@@ -348,7 +348,6 @@
   _obj->name = dwg_decode_xdata(dat, _obj, _obj->size)
 
 #define REACTORS(code)\
-  LOG_TRACE("num_reactors: %u\n", (int)obj->tio.object->num_reactors);  \
   obj->tio.object->reactors = malloc(sizeof(BITCODE_H) * obj->tio.object->num_reactors); \
   for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++) \
     {\
@@ -356,7 +355,6 @@
     }
 
 #define ENT_REACTORS(code)\
-  LOG_TRACE("num_reactors: %u\n", (int)_ent->num_reactors); \
   _ent->reactors = malloc(sizeof(BITCODE_H) * _ent->num_reactors); \
   for (vcount=0; vcount < _ent->num_reactors; vcount++)\
     {\

@@ -794,6 +794,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
   // Check CRC
   ckr = bit_calc_CRC(0xC0C1, dat->chain, dat->byte);
   ckr2 = bit_read_RS(dat);
+  LOG_TRACE("crc:  %X [RS]\n", ckr2);
   if (ckr != ckr2)
     {
       LOG_ERROR("Header CRC mismatch %X <=> %X", ckr, ckr2);
@@ -961,6 +962,9 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
           klass->maint_version = bit_read_BL(dat);
           klass->unknown_1 = bit_read_BL(dat);
           klass->unknown_2 = bit_read_BL(dat);
+          LOG_TRACE("num_instances: %d, dwg/maint version: %d/%d, unk: %d/%d\n",
+                    klass->num_instances, klass->dwg_version, klass->maint_version,
+                    klass->unknown_1, klass->unknown_2);
         }
 
       if (strcmp((const char *)klass->dxfname, "LAYOUT") == 0)
@@ -980,6 +984,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
               + dwg->header.section[SECTION_CLASSES_R13].size - 18;
   dat->bit = 0;
   ckr = bit_read_RS(dat);
+  LOG_TRACE("crc:  %X [RS]\n", ckr);
   pvz = dwg->header.section[SECTION_CLASSES_R13].address + 16;
   if (dwg->header.section[SECTION_CLASSES_R13].size < 0xfff &&
       pvz < dat->byte &&
@@ -1072,7 +1077,8 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
           dat->bit = 0;
         }
 
-      ckr = bit_read_RS_LE(dat);
+      ckr = bit_read_RS(dat);
+      LOG_TRACE("crc:  %X [RS]\n", ckr);
       ckr2 = bit_calc_CRC(0xC0C1, dat->chain + startpos, section_size);
       if (ckr != ckr2)
         {
@@ -1091,12 +1097,12 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
 
   LOG_INFO("Num objects: %lu\n", (unsigned long)dwg->num_objects)
   LOG_INFO("\n"
-           "=======> Object Data 2 (start)  : %8X\n",
-           (unsigned int) object_begin)
+           "=======> Object Data 2 (start)  : %8lX\n",
+           (unsigned long) object_begin)
   dat->byte = object_end;
   object_begin = bit_read_MS(dat);
-  LOG_INFO("         Object Data 2 (end)    : %8X\n",
-      (unsigned int) (object_end + object_begin+ 2))
+  LOG_INFO("         Object Data 2 (end)    : %8lX (%8lX)\n",
+           (unsigned long) (object_end + object_begin+ 2), object_begin)
 
   /*
    dat->byte = dwg->header.section[SECTION_OBJECTS_R13].address - 2;
@@ -2515,12 +2521,9 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   if(error & DWG_ERR_INVALIDHANDLE)
     {
       LOG_ERROR("Wrong object handle at pos 0x%0lx", dat->byte)
-      obj->bitsize = 0;
-      _obj->num_eed = 0;
-      _obj->num_reactors = 0;
       return error;
     }
-  LOG_TRACE("handle: %d.%d.%lX [5]\n", obj->handle.code,
+  LOG_TRACE("handle: %x.%d.%lX [5]\n", obj->handle.code,
             obj->handle.size, obj->handle.value)
 
   error |= dwg_decode_eed(dat, _obj);
@@ -2530,6 +2533,7 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   VERSIONS(R_13,R_14)
     {
       obj->bitsize = bit_read_RL(dat);
+      LOG_TRACE("bitsize: %u [RL]\n", obj->bitsize);
     }
   // documentation bug, same BL type as with entity
   FIELD_BL(num_reactors, 0);
@@ -2537,8 +2541,8 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   {
     if (_obj->num_reactors > 0x1000)
       {
+        LOG_WARN("Invalid num_reactors %ld", (long)_obj->num_reactors)
         _obj->num_reactors = 0;
-        LOG_WARN("Invalid num_reactors")
       }
   }
   SINCE(R_2004)
@@ -2670,7 +2674,7 @@ dwg_decode_handleref_with_code(Bit_Chain *restrict dat, Dwg_Object *restrict obj
 
   if (bit_read_H(dat, &ref->handleref))
     {
-      LOG_WARN("Invalid handleref code %d: (%d.%d.%lX)",
+      LOG_WARN("Invalid handleref: wanted code %d, got (%d.%d.%lX)",
                code, ref->handleref.code, ref->handleref.size, ref->handleref.value)
       free(ref);
       return NULL;
@@ -3110,6 +3114,7 @@ decode_preR13_entities(unsigned long start, unsigned long end,
 
       bit_set_position(dat, obj->address + obj->size - 2);
       crc = bit_read_RS(dat);
+      LOG_TRACE("crc:  %X [RS]\n", crc);
       num++;
 
       if (obj->size < 2 || obj->size > 0x1000) //FIXME
@@ -3598,7 +3603,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
   {
     BITCODE_RS seed, calc;
     BITCODE_RS crc = bit_read_RS(dat);
-    LOG_TRACE("crc:  %X RS\n", crc);
+    LOG_TRACE("crc:  %X [RS]\n", crc);
     dat->byte -= 2;
     // experimentally verify the seed 0xC0C1, for all objects
     for (seed=0; seed<0xffff; seed++) {
@@ -3607,7 +3612,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
         break;
     }
     bit_check_CRC(dat, address, seed);
-    LOG_TRACE("seed: %X RS\n", seed);
+    LOG_TRACE("seed: %X [RS]\n", seed);
     LOG_TRACE("size: %d\n", (int)(dat->byte - address - 2));
   }
 #endif
