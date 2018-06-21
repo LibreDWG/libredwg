@@ -370,10 +370,6 @@
         {\
           VALUE_HANDLE(obj->tio.object->xdicobjhandle, xdicobjhandle, code, 360);\
         }\
-      else \
-        {\
-          LOG_TRACE("xdic_missing_flag: 1\n"); \
-        }\
     }\
   else { \
     SINCE(R_13) \
