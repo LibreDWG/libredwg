@@ -2413,7 +2413,8 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
     if (FIELD_VALUE(flag_r11) & 0x20) {
       Dwg_Object_Ref* hdl =
         dwg_decode_handleref_with_code(dat, obj, dwg, 0);
-      obj->handle = hdl->handleref;
+      if (hdl)
+        obj->handle = hdl->handleref;
     }
     if (FIELD_VALUE(extra_r11) & 4)
       FIELD_RS (paper_r11, 0);
