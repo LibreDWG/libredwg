@@ -385,6 +385,7 @@ typedef enum DWG_ERROR
   DWG_ERR_INVALIDHANDLE    = 1 << 4, /* 16 */
   DWG_ERR_INVALIDEED       = 1 << 5, /* 32 */
   DWG_ERR_VALUEOUTOFBOUNDS = 1 << 6, /* 64 */
+  /* -------- critical errors ------- */
   DWG_ERR_CLASSESNOTFOUND  = 1 << 7, /* 128 */
   DWG_ERR_SECTIONNOTFOUND  = 1 << 8, /* 256 */
   DWG_ERR_PAGENOTFOUND     = 1 << 9, /* 512 */
@@ -394,7 +395,7 @@ typedef enum DWG_ERROR
   DWG_ERR_OUTOFMEM         = 1 << 13,/* 8192 */
 
 } Dwg_Error;
-#define DWG_ERR_CRITICAL DWG_ERR_VALUEOUTOFBOUNDS
+#define DWG_ERR_CRITICAL DWG_ERR_CLASSESNOTFOUND
 
 /**
    handles resolve absolute or relative indices to objects.
