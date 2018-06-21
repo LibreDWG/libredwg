@@ -2568,16 +2568,8 @@ dwg_decode_handleref(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 
   if (bit_read_H(dat, &ref->handleref))
     {
-      if (obj)
-        {
-          LOG_ERROR(
-            "Could not read handleref from object whose handle is: %d.%d.%lu",
-            obj->handle.code, obj->handle.size, obj->handle.value)
-        }
-      else
-        {
-          LOG_ERROR("Could not read handleref in the header variables section")
-        }
+      LOG_WARN("Invalid handleref: (%d.%d.%lX)",
+               ref->handleref.code, ref->handleref.size, ref->handleref.value)
       free(ref);
       return NULL;
     }
@@ -2633,6 +2625,9 @@ dwg_decode_handleref(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     case 0x0C:
       ref->absolute_ref = (obj->handle.value - ref->handleref.value);
       break;
+    case 0x0E: //eg 2007 REGION.history_id (some very high number)
+      ref->absolute_ref = obj->handle.value;
+      break;
     case 2: case 3: case 4: case 5:
       ref->absolute_ref = ref->handleref.value;
       break;
@@ -2659,61 +2654,91 @@ dwg_decode_handleref(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
  *   8 ref - 1
  *   a ref + offset
  *   c ref - offset
+ *   e ??
  */
 Dwg_Object_Ref *
 dwg_decode_handleref_with_code(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
                                Dwg_Data *restrict dwg, unsigned int code)
 {
-  Dwg_Object_Ref * ref;
-  ref = dwg_decode_handleref(dat, obj, dwg);
+  Dwg_Object_Ref* ref = (Dwg_Object_Ref *) calloc(1, sizeof(Dwg_Object_Ref));
   if (!ref)
     {
-      //LOG_ERROR("Invalid handleref");
+      LOG_ERROR("Out of memory");
       return NULL;
     }
 
-  if (ref->absolute_ref == 0 && ref->handleref.code != code)
+  if (bit_read_H(dat, &ref->handleref))
     {
-      /*
-       * With TYPEDOBJHANDLE 2-5 the code indicates the type of ownership.
-       * With OFFSETOBJHANDLE >5 the handle is stored as an offset from some other handle.
-       */
-      switch (ref->handleref.code)
+      LOG_WARN("Invalid handleref code %d: (%d.%d.%lX)",
+               code, ref->handleref.code, ref->handleref.size, ref->handleref.value)
+      free(ref);
+      return NULL;
+    }
+
+  // If the handle size is 0, it is probably a null handle.
+  // It shouldn't be placed in the object ref vector.
+  if (ref->handleref.size)
+    {
+      // Reserve memory space for object references
+      if (!dwg->num_object_refs)
+        dwg->object_ref = calloc(REFS_PER_REALLOC, sizeof(Dwg_Object_Ref*));
+      else if (dwg->num_object_refs % REFS_PER_REALLOC == 0)
+        dwg->object_ref = realloc(dwg->object_ref,
+              (dwg->num_object_refs + REFS_PER_REALLOC) * sizeof(Dwg_Object_Ref*));
+      if (!dwg->object_ref)
         {
-        case 0x06:
-          if (obj != NULL)
-            ref->absolute_ref = (obj->handle.value + 1);
-          else
-            LOG_WARN("%s: Missing obj arg", __FUNCTION__);
-          break;
-        case 0x08:
-          if (obj != NULL)
-            ref->absolute_ref = (obj->handle.value - 1);
-          else
-            LOG_WARN("%s: Missing obj arg", __FUNCTION__);
-          break;
-        case 0x0A:
-          if (obj != NULL)
-            ref->absolute_ref = (obj->handle.value + ref->handleref.value);
-          else
-            LOG_WARN("%s: Missing obj arg", __FUNCTION__);
-          break;
-        case 0x0C:
-          if (obj != NULL)
-            ref->absolute_ref = (obj->handle.value - ref->handleref.value);
-          else
-            LOG_WARN("%s: Missing obj arg", __FUNCTION__);
-          break;
-        case 2: case 3: case 4: case 5:
-          ref->absolute_ref = ref->handleref.value;
-          break;
-        case 0: // ignore (ANYCODE)
-          ref->absolute_ref = ref->handleref.value;
-          break;
-        default:
-          LOG_WARN("Invalid handle pointer code %d", ref->handleref.code);
-          break;
+          LOG_ERROR("Out of memory");
+          return NULL;
         }
+      dwg->object_ref[dwg->num_object_refs++] = ref;
+    }
+  else
+    {
+      ref->obj = NULL;
+      ref->absolute_ref = 0;
+      return ref;
+    }
+
+  // We receive a null obj when we are reading
+  // handles in the header variables section
+  if (!obj)
+    {
+      ref->absolute_ref = ref->handleref.value;
+      ref->obj = NULL;
+      return ref;
+    }
+
+  /*
+   * With TYPEDOBJHANDLE 2-5 the code indicates the type of ownership.
+   * With OFFSETOBJHANDLE >5 the handle is stored as an offset from some other handle.
+   */
+ switch (ref->handleref.code)
+    {
+    case 0x06:
+      ref->absolute_ref = (obj->handle.value + 1);
+      break;
+    case 0x08:
+      ref->absolute_ref = (obj->handle.value - 1);
+      break;
+    case 0x0A:
+      ref->absolute_ref = (obj->handle.value + ref->handleref.value);
+      break;
+    case 0x0C:
+      ref->absolute_ref = (obj->handle.value - ref->handleref.value);
+      break;
+    case 0x0E: //eg 2007 REGION.history_id (some very high number)
+      ref->absolute_ref = obj->handle.value;
+      break;
+    case 2: case 3: case 4: case 5:
+      ref->absolute_ref = ref->handleref.value;
+      break;
+    case 0: // ignore?
+      ref->absolute_ref = ref->handleref.value;
+      break;
+    default:
+      ref->absolute_ref = ref->handleref.value;
+      LOG_WARN("Invalid handle pointer code %d", ref->handleref.code);
+      break;
     }
   return ref;
 }

@@ -61,7 +61,7 @@ static unsigned int cur_ver = 0;
 #define ANYCODE -1
 #define VALUE_HANDLE(handleptr, name, handle_code, dxf) \
   if (handleptr) { \
-    LOG_TRACE(#name ": HANDLE(%d.%d.%lX) absolute:%lX/%lu [%d]\n",\
+    LOG_TRACE(#name ": HANDLE(%x.%d.%lX) absolute:%lX/%lu [%d]\n",\
               handleptr->handleref.code, \
               handleptr->handleref.size, \
               handleptr->handleref.value,\
@@ -494,7 +494,7 @@ dwg_print_object(Bit_Chain* dat, Dwg_Object *obj)
                 {
                   LOG_INFO("Object bitsize: %u\n", obj->bitsize)
                 }
-              LOG_INFO("Object handle: %d.%d.%lX\n",
+              LOG_INFO("Object handle: %x.%d.%lX\n",
                        obj->handle.code, obj->handle.size, obj->handle.value);
               return error | DWG_ERR_INVALIDTYPE;
             }

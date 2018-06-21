@@ -1040,7 +1040,7 @@ bit_write_BT(Bit_Chain * dat, double value)
     }
 }
 
-/** Read handle-references.
+/** Read handle-references. Returns error code: DWG_ERR_INVALIDHANDLE or 0 on success
  */
 int
 bit_read_H(Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
@@ -1053,11 +1053,10 @@ bit_read_H(Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   handle->code = (handle->code & 0xf0) >> 4;
 
   handle->value = 0;
-  if (handle->size > 4 || handle->code > 12)
+  if (handle->size > 4 || handle->code > 14)
     {
-      LOG_WARN("Invalid handle-reference, longer than 4 bytes: %i.%i.%lu",
+      LOG_WARN("Invalid handle-reference, longer than 4 bytes: (%x.%d.%lX)",
                 handle->code, handle->size, handle->value)
-      handle->size = 0;
       return DWG_ERR_INVALIDHANDLE;
     }
 

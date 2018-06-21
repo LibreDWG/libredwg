@@ -271,7 +271,7 @@ static bool env_var_checked_p;
                     handle_code, hdlptr->handleref.code); \
         } \
       bit_write_H(hdl_dat, &hdlptr->handleref); \
-      LOG_TRACE(#name ": HANDLE(%d.%d.%lu) absolute:%lu [%d]\n", \
+      LOG_TRACE(#name ": HANDLE(%x.%d.%lX) absolute:%lu [%d]\n", \
                 hdlptr->handleref.code,\
                 hdlptr->handleref.size,\
                 hdlptr->handleref.value,\
@@ -292,11 +292,11 @@ static bool env_var_checked_p;
       else { \
         if (handle_code != ANYCODE && _obj->name->handleref.code != handle_code) \
           { \
-            LOG_WARN("Expected a CODE %d handle, got a %d", \
+            LOG_WARN("Expected a CODE %x handle, got a %x", \
                       handle_code, _obj->name->handleref.code); \
           } \
         bit_write_H(hdl_dat, &_obj->name->handleref); \
-        LOG_TRACE(#name "[%d]: HANDLE(%d.%d.%lu) absolute:%lu [%d]\n", \
+        LOG_TRACE(#name "[%d]: HANDLE(%x.%d.%lX) absolute:%lu [%d]\n", \
                   (int)vcount, \
                   _obj->name->handleref.code,\
                   _obj->name->handleref.size,\
@@ -453,7 +453,7 @@ static int dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj
   Dwg_Object_##token * _obj = obj->tio.object->tio.token; \
   error = dwg_encode_object(obj, dat, hdl_dat, str_dat); \
   if (error) return error; \
-  LOG_INFO("Object " #token " handle: %d.%d.%lX\n",\
+  LOG_INFO("Object " #token " handle: %x.%d.%lX\n",\
     obj->handle.code, \
     obj->handle.size, \
     obj->handle.value)
@@ -1440,7 +1440,7 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
                            dat->byte, dat->bit);
                 }
               bit_write_H(dat, &(obj->handle));
-              LOG_INFO("Object handle: %d.%d.%lX\n",
+              LOG_INFO("Object handle: %x.%d.%lX\n",
                        obj->handle.code, obj->handle.size, obj->handle.value);
               // write obj->size bytes, excl. bitsize and handle.
               // overshoot the bitsize and handle size.
@@ -1496,7 +1496,7 @@ static int dwg_encode_eed(Bit_Chain *restrict dat, Dwg_Object_Object *restrict e
         {
           bit_write_BS(dat, size);
           bit_write_H(dat, &(ent->eed[i].handle));
-          LOG_TRACE("EED[%u] handle: %d.%d.%lX\n", i,
+          LOG_TRACE("EED[%u] handle: %x.%d.%lX\n", i,
                     ent->eed[i].handle.code, ent->eed[i].handle.size,
                     ent->eed[i].handle.value);
           bit_write_TF(dat, ent->eed[i].raw, size);
@@ -1565,7 +1565,7 @@ dwg_encode_entity(Dwg_Object* obj,
     }
 
   bit_write_H(dat, &(obj->handle));
-  LOG_TRACE("handle: %d.%d.%lX [5]\n", obj->handle.code,
+  LOG_TRACE("handle: %x.%d.%lX [5]\n", obj->handle.code,
             obj->handle.size, obj->handle.value)
   PRE(R_13) {
     return DWG_ERR_NOTYETSUPPORTED;
