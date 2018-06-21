@@ -1559,6 +1559,7 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
         FIELD_VALUE(version) = 1;
       }
       FIELD_BS (version, 70);
+      // which is SAT format ACIS 4.0 (since r2000+)
       if (FIELD_VALUE(version) == 1)
         {
           do
@@ -1597,11 +1598,38 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
           // DXF 1 + 3 if >255
           LOG_TRACE("acis_data [1]:\n%s\n", FIELD_VALUE (acis_data));
         }
+      // version 2, which is a link to SAT format ACIS 7.0/ShapeManager.
+      // Maybe the binary SAB variant.
+      /* ACIS versions:
+         R14 release	        106   (ACIS 1.6)
+         R15 (2000) release	400   (ACIS 4.0)
+         R18 (2004) release	20800 (ShapeManager, forked from ACIS 7.0)
+         R21 (2007) release	21200
+         R24 (2010) release	21500
+         R27 (2013) release	21800
+       */
       else //if (FIELD_VALUE(version)==2)
         {
           //TODO
+          do
+            {
+              FIELD_VALUE(encr_sat_data) = (BITCODE_RC**)
+                realloc(FIELD_VALUE(encr_sat_data), (i+1) * sizeof (BITCODE_RC*));
+              FIELD_VALUE(block_size) = (BITCODE_BL*)
+                realloc(FIELD_VALUE(block_size), (i+1) * sizeof (BITCODE_BL));
+
+              FIELD_BL (block_size[i], 0);
+              FIELD_TF (encr_sat_data[i], FIELD_VALUE(block_size[i]), 1);
+              if (FIELD_VALUE(block_size[i])) {
+                LOG_TRACE("encr_sat_data [%d]:\n", i);
+                LOG_TF(TRACE, _obj->encr_sat_data[i], _obj->block_size[i]);
+                total_size += FIELD_VALUE (block_size[i]);
+              }
+            } while(FIELD_VALUE (block_size[i++]));
+          num_blocks = i-1;
+          FIELD_VALUE(num_blocks) = num_blocks;
           LOG_ERROR("TODO: Implement parsing of SAT file (version 2) "
-                    "in entities 37,38 and 39.\n");
+                    "in 3DSOLID entity.");
         }
 
       FIELD_B (wireframe_data_present, 0);
