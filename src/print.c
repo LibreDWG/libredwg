@@ -61,22 +61,22 @@ static unsigned int cur_ver = 0;
 #define ANYCODE -1
 #define VALUE_HANDLE(handleptr, name, handle_code, dxf) \
   if (handleptr) { \
-    LOG_TRACE(#name ": HANDLE(%d.%d.%lu) absolute:%lu\n",\
+    LOG_TRACE(#name ": HANDLE(%d.%d.%lX) absolute:%lX/%lu [%d]\n",\
               handleptr->handleref.code, \
               handleptr->handleref.size, \
               handleptr->handleref.value,\
-              handleptr->absolute_ref);  \
+              handleptr->absolute_ref, handleptr->absolute_ref, dxf);  \
   }
 #define FIELD_HANDLE(name, handle_code, dxf) VALUE_HANDLE(_obj->name, name, handle_code, dxf)
 #define FIELD_DATAHANDLE(name, code, dxf) FIELD_HANDLE(name, code, dxf)
 #define VALUE_HANDLE_N(handleptr, name, vcount, handle_code, dxf)\
   if (handleptr) { \
-    LOG_TRACE(#name "[%d]: HANDLE(%d.%d.%lu) absolute:%lu\n",\
+    LOG_TRACE(#name "[%d]: HANDLE(%d.%d.%lX) absolute:%lX/%lu [%d]\n",\
               (int)vcount, \
               handleptr->handleref.code, \
               handleptr->handleref.size, \
               handleptr->handleref.value, \
-              handleptr->absolute_ref); \
+              handleptr->absolute_ref, handleptr->absolute_ref, dxf); \
   }
 #define FIELD_HANDLE_N(name, vcount, handle_code, dxf) \
   VALUE_HANDLE_N(_obj->name, name, vcount, handle_code, dxf)
