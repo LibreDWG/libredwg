@@ -1621,8 +1621,6 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
               FIELD_BL (block_size[i], 0);
               FIELD_TF (encr_sat_data[i], FIELD_VALUE(block_size[i]), 1);
               if (FIELD_VALUE(block_size[i])) {
-                LOG_TRACE("encr_sat_data [%d]:\n", i);
-                LOG_TF(TRACE, _obj->encr_sat_data[i], _obj->block_size[i]);
                 total_size += FIELD_VALUE (block_size[i]);
               }
             } while(FIELD_VALUE (block_size[i++]));
