@@ -714,6 +714,8 @@ if test x$cross_compiling = xno -a x$enable_bindings = xyes; then
     dnl swig not required for perl, we ship swig_perl.c
     dnl AX_SWIG_ENABLE_CXX
     dnl SWIG_MULTI_MODULE_SUPPORT
+    AC_PATH_PROG([DOTNETCORE],[dotnet])
+    AX_PROG_DOTNETCORE_VERSION([1.0],[],[])
 else
     AC_MSG_WARN([disabled swig bindings])
     if test x$enable_python != xno; then
@@ -1046,7 +1048,9 @@ AC_CONFIG_FILES([
 ])
 
 AM_COND_IF([DISABLE_BINDINGS], [],
-           [AC_CONFIG_FILES([bindings/Makefile bindings/python/Makefile])])
+           [AC_CONFIG_FILES([bindings/Makefile
+                             bindings/python/Makefile
+                             bindings/csharp/Makefile])])
 AM_COND_IF([DISABLE_BINDINGS], [],
            [AM_COND_IF([HAVE_PERL], [AC_CONFIG_FILES([bindings/perl/Makefile.PL])])])
 AM_COND_IF([HAVE_PYTHON_LXML],  [AC_CONFIG_FILES([test/xmlsuite/Makefile])])
