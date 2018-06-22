@@ -4838,7 +4838,7 @@ EXPORT dwg_object *
 dwg_obj_ref_get_object(const dwg_object_ref *restrict ref,
                           int *restrict error);
 
-dwg_object *
+EXPORT dwg_object *
 dwg_absref_get_object(const dwg_data* dwg, const BITCODE_BL absref);
 
 EXPORT dwg_obj_obj *
