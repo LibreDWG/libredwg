@@ -74,9 +74,20 @@ customize the installation dirs.  Other options recognized by configure are:
   
     Disable write support (default: no). When enabled, you activate the write
     support for the DWG format.
-    This is an experimental feature, rewriting most DWG's to the r2000 format
+    This is an experimental feature. Rewriting most DWG's to the r2000 format
     usually works fine, DWG versions since r2004 are not yet supported, and the
     API usage is very rough so far.
+
+== Windows ==
+
+See the following scripts how we build on Windows:
+
+* build-aux/smoke.sh: cross-compilation recipes
+* build-aux/msys2.bat: msys2 deps
+* .appveyor.yml: windows smoker
+
+We only support C99 compilers and POSIX environments, i.e. cygwin or msys or cross.
+Pre-compiled Windows binaries are here: https://github.com/LibreDWG/libredwg/releases
 
 == Example usage of the library ==
 
