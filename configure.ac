@@ -229,36 +229,44 @@ AM_CONDITIONAL([HAVE_WINE], [test -n "$WINE"])
 
 dnl Optional SWIG + python bindings
 dnl Feature: --disable-python or --enable-python=python3.6
+AC_MSG_CHECKING([for --disable-python])
 AC_ARG_ENABLE(python,
 	AS_HELP_STRING([--disable-python],
 		       [Disable python bindings @<:@default=check@:>@]),
 	[case "${enableval}" in
-	yes) enable_python=true ;;
-	no)  enable_python=false ;;
-	*)   enable_python=true ; PYTHON="${enableval}" ;;
-	esac], [enable_python=check])
+	yes) enable_python=yes; AC_MSG_RESULT([enabled]) ;;
+	no)  enable_python=no; AC_MSG_RESULT([disabled]) ;;
+	*)   enable_python=yes ; PYTHON="${enableval}"; AC_MSG_RESULT([enabled]) ;;
+	esac], [enable_python=check; AC_MSG_RESULT([check]) ])
 
-AC_MSG_CHECKING([for --disable-python])
-if test x$enable_python != xfalse -a x$cross_compiling = xno; then
+if test x$cross_compiling = xno; then
     AX_PKG_SWIG([1.3.17], [],
-      AC_MSG_WARN([SWIG is required for python+perl bindings. disabled]))
-    if test -n "$SWIG"; then
+      AC_MSG_WARN([SWIG is required for python bindings. disabled]))
+    if test -n "$SWIG" -a x$enable_python != xno; then
       AM_PATH_PYTHON([2.7])
       SWIG_PYTHON
-      AC_PATH_PROG([PERL], [perl])
-      AM_RUN_LOG([$PERL --version])
     fi
+    dnl swig not required for perl, we ship swig_perl.c
+    if test -n "$PERL"; then
+      ac_cv_perl="$PERL"
+      AC_CACHE_VAL([ac_cv_perl],$PERL)
+    else
+      ac_cv_perl=perl
+    fi
+    AC_PATH_PROG([PERL], [$ac_cv_perl])
+    AM_RUN_LOG([$PERL --version])
+    AM_RUN_LOG([$PERL -V:cc])
     dnl AX_SWIG_ENABLE_CXX
     dnl SWIG_MULTI_MODULE_SUPPORT
 else
-    if test x$enable_python = xfalse; then AC_MSG_RESULT([yes (swig disabled)])
-    else AC_MSG_WARN([disabled swig bindings: cross-compiled])
-    fi
+    AC_MSG_WARN([disabled swig bindings: cross-compiled])
 fi
 AM_CONDITIONAL([HAVE_SWIG_PYTHON],
   [test -n "$SWIG" && test -n "$PYTHON_VERSION"])
 AM_CONDITIONAL([HAVE_SWIG_PERL],
   [test -n "$SWIG" && test -n "$PERL"])
+AM_CONDITIONAL([HAVE_PERL],
+  [test -n "$PERL"])
 
 AC_CHECK_PROGS([DOXYGEN], [doxygen])
 AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
@@ -288,7 +296,6 @@ AC_CONFIG_FILES([
 	programs/Makefile
 	examples/Makefile
 	bindings/Makefile
-	bindings/perl/Makefile
 	bindings/python/Makefile
 	test/Makefile
 	test/testcases/Makefile
