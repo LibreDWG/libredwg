@@ -60,18 +60,18 @@ check-dwg-valgrind: all
 	done
 check-dxf: all
 	-mv check-dxf.log check-dxf.log~ 2>/dev/null
-	for f in test/test-data/Drawing_2*.dwg \
+	-for f in test/test-data/Drawing_2*.dwg \
                  test/test-data/sample_2*.dwg \
                  test/test-data/example_2000.dwg; \
           do \
             echo programs/dwg2dxf -v3 $$f | tee -a check-dxf.log; \
             programs/dwg2dxf -v3 $$f >>check-dxf.log 2>&1; \
           done
-	for d in 2000 2004 2007 2010 2013 2018; do \
+	-for d in r14 2000 2004 2007 2010 2013 2018; do \
           for f in test/test-data/$$d/*.dwg; do \
-            b=`basename $$f .dwg`; \
-            echo programs/dwg2dxf -v3 -o $${b}_$${d}.dxf $$f | tee -a check-dxf.log; \
-            programs/dwg2dxf -v3 -o $${b}_$${d}.dxf $f >>check-dxf.log 2>&1; \
+            b=`basename $$f .dwg`; dxf="$${b}_$${d}.dxf"; \
+            echo programs/dwg2dxf -v3 -o $${dxf} $$f | tee -a check-dxf.log; \
+            programs/dwg2dxf -v3 -o $${dxf} $$f >>check-dxf.log 2>&1; \
 	  done; \
 	done
 
