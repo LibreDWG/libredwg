@@ -3,15 +3,18 @@
 
     make -C examples alldwg.inc
 
+    static struct _unknown {
+      const char *name;
+      const char *bytes;
+      const char *bits;
+      const char *log; const char *dxf;
+      const unsigned int handle; const int bitsize;
+    } unknowns[];
+
 =cut
 
-BEGIN {
-  $file = $ARGV;
-  $file =~ s{^(.*)_(20\d\d)\.log}{test/test-data/$2/$1.dwg};
-}
-
-if (/Offset: \d+ @(\d+)\n/) {
-  $offset = $1; next;
+if (/handle: .+\..+\.(.+) \[5\]\n/) {
+  $handle = $1; next;
 }
 if (/Warning: Unhandled Class (?:object|entity) \d+ (\w+) /) {
   $object = $1; next;
@@ -33,7 +36,17 @@ if (/^bits\[\d\]: (\d)/) {
   $bits .= $1; next;
 }
 if (/Next object: /) {
-  print "    { \"$object\", \"$b\", \"$bits\", \"$ARGV\", $offset, $bitsize },\n"
-    if $object and $b and $offset && $bitsize;
-  $object = $bitsize = $b = $bits = $offset = undef;
+  if ($object and $b and $handle && $bitsize) {
+    my $dxf = $ARGV;
+    my ($n, $d) = $dxf =~ /^(.*_)(r\d+|20\d\d)\.log$/;
+    if ($n =~ /(example_|sample_|Drawing_)/) {
+      $dxf = "test/test-data/$n$d.dxf";
+    } else {
+      $dxf = "test/test-data/$d/$n.dxf";
+    }
+    $dxf = undef unless -f $dxf;
+    printf "    { \"$object\", \"$b\", \"$bits\", \"$ARGV\", %s, 0x$handle, $bitsize },\n",
+      $dxf ? "\"$dxf\"" : "NULL";
+    $object = $bitsize = $b = $bits = $handle = undef;
+  }
 }

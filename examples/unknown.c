@@ -30,11 +30,11 @@ static struct _unknown {
   const char *name;
   const char *bytes;
   const char *bits;
-  const char *source;
-  const long address; const int bitsize;
+  const char *log; const char *dxf;
+  const unsigned int handle; const int bitsize;
 } unknowns[] =
   {
-    { "MATERIAL", "0e0101000f010100", "10", "150DSC4_AO-46050_QDC-fixed_2000.log", 400137, 1426 },
+   { "MATERIAL", "0e0101000f010100", "10", "150DSC4_AO-46050_QDC-fixed_2000.log", NULL, 400137, 1426 },
     /* the following types:
       5 ACDBASSOCGEOMDEPENDENCY
       3 ACDBASSOCNETWORK
@@ -50,7 +50,7 @@ static struct _unknown {
     // see log_unknown.pl
     #include "alldwg.inc"
 
-    { 0, NULL, "", "", 0L, 0L }
+    { 0, NULL, "", "", NULL, 0L, 0L }
 };
 
 int
@@ -60,7 +60,7 @@ main (int argc, char *argv[])
   for (i=0; unknowns[i].name; i++)
     {
       //TODO offline: find the shortest objects. find the matching DWG and DXF. get the DXF values.
-      printf("%s: %d (%s)\n", unknowns[i].name, unknowns[i].bitsize, unknowns[i].source);
+      printf("%s: %d %X (%s)\n", unknowns[i].name, unknowns[i].bitsize, unknowns[i].handle, unknowns[i].log);
       //TODO: try likely field combinations and print the top 3.
       //there are various heuristics, like the handle stream at the end
     }
