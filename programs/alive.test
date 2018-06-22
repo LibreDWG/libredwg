@@ -79,6 +79,7 @@ run ()
             ls -l $log
         else
             problems=$(expr 1 + $problems)
+            tail -n100 $log
         fi
     fi
     if test x$MINGW != x -a x$OLDTESTPROG != x; then
