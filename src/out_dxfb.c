@@ -927,7 +927,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       }
     for (i=0; i<dwg->vport_control.num_entries; i++)
       {
-        Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->vports[i]);
+        Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->vports[i]);
         if (obj && obj->type == DWG_TYPE_VPORT) {
           //reordered in the DXF: 2,70,10,11,12,13,14,15,16,...
           //special-cased in the spec
@@ -945,16 +945,16 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     COMMON_TABLE_CONTROL_FLAGS;
     error |= dwg_dxfb_LTYPE_CONTROL(dat, ctrl);
     // first the 2 builtin ltypes: ByBlock, ByLayer
-    if ((obj  = dwg_ref_get_object(dwg, dwg->header_vars.LTYPE_BYBLOCK))) {
+    if ((obj  = dwg_ref_object(dwg, dwg->header_vars.LTYPE_BYBLOCK))) {
       dwg_dxfb_LTYPE(dat, obj);
     }
-    if ((obj  = dwg_ref_get_object(dwg, dwg->header_vars.LTYPE_BYLAYER))) {
+    if ((obj  = dwg_ref_object(dwg, dwg->header_vars.LTYPE_BYLAYER))) {
       error |= dwg_dxfb_LTYPE(dat, obj);
     }
     // here LTYPE_CONTINUOUS is already included
     for (i=0; i<dwg->ltype_control.num_entries; i++)
       {
-        obj = dwg_ref_get_object(dwg, _ctrl->linetypes[i]);
+        obj = dwg_ref_object(dwg, _ctrl->linetypes[i]);
         if (obj && obj->type == DWG_TYPE_LTYPE) {
           error |= dwg_dxfb_LTYPE(dat, obj);
         }
@@ -969,7 +969,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     error |= dwg_dxfb_LAYER_CONTROL(dat, ctrl);
     for (i=0; i<dwg->layer_control.num_entries; i++)
       {
-        Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->layers[i]);
+        Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->layers[i]);
         if (obj && obj->type == DWG_TYPE_LAYER) {
           error |= dwg_dxfb_LAYER(dat, obj);
         }
@@ -984,7 +984,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     error |= dwg_dxfb_STYLE_CONTROL(dat, ctrl);
     for (i=0; i<dwg->style_control.num_entries; i++)
       {
-        Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->styles[i]);
+        Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->styles[i]);
         if (obj && obj->type == DWG_TYPE_STYLE) {
           error |= dwg_dxfb_STYLE(dat, obj);
         }
@@ -999,7 +999,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     error |= dwg_dxfb_VIEW_CONTROL(dat, ctrl);
     for (i=0; i<dwg->view_control.num_entries; i++)
       {
-        Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->views[i]);
+        Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->views[i]);
         //FIXME implement the other two
         if (obj && obj->type == DWG_TYPE_VIEW)
           error |= dwg_dxfb_VIEW(dat, obj);
@@ -1020,7 +1020,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     error |= dwg_dxfb_UCS_CONTROL(dat, ctrl);
     for (i=0; i<dwg->ucs_control.num_entries; i++)
       {
-        Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->ucs[i]);
+        Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->ucs[i]);
         if (obj && obj->type == DWG_TYPE_UCS) {
           error |= dwg_dxfb_UCS(dat, obj);
         }
@@ -1036,7 +1036,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     error |= dwg_dxfb_APPID_CONTROL(dat, ctrl);
     for (i=0; i<dwg->appid_control.num_entries; i++)
       {
-        Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->apps[i]);
+        Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->apps[i]);
         if (obj && obj->type == DWG_TYPE_APPID) {
           error |= dwg_dxfb_APPID(dat, obj);
         }
@@ -1052,7 +1052,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     //ignoring morehandles
     for (i=0; i<dwg->dimstyle_control.num_entries; i++)
       {
-        Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->dimstyles[i]);
+        Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->dimstyles[i]);
         if (obj && obj->type == DWG_TYPE_DIMSTYLE) {
           error |= dwg_dxfb_DIMSTYLE(dat, obj);
         }
@@ -1069,7 +1069,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       error |= dwg_dxfb_VPORT_ENTITY_CONTROL(dat, ctrl);
       for (i=0; i<dwg->vport_entity_control.num_entries; i++)
         {
-          Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->vport_entity_headers[i]);
+          Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->vport_entity_headers[i]);
           if (obj && obj->type == DWG_TYPE_VPORT_ENTITY_HEADER) {
             error |= dwg_dxfb_VPORT_ENTITY_HEADER(dat, obj);
           }
@@ -1084,7 +1084,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   {
     Dwg_Object_BLOCK_CONTROL *_ctrl = &dwg->block_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
-    Dwg_Object *obj = dwg_ref_get_object(dwg, _ctrl->model_space);
+    Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->model_space);
     Dwg_Object *mspace = NULL, *pspace = NULL;
 
     TABLE(BLOCK_RECORD);
@@ -1096,7 +1096,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       error |= dwg_dxfb_BLOCK_HEADER(dat, obj);
     }
     if (_ctrl->paper_space) {
-      obj = dwg_ref_get_object(dwg, _ctrl->paper_space);
+      obj = dwg_ref_object(dwg, _ctrl->paper_space);
       if (obj && obj->type == DWG_TYPE_BLOCK_HEADER) {
         pspace = obj;
         RECORD(BLOCK_RECORD);
@@ -1105,7 +1105,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
     for (i=0; i<dwg->block_control.num_entries; i++)
       {
-        Dwg_Object *obj = dwg_ref_get_object(dwg, dwg->block_control.block_headers[i]);
+        Dwg_Object *obj = dwg_ref_object(dwg, dwg->block_control.block_headers[i]);
         if (obj && obj->type == DWG_TYPE_BLOCK_HEADER &&
             obj != mspace && obj != pspace)
           {

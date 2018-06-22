@@ -133,8 +133,8 @@ create_postscript(Dwg_Data *dwg, char *output)
       else if (obj->type == DWG_TYPE_POLYLINE_2D)
         {
           int error;
-          BITCODE_RL j, numpts = dwg_obj_polyline_2d_get_numpoints(obj, &error);
-          dwg_point_2d *pts = dwg_obj_polyline_2d_get_points(obj, &error);
+          BITCODE_RL j, numpts = dwg_object_polyline_2d_get_numpoints(obj, &error);
+          dwg_point_2d *pts = dwg_object_polyline_2d_get_points(obj, &error);
           if (numpts && !error)
             {
               PS_moveto(ps, (float)pts[0].x, (float)pts[0].y);

@@ -32,7 +32,7 @@ api_process (dwg_object * obj)
   else
     fail ("error in reading flag2");
 
-  numpoints = dwg_obj_polyline_3d_get_numpoints(obj, &error);
+  numpoints = dwg_object_polyline_3d_get_numpoints(obj, &error);
   //FIXME: only valid for r2004+
   if (!error && polyline_3d->num_owned == numpoints)
     pass ("Working Properly");

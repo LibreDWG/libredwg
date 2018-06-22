@@ -92,7 +92,7 @@ output_BLOCK_HEADER (dwg_object_ref * ref)
   dwg_object *hdr, *obj;
   int error;
 
-  hdr = dwg_obj_ref_get_object (ref, &error);
+  hdr = dwg_ref_get_object (ref, &error);
   if (!ref)
     {
       fprintf (stderr,
@@ -151,7 +151,7 @@ output_object(dwg_object* obj){
       return;
     }
 
-  if (dwg_get_type(obj) == DWG_TYPE)
+  if (dwg_object_get_type(obj) == DWG_TYPE)
     {
       output_process(obj);
     }

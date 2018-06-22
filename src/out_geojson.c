@@ -378,8 +378,8 @@ dwg_geojson_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         GEOMETRY(MultiLineString);
         KEY(coordinates);
           ARRAY;
-          numpts = dwg_obj_polyline_2d_get_numpoints(obj, &error);
-          pts = dwg_obj_polyline_2d_get_points(obj, &error);
+          numpts = dwg_object_polyline_2d_get_numpoints(obj, &error);
+          pts = dwg_object_polyline_2d_get_points(obj, &error);
           for (j=0; j<numpts; j++)
             {
               if (j == numpts-1)
@@ -405,8 +405,8 @@ dwg_geojson_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         GEOMETRY(MultiLineString);
         KEY(coordinates);
           ARRAY;
-          numpts = dwg_obj_polyline_3d_get_numpoints(obj, &error);
-          pts = dwg_obj_polyline_3d_get_points(obj, &error);
+          numpts = dwg_object_polyline_3d_get_numpoints(obj, &error);
+          pts = dwg_object_polyline_3d_get_points(obj, &error);
           for (j=0; j<numpts; j++)
             {
               if (j == numpts-1)

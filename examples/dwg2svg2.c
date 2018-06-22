@@ -98,7 +98,7 @@ output_TEXT(dwg_object* obj)
   char * text_value;
   double fontsize;
 
-  index = dwg_obj_object_get_index(obj, &error);
+  index = dwg_object_get_index(obj, &error);
   log_if_error("object_get_index");
   text = dwg_object_to_TEXT(obj);
   if (!text) {
@@ -127,7 +127,7 @@ output_LINE(dwg_object* obj)
   Dwg_Entity_LINE* line;
   dwg_point_3d start, end;
   
-  index = dwg_obj_object_get_index(obj, &error);
+  index = dwg_object_get_index(obj, &error);
   log_if_error("object_get_index");
   line = dwg_object_to_LINE(obj);
   if (!line) {
@@ -151,7 +151,7 @@ output_CIRCLE(dwg_object* obj)
   double radius;
   dwg_point_3d center;
   
-  index = dwg_obj_object_get_index(obj, &error);
+  index = dwg_object_get_index(obj, &error);
   log_if_error("object_get_index");
   circle = dwg_object_to_CIRCLE(obj);
   if (!circle) {
@@ -176,7 +176,7 @@ output_ARC(dwg_object* obj)
   double x_start, y_start, x_end, y_end;
   int large_arc;
   
-  index = dwg_obj_object_get_index(obj, &error);
+  index = dwg_object_get_index(obj, &error);
   log_if_error("object_get_index");
   arc = dwg_object_to_ARC(obj);
   if (!arc) {
@@ -217,7 +217,7 @@ output_INSERT(dwg_object* obj)
   if (!insert) {
     error = 1; log_if_error("dwg_object_to_INSERT");
   }
-  index = dwg_obj_object_get_index(obj, &error);
+  index = dwg_object_get_index(obj, &error);
   log_if_error("object_get_index");
   rotation = dwg_ent_insert_get_rotation(insert, &error);
   log_if_error("insert_get_rotation");
@@ -225,7 +225,7 @@ output_INSERT(dwg_object* obj)
   log_if_error("insert_get_ins_pt");
   dwg_ent_insert_get_scale(insert, &_scale, &error);
   log_if_error("insert_get_scale");
-  obj_handle = dwg_obj_get_handle(obj, &error);
+  obj_handle = dwg_object_get_handle(obj, &error);
   log_if_error("get_handle");
   ins_handle = &obj->handle;
   log_if_error("insert_get_ref_handle");
@@ -258,27 +258,27 @@ output_object(dwg_object* obj){
       return;
     }
 
-  if (dwg_get_type(obj) == DWG_TYPE_INSERT)
+  if (dwg_object_get_type(obj) == DWG_TYPE_INSERT)
     {
       output_INSERT(obj);
     }
 
-  if (dwg_get_type(obj)== DWG_TYPE_LINE)
+  if (dwg_object_get_type(obj)== DWG_TYPE_LINE)
     {
       output_LINE(obj);
     }
 
-  if (dwg_get_type(obj)== DWG_TYPE_CIRCLE)
+  if (dwg_object_get_type(obj)== DWG_TYPE_CIRCLE)
     {
       output_CIRCLE(obj);
     }
 
-  if (dwg_get_type(obj)== DWG_TYPE_TEXT)
+  if (dwg_object_get_type(obj)== DWG_TYPE_TEXT)
     {
       output_TEXT(obj);
     }
 
-  if (dwg_get_type(obj)== DWG_TYPE_ARC)
+  if (dwg_object_get_type(obj)== DWG_TYPE_ARC)
     {
       output_ARC(obj);
     }
@@ -299,7 +299,7 @@ output_BLOCK_HEADER(dwg_object_ref* ref)
               " Could not output an SVG symbol for this BLOCK_HEADER\n");
       return;
     }
-  hdr = dwg_obj_ref_get_object(ref, &error);
+  hdr = dwg_ref_get_object(ref, &error);
   log_if_error("reference_get_object");
   abs_ref = dwg_ref_get_absref(ref, &error);
   log_if_error("ref_get_abs_ref");

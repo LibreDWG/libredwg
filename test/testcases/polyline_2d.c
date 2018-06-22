@@ -72,7 +72,7 @@ api_process (dwg_object * obj)
     fail ("error in reading curve type");
 
 
-  numpoints = dwg_obj_polyline_2d_get_numpoints (obj, &error);
+  numpoints = dwg_object_polyline_2d_get_numpoints (obj, &error);
   if (!error && numpoints > 0)
     pass ("Working Properly");
   else

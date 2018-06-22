@@ -32,7 +32,7 @@ api_process(dwg_object *obj)
   else
     printf("error in reading flag2");
 
-  numpoints = dwg_obj_polyline_3d_get_numpoints(obj, &error);
+  numpoints = dwg_object_polyline_3d_get_numpoints(obj, &error);
   if ( !error )
      printf("numpoints of polyline_3d : " FORMAT_BL "\n", numpoints);
   else

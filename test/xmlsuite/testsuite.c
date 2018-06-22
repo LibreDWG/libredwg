@@ -275,10 +275,10 @@ add_lwpolyline (xmlNodePtr rootnode, const Dwg_Object* obj)
 void
 add_2dpolyline (xmlNodePtr rootnode, const Dwg_Object* obj)
 {
-  Dwg_Entity_POLYLINE_2D *polyline2d = obj->tio.entity->tio.POLYLINE_2D;
+  //Dwg_Entity_POLYLINE_2D *polyline2d = obj->tio.entity->tio.POLYLINE_2D;
   int error;
-  BITCODE_RL j, numpts = dwg_obj_polyline_2d_get_numpoints(obj, &error);
-  dwg_point_2d *pts = dwg_obj_polyline_2d_get_points(obj, &error);
+  BITCODE_RL j, numpts = dwg_object_polyline_2d_get_numpoints(obj, &error);
+  dwg_point_2d *pts = dwg_object_polyline_2d_get_points(obj, &error);
   xmlChar *buf = NULL;
 
   //the start of the entity
@@ -313,10 +313,10 @@ add_2dpolyline (xmlNodePtr rootnode, const Dwg_Object* obj)
 void
 add_3dpolyline (xmlNodePtr rootnode, const Dwg_Object* obj)
 {
-  Dwg_Entity_POLYLINE_3D *polyline3d = obj->tio.entity->tio.POLYLINE_3D;
+  //Dwg_Entity_POLYLINE_3D *polyline3d = obj->tio.entity->tio.POLYLINE_3D;
   int error;
-  BITCODE_RL j, numpts = dwg_obj_polyline_3d_get_numpoints(obj, &error);
-  dwg_point_3d *pts = dwg_obj_polyline_3d_get_points(obj, &error);
+  BITCODE_RL j, numpts = dwg_object_polyline_3d_get_numpoints(obj, &error);
+  dwg_point_3d *pts = dwg_object_polyline_3d_get_points(obj, &error);
   xmlChar *buf = NULL;
   xmlNodePtr node = newXMLEntity (rootnode);
 

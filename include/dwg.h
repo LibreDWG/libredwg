@@ -5028,13 +5028,13 @@ EXPORT Dwg_Object*
 dwg_next_object(const Dwg_Object* obj);
 
 EXPORT Dwg_Object*
-dwg_ref_get_object(const Dwg_Data *restrict dwg,
-                   Dwg_Object_Ref *restrict ref);
+dwg_ref_object(const Dwg_Data *restrict dwg,
+               Dwg_Object_Ref *restrict ref);
 
 EXPORT Dwg_Object*
-dwg_ref_get_object_relative(const Dwg_Data *restrict dwg,
-                            Dwg_Object_Ref *restrict ref,
-                            const Dwg_Object *restrict obj);
+dwg_ref_object_relative(const Dwg_Data *restrict dwg,
+                        Dwg_Object_Ref *restrict ref,
+                        const Dwg_Object *restrict obj);
 
 EXPORT Dwg_Object*
 get_first_owned_object(const Dwg_Object *restrict hdr);

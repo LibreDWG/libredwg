@@ -4463,12 +4463,12 @@ dwg_ent_insert_get_num_owned(const dwg_ent_insert *restrict insert,
 */
 dwg_object *
 dwg_ent_insert_get_block_header(const dwg_ent_insert *restrict insert,
-                          int *restrict error)
+                                int *restrict error)
 {
   if (insert)
     {
       *error = 0;
-      return dwg_obj_ref_get_object(insert->block_header, error);
+      return dwg_ref_get_object(insert->block_header, error);
     }
   else
     {
@@ -4935,7 +4935,7 @@ dwg_ent_minsert_get_block_header(const dwg_ent_minsert *restrict minsert,
   if (minsert)
     {
       *error = 0;
-      return dwg_obj_ref_get_object(minsert->block_header, error);
+      return dwg_ref_get_object(minsert->block_header, error);
     }
   else
     {
@@ -9693,7 +9693,7 @@ dwg_obj_proxy_set_data(dwg_obj_proxy *restrict proxy,
 
 dwg_object_ref*
 dwg_obj_proxy_get_parenthandle(const dwg_obj_proxy *restrict proxy,
-                          int *restrict error)
+                               int *restrict error)
 {
   if (proxy)
     {
@@ -9727,7 +9727,7 @@ dwg_obj_proxy_get_reactors(const dwg_obj_proxy *restrict proxy,
 
 dwg_object_ref**
 dwg_obj_proxy_get_objid_object_handles(const dwg_obj_proxy *restrict proxy,
-                          int *restrict error)
+                                       int *restrict error)
 {
   if (proxy)
     {
@@ -9850,7 +9850,7 @@ dwg_obj_xrecord_set_xdata(dwg_obj_xrecord *restrict xrecord,
 
 dwg_object_ref*
 dwg_obj_xrecord_get_parenthandle(const dwg_obj_xrecord *restrict xrecord,
-                          int *restrict error)
+                                 int *restrict error)
 {
   if (xrecord)
     {
@@ -9884,7 +9884,7 @@ dwg_obj_xrecord_get_num_objid_handles(const dwg_obj_xrecord *restrict xrecord,
 
 dwg_object_ref**
 dwg_obj_xrecord_get_objid_handles(const dwg_obj_xrecord *restrict xrecord,
-                          int *restrict error)
+                                  int *restrict error)
 {
   if (xrecord)
     {
@@ -11689,7 +11689,7 @@ dwg_ent_polyline_pface_get_numfaces(const dwg_ent_polyline_pface *restrict pface
 
 dwg_point_3d *
 dwg_obj_polyline_pface_get_points(const dwg_object *restrict obj,
-                          int *restrict error)
+                                  int *restrict error)
 {
   if (obj && obj->type == DWG_TYPE_POLYLINE_PFACE)
     {
@@ -12193,7 +12193,7 @@ dwg_ent_polyline_2d_set_curve_type(dwg_ent_polyline_2d *restrict pline2d,
 
 /// Returns number of vertices
 BITCODE_BL
-dwg_obj_polyline_2d_get_numpoints(const dwg_object *restrict obj,
+dwg_object_polyline_2d_get_numpoints(const dwg_object *restrict obj,
                                   int *restrict error)
 {
   if (obj && obj->type == DWG_TYPE_POLYLINE_2D)
@@ -12208,8 +12208,8 @@ dwg_obj_polyline_2d_get_numpoints(const dwg_object *restrict obj,
         return obj->tio.entity->tio.POLYLINE_2D->num_owned;
       else if (dwg->header.version >= R_13) // iterate over first_vertex - last_vertex
         {
-          Dwg_Object *vobj = dwg_ref_get_object(dwg, _obj->first_vertex);
-          Dwg_Object *vlast = dwg_ref_get_object(dwg, _obj->last_vertex);
+          Dwg_Object *vobj = dwg_ref_object(dwg, _obj->first_vertex);
+          Dwg_Object *vlast = dwg_ref_object(dwg, _obj->last_vertex);
           if (!vobj)
             *error = 1;
           else {
@@ -12245,8 +12245,8 @@ dwg_obj_polyline_2d_get_numpoints(const dwg_object *restrict obj,
 
 /// Returns a copy of the points
 dwg_point_2d *
-dwg_obj_polyline_2d_get_points(const dwg_object *restrict obj,
-                          int *restrict error)
+dwg_object_polyline_2d_get_points(const dwg_object *restrict obj,
+                                  int *restrict error)
 {
   *error = 0;
   if (obj && obj->type == DWG_TYPE_POLYLINE_2D)
@@ -12254,7 +12254,7 @@ dwg_obj_polyline_2d_get_points(const dwg_object *restrict obj,
       BITCODE_BL i;
       Dwg_Data *dwg = obj->parent;
       Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
-      BITCODE_BL num_points = dwg_obj_polyline_2d_get_numpoints(obj, error);
+      BITCODE_BL num_points = dwg_object_polyline_2d_get_numpoints(obj, error);
       Dwg_Entity_VERTEX_2D *vertex = NULL;
       dwg_point_2d *ptx;
 
@@ -12269,7 +12269,7 @@ dwg_obj_polyline_2d_get_points(const dwg_object *restrict obj,
       if (dwg->header.version >= R_2004)
         for (i = 0; i < num_points; i++)
           {
-            Dwg_Object *vobj = dwg_ref_get_object(dwg, _obj->vertex[i]);
+            Dwg_Object *vobj = dwg_ref_object(dwg, _obj->vertex[i]);
             if (vobj && (vertex = dwg_object_to_VERTEX_2D(vobj))) {
               ptx[i].x = vertex->point.x;
               ptx[i].y = vertex->point.y;
@@ -12279,8 +12279,8 @@ dwg_obj_polyline_2d_get_points(const dwg_object *restrict obj,
           }
       else if (dwg->header.version >= R_13) // iterate over first_vertex - last_vertex
         {
-          Dwg_Object *vobj = dwg_ref_get_object(dwg, _obj->first_vertex);
-          Dwg_Object *vlast = dwg_ref_get_object(dwg, _obj->last_vertex);
+          Dwg_Object *vobj = dwg_ref_object(dwg, _obj->first_vertex);
+          Dwg_Object *vlast = dwg_ref_object(dwg, _obj->last_vertex);
           if (!vobj)
             *error = 1;
           else {
@@ -12421,8 +12421,8 @@ dwg_ent_polyline_3d_set_flag2(dwg_ent_polyline_3d *restrict pline3d,
     the list of associated _dwg_object_VERTEX_3D:: points.
 */
 BITCODE_BL
-dwg_obj_polyline_3d_get_numpoints(const dwg_object *restrict obj,
-                                  int *restrict error)
+dwg_object_polyline_3d_get_numpoints(const dwg_object *restrict obj,
+                                     int *restrict error)
 {
   if (obj && obj->type == DWG_TYPE_POLYLINE_3D)
     {
@@ -12436,8 +12436,8 @@ dwg_obj_polyline_3d_get_numpoints(const dwg_object *restrict obj,
         return obj->tio.entity->tio.POLYLINE_3D->num_owned;
       else if (dwg->header.version >= R_13) // iterate over first_vertex - last_vertex
         {
-          Dwg_Object *vobj = dwg_ref_get_object(dwg, _obj->first_vertex);
-          Dwg_Object *vlast = dwg_ref_get_object(dwg, _obj->last_vertex);
+          Dwg_Object *vobj = dwg_ref_object(dwg, _obj->first_vertex);
+          Dwg_Object *vlast = dwg_ref_object(dwg, _obj->last_vertex);
           if (!vobj)
             *error = 1;
           else {
@@ -12475,8 +12475,8 @@ dwg_obj_polyline_3d_get_numpoints(const dwg_object *restrict obj,
     the list of associated _dwg_object_VERTEX_3D:: points.
 */
 dwg_point_3d *
-dwg_obj_polyline_3d_get_points(const dwg_object *restrict obj,
-                               int *restrict error)
+dwg_object_polyline_3d_get_points(const dwg_object *restrict obj,
+                                  int *restrict error)
 {
   *error = 0;
   if (obj && obj->type == DWG_TYPE_POLYLINE_3D)
@@ -12484,7 +12484,7 @@ dwg_obj_polyline_3d_get_points(const dwg_object *restrict obj,
       BITCODE_BL i;
       Dwg_Data *dwg = obj->parent;
       Dwg_Entity_POLYLINE_3D *_obj = obj->tio.entity->tio.POLYLINE_3D;
-      BITCODE_BL num_points = dwg_obj_polyline_3d_get_numpoints(obj, error);
+      BITCODE_BL num_points = dwg_object_polyline_3d_get_numpoints(obj, error);
       Dwg_Entity_VERTEX_3D *vertex = NULL;
       dwg_point_3d *ptx;
 
@@ -12500,7 +12500,7 @@ dwg_obj_polyline_3d_get_points(const dwg_object *restrict obj,
       if (dwg->header.version >= R_2004)
         for (i = 0; i < num_points; i++)
           {
-            Dwg_Object *vobj = dwg_ref_get_object(dwg, _obj->vertex[i]);
+            Dwg_Object *vobj = dwg_ref_object(dwg, _obj->vertex[i]);
             if (vobj && (vertex = dwg_object_to_VERTEX_3D(vobj))) {
               ptx[i].x = vertex->point.x;
               ptx[i].y = vertex->point.y;
@@ -12511,8 +12511,8 @@ dwg_obj_polyline_3d_get_points(const dwg_object *restrict obj,
           }
       else if (dwg->header.version >= R_13) // iterate over first_vertex - last_vertex
         {
-          Dwg_Object *vobj = dwg_ref_get_object(dwg, _obj->first_vertex);
-          Dwg_Object *vlast = dwg_ref_get_object(dwg, _obj->last_vertex);
+          Dwg_Object *vobj = dwg_ref_object(dwg, _obj->first_vertex);
+          Dwg_Object *vlast = dwg_ref_object(dwg, _obj->last_vertex);
           if (!vobj)
             *error = 1;
           else {
@@ -17560,7 +17560,7 @@ dwg_get_block_header(dwg_data *restrict dwg,
 */
 char *
 dwg_obj_layer_get_name(const dwg_obj_layer *restrict layer,
-                          int *restrict error)
+                       int *restrict error)
 {
   if (layer)
     {
@@ -17583,14 +17583,14 @@ dwg_obj_layer_get_name(const dwg_obj_layer *restrict layer,
 ********************************************************************/
 
 /** Get number of table entries from the generic table control object.
-\code Usage: char* name = dwg_obj_tablectrl_get_num_entries(obj, &error);
+\code Usage: char* name = dwg_object_tablectrl_get_num_entries(obj, &error);
 \endcode
 \param[in]  obj    a TABLE_CONTROL dwg_object*
 \param[out] error  set to 0 for ok, >0 if not found.
 */
 BITCODE_BL
-dwg_obj_tablectrl_get_num_entries(const dwg_object *restrict obj,
-                          int *restrict error)
+dwg_object_tablectrl_get_num_entries(const dwg_object *restrict obj,
+                                  int *restrict error)
 {
   if (obj &&
       obj->supertype == DWG_SUPERTYPE_OBJECT &&
@@ -17611,14 +17611,14 @@ dwg_obj_tablectrl_get_num_entries(const dwg_object *restrict obj,
 }
 
 /** Get all table entries from the generic table control object.
-\code Usage: dwg_object_ref **refs = dwg_obj_tablectrl_get_entries(obj, &error);
+\code Usage: dwg_object_ref **refs = dwg_object_tablectrl_get_entries(obj, &error);
 \endcode
 \param[in]  obj    a TABLE_CONTROL dwg_object*
 \param[out] error  set to 0 for ok, >0 if not found.
 */
 dwg_object_ref **
-dwg_obj_tablectrl_get_entries(const dwg_object *restrict obj,
-                          int *restrict error)
+dwg_object_tablectrl_get_entries(const dwg_object *restrict obj,
+                              int *restrict error)
 {
   if (obj &&
       obj->supertype == DWG_SUPERTYPE_OBJECT &&
@@ -17638,14 +17638,14 @@ dwg_obj_tablectrl_get_entries(const dwg_object *restrict obj,
 }
 
 /** Get the nth table entry from the generic table control object.
-\code Usage: dwg_object_ref *ref = dwg_obj_tablectrl_get_entry(obj, 0, &error);
+\code Usage: dwg_object_ref *ref = dwg_object_tablectrl_get_entry(obj, 0, &error);
 \endcode
 \param[in]  obj    a TABLE_CONTROL dwg_object*
 \param[in]  index  BITCODE_BS
 \param[out] error  set to 0 for ok, >0 if not found.
 */
 dwg_object_ref *
-dwg_obj_tablectrl_get_entry(const dwg_object *restrict obj,
+dwg_object_tablectrl_get_entry(const dwg_object *restrict obj,
                             const BITCODE_BS index,
                             int *restrict error)
 {
@@ -17679,13 +17679,13 @@ dwg_obj_tablectrl_get_entry(const dwg_object *restrict obj,
 }
 
 /** Get the null_handle from the generic table control object.
-\code Usage: dwg_object_ref *ref = dwg_obj_tablectrl_get_null_handle(obj, &error);
+\code Usage: dwg_object_ref *ref = dwg_object_tablectrl_get_null_handle(obj, &error);
 \endcode
 \param[in]  obj    a TABLE_CONTROL dwg_object*
 \param[out] error  set to 0 for ok, >0 if not found.
 */
 dwg_object_ref *
-dwg_obj_tablectrl_get_null_handle(const dwg_object *restrict obj,
+dwg_object_tablectrl_get_null_handle(const dwg_object *restrict obj,
                                   int *restrict error)
 {
   if (obj &&
@@ -17706,13 +17706,13 @@ dwg_obj_tablectrl_get_null_handle(const dwg_object *restrict obj,
 }
 
 /** Get the xdicobjhandle from the generic table control object.
-\code Usage: dwg_object_ref *ref = dwg_obj_tablectrl_get_xdicobjhandle(obj, &error);
+\code Usage: dwg_object_ref *ref = dwg_object_tablectrl_get_xdicobjhandle(obj, &error);
 \endcode
 \param[in]  obj    a TABLE_CONTROL dwg_object*
 \param[out] error  set to 0 for ok, >0 if not found.
 */
 dwg_object_ref *
-dwg_obj_tablectrl_get_xdicobjhandle(const dwg_object *restrict obj,
+dwg_object_tablectrl_get_xdicobjhandle(const dwg_object *restrict obj,
                                     int *restrict error)
 {
   if (obj &&
@@ -17733,13 +17733,13 @@ dwg_obj_tablectrl_get_xdicobjhandle(const dwg_object *restrict obj,
 }
 
 /** Get the objid from the generic table control object.
-\code Usage: objid = dwg_obj_tablectrl_get_objid(obj, &error);
+\code Usage: objid = dwg_object_tablectrl_get_objid(obj, &error);
 \endcode
 \param[in]  obj    a TABLE_CONTROL dwg_object*
 \param[out] error  set to 0 for ok, >0 if not found.
 */
 BITCODE_BL
-dwg_obj_tablectrl_get_objid(const dwg_object *restrict obj,
+dwg_object_tablectrl_get_objid(const dwg_object *restrict obj,
                             int *restrict error)
 {
   if (obj &&
@@ -18046,7 +18046,7 @@ dwg_object_to_entity(dwg_object *restrict obj,
 }
 
 /*******************************************************************
-*                    FUNCTIONS FOR DWG OBJECT                       *
+*                    FUNCTIONS FOR DWG                             *
 ********************************************************************/
 
 /** Returns the number of classes or 0
@@ -18096,27 +18096,48 @@ dwg_get_object(dwg_data *dwg, BITCODE_BL index)
   return (index < dwg->num_objects) ? &dwg->object[index] : NULL;
 }
 
+
+/** Returns object from absolute reference or NULL
+\code Usage: dwg_object* obj = dwg_absref_get_object(dwg, absref);
+\endcode
+\param[in]  dwg
+\param[in]  absref
+*/
+dwg_object *
+dwg_absref_get_object(const dwg_data *dwg,
+                      const BITCODE_BL absref)
+{
+  if (absref)
+      return dwg_resolve_handle(dwg, absref);
+  else
+    return NULL;
+}
+
+/*******************************************************************
+*                    FUNCTIONS FOR DWG OBJECT                       *
+********************************************************************/
+
 /** Returns the object bitsize or 0
-\code Usage: bitsize = dwg_obj_get_bitsize(obj);
+\code Usage: bitsize = dwg_object_get_bitsize(obj);
 \endcode
 \param[in]  obj   dwg_object*
 */
 BITCODE_RL
-dwg_obj_get_bitsize(const dwg_object *obj)
+dwg_object_get_bitsize(const dwg_object *obj)
 {
   return obj ? obj->bitsize : 0;
 }
 
 /** Returns the global index/objid in the list of all objects.
     This is the same as a dwg_handle absolute_ref value.
-\code Usage: int index = dwg_obj_object_get_index(obj, &error);
+\code Usage: int index = dwg_object_get_index(obj, &error);
 \endcode
 \param[in]  obj     dwg_object*
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 BITCODE_BL
-dwg_obj_object_get_index(const dwg_object *restrict obj,
-                          int *restrict error)
+dwg_object_get_index(const dwg_object *restrict obj,
+                     int *restrict error)
 {
   if (obj)
     {
@@ -18140,7 +18161,7 @@ dwg_obj_object_get_index(const dwg_object *restrict obj,
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 dwg_handle *
-dwg_obj_get_handle(dwg_object *restrict obj,
+dwg_object_get_handle(dwg_object *restrict obj,
                    int *restrict error)
 {
   if (obj)
@@ -18158,6 +18179,103 @@ dwg_obj_get_handle(dwg_object *restrict obj,
     }
 }
 
+
+/** Returns the dwg object type, see \ref DWG_OBJECT_TYPE "enum DWG_OBJECT_TYPE".
+    With types > 500 you need to check the dxfname instead, or check fixedtype.
+    \sa dwg_object_get_dxfname \sa dwg_get_fixedtype
+\code Usage:
+  int type = dwg_object_get_type(obj);
+  if (type > 500) dxfname = dwg_object_get_dxfname(obj);
+\endcode
+\param[in]  obj   dwg_object*
+*/
+int
+dwg_object_get_type(const dwg_object *obj)
+{
+  if (obj)
+    {
+      return obj->type;
+    }
+  else
+    {
+      LOG_ERROR("%s: empty ref", __FUNCTION__)
+      return -1;
+    }
+}
+
+/** Returns the fixed dwg object type, see \ref DWG_OBJECT_TYPE "enum DWG_OBJECT_TYPE".
+    \sa dwg_object_get_type
+\code Usage:
+  int type = dwg_object_get_type(obj);
+  if (type > 500) dxfname = dwg_object_get_dxfname(obj);
+\endcode
+\param[in]  obj   dwg_object*
+*/
+int
+dwg_get_fixedtype(const dwg_object *obj)
+{
+  if (obj)
+    {
+      return obj->fixedtype;
+    }
+  else
+    {
+      LOG_ERROR("%s: empty ref", __FUNCTION__)
+      return -1;
+    }
+}
+
+/** Returns the object dxfname as ASCII string. Since r2007 utf8 encoded, but
+    we haven't seen unicode names for the dxfname yet.
+\code Usage: const char* name = dwg_object_get_dxfname(obj);
+\endcode
+\param obj dwg_object*
+*/
+char*
+dwg_object_get_dxfname(const dwg_object *obj)
+{
+  if (obj)
+    {
+      if (dwg_version == R_INVALID)
+        dwg_version = (Dwg_Version_Type)obj->parent->header.version;
+      return obj->dxfname;
+    }
+  else
+    {
+      LOG_ERROR("%s: empty ref", __FUNCTION__)
+      return NULL;
+    }
+}
+
+/*******************************************************************
+*                    FUNCTIONS FOR DWG OBJECT SUBCLASSES           *
+********************************************************************/
+
+/** Returns dwg_obj_obj* from dwg_object*
+\code Usage: dwg_obj_obj ent = dwg_object_to_object(obj, &error);
+\endcode
+\param[in]  obj   dwg_object*
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+dwg_obj_obj *
+dwg_object_to_object(dwg_object *restrict obj,
+                     int *restrict error)
+{
+  if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT)
+    {
+      *error = 0;
+      if (dwg_version == R_INVALID)
+        dwg_version = (Dwg_Version_Type)obj->parent->header.version;
+      return obj->tio.object;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__)
+      return NULL;
+    }
+}
+
 /** Returns dwg_object* from dwg_obj_obj*
 \code Usage: dwg_object* obj = dwg_obj_obj_to_object(_obj, &error);
 \endcode
@@ -18166,7 +18284,7 @@ dwg_obj_get_handle(dwg_object *restrict obj,
 */
 dwg_object *
 dwg_obj_obj_to_object(const dwg_obj_obj *restrict obj,
-                          int *restrict error)
+                      int *restrict error)
 {
   dwg_data *dwg;
   dwg_object *retval;
@@ -18244,39 +18362,18 @@ dwg_obj_generic_parent(const dwg_obj_generic *restrict obj,
     }
 }
 
-/** Returns dwg_obj_obj* from dwg_object*
-\code Usage: dwg_obj_obj ent = dwg_object_to_object(obj, &error);
-\endcode
-\param[in]  obj   dwg_object*
-\param[out] error   int*, is set to 0 for ok, 1 on error
-*/
-dwg_obj_obj *
-dwg_object_to_object(dwg_object *restrict obj,
-                     int *restrict error)
-{
-  if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT)
-    {
-      *error = 0;
-      if (dwg_version == R_INVALID)
-        dwg_version = (Dwg_Version_Type)obj->parent->header.version;
-      return obj->tio.object;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__)
-      return NULL;
-    }
-}
+/*******************************************************************
+*                    FUNCTIONS FOR DWG OBJECT REF                  *
+********************************************************************/
 
 /** Returns object from reference or NULL
-\code Usage: dwg_object obj = dwg_obj_ref_get_object(obj, &error);
+\code Usage: dwg_object obj = dwg_ref_get_object(obj, &error);
 \endcode
 \param[in]  ref     dwg_object_ref*
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 dwg_object *
-dwg_obj_ref_get_object(const dwg_object_ref *restrict ref,
+dwg_ref_get_object(const dwg_object_ref *restrict ref,
                        int *restrict error)
 {
   if (ref)
@@ -18290,22 +18387,6 @@ dwg_obj_ref_get_object(const dwg_object_ref *restrict ref,
       LOG_ERROR("%s: empty ref", __FUNCTION__)
       return NULL;
     }
-}
-
-/** Returns object from absolute reference or NULL
-\code Usage: dwg_object* obj = dwg_absref_get_object(dwg, absref);
-\endcode
-\param[in]  dwg
-\param[in]  absref
-*/
-dwg_object *
-dwg_absref_get_object(const dwg_data *dwg,
-                      const BITCODE_BL absref)
-{
-  if (absref)
-      return dwg_resolve_handle(dwg, absref);
-  else
-    return NULL;
 }
 
 /* Returns the absolute handle reference, to be looked up
@@ -18332,47 +18413,3 @@ dwg_ref_get_absref(const dwg_object_ref *restrict ref,
     }
 }
 
-/** Returns the dwg object type, see \ref DWG_OBJECT_TYPE "enum DWG_OBJECT_TYPE".
-    With types > 500 you need to check the dxfname instead.
-    \sa dwg_get_dxfname
-\code Usage:
-  int type = dwg_get_type(obj);
-  if (type > 500) dxfname = dwg_get_dxfname(obj);
-\endcode
-\param[in]  obj   dwg_object*
-*/
-int
-dwg_get_type(const dwg_object *obj)
-{
-  if (obj)
-    {
-      return obj->type;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty ref", __FUNCTION__)
-      return -1;
-    }
-}
-
-/** Returns the object dxfname as ASCII string. Since r2007 utf8 encoded, but
-    we haven't seen unicode names for the dxfname yet.
-\code Usage: const char* name = dwg_get_dxfname(obj);
-\endcode
-\param obj dwg_object*
-*/
-char*
-dwg_get_dxfname(const dwg_object *obj)
-{
-  if (obj)
-    {
-      if (dwg_version == R_INVALID)
-        dwg_version = (Dwg_Version_Type)obj->parent->header.version;
-      return obj->dxfname;
-    }
-  else
-    {
-      LOG_ERROR("%s: empty ref", __FUNCTION__)
-      return NULL;
-    }
-}

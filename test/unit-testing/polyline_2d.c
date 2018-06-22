@@ -97,7 +97,7 @@ api_process(dwg_object *obj)
   }
 
 
-  numpoints = dwg_obj_polyline_2d_get_numpoints(obj, &error);
+  numpoints = dwg_object_polyline_2d_get_numpoints(obj, &error);
   if ( !error )
   {
      printf("numpoints of polyline : " FORMAT_BL "\n", numpoints);
@@ -107,7 +107,7 @@ api_process(dwg_object *obj)
     printf("error in reading numpoints");
   }
 
-  points = dwg_obj_polyline_2d_get_points(obj, &error);
+  points = dwg_object_polyline_2d_get_points(obj, &error);
   if ( !error )
    {
      unsigned long i;

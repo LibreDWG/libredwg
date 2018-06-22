@@ -603,7 +603,7 @@ dwg_next_object(const Dwg_Object* obj)
  * Find an object given its handle
  */
 Dwg_Object*
-dwg_ref_get_object(const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
+dwg_ref_object(const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
 {
   if (!ref)
     return NULL;
@@ -625,7 +625,7 @@ dwg_ref_get_object(const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
  * OFFSETOBJHANDLE, handleref.code > 6.
  */
 Dwg_Object*
-dwg_ref_get_object_relative(const Dwg_Data *restrict dwg,
+dwg_ref_object_relative(const Dwg_Data *restrict dwg,
                             Dwg_Object_Ref *restrict ref,
                             const Dwg_Object *restrict obj)
 {
