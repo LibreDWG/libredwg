@@ -2,5 +2,5 @@ LibreDWG.pm
 LibreDWG.xs
 MANIFEST
 Makefile.PL
-wrap_perl.c
+swig_perl.c
 t/0_basic.t

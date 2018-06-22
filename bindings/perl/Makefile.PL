@@ -1,31 +1,36 @@
 use ExtUtils::MakeMaker;
 use strict;
 use ExtUtils::Embed qw(ccopts ldopts);
-my ($ccflags, $ldflags);
+use Config;
 
+my $lddlflags = $Config{lddlflags};
 my $ldopts = ldopts;
 chomp($ldopts);
+my $ccopts = ccopts;
+chomp($ccopts);
 
-for (@ARGV) {
-  if    (/^CCFLAGS=(.*)$/)  { $ccflags = ccopts . " $1"; }
-  elsif (/^LDFLAGS=(.*)$/)  { $ldflags = $ldopts . " $1"; }
-  else { warn "ignored arg $_. We only accept CCFLAGS and LDFLAGS"; }
-}
 if (!@ARGV && 
     -d '../../bindings' &&
     -d '../../src/.libs' &&
     -d '../../include') {
-  $ccflags = ccopts . " -I../../include";
-  $ldflags = $ldopts . " -L../../src/.libs -lredwg";
-}
+  $ccopts .= " -I../../include";
+  $ldopts .= " -L../../src/.libs";
+  $lddlflags = $lddlflags . " -L../../src/.libs";
+} # else link to the installed libredwg
+
 # wrap_perl.c is 9MB, too big
-$ccflags =~ s/-O\d //;
+$ccopts =~ s/-O\d //;
+$ldopts .= " -lredwg";
+$lddlflags .= " -lredwg";
 
 WriteMakefile (
   NAME         => 'LibreDWG',
   VERSION      => '0.4',
-  ($ccflags ? (CCFLAGS => $ccflags) : ()),
-  ($ldflags ? (LDFLAGS => $ldflags) : ()),
+  ($ccopts ? (CCFLAGS => $ccopts) : ()),
+  ($ldopts ? (LDFLAGS => $ldopts) : ()),
+  ($lddlflags ? (LDDLFLAGS => $lddlflags) : ()),
+  LIBS => ['-lredwg'],
+  OPTIMIZE => '',
   ($] >= 5.005
    ? (ABSTRACT	=> 'LibreDWG perl5 bindings',
       AUTHOR  	=> 'Reini Urban <rurban@cpan.org>')

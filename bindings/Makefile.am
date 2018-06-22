@@ -25,31 +25,37 @@ ACLOCAL_AMFLAGS = -I m4
 # The perl subdir is for the perl Makefile.PL tool and is driven from here
 SUBDIRS = python
 
-dist_perl_PERL = perl/wrap_perl.c perl/LibreDWG.pm perl/LibreDWG.xs perl/Makefile.PL \
+SWIG_PERL_sources = perl/swig_perl.c
+dist_perl_PERL = $(SWIG_PERL_sources) perl/LibreDWG.pm perl/LibreDWG.xs perl/Makefile.PL \
 	         perl/LibreDWG.o
+
 all-am: $(dist_perl_PERL)
 	echo Making all for perl
 
 perl/LibreDWG.o: perl/LibreDWG.pm perl/LibreDWG.xs perl/Makefile.PL
-	echo Note wrap_perl.c is huge. this will need some time...
+	echo Note swig_perl.c is huge. this will need some time...
 	cd perl && \
-	  $(PERL) Makefile.PL CCFLAGS="-I$(abs_top_srcdir)/include" \
-                              LDFLAGS="-L$(abs_top_builddir)/src/.libs" && \
+	  $(PERL) Makefile.PL && \
 	  $(MAKE) OPTIMIZE=
 
 # regen the wrapper
 if HAVE_SWIG_PERL
-SWIG_PERL_sources = perl/wrap_perl.c
-PERL_sources = $(top_srcdir)/bindings/dwg.i \
-	$(top_srcdir)/include/dwg.h \
-	$(top_srcdir)/include/dwg_api.h
+PERL_sources =  $(top_srcdir)/bindings/dwg.i \
+		$(top_srcdir)/include/dwg.h \
+		$(top_srcdir)/include/dwg_api.h \
+		$(top_srcdir)/src/dwg_api.c \
+		$(top_srcdir)/src/dwg.c
 
 $(SWIG_PERL_sources): $(PERL_sources) Makefile.am
-	$(SWIG) -perl5 -I$(abs_top_srcdir)/include -o perl/wrap_perl.c $(srcdir)/dwg.i
+	$(SWIG) -perl5 -I$(abs_top_srcdir)/include -o perl/swig_perl.c $(srcdir)/dwg.i
 
 CLEANFILES = perl/LibreDWG.bs perl/LibreDWG.c perl/pm_to_blib perl/Makefile perl/LibreDWG.o
 
 check-am: $(dist_perl_PERL)
 	echo Making check for perl
 	$(MAKE) -C perl test
+
+install-am: $(dist_perl_PERL)
+	echo Making install for perl
+	$(MAKE) -C perl install
 endif

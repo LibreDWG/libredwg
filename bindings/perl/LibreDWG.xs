@@ -4,4 +4,4 @@
 
 #define restrict
 #include "dwg_api.h"
-#include "wrap_perl.c"
+#include "swig_perl.c"

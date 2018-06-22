@@ -19,6 +19,7 @@
 
 ## bindings/python/Makefile.am: call SWIG and build python module
 ## written by Rodrigo Rodrigues da Silva
+## modified by Reini Urban
 
 ## TODO: place generated files out of source tree
 
@@ -30,8 +31,10 @@ pkgpythondir = $(pythondir)
 
 if HAVE_SWIG_PYTHON
 
-BUILT_SOURCES = swig_wrap_python.c
-SWIG_SOURCES = $(srcdir)/../dwg.i $(top_srcdir)/include/dwg.h
+BUILT_SOURCES = swig_python.c
+SWIG_SOURCES  = $(top_srcdir)/bindings/dwg.i \
+		$(top_srcdir)/include/dwg.h \
+		$(top_srcdir)/include/dwg_api.h
 
 dist_python_PYTHON = libredwg.py
 pyexec_LTLIBRARIES = _libredwg.la
@@ -49,14 +52,14 @@ _libredwg_la_LIBADD = ../../src/libredwg.la
 
 ## not elegant, but works
 ## With macports gcc you need -I/opt/local/lib/gcc6/gcc/x86_64-apple-darwin15/6.4.0/include
-swig_wrap_python.c : $(SWIG_SOURCES) Makefile.am
+swig_python.c : $(SWIG_SOURCES) Makefile.am
 	swig -python -I$(top_srcdir)/include -o $@ $(srcdir)/../dwg.i
 
 ## should work out of the box, but $(SWIG) resolves to swig -c++
 ## which we don't want, and SWIG_PYTHON_OPT resolves to null,
 ## therefore -tcl is called by default
 ##
-##    $(srcdir)/swig_wrap_python.c : $(SWIG_SOURCES)
+##    $(srcdir)/swig_python.c : $(SWIG_SOURCES)
 ##	$(SWIG) $(SWIG_PYTHON_OPT) -I$(top_srcdir)/src -o $@ $<
 
 endif
