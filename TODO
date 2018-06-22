@@ -66,13 +66,16 @@
 * add geomutils to tesselate curves (e.g. GeomJSON),
   and to transform OCS/UCS objects when being displayed (e.g. svg, ps).
   add API funcs to find table elements (layer, ltype).
-* ACIS: implement parsing of SAT file version 2,
-  in ACIS entities 37, 38 and 39
+* ACIS: implement parsing of SAT file version 2 (ShapeManager, forked from ACIS 7.0)
 * map DWG constraints to FreeCAD and SolveSpace constraints
   https://www.freecadweb.org/wiki/Sketcher_Workbench#Sketcher_Constraints
 * check valabind vapi files to generate more and better bindings
   (e.g. radare2-bindings). c++, rust, go, node, java, perl, ruby, php,
   autolisp (via ARX).
+  Did so, I dislike it. Too much work, valabind crashes and requires glib and gobject.
+  See the work/vapi branch.
+* add some UI to inspect the DWG internal structs (dwgiview), and maybe a viewer (dwgview).
+  Started with perl-tk
 
 * fix the remaining leaks (xdata?, unicode texts).
 * finish documentation of the API functions, refman.

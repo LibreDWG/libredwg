@@ -58,6 +58,7 @@ Texts.  A copy of the license is included in the section entitled
 * Functions::           Call them.
 * Errors::              Error levels.
 * Programs::            Useful binaries.
+* Bindings::            Bindings to other languages.
 * Reference API::
 
 * Reporting bugs::      Sending bug reports and feature suggestions.
@@ -680,6 +681,15 @@ There are also some more examples in the source distribution:
 @file{dwg2svg2} converts a DWG to SVG similar to @file{dwg2SVG},
 but via the @file{dwg_api.h} only. The graphical representation for PS and SVG output is severely lacking, block references (insert entities) are not yet exploded , UCS and paper space transformations per entity are not yet done.
 @cindex dwg2svg2
+
+@node Bindings
+@chapter Bindings
+
+@cindex python perl
+
+LibreDWG generates library bindings to python and perl5 via swig. These can be quite huge.
+You can easily add bindings to other swig-supported languages, like go, ruby, node, ...
+by yourself.
 
 @node Reference API
 @chapter Reference API
