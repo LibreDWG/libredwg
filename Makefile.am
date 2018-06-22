@@ -28,11 +28,12 @@ include_HEADERS = \
 	include/dwg.h \
 	include/dwg_api.h
 
-.PHONY: check-dwg check-dwg-valgrind man manual scan-build gcov check-wine
+.PHONY: check-dwg check-dxf check-dwg-valgrind \
+        regen-man man manual refman refman-pdf scan-build gcov
 
-man:
-	$(MAKE) -C programs $@
 regen-man:
+	$(MAKE) -C programs $@
+man:
 	$(MAKE) -C programs $@
 manual:
 	$(MAKE) -C doc $@
@@ -89,7 +90,7 @@ gcov: check
 	cover -no-gcov
 endif
 
-EXTRA_DIST = README README-alpha dxf_example.lsp dxf_example.sh test-dxf.sh
+EXTRA_DIST = README README-alpha dxf_example.lsp dxf_example.sh test-dxf.sh logs.sh
 CLEANFILES = check-dwg.log check-dwg-valgrind.log check-dxf.log \
              check-dwg.log~ check-dwg-valgrind.log~ check-dxf.log~ \
 	     *_20*.dxf *_r1*.dxf

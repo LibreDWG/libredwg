@@ -25,7 +25,7 @@ EXTRA_PROGRAMS = unknown
 
 load_dwg_SOURCES = load_dwg.c
 dwg2svg2_SOURCES = dwg2svg2.c
-unknown_SOURCES  = unknown.c alldwg.inc
+unknown_SOURCES  = unknown.c #alldwg.inc
 
 alldwg.inc: log_unknown.pl
 	echo Creating alldwg.inc will need a few minutes...
@@ -33,6 +33,9 @@ alldwg.inc: log_unknown.pl
 	  mv examples/alldwg.inc examples/alldwg.inc~; \
 	  for l in *.log; do b=`basename $l .log`; \
 	    examples/log_unknown.pl $l >>examples/alldwg.inc; done
+
+.PHONY: check-syntax regen-unknown dsymutil gcov
+regen-unknown: alldwg.inc
 
 if HAVE_WINE
 TESTS_ENVIRONMENT = \
@@ -48,7 +51,7 @@ endif
 
 TESTS = $(top_srcdir)/programs/alive.test
 
-EXTRA_DIST = load_dwg.py log_unknown.pl
+EXTRA_DIST = load_dwg.py log_unknown.pl alldwg.inc
 CLEANFILES = {example,sample}_2000.svg alldwg.inc~
 MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
 
@@ -63,7 +66,6 @@ dsymutil:
 check-syntax:
 	test -n "$(CHK_SOURCES)" && \
 	  $(COMPILE) -o /dev/null -S $(CHK_SOURCES)
-.PHONY: check-syntax
 
 if ENABLE_GCOV
 AM_CFLAGS += @GCOV_CFLAGS@
