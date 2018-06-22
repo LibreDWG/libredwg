@@ -41,9 +41,11 @@ perl/LibreDWG.o: perl/LibreDWG.pm perl/LibreDWG.xs perl/Makefile.PL
 
 CLEANFILES = perl/LibreDWG.bs perl/LibreDWG.c perl/pm_to_blib perl/Makefile perl/LibreDWG.o
 
+#disable if libredwg.so was not installed yet
 check-am: $(dist_perl_PERL)
 	@echo Making check for perl
-	$(MAKE) -C perl test
+	-dlname=$$(grep dlname= $(top_srcdir)/src/.libs/libredwg.la | cut -c8-); \
+	  test -f $(libdir)/$$dlname && $(MAKE) -C perl test
 
 install-am: $(dist_perl_PERL)
 	@echo Making install for perl
