@@ -59,7 +59,7 @@ main (int argc, char *argv[])
   int i;
   for (i=0; unknowns[i].name; i++)
     {
-      //TODO: find the shortest objects
+      //TODO offline: find the shortest objects. find the matching DWG and DXF. get the DXF values.
       printf("%s: %d (%s)\n", unknowns[i].name, unknowns[i].bitsize, unknowns[i].source);
       //TODO: try likely field combinations and print the top 3.
       //there are various heuristics, like the handle stream at the end

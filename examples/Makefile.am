@@ -27,6 +27,8 @@ load_dwg_SOURCES = load_dwg.c
 dwg2svg2_SOURCES = dwg2svg2.c
 unknown_SOURCES  = unknown.c #alldwg.inc
 
+all: $(check_PROGRAMS)
+
 alldwg.inc: log_unknown.pl
 	echo Creating alldwg.inc will need a few minutes...
 	-cd .. && ./logs.sh; \
