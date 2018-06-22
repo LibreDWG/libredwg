@@ -553,7 +553,7 @@ This is about 70% finished. Check the covered entity types.
 LibreDWG is mostly a library, and as such collects error codes from
 the highest level function down to the lowest level functions.
 The error codes are sorted by severity, and only if the error exceeds
-DWG_ERR_CRITICAL, i.e. DWG_ERR_VALUEOUTOFBOUNDS, processing is stopped.
+DWG_ERR_CRITICAL, i.e. DWG_ERR_CLASSESNOTFOUND, processing is stopped.
 
 All error bitmasks are collected during read or write and returned at the end.
 
@@ -564,8 +564,8 @@ All error bitmasks are collected during read or write and returned at the end.
 @item DWG_ERR_INVALIDTYPE       8
 @item DWG_ERR_INVALIDHANDLE     16
 @item DWG_ERR_INVALIDEED        32
-@item DWG_ERR_VALUEOUTOFBOUNDS  64 = DWG_ERR_CRITICAL
-@item DWG_ERR_CLASSESNOTFOUND   128
+@item DWG_ERR_VALUEOUTOFBOUNDS  64
+@item DWG_ERR_CLASSESNOTFOUND   128 = DWG_ERR_CRITICAL
 @item DWG_ERR_SECTIONNOTFOUND   256
 @item DWG_ERR_PAGENOTFOUND      512
 @item DWG_ERR_INTERNALERROR     1024
@@ -685,11 +685,13 @@ but via the @file{dwg_api.h} only. The graphical representation for PS and SVG o
 @node Bindings
 @chapter Bindings
 
-@cindex python perl
+@cindex python
+@cindex perl
 
-LibreDWG generates library bindings to python and perl5 via swig. These can be quite huge.
-You can easily add bindings to other swig-supported languages, like go, ruby, node, ...
-by yourself.
+LibreDWG generates library bindings to python and perl5 via
+swig. These can be quite huge.  You can easily add bindings to other
+swig-supported languages, like Go, C#, ruby, php, D, lua, tcl, common
+lisp, ocaml, or others by yourself. Patches accepted.
 
 @node Reference API
 @chapter Reference API
