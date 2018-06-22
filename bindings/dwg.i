@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2010,2011 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2010,2011,2018 Free Software Foundation, Inc.              */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -14,15 +14,18 @@
  * dwg.i: SWIG interface file
  * written by Rodrigo Rodrigues da Silva
  * ideas contributed by James Michael DuPont
+ * modified by Reini Urban
  */
 
 %module libredwg
 
 %{
-#include "../../include/dwg.h"
+#include "../src/config.h"
+#include "dwg_api.h"
 %}
 
 %include "carrays.i"
 %array_functions(Dwg_Object, Dwg_Object_Array);
 
-#include "../../include/dwg.h"
+%include "dwg.h"
+%include "dwg_api.h"
