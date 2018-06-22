@@ -18342,7 +18342,7 @@ dwg_ent_generic_parent(const dwg_ent_generic *restrict ent,
 */
 dwg_obj_ent *
 dwg_object_to_entity(dwg_object *restrict obj,
-                          int *restrict error)
+                     int *restrict error)
 {
   if (obj && obj->supertype == DWG_SUPERTYPE_ENTITY)
     {
