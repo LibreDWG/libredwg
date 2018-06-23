@@ -9,6 +9,7 @@ chomp($ldopts);
 my $ccopts = ccopts;
 chomp($ccopts);
 
+# we are in bindings/perl. didn't check for out-of-dir configure
 if (!@ARGV && 
     -d '../../bindings' &&
     -d '../../src/.libs' &&
@@ -29,7 +30,7 @@ WriteMakefile (
   ($ccopts ? (CCFLAGS => $ccopts) : ()),
   ($ldopts ? (LDFLAGS => $ldopts) : ()),
   ($lddlflags ? (LDDLFLAGS => $lddlflags) : ()),
-  LIBS => ['-lredwg'],
+  #LIBS => ['-lredwg'],
   OPTIMIZE => '',
   ($] >= 5.005
    ? (ABSTRACT	=> 'LibreDWG perl5 bindings',

@@ -26,30 +26,35 @@ ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = python
 
 if HAVE_PERL
-SWIG_PERL_sources = perl/swig_perl.c
-dist_perl_PERL = $(SWIG_PERL_sources) perl/LibreDWG.pm perl/LibreDWG.xs perl/Makefile.PL \
-	         perl/LibreDWG.o
+dist_perl_PERL = perl/swig_perl.c perl/LibreDWG.pm perl/LibreDWG.xs \
+                 perl/Makefile.PL perl/MANIFEST
+EXTRA_DIST = $(dist_perl_PERL)
 
 all-am: $(dist_perl_PERL)
 	@echo Making all for perl
 
-perl/LibreDWG.o: perl/LibreDWG.pm perl/LibreDWG.xs perl/Makefile.PL
-	@echo Note swig_perl.c is huge. this will need some time...
-	cd perl && \
-	  $(PERL) Makefile.PL && \
+# building perl bindings is optional. Most setup's don't have all the deps, like
+# crypt.h, sys/wait.h on windows.
+perl/LibreDWG.o: perl/LibreDWG.pm perl/LibreDWG.xs perl/Makefile
+	@echo Note swig_perl.c is huge. This will need some time...
+	-cd perl && \
 	  $(MAKE) OPTIMIZE=
+
+perl/Makefile: perl/Makefile.PL
+	-cd perl && \
+	  $(PERL) Makefile.PL
 
 CLEANFILES = perl/LibreDWG.bs perl/LibreDWG.c perl/pm_to_blib perl/Makefile perl/LibreDWG.o
 
-#disable if libredwg.so was not installed yet
+# Maybe disable if libredwg.so was not installed yet.
+# rpath/LD_LIBRARY_PATH overrides are too troublesome
 check-am: $(dist_perl_PERL)
 	@echo Making check for perl
-	-dlname=$$(grep dlname= $(top_srcdir)/src/.libs/libredwg.la | cut -c8-); \
-	  test -f $(libdir)/$$dlname && $(MAKE) -C perl test
+	-$(MAKE) -C perl test OPTIMIZE= LD_RUN_PATH="$(abs_top_builddir)/src/.libs"
 
 install-am: $(dist_perl_PERL)
 	@echo Making install for perl
-	$(MAKE) -C perl install
+	-$(MAKE) -C perl install
 endif
 
 # regen the wrapper
@@ -60,7 +65,8 @@ PERL_sources =  $(top_srcdir)/bindings/dwg.i \
 		$(top_srcdir)/src/dwg_api.c \
 		$(top_srcdir)/src/dwg.c
 
-$(SWIG_PERL_sources): $(PERL_sources) Makefile.am
+perl/LibreDWG.pm: perl/swig_perl.c
+perl/swig_perl.c: $(PERL_sources) Makefile.am
 	$(SWIG) -perl5 -I$(abs_top_srcdir)/include -o perl/swig_perl.c $(srcdir)/dwg.i
 
 endif
