@@ -56,6 +56,9 @@ char *pattern;
 char buf[4096];
 int options = PCRE2_DUPNAMES;
 int opt_count = 0;
+int opt_text = 0;
+int opt_tables = 0;
+int opt_filename = 1;
 
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
@@ -71,9 +74,9 @@ static pcre2_match_context_8 *match_context = NULL;
 static pcre2_jit_stack *jit_stack = NULL;
 static pcre2_compile_context_8 *compile_context = NULL;
 # endif
-# define PUBLIC_JIT_MATCH_OPTIONS \
+# define PCRE2_JIT_MATCH_OPTIONS \
    (PCRE2_NO_UTF_CHECK|PCRE2_NOTBOL|PCRE2_NOTEOL|PCRE2_NOTEMPTY|\
-    PCRE2_NOTEMPTY_ATSTART|PCRE2_PARTIAL_SOFT|PCRE2_PARTIAL_HARD)
+    PCRE2_NOTEMPTY_ATSTART|PCRE2_PARTIAL_SOFT)
 #endif
 
 static int usage(void) {
@@ -95,15 +98,18 @@ static int help(void) {
 #ifdef HAVE_PCRE2_H
   printf("  -x                        Extended regex pattern\n");
 #endif
+  printf("  -c, --count               Print only the count of matched elements.\n");
+  printf("  -h, --no-filename         Print no filename.\n");
+#if 0
+  printf("  -R, -r, --recursive       Recursively search subdirectories listed.\n");
+#endif
 #if 0
   printf("  --type NAME               Search only NAME entities or objects.\n");
   printf("  --dxf NUM                 Search only DXF group NUM fields.\n");
+#endif
   // for now only this:
   printf("  --text                    Search only in TEXT-like entities.\n");
   printf("  --tables                  Search only in table names.\n");
-  printf("  -R, -r, --recursive       Recursively search subdirectories listed.\n");
-#endif
-  printf("  -c, --count               Print only the count of matched elements.\n");
   printf("      --help                Display this help and exit\n");
   printf("      --version             Output version information and exit\n"
          "\n");
@@ -112,52 +118,58 @@ static int help(void) {
 }
 
 static int
-do_match (char *filename, char *entity, int dxf, char* text, int textlen)
+do_match (char *filename, char *entity, int dxf, char* text)
 {
 #ifdef HAVE_PCRE2_H
-  int found = pcre2_jit_match_8(ri, (PCRE2_SPTR8)text, textlen, 0,
-                                PUBLIC_JIT_MATCH_OPTIONS,
+  int found = pcre2_jit_match_8(ri, (PCRE2_SPTR8)text, PCRE2_ZERO_TERMINATED, 0,
+                                PCRE2_JIT_MATCH_OPTIONS,
                                 match_data,     /* block for storing the result */
                                 match_context); /* disabled */
   if (found >= 0) {
     if (!opt_count)
-      printf("%s %s %d: %s\n", filename, entity, dxf, text);
+      printf("%s %s %d: %s\n", opt_filename ? filename : "", entity, dxf, text);
     return 1;
   }
-#else
+#endif
+
   if (options & PCRE2_CASELESS)
     {
 # ifndef HAVE_STRCASESTR
-      int i, len;
+      int i, len, dmax;
       char *dest = text;
-      int dlen = textlen;
+      int dlen = dmax = strlen(text);
       char *src = pattern;
       int slen = strlen(pattern);
-      while (*dest && dlen)
+
+      while (*dest && dmax)
         {
           i = 0;
           len = slen;
-          dlen = textlen;
-          if (toupper((unsigned char)dest[i]) != toupper((unsigned char)src[i])) {
-            break;
-          }
-          /* move to the next char */
-          i++;
-          len--;
-          dlen--;
+          dlen = dmax;
+          while (dest[i] && dlen)
+            {
+              if (toupper((unsigned char)dest[i]) != toupper((unsigned char)src[i])) {
+                break;
+              }
+              /* move to the next char */
+              i++;
+              len--;
+              dlen--;
 
-          if (src[i] == '\0' || !len) {
-            if (!opt_count)
-              printf("%s %s %d: %s\n", filename, entity, dxf, text);
-            return 1;
-          }
+              if (src[i] == '\0' || !len) {
+                if (!opt_count)
+                  printf("%s %s %d: %s\n", opt_filename ? filename : "", entity, dxf, text);
+                return 1;
+              }
+            }
           dest++;
+          dmax--;
         }
 # else
       if (strcasestr(text, pattern))
         {
           if (!opt_count)
-            printf("%s %s %d: %s\n", filename, entity, dxf, text);
+            printf("%s %s %d: %s\n", opt_filename ? filename : "", entity, dxf, text);
           return 1;
         }
 # endif
@@ -166,59 +178,133 @@ do_match (char *filename, char *entity, int dxf, char* text, int textlen)
     {
       if (strstr(text, pattern)) {
         if (!opt_count)
-          printf("%s %s %d: %s\n", filename, entity, dxf, text);
+          printf("%s %s %d: %s\n", opt_filename ? filename : "", entity, dxf, text);
         return 1;
       }
     }
-#endif
+
   return 0;
 }
-  
+
+#define MATCH_TYPE(type,ENTITY,text_field,dxf)  \
+  text = obj->tio.type->tio.ENTITY->text_field; \
+  if (obj->parent->header.version >= R_2007) \
+    text = bit_convert_TU((BITCODE_TU)text); \
+  found += do_match(filename, #ENTITY, dxf, text); \
+  if (obj->parent->header.version >= R_2007) \
+    free(text)
+
+#define MATCH_ENTITY(ENTITY,text_field,dxf) \
+  MATCH_TYPE(entity,ENTITY,text_field,dxf)
+#define MATCH_OBJECT(ENTITY,text_field,dxf) \
+  MATCH_TYPE(object,ENTITY,text_field,dxf)
+#define MATCH_TABLE(ENTITY, handle, TABLE, dxf) {}
+
 static
 int match_TEXT(char* filename, Dwg_Object* obj)
 {
-  char *text = obj->tio.entity->tio.TEXT->text_value;
-  int found, textlen;
-  if (obj->parent->header.version >= R_2007)
-    text = bit_convert_TU((BITCODE_TU)text);
-  textlen = strlen(text);
-
-  found = do_match(filename, "TEXT", 1, text, textlen);
-
-  if (obj->parent->header.version >= R_2007)
-    free(text);
+  char *text;
+  int found = 0;
+  MATCH_ENTITY (TEXT, text_value, 1);
+  if (!opt_text)
+    MATCH_TABLE (TEXT, style, STYLE, 7);
   return found;
 }
 
 static
 int match_ATTRIB(char* filename, Dwg_Object* obj)
 {
-  char *text = obj->tio.entity->tio.ATTRIB->text_value;
-  int found, textlen;
-  if (obj->parent->header.version >= R_2007)
-    text = bit_convert_TU((BITCODE_TU)text);
-  textlen = strlen(text);
+  char *text;
+  int found = 0;
+  MATCH_ENTITY (ATTRIB, text_value, 1);
+  MATCH_ENTITY (ATTRIB, tag, 2);
+  if (!opt_text)
+    MATCH_TABLE (ATTRIB, style, STYLE, 7);
+  return found;
+}
 
-  found = do_match(filename, "ATTRIB", 1, text, textlen);
+static
+int match_ATTDEF(char* filename, Dwg_Object* obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_ENTITY (ATTDEF, default_value, 1);
+  MATCH_ENTITY (ATTDEF, tag, 2);
+  MATCH_ENTITY (ATTDEF, prompt, 3);
+  return found;
+}
 
-  if (obj->parent->header.version >= R_2007)
-    free(text);
+static
+int match_BLOCK(char* filename, Dwg_Object* obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_ENTITY (BLOCK, name, 2);
   return found;
 }
 
 static
 int match_MTEXT(char* filename, Dwg_Object* obj)
 {
-  char *text = obj->tio.entity->tio.MTEXT->text;
-  int found, textlen;
-  if (obj->parent->header.version >= R_2007)
-    text = bit_convert_TU((BITCODE_TU)text);
-  textlen = strlen(text);
+  char *text;
+  int found = 0;
+  MATCH_ENTITY (MTEXT, text, 1);
+  return found;
+}
 
-  found = do_match(filename, "MTEXT", 1, text, textlen);
+static
+int match_DICTIONARY(char* filename, Dwg_Object* obj)
+{
+  char *text;
+  int found = 0, i;
+  Dwg_Object_DICTIONARY *_obj = obj->tio.object->tio.DICTIONARY;
 
-  if (obj->parent->header.version >= R_2007)
-    free(text);
+  for (i=0; i<_obj->numitems; i++)
+    {
+      MATCH_OBJECT (DICTIONARY, text[i], 3);
+    }
+  return found;
+}
+
+static
+int match_DICTIONARYVAR(char* filename, Dwg_Object* obj)
+{
+  char *text;
+  int found = 0, textlen;
+  MATCH_OBJECT (DICTIONARYVAR, str, 1);
+  return found;
+}
+
+static
+int match_IMAGEDEF(char* filename, Dwg_Object* obj)
+{
+  char *text;
+  int found = 0, textlen;
+  MATCH_OBJECT (IMAGEDEF, file_path, 1);
+  return found;
+}
+
+static
+int match_LAYOUT(char* filename, Dwg_Object* obj)
+{
+  char *text;
+  int found = 0, i;
+  Dwg_Object_LAYOUT *_obj = obj->tio.object->tio.LAYOUT;
+
+  MATCH_OBJECT (LAYOUT, page_setup_name, 1);
+  MATCH_OBJECT (LAYOUT, printer_or_config, 2);
+  MATCH_OBJECT (LAYOUT, paper_size, 4);
+  MATCH_OBJECT (LAYOUT, plot_view_name, 6);
+  MATCH_OBJECT (LAYOUT, current_style_sheet, 7);
+  MATCH_OBJECT (LAYOUT, layout_name, 1);
+  MATCH_TABLE (LAYOUT, plot_view, ??, 6);
+  MATCH_TABLE (LAYOUT, visual_style, ??, 0);
+  MATCH_TABLE (LAYOUT, base_ucs, UCS, 346);
+  MATCH_TABLE (LAYOUT, named_ucs, UCS, 345);
+  for (i=0; i<_obj->num_viewports; i++)
+    {
+      MATCH_TABLE (LAYOUT, viewports[i], VPORT, 0);
+    }
   return found;
 }
 
@@ -235,12 +321,48 @@ int match_BLOCK_HEADER(char* filename, Dwg_Object_Ref* ref)
   obj = get_first_owned_object(ref->obj);
   while (obj)
     {
-      if (obj->type == DWG_TYPE_TEXT)
-        found += match_TEXT(filename, obj);
-      else if (obj->type == DWG_TYPE_ATTRIB)
-        found += match_ATTRIB(filename, obj);
-      else if (obj->type == DWG_TYPE_MTEXT)
-        found += match_MTEXT(filename, obj);
+      if (!opt_tables)
+        { // opt_text:
+          if (obj->type == DWG_TYPE_TEXT)
+            found += match_TEXT(filename, obj);
+          else if (obj->type == DWG_TYPE_ATTRIB)
+            found += match_ATTRIB(filename, obj);
+          else if (obj->type == DWG_TYPE_ATTDEF)
+            found += match_ATTDEF(filename, obj);
+          else if (obj->type == DWG_TYPE_MTEXT)
+            found += match_MTEXT(filename, obj);
+          if (!opt_text)
+            {
+              if (obj->type == DWG_TYPE_BLOCK)
+                found += match_BLOCK(filename, obj);
+              else if (obj->fixedtype == DWG_TYPE_DICTIONARY)
+                found += match_DICTIONARY(filename, obj);
+              else if (obj->fixedtype == DWG_TYPE_DICTIONARYVAR)
+                found += match_DICTIONARYVAR(filename, obj);
+              else if (obj->type == DWG_TYPE_IMAGEDEF)
+                found += match_IMAGEDEF(filename, obj);
+              else if (obj->type == DWG_TYPE_LAYOUT)
+                found += match_LAYOUT(filename, obj);
+            }
+        }
+      if (!opt_text)
+        {
+          if (obj->supertype == DWG_SUPERTYPE_ENTITY)
+            {
+              //common entity names
+              MATCH_TABLE (ENTITY, layer, LAYER, 8);
+              MATCH_TABLE (ENTITY, ltype, LTYPE, 8);
+              //r2000+
+              MATCH_TABLE (ENTITY, plotstyle, PLOTSTYLE, 8);
+              //r2007+
+              MATCH_TABLE (ENTITY, material, MATERIAL, 8);
+              MATCH_TABLE (ENTITY, shadow, DICTIONARY, 8);
+              //r2010+
+              MATCH_TABLE (ENTITY, full_visualstyle, VISUALSTYLE, 8);
+              MATCH_TABLE (ENTITY, face_visualstyle, VISUALSTYLE, 8);
+              MATCH_TABLE (ENTITY, edge_visualstyle, VISUALSTYLE, 8);
+            }
+        }
       obj = get_next_owned_object(ref->obj, obj);
     }
   return found;
@@ -265,6 +387,7 @@ main (int argc, char *argv[])
   /* pcre_compile */
   int have_jit;
 #endif
+  int opt_recurse = 0;
   int count = 0;
 
   // check args
@@ -284,21 +407,43 @@ main (int argc, char *argv[])
       i++;
     }
 #endif
+  if (i < argc && (!strcmp(argv[i], "--count") || !strcmp(argv[i], "-c")))
+    {
+      opt_count = 1;
+      i++;
+    }
+  if (i < argc && (!strcmp(argv[i], "--no-filename") || !strcmp(argv[i], "-h")))
+    {
+      opt_filename = 0;
+      i++;
+    }
+  if (i < argc && (!strcmp(argv[i], "--recursive") ||
+                   !strcmp(argv[i], "-R") ||
+                   !strcmp(argv[i], "-r")))
+    {
+      opt_recurse = 1;
+      i++;
+    }
   if (i < argc-1 && !strcmp(argv[i], "--type"))
     {
-      if (numtype>=10) exit(1);
+      if (numtype >= 10) return usage(); //too many
       objtype[numtype++] = argv[i+1];
       i += 2;
     }
   if (i < argc-1 && !strcmp(argv[i], "--dxf"))
     {
-      if (numdxf>=10) exit(1);
+      if (numdxf >= 10) return usage(); // too many
       dxf[numdxf++] = (short)strtol(argv[i+1], NULL, 10);
       i += 2;
     }
-  if (i < argc && (!strcmp(argv[i], "--count") || !strcmp(argv[i], "-c")))
+  if (i < argc && !strcmp(argv[i], "--text"))
     {
-      opt_count = 1;
+      opt_text = 1;
+      i++;
+    }
+  if (i < argc && !strcmp(argv[i], "--tables"))
+    {
+      opt_tables = 1;
       i++;
     }
   if (i < argc && !strcmp(argv[i], "--help"))
