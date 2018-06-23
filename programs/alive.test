@@ -107,8 +107,8 @@ for prog in $PROGS ; do
 done
 case $PROGS in
   *dwggrep*)
-    echo ./dwggrep -c tekst ../test/test-data/example_20*.dwg
-    if test `./dwggrep -c tekst ../test/test-data/example_20*.dwg` != 9; then
+    echo ./dwggrep -i -c tekst ../test/test-data/example_20*.dwg
+    if test `./dwggrep -i -c tekst ../test/test-data/example_20*.dwg` != 9; then
       problems=$(expr 1 + $problems)
     fi
 

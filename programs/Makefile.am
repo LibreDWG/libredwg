@@ -37,9 +37,12 @@ dwgread_SOURCES  = dwgread.c
 dwgbmp_SOURCES   = dwgbmp.c
 dwg2dxf_SOURCES  = dwg2dxf.c
 dwglayers_SOURCES = dwglayers.c
-dwggrep_SOURCES = dwggrep.c
-dwggrep_LDADD   = $(LDADD) -lpcre2-8
 dwg2SVG_SOURCES  = dwg2SVG.c
+dwggrep_SOURCES = dwggrep.c
+
+if HAVE_PCRE2
+dwggrep_LDADD   = $(LDADD) -lpcre2-8
+endif
 
 if USE_WRITE
 bin_PROGRAMS += dwgrewrite
