@@ -36,12 +36,12 @@ SWIG_SOURCES  = $(top_srcdir)/bindings/dwg.i \
 		$(top_srcdir)/include/dwg.h \
 		$(top_srcdir)/include/dwg_api.h
 
-dist_python_PYTHON = libredwg.py
+dist_python_PYTHON = $(srcdir)/libredwg.py
 pyexec_LTLIBRARIES = _libredwg.la
 
 # the underscore is correct. the python interpreter looks for _libredwg.so
 # when libredwg module is loaded
-_libredwg_la_SOURCES = $(BUILT_SOURCES)  $(SWIG_SOURCES)
+_libredwg_la_SOURCES = $(BUILT_SOURCES) $(SWIG_SOURCES)
 ## more magic: SWIG_PYTHON_CPPFLAGS resolves to null and python includes
 ## are not passed to gcc via -I
 _libredwg_la_CPPFLAGS = -I$(top_srcdir)/include $(AX_SWIG_PYTHON_CPPFLAGS)
@@ -51,6 +51,7 @@ _libredwg_la_LIBADD = ../../src/libredwg.la
 ## not elegant, but works
 ## With macports gcc you need -I/opt/local/lib/gcc6/gcc/x86_64-apple-darwin15/6.4.0/include
 $(dist_python_PYTHON) : swig_python.c
+	if test -f libredwg.py; then cp libredwg.py $@; fi
 swig_python.c : $(SWIG_SOURCES) Makefile.am
 	swig -python -I$(top_srcdir)/include -o swig_python.c $(srcdir)/../dwg.i
 
