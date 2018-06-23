@@ -22,12 +22,13 @@ LDADD   = $(top_builddir)/src/libredwg.la -lm
 
 bin_PROGRAMS = dwgread dwgbmp dwg2dxf dwg2SVG dwglayers
 noinst_PROGRAMS =
-dist_man1_MANS = dwgread.1 dwgbmp.1 dwg2dxf.1 dwg2SVG.1 dwglayers.1
+dist_man1_MANS = $(srcdir)/dwgread.1 $(srcdir)/dwgbmp.1 $(srcdir)/dwg2dxf.1 \
+	         $(srcdir)/dwg2SVG.1 $(srcdir)/dwglayers.1
 DISTCLEANFILES = core
 
 if HAVE_LIBPS
 bin_PROGRAMS += dwg2ps
-dist_man1_MANS += dwg2ps.1
+dist_man1_MANS += $(srcdir)/dwg2ps.1
 dwg2ps_SOURCES = dwg2ps.c
 dwg2ps_LDADD = $(LDADD) -lps
 endif
@@ -42,7 +43,7 @@ if USE_WRITE
 bin_PROGRAMS += dwgrewrite
 # not yet ready
 noinst_PROGRAMS += dxf2dwg dwgwrite
-dist_man1_MANS  += dwgrewrite.1 dwgwrite.1 dxf2dwg.1
+dist_man1_MANS  += $(srcdir)/dwgrewrite.1 $(srcdir)/dwgwrite.1 $(srcdir)/dxf2dwg.1
 dwgrewrite_SOURCES = dwgrewrite.c
 dwgwrite_SOURCES   = dwgwrite.c
 dxf2dwg_SOURCES    = dxf2dwg.c
@@ -74,7 +75,6 @@ MAINTAINERCLEANFILES = *_flymake.[ch] *~ *.i
 	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -E -o $@ $<
 
 man: $(dist_man1_MANS)
-$(dist_man1_MANS):
 
 if !HAVE_MINGW_CROSS
 # Note: These rules do not work cross-compiled
