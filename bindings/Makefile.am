@@ -25,7 +25,8 @@ ACLOCAL_AMFLAGS = -I m4
 # The perl subdir is for the perl Makefile.PL tool and is driven from here
 SUBDIRS = python
 
-if HAVE_PERL
+if HAVE_SWIG_PERL
+
 dist_perl_PERL = perl/swig_perl.c perl/LibreDWG.pm perl/LibreDWG.xs \
                  perl/Makefile.PL perl/MANIFEST
 EXTRA_DIST = $(dist_perl_PERL)
@@ -55,10 +56,7 @@ check-am: $(dist_perl_PERL)
 install-am: $(dist_perl_PERL)
 	@echo Making install for perl
 	-$(MAKE) -C perl install
-endif
 
-# regen the wrapper
-if HAVE_SWIG_PERL
 PERL_sources =  $(top_srcdir)/bindings/dwg.i \
 		$(top_srcdir)/include/dwg.h \
 		$(top_srcdir)/include/dwg_api.h \
