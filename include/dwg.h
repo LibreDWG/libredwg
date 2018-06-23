@@ -4322,6 +4322,51 @@ typedef struct _dwg_object_DATATABLE
   BITCODE_H xdicobjhandle; /* ignored */
 } Dwg_Object_DATATABLE;
 
+
+typedef struct _dwg_ACTIONBODY
+{
+  struct _dwg_object_ASSOCNETWORK *parent;
+  BITCODE_T  evaluatorid;
+  BITCODE_T  expresssion;
+  BITCODE_BL value; //resbuf
+} Dwg_ACTIONBODY;
+
+typedef struct _dwg_object_ASSOCACTION
+{
+  BITCODE_B  is_body_proxy;
+  //BITCODE_B is_actionevaluation_in_progress; // 90
+  Dwg_ACTIONBODY body;
+  BITCODE_BL status; // 90
+  BITCODE_H  callback;
+  BITCODE_H  owningnetwork;
+  BITCODE_BL num_deps; // 90
+  BITCODE_H* readdep;  // 330
+  BITCODE_H* writedep; // 360
+  BITCODE_BL unknown_assoc; // 90
+} Dwg_Object_ASSOCACTION;
+
+/**
+ Object ASSOCNETWORK (varies) UNKNOWN FIELDS
+ subclass of AcDbAssocAction
+ Object1 --ReadDep--> Action1 --WriteDep1--> Object2 --ReadDep--> Action2 ...
+ */
+typedef struct _dwg_object_ASSOCNETWORK
+{
+  struct _dwg_object_object *parent;
+  BITCODE_H action;
+
+  //90, 90, [90, 330], 90
+  BITCODE_BL unknown_n1; // 90
+  BITCODE_BL unknown_n2; // 90
+  BITCODE_BL num_actions;// 90
+  BITCODE_H* actions;    // 330
+  BITCODE_BL unknown_n3; // 90
+} Dwg_Object_ASSOCNETWORK;
+
+/**
+ -----------------------------------
+ */
+
 /**
  Unknown Class entity, a blob
  */
@@ -5176,18 +5221,18 @@ EXPORT int dwg_add_PROXY_OBJECT (Dwg_Object *obj);
 //EXPORT int dwg_add_ARCALIGNEDTEXT (Dwg_Object *obj);
 //EXPORT int dwg_add_ARC_DIMENSION (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOC2DCONSTRAINTGROUP (Dwg_Object *obj);
-//EXPORT int dwg_add_ASSOCACTION (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCALIGNEDDIMACTIONBODY (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCDEPENDENCY (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCGEOMDEPENDENCY (Dwg_Object *obj);
-//EXPORT int dwg_add_ASSOCNETWORK (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCOSNAPPOINTREFACTIONPARAM (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCPERSSUBENTMANAGER (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCVERTEXACTIONPARAM (Dwg_Object *obj);
-EXPORT int dwg_add_CAMERA (Dwg_Object *obj);
 #ifdef DEBUG_CLASSES
+EXPORT int dwg_add_ASSOCACTION (Dwg_Object *obj);
+EXPORT int dwg_add_ASSOCNETWORK (Dwg_Object *obj);
 EXPORT int dwg_add_CELLSTYLEMAP (Dwg_Object *obj);
 #endif
+EXPORT int dwg_add_CAMERA (Dwg_Object *obj);
 //EXPORT int dwg_add_CSACDOCUMENTOPTIONS (Dwg_Object *obj);
 //EXPORT int dwg_add_DATATABLE (Dwg_Object *obj);
 //EXPORT int dwg_add_DBCOLOR (Dwg_Object *obj);

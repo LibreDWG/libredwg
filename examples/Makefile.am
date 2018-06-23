@@ -37,6 +37,9 @@ alldwg.inc: log_unknown.pl
 	  mv examples/alldwg.inc examples/alldwg.inc~; \
 	  for l in *.log; do b=`basename $l .log`; \
 	    examples/log_unknown.pl $l >>examples/alldwg.inc; done
+alldxf.inc: alldwg.inc
+	mv alldxf.inc alldxf.inc~
+	log_unknown_dxf.pl alldwg.inc >alldxf.inc
 
 .PHONY: check-syntax regen-unknown dsymutil gcov
 regen-unknown: alldwg.inc
@@ -55,7 +58,7 @@ endif
 
 TESTS = $(top_srcdir)/programs/alive.test
 
-EXTRA_DIST = load_dwg.py log_unknown.pl alldwg.inc
+EXTRA_DIST = load_dwg.py log_unknown.pl alldwg.inc log_unknown_dxf.pl
 CLEANFILES = {example,sample}_2000.svg alldwg.inc~
 MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
 

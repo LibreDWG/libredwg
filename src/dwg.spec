@@ -5902,7 +5902,52 @@ DWG_OBJECT_END
 DWG_OBJECT(ASSOCGEOMDEPENDENCY)
 DWG_OBJECT_END
 
+DWG_OBJECT(ASSOCACTION)
+  FIELD_B (is_body_a_proxy, 90);
+  FIELD_T (body.evaluatorid, 0);
+  FIELD_T (body.expresssion, 0);
+  FIELD_BL (body.value, 0); //rbuf really
+  //FIELD_B (is_actionevaluation_in_progress, 90);
+  FIELD_BL (status, 90);
+  FIELD_H (actionbody, 5, 0);
+  FIELD_H (callback, 5, 0);
+  FIELD_H (owningnetwork, 5, 0);
+  FIELD_BL (num_deps, 90);
+  HANDLE_VECTOR(readdep, num_assoc, 5, 330);
+  HANDLE_VECTOR(writedep, num_assoc, 0, 360);
+  FIELD_BL (unknown_assoc, 90);
+DWG_OBJECT_END
+
+// in work: subclass of AcDbAssocAction
+// Object1 --ReadDep--> Action1 --WriteDep1--> Object2 --ReadDep--> Action2 ...
 DWG_OBJECT(ASSOCNETWORK)
+  //SUBCLASS (AcDbActionBody)
+  SUBCLASS (AcDbAssocAction)
+  FIELD_H (action, 5, 0);   // handle or inlined?
+#if 0  
+  //90, 90, 330, 360, 90, 90, 90
+  FIELD_B (is_body_a_proxy, 90);
+  FIELD_T (body.evaluatorid, 0);
+  FIELD_T (body.expresssion, 0);
+  FIELD_BL (body.value, 0); //rbuf really
+  //FIELD_B (is_actionevaluation_in_progress, 90);
+  FIELD_BL (action.status, 90);
+  FIELD_H (action.actionbody, 5, 0);
+  FIELD_H (action.callback, 5, 0);
+  FIELD_H (action.owningnetwork, 5, 0);
+  FIELD_BL (action.num_deps, 90);
+  HANDLE_VECTOR(action.readdep, num_assoc, 5, 330);
+  HANDLE_VECTOR(action.writedep, num_assoc, 0, 360);
+  FIELD_BL (action.unknown_assoc, 90);
+#endif
+
+  SUBCLASS (AcDbAssocNetwork)
+  //90, 90, [90, 330], 90
+  FIELD_BL (unknown_n1, 90);
+  FIELD_BL (unknown_n2, 90);
+  FIELD_BL (num_actions, 90);
+  HANDLE_VECTOR(actions, num_actions, 5, 330);
+  FIELD_BL (unknown_n3, 90);
 DWG_OBJECT_END
 
 DWG_OBJECT(DBCOLOR)
