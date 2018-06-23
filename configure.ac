@@ -47,19 +47,23 @@ AM_CONDITIONAL([HAVE_LIBPS],[test yes = "$libredwg_have_libps" &&
 
 dnl `pcre2-config --libs8`
 AC_CHECK_LIB([pcre2-8],[pcre2_config_8],
-  [libredwg_have_libpcre2=yes],
+  [libredwg_have_libpcre2=yes; PCRE2_LIBS=-lpcre2-8],
   [if pkg-config --exists libpcre2; then
-    libredwg_have_libpcre2=yes
+    libredwg_have_libpcre2=yes;
     PCRE2_CFLAGS=`pkg-config libpcre2 --cflags`
     PCRE2_LIBS=`pkg-config libpcre2 --libs`
   else
-    libredwg_have_libpcre2=no
     AC_MSG_WARN([libpcre2 for dwggrep not found])
-  fi
-  AC_SUBST([PCRE2_CFLAGS])
-  AC_SUBST([PCRE2_LIBS])])
-AM_CONDITIONAL([HAVE_PCRE2], [test yes = "$libredwg_have_libpcre2"])
-
+  fi])
+AC_CHECK_LIB([pcre2-16],[pcre2_config_16],
+  [libredwg_have_libpcre2_16=yes])
+if test yes = "$libredwg_have_libpcre2_16"; then
+  AC_DEFINE([HAVE_PCRE2_16],1,[Define to 1 if -lpcre2-16 is used also])
+  PCRE2_LIBS="$PCRE2_LIBS -lpcre2-16"
+fi
+AC_SUBST([PCRE2_CFLAGS])
+AC_SUBST([PCRE2_LIBS])
+  
 dnl PKG_CHECK_MODULES([LIBXML2], [libxml-2.0], [],
 dnl    AC_MSG_ERROR([Install libxml-2.0 first]))
 if pkg-config --exists libxml-2.0; then

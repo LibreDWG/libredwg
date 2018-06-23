@@ -39,10 +39,8 @@ dwg2dxf_SOURCES  = dwg2dxf.c
 dwglayers_SOURCES = dwglayers.c
 dwg2SVG_SOURCES  = dwg2SVG.c
 dwggrep_SOURCES = dwggrep.c
-
-if HAVE_PCRE2
-dwggrep_LDADD   = $(LDADD) -lpcre2-8
-endif
+dwggrep_CFLAGS  = $(CFLAGS) $(AM_CFLAGS) $(PCRE2_CFLAGS)
+dwggrep_LDADD   = $(LDADD) $(PCRE2_LIBS)
 
 if USE_WRITE
 bin_PROGRAMS += dwgrewrite

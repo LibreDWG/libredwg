@@ -68,19 +68,15 @@ run ()
     then
         rm $log
     else
-        if test $bprog != dwggrep
-        then
-            if test $bprog = dwgrewrite -o $bprog = dwgwrite -o $bprog = dxf2dwg
-            then
-                test -f core && rm core
+        case $bprog in
+        dwggrep) rm $log ;;
+        dwgrewrite|dwgwrite|dxf2dwg) test -f core && rm core
                 tmpnum=$(expr 1 + $problems)
                 echo $(basename $0): TODO $prog $tmpnum failures
-                ls -l $log
-            else
-                problems=$(expr 1 + $problems)
-                tail -n100 $log
-            fi
-        fi
+                ls -l $log ;;
+        *)      problems=$(expr 1 + $problems)
+                tail -n100 $log ;;
+        esac
     fi
     if test x$MINGW != x -a x$OLDTESTPROG != x; then
         TESTPROG=$OLDTESTPROG
@@ -108,7 +104,7 @@ done
 case $PROGS in
   *dwggrep*)
     echo ./dwggrep -i -c tekst ../test/test-data/example_20*.dwg
-    if test `./dwggrep -i -c tekst ../test/test-data/example_20*.dwg` != 9; then
+    if test x"`./dwggrep -i -c tekst ../test/test-data/example_*.dwg`" != x"10"; then
       problems=$(expr 1 + $problems)
     fi
 

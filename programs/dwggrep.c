@@ -30,10 +30,9 @@
 # include <ctype.h>
 #endif
 #ifdef HAVE_PCRE2_H
-# define PCRE2_CODE_UNIT_WIDTH 8
+//use both, 8 and 16 (r2007+)
+# define PCRE2_CODE_UNIT_WIDTH 0
 # include <pcre2.h>
-//Maybe: for r2007+ use pcre2-16, before use pcre2-8
-//       Currently we convert to UTF-8
 #endif
 
 #include "dwg.h"
@@ -66,13 +65,22 @@ static unsigned int cur_ver = 0;
 #ifdef HAVE_PCRE2_H
 # undef USE_MATCH_CONTEXT
 /* pcre2_compile */
-static pcre2_code_8 *ri;
-static pcre2_match_data_8 *match_data;
-static pcre2_match_context_8 *match_context = NULL;
+static pcre2_code_8 *ri8;
+static pcre2_match_data_8 *match_data8;
+static pcre2_match_context_8 *match_context8 = NULL;
+#ifdef HAVE_PCRE2_16
+static pcre2_code_16 *ri16;
+static pcre2_match_data_16 *match_data16;
+static pcre2_match_context_16 *match_context16 = NULL;
+#endif
 
 # ifdef USE_MATCH_CONTEXT
-static pcre2_jit_stack *jit_stack = NULL;
-static pcre2_compile_context_8 *compile_context = NULL;
+static pcre2_jit_stack_8 *jit_stack8 = NULL;
+static pcre2_compile_context_8 *compile_context8 = NULL;
+#ifdef HAVE_PCRE2_16
+static pcre2_jit_stack_16 *jit_stack16 = NULL;
+static pcre2_compile_context_16 *compile_context16 = NULL;
+#endif
 # endif
 # define PCRE2_JIT_MATCH_OPTIONS \
    (PCRE2_NO_UTF_CHECK|PCRE2_NOTBOL|PCRE2_NOTEOL|PCRE2_NOTEMPTY|\
@@ -118,13 +126,23 @@ static int help(void) {
 }
 
 static int
-do_match (char *filename, char *entity, int dxf, char* text)
+do_match (int is16, char *filename, char *entity, int dxf, char* text)
 {
 #ifdef HAVE_PCRE2_H
-  int found = pcre2_jit_match_8(ri, (PCRE2_SPTR8)text, PCRE2_ZERO_TERMINATED, 0,
+  int found;
+# ifdef HAVE_PCRE2_16
+  if (is16)
+    found = pcre2_jit_match_16(ri16, (PCRE2_SPTR16)text, PCRE2_ZERO_TERMINATED, 0,
+                              PCRE2_JIT_MATCH_OPTIONS,
+                              match_data16,     /* block for storing the result */
+                              match_context16); /* disabled */
+  else
+# endif
+  // converted to UTF-8 before
+  found = pcre2_jit_match_8(ri8, (PCRE2_SPTR8)text, PCRE2_ZERO_TERMINATED, 0,
                                 PCRE2_JIT_MATCH_OPTIONS,
-                                match_data,     /* block for storing the result */
-                                match_context); /* disabled */
+                                match_data8,     /* block for storing the result */
+                                match_context8); /* disabled */
   if (found >= 0) {
     if (!opt_count)
       printf("%s %s %d: %s\n", opt_filename ? filename : "", entity, dxf, text);
@@ -132,6 +150,10 @@ do_match (char *filename, char *entity, int dxf, char* text)
   }
 #endif
 
+#ifdef HAVE_PCRE2_16
+  if (!is16)
+  {
+#endif
   if (options & PCRE2_CASELESS)
     {
 # ifndef HAVE_STRCASESTR
@@ -182,17 +204,26 @@ do_match (char *filename, char *entity, int dxf, char* text)
         return 1;
       }
     }
+#ifdef HAVE_PCRE2_16
+  }
+#endif
 
   return 0;
 }
 
+#ifdef HAVE_PCRE2_16
+#define MATCH_TYPE(type,ENTITY,text_field,dxf)  \
+  text = obj->tio.type->tio.ENTITY->text_field; \
+  found += do_match(obj->parent->header.version >= R_2007, filename, #ENTITY, dxf, text)
+#else
 #define MATCH_TYPE(type,ENTITY,text_field,dxf)  \
   text = obj->tio.type->tio.ENTITY->text_field; \
   if (obj->parent->header.version >= R_2007) \
     text = bit_convert_TU((BITCODE_TU)text); \
-  found += do_match(filename, #ENTITY, dxf, text); \
+  found += do_match(obj->parent->header.version >= R_2007, filename, #ENTITY, dxf, text); \
   if (obj->parent->header.version >= R_2007) \
     free(text)
+#endif
 
 #define MATCH_ENTITY(ENTITY,text_field,dxf) \
   MATCH_TYPE(entity,ENTITY,text_field,dxf)
@@ -386,6 +417,9 @@ main (int argc, char *argv[])
   PCRE2_SIZE erroffset;
   /* pcre_compile */
   int have_jit;
+# ifdef HAVE_PCRE2_16
+  BITCODE_TU pattern16;
+# endif
 #endif
   int opt_recurse = 0;
   int count = 0;
@@ -457,7 +491,7 @@ main (int argc, char *argv[])
   pattern = argv[i]; plen = strlen(pattern);
 #ifdef HAVE_PCRE2_H
   pcre2_config_8(PCRE2_CONFIG_JIT, &have_jit);
-  ri = pcre2_compile_8(
+  ri8 = pcre2_compile_8(
      (PCRE2_SPTR8)pattern, plen, /* pattern */
      options,      /* options */
      &errcode,     /* errors */
@@ -468,8 +502,26 @@ main (int argc, char *argv[])
      NULL
 # endif
     );
-  match_data = pcre2_match_data_create_from_pattern_8(ri, NULL);
-  pcre2_jit_compile_8(ri, PCRE2_JIT_COMPLETE); /* no partial matches */
+  match_data8 = pcre2_match_data_create_from_pattern_8(ri8, NULL);
+  pcre2_jit_compile_8(ri8, PCRE2_JIT_COMPLETE); /* no partial matches */
+
+# ifdef HAVE_PCRE2_16
+  pcre2_config_16(PCRE2_CONFIG_JIT, &have_jit);
+  pattern16 = bit_utf8_to_TU(pattern);
+  ri16 = pcre2_compile_16(
+     (PCRE2_SPTR16)pattern16, plen, /* pattern */
+     options,      /* options */
+     &errcode,     /* errors */
+     &erroffset,   /* error offset */
+#  ifdef USE_MATCH_CONTEXT
+     compile_context
+#  else
+     NULL
+#  endif
+    );
+  match_data16 = pcre2_match_data_create_from_pattern_16(ri16, NULL);
+  pcre2_jit_compile_16(ri16, PCRE2_JIT_COMPLETE); /* no partial matches */
+# endif
 #endif
 
   //for all filenames...
