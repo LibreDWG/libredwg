@@ -447,6 +447,11 @@ from the header ref via:
 where @code{process_object} checks the type of each object or entity under the
 @var{Dwg_Object* obj}.
 
+The decoder is driven by the fields definition in the @file{dwg.spec}, which adds each field to the object. This is done in the @file{decode.c} or @file{decode_r2007.c}.
+@deftypefn {Function} int dwg_decode_OBJECT (Bit_Chain *@var{dat}, Dwg_Object *@var{obj})
+Sets the fields for the object from the DWG bitstream.
+@end deftypefn
+
 @node Encoding
 @section Encoding
 
@@ -466,7 +471,7 @@ Return 0 if successful.
 @end deftypefn
 
 @deftypefn {Function} int dwg_add_object (Dwg_Data *@var{dwg})
-Adds a new uninitialized object to the @var{dwg->object[]} array.
+Adds a new uninitialized object to the @var{dwg->object}[] array.
 Return 0 or -1 if successful, otherwise DWG_ERR_OUTOFMEM. -1 is the array was re-allocated.
 @end deftypefn
 
@@ -479,7 +484,7 @@ This does not initialize the @var{obj} size, type, address, handlestream_size, b
 The encoder is driven by the fields definition in the @file{dwg.spec}, which adds each field to
 the object. This is done by @file{encode} or any @file{in_*} import module.
 @deftypefn {Function} int dwg_encode_OBJECT (Bit_Chain *@var{dat}, Dwg_Object *@var{obj})
-Sets the fields for the object from the encoded bitstream.
+Encodes the DWG bitstream from the fields of the object.
 @end deftypefn
 
 The iterator is similar to above, but you want to encode all data
@@ -553,26 +558,40 @@ This is about 70% finished. Check the covered entity types.
 LibreDWG is mostly a library, and as such collects error codes from
 the highest level function down to the lowest level functions.
 The error codes are sorted by severity, and only if the error exceeds
-DWG_ERR_CRITICAL, i.e. DWG_ERR_CLASSESNOTFOUND, processing is stopped.
+@var{DWG_ERR_CRITICAL}, i.e. @code{DWG_ERR_CLASSESNOTFOUND}, processing is stopped.
 
 All error bitmasks are collected during read or write and returned at the end.
 
-@table @asis
-@item DWG_ERR_WRONGCRC          1
-@item DWG_ERR_NOTYETSUPPORTED   2
-@item DWG_ERR_UNHANDLEDCLASS    4
-@item DWG_ERR_INVALIDTYPE       8
-@item DWG_ERR_INVALIDHANDLE     16
-@item DWG_ERR_INVALIDEED        32
-@item DWG_ERR_VALUEOUTOFBOUNDS  64
-@item DWG_ERR_CLASSESNOTFOUND   128 = DWG_ERR_CRITICAL
-@item DWG_ERR_SECTIONNOTFOUND   256
-@item DWG_ERR_PAGENOTFOUND      512
-@item DWG_ERR_INTERNALERROR     1024
-@item DWG_ERR_INVALIDDWG        2048
-@item DWG_ERR_IOERROR           4096
-@item DWG_ERR_OUTOFMEM          8192
-@end table
+@vtable @code
+@item DWG_ERR_WRONGCRC
+1
+@item DWG_ERR_NOTYETSUPPORTED
+2
+@item DWG_ERR_UNHANDLEDCLASS
+4
+@item DWG_ERR_INVALIDTYPE
+8
+@item DWG_ERR_INVALIDHANDLE
+16
+@item DWG_ERR_INVALIDEED
+32
+@item DWG_ERR_VALUEOUTOFBOUNDS
+64
+@item DWG_ERR_CLASSESNOTFOUND
+128 = @code{DWG_ERR_CRITICAL}
+@item DWG_ERR_SECTIONNOTFOUND
+256
+@item DWG_ERR_PAGENOTFOUND
+512
+@item DWG_ERR_INTERNALERROR
+1024
+@item DWG_ERR_INVALIDDWG
+2048
+@item DWG_ERR_IOERROR
+4096
+@item DWG_ERR_OUTOFMEM
+8192
+@end vtable
 
 Additionally, verbose warning and error messages are printed to stderr.
 
