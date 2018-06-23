@@ -23,12 +23,11 @@ LDADD   = $(top_builddir)/src/libredwg.la -lm
 bin_PROGRAMS = dwgread dwgbmp dwg2dxf dwg2SVG dwglayers
 noinst_PROGRAMS =
 dist_man1_MANS = $(srcdir)/dwgread.1 $(srcdir)/dwgbmp.1 $(srcdir)/dwg2dxf.1 \
-	         $(srcdir)/dwg2SVG.1 $(srcdir)/dwglayers.1
+	         $(srcdir)/dwg2SVG.1 $(srcdir)/dwglayers.1 $(srcdir)/dwg2ps.1
 DISTCLEANFILES = core
 
 if HAVE_LIBPS
 bin_PROGRAMS += dwg2ps
-dist_man1_MANS += $(srcdir)/dwg2ps.1
 dwg2ps_SOURCES = dwg2ps.c
 dwg2ps_LDADD = $(LDADD) -lps
 endif
@@ -64,8 +63,8 @@ endif
 TESTS = alive.test
 
 EXTRA_DIST = suffix.inc common.inc $(TESTS) cmp_dxf.pl
-CLEANFILES = {example_,sample_,Arc,Leader_}*.{bmp,ps,svg,dxf,log}
-CLEANFILES += {example_,sample_,Arc,Leader_}*rewrite.{dwg,log}
+CLEANFILES = {example_,sample_}*.{bmp,ps,svg,dxf,log}
+CLEANFILES += {example_,sample_}*rewrite.{dwg,log}
 MAINTAINERCLEANFILES = *_flymake.[ch] *~ *.i
 
 .PHONY: man dsymutil clean-dsymutil check-syntax
