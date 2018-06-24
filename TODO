@@ -54,7 +54,6 @@
 * finish binary DXF (easy). cross-check via: filedia 0, dxfout => Binary
 * add DXF reading (medium)
 * finish GeoJSON http://geojson.org/geojson-spec.html
-* add dwggrep, see the branch
 * maybe dwgfilter, as from the osmctools, with keep and drop rules.
 * add getopt_long() for position independent options
 * check osm tools https://gitlab.com/osm-c-tools/osmctools how

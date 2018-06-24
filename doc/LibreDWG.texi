@@ -657,11 +657,13 @@ With @code{--on} only the visible layers, which are on and not frozen.
 @item @file{dwggrep}
 @cindex dwggrep
 
-Search regex pattern in all text values list of DWGs.
+Search regex pattern in all text values in a list of DWGs. The order of options is still important.
+With @code{-i} searches case-insensitive.
+With @code{-c} prints only the count of found texts.
+With @code{-h} or @code{--no-filename} does not print the filename.
 With @code{--type NAME} search only NAME entities or objects.
 With @code{--dxf NUM} search only in DXF group NUM fields.
-
-Still in development.
+With @code{--text} searches only TEXT-like entities: TEXT, MTEXT, ATTRIB, ATTDEF.
 
 @item @file{dwg2SVG}
 @cindex dwg2SVG

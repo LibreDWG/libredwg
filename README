@@ -112,7 +112,6 @@ The programs and examples directories contains some application code that uses o
 * dwglayers -- Prints the list of layers in a DWG
 
 * dwggrep -- Searches DWG files for a text string, via regular expressions.
-  This feature is under construction.
 
 * dwg2ps -- Opens a DWG file and outputs an PostScript file.  This code
   depends on the PSlib library.  On Debian-based systems this is usually
