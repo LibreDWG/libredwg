@@ -134,8 +134,21 @@ static int help(void) {
   return 0;
 }
 
+static void print_match(const int is16, const char *restrict filename,
+                        const char *restrict entity,
+                        const int dxfgroup, char *restrict text)
+{
+  if (is16)
+    text = bit_convert_TU((BITCODE_TU)text);
+  printf("%s %s %d: %s\n", opt_filename ? filename : "", entity, dxfgroup, text);
+  if (is16)
+    free(text);
+}
+
 static int
-do_match (int is16, char *filename, char *entity, int dxfgroup, char* text)
+do_match (const int is16, const char *restrict filename,
+          const char *restrict entity,
+          const int dxfgroup, char *restrict text)
 {
 #ifdef HAVE_PCRE2_H
   int rc;
@@ -154,7 +167,7 @@ do_match (int is16, char *filename, char *entity, int dxfgroup, char* text)
                        match_context8); /* disabled */
   if (rc >= 0) {
     if (!opt_count)
-      printf("%s %s %d: %s\n", opt_filename ? filename : "", entity, dxfgroup, text);
+      print_match(is16, filename, entity, dxfgroup, text);
     return 1;
   } else if (rc < -2) { //not PCRE2_ERROR_NOMATCH nor PCRE2_ERROR_PARTIAL
     pcre2_get_error_message_8(rc, buf, 4096);
@@ -190,7 +203,7 @@ do_match (int is16, char *filename, char *entity, int dxfgroup, char* text)
 
               if (src[i] == '\0' || !len) {
                 if (!opt_count)
-                  printf("%s %s %d: %s\n", opt_filename ? filename : "", entity, dxfgroup, text);
+                  print_match(is16, filename, entity, dxfgroup, text);
                 return 1;
               }
             }
@@ -201,7 +214,7 @@ do_match (int is16, char *filename, char *entity, int dxfgroup, char* text)
       if (strcasestr(text, pattern))
         {
           if (!opt_count)
-            printf("%s %s %d: %s\n", opt_filename ? filename : "", entity, dxfgroup, text);
+            print_match(is16, filename, entity, dxfgroup, text);
           return 1;
         }
 # endif
@@ -210,7 +223,7 @@ do_match (int is16, char *filename, char *entity, int dxfgroup, char* text)
     {
       if (strstr(text, pattern)) {
         if (!opt_count)
-          printf("%s %s %d: %s\n", opt_filename ? filename : "", entity, dxfgroup, text);
+          print_match(is16, filename, entity, dxfgroup, text);
         return 1;
       }
     }
@@ -255,7 +268,7 @@ do_match (int is16, char *filename, char *entity, int dxfgroup, char* text)
 #define MATCH_TABLE(ENTITY, handle, TABLE, dxf) {}
 
 static
-int match_TEXT(char* filename, Dwg_Object* obj)
+int match_TEXT(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
@@ -266,7 +279,7 @@ int match_TEXT(char* filename, Dwg_Object* obj)
 }
 
 static
-int match_ATTRIB(char* filename, Dwg_Object* obj)
+int match_ATTRIB(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
@@ -278,7 +291,7 @@ int match_ATTRIB(char* filename, Dwg_Object* obj)
 }
 
 static
-int match_ATTDEF(char* filename, Dwg_Object* obj)
+int match_ATTDEF(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
@@ -289,7 +302,7 @@ int match_ATTDEF(char* filename, Dwg_Object* obj)
 }
 
 static
-int match_BLOCK(char* filename, Dwg_Object* obj)
+int match_BLOCK(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
@@ -298,7 +311,7 @@ int match_BLOCK(char* filename, Dwg_Object* obj)
 }
 
 static
-int match_MTEXT(char* filename, Dwg_Object* obj)
+int match_MTEXT(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
@@ -307,7 +320,7 @@ int match_MTEXT(char* filename, Dwg_Object* obj)
 }
 
 static
-int match_DICTIONARY(char* filename, Dwg_Object* obj)
+int match_DICTIONARY(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0, i;
@@ -321,7 +334,7 @@ int match_DICTIONARY(char* filename, Dwg_Object* obj)
 }
 
 static
-int match_DICTIONARYVAR(char* filename, Dwg_Object* obj)
+int match_DICTIONARYVAR(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0, textlen;
@@ -330,7 +343,7 @@ int match_DICTIONARYVAR(char* filename, Dwg_Object* obj)
 }
 
 static
-int match_IMAGEDEF(char* filename, Dwg_Object* obj)
+int match_IMAGEDEF(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0, textlen;
@@ -339,11 +352,11 @@ int match_IMAGEDEF(char* filename, Dwg_Object* obj)
 }
 
 static
-int match_LAYOUT(char* filename, Dwg_Object* obj)
+int match_LAYOUT(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0, i;
-  Dwg_Object_LAYOUT *_obj = obj->tio.object->tio.LAYOUT;
+  const Dwg_Object_LAYOUT *_obj = obj->tio.object->tio.LAYOUT;
 
   MATCH_OBJECT (LAYOUT, page_setup_name, 1);
   MATCH_OBJECT (LAYOUT, printer_or_config, 2);
@@ -363,7 +376,7 @@ int match_LAYOUT(char* filename, Dwg_Object* obj)
 }
 
 static
-int match_BLOCK_HEADER(char* filename, Dwg_Object_Ref* ref)
+int match_BLOCK_HEADER(const char *restrict filename, const Dwg_Object_Ref *restrict ref)
 {
   int found = 0;
   Dwg_Object* obj;
@@ -432,15 +445,6 @@ int match_BLOCK_HEADER(char* filename, Dwg_Object_Ref* ref)
         }
     }
   return found;
-}
-
-// partial matches are worthless. so add .* to the front and end
-// 8bit only
-char* re_prepare(const char* pattern, int plen)
-{
-  char *re = malloc(plen+5);
-  strcpy(re, pattern);
-  return re;
 }
 
 int
