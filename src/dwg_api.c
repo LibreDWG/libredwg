@@ -17682,7 +17682,7 @@ dwg_obj_layer_get_name(const dwg_obj_layer *restrict layer,
 */
 BITCODE_BL
 dwg_object_tablectrl_get_num_entries(const dwg_object *restrict obj,
-                                  int *restrict error)
+                                     int *restrict error)
 {
   if (obj &&
       obj->supertype == DWG_SUPERTYPE_OBJECT &&
@@ -17710,7 +17710,7 @@ dwg_object_tablectrl_get_num_entries(const dwg_object *restrict obj,
 */
 dwg_object_ref **
 dwg_object_tablectrl_get_entries(const dwg_object *restrict obj,
-                              int *restrict error)
+                                 int *restrict error)
 {
   if (obj &&
       obj->supertype == DWG_SUPERTYPE_OBJECT &&
@@ -17778,7 +17778,7 @@ dwg_object_tablectrl_get_entry(const dwg_object *restrict obj,
 */
 dwg_object_ref *
 dwg_object_tablectrl_get_null_handle(const dwg_object *restrict obj,
-                                  int *restrict error)
+                                     int *restrict error)
 {
   if (obj &&
       obj->supertype == DWG_SUPERTYPE_OBJECT &&
@@ -17805,7 +17805,7 @@ dwg_object_tablectrl_get_null_handle(const dwg_object *restrict obj,
 */
 dwg_object_ref *
 dwg_object_tablectrl_get_xdicobjhandle(const dwg_object *restrict obj,
-                                    int *restrict error)
+                                       int *restrict error)
 {
   if (obj &&
       obj->supertype == DWG_SUPERTYPE_OBJECT &&
@@ -17832,7 +17832,7 @@ dwg_object_tablectrl_get_xdicobjhandle(const dwg_object *restrict obj,
 */
 BITCODE_BL
 dwg_object_tablectrl_get_objid(const dwg_object *restrict obj,
-                            int *restrict error)
+                               int *restrict error)
 {
   if (obj &&
       obj->supertype == DWG_SUPERTYPE_OBJECT &&

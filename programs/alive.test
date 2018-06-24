@@ -104,7 +104,7 @@ done
 case $PROGS in
   *dwggrep*)
     echo ./dwggrep -i -c tekst ${datadir}/example_*.dwg
-    if test x"`./dwggrep -i -c tekst ${datadir}/example_*.dwg`" != x"28"; then
+    if test x"`./dwggrep -i -c tekst ${datadir}/example_*.dwg`" != x"16"; then
       problems=$(expr 1 + $problems)
     fi
 

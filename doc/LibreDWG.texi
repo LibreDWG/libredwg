@@ -398,42 +398,35 @@ via two ways:
 
 1. by using the @file{dwg.h} data structures. Via @code{dwg->object[0]}, which is of
    type @code{Dwg_Object_BLOCK_CONTROL},
-   and a custom @code{void process_BLOCK_HEADER((Dwg_Object_Ref* ref)}:
+   and a custom @code{void process_BLOCK_HEADER(Dwg_Object_Ref* ref)}:
 
 @verbatim
-  Dwg_Object_BLOCK_CONTROL* block_control
-    = dwg->object[0]->tio.object->tio.BLOCK_CONTROL;
-
-  // optional
+  Dwg_Object_BLOCK_CONTROL* block_control = dwg->block_control;
+  //first all objects in the model space
+  process_BLOCK_HEADER(dwg->header_vars.BLOCK_RECORD_MSPACE);
+  //then all objects in the blocks
   for (i=0; i < block_control->num_entries; i++)
     {
       process_BLOCK_HEADER(block_control->block_headers[i]);
     }
-
-  process_BLOCK_HEADER(block_control->model_space);
-  process_BLOCK_HEADER(block_control->paper_space);
+  //and last all objects in the paper space
+  process_BLOCK_HEADER(dwg->header_vars.BLOCK_RECORD_PSPACE);
 @end verbatim
 
 or 2. by using the API functions from @file{dwg_api.h}:
 
 @verbatim
-  int error;
-  dwg_obj_block_control *ctrl = &dwg->block_control;
-
-  dwg_object_ref **hdr_refs
-    = dwg_obj_block_control_get_block_headers(ctrl, &error);
-  long num_hdr_objs = dwg_obj_block_control_get_num_entries(ctrl, &error);
-  for (i=0; i < num_hdr_objs; i++)
+  Dwg_Object_BLOCK_CONTROL* block_control = dwg_block_control(dwg);
+  process_BLOCK_HEADER(dwg_model_space_ref(dwg));
+  for (i=0; i < block_control->num_entries; i++)
     {
-      process_BLOCK_HEADER(hdr_refs[i]);
+      process_BLOCK_HEADER(block_control->block_headers[i]);
     }
-
-  process_BLOCK_HEADER(dwg_obj_block_control_get_model_space(ctrl, &error));
-  process_BLOCK_HEADER(dwg_obj_block_control_get_paper_space(ctrl, &error));
+  process_BLOCK_HEADER(dwg_paper_space_ref(dwg));
 @end verbatim
 
 and inside the @code{process_BLOCK_HEADER} function, you iterate over the objects
-from the header ref via:
+from the block_header via:
 
 @verbatim
   Dwg_Object* obj = get_first_owned_object(ref->obj);

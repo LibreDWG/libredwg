@@ -242,31 +242,15 @@ output_SVG(Dwg_Data* dwg)
     "   height=\"%f\"\n"
     ">\n", page_width, page_height);
 
-  obj = &dwg->object[0];
-  if (obj->type != DWG_TYPE_BLOCK_CONTROL)
-    {
-      fprintf(stderr, "ERROR: First object is not a BLOCK_CONTROL\n");
-      return;
-    }
-
-  block_control = obj->tio.object->tio.BLOCK_CONTROL;
+  output_BLOCK_HEADER(dwg_model_space_ref(dwg));
+  output_BLOCK_HEADER(dwg_paper_space_ref(dwg));
   printf("\t<defs>\n");
-  for (i=0; i < block_control->num_entries; i++)
+  for (i=0; i < dwg->block_control.num_entries; i++)
     {
-      output_BLOCK_HEADER(block_control->block_headers[i]);
+      output_BLOCK_HEADER(dwg->block_control.block_headers[i]);
     }
   printf("\t</defs>\n");
 
-  output_BLOCK_HEADER(block_control->model_space);
-  output_BLOCK_HEADER(block_control->paper_space);
-
-/*
-  for (i = 0; i < dwg->num_objects; i++)
-    {
-      obj = &dwg->object[i];
-      output_object(obj);
-    }
-*/
   printf("</svg>\n");
 }
 

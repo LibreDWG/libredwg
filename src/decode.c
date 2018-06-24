@@ -3397,8 +3397,9 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
       break;
     case DWG_TYPE_BLOCK_HEADER:
       error = dwg_decode_BLOCK_HEADER(dat, obj);
-      /* XXX
-       * We cannot cache dwg->*space_block here as dwg->objects might get realloc'ed
+      /*
+       * We cannot cache dwg->*space_block here as dwg->objects might get realloc'ed.
+       * See dwg_model_space_object() and dwg_paper_space_object() instead.
        */
       break;
     case DWG_TYPE_LAYER_CONTROL:

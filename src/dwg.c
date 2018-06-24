@@ -699,6 +699,36 @@ dwg_resolve_handleref(Dwg_Object_Ref *restrict ref, const Dwg_Object *restrict o
   return 1;
 }
 
+/** Returns the block_control for the DWG,
+    containing the list of all blocks headers.
+*/
+Dwg_Object_BLOCK_CONTROL*
+dwg_block_control(Dwg_Data *dwg)
+{
+  return &(dwg->block_control);
+}
+
+/** Returns the model space block object for the DWG.
+    On r2010 and r2013 it could be different to the canonical dwg->block_control.model_space.
+*/
+Dwg_Object_Ref*
+dwg_model_space_ref(Dwg_Data *dwg)
+{
+  if (dwg->header_vars.BLOCK_RECORD_MSPACE->obj)
+    return dwg->header_vars.BLOCK_RECORD_MSPACE;
+  return dwg->block_control.model_space->obj ? dwg->block_control.model_space : NULL;
+}
+
+/** Returns the paper space block object for the DWG.
+*/
+Dwg_Object_Ref*
+dwg_paper_space_ref(Dwg_Data *dwg)
+{
+  if (dwg->header_vars.BLOCK_RECORD_PSPACE->obj)
+    return dwg->header_vars.BLOCK_RECORD_PSPACE;
+  return dwg->block_control.paper_space->obj ? dwg->block_control.paper_space : NULL;
+}
+
 Dwg_Object*
 get_first_owned_object(const Dwg_Object *hdr)
 {

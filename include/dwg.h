@@ -4927,7 +4927,7 @@ typedef struct _dwg_struct
   Dwg_Object * mspace_block;
   Dwg_Object * pspace_block;
   /* Those TABLES might be empty with num_entries=0 */
-  Dwg_Object_BLOCK_CONTROL      block_control; /* unused */
+  Dwg_Object_BLOCK_CONTROL      block_control;
   Dwg_Object_LAYER_CONTROL      layer_control;
   Dwg_Object_STYLE_CONTROL      style_control;
   Dwg_Object_LTYPE_CONTROL      ltype_control;
@@ -4996,11 +4996,20 @@ EXPORT double dwg_page_x_max(const Dwg_Data *);
 EXPORT double dwg_page_y_min(const Dwg_Data *);
 EXPORT double dwg_page_y_max(const Dwg_Data *);
 
+EXPORT Dwg_Object_BLOCK_CONTROL*
+dwg_block_control(Dwg_Data *dwg);
+
+EXPORT Dwg_Object_Ref*
+dwg_model_space_ref(Dwg_Data *dwg);
+
+EXPORT Dwg_Object_Ref*
+dwg_paper_space_ref(Dwg_Data *dwg);
+
 EXPORT unsigned int
-dwg_get_layer_count(const Dwg_Data *);
+dwg_get_layer_count(const Dwg_Data *dwg);
 
 EXPORT Dwg_Object_LAYER**
-dwg_get_layers(const Dwg_Data *);
+dwg_get_layers(const Dwg_Data *dwg);
 
 EXPORT BITCODE_BL
 dwg_get_num_objects(const Dwg_Data *dwg);
