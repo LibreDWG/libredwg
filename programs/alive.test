@@ -49,7 +49,7 @@ run ()
     arg="${datadir}/$dwg.dwg"
     case $bprog in
     dwglayers)  ;;
-    dwggrep)    arg="tekst $arg" ;;
+    dwggrep)    arg="-i tekst $arg" ;;
     dwgrewrite) arg="-v2 $arg" ;;
     *)          arg="-v4 $arg" ;;
     esac
@@ -103,8 +103,8 @@ for prog in $PROGS ; do
 done
 case $PROGS in
   *dwggrep*)
-    echo ./dwggrep -i -c tekst ../test/test-data/example_20*.dwg
-    if test x"`./dwggrep -i -c tekst ../test/test-data/example_*.dwg`" != x"10"; then
+    echo ./dwggrep -i -c tekst ../test/test-data/example_*.dwg
+    if test x"`./dwggrep -i -c tekst ../test/test-data/example_*.dwg`" != x"12"; then
       problems=$(expr 1 + $problems)
     fi
 

@@ -46,18 +46,31 @@ int verbosity(int argc, char **argv, int i, unsigned int *opts);
 #include "dwg_api.h"
 
 #ifndef HAVE_PCRE2_H
-# define PCRE2_DUPNAMES 0
-# define PCRE2_CASELESS 1
-# define PCRE2_EXTENDED 2
+# define PCRE2_MULTILINE 1
+# define PCRE2_CASELESS 2
+# define PCRE2_EXTENDED 3
+# define PCRE2_NO_AUTO_CAPTURE 4
+# define PCRE2_NO_DOTSTAR_ANCHOR 5
+#else
+# define PCRE2_JIT_MATCH_OPTIONS \
+   (PCRE2_NO_UTF_CHECK|PCRE2_NOTBOL|PCRE2_NOTEOL|PCRE2_NOTEMPTY|\
+    PCRE2_NOTEMPTY_ATSTART)
+# define PCRE2_JIT_COMPILE_OPTIONS \
+   (PCRE2_JIT_COMPLETE)
 #endif
 
 char *pattern;
 char buf[4096];
-int options = PCRE2_DUPNAMES;
+// partial to find substrings, not only complete matches
+int options = PCRE2_MULTILINE|PCRE2_NO_AUTO_CAPTURE|PCRE2_NO_DOTSTAR_ANCHOR;
 int opt_count = 0;
 int opt_text = 0;
 int opt_tables = 0;
 int opt_filename = 1;
+short numdxf = 0;
+short numtype = 0;
+static short dxf[10];  //ensure zero-fill
+static char* type[10]; //ensure zero-fill
 
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
@@ -68,23 +81,20 @@ static unsigned int cur_ver = 0;
 static pcre2_code_8 *ri8;
 static pcre2_match_data_8 *match_data8;
 static pcre2_match_context_8 *match_context8 = NULL;
-#ifdef HAVE_PCRE2_16
+# ifdef HAVE_PCRE2_16
 static pcre2_code_16 *ri16;
 static pcre2_match_data_16 *match_data16;
 static pcre2_match_context_16 *match_context16 = NULL;
-#endif
+# endif
 
 # ifdef USE_MATCH_CONTEXT
 static pcre2_jit_stack_8 *jit_stack8 = NULL;
 static pcre2_compile_context_8 *compile_context8 = NULL;
-#ifdef HAVE_PCRE2_16
+#  ifdef HAVE_PCRE2_16
 static pcre2_jit_stack_16 *jit_stack16 = NULL;
 static pcre2_compile_context_16 *compile_context16 = NULL;
-#endif
+#  endif
 # endif
-# define PCRE2_JIT_MATCH_OPTIONS \
-   (PCRE2_NO_UTF_CHECK|PCRE2_NOTBOL|PCRE2_NOTEOL|PCRE2_NOTEMPTY|\
-    PCRE2_NOTEMPTY_ATSTART|PCRE2_PARTIAL_SOFT)
 #endif
 
 static int usage(void) {
@@ -111,13 +121,12 @@ static int help(void) {
 #if 0
   printf("  -R, -r, --recursive       Recursively search subdirectories listed.\n");
 #endif
-#if 0
   printf("  --type NAME               Search only NAME entities or objects.\n");
   printf("  --dxf NUM                 Search only DXF group NUM fields.\n");
-#endif
-  // for now only this:
   printf("  --text                    Search only in TEXT-like entities.\n");
+#if 0
   printf("  --tables                  Search only in table names.\n");
+#endif
   printf("      --help                Display this help and exit\n");
   printf("      --version             Output version information and exit\n"
          "\n");
@@ -126,34 +135,35 @@ static int help(void) {
 }
 
 static int
-do_match (int is16, char *filename, char *entity, int dxf, char* text)
+do_match (int is16, char *filename, char *entity, int dxfgroup, char* text)
 {
 #ifdef HAVE_PCRE2_H
-  int found;
+  int rc;
 # ifdef HAVE_PCRE2_16
   if (is16)
-    found = pcre2_jit_match_16(ri16, (PCRE2_SPTR16)text, PCRE2_ZERO_TERMINATED, 0,
-                              PCRE2_JIT_MATCH_OPTIONS,
-                              match_data16,     /* block for storing the result */
-                              match_context16); /* disabled */
+    rc = pcre2_match_16(ri16, (PCRE2_SPTR16)text, PCRE2_ZERO_TERMINATED, 0,
+                           PCRE2_JIT_MATCH_OPTIONS,
+                           match_data16,     /* block for storing the result */
+                           match_context16); /* disabled */
   else
 # endif
-  // converted to UTF-8 before
-  found = pcre2_jit_match_8(ri8, (PCRE2_SPTR8)text, PCRE2_ZERO_TERMINATED, 0,
-                                PCRE2_JIT_MATCH_OPTIONS,
-                                match_data8,     /* block for storing the result */
-                                match_context8); /* disabled */
-  if (found >= 0) {
+    // already converted to UTF-8 before
+    rc = pcre2_match_8(ri8, (PCRE2_SPTR8)text, PCRE2_ZERO_TERMINATED, 0,
+                       PCRE2_JIT_MATCH_OPTIONS,
+                       match_data8,     /* block for storing the result */
+                       match_context8); /* disabled */
+  if (rc >= 0) {
     if (!opt_count)
-      printf("%s %s %d: %s\n", opt_filename ? filename : "", entity, dxf, text);
+      printf("%s %s %d: %s\n", opt_filename ? filename : "", entity, dxfgroup, text);
     return 1;
+  } else if (rc < -2) { //not PCRE2_ERROR_NOMATCH nor PCRE2_ERROR_PARTIAL
+    pcre2_get_error_message_8(rc, buf, 4096);
+    LOG_WARN("pcre2 match error %s with %s", buf, pattern);
   }
-#endif
+  return 0;
 
-#ifdef HAVE_PCRE2_16
-  if (!is16)
-  {
-#endif
+#else
+
   if (options & PCRE2_CASELESS)
     {
 # ifndef HAVE_STRCASESTR
@@ -180,7 +190,7 @@ do_match (int is16, char *filename, char *entity, int dxf, char* text)
 
               if (src[i] == '\0' || !len) {
                 if (!opt_count)
-                  printf("%s %s %d: %s\n", opt_filename ? filename : "", entity, dxf, text);
+                  printf("%s %s %d: %s\n", opt_filename ? filename : "", entity, dxfgroup, text);
                 return 1;
               }
             }
@@ -191,7 +201,7 @@ do_match (int is16, char *filename, char *entity, int dxf, char* text)
       if (strcasestr(text, pattern))
         {
           if (!opt_count)
-            printf("%s %s %d: %s\n", opt_filename ? filename : "", entity, dxf, text);
+            printf("%s %s %d: %s\n", opt_filename ? filename : "", entity, dxfgroup, text);
           return 1;
         }
 # endif
@@ -200,35 +210,48 @@ do_match (int is16, char *filename, char *entity, int dxf, char* text)
     {
       if (strstr(text, pattern)) {
         if (!opt_count)
-          printf("%s %s %d: %s\n", opt_filename ? filename : "", entity, dxf, text);
+          printf("%s %s %d: %s\n", opt_filename ? filename : "", entity, dxfgroup, text);
         return 1;
       }
     }
+  return 0;
+#endif
+}
+
+// check matching dxfgroup first to avoid costly utf8 conversions
+#define MATCH_DXF(type,ENTITY,text_field,dxfgroup)  \
+  if (numdxf) { \
+    int dxfok = 0; \
+    for (int i=0; i<numdxf; i++) { \
+      if (dxf[i] == dxfgroup) { dxfok = 1; break; } \
+    } \
+    if (dxfok) { MATCH_TYPE(type,ENTITY,text_field,dxfgroup); } \
+  } \
+  else { \
+    MATCH_TYPE(type,ENTITY,text_field,dxfgroup); \
+  }
+
 #ifdef HAVE_PCRE2_16
+#define MATCH_TYPE(type,ENTITY,text_field,dxfgroup)  \
+  text = obj->tio.type->tio.ENTITY->text_field; \
+  if (text) \
+    found += do_match(obj->parent->header.version >= R_2007, filename, #ENTITY, dxfgroup, text)
+#else
+#define MATCH_TYPE(type,ENTITY,text_field,dxfgroup)  \
+  text = obj->tio.type->tio.ENTITY->text_field; \
+  if (text) { \
+    if (obj->parent->header.version >= R_2007) \
+      text = bit_convert_TU((BITCODE_TU)text); \
+    found += do_match(obj->parent->header.version >= R_2007, filename, #ENTITY, dxfgroup, text); \
+    if (obj->parent->header.version >= R_2007) \
+      free(text); \
   }
 #endif
 
-  return 0;
-}
-
-#ifdef HAVE_PCRE2_16
-#define MATCH_TYPE(type,ENTITY,text_field,dxf)  \
-  text = obj->tio.type->tio.ENTITY->text_field; \
-  found += do_match(obj->parent->header.version >= R_2007, filename, #ENTITY, dxf, text)
-#else
-#define MATCH_TYPE(type,ENTITY,text_field,dxf)  \
-  text = obj->tio.type->tio.ENTITY->text_field; \
-  if (obj->parent->header.version >= R_2007) \
-    text = bit_convert_TU((BITCODE_TU)text); \
-  found += do_match(obj->parent->header.version >= R_2007, filename, #ENTITY, dxf, text); \
-  if (obj->parent->header.version >= R_2007) \
-    free(text)
-#endif
-
 #define MATCH_ENTITY(ENTITY,text_field,dxf) \
-  MATCH_TYPE(entity,ENTITY,text_field,dxf)
+  MATCH_DXF(entity,ENTITY,text_field,dxf)
 #define MATCH_OBJECT(ENTITY,text_field,dxf) \
-  MATCH_TYPE(object,ENTITY,text_field,dxf)
+  MATCH_DXF(object,ENTITY,text_field,dxf)
 #define MATCH_TABLE(ENTITY, handle, TABLE, dxf) {}
 
 static
@@ -349,9 +372,22 @@ int match_BLOCK_HEADER(char* filename, Dwg_Object_Ref* ref)
   if (!ref || !ref->obj || !ref->obj->tio.object)
     return 0;
   //hdr = ref->obj->tio.object->tio.BLOCK_HEADER;
-  obj = get_first_owned_object(ref->obj);
-  while (obj)
+  for (obj = get_first_owned_object(ref->obj);
+       obj;
+       obj = get_next_owned_object(ref->obj, obj))
     {
+      if (numtype) //search for allowed --type and skip if not
+        {
+          int typeok = 0;
+          for (int i=0; i<numtype; i++) {
+            if (obj->dxfname && !strcmp(type[i], obj->dxfname)) {
+              typeok = 1;
+              break;
+            }
+          }
+          if (!typeok) //next obj
+            continue;
+        }
       if (!opt_tables)
         { // opt_text:
           if (obj->type == DWG_TYPE_TEXT)
@@ -394,9 +430,17 @@ int match_BLOCK_HEADER(char* filename, Dwg_Object_Ref* ref)
               MATCH_TABLE (ENTITY, edge_visualstyle, VISUALSTYLE, 8);
             }
         }
-      obj = get_next_owned_object(ref->obj, obj);
     }
   return found;
+}
+
+// partial matches are worthless. so add .* to the front and end
+// 8bit only
+char* re_prepare(const char* pattern, int plen)
+{
+  char *re = malloc(plen+5);
+  strcpy(re, pattern);
+  return re;
 }
 
 int
@@ -407,15 +451,10 @@ main (int argc, char *argv[])
   char* filename;
   Dwg_Data dwg;
   Bit_Chain dat;
-  short dxf[10];
-  char* objtype[10];
-  short numdxf = 0;
-  short numtype = 0;
   int plen;
   int errcode;
 #ifdef HAVE_PCRE2_H
   PCRE2_SIZE erroffset;
-  /* pcre_compile */
   int have_jit;
 # ifdef HAVE_PCRE2_16
   BITCODE_TU pattern16;
@@ -461,12 +500,13 @@ main (int argc, char *argv[])
   if (i < argc-1 && !strcmp(argv[i], "--type"))
     {
       if (numtype >= 10) return usage(); //too many
-      objtype[numtype++] = argv[i+1];
+      type[numtype++] = argv[i+1]; // a string
       i += 2;
     }
   if (i < argc-1 && !strcmp(argv[i], "--dxf"))
     {
       if (numdxf >= 10) return usage(); // too many
+      // a integer group
       dxf[numdxf++] = (short)strtol(argv[i+1], NULL, 10);
       i += 2;
     }
@@ -502,9 +542,15 @@ main (int argc, char *argv[])
      NULL
 # endif
     );
+  if (errcode != 0 && errcode != 100) {
+    pcre2_get_error_message_8(errcode, buf, 4096);
+    LOG_ERROR("pcre2_compile_8 error %d: %s with %s", errcode, buf, pattern);
+    return 1;
+  }
   match_data8 = pcre2_match_data_create_from_pattern_8(ri8, NULL);
-  pcre2_jit_compile_8(ri8, PCRE2_JIT_COMPLETE); /* no partial matches */
-
+  if (have_jit)
+    pcre2_jit_compile_8(ri8, PCRE2_JIT_COMPILE_OPTIONS);
+  
 # ifdef HAVE_PCRE2_16
   pcre2_config_16(PCRE2_CONFIG_JIT, &have_jit);
   pattern16 = bit_utf8_to_TU(pattern);
@@ -519,8 +565,14 @@ main (int argc, char *argv[])
      NULL
 #  endif
     );
+  if (errcode != 0 && errcode != 100) {
+    pcre2_get_error_message_8(errcode, buf, 4096);
+    LOG_ERROR("pcre2_compile_16 error %d: %s with %s", errcode, buf, pattern);
+    return 1;
+  }
   match_data16 = pcre2_match_data_create_from_pattern_16(ri16, NULL);
-  pcre2_jit_compile_16(ri16, PCRE2_JIT_COMPLETE); /* no partial matches */
+  if (have_jit)
+    pcre2_jit_compile_16(ri16, PCRE2_JIT_COMPILE_OPTIONS);
 # endif
 #endif
 
@@ -552,6 +604,6 @@ main (int argc, char *argv[])
     }
   if (opt_count)
     printf("%d\n", count);
-
+  
   return count ? 0 : 1;
 }
