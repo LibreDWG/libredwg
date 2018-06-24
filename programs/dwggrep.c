@@ -376,18 +376,20 @@ int match_LAYOUT(const char *restrict filename, const Dwg_Object *restrict obj)
 }
 
 static
-int match_BLOCK_HEADER(const char *restrict filename, const Dwg_Object_Ref *restrict ref)
+int match_BLOCK_HEADER(const char *restrict filename, const Dwg_Object *restrict hdr)
 {
   int found = 0;
-  Dwg_Object* obj;
-  //Dwg_Object_BLOCK_HEADER* hdr;
+  Dwg_Object *obj;
 
-  if (!ref || !ref->obj || !ref->obj->tio.object)
+  if (!hdr ||
+      hdr->supertype != DWG_SUPERTYPE_OBJECT ||
+      hdr->type != DWG_TYPE_BLOCK_HEADER)
     return 0;
+  //fprintf(stderr, "HDR: %d, HANDLE: %X\n", hdr->address, hdr->handle.value);
   //hdr = ref->obj->tio.object->tio.BLOCK_HEADER;
-  for (obj = get_first_owned_object(ref->obj);
+  for (obj = get_first_owned_object(hdr);
        obj;
-       obj = get_next_owned_object(ref->obj, obj))
+       obj = get_next_owned_object(hdr, obj))
     {
       if (numtype) //search for allowed --type and skip if not
         {
@@ -413,6 +415,8 @@ int match_BLOCK_HEADER(const char *restrict filename, const Dwg_Object_Ref *rest
             found += match_MTEXT(filename, obj);
           if (!opt_text)
             {
+              if (obj->type == DWG_TYPE_BLOCK_HEADER)
+                found += match_BLOCK_HEADER(filename, obj);
               if (obj->type == DWG_TYPE_BLOCK)
                 found += match_BLOCK(filename, obj);
               else if (obj->fixedtype == DWG_TYPE_DICTIONARY)
@@ -596,12 +600,27 @@ main (int argc, char *argv[])
           continue;
         }
 
+      //2010 and 2013 have a different ctrl.model_space handle
+      if (dwg.header_vars.BLOCK_RECORD_MSPACE != dwg.block_control.model_space)
+        count += match_BLOCK_HEADER(filename, dwg.header_vars.BLOCK_RECORD_MSPACE->obj);
+      if (dwg.block_control.model_space)
+        count += match_BLOCK_HEADER(filename, dwg.block_control.model_space->obj);
+
       for (k=0; k < dwg.block_control.num_entries; k++)
         {
-          count += match_BLOCK_HEADER(filename, dwg.block_control.block_headers[k]);
+          count += match_BLOCK_HEADER(filename, dwg.block_control.block_headers[k]->obj);
         }
-      count += match_BLOCK_HEADER(filename, dwg.block_control.model_space);
-      count += match_BLOCK_HEADER(filename, dwg.block_control.paper_space);
+      if (dwg.block_control.parent->objid != 0)
+        {
+          //oops, we really want to first BLOCK_CONTROL
+          Dwg_Object_BLOCK_CONTROL *ctrl = dwg.object[0].tio.object->tio.BLOCK_CONTROL;
+          for (k=0; k < ctrl->num_entries; k++)
+            {
+              count += match_BLOCK_HEADER(filename, ctrl->block_headers[k]->obj);
+            }
+        }
+      if (dwg.block_control.paper_space)
+        count += match_BLOCK_HEADER(filename, dwg.block_control.paper_space->obj);
 
       if (j < argc)
         dwg_free(&dwg); //skip the last free
