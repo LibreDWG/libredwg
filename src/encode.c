@@ -537,7 +537,7 @@ dwg_encode_xdata(Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj, int 
  *
  * TODO: preR13 tables, 2007 maps.
  * 2010+ uses the 2004 format.
- * Returns a summary bitmap of all errors.
+ * Returns a summary bitmask of all errors.
  */
 int
 dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)

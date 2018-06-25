@@ -1,4 +1,4 @@
-LibreDWG
+LibreDWG - free implementation of the DWG file format
 
 LibreDWG is a free C library to read and write DWG files.  This program is
 part of the GNU project, released under the aegis of GNU.  It is licensed
@@ -16,8 +16,9 @@ moment our decoder (i.e. reader) is done, just some very advanced
 R2010+ and pre-R13 entities fail to read and are skipped over. The
 writer is good enough for R2000.  Among the example applications we
 wrote using LibreDWG is a reader, a writer, a rewriter (i.e. saveas),
-an initial SVG and Postscript conversion, dxf converters, and dwglayer
-to print the list of layers. More are in the pipeline.
+an initial SVG and Postscript conversion, dxf converters, dwggrep to
+search for text, and dwglayer to print the list of layers.
+More are in the pipeline.
 Please contact us if you want to help.
 
 The strings API is utf-8 (wtf8 really, Windows UCS-2 has no surrogate
@@ -42,10 +43,17 @@ http://www.gnu.org/software/libredwg
 
 You need the following dependencies:
 - Basic development tools (a C99 compiler like gcc/clang, make, autoconf, automake and libtool)
-- SWIG 1.7+
-- Python 2.7 development headers (debian: python-dev; yum: python-devel)
-  and the libxml2 python bindings.
+
+Optionally:
+
+- dejagnu
 - TeXinfo for building the docs
+- pslib for dwg2ps: http://pslib.sourceforge.net/doc/pslib.html
+- pcre2 with 8bit and 16bit libraries for dwggrep regexp support
+- SWIG 1.7+
+- Python 2.7 or 3.x development headers (debian: python-dev; yum: python-devel)
+  and the libxml2 python bindings.
+- Perl 5 for the perl bindings
 
 See INSTALL for generic instructions.  Basically, you do:
 
@@ -131,18 +139,14 @@ The programs and examples directories contains some application code that uses o
 * dwg2svg2 -- Another example how to use the DWG API, bypassing direct access to
   the DWG struct.
 
-* xmlsuite -- an extensive example library to use the SWIG python bindings
-  is in the test/xmlsuite directory. It also features code to output entities
-  in XML.
+* xmlsuite -- an extensive example library to use XML to compare against prepared
+  features is in the test/xmlsuite directory. It also features code to output entities
+  in XML, but does not use the python bindings.
 
-/*****************************************************************************/
-/*  LibreDWG - free implementation of the DWG file format                    */
-/*                                                                           */
-/*  Copyright (C) 2009, 2010, 2015, 2018 Free Software Foundation, Inc.      */
-/*                                                                           */
-/*  This library is free software, licensed under the terms of the GNU       */
-/*  General Public License as published by the Free Software Foundation,     */
-/*  either version 3 of the License, or (at your option) any later version.  */
-/*  You should have received a copy of the GNU General Public License        */
-/*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
-/*****************************************************************************/
+Copyright (C) 2009, 2010, 2015, 2018 Free Software Foundation, Inc.
+
+This library is free software, licensed under the terms of the GNU
+General Public License as published by the Free Software Foundation,
+either version 3 of the License, or (at your option) any later version.
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.

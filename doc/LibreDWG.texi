@@ -127,7 +127,7 @@ Here is a list of features that are still missing.
 @item Reading pre-R13 DWG
 Reading DWG formats for pre-R13 and some R2010+ non-graphical objects is an ongoing effort, some minor parts are missing. Simple DWG's can be read already, some undocumented classes are skipped.
 
-* ACIS: only converted to a raw string
+* ACIS: version 1 is converted to a raw string. ACIS version 2, i.e. the forked variant ACIS 7.0 under the name ShapeManager, is not yet supported.
 
 @item Writing pre-R13 and R2004+ DWG
 Writing DWG formats for R2004 and later: R2007, R2010, R2013, R2018 is an
@@ -138,7 +138,7 @@ DXF support is an ongoing effort, and about halfway implemented.
 Ascii DXF's are generated fully, with much more elements and fields and other free libraries,
 but AutoCAD fails to import some of them. See the @file{TODO} file for a detailled coverage report.
 
-Writing binary DXF is still under construction, done about 50%.
+Writing binary DXF is still under construction, done about 80%.
 Reading DXF is not yet fully implemented, this is under construction.
 
 @item Enabled entities and objects, but untested:
@@ -506,7 +506,7 @@ or from an earlier or later DWG version.
 
 We can write Ascii DXF files in various versions, with much more data than other free
 DWG libraries, but not as stable as the unfree Teigha library yet.
-AutoCAD fails to import our files still.
+AutoCAD fails to import some of our files still (~20% failure rate).
 
 Options: @code{--minimal} (see @code{dwg2dxf} or @code{dwgread}) creates
 only a short header with a ACADVER and HANDSEED element, and the
@@ -528,7 +528,9 @@ Reading DXFB is under construction.
 
 @cindex JSON
 
-We write and read to our own JSON format, which is a readable 1:1 mapping of the DWG structures, and carries much more information than the DXF format.
+We write and read to our own JSON format, which is a readable 1:1
+mapping of the DWG structures, and carries much more information than
+the DXF format.
 
 Writing a JSON to stdout is not recommended, as then ending commas are
 still there, which is strictly not valid JSON.
@@ -667,11 +669,12 @@ TEXT, LINE, CIRCLE, ARC, INSERT.
 @cindex dwg2ps
 Convert a DWG to a very limited Postscript file. All paperspace and modelspace enties of type LINE.
 
-Noe that the graphical representation for PS and SVG output is severely lacking, block references (insert entities) are not yet exploded, UCS and paper space transformations per entity are not yet done.
+This requires installation of pslib @uref{http://pslib.sourceforge.net/doc/pslib.html}.
+
+Note that the graphical representation for PS and SVG output is severely lacking, block references (insert entities) are not yet exploded, UCS and paper space transformations per entity are not yet done.
 
 @item @file{dwg2dxf}
 @cindex dwg2dxf
-
 Converts DWG files to DXF, optionally via @code{--as-rNNNN} as another
 version, an earlier or later version, or via @code{-m} or
 @code{--minimal} as a minimal DXF version, skipping most headers vars,
@@ -683,27 +686,31 @@ The DXF files are created in the current directory and silently overwritten.
 
 @item @file{dxf2dwg}
 @cindex dxf2dwg
-
 Convert a DXF (or Binary DXF) to DWG, optionally via @code{--as-rVER} as another
 version, an earlier or later version.
 The DXF reader is not yet implemented.
-
-@item @file{dwggrep}
-@cindex dwggrep
-
-Searches DWG files for a text string, via regular expressions.
-This feature is under construction.
 
 @end table
 
 There are also some more examples in the source distribution:
 
-@file{load_dwg} loads a DWG and adds some entities.
-@cindex load_dwg
+@table @asis
 
-@file{dwg2svg2} converts a DWG to SVG similar to @file{dwg2SVG},
-but via the @file{dwg_api.h} only. The graphical representation for PS and SVG output is severely lacking, block references (insert entities) are not yet exploded , UCS and paper space transformations per entity are not yet done.
+@item @file{load_dwg}
+@cindex load_dwg
+loads a DWG and adds some entities.
+
+@item @file{dwg2svg2}
 @cindex dwg2svg2
+converts a DWG to SVG similar to @file{dwg2SVG},
+but via the @file{dwg_api.h} only. The graphical representation for PS and SVG output is severely lacking, block references (insert entities) are not yet exploded , UCS and paper space transformations per entity are not yet done.
+
+@item @file{unknown}
+@cindex unknown
+lists the not yet reverse-engineered blobs from our example files, and
+is the framework to guess the field layout for these.
+
+@end table
 
 @node Bindings
 @chapter Bindings
@@ -712,9 +719,9 @@ but via the @file{dwg_api.h} only. The graphical representation for PS and SVG o
 @cindex perl
 
 LibreDWG generates library bindings to python and perl5 via
-swig. These can be quite huge.  You can easily add bindings to other
-swig-supported languages, like Go, C#, ruby, php, D, lua, tcl, common
-lisp, ocaml, or others by yourself. Patches accepted.
+swig. These can be quite huge, and it is recommended to use @file{ccache}.
+You can easily add bindings to other swig-supported languages, like Go, C#,
+ruby, php, D, lua, tcl, common lisp, ocaml, or others by yourself. Patches accepted.
 
 @node Reference API
 @chapter Reference API
