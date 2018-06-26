@@ -5,16 +5,16 @@ AM_CPPFLAGS = $(XML2_CFLAGS)
 AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
 LDADD = $(top_builddir)/src/libredwg.la $(XML2_LIBS)
 
-if HAVE_SWIG_PYTHON
-
+if HAVE_PYTHON
 # Set env var ‘PYTHON’ so that check.py can invoke other .py programs.
 TESTS_ENVIRONMENT = PYTHON='$(PYTHON)' $(PYTHON)
-
-CLEANFILES = *.log *.sum site.bak result.htm
-MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
+endif
 
 check_PROGRAMS = testsuite
 TESTS = check.py
+
+CLEANFILES = *.log *.sum site.bak result.htm
+MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
 
 @VALGRIND_CHECK_RULES@
 
@@ -26,7 +26,6 @@ gcov: $(CHECK)
 	$(GCOV) *.gcno | tee -a $(builddir)/gcov.log
 
 CLEANFILES  += *.gcov *.gcno *.gcda gcov.log
-endif
 
 else
 gcov:
@@ -34,7 +33,7 @@ endif
 
 EXTRA_DIST = common.c
 EXTRA_DIST += newxml.py txttoxml.py
-EXTRA_DIST += header.htm helper.py $(TESTS)
+EXTRA_DIST += header.htm helper.py check.py
 
 clean-local:
 	rm -rf test_output/

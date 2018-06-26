@@ -289,6 +289,8 @@ else
 fi
 AM_CONDITIONAL([HAVE_SWIG_PYTHON],
   [test -n "$SWIG" && test -n "$PYTHON_VERSION"])
+AM_CONDITIONAL([HAVE_PYTHON],
+  [test x$enable_python != xno])
 AM_CONDITIONAL([HAVE_SWIG_PERL],
   [test -n "$SWIG" && test -n "$PERL"])
 AM_CONDITIONAL([HAVE_PERL],
