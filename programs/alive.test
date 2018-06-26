@@ -84,8 +84,8 @@ run ()
 }
 
 DATA="sample_2000 example_2000 example_2004 example_2007 example_2010"
-DATA="$DATA example_2013 example_2018"
-TODO="r11/ACEL10 2010/Leader_2010 2013/Leader_2013 2018/Leader_2018"
+DATA="$DATA example_2013 example_2018 example_r14"
+TODO="r11/ACEL10"
 
 for d in $DATA; do
     b=$(basename $d)
