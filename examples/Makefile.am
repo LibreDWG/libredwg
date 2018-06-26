@@ -25,7 +25,7 @@ EXTRA_PROGRAMS = unknown
 
 load_dwg_SOURCES = load_dwg.c
 dwg2svg2_SOURCES = dwg2svg2.c
-unknown_SOURCES  = unknown.c alldxf.inc
+unknown_SOURCES  = unknown.c alldxf_0.inc alldxf_1.inc alldxf_2.inc
 all: $(check_PROGRAMS)
 
 if HAVE_PERL
@@ -37,6 +37,9 @@ alldwg.inc: # log_unknown.pl
 	  mv examples/alldwg.inc examples/alldwg.inc~; \
 	  for l in *.log; do b=`basename $l .log`; \
 	    $(PERL) examples/log_unknown.pl $l >>examples/alldwg.inc; done
+alldxf_2.inc: alldxf_1.inc
+alldxf_1.inc: alldxf_0.inc
+alldxf_0.inc: log_unknown_dxf.pl
 alldxf.inc: log_unknown_dxf.pl
 	test -d ../.git || false
 	test -f alldwg.inc || (echo make regen-unknown; false)
@@ -61,8 +64,10 @@ endif
 
 TESTS = $(top_srcdir)/programs/alive.test
 
-EXTRA_DIST = load_dwg.py log_unknown.pl alldwg.inc log_unknown_dxf.pl alldxf.inc
-CLEANFILES = {example,sample}_2000.svg alldwg.inc~ alldxf.inc~
+EXTRA_DIST = load_dwg.py log_unknown.pl alldwg.inc log_unknown_dxf.pl
+	     alldxf_0.inc alldxf_1.inc alldxf_2.inc
+CLEANFILES = {example,sample}_2000.svg alldwg.inc~ \
+	     alldxf_0.inc~ alldxf_1.inc~ alldxf_2.inc~
 MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
 
 .c.i:

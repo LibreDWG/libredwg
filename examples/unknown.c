@@ -17,15 +17,38 @@
  * A sample program to find the most likely
  * fields for all unknown dwg entities and objects.
  * gather all binary raw data from all unknown dwg entities and objects
- * into examples/alldwg.inc.
+ * into examples/alldwg.inc and examples/alldxf.inc
  * with the available likely fields try permutations of most likely types.
  */
 
 #include "config.h"
 #include <stdio.h>
+#include <string.h>
 #include "dwg.h"
 #include "bits.h"
 
+struct _unknown_field {
+  int code;
+  char *value;
+  int type;
+  int pos;
+};
+static struct _unknown_dxf {
+  const char *name;
+  const char *dxf;
+  const unsigned int handle;
+  const char *bytes;
+  const char *bits;
+  const struct _unknown_field *fields;
+} unknown_dxf[] = {
+    // see log_unknown_dxf.pl
+    #include "alldxf_0.inc"
+    { NULL, NULL, 0, "", "", NULL }
+};
+#include "alldxf_1.inc"  
+
+/* not needed for the solver, only to check against afterwards */
+#if 0
 static struct _unknown {
   const char *name;
   const char *bytes;
@@ -52,15 +75,28 @@ static struct _unknown {
 
     { 0, NULL, "", "", NULL, 0L, 0L }
 };
+#endif
 
 int
 main (int argc, char *argv[])
 {
-  int i;
-  for (i=0; unknowns[i].name; i++)
+  int i, j;
+  #include "alldxf_2.inc"
+  for (i=0; unknown_dxf[i].name; i++)
     {
-      //TODO offline: find the shortest objects. find the matching DWG and DXF. get the DXF values.
-      printf("%s: %d %X (%s)\n", unknowns[i].name, unknowns[i].bitsize, unknowns[i].handle, unknowns[i].log);
+      int num_fields;
+      const struct _unknown_field *g = unknown_dxf[i].fields;
+      int len = strlen(unknown_dxf[i].bytes);
+      //TODO offline: find the shortest objects.
+      printf("\n%s: %X %s (%d)\n", unknown_dxf[i].name, unknown_dxf[i].handle,
+             len < 200 ? unknown_dxf[i].bytes : "...", len);
+      for (j=0; g[j].code; j++)
+        {
+          if (g[j].code == 100)
+            printf("%d: %s\n", g[j].code, g[j].value);
+        }
+      num_fields = j;
+
       //TODO: try likely field combinations and print the top 3.
       //there are various heuristics, like the handle stream at the end
     }
