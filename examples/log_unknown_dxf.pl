@@ -1,4 +1,4 @@
-#!/usr/bin/perl -sn
+#!/usr/bin/perl -an
 =head1 USAGE
 
     log_unknown_dxf alldwg.inc >alldxf.inc
@@ -85,4 +85,65 @@ Search 0 MATERIAL + Handle 96 in test/test-data/Drawing_2007.dxf =>
 
 
 =cut
+
+my $dxf = $F[5];
+if ($dxf eq 'NULL,' or $dxf !~ /\.dxf",/) {
+  next LINE; # -n
+}
+$dxf = substr($dxf, 1, -2);
+if (!-f $dxf) {
+  if (!-f "../$dxf") {
+    warn "$dxf and ../$dxf not found";
+  } else {
+    $dxf = "../$dxf";
+  }
+}
+my $obj = substr($F[1],1,-2); # "MATERIAL",
+my $unknown = substr($F[2],1,-2);
+my $unknown_b = substr($F[3],1,-2);
+my $hdl = substr($F[6],2,-1); # 0xXXX,
+#warn "$dxf: $obj HANDLE($hdl)\n";
+# 9080187 5160203 9080187 201AA 51E0204 90C0202 35200204 20640A8 2D22020C 90A01D1 
+if ($hdl =~ /^([0-9A-F]){1,4}0([0-9A-F]+)$/) {
+  $hdl = $2;
+  #warn "=> try HANDLE($hdl)\n";
+}
+
+open my $f, "$dxf" or next LINE;
+my ($foundobj, $foundhdl);
+while (my $code = <$f>) {
+  $code =~ s/\cM\cJ//;
+  my $v = <$f>;
+  $v =~ s/\cM\cJ//;
+  $v =~ s/^\s*//;
+  if ($code =~ /^ *0$/) {
+    $foundobj = $v eq $obj;
+    if ($foundhdl) {
+      $foundhdl = 0;
+      print "      { 0, NULL}\n";
+      print "    },\n";
+      print "  },\n";
+    }
+  }
+  if ($foundobj and $code =~ /^ *5$/) {
+    $foundhdl = $v eq $hdl;
+    if ($foundhdl) {
+      warn "found $obj $hdl in $dxf\n";
+      print "  { \"$obj\", \"$dxf\",\n";
+      print "    \"$unknown\", \"$unknown_b\",\n";
+      print "    {\n";
+    }
+  }
+  if ($foundhdl) {
+    process_dxf($dxf, $obj, $hdl, $code, $v);
+  }
+}
+close $f;
+
+sub process_dxf {
+  my ($dxf, $obj, $hdl, $code, $v) = @_;
+  #warn "$code: $v\n";
+  #return if $code == 100;
+  print "      { $code, \"$v\" },\n";
+}
 

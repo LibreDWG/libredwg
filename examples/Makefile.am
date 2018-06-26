@@ -25,21 +25,24 @@ EXTRA_PROGRAMS = unknown
 
 load_dwg_SOURCES = load_dwg.c
 dwg2svg2_SOURCES = dwg2svg2.c
-unknown_SOURCES  = unknown.c #alldwg.inc
-
+unknown_SOURCES  = unknown.c alldxf.inc #alldwg.inc
 all: $(check_PROGRAMS)
 
-# maintainer rule only
+if HAVE_PERL
+# maintainer rules only
 alldwg.inc: log_unknown.pl
 	test -d ../.git || false
 	echo Creating alldwg.inc will need a few minutes...
 	-cd $(abs_top_builddir) && ./logs.sh; \
 	  mv examples/alldwg.inc examples/alldwg.inc~; \
 	  for l in *.log; do b=`basename $l .log`; \
-	    examples/log_unknown.pl $l >>examples/alldwg.inc; done
-alldxf.inc: alldwg.inc
+	    $(PERL) examples/log_unknown.pl $l >>examples/alldwg.inc; done
+alldxf.inc: log_unknown_dxf.pl
+	test -d ../.git || false
+	test -f alldwg.inc || $(MAKE) alldwg.inc
 	mv alldxf.inc alldxf.inc~
-	log_unknown_dxf.pl alldwg.inc >alldxf.inc
+	cd .. && $(PERL) examples/log_unknown_dxf.pl examples/alldwg.inc >examples/alldxf.inc
+endif
 
 .PHONY: check-syntax regen-unknown dsymutil gcov
 regen-unknown: alldwg.inc
@@ -58,8 +61,8 @@ endif
 
 TESTS = $(top_srcdir)/programs/alive.test
 
-EXTRA_DIST = load_dwg.py log_unknown.pl alldwg.inc log_unknown_dxf.pl
-CLEANFILES = {example,sample}_2000.svg alldwg.inc~
+EXTRA_DIST = load_dwg.py log_unknown.pl alldwg.inc log_unknown_dxf.pl alldxf.inc
+CLEANFILES = {example,sample}_2000.svg alldwg.inc~ alldxf.inc~
 MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
 
 .c.i:
