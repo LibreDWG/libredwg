@@ -25,12 +25,12 @@ EXTRA_PROGRAMS = unknown
 
 load_dwg_SOURCES = load_dwg.c
 dwg2svg2_SOURCES = dwg2svg2.c
-unknown_SOURCES  = unknown.c alldxf.inc #alldwg.inc
+unknown_SOURCES  = unknown.c alldxf.inc
 all: $(check_PROGRAMS)
 
 if HAVE_PERL
 # maintainer rules only
-alldwg.inc: log_unknown.pl
+alldwg.inc: # log_unknown.pl
 	test -d ../.git || false
 	echo Creating alldwg.inc will need a few minutes...
 	-cd $(abs_top_builddir) && ./logs.sh; \
@@ -39,13 +39,13 @@ alldwg.inc: log_unknown.pl
 	    $(PERL) examples/log_unknown.pl $l >>examples/alldwg.inc; done
 alldxf.inc: log_unknown_dxf.pl
 	test -d ../.git || false
-	test -f alldwg.inc || $(MAKE) alldwg.inc
+	test -f alldwg.inc || (echo make regen-unknown; false)
 	mv alldxf.inc alldxf.inc~
-	cd .. && $(PERL) examples/log_unknown_dxf.pl examples/alldwg.inc >examples/alldxf.inc
+	cd .. && $(PERL) examples/log_unknown_dxf.pl examples/alldwg.inc
 endif
 
 .PHONY: check-syntax regen-unknown dsymutil gcov
-regen-unknown: alldwg.inc
+regen-unknown: alldwg.inc alldxf.inc
 
 if HAVE_WINE
 TESTS_ENVIRONMENT = \
