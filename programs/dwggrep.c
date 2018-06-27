@@ -13,7 +13,6 @@
 /*
  * dwggrep.c: search a string in all text values in a DWG
  * TODO scan the dwg.spec for all text DXF codes, per object.
- * uses pcre2-8 (not yet pcre2-16, rather convert down to UTF-8)
  *
  * written by Reini Urban
  */
@@ -244,6 +243,22 @@ do_match (const int is16, const char *restrict filename,
     MATCH_TYPE(type,ENTITY,text_field,dxfgroup); \
   }
 
+//8bit only
+#define MATCH_NO16(type,ENTITY,text_field,dxfgroup) \
+  text = obj->tio.type->tio.ENTITY->text_field; \
+  if (text && numdxf) { \
+    int dxfok = 0; \
+    for (int i=0; i<numdxf; i++) { \
+      if (dxf[i] == dxfgroup) { dxfok = 1; break; } \
+    } \
+    if (dxfok) { \
+      found += do_match(0, filename, #ENTITY, dxfgroup, text); \
+    } \
+  } \
+  else if (text) { \
+    found += do_match(0, filename, #ENTITY, dxfgroup, text); \
+  }
+
 #ifdef HAVE_PCRE2_16
 #define MATCH_TYPE(type,ENTITY,text_field,dxfgroup)  \
   text = obj->tio.type->tio.ENTITY->text_field; \
@@ -302,6 +317,15 @@ int match_ATTDEF(const char *restrict filename, const Dwg_Object *restrict obj)
 }
 
 static
+int match_MTEXT(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_ENTITY (MTEXT, text, 1);
+  return found;
+}
+
+static
 int match_BLOCK(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
@@ -311,11 +335,41 @@ int match_BLOCK(const char *restrict filename, const Dwg_Object *restrict obj)
 }
 
 static
-int match_MTEXT(const char *restrict filename, const Dwg_Object *restrict obj)
+int match_DIMENSION(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  MATCH_ENTITY (MTEXT, text, 1);
+  //int is16 = obj->parent->header.version >= R_2007;
+
+  text = obj->tio.entity->tio.DIMENSION_ORDINATE->user_text;
+  if (text)
+    found += do_match(0, filename, "DIMENSION", 1, text);
+  return found;
+}
+
+static
+int match_VIEWPORT(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_ENTITY (VIEWPORT, style_sheet, 1);
+  return found;
+}
+
+static
+int match_3DSOLID(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0, i;
+  Dwg_Entity_3DSOLID *_obj = obj->tio.entity->tio._3DSOLID;
+
+  for (i=0; i<_obj->num_blocks; i++)
+    {
+      text = obj->tio.entity->tio._3DSOLID->encr_sat_data[i];
+      if (text)
+        found += do_match(0, filename, "3DSOLID", 301, text);
+      //MATCH_NO16 (entity, _3DSOLID, encr_sat_data[i], 301);
+    }
   return found;
 }
 
@@ -334,11 +388,75 @@ int match_DICTIONARY(const char *restrict filename, const Dwg_Object *restrict o
 }
 
 static
+int match_STYLE(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_OBJECT (STYLE, font_name, 3);
+  MATCH_OBJECT (STYLE, bigfont_name, 4);
+  return found;
+}
+
+static
+int match_LTYPE(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_OBJECT (LTYPE, description, 3);
+  MATCH_OBJECT (LTYPE, strings_area, 3);
+  return found;
+}
+
+static
+int match_DIMSTYLE(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_OBJECT (DIMSTYLE, DIMPOST, 3);
+  MATCH_OBJECT (DIMSTYLE, DIMAPOST, 4);
+  MATCH_OBJECT (DIMSTYLE, DIMBLK_T, 5);
+  MATCH_OBJECT (DIMSTYLE, DIMBLK1_T, 6);
+  MATCH_OBJECT (DIMSTYLE, DIMBLK2_T, 7);
+  MATCH_OBJECT (DIMSTYLE, DIMMZS, 0);
+  MATCH_OBJECT (DIMSTYLE, DIMALTMZS, 0);
+  return found;
+}
+
+static
+int match_GROUP(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_OBJECT (GROUP, name, 3);
+  return found;
+}
+
+static
+int match_MLINESTYLE(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_OBJECT (MLINESTYLE, entry_name, 2);
+  MATCH_OBJECT (MLINESTYLE, desc, 3);
+  return found;
+}
+
+static
 int match_DICTIONARYVAR(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
-  int found = 0, textlen;
+  int found = 0;
   MATCH_OBJECT (DICTIONARYVAR, str, 1);
+  return found;
+}
+
+static
+int match_HATCH(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_ENTITY (HATCH, name, 2);
+  MATCH_ENTITY (HATCH, gradient_name, 470);
   return found;
 }
 
@@ -346,8 +464,22 @@ static
 int match_IMAGEDEF(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
-  int found = 0, textlen;
+  int found = 0;
   MATCH_OBJECT (IMAGEDEF, file_path, 1);
+  return found;
+}
+
+static
+int match_LAYER_INDEX(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0, i;
+  const Dwg_Object_LAYER_INDEX *_obj = obj->tio.object->tio.LAYER_INDEX;
+
+  for (i=0; i<_obj->num_entries; i++)
+    {
+      MATCH_OBJECT (LAYER_INDEX, entries[i].layer, 8);
+    }
   return found;
 }
 
@@ -376,19 +508,101 @@ int match_LAYOUT(const char *restrict filename, const Dwg_Object *restrict obj)
 }
 
 static
+int match_FIELD(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0, i;
+  const Dwg_Object_FIELD *_obj = obj->tio.object->tio.FIELD;
+
+  MATCH_OBJECT (FIELD, format, 4);
+  MATCH_OBJECT (FIELD, evaluation_error_msg, 300);
+  MATCH_OBJECT (FIELD, value.format_string, 300);
+  MATCH_OBJECT (FIELD, value.value_string, 300);
+  MATCH_OBJECT (FIELD, value_string, 301);
+  for (i=0; i<_obj->num_childval; i++)
+    {
+      MATCH_OBJECT (FIELD, childval[i].key, 6);
+      MATCH_OBJECT (FIELD, childval[i].value.format_string, 300);
+      MATCH_OBJECT (FIELD, childval[i].value.value_string, 302);
+    }
+}
+
+static
+int match_TABLECONTENT(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0, i, j, k;
+  const Dwg_Object_TABLECONTENT *_obj = obj->tio.object->tio.TABLECONTENT;
+
+  MATCH_OBJECT (TABLECONTENT, ldata.name, 1);
+  MATCH_OBJECT (TABLECONTENT, ldata.desc, 300);
+  for (i=0; i<_obj->tdata.num_cols; i++)
+    {
+      MATCH_OBJECT (TABLECONTENT, tdata.cols[i].name, 300);
+    }
+  for (i=0; i<_obj->tdata.num_rows; i++)
+    {
+      for (j=0; j<_obj->tdata.rows[i].num_cells; j++)
+        {
+          MATCH_OBJECT (TABLECONTENT, tdata.rows[i].cells[j].tooltip, 300);
+          for (k=0; k<_obj->tdata.rows[i].cells[j].num_customdata_items; k++)
+            {
+              #define _custom tdata.rows[i].cells[j].customdata_items[k]
+              MATCH_OBJECT (TABLECONTENT, _custom.name, 300);
+              if (_obj->_custom.value.data_type == 4)
+                {
+                  MATCH_OBJECT (TABLECONTENT, _custom.value.data_string, 302);
+                }
+              #undef _custom
+            }
+          for (k=0; k<_obj->tdata.rows[i].cells[j].num_cell_contents; k++)
+            {
+              #define _content tdata.rows[i].cells[j].cell_contents[k]
+              if (_obj->_content.type == 1 && _obj->_content.value.data_type == 4)
+                MATCH_OBJECT (TABLECONTENT, _content.value.data_string, 302);
+              #undef _content
+            }
+        }
+    }
+}
+
+static
+int match_GEODATA(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0, i;
+  const Dwg_Object_GEODATA *_obj = obj->tio.object->tio.GEODATA;
+
+  MATCH_OBJECT (GEODATA, coord_system_def, 0);
+  MATCH_OBJECT (GEODATA, geo_rss_tag, 302);
+  MATCH_OBJECT (GEODATA, observation_from_tag, 305);
+  MATCH_OBJECT (GEODATA, observation_to_tag, 306);
+  MATCH_OBJECT (GEODATA, observation_coverage_tag, 0);
+  //obsolete
+  MATCH_OBJECT (GEODATA, coord_system_datum, 0);
+  MATCH_OBJECT (GEODATA, coord_system_wkt, 0);
+}
+
+static
 int match_BLOCK_HEADER(const char *restrict filename, Dwg_Object_Ref *restrict ref)
 {
   int found = 0;
   Dwg_Object *hdr;
   Dwg_Object *obj;
+  char *text;
 
-  if (!ref ||
-      !ref->obj ||
-      ref->obj->supertype != DWG_SUPERTYPE_OBJECT ||
-      ref->obj->type != DWG_TYPE_BLOCK_HEADER)
+  if (!ref)
     return 0;
+  obj = hdr = ref->obj;
+  if (!hdr ||
+      hdr->supertype != DWG_SUPERTYPE_OBJECT ||
+      hdr->type != DWG_TYPE_BLOCK_HEADER)
+    return 0;
+
+  MATCH_OBJECT (BLOCK_HEADER, xref_pname, 1);
+  MATCH_OBJECT (BLOCK_HEADER, description, 4);
+
   //fprintf(stderr, "HDR: %d, HANDLE: %X\n", hdr->address, hdr->handle.value);
-  hdr = ref->obj;
   for (obj = get_first_owned_object(hdr);
        obj;
        obj = get_next_owned_object(hdr, obj))
@@ -419,14 +633,50 @@ int match_BLOCK_HEADER(const char *restrict filename, Dwg_Object_Ref *restrict r
             {
               if (obj->type == DWG_TYPE_BLOCK)
                 found += match_BLOCK(filename, obj);
+              else if (obj->type == DWG_TYPE_DIMENSION_ORDINATE ||
+                       obj->type == DWG_TYPE_DIMENSION_LINEAR ||
+                       obj->type == DWG_TYPE_DIMENSION_ALIGNED ||
+                       obj->type == DWG_TYPE_DIMENSION_ANG3PT ||
+                       obj->type == DWG_TYPE_DIMENSION_ANG2LN ||
+                       obj->type == DWG_TYPE_DIMENSION_RADIUS ||
+                       obj->type == DWG_TYPE_DIMENSION_DIAMETER)
+                found += match_DIMENSION(filename, obj);
+              else if (obj->type == DWG_TYPE_VIEWPORT)
+                found += match_VIEWPORT(filename, obj);
+              else if (obj->type == DWG_TYPE__3DSOLID ||
+                       obj->type == DWG_TYPE_BODY ||
+                       obj->type == DWG_TYPE_REGION)
+                found += match_3DSOLID(filename, obj);
+              //tables??
+              else if (obj->type == DWG_TYPE_STYLE)
+                found += match_STYLE(filename, obj);
+              else if (obj->type == DWG_TYPE_LTYPE)
+                found += match_LTYPE(filename, obj);
+              else if (obj->type == DWG_TYPE_DIMSTYLE)
+                found += match_DIMSTYLE(filename, obj);
               else if (obj->fixedtype == DWG_TYPE_DICTIONARY)
                 found += match_DICTIONARY(filename, obj);
+
+              else if (obj->fixedtype == DWG_TYPE_GROUP)
+                found += match_GROUP(filename, obj);
+              else if (obj->fixedtype == DWG_TYPE_MLINESTYLE)
+                found += match_MLINESTYLE(filename, obj);
               else if (obj->fixedtype == DWG_TYPE_DICTIONARYVAR)
                 found += match_DICTIONARYVAR(filename, obj);
+              else if (obj->fixedtype == DWG_TYPE_HATCH)
+                found += match_HATCH(filename, obj);
               else if (obj->type == DWG_TYPE_IMAGEDEF)
                 found += match_IMAGEDEF(filename, obj);
+              else if (obj->type == DWG_TYPE_LAYER_INDEX)
+                found += match_LAYER_INDEX(filename, obj);
               else if (obj->type == DWG_TYPE_LAYOUT)
                 found += match_LAYOUT(filename, obj);
+              else if (obj->fixedtype == DWG_TYPE_FIELD)
+                found += match_FIELD(filename, obj);
+              else if (obj->fixedtype == DWG_TYPE_TABLECONTENT)
+                found += match_TABLECONTENT(filename, obj);
+              else if (obj->fixedtype == DWG_TYPE_GEODATA)
+                found += match_GEODATA(filename, obj);
             }
         }
       if (!opt_text)
@@ -436,15 +686,21 @@ int match_BLOCK_HEADER(const char *restrict filename, Dwg_Object_Ref *restrict r
               //common entity names
               MATCH_TABLE (ENTITY, layer, LAYER, 8);
               MATCH_TABLE (ENTITY, ltype, LTYPE, 8);
-              //r2000+
-              MATCH_TABLE (ENTITY, plotstyle, PLOTSTYLE, 8);
-              //r2007+
-              MATCH_TABLE (ENTITY, material, MATERIAL, 8);
-              MATCH_TABLE (ENTITY, shadow, DICTIONARY, 8);
-              //r2010+
-              MATCH_TABLE (ENTITY, full_visualstyle, VISUALSTYLE, 8);
-              MATCH_TABLE (ENTITY, face_visualstyle, VISUALSTYLE, 8);
-              MATCH_TABLE (ENTITY, edge_visualstyle, VISUALSTYLE, 8);
+              if (obj->parent->header.version >= R_2000)
+                {
+                  MATCH_TABLE (ENTITY, plotstyle, PLOTSTYLE, 8);
+                }
+              if (obj->parent->header.version >= R_2007)
+                {
+                  MATCH_TABLE (ENTITY, material, MATERIAL, 8);
+                  MATCH_TABLE (ENTITY, shadow, DICTIONARY, 8);
+                }
+              if (obj->parent->header.version >= R_2010)
+                {
+                  MATCH_TABLE (ENTITY, full_visualstyle, VISUALSTYLE, 8);
+                  MATCH_TABLE (ENTITY, face_visualstyle, VISUALSTYLE, 8);
+                  MATCH_TABLE (ENTITY, edge_visualstyle, VISUALSTYLE, 8);
+                }
             }
         }
     }
