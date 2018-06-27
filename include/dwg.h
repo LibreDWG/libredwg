@@ -3526,7 +3526,7 @@ typedef struct _dwg_object_FIELD
   BITCODE_TV evaluation_error_msg;  /* 300 */
   Dwg_TABLE_value value;
   BITCODE_TV value_string;        /* 301,9 */
-  BITCODE_TV value_string_length; /* 98 */
+  BITCODE_BL value_string_length; /* 98 ODA bug: TV */
   BITCODE_BL num_childval;      /* 93 */
   Dwg_FIELD_ChildValue *childval;
 

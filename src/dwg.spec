@@ -4025,7 +4025,7 @@ DWG_OBJECT(FIELD)
   FIELD_T (evaluation_error_msg, 300);
   Table_Value(value)
   FIELD_T (value_string, 301); // and 9 for subsequent >255 chunks
-  FIELD_T (value_string_length, 98);
+  FIELD_BL (value_string_length, 98); //ODA bug TV
 
   FIELD_BL (num_childval, 93);
   REPEAT_N((long)FIELD_VALUE(num_childval), childval, Dwg_FIELD_ChildValue)
