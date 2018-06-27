@@ -61,4 +61,6 @@ swig_python.c : $(SWIG_SOURCES) Makefile.am
 ##    $(srcdir)/swig_python.c : $(SWIG_SOURCES)
 ##	$(SWIG) $(SWIG_PYTHON_OPT) -I$(top_srcdir)/src -o $@ $<
 
+DISTCLEANFILES = LibreDWG.py swig_python.c
+
 endif
