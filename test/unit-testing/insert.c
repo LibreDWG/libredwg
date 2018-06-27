@@ -41,15 +41,7 @@ api_process(dwg_object *obj)
     }
 
 
-  scale_flag = dwg_ent_insert_get_scale_flag(insert, &error); 
-  if ( !error )
-    printf("scale flag for insert : " FORMAT_BB "\n", scale_flag);
-  else
-    printf("in reading scale flag\n"); 
-
-
-  dwg_ent_insert_get_scale(insert, &scale,
-                           &error); 
+  dwg_ent_insert_get_scale(insert, &scale, &error); 
   if ( !error )
     {
       printf("scale points : x = %f, y = %f, z = %f\n",

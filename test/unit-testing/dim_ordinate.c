@@ -36,12 +36,12 @@ low_level_process(dwg_object *obj)
   printf("text_mid_pt of dim_ordinate : x = %f, y = %f\n",
           dim_ordinate->text_midpt.x, dim_ordinate->text_midpt.y);
   printf("user text of dim_ordinate : %s\n", dim_ordinate->user_text);
-  printf("text rotation of dim_ordinate : %f\n", dim_ordinate->text_rot);
+  printf("text rotation of dim_ordinate : %f\n", dim_ordinate->text_rotation);
   printf("ins rotation of dim_ordinate : %f\n", dim_ordinate->ins_rotation);
   printf("arrow1 of dim_ordinate : " FORMAT_B "\n", dim_ordinate->flip_arrow1);
   printf("arrow2 of dim_ordinate : " FORMAT_B "\n", dim_ordinate->flip_arrow2);
-  printf("flags1 of dim_ordinate : " FORMAT_RC "\n", dim_ordinate->flags_1);
-  printf("flags2 of dim_ordinate : " FORMAT_RC "\n", dim_ordinate->flags_2);
+  printf("flags1 of dim_ordinate : " FORMAT_RC "\n", dim_ordinate->flag1);
+  printf("flags2 of dim_ordinate : " FORMAT_RC "\n", dim_ordinate->flag2);
   printf("act_measurement of dim_ordinate : %f\n",
           dim_ordinate->act_measurement);
 
@@ -135,7 +135,7 @@ api_process(dwg_object *obj)
   else
     printf("error in reading clone_ins_pt\n");
 
-  dwg_ent_dim_get_text_mid_pt(dim, &text_mid_pt, &error);
+  dwg_ent_dim_get_text_midpt(dim, &text_mid_pt, &error);
   if ( !error )
     printf("text_mid_pt of dim_ordinate : x = %f, y = %f\n",
            text_mid_pt.x, text_mid_pt.y);
@@ -148,7 +148,7 @@ api_process(dwg_object *obj)
   else
     printf("error in reading user_text \n");
 
-  text_rot = dwg_ent_dim_get_text_rot(dim, &error);
+  text_rot = dwg_ent_dim_get_text_rotation(dim, &error);
   if ( !error )
     printf(" text rotation of dim_ordinate : %f\n", text_rot);
   else

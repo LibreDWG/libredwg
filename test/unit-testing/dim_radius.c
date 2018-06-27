@@ -25,11 +25,11 @@ low_level_process(dwg_object *obj)
   printf("text_mid_pt of dim_radius : x = %f, y = %f\n",
           dim_radius->text_midpt.x, dim_radius->text_midpt.y);
   printf("user text of dim_radius : %s\n", dim_radius->user_text);
-  printf("text rotation of dim_radius : %f\n", dim_radius->text_rot);
+  printf("text rotation of dim_radius : %f\n", dim_radius->text_rotation);
   printf("ins rotation of dim_radius : %f\n", dim_radius->ins_rotation);
   printf("arrow 1 of dim_radius : " FORMAT_B "\n", dim_radius->flip_arrow1);
   printf("arrow 2 of dim_radius : " FORMAT_B "\n", dim_radius->flip_arrow2);
-  printf("flags1 of dim_radius : "  FORMAT_RC "\n", dim_radius->flags_1);
+  printf("flags1 of dim_radius : "  FORMAT_RC "\n", dim_radius->flag1);
   printf("act_measurement of dim_radius : %f\n",
           dim_radius->act_measurement); 
   printf("leader length of dim radius : %f\n", dim_radius->leader_len);
@@ -96,7 +96,7 @@ api_process(dwg_object *obj)
   else
     printf("error in reading ins_scale \n");
 
-  dwg_ent_dim_get_text_mid_pt(dim, &text_mid_pt, &error);
+  dwg_ent_dim_get_text_midpt(dim, &text_mid_pt, &error);
   if ( !error )
     printf("text_mid_pt of dim_radius : x = %f, y = %f\n",
            text_mid_pt.x, text_mid_pt.y);
@@ -109,7 +109,7 @@ api_process(dwg_object *obj)
   else
     printf("in reading user_text \n");
 
-  text_rot = dwg_ent_dim_get_text_rot(dim, &error);
+  text_rot = dwg_ent_dim_get_text_rotation(dim, &error);
   if ( !error )
     printf(" text rotation of dim_radius : %f\n", text_rot);
   else

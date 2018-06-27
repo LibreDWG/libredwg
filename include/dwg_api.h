@@ -797,21 +797,21 @@ dwg_ent_text_set_rotation(dwg_ent_text *restrict text,
 
 //Get/Set horizontal alignment angle of text
 EXPORT BITCODE_BS
-dwg_ent_text_get_vert_align(const dwg_ent_text *restrict text,
+dwg_ent_text_get_vert_alignment(const dwg_ent_text *restrict text,
                           int *restrict error);
 
 EXPORT void
-dwg_ent_text_set_vert_align(dwg_ent_text *restrict text,
+dwg_ent_text_set_vert_alignment(dwg_ent_text *restrict text,
                             const BITCODE_BS alignment,
                           int *restrict error);
 
 //Get/Set vertical alignment of text
 EXPORT BITCODE_BS
-dwg_ent_text_get_horiz_align(const dwg_ent_text *restrict text,
+dwg_ent_text_get_horiz_alignment(const dwg_ent_text *restrict text,
                           int *restrict error);
 
 EXPORT void
-dwg_ent_text_set_horiz_align(dwg_ent_text *restrict text,
+dwg_ent_text_set_horiz_alignment(dwg_ent_text *restrict text,
                              const BITCODE_BS alignment,
                           int *restrict error);
 
@@ -875,31 +875,31 @@ dwg_ent_attrib_set_thickness(dwg_ent_attrib *restrict attrib,
 
 //Get/Set rotation angle of attrib
 EXPORT double
-dwg_ent_attrib_get_rot_angle(const dwg_ent_attrib *restrict attrib,
-                          int *restrict error);
+dwg_ent_attrib_get_rotation(const dwg_ent_attrib *restrict attrib,
+                            int *restrict error);
 
 EXPORT void
-dwg_ent_attrib_set_rot_angle(dwg_ent_attrib *restrict attrib,
-                             const double  angle,
-                             int *restrict error);
+dwg_ent_attrib_set_rotation(dwg_ent_attrib *restrict attrib,
+                            const double  angle,
+                            int *restrict error);
 
 //Get/Set horizontal alignment angle of attrib
 EXPORT BITCODE_BS
-dwg_ent_attrib_get_vert_align(const dwg_ent_attrib *restrict attrib,
-                          int *restrict error);
+dwg_ent_attrib_get_vert_alignment(const dwg_ent_attrib *restrict attrib,
+                              int *restrict error);
 
 EXPORT void
-dwg_ent_attrib_set_vert_align(dwg_ent_attrib *restrict attrib,
+dwg_ent_attrib_set_vert_alignment(dwg_ent_attrib *restrict attrib,
                               const BITCODE_BS alignment,
                               int *restrict error);
 
 //Get/Set vertical alignment of attrib
 EXPORT BITCODE_BS
-dwg_ent_attrib_get_horiz_align(const dwg_ent_attrib *restrict attrib,
+dwg_ent_attrib_get_horiz_alignment(const dwg_ent_attrib *restrict attrib,
                           int *restrict error);
 
 EXPORT void
-dwg_ent_attrib_set_horiz_align(dwg_ent_attrib *restrict attrib,
+dwg_ent_attrib_set_horiz_alignment(dwg_ent_attrib *restrict attrib,
                                const BITCODE_BS alignment,
                                int *restrict error);
 
@@ -911,13 +911,13 @@ dwg_ent_attrib_set_horiz_align(dwg_ent_attrib *restrict attrib,
 
 // Get/Set default text of attdef (utf-8 encoded)
 EXPORT void
-dwg_ent_attdef_set_text(dwg_ent_attdef *restrict attdef,
-                        const char *restrict default_value,
-                        int *restrict error);
+dwg_ent_attdef_set_default_value(dwg_ent_attdef *restrict attdef,
+                                 const char *restrict default_value,
+                                 int *restrict error);
 
 EXPORT char *
-dwg_ent_attdef_get_text(const dwg_ent_attdef *restrict attdef,
-                          int *restrict error);
+dwg_ent_attdef_get_default_value(const dwg_ent_attdef *restrict attdef,
+                                 int *restrict error);
 
 // Get/Set insertion points of attdef
 EXPORT void
@@ -957,35 +957,39 @@ dwg_ent_attdef_get_thickness(const dwg_ent_attdef *restrict attdef,
                           int *restrict error);
 
 EXPORT void
-dwg_ent_attdef_set_thickness(dwg_ent_attdef *restrict attdef, const double  thickness,
+dwg_ent_attdef_set_thickness(dwg_ent_attdef *restrict attdef,
+                             const double  thickness,
                              int *restrict error);
 
 //Get/Set rotation angle of attdef
 EXPORT double
-dwg_ent_attdef_get_rot_angle(const dwg_ent_attdef *restrict attdef,
-                          int *restrict error);
+dwg_ent_attdef_get_rotation(const dwg_ent_attdef *restrict attdef,
+                            int *restrict error);
 
 EXPORT void
-dwg_ent_attdef_set_rot_angle(dwg_ent_attdef *restrict attdef, const double  angle,
-                             int *restrict error);
+dwg_ent_attdef_set_rotation(dwg_ent_attdef *restrict attdef,
+                            const double  angle,
+                            int *restrict error);
 
 //Get/Set horizontal alignment angle of attdef
 EXPORT BITCODE_BS
-dwg_ent_attdef_get_vert_align(const dwg_ent_attdef *restrict attdef,
-                          int *restrict error);
+dwg_ent_attdef_get_vert_alignment(const dwg_ent_attdef *restrict attdef,
+                                  int *restrict error);
 
 EXPORT void
-dwg_ent_attdef_set_vert_align(dwg_ent_attdef *restrict attdef, const BITCODE_BS alignment,
-                              int *restrict error);
+dwg_ent_attdef_set_vert_alignment(dwg_ent_attdef *restrict attdef,
+                                  const BITCODE_BS alignment,
+                                  int *restrict error);
 
 //Get/Set vertical alignment of attdef
 EXPORT BITCODE_BS
-dwg_ent_attdef_get_horiz_align(const dwg_ent_attdef *restrict attdef,
-                          int *restrict error);
+dwg_ent_attdef_get_horiz_alignment(const dwg_ent_attdef *restrict attdef,
+                                   int *restrict error);
 
 EXPORT void
-dwg_ent_attdef_set_horiz_align(dwg_ent_attdef *restrict attdef, const BITCODE_BS alignment,
-                               int *restrict error);
+dwg_ent_attdef_set_horiz_alignment(dwg_ent_attdef *restrict attdef,
+                                   const BITCODE_BS alignment,
+                                   int *restrict error);
 
 
 /********************************************************************
@@ -1419,16 +1423,6 @@ dwg_ent_insert_set_ins_pt(dwg_ent_insert *restrict insert,
                           const dwg_point_3d *restrict point,
                           int *restrict error);
 
-// Get/Set scale flag of an insert entity
-EXPORT char
-dwg_ent_insert_get_scale_flag(const dwg_ent_insert *restrict insert,
-                          int *restrict error);
-
-EXPORT void
-dwg_ent_insert_set_scale_flag(dwg_ent_insert *restrict insert,
-                              const char flags,
-                          int *restrict error);
-
 EXPORT void
 dwg_ent_insert_get_scale(const dwg_ent_insert *restrict insert,
                          dwg_point_3d *restrict point,
@@ -1486,15 +1480,6 @@ dwg_ent_minsert_set_ins_pt(dwg_ent_minsert *restrict minsert,
                            const dwg_point_3d *restrict point,
                            int *restrict error);
 
-EXPORT char
-dwg_ent_minsert_get_scale_flag(const dwg_ent_minsert *restrict minsert,
-                          int *restrict error);
-
-EXPORT void
-dwg_ent_minsert_set_scale_flag(dwg_ent_minsert *restrict minsert,
-                               const char flags,
-                               int *restrict error);
-
 EXPORT void
 dwg_ent_minsert_get_scale(const dwg_ent_minsert *restrict minsert,
                           dwg_point_3d *restrict point,
@@ -1507,7 +1492,7 @@ dwg_ent_minsert_set_scale(dwg_ent_minsert *restrict minsert,
 
 EXPORT double
 dwg_ent_minsert_get_rotation(const dwg_ent_minsert *restrict minsert,
-                          int *restrict error);
+                             int *restrict error);
 
 EXPORT void
 dwg_ent_minsert_set_rotation(dwg_ent_minsert *restrict minsert,
@@ -1526,28 +1511,28 @@ dwg_ent_minsert_set_extrusion(dwg_ent_minsert *restrict minsert,
 
 EXPORT char
 dwg_ent_minsert_has_attribs(dwg_ent_minsert *restrict minsert,
-                          int *restrict error);
+                            int *restrict error);
 
 EXPORT BITCODE_BL
 dwg_ent_minsert_get_num_owned(const dwg_ent_minsert *restrict minsert,
-                          int *restrict error);
+                              int *restrict error);
 
 //TODO dwg_ent_minsert_add_owned, dwg_ent_insert_delete_owned
 
 EXPORT BITCODE_BL
-dwg_ent_minsert_get_numcols(const dwg_ent_minsert *restrict minsert,
-                          int *restrict error);
+dwg_ent_minsert_get_num_cols(const dwg_ent_minsert *restrict minsert,
+                             int *restrict error);
 
 EXPORT BITCODE_BL
-dwg_ent_minsert_get_numrows(const dwg_ent_minsert *restrict minsert,
-                          int *restrict error);
+dwg_ent_minsert_get_num_rows(const dwg_ent_minsert *restrict minsert,
+                             int *restrict error);
 
 //TODO dwg_ent_minsert_add_row, dwg_ent_insert_delete_row
 //TODO dwg_ent_minsert_add_col, dwg_ent_insert_delete_col
 
 EXPORT double
 dwg_ent_minsert_get_col_spacing(const dwg_ent_minsert *restrict minsert,
-                          int *restrict error);
+                                int *restrict error);
 
 EXPORT void
 dwg_ent_minsert_set_col_spacing(dwg_ent_minsert *restrict minsert,
@@ -1556,7 +1541,7 @@ dwg_ent_minsert_set_col_spacing(dwg_ent_minsert *restrict minsert,
 
 EXPORT double
 dwg_ent_minsert_get_row_spacing(const dwg_ent_minsert *restrict minsert,
-                          int *restrict error);
+                                int *restrict error);
 
 EXPORT void
 dwg_ent_minsert_set_row_spacing(dwg_ent_minsert *restrict minsert,
@@ -1605,16 +1590,16 @@ dwg_obj_mlinestyle_get_start_angle(const dwg_obj_mlinestyle *restrict mlinestyle
 EXPORT void
 dwg_obj_mlinestyle_set_start_angle(dwg_obj_mlinestyle *restrict mlinestyle,
                                    const double startang,
-                          int *restrict error);
+                                   int *restrict error);
 
 EXPORT double
 dwg_obj_mlinestyle_get_end_angle(const dwg_obj_mlinestyle *restrict mlinestyle,
-                          int *restrict error);
+                                 int *restrict error);
 
 EXPORT void
 dwg_obj_mlinestyle_set_end_angle(dwg_obj_mlinestyle *restrict mlinestyle,
                                  const double endang,
-                          int *restrict error);
+                                 int *restrict error);
 
 EXPORT char
 dwg_obj_mlinestyle_get_num_lines(const dwg_obj_mlinestyle *restrict mlinestyle,
@@ -1642,22 +1627,17 @@ dwg_obj_appid_control_get_appid(const dwg_obj_appid_control *restrict appid,
 
 
 EXPORT char *
-dwg_obj_appid_get_entry_name(const dwg_obj_appid *restrict appid,
-                          int *restrict error);
-
-EXPORT void
-dwg_obj_appid_set_entry_name(dwg_obj_appid *restrict appid,
-                             const char *restrict entry_name,
-                             int *restrict error);
+dwg_obj_appid_get_name(const dwg_obj_appid *restrict appid,
+                       int *restrict error);
 
 EXPORT BITCODE_RC
 dwg_obj_appid_get_flag(const dwg_obj_appid *restrict appid,
-                          int *restrict error);
+                       int *restrict error);
 
 EXPORT void
 dwg_obj_appid_set_flag(dwg_obj_appid *restrict appid,
                        const BITCODE_RC flag,
-                          int *restrict error);
+                       int *restrict error);
 
 EXPORT dwg_obj_appid_control *
 dwg_obj_appid_get_appid_control(const dwg_obj_appid *restrict appid,
@@ -1691,13 +1671,14 @@ dwg_ent_dim_get_act_measurement(const dwg_ent_dim *restrict dim,
 EXPORT void
 dwg_ent_dim_set_act_measurement(dwg_ent_dim *restrict dim,
                                 const double act_measurement,
-                          int *restrict error);
+                                int *restrict error);
 EXPORT double
 dwg_ent_dim_get_horiz_dir(const dwg_ent_dim *restrict dim,
                           int *restrict error);
 
 EXPORT void
-dwg_ent_dim_set_horiz_dir(dwg_ent_dim *restrict dim, const double  horiz_dir,
+dwg_ent_dim_set_horiz_dir(dwg_ent_dim *restrict dim,
+                          const double  horiz_dir,
                           int *restrict error);
 EXPORT double
 dwg_ent_dim_get_lspace_factor(const dwg_ent_dim *restrict dim,
@@ -1706,15 +1687,15 @@ dwg_ent_dim_get_lspace_factor(const dwg_ent_dim *restrict dim,
 EXPORT void
 dwg_ent_dim_set_lspace_factor(dwg_ent_dim *restrict dim,
                               const double factor,
-                          int *restrict error);
+                              int *restrict error);
 EXPORT BITCODE_BS
 dwg_ent_dim_get_lspace_style(const dwg_ent_dim *restrict dim,
-                          int *restrict error);
+                             int *restrict error);
 
 EXPORT void
 dwg_ent_dim_set_lspace_style(dwg_ent_dim *restrict dim,
-                             BITCODE_BS style,
-                          int *restrict error);
+                             const BITCODE_BS style,
+                             int *restrict error);
 EXPORT BITCODE_BS
 dwg_ent_dim_get_attachment(const dwg_ent_dim *restrict dim,
                           int *restrict error);
@@ -1722,10 +1703,10 @@ dwg_ent_dim_get_attachment(const dwg_ent_dim *restrict dim,
 EXPORT void
 dwg_ent_dim_set_attachment(dwg_ent_dim *restrict dim,
                            const BITCODE_BS attachment,
-                          int *restrict error);
+                           int *restrict error);
 EXPORT void
 dwg_ent_dim_set_extrusion(dwg_ent_dim *restrict dim,
-                          dwg_point_3d *restrict vector,
+                          const dwg_point_3d *restrict vector,
                           int *restrict error);
 EXPORT void
 dwg_ent_dim_get_extrusion(const dwg_ent_dim *restrict dim,
@@ -1740,11 +1721,11 @@ EXPORT void
 dwg_ent_dim_set_user_text(dwg_ent_dim *restrict dim, const char *text,
                           int *restrict error);
 EXPORT double
-dwg_ent_dim_get_text_rot(const dwg_ent_dim *restrict dim,
+dwg_ent_dim_get_text_rotation(const dwg_ent_dim *restrict dim,
                           int *restrict error);
 
 EXPORT void
-dwg_ent_dim_set_text_rot(dwg_ent_dim *restrict dim,
+dwg_ent_dim_set_text_rotation(dwg_ent_dim *restrict dim,
                          const double rot,
                          int *restrict error);
 EXPORT double
@@ -1772,13 +1753,13 @@ dwg_ent_dim_set_flip_arrow2(dwg_ent_dim *restrict dim,
                             const char flip_arrow,
                           int *restrict error);
 EXPORT void
-dwg_ent_dim_set_text_mid_pt(dwg_ent_dim *restrict dim,
+dwg_ent_dim_set_text_midpt(dwg_ent_dim *restrict dim,
                             const dwg_point_2d *restrict point,
-                          int *restrict error);
+                           int *restrict error);
 EXPORT void
-dwg_ent_dim_get_text_mid_pt(const dwg_ent_dim *restrict dim,
+dwg_ent_dim_get_text_midpt(const dwg_ent_dim *restrict dim,
                             dwg_point_2d *restrict point,
-                          int *restrict error);
+                           int *restrict error);
 EXPORT void
 dwg_ent_dim_set_ins_scale(dwg_ent_dim *restrict dim,
                           const dwg_point_3d *restrict point,
@@ -1876,17 +1857,17 @@ dwg_ent_dim_linear_get_14_pt(const dwg_ent_dim_linear *restrict dim,
                              int *restrict error);
 
 EXPORT double
-dwg_ent_dim_linear_get_dim_rot(const dwg_ent_dim_linear *restrict dim,
-                          int *restrict error);
+dwg_ent_dim_linear_get_dim_rotation(const dwg_ent_dim_linear *restrict dim,
+                               int *restrict error);
 
 EXPORT void
-dwg_ent_dim_linear_set_dim_rot(dwg_ent_dim_linear *restrict dim,
+dwg_ent_dim_linear_set_dim_rotation(dwg_ent_dim_linear *restrict dim,
                                const double  rot,
                                int *restrict error);
 
 EXPORT double
 dwg_ent_dim_linear_get_ext_line_rotation(const dwg_ent_dim_linear *restrict dim,
-                          int *restrict error);
+                                         int *restrict error);
 
 EXPORT void
 dwg_ent_dim_linear_set_ext_line_rotation(dwg_ent_dim_linear *restrict dim,
@@ -2098,12 +2079,12 @@ dwg_ent_dim_diameter_get_first_arc_pt(const dwg_ent_dim_diameter *restrict dia,
 
 EXPORT double
 dwg_ent_dim_diameter_get_leader_length(const dwg_ent_dim_diameter *restrict dia,
-                          int *restrict error);
+                                       int *restrict error);
 
 EXPORT void
 dwg_ent_dim_diameter_set_leader_length(dwg_ent_dim_diameter *restrict dia,
                                        const double leader_len,
-                          int *restrict error);
+                                       int *restrict error);
 
 
 /********************************************************************
@@ -2138,7 +2119,7 @@ dwg_ent_shape_get_scale(const dwg_ent_shape *restrict shape,
 EXPORT void
 dwg_ent_shape_set_scale(dwg_ent_shape *restrict shape,
                         const double  scale,
-                          int *restrict error);
+                        int *restrict error);
 
 EXPORT double
 dwg_ent_shape_get_rotation(const dwg_ent_shape *restrict shape,
@@ -2147,7 +2128,7 @@ dwg_ent_shape_get_rotation(const dwg_ent_shape *restrict shape,
 EXPORT void
 dwg_ent_shape_set_rotation(dwg_ent_shape *restrict shape,
                            const double  rotation,
-                          int *restrict error);
+                           int *restrict error);
 
 EXPORT double
 dwg_ent_shape_get_width_factor(const dwg_ent_shape *restrict shape,
@@ -2172,7 +2153,8 @@ dwg_ent_shape_get_thickness(const dwg_ent_shape *restrict shape,
                           int *restrict error);
 
 EXPORT void
-dwg_ent_shape_set_thickness(dwg_ent_shape *restrict shape, const double  thickness,
+dwg_ent_shape_set_thickness(dwg_ent_shape *restrict shape,
+                            const double  thickness,
                             int *restrict error);
 
 EXPORT double
@@ -2182,7 +2164,7 @@ dwg_ent_shape_get_shape_no(const dwg_ent_shape *restrict shape,
 EXPORT void
 dwg_ent_shape_set_shape_no(dwg_ent_shape *restrict shape,
                            const double  no,
-                          int *restrict error);
+                           int *restrict error);
 
 EXPORT void
 dwg_ent_shape_get_extrusion(const dwg_ent_shape *restrict shape,
@@ -2246,7 +2228,7 @@ dwg_ent_mtext_set_rect_width(dwg_ent_mtext *restrict mtext,
 
 EXPORT double
 dwg_ent_mtext_get_rect_width(const dwg_ent_mtext *restrict mtext,
-                          int *restrict error);
+                             int *restrict error);
 
 EXPORT void
 dwg_ent_mtext_set_text_height(dwg_ent_mtext *restrict mtext,
@@ -2255,7 +2237,7 @@ dwg_ent_mtext_set_text_height(dwg_ent_mtext *restrict mtext,
 
 EXPORT double
 dwg_ent_mtext_get_text_height(const dwg_ent_mtext *restrict mtext,
-                          int *restrict error);
+                              int *restrict error);
 
 EXPORT BITCODE_BS
 dwg_ent_mtext_get_attachment(const dwg_ent_mtext *restrict mtext,
@@ -2282,20 +2264,19 @@ dwg_ent_mtext_get_extents_height(const dwg_ent_mtext *restrict mtext,
 EXPORT void
 dwg_ent_mtext_set_extents_height(dwg_ent_mtext *restrict mtext,
                                  const double  ht,
-                          int *restrict error);
+                                 int *restrict error);
 
 EXPORT double
 dwg_ent_mtext_get_extents_width(const dwg_ent_mtext *restrict mtext,
                           int *restrict error);
-
 EXPORT void
 dwg_ent_mtext_set_extents_width(dwg_ent_mtext *restrict mtext,
                                 const double  wid,
-                          int *restrict error);
+                                int *restrict error);
 
 /* (utf-8 encoded) */
 EXPORT char* dwg_ent_mtext_get_text(const dwg_ent_mtext *restrict mtext,
-                          int *restrict error);
+                                    int *restrict error);
 
 EXPORT void
 dwg_ent_mtext_set_text(dwg_ent_mtext *restrict mtext, char *text,
@@ -2303,7 +2284,7 @@ dwg_ent_mtext_set_text(dwg_ent_mtext *restrict mtext, char *text,
 
 EXPORT BITCODE_BS
 dwg_ent_mtext_get_linespace_style(const dwg_ent_mtext *restrict mtext,
-                          int *restrict error);
+                                  int *restrict error);
 
 EXPORT void
 dwg_ent_mtext_set_linespace_style(dwg_ent_mtext *restrict mtext,
@@ -2312,7 +2293,7 @@ dwg_ent_mtext_set_linespace_style(dwg_ent_mtext *restrict mtext,
 
 EXPORT double
 dwg_ent_mtext_get_linespace_factor(const dwg_ent_mtext *restrict mtext,
-                          int *restrict error);
+                                   int *restrict error);
 
 EXPORT void
 dwg_ent_mtext_set_linespace_factor(dwg_ent_mtext *restrict mtext,
@@ -2332,7 +2313,7 @@ dwg_ent_leader_set_annot_type(dwg_ent_leader *restrict leader,
 
 EXPORT BITCODE_BS
 dwg_ent_leader_get_annot_type(const dwg_ent_leader *restrict leader,
-                          int *restrict error);
+                              int *restrict error);
 
 EXPORT void
 dwg_ent_leader_set_path_type(dwg_ent_leader *restrict leader,
@@ -2403,7 +2384,7 @@ dwg_ent_leader_set_box_height(dwg_ent_leader *restrict leader,
 
 EXPORT double
 dwg_ent_leader_get_box_height(const dwg_ent_leader *restrict leader,
-                          int *restrict error);
+                              int *restrict error);
 
 EXPORT void
 dwg_ent_leader_set_box_width(dwg_ent_leader *restrict leader,
@@ -2412,23 +2393,25 @@ dwg_ent_leader_set_box_width(dwg_ent_leader *restrict leader,
 
 EXPORT double
 dwg_ent_leader_get_box_width(const dwg_ent_leader *restrict leader,
-                          int *restrict error);
+                             int *restrict error);
 
 EXPORT void
-dwg_ent_leader_set_hook_line_on_x_dir(dwg_ent_leader *restrict leader, const char hook,
+dwg_ent_leader_set_hook_line_on_x_dir(dwg_ent_leader *restrict leader,
+                                      const char hook,
                                       int *restrict error);
 
 EXPORT char
 dwg_ent_leader_get_hook_line_on_x_dir(const dwg_ent_leader *restrict leader,
-                          int *restrict error);
+                                      int *restrict error);
 
 EXPORT void
-dwg_ent_leader_set_arrowhead_on(dwg_ent_leader *restrict leader, const char arrow,
+dwg_ent_leader_set_arrowhead_on(dwg_ent_leader *restrict leader,
+                                const char arrow,
                                 int *restrict error);
 
 EXPORT char
 dwg_ent_leader_get_arrowhead_on(const dwg_ent_leader *restrict leader,
-                          int *restrict error);
+                                int *restrict error);
 
 EXPORT void
 dwg_ent_leader_set_arrowhead_type(dwg_ent_leader *restrict leader,
@@ -2534,7 +2517,7 @@ dwg_ent_lwpline_get_flag(const dwg_ent_lwpline *restrict lwpline,
 EXPORT void
 dwg_ent_lwpline_set_flag(dwg_ent_lwpline *restrict lwpline,
                          const char flags,
-                          int *restrict error);
+                         int *restrict error);
 
 EXPORT double
 dwg_ent_lwpline_get_const_width(const dwg_ent_lwpline *restrict lwpline,
@@ -2617,7 +2600,6 @@ dwg_ent_ole2frame_get_mode(const dwg_ent_ole2frame *restrict frame,
 
 EXPORT void
 dwg_ent_ole2frame_set_mode(dwg_ent_ole2frame *restrict frame,
-
                            const BITCODE_BS mode,
                            int *restrict error);
 
@@ -2637,7 +2619,7 @@ dwg_ent_ole2frame_get_data(const dwg_ent_ole2frame *restrict frame,
 EXPORT void
 dwg_ent_ole2frame_set_data(dwg_ent_ole2frame *restrict frame,
                            const char *data,
-                          int *restrict error);
+                           int *restrict error);
 
 
 /********************************************************************
@@ -2858,7 +2840,7 @@ dwg_ent_viewport_get_height(const dwg_ent_viewport *restrict vp,
 EXPORT void
 dwg_ent_viewport_set_height(dwg_ent_viewport *restrict vp,
                             const double  height,
-                          int *restrict error);
+                            int *restrict error);
 
 EXPORT BITCODE_BS
 dwg_ent_viewport_get_grid_major(const dwg_ent_viewport *restrict vp,
@@ -2906,12 +2888,12 @@ dwg_ent_viewport_get_status_flag(const dwg_ent_viewport *restrict vp,
 
 EXPORT char
 dwg_ent_viewport_get_render_mode(const dwg_ent_viewport *restrict vp,
-                          int *restrict error);
+                                 int *restrict error);
 
 EXPORT void
 dwg_ent_viewport_set_render_mode(dwg_ent_viewport *restrict vp,
                                  char mode,
-                          int *restrict error);
+                                 int *restrict error);
 
 EXPORT void
 dwg_ent_viewport_set_ucs_at_origin(dwg_ent_viewport *restrict vp,
@@ -2925,17 +2907,15 @@ dwg_ent_viewport_get_ucs_at_origin(const dwg_ent_viewport *restrict vp,
 EXPORT void
 dwg_ent_viewport_set_ucs_per_viewport(dwg_ent_viewport *restrict vp,
                                       unsigned char viewport,
-                          int *restrict error);
-
+                                      int *restrict error);
 EXPORT unsigned char
 dwg_ent_viewport_get_ucs_per_viewport(const dwg_ent_viewport *restrict vp,
-                          int *restrict error);
+                                      int *restrict error);
 
 EXPORT void
 dwg_ent_viewport_set_view_target(dwg_ent_viewport *restrict vp,
                                  const dwg_point_3d *restrict point,
                                  int *restrict error);
-
 EXPORT void
 dwg_ent_viewport_get_view_target(const dwg_ent_viewport *restrict vp,
                                  dwg_point_3d *restrict point,
@@ -2945,7 +2925,6 @@ EXPORT void
 dwg_ent_viewport_set_view_direction(dwg_ent_viewport *restrict vp,
                                     const dwg_point_3d *restrict point,
                                     int *restrict error);
-
 EXPORT void
 dwg_ent_viewport_get_view_direction(const dwg_ent_viewport *restrict vp,
                                     dwg_point_3d *restrict point,
@@ -2955,19 +2934,17 @@ EXPORT void
 dwg_ent_viewport_set_view_twist(dwg_ent_viewport *restrict vp,
                                 const double  angle,
                                 int *restrict error);
-
 EXPORT double
 dwg_ent_viewport_get_view_twist(const dwg_ent_viewport *restrict vp,
-                          int *restrict error);
+                                int *restrict error);
 
 EXPORT void
 dwg_ent_viewport_set_view_height(dwg_ent_viewport *restrict vp,
                                  const double  height,
                                  int *restrict error);
-
 EXPORT double
 dwg_ent_viewport_get_view_height(const dwg_ent_viewport *restrict vp,
-                          int *restrict error);
+                                 int *restrict error);
 
 EXPORT void
 dwg_ent_viewport_set_lens_length(dwg_ent_viewport *restrict vp,
@@ -2976,34 +2953,31 @@ dwg_ent_viewport_set_lens_length(dwg_ent_viewport *restrict vp,
 
 EXPORT double
 dwg_ent_viewport_get_lens_length(const dwg_ent_viewport *restrict vp,
-                          int *restrict error);
+                                 int *restrict error);
 
 EXPORT void
 dwg_ent_viewport_set_front_clip_z(dwg_ent_viewport *restrict vp,
                                   const double  front_z,
                                   int *restrict error);
-
 EXPORT double
 dwg_ent_viewport_get_front_clip_z(const dwg_ent_viewport *restrict vp,
-                          int *restrict error);
+                                  int *restrict error);
 
 EXPORT void
 dwg_ent_viewport_set_back_clip_z(dwg_ent_viewport *restrict vp,
                                  const double  back_z,
                                  int *restrict error);
-
 EXPORT double
 dwg_ent_viewport_get_back_clip_z(const dwg_ent_viewport *restrict vp,
-                          int *restrict error);
+                                 int *restrict error);
 
 EXPORT void
 dwg_ent_viewport_set_snap_angle(dwg_ent_viewport *restrict vp,
                                 const double  angle,
                                 int *restrict error);
-
 EXPORT double
 dwg_ent_viewport_get_snap_angle(const dwg_ent_viewport *restrict vp,
-                          int *restrict error);
+                                int *restrict error);
 
 EXPORT void
 dwg_ent_viewport_get_view_center(const dwg_ent_viewport *restrict vp, dwg_point_2d *restrict point,
@@ -3038,7 +3012,6 @@ EXPORT void
 dwg_ent_viewport_get_snap_spacing(const dwg_ent_viewport *restrict vp,
                                   dwg_point_2d *restrict point,
                                   int *restrict error);
-
 EXPORT void
 dwg_ent_viewport_set_snap_spacing(dwg_ent_viewport *restrict vp,
                                   const dwg_point_2d *restrict point,
@@ -3068,7 +3041,6 @@ EXPORT void
 dwg_ent_viewport_set_ucs_y_axis(dwg_ent_viewport *restrict vp,
                                 const dwg_point_3d *restrict point,
                                 int *restrict error);
-
 EXPORT void
 dwg_ent_viewport_get_ucs_y_axis(const dwg_ent_viewport *restrict vp,
                                 dwg_point_3d *restrict point,
@@ -3078,37 +3050,36 @@ EXPORT void
 dwg_ent_viewport_set_ucs_elevation(dwg_ent_viewport *restrict vp,
                                    const double  elevation,
                                    int *restrict error);
-
 EXPORT double
 dwg_ent_viewport_get_ucs_elevation(const dwg_ent_viewport *restrict vp,
-                          int *restrict error);
+                                   int *restrict error);
 
 EXPORT void
 dwg_ent_viewport_set_ucs_ortho_view_type(dwg_ent_viewport *restrict vp, 
                                          const BITCODE_BS type,
-                          int *restrict error);
+                                         int *restrict error);
 
 EXPORT BITCODE_BS
 dwg_ent_viewport_get_ucs_ortho_view_type(const dwg_ent_viewport *restrict vp,
-                          int *restrict error);
+                                         int *restrict error);
 
 EXPORT void
 dwg_ent_viewport_set_shadeplot_mode(dwg_ent_viewport *restrict vp,
                                     const BITCODE_BS shadeplot,
-                          int *restrict error);
+                                    int *restrict error);
 
 EXPORT BITCODE_BS
 dwg_ent_viewport_get_shadeplot_mode(const dwg_ent_viewport *restrict vp,
-                          int *restrict error);
+                                    int *restrict error);
 
 EXPORT void
 dwg_ent_viewport_set_use_default_lights(dwg_ent_viewport *restrict vp,
                                         const unsigned char lights,
-                          int *restrict error);
+                                        int *restrict error);
 
 EXPORT unsigned char
 dwg_ent_viewport_get_use_default_lights(const dwg_ent_viewport *restrict vp,
-                          int *restrict error);
+                                        int *restrict error);
 
 EXPORT void
 dwg_ent_viewport_set_default_lighting_type(dwg_ent_viewport *restrict vp,
@@ -3117,7 +3088,7 @@ dwg_ent_viewport_set_default_lighting_type(dwg_ent_viewport *restrict vp,
 
 EXPORT char
 dwg_ent_viewport_get_default_lighting_type(const dwg_ent_viewport *restrict vp,
-                          int *restrict error);
+                                           int *restrict error);
 
 EXPORT void
 dwg_ent_viewport_set_brightness(dwg_ent_viewport *restrict vp,
@@ -3126,7 +3097,7 @@ dwg_ent_viewport_set_brightness(dwg_ent_viewport *restrict vp,
 
 EXPORT double
 dwg_ent_viewport_get_brightness(const dwg_ent_viewport *restrict vp,
-                          int *restrict error);
+                                int *restrict error);
 
 EXPORT void
 dwg_ent_viewport_set_contrast(dwg_ent_viewport *restrict vp,
@@ -3135,7 +3106,7 @@ dwg_ent_viewport_set_contrast(dwg_ent_viewport *restrict vp,
 
 EXPORT double
 dwg_ent_viewport_get_contrast(const dwg_ent_viewport *restrict vp,
-                          int *restrict error);
+                              int *restrict error);
 
 
 /********************************************************************
@@ -3167,7 +3138,7 @@ dwg_ent_polyline_mesh_get_flag(const dwg_ent_polyline_mesh *restrict mesh,
 EXPORT void
 dwg_ent_polyline_mesh_set_flag(dwg_ent_polyline_mesh *restrict mesh,
                                const BITCODE_BS flags,
-                          int *restrict error);
+                               int *restrict error);
 
 EXPORT BITCODE_BS
 dwg_ent_polyline_mesh_get_curve_type(const dwg_ent_polyline_mesh *restrict mesh,
@@ -3176,7 +3147,7 @@ dwg_ent_polyline_mesh_get_curve_type(const dwg_ent_polyline_mesh *restrict mesh,
 EXPORT void
 dwg_ent_polyline_mesh_set_curve_type(dwg_ent_polyline_mesh *restrict mesh,
                                      const BITCODE_BS curve_type,
-                          int *restrict error);
+                                     int *restrict error);
 
 EXPORT BITCODE_BS
 dwg_ent_polyline_mesh_get_num_m_verts(const dwg_ent_polyline_mesh *restrict mesh,
@@ -3193,7 +3164,7 @@ dwg_ent_polyline_mesh_get_m_density(const dwg_ent_polyline_mesh *restrict mesh,
 EXPORT void
 dwg_ent_polyline_mesh_set_m_density(dwg_ent_polyline_mesh *restrict mesh,
                                     const BITCODE_BS m_density,
-                          int *restrict error);
+                                    int *restrict error);
 
 EXPORT BITCODE_BS
 dwg_ent_polyline_mesh_get_n_density(const dwg_ent_polyline_mesh *restrict mesh,
@@ -3202,7 +3173,7 @@ dwg_ent_polyline_mesh_get_n_density(const dwg_ent_polyline_mesh *restrict mesh,
 EXPORT void
 dwg_ent_polyline_mesh_set_n_density(dwg_ent_polyline_mesh *restrict mesh,
                                     const BITCODE_BS n_density,
-                          int *restrict error);
+                                    int *restrict error);
 
 EXPORT BITCODE_BL
 dwg_ent_polyline_mesh_get_num_owned(const dwg_ent_polyline_mesh *restrict mesh,
@@ -3229,7 +3200,6 @@ dwg_ent_polyline_2d_set_extrusion(dwg_ent_polyline_2d *restrict pline2d,
 EXPORT double
 dwg_ent_polyline_2d_get_start_width(const dwg_ent_polyline_2d *restrict pline2d,
                                     int *restrict error);
-
 EXPORT void
 dwg_ent_polyline_2d_set_start_width(dwg_ent_polyline_2d *restrict pline2d,
                                     const double start_width,
@@ -3480,7 +3450,7 @@ dwg_ent_image_get_fade(const dwg_ent_image *restrict image,
 EXPORT void
 dwg_ent_image_set_fade(dwg_ent_image *restrict image,
                        const char fade,
-                          int *restrict error);
+                       int *restrict error);
 
 EXPORT BITCODE_BS
 dwg_ent_image_get_clip_boundary_type(const dwg_ent_image *restrict image,
@@ -3528,16 +3498,16 @@ dwg_ent_image_get_clip_verts(const dwg_ent_image *restrict image,
 EXPORT void
 dwg_ent_mline_set_scale(dwg_ent_mline *restrict mline,
                         const double scale,
-                          int *restrict error);
+                        int *restrict error);
 
 EXPORT double
 dwg_ent_mline_get_scale(const dwg_ent_mline *restrict mline,
-                          int *restrict error);
+                        int *restrict error);
 
 EXPORT void
 dwg_ent_mline_set_justification(dwg_ent_mline *restrict mline,
                                 const BITCODE_RC just,
-                          int *restrict error);
+                                int *restrict error);
 
 EXPORT BITCODE_RC
 dwg_ent_mline_get_justification(const dwg_ent_mline *restrict mline,
@@ -4052,29 +4022,29 @@ dwg_ent_table_get_data_row_fill_none(const dwg_ent_table *restrict table,
                                      int *restrict error);
 
 EXPORT void
-dwg_ent_table_set_title_row_align(dwg_ent_table *restrict table,
-                                  const unsigned char fill,
-                                  int *restrict error);
+dwg_ent_table_set_title_row_alignment(dwg_ent_table *restrict table,
+                                      const unsigned char fill,
+                                      int *restrict error);
 
 EXPORT BITCODE_BS
-dwg_ent_table_get_title_row_align(const dwg_ent_table *restrict table,
-                                  int *restrict error);
-
-EXPORT void
-dwg_ent_table_set_header_row_align(dwg_ent_table *restrict table,
-                                   const BITCODE_BS align,
-                                   int *restrict error);
-EXPORT BITCODE_BS
-dwg_ent_table_get_header_row_align(const dwg_ent_table *restrict table,
-                                   int *restrict error);
+dwg_ent_table_get_title_row_alignment(const dwg_ent_table *restrict table,
+                                      int *restrict error);
 
 EXPORT void
-dwg_ent_table_set_data_row_align(dwg_ent_table *restrict table,
-                                 const BITCODE_BS align,
-                                 int *restrict error);
+dwg_ent_table_set_header_row_alignment(dwg_ent_table *restrict table,
+                                       const BITCODE_BS align,
+                                       int *restrict error);
 EXPORT BITCODE_BS
-dwg_ent_table_get_data_row_align(const dwg_ent_table *restrict table,
-                                 int *restrict error);
+dwg_ent_table_get_header_row_alignment(const dwg_ent_table *restrict table,
+                                       int *restrict error);
+
+EXPORT void
+dwg_ent_table_set_data_row_alignment(dwg_ent_table *restrict table,
+                                     const BITCODE_BS align,
+                                     int *restrict error);
+EXPORT BITCODE_BS
+dwg_ent_table_get_data_row_alignment(const dwg_ent_table *restrict table,
+                                     int *restrict error);
 
 EXPORT void
 dwg_ent_table_set_title_row_height(dwg_ent_table *restrict table,
@@ -4453,7 +4423,7 @@ dwg_ent_vertex_pface_face_get_vertind(const dwg_ent_vert_pface_face *face);
 
 EXPORT void
 dwg_ent_vertex_pface_face_set_vertind(dwg_ent_vert_pface_face *restrict face,
-                                      BITCODE_BS vertind[4]);
+                                      const BITCODE_BS vertind[4]);
 
 
 /*******************************************************************

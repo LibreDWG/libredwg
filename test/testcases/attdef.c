@@ -17,7 +17,7 @@ api_process (dwg_object * obj)
   dwg_ent_attdef *attdef = dwg_object_to_ATTDEF (obj);
 
   // return attdef value
-  attdef_value = dwg_ent_attdef_get_text (attdef, &error);
+  attdef_value = dwg_ent_attdef_get_default_value (attdef, &error);
   if (!error  && attdef_value == attdef->default_value)	// error checking
     pass ("Working Properly");
   else
@@ -52,21 +52,21 @@ api_process (dwg_object * obj)
     fail ("error in reading thickness");
 
 
-  rotation = dwg_ent_attdef_get_rot_angle (attdef, &error);
+  rotation = dwg_ent_attdef_get_rotation (attdef, &error);
   if (!error  && attdef->rotation == rotation)
     pass ("Working Properly");
   else
     fail ("error in reading rotation");
 
 
-  vert_align = dwg_ent_attdef_get_vert_align (attdef, &error);
+  vert_align = dwg_ent_attdef_get_vert_alignment (attdef, &error);
   if (!error  && attdef->vert_alignment == vert_align)
     pass ("Working Properly");
   else
     fail ("error in reading vertical alignment");
 
 
-  horiz_align = dwg_ent_attdef_get_horiz_align (attdef, &error);
+  horiz_align = dwg_ent_attdef_get_horiz_alignment (attdef, &error);
   if (!error  && horiz_align == attdef->horiz_alignment)
     pass ("Working Properly");
   else

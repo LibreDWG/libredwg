@@ -33,9 +33,9 @@ api_process (dwg_object * obj)
     fail ("error in reading pt14");
 
   ext_line_rot = dwg_ent_dim_aligned_get_ext_line_rotation (dim_aligned, &error);
-  if (!error  && ext_line_rot == dim_aligned->ext_line_rot)
+  if (!error  && ext_line_rot == dim_aligned->ext_line_rotation)
     pass ("Working Properly");
   else
-    fail ("error in reading ext line rot");
+    fail ("error in reading ext line rotation");
 
 }

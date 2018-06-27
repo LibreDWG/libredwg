@@ -18,7 +18,7 @@ api_process (dwg_object * obj)
   dwg_ent_attrib *attrib = dwg_object_to_ATTRIB (obj);
 
   attrib_value = dwg_ent_attrib_get_text (attrib, &error);
-  if (!error  && attrib_value == attrib->text_value)	// error reporting
+  if (!error  && attrib_value == attrib->text_value)
     pass ("Working Properly");
   else
     fail ("error in reading attrib_value");
@@ -36,31 +36,31 @@ api_process (dwg_object * obj)
     fail ("error in reading extrusion");
 
   height = dwg_ent_attrib_get_height (attrib, &error);
-  if (!error  && height == attrib->height)	// error report
+  if (!error  && height == attrib->height)
     pass ("Working Properly");
   else
     fail ("error in reading height");
 
   thickness = dwg_ent_attrib_get_thickness (attrib, &error);
-  if (!error  && attrib->thickness == thickness)	// error check
+  if (!error  && attrib->thickness == thickness)
     pass ("Working Properly");
   else
     fail ("error in reading thickness");
 
-  rotation = dwg_ent_attrib_get_rot_angle (attrib, &error);
-  if (!error  && attrib->rotation == rotation)	// error checks
+  rotation = dwg_ent_attrib_get_rotation (attrib, &error);
+  if (!error  && attrib->rotation == rotation)
     pass ("Working Properly");
   else
     fail ("error in reading rotation");
 
-  vert_align = dwg_ent_attrib_get_vert_align (attrib, &error);
+  vert_align = dwg_ent_attrib_get_vert_alignment (attrib, &error);
   if (!error  && vert_align == attrib->vert_alignment)
     pass ("Working Properly");
   else
     fail ("error in reading vertical alignment");
 
-  horiz_align = dwg_ent_attrib_get_horiz_align (attrib, &error);
-  if (!error  && attrib->horiz_alignment == horiz_align)	// error check
+  horiz_align = dwg_ent_attrib_get_horiz_alignment (attrib, &error);
+  if (!error  && attrib->horiz_alignment == horiz_align)
     pass ("Working Properly");
   else
     fail ("error in reading horizontal alignment");

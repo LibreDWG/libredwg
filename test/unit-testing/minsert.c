@@ -16,8 +16,8 @@ low_level_process(dwg_object *obj)
 	  minsert->extrusion.x, minsert->extrusion.y, minsert->extrusion.z);
   printf("attribs for minsert : " FORMAT_B "\n", minsert->has_attribs);
   printf("object count for minsert : " FORMAT_BL "\n", minsert->num_owned);
-  printf("number of rows for minsert : %u\n", minsert->numrows);
-  printf("number of columns for minsert : %u\n", minsert->numcols);
+  printf("number of rows for minsert : %u\n", minsert->num_rows);
+  printf("number of columns for minsert : %u\n", minsert->num_cols);
   printf("col space for minsert : %f\n", minsert->row_spacing);
   printf("row space for minsert : %f\n", minsert->col_spacing);
 }
@@ -36,8 +36,7 @@ api_process(dwg_object *obj)
   dwg_ent_minsert *minsert = dwg_object_to_MINSERT(obj);
 
 
-  dwg_ent_minsert_get_ins_pt(minsert, &ins_pt,
-                             &error);
+  dwg_ent_minsert_get_ins_pt(minsert, &ins_pt, &error);
   if ( !error )
     printf("minsert points : x = %f, y = %f, z = %f\n",
            ins_pt.x, ins_pt.y, ins_pt.z);
@@ -45,15 +44,7 @@ api_process(dwg_object *obj)
     printf("error in reading minsertion point\n");
 
 
-  scale_flag = dwg_ent_minsert_get_scale_flag(minsert, &error); 
-  if ( !error )
-    printf("scale flag for minsert : " FORMAT_BB "\n", scale_flag);
-  else
-    printf("in reading scale flag\n"); 
-
-
-  dwg_ent_minsert_get_scale(minsert, &scale,
-                            &error); 
+  dwg_ent_minsert_get_scale(minsert, &scale, &error); 
   if ( !error )
     printf("scale points : x = %f, y = %f, z = %f\n",
            scale.x, scale.y, scale.z);
@@ -68,8 +59,7 @@ api_process(dwg_object *obj)
     printf("in reading rotation angle\n"); 
 
 
-  dwg_ent_minsert_get_extrusion(minsert, &ext,
-                                &error); 
+  dwg_ent_minsert_get_extrusion(minsert, &ext, &error); 
   if ( !error )
     printf("extrusion points : x = %f, y = %f, z = %f\n",
            ext.x, ext.y, ext.z);
@@ -91,14 +81,14 @@ api_process(dwg_object *obj)
     printf("in reading object counts\n"); 
 
 
-  num_rows = dwg_ent_minsert_get_numrows(minsert, &error); 
+  num_rows = dwg_ent_minsert_get_num_rows(minsert, &error); 
   if ( !error )
     printf("number of rows for minsert : " FORMAT_BL "\n", num_rows);
   else
     printf("in reading number of rows\n"); 
 
 
-  num_cols = dwg_ent_minsert_get_numcols(minsert, &error); 
+  num_cols = dwg_ent_minsert_get_num_cols(minsert, &error); 
   if ( !error )
     printf("number of columns for minsert : " FORMAT_BL "\n", num_cols);
   else

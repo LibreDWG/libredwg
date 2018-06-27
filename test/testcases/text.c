@@ -73,14 +73,14 @@ api_process (dwg_object * obj)
     fail ("error in reading rotation");
 
 
-  vert_align = dwg_ent_text_get_vert_align (text, &error);
+  vert_align = dwg_ent_text_get_vert_alignment (text, &error);
   if (!error  && vert_align == text->vert_alignment)
     pass ("Working Properly");
   else
     fail ("error in reading vertical alignment");
 
 
-  horiz_align = dwg_ent_text_get_horiz_align (text, &error);
+  horiz_align = dwg_ent_text_get_horiz_alignment (text, &error);
   if (!error  && horiz_align == text->horiz_alignment)
     pass ("Working Properly");
   else

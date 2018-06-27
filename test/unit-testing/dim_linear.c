@@ -36,15 +36,15 @@ low_level_process(dwg_object *obj)
   printf("text_mid_pt of dim_linear : x = %f, y = %f\n",
           dim_linear->text_midpt.x, dim_linear->text_midpt.y);
   printf("user text of dim_linear : %s\n", dim_linear->user_text);
-  printf("text rotation of dim_linear : %f\n", dim_linear->text_rot);
+  printf("text rotation of dim_linear : %f\n", dim_linear->text_rotation);
   printf("ins rotation of dim_linear : %f\n", dim_linear->ins_rotation);
   printf("arrow1 of dim_linear : " FORMAT_B "\n", dim_linear->flip_arrow1);
   printf("arrow2 of dim_linear : " FORMAT_B "\n", dim_linear->flip_arrow2);
-  printf("flags1 of dim_linear : " FORMAT_RC "\n", dim_linear->flags_1);
+  printf("flags1 of dim_linear : " FORMAT_RC "\n", dim_linear->flag1);
   printf("act_measurement of dim_linear : %f\n",
            dim_linear->act_measurement);
-  printf("ext line rot of dim_linear : %f\n",dim_linear->ext_line_rot);
-  printf("dim rot of dim linear : %f\n", dim_linear->dim_rot);
+  printf("ext line rotation of dim_linear : %f\n",dim_linear->ext_line_rotation);
+  printf("dim rotation of dim linear : %f\n", dim_linear->dim_rotation);
 
 }
 
@@ -142,7 +142,7 @@ api_process(dwg_object *obj)
     printf("error in reading clone_ins_pt \n");
 
 
-  dwg_ent_dim_get_text_mid_pt(dim, &text_mid_pt, &error);
+  dwg_ent_dim_get_text_midpt(dim, &text_mid_pt, &error);
   if (!error)
     printf("text_mid_pt of dim : x = %f, y = %f\n",
            text_mid_pt.x, text_mid_pt.y);
@@ -155,7 +155,7 @@ api_process(dwg_object *obj)
   else
     printf("error in reading user_text \n");
 
-  text_rot = dwg_ent_dim_get_text_rot(dim, &error);
+  text_rot = dwg_ent_dim_get_text_rotation(dim, &error);
   if (!error)
     printf(" text rotation of dim : %f\n", text_rot);
   else
@@ -188,24 +188,21 @@ api_process(dwg_object *obj)
     printf("error in reading flags1 \n");
 
 
-  act_measure = dwg_ent_dim_get_act_measurement(dim,
-                                                       &error);
+  act_measure = dwg_ent_dim_get_act_measurement(dim, &error);
   if (!error)
     printf("act_measurement of dim : %f\n", act_measure);
   else
     printf("error in reading act_measurement \n");
 
 
-  ext_line_rot = dwg_ent_dim_linear_get_ext_line_rotation(dim_linear,
-                                                          &error);
+  ext_line_rot = dwg_ent_dim_linear_get_ext_line_rotation(dim_linear, &error);
   if (!error)
     printf("ext line rot of dim_linear : %f\n", ext_line_rot);
   else
     printf("error in reading ext line rot \n");
 
 
-  dim_rot = dwg_ent_dim_linear_get_dim_rot(dim_linear,
-                                           &error);
+  dim_rot = dwg_ent_dim_linear_get_dim_rotation(dim_linear, &error);
   if (!error)
     printf("dim rot of dim linear : %f\n", dim_rot);
   else

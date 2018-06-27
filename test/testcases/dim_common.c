@@ -11,7 +11,7 @@ api_process (dwg_object * obj)
   int error;
   double elevation, act_measure, horiz_dir, lspace_factor, text_rot,
     ins_rot;
-  BITCODE_RC flags1;
+  BITCODE_RC flag1;
   BITCODE_BS lspace_style, attachment;
   BITCODE_B flip_arrow1, flip_arrow2;
   char *user_text;
@@ -72,7 +72,7 @@ api_process (dwg_object * obj)
   else
     fail ("error in reading clone_ins_pt");
 
-  dwg_ent_dim_get_text_mid_pt (dim, &text_mid_pt, &error);
+  dwg_ent_dim_get_text_midpt (dim, &text_mid_pt, &error);
   if (!error  && text_mid_pt.x == dim->text_midpt.x && text_mid_pt.y == dim->text_midpt.y)
     pass ("Working Properly");
   else
@@ -87,15 +87,14 @@ api_process (dwg_object * obj)
     fail ("error in reading user_text");
 
 
-  text_rot = dwg_ent_dim_get_text_rot (dim, &error);
-  if (!error  && text_rot == dim->text_rot)	// error check
+  text_rot = dwg_ent_dim_get_text_rotation (dim, &error);
+  if (!error  && text_rot == dim->text_rotation)
     pass ("Working Properly");
   else
     fail ("error in reading text rotation");
 
 
-  ins_rot =
-    dwg_ent_dim_get_ins_rotation (dim, &error);
+  ins_rot = dwg_ent_dim_get_ins_rotation (dim, &error);
   if (!error  && ins_rot == dim->ins_rotation)	// error check
     pass ("Working Properly");
   else
@@ -116,8 +115,8 @@ api_process (dwg_object * obj)
     fail ("error in reading arrow1 \n");
 
 
-  flags1 = dwg_ent_dim_get_flag1 (dim, &error);
-  if (!error  && dim->flags_1 == flags1)
+  flag1 = dwg_ent_dim_get_flag1 (dim, &error);
+  if (!error  && dim->flag1 == flag1)
     pass ("Working Properly");
   else
     fail ("error in reading flags1");

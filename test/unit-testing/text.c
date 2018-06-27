@@ -69,14 +69,14 @@ api_process(dwg_object *obj)
     printf("error in reading rotation \n");
 
 
-  vert_align = dwg_ent_text_get_vert_align(text, &error);
+  vert_align = dwg_ent_text_get_vert_alignment(text, &error);
   if (!error)
     printf("Vertical alignment of text : " FORMAT_BS "\n", vert_align);
   else
     printf("error in reading vertical alignment");
 
 
-  horiz_align = dwg_ent_text_get_horiz_align(text, &error);
+  horiz_align = dwg_ent_text_get_horiz_alignment(text, &error);
   if (!error)
       printf("Horizontal alignment of text : " FORMAT_BS "\n", horiz_align);
   else

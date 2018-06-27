@@ -38,20 +38,11 @@ api_process (dwg_object * obj)
   else
     fail ("error in reading insertion point");
 
-
-  scale_flag = dwg_ent_insert_get_scale_flag (insert, &error);
-  if (!error  && scale_flag == insert->scale_flag)	// error check
-    pass ("Working Properly");
-  else
-    fail ("error in reading scale flag");
-
-
   dwg_ent_insert_get_scale (insert, &scale, &error);
   if (!error  && scale.x == insert->scale.x && scale.y == insert->scale.y && scale.z == insert->scale.z)	// error check
     pass ("Working Properly");
   else
     fail ("error in reading scale");
-
 
   rot_angle = dwg_ent_insert_get_rotation (insert, &error);
   if (!error  && rot_angle == insert->rotation)	// error check
@@ -59,20 +50,17 @@ api_process (dwg_object * obj)
   else
     fail ("error in reading rotation angle");
 
-
   dwg_ent_insert_get_extrusion (insert, &ext, &error);
   if (!error  && ext.x == insert->extrusion.x && ext.y == insert->extrusion.y && ext.z == insert->extrusion.z)	// error check
     pass ("Working Properly");
   else
     fail ("error in reading extrusion");
 
-
   attribs = dwg_ent_insert_has_attribs (insert, &error);
   if (!error  && attribs == insert->has_attribs)	// error check
     pass ("Working Properly");
   else
     fail ("error in reading attribs");
-
 
   obj_count = dwg_ent_insert_get_num_owned (insert, &error);
   if (!error  && obj_count == insert->num_owned)	// error check

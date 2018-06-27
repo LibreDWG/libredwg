@@ -37,27 +37,26 @@ low_level_process(dwg_object *obj)
   printf("text_mid_pt of dim_aligned : x = %f, y = %f\n",
           dim_aligned->text_midpt.x, dim_aligned->text_midpt.y);
   printf("user text of dim_aligned : %s\n", dim_aligned->user_text);
-  printf("text rotation of dim_aligned : %f\n", dim_aligned->text_rot);
+  printf("text rotation of dim_aligned : %f\n", dim_aligned->text_rotation);
   printf("ins rotation of dim_aligned : %f\n", dim_aligned->ins_rotation);
   printf("arrow1 of dim_aligned : " FORMAT_B "\n", dim_aligned->flip_arrow1);
   printf("arrow2 of dim_aligned : " FORMAT_B "\n", dim_aligned->flip_arrow2);
-  printf("flags1 of dim_aligned : " FORMAT_RC "\n", dim_aligned->flags_1);
+  printf("flag1 of dim_aligned : " FORMAT_RC "\n", dim_aligned->flag1);
   printf("act_measurement of dim_aligned : %f\n",
           dim_aligned->act_measurement);
-  printf("ext line rot of dim_aligned : %f\n", dim_aligned->ext_line_rot);
+  printf("ext line rotation of dim_aligned : %f\n", dim_aligned->ext_line_rotation);
 }
 
 void
 api_process(dwg_object *obj)
 {
   int error;
-  double elevation, act_measure, horiz_dir, lspace_factor, text_rot, 
-         ins_rot, ext_line_rot, dim_rot;
+  double elevation, act_measure, horiz_dir, lspace_factor, rotation;
   BITCODE_B flip_arrow1, flip_arrow2;
   BITCODE_RC flags1, flags2;
   BITCODE_BS lspace_style, attachment;
   char * user_text;
-  dwg_point_2d text_mid_pt, pt12;
+  dwg_point_2d text_midpt, pt12;
   dwg_point_3d pt10, pt13, pt14, ext, ins_scale;
 
   dwg_ent_dim_aligned *dim_aligned = dwg_object_to_DIMENSION_ALIGNED(obj);
@@ -135,10 +134,10 @@ api_process(dwg_object *obj)
   else
     printf("error in reading pt12 \n");
 
-  dwg_ent_dim_get_text_mid_pt(dim, &text_mid_pt, &error);
+  dwg_ent_dim_get_text_midpt(dim, &text_midpt, &error);
   if (!error)
     printf("text_mid_pt of dim_aligned : x = %f, y = %f\n",
-           text_mid_pt.x, text_mid_pt.y);
+           text_midpt.x, text_midpt.y);
   else
     printf("error in reading text_mid_pt \n");
 
@@ -148,15 +147,15 @@ api_process(dwg_object *obj)
   else
     printf("error in reading user_text \n");
 
-  text_rot = dwg_ent_dim_get_text_rot(dim, &error);
+  rotation = dwg_ent_dim_get_text_rotation(dim, &error);
   if (!error)
-    printf(" text rotation of dim_aligned : %f\n", text_rot);
+    printf(" text rotation of dim_aligned : %f\n", rotation);
   else
     printf("error in reading text rotation \n");
 
-  ins_rot = dwg_ent_dim_get_ins_rotation(dim, &error);
+  rotation = dwg_ent_dim_get_ins_rotation(dim, &error);
   if (!error)
-    printf("ins rotation of dim : %f\n", ins_rot);
+    printf("ins rotation of dim : %f\n", rotation);
   else
     printf("error in reading ins rotation \n");
   
@@ -184,9 +183,9 @@ api_process(dwg_object *obj)
   else
     printf("error in reading act_measurement \n");
 
-  ext_line_rot = dwg_ent_dim_aligned_get_ext_line_rotation(dim_aligned, &error);
+  rotation = dwg_ent_dim_aligned_get_ext_line_rotation(dim_aligned, &error);
   if (!error)
-    printf("ext line rot of dim_aligned : %f\n", ext_line_rot);
+    printf("ext line rotation of dim_aligned : %f\n", rotation);
   else
-    printf("error in reading ext line rot \n");
+    printf("error in reading ext line rotation \n");
 }

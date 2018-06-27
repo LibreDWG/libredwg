@@ -63,19 +63,19 @@ api_process(dwg_object *obj)
   else
     printf("error in reading thickness\n");
 
-  rotation = dwg_ent_attrib_get_rot_angle(attrib, &error);
+  rotation = dwg_ent_attrib_get_rotation(attrib, &error);
   if (!error)
     printf("rotation of attrib : %f\n", rotation);
   else
     printf("error in reading rotation \n");
 
-  vert_align = dwg_ent_attrib_get_vert_align(attrib, &error);
+  vert_align = dwg_ent_attrib_get_vert_alignment(attrib, &error);
   if (!error)
     printf("Vertical alignment of attrib : " FORMAT_BS "\n", vert_align);
   else
     printf("error in reading vertical alignment");
 
-  horiz_align = dwg_ent_attrib_get_horiz_align(attrib, &error);
+  horiz_align = dwg_ent_attrib_get_horiz_alignment(attrib, &error);
   if (!error)
     printf("Horizontal alignment of attrib : " FORMAT_BS "\n", horiz_align);
   else

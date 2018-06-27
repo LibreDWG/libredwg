@@ -18,8 +18,8 @@ low_level_process (dwg_object * obj)
 	  minsert->extrusion.x, minsert->extrusion.y, minsert->extrusion.z);
   printf ("attribs for minsert : " FORMAT_B "\n", minsert->has_attribs);
   printf ("object count for minsert : " FORMAT_BL "\n", minsert->num_owned);
-  printf ("number of rows for minsert : " FORMAT_BS "\n", minsert->numrows);
-  printf ("number of columns for minsert : " FORMAT_BS "\n", minsert->numcols);
+  printf ("number of rows for minsert : " FORMAT_BS "\n", minsert->num_rows);
+  printf ("number of columns for minsert : " FORMAT_BS "\n", minsert->num_cols);
   printf ("col space for minsert : %f\n", minsert->row_spacing);
   printf ("row space for minsert : %f\n", minsert->col_spacing);
 }
@@ -30,7 +30,7 @@ api_process (dwg_object * obj)
   int error;
   dwg_point_3d ins_pt, ext, scale;
   double rot_angle;
-  char scale_flag, attribs;
+  char has_attribs;
   BITCODE_BD col_space, row_space;
   BITCODE_BL obj_count, num_rows, num_cols;
 
@@ -43,14 +43,6 @@ api_process (dwg_object * obj)
     pass ("Working Properly");
   else
     fail ("error in reading insertion point");
-
-
-  scale_flag = dwg_ent_minsert_get_scale_flag (minsert, &error);
-  if (!error  && scale_flag == minsert->scale_flag)
-    pass ("Working Properly");
-  else
-    fail ("error in reading scale flag");
-
 
   dwg_ent_minsert_get_scale (minsert, &scale, &error);
   if (!error  && scale.x == minsert->scale.x && scale.y == minsert->scale.y && scale.z == minsert->scale.z)
@@ -73,11 +65,11 @@ api_process (dwg_object * obj)
     fail ("error in reading extrusion");
 
 
-  attribs = dwg_ent_minsert_has_attribs (minsert, &error);
-  if (!error  && attribs == minsert->has_attribs)
+  has_attribs = dwg_ent_minsert_has_attribs (minsert, &error);
+  if (!error  && has_attribs == minsert->has_attribs)
     pass ("Working Properly");
   else
-    fail ("error in reading attribs");
+    fail ("error in reading has_attribs");
 
 
   obj_count = dwg_ent_minsert_get_num_owned (minsert, &error);
@@ -87,15 +79,15 @@ api_process (dwg_object * obj)
     fail ("error in reading object counts");
 
 
-  num_rows = dwg_ent_minsert_get_numrows (minsert, &error);
-  if (!error  && num_rows == minsert->numrows)
+  num_rows = dwg_ent_minsert_get_num_rows (minsert, &error);
+  if (!error  && num_rows == minsert->num_rows)
     pass ("Working Properly");
   else
     fail ("error in reading number of rows");
 
 
-  num_cols = dwg_ent_minsert_get_numcols (minsert, &error);
-  if (!error  && num_cols == minsert->numcols)
+  num_cols = dwg_ent_minsert_get_num_cols (minsert, &error);
+  if (!error  && num_cols == minsert->num_cols)
     pass ("Working Properly");
   else
     fail ("error in reading number of columns");

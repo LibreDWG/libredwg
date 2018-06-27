@@ -34,14 +34,14 @@ api_process (dwg_object * obj)
     fail ("error in reading pt14");
 
   ext_line_rot = dwg_ent_dim_linear_get_ext_line_rotation (dim_linear, &error);
-  if (!error  && ext_line_rot == dim_linear->ext_line_rot)
+  if (!error  && ext_line_rot == dim_linear->ext_line_rotation)
     pass ("Working Properly");
   else
     fail ("error in reading ext line rot");
 
-  dim_rot = dwg_ent_dim_linear_get_dim_rot (dim_linear, &error);
-  if (!error  && dim_linear->dim_rot == dim_rot)
+  dim_rot = dwg_ent_dim_linear_get_dim_rotation (dim_linear, &error);
+  if (!error  && dim_linear->dim_rotation == dim_rot)
     pass ("Working Properly");
   else
-    fail ("error in reading dim rot \n");
+    fail ("error in reading dim rotation \n");
 }

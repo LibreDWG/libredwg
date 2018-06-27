@@ -39,11 +39,11 @@ low_level_process(dwg_object *obj)
   printf("text_mid_pt of dim_ang3pt : x = %f, y = %f\n",
           dim_ang3pt->text_midpt.x, dim_ang3pt->text_midpt.y);
   printf("user text of dim_ang3pt : %s\n", dim_ang3pt->user_text);
-  printf("text rotation of dim_ang3pt : %f\n", dim_ang3pt->text_rot);
+  printf("text rotation of dim_ang3pt : %f\n", dim_ang3pt->text_rotation);
   printf("ins rotation of dim_ang3pt : %f\n", dim_ang3pt->ins_rotation);
   printf("arrow1 of dim_ang3pt : " FORMAT_RC "\n", dim_ang3pt->flip_arrow1);
   printf("arrow2 of dim_ang3pt : " FORMAT_RC "\n", dim_ang3pt->flip_arrow2);
-  printf("flags1 of dim_ang3pt : " FORMAT_RC "\n", dim_ang3pt->flags_1);
+  printf("flags1 of dim_ang3pt : " FORMAT_RC "\n", dim_ang3pt->flag1);
   printf("act_measurement of dim_ang3pt : %f\n",
           dim_ang3pt->act_measurement); 
 }
@@ -144,7 +144,7 @@ api_process(dwg_object *obj)
   else
     printf("error in reading pt12 \n");
 
-  dwg_ent_dim_get_text_mid_pt(dim, &text_mid_pt, &error);
+  dwg_ent_dim_get_text_midpt(dim, &text_mid_pt, &error);
   if ( !error )
     printf("text_mid_pt of dim_ang3pt : x = %f, y = %f\n",
            text_mid_pt.x, text_mid_pt.y);
@@ -157,7 +157,7 @@ api_process(dwg_object *obj)
   else
     printf("error in reading user_text \n");
 
-  text_rot = dwg_ent_dim_get_text_rot(dim, &error);
+  text_rot = dwg_ent_dim_get_text_rotation(dim, &error);
   if ( !error )
     printf(" text rotation of dim_ang3pt : %f\n", text_rot);
   else
