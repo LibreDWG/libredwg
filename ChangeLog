@@ -1,9 +1,70 @@
 Full history from the git log
 -----------------------------
 
+2018-06-28  Reini Urban  <rurban@cpan.org>
+
+	Second test release 0.4.999
+
+2018-06-28  Reini Urban  <rurban@cpan.org>
+
+	common_entity_data: fix has_ds_binary_data
+	use instead of nolinks with r2013+
+
+	improve FIELD_2DD_VECTOR logging, print index
+
+2018-06-28  Reini Urban  <rurban@cpan.org>
+
+	try ACIS 2 only with .git (ifndef IS_RELEASE)
+
+	add some FIELD formatting overrides FIELD_RCu lineweight FIELD_BLh rgb_color
+	pass thru preR13 decode errors
+
+	add analog VECTOR_CHKCOUNT
+	also for HATCH.
+	Maybe we should use these checks only for known UNKNOWN_CLASS
+	entities. The strcmp check for the classname
+	is resolved at compile-time already., if the classname would
+	appear in the macro.
+
+	add REPEAT_CHKCOUNT and use it more
+	not only since r2010+ also with r2004 for invalid HATCH entities.
+
+	decode BD stability: check bit_isnan
+	when decoding bitcode encoded doubles, check for our
+	own unique return value of bit_nan (avoiding math.h and -lm).
+	return DWG_ERR_VALUEOUTOFBOUNDS in objects and entities then
+
+2018-06-28  Reini Urban  <rurban@cpan.org>
+
+	fix common_entity color ENC encoding
+	various serious errors in the color encoding
+	for entities, called ENC.
+
+	The bug only occured with non-indexed colors
+	with RGB or transparency values.
+	Thanks to @arturredzko for an example DWG.
+
+2018-06-28  Reini Urban  <rurban@cpan.org>
+
+	api: finish docs, more renames
+	Take the opportunity that the API should be somewhat sane and stable,
+	to harmonize more names:
+	align => alignment
+	numrows => num_rows
+	numcols => num_cols
+	flags_  => flag
+
+	remove the dwg_ent_insert scale_flag API. This is DWG internal only.
+
 2018-06-27  Reini Urban  <rurban@cpan.org>
 
-	Release 0.5
+	ChangeLog: update for last month
+	with gnulib's gitlog-to-changelog, clustered.
+
+	cluster adjacent commit messages if their headers are the same and
+	neither commit message contains multiple paragraphs.
+
+2018-06-27  Reini Urban  <rurban@cpan.org>
 
 	python DISTCLEANFILES
 
