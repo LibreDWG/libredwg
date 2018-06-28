@@ -418,22 +418,26 @@
     bit_set_position(hdl_dat, obj->hdlpos); \
     LOG_HANDLE(" -> @%lu.%u (%lu)\n", dat->byte, dat->bit, bit_position(dat)); }
 
+#define REPEAT_CHKCOUNT(name,times) \
+  if (dat->version >= R_2004 && times > 0x1000) { \
+    fprintf(stderr, "Invalid " #name "rcount %ld", (long)times); \
+    return DWG_ERR_VALUEOUTOFBOUNDS; } \
+
 // unchecked with a constant
 #define REPEAT_CN(times, name, type) \
   _obj->name = (type *) calloc(times, sizeof(type)); \
   for (rcount1=0; rcount1<(long)times; rcount1++)
 #define REPEAT_N(times, name, type) \
-  if (dat->version >= R_2010 && times > 0x1000) { \
-    fprintf(stderr, "Invalid rcount %ld", (long)times); return DWG_ERR_VALUEOUTOFBOUNDS; } \
+  REPEAT_CHKCOUNT(name,times) \
   if (times) _obj->name = (type *) calloc(times, sizeof(type)); \
   for (rcount1=0; rcount1<(long)times; rcount1++)
 
 #define _REPEAT(times, name, type, idx) \
-  if (dat->version >= R_2010 && _obj->times > 0x1000) { \
-    fprintf(stderr, "Invalid rcount " #idx " %ld", (long)_obj->times); return DWG_ERR_VALUEOUTOFBOUNDS; } \
+  REPEAT_CHKCOUNT(name,_obj->times) \
   if (_obj->times) _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
   for (rcount##idx=0; rcount##idx<(long)_obj->times; rcount##idx++)
 #define _REPEAT_C(times, name, type, idx) \
+  REPEAT_CHKCOUNT(name,_obj->times) \
   if (_obj->times) _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
   for (rcount##idx=0; rcount##idx<(long)_obj->times; rcount##idx++)
 
