@@ -290,4 +290,7 @@ bit_explore_chain(Bit_Chain *dat, long unsigned int size);
 BITCODE_BD
 bit_nan(void);
 
+int
+bit_isnan(BITCODE_BD number);
+
 #endif

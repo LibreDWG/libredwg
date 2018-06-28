@@ -125,7 +125,12 @@
 #define FIELD_BS(name,dxf) FIELDG(name, BS, dxf)
 #define FIELD_BL(name,dxf) FIELDG(name, BL, dxf)
 #define FIELD_BLL(name,dxf) FIELDG(name, BLL, dxf)
-#define FIELD_BD(name,dxf) FIELDG(name, BD, dxf)
+#define FIELD_BD(name,dxf) \
+   FIELDG(name, BD, dxf); \
+   if (bit_isnan(_obj->name)) { \
+     LOG_ERROR("Invalid BD " #name); \
+     return DWG_ERR_VALUEOUTOFBOUNDS; \
+   }
 #define FIELD_RC(name,dxf) FIELDG(name, RC, dxf)
 #define FIELD_RS(name,dxf) FIELDG(name, RS, dxf)
 #define FIELD_RD(name,dxf) FIELDG(name, RD, dxf)

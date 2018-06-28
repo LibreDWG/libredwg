@@ -704,6 +704,13 @@ bit_nan(void)
   return result;
 }
 
+int
+bit_isnan(BITCODE_BD number)
+{
+  int32_t *res = (int32_t*) &number;
+  return (res[0] == -1 && res[1] == -1);
+}
+
 /** Write 1 bitdouble (compacted data).
  */
 void
