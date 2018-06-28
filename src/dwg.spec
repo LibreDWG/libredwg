@@ -3369,6 +3369,11 @@ DWG_ENTITY(HATCH)
       FIELD_BL (single_color_gradient, 452);
       FIELD_BD (gradient_tint, 462);
       FIELD_BL (num_colors, 453); //default: 2
+      if (FIELD_VALUE(is_gradient_fill) && FIELD_VALUE(num_colors > 1000))
+        {
+          LOG_ERROR("Invalid gradient fill HATCH.num_colors %lu", _obj->num_colors);
+          return DWG_ERR_VALUEOUTOFBOUNDS;
+        }
       REPEAT(num_colors, colors, Dwg_HATCH_Color)
         {
           FIELD_BD (colors[rcount1].unknown_double, 463); //value
@@ -3387,12 +3392,23 @@ DWG_ENTITY(HATCH)
   FIELD_B (solid_fill, 70); //default: 1, pattern_fill: 0
   FIELD_B (associative, 71);
   FIELD_BL (num_paths, 91);
+  if (FIELD_VALUE(num_paths > 10000))
+    {
+      LOG_ERROR("Invalid HATCH.num_paths %lu", _obj->num_paths);
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
   REPEAT(num_paths, paths, Dwg_HATCH_Path)
     {
       FIELD_BL (paths[rcount1].flag, 92);
       if (!(FIELD_VALUE(paths[rcount1].flag) & 2))
         {
           FIELD_BL (paths[rcount1].num_segs_or_paths, 93);
+          if (FIELD_VALUE(paths[rcount1].num_segs_or_paths > 10000))
+            {
+              LOG_ERROR("Invalid HATCH.num_segs_or_paths %lu",
+                        _obj->paths[rcount1].num_segs_or_paths);
+              return DWG_ERR_VALUEOUTOFBOUNDS;
+            }
           REPEAT2(paths[rcount1].num_segs_or_paths, paths[rcount1].segs,
                   Dwg_HATCH_PathSeg)
             {

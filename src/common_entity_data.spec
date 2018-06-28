@@ -54,65 +54,54 @@
   VERSIONS(R_13, R_14)
     {
       FIELD_B (isbylayerlt, 0);
+      if (FIELD_VALUE(isbylayerlt))
+        FIELD_VALUE(linetype_flags) = FIELD_VALUE(isbylayerlt) ? 0 : 3;
     }
 
-  FIELD_B (nolinks, 0);
-
-  SINCE(R_2004)
+  SINCE(R_2004) // ENC (entity color encoding)
     {
-      BITCODE_B color_indexed;
-      unsigned int color_flags;
+      BITCODE_BS flags = bit_read_BS(dat);
+      LOG_HANDLE("color flags: 0x%X [BS 0]\n", (unsigned)flags);
+      ent->color.rgb = 0L;
+      ent->color.index = flags && 0xff; // or 0x1ff?
+      flags = flags >> 8;
+      ent->color.flag = flags;
 
-      if (FIELD_VALUE(nolinks) == 0)
+      if (flags & 0x40)
         {
-          color_indexed = bit_read_B(dat);
-          LOG_TRACE("color_indexed: " FORMAT_B " \n", color_indexed) //indexed or rgb
-
-            if (color_indexed)
-              {
-                ent->color.index = bit_read_RC(dat);  // color index
-                ent->color.rgb = 0L;
-                LOG_TRACE("color.index: %u\n", (unsigned)ent->color.index);
-              }
-            else
-              {
-                color_flags = bit_read_RS(dat);
-                LOG_TRACE("color.flags: 0x%X\n", (unsigned)color_flags);
-
-                if (color_flags & 0x8000)
-                  {
-                    unsigned char c1, c2, c3, c4;
-                    char *name;
-
-                    c1 = bit_read_RC(dat);  // rgb color
-                    c2 = bit_read_RC(dat);
-                    c3 = bit_read_RC(dat);
-                    c4 = bit_read_RC(dat);
-                    name = bit_read_TV(dat);
-                    ent->color.index = 0;
-                    ent->color.rgb   = c1 << 24 | c2 << 16 | c3 << 8 | c4;
-                    ent->color.name  = name;
-                    LOG_TRACE("color.rgb: 0x%X\n", (unsigned)ent->color.rgb);
-                    if (name && *name)
-                      LOG_TRACE("color.name: %s\n", name);
-                  }
-
-                /*if (flags & 0x4000)
-                  flags = flags;   // has AcDbColor reference (handle)
-                */
-                if (color_flags & 0x2000)
-                  {
-                    ent->color.transparency_type = bit_read_BL(dat);
-                    LOG_TRACE("color.transparency_type: 0x%X\n",
-                              (unsigned)ent->color.transparency_type);
-                  }
-              }
+          LOG_HANDLE("color: has handle\n");
         }
-      else
+      if (flags & 0x20)
         {
-          char color = bit_read_B(dat);
-          LOG_TRACE("color.index: %d\n", (int)color)
-            ent->color.index = color;
+          BITCODE_BL trlong = bit_read_BL(dat);
+          LOG_HANDLE("transparency: %x [BL 0]\n", trlong);
+          ent->color.transparency_type = trlong & 0xff;
+          ent->color.alpha = trlong >> 8;
+          /* 0 BYLAYER, 1 BYBLOCK, 3 alpha */
+          LOG_TRACE("color.transparency_type: %d\n", ent->color.transparency_type);
+          if (ent->color.transparency_type == 3)
+            LOG_TRACE("color.alpha: %d [BL 440]\n", ent->color.alpha);
+        }
+      if (flags & 0x80)
+        {
+          ent->color.rgb = bit_read_BL(dat); //ODA bug, documented as BS
+          LOG_TRACE("color.rgb: %06X [BL 420]\n", (unsigned)ent->color.rgb);
+        }
+      /* not with entities, only with CMC  
+      if (flags & 1)
+        {
+          ent->color.name = bit_read_TV(dat);
+          LOG_TRACE("color.name: %s\n", ent->color.name);
+        }
+      if (flags & 2)
+        {
+          ent->color.book_name = bit_read_TV(dat);
+          LOG_TRACE("color.book_name: %s\n", ent->color.book_name);
+        }
+      */
+      if (!(flags & 0xf0))
+        {
+          LOG_TRACE("color.index: %u [62]\n", (unsigned)ent->color.index);
         }
     }
   OTHER_VERSIONS

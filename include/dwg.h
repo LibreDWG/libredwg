@@ -454,7 +454,8 @@ typedef struct _dwg_color /* CmColor: R15 and earlier */
   unsigned char flag;    /* 1: name follows, 2: book name follows */
   char* name;
   char* book_name;
-  unsigned char transparency_type; /* 0 BYLAYER, 1 BYBLOCK, 3 alpha in the last byte */
+  unsigned char transparency_type; /* 0 BYLAYER, 1 BYBLOCK, 3 alpha */
+  unsigned char alpha;
 } Dwg_Color;
 
 /**
