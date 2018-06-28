@@ -131,7 +131,16 @@
      LOG_ERROR("Invalid BD " #name); \
      return DWG_ERR_VALUEOUTOFBOUNDS; \
    }
+#define FIELD_BLh(name,dxf) \
+  { _obj->name = bit_read_BL(dat); \
+    LOG_TRACE(#name ": 0x%x [BL %d]\n", (unsigned)_obj->name, dxf); }
 #define FIELD_RC(name,dxf) FIELDG(name, RC, dxf)
+#define FIELD_RCu(name,dxf) \
+  { _obj->name = bit_read_RC(dat); \
+    LOG_TRACE(#name ": %u [RC %d]\n", (unsigned)((unsigned char)_obj->name), dxf); }
+#define FIELD_RCd(name,dxf) \
+  { _obj->name = bit_read_RC(dat); \
+    LOG_TRACE(#name ": %d [RC %d]\n", (int)((signed char)_obj->name), dxf); }
 #define FIELD_RS(name,dxf) FIELDG(name, RS, dxf)
 #define FIELD_RD(name,dxf) FIELDG(name, RD, dxf)
 #define FIELD_RL(name,dxf) FIELDG(name, RL, dxf)

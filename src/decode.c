@@ -69,9 +69,9 @@ decode_preR13_section_ptr(const char* name, Dwg_Section_Type_r11 id,
 static void
 decode_preR13_section_chk(Dwg_Section_Type_r11 id, Bit_Chain* dat,
                           Dwg_Data * dwg);
-static void
+static int
 decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg);
-static void
+static int
 decode_preR13_entities(unsigned long start, unsigned long end, unsigned long offset,
                        Bit_Chain* dat, Dwg_Data * dwg);
 
@@ -267,11 +267,12 @@ decode_preR13_section_chk(Dwg_Section_Type_r11 id, Bit_Chain* dat,
 }
 
 // TABLES really
-static void
+static int
 decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
 {
   Dwg_Section *tbl = &dwg->header.section[id];
   int i; long vcount;
+  int error = 0;
   long unsigned int num = dwg->num_objects;
   long unsigned int old_size = num * sizeof(Dwg_Object);
   long unsigned int size = tbl->number * sizeof(Dwg_Object);
@@ -541,6 +542,7 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
     }
   dwg->num_objects += tbl->number;
   dat->byte = tbl->address + (tbl->number * tbl->size);
+  return error;
 }
 
 static int
@@ -3076,7 +3078,7 @@ dwg_decode_xdata(Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj, int 
  * Private functions which depend on the preceding
  */
 
-static void
+static int
 decode_preR13_entities(unsigned long start, unsigned long end,
                        unsigned long offset,
                        Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
@@ -3099,7 +3101,7 @@ decode_preR13_entities(unsigned long start, unsigned long end,
       if (!dwg->object)
         {
           LOG_ERROR("Out of memory");
-          return;
+          return DWG_ERR_OUTOFMEM;
         }
       obj = &dwg->object[num];
       memset(obj, 0, sizeof(Dwg_Object));
@@ -3190,7 +3192,7 @@ decode_preR13_entities(unsigned long start, unsigned long end,
     }
 
   dat->byte = end;
-  return;
+  return error;
 }
 
 /** dwg_decode_variable_type

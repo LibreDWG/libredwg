@@ -56,6 +56,16 @@
 #ifndef VALUE_BL
 # define VALUE_BL(value, dxf)
 #endif
+// logging format overrides
+#ifndef FIELD_BLh
+# define FIELD_BLh(name, dxf) FIELD_BL(name, dxf)
+#endif
+#ifndef FIELD_RCu
+# define FIELD_RCu(name, dxf) FIELD_RC(name, dxf)
+#endif
+#ifndef FIELD_RCd
+# define FIELD_RCd(name, dxf) FIELD_RC(name, dxf)
+#endif
 #ifndef SUBCLASS
 # define SUBCLASS(text)
 #endif

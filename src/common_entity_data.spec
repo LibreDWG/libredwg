@@ -131,5 +131,5 @@
 
   SINCE(R_2000)
     {
-      FIELD_RC (lineweight, 0);
+      FIELD_RCu (lineweight, 0);
     }

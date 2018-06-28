@@ -3378,7 +3378,7 @@ DWG_ENTITY(HATCH)
         {
           FIELD_BD (colors[rcount1].unknown_double, 463); //value
           FIELD_BS (colors[rcount1].unknown_short, 0);
-          FIELD_BL (colors[rcount1].rgb_color, 63); // 63 for color as ACI. 421 for rgb
+          FIELD_BLh (colors[rcount1].rgb_color, 63); // 63 for color as ACI. 421 for rgb
           FIELD_RC (colors[rcount1].ignored_color_byte, 0);
         }
       SET_PARENT_OBJ(colors)
