@@ -1610,6 +1610,7 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
        */
       else //if (FIELD_VALUE(version)==2)
         {
+#ifndef IS_RELEASE
           //TODO
           do
             {
@@ -1619,6 +1620,10 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
                 realloc(FIELD_VALUE(block_size), (i+1) * sizeof (BITCODE_BL));
 
               FIELD_BL (block_size[i], 0);
+              if (_obj->block_size[i] > 10000) {
+                LOG_ERROR("Invalid ACIS 2 block_size[%d] %d", i, _obj->block_size[i]);
+                return DWG_ERR_NOTYETSUPPORTED;
+              }
               FIELD_TF (encr_sat_data[i], FIELD_VALUE(block_size[i]), 1);
               if (FIELD_VALUE(block_size[i])) {
                 total_size += FIELD_VALUE (block_size[i]);
@@ -1626,6 +1631,7 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
             } while(FIELD_VALUE (block_size[i++]));
           num_blocks = i-1;
           FIELD_VALUE(num_blocks) = num_blocks;
+#endif
           LOG_ERROR("TODO: Implement parsing of SAT file (version 2) "
                     "in 3DSOLID entity.");
         }
@@ -5943,5 +5949,3 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
-
-
