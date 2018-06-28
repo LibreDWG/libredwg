@@ -275,12 +275,18 @@
     *dat = here;                                                \
   }
 
+#define VECTOR_CHKCOUNT(name,size) \
+  if (dat->version >= R_2004 && size > 0x10000) { \
+    fprintf(stderr, "Invalid " #name "vcount %ld", (long)size); \
+    return DWG_ERR_VALUEOUTOFBOUNDS; } \
+
 //FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'name'.
 #define FIELD_VECTOR_N(name, type, size, dxf) \
   if (size > 0) \
     { \
+      VECTOR_CHKCOUNT(name,size) \
       _obj->name = (BITCODE_##type*) malloc(size * sizeof(BITCODE_##type));\
       for (vcount=0; vcount<(long)size; vcount++) \
         {\
@@ -292,6 +298,7 @@
 #define FIELD_VECTOR_T(name, size, dxf) \
   if (_obj->size > 0) \
     { \
+      VECTOR_CHKCOUNT(name,_obj->size) \
       _obj->name = (char**) malloc(_obj->size * sizeof(char*)); \
       for (vcount=0; vcount<(long)_obj->size; vcount++) \
         {\
@@ -309,6 +316,7 @@
 #define FIELD_VECTOR(name, type, size, dxf) FIELD_VECTOR_N(name, type, _obj->size, dxf)
 
 #define FIELD_2RD_VECTOR(name, size, dxf)                                   \
+  VECTOR_CHKCOUNT(name,_obj->size) \
   _obj->name = (BITCODE_2RD *) malloc(_obj->size * sizeof(BITCODE_2RD));\
   for (vcount=0; vcount< (long)_obj->size; vcount++)\
     {\
@@ -316,6 +324,7 @@
     }
 
 #define FIELD_2DD_VECTOR(name, size, dxf)                                   \
+  VECTOR_CHKCOUNT(name,_obj->size) \
   _obj->name = (BITCODE_2RD *) malloc(_obj->size * sizeof(BITCODE_2RD));\
   FIELD_2RD(name[0], dxf);                                                  \
   for (vcount = 1; vcount < (long)_obj->size; vcount++)\
@@ -324,6 +333,7 @@
     }
 
 #define FIELD_3DPOINT_VECTOR(name, size, dxf)                               \
+  VECTOR_CHKCOUNT(name,_obj->size) \
   _obj->name = (BITCODE_3DPOINT *) malloc(_obj->size * sizeof(BITCODE_3DPOINT));\
   for (vcount=0; vcount < (long)_obj->size; vcount++) \
     {\
@@ -331,6 +341,7 @@
     }
 
 #define HANDLE_VECTOR_N(name, size, code, dxf) \
+  VECTOR_CHKCOUNT(name,size) \
   FIELD_VALUE(name) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * size);\
   for (vcount=0; vcount < (long)size; vcount++) \
     {\
