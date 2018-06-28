@@ -286,7 +286,7 @@
 
 #define VECTOR_CHKCOUNT(name,size) \
   if (dat->version >= R_2004 && size > 0x10000) { \
-    fprintf(stderr, "Invalid " #name "vcount %ld", (long)size); \
+    LOG_ERROR("Invalid " #name " vcount %ld", (long)size); \
     return DWG_ERR_VALUEOUTOFBOUNDS; } \
 
 //FIELD_VECTOR_N(name, type, size):
@@ -332,16 +332,19 @@
       FIELD_2RD(name[vcount], dxf); \
     }
 
-#define FIELD_2DD_VECTOR(name, size, dxf)                                   \
+#define FIELD_2DD_VECTOR(name, size, dxf) \
   VECTOR_CHKCOUNT(name,_obj->size) \
   _obj->name = (BITCODE_2RD *) malloc(_obj->size * sizeof(BITCODE_2RD));\
-  FIELD_2RD(name[0], dxf);                                                  \
+  FIELD_2RD(name[0], dxf); \
   for (vcount = 1; vcount < (long)_obj->size; vcount++)\
     {\
-      FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf); \
+      FIELD_DD(name[vcount].x, FIELD_VALUE(name[vcount - 1].x), dxf); \
+      FIELD_DD(name[vcount].y, FIELD_VALUE(name[vcount - 1].x), dxf+10);\
+      LOG_TRACE(#name "[%ld]: (" FORMAT_BD ", " FORMAT_BD ") [DD %d]\n", \
+                (long)vcount, _obj->name[vcount].x, _obj->name[vcount].y, dxf) \
     }
 
-#define FIELD_3DPOINT_VECTOR(name, size, dxf)                               \
+#define FIELD_3DPOINT_VECTOR(name, size, dxf) \
   VECTOR_CHKCOUNT(name,_obj->size) \
   _obj->name = (BITCODE_3DPOINT *) malloc(_obj->size * sizeof(BITCODE_3DPOINT));\
   for (vcount=0; vcount < (long)_obj->size; vcount++) \
@@ -440,7 +443,7 @@
 
 #define REPEAT_CHKCOUNT(name,times) \
   if (dat->version >= R_2004 && times > 0x1000) { \
-    fprintf(stderr, "Invalid " #name "rcount %ld", (long)times); \
+    LOG_ERROR("Invalid " #name " rcount %ld\n", (long)times); \
     return DWG_ERR_VALUEOUTOFBOUNDS; } \
 
 // unchecked with a constant

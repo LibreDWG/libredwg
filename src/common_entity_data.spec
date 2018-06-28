@@ -40,22 +40,26 @@
                 dat->byte, dat->bit)
     }
 
-  FIELD_BB (entity_mode, 0);
-  FIELD_BL (num_reactors, 0);
+  FIELD_BB (entity_mode, 0);  //ODA bug
+  FIELD_BL (num_reactors, 0); //ODA bug
 
-  SINCE(R_2004)
-    {
-      FIELD_B (xdic_missing_flag, 0);
-    }
-  SINCE(R_2013)
-    {
-      FIELD_B (has_ds_binary_data, 0);
-    }
-  VERSIONS(R_13, R_14)
+  VERSIONS(R_13, R_14) //ODA bug
     {
       FIELD_B (isbylayerlt, 0);
       if (FIELD_VALUE(isbylayerlt))
         FIELD_VALUE(linetype_flags) = FIELD_VALUE(isbylayerlt) ? 0 : 3;
+    }
+  SINCE(R_2004) //ODA bug
+    {
+      FIELD_B (xdic_missing_flag, 0);
+    }
+  PRE(R_2004) //ODA bug
+    {
+      FIELD_B (nolinks, 0)
+    }
+  SINCE(R_2013)
+    {
+      FIELD_B (has_ds_binary_data, 0)
     }
 
   SINCE(R_2004) // ENC (entity color encoding)

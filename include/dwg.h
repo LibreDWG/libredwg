@@ -4499,9 +4499,9 @@ typedef struct _dwg_object_entity
   BITCODE_BB entity_mode;
   BITCODE_BL num_reactors;
   BITCODE_B xdic_missing_flag;  /*!< r2004+ */
-  BITCODE_B has_ds_binary_data; /*!< r2013+ */
   BITCODE_B isbylayerlt;        /*!< r13-r14 */
-  BITCODE_B nolinks;
+  BITCODE_B nolinks;            /*!< r13-r2000 */
+  BITCODE_B has_ds_binary_data; /*!< r2013+ */
   BITCODE_CMC color;
   BITCODE_BD linetype_scale;
   BITCODE_BB linetype_flags;    /*!< r2000+ */
