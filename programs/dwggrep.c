@@ -23,6 +23,9 @@
 #ifdef HAVE_STRCASESTR
 # undef  __DARWIN_C_LEVEL
 # define __DARWIN_C_LEVEL __DARWIN_C_FULL
+# ifndef __USE_GNU
+#   define __USE_GNU
+# endif
 # include <string.h>
 #else
 # include <string.h>
