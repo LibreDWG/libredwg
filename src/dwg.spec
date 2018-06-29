@@ -3377,7 +3377,8 @@ DWG_ENTITY(HATCH)
       FIELD_BL (num_colors, 453); //default: 2
       if (FIELD_VALUE(is_gradient_fill) && FIELD_VALUE(num_colors > 1000))
         {
-          LOG_ERROR("Invalid gradient fill HATCH.num_colors %lu", _obj->num_colors);
+          LOG_ERROR("Invalid gradient fill HATCH.num_colors " FORMAT_BL,
+                    _obj->num_colors);
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
       REPEAT(num_colors, colors, Dwg_HATCH_Color)
