@@ -1,6 +1,6 @@
 #!/bin/sh
 # create -v5 logs for all DWGs
-gmake -s -j4
+make -s -j4
 for d in test/test-data/2*/*.dwg test/test-data/r*/*.dwg; do
     dir=$(basename `dirname "$d"`)
     log=`basename "$d" .dwg`_$dir.log

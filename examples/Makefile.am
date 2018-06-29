@@ -18,7 +18,7 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
-LDADD   = $(top_builddir)/src/libredwg.la -lm
+LDADD     = $(top_builddir)/src/libredwg.la -lm
 
 check_PROGRAMS = load_dwg dwg2svg2
 EXTRA_PROGRAMS = unknown
@@ -29,9 +29,11 @@ unknown_SOURCES  = unknown.c #alldwg.inc
 
 all: $(check_PROGRAMS)
 
+# maintainer rule only
 alldwg.inc: log_unknown.pl
+	test -d ../.git || false
 	echo Creating alldwg.inc will need a few minutes...
-	-cd .. && ./logs.sh; \
+	-cd $(abs_top_builddir) && ./logs.sh; \
 	  mv examples/alldwg.inc examples/alldwg.inc~; \
 	  for l in *.log; do b=`basename $l .log`; \
 	    examples/log_unknown.pl $l >>examples/alldwg.inc; done
