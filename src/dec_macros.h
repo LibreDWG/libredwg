@@ -285,7 +285,7 @@
   }
 
 #define VECTOR_CHKCOUNT(name,size) \
-  if (dat->version >= R_2004 && size > 0x10000) { \
+  if (dat->version >= R_2004 && size > 0xff00) { \
     LOG_ERROR("Invalid " #name " vcount %ld", (long)size); \
     return DWG_ERR_VALUEOUTOFBOUNDS; } \
 
@@ -442,7 +442,7 @@
     LOG_HANDLE(" -> @%lu.%u (%lu)\n", dat->byte, dat->bit, bit_position(dat)); }
 
 #define REPEAT_CHKCOUNT(name,times) \
-  if (dat->version >= R_2004 && times > 0x1000) { \
+  if (dat->version >= R_2004 && times > 0xff00) { \
     LOG_ERROR("Invalid " #name " rcount %ld\n", (long)times); \
     return DWG_ERR_VALUEOUTOFBOUNDS; } \
 

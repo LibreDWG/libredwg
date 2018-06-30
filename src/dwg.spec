@@ -3401,7 +3401,7 @@ DWG_ENTITY(HATCH)
   FIELD_BL (num_paths, 91);
   if (FIELD_VALUE(num_paths > 10000))
     {
-      LOG_ERROR("Invalid HATCH.num_paths %lu", _obj->num_paths);
+      LOG_ERROR("Invalid HATCH.num_paths " FORMAT_BL, _obj->num_paths);
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
   REPEAT(num_paths, paths, Dwg_HATCH_Path)
@@ -3412,7 +3412,7 @@ DWG_ENTITY(HATCH)
           FIELD_BL (paths[rcount1].num_segs_or_paths, 93);
           if (FIELD_VALUE(paths[rcount1].num_segs_or_paths > 10000))
             {
-              LOG_ERROR("Invalid HATCH.num_segs_or_paths %lu",
+              LOG_ERROR("Invalid HATCH.num_segs_or_paths " FORMAT_BL,
                         _obj->paths[rcount1].num_segs_or_paths);
               return DWG_ERR_VALUEOUTOFBOUNDS;
             }

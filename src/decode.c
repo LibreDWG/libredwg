@@ -1476,7 +1476,7 @@ decompress_R2004_section(Bit_Chain *restrict dat, char *restrict decomp,
       if (comp_bytes > bytes_left) // bytes left to write
         {
           LOG_ERROR("Invalid comp_bytes %lu > %lu bytes left",
-                    (unsigned long)comp_bytes, bytes_left)
+                    (unsigned long)comp_bytes, (unsigned long)bytes_left)
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
       for (i = 0; i < comp_bytes; ++i)
@@ -1698,7 +1698,8 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
 
               if (section_number > info->num_sections + info->sections[0]->number)
                 {
-                  LOG_TRACE("Strange Section Number: 0x%x\n", (unsigned long)section_number)
+                  LOG_TRACE("Strange Section Number: 0x%lx\n",
+                            (unsigned long)section_number)
                 }
               else
                 {

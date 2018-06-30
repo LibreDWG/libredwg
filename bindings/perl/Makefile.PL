@@ -26,7 +26,7 @@ $lddlflags .= " -lredwg";
 
 WriteMakefile (
   NAME         => 'LibreDWG',
-  VERSION      => '0.4_924',
+  VERSION      => '0.4_938',
   ($ccopts ? (CCFLAGS => $ccopts) : ()),
   ($ldopts ? (LDFLAGS => $ldopts) : ()),
   ($lddlflags ? (LDDLFLAGS => $lddlflags) : ()),

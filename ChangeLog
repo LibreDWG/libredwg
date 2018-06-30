@@ -1,9 +1,40 @@
 Full history from the git log
 -----------------------------
 
+2018-06-30  Reini Urban  <rurban@cpan.org>
+
+       Third test release 0.4.938
+
+2018-06-29  Reini Urban  <rurban@cpan.org>
+
+       more format string types
+
+       enable glibc strcasestr
+       probed as yes, but not declared. same as on darwin.
+
+       ../../programs/dwggrep.c:213:7: warning: implicit declaration of function ‘strcasestr’ [-Wimplicit-function-declaration]
+              if (strcasestr(text, pattern))
+
+2018-06-29  Reini Urban  <rurban@cpan.org>
+
+       alldwg.inc: create from builddir
+       ./logs.sh can only be run from the builddir,
+       only there are the binaries.
+       call make from logs.sh, not gmake. we would really need a MAKE=$(MAKE)
+       but this is only done on regen-unknown by the maintainer.
+       make the alldwg.inc target a maintainer rule only. test -d ../.git || false
+
 2018-06-28  Reini Urban  <rurban@cpan.org>
 
-	Second test release 0.4.999
+       eed: fix max limit from 1024 to obj->size
+       And on overlong stringsize just skip it to the end.
+
+       This fixes the error with hatch_color_ref.dwg from [GH #27]
+       and several LAYER entities with attached large EED data.
+
+2018-06-28  Reini Urban  <rurban@cpan.org>
+
+	Second test release 0.4.924
 
 2018-06-28  Reini Urban  <rurban@cpan.org>
 

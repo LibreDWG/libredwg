@@ -67,7 +67,7 @@
       BITCODE_BS flags = bit_read_BS(dat);
       LOG_HANDLE("color flags: 0x%X [BS 0]\n", (unsigned)flags);
       ent->color.rgb = 0L;
-      ent->color.index = flags && 0xff; // or 0x1ff?
+      ent->color.index = flags & 0xff; // or 0x1ff?
       flags = flags >> 8;
       ent->color.flag = flags;
 
