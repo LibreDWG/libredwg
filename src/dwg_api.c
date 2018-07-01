@@ -4768,7 +4768,6 @@ dwg_ent_minsert_get_num_owned(const dwg_ent_minsert *restrict minsert,
     }
 }
 
-/** Sets the owned object count of minsert.
 /// FIXME needs to adjust attrib_handles array: add/delete
 
 // TODO dwg_ent_minsert_add_owned, dwg_ent_minsert_delete_owned
