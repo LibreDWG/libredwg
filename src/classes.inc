@@ -140,6 +140,7 @@
   STABLE_CLASS    (ACTION, SPATIAL_FILTER)
   STABLE_CLASS    (ACTION, SPATIAL_INDEX)
   STABLE_CLASS    (ACTION, VISUALSTYLE)
+  STABLE_CLASS    (ACTION, WIPEOUTVARIABLES)
   STABLE_CLASS    (ACTION, XRECORD)
 
   // not enough coverage, but assumed ok
@@ -147,7 +148,6 @@
   UNTESTED_CLASS    (ACTION, GEODATA)
   UNTESTED_CLASS    (ACTION, OBJECT_PTR)
   UNTESTED_CLASS_CPP(ACTION, OBJECT_PTR, CAseDLPNTableRecord)
-  UNTESTED_CLASS    (ACTION, WIPEOUTVARIABLES)
 
   // coverage exists, but broken and being worked on. needs -DDEBUG_CLASSES. see also
   // the unknown branch with all the unknown blobs of these.

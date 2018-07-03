@@ -145,7 +145,7 @@ Reading DXF is not yet fully implemented, this is under construction.
 
 For a detailled overview see the files @file{TODO} or @file{src/classes.inc}.
 
-CAMERA, GEODATA, LONG_TRANSACTION, OBJECT_PTR, WIPEOUTVARIABLES.
+CAMERA, GEODATA, LONG_TRANSACTION, OBJECT_PTR.
 
 @item Unhandled (fields spec'ed but broken/untested):
 
@@ -164,8 +164,6 @@ Halfway:
 * MATERIAL
 
 * SPATIAL_INDEX object untested
-
-* WIPEOUTVARIABLES object untested
 
 @item Unhandled (i.e. passed through, no DXF and fields):
 
