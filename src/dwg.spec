@@ -4016,7 +4016,7 @@ DWG_OBJECT_END
     default: \
       LOG_ERROR("Invalid data type in TABLE entity\n") \
       DEBUG_HERE() \
-      break; \
+      return DWG_ERR_INVALIDTYPE; \
     } \
   SINCE(R_2007) \
     { \
@@ -4529,7 +4529,8 @@ DWG_ENTITY(TABLE)
           default:
             LOG_ERROR("Invalid data_flags in TABLE entity %d\n", (int)FIELD_VALUE(data_flags))
             DEBUG_HERE()
-            break;
+            return DWG_ERR_INVALIDTYPE;
+            //break;
         }
 #ifndef IS_FREE
       FIELD_3PT_TRACE(scale, DD, 41);
@@ -5052,6 +5053,7 @@ DWG_ENTITY(MULTILEADER)
       FIELD_HANDLE (ctx.scale_handle, 5, 340);
     }
 
+  DXF { VALUE_TV ("LEADER{", 302); }
   FIELD_BL (ctx.num_leaders, 0);
   REPEAT(ctx.num_leaders, ctx.leaders, Dwg_Leader)
     {
@@ -5070,6 +5072,7 @@ DWG_ENTITY(MULTILEADER)
       END_REPEAT (lev1.breaks);
       FIELD_BL (lev1.index, 90);
       FIELD_BD (lev1.landing_distance, 40); //ok
+      DXF { VALUE_TV ("LEADER_LINE{", 304); }
       // num_lines was missing
       REPEAT2(lev1.num_lines, lev1.lines, Dwg_Leader_Line)
         {
@@ -5103,6 +5106,7 @@ DWG_ENTITY(MULTILEADER)
 #         undef lev2
         }
       SET_PARENT(lev1.lines, &_obj->lev1)
+      DXF { VALUE_TV ("}", 305); }
       END_REPEAT (lev1.lines);
       SINCE (R_2010)
         {
@@ -5112,7 +5116,9 @@ DWG_ENTITY(MULTILEADER)
     }
   SET_PARENT_OBJ(ctx.leaders)
   END_REPEAT (ctx.leaders);
+  DXF { VALUE_TV ("}", 303); }
 
+  DXF { VALUE_TV ("CONTEXT_DATA{", 300); }
   FIELD_BD (ctx.scale, 40);
   FIELD_3BD (ctx.content_base, 10); //broken
   FIELD_BD (ctx.text_height, 41);
@@ -5180,6 +5186,7 @@ DWG_ENTITY(MULTILEADER)
       FIELD_BS (ctx.text_top, 273);
       FIELD_BS (ctx.text_bottom, 272);
     }
+  DXF { VALUE_TV ("}", 301); }
 
   FIELD_HANDLE (leaderstyle, 5, 340);
   FIELD_BL (flags, 90); // override flags
@@ -5243,6 +5250,7 @@ DWG_ENTITY(MULTILEADER)
     FIELD_B (text_extended, 295);
   }
 
+  //TODO 1001 1070
   COMMON_ENTITY_HANDLE_DATA; //??
 
 DWG_ENTITY_END
