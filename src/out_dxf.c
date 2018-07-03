@@ -318,7 +318,7 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'name'.
 #define FIELD_VECTOR_N(name, type, size, dxf)\
-  if (dxf)\
+  if (dxf && _obj->name)\
     {\
       for (vcount=0; vcount < (int)size; vcount++)\
         {\
@@ -326,7 +326,7 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
         }\
     }
 #define FIELD_VECTOR_T(name, size, dxf)\
-  if (dxf) {\
+  if (dxf && _obj->name) {\
     PRE (R_2007) {                                                   \
       for (vcount=0; vcount < (int)_obj->size; vcount++)             \
         VALUE_TV(_obj->name[vcount], dxf);                           \
@@ -339,7 +339,7 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 #define FIELD_VECTOR(name, type, size, dxf) FIELD_VECTOR_N(name, type, _obj->size, dxf)
 
 #define FIELD_2RD_VECTOR(name, size, dxf)\
-  if (dxf) {\
+  if (dxf && _obj->name) {\
     for (vcount=0; vcount < (int)_obj->size; vcount++)    \
       {\
         FIELD_2RD(name[vcount], dxf);\

@@ -5450,7 +5450,7 @@ DWG_OBJECT(MATERIAL)
   FIELD_BD (diffuse_color_factor, 41); // 0.0 - 1.0
   FIELD_CMC (diffuse_color, 91);
   FIELD_BS (diffusemap_source, 72);  // 0 scene, 1 file (def), 2 procedural
-  FIELD_BS (diffusemap_filename, 3); // if NULL no diffuse map
+  FIELD_T  (diffusemap_filename, 3); // if NULL no diffuse map
   FIELD_BD (diffusemap_blendfactor, 42); // 1.0
   FIELD_BS (diffusemap_projection, 73); // 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere
   FIELD_BS (diffusemap_tiling, 74);     // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
@@ -5465,7 +5465,7 @@ DWG_OBJECT(MATERIAL)
   FIELD_CMC (specular_color, 92);
 
   FIELD_BS (specularmap_source, 77); // 0 current, 1 image file (default)
-  FIELD_BS (specularmap_filename, 4); // if NULL no specular map
+  FIELD_T  (specularmap_filename, 4); // if NULL no specular map
   FIELD_BD (specularmap_blendfactor, 46); // 1.0
   FIELD_BS (specularmap_projection, 78);  // 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere
   FIELD_BS (specularmap_tiling, 79); // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
@@ -5474,7 +5474,7 @@ DWG_OBJECT(MATERIAL)
   FIELD_VECTOR_N (specularmap_transmatrix, BD, 16, 47);
 
   FIELD_BS (reflectionmap_source, 171); // 0 current, 1 image file (default)
-  FIELD_BS (reflectionmap_filename, 6); // if NULL no diffuse map
+  FIELD_T  (reflectionmap_filename, 6); // if NULL no diffuse map
   FIELD_BD (reflectionmap_blendfactor, 48); // 1.0
   FIELD_BS (reflectionmap_projection, 172); // 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere
   FIELD_BS (reflectionmap_tiling, 173); // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
@@ -5485,7 +5485,7 @@ DWG_OBJECT(MATERIAL)
 
   FIELD_BD (opacity_percent, 140); //def: 1.0
   FIELD_BS (opacitymap_source, 175); // 0 current, 1 image file (default)
-  FIELD_BS (opacitymap_filename, 7); // if NULL no specular map
+  FIELD_T  (opacitymap_filename, 7); // if NULL no specular map
   FIELD_BD (opacitymap_blendfactor, 141); // 1.0
   FIELD_BS (opacitymap_projection, 176); // 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere
   FIELD_BS (opacitymap_tiling, 177); // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
@@ -5495,7 +5495,7 @@ DWG_OBJECT(MATERIAL)
   FIELD_VECTOR_N (opacitymap_transmatrix, BD, 16, 142);
 
   FIELD_BS (bumpmap_source, 179); // 0 current, 1 image file (default)
-  FIELD_BS (bumpmap_filename, 8); // if NULL no specular map
+  FIELD_T  (bumpmap_filename, 8); // if NULL no specular map
   FIELD_BD (bumpmap_blendfactor, 143); // 1.0
   FIELD_BS (bumpmap_projection, 270); // 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere
   FIELD_BS (bumpmap_tiling, 271); // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
@@ -5506,7 +5506,7 @@ DWG_OBJECT(MATERIAL)
 
   FIELD_BD (refraction_index, 145); //def: 1.0
   FIELD_BS (refractionmap_source, 273); // 0 current, 1 image file (default)
-  FIELD_BS (refractionmap_filename, 9); // if NULL no specular map
+  FIELD_T  (refractionmap_filename, 9); // if NULL no specular map
   FIELD_BD (refractionmap_blendfactor, 143); // 1.0
   FIELD_BS (refractionmap_projection, 274); // 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere
   FIELD_BS (refractionmap_tiling, 275); // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
@@ -5524,7 +5524,7 @@ DWG_OBJECT(MATERIAL)
   FIELD_BS (normalmap_method, 271);
   FIELD_BD (normalmap_strength, 465); //def: 1.0
   FIELD_BS (normalmap_source, 72); // 0 current, 1 image file (default)
-  FIELD_BS (normalmap_filename, 3); // if NULL no specular map
+  FIELD_T  (normalmap_filename, 3); // if NULL no specular map
   FIELD_BD (normalmap_blendfactor, 42); // 1.0
   FIELD_BS (normalmap_projection, 73); // 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere
   FIELD_BS (normalmap_tiling, 74); // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
