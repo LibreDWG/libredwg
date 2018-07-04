@@ -2,17 +2,17 @@ GNU LibreDWG NEWS -- history of user-visible changes.
 Copyright (C) 2018 Free Software Foundation, Inc.
 See the end for copying conditions.
 
-LibreDWG version 0.4.924 - released 2018/06/28:
+LibreDWG version 0.5 - released 2018/07/05:
 
-This is the second test release towards 0.5.
+This is the first public release ever, after several years of silence.
 It can read most r13-r2018 DWG files, and write r2000 DWG,
 write DXF and GeoJSON files for all versions.
 There are also many new programs: dwgread, dwgwrite, dwgrewrite,
 dwg2dxf, dwglayers, dwggrep, dwgbmp, dwg2SVG (very basic), dwg2ps (infancy).
 See the manual, ChangeLog or git history for details.
 
-+The API is usable but still pretty rough, we might still rename +some
-functions or names for better consistency and add more encoding API.
+The API is usable but still pretty rough, we might still rename
+some functions or names for better consistency and add more encoding API.
 
 Copyright information:
 

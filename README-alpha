@@ -5,6 +5,6 @@ With unknown objects and unsupported versions it might crash,
 future releases will rather abort on unsupported DWG versions.
 
 The API is usable but still pretty rough, we might still rename
-some functions or better consistency and add more encoding API.
+some functions or names for better consistency and add more encoding API.
 
 Please see the file README for more information.

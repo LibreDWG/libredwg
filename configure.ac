@@ -9,7 +9,7 @@ dnl You should have received a copy of the GNU General Public License
 dnl along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 AC_PREREQ([2.61])
-AC_INIT([LibreDWG],[0.4.938],[libredwg@gnu.org],,
+AC_INIT([LibreDWG],[0.5],[libredwg@gnu.org],,
         [https://savannah.gnu.org/projects/libredwg/])
 AC_CONFIG_AUX_DIR([build-aux])
 dnl for older systems use this:

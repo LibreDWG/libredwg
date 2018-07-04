@@ -6,7 +6,7 @@
 
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = "LibreDWG API"
-PROJECT_NUMBER         = 0.4.938
+PROJECT_NUMBER         = 0.5
 PROJECT_BRIEF          = "LibreDWG API - The DWG Library"
 PROJECT_LOGO           =
 OUTPUT_DIRECTORY       = doc/

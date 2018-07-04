@@ -1,5 +1,22 @@
 Full history from the git log
 -----------------------------
+2018-07-05  Reini Urban  <rurban@cpan.org>
+
+	First release 0.5
+
+2018-07-04  Reini Urban  <rurban@cpan.org>
+
+        logging: remove decimal handle value
+        handles are hex only
+
+2018-07-03  Reini Urban  <rurban@cpan.org>
+
+        dxf: protect empty vectors
+        and fix wrong MATERIAL text types for *map_filename
+
+        api: remove wrong comment
+        MULTILEADER spec: more DXF
+        and return earlier on errors
 
 2018-06-30  Reini Urban  <rurban@cpan.org>
 
