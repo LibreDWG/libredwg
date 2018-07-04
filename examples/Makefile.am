@@ -43,7 +43,9 @@ alldxf_0.inc: log_unknown_dxf.pl
 alldxf.inc: log_unknown_dxf.pl
 	test -d ../.git || false
 	test -f alldwg.inc || (echo make regen-unknown; false)
-	mv alldxf.inc alldxf.inc~
+	-mv alldxf_0.inc alldxf_0.inc~
+	-mv alldxf_1.inc alldxf_1.inc~
+	-mv alldxf_2.inc alldxf_2.inc~
 	cd .. && $(PERL) examples/log_unknown_dxf.pl examples/alldwg.inc
 endif
 

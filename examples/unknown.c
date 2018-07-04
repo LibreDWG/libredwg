@@ -68,7 +68,7 @@ typedef enum DWG_BITS
 struct _unknown_field {
   int code;
   char *value;
-  char *bits;
+  char *bytes;
   int bitsize;
   Dwg_Bits type;
   int pos;
@@ -78,12 +78,12 @@ static struct _unknown_dxf {
   const char *dxf;
   const unsigned int handle;
   const char *bytes;
-  const char *bits;
+  const int bitsize;
   const struct _unknown_field *fields;
 } unknown_dxf[] = {
     // see log_unknown_dxf.pl
     #include "alldxf_0.inc"
-    { NULL, NULL, 0, "", "", NULL }
+    { NULL, NULL, 0, "", 0, NULL }
 };
 #include "alldxf_1.inc"  
 
@@ -197,8 +197,7 @@ static void
 bits_format (struct _unknown_field *g, int is16)
 {
   int code = g->code;
-  static Bit_Chain dat;
-  dat.size = 16;
+  Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
   dat.chain = calloc(16,1);
   if (is16)
     dat.version = R_2007;
@@ -271,7 +270,7 @@ bits_format (struct _unknown_field *g, int is16)
     bits_BL(&dat, g);//int32_t
 
   if (g->type) {
-    g->bits = dat.chain;
+    g->bytes = dat.chain;
     g->bitsize = (dat.byte * 8) + dat.bit;
   } else {
     free (dat.chain);
@@ -285,34 +284,39 @@ int search_bits(struct _unknown_field *g, struct _unknown_dxf *dxf)
   unsigned char *s;
   unsigned char* found;
   int num_found = 0;
-  int haystack_size = strlen(dxf->bytes);
+  int dxf_size = dxf->bitsize;
 
-  if (!g->type || !g->bitsize || g->bitsize > 1024)
+  if (!g->type || !g->bitsize)
     return 0;
   size = (g->bitsize/8) + (g->bitsize % 8 ? 1 : 0);
+  if (size > dxf_size/8)
+    return 0;
   s = alloca(size);
-  fprintf(stderr, "search %d:\"%s\" (%d byte of type %d) in %d bytes\n",
-          g->code, g->value, size, g->type, haystack_size);
+  printf("  search %d:\"%s\" (%d bits of type %d) in %d bits\n",
+          g->code, g->value, g->bitsize, g->type, dxf_size);
+  // search for value in all 8 shift positions
+  memcpy(s, g->bytes, size);
   for (i=0; i<8; i++) {
-    // search for value in all 8 shift positions
-    memcpy(s, g->bits, size);
-    if (i) { // 01110 -> 00111
-      unsigned char mask = (1>>i) - 1;
+    if (i) { // 01110 -> 11100
       for (int j=0; j<size; j++) {
-        int carry = s[j] & mask;
-        s[j] <<= i;
+        int carry =  (j<size && s[j+1] & 128) ? 1 : 0; //first bit of next byte set
+        s[j] <<= 1;
+        s[j] |= carry;
       }
     }
-    // TODO: add the remaining bits also to bytes
-    found = memmem(dxf->bytes, haystack_size, s, size);
+    found = memmem(dxf->bytes, dxf_size, s, size);
     if (found) {
-      int offset = (found - (unsigned char*)dxf->bytes) * 8 + i;
+      int offset = ((found - (unsigned char*)dxf->bytes) * 8) + i;
       num_found++;
       if (num_found == 1) {
         g->pos = offset;
       }
       else {
-        g->pos = 0;
+        if (num_found > 2) {
+          printf("  multiple finds. first at %d, current at %d\n", g->pos, offset);
+          g->pos = 0;
+          break;
+        }
       }
     }
   }
@@ -329,13 +333,12 @@ main (int argc, char *argv[])
       int num_fields;
       int num_found;
       struct _unknown_field *g = (struct _unknown_field *)unknown_dxf[i].fields;
-      int len = strlen(unknown_dxf[i].bytes);
       int is16 = strstr(unknown_dxf[i].dxf, "_2007.dxf") ? 1 : 0;
       if (!is16)
         strstr(unknown_dxf[i].dxf, "_201") ? 1 : 0;
       //TODO offline: find the shortest objects.
-      printf("\n%s: %X %s (%d)\n", unknown_dxf[i].name, unknown_dxf[i].handle,
-             len < 200 ? unknown_dxf[i].bytes : "...", len);
+      printf("\n%s: 0x%X (%d)\n", unknown_dxf[i].name, unknown_dxf[i].handle,
+             unknown_dxf[i].bitsize);
       for (j=0; g[j].code; j++)
         {
           if (g[j].code == 100)

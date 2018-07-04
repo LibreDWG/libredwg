@@ -49,8 +49,14 @@ while (<>) {
     }
   }
   my $obj = substr($F[1],1,-2); # "MATERIAL",
-  my $unknown = substr($F[2],1,-2);
-  my $unknown_b = substr($F[3],1,-2);
+  my $bytes   = substr($F[2],1,-2);
+  my $bits = substr($F[3],1,-2);
+  my $bitsize = $F[7];
+  my $unknown = pack ("H*", $bytes);
+  if ($bits) {
+    $unknown .= pack ("B8", $bits);
+  }
+  $unknown = join("", map { sprintf("\\%03o", $_) } unpack("C*", $unknown));
   my $hdl = substr($F[6],2,-1); # 0xXXX,
   #warn "$dxf: $obj HANDLE($hdl)\n";
   # 9080187 5160203 9080187 201AA 51E0204 90C0202 35200204 20640A8 2D22020C 90A01D1 
@@ -79,7 +85,7 @@ while (<>) {
       if ($foundhdl) {
         warn "found $obj $hdl in $dxf\n";
         print $f0  "  { \"$obj\", \"$dxf\", 0x$hdl, /* $i */\n";
-        print $f0  "    \"$unknown\", \"$unknown_b\",";
+        print $f0  "    \"$unknown\", $bitsize,";
 
         print $f1 "/* $obj $hdl in $dxf */\n";
         print $f1 "static const struct _unknown_field unknown_dxf_$i\[\] = {\n";
