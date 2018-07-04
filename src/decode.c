@@ -854,14 +854,14 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
           LOG_TRACE("         PICTURE (end): %8X\n",
                 (unsigned int) dat->byte)
           dwg->picture.size = (dat->byte - 16) - start_address;
-          dwg->picture.chain = (unsigned char *) calloc(1, dwg->picture.size);
+          dwg->picture.chain = (unsigned char *) calloc(dwg->picture.size, 1);
           if (!dwg->picture.chain)
             {
               LOG_ERROR("Out of memory");
               return DWG_ERR_OUTOFMEM;
             }
           memcpy(dwg->picture.chain, &dat->chain[start_address],
-              dwg->picture.size);
+                 dwg->picture.size);
         }
     }
 

@@ -528,6 +528,7 @@ int match_FIELD(const char *restrict filename, const Dwg_Object *restrict obj)
       MATCH_OBJECT (FIELD, childval[i].value.format_string, 300);
       MATCH_OBJECT (FIELD, childval[i].value.value_string, 302);
     }
+  return found;
 }
 
 static
@@ -562,11 +563,14 @@ int match_TABLECONTENT(const char *restrict filename, const Dwg_Object *restrict
             {
               #define _content tdata.rows[i].cells[j].cell_contents[k]
               if (_obj->_content.type == 1 && _obj->_content.value.data_type == 4)
-                MATCH_OBJECT (TABLECONTENT, _content.value.data_string, 302);
+                {
+                  MATCH_OBJECT (TABLECONTENT, _content.value.data_string, 302);
+                }
               #undef _content
             }
         }
     }
+  return found;
 }
 
 static
@@ -584,6 +588,7 @@ int match_GEODATA(const char *restrict filename, const Dwg_Object *restrict obj)
   //obsolete
   MATCH_OBJECT (GEODATA, coord_system_datum, 0);
   MATCH_OBJECT (GEODATA, coord_system_wkt, 0);
+  return found;
 }
 
 static
