@@ -23,14 +23,51 @@
 
 #include "config.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "dwg.h"
-#include "bits.h"
+#include "../src/bits.h"
+#include "../src/logging.h"
+
+typedef enum DWG_BITS
+{
+  BITS_UNKNOWN,
+  BITS_RC,
+  BITS_RS,
+  BITS_RL,
+  BITS_B,
+  BITS_BB,
+  BITS_3B,
+  BITS_4BITS,
+  BITS_BS,
+  BITS_BL,
+  BITS_RLL,
+  BITS_RD,
+  BITS_BD,
+  BITS_MC,
+  BITS_UMC,
+  BITS_MS,
+  BITS_TV,
+  BITS_TU,
+  BITS_T,
+  BITS_TF,
+  BITS_HANDLE,
+  BITS_BE,
+  BITS_DD,
+  BITS_BT,
+  BITS_CRC,
+  BITS_BOT,
+  BITS_BLL,
+  BITS_TIMEBLL,
+  BITS_CMC,
+} Dwg_Bits;
 
 struct _unknown_field {
   int code;
   char *value;
-  int type;
+  char *bits;
+  int bitsize;
+  Dwg_Bits type;
   int pos;
 };
 static struct _unknown_dxf {
@@ -77,6 +114,159 @@ static struct _unknown {
 };
 #endif
 
+static void bits_string(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
+{
+  bit_write_TV(dat, (BITCODE_TV)g->value);
+  g->type = BITS_TV;
+}
+
+static void bits_B(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
+{
+  if (*g->value == '0') {
+    bit_write_B(dat, 0);
+    g->type = BITS_B;
+  }
+  else if (*g->value == '1') {
+    bit_write_B(dat, 0);
+    g->type = BITS_B;
+  }
+  else
+    LOG_ERROR("Invalid B %s", g->value);
+}
+
+static void bits_BD(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
+{
+  double d;
+  sscanf(g->value, "%f", &d);
+  bit_write_BD(dat, d);
+  g->type = BITS_BD;
+}
+
+static void bits_RC(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
+{
+  unsigned int l;
+  sscanf(g->value, "%u", &l);
+  bit_write_RC(dat, (unsigned char)l);
+  g->type = BITS_RC;
+}
+
+static void bits_BS(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
+{
+  unsigned int l;
+  sscanf(g->value, "%u", &l);
+  bit_write_BS(dat, (unsigned short)l);
+  g->type = BITS_BS;
+}
+
+static void bits_BL(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
+{
+  unsigned int l;
+  sscanf(g->value, "%u", &l);
+  bit_write_BL(dat, l);
+  g->type = BITS_BL;
+}
+
+static void bits_handle(Bit_Chain *restrict dat, struct _unknown_field *restrict g, int code)
+{
+    Dwg_Handle handle;
+    //parse hex -> owner handle
+    sscanf(g->value, "%X", &handle.value);
+    handle.code = code;
+    if (handle.value < 0xff)
+      handle.size = 1;
+    else if (handle.value < 0xffff)
+      handle.size = 2;
+    else if (handle.value < 0xffffff)
+      handle.size = 3;
+    else
+      handle.size = 4;
+    bit_write_H(dat, &handle);
+    g->type = BITS_HANDLE;
+}
+
+static void
+bits_format (struct _unknown_field *g)
+{
+  int code = g->code;
+  static Bit_Chain dat;
+  dat.size = 16;
+  dat.chain = calloc(16,1);
+
+  if (0 <= code && code < 5)
+    bits_string(&dat, g);
+  else if (code == 5 || code == -5)
+    bits_handle(&dat, g, 0);
+  else if (5 < code && code < 10)
+    bits_string(&dat, g);
+  else if (code < 60)
+    bits_BD(&dat, g); //todo deg2rad for angles
+  else if (code < 80)
+    bits_BS(&dat, g);
+  else if (80 <= code && code <= 99) //BL int32
+    bits_BL(&dat, g);
+  else if (code == 100)
+    return;
+  else if (code == 102)
+    bits_string(&dat, g);
+  else if (code == 105)
+    bits_handle(&dat, g, 3);
+  else if (110 <= code && code <= 149)
+    bits_BD(&dat, g);
+  else if (160 <= code && code <= 169)
+    bits_BL(&dat, g);
+  else if (170 <= code && code <= 179)
+    bits_BS(&dat, g);
+  else if (210 <= code && code <= 239)
+    bits_BD(&dat, g);
+  else if (270 <= code && code <= 289)
+    bits_BS(&dat, g);
+  else if (290 <= code && code <= 299)
+    bits_B(&dat, g);
+  else if (300 <= code && code <= 319)
+    bits_string(&dat, g);
+  else if (320 <= code && code <= 369)
+    bits_handle(&dat, g, 5);
+  else if (370 <= code && code <= 389)
+    bits_BS(&dat, g);
+  else if (390 <= code && code <= 399)
+    bits_handle(&dat, g, 5);
+  else if (400 <= code && code <= 409)
+    bits_BS(&dat, g);
+  else if (410 <= code && code <= 419)
+    bits_string(&dat, g);
+  else if (420 <= code && code <= 429)
+    bits_BL(&dat, g); //int32_t
+  else if (430 <= code && code <= 439)
+    bits_string(&dat, g);
+  else if (440 <= code && code <= 449)
+    bits_BL(&dat, g);//int32_t
+  else if (450 <= code && code <= 459)
+    bits_BL(&dat, g);//long
+  else if (460 <= code && code <= 469)
+    bits_BD(&dat, g);
+  else if (470 <= code && code <= 479)
+    bits_string(&dat, g);
+  else if (480 <= code && code <= 481)
+    bits_handle(&dat, g, 5);
+  else if (code == 999)
+    return;
+  else if (1000 <= code && code <= 1009)
+    bits_string(&dat, g);
+  else if (1010 <= code && code <= 1059)
+    bits_BD(&dat, g);
+  else if (1060 <= code && code <= 1070)
+    bits_BS(&dat, g);
+  else if (code == 1071)
+    bits_BL(&dat, g);//int32_t
+
+  if (g->type) {
+    g->bits = dat.chain;
+    g->bitsize = (dat.byte * 8) + dat.bit;
+  } else {
+    free (dat.chain);
+  }
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -85,7 +275,7 @@ main (int argc, char *argv[])
   for (i=0; unknown_dxf[i].name; i++)
     {
       int num_fields;
-      const struct _unknown_field *g = unknown_dxf[i].fields;
+      struct _unknown_field *g = (struct _unknown_field *)unknown_dxf[i].fields;
       int len = strlen(unknown_dxf[i].bytes);
       //TODO offline: find the shortest objects.
       printf("\n%s: %X %s (%d)\n", unknown_dxf[i].name, unknown_dxf[i].handle,
@@ -94,6 +284,8 @@ main (int argc, char *argv[])
         {
           if (g[j].code == 100)
             printf("%d: %s\n", g[j].code, g[j].value);
+          //store the binary repr
+          bits_format(&g[j]);
         }
       num_fields = j;
 
