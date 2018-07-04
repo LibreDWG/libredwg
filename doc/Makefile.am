@@ -22,15 +22,22 @@ TEXINPUTS="$(TEXINPUTS)$(PATH_SEPARATOR)$(TEXINFO_TEX_DIR)"
 info_TEXINFOS = LibreDWG.texi
 LibreDWG_TEXINFOS = fdl.texi
 
+if HAVE_DOXYGEN
+refman doxygen html/index.html: Doxyfile ../include/dwg_api.h ../include/dwg.h
+	-rm ../{src,include}/*_flymake.{c,h}
+	cd .. && $(DOXYGEN) doc/Doxyfile
+refman-pdf: html/index.html
+	$(MAKE) -C latex
+endif
+
 manual:
 	../build-aux/gendocs.sh LibreDWG "GNU LibreDWG - Manual"
 
-refman doxygen refman/index.html: Doxyfile ../include/dwg_api.h ../include/dwg.h
-	$(MAKE) -C .. refman
-
-refman-pdf: refman
-	$(MAKE) -C latex
-
+CLEANFILES = Doxyfile footer
+all-local: Doxyfile footer
+clean-local:
+	rm -rf $(builddir)/doc/refman
+	rm -rf $(builddir)/doc/manual
 DISTCLEANFILES = LibreDWG.pdf LibreDWG.{aux,cp,cps,log,t2p,toc}
 distclean-local:
 	-rm -rf manual refman latex

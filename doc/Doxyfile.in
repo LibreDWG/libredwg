@@ -6,7 +6,7 @@
 
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = "LibreDWG API"
-PROJECT_NUMBER         = 0.5
+PROJECT_NUMBER         = @PACKAGE_VERSION@
 PROJECT_BRIEF          = "LibreDWG API - The DWG Library"
 PROJECT_LOGO           =
 OUTPUT_DIRECTORY       = doc/
@@ -548,7 +548,7 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories
 # with spaces.
 
-INPUT                  = include/ src/
+INPUT                  = @top_srcdir@/include @top_srcdir@/src
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is
@@ -783,7 +783,7 @@ HTML_HEADER            =
 # each generated HTML page. If it is left blank doxygen will generate a
 # standard footer.
 
-HTML_FOOTER            =
+HTML_FOOTER            = doc/footer
 
 # The HTML_STYLESHEET tag can be used to specify a user-defined cascading
 # style sheet that is used by each HTML page. It can be used to

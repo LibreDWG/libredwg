@@ -42,14 +42,8 @@ man:
 	$(MAKE) -C programs $@
 manual:
 	$(MAKE) -C doc $@
-
-if HAVE_DOXYGEN
-refman doxygen doc/html/index.html: doc/Doxyfile $(include_HEADERS)
-	-rm {src,include}/*_flymake.{c,h}
-	$(DOXYGEN) doc/Doxyfile
-refman-pdf: doc/html/index.html
-	$(MAKE) -C doc/latex
-endif
+refman:
+	$(MAKE) -C doc $@
 
 check-dwg: all
 	-mv check-dwg.log check-dwg.log~ 2>/dev/null

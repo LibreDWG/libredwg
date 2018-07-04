@@ -333,6 +333,9 @@ AC_CONFIG_FILES([
 	test/unit-testing/Makefile
 ])
 
+AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([doc/Doxyfile])])
+AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([doc/footer])])
+
 AC_OUTPUT
 
 dnl configure.ac ends here
