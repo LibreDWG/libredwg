@@ -1272,10 +1272,10 @@ resolve_objectref_vector(Bit_Chain* dat, Dwg_Data * dwg)
     {
       Dwg_Object_Ref *ref = dwg->object_ref[i];
       LOG_INSANE("==========\n")
-      LOG_TRACE("-objref[%3ld]: HANDLE(%d.%d.%lX) Absolute:%lX/%lu\n", i,
+      LOG_TRACE("-objref[%3ld]: HANDLE(%d.%d.%lX) Absolute:%lX\n", i,
                 ref->handleref.code, ref->handleref.size,
                 ref->handleref.value,
-                ref->absolute_ref, ref->absolute_ref)
+                ref->absolute_ref)
 
       // search the handle in all objects
       obj = dwg_resolve_handle(dwg, ref->absolute_ref);

@@ -69,11 +69,11 @@
       }\
     if (handleptr)\
       {\
-        LOG_TRACE(#name ": HANDLE(%x.%d.%lX) absolute:%lX/%lu [%d]\n", \
+        LOG_TRACE(#name ": HANDLE(%x.%d.%lX) absolute:%lX [%d]\n", \
                   handleptr->handleref.code, \
                   handleptr->handleref.size, \
                   handleptr->handleref.value,\
-                  handleptr->absolute_ref, handleptr->absolute_ref, dxf) \
+                  handleptr->absolute_ref, dxf) \
       }\
     else \
       {\
@@ -94,12 +94,12 @@
       }\
     if (handleptr)\
       {\
-        LOG_TRACE(#name "[%d]: %d HANDLE(%x.%d.%lX) absolute:%lX/%lu [%d]\n",  \
+        LOG_TRACE(#name "[%d]: %d HANDLE(%x.%d.%lX) absolute:%lX [%d]\n",  \
               (int)vcount, handle_code,   \
               handleptr->handleref.code,  \
               handleptr->handleref.size,  \
               handleptr->handleref.value, \
-              handleptr->absolute_ref, handleptr->absolute_ref, dxf) \
+              handleptr->absolute_ref, dxf) \
       }\
     else \
       {\
@@ -112,11 +112,11 @@
 #define FIELD_DATAHANDLE(name, handle_code, dxf) \
   { \
     _obj->name = dwg_decode_handleref(dat, obj, dwg);\
-    LOG_TRACE(#name ": HANDLE(%x.%d.%lX) absolute:%lX/%lu [%d]\n",\
+    LOG_TRACE(#name ": HANDLE(%x.%d.%lX) absolute:%lX [%d]\n",\
               _obj->name->handleref.code,  \
               _obj->name->handleref.size,  \
               _obj->name->handleref.value, \
-              _obj->name->absolute_ref, _obj->name->absolute_ref, dxf);\
+              _obj->name->absolute_ref, dxf);\
   }
 
 #define FIELD_B(name,dxf) FIELDG(name, B, dxf)
