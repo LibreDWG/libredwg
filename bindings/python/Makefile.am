@@ -50,9 +50,17 @@ _LibreDWG_la_LIBADD = ../../src/libredwg.la
 
 ## not elegant, but works
 ## With macports gcc you need -I/opt/local/lib/gcc6/gcc/x86_64-apple-darwin15/6.4.0/include
+SWIG_PYTHON_PATCH = $(top_srcdir)/build-aux/swig_python.patch
 $(dist_python_PYTHON) : swig_python.c
+if HAVE_PATCH
 swig_python.c : $(SWIG_SOURCES) Makefile.am
 	swig -python -I$(top_srcdir)/include -o swig_python.c $(srcdir)/../dwg.i
+	-$(PATCH) -t --dry-run -N -p2 -i $(SWIG_PYTHON_PATCH) && \
+	  $(PATCH) -t -N -p2 -i $(SWIG_PYTHON_PATCH)
+else
+swig_python.c : $(SWIG_SOURCES) Makefile.am
+	swig -python -I$(top_srcdir)/include -o swig_python.c $(srcdir)/../dwg.i
+endif
 
 ## should work out of the box, but $(SWIG) resolves to swig -c++
 ## which we don't want, and SWIG_PYTHON_OPT resolves to null,

@@ -273,6 +273,7 @@ if test x$cross_compiling = xno; then
     if test -n "$SWIG" -a x$enable_python != xno; then
       AM_PATH_PYTHON([2.7])
       SWIG_PYTHON
+      AC_CHECK_PROGS([PATCH], [patch])
     fi
     dnl swig not required for perl, we ship swig_perl.c
     if test -n "$PERL"; then
@@ -297,6 +298,9 @@ AM_CONDITIONAL([HAVE_SWIG_PERL],
   [test -n "$SWIG" && test -n "$PERL"])
 AM_CONDITIONAL([HAVE_PERL],
   [test -n "$PERL"])
+dnl only needed with python bindings
+AM_CONDITIONAL([HAVE_PATCH],
+  [test -n "$PATCH"])
 
 AC_CHECK_PROGS([DOXYGEN], [doxygen])
 AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])

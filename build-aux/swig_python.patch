@@ -1,0 +1,101 @@
+diff -bu bindings/python/swig_python.c~ bindings/python/swig_python.c
+--- bindings/python/swig_python.c~	2018-07-04 18:54:45.000000000 +0200
++++ bindings/python/swig_python.c	2018-07-04 19:10:15.000000000 +0200
+@@ -2480,7 +2480,7 @@
+ */
+ 
+ SWIGRUNTIME PyObject* 
+-SWIG_Python_NewShadowInstance(SwigPyClientData *data, PyObject *swig_this)
++SWIG_Python_NewShadowInstance(SwigPyClientData *data, PyObject *this)
+ {
+ #if (PY_VERSION_HEX >= 0x02020000)
+   PyObject *inst = 0;
+@@ -2495,25 +2495,25 @@
+ 	if (dict == NULL) {
+ 	  dict = PyDict_New();
+ 	  *dictptr = dict;
+-	  PyDict_SetItem(dict, SWIG_This(), swig_this);
++	  PyDict_SetItem(dict, SWIG_This(), this);
+ 	}
+       }
+ #else
+       PyObject *key = SWIG_This();
+-      PyObject_SetAttr(inst, key, swig_this);
++      PyObject_SetAttr(inst, key, this);
+ #endif
+     }
+   } else {
+ #if PY_VERSION_HEX >= 0x03000000
+     inst = ((PyTypeObject*) data->newargs)->tp_new((PyTypeObject*) data->newargs, Py_None, Py_None);
+     if (inst) {
+-      PyObject_SetAttr(inst, SWIG_This(), swig_this);
++      PyObject_SetAttr(inst, SWIG_This(), this);
+       Py_TYPE(inst)->tp_flags &= ~Py_TPFLAGS_VALID_VERSION_TAG;
+     }
+ #else
+     PyObject *dict = PyDict_New();
+     if (dict) {
+-      PyDict_SetItem(dict, SWIG_This(), swig_this);
++      PyDict_SetItem(dict, SWIG_This(), this);
+       inst = PyInstance_NewRaw(data->newargs, dict);
+       Py_DECREF(dict);
+     }
+@@ -2525,7 +2525,7 @@
+   PyObject *inst = 0;
+   PyObject *dict = PyDict_New();
+   if (dict) {
+-    PyDict_SetItem(dict, SWIG_This(), swig_this);
++    PyDict_SetItem(dict, SWIG_This(), this);
+     inst = PyInstance_NewRaw(data->newargs, dict);
+     Py_DECREF(dict);
+   }
+@@ -2548,14 +2548,14 @@
+ #ifdef Py_TPFLAGS_GC
+   PyObject_GC_Init(inst);
+ #endif
+-  PyDict_SetItem(inst->in_dict, SWIG_This(), swig_this);
++  PyDict_SetItem(inst->in_dict, SWIG_This(), this);
+   return (PyObject *) inst;
+ #endif
+ #endif
+ }
+ 
+ SWIGRUNTIME void
+-SWIG_Python_SetSwigThis(PyObject *inst, PyObject *swig_this)
++SWIG_Python_SetSwigThis(PyObject *inst, PyObject *this)
+ {
+  PyObject *dict;
+ #if (PY_VERSION_HEX >= 0x02020000) && !defined(SWIG_PYTHON_SLOW_GETSET_THIS)
+@@ -2566,12 +2566,12 @@
+      dict = PyDict_New();
+      *dictptr = dict;
+    }
+-   PyDict_SetItem(dict, SWIG_This(), swig_this);
++   PyDict_SetItem(dict, SWIG_This(), this);
+    return;
+  }
+ #endif
+  dict = PyObject_GetAttrString(inst, (char*)"__dict__");
+- PyDict_SetItem(dict, SWIG_This(), swig_this);
++ PyDict_SetItem(dict, SWIG_This(), this);
+  Py_DECREF(dict);
+ } 
+ 
+@@ -188556,6 +188556,17 @@
+ #ifdef __cplusplus
+ extern "C"
+ #endif
++SWIGEXPORT 
++#if PY_VERSION_HEX >= 0x03000000
++PyObject*
++#else
++void
++#endif
++SWIG_init(void);
++
++#ifdef __cplusplus
++extern "C"
++#endif
+ 
+ SWIGEXPORT 
+ #if PY_VERSION_HEX >= 0x03000000
