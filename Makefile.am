@@ -28,6 +28,11 @@ include_HEADERS = \
 	include/dwg.h \
 	include/dwg_api.h
 
+BUILT_SOURCES = $(top_srcdir)/.version
+EXTRA_DIST = $(top_srcdir)/.version \
+             README README-alpha \
+	     dxf_example.lsp dxf_example.sh test-dxf.sh logs.sh
+
 .PHONY: check-dwg check-dxf check-dwg-valgrind \
         regen-man man manual refman refman-pdf scan-build gcov
 
@@ -90,7 +95,11 @@ gcov: check
 	cover -no-gcov
 endif
 
-EXTRA_DIST = README README-alpha dxf_example.lsp dxf_example.sh test-dxf.sh logs.sh
+$(BUILT_SOURCES):
+	echo $(VERSION) > $@-t && mv $@-t $@
+dist-hook:
+	echo $(VERSION) > $(distdir)/.tarball-version
+
 CLEANFILES = check-dwg.log check-dwg-valgrind.log check-dxf.log \
              check-dwg.log~ check-dwg-valgrind.log~ check-dxf.log~ \
 	     *_20*.dxf *_r1*.dxf

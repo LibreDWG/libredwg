@@ -56,6 +56,8 @@ gcov.log
 # specific filenames
 /.rb.sh
 /.upwork.sh
+/.version
+/.tarball-version
 /.cproject
 /.project
 /.patches
