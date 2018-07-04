@@ -335,6 +335,7 @@ AC_CONFIG_FILES([
 
 AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([doc/Doxyfile])])
 AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([doc/footer])])
+AM_COND_IF([HAVE_PERL], [AC_CONFIG_FILES([bindings/perl/Makefile.PL])])
 
 AC_OUTPUT
 

@@ -19,14 +19,14 @@ if (!@ARGV &&
   $lddlflags = $lddlflags . " -L../../src/.libs";
 } # else link to the installed libredwg
 
-# wrap_perl.c is 9MB, too big
+# swig_perl.c is 9MB, too big
 $ccopts =~ s/-O\d //;
 $ldopts .= " -lredwg";
 $lddlflags .= " -lredwg";
 
 WriteMakefile (
   NAME         => 'LibreDWG',
-  VERSION      => '0.5',
+  VERSION      => '@PACKAGE_VERSION@',
   ($ccopts ? (CCFLAGS => $ccopts) : ()),
   ($ldopts ? (LDFLAGS => $ldopts) : ()),
   ($lddlflags ? (LDDLFLAGS => $lddlflags) : ()),
