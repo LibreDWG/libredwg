@@ -25,9 +25,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <alloca.h>
 #include "dwg.h"
 #include "../src/bits.h"
 #include "../src/logging.h"
+
+void *memmem(const void *big, size_t big_len, const void *little, size_t little_len);
 
 typedef enum DWG_BITS
 {
@@ -116,8 +119,14 @@ static struct _unknown {
 
 static void bits_string(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
-  bit_write_TV(dat, (BITCODE_TV)g->value);
-  g->type = BITS_TV;
+  if (dat->version >= R_2007) {
+    bit_write_TU(dat, (BITCODE_TU)g->value);
+    g->type = BITS_TU;
+  }
+  else {
+    bit_write_TV(dat, (BITCODE_TV)g->value);
+    g->type = BITS_TV;
+  }
 }
 
 static void bits_B(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
@@ -185,12 +194,14 @@ static void bits_handle(Bit_Chain *restrict dat, struct _unknown_field *restrict
 }
 
 static void
-bits_format (struct _unknown_field *g)
+bits_format (struct _unknown_field *g, int is16)
 {
   int code = g->code;
   static Bit_Chain dat;
   dat.size = 16;
   dat.chain = calloc(16,1);
+  if (is16)
+    dat.version = R_2007;
 
   if (0 <= code && code < 5)
     bits_string(&dat, g);
@@ -267,6 +278,47 @@ bits_format (struct _unknown_field *g)
   }
 }
 
+int search_bits(struct _unknown_field *g, struct _unknown_dxf *dxf)
+{
+  int i;
+  int size;
+  unsigned char *s;
+  unsigned char* found;
+  int num_found = 0;
+  int haystack_size = strlen(dxf->bytes);
+
+  if (!g->type || !g->bitsize || g->bitsize > 1024)
+    return 0;
+  size = (g->bitsize/8) + (g->bitsize % 8 ? 1 : 0);
+  s = alloca(size);
+  fprintf(stderr, "search %d:\"%s\" (%d byte of type %d) in %d bytes\n",
+          g->code, g->value, size, g->type, haystack_size);
+  for (i=0; i<8; i++) {
+    // search for value in all 8 shift positions
+    memcpy(s, g->bits, size);
+    if (i) { // 01110 -> 00111
+      unsigned char mask = (1>>i) - 1;
+      for (int j=0; j<size; j++) {
+        int carry = s[j] & mask;
+        s[j] <<= i;
+      }
+    }
+    // TODO: add the remaining bits also to bytes
+    found = memmem(dxf->bytes, haystack_size, s, size);
+    if (found) {
+      int offset = (found - (unsigned char*)dxf->bytes) * 8 + i;
+      num_found++;
+      if (num_found == 1) {
+        g->pos = offset;
+      }
+      else {
+        g->pos = 0;
+      }
+    }
+  }
+  return num_found;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -275,8 +327,12 @@ main (int argc, char *argv[])
   for (i=0; unknown_dxf[i].name; i++)
     {
       int num_fields;
+      int num_found;
       struct _unknown_field *g = (struct _unknown_field *)unknown_dxf[i].fields;
       int len = strlen(unknown_dxf[i].bytes);
+      int is16 = strstr(unknown_dxf[i].dxf, "_2007.dxf") ? 1 : 0;
+      if (!is16)
+        strstr(unknown_dxf[i].dxf, "_201") ? 1 : 0;
       //TODO offline: find the shortest objects.
       printf("\n%s: %X %s (%d)\n", unknown_dxf[i].name, unknown_dxf[i].handle,
              len < 200 ? unknown_dxf[i].bytes : "...", len);
@@ -285,7 +341,11 @@ main (int argc, char *argv[])
           if (g[j].code == 100)
             printf("%d: %s\n", g[j].code, g[j].value);
           //store the binary repr
-          bits_format(&g[j]);
+          bits_format(&g[j], is16);
+          //searching for it in the stream and store found position if found only once
+          num_found = search_bits(&g[j], &unknown_dxf[i]);
+          if (num_found == 1)
+            printf("%d: %s found at offset %d\n", g[j].code, g[j].value, g[j].pos);
         }
       num_fields = j;
 
