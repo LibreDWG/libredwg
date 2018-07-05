@@ -89,7 +89,6 @@ main(int argc, char *argv[])
   Bit_Chain dat;
   const char *version = NULL;
   Dwg_Version_Type dwg_version;
-  int has_v = 0;
   int c;
 #ifdef HAVE_GETOPT_LONG
   int option_index = 0;
@@ -120,7 +119,6 @@ main(int argc, char *argv[])
       case ':': // missing arg
         if (optarg && !strcmp(optarg, "v")) {
           opts = 1;
-          has_v = 1;
           break;
         }
         fprintf(stderr, "%s: option '-%c' requires an argument\n",
@@ -141,7 +139,6 @@ main(int argc, char *argv[])
               setenv("LIBREDWG_TRACE", v, 1);
             }
 # endif
-            has_v = 1;
             break;
           }
         if (!strcmp(long_options[option_index].name, "version"))
@@ -184,7 +181,6 @@ main(int argc, char *argv[])
           setenv("LIBREDWG_TRACE", v, 1);
         }
 #endif
-        has_v = 1;
         break;
       case 'h':
         return help();
