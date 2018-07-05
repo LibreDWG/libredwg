@@ -31,8 +31,6 @@
 #include "suffix.inc"
 #include "out_dxf.h"
 
-static int help(void);
-
 static int opts = 1;
 int minimal = 0;
 int binary = 0;
