@@ -31,6 +31,7 @@ dwg_inthash *hash_new(uint32_t size)
     return NULL;
   // multiply with load factor,
   // and round size to next power of 2 (fast) or prime (secure),
+  if (!size) size = 15;
   cap = (uint32_t)(size * 100.0/HASH_LOAD);
   while (size <= cap) // this is slow, but only done once. clz would be much faster
     size <<= 1U;
