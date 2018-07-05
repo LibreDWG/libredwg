@@ -31,6 +31,7 @@
 # include <string.h>
 # include <ctype.h>
 #endif
+#include <getopt.h>
 #ifdef HAVE_PCRE2_H
 //use both, 8 and 16 (r2007+)
 # define PCRE2_CODE_UNIT_WIDTH 0
@@ -38,13 +39,9 @@
 #endif
 
 #include "dwg.h"
-#include "../src/logging.h"
-#include "../src/common.h"
-#include "../src/bits.h"
-#include "suffix.inc"
-static int help(void);
-int verbosity(int argc, char **argv, int i, unsigned int *opts);
-#include "common.inc"
+#include "logging.h"
+#include "common.h"
+#include "bits.h"
 #include "dwg_api.h"
 
 #ifndef HAVE_PCRE2_H
@@ -123,15 +120,21 @@ static int help(void) {
 #if 0
   printf("  -R, -r, --recursive       Recursively search subdirectories listed.\n");
 #endif
-  printf("  --type NAME               Search only NAME entities or objects.\n");
-  printf("  --dxf NUM                 Search only DXF group NUM fields.\n");
-  printf("  --text                    Search only in TEXT-like entities.\n");
+  printf("  -y, --type NAME           Search only NAME entities or objects.\n");
+  printf("  -d, --dxf NUM             Search only DXF group NUM fields.\n");
+  printf("  -t, --text                Search only in TEXT-like entities.\n");
 #if 0
-  printf("  --tables                  Search only in table names.\n");
+  printf("  -b, --tables              Search only in table names.\n");
 #endif
+#ifdef HAVE_GETOPT_LONG
   printf("      --help                Display this help and exit\n");
   printf("      --version             Output version information and exit\n"
          "\n");
+#else
+  printf("  -u                        Display this help and exit\n");
+  printf("  -v                        Output version information and exit\n"
+         "\n");
+#endif
   printf("GNU LibreDWG online manual: <https://www.gnu.org/software/libredwg/>\n");
   return 0;
 }
@@ -734,69 +737,95 @@ main (int argc, char *argv[])
 #endif
   int opt_recurse = 0;
   int count = 0;
+  int c;
+#ifdef HAVE_GETOPT_LONG
+  int option_index = 0;
+  static struct option long_options[] = {
+        {"case",      0, 0, 'i'},
+        {"extended",  0, 0, 'x'},
+        {"count",     0, 0, 'c'},
+        {"no-filename",0, 0, 'h'},
+        {"recursive", 0, 0, 'r'},
+        {"recursive", 0, 0, 'R'},
+        {"type",      1, 0, 'y'},
+        {"dxf",       1, 0, 'd'},
+        {"text",      0, 0, 't'},
+        {"tables",    0, 0, 'b'},
+        {"help",      0, 0, 0},
+        {"version",   0, 0, 0},
+        {NULL,        0, NULL, 0}
+  };
+#endif
 
   // check args
   if (argc < 2)
     return usage();
-
   memset(dxf, 0, 10*sizeof(short));
-  if (i < argc && !strcmp(argv[i], "-i"))
-    {
-      options |= PCRE2_CASELESS;
-      i++;
-    }
-#ifdef HAVE_PCRE2_H
-  if (i < argc && !strcmp(argv[i], "-x"))
-    {
-      options |= PCRE2_EXTENDED;
-      i++;
-    }
-#endif
-  if (i < argc && (!strcmp(argv[i], "--count") || !strcmp(argv[i], "-c")))
-    {
-      opt_count = 1;
-      i++;
-    }
-  if (i < argc && (!strcmp(argv[i], "--no-filename") || !strcmp(argv[i], "-h")))
-    {
-      opt_filename = 0;
-      i++;
-    }
-  if (i < argc && (!strcmp(argv[i], "--recursive") ||
-                   !strcmp(argv[i], "-R") ||
-                   !strcmp(argv[i], "-r")))
-    {
-      opt_recurse = 1;
-      i++;
-    }
-  if (i < argc-1 && !strcmp(argv[i], "--type"))
-    {
-      if (numtype >= 10) return usage(); //too many
-      type[numtype++] = argv[i+1]; // a string
-      i += 2;
-    }
-  if (i < argc-1 && !strcmp(argv[i], "--dxf"))
-    {
-      if (numdxf >= 10) return usage(); // too many
-      // a integer group
-      dxf[numdxf++] = (short)strtol(argv[i+1], NULL, 10);
-      i += 2;
-    }
-  if (i < argc && !strcmp(argv[i], "--text"))
-    {
-      opt_text = 1;
-      i++;
-    }
-  if (i < argc && !strcmp(argv[i], "--tables"))
-    {
-      opt_tables = 1;
-      i++;
-    }
-  if (i < argc && !strcmp(argv[i], "--help"))
-    return help();
-  if (i < argc && !strcmp(argv[i], "--version"))
-    return opt_version();
 
+  while
+#ifdef HAVE_GETOPT_LONG
+    ((c = getopt_long(argc, argv, "ixchrRy:d:tb",
+                      long_options, &option_index)) != -1)
+#else
+    ((c = getopt(argc, argv, "ixchrRy:d:tbvu")) != -1)
+#endif
+    {
+      if (c == -1) break;
+      switch (c) {
+#ifdef HAVE_GETOPT_LONG
+      case 0:
+        if (!strcmp(long_options[option_index].name, "help"))
+          return help();
+        break;
+#else
+      case 'v':
+        return opt_version();
+#endif
+#ifdef HAVE_PCRE2_H
+      case 'x':
+        options |= PCRE2_EXTENDED;
+        break;
+#endif
+      case 'i':
+        options |= PCRE2_CASELESS;
+        break;
+      case 'c':
+        opt_count = 1;
+        break;
+      case 'h':
+        opt_filename = 0;
+        break;
+      case 'r':
+      case 'R':
+        opt_recurse = 1;
+        break;
+      case 't':
+        opt_text = 1;
+        break;
+      case 'b':
+        opt_tables = 1;
+        break;
+      case 'y':
+        if (numtype >= 10) return usage(); //too many
+        type[numtype++] = optarg; // a string
+        break;
+      case 'd':
+        if (numdxf >= 10) return usage(); // too many
+        // a integer group
+        dxf[numdxf++] = (short)strtol(optarg, NULL, 10);
+        break;
+
+      case 'u':
+        return help();
+      case '?':
+        fprintf(stderr, "%s: invalid option '-%c' ignored\n",
+                argv[0], optopt);
+        break;
+      default:
+        return usage();
+      }
+    }
+  i = optind;
   if (i > argc-2) // need 2 more args. TODO: unless -R given
     return usage();
 
