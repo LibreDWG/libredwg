@@ -26,15 +26,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <libps/pslib.h>
+#include <getopt.h>
 
 #include <dwg.h>
 #include <dwg_api.h>
-#include "../src/common.h"
+#include "common.h"
 //#include "../src/bits.h" //bit_convert_TU
 #include "suffix.inc"
-static int help(void);
-int verbosity(int argc, char **argv, int i, unsigned int *opts);
-#include "common.inc"
+
+static int opts = 0;
 
 static int usage(void) {
   printf("\nUsage: dwg2ps [-v[0-9]] DWGFILE [PSFILE]\n");
@@ -48,10 +48,17 @@ static int help(void) {
   printf("\nUsage: dwg2ps [OPTION]... DWGFILE [PSFILE]\n");
   printf("Converts some 2D elements of the DWG to a Postscript file.\n"
          "\n");
+#ifdef HAVE_GETOPT_LONG
   printf("  -v[0-9], --verbose [0-9]  verbosity\n");
   printf("           --help           display this help and exit\n");
   printf("           --version        output version information and exit\n"
          "\n");
+#else
+  printf("  -v[0-9]     verbosity\n");
+  printf("  -h          display this help and exit\n");
+  printf("  -i          output version information and exit\n"
+         "\n");
+#endif
   printf("GNU LibreDWG online manual: <https://www.gnu.org/software/libredwg/>\n");
   return 0;
 }
@@ -172,28 +179,97 @@ main(int argc, char *argv[])
   int error;
   char *outfile;
   int i = 1;
-  unsigned int opts = 1; //loglevel 1
   Dwg_Data dwg;
+
+  int c;
+#ifdef HAVE_GETOPT_LONG
+  int option_index = 0;
+  static struct option long_options[] = {
+        {"verbose", 1, &opts, 1}, //optional
+        {"help",    0, 0, 0},
+        {"version", 0, 0, 0},
+        {NULL,      0, NULL, 0}
+  };
+#endif
 
   if (argc < 2)
     return usage();
-#if defined(USE_TRACING) && defined(HAVE_SETENV)
-  setenv("LIBREDWG_TRACE", "1", 0);
-#endif
-  if (argc > 2 &&
-      (!strcmp(argv[i], "--verbose") ||
-       !strncmp(argv[i], "-v", 2)))
-    {
-      int num_args = verbosity(argc, argv, i, &opts);
-      argc -= num_args;
-      i += num_args;
-    }
-  if (argc > 1 && !strcmp(argv[i], "--help"))
-    return help();
-  if (argc > 1 && !strcmp(argv[i], "--version"))
-    return opt_version();
 
-  REQUIRE_INPUT_FILE_ARG (argc);
+  while
+#ifdef HAVE_GETOPT_LONG
+    ((c = getopt_long(argc, argv, ":v::h",
+                      long_options, &option_index)) != -1)
+#else
+    ((c = getopt(argc, argv, ":v::hi")) != -1)
+#endif
+    {
+      if (c == -1) break;
+      switch (c) {
+      case ':': // missing arg
+        if (optarg && !strcmp(optarg, "v")) {
+          opts = 1;
+          break;
+        }
+        fprintf(stderr, "%s: option '-%c' requires an argument\n",
+                argv[0], optopt);
+        break;
+#ifdef HAVE_GETOPT_LONG
+      case 0:
+        /* This option sets a flag */
+        if (!strcmp(long_options[option_index].name, "verbose"))
+          {
+            if (opts < 0 || opts > 9)
+              return usage();
+# if defined(USE_TRACING) && defined(HAVE_SETENV)
+            {
+              char v[2];
+              *v = opts + '0';
+              *(v+1) = 0;
+              setenv("LIBREDWG_TRACE", v, 1);
+            }
+# endif
+            break;
+          }
+        if (!strcmp(long_options[option_index].name, "version"))
+          return opt_version();
+        if (!strcmp(long_options[option_index].name, "help"))
+          return help();
+        break;
+#else
+      case 'i':
+        return opt_version();
+#endif
+      case 'v': // support -v3 and -v
+        i = (optind > 0 && optind < argc) ? optind-1 : 1;
+        if (!memcmp(argv[i], "-v", 2))
+          {
+            opts = argv[i][2] ? argv[i][2] - '0' : 1;
+          }
+        if (opts < 0 || opts > 9)
+          return usage();
+#if defined(USE_TRACING) && defined(HAVE_SETENV)
+        {
+          char v[2];
+          *v = opts + '0';
+          *(v+1) = 0;
+          setenv("LIBREDWG_TRACE", v, 1);
+        }
+#endif
+        break;
+      case 'h':
+        return help();
+      case '?':
+        fprintf(stderr, "%s: invalid option '-%c' ignored\n",
+                argv[0], optopt);
+        break;
+      default:
+        return usage();
+      }
+    }
+  i = optind;
+  if (i >= argc)
+    return usage();
+
   memset(&dwg, 0, sizeof(Dwg_Data));
   dwg.opts = opts;
   error = dwg_read_file(argv[i], &dwg);
