@@ -32,8 +32,6 @@
 #include "out_dxf.h"
 
 static int help(void);
-//int verbosity(int argc, char **argv, int i, unsigned int *opts);
-//#include "common.inc"
 
 static int opts = 1;
 int minimal = 0;
