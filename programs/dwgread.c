@@ -50,6 +50,7 @@ static int help(void) {
   printf("Reads the DWG into some optional output format to stdout or some file,\n"
          "and prints error, success or verbose internal progress to stderr.\n"
          "\n");
+#ifdef HAVE_GETOPT_LONG
   printf("  -v[0-9], --verbose [0-9]  verbosity\n");
   printf("  -O fmt,  --format fmt     fmt: DXF, DXFB, JSON, GeoJSON\n");
   printf("           Planned output formats:  YAML, XML/OGR, GPX, SVG, PS\n");
@@ -57,6 +58,15 @@ static int help(void) {
   printf("           --help           display this help and exit\n");
   printf("           --version        output version information and exit\n"
          "\n");
+#else
+  printf("  -v[0-9]     verbosity\n");
+  printf("  -O fmt      fmt: DXF, DXFB, JSON, GeoJSON\n");
+  printf("              Planned output formats:  YAML, XML/OGR, GPX, SVG, PS\n");
+  printf("  -o outfile  also defines the output fmt. Default: stdout\n");
+  printf("  -h          display this help and exit\n");
+  printf("  -i          output version information and exit\n"
+         "\n");
+#endif
   printf("GNU LibreDWG online manual: <https://www.gnu.org/software/libredwg/>\n");
   return 0;
 }
@@ -91,7 +101,7 @@ main(int argc, char *argv[])
     ((c = getopt_long(argc, argv, ":v::O:o:h",
                       long_options, &option_index)) != -1)
 #else
-    ((c = getopt(argc, argv, ":v::O:o:h")) != -1)
+    ((c = getopt(argc, argv, ":v::O:o:hi")) != -1)
 #endif
     {
       if (c == -1) break;
@@ -112,14 +122,14 @@ main(int argc, char *argv[])
           {
             if (opts < 0 || opts > 9)
               return usage();
-#if defined(USE_TRACING) && defined(HAVE_SETENV)
+# if defined(USE_TRACING) && defined(HAVE_SETENV)
             {
               char v[2];
               *v = opts + '0';
               *(v+1) = 0;
               setenv("LIBREDWG_TRACE", v, 1);
             }
-#endif
+# endif
             has_v = 1;
             break;
           }
@@ -128,6 +138,9 @@ main(int argc, char *argv[])
         if (!strcmp(long_options[option_index].name, "help"))
           return help();
         break;
+#else
+      case 'i':
+        return opt_version();
 #endif
       case 'O':
         fmt = optarg;
