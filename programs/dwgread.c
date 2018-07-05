@@ -28,16 +28,14 @@
 #ifdef AX_STRCASECMP_HEADER
 # include AX_STRCASECMP_HEADER
 #endif
+#include <getopt.h>
 
 #include "dwg.h"
-#include "../src/bits.h"
-#include "suffix.inc"
+#include "bits.h"
 #include "out_json.h"
 #include "out_dxf.h"
 
-static int help(void);
-int verbosity(int argc, char **argv, int i, unsigned int *opts);
-#include "common.inc"
+static int opts = 1;
 
 static int usage(void) {
   printf("\nUsage: dwgread [-v[0-9]] [-O FMT] [-o OUTFILE] [DWGFILE|-]\n");
@@ -66,81 +64,138 @@ static int help(void) {
 int
 main(int argc, char *argv[])
 {
-  unsigned int opts = 1; //loglevel 1
   int i = 1;
   int error;
   Dwg_Data dwg;
   const char *fmt = NULL;
   const char *outfile = NULL;
   int has_v = 0;
+  int c;
+#ifdef HAVE_GETOPT_LONG
+  int option_index = 0;
+  static struct option long_options[] = {
+        {"verbose", 1, &opts, 1}, //optional
+        {"format",  1, 0, 'O'},
+        {"file",    1, 0, 'o'},
+        {"help",    0, 0, 0},
+        {"version", 0, 0, 0},
+        {NULL,      0, NULL, 0}
+  };
+#endif
 
   if (argc < 2)
-    {
-      return usage();
-    }
-#if defined(USE_TRACING) && defined(HAVE_SETENV)
-  setenv("LIBREDWG_TRACE", "1", 0);
-#endif
-  if (argc > 2 &&
-      (!strcmp(argv[i], "--verbose") ||
-       !strncmp(argv[i], "-v", 2)))
-    {
-      int num_args = verbosity(argc, argv, i, &opts);
-      has_v = 1;
-      argc -= num_args;
-      i += num_args;
-    }
-  if (argc > 2 &&
-      (!strcmp(argv[i], "--format") ||
-       !strncmp(argv[i], "-O", 2)))
-    {
-      int num_args;
-      if (!strncmp(argv[i], "-O", 2) && strcmp(argv[i], "-O")) //-Ofmt
-        {
-          fmt = argv[i]+2;
-          num_args = 1;
-        }
-      else //-O fmt | --format fmt
-        {
-          fmt = argv[i+1];
-          num_args = 2;
-        }
-      if (!has_v) opts = 0;
-      argc -= num_args;
-      i += num_args;
-    }
-  if (argc > 2 && !strcmp(argv[i], "-o"))
-    {
-      outfile = argv[i+1];
-      argc -= 2;
-      i += 2;
-      if (!fmt)
-        {
-          if (strstr(outfile, ".json") || strstr(outfile, ".JSON"))
-            fmt = (char*)"json";
-          else
-          if (strstr(outfile, ".dxf") || strstr(outfile, ".DXF"))
-            fmt = (char*)"dxf";
-          else
-          if (strstr(outfile, ".dxfb") || strstr(outfile, ".DXFB"))
-            fmt = (char*)"dxfb";
-          else
-          if (strstr(outfile, ".geojson") || strstr(outfile, ".GeoJSON"))
-            fmt = (char*)"geojson";
-          else {
-            fprintf(stderr, "Unknown output format for %s\n", outfile);
-          }
-        }
-    }
-  if (argc > 1 && !strcmp(argv[i], "--help"))
-    return help();
-  if (argc > 1 && !strcmp(argv[i], "--version"))
-    return opt_version();
+    return usage();
 
-  REQUIRE_INPUT_FILE_ARG (argc);
+  while
+#ifdef HAVE_GETOPT_LONG
+    ((c = getopt_long(argc, argv, ":v::O:o:h",
+                      long_options, &option_index)) != -1)
+#else
+    ((c = getopt(argc, argv, ":v::O:o:h")) != -1)
+#endif
+    {
+      if (c == -1) break;
+      switch (c) {
+      case ':': // missing arg
+        if (optarg && !strcmp(optarg, "v")) {
+          opts = 1;
+          has_v = 1;
+          break;
+        }
+        fprintf(stderr, "%s: option '-%c' requires an argument\n",
+                argv[0], optopt);
+        break;
+#ifdef HAVE_GETOPT_LONG
+      case 0:
+        /* This option sets a flag */
+        if (!strcmp(long_options[option_index].name, "verbose"))
+          {
+            if (opts < 0 || opts > 9)
+              return usage();
+#if defined(USE_TRACING) && defined(HAVE_SETENV)
+            {
+              char v[2];
+              *v = opts + '0';
+              *(v+1) = 0;
+              setenv("LIBREDWG_TRACE", v, 1);
+            }
+#endif
+            has_v = 1;
+            break;
+          }
+        if (!strcmp(long_options[option_index].name, "version"))
+          return opt_version();
+        if (!strcmp(long_options[option_index].name, "help"))
+          return help();
+        break;
+#endif
+      case 'O':
+        fmt = optarg;
+        break;
+      case 'o':
+        outfile = optarg;
+        if (!fmt)
+          {
+            if (strstr(outfile, ".json") || strstr(outfile, ".JSON"))
+              fmt = (char*)"json";
+            else
+            if (strstr(outfile, ".dxf") || strstr(outfile, ".DXF"))
+              fmt = (char*)"dxf";
+            else
+            if (strstr(outfile, ".dxfb") || strstr(outfile, ".DXFB"))
+              fmt = (char*)"dxfb";
+            else
+            if (strstr(outfile, ".geojson") || strstr(outfile, ".GeoJSON"))
+              fmt = (char*)"geojson";
+            else {
+              fprintf(stderr, "Unknown output format for %s\n", outfile);
+            }
+          }
+        break;
+      case 'v': // support -v3 and -v
+        i = (optind > 0 && optind < argc) ? optind-1 : 1;
+        if (!memcmp(argv[i], "-v", 2))
+          {
+            opts = argv[i][2] ? argv[i][2] - '0' : 1;
+          }
+        if (opts < 0 || opts > 9)
+          return usage();
+#if defined(USE_TRACING) && defined(HAVE_SETENV)
+        {
+          char v[2];
+          *v = opts + '0';
+          *(v+1) = 0;
+          setenv("LIBREDWG_TRACE", v, 1);
+        }
+#endif
+        has_v = 1;
+        break;
+      case 'h':
+        return help();
+      case '?':
+        fprintf(stderr, "%s: invalid option '-%c' ignored\n",
+                argv[0], optopt);
+        break;
+      default:
+        return usage();
+      }
+    }
+  i = optind;
+
+  if (optind == argc)
+    {
+      puts("No input file specified");
+      return 1;
+    }
+  //REQUIRE_INPUT_FILE_ARG (optind);
   memset(&dwg, 0, sizeof(Dwg_Data));
   if (has_v || !fmt)
     dwg.opts = opts;
+#if defined(USE_TRACING) && defined(HAVE_SETENV)
+  if (!has_v)
+    setenv("LIBREDWG_TRACE", "1", 0);
+#endif
+
   error = dwg_read_file(argv[i], &dwg);
   if (!fmt)
     {
@@ -169,7 +224,7 @@ main(int argc, char *argv[])
       else if (!strcasecmp(fmt, "geojson"))
         error = dwg_write_geojson(&dat, &dwg);
       else {
-        fprintf(stderr, "Invalid output format %s\n", fmt);
+        fprintf(stderr, "Invalid output format '%s'\n", fmt);
       }
       if (outfile)
         {

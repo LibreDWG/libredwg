@@ -55,7 +55,6 @@
 * add DXF reading (medium)
 * finish GeoJSON http://geojson.org/geojson-spec.html
 * maybe dwgfilter, as from the osmctools, with keep and drop rules.
-* add getopt_long() for position independent options
 * check osm tools https://gitlab.com/osm-c-tools/osmctools how
   they could import GIS data easier.
   Check OpenStreetMap XML and PBF formats.
