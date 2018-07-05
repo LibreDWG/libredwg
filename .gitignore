@@ -24,11 +24,14 @@ gcov.log
 /*_r1*.log
 /*_20*.dxf
 /*_r1*.dxf
+/libredwg-*.zip
+/libredwg-*.tar.{xz,gz}
+/libredwg-*.tar.{xz,gz}.sig
 /examples/*.log
 /examples/*.svg
 /programs/*.log
 /programs/*.bmp
-/programs/*-dwgrewrite.dwg
+/programs/*-rewrite.dwg
 /programs/*.dxf
 /programs/*.svg
 /programs/*.ps
@@ -51,6 +54,8 @@ gcov.log
 /test/test-data-20*/
 
 # specific filenames
+/.rb.sh
+/.upwork.sh
 /.cproject
 /.project
 /.patches
@@ -60,6 +65,8 @@ gcov.log
 /GTAGS
 /ID
 /INSTALL
+/unknown.log
+/x.p
 /aclocal.m4
 /autom4te.cache/
 /bindings/perl/LibreDWG.pm
