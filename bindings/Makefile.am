@@ -45,17 +45,24 @@ perl/Makefile: perl/Makefile.PL
 	-cd perl && \
 	  $(PERL) Makefile.PL
 
-CLEANFILES = perl/LibreDWG.bs perl/LibreDWG.c perl/pm_to_blib perl/Makefile perl/LibreDWG.o
+CLEANFILES = perl/LibreDWG.bs perl/LibreDWG.c perl/pm_to_blib perl/Makefile \
+	     perl/LibreDWG.$(OBJEXT)
 
 # Maybe disable if LibreDWG.so was not installed yet.
 # rpath/LD_LIBRARY_PATH overrides are too troublesome
-check-am: $(dist_perl_PERL) perl/Makefile perl/LibreDWG.o
+check-am: $(dist_perl_PERL) perl/Makefile perl/LibreDWG.$(OBJEXT)
 	@echo Making check for perl
 	-$(MAKE) -C perl test OPTIMIZE= LD_RUN_PATH="$(abs_top_builddir)/src/.libs"
 
-install-am: $(dist_perl_PERL) perl/Makefile perl/LibreDWG.o
+install-am: $(dist_perl_PERL) perl/Makefile perl/LibreDWG.$(OBJEXT)
 	@echo Making install for perl
 	-$(MAKE) -C perl install
+
+clean-am:
+	-$(MAKE) -C perl clean
+
+distclean-am:
+	-$(MAKE) -C perl distclean
 
 PERL_sources =  $(top_srcdir)/bindings/dwg.i \
 		$(top_srcdir)/include/dwg.h \
@@ -66,5 +73,8 @@ PERL_sources =  $(top_srcdir)/bindings/dwg.i \
 perl/LibreDWG.pm: perl/swig_perl.c
 perl/swig_perl.c: $(PERL_sources) Makefile.am
 	$(SWIG) -perl5 -I$(abs_top_srcdir)/include -o perl/swig_perl.c $(srcdir)/dwg.i
+
+distclean-local: distclean-am
+	rm -rf perl/blib
 
 endif

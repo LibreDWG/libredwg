@@ -38,6 +38,6 @@ all-local: Doxyfile footer
 clean-local:
 	rm -rf $(builddir)/doc/refman
 	rm -rf $(builddir)/doc/manual
-DISTCLEANFILES = LibreDWG.pdf LibreDWG.{aux,cp,cps,log,t2p,toc}
+DISTCLEANFILES = LibreDWG.ps LibreDWG.{aux,cp,cps,log,t2p,toc}
 distclean-local:
 	-rm -rf manual refman latex

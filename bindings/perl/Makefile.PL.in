@@ -32,6 +32,7 @@ WriteMakefile (
   ($lddlflags ? (LDDLFLAGS => $lddlflags) : ()),
   #LIBS => ['-lredwg'],
   OPTIMIZE => '',
+  clean => { FILES => 'MYMETA.json MYMETA.yml' },
   ($] >= 5.005
    ? (ABSTRACT	=> 'LibreDWG perl5 bindings',
       AUTHOR  	=> 'Reini Urban <rurban@cpan.org>')

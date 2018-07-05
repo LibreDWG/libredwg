@@ -112,3 +112,7 @@ LIBTOOL_DISTCLEAN_FILES = \
 	build-aux/missing \
 	build-aux/py-compile \
 	build-aux/textinfo.tex
+
+# cannot uninstall the generated perllocal.pod and share/info/dir
+distuninstallcheck:
+	@:
