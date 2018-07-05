@@ -28,6 +28,8 @@ include_HEADERS = \
 	include/dwg.h \
 	include/dwg_api.h
 
+pcdatadir = $(libdir)/pkgconfig
+pcdata_DATA = libredwg.pc
 BUILT_SOURCES = $(top_srcdir)/.version
 EXTRA_DIST = $(top_srcdir)/.version \
              README README-alpha \
