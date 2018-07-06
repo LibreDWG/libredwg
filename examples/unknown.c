@@ -65,6 +65,39 @@ typedef enum DWG_BITS
   BITS_CMC,
 } Dwg_Bits;
 
+static const char *dwg_bits_name[] =
+{
+  "UNKNOWN",
+  "RC",
+  "RS",
+  "RL",
+  "B",
+  "BB",
+  "3B",
+  "4BITS",
+  "BS",
+  "BL",
+  "RLL",
+  "RD",
+  "BD",
+  "MC",
+  "UMC",
+  "MS",
+  "TV",
+  "TU",
+  "T",
+  "TF",
+  "HANDLE",
+  "BE",
+  "DD",
+  "BT",
+  "CRC",
+  "BOT",
+  "BLL",
+  "TIMEBLL",
+  "CMC",
+};
+
 struct _unknown_field {
   int code;
   char *value;
@@ -127,6 +160,21 @@ static void bits_string(Bit_Chain *restrict dat, struct _unknown_field *restrict
     bit_write_TV(dat, (BITCODE_TV)g->value);
     g->type = BITS_TV;
   }
+}
+
+static void bits_hexstring(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
+{
+  //convert hex to string
+  int len = strlen(g->value)/2;
+  unsigned char buf[1024];
+  for (int i=0; i<len; i++) {
+    unsigned char *s = &g->value[i*2];
+    buf[i] = ((*s < 'A') ? *s - '0' : *s + 10 - 'A') << 4;
+    s++;
+    buf[i] += (*s < 'A') ? *s - '0' : *s + 10 - 'A';
+  }
+  bit_write_TF(dat, buf, len);
+  g->type = BITS_TF;
 }
 
 static void bits_B(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
@@ -216,7 +264,7 @@ bits_format (struct _unknown_field *g, int is16)
     bits_BL(&dat, g);
   else if (code == 100)
     return;
-  else if (code == 102)
+  else if (code == 102) //this is never stored in a DWG
     bits_string(&dat, g);
   else if (code == 105)
     bits_handle(&dat, g, 3);
@@ -224,39 +272,41 @@ bits_format (struct _unknown_field *g, int is16)
     bits_BD(&dat, g);
   else if (160 <= code && code <= 169)
     bits_BL(&dat, g);
-  else if (170 <= code && code <= 179)
+  else if (code <= 179)
     bits_BS(&dat, g);
   else if (210 <= code && code <= 239)
     bits_BD(&dat, g);
   else if (270 <= code && code <= 289)
     bits_BS(&dat, g);
-  else if (290 <= code && code <= 299)
+  else if (code <= 299)
     bits_B(&dat, g);
-  else if (300 <= code && code <= 319)
+  else if (code <= 309)
     bits_string(&dat, g);
-  else if (320 <= code && code <= 369)
+  else if (code <= 319)
+    bits_hexstring(&dat, g);
+  else if (code <= 369)
     bits_handle(&dat, g, 5);
-  else if (370 <= code && code <= 389)
+  else if (code <= 389)
     bits_BS(&dat, g);
-  else if (390 <= code && code <= 399)
+  else if (code <= 399)
     bits_handle(&dat, g, 5);
-  else if (400 <= code && code <= 409)
+  else if (code <= 409)
     bits_BS(&dat, g);
-  else if (410 <= code && code <= 419)
+  else if (code <= 419)
     bits_string(&dat, g);
-  else if (420 <= code && code <= 429)
+  else if (code <= 429)
     bits_BL(&dat, g); //int32_t
-  else if (430 <= code && code <= 439)
+  else if (code <= 439)
     bits_string(&dat, g);
-  else if (440 <= code && code <= 449)
+  else if (code <= 449)
     bits_BL(&dat, g);//int32_t
-  else if (450 <= code && code <= 459)
+  else if (code <= 459)
     bits_BL(&dat, g);//long
-  else if (460 <= code && code <= 469)
+  else if (code <= 469)
     bits_BD(&dat, g);
-  else if (470 <= code && code <= 479)
+  else if (code <= 479)
     bits_string(&dat, g);
-  else if (480 <= code && code <= 481)
+  else if (code <= 481)
     bits_handle(&dat, g, 5);
   else if (code == 999)
     return;
@@ -268,6 +318,8 @@ bits_format (struct _unknown_field *g, int is16)
     bits_BS(&dat, g);
   else if (code == 1071)
     bits_BL(&dat, g);//int32_t
+  else
+    fprintf(stderr, "Unknown DXF code %d\n", code);
 
   if (g->type) {
     g->bytes = dat.chain;
@@ -284,16 +336,18 @@ int search_bits(struct _unknown_field *g, struct _unknown_dxf *dxf)
   unsigned char *s;
   unsigned char* found;
   int num_found = 0;
-  int dxf_size = dxf->bitsize;
+  int dxf_bitsize = dxf->bitsize;
+  int dxf_size = dxf_bitsize/8;
 
-  if (!g->type || !g->bitsize)
+  if (!g->type || !g->bitsize || !dxf_size)
     return 0;
   size = (g->bitsize/8) + (g->bitsize % 8 ? 1 : 0);
-  if (size > dxf_size/8)
+  dxf_size += (dxf_size % 8 ? 1 : 0);
+  if (size > dxf_size)
     return 0;
   s = alloca(size);
-  printf("  search %d:\"%s\" (%d bits of type %d) in %d bits\n",
-          g->code, g->value, g->bitsize, g->type, dxf_size);
+  printf("  search %d:\"%s\" (%d bits of type %s) in %d bits\n",
+          g->code, g->value, g->bitsize, dwg_bits_name[g->type], dxf_bitsize);
   // search for value in all 8 shift positions
   memcpy(s, g->bytes, size);
   for (i=0; i<8; i++) {
@@ -307,6 +361,10 @@ int search_bits(struct _unknown_field *g, struct _unknown_dxf *dxf)
     found = memmem(dxf->bytes, dxf_size, s, size);
     if (found) {
       int offset = ((found - (unsigned char*)dxf->bytes) * 8) + i;
+      if (offset > dxf_bitsize) { //ignore then
+        //fprintf(stderr, "Illegal offset %d > %d\n", offset, dxf_bitsize);
+        continue;
+      }
       num_found++;
       if (num_found == 1) {
         g->pos = offset;
@@ -348,7 +406,8 @@ main (int argc, char *argv[])
           //searching for it in the stream and store found position if found only once
           num_found = search_bits(&g[j], &unknown_dxf[i]);
           if (num_found == 1)
-            printf("%d: %s found at offset %d\n", g[j].code, g[j].value, g[j].pos);
+            printf("%d: %s [%s] found at offset %d/%d\n", g[j].code, g[j].value,
+                   dwg_bits_name[g[j].type], g[j].pos, unknown_dxf[i].bitsize);
         }
       num_fields = j;
 
