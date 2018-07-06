@@ -111,7 +111,7 @@ struct _unknown_field {
   char *bytes;
   int bitsize;
   Dwg_Bits type;
-  int pos;
+  int pos; //found bit offset in dxf->bytes or -1 if not found
 };
 static struct _unknown_dxf {
   const char *name;
@@ -412,7 +412,7 @@ int search_bits(struct _unknown_field *g, struct _unknown_dxf *dxf)
     else {
       if (num_found > 2) {
         printf("  multiple finds. first at %d, current at %d\n", g->pos, offset);
-        g->pos = 0;
+        g->pos = -1;
         break;
       }
     }
@@ -444,7 +444,7 @@ int search_bits(struct _unknown_field *g, struct _unknown_dxf *dxf)
       else {
         if (num_found > 2) {
           printf("  multiple finds. first at %d, current at %d\n", g->pos, offset);
-          g->pos = 0;
+          g->pos = -1;
           break;
         }
       }

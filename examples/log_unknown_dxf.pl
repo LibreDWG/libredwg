@@ -107,6 +107,7 @@ sub process_dxf {
   #return if $code == 100;
   $v =~ s/\\/\\\\/g;
   $v =~ s/"/\\"/g;
-  print $f "    { $code, \"$v\", 0, 0 },\n";
+  # code, value, bytes, bitsize, type, pos
+  print $f "    { $code, \"$v\", NULL, 0, BITS_UNKNOWN, -1 },\n";
 }
 
