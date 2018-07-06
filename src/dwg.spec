@@ -4068,7 +4068,7 @@ DWG_OBJECT(FIELDLIST)
   FIELD_BL (num_fields, 0); //DXF 70?
   FIELD_B (unknown, 0); // has handles?
   START_HANDLE_STREAM;
-  HANDLE_VECTOR (field_handles, num_fields, 0, 330);
+  HANDLE_VECTOR (field_handles, num_fields, 0, 330); // 2 or 4, or 3.0.0
   //}
 
 DWG_OBJECT_END

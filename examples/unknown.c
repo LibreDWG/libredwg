@@ -307,8 +307,12 @@ bits_format (struct _unknown_field *g, int is16)
     bits_TV(&dat, g);
   else if (code <= 319)
     bits_hexstring(&dat, g);
-  else if (code <= 369)
+  else if (code >= 320 && code < 360)
+    bits_handle(&dat, g, 4); //2 or 4 or 3.0
+  else if (code >= 340 && code < 360)
     bits_handle(&dat, g, 5);
+  else if (code >= 360 && code <= 369)
+    bits_handle(&dat, g, 3);
   else if (code <= 389)
     bits_BS(&dat, g);
   else if (code <= 399)
