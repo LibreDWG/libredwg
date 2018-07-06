@@ -21,14 +21,21 @@
  * with the available likely fields try permutations of most likely types.
  */
 
-#include "config.h"
+#include "../src/config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <alloca.h>
+
 #include "dwg.h"
 #include "../src/bits.h"
 #include "../src/logging.h"
+
+#ifndef M_PI_2
+# define M_PI_2      1.57079632679489661923132169163975144
+#endif
+#define rad2deg(ang) (ang)*180.0/M_PI_2
+#define deg2rad(ang) (ang) ? M_PI_2/((ang)*180.0) : 0.0
 
 void *memmem(const void *big, size_t big_len, const void *little, size_t little_len);
 
@@ -162,6 +169,12 @@ static void bits_string(Bit_Chain *restrict dat, struct _unknown_field *restrict
   }
 }
 
+static void bits_TV(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
+{
+  bit_write_TV(dat, g->value);
+  g->type = BITS_TV;
+}
+
 static void bits_hexstring(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
   //convert hex to string
@@ -195,6 +208,15 @@ static void bits_BD(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
   double d;
   sscanf(g->value, "%f", &d);
+  bit_write_BD(dat, d);
+  g->type = BITS_BD;
+}
+
+static void bits_angle_BD(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
+{
+  double d;
+  sscanf(g->value, "%f", &d);
+  d = deg2rad(d);
   bit_write_BD(dat, d);
   g->type = BITS_BD;
 }
@@ -256,8 +278,10 @@ bits_format (struct _unknown_field *g, int is16)
     bits_handle(&dat, g, 0);
   else if (5 < code && code < 10)
     bits_string(&dat, g);
+  else if (code < 50)
+    bits_BD(&dat, g);
   else if (code < 60)
-    bits_BD(&dat, g); //todo deg2rad for angles
+    bits_angle_BD(&dat, g); //deg2rad for angles
   else if (code < 80)
     bits_BS(&dat, g);
   else if (80 <= code && code <= 99) //BL int32
@@ -281,7 +305,7 @@ bits_format (struct _unknown_field *g, int is16)
   else if (code <= 299)
     bits_B(&dat, g);
   else if (code <= 309)
-    bits_string(&dat, g);
+    bits_TV(&dat, g);
   else if (code <= 319)
     bits_hexstring(&dat, g);
   else if (code <= 369)
@@ -312,8 +336,10 @@ bits_format (struct _unknown_field *g, int is16)
     return;
   else if (1000 <= code && code <= 1009)
     bits_string(&dat, g);
-  else if (1010 <= code && code <= 1059)
+  else if (1010 <= code && code <= 1049)
     bits_BD(&dat, g);
+  else if (1050 <= code && code <= 1059)
+    bits_angle_BD(&dat, g);
   else if (1060 <= code && code <= 1070)
     bits_BS(&dat, g);
   else if (code == 1071)
