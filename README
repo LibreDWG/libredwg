@@ -66,6 +66,7 @@ $ sudo make install
 This builds and installs various files in the "installation dirs":
   $libdir     ($exec_prefix/lib)   -- library files (libredwg.*)
   $includedir ($prefix/include)    -- dwg.h dwg_api.h
+  $libdir/pkgconfig                -- libredwg.pc
   $infodir    ($datarootdir/info)  -- LibreDWG.info
 
 Use "./configure --help" to see a full list of options you can use to
@@ -80,7 +81,7 @@ customize the installation dirs.  Other options recognized by configure are:
 
   --disable-write
   
-    Disable write support (default: no). When enabled, you activate the write
+    Disable DWG write support (default: no). When enabled, you activate the write
     support for the DWG format.
     This is an experimental feature. Rewriting most DWG's to the r2000 format
     usually works fine, DWG versions since r2004 are not yet supported, and the
