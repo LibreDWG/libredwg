@@ -206,16 +206,16 @@ static void bits_B(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 
 static void bits_BD(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
-  double d;
-  sscanf(g->value, "%f", &d);
+  double d = strtod(g->value, NULL);
+  //sscanf(g->value, "%lf", &d);
   bit_write_BD(dat, d);
   g->type = BITS_BD;
 }
 
 static void bits_angle_BD(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
-  double d;
-  sscanf(g->value, "%f", &d);
+  double d = strtod(g->value, NULL);
+  //sscanf(g->value, "%lf", &d);
   d = deg2rad(d);
   bit_write_BD(dat, d);
   g->type = BITS_BD;
@@ -277,6 +277,7 @@ bits_format (struct _unknown_field *g, int is16)
   else if (code == 5 || code == -5)
     bits_handle(&dat, g, 0);
   else if (5 < code && code < 10)
+    // 6 ltype handle or BS index, 7 style handle, 8 layer handle
     bits_string(&dat, g);
   else if (code < 50)
     bits_BD(&dat, g);
@@ -355,6 +356,32 @@ bits_format (struct _unknown_field *g, int is16)
   }
 }
 
+#define BIT(b,i) ((b[(i)/8] >> (i)%8) & 1)
+
+// like memmem but for bits, not bytes.
+// search for the bits of small in big. returns the bit offset in big or -1.
+// handle bits before and after.
+int membits(const unsigned char *restrict big, const int bigsize,
+            const unsigned char *restrict small, const int smallsize,
+            int offset)
+{
+  int pos = offset;
+  if (smallsize > bigsize)
+    return -1;
+  while (pos < bigsize) {
+    int i = 0;
+    while (i < smallsize) {
+      if (BIT(big, pos+i) != BIT(small, i))
+        break;
+      i++; //found, check next bit
+    }
+    if (i == smallsize) //found all smallsize bits
+      return pos;
+    pos++;
+  }
+  return -1;
+}
+
 int search_bits(struct _unknown_field *g, struct _unknown_dxf *dxf)
 {
   int i;
@@ -362,6 +389,7 @@ int search_bits(struct _unknown_field *g, struct _unknown_dxf *dxf)
   unsigned char *s;
   unsigned char* found;
   int num_found = 0;
+  int offset = 0;
   int dxf_bitsize = dxf->bitsize;
   int dxf_size = dxf_bitsize/8;
 
@@ -374,6 +402,23 @@ int search_bits(struct _unknown_field *g, struct _unknown_dxf *dxf)
   s = alloca(size);
   printf("  search %d:\"%s\" (%d bits of type %s) in %d bits\n",
           g->code, g->value, g->bitsize, dwg_bits_name[g->type], dxf_bitsize);
+#if 1
+  printf("  =search: "); bit_print_bits(g->bytes, g->bitsize);
+  while ((offset = membits(dxf->bytes, dxf->bitsize, g->bytes, g->bitsize, offset)) != -1) {
+    num_found++;
+    if (num_found == 1) {
+      g->pos = offset;
+    }
+    else {
+      if (num_found > 2) {
+        printf("  multiple finds. first at %d, current at %d\n", g->pos, offset);
+        g->pos = 0;
+        break;
+      }
+    }
+    offset++;
+  }
+#else
   // search for value in all 8 shift positions
   memcpy(s, g->bytes, size);
   for (i=0; i<8; i++) {
@@ -384,6 +429,7 @@ int search_bits(struct _unknown_field *g, struct _unknown_dxf *dxf)
         s[j] |= carry;
       }
     }
+    //TODO: memmem only finds bytes, but we need to find bits
     found = memmem(dxf->bytes, dxf_size, s, size);
     if (found) {
       int offset = ((found - (unsigned char*)dxf->bytes) * 8) + i;
@@ -404,6 +450,7 @@ int search_bits(struct _unknown_field *g, struct _unknown_dxf *dxf)
       }
     }
   }
+#endif
   return num_found;
 }
 
@@ -423,10 +470,14 @@ main (int argc, char *argv[])
       //TODO offline: find the shortest objects.
       printf("\n%s: 0x%X (%d)\n", unknown_dxf[i].name, unknown_dxf[i].handle,
              unknown_dxf[i].bitsize);
+      printf("  =bits: "); bit_print_bits((unsigned char*)unknown_dxf[i].bytes,
+                                          unknown_dxf[i].bitsize);
       for (j=0; g[j].code; j++)
         {
-          if (g[j].code == 100)
+          if (g[j].code == 100 || g[j].code == 102) {
             printf("%d: %s\n", g[j].code, g[j].value);
+            continue;
+          }
           //store the binary repr
           bits_format(&g[j], is16);
           //searching for it in the stream and store found position if found only once

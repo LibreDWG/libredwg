@@ -285,6 +285,9 @@ void
 bit_print(Bit_Chain *dat, long unsigned int size);
 
 void
+bit_print_bits(unsigned char* bits, long unsigned int size);
+
+void
 bit_explore_chain(Bit_Chain *dat, long unsigned int size);
 
 BITCODE_BD

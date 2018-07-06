@@ -5936,7 +5936,7 @@ DWG_OBJECT(ASSOCNETWORK)
   FIELD_H (action.callback, 5, 0);
   FIELD_H (action.owningnetwork, 5, 0);
   FIELD_BL (action.num_deps, 90);
-  HANDLE_VECTOR(action.readdep, num_assoc, 5, 330);
+  HANDLE_VECTOR(action.readdep, num_assoc, 5, 330);  //offset 124/139
   HANDLE_VECTOR(action.writedep, num_assoc, 0, 360);
   FIELD_BL (action.unknown_assoc, 90);
 #endif
