@@ -224,44 +224,41 @@ static void bits_angle_BD(Bit_Chain *restrict dat, struct _unknown_field *restri
 
 static void bits_RC(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
-  unsigned int l;
-  sscanf(g->value, "%u", &l);
+  unsigned int l = strtol(g->value, NULL, 10);
   bit_write_RC(dat, (unsigned char)l);
   g->type = BITS_RC;
 }
 
 static void bits_BS(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
-  unsigned int l;
-  sscanf(g->value, "%u", &l);
+  unsigned int l = strtol(g->value, NULL, 10);
   bit_write_BS(dat, (unsigned short)l);
   g->type = BITS_BS;
 }
 
 static void bits_BL(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
-  unsigned int l;
-  sscanf(g->value, "%u", &l);
+  unsigned int l = strtol(g->value, NULL, 10);
   bit_write_BL(dat, l);
   g->type = BITS_BL;
 }
 
 static void bits_handle(Bit_Chain *restrict dat, struct _unknown_field *restrict g, int code)
 {
-    Dwg_Handle handle;
-    //parse hex -> owner handle
-    sscanf(g->value, "%X", &handle.value);
-    handle.code = code;
-    if (handle.value < 0xff)
-      handle.size = 1;
-    else if (handle.value < 0xffff)
-      handle.size = 2;
-    else if (handle.value < 0xffffff)
-      handle.size = 3;
-    else
-      handle.size = 4;
-    bit_write_H(dat, &handle);
-    g->type = BITS_HANDLE;
+  Dwg_Handle handle;
+  //parse hex -> owner handle;
+  sscanf(g->value, "%X", &handle.value);
+  handle.code = code;
+  if (handle.value < 0xff)
+    handle.size = 1;
+  else if (handle.value < 0xffff)
+    handle.size = 2;
+  else if (handle.value < 0xffffff)
+    handle.size = 3;
+  else
+    handle.size = 4;
+  bit_write_H(dat, &handle);
+  g->type = BITS_HANDLE;
 }
 
 static void
