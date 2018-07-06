@@ -77,7 +77,7 @@ while (<>) {
       if ($foundhdl) {
         $foundhdl = 0;
         print $f0 " NULL },\n";
-        print $f1 "    { 0, NULL}\n};\n";
+        print $f1 "    { 0,    NULL, NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1}}\n};\n";
       }
     }
     if ($foundobj and $code =~ /^ *5$/) {
@@ -108,6 +108,6 @@ sub process_dxf {
   $v =~ s/\\/\\\\/g;
   $v =~ s/"/\\"/g;
   # code, value, bytes, bitsize, type, pos
-  print $f "    { $code, \"$v\", NULL, 0, BITS_UNKNOWN, -1 },\n";
+  print $f "    { $code, \"$v\", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },\n";
 }
 

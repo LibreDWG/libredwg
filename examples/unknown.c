@@ -111,7 +111,8 @@ struct _unknown_field {
   char *bytes;
   int bitsize;
   Dwg_Bits type;
-  int pos; //found bit offset in dxf->bytes or -1 if not found
+  int pos[5]; //5x found bit offset in dxf->bytes or -1 if not found
+  // many typical values are 5x found (handle 0, BL 2)
 };
 static struct _unknown_dxf {
   const char *name;
@@ -384,7 +385,7 @@ int membits(const unsigned char *restrict big, const int bigsize,
 
 int search_bits(struct _unknown_field *g, struct _unknown_dxf *dxf)
 {
-  int i;
+  int i, j;
   int size;
   unsigned char *s;
   unsigned char* found;
@@ -405,17 +406,11 @@ int search_bits(struct _unknown_field *g, struct _unknown_dxf *dxf)
 #if 1
   printf("  =search: "); bit_print_bits(g->bytes, g->bitsize);
   while ((offset = membits(dxf->bytes, dxf->bitsize, g->bytes, g->bitsize, offset)) != -1) {
+    if (num_found < 5)
+      g->pos[num_found] = offset;
     num_found++;
-    if (num_found == 1) {
-      g->pos = offset;
-    }
-    else {
-      if (num_found > 2) {
-        printf("  multiple finds. first at %d, current at %d\n", g->pos, offset);
-        g->pos = -1;
-        break;
-      }
-    }
+    if (num_found > 5)
+      break;
     offset++;
   }
 #else
@@ -482,9 +477,47 @@ main (int argc, char *argv[])
           bits_format(&g[j], is16);
           //searching for it in the stream and store found position if found only once
           num_found = search_bits(&g[j], &unknown_dxf[i]);
+          if (!num_found)
+            continue;
+          else
           if (num_found == 1)
-            printf("%d: %s [%s] found at offset %d/%d\n", g[j].code, g[j].value,
-                   dwg_bits_name[g[j].type], g[j].pos, unknown_dxf[i].bitsize);
+            printf("%d: %s [%s] found 1 at offset %d /%d\n", g[j].code, g[j].value,
+                   dwg_bits_name[g[j].type], g[j].pos[0], unknown_dxf[i].bitsize);
+          else
+          if (num_found == 2)
+            printf("%d: %s [%s] found 2 at offsets %d, %d /%d\n",
+                   g[j].code, g[j].value,
+                   dwg_bits_name[g[j].type],
+                   g[j].pos[0], g[j].pos[1],
+                   unknown_dxf[i].bitsize);
+          else
+          if (num_found == 3)
+            printf("%d: %s [%s] found 3 at offsets %d, %d, %d /%d\n",
+                   g[j].code, g[j].value,
+                   dwg_bits_name[g[j].type],
+                   g[j].pos[0], g[j].pos[1], g[j].pos[2],
+                   unknown_dxf[i].bitsize);
+          else
+          if (num_found == 4)
+            printf("%d: %s [%s] found 4 at offsets %d, %d, %d, %d /%d\n",
+                   g[j].code, g[j].value,
+                   dwg_bits_name[g[j].type],
+                   g[j].pos[0], g[j].pos[1], g[j].pos[2], g[j].pos[3],
+                   unknown_dxf[i].bitsize);
+          else
+          if (num_found == 5)
+            printf("%d: %s [%s] found 5 at offsets %d, %d, %d, %d /%d\n",
+                   g[j].code, g[j].value,
+                   dwg_bits_name[g[j].type],
+                   g[j].pos[0], g[j].pos[1], g[j].pos[2], g[j].pos[3], g[j].pos[4],
+                   unknown_dxf[i].bitsize);
+          else
+          if (num_found > 5)
+            printf("%d: %s [%s] found >5 at offsets %d, %d, %d, %d, %d, ... /%d\n",
+                   g[j].code, g[j].value,
+                   dwg_bits_name[g[j].type],
+                   g[j].pos[0], g[j].pos[1], g[j].pos[2], g[j].pos[3], g[j].pos[4],
+                   unknown_dxf[i].bitsize);
         }
       num_fields = j;
 
