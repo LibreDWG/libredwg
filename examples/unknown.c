@@ -261,6 +261,27 @@ static void bits_handle(Bit_Chain *restrict dat, struct _unknown_field *restrict
   g->type = BITS_HANDLE;
 }
 
+static int is_handle(int code)
+{
+  return code == 5 ||
+         code == 105 ||
+         (code >= 320 && code <= 369) ||
+         (code >= 390 && code <= 399) ||
+         (code >= 480 && code <= 481);
+}
+
+static void
+bits_try_handle (struct _unknown_field *g, int code)
+{
+  Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
+  dat.chain = calloc(16,1);
+
+  bits_handle(&dat, g, code);
+
+  g->bytes = dat.chain;
+  g->bitsize = (dat.byte * 8) + dat.bit;
+}
+
 static void
 bits_format (struct _unknown_field *g, int is16)
 {
@@ -478,9 +499,22 @@ main (int argc, char *argv[])
           bits_format(&g[j], is16);
           //searching for it in the stream and store found position if found only once
           num_found = search_bits(&g[j], &unknown_dxf[i]);
-          if (!num_found)
+          if (!num_found) {
+            int code = g[j].code;
+            if (is_handle(code) && code != 330 && code != 5) {
+              int handles[] = {2,3,4,5,6,8,0xa,0xc};
+              for (int c=0; c<8; c++) {
+                if (handles[c] != g[j].code) {
+                  bits_try_handle (&g[j], handles[c]);
+                  num_found = search_bits(&g[j], &unknown_dxf[i]);
+                  if (num_found)
+                    goto FOUND;
+                }
+              }
+            }
             continue;
-          else
+          }
+        FOUND:
           if (num_found == 1)
             printf("%d: %s [%s] found 1 at offset %d /%d\n", g[j].code, g[j].value,
                    dwg_bits_name[g[j].type], g[j].pos[0], unknown_dxf[i].bitsize);
