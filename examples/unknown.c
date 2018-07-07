@@ -126,7 +126,17 @@ static struct _unknown_dxf {
     #include "alldxf_0.inc"
     { NULL, NULL, 0, "", 0, NULL }
 };
-#include "alldxf_1.inc"  
+#include "alldxf_1.inc"
+
+//dynamic helper companian
+struct _dxf {
+  unsigned char *found;    //coverage per bit for found 1
+  unsigned char *possible; //coverage for mult. finds >1
+  int num_filled;
+  int num_empty;
+  int num_possible;
+  double percentage;
+};
 
 /* not needed for the solver, only to check against afterwards */
 #if 0
@@ -165,7 +175,7 @@ static void bits_string(Bit_Chain *restrict dat, struct _unknown_field *restrict
     g->type = BITS_TU;
   }
   else {
-    bit_write_TV(dat, (BITCODE_TV)g->value);
+    bit_write_TV(dat, g->value);
     g->type = BITS_TV;
   }
 }
@@ -201,13 +211,25 @@ static void bits_B(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
     bit_write_B(dat, 0);
     g->type = BITS_B;
   }
-  else
+  else {
     LOG_ERROR("Invalid B %s", g->value);
+  }
 }
 
 static void bits_BD(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
   double d = strtod(g->value, NULL);
+  //properly found are: 0.0, 1.0, 5929.403601723592, 607.2183823688756,
+  // 4.0, 2.0, 0.36, 5.0, 4.131293495034893, 4701.847034571434, 0.5024999976158142
+  //hard-code some special values not properly converted and found.
+  if (!strcmp(g->value, "0.5"))
+    d = 0.5;
+  else if (!strcmp(g->value, "10.0"))
+    d = 10.0;
+  else if (!strcmp(g->value, "11.0"))
+    d = 11.0;
+  else if (!strcmp(g->value, "63.5"))
+    d = 63.5;
   //sscanf(g->value, "%lf", &d);
   bit_write_BD(dat, d);
   g->type = BITS_BD;
@@ -379,6 +401,37 @@ bits_format (struct _unknown_field *g, int is16)
   }
 }
 
+static int set_found (struct _dxf *dxf, const struct _unknown_field *g) {
+  // check for overlap, if already found by some other field
+  int overlap = 0;
+  for (int k=g->pos[0]; k<g->pos[0]+g->bitsize; k++) {
+    if (dxf->found[k] && !overlap) {
+      overlap = 1;
+      printf("field %d already found at %d\n", g->code, k);
+    }
+    dxf->found[k]++;
+  }
+  return overlap;
+}
+
+static void set_possible_pos(struct _dxf *dxf, const struct _unknown_field *g, const int pos)
+{
+  // add coverage counter for each bit
+  for (int k=pos; k<pos+g->bitsize; k++) {
+    dxf->possible[k]++;
+  }
+}
+
+static void set_possible(struct _dxf *dxf, const struct _unknown_field *g, const int i)
+{
+  // add coverage counter for each bit
+  for (int j=0; j<i; j++) {
+    for (int k=g->pos[j]; k<g->pos[j]+g->bitsize; k++) {
+      dxf->possible[k]++;
+    }
+  }
+}
+
 #define BIT(b,i) ((b[(i)/8] >> (i)%8) & 1)
 
 // like memmem but for bits, not bytes.
@@ -405,15 +458,14 @@ int membits(const unsigned char *restrict big, const int bigsize,
   return -1;
 }
 
-int search_bits(struct _unknown_field *g, struct _unknown_dxf *dxf)
+int search_bits(struct _unknown_field *g, struct _unknown_dxf *udxf, struct _dxf *dxf, int offset)
 {
   int i, j;
   int size;
   unsigned char *s;
   unsigned char* found;
   int num_found = 0;
-  int offset = 0;
-  int dxf_bitsize = dxf->bitsize;
+  int dxf_bitsize = udxf->bitsize;
   int dxf_size = dxf_bitsize/8;
 
   if (!g->type || !g->bitsize || !dxf_size)
@@ -425,49 +477,16 @@ int search_bits(struct _unknown_field *g, struct _unknown_dxf *dxf)
   s = alloca(size);
   printf("  search %d:\"%s\" (%d bits of type %s) in %d bits\n",
           g->code, g->value, g->bitsize, dwg_bits_name[g->type], dxf_bitsize);
-#if 1
-  printf("  =search: "); bit_print_bits(g->bytes, g->bitsize);
-  while ((offset = membits(dxf->bytes, dxf->bitsize, g->bytes, g->bitsize, offset)) != -1) {
-    if (num_found < 5)
+  printf("  =search (%d): ", offset); bit_print_bits(g->bytes, g->bitsize);
+  while ((offset = membits(udxf->bytes, udxf->bitsize, g->bytes, g->bitsize, offset)) != -1) {
+    if (num_found < 5) //record only the first 5 offsets for the solver
       g->pos[num_found] = offset;
     num_found++;
-    if (num_found > 5)
-      break;
+    set_possible_pos(dxf, g, offset); //but record all other offsets here as counts 0-255
+    //if (num_found > 5)
+    //  break;
     offset++;
   }
-#else
-  // search for value in all 8 shift positions
-  memcpy(s, g->bytes, size);
-  for (i=0; i<8; i++) {
-    if (i) { // 01110 -> 11100
-      for (int j=0; j<size; j++) {
-        int carry =  (j<size && s[j+1] & 128) ? 1 : 0; //first bit of next byte set
-        s[j] <<= 1;
-        s[j] |= carry;
-      }
-    }
-    //TODO: memmem only finds bytes, but we need to find bits
-    found = memmem(dxf->bytes, dxf_size, s, size);
-    if (found) {
-      int offset = ((found - (unsigned char*)dxf->bytes) * 8) + i;
-      if (offset > dxf_bitsize) { //ignore then
-        //fprintf(stderr, "Illegal offset %d > %d\n", offset, dxf_bitsize);
-        continue;
-      }
-      num_found++;
-      if (num_found == 1) {
-        g->pos = offset;
-      }
-      else {
-        if (num_found > 2) {
-          printf("  multiple finds. first at %d, current at %d\n", g->pos, offset);
-          g->pos = -1;
-          break;
-        }
-      }
-    }
-  }
-#endif
   return num_found;
 }
 
@@ -475,86 +494,116 @@ int
 main (int argc, char *argv[])
 {
   int i, j;
+  struct _dxf *dxf = calloc(sizeof(unknown_dxf)/sizeof(unknown_dxf[0]), sizeof(struct _dxf));
   #include "alldxf_2.inc"
   for (i=0; unknown_dxf[i].name; i++)
     {
       int num_fields;
       int num_found;
+      int size = unknown_dxf[i].bitsize;
       struct _unknown_field *g = (struct _unknown_field *)unknown_dxf[i].fields;
       int is16 = strstr(unknown_dxf[i].dxf, "_2007.dxf") ? 1 : 0;
       if (!is16)
         strstr(unknown_dxf[i].dxf, "_201") ? 1 : 0;
+      dxf[i].found = calloc(unknown_dxf[i].bitsize, 1);
+      dxf[i].possible = calloc(unknown_dxf[i].bitsize, 1);
       //TODO offline: find the shortest objects.
       printf("\n%s: 0x%X (%d)\n", unknown_dxf[i].name, unknown_dxf[i].handle,
-             unknown_dxf[i].bitsize);
+             size);
       printf("  =bits: "); bit_print_bits((unsigned char*)unknown_dxf[i].bytes,
-                                          unknown_dxf[i].bitsize);
+                                          size);
       for (j=0; g[j].code; j++)
         {
+          int offset = 0;
           if (g[j].code == 100 || g[j].code == 102) {
             printf("%d: %s\n", g[j].code, g[j].value);
             continue;
           }
           //store the binary repr
           bits_format(&g[j], is16);
+        SEARCH:
           //searching for it in the stream and store found position if found only once
-          num_found = search_bits(&g[j], &unknown_dxf[i]);
+          num_found = search_bits(&g[j], &unknown_dxf[i], &dxf[i], offset);
           if (!num_found) {
             int code = g[j].code;
             if (is_handle(code) && code != 330 && code != 5) {
               int handles[] = {2,3,4,5,6,8,0xa,0xc};
               for (int c=0; c<8; c++) {
-                if (handles[c] != g[j].code) {
-                  bits_try_handle (&g[j], handles[c]);
-                  num_found = search_bits(&g[j], &unknown_dxf[i]);
-                  if (num_found)
-                    goto FOUND;
-                }
+                bits_try_handle (&g[j], handles[c]);
+                num_found = search_bits(&g[j], &unknown_dxf[i], &dxf[i], offset);
+                if (num_found)
+                  goto FOUND;
               }
             }
             continue;
           }
         FOUND:
-          if (num_found == 1)
+          if (num_found == 1) {
             printf("%d: %s [%s] found 1 at offset %d /%d\n", g[j].code, g[j].value,
-                   dwg_bits_name[g[j].type], g[j].pos[0], unknown_dxf[i].bitsize);
-          else
-          if (num_found == 2)
+                   dwg_bits_name[g[j].type], g[j].pos[0], size);
+            if (set_found(&dxf[i], &g[j])) {
+              offset = g[j].pos[0]+1;
+              goto SEARCH;
+            }
+            else
+              dxf[i].num_filled += g[j].bitsize;
+          } else if (num_found == 2) {
             printf("%d: %s [%s] found 2 at offsets %d, %d /%d\n",
                    g[j].code, g[j].value,
                    dwg_bits_name[g[j].type],
                    g[j].pos[0], g[j].pos[1],
-                   unknown_dxf[i].bitsize);
-          else
-          if (num_found == 3)
+                   size);
+          } else if (num_found == 3) {
             printf("%d: %s [%s] found 3 at offsets %d, %d, %d /%d\n",
                    g[j].code, g[j].value,
                    dwg_bits_name[g[j].type],
                    g[j].pos[0], g[j].pos[1], g[j].pos[2],
-                   unknown_dxf[i].bitsize);
-          else
-          if (num_found == 4)
+                   size);
+          } else if (num_found == 4) {
             printf("%d: %s [%s] found 4 at offsets %d, %d, %d, %d /%d\n",
                    g[j].code, g[j].value,
                    dwg_bits_name[g[j].type],
                    g[j].pos[0], g[j].pos[1], g[j].pos[2], g[j].pos[3],
-                   unknown_dxf[i].bitsize);
-          else
-          if (num_found == 5)
+                   size);
+          } else if (num_found == 5) {
             printf("%d: %s [%s] found 5 at offsets %d, %d, %d, %d /%d\n",
                    g[j].code, g[j].value,
                    dwg_bits_name[g[j].type],
                    g[j].pos[0], g[j].pos[1], g[j].pos[2], g[j].pos[3], g[j].pos[4],
-                   unknown_dxf[i].bitsize);
-          else
-          if (num_found > 5)
+                   size);
+          } else if (num_found > 5) {
             printf("%d: %s [%s] found >5 at offsets %d, %d, %d, %d, %d, ... /%d\n",
                    g[j].code, g[j].value,
                    dwg_bits_name[g[j].type],
                    g[j].pos[0], g[j].pos[1], g[j].pos[2], g[j].pos[3], g[j].pos[4],
-                   unknown_dxf[i].bitsize);
+                   size);
+          }
         }
       num_fields = j;
+      // check for holes and percentage of found ranges
+      /*printf("coverage: [");
+      for (j=0; j<size; j++) {
+        if (dxf[i].found[j]) {
+          dxf[i].num_filled++;
+          printf("1");
+        } else {
+          printf(" ");
+        }
+      }*/
+      printf("%d/%d=%.1f%%\n", dxf[i].num_filled, size,
+             100.0*dxf[i].num_filled/size);
+      printf("possible: [");
+      for (j=0; j<size; j++) {
+        if (dxf[i].found[j]) {
+          printf("x");
+        } else if (dxf[i].possible[j]) {
+          dxf[i].num_possible++;
+          printf("%c", dxf[i].possible[j] >= 10 ? '.' : dxf[i].possible[j] + '0');
+        } else {
+          printf(" ");
+        }
+      }
+      printf("]\n");
 
       //TODO: try likely field combinations and print the top 3.
       //there are various heuristics, like the handle stream at the end

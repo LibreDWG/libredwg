@@ -5630,10 +5630,11 @@ DWG_OBJECT_END
    the contents of this dictionary correspond to user-defined light
    properties (displayed on a property palette accessible by selection
    of the light using a variety of methods */
+//TODO: 92:8
 DWG_ENTITY(LIGHT)
   // unsorted!
   FIELD_T (name, 1);
-  FIELD_T (type, 70); /*!< distant = 1; point = 2; spot = 3 */
+  FIELD_T (type, 70); /*!< distant = 1; point = 2; spot = 3 */ //offsets: 0,194,229,394,461,...
   FIELD_B (status, 290);
   FIELD_B (plot_glyph, 291);
   FIELD_BD (intensity, 40);
