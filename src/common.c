@@ -62,8 +62,8 @@ dwg_sentinel(Dwg_Sentinel s)
 char version_codes[DWG_VERSIONS][7] =
   {
     "INVALI",  // R_INVALID
-    "MC0.0",   /* DWG Release 1.1 */
-    "AC1.2",   /* DWG Release 1.2 */
+    "MC0.0",   /* DWG Release 1.1 (as MicroCAD) */
+    "AC1.2",   /* DWG Release 1.2 (as AutoCAD) */
     "AC1.4",   /* DWG Release 1.4 */
     "AC1.50",  /* DWG Release 2.0 */
     "AC2.10",  /* DWG Release 2.10 */
