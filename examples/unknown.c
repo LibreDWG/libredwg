@@ -266,12 +266,21 @@ static void bits_BL(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
   g->type = BITS_BL;
 }
 
-static void bits_handle(Bit_Chain *restrict dat, struct _unknown_field *restrict g, int code)
+static void bits_handle(Bit_Chain *restrict dat, struct _unknown_field *restrict g,
+                        int code, unsigned int objhandle)
 {
   Dwg_Handle handle;
   //parse hex -> owner handle;
   sscanf(g->value, "%X", &handle.value);
   handle.code = code;
+  if (code > 5) { //relative offset to objhandle
+    switch (code) {
+    case 6: handle.value = objhandle + 1; break;
+    case 8: handle.value = objhandle - 1; break;
+    case 0xA: handle.value += objhandle; break;
+    case 0xC: handle.value -= objhandle; break;
+    }
+  }
   if (handle.value < 0xff)
     handle.size = 1;
   else if (handle.value < 0xffff)
@@ -280,6 +289,7 @@ static void bits_handle(Bit_Chain *restrict dat, struct _unknown_field *restrict
     handle.size = 3;
   else
     handle.size = 4;
+  printf("  handle %x.%d.%X (%X)\n", code, handle.size, handle.value, objhandle);
   bit_write_H(dat, &handle);
   g->type = BITS_HANDLE;
 }
@@ -294,12 +304,12 @@ static int is_handle(int code)
 }
 
 static void
-bits_try_handle (struct _unknown_field *g, int code)
+bits_try_handle (struct _unknown_field *g, int code, unsigned int objhandle)
 {
   Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
   dat.chain = calloc(16,1);
 
-  bits_handle(&dat, g, code);
+  bits_handle(&dat, g, code, objhandle);
 
   g->bytes = dat.chain;
   g->bitsize = (dat.byte * 8) + dat.bit;
@@ -317,7 +327,7 @@ bits_format (struct _unknown_field *g, int is16)
   if (0 <= code && code < 5)
     bits_string(&dat, g);
   else if (code == 5 || code == -5)
-    bits_handle(&dat, g, 0);
+    bits_handle(&dat, g, 0, 0);
   else if (5 < code && code < 10)
     // 6 ltype handle or BS index, 7 style handle, 8 layer handle
     bits_string(&dat, g);
@@ -334,7 +344,7 @@ bits_format (struct _unknown_field *g, int is16)
   else if (code == 102) //this is never stored in a DWG
     bits_string(&dat, g);
   else if (code == 105)
-    bits_handle(&dat, g, 3);
+    bits_handle(&dat, g, 3, 0);
   else if (110 <= code && code <= 149)
     bits_BD(&dat, g);
   else if (160 <= code && code <= 169)
@@ -352,15 +362,15 @@ bits_format (struct _unknown_field *g, int is16)
   else if (code <= 319)
     bits_hexstring(&dat, g);
   else if (code >= 320 && code < 360)
-    bits_handle(&dat, g, 4); //2 or 4 or 3.0
+    bits_handle(&dat, g, 4, 0); //2 or 4 or 3.0
   else if (code >= 340 && code < 360)
-    bits_handle(&dat, g, 5);
+    bits_handle(&dat, g, 5, 0);
   else if (code >= 360 && code <= 369)
-    bits_handle(&dat, g, 3);
+    bits_handle(&dat, g, 3, 0);
   else if (code <= 389)
     bits_BS(&dat, g);
   else if (code <= 399)
-    bits_handle(&dat, g, 5);
+    bits_handle(&dat, g, 5, 0);
   else if (code <= 409)
     bits_BS(&dat, g);
   else if (code <= 419)
@@ -378,7 +388,7 @@ bits_format (struct _unknown_field *g, int is16)
   else if (code <= 479)
     bits_string(&dat, g);
   else if (code <= 481)
-    bits_handle(&dat, g, 5);
+    bits_handle(&dat, g, 5, 0);
   else if (code == 999)
     return;
   else if (1000 <= code && code <= 1009)
@@ -533,7 +543,7 @@ main (int argc, char *argv[])
             if (is_handle(code) && code != 330 && code != 5) {
               int handles[] = {2,3,4,5,6,8,0xa,0xc};
               for (int c=0; c<8; c++) {
-                bits_try_handle (&g[j], handles[c]);
+                bits_try_handle (&g[j], handles[c], unknown_dxf[i].handle);
                 num_found = search_bits(j, &g[j], &unknown_dxf[i], &dxf[i], offset);
                 if (num_found)
                   goto FOUND;
