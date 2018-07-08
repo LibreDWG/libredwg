@@ -459,9 +459,9 @@ int membits(const unsigned char *restrict big, const int bigsize,
   return -1;
 }
 
-int search_bits(struct _unknown_field *g, struct _unknown_dxf *udxf, struct _dxf *dxf, int offset)
+int search_bits(int j, struct _unknown_field *g, struct _unknown_dxf *udxf,
+                struct _dxf *dxf, int offset)
 {
-  int i, j;
   int size;
   unsigned char *s;
   unsigned char* found;
@@ -476,8 +476,8 @@ int search_bits(struct _unknown_field *g, struct _unknown_dxf *udxf, struct _dxf
   if (size > dxf_size)
     return 0;
   s = alloca(size);
-  printf("  search %d:\"%s\" (%d bits of type %s) in %d bits\n",
-          g->code, g->value, g->bitsize, dwg_bits_name[g->type], dxf_bitsize);
+  printf("  search %d:\"%s\" (%d bits of type %s [%d]) in %d bits\n",
+         g->code, g->value, g->bitsize, dwg_bits_name[g->type], j, dxf_bitsize);
   printf("  =search (%d): ", offset); bit_print_bits(g->bytes, g->bitsize);
   while ((offset = membits(udxf->bytes, udxf->bitsize, g->bytes, g->bitsize, offset)) != -1) {
     if (num_found < 5) //record only the first 5 offsets for the solver
@@ -525,16 +525,40 @@ main (int argc, char *argv[])
           bits_format(&g[j], is16);
         SEARCH:
           //searching for it in the stream and store found position if found only once
-          num_found = search_bits(&g[j], &unknown_dxf[i], &dxf[i], offset);
+          num_found = search_bits(j, &g[j], &unknown_dxf[i], &dxf[i], offset);
           if (!num_found) {
+
+            // try alternate formats than the standard one from bits_format:
             int code = g[j].code;
             if (is_handle(code) && code != 330 && code != 5) {
               int handles[] = {2,3,4,5,6,8,0xa,0xc};
               for (int c=0; c<8; c++) {
                 bits_try_handle (&g[j], handles[c]);
-                num_found = search_bits(&g[j], &unknown_dxf[i], &dxf[i], offset);
+                num_found = search_bits(j, &g[j], &unknown_dxf[i], &dxf[i], offset);
                 if (num_found)
                   goto FOUND;
+              }
+            }
+            if (g[j].type == BITS_BS && strlen(g[j].value) < 3) {
+              Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
+              dat.chain = calloc(16,1);
+              bits_RC (&dat, &g[j]);
+              g[j].bytes = dat.chain;
+              g[j].bitsize = (dat.byte * 8) + dat.bit;
+              num_found = search_bits(j, &g[j], &unknown_dxf[i], &dxf[i], offset);
+              if (num_found) {
+                goto FOUND;
+              }
+            }
+            if (g[j].type == BITS_RC) {
+              Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
+              dat.chain = calloc(16,1);
+              bits_BS (&dat, &g[j]);
+              g[j].bytes = dat.chain;
+              g[j].bitsize = (dat.byte * 8) + dat.bit;
+              num_found = search_bits(j, &g[j], &unknown_dxf[i], &dxf[i], offset);
+              if (num_found) {
+                goto FOUND;
               }
             }
             //relaxed BD search, less mantissa precision.
@@ -546,6 +570,7 @@ main (int argc, char *argv[])
               dat.chain = calloc(16,1);
 
               bits_BD (&dat, &g[j]); //g.value -> dat
+              g[j].bytes = dat.chain;
 
               if (dat.byte == 8)
                 g[j].bitsize = 58; // from 66
@@ -553,7 +578,7 @@ main (int argc, char *argv[])
                 goto FOUND;
               //print rounded found value and show bit diff
               printf("  unprecise BD search, 42bit mantissa precision\n");
-              num_found = search_bits(&g[j], &unknown_dxf[i], &dxf[i], offset);
+              num_found = search_bits(j, &g[j], &unknown_dxf[i], &dxf[i], offset);
               if (num_found) {
                 dat.chain = (unsigned char *)unknown_dxf[i].bytes;
                 dat.size = unknown_dxf[i].bitsize / 8;
@@ -569,7 +594,7 @@ main (int argc, char *argv[])
               else {
                 g[j].bitsize = 54;    // from 66
                 //printf("  more unprecise BD search, 38bit mantissa precision\n");
-                num_found = search_bits(&g[j], &unknown_dxf[i], &dxf[i], offset);
+                num_found = search_bits(j, &g[j], &unknown_dxf[i], &dxf[i], offset);
                 if (num_found) {
                   dat.chain = (unsigned char *)unknown_dxf[i].bytes;
                   dat.size = unknown_dxf[i].bitsize / 8;
@@ -584,7 +609,7 @@ main (int argc, char *argv[])
                 }
               }
             }
-            if (0 && code == 1 && is16) { // TU not found, try TV (unsuccessful)
+            if (code == 1 && is16) { // TU not found, try TV (unsuccessful)
               Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
               dat.chain = calloc(16,1);
 
@@ -592,7 +617,7 @@ main (int argc, char *argv[])
 
               g[j].bytes = dat.chain;
               g[j].bitsize = (dat.byte * 8) + dat.bit;
-              num_found = search_bits(&g[j], &unknown_dxf[i], &dxf[i], offset);
+              num_found = search_bits(j, &g[j], &unknown_dxf[i], &dxf[i], offset);
               if (num_found)
                 goto FOUND;
             }
