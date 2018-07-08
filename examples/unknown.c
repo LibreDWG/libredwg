@@ -579,6 +579,28 @@ main (int argc, char *argv[])
                 goto FOUND;
               }
             }
+            if (g[j].type == BITS_BS) {
+              Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
+              dat.chain = calloc(16,1);
+              bits_BL (&dat, &g[j]);
+              g[j].bytes = dat.chain;
+              g[j].bitsize = (dat.byte * 8) + dat.bit;
+              num_found = search_bits(j, &g[j], &unknown_dxf[i], &dxf[i], offset);
+              if (num_found) {
+                goto FOUND;
+              }
+            }
+            if (g[j].type == BITS_BL) {
+              Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
+              dat.chain = calloc(16,1);
+              bits_BS (&dat, &g[j]);
+              g[j].bytes = dat.chain;
+              g[j].bitsize = (dat.byte * 8) + dat.bit;
+              num_found = search_bits(j, &g[j], &unknown_dxf[i], &dxf[i], offset);
+              if (num_found) {
+                goto FOUND;
+              }
+            }
             if (g[j].type == BITS_RC) {
               Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
               dat.chain = calloc(16,1);
