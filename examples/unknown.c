@@ -217,6 +217,13 @@ static void bits_B(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
   }
 }
 
+static void bits_RD(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
+{
+  double d = strtod(g->value, NULL);
+  bit_write_RD(dat, d);
+  g->type = BITS_RD;
+}
+
 static void bits_BD(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
   double d = strtod(g->value, NULL);
@@ -489,7 +496,7 @@ int search_bits(int j, struct _unknown_field *g, struct _unknown_dxf *udxf,
     return 0;
   s = alloca(size);
   printf("  search %d:\"%s\" (%d bits of type %s [%d]) in %d bits\n",
-         g->code, g->value, g->bitsize, dwg_bits_name[g->type], j, dxf_bitsize);
+         g->code, g->value, g->bitsize, dwg_bits_name[g->type], j, dxf_bitsize-offset);
   printf("  =search (%d): ", offset); bit_print_bits(g->bytes, g->bitsize);
   while ((offset = membits(udxf->bytes, udxf->bitsize, g->bytes, g->bitsize, offset)) != -1) {
     if (num_found < 5) //record only the first 5 offsets for the solver
@@ -583,10 +590,21 @@ main (int argc, char *argv[])
                 goto FOUND;
               }
             }
+            if (g[j].type == BITS_BD) {
+              Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
+              dat.chain = calloc(16,1);
+              bits_RD (&dat, &g[j]);
+              g[j].bytes = dat.chain;
+              g[j].bitsize = (dat.byte * 8) + dat.bit;
+              num_found = search_bits(j, &g[j], &unknown_dxf[i], &dxf[i], offset);
+              if (num_found) {
+                goto FOUND;
+              }
+            }
             //relaxed BD search, less mantissa precision.
             //e.g. 49:"0.0008202099737533" (66 bits of type BD)
             //52 -> 44 bit
-            if (g[j].type == BITS_BD && strlen(g[j].value) > 3) {
+            if (g[j].type == BITS_BD && strlen(g[j].value) >= 3) {
               double d;
               Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
               dat.chain = calloc(16,1);
@@ -623,14 +641,61 @@ main (int argc, char *argv[])
                   bit_set_position(&dat, g[j].pos[0]);
                   d = bit_read_BD(&dat);
                   if (fabs(d - strtod(g[j].value, NULL)) < 0.001) {
-                    printf("  found unprecise %f value (38bit)\n", d);
+                    printf("  found unprecise BD %f value (38bit)\n", d);
                     goto FOUND;
                   } else {
-                    printf("  result too unprecise %f (38bit)\n", d);
+                    printf("  result too unprecise BD %f (38bit)\n", d);
                   }
                 }
               }
             }
+            //ditto relaxed RD search, without the BB prefix
+            if (g[j].type == BITS_BD && strlen(g[j].value) >= 3) {
+              double d;
+              Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
+              dat.chain = calloc(16,1);
+
+              bits_RD (&dat, &g[j]); //g.value -> dat
+              g[j].bytes = dat.chain;
+
+              if (dat.byte == 8)
+                g[j].bitsize = 56; // from 64
+              else
+                goto FOUND;
+              //print rounded found value and show bit diff
+              printf("  unprecise RD search, 42bit mantissa precision\n");
+              num_found = search_bits(j, &g[j], &unknown_dxf[i], &dxf[i], offset);
+              if (num_found) {
+                dat.chain = (unsigned char *)unknown_dxf[i].bytes;
+                dat.size = unknown_dxf[i].bitsize / 8;
+                bit_set_position(&dat, g[j].pos[0]);
+                d = bit_read_BD(&dat);
+                if (fabs(d - strtod(g[j].value, NULL)) < 0.001) {
+                  printf("  found unprecise RD %f value (42bit)\n", d);
+                  goto FOUND;
+                } else {
+                  printf("  result too unprecise RD %f (42bit)\n", d);
+                }
+              }
+              else {
+                g[j].bitsize = 52;    // from 64
+                //printf("  more unprecise RD search, 38bit mantissa precision\n");
+                num_found = search_bits(j, &g[j], &unknown_dxf[i], &dxf[i], offset);
+                if (num_found) {
+                  dat.chain = (unsigned char *)unknown_dxf[i].bytes;
+                  dat.size = unknown_dxf[i].bitsize / 8;
+                  bit_set_position(&dat, g[j].pos[0]);
+                  d = bit_read_BD(&dat);
+                  if (fabs(d - strtod(g[j].value, NULL)) < 0.001) {
+                    printf("  found unprecise RD %f value (38bit)\n", d);
+                    goto FOUND;
+                  } else {
+                    printf("  result too unprecise RD %f (38bit)\n", d);
+                  }
+                }
+              }
+            }
+
             if (code == 1 && is16) { // TU not found, try TV (unsuccessful)
               Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
               dat.chain = calloc(16,1);
