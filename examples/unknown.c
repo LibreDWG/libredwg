@@ -536,6 +536,23 @@ main (int argc, char *argv[])
                   goto FOUND;
               }
             }
+            //relaxed BD search, less mantissa precision.
+            //e.g. 49:"0.0008202099737533" (66 bits of type BD)
+            //52 -> 44 bit
+            if (g[j].type == BITS_BD && strlen(g[j].value) > 3) {
+              printf("  unprecise BD search, 44bit mantissa precision\n");
+              Bit_Chain dat = {NULL,66,0,0,NULL,0,0};
+              dat.chain = calloc(66,1);
+
+              bits_BD (&dat, &g[j]);
+
+              g[j].bytes = dat.chain;
+              if (dat.byte == 8)
+                g[j].bitsize = 60; // from 66
+              num_found = search_bits(&g[j], &unknown_dxf[i], &dxf[i], offset);
+              if (num_found)
+                goto FOUND;
+            }
             if (0 && code == 1 && is16) { // TU not found, try TV (unsuccessful)
               Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
               dat.chain = calloc(16,1);
