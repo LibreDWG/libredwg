@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <alloca.h>
+#include <math.h>
 
 #include "dwg.h"
 #include "../src/bits.h"
@@ -544,35 +545,42 @@ main (int argc, char *argv[])
               Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
               dat.chain = calloc(16,1);
 
-              bits_BD (&dat, &g[j]);
+              bits_BD (&dat, &g[j]); //g.value -> dat
 
-              g[j].bytes = dat.chain;
               if (dat.byte == 8)
-                g[j].bitsize = 60; // from 66
+                g[j].bitsize = 58; // from 66
               else
                 goto FOUND;
               //print rounded found value and show bit diff
-              printf("  unprecise BD search, 44bit mantissa precision\n");
+              printf("  unprecise BD search, 42bit mantissa precision\n");
               num_found = search_bits(&g[j], &unknown_dxf[i], &dxf[i], offset);
               if (num_found) {
-                dat.chain[7] &= 0x0f; //mask 4 bits (LE specific)
-                dat.chain[8] = 0x0;   //and the last 2
-                bit_set_position(&dat, 0);
+                dat.chain = (unsigned char *)unknown_dxf[i].bytes;
+                dat.size = unknown_dxf[i].bitsize / 8;
+                bit_set_position(&dat, g[j].pos[0]);
                 d = bit_read_BD(&dat);
-                printf("  found unprecise %f value (44bit)\n", d);
-                goto FOUND;
+                if (fabs(d - strtod(g[j].value, NULL)) < 0.001) {
+                  printf("  found unprecise %f value (42bit)\n", d);
+                  goto FOUND;
+                } else {
+                  printf("  result too unprecise %f (42bit)\n", d);
+                }
               }
               else {
                 g[j].bitsize = 54;    // from 66
-                printf("  more unprecise BD search, 38bit mantissa precision\n");
+                //printf("  more unprecise BD search, 38bit mantissa precision\n");
                 num_found = search_bits(&g[j], &unknown_dxf[i], &dxf[i], offset);
                 if (num_found) {
-                  dat.chain[6] &= 0xcf; //mask 6 more bits. 2 here,
-                  dat.chain[7] = 0x0;   // and the last 4 there
-                  bit_set_position(&dat, 0);
+                  dat.chain = (unsigned char *)unknown_dxf[i].bytes;
+                  dat.size = unknown_dxf[i].bitsize / 8;
+                  bit_set_position(&dat, g[j].pos[0]);
                   d = bit_read_BD(&dat);
-                  printf("  found unprecise %f value (38bit)\n", d);
-                  goto FOUND;
+                  if (fabs(d - strtod(g[j].value, NULL)) < 0.001) {
+                    printf("  found unprecise %f value (38bit)\n", d);
+                    goto FOUND;
+                  } else {
+                    printf("  result too unprecise %f (38bit)\n", d);
+                  }
                 }
               }
             }
