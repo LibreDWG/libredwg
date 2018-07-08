@@ -494,6 +494,7 @@ int
 main (int argc, char *argv[])
 {
   int i, j;
+  long sum_filled = 0, sum_size = 0;
   struct _dxf *dxf = calloc(sizeof(unknown_dxf)/sizeof(unknown_dxf[0]), sizeof(struct _dxf));
   #include "alldxf_2.inc"
   for (i=0; unknown_dxf[i].name; i++)
@@ -535,18 +536,33 @@ main (int argc, char *argv[])
                   goto FOUND;
               }
             }
+            if (0 && code == 1 && is16) { // TU not found, try TV (unsuccessful)
+              Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
+              dat.chain = calloc(16,1);
+
+              bits_TV (&dat, &g[j]);
+
+              g[j].bytes = dat.chain;
+              g[j].bitsize = (dat.byte * 8) + dat.bit;
+              num_found = search_bits(&g[j], &unknown_dxf[i], &dxf[i], offset);
+              if (num_found)
+                goto FOUND;
+            }
             continue;
           }
         FOUND:
           if (num_found == 1) {
-            printf("%d: %s [%s] found 1 at offset %d /%d\n", g[j].code, g[j].value,
-                   dwg_bits_name[g[j].type], g[j].pos[0], size);
-            if (set_found(&dxf[i], &g[j])) {
+            //oops, this looks wrong. it would rather return 2+ founds
+            //still we still need to skip already reserved offsets
+            if (set_found(&dxf[i], &g[j])) { //same pos, search for next
               offset = g[j].pos[0]+1;
               goto SEARCH;
             }
-            else
+            else {
+              printf("%d: %s [%s] found 1 at offset %d /%d\n", g[j].code, g[j].value,
+                   dwg_bits_name[g[j].type], g[j].pos[0], size);
               dxf[i].num_filled += g[j].bitsize;
+            }
           } else if (num_found == 2) {
             printf("%d: %s [%s] found 2 at offsets %d, %d /%d\n",
                    g[j].code, g[j].value,
@@ -592,6 +608,8 @@ main (int argc, char *argv[])
       }*/
       printf("%d/%d=%.1f%%\n", dxf[i].num_filled, size,
              100.0*dxf[i].num_filled/size);
+      sum_filled += dxf[i].num_filled;
+      sum_size += size;
       printf("possible: [");
       for (j=0; j<size; j++) {
         if (dxf[i].found[j]) {
@@ -609,5 +627,7 @@ main (int argc, char *argv[])
       //there are various heuristics, like the handle stream at the end
     }
 
+  printf("summary: %d/%d=%.2f%%\n", sum_filled, sum_size,
+         100.0*sum_filled/sum_size);
   return 0;
 }

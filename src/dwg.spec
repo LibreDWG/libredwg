@@ -5900,7 +5900,29 @@ DWG_OBJECT(ASSOC2DCONSTRAINTGROUP)
   // ...
 DWG_OBJECT_END
 
+// see unknown 34/117=29.1%
+// possible: [......29    7 7 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx9 99   7  9........5...9 99 9.9 9.........5...9    9..9 99    9....]
+// 90 -10000 at offset 16/117
 DWG_OBJECT(ASSOCGEOMDEPENDENCY)
+  //90 2 DependentOnObjectStatus (ok, NotInitializedYet, InvalidObjectId)
+  //90 0 Status
+  //290 1 HasCachedValue
+  //290 1 IsActionEvaluationInProgress
+  //290 1 IsAttachedToObject
+  //290 1 IsDelegatingToOwningAction
+  //90 -10000
+  //330 -> CIRCLE
+  //290 0
+  //330 0
+  //330 0
+  //360 0
+  //90 2
+  //AcDbAssocGeomDependency:
+  //90 0
+  //290 1
+  //1 AcDbAssocSingleEdgePersSubentId
+  //290 0
+  //FIELD_B (DependentOnCompoundObject, 90);
 DWG_OBJECT_END
 
 DWG_OBJECT(ASSOCACTION)
