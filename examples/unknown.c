@@ -540,18 +540,41 @@ main (int argc, char *argv[])
             //e.g. 49:"0.0008202099737533" (66 bits of type BD)
             //52 -> 44 bit
             if (g[j].type == BITS_BD && strlen(g[j].value) > 3) {
-              printf("  unprecise BD search, 44bit mantissa precision\n");
-              Bit_Chain dat = {NULL,66,0,0,NULL,0,0};
-              dat.chain = calloc(66,1);
+              double d;
+              Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
+              dat.chain = calloc(16,1);
 
               bits_BD (&dat, &g[j]);
 
               g[j].bytes = dat.chain;
               if (dat.byte == 8)
                 g[j].bitsize = 60; // from 66
-              num_found = search_bits(&g[j], &unknown_dxf[i], &dxf[i], offset);
-              if (num_found)
+              else
                 goto FOUND;
+              //print rounded found value and show bit diff
+              printf("  unprecise BD search, 44bit mantissa precision\n");
+              num_found = search_bits(&g[j], &unknown_dxf[i], &dxf[i], offset);
+              if (num_found) {
+                dat.chain[7] &= 0x0f; //mask 4 bits (LE specific)
+                dat.chain[8] = 0x0;   //and the last 2
+                bit_set_position(&dat, 0);
+                d = bit_read_BD(&dat);
+                printf("  found unprecise %f value (44bit)\n", d);
+                goto FOUND;
+              }
+              else {
+                g[j].bitsize = 54;    // from 66
+                printf("  more unprecise BD search, 38bit mantissa precision\n");
+                num_found = search_bits(&g[j], &unknown_dxf[i], &dxf[i], offset);
+                if (num_found) {
+                  dat.chain[6] &= 0xcf; //mask 6 more bits. 2 here,
+                  dat.chain[7] = 0x0;   // and the last 4 there
+                  bit_set_position(&dat, 0);
+                  d = bit_read_BD(&dat);
+                  printf("  found unprecise %f value (38bit)\n", d);
+                  goto FOUND;
+                }
+              }
             }
             if (0 && code == 1 && is16) { // TU not found, try TV (unsuccessful)
               Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
