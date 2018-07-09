@@ -36,7 +36,12 @@ EXTRA_DIST = $(top_srcdir)/.version \
 	     dxf_example.lsp dxf_example.sh test-dxf.sh logs.sh
 
 .PHONY: check-dwg check-dxf check-dwg-valgrind \
-        regen-man man manual refman refman-pdf scan-build gcov
+        regen-man man manual refman refman-pdf scan-build gcov unknown
+
+UNKNOWN_LOG = unknown-`git describe --long --tags --dirty --always`.log
+unknown:
+	$(MAKE) -C examples unknown$(EXEEXT) && \
+	$(LIBTOOL) --mode=execute examples/unknown$(EXEEXT) > $(UNKNOWN_LOG)
 
 regen-man:
 	$(MAKE) -C programs $@
