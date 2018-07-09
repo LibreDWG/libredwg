@@ -38,9 +38,9 @@ if (/^bits\[\d\]: (\d)/) {
 if (/Next object: /) {
   if ($object and $b and $handle && $bitsize) {
     my $dxf = $ARGV;
-    my ($n, $d) = $dxf =~ /^(.*_)(r\d+|20\d\d)\.log$/;
-    if ($n =~ /(example_|sample_|Drawing_)/) {
-      $dxf = "test/test-data/$n$d.dxf";
+    my ($n, $d) = $dxf =~ /^(.*)_(r\d+|R?20\d\d)\.log$/;
+    if ($n =~ /^(example|sample|Drawing|DS_li)/) {
+      $dxf = "test/test-data/${n}_${d}.dxf";
     } else {
       $dxf = "test/test-data/$d/$n.dxf";
     }

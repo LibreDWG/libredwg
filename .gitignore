@@ -52,6 +52,7 @@ gcov.log
 /test/unit-testing/*.gcda
 /test/test-data-r*/
 /test/test-data-20*/
+/unknown-*.log
 
 # specific filenames
 /.rb.sh
@@ -72,6 +73,7 @@ gcov.log
 /aclocal.m4
 /autom4te.cache/
 /bindings/perl/LibreDWG.pm
+/bindings/perl/Makefile.PL
 /bindings/perl/Makefile.old
 /bindings/perl/swig_perl.c
 /bindings/python/libredwg.py

@@ -5039,6 +5039,7 @@ DWG_OBJECT_END
 DWG_ENTITY(MULTILEADER)
 
   SUBCLASS (AcDbMLeader)
+  DXF { VALUE_TV ("CONTEXT_DATA{", 300); } //AcDbObjectContextData
   SINCE(R_2010)
     {
       IF_ENCODE_FROM_EARLIER {
@@ -5050,8 +5051,9 @@ DWG_ENTITY(MULTILEADER)
       FIELD_BS (ctx.class_version, 70); // default 3
       FIELD_B (ctx.has_xdic_file, 0);
       FIELD_B (ctx.is_default, 290);
-      FIELD_HANDLE (ctx.scale_handle, 5, 340);
     }
+  //AcDbAnnotScaleObjectContextData
+  FIELD_HANDLE (ctx.scale_handle, 5, 340); //??
 
   DXF { VALUE_TV ("LEADER{", 302); }
   FIELD_BL (ctx.num_leaders, 0);
@@ -5059,10 +5061,10 @@ DWG_ENTITY(MULTILEADER)
     {
 #     define lev1 ctx.leaders[rcount1]
       FIELD_B (lev1.is_valid, 290);  //1
-      FIELD_B (lev1.num_lines, 291); //1
-      FIELD_3BD (lev1.connection, 10);
-      FIELD_3BD (lev1.direction, 11);
-      FIELD_BL (lev1.num_breaks, 0);
+      FIELD_B (lev1.unknown, 291);   //always 1
+      FIELD_3BD (lev1.connection, 10); //offset 12
+      FIELD_3BD (lev1.direction, 11);  //offset 146
+      FIELD_BL (lev1.num_breaks, 0);   //offset 152-154 (should be 1)
       REPEAT2(lev1.num_breaks, lev1.breaks, Dwg_Leader_Break)
         {
           FIELD_3BD (lev1.breaks[rcount2].start, 12);
@@ -5071,7 +5073,7 @@ DWG_ENTITY(MULTILEADER)
       SET_PARENT(lev1.breaks, (Dwg_Leader_Line*)&_obj->lev1)
       END_REPEAT (lev1.breaks);
       FIELD_BL (lev1.index, 90);
-      FIELD_BD (lev1.landing_distance, 40); //ok
+      FIELD_BD (lev1.landing_distance, 40); //ok 156-222
       DXF { VALUE_TV ("LEADER_LINE{", 304); }
       // num_lines was missing
       REPEAT2(lev1.num_lines, lev1.lines, Dwg_Leader_Line)
@@ -5118,12 +5120,11 @@ DWG_ENTITY(MULTILEADER)
   END_REPEAT (ctx.leaders);
   DXF { VALUE_TV ("}", 303); }
 
-  DXF { VALUE_TV ("CONTEXT_DATA{", 300); }
   FIELD_BD (ctx.scale, 40);
-  FIELD_3BD (ctx.content_base, 10); //broken
-  FIELD_BD (ctx.text_height, 41);
-  FIELD_BD (ctx.arrow_size, 140);
-  FIELD_BD (ctx.landing_gap, 145);
+  FIELD_3RD (ctx.content_base, 10); //broken (2000: 384-576) 3x64
+  FIELD_BD (ctx.text_height, 41);   //offset 586-652, 584-648
+  FIELD_BD (ctx.arrow_size, 140);   //offset 586-652, 584-648
+  FIELD_BD (ctx.landing_gap, 145);  //576,648,...
   FIELD_BS (ctx.text_left, 174);
   FIELD_BS (ctx.text_right, 175);
   FIELD_BS (ctx.text_alignment, 176);
@@ -5186,9 +5187,9 @@ DWG_ENTITY(MULTILEADER)
       FIELD_BS (ctx.text_top, 273);
       FIELD_BS (ctx.text_bottom, 272);
     }
-  DXF { VALUE_TV ("}", 301); }
+  DXF { VALUE_TV ("}", 301); } //end CONTEXT_DATA
 
-  FIELD_HANDLE (leaderstyle, 5, 340);
+  FIELD_HANDLE (mleaderstyle, 5, 340);
   FIELD_BL (flags, 90); // override flags
   FIELD_BS (type, 170);
   FIELD_CMC (color, 91);

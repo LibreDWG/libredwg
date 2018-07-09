@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 =head1 USAGE
 
-    log_unknown_dxf alldwg.inc >alldxf.inc
-    make -C examples alldxf.inc
+    perl examples/log_unknown_dxf.pl examples/alldwg.inc
+    make -C examples alldxf_0.inc
 
     In C we cannot statically initialize variable-sized arrays of structs,
     to split it up into 3 parts.

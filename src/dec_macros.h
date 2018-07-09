@@ -530,7 +530,8 @@ static int dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj
   _ent->objid = obj->index; /* obj ptr itself might move */ \
   _obj->parent = obj->tio.entity;\
   error = dwg_decode_entity(dat, hdl_dat, str_dat, _ent); \
-  if (error >= DWG_ERR_CRITICAL) return error;
+  if (error >= DWG_ERR_CRITICAL) return error; \
+  obj->bitsize_address = bit_position(dat);
 
 #define DWG_ENTITY_END \
   if (dat->version >= R_2007) { free(str_dat); } \

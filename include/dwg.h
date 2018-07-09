@@ -2665,7 +2665,7 @@ typedef struct _dwg_MLeaderAnnotContext
   BITCODE_B has_xdic_file;
   BITCODE_B is_default;
 
-  BITCODE_H scale_handle;
+  BITCODE_H scale_handle; //ODA bug? looks more like the mleaderstyle 340 handle
 
   BITCODE_BL num_leaders;
   Dwg_Leader * leaders;
@@ -2742,7 +2742,7 @@ typedef struct _dwg_object_MULTILEADER
 
   BITCODE_BS class_version; /*!< r2010+ =2 */
   Dwg_MLeaderAnnotContext ctx;
-  BITCODE_H leaderstyle;
+  BITCODE_H mleaderstyle;
   BITCODE_BL flags; /* override */
   BITCODE_BS type;
   BITCODE_CMC color;
