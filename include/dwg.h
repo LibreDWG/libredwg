@@ -5254,12 +5254,12 @@ EXPORT int dwg_add_LWPOLYLINE (Dwg_Object *obj);
 EXPORT int dwg_add_HATCH (Dwg_Object *obj);
 EXPORT int dwg_add_XRECORD (Dwg_Object *obj);
 EXPORT int dwg_add_PLACEHOLDER (Dwg_Object *obj);
-#ifdef DEBUG_CLASSES
-  EXPORT int dwg_add_VBA_PROJECT (Dwg_Object *obj);
-#endif
+EXPORT int dwg_add_VBA_PROJECT (Dwg_Object *obj);
 EXPORT int dwg_add_LAYOUT (Dwg_Object *obj);
 EXPORT int dwg_add_PROXY_ENTITY (Dwg_Object *obj);
 EXPORT int dwg_add_PROXY_OBJECT (Dwg_Object *obj);
+EXPORT int dwg_add_UNKNOWN_ENT (Dwg_Object *obj);
+EXPORT int dwg_add_UNKNOWN_OBJ (Dwg_Object *obj);
 //EXPORT int dwg_add_ACAD_EVALUATION_GRAPH (Dwg_Object *obj);
 //EXPORT int dwg_add_ACSH_HISTORY_CLASS (Dwg_Object *obj);
 //EXPORT int dwg_add_ACSH_SWEEP_CLASS (Dwg_Object *obj);
@@ -5272,14 +5272,12 @@ EXPORT int dwg_add_PROXY_OBJECT (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCOSNAPPOINTREFACTIONPARAM (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCPERSSUBENTMANAGER (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCVERTEXACTIONPARAM (Dwg_Object *obj);
-#ifdef DEBUG_CLASSES
 EXPORT int dwg_add_ASSOCACTION (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCNETWORK (Dwg_Object *obj);
-EXPORT int dwg_add_CELLSTYLEMAP (Dwg_Object *obj);
-#endif
 EXPORT int dwg_add_CAMERA (Dwg_Object *obj);
+EXPORT int dwg_add_CELLSTYLEMAP (Dwg_Object *obj);
 //EXPORT int dwg_add_CSACDOCUMENTOPTIONS (Dwg_Object *obj);
-//EXPORT int dwg_add_DATATABLE (Dwg_Object *obj);
+EXPORT int dwg_add_DATATABLE (Dwg_Object *obj);
 //EXPORT int dwg_add_DBCOLOR (Dwg_Object *obj);
 //EXPORT int dwg_add_DETAILVIEWSTYLE (Dwg_Object *obj);
 //EXPORT int dwg_add_DIMASSOC (Dwg_Object *obj);
@@ -5289,10 +5287,9 @@ EXPORT int dwg_add_DICTIONARYWDFLT (Dwg_Object *obj);
 EXPORT int dwg_add_FIELD (Dwg_Object *obj);
 EXPORT int dwg_add_FIELDLIST (Dwg_Object *obj);
 EXPORT int dwg_add_GEODATA (Dwg_Object *obj);
-#ifdef DEBUG_CLASSES
-  EXPORT int dwg_add_GEOPOSITIONMARKER (Dwg_Object *obj);
-  EXPORT int dwg_add_HELIX (Dwg_Object *obj);
-#endif
+EXPORT int dwg_add_GEOPOSITIONMARKER (Dwg_Object *obj);
+EXPORT int dwg_add_HELIX (Dwg_Object *obj);
+EXPORT int dwg_add_IDBUFFER (Dwg_Object *obj);
 EXPORT int dwg_add_IMAGE (Dwg_Object *obj);
 EXPORT int dwg_add_IMAGEDEF (Dwg_Object *obj);
 EXPORT int dwg_add_IMAGEDEF_REACTOR (Dwg_Object *obj);
@@ -5302,18 +5299,14 @@ EXPORT int dwg_add_LAYER_INDEX (Dwg_Object *obj);
 //EXPORT int dwg_add_LEADEROBJECTCONTEXTDATA (Dwg_Object *obj);
 //EXPORT int dwg_add_LIGHTLIST (Dwg_Object *obj);
 EXPORT int dwg_add_MLEADERSTYLE (Dwg_Object *obj);
-#ifdef DEBUG_CLASSES
-  EXPORT int dwg_add_LIGHT (Dwg_Object *obj);
-  EXPORT int dwg_add_MATERIAL (Dwg_Object *obj);
-  EXPORT int dwg_add_MULTILEADER (Dwg_Object *obj);
-#endif
+EXPORT int dwg_add_LIGHT (Dwg_Object *obj);
+EXPORT int dwg_add_MATERIAL (Dwg_Object *obj);
+EXPORT int dwg_add_MULTILEADER (Dwg_Object *obj);
 //EXPORT int dwg_add_NPOCOLLECTION (Dwg_Object *obj);
-//EXPORT int dwg_add_OBJECTCONTEXTDATA (Dwg_Object *obj);
+EXPORT int dwg_add_OBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_add_OBJECT_PTR (Dwg_Object *obj);
 //EXPORT int dwg_add_PERSSUBENTMANAGER (Dwg_Object *obj);
-#ifdef DEBUG_CLASSES
-  EXPORT int dwg_add_PLOTSETTINGS (Dwg_Object *obj);
-#endif
+EXPORT int dwg_add_PLOTSETTINGS (Dwg_Object *obj);
 //EXPORT int dwg_add_POINTCLOUD (Dwg_Object *obj);
 EXPORT int dwg_add_RASTERVARIABLES (Dwg_Object *obj);
 //EXPORT int dwg_add_RTEXT (Dwg_Object *obj);
@@ -5322,15 +5315,14 @@ EXPORT int dwg_add_SCALE (Dwg_Object *obj);
 EXPORT int dwg_add_SORTENTSTABLE (Dwg_Object *obj);
 EXPORT int dwg_add_SPATIAL_FILTER (Dwg_Object *obj);
 EXPORT int dwg_add_SPATIAL_INDEX (Dwg_Object *obj);
-#ifdef DEBUG_CLASSES
-  EXPORT int dwg_add_SUN (Dwg_Object *obj);
-  EXPORT int dwg_add_SUNSTUDY (Dwg_Object *obj);
-  EXPORT int dwg_add_TABLE (Dwg_Object *obj);
-  EXPORT int dwg_add_TABLECONTENT (Dwg_Object *obj);
-  EXPORT int dwg_add_TABLEGEOMETRY (Dwg_Object *obj);
-  EXPORT int dwg_add_TABLESTYLE (Dwg_Object *obj);
-  EXPORT int dwg_add_UNDERLAY (Dwg_Object *obj);
-#endif
+EXPORT int dwg_add_SUN (Dwg_Object *obj);
+EXPORT int dwg_add_SURFACE (Dwg_Object *obj);
+EXPORT int dwg_add_SUNSTUDY (Dwg_Object *obj);
+EXPORT int dwg_add_TABLE (Dwg_Object *obj);
+EXPORT int dwg_add_TABLESTYLE (Dwg_Object *obj);
+EXPORT int dwg_add_UNDERLAY (Dwg_Object *obj);
+EXPORT int dwg_add_TABLECONTENT (Dwg_Object *obj);
+EXPORT int dwg_add_TABLEGEOMETRY (Dwg_Object *obj);
 //EXPORT int dwg_add_UNDERLAYDEFINITION (Dwg_Object *obj);
 EXPORT int dwg_add_VISUALSTYLE (Dwg_Object *obj);
 EXPORT int dwg_add_WIPEOUT (Dwg_Object *obj);

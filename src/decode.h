@@ -65,6 +65,10 @@ dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
 void
 dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf);
 
+/* reused with encode */
+void
+dwg_resolve_objectrefs_silent(Dwg_Data *restrict dwg);
+
 /* from decode_r2007.c */
 int
 obj_string_stream(Bit_Chain *dat,

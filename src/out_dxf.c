@@ -162,27 +162,27 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 /* avoid empty numbers, and fixup some bad %f libc formatting */
 #define VALUE(value, type, dxf) \
   if (dxf) { \
-    char *s; \
-    const char *fmt = dxf_format (dxf); \
+    char *_s; \
+    const char *_fmt = dxf_format (dxf); \
     GROUP(dxf); \
     GCC_DIAG_IGNORE(-Wformat-nonliteral) \
-    snprintf(buf, 255, fmt, value); \
+    snprintf(buf, 255, _fmt, value); \
     GCC_DIAG_RESTORE \
     /* not a string, emtpy num. must be zero */ \
-    if (strcmp(fmt, "%s") && !*buf) \
+    if (strcmp(_fmt, "%s") && !*buf) \
       strcpy(buf, "0"); \
     else if (90 <= dxf && dxf < 100) \
       /* ignore -Wpointer-to-int-cast, cannot happen with 90 */ \
       snprintf(buf, 255, "%6i", (int32_t)(value)); \
-    else if (!strcmp(fmt, "%-16.14f")) { \
+    else if (!strcmp(_fmt, "%-16.14f")) { \
       if (!strcmp(buf, "0.00000000000000")) \
         strcpy(buf, "0.0"); \
-      else if ((s = strstr(buf, ".00000000000000"))) \
-        strcpy(s, ".0"); \
-      else if ((s = strstr(buf, ".50000000000000"))) \
-        strcpy(s, ".5"); \
-      else if ((s = strstr(buf, ".12500000000000"))) \
-        strcpy(s, ".125"); \
+      else if ((_s = strstr(buf, ".00000000000000"))) \
+        strcpy(_s, ".0"); \
+      else if ((_s = strstr(buf, ".50000000000000"))) \
+        strcpy(_s, ".5"); \
+      else if ((_s = strstr(buf, ".12500000000000"))) \
+        strcpy(_s, ".125"); \
     } \
     fprintf(dat->fh, "%s\r\n", buf); \
   }
@@ -435,8 +435,14 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 #define END_STRING_STREAM
 #define START_HANDLE_STREAM
 
+#ifndef DEBUG_CLASSES
 static int
-dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
+dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
+{
+  (void)dat; (void)obj;
+  return 0;
+}
+#endif
 
 //The strcmp is being optimized away at compile-time! https://godbolt.org/g/AqkhwL
 #define DWG_ENTITY(token) \
@@ -680,7 +686,7 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
   unsigned long j;
   int vcount, rcount1, rcount2;
   int error = 0;
-  int i = 0;
+  unsigned int i = 0;
   int index;
   int total_size = 0;
   int num_blocks = 0;
@@ -1356,7 +1362,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
     for (i=0; i<dwg->block_control.num_entries; i++)
       {
-        Dwg_Object *obj = dwg_ref_object(dwg, dwg->block_control.block_headers[i]);
+        obj = dwg_ref_object(dwg, dwg->block_control.block_headers[i]);
         if (obj && obj->type == DWG_TYPE_BLOCK_HEADER &&
             obj != mspace && obj != pspace)
           {
@@ -1417,7 +1423,7 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     hdr = _ctrl->paper_space->obj;
 
   if (hdr) {
-      Dwg_Object *obj = get_first_owned_block(hdr);
+      obj = get_first_owned_block(hdr);
       while (obj)
         {
           error |= dwg_dxf_object(dat, obj);

@@ -1522,13 +1522,17 @@ dwg_ent_minsert_get_num_owned(const dwg_ent_minsert *restrict minsert,
 EXPORT BITCODE_BL
 dwg_ent_minsert_get_num_cols(const dwg_ent_minsert *restrict minsert,
                              int *restrict error);
-
+EXPORT void
+dwg_ent_minsert_set_num_cols(dwg_ent_minsert *restrict minsert,
+                             const BITCODE_BL num_cols,
+                             int *restrict error);
 EXPORT BITCODE_BL
 dwg_ent_minsert_get_num_rows(const dwg_ent_minsert *restrict minsert,
                              int *restrict error);
-
-//TODO dwg_ent_minsert_add_row, dwg_ent_insert_delete_row
-//TODO dwg_ent_minsert_add_col, dwg_ent_insert_delete_col
+EXPORT void
+dwg_ent_minsert_set_num_rows(dwg_ent_minsert *restrict minsert,
+                             const BITCODE_BL num_rows,
+                             int *restrict error);
 
 EXPORT double
 dwg_ent_minsert_get_col_spacing(const dwg_ent_minsert *restrict minsert,
@@ -2670,7 +2674,9 @@ dwg_obj_proxy_get_parenthandle(const dwg_obj_proxy *restrict proxy,
 EXPORT dwg_object_ref**
 dwg_obj_proxy_get_objid_object_handles(const dwg_obj_proxy *restrict proxy,
                                        int *restrict error);
-
+EXPORT dwg_object_ref**
+dwg_obj_proxy_get_reactors(const dwg_obj_proxy *restrict proxy,
+                           int *restrict error);
 
 /********************************************************************
 *                   FUNCTIONS FOR SPLINE ENTITY                     *

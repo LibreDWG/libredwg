@@ -17058,7 +17058,7 @@ dwg_ent_table_set_title_horiz_top_visibility(dwg_ent_table *restrict table,
                                              const BITCODE_BS visibility,
                                              int *restrict error)
 {
-  if (table && visibility >=0 && visibility <= 1)
+  if (table && visibility <= 1)
     {
       *error = 0;
       if (visibility) table->border_visibility_overrides_flag |= 0x1;
@@ -17542,7 +17542,7 @@ dwg_ent_table_set_header_vert_right_visibility(dwg_ent_table *restrict table,
                                                const BITCODE_BS visibility,
                                                int *restrict error)
 {
-  if (table && visibility >=0 && visibility <= 1)
+  if (table && visibility <= 1)
     {
       *error = 0;
       if (visibility) table->border_visibility_overrides_flag |= 0x800;
@@ -17718,7 +17718,7 @@ dwg_ent_table_set_data_vert_left_visibility(dwg_ent_table *restrict table,
                                            const BITCODE_BS visibility,
                                            int *restrict error)
 {
-  if (table && visibility >=0 && visibility <= 1)
+  if (table && visibility <= 1)
     {
       *error = 0;
       if (visibility) table->border_visibility_overrides_flag |= 0x8000;
@@ -17762,7 +17762,7 @@ dwg_ent_table_set_data_vert_ins_visibility(dwg_ent_table *restrict table,
                                            const BITCODE_BS visibility,
                                            int *restrict error)
 {
-  if (table && visibility >=0 && visibility <= 1)
+  if (table && visibility <= 1)
     {
       *error = 0;
       if (visibility) table->border_visibility_overrides_flag |= 0x10000;
@@ -18281,7 +18281,7 @@ dwg_ref_get_table_name(const dwg_object_ref *restrict ref,
   if (ref && ref->obj)
     name = dwg_obj_table_get_name(ref->obj, error);
   if (!name)
-    name = "ByLayer";
+    name = (char*)"ByLayer";
   return name;
 }
 
@@ -18345,7 +18345,7 @@ dwg_ent_get_layer_name(const dwg_obj_ent *restrict ent,
   if (layer)
     name = dwg_obj_table_get_name(layer, error);
   if (!name)
-    name = "0";
+    name = (char*)"0";
   return name;
 }
 

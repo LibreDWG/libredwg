@@ -60,7 +60,7 @@ static int help(void) {
 }
 
 static int
-get_bmp(char *dwgfile, char *bmpfile, unsigned int opts)
+get_bmp(char *dwgfile, char *bmpfile)
 {
   unsigned char *data;
   int error;
@@ -229,6 +229,6 @@ main (int argc, char *argv[])
 
   dwgfile = argv[i];
   bmpfile = suffix (dwgfile, "bmp");
-  return get_bmp (dwgfile, bmpfile, opts);
+  return get_bmp (dwgfile, bmpfile);
 }
 

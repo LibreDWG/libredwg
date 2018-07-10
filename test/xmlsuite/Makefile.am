@@ -2,6 +2,7 @@
 AM_CPPFLAGS = $(XML2_CFLAGS)
 # no -O2
 # CFLAGS = -g
+WARN_CFLAGS = @WARN_CFLAGS@
 AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
 LDADD = $(top_builddir)/src/libredwg.la $(XML2_LIBS)
 

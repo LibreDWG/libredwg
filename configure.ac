@@ -131,13 +131,14 @@ AM_CONDITIONAL([IS_RELEASE], [test x$ax_is_release = xyes])
 dnl Disable unwanted warnings here. These should be fixed before 1.0
 enable_Werror=no
 ax_enable_compile_warnings=yes
-AX_COMPILER_FLAGS([AM_CFLAGS],[AM_LDFLAGS],[$ax_is_release],[-fvisibility=hidden])
+AX_COMPILER_FLAGS([WARN_CFLAGS],[AM_LDFLAGS],[$ax_is_release],[-fvisibility=hidden])
 dnl if test x$ax_cv_check_cflags__Wunused_but_set_variable = xyes; then
 dnl   WARN_CFLAGS="$WARN_CFLAGS -Wno-unused-but-set-variable"
 dnl fi
 dnl if test x$ax_cv_check_cflags__Wunused_variable = xyes; then
 dnl   WARN_CFLAGS="$WARN_CFLAGS -Wno-unused-variable"
 dnl fi
+AC_SUBST(WARN_CFLAGS)
 
 AC_CACHE_CHECK([for __attribute__((visibility("default")))],
   ac_cv_attribute_visibility_default, [

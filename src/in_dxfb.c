@@ -57,10 +57,10 @@ static char buf[4096];
 #else
 # define FIELD_TEXT_TU(name,wlen,wstr) \
   { \
-    BITCODE_TU ws = (BITCODE_TU)wstr; \
+    BITCODE_TU _ws = (BITCODE_TU)wstr; \
     uint16_t _c; \
     fprintf(dat->fh, #name ": \""); \
-    while ((_c = *ws++)) { \
+    while ((_c = *_ws++)) { \
       fprintf(dat->fh, "%c", (char)(_c & 0xff)); \
     } \
     fprintf(dat->fh, "\",\n"); \
@@ -72,9 +72,9 @@ static char buf[4096];
 //TODO read
 #define VALUE_HANDLE(hdlptr, handle_code, dxf) \
   if (hdlptr) { \
-     uint32_t hdl = (uint32_t)hdlptr->absolute_ref; \
+     uint32_t _hdl = (uint32_t)hdlptr->absolute_ref; \
      GROUP(dxf); \
-     fwrite(&hdl, 4, 4, dat->fh); \
+     fwrite(&_hdl, 4, 4, dat->fh); \
   }
 #define FIELD_HANDLE(name, handle_code, dxf) VALUE_HANDLE(_obj->name, handle_code, dxf)
 
@@ -145,9 +145,9 @@ static char buf[4096];
     fprintf (dat->fh, "$%s%c", #name, 0)
 #define VALUE_RC(value,dxf) \
   {\
-    BITCODE_RC c = value;\
+    BITCODE_RC _c = value;\
     GROUP(dxf);\
-    fread(&c, 1, 1, dat->fh); \
+    fread(&_c, 1, 1, dat->fh); \
   }
 #define FIELD_RC(name,dxf)  FIELD(name,RC,dxf)
 #define HEADER_RC(name,dxf)  HEADER_9(name); FIELD(name,RC,dxf)
@@ -160,9 +160,9 @@ static char buf[4096];
 
 #define VALUE_RS(value,dxf) \
   {\
-    BITCODE_RS s = value;\
+    BITCODE_RS _s = value;\
     GROUP(dxf);\
-    fread(&s, 2, 1, dat->fh);\
+    fread(&_s, 2, 1, dat->fh);\
   }
 #define FIELD_RS(name,dxf) FIELD(name,RS,dxf)
 #define HEADER_RS(name,dxf) \
@@ -171,9 +171,9 @@ static char buf[4096];
 
 #define VALUE_RD(value,dxf)\
   {\
-    double d = value;\
+    double _d = value;\
     GROUP(dxf);\
-    fwrite(&d, 1, 8, dat->fh); \
+    fwrite(&_d, 1, 8, dat->fh); \
   }
 #define FIELD_RD(name,dxf) VALUE_RD(_obj->name,dxf)
 #define HEADER_RD(name,dxf) \
@@ -182,9 +182,9 @@ static char buf[4096];
 
 #define VALUE_RL(value,dxf)\
   {\
-    BITCODE_RL s = value;\
+    BITCODE_RL _s = value;\
     GROUP(dxf);\
-    fwrite(&s, 4, 1, dat->fh);\
+    fwrite(&_s, 4, 1, dat->fh);\
   }
 #define FIELD_RL(name,dxf) VALUE_RL(_obj->name,dxf)
 #define HEADER_RL(name,dxf) \
@@ -193,8 +193,8 @@ static char buf[4096];
 
 #define VALUE_H(value,dxf) \
   {\
-    Dwg_Object_Ref *ref = value;\
-    if (ref && ref->obj) {VALUE_RS(ref->absolute_ref, dxf);}\
+    Dwg_Object_Ref *_ref = value;\
+    if (_ref && _ref->obj) { VALUE_RS(_ref->absolute_ref, dxf); }\
     else {VALUE_RS(0, dxf);}                                \
   }
 #define HEADER_H(name,dxf) \
@@ -202,8 +202,8 @@ static char buf[4096];
     VALUE_H(dwg->header_vars.name, dxf)
 #define VALUE_HANDLE_NAME(value,dxf,section)\
   {\
-    Dwg_Object_Ref *ref = value;\
-    if (ref && ref->obj) { VALUE_TV(ref->obj->tio.object->tio.section->entry_name, dxf);} \
+    Dwg_Object_Ref *_ref = value;\
+    if (_ref && _ref->obj) { VALUE_TV(_ref->obj->tio.object->tio.section->entry_name, dxf);} \
     else VALUE_TV("", dxf);\
   }
 #define FIELD_HANDLE_NAME(name,dxf,section) VALUE_HANDLE_NAME(_obj->name,dxf,section)
@@ -213,11 +213,11 @@ static char buf[4096];
 
 #define FIELD_RLL(name,dxf) \
   {\
-    BITCODE_RLL s = _obj->name;\
+    BITCODE_RLL _s = _obj->name;\
     GROUP(9);\
     fprintf (dat->fh, "$%s%c", #name, 0);\
     GROUP(dxf);\
-    fwrite(&s, 8, 1, dat->fh);\
+    fwrite(&_s, 8, 1, dat->fh);\
   }
 #define FIELD_MC(name,dxf) FIELD_RC(name,dxf)
 #define FIELD_MS(name,dxf)  FIELD_RS(name,dxf)

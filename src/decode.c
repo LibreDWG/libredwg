@@ -1473,19 +1473,19 @@ decompress_R2004_section(Bit_Chain *restrict dat, char *restrict decomp,
       // copy "compressed data"
       src = dst - comp_offset - 1;
       assert(src >= decomp);
-      if (comp_bytes > bytes_left) // bytes left to write
+      if ((uint32_t)comp_bytes > bytes_left) // bytes left to write
         {
           LOG_ERROR("Invalid comp_bytes %lu > %lu bytes left",
                     (unsigned long)comp_bytes, (unsigned long)bytes_left)
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
-      for (i = 0; i < comp_bytes; ++i)
+      for (i = 0; (uint32_t)i < comp_bytes; ++i)
         *dst++ = *src++;
       bytes_left -= comp_bytes;
 
       // copy "literal data"
       LOG_INSANE("<L %d\n", lit_length)
-      if (lit_length > bytes_left) // bytes left to write
+      if ((uint32_t)lit_length > bytes_left) // bytes left to write
         {
           LOG_ERROR("Invalid lit_length %lu > %lu bytes left",
                     (unsigned long)lit_length, (unsigned long)bytes_left)
@@ -2564,7 +2564,7 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
 {
   unsigned int i;
   BITCODE_BS size;
-  int error;
+  int error = 0;
   Dwg_Data *dwg = _obj->dwg;
   Dwg_Object *obj = &dwg->object[_obj->objid];
 

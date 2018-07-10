@@ -101,9 +101,9 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 //TODO
 #define VALUE_HANDLE(hdlptr, handle_code, dxf) \
   { \
-     uint32_t i = (uint32_t)hdlptr->absolute_ref; \
+     uint32_t _j = (uint32_t)hdlptr->absolute_ref; \
      GROUP(dxf); \
-     fwrite(&i, 4, 4, dat->fh); \
+     fwrite(&_j, 4, 4, dat->fh); \
   }
 #define FIELD_HANDLE(name, handle_code, dxf) VALUE_HANDLE(_obj->name, handle_code, dxf)
 
@@ -227,9 +227,9 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 
 #define VALUE_RL(value,dxf)\
   {\
-    BITCODE_RL s = value;\
+    BITCODE_RL _s = value;\
     GROUP(dxf);\
-    fwrite(&s, 4, 1, dat->fh);\
+    fwrite(&_s, 4, 1, dat->fh);\
   }
 #define FIELD_RL(name,dxf) VALUE_RL(_obj->name,dxf)
 #define HEADER_RL(name,dxf) \
@@ -388,7 +388,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 #define ENT_REACTORS(code)\
   if (dat->version >= R_13 && _obj->num_reactors && _obj->reactors) {\
     VALUE_TV("{ACAD_REACTORS", 102) \
-    for (vcount=0; vcount < (int)_obj->num_reactors; vcount++)\
+    for (vcount=0; vcount < _obj->num_reactors; vcount++)\
       {\
         VALUE_HANDLE(_obj->reactors[vcount], code, 330);\
       }\
@@ -413,8 +413,14 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 #define END_STRING_STREAM
 #define START_HANDLE_STREAM
 
+#ifndef DEBUG_CLASSES
 static int
-dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
+dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
+{
+  (void)dat; (void)obj;
+  return 0;
+}
+#endif
 
 #define DWG_ENTITY(token) \
 static int \
@@ -480,11 +486,11 @@ dwg_dxfb_ ##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
     else if (obj->type != DWG_TYPE_BLOCK_HEADER) \
       RECORD(token)                              \
     SINCE(R_13) { \
-      uint32_t i = (uint32_t)obj->handle.value; \
+      uint32_t _i = (uint32_t)obj->handle.value; \
       int dxf = 5; \
       if (obj->type == DWG_TYPE_DIMSTYLE) dxf = 105; \
       GROUP(dxf);\
-      fwrite(&i, 4, 4, dat->fh); \
+      fwrite(&_i, 4, 4, dat->fh); \
       _XDICOBJHANDLE(3); \
       _REACTORS(4); \
     } \
@@ -594,9 +600,9 @@ dxfb_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
 // 5 written here first
 #define COMMON_TABLE_CONTROL_FLAGS \
   SINCE(R_13) { \
-    uint32_t i = (uint32_t)ctrl->handle.value; \
+    uint32_t _i = (uint32_t)ctrl->handle.value; \
     GROUP(5); \
-    fwrite(&i, 4, 4, dat->fh); \
+    fwrite(&_i, 4, 4, dat->fh); \
   } \
   SINCE(R_14) \
     VALUE_H (_ctrl->null_handle, 330); \
@@ -1105,12 +1111,12 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
     for (i=0; i<dwg->block_control.num_entries; i++)
       {
-        Dwg_Object *obj = dwg_ref_object(dwg, dwg->block_control.block_headers[i]);
-        if (obj && obj->type == DWG_TYPE_BLOCK_HEADER &&
-            obj != mspace && obj != pspace)
+        Dwg_Object *_o = dwg_ref_object(dwg, dwg->block_control.block_headers[i]);
+        if (_o && _o->type == DWG_TYPE_BLOCK_HEADER &&
+            _o != mspace && _o != pspace)
           {
             RECORD(BLOCK_RECORD);
-            error |= dwg_dxfb_BLOCK_HEADER(dat, obj);
+            error |= dwg_dxfb_BLOCK_HEADER(dat, _o);
           }
       }
     ENDTAB();
@@ -1166,7 +1172,7 @@ dxfb_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     hdr = _ctrl->paper_space->obj;
 
   if (hdr) {
-      Dwg_Object *obj = get_first_owned_block(hdr);
+      obj = get_first_owned_block(hdr);
       while (obj)
         {
           error |= dwg_dxfb_object(dat, obj);

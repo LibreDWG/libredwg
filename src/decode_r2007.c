@@ -603,7 +603,7 @@ read_system_page(Bit_Chain* dat, int64_t size_comp, int64_t size_uncomp,
   assert((uint64_t)repeat_count < DBG_MAX_COUNT);
   assert((uint64_t)page_size < DBG_MAX_COUNT);
 
-  if (page_size > dat->size - dat->byte) // bytes left to read
+  if ((unsigned long)page_size > dat->size - dat->byte) // bytes left to read
     {
       LOG_ERROR("Invalid page_size %ld > %lu bytes left",
                 (long)page_size, dat->size - dat->byte);
@@ -1067,7 +1067,7 @@ read_file_header(Bit_Chain *restrict dat, r2007_file_header *restrict file_heade
   if (!error) {
 
 #define VALID_SIZE(var) \
-    if (var < 0 || var > dat->size) { \
+    if (var < 0 || (unsigned)var > dat->size) { \
       errcount++; \
       error |= DWG_ERR_VALUEOUTOFBOUNDS; \
       LOG_ERROR("%s Invalid %s %ld > MAX_SIZE", __FUNCTION__, #var, \
@@ -1075,7 +1075,7 @@ read_file_header(Bit_Chain *restrict dat, r2007_file_header *restrict file_heade
       var = 0; \
     }
 #define VALID_COUNT(var) \
-    if (var < 0 || var > dat->size) { \
+    if (var < 0 || (unsigned)var > dat->size) { \
       errcount++; \
       error |= DWG_ERR_VALUEOUTOFBOUNDS; \
       LOG_ERROR("%s Invalid %s %ld > MAX_COUNT", __FUNCTION__, #var, \
@@ -1499,7 +1499,7 @@ read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat,
       return DWG_ERR_SECTIONNOTFOUND;
     }
   dat->byte = page->offset;
-  if (file_header.sections_map_size_comp > dat->byte - dat->size)
+  if ((unsigned long)file_header.sections_map_size_comp > dat->byte - dat->size)
     {
       LOG_ERROR("%s Invalid comp_data_size %lu > %lu bytes left",
                 __FUNCTION__, (unsigned long)file_header.sections_map_size_comp,

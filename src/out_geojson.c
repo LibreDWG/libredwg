@@ -99,7 +99,7 @@ static unsigned int cur_ver = 0;
     PAIR_S(type, #name)
 #define ENDGEOMETRY LASTENDHASH
 
-//#define VALUE(value,type,dxf) \
+//#define VALUE(value,type,dxf)
 //    fprintf(dat->fh, FORMAT_##type, value)
 //#define VALUE_RC(value,dxf) VALUE(value, RC, dxf)
 
@@ -139,7 +139,7 @@ static unsigned int cur_ver = 0;
 #define FIELD_TV(name,dxf)      FIELD_TEXT(name, _obj->name)
 #define FIELD_TU(name,dxf)      FIELD_TEXT_TU(name, (BITCODE_TU)_obj->name)
 #define FIELD_T(name,dxf)
-//  { if (dat->version >= R_2007) { FIELD_TU(name, dxf); }    \
+//  { if (dat->version >= R_2007) { FIELD_TU(name, dxf); }
 //    else                        { FIELD_TV(name, dxf); } }
 #define FIELD_BT(name,dxf)    FIELD(name, BT, dxf);
 #define FIELD_4BITS(name,dxf) FIELD(name,4BITS,dxf)

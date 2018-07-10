@@ -294,7 +294,7 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 #define RECORD(record) PAIR(0, record)
 #define GROUP(dxf) dxf_read_group(dat, dxf)
 
-#define VALUE(value, type, dxf)
+#define VALUE(value, type, dxf) {}
 
 #define HEADER_HANDLE_NAME(name, dxf, section) \
   HEADER_9(name);\

@@ -2411,20 +2411,20 @@ DWG_OBJECT(STYLE)
     //1001 1000 1071 mandatory r2007+ if .ttf
     //long truetype font’s pitch and family, charset, and italic and bold flags
     DXF {
-      char buf[255];
+      char _buf[255];
       char *s;
       SINCE(R_2007) {
         s = bit_convert_TU((BITCODE_TU)_obj->font_name);
-        strncpy(buf, s, 255);
+        strncpy(_buf, s, 255);
       } else {
-        strncpy(buf, _obj->font_name, 255);
+        strncpy(_buf, _obj->font_name, 255);
       }
-      if ((s = strstr(buf, ".ttf")) ||
-          (s = strstr(buf, ".TTF")))
+      if ((s = strstr(_buf, ".ttf")) ||
+          (s = strstr(_buf, ".TTF")))
         {
           *s = 0;
           VALUE_TV ("ACAD", 1001);
-          VALUE_TV (buf, 1000);
+          VALUE_TV (_buf, 1000);
           VALUE_RL (34, 1071);
         }
     }
@@ -3942,6 +3942,7 @@ DWG_OBJECT(PROXY_OBJECT)
 
   LOG_INFO("TODO PROXY_OBJECT data\n");
   /*
+  //TODO: save at least the remaining bytes
   //TODO: figure out how to deal with the arbitrary size vector databits
   FIELD_RC (*data);
   START_HANDLE_STREAM;
@@ -4227,6 +4228,8 @@ DWG_OBJECT(SPATIAL_INDEX)
   XDICOBJHANDLE(3);
 
 DWG_OBJECT_END
+
+#ifdef DEBUG_CLASSES
 
 // 20.4.101.3 Content format for TABLECONTENT and Cell_Style_Field
 #define Content_Format(fmt) \
@@ -4932,6 +4935,8 @@ DWG_ENTITY(TABLE)
 
 DWG_ENTITY_END
 
+#endif /* DEBUG_CLASSES */
+
 //(79 + varies) pg.247 20.4.104
 DWG_OBJECT(XRECORD)
 
@@ -4998,22 +5003,6 @@ DWG_OBJECT(PLACEHOLDER)
 
 DWG_OBJECT_END
 
-// just guessing:
-// VBA_PROJECT (81 + varies), a blob
-DWG_OBJECT(VBA_PROJECT)
-
-  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
-  SUBCLASS (AcDbVbaProject)
-  FIELD_RL (num_bytes, 0);
-  FIELD_TF (bytes, FIELD_VALUE(num_bytes), 0);
-
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
-
-DWG_OBJECT_END
-
 // SCALE (varies)
 // 20.4.92 page 221
 DWG_OBJECT(SCALE)
@@ -5026,6 +5015,24 @@ DWG_OBJECT(SCALE)
   FIELD_BD (drawing_units, 141);
   FIELD_B (has_unit_scale, 290);
       
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (parenthandle, 4, 0);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+
+DWG_OBJECT_END
+
+#ifdef DEBUG_CLASSES
+
+// just guessing:
+// VBA_PROJECT (81 + varies), a blob
+DWG_OBJECT(VBA_PROJECT)
+
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
+  SUBCLASS (AcDbVbaProject)
+  FIELD_RL (num_bytes, 0);
+  FIELD_TF (bytes, FIELD_VALUE(num_bytes), 0);
+
   START_HANDLE_STREAM;
   FIELD_HANDLE (parenthandle, 4, 0);
   REACTORS(4);
@@ -5256,6 +5263,8 @@ DWG_ENTITY(MULTILEADER)
 
 DWG_ENTITY_END
 
+#endif /* DEBUG_CLASSES */
+
 /* par 20.4.87 (varies) */
 DWG_OBJECT(MLEADERSTYLE)
 
@@ -5430,9 +5439,25 @@ DWG_OBJECT(VISUALSTYLE)
 
 DWG_OBJECT_END
 
+// (varies) UNTESTED
+DWG_OBJECT(OBJECT_PTR) //empty? only xdata. CAseDLPNTableRecord
+
+  DEBUG_HERE()
+  
+DWG_OBJECT_END
+
+DWG_ENTITY(CAMERA) // i.e. a named view, not persistent in a DWG. CAMERADISPLAY=1
+  
+  COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE(view, 5, 0);
+
+DWG_ENTITY_END
+
 /* In work area:
    The following entities/objects are stored as raw UNKNOWN_ENT/OBJ,
-   unless enabled via -DDEBUG_... */
+   unless enabled via -DDEBUG_CLASSES */
+
+#ifdef DEBUG_CLASSES
 
 // (varies) working on
 DWG_OBJECT(MATERIAL)
@@ -5815,13 +5840,6 @@ DWG_ENTITY(HELIX)
 DWG_ENTITY_END
 
 // (varies) UNTESTED
-DWG_OBJECT(OBJECT_PTR) //empty? only xdata. CAseDLPNTableRecord
-
-  DEBUG_HERE()
-  
-DWG_OBJECT_END
-
-// (varies) UNTESTED
 // in DXF as POSITIONMARKER (rename?, no), command: GEOMARKPOSITION, GEOMARKPOINT
 DWG_ENTITY(GEOPOSITIONMARKER)
 
@@ -5845,13 +5863,6 @@ DWG_ENTITY(GEOPOSITIONMARKER)
   //FIELD_HANDLE (leader_handle, 5, 0); //or drawn automatically?
   FIELD_HANDLE (mtext_handle, 5, 0);
   FIELD_HANDLE (text_style, 5, 7);
-
-DWG_ENTITY_END
-
-DWG_ENTITY(CAMERA) // i.e. a named view, not persistent in a DWG. CAMERADISPLAY=1
-  
-  COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE(view, 5, 0);
 
 DWG_ENTITY_END
 
@@ -5929,6 +5940,56 @@ DWG_OBJECT(DATATABLE)
   
 DWG_OBJECT_END
 
+DWG_OBJECT(ASSOCACTION)
+  FIELD_B (is_body_a_proxy, 90);
+  FIELD_T (body.evaluatorid, 0);
+  FIELD_T (body.expresssion, 0);
+  FIELD_BL (body.value, 0); //rbuf really
+  //FIELD_B (is_actionevaluation_in_progress, 90);
+  FIELD_BL (status, 90);
+  FIELD_H (actionbody, 5, 0);
+  FIELD_H (callback, 5, 0);
+  FIELD_H (owningnetwork, 5, 0);
+  FIELD_BL (num_deps, 90);
+  HANDLE_VECTOR(readdep, num_assoc, 5, 330);
+  HANDLE_VECTOR(writedep, num_assoc, 0, 360);
+  FIELD_BL (unknown_assoc, 90);
+DWG_OBJECT_END
+
+// in work: subclass of AcDbAssocAction
+// Object1 --ReadDep--> Action1 --WriteDep1--> Object2 --ReadDep--> Action2 ...
+DWG_OBJECT(ASSOCNETWORK)
+  //SUBCLASS (AcDbActionBody)
+  SUBCLASS (AcDbAssocAction)
+  FIELD_H (action, 5, 0);   // handle or inlined?
+#if 0  
+  //90, 90, 330, 360, 90, 90, 90
+  FIELD_B (is_body_a_proxy, 90);
+  FIELD_T (body.evaluatorid, 0);
+  FIELD_T (body.expresssion, 0);
+  FIELD_BL (body.value, 0); //rbuf really
+  //FIELD_B (is_actionevaluation_in_progress, 90);
+  FIELD_BL (action.status, 90);
+  FIELD_H (action.actionbody, 5, 0);
+  FIELD_H (action.callback, 5, 0);
+  FIELD_H (action.owningnetwork, 5, 0);
+  FIELD_BL (action.num_deps, 90);
+  HANDLE_VECTOR(action.readdep, num_assoc, 5, 330);  //offset 124/139
+  HANDLE_VECTOR(action.writedep, num_assoc, 0, 360);
+  FIELD_BL (action.unknown_assoc, 90);
+#endif
+
+  SUBCLASS (AcDbAssocNetwork)
+  //90, 90, [90, 330], 90
+  FIELD_BL (unknown_n1, 90);
+  FIELD_BL (unknown_n2, 90);
+  FIELD_BL (num_actions, 90);
+  HANDLE_VECTOR(actions, num_actions, 5, 330);
+  FIELD_BL (unknown_n3, 90);
+DWG_OBJECT_END
+
+#endif /* DEBUG_CLASSES */
+
 /* Those undocumented objects are also stored as raw UNKNOWN_OBJ */
 
 #if 0
@@ -5982,54 +6043,6 @@ DWG_OBJECT(ASSOCGEOMDEPENDENCY)
   //1 AcDbAssocSingleEdgePersSubentId
   //290 0
   //FIELD_B (DependentOnCompoundObject, 90);
-DWG_OBJECT_END
-
-DWG_OBJECT(ASSOCACTION)
-  FIELD_B (is_body_a_proxy, 90);
-  FIELD_T (body.evaluatorid, 0);
-  FIELD_T (body.expresssion, 0);
-  FIELD_BL (body.value, 0); //rbuf really
-  //FIELD_B (is_actionevaluation_in_progress, 90);
-  FIELD_BL (status, 90);
-  FIELD_H (actionbody, 5, 0);
-  FIELD_H (callback, 5, 0);
-  FIELD_H (owningnetwork, 5, 0);
-  FIELD_BL (num_deps, 90);
-  HANDLE_VECTOR(readdep, num_assoc, 5, 330);
-  HANDLE_VECTOR(writedep, num_assoc, 0, 360);
-  FIELD_BL (unknown_assoc, 90);
-DWG_OBJECT_END
-
-// in work: subclass of AcDbAssocAction
-// Object1 --ReadDep--> Action1 --WriteDep1--> Object2 --ReadDep--> Action2 ...
-DWG_OBJECT(ASSOCNETWORK)
-  //SUBCLASS (AcDbActionBody)
-  SUBCLASS (AcDbAssocAction)
-  FIELD_H (action, 5, 0);   // handle or inlined?
-#if 0  
-  //90, 90, 330, 360, 90, 90, 90
-  FIELD_B (is_body_a_proxy, 90);
-  FIELD_T (body.evaluatorid, 0);
-  FIELD_T (body.expresssion, 0);
-  FIELD_BL (body.value, 0); //rbuf really
-  //FIELD_B (is_actionevaluation_in_progress, 90);
-  FIELD_BL (action.status, 90);
-  FIELD_H (action.actionbody, 5, 0);
-  FIELD_H (action.callback, 5, 0);
-  FIELD_H (action.owningnetwork, 5, 0);
-  FIELD_BL (action.num_deps, 90);
-  HANDLE_VECTOR(action.readdep, num_assoc, 5, 330);  //offset 124/139
-  HANDLE_VECTOR(action.writedep, num_assoc, 0, 360);
-  FIELD_BL (action.unknown_assoc, 90);
-#endif
-
-  SUBCLASS (AcDbAssocNetwork)
-  //90, 90, [90, 330], 90
-  FIELD_BL (unknown_n1, 90);
-  FIELD_BL (unknown_n2, 90);
-  FIELD_BL (num_actions, 90);
-  HANDLE_VECTOR(actions, num_actions, 5, 330);
-  FIELD_BL (unknown_n3, 90);
 DWG_OBJECT_END
 
 DWG_OBJECT(DBCOLOR)

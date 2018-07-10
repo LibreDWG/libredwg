@@ -175,7 +175,7 @@ do_match (const int is16, const char *restrict filename,
       print_match(is16, filename, entity, dxfgroup, text);
     return 1;
   } else if (rc < -2) { //not PCRE2_ERROR_NOMATCH nor PCRE2_ERROR_PARTIAL
-    pcre2_get_error_message_8(rc, buf, 4096);
+    pcre2_get_error_message_8(rc, (PCRE2_UCHAR8 *)buf, 4096);
     LOG_WARN("pcre2 match error %s with %s", buf, pattern);
   }
   return 0;
@@ -240,8 +240,8 @@ do_match (const int is16, const char *restrict filename,
 #define MATCH_DXF(type,ENTITY,text_field,dxfgroup)  \
   if (numdxf) { \
     int dxfok = 0; \
-    for (int i=0; i<numdxf; i++) { \
-      if (dxf[i] == dxfgroup) { dxfok = 1; break; } \
+    for (int _i=0; _i<numdxf; _i++) { \
+      if (dxf[_i] == dxfgroup) { dxfok = 1; break; } \
     } \
     if (dxfok) { MATCH_TYPE(type,ENTITY,text_field,dxfgroup); } \
   } \
@@ -366,7 +366,8 @@ static
 int match_3DSOLID(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
-  int found = 0, i;
+  int found = 0;
+  unsigned int i;
   Dwg_Entity_3DSOLID *_obj = obj->tio.entity->tio._3DSOLID;
 
   for (i=0; i<_obj->num_blocks; i++)
@@ -383,7 +384,8 @@ static
 int match_DICTIONARY(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
-  int found = 0, i;
+  int found = 0;
+  unsigned int i;
   Dwg_Object_DICTIONARY *_obj = obj->tio.object->tio.DICTIONARY;
 
   for (i=0; i<_obj->numitems; i++)
@@ -479,7 +481,8 @@ static
 int match_LAYER_INDEX(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
-  int found = 0, i;
+  int found = 0;
+  unsigned int i;
   const Dwg_Object_LAYER_INDEX *_obj = obj->tio.object->tio.LAYER_INDEX;
 
   for (i=0; i<_obj->num_entries; i++)
@@ -493,7 +496,8 @@ static
 int match_LAYOUT(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
-  int found = 0, i;
+  int found = 0;
+  unsigned int i;
   const Dwg_Object_LAYOUT *_obj = obj->tio.object->tio.LAYOUT;
 
   MATCH_OBJECT (LAYOUT, page_setup_name, 1);
@@ -517,7 +521,8 @@ static
 int match_FIELD(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
-  int found = 0, i;
+  int found = 0;
+  unsigned int i;
   const Dwg_Object_FIELD *_obj = obj->tio.object->tio.FIELD;
 
   MATCH_OBJECT (FIELD, format, 4);
@@ -538,7 +543,8 @@ static
 int match_TABLECONTENT(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
-  int found = 0, i, j, k;
+  int found = 0;
+  unsigned int i, j, k;
   const Dwg_Object_TABLECONTENT *_obj = obj->tio.object->tio.TABLECONTENT;
 
   MATCH_OBJECT (TABLECONTENT, ldata.name, 1);
@@ -776,6 +782,8 @@ main (int argc, char *argv[])
       case 0:
         if (!strcmp(long_options[option_index].name, "help"))
           return help();
+        if (!strcmp(long_options[option_index].name, "version"))
+          return opt_version();
         break;
 #else
       case 'v':
@@ -844,7 +852,7 @@ main (int argc, char *argv[])
 # endif
     );
   if (errcode != 0 && errcode != 100) {
-    pcre2_get_error_message_8(errcode, buf, 4096);
+    pcre2_get_error_message_8(errcode, (PCRE2_UCHAR8 *)buf, 4096);
     LOG_ERROR("pcre2_compile_8 error %d: %s with %s", errcode, buf, pattern);
     return 1;
   }
@@ -867,7 +875,7 @@ main (int argc, char *argv[])
 #  endif
     );
   if (errcode != 0 && errcode != 100) {
-    pcre2_get_error_message_8(errcode, buf, 4096);
+    pcre2_get_error_message_8(errcode, (PCRE2_UCHAR8 *)buf, 4096);
     LOG_ERROR("pcre2_compile_16 error %d: %s with %s", errcode, buf, pattern);
     return 1;
   }

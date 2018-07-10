@@ -499,7 +499,7 @@ EXPORT int dwg_add_##token (Dwg_Object *obj) \
   if (!_ent) return DWG_ERR_OUTOFMEM; \
   _ent->tio.token = calloc(1, sizeof (Dwg_Entity_##token));\
   if (!_ent->tio.token) return DWG_ERR_OUTOFMEM; \
-  obj->dxfname = #token;\
+  obj->dxfname = (char*)#token; \
   _ent->dwg = obj->parent; \
   _ent->objid = obj->index; /* obj ptr itself might move */ \
   _ent->tio.token->parent = obj->tio.entity;\
@@ -549,7 +549,7 @@ EXPORT int dwg_add_ ## token (Dwg_Object *obj) \
   if (!obj->tio.object) return DWG_ERR_OUTOFMEM; \
   _obj = obj->tio.object->tio.token = calloc (1, sizeof(Dwg_Object_##token)); \
   if (!_obj) return DWG_ERR_OUTOFMEM; \
-  obj->dxfname = #token;\
+  obj->dxfname = (char*)#token; \
   _obj->parent = obj->tio.object; \
   obj->tio.object->dwg = obj->parent; \
   obj->tio.object->objid = obj->index; /* obj ptr itself might move */ \

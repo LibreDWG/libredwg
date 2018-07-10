@@ -79,7 +79,7 @@ static void
 output_SVG(dwg_data* dwg);
 
 static int
-test_SVG(char *filename, unsigned int opts)
+test_SVG(char *filename)
 {
   int error;
 
@@ -476,5 +476,5 @@ main(int argc, char *argv[])
   if (i >= argc)
     return usage();
 
-  return test_SVG(argv[i], opts);
+  return test_SVG(argv[i]);
 }

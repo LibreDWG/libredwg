@@ -1562,7 +1562,7 @@ bit_print(Bit_Chain * dat, long unsigned int size)
 void
 bit_print_bits(unsigned char* bits, long unsigned int size)
 {
-  for (int i = 0; i < size; i++)
+  for (long unsigned int i = 0; i < size; i++)
     {
       //if (i % 8 == 0) printf(" ");
       printf("%d", BIT(bits, i) ? 1 : 0);

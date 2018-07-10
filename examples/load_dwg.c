@@ -47,7 +47,7 @@ static int help(void) {
   return 0;
 }
 
-void
+static void
 add_line(double x1, double y1, double x2, double y2)
 {
   // Make something with that
@@ -57,7 +57,7 @@ add_line(double x1, double y1, double x2, double y2)
   (void)y2;
 }
 
-void
+static void
 add_circle(double x, double y, double R)
 {
   // Make something with that
@@ -66,7 +66,7 @@ add_circle(double x, double y, double R)
   (void)R;
 }
 
-void
+static void
 add_text(double x, double y, char *txt)
 {
   // Make something with that
@@ -75,7 +75,7 @@ add_text(double x, double y, char *txt)
   (void)txt;
 }
 
-int
+static int
 load_dwg(char *filename, unsigned int opts)
 {
   unsigned int i;
@@ -105,6 +105,7 @@ load_dwg(char *filename, unsigned int opts)
           text = dwg.object[i].tio.entity->tio.TEXT;
           add_text(text->insertion_pt.x, text->insertion_pt.y, text->text_value);
           break;
+        default: break;
         }
     }
   dwg_free(&dwg);

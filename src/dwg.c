@@ -46,9 +46,6 @@ static bool env_var_checked_p;
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
 
-// used by free.c:
-int dwg_obj_is_control(const Dwg_Object *obj);
-
 /*------------------------------------------------------------------------------
  * Public functions
  */

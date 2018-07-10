@@ -43,9 +43,6 @@ static unsigned int cur_ver = 0;
 static Bit_Chain pdat = {NULL,0,0,0,0,0};
 static Bit_Chain *dat = &pdat;
 
-/* from dwg.c */
-int dwg_obj_is_control(const Dwg_Object *obj);
-
 /*--------------------------------------------------------------------------------
  * MACROS
  */
@@ -69,7 +66,7 @@ int dwg_obj_is_control(const Dwg_Object *obj);
 
 #define ANYCODE -1
 #define FIELD_HANDLE(name,code,dxf) VALUE_HANDLE(_obj->name,code,dxf)
-#define VALUE_HANDLE(hdl,code,dxf)  /* freed globally */
+#define VALUE_HANDLE(hdl,code,dxf)  {} /* freed globally */
 #define FIELD_DATAHANDLE(name,code,dxf) FIELD_HANDLE(name, code, dxf)
 #define FIELD_HANDLE_N(name,vcount,code,dxf) FIELD_HANDLE(name, code, dxf)
 
@@ -144,15 +141,11 @@ int dwg_obj_is_control(const Dwg_Object *obj);
 
 #define REACTORS(code) \
   for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++) \
-    {\
-      VALUE_HANDLE(obj->tio.object->reactors[vcount], code, 330);  \
-    } \
-    VALUE_TV(obj->tio.object->reactors, 0)
+    VALUE_HANDLE(obj->tio.object->reactors[vcount], code, 330);  \
+  VALUE_TV(obj->tio.object->reactors, 0)
 #define ENT_REACTORS(code)  \
   for (vcount=0; vcount < ent->num_reactors; vcount++)\
-    {\
-      VALUE_HANDLE(ent->reactors[vcount], code, 330);  \
-    }\
+    VALUE_HANDLE(ent->reactors[vcount], code, 330);  \
   VALUE_TV(ent->reactors,0)
 #define XDICOBJHANDLE(code)\
   SINCE(R_2004)\
@@ -195,18 +188,18 @@ static int dwg_free_UNKNOWN_OBJ (Bit_Chain *restrict dat, Dwg_Object *restrict o
 
 #define DWG_ENTITY(token) \
 static int \
-dwg_free_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj)\
+dwg_free_ ##token (Bit_Chain *restrict _dat, Dwg_Object *restrict obj)\
 {\
   long vcount, rcount1, rcount2, rcount3, rcount4;\
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Object_Entity *_ent;\
-  Bit_Chain *hdl_dat = dat;\
-  Bit_Chain* str_dat = dat;\
+  Bit_Chain *hdl_dat = _dat;\
+  Bit_Chain* str_dat = _dat;\
   Dwg_Data* dwg = obj->parent;\
   int error = 0; \
   LOG_HANDLE("Free entity " #token "\n")\
   if (strcmp(#token, "UNKNOWN_ENT") && obj->supertype == DWG_SUPERTYPE_UNKNOWN) \
-    return dwg_free_UNKNOWN_ENT(dat, obj); \
+    return dwg_free_UNKNOWN_ENT(_dat, obj); \
   _ent = obj->tio.entity;\
   _obj = ent = _ent->tio.token;
 
@@ -220,17 +213,17 @@ dwg_free_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj)\
 
 #define DWG_OBJECT(token) \
 static int \
-dwg_free_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
+dwg_free_ ##token (Bit_Chain *restrict _dat, Dwg_Object *restrict obj) \
 { \
   long vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Object_##token *_obj;                      \
-  Bit_Chain *hdl_dat = dat;                      \
-  Bit_Chain* str_dat = dat;                      \
+  Bit_Chain *hdl_dat = _dat;                      \
+  Bit_Chain* str_dat = _dat;                      \
   Dwg_Data* dwg = obj->parent;                   \
   int error = 0; \
   LOG_HANDLE("Free object " #token " %p\n", obj) \
   if (strcmp(#token, "UNKNOWN_OBJ") && obj->supertype == DWG_SUPERTYPE_UNKNOWN) \
-    return dwg_free_UNKNOWN_OBJ(dat, obj); \
+    return dwg_free_UNKNOWN_OBJ(_dat, obj); \
   _obj = obj->tio.object->tio.token;
 
 /* obj itself is allocated via dwg->object[], dxfname is klass->dxfname */
@@ -663,7 +656,7 @@ dwg_free(Dwg_Data * dwg)
         }
       if (dwg->num_classes)
         {
-          for (i=0; i < (int)dwg->num_classes; ++i)
+          for (i=0; i < dwg->num_classes; ++i)
             {
               FREE_IF(dwg->dwg_class[i].appname);
               FREE_IF(dwg->dwg_class[i].cppname);
@@ -673,7 +666,7 @@ dwg_free(Dwg_Data * dwg)
             }
           FREE_IF(dwg->dwg_class);
         }
-      for (i=0; i < (int)dwg->num_object_refs; ++i)
+      for (i=0; i < dwg->num_object_refs; ++i)
         {
           FREE_IF(dwg->object_ref[i]);
         }
