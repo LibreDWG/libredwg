@@ -5673,7 +5673,7 @@ DWG_OBJECT(SUN)
 
   DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS(AcDbSun)
-  FIELD_BL (class_version, 90);
+    FIELD_BL (class_version, 90); //1
   if (FIELD_VALUE(class_version) > 10)
     return DWG_ERR_VALUEOUTOFBOUNDS;
   FIELD_B (is_on, 290); // status, isOn
@@ -5683,7 +5683,7 @@ DWG_OBJECT(SUN)
   FIELD_BL (time, 92);    // in seconds past midnight
   FIELD_BD (intensity, 40);
   //DEBUG_HERE()
-  FIELD_CMC (color, 60);
+  FIELD_CMC (color, 63);
   //FIELD_BD (altitude, 0); //calculated?
   //FIELD_BD (azimuth, 0);  //calculated?
   //FIELD_3BD (direction, 0); //calculated?
@@ -5694,6 +5694,7 @@ DWG_OBJECT(SUN)
     FIELD_BS (shadow_softness, 280);
   }
   //there's still 5.4 - 11.3 bits free for some fields
+  //421:16777215
 
   DEBUG_HERE() //DEBUG_POS()
   rcount1 = bit_position(dat);

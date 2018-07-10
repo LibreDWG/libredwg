@@ -254,23 +254,33 @@ static void bits_angle_BD(Bit_Chain *restrict dat, struct _unknown_field *restri
 
 static void bits_RC(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
-  unsigned int l = strtol(g->value, NULL, 10);
+  unsigned int l = (unsigned int)strtol(g->value, NULL, 10);
   bit_write_RC(dat, (unsigned char)l);
   g->type = BITS_RC;
 }
 
 static void bits_BS(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
-  unsigned int l = strtol(g->value, NULL, 10);
+  unsigned int l = (unsigned int)strtol(g->value, NULL, 10);
   bit_write_BS(dat, (unsigned short)l);
   g->type = BITS_BS;
 }
 
 static void bits_BL(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
-  unsigned int l = strtol(g->value, NULL, 10);
+  unsigned int l = (unsigned int)strtol(g->value, NULL, 10);
   bit_write_BL(dat, l);
   g->type = BITS_BL;
+}
+
+static void bits_CMC(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
+{
+  //dat should know if >= R_2004, but we just search for the index
+  Dwg_Color color;
+  memset(&color, 0, sizeof(color));
+  color.index = strtol(g->value, NULL, 10);
+  bit_write_CMC(dat, &color);
+  g->type = BITS_CMC;
 }
 
 static void bits_handle(Bit_Chain *restrict dat, struct _unknown_field *restrict g,
@@ -344,6 +354,8 @@ bits_format (struct _unknown_field *g, int is16)
     bits_BD(&dat, g);
   else if (code < 60)
     bits_angle_BD(&dat, g); //deg2rad for angles
+  else if (code == 63)
+    bits_CMC(&dat, g);
   else if (code < 80)
     bits_BS(&dat, g);
   else if (80 <= code && code <= 99) //BL int32
