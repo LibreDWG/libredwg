@@ -7,10 +7,11 @@ import libxml2
 import re
 
 # Divide the scripts into two files
+srcdir = os.path.dirname(__file__)
 sys.path.append(os.getcwd())
+# sys.path.append(srcdir)
 from helper import *
 
-srcdir = os.path.dirname(__file__)
 # path where DWG files are present
 path_to_dwg = srcdir + "/../test-data"
 # The name of the output files folder

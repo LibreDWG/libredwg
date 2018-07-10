@@ -8,10 +8,9 @@ LDADD = $(top_builddir)/src/libredwg.la $(XML2_LIBS)
 if HAVE_PYTHON
 # Set env var ‘PYTHON’ so that check.py can invoke other .py programs.
 TESTS_ENVIRONMENT = PYTHON='$(PYTHON)' $(PYTHON)
-endif
-
 check_PROGRAMS = testsuite
 TESTS = check.py
+endif
 
 CLEANFILES = *.log *.sum site.bak result.htm
 MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
