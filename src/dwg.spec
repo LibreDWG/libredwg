@@ -5668,6 +5668,7 @@ DWG_ENTITY_END
 // (varies) UNKNOWN FIELDS
 // hard-owned child of AcDbViewportTableRecord or AcDbViewport 361
 // 11 byte+3bit accounted for.
+// DXF docs put that as Entity, wrong
 DWG_OBJECT(SUN)
 
   DXF { FIELD_HANDLE (parenthandle, 4, 330); }
@@ -5692,9 +5693,9 @@ DWG_OBJECT(SUN)
     FIELD_BS (shadow_mapsize, 71);
     FIELD_BS (shadow_softness, 280);
   }
-  //there's still 46 bit free for some BD
+  //there's still 5.4 - 11.3 bits free for some fields
 
-  DEBUG_HERE() DEBUG_POS()
+  DEBUG_HERE() //DEBUG_POS()
   rcount1 = bit_position(dat);
   rcount2 = rcount1 - obj->address * 8;
   FIELD_VALUE(num_bytes) = (obj->bitsize - rcount2) / 8;
@@ -5704,9 +5705,11 @@ DWG_OBJECT(SUN)
   FIELD_VECTOR (bits, B, num_bits, 0);
   bit_set_position(dat, rcount1 + 60);
 
-#if 0
+#if 1
   //find handle stream
-  for (vcount=bit_position(dat); dat->byte<9993; bit_set_position(dat,++vcount))
+  for (vcount=bit_position(dat);
+       dat->byte < obj->address+obj->size;
+       bit_set_position(dat,++vcount))
     {
       DEBUG_POS()
       // @9979.6 5.0.0, @9980.0 4.0.0, @9991.1 3.0.0
@@ -5734,7 +5737,61 @@ DWG_OBJECT(SUN)
   FIELD_HANDLE (parenthandle, 4, 0); //@9980.0, @9981.3, @9985.5 (11.0.0)
   REACTORS(4);
   XDICOBJHANDLE(3); //@9991.1
-  //DEBUG_POS() //@9992.1
+  DEBUG_POS() //@9992.1
+
+DWG_OBJECT_END
+
+// (varies) UNKNOWN FIELDS
+DWG_OBJECT(SUNSTUDY)
+
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
+  SUBCLASS(AcDbSunStudy)
+  FIELD_BL (class_version, 90);
+  if (FIELD_VALUE(class_version) > 10)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
+  FIELD_T (setup_name, 1);
+  FIELD_T (desc, 2);
+  FIELD_BL (output_type, 70);
+  if (FIELD_VALUE(output_type) == 0) // Sheet_Set
+    {
+      FIELD_B (use_subset, 290);
+      FIELD_T (sheet_set_name, 3);
+      FIELD_T (sheet_subset_name, 4);
+    }
+  FIELD_B (select_dates_from_calendar, 291);
+  FIELD_BL (num_dates, 91);
+  REPEAT(num_dates, dates, Dwg_SUNSTUDY_Dates)
+   {
+     FIELD_BL (dates[rcount1].julian_day, 90);
+     FIELD_BL (dates[rcount1].time, 90);
+   }
+  END_REPEAT(dates);
+  FIELD_B (select_range_of_dates, 292);
+  if (FIELD_VALUE(select_range_of_dates))
+    {
+     FIELD_BL (start_time, 93);
+     FIELD_BL (end_time, 94);
+     FIELD_BL (interval, 95);
+    }
+  FIELD_BL (num_hours, 91);
+  FIELD_VECTOR (hours, B, num_hours, 290);
+
+  FIELD_BL (shade_plot_type, 74);
+  FIELD_BL (numvports, 75);
+  FIELD_BL (numrows, 76);
+  FIELD_BL (numcols, 77);
+  FIELD_BD (spacing, 40);
+  FIELD_B (lock_viewports, 293);
+  FIELD_B (label_viewports, 294);
+
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (parenthandle, 3, 0);
+  FIELD_HANDLE (page_setup_wizard, 5, 340);
+  FIELD_HANDLE (view, 5, 341);
+  FIELD_HANDLE (visual_style, 2, 342);
+  FIELD_HANDLE (text_style, 2, 343);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
 
 DWG_OBJECT_END
 

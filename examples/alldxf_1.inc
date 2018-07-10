@@ -17928,3 +17928,138 @@ static const struct _unknown_field unknown_dxf_138[] = {
     { 147, "1.0", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
     { 0,    NULL, NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1}}
 };
+/* LIGHT 228 in test/test-data/DS_line_R2000.dxf */
+static const struct _unknown_field unknown_dxf_139[] = {
+    {   5, "228", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 360, "229", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 330, "1F", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {   8, "ADSK_SYSTEM_LIGHTS", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  92, "8", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 310, "0800000000000000", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbLight", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  90, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {   1, "Distantlight1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  70, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  90, "-1026700341", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 291, "0", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  40, "0.4660000000000001", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  10, "12.66480881503287", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  20, "30.39966347585608", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  30, "0.0", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  11, "31.52145527910568", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  21, "39.76505177926015", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  31, "0.0", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  72, "0", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 292, "0", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  41, "1.0", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  42, "10.0", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  50, "45.0", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  51, "50.0", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 293, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  73, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  91, "256", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 280, "4", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 1001, "ACAD", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 1000, "AcDbSavedByObjectVersion", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 1070, "0", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 0,    NULL, NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1}}
+};
+/* MATERIAL 73 in test/test-data/DS_line_R2013.dxf */
+static const struct _unknown_field unknown_dxf_140[] = {
+    {   5, "73", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 330, "72", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 330, "72", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbMaterial", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {   1, "ByLayer", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  73, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  78, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 172, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 270, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 274, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 0,    NULL, NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1}}
+};
+/* MATERIAL 74 in test/test-data/DS_line_R2013.dxf */
+static const struct _unknown_field unknown_dxf_141[] = {
+    {   5, "74", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 330, "72", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 330, "72", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbMaterial", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {   1, "ByBlock", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  73, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  78, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 172, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 270, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 274, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 0,    NULL, NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1}}
+};
+/* MATERIAL 75 in test/test-data/DS_line_R2013.dxf */
+static const struct _unknown_field unknown_dxf_142[] = {
+    {   5, "75", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 330, "72", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 330, "72", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbMaterial", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {   1, "Global", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  73, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  78, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 172, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 270, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 274, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 0,    NULL, NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1}}
+};
+/* SUN 80 in test/test-data/DS_line_R2013.dxf */
+static const struct _unknown_field unknown_dxf_143[] = {
+    {   5, "80", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 330, "29", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbSun", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  90, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  63, "7", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 421, "16777215", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  40, "1.0", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 291, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  91, "2455826", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  92, "54000000", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 292, "0", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  70, "0", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  71, "256", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 280, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 1001, "ACAD", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 1000, "AcDbSavedByObjectVersion", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 1070, "0", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 0,    NULL, NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1}}
+};
+/* SUN D1 in test/test-data/DS_line_R2013.dxf */
+static const struct _unknown_field unknown_dxf_144[] = {
+    {   5, "D1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 330, "CF", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbSun", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  90, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  63, "7", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 421, "16777215", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  40, "1.0", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 291, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  91, "2455826", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  92, "54000000", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 292, "0", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  70, "0", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    {  71, "256", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 280, "1", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 1001, "ACAD", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 1000, "AcDbSavedByObjectVersion", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 1070, "0", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },
+    { 0,    NULL, NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1}}
+};

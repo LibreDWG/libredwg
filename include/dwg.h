@@ -356,6 +356,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_SPATIAL_FILTER,
   DWG_TYPE_SPATIAL_INDEX,
   DWG_TYPE_SUN,
+  DWG_TYPE_SUNSTUDY,
   DWG_TYPE_SURFACE,
   DWG_TYPE_TABLE,
   DWG_TYPE_TABLECONTENT,
@@ -4274,16 +4275,11 @@ typedef struct _dwg_entity_UNDERLAY
 
 /**
  Object SUN (varies) UNKNOWN FIELDS
+ wrongly documented by ACAD DXF as entity
  */
 typedef struct _dwg_object_SUN
 {
   struct _dwg_object_object *parent;
-  BITCODE_RC flag; /* preR13 */
-  BITCODE_TV entry_name;
-  BITCODE_RC used; /* preR13 */
-  BITCODE_B xrefref;
-  BITCODE_BS xrefindex_plus1;
-  BITCODE_B xrefdep;
 
   BITCODE_BL class_version; //90
   BITCODE_B is_on;   // 290
@@ -4308,7 +4304,55 @@ typedef struct _dwg_object_SUN
 
   BITCODE_H skyparams;
   BITCODE_H parenthandle;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
 } Dwg_Object_SUN;
+
+typedef struct _dwg_SUNSTUDY_Dates
+{
+  BITCODE_BL julian_day;
+  BITCODE_BL time; //seconds past midnight
+} Dwg_SUNSTUDY_Dates;
+
+/**
+ Object SUNSTUDY (varies) UNKNOWN FIELDS
+ */
+typedef struct _dwg_object_SUNSTUDY
+{
+  struct _dwg_object_object *parent;
+
+  BITCODE_BL class_version;    //90
+  BITCODE_T setup_name;        //1
+  BITCODE_T desc;              //2
+  BITCODE_BL output_type;      //70
+  BITCODE_T sheet_set_name;    //3
+  BITCODE_B use_subset;        //290
+  BITCODE_T sheet_subset_name; //3
+  BITCODE_B select_dates_from_calendar; //291
+  BITCODE_BL num_dates;   //91
+  Dwg_SUNSTUDY_Dates* dates; //90+90[]
+  BITCODE_B select_range_of_dates; //292
+  BITCODE_BL start_time;  //93
+  BITCODE_BL end_time;    //94
+  BITCODE_BL interval;    //95
+  BITCODE_BL num_hours;   //73
+  BITCODE_B* hours;       //290
+  BITCODE_BL shade_plot_type;  //74
+  BITCODE_BL numvports;        //75
+  BITCODE_BL numrows;        //76
+  BITCODE_BL numcols;        //77
+  BITCODE_BD spacing;        //40
+  BITCODE_B  lock_viewports; //293
+  BITCODE_B  label_viewports; //294
+
+  BITCODE_H  parenthandle; //3. 330
+  BITCODE_H  page_setup_wizard; //5. 340
+  BITCODE_H  view;         //341
+  BITCODE_H  visual_style; //342
+  BITCODE_H  text_style;   //343
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
+} Dwg_Object_SUNSTUDY;
 
 /**
  Object DATATABLE (varies) UNKNOWN FIELDS
@@ -4517,7 +4561,6 @@ typedef struct _dwg_object_entity
     Dwg_Entity_HATCH *HATCH;
 
     Dwg_Entity_CAMERA *CAMERA;
-    Dwg_Entity_SURFACE *SURFACE;
     Dwg_Entity_GEOPOSITIONMARKER *GEOPOSITIONMARKER;
     Dwg_Entity_HELIX *HELIX;
     Dwg_Entity_IMAGE *IMAGE;
@@ -4526,6 +4569,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_MULTILEADER *MULTILEADER;
     Dwg_Entity_PROXY_ENTITY *PROXY_ENTITY;
     Dwg_Entity_PROXY_LWPOLYLINE *PROXY_LWPOLYLINE;
+    Dwg_Entity_SURFACE *SURFACE;
     Dwg_Entity_TABLE *TABLE;
     Dwg_Entity_UNDERLAY *UNDERLAY;
     Dwg_Entity_WIPEOUT *WIPEOUT;
@@ -4660,6 +4704,7 @@ typedef struct _dwg_object_object
     Dwg_Object_SPATIAL_FILTER *SPATIAL_FILTER;
     Dwg_Object_SPATIAL_INDEX *SPATIAL_INDEX;
     Dwg_Object_SUN *SUN;
+    Dwg_Object_SUNSTUDY *SUNSTUDY;
     Dwg_Object_TABLECONTENT *TABLECONTENT;
     Dwg_Object_TABLEGEOMETRY *TABLEGEOMETRY;
     Dwg_Object_TABLESTYLE *TABLESTYLE;
@@ -5279,6 +5324,7 @@ EXPORT int dwg_add_SPATIAL_FILTER (Dwg_Object *obj);
 EXPORT int dwg_add_SPATIAL_INDEX (Dwg_Object *obj);
 #ifdef DEBUG_CLASSES
   EXPORT int dwg_add_SUN (Dwg_Object *obj);
+  EXPORT int dwg_add_SUNSTUDY (Dwg_Object *obj);
   EXPORT int dwg_add_TABLE (Dwg_Object *obj);
   EXPORT int dwg_add_TABLECONTENT (Dwg_Object *obj);
   EXPORT int dwg_add_TABLEGEOMETRY (Dwg_Object *obj);

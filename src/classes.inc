@@ -155,7 +155,7 @@
   DEBUGGING_CLASS     (ACTION, GEOPOSITIONMARKER) /*ent, yet unsorted */
   DEBUGGING_CLASS     (ACTION, HELIX)             /*ent, yet unsorted */
   DEBUGGING_CLASS     (ACTION, LIGHT)             /*ent, yet unsorted */
-  DEBUGGING_CLASS     (ACTION, MULTILEADER)       /*ent, broken Leader_Line's/Points */
+  DEBUGGING_CLASS     (ACTION, MULTILEADER)        /*ent, broken Leader_Line's/Points */
   DEBUGGING_CLASS     (ACTION, SURFACE)           /*ent, yet unsorted */
   DEBUGGING_CLASS     (ACTION, UNDERLAY)          /*ent DGN DWF PDF */
   DEBUGGING_CLASS_DXF (ACTION, TABLE, ACAD_TABLE) /*ent, r2010+ needs subclassing */
@@ -164,7 +164,8 @@
   DEBUGGING_CLASS     (ACTION, CELLSTYLEMAP) //broken
   DEBUGGING_CLASS     (ACTION, MATERIAL)     //working on
   DEBUGGING_CLASS     (ACTION, PLOTSETTINGS) //yet unsorted
-  DEBUGGING_CLASS     (ACTION, SUN)          //i.e. 2000/1.dwg
+  DEBUGGING_CLASS     (ACTION, SUN)           //i.e. 2000/1.dwg DS_Line_R2000
+  DEBUGGING_CLASS     (ACTION, SUNSTUDY)     //yet unsorted
   DEBUGGING_CLASS     (ACTION, VBA_PROJECT)  //Has its own section?
   DEBUGGING_CLASS_DXF (ACTION, ASSOCACTION, ACDBASSOCACTION)
   DEBUGGING_CLASS_DXF (ACTION, ASSOCNETWORK, ACDBASSOCNETWORK)
