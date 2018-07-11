@@ -39,7 +39,7 @@ all-am: $(dist_perl_PERL)
 # grep rem: with a command.com compat Makefile we cannot continue from bash
 perl/LibreDWG.$(OBJEXT): perl/LibreDWG.pm perl/LibreDWG.xs perl/Makefile
 	@echo Note swig_perl.c is huge. This will need some time...
-	-if grep "NOOP = rem" perl/Makefile; then ; else cd perl &&  $(MAKE) OPTIMIZE=""; fi
+	-if grep "NOOP = rem" perl/Makefile; then false; else cd perl &&  $(MAKE) OPTIMIZE=""; fi
 
 perl/Makefile: perl/Makefile.PL
 	-cd perl && \
@@ -52,11 +52,11 @@ CLEANFILES = perl/LibreDWG.bs perl/LibreDWG.c perl/pm_to_blib perl/Makefile \
 # rpath/LD_LIBRARY_PATH overrides are too troublesome
 check-am: $(dist_perl_PERL) perl/Makefile perl/LibreDWG.$(OBJEXT)
 	@echo Making check for perl
-	-if grep "NOOP = rem" perl/Makefile; then ; else $(MAKE) -C perl test OPTIMIZE="" LD_RUN_PATH="$(abs_top_builddir)/src/.libs"; fi
+	-if grep "NOOP = rem" perl/Makefile; then false; else $(MAKE) -C perl test OPTIMIZE="" LD_RUN_PATH="$(abs_top_builddir)/src/.libs"; fi
 
 install-am: $(dist_perl_PERL) perl/Makefile perl/LibreDWG.$(OBJEXT)
 	@echo Making install for perl
-	-if grep "NOOP = rem" perl/Makefile; then ; else $(MAKE) -C perl install; fi
+	-if grep "NOOP = rem" perl/Makefile; then false; else $(MAKE) -C perl install; fi
 
 clean-am:
 	-$(MAKE) -C perl clean
