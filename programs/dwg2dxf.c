@@ -87,7 +87,7 @@ int
 main (int argc, char *argv[])
 {
   int i = 1;
-  int error;
+  int error = 0;
   Dwg_Data dwg;
   char* filename_in;
   const char *version = NULL;
