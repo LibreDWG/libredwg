@@ -25,6 +25,8 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
 AM_CONFIG_HEADER([src/config.h])
+AC_MSG_CHECKING([git version])
+AC_MSG_RESULT($PACKAGE_VERSION)
 
 ISODATE=`date +%Y-%m-%d`
 AC_SUBST(ISODATE)
