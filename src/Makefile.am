@@ -19,7 +19,7 @@
 
 lib_LTLIBRARIES = libredwg.la
 WARN_CFLAGS = @WARN_CFLAGS@
-AM_CFLAGS = -I$(top_srcdir)/include -I. $(WARN_CFLAGS)
+AM_CFLAGS   = -I$(top_srcdir)/include -I. $(WARN_CFLAGS)
 
 libredwg_la_SOURCES = \
 	dwg.c \

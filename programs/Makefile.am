@@ -17,9 +17,9 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-WARN_CFLAGS = @WARN_CFLAGS@
-AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
-LDADD   = $(top_builddir)/src/libredwg.la -lm
+WARN_CFLAGS  = @WARN_CFLAGS@
+AM_CFLAGS  = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
+LDADD      = $(top_builddir)/src/libredwg.la -lm
 
 bin_PROGRAMS = dwgread dwgbmp dwg2dxf dwg2SVG dwglayers dwggrep
 noinst_PROGRAMS =

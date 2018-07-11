@@ -138,7 +138,6 @@ dnl fi
 dnl if test x$ax_cv_check_cflags__Wunused_variable = xyes; then
 dnl   WARN_CFLAGS="$WARN_CFLAGS -Wno-unused-variable"
 dnl fi
-AC_SUBST(WARN_CFLAGS)
 
 AC_CACHE_CHECK([for __attribute__((visibility("default")))],
   ac_cv_attribute_visibility_default, [
@@ -155,11 +154,9 @@ fi
 
 dnl until we can make a release, favor no -O2 optims.
 dnl it's fast enough and better for debugging.
-if test x$ac_compiler_gnu = xyes; then
-  CFLAGS="-g -fno-omit-frame-pointer"
-else
-  CFLAGS="-g"
-fi
+dnl if test x$ac_compiler_gnu = xyes; then
+dnl   CFLAGS="$CFLAGS -fno-omit-frame-pointer"
+dnl fi
 
 if test "x$ac_cv_prog_cc_c99" = "xno"; then
    AC_MSG_WARN([This compiler ${CC} has no c99 support])
