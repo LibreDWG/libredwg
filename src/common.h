@@ -38,7 +38,7 @@
 #endif
 
 #ifndef EXPORT
-# ifdef _WIN32
+# if defined(_WIN32) && defined(ENABLE_SHARED)
 #   ifdef DLL_EXPORT
 #     define EXPORT  __declspec(dllexport)
 #   else

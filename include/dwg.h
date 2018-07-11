@@ -45,7 +45,7 @@
 
 #ifdef SWIG
 # define EXPORT extern
-#elif defined(_WIN32)
+#elif defined(_WIN32) && defined(ENABLE_SHARED)
 # ifdef DLL_EXPORT
 #   define EXPORT  __declspec(dllexport)
 # else

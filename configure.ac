@@ -40,6 +40,11 @@ AC_PROG_INSTALL
 AC_PROG_LIBTOOL
 LT_INIT
 
+if test x$enable_shared = xyes; then
+   AC_DEFINE([ENABLE_SHARED],1,[Define to 1 if a shared library will be built])
+fi
+AM_CONDITIONAL([ENABLE_SHARED],[test "x$enable_shared" = xyes])
+
 dnl Checks for libraries
 AC_CHECK_LIB([ps],[PS_open_file],
   libredwg_have_libps=yes,
