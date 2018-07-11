@@ -153,6 +153,7 @@ static char buf[4096];
 #define HEADER_RC(name,dxf)  HEADER_9(name); FIELD(name,RC,dxf)
 #define HEADER_RLL(name,dxf) HEADER_9(name); FIELD(name, RLL, dxf)
 #define HEADER_T(name,dxf)   HEADER_9(name); VALUE_T(_obj->name, dxf)
+#define HEADER_TU(name,dxf)  HEADER_9(name); VALUE_TU(_obj->name, dxf)
 #define HEADER_B(name,dxf)   HEADER_9(name); FIELD(name, B, dxf)
 #define HEADER_BS(name,dxf)  HEADER_9(name); FIELD(name, BS, dxf)
 #define HEADER_BL(name,dxf)  HEADER_9(name); FIELD(name, BL, dxf)

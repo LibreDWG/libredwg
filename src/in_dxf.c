@@ -326,6 +326,7 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 #define HEADER_RD(name,dxf)  HEADER_9(name); FIELD(name, RD, dxf)
 #define HEADER_RLL(name,dxf) HEADER_9(name); FIELD(name, RLL, dxf)
 #define HEADER_TV(name,dxf)  HEADER_9(name); VALUE_TV(_obj->name,dxf)
+#define HEADER_TU(name,dxf)  HEADER_9(name); VALUE_TU(_obj->name,dxf)
 #define HEADER_T(name,dxf)   HEADER_9(name); VALUE_T(_obj->name, dxf)
 #define HEADER_B(name,dxf)   HEADER_9(name); FIELD(name, B, dxf)
 #define HEADER_BS(name,dxf)  HEADER_9(name); FIELD(name, BS, dxf)
@@ -835,7 +836,7 @@ dwg_indxf_object(Bit_Chain *dat, Dwg_Object *obj)
     case DWG_TYPE_OLE2FRAME:
       return dwg_indxf_OLE2FRAME(dat, obj);
     case DWG_TYPE_DUMMY:
-      return dwg_indxf_DUMMY(dat, obj);
+      return 0; //dwg_indxf_DUMMY(dat, obj);
     case DWG_TYPE_LONG_TRANSACTION:
       return dwg_indxf_LONG_TRANSACTION(dat, obj);
     case DWG_TYPE_LWPOLYLINE:
@@ -990,7 +991,7 @@ dxf_tables_read (Bit_Chain *dat, Dwg_Data * dwg)
 }
 
 static int
-dxf_blocks_read (Bit_Chain *dat, Dwg_Data * dwg)
+dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   (void)dwg;
 
@@ -1001,29 +1002,43 @@ dxf_blocks_read (Bit_Chain *dat, Dwg_Data * dwg)
 }
 
 static int
-dxf_entities_read (Bit_Chain *dat, Dwg_Data * dwg)
+dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
+  Dxf_Pair *pair;
+  Dwg_Object *obj = NULL;
   (void)dwg;
 
   SECTION(ENTITIES);
-  //...
+  while (dat->byte < dat->size) {
+    pair = dxf_read_pair(dat);
+    dxf_expect_code(dat, pair, 0);
+    DXF_CHECK_EOF;
+    dwg_indxf_object(dat, obj);
+  }
   ENDSEC();
   return 0;
 }
 
 static int
-dxf_objects_read (Bit_Chain *dat, Dwg_Data * dwg)
+dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
+  Dxf_Pair *pair;
+  Dwg_Object *obj = NULL;
   (void)dwg;
 
   SECTION(OBJECTS);
-  //...
+  while (dat->byte < dat->size) {
+    pair = dxf_read_pair(dat);
+    dxf_expect_code(dat, pair, 0);
+    DXF_CHECK_EOF;
+    dwg_indxf_object(dat, obj);
+  }
   ENDSEC();
   return 0;
 }
 
 static int
-dxf_preview_read (Bit_Chain *dat, Dwg_Data * dwg)
+dxf_preview_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   (void)dwg;
   SECTION(THUMBNAILIMAGE);
@@ -1086,13 +1101,12 @@ dwg_read_dxf(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             dxf_free_pair(pair);
             dxf_objects_read (dat, dwg);
           }
+        if (!strcmp(pair->value.s, "THUMBNAIL"))
+          {
+            dxf_free_pair(pair);
+            dxf_preview_read (dat, dwg);
+          }
       }
-    /* if (!strcmp(pair->value.s, "THUMBNAIL"))
-      {
-        dxf_free_pair(pair);
-        dxf_preview_read (dat, dwg);
-      }
-    */
   }
   return dwg->num_objects ? 1 : 0;
 }

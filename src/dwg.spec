@@ -5397,6 +5397,8 @@ DWG_ENTITY(WIPEOUT)
 
 DWG_ENTITY_END
 
+#ifndef IS_DXF
+
 /* (varies) container to hold a raw class entity (none observed in the wild) */
 DWG_ENTITY(UNKNOWN_ENT)
 
@@ -5420,10 +5422,12 @@ DWG_OBJECT(UNKNOWN_OBJ)
 
 DWG_OBJECT_END
 
-// just a dummy dwg filer, ignored
+// just a dummy dwg filer, ignored for dxf
 DWG_OBJECT(DUMMY)
   //COMMON_ENTITY_HANDLE_DATA;
 DWG_OBJECT_END
+
+#endif /* IS_DXF */
 
 DWG_OBJECT(LONG_TRANSACTION)
   SUBCLASS (AcDbLongTransaction)

@@ -133,6 +133,9 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 #define HEADER_TV(name,dxf) \
     HEADER_9(name);\
     VALUE_TV(dwg->header_vars.name, dxf)
+#define HEADER_TU(name,dxf) \
+    HEADER_9(name);\
+    VALUE_TU(dwg->header_vars.name, dxf)
 #define HEADER_T(name,dxf) \
     HEADER_9(name);\
     VALUE_T(dwg->header_vars.name, dxf)
@@ -762,6 +765,7 @@ dwg_dxfb_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
       return dwg_dxfb_MLINE(dat, obj);
 #else
       LOG_WARN("Unhandled Entity MLINE in out_dxfb %u/%lX", obj->index, obj->handle.value)
+      if (0) dwg_dxfb_MLINE(dat, obj);
       return DWG_ERR_UNHANDLEDCLASS;
 #endif
     case DWG_TYPE_BLOCK_CONTROL:
@@ -1082,8 +1086,6 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
       // avoid unused warnings
       dwg_dxfb_PROXY_ENTITY(dat, &dwg->object[0]);
-      dwg_dxfb_UNKNOWN_ENT(dat, &dwg->object[0]);
-      dwg_dxfb_UNKNOWN_OBJ(dat, &dwg->object[0]);
       ENDTAB();
     }
   SINCE (R_13)

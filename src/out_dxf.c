@@ -224,7 +224,8 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 #define HEADER_RL(name,dxf)  HEADER_9(name); FIELD(name, RL, dxf)
 #define HEADER_RLL(name,dxf) HEADER_9(name); FIELD(name, RLL, dxf)
 #define HEADER_TV(name,dxf)  HEADER_9(name); VALUE_TV(_obj->name, dxf)
-#define HEADER_T(name,dxf)   HEADER_9(name); VALUE_T(_obj->name, dxf)
+#define HEADER_TU(name,dxf)  HEADER_9(name); VALUE_TU(_obj->name, dxf)
+#define HEADER_T(name,dxf)   HEADER_9(name); VALUE_T((char*)_obj->name, dxf)
 #define HEADER_B(name,dxf)   HEADER_9(name); FIELD_B(name, dxf)
 #define HEADER_BS(name,dxf)  HEADER_9(name); FIELD(name, BS, dxf)
 #define HEADER_BD(name,dxf)  HEADER_9(name); FIELD_BD(name, dxf)
@@ -923,6 +924,7 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
       return dwg_dxf_MLINE(dat, obj);
 #else
       LOG_WARN("Unhandled Entity MLINE in out_dxf %u/%lX", obj->index, obj->handle.value)
+      if (0) dwg_dxf_MLINE(dat, obj);
       return DWG_ERR_UNHANDLEDCLASS;
 #endif
     case DWG_TYPE_BLOCK_CONTROL:
@@ -1333,8 +1335,6 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
       // avoid unused warnings
       dwg_dxf_PROXY_ENTITY(dat, &dwg->object[0]);
-      dwg_dxf_UNKNOWN_ENT(dat, &dwg->object[0]);
-      dwg_dxf_UNKNOWN_OBJ(dat, &dwg->object[0]);
       ENDTAB();
     }
   SINCE (R_13)

@@ -31,7 +31,7 @@
 #include <dwg.h>
 #include <dwg_api.h>
 #include "common.h"
-//#include "../src/bits.h" //bit_convert_TU
+#include "../src/bits.h" //bit_convert_TU
 #include "suffix.inc"
 
 static int opts = 0;
@@ -86,10 +86,10 @@ create_postscript(Dwg_Data *dwg, char *output)
     }
 
   PS_set_info(ps, "Creator", "dwg2ps " PACKAGE_VERSION);
-  //TODO LASTSAVEDBY
-  //PS_set_info(ps, "Author", bit_convert_TU(dwg->header_vars.LASTSAVEDBY));
+  if (dwg->header_vars.LASTSAVEDBY)
+    PS_set_info(ps, "Author", bit_convert_TU(dwg->header_vars.LASTSAVEDBY));
   PS_set_info(ps, "Title", output);
-  //PS_set_info(ps, "Keywords", "dwg, postscript, conversion, CAD, plot");
+  PS_set_info(ps, "Keywords", "dwg, postscript, conversion, CAD, plot");
 
   /* First page: Model Space (?)
    */
@@ -102,7 +102,7 @@ create_postscript(Dwg_Data *dwg, char *output)
   scale *= (scale_x > scale_y ? scale_x : scale_y);
   PS_scale(ps, (float)scale, (float)scale);
   PS_translate(ps, (float)-dwg_model_x_min(dwg), (float)-dwg_model_y_min(dwg));
-  if (dwg->opts)
+  if (dwg->opts & 0xf)
     {
       fprintf (stderr, "Limits: %f, %f\n", dx, dy);
       fprintf (stderr, "Scale: %f (%f, %f)\n", scale, scale_x, scale_y);
