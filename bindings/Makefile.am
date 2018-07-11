@@ -36,10 +36,10 @@ all-am: $(dist_perl_PERL)
 
 # building perl bindings is optional. Most setup's don't have all the deps, like
 # crypt.h, sys/wait.h on windows.
-perl/LibreDWG.o: perl/LibreDWG.pm perl/LibreDWG.xs perl/Makefile
+perl/LibreDWG.$(OBJEXT): perl/LibreDWG.pm perl/LibreDWG.xs perl/Makefile
 	@echo Note swig_perl.c is huge. This will need some time...
 	-cd perl && \
-	  $(MAKE) OPTIMIZE=
+	  $(MAKE) OPTIMIZE=""
 
 perl/Makefile: perl/Makefile.PL
 	-cd perl && \
@@ -52,7 +52,7 @@ CLEANFILES = perl/LibreDWG.bs perl/LibreDWG.c perl/pm_to_blib perl/Makefile \
 # rpath/LD_LIBRARY_PATH overrides are too troublesome
 check-am: $(dist_perl_PERL) perl/Makefile perl/LibreDWG.$(OBJEXT)
 	@echo Making check for perl
-	-$(MAKE) -C perl test OPTIMIZE= LD_RUN_PATH="$(abs_top_builddir)/src/.libs"
+	-$(MAKE) -C perl test OPTIMIZE="" LD_RUN_PATH="$(abs_top_builddir)/src/.libs"
 
 install-am: $(dist_perl_PERL) perl/Makefile perl/LibreDWG.$(OBJEXT)
 	@echo Making install for perl
