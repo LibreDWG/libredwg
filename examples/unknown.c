@@ -313,8 +313,8 @@ bits_handle(Bit_Chain *restrict dat, struct _unknown_field *restrict g,
     switch (code) {
     case 6: handle.value = 0; break;
     case 8: handle.value = 0; break;
-    case 0xA: handle.value += objhandle; break;
-    case 0xC: handle.value -= objhandle; break;
+    case 0xA: handle.value -= objhandle; break;
+    case 0xC: handle.value += objhandle; break;
     default: break;
     }
   }
@@ -601,13 +601,13 @@ main (int argc, char *argv[])
               unsigned int hdl;
               sscanf(g[j].value, "%X", &hdl);
               for (int c=0; c<8; c++) {
-                if (handles[c]==6 && unknown_dxf[i].handle - hdl != 1) //+1
+                if (handles[c]==6 && hdl != unknown_dxf[i].handle+1) //+1
                   continue;
-                if (handles[c]==8 && (int)((int)unknown_dxf[i].handle - hdl) != -1) //-1
+                if (handles[c]==8 && hdl != unknown_dxf[i].handle-1) //-1
                   continue;
-                if (handles[c]==0xa && (int)((int)unknown_dxf[i].handle - hdl) < 0)
+                if (handles[c]==0xa && hdl < unknown_dxf[i].handle) //>
                   continue;
-                if (handles[c]==0xc && unknown_dxf[i].handle - hdl > 0)
+                if (handles[c]==0xc && hdl > unknown_dxf[i].handle) //<
                   continue;
                 bits_try_handle (&g[j], handles[c], unknown_dxf[i].handle);
                 num_found = search_bits(j, &g[j], &unknown_dxf[i], &dxf[i], offset);
