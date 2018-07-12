@@ -5457,6 +5457,19 @@ DWG_ENTITY(CAMERA) // i.e. a named view, not persistent in a DWG. CAMERADISPLAY=
 
 DWG_ENTITY_END
 
+// subclass of AcDbAssocAction
+// Object1 --ReadDep--> Action1 --WriteDep1--> Object2 --ReadDep--> Action2 ...
+DWG_OBJECT(ASSOCNETWORK)
+  SUBCLASS (AcDbAssocAction)
+  FIELD_HANDLE (action, 5, 0);   // handle or inlined?
+  SUBCLASS (AcDbAssocNetwork)
+  FIELD_BL (unknown_n1, 90);
+  FIELD_BL (unknown_n2, 90);
+  FIELD_BL (num_actions, 90);
+  HANDLE_VECTOR(actions, num_actions, 5, 330);
+  FIELD_BL (unknown_n3, 90);
+DWG_OBJECT_END
+
 /* In work area:
    The following entities/objects are stored as raw UNKNOWN_ENT/OBJ,
    unless enabled via -DDEBUG_CLASSES */
@@ -5958,38 +5971,6 @@ DWG_OBJECT(ASSOCACTION)
   HANDLE_VECTOR(readdep, num_deps, 5, 330);
   HANDLE_VECTOR(writedep, num_deps, 0, 360);
   FIELD_BL (unknown_assoc, 90);
-DWG_OBJECT_END
-
-// in work: subclass of AcDbAssocAction
-// Object1 --ReadDep--> Action1 --WriteDep1--> Object2 --ReadDep--> Action2 ...
-DWG_OBJECT(ASSOCNETWORK)
-  //SUBCLASS (AcDbActionBody)
-  SUBCLASS (AcDbAssocAction)
-  FIELD_HANDLE (action, 5, 0);   // handle or inlined?
-#if 0  
-  //90, 90, 330, 360, 90, 90, 90
-  FIELD_B (is_body_a_proxy, 90);
-  FIELD_T (body.evaluatorid, 0);
-  FIELD_T (body.expresssion, 0);
-  FIELD_BL (body.value, 0); //rbuf really
-  //FIELD_B (is_actionevaluation_in_progress, 90);
-  FIELD_BL (action.status, 90);
-  FIELD_HANDLE (action.actionbody, 5, 0);
-  FIELD_HANDLE (action.callback, 5, 0);
-  FIELD_HANDLE (action.owningnetwork, 5, 0);
-  FIELD_BL (action.num_deps, 90);
-  HANDLE_VECTOR(action.readdep, num_assoc, 5, 330);  //offset 124/139
-  HANDLE_VECTOR(action.writedep, num_assoc, 0, 360);
-  FIELD_BL (action.unknown_assoc, 90);
-#endif
-
-  SUBCLASS (AcDbAssocNetwork)
-  //90, 90, [90, 330], 90
-  FIELD_BL (unknown_n1, 90);
-  FIELD_BL (unknown_n2, 90);
-  FIELD_BL (num_actions, 90);
-  HANDLE_VECTOR(actions, num_actions, 5, 330);
-  FIELD_BL (unknown_n3, 90);
 DWG_OBJECT_END
 
 #endif /* DEBUG_CLASSES */
