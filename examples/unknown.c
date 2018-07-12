@@ -314,7 +314,7 @@ bits_handle(Bit_Chain *restrict dat, struct _unknown_field *restrict g,
     case 6: handle.value = 0; break;
     case 8: handle.value = 0; break;
     case 0xA: handle.value -= objhandle; break;
-    case 0xC: handle.value += objhandle; break;
+    case 0xC: handle.value = objhandle - handle.value; break;
     default: break;
     }
   }
