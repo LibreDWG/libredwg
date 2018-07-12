@@ -3311,8 +3311,8 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
 
   obj->size = bit_read_MS(dat);
   LOG_INFO(", Size: %d/0x%x", obj->size, obj->size)
-  obj->address = object_address = dat->byte;
-  end_address = object_address + obj->size; /* (calculate the bitsize) */
+  obj->address = dat->byte;
+  end_address = obj->address + obj->size; /* (calculate the bitsize) */
 
   SINCE(R_2010)
   {
@@ -3324,6 +3324,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
     obj->type = bit_read_BS(dat);
   }
   LOG_INFO(", Type: %d\n", obj->type)
+  object_address = bit_position(dat);
 
   /* Check the type of the object
    */
@@ -3602,30 +3603,27 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
           int is_entity = 0;
           int i = obj->type - 500;
           Dwg_Class *klass = NULL;
-          BITCODE_MS size;
-          BITCODE_BS type;
 
-          if (dat->byte != end_address)
-            {
-              LOG_TRACE("wrong offset: %lu, got %lu (%ld/%d)\n",
-                        end_address, dat->byte, end_address - dat->byte,
-                        obj->bitsize/8)
-                }
-          dat->byte = address;   // restart and read into the UNKNOWN_OBJ object
-          dat->bit = 0;
-          size = bit_read_MS(dat);
-          type = bit_read_BS(dat);
+          // restart and read into the UNKNOWN_OBJ object
+          bit_set_position(dat, object_address);
 
           if (i > 0 && i <= (int)dwg->num_classes)
             {
               klass = &dwg->dwg_class[i];
               is_entity = dwg_class_is_entity(klass);
             }
-          else if (size > 0xffff) {
-            LOG_ERROR("Invalid object type %d and size %lu", type, size);
+          else {
+            if (i <= 0)
+              {
+                LOG_ERROR("Invalid class index %d <0", i);
+              }
+            else
+              {
+                LOG_ERROR("Invalid class index %d >%d", i,
+                          (int)dwg->num_classes);
+              }
             obj->supertype = DWG_SUPERTYPE_UNKNOWN;
             obj->type = 0;
-            obj->size = 0;
             dat->byte = oldpos;
             dat->bit  = previous_bit;
             return error | DWG_ERR_VALUEOUTOFBOUNDS;
