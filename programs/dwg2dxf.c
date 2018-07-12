@@ -94,7 +94,7 @@ main (int argc, char *argv[])
   char* filename_out = NULL;
   Dwg_Version_Type dwg_version;
   Bit_Chain dat;
-
+  int do_free;
   int c;
 #ifdef HAVE_GETOPT_LONG
   int option_index = 0;
@@ -210,6 +210,7 @@ main (int argc, char *argv[])
               argv[0]);
       return usage();
     }
+  do_free = i+1 < argc;
 
   while (i < argc)
     {
@@ -261,7 +262,7 @@ main (int argc, char *argv[])
         fclose (dat.fh);
 
       // forget about valgrind. really huge DWG's need endlessly here.
-      if (argc > 1) {
+      if (do_free) {
         dwg_free(&dwg);
         free (filename_out);
       }
