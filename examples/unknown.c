@@ -477,6 +477,7 @@ set_possible_pos(struct _dxf *dxf, const struct _unknown_field *g, const int pos
   }
 }
 
+#if 0
 static void
 set_possible(struct _dxf *dxf, const struct _unknown_field *g, const int i)
 {
@@ -487,6 +488,7 @@ set_possible(struct _dxf *dxf, const struct _unknown_field *g, const int i)
     }
   }
 }
+#endif
 
 #define BIT(b,i) ((b[(i)/8] >> (i)%8) & 1)
 
@@ -676,7 +678,7 @@ main (int argc, char *argv[])
             //relaxed BD search, less mantissa precision.
             //e.g. 49:"0.0008202099737533" (66 bits of type BD)
             //52 -> 44 bit
-            if (g[j].type == BITS_BD && strlen(g[j].value) >= 3) {
+            if (g[j].type == BITS_RD && strlen(g[j].value) >= 3) {
               double d;
               Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
               dat.chain = calloc(16,1);
@@ -726,7 +728,7 @@ main (int argc, char *argv[])
               }
             }
             //ditto relaxed RD search, without the BB prefix
-            if (g[j].type == BITS_BD && strlen(g[j].value) >= 3) {
+            if (g[j].type == BITS_RD && strlen(g[j].value) >= 3) {
               double d;
               Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
               dat.chain = calloc(16,1);
@@ -819,8 +821,8 @@ main (int argc, char *argv[])
               goto SEARCH;
             }
             else {
-              printf("%d: %s [%s] found 1 at offset %d /%d\n", g[j].code, g[j].value,
-                   dwg_bits_name[g[j].type], g[j].pos[0], size);
+              printf("%d: %s [%s] found 1 at offset %d-%d /%d\n", g[j].code, g[j].value,
+                   dwg_bits_name[g[j].type], g[j].pos[0], g[j].pos[0]+g[j].bitsize-1, size);
               dxf[i].num_filled += g[j].bitsize;
             }
           } else if (num_found == 2) {
