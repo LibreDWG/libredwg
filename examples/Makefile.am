@@ -29,28 +29,30 @@ dwg2svg2_SOURCES = dwg2svg2.c
 unknown_SOURCES  = unknown.c alldxf_0.inc alldxf_1.inc alldxf_2.inc
 all: $(check_PROGRAMS)
 
+.PHONY: check-syntax regen-unknown dsymutil gcov
+
 if HAVE_PERL
 # maintainer rules only
-alldwg.inc: log_unknown.pl
-	test -d ../.git || false
-	echo Creating alldwg.inc will need a few minutes...
-	-cd $(abs_top_builddir) && ./logs.sh; \
-	  mv examples/alldwg.inc examples/alldwg.inc~; \
-	  for l in *_r*.log *_20*.log DS_*.log; \
-	    do $(PERL) examples/log_unknown.pl "$$l" >>examples/alldwg.inc; done
 alldxf_2.inc: alldxf_1.inc
 alldxf_1.inc: alldxf_0.inc
-alldxf_0.inc: alldwg.inc log_unknown_dxf.pl
+alldxf_0.inc: # log_unknown_dxf.pl
 	test -d ../.git || false
 	test -f alldwg.inc || (echo make regen-unknown; false)
 	-mv alldxf_0.inc alldxf_0.inc~
 	-mv alldxf_1.inc alldxf_1.inc~
 	-mv alldxf_2.inc alldxf_2.inc~
 	cd .. && $(PERL) examples/log_unknown_dxf.pl examples/alldwg.inc
-endif
+alldwg.inc: # log_unknown.pl
+	echo Creating alldwg.inc will need a few minutes...
+	-cd $(abs_top_builddir) && ./logs.sh; \
+	  mv examples/alldwg.inc examples/alldwg.inc~; \
+	  for l in *_r*.log *_20*.log DS_*.log; \
+	    do $(PERL) examples/log_unknown.pl "$$l" >>examples/alldwg.inc; done
 
-.PHONY: check-syntax regen-unknown dsymutil gcov
-regen-unknown: alldwg.inc alldxf_0.inc
+regen-unknown:
+	$(MAKE) alldwg.inc
+	$(MAKE) alldxf_0.inc
+endif
 
 if HAVE_WINE
 TESTS_ENVIRONMENT = \
@@ -66,8 +68,7 @@ endif
 
 TESTS = $(top_srcdir)/programs/alive.test
 
-EXTRA_DIST = load_dwg.py log_unknown.pl alldwg.inc log_unknown_dxf.pl
-	     alldxf_0.inc alldxf_1.inc alldxf_2.inc
+EXTRA_DIST = load_dwg.py
 CLEANFILES = {example,sample}_2000.svg alldwg.inc~ \
 	     alldxf_0.inc~ alldxf_1.inc~ alldxf_2.inc~
 MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
@@ -77,7 +78,7 @@ MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
 	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -E -o $@ $<
 
 dsymutil:
-	for e in $(check_PROGRAMS); do dsymutil $$e; done
+	for e in $(check_PROGRAMS) $(EXTRA_PROGRAMS); do dsymutil $$e; done
 
 # emacs flymake-mode
 check-syntax:
