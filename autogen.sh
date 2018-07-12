@@ -11,8 +11,13 @@
 # - ltmain.sh (GNU libtool) 2.2.6b
 
 set -x
-if test -d .git; then git fetch --tags; test -f .tarball-version && rm .tarball-version; fi
-test -f .version || git describe --long --tags --always > .version
+if test -d .git; then
+    git fetch --tags
+    rm .tarball-version
+    v=`build-aux/git-version-gen .tarball-version`
+    echo $v >.tarball-version
+    echo $v >.version
+fi
 set -e
 autoreconf --install --symlink "$@" -I m4
 
