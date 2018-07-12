@@ -5731,8 +5731,10 @@ DWG_OBJECT(SUN)
   FIELD_VALUE(num_bytes) = (obj->bitsize - rcount2) / 8;
   FIELD_VALUE(num_bits)  = (obj->bitsize - rcount2) % 8;
   LOG_TRACE("num_bytes: %d, num_bits: %d\n", FIELD_VALUE(num_bytes), FIELD_VALUE(num_bits));
-  FIELD_TF (bytes, FIELD_VALUE(num_bytes), 0);
-  FIELD_VECTOR (bits, B, num_bits, 0);
+  if (obj->bitsize > rcount2) {
+    FIELD_TF (bytes, FIELD_VALUE(num_bytes), 0);
+    FIELD_VECTOR (bits, B, num_bits, 0);
+  }
   bit_set_position(dat, rcount1 + 60);
 
 #if 1
@@ -5936,27 +5938,25 @@ DWG_ENTITY(UNDERLAY)
 
 DWG_ENTITY_END
 
-// (varies) TODO
-DWG_OBJECT(DATATABLE)
-
-  SUBCLASS (AcDbDataTable)
-  DEBUG_HERE()
-  
-DWG_OBJECT_END
-
 DWG_OBJECT(ASSOCACTION)
-  FIELD_B (is_body_a_proxy, 90);
+  rcount1 = bit_position(dat);
+  FIELD_B (is_body_a_proxy, 90); //0-9
+  DEBUG_HERE()
+  //17bit 00101000101000101:
   FIELD_T (body.evaluatorid, 0);
   FIELD_T (body.expresssion, 0);
   FIELD_BL (body.value, 0); //rbuf really
   //FIELD_B (is_actionevaluation_in_progress, 90);
-  FIELD_BL (status, 90);
-  FIELD_H (actionbody, 5, 0);
-  FIELD_H (callback, 5, 0);
-  FIELD_H (owningnetwork, 5, 0);
+  DEBUG_POS()
+  bit_set_position(dat, rcount1 + 27);
+  FIELD_BL (status, 90); //27-36
+  DEBUG_HERE()
+  FIELD_HANDLE (actionbody, 5, 0);
+  FIELD_HANDLE (callback, 3, 0);
+  FIELD_HANDLE (owningnetwork, 3, 0);
   FIELD_BL (num_deps, 90);
-  HANDLE_VECTOR(readdep, num_assoc, 5, 330);
-  HANDLE_VECTOR(writedep, num_assoc, 0, 360);
+  HANDLE_VECTOR(readdep, num_deps, 5, 330);
+  HANDLE_VECTOR(writedep, num_deps, 0, 360);
   FIELD_BL (unknown_assoc, 90);
 DWG_OBJECT_END
 
@@ -5965,7 +5965,7 @@ DWG_OBJECT_END
 DWG_OBJECT(ASSOCNETWORK)
   //SUBCLASS (AcDbActionBody)
   SUBCLASS (AcDbAssocAction)
-  FIELD_H (action, 5, 0);   // handle or inlined?
+  FIELD_HANDLE (action, 5, 0);   // handle or inlined?
 #if 0  
   //90, 90, 330, 360, 90, 90, 90
   FIELD_B (is_body_a_proxy, 90);
@@ -5974,9 +5974,9 @@ DWG_OBJECT(ASSOCNETWORK)
   FIELD_BL (body.value, 0); //rbuf really
   //FIELD_B (is_actionevaluation_in_progress, 90);
   FIELD_BL (action.status, 90);
-  FIELD_H (action.actionbody, 5, 0);
-  FIELD_H (action.callback, 5, 0);
-  FIELD_H (action.owningnetwork, 5, 0);
+  FIELD_HANDLE (action.actionbody, 5, 0);
+  FIELD_HANDLE (action.callback, 5, 0);
+  FIELD_HANDLE (action.owningnetwork, 5, 0);
   FIELD_BL (action.num_deps, 90);
   HANDLE_VECTOR(action.readdep, num_assoc, 5, 330);  //offset 124/139
   HANDLE_VECTOR(action.writedep, num_assoc, 0, 360);
@@ -6047,6 +6047,14 @@ DWG_OBJECT(ASSOCGEOMDEPENDENCY)
   //1 AcDbAssocSingleEdgePersSubentId
   //290 0
   //FIELD_B (DependentOnCompoundObject, 90);
+DWG_OBJECT_END
+
+// (varies) TODO
+DWG_OBJECT(DATATABLE)
+
+  SUBCLASS (AcDbDataTable)
+  DEBUG_HERE()
+  
 DWG_OBJECT_END
 
 DWG_OBJECT(DBCOLOR)

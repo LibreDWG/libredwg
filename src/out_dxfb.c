@@ -423,6 +423,9 @@ dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
   (void)dat; (void)obj;
   return 0;
 }
+#else
+static int
+dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 #endif
 
 #define DWG_ENTITY(token) \

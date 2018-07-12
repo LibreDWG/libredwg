@@ -443,6 +443,9 @@ dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
   (void)dat; (void)obj;
   return 0;
 }
+#else
+static int
+dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 #endif
 
 //The strcmp is being optimized away at compile-time! https://godbolt.org/g/AqkhwL

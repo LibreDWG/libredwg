@@ -4377,10 +4377,12 @@ typedef struct _dwg_ACTIONBODY
 
 typedef struct _dwg_object_ASSOCACTION
 {
-  BITCODE_B  is_body_proxy;
+  struct _dwg_object_object *parent;
+  BITCODE_B  is_body_a_proxy;
   //BITCODE_B is_actionevaluation_in_progress; // 90
   Dwg_ACTIONBODY body;
   BITCODE_BL status; // 90
+  BITCODE_H  actionbody;
   BITCODE_H  callback;
   BITCODE_H  owningnetwork;
   BITCODE_BL num_deps; // 90
@@ -4664,10 +4666,11 @@ typedef struct _dwg_object_object
     //TODO Dwg_Object_ARCALIGNEDTEXT *ARCALIGNEDTEXT;
     //TODO Dwg_Object_ASSOC2DCONSTRAINTGROUP *ASSOC2DCONSTRAINTGROUP;
     //TODO Dwg_Object_ASSOCGEOMDEPENDENCY *ASSOCGEOMDEPENDENCY;
-    //TODO Dwg_Object_ASSOCNETWORK *ASSOCNETWORK;
+    Dwg_Object_ASSOCACTION *ASSOCACTION;
+    Dwg_Object_ASSOCNETWORK *ASSOCNETWORK;
     //Dwg_Object_CSACDOCUMENTOPTIONS *CSACDOCUMENTOPTIONS;
     Dwg_Object_CELLSTYLEMAP *CELLSTYLEMAP;
-    Dwg_Object_DATATABLE *DATATABLE;
+    //Dwg_Object_DATATABLE *DATATABLE;
     Dwg_Object_DBCOLOR *DBCOLOR;
     //TODO Dwg_Object_DETAILVIEWSTYLE *DETAILVIEWSTYLE;
     Dwg_Object_DICTIONARY *DICTIONARY;
