@@ -108,8 +108,8 @@ static const char *dwg_bits_name[] =
 
 struct _unknown_field {
   int code;
-  char *value;
-  char *bytes;
+  const char *value;
+  unsigned char *bytes;
   int bitsize;
   Dwg_Bits type;
   int pos[5]; //5x found bit offset in dxf->bytes or -1 if not found
@@ -193,7 +193,7 @@ static void bits_hexstring(Bit_Chain *restrict dat, struct _unknown_field *restr
   int len = strlen(g->value)/2;
   unsigned char buf[1024];
   for (int i=0; i<len; i++) {
-    unsigned char *s = &g->value[i*2];
+    unsigned char *s = (unsigned char *)&g->value[i*2];
     buf[i] = ((*s < 'A') ? *s - '0' : *s + 10 - 'A') << 4;
     s++;
     buf[i] += (*s < 'A') ? *s - '0' : *s + 10 - 'A';
@@ -288,7 +288,7 @@ static void bits_handle(Bit_Chain *restrict dat, struct _unknown_field *restrict
 {
   Dwg_Handle handle;
   //parse hex -> owner handle;
-  sscanf(g->value, "%X", &handle.value);
+  sscanf(g->value, "%lX", &handle.value);
   handle.code = code;
   if (code > 5) { //relative offset to objhandle
     switch (code) {
@@ -296,6 +296,7 @@ static void bits_handle(Bit_Chain *restrict dat, struct _unknown_field *restrict
     case 8: handle.value = 0; break;
     case 0xA: handle.value += objhandle; break;
     case 0xC: handle.value -= objhandle; break;
+    default: break;
     }
   }
   if (handle.value == 0)
@@ -308,7 +309,7 @@ static void bits_handle(Bit_Chain *restrict dat, struct _unknown_field *restrict
     handle.size = 3;
   else
     handle.size = 4;
-  printf("  handle %x.%d.%X (%X)\n", code, handle.size, handle.value, objhandle);
+  printf("  handle %x.%d.%lX (%X)\n", code, handle.size, handle.value, objhandle);
   bit_write_H(dat, &handle);
   g->type = BITS_HANDLE;
 }
@@ -568,9 +569,9 @@ main (int argc, char *argv[])
               for (int c=0; c<8; c++) {
                 if (handles[c]==6 && unknown_dxf[i].handle - hdl != 1) //+1
                   continue;
-                if (handles[c]==8 && unknown_dxf[i].handle - hdl != -1) //-1
+                if (handles[c]==8 && (int)unknown_dxf[i].handle - hdl != -1) //-1
                   continue;
-                if (handles[c]==0xa && unknown_dxf[i].handle - hdl < 0)
+                if (handles[c]==0xa && (int)unknown_dxf[i].handle - hdl < 0)
                   continue;
                 if (handles[c]==0xc && unknown_dxf[i].handle - hdl > 0)
                   continue;
@@ -776,7 +777,7 @@ main (int argc, char *argv[])
                    g[j].pos[0], g[j].pos[1], g[j].pos[2], g[j].pos[3],
                    size);
           } else if (num_found == 5) {
-            printf("%d: %s [%s] found 5 at offsets %d, %d, %d, %d /%d\n",
+            printf("%d: %s [%s] found 5 at offsets %d, %d, %d, %d, %d /%d\n",
                    g[j].code, g[j].value,
                    dwg_bits_name[g[j].type],
                    g[j].pos[0], g[j].pos[1], g[j].pos[2], g[j].pos[3], g[j].pos[4],
@@ -821,7 +822,7 @@ main (int argc, char *argv[])
       //there are various heuristics, like the handle stream at the end
     }
 
-  printf("summary: %d/%d=%.2f%%\n", sum_filled, sum_size,
+  printf("summary: %ld/%ld=%.2f%%\n", sum_filled, sum_size,
          100.0*sum_filled/sum_size);
   return 0;
 }
