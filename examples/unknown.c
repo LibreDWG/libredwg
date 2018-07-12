@@ -596,11 +596,12 @@ main (int argc, char *argv[])
 
             // try alternate formats than the standard one from bits_format:
             int code = g[j].code;
-            if (is_handle(code) && code != 330 && code != 5) {
+            if (is_handle(code) && code != 5) {
               int handles[] = {2,3,4,5,6,8,0xa,0xc};
               unsigned int hdl;
               sscanf(g[j].value, "%X", &hdl);
-              for (int c=0; c<8; c++) {
+              //for 330 start with 6 (relative reactors)
+              for (int c = code==330 ? 4 : 0; c<8; c++) {
                 if (handles[c]==6 && hdl != unknown_dxf[i].handle+1) //+1
                   continue;
                 if (handles[c]==8 && hdl != unknown_dxf[i].handle-1) //-1
