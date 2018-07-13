@@ -48,6 +48,7 @@ while (<>) {
       $dxf = "../$dxf";
     }
   }
+  next LINE if $F[0] =~ m|//{|; # skip duplicates
   my $obj = substr($F[1],1,-2); # "MATERIAL",
   my $bytes   = substr($F[2],1,-2);
   my $bits = substr($F[3],1,-2);
