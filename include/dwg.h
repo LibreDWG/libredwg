@@ -3465,8 +3465,10 @@ typedef struct _dwg_object_DBCOLOR
 {
   struct _dwg_object_object *parent;
 
-  BITCODE_H* reactors;     /* ignored */
-  BITCODE_H xdicobjhandle; /* ignored */
+  BITCODE_BS color; //62: 253
+  BITCODE_H parenthandle;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
 } Dwg_Object_DBCOLOR;
 
 /**
@@ -5290,7 +5292,7 @@ EXPORT int dwg_add_CAMERA (Dwg_Object *obj);
 EXPORT int dwg_add_CELLSTYLEMAP (Dwg_Object *obj);
 //EXPORT int dwg_add_CSACDOCUMENTOPTIONS (Dwg_Object *obj);
 EXPORT int dwg_add_DATATABLE (Dwg_Object *obj);
-//EXPORT int dwg_add_DBCOLOR (Dwg_Object *obj);
+EXPORT int dwg_add_DBCOLOR (Dwg_Object *obj);
 //EXPORT int dwg_add_DETAILVIEWSTYLE (Dwg_Object *obj);
 //EXPORT int dwg_add_DIMASSOC (Dwg_Object *obj);
 EXPORT int dwg_add_DICTIONARYVAR (Dwg_Object *obj);

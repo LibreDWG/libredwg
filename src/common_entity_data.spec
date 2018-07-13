@@ -73,7 +73,12 @@
 
       if (flags & 0x40)
         {
-          LOG_HANDLE("color: has handle\n");
+          ent->color_handle = dwg_decode_handleref(dat, obj, dwg);
+          LOG_HANDLE("dbcolor: HANDLE(%x.%d.%lX) absolute:%lX [0]\n",
+              ent->color_handle->handleref.code,
+              ent->color_handle->handleref.size,
+              ent->color_handle->handleref.value,
+              ent->color_handle->absolute_ref);
         }
       if (flags & 0x20)
         {
