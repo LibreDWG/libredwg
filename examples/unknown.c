@@ -827,34 +827,39 @@ main (int argc, char *argv[])
               dxf[i].num_filled += g[j].bitsize;
             }
           } else if (num_found == 2) {
-            printf("%d: %s [%s] found 2 at offsets %d, %d /%d\n",
+            printf("%d: %s [%s] found 2 at offsets %d-%d, %d-%d /%d\n",
                    g[j].code, g[j].value,
                    dwg_bits_name[g[j].type],
-                   g[j].pos[0], g[j].pos[1],
+                   g[j].pos[0], g[j].pos[0]+g[j].bitsize-1,
+                   g[j].pos[1], g[j].pos[1]+g[j].bitsize-1,
                    size);
           } else if (num_found == 3) {
-            printf("%d: %s [%s] found 3 at offsets %d, %d, %d /%d\n",
+            printf("%d: %s [%s] found 3 at offsets %d-%d, %d, %d /%d\n",
                    g[j].code, g[j].value,
                    dwg_bits_name[g[j].type],
-                   g[j].pos[0], g[j].pos[1], g[j].pos[2],
+                   g[j].pos[0], g[j].pos[0]+g[j].bitsize-1,
+                   g[j].pos[1], g[j].pos[2],
                    size);
           } else if (num_found == 4) {
-            printf("%d: %s [%s] found 4 at offsets %d, %d, %d, %d /%d\n",
+            printf("%d: %s [%s] found 4 at offsets %d-%d, %d, %d, %d /%d\n",
                    g[j].code, g[j].value,
                    dwg_bits_name[g[j].type],
-                   g[j].pos[0], g[j].pos[1], g[j].pos[2], g[j].pos[3],
+                   g[j].pos[0], g[j].pos[0]+g[j].bitsize-1,
+                   g[j].pos[1], g[j].pos[2], g[j].pos[3],
                    size);
           } else if (num_found == 5) {
-            printf("%d: %s [%s] found 5 at offsets %d, %d, %d, %d, %d /%d\n",
+            printf("%d: %s [%s] found 5 at offsets %d-%d, %d, %d, %d, %d /%d\n",
                    g[j].code, g[j].value,
                    dwg_bits_name[g[j].type],
-                   g[j].pos[0], g[j].pos[1], g[j].pos[2], g[j].pos[3], g[j].pos[4],
+                   g[j].pos[0], g[j].pos[0]+g[j].bitsize-1,
+                   g[j].pos[1], g[j].pos[2], g[j].pos[3], g[j].pos[4],
                    size);
           } else if (num_found > 5) {
-            printf("%d: %s [%s] found >5 at offsets %d, %d, %d, %d, %d, ... /%d\n",
+            printf("%d: %s [%s] found >5 at offsets %d-%d, %d, %d, %d, %d, ... /%d\n",
                    g[j].code, g[j].value,
                    dwg_bits_name[g[j].type],
-                   g[j].pos[0], g[j].pos[1], g[j].pos[2], g[j].pos[3], g[j].pos[4],
+                   g[j].pos[0], g[j].pos[0]+g[j].bitsize-1,
+                   g[j].pos[1], g[j].pos[2], g[j].pos[3], g[j].pos[4],
                    size);
           }
         }
