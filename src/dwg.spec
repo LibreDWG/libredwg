@@ -5457,24 +5457,33 @@ DWG_ENTITY(CAMERA) // i.e. a named view, not persistent in a DWG. CAMERADISPLAY=
 
 DWG_ENTITY_END
 
-// subclass of AcDbAssocAction
-// Object1 --ReadDep--> Action1 --WriteDep1--> Object2 --ReadDep--> Action2 ...
-DWG_OBJECT(ASSOCNETWORK)
-  SUBCLASS (AcDbAssocAction)
-  FIELD_HANDLE (action, 5, 0);   // handle or inlined?
-  SUBCLASS (AcDbAssocNetwork)
-  FIELD_BL (unknown_n1, 90);
-  FIELD_BL (unknown_n2, 90);
-  FIELD_BL (num_actions, 90);
-  HANDLE_VECTOR(actions, num_actions, 5, 330);
-  FIELD_BL (unknown_n3, 90);
-DWG_OBJECT_END
+#ifdef DEBUG_CLASSES
 
 /* In work area:
    The following entities/objects are stored as raw UNKNOWN_ENT/OBJ,
    unless enabled via -DDEBUG_CLASSES */
 
-#ifdef DEBUG_CLASSES
+// subclass of AcDbAssocAction
+// Object1 --ReadDep--> Action1 --WriteDep1--> Object2 --ReadDep--> Action2 ...
+DWG_OBJECT(ASSOCNETWORK)
+  SUBCLASS (AcDbAssocAction)
+  //FIELD_HANDLE (assocaction, 5, 0);   // handle or inlined?
+  FIELD_BL (status, 90); //0-9
+  FIELD_BL (num_deps, 90); //10-11 ?? not really
+  FIELD_HANDLE (readdep, 5, 330);
+  FIELD_HANDLE (writedep, 5, 360);
+  FIELD_BL (unknown_assoc, 90);
+
+  SUBCLASS (AcDbAssocNetwork)
+  FIELD_BL (unknown_n1, 90);
+  FIELD_BL (unknown_n2, 90);
+  FIELD_BL (num_actions, 90);
+  START_HANDLE_STREAM;
+  HANDLE_VECTOR(actions, num_actions, 5, 330);
+  //FIELD_BL (unknown_n3, 90);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+DWG_OBJECT_END
 
 // (varies) working on
 DWG_OBJECT(MATERIAL)
@@ -5968,8 +5977,8 @@ DWG_OBJECT(ASSOCACTION)
   FIELD_HANDLE (callback, 3, 0);
   FIELD_HANDLE (owningnetwork, 3, 0);
   FIELD_BL (num_deps, 90);
-  HANDLE_VECTOR(readdep, num_deps, 5, 330);
-  HANDLE_VECTOR(writedep, num_deps, 0, 360);
+  HANDLE_VECTOR(readdeps, num_deps, 5, 330);
+  HANDLE_VECTOR(writedeps, num_deps, 0, 360);
   FIELD_BL (unknown_assoc, 90);
 DWG_OBJECT_END
 
