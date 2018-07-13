@@ -3787,8 +3787,8 @@ typedef struct _dwg_object_SORTENTSTABLE
 
   BITCODE_BL num_ents;
   BITCODE_H* sort_handles;
-  BITCODE_H parenthandle;
-  BITCODE_H owner_handle;
+  BITCODE_H parenthandle; /* MSPACE 1F */
+  BITCODE_H owner_dict;   /* <= r2007 */
   BITCODE_H* ents;
 } Dwg_Object_SORTENTSTABLE;
 

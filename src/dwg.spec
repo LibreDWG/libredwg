@@ -4173,16 +4173,16 @@ DWG_OBJECT(SORTENTSTABLE)
   DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS (AcDbSortentsTable)
   FIELD_BL (num_ents, 0);
+  HANDLE_VECTOR (sort_handles, num_ents, 0, 5);
 
   START_HANDLE_STREAM;
-  HANDLE_VECTOR (sort_handles, num_ents, ANYCODE, 0);
-  FIELD_HANDLE (parenthandle, 4, 0);
+  UNTIL(R_2007) {
+    FIELD_HANDLE (owner_dict, 4, 330); //always the prev handle 8.0.0
+  }
   REACTORS(4);
   XDICOBJHANDLE(3);
-  UNTIL(R_2007) {
-    FIELD_HANDLE (owner_handle, 4, 0);
-  }
-  HANDLE_VECTOR (ents, num_ents, 4, 0);
+  FIELD_HANDLE (parenthandle, 4, 0);
+  HANDLE_VECTOR (ents, num_ents, 4, 331);
 
 DWG_OBJECT_END
 
