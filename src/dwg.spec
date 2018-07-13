@@ -1485,10 +1485,7 @@ DWG_ENTITY(SPLINE)
     }
   
   if (FIELD_VALUE(scenario) & 1) {
-    REPEAT(num_knots, knots, BITCODE_BD)
-      {
-        FIELD_BD (knots[rcount1], 40);
-      }
+    FIELD_VECTOR(knots, BD, num_knots, 40)
     END_REPEAT(knots);
     REPEAT(num_ctrl_pts, ctrl_pts, Dwg_SPLINE_control_point)
       {
@@ -3375,6 +3372,7 @@ DWG_ENTITY(HATCH)
       FIELD_BL (single_color_gradient, 452);
       FIELD_BD (gradient_tint, 462);
       FIELD_BL (num_colors, 453); //default: 2
+      PRINT { if (FIELD_VALUE(is_gradient_fill)) return DWG_ERR_NOTYETSUPPORTED; }
       if (FIELD_VALUE(is_gradient_fill) && FIELD_VALUE(num_colors > 1000))
         {
           LOG_ERROR("Invalid gradient fill HATCH.num_colors " FORMAT_BL,
@@ -3447,8 +3445,20 @@ DWG_ENTITY(HATCH)
                       FIELD_B (paths[rcount1].segs[rcount2].is_periodic, 74);
                       FIELD_BL (paths[rcount1].segs[rcount2].num_knots, 95);
                       FIELD_BL (paths[rcount1].segs[rcount2].num_control_points, 96);
+                      if (FIELD_VALUE(paths[rcount1].segs[rcount2].num_knots > 10000))
+                        {
+                          LOG_ERROR("Invalid HATCH.paths.segs.num_knots " FORMAT_BL,
+                                    _obj->paths[rcount1].segs[rcount2].num_knots);
+                          return DWG_ERR_VALUEOUTOFBOUNDS;
+                        }
                       FIELD_VECTOR (paths[rcount1].segs[rcount2].knots, BD,
                                     paths[rcount1].segs[rcount2].num_knots, 40);
+                      if (FIELD_VALUE(paths[rcount1].segs[rcount2].num_control_points > 10000))
+                        {
+                          LOG_ERROR("Invalid HATCH.paths.segs.num_control_points " FORMAT_BL,
+                                    _obj->paths[rcount1].segs[rcount2].num_control_points);
+                          return DWG_ERR_VALUEOUTOFBOUNDS;
+                        }
                       REPEAT3(paths[rcount1].segs[rcount2].num_control_points,
                               paths[rcount1].segs[rcount2].control_points,
                               Dwg_HATCH_ControlPoint)
@@ -3472,7 +3482,7 @@ DWG_ENTITY(HATCH)
                     default:
                       LOG_ERROR("Invalid type_status in HATCH entity\n")
                       DEBUG_HERE()
-                      break;
+                      return DWG_ERR_VALUEOUTOFBOUNDS;
                 }
             }
           SET_PARENT(paths[rcount1].segs, &_obj->paths[rcount1])
@@ -3531,6 +3541,12 @@ DWG_ENTITY(HATCH)
   if (FIELD_VALUE (has_derived))
       FIELD_BD (pixel_size, 47);
   FIELD_BL (num_seeds, 98);
+  if (FIELD_VALUE(num_seeds > 10000))
+    {
+      LOG_ERROR("Invalid HATCH.num_seeds " FORMAT_BL,
+                _obj->num_seeds);
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
   FIELD_2RD_VECTOR (seeds, num_seeds, 10);
 
   COMMON_ENTITY_HANDLE_DATA;

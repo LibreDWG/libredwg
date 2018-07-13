@@ -453,8 +453,8 @@
     bit_set_position(hdl_dat, obj->hdlpos); \
     LOG_HANDLE(" -> @%lu.%u (%lu)\n", dat->byte, dat->bit, bit_position(dat)); }
 
-#define REPEAT_CHKCOUNT(name,times) \
-  if (dat->version >= R_2004 && times > 0xff00) { \
+#define REPEAT_CHKCOUNT(name,times,type) \
+  if (dat->version >= R_2004 && (unsigned)(times)*sizeof(type) > AVAIL_BITS()) { \
     LOG_ERROR("Invalid " #name " rcount %ld for %s\n", (long)times, obj->dxfname); \
     return DWG_ERR_VALUEOUTOFBOUNDS; } \
 
@@ -463,16 +463,16 @@
   _obj->name = (type *) calloc(times, sizeof(type)); \
   for (rcount1=0; rcount1<(long)times; rcount1++)
 #define REPEAT_N(times, name, type) \
-  REPEAT_CHKCOUNT(name,times) \
+  REPEAT_CHKCOUNT(name,times,type) \
   if (times) _obj->name = (type *) calloc(times, sizeof(type)); \
   for (rcount1=0; rcount1<(long)times; rcount1++)
 
 #define _REPEAT(times, name, type, idx) \
-  REPEAT_CHKCOUNT(name,_obj->times) \
+  REPEAT_CHKCOUNT(name,_obj->times,type) \
   if (_obj->times) _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
   for (rcount##idx=0; rcount##idx<(long)_obj->times; rcount##idx++)
 #define _REPEAT_C(times, name, type, idx) \
-  REPEAT_CHKCOUNT(name,_obj->times) \
+  REPEAT_CHKCOUNT(name,_obj->times,type) \
   if (_obj->times) _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
   for (rcount##idx=0; rcount##idx<(long)_obj->times; rcount##idx++)
 
