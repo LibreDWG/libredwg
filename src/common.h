@@ -77,47 +77,58 @@ typedef enum DWG_VERSION_TYPE
    R_13,  R_14,  R_2000, R_2004, R_2007, R_2010, R_2013, R_2018, R_AFTER
 /* AC1012,AC1014,AC1015, AC1018, AC1021, AC1024, AC1027, AC1032, ... */
 } Dwg_Version_Type;
-extern char version_codes[DWG_VERSIONS][7];
+extern const char version_codes[DWG_VERSIONS][7];
 
 EXPORT Dwg_Version_Type dwg_version_as(const char *);
 
 /**
  Data types (including compressed forms) used through the project
 */
-#if 0
-  B,   /** bit (1 or 0) */
-  BB,  /** special 2-bit code (entmode in entities, for instance) */
-  RC,  /** raw char (not compressed) */
-  RS,  /** raw short (not compressed, big-endian) */
-  RD,  /** raw double (not compressed, big-endian) */
-  RL,  /** raw long (not compressed, big-endian) */
-  BS,  /** bitshort */
-  BL,  /** bitlong */
-  BD,  /** bitdouble */
-  MC,  /** modular char */
-  MS,  /** modular short */
-  BE,  /** BitExtrusion */
-  DD,  /** BitDouble With Default */
-  BT,  /** BitThickness */
-  H,   /** handle reference (see the HANDLE REFERENCES section) */
-  CMC, /** CmColor value */
-  T,   /** text (bitshort length, followed by the string) */
-  TV,  /** ASCII text value, -r2007 */
-  TU,  /** Unicode text (bitshort character length, followed by
-           UCS-2 string). Unicode text is read from the
-           “string stream” within the object data. r2007+ */
-  TF,  /** fixed-length text */
-  2RD, /** 2 raw doubles **/
-  3RD, /** 3 raw doubles **/
-  2BD, /** 2D point (2 bitdoubles) **/
-  3BD, /** 3D point (3 bitdoubles) **/
-  2DD, /** 2 doubles with default **/
-  3DD, /** 3 doubles with default **/
-  3B,  /** special 3-bit code R24+ */
-  BLL, /** bitlonglong R24+ */
-  TIMEBLL, /** time long.long */
-  4BITS, /** 4 bits, r2000+ for VIEWMODE */
-#endif
+//keep in sync with common.c dwg_bits_name
+typedef enum DWG_BITS
+{
+  BITS_UNKNOWN,
+  BITS_RC,  /** raw char (not compressed) */
+  BITS_RS,  /** raw 2-byte short (not compressed, big-endian) */
+  BITS_RL,  /** raw 4-byte long (not compressed, big-endian) */
+  BITS_B,   /** bit (1 or 0) */
+  BITS_BB,  /** special 2-bit code (entmode in entities, for instance) */
+  BITS_3B,  /** special 3-bit code R24+ */
+  BITS_4BITS, /** 4 bits, r2000+ for VIEWMODE */
+  BITS_BS,  /** bitshort */
+  BITS_BL,  /** bitlong */
+  BITS_RLL, /** raw 8-byte long long (not compressed, big-endian) */
+  BITS_RD,  /** raw double (not compressed, big-endian) */
+  BITS_BD,  /** bitdouble */
+  BITS_MC,  /** modular char */
+  BITS_UMC, /** unsigned modular char, max 4 bytes (handlestream_size) */
+  BITS_MS,  /** modular short */
+  BITS_TV,  /** text value, -r2007 */
+  BITS_TU,  /** Unicode text (bitshort character length, followed by
+                UCS-2 string). Unicode text is read from the
+                “string stream” within the object data. r2007+ */
+  BITS_T,   /** text, version dependent: TV or TU */
+  BITS_TF,  /** fixed-length text */
+  BITS_HANDLE, /** handle reference (see the HANDLE REFERENCES section) */
+  BITS_BE,  /** BitExtrusion */
+  BITS_DD,  /** BitDouble With Default */
+  BITS_BT,  /** BitThickness */
+  BITS_BOT, /** Bit object type: 2010+ (BB + 1-2RC) */
+  BITS_BLL, /** bitlonglong R24+ */
+  BITS_TIMEBLL, /** time long.long */
+  BITS_CMC, /** CmColor value */
+  BITS_2RD, /** 2 raw doubles **/
+  BITS_3RD, /** 3 raw doubles **/
+  BITS_2BD, /** 2D point (2 bitdoubles) **/
+  BITS_3BD, /** 3D point (3 bitdoubles) **/
+  BITS_2DD, /** 2 doubles with default **/
+  BITS_3DD, /** 3 doubles with default **/
+  BITS_CRC,
+  BITS_CRC64
+} Dwg_Bits;
+
+extern const char* dwg_bits_name[];
+extern const unsigned char dwg_bits_size[];
 
 /**
  * References of sentinels

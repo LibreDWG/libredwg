@@ -59,7 +59,7 @@ dwg_sentinel(Dwg_Sentinel s)
   return (sentinels[s]);
 }
 
-char version_codes[DWG_VERSIONS][7] =
+const char version_codes[DWG_VERSIONS][7] =
   {
     "INVALI",  // R_INVALID
     "MC0.0",   /* DWG Release 1.1 (as MicroCAD) */
@@ -82,6 +82,89 @@ char version_codes[DWG_VERSIONS][7] =
     "AC1032", // R_2018
     "------"  // R_AFTER
   };
+
+//keep in sync with common.h DWG_BITS
+const char *dwg_bits_name[] =
+{
+  "UNKNOWN",
+  "RC",
+  "RS",
+  "RL",
+  "B",
+  "BB",
+  "3B",
+  "4BITS",
+  "BS",
+  "BL",
+  "RLL",
+  "RD",
+  "BD",
+  "MC",
+  "UMC",
+  "MS",
+  "TV",
+  "TU",
+  "T",
+  "TF",
+  "HANDLE",
+  "BE",
+  "DD",
+  "BT",
+  "BOT",
+  "BLL",
+  "TIMEBLL",
+  "CMC",
+  "2RD",
+  "3RD",
+  "2BD",
+  "3BD",
+  "2DD",
+  "3DD",
+  "CRC",
+  "CRC64",
+};
+
+//minimal size of type in bits
+//keep in sync with above
+const unsigned char dwg_bits_size[] =
+{
+  0, //"UNKNOWN",
+  8, //"RC",
+  16, //"RS",
+  32, //"RL",
+  1, //"B",
+  2, //"BB",
+  3, //"3B",
+  4, //"4BITS",
+  2, //"BS", 10,18
+  2, //"BL", 10,34
+  64, //"RLL",
+  64, //"RD",
+  2, //"BD", 66
+  1, //"MC", 1-4
+  1, //"UMC", 1-4
+  16, //"MS", 32
+  2, //"TV",
+  18, //"TU",
+  2, //"T",
+  0, //"TF",
+  8, //"HANDLE",
+  1, //"BE", or 3BD
+  2, //"DD",
+  1, //"BT",
+  10, //"BOT",
+  3, //"BLL",
+  4, //"TIMEBLL", 2xBL
+  2, //"CMC", r2004+: +2
+  128, //"2RD",
+  196, //"3RD",
+  4, //"2BD",
+  6, //"3BD",
+  4, //"2DD",
+  6, //"3DD",
+  8, //"CRC",
+  64, //"CRC64",
+};
 
 // map [rVER] to our enum number, not the dwg->header.dwgversion
 // Acad 2018 offers SaveAs DWG: 2018,2013,2010,2007,2004,2004,2000,r14

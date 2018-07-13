@@ -284,10 +284,21 @@
     *dat = here;                                                \
   }
 
-#define VECTOR_CHKCOUNT(name,size) \
-  if (dat->version >= R_2004 && size > 0xff00) { \
-    LOG_ERROR("Invalid " #name " vcount %ld", (long)size); \
-    return DWG_ERR_VALUEOUTOFBOUNDS; } \
+//check for overflow into next object (invalid num_elems)
+#define AVAIL_BITS() (obj?(unsigned)((obj->address + obj->size)*8 - bit_position(dat) + 100)\
+                         :0xff00)
+#define TYPE_MAXELEMSIZE(type) (unsigned)dwg_bits_size[BITS_##type]
+#define VECTOR_CHKCOUNT(name,type,size)        \
+  if ((size)*TYPE_MAXELEMSIZE(type) > AVAIL_BITS()) { \
+    LOG_ERROR("Invalid " #name " vcount %ld. Need min. %u bits for %s, have %u for %s.", \
+              (long)(size), (size)*TYPE_MAXELEMSIZE(type), #type, AVAIL_BITS(), obj?obj->dxfname:""); \
+    return DWG_ERR_VALUEOUTOFBOUNDS; }
+#define _VECTOR_CHKCOUNT(name,size,maxelemsize) \
+  if ((unsigned)(size)*(maxelemsize) > AVAIL_BITS()) { \
+    LOG_ERROR("Invalid " #name " vcount %ld. Need min. %u bits, have %u for %s.", \
+              (long)(size), (unsigned)(size)*(maxelemsize), AVAIL_BITS(), obj?obj->dxfname:""); \
+    return DWG_ERR_VALUEOUTOFBOUNDS; }
+#define HANDLE_VECTOR_CHKCOUNT(name,size) _VECTOR_CHKCOUNT(name,size,8)
 
 //FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
@@ -295,7 +306,7 @@
 #define FIELD_VECTOR_N(name, type, size, dxf) \
   if (size > 0) \
     { \
-      VECTOR_CHKCOUNT(name,size) \
+      VECTOR_CHKCOUNT(name,type,size) \
       _obj->name = (BITCODE_##type*) malloc(size * sizeof(BITCODE_##type));\
       for (vcount=0; vcount<(long)size; vcount++) \
         {\
@@ -307,7 +318,7 @@
 #define FIELD_VECTOR_T(name, size, dxf) \
   if (_obj->size > 0) \
     { \
-      VECTOR_CHKCOUNT(name,_obj->size) \
+      _VECTOR_CHKCOUNT(name,_obj->size,dat->version>=R_2007 ? 18 : 2) \
       _obj->name = (char**) malloc(_obj->size * sizeof(char*)); \
       for (vcount=0; vcount<(long)_obj->size; vcount++) \
         {\
@@ -324,8 +335,8 @@
 
 #define FIELD_VECTOR(name, type, size, dxf) FIELD_VECTOR_N(name, type, _obj->size, dxf)
 
-#define FIELD_2RD_VECTOR(name, size, dxf)                                   \
-  VECTOR_CHKCOUNT(name,_obj->size) \
+#define FIELD_2RD_VECTOR(name, size, dxf) \
+  VECTOR_CHKCOUNT(name,2RD,_obj->size) \
   _obj->name = (BITCODE_2RD *) malloc(_obj->size * sizeof(BITCODE_2RD));\
   for (vcount=0; vcount< (long)_obj->size; vcount++)\
     {\
@@ -333,7 +344,7 @@
     }
 
 #define FIELD_2DD_VECTOR(name, size, dxf) \
-  VECTOR_CHKCOUNT(name,_obj->size) \
+  VECTOR_CHKCOUNT(name,2DD,_obj->size) \
   _obj->name = (BITCODE_2RD *) malloc(_obj->size * sizeof(BITCODE_2RD));\
   FIELD_2RD(name[0], dxf); \
   for (vcount = 1; vcount < (long)_obj->size; vcount++)\
@@ -345,15 +356,16 @@
     }
 
 #define FIELD_3DPOINT_VECTOR(name, size, dxf) \
-  VECTOR_CHKCOUNT(name,_obj->size) \
+  VECTOR_CHKCOUNT(name,3BD,_obj->size) \
   _obj->name = (BITCODE_3DPOINT *) malloc(_obj->size * sizeof(BITCODE_3DPOINT));\
   for (vcount=0; vcount < (long)_obj->size; vcount++) \
     {\
       FIELD_3DPOINT(name[vcount], dxf); \
     }
 
+// shortest handle: 8 bit
 #define HANDLE_VECTOR_N(name, size, code, dxf) \
-  VECTOR_CHKCOUNT(name,size) \
+  VECTOR_CHKCOUNT(name,HANDLE,size) \
   FIELD_VALUE(name) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * size);\
   for (vcount=0; vcount < (long)size; vcount++) \
     {\
@@ -443,7 +455,7 @@
 
 #define REPEAT_CHKCOUNT(name,times) \
   if (dat->version >= R_2004 && times > 0xff00) { \
-    LOG_ERROR("Invalid " #name " rcount %ld\n", (long)times); \
+    LOG_ERROR("Invalid " #name " rcount %ld for %s\n", (long)times, obj->dxfname); \
     return DWG_ERR_VALUEOUTOFBOUNDS; } \
 
 // unchecked with a constant
