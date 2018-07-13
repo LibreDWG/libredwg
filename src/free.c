@@ -116,7 +116,7 @@ static Bit_Chain *dat = &pdat;
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'name'.
 #define FIELD_VECTOR_N(name, type, size, dxf) \
-  if (size) { \
+  if (size && _obj->name) { \
     for (vcount=0; vcount < (int)size; vcount++)  \
       FIELD_##type(name[vcount], dxf); \
   } \
