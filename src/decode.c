@@ -2757,9 +2757,9 @@ dwg_decode_handleref_with_code(Bit_Chain *restrict dat, Dwg_Object *restrict obj
       return NULL;
     }
 
-  // If the handle size is 0, it is probably a null handle.
+  // If absolute and the handle size is 0, it is probably a null handle.
   // It shouldn't be placed in the object ref vector.
-  if (ref->handleref.size)
+  if (ref->handleref.code >= 6 || ref->handleref.size)
     {
       // Reserve memory space for object references
       if (!dwg->num_object_refs)
