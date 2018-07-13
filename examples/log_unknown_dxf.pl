@@ -60,10 +60,10 @@ while (<>) {
   my $hdl = substr($F[6],2,-1); # 0xXXX,
   #warn "$dxf: $obj HANDLE($hdl)\n";
   # 9080187 5160203 9080187 201AA 51E0204 90C0202 35200204 20640A8 2D22020C 90A01D1 
-  if ($hdl =~ /^([0-9A-F]){1,4}0([0-9A-F]+)$/) {
-    $hdl = $2;
-    #warn "=> try HANDLE($hdl)\n";
-  }
+  #if ($hdl =~ /^([0-9A-F]){1,4}0([0-9A-F]+)$/) {
+  #  $hdl = $2;
+  #  #warn "=> try HANDLE($hdl)\n";
+  #}
 
   open my $f, "$dxf" or next LINE;
   my ($foundobj, $foundhdl);

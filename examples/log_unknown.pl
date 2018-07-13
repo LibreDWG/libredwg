@@ -19,10 +19,10 @@ if (/handle: .+\..+\.(.+) \[5\]\n/) {
 if (/Warning: Unhandled Class (?:object|entity) \d+ (\w+) /) {
   $object = $1; next;
 }
-if (/object UNKNOWN_OBJ bitsize: (.\d+) /) {
+if (/object UNKNOWN_OBJ bitsize: (.\d+)/) {
   $bitsize = $1; next;
 }
-if (/entity UNKNOWN_ENT Entity bitsize: (.\d+) /) {
+if (/entity UNKNOWN_ENT Entity bitsize: (.\d+)/) {
   $bitsize = $1; next;
 }
 if (/ \(bitsize: (.\d+), hdlpos/) {
