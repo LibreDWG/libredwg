@@ -40,8 +40,10 @@
     }
 
   SINCE(R_2004)
-    { // color book handle
-      FIELD_HANDLE(color_handle, 5, 0);
+    {
+      if (FIELD_VALUE(color.flag) & 0x40) {
+        FIELD_HANDLE(color_handle, 5, 0);
+      }
     }
 
   VERSION(R_2000)

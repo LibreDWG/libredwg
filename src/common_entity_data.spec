@@ -73,12 +73,14 @@
 
       if (flags & 0x40)
         {
-          ent->color_handle = dwg_decode_handleref(dat, obj, dwg);
-          LOG_HANDLE("dbcolor: HANDLE(%x.%d.%lX) absolute:%lX [0]\n",
+          PRE (R_2004) { // r2004+ in handle stream
+            ent->color_handle = dwg_decode_handleref(dat, obj, dwg);
+            LOG_HANDLE("dbcolor: HANDLE(%x.%d.%lX) absolute:%lX [0]\n",
               ent->color_handle->handleref.code,
               ent->color_handle->handleref.size,
               ent->color_handle->handleref.value,
               ent->color_handle->absolute_ref);
+          }
         }
       if (flags & 0x20)
         {
@@ -91,23 +93,22 @@
           if (ent->color.transparency_type == 3)
             LOG_TRACE("color.alpha: %d [BL 440]\n", ent->color.alpha);
         }
-      if (flags & 0x80)
+      if (flags & 0x80 && !(flags & 0x40)) // and not a reference
         {
           ent->color.rgb = bit_read_BL(dat); //ODA bug, documented as BS
           LOG_TRACE("color.rgb: %06X [BL 420]\n", (unsigned)ent->color.rgb);
         }
-      /* not with entities, only with CMC  
-      if (flags & 1)
+      /* not with entities, only with CMC or dbcolor handle */
+      if ((flags & 0x41) == 0x41)
         {
           ent->color.name = bit_read_TV(dat);
           LOG_TRACE("color.name: %s\n", ent->color.name);
         }
-      if (flags & 2)
+      if ((flags & 0x42) == 0x41)
         {
           ent->color.book_name = bit_read_TV(dat);
           LOG_TRACE("color.book_name: %s\n", ent->color.book_name);
         }
-      */
       if (!(flags & 0xf0))
         {
           LOG_TRACE("color.index: %u [62]\n", (unsigned)ent->color.index);

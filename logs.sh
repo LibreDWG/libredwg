@@ -5,10 +5,15 @@ for d in test/test-data/2*/*.dwg test/test-data/r*/*.dwg; do
     dir=$(basename `dirname "$d"`)
     log=`basename "$d" .dwg`_$dir.log
     echo $d
-    programs/dwgread -v5 "$d" 2>$log
+    timeout -k 1 10 programs/dwgread -v5 "$d" 2>$log
+    #(sleep 10s; kill %1 2>/dev/null) &
 done
 for d in test/test-data/*.dwg; do
     log=`basename "$d" .dwg`.log
     echo $d
-    programs/dwgread -v5 "$d" 2>$log
+    timeout -k 1 10 programs/dwgread -v5 "$d" 2>$log
+    #(sleep 10s; kill %1 2>/dev/null) &
 done
+#with background killing we would need to
+#wait for all processes to end (GNU parallel would be better)
+#while pgrep dwgread; do sleep 1; done
