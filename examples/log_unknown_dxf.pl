@@ -32,9 +32,20 @@ open my $f0, ">", "examples/alldxf_0.inc" || die "$!";
 open my $f1, ">", "examples/alldxf_1.inc" || die "$!";
 open my $f2, ">", "examples/alldxf_2.inc" || die "$!";
 
+open my $skip_fh, "<", "examples/alldwg.skip"
+  or warn "examples/alldwg.skip missing";
+my %skip;
+while (<$skip_fh>) {
+  my @F = split(' ');
+  shift @F;
+  # NAME-HANDLE-BITSIZE
+  $F[2] =~ s/^0x//;
+  $skip{"$F[0]-$F[2]-$F[3]"} = \@F;
+}
+
 LINE:
 while (<>) {
-  @F = split(' ');
+  my @F = split(' ');
   
   my $dxf = $F[5];
   if ($dxf eq 'NULL,' or $dxf !~ /\.dxf",/) {
@@ -48,17 +59,21 @@ while (<>) {
       $dxf = "../$dxf";
     }
   }
-  next LINE if $F[0] =~ m|//{|; # skip duplicates
+  #next LINE if $F[0] =~ m|//{|; # skip duplicates
   my $obj = substr($F[1],1,-2); # "MATERIAL",
   my $bytes   = substr($F[2],1,-2);
   my $bits = substr($F[3],1,-2);
+  my $hdl = substr($F[6],2,-1); # 0xXXX,
   my $bitsize = $F[7];
+  if ($skip{"$obj-$hdl-$bitsize"}) { # skip empty unknowns
+    warn "skip empty $obj-$hdl-$bitsize $dxf\n";
+    next LINE;
+  }
   my $unknown = pack ("H*", $bytes);
   if ($bits) {
     $unknown .= pack ("B8", $bits);
   }
   $unknown = join("", map { sprintf("\\%03o", $_) } unpack("C*", $unknown));
-  my $hdl = substr($F[6],2,-1); # 0xXXX,
   #warn "$dxf: $obj HANDLE($hdl)\n";
   # 9080187 5160203 9080187 201AA 51E0204 90C0202 35200204 20640A8 2D22020C 90A01D1 
   #if ($hdl =~ /^([0-9A-F]){1,4}0([0-9A-F]+)$/) {

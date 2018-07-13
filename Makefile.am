@@ -40,9 +40,13 @@ EXTRA_DIST = $(top_srcdir)/.version \
         regen-man man manual refman refman-pdf scan-build gcov unknown
 
 UNKNOWN_LOG = unknown-`git describe --long --tags --dirty --always`.log
+UNKNOWN_SKIP = examples/alldwg.skip
 unknown:
+	-mv examples/alldwg.skip examples/alldwg.skip~
 	$(MAKE) -C examples unknown$(EXEEXT) && \
-	$(LIBTOOL) --mode=execute examples/unknown$(EXEEXT) > $(UNKNOWN_LOG)
+	$(LIBTOOL) --mode=execute examples/unknown$(EXEEXT) >$(UNKNOWN_LOG) 2>$(UNKNOWN_SKIP)
+	if test -s examples/alldwg.skip; then true; \
+	else mv examples/alldwg.skip~ examples/alldwg.skip; fi
 
 regen-man:
 	$(MAKE) -C programs $@

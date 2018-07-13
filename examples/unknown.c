@@ -17,8 +17,10 @@
  * A sample program to find the most likely
  * fields for all unknown dwg entities and objects.
  * gather all binary raw data from all unknown dwg entities and objects
- * into examples/alldwg.inc and examples/alldxf.inc
+ * into examples/alldwg.inc and examples/alldxf_*.inc
  * with the available likely fields try permutations of most likely types.
+ * When no identifiable field value was found, (filled is empty) 0.0% is printed
+ * and the entity is printed to stderr for alldwg.skip to be ignored later.
  */
 
 #include "../src/config.h"
@@ -811,6 +813,12 @@ main (int argc, char *argv[])
       }*/
       printf("%d/%d=%.1f%%\n", dxf[i].num_filled, size,
              100.0*dxf[i].num_filled/size);
+      if (!dxf[i].num_filled)
+        {
+          fprintf(stderr, "empty %s \"%s\" 0x%X %d\n",
+                  unknown_dxf[i].name, unknown_dxf[i].dxf, unknown_dxf[i].handle,
+                  unknown_dxf[i].bitsize);
+        }
       sum_filled += dxf[i].num_filled;
       sum_size += size;
       printf("possible: [");
