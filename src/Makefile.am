@@ -88,7 +88,7 @@ EXTRA_DIST = \
 # emacs flymake-mode
 check-syntax:
 	test -n "$(CHK_SOURCES)" && \
-	  $(COMPILE) -o /dev/null -S $(CHK_SOURCES)
+	  nice $(COMPILE) -O0 -o /dev/null -S $(CHK_SOURCES)
 .PHONY: check-syntax
 
 if ENABLE_GCOV

@@ -83,7 +83,7 @@ dsymutil:
 # emacs flymake-mode
 check-syntax:
 	test -n "$(CHK_SOURCES)" && \
-	  $(COMPILE) -o /dev/null -S $(CHK_SOURCES)
+	  nice $(COMPILE) -O0 -o /dev/null -S $(CHK_SOURCES)
 
 if ENABLE_GCOV
 AM_CFLAGS += @GCOV_CFLAGS@
