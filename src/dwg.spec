@@ -5477,7 +5477,10 @@ DWG_ENTITY_END
 DWG_OBJECT(DBCOLOR)
   DXF { FIELD_HANDLE (parenthandle, 3, 330); }
   SUBCLASS (AcDbColor)
-  FIELD_BS (color, 62);
+  //FIELD_BS (color, 62); <= EED 1070
+  //FIELD_RL (rgb, 420);  <= EED 1071
+  //FIELD_T (name, 430);  <= EED 1000
+  DEBUG_HERE()
   START_HANDLE_STREAM;
   FIELD_HANDLE (parenthandle, 3, 0);
   REACTORS(4);

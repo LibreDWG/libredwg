@@ -87,10 +87,22 @@ static unsigned int cur_ver = 0;
 #define FIELD_BS(name,dxf) FIELD(name, BS, dxf);
 #define FIELD_BL(name,dxf) FIELD(name, BL, dxf);
 #define FIELD_BLL(name,dxf) FIELD(name, BLL, dxf);
-#define FIELD_BD(name,dxf) FIELD(name, BD, dxf);
+#define FIELD_BD(name,dxf) { \
+  if (bit_isnan(_obj->name)) { \
+    LOG_ERROR("Invalid BD " #name); \
+    return DWG_ERR_VALUEOUTOFBOUNDS; \
+  } \
+  FIELD(name, BD, dxf); \
+}
 #define FIELD_RC(name,dxf) FIELD(name, RC, dxf);
 #define FIELD_RS(name,dxf) FIELD(name, RS, dxf);
-#define FIELD_RD(name,dxf) FIELD(name, RD, dxf);
+#define FIELD_RD(name,dxf) { \
+  if (bit_isnan(_obj->name)) { \
+    LOG_ERROR("Invalid BD " #name); \
+    return DWG_ERR_VALUEOUTOFBOUNDS; \
+  } \
+  FIELD(name, RD, dxf); \
+}
 #define FIELD_RL(name,dxf) FIELD(name, RL, dxf);
 #define FIELD_RLL(name,dxf) FIELD(name, RLL, dxf);
 #define FIELD_MC(name,dxf) FIELD(name, MC, dxf);

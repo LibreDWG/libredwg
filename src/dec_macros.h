@@ -125,12 +125,13 @@
 #define FIELD_BS(name,dxf) FIELDG(name, BS, dxf)
 #define FIELD_BL(name,dxf) FIELDG(name, BL, dxf)
 #define FIELD_BLL(name,dxf) FIELDG(name, BLL, dxf)
-#define FIELD_BD(name,dxf) \
-   FIELDG(name, BD, dxf); \
-   if (bit_isnan(_obj->name)) { \
-     LOG_ERROR("Invalid BD " #name); \
-     return DWG_ERR_VALUEOUTOFBOUNDS; \
-   }
+#define FIELD_BD(name,dxf) { \
+  FIELDG(name, BD, dxf); \
+  if (bit_isnan(_obj->name)) { \
+    LOG_ERROR("Invalid BD " #name); \
+    return DWG_ERR_VALUEOUTOFBOUNDS; \
+  } \
+}
 #define FIELD_BLh(name,dxf) \
   { _obj->name = bit_read_BL(dat); \
     LOG_TRACE(#name ": 0x%x [BL %d]\n", (unsigned)_obj->name, dxf); }
@@ -142,11 +143,17 @@
   { _obj->name = bit_read_RC(dat); \
     LOG_TRACE(#name ": %d [RC %d]\n", (int)((signed char)_obj->name), dxf); }
 #define FIELD_RS(name,dxf) FIELDG(name, RS, dxf)
-#define FIELD_RD(name,dxf) FIELDG(name, RD, dxf)
-#define FIELD_RL(name,dxf) FIELDG(name, RL, dxf)
+#define FIELD_RD(name,dxf) { \
+  FIELDG(name, RD, dxf); \
+  if (bit_isnan(_obj->name)) { \
+    LOG_ERROR("Invalid RD " #name); \
+    return DWG_ERR_VALUEOUTOFBOUNDS; \
+  } \
+}
+#define FIELD_RL(name,dxf)  FIELDG(name, RL, dxf)
 #define FIELD_RLL(name,dxf) FIELDG(name, RLL, dxf)
-#define FIELD_MC(name,dxf) FIELDG(name, MC, dxf)
-#define FIELD_MS(name,dxf) FIELDG(name, MS, dxf)
+#define FIELD_MC(name,dxf)  FIELDG(name, MC, dxf)
+#define FIELD_MS(name,dxf)  FIELDG(name, MS, dxf)
 #define FIELD_TF(name,len,dxf) \
   { _obj->name = bit_read_TF(dat,(int)len); \
     LOG_INSANE( #name ": [TF " #dxf "]\n"); \
@@ -177,8 +184,13 @@
 
 #define FIELD_BE(name,dxf) \
     bit_read_BE(dat, &_obj->name.x, &_obj->name.y, &_obj->name.z)
-#define FIELD_DD(name, _default, dxf) \
-    FIELD_VALUE(name) = bit_read_DD(dat, _default)
+#define FIELD_DD(name, _default, dxf) { \
+  FIELD_VALUE(name) = bit_read_DD(dat, _default); \
+  if (bit_isnan(_obj->name)) { \
+    LOG_ERROR("Invalid DD " #name); \
+    return DWG_ERR_VALUEOUTOFBOUNDS; \
+  } \
+}
 #define FIELD_2DD(name, d1, d2, dxf) { \
     FIELD_DD(name.x, d1, dxf); FIELD_DD(name.y, d2, dxf+10); \
     FIELD_2PT_TRACE(name, DD, dxf); }
@@ -191,33 +203,57 @@
   { _obj->name.x = bit_read_RD(dat); \
     _obj->name.y = bit_read_RD(dat); \
     _obj->name.z = bit_read_RD(dat); \
+    if (bit_isnan(_obj->name.x) || bit_isnan(_obj->name.y) || bit_isnan(_obj->name.z)) { \
+      LOG_ERROR("Invalid 3RD " #name); \
+      return DWG_ERR_VALUEOUTOFBOUNDS; \
+    } \
     FIELD_3PT_TRACE(name,RD,dxf); }
 #define FIELD_3BD(name,dxf) \
   { _obj->name.x = bit_read_BD(dat); \
     _obj->name.y = bit_read_BD(dat); \
     _obj->name.z = bit_read_BD(dat); \
+    if (bit_isnan(_obj->name.x) || bit_isnan(_obj->name.y) || bit_isnan(_obj->name.z)) { \
+      LOG_ERROR("Invalid 3BD " #name); \
+      return DWG_ERR_VALUEOUTOFBOUNDS; \
+    } \
     FIELD_3PT_TRACE(name,BD,dxf); }
 #define FIELD_2RD(name,dxf) \
   { _obj->name.x = bit_read_RD(dat); \
     _obj->name.y = bit_read_RD(dat); \
+    if (bit_isnan(_obj->name.x) || bit_isnan(_obj->name.y)) { \
+      LOG_ERROR("Invalid 2RD " #name); \
+      return DWG_ERR_VALUEOUTOFBOUNDS; \
+    } \
     FIELD_2PT_TRACE(name,RD,dxf); }
 #define FIELD_2BD(name,dxf) \
   { _obj->name.x = bit_read_BD(dat); \
     _obj->name.y = bit_read_BD(dat); \
+    if (bit_isnan(_obj->name.x) || bit_isnan(_obj->name.y)) { \
+      LOG_ERROR("Invalid 2BD " #name); \
+      return DWG_ERR_VALUEOUTOFBOUNDS; \
+    } \
     FIELD_2PT_TRACE(name,BD,dxf); }
 #define FIELD_2BD_1(name,dxf) \
   { _obj->name.x = bit_read_BD(dat); \
     _obj->name.y = bit_read_BD(dat); \
+    if (bit_isnan(_obj->name.x) || bit_isnan(_obj->name.y)) { \
+      LOG_ERROR("Invalid 2BD_1 " #name); \
+      return DWG_ERR_VALUEOUTOFBOUNDS; \
+    } \
     FIELD_2PT_TRACE(name,BD,dxf); }
 // FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+1);
 #define FIELD_3BD_1(name,dxf) \
   { _obj->name.x = bit_read_BD(dat); \
     _obj->name.y = bit_read_BD(dat); \
     _obj->name.z = bit_read_BD(dat); \
+    if (bit_isnan(_obj->name.x) || bit_isnan(_obj->name.y) || bit_isnan(_obj->name.z)) { \
+      LOG_ERROR("Invalid 3BD_1 " #name); \
+      return DWG_ERR_VALUEOUTOFBOUNDS; \
+    } \
     FIELD_3PT_TRACE(name,BD,dxf); }
 //    FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+1);
 //    FIELDG(name.z, BD, dxf+2); }
-#define FIELD_3DPOINT(name,dxf) FIELD_3BD(name,dxf)
+#define FIELD_3DPOINT(name,dxf)  FIELD_3BD(name,dxf)
 #define FIELD_3DVECTOR(name,dxf) FIELD_3BD_1(name,dxf)
 #define FIELD_TIMEBLL(name,dxf) \
   { _obj->name = bit_read_TIMEBLL(dat); \
