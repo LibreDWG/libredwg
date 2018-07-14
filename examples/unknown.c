@@ -49,6 +49,7 @@ struct _unknown_field {
   unsigned char *bytes;
   int bitsize;
   Dwg_Bits type;
+  unsigned short num; //number of occurances of this type:value pair (max 1423)
   int pos[5]; //5x found bit offset in dxf->bytes or -1 if not found
   // many typical values are 5x found (handle 0, BL 2)
 };
@@ -408,6 +409,7 @@ bits_format (struct _unknown_field *g, const int is16)
 }
 
 // check how many of the given fields (code=value pairs) exist in the DXF
+#if 0
 static int
 num_dxf(const struct _unknown_field *g, const struct _unknown_dxf *dxf) {
   int num_dxf = 0;
@@ -419,6 +421,7 @@ num_dxf(const struct _unknown_field *g, const struct _unknown_dxf *dxf) {
   }
   return num_dxf;
 }
+#endif
 
 static int
 set_found (struct _dxf *dxf, const struct _unknown_field *g) {
@@ -843,7 +846,7 @@ main (int argc, char *argv[])
                    g[j].pos[1], g[j].pos[1]+g[j].bitsize-1,
                    size);
             // check if we have two of those fields, then it's unique also
-            if (2 == num_dxf(&g[j], &unknown_dxf[i])) {
+            if (2 == g[j].num) {
               printf("        and we have %d same DXF fields\n", 2);
               set_found(&dxf[i], &g[j]);
               set_found_i(&dxf[i], &g[j], 1);
@@ -855,7 +858,7 @@ main (int argc, char *argv[])
                    g[j].pos[0], g[j].pos[0]+g[j].bitsize-1,
                    g[j].pos[1], g[j].pos[2],
                    size);
-            if (3 == num_dxf(&g[j], &unknown_dxf[i])) {
+            if (3 == g[j].num) {
               printf("        and we have %d same DXF fields\n", 3);
               set_found(&dxf[i], &g[j]);
               set_found_i(&dxf[i], &g[j], 1);
@@ -868,7 +871,7 @@ main (int argc, char *argv[])
                    g[j].pos[0], g[j].pos[0]+g[j].bitsize-1,
                    g[j].pos[1], g[j].pos[2], g[j].pos[3],
                    size);
-            if (4 == num_dxf(&g[j], &unknown_dxf[i])) {
+            if (4 == g[j].num) {
               printf("        and we have %d same DXF fields\n", 4);
               set_found(&dxf[i], &g[j]);
               set_found_i(&dxf[i], &g[j], 1);
@@ -882,7 +885,7 @@ main (int argc, char *argv[])
                    g[j].pos[0], g[j].pos[0]+g[j].bitsize-1,
                    g[j].pos[1], g[j].pos[2], g[j].pos[3], g[j].pos[4],
                    size);
-            if (5 == num_dxf(&g[j], &unknown_dxf[i])) {
+            if (5 == g[j].num) {
               printf("        and we have %d same DXF fields\n", 5);
               set_found(&dxf[i], &g[j]);
               set_found_i(&dxf[i], &g[j], 1);

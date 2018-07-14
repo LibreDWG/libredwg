@@ -5,7 +5,7 @@
     make -C examples alldxf_0.inc
 
     In C we cannot statically initialize variable-sized arrays of structs,
-    to split it up into 3 parts.
+    so we split it up into 3 parts.
 
 e.g.
 
@@ -25,7 +25,18 @@ Search 0 MATERIAL + Handle 96 in test/test-data/Drawing_2007.dxf =>
     FIELD_T   1  "ByLayer"    => dwg.spec: FIELD_T (name, 1);
     FIELD_BL 94 63  (int32_t) => dwg.spec: FIELD_BL (channel_flags, 94);
 
+calc. number of same-typed: value fields as num.
+
 =cut
+
+# DXF types
+use constant UNKNOWN => 0;
+use constant B       => 1;
+use constant NUM     => 2; #BL, BS, RL, RS or RC
+use constant HDL     => 3;
+use constant STR     => 4;
+use constant HEXSTR  => 5;
+use constant DBL     => 6;
 
 my $i = 0;
 open my $f0, ">", "examples/alldxf_0.inc" || die "$!";
@@ -82,7 +93,7 @@ while (<>) {
   #}
 
   open my $f, "$dxf" or next LINE;
-  my ($foundobj, $foundhdl);
+  my ($foundobj, $foundhdl, @FIELD);
   while (my $code = <$f>) {
     $code =~ s/\cM\cJ//;
     my $v = <$f>;
@@ -92,8 +103,20 @@ while (<>) {
       $foundobj = $v eq $obj;
       if ($foundhdl) {
         $foundhdl = 0;
+        # search FIELD for duplicates
+        my %sorted = ();
+        for (@FIELD) {
+          my $t = dxf_type($_->[0]);
+          $sorted{"$t:$_->[1]"}++;
+        }
+        for (@FIELD) {
+          my $t = dxf_type($_->[0]);
+          my $num = $sorted{"$t:$_->[1]"};
+          emit_field($f1, $_->[0], $_->[1], $num);
+        }
+        @FIELD = ();
         print $f0 " NULL },\n";
-        print $f1 "    { 0,    NULL, NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1}}\n};\n";
+        print $f1 "    { 0,    NULL, NULL, 0, BITS_UNKNOWN, 0, {-1,-1,-1,-1,-1}}\n};\n";
       }
     }
     if ($foundobj and $code =~ /^ *5$/) {
@@ -106,24 +129,90 @@ while (<>) {
         print $f1 "/* $obj $hdl in $dxf */\n";
         print $f1 "static const struct _unknown_field unknown_dxf_$i\[\] = {\n";
         print $f2 "unknown_dxf\[$i\].fields = unknown_dxf_$i;\n";
+        @FIELD = ();
         $i++;
       }
     }
     if ($foundhdl) {
-      process_dxf($f1, $code, $v);
+      $code =~ s/\s//g;
+      push @FIELD, [$code, $v];
     }
   }
   close $f;
 }
 close $fu;
 
-sub process_dxf {
-  my ($f, $code, $v) = @_;
+sub dxf_type {
+  my $code = shift;
+  if ($code < 5) {
+    return STR;
+  } elsif ($code == 5) {
+    return HDL;
+  } elsif ($code < 10) {
+    return STR;
+  } elsif ($code < 60) {
+    return DBL;
+  } elsif ($code < 100) {
+    return NUM;
+  } elsif ($code == 102) {
+    return STR;
+  } elsif ($code == 105) {
+    return HDL;
+  } elsif ($code < 110) {
+    return STR;
+  } elsif ($code < 160) {
+    return DBL;
+  } elsif ($code < 210) {
+    return NUM;
+  } elsif ($code < 240) {
+    return DBL;
+  } elsif ($code < 289) {
+    return NUM;
+  } elsif ($code < 299) {
+    return B;
+  } elsif ($code < 320) {
+    return STR;
+  } elsif ($code < 370) {
+    return HDL;
+  } elsif ($code < 390) {
+    return NUM;
+  } elsif ($code < 400) {
+    return HDL;
+  } elsif ($code < 410) {
+    return NUM;
+  } elsif ($code < 420) {
+    return STR;
+  } elsif ($code < 430) {
+    return NUM;
+  } elsif ($code < 440) {
+    return STR;
+  } elsif ($code < 460) {
+    return NUM;
+  } elsif ($code < 470) {
+    return DBL;
+  } elsif ($code < 480) {
+    return STR;
+  } elsif ($code < 481) {
+    return HDL;
+  } elsif ($code < 1010) {
+    return STR;
+  } elsif ($code < 1060) {
+    return DBL;
+  } elsif ($code <= 1071) {
+    return NUM;
+  }
+  warn "unknown DXF code $code\n";
+  return UNKNOWN;
+}
+
+sub emit_field {
+  my ($f, $code, $v, $num) = @_;
   #warn "$code: $v\n";
   #return if $code == 100;
   $v =~ s/\\/\\\\/g;
   $v =~ s/"/\\"/g;
-  # code, value, bytes, bitsize, type, pos
-  print $f "    { $code, \"$v\", NULL, 0, BITS_UNKNOWN, {-1,-1,-1,-1,-1} },\n";
+  $num = 0 unless $num;
+  # code, value, bytes, bitsize, type, num, pos[]
+  print $f "    { $code, \"$v\", NULL, 0, BITS_UNKNOWN, $num, {-1,-1,-1,-1,-1} },\n";
 }
 
