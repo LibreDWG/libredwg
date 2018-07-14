@@ -5473,21 +5473,23 @@ DWG_ENTITY(CAMERA) // i.e. a named view, not persistent in a DWG. CAMERADISPLAY=
 
 DWG_ENTITY_END
 
-//only EED data, I think
+#ifdef DEBUG_CLASSES
+
+//EED data copied plus some other
 DWG_OBJECT(DBCOLOR)
   DXF { FIELD_HANDLE (parenthandle, 3, 330); }
   SUBCLASS (AcDbColor)
-  //FIELD_BS (color, 62); <= EED 1070
+  //FIELD_BS (color, 62); <= EED 1070 @224-233
   //FIELD_RL (rgb, 420);  <= EED 1071
   //FIELD_T (name, 430);  <= EED 1000
   DEBUG_HERE()
-  START_HANDLE_STREAM;
+  START_HANDLE_STREAM; //@264-295
   FIELD_HANDLE (parenthandle, 3, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
+  //TODO copy of the EED data? big hole from 296-753
+  DEBUG_HERE()
 DWG_OBJECT_END
-
-#ifdef DEBUG_CLASSES
 
 /* In work area:
    The following entities/objects are stored as raw UNKNOWN_ENT/OBJ,

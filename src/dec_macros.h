@@ -626,4 +626,3 @@ static int dwg_decode_ ## token (Bit_Chain *restrict dat, Dwg_Object *restrict o
   if (dat->version >= R_2007) { free(str_dat); } \
   return error & ~DWG_ERR_UNHANDLEDCLASS; \
 }
-
