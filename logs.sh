@@ -14,6 +14,11 @@ for d in test/test-data/*.dwg; do
     timeout -k 1 10 programs/dwgread -v5 "$d" 2>$log
     #(sleep 10s; kill %1 2>/dev/null) &
 done
-#with background killing we would need to
-#wait for all processes to end (GNU parallel would be better)
-#while pgrep dwgread; do sleep 1; done
+#with background killing we would need to wait for all processes to end
+# while pgrep dwgread; do sleep 1; done
+
+#GNU parallel would be better:
+# parallel timeout 10 programs/dwgread -v5 {} \2\>{/.}.log ::: test/test-data/*.dwg
+# cd test/test-data
+# parallel timeout 10 ../../programs/dwgread -v5 {} \2\>../../{/.}_{//}.log ::: */*.dwg
+# cd ../..
