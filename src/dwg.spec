@@ -6014,6 +6014,34 @@ DWG_OBJECT(ASSOCACTION)
   FIELD_BL (unknown_assoc, 90);
 DWG_OBJECT_END
 
+DWG_OBJECT(EVALUATION_GRAPH)
+
+  SUBCLASS(AcDbEvalGraph)
+  FIELD_BL(has_graph, 96); //1
+  if (FIELD_VALUE(has_graph))
+    {
+      FIELD_BL(nodeid, 91); //0 nodeid
+      FIELD_BL(edge_flags, 93); //32 @32-41? edge_flags
+      FIELD_BL(num_nodes, 95); // 1 num_nodes?
+      REPEAT (num_nodes, nodes, Dwg_EVAL_Node)
+        {
+          FIELD_HANDLE(nodes->evalexpr, 5, 360); // @32-39 AcDbEvalExpr (ACSH_SWEEP_CLASS)
+          FIELD_RL(nodes->edge_from, 92);  // -1 @82-113
+          FIELD_RL(nodes->edge_to, 92);    // -1
+          FIELD_RL(nodes->edge_from2, 92); // -1
+          FIELD_RL(nodes->edge_to2, 92);   // -1
+        }
+      SET_PARENT_OBJ(nodes)
+      END_REPEAT(nodes)
+    }
+  FIELD_BL(unknown_bl, 97); //1
+
+  START_HANDLE_STREAM;
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+
+DWG_OBJECT_END
+
 #endif /* DEBUG_CLASSES */
 
 /* Those undocumented objects are also stored as raw UNKNOWN_OBJ */

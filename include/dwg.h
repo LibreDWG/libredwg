@@ -301,7 +301,7 @@ typedef enum DWG_OBJECT_TYPE
 
   /* non-fixed types > 500. not stored as type, but as fixedtype */
 
-  DWG_TYPE_ACAD_EVALUATION_GRAPH,
+  DWG_TYPE_EVALUATION_GRAPH,
   DWG_TYPE_ACSH_HISTORY_CLASS,
   DWG_TYPE_ACSH_SWEEP_CLASS,
   DWG_TYPE_ARCALIGNEDTEXT,
@@ -4368,7 +4368,6 @@ typedef struct _dwg_object_DATATABLE
   BITCODE_H xdicobjhandle; /* ignored */
 } Dwg_Object_DATATABLE;
 
-
 typedef struct _dwg_ACTIONBODY
 {
   struct _dwg_object_ASSOCNETWORK *parent;
@@ -4419,6 +4418,30 @@ typedef struct _dwg_object_ASSOCNETWORK
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
 } Dwg_Object_ASSOCNETWORK;
+
+typedef struct _dwg_EVAL_Node
+{
+  struct _dwg_object_EVALUATION_GRAPH *parent;
+  BITCODE_H   evalexpr;   // 360
+  BITCODE_RL  edge_from;  // 92
+  BITCODE_RL  edge_to;    // 92
+  BITCODE_RL  edge_from2; // 92
+  BITCODE_RL  edge_to2;   // 92
+} Dwg_EVAL_Node;
+
+typedef struct _dwg_object_EVALUATION_GRAPH
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BL  has_graph; //96
+  BITCODE_BL  unknown_bl; // 97
+  BITCODE_BL  nodeid;     // 91
+  BITCODE_BL  edge_flags; // 93
+  BITCODE_BL  num_nodes;  // 95
+  Dwg_EVAL_Node *nodes;
+
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
+} Dwg_Object_EVALUATION_GRAPH;
 
 /**
  -----------------------------------
@@ -4674,6 +4697,8 @@ typedef struct _dwg_object_object
     Dwg_Object_DIMSTYLE *DIMSTYLE;
     Dwg_Object_VPORT_ENTITY_CONTROL *VPORT_ENTITY_CONTROL;
     Dwg_Object_VPORT_ENTITY_HEADER *VPORT_ENTITY_HEADER;
+
+    Dwg_Object_EVALUATION_GRAPH *EVALUATION_GRAPH;
     //TODO Dwg_Object_ARCALIGNEDTEXT *ARCALIGNEDTEXT;
     //TODO Dwg_Object_ASSOC2DCONSTRAINTGROUP *ASSOC2DCONSTRAINTGROUP;
     //TODO Dwg_Object_ASSOCGEOMDEPENDENCY *ASSOCGEOMDEPENDENCY;
@@ -5274,7 +5299,7 @@ EXPORT int dwg_add_PROXY_ENTITY (Dwg_Object *obj);
 EXPORT int dwg_add_PROXY_OBJECT (Dwg_Object *obj);
 EXPORT int dwg_add_UNKNOWN_ENT (Dwg_Object *obj);
 EXPORT int dwg_add_UNKNOWN_OBJ (Dwg_Object *obj);
-//EXPORT int dwg_add_ACAD_EVALUATION_GRAPH (Dwg_Object *obj);
+EXPORT int dwg_add_EVALUATION_GRAPH (Dwg_Object *obj);
 //EXPORT int dwg_add_ACSH_HISTORY_CLASS (Dwg_Object *obj);
 //EXPORT int dwg_add_ACSH_SWEEP_CLASS (Dwg_Object *obj);
 //EXPORT int dwg_add_ARCALIGNEDTEXT (Dwg_Object *obj);

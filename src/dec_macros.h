@@ -496,7 +496,7 @@
 
 // unchecked with a constant
 #define REPEAT_CN(times, name, type) \
-  _obj->name = (type *) calloc(times, sizeof(type)); \
+  if (times) _obj->name = (type *) calloc(times, sizeof(type)); \
   for (rcount1=0; rcount1<(long)times; rcount1++)
 #define REPEAT_N(times, name, type) \
   REPEAT_CHKCOUNT(name,times,type) \
