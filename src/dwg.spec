@@ -6023,6 +6023,39 @@ DWG_OBJECT(ASSOCACTION)
   FIELD_BL (unknown_assoc, 90);
 DWG_OBJECT_END
 
+DWG_OBJECT(ASSOCOSNAPPOINTREFACTIONPARAM)
+  SUBCLASS(AcDbAssocActionParam)
+  FIELD_B  (unknown1, 0); //
+  FIELD_RC (unknown, 0); //01010101
+  FIELD_T (name, 1); //@9-10
+  DEBUG_HERE_OBJ
+  FIELD_B  (unknown1, 0); //
+  DEBUG_HERE_OBJ
+  FIELD_B  (unknown1, 0); //
+  DEBUG_HERE_OBJ
+  FIELD_BS (status, 90); //0
+  FIELD_B  (unknown1, 0); //
+  DEBUG_HERE_OBJ
+  //DEBUG_HERE_OBJ
+  SUBCLASS(AcDbAssocCompoundActionParam)
+  FIELD_BD (unknown3, 40); //-1 32-97
+  FIELD_BS (flags, 90); //0 read/write deps
+  //...
+  DEBUG_HERE_OBJ
+  FIELD_BS (num_params, 90); //1
+  DEBUG_HERE_OBJ
+
+  bit_advance_position(dat, 122-118);
+  START_HANDLE_STREAM;
+  DEBUG_POS_OBJ
+  FIELD_HANDLE (writedep, ANYCODE, 360); //122-129
+  bit_advance_position(dat, 168-130);
+  DEBUG_POS_OBJ
+  FIELD_HANDLE (actionparam, 4, 330); //168-175
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+DWG_OBJECT_END
+
 DWG_OBJECT(EVALUATION_GRAPH)
 
   SUBCLASS(AcDbEvalGraph)
@@ -6166,3 +6199,4 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+

@@ -4419,6 +4419,31 @@ typedef struct _dwg_object_ASSOCNETWORK
   BITCODE_H xdicobjhandle;
 } Dwg_Object_ASSOCNETWORK;
 
+/**
+ Object ASSOCOSNAPPOINTREFACTIONPARAM (varies) UNKNOWN FIELDS
+ Action parameter that owns other AcDbAssocActionParameters,
+ allowing the representation of hierarchical structures of action parameters.
+ */
+typedef struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM
+{
+  struct _dwg_object_object *parent;
+  // AcDbAssocActionParam
+  BITCODE_RC unknown;  // 01010101
+  BITCODE_B unknown1;  //
+  BITCODE_BL status;   // 90: 0 uptodate, 1 changed_directly, 2 changed_transitive,
+                       // 3 ChangedNoDifference, 4 FailedToEvaluate, 5 Erased, 6 Suppressed
+                       // 7 Unresolved
+  BITCODE_T  name;     // 1 ""
+  BITCODE_RS flags;    // 90 0
+  // AcDbAssocCompoundActionParam
+  BITCODE_BD unknown3; // 40 -1.0
+  BITCODE_BL num_params; // 90 1
+  BITCODE_H actionparam;  // 330
+  BITCODE_H writedep; // 360
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
+} Dwg_Object_ASSOCOSNAPPOINTREFACTIONPARAM;
+
 typedef struct _dwg_EVAL_Node
 {
   struct _dwg_object_EVALUATION_GRAPH *parent;
@@ -4704,6 +4729,7 @@ typedef struct _dwg_object_object
     //TODO Dwg_Object_ASSOCGEOMDEPENDENCY *ASSOCGEOMDEPENDENCY;
     Dwg_Object_ASSOCACTION *ASSOCACTION;
     Dwg_Object_ASSOCNETWORK *ASSOCNETWORK;
+    Dwg_Object_ASSOCOSNAPPOINTREFACTIONPARAM *ASSOCOSNAPPOINTREFACTIONPARAM;
     //Dwg_Object_CSACDOCUMENTOPTIONS *CSACDOCUMENTOPTIONS;
     Dwg_Object_CELLSTYLEMAP *CELLSTYLEMAP;
     //Dwg_Object_DATATABLE *DATATABLE;
@@ -5308,7 +5334,7 @@ EXPORT int dwg_add_EVALUATION_GRAPH (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCALIGNEDDIMACTIONBODY (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCDEPENDENCY (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCGEOMDEPENDENCY (Dwg_Object *obj);
-//EXPORT int dwg_add_ASSOCOSNAPPOINTREFACTIONPARAM (Dwg_Object *obj);
+EXPORT int dwg_add_ASSOCOSNAPPOINTREFACTIONPARAM (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCPERSSUBENTMANAGER (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCVERTEXACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCACTION (Dwg_Object *obj);
