@@ -164,28 +164,36 @@ static unsigned int cur_ver = 0;
 #define FIELD_VECTOR(name, type, size, dxf) FIELD_VECTOR_N(name, type, _obj->size, dxf)
 
 #define FIELD_2RD_VECTOR(name, size, dxf)\
-  for (vcount=0; vcount < (long)_obj->size; vcount++)\
-    {\
-      FIELD_2RD(name[vcount], dxf);\
-    }
+  if (_obj->name) { \
+    for (vcount=0; vcount < (long)_obj->size; vcount++)\
+      {\
+        FIELD_2RD(name[vcount], dxf);\
+      }\
+  }
 
 #define FIELD_2DD_VECTOR(name, size, dxf)\
-  FIELD_2RD(name[0], 0);\
-  for (vcount = 1; vcount < (long)_obj->size; vcount++)\
-    {\
-      FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
+  if (_obj->name) { \
+    FIELD_2RD(name[0], 0);\
+    for (vcount = 1; vcount < (long)_obj->size; vcount++)\
+      {\
+        FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
+      }\
     }
 
 #define FIELD_3DPOINT_VECTOR(name, size, dxf)\
-  for (vcount=0; vcount < (long)_obj->size; vcount++)\
-    {\
-      FIELD_3DPOINT(name[vcount], dxf);\
+  if (_obj->name) { \
+    for (vcount=0; vcount < (long)_obj->size; vcount++)\
+      {\
+        FIELD_3DPOINT(name[vcount], dxf);\
+      }\
     }
 
 #define HANDLE_VECTOR_N(name, size, code, dxf) \
-  for (vcount=0; vcount < (long)size; vcount++)\
-    {\
-      FIELD_HANDLE_N(name[vcount], vcount, code, dxf);\
+  if (_obj->name) { \
+    for (vcount=0; vcount < (long)size; vcount++)\
+      {\
+        FIELD_HANDLE_N(name[vcount], vcount, code, dxf);\
+      }\
     }
 
 #define HANDLE_VECTOR(name, sizefield, code, dxf) \
@@ -199,10 +207,12 @@ static unsigned int cur_ver = 0;
 #define REACTORS(code)\
   if (dat->version >= R_2000 && obj->tio.object->num_reactors > 0x1000) { \
     fprintf(stderr, "Invalid num_reactors: %ld\n", (long)obj->tio.object->num_reactors); return DWG_ERR_VALUEOUTOFBOUNDS; } \
-  for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++)\
-    {\
-      VALUE_HANDLE_N(obj->tio.object->reactors[vcount], reactors, vcount, code, -5); \
-    }
+  if (obj->tio.object->reactors) {\
+    for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++)\
+      {\
+        VALUE_HANDLE_N(obj->tio.object->reactors[vcount], reactors, vcount, code, -5); \
+      }\
+  }
 
 #define XDICOBJHANDLE(code)\
   SINCE(R_2004)\
