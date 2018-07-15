@@ -121,7 +121,7 @@ static void dxf_read_string(Bit_Chain *dat, char **string)
   }
 }
 
-static inline void dxf_free_pair(Dxf_Pair* pair)
+static void dxf_free_pair(Dxf_Pair* pair)
 {
   if (pair->type == VT_STRING ||
       pair->type == VT_BINARY)
