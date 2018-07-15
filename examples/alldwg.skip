@@ -35,7 +35,6 @@ empty TABLECONTENT "test/test-data/2010/5151-019.dxf" 0x3826F 2224
 empty TABLECONTENT "test/test-data/2010/5151-019.dxf" 0x38273 2224
 empty TABLECONTENT "test/test-data/2010/5151-019.dxf" 0x38275 1328
 empty TABLECONTENT "test/test-data/2010/5151-019.dxf" 0x38277 2000
-empty TABLECONTENT "test/test-data/2010/5151-019.dxf" 0x38279 768
 empty TABLECONTENT "test/test-data/2010/5151-019.dxf" 0x38489 816
 empty MATERIAL "test/test-data/2010/5151-022.dxf" 0x8969 698
 empty MATERIAL "test/test-data/2010/5151-022.dxf" 0xF48E 1472
@@ -82,7 +81,6 @@ empty TABLECONTENT "test/test-data/2010/5151-024.dxf" 0x428F1 2224
 empty TABLECONTENT "test/test-data/2010/5151-024.dxf" 0x428F5 2224
 empty TABLECONTENT "test/test-data/2010/5151-024.dxf" 0x428F7 1328
 empty TABLECONTENT "test/test-data/2010/5151-024.dxf" 0x428F9 2000
-empty TABLECONTENT "test/test-data/2010/5151-024.dxf" 0x428FB 768
 empty TABLECONTENT "test/test-data/2010/5151-024.dxf" 0x42B0B 816
 empty TABLECONTENT "test/test-data/2010/5151-024.dxf" 0x42B23 1526
 empty CSACDOCUMENTOPTIONS "test/test-data/2000/5.dxf" 0x366 1232
@@ -175,7 +173,6 @@ empty ACDBASSOCDEPENDENCY "test/test-data/example_2000.dxf" 0x397 107
 empty DIMASSOC "test/test-data/example_2000.dxf" 0x42F 364
 empty ACAD_TABLE "test/test-data/example_2000.dxf" 0x4F2 47489
 empty ACDBASSOCACTION "test/test-data/example_2004.dxf" 0x391 131
-empty ACDBASSOCDEPENDENCY "test/test-data/example_2004.dxf" 0x397 108
 empty DIMASSOC "test/test-data/example_2004.dxf" 0x42F 365
 empty DIMASSOC "test/test-data/example_2004.dxf" 0x466 373
 empty ACDBASSOCNETWORK "test/test-data/example_2007.dxf" 0x38E 155
@@ -198,7 +195,6 @@ empty DIMASSOC "test/test-data/example_2013.dxf" 0x47E 874
 empty DIMASSOC "test/test-data/example_2013.dxf" 0x496 874
 empty SUN "test/test-data/example_2013.dxf" 0x761 638
 empty ACDBASSOCACTION "test/test-data/example_2018.dxf" 0x391 131
-empty ACDBASSOCDEPENDENCY "test/test-data/example_2018.dxf" 0x397 108
 empty DIMASSOC "test/test-data/example_2018.dxf" 0x42F 365
 empty DIMASSOC "test/test-data/example_2018.dxf" 0x466 373
 empty ACAD_TABLE "test/test-data/example_2018.dxf" 0x4F2 53633

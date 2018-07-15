@@ -430,9 +430,9 @@ set_found (struct _dxf *dxf, const struct _unknown_field *g) {
   // check for overlap, if already found by some other field
   int overlap = 0;
   for (int k=g->pos[0]; k<g->pos[0]+g->bitsize; k++) {
-    if (dxf->found[k] && !overlap) {
+    if (dxf->found[k] && !overlap && k<g->bitsize) {
       overlap = 1;
-      printf("field %d already found at %d\n", g->code, k);
+      printf("position %d already found\n", k);
     }
     dxf->found[k]++;
   }
@@ -915,10 +915,23 @@ main (int argc, char *argv[])
             } else if (g[j].num > 1) {
               printf("        but we have %d same DXF fields\n", g[j].num);
             }
-          } else if (num_found > 5) {
-            printf("? %d: %s [%s] found >5 at offsets %d-%d, %d, %d, %d, %d, ... /%d\n",
+          } else if (num_found > 5 && num_found == g[j].num) {
+            printf("? %d: %s [%s] found %d at offsets %d-%d, %d, %d, %d, %d, ... /%d\n",
                    g[j].code, g[j].value,
-                   dwg_bits_name[g[j].type],
+                   dwg_bits_name[g[j].type], num_found,
+                   g[j].pos[0], g[j].pos[0]+g[j].bitsize-1,
+                   g[j].pos[1], g[j].pos[2], g[j].pos[3], g[j].pos[4],
+                   size);
+            printf("        and we have %d same DXF fields\n", num_found);
+            set_found(&dxf[i], &g[j]);
+            set_found_i(&dxf[i], &g[j], 1);
+            set_found_i(&dxf[i], &g[j], 2);
+            set_found_i(&dxf[i], &g[j], 3);
+            set_found_i(&dxf[i], &g[j], 4);
+          } else if (num_found > 5) {
+            printf("? %d: %s [%s] found %d >5 at offsets %d-%d, %d, %d, %d, %d, ... /%d\n",
+                   g[j].code, g[j].value,
+                   dwg_bits_name[g[j].type], num_found,
                    g[j].pos[0], g[j].pos[0]+g[j].bitsize-1,
                    g[j].pos[1], g[j].pos[2], g[j].pos[3], g[j].pos[4],
                    size);
