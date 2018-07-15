@@ -194,7 +194,7 @@ sub dxf_type {
     return STR;
   } elsif ($code < 481) {
     return HDL;
-  } elsif ($code < 1010) {
+  } elsif ($code < 1010) { # eed fields:
     return STR;
   } elsif ($code < 1060) {
     return DBL;

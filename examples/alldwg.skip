@@ -94,9 +94,11 @@ empty MATERIAL "test/test-data/2004/CascoUrbano.dxf" 0x16F329 813
 empty DBCOLOR "test/test-data/2004/CascoUrbano.dxf" 0x1EB307 7073
 empty MATERIAL "test/test-data/2000/Constraints.dxf" 0x96 660
 empty MATERIAL "test/test-data/2000/Constraints.dxf" 0x97 660
+empty MATERIAL "test/test-data/2000/Constraints.dxf" 0x98 1358
 empty ACDBASSOCNETWORK "test/test-data/2000/Constraints.dxf" 0x3E0 137
 empty MATERIAL "test/test-data/2004/Constraints.dxf" 0x96 661
 empty MATERIAL "test/test-data/2004/Constraints.dxf" 0x97 661
+empty MATERIAL "test/test-data/2004/Constraints.dxf" 0x98 1359
 empty ACDBASSOCNETWORK "test/test-data/2004/Constraints.dxf" 0x3E2 130
 empty ACDBDETAILVIEWSTYLE "test/test-data/2007/Constraints.dxf" 0x1AC 2401
 empty ACDBASSOCNETWORK "test/test-data/2007/Constraints.dxf" 0x3E0 139
@@ -111,9 +113,11 @@ empty ACDBDETAILVIEWSTYLE "test/test-data/2013/Donut.dxf" 0x1AC 2362
 empty ACDBDETAILVIEWSTYLE "test/test-data/2018/Donut.dxf" 0x1AC 2534
 empty MATERIAL "test/test-data/Drawing_2000.dxf" 0x96 660
 empty MATERIAL "test/test-data/Drawing_2000.dxf" 0x97 660
+empty MATERIAL "test/test-data/Drawing_2000.dxf" 0x98 1358
 empty ACDBASSOCNETWORK "test/test-data/Drawing_2000.dxf" 0x3E0 137
 empty MATERIAL "test/test-data/Drawing_2004.dxf" 0x96 661
 empty MATERIAL "test/test-data/Drawing_2004.dxf" 0x97 661
+empty MATERIAL "test/test-data/Drawing_2004.dxf" 0x98 1359
 empty ACDBASSOCNETWORK "test/test-data/Drawing_2004.dxf" 0x3E2 130
 empty ACDBDETAILVIEWSTYLE "test/test-data/Drawing_2007.dxf" 0x1AC 2401
 empty ACDBASSOCNETWORK "test/test-data/Drawing_2007.dxf" 0x3E0 139
@@ -125,12 +129,15 @@ empty ACDBDETAILVIEWSTYLE "test/test-data/2013/Ellipse.dxf" 0x1AC 2362
 empty ACDBDETAILVIEWSTYLE "test/test-data/2018/Ellipse.dxf" 0x1AC 2534
 empty MATERIAL "test/test-data/2004/HatchG.dxf" 0x96 661
 empty MATERIAL "test/test-data/2004/HatchG.dxf" 0x97 661
+empty MATERIAL "test/test-data/2004/HatchG.dxf" 0x98 1359
 empty ACDBDETAILVIEWSTYLE "test/test-data/2013/Helix.dxf" 0x1AC 2362
 empty ACDBDETAILVIEWSTYLE "test/test-data/2018/Helix.dxf" 0x1AC 2534
 empty MATERIAL "test/test-data/2000/Leader.dxf" 0x96 660
 empty MATERIAL "test/test-data/2000/Leader.dxf" 0x97 660
+empty MATERIAL "test/test-data/2000/Leader.dxf" 0x98 1358
 empty MATERIAL "test/test-data/2004/Leader.dxf" 0x96 661
 empty MATERIAL "test/test-data/2004/Leader.dxf" 0x97 661
+empty MATERIAL "test/test-data/2004/Leader.dxf" 0x98 1359
 empty ACDBDETAILVIEWSTYLE "test/test-data/2007/Leader.dxf" 0x1AC 2401
 empty ACDBDETAILVIEWSTYLE "test/test-data/2010/Leader.dxf" 0x1AC 2361
 empty ACDBDETAILVIEWSTYLE "test/test-data/2013/Leader.dxf" 0x1AC 2362
@@ -160,6 +167,7 @@ empty ACDBDETAILVIEWSTYLE "test/test-data/2018/Text.dxf" 0x1AC 2534
 empty ACDBDETAILVIEWSTYLE "test/test-data/2018/circle.dxf" 0x1AC 2534
 empty MATERIAL "test/test-data/2004/dbcolor.dxf" 0x96 661
 empty MATERIAL "test/test-data/2004/dbcolor.dxf" 0x97 661
+empty MATERIAL "test/test-data/2004/dbcolor.dxf" 0x98 1359
 empty ACDBASSOCNETWORK "test/test-data/example_2000.dxf" 0x38E 153
 empty ACDBASSOCNETWORK "test/test-data/example_2000.dxf" 0x390 145
 empty ACDBASSOCACTION "test/test-data/example_2000.dxf" 0x391 130
@@ -213,6 +221,7 @@ empty MATERIAL "test/test-data/2004/hatch_color_ref.dxf" 0x128FEE 677
 empty MATERIAL "test/test-data/2004/hatch_color_ref.dxf" 0x16F329 813
 empty MATERIAL "test/test-data/2004/material.dxf" 0x96 661
 empty MATERIAL "test/test-data/2004/material.dxf" 0x97 661
+empty MATERIAL "test/test-data/2004/material.dxf" 0x98 1359
 empty MATERIAL "test/test-data/sample_2013.dxf" 0x9F 1465
 empty MATERIAL "test/test-data/sample_2013.dxf" 0xA7 1465
 empty MATERIAL "test/test-data/sample_2013.dxf" 0xAF 1449
@@ -221,6 +230,7 @@ empty MATERIAL "test/test-data/sample_2018.dxf" 0xA7 1465
 empty MATERIAL "test/test-data/sample_2018.dxf" 0xAF 1449
 empty MATERIAL "test/test-data/2004/truecolor.dxf" 0x96 661
 empty MATERIAL "test/test-data/2004/truecolor.dxf" 0x97 661
+empty MATERIAL "test/test-data/2004/truecolor.dxf" 0x98 1359
 empty MATERIAL "test/test-data/DS_line_R2000.dxf" 0xF1 1419
 empty MATERIAL "test/test-data/DS_line_R2000.dxf" 0xF9 1419
 empty SUN "test/test-data/DS_line_R2013.dxf" 0x80 180

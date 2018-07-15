@@ -42,6 +42,7 @@
 
 void *memmem(const void *big, size_t big_len, const void *little, size_t little_len);
 
+int cur_hdl; // to avoid dupl. search
 
 struct _unknown_field {
   int code;
@@ -263,6 +264,7 @@ bits_handle(Bit_Chain *restrict dat, struct _unknown_field *restrict g,
   //parse hex -> owner handle;
   sscanf(g->value, "%lX", &handle.value);
   handle.code = code;
+  cur_hdl = code;
   if (code > 5) { //relative offset to objhandle
     switch (code) {
     case 6: handle.value = 0; break;
@@ -577,6 +579,10 @@ main (int argc, char *argv[])
             printf("%d: %s\n", g[j].code, g[j].value);
             continue;
           }
+          if (g[j].code >= 1000) {
+            printf("%d: %s EED\n", g[j].code, g[j].value);
+            continue;
+          }
           //store the binary repr
           bits_format(&g[j], is16);
         SEARCH:
@@ -589,9 +595,12 @@ main (int argc, char *argv[])
             if (is_handle(code) && code != 5) {
               int handles[] = {2,3,4,5,6,8,0xa,0xc};
               unsigned int hdl;
+              int cur_code = cur_hdl;
               sscanf(g[j].value, "%X", &hdl);
               //for 330 start with 6 (relative reactors)
               for (int c = code==330 ? 4 : 0; c<8; c++) {
+                if (handles[c]==cur_code)
+                  continue;
                 if (handles[c]==6 && hdl != unknown_dxf[i].handle+1) //+1
                   continue;
                 if (handles[c]==8 && hdl != unknown_dxf[i].handle-1) //-1
