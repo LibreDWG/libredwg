@@ -265,19 +265,26 @@
 
 #undef DEBUG_POS
 #undef DEBUG_HERE
-#define DEBUG_POS()\
+#undef DEBUG_POS_OBJ
+#undef DEBUG_HERE_OBJ
+#define DEBUG_POS_OBJ\
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE) { \
-    LOG_TRACE("DEBUG_POS @%u.%u / 0x%x (%lu)\n", (unsigned int)dat->byte, dat->bit, \
-              (unsigned int)dat->byte, bit_position(dat)); \
+    LOG_TRACE("DEBUG_POS @%u.%u (%lu) %lu\n", (unsigned int)dat->byte, dat->bit, \
+              bit_position(dat), \
+              obj ? obj->bitsize_address ? bit_position(dat) - obj->bitsize_address \
+                                         : bit_position(dat) - obj->address*8 : 0); \
   }
-#define DEBUG_HERE()\
+#define DEBUG_POS\
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE) { \
+    LOG_TRACE("DEBUG_POS @%u.%u (%lu)\n", (unsigned int)dat->byte, dat->bit, \
+              bit_position(dat)); \
+  }
+#define _DEBUG_HERE\
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE) { \
     Bit_Chain here = *dat; \
     int oldloglevel = loglevel; \
     char *tmp; BITCODE_BB bb = 0; BITCODE_RS rs; BITCODE_RL rl;\
     Dwg_Handle hdl; \
-    LOG_TRACE("DEBUG_HERE @%u.%u / 0x%x\n  24RC: ", (unsigned int)dat->byte, dat->bit, \
-              (unsigned int)dat->byte); \
     tmp = bit_read_TF(dat, 24);\
     LOG_TRACE_TF(tmp, 24);\
     SINCE(R_13) {\
@@ -319,6 +326,12 @@
     }                                                           \
     *dat = here;                                                \
   }
+#define DEBUG_HERE_OBJ\
+  DEBUG_POS_OBJ\
+  _DEBUG_HERE
+#define DEBUG_HERE\
+  DEBUG_POS\
+  _DEBUG_HERE
 
 //check for overflow into next object (invalid num_elems)
 #define AVAIL_BITS() (obj?(unsigned)((obj->address + obj->size)*8 - bit_position(dat) + 100)\
@@ -620,7 +633,8 @@ static int dwg_decode_ ## token (Bit_Chain *restrict dat, Dwg_Object *restrict o
   LOG_INFO("Decode object " #token " ")\
   _obj = obj->tio.object->tio.token;\
   error |= dwg_decode_object(dat, hdl_dat, str_dat, obj->tio.object); \
-  if (error >= DWG_ERR_CRITICAL) return error;
+  if (error >= DWG_ERR_CRITICAL) return error; \
+  obj->bitsize_address = bit_position(dat);
 
 #define DWG_OBJECT_END \
   if (dat->version >= R_2007) { free(str_dat); } \

@@ -1355,7 +1355,7 @@ read_2007_section_header(Bit_Chain*restrict dat, Bit_Chain*restrict hdl_dat,
       dwg_decode_header_variables(&sec_dat, hdl_dat, &str_dat, dwg);
     }
   else {
-    DEBUG_HERE();
+    DEBUG_HERE;
     error = DWG_ERR_SECTIONNOTFOUND;
   }
   return error;

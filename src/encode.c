@@ -482,7 +482,7 @@ static int dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj
   }
 
 #undef DEBUG_POS
-#define DEBUG_POS()\
+#define DEBUG_POS\
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE) { \
     LOG_TRACE("DEBUG_POS @%u.%u / 0x%x (%lu)\n", (unsigned int)dat->byte, dat->bit, \
               (unsigned int)dat->byte, bit_position(dat)); \

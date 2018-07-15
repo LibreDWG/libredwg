@@ -43,7 +43,7 @@
   FIELD_RD (LTSCALE, 40);  // 16.0 confirmed
   FIELD_RD (TEXTSIZE, 40); //unconfirmed, ineffective with r12
   FIELD_RD (TRACEWID, 40); //ok
-  DEBUG_HERE() // 14a
+  DEBUG_HERE // 14a
   //RS TEXTSTYLE STYLE index?
   //RS 15
 
@@ -53,14 +53,14 @@
   dat->byte = 0x164;
   FIELD_RS (LUNITS, 70); //ok
   FIELD_RS (LUPREC, 70); //ok
-  DEBUG_HERE()//@168
+  DEBUG_HERE//@168
   //RS 2xRD
   dat->byte = 0x17a;
   FIELD_RD (SKETCHINC, 40); //ok
   FIELD_RD (FILLETRAD, 40); //ok
   FIELD_RS (AUNITS, 70);    //ok
   FIELD_RS (AUPREC, 70);    //ok
-  DEBUG_HERE()//@18e
+  DEBUG_HERE//@18e
   //RC 0
   //RS 25
   dat->byte = 0x192;
@@ -84,7 +84,7 @@
   FIELD_RC (DIMSE2, 70); //ok
   FIELD_CAST (DIMTAD, RC, RS, 70); //ok
   FIELD_RC (LIMCHECK, 70); //ok 1fa
-  DEBUG_HERE() //1fb
+  DEBUG_HERE //1fb
 
   // not in DWG, resp. not converted by ODA from r12 dxf to r12 dwg:
   // SNAPMODE, DRAGMODE, BLIPMODE, CHAMFERA, CHAMFERB,
@@ -94,13 +94,13 @@
   dat->byte = 0x229;
   FIELD_RD (ELEVATION, 40); //ok 
   FIELD_RD (THICKNESS, 40); //ok 
-  DEBUG_HERE() //239
+  DEBUG_HERE //239
 
   dat->byte = 0x2e5;
   FIELD_CAST (DIMZIN, RC, B, 70); //ok
   FIELD_RD (DIMRND, 40);
   FIELD_RD (DIMDLE, 40);
-  DEBUG_HERE() //2ee
+  DEBUG_HERE //2ee
 
   /*
   TODO...
@@ -138,13 +138,13 @@
   FIELD_TIMEBLL (TDUPDATE, 40);
   FIELD_TIMEBLL (TDINDWG, 40);
   FIELD_TIMEBLL (TDUSRTIMER, 40);
-  DEBUG_HERE() //
+  DEBUG_HERE //
 
   dat->byte = 0x33f;
   FIELD_CAST (USRTIMER, RS, B, 70);
   FIELD_RS (unknown_10, 70);
   FIELD_CAST (SKPOLY, RS, B, 70);
-  DEBUG_HERE() //345
+  DEBUG_HERE //345
 
   dat->byte = 0x353;
   FIELD_RD (ANGBASE, 50);
@@ -167,36 +167,36 @@
   FIELD_RC (DIMASO, 70); //ok
   FIELD_RC (DIMSHO, 70); //ok
   FIELD_CAST (DIMTOFL, RS, B, 70);
-  DEBUG_HERE() //3a7
+  DEBUG_HERE //3a7
 
   dat->byte = 0x3c5;
   FIELD_RD (DIMALTF, 40);
   FIELD_RD (DIMLFAC, 40);
   FIELD_RS (SPLINESEGS, 70);
   FIELD_CAST (SPLFRAME, RS, B, 70);
-  DEBUG_HERE() //3d9
+  DEBUG_HERE //3d9
 
   dat->byte = 0x3ed;
   FIELD_CAST (MIRRTEXT, RS, B, 70); //confirmed
-  DEBUG_HERE() //3ef
+  DEBUG_HERE //3ef
   // UCS: 3ef
 
   dat->byte = 0x3fb;
   FIELD_3RD (UCSORG, 10); //ok
   FIELD_3RD (UCSXDIR, 11); //ok
   FIELD_3RD (UCSYDIR, 12); //ok
-  DEBUG_HERE() //443
+  DEBUG_HERE //443
   
   dat->byte = 0x47d;
   FIELD_RC (DIMTOFL, 70); //ok
-  DEBUG_HERE() //47e
+  DEBUG_HERE //47e
 
   dat->byte = 0x4c0;
   FIELD_RC (DIMSAH, 70); //ok
   FIELD_RC (DIMTIX, 70); //ok
   FIELD_RC (DIMSOXD, 70); //ok
   FIELD_RD (DIMTVP, 40); //ok
-  DEBUG_HERE() //4cb
+  DEBUG_HERE //4cb
 
   dat->byte = 0x4ee;
   DECODER {
@@ -204,7 +204,7 @@
     _obj->HANDSEED->absolute_ref = bit_read_RS(dat);
     LOG_TRACE("HANDSEED: %lu [long 5]\n", _obj->HANDSEED->absolute_ref)
   }
-  DEBUG_HERE() //4f0
+  DEBUG_HERE //4f0
 
   dat->byte = 0x4f6;
   FIELD_RS (SURFU, 70); //ok
@@ -212,11 +212,11 @@
   FIELD_RS (SURFTYPE, 70); //ok
   FIELD_RS (SURFTAB1, 70); //ok
   FIELD_RS (SURFTAB2, 70); //ok
-  DEBUG_HERE() //500 VPORT
+  DEBUG_HERE //500 VPORT
 
   dat->byte = 0x50c;
   FIELD_RS (SPLINETYPE, 70);
-  DEBUG_HERE() //50e
+  DEBUG_HERE //50e
   // 3
 
   dat->byte = 0x531;
@@ -226,7 +226,7 @@
   FIELD_RS (SHADEDGE, 70); //ok
   FIELD_RS (SHADEDIF, 70); //ok
   FIELD_RS (UNITMODE, 70); //ok
-  DEBUG_HERE() //53d
+  DEBUG_HERE //53d
   
   dat->byte = 0x5df;
   FIELD_RD (DIMTFAC, 40); //ok
@@ -242,7 +242,7 @@
   FIELD_3RD (PEXTMAX, 10); //
   FIELD_2RD (PLIMMIN, 10); //
   FIELD_2RD (PLIMMAX, 10); //
-  DEBUG_HERE() //687
+  DEBUG_HERE //687
 
   dat->byte = 0x6a9;
   FIELD_RS (MAXACTVP, 70); //ok

@@ -516,7 +516,7 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
           FIELD_TF (DIMBLK_T, 16, 5);  //?? unsupported by ODA
           FIELD_TF (DIMBLK1_T, 16, 6); //?? unsupported by ODA
           FIELD_TF (DIMBLK2_T, 66, 7); //?? unsupported by ODA
-          //DEBUG_HERE(); //e18
+          //DEBUG_HERE; //e18
           //dat->byte += 50; //unknown: DIMSHO, DIMASO (global)
           FIELD_RS (DIMCLRD_N, 176); //e4a
           FIELD_RS (DIMCLRE_N, 177);
@@ -1175,7 +1175,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
       LOG_TRACE("version: %s\n", _obj->version)
       for (i = 0; i < 4; i++)
         FIELD_B(null_b[i], 0);
-      //DEBUG_HERE();
+      //DEBUG_HERE;
       // documented as 0x18,0x78,0x01,0x04 for R13, 0x18,0x78,0x01,0x05 for R14
       // r14:      7d f4 78 01
       // r2000:    14 64 78 01
@@ -3121,7 +3121,7 @@ decode_preR13_entities(unsigned long start, unsigned long end,
       obj->tio.entity->objid = obj->index;
     
       obj->address = dat->byte;
-      DEBUG_HERE();
+      DEBUG_HERE;
       error |= decode_entity_preR13(dat, obj, ent); // error: eed not decodable
 
       switch (obj->type)
@@ -3298,7 +3298,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
   dat->byte = address;
   dat->bit = 0;
 
-  //DEBUG_HERE();
+  //DEBUG_HERE;
   /*
    * Reserve memory space for objects. A realloc violates all internal pointers.
    */
@@ -3605,7 +3605,10 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
           Dwg_Class *klass = NULL;
 
           // restart and read into the UNKNOWN_OBJ object
+          //obj->unknown_pos = bit_position(dat);
           bit_set_position(dat, object_address);
+          //obj->unknown_off = obj->unknown_pos - object_address;
+          //LOG_TRACE("Unknown pos %lu, offset %lu\n", obj->unknown_pos, obj->unknown_off);
 
           if (i > 0 && i <= (int)dwg->num_classes)
             {

@@ -1833,7 +1833,7 @@ DWG_OBJECT(DICTIONARY)
     {
       LOG_ERROR("Invalid dictionary with more than 10.000 entries. Handle: %lu\n",
               obj->handle.value);
-      DEBUG_HERE()
+      DEBUG_HERE_OBJ
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
 #endif
@@ -1887,7 +1887,7 @@ DWG_OBJECT(DICTIONARYWDFLT)
     {
       LOG_ERROR("Invalid dictionary with more than 10.000 entries. Handle: %lu\n",
               obj->handle.value);
-      DEBUG_HERE()
+      DEBUG_HERE_OBJ
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
 #ifdef IS_DXF
@@ -3481,7 +3481,7 @@ DWG_ENTITY(HATCH)
                       break;
                     default:
                       LOG_ERROR("Invalid type_status in HATCH entity\n")
-                      DEBUG_HERE()
+                      DEBUG_HERE_OBJ
                       return DWG_ERR_VALUEOUTOFBOUNDS;
                 }
             }
@@ -3811,7 +3811,7 @@ DWG_ENTITY(LWPOLYLINE)
 #ifndef IS_RELEASE
     if (FIELD_VALUE(num_points) > 0x10000) {
       LOG_ERROR("Invalid LWPOLYLINE.num_points %ld", (long)FIELD_VALUE(num_points));
-      DEBUG_HERE()
+      DEBUG_HERE_OBJ
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
 #endif
@@ -4032,7 +4032,7 @@ DWG_OBJECT_END
       break; \
     default: \
       LOG_ERROR("Invalid data type in TABLE entity\n") \
-      DEBUG_HERE() \
+      DEBUG_HERE_OBJ \
       return DWG_ERR_INVALIDTYPE; \
     } \
   SINCE(R_2007) \
@@ -4049,7 +4049,7 @@ DWG_OBJECT(FIELD)
   FIELD_T (code, 2); // and code 3 for subsequent >255 chunks
   FIELD_BL (num_childs, 90);
   DECODER { if (_obj->num_childs) _obj->num_childs--; }
-  //DEBUG_HERE()
+  //DEBUG_HERE_OBJ
   HANDLE_VECTOR (childs, num_childs, 3, 360);
   FIELD_BL (num_objects, 97);
   HANDLE_VECTOR (objects, num_objects, 5, 331);
@@ -4061,7 +4061,7 @@ DWG_OBJECT(FIELD)
   FIELD_BL (field_state, 94);
   FIELD_BL (evaluation_status, 95);
   FIELD_BL (evaluation_error_code, 96);
-  //DEBUG_HERE()
+  //DEBUG_HERE_OBJ
   FIELD_T (evaluation_error_msg, 300);
   Table_Value(value)
   FIELD_T (value_string, 301); // and 9 for subsequent >255 chunks
@@ -4547,7 +4547,7 @@ DWG_ENTITY(TABLE)
             break;
           default:
             LOG_ERROR("Invalid data_flags in TABLE entity %d\n", (int)FIELD_VALUE(data_flags))
-            DEBUG_HERE()
+            DEBUG_HERE_OBJ
             return DWG_ERR_INVALIDTYPE;
             //break;
         }
@@ -4572,7 +4572,7 @@ DWG_ENTITY(TABLE)
 #ifndef IS_RELEASE
   if (FIELD_VALUE(num_rows) > 0x1000) {
     LOG_ERROR("Invalid TABLE.num_rows %ld", (long)FIELD_VALUE(num_rows));
-    DEBUG_HERE()
+    DEBUG_HERE_OBJ
     return DWG_ERR_VALUEOUTOFBOUNDS;
   }
 #endif
@@ -5462,7 +5462,7 @@ DWG_OBJECT_END
 // (varies) UNTESTED
 DWG_OBJECT(OBJECT_PTR) //empty? only xdata. CAseDLPNTableRecord
 
-  DEBUG_HERE()
+  DEBUG_HERE_OBJ
   
 DWG_OBJECT_END
 
@@ -5482,13 +5482,13 @@ DWG_OBJECT(DBCOLOR)
   //FIELD_BS (color, 62); <= EED 1070 @224-233
   //FIELD_RL (rgb, 420);  <= EED 1071
   //FIELD_T (name, 430);  <= EED 1000
-  DEBUG_HERE()
+  DEBUG_HERE_OBJ
   START_HANDLE_STREAM; //@264-295
   FIELD_HANDLE (parenthandle, 3, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
   //TODO copy of the EED data? big hole from 296-753
-  DEBUG_HERE()
+  DEBUG_HERE_OBJ
 DWG_OBJECT_END
 
 /* In work area:
@@ -5524,12 +5524,12 @@ DWG_OBJECT(MATERIAL)
   FIELD_T (name, 1);
   FIELD_T (desc, 2);
 
-  DEBUG_HERE(); // TODO from here on the order of the fields is unknown
+  DEBUG_HERE_OBJ; // TODO from here on the order of the fields is unknown
   FIELD_BS (ambient_color_flag, 70); // 0 Use current color, 1 Override
   FIELD_BD (ambient_color_factor, 40); // 0.0 - 1.0
   FIELD_CMC (ambient_color, 90);
 
-  DEBUG_HERE();
+  DEBUG_HERE_OBJ;
   FIELD_BS (diffuse_color_flag, 71); // 0 Use current color, 1 Override
   FIELD_BD (diffuse_color_factor, 41); // 0.0 - 1.0
   FIELD_CMC (diffuse_color, 91);
@@ -5540,7 +5540,7 @@ DWG_OBJECT(MATERIAL)
   FIELD_BS (diffusemap_tiling, 74);     // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
   FIELD_BS (diffusemap_autotransform, 75); // 1 no, 2: scale to curr ent,
                                            // 4: w/ current block transform
-  DEBUG_HERE();
+  DEBUG_HERE_OBJ;
   FIELD_VECTOR_N (diffusemap_transmatrix, BD, 16, 43);
 
   FIELD_BD (specular_gloss_factor, 44); //def: 0.5
@@ -5564,7 +5564,7 @@ DWG_OBJECT(MATERIAL)
   FIELD_BS (reflectionmap_tiling, 173); // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
   FIELD_BS (reflectionmap_autotransform, 174); // 1 no, 2: scale to curr ent,
                                         // 4: w/ current block transform
-  DEBUG_HERE();
+  DEBUG_HERE_OBJ;
   FIELD_VECTOR_N (reflectionmap_transmatrix, BD, 16, 49);
 
   FIELD_BD (opacity_percent, 140); //def: 1.0
@@ -5575,7 +5575,7 @@ DWG_OBJECT(MATERIAL)
   FIELD_BS (opacitymap_tiling, 177); // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
   FIELD_BS (opacitymap_autotransform, 178); // 1 no, 2: scale to curr ent,
                                         // 4: w/ current block transform
-  DEBUG_HERE();
+  DEBUG_HERE_OBJ;
   FIELD_VECTOR_N (opacitymap_transmatrix, BD, 16, 142);
 
   FIELD_BS (bumpmap_source, 179); // 0 current, 1 image file (default)
@@ -5585,7 +5585,7 @@ DWG_OBJECT(MATERIAL)
   FIELD_BS (bumpmap_tiling, 271); // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
   FIELD_BS (bumpmap_autotransform, 272); // 1 no, 2: scale to curr ent,
                                         // 4: w/ current block transform
-  DEBUG_HERE();
+  DEBUG_HERE_OBJ;
   FIELD_VECTOR_N (bumpmap_transmatrix, BD, 16, 144);
 
   FIELD_BD (refraction_index, 145); //def: 1.0
@@ -5602,7 +5602,7 @@ DWG_OBJECT(MATERIAL)
   FIELD_BD (reflectance_scale, 462);
   FIELD_BD (transmittance_scale, 463);
   FIELD_B (two_sided_material, 290);
-  DEBUG_HERE();
+  DEBUG_HERE_OBJ;
   FIELD_BD (luminance, 464);
   FIELD_BS (luminance_mode, 270);
   FIELD_BS (normalmap_method, 271);
@@ -5614,7 +5614,7 @@ DWG_OBJECT(MATERIAL)
   FIELD_BS (normalmap_tiling, 74); // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
   FIELD_BS (normalmap_autotransform, 43); // 0 inherit, 1 no, 2 object (scale to curr ent),
                                           // 4 model (w/ current block transform)
-  DEBUG_HERE();
+  DEBUG_HERE_OBJ;
   FIELD_VECTOR_N (normalmap_transmatrix, BD, 16, 43);
   FIELD_B (materials_anonymous, 293);
   FIELD_BS (global_illumination_mode, 272); // 0 none, 1 cast, 2 receive, 3 cast&receive
@@ -5633,7 +5633,7 @@ DWG_OBJECT(MATERIAL)
   FIELD_BL (self_illumination, 90);
   FIELD_BD (reflectivity, 468);
   FIELD_BL (illumination_model, 93);
-  DEBUG_HERE();
+  DEBUG_HERE_OBJ;
   FIELD_BL (channel_flags, 94);
   //78
   //172
@@ -5754,6 +5754,7 @@ DWG_ENTITY_END
 // DXF docs put that as Entity, wrong
 DWG_OBJECT(SUN)
 
+  //DEBUG_POS_OBJ
   DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS(AcDbSun)
     FIELD_BL (class_version, 90); //1
@@ -5762,10 +5763,14 @@ DWG_OBJECT(SUN)
   FIELD_B (is_on, 290); // status, isOn
   FIELD_B (has_shadow, 291); // shadow on/off
   FIELD_B (is_dst, 292);  // isDayLightSavingsOn
-  FIELD_BL (julian_day, 91);
+  //FIELD_B (is_dst, 292);
+  //FIELD_B (is_dst, 292);
+  DEBUG_POS_OBJ
+  FIELD_BL (julian_day, 91); // same as TIMEBLL
   FIELD_BL (time, 92);    // in seconds past midnight
+  //DEBUG_POS_OBJ
   FIELD_BD (intensity, 40);
-  //DEBUG_HERE()
+  //DEBUG_HERE_OBJ
   //FIELD_CMC (color, 63);
   //FIELD_BD (altitude, 0); //calculated?
   //FIELD_BD (azimuth, 0);  //calculated?
@@ -5777,13 +5782,13 @@ DWG_OBJECT(SUN)
       LOG_ERROR("Invalid SUN.shadow_type %d", (int)FIELD_VALUE(shadow_type));
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
+    FIELD_BS (shadow_softness, 280); //1
     FIELD_BS (shadow_mapsize, 71); //256 usually
-    FIELD_BS (shadow_softness, 280);
   }
   //there's still 5.4 - 11.3 bits free for some fields
   //421:16777215
 
-  DEBUG_HERE() //DEBUG_POS()
+  DEBUG_HERE_OBJ //DEBUG_POS_OBJ
   rcount1 = bit_position(dat);
   rcount2 = rcount1 - obj->address * 8; // cur offset
   FIELD_VALUE(num_bytes) = (obj->bitsize - rcount2) / 8;
@@ -5801,7 +5806,7 @@ DWG_OBJECT(SUN)
        dat->byte < obj->address+obj->size;
        bit_set_position(dat,++vcount))
     {
-      DEBUG_POS()
+      DEBUG_POS_OBJ
       // @9979.6 5.0.0, @9980.0 4.0.0, @9991.1 3.0.0
       // search for a valid code=4 handle followed by a valid code=3
       FIELD_HANDLE(parenthandle, 4, 330);
@@ -5827,7 +5832,7 @@ DWG_OBJECT(SUN)
   REACTORS(4);
   XDICOBJHANDLE(3); //@9991.1
   FIELD_HANDLE (skyparams, 5, 0); //AcGiSkyParameters class?
-  DEBUG_POS() //@9992.1
+  DEBUG_POS_OBJ //@9992.1
 
 DWG_OBJECT_END
 
@@ -5889,7 +5894,7 @@ DWG_OBJECT_END
 DWG_ENTITY(HELIX)
 
   SUBCLASS (AcDbHelix)
-  DEBUG_HERE()
+  DEBUG_HERE_OBJ
   FIELD_BS (major_version, 90);
   FIELD_BS (maint_version, 91);
   FIELD_3BD (axis_base_pt, 10);
@@ -5999,16 +6004,16 @@ DWG_ENTITY_END
 DWG_OBJECT(ASSOCACTION)
   rcount1 = bit_position(dat);
   FIELD_B (is_body_a_proxy, 90); //0-9
-  DEBUG_HERE()
+  DEBUG_HERE_OBJ
   //17bit 00101000101000101:
   FIELD_T (body.evaluatorid, 0);
   FIELD_T (body.expresssion, 0);
   FIELD_BL (body.value, 0); //rbuf really
   //FIELD_B (is_actionevaluation_in_progress, 90);
-  DEBUG_POS()
+  DEBUG_POS_OBJ
   bit_set_position(dat, rcount1 + 27);
   FIELD_BL (status, 90); //27-36
-  DEBUG_HERE()
+  DEBUG_HERE_OBJ
   FIELD_HANDLE (actionbody, 5, 0);
   FIELD_HANDLE (callback, 3, 0);
   FIELD_HANDLE (owningnetwork, 3, 0);
@@ -6107,7 +6112,7 @@ DWG_OBJECT_END
 DWG_OBJECT(DATATABLE)
 
   SUBCLASS (AcDbDataTable)
-  DEBUG_HERE()
+  DEBUG_HERE_OBJ
   
 DWG_OBJECT_END
 

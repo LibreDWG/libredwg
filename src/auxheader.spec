@@ -55,9 +55,9 @@
     #define FORMAT_RS "%" PRIu16
   }
   FIELD_TFF(unknown_rc, 20, 0) // documented as 5xRL, but really looks like some RC flags
-  DEBUG_HERE();
+  DEBUG_HERE;
   FIELD_RD(TDCREATE, 0);
-  DEBUG_HERE();
+  DEBUG_HERE;
   FIELD_RD(TDUPDATE, 0);
   FIELD_RL(HANDSEED, 0);
   FIELD_RL(plot_stamp, 0);
@@ -71,7 +71,7 @@
   FIELD_RL(zero_6, 0);
   FIELD_RL(zero_7, 0);
   FIELD_RL(zero_8, 0);
-  DEBUG_HERE();
+  DEBUG_HERE;
 
   SINCE(R_2018) {
     for (i = 0; i < 3; i++) {

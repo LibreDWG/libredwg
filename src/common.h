@@ -65,8 +65,10 @@
 #define LATER_VERSIONS else
 #define RESET_VER cur_ver = dat->version;
 
-#define DEBUG_POS()
-#define DEBUG_HERE()
+#define DEBUG_POS
+#define DEBUG_HERE
+#define DEBUG_POS_OBJ
+#define DEBUG_HERE_OBJ
 
 #define DWG_VERSIONS 20
 typedef enum DWG_VERSION_TYPE
