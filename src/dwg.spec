@@ -5766,14 +5766,18 @@ DWG_OBJECT(SUN)
   FIELD_BL (time, 92);    // in seconds past midnight
   FIELD_BD (intensity, 40);
   //DEBUG_HERE()
-  FIELD_CMC (color, 63);
+  //FIELD_CMC (color, 63);
   //FIELD_BD (altitude, 0); //calculated?
   //FIELD_BD (azimuth, 0);  //calculated?
   //FIELD_3BD (direction, 0); //calculated?
   if (FIELD_VALUE(has_shadow))
   {
     FIELD_BS (shadow_type, 70); // 0 raytraced, 1 shadow maps
-    FIELD_BS (shadow_mapsize, 71);
+    if (FIELD_VALUE(shadow_type)>2) {
+      LOG_ERROR("Invalid SUN.shadow_type %d", (int)FIELD_VALUE(shadow_type));
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
+    FIELD_BS (shadow_mapsize, 71); //256 usually
     FIELD_BS (shadow_softness, 280);
   }
   //there's still 5.4 - 11.3 bits free for some fields
@@ -5781,7 +5785,7 @@ DWG_OBJECT(SUN)
 
   DEBUG_HERE() //DEBUG_POS()
   rcount1 = bit_position(dat);
-  rcount2 = rcount1 - obj->address * 8;
+  rcount2 = rcount1 - obj->address * 8; // cur offset
   FIELD_VALUE(num_bytes) = (obj->bitsize - rcount2) / 8;
   FIELD_VALUE(num_bits)  = (obj->bitsize - rcount2) % 8;
   LOG_TRACE("num_bytes: %d, num_bits: %d\n", FIELD_VALUE(num_bytes), FIELD_VALUE(num_bits));
@@ -5791,7 +5795,7 @@ DWG_OBJECT(SUN)
   }
   bit_set_position(dat, rcount1 + 60);
 
-#if 1
+#if 0
   //find handle stream
   for (vcount=bit_position(dat);
        dat->byte < obj->address+obj->size;
@@ -5819,10 +5823,10 @@ DWG_OBJECT(SUN)
 #endif
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (skyparams, 5, 0); //AcGiSkyParameters class?
   FIELD_HANDLE (parenthandle, 4, 0); //@9980.0, @9981.3, @9985.5 (11.0.0)
   REACTORS(4);
   XDICOBJHANDLE(3); //@9991.1
+  FIELD_HANDLE (skyparams, 5, 0); //AcGiSkyParameters class?
   DEBUG_POS() //@9992.1
 
 DWG_OBJECT_END
