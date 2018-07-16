@@ -6056,27 +6056,48 @@ DWG_OBJECT(ASSOCOSNAPPOINTREFACTIONPARAM)
   XDICOBJHANDLE(3);
 DWG_OBJECT_END
 
+/* todo: [360 2E2] 01000000
+         [91 0] 01
+0010000000 [96 1]
+ 1010000000101000000011 [?]
+0010010000 [93 32]
+0010000000 [95 1]
+ 10010111111101111111011111110111111001111111011111110111111101111111 [?]
+0001111101111111011111110111111101 [92 -1]
+ 10011101111111011111110111111101111100011000000011 [?]
+0010000000 [97 1]
+ 100110001 [?]
+0010000000 [90 1]
+ 1001000011100000000000000000000011000 [?]
+ */
 DWG_OBJECT(EVALUATION_GRAPH)
 
   SUBCLASS(AcDbEvalGraph)
-  FIELD_BL(has_graph, 96); //1
+  FIELD_BL(has_graph, 96); //1-10
   if (FIELD_VALUE(has_graph))
     {
-      FIELD_BL(nodeid, 91); //0 nodeid
-      FIELD_BL(edge_flags, 93); //32 @32-41? edge_flags
-      FIELD_BL(num_nodes, 95); // 1 num_nodes?
-      REPEAT (num_nodes, nodes, Dwg_EVAL_Node)
-        {
-          FIELD_HANDLE(nodes->evalexpr, 5, 360); // @32-39 AcDbEvalExpr (ACSH_SWEEP_CLASS)
-          FIELD_RL(nodes->edge_from, 92);  // -1 @82-113
-          FIELD_RL(nodes->edge_to, 92);    // -1
-          FIELD_RL(nodes->edge_from2, 92); // -1
-          FIELD_RL(nodes->edge_to2, 92);   // -1
-        }
-      SET_PARENT_OBJ(nodes)
-      END_REPEAT(nodes)
+      DEBUG_HERE_OBJ
+      FIELD_BS(nodeid, 91); //0 nodeid... 11-12
+      //13-32
+      DEBUG_HERE_OBJ
+      bit_read_fixed(dat, _obj->hole1, 20);
+      //bit_advance_position(dat, 33-13);
+      FIELD_BL(edge_flags, 93); //33-42 edge_flags
+      FIELD_BL(unknown_bl, 97); //1
+      //53-120
+      DEBUG_HERE_OBJ
+      bit_read_fixed(dat, _obj->hole2, 68);
+      //bit_advance_position(dat, 68);
+      FIELD_BL(nodes_edges, 92);  // -1 @121-154
+      //155-204
+      DEBUG_HERE_OBJ
+      bit_read_fixed(dat, _obj->hole3, 50);
+      //bit_advance_position(dat, 205-155);
+      FIELD_BL(num_evalexpr, 95); // 1
+      if (_obj->num_evalexpr > 10)
+        return DWG_ERR_VALUEOUTOFBOUNDS;
+      HANDLE_VECTOR(evalexpr, num_evalexpr, 5, 360);
     }
-  FIELD_BL(unknown_bl, 97); //1
 
   START_HANDLE_STREAM;
   REACTORS(4);

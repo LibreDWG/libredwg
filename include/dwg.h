@@ -4448,21 +4448,22 @@ typedef struct _dwg_EVAL_Node
 {
   struct _dwg_object_EVALUATION_GRAPH *parent;
   BITCODE_H   evalexpr;   // 360
-  BITCODE_RL  edge_from;  // 92
-  BITCODE_RL  edge_to;    // 92
-  BITCODE_RL  edge_from2; // 92
-  BITCODE_RL  edge_to2;   // 92
+  BITCODE_BL  edges;      // 4x 92, def: 4x -1
 } Dwg_EVAL_Node;
 
 typedef struct _dwg_object_EVALUATION_GRAPH
 {
   struct _dwg_object_object *parent;
   BITCODE_BL  has_graph; //96
-  BITCODE_BL  unknown_bl; // 97
   BITCODE_BL  nodeid;     // 91
+  char hole1[20];
   BITCODE_BL  edge_flags; // 93
-  BITCODE_BL  num_nodes;  // 95
-  Dwg_EVAL_Node *nodes;
+  BITCODE_BL  unknown_bl; // 97
+  char hole2[68];
+  BITCODE_BL  nodes_edges; // 92
+  char hole3[50];
+  BITCODE_BL  num_evalexpr; // 95
+  BITCODE_H* evalexpr; //360
 
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
