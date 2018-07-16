@@ -303,7 +303,7 @@ static void
 bits_try_handle (struct _unknown_field *g, int code, unsigned int objhandle)
 {
   Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
-  dat.chain = calloc(16,1);
+  dat.chain = calloc(1,16);
 
   bits_handle(&dat, g, code, objhandle);
 
@@ -316,7 +316,7 @@ bits_format (struct _unknown_field *g, const int is16)
 {
   int code = g->code;
   Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
-  dat.chain = calloc(16,1);
+  dat.chain = calloc(1,16);
   if (is16)
     dat.version = R_2007;
 
@@ -475,7 +475,7 @@ set_possible(struct _dxf *dxf, const struct _unknown_field *g, const int i)
 }
 #endif
 
-#define BIT(b,i) ((b[(i)/8] >> (i)%8) & 1)
+#define BIT(b,i) (((b)[(i)/8] >> (8-((i)%8))) & 1)
 
 // like memmem but for bits, not bytes.
 // search for the bits of small in big. returns the bit offset in big or -1.
@@ -565,8 +565,12 @@ main (int argc, char *argv[])
           continue;
       if (file && strcmp(file, unknown_dxf[i].dxf))
           continue;
-      dxf[i].found = calloc(unknown_dxf[i].bitsize, 1);
-      dxf[i].possible = calloc(unknown_dxf[i].bitsize, 1);
+      /*if (!strcmp(unknown_dxf[i].name, "TABLEGEOMETRY")) {
+        printf("skip TABLEGEOMETRY\n");
+        continue;
+      }*/
+      dxf[i].found = calloc(1, unknown_dxf[i].bitsize);
+      dxf[i].possible = calloc(1, unknown_dxf[i].bitsize);
       //TODO offline: find the shortest objects.
       printf("\n%s: 0x%X (%d) %s\n", unknown_dxf[i].name, unknown_dxf[i].handle,
              size, unknown_dxf[i].dxf);
@@ -616,7 +620,7 @@ main (int argc, char *argv[])
             }
             if (g[j].type == BITS_BS && strlen(g[j].value) < 3) {
               Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
-              dat.chain = calloc(16,1);
+              dat.chain = calloc(1,16);
 
               bits_RC (&dat, &g[j]);
               g[j].bytes = dat.chain;
@@ -629,7 +633,7 @@ main (int argc, char *argv[])
             }
             if (g[j].type == BITS_BS) {
               Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
-              dat.chain = calloc(16,1);
+              dat.chain = calloc(1,16);
 
               bits_BL (&dat, &g[j]);
               g[j].bytes = dat.chain;
@@ -652,7 +656,7 @@ main (int argc, char *argv[])
             }
             if (g[j].type == BITS_BL) {
               Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
-              dat.chain = calloc(16,1);
+              dat.chain = calloc(1,16);
 
               bits_BS (&dat, &g[j]);
               g[j].bytes = dat.chain;
@@ -675,7 +679,7 @@ main (int argc, char *argv[])
             }
             if (g[j].type == BITS_RC) {
               Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
-              dat.chain = calloc(16,1);
+              dat.chain = calloc(1,16);
 
               bits_BS (&dat, &g[j]);
               g[j].bytes = dat.chain;
@@ -688,7 +692,7 @@ main (int argc, char *argv[])
             }
             if (g[j].type == BITS_BD) {
               Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
-              dat.chain = calloc(16,1);
+              dat.chain = calloc(1,16);
 
               bits_RD (&dat, &g[j]);
               g[j].bytes = dat.chain;
@@ -705,7 +709,7 @@ main (int argc, char *argv[])
             if (g[j].type == BITS_RD && strlen(g[j].value) >= 3) {
               double d;
               Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
-              dat.chain = calloc(16,1);
+              dat.chain = calloc(1,16);
 
               bits_BD (&dat, &g[j]); //g.value -> dat
               g[j].bytes = dat.chain;
@@ -746,7 +750,7 @@ main (int argc, char *argv[])
                     printf("  found unprecise BD %f value (38bit)\n", d);
                     goto FOUND;
                   } else {
-                    printf("  result too unprecise BD %f (38bit)\n", d);
+                    printf("  result too unprecise BD (38bit)\n");
                   }
                 }
               }
@@ -755,7 +759,7 @@ main (int argc, char *argv[])
             if (g[j].type == BITS_RD && strlen(g[j].value) >= 3) {
               double d;
               Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
-              dat.chain = calloc(16,1);
+              dat.chain = calloc(1,16);
 
               bits_RD (&dat, &g[j]); //g.value -> dat
               g[j].bytes = dat.chain;
@@ -806,7 +810,7 @@ main (int argc, char *argv[])
             if (code >= 1 && code <= 3) {
               Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
               int len = strlen(g[j].value);
-              dat.chain = calloc(16,1);
+              dat.chain = calloc(1,16);
 
               if (is16)
                 {
@@ -833,6 +837,8 @@ main (int argc, char *argv[])
                   if (num_found)
                     goto FOUND;
                 }
+              else
+                free (dat.chain);
             }
             continue;
           }
@@ -981,6 +987,9 @@ main (int argc, char *argv[])
 
       //TODO: try likely field combinations and print the top 3.
       //there are various heuristics, like the handle stream at the end
+
+      free (dxf[i].found);
+      free (dxf[i].possible);
     }
 
   printf("summary: %ld/%ld=%.2f%%\n", sum_filled, sum_size,

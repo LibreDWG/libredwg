@@ -1557,7 +1557,9 @@ bit_print(Bit_Chain * dat, long unsigned int size)
   puts("---------------------------------------------------------");
 }
 
-#define BIT(b,i) ((b[(i)/8] >> (i)%8) & 1)
+// The i-th bit of a string.
+// 0b1000_0000,0 >> 8 = 1
+#define BIT(b,i) (((b)[(i)/8] >> (8-((i)%8))) & 1)
 
 void
 bit_print_bits(unsigned char* bits, long unsigned int size)
