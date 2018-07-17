@@ -6080,19 +6080,20 @@ DWG_OBJECT(EVALUATION_GRAPH)
       FIELD_BS(nodeid, 91); //0 nodeid... 11-12
       //13-32
       DEBUG_HERE_OBJ
-      bit_read_fixed(dat, _obj->hole1, 20);
-      //bit_advance_position(dat, 33-13);
+      //bit_read_fixed(dat, _obj->hole1, 3);
+      bit_advance_position(dat, 20);
+      DEBUG_HERE_OBJ
       FIELD_BL(edge_flags, 93); //33-42 edge_flags
       FIELD_BL(unknown_bl, 97); //1
       //53-120
       DEBUG_HERE_OBJ
-      bit_read_fixed(dat, _obj->hole2, 68);
-      //bit_advance_position(dat, 68);
+      //bit_read_fixed(dat, _obj->hole2, 9);
+      bit_advance_position(dat, 120-52);
       FIELD_BL(nodes_edges, 92);  // -1 @121-154
       //155-204
       DEBUG_HERE_OBJ
-      bit_read_fixed(dat, _obj->hole3, 50);
-      //bit_advance_position(dat, 205-155);
+      //bit_read_fixed(dat, _obj->hole3, 7);
+      bit_advance_position(dat, 50);
       FIELD_BL(num_evalexpr, 95); // 1
       if (_obj->num_evalexpr > 10)
         return DWG_ERR_VALUEOUTOFBOUNDS;

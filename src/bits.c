@@ -1192,7 +1192,7 @@ bit_read_TF(Bit_Chain *restrict dat, int length)
   bit_read_fixed(dat, chain, length);
   chain[length] = '\0';
 
-  return (char*)chain;
+  return chain;
 }
 
 void
@@ -1200,7 +1200,7 @@ bit_read_fixed(Bit_Chain *restrict dat, char *restrict dest, int length)
 {
   for (int i = 0; i < length; i++)
     {
-      dest[i] = bit_read_RC(dat);
+      dest[i] = (char)bit_read_RC(dat);
     }
 }
 
@@ -1570,6 +1570,17 @@ bit_print_bits(unsigned char* bits, long unsigned int size)
       printf("%d", BIT(bits, i) ? 1 : 0);
     }
   printf("\n");
+}
+
+void
+bit_errprint_bits(unsigned char* bits, long unsigned int size)
+{
+  for (long unsigned int i = 0; i < size; i++)
+    {
+      //if (i % 8 == 0) printf(" ");
+      fprintf(stderr, "%d", BIT(bits, i) ? 1 : 0);
+    }
+  fprintf(stderr, "\n");
 }
 
 void
