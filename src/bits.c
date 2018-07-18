@@ -1573,14 +1573,10 @@ bit_print_bits(unsigned char* bits, long unsigned int size)
 }
 
 void
-bit_errprint_bits(unsigned char* bits, long unsigned int size)
+bit_fprint_bits(FILE* fp, unsigned char* bits, long unsigned int size)
 {
   for (long unsigned int i = 0; i < size; i++)
-    {
-      //if (i % 8 == 0) printf(" ");
-      fprintf(stderr, "%d", BIT(bits, i) ? 1 : 0);
-    }
-  fprintf(stderr, "\n");
+    fprintf(fp, "%d", BIT(bits, i) ? 1 : 0);
 }
 
 void

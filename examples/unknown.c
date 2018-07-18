@@ -29,6 +29,7 @@
 #include <string.h>
 #include <alloca.h>
 #include <math.h>
+#include <libgen.h> //dirname,basename
 
 #include "dwg.h"
 #include "../src/bits.h"
@@ -538,10 +539,12 @@ search_bits(int j, struct _unknown_field *g, struct _unknown_dxf *udxf,
 int
 main (int argc, char *argv[])
 {
-  int i = 1, j;
+  int i = 1, ic, j, num_classes;
   long sum_filled = 0, sum_size = 0;
   char *class = NULL;
   char *file = NULL;
+#define MAX_CLASSES 100
+  char *classes[MAX_CLASSES]; //create files per classes
   struct _dxf *dxf = calloc(sizeof(unknown_dxf)/sizeof(unknown_dxf[0]), sizeof(struct _dxf));
   #include "alldxf_2.inc"
 
@@ -551,16 +554,64 @@ main (int argc, char *argv[])
   }
   if (argc-i >= 2 && !strcmp(argv[i], "--file"))
       file = argv[i+1];
+  // process per class, not per logged instances.
+  if (!class)
+    {
+      num_classes = 0;
+      for (i=0; unknown_dxf[i].name; i++)
+        { //TODO: alldwg/alldxf needs to be sorted per class, not file.
+          if (class != unknown_dxf[i].name) {
+            classes[num_classes++] = (char*)unknown_dxf[i].name;
+            class = (char*)unknown_dxf[i].name;
+            if (num_classes >= MAX_CLASSES) {
+              fprintf(stderr, "Too many classes: %d (unsorted?)\n", MAX_CLASSES);
+              break;
+            }
+          }
+        }
+    }
+  else {
+    num_classes = 1;
+    classes[0] = class;
+  }
+  for (ic=0; ic < num_classes; ic++)
+  {
+    FILE *pi;
+    char pi_fn[80];
+    int k = 0;
+    long class_filled = 0, class_size = 0;
+    char *dn;
+
+    class = classes[ic];
+    // dirname should be examples/
+    dn = dirname(argv[0]);
+    if (dn && !strcmp(basename(dn), "examples"))
+      {
+        strcpy(pi_fn, dn);
+        strcat(pi_fn, "/");
+      }
+    else
+      strcpy(pi_fn, "");
+    strcat(pi_fn, class);
+    strcat(pi_fn, ".pi");
+    pi = fopen(pi_fn, "w");
+    fprintf(pi, "import unknown.\n\n"
+            "/* %s field packing problem.\n"
+            "   examples/unknown generated example, needs picat-lang.org.\n"
+            "   Usage: picat [-g go2] %s\n"
+            "*/\n", class, pi_fn);
   for (i=0; unknown_dxf[i].name; i++)
     {
       int num_fields;
-      int num_found;
+      int num_found = -1;
       int size = unknown_dxf[i].bitsize;
       struct _unknown_field *g = (struct _unknown_field *)unknown_dxf[i].fields;
       const int is16 = strstr(unknown_dxf[i].dxf, "/2007/") ||
                        strstr(unknown_dxf[i].dxf, "/201")   ||
                        strstr(unknown_dxf[i].dxf, "_2007.dxf") ||
                        strstr(unknown_dxf[i].dxf, "_201");
+      int have_struct = 0;
+
       if (class && strcmp(class, unknown_dxf[i].name))
           continue;
       if (file && strcmp(file, unknown_dxf[i].dxf))
@@ -576,8 +627,20 @@ main (int argc, char *argv[])
              size, unknown_dxf[i].dxf);
       printf("  =bits:\n"); bit_print_bits((unsigned char*)unknown_dxf[i].bytes,
                                           size);
+      fprintf(pi,
+              "def(%d,S,Fields) =>\n"
+              "  println(\"%s: 0x%X (%d) %s:\"),\n",
+              k, class, unknown_dxf[i].handle, size, unknown_dxf[i].dxf);
+      fprintf(pi,
+              "  S=\"");
+      bit_fprint_bits(pi, (unsigned char*)unknown_dxf[i].bytes, size);
+      fprintf(pi,
+              "\",\n"
+              "  %% name: [1] bits, [2] value, [3] positions, [4] name, [5] dxfcode\n"
+              "  Fields = [\n");
       for (j=0; g[j].code; j++)
         {
+          /*char piname[30];*/
           int offset = 0;
           printf("%d: %s\n", g[j].code, g[j].value);
           if (g[j].code == 100 || g[j].code == 102) {
@@ -586,6 +649,7 @@ main (int argc, char *argv[])
           if (g[j].code >= 1000) {
             continue;
           }
+          //if we came here from continue, i.e. not_found
           //store the binary repr
           bits_format(&g[j], is16);
         SEARCH:
@@ -840,9 +904,27 @@ main (int argc, char *argv[])
               else
                 free (dat.chain);
             }
+
+            if (!num_found)
+              {
+                // unfound DXF field for the picat file
+                fprintf(pi,
+                        "    %%new_struct('X%s%d', [\"",
+                        dwg_bits_name[g[j].type], g[j].code);
+                bit_fprint_bits(pi, g[j].bytes, g[j].bitsize);
+                fprintf(pi,
+                        "\", '%s', []])\n", g[j].value);
+              }
             continue;
           }
         FOUND:
+          fprintf(pi,
+                  "    %snew_struct('%s%d', [\"",
+                  have_struct ? "," : " ", dwg_bits_name[g[j].type], g[j].code);
+          have_struct = 1;
+          bit_fprint_bits(pi, g[j].bytes, g[j].bitsize);
+          fprintf(pi,
+                  "\", '%s', []]) %%\n", g[j].value);
           if (num_found == 1) {
             //we still need to skip already reserved offsets
             if (set_found(&dxf[i], &g[j])) {
@@ -951,6 +1033,9 @@ main (int argc, char *argv[])
           }
           */
         }
+      fprintf(pi,
+              "  ],\n"
+              "  go(S,Fields).\n\n");
       num_fields = j;
       // check for holes and percentage of found ranges
       /*printf("coverage: [");
@@ -970,6 +1055,8 @@ main (int argc, char *argv[])
                   unknown_dxf[i].name, unknown_dxf[i].dxf, unknown_dxf[i].handle,
                   unknown_dxf[i].bitsize);
         }
+      class_filled += dxf[i].num_filled;
+      class_size += size;
       sum_filled += dxf[i].num_filled;
       sum_size += size;
       printf("possible: [");
@@ -990,7 +1077,22 @@ main (int argc, char *argv[])
 
       free (dxf[i].found);
       free (dxf[i].possible);
+      k++;
     }
+    //class_summary
+    fprintf(pi, "\n%% summary: %ld/%ld=%.1f%%\n\n", class_filled, class_size,
+           100.0*class_filled/class_size);
+
+    for (i=0; i<k; i++) {
+      fprintf(pi, "go%d ?=> def(%d,S,Fields).\n", i, i);
+    }
+    fprintf(pi, "\nmain => go0,\n");
+    for (i=1; i<k-1; i++) {
+      fprintf(pi, "        go%d,\n", i);
+    }
+    fprintf(pi, "        go%d.\n", k-1);
+    fclose(pi);
+  }
 
   printf("summary: %ld/%ld=%.2f%%\n", sum_filled, sum_size,
          100.0*sum_filled/sum_size);

@@ -286,8 +286,9 @@
     char *tmp; BITCODE_BB bb = 0; BITCODE_RS rs; BITCODE_RL rl;\
     Dwg_Handle hdl; \
     tmp = bit_read_TF(dat, 24);\
-    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE) \
-      bit_errprint_bits((unsigned char*)tmp, 68); \
+    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE) { \
+      bit_fprint_bits(stderr, (unsigned char*)tmp, 68); fprintf(stderr,"\n"); \
+    } \
     LOG_TRACE_TF(tmp, 24);\
     SINCE(R_13) {\
       *dat = here;\
