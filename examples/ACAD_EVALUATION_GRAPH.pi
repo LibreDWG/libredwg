@@ -2,7 +2,7 @@ import unknown.
 
 /* ACAD_EVALUATION_GRAPH field packing problem.
    examples/unknown generated example, needs picat-lang.org.
-   Usage: picat [-g go2] examples/examples/ACAD_EVALUATION_GRAPH.pi
+   Usage: picat [-g go2] examples/ACAD_EVALUATION_GRAPH.pi
 */
 def(0,S,Fields) =>
   println("ACAD_EVALUATION_GRAPH: 0x1E9E4C (103) test/test-data/2004/CascoUrbano.dxf:"),
