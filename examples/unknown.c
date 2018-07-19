@@ -636,11 +636,11 @@ main (int argc, char *argv[])
           bit_fprint_bits(pi, (unsigned char*)unknown_dxf[i].bytes, size);
           fprintf(pi,
                   "\",\n"
-                  "  %% name: [1] bits, [2] value, [3] positions, [4] name, [5] dxfcode\n"
+                  "  %% name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode\n"
                   "  Fields = [\n");
           for (j=0; g[j].code; j++)
             {
-              /*char piname[30];*/
+              char *piname;
               int offset = 0;
               printf("%d: %s\n", g[j].code, g[j].value);
               if (g[j].code == 100 || g[j].code == 102) {
@@ -907,10 +907,13 @@ main (int argc, char *argv[])
 
                 if (!num_found)
                   {
-                    // unfound DXF field for the picat file
+                    piname = (char*)dwg_bits_name[g[j].type];
+                    if (!strcmp(piname, "HANDLE")) piname = (char*)"H";
+                    // unfound DXF field for the picat file.
+                    // later could be used as hints for the picat solver
                     fprintf(pi,
-                            "    %%new_struct('X%s%d', [\"",
-                            dwg_bits_name[g[j].type], g[j].code);
+                            "    %%new_struct('_%s%d', [\"",
+                            piname, g[j].code);
                     bit_fprint_bits(pi, g[j].bytes, g[j].bitsize);
                     fprintf(pi,
                             "\", '%s', []])\n", g[j].value);
@@ -918,13 +921,15 @@ main (int argc, char *argv[])
                 continue;
               }
             FOUND:
+              piname = (char*)dwg_bits_name[g[j].type];
+              if (!strcmp(piname, "HANDLE")) piname = (char*)"H";
               fprintf(pi,
                       "    %snew_struct('%s%d', [\"",
-                      have_struct ? "," : " ", dwg_bits_name[g[j].type], g[j].code);
+                      have_struct ? "," : " ", piname, g[j].code);
               have_struct = 1;
               bit_fprint_bits(pi, g[j].bytes, g[j].bitsize);
               fprintf(pi,
-                      "\", '%s', []]) %%\n", g[j].value);
+                      "\", '%s', []])\n", g[j].value);
               if (num_found == 1) {
                 //we still need to skip already reserved offsets
                 if (set_found(&dxf[i], &g[j])) {
