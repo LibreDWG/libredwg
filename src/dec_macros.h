@@ -283,7 +283,7 @@
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE) { \
     Bit_Chain here = *dat; \
     int oldloglevel = loglevel; \
-    char *tmp; BITCODE_BB bb = 0; BITCODE_RS rs; BITCODE_RL rl;\
+    char *tmp; BITCODE_BB bb = 0; BITCODE_RS rs; BITCODE_RL rl; double bd; \
     Dwg_Handle hdl; \
     tmp = bit_read_TF(dat, 24);\
     if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE) { \
@@ -292,38 +292,42 @@
     LOG_TRACE_TF(tmp, 24);\
     SINCE(R_13) {\
       *dat = here;\
-      LOG_TRACE("  B  :"FORMAT_B"\n", bit_read_B(dat));\
+      LOG_TRACE("  B  :"FORMAT_B"\t", bit_read_B(dat));\
       *dat = here; bb = bit_read_BB(dat) & 0x3;\
       LOG_TRACE("  BB :"FORMAT_BB"\n", bb);\
     }\
     *dat = here; rs = bit_read_RS(dat);                \
-    LOG_TRACE("  RS :"FORMAT_RS" / 0x%04x\n", rs, rs); \
+    LOG_TRACE("  RS :"FORMAT_RS" / 0x%04x (16)\n", rs, rs); \
     SINCE(R_13) {\
       *dat = here; rs = bit_read_BS(dat); \
-      LOG_TRACE("  BS :"FORMAT_BS" / 0x%04x\n", rs, rs);\
+      LOG_TRACE("  BS :"FORMAT_BS" / 0x%04x (%ld)\t", rs, rs, \
+                bit_position(dat)-bit_position(&here)); \
      }\
     SINCE(R_2007) {\
       *dat = here; rs = bit_read_MS(dat);              \
-      LOG_TRACE("  MS :"FORMAT_RS" / 0x%04x\n", rs, rs); \
-    }\
+      LOG_TRACE("  MS :"FORMAT_RS" / 0x%04x (%ld)\n", rs, rs, \
+                bit_position(dat)-bit_position(&here)); \
+    } else LOG_TRACE("\n"); \
     *dat = here; rl = bit_read_RL(dat);  \
-    LOG_TRACE("  RL :"FORMAT_RL " / 0x%08x\n", rl, rl);\
+    LOG_TRACE("  RL :"FORMAT_RL " / 0x%08x (32)\n", rl, rl);\
     *dat = here;\
-    LOG_TRACE("  RD :"FORMAT_RD "\n", bit_read_RD(dat));\
+    LOG_TRACE("  RD :"FORMAT_RD " (64)\n", bit_read_RD(dat));\
     *dat = here; \
     SINCE(R_13) {\
       if (bb != 3) { rl = bit_read_BL(dat);                     \
-        LOG_TRACE("  BL :"FORMAT_BL " / 0x%08x\n", rl, rl);     \
-        *dat = here;                                            \
-        LOG_TRACE("  BD :"FORMAT_BD "\n", bit_read_BD(dat));    \
+        LOG_TRACE("  BL :"FORMAT_BL " / 0x%08x (%ld)\n", rl, rl,\
+                  bit_position(dat)-bit_position(&here));       \
+        *dat = here; bd = bit_read_BD(dat);                     \
+        LOG_TRACE("  BD :"FORMAT_BD " (%ld)\n", bd,\
+                  bit_position(dat)-bit_position(&here)); \
         *dat = here;                                            \
       }                                                         \
     }                                                           \
     if ((dat->chain[dat->byte] & 0xf) <= 4) {                   \
       loglevel = 0;                                             \
       if (!bit_read_H(dat, &hdl)) {                             \
-        LOG_TRACE("  H :(%d.%d.%lX)\n", hdl.code, hdl.size,     \
-                  hdl.value);                                   \
+        LOG_TRACE("  H :(%d.%d.%lX) (%ld)\n", hdl.code, hdl.size,\
+                  hdl.value, bit_position(dat)-bit_position(&here)); \
       }                                                         \
       loglevel = oldloglevel;                                   \
     }                                                           \

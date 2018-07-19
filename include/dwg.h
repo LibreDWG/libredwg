@@ -4459,7 +4459,9 @@ typedef struct _dwg_object_EVALUATION_GRAPH
   char hole1[20];
   BITCODE_BL  edge_flags; // 93
   BITCODE_BL  unknown_bl; // 97
-  char hole2[68];
+  BITCODE_BD  unknown_bs;
+  BITCODE_BD  unknown_bd;
+  //char hole2[68];
   BITCODE_BL  nodes_edges; // 92
   char hole3[50];
   BITCODE_BL  num_evalexpr; // 95

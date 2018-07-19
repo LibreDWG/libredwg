@@ -1559,15 +1559,17 @@ bit_print(Bit_Chain * dat, long unsigned int size)
 
 // The i-th bit of a string.
 // 0b1000_0000,0 >> 8 = 1
-#define BIT(b,i) (((b)[(i)/8] >> (8-((i)%8))) & 1)
+#define BIT(b,i) (((b)[(i)/8] & (0x80 >> (i)%8)) >> (7 - (i)%8))
 
 void
 bit_print_bits(unsigned char* bits, long unsigned int size)
 {
   for (long unsigned int i = 0; i < size; i++)
     {
-      //if (i % 8 == 0) printf(" ");
-      printf("%d", BIT(bits, i) ? 1 : 0);
+      unsigned char bit = i % 8;
+      unsigned char result = (bits[i/8] & (0x80 >> bit)) >> (7 - bit);
+      //if (i && (i % 8 == 0)) printf(" ");
+      printf("%d", result ? 1 : 0);
     }
   printf("\n");
 }
@@ -1576,7 +1578,13 @@ void
 bit_fprint_bits(FILE* fp, unsigned char* bits, long unsigned int size)
 {
   for (long unsigned int i = 0; i < size; i++)
-    fprintf(fp, "%d", BIT(bits, i) ? 1 : 0);
+    {
+      unsigned char bit = i % 8;
+      unsigned char result = (bits[i/8] & (0x80 >> bit)) >> (7 - bit);
+      if (i && !bit) printf(" ");
+      fprintf(fp,"%d", result ? 1 : 0);
+      //fprintf(fp, "%d", BIT(bits, i) ? 1 : 0);
+    }
 }
 
 void

@@ -6076,19 +6076,22 @@ DWG_OBJECT(EVALUATION_GRAPH)
   FIELD_BL(has_graph, 96); //1-10
   if (FIELD_VALUE(has_graph))
     {
-      DEBUG_HERE_OBJ
-      FIELD_BS(nodeid, 91); //0 nodeid... 11-12
-      //13-32
+      FIELD_BS(nodeid, 91); //1 BS nodeid... 11-32
       DEBUG_HERE_OBJ
       //bit_read_fixed(dat, _obj->hole1, 3);
       bit_advance_position(dat, 20);
-      DEBUG_HERE_OBJ
-      FIELD_BL(edge_flags, 93); //33-42 edge_flags
+      DEBUG_POS_OBJ
+      FIELD_BL(edge_flags, 93); //33-42 edge_flags -1
       FIELD_BL(unknown_bl, 97); //1
-      //53-120
+      rcount1 = bit_position(dat);
+      //53-120 (BD+BS?)
       DEBUG_HERE_OBJ
+      FIELD_BS(unknown_bs, 0);
+      FIELD_BS(unknown_bs, 0);
+      DEBUG_HERE_OBJ
+      FIELD_RD(unknown_bd, 0);
       //bit_read_fixed(dat, _obj->hole2, 9);
-      bit_advance_position(dat, 120-52);
+      bit_set_position(dat, rcount1 + 68);
       FIELD_BL(nodes_edges, 92);  // -1 @121-154
       //155-204
       DEBUG_HERE_OBJ
