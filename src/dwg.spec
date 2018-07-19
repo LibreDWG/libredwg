@@ -6109,6 +6109,59 @@ DWG_OBJECT(EVALUATION_GRAPH)
 
 DWG_OBJECT_END
 
+// See AcDbAssocPersSubentIdPE.h?
+DWG_OBJECT(ASSOCPERSSUBENTMANAGER)
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
+  SUBCLASS (AcDbAssocPersSubentManager)
+  FIELD_BL (class_version, 90); //1
+  FIELD_BL (unknown_bl1, 90); //3
+  FIELD_BL (unknown_bl2, 90); //0
+  FIELD_BL (unknown_bl3, 90); //2
+  FIELD_BL (unknown_bl4, 90); //3
+  FIELD_BL (unknown_bl5, 90); //1
+  FIELD_BL (unknown_bl6, 90); //5
+  FIELD_BL (unknown_bl6a, 90); //0 10 0100000100 0100000011
+  FIELD_BL (unknown_bl7a, 90); //4
+  FIELD_BL (unknown_bl7, 90); //3 0b0100000011
+  FIELD_BL (unknown_bl7, 90); //2
+  FIELD_BL (unknown_bl8, 90); //2
+  FIELD_BL (unknown_bl9, 90); //2
+  FIELD_BL (unknown_bl10, 90); //21
+  FIELD_BL (unknown_bl11, 90); //0
+  FIELD_BL (unknown_bl12, 90); //0
+  FIELD_BL (unknown_bl13, 90); //0
+  FIELD_BL (unknown_bl14, 90); //0
+  FIELD_BL (unknown_bl15, 90); //1 [[133,142]]
+  FIELD_BL (unknown_bl16, 90); //3
+  FIELD_BL (unknown_bl17, 90); //1
+  FIELD_BL (unknown_bl18, 90); //1000000000
+  FIELD_BL (unknown_bl19, 90); //1001
+  FIELD_BL (unknown_bl20, 90); //1
+  FIELD_BL (unknown_bl21, 90); //1000000000
+  FIELD_BL (unknown_bl22, 90); //51001
+  FIELD_BL (unknown_bl23, 90); //1
+  FIELD_BL (unknown_bl24, 90); //1000000000
+  FIELD_BL (unknown_bl25, 90); //351001
+  FIELD_BL (unknown_bl26, 90); //0
+  FIELD_BL (unknown_bl27, 90); //0
+  FIELD_BL (unknown_bl28, 90); //0
+  FIELD_BL (unknown_bl29, 90); //900
+  FIELD_BL (unknown_bl30, 90); //0
+  FIELD_BL (unknown_bl31, 90); //900
+  FIELD_BL (unknown_bl32, 90); //0
+  FIELD_BL (unknown_bl33, 90); //2
+  FIELD_BL (unknown_bl34, 90); //2
+  FIELD_BL (unknown_bl35, 90); //3 0100000011
+  FIELD_BL (unknown_bl36, 90); //0
+  FIELD_B  (unknown_b37, 290); //0
+  FIELD_B  (unknown_b38, 0); //?
+
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (parenthandle, 3, 0);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+DWG_OBJECT_END
+
 #endif /* DEBUG_CLASSES */
 
 /* Those undocumented objects are also stored as raw UNKNOWN_OBJ */
@@ -6224,4 +6277,3 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
-

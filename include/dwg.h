@@ -4459,7 +4459,7 @@ typedef struct _dwg_object_EVALUATION_GRAPH
   char hole1[20];
   BITCODE_BL  edge_flags; // 93
   BITCODE_BL  unknown_bl; // 97
-  BITCODE_BD  unknown_bs;
+  BITCODE_BS  unknown_bs;
   BITCODE_BD  unknown_bd;
   //char hole2[68];
   BITCODE_BL  nodes_edges; // 92
@@ -4467,9 +4467,59 @@ typedef struct _dwg_object_EVALUATION_GRAPH
   BITCODE_BL  num_evalexpr; // 95
   BITCODE_H* evalexpr; //360
 
-  BITCODE_H* reactors;
+  BITCODE_H* reactors; //330
   BITCODE_H xdicobjhandle;
 } Dwg_Object_EVALUATION_GRAPH;
+
+typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BL class_version; /*!< DXF 90 1 */
+  BITCODE_BL unknown_bl1;   /*!< DXF 90 3 */
+  BITCODE_BL unknown_bl2;   /*!< DXF 90 0 */
+  BITCODE_BL unknown_bl3;   /*!< DXF 90 2 */
+  BITCODE_BL unknown_bl4;   /*!< DXF 90 3 */
+  BITCODE_BL unknown_bl5;   /*!< DXF 90 1 */
+  BITCODE_BL unknown_bl6;   /*!< DXF 90 5 */
+  BITCODE_BL unknown_bl6a;  /*!< DXF 90 0 */
+  BITCODE_BL unknown_bl7a;  /*!< DXF 90 3 */
+  BITCODE_BL unknown_bl7;   /*!< DXF 90 2 */
+  BITCODE_BL unknown_bl8;   /*!< DXF 90 2 */
+  BITCODE_BL unknown_bl9;   /*!< DXF 90 2 */
+  BITCODE_BL unknown_bl10;  /*!< DXF 90 21 */
+  BITCODE_BL unknown_bl11;  /*!< DXF 90 0 */
+  BITCODE_BL unknown_bl12;  /*!< DXF 90 0 */
+  BITCODE_BL unknown_bl13;  /*!< DXF 90 0 */
+  BITCODE_BL unknown_bl14;  /*!< DXF 90 0 */
+  BITCODE_BL unknown_bl15;  /*!< DXF 90 1 */
+  BITCODE_BL unknown_bl16;  /*!< DXF 90 3 */
+  BITCODE_BL unknown_bl17;  /*!< DXF 90 1 */
+  BITCODE_BL unknown_bl18;  /*!< DXF 90 1000000000 */
+  BITCODE_BL unknown_bl19;  /*!< DXF 90 1001 */
+  BITCODE_BL unknown_bl20;  /*!< DXF 90 1 */
+  BITCODE_BL unknown_bl21;  /*!< DXF 90 1000000000 */
+  BITCODE_BL unknown_bl22;  /*!< DXF 90 51001 */
+  BITCODE_BL unknown_bl23;  /*!< DXF 90 1 */
+  BITCODE_BL unknown_bl24;  /*!< DXF 90 1000000000 */
+  BITCODE_BL unknown_bl25;  /*!< DXF 90 351001 */
+  BITCODE_BL unknown_bl26;  /*!< DXF 90 0 */
+  BITCODE_BL unknown_bl27;  /*!< DXF 90 0 */
+  BITCODE_BL unknown_bl28;  /*!< DXF 90 0 */
+  BITCODE_BL unknown_bl29;  /*!< DXF 90 900 */
+  BITCODE_BL unknown_bl30;  /*!< DXF 90 0 */
+  BITCODE_BL unknown_bl31;  /*!< DXF 90 900 */
+  BITCODE_BL unknown_bl32;  /*!< DXF 90 0 */
+  BITCODE_BL unknown_bl33;  /*!< DXF 90 2 */
+  BITCODE_BL unknown_bl34;  /*!< DXF 90 2 */
+  BITCODE_BL unknown_bl35;  /*!< DXF 90 3 0100000011 */
+  BITCODE_BL unknown_bl36;  /*!< DXF 90 0 */
+  BITCODE_B  unknown_b37;   /*!< DXF 290 0 */
+  BITCODE_B  unknown_b38;   /*!< DXF 0 */
+
+  BITCODE_H  parenthandle; //3. 330
+  BITCODE_H* reactors;
+  BITCODE_H  xdicobjhandle;
+} Dwg_Object_ASSOCPERSSUBENTMANAGER;
 
 /**
  -----------------------------------
@@ -4733,6 +4783,7 @@ typedef struct _dwg_object_object
     Dwg_Object_ASSOCACTION *ASSOCACTION;
     Dwg_Object_ASSOCNETWORK *ASSOCNETWORK;
     Dwg_Object_ASSOCOSNAPPOINTREFACTIONPARAM *ASSOCOSNAPPOINTREFACTIONPARAM;
+    Dwg_Object_ASSOCPERSSUBENTMANAGER *ASSOCPERSSUBENTMANAGER;
     //Dwg_Object_CSACDOCUMENTOPTIONS *CSACDOCUMENTOPTIONS;
     Dwg_Object_CELLSTYLEMAP *CELLSTYLEMAP;
     //Dwg_Object_DATATABLE *DATATABLE;
@@ -5338,7 +5389,7 @@ EXPORT int dwg_add_EVALUATION_GRAPH (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCDEPENDENCY (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCGEOMDEPENDENCY (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCOSNAPPOINTREFACTIONPARAM (Dwg_Object *obj);
-//EXPORT int dwg_add_ASSOCPERSSUBENTMANAGER (Dwg_Object *obj);
+EXPORT int dwg_add_ASSOCPERSSUBENTMANAGER (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCVERTEXACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCACTION (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCNETWORK (Dwg_Object *obj);
