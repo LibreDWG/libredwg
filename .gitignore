@@ -29,6 +29,8 @@ gcov.log
 /libredwg-*.tar.{xz,gz}.sig
 /examples/*.log
 /examples/*.svg
+/examples/*.qi
+/examples/*.pi
 /programs/*.log
 /programs/*.bmp
 /programs/*-rewrite.dwg
@@ -69,6 +71,7 @@ gcov.log
 /ID
 /INSTALL
 /unknown.log
+/unknown.lst
 /x.p
 /aclocal.m4
 /autom4te.cache/
@@ -114,6 +117,7 @@ gcov.log
 /doc/refman/
 /doc/stamp-vti
 /doc/version.texi
+/examples/unknown
 /programs/dwgbmp
 /programs/dwgrewrite
 /programs/dwgread
