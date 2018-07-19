@@ -295,19 +295,20 @@ if test x$cross_compiling = xno; then
 else
     AC_MSG_WARN([disabled swig bindings: cross-compiled])
 fi
-AM_CONDITIONAL([HAVE_SWIG_PYTHON],
-  [test -n "$SWIG" && test -n "$PYTHON_VERSION"])
-AM_CONDITIONAL([HAVE_PYTHON],
-  [test x$enable_python != xno])
-AM_CONDITIONAL([HAVE_SWIG_PERL],
-  [test -n "$SWIG" && test -n "$PERL"])
-AM_CONDITIONAL([HAVE_PERL],
-  [test -n "$PERL"])
+
+AM_CONDITIONAL([HAVE_SWIG_PYTHON], [test -n "$SWIG" && test -n "$PYTHON_VERSION"])
+AM_CONDITIONAL([HAVE_PYTHON], [test x$enable_python != xno])
+AM_CONDITIONAL([HAVE_SWIG_PERL], [test -n "$SWIG" && test -n "$PERL"])
+AM_CONDITIONAL([HAVE_PERL], [test -n "$PERL"])
 dnl only needed with python bindings
-AM_CONDITIONAL([HAVE_PATCH],
-  [test -n "$PATCH"])
+AM_CONDITIONAL([HAVE_PATCH], [test -n "$PATCH"])
+
+AC_CHECK_PROGS([PICAT], [picat])
+if test -n "$PICAT"; then AM_RUN_LOG([$PICAT --version]); fi
+AM_CONDITIONAL([HAVE_PICAT], [test -n "$PICAT"])
 
 AC_CHECK_PROGS([DOXYGEN], [doxygen])
+if test -n "$DOXYGEN"; then AM_RUN_LOG([$DOXYGEN --version]); fi
 AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
 dnl help2man only by the maintainer
 
@@ -321,6 +322,7 @@ if test x$cross_compiling = xno; then
   esac
   dnl passes only on some systems. --enable-valgrind-sgcheck
   AX_VALGRIND_DFLT([sgcheck], [off])
+  if test -n "$VALGRIND"; then AM_RUN_LOG([$VALGRIND --version]); fi
 else
  AC_MSG_WARN([disabled valgrind: cross-compiled])
  enable_valgrind=no
