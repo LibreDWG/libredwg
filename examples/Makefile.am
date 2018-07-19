@@ -45,9 +45,10 @@ alldxf_0.inc: # log_unknown_dxf.pl
 alldwg.inc: # log_unknown.pl
 	echo Creating alldwg.inc will need a few minutes...
 	-cd $(abs_top_builddir) && ./logs.sh; \
-	  mv examples/alldwg.inc examples/alldwg.inc~; \
+	  rm alldwg.tmp; mv examples/alldwg.inc examples/alldwg.inc~; \
 	  for l in *_r*.log *_20*.log DS_*.log; \
-	    do $(PERL) examples/log_unknown.pl "$$l" >>examples/alldwg.inc; done
+	    do $(PERL) examples/log_unknown.pl "$$l" >>alldwg.tmp; done \
+          sort < alldwg.tmp > examples/alldwg.inc; rm alldwg.tmp
 
 regen-unknown:
 	$(MAKE) alldwg.inc
