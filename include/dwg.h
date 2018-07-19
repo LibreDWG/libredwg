@@ -4444,30 +4444,31 @@ typedef struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM
   BITCODE_H xdicobjhandle;
 } Dwg_Object_ASSOCOSNAPPOINTREFACTIONPARAM;
 
+/* or maybe the nodes are layed out like this */
 typedef struct _dwg_EVAL_Node
 {
   struct _dwg_object_EVALUATION_GRAPH *parent;
+  BITCODE_BL  edge[4];   // 4x 92, def: 4x -1
   BITCODE_H   evalexpr;   // 360
-  BITCODE_BL  edges;      // 4x 92, def: 4x -1
 } Dwg_EVAL_Node;
 
 typedef struct _dwg_object_EVALUATION_GRAPH
 {
   struct _dwg_object_object *parent;
-  BITCODE_BL  has_graph; //96
-  BITCODE_BL  nodeid;     // 91
-  char hole1[20];
-  BITCODE_BL  edge_flags; // 93
-  BITCODE_BL  unknown_bl; // 97
-  BITCODE_BS  unknown_bs;
-  BITCODE_BD  unknown_bd;
-  //char hole2[68];
-  BITCODE_BL  nodes_edges; // 92
-  char hole3[50];
-  BITCODE_BL  num_evalexpr; // 95
-  BITCODE_H* evalexpr; //360
-
-  BITCODE_H* reactors; //330
+  BITCODE_BL has_graph;   // 96
+  BITCODE_BL unknown1;    // 97
+  BITCODE_BL unknown2;
+  BITCODE_BL nodeid;      // 91
+  BITCODE_BL edge_flags;  // 93
+  BITCODE_BL num_evalexpr;// 95
+  BITCODE_BL node_edge1;  // 92
+  BITCODE_BL node_edge2;  // 92
+  BITCODE_BL node_edge3;  // 92
+  BITCODE_BL node_edge4;  // 92
+  
+  BITCODE_H  parenthandle; //330
+  BITCODE_H  evalexpr;     //360
+  BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
 } Dwg_Object_EVALUATION_GRAPH;
 

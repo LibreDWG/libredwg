@@ -6056,57 +6056,35 @@ DWG_OBJECT(ASSOCOSNAPPOINTREFACTIONPARAM)
   XDICOBJHANDLE(3);
 DWG_OBJECT_END
 
-/* todo: [360 2E2] 01000000
-         [91 0] 01
-0010000000 [96 1]
- 1010000000101000000011 [?]
-0010010000 [93 32]
-0010000000 [95 1]
- 10010111111101111111011111110111111001111111011111110111111101111111 [?]
-0001111101111111011111110111111101 [92 -1]
- 10011101111111011111110111111101111100011000000011 [?]
-0010000000 [97 1]
- 100110001 [?]
-0010000000 [90 1]
- 1001000011100000000000000000000011000 [?]
- */
 DWG_OBJECT(EVALUATION_GRAPH)
-
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS(AcDbEvalGraph)
-  FIELD_BL(has_graph, 96); //1-10
+  FIELD_BL(has_graph, 96);        // 1
+  FIELD_BL(unknown1, 97);         // 1
+  FIELD_BL(unknown2, 0);          // 1
+  FIELD_BL(nodeid, 91);           // 0
   if (FIELD_VALUE(has_graph))
     {
-      FIELD_BS(nodeid, 91); //1 BS nodeid... 11-32
-      DEBUG_HERE_OBJ
-      //bit_read_fixed(dat, _obj->hole1, 3);
-      bit_advance_position(dat, 20);
-      DEBUG_POS_OBJ
-      FIELD_BL(edge_flags, 93); //33-42 edge_flags -1
-      FIELD_BL(unknown_bl, 97); //1
-      rcount1 = bit_position(dat);
-      //53-120 (BD+BS?)
-      DEBUG_HERE_OBJ
-      FIELD_BS(unknown_bs, 0);
-      FIELD_BS(unknown_bs, 0);
-      DEBUG_HERE_OBJ
-      FIELD_RD(unknown_bd, 0);
-      //bit_read_fixed(dat, _obj->hole2, 9);
-      bit_set_position(dat, rcount1 + 68);
-      FIELD_BL(nodes_edges, 92);  // -1 @121-154
-      //155-204
-      DEBUG_HERE_OBJ
-      //bit_read_fixed(dat, _obj->hole3, 7);
-      bit_advance_position(dat, 50);
+      FIELD_BL(edge_flags, 93);   // 32
       FIELD_BL(num_evalexpr, 95); // 1
+      // maybe REPEAT num_evalexpr: edge1-4, evalexpr
+      FIELD_BL(node_edge1, 92);   // -1
+      FIELD_BL(node_edge2, 92);   // -1
+      FIELD_BL(node_edge3, 92);   // -1
+      FIELD_BL(node_edge4, 92);   // -1
       if (_obj->num_evalexpr > 10)
         return DWG_ERR_VALUEOUTOFBOUNDS;
-      HANDLE_VECTOR(evalexpr, num_evalexpr, 5, 360);
+      //HANDLE_VECTOR(evalexpr, num_evalexpr, 5, 360);
     }
 
   START_HANDLE_STREAM;
+  FIELD_HANDLE (parenthandle, 3, 0); //??
+  if (FIELD_VALUE(has_graph))
+    {
+      FIELD_HANDLE (evalexpr, 5, 360); // VECTOR?
+    }
   REACTORS(4);
   XDICOBJHANDLE(3);
-
 DWG_OBJECT_END
 
 // See AcDbAssocPersSubentIdPE.h?

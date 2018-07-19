@@ -11,7 +11,7 @@ fi
 dir=_$(basename `dirname "$d"`)
 if [ x$dir = x_test-data ]; then dir=""; fi
 log=`basename "$d" .dwg`$dir.log
-echo programs/dwgread -v5 "$d" 2\>$log
+echo programs/dwgread -v4 "$d" 2\>$log
 (sleep 12s; killall dwgread 2>/dev/null) &
 
-programs/dwgread -v5 "$d" 2>$log
+programs/dwgread -v4 "$d" 2>$log

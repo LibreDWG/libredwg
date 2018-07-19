@@ -71,8 +71,9 @@ go(S,Fields) =>
   foreach (F in Found)
     delete_found(F, [], Fields)
   end,
-  println(rest=[F: F in Fields, F[3].length > 1]),
   nl,
+  println("Definite result:"),
+  println("----------------"),
   % create holes by looking at all adjacent pos's
   foreach (I in 1 .. Sorted.length)
     Sub := Sorted[I],
@@ -99,12 +100,36 @@ go(S,Fields) =>
         append(Holes, [Hole], T), Holes := T
       end
     end,
-    println(field=Sub)
+    print_field(Sub)
   end,
+  % TODO: maybe one last hole
+  Sub = last(Sorted), Pos = first(poslist(Sub)),
+  if Pos[2] < S.length then
+    H = [Pos[2]+1, S.length], %println(h=H),
+    R = S.slice(Pos[2]+1, S.length), %println(r=R),
+    Hole = new_struct('HOLE', [H, R]),
+    print(hole_=Hole),print(" "),println(len=H[2]+1-H[1]),
+    append(Holes, [Hole], T), Holes := T
+  end,
+  println("----------------"),
+  foreach (F in Fields, F[3].length > 1)
+    print_field(F)
+  end,
+  nl,
+  println("Most probable result: (TODO)"),
   % TODO: fill holes by probable types (cp or sat?)
-  % if the Hole length is 66 it is most likely a BD, 64 RD, ...
-  % check for the nan range then
+  % e.g. if the Hole length is 66 it is most likely a BD, 64 RD, ...
+  % check for the nan range then.
   nl.
+
+% H330(01100000,2E4,[[192,199]],reactors,330) =>
+% FIELD_H (reactors, 330); // 2E4 01100000 191-198
+print_field(Sub) =>
+  % split name into type and dxf
+  Str = name(Sub),
+  %Type = [C: C in Str, ord(C) > ord('9')], print(Type),
+  %DXF  = [C: C in Str, ord(C) >= ord('0'), ord(C) <= ord('9')], print(DXF),
+  print("FIELD_"),print(Sub),nl.
 
 % list of same values and number of solutions of Sub in Fields
 same_values(Fields, Sub) =
