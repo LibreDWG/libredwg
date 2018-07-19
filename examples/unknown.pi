@@ -1,23 +1,29 @@
 import util.
+%import cp.
 %module unknown.
 
 /* DWG field packing problem, the solver in picat-lang.org
    See https://www.gnu.org/software/libredwg/ examples/unknown
 
    At first fix all positions for unique finds: BL93,H330,BL92.
-   TODO Error if there's a conflict already.
+   Skip conflicts, i.e. duplicate fields.
 
    Then check for all multiple finds if the number of finds is the same as the
    number of equal values: BL90,BL96,BL97. Distribute it then.
 
-   TODO Then pack the possible others optimally (smallest amount of missing holes),
-   with backtracking.
+   TODO Then pack the possible others optimally: smallest amount of
+   missing holes, and keep the original order, with backtracking.
 
    Print the final layout of fixed and open ranges in dwg.spec syntax.
-   TODO: sort by pos, fill holes by probable types.
 
    Compare to all examples of the same class.
 */
+
+bits(S) = S[1].
+value(S) = S[2].
+poslist(S) = S[3].
+%fieldname(S) = S[4]. % from the dwg.spec, if unique
+%dxfcode(S) = S[5].   % also in the struct name
 
 go(S,Fields) =>
   Found = [],
@@ -28,20 +34,8 @@ go(S,Fields) =>
     PosList = findall([Start,End], find(S,Sub[1],Start,End)),
     Sub[3] := PosList,
     if PosList.length = 1 then
-      Found := add_found(PosList[1],Found), % checks overlap
-      println(fixed=first(Sub[3])),
-      %println(fixed=Found),
-      % for each found range delete now invalid ranges in all fields.
-      % ie H360 [206,213]
-      Pos = PosList[1], %print(pos=Pos),
-      foreach(S1 in Fields, S1[3].length > 1, Sub != S1)
-        %println(pre=S1),
-        Before = [P1: P1 in S1[3], P1[2] < Pos[1]],
-        After  = [P2: P2 in S1[3], P2[1] > Pos[2]],
-        %print(before=Before),print(after=After),println(curr=S1[3]),
-        append(Before, After, T), S1[3] := T
-        %println(post=S1)
-      end
+      Found := add_found(PosList[1],Found,[Sub],Fields), % checks overlap
+      println(fixed=first(Sub[3]))
     else
       print(PosList.length), print(" "),println(positions=PosList),
       % check for matching number of multiple values
@@ -49,10 +43,11 @@ go(S,Fields) =>
       if N.length = PosList.length then
         print("distribute positions: "),
         I = 1,
-        foreach(X in N)
-          X3 = X[3],
+        foreach(X in N, X[3].length >= I)
           print(X.name),print(" "),
-          Found := add_found(X3[I],Found),
+          nth(I,X[3],T1),
+          Found := add_found(T1,Found,N,Fields),
+          % nth(I,PosList,T),
           X[3] := [PosList[I]], % collapse to single entry
           I := I + 1
         end,
@@ -65,32 +60,119 @@ go(S,Fields) =>
 
   % TODO Then pack the possible others optimally (smallest amount of missing holes),
   % with backtracking.
-    
-  % Print the final layout of fixed and open ranges
+
+  % Print the layout of all fixed ranges and holes (yet unconstraint)
   println(fixed=Found),
-  % TODO: sort by pos, fill holes by probable types
-  foreach (Sub in Fields)  
+  Holes = [],
+  Sorted := [F: F in Fields, F[3].length == 1],
+  Sorted := field_sort(Sorted),
+  println(sortd=Sorted.map(poslist).map(first)), % just for control
+  % here maybe filter out all all fixed from Fields again
+  foreach (F in Found)
+    delete_found(F, [], Fields)
+  end,
+  println(rest=[F: F in Fields, F[3].length > 1]),
+  nl,
+  % create holes by looking at all adjacent pos's
+  foreach (I in 1 .. Sorted.length)
+    Sub := Sorted[I],
+    Pos := first(poslist(Sub)),
+    if I == 1 then
+      if Pos[1] != 1 then
+        %println(pos=Pos),
+        H = [1, Pos[1]-1], %println(h=H),
+        R = S.slice(1,Pos[1]-1),
+        Hole = new_struct('HOLE', [H, R]),
+        print(hole_=Hole),print(" "),println(len=H[2]+1-H[1]),
+        Holes := [Hole]
+      end
+    else
+      Prev := Sorted[I-1],
+      PrevPos = first(poslist(Prev)),
+      %println(prevpos=PrevPos),
+      %println(pos=Pos),
+      if Pos[1] > PrevPos[2]+1 then
+        H = [PrevPos[2]+1, Pos[1]-1], %println(h=H),
+        R = S.slice(PrevPos[2]+1, Pos[1]-1), %println(r=R),
+        Hole = new_struct('HOLE', [H, R]),
+        print(hole_=Hole),print(" "),println(len=H[2]+1-H[1]),
+        append(Holes, [Hole], T), Holes := T
+      end
+    end,
     println(field=Sub)
   end,
+  % TODO: fill holes by probable types (cp or sat?)
+  % if the Hole length is 66 it is most likely a BD, 64 RD, ...
+  % check for the nan range then
   nl.
 
 % list of same values and number of solutions of Sub in Fields
 same_values(Fields, Sub) =
-  % needs to use , for /\ here: "compound condition". ; would be or
-  [X : X in Fields, X[3].length == Sub[3].length, X[1] = Sub[1]].
+  % && or , for /\ here: "compound condition". ; would be or
+  [X : X in Fields, X[3].length == Sub[3].length && X[1] = Sub[1]].
 
-% check valid ranges,
+% delete found pos from all other fields. changes Fields destructively
+delete_found(Pos, Subs, Fields) =>
+  %print("delete_found "),print(pos=Pos),print(" "),println(sub=Sub),
+  foreach(S in Fields, S[3].length > 1, not member(S, Subs))
+    P = S[3], %print(P),
+    Before = [P1: P1 in P, P1[1] < Pos[1]],
+    After  = [P2: P2 in P, P2[1] > Pos[2]],
+    append(Before, After, T),
+    %if T.length != P.length then print("=>"), println(T) end,
+    S[3] := T
+  end.
+
 % add found pos if not already in.
-% change Found inline, keep Found sorted.
-add_found(Pos, []) = [Pos].
-add_found(Pos, Found) = List =>
+% check valid ranges, change Found inline, keep Found sorted.
+add_found(Pos, [], Subs, Fields) = List =>
+  List = [Pos],
+  delete_found(Pos, Subs, Fields).
+% backtracking not needed yet
+add_found(Pos, Found, Subs, Fields) = List =>
   %print("add_found "),print(pos=Pos),print(" "),println(found=Found),
   % sort Pos into Found: pos = [33,42] found = [[192,199]]
   Before = [X1: X1 in Found, Pos[1] > X1[1], Pos[2] > X1[1]],
-  append(Before, [Pos], T1), List = T1,
+  append(Before, [Pos], T1),
   % and the remaining elems behind. pos = [43,52] found = [[33,42],[192,199]]
   Behind = [X2: X2 in Found, Pos[1] < X2[1], Pos[2] < X2[1]],
-  append(List, Behind, T2), List := T2,
-  if Found.length != List.length-1 then
-    println("overlap"), List := Found
+  append(T1, Behind, T2),
+  if Found.length != T2.length-1 then
+    print("Ignored overlap "), List = Found
+  else
+    List = T2,
+    delete_found(Pos, Subs, Fields)
   end.
+
+% sort Field struct by first pos (simple bubble sort)
+field_sort(T) = Ret =>
+  T2 = copy_term(T),
+  Len = T.length,
+  Check = true,
+  while(Check = true)
+    Swapped = false,
+    foreach(I in 2..Len)
+      P = T2[I-1], C = T2[I],
+      if first(first(P[3])) > first(first(C[3])) then
+        T2 := swap(T2,I-1,I),
+        Swapped := true % interchange the items.
+      end
+    end,
+    if Swapped = false then
+      Check := false
+    end
+  end,
+  Ret = T2.
+
+swap(L,I,J) = L2, list(L) =>
+  L2 = copy_term(L),
+  T = L2[I],
+  L2[I] := L2[J],
+  L2[J] := T.
+
+%nth(I,List) = Elem =>
+%  K = 0,
+%  while (K<I) do
+%    L := List.head
+%  end,
+%  Elem = L.
