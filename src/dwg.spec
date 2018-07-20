@@ -3282,9 +3282,7 @@ DWG_OBJECT_END
 /* (73) */
 DWG_OBJECT(MLINESTYLE)
 
-  DXF {
-    FIELD_HANDLE (parenthandle, 4, 330);
-  }
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS (AcDbMlineStyle)
   FIELD_T (entry_name, 2);
   FIELD_T (desc, 3);
@@ -6140,6 +6138,55 @@ DWG_OBJECT(ASSOCPERSSUBENTMANAGER)
   XDICOBJHANDLE(3);
 DWG_OBJECT_END
 
+// Class AcDbAssoc2dConstraintGroup
+// see https://help.autodesk.com/view/OARX/2018/ENU/?guid=OREF-AcDbAssoc2dConstraintGroup
+DWG_OBJECT(ASSOC2DCONSTRAINTGROUP)
+  SUBCLASS (AcDbAssocAction)
+  // This has multiple handles and types.
+  FIELD_BL (solution_status, 90); // 0 WellDefined, 1 UnderConstrained, 2 OverConstrained,
+	                        // 3 Inconsistent, 4 NotEvaluated, 5 NotAvailable,
+                                // 6 RejectedByClient
+  FIELD_BL (geometry_status, 90);   //0
+  /* 330, 360 */
+  FIELD_BL (constraint_status, 90); //1
+  FIELD_BL (dof, 90); //2 remaining degree of freedom
+  FIELD_BL (l4, 90); //0
+  FIELD_BL (l5, 90); //2
+  FIELD_B (b1, 70);  //0
+  FIELD_3BD (workplane[0], 10); // 0,0,0
+  FIELD_3BD (workplane[1], 10); // 1,0,0
+  FIELD_3BD (workplane[2], 10); // 0,1,0
+  // 360
+  FIELD_BL (l6, 90); //2
+  // 360, 360
+  FIELD_BL (l7, 90); //9
+  FIELD_BL (l8, 90); //9
+
+  //DXF { FIELD_TV("AcConstrainedCircle", 1); }
+  //330
+  FIELD_BL (cl1, 90); //1
+  FIELD_RC (cs1, 70); //1
+  FIELD_BL (cl2, 90); //1
+  FIELD_BL (cl3, 90); //3
+  //330
+  FIELD_BL (cl4, 90); //0
+  FIELD_3BD (c1, 10); // @133
+  FIELD_3BD (c2, 10);
+  FIELD_3BD (c3, 10);
+  FIELD_BD (w1, 40); // @279
+  FIELD_BD (w2, 40);
+  FIELD_BD (w3, 40);
+
+  //DXF { FIELD_TV("AcConstrainedImplicitPoint", 1); }
+  // ...
+  /*
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (parenthandle, 3, 0);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  */
+DWG_OBJECT_END
+
 #endif /* DEBUG_CLASSES */
 
 /* Those undocumented objects are also stored as raw UNKNOWN_OBJ */
@@ -6161,16 +6208,6 @@ AcDbUnderlayReference: => DXF 0: DGNUNDERLAY  DWFUNDERLAY PDFUNDERLAY
 DWG_OBJECT(ARCALIGNEDTEXT)
 DWG_OBJECT_END
 
-// Class AcDbAssoc2dConstraintGroup
-// see https://help.autodesk.com/view/OARX/2018/ENU/?guid=OREF-AcDbAssoc2dConstraintGroup
-DWG_OBJECT(ASSOC2DCONSTRAINTGROUP)
-  SUBCLASS (AcDbAssocAction)
-  // this has multiple handles and types.
-  FIELD_BS(solution_status, 0); // 0 WellDefined, 1 UnderConstrained, 2 OverConstrained,
-	                        // 3 Inconsistent, 4 NotEvaluated, 5 NotAvailable,
-                                // 6 RejectedByClient
-  // ...
-DWG_OBJECT_END
 
 // see unknown 34/117=29.1%
 // possible: [......29    7 7 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx9 99   7  9........5...9 99 9.9 9.........5...9    9..9 99    9....]

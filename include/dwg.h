@@ -4445,6 +4445,36 @@ typedef struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM
   BITCODE_H xdicobjhandle;
 } Dwg_Object_ASSOCOSNAPPOINTREFACTIONPARAM;
 
+typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BL solution_status;   //90 1
+  BITCODE_BL geometry_status;   //90 0
+  BITCODE_BL constraint_status; //90 1
+  BITCODE_BL dof;               //90 2
+  BITCODE_BL l4; //90 1
+  BITCODE_BL l5; //90 1
+  BITCODE_B  b1; //70 0
+  BITCODE_3BD workplane[3]; //3x10 workplane
+  // 360
+  BITCODE_BL l6; //90 2
+  // 360 360
+  BITCODE_BL l7; //90 9
+  BITCODE_BL l8; //90 9
+
+  BITCODE_BL cl1; //90 1
+  BITCODE_RC cs1; //70 1
+  BITCODE_BL cl2; //90 1
+  BITCODE_BL cl3; //90 3
+  BITCODE_BL cl4; //90 0
+  BITCODE_3BD c1; //10 @134
+  BITCODE_3BD c2; //10
+  BITCODE_3BD c3; //10
+  BITCODE_BD w1; //40
+  BITCODE_BD w2; //40
+  BITCODE_BD w3; //40
+} Dwg_Object_ASSOC2DCONSTRAINTGROUP;
+
 /* or maybe the nodes are layed out like this */
 typedef struct _dwg_EVAL_Node
 {
@@ -4782,7 +4812,7 @@ typedef struct _dwg_object_object
     //TODO Dwg_Object_ACSH_SWEEP_CLASS *ACSH_SWEEP_CLASS;
     //TODO Dwg_Object_ARCALIGNEDTEXT *ARCALIGNEDTEXT;
     //TODO Dwg_Object_ARC_DIMENSION *ARC_DIMENSION;
-    //TODO Dwg_Object_ASSOC2DCONSTRAINTGROUP *ASSOC2DCONSTRAINTGROUP;
+    Dwg_Object_ASSOC2DCONSTRAINTGROUP *ASSOC2DCONSTRAINTGROUP;
     Dwg_Object_ASSOCACTION *ASSOCACTION;
     //TODO Dwg_Object_ASSOCALIGNEDDIMACTIONBODY *ASSOCALIGNEDDIMACTIONBODY;
     //TODO Dwg_Object_ASSOCDEPENDENCY *ASSOCDEPENDENCY;
@@ -5393,7 +5423,7 @@ EXPORT int dwg_add_EVALUATION_GRAPH (Dwg_Object *obj);
 //EXPORT int dwg_add_ACSH_SWEEP_CLASS (Dwg_Object *obj);
 //EXPORT int dwg_add_ARCALIGNEDTEXT (Dwg_Object *obj);
 //EXPORT int dwg_add_ARC_DIMENSION (Dwg_Object *obj);
-//EXPORT int dwg_add_ASSOC2DCONSTRAINTGROUP (Dwg_Object *obj);
+int dwg_add_ASSOC2DCONSTRAINTGROUP (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCALIGNEDDIMACTIONBODY (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCDEPENDENCY (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCGEOMDEPENDENCY (Dwg_Object *obj);
