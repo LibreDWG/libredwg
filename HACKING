@@ -170,6 +170,112 @@ CONTRIBUTING.
 The license of this work (code, docs, ...) must be GPLv3 compatible,
 see the list at USING_FOREIGN_CODE.
 
+* reverse-engineering with examples/unknown
+
+There's a lot of code related to examples/unknown to automatically
+find the field layout of yet unknown classes. At first you need
+DWG/DXF pairs of unknown entities or objects and put them into
+test/test-data/. At creation take care to create uniquely identifiable
+names and numbers, not to create DXF fields all with the same value 0.
+Then you'll never known which field in the DWG is which.
+
+Then run make -C examples regen-unknown, which does this:
+
+run ./logs.sh to create -v5 logfiles with the binary blobs for all
+UNKNOWN_OBJ and UNKNOWN_ENT instances in those DWG's.
+
+Then the perl script log_unknown.pl creates the include file
+alldwg.inc adding all those blobs.
+
+The next perl script log_unknown_dxf.pl parses alldwg.inc and looks
+for matching DXF files, and creates the 3 include files alldxf_0.inc
+with the matching blob data from alldwg.inc, alldxf_1.inc with the
+matching field types and values from the DXF and alldxf_2.inc to
+workaround some static initialization issues in the C file.
+
+Next run make unknown, which does this:
+
+Compiles and runs examples/unknown, which creates for a every string
+value in the DXF some bits representations and tries to find them in
+the UNKNOWN blobs. If it doesn't find them, either the string-to-bit
+conversion lost too much precision to be able to find them, esp. with
+doubles, or we have a different problem. make unknown creates a big
+log file unknown-`git describe`.log in which you can see the
+individual statistics and initial layout guesses.
+
+E.g.
+42/230=18.3%
+possible: [34433333344443333334444333333311xxxxxxxxxx3443333...
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+11 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 11   1]
+
+The x stands for a fixed field, the numbers and a dot for the number
+of variants this bit is used for (the dot for >9) and a space means
+this is a hole for a field which is not represented as DXF field, i.e.
+a FIELD_*(name, 0) in the dwg.spec with DXF group code 0.
+
+unknown also creates picat data files in examples/ which are then used with
+picat from picat-lang.org to enhance the search for the best layout
+guess for each particular class. picat is a nice mix of a functional
+programming tool with an optional constraint solver. The first part in
+the picat process does almost the same as unknown.c, finding the fixed
+layout, possible variants and holes in a straight-forward functional
+fashion. This language is very similar to erlang, untyped haskell or prolog.
+The second optimization part of picat uses a solver with
+constraints to improve the layout of the found variants and holes to
+find the best guess for the needed dwg.spec layout.
+Note that picat list and array indices are one-based, so you need to
+subtract 1 from each found offset. 1-32 mean the bits 0-31.
+
+E.g. for ACAD_EVALUATION_GRAPH.pi with a high percentage from the above
+possible layout, it currently produces this:
+
+Definite result:
+----------------
+hole_ = HOLE([1,32],01000000010100000001010000000110) len = 32
+FIELD_BL93(0100100000,32,[[33,42]])
+hole_ = HOLE([43,52],0100000001) len = 10
+FIELD_BL92(0011111111111111111111111111111111,-1,[[53,86]])
+FIELD_BL92(0011111111111111111111111111111111,-1,[[87,120]])
+FIELD_BL92(0011111111111111111111111111111111,-1,[[121,154]])
+FIELD_BL92(0011111111111111111111111111111111,-1,[[155,188]])
+hole_ = HOLE([189,191],100) len = 3
+FIELD_H330(01100000,2E4,[[192,199]])
+FIELD_H360(001100100000001011100010,2E2,[[200,223]])
+hole_ = HOLE([224,230],1100111) len = 7
+----------------
+FIELD_BL96(0100000001,1,[[1,10],[11,20],[21,30],[43,52]])
+FIELD_BL97(0100000001,1,[[1,10],[11,20],[21,30],[43,52]])
+FIELD_BL91(10,0,[[2,3],[10,11],[12,13],[20,21],[22,23],[31,32],[44,45],[52,53],[189,190],[225,226]])
+FIELD_BL95(0100000001,1,[[1,10],[11,20],[21,30],[43,52]])
+
+The next picat steps will automate the following reasoning:
+
+The first hole 1-32 is filled by the 3 1 values from BL96, BL97 and
+BL95, followed by the 0 value from BL91.  The second hole at 189-191
+is padding before the handle stream, and can be ignored.  This is from
+a r2010 file, which has seperate handle and text streams.  The last
+hole 224-230 could theoretically hold almost another unknown handle, but
+practically it's also just padding. The last handles are always optional 
+reactors and the xdicobject handle for objects, and 7 bits is not enough
+for a handle value. A code 4 null-handle would be 01000000.
+
+You start by finding the DXF documentation and the ObjectARX header
+file of the class, to get the names and description of the class.
+
+You add the names and types to dwg.h and dwg.spec, change the class
+type in classes.inc to DEBUGGING or UNTESTED. With DEBUGGING add the
+-DDEBUG_CLASSES flag to CFLAGS in src/Makefile and test the dwg's with
+programs/dwgread -v4. Some layouts are version dependent, some need
+a REPEAT loop or vector with a num_field field.
+
+The picat constraints module examples/unknown.pi is still being worked
+and is getting better and better identifying all missing classes
+automatically. The problem with AutoCAD DWG's is that everybody can
+add their own custom classes as ObjectARX application, and that
+reverse-engineering them never stops. So it has to be automated somehow.
+
 * etc
 #+STARTUP: odd
   Local variables:

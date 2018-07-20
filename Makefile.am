@@ -41,12 +41,16 @@ EXTRA_DIST = $(top_srcdir)/.version \
 
 UNKNOWN_LOG = unknown-`git describe --long --tags --dirty --always`.log
 UNKNOWN_SKIP = examples/alldwg.skip
+TIMEOUT_30 = timeout 30
 unknown:
 	-mv examples/alldwg.skip examples/alldwg.skip~
 	$(MAKE) -C examples unknown$(EXEEXT) && \
 	$(LIBTOOL) --mode=execute examples/unknown$(EXEEXT) >$(UNKNOWN_LOG) 2>$(UNKNOWN_SKIP)
 	if test -s examples/alldwg.skip; then true; \
 	else mv examples/alldwg.skip~ examples/alldwg.skip; fi
+if HAVE_PICAT
+	-for f in examples/[A-Z]*.pi; do $(TIMEOUT_30) $(PICAT) $$f >$$f.log; done
+endif
 
 regen-man:
 	$(MAKE) -C programs $@
