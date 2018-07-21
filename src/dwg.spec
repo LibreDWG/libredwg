@@ -5748,31 +5748,34 @@ DWG_ENTITY_END
 
 // (varies) UNKNOWN FIELDS
 // hard-owned child of AcDbViewportTableRecord or AcDbViewport 361
-// 11 byte+3bit accounted for.
-// DXF docs put that as Entity, wrong
+// DXF docs put that as Entity, wrong!
 DWG_OBJECT(SUN)
 
-  //DEBUG_POS_OBJ
   DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS(AcDbSun)
-    FIELD_BL (class_version, 90); //1
+  FIELD_BL (class_version, 90); //1
   if (FIELD_VALUE(class_version) > 10)
     return DWG_ERR_VALUEOUTOFBOUNDS;
   FIELD_B (is_on, 290); // status, isOn
   FIELD_B (has_shadow, 291); // shadow on/off
   FIELD_B (is_dst, 292);  // isDayLightSavingsOn
-  //FIELD_B (is_dst, 292);
-  //FIELD_B (is_dst, 292);
-  DEBUG_POS_OBJ
+  FIELD_BS(unknown, 421); //16777215
+  DEBUG_HERE_OBJ
+  //27 111111111100001000000000 011 [32,58]
+  bit_advance_position(dat, 24);
+  FIELD_BD (intensity, 40); //01
+  FIELD_B (has_shadow, 291); //1
   FIELD_BL (julian_day, 91); // same as TIMEBLL
   FIELD_BL (time, 92);    // in seconds past midnight
-  //DEBUG_POS_OBJ
-  FIELD_BD (intensity, 40);
-  //DEBUG_HERE_OBJ
-  //FIELD_CMC (color, 63);
-  //FIELD_BD (altitude, 0); //calculated?
-  //FIELD_BD (azimuth, 0);  //calculated?
-  //FIELD_3BD (direction, 0); //calculated?
+  FIELD_B (is_dst, 292);  // isDayLightSavingsOn
+  //
+  DEBUG_HERE_OBJ //128
+  //22 0 010000001011000000010 | 14 0 1011000000010
+  bit_advance_position(dat, 21);
+
+  //FIELD_BD (altitude, 0); //calculated? 10
+  //FIELD_BD (azimuth, 0);  //calculated? 10
+  //FIELD_3BD (direction, 0); //calculated? 101001
   if (FIELD_VALUE(has_shadow))
   {
     FIELD_BS (shadow_type, 70); // 0 raytraced, 1 shadow maps
@@ -5780,7 +5783,7 @@ DWG_OBJECT(SUN)
       LOG_ERROR("Invalid SUN.shadow_type %d", (int)FIELD_VALUE(shadow_type));
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
-    FIELD_BS (shadow_softness, 280); //1
+    FIELD_BS (shadow_softness, 280); //1 [94-103]
     FIELD_BS (shadow_mapsize, 71); //256 usually
   }
   //there's still 5.4 - 11.3 bits free for some fields
@@ -5825,8 +5828,10 @@ DWG_OBJECT(SUN)
     }
 #endif
 
+  FIELD_HANDLE (parenthandle, 4, 0); //DXF 330
+  FIELD_CMC(color, 63);
+
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 0); //@9980.0, @9981.3, @9985.5 (11.0.0)
   REACTORS(4);
   XDICOBJHANDLE(3); //@9991.1
   FIELD_HANDLE (skyparams, 5, 0); //AcGiSkyParameters class?

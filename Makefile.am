@@ -49,7 +49,8 @@ unknown:
 	if test -s examples/alldwg.skip; then true; \
 	else mv examples/alldwg.skip~ examples/alldwg.skip; fi
 if HAVE_PICAT
-	-for f in examples/[A-Z]*.pi; do $(TIMEOUT_30) $(PICAT) $$f >$$f.log; done
+	-for f in examples/[A-Z]*.pi; do \
+	  echo $(TIMEOUT_30) picat $$f; $(TIMEOUT_30) $(PICAT) $$f >$$f.log; done
 endif
 
 regen-man:

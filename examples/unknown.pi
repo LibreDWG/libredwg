@@ -22,22 +22,26 @@ import util.
 bits(S) = S[1].
 value(S) = S[2].
 poslist(S) = S[3].
-%fieldname(S) = S[4]. % from the dwg.spec, if unique
-%dxfcode(S) = S[5].   % also in the struct name
+fieldname(S) = cond(S.length >= 4, S[4],
+                    [C: C in S.name.atom_chars, ord(C) > ord('9')].to_lowercase).
+dxfcode(S) = cond(S.length >= 5, S[5],
+                    [C: C in S.name.atom_chars, ord(C) >= ord('0'), ord(C) <= ord('9')]).
+bitslen(S) = S[1].length.
 
-go(S,Fields) =>
+go(Data) =>
+  [S,Fields,Class,Dxf,Version] = Data,
   Found = [],
-  Possible = [],
+  %Possible = [],
   println(S), nl,
   foreach(Sub in Fields)
-    print(Sub.name), print(" "), print(Sub[2]), println(": "++Sub[1]),
+    print(Sub.name), print(" "), print(Sub[2]), print(": "++Sub[1]),
     PosList = findall([Start,End], find(S,Sub[1],Start,End)),
     Sub[3] := PosList,
     if PosList.length = 1 then
       Found := add_found(PosList[1],Found,[Sub],Fields), % checks overlap
-      println(fixed=first(Sub[3]))
+      nl,println(fixed=first(Sub[3]))
     else
-      print(PosList.length), print(" "),println(positions=PosList),
+      print(" "),print(PosList.length),println(" positions"), % println(positions=PosList),
       % check for matching number of multiple values
       N := same_values(Fields, Sub), % all Subs with same values
       if N.length = PosList.length then
@@ -58,6 +62,10 @@ go(S,Fields) =>
     nl
   end,
 
+  % At first fix all positions for one finds: BL93,H330,BL92.
+  % TODO Error if there's a conflict already.
+  % Then check for all multiple finds if the number of finds is the same as the number of
+  % equal values: BL90,BL96,BL97. Distribute it then.
   % TODO Then pack the possible others optimally (smallest amount of missing holes),
   % with backtracking.
 
@@ -72,19 +80,20 @@ go(S,Fields) =>
     delete_found(F, [], Fields)
   end,
   nl,
-  println("Definite result:"),
+  FoundSize = sum(map(bitslen,Sorted)),
+  print("Definite result: "),print(FoundSize),print("/"),println(S.length),
   println("----------------"),
   % create holes by looking at all adjacent pos's
   foreach (I in 1 .. Sorted.length)
-    Sub := Sorted[I],
-    Pos := first(poslist(Sub)),
+    Sub = Sorted[I],
+    Pos = first(poslist(Sub)),
     if I == 1 then
       if Pos[1] != 1 then
         %println(pos=Pos),
         H = [1, Pos[1]-1], %println(h=H),
         R = S.slice(1,Pos[1]-1),
         Hole = new_struct('HOLE', [H, R]),
-        print(hole_=Hole),print(" "),println(len=H[2]+1-H[1]),
+        print(Hole),print(" "),println(len=H[2]+1-H[1]),
         Holes := [Hole]
       end
     else
@@ -96,11 +105,11 @@ go(S,Fields) =>
         H = [PrevPos[2]+1, Pos[1]-1], %println(h=H),
         R = S.slice(PrevPos[2]+1, Pos[1]-1), %println(r=R),
         Hole = new_struct('HOLE', [H, R]),
-        print(hole_=Hole),print(" "),println(len=H[2]+1-H[1]),
+        print(Hole),print(" "),println(len=H[2]+1-H[1]),
         append(Holes, [Hole], T), Holes := T
       end
     end,
-    print_field(Sub)
+    print_field(Sub,false)
   end,
   % TODO: maybe one last hole
   Sub = last(Sorted), Pos = first(poslist(Sub)),
@@ -108,12 +117,17 @@ go(S,Fields) =>
     H = [Pos[2]+1, S.length], %println(h=H),
     R = S.slice(Pos[2]+1, S.length), %println(r=R),
     Hole = new_struct('HOLE', [H, R]),
-    print(hole_=Hole),print(" "),println(len=H[2]+1-H[1]),
+    print(Hole),print(" "),println(len=H[2]+1-H[1]),
     append(Holes, [Hole], T), Holes := T
   end,
   println("----------------"),
+  NotFoundSize = sum(map(bitslen,[F: F in Fields, F[3].length > 1])),
+  BothFoundSizes = FoundSize+NotFoundSize,
+  print("Todo: "),print(NotFoundSize),print(" + "),print(FoundSize),
+    print(" = "),print(BothFoundSizes),
+    print(", Missing: "),println(S.length-BothFoundSizes),
   foreach (F in Fields, F[3].length > 1)
-    print_field(F)
+    print_field(F,true)
   end,
   nl,
   println("Most probable result: (TODO)"),
@@ -124,12 +138,27 @@ go(S,Fields) =>
 
 % H330(01100000,2E4,[[192,199]],reactors,330) =>
 % FIELD_H (reactors, 330); // 2E4 01100000 191-198
-print_field(Sub) =>
+print_field(Sub,ShowBits) =>
   % split name into type and dxf
-  Str = name(Sub),
-  %Type = [C: C in Str, ord(C) > ord('9')], print(Type),
-  %DXF  = [C: C in Str, ord(C) >= ord('0'), ord(C) <= ord('9')], print(DXF),
-  print("FIELD_"),print(Sub),nl.
+  Name = name(Sub), L = poslist(Sub),
+  Type = [C: C in Name.atom_chars, ord(C) > ord('9')],
+  DXF = Sub.dxfcode,
+  print("FIELD_"),print(Type),print(" ("),
+  print(Sub.fieldname),
+  print(", "),print(DXF),print(");\t// "),
+  print(Sub.value),print(" "),
+  if ShowBits then print(Sub.bits),print(" ") end,
+  if L.length > 10 then
+    print(L.slice(1,10)),
+    print("...)")
+  else
+    if L.length == 1 then
+      print(L[1])
+    else
+      print(L)
+    end
+  end,
+  nl.
 
 % list of same values and number of solutions of Sub in Fields
 same_values(Fields, Sub) =
@@ -163,7 +192,7 @@ add_found(Pos, Found, Subs, Fields) = List =>
   Behind = [X2: X2 in Found, Pos[1] < X2[1], Pos[2] < X2[1]],
   append(T1, Behind, T2),
   if Found.length != T2.length-1 then
-    print("Ignored overlap "), List = Found
+    print(" Ignored overlap "), List = Found
   else
     List = T2,
     delete_found(Pos, Subs, Fields)

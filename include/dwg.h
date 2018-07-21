@@ -4286,6 +4286,7 @@ typedef struct _dwg_object_SUN
 
   BITCODE_BL class_version; //90
   BITCODE_B is_on;   // 290
+  BITCODE_BS unknown; //421
   BITCODE_CMC color; // 60
   BITCODE_BD intensity; // 40
   //BITCODE_3BD direction; //calculated?

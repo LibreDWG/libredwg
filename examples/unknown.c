@@ -258,6 +258,37 @@ bits_CMC(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 }
 
 static void
+handle_string(char *restrict dest,
+              const int code, const char *restrict hdl,
+              const long relhandle)
+{
+  Dwg_Handle handle;
+  //parse hex -> owner handle;
+  sscanf(hdl, "%lX", &handle.value);
+  handle.code = code;
+  if (code > 5) { //relative offset to objhandle
+    switch (code) {
+    case 6: handle.value = 0; break;
+    case 8: handle.value = 0; break;
+    case 0xA: handle.value -= relhandle; break;
+    case 0xC: handle.value = relhandle - handle.value; break;
+    default: break;
+    }
+  }
+  if (handle.value == 0)
+    handle.size = 0;
+  else if (handle.value < 0xff)
+    handle.size = 1;
+  else if (handle.value < 0xffff)
+    handle.size = 2;
+  else if (handle.value < 0xffffff)
+    handle.size = 3;
+  else
+    handle.size = 4;
+  sprintf(dest, "%x.%d.%lX", code, handle.size, handle.value);
+}
+
+static void
 bits_handle(Bit_Chain *restrict dat, struct _unknown_field *restrict g,
             int code, unsigned int objhandle)
 {
@@ -614,6 +645,8 @@ main (int argc, char *argv[])
             strstr(unknown_dxf[i].dxf, "_2007.dxf") ||
             strstr(unknown_dxf[i].dxf, "_201");
           int have_struct = 0;
+          int version = 0;
+          char *s;
 
           if (class && strcmp(class, unknown_dxf[i].name))
             continue;
@@ -623,6 +656,9 @@ main (int argc, char *argv[])
             printf("skip TABLEGEOMETRY\n");
             continue;
           }*/
+          s = strstr(unknown_dxf[i].dxf, "20");
+          if (s)
+            sscanf(s, "%d", &version);
           dxf[i].found = calloc(1, unknown_dxf[i].bitsize);
           dxf[i].possible = calloc(1, unknown_dxf[i].bitsize);
           //TODO offline: find the shortest objects.
@@ -631,9 +667,13 @@ main (int argc, char *argv[])
           printf("  =bits:\n"); bit_print_bits((unsigned char*)unknown_dxf[i].bytes,
                                                size);
           fprintf(pi,
-                  "def(%d,S,Fields) =>\n"
-                  "  println(\"%s: 0x%X (%d) %s:\"),\n",
-                  k, class, unknown_dxf[i].handle, size, unknown_dxf[i].dxf);
+                  "def(%d,Data) =>\n"
+                  "  println(\"%s: 0x%X (%d) %s:\"),\n"
+                  "  Class=\"%s\",\n"
+                  "  Dxf=\"%s\",\n"
+                  "  Version=%d,\n",
+                  k, class, unknown_dxf[i].handle, size, unknown_dxf[i].dxf,
+                  class, unknown_dxf[i].dxf, version);
           fprintf(pi,
                   "  S=\"");
           bit_fprint_bits(pi, (unsigned char*)unknown_dxf[i].bytes, size);
@@ -681,8 +721,10 @@ main (int argc, char *argv[])
                       continue;
                     bits_try_handle (&g[j], handles[c], unknown_dxf[i].handle);
                     num_found = search_bits(j, &g[j], &unknown_dxf[i], &dxf[i], offset);
-                    if (num_found)
+                    if (num_found) { // cur_hdl is set
+                      //sprintf(&g[j].value, "%x..%X", handles[c], hdl); 
                       goto FOUND;
+                    }
                   }
                 }
                 if (g[j].type == BITS_BS && strlen(g[j].value) < 3) {
@@ -918,21 +960,34 @@ main (int argc, char *argv[])
                             "    %%new_struct('_%s%d', [\"",
                             piname, g[j].code);
                     bit_fprint_bits(pi, g[j].bytes, g[j].bitsize);
-                    fprintf(pi,
-                            "\", '%s', []])\n", g[j].value);
+                    if (g[j].type == BITS_HANDLE)
+                      {
+                        char buf[32];
+                        handle_string(buf, cur_hdl, g[j].value, unknown_dxf[i].handle);
+                        fprintf(pi, "\", '%s', []])\n", buf);
+                      }
+                    else
+                      fprintf(pi, "\", '%s', []])\n", g[j].value);
                   }
                 continue;
               }
             FOUND:
               piname = (char*)dwg_bits_name[g[j].type];
-              if (!strcmp(piname, "HANDLE")) piname = (char*)"H";
+              if (g[j].type == BITS_HANDLE)
+                piname = (char*)"H";
               fprintf(pi,
                       "    %snew_struct('%s%d', [\"",
                       have_struct ? "," : " ", piname, g[j].code);
               have_struct = 1;
               bit_fprint_bits(pi, g[j].bytes, g[j].bitsize);
-              fprintf(pi,
-                      "\", '%s', []])\n", g[j].value);
+              if (g[j].type == BITS_HANDLE)
+                {
+                  char buf[32];
+                  handle_string(buf, cur_hdl, g[j].value, unknown_dxf[i].handle);
+                  fprintf(pi, "\", '%s', []])\n", buf);
+                }
+              else
+                fprintf(pi, "\", '%s', []])\n", g[j].value);
               if (num_found == 1) {
                 //we still need to skip already reserved offsets
                 if (set_found(&dxf[i], &g[j])) {
@@ -1043,7 +1098,8 @@ main (int argc, char *argv[])
             }
           fprintf(pi,
                   "  ],\n"
-                  "  go(S,Fields).\n\n");
+                  "  Data = [S,Fields,Class,Dxf,Version],\n"
+                  "  go(Data).\n\n");
           num_fields = j;
           // check for holes and percentage of found ranges
         /*printf("coverage: [");
@@ -1092,7 +1148,7 @@ main (int argc, char *argv[])
               100.0*class_filled/class_size);
 
       for (i=0; i<k; i++) {
-        fprintf(pi, "go%d ?=> def(%d,S,Fields).\n", i, i);
+        fprintf(pi, "go%d ?=> def(%d,Data).\n", i, i);
       }
       fprintf(pi, "\nmain => go0,\n");
       for (i=1; i<k-1; i++) {
