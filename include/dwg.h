@@ -3988,8 +3988,8 @@ typedef struct _dwg_object_MATERIAL
   //?? BD refraction_translucency_weight
   //?? refraction_glossy_samples
   BITCODE_BS refractionmap_source;   /*!< DXF 273 0 current, 1 image file (def) */
-  BITCODE_T refractionmap_filename; /*!< DXF 9 if NULL no refractionmap */
-  BITCODE_BD refractionmap_blendfactor;/*!< DXF 143 def: 1.0 */
+  BITCODE_T refractionmap_filename;  /*!< DXF 9 if NULL no refractionmap */
+  BITCODE_BD refractionmap_blendfactor;/*!< DXF 146 def: 1.0 */
   BITCODE_BS refractionmap_projection; /*!< DXF 274 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere */
   BITCODE_BS refractionmap_tiling;       /*!< DXF 275 1 Tile (def), 2 Crop, 3 Clamp */
   BITCODE_BS refractionmap_autotransform;/*!< DXF 276 */ // 1 no, 2: scale to curr ent,
@@ -4010,7 +4010,7 @@ typedef struct _dwg_object_MATERIAL
   BITCODE_BD normalmap_blendfactor;/*!< DXF 42 def: 1.0 */
   BITCODE_BS normalmap_projection; /*!< DXF 73 1 = Planar (def), 2 = Box, 3 = Cylinder, 4 = Sphere */
   BITCODE_BS normalmap_tiling;     /*!< DXF 74 1 = Tile (def), 2 = Crop, 3 = Clamp */
-  BITCODE_BS normalmap_autotransform; /*!< DXF 43 1 no, 2: scale to curr ent,
+  BITCODE_BS normalmap_autotransform; /*!< DXF 75 1 no, 2: scale to curr ent,
                                                   4: w/ current block transform */
   BITCODE_BD* normalmap_transmatrix; /*!< DXF 43: 16x BD */
   BITCODE_B materials_anonymous;     /*!< DXF 293 */
@@ -4125,9 +4125,11 @@ typedef struct _dwg_entity_LIGHT
 {
   struct _dwg_object_entity *parent;
 
+  BITCODE_BL class_version; /*!< DXF 90 */
   BITCODE_T name; 	/*!< DXF 1 */
   BITCODE_T type; 	/*!< DXF 70, distant = 1; point = 2; spot = 3 */
   BITCODE_B status; 	/*!< DXF 290 */
+  BITCODE_CMC color;    /*!< DXF 63 */
   BITCODE_B plot_glyph; /*!< DXF 291 */
   BITCODE_BD intensity; /*!< DXF 40 */
   BITCODE_3BD position; /*!< DXF 10 */

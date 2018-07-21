@@ -32,22 +32,24 @@ all: $(check_PROGRAMS)
 .PHONY: check-syntax regen-unknown dsymutil gcov
 
 if HAVE_PERL
-# maintainer rules only
+# maintainer rules only. srcdir = builddir only
 alldxf_2.inc: alldxf_1.inc
 alldxf_1.inc: alldxf_0.inc
-alldxf_0.inc: # log_unknown_dxf.pl
+alldxf_0.inc: alldwg.inc log_unknown_dxf.pl
 	test -d ../.git || false
+	test x"$srcdir" = x"$builddir" || false
 	test -f alldwg.inc || (echo make regen-unknown; false)
 	-mv alldxf_0.inc alldxf_0.inc~
 	-mv alldxf_1.inc alldxf_1.inc~
 	-mv alldxf_2.inc alldxf_2.inc~
 	cd .. && $(PERL) examples/log_unknown_dxf.pl examples/alldwg.inc
-alldwg.inc: # log_unknown.pl
+alldwg.inc: log_unknown.pl
 	echo Creating alldwg.inc will need a few minutes...
-	-cd $(abs_top_builddir) && ./logs.sh; \
+	test x"$srcdir" = x"$builddir" || false
+	-cd .. && ./logs.sh; \
 	  rm alldwg.tmp; mv examples/alldwg.inc examples/alldwg.inc~; \
 	  for l in *_r*.log *_20*.log DS_*.log; \
-	    do $(PERL) examples/log_unknown.pl "$$l" >>alldwg.tmp; done \
+	    do $(PERL) examples/log_unknown.pl "$$l" >>alldwg.tmp; done; \
           sort < alldwg.tmp > examples/alldwg.inc; rm alldwg.tmp
 
 regen-unknown:

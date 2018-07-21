@@ -5589,7 +5589,7 @@ DWG_OBJECT(MATERIAL)
   FIELD_BD (refraction_index, 145); //def: 1.0
   FIELD_BS (refractionmap_source, 273); // 0 current, 1 image file (default)
   FIELD_T  (refractionmap_filename, 9); // if NULL no specular map
-  FIELD_BD (refractionmap_blendfactor, 143); // 1.0
+  FIELD_BD (refractionmap_blendfactor, 146); // 1.0
   FIELD_BS (refractionmap_projection, 274); // 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere
   FIELD_BS (refractionmap_tiling, 275); // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
   FIELD_BS (refractionmap_autotransform, 276); // 1 no, 2: scale to curr ent,
@@ -5610,7 +5610,7 @@ DWG_OBJECT(MATERIAL)
   FIELD_BD (normalmap_blendfactor, 42); // 1.0
   FIELD_BS (normalmap_projection, 73); // 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere
   FIELD_BS (normalmap_tiling, 74); // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
-  FIELD_BS (normalmap_autotransform, 43); // 0 inherit, 1 no, 2 object (scale to curr ent),
+  FIELD_BS (normalmap_autotransform, 75); // 0 inherit, 1 no, 2 object (scale to curr ent),
                                           // 4 model (w/ current block transform)
   DEBUG_HERE_OBJ;
   FIELD_VECTOR_N (normalmap_transmatrix, BD, 16, 43);
@@ -5714,10 +5714,13 @@ DWG_OBJECT_END
    of the light using a variety of methods */
 //TODO: 92:8
 DWG_ENTITY(LIGHT)
-  // unsorted!
+  // yet unsorted!
+  SUBCLASS (AcDbLight);
+  FIELD_BL (class_version, 90); //1
   FIELD_T (name, 1);
   FIELD_T (type, 70); /*!< distant = 1; point = 2; spot = 3 */ //offsets: 0,194,229,394,461,...
   FIELD_B (status, 290);
+  FIELD_CMC (color, 63);
   FIELD_B (plot_glyph, 291);
   FIELD_BD (intensity, 40);
   FIELD_3BD (position, 10);

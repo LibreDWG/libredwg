@@ -51,6 +51,7 @@ struct _unknown_field {
   unsigned char *bytes;
   int bitsize;
   Dwg_Bits type;
+  const char *name; // in dwg.spec
   unsigned short num; //number of occurances of this type:value pair (max 1423)
   int pos[5]; //5x found bit offset in dxf->bytes or -1 if not found
   // many typical values are 5x found (handle 0, BL 2)
@@ -645,6 +646,8 @@ main (int argc, char *argv[])
             strstr(unknown_dxf[i].dxf, "_2007.dxf") ||
             strstr(unknown_dxf[i].dxf, "_201");
           int have_struct = 0;
+          int is_dict = 0;
+          int is_react = 0;
           int version = 0;
           char *s;
 
@@ -686,10 +689,17 @@ main (int argc, char *argv[])
               char *piname;
               int offset = 0;
               printf("%d: %s\n", g[j].code, g[j].value);
-              if (g[j].code == 100 || g[j].code == 102) {
+              if (g[j].code == 102) {
+                if (!strcmp(g[j].value, "{ACAD_XDICTIONARY"))
+                  is_dict = 1;
+                else if (!strcmp(g[j].value, "{ACAD_REACTORS"))
+                  is_react = 1;
+                else if (!strcmp(g[j].value, "}")) {
+                  is_react = 0; is_dict = 0;
+                }
                 continue;
               }
-              if (g[j].code >= 1000) {
+              if (g[j].code == 100 || g[j].code >= 1000) {
                 continue;
               }
               //if we came here from continue, i.e. not_found
@@ -983,6 +993,7 @@ main (int argc, char *argv[])
               if (g[j].type == BITS_HANDLE)
                 {
                   char buf[32];
+                  //reactors or xdict?
                   handle_string(buf, cur_hdl, g[j].value, unknown_dxf[i].handle);
                   fprintf(pi, "\", '%s', []])\n", buf);
                 }
