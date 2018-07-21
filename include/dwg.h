@@ -4506,6 +4506,22 @@ typedef struct _dwg_object_EVALUATION_GRAPH
   BITCODE_H xdicobjhandle;
 } Dwg_Object_EVALUATION_GRAPH;
 
+typedef struct _dwg_object_PERSSUBENTMANAGER
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BL class_version; /*!< DXF 90 2 */
+  BITCODE_BL unknown_bl1;   /*!< DXF 90 0 */
+  BITCODE_BL unknown_bl2;   /*!< DXF 90 2 */
+  BITCODE_BL unknown_bl3;   /*!< DXF 90 3 */
+  BITCODE_BL unknown_bl4;   /*!< DXF 90 0 */
+  BITCODE_BL unknown_bl5;   /*!< DXF 90 1 */
+  BITCODE_BL unknown_bl6;   /*!< DXF 90 1 */
+
+  BITCODE_H  parenthandle; //3. 330
+  BITCODE_H* reactors;
+  BITCODE_H  xdicobjhandle;
+} Dwg_Object_PERSSUBENTMANAGER;
+
 typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER
 {
   struct _dwg_object_object *parent;
@@ -4549,7 +4565,6 @@ typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER
   BITCODE_BL unknown_bl35;  /*!< DXF 90 3 0100000011 */
   BITCODE_BL unknown_bl36;  /*!< DXF 90 0 */
   BITCODE_B  unknown_b37;   /*!< DXF 290 0 */
-  BITCODE_B  unknown_b38;   /*!< DXF 0 */
 
   BITCODE_H  parenthandle; //3. 330
   BITCODE_H* reactors;
@@ -4852,7 +4867,7 @@ typedef struct _dwg_object_object
     //TODO Dwg_Object_NPOCOLLECTION *NPOCOLLECTION;
     Dwg_Object_OBJECT_PTR *OBJECT_PTR;
     Dwg_Object_OBJECTCONTEXTDATA *OBJECTCONTEXTDATA;
-    //Dwg_Object_PERSSUBENTMANAGER *PERSSUBENTMANAGER;
+    Dwg_Object_PERSSUBENTMANAGER *PERSSUBENTMANAGER;
     Dwg_Object_PLACEHOLDER *PLACEHOLDER;
     Dwg_Object_PLOTSETTINGS *PLOTSETTINGS;
     Dwg_Object_PROXY_OBJECT *PROXY_OBJECT;
@@ -5466,7 +5481,7 @@ EXPORT int dwg_add_MULTILEADER (Dwg_Object *obj);
 //EXPORT int dwg_add_NPOCOLLECTION (Dwg_Object *obj);
 EXPORT int dwg_add_OBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_add_OBJECT_PTR (Dwg_Object *obj);
-//EXPORT int dwg_add_PERSSUBENTMANAGER (Dwg_Object *obj);
+EXPORT int dwg_add_PERSSUBENTMANAGER (Dwg_Object *obj);
 EXPORT int dwg_add_PLOTSETTINGS (Dwg_Object *obj);
 //EXPORT int dwg_add_POINTCLOUD (Dwg_Object *obj);
 EXPORT int dwg_add_RASTERVARIABLES (Dwg_Object *obj);

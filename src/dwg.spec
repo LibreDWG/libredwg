@@ -5471,6 +5471,25 @@ DWG_ENTITY(CAMERA) // i.e. a named view, not persistent in a DWG. CAMERADISPLAY=
 
 DWG_ENTITY_END
 
+// (varies) UNTESTED
+// works ok on all example_20* but this coverage seems limited
+DWG_OBJECT(PERSSUBENTMANAGER)
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
+  SUBCLASS (AcDbPersSubentManager)
+  FIELD_BL (class_version, 90); //2
+  FIELD_BL (unknown_bl1, 90); //0
+  FIELD_BL (unknown_bl2, 90); //2
+  FIELD_BL (unknown_bl3, 90); //3
+  FIELD_BL (unknown_bl4, 90); //0
+  FIELD_BL (unknown_bl5, 90); //1
+  FIELD_BL (unknown_bl6, 90); //1
+
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (parenthandle, 3, 0);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+DWG_OBJECT_END
+
 #ifdef DEBUG_CLASSES
 
 //EED data copied plus some other
@@ -6138,7 +6157,6 @@ DWG_OBJECT(ASSOCPERSSUBENTMANAGER)
   FIELD_BL (unknown_bl35, 90); //3 0100000011
   FIELD_BL (unknown_bl36, 90); //0
   FIELD_B  (unknown_b37, 290); //0
-  FIELD_B  (unknown_b38, 0); //?
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (parenthandle, 3, 0);
