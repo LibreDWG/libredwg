@@ -44,18 +44,20 @@ my $i = 0;
 open my $f0, ">", "examples/alldxf_0.inc" || die "$!";
 open my $f1, ">", "examples/alldxf_1.inc" || die "$!";
 open my $f2, ">", "examples/alldxf_2.inc" || die "$!";
-
-open my $skip_fh, "<", "examples/alldwg.skip"
-  or warn "examples/alldwg.skip missing";
 my %skip;
-while (<$skip_fh>) {
-  my @F = split(' ');
-  shift @F;
-  # NAME-HANDLE-BITSIZE
-  $F[2] =~ s/^0x//;
-  $skip{"$F[0]-$F[2]-$F[3]"} = \@F;
+
+if (0) {
+  open my $skip_fh, "<", "examples/alldwg.skip"
+    or warn "examples/alldwg.skip missing";
+  while (<$skip_fh>) {
+    my @F = split(' ');
+    shift @F;
+    # NAME-HANDLE-BITSIZE
+    $F[2] =~ s/^0x//;
+    $skip{"$F[0]-$F[2]-$F[3]"} = \@F;
+  }
+  close $skip_fh;
 }
-close $skip_fh;
 
 my $known = {
   ACAD_EVALUATION_GRAPH => [
