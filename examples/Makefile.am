@@ -32,6 +32,7 @@ all: $(check_PROGRAMS)
 .PHONY: check-syntax regen-unknown dsymutil gcov
 
 if HAVE_PERL
+if HAVE_INSRCDIR
 # maintainer rules only. srcdir = builddir only
 alldxf_2.inc: alldxf_1.inc
 alldxf_1.inc: alldxf_0.inc
@@ -55,6 +56,10 @@ alldwg.inc: log_unknown.pl
 regen-unknown:
 	$(MAKE) alldwg.inc
 	$(MAKE) alldxf_0.inc
+else
+regen-unknown:
+	$(ECHO) Need a configure in srcdir
+endif
 endif
 
 if HAVE_WINE

@@ -302,6 +302,7 @@ AM_CONDITIONAL([HAVE_SWIG_PERL], [test -n "$SWIG" && test -n "$PERL"])
 AM_CONDITIONAL([HAVE_PERL], [test -n "$PERL"])
 dnl only needed with python bindings
 AM_CONDITIONAL([HAVE_PATCH], [test -n "$PATCH"])
+AM_CONDITIONAL([HAVE_INSRCDIR], [test x"$srcdir" = x"$builddir"])
 
 AC_CHECK_PROGS([PICAT], [picat])
 if test -n "$PICAT"; then AM_RUN_LOG([$PICAT --version]); fi
