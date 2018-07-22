@@ -323,7 +323,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_DICTIONARYWDFLT,
   DWG_TYPE_DIMASSOC,
   DWG_TYPE_DOCUMENTOPTIONS,
-  DWG_TYPE_DYNAMICBLOCKPURGEPREVENTER_VERSION,
+  DWG_TYPE_DYNAMICBLOCKPURGEPREVENTER,
   DWG_TYPE_EVALUATION_GRAPH,
   DWG_TYPE_FIELD,
   DWG_TYPE_FIELDLIST,
@@ -4512,6 +4512,19 @@ typedef struct _dwg_object_EVALUATION_GRAPH
   BITCODE_H xdicobjhandle;
 } Dwg_Object_EVALUATION_GRAPH;
 
+typedef struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BS flag; /*!< DXF 70 0 */
+  BITCODE_RS unknown_rs1;
+
+  BITCODE_H  parenthandle; //330 => BLOCK_HEADER
+  BITCODE_H* reactors;     //dict
+  BITCODE_H  xdicobjhandle;
+  BITCODE_H unknown_h1;
+  BITCODE_H unknown_h2;
+} Dwg_Object_DYNAMICBLOCKPURGEPREVENTER;
+
 typedef struct _dwg_object_PERSSUBENTMANAGER
 {
   struct _dwg_object_object *parent;
@@ -4853,6 +4866,7 @@ typedef struct _dwg_object_object
     Dwg_Object_DICTIONARYWDFLT *DICTIONARYWDFLT;
     //TODO Dwg_Object_DIMASSOC *DIMASSOC;
     //Dwg_Object_DOCUMENTOPTIONS *DOCUMENTOPTIONS;
+    Dwg_Object_DYNAMICBLOCKPURGEPREVENTER *DYNAMICBLOCKPURGEPREVENTER;
     Dwg_Object_DUMMY *DUMMY;
     Dwg_Object_EVALUATION_GRAPH *EVALUATION_GRAPH;
     Dwg_Object_FIELD *FIELD;
@@ -5458,7 +5472,8 @@ EXPORT int dwg_add_ASSOCACTION (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCNETWORK (Dwg_Object *obj);
 EXPORT int dwg_add_CAMERA (Dwg_Object *obj);
 EXPORT int dwg_add_CELLSTYLEMAP (Dwg_Object *obj);
-//EXPORT int dwg_add_CSACDOCUMENTOPTIONS (Dwg_Object *obj);
+//EXPORT int dwg_add_DOCUMENTOPTIONS (Dwg_Object *obj);
+EXPORT int dwg_add_DYNAMICBLOCKPURGEPREVENTER (Dwg_Object *obj);
 EXPORT int dwg_add_DATATABLE (Dwg_Object *obj);
 EXPORT int dwg_add_DBCOLOR (Dwg_Object *obj);
 //EXPORT int dwg_add_DETAILVIEWSTYLE (Dwg_Object *obj);

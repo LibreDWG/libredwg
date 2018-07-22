@@ -5485,12 +5485,31 @@ DWG_OBJECT(PERSSUBENTMANAGER)
   FIELD_BL (unknown_bl6, 90); //1
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 3, 0);
+  FIELD_HANDLE (parenthandle, 4, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
 DWG_OBJECT_END
 
 #ifdef DEBUG_CLASSES
+
+// (varies) UNTESTED
+// ENHANCEDBLOCK => AcDbDynamicBlockRoundTripPurgePreventer
+DWG_OBJECT(DYNAMICBLOCKPURGEPREVENTER)
+  DXF { FIELD_HANDLE (parenthandle, 5, 330); }
+  SUBCLASS (AcDbDynamicBlockPurgePreventer)
+  FIELD_BS (flag, 70); //1
+  FIELD_RS (unknown_rs1, 0);
+
+  START_HANDLE_STREAM;
+  REACTORS(4); // BLOCK_HEADER
+  FIELD_HANDLE (parenthandle, 5, 0); // dict
+  XDICOBJHANDLE(3);
+  //len 47
+  DEBUG_HERE_OBJ
+  //FIELD_HANDLE (unknown_h1, 0, 0);
+  //DEBUG_HERE_OBJ
+  //FIELD_HANDLE (unknown_h2, 0, 0);
+DWG_OBJECT_END
 
 //EED data copied plus some other
 DWG_OBJECT(DBCOLOR)
