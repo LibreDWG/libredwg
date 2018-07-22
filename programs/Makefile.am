@@ -21,17 +21,22 @@ WARN_CFLAGS  = @WARN_CFLAGS@
 AM_CFLAGS  = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
 LDADD      = $(top_builddir)/src/libredwg.la -lm
 
-bin_PROGRAMS = dwgread dwgbmp dwg2dxf dwg2SVG dwglayers dwggrep
+bin_PROGRAMS = dwgread
+if !DISABLE_DXF
+bin_PROGRAMS += dwgbmp dwg2dxf dwg2SVG dwglayers dwggrep
+endif
 noinst_PROGRAMS =
 dist_man1_MANS = $(srcdir)/dwgread.1 $(srcdir)/dwgbmp.1 $(srcdir)/dwg2dxf.1 \
 	         $(srcdir)/dwg2SVG.1 $(srcdir)/dwglayers.1 $(srcdir)/dwg2ps.1 \
 		 $(srcdir)/dwggrep.1
 DISTCLEANFILES = core
 
+if !DISABLE_DXF
 if HAVE_LIBPS
 bin_PROGRAMS += dwg2ps
 dwg2ps_SOURCES = dwg2ps.c
 dwg2ps_LDADD = $(LDADD) -lps
+endif
 endif
 
 dwgread_SOURCES  = dwgread.c
@@ -43,6 +48,7 @@ dwggrep_SOURCES = dwggrep.c
 dwggrep_CFLAGS  = $(CFLAGS) $(AM_CFLAGS) $(PCRE2_CFLAGS)
 dwggrep_LDADD   = $(LDADD) $(PCRE2_LIBS)
 
+if !DISABLE_DXF
 if USE_WRITE
 bin_PROGRAMS += dwgrewrite
 # not yet ready
@@ -51,6 +57,7 @@ dist_man1_MANS  += $(srcdir)/dwgrewrite.1 $(srcdir)/dwgwrite.1 $(srcdir)/dxf2dwg
 dwgrewrite_SOURCES = dwgrewrite.c
 dwgwrite_SOURCES   = dwgwrite.c
 dxf2dwg_SOURCES    = dxf2dwg.c
+endif
 endif
 
 if HAVE_WINE

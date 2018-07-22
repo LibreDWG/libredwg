@@ -205,6 +205,16 @@ AC_ARG_ENABLE([trace],AS_HELP_STRING([--enable-trace],[
   AC_MSG_RESULT([yes]),
   AC_MSG_RESULT([no (default)]))
 
+dnl only useful for faster debug/test cycles
+AC_MSG_CHECKING([--disable-dxf])
+AC_ARG_ENABLE([dxf],AS_HELP_STRING([--disable-dxf],[
+    Disable DXF and other in/out modules (default: no).]),[],[enable_dxf=yes])
+AM_CONDITIONAL([DISABLE_DXF], [test x$enable_dxf = xno])
+AS_IF([test x$enable_dxf = xno],
+  AC_DEFINE([DISABLE_DXF],1,[Define to disable DXF and other in/out modules.])
+  AC_MSG_RESULT([yes]),
+  AC_MSG_RESULT([no (default)]))
+
 AC_CHECK_FUNCS([setenv],[],
   AS_IF([test x$enable_trace = xyes],
     [AC_MSG_WARN([setenv not found. --enable-trace is limited with cmdline apps.

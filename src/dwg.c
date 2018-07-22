@@ -202,7 +202,7 @@ dwg_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
 }
 
 /* if write support is enabled */
-#ifdef USE_WRITE
+#if defined(USE_WRITE) && !defined(DISABLE_DXF)
 
 /** dxf_read_file
  * returns 0 on success.

@@ -149,6 +149,7 @@ main(int argc, char *argv[])
         outfile = optarg;
         if (!fmt)
           {
+#ifndef DISABLE_DXF
             if (strstr(outfile, ".json") || strstr(outfile, ".JSON"))
               fmt = (char*)"json";
             else
@@ -160,9 +161,9 @@ main(int argc, char *argv[])
             else
             if (strstr(outfile, ".geojson") || strstr(outfile, ".GeoJSON"))
               fmt = (char*)"geojson";
-            else {
+            else
+#endif
               fprintf(stderr, "Unknown output format for %s\n", outfile);
-            }
           }
         break;
       case 'v': // support -v3 and -v
@@ -227,7 +228,7 @@ main(int argc, char *argv[])
       dat.version = dat.from_version = dwg.header.version;
       // TODO --as-rNNNN version? for now not.
       // we want the native dump, converters are seperate.
-
+#ifndef DISABLE_DXF
       if (!strcasecmp(fmt, "json"))
         error = dwg_write_json(&dat, &dwg);
       else if (!strcasecmp(fmt, "dxfb"))
@@ -236,9 +237,10 @@ main(int argc, char *argv[])
         error = dwg_write_dxf(&dat, &dwg);
       else if (!strcasecmp(fmt, "geojson"))
         error = dwg_write_geojson(&dat, &dwg);
-      else {
+      else
+#endif
         fprintf(stderr, "Invalid output format '%s'\n", fmt);
-      }
+
       if (outfile)
         {
           fclose(dat.fh);
