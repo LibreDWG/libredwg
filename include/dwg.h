@@ -3466,7 +3466,13 @@ typedef struct _dwg_object_DBCOLOR
 {
   struct _dwg_object_object *parent;
 
-  BITCODE_BS color; //62: 253
+  BITCODE_BL class_version; //  0
+  BITCODE_BS rgb;     //420:
+  BITCODE_BS unknown1; //  256
+  BITCODE_T name;     //430: DIC 6
+  BITCODE_T catalog;  //     DIC COLOR GUIDE(R)
+  BITCODE_CMC color;  //62: 253
+  //...
   BITCODE_H parenthandle;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;

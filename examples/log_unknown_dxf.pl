@@ -73,7 +73,7 @@ my $known = {
     360 => 'evalexpr'
     ],
   DBCOLOR => [
-    62 => 'color',
+    62  => 'color',
     420 => 'rgb',
     430 => 'name',
     330 => 'parenthandle',

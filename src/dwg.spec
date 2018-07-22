@@ -5496,15 +5496,31 @@ DWG_OBJECT_END
 DWG_OBJECT(DBCOLOR)
   DXF { FIELD_HANDLE (parenthandle, 3, 330); }
   SUBCLASS (AcDbColor)
-  //FIELD_BS (color, 62); <= EED 1070 @224-233
-  //FIELD_RL (rgb, 420);  <= EED 1071
-  //FIELD_T (name, 430);  <= EED 1000
+  FIELD_BL (class_version, 0); //0 01
+  FIELD_BS (rgb, 420);
   DEBUG_HERE_OBJ
-  START_HANDLE_STREAM; //@264-295
+  bit_advance_position(dat, 24);
+  /* rcount1 = bit_position(dat);
+  DEBUG_HERE_OBJ
+  for (vcount=0; vcount<20; vcount++) {
+    FIELD_T (name, 0);    //2nd part of 430
+    if (memcmp(_obj->name, "DIC 6", 5))
+      bit_set_position(dat, rcount1 + vcount);
+    else {
+      fprintf(stderr, "offset %ld\n", vcount);
+      break;
+    }
+  }*/
+  FIELD_T (name, 0);    //2nd part of 430
+  FIELD_T (catalog, 0); //1st part of 430
+
+  DEBUG_HERE_OBJ
+  FIELD_CMC (color, 62); //= EED 1070 @224-233 (or RC)
+  START_HANDLE_STREAM;   //@264-295
   FIELD_HANDLE (parenthandle, 3, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
-  //TODO copy of the EED data? big hole from 296-753
+  //TODO copy of the EED data? big hole from 296-753.
   DEBUG_HERE_OBJ
 DWG_OBJECT_END
 
