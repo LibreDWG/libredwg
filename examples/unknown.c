@@ -974,10 +974,12 @@ main (int argc, char *argv[])
                       {
                         char buf[32];
                         handle_string(buf, cur_hdl, g[j].value, unknown_dxf[i].handle);
-                        fprintf(pi, "\", '%s', []])\n", buf);
+                        fprintf(pi, "\", '%s', [], \"%s\", %d])\n", buf,
+                                g[j].name, g[j].code);
                       }
                     else
-                      fprintf(pi, "\", '%s', []])\n", g[j].value);
+                      fprintf(pi, "\", '%s', [], \"%s\", %d])\n", g[j].value,
+                              g[j].name, g[j].code);
                   }
                 continue;
               }
@@ -995,10 +997,12 @@ main (int argc, char *argv[])
                   char buf[32];
                   //reactors or xdict?
                   handle_string(buf, cur_hdl, g[j].value, unknown_dxf[i].handle);
-                  fprintf(pi, "\", '%s', []])\n", buf);
+                  fprintf(pi, "\", '%s', [], \"%s\", %d])\n", buf,
+                          g[j].name, g[j].code);
                 }
               else
-                fprintf(pi, "\", '%s', []])\n", g[j].value);
+                fprintf(pi, "\", '%s', [], \"%s\", %d])\n", g[j].value,
+                          g[j].name, g[j].code);
               if (num_found == 1) {
                 //we still need to skip already reserved offsets
                 if (set_found(&dxf[i], &g[j])) {
