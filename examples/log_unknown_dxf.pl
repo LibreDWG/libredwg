@@ -770,7 +770,7 @@ my $known = {
     ],
 };
 
-print $f1 "/* code, value, bytes, bitsize, type, name, num, pos[] */\n";
+print $f1 "// code, value, bytes, bitsize, type, name, num, pos[]\n";
 
 LINE:
 while (<>) {
