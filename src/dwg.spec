@@ -5547,6 +5547,37 @@ DWG_OBJECT_END
    The following entities/objects are stored as raw UNKNOWN_ENT/OBJ,
    unless enabled via -DDEBUG_CLASSES */
 
+// See AcDbAssocActionBody.h and AcDbAssocDimDependencyBody.h
+DWG_OBJECT(ASSOCALIGNEDDIMACTIONBODY)
+  SUBCLASS (AcDbAssocActionBody)
+  FIELD_BL (status, 90); //0:1
+  SUBCLASS (AcDbAssocParamBasedActionBody)
+  FIELD_BL (unknown1, 90);
+  FIELD_BL (unknown2, 90);
+  FIELD_BL (unknown3, 90);
+  FIELD_BL (unknown4, 90);
+  FIELD_BL (unknown5, 90);
+  FIELD_BL (unknown6, 90);
+  SUBCLASS (ACDBASSOCALIGNEDDIMACTIONBODY)
+  FIELD_BL (dcm_status, 90); //has d_node or r_node
+  //TODO: DXF has a different order
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (parenthandle, 4, 330);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  VERSION (R_2013) {
+    FIELD_HANDLE (readdep, 4, 330);
+    FIELD_HANDLE (writedep, 3, 360);
+    FIELD_HANDLE (r_node, 4, 330);
+    FIELD_HANDLE (d_node, 4, 330);
+  } else {
+    FIELD_HANDLE (writedep, 3, 360);
+    FIELD_HANDLE (readdep, 4, 330);
+    FIELD_HANDLE (d_node, 3, 330);
+    FIELD_HANDLE (r_node, 4, 330);
+  }
+DWG_OBJECT_END
+
 // subclass of AcDbAssocAction
 // Object1 --ReadDep--> Action1 --WriteDep1--> Object2 --ReadDep--> Action2 ...
 DWG_OBJECT(ASSOCNETWORK)

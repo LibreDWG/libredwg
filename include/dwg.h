@@ -4402,6 +4402,26 @@ typedef struct _dwg_object_ASSOCACTION
   BITCODE_BL unknown_assoc; // 90
 } Dwg_Object_ASSOCACTION;
 
+typedef struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BL status; // 90
+  BITCODE_BL unknown1; // 90:0
+  BITCODE_BL unknown2; // 90:0
+  BITCODE_BL unknown3; // 90:1
+  BITCODE_H  writedep; // 360
+  BITCODE_BL unknown4; // 90:0
+  BITCODE_BL unknown5; // 90:0
+  BITCODE_BL unknown6; // 90:0
+  BITCODE_H  readdep; // 330
+  BITCODE_BL dcm_status; // 90:0
+  BITCODE_H  parenthandle; //330
+  BITCODE_H  d_node; // 330
+  BITCODE_H  r_node; // 330
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
+} Dwg_Object_ASSOCALIGNEDDIMACTIONBODY;
+
 /**
  Object ASSOCNETWORK (varies) UNKNOWN FIELDS
  subclass of AcDbAssocAction
@@ -4851,7 +4871,7 @@ typedef struct _dwg_object_object
     //TODO Dwg_Object_ARC_DIMENSION *ARC_DIMENSION;
     Dwg_Object_ASSOC2DCONSTRAINTGROUP *ASSOC2DCONSTRAINTGROUP;
     Dwg_Object_ASSOCACTION *ASSOCACTION;
-    //TODO Dwg_Object_ASSOCALIGNEDDIMACTIONBODY *ASSOCALIGNEDDIMACTIONBODY;
+    Dwg_Object_ASSOCALIGNEDDIMACTIONBODY *ASSOCALIGNEDDIMACTIONBODY;
     //TODO Dwg_Object_ASSOCDEPENDENCY *ASSOCDEPENDENCY;
     //TODO Dwg_Object_ASSOCGEOMDEPENDENCY *ASSOCGEOMDEPENDENCY;
     Dwg_Object_ASSOCNETWORK *ASSOCNETWORK;
@@ -5461,8 +5481,8 @@ EXPORT int dwg_add_EVALUATION_GRAPH (Dwg_Object *obj);
 //EXPORT int dwg_add_ACSH_SWEEP_CLASS (Dwg_Object *obj);
 //EXPORT int dwg_add_ARCALIGNEDTEXT (Dwg_Object *obj);
 //EXPORT int dwg_add_ARC_DIMENSION (Dwg_Object *obj);
-int dwg_add_ASSOC2DCONSTRAINTGROUP (Dwg_Object *obj);
-//EXPORT int dwg_add_ASSOCALIGNEDDIMACTIONBODY (Dwg_Object *obj);
+EXPORT int dwg_add_ASSOC2DCONSTRAINTGROUP (Dwg_Object *obj);
+EXPORT int dwg_add_ASSOCALIGNEDDIMACTIONBODY (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCDEPENDENCY (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCGEOMDEPENDENCY (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCOSNAPPOINTREFACTIONPARAM (Dwg_Object *obj);

@@ -209,6 +209,22 @@ my $known = {
     360 => 'writedep',
     90 => 'unknown_assoc',
     ],
+  ACDBASSOCALIGNEDDIMACTIONBODY => [
+    90 => 'status',
+    #100 => AcDbAssocParamBasedActionBody
+    90 => 'unknown1',
+    90 => 'unknown2',
+    90 => 'unknown3',
+    90 => 'unknown4',
+    90 => 'unknown5',
+    90 => 'unknown6',
+    360 => 'writedep',
+    330 => 'readdep',
+    #100 => ACDBASSOCALIGNEDDIMACTIONBODY,
+    90 => 'dcm_status',
+    330 => 'd_node',
+    330 => 'r_node',
+    ],
   ACDBASSOCNETWORK => [
     #100 => 'AcDbAssocAction',
     90 => 'status',
@@ -483,7 +499,7 @@ my $known = {
     #0 => 'break_rows.start',
     ],
   TABLECONTENT => [
-    #SUBCLASS (AcDbDataTableContent)
+    #100 => AcDbDataTableContent
     1 => 'ldata.name',
     300 => 'ldata.desc',
     90 => 'tdata.num_cols',
