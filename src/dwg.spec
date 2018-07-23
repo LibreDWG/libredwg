@@ -3370,7 +3370,12 @@ DWG_ENTITY(HATCH)
       FIELD_BL (single_color_gradient, 452);
       FIELD_BD (gradient_tint, 462);
       FIELD_BL (num_colors, 453); //default: 2
-      PRINT { if (FIELD_VALUE(is_gradient_fill)) return DWG_ERR_NOTYETSUPPORTED; }
+      PRINT {
+        if (FIELD_VALUE(is_gradient_fill)) {
+          LOG_ERROR("Unsupported HATCH.is_gradient_fill");
+          return DWG_ERR_NOTYETSUPPORTED;
+        }
+      }
       if (FIELD_VALUE(is_gradient_fill) && FIELD_VALUE(num_colors > 1000))
         {
           LOG_ERROR("Invalid gradient fill HATCH.num_colors " FORMAT_BL,
@@ -3478,7 +3483,8 @@ DWG_ENTITY(HATCH)
                         }
                       break;
                     default:
-                      LOG_ERROR("Invalid type_status in HATCH entity\n")
+                      LOG_ERROR("Invalid HATCH.type_status %d\n",
+                                FIELD_VALUE(paths[rcount1].segs[rcount2].type_status));
                       DEBUG_HERE_OBJ
                       return DWG_ERR_VALUEOUTOFBOUNDS;
                 }
