@@ -2309,6 +2309,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
         LOG_ERROR("No EED[%d].handle", idx);
         obj->num_eed = 0;
         free(obj->eed);
+        obj->eed = NULL;
         return error;
       } else {
         end = dat->byte + size;
@@ -2372,6 +2373,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
                       free(obj->eed[idx].raw);
                     free(obj->eed[idx].data);
                     free(obj->eed);
+                    obj->eed = NULL;
                     dat->byte = end;
                     return DWG_ERR_VALUEOUTOFBOUNDS; /* may not continue */
 #endif

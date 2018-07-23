@@ -267,8 +267,7 @@ dwg_free_eed(Dwg_Object* obj)
     for (i=0; i < _obj->num_eed; i++) {
       if (_obj->eed[i].size)
         FREE_IF(_obj->eed[i].raw);
-      if (_obj->eed[i].data)
-        FREE_IF(_obj->eed[i].data);
+      FREE_IF(_obj->eed[i].data);
     }
     FREE_IF(_obj->eed);
   }
@@ -277,8 +276,7 @@ dwg_free_eed(Dwg_Object* obj)
     for (i=0; i < _obj->num_eed; i++) {
       if (_obj->eed[i].size)
         FREE_IF(_obj->eed[i].raw);
-      if (_obj->eed[i].data)
-        FREE_IF(_obj->eed[i].data);
+      FREE_IF(_obj->eed[i].data);
     }
     FREE_IF(_obj->eed);
   }
