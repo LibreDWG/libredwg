@@ -31,7 +31,6 @@ bitslen(S) = S[1].length.
 go(Data) =>
   [S,Fields,Class,Dxf,Version] = Data,
   Found = [],
-  %Possible = [],
   println(S), nl,
   foreach(Sub in Fields)
     print(Sub.name), print(" "), print(Sub[2]), print(": "++Sub[1]),
@@ -39,7 +38,7 @@ go(Data) =>
     Sub[3] := PosList,
     if PosList.length = 1 then
       Found := add_found(PosList[1],Found,[Sub],Fields), % checks overlap
-      nl,println(fixed=first(Sub[3]))
+      print(" "),println(fixed=first(Sub[3]))
     else
       print(" "),print(PosList.length),println(" positions"), % println(positions=PosList),
       % check for matching number of multiple values
@@ -59,7 +58,6 @@ go(Data) =>
       end
     end,
     %println(fixed=Found),
-    nl
   end,
 
   % At first fix all positions for one finds: BL93,H330,BL92.
@@ -70,7 +68,7 @@ go(Data) =>
   % with backtracking.
 
   % Print the layout of all fixed ranges and holes (yet unconstraint)
-  println(fixed=Found),
+  nl,println(fixed=Found),
   Holes = [],
   Sorted := [F: F in Fields, F[3].length == 1],
   Sorted := field_sort(Sorted),

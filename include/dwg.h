@@ -359,6 +359,10 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_SUN,
   DWG_TYPE_SUNSTUDY,
   DWG_TYPE_SURFACE,
+  DWG_TYPE_EXTRUDEDSURFACE,
+  DWG_TYPE_LOFTEDSURFACE,
+  DWG_TYPE_REVOLVEDSURFACE,
+  DWG_TYPE_SWEPTSURFACE,
   DWG_TYPE_TABLE,
   DWG_TYPE_TABLECONTENT,
   DWG_TYPE_TABLEGEOMETRY,
@@ -4210,12 +4214,10 @@ typedef struct _dwg_entity_HELIX
 } Dwg_Entity_HELIX;
 
 /**
- Entity SURFACE (varies) UNKNOWN FIELDS
- in DXF as SURFACE and encrypted
- yet unsorted, and unused.
- There's EXTRUDED, LOFTED, PLANE, REVOLVED, SWEPT
+ Entity EXTRUDEDSURFACE (varies)
+ in DXF encrypted.
 */
-typedef struct _dwg_entity_SURFACE
+typedef struct _dwg_entity_EXTRUDEDSURFACE
 {
   struct _dwg_object_entity *parent;
   //? sweep_profile, taper_angle
@@ -4248,7 +4250,112 @@ typedef struct _dwg_entity_SURFACE
   BITCODE_3BD reference_vector_for_controlling_twist; /*!< DXF 11 */
   BITCODE_H sweep_entity;
   BITCODE_H path_entity;
+} Dwg_Entity_EXTRUDEDSURFACE;
+
+/**
+ Entity LOFTEDSURFACE (varies)
+*/
+typedef struct _dwg_entity_LOFTEDSURFACE
+{
+  struct _dwg_object_entity *parent;
+  BITCODE_BS modeler_format_version; /*!< DXF 70 */
+  BITCODE_BS u_isolines;         /*!< DXF 71 */
+  BITCODE_BS v_isolines;         /*!< DXF 72 */
+  BITCODE_BL class_version;      /*!< DXF 90 */
+  BITCODE_BD* loft_entity_transmatrix; /*!< DXF 40: 16x BD */
+  BITCODE_BL plane_normal_lofting_type; /*!< DXF 70 */
+  BITCODE_BD start_draft_angle;     /*!< DXF 41 */
+  BITCODE_BD end_draft_angle;       /*!< DXF 42 */
+  BITCODE_BD start_draft_magnitude; /*!< DXF 43 */
+  BITCODE_BD end_draft_magnitude;   /*!< DXF 44 */
+  BITCODE_B arc_length_parameterization; // 290
+  BITCODE_B no_twist; // 291
+  BITCODE_B align_direction; // 292
+  BITCODE_B simple_surfaces; // 293
+  BITCODE_B closed_surfaces; // 294
+  BITCODE_B solid; // 295
+  BITCODE_B ruled_surface; // 296
+  BITCODE_B virtual_guide; // 297
+  
+  BITCODE_H cross_section;
+  BITCODE_H guide_curve;
+  BITCODE_H path_curve;
+} Dwg_Entity_LOFTEDSURFACE;
+
+/**
+ Entity PLANE SURFACE (varies)
+*/
+typedef struct _dwg_entity_SURFACE
+{
+  struct _dwg_object_entity *parent;
+  BITCODE_BS modeler_format_version; /*!< DXF 70 */
+  BITCODE_BS u_isolines;         /*!< DXF 71 */
+  BITCODE_BS v_isolines;         /*!< DXF 72 */
+  BITCODE_BL class_version; /*!< DXF 90 */
+  
 } Dwg_Entity_SURFACE;
+
+/**
+ Entity REVOLVEDSURFACE (varies)
+*/
+typedef struct _dwg_entity_REVOLVEDSURFACE
+{
+  struct _dwg_object_entity *parent;
+  BITCODE_BS modeler_format_version; /*!< DXF 70 */
+  BITCODE_BS u_isolines;         /*!< DXF 71 */
+  BITCODE_BS v_isolines;         /*!< DXF 72 */
+  BITCODE_BL class_version; /*!< DXF 90 */
+
+  BITCODE_BL id; // 90
+  BITCODE_BL num_bindata; // 90
+  BITCODE_TF bindata; // 310
+  BITCODE_3BD axis_point; // 10
+  BITCODE_3BD axis_vector; // 11
+  BITCODE_BD revolve_angle; // 40
+  BITCODE_BD start_angle; // 41
+  BITCODE_BD* revolved_entity_transmatrix; // 42
+  BITCODE_BD draft_angle; // 43
+  BITCODE_BD draft_start_distance; // 44
+  BITCODE_BD draft_end_distance; // 45
+  BITCODE_BD twist_angle; // 46
+  BITCODE_B solid; // 290
+  BITCODE_B close_to_axis; // 291
+  
+} Dwg_Entity_REVOLVEDSURFACE;
+
+/**
+ Entity SWEPTSURFACE (varies)
+*/
+typedef struct _dwg_entity_SWEPTSURFACE
+{
+  struct _dwg_object_entity *parent;
+  BITCODE_BS modeler_format_version; /*!< DXF 70 */
+  BITCODE_BS u_isolines;         /*!< DXF 71 */
+  BITCODE_BS v_isolines;         /*!< DXF 72 */
+  BITCODE_BL class_version; /*!< DXF 90 */
+  
+  BITCODE_BL sweep_entity_id; // 90
+  BITCODE_BL num_sweepdata; // 90
+  BITCODE_TF sweepdata; // 310
+  BITCODE_BL path_entity_id; // 90
+  BITCODE_BL num_pathdata; // 90
+  BITCODE_TF pathdata; // 310
+  BITCODE_BD* sweep_entity_transmatrix; // 40
+  BITCODE_BD* path_entity_transmatrix; // 41
+  BITCODE_BD draft_angle; // 42
+  BITCODE_BD draft_start_distance; // 43
+  BITCODE_BD draft_end_distance; // 44
+  BITCODE_BD twist_angle; // 45
+  BITCODE_B solid; // 290
+  BITCODE_RC sweep_alignment; // 70
+  BITCODE_B align_start; // 292
+  BITCODE_B bank; // 293
+  BITCODE_B base_point_set; // 294
+  BITCODE_B sweep_entity_transform_computed; // 295
+  BITCODE_B path_entity_transform_computed; // 296
+  BITCODE_3BD reference_vector_for_controlling_twist; // 11
+
+} Dwg_Entity_SWEPTSURFACE;
 
 typedef struct _dwg_UNDERLAY_Boundary
 {
@@ -4772,7 +4879,11 @@ typedef struct _dwg_object_entity
     Dwg_Entity_MULTILEADER *MULTILEADER;
     Dwg_Entity_PROXY_ENTITY *PROXY_ENTITY;
     Dwg_Entity_PROXY_LWPOLYLINE *PROXY_LWPOLYLINE;
-    Dwg_Entity_SURFACE *SURFACE;
+    Dwg_Entity_SURFACE *SURFACE; //or PLANESURFACE?
+    Dwg_Entity_EXTRUDEDSURFACE *EXTRUDEDSURFACE;
+    Dwg_Entity_LOFTEDSURFACE *LOFTEDSURFACE;
+    Dwg_Entity_REVOLVEDSURFACE *REVOLVEDSURFACE;
+    Dwg_Entity_SWEPTSURFACE *SWEPTSURFACE;
     Dwg_Entity_TABLE *TABLE;
     Dwg_Entity_UNDERLAY *UNDERLAY;
     Dwg_Entity_WIPEOUT *WIPEOUT;
@@ -5534,6 +5645,10 @@ EXPORT int dwg_add_SPATIAL_FILTER (Dwg_Object *obj);
 EXPORT int dwg_add_SPATIAL_INDEX (Dwg_Object *obj);
 EXPORT int dwg_add_SUN (Dwg_Object *obj);
 EXPORT int dwg_add_SURFACE (Dwg_Object *obj);
+EXPORT int dwg_add_EXTRUDEDSURFACE (Dwg_Object *obj);
+EXPORT int dwg_add_LOFTEDSURFACE (Dwg_Object *obj);
+EXPORT int dwg_add_REVOLVEDSURFACE (Dwg_Object *obj);
+EXPORT int dwg_add_SWEPTSURFACE (Dwg_Object *obj);
 EXPORT int dwg_add_SUNSTUDY (Dwg_Object *obj);
 EXPORT int dwg_add_TABLE (Dwg_Object *obj);
 EXPORT int dwg_add_TABLESTYLE (Dwg_Object *obj);

@@ -6034,14 +6034,14 @@ DWG_ENTITY_END
 
 // r2007+
 // EXTRUDED, PLANE, LOFTED, REVOLVED, SWEPT
-DWG_ENTITY(SURFACE)
+DWG_ENTITY(EXTRUDEDSURFACE)
 
   SUBCLASS(AcDbModelerGeometry)
   FIELD_BS (modeler_format_version, 70); //def 1
   SUBCLASS(AcDbSurface)
   FIELD_BS (u_isolines, 71);
   FIELD_BS (v_isolines, 72);
-  //SUBCLASS(AcDbExtrudedSurface)
+  SUBCLASS(AcDbExtrudedSurface)
   FIELD_BL (class_version, 90);
   if (FIELD_VALUE(class_version) > 10)
     return DWG_ERR_VALUEOUTOFBOUNDS;
@@ -6068,6 +6068,122 @@ DWG_ENTITY(SURFACE)
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (sweep_entity, 5, 0);
   FIELD_HANDLE (path_entity, 5, 0);
+
+DWG_ENTITY_END
+
+// r2007+
+DWG_ENTITY(LOFTEDSURFACE)
+
+  SUBCLASS(AcDbModelerGeometry)
+  FIELD_BS (modeler_format_version, 70); //def 1
+  SUBCLASS(AcDbSurface)
+  FIELD_BS (u_isolines, 71);
+  FIELD_BS (v_isolines, 72);
+  SUBCLASS(AcDbLoftedSurface)
+  FIELD_BL (class_version, 90);
+  if (FIELD_VALUE(class_version) > 10)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
+  FIELD_BL (plane_normal_lofting_type, 70);
+  FIELD_BD (start_draft_angle, 41);
+  FIELD_BD (end_draft_angle, 42);
+  FIELD_BD (start_draft_magnitude, 43);
+  FIELD_BD (end_draft_magnitude, 44);
+  FIELD_B (arc_length_parameterization, 290);
+  FIELD_B (no_twist, 291);
+  FIELD_B (align_direction, 292);
+  FIELD_B (simple_surfaces, 293);
+  FIELD_B (closed_surfaces, 294);
+  FIELD_B (solid, 295);
+  FIELD_B (ruled_surface, 296);
+  FIELD_B (virtual_guide, 297);
+
+  COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE (cross_section, 5, 0);
+  FIELD_HANDLE (guide_curve, 5, 0);
+  FIELD_HANDLE (path_curve, 5, 0);
+
+DWG_ENTITY_END
+
+// r2007+
+DWG_ENTITY(REVOLVEDSURFACE)
+  SUBCLASS(AcDbModelerGeometry)
+  FIELD_BS (modeler_format_version, 70); //def 1
+  SUBCLASS(AcDbSurface)
+  FIELD_BS (u_isolines, 71);
+  FIELD_BS (v_isolines, 72);
+  SUBCLASS(AcDbRevolvedSurface)
+  FIELD_BL (class_version, 90);
+  if (FIELD_VALUE(class_version) > 10)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
+
+  FIELD_BL (id, 90);
+  FIELD_BL (num_bindata, 90);
+  FIELD_TF (bindata, num_bindata, 310);
+  FIELD_3BD (axis_point, 10);
+  FIELD_3BD (axis_vector, 11);
+  FIELD_BD (revolve_angle, 40);
+  FIELD_BD (start_angle, 41);
+  FIELD_VECTOR_N (revolved_entity_transmatrix, BD, 16, 42);
+  FIELD_BD (draft_angle, 43);
+  FIELD_BD (draft_start_distance, 44);
+  FIELD_BD (draft_end_distance, 45);
+  FIELD_BD (twist_angle, 46);
+  FIELD_B (solid, 290);
+  FIELD_B (close_to_axis, 291);
+
+  COMMON_ENTITY_HANDLE_DATA;
+
+DWG_ENTITY_END
+
+DWG_ENTITY(SWEPTSURFACE)
+  SUBCLASS(AcDbModelerGeometry)
+  FIELD_BS (modeler_format_version, 70); //def 1
+  SUBCLASS(AcDbSurface)
+  FIELD_BS (u_isolines, 71);
+  FIELD_BS (v_isolines, 72);
+  SUBCLASS(AcDbSweptSurface)
+  FIELD_BL (class_version, 90);
+  if (FIELD_VALUE(class_version) > 10)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
+
+  FIELD_BL (swept_entity_id, 90);
+  FIELD_BL (num_sweepdata, 90);
+  FIELD_TF (sweepdata, num_sweepdata, 310);
+  FIELD_BL (path_entity_id, 90);
+  FIELD_BL (num_pathdata, 90);
+  FIELD_TF (pathdata, num_pathdata, 310);
+  FIELD_VECTOR_N (sweep_entity_transmatrix, BD, 16, 40);
+  FIELD_VECTOR_N (path_entity_transmatrix, BD, 16, 41);
+  FIELD_BD (draft_angle, 42);
+  FIELD_BD (draft_start_distance, 43);
+  FIELD_BD (draft_end_distance, 44);
+  FIELD_BD (twist_angle, 45);
+  FIELD_BD (scale_factor, 48);
+  FIELD_B (solid, 290);
+  FIELD_RC (sweep_alignment, 70);
+  FIELD_B (align_start, 292);
+  FIELD_B (bank, 293);
+  FIELD_B (base_point_set, 294);
+  FIELD_B (sweep_entity_transform_computed, 295);
+  FIELD_B (path_entity_transform_computed, 296);
+  FIELD_3BD (reference_vector_for_controlling_twist, 11);
+
+  COMMON_ENTITY_HANDLE_DATA;
+
+DWG_ENTITY_END
+
+DWG_ENTITY(SURFACE) //PLANESURFACE?
+  SUBCLASS(AcDbModelerGeometry)
+  FIELD_BS (modeler_format_version, 70); //def 1
+  SUBCLASS(AcDbSurface)
+  FIELD_BS (u_isolines, 71);
+  FIELD_BS (v_isolines, 72);
+  SUBCLASS(AcDbPlaneSurface)
+  FIELD_BL (class_version, 90);
+  if (FIELD_VALUE(class_version) > 10)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
+
+  COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
 
@@ -6390,3 +6506,4 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+

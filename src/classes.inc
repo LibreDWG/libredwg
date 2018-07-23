@@ -158,7 +158,11 @@
   DEBUGGING_CLASS     (ACTION, HELIX)             /*ent, yet unsorted */
   DEBUGGING_CLASS     (ACTION, LIGHT)             /*ent, yet unsorted */
   DEBUGGING_CLASS     (ACTION, MULTILEADER)       /*ent, broken Leader_Line's/Points */
-  DEBUGGING_CLASS     (ACTION, SURFACE)           /*ent, yet unsorted */
+  DEBUGGING_CLASS     (ACTION, SURFACE)           /*ent PLANE */
+  DEBUGGING_CLASS     (ACTION, EXTRUDEDSURFACE)   /*ent */
+  DEBUGGING_CLASS     (ACTION, LOFTEDSURFACE)     /*ent */
+  DEBUGGING_CLASS     (ACTION, REVOLVEDSURFACE)   /*ent */
+  DEBUGGING_CLASS     (ACTION, SWEPTSURFACE)      /*ent */
   DEBUGGING_CLASS     (ACTION, UNDERLAY)          /*ent DGN DWF PDF */
   DEBUGGING_CLASS_DXF (ACTION, TABLE, ACAD_TABLE) /*ent, r2010+ needs subclassing */
   DEBUGGING_CLASS     (ACTION, TABLECONTENT) //wrong values
