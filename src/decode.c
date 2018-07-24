@@ -2330,7 +2330,7 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
                 // search absref in APPID_CONTROL apps[]
                 for (j=0; j < appid->num_entries; j++)
                   {
-                    if ( appid->apps[j]->absolute_ref == ref.absolute_ref )
+                    if ( appid->apps[j] && appid->apps[j]->absolute_ref == ref.absolute_ref )
                       {
                         Dwg_Object_MLEADERSTYLE *this = obj->tio.MLEADERSTYLE;
                         this->is_new_format = 1;
