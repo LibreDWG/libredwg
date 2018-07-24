@@ -2658,9 +2658,9 @@ dwg_decode_handleref(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       return NULL;
     }
 
-  // If the handle size is 0, it is probably a null handle.
+  // If the handle size is 0 and not a relative handle, it is probably a null handle.
   // It shouldn't be placed in the object ref vector.
-  if (ref->handleref.size)
+  if (ref->handleref.size || (obj && ref->handleref.code > 5))
     {
       // Reserve memory space for object references
       if (!dwg->num_object_refs)
@@ -2675,16 +2675,16 @@ dwg_decode_handleref(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         }
       dwg->object_ref[dwg->num_object_refs++] = ref;
     }
-  else
+  else if (!ref->handleref.value)
     {
-      ref->obj = NULL;
       ref->absolute_ref = 0;
+      ref->obj = NULL;
       return ref;
     }
 
-  // we receive a null obj when we are reading
+  // We receive a null obj when we are reading
   // handles in the header variables section
-  if (!obj)
+  if (!obj && ref->handleref.value)
     {
       ref->absolute_ref = ref->handleref.value;
       ref->obj = NULL;
@@ -2719,7 +2719,10 @@ dwg_decode_handleref(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       ref->absolute_ref = ref->handleref.value;
       break;
     default:
-      ref->absolute_ref = ref->handleref.value;
+      dwg->object_ref[dwg->num_object_refs-1] = NULL;
+      dwg->num_object_refs--;
+      ref->absolute_ref = 0;
+      ref->obj = NULL;
       LOG_WARN("Invalid handle pointer code %d", ref->handleref.code);
       break;
     }
@@ -2759,9 +2762,9 @@ dwg_decode_handleref_with_code(Bit_Chain *restrict dat, Dwg_Object *restrict obj
       return NULL;
     }
 
-  // If absolute and the handle size is 0, it is probably a null handle.
+  // If the handle size is 0 and not a relative handle, it is probably a null handle.
   // It shouldn't be placed in the object ref vector.
-  if (ref->handleref.code >= 6 || ref->handleref.size)
+  if (ref->handleref.size || (obj && ref->handleref.code > 5))
     {
       // Reserve memory space for object references
       if (!dwg->num_object_refs)
@@ -2776,7 +2779,7 @@ dwg_decode_handleref_with_code(Bit_Chain *restrict dat, Dwg_Object *restrict obj
         }
       dwg->object_ref[dwg->num_object_refs++] = ref;
     }
-  else
+  else if (!ref->handleref.value)
     {
       ref->obj = NULL;
       ref->absolute_ref = 0;
@@ -2820,7 +2823,10 @@ dwg_decode_handleref_with_code(Bit_Chain *restrict dat, Dwg_Object *restrict obj
       ref->absolute_ref = ref->handleref.value;
       break;
     default:
-      ref->absolute_ref = ref->handleref.value;
+      dwg->object_ref[dwg->num_object_refs-1] = NULL;
+      dwg->num_object_refs--;
+      ref->absolute_ref = 0;
+      ref->obj = NULL;
       LOG_WARN("Invalid handle pointer code %d", ref->handleref.code);
       break;
     }

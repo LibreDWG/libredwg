@@ -66,8 +66,10 @@ static Bit_Chain *dat = &pdat;
 
 #define ANYCODE -1
 #define FIELD_HANDLE(name,code,dxf) VALUE_HANDLE(_obj->name,code,dxf)
-#define VALUE_HANDLE(hdl,code,dxf) \
-  { if (!hdl->absolute_ref) free(hdl); hdl = NULL; } /* else freed globally */
+#define VALUE_HANDLE(ref,code,dxf) \
+  if (ref) { \
+    if (!ref->obj && !ref->handleref.size && !ref->absolute_ref) free(ref); \
+  } /* else freed globally */
 #define FIELD_DATAHANDLE(name,code,dxf) FIELD_HANDLE(name, code, dxf)
 #define FIELD_HANDLE_N(name,vcount,code,dxf) FIELD_HANDLE(name, code, dxf)
 
@@ -141,13 +143,17 @@ static Bit_Chain *dat = &pdat;
   dwg_free_xdata(_obj, _obj->size)
 
 #define REACTORS(code) \
-  for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++) \
-    VALUE_HANDLE(obj->tio.object->reactors[vcount], code, 330);  \
-  VALUE_TV(obj->tio.object->reactors, 0)
-#define ENT_REACTORS(code)  \
-  for (vcount=0; vcount < ent->num_reactors; vcount++)\
-    VALUE_HANDLE(ent->reactors[vcount], code, 330);  \
-  VALUE_TV(ent->reactors,0)
+  if (obj->tio.object->reactors) { \
+    for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++) \
+      VALUE_HANDLE(obj->tio.object->reactors[vcount], code, 330);  \
+    VALUE_TV(obj->tio.object->reactors, 0); \
+  }
+#define ENT_REACTORS(code) \
+  if (ent->reactors) { \
+    for (vcount=0; vcount < ent->num_reactors; vcount++)\
+      VALUE_HANDLE(ent->reactors[vcount], code, 330);  \
+    VALUE_TV(ent->reactors,0); \
+  }
 #define XDICOBJHANDLE(code)\
   SINCE(R_2004)\
     {\
@@ -204,6 +210,7 @@ dwg_free_ ##token (Bit_Chain *restrict _dat, Dwg_Object *restrict obj)\
   _obj = ent = _ent->tio.token;
 
 #define DWG_ENTITY_END      \
+  dwg_free_common_entity_data(obj); \
   dwg_free_eed(obj);        \
   FREE_IF(_obj);            \
   FREE_IF(obj->tio.entity); \
@@ -243,11 +250,29 @@ dwg_free_common_entity_handle_data(Dwg_Object* obj)
   Dwg_Object_Entity *_obj;
   long unsigned int vcount;
   Dwg_Object_Entity *ent;
+  int error = 0;
 
   ent = obj->tio.entity;
   _obj = ent;
 
   #include "common_entity_handle_data.spec"
+
+}
+
+static void
+dwg_free_common_entity_data(Dwg_Object* obj)
+{
+
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Object_Entity *_obj;
+  long unsigned int vcount;
+  Dwg_Object_Entity *ent;
+  int error = 0;
+
+  ent = obj->tio.entity;
+  _obj = ent;
+
+  #include "common_entity_data.spec"
 
 }
 
