@@ -5427,7 +5427,8 @@ DWG_ENTITY(UNKNOWN_ENT)
 
   FIELD_TF (bytes, FIELD_VALUE(num_bytes), 0);
   FIELD_VECTOR (bits, B, num_bits, 0);
-  //COMMON_ENTITY_HANDLE_DATA; // including this
+
+  COMMON_ENTITY_HANDLE_DATA; // including this
 
 DWG_ENTITY_END
 
@@ -6521,3 +6522,4 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+

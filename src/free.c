@@ -176,6 +176,7 @@ static Bit_Chain *dat = &pdat;
 #define END_REPEAT(field) FIELD_TV(field,0)
 
 #define COMMON_ENTITY_HANDLE_DATA \
+  if (_ent->picture_exists && _ent->picture_size) free(_ent->picture); \
   SINCE(R_13) {\
     dwg_free_common_entity_handle_data(obj); \
   }
@@ -199,8 +200,6 @@ dwg_free_ ##token (Bit_Chain *restrict _dat, Dwg_Object *restrict obj)\
   Dwg_Data* dwg = obj->parent;\
   int error = 0; \
   LOG_HANDLE("Free entity " #token "\n")\
-  if (strcmp(#token, "UNKNOWN_ENT") && obj->supertype == DWG_SUPERTYPE_UNKNOWN) \
-    return dwg_free_UNKNOWN_ENT(_dat, obj); \
   _ent = obj->tio.entity;\
   _obj = ent = _ent->tio.token;
 
