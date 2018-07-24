@@ -2278,6 +2278,8 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
   unsigned int idx = 0;
   int error = 0;
   Dwg_Data *dwg = obj->dwg;
+  if (!dwg)
+    return DWG_ERR_INVALIDEED;
 
   obj->num_eed = 0;
   while ((size = bit_read_BS(dat)))
@@ -3127,6 +3129,8 @@ decode_preR13_entities(unsigned long start, unsigned long end,
       obj->supertype = DWG_SUPERTYPE_ENTITY;
       ent = obj->tio.entity = (Dwg_Object_Entity*)calloc (1, sizeof(Dwg_Object_Entity));
       obj->tio.entity->objid = obj->index;
+      ent->dwg = dwg;
+      ent->objid = num;
     
       obj->address = dat->byte;
       DEBUG_HERE;
