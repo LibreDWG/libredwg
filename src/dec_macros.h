@@ -270,9 +270,7 @@
 #define DEBUG_POS_OBJ\
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE) { \
     LOG_TRACE("DEBUG_POS @%u.%u (%lu) %lu\n", (unsigned int)dat->byte, dat->bit, \
-              bit_position(dat), \
-              obj ? obj->bitsize_address ? bit_position(dat) - obj->bitsize_address \
-                                         : bit_position(dat) - obj->address*8 : 0); \
+              bit_position(dat), obj ? bit_position(dat) - obj->address*8 : 0); \
   }
 #define DEBUG_POS\
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE) { \
@@ -599,8 +597,7 @@ static int dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj
   _ent->objid = obj->index; /* obj ptr itself might move */ \
   _obj->parent = obj->tio.entity;\
   error = dwg_decode_entity(dat, hdl_dat, str_dat, _ent); \
-  if (error >= DWG_ERR_CRITICAL) return error; \
-  obj->bitsize_address = bit_position(dat);
+  if (error >= DWG_ERR_CRITICAL) return error;
 
 #define DWG_ENTITY_END \
   if (dat->version >= R_2007) { free(str_dat); } \
@@ -641,8 +638,7 @@ static int dwg_decode_ ## token (Bit_Chain *restrict dat, Dwg_Object *restrict o
   LOG_INFO("Decode object " #token " ")\
   _obj = obj->tio.object->tio.token;\
   error |= dwg_decode_object(dat, hdl_dat, str_dat, obj->tio.object); \
-  if (error >= DWG_ERR_CRITICAL) return error; \
-  obj->bitsize_address = bit_position(dat);
+  if (error >= DWG_ERR_CRITICAL) return error;
 
 #define DWG_OBJECT_END \
   if (dat->version >= R_2007) { free(str_dat); } \

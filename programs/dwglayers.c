@@ -130,7 +130,7 @@ main (int argc, char *argv[])
   for (i=0; i < dwg.layer_control.num_entries; i++)
     {
       Dwg_Object *obj = dwg.layer_control.layers[i]->obj;
-      if (obj->type != DWG_TYPE_LAYER)
+      if (obj->type != DWG_TYPE_LAYER) //can be DICTIONARY also
         break;
       layer = dwg.layer_control.layers[i]->obj->tio.object->tio.LAYER;
       layer->on = layer->color.index > 0;
