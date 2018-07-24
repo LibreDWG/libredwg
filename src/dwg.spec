@@ -5496,6 +5496,20 @@ DWG_OBJECT(PERSSUBENTMANAGER)
   XDICOBJHANDLE(3);
 DWG_OBJECT_END
 
+// in DXF as {PDF,DWF,DGN}DEFINITION
+DWG_OBJECT(UNDERLAYDEFINITION)
+  
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
+  SUBCLASS(AcDbUnderlayDefinition)
+  FIELD_T (filename, 1);
+  FIELD_T (name, 2);
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (parenthandle, 4, 0);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+
+DWG_OBJECT_END
+
 #ifdef DEBUG_CLASSES
 
 // (varies) UNTESTED
@@ -6033,7 +6047,6 @@ DWG_ENTITY(GEOPOSITIONMARKER)
 DWG_ENTITY_END
 
 // r2007+
-// EXTRUDED, PLANE, LOFTED, REVOLVED, SWEPT
 DWG_ENTITY(EXTRUDEDSURFACE)
 
   SUBCLASS(AcDbModelerGeometry)
@@ -6118,7 +6131,7 @@ DWG_ENTITY(REVOLVEDSURFACE)
 
   FIELD_BL (id, 90);
   FIELD_BL (num_bindata, 90);
-  FIELD_TF (bindata, num_bindata, 310);
+  FIELD_TF (bindata, _obj->num_bindata, 310);
   FIELD_3BD (axis_point, 10);
   FIELD_3BD (axis_vector, 11);
   FIELD_BD (revolve_angle, 40);
@@ -6146,19 +6159,22 @@ DWG_ENTITY(SWEPTSURFACE)
   if (FIELD_VALUE(class_version) > 10)
     return DWG_ERR_VALUEOUTOFBOUNDS;
 
-  FIELD_BL (swept_entity_id, 90);
+  FIELD_BL (sweep_entity_id, 90);
   FIELD_BL (num_sweepdata, 90);
-  FIELD_TF (sweepdata, num_sweepdata, 310);
+  FIELD_TF (sweepdata, _obj->num_sweepdata, 310);
   FIELD_BL (path_entity_id, 90);
   FIELD_BL (num_pathdata, 90);
-  FIELD_TF (pathdata, num_pathdata, 310);
+  FIELD_TF (pathdata, _obj->num_pathdata, 310);
   FIELD_VECTOR_N (sweep_entity_transmatrix, BD, 16, 40);
   FIELD_VECTOR_N (path_entity_transmatrix, BD, 16, 41);
   FIELD_BD (draft_angle, 42);
   FIELD_BD (draft_start_distance, 43);
   FIELD_BD (draft_end_distance, 44);
   FIELD_BD (twist_angle, 45);
+  FIELD_VECTOR_N (sweep_entity_transmatrix1, BD, 16, 46);
+  FIELD_VECTOR_N (path_entity_transmatrix1, BD, 16, 47);
   FIELD_BD (scale_factor, 48);
+  FIELD_BD (align_angle, 49);
   FIELD_B (solid, 290);
   FIELD_RC (sweep_alignment, 70);
   FIELD_B (align_start, 292);
@@ -6187,30 +6203,36 @@ DWG_ENTITY(SURFACE) //PLANESURFACE?
 
 DWG_ENTITY_END
 
-// (varies) UNKNOWN FIELDS
+// (varies) UNSORTED FIELDS
 // in DXF as 0 DGNUNDERLAY DWFUNDERLAY PDFUNDERLAY
 DWG_ENTITY(UNDERLAY)
 
   SUBCLASS(AcDbUnderlayReference)
+  FIELD_3BD (extrusion, 210);
   FIELD_3DPOINT (insertion_pt, 10);
   FIELD_3BD_1 (scale, 41);
   FIELD_BD (angle, 50);
-  FIELD_3BD (extrusion, 210);
-  FIELD_BL (num_clip_boundary, 0);
-  REPEAT(num_clip_boundary, clip_boundary, Dwg_UNDERLAY_Boundary)
-  {
-    FIELD_2BD (clip_boundary->pt, 11);
-  }
-  SET_PARENT_OBJ(clip_boundary)
-  END_REPEAT(clip_boundary);
-  //FIELD_RD (size.width, 13);
-  //FIELD_RD (size.height, 23);
-  FIELD_BS (flag, 280);
-  FIELD_BS (contrast, 281); // 20-100
+  //FIELD_BD (size.width, 13);
+  //FIELD_BD (size.height, 23);
+  FIELD_RC (flag, 0); //0x0f
+  FIELD_RS (contrast, 281); // 20-100
   FIELD_BS (fade, 282); // 0-80
+  FIELD_RS (unknown, 0); // 0101000100010000
+  FIELD_HANDLE (definition_id, 5, 340);
+  //hole [471-602]
+  FIELD_BS (flag, 280);
+
+  if (FIELD_VALUE(flag) & 1) { //is_clipped
+    FIELD_BL (num_clip_boundary, 0);
+    REPEAT(num_clip_boundary, clip_boundary, Dwg_UNDERLAY_Boundary)
+    {
+      FIELD_2BD (clip_boundary->pt, 11);
+    }
+    SET_PARENT_OBJ(clip_boundary)
+    END_REPEAT(clip_boundary);
+  }
 
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (definition_id, 5, 340);
 
 DWG_ENTITY_END
 
@@ -6409,19 +6431,15 @@ DWG_OBJECT_END
 
 /* Missing DXF names:
   ACAD_PROXY_ENTITY  ACDBPOINTCLOUD  ACDBPOINTCLOUDEX  ARRAY
-  ATTDYNBLOCKREF  DGNUNDERLAY  DWFUNDERLAY  GEOMAPIMAGE  HELIX
+  ATTDYNBLOCKREF  GEOMAPIMAGE
   ATTBLOCKREF  ATTDYNBLOCKREF  BLOCKREF  CENTERMARK CENTERLINE
-  DYNBLOCKREF XREF LOFTEDSURFACE PDFUNDERLAY PLANESURFACE POSITIONMARKER
-  REVOLVEDSURFACE SECTIONOBJECT SWEPTSURFACE
-
-AcDbUnderlayReference: => DXF 0: DGNUNDERLAY  DWFUNDERLAY PDFUNDERLAY
+  DYNBLOCKREF XREF PLANESURFACE POSITIONMARKER
+  SECTIONOBJECT
 */
-
   
 // r2000+
 DWG_OBJECT(ARCALIGNEDTEXT)
 DWG_OBJECT_END
-
 
 // see unknown 34/117=29.1%
 // possible: [......29    7 7 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx9 99   7  9........5...9 99 9.9 9.........5...9    9..9 99    9....]
@@ -6494,9 +6512,6 @@ DWG_OBJECT_END
 // Entity spdsRelationMark mcsDbObjectRelationMark
 // Entity McDbMarker McDbMarker
 
-DWG_OBJECT(UNDERLAYDEFINITION)
-DWG_OBJECT_END
-
 DWG_ENTITY(RTEXT)
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
@@ -6506,4 +6521,3 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
-

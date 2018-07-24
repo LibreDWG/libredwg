@@ -37,6 +37,7 @@ if (/^bits\[\d\]: (\d)/) {
 }
 if (/Next object: /) {
   if ($object and $b and $handle && $bitsize) {
+    #TODO remove duplicate bytes, skipping dxf and handle
     my $dxf = $ARGV;
     my ($n, $d) = $dxf =~ /^(.*)_(r\d+|R?20\d\d)\.log$/;
     if ($n =~ /^(example|sample|Drawing|DS_li)/) {

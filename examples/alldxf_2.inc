@@ -942,3 +942,5 @@ unknown_dxf[940].fields = unknown_dxf_940;
 unknown_dxf[941].fields = unknown_dxf_941;
 unknown_dxf[942].fields = unknown_dxf_942;
 unknown_dxf[943].fields = unknown_dxf_943;
+unknown_dxf[944].fields = unknown_dxf_944;
+unknown_dxf[945].fields = unknown_dxf_945;

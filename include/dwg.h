@@ -367,8 +367,8 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_TABLECONTENT,
   DWG_TYPE_TABLEGEOMETRY,
   DWG_TYPE_TABLESTYLE,
-  DWG_TYPE_UNDERLAY, /* or seperate DGN,DWF,PDF types? */
-  DWG_TYPE_UNDERLAYDEFINITION,
+  DWG_TYPE_UNDERLAY, /* not seperate DGN,DWF,PDF types */
+  DWG_TYPE_UNDERLAYDEFINITION, /* not seperate DGN,DWF,PDF types */
   DWG_TYPE_VISUALSTYLE,
   DWG_TYPE_WIPEOUT,
   DWG_TYPE_WIPEOUTVARIABLES,
@@ -3450,18 +3450,23 @@ typedef struct _dwg_object_TABLEGEOMETRY
 
 /**
  Class UNDERLAYDEFINITION (varies)
+ in DXF as {PDF,DGN,DWF}DEFINITION
  */
 typedef struct _dwg_object_UNDERLAYDEFINITION
 {
   struct _dwg_object_object *parent;
 
-  /* TODO */
-  BITCODE_TV filename;
-  BITCODE_TV name;
+  BITCODE_TV filename; /*!< DXF 1, relative or absolute path to the image file */
+  BITCODE_TV name;     /*!< DXF 2, pdf: page number, dgn: default, dwf: ? */
 
-  BITCODE_H* reactors;     /* ignored */
-  BITCODE_H xdicobjhandle; /* ignored */
+  BITCODE_H parenthandle;
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
 } Dwg_Object_UNDERLAYDEFINITION;
+
+typedef struct _dwg_object_UNDERLAYDEFINITION Dwg_Object_PDFDEFINITION;
+typedef struct _dwg_object_UNDERLAYDEFINITION Dwg_Object_DGNDEFINITION;
+typedef struct _dwg_object_UNDERLAYDEFINITION Dwg_Object_DWFDEFINITION;
 
 /**
  Class DBCOLOR (varies)
@@ -4346,6 +4351,10 @@ typedef struct _dwg_entity_SWEPTSURFACE
   BITCODE_BD draft_start_distance; // 43
   BITCODE_BD draft_end_distance; // 44
   BITCODE_BD twist_angle; // 45
+  BITCODE_BD* sweep_entity_transmatrix1; // 46
+  BITCODE_BD* path_entity_transmatrix1; // 47
+  BITCODE_BD scale_factor; // 48
+  BITCODE_BD align_angle; // 49
   BITCODE_B solid; // 290
   BITCODE_RC sweep_alignment; // 70
   BITCODE_B align_start; // 292
@@ -4373,14 +4382,13 @@ typedef struct _dwg_entity_UNDERLAY
 
   BITCODE_BS flag; //280: 1 is_clipped, 2 is_on, 4 is_monochrome,
                        // 8 is_adjusted_for_background, 16 clip_inverted
-  //BITCODE_T name; //? the file => AcDbUnderlay
-  //BITCODE_T file; //? the file path, also host => AcDbUnderlay
+  BITCODE_3BD extrusion; // 210 normal
   BITCODE_3BD insertion_pt; // 10
   BITCODE_3BD scale;   // 41
   BITCODE_BD angle;    // 50
-  BITCODE_3BD extrusion; // 210 normal
-  BITCODE_BS contrast;  // 281
+  BITCODE_RS contrast;  // 281
   BITCODE_BS fade;      // 282
+  BITCODE_RS unknown;   //
   BITCODE_BL num_clip_boundary;
   Dwg_UNDERLAY_Boundary* clip_boundary; // 11: if 2 rectangle, > polygon
   //BITCODE_BD width;
@@ -4390,6 +4398,10 @@ typedef struct _dwg_entity_UNDERLAY
   BITCODE_H parenthandle;
 
 } Dwg_Entity_UNDERLAY;
+
+typedef struct _dwg_entity_UNDERLAY Dwg_Entity_PDFUNDERLAY;
+typedef struct _dwg_entity_UNDERLAY Dwg_Entity_DGNUNDERLAY;
+typedef struct _dwg_entity_UNDERLAY Dwg_Entity_DWFUNDERLAY;
 
 /**
  Object SUN (varies) UNKNOWN FIELDS
@@ -5035,7 +5047,7 @@ typedef struct _dwg_object_object
     Dwg_Object_TABLEGEOMETRY *TABLEGEOMETRY;
     Dwg_Object_TABLESTYLE *TABLESTYLE;
     Dwg_Object_VBA_PROJECT *VBA_PROJECT;
-    //TODO Dwg_Object_UNDERLAYDEFINITION *UNDERLAYDEFINITION;
+    Dwg_Object_UNDERLAYDEFINITION *UNDERLAYDEFINITION;
     Dwg_Object_VISUALSTYLE *VISUALSTYLE;
     Dwg_Object_WIPEOUTVARIABLES *WIPEOUTVARIABLES;
     Dwg_Object_XRECORD *XRECORD;
@@ -5655,7 +5667,7 @@ EXPORT int dwg_add_TABLESTYLE (Dwg_Object *obj);
 EXPORT int dwg_add_UNDERLAY (Dwg_Object *obj);
 EXPORT int dwg_add_TABLECONTENT (Dwg_Object *obj);
 EXPORT int dwg_add_TABLEGEOMETRY (Dwg_Object *obj);
-//EXPORT int dwg_add_UNDERLAYDEFINITION (Dwg_Object *obj);
+EXPORT int dwg_add_UNDERLAYDEFINITION (Dwg_Object *obj);
 EXPORT int dwg_add_VISUALSTYLE (Dwg_Object *obj);
 EXPORT int dwg_add_WIPEOUT (Dwg_Object *obj);
 EXPORT int dwg_add_WIPEOUTVARIABLES (Dwg_Object *obj);

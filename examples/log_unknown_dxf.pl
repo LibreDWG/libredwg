@@ -844,6 +844,10 @@ my $known = {
     282 => 'fade',
     340 => 'definition_id',
     ],
+  UNDERLAYDEFINITION => [
+    1 => 'filename',
+    2 => 'name',
+    ],
   HELIX => [
     90 => 'major_version',
     91 => 'maint_version',
@@ -900,6 +904,12 @@ while (<>) {
   open my $f, "$dxf" or next LINE;
   my ($foundobj, $foundhdl, @FIELD);
   my ($react, $xdict, $seen100, @avail);
+  if ($obj =~ /^\w\w\wUNDERLAY/) {
+    @avail = @{$known->{UNDERLAY}};
+  }
+  elsif ($obj =~ /^\w\w\wDEFINITION/) {
+    @avail = @{$known->{UNDERLAYDEFINITION}};
+  }
   @avail = @{$known->{$obj}} if exists $known->{$obj};
   while (my $code = <$f>) {
     $code =~ s/\cM\cJ//;
