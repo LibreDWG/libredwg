@@ -66,7 +66,8 @@ static Bit_Chain *dat = &pdat;
 
 #define ANYCODE -1
 #define FIELD_HANDLE(name,code,dxf) VALUE_HANDLE(_obj->name,code,dxf)
-#define VALUE_HANDLE(hdl,code,dxf)  {} /* freed globally */
+#define VALUE_HANDLE(hdl,code,dxf) \
+  { if (!hdl->absolute_ref) free(hdl); hdl = NULL; } /* else freed globally */
 #define FIELD_DATAHANDLE(name,code,dxf) FIELD_HANDLE(name, code, dxf)
 #define FIELD_HANDLE_N(name,vcount,code,dxf) FIELD_HANDLE(name, code, dxf)
 

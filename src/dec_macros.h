@@ -465,12 +465,13 @@
           VALUE_HANDLE(obj->tio.object->xdicobjhandle, xdicobjhandle, code, 360);\
         }\
     }\
-  else { \
-    SINCE(R_13) \
+  else\
     {\
-      VALUE_HANDLE(obj->tio.object->xdicobjhandle, xdicobjhandle, code, 360); \
-    }\
-  }
+      SINCE(R_13)\
+        {\
+          VALUE_HANDLE(obj->tio.object->xdicobjhandle, xdicobjhandle, code, 360);\
+        }\
+    }
 
 #define ENT_XDICOBJHANDLE(code)\
   SINCE(R_2004)\
