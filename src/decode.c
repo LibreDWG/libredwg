@@ -3123,18 +3123,11 @@ decode_preR13_entities(unsigned long start, unsigned long end,
       obj = &dwg->object[num];
       memset(obj, 0, sizeof(Dwg_Object));
       dwg->num_objects++;
-      dwg->num_entities++;
       obj->index = num;
       obj->parent = dwg;
-      obj->supertype = DWG_SUPERTYPE_ENTITY;
-      ent = obj->tio.entity = (Dwg_Object_Entity*)calloc (1, sizeof(Dwg_Object_Entity));
-      obj->tio.entity->objid = obj->index;
-      ent->dwg = dwg;
-      ent->objid = num;
-    
       obj->address = dat->byte;
+
       DEBUG_HERE;
-      error |= decode_entity_preR13(dat, obj, ent); // error: eed not decodable
 
       switch (obj->type)
         {

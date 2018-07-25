@@ -596,7 +596,11 @@ static int dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj
   _ent->dwg = dwg; \
   _ent->objid = obj->index; /* obj ptr itself might move */ \
   _obj->parent = obj->tio.entity;\
-  error = dwg_decode_entity(dat, hdl_dat, str_dat, _ent); \
+  if (dat->version >= R_13) { \
+    error = dwg_decode_entity(dat, hdl_dat, str_dat, _ent); \
+  } else { \
+    error = decode_entity_preR13(dat, obj, _ent); \
+  } \
   if (error >= DWG_ERR_CRITICAL) return error;
 
 #define DWG_ENTITY_END \
