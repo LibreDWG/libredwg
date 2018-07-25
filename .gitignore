@@ -82,6 +82,7 @@ gcov.log
 /bindings/python/libredwg.py
 /bindings/python/Makefile3.6
 /bindings/python/swig_python.c
+/bindings/python/swig_python.c.orig
 /build-aux/compile
 /build-aux/config.guess
 /build-aux/config.sub

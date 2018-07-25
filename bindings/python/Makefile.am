@@ -56,7 +56,7 @@ if HAVE_PATCH
 swig_python.c : $(SWIG_SOURCES) Makefile.am
 	swig -python -I$(top_srcdir)/include -o swig_python.c $(srcdir)/../dwg.i
 	-$(PATCH) -t --dry-run -N -p2 -i $(SWIG_PYTHON_PATCH) && \
-	  $(PATCH) -t -N -p2 -i $(SWIG_PYTHON_PATCH)
+	  $(PATCH) -t -N -p2 -b -i $(SWIG_PYTHON_PATCH)
 CLEANFILES = swig_python.c.orig
 else
 swig_python.c : $(SWIG_SOURCES) Makefile.am
