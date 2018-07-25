@@ -11,6 +11,7 @@
 # - ltmain.sh (GNU libtool) 2.2.6b
 
 set -x
+rm -rf autom4te.cache config.status
 if test -d .git; then
     git fetch --tags
     rm .tarball-version
