@@ -4498,6 +4498,37 @@ typedef struct _dwg_object_DATATABLE
   BITCODE_H xdicobjhandle; /* ignored */
 } Dwg_Object_DATATABLE;
 
+
+/**
+ Object DIMASSOC (varies) DEBUGGING
+ */
+typedef struct _dwg_object_DIMASSOC
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BL associativity;   /*!< DXF 90 */
+  BITCODE_BS trans_space_flag;/*!< DXF 70 */
+  BITCODE_BS rotated_type;    /*!< DXF 71 */
+  BITCODE_BS osnap_type;      /*!< DXF 72 */
+  BITCODE_TV classname;       /*!< DXF 1 */
+  BITCODE_BS main_subent_type; /*!< DXF 73 */
+  BITCODE_BS intsect_subent_type; /*!< DXF 74 */
+  BITCODE_BL main_gsmarker;   /*!< DXF 91 */
+  BITCODE_BD osnap_dist;      /*!< DXF 40 */
+  BITCODE_3BD osnap_pt;       /*!< DXF 10 */
+  BITCODE_BL intsect_gsmarker; /*!< DXF 92 */
+  BITCODE_B has_lastpt_ref;   /*!< DXF 75 */
+
+  BITCODE_H parenthandle;     /*!< DXF 330 */
+  BITCODE_H dimensionobj;     /*!< DXF 330 */
+  BITCODE_H xrefobj;          /*!< DXF 301 */
+  BITCODE_H intsectxrefobj;   /*!< DXF 302 */
+  BITCODE_H mainobj;          /*!< DXF 331 the geometry object */
+  BITCODE_H intsectobj;       /*!< DXF 332 the intersection object */
+
+  BITCODE_H* reactors;
+  BITCODE_H xdicobjhandle;
+} Dwg_Object_DIMASSOC;
+
 typedef struct _dwg_ACTIONBODY
 {
   struct _dwg_object_ASSOCNETWORK *parent;
@@ -5041,7 +5072,7 @@ typedef struct _dwg_object_object
     Dwg_Object_DICTIONARY *DICTIONARY;
     Dwg_Object_DICTIONARYVAR *DICTIONARYVAR;
     Dwg_Object_DICTIONARYWDFLT *DICTIONARYWDFLT;
-    //TODO Dwg_Object_DIMASSOC *DIMASSOC;
+    Dwg_Object_DIMASSOC *DIMASSOC;
     //Dwg_Object_DOCUMENTOPTIONS *DOCUMENTOPTIONS;
     Dwg_Object_DYNAMICBLOCKPURGEPREVENTER *DYNAMICBLOCKPURGEPREVENTER;
     Dwg_Object_DUMMY *DUMMY;
@@ -5655,10 +5686,9 @@ EXPORT int dwg_add_DYNAMICBLOCKPURGEPREVENTER (Dwg_Object *obj);
 EXPORT int dwg_add_DATATABLE (Dwg_Object *obj);
 EXPORT int dwg_add_DBCOLOR (Dwg_Object *obj);
 //EXPORT int dwg_add_DETAILVIEWSTYLE (Dwg_Object *obj);
-//EXPORT int dwg_add_DIMASSOC (Dwg_Object *obj);
 EXPORT int dwg_add_DICTIONARYVAR (Dwg_Object *obj);
 EXPORT int dwg_add_DICTIONARYWDFLT (Dwg_Object *obj);
-//EXPORT int dwg_add_DIMASSOC (Dwg_Object *obj);
+EXPORT int dwg_add_DIMASSOC (Dwg_Object *obj);
 EXPORT int dwg_add_FIELD (Dwg_Object *obj);
 EXPORT int dwg_add_FIELDLIST (Dwg_Object *obj);
 EXPORT int dwg_add_GEODATA (Dwg_Object *obj);
