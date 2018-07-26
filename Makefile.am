@@ -50,7 +50,10 @@ unknown:
 	else mv examples/alldwg.skip~ examples/alldwg.skip; fi
 if HAVE_PICAT
 	-for f in examples/[A-Z]*.pi; do \
-	  echo $(TIMEOUT_30) picat $$f; $(TIMEOUT_30) $(PICAT) $$f >$$f.log; done
+	  echo $(TIMEOUT_30) picat $$f; \
+	  $(TIMEOUT_30) $(PICAT) $$f >$$f.log || \
+	    $(TIMEOUT_30) $(PICAT) -g go1 $$f >$$f.log; \
+	done
 endif
 
 regen-man:
