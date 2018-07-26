@@ -4506,9 +4506,9 @@ typedef struct _dwg_object_DIMASSOC
 {
   struct _dwg_object_object *parent;
   BITCODE_BL associativity;   /*!< DXF 90 */
-  BITCODE_BS trans_space_flag;/*!< DXF 70 */
+  BITCODE_RC trans_space_flag;/*!< DXF 70 */
   BITCODE_BS rotated_type;    /*!< DXF 71 */
-  BITCODE_BS osnap_type;      /*!< DXF 72 */
+  BITCODE_RC osnap_type;      /*!< DXF 72 */
   BITCODE_TV classname;       /*!< DXF 1 */
   BITCODE_BS main_subent_type; /*!< DXF 73 */
   BITCODE_BS intsect_subent_type; /*!< DXF 74 */

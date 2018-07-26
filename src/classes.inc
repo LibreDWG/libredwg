@@ -142,9 +142,11 @@
   STABLE_CLASS    (ACTION, WIPEOUTVARIABLES)
   STABLE_CLASS    (ACTION, XRECORD)
 
-  // not enough coverage, but assumed ok. field names may change.
+  // unstable/undertested.
+  // not enough coverage, but assumed mostly ok. field names may change.
   UNTESTED_CLASS_DXF (ACTION, ASSOCDEPENDENCY, ACDBASSOCDEPENDENCY)
   UNTESTED_CLASS     (ACTION, CAMERA) /* ent, not persistent in a DWG */
+  UNTESTED_CLASS     (ACTION, DIMASSOC)
   UNTESTED_CLASS     (ACTION, GEODATA)
   UNTESTED_CLASS     (ACTION, OBJECT_PTR)
   UNTESTED_CLASS_CPP (ACTION, OBJECT_PTR, CAseDLPNTableRecord)
@@ -158,7 +160,7 @@
   // coverage exists, but broken and being worked on. needs -DDEBUG_CLASSES. See also
   // examples/unknown with all the unknown blobs of these.
   //PROXY_ENTITY has a fixed type
-  DEBUGGING_CLASS     (ACTION, GEOPOSITIONMARKER) /*ent, yet unsorted, maybe POSITIONMARKER */
+  DEBUGGING_CLASS     (ACTION, GEOPOSITIONMARKER) /*ent, yet unsorted */
   DEBUGGING_CLASS     (ACTION, HELIX)             /*ent, 30% */
   DEBUGGING_CLASS     (ACTION, LIGHT)             /*ent, almost */
   DEBUGGING_CLASS     (ACTION, MULTILEADER)       /*ent, broken Leader_Line's/Points */
@@ -188,7 +190,6 @@
   DEBUGGING_CLASS_DXF (ACTION, ASSOC2DCONSTRAINTGROUP, ACDBASSOC2DCONSTRAINTGROUP)
   DEBUGGING_CLASS_DXF (ACTION, EVALUATION_GRAPH, ACAD_EVALUATION_GRAPH)
   DEBUGGING_CLASS     (ACTION, DBCOLOR)           /* almost */
-  DEBUGGING_CLASS     (ACTION, DIMASSOC)
   DEBUGGING_CLASS_DXF (ACTION, DYNAMICBLOCKPURGEPREVENTER, ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION)
 
   // unimplemented, passed through. coverage exists mostly, but documentation not.
