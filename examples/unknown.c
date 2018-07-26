@@ -462,7 +462,7 @@ static int
 set_found (struct _dxf *dxf, const struct _unknown_field *g) {
   // check for overlap, if already found by some other field
   int overlap = 0;
-  for (int k=g->pos[0]; k<g->pos[0]+g->bitsize; k++) {
+  for (int k=g->pos[0]; k < g->bitsize-g->pos[0]; k++) {
     if (dxf->found[k] && !overlap && k<g->bitsize) {
       overlap = 1;
       printf("position %d already found\n", k);
@@ -476,7 +476,7 @@ static int
 set_found_i (struct _dxf *dxf, const struct _unknown_field *g, int i) {
   // check for overlap, if already found by some other field
   int overlap = 0;
-  for (int k=g->pos[i]; k<g->pos[i]+g->bitsize; k++) {
+  for (int k=g->pos[i]; k < g->bitsize-g->pos[i]; k++) {
     if (dxf->found[k] && !overlap) {
       overlap = 1;
       printf("field %d already found at %d\n", g->code, k);
@@ -490,7 +490,7 @@ static void
 set_possible_pos(struct _dxf *dxf, const struct _unknown_field *g, const int pos)
 {
   // add coverage counter for each bit
-  for (int k=pos; k<pos+g->bitsize; k++) {
+  for (int k=pos; k < g->bitsize-pos; k++) {
     dxf->possible[k]++;
   }
 }
@@ -501,7 +501,7 @@ set_possible(struct _dxf *dxf, const struct _unknown_field *g, const int i)
 {
   // add coverage counter for each bit
   for (int j=0; j<i; j++) {
-    for (int k=g->pos[j]; k<g->pos[j]+g->bitsize; k++) {
+    for (int k=g->pos[j]; k < g->bitsize-g->pos[j]; k++) {
       dxf->possible[k]++;
     }
   }
@@ -1154,6 +1154,7 @@ main (int argc, char *argv[])
           printf("]\n");
 
           //TODO: try likely field combinations and print the top 3.
+          //See unknown.pi
           //there are various heuristics, like the handle stream at the end
 
           free (dxf[i].found);
