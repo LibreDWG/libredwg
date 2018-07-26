@@ -5511,6 +5511,34 @@ DWG_OBJECT(UNDERLAYDEFINITION)
 
 DWG_OBJECT_END
 
+// (varies) UNTESTED
+// works ok on all Surface_20* but this coverage seems limited.
+// field names may change.
+// See AcDbAssocDependency.h
+DWG_OBJECT(ASSOCDEPENDENCY)
+
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
+  SUBCLASS (AcDbAssocDependency)
+  FIELD_BL (class_version, 90); //2
+  FIELD_BL (status, 90); //1 or depbody
+  FIELD_B  (isread_dep, 290); //0
+  FIELD_B  (iswrite_dep, 290); //1
+  FIELD_B  (isobjectstate_dep, 290); //1
+  FIELD_B  (unknown_b4, 290); //1
+  FIELD_BL (order, 90); //-2147483648 (-1) or 0
+  FIELD_B  (unknown_b5, 290); //0
+  FIELD_BL (depbodyid, 90); //1
+
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (parenthandle, 4, 0);
+  FIELD_HANDLE (owner, 4, 330); // => e.g. SURFACE linked to polygon
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  FIELD_HANDLE (writedep, 4, 360);
+  FIELD_HANDLE (readdep, 4, 330);
+  FIELD_HANDLE (node, 3, 330);
+DWG_OBJECT_END
+
 #ifdef DEBUG_CLASSES
 
 // (varies) UNTESTED
@@ -5810,7 +5838,7 @@ DWG_OBJECT(PLOTSETTINGS)
 
 DWG_OBJECT_END
 
-// (varies) UNTESTED
+// (varies) DEBUGGING
 /* Container for all properties relating to a generic light.  A
    dictionary of these objects is resident in the database, in the
    named object dictionary as ACAD_LIGHTS (Object LIGHTLIST). They are
@@ -6423,29 +6451,6 @@ DWG_OBJECT(ASSOC2DCONSTRAINTGROUP)
   REACTORS(4);
   XDICOBJHANDLE(3);
   */
-DWG_OBJECT_END
-
-// AcDbAssocDependency.h
-DWG_OBJECT(ASSOCDEPENDENCY)
-  SUBCLASS (AcDbAssocDependency)
-  FIELD_BL (class_version, 90); //2
-  FIELD_BL (status, 90); //1 or depbody
-  FIELD_B  (isread_dep, 290); //0
-  FIELD_B  (iswrite_dep, 290); //1
-  FIELD_B  (isobjectstate_dep, 290); //1
-  FIELD_B  (unknown_b4, 290); //1
-  FIELD_BL (order, 90); //-2147483648 order?
-  FIELD_B  (unknown_b5, 290); //0
-  FIELD_BL (depbodyid, 90); //1
-
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 4, 330);
-  FIELD_HANDLE (owner, 4, 330); //2D8 EXTRUDEDSURFACE [86,109]
-  REACTORS(4);
-  XDICOBJHANDLE(3);
-  FIELD_HANDLE (writedep, 4, 360);
-  FIELD_HANDLE (readdep, 4, 330);
-  FIELD_HANDLE (node, 3, 330);
 DWG_OBJECT_END
 
 #endif /* DEBUG_CLASSES */

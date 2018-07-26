@@ -1,8 +1,8 @@
 difforig bindings/python/swig_python.c
 
 diff -u bindings/python/swig_python.c.orig bindings/python/swig_python.c
---- bindings/python/swig_python.c.orig	2018-07-25 12:13:08.000000000 +0200
-+++ bindings/python/swig_python.c	2018-07-25 12:13:14.000000000 +0200
+--- bindings/python/swig_python.c.orig	2018-07-26 13:13:53.000000000 +0200
++++ bindings/python/swig_python.c	2018-07-26 13:13:53.000000000 +0200
 @@ -2480,7 +2480,7 @@
  */
  
@@ -83,7 +83,7 @@ diff -u bindings/python/swig_python.c.orig bindings/python/swig_python.c
   Py_DECREF(dict);
  } 
  
-@@ -205945,6 +205945,17 @@
+@@ -207513,6 +207513,17 @@
  #ifdef __cplusplus
  extern "C"
  #endif
