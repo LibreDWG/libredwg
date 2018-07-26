@@ -55,8 +55,10 @@ gcov.log
 /test/test-data-r*/
 /test/test-data-20*/
 /unknown-*.log
+/fuzz-*/
 
 # specific filenames
+/libredwg.pc
 /.rb.sh
 /.upwork.sh
 /.version
@@ -65,6 +67,7 @@ gcov.log
 /.project
 /.patches
 /.analysis
+/gen-announce.sh
 /GPATH
 /GRTAGS
 /GTAGS
