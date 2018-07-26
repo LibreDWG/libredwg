@@ -6233,7 +6233,7 @@ DWG_ENTITY(PLANESURFACE)
 
 DWG_ENTITY_END
 
-// (varies) UNSORTED FIELDS
+// (varies) DEBUGGING
 // in DXF as 0 DGNUNDERLAY DWFUNDERLAY PDFUNDERLAY
 DWG_ENTITY(UNDERLAY)
 
@@ -6266,6 +6266,7 @@ DWG_ENTITY(UNDERLAY)
 
 DWG_ENTITY_END
 
+// (varies) DEBUGGING
 DWG_OBJECT(ASSOCACTION)
   rcount1 = bit_position(dat);
   FIELD_B (is_body_a_proxy, 90); //0-9
@@ -6278,11 +6279,19 @@ DWG_OBJECT(ASSOCACTION)
   DEBUG_POS_OBJ
   bit_set_position(dat, rcount1 + 27);
   FIELD_BL (status, 90); //27-36
+  if (FIELD_VALUE(status)>0x100) {
+    LOG_ERROR("Invalid ASSOCACTION.status " FORMAT_BL, FIELD_VALUE(status));
+    return DWG_ERR_VALUEOUTOFBOUNDS;
+  }
   DEBUG_HERE_OBJ
   FIELD_HANDLE (actionbody, 5, 0);
   FIELD_HANDLE (callback, 3, 0);
   FIELD_HANDLE (owningnetwork, 3, 0);
   FIELD_BL (num_deps, 90);
+  if (FIELD_VALUE(status)>0x100) {
+    LOG_ERROR("Invalid ASSOCACTION.num_deps " FORMAT_BL, FIELD_VALUE(num_deps));
+    return DWG_ERR_VALUEOUTOFBOUNDS;
+  }
   HANDLE_VECTOR(readdeps, num_deps, 5, 330);
   HANDLE_VECTOR(writedeps, num_deps, 0, 360);
   FIELD_BL (unknown_assoc, 90);

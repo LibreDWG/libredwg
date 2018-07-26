@@ -130,11 +130,13 @@ static Bit_Chain *dat = &pdat;
 #define FIELD_2DD_VECTOR(name, size, dxf) FIELD_TV(name,dxf)
 #define FIELD_3DPOINT_VECTOR(name, size, dxf) FIELD_TV(name,dxf)
 #define HANDLE_VECTOR_N(name, size, code, dxf) \
-  for (vcount=0; vcount < (long)size; vcount++) \
+  if (_obj->name) { \
+    for (vcount=0; vcount < (long)size; vcount++) \
     {\
       FIELD_HANDLE_N(name[vcount], vcount, code, dxf);  \
     } \
-  if (size) { FIELD_TV(name,dxf) }
+    if (size) { FIELD_TV(name,dxf) } \
+  }
 #define HANDLE_VECTOR(name, sizefield, code, dxf) \
   HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
 

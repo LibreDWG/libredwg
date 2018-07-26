@@ -342,7 +342,7 @@
 #define AVAIL_BITS() (obj?(unsigned)((obj->address + obj->size)*8 - bit_position(dat) + 100)\
                          :0xff00)
 #define TYPE_MAXELEMSIZE(type) (unsigned)dwg_bits_size[BITS_##type]
-#define VECTOR_CHKCOUNT(name,type,size)        \
+#define VECTOR_CHKCOUNT(name,type,size) \
   if ((size)*TYPE_MAXELEMSIZE(type) > AVAIL_BITS()) { \
     LOG_ERROR("Invalid " #name " vcount %ld. Need min. %u bits for %s, have %u for %s.", \
               (long)(size), (size)*TYPE_MAXELEMSIZE(type), #type, AVAIL_BITS(), obj?obj->dxfname:""); \
@@ -351,8 +351,11 @@
   if ((unsigned)(size)*(maxelemsize) > AVAIL_BITS()) { \
     LOG_ERROR("Invalid " #name " vcount %ld. Need min. %u bits, have %u for %s.", \
               (long)(size), (unsigned)(size)*(maxelemsize), AVAIL_BITS(), obj?obj->dxfname:""); \
+    size = 0; \
     return DWG_ERR_VALUEOUTOFBOUNDS; }
-#define HANDLE_VECTOR_CHKCOUNT(name,size) _VECTOR_CHKCOUNT(name,size,8)
+#define HANDLE_VECTOR_CHKCOUNT(name,size) \
+  VECTOR_CHKCOUNT(name,HANDLE,size)
+
 
 //FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
@@ -511,7 +514,12 @@
 #define REPEAT_CHKCOUNT(name,times,type) \
   if (dat->version >= R_2004 && (unsigned)(times)*sizeof(type) > AVAIL_BITS()) { \
     LOG_ERROR("Invalid " #name " rcount %ld for %s\n", (long)times, obj->dxfname); \
-    return DWG_ERR_VALUEOUTOFBOUNDS; } \
+    return DWG_ERR_VALUEOUTOFBOUNDS; }
+#define REPEAT_CHKCOUNT_LVAL(name,times,type) \
+  if (dat->version >= R_2004 && (unsigned)(times)*sizeof(type) > AVAIL_BITS()) { \
+    LOG_ERROR("Invalid " #name " rcount %ld for %s\n", (long)times, obj->dxfname); \
+    times = 0; \
+    return DWG_ERR_VALUEOUTOFBOUNDS; }
 
 // unchecked with a constant
 #define REPEAT_CN(times, name, type) \
@@ -523,11 +531,11 @@
   for (rcount1=0; rcount1<(long)times; rcount1++)
 
 #define _REPEAT(times, name, type, idx) \
-  REPEAT_CHKCOUNT(name,_obj->times,type) \
+  REPEAT_CHKCOUNT_LVAL(name,_obj->times,type) \
   if (_obj->times) _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
   for (rcount##idx=0; rcount##idx<(long)_obj->times; rcount##idx++)
 #define _REPEAT_C(times, name, type, idx) \
-  REPEAT_CHKCOUNT(name,_obj->times,type) \
+  REPEAT_CHKCOUNT_LVAL(name,_obj->times,type) \
   if (_obj->times) _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
   for (rcount##idx=0; rcount##idx<(long)_obj->times; rcount##idx++)
 
