@@ -1247,7 +1247,7 @@ bit_write_TV(Bit_Chain *restrict dat, char *restrict chain)
   int i;
   int length;
 
-  length = chain ? strlen((const char *)chain) : 0;
+  length = chain ? strlen((const char *)chain)+1 : 0;
   bit_write_BS(dat, length);
   for (i = 0; i < length; i++)
     bit_write_RC(dat, (unsigned char)chain[i]);
@@ -1285,9 +1285,10 @@ bit_write_TU(Bit_Chain *restrict dat, BITCODE_TU restrict chain)
   if (chain)
     {
 #if defined(HAVE_WCHAR_H) && defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
-      length = wcslen(chain);
+      length = wcslen(chain)+1;
 #else
       for (length=0; chain[length]; length++) ;
+      length++;
 #endif
     }
   else

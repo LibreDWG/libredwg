@@ -926,7 +926,8 @@ main (int argc, char *argv[])
                 }
 
                 // TU not found, try TV (unsuccessful) or TF (wrong len?)
-                if (code >= 1 && code <= 3) {
+                // the length usually includes the final \0
+                if (g[j].type == BITS_TV || g[j].type == BITS_TU) {
                   Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
                   int len = strlen(g[j].value);
                   dat.chain = calloc(1,16);
@@ -947,7 +948,7 @@ main (int argc, char *argv[])
                   if (len)
                     {
                       bit_set_position(&dat, 0);
-                      bits_TF (&dat, &g[j], len);
+                      bits_TF (&dat, &g[j], len); // search without the final \0
 
                       g[j].bytes = dat.chain;
                       g[j].bitsize = (dat.byte * 8) + dat.bit;
@@ -983,6 +984,7 @@ main (int argc, char *argv[])
                   }
                 continue;
               }
+
             FOUND:
               piname = (char*)dwg_bits_name[g[j].type];
               if (g[j].type == BITS_HANDLE)
