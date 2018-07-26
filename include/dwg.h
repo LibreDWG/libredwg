@@ -313,6 +313,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_ASSOCNETWORK,
   DWG_TYPE_ASSOCOSNAPPOINTREFACTIONPARAM,
   DWG_TYPE_ASSOCPERSSUBENTMANAGER,
+  DWG_TYPE_ASSOCPLANESURFACEACTIONBODY,
   DWG_TYPE_ASSOCVERTEXACTIONPARAM,
   DWG_TYPE_CAMERA,
   DWG_TYPE_CELLSTYLEMAP,
@@ -358,7 +359,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_SPATIAL_INDEX,
   DWG_TYPE_SUN,
   DWG_TYPE_SUNSTUDY,
-  DWG_TYPE_SURFACE,
+  DWG_TYPE_PLANESURFACE,
   DWG_TYPE_EXTRUDEDSURFACE,
   DWG_TYPE_LOFTEDSURFACE,
   DWG_TYPE_REVOLVEDSURFACE,
@@ -4288,9 +4289,9 @@ typedef struct _dwg_entity_LOFTEDSURFACE
 } Dwg_Entity_LOFTEDSURFACE;
 
 /**
- Entity PLANE SURFACE (varies)
+ Entity PLANESURFACE (varies)
 */
-typedef struct _dwg_entity_SURFACE
+typedef struct _dwg_entity_PLANESURFACE
 {
   struct _dwg_object_entity *parent;
   BITCODE_BS modeler_format_version; /*!< DXF 70 */
@@ -4298,7 +4299,7 @@ typedef struct _dwg_entity_SURFACE
   BITCODE_BS v_isolines;         /*!< DXF 72 */
   BITCODE_BL class_version; /*!< DXF 90 */
   
-} Dwg_Entity_SURFACE;
+} Dwg_Entity_PLANESURFACE;
 
 /**
  Entity REVOLVEDSURFACE (varies)
@@ -4729,6 +4730,16 @@ typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER
   BITCODE_H  xdicobjhandle;
 } Dwg_Object_ASSOCPERSSUBENTMANAGER;
 
+typedef struct _dwg_object_ASSOCPLANESURFACEACTIONBODY
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BL class_version; /*!< DXF 90 1 */
+  //??
+  BITCODE_H  parenthandle; //3. 330
+  BITCODE_H* reactors;
+  BITCODE_H  xdicobjhandle;
+} Dwg_Object_ASSOCPLANESURFACEACTIONBODY;
+
 /**
  -----------------------------------
  */
@@ -4891,7 +4902,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_MULTILEADER *MULTILEADER;
     Dwg_Entity_PROXY_ENTITY *PROXY_ENTITY;
     Dwg_Entity_PROXY_LWPOLYLINE *PROXY_LWPOLYLINE;
-    Dwg_Entity_SURFACE *SURFACE; //or PLANESURFACE?
+    Dwg_Entity_PLANESURFACE *PLANESURFACE;
     Dwg_Entity_EXTRUDEDSURFACE *EXTRUDEDSURFACE;
     Dwg_Entity_LOFTEDSURFACE *LOFTEDSURFACE;
     Dwg_Entity_REVOLVEDSURFACE *REVOLVEDSURFACE;
@@ -5000,6 +5011,7 @@ typedef struct _dwg_object_object
     Dwg_Object_ASSOCNETWORK *ASSOCNETWORK;
     Dwg_Object_ASSOCOSNAPPOINTREFACTIONPARAM *ASSOCOSNAPPOINTREFACTIONPARAM;
     Dwg_Object_ASSOCPERSSUBENTMANAGER *ASSOCPERSSUBENTMANAGER;
+    //TODO Dwg_Object_ASSOCPLANESURFACEACTIONBODY *ASSOCPLANESURFACEACTIONBODY;
     Dwg_Object_CELLSTYLEMAP *CELLSTYLEMAP;
     //TODO Dwg_Object_DATATABLE *DATATABLE;
     Dwg_Object_DBCOLOR *DBCOLOR;
@@ -5610,6 +5622,7 @@ EXPORT int dwg_add_ASSOCALIGNEDDIMACTIONBODY (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCGEOMDEPENDENCY (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCOSNAPPOINTREFACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCPERSSUBENTMANAGER (Dwg_Object *obj);
+//EXPORT int dwg_add_ASSOCPLANESURFACEACTIONBODY (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCVERTEXACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCACTION (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCNETWORK (Dwg_Object *obj);
@@ -5656,7 +5669,7 @@ EXPORT int dwg_add_SORTENTSTABLE (Dwg_Object *obj);
 EXPORT int dwg_add_SPATIAL_FILTER (Dwg_Object *obj);
 EXPORT int dwg_add_SPATIAL_INDEX (Dwg_Object *obj);
 EXPORT int dwg_add_SUN (Dwg_Object *obj);
-EXPORT int dwg_add_SURFACE (Dwg_Object *obj);
+EXPORT int dwg_add_PLANESURFACE (Dwg_Object *obj);
 EXPORT int dwg_add_EXTRUDEDSURFACE (Dwg_Object *obj);
 EXPORT int dwg_add_LOFTEDSURFACE (Dwg_Object *obj);
 EXPORT int dwg_add_REVOLVEDSURFACE (Dwg_Object *obj);

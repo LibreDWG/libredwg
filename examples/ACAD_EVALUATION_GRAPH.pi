@@ -76,33 +76,13 @@ def(2,Data) =>
   Data = [S,Fields,Class,Dxf,Version],
   go(Data).
 
-def(3,Data) =>
-  println("ACAD_EVALUATION_GRAPH: 0x1E9E4C (103) test/test-data/2004/CascoUrbano.dxf:"),
-  Class="ACAD_EVALUATION_GRAPH",
-  Dxf="test/test-data/2004/CascoUrbano.dxf",
-  Version=2004,
-  S="1010101010000000010000110001111010011110010010111100010001100001100011000000000000000000011000000100110",
-  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
-  Fields = [
-    %new_struct('_H5', ["00000011000111101001111001001100", '0.3.1E9E4C', [], "handle", 5])
-     new_struct('H330', ["01000011000111101001111001001011", '4.3.1E9E4B', [], "reactors[0]", 330])
-    ,new_struct('H330', ["01000011000111101001111001001011", '4.3.1E9E4B', [], "parenthandle", 330])
-    ,new_struct('H330', ["10000000", '8.0.0', [], "parenthandle", 330])
-    ,new_struct('BL96', ["10", '0', [], "has_graph", 96])
-    ,new_struct('BL97', ["10", '0', [], "unknown1", 97])
-  ],
-  Data = [S,Fields,Class,Dxf,Version],
-  go(Data).
 
-
-% summary: 150/834=18.0%
+% summary: 118/731=16.1%
 
 go0 ?=> def(0,Data).
 go1 ?=> def(1,Data).
 go2 ?=> def(2,Data).
-go3 ?=> def(3,Data).
 
 main => go0,
         go1,
-        go2,
-        go3.
+        go2.

@@ -565,3 +565,7 @@ unknown_dxf[563].fields = unknown_dxf_563;
 unknown_dxf[564].fields = unknown_dxf_564;
 unknown_dxf[565].fields = unknown_dxf_565;
 unknown_dxf[566].fields = unknown_dxf_566;
+unknown_dxf[567].fields = unknown_dxf_567;
+unknown_dxf[568].fields = unknown_dxf_568;
+unknown_dxf[569].fields = unknown_dxf_569;
+unknown_dxf[570].fields = unknown_dxf_570;

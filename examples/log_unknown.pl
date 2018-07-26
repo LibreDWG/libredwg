@@ -37,7 +37,7 @@ if (/^bits\[\d\]: (\d)/) {
 }
 if (/Next object: /) {
   if ($object and $b and $handle && $bitsize) {
-    #TODO remove duplicate bytes, skipping dxf and handle
+    #duplicate bytes, skipping dxf and handle are done in log_unknown_dxf.pl
     my $dxf = $ARGV;
     my ($n, $d) = $dxf =~ /^(.*)_(r\d+|R?20\d\d)\.log$/;
     if ($n =~ /^(example|sample|Drawing|DS_li)/) {
@@ -45,6 +45,7 @@ if (/Next object: /) {
     } else {
       $dxf = "test/test-data/$d/$n.dxf";
     }
+    next if $dxf =~ /work\.orig/; # skip temp. duplicates
     $dxf = undef unless -f $dxf;
     printf "    { \"$object\", \"$b\", \"$bits\", \"$ARGV\", %s, 0x$handle, $bitsize },\n",
       $dxf ? "\"$dxf\"" : "NULL";
