@@ -969,7 +969,7 @@ while (<>) {
         print $f0  "    \"$unknown\", $bitsize,";
 
         print $f1 "/* $obj $hdl in $dxf */\n";
-        print $f1 "static const struct _unknown_field unknown_dxf_$i\[\] = {\n";
+        print $f1 "static struct _unknown_field unknown_dxf_$i\[\] = {\n";
         print $f2 "unknown_dxf\[$i\].fields = unknown_dxf_$i;\n";
         @FIELD = ();
         $i++;
