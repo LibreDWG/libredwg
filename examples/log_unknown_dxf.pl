@@ -209,6 +209,23 @@ my $known = {
     360 => 'writedep',
     90 => 'unknown_assoc',
     ],
+  ACDBASSOCDEPENDENCY => [
+    #100 => 'AcDbAssocDependency',
+    90 => 'class_version',
+    90 => 'status',
+    290 => 'isread_dep',
+    290 => 'iswrite_dep',
+    290 => 'isobjectstate_dep',
+    290 => 'unknown_b4',
+    90 => 'order',
+    290 => 'unknown_b5',
+    #330 => 'parenthandle',
+    330 => 'owner',
+    330 => 'readdep',
+    330 => 'node',
+    360 => 'writedep',
+    90 => 'depbodyid',
+    ],
   ACDBASSOCALIGNEDDIMACTIONBODY => [
     90 => 'status',
     #100 => AcDbAssocParamBasedActionBody
