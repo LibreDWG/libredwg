@@ -44,7 +44,7 @@ my $i = 0;
 open my $f0, ">", "examples/alldxf_0.inc" || die "$!";
 open my $f1, ">", "examples/alldxf_1.inc" || die "$!";
 open my $f2, ">", "examples/alldxf_2.inc" || die "$!";
-my %skip;
+my (%skip, %dupl);
 
 if (0) {
   open my $skip_fh, "<", "examples/alldwg.skip"
@@ -894,6 +894,12 @@ while (<>) {
     $unknown .= pack ("B8", $bits);
   }
   $unknown = join("", map { sprintf("\\%03o", $_) } unpack("C*", $unknown));
+  if (exists $dupl{"$obj-$unknown"}) {
+    warn "skip duplicate $obj-$hdl-$bitsize $dxf\n";
+    next LINE;
+  } else {
+    $dupl{"$obj-$unknown"}++;
+  }
   #warn "$dxf: $obj HANDLE($hdl)\n";
   # 9080187 5160203 9080187 201AA 51E0204 90C0202 35200204 20640A8 2D22020C 90A01D1 
   #if ($hdl =~ /^([0-9A-F]){1,4}0([0-9A-F]+)$/) {
