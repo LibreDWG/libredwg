@@ -6003,6 +6003,7 @@ DWG_OBJECT(SUNSTUDY)
 DWG_OBJECT_END
 
 // (varies) unsorted
+// See examples/HELIX.pi.log for 2018/Helix.dxf
 DWG_ENTITY(HELIX)
 
   SUBCLASS (AcDbHelix)
@@ -6522,4 +6523,3 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
-
