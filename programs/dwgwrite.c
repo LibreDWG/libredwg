@@ -88,7 +88,7 @@ main(int argc, char *argv[])
   char *outfile = NULL;
   Bit_Chain dat;
   const char *version = NULL;
-  Dwg_Version_Type dwg_version;
+  Dwg_Version_Type dwg_version = R_INVALID;
   int c;
 #ifdef HAVE_GETOPT_LONG
   int option_index = 0;

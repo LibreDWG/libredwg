@@ -24,7 +24,7 @@ main (int argc, char const *argv[])
   dwg_inthash *hash;
 
   hash = hash_new(max);
-  for (i=1; i<max/PRESSURE_FACTOR; i++)
+  for (i=1; i < max/PRESSURE_FACTOR; i++)
     {
       int32_t rnd = i; //we need to ensure full coverage.
       // i = maxrand(i)+1; for a more realistic workload
@@ -35,7 +35,7 @@ main (int argc, char const *argv[])
   for (i=1; i<max/PRESSURE_FACTOR; i++)
     {
       uint32_t v;
-      int32_t rnd = maxrand(i)+1;
+      uint32_t rnd = maxrand(i)+1;
       if ((v = hash_get(hash, rnd)) != rnd+1)
         fail("hash_get(%d) => %d", rnd, v);
     }

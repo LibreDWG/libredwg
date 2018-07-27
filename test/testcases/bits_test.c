@@ -15,6 +15,7 @@ void bit_read_3B_tests (void);
 void bit_write_3B_tests (void);
 void bit_read_4BITS_tests (void);
 void bit_write_4BITS_tests (void);
+void bit_read_BLL_tests (void);
 void bit_read_RC_tests (void);
 void bit_write_RC_tests (void);
 void bit_read_RS_tests (void);
