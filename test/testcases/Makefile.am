@@ -5,6 +5,7 @@ AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
 LDADD   = $(top_builddir)/src/libredwg.la -lm
 
 bits_test_LDADD = $(LDADD) $(top_builddir)/src/bits.lo
+hash_test_LDADD = $(LDADD) $(top_builddir)/src/bits.lo $(top_builddir)/src/hash.lo
 
 paired = \
 	3dsolid \
