@@ -6191,8 +6191,8 @@ DWG_ENTITY(REVOLVEDSURFACE)
     return DWG_ERR_VALUEOUTOFBOUNDS;
 
   FIELD_BL (id, 90);
-  FIELD_BL (num_bindata, 90);
-  FIELD_TF (bindata, _obj->num_bindata, 310);
+  FIELD_BL (size_bindata, 90);
+  FIELD_TF (bindata, _obj->size_bindata, 310);
   FIELD_3BD (axis_point, 10);
   FIELD_3BD (axis_vector, 11);
   FIELD_BD (revolve_angle, 40);
@@ -6221,11 +6221,11 @@ DWG_ENTITY(SWEPTSURFACE)
     return DWG_ERR_VALUEOUTOFBOUNDS;
 
   FIELD_BL (sweep_entity_id, 90);
-  FIELD_BL (num_sweepdata, 90);
-  FIELD_TF (sweepdata, _obj->num_sweepdata, 310);
+  FIELD_BL (size_sweepdata, 90);
+  FIELD_TF (sweepdata, _obj->size_sweepdata, 310);
   FIELD_BL (path_entity_id, 90);
-  FIELD_BL (num_pathdata, 90);
-  FIELD_TF (pathdata, _obj->num_pathdata, 310);
+  FIELD_BL (size_pathdata, 90);
+  FIELD_TF (pathdata, _obj->size_pathdata, 310);
   FIELD_VECTOR_N (sweep_entity_transmatrix, BD, 16, 40);
   FIELD_VECTOR_N (path_entity_transmatrix, BD, 16, 41);
   FIELD_BD (draft_angle, 42);
@@ -6597,3 +6597,4 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+

@@ -4313,7 +4313,7 @@ typedef struct _dwg_entity_REVOLVEDSURFACE
   BITCODE_BL class_version; /*!< DXF 90 */
 
   BITCODE_BL id; // 90
-  BITCODE_BL num_bindata; // 90
+  BITCODE_BL size_bindata; // 90
   BITCODE_TF bindata; // 310
   BITCODE_3BD axis_point; // 10
   BITCODE_3BD axis_vector; // 11
@@ -4341,10 +4341,10 @@ typedef struct _dwg_entity_SWEPTSURFACE
   BITCODE_BL class_version; /*!< DXF 90 */
   
   BITCODE_BL sweep_entity_id; // 90
-  BITCODE_BL num_sweepdata; // 90
+  BITCODE_BL size_sweepdata; // 90
   BITCODE_TF sweepdata; // 310
   BITCODE_BL path_entity_id; // 90
-  BITCODE_BL num_pathdata; // 90
+  BITCODE_BL size_pathdata; // 90
   BITCODE_TF pathdata; // 310
   BITCODE_BD* sweep_entity_transmatrix; // 40
   BITCODE_BD* path_entity_transmatrix; // 41
