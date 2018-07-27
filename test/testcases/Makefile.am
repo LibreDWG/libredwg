@@ -6,6 +6,12 @@ LDADD   = $(top_builddir)/src/libredwg.la -lm
 
 bits_test_LDADD = $(LDADD) $(top_builddir)/src/bits.lo
 hash_test_LDADD = $(LDADD) $(top_builddir)/src/bits.lo $(top_builddir)/src/hash.lo
+decode_test_LDADD = $(LDADD) \
+	$(top_builddir)/src/bits.lo \
+	$(top_builddir)/src/hash.lo \
+	$(top_builddir)/src/decode_r2007.lo \
+	$(top_builddir)/src/common.lo \
+	$(top_builddir)/src/print.lo
 
 paired = \
 	3dsolid \
