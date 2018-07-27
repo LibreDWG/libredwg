@@ -64,6 +64,10 @@ manual:
 	$(MAKE) -C doc $@
 refman:
 	$(MAKE) -C doc $@
+regen-swig-patch:
+	$(MAKE) -C bindings/python
+	difforig bindings/python/swig_python.c >xxxx
+	if test -s xxxx; then mv xxxx build-aux/swig_python.patch; fi
 
 check-dwg: all
 	-mv check-dwg.log check-dwg.log~ 2>/dev/null
