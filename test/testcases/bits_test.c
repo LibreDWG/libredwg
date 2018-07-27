@@ -273,6 +273,7 @@ main (int argc, char const *argv[])
   BITCODE_BL bl;
   BITCODE_BS bs;
   unsigned long pos;
+  long size;
   unsigned char sentinel[] =
     {0xCF,0x7B,0x1F,0x23,0xFD,0xDE,0x38,0xA9,0x5F,0x7C,0x68,0xB8,0x4E,0x6D,0x33,0x5F};
 
@@ -492,19 +493,20 @@ main (int argc, char const *argv[])
   else
     fail("bit_calc_CRC %X", bs);
   bit_advance_position(&bitchain, 16);
-  
-  bit_write_TV(&bitchain, (char*)"GNU");
-  if (bitchain.byte == 69 && bitchain.bit == 2)
+
+  bit_write_TV(&bitchain, (char*)"GNU"); //now we store the \0 also
+  if (bitchain.byte == 70 && bitchain.bit == 2)
     pass("bit_write_TV");
   else
     fail("bit_write_TV @%ld.%d", bitchain.byte, bitchain.bit);
 
-  bit_advance_position(&bitchain, -34);
+  bit_advance_position(&bitchain, -42);
   if (!strcmp((const char*) bit_read_TV(&bitchain), "GNU"))
     pass("bit_read_TV");
   else
     fail("bit_read_TV");
-	
+  bit_advance_position(&bitchain, -8);
+
   bit_write_L(&bitchain, 20);
   if (bitchain.byte == 73 && bitchain.bit == 2)
     pass("bit_write_L");
@@ -528,12 +530,17 @@ main (int argc, char const *argv[])
     color.book_name = (char*)"book_name";
     bit_write_CMC(&bitchain, &color);
     if (bitchain.byte == 74 && bitchain.bit == 4)
-      pass("bit_write_CMC");
+      pass("bit_write_CMC r2000");
     else
       fail("bit_write_CMC @%ld.%d", bitchain.byte, bitchain.bit);
   }
-  //pass ("CMC size: %ld", bit_position(&bitchain) - pos); //10
-  bit_advance_position(&bitchain, -10);
+  size = bit_position(&bitchain) - pos;
+  if (size == 10)
+    pass ("CMC size");
+  else
+    fail ("CMC size: %ld", size);
+
+  bit_advance_position(&bitchain, -size);
   {
     Dwg_Color color_read;
     bit_read_CMC(&bitchain, &color_read);
@@ -544,7 +551,7 @@ main (int argc, char const *argv[])
       fail("bit_read_CMC %d", color_read.index);
   }
 
-  bit_advance_position(&bitchain, -10);
+  bit_advance_position(&bitchain, -size);
   {
     Dwg_Color color;
     bitchain.version = R_2004;
@@ -554,8 +561,8 @@ main (int argc, char const *argv[])
     color.name = (char*)"Some name";
     color.book_name = (char*)"book_name";
     bit_write_CMC(&bitchain, &color);
-    if (bitchain.byte == 90 && bitchain.bit == 0)
-      pass("bit_write_CMC r2000");
+    if (bitchain.byte == 91 && bitchain.bit == 0)
+      pass("bit_write_CMC r2004");
     else
       fail("bit_write_CMC @%ld.%d", bitchain.byte, bitchain.bit);
 
@@ -580,21 +587,21 @@ main (int argc, char const *argv[])
     if (bitchain.chain[--bitchain.byte] == 0x5F)
       pass("bit_write_sentinel");
     else
-      fail("bit_write_sentinel %c", bitchain.chain[bitchain.byte]);
+      fail("bit_write_sentinel 0x%X", bitchain.chain[bitchain.byte]);
   }
 
   bitchain.bit = 0;
   bitchain.byte = 0;
   {
     int ret = bit_search_sentinel(&bitchain, sentinel);
-    if (bitchain.byte == 107)
+    if (bitchain.byte == 108)
       pass("bit_search_sentinel");
     else
       fail("bit_search_sentinel %d", bitchain.byte);
   }
   {
-    unsigned int check = bit_calc_CRC(0xc0c1, (unsigned char *)bitchain.chain, 107);
-    if (check == 0x8dd4)
+    unsigned int check = bit_calc_CRC(0xc0c1, (unsigned char *)bitchain.chain, 108);
+    if (check == 0xe497)
       pass("bit_calc_CRC");
     else
       fail("bit_calc_CRC 0x%x", check);
