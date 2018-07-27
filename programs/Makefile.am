@@ -66,10 +66,17 @@ TESTS_ENVIRONMENT = \
  datadir='$(top_srcdir)/test/test-data' \
  TESTPROG='wine'
 else
+if DISABLE_DXF
+TESTS_ENVIRONMENT = \
+ PROGS='$(bin_PROGRAMS)' \
+ datadir='$(top_srcdir)/test/test-data' \
+ TESTPROG=''
+else
 TESTS_ENVIRONMENT = \
  PROGS='$(bin_PROGRAMS) dwg2dxf' \
  datadir='$(top_srcdir)/test/test-data' \
  TESTPROG=''
+endif
 endif
 
 TESTS = alive.test

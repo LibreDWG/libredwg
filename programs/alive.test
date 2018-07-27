@@ -115,7 +115,7 @@ esac
 # TODO: check generated DXF's against original DXF's
 # skip the run part if dwg2dxf is part of bin_PROGRAMS (i.e. being installed)
 # only in programs, not examples:
-if test -f cmp_dxf.pl ; then
+if test -f cmp_dxf.pl -a -e dwg2dxf; then
     for dwg in $DATA; do
         base=$(basename $dwg .dwg)
         run dwg2dxf $dwg
