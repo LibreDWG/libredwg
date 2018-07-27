@@ -228,38 +228,44 @@ find the best guess for the needed dwg.spec layout.
 Note that picat list and array indices are one-based, so you need to
 subtract 1 from each found offset. 1-32 mean the bits 0-31.
 
+The field names are filled in by examples/log_unknown_dxf.pl automatically.
+We could parse dwg.spec for this, but for now I went with a manual solution,
+as the number of unknown classes gets less, not more.
+
 E.g. for ACAD_EVALUATION_GRAPH.pi with a high percentage from the above
 possible layout, it currently produces this:
 
 Definite result:
 ----------------
-hole_ = HOLE([1,32],01000000010100000001010000000110) len = 32
-FIELD_BL93(0100100000,32,[[33,42]])
-hole_ = HOLE([43,52],0100000001) len = 10
-FIELD_BL92(0011111111111111111111111111111111,-1,[[53,86]])
-FIELD_BL92(0011111111111111111111111111111111,-1,[[87,120]])
-FIELD_BL92(0011111111111111111111111111111111,-1,[[121,154]])
-FIELD_BL92(0011111111111111111111111111111111,-1,[[155,188]])
-hole_ = HOLE([189,191],100) len = 3
-FIELD_H330(01100000,2E4,[[192,199]])
-FIELD_H360(001100100000001011100010,2E2,[[200,223]])
-hole_ = HOLE([224,230],1100111) len = 7
+HOLE([1,32],01000000010100000001010000000110) len = 32
+FIELD_BL (edge_flags, 93);	// 32 [33,42]
+HOLE([43,52],0100000001) len = 10
+FIELD_BL (node_edge1, 92);	// -1 [53,86]
+FIELD_BL (node_edge2, 92);	// -1 [87,120]
+FIELD_BL (node_edge3, 92);	// -1 [121,154]
+FIELD_BL (node_edge4, 92);	// -1 [155,188]
+HOLE([189,191],100) len = 3
+FIELD_H (parenthandle, 330);	// 6.0.0 [192,199]
+FIELD_H (evalexpr, 360);	// 3.2.2E2 [200,223]
+HOLE([224,230],1100111) len = 7
 ----------------
-FIELD_BL96(0100000001,1,[[1,10],[11,20],[21,30],[43,52]])
-FIELD_BL97(0100000001,1,[[1,10],[11,20],[21,30],[43,52]])
-FIELD_BL91(10,0,[[2,3],[10,11],[12,13],[20,21],[22,23],[31,32],[44,45],[52,53],[189,190],[225,226]])
-FIELD_BL95(0100000001,1,[[1,10],[11,20],[21,30],[43,52]])
+Todo: 32 + 178 = 210, Missing: 20
+FIELD_BL (has_graph, 96);	// 1 0100000001 [[1,10],[11,20],[21,30],[43,52]]
+FIELD_BL (unknown1, 97);	// 1 0100000001 [[1,10],[11,20],[21,30],[43,52]]
+FIELD_BL (nodeid, 91);	// 0 10 [[2,3],[10,11],[12,13],[20,21],[22,23],[31,32],[44,45],[52,53],[189,190],[225,226]]
+FIELD_BL (num_evalexpr, 95);	// 1 0100000001 [[1,10],[11,20],[21,30],[43,52]]
 
 The next picat steps will automate the following reasoning:
 
 The first hole 1-32 is filled by the 3 1 values from BL96, BL97 and
-BL95, followed by the 0 value from BL91.  The second hole at 189-191
-is padding before the handle stream, and can be ignored.  This is from
-a r2010 file, which has seperate handle and text streams.  The last
-hole 224-230 could theoretically hold almost another unknown handle, but
-practically it's also just padding. The last handles are always optional 
-reactors and the xdicobject handle for objects, and 7 bits is not enough
-for a handle value. A code 4 null-handle would be 01000000.
+BL95, followed by the 0 value from BL91. The second hole is clearly
+another unknown BL with value 1.  The third hole at 189-191 is padding
+before the handle stream, and can be ignored.  This is from a r2010
+file, which has seperate handle and text streams.  The last hole
+224-230 could theoretically hold almost another unknown handle, but
+practically it's also just padding. The last handles are always
+optional reactors and the xdicobject handle for objects, and 7 bits is
+not enough for a handle value. A code 4 null-handle would be 01000000.
 
 You start by finding the DXF documentation and the ObjectARX header
 file of the class, to get the names and description of the class.
