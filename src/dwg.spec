@@ -5539,26 +5539,33 @@ DWG_OBJECT(ASSOCDEPENDENCY)
   FIELD_HANDLE (node, 3, 330);
 DWG_OBJECT_END
 
-// just from intsect_gsmarker it seems to be wrong
+// 1-4 references, see associativity bits 1-8.
 DWG_OBJECT(DIMASSOC)
 
   DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS(AcDbDimAssoc)
-  FIELD_BL (associativity, 90); //2
+  FIELD_BL (associativity, 90);
   FIELD_RC (trans_space_flag, 70);
-  FIELD_B (has_lastpt_ref, 75);
-  FIELD_T (classname, 1); //AcDbOsnapPointRef
-  FIELD_RC (osnap_type, 72);
-  FIELD_BS (main_subent_type, 73);
-  FIELD_BS (intsect_subent_type, 74);
-  FIELD_BS (rotated_type, 71);
-  FIELD_BL (main_gsmarker, 91);
-  FIELD_BD (osnap_dist, 40);
-  FIELD_3BD (osnap_pt, 10);
-  //?
-  FIELD_BL (intsect_gsmarker, 92);
+  REPEAT_CN(4, ref, Dwg_DIMASSOC_Ref)
+    { // 0 1 2 3 => 1 2 4 8
+      if (!(FIELD_VALUE(associativity) & (1<<rcount1)))
+        continue;
+      FIELD_B  (ref[rcount1].has_lastpt_ref, 75);
+      FIELD_T  (ref[rcount1].classname, 1); //AcDbOsnapPointRef
+      FIELD_RC (ref[rcount1].osnap_type, 72);
+      FIELD_BS (ref[rcount1].main_subent_type, 73);
+      FIELD_BS (ref[rcount1].intsect_subent_type, 74);
+      FIELD_BS (ref[rcount1].rotated_type, 71);
+      FIELD_BL (ref[rcount1].main_gsmarker, 91);
+      FIELD_BD (ref[rcount1].osnap_dist, 40);
+      FIELD_3BD(ref[rcount1].osnap_pt, 10);
+    }
+  SET_PARENT_OBJ(ref)
+  END_REPEAT(ref)
+  //FIELD_BL (intsect_gsmarker, 92);
 
   START_HANDLE_STREAM;
+  UNTIL(R_2004) { DEBUG_POS_OBJ }
   FIELD_HANDLE (parenthandle, 4, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
@@ -6597,4 +6604,3 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
-
