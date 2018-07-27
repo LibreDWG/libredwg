@@ -205,7 +205,18 @@ AC_ARG_ENABLE([trace],AS_HELP_STRING([--enable-trace],[
   AC_MSG_RESULT([yes]),
   AC_MSG_RESULT([no (default)]))
 
-dnl only useful for faster debug/test cycles
+dnl --enable-debug sets DEBUG_CLASSES
+AC_MSG_CHECKING([--enable-debug])
+AC_ARG_ENABLE([debug],AS_HELP_STRING([--enable-debug],[
+    Enable DEBUG_CLASSES (default: no).]),
+  AM_CFLAGS="$AM_CFLAGS -DDEBUG_CLASSES"
+  if test x$ac_compiler_gnu = xyes; then
+    CFLAGS="-g -fno-omit-frame-pointer"
+  fi
+  AC_MSG_RESULT([yes]),
+  AC_MSG_RESULT([no (default)]))
+
+dnl --disable-dxf only useful for faster debug/test cycles
 AC_MSG_CHECKING([--disable-dxf])
 AC_ARG_ENABLE([dxf],AS_HELP_STRING([--disable-dxf],[
     Disable DXF and other in/out modules (default: no).]),[],[enable_dxf=yes])
@@ -214,13 +225,6 @@ AS_IF([test x$enable_dxf = xno],
   AC_DEFINE([DISABLE_DXF],1,[Define to disable DXF and other in/out modules.])
   AC_MSG_RESULT([yes]),
   AC_MSG_RESULT([no (default)]))
-
-AC_CHECK_FUNCS([setenv],[],
-  AS_IF([test x$enable_trace = xyes],
-    [AC_MSG_WARN([setenv not found. --enable-trace is limited with cmdline apps.
-      Only -v args are taken for verbosity not the LIBREDWG_TRACE env var.])],
-    [AC_MSG_RESULT([setenv not needed. no --enable-trace.])]
-    ))
 
 AC_MSG_CHECKING([for --enable-gcov])
 AC_ARG_ENABLE(gcov,
@@ -253,6 +257,13 @@ else
 	AC_MSG_RESULT([no (default)])
 fi
 AM_CONDITIONAL(ENABLE_GCOV, test "x$enable_gcov" = "xtrue")
+
+AC_CHECK_FUNCS([setenv],[],
+  AS_IF([test x$enable_trace = xyes],
+    [AC_MSG_WARN([setenv not found. --enable-trace is limited with cmdline apps.
+      Only -v args are taken for verbosity not the LIBREDWG_TRACE env var.])],
+    [AC_MSG_RESULT([setenv not needed. no --enable-trace.])]
+    ))
 
 dnl Check for mingw, cross and wine
 AM_CONDITIONAL([HAVE_MINGW], [test "x$host_os" = "xmingw32"])
