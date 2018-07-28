@@ -571,6 +571,19 @@ search_bits(int j, struct _unknown_field *g, struct _unknown_dxf *udxf,
   return num_found;
 }
 
+static char*
+cquote(char *restrict dest, const char *restrict src) {
+  char c;
+  char *d = dest;
+  char *s = (char*)src;
+  while ((c = *s++)) {
+    if      (c == '"')  { *dest++ = '\\'; *dest++ = c; }
+    else if (c == '\\') { *dest++ = '\\'; *dest++ = c; }
+    else                                  *dest++ = c;
+  }
+  return d;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -978,9 +991,20 @@ main (int argc, char *argv[])
                         fprintf(pi, "\", '%s', [], \"%s\", %d])\n", buf,
                                 g[j].name, g[j].code);
                       }
+                    else if ((g[j].type == BITS_TV ||
+                              g[j].type == BITS_TU ||
+                              g[j].type == BITS_TF) &&
+                             strchr(g[j].value, '\\'))
+                      {
+                        char *buf = alloca(2*strlen(g[j].value));
+                        fprintf(pi, "\", \"%s\", [], \"%s\", %d])\n", cquote(buf, g[j].value),
+                                g[j].name, g[j].code);
+                      }
                     else
-                      fprintf(pi, "\", '%s', [], \"%s\", %d])\n", g[j].value,
-                              g[j].name, g[j].code);
+                      {
+                        fprintf(pi, "\", '%s', [], \"%s\", %d])\n", g[j].value,
+                                g[j].name, g[j].code);
+                      }
                   }
                 continue;
               }
@@ -1002,9 +1026,21 @@ main (int argc, char *argv[])
                   fprintf(pi, "\", '%s', [], \"%s\", %d])\n", buf,
                           g[j].name, g[j].code);
                 }
-              else
-                fprintf(pi, "\", '%s', [], \"%s\", %d])\n", g[j].value,
+              /* i.e. if string value contains \ */
+              else if ((g[j].type == BITS_TV ||
+                        g[j].type == BITS_TU ||
+                        g[j].type == BITS_TF) &&
+                       strchr(g[j].value, '\\'))
+                {
+                  char *buf = alloca(2*strlen(g[j].value));
+                  fprintf(pi, "\", \"%s\", [], \"%s\", %d])\n", cquote(buf, g[j].value),
                           g[j].name, g[j].code);
+                }
+              else
+                {
+                  fprintf(pi, "\", '%s', [], \"%s\", %d])\n", g[j].value,
+                          g[j].name, g[j].code);
+                }
               if (num_found == 1) {
                 //we still need to skip already reserved offsets
                 if (set_found(&dxf[i], &g[j])) {

@@ -5551,7 +5551,7 @@ DWG_OBJECT(DIMASSOC)
       if (!(FIELD_VALUE(associativity) & (1<<rcount1)))
         continue;
       FIELD_B  (ref[rcount1].has_lastpt_ref, 75);
-      FIELD_T  (ref[rcount1].classname, 1); //AcDbOsnapPointRef
+      FIELD_T  (ref[rcount1].classname, 1); // "AcDbOsnapPointRef"
       FIELD_RC (ref[rcount1].osnap_type, 72);
       FIELD_BS (ref[rcount1].main_subent_type, 73);
       FIELD_BS (ref[rcount1].intsect_subent_type, 74);
