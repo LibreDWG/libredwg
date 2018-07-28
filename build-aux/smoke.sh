@@ -18,15 +18,15 @@ CFLAGS=-I/usr/local/include
 LDFLAGS=-L/usr/local/lib
 
 gmake -s -j4 clean
-echo clang-mp-devel -fsanitize=address,undefined -fno-omit-frame-pointer --enable-trace --enable-write
+echo clang-mp-devel -fsanitize=address,undefined -fno-omit-frame-pointer --enable-trace
 CC="clang-mp-devel -fsanitize=address,undefined -fno-omit-frame-pointer" \
-    ./configure --enable-trace --enable-write && \
+    ./configure --enable-trace && \
     gmake -s -j4 check || exit
 gmake -s -j4 clean
 
-echo clang-mp-6.0 -O3 -march=native --enable-write
+echo clang-mp-6.0 -O3 -march=native
 CC="clang-mp-6.0 -O3 -march=native" \
-    ./configure --enable-write && \
+    ./configure && \
     gmake -s -j4 check || exit
     gmake scan-build
 gmake -s -j4 clean
@@ -58,8 +58,8 @@ gmake -s -j4 clean
 
 export PYTHONPATH=/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages
 
-echo gcc-mp-6 --enable-write --enable-gcov
-CC="gcc-mp-6" ./configure --enable-write --enable-trace --enable-gcov=gcov-mp-6 && \
+echo gcc-mp-6 --enable-gcov
+CC="gcc-mp-6" ./configure --enable-trace --enable-gcov=gcov-mp-6 && \
     make -s -j4 check || exit
     make -s -j4 gcov
 gmake -s -j4 clean
@@ -79,9 +79,9 @@ gmake -s -j4 clean
 Linux)
 make -s -j4 clean
 
-echo clang-3.9 -fsanitize=address -fno-omit-frame-pointer --enable-write
+echo clang-3.9 -fsanitize=address -fno-omit-frame-pointer
 CC="clang-3.9 -fsanitize=address -fno-omit-frame-pointer" \
-    ./configure --enable-write && \
+    ./configure && \
     make -s -j4 check || exit
 make -s -j4 clean
 echo clang-5.0 -march=native
@@ -98,26 +98,26 @@ echo gcc-4.4 -ansi
 CC="gcc-4.4 -ansi" ./configure && \
     make -s -j4 check || exit
 make -s -j4 clean
-echo gcc-6 --enable-write
-CC="gcc-6" ./configure --enable-write && \
+echo gcc-6
+CC="gcc-6" ./configure && \
     make -s -j4 check || exit
 make -s -j4 clean
-echo gcc-7 --enable-write
-CC="gcc-7" ./configure --enable-write && \
+echo gcc-7
+CC="gcc-7" ./configure  && \
     make -s -j4 check || exit
 make -s -j4 clean
-echo gcc-8 --enable-write
-CC="gcc-8" ./configure --enable-write && \
+echo gcc-8
+CC="gcc-8" ./configure && \
     make -s -j4 check || exit
 make -s -j4 clean
-echo gcc-8 --enable-write --enable-gcov
-CC="gcc-8" ./configure --enable-write --enable-gcov=gcov-8 && \
+echo gcc-8 --enable-gcov
+CC="gcc-8" ./configure --enable-gcov=gcov-8 && \
     make -s -j4 check || exit
     make -s -j4 gcov
 make -s -j4 clean
 
 CC="clang-7 -fsanitize=address,undefined -fno-omit-frame-pointer" \
-    ./configure --enable-write --enable-trace && \
+    ./configure --enable-trace && \
     make -s -j4 check || exit
 make -s -j4 clean
 
@@ -161,6 +161,7 @@ fi
 
 esac
 
+# features
 CC="cc -m32" ./configure --disable-python && \
     $make -s -j4 check || exit
 $make -s -j4 clean
@@ -174,12 +175,24 @@ $make -s -j4 clean
     $make -s -j4 check || exit
 $make -s -j4 clean
 
-./configure --enable-write && \
+./configure --disable-write && \
     $make -s -j4 check || exit
     $make check-valgrind
 $make -s -j4 clean
 
 ./configure --disable-shared && \
+    $make -s -j4 check || exit
+$make -s -j4 clean
+
+./configure --disable-python && \
+    $make -s -j4 check || exit
+$make -s -j4 clean
+
+./configure --disable-dxf && \
+    $make -s -j4 check || exit
+$make -s -j4 clean
+
+./configure --enable-debug && \
     $make -s -j4 check || exit
 $make -s -j4 clean
 
@@ -192,5 +205,6 @@ WINEARCH=win64 ./configure --host=x86_64-w64-mingw32 && \
     $make -s -j4 check
 $make -s -j4 clean
 
-./configure --enable-write --disable-shared && \
+# and at last keep the cfg for typical fast debugging
+./configure --disable-python --disable-shared --enable-debug --disable-dxf --disable-write && \
     $make -s -j4 check || exit
