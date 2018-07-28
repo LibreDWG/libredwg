@@ -9905,23 +9905,6 @@ dwg_obj_proxy_get_parenthandle(const dwg_obj_proxy *restrict proxy,
 }
 
 dwg_object_ref**
-dwg_obj_proxy_get_reactors(const dwg_obj_proxy *restrict proxy,
-                          int *restrict error)
-{
-  if (proxy)
-    {
-      *error = 0;
-      return proxy->reactors;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR("%s: empty arg", __FUNCTION__)
-      return NULL;
-    }
-}
-
-dwg_object_ref**
 dwg_obj_proxy_get_objid_object_handles(const dwg_obj_proxy *restrict proxy,
                                        int *restrict error)
 {

@@ -2730,9 +2730,6 @@ dwg_obj_proxy_get_parenthandle(const dwg_obj_proxy *restrict proxy,
 EXPORT dwg_object_ref**
 dwg_obj_proxy_get_objid_object_handles(const dwg_obj_proxy *restrict proxy,
                                        int *restrict error);
-EXPORT dwg_object_ref**
-dwg_obj_proxy_get_reactors(const dwg_obj_proxy *restrict proxy,
-                           int *restrict error);
 
 /********************************************************************
 *                   FUNCTIONS FOR SPLINE ENTITY                     *

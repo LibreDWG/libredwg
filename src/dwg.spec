@@ -3630,9 +3630,11 @@ DWG_OBJECT(IMAGEDEF)
   FIELD_2RD (pixel_size, 11);
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 3, 00);
+  FIELD_HANDLE (parenthandle, 3, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
+  //DEBUG_POS_OBJ
+  //FIELD_HANDLE (xrefctrl, 0, 0); ///libdxfrw bug
 
 DWG_OBJECT_END
 
