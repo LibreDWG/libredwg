@@ -457,9 +457,7 @@ DWG_ENTITY(INSERT)
   SINCE(R_2004)
     {
       if (FIELD_VALUE(has_attribs))
-        {
-          FIELD_BL (num_owned, 0);
-        }
+        FIELD_BL (num_owned, 0);
     }
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -495,9 +493,10 @@ DWG_ENTITY_END
 /* (8) 20.4.10*/
 DWG_ENTITY(MINSERT)
 
-  //SUBCLASS (AcDbBlockReference)
-  //SUBCLASS (AcDbTable)
-  FIELD_3BD (ins_pt, 10);
+  SUBCLASS (AcDbBlockReference)
+  DXF { FIELD_B (has_attribs, 66); }
+
+  FIELD_3DPOINT (ins_pt, 10);
 
   VERSIONS(R_13, R_14) {
     FIELD_3BD_1 (scale, 41);
@@ -576,7 +575,7 @@ DWG_ENTITY(MINSERT)
 
   FIELD_BD (rotation, 50);
   FIELD_3BD (extrusion, 210);
-  FIELD_B (has_attribs, 66);
+  FIELD_B (has_attribs, 0);
 
   SINCE(R_2004)
     {
@@ -604,7 +603,10 @@ DWG_ENTITY(MINSERT)
 
   SINCE(R_2004)
     {
-      HANDLE_VECTOR(attrib_handles, num_owned, 4, 0);
+    if (FIELD_VALUE(has_attribs))
+      {
+        HANDLE_VECTOR(attrib_handles, num_owned, 4, 0);
+      }
     }
 
   if (FIELD_VALUE(has_attribs))
