@@ -1,4 +1,4 @@
-version: 0.5.{build}
+version: 0.5.0.{build}
 max_jobs: 4
 environment:
   matrix:

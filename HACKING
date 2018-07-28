@@ -28,6 +28,34 @@ someone should probably think about and resolve them!
   - [[change log maintenance]]
   - [??? other]
 
+* version numbers
+
+  We follow semantic versioning, using git-version-gen with no v prefix.
+  e.g. 0.5, 0.5.0.1099, 0.5.0.1093.1-967f
+
+  Major for breaking changes in the API of otherwise declared stable entities.
+
+  Minor for adding features, bugfixes and minor changes.
+  Releases mostly only carry those two, and maybe the patch number.
+
+  Patch for backwards-compatible bug fixes. It's optional and left-out if 0.
+
+  The build number is automatically incremented for smoke and master builds
+  and creates a volatile tag.
+  It's left out in releases, only serves as volatile tag for nightly master
+  builds on github.
+
+  The optional number after those 4 numbers is the number of commits not yet
+  merged to master. E.g. the 1 in 0.5.0.1093.1-967f.
+  And finally for local development builds the abbrevated git tag, e.g. the 967f
+  in 0.5.0.1093.1-967f.
+
+  So a released version will be 2 or 3 numbers, a development version will also
+  carry the 4-digit build number, and if it's a branch also two more elements.
+
+  Version numbers are generated manually for a release by pushing a 2-3 number tag, 
+  and automatically by bumping the version in .appveyor.yml.
+
 * change log maintenance
 
   Presently, there is only one top-level ChangeLog file, and commits go
