@@ -4143,8 +4143,9 @@ typedef struct _dwg_entity_LIGHT
 
   BITCODE_BL class_version; /*!< DXF 90 */
   BITCODE_T name; 	/*!< DXF 1 */
-  BITCODE_T type; 	/*!< DXF 70, distant = 1; point = 2; spot = 3 */
+  BITCODE_BS type; 	/*!< DXF 70, distant = 1; point = 2; spot = 3 */
   BITCODE_B status; 	/*!< DXF 290 */
+  BITCODE_BL unknown;   /*!< DXF 90 undocumented -1026700341 */
   BITCODE_CMC color;    /*!< DXF 63 */
   BITCODE_B plot_glyph; /*!< DXF 291 */
   BITCODE_BD intensity; /*!< DXF 40 */
@@ -5703,7 +5704,7 @@ EXPORT int dwg_add_UNDERLAYDEFINITION (Dwg_Object *obj);
 
 /* DEBUGGING and UNHANDLED: */
 EXPORT int dwg_add_VBA_PROJECT (Dwg_Object *obj);
-//EXPORT int dwg_add_ASSOC2DCONSTRAINTGROUP (Dwg_Object *obj);
+EXPORT int dwg_add_ASSOC2DCONSTRAINTGROUP (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCACTION (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCALIGNEDDIMACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCNETWORK (Dwg_Object *obj);

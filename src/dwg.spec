@@ -5886,38 +5886,51 @@ DWG_OBJECT_END
    of the light using a variety of methods */
 //TODO: 92:8
 DWG_ENTITY(LIGHT)
-  // yet unsorted!
   SUBCLASS (AcDbLight);
   FIELD_BL (class_version, 90); //1
   FIELD_T (name, 1);
-  FIELD_T (type, 70); /*!< distant = 1; point = 2; spot = 3 */ //offsets: 0,194,229,394,461,...
+  FIELD_BS (type, 70);
   FIELD_B (status, 290);
-  FIELD_CMC (color, 63);
-  FIELD_B (plot_glyph, 291);
+  UNTIL (R_2000) {
+    FIELD_BL (unknown, 90);
+    FIELD_B (attenuation_type, 72);
+  } else {
+    FIELD_BS (attenuation_type, 72);
+  }
+  SINCE (R_2004) {
+    // len=43 0000000101000000000000000011000011000000000
+    // DEBUG_HERE_OBJ
+    bit_advance_position(dat, 43);
+  }
   FIELD_BD (intensity, 40);
   FIELD_3BD (position, 10);
   FIELD_3BD (target, 11);
+
   FIELD_BS (attenuation_type, 72);
   FIELD_B (use_attenuation_limits, 292);
-  if (FIELD_VALUE(use_attenuation_limits))
-    {
-      FIELD_BD (attenuation_start_limit, 41);
-      FIELD_BD (attenuation_end_limit, 42);
-    }
+  FIELD_BD (attenuation_start_limit, 41);
+  FIELD_BD (attenuation_end_limit, 42);
+  DEBUG_HERE_OBJ
+
+  // yet unsorted:
+  FIELD_CMC (color, 63);
+  FIELD_B (plot_glyph, 291);
+
   FIELD_BD (hotspot_angle, 50);
   FIELD_BD (falloff_angle, 51); // (spotlight only)
   FIELD_B (cast_shadows, 293);
   FIELD_BS (shadow_type, 73);   // 0 or 1
   FIELD_BS (shadow_map_size, 91);
-  FIELD_BS (shadow_map_softness, 280);
+
+  COMMON_ENTITY_HANDLE_DATA;
+
+  FIELD_BS (shadow_map_softness, 280); // but after R2004 at about attenuation_type
   FIELD_BS (lamp_color_preset, 0);
   FIELD_BS (lamp_color_type, 0);
   FIELD_BS (physical_intensity_method, 0);
   FIELD_RS (drawable_type, 0);
   FIELD_BS (glyph_display_type, 0);
   FIELD_BS (glyph_display, 0);
-
-  COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
 
