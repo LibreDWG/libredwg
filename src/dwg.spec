@@ -5061,21 +5061,42 @@ DWG_OBJECT_END
 DWG_ENTITY(MULTILEADER)
 
   SUBCLASS (AcDbMLeader)
-  DXF { VALUE_TV ("CONTEXT_DATA{", 300); } //AcDbObjectContextData
+  UNTIL (R_2007)
+    {
+      FIELD_BL (ctx.num_leaders, 0);
+      DXF { VALUE_TV ("LEADER{", 302); }
+      _obj->ctx.leaders = calloc(1, sizeof(Dwg_Leader));
+#     define lev1 ctx.leaders[0]
+      FIELD_B (lev1.is_valid, 290);
+      FIELD_B (lev1.unknown, 291);
+      _obj->lev1.lines = calloc(1, sizeof(Dwg_Leader_Line));
+#     define lev2 lev1.lines[0]
+      _obj->lev2.points = calloc(3, sizeof(BITCODE_BD));
+      _obj->lev2.breaks = calloc(1, sizeof(Dwg_Leader_Break));
+      FIELD_3BD (lev2.points[0], 10);
+      FIELD_3BD (lev2.breaks[0].start, 12);
+      FIELD_BL (lev2.segment_index, 90);
+      FIELD_BL (lev2.index, 91);
+      FIELD_BD (lev2.arrow_size, 40);
+#     undef lev1
+#     undef lev2
+      DXF { VALUE_TV ("}", 303); }
+      //...
+    }
+
   SINCE(R_2010)
     {
-      IF_ENCODE_FROM_EARLIER {
-        FIELD_VALUE(class_version) = 2;
-      }
-      FIELD_BS (class_version, 270); // default 2
-      if (FIELD_VALUE(class_version) > 10)
+      FIELD_BS (class_version, 270); // default 2. 1 <= r2004
+      if (FIELD_VALUE(class_version) > 10) {
+        LOG_ERROR("Invalid MULTILEADER.class_version %d", _obj->class_version);
         return DWG_ERR_VALUEOUTOFBOUNDS;
+      }
       FIELD_BS (ctx.class_version, 70); // default 3
       FIELD_B (ctx.has_xdic_file, 0);
       FIELD_B (ctx.is_default, 290);
-    }
-  //AcDbAnnotScaleObjectContextData
-  FIELD_HANDLE (ctx.scale_handle, 5, 340); //??
+      DXF { VALUE_TV ("CONTEXT_DATA{", 300); } //AcDbObjectContextData
+      //AcDbAnnotScaleObjectContextData
+      FIELD_HANDLE (ctx.style, 5, 340);
 
   DXF { VALUE_TV ("LEADER{", 302); }
   FIELD_BL (ctx.num_leaders, 0);
@@ -5151,6 +5172,8 @@ DWG_ENTITY(MULTILEADER)
   FIELD_BS (ctx.text_right, 175);
   FIELD_BS (ctx.text_alignment, 176);
   FIELD_BS (ctx.attach_type, 177);
+
+    }
 
   FIELD_B (ctx.has_text_content, 290);
   if (FIELD_VALUE (ctx.has_text_content))
@@ -6615,3 +6638,4 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+

@@ -2661,7 +2661,7 @@ typedef struct _dwg_MLeaderAnnotContext
   BITCODE_B has_xdic_file;
   BITCODE_B is_default;
 
-  BITCODE_H scale_handle; //ODA bug. the text style
+  BITCODE_H style; //ODA bug
 
   BITCODE_BL num_leaders;
   Dwg_Leader * leaders;
