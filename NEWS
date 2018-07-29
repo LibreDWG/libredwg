@@ -33,6 +33,7 @@ New features:
   * Extended getopt_long() support to all programs, position independent options.
   * Implemented examples/unknown to find field layouts of unknown objects.
     Now with a http://picat-lang.org helper. See also HACKING and savannah News.
+  * Implemented parsing ACIS version 2 to binary SAB format.
   * Added all missing dwg_object_to_OBJECT() functions for objects.
   * Added dwg_ent_minsert_set_num_cols(), dwg_ent_minsert_set_num_rows()
   * Added --disable-dxf, --enable--debug configure options. With debug there are many

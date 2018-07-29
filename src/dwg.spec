@@ -1597,42 +1597,33 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
           // DXF 1 + 3 if >255
           LOG_TRACE("acis_data [1]:\n%s\n", FIELD_VALUE (acis_data));
         }
-      // version 2, which is a link to SAT format ACIS 7.0/ShapeManager.
-      // Maybe the binary SAB variant.
+      // version 2, the binary, unencrypted SAT format for ACIS 7.0/ShapeManager.
       /* ACIS versions:
          R14 release	        106   (ACIS 1.6)
          R15 (2000) release	400   (ACIS 4.0)
-         R18 (2004) release	20800 (ShapeManager, forked from ACIS 7.0)
+         R18 (2004) release	20800 (ASM ShapeManager, forked from ACIS 7.0)
          R21 (2007) release	21200
          R24 (2010) release	21500
          R27 (2013) release	21800
+         R?? (2018) release	223.0.1.1930
        */
       else //if (FIELD_VALUE(version)==2)
         {
-#ifndef IS_RELEASE
-          //TODO
-          do
-            {
-              FIELD_VALUE(encr_sat_data) = (BITCODE_RC**)
-                realloc(FIELD_VALUE(encr_sat_data), (i+1) * sizeof (BITCODE_RC*));
-              FIELD_VALUE(block_size) = (BITCODE_BL*)
-                realloc(FIELD_VALUE(block_size), (i+1) * sizeof (BITCODE_BL));
-
-              FIELD_BL (block_size[i], 0);
-              if (_obj->block_size[i] > 10000) {
-                LOG_ERROR("Invalid ACIS 2 block_size[%d] %d", i, _obj->block_size[i]);
-                return DWG_ERR_NOTYETSUPPORTED;
-              }
-              FIELD_TF (encr_sat_data[i], FIELD_VALUE(block_size[i]), 1);
-              if (FIELD_VALUE(block_size[i])) {
-                total_size += FIELD_VALUE (block_size[i]);
-              }
-            } while(FIELD_VALUE (block_size[i++]));
-          num_blocks = i-1;
-          FIELD_VALUE(num_blocks) = num_blocks;
-#endif
-          LOG_ERROR("TODO: Implement parsing of SAT file (version 2) "
-                    "in 3DSOLID entity.");
+          //TODO string in strhdl, even <r2007
+          FIELD_VALUE(num_blocks) = 1;
+          FIELD_VALUE(block_size) = malloc(2 * sizeof (BITCODE_RL));
+          FIELD_VALUE(encr_sat_data) = malloc(2 * sizeof (BITCODE_RC*));
+          FIELD_TF (encr_sat_data[0], 15, 1); // "ACIS BinaryFile"
+          FIELD_VALUE(block_size[0]) = 15;
+          FIELD_RL (block_size[1], 0);
+          if (_obj->block_size[1] > obj->size) {
+            LOG_ERROR("Invalid ACIS 2 SAB block_size[1] %d. Max. %d",
+                      _obj->block_size[1], obj->size);
+            return DWG_ERR_VALUEOUTOFBOUNDS;
+          }
+          // Binary SAB, unencrypted
+          FIELD_TF (encr_sat_data[1], FIELD_VALUE(block_size[1]), 1);
+          total_size = FIELD_VALUE (block_size[1]);
         }
 
       FIELD_B (wireframe_data_present, 0);
