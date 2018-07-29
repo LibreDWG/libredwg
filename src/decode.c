@@ -2472,6 +2472,113 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
   return error;
 }
 
+// if to check for the has_strings bit after bitsize
+static int
+obj_has_strings(unsigned int type)
+{
+  switch (type)
+    {
+    case DWG_TYPE_TEXT:
+    case DWG_TYPE_ATTRIB:
+    case DWG_TYPE_ATTDEF:
+    case DWG_TYPE_BLOCK:
+      return 1;
+    case DWG_TYPE_ENDBLK:
+    case DWG_TYPE_SEQEND:
+    case DWG_TYPE_INSERT:
+    case DWG_TYPE_MINSERT:
+    case DWG_TYPE_VERTEX_2D:
+    case DWG_TYPE_VERTEX_3D:
+    case DWG_TYPE_VERTEX_MESH:
+    case DWG_TYPE_VERTEX_PFACE:
+    case DWG_TYPE_VERTEX_PFACE_FACE:
+    case DWG_TYPE_POLYLINE_2D:
+    case DWG_TYPE_POLYLINE_3D:
+    case DWG_TYPE_ARC:
+    case DWG_TYPE_CIRCLE:
+    case DWG_TYPE_LINE:
+      return 0;
+    case DWG_TYPE_DIMENSION_ORDINATE:
+    case DWG_TYPE_DIMENSION_LINEAR:
+    case DWG_TYPE_DIMENSION_ALIGNED:
+    case DWG_TYPE_DIMENSION_ANG3PT:
+    case DWG_TYPE_DIMENSION_ANG2LN:
+    case DWG_TYPE_DIMENSION_RADIUS:
+    case DWG_TYPE_DIMENSION_DIAMETER:
+      return 1;
+    case DWG_TYPE_POINT:
+    case DWG_TYPE__3DFACE:
+    case DWG_TYPE_POLYLINE_PFACE:
+    case DWG_TYPE_POLYLINE_MESH:
+    case DWG_TYPE_SOLID:
+    case DWG_TYPE_TRACE:
+    case DWG_TYPE_SHAPE:
+      return 0;
+    case DWG_TYPE_VIEWPORT:
+      return 1;
+    case DWG_TYPE_ELLIPSE:
+    case DWG_TYPE_SPLINE:
+      return 0;
+    case DWG_TYPE_REGION:
+    case DWG_TYPE__3DSOLID:
+    case DWG_TYPE_BODY:
+      return 1;
+    case DWG_TYPE_RAY:
+    case DWG_TYPE_XLINE:
+      return 0;
+    case DWG_TYPE_DICTIONARY:
+    case DWG_TYPE_OLEFRAME:
+    case DWG_TYPE_MTEXT:
+    case DWG_TYPE_LEADER:
+      return 1;
+    case DWG_TYPE_TOLERANCE:
+    case DWG_TYPE_MLINE:
+      return 0;
+    case DWG_TYPE_BLOCK_CONTROL:
+    case DWG_TYPE_LAYER_CONTROL:
+    case DWG_TYPE_STYLE_CONTROL:
+    case DWG_TYPE_LTYPE_CONTROL:
+    case DWG_TYPE_VIEW_CONTROL:
+    case DWG_TYPE_UCS_CONTROL:
+    case DWG_TYPE_VPORT_CONTROL:
+    case DWG_TYPE_APPID_CONTROL:
+    case DWG_TYPE_DIMSTYLE_CONTROL:
+    case DWG_TYPE_VPORT_ENTITY_CONTROL:
+      return 0;
+    case DWG_TYPE_BLOCK_HEADER:
+    case DWG_TYPE_LAYER:
+    case DWG_TYPE_STYLE:
+    case DWG_TYPE_LTYPE:
+    case DWG_TYPE_VIEW:
+    case DWG_TYPE_UCS:
+    case DWG_TYPE_VPORT:
+    case DWG_TYPE_APPID:
+    case DWG_TYPE_DIMSTYLE:
+    case DWG_TYPE_VPORT_ENTITY_HEADER:
+      return 1;
+    case DWG_TYPE_GROUP:
+    case DWG_TYPE_MLINESTYLE:
+    case DWG_TYPE_OLE2FRAME:
+      return 1;
+    case DWG_TYPE_DUMMY:
+    case DWG_TYPE_LONG_TRANSACTION:
+    case DWG_TYPE_LWPOLYLINE:
+      return 0;
+    case DWG_TYPE_HATCH:
+    case DWG_TYPE_XRECORD:
+      return 1;
+    case DWG_TYPE_PLACEHOLDER:
+      return 0;
+    case DWG_TYPE_VBA_PROJECT:
+    case DWG_TYPE_LAYOUT:
+    case DWG_TYPE_PROXY_ENTITY:
+    case DWG_TYPE_PROXY_OBJECT:
+    default:
+      return 1;
+    }
+}
+
+
 /* The first common part of every entity.
 
    The last common part is common_entity_handle_data.spec
@@ -2527,7 +2634,9 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
         LOG_HANDLE("hdlpos: %lu)\n", obj->hdlpos);
       }
       // and set the string stream (restricted to size)
-      error |= obj_string_stream(dat, obj, str_dat);
+      // skip for all types without strings
+      if (obj->type >= 500 || obj_has_strings(obj->type))
+        error |= obj_string_stream(dat, obj, str_dat);
     }
 
   error |= bit_read_H(dat, &(obj->handle));
@@ -2595,7 +2704,8 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
         LOG_HANDLE("hdlpos: %lu)\n", obj->hdlpos);
       }
       // and set the string stream (restricted to size)
-      error |= obj_string_stream(dat, obj, str_dat);
+      if (obj->type >= 500 || obj_has_strings(obj->type))
+        error |= obj_string_stream(dat, obj, str_dat);
     }
 
   error = bit_read_H(dat, &obj->handle);
