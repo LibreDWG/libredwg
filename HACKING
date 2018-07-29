@@ -299,7 +299,7 @@ You start by finding the DXF documentation and the ObjectARX header
 file of the class, to get the names and description of the class.
 
 You add the names and types to dwg.h and dwg.spec, change the class
-type in classes.inc to DEBUGGING or UNTESTED. With DEBUGGING add the
+type in classes.inc to DEBUGGING or UNSTABLE. With DEBUGGING add the
 -DDEBUG_CLASSES flag to CFLAGS in src/Makefile and test the dwg's with
 programs/dwgread -v4. Some layouts are version dependent, some need
 a REPEAT loop or vector with a num_field field.

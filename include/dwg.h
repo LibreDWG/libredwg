@@ -5605,7 +5605,7 @@ EXPORT int dwg_add_VISUALSTYLE (Dwg_Object *obj);
 EXPORT int dwg_add_WIPEOUTVARIABLES (Dwg_Object *obj);
 EXPORT int dwg_add_WIPEOUT (Dwg_Object *obj);
 
-/* UNTESTED: */
+/* UNSTABLE: */
 EXPORT int dwg_add_ASSOCDEPENDENCY (Dwg_Object *obj);
 EXPORT int dwg_add_CAMERA (Dwg_Object *obj);
 EXPORT int dwg_add_DIMASSOC (Dwg_Object *obj);

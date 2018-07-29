@@ -5468,7 +5468,7 @@ DWG_OBJECT(VISUALSTYLE)
 
 DWG_OBJECT_END
 
-// (varies) UNTESTED
+// (varies) UNSTABLE
 DWG_OBJECT(OBJECT_PTR) //empty? only xdata. CAseDLPNTableRecord
 
   DEBUG_HERE_OBJ
@@ -5482,7 +5482,7 @@ DWG_ENTITY(CAMERA) // i.e. a named view, not persistent in a DWG. CAMERADISPLAY=
 
 DWG_ENTITY_END
 
-// (varies) UNTESTED
+// (varies) UNSTABLE
 // works ok on all example_20* but this coverage seems limited
 DWG_OBJECT(PERSSUBENTMANAGER)
   DXF { FIELD_HANDLE (parenthandle, 4, 330); }
@@ -5515,7 +5515,7 @@ DWG_OBJECT(UNDERLAYDEFINITION)
 
 DWG_OBJECT_END
 
-// (varies) UNTESTED
+// (varies) UNSTABLE
 // works ok on all Surface_20* but this coverage seems limited.
 // field names may change.
 // See AcDbAssocDependency.h
@@ -5581,9 +5581,45 @@ DWG_OBJECT(DIMASSOC)
 
 DWG_OBJECT_END
 
+/* In work area:
+   The following entities/objects are stored as raw UNKNOWN_ENT/OBJ,
+   unless enabled via -DDEBUG_CLASSES */
+
 #ifdef DEBUG_CLASSES
 
-// (varies) UNTESTED
+// DEBUGGING
+DWG_OBJECT(EVALUATION_GRAPH)
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
+  SUBCLASS(AcDbEvalGraph)
+  FIELD_BL(has_graph, 96);        // 1
+  FIELD_BL(unknown1, 97);         // 1
+  FIELD_BL(unknown2, 0);          // 1
+  FIELD_BL(nodeid, 91);           // 0
+  if (FIELD_VALUE(has_graph))
+    {
+      FIELD_BL(edge_flags, 93);   // 32
+      FIELD_BL(num_evalexpr, 95); // 1
+      // maybe REPEAT num_evalexpr: edge1-4, evalexpr
+      FIELD_BL(node_edge1, 92);   // -1
+      FIELD_BL(node_edge2, 92);   // -1
+      FIELD_BL(node_edge3, 92);   // -1
+      FIELD_BL(node_edge4, 92);   // -1
+      if (_obj->num_evalexpr > 10)
+        return DWG_ERR_VALUEOUTOFBOUNDS;
+      //HANDLE_VECTOR(evalexpr, num_evalexpr, 5, 360);
+    }
+
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (parenthandle, 3, 0); //??
+  if (FIELD_VALUE(has_graph))
+    {
+      FIELD_HANDLE (evalexpr, 5, 360); // VECTOR?
+    }
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+DWG_OBJECT_END
+
+// (varies) DEBUGGING
 // ENHANCEDBLOCK => AcDbDynamicBlockRoundTripPurgePreventer
 DWG_OBJECT(DYNAMICBLOCKPURGEPREVENTER)
   DXF { FIELD_HANDLE (parenthandle, 5, 330); }
@@ -5602,7 +5638,7 @@ DWG_OBJECT(DYNAMICBLOCKPURGEPREVENTER)
   //FIELD_HANDLE (unknown_h2, 0, 0);
 DWG_OBJECT_END
 
-//EED data copied plus some other
+//EED data copied plus some other DEBUGGING
 DWG_OBJECT(DBCOLOR)
   DXF { FIELD_HANDLE (parenthandle, 3, 330); }
   SUBCLASS (AcDbColor)
@@ -5634,10 +5670,7 @@ DWG_OBJECT(DBCOLOR)
   DEBUG_HERE_OBJ
 DWG_OBJECT_END
 
-/* In work area:
-   The following entities/objects are stored as raw UNKNOWN_ENT/OBJ,
-   unless enabled via -DDEBUG_CLASSES */
-
+// DEBUGGING
 // See AcDbAssocActionBody.h and AcDbAssocDimDependencyBody.h
 DWG_OBJECT(ASSOCALIGNEDDIMACTIONBODY)
   SUBCLASS (AcDbAssocActionBody)
@@ -5669,7 +5702,7 @@ DWG_OBJECT(ASSOCALIGNEDDIMACTIONBODY)
   }
 DWG_OBJECT_END
 
-// subclass of AcDbAssocAction
+// subclass of AcDbAssocAction DEBUGGING
 // Object1 --ReadDep--> Action1 --WriteDep1--> Object2 --ReadDep--> Action2 ...
 DWG_OBJECT(ASSOCNETWORK)
   SUBCLASS (AcDbAssocAction)
@@ -5691,7 +5724,7 @@ DWG_OBJECT(ASSOCNETWORK)
   XDICOBJHANDLE(3);
 DWG_OBJECT_END
 
-// (varies) working on
+// (varies) working on DEBUGGING
 DWG_OBJECT(MATERIAL)
 
   SUBCLASS (AcDbMaterial)
@@ -5816,7 +5849,7 @@ DWG_OBJECT(MATERIAL)
   //274
 DWG_OBJECT_END
 
-// (varies) UNTESTED
+// (varies) DEBUGGING
 DWG_OBJECT(PLOTSETTINGS)
   //unsorted! See also LAYOUT
   SUBCLASS (AcDbPlotSettings)
@@ -5938,7 +5971,7 @@ DWG_ENTITY(LIGHT)
 
 DWG_ENTITY_END
 
-// (varies) UNKNOWN FIELDS
+// (varies) DEBUGGING, UNKNOWN FIELDS
 // hard-owned child of AcDbViewportTableRecord or AcDbViewport 361
 // DXF docs put that as Entity, wrong!
 DWG_OBJECT(SUN)
@@ -6031,7 +6064,7 @@ DWG_OBJECT(SUN)
 
 DWG_OBJECT_END
 
-// (varies) UNKNOWN FIELDS
+// (varies) DEBUGGING, UNKNOWN FIELDS
 DWG_OBJECT(SUNSTUDY)
 
   DXF { FIELD_HANDLE (parenthandle, 4, 330); }
@@ -6085,7 +6118,7 @@ DWG_OBJECT(SUNSTUDY)
 
 DWG_OBJECT_END
 
-// (varies) unsorted
+// (varies) DEBUGGING unsorted
 // See examples/HELIX.pi.log for 2018/Helix.dxf
 DWG_ENTITY(HELIX)
 
@@ -6104,7 +6137,7 @@ DWG_ENTITY(HELIX)
 
 DWG_ENTITY_END
 
-// (varies) UNTESTED
+// (varies) UNSTABLE
 // in DXF as POSITIONMARKER (rename?, no), command: GEOMARKPOSITION, GEOMARKPOINT
 DWG_ENTITY(GEOPOSITIONMARKER)
 
@@ -6352,6 +6385,7 @@ DWG_OBJECT(ASSOCACTION)
   FIELD_BL (unknown_assoc, 90);
 DWG_OBJECT_END
 
+// DEBUGGING
 DWG_OBJECT(ASSOCOSNAPPOINTREFACTIONPARAM)
   SUBCLASS(AcDbAssocActionParam)
   FIELD_B  (unknown1, 0); //
@@ -6381,37 +6415,6 @@ DWG_OBJECT(ASSOCOSNAPPOINTREFACTIONPARAM)
   bit_advance_position(dat, 168-130);
   DEBUG_POS_OBJ
   FIELD_HANDLE (actionparam, 4, 330); //168-175
-  REACTORS(4);
-  XDICOBJHANDLE(3);
-DWG_OBJECT_END
-
-DWG_OBJECT(EVALUATION_GRAPH)
-  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
-  SUBCLASS(AcDbEvalGraph)
-  FIELD_BL(has_graph, 96);        // 1
-  FIELD_BL(unknown1, 97);         // 1
-  FIELD_BL(unknown2, 0);          // 1
-  FIELD_BL(nodeid, 91);           // 0
-  if (FIELD_VALUE(has_graph))
-    {
-      FIELD_BL(edge_flags, 93);   // 32
-      FIELD_BL(num_evalexpr, 95); // 1
-      // maybe REPEAT num_evalexpr: edge1-4, evalexpr
-      FIELD_BL(node_edge1, 92);   // -1
-      FIELD_BL(node_edge2, 92);   // -1
-      FIELD_BL(node_edge3, 92);   // -1
-      FIELD_BL(node_edge4, 92);   // -1
-      if (_obj->num_evalexpr > 10)
-        return DWG_ERR_VALUEOUTOFBOUNDS;
-      //HANDLE_VECTOR(evalexpr, num_evalexpr, 5, 360);
-    }
-
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 3, 0); //??
-  if (FIELD_VALUE(has_graph))
-    {
-      FIELD_HANDLE (evalexpr, 5, 360); // VECTOR?
-    }
   REACTORS(4);
   XDICOBJHANDLE(3);
 DWG_OBJECT_END

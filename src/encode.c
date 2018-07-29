@@ -1123,8 +1123,8 @@ dwg_encode_variable_type(Dwg_Data* dwg, Bit_Chain* dat, Dwg_Object* obj)
            klass->number, klass->dxfname, klass->proxyflag,                    \
            klass->wasazombie ? " was proxy" : "")
 
-#undef WARN_UNHANDLED_CLASS
-#undef WARN_UNTESTED_CLASS
+  #undef WARN_UNHANDLED_CLASS
+  #undef WARN_UNSTABLE_CLASS
 
   return DWG_ERR_UNHANDLEDCLASS;
 }

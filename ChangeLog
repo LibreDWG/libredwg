@@ -610,7 +610,7 @@ Full history from the git log
 	added a couple of missing objects/entities.
 	extend classes.inc and DWG_TYPE_ for these.
 	Check for invalid TABLE.num_rows (with this 2018 TABLE)
-	and mark it UNTESTED.
+	and mark it UNSTABLE.
 
 	DXFIN import of the converted dxf fails with "Xdata wasn't read"
 

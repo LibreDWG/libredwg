@@ -333,6 +333,9 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
   // global class dispatcher
   #include "classes.inc"
 
+  #undef WARN_UNHANDLED_CLASS
+  #undef WARN_UNSTABLE_CLASS
+  
   return DWG_ERR_UNHANDLEDCLASS;
 }
 

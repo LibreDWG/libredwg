@@ -225,8 +225,8 @@ static unsigned int cur_ver = 0;
   if (_obj->size) NOCOMMA;\
   ENDARRAY;
 
-#define WARN_UNTESTED_CLASS \
-      LOG_WARN("Untested Class %s %d %s (0x%x%s) -@%ld", is_entity ? "entity" : "object",\
+#define WARN_UNSTABLE_CLASS \
+      LOG_WARN("Unstable Class %s %d %s (0x%x%s) -@%ld", is_entity ? "entity" : "object",\
                klass->number, dxfname, klass->proxyflag,\
                klass->wasazombie ? " was proxy" : "",\
                obj->address + obj->size)
@@ -304,7 +304,7 @@ dwg_geojson_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   if (!strcmp(dxfname, "GEODATA"))
     {
       Dwg_Object_GEODATA *_obj = obj->tio.object->tio.GEODATA;
-      WARN_UNTESTED_CLASS;
+      WARN_UNSTABLE_CLASS;
       FEATURE(AcDbObject:AcDbGeoData, obj);
       //which fields?
       ENDFEATURE;
@@ -313,7 +313,7 @@ dwg_geojson_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   if (!strcmp(dxfname, "GEOPOSITIONMARKER"))
     {
       Dwg_Entity_GEOPOSITIONMARKER *_obj = obj->tio.entity->tio.GEOPOSITIONMARKER;
-      WARN_UNTESTED_CLASS;
+      WARN_UNSTABLE_CLASS;
       // now even with text
       FEATURE(AcDbEntity:AcDbGeoPositionMarker, obj);
       GEOMETRY(Point);

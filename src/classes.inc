@@ -30,8 +30,8 @@
                klass->number, klass->dxfname, klass->proxyflag,\
                klass->wasazombie ? " was proxy" : "",\
                obj->index, obj->handle.value)
-#define WARN_UNTESTED_CLASS \
-      LOG_WARN("Untested Class %s %d %s (0x%x%s) %u/%lX", is_entity ? "entity" : "object",\
+#define WARN_UNSTABLE_CLASS \
+      LOG_WARN("Unstable Class %s %d %s (0x%x%s) %u/%lX", is_entity ? "entity" : "object",\
                klass->number, klass->dxfname, klass->proxyflag,\
                klass->wasazombie ? " was proxy" : "",\
                obj->index, obj->handle.value)
@@ -60,26 +60,26 @@
         obj->fixedtype = DWG_TYPE_##name; \
       return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
-#define UNTESTED_CLASS(ACTION, name) \
+#define UNSTABLE_CLASS(ACTION, name) \
   if (!strcmp(klass->dxfname, #name)) \
     { \
-      WARN_UNTESTED_CLASS; \
+      WARN_UNSTABLE_CLASS; \
       if (!strcmp(#ACTION, "decode")) \
         obj->fixedtype = DWG_TYPE_##name; \
       return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
-#define UNTESTED_CLASS_DXF(ACTION, name, _dxfname) \
+#define UNSTABLE_CLASS_DXF(ACTION, name, _dxfname) \
   if (!strcmp(klass->dxfname, #_dxfname)) \
     { \
-      WARN_UNTESTED_CLASS; \
+      WARN_UNSTABLE_CLASS; \
       if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) \
         obj->fixedtype = DWG_TYPE_##name; \
       return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
-#define UNTESTED_CLASS_CPP(ACTION, name, _cppname) \
+#define UNSTABLE_CLASS_CPP(ACTION, name, _cppname) \
   if (!strcmp(klass->cppname, #_cppname)) \
     { \
-      WARN_UNTESTED_CLASS; \
+      WARN_UNSTABLE_CLASS; \
       if (!strcmp(#ACTION, "decode")) \
         obj->fixedtype = DWG_TYPE_##name; \
       return DWG_FUNC_N(ACTION,name)(dat, obj); \
@@ -104,8 +104,8 @@
     }
 
 #ifdef DEBUG_CLASSES
-#define DEBUGGING_CLASS(ACTION, name)               UNTESTED_CLASS(ACTION, name)
-#define DEBUGGING_CLASS_DXF(ACTION, name, _dxfname) UNTESTED_CLASS_DXF(ACTION, name, _dxfname)
+#define DEBUGGING_CLASS(ACTION, name)               UNSTABLE_CLASS(ACTION, name)
+#define DEBUGGING_CLASS_DXF(ACTION, name, _dxfname) UNSTABLE_CLASS_DXF(ACTION, name, _dxfname)
 #else
 #define DEBUGGING_CLASS(ACTION, name)               UNHANDLED_CLASS(ACTION, name)
 #define DEBUGGING_CLASS_DXF(ACTION, name, _dxfname) UNHANDLED_CLASS_DXF(ACTION, name, _dxfname)
@@ -144,18 +144,18 @@
 
   // unstable/undertested.
   // not enough coverage, but assumed mostly ok. field names may change.
-  UNTESTED_CLASS_DXF (ACTION, ASSOCDEPENDENCY, ACDBASSOCDEPENDENCY)
-  UNTESTED_CLASS     (ACTION, CAMERA) /* ent, not persistent in a DWG */
-  UNTESTED_CLASS     (ACTION, DIMASSOC)
-  UNTESTED_CLASS     (ACTION, GEODATA)
-  UNTESTED_CLASS     (ACTION, OBJECT_PTR)
-  UNTESTED_CLASS_CPP (ACTION, OBJECT_PTR, CAseDLPNTableRecord)
-  UNTESTED_CLASS_DXF (ACTION, PROXY_OBJECT, PROXY)
-  UNTESTED_CLASS_DXF (ACTION, PERSSUBENTMANAGER, ACDBPERSSUBENTMANAGER)
-  UNTESTED_CLASS     (ACTION, UNDERLAYDEFINITION) //only tested pdf, but very simple
-  UNTESTED_CLASS_DXF (ACTION, UNDERLAYDEFINITION, PDFDEFINITION)
-  UNTESTED_CLASS_DXF (ACTION, UNDERLAYDEFINITION, DGNDEFINITION)
-  UNTESTED_CLASS_DXF (ACTION, UNDERLAYDEFINITION, DWFDEFINITION)
+  UNSTABLE_CLASS_DXF (ACTION, ASSOCDEPENDENCY, ACDBASSOCDEPENDENCY)
+  UNSTABLE_CLASS     (ACTION, CAMERA) /* ent, not persistent in a DWG */
+  UNSTABLE_CLASS     (ACTION, DIMASSOC)
+  UNSTABLE_CLASS     (ACTION, GEODATA)
+  UNSTABLE_CLASS     (ACTION, OBJECT_PTR)
+  UNSTABLE_CLASS_CPP (ACTION, OBJECT_PTR, CAseDLPNTableRecord)
+  UNSTABLE_CLASS_DXF (ACTION, PROXY_OBJECT, PROXY)
+  UNSTABLE_CLASS_DXF (ACTION, PERSSUBENTMANAGER, ACDBPERSSUBENTMANAGER)
+  UNSTABLE_CLASS     (ACTION, UNDERLAYDEFINITION) //only tested pdf, but very simple
+  UNSTABLE_CLASS_DXF (ACTION, UNDERLAYDEFINITION, PDFDEFINITION)
+  UNSTABLE_CLASS_DXF (ACTION, UNDERLAYDEFINITION, DGNDEFINITION)
+  UNSTABLE_CLASS_DXF (ACTION, UNDERLAYDEFINITION, DWFDEFINITION)
 
   // coverage exists, but broken and being worked on. needs -DDEBUG_CLASSES. See also
   // examples/unknown with all the unknown blobs of these.
@@ -188,7 +188,7 @@
   DEBUGGING_CLASS_DXF (ACTION, ASSOCOSNAPPOINTREFACTIONPARAM, ACDBASSOCOSNAPPOINTREFACTIONPARAM)
   DEBUGGING_CLASS_DXF (ACTION, ASSOCPERSSUBENTMANAGER, ACDBASSOCPERSSUBENTMANAGER)
   DEBUGGING_CLASS_DXF (ACTION, ASSOC2DCONSTRAINTGROUP, ACDBASSOC2DCONSTRAINTGROUP)
-  DEBUGGING_CLASS_DXF (ACTION, EVALUATION_GRAPH, ACAD_EVALUATION_GRAPH)
+  DEBUGGING_CLASS_DXF (ACTION, EVALUATION_GRAPH, ACAD_EVALUATION_GRAPH) /* almost */
   DEBUGGING_CLASS     (ACTION, DBCOLOR)           /* almost */
   DEBUGGING_CLASS_DXF (ACTION, DYNAMICBLOCKPURGEPREVENTER, ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION)
 
