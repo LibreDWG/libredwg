@@ -1109,7 +1109,7 @@ obj_string_stream(Bit_Chain *dat,
   str->chain += str->byte;
   str->byte = 0; str->bit = 0;
   str->size = (obj->bitsize / 8) + 1;
-  bit_advance_position(str, start);
+  bit_advance_position(str, start-8);
   LOG_TRACE("obj string stream +%u: @%lu.%u (%lu)", start,
             str->byte, str->bit & 7, bit_position(str));
   obj->has_strings = bit_read_B(str);
@@ -1117,15 +1117,15 @@ obj_string_stream(Bit_Chain *dat,
   if (!obj->has_strings)
     return 0;
 
-  bit_advance_position(str, -1);
-  str->byte -= 3;
+  bit_advance_position(str, -1); //-17
+  str->byte -= 2;
   LOG_HANDLE(" @%lu.%u", str->byte, str->bit & 7);
   data_size = (BITCODE_RL)bit_read_RS(str);
   LOG_HANDLE(" data_size: %u/0x%x\n", data_size, data_size);
 
   if (data_size & 0x8000) {
     BITCODE_RS hi_size;
-    bit_advance_position(str, -1);
+    bit_advance_position(str, -1); //-33
     str->byte -= 4;
     data_size &= 0x7FFF;
     hi_size = bit_read_RS(str);
