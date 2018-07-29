@@ -507,9 +507,14 @@
 #define START_HANDLE_STREAM \
   *hdl_dat = *dat; \
   if (dat->version >= R_2007) { \
-    LOG_HANDLE("handle stream: @%lu.%u (%lu) ", dat->byte, dat->bit, bit_position(dat)); \
-    bit_set_position(hdl_dat, obj->hdlpos); \
-    LOG_HANDLE(" -> @%lu.%u (%lu)\n", dat->byte, dat->bit, bit_position(dat)); }
+    vcount = bit_position(dat); \
+    if (obj->hdlpos != (unsigned long)vcount) { \
+      bit_set_position(hdl_dat, obj->hdlpos); \
+      LOG_HANDLE(" handle stream: %+ld @%lu.%u %s\n", obj->hdlpos - vcount, \
+        dat->byte, dat->bit, \
+        abs((long)obj->hdlpos - (long)vcount) >= 8 ? "MISSING" : ""); \
+    } \
+  }
 
 #define REPEAT_CHKCOUNT(name,times,type) \
   if (dat->version >= R_2004 && (unsigned)(times)*sizeof(type) > AVAIL_BITS()) { \
@@ -612,7 +617,14 @@ static int dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj
   if (error >= DWG_ERR_CRITICAL) return error;
 
 #define DWG_ENTITY_END \
-  if (dat->version >= R_2007) { free(str_dat); } \
+  if (dat->version >= R_2007) { \
+    free(str_dat); \
+    vcount  = (obj->size+obj->address)*8 - bit_position(hdl_dat); \
+  } else { \
+    vcount  = (obj->size+obj->address)*8 - bit_position(dat); \
+  } \
+  if (vcount) \
+    LOG_HANDLE(" padding: %+ld %s\n", vcount, abs((int)vcount) >= 8 ? "MISSING" : ""); \
   return error & ~DWG_ERR_UNHANDLEDCLASS; \
 }
 
@@ -652,7 +664,4 @@ static int dwg_decode_ ## token (Bit_Chain *restrict dat, Dwg_Object *restrict o
   error |= dwg_decode_object(dat, hdl_dat, str_dat, obj->tio.object); \
   if (error >= DWG_ERR_CRITICAL) return error;
 
-#define DWG_OBJECT_END \
-  if (dat->version >= R_2007) { free(str_dat); } \
-  return error & ~DWG_ERR_UNHANDLEDCLASS; \
-}
+#define DWG_OBJECT_END DWG_ENTITY_END
