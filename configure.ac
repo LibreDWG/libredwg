@@ -167,7 +167,7 @@ else
         [Defined to 1 when the compiler supports c99, mostly (...) macros])
    if test "x$ac_cv_prog_cc_c99" != "x"; then
       AC_MSG_RESULT([added $ac_cv_prog_cc_c99 to CFLAGS])
-      AM_CFLAGS="$AM_CFLAGS $ac_cv_prog_cc_c99"
+      CFLAGS="$CFLAGS $ac_cv_prog_cc_c99"
    fi
 fi
 AC_SUBST(HAVE_C99)
@@ -209,10 +209,10 @@ dnl --enable-debug sets DEBUG_CLASSES
 AC_MSG_CHECKING([--enable-debug])
 AC_ARG_ENABLE([debug],AS_HELP_STRING([--enable-debug],[
     Enable DEBUG_CLASSES (default: no).]),
-  AM_CFLAGS="$AM_CFLAGS -DDEBUG_CLASSES"
   if test x$ac_compiler_gnu = xyes; then
     CFLAGS="-g -fno-omit-frame-pointer"
   fi
+  CFLAGS="$CFLAGS -DDEBUG_CLASSES"
   AC_MSG_RESULT([yes]),
   AC_MSG_RESULT([no (default)]))
 
@@ -276,7 +276,7 @@ if test "x$host_os" = "xmingw32" -a "x$build_os" != "xmingw32"; then
       AC_MSG_WARN([wine not found - cannot check cross-compiled executables])
    else
       AC_MSG_RESULT([wine found - test with make check-wine])
-      AM_CFLAGS="$AM_CFLAGS -D_WINE_MSVCRT"
+      CFLAGS="$CFLAGS -D_WINE_MSVCRT"
    fi
 fi
 AM_CONDITIONAL([HAVE_WINE], [test -n "$WINE"])
