@@ -1,7 +1,47 @@
-GNU LibreDWG NEWS -- history of user-visible changes.
+GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2018 Free Software Foundation, Inc.
 See the end for copying conditions.
 
+
+LibreDWG version 0.6 - not yet released (still alpha):
+
+API breaking changes:
+  * Removed dwg_obj_proxy_get_reactors(), use dwg_obj_get_reactors() instead.
+  * Removed all unused type-specific reactors and xdicobjhandle fields,
+    use the generic object and entity fields instead.
+  * Renamed MULTILEADER.leaderstyle to MULTILEADER.mleaderstyle.
+  * Renamed SORTENTSTABLE.owner_handle to SORTENTSTABLE.owner_dict.
+  * Renamed all -as-rNNNN program options to --as-rNNNN.
+
+Important bugfixes:
+  * Fixed previously empty strings for r2007+ for some objects and entities (#34).
+  * Added more checks for unstable objects: empty handles, controls, overflows, isnan.
+  * Fixed some common_entity_data, mostly with non-indexed colors and gradient filled HATCH
+    (#27, #28, #31)
+  * Fixed some proper relative handles, which were previously treated as NULL handle.
+  * Fixed writing TV strings, now the length includes the final \0 char.
+  * Fixed the initial minimal hash size, fixing an endless loop on very small
+    (truncated) DWG's (<1000 bytes).
+  * Much less memory leaks.
+  * Improved free, i.e. no more double free with EED data. (#33)
+  * Better perl bindings build support on Windows, prefer local dwg.h over
+    installed dwg.h on testing (#29).
+
+New features:
+  * Add unstable support for the objects: DIMASSOC, ASSOCDEPENDENCY, PERSSUBENTMANAGER,
+    UNDERLAYDEFINITION.
+  * Extended getopt_long() support to all programs, position independent options.
+  * Implemented examples/unknown to find field layouts of unknown objects.
+    Now with a http://picat-lang.org helper. See also HACKING and savannah News.
+  * Added all missing dwg_object_to_OBJECT() functions for objects.
+  * Added dwg_ent_minsert_set_num_cols(), dwg_ent_minsert_set_num_rows()
+  * Added --disable-dxf, --enable--debug configure options. With debug there are many
+    more unstable objects available.
+  * Added libredwg.pc (#30)
+  * Changed and clarified the semver version numbering on development checkouts with
+    major.minor[.patch[.build.nonmastercommits-gittag]]. See HACKING.
+
+
 LibreDWG version 0.5 - released 2018/07/05:
 
 This is the first public release ever, after several years of silence.
