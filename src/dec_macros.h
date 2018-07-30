@@ -512,7 +512,8 @@
       bit_set_position(hdl_dat, obj->hdlpos); \
       LOG_HANDLE(" handle stream: %+ld @%lu.%u %s\n", obj->hdlpos - vcount, \
         dat->byte, dat->bit, \
-        abs((long)obj->hdlpos - (long)vcount) >= 8 ? "MISSING" : ""); \
+        ((long)obj->hdlpos - (long)vcount) >= 8 ? "MISSING" \
+          : ((long)obj->hdlpos < (long)vcount) ? "OVERSHOOT" : ""); \
     } \
   }
 
@@ -616,6 +617,7 @@ static int dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj
   } \
   if (error >= DWG_ERR_CRITICAL) return error;
 
+// Does size include the CRC?
 #define DWG_ENTITY_END \
   if (dat->version >= R_2007) { \
     free(str_dat); \
@@ -624,7 +626,9 @@ static int dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj
     vcount  = (obj->size+obj->address)*8 - bit_position(dat); \
   } \
   if (vcount) \
-    LOG_HANDLE(" padding: %+ld %s\n", vcount, abs((int)vcount) >= 8 ? "MISSING" : ""); \
+    LOG_HANDLE(" padding: %+ld %s\n", vcount, (int)vcount >= 8 \
+               ? "MISSING" \
+               : ((int)vcount < 0) ? "OVERSHOOT" : "");  \
   return error & ~DWG_ERR_UNHANDLEDCLASS; \
 }
 

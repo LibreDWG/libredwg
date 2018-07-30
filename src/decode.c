@@ -3787,8 +3787,8 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
   /* Now 1 padding bits until next byte, and then a RS CRC */
   if (dat->bit) {
     unsigned char r = 8 - dat->bit;
-    //LOG_TRACE("padding: %X/%X (%d bits)\n", dat->chain[dat->byte],
-    //          dat->chain[dat->byte] & ((1<<r)-1), r);
+    LOG_HANDLE("padding: %X/%X (%d bits)\n", dat->chain[dat->byte],
+              dat->chain[dat->byte] & ((1<<r)-1), r);
     bit_advance_position(dat, r);
   }
 #if 1
