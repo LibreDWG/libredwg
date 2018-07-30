@@ -859,7 +859,7 @@ dwg_indxf_object(Bit_Chain *dat, Dwg_Object *obj)
     case DWG_TYPE_PROXY_OBJECT:
       return dwg_indxf_PROXY_OBJECT(dat, obj);
     default:
-      if (obj->type == obj->parent->layout_number)
+      if (obj->parent && (obj->type == obj->parent->layout_number))
         {
           return dwg_indxf_LAYOUT(dat, obj);
         }
