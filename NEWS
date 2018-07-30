@@ -7,11 +7,12 @@ LibreDWG version 0.6 - not yet released (still alpha):
 
 API breaking changes:
   * Removed dwg_obj_proxy_get_reactors(), use dwg_obj_get_reactors() instead.
-  * Removed all unused type-specific reactors and xdicobjhandle fields,
-    use the generic object and entity fields instead.
-  * Renamed MULTILEADER.leaderstyle to MULTILEADER.mleaderstyle.
   * Renamed SORTENTSTABLE.owner_handle to SORTENTSTABLE.owner_dict.
   * Renamed all -as-rNNNN program options to --as-rNNNN.
+
+Other newsworthy changes:
+  * Removed all unused type-specific reactors and xdicobjhandle fields,
+    use the generic object and entity fields instead.
 
 Important bugfixes:
   * Fixed previously empty strings for r2007+ for some objects and entities (#34).
@@ -28,9 +29,9 @@ Important bugfixes:
     installed dwg.h on testing (#29).
 
 New features:
-  * Add unstable support for the objects: DIMASSOC, ASSOCDEPENDENCY, PERSSUBENTMANAGER,
+  * Added unstable support for the objects: DIMASSOC, ASSOCDEPENDENCY, PERSSUBENTMANAGER,
     UNDERLAYDEFINITION.
-  * Extended getopt_long() support to all programs, position independent options.
+  * Added getopt_long() support to all programs, position independent options.
   * Implemented examples/unknown to find field layouts of unknown objects.
     Now with a http://picat-lang.org helper. See also HACKING and savannah News.
   * Implemented parsing ACIS version 2 to binary SAB format.

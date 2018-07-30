@@ -79,7 +79,8 @@ go(Data) =>
   end,
   nl,
   FoundSize = sum(map(bitslen,Sorted)),
-  print("Definite result: "),print(FoundSize),print("/"),println(S.length),
+  print("Definite result: "),print(FoundSize),print("/"),print(S.length),
+  print("\t"),println(Dxf.slice(length("test/test-data/")+1)),
   println("----------------"),
   % create holes by looking at all adjacent pos's
   foreach (I in 1 .. Sorted.length)
