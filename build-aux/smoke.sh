@@ -196,7 +196,7 @@ $make -s -j4 clean
     $make -s -j4 check || exit
 $make -s -j4 clean
 
-WINEARCH=win32 CFLAGS="-g -gdwarf-2" \
+WINEARCH=win32 WINEPREFIX=~/.win32 CFLAGS="-g -gdwarf-2" \
     ./configure --host=i686-w64-mingw32 && \
     $make -s -j4 check
 $make -s -j4 clean
