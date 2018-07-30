@@ -2595,20 +2595,30 @@ typedef struct _dwg_object_PLACEHOLDER
  * Entity MULTILEADER (varies)
  * R2000+
  */
-typedef struct _dwg_Leader_Break
+typedef struct _dwg_Leader_Line // as documented by DXF
 {
-  struct _dwg_Leader_Line *parent; /* to Leader and Leader_Line */
-  BITCODE_3BD start;
-  BITCODE_3BD end;
-} Dwg_Leader_Break;
+  struct _dwg_Leader_Line *parent;
+  BITCODE_3BD vertex;              /*!< DXF 10 */
+  BITCODE_BL  break_index;         /*!< DXF 90 */
+  BITCODE_3BD break_start;         /*!< DXF 11 */
+  BITCODE_3BD break_end;           /*!< DXF 12 */
+  BITCODE_BL  line_index;          /*!< DXF 91 */
+} Dwg_Leader_Line;
 
-typedef struct _dwg_Leader_Line
+typedef struct _dwg_ODALeader_Break // as documented by ODA
+{
+  struct _dwg_Leader_Line *parent;
+  BITCODE_3BD start;         /*!< DXF 11 */
+  BITCODE_3BD end;           /*!< DXF 12 */
+} Dwg_ODALeader_Break;
+
+typedef struct _dwg_ODALeader_Line //// as documented by ODA
 {
   struct _dwg_Leader *parent;  
   BITCODE_BL num_points;
   BITCODE_3BD * points;
   BITCODE_BL num_breaks;
-  Dwg_Leader_Break * breaks;
+  Dwg_ODALeader_Break * breaks;
   BITCODE_BL segment_index;
   BITCODE_BL index;
 
@@ -2619,7 +2629,7 @@ typedef struct _dwg_Leader_Line
   BITCODE_BD arrow_size;
   BITCODE_H arrow_handle;
   BITCODE_BL flags;
-} Dwg_Leader_Line;
+} Dwg_ODALeader_Line;
 
 typedef struct _dwg_Leader_ArrowHead
 {
@@ -2637,7 +2647,9 @@ typedef struct _dwg_Leader_BlockLabel
   BITCODE_BD width;
 } Dwg_Leader_BlockLabel;
 
-typedef struct _dwg_Leader
+/* as documented in ODA, but contradicting DXF docs, and
+   the reverse-engineered format */
+typedef struct _dwg_ODALeader
 {
   struct _dwg_object_MULTILEADER *parent;
   BITCODE_B is_valid;
@@ -2645,13 +2657,28 @@ typedef struct _dwg_Leader
   BITCODE_3BD connection;
   BITCODE_3BD direction;
   BITCODE_BL num_breaks;
-  Dwg_Leader_Break * breaks;
+  Dwg_ODALeader_Break * breaks;
   BITCODE_BL num_lines;
   Dwg_Leader_Line * lines;
   BITCODE_BL index;
   BITCODE_BD landing_distance;
   /* ... */
   BITCODE_BS attach_dir;
+} Dwg_ODALeader;
+
+typedef struct _dwg_Leader_Node
+{
+  struct _dwg_object_MULTILEADER *parent;
+  BITCODE_B has_lastleaderlinepoint;    /*!< DXF 290 */
+  BITCODE_B has_dogleg_vector;          /*!< DXF 291 */
+  BITCODE_3BD lastleaderlinepoint;      /*!< DXF 10 */
+  BITCODE_3BD dogleg_vector;            /*!< DXF 11 */
+  BITCODE_3BD break_start;              /*!< DXF 12 */
+  BITCODE_3BD break_end;                /*!< DXF 13 */
+  BITCODE_BL branch_index;              /*!< DXF 90 */
+  BITCODE_BD dogleg_length;             /*!< DXF 40 */
+  BITCODE_BL num_lines;
+  Dwg_Leader_Line *lines;
 } Dwg_Leader;
 
 /* The MLeaderAnnotContext object (par 20.4.86), embedded into an MLEADER */
@@ -2732,6 +2759,7 @@ typedef struct _dwg_MLeaderAnnotContext
 
 } Dwg_MLeaderAnnotContext;
 
+// dbmleader.h
 typedef struct _dwg_object_MULTILEADER
 {
   struct _dwg_object_entity *parent;
@@ -2745,7 +2773,7 @@ typedef struct _dwg_object_MULTILEADER
   BITCODE_H ltype;
   BITCODE_BL linewt;
   BITCODE_B landing;
-  BITCODE_B dog_leg;
+  BITCODE_B dogleg;
   BITCODE_BD landing_dist;
   BITCODE_H arrow_head;
   BITCODE_BD arrow_head_size; /* the default */
@@ -2802,7 +2830,7 @@ typedef struct _dwg_object_MLEADERSTYLE
   BITCODE_BL linewt;
   BITCODE_B landing;
   BITCODE_BD landing_gap;
-  BITCODE_B dog_leg;
+  BITCODE_B dogleg;
   BITCODE_BD landing_dist;
   BITCODE_TV description;
   BITCODE_H arrow_head;

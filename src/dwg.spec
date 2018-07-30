@@ -5064,24 +5064,52 @@ DWG_ENTITY(MULTILEADER)
   UNTIL (R_2007)
     {
       FIELD_BL (ctx.num_leaders, 0);
+      if (_obj->ctx.num_leaders > 5000) { // MAX_LEADER_NUMBER
+        LOG_ERROR("Invalid MULTILEADER.ctx.num_leaders %d", _obj->ctx.num_leaders);
+        return DWG_ERR_VALUEOUTOFBOUNDS;
+      }
       DXF { VALUE_TV ("LEADER{", 302); }
-      _obj->ctx.leaders = calloc(1, sizeof(Dwg_Leader));
-#     define lev1 ctx.leaders[0]
-      FIELD_B (lev1.is_valid, 290);
-      FIELD_B (lev1.unknown, 291);
-      _obj->lev1.lines = calloc(1, sizeof(Dwg_Leader_Line));
-#     define lev2 lev1.lines[0]
-      _obj->lev2.points = calloc(3, sizeof(BITCODE_BD));
-      _obj->lev2.breaks = calloc(1, sizeof(Dwg_Leader_Break));
-      FIELD_3BD (lev2.points[0], 10);
-      FIELD_3BD (lev2.breaks[0].start, 12);
-      FIELD_BL (lev2.segment_index, 90);
-      FIELD_BL (lev2.index, 91);
-      FIELD_BD (lev2.arrow_size, 40);
-#     undef lev1
-#     undef lev2
+      REPEAT(ctx.num_leaders, ctx.leaders, Dwg_Leader)
+        {
+#         define lnode ctx.leaders[rcount1]
+          FIELD_B (lnode.has_lastleaderlinepoint, 290);
+          FIELD_B (lnode.has_dogleg_vector, 291);
+          if (_obj->lnode.has_lastleaderlinepoint)
+            {
+              FIELD_3BD (lnode.lastleaderlinepoint, 10);
+            }
+          if (_obj->lnode.has_dogleg_vector)
+            {
+              FIELD_3BD (lnode.dogleg_vector, 11);
+            }
+          else
+            {
+              FIELD_3BD (lnode.break_start, 12);
+              FIELD_3BD (lnode.break_end, 13);
+            }
+          FIELD_BL (lnode.branch_index, 90);
+          FIELD_BL (lnode.num_lines, 0);
+          FIELD_BD (lnode.dogleg_length, 40);
+          DXF { VALUE_TV ("LEADER_LINE{", 304); }
+          FIELD_VALUE (lnode.num_lines)++;
+          REPEAT2(lnode.num_lines, lnode.lines, Dwg_Leader_Line)
+            {
+#             define lline lnode.lines[rcount2]
+              FIELD_BL (lline.break_index, 90);
+              FIELD_BL (lline.line_index, 91);
+              FIELD_3BD (lline.vertex, 10);
+              if (!_obj->lnode.has_dogleg_vector)
+                {
+                  FIELD_3BD (lline.break_start, 11);
+                  FIELD_3BD (lline.break_end, 12);
+                }
+#             undef lline
+            }
+          END_REPEAT(lnode.lines)
+          DXF { VALUE_TV ("}", 305); }
+        }
+      END_REPEAT(ctx.leaders)
       DXF { VALUE_TV ("}", 303); }
-      //...
     }
 
   SINCE(R_2010)
@@ -5098,6 +5126,7 @@ DWG_ENTITY(MULTILEADER)
       //AcDbAnnotScaleObjectContextData
       FIELD_HANDLE (ctx.style, 5, 340);
 
+#if 0
   DXF { VALUE_TV ("LEADER{", 302); }
   FIELD_BL (ctx.num_leaders, 0);
   REPEAT(ctx.num_leaders, ctx.leaders, Dwg_Leader)
@@ -5162,6 +5191,7 @@ DWG_ENTITY(MULTILEADER)
   SET_PARENT_OBJ(ctx.leaders)
   END_REPEAT (ctx.leaders);
   DXF { VALUE_TV ("}", 303); }
+#endif
 
   FIELD_BD (ctx.scale, 40);
   FIELD_3RD (ctx.content_base, 10); //broken (2000: 384-576) 3x64
@@ -5241,7 +5271,7 @@ DWG_ENTITY(MULTILEADER)
   FIELD_HANDLE (ltype, 5, 341);
   FIELD_BL (linewt, 171);
   FIELD_B (landing, 290);
-  FIELD_B (dog_leg, 291);
+  FIELD_B (dogleg, 291);
   FIELD_BD (landing_dist, 41);
   FIELD_HANDLE (arrow_head, 5, 342);
   FIELD_BD (arrow_head_size, 42);
@@ -5328,7 +5358,7 @@ DWG_OBJECT(MLEADERSTYLE)
   FIELD_BL (linewt, 92);
   FIELD_B (landing, 290);
   FIELD_BD (landing_gap, 42);
-  FIELD_B (dog_leg, 291);
+  FIELD_B (dogleg, 291);
   FIELD_BD (landing_dist, 43);
   FIELD_T (description, 3);
   FIELD_BD (arrow_head_size, 44);
