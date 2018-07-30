@@ -92,6 +92,10 @@ MAINTAINERCLEANFILES = *_flymake.[ch] *~ *.i
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
 	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -E -o $@ $<
 
+.c.ii: # no linemarkers
+	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -E -P -o $@ $<
+
 man: $(dist_man1_MANS)
 
 if !HAVE_MINGW_CROSS
