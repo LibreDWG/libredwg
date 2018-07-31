@@ -4883,13 +4883,13 @@ DWG_ENTITY(TABLE)
         { /* block cell */
           FIELD_HANDLE (cells[rcount1].cell_handle, 5, 340);
         }
-  
+
       if (FIELD_VALUE(cells[rcount1].type) == 2 &&
           FIELD_VALUE(cells[rcount1].additional_data_flag) == 1)
         {
           HANDLE_VECTOR (cells[rcount1].attr_def_id, cells[rcount1].num_attr_defs, 4, 331);
         }
-  
+
       if (FIELD_VALUE(cells[rcount1].additional_data_flag2) == 1 &&
           FIELD_VALUE(cells[rcount1].cell_flag_override) & 0x08)
         {
@@ -4898,7 +4898,7 @@ DWG_ENTITY(TABLE)
     }
   SET_PARENT_OBJ(cells)
   END_REPEAT(cells);
-  
+
   if (FIELD_VALUE(has_table_overrides))
     {
       BITCODE_BL table_flag;
@@ -5029,7 +5029,7 @@ DWG_OBJECT(SCALE)
   FIELD_BD (paper_units, 140);
   FIELD_BD (drawing_units, 141);
   FIELD_B (has_unit_scale, 290);
-      
+
   START_HANDLE_STREAM;
   FIELD_HANDLE (parenthandle, 4, 0);
   REACTORS(4);
@@ -5061,157 +5061,107 @@ DWG_OBJECT_END
 DWG_ENTITY(MULTILEADER)
 
   SUBCLASS (AcDbMLeader)
-  UNTIL (R_2007)
-    {
-      FIELD_BL (ctx.num_leaders, 0);
-      if (FIELD_VALUE(ctx.num_leaders) > 5000) { // MAX_LEADER_NUMBER
-        LOG_ERROR("Invalid MULTILEADER.ctx.num_leaders %d", _obj->ctx.num_leaders);
-        return DWG_ERR_VALUEOUTOFBOUNDS;
-      }
-      DXF { VALUE_TV ("LEADER{", 302); }
-      REPEAT(ctx.num_leaders, ctx.leaders, Dwg_Leader)
-        {
-#         define lnode ctx.leaders[rcount1]
-          FIELD_B (lnode.has_lastleaderlinepoint, 290);
-          FIELD_B (lnode.has_dogleg_vector, 291);
-          if (FIELD_VALUE(lnode.has_lastleaderlinepoint))
-            {
-              FIELD_3BD (lnode.lastleaderlinepoint, 10);
-            }
-          if (FIELD_VALUE(lnode.has_dogleg_vector))
-            {
-              FIELD_3BD (lnode.dogleg_vector, 11);
-            }
-          FIELD_BL (lnode.num_break, 0);
-          if (FIELD_VALUE(lnode.num_break))
-            {
-              FIELD_3BD (lnode.break_start, 12);
-              FIELD_3BD (lnode.break_end, 13);
-            }
-          FIELD_BL (lnode.branch_index, 90);
-          FIELD_BD (lnode.dogleg_length, 40);
-          DXF { VALUE_TV ("LEADER_LINE{", 304); }
-          FIELD_BL (lnode.num_lines, 0);
-          REPEAT2(lnode.num_lines, lnode.lines, Dwg_Leader_Line)
-            {
-#             define lline lnode.lines[rcount2]
-              FIELD_BL (lline.num_vertex, 0);
-              FIELD_3BD (lline.vertex, 10);
-              FIELD_BL (lline.num_break, 0);
-              if (FIELD_VALUE(lline.num_break))
-                {
-                  FIELD_3BD (lline.break_start, 11);
-                  FIELD_3BD (lline.break_end, 12);
-                }
-              FIELD_BL (lline.line_index, 91);
-#             undef lline
-            }
-          END_REPEAT(lnode.lines)
-          DXF { VALUE_TV ("}", 305); }
-        }
-      END_REPEAT(ctx.leaders)
-      DXF { VALUE_TV ("}", 303); }
-    }
+  DXF { VALUE_TV ("CONTEXT_DATA{", 300); } //AcDbObjectContextData
 
   SINCE(R_2010)
     {
       FIELD_BS (class_version, 270); // default 2. 1 <= r2004
       if (FIELD_VALUE(class_version) > 10) {
-        LOG_ERROR("Invalid MULTILEADER.class_version %d", _obj->class_version);
+        LOG_ERROR("Invalid MULTILEADER.class_version %d",
+                  FIELD_VALUE(class_version));
         return DWG_ERR_VALUEOUTOFBOUNDS;
       }
+    }
+#if 0
       FIELD_BS (ctx.class_version, 70); // default 3
       FIELD_B (ctx.has_xdic_file, 0);
       FIELD_B (ctx.is_default, 290);
-      DXF { VALUE_TV ("CONTEXT_DATA{", 300); } //AcDbObjectContextData
-      //AcDbAnnotScaleObjectContextData
-      FIELD_HANDLE (ctx.style, 5, 340);
-
-#if 0
-  DXF { VALUE_TV ("LEADER{", 302); }
-  FIELD_BL (ctx.num_leaders, 0);
-  REPEAT(ctx.num_leaders, ctx.leaders, Dwg_Leader)
-    {
-#     define lev1 ctx.leaders[rcount1]
-      FIELD_B (lev1.is_valid, 290);  //1
-      FIELD_B (lev1.unknown, 291);   //always 1
-      FIELD_3BD (lev1.connection, 10); //offset 12
-      FIELD_3BD (lev1.direction, 11);  //offset 146
-      FIELD_BL (lev1.num_breaks, 0);   //offset 152-154 (should be 1)
-      REPEAT2(lev1.num_breaks, lev1.breaks, Dwg_Leader_Break)
-        {
-          FIELD_3BD (lev1.breaks[rcount2].start, 12);
-          FIELD_3BD (lev1.breaks[rcount2].end, 13);
-        }
-      SET_PARENT(lev1.breaks, (Dwg_Leader_Line*)&_obj->lev1)
-      END_REPEAT (lev1.breaks);
-      FIELD_BL (lev1.index, 90);
-      FIELD_BD (lev1.landing_distance, 40); //ok 156-222
-      DXF { VALUE_TV ("LEADER_LINE{", 304); }
-      // num_lines was missing
-      REPEAT2(lev1.num_lines, lev1.lines, Dwg_Leader_Line)
-        {
-#         define lev2 lev1.lines[rcount2]
-          FIELD_BL (lev2.num_points, 0); //ok?
-          REPEAT3(lev2.num_points, lev2.points, BITCODE_3BD)
-            {
-              FIELD_3BD (lev2.points[rcount3], 10); //nok
-            }
-          END_REPEAT (lev2.points);
-          FIELD_BL (lev2.num_breaks, 0);
-          FIELD_BL (lev2.segment_index, 90);
-          REPEAT2(lev2.num_breaks, lev2.breaks, Dwg_Leader_Break)
-            {
-              FIELD_3BD (lev2.breaks[rcount2].start, 11);
-              FIELD_3BD (lev2.breaks[rcount2].end, 12);
-            }
-          SET_PARENT(lev2.breaks, &_obj->lev2)
-          END_REPEAT(lev2.breaks);
-          FIELD_BL (lev2.index, 91);
-	  SINCE (R_2010)
-            {
-              FIELD_BS (lev2.type, 170);
-              FIELD_CMC (lev2.color, 92);
-              FIELD_HANDLE (lev2.type_handle, 5, 340);
-              FIELD_BL (lev2.weight, 171);
-              FIELD_BD (lev2.arrow_size, 40);
-              FIELD_HANDLE (lev2.arrow_handle, 5, 341);
-              FIELD_BL (lev2.flags, 93);
-            }
-#         undef lev2
-        }
-      SET_PARENT(lev1.lines, &_obj->lev1)
-      DXF { VALUE_TV ("}", 305); }
-      END_REPEAT (lev1.lines);
-      SINCE (R_2010)
-        {
-          FIELD_BS (lev1.attach_dir, 271);
-        }
-#     undef lev1
-    }
-  SET_PARENT_OBJ(ctx.leaders)
-  END_REPEAT (ctx.leaders);
-  DXF { VALUE_TV ("}", 303); }
 #endif
 
+  FIELD_BL (ctx.num_leaders, 0);
+  if (FIELD_VALUE(ctx.num_leaders) > 5000) { // MAX_LEADER_NUMBER
+    LOG_ERROR("Invalid MULTILEADER.ctx.num_leaders %d", _obj->ctx.num_leaders);
+    return DWG_ERR_VALUEOUTOFBOUNDS;
+  }
+  DXF { VALUE_TV ("LEADER{", 302); }
+  REPEAT(ctx.num_leaders, ctx.leaders, Dwg_Leader)
+    {
+      #define lnode ctx.leaders[rcount1]
+      FIELD_B (lnode.has_lastleaderlinepoint, 290);
+      FIELD_B (lnode.has_dogleg, 291);
+      if (FIELD_VALUE(lnode.has_lastleaderlinepoint))
+        {
+          FIELD_3BD (lnode.lastleaderlinepoint, 10);
+        }
+      if (FIELD_VALUE(lnode.has_dogleg))
+        {
+          FIELD_3BD (lnode.dogleg_vector, 11);
+        }
+      FIELD_BL (lnode.num_breaks, 0);
+      REPEAT2(lnode.num_breaks, lnode.breaks, Dwg_Leader_Break)
+        {
+          FIELD_3BD (lnode.breaks[rcount2].start, 11);
+          FIELD_3BD (lnode.breaks[rcount2].end, 12);
+        }
+      SET_PARENT(lnode.breaks, (struct _dwg_Leader_Line *)&_obj->lnode);
+      END_REPEAT(lnode.breaks);
+      FIELD_BL (lnode.branch_index, 90);
+      FIELD_BD (lnode.dogleg_length, 40);
+      DXF { VALUE_TV ("LEADER_LINE{", 304); }
+      FIELD_BL (lnode.num_lines, 0);
+      REPEAT2(lnode.num_lines, lnode.lines, Dwg_Leader_Line)
+        {
+          #define lline lnode.lines[rcount2]
+          FIELD_BL (lline.num_vertex, 0);
+          FIELD_3BD (lline.vertex, 10);
+          FIELD_BL (lline.num_breaks, 0);
+          REPEAT3(lline.num_breaks, lline.breaks, Dwg_Leader_Break)
+            {
+              FIELD_3BD (lline.breaks[rcount3].start, 11);
+              FIELD_3BD (lline.breaks[rcount3].end, 12);
+            }
+          SET_PARENT(lline.breaks, &_obj->lline);
+          END_REPEAT(lline.breaks);
+          FIELD_BL (lline.line_index, 91);
+
+          SINCE (R_2010)
+            {
+              FIELD_BS (lline.type, 170);
+              FIELD_CMC (lline.color, 92);
+              FIELD_HANDLE (lline.ltype_handle, 5, 340);
+              FIELD_BL (lline.lweight, 171);
+              FIELD_BD (lline.arrow_size, 40);
+              FIELD_HANDLE (lline.arrow_handle, 5, 341);
+              FIELD_BL (lline.flags, 93);
+            }
+            #undef lline
+        }
+      SET_PARENT(lnode.lines, &_obj->lnode);
+      END_REPEAT(lnode.lines)
+      SINCE (R_2010)
+        FIELD_BS (lnode.attach_dir, 271);
+      DXF { VALUE_TV ("}", 305); }
+    }
+  SET_PARENT_OBJ(ctx.leaders)
+  END_REPEAT(ctx.leaders)
+  DXF { VALUE_TV ("}", 303); }
+
   FIELD_BD (ctx.scale, 40);
-  FIELD_3RD (ctx.content_base, 10); //broken (2000: 384-576) 3x64
-  FIELD_BD (ctx.text_height, 41);   //offset 586-652, 584-648
-  FIELD_BD (ctx.arrow_size, 140);   //offset 586-652, 584-648
-  FIELD_BD (ctx.landing_gap, 145);  //576,648,...
+  FIELD_3BD (ctx.content_base, 10);
+  FIELD_BD (ctx.text_height, 41);
+  FIELD_BD (ctx.arrow_size, 140);
+  FIELD_BD (ctx.landing_gap, 145);
   FIELD_BS (ctx.text_left, 174);
   FIELD_BS (ctx.text_right, 175);
   FIELD_BS (ctx.text_alignment, 176);
   FIELD_BS (ctx.attach_type, 177);
 
-    }
-
-  FIELD_B (ctx.has_text_content, 290);
-  if (FIELD_VALUE (ctx.has_text_content))
+  FIELD_B (ctx.has_content, 290);
+  if (FIELD_VALUE (ctx.has_content))
     {
-      FIELD_T (ctx.txt.label, 304);
+      FIELD_T (ctx.txt.default_text, 304);
       FIELD_3BD (ctx.txt.normal, 11);
-      FIELD_HANDLE (ctx.txt.style, 5, 340);
+      //FIELD_HANDLE (ctx.txt.style, 5, 340); // ODA bug
       FIELD_3BD (ctx.txt.location, 12);
       FIELD_3BD (ctx.txt.direction, 13);
       FIELD_BD (ctx.txt.rotation, 42);
@@ -5237,19 +5187,18 @@ DWG_ENTITY(MULTILEADER)
       FIELD_B (ctx.txt.word_break, 295);
       FIELD_B (ctx.txt.unknown, 0);
     }
-
-  FIELD_B (ctx.has_content_block, 0);
-  if (FIELD_VALUE (ctx.has_content_block))
+  else
     {
-      FIELD_HANDLE (ctx.blk.block_table, 4, 341);
-      FIELD_3BD (ctx.blk.normal, 14);
-      FIELD_3BD (ctx.blk.location, 15);
-      FIELD_3BD (ctx.blk.scale, 16);
-      FIELD_BD (ctx.blk.rotation, 46);
-      FIELD_CMC (ctx.blk.color, 93);
-      for (rcount1 = 0; rcount1 < 16; rcount1++)
+      FIELD_B (ctx.has_content_block, 0);
+      if (FIELD_VALUE (ctx.has_content_block))
         {
-          FIELD_BD (ctx.blk.transform[rcount1], 47);
+          FIELD_HANDLE (ctx.blk.block_table, 4, 341);
+          FIELD_3BD (ctx.blk.normal, 14);
+          FIELD_3BD (ctx.blk.location, 15);
+          FIELD_3BD (ctx.blk.scale, 16);
+          FIELD_BD (ctx.blk.rotation, 46);
+          FIELD_CMC (ctx.blk.color, 93);
+          FIELD_VECTOR_N (ctx.blk.transform, BD, 16, 47);
         }
     }
 
@@ -5271,8 +5220,8 @@ DWG_ENTITY(MULTILEADER)
   FIELD_CMC (color, 91);
   FIELD_HANDLE (ltype, 5, 341);
   FIELD_BL (linewt, 171);
-  FIELD_B (landing, 290);
-  FIELD_B (dogleg, 291);
+  FIELD_B (has_landing, 290);
+  FIELD_B (has_dogleg, 291);
   FIELD_BD (landing_dist, 41);
   FIELD_HANDLE (arrow_head, 5, 342);
   FIELD_BD (arrow_head_size, 42);
@@ -5357,9 +5306,9 @@ DWG_OBJECT(MLEADERSTYLE)
   FIELD_BS (type, 173);
   FIELD_CMC (line_color, 91);
   FIELD_BL (linewt, 92);
-  FIELD_B (landing, 290);
+  FIELD_B (has_landing, 290);
   FIELD_BD (landing_gap, 42);
-  FIELD_B (dogleg, 291);
+  FIELD_B (has_dogleg, 291);
   FIELD_BD (landing_dist, 43);
   FIELD_T (description, 3);
   FIELD_BD (arrow_head_size, 44);
@@ -5517,11 +5466,11 @@ DWG_OBJECT_END
 DWG_OBJECT(OBJECT_PTR) //empty? only xdata. CAseDLPNTableRecord
 
   DEBUG_HERE_OBJ
-  
+
 DWG_OBJECT_END
 
 DWG_ENTITY(CAMERA) // i.e. a named view, not persistent in a DWG. CAMERADISPLAY=1
-  
+
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE(view, 5, 0);
 
@@ -6522,7 +6471,7 @@ DWG_OBJECT(ASSOC2DCONSTRAINTGROUP)
   SUBCLASS (AcDbAssocAction)
   // This has multiple handles and types.
   FIELD_BL (solution_status, 90); // 0 WellDefined, 1 UnderConstrained, 2 OverConstrained,
-	                        // 3 Inconsistent, 4 NotEvaluated, 5 NotAvailable,
+                                // 3 Inconsistent, 4 NotEvaluated, 5 NotAvailable,
                                 // 6 RejectedByClient
   FIELD_BL (geometry_status, 90);   //0
   /* 330, 360 */
@@ -6616,7 +6565,7 @@ DWG_OBJECT(DATATABLE)
 
   SUBCLASS (AcDbDataTable)
   DEBUG_HERE_OBJ
-  
+
 DWG_OBJECT_END
 
 DWG_OBJECT(DETAILVIEWSTYLE)
@@ -6629,7 +6578,7 @@ DWG_OBJECT(TABLESTYLE)
   SUBCLASS (AcDbTableStyle)
 DWG_OBJECT_END
 
-// EXACXREFPANELOBJECT  
+// EXACXREFPANELOBJECT
 DWG_OBJECT(XREFPANELOBJECT)
 DWG_OBJECT_END
 
@@ -6669,4 +6618,3 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
-

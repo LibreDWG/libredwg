@@ -3754,6 +3754,14 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
             }
           else if (klass)
             {
+#ifndef IS_RELEASE
+              if (!strcmp(klass->dxfname, "MULTILEADER")) { //debug CED
+                char *mleader = bit_read_TF(dat, obj->size);
+                LOG_INSANE_TF(mleader, (int)obj->size)
+                bit_set_position(dat, object_address);
+                free (mleader);
+              }
+#endif
               error |= dwg_decode_UNKNOWN_ENT(dat, obj);
               obj->supertype = DWG_SUPERTYPE_UNKNOWN;
             }

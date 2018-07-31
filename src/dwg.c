@@ -665,7 +665,11 @@ int
 dwg_resolve_handleref(Dwg_Object_Ref *restrict ref, const Dwg_Object *restrict obj)
 {
   /*
-   * With TYPEDOBJHANDLE 2-5 the code indicates the type of ownership.
+   * With TYPEDOBJHANDLE 2-5 the code indicates the type of ownership:
+   *   2 Soft owner
+   *   3 Hard owner
+   *   4 Soft pointer
+   *   5 Hard pointer
    * With OFFSETOBJHANDLE >5 the handle is stored as an offset from some other handle.
    */
  switch (ref->handleref.code)

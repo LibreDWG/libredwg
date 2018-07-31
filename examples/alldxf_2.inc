@@ -496,3 +496,4 @@ unknown_dxf[494].fields = unknown_dxf_494;
 unknown_dxf[495].fields = unknown_dxf_495;
 unknown_dxf[496].fields = unknown_dxf_496;
 unknown_dxf[497].fields = unknown_dxf_497;
+unknown_dxf[498].fields = unknown_dxf_498;

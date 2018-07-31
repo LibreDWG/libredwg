@@ -133,11 +133,11 @@ extern "C" {
 #define BITCODE_TV char *
 #define FORMAT_TV "\"%s\""
 #define BITCODE_BT BITCODE_DOUBLE
-#define FORMAT_BT "%g"
+#define FORMAT_BT "%f"
 #define BITCODE_DD BITCODE_DOUBLE
-#define FORMAT_DD "%g"
+#define FORMAT_DD "%f"
 #define BITCODE_BD BITCODE_DOUBLE
-#define FORMAT_BD "%g"
+#define FORMAT_BD "%f"
 #define BITCODE_BE BITCODE_3BD
 #define BITCODE_CMC Dwg_Color
 #define BITCODE_H Dwg_Object_Ref*
@@ -2593,25 +2593,35 @@ typedef struct _dwg_object_PLACEHOLDER
 
 /**
  * Entity MULTILEADER (varies)
- * R2000+
+ * R2000+ in work
  */
+
+typedef struct _dwg_Leader_Break
+{
+  struct _dwg_Leader_Line *parent;
+  BITCODE_3BD start;         /*!< DXF 12 */
+  BITCODE_3BD end;           /*!< DXF 13 */
+} Dwg_Leader_Break;
+
 typedef struct _dwg_Leader_Line // as documented by DXF
 {
-  struct _dwg_Leader_Line *parent;
+  struct _dwg_Leader_Node *parent;
   BITCODE_BL  num_vertex;
   BITCODE_3BD vertex;              /*!< DXF 10 */
-  BITCODE_BL  num_break;
-  BITCODE_3BD break_start;         /*!< DXF 11 */
-  BITCODE_3BD break_end;           /*!< DXF 12 */
+  BITCODE_BL num_breaks;
+  Dwg_Leader_Break * breaks;       /*!< DXF 12, 13 */
   BITCODE_BL  line_index;          /*!< DXF 91 */
-} Dwg_Leader_Line;
 
-typedef struct _dwg_ODALeader_Break // as documented by ODA
-{
-  struct _dwg_Leader_Line *parent;
-  BITCODE_3BD start;         /*!< DXF 11 */
-  BITCODE_3BD end;           /*!< DXF 12 */
-} Dwg_ODALeader_Break;
+  /*!< r2010+: */
+  BITCODE_BS type; // 0 = invisible leader, 1 = straight leader, 2 = spline leader
+  BITCODE_CMC color;
+  BITCODE_H ltype_handle; // 5 340
+  BITCODE_BL lweight;
+  BITCODE_BD arrow_size;
+  BITCODE_H  arrow_handle; // 5 341
+  BITCODE_BL flags; // 1 = leader type, 2 = line color, 4 = line type, 8 = line weight,
+                    // 16 = arrow size, 32 = arrow symbol (handle)
+} Dwg_Leader_Line;
 
 typedef struct _dwg_ODALeader_Line //// as documented by ODA
 {
@@ -2619,14 +2629,14 @@ typedef struct _dwg_ODALeader_Line //// as documented by ODA
   BITCODE_BL num_points;
   BITCODE_3BD * points;
   BITCODE_BL num_breaks;
-  Dwg_ODALeader_Break * breaks;
+  Dwg_Leader_Break * breaks;
   BITCODE_BL segment_index;
   BITCODE_BL index;
 
-  BITCODE_BS type;
+  BITCODE_BS type; // 0 = invisible leader, 1 = straight leader, 2 = spline leader
   BITCODE_CMC color;
-  BITCODE_H type_handle;
-  BITCODE_BL weight;
+  BITCODE_H ltype_handle;
+  BITCODE_BL lweight;
   BITCODE_BD arrow_size;
   BITCODE_H arrow_handle;
   BITCODE_BL flags;
@@ -2658,7 +2668,7 @@ typedef struct _dwg_ODALeader
   BITCODE_3BD connection;
   BITCODE_3BD direction;
   BITCODE_BL num_breaks;
-  Dwg_ODALeader_Break * breaks;
+  Dwg_Leader_Break * breaks;
   BITCODE_BL num_lines;
   Dwg_Leader_Line * lines;
   BITCODE_BL index;
@@ -2671,26 +2681,29 @@ typedef struct _dwg_Leader_Node
 {
   struct _dwg_object_MULTILEADER *parent;
   BITCODE_B has_lastleaderlinepoint;    /*!< DXF 290 */
-  BITCODE_B has_dogleg_vector;          /*!< DXF 291 */
+  BITCODE_B has_dogleg;                 /*!< DXF 291 */
   BITCODE_3BD lastleaderlinepoint;      /*!< DXF 10 */
   BITCODE_3BD dogleg_vector;            /*!< DXF 11 */
-  BITCODE_BL num_break;
-  BITCODE_3BD break_start;              /*!< DXF 12 */
-  BITCODE_3BD break_end;                /*!< DXF 13 */
   BITCODE_BL branch_index;              /*!< DXF 90 */
   BITCODE_BD dogleg_length;             /*!< DXF 40 */
   BITCODE_BL num_lines;
-  Dwg_Leader_Line *lines;
+  Dwg_Leader_Line *lines;               /*!< DXF 10 */
+  BITCODE_BL num_breaks;
+  Dwg_Leader_Break * breaks;            /*!< DXF 12, 13 */
+
+  BITCODE_BS attach_dir; //2010+ 271  
 } Dwg_Leader;
 
 /* The MLeaderAnnotContext object (par 20.4.86), embedded into an MLEADER */
 typedef struct _dwg_MLeaderAnnotContext
 {
-  BITCODE_BS class_version;
-  BITCODE_B has_xdic_file;
-  BITCODE_B is_default;
+  //AcDbObjectContextData:
+  BITCODE_BS class_version;  /*!< r2010+ DXF 70 */
+  BITCODE_B has_xdic_file;   /*!< r2010+ default true */
+  BITCODE_B is_default;      /*!< r2010+ DXF 290 */
 
-  BITCODE_H style; //ODA bug
+  // AcDbAnnotScaleObjectContextData:
+  BITCODE_H scale_handle;      /*!< DXF 340 hard ptr to AcDbScale */
 
   BITCODE_BL num_leaders;
   Dwg_Leader * leaders;
@@ -2707,10 +2720,10 @@ typedef struct _dwg_MLeaderAnnotContext
   BITCODE_BS text_alignment;
   BITCODE_BS attach_type;
 
-  BITCODE_B has_text_content;
+  BITCODE_B has_content; // DXF doc bug: has_mtext
   struct _text_content
     {
-      BITCODE_TV label;
+      BITCODE_TV default_text;
       BITCODE_3BD normal;
       BITCODE_H style;
       BITCODE_3BD location;
@@ -2774,8 +2787,8 @@ typedef struct _dwg_object_MULTILEADER
   BITCODE_CMC color;
   BITCODE_H ltype;
   BITCODE_BL linewt;
-  BITCODE_B landing;
-  BITCODE_B dogleg;
+  BITCODE_B has_landing;
+  BITCODE_B has_dogleg;
   BITCODE_BD landing_dist;
   BITCODE_H arrow_head;
   BITCODE_BD arrow_head_size; /* the default */
@@ -2830,9 +2843,9 @@ typedef struct _dwg_object_MLEADERSTYLE
   BITCODE_CMC line_color;
   BITCODE_H line_type;
   BITCODE_BL linewt;
-  BITCODE_B landing;
+  BITCODE_B has_landing;
+  BITCODE_B has_dogleg;
   BITCODE_BD landing_gap;
-  BITCODE_B dogleg;
   BITCODE_BD landing_dist;
   BITCODE_TV description;
   BITCODE_H arrow_head;
