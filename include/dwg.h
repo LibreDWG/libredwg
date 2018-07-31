@@ -2721,7 +2721,9 @@ typedef struct _dwg_MLeaderAnnotContext
   BITCODE_BS attach_type;
 
   BITCODE_B has_content; // DXF doc bug: has_mtext
-  struct _text_content
+  BITCODE_B has_content_block;
+  union {
+    struct _text_content
     {
       BITCODE_TV default_text;
       BITCODE_3BD normal;
@@ -2751,9 +2753,7 @@ typedef struct _dwg_MLeaderAnnotContext
       BITCODE_B word_break;
       BITCODE_B unknown;
     } txt;
-
-  BITCODE_B has_content_block;
-  struct _content_block
+    struct _content_block
     {
       BITCODE_H block_table;
       BITCODE_3BD normal;
@@ -2761,8 +2761,9 @@ typedef struct _dwg_MLeaderAnnotContext
       BITCODE_3BD scale;
       BITCODE_BD rotation;
       BITCODE_CMC color;
-      BITCODE_BD transform[16];
+      BITCODE_BD *transform;
     } blk;
+  } content;
   
   BITCODE_3BD base;
   BITCODE_3BD base_dir;

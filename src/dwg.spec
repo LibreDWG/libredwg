@@ -5159,46 +5159,46 @@ DWG_ENTITY(MULTILEADER)
   FIELD_B (ctx.has_content, 290);
   if (FIELD_VALUE (ctx.has_content))
     {
-      FIELD_T (ctx.txt.default_text, 304);
-      FIELD_3BD (ctx.txt.normal, 11);
-      //FIELD_HANDLE (ctx.txt.style, 5, 340); // ODA bug
-      FIELD_3BD (ctx.txt.location, 12);
-      FIELD_3BD (ctx.txt.direction, 13);
-      FIELD_BD (ctx.txt.rotation, 42);
-      FIELD_BD (ctx.txt.width, 43);
-      FIELD_BD (ctx.txt.height, 44);
-      FIELD_BD (ctx.txt.line_spacing_factor, 45);
-      FIELD_BS (ctx.txt.line_spacing_style, 170);
-      FIELD_CMC (ctx.txt.color, 90);
-      FIELD_BS (ctx.txt.alignment, 171);
-      FIELD_BS (ctx.txt.flow, 172);
-      FIELD_CMC (ctx.txt.bg_color, 91);
-      FIELD_BD (ctx.txt.bg_scale, 141);
-      FIELD_BL (ctx.txt.bg_transparency, 92);
-      FIELD_B (ctx.txt.is_bg_fill, 291);
-      FIELD_B (ctx.txt.is_bg_mask_fill, 292);
-      FIELD_BS (ctx.txt.col_type, 173);
-      FIELD_B (ctx.txt.is_height_auto, 293);
-      FIELD_BD (ctx.txt.col_width, 142);
-      FIELD_BD (ctx.txt.col_gutter, 143);
-      FIELD_B (ctx.txt.is_col_flow_reversed, 294);
-      FIELD_BL (ctx.txt.num_col_sizes, 0);
-      FIELD_VECTOR (ctx.txt.col_sizes, BD, ctx.txt.num_col_sizes, 144);
-      FIELD_B (ctx.txt.word_break, 295);
-      FIELD_B (ctx.txt.unknown, 0);
+      FIELD_T (ctx.content.txt.default_text, 304);
+      FIELD_3BD (ctx.content.txt.normal, 11);
+      //FIELD_HANDLE (ctx.content.txt.style, 5, 340); // ODA bug
+      FIELD_3BD (ctx.content.txt.location, 12);
+      FIELD_3BD (ctx.content.txt.direction, 13);
+      FIELD_BD (ctx.content.txt.rotation, 42);
+      FIELD_BD (ctx.content.txt.width, 43);
+      FIELD_BD (ctx.content.txt.height, 44);
+      FIELD_BD (ctx.content.txt.line_spacing_factor, 45);
+      FIELD_BS (ctx.content.txt.line_spacing_style, 170);
+      FIELD_CMC (ctx.content.txt.color, 90);
+      FIELD_BS (ctx.content.txt.alignment, 171);
+      FIELD_BS (ctx.content.txt.flow, 172);
+      FIELD_CMC (ctx.content.txt.bg_color, 91);
+      FIELD_BD (ctx.content.txt.bg_scale, 141);
+      FIELD_BL (ctx.content.txt.bg_transparency, 92);
+      FIELD_B (ctx.content.txt.is_bg_fill, 291);
+      FIELD_B (ctx.content.txt.is_bg_mask_fill, 292);
+      FIELD_BS (ctx.content.txt.col_type, 173);
+      FIELD_B (ctx.content.txt.is_height_auto, 293);
+      FIELD_BD (ctx.content.txt.col_width, 142);
+      FIELD_BD (ctx.content.txt.col_gutter, 143);
+      FIELD_B (ctx.content.txt.is_col_flow_reversed, 294);
+      FIELD_BL (ctx.content.txt.num_col_sizes, 0);
+      FIELD_VECTOR (ctx.content.txt.col_sizes, BD, ctx.content.txt.num_col_sizes, 144);
+      FIELD_B (ctx.content.txt.word_break, 295);
+      FIELD_B (ctx.content.txt.unknown, 0);
     }
   else
     {
       FIELD_B (ctx.has_content_block, 0);
       if (FIELD_VALUE (ctx.has_content_block))
         {
-          FIELD_HANDLE (ctx.blk.block_table, 4, 341);
-          FIELD_3BD (ctx.blk.normal, 14);
-          FIELD_3BD (ctx.blk.location, 15);
-          FIELD_3BD (ctx.blk.scale, 16);
-          FIELD_BD (ctx.blk.rotation, 46);
-          FIELD_CMC (ctx.blk.color, 93);
-          FIELD_VECTOR_N (ctx.blk.transform, BD, 16, 47);
+          FIELD_HANDLE (ctx.content.blk.block_table, 4, 341);
+          FIELD_3BD (ctx.content.blk.normal, 14);
+          FIELD_3BD (ctx.content.blk.location, 15);
+          FIELD_3BD (ctx.content.blk.scale, 16);
+          FIELD_BD (ctx.content.blk.rotation, 46);
+          FIELD_CMC (ctx.content.blk.color, 93);
+          FIELD_VECTOR_N (ctx.content.blk.transform, BD, 16, 47);
         }
     }
 
