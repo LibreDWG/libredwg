@@ -5128,8 +5128,8 @@ DWG_ENTITY(MULTILEADER)
             {
               FIELD_BS (lline.type, 170);
               FIELD_CMC (lline.color, 92);
-              FIELD_HANDLE (lline.ltype_handle, 5, 340);
-              FIELD_BL (lline.lweight, 171);
+              FIELD_HANDLE (lline.ltype, 5, 340);
+              FIELD_BL (lline.linewt, 171);
               FIELD_BD (lline.arrow_size, 40);
               FIELD_HANDLE (lline.arrow_handle, 5, 341);
               FIELD_BL (lline.flags, 93);
@@ -5213,27 +5213,23 @@ DWG_ENTITY(MULTILEADER)
       FIELD_BS (ctx.text_bottom, 272);
     }
   DXF { VALUE_TV ("}", 301); } //end CONTEXT_DATA
+  // END MLeaderAnnotContext
 
-  FIELD_HANDLE (mleaderstyle, 5, 340);
   FIELD_BL (flags, 90); // override flags
   FIELD_BS (type, 170);
   FIELD_CMC (color, 91);
-  FIELD_HANDLE (ltype, 5, 341);
   FIELD_BL (linewt, 171);
   FIELD_B (has_landing, 290);
   FIELD_B (has_dogleg, 291);
   FIELD_BD (landing_dist, 41);
-  FIELD_HANDLE (arrow_head, 5, 342);
-  FIELD_BD (arrow_head_size, 42);
+  FIELD_BD (arrow_size, 42);
   FIELD_BS (style_content, 172);
-  FIELD_HANDLE (text_style, 5, 343);
-  FIELD_BS (text_left, 95);
+  FIELD_BS (text_left, 173);
   FIELD_BS (text_right, 95);
   FIELD_BS (text_angletype, 174);
-  FIELD_BS (attach_type, 175);
+  FIELD_BS (attach_type, 175); // unknown at ODA
   FIELD_CMC (text_color, 92);
-  FIELD_B (text_frame, 292);
-  FIELD_HANDLE (block_style, 5, 344);
+  FIELD_B (has_text_frame, 292);
   FIELD_CMC (block_color, 93);
   FIELD_3BD (block_scale, 10);
   FIELD_BD (block_rotation, 43);
@@ -5276,8 +5272,12 @@ DWG_ENTITY(MULTILEADER)
     FIELD_B (text_extended, 295);
   }
 
-  //TODO 1001 1070
-  COMMON_ENTITY_HANDLE_DATA; //??
+  COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE (mleaderstyle, 5, 340); // ODA bug
+  FIELD_HANDLE (ltype, 5, 341);
+  FIELD_HANDLE (arrow_handle, 5, 342);
+  FIELD_HANDLE (text_style, 5, 343);
+  FIELD_HANDLE (block_style, 5, 344);
 
 DWG_ENTITY_END
 

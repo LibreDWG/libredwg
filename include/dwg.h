@@ -2615,8 +2615,8 @@ typedef struct _dwg_Leader_Line // as documented by DXF
   /*!< r2010+: */
   BITCODE_BS type; // 0 = invisible leader, 1 = straight leader, 2 = spline leader
   BITCODE_CMC color;
-  BITCODE_H ltype_handle; // 5 340
-  BITCODE_BL lweight;
+  BITCODE_H ltype; // 5 340
+  BITCODE_BL linewt;
   BITCODE_BD arrow_size;
   BITCODE_H  arrow_handle; // 5 341
   BITCODE_BL flags; // 1 = leader type, 2 = line color, 4 = line type, 8 = line weight,
@@ -2635,8 +2635,8 @@ typedef struct _dwg_ODALeader_Line //// as documented by ODA
 
   BITCODE_BS type; // 0 = invisible leader, 1 = straight leader, 2 = spline leader
   BITCODE_CMC color;
-  BITCODE_H ltype_handle;
-  BITCODE_BL lweight;
+  BITCODE_H ltype;
+  BITCODE_BL linewt;
   BITCODE_BD arrow_size;
   BITCODE_H arrow_handle;
   BITCODE_BL flags;
@@ -2791,8 +2791,8 @@ typedef struct _dwg_object_MULTILEADER
   BITCODE_B has_landing;
   BITCODE_B has_dogleg;
   BITCODE_BD landing_dist;
-  BITCODE_H arrow_head;
-  BITCODE_BD arrow_head_size; /* the default */
+  BITCODE_H arrow_handle;
+  BITCODE_BD arrow_size; /* the default */
   BITCODE_BS style_content;
   BITCODE_H text_style;
   BITCODE_BS text_left;
@@ -2800,12 +2800,12 @@ typedef struct _dwg_object_MULTILEADER
   BITCODE_BS text_angletype;
   BITCODE_BS attach_type;
   BITCODE_CMC text_color;
-  BITCODE_B text_frame;
+  BITCODE_B has_text_frame;
   BITCODE_H block_style;
   BITCODE_CMC block_color;
   BITCODE_3BD block_scale;
   BITCODE_BD block_rotation;
-  BITCODE_BS style_attachment;
+  BITCODE_BS style_attachment; // 0 = center extents, 1 = insertion point
   BITCODE_B is_annotative;
 
   /* until r2007: */
