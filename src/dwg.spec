@@ -5055,8 +5055,10 @@ DWG_OBJECT(VBA_PROJECT)
 
 DWG_OBJECT_END
 
+#endif
+
 /* pg. 157, 20.4.48 (varies)
-   AcDbMLeader. broken leader_lines/points
+   AcDbMLeader, now implemented.
  */
 DWG_ENTITY(MULTILEADER)
 
@@ -5292,8 +5294,6 @@ DWG_ENTITY(MULTILEADER)
   FIELD_HANDLE (block_style, 5, 344);
 
 DWG_ENTITY_END
-
-#endif /* DEBUG_CLASSES */
 
 /* par 20.4.87 (varies) */
 DWG_OBJECT(MLEADERSTYLE)

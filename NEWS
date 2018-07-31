@@ -31,8 +31,8 @@ Important bugfixes:
     installed dwg.h on testing (#29).
 
 New features:
-  * Added unstable support for the objects: DIMASSOC, ASSOCDEPENDENCY, PERSSUBENTMANAGER,
-    UNDERLAYDEFINITION.
+  * Added unstable support for the objects: DIMASSOC, ASSOCDEPENDENCY, MULTILEADER,
+    PERSSUBENTMANAGER, UNDERLAYDEFINITION.
   * Added getopt_long() support to all programs, position independent options.
   * Implemented examples/unknown to find field layouts of unknown objects.
     Now with a http://picat-lang.org helper. See also HACKING and savannah News.

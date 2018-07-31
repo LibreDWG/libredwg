@@ -144,8 +144,9 @@
 
   // unstable/undertested.
   // not enough coverage, but assumed mostly ok. field names may change.
-  UNSTABLE_CLASS_DXF (ACTION, ASSOCDEPENDENCY, ACDBASSOCDEPENDENCY)
   UNSTABLE_CLASS     (ACTION, CAMERA) /* ent, not persistent in a DWG */
+  UNSTABLE_CLASS     (ACTION, MULTILEADER)  /* ent */
+  UNSTABLE_CLASS_DXF (ACTION, ASSOCDEPENDENCY, ACDBASSOCDEPENDENCY)
   UNSTABLE_CLASS     (ACTION, DIMASSOC)
   UNSTABLE_CLASS     (ACTION, GEODATA)
   UNSTABLE_CLASS     (ACTION, OBJECT_PTR)
@@ -163,7 +164,6 @@
   DEBUGGING_CLASS     (ACTION, GEOPOSITIONMARKER) /*ent, yet unsorted */
   DEBUGGING_CLASS     (ACTION, HELIX)             /*ent, 30% */
   DEBUGGING_CLASS     (ACTION, LIGHT)             /*ent, almost */
-  DEBUGGING_CLASS     (ACTION, MULTILEADER)       /*ent, broken Leader_Line's/Points */
   DEBUGGING_CLASS     (ACTION, PLANESURFACE)      /*ent */
   DEBUGGING_CLASS     (ACTION, EXTRUDEDSURFACE)   /*ent */
   DEBUGGING_CLASS     (ACTION, LOFTEDSURFACE)     /*ent */
