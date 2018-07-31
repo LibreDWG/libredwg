@@ -2598,8 +2598,9 @@ typedef struct _dwg_object_PLACEHOLDER
 typedef struct _dwg_Leader_Line // as documented by DXF
 {
   struct _dwg_Leader_Line *parent;
+  BITCODE_BL  num_vertex;
   BITCODE_3BD vertex;              /*!< DXF 10 */
-  BITCODE_BL  break_index;         /*!< DXF 90 */
+  BITCODE_BL  num_break;
   BITCODE_3BD break_start;         /*!< DXF 11 */
   BITCODE_3BD break_end;           /*!< DXF 12 */
   BITCODE_BL  line_index;          /*!< DXF 91 */
@@ -2673,6 +2674,7 @@ typedef struct _dwg_Leader_Node
   BITCODE_B has_dogleg_vector;          /*!< DXF 291 */
   BITCODE_3BD lastleaderlinepoint;      /*!< DXF 10 */
   BITCODE_3BD dogleg_vector;            /*!< DXF 11 */
+  BITCODE_BL num_break;
   BITCODE_3BD break_start;              /*!< DXF 12 */
   BITCODE_3BD break_end;                /*!< DXF 13 */
   BITCODE_BL branch_index;              /*!< DXF 90 */

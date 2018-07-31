@@ -5064,7 +5064,7 @@ DWG_ENTITY(MULTILEADER)
   UNTIL (R_2007)
     {
       FIELD_BL (ctx.num_leaders, 0);
-      if (_obj->ctx.num_leaders > 5000) { // MAX_LEADER_NUMBER
+      if (FIELD_VALUE(ctx.num_leaders) > 5000) { // MAX_LEADER_NUMBER
         LOG_ERROR("Invalid MULTILEADER.ctx.num_leaders %d", _obj->ctx.num_leaders);
         return DWG_ERR_VALUEOUTOFBOUNDS;
       }
@@ -5074,35 +5074,36 @@ DWG_ENTITY(MULTILEADER)
 #         define lnode ctx.leaders[rcount1]
           FIELD_B (lnode.has_lastleaderlinepoint, 290);
           FIELD_B (lnode.has_dogleg_vector, 291);
-          if (_obj->lnode.has_lastleaderlinepoint)
+          if (FIELD_VALUE(lnode.has_lastleaderlinepoint))
             {
               FIELD_3BD (lnode.lastleaderlinepoint, 10);
             }
-          if (_obj->lnode.has_dogleg_vector)
+          if (FIELD_VALUE(lnode.has_dogleg_vector))
             {
               FIELD_3BD (lnode.dogleg_vector, 11);
             }
-          else
+          FIELD_BL (lnode.num_break, 0);
+          if (FIELD_VALUE(lnode.num_break))
             {
               FIELD_3BD (lnode.break_start, 12);
               FIELD_3BD (lnode.break_end, 13);
             }
           FIELD_BL (lnode.branch_index, 90);
-          FIELD_BL (lnode.num_lines, 0);
           FIELD_BD (lnode.dogleg_length, 40);
           DXF { VALUE_TV ("LEADER_LINE{", 304); }
-          FIELD_VALUE (lnode.num_lines)++;
+          FIELD_BL (lnode.num_lines, 0);
           REPEAT2(lnode.num_lines, lnode.lines, Dwg_Leader_Line)
             {
 #             define lline lnode.lines[rcount2]
-              FIELD_BL (lline.break_index, 90);
-              FIELD_BL (lline.line_index, 91);
+              FIELD_BL (lline.num_vertex, 0);
               FIELD_3BD (lline.vertex, 10);
-              if (!_obj->lnode.has_dogleg_vector)
+              FIELD_BL (lline.num_break, 0);
+              if (FIELD_VALUE(lline.num_break))
                 {
                   FIELD_3BD (lline.break_start, 11);
                   FIELD_3BD (lline.break_end, 12);
                 }
+              FIELD_BL (lline.line_index, 91);
 #             undef lline
             }
           END_REPEAT(lnode.lines)
