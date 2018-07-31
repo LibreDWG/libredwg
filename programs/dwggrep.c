@@ -367,7 +367,7 @@ int match_3DSOLID(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  unsigned int i;
+  BITCODE_BL i;
   Dwg_Entity_3DSOLID *_obj = obj->tio.entity->tio._3DSOLID;
 
   for (i=0; i<_obj->num_blocks; i++)
@@ -385,7 +385,7 @@ int match_DICTIONARY(const char *restrict filename, const Dwg_Object *restrict o
 {
   char *text;
   int found = 0;
-  unsigned int i;
+  BITCODE_BL i;
   Dwg_Object_DICTIONARY *_obj = obj->tio.object->tio.DICTIONARY;
 
   for (i=0; i<_obj->numitems; i++)
@@ -482,7 +482,7 @@ int match_LAYER_INDEX(const char *restrict filename, const Dwg_Object *restrict 
 {
   char *text;
   int found = 0;
-  unsigned int i;
+  BITCODE_BL i;
   const Dwg_Object_LAYER_INDEX *_obj = obj->tio.object->tio.LAYER_INDEX;
 
   for (i=0; i<_obj->num_entries; i++)
@@ -497,7 +497,7 @@ int match_LAYOUT(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  unsigned int i;
+  BITCODE_BL i;
   const Dwg_Object_LAYOUT *_obj = obj->tio.object->tio.LAYOUT;
 
   MATCH_OBJECT (LAYOUT, page_setup_name, 1);
@@ -522,7 +522,7 @@ int match_FIELD(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  unsigned int i;
+  BITCODE_BL i;
   const Dwg_Object_FIELD *_obj = obj->tio.object->tio.FIELD;
 
   MATCH_OBJECT (FIELD, format, 4);
@@ -544,7 +544,7 @@ int match_TABLECONTENT(const char *restrict filename, const Dwg_Object *restrict
 {
   char *text;
   int found = 0;
-  unsigned int i, j, k;
+  BITCODE_BL i, j, k;
   const Dwg_Object_TABLECONTENT *_obj = obj->tio.object->tio.TABLECONTENT;
 
   MATCH_OBJECT (TABLECONTENT, ldata.name, 1);

@@ -78,7 +78,7 @@ add_text(double x, double y, char *txt)
 static int
 load_dwg(char *filename, unsigned int opts)
 {
-  unsigned int i;
+  BITCODE_BL i;
   int success;
   Dwg_Data dwg;
 

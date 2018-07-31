@@ -137,7 +137,7 @@ api_process (dwg_object * obj)
   bulges = dwg_ent_lwpline_get_bulges (lwpline, &error);
   if (error == 0)
     {
-      unsigned int i, matches = 1;
+      BITCODE_BL i, matches = 1;
       for (i = 0; i < lwpline->num_bulges; i++)
 	{
 	  if (lwpline->bulges[i] != bulges[i])
@@ -163,7 +163,7 @@ api_process (dwg_object * obj)
   points = dwg_ent_lwpline_get_points (lwpline, &error);
   if (error == 0)	// error check
     {
-      unsigned int i, matches = 1;
+      BITCODE_BL i, matches = 1;
       for (i = 0; i < lwpline->num_points; i++)
 	{
 	  if (lwpline->points[i].x != points[i].x
@@ -190,7 +190,7 @@ api_process (dwg_object * obj)
   width = dwg_ent_lwpline_get_widths (lwpline, &error);
   if (error == 0)
     {
-      unsigned int i, matches = 1;
+      BITCODE_BL i, matches = 1;
       for (i = 0; i < lwpline->num_widths; i++)
 	{
 	  if (lwpline->widths[i].start != width[i].start

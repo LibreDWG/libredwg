@@ -9,6 +9,7 @@ API breaking changes:
   * Removed dwg_obj_proxy_get_reactors(), use dwg_obj_get_reactors() instead.
   * Renamed SORTENTSTABLE.owner_handle to SORTENTSTABLE.owner_dict.
   * Renamed all -as-rNNNN program options to --as-rNNNN.
+  * Changed BITCODE_RL and BITCODE_BL from unsigned to signed int32_t.
 
 Other newsworthy changes:
   * Removed all unused type-specific reactors and xdicobjhandle fields,

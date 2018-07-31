@@ -87,42 +87,42 @@ extern "C" {
 #ifdef HAVE_STDINT_H
 # define BITCODE_BS uint16_t
 # define BITCODE_RS uint16_t
-# define BITCODE_BL uint32_t
-# define BITCODE_RL uint32_t
+# define BITCODE_BL int32_t
+# define BITCODE_RL int32_t
 #else
 # define BITCODE_BS unsigned short int
 # define BITCODE_RS unsigned short int
-# define BITCODE_BL unsigned int
-# define BITCODE_RL unsigned int
+# define BITCODE_BL int
+# define BITCODE_RL int
 #endif
 #ifdef HAVE_INTTYPES_H
 # define FORMAT_BS "%" PRIu16
 # define FORMAT_RS "%" PRIu16
-# define FORMAT_BL "%" PRIu32
-# define FORMAT_RL "%" PRIu32
+# define FORMAT_BL "%" PRId32
+# define FORMAT_RL "%" PRId32
 #else
 # define FORMAT_BS "%hu"
 # define FORMAT_RS "%hu"
-# define FORMAT_BL "%u"
-# define FORMAT_RL "%u"
+# define FORMAT_BL "%d"
+# define FORMAT_RL "%d"
 #endif
 #define BITCODE_RD BITCODE_DOUBLE
 #define FORMAT_RD "%f"
 #ifdef HAVE_STDINT_H
-# define BITCODE_RLL uint64_t
+# define BITCODE_RLL int64_t
 /* Since R2004 */
-# define BITCODE_BLL uint64_t
+# define BITCODE_BLL int64_t
 #else
 /* on 64bit just long */
-# define BITCODE_RLL unsigned long
-# define BITCODE_BLL unsigned long
+# define BITCODE_RLL long
+# define BITCODE_BLL long
 #endif
 #ifdef HAVE_INTTYPES_H
-# define FORMAT_RLL "%" PRIu64
-# define FORMAT_BLL "%" PRIu64
+# define FORMAT_RLL "%" PRId64
+# define FORMAT_BLL "%" PRId64
 #else
-# define FORMAT_RLL "%lu"
-# define FORMAT_BLL "%lu"
+# define FORMAT_RLL "%ld"
+# define FORMAT_BLL "%ld"
 #endif
 #ifndef HAVE_NATIVE_WCHAR2
   typedef BITCODE_RS dwg_wchar_t;
@@ -2573,7 +2573,7 @@ typedef struct _dwg_object_XRECORD
 
   BITCODE_BL num_databytes;
   BITCODE_BS cloning_flags;
-  unsigned int num_eed;
+  BITCODE_BL num_eed;
   Dwg_Resbuf* xdata;
   BITCODE_H parenthandle;
   BITCODE_BL num_objid_handles;
@@ -4857,7 +4857,7 @@ typedef struct _dwg_entity_eed
  */
 typedef struct _dwg_object_entity
 {
-  long unsigned int objid; /*<! link to the parent */
+  BITCODE_BL objid; /*<! link to the parent */
   union
   {
     Dwg_Entity_UNUSED *UNUSED;
@@ -4932,7 +4932,7 @@ typedef struct _dwg_object_entity
   } tio;
 
   struct _dwg_struct *dwg;
-  unsigned int num_eed;
+  BITCODE_BL num_eed;
   Dwg_Eed *eed; /* see also Dwg_Resbuf* xdata */
 
   /* Common Entity Data */
@@ -4992,7 +4992,7 @@ typedef struct _dwg_object_entity
  */
 typedef struct _dwg_object_object
 {
-  long unsigned int objid; /*<! link to the parent */
+  BITCODE_BL objid; /*<! link to the parent */
   union
   {
     Dwg_Object_BLOCK_CONTROL *BLOCK_CONTROL;
@@ -5085,7 +5085,7 @@ typedef struct _dwg_object_object
   } tio;
 
   struct _dwg_struct *dwg;
-  unsigned int num_eed;
+  BITCODE_BL num_eed;
   Dwg_Eed *eed;
 
   long unsigned int datpos; /* the data stream offset */
@@ -5104,7 +5104,7 @@ typedef struct _dwg_object_object
  */
 typedef struct _dwg_object
 {
-  unsigned int size;     /*!< in bytes */
+  BITCODE_RL size;       /*!< in bytes */
   unsigned long address; /*!< byte offset in the file */
   unsigned int type;     /*!< fixed or variable (class - 500) */
   BITCODE_RL index;      /*!< into dwg->object[] */

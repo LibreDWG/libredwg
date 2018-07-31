@@ -857,8 +857,8 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat, const Dwg_Object *restri
   Dwg_Object_Entity *ent;
   //Dwg_Data *dwg = obj->parent;
   Dwg_Object_Entity *_obj;
-  int i, error = 0;
-  long unsigned int vcount = 0;
+  BITCODE_BL vcount = 0;
+  int error = 0;
   ent = obj->tio.entity;
   _obj = ent;
 
@@ -1135,7 +1135,6 @@ static int
 dxfb_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
-  unsigned int i;
   Dwg_Object_BLOCK_CONTROL *_ctrl = &dwg->block_control;
   /* let's see if this control block is correct... */
   Dwg_Object_Ref *msref = dwg->header_vars.BLOCK_RECORD_MSPACE;
@@ -1197,7 +1196,7 @@ static int
 dxfb_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
-  long unsigned int i;
+  BITCODE_BL i;
 
   SECTION(ENTITIES);
   for (i=0; i<dwg->num_objects; i++)
@@ -1215,7 +1214,7 @@ static int
 dxfb_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
-  long unsigned int i;
+  BITCODE_BL i;
 
   SECTION(OBJECTS);
   for (i=0; i<dwg->num_objects; i++)

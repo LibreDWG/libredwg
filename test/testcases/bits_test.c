@@ -218,10 +218,10 @@ bit_write_RL_tests (void)
 void
 bit_read_RL_tests (void)
 {
-  Bit_Chain bitchain = strtobt ("11111111111111111111111111111111");
-  long unsigned int result = bit_read_RL (&bitchain);
+  Bit_Chain bitchain = strtobt ("01111111111111111111111111111111");
+  BITCODE_RL result = bit_read_RL (&bitchain);
 
-  if (result == 0xFFFFFFFF)
+  if (result == (BITCODE_RL)0x8FFFFFFF)
       pass ("bit_read_RL");
   else
       fail ("bit_read_RL");

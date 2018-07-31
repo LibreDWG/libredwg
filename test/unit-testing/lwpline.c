@@ -20,10 +20,10 @@ low_level_process(dwg_object *obj)
   for ( i = 0; i < lwpline->num_bulges; i++ )
     printf("bulge[%d] of lwpline : %f\n", (int)i, lwpline->bulges[i]);
   for ( i = 0; i < lwpline->num_points; i++ )
-    printf("point[%d] of lwpline : x =%f\ty = %f\n",
+    printf("point[%d] of lwpline : x = %f\ty = %f\n",
            (int)i, lwpline->points[i].x, lwpline->points[i].y);
   for ( i = 0; i < lwpline->num_widths; i++ )
-    printf("widths[%d] of lwpline : x =%f\ty = %f\n",
+    printf("widths[%d] of lwpline : x = %f\ty = %f\n",
            (int)i, lwpline->widths[i].start, lwpline->widths[i].end);
 }
 
@@ -38,7 +38,7 @@ api_process(dwg_object *obj)
   double * bulges;
   dwg_point_2d *points;
   dwg_lwpline_widths *width; 
-
+  BITCODE_BL i;
   dwg_ent_lwpline *lwpline = dwg_object_to_LWPOLYLINE(obj);
 
   dwg_ent_lwpline_get_normal(lwpline, &normal, &error);
@@ -93,8 +93,7 @@ api_process(dwg_object *obj)
   bulges = dwg_ent_lwpline_get_bulges(lwpline, &error);
   if ( !error )
    {
-     unsigned long i;
-     for ( i = 0;i < lwpline->num_bulges; i++ )
+     for ( i = 0; i < lwpline->num_bulges; i++ )
        printf("bulge[%d] of lwpline : %f\n", (int)i, bulges[i]);
    }
   else
@@ -106,9 +105,8 @@ api_process(dwg_object *obj)
   points = dwg_ent_lwpline_get_points(lwpline, &error);
   if ( !error )
    {
-     unsigned long i;
      for ( i = 0; i < lwpline->num_points ; i++ )
-       printf("point[%d] of lwpline : x =%f\ty = %f\n",
+       printf("point[%d] of lwpline : x = %f\ty = %f\n",
               (int)i, points[i].x, points[i].y);
    }
   else
@@ -120,9 +118,8 @@ api_process(dwg_object *obj)
   width = dwg_ent_lwpline_get_widths(lwpline, &error);
   if ( !error )
    {
-     unsigned long i;
-     for ( i = 0;i < lwpline->num_widths ; i++ )
-       printf("widths[%d] of lwpline : x =%f\ty = %f\n",
+     for ( i = 0; i < lwpline->num_widths ; i++ )
+       printf("widths[%d] of lwpline : x = %f\ty = %f\n",
               (int)i, width[i].start, width[i].end);
    }
   else

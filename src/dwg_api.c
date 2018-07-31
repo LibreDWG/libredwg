@@ -18369,7 +18369,7 @@ See dwg_object_to_entity how to get the ent.
 \param[in]  ent     dwg_obj_ent*
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
-unsigned int
+BITCODE_BL
 dwg_ent_get_num_eed(const dwg_obj_ent *restrict ent,
                     int *restrict error)
 {
@@ -18389,7 +18389,7 @@ dwg_ent_get_num_eed(const dwg_obj_ent *restrict ent,
 */
 dwg_entity_eed *
 dwg_ent_get_eed(const dwg_obj_ent *restrict ent,
-                const unsigned int index,
+                const BITCODE_BL index,
                 int *restrict error)
 {
   if (!ent) {
@@ -18397,7 +18397,7 @@ dwg_ent_get_eed(const dwg_obj_ent *restrict ent,
     LOG_ERROR("%s: empty or invalid ent", __FUNCTION__)
     return NULL;
   }
-  else if (index >= ent->num_eed) {
+  else if (index < 0 || index >= ent->num_eed) {
     *error = 2;
     return NULL;
   }
@@ -18416,7 +18416,7 @@ dwg_ent_get_eed(const dwg_obj_ent *restrict ent,
 */
 dwg_entity_eed_data *
 dwg_ent_get_eed_data(const dwg_obj_ent *restrict ent,
-                     const unsigned int index,
+                     const BITCODE_BL index,
                      int *restrict error)
 {
   if (!ent) {
@@ -18424,7 +18424,7 @@ dwg_ent_get_eed_data(const dwg_obj_ent *restrict ent,
     LOG_ERROR("%s: empty or invalid ent", __FUNCTION__)
     return NULL;
   }
-  else if (index >= ent->num_eed) {
+  else if (index < 0 || index >= ent->num_eed) {
     *error = 2;
     return NULL;
   }
@@ -18978,7 +18978,7 @@ dwg_object_get_dxfname(const dwg_object *obj)
 ********************************************************************/
 
 /** This is the same as \sa dwg_object_get_index */
-EXPORT long unsigned int
+EXPORT BITCODE_BL
 dwg_obj_get_objid(const dwg_obj_obj *restrict obj,
                   int *restrict error)
 {
@@ -18991,7 +18991,7 @@ dwg_obj_get_objid(const dwg_obj_obj *restrict obj,
 \param[in]  obj     dwg_obj_obj*
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
-unsigned int
+BITCODE_BL
 dwg_obj_get_num_eed(const dwg_obj_obj *restrict obj,
                     int *restrict error)
 {
@@ -19011,7 +19011,7 @@ dwg_obj_get_num_eed(const dwg_obj_obj *restrict obj,
 */
 dwg_entity_eed *
 dwg_obj_get_eed(const dwg_obj_obj *restrict obj,
-                const unsigned int index,
+                const BITCODE_BL index,
                 int *restrict error)
 {
   if (!obj) {
@@ -19019,7 +19019,7 @@ dwg_obj_get_eed(const dwg_obj_obj *restrict obj,
     LOG_ERROR("%s: empty or invalid obj", __FUNCTION__)
     return NULL;
   }
-  else if (index >= obj->num_eed) {
+  else if (index < 0 || index >= obj->num_eed) {
     *error = 2;
     return NULL;
   }
@@ -19038,7 +19038,7 @@ dwg_obj_get_eed(const dwg_obj_obj *restrict obj,
 */
 dwg_entity_eed_data *
 dwg_obj_get_eed_data(const dwg_obj_obj *restrict obj,
-                     const unsigned int index,
+                     const BITCODE_BL index,
                      int *restrict error)
 {
   if (!obj) {
@@ -19046,7 +19046,7 @@ dwg_obj_get_eed_data(const dwg_obj_obj *restrict obj,
     LOG_ERROR("%s: empty or invalid obj", __FUNCTION__)
     return NULL;
   }
-  else if (index >= obj->num_eed) {
+  else if (index < 0 || index >= obj->num_eed) {
     *error = 2;
     return NULL;
   }

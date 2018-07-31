@@ -609,7 +609,7 @@ json_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static int
 json_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  unsigned int i;
+  BITCODE_BL i;
 
   SECTION(ENTITIES);
   for (i=0; i < dwg->num_objects; i++)
@@ -629,7 +629,7 @@ json_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static int
 json_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  unsigned int i;
+  BITCODE_BL i;
 
   SECTION(OBJECTS);
   for (j = 0; j < dwg->num_objects; j++)

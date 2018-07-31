@@ -4647,16 +4647,16 @@ EXPORT BITCODE_RL
 dwg_ent_get_bitsize(const dwg_obj_ent *restrict ent,
                           int *restrict error);
 
-EXPORT unsigned int
+EXPORT BITCODE_BL
 dwg_ent_get_num_eed(const dwg_obj_ent *restrict ent,
                           int *restrict error);
 
 EXPORT dwg_entity_eed *
-dwg_ent_get_eed(const dwg_obj_ent *restrict ent, unsigned int index,
+dwg_ent_get_eed(const dwg_obj_ent *restrict ent, BITCODE_BL index,
                 int *restrict error);
 
 EXPORT dwg_entity_eed_data *
-dwg_ent_get_eed_data(const dwg_obj_ent *restrict ent, unsigned int index,
+dwg_ent_get_eed_data(const dwg_obj_ent *restrict ent, BITCODE_BL index,
                      int *restrict error);
 
 EXPORT BITCODE_B
@@ -4799,18 +4799,18 @@ EXPORT dwg_object *
 dwg_obj_obj_to_object(const dwg_obj_obj *restrict obj,
                       int *restrict error);
 
-EXPORT long unsigned int
+EXPORT BITCODE_BL
 dwg_obj_get_objid(const dwg_obj_obj *restrict obj,
                   int *restrict error);
 
-EXPORT unsigned int
+EXPORT BITCODE_BL
 dwg_obj_get_num_eed(const dwg_obj_obj *restrict obj,
                     int *restrict error);
 EXPORT dwg_entity_eed *
-dwg_obj_get_eed(const dwg_obj_obj *restrict obj, const unsigned int index,
+dwg_obj_get_eed(const dwg_obj_obj *restrict obj, const BITCODE_BL index,
                 int *restrict error);
 EXPORT dwg_entity_eed_data *
-dwg_obj_get_eed_data(const dwg_obj_obj *restrict obj, const unsigned int index,
+dwg_obj_get_eed_data(const dwg_obj_obj *restrict obj, const BITCODE_BL index,
                      int *restrict error);
 
 EXPORT BITCODE_BL
@@ -4848,7 +4848,7 @@ dwg_get_object(dwg_data *dwg, BITCODE_BL index);
 EXPORT BITCODE_RL
 dwg_object_get_bitsize(const dwg_object *obj);
 
-EXPORT unsigned int
+EXPORT BITCODE_BL
 dwg_object_get_index(const dwg_object *restrict obj,
                      int *restrict error);
 

@@ -675,7 +675,7 @@ add_table (xmlNodePtr rootnode, const Dwg_Object *obj)
 int
 load_dwg (char *dwgfilename, xmlNodePtr rootnode)
 {
-  unsigned int i;
+  BITCODE_BL i;
   int error;
   Dwg_Data dwg;
 

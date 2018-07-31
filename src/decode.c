@@ -271,7 +271,8 @@ static int
 decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
 {
   Dwg_Section *tbl = &dwg->header.section[id];
-  int i; long vcount;
+  int i;
+  BITCODE_BL vcount;
   int error = 0;
   long unsigned int num = dwg->num_objects;
   long unsigned int old_size = num * sizeof(Dwg_Object);
@@ -748,7 +749,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
   long unsigned int object_begin;
   long unsigned int object_end;
   long unsigned int pvz;
-  unsigned int j, k;
+  BITCODE_BL j, k;
   int error = 0;
 
   {
@@ -1148,7 +1149,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
     {
       int i;
       BITCODE_RC sig, sig2;
-      long vcount;
+      BITCODE_BL vcount;
       long unsigned int pvzadr;
       struct _dwg_second_header* _obj = &dwg->second_header;
       obj = NULL;
@@ -1265,14 +1266,14 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
 static int
 resolve_objectref_vector(Bit_Chain* dat, Dwg_Data * dwg)
 {
-  long unsigned int i;
+  BITCODE_BL i;
   Dwg_Object * obj;
 
   for (i = 0; i < dwg->num_object_refs; i++)
     {
       Dwg_Object_Ref *ref = dwg->object_ref[i];
       LOG_INSANE("==========\n")
-      LOG_TRACE("-objref[%3ld]: HANDLE(%d.%d.%lX) Absolute:%lX\n", i,
+        LOG_TRACE("-objref[%3ld]: HANDLE(%d.%d.%lX) Absolute:%lX\n", (long)i,
                 ref->handleref.code, ref->handleref.size,
                 ref->handleref.value,
                 ref->absolute_ref)
@@ -1293,7 +1294,7 @@ resolve_objectref_vector(Bit_Chain* dat, Dwg_Data * dwg)
           if (obj)
             dwg_print_object(dat, obj);
           else
-            LOG_TRACE("Null object pointer: object_ref[%lu]\n", i)
+            LOG_TRACE("Null object pointer: object_ref[%ld]\n", (long)i)
         }
     }
   return dwg->num_object_refs ? 0 : DWG_ERR_VALUEOUTOFBOUNDS;
@@ -1302,7 +1303,7 @@ resolve_objectref_vector(Bit_Chain* dat, Dwg_Data * dwg)
 void
 dwg_resolve_objectrefs_silent(Dwg_Data *restrict dwg)
 {
-  long unsigned int i;
+  BITCODE_BL i;
   Dwg_Object *restrict obj;
   int oldloglevel = loglevel;
 
@@ -1584,7 +1585,7 @@ read_R2004_section_map(Bit_Chain* dat, Dwg_Data * dwg)
 static Dwg_Section*
 find_section(Dwg_Data *dwg, unsigned long int index)
 {
-  long unsigned int i;
+  BITCODE_BL i;
   if (dwg->header.section == 0 || index == 0)
     return 0;
   for (i = 0; i < dwg->header.num_sections; ++i)
@@ -1603,8 +1604,8 @@ read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
                         uint32_t decomp_data_size)
 {
   char *decomp, *ptr;
-  unsigned int i, j;
-  uint32_t section_number = 0;
+  BITCODE_BL i, j;
+  BITCODE_BL section_number = 0;
   uint32_t data_size;
   uint64_t start_offset;
   int error;
@@ -1775,7 +1776,7 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
   Dwg_Section_Info *info = NULL;
   encrypted_section_header es;
   char *decomp;
-  unsigned int i, j;
+  BITCODE_BL i, j;
   int error = 0;
 
   for (i=0; i < dwg->header.num_infos && !info; ++i)
@@ -2965,7 +2966,7 @@ dwg_decode_common_entity_handle_data(Bit_Chain* dat, Bit_Chain* hdl_dat,
 
   Dwg_Data *dwg = obj->parent;
   Dwg_Object_Entity *_obj;
-  long unsigned int vcount;
+  BITCODE_BL vcount;
   Dwg_Object_Entity *_ent;
   int error = 0;
 
@@ -3083,7 +3084,8 @@ dwg_decode_xdata(Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj, int 
   Dwg_Resbuf *rbuf, *root = NULL, *curr = NULL;
   unsigned char codepage;
   long unsigned int end_address;
-  int i, length, num_xdata = 0;
+  BITCODE_BL i, num_xdata = 0;
+  BITCODE_RS length;
 
   static int cnt = 0;
   cnt++;

@@ -518,7 +518,7 @@ dwg_geojson_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 static int
 geojson_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  unsigned int i;
+  BITCODE_BL i;
 
   SECTION(features);
   for (i=0; i < dwg->num_objects; i++)

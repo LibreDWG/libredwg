@@ -414,10 +414,10 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
 #define DWG_ENTITY(token) \
 static int dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
-  int error; \
-  long vcount, rcount1, rcount2, rcount3, rcount4; \
+  BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Object_Entity *_ent = obj->tio.entity; \
   Dwg_Entity_##token * _obj = _ent->tio.token; \
+  int error; \
   Bit_Chain* hdl_dat = dat; \
   Bit_Chain* str_dat = dat; \
   Dwg_Data* dwg = obj->parent; \
@@ -445,8 +445,8 @@ static int dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj
 #define DWG_OBJECT(token) \
 static int dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
-  int error = 0; \
-  long vcount, rcount1, rcount2, rcount3, rcount4; \
+  BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4; \
+  int error; \
   Bit_Chain* hdl_dat = dat; \
   Bit_Chain* str_dat = dat; \
   Dwg_Data* dwg = obj->parent; \
@@ -1587,8 +1587,8 @@ dwg_encode_common_entity_handle_data(Bit_Chain* dat, Bit_Chain* hdl_dat,
   Dwg_Object_Entity *ent;
   //Dwg_Data *dwg = obj->parent;
   Dwg_Object_Entity *_obj;
-  int i, error = 0;
-  long unsigned int vcount;
+  BITCODE_BL vcount;
+  int error = 0;
   ent = obj->tio.entity;
   _obj = ent;
 

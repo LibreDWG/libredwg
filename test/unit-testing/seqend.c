@@ -11,7 +11,7 @@ low_level_process(dwg_object *obj)
     printf("ERROR: obj_obj of seqend %p == %p", seqend->parent, obj->tio.entity);
 
   if (&dwg->object[seqend->parent->objid] != obj)
-    printf("ERROR: obj of seqend %lu -> obj %p", seqend->parent->objid, obj);
+    printf("ERROR: obj of seqend %ld -> obj %p", (long)seqend->parent->objid, obj);
 }
 
 void

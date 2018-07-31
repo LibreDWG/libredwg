@@ -110,7 +110,7 @@ api_process(dwg_object *obj)
   points = dwg_object_polyline_2d_get_points(obj, &error);
   if ( !error )
    {
-     unsigned long i;
+     BITCODE_BL i;
      for ( i = 0; i < numpoints ; i++ )
        printf("point[%d] of polyline : x = %f\ty = %f\n",
               (int)i, points[i].x, points[i].y);

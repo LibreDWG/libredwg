@@ -366,7 +366,7 @@
     { \
       VECTOR_CHKCOUNT(name,type,size) \
       _obj->name = (BITCODE_##type*) malloc(size * sizeof(BITCODE_##type));\
-      for (vcount=0; vcount<(long)size; vcount++) \
+      for (vcount=0; vcount<(BITCODE_BL)size; vcount++) \
         {\
           _obj->name[vcount] = bit_read_##type(dat); \
           LOG_INSANE(#name "[%ld]: " FORMAT_##type "\n", \
@@ -378,7 +378,7 @@
     { \
       _VECTOR_CHKCOUNT(name,_obj->size,dat->version>=R_2007 ? 18 : 2) \
       _obj->name = (char**) malloc(_obj->size * sizeof(char*)); \
-      for (vcount=0; vcount<(long)_obj->size; vcount++) \
+      for (vcount=0; vcount<(BITCODE_BL)_obj->size; vcount++) \
         {\
           PRE (R_2007) { \
             _obj->name[vcount] = bit_read_TV(dat); \
@@ -396,7 +396,7 @@
 #define FIELD_2RD_VECTOR(name, size, dxf) \
   VECTOR_CHKCOUNT(name,2RD,_obj->size) \
   _obj->name = (BITCODE_2RD *) malloc(_obj->size * sizeof(BITCODE_2RD));\
-  for (vcount=0; vcount< (long)_obj->size; vcount++)\
+  for (vcount=0; vcount< (BITCODE_BL)_obj->size; vcount++)\
     {\
       FIELD_2RD(name[vcount], dxf); \
     }
@@ -405,7 +405,7 @@
   VECTOR_CHKCOUNT(name,2DD,_obj->size) \
   _obj->name = (BITCODE_2RD *) malloc(_obj->size * sizeof(BITCODE_2RD));\
   FIELD_2RD(name[0], dxf); \
-  for (vcount = 1; vcount < (long)_obj->size; vcount++)\
+  for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
       FIELD_DD(name[vcount].x, FIELD_VALUE(name[vcount - 1].x), dxf); \
       FIELD_DD(name[vcount].y, FIELD_VALUE(name[vcount - 1].x), dxf+10);\
@@ -416,7 +416,7 @@
 #define FIELD_3DPOINT_VECTOR(name, size, dxf) \
   VECTOR_CHKCOUNT(name,3BD,_obj->size) \
   _obj->name = (BITCODE_3DPOINT *) malloc(_obj->size * sizeof(BITCODE_3DPOINT));\
-  for (vcount=0; vcount < (long)_obj->size; vcount++) \
+  for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++) \
     {\
       FIELD_3DPOINT(name[vcount], dxf); \
     }
@@ -425,7 +425,7 @@
 #define HANDLE_VECTOR_N(name, size, code, dxf) \
   VECTOR_CHKCOUNT(name,HANDLE,size) \
   FIELD_VALUE(name) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * size);\
-  for (vcount=0; vcount < (long)size; vcount++) \
+  for (vcount=0; vcount < (BITCODE_BL)size; vcount++) \
     {\
       FIELD_HANDLE_N(name[vcount], vcount, code, dxf);  \
     }
@@ -447,7 +447,7 @@
 
 #define REACTORS(code)\
   obj->tio.object->reactors = malloc(sizeof(BITCODE_H) * obj->tio.object->num_reactors); \
-  for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++) \
+  for (vcount=0; vcount < obj->tio.object->num_reactors; vcount++) \
     {\
       VALUE_HANDLE_N(obj->tio.object->reactors[vcount], reactors, vcount, code, 330); \
     }
@@ -603,7 +603,7 @@ EXPORT int dwg_add_##token (Dwg_Object *obj) \
 /**Call dwg_add_##token and write the fields from the bitstream dat to the entity or object. */ \
 static int dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
-  long vcount, rcount1, rcount2, rcount3, rcount4; \
+  BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj; \
   Dwg_Object_Entity *_ent; \
   Dwg_Data* dwg = obj->parent; \
@@ -640,9 +640,9 @@ static int dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj
     vcount  = (obj->size+obj->address)*8 - bit_position(dat); \
   } \
   if (vcount) \
-    LOG_HANDLE(" padding: %+ld %s\n", vcount, (int)vcount >= 8 \
+    LOG_HANDLE(" padding: %+ld %s\n", (long)vcount, (long)vcount >= 8 \
                ? "MISSING" \
-               : ((int)vcount < 0) ? "OVERSHOOT" : "");  \
+               : ((long)vcount < 0) ? "OVERSHOOT" : "");  \
   return error & ~DWG_ERR_UNHANDLEDCLASS; \
 }
 
@@ -665,7 +665,7 @@ EXPORT int dwg_add_ ## token (Dwg_Object *obj) \
 } \
 static int dwg_decode_ ## token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
-  long vcount, rcount1, rcount2, rcount3, rcount4; \
+  BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Object_##token *_obj;\
   Dwg_Data* dwg = obj->parent;\
   Bit_Chain* hdl_dat = dat; /* handle stream initially the same */ \

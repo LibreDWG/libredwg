@@ -143,18 +143,18 @@ static unsigned int cur_ver = 0;
 #define FIELD_VECTOR_N(name, type, size, dxf)\
   if (size>0)\
     {\
-      for (vcount=0; vcount < (long)size; vcount++)\
+      for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
         {\
-          LOG_TRACE(#name "[%ld]: " FORMAT_##type "\n", vcount, _obj->name[vcount])\
+          LOG_TRACE(#name "[%ld]: " FORMAT_##type "\n", (long)vcount, _obj->name[vcount]) \
         }\
     }
 #define FIELD_VECTOR_T(name, size, dxf)\
   if (_obj->size > 0)\
     {\
-      for (vcount=0; vcount < (long)_obj->size; vcount++)\
+      for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
         {\
           PRE (R_2007) { \
-            LOG_TRACE(#name "[%ld]: %s\n", vcount, _obj->name[vcount]) \
+            LOG_TRACE(#name "[%ld]: %s\n", (long)vcount, _obj->name[vcount]) \
           } else { \
             LOG_TRACE_TU(#name, _obj->name[vcount], dxf) \
           } \
@@ -165,7 +165,7 @@ static unsigned int cur_ver = 0;
 
 #define FIELD_2RD_VECTOR(name, size, dxf)\
   if (_obj->name) { \
-    for (vcount=0; vcount < (long)_obj->size; vcount++)\
+    for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
       {\
         FIELD_2RD(name[vcount], dxf);\
       }\
@@ -174,7 +174,7 @@ static unsigned int cur_ver = 0;
 #define FIELD_2DD_VECTOR(name, size, dxf)\
   if (_obj->name) { \
     FIELD_2RD(name[0], 0);\
-    for (vcount = 1; vcount < (long)_obj->size; vcount++)\
+    for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)\
       {\
         FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
       }\
@@ -182,7 +182,7 @@ static unsigned int cur_ver = 0;
 
 #define FIELD_3DPOINT_VECTOR(name, size, dxf)\
   if (_obj->name) { \
-    for (vcount=0; vcount < (long)_obj->size; vcount++)\
+    for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
       {\
         FIELD_3DPOINT(name[vcount], dxf);\
       }\
@@ -190,7 +190,7 @@ static unsigned int cur_ver = 0;
 
 #define HANDLE_VECTOR_N(name, size, code, dxf) \
   if (_obj->name) { \
-    for (vcount=0; vcount < (long)size; vcount++)\
+    for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
       {\
         FIELD_HANDLE_N(name[vcount], vcount, code, dxf);\
       }\
@@ -208,7 +208,7 @@ static unsigned int cur_ver = 0;
   if (dat->version >= R_2000 && obj->tio.object->num_reactors > 0x1000) { \
     fprintf(stderr, "Invalid num_reactors: %ld\n", (long)obj->tio.object->num_reactors); return DWG_ERR_VALUEOUTOFBOUNDS; } \
   if (obj->tio.object->reactors) {\
-    for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++)\
+    for (vcount=0; vcount < obj->tio.object->num_reactors; vcount++)\
       {\
         VALUE_HANDLE_N(obj->tio.object->reactors[vcount], reactors, vcount, code, -5); \
       }\
@@ -246,7 +246,7 @@ static unsigned int cur_ver = 0;
 static int \
 dwg_print_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj)\
 {\
-  long vcount, rcount1, rcount2, rcount3, rcount4; \
+  BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Object_Entity *_ent;\
   Bit_Chain *hdl_dat = dat;\
@@ -267,7 +267,7 @@ dwg_print_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj)\
 static int \
 dwg_print_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
-  long vcount, rcount1, rcount2, rcount3, rcount4;\
+  BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;\
   Dwg_Object_##token *_obj;\
   Bit_Chain *hdl_dat = dat;\
   Bit_Chain* str_dat = dat;\

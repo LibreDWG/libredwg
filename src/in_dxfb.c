@@ -256,14 +256,14 @@ static char buf[4096];
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'name'.
 #define FIELD_VECTOR_N(name, type, size, dxf)\
-    for (vcount=0; vcount < (int)size; vcount++)\
+    for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
       fprintf(dat->fh, #name " " FORMAT_##type ",\n", _obj->name[vcount]);
 #define FIELD_VECTOR_T(name, size, dxf)\
     PRE (R_2007) { \
-      for (vcount=0; vcount < (int)_obj->size; vcount++) \
+      for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++) \
         fprintf(dat->fh, #name ": \"%s\",\n", _obj->name[vcount]); \
     } else { \
-      for (vcount=0; vcount < (int)_obj->size; vcount++) \
+      for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++) \
         FIELD_TEXT_TU(name, wcslen((wchar_t*)_obj->name[vcount]), _obj->name[vcount]); \
     }
 
@@ -271,7 +271,7 @@ static char buf[4096];
 
 #define FIELD_2RD_VECTOR(name, size, dxf)\
   fprintf(dat->fh, "["); \
-  for (vcount=0; vcount < (int)_obj->size; vcount++)\
+  for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
       FIELD_2RD(name[vcount], dxf);\
     }\
@@ -280,7 +280,7 @@ static char buf[4096];
 #define FIELD_2DD_VECTOR(name, size, dxf)\
   fprintf(dat->fh, "["); \
   FIELD_2RD(name[0], 0);\
-  for (vcount = 1; vcount < (int)_obj->size; vcount++)\
+  for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
       FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
     }\
@@ -288,7 +288,7 @@ static char buf[4096];
 
 #define FIELD_3DPOINT_VECTOR(name, size, dxf)\
   fprintf(dat->fh, "["); \
-  for (vcount=0; vcount < (int)_obj->size; vcount++)\
+  for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
       FIELD_3DPOINT(name[vcount], dxf);\
     }\
@@ -296,7 +296,7 @@ static char buf[4096];
 
 #define HANDLE_VECTOR_N(name, size, code, dxf) \
   fprintf(dat->fh, "["); \
-  for (vcount=0; vcount < (int)size; vcount++)\
+  for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
     {\
       FIELD_HANDLE_N(name[vcount], vcount, code, dxf);\
     }\
@@ -312,7 +312,7 @@ static char buf[4096];
 
 #define REACTORS(code)\
   fprintf(dat->fh, "[");\
-  for (vcount=0; vcount < (int)obj->tio.object->num_reactors; vcount++)\
+  for (vcount=0; vcount < obj->tio.object->num_reactors; vcount++)\
     {\
       VALUE_HANDLE(obj->tio.object->reactors[vcount], code, 330);\
     }\
@@ -342,7 +342,7 @@ static char buf[4096];
 static int \
 dwg_indxfb_##token (Bit_Chain *dat, Dwg_Object * obj) \
 {\
-  long vcount, rcount1, rcount2, rcount3, rcount4; \
+  BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Object_Entity *_ent;\
   int error = 0;\
@@ -360,7 +360,7 @@ dwg_indxfb_##token (Bit_Chain *dat, Dwg_Object * obj) \
 static int \
 dwg_indxfb_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
 { \
-  long vcount, rcount1, rcount2, rcount3, rcount4; \
+  BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4; \
   Bit_Chain *hdl_dat = dat;\
   Dwg_Data* dwg = obj->parent;\
   Dwg_Object_##token *_obj;\

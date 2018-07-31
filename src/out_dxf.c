@@ -453,8 +453,8 @@ dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 static int \
 dwg_dxf_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
 {\
+  BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4; \
   int error = 0; \
-  long vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Data* dwg = obj->parent; \
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Object_Entity *_ent;\
@@ -498,8 +498,8 @@ dwg_dxf_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
 static int \
 dwg_dxf_ ##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
 { \
+  BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;\
   int error = 0; \
-  long vcount, rcount1, rcount2, rcount3, rcount4;\
   Bit_Chain *hdl_dat = dat;\
   Dwg_Data* dwg = obj->parent; \
   Dwg_Object_##token *_obj;\
@@ -688,9 +688,9 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 {
   Dwg_Data* dwg = obj->parent;
   unsigned long j;
-  int vcount, rcount1, rcount2;
+  BITCODE_BL vcount, rcount1, rcount2;
+  BITCODE_BL i;
   int error = 0;
-  unsigned int i = 0;
   int index;
   int total_size = 0;
   int num_blocks = 0;
@@ -1019,8 +1019,8 @@ dxf_common_entity_handle_data(Bit_Chain *restrict dat, const Dwg_Object *restric
   Dwg_Object_Entity *ent;
   //Dwg_Data *dwg = obj->parent;
   Dwg_Object_Entity *_obj;
-  int i, error = 0;
-  long unsigned int vcount = 0;
+  int error = 0;
+  BITCODE_BL vcount = 0;
   ent = obj->tio.entity;
   _obj = ent;
 
@@ -1383,7 +1383,7 @@ static int
 dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
-  unsigned int i;
+  //unsigned int i;
   Dwg_Object_BLOCK_CONTROL *_ctrl = &dwg->block_control;
   Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
   /* let's see if this control block is correct... */
@@ -1446,7 +1446,7 @@ static int
 dxf_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
-  long unsigned int i;
+  BITCODE_BL i;
 
   SECTION(ENTITIES);
   for (i=0; i<dwg->num_objects; i++)
@@ -1464,7 +1464,7 @@ static int
 dxf_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
-  long unsigned int i;
+  BITCODE_BL i;
 
   SECTION(OBJECTS);
   for (i=0; i<dwg->num_objects; i++)

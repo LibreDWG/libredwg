@@ -21,7 +21,7 @@
           }
         if (ent->picture_size < 210210)
           {
-            if (ent->picture_size)
+            if (ent->picture_size >= 0) // negative values for what reason?
               ent->picture = bit_read_TF(dat, ent->picture_size); // DXF 310 BINARY
           }
         else

@@ -94,7 +94,7 @@ api_process (dwg_object * obj)
   wire = dwg_ent_3dsolid_get_wires (_3dsolid, &error);
   if (error == 0)
     {
-      unsigned long i, matches = 1;
+      BITCODE_BL i, matches = 1;
       for (i = 0; i < num_wires; i++)
 	{
 	  if (_3dsolid->wires[i].selection_marker != wire[i].selection_marker)
@@ -122,7 +122,7 @@ api_process (dwg_object * obj)
   sil = dwg_ent_3dsolid_get_silhouettes (_3dsolid, &error);
   if (error == 0)
     {
-      unsigned long i, matches = 1;
+      BITCODE_BL i, matches = 1;
       for (i = 0; i < num_sil; i++)
 	{
 	  if (_3dsolid->silhouettes[i].vp_id != sil[i].vp_id)

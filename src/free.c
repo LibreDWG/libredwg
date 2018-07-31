@@ -120,7 +120,7 @@ static Bit_Chain *dat = &pdat;
 // it all in the vector called 'name'.
 #define FIELD_VECTOR_N(name, type, size, dxf) \
   if (size && _obj->name) { \
-    for (vcount=0; vcount < (int)size; vcount++)  \
+    for (vcount=0; vcount < (BITCODE_BL)size; vcount++)  \
       FIELD_##type(name[vcount], dxf); \
   } \
   FIELD_TV(name,dxf);
@@ -131,7 +131,7 @@ static Bit_Chain *dat = &pdat;
 #define FIELD_3DPOINT_VECTOR(name, size, dxf) FIELD_TV(name,dxf)
 #define HANDLE_VECTOR_N(name, size, code, dxf) \
   if (_obj->name) { \
-    for (vcount=0; vcount < (long)size; vcount++) \
+    for (vcount=0; vcount < (BITCODE_BL)size; vcount++) \
     {\
       FIELD_HANDLE_N(name[vcount], vcount, code, dxf);  \
     } \
@@ -146,7 +146,7 @@ static Bit_Chain *dat = &pdat;
 
 #define REACTORS(code) \
   if (obj->tio.object->reactors) { \
-    for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++) \
+    for (vcount=0; vcount < obj->tio.object->num_reactors; vcount++) \
       VALUE_HANDLE(obj->tio.object->reactors[vcount], code, 330);  \
     VALUE_TV(obj->tio.object->reactors, 0); \
   }
@@ -200,7 +200,7 @@ static int dwg_free_UNKNOWN_OBJ (Bit_Chain *restrict dat, Dwg_Object *restrict o
 static int \
 dwg_free_ ##token (Bit_Chain *restrict _dat, Dwg_Object *restrict obj)\
 {\
-  long vcount, rcount1, rcount2, rcount3, rcount4;\
+  BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;\
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Object_Entity *_ent;\
   Bit_Chain *hdl_dat = _dat;\
@@ -224,10 +224,10 @@ dwg_free_ ##token (Bit_Chain *restrict _dat, Dwg_Object *restrict obj)\
 static int \
 dwg_free_ ##token (Bit_Chain *restrict _dat, Dwg_Object *restrict obj) \
 { \
-  long vcount, rcount1, rcount2, rcount3, rcount4; \
+  BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Object_##token *_obj;                      \
-  Bit_Chain *hdl_dat = _dat;                      \
-  Bit_Chain* str_dat = _dat;                      \
+  Bit_Chain *hdl_dat = _dat;                     \
+  Bit_Chain* str_dat = _dat;                     \
   Dwg_Data* dwg = obj->parent;                   \
   int error = 0; \
   LOG_HANDLE("Free object " #token " %p\n", obj) \
@@ -250,7 +250,7 @@ dwg_free_common_entity_handle_data(Dwg_Object* obj)
 
   Dwg_Data *dwg = obj->parent;
   Dwg_Object_Entity *_obj;
-  long unsigned int vcount;
+  BITCODE_BL vcount;
   Dwg_Object_Entity *ent;
   int error = 0;
 
@@ -267,7 +267,7 @@ dwg_free_common_entity_data(Dwg_Object* obj)
 
   Dwg_Data *dwg = obj->parent;
   Dwg_Object_Entity *_obj;
-  long unsigned int vcount;
+  BITCODE_BL vcount;
   Dwg_Object_Entity *ent;
   int error = 0;
 
@@ -288,7 +288,7 @@ dwg_free_xdata(Dwg_Object_XRECORD *obj, int size)
 static void
 dwg_free_eed(Dwg_Object* obj)
 {
-  unsigned int i;
+  BITCODE_BL i;
   if (obj->supertype == DWG_SUPERTYPE_OBJECT) {
     Dwg_Object_Object* _obj = obj->tio.object;
     for (i=0; i < _obj->num_eed; i++) {
@@ -645,7 +645,7 @@ static int dwg_free_header_vars(Dwg_Data * dwg)
 void
 dwg_free(Dwg_Data * dwg)
 {
-  unsigned int i;
+  BITCODE_BL i;
   if (dwg)
     {
       if (dwg->opts)

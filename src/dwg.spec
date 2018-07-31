@@ -1542,13 +1542,13 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
                           Dwg_Entity_3DSOLID *restrict _obj)
 {
   Dwg_Data* dwg = obj->parent;
-  unsigned long j;
-  int vcount, rcount1, rcount2;
-  int error = 0;
-  int i = 0;
+  BITCODE_BL j;
+  BITCODE_BL vcount, rcount1, rcount2;
+  BITCODE_BL i = 0;
   int index;
   int total_size = 0;
   int num_blocks = 0;
+  int error = 0;
 
   FIELD_B (acis_empty, 0);
   if (!FIELD_VALUE(acis_empty))
@@ -1579,7 +1579,7 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
           index = 0;
           for (i=0; i<num_blocks; i++)
             {
-              for (j=0; j<FIELD_VALUE (block_size[i]); j++)
+              for (j=0; j < FIELD_VALUE (block_size[i]); j++)
                 {
                   if (FIELD_VALUE(encr_sat_data[i][j] <= 32))
                     {
@@ -1715,8 +1715,8 @@ static int encode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj,
 #ifdef IS_FREE
 static void free_3dsolid(Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
 {
-  unsigned int i;
-  int vcount;
+  BITCODE_BL i;
+  BITCODE_BL vcount;
   if (FIELD_VALUE(version) == 1)
     {
       for (i=0; i < FIELD_VALUE (num_blocks); i++)
