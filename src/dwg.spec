@@ -5128,10 +5128,10 @@ DWG_ENTITY(MULTILEADER)
             {
               FIELD_BS (lline.type, 170);
               FIELD_CMC (lline.color, 92);
-              FIELD_HANDLE (lline.ltype, 5, 340);
+              //FIELD_HANDLE (lline.ltype, 5, 340);
               FIELD_BL (lline.linewt, 171);
               FIELD_BD (lline.arrow_size, 40);
-              FIELD_HANDLE (lline.arrow_handle, 5, 341);
+              //FIELD_HANDLE (lline.arrow_handle, 5, 341);
               FIELD_BL (lline.flags, 93);
             }
             #undef lline
@@ -5273,7 +5273,19 @@ DWG_ENTITY(MULTILEADER)
   }
 
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (mleaderstyle, 5, 340); // ODA bug
+  // wrong documentation in the ODA. the handles are at the end.
+  _REPEAT_N(_obj->ctx.num_leaders, ctx.leaders, Dwg_Leader, 1)
+    {
+      #define lnode ctx.leaders[rcount1]
+      _REPEAT_N(_obj->lnode.num_lines, lnode.lines, Dwg_Leader_Line, 2)
+        {
+          #define lline lnode.lines[rcount2]
+          FIELD_HANDLE (lline.ltype, 5, 340);
+          FIELD_HANDLE (lline.arrow_handle, 5, 341);
+        }
+    }
+  FIELD_HANDLE (ctx.content.txt.style, 5, 340);
+  FIELD_HANDLE (mleaderstyle, 5, 340);
   FIELD_HANDLE (ltype, 5, 341);
   FIELD_HANDLE (arrow_handle, 5, 342);
   FIELD_HANDLE (text_style, 5, 343);

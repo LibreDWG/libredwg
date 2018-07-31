@@ -199,21 +199,24 @@
 
 #define REPEAT_CN(times, name, type) \
   if (_obj->name) \
-    for (rcount1=0; rcount1<(long)times; rcount1++)
+    for (rcount1=0; rcount1<(BITCODE_BL)times; rcount1++)
 #define REPEAT_N(times, name, type) \
   if (dat->version >= R_2000 && times > 0x1000) { \
     fprintf(stderr, "Invalid rcount1 %ld", (long)times); return DWG_ERR_VALUEOUTOFBOUNDS; } \
   if (_obj->name) \
-    for (rcount1=0; rcount1<(long)times; rcount1++)
+    for (rcount1=0; rcount1<(BITCODE_BL)times; rcount1++)
 
 #define _REPEAT(times, name, type, idx) \
   if (dat->version >= R_2000 && _obj->times > 0x1000) { \
     fprintf(stderr, "Invalid rcount " #idx " %ld", (long)_obj->times); return DWG_ERR_VALUEOUTOFBOUNDS; } \
   if (_obj->name) \
-    for (rcount##idx=0; rcount##idx<(long)_obj->times; rcount##idx++)
+    for (rcount##idx=0; rcount##idx<(BITCODE_BL)_obj->times; rcount##idx++)
 #define _REPEAT_C(times, name, type, idx) \
   if (_obj->name) \
-    for (rcount##idx=0; rcount##idx<(long)_obj->times; rcount##idx++)
+    for (rcount##idx=0; rcount##idx<(BITCODE_BL)_obj->times; rcount##idx++)
+#define _REPEAT_N(times, name, type, idx) \
+  if (_obj->name) \
+    for (rcount##idx=0; rcount##idx<(BITCODE_BL)times; rcount##idx++)
 #define REPEAT(times, name, type)  _REPEAT(times, name, type, 1)
 #define REPEAT2(times, name, type) _REPEAT(times, name, type, 2)
 #define REPEAT3(times, name, type) _REPEAT(times, name, type, 3)
@@ -224,6 +227,5 @@
 #define REPEAT4_C(times, name, type) _REPEAT_C(times, name, type, 4)
 
 #endif
-
 
 #endif /* SPEC_H */

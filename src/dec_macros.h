@@ -544,20 +544,23 @@
 // unchecked with a constant
 #define REPEAT_CN(times, name, type) \
   if (times) _obj->name = (type *) calloc(times, sizeof(type)); \
-  for (rcount1=0; rcount1<(long)times; rcount1++)
+  for (rcount1=0; rcount1<(BITCODE_BL)times; rcount1++)
 #define REPEAT_N(times, name, type) \
   REPEAT_CHKCOUNT(name,times,type) \
   if (times) _obj->name = (type *) calloc(times, sizeof(type)); \
-  for (rcount1=0; rcount1<(long)times; rcount1++)
+  for (rcount1=0; rcount1<(BITCODE_BL)times; rcount1++)
 
 #define _REPEAT(times, name, type, idx) \
   REPEAT_CHKCOUNT_LVAL(name,_obj->times,type) \
   if (_obj->times) _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
-  for (rcount##idx=0; rcount##idx<(long)_obj->times; rcount##idx++)
+  for (rcount##idx=0; rcount##idx<(BITCODE_BL)_obj->times; rcount##idx++)
 #define _REPEAT_C(times, name, type, idx) \
   REPEAT_CHKCOUNT_LVAL(name,_obj->times,type) \
   if (_obj->times) _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
-  for (rcount##idx=0; rcount##idx<(long)_obj->times; rcount##idx++)
+  for (rcount##idx=0; rcount##idx<(BITCODE_BL)_obj->times; rcount##idx++)
+#define _REPEAT_N(times, name, type, idx) \
+  if (_obj->name) \
+    for (rcount##idx=0; rcount##idx<(BITCODE_BL)times; rcount##idx++)
 
 #define REPEAT(times, name, type)   _REPEAT(times, name, type, 1)
 #define REPEAT2(times, name, type)  _REPEAT(times, name, type, 2)
