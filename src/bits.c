@@ -600,13 +600,19 @@ bit_read_BLL(Bit_Chain * dat)
 {
   unsigned int i, len;
   BITCODE_BLL result = 0ULL;
-  len = bit_read_BB(dat) << 2 | bit_read_B(dat);
-  for (i=0; i<len; i++)
-    {
-      result <<= 8;
-      result |= bit_read_RC(dat);
-    }
-  return result;
+  len = bit_read_BB(dat) << 1 | bit_read_B(dat);
+  switch (len) {
+  case 1: return bit_read_RC(dat);
+  case 2: return bit_read_RS(dat);
+  case 4: return bit_read_RL(dat);
+  default:
+    for (i=0; i<len; i++)
+      {
+        result <<= 8;
+        result |= bit_read_RC(dat);
+      }
+    return result;
+  }
 }
 
 /** Read 1 bitlonglong (compacted uint64_t) as documented (but unused).

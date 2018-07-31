@@ -16,6 +16,7 @@ Other newsworthy changes:
 
 Important bugfixes:
   * Fixed previously empty strings for r2007+ for some objects and entities (#34).
+  * Fixed r2010+ picture size calculation (DXF 160, 310), leading to wrong entity offsets.
   * Added more checks for unstable objects: empty handles, controls, overflows, isnan.
   * Fixed some common_entity_data, mostly with non-indexed colors and gradient filled HATCH
     (#27, #28, #31)

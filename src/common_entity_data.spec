@@ -12,12 +12,13 @@
         VERSIONS(R_13, R_2007)
           {
             ent->picture_size = (BITCODE_BLL)bit_read_RL(dat);
+            LOG_TRACE("picture_size: " FORMAT_BLL " [RL 160]\n", ent->picture_size);
           }
         SINCE(R_2010)
           {
             ent->picture_size = bit_read_BLL(dat);
+            LOG_TRACE("picture_size: " FORMAT_BLL " [BLL 160]\n", ent->picture_size);
           }
-        LOG_TRACE("picture_size: " FORMAT_BLL " \n", ent->picture_size);
         if (ent->picture_size < 210210)
           {
             if (ent->picture_size)
@@ -25,9 +26,9 @@
           }
         else
           {
-            LOG_ERROR("Invalid picture-size: %lu kB. Object: %lX (handle)",
-                      (unsigned long)(ent->picture_size / 1000), obj->handle.value);
-            bit_set_position(dat, pos);
+            LOG_ERROR("Invalid picture-size: %lu kB",
+                      (unsigned long)(ent->picture_size / 1000));
+            //bit_set_position(dat, pos+1);
             error |= DWG_ERR_VALUEOUTOFBOUNDS;
           }
       }
@@ -61,6 +62,10 @@
     {
       FIELD_B (has_ds_binary_data, 0)
     }
+
+  // TODO:
+  // group 92 num_proxydata
+  // group 310 proxydata
 
   SINCE(R_2004) // ENC (entity color encoding)
     {
@@ -102,7 +107,7 @@
       if ((flags & 0x41) == 0x41)
         {
           ent->color.name = bit_read_TV(dat);
-          LOG_TRACE("color.name: %s\n", ent->color.name);
+          LOG_TRACE("color.name: %s [TV 430]\n", ent->color.name);
         }
       if ((flags & 0x42) == 0x41)
         {
@@ -117,7 +122,7 @@
   OTHER_VERSIONS
     bit_read_CMC(dat, &ent->color);
 
-  FIELD_BD (linetype_scale, 0);    
+  FIELD_BD (linetype_scale, 48);
   SINCE(R_2000)
     {
       // 00 BYLAYER, 01 BYBLOCK, 10 CONTINUOUS, 11 ltype handle
@@ -127,8 +132,8 @@
     }
   SINCE(R_2007)
     {
-      FIELD_BB (material_flags, 0);
-      FIELD_RC (shadow_flags, 0);
+      FIELD_BB (material_flags, 0); //if not BYLAYER 00: 347 material handle
+      FIELD_RC (shadow_flags, 284);
     }
   SINCE(R_2010)
     {
@@ -137,9 +142,10 @@
       FIELD_B (has_edge_visualstyle, 0);
     }
 
-  FIELD_BS (invisible, 0); //bit 0: 0 visible, 1 invisible
+  FIELD_BS (invisible, 60); //bit 0: 0 visible, 1 invisible
 
   SINCE(R_2000)
     {
-      FIELD_RCu (lineweight, 0);
+      FIELD_RCu (lineweight, 370);
     }
+
