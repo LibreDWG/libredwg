@@ -218,7 +218,7 @@ bit_write_RL_tests (void)
 void
 bit_read_RL_tests (void)
 {
-  Bit_Chain bitchain = strtobt ("01111111111111111111111111111111");
+  Bit_Chain bitchain = strtobt ("01111111" "11111111" "11111111" "11111111");
   BITCODE_RL result = bit_read_RL (&bitchain);
 
   if (result == (BITCODE_RL)0x8FFFFFFF)

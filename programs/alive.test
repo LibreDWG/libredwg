@@ -56,6 +56,8 @@ run ()
     if [ -n "$VALGRIND" -a -n "$LOG_COMPILER" ]; then
         TESTPROG="$LOG_COMPILER $LOG_FLAGS"
         log=$TEST_SUITE_LOG
+    else
+        TESTPROG="../libtool --mode=execute"
     fi
     echo $TESTPROG ./$prog $arg \>$log
     # writers can hang
