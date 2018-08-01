@@ -349,11 +349,11 @@ if test x$cross_compiling = xno; then
      AC_MSG_CHECKING([for Valgrind suppressions])
      AM_RUN_LOG([$VALGRIND --version])
      case $host_os in
-       linux*)  VALGRIND_SUPPRESSIONS_FILE="\$(abs_top_srcdir)/valgrind-linux.supp" ;;
-       darwin*) VALGRIND_SUPPRESSIONS_FILE="\$(abs_top_srcdir)/valgrind-darwin.supp" ;;
+       linux*)  VALGRIND_SUPPRESSIONS_FILE=valgrind-linux.supp ;;
+       darwin*) VALGRIND_SUPPRESSIONS_FILE=valgrind-darwin.supp ;;
      esac
      if test -n $VALGRIND_SUPPRESSIONS_FILE; then
-       VALGRIND_SUPPRESSIONS="--suppressions=\$(VALGRIND_SUPPRESSIONS_FILE)"
+       VALGRIND_SUPPRESSIONS="--suppressions=\$(abs_top_srcdir)/\$(VALGRIND_SUPPRESSIONS_FILE)"
        AC_MSG_RESULT([$VALGRIND_SUPPRESSIONS_FILE])
      else
        AC_MSG_RESULT([none])
