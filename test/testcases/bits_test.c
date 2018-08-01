@@ -206,25 +206,26 @@ bit_write_RS_tests (void)
 void
 bit_write_RL_tests (void)
 {
-  Bit_Chain bitchain = strtobt ("11111111111111111111111111111111");
+  Bit_Chain bitchain = strtobt ("11111111" "11111111" "11111111" "11111111");
   bit_write_RL (&bitchain, 2147549183);
   if (bitchain.chain[0] == 255 && bitchain.chain[1] == 255 &&
       bitchain.chain[2] == 0 && bitchain.chain[3] == 128)
     pass ("bit_write_RL");
   else
-    fail ("bit_write_RL");
+    fail ("bit_write_RL %d %d %d %d",
+          bitchain.chain[0], bitchain.chain[1], bitchain.chain[2], bitchain.chain[3]);
 }
 
 void
 bit_read_RL_tests (void)
-{
-  Bit_Chain bitchain = strtobt ("01111111" "11111111" "11111111" "11111111");
+{                             /* 7f         f7         bf        7d */
+  Bit_Chain bitchain = strtobt ("01111111" "11110111" "10111111" "01111101");
   BITCODE_RL result = bit_read_RL (&bitchain);
 
-  if (result == (BITCODE_RL)0x7FFFFFFF)
+  if (result == (BITCODE_RL)0x7dbff77f)
       pass ("bit_read_RL");
   else
-      fail ("bit_read_RL");
+    fail ("bit_read_RL 0x%x", (unsigned)result);
 }
 
 void
