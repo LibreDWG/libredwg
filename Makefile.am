@@ -31,10 +31,14 @@ include_HEADERS = \
 pcdatadir = $(libdir)/pkgconfig
 pcdata_DATA = libredwg.pc
 BUILT_SOURCES = $(top_srcdir)/.version
+
+VALGRIND_SUPPRESSIONS = @VALGRIND_SUPPRESSIONS@
+VALGRIND_SUPPRESSIONS_FILE = @VALGRIND_SUPPRESSIONS_FILE@
 EXTRA_DIST = $(top_srcdir)/.version \
              README README-alpha \
 	     dxf_example.lsp dxf_example.sh test-dxf.sh logs.sh unknown.sh \
-	     build-aux/swig_python.patch
+	     build-aux/swig_python.patch \
+	     $(VALGRIND_SUPPRESSIONS_FILE)
 
 .PHONY: check-dwg check-dxf check-dwg-valgrind \
         regen-man man manual refman refman-pdf scan-build gcov unknown
@@ -66,7 +70,7 @@ refman:
 	$(MAKE) -C doc $@
 regen-swig-patch:
 	$(MAKE) -C bindings/python
-	difforig bindings/python/swig_python.c >xxxx
+	-difforig bindings/python/swig_python.c >xxxx
 	if test -s xxxx; then mv xxxx build-aux/swig_python.patch; fi
 
 check-dwg: all
@@ -78,8 +82,8 @@ check-dwg: all
 check-dwg-valgrind: all
 	-mv check-dwg-valgrind.log check-dwg-valgrind.log~ 2>/dev/null
 	for d in `find test/test-data -iname \*.dwg -size -10M`; do \
-	  echo valgrind --leak-check=full programs/dwgread $$d | tee -a check-dwg-valgrind.log; \
-	  valgrind --leak-check=full programs/dwgread $$d >> check-dwg-valgrind.log 2>&1; \
+	  echo $(VALGRIND) --leak-check=full --show-reachable=no --num-callers=30 $(VALGRIND_SUPPRESSIONS) programs/dwgread $$d | tee -a check-dwg-valgrind.log; \
+	  $(VALGRIND) --leak-check=full --show-reachable=no --num-callers=30 $(VALGRIND_SUPPRESSIONS) programs/dwgread $$d >> check-dwg-valgrind.log 2>&1; \
 	done
 check-dxf: all
 	-mv check-dxf.log check-dxf.log~ 2>/dev/null

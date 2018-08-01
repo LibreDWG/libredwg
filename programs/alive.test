@@ -53,7 +53,11 @@ run ()
     dwgrewrite) arg="-v2 $arg" ;;
     *)          arg="-v4 $arg" ;;
     esac
-    echo $TESTPROG ./$prog $arg
+    if [ -n "$VALGRIND" -a -n "$LOG_COMPILER" ]; then
+        TESTPROG="$LOG_COMPILER $LOG_FLAGS"
+        log=$TEST_SUITE_LOG
+    fi
+    echo $TESTPROG ./$prog $arg \>$log
     # writers can hang
     if test $bprog = dwgrewrite -o $bprog = dwgwrite -o $bprog = dxf2dwg
     then
@@ -64,12 +68,12 @@ run ()
             (sleep 5s; killall $bprog 2>/dev/null) &
         fi
     fi
-    if $TESTPROG ./$prog $arg > $log 2>&1
+    if $TESTPROG ./$prog $arg >$log 2>&1
     then
         rm $log
     else
         case $bprog in
-        dwggrep) rm $log ;;
+        dwggrep) ;;
         dwgrewrite|dwgwrite|dxf2dwg) test -f core && rm core
                 tmpnum=$(expr 1 + $problems)
                 echo $(basename $0): TODO $prog $tmpnum failures

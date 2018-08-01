@@ -1,0 +1,71 @@
+{
+   <darwin sh>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   obj:/bin/sh
+   ...
+   obj:/bin/sh
+}
+{
+   <darwin realizeClass>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:calloc
+   fun:_ZL12realizeClassP10objc_class
+   fun:_os_object_alloc_realized
+   fun:_xpc_pipe_create
+   fun:xpc_atfork_child
+   fun:libSystem_atfork_child
+   fun:fork
+   obj:/bin/sh
+   ...
+   obj:/bin/sh
+}
+{
+   <swift objc_initializeClassPair_internal>
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:malloc_zone_malloc
+   fun:_objc_copyClassNamesForImage
+   fun:_ZL9protocolsv
+   fun:_Z9readClassP10objc_classbb
+   fun:gc_init
+   fun:_ZL33objc_initializeClassPair_internalP10objc_classPKcS0_S0_
+   fun:layout_string_create
+   fun:_ZL12realizeClassP10objc_class
+   fun:_ZL22copySwiftV1MangledNamePKcb
+   fun:_ZL22copySwiftV1MangledNamePKcb
+   fun:_ZL22copySwiftV1MangledNamePKcb
+   fun:_ZL22copySwiftV1MangledNamePKcb
+}
+{
+<darwin notify_init_globals>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:_nc_table_new
+   fun:_notify_init_globals
+   fun:_os_once
+   fun:_os_alloc_once
+   fun:_notify_fork_child
+   fun:libSystem_atfork_child
+   fun:fork
+   obj:/bin/sh
+   ...
+   obj:/bin/sh
+}
+{
+   <darwin notify_init_globals>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:_nc_table_new
+   fun:_notify_init_globals
+   fun:_notify_fork_child
+   fun:libSystem_atfork_child
+   fun:fork
+   obj:/bin/sh
+   ...
+   obj:/bin/sh
+}

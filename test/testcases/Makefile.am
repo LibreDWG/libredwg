@@ -82,8 +82,8 @@ bits_test.cbmc: bits_test.c ../../src/bits.c
 	     --unwind 6  --cover decision > bits_test.cbmc
 
 @VALGRIND_CHECK_RULES@
-#VALGRIND_SUPPRESSIONS_FILES = $(PACKAGE).supp
-#EXTRA_DIST = $(PACKAGE).supp
+VALGRIND_SUPPRESSIONS_FILE = @VALGRIND_SUPPRESSIONS_FILE@
+VALGRIND_SUPPRESSIONS = @VALGRIND_SUPPRESSIONS@
 
 # emacs flymake-mode
 check-syntax:

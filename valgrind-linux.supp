@@ -1,0 +1,56 @@
+{
+   <bash set_default_locale>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:xmalloc
+   fun:set_default_locale
+   fun:main
+}
+{
+   <bash expand_word_unsplit>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:xmalloc
+   fun:execute_command_internal
+   fun:parse_and_execute
+   fun:command_substitute
+   obj:/bin/bash
+   obj:/bin/bash
+   fun:expand_word_unsplit
+   fun:execute_command_internal
+   fun:execute_command
+   fun:execute_command_internal
+   fun:execute_command
+}
+{
+   <bash reader_loop>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:xmalloc
+   fun:execute_command_internal
+   fun:execute_command
+   fun:execute_command_internal
+   fun:execute_command
+   fun:reader_loop
+   fun:main
+}
+{
+   <bash expand_string_assignment>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:xmalloc
+   obj:/bin/bash
+   fun:execute_command_internal
+   obj:/bin/bash
+   fun:execute_command_internal
+   fun:parse_and_execute
+   fun:command_substitute
+   obj:/bin/bash
+   obj:/bin/bash
+   fun:expand_string_assignment
+   obj:/bin/bash
+}
