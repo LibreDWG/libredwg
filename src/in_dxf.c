@@ -94,6 +94,7 @@ static int dxf_read_group(Bit_Chain *dat, int dxf)
   char *endptr;
   long num = strtol((char*)&dat->chain[dat->byte], &endptr, 10);
   if ((int)num == dxf) {
+    LOG_HANDLE("group %d\n", dxf);
     dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
     dxf_skip_ws(dat);
     return 1;
@@ -120,6 +121,9 @@ static void dxf_read_string(Bit_Chain *dat, char **string)
     strcpy(*string, buf);
   }
 }
+
+#define STRADD(field, string) \
+  field = malloc(strlen(string)+1); strcpy(field, string)
 
 static void dxf_free_pair(Dxf_Pair* pair)
 {
@@ -262,6 +266,7 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
     char *headername; \
     if (GROUP(9)) { \
       dxf_read_string(dat, &headername); \
+      LOG_TRACE("9 %s:\n", #name); \
       VALUE (value, type, dxf); \
     } \
     else { \
@@ -910,6 +915,12 @@ dwg_indxf_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   if (dat->byte >= dat->size || \
       (pair->code == 0 && !strcmp(pair->value.s, "ENDSEC"))) \
     break
+#define DXF_RETURN_ENDSEC(what) \
+  if (dat->byte >= dat->size || \
+      (pair->code == 0 && !strcmp(pair->value.s, "ENDSEC"))) { \
+    dxf_free_pair(pair); \
+    return what; \
+  }
 
 static int dxf_expect_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 {
@@ -944,11 +955,13 @@ dxf_header_read(Bit_Chain *dat, Dwg_Data* dwg)
     pair = dxf_read_pair(dat);
     DXF_BREAK_ENDSEC;
 
-    //TODO process field
-    
+    //TODO find name in header struct and set value
+
     dxf_free_pair(pair);
   }
+  dxf_free_pair(pair);
 
+  // TODO: convert DWGCODEPAGE string to header.codepage number
   if (!strcmp(_obj->DWGCODEPAGE, "ANSI_1252"))
       dwg->header.codepage = 30;
 
@@ -958,24 +971,44 @@ dxf_header_read(Bit_Chain *dat, Dwg_Data* dwg)
 static int
 dxf_classes_read (Bit_Chain *dat, Dwg_Data * dwg)
 {
-  unsigned int i;
+  BITCODE_BL i;
+  Dxf_Pair *pair = dxf_read_pair(dat);
+  Dwg_Class *klass;
 
-  SECTION(CLASSES);
-  for (i=0; i < dwg->num_classes; i++)
-    {
-      RECORD(CLASS);
-      VALUE_TV (dwg->dwg_class[i].dxfname, 1);
-      VALUE_T (dwg->dwg_class[i].cppname, 2);
-      VALUE_T (dwg->dwg_class[i].appname, 3);
-      VALUE_RS (dwg->dwg_class[i].proxyflag, 90);
-      SINCE (R_2004) {
-        VALUE_RC (dwg->dwg_class[i].num_instances, 91);
+  while (1) { // read next class
+    // add class (see decode)
+    i = dwg->num_classes;
+    if (i == 0)
+      dwg->dwg_class = malloc(sizeof(Dwg_Class));
+    else
+      dwg->dwg_class = realloc(dwg->dwg_class, (i + 1) * sizeof(Dwg_Class));
+    if (!dwg->dwg_class) { LOG_ERROR("Out of memory"); return DWG_ERR_OUTOFMEM; }
+
+    klass = &dwg->dwg_class[i];
+    memset(klass, 0, sizeof(Dwg_Class));
+
+    while (pair->code != 0) { // read until next 0 CLASS
+      pair = dxf_read_pair(dat);
+      switch (pair->code) {
+      case 1: STRADD(klass->dxfname, pair->value.s); break;
+      case 2: STRADD(klass->cppname, pair->value.s); break;
+      case 3: STRADD(klass->appname, pair->value.s); break;
+      case 90: klass->proxyflag = pair->value.l; break;
+      case 91: klass->num_instances = pair->value.l; break;
+      case 280: klass->wasazombie = (BITCODE_B)pair->value.i; break;
+      case 281: klass->item_class_id = pair->value.i ? 0x1f3 : 0x1f2; break;
+      default: LOG_WARN("Unknown DXF code for class[%d].%d", i, pair->code);
+               break;
       }
-      VALUE_RC (dwg->dwg_class[i].wasazombie, 280);
-      // Is-an-entity. 1f2 for entities, 1f3 for objects
-      VALUE_RC (dwg->dwg_class[i].item_class_id == 0x1F2 ? 1 : 0, 281);
+      dxf_free_pair(pair);
     }
-  ENDSEC();
+    DXF_RETURN_ENDSEC(0); // next class or ENDSEC
+    if (strcmp(pair->value.s, "CLASS")) { // or something else
+      LOG_ERROR("Unexpexted DXF 0 %s at class[%d]", pair->value.s, i);
+      return DWG_ERR_CLASSESNOTFOUND;
+    }
+    dwg->num_classes++;
+  }
   return 0;
 }
 
