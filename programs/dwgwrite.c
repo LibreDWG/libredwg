@@ -24,7 +24,7 @@
 #endif
 #include <getopt.h>
 
-#include <dwg.h>
+#include "dwg.h"
 #include "bits.h"
 #include "suffix.inc"
 #include "in_json.h"
