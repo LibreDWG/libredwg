@@ -154,6 +154,13 @@ then
     [Define if __attribute__((visibility("default"))) is supported.])
 fi
 
+if test x$ac_cv_header_dejagnu_h = xyes; then
+  dnl check if dejagnu needs -fgnu89-inline
+  dnl https://gcc.gnu.org/bugzilla//show_bug.cgi?id=63613
+  AX_CHECK_COMPILE_FLAG([-fgnu89-inline],[DEJAGNU_CFLAGS=-fgnu89-inline],[DEJAGNU_CFLAGS=])
+  AC_SUBST([DEJAGNU_CFLAGS])
+fi
+
 dnl until we can make a release, favor no -O2 optims.
 dnl it's fast enough and better for debugging.
 dnl if test x$ac_compiler_gnu = xyes; then

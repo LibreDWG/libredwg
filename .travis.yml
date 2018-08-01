@@ -12,6 +12,7 @@ addons:
       - python-libxml2
       - swig
       - help2man
+      - dejagnu
 matrix:
   fast_finish: true
   include:

@@ -1,7 +1,7 @@
 AUTOMAKE_OPTIONS = dejagnu
 
 WARN_CFLAGS = @WARN_CFLAGS@
-AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
+AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS) @DEJAGNU_CFLAGS@
 LDADD   = $(top_builddir)/src/libredwg.la -lm
 
 bits_test_LDADD = $(LDADD) $(top_builddir)/src/bits.lo
