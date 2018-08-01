@@ -826,7 +826,10 @@ static int
 dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
 {
   int error = 0;
-  const int minimal = obj->parent->opts & 0x10;
+  int minimal;
+  if (!obj || !obj->parent)
+    return DWG_ERR_INTERNALERROR;
+  minimal = obj->parent->opts & 0x10;
 
   if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
     return 0;

@@ -531,15 +531,15 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 
 #define DWG_ENTITY(token) \
 static int \
-dwg_indxf_##token (Bit_Chain *dat, Dwg_Object * obj) \
+dwg_indxf_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 {\
-  int error = 0;\
-  long vcount, rcount1, rcount2, rcount3, rcount4; \
+  BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj;\
   Bit_Chain *hdl_dat = dat;\
   Dwg_Data* dwg = obj->parent;\
   Dwg_Object_Entity *_ent;\
   Dxf_Pair *pair; \
+  int error = 0;\
   LOG_INFO("Entity " #token ":\n")\
   _ent = obj->tio.entity;\
   _obj = ent = _ent->tio.token;\
@@ -553,14 +553,14 @@ dwg_indxf_##token (Bit_Chain *dat, Dwg_Object * obj) \
 
 #define DWG_OBJECT(token) \
 static int \
-dwg_indxf_ ##token (Bit_Chain *dat, Dwg_Object * obj) \
+dwg_indxf_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
-  int error = 0; \
-  long vcount, rcount1, rcount2, rcount3, rcount4;\
+  BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;\
   Bit_Chain *hdl_dat = dat;\
   Dwg_Data* dwg = obj->parent;\
   Dwg_Object_##token *_obj;\
   Dxf_Pair *pair; \
+  int error = 0; \
   obj->fixedtype = DWG_TYPE_##token;\
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
@@ -693,9 +693,11 @@ dwg_indxf_variable_type(Dwg_Data * dwg, Bit_Chain *dat, Dwg_Object* obj)
 }
 
 static int
-dwg_indxf_object(Bit_Chain *dat, Dwg_Object *obj)
+dwg_indxf_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   int error = 0;
+  if (!obj || !obj->parent)
+    return DWG_ERR_INTERNALERROR;
 
   switch (obj->type)
     {
@@ -859,7 +861,7 @@ dwg_indxf_object(Bit_Chain *dat, Dwg_Object *obj)
     case DWG_TYPE_PROXY_OBJECT:
       return dwg_indxf_PROXY_OBJECT(dat, obj);
     default:
-      if (obj->parent && (obj->type == obj->parent->layout_number))
+      if (obj->type == obj->parent->layout_number)
         {
           return dwg_indxf_LAYOUT(dat, obj);
         }
@@ -1013,7 +1015,7 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     pair = dxf_read_pair(dat);
     dxf_expect_code(dat, pair, 0);
     DXF_CHECK_EOF;
-    dwg_indxf_object(dat, obj);
+    dwg_indxf_object(dat, obj); //TODO obj must be already created here
   }
   ENDSEC();
   return 0;
@@ -1031,7 +1033,7 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     pair = dxf_read_pair(dat);
     dxf_expect_code(dat, pair, 0);
     DXF_CHECK_EOF;
-    dwg_indxf_object(dat, obj);
+    dwg_indxf_object(dat, obj); //TODO obj must be already created here
   }
   ENDSEC();
   return 0;
