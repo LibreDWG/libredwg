@@ -6334,16 +6334,13 @@ DWG_ENTITY(UNDERLAY)
   SUBCLASS(AcDbUnderlayReference)
   FIELD_3BD (extrusion, 210);
   FIELD_3DPOINT (insertion_pt, 10);
-  FIELD_3BD_1 (scale, 41);
   FIELD_BD (angle, 50);
-  //FIELD_BD (size.width, 13);
-  //FIELD_BD (size.height, 23);
-  FIELD_RC (flag, 0); //0x0f
-  FIELD_RS (contrast, 281); // 20-100
-  FIELD_BS (fade, 282); // 0-80
-  FIELD_RS (unknown, 0); // 0101000100010000
+  FIELD_3BD_1 (scale, 41);
+  FIELD_RC (type, 0); //0x0f for PDF (PDF/DGN/DWF type?)
+  FIELD_RS (contrast, 281); // 20-100. def: 100
+  FIELD_BS (fade, 282);  // 0-80
+  FIELD_RS (unknown, 0); // 4177 0101000100010000
   FIELD_HANDLE (definition_id, 5, 340);
-  //hole [471-602]
   FIELD_BS (flag, 280);
 
   if (FIELD_VALUE(flag) & 1) { //is_clipped

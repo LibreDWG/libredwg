@@ -161,7 +161,7 @@
   // coverage exists, but broken and being worked on. needs -DDEBUG_CLASSES. See also
   // examples/unknown with all the unknown blobs of these.
   //PROXY_ENTITY has a fixed type
-  DEBUGGING_CLASS     (ACTION, GEOPOSITIONMARKER) /*ent, yet unsorted */
+  DEBUGGING_CLASS     (ACTION, GEOPOSITIONMARKER) /*ent, yet unsorted. no coverage */
   DEBUGGING_CLASS     (ACTION, HELIX)             /*ent, 30% */
   DEBUGGING_CLASS     (ACTION, LIGHT)             /*ent, almost */
   DEBUGGING_CLASS     (ACTION, PLANESURFACE)      /*ent */

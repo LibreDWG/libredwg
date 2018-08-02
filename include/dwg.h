@@ -4371,22 +4371,20 @@ typedef struct _dwg_entity_UNDERLAY
 {
   struct _dwg_object_entity *parent;
 
-  BITCODE_BS flag; //280: 1 is_clipped, 2 is_on, 4 is_monochrome,
-                       // 8 is_adjusted_for_background, 16 clip_inverted
-  BITCODE_3BD extrusion; // 210 normal
-  BITCODE_3BD insertion_pt; // 10
-  BITCODE_3BD scale;   // 41
-  BITCODE_BD angle;    // 50
-  BITCODE_RS contrast;  // 281
-  BITCODE_BS fade;      // 282
-  BITCODE_RS unknown;   //
+  BITCODE_BS flag; /*!< DXF 280: 1 is_clipped, 2 is_on, 4 is_monochrome,
+                        8 is_adjusted_for_background, 16 clip_inverted */
+  BITCODE_3BD extrusion; /*!< DXF 210 normal */
+  BITCODE_3BD insertion_pt; /*!< DXF 10 */
+  BITCODE_3BD scale;   /*!< DXF 41 */
+  BITCODE_BD angle;    /*!< DXF 50 */
+  BITCODE_RC type;     /* 0x0f for PDF */
+  BITCODE_RS contrast; /*!< DXF 281 20-100, def: 100 */
+  BITCODE_BS fade;     /*!< DXF 282 0-80, def: 0*/
+  BITCODE_RS unknown;
   BITCODE_BL num_clip_boundary;
-  Dwg_UNDERLAY_Boundary* clip_boundary; // 11: if 2 rectangle, > polygon
-  //BITCODE_BD width;
-  //BITCODE_BD height;
+  Dwg_UNDERLAY_Boundary* clip_boundary; /*!< DXF 11: if 2 rectangle, > polygon */
 
   BITCODE_H definition_id;
-  BITCODE_H parenthandle;
 
 } Dwg_Entity_UNDERLAY;
 
