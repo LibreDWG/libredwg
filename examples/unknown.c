@@ -458,6 +458,12 @@ num_dxf(const struct _unknown_field *g, const struct _unknown_dxf *dxf) {
 }
 #endif
 
+static int is_common_entity_data(int dxf)
+{
+  return dxf == 8  || dxf == 440 || dxf == 420 || dxf == 430
+      || dxf == 48 || dxf == 284 || dxf == 370;
+}
+
 static int
 set_found (struct _dxf *dxf, const struct _unknown_field *g) {
   // check for overlap, if already found by some other field
@@ -974,7 +980,7 @@ main (int argc, char *argv[])
                     free (dat.chain);
                 }
 
-                if (!num_found)
+                if (!num_found || is_common_entity_data(g[j].code))
                   {
                     piname = (char*)dwg_bits_name[g[j].type];
                     if (!strcmp(piname, "HANDLE")) piname = (char*)"H";
