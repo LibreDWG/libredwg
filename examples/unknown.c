@@ -1204,11 +1204,10 @@ main (int argc, char *argv[])
       for (i=0; i<k; i++) {
         fprintf(pi, "go%d ?=> def(%d,Data).\n", i, i);
       }
-      fprintf(pi, "\nmain => go0,\n");
-      for (i=1; i<k-1; i++) {
-        fprintf(pi, "        go%d,\n", i);
+      fprintf(pi, "\nmain => go0%s\n", k==1 ? "." : ",");
+      for (i=1; i<k; i++) {
+        fprintf(pi, "        go%d%s\n", i, i==k-1 ? "." : ",");
       }
-      fprintf(pi, "        go%d.\n", k-1);
       fclose(pi);
     }
 
