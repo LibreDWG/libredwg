@@ -8,8 +8,8 @@ low_level_process (dwg_object * obj)
   BITCODE_BL i;
   dwg_ent_lwpline *lwpline = dwg_object_to_LWPOLYLINE (obj);
 
-  printf ("normal of lwpline : x = %f, y = %f, z = %f\n",
-	  lwpline->normal.x, lwpline->normal.y, lwpline->normal.z);
+  printf ("extrusion of lwpline : x = %f, y = %f, z = %f\n",
+	  lwpline->extrusion.x, lwpline->extrusion.y, lwpline->extrusion.z);
   printf ("const width of lwpline : %f\n", lwpline->const_width);
   printf ("elevation of lwpline : %f\n", lwpline->elevation);
   printf ("thickness of lwpline : %f\n", lwpline->thickness);
@@ -35,7 +35,7 @@ api_process (dwg_object * obj)
 {
   int error;
   BITCODE_BL num_points, num_bulges, num_widths;
-  dwg_point_3d normal;
+  dwg_point_3d extrusion;
   BITCODE_BS flags;
   BITCODE_BD const_width, elevation, thickness;
   BITCODE_BD *bulges;
@@ -44,15 +44,15 @@ api_process (dwg_object * obj)
 
   dwg_ent_lwpline *lwpline = dwg_object_to_LWPOLYLINE (obj);
 
-  dwg_ent_lwpline_get_normal (lwpline, &normal, &error);
-  if (error == 0 && lwpline->normal.x == normal.x &&
-      lwpline->normal.y == normal.y && lwpline->normal.z == normal.z)
+  dwg_ent_lwpline_get_extrusion (lwpline, &extrusion, &error);
+  if (error == 0 && lwpline->extrusion.x == extrusion.x &&
+      lwpline->extrusion.y == extrusion.y && lwpline->extrusion.z == extrusion.z)
     {
-      pass ("lwpline_get_normal");
+      pass ("lwpline_get_extrusion");
     }
   else
     {
-      fail ("lwpline_get_normal");
+      fail ("lwpline_get_extrusion");
     }
 
 

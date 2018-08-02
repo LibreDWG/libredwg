@@ -9476,15 +9476,15 @@ dwg_ent_lwpline_get_numwidths(const dwg_ent_lwpline *restrict lwpline,
 /** Returns lwpline normal
  */
 void
-dwg_ent_lwpline_get_normal(const dwg_ent_lwpline *restrict lwpline, dwg_point_3d *restrict point,
+dwg_ent_lwpline_get_extrusion(const dwg_ent_lwpline *restrict lwpline, dwg_point_3d *restrict point,
                            int *restrict error)
 {
   if (lwpline && point)
     {
       *error = 0;
-      point->x = lwpline->normal.x;
-      point->y = lwpline->normal.y;
-      point->z = lwpline->normal.z;
+      point->x = lwpline->extrusion.x;
+      point->y = lwpline->extrusion.y;
+      point->z = lwpline->extrusion.z;
     }
   else
     {
@@ -9496,16 +9496,16 @@ dwg_ent_lwpline_get_normal(const dwg_ent_lwpline *restrict lwpline, dwg_point_3d
 /** Sets lwpline normal
  */
 void
-dwg_ent_lwpline_set_normal(dwg_ent_lwpline *restrict lwpline,
-                           const dwg_point_3d *restrict point,
-                           int *restrict error)
+dwg_ent_lwpline_set_extrusion(dwg_ent_lwpline *restrict lwpline,
+                              const dwg_point_3d *restrict point,
+                              int *restrict error)
 {
   if (lwpline && point)
     {
       *error = 0;
-      lwpline->normal.x = point->x;
-      lwpline->normal.y = point->y;
-      lwpline->normal.z = point->z;
+      lwpline->extrusion.x = point->x;
+      lwpline->extrusion.y = point->y;
+      lwpline->extrusion.z = point->z;
   }
     else
     {

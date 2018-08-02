@@ -24,7 +24,7 @@
 ;   Material = "ByLayer"
 ;   MinorAxis (RO) = (2.70052 -2.94122 0.0)
 ;   MinorRadius = 3.99294
-;   Normal = (0.0 0.0 1.0)
+;   Extrusion = (0.0 0.0 1.0)
 ;   ObjectID (RO) = 42
 ;   ObjectID32 (RO) = 42
 ;   ObjectName (RO) = "AcDbEllipse"

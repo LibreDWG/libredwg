@@ -3769,7 +3769,7 @@ DWG_ENTITY(LWPOLYLINE)
   if (FIELD_VALUE(flag) & 2)
     FIELD_BD (thickness, 39);
   if (FIELD_VALUE(flag) & 1) //clashes with the dxf closed bit flag 512
-    FIELD_3BD (normal, 210);
+    FIELD_3BD (extrusion, 210);
 
 #ifndef IS_DXF
   FIELD_BL (num_points, 90);
@@ -3860,27 +3860,27 @@ DWG_ENTITY(OLE2FRAME)
 DWG_ENTITY_END
 
 //pg.276
-#if 0 /* no proxy subtypes yet */
+#if 0 /* no proxy subtypes yet. seems to be the same as LWPOLYLINE */
 DWG_ENTITY(PROXY_LWPOLYLINE)
 
   FIELD_RL (size);
-  FIELD_BS (flag);
+  FIELD_BS (flag, 70);
 
   if (FIELD_VALUE(flag) & 4)
-    FIELD_BD (const_width);
+    FIELD_BD (const_width, 43);
   if (FIELD_VALUE(flag) & 8)
-    FIELD_BD (elevation);
+    FIELD_BD (elevation, 38);
   if (FIELD_VALUE(flag) & 2)
-    FIELD_BD (thickness);
+    FIELD_BD (thickness, 39);
   if (FIELD_VALUE(flag) & 1)
-    FIELD_3BD (normal);
+    FIELD_3BD (extrusion, 210);
 
-  FIELD_BL (num_points);
+  FIELD_BL (num_points, 90);
 
   if (FIELD_VALUE(flag) & 16)
-    FIELD_BL (num_bulges);
+    FIELD_BL (num_bulges, 0);
   if (FIELD_VALUE(flag) & 32)
-    FIELD_BL (num_widths);
+    FIELD_BL (num_widths, 0);
 
   VERSIONS(R_13, R_14) {
     FIELD_2RD_VECTOR (points, num_points);
@@ -6627,3 +6627,4 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+

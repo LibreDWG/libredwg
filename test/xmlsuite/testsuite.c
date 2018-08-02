@@ -255,8 +255,8 @@ add_lwpolyline (xmlNodePtr rootnode, const Dwg_Object* obj)
   buf = doubletochar (lwpline->elevation);
   newXMLProp ("Elevation", buf);
 
-  buf = spointprepare (lwpline->normal.x, lwpline->normal.y, lwpline->normal.z);
-  newXMLProp ("Normal", buf);
+  buf = spointprepare (lwpline->extrusion.x, lwpline->extrusion.y, lwpline->extrusion.z);
+  newXMLProp ("Extrusion", buf);
 
   newXMLcProp ("ObjectName", "AcDbPolyline");
 

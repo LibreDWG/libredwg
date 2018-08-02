@@ -20,10 +20,10 @@ def(0,Data) =>
     ,new_struct('BL93', ["0100100000", '32', [], "edge_flags", 93])
     ,new_struct('BL95', ["0100000001", '1', [], "num_evalexpr", 95])
     ,new_struct('H360', ["001100100000001011100010", '3.2.2E2', [], "evalexpr", 360])
-    ,new_struct('BL92', ["0011111111111111111111111111111111", '-1', [], "node_edge1", 92])
-    ,new_struct('BL92', ["0011111111111111111111111111111111", '-1', [], "node_edge2", 92])
-    ,new_struct('BL92', ["0011111111111111111111111111111111", '-1', [], "node_edge3", 92])
-    ,new_struct('BL92', ["0011111111111111111111111111111111", '-1', [], "node_edge4", 92])
+    ,new_struct('BL92', ["0111111111", '-1', [], "node_edge1", 92])
+    ,new_struct('BL92', ["0111111111", '-1', [], "node_edge2", 92])
+    ,new_struct('BL92', ["0111111111", '-1', [], "node_edge3", 92])
+    ,new_struct('BL92', ["0111111111", '-1', [], "node_edge4", 92])
   ],
   Data = [S,Fields,Class,Dxf,Version],
   go(Data).
@@ -44,10 +44,10 @@ def(1,Data) =>
     ,new_struct('BL93', ["0100100000", '32', [], "edge_flags", 93])
     ,new_struct('BL95', ["0100000001", '1', [], "num_evalexpr", 95])
     ,new_struct('H360', ["001100100000001011100010", '3.2.2E2', [], "evalexpr", 360])
-    ,new_struct('BL92', ["0011111111111111111111111111111111", '-1', [], "node_edge1", 92])
-    ,new_struct('BL92', ["0011111111111111111111111111111111", '-1', [], "node_edge2", 92])
-    ,new_struct('BL92', ["0011111111111111111111111111111111", '-1', [], "node_edge3", 92])
-    ,new_struct('BL92', ["0011111111111111111111111111111111", '-1', [], "node_edge4", 92])
+    ,new_struct('BL92', ["0111111111", '-1', [], "node_edge1", 92])
+    ,new_struct('BL92', ["0111111111", '-1', [], "node_edge2", 92])
+    ,new_struct('BL92', ["0111111111", '-1', [], "node_edge3", 92])
+    ,new_struct('BL92', ["0111111111", '-1', [], "node_edge4", 92])
   ],
   Data = [S,Fields,Class,Dxf,Version],
   go(Data).
@@ -68,10 +68,10 @@ def(2,Data) =>
     ,new_struct('BL93', ["0100100000", '32', [], "edge_flags", 93])
     ,new_struct('BL95', ["0100000001", '1', [], "num_evalexpr", 95])
     ,new_struct('H360', ["001100100000001011100010", '3.2.2E2', [], "evalexpr", 360])
-    ,new_struct('BL92', ["0011111111111111111111111111111111", '-1', [], "node_edge1", 92])
-    ,new_struct('BL92', ["0011111111111111111111111111111111", '-1', [], "node_edge2", 92])
-    ,new_struct('BL92', ["0011111111111111111111111111111111", '-1', [], "node_edge3", 92])
-    ,new_struct('BL92', ["0011111111111111111111111111111111", '-1', [], "node_edge4", 92])
+    ,new_struct('BL92', ["0111111111", '-1', [], "node_edge1", 92])
+    ,new_struct('BL92', ["0111111111", '-1', [], "node_edge2", 92])
+    ,new_struct('BL92', ["0111111111", '-1', [], "node_edge3", 92])
+    ,new_struct('BL92', ["0111111111", '-1', [], "node_edge4", 92])
   ],
   Data = [S,Fields,Class,Dxf,Version],
   go(Data).

@@ -19,7 +19,7 @@
 ;   LinetypeScale = 1.0
 ;   Lineweight = -1
 ;   Material = "ByLayer"
-;   Normal = (0.0 0.0 1.0)
+;   Extrusion = (0.0 0.0 1.0)
 ;   ObjectID (RO) = 50
 ;   ObjectID32 (RO) = 50
 ;   ObjectName (RO) = "AcDbLine"

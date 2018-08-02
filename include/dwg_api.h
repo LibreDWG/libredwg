@@ -2607,13 +2607,13 @@ dwg_ent_lwpline_set_thickness(dwg_ent_lwpline *restrict lwpline,
                               int *restrict error);
 
 EXPORT void
-dwg_ent_lwpline_get_normal(const dwg_ent_lwpline *restrict lwpline,
-                           dwg_point_3d *points,
-                           int *restrict error);
+dwg_ent_lwpline_get_extrusion(const dwg_ent_lwpline *restrict lwpline,
+                              dwg_point_3d *points,
+                              int *restrict error);
 EXPORT void
-dwg_ent_lwpline_set_normal(dwg_ent_lwpline *restrict lwpline,
-                           const dwg_point_3d *points,
-                           int *restrict error);
+dwg_ent_lwpline_set_extrusion(dwg_ent_lwpline *restrict lwpline,
+                              const dwg_point_3d *points,
+                              int *restrict error);
 
 EXPORT BITCODE_BL
 dwg_ent_lwpline_get_numpoints(const dwg_ent_lwpline *restrict lwpline,

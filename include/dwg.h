@@ -2393,7 +2393,7 @@ typedef struct _dwg_entity_PROXY_LWPOLYLINE
   BITCODE_BD const_width;
   BITCODE_BD elevation;
   BITCODE_BD thickness;
-  BITCODE_3BD normal;
+  BITCODE_3BD extrusion;
   BITCODE_BL num_points;
   BITCODE_2RD* points;
   BITCODE_BL num_bulges;
@@ -2726,7 +2726,7 @@ typedef struct _dwg_MLeaderAnnotContext
     struct _text_content
     {
       BITCODE_TV default_text;
-      BITCODE_3BD normal;
+      BITCODE_3BD normal; // 11
       BITCODE_H style;
       BITCODE_3BD location;
       BITCODE_3BD direction;
@@ -2756,7 +2756,7 @@ typedef struct _dwg_MLeaderAnnotContext
     struct _content_block
     {
       BITCODE_H block_table;
-      BITCODE_3BD normal;
+      BITCODE_3BD normal; // 14
       BITCODE_3BD location;
       BITCODE_3BD scale;
       BITCODE_BD rotation;
@@ -3746,7 +3746,7 @@ typedef struct _dwg_entity_LWPOLYLINE
   BITCODE_BD const_width;	/*!< DXF 43 */
   BITCODE_BD elevation;		/*!< DXF 38 */
   BITCODE_BD thickness;		/*!< DXF 39 */
-  BITCODE_3BD normal;		/*!< DXF 210 */
+  BITCODE_3BD extrusion;	/*!< DXF 210 */
   BITCODE_BL num_points;	/*!< DXF 90 */
   BITCODE_2RD* points;		/*!< DXF 10,20 */
   BITCODE_BL num_bulges;
