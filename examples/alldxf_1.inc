@@ -36141,6 +36141,7 @@ static struct _unknown_field unknown_dxf_331[] = {
     { 280, "27", NULL, 0, BITS_UNKNOWN, "flag", 1, {-1,-1,-1,-1,-1} },
     { 281, "59", NULL, 0, BITS_UNKNOWN, "contrast", 1, {-1,-1,-1,-1,-1} },
     { 282, "45", NULL, 0, BITS_UNKNOWN, "fade", 1, {-1,-1,-1,-1,-1} },
+    // num 11
     { 11, "2.191885736127233", NULL, 0, BITS_UNKNOWN, "clip_boundary->pt", 1, {-1,-1,-1,-1,-1} },
     { 21, "4.577875369828461", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 11, "0.00004", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },

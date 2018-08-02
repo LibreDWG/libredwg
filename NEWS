@@ -29,10 +29,12 @@ Important bugfixes:
   * Improved free, i.e. no more double free with EED data. (#33)
   * Better perl bindings build support on Windows, prefer local dwg.h over
     installed dwg.h on testing (#29).
+  * Fixed dejagnu compilation on C11 by using -fgnu89-inline (#2)
 
 New features:
-  * Added unstable support for the objects: DIMASSOC, ASSOCDEPENDENCY, MULTILEADER,
-    PERSSUBENTMANAGER, UNDERLAYDEFINITION.
+  * Added unstable support for the objects ASSOCDEPENDENCY, DIMASSOC,
+    PERSSUBENTMANAGER, UNDERLAYDEFINITION and the entities
+    MULTILEADER, UNDERLAY.
   * Added getopt_long() support to all programs, position independent options.
   * Implemented examples/unknown to find field layouts of unknown objects.
     Now with a http://picat-lang.org helper. See also HACKING and savannah News.

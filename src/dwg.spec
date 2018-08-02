@@ -5507,7 +5507,9 @@ DWG_OBJECT(PERSSUBENTMANAGER)
   XDICOBJHANDLE(3);
 DWG_OBJECT_END
 
+// (varies) UNSTABLE
 // in DXF as {PDF,DWF,DGN}DEFINITION
+// no DWF, DGN coverage yet
 DWG_OBJECT(UNDERLAYDEFINITION)
   
   DXF { FIELD_HANDLE (parenthandle, 4, 330); }
@@ -5520,6 +5522,29 @@ DWG_OBJECT(UNDERLAYDEFINITION)
   XDICOBJHANDLE(3);
 
 DWG_OBJECT_END
+
+// (varies) UNSTABLE
+// in DXF as 0 DGNUNDERLAY DWFUNDERLAY PDFUNDERLAY
+// looks perfect, but no DWF, DGN coverage yet
+DWG_ENTITY(UNDERLAY)
+
+  SUBCLASS(AcDbUnderlayReference)
+  FIELD_3BD (extrusion, 210);
+  FIELD_3DPOINT (insertion_pt, 10);
+  FIELD_BD (angle, 50);
+  FIELD_3BD_1 (scale, 41);
+  FIELD_RC (flag, 280);
+  FIELD_RCd (contrast, 281); // 20-100. def: 100
+  FIELD_RCd (fade, 282);  // 0-80
+
+  FIELD_BL (num_clip_verts, 0);
+  FIELD_2RD_VECTOR (clip_verts, num_clip_verts, 11);
+
+  COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE (underlay_layer, 5, 0);
+  FIELD_HANDLE (definition_id, 5, 340);
+
+DWG_ENTITY_END
 
 // (varies) UNSTABLE
 // works ok on all Surface_20* but this coverage seems limited.
@@ -6322,36 +6347,6 @@ DWG_ENTITY(PLANESURFACE)
   FIELD_BL (class_version, 90);
   if (FIELD_VALUE(class_version) > 10)
     return DWG_ERR_VALUEOUTOFBOUNDS;
-
-  COMMON_ENTITY_HANDLE_DATA;
-
-DWG_ENTITY_END
-
-// (varies) DEBUGGING
-// in DXF as 0 DGNUNDERLAY DWFUNDERLAY PDFUNDERLAY
-DWG_ENTITY(UNDERLAY)
-
-  SUBCLASS(AcDbUnderlayReference)
-  FIELD_3BD (extrusion, 210);
-  FIELD_3DPOINT (insertion_pt, 10);
-  FIELD_BD (angle, 50);
-  FIELD_3BD_1 (scale, 41);
-  FIELD_RC (type, 0); //0x0f for PDF (PDF/DGN/DWF type?)
-  FIELD_RS (contrast, 281); // 20-100. def: 100
-  FIELD_BS (fade, 282);  // 0-80
-  FIELD_RS (unknown, 0); // 4177 0101000100010000
-  FIELD_HANDLE (definition_id, 5, 340);
-  FIELD_BS (flag, 280);
-
-  if (FIELD_VALUE(flag) & 1) { //is_clipped
-    FIELD_BL (num_clip_boundary, 0);
-    REPEAT(num_clip_boundary, clip_boundary, Dwg_UNDERLAY_Boundary)
-    {
-      FIELD_2BD (clip_boundary->pt, 11);
-    }
-    SET_PARENT_OBJ(clip_boundary)
-    END_REPEAT(clip_boundary);
-  }
 
   COMMON_ENTITY_HANDLE_DATA;
 

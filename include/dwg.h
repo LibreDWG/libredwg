@@ -3486,6 +3486,36 @@ typedef struct _dwg_object_UNDERLAYDEFINITION Dwg_Object_DGNDEFINITION;
 typedef struct _dwg_object_UNDERLAYDEFINITION Dwg_Object_DWFDEFINITION;
 
 /**
+ Entity UNDERLAY, the reference (varies)
+ As IMAGE but snappable.
+ in DXF as{PDF,DGN,DWF}UNDERLAY
+ */
+typedef struct _dwg_entity_UNDERLAY
+{
+  struct _dwg_object_entity *parent;
+
+  BITCODE_3BD extrusion; /*!< DXF 210 normal */
+  BITCODE_3BD insertion_pt; /*!< DXF 10 */
+  BITCODE_3BD scale;   /*!< DXF 41 */
+  BITCODE_BD angle;    /*!< DXF 50 */
+  BITCODE_RC flag;     /*!< DXF 280: 1 is_clipped, 2 is_on, 4 is_monochrome,
+                            8 is_adjusted_for_background, 16 is_clip_inverted,
+                            ? is_frame_visible, ? is_frame_plottable */
+  BITCODE_RC contrast; /*!< DXF 281 20-100, def: 100 */
+  BITCODE_RC fade;     /*!< DXF 282 0-80, def: 0*/
+  BITCODE_BL num_clip_verts;
+  BITCODE_2RD *clip_verts; /*!< DXF 11: if 2 rectangle, > polygon */
+
+  BITCODE_H underlay_layer;
+  BITCODE_H definition_id; /*!< DXF 340 */
+
+} Dwg_Entity_UNDERLAY;
+
+typedef struct _dwg_entity_UNDERLAY Dwg_Entity_PDFUNDERLAY;
+typedef struct _dwg_entity_UNDERLAY Dwg_Entity_DGNUNDERLAY;
+typedef struct _dwg_entity_UNDERLAY Dwg_Entity_DWFUNDERLAY;
+
+/**
  Class DBCOLOR (varies)
  */
 typedef struct _dwg_object_DBCOLOR
@@ -4356,43 +4386,6 @@ typedef struct _dwg_entity_SWEPTSURFACE
   BITCODE_3BD reference_vector_for_controlling_twist; // 11
 
 } Dwg_Entity_SWEPTSURFACE;
-
-typedef struct _dwg_UNDERLAY_Boundary
-{
-  struct _dwg_entity_UNDERLAY *parent;
-  BITCODE_2BD pt;
-} Dwg_UNDERLAY_Boundary;
-
-/**
- Entity UNDERLAY, the reference (varies) UNKNOWN FIELDS
- As IMAGE but snappable.
- in DXF as 0 DGNUNDERLAY DWFUNDERLAY PDFUNDERLAY
- */
-typedef struct _dwg_entity_UNDERLAY
-{
-  struct _dwg_object_entity *parent;
-
-  BITCODE_BS flag; /*!< DXF 280: 1 is_clipped, 2 is_on, 4 is_monochrome,
-                        8 is_adjusted_for_background, 16 is_clip_inverted,
-                        ? is_frame_visible, ? is_frame_plottable */
-  BITCODE_3BD extrusion; /*!< DXF 210 normal */
-  BITCODE_3BD insertion_pt; /*!< DXF 10 */
-  BITCODE_3BD scale;   /*!< DXF 41 */
-  BITCODE_BD angle;    /*!< DXF 50 */
-  BITCODE_RC type;     /* 0x0f for PDF */
-  BITCODE_RS contrast; /*!< DXF 281 20-100, def: 100 */
-  BITCODE_BS fade;     /*!< DXF 282 0-80, def: 0*/
-  BITCODE_RS unknown;
-  BITCODE_BL num_clip_boundary;
-  Dwg_UNDERLAY_Boundary* clip_boundary; /*!< DXF 11: if 2 rectangle, > polygon */
-
-  BITCODE_H definition_id;
-
-} Dwg_Entity_UNDERLAY;
-
-typedef struct _dwg_entity_UNDERLAY Dwg_Entity_PDFUNDERLAY;
-typedef struct _dwg_entity_UNDERLAY Dwg_Entity_DGNUNDERLAY;
-typedef struct _dwg_entity_UNDERLAY Dwg_Entity_DWFUNDERLAY;
 
 /**
  Object SUN (varies) UNKNOWN FIELDS
@@ -5657,6 +5650,7 @@ EXPORT int dwg_add_GEODATA (Dwg_Object *obj);
 EXPORT int dwg_add_MULTILEADER (Dwg_Object *obj);
 EXPORT int dwg_add_OBJECT_PTR (Dwg_Object *obj);
 EXPORT int dwg_add_PERSSUBENTMANAGER (Dwg_Object *obj);
+EXPORT int dwg_add_UNDERLAY (Dwg_Object *obj);
 EXPORT int dwg_add_UNDERLAYDEFINITION (Dwg_Object *obj);
 
 #ifdef DEBUG_CLASSES
@@ -5705,7 +5699,6 @@ EXPORT int dwg_add_SUN (Dwg_Object *obj);
 EXPORT int dwg_add_SUNSTUDY (Dwg_Object *obj);
 EXPORT int dwg_add_TABLE (Dwg_Object *obj);
 //EXPORT int dwg_add_TABLESTYLE (Dwg_Object *obj);
-EXPORT int dwg_add_UNDERLAY (Dwg_Object *obj);
 EXPORT int dwg_add_TABLECONTENT (Dwg_Object *obj);
 EXPORT int dwg_add_TABLEGEOMETRY (Dwg_Object *obj);
 //EXPORT int dwg_add_XREFPANELOBJECT (Dwg_Object *obj);
