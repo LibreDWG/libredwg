@@ -4365,6 +4365,7 @@ typedef struct _dwg_UNDERLAY_Boundary
 
 /**
  Entity UNDERLAY, the reference (varies) UNKNOWN FIELDS
+ As IMAGE but snappable.
  in DXF as 0 DGNUNDERLAY DWFUNDERLAY PDFUNDERLAY
  */
 typedef struct _dwg_entity_UNDERLAY
@@ -4372,7 +4373,8 @@ typedef struct _dwg_entity_UNDERLAY
   struct _dwg_object_entity *parent;
 
   BITCODE_BS flag; /*!< DXF 280: 1 is_clipped, 2 is_on, 4 is_monochrome,
-                        8 is_adjusted_for_background, 16 clip_inverted */
+                        8 is_adjusted_for_background, 16 is_clip_inverted,
+                        ? is_frame_visible, ? is_frame_plottable */
   BITCODE_3BD extrusion; /*!< DXF 210 normal */
   BITCODE_3BD insertion_pt; /*!< DXF 10 */
   BITCODE_3BD scale;   /*!< DXF 41 */
