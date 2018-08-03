@@ -4153,9 +4153,8 @@ typedef struct _dwg_object_OBJECT_PTR
 } Dwg_Object_OBJECT_PTR;
 
 /**
- Entity LIGHT (varies) UNKNOWN FIELDS
- yet unsorted, and unused.
- 
+ Entity LIGHT (varies)
+ UNSTABLE, almost complete
  */
 typedef struct _dwg_entity_LIGHT
 {
@@ -5657,6 +5656,7 @@ EXPORT int dwg_add_ASSOCDEPENDENCY (Dwg_Object *obj);
 EXPORT int dwg_add_CAMERA (Dwg_Object *obj);
 EXPORT int dwg_add_DIMASSOC (Dwg_Object *obj);
 EXPORT int dwg_add_GEODATA (Dwg_Object *obj);
+EXPORT int dwg_add_LIGHT (Dwg_Object *obj);
 EXPORT int dwg_add_MULTILEADER (Dwg_Object *obj);
 EXPORT int dwg_add_OBJECT_PTR (Dwg_Object *obj);
 EXPORT int dwg_add_PERSSUBENTMANAGER (Dwg_Object *obj);
@@ -5691,7 +5691,6 @@ EXPORT int dwg_add_HELIX (Dwg_Object *obj);
 //EXPORT int dwg_add_LAYOUTPRINTCONFIG (Dwg_Object *obj);
 //EXPORT int dwg_add_LEADEROBJECTCONTEXTDATA (Dwg_Object *obj);
 //EXPORT int dwg_add_LIGHTLIST (Dwg_Object *obj);
-EXPORT int dwg_add_LIGHT (Dwg_Object *obj);
 EXPORT int dwg_add_MATERIAL (Dwg_Object *obj);
 //EXPORT int dwg_add_NPOCOLLECTION (Dwg_Object *obj);
 EXPORT int dwg_add_PLOTSETTINGS (Dwg_Object *obj);

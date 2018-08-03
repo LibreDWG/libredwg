@@ -5626,6 +5626,73 @@ DWG_OBJECT_END
    The following entities/objects are stored as raw UNKNOWN_ENT/OBJ,
    unless enabled via -DDEBUG_CLASSES */
 
+// (varies) In Work
+/* Container for all properties relating to a generic light.  A
+   dictionary of these objects is resident in the database, in the
+   named object dictionary as ACAD_LIGHTS (Object LIGHTLIST). They are
+   indexed by the name of the setting objects. In the user interface,
+   the contents of this dictionary correspond to user-defined light
+   properties (displayed on a property palette accessible by selection
+   of the light using a variety of methods.
+   SpotLight, PointLight, DistantLight. dbLight.h
+ */
+DWG_ENTITY(LIGHT)
+  SUBCLASS (AcDbLight);
+  FIELD_BL (class_version, 90); //1
+  FIELD_T (name, 1);
+  FIELD_BS (type, 70);
+  FIELD_B (status, 290);
+
+  UNTIL (R_2000) {
+    FIELD_BS (unknown, 0); //
+    FIELD_B (plot_glyph, 72);
+  } else {
+    FIELD_BS (plot_glyph, 90); // 10 0 ??
+    FIELD_BS (color_index, 63); // 5 634-609
+
+    vcount = bit_position(dat);
+    // HOLE([122,164],0000000101000000000000000011000011000000000) len = 43
+    // 5 0100000101
+    DEBUG_HERE_OBJ
+    // 0000000011000011000000000
+#ifdef DEBUG_CLASSES
+    FIELD_BS (lamp_color_type, 0); //0: in kelvin, 1: as preset
+    if (FIELD_VALUE(lamp_color_type) == 0) {
+      FIELD_BD (lamp_color_temp, 0);
+    } else {
+      FIELD_BS (lamp_color_preset, 0);
+      if (FIELD_VALUE(lamp_color_preset) == 14) // Custom
+        FIELD_BL (lamp_color_rgb, 0);
+    }
+    //FIELD_T (web_file, 0);
+    //FIELD_3BD (web_rotation, 0);
+    FIELD_B (has_target_grip, 0);
+    FIELD_BS (glyph_display_type, 0);
+    //FIELD_BS (physical_intensity_method, 0);
+    //FIELD_BS (drawable_type, 0);
+#endif
+    bit_set_position(dat, vcount+25);
+  }
+  DEBUG_POS_OBJ //634
+
+  FIELD_BD (intensity, 40);
+  FIELD_3BD (position, 10);
+  FIELD_3BD (target, 11);
+  FIELD_BS (attenuation_type, 72);
+  FIELD_B (use_attenuation_limits, 292);
+  FIELD_BD (attenuation_start_limit, 41);
+  FIELD_BD (attenuation_end_limit, 42);
+  FIELD_BD (hotspot_angle, 50);
+  FIELD_BD (falloff_angle, 51);
+  FIELD_B (cast_shadows, 293);
+  FIELD_BS (shadow_type, 73);   // 0 or 1
+  FIELD_BS (shadow_map_size, 91); //256 11
+  FIELD_RC (shadow_map_softness, 280);
+
+  COMMON_ENTITY_HANDLE_DATA;
+
+DWG_ENTITY_END
+
 #ifdef DEBUG_CLASSES
 
 // DEBUGGING
@@ -5953,73 +6020,6 @@ DWG_OBJECT(PLOTSETTINGS)
     }
 
 DWG_OBJECT_END
-
-// (varies) DEBUGGING
-/* Container for all properties relating to a generic light.  A
-   dictionary of these objects is resident in the database, in the
-   named object dictionary as ACAD_LIGHTS (Object LIGHTLIST). They are
-   indexed by the name of the setting objects. In the user interface,
-   the contents of this dictionary correspond to user-defined light
-   properties (displayed on a property palette accessible by selection
-   of the light using a variety of methods.
-   SpotLight, PointLight, DistantLight. dbLight.h
- */
-DWG_ENTITY(LIGHT)
-  SUBCLASS (AcDbLight);
-  FIELD_BL (class_version, 90); //1
-  FIELD_T (name, 1);
-  FIELD_BS (type, 70);
-  FIELD_B (status, 290);
-
-  UNTIL (R_2000) {
-    FIELD_BS (unknown, 0); //
-    FIELD_B (plot_glyph, 72);
-  } else {
-    FIELD_BS (plot_glyph, 90); // 10 0 ??
-    FIELD_BS (color_index, 63); // 5 634-609
-
-    vcount = bit_position(dat);
-    // HOLE([122,164],0000000101000000000000000011000011000000000) len = 43
-    // 5 0100000101
-    DEBUG_HERE_OBJ
-    // 0000000011000011000000000
-#ifndef IS_RELEASE
-    FIELD_BS (lamp_color_type, 0); //0: in kelvin, 1: as preset
-    if (FIELD_VALUE(lamp_color_type) == 0) {
-      FIELD_BD (lamp_color_temp, 0);
-    } else {
-      FIELD_BS (lamp_color_preset, 0);
-      if (FIELD_VALUE(lamp_color_preset) == 14) // Custom
-        FIELD_BL (lamp_color_rgb, 0);
-    }
-    //FIELD_T (web_file, 0);
-    //FIELD_3BD (web_rotation, 0);
-    FIELD_B (has_target_grip, 0);
-    FIELD_BS (glyph_display_type, 0);
-    //FIELD_BS (physical_intensity_method, 0);
-    //FIELD_BS (drawable_type, 0);
-#endif
-    bit_set_position(dat, vcount+25);
-  }
-  DEBUG_POS_OBJ //634
-
-  FIELD_BD (intensity, 40);
-  FIELD_3BD (position, 10);
-  FIELD_3BD (target, 11);
-  FIELD_BS (attenuation_type, 72);
-  FIELD_B (use_attenuation_limits, 292);
-  FIELD_BD (attenuation_start_limit, 41);
-  FIELD_BD (attenuation_end_limit, 42);
-  FIELD_BD (hotspot_angle, 50);
-  FIELD_BD (falloff_angle, 51);
-  FIELD_B (cast_shadows, 293);
-  FIELD_BS (shadow_type, 73);   // 0 or 1
-  FIELD_BS (shadow_map_size, 91); //256 11
-  FIELD_RC (shadow_map_softness, 280);
-
-  COMMON_ENTITY_HANDLE_DATA;
-
-DWG_ENTITY_END
 
 // (varies) DEBUGGING, UNKNOWN FIELDS
 // hard-owned child of AcDbViewportTableRecord or AcDbViewport 361
