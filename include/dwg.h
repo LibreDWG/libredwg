@@ -4155,6 +4155,7 @@ typedef struct _dwg_object_OBJECT_PTR
 /**
  Entity LIGHT (varies) UNKNOWN FIELDS
  yet unsorted, and unused.
+ 
  */
 typedef struct _dwg_entity_LIGHT
 {
@@ -4163,29 +4164,37 @@ typedef struct _dwg_entity_LIGHT
   BITCODE_BL class_version; /*!< DXF 90 */
   BITCODE_T name; 	/*!< DXF 1 */
   BITCODE_BS type; 	/*!< DXF 70, distant = 1; point = 2; spot = 3 */
-  BITCODE_B status; 	/*!< DXF 290 */
+  BITCODE_B status; 	/*!< DXF 290, on or off */
   BITCODE_BL unknown;   /*!< DXF 90 undocumented -1026700341 */
   BITCODE_CMC color;    /*!< DXF 63 */
+  BITCODE_BS color_index; /*!< DXF 63 2004+ */
   BITCODE_B plot_glyph; /*!< DXF 291 */
   BITCODE_BD intensity; /*!< DXF 40 */
   BITCODE_3BD position; /*!< DXF 10 */
   BITCODE_3BD target;   /*!< DXF 11 */
-  BITCODE_BS attenuation_type;        /*!< DXF 72 */
+  BITCODE_BS attenuation_type;        /*!< DXF 72 0 = None, 1 = Inverse Linear,
+                                        2 = Inverse Square */
   BITCODE_B use_attenuation_limits;   /*!< DXF 292 */
   BITCODE_BD attenuation_start_limit; /*!< DXF 41 */
   BITCODE_BD attenuation_end_limit;   /*!< DXF 42 */
   BITCODE_BD hotspot_angle; /*!< DXF 50 */
-  BITCODE_BD falloff_angle; /*!< DXF 51, type=spot only */
+  BITCODE_BD falloff_angle; /*!< DXF 51, always stored, used with type=spot only */
   BITCODE_B cast_shadows;   /*!< DXF 293 */
   BITCODE_BS shadow_type;   /*!< DXF 73, 0 or 1 */
   BITCODE_BS shadow_map_size;     /*!< DXF 91 */
   BITCODE_BS shadow_map_softness; /*!< DXF 280 */
-  BITCODE_BS lamp_color_preset;   /*!< DXF ? */
-  BITCODE_BS lamp_color_type;     /*!< DXF ? */
-  BITCODE_BS physical_intensity_method; /*!< DXF ? */
-  BITCODE_RS drawable_type;       /*!< DXF ? */
-  BITCODE_BS glyph_display_type;  /*!< DXF ? */
-  BITCODE_BS glyph_display;       /*!< DXF ? */
+  /* yet unknown: */
+  BITCODE_BS lamp_color_type;     /*!< /0: in kelvin, 1: as preset */
+  BITCODE_BD lamp_color_temp;     /*!< Temperature in Kelvin */
+  BITCODE_BS lamp_color_preset;   /*!< 0: D65White, 1: Fluorescent, ... */
+  BITCODE_BL lamp_color_rgb;      /*!< if lamp_color_preset is Custom */
+  BITCODE_TV web_file;            /*!< IES file */
+  BITCODE_3BD web_rotation;       /*!< rotation offset in XYZ Euler angles */
+  BITCODE_B has_target_grip;      /*!< if the light displays a target grip for orienting
+                                       the light */
+  BITCODE_BS glyph_display_type;  /*!< 0:auto, 1:on, 2:off */
+  BITCODE_BS physical_intensity_method; /*!< ? */
+  BITCODE_BS drawable_type;       /*!< ? */
 } Dwg_Entity_LIGHT;
 
 /**

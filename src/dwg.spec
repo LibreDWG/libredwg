@@ -5951,7 +5951,9 @@ DWG_OBJECT_END
    indexed by the name of the setting objects. In the user interface,
    the contents of this dictionary correspond to user-defined light
    properties (displayed on a property palette accessible by selection
-   of the light using a variety of methods */
+   of the light using a variety of methods.
+   SpotLight, PointLight, DistantLight. dbLight.h
+ */
 //TODO: 92:8
 DWG_ENTITY(LIGHT)
   SUBCLASS (AcDbLight);
@@ -5959,46 +5961,53 @@ DWG_ENTITY(LIGHT)
   FIELD_T (name, 1);
   FIELD_BS (type, 70);
   FIELD_B (status, 290);
+
   UNTIL (R_2000) {
-    FIELD_BL (unknown, 90);
-    FIELD_B (attenuation_type, 72);
+    FIELD_BS (unknown, 0); //
+    FIELD_B (plot_glyph, 72);
   } else {
-    FIELD_BS (attenuation_type, 72);
+    FIELD_BS (plot_glyph, 90); // 10 0 ??
+    FIELD_BS (color_index, 63); // 5 634-609
+    // HOLE([122,164],0000000101000000000000000011000011000000000) len = 43
+    // 5 0100000101
+    DEBUG_HERE_OBJ
+    // 0000000011000011000000000
+#ifndef IS_RELEASE
+    vcount = bit_position(dat);
+    FIELD_BS (lamp_color_type, 0); //0: in kelvin, 1: as preset
+    if (FIELD_VALUE(lamp_color_type) == 0) {
+      FIELD_BD (lamp_color_temp, 0);
+    } else {
+      FIELD_BS (lamp_color_preset, 0);
+      if (FIELD_VALUE(lamp_color_preset) == 14) // Custom
+        FIELD_BL (lamp_color_rgb, 0);
+    }
+    FIELD_T (web_file, 0);
+    FIELD_3BD (web_rotation, 0);
+    FIELD_B (has_target_grip, 0);
+    FIELD_BS (glyph_display_type, 0);
+    //FIELD_BS (physical_intensity_method, 0);
+    //FIELD_BS (drawable_type, 0);
+#endif
+    bit_set_position(dat, vcount+25);
   }
-  SINCE (R_2004) {
-    // len=43 0000000101000000000000000011000011000000000
-    // DEBUG_HERE_OBJ
-    bit_advance_position(dat, 43);
-  }
+  DEBUG_POS_OBJ //634
+
   FIELD_BD (intensity, 40);
   FIELD_3BD (position, 10);
   FIELD_3BD (target, 11);
-
   FIELD_BS (attenuation_type, 72);
   FIELD_B (use_attenuation_limits, 292);
   FIELD_BD (attenuation_start_limit, 41);
   FIELD_BD (attenuation_end_limit, 42);
-  DEBUG_HERE_OBJ
-
-  // yet unsorted:
-  FIELD_CMC (color, 63);
-  FIELD_B (plot_glyph, 291);
-
   FIELD_BD (hotspot_angle, 50);
-  FIELD_BD (falloff_angle, 51); // (spotlight only)
+  FIELD_BD (falloff_angle, 51);
   FIELD_B (cast_shadows, 293);
   FIELD_BS (shadow_type, 73);   // 0 or 1
-  FIELD_BS (shadow_map_size, 91);
+  FIELD_BS (shadow_map_size, 91); //256 11
+  FIELD_RC (shadow_map_softness, 280);
 
   COMMON_ENTITY_HANDLE_DATA;
-
-  FIELD_BS (shadow_map_softness, 280); // but after R2004 at about attenuation_type
-  FIELD_BS (lamp_color_preset, 0);
-  FIELD_BS (lamp_color_type, 0);
-  FIELD_BS (physical_intensity_method, 0);
-  FIELD_RS (drawable_type, 0);
-  FIELD_BS (glyph_display_type, 0);
-  FIELD_BS (glyph_display, 0);
 
 DWG_ENTITY_END
 

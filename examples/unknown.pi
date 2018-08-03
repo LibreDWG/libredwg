@@ -19,7 +19,7 @@ import util.
    Compare to all examples of the same class.
 */
 
-bits(S) = S[1].
+bits(S) = S[1]. % TODO filter out " " and "\n"
 value(S) = S[2].
 poslist(S) = S[3].
 fieldname(S) = cond(S.length >= 4, S[4],
@@ -32,6 +32,8 @@ go(Data) =>
   [S,Fields,Class,Dxf,Version] = Data,
   Found = [],
   println(S), nl,
+  S := S.delete_all(" "),
+  S := S.delete_all("\n"),
   foreach(Sub in Fields)
     print(Sub.name), print(" "), print(Sub[2]), print(": "++Sub[1]),
     PosList = findall([Start,End], find(S,Sub[1],Start,End)),
