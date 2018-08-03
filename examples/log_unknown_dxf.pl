@@ -1022,6 +1022,12 @@ while (<>) {
         } elsif ($v eq '}') {
           $xdict = 0; $react = 0;
         }
+      } elsif ($code == 430 && $obj eq 'DBCOLOR' &&
+               $v =~ /DIC COLOR GUIDE\(R\)\$DIC (\d+)/)
+      {
+        push @FIELD, [430, "DIC $1", "name"];
+        $v = "DIC COLOR GUIDE(R)";
+        $name = "catalog";
       } elsif ($x = find_name($code, $obj, \@avail, \@FIELD)) {
         $name = $x;
       } elsif ($code == 8) {
