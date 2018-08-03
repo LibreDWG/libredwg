@@ -5770,7 +5770,7 @@ DWG_OBJECT_END
 DWG_OBJECT(DBCOLOR)
   DXF { FIELD_HANDLE (parenthandle, 3, 330); }
   SUBCLASS (AcDbColor)
-  FIELD_BL (class_version, 0); //0 01
+  FIELD_BL (class_version, 0); //0
   FIELD_BS (rgb, 420);
   DEBUG_HERE_OBJ
   bit_advance_position(dat, 24);
@@ -5785,16 +5785,22 @@ DWG_OBJECT(DBCOLOR)
       break;
     }
   }*/
-  FIELD_T (name, 0);    //2nd part of 430
-  FIELD_T (catalog, 0); //1st part of 430
+  DXF {
+    char *s = malloc(strlen(_obj->name) + strlen(_obj->catalog) + 2);
+    strcpy(s, _obj->catalog);
+    strcat(s, "$");
+    strcat(s, _obj->name);
+    VALUE_TV (s, 430);
+  }
+  FIELD_T (name, 0);    //2nd part of 430: DIC \d+
+  FIELD_T (catalog, 0); //1st part of 430: DIC COLOR GUIDE(R)
 
-  DEBUG_HERE_OBJ
-  FIELD_CMC (color, 62); //= EED 1070 @224-233 (or RC)
-  START_HANDLE_STREAM;   //@264-295
+  START_HANDLE_STREAM;
   FIELD_HANDLE (parenthandle, 3, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
   //TODO copy of the EED data? big hole from 296-753.
+  // with a copy of name, catalog again
   DEBUG_HERE_OBJ
 DWG_OBJECT_END
 
