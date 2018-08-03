@@ -944,7 +944,7 @@ while (<>) {
   #}
 
   open my $f, "$dxf" or next LINE;
-  my ($foundobj, $foundhdl, @FIELD);
+  my ($foundobj, $foundhdl, @FIELD, $in_entity);
   my ($react, $xdict, $seen100, @avail);
   if ($obj =~ /^\w\w\wUNDERLAY/) {
     @avail = @{$known->{UNDERLAY}};
@@ -972,7 +972,7 @@ while (<>) {
         for (@FIELD) {
           my $t = dxf_type($_->[0]);
           my $num = $sorted{"$t:$_->[1]"};
-          emit_field($f1, $_->[0], $_->[1], $_->[2],, $num);
+          emit_field($f1, $num, @$_);
         }
         @FIELD = ();
         print $f0 " NULL },\n";
@@ -1011,6 +1011,8 @@ while (<>) {
       } elsif ($code == 360 and $xdict) {
         $name = "xdicobjhandle";
       } elsif ($code == 100) {
+        if ($v eq 'AcDbEntity') { $in_entity++ }
+        else { $in_entity = 0 }
         $seen100++;
       } elsif ($code == 102) {
         if ($v eq '{ACAD_REACTORS') {
@@ -1029,12 +1031,25 @@ while (<>) {
       } elsif ($code == 7) {
         $name = "ltype";
       }
-      push @FIELD, [$code, $v, $name];
+      if ($in_entity && is_common_entity($code, $v, $name)) {
+        push @FIELD, [$code, $v, $name, 1];
+      } elsif ($code >= 1000) { # no EED
+        push @FIELD, [$code, $v, $name, 1];
+      } else {
+        push @FIELD, [$code, $v, $name];
+      }
     }
   }
   close $f;
 }
 close $f0; close $f1; close $f2;
+
+sub is_common_entity {
+  my ($code, $v, $name) = @_;
+  return 1 if $code == 8 or $code == 6 or $code == 7 or $code == 62 or
+              $code == 92 or $code == 160 or
+              $code == 310 or $code == 420 or $code == 440;
+}
 
 sub dxf_type {
   my $code = shift;
@@ -1117,13 +1132,17 @@ sub find_name {
 }
 
 sub emit_field {
-  my ($f, $code, $v, $name, $num) = @_;
+  my ($f, $num, $code, $v, $name, $hidden) = @_;
   #warn "$code: $v\n";
   #return if $code == 100;
   $v =~ s/\\/\\\\/g;
   $v =~ s/"/\\"/g;
   $num = 0 unless $num;
   # code, value, bytes, bitsize, type, name, num, pos[]
-  print $f "    { $code, \"$v\", NULL, 0, BITS_UNKNOWN, \"$name\", $num, {-1,-1,-1,-1,-1} },\n";
+  if ($hidden) {
+    print $f "  //";
+  } else {
+    print $f "    ";
+  }
+  print $f "{ $code, \"$v\", NULL, 0, BITS_UNKNOWN, \"$name\", $num, {-1,-1,-1,-1,-1} },\n";
 }
-
