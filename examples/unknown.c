@@ -210,23 +210,23 @@ bits_angle_BD(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 static void
 bits_RC(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
-  unsigned int l = (unsigned int)strtol(g->value, NULL, 10);
-  bit_write_RC(dat, (unsigned char)l);
+  BITCODE_RC l = (BITCODE_RC)strtol(g->value, NULL, 10);
+  bit_write_RC(dat, l);
   g->type = BITS_RC;
 }
 
 static void
 bits_BS(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
-  unsigned int l = (unsigned int)strtol(g->value, NULL, 10);
-  bit_write_BS(dat, (unsigned short)l);
+  BITCODE_BS l = (BITCODE_BS)strtol(g->value, NULL, 10);
+  bit_write_BS(dat, l);
   g->type = BITS_BS;
 }
 
 static void
 bits_BL(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
-  unsigned int l = (unsigned int)strtol(g->value, NULL, 10);
+  uint32_t l = (uint32_t)strtol(g->value, NULL, 10);
   bit_write_BL(dat, l);
   g->type = BITS_BL;
 }
@@ -234,15 +234,15 @@ bits_BL(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 static void
 bits_RS(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
-  unsigned int l = (unsigned int)strtol(g->value, NULL, 10);
-  bit_write_RS(dat, (unsigned short)l);
+  BITCODE_RS l = (BITCODE_RS)strtol(g->value, NULL, 10);
+  bit_write_RS(dat, l);
   g->type = BITS_RS;
 }
 
 static void
 bits_RL(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
-  unsigned int l = (unsigned int)strtol(g->value, NULL, 10);
+  uint32_t l = (uint32_t)strtol(g->value, NULL, 10);
   bit_write_RL(dat, l);
   g->type = BITS_RL;
 }

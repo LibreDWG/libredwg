@@ -5435,14 +5435,28 @@ DWG_ENTITY_END
 DWG_ENTITY(UNKNOWN_ENT)
 
   // bitsize does not include the handles size
-  vcount = 8*(obj->address + obj->size) - bit_position(dat);
+  rcount1 = bit_position(dat);
+  vcount = 8*(obj->address + obj->size) - rcount1;
   if (vcount < 0)
     return DWG_ERR_VALUEOUTOFBOUNDS;
+  vcount -= rcount1 % 8;
   FIELD_VALUE(num_bytes) = vcount / 8;
   FIELD_VALUE(num_bits)  = vcount % 8;
 
   FIELD_TF (bytes, FIELD_VALUE(num_bytes), 0);
   FIELD_VECTOR (bits, B, num_bits, 0);
+  DECODER {
+    if (DWG_LOGLEVEL < DWG_LOGLEVEL_INSANE)
+    {
+      LOG_TRACE("bytes [%d TF]: ", FIELD_VALUE(num_bytes));
+      LOG_TRACE_TF(FIELD_VALUE(bytes), FIELD_VALUE(num_bytes));
+      for (vcount=0; vcount<(BITCODE_BL)FIELD_VALUE(num_bits); vcount++)
+        {
+          LOG_TRACE("bits[%d]: " FORMAT_B "\n",
+                    (int)vcount, FIELD_VALUE(bits[vcount]))
+        }
+    }
+  }
 
   COMMON_ENTITY_HANDLE_DATA; // including this
 
@@ -5452,14 +5466,28 @@ DWG_ENTITY_END
 DWG_OBJECT(UNKNOWN_OBJ)
 
   // bitsize does not include the handles size
-  vcount = 8*(obj->address + obj->size) - bit_position(dat);
+  rcount1 = bit_position(dat);
+  vcount = 8*(obj->address + obj->size) - rcount1;
   if (vcount < 0)
     return DWG_ERR_VALUEOUTOFBOUNDS;
+  vcount -= rcount1 % 8;
   FIELD_VALUE(num_bytes) = vcount / 8;
   FIELD_VALUE(num_bits)  = vcount % 8;
 
   FIELD_TF (bytes, FIELD_VALUE(num_bytes), 0);
   FIELD_VECTOR (bits, B, num_bits, 0);
+  DECODER {
+    if (DWG_LOGLEVEL < DWG_LOGLEVEL_INSANE)
+    {
+      LOG_TRACE("bytes [%d TF]: ", FIELD_VALUE(num_bytes));
+      LOG_TRACE_TF(FIELD_VALUE(bytes), FIELD_VALUE(num_bytes));
+      for (vcount=0; vcount<(BITCODE_BL)FIELD_VALUE(num_bits); vcount++)
+        {
+          LOG_TRACE("bits[%d]: " FORMAT_B "\n",
+                    (int)vcount, FIELD_VALUE(bits[vcount]))
+        }
+    }
+  }
 
 DWG_OBJECT_END
 
@@ -5714,15 +5742,12 @@ DWG_OBJECT(EVALUATION_GRAPH)
       FIELD_BL(node_edge4, 92);   // -1
       if (_obj->num_evalexpr > 10)
         return DWG_ERR_VALUEOUTOFBOUNDS;
-      //HANDLE_VECTOR(evalexpr, num_evalexpr, 5, 360);
     }
 
   START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 3, 0); //??
-  if (FIELD_VALUE(has_graph))
-    {
-      FIELD_HANDLE (evalexpr, 5, 360); // VECTOR?
-    }
+  FIELD_HANDLE (parenthandle, 3, 0);
+  HANDLE_VECTOR(evalexpr, num_evalexpr, 5, 360);
+  //FIELD_HANDLE (evalexpr, 5, 360); // VECTOR?
   REACTORS(4);
   XDICOBJHANDLE(3);
 DWG_OBJECT_END

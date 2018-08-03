@@ -112,14 +112,16 @@ go(Data) =>
     end,
     print_field(Sub,false)
   end,
-  % TODO: maybe one last hole
-  Sub = last(Sorted), Pos = first(poslist(Sub)),
-  if Pos[2] < S.length then
-    H = [Pos[2]+1, S.length], %println(h=H),
-    R = S.slice(Pos[2]+1, S.length), %println(r=R),
-    Hole = new_struct('HOLE', [H, R]),
-    print(Hole),print(" "),println(len=H[2]+1-H[1]),
-    append(Holes, [Hole], T), Holes := T
+  % maybe one last hole
+  if Sorted.length > 1 then
+    Sub = last(Sorted), Pos = first(poslist(Sub)),
+    if Pos[2] < S.length then
+      H = [Pos[2]+1, S.length], %println(h=H),
+      R = S.slice(Pos[2]+1, S.length), %println(r=R),
+      Hole = new_struct('HOLE', [H, R]),
+      print(Hole),print(" "),println(len=H[2]+1-H[1]),
+      append(Holes, [Hole], T), Holes := T
+    end
   end,
   println("----------------"),
   NotFoundSize = sum(map(bitslen,[F: F in Fields, F[3].length > 1])),

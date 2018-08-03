@@ -4660,7 +4660,7 @@ typedef struct _dwg_EVAL_Node
 {
   struct _dwg_object_EVALUATION_GRAPH *parent;
   BITCODE_BL  edge[4];   // 4x 92, def: 4x -1
-  BITCODE_H   evalexpr;   // 360
+  //BITCODE_H   evalexpr;   // 360
 } Dwg_EVAL_Node;
 
 typedef struct _dwg_object_EVALUATION_GRAPH
@@ -4678,7 +4678,7 @@ typedef struct _dwg_object_EVALUATION_GRAPH
   BITCODE_BL node_edge4;  // 92
   
   BITCODE_H  parenthandle; //330
-  BITCODE_H  evalexpr;     //360
+  BITCODE_H  *evalexpr;    //360
 } Dwg_Object_EVALUATION_GRAPH;
 
 typedef struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER

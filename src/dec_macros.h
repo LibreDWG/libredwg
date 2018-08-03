@@ -33,17 +33,19 @@
   LOG_TRACE(#name ": " FORMAT_##type " [" #type " %d]\n", _obj->name, dxfgroup)
 #define FIELD_TRACE(name,type) \
   LOG_TRACE(#name ": " FORMAT_##type " " #type "\n", _obj->name)
-#define LOG_TF(level,var,len)                   \
+#define LOG_TF(level,var,len) \
   { int _i; \
-    for (_i=0; _i<len; _i++) { \
+    for (_i=0; _i<(len); _i++) { \
       LOG(level,"%02x", (unsigned char)((char*)var)[_i]); \
     } \
     LOG(level,"\n"); \
-    for (_i=0; _i<len; _i++) { \
-      unsigned char c = ((unsigned char*)var)[_i]; \
-      LOG(level,"%-2c", isprint(c) ? c : ' ');  \
+    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE) { \
+      for (_i=0; _i<(len); _i++) { \
+        unsigned char c = ((unsigned char*)var)[_i]; \
+        LOG_INSANE("%-2c", isprint(c) ? c : ' '); \
+      } \
+      LOG_INSANE("\n"); \
     } \
-    LOG(level,"\n"); \
   }
 #define LOG_TRACE_TF(var,len) LOG_TF(TRACE,var,len)
 #define LOG_INSANE_TF(var,len) LOG_TF(INSANE,var,len)

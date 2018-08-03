@@ -80,6 +80,10 @@
   LOG_TRACE(#name ": (" FORMAT_BD ", " FORMAT_BD ", " FORMAT_BD ") [" #type " %d]\n", \
             _obj->name.x, _obj->name.y, _obj->name.z, dxf)
 #endif
+#ifndef LOG_TRACE_TF
+#define LOG_TRACE_TF(var,len)
+#define LOG_INSANE_TF(var,len)
+#endif
 
 #ifdef IS_ENCODER
 #undef ENCODER

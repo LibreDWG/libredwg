@@ -1035,6 +1035,8 @@ while (<>) {
         push @FIELD, [$code, $v, $name, 1];
       } elsif ($code >= 1000) { # no EED
         push @FIELD, [$code, $v, $name, 1];
+      } elsif ($code == 5 && !$seen100) {
+        push @FIELD, [$code, $v, $name, 1];
       } else {
         push @FIELD, [$code, $v, $name];
       }

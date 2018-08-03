@@ -28,7 +28,7 @@ if (/entity UNKNOWN_ENT Entity bitsize: (.\d+)/) {
 if (/ \(bitsize: (.\d+), hdlpos/) {
   $bitsize = $1; next;
 }
-if (/^([0-9a-f]+\n)/) {
+if (/^bytes \[\d+ TF\]: ([0-9a-f]+\n)/) {
   $b = $1;
   chomp $b; next;
 }
