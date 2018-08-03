@@ -3522,12 +3522,13 @@ typedef struct _dwg_object_DBCOLOR
 {
   struct _dwg_object_object *parent;
 
-  BITCODE_BL class_version; //  0
-  BITCODE_BS rgb;     //420:
-  BITCODE_BS unknown1; //  256
-  BITCODE_T name;     //430: DIC 6
-  BITCODE_T catalog;  //     DIC COLOR GUIDE(R)
-  BITCODE_CMC color;  //62: 253
+  BITCODE_BL class_version; // 0
+  BITCODE_BB unknown1; //  0  masked off first byte of rgb
+  BITCODE_RL rgb;      //420: 0xXXRRGGBB
+  BITCODE_RC unknown2; //     256
+  BITCODE_T name;      //430: DIC 6
+  BITCODE_T catalog;   //430: DIC COLOR GUIDE(R)
+  //BITCODE_CMC color;   //62: 253 color index only as EED
   //...
   BITCODE_H parenthandle;
 } Dwg_Object_DBCOLOR;
@@ -5654,6 +5655,7 @@ EXPORT int dwg_add_WIPEOUT (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCDEPENDENCY (Dwg_Object *obj);
 EXPORT int dwg_add_CAMERA (Dwg_Object *obj);
 EXPORT int dwg_add_DIMASSOC (Dwg_Object *obj);
+EXPORT int dwg_add_DBCOLOR (Dwg_Object *obj);
 EXPORT int dwg_add_DYNAMICBLOCKPURGEPREVENTER (Dwg_Object *obj);
 EXPORT int dwg_add_GEODATA (Dwg_Object *obj);
 EXPORT int dwg_add_LIGHT (Dwg_Object *obj);
@@ -5681,7 +5683,6 @@ EXPORT int dwg_add_ASSOCPERSSUBENTMANAGER (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCPLANESURFACEACTIONBODY (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCVERTEXACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_add_DATATABLE (Dwg_Object *obj);
-EXPORT int dwg_add_DBCOLOR (Dwg_Object *obj);
 //EXPORT int dwg_add_DETAILVIEWSTYLE (Dwg_Object *obj);
 EXPORT int dwg_add_EVALUATION_GRAPH (Dwg_Object *obj);
 EXPORT int dwg_add_GEOPOSITIONMARKER (Dwg_Object *obj);

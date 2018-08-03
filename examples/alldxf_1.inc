@@ -29515,7 +29515,7 @@ static struct _unknown_field unknown_dxf_226[] = {
     { 430, "DIC COLOR GUIDE(R)", NULL, 0, BITS_UNKNOWN, "catalog", 1, {-1,-1,-1,-1,-1} },
   //{ 1001, "ACAD", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
   //{ 1000, "DBColXD", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-  //{ 1070, "21", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 70, "21", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
   //{ 1071, "-1023430775", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
   //{ 1000, "DIC COLOR GUIDE(R)$DIC 6", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}

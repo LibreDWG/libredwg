@@ -57,8 +57,12 @@
 # define VALUE_BL(value, dxf)
 #endif
 // logging format overrides
-#ifndef FIELD_BLh
-# define FIELD_BLh(name, dxf) FIELD_BL(name, dxf)
+#ifndef FIELD_RLx
+# define FIELD_RLx(name, dxf) FIELD_RL(name, dxf)
+#endif
+#ifndef FIELD_BLx
+# define FIELD_BLx(name, dxf) FIELD_BL(name, dxf)
+# define FIELD_BSx(name, dxf) FIELD_BS(name, dxf)
 #endif
 #ifndef FIELD_RCu
 # define FIELD_RCu(name, dxf) FIELD_RC(name, dxf)

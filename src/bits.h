@@ -300,4 +300,7 @@ bit_nan(void);
 int
 bit_isnan(BITCODE_BD number);
 
+void
+bit_write_BLs(Bit_Chain * dat, int32_t value);
+
 #endif

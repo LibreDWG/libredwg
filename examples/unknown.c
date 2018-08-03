@@ -232,6 +232,14 @@ bits_BL(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 }
 
 static void
+bits_BLs(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
+{
+  int32_t l = (int32_t)strtol(g->value, NULL, 10);
+  bit_write_BLs(dat, l);
+  g->type = BITS_BLs;
+}
+
+static void
 bits_RS(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
   BITCODE_RS l = (BITCODE_RS)strtol(g->value, NULL, 10);
@@ -407,11 +415,11 @@ bits_format (struct _unknown_field *g, const int is16)
   else if (code <= 419)
     bits_string(&dat, g);
   else if (code <= 429)
-    bits_BL(&dat, g); //int32_t
+    bits_BLs(&dat, g); //int32_t
   else if (code <= 439)
     bits_string(&dat, g);
   else if (code <= 449)
-    bits_BL(&dat, g);//int32_t
+    bits_BLs(&dat, g);//int32_t
   else if (code <= 459)
     bits_BL(&dat, g);//long
   else if (code <= 469)
@@ -792,7 +800,9 @@ main (int argc, char *argv[])
                     goto FOUND;
                   }
                 }
-                if (g[j].type == BITS_BL) {
+                if ((g[j].type == BITS_BL || g[j].type == BITS_BLs) &&
+                    strlen(g[j].value) <= 5)
+                {
                   Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
                   dat.chain = calloc(1,16);
 

@@ -3379,7 +3379,7 @@ DWG_ENTITY(HATCH)
         {
           FIELD_BD (colors[rcount1].unknown_double, 463); //value
           FIELD_BS (colors[rcount1].unknown_short, 0);
-          FIELD_BLh (colors[rcount1].rgb_color, 63); // 63 for color as ACI. 421 for rgb
+          FIELD_BLx (colors[rcount1].rgb_color, 63); // 63 for color as ACI. 421 for rgb
           FIELD_RC (colors[rcount1].ignored_color_byte, 0);
         }
       SET_PARENT_OBJ(colors)
@@ -5735,6 +5735,41 @@ DWG_OBJECT(DYNAMICBLOCKPURGEPREVENTER)
   XDICOBJHANDLE(3);
 DWG_OBJECT_END
 
+// UNSTABLE. missing color index 62: 21
+DWG_OBJECT(DBCOLOR)
+  DXF { FIELD_HANDLE (parenthandle, 3, 330); }
+  SUBCLASS (AcDbColor)
+  FIELD_BL (class_version, 0); //0
+#if 0
+  FIELD_BB (unknown1, 0); //2
+  FIELD_RLx (rgb, 420);   //32
+  FIELD_RC (unknown2, 0); //8
+#elsif 0
+  FIELD_BSx (rgb, 420);   //18
+  FIELD_RS  (unknown1, 0);//16
+  FIELD_RC  (unknown2, 0);//8
+#else
+  DXF { FIELD_VALUE (rgb) = FIELD_VALUE (rgb) & 0xffffff; }
+  FIELD_BLx (rgb, 420);   //34
+  FIELD_VALUE (unknown1) = FIELD_VALUE (rgb) & 0xff000000; //0xc2
+  FIELD_RC (unknown2, 0); //8
+#endif
+  DXF {
+    char *s = malloc(strlen(_obj->name) + strlen(_obj->catalog) + 2);
+    strcpy(s, _obj->catalog);
+    strcat(s, "$");
+    strcat(s, _obj->name);
+    VALUE_TV (s, 430);
+  }
+  FIELD_T (name, 0);    //2nd part of 430: DIC \d+
+  FIELD_T (catalog, 0); //1st part of 430: DIC COLOR GUIDE(R)
+
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (parenthandle, 3, 0);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+DWG_OBJECT_END
+
 #ifdef DEBUG_CLASSES
 
 // DEBUGGING
@@ -5764,44 +5799,6 @@ DWG_OBJECT(EVALUATION_GRAPH)
   //FIELD_HANDLE (evalexpr, 5, 360); // VECTOR?
   REACTORS(4);
   XDICOBJHANDLE(3);
-DWG_OBJECT_END
-
-//EED data copied plus some other DEBUGGING
-DWG_OBJECT(DBCOLOR)
-  DXF { FIELD_HANDLE (parenthandle, 3, 330); }
-  SUBCLASS (AcDbColor)
-  FIELD_BL (class_version, 0); //0
-  FIELD_BS (rgb, 420);
-  DEBUG_HERE_OBJ
-  bit_advance_position(dat, 24);
-  /* rcount1 = bit_position(dat);
-  DEBUG_HERE_OBJ
-  for (vcount=0; vcount<20; vcount++) {
-    FIELD_T (name, 0);    //2nd part of 430
-    if (memcmp(_obj->name, "DIC 6", 5))
-      bit_set_position(dat, rcount1 + vcount);
-    else {
-      fprintf(stderr, "offset %ld\n", vcount);
-      break;
-    }
-  }*/
-  DXF {
-    char *s = malloc(strlen(_obj->name) + strlen(_obj->catalog) + 2);
-    strcpy(s, _obj->catalog);
-    strcat(s, "$");
-    strcat(s, _obj->name);
-    VALUE_TV (s, 430);
-  }
-  FIELD_T (name, 0);    //2nd part of 430: DIC \d+
-  FIELD_T (catalog, 0); //1st part of 430: DIC COLOR GUIDE(R)
-
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (parenthandle, 3, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
-  //TODO copy of the EED data? big hole from 296-753.
-  // with a copy of name, catalog again
-  DEBUG_HERE_OBJ
 DWG_OBJECT_END
 
 // DEBUGGING

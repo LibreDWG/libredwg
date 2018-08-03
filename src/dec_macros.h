@@ -141,9 +141,15 @@
     FIELD_G_TRACE(name,BD,dxf); \
   } \
 }
-#define FIELD_BLh(name,dxf) \
+#define FIELD_BLx(name,dxf) \
   { _obj->name = bit_read_BL(dat); \
-    LOG_TRACE(#name ": 0x%x [BL %d]\n", (unsigned)_obj->name, dxf); }
+    LOG_TRACE(#name ": 0x%x [BL %d]\n", (uint32_t)_obj->name, dxf); }
+#define FIELD_RLx(name,dxf) \
+  { _obj->name = bit_read_RL(dat); \
+    LOG_TRACE(#name ": 0x%x [RL %d]\n", (uint32_t)_obj->name, dxf); }
+#define FIELD_BSx(name,dxf) \
+  { _obj->name = bit_read_BS(dat); \
+    LOG_TRACE(#name ": 0x%x [BS %d]\n", _obj->name, dxf); }
 #define FIELD_RC(name,dxf) FIELDG(name, RC, dxf)
 #define FIELD_RCu(name,dxf) \
   { _obj->name = bit_read_RC(dat); \

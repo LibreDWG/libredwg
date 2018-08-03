@@ -98,7 +98,8 @@ typedef enum DWG_BITS
   BITS_3B,  /** special 3-bit code R24+ */
   BITS_4BITS, /** 4 bits, r2000+ for VIEWMODE */
   BITS_BS,  /** bitshort */
-  BITS_BL,  /** bitlong */
+  BITS_BL,  /** bitlong uint32_t */
+  BITS_BLs,  /** signed bitlong int32_t */
   BITS_RLL, /** raw 8-byte long long (not compressed, big-endian) */
   BITS_RD,  /** raw double (not compressed, big-endian) */
   BITS_BD,  /** bitdouble */

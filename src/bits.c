@@ -321,7 +321,7 @@ bit_read_RS(Bit_Chain * dat)
   //least significant byte first:
   byte1 = bit_read_RC(dat);
   byte2 = bit_read_RC(dat);
-  return ((uint16_t) ((byte2 << 8) | byte1));
+  return (BITCODE_RS) ((byte2 << 8) | byte1);
 }
 
 /** Read 1 raw short little-endian.
@@ -332,7 +332,7 @@ bit_read_RS_LE(Bit_Chain * dat)
   unsigned char byte1, byte2;
   byte1 = bit_read_RC(dat);
   byte2 = bit_read_RC(dat);
-  return ((uint16_t) ((byte1 << 8) | byte2));
+  return (BITCODE_RS) ((byte1 << 8) | byte2);
 }
 
 /** Write 1 raw short (BE short).
@@ -461,26 +461,15 @@ bit_write_RD(Bit_Chain * dat, double value)
 BITCODE_BS
 bit_read_BS(Bit_Chain * dat)
 {
-  unsigned char two_bit_code;
-  unsigned int result;
-
-  two_bit_code = bit_read_BB(dat);
-
+  const unsigned char two_bit_code = bit_read_BB(dat);
   if (two_bit_code == 0)
-    {
-      result = bit_read_RS(dat);
-      return (result);
-    }
+    return bit_read_RS(dat);
   else if (two_bit_code == 1)
-    {
-      result = (unsigned char)bit_read_RC(dat);
-      return (result);
-    }
+    return (BITCODE_BS)bit_read_RC(dat) & 0xFF;
   else if (two_bit_code == 2)
-    return (0);
-  else
-    /* if (two_bit_code == 3) */
-    return (256);
+    return 0;
+  else /* if (two_bit_code == 3) */
+    return 256;
 }
 
 /** Write 1 bitshort (compacted data).
@@ -488,8 +477,9 @@ bit_read_BS(Bit_Chain * dat)
 void
 bit_write_BS(Bit_Chain * dat, BITCODE_BS value)
 {
-
-  if (value > 256)
+  // BITCODE_BS is defined as uint16_t, but better safe than sorry
+  const uint16_t l = value;
+  if (l > 256)
     {
       bit_write_BB(dat, 0);
       bit_write_RS(dat, value);
@@ -510,27 +500,17 @@ bit_write_BS(Bit_Chain * dat, BITCODE_BS value)
 BITCODE_BL
 bit_read_BL(Bit_Chain * dat)
 {
-  unsigned char two_bit_code;
-  BITCODE_BL result;
-
-  two_bit_code = bit_read_BB(dat);
-
+  const unsigned char two_bit_code =  bit_read_BB(dat);
   if (two_bit_code == 0)
-    {
-      result = bit_read_RL(dat);
-      return (result);
-    }
+    return bit_read_RL(dat);
   else if (two_bit_code == 1)
-    {
-      result = bit_read_RC(dat) & 0xFF;
-      return (result);
-    }
+    return bit_read_RC(dat) & 0xFF;
   else if (two_bit_code == 2)
-    return (0);
+    return 0;
   else /* if (two_bit_code == 3) */
     {
       LOG_ERROR("bit_read_BL: unexpected 2-bit code: '11'")
-      return (256);
+      return 256;
     }
 }
 
@@ -539,11 +519,32 @@ bit_read_BL(Bit_Chain * dat)
 void
 bit_write_BL(Bit_Chain * dat, BITCODE_BL value)
 {
+  // BITCODE_BL is signed int32_t
   const uint32_t l = value;
   if (l > 255)
     {
       bit_write_BB(dat, 0);
       bit_write_RL(dat, value);
+    }
+  else if (l == 0)
+    bit_write_BB(dat, 2);
+  else
+    {
+      bit_write_BB(dat, 1);
+      bit_write_RC(dat, value);
+    }
+}
+
+/** Write signed bitlong (compacted data).
+ */
+void
+bit_write_BLs(Bit_Chain * dat, int32_t value)
+{
+  const uint32_t l = value;
+  if (l > 255)
+    {
+      bit_write_BB(dat, 0);
+      bit_write_RL(dat, (BITCODE_RL)value);
     }
   else if (l == 0)
     bit_write_BB(dat, 2);
@@ -1232,6 +1233,7 @@ bit_read_TV(Bit_Chain *restrict dat)
   unsigned char *chain;
 
   length = bit_read_BS(dat);
+  // if (length > AVAIL_BITS()) return DWG_ERR_VALUEOUTOFBOUNDS;
   chain = (unsigned char *) malloc(length + 1);
   for (i = 0; i < length; i++)
     {

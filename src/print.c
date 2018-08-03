@@ -106,6 +106,8 @@ static unsigned int cur_ver = 0;
 }
 #define FIELD_RL(name,dxf) FIELD(name, RL, dxf);
 #define FIELD_RLL(name,dxf) FIELD(name, RLL, dxf);
+#define FIELD_RLx(name,dxf) \
+  LOG_TRACE(#name ": %x [RL " #dxf "]\n", _obj->name)
 #define FIELD_MC(name,dxf) FIELD(name, MC, dxf);
 #define FIELD_MS(name,dxf) FIELD(name, MS, dxf);
 #define FIELD_TF(name,len,dxf) { \
