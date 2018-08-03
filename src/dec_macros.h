@@ -126,10 +126,17 @@
 #define FIELD_BL(name,dxf) FIELDG(name, BL, dxf)
 #define FIELD_BLL(name,dxf) FIELDG(name, BLL, dxf)
 #define FIELD_BD(name,dxf) { \
-  FIELDG(name, BD, dxf); \
+  _obj->name = bit_read_BD(dat); \
   if (bit_isnan(_obj->name)) { \
+    FIELD_G_TRACE(name,BD,dxf); \
     LOG_ERROR("Invalid BD " #name); \
     return DWG_ERR_VALUEOUTOFBOUNDS; \
+  } \
+  if (dxf >= 50 && dxf < 54) { \
+    LOG_TRACE(#name ": " FORMAT_BD " [BD %d]  %gº\n", \
+              _obj->name, dxf, rad2deg(_obj->name)); \
+  } else { \
+    FIELD_G_TRACE(name,BD,dxf); \
   } \
 }
 #define FIELD_BLh(name,dxf) \
