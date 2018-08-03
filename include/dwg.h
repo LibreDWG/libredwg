@@ -5130,6 +5130,7 @@ typedef struct _dwg_object
   unsigned long hdlpos;
   Dwg_Handle handle;
   struct _dwg_struct *parent;
+  unsigned long common_size; /* the relative offset from type after common_entity_data */
 } Dwg_Object;
 
 /**

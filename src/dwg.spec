@@ -5429,11 +5429,17 @@ DWG_ENTITY_END
 
 #ifndef IS_DXF
 
-/* (varies) container to hold a raw class entity (none observed in the wild) */
+/* (varies) container to hold a unknown class entity,
+   see classes.inc
+ */
 DWG_ENTITY(UNKNOWN_ENT)
 
-  FIELD_VALUE(num_bytes) = obj->bitsize / 8;
-  FIELD_VALUE(num_bits)  = obj->bitsize % 8;
+  // bitsize does not include the handles size
+  vcount = 8*(obj->address + obj->size) - bit_position(dat);
+  if (vcount < 0)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
+  FIELD_VALUE(num_bytes) = vcount / 8;
+  FIELD_VALUE(num_bits)  = vcount % 8;
 
   FIELD_TF (bytes, FIELD_VALUE(num_bytes), 0);
   FIELD_VECTOR (bits, B, num_bits, 0);
@@ -5445,8 +5451,12 @@ DWG_ENTITY_END
 /* container to hold a raw class object (varies) */
 DWG_OBJECT(UNKNOWN_OBJ)
 
-  FIELD_VALUE(num_bytes) = obj->bitsize / 8;
-  FIELD_VALUE(num_bits)  = obj->bitsize % 8;
+  // bitsize does not include the handles size
+  vcount = 8*(obj->address + obj->size) - bit_position(dat);
+  if (vcount < 0)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
+  FIELD_VALUE(num_bytes) = vcount / 8;
+  FIELD_VALUE(num_bits)  = vcount % 8;
 
   FIELD_TF (bytes, FIELD_VALUE(num_bytes), 0);
   FIELD_VECTOR (bits, B, num_bits, 0);
@@ -5954,7 +5964,6 @@ DWG_OBJECT_END
    of the light using a variety of methods.
    SpotLight, PointLight, DistantLight. dbLight.h
  */
-//TODO: 92:8
 DWG_ENTITY(LIGHT)
   SUBCLASS (AcDbLight);
   FIELD_BL (class_version, 90); //1
@@ -5968,12 +5977,13 @@ DWG_ENTITY(LIGHT)
   } else {
     FIELD_BS (plot_glyph, 90); // 10 0 ??
     FIELD_BS (color_index, 63); // 5 634-609
+
+    vcount = bit_position(dat);
     // HOLE([122,164],0000000101000000000000000011000011000000000) len = 43
     // 5 0100000101
     DEBUG_HERE_OBJ
     // 0000000011000011000000000
 #ifndef IS_RELEASE
-    vcount = bit_position(dat);
     FIELD_BS (lamp_color_type, 0); //0: in kelvin, 1: as preset
     if (FIELD_VALUE(lamp_color_type) == 0) {
       FIELD_BD (lamp_color_temp, 0);
@@ -5982,8 +5992,8 @@ DWG_ENTITY(LIGHT)
       if (FIELD_VALUE(lamp_color_preset) == 14) // Custom
         FIELD_BL (lamp_color_rgb, 0);
     }
-    FIELD_T (web_file, 0);
-    FIELD_3BD (web_rotation, 0);
+    //FIELD_T (web_file, 0);
+    //FIELD_3BD (web_rotation, 0);
     FIELD_B (has_target_grip, 0);
     FIELD_BS (glyph_display_type, 0);
     //FIELD_BS (physical_intensity_method, 0);
@@ -6631,4 +6641,3 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
-

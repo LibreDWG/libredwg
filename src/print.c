@@ -50,6 +50,7 @@ static unsigned int cur_ver = 0;
 #define FIELD_CAST(name,type,cast,dxf)             \
   FIELD_G_TRACE(name,cast,dxf)
 
+#define LOG_INSANE_TF(var,len)
 #define FIELD_VALUE(name) _obj->name
 #define FIELD_2PT_TRACE(name, type, dxf) \
   { LOG_TRACE(#name ": (" FORMAT_BD ", " FORMAT_BD ") [" #type " %d]\n", \
@@ -107,8 +108,13 @@ static unsigned int cur_ver = 0;
 #define FIELD_RLL(name,dxf) FIELD(name, RLL, dxf);
 #define FIELD_MC(name,dxf) FIELD(name, MC, dxf);
 #define FIELD_MS(name,dxf) FIELD(name, MS, dxf);
-#define FIELD_TF(name,len,dxf) FIELD_G_TRACE(name, TF, dxf)
-#define FIELD_TFF(name,len,dxf) FIELD_TF(name,len,dxf)
+#define FIELD_TF(name,len,dxf) { \
+    LOG_TRACE( #name ": [%d TF " #dxf "]\n", len); \
+    LOG_INSANE_TF(FIELD_VALUE(name), (int)len); }
+#define FIELD_TFF(name,len,dxf) { \
+    LOG_TRACE( #name ": [%d TFF " #dxf "]\n", len); \
+    LOG_INSANE_TF(FIELD_VALUE(name), (int)len); }
+
 #define FIELD_TV(name,dxf) FIELD(name, TV, dxf);
 #define FIELD_TU(name,dxf) LOG_TRACE_TU(#name, (BITCODE_TU)_obj->name, dxf)
 #define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
@@ -141,7 +147,7 @@ static unsigned int cur_ver = 0;
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'name'.
 #define FIELD_VECTOR_N(name, type, size, dxf)\
-  if (size>0)\
+  if (size > 0 && _obj->name != NULL)\
     {\
       for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
         {\
@@ -149,7 +155,7 @@ static unsigned int cur_ver = 0;
         }\
     }
 #define FIELD_VECTOR_T(name, size, dxf)\
-  if (_obj->size > 0)\
+  if (_obj->size > 0 && _obj->name != NULL)\
     {\
       for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
         {\

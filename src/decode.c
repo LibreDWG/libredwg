@@ -2596,6 +2596,7 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   Dwg_Data *dwg = ent->dwg;
   Dwg_Object *obj = &dwg->object[ent->objid];
   Dwg_Object_Entity* _obj = ent;
+  unsigned long object_address = bit_position(dat);
 
   PRE(R_13) {
 
@@ -2663,6 +2664,8 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   #include "common_entity_data.spec"
 
   // elsewhere: object data, handles, padding bits, crc
+  obj->common_size = bit_position(dat) - object_address;
+  LOG_HANDLE("--common_size: %lu\n", obj->common_size); // needed for unknown
 
   return error;
 }
@@ -2681,6 +2684,7 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   int error = 0;
   Dwg_Data *dwg = _obj->dwg;
   Dwg_Object *obj = &dwg->object[_obj->objid];
+  unsigned long object_address = bit_position(dat);
 
   _obj->datpos = dat->byte;     // the data stream offset
   SINCE(R_2007) {
@@ -2745,6 +2749,8 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
     {
       FIELD_B (has_ds_binary_data, 0);
     }
+  obj->common_size = bit_position(dat) - object_address;
+  LOG_HANDLE("--common_size: %lu\n", obj->common_size); // needed for unknown
 
   return error;
 }
@@ -3721,8 +3727,10 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
           int i = obj->type - 500;
           Dwg_Class *klass = NULL;
 
-          // restart and read into the UNKNOWN_OBJ object
-          //obj->unknown_pos = bit_position(dat);
+          /* restart and read into the UNKNOWN_OBJ object */
+          /* the relative offset from type after common_entity_data */
+          //obj->common_size = bit_position(dat) - object_address; 
+          //LOG_HANDLE("common_size: %lu\n", obj->common_size); // needed for unknown
           bit_set_position(dat, object_address);
           //obj->unknown_off = obj->unknown_pos - object_address;
           //LOG_TRACE("Unknown pos %lu, offset %lu\n", obj->unknown_pos, obj->unknown_off);
@@ -3756,7 +3764,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
             }
           else if (klass)
             {
-#ifndef IS_RELEASE
+#if 0 && !defined(IS_RELEASE)
               if (!strcmp(klass->dxfname, "MULTILEADER")) { //debug CED
                 char *mleader = bit_read_TF(dat, obj->size);
                 LOG_INSANE_TF(mleader, (int)obj->size)

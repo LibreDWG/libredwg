@@ -163,7 +163,7 @@
 #define FIELD_MS(name,dxf)  FIELDG(name, MS, dxf)
 #define FIELD_TF(name,len,dxf) \
   { _obj->name = bit_read_TF(dat,(int)len); \
-    LOG_INSANE( #name ": [TF " #dxf "]\n"); \
+    LOG_INSANE( #name ": [%d TF " #dxf "]\n", len); \
     LOG_INSANE_TF(FIELD_VALUE(name), (int)len); }
 #define FIELD_TFF(name,len,dxf) \
   { bit_read_fixed(dat,_obj->name,(int)len); \
