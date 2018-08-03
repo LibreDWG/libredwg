@@ -5721,6 +5721,20 @@ DWG_ENTITY(LIGHT)
 
 DWG_ENTITY_END
 
+// (varies) UNSTABLE
+// ENHANCEDBLOCK => AcDbDynamicBlockRoundTripPurgePreventer
+DWG_OBJECT(DYNAMICBLOCKPURGEPREVENTER)
+  DXF { FIELD_HANDLE (parenthandle, 5, 330); }
+  SUBCLASS (AcDbDynamicBlockPurgePreventer)
+  FIELD_BS (flag, 70); //1 class_version would be 90
+  FIELD_RS (unknown_rs1, 0);
+
+  START_HANDLE_STREAM;
+  REACTORS(4); // BLOCK_HEADER
+  FIELD_HANDLE (parenthandle, 5, 0); // dict
+  XDICOBJHANDLE(3);
+DWG_OBJECT_END
+
 #ifdef DEBUG_CLASSES
 
 // DEBUGGING
@@ -5750,25 +5764,6 @@ DWG_OBJECT(EVALUATION_GRAPH)
   //FIELD_HANDLE (evalexpr, 5, 360); // VECTOR?
   REACTORS(4);
   XDICOBJHANDLE(3);
-DWG_OBJECT_END
-
-// (varies) DEBUGGING
-// ENHANCEDBLOCK => AcDbDynamicBlockRoundTripPurgePreventer
-DWG_OBJECT(DYNAMICBLOCKPURGEPREVENTER)
-  DXF { FIELD_HANDLE (parenthandle, 5, 330); }
-  SUBCLASS (AcDbDynamicBlockPurgePreventer)
-  FIELD_BS (flag, 70); //1
-  FIELD_RS (unknown_rs1, 0);
-
-  START_HANDLE_STREAM;
-  REACTORS(4); // BLOCK_HEADER
-  FIELD_HANDLE (parenthandle, 5, 0); // dict
-  XDICOBJHANDLE(3);
-  //len 47
-  DEBUG_HERE_OBJ
-  //FIELD_HANDLE (unknown_h1, 0, 0);
-  //DEBUG_HERE_OBJ
-  //FIELD_HANDLE (unknown_h2, 0, 0);
 DWG_OBJECT_END
 
 //EED data copied plus some other DEBUGGING
