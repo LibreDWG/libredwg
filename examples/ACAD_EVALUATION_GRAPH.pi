@@ -5,6 +5,30 @@ import unknown.
    Usage: picat [-g go2] examples/ACAD_EVALUATION_GRAPH.pi
 */
 def(0,Data) =>
+  println("ACAD_EVALUATION_GRAPH: 0x2E3 (270) test/test-data/example_2007.dxf:"),
+  Class="ACAD_EVALUATION_GRAPH",
+  Dxf="test/test-data/example_2007.dxf",
+  Version=2007,
+  S="010000000101000000010100000001100100100000010000000100111111111111111111111111111111110011111111111111111111111111111111001111111111111111111111111111111100111111111111111111111111111111111000110000000110010000000101110001011000000010010001111000000000000001110100011001",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+    %new_struct('_H5', ["000000100000001011100011", '0.2.2E3', [], "handle", 5])
+     new_struct('H330', ["01100000", '6.0.0', [], "parenthandle", 330])
+    ,new_struct('BL96', ["0100000001", '1', [], "has_graph", 96])
+    ,new_struct('BL97', ["0100000001", '1', [], "unknown1", 97])
+    ,new_struct('BL91', ["10", '0', [], "nodeid", 91])
+    ,new_struct('BL93', ["0100100000", '32', [], "edge_flags", 93])
+    ,new_struct('BL95', ["0100000001", '1', [], "num_evalexpr", 95])
+    ,new_struct('H360', ["001100100000001011100010", '3.2.2E2', [], "evalexpr", 360])
+    ,new_struct('BL92', ["0111111111", '-1', [], "node_edge1", 92])
+    ,new_struct('BL92', ["0111111111", '-1', [], "node_edge2", 92])
+    ,new_struct('BL92', ["0111111111", '-1', [], "node_edge3", 92])
+    ,new_struct('BL92', ["0111111111", '-1', [], "node_edge4", 92])
+  ],
+  Data = [S,Fields,Class,Dxf,Version],
+  go(Data).
+
+def(1,Data) =>
   println("ACAD_EVALUATION_GRAPH: 0x2E3 (230) test/test-data/example_2010.dxf:"),
   Class="ACAD_EVALUATION_GRAPH",
   Dxf="test/test-data/example_2010.dxf",
@@ -28,7 +52,7 @@ def(0,Data) =>
   Data = [S,Fields,Class,Dxf,Version],
   go(Data).
 
-def(1,Data) =>
+def(2,Data) =>
   println("ACAD_EVALUATION_GRAPH: 0x2E3 (231) test/test-data/example_2013.dxf:"),
   Class="ACAD_EVALUATION_GRAPH",
   Dxf="test/test-data/example_2013.dxf",
@@ -52,32 +76,8 @@ def(1,Data) =>
   Data = [S,Fields,Class,Dxf,Version],
   go(Data).
 
-def(2,Data) =>
-  println("ACAD_EVALUATION_GRAPH: 0x2E3 (270) test/test-data/example_2007.dxf:"),
-  Class="ACAD_EVALUATION_GRAPH",
-  Dxf="test/test-data/example_2007.dxf",
-  Version=2007,
-  S="010000000101000000010100000001100100100000010000000100111111111111111111111111111111110011111111111111111111111111111111001111111111111111111111111111111100111111111111111111111111111111111000110000000110010000000101110001011000000010010001111000010000000000000001110000",
-  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
-  Fields = [
-    %new_struct('_H5', ["000000100000001011100011", '0.2.2E3', [], "handle", 5])
-     new_struct('H330', ["01100000", '6.0.0', [], "parenthandle", 330])
-    ,new_struct('BL96', ["0100000001", '1', [], "has_graph", 96])
-    ,new_struct('BL97', ["0100000001", '1', [], "unknown1", 97])
-    ,new_struct('BL91', ["10", '0', [], "nodeid", 91])
-    ,new_struct('BL93', ["0100100000", '32', [], "edge_flags", 93])
-    ,new_struct('BL95', ["0100000001", '1', [], "num_evalexpr", 95])
-    ,new_struct('H360', ["001100100000001011100010", '3.2.2E2', [], "evalexpr", 360])
-    ,new_struct('BL92', ["0111111111", '-1', [], "node_edge1", 92])
-    ,new_struct('BL92', ["0111111111", '-1', [], "node_edge2", 92])
-    ,new_struct('BL92', ["0111111111", '-1', [], "node_edge3", 92])
-    ,new_struct('BL92', ["0111111111", '-1', [], "node_edge4", 92])
-  ],
-  Data = [S,Fields,Class,Dxf,Version],
-  go(Data).
 
-
-% summary: 118/731=16.1%
+% summary: 110/731=15.0%
 
 go0 ?=> def(0,Data).
 go1 ?=> def(1,Data).
