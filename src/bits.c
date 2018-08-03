@@ -372,9 +372,10 @@ bit_read_RL(Bit_Chain * dat)
 void
 bit_write_RL(Bit_Chain * dat, BITCODE_RL value)
 {
+  const uint32_t l = value;
   //least significant word first:
-  bit_write_RS(dat, value & 0xFFFF);
-  bit_write_RS(dat, value >> 16);
+  bit_write_RS(dat, l & 0xFFFF);
+  bit_write_RS(dat, l >> 16);
 }
 
 /** Read 1 raw long (4 byte, LE).
@@ -538,12 +539,13 @@ bit_read_BL(Bit_Chain * dat)
 void
 bit_write_BL(Bit_Chain * dat, BITCODE_BL value)
 {
-  if (value > 255)
+  const uint32_t l = value;
+  if (l > 255)
     {
       bit_write_BB(dat, 0);
       bit_write_RL(dat, value);
     }
-  else if (value == 0)
+  else if (l == 0)
     bit_write_BB(dat, 2);
   else
     {
