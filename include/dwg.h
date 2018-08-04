@@ -5684,7 +5684,6 @@ EXPORT int dwg_add_SCALE (Dwg_Object *obj);
 EXPORT int dwg_add_SORTENTSTABLE (Dwg_Object *obj);
 EXPORT int dwg_add_SPATIAL_FILTER (Dwg_Object *obj);
 EXPORT int dwg_add_SPATIAL_INDEX (Dwg_Object *obj);
-EXPORT int dwg_add_VISUALSTYLE (Dwg_Object *obj);
 EXPORT int dwg_add_WIPEOUTVARIABLES (Dwg_Object *obj);
 EXPORT int dwg_add_WIPEOUT (Dwg_Object *obj);
 
@@ -5701,6 +5700,7 @@ EXPORT int dwg_add_OBJECT_PTR (Dwg_Object *obj);
 EXPORT int dwg_add_PERSSUBENTMANAGER (Dwg_Object *obj);
 EXPORT int dwg_add_UNDERLAY (Dwg_Object *obj);
 EXPORT int dwg_add_UNDERLAYDEFINITION (Dwg_Object *obj);
+EXPORT int dwg_add_VISUALSTYLE (Dwg_Object *obj);
 
 #ifdef DEBUG_CLASSES
 
