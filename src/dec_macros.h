@@ -274,9 +274,19 @@
   { _obj->name = bit_read_TIMEBLL(dat); \
     LOG_TRACE(#name ": %.8f  (" FORMAT_BL ", " FORMAT_BL ") [TIMEBLL %d]\n", \
               _obj->name.value, _obj->name.days, _obj->name.ms, dxf); }
-#define FIELD_CMC(name,dxf) \
-  { bit_read_CMC(dat, &_obj->name); \
-    LOG_TRACE(#name ": index %d\n", _obj->name.index); }
+#define FIELD_CMC(color,dxf) \
+  { bit_read_CMC(dat, &_obj->color); \
+    LOG_TRACE(#color ".index: %d [CMC.BS %d]\n", _obj->color.index, dxf); \
+    if (dat->version >= R_2004) { \
+      LOG_TRACE(#color ".rgb: %x [CMC.BLx]\n", (unsigned)_obj->color.rgb);   \
+      if (_obj->color.flag) \
+        LOG_TRACE(#color ".flag: %x [CMC.RC]\n", (unsigned)_obj->color.flag); \
+      if (_obj->color.flag & 1) \
+        LOG_TRACE(#color ".name: %s [CMC.TV]\n", _obj->color.name); \
+      if (_obj->color.flag & 2) \
+        LOG_TRACE(#color ".bookname: %s [CMC.TV]\n", _obj->color.book_name); \
+    }\
+  }
 
 #undef DEBUG_POS
 #undef DEBUG_HERE
