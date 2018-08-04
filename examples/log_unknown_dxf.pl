@@ -897,13 +897,16 @@ my $known = {
     ],
 };
 
-print $f1 "// code, value, bytes, bitsize, type, name, num, pos[]\n";
+print $f0 "// -*- c -*-\n";
+print $f1 "// -*- c -*-\n";
+print $f1 "// code, value, bits, pre_bits, num_bits, type, name, num, pos[]\n";
+print $f2 "// -*- c -*-\n";
 
 LINE:
 while (<>) {
   my @F = split(' ');
   
-  my $dxf = $F[5];
+  my $dxf = $F[4];
   if ($dxf eq 'NULL,' or $dxf !~ /\.dxf",/) {
     next LINE; # -n
   }
@@ -918,18 +921,17 @@ while (<>) {
   #next LINE if $F[0] =~ m|//{|; # skip duplicates
   my $obj   = substr($F[1],1,-2); # "MATERIAL",
   my $bytes = substr($F[2],1,-2);
-  my $bits  = substr($F[3],1,-2);
-  my $hdl   = substr($F[6],2,-1); # 0xXXX,
+  my $hdl   = substr($F[5],2,-1); # 0xXXX,
+  my $presize = $F[6];
   my $bitsize = $F[7];
   if ($skip{"$obj-$hdl-$bitsize"}) { # skip empty unknowns
     warn "skip empty $obj-$hdl-$bitsize $dxf\n";
     next LINE;
   }
   my $unknown = pack ("H*", $bytes);
-  if ($bits) {
-    $unknown .= pack ("B8", $bits);
-  }
   $unknown = join("", map { sprintf("\\%03o", $_) } unpack("C*", $unknown));
+  $unknown = substr($unknown, $presize, $bitsize);
+
   if (exists $dupl{"$obj-$unknown"}) {
     warn "skip duplicate $obj-$hdl-$bitsize $dxf\n";
     next LINE;
@@ -971,8 +973,8 @@ while (<>) {
         }
         for (@FIELD) {
           my $t = dxf_type($_->[0]);
-          my $num = $sorted{"$t:$_->[1]"};
-          emit_field($f1, $num, @$_);
+          my $count = $sorted{"$t:$_->[1]"};
+          emit_field($f1, $count, @$_);
         }
         @FIELD = ();
         print $f0 " NULL },\n";
@@ -1140,17 +1142,17 @@ sub find_name {
 }
 
 sub emit_field {
-  my ($f, $num, $code, $v, $name, $hidden) = @_;
+  my ($f, $count, $code, $v, $name, $hidden) = @_;
   #warn "$code: $v\n";
   #return if $code == 100;
   $v =~ s/\\/\\\\/g;
   $v =~ s/"/\\"/g;
-  $num = 0 unless $num;
+  $count = 0 unless $count;
   # code, value, bytes, bitsize, type, name, num, pos[]
   if ($hidden) {
     print $f "  //";
   } else {
     print $f "    ";
   }
-  print $f "{ $code, \"$v\", NULL, 0, BITS_UNKNOWN, \"$name\", $num, {-1,-1,-1,-1,-1} },\n";
+  print $f "{ $code, \"$v\", NULL, 0, BITS_UNKNOWN, \"$name\", $count, {-1,-1,-1,-1,-1} },\n";
 }

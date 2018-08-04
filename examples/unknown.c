@@ -84,13 +84,14 @@ struct _dxf {
 #if 0
 static struct _unknown {
   const char *name;
-  const char *bytes;
   const char *bits;
   const char *log; const char *dxf;
-  const unsigned int handle; const int bitsize;
+  const unsigned int handle;
+  const int pre_bits;
+  const int num_bits;
 } unknowns[] =
   {
-   { "MATERIAL", "0e0101000f010100", "10", "150DSC4_AO-46050_QDC-fixed_2000.log", NULL, 400137, 1426 },
+   { "MATERIAL", "0e0101000f010100", "150DSC4_AO-46050_QDC-fixed_2000.log", NULL, 400137, 0, 1426 },
     /* the following types:
       5 ACDBASSOCGEOMDEPENDENCY
       3 ACDBASSOCNETWORK
