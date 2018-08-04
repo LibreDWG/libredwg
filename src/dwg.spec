@@ -5480,6 +5480,12 @@ DWG_ENTITY(CAMERA) // i.e. a named view, not persistent in a DWG. CAMERADISPLAY=
 
 DWG_ENTITY_END
 
+/* In work area:
+   The following entities/objects are all stored with partial fields,
+   plus as raw bits for examples/unknown.
+   Coverage might be missing for some cases, or field names may change.
+ */
+
 // (varies) UNSTABLE
 // works ok on all example_20* but this coverage seems limited
 DWG_OBJECT(PERSSUBENTMANAGER)
@@ -5571,6 +5577,7 @@ DWG_OBJECT(ASSOCDEPENDENCY)
   FIELD_HANDLE (node, 3, 330);
 DWG_OBJECT_END
 
+// (varies) UNSTABLE
 // 1-4 references, see associativity bits 1-8.
 DWG_OBJECT(DIMASSOC)
 
@@ -5615,14 +5622,11 @@ DWG_OBJECT(VISUALSTYLE)
 
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbVisualStyle)
+
   START_HANDLE_STREAM;
   FIELD_HANDLE (dictionary, 5, 0);
   // ~480 bits missing
 DWG_OBJECT_END
-
-/* In work area:
-   The following entities/objects are stored as raw UNKNOWN_ENT/OBJ,
-   unless enabled via -DDEBUG_CLASSES */
 
 // (varies) In Work
 /* Container for all properties relating to a generic light.  A
@@ -5634,6 +5638,7 @@ DWG_OBJECT_END
    of the light using a variety of methods.
    SpotLight, PointLight, DistantLight. dbLight.h
  */
+// (varies) UNSTABLE
 DWG_ENTITY(LIGHT)
 
   DECODE_UNKNOWN_BITS
@@ -5745,6 +5750,10 @@ DWG_OBJECT(DBCOLOR)
   REACTORS(4);
   XDICOBJHANDLE(3);
 DWG_OBJECT_END
+
+/* In work area:
+   The following entities/objects are only stored as raw UNKNOWN_ENT/OBJ,
+   unless enabled via -DDEBUG_CLASSES */
 
 #ifdef DEBUG_CLASSES
 
