@@ -4639,14 +4639,14 @@ typedef struct _dwg_object_ASSOCDEPENDENCY
 typedef struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY
 {
   struct _dwg_object_object *parent;
-  BITCODE_BL status; // 90
-  BITCODE_BL unknown1; // 90:0
-  BITCODE_BL unknown2; // 90:0
-  BITCODE_BL unknown3; // 90:1
+  BITCODE_BL aab_status; // 90
+  BITCODE_BL pab_status; // 90:0
+  BITCODE_BL pab_l2; // 90:0
+  BITCODE_BL pab_l3; // 90:1
   BITCODE_H  writedep; // 360
-  BITCODE_BL unknown4; // 90:0
-  BITCODE_BL unknown5; // 90:0
-  BITCODE_BL unknown6; // 90:0
+  BITCODE_BL pab_l4; // 90:0
+  BITCODE_BL pab_l5; // 90:0
+  BITCODE_BL pab_l6; // 90:0
   BITCODE_H  readdep; // 330
   BITCODE_BL dcm_status; // 90:0
   BITCODE_H  parenthandle; //330
@@ -4840,9 +4840,28 @@ typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER
 typedef struct _dwg_object_ASSOCPLANESURFACEACTIONBODY
 {
   struct _dwg_object_object *parent;
-  BITCODE_BL class_version; /*!< DXF 90 1 */
-  //??
-  BITCODE_H  parenthandle; //3. 330
+  // AcDbAssocActionBody
+  BITCODE_BL aab_status; // 90
+  // AcDbAssocParamBasedActionBody
+  BITCODE_BL pab_status; // 90:0
+  BITCODE_BL pab_l2; // 90:0
+  BITCODE_BL pab_l3; // 90:1
+  BITCODE_H  writedep; // 360
+  BITCODE_BL pab_l4; // 90:0
+  BITCODE_BL pab_l5; // 90:0
+  BITCODE_H  readdep; // 330
+  // AcDbAssocSurfaceActionBody
+  BITCODE_BL sab_status;/*!< DXF 90  */
+  BITCODE_B sab_b1;	/*!< DXF 290  */
+  BITCODE_BL sab_l2;	/*!< DXF 90  */
+  BITCODE_B sab_b2;	/*!< DXF 290  */
+  BITCODE_BS sab_s1;	/*!< DXF 70  */
+  // AcDbAssocPathBasedSurfaceActionBody
+  BITCODE_BL pbsab_status;	/*!< DXF 90  */
+  // AcDbAssocPlaneSurfaceActionBody
+  BITCODE_BL psab_status;	/*!< DXF 90  */
+
+  BITCODE_H  parenthandle; //330
   UNKNOWN_FIELDS;
 } Dwg_Object_ASSOCPLANESURFACEACTIONBODY;
 
@@ -5108,7 +5127,7 @@ typedef struct _dwg_object_object
     Dwg_Object_ASSOCNETWORK *ASSOCNETWORK;
     Dwg_Object_ASSOCOSNAPPOINTREFACTIONPARAM *ASSOCOSNAPPOINTREFACTIONPARAM;
     Dwg_Object_ASSOCPERSSUBENTMANAGER *ASSOCPERSSUBENTMANAGER;
-    //TODO Dwg_Object_ASSOCPLANESURFACEACTIONBODY *ASSOCPLANESURFACEACTIONBODY;
+    Dwg_Object_ASSOCPLANESURFACEACTIONBODY *ASSOCPLANESURFACEACTIONBODY;
     Dwg_Object_CELLSTYLEMAP *CELLSTYLEMAP;
     //TODO Dwg_Object_DATATABLE *DATATABLE;
     Dwg_Object_DBCOLOR *DBCOLOR;
@@ -5731,6 +5750,7 @@ EXPORT int dwg_add_WIPEOUT (Dwg_Object *obj);
 
 /* UNSTABLE: */
 EXPORT int dwg_add_ASSOCDEPENDENCY (Dwg_Object *obj);
+EXPORT int dwg_add_ASSOCPLANESURFACEACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_add_CAMERA (Dwg_Object *obj);
 EXPORT int dwg_add_DIMASSOC (Dwg_Object *obj);
 EXPORT int dwg_add_DBCOLOR (Dwg_Object *obj);
@@ -5759,7 +5779,6 @@ EXPORT int dwg_add_ASSOCNETWORK (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCGEOMDEPENDENCY (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCOSNAPPOINTREFACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCPERSSUBENTMANAGER (Dwg_Object *obj);
-//EXPORT int dwg_add_ASSOCPLANESURFACEACTIONBODY (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCVERTEXACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_add_DATATABLE (Dwg_Object *obj);
 //EXPORT int dwg_add_DETAILVIEWSTYLE (Dwg_Object *obj);

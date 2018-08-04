@@ -5578,6 +5578,41 @@ DWG_OBJECT(ASSOCDEPENDENCY)
 DWG_OBJECT_END
 
 // (varies) UNSTABLE
+// works ok on all Surface_20* but this coverage seems limited.
+// field names may change.
+// See AcDbAssocActionBody.h
+// summary: 78/98=79.59%
+DWG_OBJECT(ASSOCPLANESURFACEACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
+  SUBCLASS (AcDbAssocActionBody)
+  FIELD_BL (aab_status, 90); //1 or ownerid?
+  SUBCLASS (AcDbAssocParamBasedActionBody)
+  FIELD_BL (pab_status, 90);
+  FIELD_BL (pab_l2, 90);
+  FIELD_BL (pab_l3, 90);
+  FIELD_BL (pab_l4, 90);
+  FIELD_BL (pab_l5, 90);
+  SUBCLASS (AcDbAssocSurfaceActionBody)
+  FIELD_BL (sab_status, 90);
+  FIELD_B (sab_b1, 290);
+  FIELD_BL (sab_l2, 90);
+  FIELD_B (sab_b2, 290);
+  FIELD_BS (sab_s1, 70);
+  SUBCLASS (AcDbAssocPathBasedSurfaceActionBody)
+  FIELD_BL (pbsab_status, 90);
+  SUBCLASS (AcDbAssocPlaneSurfaceActionBody)
+  FIELD_BL (psab_status, 90);
+
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (parenthandle, 3, 0);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  FIELD_HANDLE (writedep, 0, 360);
+  FIELD_HANDLE (readdep, 0, 330);
+DWG_OBJECT_END
+
+// (varies) UNSTABLE
 // 1-4 references, see associativity bits 1-8.
 DWG_OBJECT(DIMASSOC)
 
@@ -5841,16 +5876,18 @@ DWG_OBJECT(ASSOCALIGNEDDIMACTIONBODY)
 
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbAssocActionBody)
-  FIELD_BL (status, 90); //0:1
-  SUBCLASS (AcDbAssocParamBasedActionBody)
-  FIELD_BL (unknown1, 90);
-  FIELD_BL (unknown2, 90);
-  FIELD_BL (unknown3, 90);
-  FIELD_BL (unknown4, 90);
-  FIELD_BL (unknown5, 90);
-  FIELD_BL (unknown6, 90);
+  FIELD_BL (aab_status, 90); //1 or ownerid
+  SUBCLASS(AcDbAssocParamBasedActionBody)
+  FIELD_BL (pab_status, 90);
+  FIELD_BL (pab_l2, 90);
+  FIELD_BL (pab_l3, 90);
+  //FIELD_HANDLE (writedep, 0, 360);
+  FIELD_BL (pab_l4, 90);
+  FIELD_BL (pab_l5, 90);
+  //FIELD_BL (pab_l6, 90);
   SUBCLASS (ACDBASSOCALIGNEDDIMACTIONBODY)
   FIELD_BL (dcm_status, 90); //has d_node or r_node
+
   //TODO: DXF has a different order
   START_HANDLE_STREAM;
   FIELD_HANDLE (parenthandle, 4, 330);
@@ -6659,10 +6696,6 @@ DWG_OBJECT(ASSOCGEOMDEPENDENCY)
   //1 AcDbAssocSingleEdgePersSubentId
   //290 0
   //FIELD_B (DependentOnCompoundObject, 90);
-DWG_OBJECT_END
-
-DWG_OBJECT(ASSOCPLANESURFACEACTIONBODY)
-  DECODE_UNKNOWN_BITS
 DWG_OBJECT_END
 
 // (varies) TODO
