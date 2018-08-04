@@ -3863,6 +3863,7 @@ DWG_ENTITY_END
 #if 0 /* no proxy subtypes yet. seems to be the same as LWPOLYLINE */
 DWG_ENTITY(PROXY_LWPOLYLINE)
 
+  DECODE_UNKNOWN_BITS
   FIELD_RL (size);
   FIELD_BS (flag, 70);
 
@@ -3910,6 +3911,7 @@ DWG_ENTITY_END
 //(498) pg.149 r2000+
 DWG_ENTITY(PROXY_ENTITY)
 
+  DECODE_UNKNOWN_BITS
   FIELD_BL (class_id, 91);
   PRE(R_2018)
   {
@@ -3939,6 +3941,7 @@ DWG_ENTITY_END
 //(499) pg.149 r2000+
 DWG_OBJECT(PROXY_OBJECT)
 
+  DECODE_UNKNOWN_BITS
   DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   FIELD_BL (class_id, 91);
   PRE(R_2018)
@@ -5429,66 +5432,21 @@ DWG_ENTITY_END
 
 #ifndef IS_DXF
 
-/* (varies) container to hold a unknown class entity,
-   see classes.inc
+/* UNKNOWN (varies)
+   container to hold a unknown class entity, see classes.inc
+   every DEBUGGING class holds a bits array, an prefix offset and a bitsize.
+   It starts after the common_entity|object_data until and goes until the end
+   of final padding, to the CRC.
+   (obj->address+obj->common_size/8 .. obj->address+obj->size)
  */
 DWG_ENTITY(UNKNOWN_ENT)
-
-  // bitsize does not include the handles size
-  rcount1 = bit_position(dat);
-  vcount = 8*(obj->address + obj->size) - rcount1;
-  if (vcount < 0)
-    return DWG_ERR_VALUEOUTOFBOUNDS;
-  vcount -= rcount1 % 8;
-  FIELD_VALUE(num_bytes) = vcount / 8;
-  FIELD_VALUE(num_bits)  = vcount % 8;
-
-  FIELD_TF (bytes, FIELD_VALUE(num_bytes), 0);
-  FIELD_VECTOR (bits, B, num_bits, 0);
-  DECODER {
-    if (DWG_LOGLEVEL < DWG_LOGLEVEL_INSANE)
-    {
-      LOG_TRACE("bytes [%d TF]: ", FIELD_VALUE(num_bytes));
-      LOG_TRACE_TF(FIELD_VALUE(bytes), FIELD_VALUE(num_bytes));
-      for (vcount=0; vcount<(BITCODE_BL)FIELD_VALUE(num_bits); vcount++)
-        {
-          LOG_TRACE("bits[%d]: " FORMAT_B "\n",
-                    (int)vcount, FIELD_VALUE(bits[vcount]))
-        }
-    }
-  }
-
+  DECODE_UNKNOWN_BITS
   COMMON_ENTITY_HANDLE_DATA; // including this
-
 DWG_ENTITY_END
 
 /* container to hold a raw class object (varies) */
 DWG_OBJECT(UNKNOWN_OBJ)
-
-  // bitsize does not include the handles size
-  rcount1 = bit_position(dat);
-  vcount = 8*(obj->address + obj->size) - rcount1;
-  if (vcount < 0)
-    return DWG_ERR_VALUEOUTOFBOUNDS;
-  vcount -= rcount1 % 8;
-  FIELD_VALUE(num_bytes) = vcount / 8;
-  FIELD_VALUE(num_bits)  = vcount % 8;
-
-  FIELD_TF (bytes, FIELD_VALUE(num_bytes), 0);
-  FIELD_VECTOR (bits, B, num_bits, 0);
-  DECODER {
-    if (DWG_LOGLEVEL < DWG_LOGLEVEL_INSANE)
-    {
-      LOG_TRACE("bytes [%d TF]: ", FIELD_VALUE(num_bytes));
-      LOG_TRACE_TF(FIELD_VALUE(bytes), FIELD_VALUE(num_bytes));
-      for (vcount=0; vcount<(BITCODE_BL)FIELD_VALUE(num_bits); vcount++)
-        {
-          LOG_TRACE("bits[%d]: " FORMAT_B "\n",
-                    (int)vcount, FIELD_VALUE(bits[vcount]))
-        }
-    }
-  }
-
+  DECODE_UNKNOWN_BITS
 DWG_OBJECT_END
 
 // just a dummy dwg filer, ignored for dxf
@@ -5499,6 +5457,8 @@ DWG_OBJECT_END
 #endif /* IS_DXF */
 
 DWG_OBJECT(LONG_TRANSACTION)
+
+  DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbLongTransaction)
   LOG_INFO("TODO LONG_TRANSACTION\n");
   //COMMON_ENTITY_HANDLE_DATA;
@@ -5507,6 +5467,7 @@ DWG_OBJECT_END
 // r2007+
 DWG_OBJECT(VISUALSTYLE)
 
+  DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbVisualStyle)
   FIELD_HANDLE (dictionary, 5, 0);
 
@@ -5515,12 +5476,14 @@ DWG_OBJECT_END
 // (varies) UNSTABLE
 DWG_OBJECT(OBJECT_PTR) //empty? only xdata. CAseDLPNTableRecord
 
+  DECODE_UNKNOWN_BITS
   DEBUG_HERE_OBJ
 
 DWG_OBJECT_END
 
 DWG_ENTITY(CAMERA) // i.e. a named view, not persistent in a DWG. CAMERADISPLAY=1
 
+  DECODE_UNKNOWN_BITS
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE(view, 5, 0);
 
@@ -5529,6 +5492,8 @@ DWG_ENTITY_END
 // (varies) UNSTABLE
 // works ok on all example_20* but this coverage seems limited
 DWG_OBJECT(PERSSUBENTMANAGER)
+
+  DECODE_UNKNOWN_BITS
   DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS (AcDbPersSubentManager)
   FIELD_BL (class_version, 90); //2
@@ -5550,6 +5515,7 @@ DWG_OBJECT_END
 // no DWF, DGN coverage yet
 DWG_OBJECT(UNDERLAYDEFINITION)
   
+  DECODE_UNKNOWN_BITS
   DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS(AcDbUnderlayDefinition)
   FIELD_T (filename, 1);
@@ -5566,6 +5532,7 @@ DWG_OBJECT_END
 // looks perfect, but no DWF, DGN coverage yet
 DWG_ENTITY(UNDERLAY)
 
+  DECODE_UNKNOWN_BITS
   SUBCLASS(AcDbUnderlayReference)
   FIELD_3BD (extrusion, 210);
   FIELD_3DPOINT (insertion_pt, 10);
@@ -5590,6 +5557,7 @@ DWG_ENTITY_END
 // See AcDbAssocDependency.h
 DWG_OBJECT(ASSOCDEPENDENCY)
 
+  DECODE_UNKNOWN_BITS
   DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS (AcDbAssocDependency)
   FIELD_BL (class_version, 90); //2
@@ -5615,6 +5583,7 @@ DWG_OBJECT_END
 // 1-4 references, see associativity bits 1-8.
 DWG_OBJECT(DIMASSOC)
 
+  DECODE_UNKNOWN_BITS
   DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS(AcDbDimAssoc)
   FIELD_BL (associativity, 90);
@@ -5665,6 +5634,8 @@ DWG_OBJECT_END
    SpotLight, PointLight, DistantLight. dbLight.h
  */
 DWG_ENTITY(LIGHT)
+
+  DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbLight);
   FIELD_BL (class_version, 90); //1
   FIELD_T (name, 1);
@@ -5724,6 +5695,8 @@ DWG_ENTITY_END
 // (varies) UNSTABLE
 // ENHANCEDBLOCK => AcDbDynamicBlockRoundTripPurgePreventer
 DWG_OBJECT(DYNAMICBLOCKPURGEPREVENTER)
+
+  DECODE_UNKNOWN_BITS
   DXF { FIELD_HANDLE (parenthandle, 5, 330); }
   SUBCLASS (AcDbDynamicBlockPurgePreventer)
   FIELD_BS (flag, 70); //1 class_version would be 90
@@ -5737,6 +5710,8 @@ DWG_OBJECT_END
 
 // UNSTABLE. missing color index 62: 21
 DWG_OBJECT(DBCOLOR)
+
+  DECODE_UNKNOWN_BITS
   DXF { FIELD_HANDLE (parenthandle, 3, 330); }
   SUBCLASS (AcDbColor)
   FIELD_BL (class_version, 0); //0
@@ -5774,6 +5749,8 @@ DWG_OBJECT_END
 
 // DEBUGGING
 DWG_OBJECT(EVALUATION_GRAPH)
+
+  DECODE_UNKNOWN_BITS
   DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS(AcDbEvalGraph)
   FIELD_BL(has_graph, 96);        // 1
@@ -5804,6 +5781,8 @@ DWG_OBJECT_END
 // DEBUGGING
 // See AcDbAssocActionBody.h and AcDbAssocDimDependencyBody.h
 DWG_OBJECT(ASSOCALIGNEDDIMACTIONBODY)
+
+  DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbAssocActionBody)
   FIELD_BL (status, 90); //0:1
   SUBCLASS (AcDbAssocParamBasedActionBody)
@@ -5836,6 +5815,8 @@ DWG_OBJECT_END
 // subclass of AcDbAssocAction DEBUGGING
 // Object1 --ReadDep--> Action1 --WriteDep1--> Object2 --ReadDep--> Action2 ...
 DWG_OBJECT(ASSOCNETWORK)
+
+  DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbAssocAction)
   //FIELD_HANDLE (assocaction, 5, 0);   // handle or inlined?
   FIELD_BL (status, 90); //0-9
@@ -5858,6 +5839,7 @@ DWG_OBJECT_END
 // (varies) working on DEBUGGING
 DWG_OBJECT(MATERIAL)
 
+  DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbMaterial)
   FIELD_T (name, 1);
   FIELD_T (desc, 2);
@@ -5982,6 +5964,8 @@ DWG_OBJECT_END
 
 // (varies) DEBUGGING
 DWG_OBJECT(PLOTSETTINGS)
+
+  DECODE_UNKNOWN_BITS
   //unsorted! See also LAYOUT
   SUBCLASS (AcDbPlotSettings)
   FIELD_T (page_setup_name, 1);
@@ -6049,6 +6033,7 @@ DWG_OBJECT_END
 // DXF docs put that as Entity, wrong!
 DWG_OBJECT(SUN)
 
+  DECODE_UNKNOWN_BITS
   DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS(AcDbSun)
   FIELD_BL (class_version, 90); //1
@@ -6090,6 +6075,7 @@ DWG_OBJECT(SUN)
   DEBUG_HERE_OBJ //DEBUG_POS_OBJ
   rcount1 = bit_position(dat);
   rcount2 = rcount1 - obj->address * 8; // cur offset
+#if 0
   FIELD_VALUE(num_bytes) = (obj->bitsize - rcount2) / 8;
   FIELD_VALUE(num_bits)  = (obj->bitsize - rcount2) % 8;
   LOG_TRACE("num_bytes: %d, num_bits: %d\n", FIELD_VALUE(num_bytes), FIELD_VALUE(num_bits));
@@ -6097,6 +6083,7 @@ DWG_OBJECT(SUN)
     FIELD_TF (bytes, FIELD_VALUE(num_bytes), 0);
     FIELD_VECTOR (bits, B, num_bits, 0);
   }
+#endif
   bit_set_position(dat, rcount1 + 60);
 
 #if 0
@@ -6140,6 +6127,7 @@ DWG_OBJECT_END
 // (varies) DEBUGGING, UNKNOWN FIELDS
 DWG_OBJECT(SUNSTUDY)
 
+  DECODE_UNKNOWN_BITS
   DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS(AcDbSunStudy)
   FIELD_BL (class_version, 90);
@@ -6195,6 +6183,7 @@ DWG_OBJECT_END
 // See examples/HELIX.pi.log for 2018/Helix.dxf
 DWG_ENTITY(HELIX)
 
+  DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbHelix)
   DEBUG_HERE_OBJ
   FIELD_BS (major_version, 90);
@@ -6214,6 +6203,7 @@ DWG_ENTITY_END
 // in DXF as POSITIONMARKER (rename?, no), command: GEOMARKPOSITION, GEOMARKPOINT
 DWG_ENTITY(GEOPOSITIONMARKER)
 
+  DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbGeoPositionMarker)
   FIELD_BS (type, 0); // POINT, LATLONG, MYLOCATION
   FIELD_3BD (position, 10);
@@ -6240,6 +6230,7 @@ DWG_ENTITY_END
 // r2007+
 DWG_ENTITY(EXTRUDEDSURFACE)
 
+  DECODE_UNKNOWN_BITS
   SUBCLASS(AcDbModelerGeometry)
   FIELD_BS (modeler_format_version, 70); //def 1
   SUBCLASS(AcDbSurface)
@@ -6278,6 +6269,7 @@ DWG_ENTITY_END
 // r2007+
 DWG_ENTITY(LOFTEDSURFACE)
 
+  DECODE_UNKNOWN_BITS
   SUBCLASS(AcDbModelerGeometry)
   FIELD_BS (modeler_format_version, 70); //def 1
   SUBCLASS(AcDbSurface)
@@ -6310,6 +6302,7 @@ DWG_ENTITY_END
 
 // r2007+
 DWG_ENTITY(REVOLVEDSURFACE)
+  DECODE_UNKNOWN_BITS
   SUBCLASS(AcDbModelerGeometry)
   FIELD_BS (modeler_format_version, 70); //def 1
   SUBCLASS(AcDbSurface)
@@ -6340,6 +6333,7 @@ DWG_ENTITY(REVOLVEDSURFACE)
 DWG_ENTITY_END
 
 DWG_ENTITY(SWEPTSURFACE)
+  DECODE_UNKNOWN_BITS
   SUBCLASS(AcDbModelerGeometry)
   FIELD_BS (modeler_format_version, 70); //def 1
   SUBCLASS(AcDbSurface)
@@ -6380,6 +6374,7 @@ DWG_ENTITY(SWEPTSURFACE)
 DWG_ENTITY_END
 
 DWG_ENTITY(PLANESURFACE)
+  DECODE_UNKNOWN_BITS
   SUBCLASS(AcDbModelerGeometry)
   FIELD_BS (modeler_format_version, 70); //def 1
   SUBCLASS(AcDbSurface)
@@ -6396,6 +6391,7 @@ DWG_ENTITY_END
 
 // (varies) DEBUGGING
 DWG_OBJECT(ASSOCACTION)
+  DECODE_UNKNOWN_BITS
   rcount1 = bit_position(dat);
   FIELD_B (is_body_a_proxy, 90); //0-9
   DEBUG_HERE_OBJ
@@ -6427,6 +6423,7 @@ DWG_OBJECT_END
 
 // DEBUGGING
 DWG_OBJECT(ASSOCOSNAPPOINTREFACTIONPARAM)
+  DECODE_UNKNOWN_BITS
   SUBCLASS(AcDbAssocActionParam)
   FIELD_B  (unknown1, 0); //
   FIELD_RC (unknown, 0); //01010101
@@ -6461,6 +6458,7 @@ DWG_OBJECT_END
 
 // See AcDbAssocPersSubentIdPE.h?
 DWG_OBJECT(ASSOCPERSSUBENTMANAGER)
+  DECODE_UNKNOWN_BITS
   DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS (AcDbAssocPersSubentManager)
   FIELD_BL (class_version, 90); //1
@@ -6514,6 +6512,7 @@ DWG_OBJECT_END
 // Class AcDbAssoc2dConstraintGroup
 // see https://help.autodesk.com/view/OARX/2018/ENU/?guid=OREF-AcDbAssoc2dConstraintGroup
 DWG_OBJECT(ASSOC2DCONSTRAINTGROUP)
+  DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbAssocAction)
   // This has multiple handles and types.
   FIELD_BL (solution_status, 90); // 0 WellDefined, 1 UnderConstrained, 2 OverConstrained,
@@ -6576,12 +6575,14 @@ DWG_OBJECT_END
   
 // r2000+
 DWG_OBJECT(ARCALIGNEDTEXT)
+  DECODE_UNKNOWN_BITS
 DWG_OBJECT_END
 
 // see unknown 34/117=29.1%
 // possible: [......29    7 7 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx9 99   7  9........5...9 99 9.9 9.........5...9    9..9 99    9....]
 // 90 -10000 at offset 16/117
 DWG_OBJECT(ASSOCGEOMDEPENDENCY)
+  DECODE_UNKNOWN_BITS
   //90 2 DependentOnObjectStatus (ok, NotInitializedYet, InvalidObjectId)
   //90 0 Status
   //290 1 HasCachedValue
@@ -6604,43 +6605,54 @@ DWG_OBJECT(ASSOCGEOMDEPENDENCY)
 DWG_OBJECT_END
 
 DWG_OBJECT(ASSOCPLANESURFACEACTIONBODY)
+  DECODE_UNKNOWN_BITS
 DWG_OBJECT_END
 
 // (varies) TODO
 DWG_OBJECT(DATATABLE)
 
+  DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbDataTable)
   DEBUG_HERE_OBJ
 
 DWG_OBJECT_END
 
 DWG_OBJECT(DETAILVIEWSTYLE)
+  DECODE_UNKNOWN_BITS
 DWG_OBJECT_END
 
 DWG_OBJECT(SECTIONVIEWSTYLE)
+  DECODE_UNKNOWN_BITS
 DWG_OBJECT_END
 
 DWG_OBJECT(TABLESTYLE)
+  DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbTableStyle)
 DWG_OBJECT_END
 
 // EXACXREFPANELOBJECT
 DWG_OBJECT(XREFPANELOBJECT)
+  DECODE_UNKNOWN_BITS
 DWG_OBJECT_END
 
 DWG_OBJECT(GEOMAPIMAGE)
+  DECODE_UNKNOWN_BITS
 DWG_OBJECT_END
 
 DWG_OBJECT(LEADEROBJECTCONTEXTDATA)
+  DECODE_UNKNOWN_BITS
 DWG_OBJECT_END
 
 DWG_OBJECT(LIGHTLIST)
+  DECODE_UNKNOWN_BITS
 DWG_OBJECT_END
 
 DWG_OBJECT(NPOCOLLECTION)
+  DECODE_UNKNOWN_BITS
 DWG_OBJECT_END
 
 DWG_OBJECT(POINTCLOUD)
+  DECODE_UNKNOWN_BITS
 DWG_OBJECT_END
 
 // NanoSPDS License Parser (flexlm) or nanoCAD SPDS.
@@ -6656,10 +6668,12 @@ DWG_OBJECT_END
 // Entity McDbMarker McDbMarker
 
 DWG_ENTITY(RTEXT)
+  DECODE_UNKNOWN_BITS
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
 DWG_OBJECT(CSACDOCUMENTOPTIONS)
+  DECODE_UNKNOWN_BITS
 //size 161
 DWG_OBJECT_END
 

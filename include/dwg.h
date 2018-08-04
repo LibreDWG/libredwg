@@ -870,6 +870,14 @@ typedef struct _dwg_header_variables {
  */
 typedef int Dwg_Entity_UNUSED;
 
+/*
+  common fields to store the unknown fields as bit blob
+ */
+#define UNKNOWN_FIELDS \
+  int pre_unknown_bits; \
+  unsigned long num_unknown_bits; \
+  BITCODE_RC *unknown_bits
+
 /** \ref Dwg_Entity_TEXT
  TEXT (1) entity
  */
@@ -2371,6 +2379,7 @@ typedef struct _dwg_object_LONG_TRANSACTION
 {
   struct _dwg_object_object *parent;
   /* ??? not seen */
+  UNKNOWN_FIELDS;
 } Dwg_Object_LONG_TRANSACTION;
 
 /* NOT SURE ABOUT THIS ONE (IS IT OBJECT OR ENTITY?): */
@@ -2403,6 +2412,7 @@ typedef struct _dwg_entity_PROXY_LWPOLYLINE
   BITCODE_RC unknown_1;
   BITCODE_RC unknown_2;
   BITCODE_RC unknown_3;
+  UNKNOWN_FIELDS;
 } Dwg_Entity_PROXY_LWPOLYLINE;
 
 /**
@@ -2420,6 +2430,7 @@ typedef struct _dwg_entity_PROXY_ENTITY
   BITCODE_H parenthandle;
   BITCODE_H* objid_object_handles;
   BITCODE_MS size;
+  UNKNOWN_FIELDS;
 } Dwg_Entity_PROXY_ENTITY;
 
 /**
@@ -2436,6 +2447,7 @@ typedef struct _dwg_object_PROXY_OBJECT
   BITCODE_RC* data;
   BITCODE_H parenthandle;
   BITCODE_H* objid_object_handles;
+  UNKNOWN_FIELDS;
 } Dwg_Object_PROXY_OBJECT;
 
 /**
@@ -2959,6 +2971,35 @@ typedef struct _dwg_object_LAYOUT
  */
 
 /**
+ Class DICTIONARYVAR (varies)
+ */
+typedef struct _dwg_object_DICTIONARYVAR
+{
+  struct _dwg_object_object *parent;
+
+  BITCODE_RC intval;
+  BITCODE_TV str;
+  BITCODE_H parenthandle;
+} Dwg_Object_DICTIONARYVAR;
+
+/**
+ Class DICTIONARYWDFLT (varies)
+ */
+typedef struct _dwg_object_DICTIONARYWDFLT
+{
+  struct _dwg_object_object *parent;
+
+  BITCODE_BL numitems;
+  BITCODE_RL cloning_rl; /*!< r14 only */
+  BITCODE_BS cloning;    /*!< r2000+ */
+  BITCODE_RC hard_owner;
+  BITCODE_TV* text;
+  BITCODE_H parenthandle;
+  BITCODE_H* itemhandles;
+  BITCODE_H defaultid;
+} Dwg_Object_DICTIONARYWDFLT;
+
+/**
  Class TABLE (varies)
  */
 
@@ -3191,6 +3232,7 @@ typedef struct _dwg_entity_TABLE
   Dwg_TABLE_BreakHeight *break_heights;
   BITCODE_BL num_break_rows;
   Dwg_TABLE_BreakRow *break_rows;
+  UNKNOWN_FIELDS;
 } Dwg_Entity_TABLE;
 
 typedef struct _dwg_LinkedData
@@ -3383,6 +3425,7 @@ typedef struct _dwg_object_TABLECONTENT
   Dwg_LinkedTableData tdata;
   Dwg_FormattedTableData fdata;
   BITCODE_H table_style;
+  UNKNOWN_FIELDS;
 } Dwg_Object_TABLECONTENT;
 
 /**
@@ -3415,6 +3458,7 @@ typedef struct _dwg_object_TABLESTYLE
   BITCODE_BD vert_cell_margin;
   BITCODE_BL num_cells;
   Dwg_TABLESTYLE_Cell* cells;
+  UNKNOWN_FIELDS;
 } Dwg_Object_TABLESTYLE;
 
 /**
@@ -3439,6 +3483,7 @@ typedef struct _dwg_object_CELLSTYLEMAP
 
   BITCODE_BL num_cells;
   Dwg_CELLSTYLEMAP_Cell* cells;
+  UNKNOWN_FIELDS;
 } Dwg_Object_CELLSTYLEMAP;
 
 /* 20.4.103 TABLEGEOMETRY
@@ -3464,6 +3509,7 @@ typedef struct _dwg_object_TABLEGEOMETRY
   BITCODE_BL num_cols;
   BITCODE_BL num_cells; /* = num_rows * num_cols */
   Dwg_TABLEGEOMETRY_Cell *cells;
+  UNKNOWN_FIELDS;
 } Dwg_Object_TABLEGEOMETRY;
 
 
@@ -3479,6 +3525,7 @@ typedef struct _dwg_object_UNDERLAYDEFINITION
   BITCODE_TV name;     /*!< DXF 2, pdf: page number, dgn: default, dwf: ? */
 
   BITCODE_H parenthandle;
+  UNKNOWN_FIELDS;
 } Dwg_Object_UNDERLAYDEFINITION;
 
 typedef struct _dwg_object_UNDERLAYDEFINITION Dwg_Object_PDFDEFINITION;
@@ -3509,6 +3556,7 @@ typedef struct _dwg_entity_UNDERLAY
   BITCODE_H underlay_layer;
   BITCODE_H definition_id; /*!< DXF 340 */
 
+  UNKNOWN_FIELDS;
 } Dwg_Entity_UNDERLAY;
 
 typedef struct _dwg_entity_UNDERLAY Dwg_Entity_PDFUNDERLAY;
@@ -3531,36 +3579,8 @@ typedef struct _dwg_object_DBCOLOR
   //BITCODE_CMC color;   //62: 253 color index only as EED
   //...
   BITCODE_H parenthandle;
+  UNKNOWN_FIELDS;
 } Dwg_Object_DBCOLOR;
-
-/**
- Class DICTIONARYVAR (varies)
- */
-typedef struct _dwg_object_DICTIONARYVAR
-{
-  struct _dwg_object_object *parent;
-
-  BITCODE_RC intval;
-  BITCODE_TV str;
-  BITCODE_H parenthandle;
-} Dwg_Object_DICTIONARYVAR;
-
-/**
- Class DICTIONARYWDFLT (varies)
- */
-typedef struct _dwg_object_DICTIONARYWDFLT
-{
-  struct _dwg_object_object *parent;
-
-  BITCODE_BL numitems;
-  BITCODE_RL cloning_rl; /*!< r14 only */
-  BITCODE_BS cloning;    /*!< r2000+ */
-  BITCODE_RC hard_owner;
-  BITCODE_TV* text;
-  BITCODE_H parenthandle;
-  BITCODE_H* itemhandles;
-  BITCODE_H defaultid;
-} Dwg_Object_DICTIONARYWDFLT;
 
 /**
  Class FIELDLIST AcDbField (varies)
@@ -3931,8 +3951,8 @@ typedef struct _dwg_object_VISUALSTYLE
 {
   struct _dwg_object_object *parent;
   BITCODE_H dictionary; /* (hard-pointer to DICTIONARY_VISUALSTYLE or reverse?) */
+  UNKNOWN_FIELDS;
 } Dwg_Object_VISUALSTYLE;
-
 
 /**
  Object LIGHTLIST (varies)
@@ -3948,6 +3968,7 @@ typedef struct _dwg_object_LIGHTLIST
   BITCODE_BS num_lights;
   BITCODE_H  light_handle; /* one for each light */
   BITCODE_TV light_name;   /* one for each light */
+  UNKNOWN_FIELDS;
 } Dwg_Object_LIGHTLIST;
 
 /**
@@ -4078,6 +4099,7 @@ typedef struct _dwg_object_MATERIAL
   //? BD backface_cull
   //? BD self_illum_luminance
   //? BD self_illum_color_temperature
+  UNKNOWN_FIELDS;
 } Dwg_Object_MATERIAL;
 
 /**
@@ -4142,6 +4164,7 @@ typedef struct _dwg_object_PLOTSETTINGS
   BITCODE_BS  shade_plot_custom_dpi; /*!< DXF 78, 100-32767 */
   BITCODE_2BD paper_image_origin;    /*!< DXF 148 + 149 */
   BITCODE_H   shade_plot_id;         /*!< DXF 333  optional */
+  UNKNOWN_FIELDS;
 } Dwg_Object_PLOTSETTINGS;
 
 /**
@@ -4151,6 +4174,7 @@ typedef struct _dwg_object_PLOTSETTINGS
 typedef struct _dwg_object_OBJECT_PTR
 {
   struct _dwg_object_object *parent;
+  UNKNOWN_FIELDS;
 } Dwg_Object_OBJECT_PTR;
 
 /**
@@ -4195,6 +4219,7 @@ typedef struct _dwg_entity_LIGHT
   BITCODE_BS glyph_display_type;  /*!< 0:auto, 1:on, 2:off */
   BITCODE_BS physical_intensity_method; /*!< ? */
   BITCODE_BS drawable_type;       /*!< ? */
+  UNKNOWN_FIELDS;
 } Dwg_Entity_LIGHT;
 
 /**
@@ -4205,6 +4230,7 @@ typedef struct _dwg_entity_CAMERA
 {
   struct _dwg_object_entity *parent;
   BITCODE_H view;
+  UNKNOWN_FIELDS;
 } Dwg_Entity_CAMERA;
 
 /**
@@ -4226,6 +4252,7 @@ typedef struct _dwg_entity_GEOPOSITIONMARKER
   BITCODE_T notes;        /*!< DXF 3 */
   BITCODE_H mtext_handle; /*!< DXF ? */
   BITCODE_H text_style;   /*!< DXF 7 */
+  UNKNOWN_FIELDS;
 } Dwg_Entity_GEOPOSITIONMARKER;
 
 /**
@@ -4246,6 +4273,7 @@ typedef struct _dwg_entity_HELIX
   BITCODE_B handedness;
   BITCODE_BS constraint_type;
 
+  UNKNOWN_FIELDS;
 } Dwg_Entity_HELIX;
 
 /**
@@ -4285,6 +4313,7 @@ typedef struct _dwg_entity_EXTRUDEDSURFACE
   BITCODE_3BD reference_vector_for_controlling_twist; /*!< DXF 11 */
   BITCODE_H sweep_entity;
   BITCODE_H path_entity;
+  UNKNOWN_FIELDS;
 } Dwg_Entity_EXTRUDEDSURFACE;
 
 /**
@@ -4315,6 +4344,7 @@ typedef struct _dwg_entity_LOFTEDSURFACE
   BITCODE_H cross_section;
   BITCODE_H guide_curve;
   BITCODE_H path_curve;
+  UNKNOWN_FIELDS;
 } Dwg_Entity_LOFTEDSURFACE;
 
 /**
@@ -4328,6 +4358,7 @@ typedef struct _dwg_entity_PLANESURFACE
   BITCODE_BS v_isolines;         /*!< DXF 72 */
   BITCODE_BL class_version; /*!< DXF 90 */
   
+  UNKNOWN_FIELDS;
 } Dwg_Entity_PLANESURFACE;
 
 /**
@@ -4356,6 +4387,7 @@ typedef struct _dwg_entity_REVOLVEDSURFACE
   BITCODE_B solid; // 290
   BITCODE_B close_to_axis; // 291
   
+  UNKNOWN_FIELDS;
 } Dwg_Entity_REVOLVEDSURFACE;
 
 /**
@@ -4394,6 +4426,7 @@ typedef struct _dwg_entity_SWEPTSURFACE
   BITCODE_B path_entity_transform_computed; // 296
   BITCODE_3BD reference_vector_for_controlling_twist; // 11
 
+  UNKNOWN_FIELDS;
 } Dwg_Entity_SWEPTSURFACE;
 
 /**
@@ -4421,13 +4454,10 @@ typedef struct _dwg_object_SUN
   BITCODE_BS shadow_softness; //280
 
   // 11.3 bytes missing, from UNKNOWN_OBJ
-  int num_bytes;
-  BITCODE_RC *bytes;
-  int num_bits;
-  BITCODE_B *bits;
-
   BITCODE_H skyparams;
   BITCODE_H parenthandle;
+
+  UNKNOWN_FIELDS;
 } Dwg_Object_SUN;
 
 typedef struct _dwg_SUNSTUDY_Dates
@@ -4472,6 +4502,7 @@ typedef struct _dwg_object_SUNSTUDY
   BITCODE_H  view;         //341
   BITCODE_H  visual_style; //342
   BITCODE_H  text_style;   //343
+  UNKNOWN_FIELDS;
 } Dwg_Object_SUNSTUDY;
 
 /**
@@ -4481,8 +4512,8 @@ typedef struct _dwg_object_DATATABLE
 {
   struct _dwg_object_object *parent;
   //...
+  UNKNOWN_FIELDS;
 } Dwg_Object_DATATABLE;
-
 
 /**
  Object DIMASSOC (varies) DEBUGGING
@@ -4514,6 +4545,7 @@ typedef struct _dwg_object_DIMASSOC
   BITCODE_H intsectxrefobj;   /*!< DXF 302 */
   BITCODE_H mainobj;          /*!< DXF 331 the geometry object */
   BITCODE_H intsectobj;       /*!< DXF 332 the intersection object */
+  UNKNOWN_FIELDS;
 } Dwg_Object_DIMASSOC;
 
 typedef struct _dwg_ACTIONBODY
@@ -4538,6 +4570,7 @@ typedef struct _dwg_object_ASSOCACTION
   BITCODE_H* readdeps;  // 330
   BITCODE_H* writedeps; // 360
   BITCODE_BL unknown_assoc; // 90
+  UNKNOWN_FIELDS;
 } Dwg_Object_ASSOCACTION;
 
 typedef struct _dwg_object_ASSOCDEPENDENCY
@@ -4558,6 +4591,7 @@ typedef struct _dwg_object_ASSOCDEPENDENCY
   BITCODE_H  readdep; // 330
   BITCODE_H  writedep; // 360
   BITCODE_H  node; // 330
+  UNKNOWN_FIELDS;
 } Dwg_Object_ASSOCDEPENDENCY;
 
 typedef struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY
@@ -4576,6 +4610,7 @@ typedef struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY
   BITCODE_H  parenthandle; //330
   BITCODE_H  d_node; // 330
   BITCODE_H  r_node; // 330
+  UNKNOWN_FIELDS;
 } Dwg_Object_ASSOCALIGNEDDIMACTIONBODY;
 
 /**
@@ -4601,6 +4636,7 @@ typedef struct _dwg_object_ASSOCNETWORK
   BITCODE_BL num_actions;// 90 1
   BITCODE_H* actions;    // 360
   //BITCODE_BL unknown_n3; // 90 0
+  UNKNOWN_FIELDS;
 } Dwg_Object_ASSOCNETWORK;
 
 /**
@@ -4624,6 +4660,7 @@ typedef struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM
   BITCODE_BL num_params; // 90 1
   BITCODE_H actionparam;  // 330
   BITCODE_H writedep; // 360
+  UNKNOWN_FIELDS;
 } Dwg_Object_ASSOCOSNAPPOINTREFACTIONPARAM;
 
 typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP
@@ -4654,6 +4691,7 @@ typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP
   BITCODE_BD w1; //40
   BITCODE_BD w2; //40
   BITCODE_BD w3; //40
+  UNKNOWN_FIELDS;
 } Dwg_Object_ASSOC2DCONSTRAINTGROUP;
 
 /* or maybe the nodes are layed out like this */
@@ -4680,6 +4718,7 @@ typedef struct _dwg_object_EVALUATION_GRAPH
   
   BITCODE_H  parenthandle; //330
   BITCODE_H  *evalexpr;    //360
+  UNKNOWN_FIELDS;
 } Dwg_Object_EVALUATION_GRAPH;
 
 // UNSTABLE
@@ -4690,6 +4729,7 @@ typedef struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER
   BITCODE_RS unknown_rs1;
 
   BITCODE_H  parenthandle; /* DXF 330 => BLOCK_HEADER */
+  UNKNOWN_FIELDS;
 } Dwg_Object_DYNAMICBLOCKPURGEPREVENTER;
 
 typedef struct _dwg_object_PERSSUBENTMANAGER
@@ -4704,6 +4744,7 @@ typedef struct _dwg_object_PERSSUBENTMANAGER
   BITCODE_BL unknown_bl6;   /*!< DXF 90 1 */
 
   BITCODE_H  parenthandle; //3. 330
+  UNKNOWN_FIELDS;
 } Dwg_Object_PERSSUBENTMANAGER;
 
 typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER
@@ -4751,6 +4792,7 @@ typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER
   BITCODE_B  unknown_b37;   /*!< DXF 290 0 */
 
   BITCODE_H  parenthandle; //3. 330
+  UNKNOWN_FIELDS;
 } Dwg_Object_ASSOCPERSSUBENTMANAGER;
 
 typedef struct _dwg_object_ASSOCPLANESURFACEACTIONBODY
@@ -4759,6 +4801,7 @@ typedef struct _dwg_object_ASSOCPLANESURFACEACTIONBODY
   BITCODE_BL class_version; /*!< DXF 90 1 */
   //??
   BITCODE_H  parenthandle; //3. 330
+  UNKNOWN_FIELDS;
 } Dwg_Object_ASSOCPLANESURFACEACTIONBODY;
 
 /**
@@ -4772,10 +4815,7 @@ typedef struct _dwg_entity_UNKNOWN_ENT
 {
   struct _dwg_object_entity *parent;
 
-  int num_bytes;
-  BITCODE_RC *bytes;
-  int num_bits;
-  BITCODE_B *bits;
+  UNKNOWN_FIELDS;
 } Dwg_Entity_UNKNOWN_ENT;
 
 /**
@@ -4785,10 +4825,7 @@ typedef struct _dwg_object_UNKNOWN_OBJ
 {
   struct _dwg_object_object *parent;
 
-  int num_bytes;
-  BITCODE_RC *bytes;
-  int num_bits;
-  BITCODE_B *bits;
+  UNKNOWN_FIELDS;
 } Dwg_Object_UNKNOWN_OBJ;
 
 /* OBJECTS - END ************************************************************/

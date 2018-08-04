@@ -47,7 +47,7 @@
       LOG_INSANE("\n"); \
     } \
   }
-#define LOG_TRACE_TF(var,len) LOG_TF(TRACE,var,len)
+#define LOG_TRACE_TF(var,len)  LOG_TF(TRACE,var,len)
 #define LOG_INSANE_TF(var,len) LOG_TF(INSANE,var,len)
 #define FIELD_2PT_TRACE(name, type, dxf) \
   LOG_TRACE(#name ": (" FORMAT_BD ", " FORMAT_BD ") [" #type " %d]\n", \
@@ -355,7 +355,7 @@
 
 //check for overflow into next object (invalid num_elems)
 #define AVAIL_BITS() \
-  (obj ? (long)((obj->address + obj->size)*8 - bit_position(dat) + 100) \
+  (obj ? (long)((obj->address + obj->size)*8 - bit_position(dat) + 20) \
        : 0xff00L)
 #define TYPE_MAXELEMSIZE(type) (unsigned)dwg_bits_size[BITS_##type]
 #define VECTOR_CHKCOUNT(name,type,size) \

@@ -141,6 +141,13 @@
 #define R11OPTS(b) _ent->opts_r11 & b
 #define R11FLAG(b) _ent->flag_r11 & b
 
+#define DECODE_UNKNOWN_BITS \
+  DECODER { \
+    dwg_decode_unknown(dat, obj, \
+                       &_obj->unknown_bits, &_obj->pre_unknown_bits, \
+                       &_obj->num_unknown_bits); \
+  }
+
 #ifndef COMMON_TABLE_FLAGS
 #define COMMON_TABLE_FLAGS(owner, acdbname) \
   PRE (R_13) \

@@ -953,7 +953,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
       // 1f2 for entities, 1f3 for objects
       klass->item_class_id = bit_read_BS(dat);
       LOG_TRACE("Class %d 0x%x %s\n"
-                "%s \"%s\" %d 0x%x\n",
+                " %s \"%s\" %d 0x%x\n",
                 klass->number, klass->proxyflag, klass->dxfname,
                 klass->cppname, klass->appname,
                 klass->wasazombie, klass->item_class_id)
@@ -965,7 +965,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
           klass->maint_version = bit_read_BL(dat);
           klass->unknown_1 = bit_read_BL(dat);
           klass->unknown_2 = bit_read_BL(dat);
-          LOG_TRACE("num_instances: %d, dwg/maint version: %d/%d, unk: %d/%d\n",
+          LOG_TRACE(" num_instances: %d, dwg/maint version: %d/%d, unk: %d/%d\n",
                     klass->num_instances, klass->dwg_version, klass->maint_version,
                     klass->unknown_1, klass->unknown_2);
         }
@@ -3834,6 +3834,38 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
   dat->byte = oldpos;
   dat->bit = previous_bit;
   return realloced ? -1 : error; //re-alloced or not
+}
+
+/** dwg_decode_unknown
+   container to hold a unknown class entity, see classes.inc
+   every DEBUGGING class holds a bits array, an prefix offset and a bitsize.
+   It starts after the common_entity|object_data until and goes until the end
+   of final padding, to the CRC.
+   (obj->address+obj->common_size/8 .. obj->address+obj->size)
+ */
+int
+dwg_decode_unknown(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
+                   char **restrict bits, int *restrict pre_bits,
+                   unsigned long *restrict num_bits)
+{
+  // bitsize does not include the handles size
+  // FIXME: this overshoots
+  int num_bytes;
+  unsigned long pos = bit_position(dat);
+  long size = 8*(obj->address + obj->size) - pos;
+  if (size < 0)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
+
+  *pre_bits = pos % 8;
+  num_bytes = size / 8;
+  *num_bits = size - *pre_bits;
+  if (size % 8) num_bytes++;
+
+  *bits = bit_read_TF(dat, num_bytes);
+  LOG_TRACE("unknown_bits [%d (%d,%lu) TF]: ", num_bytes, *pre_bits, *num_bits);
+  LOG_TRACE_TF(*bits, num_bytes);
+  bit_set_position(dat, pos);
+  return 0;
 }
 
 #undef IS_DECODER

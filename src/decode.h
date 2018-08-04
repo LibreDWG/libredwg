@@ -44,6 +44,10 @@ get_base_value_type(short gc);
 
 int
 dwg_decode(Bit_Chain *dat, Dwg_Data *dwg);
+int
+dwg_decode_unknown(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
+                   char **restrict bits, int *restrict pre_bits,
+                   unsigned long *restrict num_bits);
 
 /*------------------------------------------------------------------------------
  * Functions reused with decode_r2007
@@ -61,6 +65,7 @@ dwg_decode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat,
 int
 dwg_decode_add_object(Dwg_Data* dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
                       long unsigned int address);
+
 /* reused with free */
 void
 dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf);
