@@ -151,8 +151,16 @@ static unsigned int cur_ver = 0;
 #define FIELD_3BD_1(name,dxf) {FIELD(name.x, BD, dxf); FIELD(name.y, BD, dxf+1); \
     FIELD(name.z, BD, dxf+2);}
 #define FIELD_3DPOINT(name,dxf) FIELD_3BD(name,dxf)
-#define FIELD_CMC(name,dxf)\
-    PREFIX fprintf(dat->fh, "\"" #name "\": %d,\n", _obj->name.index)
+#define FIELD_CMC(color,dxf1,dxf2) { \
+  PREFIX fprintf(dat->fh, "\"" #color "\": %d,\n", _obj->color.index); \
+  if (dat->version >= R_2004) { \
+      PREFIX fprintf(dat->fh, "\"" #color "\".rgb: %x %d,\n", (unsigned)_obj->color.rgb); \
+    if (_obj->color.flag & 1) \
+      PREFIX fprintf(dat->fh, "\"" #color ".name\": \"%s\",\n", _obj->color.name); \
+    if (_obj->color.flag & 2) \
+      PREFIX fprintf(dat->fh, "\"" #color ".bookname\": \"%s\",\n", _obj->color.book_name); \
+  }\
+}
 #define FIELD_TIMEBLL(name,dxf) \
     PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_BL "." FORMAT_BL ",\n", \
             _obj->name.days, _obj->name.ms)

@@ -394,8 +394,9 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 #define FIELD_3BD(name,dxf) {FIELD(name.x, BD, dxf); FIELD(name.y, BD, dxf+10); FIELD(name.z, BD, dxf+20);}
 #define FIELD_3BD_1(name,dxf) {FIELD(name.x, BD, dxf); FIELD(name.y, BD, dxf+1); FIELD(name.z, BD, dxf+2);}
 #define FIELD_3DPOINT(name,dxf) FIELD_3BD(name,dxf)
-#define FIELD_CMC(name,dxf)\
-  VALUE_RS(_obj->name.index, dxf)
+#define FIELD_CMC(color,dxf1,dxf2) \
+  VALUE_RS(_obj->color.index, dxf1)
+// TODO: rgb
 #define FIELD_TIMEBLL(name,dxf) \
   GROUP(dxf);\
   sscanf((char*)&dat->chain[dat->byte], "%u.%u", \

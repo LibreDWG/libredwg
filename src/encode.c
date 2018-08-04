@@ -144,7 +144,7 @@ static bool env_var_checked_p;
   { bit_write_TIMEBLL(dat, (BITCODE_TIMEBLL)_obj->name); \
     LOG_TRACE(#name ": " FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms); }
 
-#define FIELD_CMC(name, dxf) bit_write_CMC(dat, &_obj->name)
+#define FIELD_CMC(name,dxf1,dxf2) bit_write_CMC(dat, &_obj->name)
 
 #define FIELD_BE(name, dxf)\
   bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z));

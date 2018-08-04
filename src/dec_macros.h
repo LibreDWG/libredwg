@@ -274,11 +274,11 @@
   { _obj->name = bit_read_TIMEBLL(dat); \
     LOG_TRACE(#name ": %.8f  (" FORMAT_BL ", " FORMAT_BL ") [TIMEBLL %d]\n", \
               _obj->name.value, _obj->name.days, _obj->name.ms, dxf); }
-#define FIELD_CMC(color,dxf) \
+#define FIELD_CMC(color,dxf1,dxf2) \
   { bit_read_CMC(dat, &_obj->color); \
-    LOG_TRACE(#color ".index: %d [CMC.BS %d]\n", _obj->color.index, dxf); \
+    LOG_TRACE(#color ".index: %d [CMC.BS %d]\n", _obj->color.index, dxf1); \
     if (dat->version >= R_2004) { \
-      LOG_TRACE(#color ".rgb: %x [CMC.BLx]\n", (unsigned)_obj->color.rgb);   \
+      LOG_TRACE(#color ".rgb: %x [CMC.BL %d]\n", (unsigned)_obj->color.rgb, dxf2); \
       if (_obj->color.flag) \
         LOG_TRACE(#color ".flag: %x [CMC.RC]\n", (unsigned)_obj->color.flag); \
       if (_obj->color.flag & 1) \

@@ -245,7 +245,8 @@ static char buf[4096];
 #define FIELD_3BD(name,dxf) FIELD_3RD(name,dxf)
 #define FIELD_3BD_1(name,dxf) {FIELD_RD(name.x,dxf); FIELD_RD(name.y,dxf+1); FIELD_RD(name.z,dxf+2);}
 #define FIELD_3DPOINT(name,dxf) FIELD_3RD(name,dxf)
-#define FIELD_CMC(name,dxf) VALUE_RS(_obj->name.index, dxf)
+#define FIELD_CMC(color,dxf1,dxf2) VALUE_RS(_obj->color.index, dxf1)
+// TODO rgb
 #define HEADER_CMC(name,dxf) \
     HEADER_9(name);\
     VALUE_RS(dwg->header_vars.name.index, dxf)

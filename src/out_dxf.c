@@ -292,8 +292,12 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 #define FIELD_3BD(name,dxf) {FIELD_BD(name.x, dxf); FIELD_BD(name.y, dxf+10); FIELD_BD(name.z, dxf+20);}
 #define FIELD_3BD_1(name,dxf) {FIELD_BD(name.x, dxf); FIELD_BD(name.y, dxf+1); FIELD_BD(name.z, dxf+2);}
 #define FIELD_3DPOINT(name,dxf) FIELD_3BD(name,dxf)
-#define FIELD_CMC(name,dxf)\
-  VALUE_RS(_obj->name.index, dxf)
+#define FIELD_CMC(color,dxf1,dxf2) { \
+  VALUE_RS(_obj->color.index, dxf1); \
+  if (dat->version >= R_2004 && dxf2 && _obj->color.rgb) { \
+    VALUE_RL(_obj->color.rgb, dxf2); \
+  } \
+}
 #define HEADER_TIMEBLL(name, dxf) \
   HEADER_9(name); FIELD_TIMEBLL(name, dxf)
 #define FIELD_TIMEBLL(name,dxf) \

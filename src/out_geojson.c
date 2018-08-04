@@ -168,7 +168,7 @@ static unsigned int cur_ver = 0;
             px, py, pz)
 #define FIELD_3DPOINT(name)     VALUE_3DPOINT(_obj->name.x, _obj->name.y, _obj->name.z)
 #define LASTFIELD_3DPOINT(name) LASTVALUE_3DPOINT(_obj->name.x, _obj->name.y, _obj->name.z)
-#define FIELD_CMC(name,dxf)
+#define FIELD_CMC(name,dxf1,dxf2)
 #define FIELD_TIMEBLL(name,dxf)
 
 //FIELD_VECTOR_N(name, type, size):

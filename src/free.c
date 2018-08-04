@@ -111,9 +111,9 @@ static Bit_Chain *dat = &pdat;
 #define FIELD_3BD_1(name,dxf) {}
 #define FIELD_3DPOINT(name,dxf) {}
 #define FIELD_TIMEBLL(name,dxf)
-#define FIELD_CMC(token, dxf)\
-  { FIELD_TV(token.name, dxf); \
-    FIELD_TV(token.book_name, dxf+1); }
+#define FIELD_CMC(color,dxf1,dxf2) \
+  { FIELD_TV(color.name, 0); \
+    FIELD_TV(color.book_name, 0); }
 
 //FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
