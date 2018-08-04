@@ -355,6 +355,9 @@ dwg_free_object(Dwg_Object *obj)
   if (obj->type == DWG_TYPE_FREED)
     return;
   dat->from_version = dat->version;
+  if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
+    goto unhandled;
+
   switch (obj->type)
     {
     case DWG_TYPE_TEXT:
@@ -608,8 +611,12 @@ dwg_free_object(Dwg_Object *obj)
                & DWG_ERR_UNHANDLEDCLASS)
         {
           int is_entity;
-          int i = obj->type - 500;
-          Dwg_Class *klass = NULL;
+          int i;
+          Dwg_Class *klass;
+
+        unhandled:
+          i = obj->type - 500;
+          klass = NULL;
 
           dwg = obj->parent;
           if (dwg->dwg_class && i >= 0 && i < (int)dwg->num_classes)
