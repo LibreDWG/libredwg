@@ -154,7 +154,7 @@ static unsigned int cur_ver = 0;
 #define FIELD_CMC(color,dxf1,dxf2) { \
   PREFIX fprintf(dat->fh, "\"" #color "\": %d,\n", _obj->color.index); \
   if (dat->version >= R_2004) { \
-      PREFIX fprintf(dat->fh, "\"" #color "\".rgb: %x %d,\n", (unsigned)_obj->color.rgb); \
+      PREFIX fprintf(dat->fh, "\"" #color "\".rgb: %x,\n", (unsigned)_obj->color.rgb); \
     if (_obj->color.flag & 1) \
       PREFIX fprintf(dat->fh, "\"" #color ".name\": \"%s\",\n", _obj->color.name); \
     if (_obj->color.flag & 2) \

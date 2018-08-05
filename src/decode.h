@@ -45,9 +45,7 @@ get_base_value_type(short gc);
 int
 dwg_decode(Bit_Chain *dat, Dwg_Data *dwg);
 int
-dwg_decode_unknown(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
-                   char **restrict bits, int *restrict pre_bits,
-                   unsigned long *restrict num_bits);
+dwg_decode_unknown(Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 
 /*------------------------------------------------------------------------------
  * Functions reused with decode_r2007

@@ -62,11 +62,15 @@ static struct _unknown_dxf {
   const unsigned int handle;
   const char *bytes;
   const int bitsize;
+  const int commonsize;
+  const int hdloff;
+  const int strsize;
+  const int objbitsize;
   const struct _unknown_field *fields;
 } unknown_dxf[] = {
     // see log_unknown_dxf.pl
     #include "alldxf_0.inc"
-    { NULL, NULL, 0, "", 0, NULL }
+    { NULL, NULL, 0, "", 0, 0, 0, 0, 0, NULL }
 };
 #include "alldxf_1.inc"
 
@@ -87,8 +91,11 @@ static struct _unknown {
   const char *bits;
   const char *log; const char *dxf;
   const unsigned int handle;
-  const int pre_bits;
-  const int num_bits;
+  const int bitsize;
+  const int commonsize;
+  const int hdloff;
+  const int strsize;
+  const int objbitsize;
 } unknowns[] =
   {
    { "MATERIAL", "0e0101000f010100", "150DSC4_AO-46050_QDC-fixed_2000.log", NULL, 400137, 0, 1426 },
@@ -107,7 +114,7 @@ static struct _unknown {
     // see log_unknown.pl
     #include "alldwg.inc"
 
-    { 0, NULL, "", "", NULL, 0L, 0L }
+   { 0, NULL, "", "", NULL, 0L, 0, 0, 0, 0, 0 }
 };
 #endif
 
@@ -698,13 +705,16 @@ main (int argc, char *argv[])
           printf("  =bits:\n"); bit_print_bits((unsigned char*)unknown_dxf[i].bytes,
                                                size);
           fprintf(pi,
-                  "def(%d,Data) =>\n"
+                  "def(%d, Data) =>\n"
                   "  println(\"%s: 0x%X (%d) %s:\"),\n"
                   "  Class=\"%s\",\n"
                   "  Dxf=\"%s\",\n"
-                  "  Version=%d,\n",
+                  "  Version=%d,\n"
+                  "  Offsets=[%d, %d, %d, %d], %% hdloff, strsize, commonsize, bitsize\n",
                   k, class, unknown_dxf[i].handle, size, unknown_dxf[i].dxf,
-                  class, unknown_dxf[i].dxf, version);
+                  class, unknown_dxf[i].dxf, version,
+                  unknown_dxf[i].hdloff, unknown_dxf[i].strsize,
+                  unknown_dxf[i].commonsize, unknown_dxf[i].objbitsize);
           fprintf(pi,
                   "  S=\"");
           bit_fprint_bits(pi, (unsigned char*)unknown_dxf[i].bytes, size);
@@ -1168,7 +1178,7 @@ main (int argc, char *argv[])
             }
           fprintf(pi,
                   "  ],\n"
-                  "  Data = [S,Fields,Class,Dxf,Version],\n"
+                  "  Data = [S,Fields,Class,Dxf,Version,Offsets],\n"
                   "  go(Data).\n\n");
           num_fields = j;
           // check for holes and percentage of found ranges

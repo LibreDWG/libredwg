@@ -959,18 +959,21 @@ while (<>) {
   my $obj   = substr($F[1],1,-2); # "MATERIAL",
   my $bytes = substr($F[2],1,-2);
   my $hdl   = substr($F[5],2,-1); # 0xXXX,
-  my $presize = $F[6];
-  my $bitsize = $F[7];
-  if ($skip{"$obj-$hdl-$bitsize"}) { # skip empty unknowns
-    warn "skip empty $obj-$hdl-$bitsize $dxf\n";
+  my $num_bits   = substr($F[6],0,-1);
+  my $commonsize = substr($F[7],0,-1);
+  my $hdloff     = substr($F[8],0,-1);
+  my $strsize    = substr($F[9],0,-1);
+  my $bitsize    = substr($F[10],0,-1);
+  if ($skip{"$obj-$hdl-$num_bits"}) { # skip empty unknowns
+    warn "skip empty $obj-$hdl-$num_bits $dxf\n";
     next LINE;
   }
   my $unknown = pack ("H*", $bytes);
   $unknown = join("", map { sprintf("\\%03o", $_) } unpack("C*", $unknown));
-  $unknown = substr($unknown, $presize, $bitsize);
+  $unknown = substr($unknown, 0, $num_bits);
 
   if (exists $dupl{"$obj-$unknown"}) {
-    warn "skip duplicate $obj-$hdl-$bitsize $dxf\n";
+    warn "skip duplicate $obj-$hdl-$num_bits $dxf\n";
     next LINE;
   } else {
     $dupl{"$obj-$unknown"}++;
@@ -1014,7 +1017,6 @@ while (<>) {
           emit_field($f1, $count, @$_);
         }
         @FIELD = ();
-        print $f0 " NULL },\n";
         print $f1 "    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}\n};\n";
       }
     }
@@ -1024,7 +1026,8 @@ while (<>) {
       if ($foundhdl) {
         warn "found $obj $hdl in $dxf\n";
         print $f0  "  { \"$obj\", \"$dxf\", 0x$hdl, /* $i */\n";
-        print $f0  "    \"$unknown\", $bitsize,";
+        printf $f0  "    \"%s\", %d, %d, %d, %d, %d, NULL },\n",
+          $unknown, $num_bits, $commonsize, $hdloff, $strsize, $bitsize;
 
         print $f1 "/* $obj $hdl in $dxf */\n";
         print $f1 "static struct _unknown_field unknown_dxf_$i\[\] = {\n";

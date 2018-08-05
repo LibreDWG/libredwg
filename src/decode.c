@@ -2629,9 +2629,11 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       // The handle stream offset, i.e. end of the object, right after
       // the has_strings bit.
       obj->hdlpos = obj->address * 8 + obj->bitsize;
+      obj->handle_offset = obj->bitsize;
       SINCE(R_2010)
       {
         obj->hdlpos += 8;
+        obj->handle_offset += 8;
         LOG_HANDLE("(bitsize: " FORMAT_RL ", ", obj->bitsize);
         LOG_HANDLE("hdlpos: %lu)\n", obj->hdlpos);
       }
@@ -2702,9 +2704,11 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       // The handle stream offset, i.e. end of the object, right after
       // the has_strings bit.
       obj->hdlpos = (obj->address * 8) + obj->bitsize;
+      obj->handle_offset = obj->bitsize;
       SINCE(R_2010)
       {
         obj->hdlpos += 8;
+        obj->handle_offset += 8;
         LOG_HANDLE("(bitsize: " FORMAT_RL ", ", obj->bitsize);
         LOG_HANDLE("hdlpos: %lu)\n", obj->hdlpos);
       }
@@ -3837,33 +3841,34 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
 }
 
 /** dwg_decode_unknown
-   container to hold a unknown class entity, see classes.inc
-   every DEBUGGING class holds a bits array, an prefix offset and a bitsize.
+   Container to hold a unknown class entity, see classes.inc
+   Every DEBUGGING class holds a bits array, a bitsize, and the handle
+   and string stream offsets.
    It starts after the common_entity|object_data until and goes until the end
    of final padding, to the CRC.
    (obj->address+obj->common_size/8 .. obj->address+obj->size)
  */
 int
-dwg_decode_unknown(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
-                   char **restrict bits, int *restrict pre_bits,
-                   unsigned long *restrict num_bits)
+dwg_decode_unknown(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   // bitsize does not include the handles size
-  // FIXME: this overshoots
   int num_bytes;
   unsigned long pos = bit_position(dat);
-  long size = 8*(obj->address + obj->size) - pos;
-  if (size < 0)
+  long bitsize = 8*(obj->address + obj->size) - pos;
+  if (bitsize < 0)
     return DWG_ERR_VALUEOUTOFBOUNDS;
 
-  *pre_bits = pos % 8;
-  num_bytes = size / 8;
-  *num_bits = size - *pre_bits;
-  if (size % 8) num_bytes++;
+  //*pre_bits = pos % 8;
+  obj->num_unknown_bits = bitsize;
+  num_bytes = bitsize / 8;
+  if (bitsize % 8) num_bytes++;
 
-  *bits = bit_read_TF(dat, num_bytes);
-  LOG_TRACE("unknown_bits [%d (%d,%lu) TF]: ", num_bytes, *pre_bits, *num_bits);
-  LOG_TRACE_TF(*bits, num_bytes);
+  obj->unknown_bits = bit_read_TF(dat, num_bytes);
+  LOG_TRACE("unknown_bits [%ld (%lu,%ld,%d) TF]: ",
+            bitsize, obj->common_size,
+            obj->handle_offset - obj->common_size,
+            (int)obj->stringstream_size);
+  LOG_TRACE_TF(obj->unknown_bits, num_bytes);
   bit_set_position(dat, pos);
   return 0;
 }

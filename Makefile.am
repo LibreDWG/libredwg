@@ -55,9 +55,10 @@ unknown:
 if HAVE_PICAT
 	-for f in examples/[A-Z]*.pi; do \
 	  echo $(TIMEOUT_30) picat $$f; \
-	  $(TIMEOUT_30) $(PICAT) $$f >$$f.log || \
-	    $(TIMEOUT_30) $(PICAT) -g go1 $$f >$$f.log; \
-	done
+	  $(TIMEOUT_30) $(PICAT) $$f >$$f.tmplog || \
+	    $(TIMEOUT_30) $(PICAT) -g go0 $$f >$$f.tmplog; \
+	    if test -s $$f.tmplog; then mv $$f.tmplog $$f.log; fi \
+	done; rm examples/[A-Z]*.pi.tmplog 2>/dev/null
 endif
 
 regen-man:

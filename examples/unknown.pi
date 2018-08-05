@@ -29,9 +29,10 @@ dxfcode(S) = cond(S.length >= 5, S[5],
 bitslen(S) = S[1].length.
 
 go(Data) =>
-  [S,Fields,Class,Dxf,Version] = Data,
+  [S,Fields,Class,Dxf,Version,Offsets] = Data,
   Found = [],
   println(S), nl,
+  print("[hdloff, strsize, commonsize, bitsize]="),println(Offsets),
   S := S.delete_all(" "),
   S := S.delete_all("\n"),
   foreach(Sub in Fields)

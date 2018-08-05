@@ -19,20 +19,18 @@ if (/handle: .+\..+\.(.+) \[5\]\n/) {
 if (/Warning: (?:Unhandled|Unstable) Class (?:object|entity) \d+ (\w+) /) {
   $object = $1; next;
 }
-if (/object UNKNOWN_OBJ bitsize: (.\d+)/) {
-  $bitsize = $1; next;
-}
-if (/entity UNKNOWN_ENT Entity bitsize: (.\d+)/) {
+if (/ Decode entity $object Entity bitsize: (.\d+)/) {
   $bitsize = $1; next;
 }
 if (/ \(bitsize: (.\d+), hdlpos/) {
   $bitsize = $1; next;
 }
-if (/ Decode (?:object|entity) $object bitsize: (.\d+)$/) {
+if (/ Decode (?:object|entity) $object bitsize: (.\d+)/) {
   $bitsize = $1; next;
 }
-if (/^unknown_bits \[(\d+) \((\d),(\d+)\) TF\]: ([0-9a-f]+\n)/) {
-  ($num_bytes, $pre_bits, $num_bits, $b) = ($1, $2, $3, $4);
+
+if (/^unknown_bits \[(\d+) \((\d+),(\d+),(\d+)\) TF\]: ([0-9a-f]+\n)/) {
+  ($num_bits, $commonsize, $hdloff, $strsize, $b) = ($1, $2, $3, $4, $5);
   chomp $b; next;
 }
 if (/Next object: /) {
@@ -53,9 +51,10 @@ if (/Next object: /) {
     }
     next if $dxf =~ /work\.orig/; # skip temp. duplicates
     $dxf = undef unless -f $dxf;
-    printf "    { \"$object\", \"$b\", \"$ARGV\", %s, 0x$handle, $pre_bits, $num_bits },\n",
+    printf "    { \"$object\", \"$b\", \"$ARGV\", %s, 0x$handle, ".
+           "$num_bits, $commonsize, $hdloff, $strsize, $bitsize },\n",
       $dxf ? "\"$dxf\"" : "NULL";
-    $object = $bitsize = $b = $bits = $handle = undef;
-    $num_bytes = $pre_bits = $num_bits = undef;
+    $object = $b = $handle = undef;
+    $num_bits = $commonsize = $hdloff = $strsize = $bitsize = 0;
   }
 }
