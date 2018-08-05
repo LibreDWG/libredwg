@@ -5,31 +5,34 @@
 
 =cut
 
+# also triggered by objectmap (print) and free
 if (/^Warning: (?:Unhandled|Unstable) Class (?:object|entity) \d+ (\w+) /) {
-  print "object=$1\n";
+  print "//log=$ARGV object=$1\n";
   $object = $1; next;
 }
 next unless $object;
 
 if (/ \(bitsize: (.\d+), hdlpos/) {
-  print "bitsize hdlpos=$1\n";
+  print "//bitsize hdlpos=$1\n";
   $bitsize = $1; next;
 }
 elsif (/ Decode (?:object|entity) \w+ bitsize: (\d+)/) {
-  print "bitsize decode=$1\n";
+  print "//bitsize decode=$1\n";
   $bitsize = $1; next;
 }
-next unless $bitsize;
-
-if (/^handle: .+\..+\.(.+) \[5\]$/) {
-  print "handle=$1\n";
+elsif (/^bitsize: (\d+) \[RL\]/) {
+  print "//bitsize r14=$1\n";
+  $bitsize = $1; next;
+}
+elsif (/handle: 0\.\d+\.([0-9A-F]+) \[5\]$/) {
+  print "//handle=$1\n";
   $handle = $1; next;
 }
-next unless $handle;
+next unless $bitsize and $handle;
 
-if (/^unknown_bits \[(\d+) \((\d+),(\d+),(\d+)\) TF\]: ([0-9a-f]+$)/) {
+if (/^unknown_bits \[(\d+) \((\d+),(-?\d+),(\d+)\) TF\]: ([0-9a-f]+$)/) {
   ($num_bits, $commonsize, $hdloff, $strsize, $b) = ($1, $2, $3, $4, $5);
-  print "offsets=$num_bits, $commonsize, $hdloff, $strsize\n";
+  print "//offsets=$num_bits, $commonsize, $hdloff, $strsize\n";
   chomp $b; next;
 }
 next unless $b;

@@ -4296,6 +4296,7 @@ DWG_OBJECT_END
 //pg.237 20.4.97
 DWG_OBJECT(TABLECONTENT)
 
+  DECODE_UNKNOWN_BITS
   //SUBCLASS (AcDbDataTableContent)
   FIELD_T (ldata.name, 1);
   FIELD_T (ldata.desc, 300);
@@ -4446,6 +4447,7 @@ DWG_OBJECT_END
 // unused
 DWG_OBJECT(CELLSTYLEMAP)
 
+  DECODE_UNKNOWN_BITS
   //SUBCLASS (AcDbCellStyleMap)
   FIELD_BL (num_cells, 90);
   REPEAT(num_cells, cells, Dwg_CELLSTYLEMAP_Cell)
@@ -4463,6 +4465,7 @@ DWG_OBJECT_END
 //pg.246 20.4.103
 DWG_OBJECT(TABLEGEOMETRY)
 
+  DECODE_UNKNOWN_BITS
   //SUBCLASS (AcDbTableGeometry)
   FIELD_BL (num_rows, 90);
   FIELD_BL (num_cols, 91);
@@ -4498,6 +4501,7 @@ DWG_OBJECT_END
 //this works for the pre-2010 variant, deriving from INSERT
 DWG_ENTITY(TABLE)
 
+  DECODE_UNKNOWN_BITS
   SINCE(R_2010) //AC1024
     {
       FIELD_RC (unknown_rc, 0);
@@ -5046,6 +5050,7 @@ DWG_OBJECT_END
 // VBA_PROJECT (81 + varies), a blob
 DWG_OBJECT(VBA_PROJECT)
 
+  DECODE_UNKNOWN_BITS
   DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS (AcDbVbaProject)
   FIELD_RL (num_bytes, 0);
@@ -5065,6 +5070,7 @@ DWG_OBJECT_END
  */
 DWG_ENTITY(MULTILEADER)
 
+  //DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbMLeader)
   DXF { VALUE_TV ("CONTEXT_DATA{", 300); } //AcDbObjectContextData
 
@@ -6396,6 +6402,7 @@ DWG_ENTITY_END
 
 // r2007+
 DWG_ENTITY(REVOLVEDSURFACE)
+
   DECODE_UNKNOWN_BITS
   SUBCLASS(AcDbModelerGeometry)
   FIELD_BS (modeler_format_version, 70); //def 1
@@ -6427,6 +6434,7 @@ DWG_ENTITY(REVOLVEDSURFACE)
 DWG_ENTITY_END
 
 DWG_ENTITY(SWEPTSURFACE)
+
   DECODE_UNKNOWN_BITS
   SUBCLASS(AcDbModelerGeometry)
   FIELD_BS (modeler_format_version, 70); //def 1
@@ -6468,6 +6476,7 @@ DWG_ENTITY(SWEPTSURFACE)
 DWG_ENTITY_END
 
 DWG_ENTITY(PLANESURFACE)
+
   DECODE_UNKNOWN_BITS
   SUBCLASS(AcDbModelerGeometry)
   FIELD_BS (modeler_format_version, 70); //def 1

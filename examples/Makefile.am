@@ -45,18 +45,16 @@ alldxf_0.inc: alldwg.inc log_unknown_dxf.pl
 	-mv alldxf_2.inc alldxf_2.inc~ 2>/dev/null
 	cd .. && $(PERL) examples/log_unknown_dxf.pl examples/alldwg.inc
 alldwg.inc: log_unknown.pl
-	echo Creating alldwg.inc will need a few minutes...
 	test x"$$srcdir" = x"$$builddir" || false
+	echo Creating alldwg.inc will need a few minutes...
 	-cd .. && ./logs.sh; \
 	  rm alldwg.tmp 2>/dev/null; \
 	  mv examples/alldwg.inc examples/alldwg.inc~; \
 	  for l in *_r*.log *_20*.log DS_*.log; \
 	    do $(PERL) examples/log_unknown.pl "$$l" >>alldwg.tmp; done; \
-          sort < alldwg.tmp > examples/alldwg.inc; rm alldwg.tmp
+          grep -v '^//' alldwg.tmp | sort >examples/alldwg.inc; rm alldwg.tmp
 
-regen-unknown:
-	$(MAKE) alldwg.inc
-	$(MAKE) alldxf_0.inc
+regen-unknown: alldwg.inc alldxf_0.inc
 else
 regen-unknown:
 	echo "Need a configure in srcdir"
