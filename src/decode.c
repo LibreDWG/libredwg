@@ -2622,7 +2622,7 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   VERSIONS (R_2000, R_2007)
     {
       obj->bitsize = bit_read_RL(dat); // until the handles
-      LOG_TRACE("Entity bitsize: " FORMAT_BL " @%lu.%u\n", obj->bitsize, dat->byte, dat->bit)
+      LOG_TRACE("bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize, dat->byte, dat->bit)
     }
   SINCE (R_2007)
     {
@@ -2695,7 +2695,7 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   VERSIONS(R_2000, R_2007)
     {
       obj->bitsize = bit_read_RL(dat);
-      LOG_TRACE("bitsize: " FORMAT_RL "\n", obj->bitsize);
+      LOG_TRACE("bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize, dat->byte, dat->bit)
     }
   SINCE(R_2007)
     {
