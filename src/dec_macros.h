@@ -549,7 +549,7 @@
     return DWG_ERR_VALUEOUTOFBOUNDS; \
   } \
   LOG_INSANE("REPEAT_CHKCOUNT %s." #name " x %ld: %ld > %ld?\n", \
-    obj->dxfname, (long)times, (long)(times)*sizeof(type), AVAIL_BITS()); \
+    obj->dxfname, (long)times, (long)((times)*sizeof(type)), AVAIL_BITS()); \
   if (dat->version >= R_2004 && (long)((times)*sizeof(type)) > AVAIL_BITS()) { \
     LOG_ERROR("Invalid %s." #name " x %ld\n", obj->dxfname, (long)times); \
     return DWG_ERR_VALUEOUTOFBOUNDS; }
@@ -560,7 +560,7 @@
     return DWG_ERR_VALUEOUTOFBOUNDS; \
   } \
   LOG_INSANE("REPEAT_CHKCOUNT_LVAL %s." #name " x %ld: %ld > %ld?\n", \
-    obj->dxfname, (long)times, (long)(times)*sizeof(type), AVAIL_BITS()); \
+    obj->dxfname, (long)times, (long)((times)*sizeof(type)), AVAIL_BITS()); \
   if (dat->version >= R_2004 && (long)((times)*sizeof(type)) > AVAIL_BITS()) { \
     LOG_ERROR("Invalid %s." #name " x %ld\n", obj->dxfname, (long)times); \
     times = 0; \
