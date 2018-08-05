@@ -38,17 +38,18 @@ alldxf_2.inc: alldxf_1.inc
 alldxf_1.inc: alldxf_0.inc
 alldxf_0.inc: alldwg.inc log_unknown_dxf.pl
 	test -d ../.git || false
-	test x"$srcdir" = x"$builddir" || false
+	test x"$$srcdir" = x"$$builddir" || false
 	test -f alldwg.inc || (echo make regen-unknown; false)
-	-mv alldxf_0.inc alldxf_0.inc~
-	-mv alldxf_1.inc alldxf_1.inc~
-	-mv alldxf_2.inc alldxf_2.inc~
+	-mv alldxf_0.inc alldxf_0.inc~ 2>/dev/null
+	-mv alldxf_1.inc alldxf_1.inc~ 2>/dev/null
+	-mv alldxf_2.inc alldxf_2.inc~ 2>/dev/null
 	cd .. && $(PERL) examples/log_unknown_dxf.pl examples/alldwg.inc
 alldwg.inc: log_unknown.pl
 	echo Creating alldwg.inc will need a few minutes...
-	test x"$srcdir" = x"$builddir" || false
+	test x"$$srcdir" = x"$$builddir" || false
 	-cd .. && ./logs.sh; \
-	  rm alldwg.tmp; mv examples/alldwg.inc examples/alldwg.inc~; \
+	  rm alldwg.tmp 2>/dev/null; \
+	  mv examples/alldwg.inc examples/alldwg.inc~; \
 	  for l in *_r*.log *_20*.log DS_*.log; \
 	    do $(PERL) examples/log_unknown.pl "$$l" >>alldwg.tmp; done; \
           sort < alldwg.tmp > examples/alldwg.inc; rm alldwg.tmp
@@ -58,7 +59,7 @@ regen-unknown:
 	$(MAKE) alldxf_0.inc
 else
 regen-unknown:
-	$(ECHO) Need a configure in srcdir
+	echo "Need a configure in srcdir"
 endif
 endif
 
