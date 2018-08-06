@@ -56,7 +56,7 @@ if HAVE_PICAT
 	-for f in examples/[A-Z]*.pi; do \
 	  echo $(TIMEOUT_30) picat $$f; \
 	  $(TIMEOUT_30) $(PICAT) $$f >$$f.tmplog; \
-	  if test -n "`grep 'Definite' $$f.tmplog`"; then \
+	  if test -n "`grep 'Most probable result:' $$f.tmplog`"; then \
 	    mv $$f.tmplog $$f.log; \
 	  fi; \
 	done; rm examples/[A-Z]*.pi.tmplog 2>/dev/null
