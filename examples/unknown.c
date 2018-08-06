@@ -664,6 +664,7 @@ cquote(char *restrict dest, const char *restrict src) {
     else if (c == '\\') { *dest++ = '\\'; *dest++ = c; }
     else                                  *dest++ = c;
   }
+  *dest = 0; //add final delim, skipped above
   return d;
 }
 
