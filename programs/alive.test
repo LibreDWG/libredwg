@@ -84,7 +84,7 @@ run ()
                 tail -n100 $log ;;
         esac
     fi
-    if test x$MINGW != x -a x$OLDTESTPROG != x; then
+    if test x"$MINGW" != x -a x"$OLDTESTPROG" != x; then
         TESTPROG=$OLDTESTPROG
     fi
 }
