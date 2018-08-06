@@ -78,6 +78,7 @@ static struct _unknown_dxf {
 struct _dxf {
   unsigned char *found;    //coverage per bit for found 1
   unsigned char *possible; //coverage for mult. finds >1
+  int bitsize; //copy of unknown_dxf.bitsize
   int num_filled;
   int num_empty;
   int num_possible;
@@ -484,6 +485,11 @@ static int
 set_found (struct _dxf *dxf, const struct _unknown_field *g) {
   // check for overlap, if already found by some other field
   int overlap = 0;
+  if (g->bitsize + g->pos[0] > dxf->bitsize) {
+    fprintf(stderr, "overflow with found group %d %s: %d+%d >= %d\n",
+            g->code, g->name, g->bitsize, g->pos[0], dxf->bitsize);
+    return 1;
+  }
   for (int k=g->pos[0]; k < g->bitsize + g->pos[0]; k++) {
     if (dxf->found[k] && !overlap && k < g->bitsize) {
       overlap = 1;
@@ -498,10 +504,15 @@ static int
 set_found_i (struct _dxf *dxf, const struct _unknown_field *g, int i) {
   // check for overlap, if already found by some other field
   int overlap = 0;
+  if (g->bitsize + g->pos[i] > dxf->bitsize) {
+    fprintf(stderr, "overflow with found group %d %s: %d+%d >= %d\n",
+            g->code, g->name, g->bitsize, g->pos[i], dxf->bitsize);
+    return 1;
+  }
   for (int k=g->pos[i]; k < g->bitsize + g->pos[i]; k++) {
     if (dxf->found[k] && !overlap) {
       overlap = 1;
-      printf("field %d already found at %d\n", g->code, k);
+      printf("field %d %s already found at %d\n", g->code, g->name, k);
     }
     dxf->found[k]++;
   }
@@ -512,6 +523,11 @@ static void
 set_possible_pos(struct _dxf *dxf, const struct _unknown_field *g, const int pos)
 {
   // add coverage counter for each bit
+  if (g->bitsize + pos > dxf->bitsize) {
+    fprintf(stderr, "overflow with possible group %d %s: %d+%d >= %d\n",
+            g->code, g->name, g->bitsize, pos, dxf->bitsize);
+    return;
+  }
   for (int k=pos; k < g->bitsize + pos; k++) {
     dxf->possible[k]++;
   }
@@ -546,7 +562,7 @@ membits(const unsigned char *restrict big, const int bigsize,
   int pos = offset;
   if (smallsize > bigsize)
     return -1;
-  while (pos < bigsize) {
+  while (pos + smallsize < bigsize) {
     int i = 0;
     while (i < smallsize) {
       if (BIT(big, pos+i) != BIT(small, i))
@@ -697,8 +713,9 @@ main (int argc, char *argv[])
           s = strstr(unknown_dxf[i].dxf, "20");
           if (s)
             sscanf(s, "%d", &version);
-          dxf[i].found = calloc(1, unknown_dxf[i].bitsize);
-          dxf[i].possible = calloc(1, unknown_dxf[i].bitsize);
+          dxf[i].found = calloc(1, unknown_dxf[i].bitsize+1);
+          dxf[i].possible = calloc(1, unknown_dxf[i].bitsize+1);
+          dxf[i].bitsize = unknown_dxf[i].bitsize+1;
           //TODO offline: find the shortest objects.
           printf("\n%s: 0x%X (%d) %s\n", unknown_dxf[i].name, unknown_dxf[i].handle,
                  size, unknown_dxf[i].dxf);
