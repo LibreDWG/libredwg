@@ -267,8 +267,9 @@ dwg_free_common_entity_data(Dwg_Object* obj)
 
   Dwg_Data *dwg = obj->parent;
   Dwg_Object_Entity *_obj;
-  BITCODE_BL vcount;
   Dwg_Object_Entity *ent;
+  Bit_Chain *hdl_dat = NULL;
+  BITCODE_BL vcount;
   int error = 0;
 
   ent = obj->tio.entity;

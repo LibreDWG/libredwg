@@ -115,6 +115,7 @@ const char *dwg_bits_name[] =
   "BLL",
   "TIMEBLL",
   "CMC",
+  "EMC",
   "2RD",
   "3RD",
   "2BD",
@@ -158,6 +159,7 @@ const unsigned char dwg_bits_size[] =
   3, //"BLL",
   4, //"TIMEBLL", 2xBL
   2, //"CMC", r2004+: +2
+  4, //"EMC", r2004+
   128, //"2RD",
   196, //"3RD",
   4, //"2BD",

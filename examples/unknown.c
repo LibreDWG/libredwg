@@ -34,6 +34,7 @@
 #include "dwg.h"
 #include "../src/bits.h"
 #include "../src/logging.h"
+#include "../src/common.h"
 
 #ifndef M_PI_2
 # define M_PI_2      1.57079632679489661923132169163975144
@@ -268,11 +269,49 @@ static void
 bits_CMC(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
   //dat should know if >= R_2004, but we just search for the index
+  //we first try EMC, only if it fails CMC
   Dwg_Color color;
   memset(&color, 0, sizeof(color));
   color.index = strtol(g->value, NULL, 10);
   bit_write_CMC(dat, &color);
   g->type = BITS_CMC;
+}
+
+// needs to know color.index (62) and color.rgb (421) at least, opt. also alpha (441)
+static void
+bits_EMC(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
+{
+  //dat should know if >= R_2004, but we just search for the index
+  Dwg_Color color;
+  memset(&color, 0, sizeof(color));
+  color.index = strtol(g->value, NULL, 10);
+  if (dat->version >= R_2004) {
+    //check next g field
+    struct _unknown_field *ng = g+1;
+    struct _unknown_field *ng2 = g+2;
+    if (ng->code >= 420 && ng->code < 430) {
+      color.flag = 0x80;
+      color.rgb = strtol(ng->value, NULL, 10);
+      if (ng2->code >= 430 && ng2->code < 440) {
+        color.flag |= 0x1;
+        color.name = (char*)ng2->value;
+        ng2++;
+        if (ng2->code >= 440 && ng2->code < 450) {
+          color.flag |= 0x20;
+          color.alpha = strtol(ng2->value, NULL, 10);
+        }
+      }
+      else if (ng2->code >= 440 && ng2->code < 450) {
+        color.flag |= 0x20;
+        color.alpha = strtol(ng2->value, NULL, 10);
+      }
+    } else if (ng->code >= 440 && ng->code < 450) {
+      color.flag = 0x20;
+      color.alpha = strtol(ng->value, NULL, 10);
+    }
+  }
+  bit_write_EMC(dat, &color);
+  g->type = BITS_EMC;
 }
 
 static void
@@ -362,13 +401,16 @@ bits_try_handle (struct _unknown_field *g, int code, unsigned int objhandle)
 }
 
 static void
-bits_format (struct _unknown_field *g, const int is16)
+bits_format (struct _unknown_field *g, const int version)
 {
   int code = g->code;
   Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
   dat.chain = calloc(1,16);
-  if (is16)
-    dat.version = R_2007;
+  if (version) {
+    char s[16];
+    sprintf(s, "r%d", version);
+    dat.version = dwg_version_as(s);
+  }
 
   if (0 <= code && code < 5)
     bits_string(&dat, g);
@@ -381,8 +423,11 @@ bits_format (struct _unknown_field *g, const int is16)
     bits_BD(&dat, g);
   else if (code < 60)
     bits_angle_BD(&dat, g); //deg2rad for angles
-  else if (code == 63)
-    bits_CMC(&dat, g);
+  else if (code < 70)
+    if (version >= R_2004)
+      bits_EMC(&dat, g);
+    else
+      bits_CMC(&dat, g);
   else if (code < 80)
     bits_BS(&dat, g);
   else if (80 <= code && code <= 99) //BL int32
@@ -424,11 +469,11 @@ bits_format (struct _unknown_field *g, const int is16)
   else if (code <= 419)
     bits_string(&dat, g);
   else if (code <= 429)
-    bits_BLs(&dat, g); //int32_t
+    bits_BLs(&dat, g); //int32_t. ignore if after color
   else if (code <= 439)
-    bits_string(&dat, g);
+    bits_string(&dat, g); // ignore if after color
   else if (code <= 449)
-    bits_BLs(&dat, g);//int32_t
+    bits_BLs(&dat, g);//int32_t. ignore if after color
   else if (code <= 459)
     bits_BL(&dat, g);//long
   else if (code <= 469)
@@ -759,7 +804,7 @@ main (int argc, char *argv[])
               }
               //if we came here from continue, i.e. not_found
               //store the binary repr
-              bits_format(&g[j], is16);
+              bits_format(&g[j], version);
             SEARCH:
               //searching for it in the stream and store found position if found only once
               num_found = search_bits(j, &g[j], &unknown_dxf[i], &dxf[i], offset);
@@ -790,6 +835,19 @@ main (int argc, char *argv[])
                       //sprintf(&g[j].value, "%x..%X", handles[c], hdl); 
                       goto FOUND;
                     }
+                  }
+                }
+                if (g[j].type == BITS_EMC) {
+                  Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
+                  dat.chain = calloc(1,16);
+
+                  bits_CMC (&dat, &g[j]);
+                  g[j].bytes = dat.chain;
+                  g[j].bitsize = (dat.byte * 8) + dat.bit;
+                  num_found = search_bits(j, &g[j], &unknown_dxf[i], &dxf[i], offset);
+                  free (dat.chain);
+                  if (num_found) {
+                    goto FOUND;
                   }
                 }
                 if (g[j].type == BITS_BS && strlen(g[j].value) < 3) {

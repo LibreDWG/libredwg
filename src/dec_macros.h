@@ -286,6 +286,22 @@
         LOG_TRACE(#color ".bookname: %s [CMC.TV]\n", _obj->color.book_name); \
     }\
   }
+#define FIELD_EMC(color,dxf1,dxf2) \
+  { bit_read_EMC(dat, &_obj->color); \
+    LOG_TRACE(#color ".index: %d [EMC.BS %d]\n", _obj->color.index, dxf1); \
+    if (dat->version >= R_2004) { \
+      if (_obj->color.flag) \
+        LOG_TRACE(#color ".flag: 0x%x\n", (unsigned)_obj->color.flag); \
+      if (_obj->color.flag & 0x20) \
+        LOG_TRACE(#color ".alpha: 0x%06x [EMC.BL %d]\n", (unsigned)_obj->color.alpha, dxf2+20); \
+      if (_obj->color.flag & 0x80) \
+        LOG_TRACE(#color ".rgb: 0x%06x [EMC.BL %d]\n", (unsigned)_obj->color.rgb, dxf2); \
+      if (_obj->color.flag & 0xff1) \
+        LOG_TRACE(#color ".name: %s [EMC.TV %d]\n", _obj->color.name, dxf2+10);    \
+      if (_obj->color.flag & 0xff2) \
+        LOG_TRACE(#color ".bookname: %s [EMC.TV]\n", _obj->color.book_name); \
+    }\
+  }
 
 #undef DEBUG_POS
 #undef DEBUG_HERE

@@ -894,6 +894,7 @@ my $known = {
     41 => 'face_specular',
     90 => 'face_modifier',
     62 => 'color',
+    420 => 'color.rgb',
     63 => 'face_mono_color',
     421 => 'face_mono_color.rgb',
     74 => 'edge_model',

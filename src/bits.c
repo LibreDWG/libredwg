@@ -1456,7 +1456,7 @@ bit_write_TIMEBLL(Bit_Chain * dat, BITCODE_TIMEBLL date)
 /** Read color
  */
 void
-bit_read_CMC(Bit_Chain * dat, Dwg_Color* color)
+bit_read_CMC(Bit_Chain *restrict dat, Dwg_Color *restrict color)
 {
   color->index = bit_read_BS(dat);
   if (dat->version >= R_2004)
@@ -1473,7 +1473,7 @@ bit_read_CMC(Bit_Chain * dat, Dwg_Color* color)
 /** Write color
  */
 void
-bit_write_CMC(Bit_Chain * dat, Dwg_Color* color)
+bit_write_CMC(Bit_Chain *restrict dat, Dwg_Color *restrict color)
 {
   bit_write_BS(dat, color->index);
   if (dat->version >= R_2004)
@@ -1484,6 +1484,58 @@ bit_write_CMC(Bit_Chain * dat, Dwg_Color* color)
         bit_write_TV(dat, color->name);
       if (color->flag & 2)
         bit_write_TV(dat, color->book_name);
+    }
+}
+
+/** Read entity color (2004+)
+ */
+void
+bit_read_EMC(Bit_Chain *restrict dat, Dwg_Color *restrict color)
+{
+  color->index = bit_read_BS(dat);
+  if (dat->version >= R_2004)
+    {
+      uint16_t flag = color->index >> 8;
+      color->index &= 0x1ff;
+      //if (flag & 0x40) {
+      //  color.handle = dwg_decode_handleref(hdl_dat, obj, dwg);
+      //}
+      if (flag & 0x20) {
+        BITCODE_BL trlong = bit_read_BL(dat);
+        color->transparency_type = trlong & 0xff;
+        color->alpha = trlong >> 8;
+      }
+      if (!(flag & 0x40) && (flag & 0x80))
+        color->rgb = bit_read_BL(dat);
+      if ((flag & 0x41) == 0x41)
+        color->name = (char*)bit_read_TV(dat); //str_dat?
+      if ((flag & 0x42) == 0x42)
+        color->book_name = (char*)bit_read_TV(dat); //str_dat?
+      color->flag = flag;
+    }
+}
+
+/** Write entity color (2004+)
+ */
+void
+bit_write_EMC(Bit_Chain *restrict dat, Dwg_Color *restrict color)
+{
+  bit_write_BS(dat, (color->index & 0x1ff) | (color->flag << 8));
+  if (dat->version >= R_2004)
+    {
+      uint16_t flag = color->flag;
+      //if (flag & 0x40) {
+      //  color.handle = dwg_decode_handleref(dat, obj, dwg); //hdl_dat!
+      //}
+      if (flag & 0x20) {
+        bit_write_BL(dat, color->alpha | (color->transparency_type << 8));
+      }
+      if (!(flag & 0x40) && (flag & 0x80))
+        bit_write_BL(dat, color->rgb);
+      if ((flag & 0x41) == 0x41)
+        bit_write_TV(dat, color->name); //str_dat
+      if ((flag & 0x42) == 0x42)
+        bit_write_TV(dat, color->book_name); //str_dat
     }
 }
 

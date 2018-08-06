@@ -88,6 +88,9 @@
 #define LOG_TRACE_TF(var,len)
 #define LOG_INSANE_TF(var,len)
 #endif
+#ifndef FIELD_EMC
+#define FIELD_EMC(a,b,c) FIELD_CMC(a,b,c)
+#endif
 
 #ifdef IS_ENCODER
 #undef ENCODER

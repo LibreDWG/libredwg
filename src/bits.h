@@ -269,10 +269,16 @@ void
 bit_write_TIMEBLL(Bit_Chain *dat, BITCODE_TIMEBLL value);
 
 void
-bit_read_CMC(Bit_Chain *dat, Dwg_Color* color);
+bit_read_CMC(Bit_Chain *restrict dat, Dwg_Color *restrict color);
 
 void
-bit_write_CMC(Bit_Chain *dat, Dwg_Color* color);
+bit_write_CMC(Bit_Chain *restrict dat, Dwg_Color *restrict color);
+
+void
+bit_read_EMC(Bit_Chain *restrict dat, Dwg_Color *restrict color);
+
+void
+bit_write_EMC(Bit_Chain *restrict dat, Dwg_Color *restrict color);
 
 int
 bit_search_sentinel(Bit_Chain *dat, unsigned char sentinel[16]);

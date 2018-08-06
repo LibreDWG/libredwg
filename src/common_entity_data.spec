@@ -78,8 +78,17 @@
 
       if (flags & 0x40)
         {
-          PRE (R_2004) { // r2004+ in handle stream
+          PRE (R_2004) {
             ent->color_handle = dwg_decode_handleref(dat, obj, dwg);
+            LOG_HANDLE("dbcolor: HANDLE(%x.%d.%lX) absolute:%lX [0]\n",
+              ent->color_handle->handleref.code,
+              ent->color_handle->handleref.size,
+              ent->color_handle->handleref.value,
+              ent->color_handle->absolute_ref);
+          }
+          // r2004+ in handle stream
+          else {
+            ent->color_handle = dwg_decode_handleref(hdl_dat, obj, dwg);
             LOG_HANDLE("dbcolor: HANDLE(%x.%d.%lX) absolute:%lX [0]\n",
               ent->color_handle->handleref.code,
               ent->color_handle->handleref.size,
@@ -109,7 +118,7 @@
           ent->color.name = bit_read_TV(dat);
           LOG_TRACE("color.name: %s [TV 430]\n", ent->color.name);
         }
-      if ((flags & 0x42) == 0x41)
+      if ((flags & 0x42) == 0x42)
         {
           ent->color.book_name = bit_read_TV(dat);
           LOG_TRACE("color.book_name: %s\n", ent->color.book_name);
@@ -148,4 +157,3 @@
     {
       FIELD_RCu (lineweight, 370);
     }
-

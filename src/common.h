@@ -120,6 +120,7 @@ typedef enum DWG_BITS
   BITS_BLL, /** bitlonglong R24+ */
   BITS_TIMEBLL, /** time long.long */
   BITS_CMC, /** CmColor value */
+  BITS_EMC, /** Entity CmColor value */
   BITS_2RD, /** 2 raw doubles **/
   BITS_3RD, /** 3 raw doubles **/
   BITS_2BD, /** 2D point (2 bitdoubles) **/
