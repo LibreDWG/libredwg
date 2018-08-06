@@ -647,7 +647,7 @@ main (int argc, char *argv[])
   for (ic=0; ic < num_classes; ic++)
     {
       FILE *pi;
-      char pi_fn[80];
+      char pi_fn[256];
       int k = 0;
       long class_filled = 0, class_size = 0;
       char *dn;

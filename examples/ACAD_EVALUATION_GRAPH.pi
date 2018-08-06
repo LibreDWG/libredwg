@@ -87,6 +87,7 @@ def(3, Data) =>
   Fields = [
      new_struct('H330', ["01000011000111101001111001001011", '4.3.1E9E4B', [], "reactors[0]", 330])
     ,new_struct('H330', ["01000011000111101001111001001011", '4.3.1E9E4B', [], "parenthandle", 330])
+    %new_struct('_H330', ["1100000100000001", 'c.1.1', [], "parenthandle", 330])
     ,new_struct('BL96', ["10", '0', [], "has_graph", 96])
     ,new_struct('BL97', ["10", '0', [], "unknown1", 97])
   ],
@@ -94,7 +95,7 @@ def(3, Data) =>
   go(Data).
 
 
-% summary: 158/707=22.3%
+% summary: 502/707=71.0%
 
 go0 ?=> def(0,Data).
 go1 ?=> def(1,Data).
