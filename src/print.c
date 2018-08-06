@@ -136,9 +136,8 @@ static unsigned int cur_ver = 0;
 #define FIELD_CMC(color,dxf1,dxf2) { \
   LOG_TRACE(#color ".index [CMC.BS %d]\n", _obj->color.index) \
   if (dat->version >= R_2004) { \
-    LOG_TRACE(#color ".rgb: %x [CMC.BL %d]\n", (unsigned)_obj->color.rgb, dxf2); \
-    if (_obj->color.flag) \
-      LOG_TRACE(#color ".flag: %x [CMC.RC]\n", (unsigned)_obj->color.flag); \
+    LOG_TRACE(#color ".rgb: 0x%06x [CMC.BL %d]\n", (unsigned)_obj->color.rgb, dxf2); \
+    LOG_TRACE(#color ".flag: 0x%x [CMC.RC]\n", (unsigned)_obj->color.flag); \
     if (_obj->color.flag & 1) \
       LOG_TRACE(#color ".name: %s [CMC.TV]\n", _obj->color.name); \
     if (_obj->color.flag & 2) \

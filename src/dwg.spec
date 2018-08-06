@@ -5676,8 +5676,8 @@ DWG_OBJECT(VISUALSTYLE)
   FIELD_BS (face_modifier, 90);
   FIELD_BS (edge_model, 74);
   FIELD_BL (edge_style, 91);
-  FIELD_CMC (edge_intersection_color, 64,422);
-  UNTIL (R_2000) {
+  UNTIL (R_2007) {
+    FIELD_CMC (edge_intersection_color, 64,422);
     FIELD_CMC (edge_obscured_color, 65,423);
   }
 #ifdef DEBUG_CLASSES
