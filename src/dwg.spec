@@ -5672,7 +5672,7 @@ DWG_OBJECT(VISUALSTYLE)
   FIELD_BS (face_color_mode, 73); // 1
   FIELD_BD (face_opacity, 40);
   FIELD_BD (face_specular, 41);
-  FIELD_CMC (color, 63,421);
+  FIELD_CMC (face_mono_color, 63,421);
   FIELD_BS (face_modifier, 90);
   FIELD_BS (edge_model, 74);
   FIELD_BL (edge_style, 91);
@@ -5685,19 +5685,18 @@ DWG_OBJECT(VISUALSTYLE)
   FIELD_BS (edge_intersection_line_pattern, 175);
   FIELD_BD (edge_crease_angle, 42);
   FIELD_BS (edge_modifier, 92);
+  FIELD_BS (edge_halo_gap, 170);
+  DEBUG_HERE_OBJ
   FIELD_BD (edge_opacity, 43);
   FIELD_BS (edge_jitter, 78);
-
-  FIELD_CMC (face_mono_color, 62,420);
+  FIELD_CMC (color, 62,420);
   FIELD_BS (edge_obscured_line_pattern, 75);
-  //FIELD_BLx (face_mono_color.rgb, 421);
 
   FIELD_CMC (edge_color, 66,424);
   FIELD_BS (edge_width, 76);
   FIELD_BS (edge_overhang, 77);
   FIELD_CMC (edge_silhouette_color, 67,425);
   FIELD_BS (edge_silhouette_width, 79);
-  FIELD_BS (edge_halo_gap, 170);
   FIELD_BS (num_edge_isolines, 171);
   FIELD_BS (edge_hide_precision_flag, 290);
   FIELD_BS (edge_style_apply_flag, 174);

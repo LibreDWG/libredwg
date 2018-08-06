@@ -4223,7 +4223,7 @@ typedef struct _dwg_entity_LIGHT
   BITCODE_B cast_shadows;   /*!< DXF 293 */
   BITCODE_BS shadow_type;   /*!< DXF 73, 0 or 1 */
   BITCODE_BS shadow_map_size;     /*!< DXF 91 */
-  BITCODE_BS shadow_map_softness; /*!< DXF 280 */
+  BITCODE_RC shadow_map_softness; /*!< DXF 280 */
   /* yet unknown: */
   BITCODE_BS lamp_color_type;     /*!< /0: in kelvin, 1: as preset */
   BITCODE_BD lamp_color_temp;     /*!< Temperature in Kelvin */
