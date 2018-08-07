@@ -59,6 +59,7 @@ gcov.log
 
 # specific filenames
 /libredwg.pc
+/logs-all.sh
 /.rb.sh
 /.upwork.sh
 /.version
@@ -73,7 +74,7 @@ gcov.log
 /GTAGS
 /ID
 /INSTALL
-/unknown.log
+/unknown-*.log
 /unknown.lst
 /x.p
 /aclocal.m4

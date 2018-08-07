@@ -47,7 +47,7 @@ alldxf_0.inc: alldwg.inc log_unknown_dxf.pl
 alldwg.inc: log_unknown.pl
 	test x"$$srcdir" = x"$$builddir" || false
 	echo Creating alldwg.inc will need a few minutes...
-	-cd .. && ./logs.sh; \
+	-cd .. && ./logs-all.sh; \
 	  rm alldwg.tmp 2>/dev/null; \
 	  mv examples/alldwg.inc examples/alldwg.inc~; \
 	  for l in *_r*.log *_20*.log DS_*.log; \

@@ -352,8 +352,10 @@ if test -n "$TIMEOUT"; then
   AC_MSG_CHECKING([TIMEOUT version])
   [timeout_version=`$TIMEOUT --version 2>&1 | grep '^timeout ' | sed 's/.*\([0-9][0-9]*\.[0-9][0-9]*\).*/\1/g'`]
   AC_MSG_RESULT([$timeout_version])
+  TIMEOUT_10="$TIMEOUT 10"
 fi
 AM_CONDITIONAL([HAVE_TIMEOUT], [test -n "$TIMEOUT"])
+AC_SUBST([TIMEOUT_10])
 
 AC_CHECK_PROGS([DOXYGEN], [doxygen])
 if test -n "$DOXYGEN"; then
@@ -421,6 +423,10 @@ AC_CONFIG_FILES([
 AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([doc/Doxyfile])])
 AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([doc/footer])])
 AM_COND_IF([HAVE_PERL], [AC_CONFIG_FILES([bindings/perl/Makefile.PL])])
+AM_COND_IF([HAVE_PARALLEL],
+  [logs_all=logs-all-parallel.sh.in],
+  [logs_all=logs-all-serial.sh.in])
+AC_CONFIG_FILES([logs-all.sh:$logs_all], [chmod +x logs-all.sh])
 
 AC_OUTPUT
 

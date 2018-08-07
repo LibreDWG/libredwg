@@ -36,7 +36,8 @@ VALGRIND_SUPPRESSIONS = @VALGRIND_SUPPRESSIONS@
 VALGRIND_SUPPRESSIONS_FILE = @VALGRIND_SUPPRESSIONS_FILE@
 EXTRA_DIST = $(top_srcdir)/.version \
              README README-alpha \
-	     dxf_example.lsp dxf_example.sh test-dxf.sh logs.sh unknown.sh \
+	     dxf_example.lsp dxf_example.sh test-dxf.sh \
+	     logs-all-parallel.sh.in logs-all-serial.sh.in unknown.sh \
 	     build-aux/swig_python.patch \
 	     $(VALGRIND_SUPPRESSIONS_FILE)
 
@@ -45,7 +46,12 @@ EXTRA_DIST = $(top_srcdir)/.version \
 
 UNKNOWN_LOG = unknown-`git describe --long --tags --dirty --always`.log
 UNKNOWN_SKIP = examples/alldwg.skip
-TIMEOUT_30 = timeout 30
+if HAVE_TIMEOUT
+TIMEOUT_30 = @TIMEOUT@ 30
+else
+TIMEOUT_30 =
+endif
+
 unknown:
 	-mv examples/alldwg.skip examples/alldwg.skip~
 	$(MAKE) -C examples unknown$(EXEEXT) && \
@@ -53,6 +59,14 @@ unknown:
 	if test -s examples/alldwg.skip; then true; \
 	else mv examples/alldwg.skip~ examples/alldwg.skip; fi
 if HAVE_PICAT
+if HAVE_PARALLEL
+	-rm examples/*.pi.tmplog 2>/dev/null
+	-$(PARALLEL) $(TIMEOUT_30) $(PICAT) {} >{}.tmplog ::: examples/[A-Z]*.pi
+	-for f in examples/*.pi.tmplog; do \
+	   if test -n "`grep 'Most probable result:' $$f`"; then \
+	     mv $$f examples/`basename $$f .log`; fi; done
+	-rm examples/*.pi.tmplog 2>/dev/null
+else
 	-for f in examples/[A-Z]*.pi; do \
 	  echo $(TIMEOUT_30) picat $$f; \
 	  $(TIMEOUT_30) $(PICAT) $$f >$$f.tmplog; \
@@ -60,6 +74,7 @@ if HAVE_PICAT
 	    mv $$f.tmplog $$f.log; \
 	  fi; \
 	done; rm examples/[A-Z]*.pi.tmplog 2>/dev/null
+endif
 endif
 
 regen-man:

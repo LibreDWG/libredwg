@@ -1,0 +1,19 @@
+#!/bin/sh
+# create logs for all DWGs
+make -s -j4
+for d in test/test-data/2*/*.dwg test/test-data/r*/*.dwg; do
+    dir=$(basename `dirname "$d"`)
+    log=`basename "$d" .dwg`_$dir.log
+    echo $d
+    @TIMEOUT_10@ ./libtool --mode=execute programs/dwgread -v4 "$d" 2>$log
+    #(sleep 10s; kill %1 2>/dev/null) &
+done
+for d in test/test-data/*.dwg; do
+    log=`basename "$d" .dwg`.log
+    echo $d
+    @TIMEOUT_10@ ./libtool --mode=execute programs/dwgread -v4 "$d" 2>$log
+    #(sleep 10s; kill %1 2>/dev/null) &
+done
+
+#with background killing we would need to wait for all processes to end
+# while pgrep dwgread; do sleep 1; done
