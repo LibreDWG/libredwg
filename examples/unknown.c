@@ -717,13 +717,15 @@ main (int argc, char *argv[])
       class = classes[ic];
       // dirname should be examples/
       dn = dirname(argv[0]);
+      printf("dirname(%s): %s\n", argv[0], dn);
       if (dn && !strcmp(basename(dn), "examples"))
         {
           strcpy(pi_fn, dn);
           strcat(pi_fn, "/");
         }
-      else
-        strcpy(pi_fn, "");
+      else if (!strcmp(argv[0], "examples")) {
+        strcpy(pi_fn, "examples/");
+      }
       strcat(pi_fn, class);
       strcat(pi_fn, ".pi");
       pi = fopen(pi_fn, "w");

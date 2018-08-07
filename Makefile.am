@@ -56,16 +56,17 @@ endif
 unknown:
 	-mv examples/alldwg.skip examples/alldwg.skip~
 	$(MAKE) -C examples unknown$(EXEEXT) && \
-	$(LIBTOOL) --mode=execute examples/unknown$(EXEEXT) >$(UNKNOWN_LOG) 2>$(UNKNOWN_SKIP)
+	$(LTEXEC) examples/unknown$(EXEEXT) >$(UNKNOWN_LOG) 2>$(UNKNOWN_SKIP)
 	if test -s examples/alldwg.skip; then true; \
 	else mv examples/alldwg.skip~ examples/alldwg.skip; fi
 if HAVE_PICAT
 if HAVE_PARALLEL
 	-rm examples/*.pi.tmplog 2>/dev/null
-	-$(PARALLEL) $(TIMEOUT_30) $(PICAT) {} >{}.tmplog ::: examples/[A-Z]*.pi
+	echo $(PARALLEL) $(TIMEOUT_30) $(PICAT) {} \>{}.tmplog ::: examples/[A-Z]\*.pi
+	-$(PARALLEL) $(TIMEOUT_30) $(PICAT) {} \>{}.tmplog ::: examples/[A-Z]*.pi
 	-for f in examples/*.pi.tmplog; do \
 	   if test -n "`grep 'Most probable result:' $$f`"; then \
-	     mv $$f examples/`basename $$f .log`; fi; done
+	     mv $$f examples/`basename $$f .tmplog`.log; fi; done
 	-rm examples/*.pi.tmplog 2>/dev/null
 else
 	-for f in examples/[A-Z]*.pi; do \
