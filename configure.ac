@@ -44,8 +44,10 @@ LT_INIT
 
 if test x$enable_shared = xyes; then
    AC_DEFINE([ENABLE_SHARED],1,[Define to 1 if a shared library will be built])
+   LTEXEC="$ac_top_builddir/libtool --mode=execute"
 fi
-AM_CONDITIONAL([ENABLE_SHARED],[test "x$enable_shared" = xyes])
+AM_CONDITIONAL([ENABLE_SHARED], [test "x$enable_shared" = xyes])
+AC_SUBST(LTEXEC)
 
 dnl Checks for libraries
 AC_CHECK_LIB([ps],[PS_open_file],
@@ -427,6 +429,7 @@ AM_COND_IF([HAVE_PARALLEL],
   [logs_all=logs-all-parallel.sh.in],
   [logs_all=logs-all-serial.sh.in])
 AC_CONFIG_FILES([logs-all.sh:$logs_all], [chmod +x logs-all.sh])
+AC_CONFIG_FILES([log], [chmod +x log])
 
 AC_OUTPUT
 

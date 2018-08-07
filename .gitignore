@@ -59,6 +59,7 @@ gcov.log
 
 # specific filenames
 /libredwg.pc
+/log
 /logs-all.sh
 /.rb.sh
 /.upwork.sh

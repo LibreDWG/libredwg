@@ -31,13 +31,14 @@ include_HEADERS = \
 pcdatadir = $(libdir)/pkgconfig
 pcdata_DATA = libredwg.pc
 BUILT_SOURCES = $(top_srcdir)/.version
+LTEXEC = @LTEXEC@
 
 VALGRIND_SUPPRESSIONS = @VALGRIND_SUPPRESSIONS@
 VALGRIND_SUPPRESSIONS_FILE = @VALGRIND_SUPPRESSIONS_FILE@
 EXTRA_DIST = $(top_srcdir)/.version \
              README README-alpha \
 	     dxf_example.lsp dxf_example.sh test-dxf.sh \
-	     logs-all-parallel.sh.in logs-all-serial.sh.in unknown.sh \
+	     log.in logs-all-parallel.sh.in logs-all-serial.sh.in unknown.sh \
 	     build-aux/swig_python.patch \
 	     $(VALGRIND_SUPPRESSIONS_FILE)
 
@@ -142,7 +143,7 @@ dist-hook:
 CLEANFILES = check-dwg.log check-dwg-valgrind.log check-dxf.log \
              check-dwg.log~ check-dwg-valgrind.log~ check-dxf.log~ \
 	     *_20*.dxf *_r1*.dxf
-MAINTAINERCLEANFILES  = *~ *.log cover_db .analysis
+MAINTAINERCLEANFILES  = *~ *.log cover_db .analysis log logs-all.sh.in logs-all.sh
 
 maintainer-clean-local:
 	-rm -rf cover_db
