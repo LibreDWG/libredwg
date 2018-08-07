@@ -296,9 +296,9 @@
         LOG_TRACE(#color ".alpha: 0x%06x [EMC.BL %d]\n", (unsigned)_obj->color.alpha, dxf2+20); \
       if (_obj->color.flag & 0x80) \
         LOG_TRACE(#color ".rgb: 0x%06x [EMC.BL %d]\n", (unsigned)_obj->color.rgb, dxf2); \
-      if (_obj->color.flag & 0xff1) \
+      if ((_obj->color.flag & 0x41) == 0x41) \
         LOG_TRACE(#color ".name: %s [EMC.TV %d]\n", _obj->color.name, dxf2+10);    \
-      if (_obj->color.flag & 0xff2) \
+      if ((_obj->color.flag & 0x42) == 0x42) \
         LOG_TRACE(#color ".bookname: %s [EMC.TV]\n", _obj->color.book_name); \
     }\
   }

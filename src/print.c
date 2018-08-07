@@ -144,6 +144,22 @@ static unsigned int cur_ver = 0;
       LOG_TRACE(#color ".bookname: %s [CMC.TV]\n", _obj->color.book_name); \
   }\
 }
+#define FIELD_EMC(color,dxf1,dxf2) { \
+  LOG_TRACE(#color ".index: %d [EMC.BS %d]\n", _obj->color.index, dxf1); \
+  if (dat->version >= R_2004) { \
+    if (_obj->color.flag) \
+      LOG_TRACE(#color ".flag: 0x%x\n", (unsigned)_obj->color.flag); \
+    if (_obj->color.flag & 0x20) \
+      LOG_TRACE(#color ".alpha: 0x%06x [EMC.BL %d]\n", (unsigned)_obj->color.alpha, dxf2+20); \
+    if (_obj->color.flag & 0x80) \
+      LOG_TRACE(#color ".rgb: 0x%06x [EMC.BL %d]\n", (unsigned)_obj->color.rgb, dxf2); \
+    if ((_obj->color.flag & 0x41) == 0x41) \
+      LOG_TRACE(#color ".name: %s [EMC.TV %d]\n", _obj->color.name, dxf2+10);    \
+    if ((_obj->color.flag & 0x42) == 0x42) \
+      LOG_TRACE(#color ".bookname: %s [EMC.TV]\n", _obj->color.book_name); \
+  } \
+}
+
 #define FIELD_TIMEBLL(name,dxf) \
   LOG_TRACE(#name " " #dxf ": " FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms)
 

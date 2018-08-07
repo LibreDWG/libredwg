@@ -5740,9 +5740,9 @@ DWG_ENTITY(LIGHT)
     FIELD_B (plot_glyph, 72);
   } else {
     FIELD_BS (plot_glyph, 90); // 10 0 ??
-    FIELD_BS (color_index, 63); // 5 634-609
-
     vcount = bit_position(dat);
+    FIELD_EMC (color, 63,0);   // 5 634-609
+
     // HOLE([122,164],0000000101000000000000000011000011000000000) len = 43
     // 5 0100000101
     DEBUG_HERE_OBJ
@@ -5763,7 +5763,7 @@ DWG_ENTITY(LIGHT)
     //FIELD_BS (physical_intensity_method, 0);
     //FIELD_BS (drawable_type, 0);
 #endif
-    bit_set_position(dat, vcount+25);
+    bit_set_position(dat, vcount+15);
   }
   DEBUG_POS_OBJ //634
 
@@ -5946,12 +5946,12 @@ DWG_OBJECT(MATERIAL)
   DEBUG_HERE_OBJ; // TODO from here on the order of the fields is unknown
   FIELD_BS (ambient_color_flag, 70); // 0 Use current color, 1 Override
   FIELD_BD (ambient_color_factor, 40); // 0.0 - 1.0
-  FIELD_CMC (ambient_color, 90,0);
+  FIELD_EMC (ambient_color, 90,0);
 
   DEBUG_HERE_OBJ;
   FIELD_BS (diffuse_color_flag, 71); // 0 Use current color, 1 Override
   FIELD_BD (diffuse_color_factor, 41); // 0.0 - 1.0
-  FIELD_CMC (diffuse_color, 91,0);
+  FIELD_EMC (diffuse_color, 91,0);
   FIELD_BS (diffusemap_source, 72);  // 0 scene, 1 file (def), 2 procedural
   FIELD_T  (diffusemap_filename, 3); // if NULL no diffuse map
   FIELD_BD (diffusemap_blendfactor, 42); // 1.0
@@ -5965,7 +5965,7 @@ DWG_OBJECT(MATERIAL)
   FIELD_BD (specular_gloss_factor, 44); //def: 0.5
   FIELD_BS (specular_color_flag, 76); // 0 Use current color, 1 Override
   FIELD_BD (specular_color_factor, 45); // 0.0 - 1.0
-  FIELD_CMC (specular_color, 92,0);
+  FIELD_EMC (specular_color, 92,0);
 
   FIELD_BS (specularmap_source, 77); // 0 current, 1 image file (default)
   FIELD_T  (specularmap_filename, 4); // if NULL no specular map
@@ -6044,7 +6044,7 @@ DWG_OBJECT(MATERIAL)
   FIELD_BD (genprocvalreal, 469);
   FIELD_T (genprocvaltext, 301);
   FIELD_B (genproctableend, 292);
-  FIELD_CMC (genprocvalcolorindex, 62,420);
+  FIELD_EMC (genprocvalcolorindex, 62,420);
   FIELD_BL (genprocvalcolorrgb, 420); //int32
   FIELD_T (genprocvalcolorname, 430);
   FIELD_BS (map_utile, 270);

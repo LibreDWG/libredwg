@@ -140,6 +140,7 @@ extern "C" {
 #define FORMAT_BD "%f"
 #define BITCODE_BE BITCODE_3BD
 #define BITCODE_CMC Dwg_Color
+#define BITCODE_EMC Dwg_Color
 #define BITCODE_H Dwg_Object_Ref*
 #define BITCODE_4BITS BITCODE_RC
 #define FORMAT_4BITS "%1x"
@@ -4207,8 +4208,8 @@ typedef struct _dwg_entity_LIGHT
   BITCODE_BS type; 	/*!< DXF 70, distant = 1; point = 2; spot = 3 */
   BITCODE_B status; 	/*!< DXF 290, on or off */
   BITCODE_BL unknown;   /*!< DXF 90 undocumented -1026700341 */
-  BITCODE_CMC color;    /*!< DXF 63 */
-  BITCODE_BS color_index; /*!< DXF 63 2004+ */
+  BITCODE_EMC color;    /*!< DXF 63 */
+  //BITCODE_BS color_index; /*!< DXF 63 2004+ */
   BITCODE_B plot_glyph; /*!< DXF 291 */
   BITCODE_BD intensity; /*!< DXF 40 */
   BITCODE_3BD position; /*!< DXF 10 */

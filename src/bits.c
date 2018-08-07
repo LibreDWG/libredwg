@@ -1487,7 +1487,8 @@ bit_write_CMC(Bit_Chain *restrict dat, Dwg_Color *restrict color)
     }
 }
 
-/** Read entity color (2004+)
+/** Read entity color (2004+) (truecolor rgb and alpha support)
+ *  Does also references, DBCOLOR lookups (not yet, needs hdl_dat stream)
  */
 void
 bit_read_EMC(Bit_Chain *restrict dat, Dwg_Color *restrict color)
