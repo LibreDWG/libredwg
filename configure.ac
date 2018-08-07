@@ -334,12 +334,35 @@ dnl AC_MSG_WARN([srcdir: $srcdir ac_builddir: $ac_builddir builddir: $builddir])
 AM_CONDITIONAL([HAVE_INSRCDIR], [test x"$srcdir" = x"."])
 
 AC_CHECK_PROGS([PICAT], [picat])
-if test -n "$PICAT"; then AM_RUN_LOG([$PICAT --version]); fi
+if test -n "$PICAT"; then
+  AC_MSG_CHECKING([PICAT version])
+  [picat_version=`$PICAT --version 2>&1 | grep 'Picat version' | cut -c15-`]
+  AC_MSG_RESULT([$picat_version])
+fi
 AM_CONDITIONAL([HAVE_PICAT], [test -n "$PICAT"])
 
+dnl GNU parallel
+AC_CHECK_PROGS([PARALLEL], [parallel])
+if test -n "$PARALLEL"; then AM_RUN_LOG([$PARALLEL --version]); fi
+AM_CONDITIONAL([HAVE_PARALLEL], [test -n "$PARALLEL"])
+
+dnl coreutils timeout
+AC_CHECK_PROGS([TIMEOUT], [timeout])
+if test -n "$TIMEOUT"; then
+  AC_MSG_CHECKING([TIMEOUT version])
+  [timeout_version=`$TIMEOUT --version 2>&1 | grep '^timeout ' | sed 's/.*\([0-9][0-9]*\.[0-9][0-9]*\).*/\1/g'`]
+  AC_MSG_RESULT([$timeout_version])
+fi
+AM_CONDITIONAL([HAVE_TIMEOUT], [test -n "$TIMEOUT"])
+
 AC_CHECK_PROGS([DOXYGEN], [doxygen])
-if test -n "$DOXYGEN"; then AM_RUN_LOG([$DOXYGEN --version]); fi
+if test -n "$DOXYGEN"; then
+  AC_MSG_CHECKING([DOXYGEN version])
+  [doxygen_version=`$DOXYGEN --version 2>&1`]
+  AC_MSG_RESULT([$doxygen_version])
+fi
 AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
+
 dnl help2man only by the maintainer
 
 if test x$cross_compiling = xno; then
@@ -354,8 +377,12 @@ if test x$cross_compiling = xno; then
   AX_VALGRIND_DFLT([sgcheck], [off])
   AX_VALGRIND_CHECK()
   if test -n "$VALGRIND"; then
+     if test -n "$VALGRIND"; then
+       AC_MSG_CHECKING([VALGRIND version])
+       [valgrind_version=`$VALGRIND --version 2>&1`]
+       AC_MSG_RESULT([$valgrind_version])
+     fi
      AC_MSG_CHECKING([for Valgrind suppressions])
-     AM_RUN_LOG([$VALGRIND --version])
      case $host_os in
        linux*)  VALGRIND_SUPPRESSIONS_FILE=valgrind-linux.supp ;;
        darwin*) VALGRIND_SUPPRESSIONS_FILE=valgrind-darwin.supp ;;
