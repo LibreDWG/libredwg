@@ -343,9 +343,24 @@ if test -n "$PICAT"; then
 fi
 AM_CONDITIONAL([HAVE_PICAT], [test -n "$PICAT"])
 
-dnl GNU parallel
+dnl GNU parallel, skip the old non-perl version from moreutils so far
 AC_CHECK_PROGS([PARALLEL], [parallel])
-if test -n "$PARALLEL"; then AM_RUN_LOG([$PARALLEL --version]); fi
+logs_all=logs-all-serial.sh.in
+if test -n "$PARALLEL"; then
+  AC_MSG_CHECKING([PARALLEL version])
+  parallel_version=`$PARALLEL --version 2>&1 | head -n1 | cut -c14-`
+  case "$parallel_version" in
+    [0-9]*) AC_MSG_RESULT([$parallel_version])
+            logs_all=logs-all-parallel.sh.in
+            ;;
+    *invalid*)
+            PARALLEL=
+            parallel_version="skip old moreutils version, need GNU parallel"
+            #TODO
+            #logs_all=logs-all-parallel-old.sh.in
+  esac
+  AC_MSG_RESULT([$parallel_version])
+fi
 AM_CONDITIONAL([HAVE_PARALLEL], [test -n "$PARALLEL"])
 
 dnl coreutils timeout
@@ -425,9 +440,6 @@ AC_CONFIG_FILES([
 AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([doc/Doxyfile])])
 AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([doc/footer])])
 AM_COND_IF([HAVE_PERL], [AC_CONFIG_FILES([bindings/perl/Makefile.PL])])
-AM_COND_IF([HAVE_PARALLEL],
-  [logs_all=logs-all-parallel.sh.in],
-  [logs_all=logs-all-serial.sh.in])
 AC_CONFIG_FILES([logs-all.sh:$logs_all], [chmod +x logs-all.sh])
 AC_CONFIG_FILES([log], [chmod +x log])
 
