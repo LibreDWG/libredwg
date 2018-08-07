@@ -90,8 +90,9 @@ struct _dxf {
 #if 0
 static struct _unknown {
   const char *name;
+  const char *log;
   const char *bits;
-  const char *log; const char *dxf;
+  const char *dxf;
   const unsigned int handle;
   const int bitsize;
   const int commonsize;
@@ -100,7 +101,7 @@ static struct _unknown {
   const int objbitsize;
 } unknowns[] =
   {
-   { "MATERIAL", "0e0101000f010100", "150DSC4_AO-46050_QDC-fixed_2000.log", NULL, 400137, 0, 1426 },
+   { "ACAD_EVALUATION_GRAPH", "example_2000.log", "40501406481013fffffffcffffffff3fffffffcffffffff980c0c80b8bee", "test/test-data/example_2000.dxf", 0x2E3, 234, 60, -60, 0, 268 },
     /* the following types:
       5 ACDBASSOCGEOMDEPENDENCY
       3 ACDBASSOCNETWORK

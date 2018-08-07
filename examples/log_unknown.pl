@@ -57,7 +57,7 @@ if (/Next object: / or /^Num objects:/) {
   }
   next if $dxf =~ /work\.orig/; # skip temp. duplicates
   $dxf = undef unless -f $dxf;
-  printf "    { \"$object\", \"$b\", \"$ARGV\", %s, 0x$handle, ".
+  printf "    { \"$object\", \"$ARGV\", \"$b\", %s, 0x$handle, ".
     "$num_bits, $commonsize, $hdloff, $strsize, $bitsize },\n",
     $dxf ? "\"$dxf\"" : "NULL";
   $object = $b = $handle = undef;

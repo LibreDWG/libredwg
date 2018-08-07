@@ -958,7 +958,7 @@ while (<>) {
   }
   #next LINE if $F[0] =~ m|//{|; # skip duplicates
   my $obj   = substr($F[1],1,-2); # "MATERIAL",
-  my $bytes = substr($F[2],1,-2);
+  my $bytes = substr($F[3],1,-2);
   my $hdl   = substr($F[5],2,-1); # 0xXXX,
   my $num_bits   = substr($F[6],0,-1);
   my $commonsize = substr($F[7],0,-1);
