@@ -27,6 +27,7 @@ EXTRA_PROGRAMS = unknown
 load_dwg_SOURCES = load_dwg.c
 dwg2svg2_SOURCES = dwg2svg2.c
 unknown_SOURCES  = unknown.c alldxf_0.inc alldxf_1.inc alldxf_2.inc
+unknown_LDADD  = ../src/bits.lo ../src/common.lo
 all: $(check_PROGRAMS)
 
 .PHONY: check-syntax regen-unknown dsymutil gcov

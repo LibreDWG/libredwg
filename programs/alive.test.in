@@ -58,6 +58,7 @@ run ()
         log=$TEST_SUITE_LOG
     else
         # libtool only if shared
+        top_builddir=..
         TESTPROG="@LTEXEC@"
     fi
     echo $TESTPROG ./$prog $arg \>$log

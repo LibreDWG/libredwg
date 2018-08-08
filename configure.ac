@@ -44,7 +44,7 @@ LT_INIT
 
 if test x$enable_shared = xyes; then
    AC_DEFINE([ENABLE_SHARED],1,[Define to 1 if a shared library will be built])
-   LTEXEC="$ac_top_builddir/libtool --mode=execute"
+   LTEXEC="\${top_builddir}/libtool --mode=execute"
 fi
 AM_CONDITIONAL([ENABLE_SHARED], [test "x$enable_shared" = xyes])
 AC_SUBST(LTEXEC)
