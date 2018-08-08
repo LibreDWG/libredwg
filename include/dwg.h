@@ -457,13 +457,12 @@ typedef struct _dwg_object_ref
  */
 typedef struct _dwg_color /* CmColor: R15 and earlier */
 {
-  unsigned int index;
-  long unsigned int rgb;
-  unsigned char flag;    /* 1: name follows, 2: book name follows */
+  BITCODE_BS index;
+  BITCODE_BS flag;    /* 1: name follows, 2: book name follows */
+  BITCODE_BL rgb;
   char* name;
   char* book_name;
-  unsigned char transparency_type; /* 0 BYLAYER, 1 BYBLOCK, 3 alpha */
-  unsigned char alpha;
+  BITCODE_BL alpha; /* & 0xff: 0 BYLAYER, 1 BYBLOCK, 3 alpha */
 } Dwg_Color;
 
 /**

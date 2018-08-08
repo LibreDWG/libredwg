@@ -218,7 +218,7 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
  */
 
 #define ACTION indxf
-#define IS_ENCODE
+#define IS_ENCODER
 #define IS_DXF
 
 //for sscanf with BD we need to use %lf not %g

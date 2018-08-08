@@ -96,7 +96,7 @@ static Bit_Chain *dat = &pdat;
 #define FIELD_TU(name,dxf)  FIELD_TV(name,dxf)
 #define FIELD_TF(name,len,dxf) FIELD_TV(name,dxf)
 #define FIELD_TFF(name,len,dxf) {}
-#define FIELD_T FIELD_TV /*TODO: implement version dependant string fields */
+#define FIELD_T(name,dxf) FIELD_TV(name,dxf)
 #define FIELD_BT(name,dxf) FIELD(name, BT);
 #define FIELD_4BITS(name,dxf) {}
 #define FIELD_BE(name,dxf) {}
@@ -184,7 +184,6 @@ static Bit_Chain *dat = &pdat;
 #define END_REPEAT(field) FIELD_TV(field,0)
 
 #define COMMON_ENTITY_HANDLE_DATA \
-  if (_ent->picture_exists && _ent->picture_size) free(_ent->picture); \
   SINCE(R_13) {\
     dwg_free_common_entity_handle_data(obj); \
   }

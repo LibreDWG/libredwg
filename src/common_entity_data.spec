@@ -4,25 +4,30 @@
   //Dwg_Object_Entity* _obj = ent;
 
   {
-    unsigned long pos = bit_position(dat);
+    // unsigned long pos = bit_position(dat);
     // no picture for TABLE, ...??
     FIELD_B (picture_exists, 0);
     if (ent->picture_exists)
       {
         VERSIONS(R_13, R_2007)
           {
-            ent->picture_size = (BITCODE_BLL)bit_read_RL(dat);
-            LOG_TRACE("picture_size: " FORMAT_BLL " [RL 160]\n", ent->picture_size);
+            FIELD_CAST (picture_size, RL, BLL, 160);
+            //ent->picture_size = (BITCODE_BLL)bit_read_RL(dat);
+            //LOG_TRACE("picture_size: " FORMAT_BLL " [RL 160]\n", ent->picture_size);
           }
         SINCE(R_2010)
           {
-            ent->picture_size = bit_read_BLL(dat);
-            LOG_TRACE("picture_size: " FORMAT_BLL " [BLL 160]\n", ent->picture_size);
+            FIELD_BLL (picture_size, 160);
+            //ent->picture_size = bit_read_BLL(dat);
+            //LOG_TRACE("picture_size: " FORMAT_BLL " [BLL 160]\n", ent->picture_size);
           }
         if (ent->picture_size < 210210)
           {
-            if (ent->picture_size >= 0) // negative values for what reason?
-              ent->picture = bit_read_TF(dat, ent->picture_size); // DXF 310 BINARY
+            if (ent->picture_size >= 0) { // negative values for what reason?
+              //or FIELD_BINARY for DXF
+              FIELD_TF (picture, (int)ent->picture_size, 310);
+              //ent->picture = bit_read_TF(dat, ent->picture_size); // DXF 310 BINARY
+            }
           }
         else
           {
@@ -36,9 +41,16 @@
 
   VERSIONS(R_13, R_14)
     {
+#ifdef IS_DECODER
       obj->bitsize = bit_read_RL(dat); // until the handles
       LOG_TRACE("Entity bitsize: " FORMAT_BL " @%lu.%u\n", obj->bitsize,
                 dat->byte, dat->bit)
+#endif
+#ifdef IS_ENCODER
+      bit_write_RL(dat, obj->bitsize);
+      LOG_TRACE("Entity bitsize: " FORMAT_BL " @%lu.%u\n", obj->bitsize,
+                dat->byte, dat->bit)
+#endif
     }
 
   FIELD_BB (entity_mode, 0);  //ODA bug
@@ -66,70 +78,85 @@
   // TODO:
   // group 92 num_proxydata
   // group 310 proxydata
+  // color as FIELD_EMC (DXF, ENCODE)
 
   SINCE(R_2004) // ENC (entity color encoding)
     {
-      BITCODE_BS flags = bit_read_BS(dat);
-      LOG_HANDLE("color flags: 0x%X [BS 0]\n", (unsigned)flags);
-      ent->color.rgb = 0L;
-      ent->color.index = flags & 0xff; // or 0x1ff?
-      flags = flags >> 8;
-      ent->color.flag = flags;
+      BITCODE_BS flags;
+      FIELD_BS (color.flag, 0);
+      flags = ent->color.flag >> 8;
+      DECODER {
+        ent->color.rgb = 0L;
+        ent->color.index = ent->color.flag & 0x1ff; // or 0xff?
+        LOG_HANDLE("color.index: %d [EMC 62]\n", ent->color.index);
+      }
+      DXF {
+        FIELD_BS (color.index, 62);
+      }
 
       if (flags & 0x40)
         {
-          PRE (R_2004) {
-            ent->color_handle = dwg_decode_handleref(dat, obj, dwg);
-            LOG_HANDLE("dbcolor: HANDLE(%x.%d.%lX) absolute:%lX [0]\n",
-              ent->color_handle->handleref.code,
-              ent->color_handle->handleref.size,
-              ent->color_handle->handleref.value,
-              ent->color_handle->absolute_ref);
-          }
           // r2004+ in handle stream
-          else {
-            ent->color_handle = dwg_decode_handleref(hdl_dat, obj, dwg);
-            LOG_HANDLE("dbcolor: HANDLE(%x.%d.%lX) absolute:%lX [0]\n",
-              ent->color_handle->handleref.code,
-              ent->color_handle->handleref.size,
-              ent->color_handle->handleref.value,
-              ent->color_handle->absolute_ref);
-          }
+          FIELD_HANDLE(color_handle, 0, 0);
         }
       if (flags & 0x20)
         {
-          BITCODE_BL trlong = bit_read_BL(dat);
-          LOG_HANDLE("transparency: %x [BL 0]\n", trlong);
-          ent->color.transparency_type = trlong & 0xff;
-          ent->color.alpha = trlong >> 8;
+          int type;
+          FIELD_BL (color.alpha, 0);
+          type = ent->color.alpha & 0xff;
+          //LOG_HANDLE("transparency: %x [BL 0]\n", trlong);
+          //ent->color.alpha = trlong >> 8;
           /* 0 BYLAYER, 1 BYBLOCK, 3 alpha */
-          LOG_TRACE("color.transparency_type: %d\n", ent->color.transparency_type);
-          if (ent->color.transparency_type == 3)
-            LOG_TRACE("color.alpha: %d [BL 440]\n", ent->color.alpha);
+#ifdef IS_DECODER
+          LOG_TRACE("color.transparency_type: %d\n", type);
+#endif
+          if (type == 3) {
+#ifdef IS_ENCODER
+            DXF { FIELD_BL (color.alpha >> 8, 430); }
+#else
+            DXF { FIELD_BL (color.alpha, 430); }
+#endif
+            //else LOG_TRACE("color.alpha: %d [EMC 440]\n", ent->color.alpha >> 8);
+          }
         }
       if (flags & 0x80 && !(flags & 0x40)) // and not a reference
         {
-          ent->color.rgb = bit_read_BL(dat); //ODA bug, documented as BS
-          LOG_TRACE("color.rgb: %06X [BL 420]\n", (unsigned)ent->color.rgb);
+          int type;
+          FIELD_BL (color.rgb, 0);
+          type = ent->color.rgb & 0xff;
+          //ent->color.rgb = bit_read_BL(dat); //ODA bug, documented as BS
+#ifdef IS_DECODER
+          LOG_TRACE("color.rgb: %06x [EMC.BL 420] (%d)\n", (unsigned)ent->color.rgb,
+                    (int32_t)(ent->color.rgb & 0x00ffffff));
+#endif
+#ifdef IS_ENCODER
+          DXF { FIELD_BL (color.rgb & 0x00ffffff, 420); }
+#else
+          DXF { FIELD_BL (color.rgb, 420); }
+#endif
         }
       /* not with entities, only with CMC or dbcolor handle */
       if ((flags & 0x41) == 0x41)
         {
-          ent->color.name = bit_read_TV(dat);
-          LOG_TRACE("color.name: %s [TV 430]\n", ent->color.name);
+          FIELD_TV (color.name, 430);
+          //ent->color.name = bit_read_TV(dat);
+          //LOG_TRACE("color.name: %s [EMC.TV 430]\n", ent->color.name);
         }
       if ((flags & 0x42) == 0x42)
         {
-          ent->color.book_name = bit_read_TV(dat);
-          LOG_TRACE("color.book_name: %s\n", ent->color.book_name);
+          FIELD_TV (color.book_name, 430);
+          //ent->color.book_name = bit_read_TV(dat);
+          //LOG_TRACE("color.book_name: %s [EMC]\n", ent->color.book_name);
         }
+#ifndef IS_DECODER
       if (!(flags & 0xf0))
         {
-          LOG_TRACE("color.index: %u [62]\n", (unsigned)ent->color.index);
+          LOG_TRACE("color.index: %u [EMC 62]\n", (unsigned)ent->color.index);
         }
+#endif
     }
   OTHER_VERSIONS
-    bit_read_CMC(dat, &ent->color);
+    FIELD_CMC(color, 62,420);
 
   FIELD_BD (linetype_scale, 48);
   SINCE(R_2000)
@@ -142,11 +169,15 @@
   SINCE(R_2007)
     {
       FIELD_BB (material_flags, 0); //if not BYLAYER 00: 347 material handle
+      DXF {
+        if (FIELD_VALUE(material_flags))
+          FIELD_HANDLE (material, 0, 347)
+      }
       FIELD_RC (shadow_flags, 284);
     }
   SINCE(R_2010)
     {
-      FIELD_B (has_full_visualstyle, 0);
+      FIELD_B (has_full_visualstyle, 0); // DXF?
       FIELD_B (has_face_visualstyle, 0);
       FIELD_B (has_edge_visualstyle, 0);
     }
@@ -157,3 +188,4 @@
     {
       FIELD_RCu (lineweight, 370);
     }
+

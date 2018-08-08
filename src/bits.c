@@ -1502,9 +1502,9 @@ bit_read_EMC(Bit_Chain *restrict dat, Dwg_Color *restrict color)
       //  color.handle = dwg_decode_handleref(hdl_dat, obj, dwg);
       //}
       if (flag & 0x20) {
-        BITCODE_BL trlong = bit_read_BL(dat);
-        color->transparency_type = trlong & 0xff;
-        color->alpha = trlong >> 8;
+        BITCODE_BL alpha = bit_read_BL(dat);
+        //color->transparency_type = trlong & 0xff;
+        //color->alpha = trlong >> 8;
       }
       if (!(flag & 0x40) && (flag & 0x80))
         color->rgb = bit_read_BL(dat);
@@ -1529,7 +1529,7 @@ bit_write_EMC(Bit_Chain *restrict dat, Dwg_Color *restrict color)
       //  color.handle = dwg_decode_handleref(dat, obj, dwg); //hdl_dat!
       //}
       if (flag & 0x20) {
-        bit_write_BL(dat, color->alpha | (color->transparency_type << 8));
+        bit_write_BL(dat, color->alpha);
       }
       if (!(flag & 0x40) && (flag & 0x80))
         bit_write_BL(dat, color->rgb);

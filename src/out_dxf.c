@@ -1033,6 +1033,51 @@ dxf_common_entity_handle_data(Bit_Chain *restrict dat, const Dwg_Object *restric
 
   #include "common_entity_handle_data.spec"
 
+#if 1
+  #include "common_entity_data.spec"
+#else
+  if (ent->picture_exists && ent->picture_size >= 0 && ent->picture_size < 210210) {
+    FIELD_RL(picture_size, 160);
+    VALUE_BINARY(ent->picture, ent->picture_size, 310); //chunked hex encoding
+  }
+  SINCE(R_2004) {
+    if (ent->color.index > 0)
+      FIELD_BL(color.index, 62);
+    if (ent->color.flag & 0x80)
+      FIELD_BL(color.rgb & 0x00ffffff, 420);
+    if (ent->color.flag & 0x20) {
+      if (ent->color.transparency_type == 0)
+        VALUE_TV("ByLayer", 440)
+      else if (ent->color.transparency_type == 1)
+        VALUE_TV("ByBlock", 440)
+      else if (ent->color.transparency_type == 3)
+        FIELD_BL(color.alpha, 440)
+    }
+    if ((ent->color.flag & 0x41) == 0x41)
+      FIELD_TV(color.name, 430)
+    if ((ent->color.flag  & 0x42) == 0x42)
+      FIELD_TV(color.book_name, 430)
+  }
+  if (ent->linetype_scale > 0.0)
+    FIELD_BD (linetype_scale, 48)
+
+  SINCE(R_2000)
+    {
+      switch (ent->linetype_flags) {
+      case 1: VALUE_TV("ByBlock", 7); break;
+      case 2: VALUE_TV("CONTINUOUS", 7); break;
+      //case 3: HANDLE_NAME(LTYPE, 7); break;
+      }
+      // 00 BYLAYER, 01 BYBLOCK, 10 CONTINUOUS, 11 plotstyle handle
+      FIELD_BB (plotstyle_flags, 0);
+    }
+  SINCE(R_2007)
+    {
+      FIELD_BB (material_flags, 0); //if not BYLAYER 00: 347 material handle
+      FIELD_RC (shadow_flags, 284);
+    }
+#endif
+
   return error;
 }
 

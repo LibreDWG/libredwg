@@ -5672,13 +5672,13 @@ DWG_OBJECT(VISUALSTYLE)
   FIELD_BS (face_color_mode, 73); // 1
   FIELD_BD (face_opacity, 40);
   FIELD_BD (face_specular, 41);
-  FIELD_EMC (face_mono_color, 63,421);
+  FIELD_CMC (face_mono_color, 63,421);
   FIELD_BS (face_modifier, 90);
   FIELD_BS (edge_model, 74);
   FIELD_BL (edge_style, 91);
 //UNTIL (R_2007) {
-    FIELD_EMC (edge_intersection_color, 64,422);
-    FIELD_EMC (edge_obscured_color, 65,423);
+    FIELD_CMC (edge_intersection_color, 64,422);
+    FIELD_CMC (edge_obscured_color, 65,423);
 //}
 #ifdef DEBUG_CLASSES
   DEBUG_HERE_OBJ
@@ -5689,7 +5689,7 @@ DWG_OBJECT(VISUALSTYLE)
   DEBUG_HERE_OBJ
   FIELD_BD (edge_opacity, 43);
   FIELD_BS (edge_jitter, 78);
-  FIELD_EMC (color, 62,420);
+  FIELD_CMC (color, 62,420);
   FIELD_BS (edge_obscured_line_pattern, 75);
 
   FIELD_EMC (edge_color, 66,424);
@@ -6776,3 +6776,4 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+
