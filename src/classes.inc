@@ -35,6 +35,12 @@
                klass->number, klass->dxfname, klass->proxyflag,\
                klass->wasazombie ? " was proxy" : "",\
                obj->index, obj->handle.value)
+#if defined(IS_FREE) || defined(IS_PRINT)
+# undef WARN_UNSTABLE_CLASS
+# undef WARN_UNHANDLED_CLASS
+# define WARN_UNSTABLE_CLASS
+# define WARN_UNHANDLED_CLASS
+#endif
 
 //#define _DWG_FUNC_N(ACTION,name) dwg_ ## ACTION ## _ ## name
 //#define DWG_FUNC_N(ACTION,name) _DWG_FUNC_N(ACTION,name)
