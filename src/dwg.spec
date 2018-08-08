@@ -5725,7 +5725,6 @@ DWG_OBJECT_END
    of the light using a variety of methods.
    SpotLight, PointLight, DistantLight. dbLight.h
  */
-// (varies) UNSTABLE
 DWG_ENTITY(LIGHT)
 
   DECODE_UNKNOWN_BITS
@@ -5733,39 +5732,27 @@ DWG_ENTITY(LIGHT)
   FIELD_BL (class_version, 90); //1
   FIELD_T (name, 1);
   FIELD_BS (type, 70);
-  FIELD_B (status, 290);
+  FIELD_B (status, 290); //127
 
-  UNTIL (R_2000) {
-    FIELD_BS (unknown, 0); //
-    FIELD_B (plot_glyph, 72);
-  } else {
-    FIELD_BS (plot_glyph, 90); // 10 0 ??
-    vcount = bit_position(dat);
-    FIELD_EMC (color, 63,0);   // 5 634-609
+  FIELD_CMC (color, 63,421);
+  FIELD_B (plot_glyph, 291);
 
-    // HOLE([122,164],0000000101000000000000000011000011000000000) len = 43
-    // 5 0100000101
-    DEBUG_HERE_OBJ
-    // 0000000011000011000000000
-#ifdef DEBUG_CLASSES
+#if 0
     FIELD_BS (lamp_color_type, 0); //0: in kelvin, 1: as preset
     if (FIELD_VALUE(lamp_color_type) == 0) {
       FIELD_BD (lamp_color_temp, 0);
     } else {
       FIELD_BS (lamp_color_preset, 0);
       if (FIELD_VALUE(lamp_color_preset) == 14) // Custom
-        FIELD_BL (lamp_color_rgb, 0);
+        FIELD_BLx (lamp_color_rgb, 0);
     }
-    //FIELD_T (web_file, 0);
-    //FIELD_3BD (web_rotation, 0);
     FIELD_B (has_target_grip, 0);
     FIELD_BS (glyph_display_type, 0);
-    //FIELD_BS (physical_intensity_method, 0);
-    //FIELD_BS (drawable_type, 0);
+    FIELD_T (web_file, 0);
+    FIELD_3BD (web_rotation, 0);
+    FIELD_BS (physical_intensity_method, 0);
+    FIELD_BS (drawable_type, 0);
 #endif
-    bit_set_position(dat, vcount+15);
-  }
-  DEBUG_POS_OBJ //634
 
   FIELD_BD (intensity, 40);
   FIELD_3BD (position, 10);
@@ -5782,6 +5769,7 @@ DWG_ENTITY(LIGHT)
   FIELD_RC (shadow_map_softness, 280);
 
   COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE (lights_layer, 5, 0);
 
 DWG_ENTITY_END
 
@@ -6776,4 +6764,3 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
-

@@ -4206,9 +4206,7 @@ typedef struct _dwg_entity_LIGHT
   BITCODE_T name; 	/*!< DXF 1 */
   BITCODE_BS type; 	/*!< DXF 70, distant = 1; point = 2; spot = 3 */
   BITCODE_B status; 	/*!< DXF 290, on or off */
-  BITCODE_BL unknown;   /*!< DXF 90 undocumented -1026700341 */
-  BITCODE_EMC color;    /*!< DXF 63 */
-  //BITCODE_BS color_index; /*!< DXF 63 2004+ */
+  BITCODE_CMC color;    /*!< DXF 63 + 421 */
   BITCODE_B plot_glyph; /*!< DXF 291 */
   BITCODE_BD intensity; /*!< DXF 40 */
   BITCODE_3BD position; /*!< DXF 10 */
@@ -4224,6 +4222,8 @@ typedef struct _dwg_entity_LIGHT
   BITCODE_BS shadow_type;   /*!< DXF 73, 0 or 1 */
   BITCODE_BS shadow_map_size;     /*!< DXF 91 */
   BITCODE_RC shadow_map_softness; /*!< DXF 280 */
+  BITCODE_H lights_layer;
+#ifdef DEBUG_CLASSES
   /* yet unknown: */
   BITCODE_BS lamp_color_type;     /*!< /0: in kelvin, 1: as preset */
   BITCODE_BD lamp_color_temp;     /*!< Temperature in Kelvin */
@@ -4236,6 +4236,7 @@ typedef struct _dwg_entity_LIGHT
   BITCODE_BS glyph_display_type;  /*!< 0:auto, 1:on, 2:off */
   BITCODE_BS physical_intensity_method; /*!< ? */
   BITCODE_BS drawable_type;       /*!< ? */
+#endif
 } Dwg_Entity_LIGHT;
 
 /**
