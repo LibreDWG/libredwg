@@ -58,11 +58,7 @@ run ()
         log=$TEST_SUITE_LOG
     else
         # libtool only if shared
-        #if `grep "dlname=''" ../src/.libs/libredwg.lai) 2>/null`; then
-        #    TESTPROG=
-        #else
-        TESTPROG="../libtool --mode=execute"
-        #fi
+        TESTPROG="@LTEXEC@"
     fi
     echo $TESTPROG ./$prog $arg \>$log
     # writers can hang

@@ -440,6 +440,7 @@ AC_CONFIG_FILES([
 AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([doc/Doxyfile])])
 AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([doc/footer])])
 AM_COND_IF([HAVE_PERL], [AC_CONFIG_FILES([bindings/perl/Makefile.PL])])
+AC_CONFIG_FILES([programs/alive.test], [chmod +x programs/alive.test])
 AC_CONFIG_FILES([logs-all.sh:$logs_all], [chmod +x logs-all.sh])
 AC_CONFIG_FILES([log], [chmod +x log])
 
