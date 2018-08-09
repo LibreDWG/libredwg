@@ -3,7 +3,7 @@ Copyright (C) 2018 Free Software Foundation, Inc.
 See the end for copying conditions.
 
 
-LibreDWG version 0.6 - not yet released (still alpha):
+LibreDWG version 0.6 - not yet released - still alpha:
 
 API breaking changes:
   * Removed dwg_obj_proxy_get_reactors(), use dwg_obj_get_reactors() instead.
@@ -32,13 +32,13 @@ Important bugfixes:
   * Fixed dejagnu compilation on C11 by using -fgnu89-inline (#2)
 
 New features:
-  * Added unstable support for the objects ASSOCDEPENDENCY, DIMASSOC,
-    PERSSUBENTMANAGER, UNDERLAYDEFINITION and the entities
-    MULTILEADER, UNDERLAY.
+  * Added unstable support for the objects ASSOCDEPENDENCY, ASSOCPLANESURFACEACTIONBODY,
+    DBCOLOR, DIMASSOC, DYNAMICBLOCKPURGEPREVENTER, LIGHT, PERSSUBENTMANAGER,
+    UNDERLAYDEFINITION and the entities MULTILEADER, UNDERLAY.
   * Added getopt_long() support to all programs, position independent options.
   * Implemented examples/unknown to find field layouts of unknown objects.
     Now with a http://picat-lang.org helper. See also HACKING and savannah News.
-  * Implemented parsing ACIS version 2 to binary SAB format.
+  * Implemented parsing ACIS version 2 to the binary SAB format.
   * Added all missing dwg_object_to_OBJECT() functions for objects.
   * Added dwg_ent_minsert_set_num_cols(), dwg_ent_minsert_set_num_rows()
   * Added --disable-dxf, --enable--debug configure options. With debug there are many

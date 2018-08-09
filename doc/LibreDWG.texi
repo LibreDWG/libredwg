@@ -127,7 +127,7 @@ Here is a list of features that are still missing.
 @item Reading pre-R13 DWG
 Reading DWG formats for pre-R13 and some R2010+ non-graphical objects is an ongoing effort, some minor parts are missing. Simple DWG's can be read already, some undocumented classes are skipped.
 
-* ACIS: version 1 is converted to a raw string. ACIS version 2, i.e. the forked variant ACIS 7.0 under the name ShapeManager, is not yet supported.
+* ACIS: version 1 is converted to a raw string. ACIS version 2, i.e. the forked variant ACIS 7.0 under the name ShapeManager, is dumped to a string containing the binary SAB format.
 
 @item Writing pre-R13 and R2004+ DWG
 Writing DWG formats for R2004 and later: R2007, R2010, R2013, R2018 is an
