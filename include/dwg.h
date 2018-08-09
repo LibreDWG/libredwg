@@ -1556,10 +1556,34 @@ typedef struct _dwg_3DSOLID_silhouette
   Dwg_3DSOLID_wire * wires;
 } Dwg_3DSOLID_silhouette;
 
+#define _3DSOLID_FIELDS \
+  BITCODE_B acis_empty; \
+  BITCODE_B unknown; \
+  BITCODE_BS version; \
+  BITCODE_BL num_blocks; \
+  BITCODE_BL* block_size; \
+  BITCODE_RC** encr_sat_data; \
+  unsigned char* acis_data; \
+  BITCODE_B wireframe_data_present; \
+  BITCODE_B point_present; \
+  BITCODE_3BD point; \
+  BITCODE_BL num_isolines; \
+  BITCODE_B isoline_present; \
+  BITCODE_BL num_wires; \
+  Dwg_3DSOLID_wire * wires; \
+  BITCODE_BL num_silhouettes; \
+  Dwg_3DSOLID_silhouette * silhouettes; \
+  BITCODE_B acis_empty2; \
+  struct _dwg_entity_3DSOLID* extra_acis_data; \
+  BITCODE_BL unknown_2007; \
+  BITCODE_H history_id; \
+  BITCODE_B acis_empty_bit 
+
 typedef struct _dwg_entity_3DSOLID
 {
   struct _dwg_object_entity *parent;
-
+  _3DSOLID_FIELDS;
+#if 0
   BITCODE_B acis_empty;  /*!< no DXF */
   BITCODE_B unknown;
   BITCODE_BS version;    /*!< DXF 70 Modeler format version =1*/
@@ -1581,6 +1605,7 @@ typedef struct _dwg_entity_3DSOLID
   BITCODE_BL unknown_2007;
   BITCODE_H history_id;
   BITCODE_B acis_empty_bit;
+#endif
 } Dwg_Entity__3DSOLID;
 
 /**
@@ -4297,8 +4322,11 @@ typedef struct _dwg_entity_HELIX
 typedef struct _dwg_entity_EXTRUDEDSURFACE
 {
   struct _dwg_object_entity *parent;
+  _3DSOLID_FIELDS;
   //? sweep_profile, taper_angle
   BITCODE_BS modeler_format_version; /*!< DXF 70 */
+  BITCODE_BL size_bindata; // 90
+  BITCODE_TF bindata; // 310|1
   BITCODE_BS u_isolines;         /*!< DXF 71 */
   BITCODE_BS v_isolines;         /*!< DXF 72 */
   BITCODE_BL class_version; /*!< DXF 90 */
@@ -4335,6 +4363,7 @@ typedef struct _dwg_entity_EXTRUDEDSURFACE
 typedef struct _dwg_entity_LOFTEDSURFACE
 {
   struct _dwg_object_entity *parent;
+  _3DSOLID_FIELDS;
   BITCODE_BS modeler_format_version; /*!< DXF 70 */
   BITCODE_BS u_isolines;         /*!< DXF 71 */
   BITCODE_BS v_isolines;         /*!< DXF 72 */
@@ -4365,10 +4394,11 @@ typedef struct _dwg_entity_LOFTEDSURFACE
 typedef struct _dwg_entity_PLANESURFACE
 {
   struct _dwg_object_entity *parent;
+  _3DSOLID_FIELDS;
   BITCODE_BS modeler_format_version; /*!< DXF 70 */
   BITCODE_BS u_isolines;         /*!< DXF 71 */
   BITCODE_BS v_isolines;         /*!< DXF 72 */
-  BITCODE_BL class_version; /*!< DXF 90 */
+  BITCODE_BL class_version; 	 /*!< DXF 90 */
   
 } Dwg_Entity_PLANESURFACE;
 
@@ -4378,14 +4408,13 @@ typedef struct _dwg_entity_PLANESURFACE
 typedef struct _dwg_entity_REVOLVEDSURFACE
 {
   struct _dwg_object_entity *parent;
+  _3DSOLID_FIELDS;
   BITCODE_BS modeler_format_version; /*!< DXF 70 */
   BITCODE_BS u_isolines;         /*!< DXF 71 */
   BITCODE_BS v_isolines;         /*!< DXF 72 */
   BITCODE_BL class_version; /*!< DXF 90 */
 
   BITCODE_BL id; // 90
-  BITCODE_BL size_bindata; // 90
-  BITCODE_TF bindata; // 310
   BITCODE_3BD axis_point; // 10
   BITCODE_3BD axis_vector; // 11
   BITCODE_BD revolve_angle; // 40
@@ -4406,6 +4435,7 @@ typedef struct _dwg_entity_REVOLVEDSURFACE
 typedef struct _dwg_entity_SWEPTSURFACE
 {
   struct _dwg_object_entity *parent;
+  _3DSOLID_FIELDS;
   BITCODE_BS modeler_format_version; /*!< DXF 70 */
   BITCODE_BS u_isolines;         /*!< DXF 71 */
   BITCODE_BS v_isolines;         /*!< DXF 72 */

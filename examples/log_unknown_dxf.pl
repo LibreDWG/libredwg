@@ -1057,6 +1057,11 @@ while (<>) {
         if ($v eq 'AcDbEntity') { $in_entity++ }
         else { $in_entity = 0 }
         $seen100++;
+        if ($v eq 'AcDbModelerGeometry') {
+          push @FIELD, [$code, $v, $name];
+          push @FIELD, [1, "ACIS BinaryFile", "bin_sat_data"];
+          next;
+        }
       } elsif ($code == 102) {
         if ($v eq '{ACAD_REACTORS') {
           $react = 1;

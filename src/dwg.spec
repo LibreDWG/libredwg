@@ -1535,7 +1535,7 @@ DWG_ENTITY_END
 
 #if defined(IS_DECODER)
 
-#define DECODE_3DSOLID decode_3dsolid(dat, hdl_dat, obj, _obj);
+#define DECODE_3DSOLID decode_3dsolid(dat, hdl_dat, obj, (Dwg_Entity_3DSOLID *)_obj);
 
 static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
                           Dwg_Object *restrict obj,
@@ -1610,7 +1610,7 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
       else //if (FIELD_VALUE(version)==2)
         {
           //TODO string in strhdl, even <r2007
-          FIELD_VALUE(num_blocks) = 1;
+          FIELD_VALUE(num_blocks) = 2;
           FIELD_VALUE(block_size) = malloc(2 * sizeof (BITCODE_RL));
           FIELD_VALUE(encr_sat_data) = malloc(2 * sizeof (BITCODE_RC*));
           FIELD_TF (encr_sat_data[0], 15, 1); // "ACIS BinaryFile"
@@ -1696,7 +1696,7 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
 
 #ifdef IS_ENCODER
 
-#define ENCODE_3DSOLID encode_3dsolid(dat, hdl_dat, obj, _obj);
+#define ENCODE_3DSOLID encode_3dsolid(dat, hdl_dat, obj, (Dwg_Entity_3DSOLID *)_obj);
 static int encode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj,
                           Dwg_Entity_3DSOLID* _obj)
 {
@@ -1729,53 +1729,37 @@ static void free_3dsolid(Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
     }
 }
 #undef FREE_3DSOLID
-#define FREE_3DSOLID free_3dsolid(obj, _obj)
+#define FREE_3DSOLID free_3dsolid(obj, (Dwg_Entity_3DSOLID *)_obj)
 #endif
 
+#define ACTION_3DSOLID \
+  DXF { \
+    DXF_3DSOLID \
+  } \
+  DECODER { \
+    DECODE_3DSOLID \
+  } \
+  ENCODER { \
+    ENCODE_3DSOLID \
+  } \
+  FREE_3DSOLID
 
 /*(37)*/
 DWG_ENTITY(REGION)
   SUBCLASS (AcDbModelerGeometry)
-  DXF {
-    DXF_3DSOLID
-  }
-  DECODER {
-    DECODE_3DSOLID
-  }
-  ENCODER {
-    ENCODE_3DSOLID
-  }
-  FREE_3DSOLID;
+  ACTION_3DSOLID;
 DWG_ENTITY_END
 
 /*(38)*/
 DWG_ENTITY(_3DSOLID)
   SUBCLASS (AcDb3dSolid)
-  DXF {
-    DECODE_3DSOLID
-  }
-  DECODER {
-    DECODE_3DSOLID
-  }
-  ENCODER {
-    ENCODE_3DSOLID
-  }
-  FREE_3DSOLID;
+  ACTION_3DSOLID;
 DWG_ENTITY_END
 
 /*(39)*/
 DWG_ENTITY(BODY)
   SUBCLASS (AcDbBody)
-  DXF {
-    DECODE_3DSOLID
-  }
-  DECODER {
-    DECODE_3DSOLID
-  }
-  ENCODER {
-    ENCODE_3DSOLID
-  }
-  FREE_3DSOLID;
+  ACTION_3DSOLID;
 DWG_ENTITY_END
 
 /*(40)*/
@@ -6319,7 +6303,8 @@ DWG_ENTITY(EXTRUDEDSURFACE)
 
   DECODE_UNKNOWN_BITS
   SUBCLASS(AcDbModelerGeometry)
-  FIELD_BS (modeler_format_version, 70); //def 1
+  ACTION_3DSOLID;
+  //FIELD_BS (modeler_format_version, 70); //def 1
   SUBCLASS(AcDbSurface)
   FIELD_BS (u_isolines, 71);
   FIELD_BS (v_isolines, 72);
@@ -6358,7 +6343,9 @@ DWG_ENTITY(LOFTEDSURFACE)
 
   DECODE_UNKNOWN_BITS
   SUBCLASS(AcDbModelerGeometry)
+  ACTION_3DSOLID;
   FIELD_BS (modeler_format_version, 70); //def 1
+
   SUBCLASS(AcDbSurface)
   FIELD_BS (u_isolines, 71);
   FIELD_BS (v_isolines, 72);
@@ -6392,7 +6379,9 @@ DWG_ENTITY(REVOLVEDSURFACE)
 
   DECODE_UNKNOWN_BITS
   SUBCLASS(AcDbModelerGeometry)
+  ACTION_3DSOLID;
   FIELD_BS (modeler_format_version, 70); //def 1
+
   SUBCLASS(AcDbSurface)
   FIELD_BS (u_isolines, 71);
   FIELD_BS (v_isolines, 72);
@@ -6402,8 +6391,8 @@ DWG_ENTITY(REVOLVEDSURFACE)
     return DWG_ERR_VALUEOUTOFBOUNDS;
 
   FIELD_BL (id, 90);
-  FIELD_BL (size_bindata, 90);
-  FIELD_TF (bindata, _obj->size_bindata, 310);
+  //FIELD_BL (size_bindata, 90);
+  //FIELD_TF (bindata, _obj->size_bindata, 310);
   FIELD_3BD (axis_point, 10);
   FIELD_3BD (axis_vector, 11);
   FIELD_BD (revolve_angle, 40);
@@ -6424,7 +6413,9 @@ DWG_ENTITY(SWEPTSURFACE)
 
   DECODE_UNKNOWN_BITS
   SUBCLASS(AcDbModelerGeometry)
+  ACTION_3DSOLID;
   FIELD_BS (modeler_format_version, 70); //def 1
+
   SUBCLASS(AcDbSurface)
   FIELD_BS (u_isolines, 71);
   FIELD_BS (v_isolines, 72);
@@ -6466,14 +6457,18 @@ DWG_ENTITY(PLANESURFACE)
 
   DECODE_UNKNOWN_BITS
   SUBCLASS(AcDbModelerGeometry)
+  ACTION_3DSOLID;
   FIELD_BS (modeler_format_version, 70); //def 1
+  //FIELD_BL (size_bindata, 90);
+  //FIELD_TF (bindata, FIELD_VALUE(size_bindata), 1); // in DXF as encrypted ASCII
+
   SUBCLASS(AcDbSurface)
   FIELD_BS (u_isolines, 71);
   FIELD_BS (v_isolines, 72);
-  SUBCLASS(AcDbPlaneSurface)
-  FIELD_BL (class_version, 90);
-  if (FIELD_VALUE(class_version) > 10)
-    return DWG_ERR_VALUEOUTOFBOUNDS;
+  //SUBCLASS(AcDbPlaneSurface)
+  //FIELD_BL (class_version, 90);
+  //if (FIELD_VALUE(class_version) > 10)
+  //  return DWG_ERR_VALUEOUTOFBOUNDS;
 
   COMMON_ENTITY_HANDLE_DATA;
 
