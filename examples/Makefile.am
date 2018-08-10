@@ -22,12 +22,14 @@ AM_CFLAGS  = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
 LDADD      = $(top_builddir)/src/libredwg.la -lm
 
 check_PROGRAMS = load_dwg dwg2svg2
-EXTRA_PROGRAMS = unknown
+EXTRA_PROGRAMS = unknown bd
 
 load_dwg_SOURCES = load_dwg.c
 dwg2svg2_SOURCES = dwg2svg2.c
 unknown_SOURCES  = unknown.c alldxf_0.inc alldxf_1.inc alldxf_2.inc
 unknown_LDADD  = ../src/bits.lo ../src/common.lo
+bd_SOURCE  = bd.c
+bd_LDADD  = ../src/bits.lo
 all: $(check_PROGRAMS)
 
 .PHONY: check-syntax regen-unknown dsymutil gcov

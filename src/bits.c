@@ -1629,7 +1629,7 @@ void bit_write_bits(Bit_Chain *restrict dat, const char *restrict bits)
 {
   char *p = (char *)bits;
   for (; *p; p++) {
-    bit_write_B(dat, *p == '1');
+    bit_write_B(dat, *p != '0');
   }
 }
 
