@@ -4296,22 +4296,44 @@ typedef struct _dwg_entity_GEOPOSITIONMARKER
 } Dwg_Entity_GEOPOSITIONMARKER;
 
 /**
- Entity HELIX (varies) UNKNOWN FIELDS
- yet unsorted.
+ Entity HELIX (varies) UNSTABLE
+ subclass of SPLINE
 */
 typedef struct _dwg_entity_HELIX
 {
   struct _dwg_object_entity *parent;
-  BITCODE_BS major_version;
-  BITCODE_BS maint_version;
-  BITCODE_3BD axis_base_pt;
-  BITCODE_3BD start_pt;
-  BITCODE_3BD axis_vector;
-  BITCODE_BD radius;
-  BITCODE_BD num_turns;
-  BITCODE_BD height;
-  BITCODE_B handedness;
-  BITCODE_BS constraint_type;
+
+  BITCODE_BS flag; /* computed */
+  BITCODE_BS scenario; /* 1 spline, 2 bezier */
+  BITCODE_BS degree;
+  BITCODE_BL splineflags1; /* 2013+: method fit points = 1, CV frame show = 2, closed = 4 */
+  BITCODE_BL knotparam;    /* 2013+: Chord = 0, Square root = 1, Uniform = 2, Custom = 15 */
+  BITCODE_BD fit_tol;
+  BITCODE_3BD beg_tan_vec;
+  BITCODE_3BD end_tan_vec;
+  BITCODE_B rational;
+  BITCODE_B closed_b;
+  BITCODE_B periodic;
+  BITCODE_B weighted; /* bit 4 of 70 */
+  BITCODE_BD knot_tol;
+  BITCODE_BD ctrl_tol;
+  BITCODE_BS num_fit_pts;
+  Dwg_SPLINE_point* fit_pts;
+  BITCODE_BL num_knots;
+  BITCODE_BD* knots;
+  BITCODE_BL num_ctrl_pts;
+  Dwg_SPLINE_control_point* ctrl_pts;
+
+  BITCODE_BS major_version; //90
+  BITCODE_BS maint_version; //91
+  BITCODE_3BD axis_base_pt; //10
+  BITCODE_3BD start_pt;     //11
+  BITCODE_3BD axis_vector;  //12
+  BITCODE_BD radius;        //40
+  BITCODE_BD num_turns;     //41
+  BITCODE_BD turn_height;   //42
+  BITCODE_B handedness;     //290
+  BITCODE_BS constraint_type; //280
 
 } Dwg_Entity_HELIX;
 
@@ -5740,6 +5762,7 @@ EXPORT int dwg_add_DIMASSOC (Dwg_Object *obj);
 EXPORT int dwg_add_DBCOLOR (Dwg_Object *obj);
 EXPORT int dwg_add_DYNAMICBLOCKPURGEPREVENTER (Dwg_Object *obj);
 EXPORT int dwg_add_GEODATA (Dwg_Object *obj);
+EXPORT int dwg_add_HELIX (Dwg_Object *obj);
 EXPORT int dwg_add_LIGHT (Dwg_Object *obj);
 EXPORT int dwg_add_MULTILEADER (Dwg_Object *obj);
 EXPORT int dwg_add_OBJECT_PTR (Dwg_Object *obj);
@@ -5768,7 +5791,6 @@ EXPORT int dwg_add_DATATABLE (Dwg_Object *obj);
 //EXPORT int dwg_add_DETAILVIEWSTYLE (Dwg_Object *obj);
 EXPORT int dwg_add_EVALUATION_GRAPH (Dwg_Object *obj);
 EXPORT int dwg_add_GEOPOSITIONMARKER (Dwg_Object *obj);
-EXPORT int dwg_add_HELIX (Dwg_Object *obj);
 //EXPORT int dwg_add_LAYER_FILTER (Dwg_Object *obj);
 //EXPORT int dwg_add_LAYOUTPRINTCONFIG (Dwg_Object *obj);
 //EXPORT int dwg_add_LEADEROBJECTCONTEXTDATA (Dwg_Object *obj);

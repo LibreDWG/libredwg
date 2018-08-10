@@ -5810,6 +5810,96 @@ DWG_OBJECT(DBCOLOR)
   XDICOBJHANDLE(3);
 DWG_OBJECT_END
 
+// (varies) UNSTABLE
+// dbhelix.h
+DWG_ENTITY(HELIX)
+
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbSpline)
+  FIELD_BL (scenario, 0);
+  UNTIL(R_2013) {
+    if (FIELD_VALUE(scenario) != 1 && FIELD_VALUE(scenario) != 2)
+      fprintf(stderr, "Error: unknown scenario %d", FIELD_VALUE (scenario));
+  }
+  SINCE(R_2013) {
+    FIELD_BL (splineflags1, 0);
+    FIELD_BL (knotparam, 0);
+    if (FIELD_VALUE(splineflags1) & 1)
+      FIELD_VALUE(scenario) = 2;
+    if (FIELD_VALUE(knotparam) == 15)
+      FIELD_VALUE(scenario) = 1;
+  }
+
+  DXF {
+    // extrusion on planar
+    VALUE_RD(0.0, 210); VALUE_RD(0.0, 220); VALUE_RD(1.0, 230);
+    FIELD_BL(flag, 70);
+  }
+  FIELD_BL (degree, 71);
+
+  if (FIELD_VALUE(scenario) & 2) // bezier spline
+    {
+      FIELD_VALUE(flag) = 8 + 32 + //planar, not rational
+        // ignore method fit points and closed bits
+        ((FIELD_VALUE(splineflags1) & ~5) << 7);
+      FIELD_BD (fit_tol, 44); // def: 0.0000001
+      FIELD_3BD (beg_tan_vec, 12);
+      FIELD_3BD (end_tan_vec, 13);
+      FIELD_BL (num_fit_pts, 74);
+    }
+  if (FIELD_VALUE(scenario) & 1) // spline
+    {
+      FIELD_B (rational, 0); // flag bit 2
+      FIELD_B (closed_b, 0); // flag bit 0
+      FIELD_B (periodic, 0); // flag bit 1
+      FIELD_BD (knot_tol, 42); // def: 0.0000001
+      FIELD_BD (ctrl_tol, 43); // def: 0.0000001
+      FIELD_BL (num_knots, 72);
+      FIELD_BL (num_ctrl_pts, 73);
+      FIELD_B (weighted, 0);
+
+      FIELD_VALUE(flag) = 8 + //planar
+        FIELD_VALUE(closed_b) +
+        (FIELD_VALUE(periodic) << 1) +
+        (FIELD_VALUE(rational) << 2) +
+        (FIELD_VALUE(weighted) << 3);
+    }
+
+  if (FIELD_VALUE(scenario) & 1) {
+    FIELD_VECTOR(knots, BD, num_knots, 40)
+    END_REPEAT(knots);
+    REPEAT(num_ctrl_pts, ctrl_pts, Dwg_SPLINE_control_point)
+      {
+        FIELD_3BD (ctrl_pts[rcount1], 10);
+        if (!FIELD_VALUE(weighted))
+          FIELD_VALUE(ctrl_pts[rcount1].w) = 0; // skipped when encoding
+        else
+          FIELD_BD (ctrl_pts[rcount1].w, 41);
+      }
+    END_REPEAT(ctrl_pts);
+  }
+  if (FIELD_VALUE(scenario) & 2) {
+    REPEAT(num_fit_pts, fit_pts, Dwg_SPLINE_point)
+      {
+        FIELD_3BD (fit_pts[rcount1], 11);
+      }
+    END_REPEAT(fit_pts);
+  }
+
+  SUBCLASS (AcDbHelix)
+  FIELD_BS (major_version, 90);
+  FIELD_BS (maint_version, 91);
+  FIELD_3BD (axis_base_pt, 10);
+  FIELD_3BD_1 (start_pt, 11);
+  FIELD_3BD_1 (axis_vector, 12);
+  FIELD_BD (radius, 40);
+  FIELD_BD (num_turns, 41);
+  FIELD_BD (turn_height, 43);
+  FIELD_B (handedness, 290); //0 left, 1 right (twist)
+  FIELD_BS (constraint_type, 280); //0 constrain turn height, 1 turns, 2 height
+
+DWG_ENTITY_END
+
 /* In work area:
    The following entities/objects are only stored as raw UNKNOWN_ENT/OBJ,
    unless enabled via -DDEBUG_CLASSES */
@@ -6249,26 +6339,6 @@ DWG_OBJECT(SUNSTUDY)
   XDICOBJHANDLE(3);
 
 DWG_OBJECT_END
-
-// (varies) DEBUGGING unsorted
-// See examples/HELIX.pi.log for 2018/Helix.dxf
-DWG_ENTITY(HELIX)
-
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbHelix)
-  DEBUG_HERE_OBJ
-  FIELD_BS (major_version, 90);
-  FIELD_BS (maint_version, 91);
-  FIELD_3BD (axis_base_pt, 10);
-  FIELD_3BD_1 (start_pt, 11);
-  FIELD_3BD_1 (axis_vector, 12);
-  FIELD_BD (radius, 40);
-  FIELD_BD (num_turns, 41);
-  FIELD_BD (height, 42);
-  FIELD_B (handedness, 290); //0 left, 1 right
-  FIELD_BS (constraint_type, 280); //0 constrain turn height, 1 turns, 2 height
-
-DWG_ENTITY_END
 
 // (varies) UNSTABLE
 // in DXF as POSITIONMARKER (rename?, no), command: GEOMARKPOSITION, GEOMARKPOINT

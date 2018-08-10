@@ -33,7 +33,7 @@ Important bugfixes:
 
 New features:
   * Added unstable support for the objects ASSOCDEPENDENCY, ASSOCPLANESURFACEACTIONBODY,
-    DBCOLOR, DIMASSOC, DYNAMICBLOCKPURGEPREVENTER, LIGHT, PERSSUBENTMANAGER,
+    DBCOLOR, DIMASSOC, DYNAMICBLOCKPURGEPREVENTER, HELIX, LIGHT, PERSSUBENTMANAGER,
     UNDERLAYDEFINITION and the entities MULTILEADER, UNDERLAY.
   * Added getopt_long() support to all programs, position independent options.
   * Implemented examples/unknown to find field layouts of unknown objects.
