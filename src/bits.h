@@ -293,6 +293,8 @@ void
 bit_print(Bit_Chain *dat, long unsigned int size);
 
 void
+bit_write_bits(Bit_Chain *restrict dat, const char *restrict bits);
+void
 bit_print_bits(unsigned char* bits, long unsigned int size);
 void
 bit_fprint_bits(FILE* fp, unsigned char* bits, long unsigned int size);

@@ -1625,6 +1625,14 @@ bit_print(Bit_Chain * dat, long unsigned int size)
 // 0b1000_0000,0 >> 8 = 1
 #define BIT(b,i) (((b)[(i)/8] & (0x80 >> (i)%8)) >> (7 - (i)%8))
 
+void bit_write_bits(Bit_Chain *restrict dat, const char *restrict bits)
+{
+  char *p = (char *)bits;
+  for (; *p; p++) {
+    bit_write_B(dat, *p == '1');
+  }
+}
+
 void
 bit_print_bits(unsigned char* bits, long unsigned int size)
 {

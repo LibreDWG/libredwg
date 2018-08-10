@@ -212,9 +212,15 @@ bits_BD(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
     d = 11.0;
   else if (!strcmp(g->value, "63.5"))
     d = 63.5;
+  g->type = BITS_BD;
+  // some more not found BD values
+  for (struct _bd *b = &bd[0]; b->value; b++) {
+    if (!strcmp(g->value, b->value)) {
+      bit_write_bits(dat, b->bin); return;
+    }
+  }
   //sscanf(g->value, "%lf", &d);
   bit_write_BD(dat, d);
-  g->type = BITS_BD;
 }
 
 static void
