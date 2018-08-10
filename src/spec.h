@@ -208,6 +208,10 @@
 #endif
 
 
+#ifndef FIELD_VECTOR_N1
+# define FIELD_VECTOR_N1(name, type, size, dxf) FIELD_VECTOR_N(name, type, size, dxf)
+#endif
+
 #ifndef REPEAT
 
 #define REPEAT_CN(times, name, type) \

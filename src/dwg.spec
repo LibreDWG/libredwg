@@ -6714,6 +6714,77 @@ DWG_OBJECT(ASSOC2DCONSTRAINTGROUP)
   */
 DWG_OBJECT_END
 
+// Class AcDbSweepOptions? DEBUGGING
+// dbSweepOptions.h dbsurf.h
+DWG_OBJECT(ACSH_SWEEP_CLASS)
+
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbEvalExpr)
+  FIELD_BL (class_version, 90); //1
+  FIELD_BL (ee_bl98, 98); //33 major/minor?
+  FIELD_BL (ee_bl99, 99); //29
+  SUBCLASS (AcDbShHistoryNode)
+  FIELD_BL (shhn_bl98, 98); //33
+  FIELD_BL (shhn_bl99, 99); //29
+  FIELD_VECTOR_N1 (shhn_pts, BD, 16, 40); //40-55
+  FIELD_CMC (color, 62,421); //256
+  FIELD_B  (shhn_b92, 92);     //1
+  FIELD_BL (shhn_bl347, 347);   //269
+  
+  SUBCLASS (AcDbShPrimitive)
+  SUBCLASS (AcDbShSweepBase)
+  FIELD_BL (shsw_bl90, 90); //33
+  FIELD_BL (shsw_bl91, 91); //29
+  FIELD_3BD (basept, 10); //0,0,0
+  FIELD_BL (shsw_bl92, 92); //77
+  FIELD_BL (shsw_size_text, 90); //744
+  FIELD_TF (shsw_text, _obj->shsw_size_text, 310);
+  FIELD_BL (shsw_bl93, 93); //77
+  FIELD_BL (shsw_size_text2, 90); //480
+  FIELD_TF (shsw_text2, _obj->shsw_size_text2, 310);
+  FIELD_BD (draft_angle, 42); //0.0
+  FIELD_BD (start_draft_dist, 43); //0.0
+  FIELD_BD (end_draft_dist, 44); //0.0
+  FIELD_BD (scale_factor, 45); //1.0
+  FIELD_BD (twist_angle, 48); //0.0
+  FIELD_BD (align_angle, 49); //0.0
+  FIELD_VECTOR_N (sweepentity_transform, BD, 16, 46);
+  FIELD_VECTOR_N (pathentity_transform, BD, 16, 47);
+  FIELD_RC (align_option, 70); //2
+  FIELD_RC (miter_option, 71); //2
+  FIELD_B (has_align_start, 290); //1
+  FIELD_B (bank, 292); //1
+  FIELD_B (check_intersections, 293); //0
+  FIELD_B (shsw_b294, 294); //1
+  FIELD_B (shsw_b295, 295); //1
+  FIELD_B (shsw_b296, 296); //1
+  FIELD_3BD (pt2, 11); //0,0,0
+
+  SUBCLASS (AcDbShSweep)
+
+DWG_OBJECT_END
+
+// (varies) TODO
+// no coverage. Stored in ACAD_BIM_DEFINITIONS dictionary
+DWG_OBJECT(ACDBNAVISWORKSMODELDEF)
+
+  DECODE_UNKNOWN_BITS
+  DXF { FIELD_HANDLE (parenthandle, 4, 330); }
+  SUBCLASS (AcDbNavisworksModelDef)
+  DEBUG_HERE_OBJ
+  FIELD_T (path, 1);
+  FIELD_B (status, 290);
+  FIELD_3BD (min_extent, 10);
+  FIELD_3BD (max_extent, 11);
+  FIELD_B (host_drawing_visibility, 290);
+
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (parenthandle, 3, 0);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+
+DWG_OBJECT_END
+  
 #endif /* DEBUG_CLASSES */
 
 /* Those undocumented objects are also stored as raw UNKNOWN_OBJ */
@@ -6829,3 +6900,4 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+

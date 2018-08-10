@@ -302,6 +302,7 @@ typedef enum DWG_OBJECT_TYPE
 
   /* non-fixed types > 500. not stored as type, but as fixedtype */
 
+  DWG_TYPE_ACDBNAVISWORKSMODELDEF,
   DWG_TYPE_ACSH_HISTORY_CLASS,
   DWG_TYPE_ACSH_SWEEP_CLASS,
   DWG_TYPE_ARCALIGNEDTEXT,
@@ -4869,6 +4870,68 @@ typedef struct _dwg_object_ASSOCPLANESURFACEACTIONBODY
   BITCODE_H  parenthandle; //330
 } Dwg_Object_ASSOCPLANESURFACEACTIONBODY;
 
+typedef struct _dwg_object_ACSH_SWEEP_CLASS
+{
+  struct _dwg_object_object *parent;
+  // AcDbEvalExpr
+  BITCODE_BL class_version; // 90
+  BITCODE_BL ee_bl98; //98
+  BITCODE_BL ee_bl99; //99
+  // AcDbShHistoryNode
+  BITCODE_BL shhn_bl98; //98
+  BITCODE_BL shhn_bl99; //99
+  BITCODE_BD* shhn_pts; //last 16x nums 40-55
+  BITCODE_CMC color; /*!< DXF 62 */
+  BITCODE_B  shhn_b92; /*!< DXF 92 */
+  BITCODE_BL shhn_bl347; /*!< DXF 347 */
+  
+  // AcDbShPrimitive
+  // AcDbShSweepBase
+  BITCODE_BL shsw_bl90;       /*!< DXF 90 */
+  BITCODE_BL shsw_bl91;       /*!< DXF 91 */
+  BITCODE_3BD basept;         /*!< DXF 10 */
+  BITCODE_BL shsw_bl92;       /*!< DXF 92 */
+  BITCODE_BL shsw_size_text;  /*!< DXF 90 */
+  BITCODE_TF shsw_text;       /*!< DXF 310 */
+  BITCODE_BL shsw_bl93;       /*!< DXF 93 */
+  BITCODE_BL shsw_size_text2; /*!< DXF 90 */
+  BITCODE_TF shsw_text2;      /*!< DXF 310 */
+  BITCODE_BD draft_angle;	/*!< DXF 42 0.0 */
+  BITCODE_BD start_draft_dist;	/*!< DXF 43 0.0 */
+  BITCODE_BD end_draft_dist;	/*!< DXF 44 0.0 */
+  BITCODE_BD scale_factor;	/*!< DXF 45 1.0 */
+  BITCODE_BD twist_angle;	/*!< DXF 48 0.0 */
+  BITCODE_BD align_angle;	/*!< DXF 49 0.0 */
+  BITCODE_BD* sweepentity_transform; /*!< DXF 46 16x */
+  BITCODE_BD* pathentity_transform;  /*!< DXF 47 16x */
+  BITCODE_RC align_option;	/*!< DXF 70 2 */
+  BITCODE_RC miter_option;	/*!< DXF 71 2 */
+  BITCODE_B has_align_start;	/*!< DXF 290 1 */
+  BITCODE_B bank;	/*!< DXF 292 1 */
+  BITCODE_B check_intersections; /*!< DXF 293 0 */
+  BITCODE_B shsw_b294;	/*!< DXF 294  1 */
+  BITCODE_B shsw_b295;	/*!< DXF 295  1 */
+  BITCODE_B shsw_b296;	/*!< DXF 296  1 */
+  BITCODE_3BD pt2;	/*!< DXF 11 0,0,0 */
+
+  // AcDbShSweep
+
+} Dwg_Object_ACSH_SWEEP_CLASS;
+
+typedef struct _dwg_object_ACDBNAVISWORKSMODELDEF
+{
+  struct _dwg_object_object *parent;
+  BITCODE_H parenthandle; /*!< DXF 330 */
+
+  // AcDbNavisworksModelDef
+  BITCODE_T path; 	/*!< DXF 1 */
+  BITCODE_B status; 	/*!< DXF 290 */
+  BITCODE_3BD min_extent; /*!< DXF 10 */
+  BITCODE_3BD max_extent; /*!< DXF 11 */
+  BITCODE_B host_drawing_visibility; /*!< DXF 290 */
+
+} Dwg_Object_ACDBNAVISWORKSMODELDEF;
+
 /**
  -----------------------------------
  */
@@ -5116,7 +5179,8 @@ typedef struct _dwg_object_object
     Dwg_Object_VPORT_ENTITY_HEADER *VPORT_ENTITY_HEADER;
 
     //TODO Dwg_Object_ACSH_HISTORY_CLASS *ACSH_HISTORY_CLASS;
-    //TODO Dwg_Object_ACSH_SWEEP_CLASS *ACSH_SWEEP_CLASS;
+    Dwg_Object_ACSH_SWEEP_CLASS *ACSH_SWEEP_CLASS;
+    Dwg_Object_ACDBNAVISWORKSMODELDEF *ACDBNAVISWORKSMODELDEF;
     //TODO Dwg_Object_ARCALIGNEDTEXT *ARCALIGNEDTEXT;
     //TODO Dwg_Object_ARC_DIMENSION *ARC_DIMENSION;
     Dwg_Object_ASSOC2DCONSTRAINTGROUP *ASSOC2DCONSTRAINTGROUP;
@@ -5779,8 +5843,9 @@ EXPORT int dwg_add_ASSOC2DCONSTRAINTGROUP (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCACTION (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCALIGNEDDIMACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCNETWORK (Dwg_Object *obj);
+EXPORT int dwg_add_ACDBNAVISWORKSMODELDEF (Dwg_Object *obj);
 //EXPORT int dwg_add_ACSH_HISTORY_CLASS (Dwg_Object *obj);
-//EXPORT int dwg_add_ACSH_SWEEP_CLASS (Dwg_Object *obj);
+EXPORT int dwg_add_ACSH_SWEEP_CLASS (Dwg_Object *obj);
 //EXPORT int dwg_add_ARCALIGNEDTEXT (Dwg_Object *obj);
 //EXPORT int dwg_add_ARC_DIMENSION (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCGEOMDEPENDENCY (Dwg_Object *obj);

@@ -430,6 +430,19 @@
           } \
         } \
     }
+#define FIELD_VECTOR_N1(name, type, size, dxf) \
+  if (size > 0) \
+    { \
+      int _dxf = dxf;\
+      VECTOR_CHKCOUNT(name,type,size) \
+      _obj->name = (BITCODE_##type*) malloc(size * sizeof(BITCODE_##type));\
+      for (vcount=0; vcount<(BITCODE_BL)size; vcount++) \
+        {\
+          _obj->name[vcount] = bit_read_##type(dat); \
+          LOG_INSANE(#name "[%ld]: " FORMAT_##type " [" #type " %d]\n", \
+                     (long)vcount, _obj->name[vcount], _dxf++) \
+        } \
+    }
 
 #define FIELD_VECTOR(name, type, size, dxf) FIELD_VECTOR_N(name, type, _obj->size, dxf)
 
