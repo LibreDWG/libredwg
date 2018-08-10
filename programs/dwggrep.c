@@ -251,7 +251,7 @@ do_match (const int is16, const char *restrict filename,
 
 //8bit only
 #define MATCH_NO16(type,ENTITY,text_field,dxfgroup) \
-  text = obj->tio.type->tio.ENTITY->text_field; \
+  text = (char*)obj->tio.type->tio.ENTITY->text_field; \
   if (text && numdxf) { \
     int dxfok = 0; \
     for (int i=0; i<numdxf; i++) { \
@@ -267,12 +267,12 @@ do_match (const int is16, const char *restrict filename,
 
 #ifdef HAVE_PCRE2_16
 #define MATCH_TYPE(type,ENTITY,text_field,dxfgroup)  \
-  text = obj->tio.type->tio.ENTITY->text_field; \
+  text = (char*)obj->tio.type->tio.ENTITY->text_field; \
   if (text) \
     found += do_match(obj->parent->header.version >= R_2007, filename, #ENTITY, dxfgroup, text)
 #else
 #define MATCH_TYPE(type,ENTITY,text_field,dxfgroup)  \
-  text = obj->tio.type->tio.ENTITY->text_field; \
+  text = (char*)obj->tio.type->tio.ENTITY->text_field; \
   if (text) { \
     if (obj->parent->header.version >= R_2007) \
       text = bit_convert_TU((BITCODE_TU)text); \
@@ -365,18 +365,27 @@ int match_VIEWPORT(const char *restrict filename, const Dwg_Object *restrict obj
 static
 int match_3DSOLID(const char *restrict filename, const Dwg_Object *restrict obj)
 {
-  char *text;
+  char *text = NULL;
   int found = 0;
-  BITCODE_BL i;
+  BITCODE_BL j;
   Dwg_Entity_3DSOLID *_obj = obj->tio.entity->tio._3DSOLID;
 
-  for (i=0; i<_obj->num_blocks; i++)
+  if (!_obj || !obj->tio.entity) return 0;
+  if (_obj->acis_data) {
+    MATCH_NO16 (entity, _3DSOLID, acis_data, 1);
+    //MATCH_ENTITY (_3DSOLID, acis_data, 1);
+    //found += do_match(0, filename, "3DSOLID", 1, (char*)_obj->acis_data);
+  }
+  /*
+  if (!_obj->encr_sat_data) return 0;
+  for (j=0; j<_obj->num_blocks; j++)
     {
-      text = obj->tio.entity->tio._3DSOLID->encr_sat_data[i];
-      if (text)
-        found += do_match(0, filename, "3DSOLID", 301, text);
-      //MATCH_NO16 (entity, _3DSOLID, encr_sat_data[i], 301);
+      //text = _obj->encr_sat_data[j];
+      //if (text)
+      //  found += do_match(0, filename, "3DSOLID", 301, text);
+      MATCH_NO16 (entity, _3DSOLID, encr_sat_data[j], 301);
     }
+  */
   return found;
 }
 
