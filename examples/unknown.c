@@ -121,6 +121,15 @@ static struct _unknown {
 };
 #endif
 
+static struct _bd {
+  const char *value;
+  const char *bin;
+} bd[] = {
+    // see bd-unknown.pl
+    #include "bd-unknown.inc"
+    { NULL, NULL }
+};
+
 static void
 bits_string(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
