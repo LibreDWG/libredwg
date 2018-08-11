@@ -398,7 +398,7 @@ if test x$cross_compiling = xno; then
   if test -n "$VALGRIND"; then
      if test -n "$VALGRIND"; then
        AC_MSG_CHECKING([VALGRIND version])
-       [valgrind_version=`$VALGRIND --version 2>&1`]
+       [valgrind_version=`$VALGRIND --version 2>&1 | sed 's,valgrind-,,'`]
        AC_MSG_RESULT([$valgrind_version])
      fi
      AC_MSG_CHECKING([for Valgrind suppressions])
