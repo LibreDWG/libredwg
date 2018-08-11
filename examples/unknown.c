@@ -258,11 +258,11 @@ bits_BL(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 }
 
 static void
-bits_BLs(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
+bits_BLd(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
   int32_t l = (int32_t)strtol(g->value, NULL, 10);
-  bit_write_BLs(dat, l);
-  g->type = BITS_BLs;
+  bit_write_BLd(dat, l);
+  g->type = BITS_BLd;
 }
 
 static void
@@ -485,11 +485,11 @@ bits_format (struct _unknown_field *g, const int version)
   else if (code <= 419)
     bits_string(&dat, g);
   else if (code <= 429)
-    bits_BLs(&dat, g); //int32_t. ignore if after color
+    bits_BLd(&dat, g); //int32_t. ignore if after color
   else if (code <= 439)
     bits_string(&dat, g); // ignore if after color
   else if (code <= 449)
-    bits_BLs(&dat, g);//int32_t. ignore if after color
+    bits_BLd(&dat, g);//int32_t. ignore if after color
   else if (code <= 459)
     bits_BL(&dat, g);//long
   else if (code <= 469)
@@ -905,7 +905,7 @@ main (int argc, char *argv[])
                     goto FOUND;
                   }
                 }
-                if ((g[j].type == BITS_BL || g[j].type == BITS_BLs) &&
+                if ((g[j].type == BITS_BL || g[j].type == BITS_BLd) &&
                     strlen(g[j].value) <= 5)
                 {
                   Bit_Chain dat = {NULL,16,0,0,NULL,0,0};

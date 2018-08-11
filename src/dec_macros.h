@@ -170,11 +170,13 @@
 #define FIELD_MC(name,dxf)  FIELDG(name, MC, dxf)
 #define FIELD_MS(name,dxf)  FIELDG(name, MS, dxf)
 #define FIELD_TF(name,len,dxf) \
-  { _obj->name = bit_read_TF(dat,(int)len); \
+  { VECTOR_CHKCOUNT(name,TF,len) \
+   _obj->name = bit_read_TF(dat,(int)len); \
     LOG_INSANE( #name ": [%d TF " #dxf "]\n", len); \
     LOG_INSANE_TF(FIELD_VALUE(name), (int)len); }
 #define FIELD_TFF(name,len,dxf) \
-  { bit_read_fixed(dat,_obj->name,(int)len); \
+  { VECTOR_CHKCOUNT(name,TF,len) \
+    bit_read_fixed(dat,_obj->name,(int)len); \
     LOG_INSANE( #name ": [%d TFF " #dxf "]\n", len); \
     LOG_INSANE_TF(FIELD_VALUE(name), (int)len); }
 #define FIELD_TV(name,dxf) FIELDG(name, TV, dxf)
@@ -696,9 +698,9 @@ static int dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj
     vcount  = (obj->size+obj->address)*8 - bit_position(dat); \
   } \
   if (vcount) \
-    LOG_HANDLE(" padding: %+ld %s\n", (long)vcount, (long)vcount >= 8 \
+    LOG_HANDLE(" padding: %+ld %s\n", (long)vcount, (BITCODE_BLd)vcount >= 8 \
                ? "MISSING" \
-               : ((long)vcount < 0) ? "OVERSHOOT" : "");  \
+               : ((BITCODE_BLd)vcount < 0) ? "OVERSHOOT" : "");  \
   return error & ~DWG_ERR_UNHANDLEDCLASS; \
 }
 

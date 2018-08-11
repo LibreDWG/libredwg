@@ -442,7 +442,7 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 #define FIELD_VECTOR_N(name, type, size, dxf)\
   if (dxf)\
     {\
-      for (vcount=0; vcount < (int)size; vcount++)\
+      for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
         {\
           sscanf((char*)&dat->chain[dat->byte], #name ": " FORMAT_##type ",\n", \
                  &_obj->name[vcount]);\
@@ -452,10 +452,10 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 #define FIELD_VECTOR_T(name, size, dxf)\
   if (dxf) {\
     PRE (R_2007) {                                                   \
-      for (vcount=0; vcount < (int)_obj->size; vcount++)             \
+      for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         VALUE_TV(_obj->name[vcount], dxf);                           \
     } else {                                                         \
-      for (vcount=0; vcount < (int)_obj->size; vcount++)             \
+      for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         VALUE_TU(_obj->name[vcount], dxf);                           \
     }                                                                \
   }
@@ -464,7 +464,7 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 
 #define FIELD_2RD_VECTOR(name, size, dxf)\
   if (dxf) {\
-    for (vcount=0; vcount < (int)_obj->size; vcount++)    \
+    for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)    \
       {\
         FIELD_2RD(name[vcount], dxf);\
       }\
@@ -472,14 +472,14 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 
 #define FIELD_2DD_VECTOR(name, size, dxf)\
   FIELD_2RD(name[0], dxf);\
-  for (vcount = 1; vcount < (int)_obj->size; vcount++)\
+  for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
       FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
     }\
 
 #define FIELD_3DPOINT_VECTOR(name, size, dxf)\
   if (dxf) {\
-    for (vcount=0; vcount < (int)_obj->size; vcount++)\
+    for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
       {\
         FIELD_3DPOINT(name[vcount], dxf);\
       }\
@@ -487,7 +487,7 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 
 #define HANDLE_VECTOR_N(name, size, code, dxf) \
   if (dxf) {\
-    for (vcount=0; vcount < (int)size; vcount++)\
+    for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
       {\
         FIELD_HANDLE_N(name[vcount], vcount, code, dxf);\
       }\

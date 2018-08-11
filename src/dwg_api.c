@@ -18397,7 +18397,7 @@ dwg_ent_get_eed(const dwg_obj_ent *restrict ent,
     LOG_ERROR("%s: empty or invalid ent", __FUNCTION__)
     return NULL;
   }
-  else if (index < 0 || index >= ent->num_eed) {
+  else if (index >= ent->num_eed) {
     *error = 2;
     return NULL;
   }
@@ -18424,7 +18424,7 @@ dwg_ent_get_eed_data(const dwg_obj_ent *restrict ent,
     LOG_ERROR("%s: empty or invalid ent", __FUNCTION__)
     return NULL;
   }
-  else if (index < 0 || index >= ent->num_eed) {
+  else if (index >= ent->num_eed) {
     *error = 2;
     return NULL;
   }
@@ -19019,7 +19019,7 @@ dwg_obj_get_eed(const dwg_obj_obj *restrict obj,
     LOG_ERROR("%s: empty or invalid obj", __FUNCTION__)
     return NULL;
   }
-  else if (index < 0 || index >= obj->num_eed) {
+  else if (index >= obj->num_eed) {
     *error = 2;
     return NULL;
   }
@@ -19046,7 +19046,7 @@ dwg_obj_get_eed_data(const dwg_obj_obj *restrict obj,
     LOG_ERROR("%s: empty or invalid obj", __FUNCTION__)
     return NULL;
   }
-  else if (index < 0 || index >= obj->num_eed) {
+  else if (index >= obj->num_eed) {
     *error = 2;
     return NULL;
   }

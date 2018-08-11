@@ -176,7 +176,7 @@ static unsigned int cur_ver = 0;
 // it all in the vector called 'name'.
 #define FIELD_VECTOR_N(name, type, size, dxf)\
     ARRAY; \
-    for (vcount=0; vcount < (int)size; vcount++)\
+    for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
       {\
         PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n", _obj->name[vcount]); \
       }\
@@ -185,11 +185,11 @@ static unsigned int cur_ver = 0;
 #define FIELD_VECTOR_T(name, size, dxf)\
     ARRAY; \
     PRE (R_2007) { \
-      for (vcount=0; vcount < (int)_obj->size; vcount++) { \
+      for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++) { \
         PREFIX fprintf(dat->fh, "\"" #name "\": \"%s\",\n", _obj->name[vcount]); \
       }\
     } else { \
-      for (vcount=0; vcount < (int)_obj->size; vcount++)\
+      for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
         FIELD_TEXT_TU(name, _obj->name[vcount]); \
     } \
     if (_obj->size) NOCOMMA;\
@@ -199,7 +199,7 @@ static unsigned int cur_ver = 0;
 
 #define FIELD_2RD_VECTOR(name, size, dxf)\
   ARRAY;\
-  for (vcount=0; vcount < (int)_obj->size; vcount++)\
+  for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
       FIELD_2RD(name[vcount], dxf);\
     }\
@@ -209,7 +209,7 @@ static unsigned int cur_ver = 0;
 #define FIELD_2DD_VECTOR(name, size, dxf)\
   ARRAY;\
   FIELD_2RD(name[0], 0);\
-  for (vcount = 1; vcount < (int)_obj->size; vcount++)\
+  for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
       FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
     }\
@@ -218,7 +218,7 @@ static unsigned int cur_ver = 0;
 
 #define FIELD_3DPOINT_VECTOR(name, size, dxf)\
   ARRAY;\
-  for (vcount=0; vcount < (int)_obj->size; vcount++)\
+  for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
       FIELD_3DPOINT(name[vcount], dxf);\
     }\

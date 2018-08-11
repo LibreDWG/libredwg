@@ -154,7 +154,7 @@ static unsigned int cur_ver = 0;
 #define FIELD_CMC(color,dxf1,dxf2) { \
   PREFIX fprintf(dat->fh, "\"" #color "\": %d,\n", _obj->color.index); \
   if (dat->version >= R_2004) { \
-      PREFIX fprintf(dat->fh, "\"" #color "\".rgb: %x,\n", (unsigned)_obj->color.rgb); \
+      PREFIX fprintf(dat->fh, "\"" #color "\".rgb: %06x,\n", (unsigned)_obj->color.rgb); \
     if (_obj->color.flag & 1) \
       PREFIX fprintf(dat->fh, "\"" #color ".name\": \"%s\",\n", _obj->color.name); \
     if (_obj->color.flag & 2) \
@@ -170,7 +170,7 @@ static unsigned int cur_ver = 0;
 // it all in the vector called 'name'.
 #define FIELD_VECTOR_N(name, type, size, dxf)\
     ARRAY; \
-    for (vcount=0; vcount < (int)size; vcount++)\
+    for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
       {\
         PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n", _obj->name[vcount]); \
       }\
@@ -179,11 +179,11 @@ static unsigned int cur_ver = 0;
 #define FIELD_VECTOR_T(name, size, dxf)\
     ARRAY; \
     PRE (R_2007) { \
-      for (vcount=0; vcount < (int)_obj->size; vcount++) { \
+      for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++) { \
         PREFIX fprintf(dat->fh, "\"" #name "\": \"%s\",\n", _obj->name[vcount]); \
       }\
     } else { \
-      for (vcount=0; vcount < (int)_obj->size; vcount++)\
+      for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
         FIELD_TEXT_TU(name, _obj->name[vcount]); \
     } \
     if (_obj->size) NOCOMMA;\
@@ -193,7 +193,7 @@ static unsigned int cur_ver = 0;
 
 #define FIELD_2RD_VECTOR(name, size, dxf)\
   ARRAY;\
-  for (vcount=0; vcount < (int)_obj->size; vcount++)\
+  for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
       FIELD_2RD(name[vcount], dxf);\
     }\
@@ -203,7 +203,7 @@ static unsigned int cur_ver = 0;
 #define FIELD_2DD_VECTOR(name, size, dxf)\
   ARRAY;\
   FIELD_2RD(name[0], 0);\
-  for (vcount = 1; vcount < (int)_obj->size; vcount++)\
+  for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
       FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
     }\
@@ -212,7 +212,7 @@ static unsigned int cur_ver = 0;
 
 #define FIELD_3DPOINT_VECTOR(name, size, dxf)\
   ARRAY;\
-  for (vcount=0; vcount < (int)_obj->size; vcount++)\
+  for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
       FIELD_3DPOINT(name[vcount], dxf);\
     }\
@@ -221,7 +221,7 @@ static unsigned int cur_ver = 0;
 
 #define HANDLE_VECTOR_N(name, size, code, dxf) \
   ARRAY;\
-  for (vcount=0; vcount < (int)size; vcount++)\
+  for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
     {\
       FIELD_HANDLE_N(name[vcount], vcount, code, dxf);\
     }\
@@ -239,7 +239,7 @@ static unsigned int cur_ver = 0;
 #define REACTORS(code)\
   PREFIX; \
   fprintf(dat->fh, "\"reactors\":"); ARRAY; \
-  for (vcount=0; vcount < (int)obj->tio.object->num_reactors; vcount++)\
+  for (vcount=0; vcount < obj->tio.object->num_reactors; vcount++)\
     {\
       VALUE_HANDLE(obj->tio.object->reactors[vcount], reactors, code, 330); \
     }\
@@ -267,7 +267,7 @@ static unsigned int cur_ver = 0;
 static int \
 dwg_json_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 {\
-  long vcount, rcount1, rcount2, rcount3, rcount4; \
+  BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4; \
   Bit_Chain *hdl_dat = dat;\
   Dwg_Data* dwg = obj->parent; \
   Dwg_Entity_##token *ent, *_obj;\
@@ -287,7 +287,7 @@ dwg_json_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 static int \
 dwg_json_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
-  long vcount, rcount1, rcount2, rcount3, rcount4;\
+  BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;\
   Bit_Chain *hdl_dat = dat;\
   Dwg_Data* dwg = obj->parent; \
   Dwg_Object_##token *_obj;\
@@ -566,10 +566,10 @@ json_header_write(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static int
 json_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  unsigned int i;
+  BITCODE_BS i;
 
   SECTION(CLASSES);
-  LOG_TRACE("num_classes: %u\n", dwg->num_classes);
+  LOG_TRACE("num_classes: " FORMAT_BS "\n", dwg->num_classes);
   for (i=0; i < dwg->num_classes; i++)
     {
       Dwg_Class *_obj = &dwg->dwg_class[i];

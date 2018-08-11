@@ -313,16 +313,16 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 // it all in the vector called 'name'.
 #define FIELD_VECTOR_N(name, type, size, dxf)\
   if (dxf) {\
-    for (vcount=0; vcount < (int)size; vcount++) \
+    for (vcount=0; vcount < (BITCODE_BL)size; vcount++) \
       VALUE (_obj->name[vcount], type, dxf); \
   }
 #define FIELD_VECTOR_T(name, size, dxf)\
   if (dxf) {\
     PRE (R_2007) { \
-      for (vcount=0; vcount < (int)_obj->size; vcount++) \
+      for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++) \
         VALUE_TV (_obj->name[vcount], dxf) \
     } else { \
-      for (vcount=0; vcount < (int)_obj->size; vcount++) \
+      for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++) \
         VALUE_TU (_obj->name[vcount], dxf) \
     }\
   }
@@ -332,7 +332,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 
 #define FIELD_2RD_VECTOR(name, size, dxf)\
   if (dxf) {\
-    for (vcount=0; vcount < (int)_obj->size; vcount++)\
+    for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
       {\
         FIELD_2RD(name[vcount], dxf);\
       }\
@@ -341,7 +341,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 #define FIELD_2DD_VECTOR(name, size, dxf)\
   if (dxf) {\
     FIELD_2RD(name[0], 0);\
-    for (vcount = 1; vcount < (int)_obj->size; vcount++)\
+    for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)\
       {\
         FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
       }\
@@ -349,7 +349,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 
 #define FIELD_3DPOINT_VECTOR(name, size, dxf)\
   if (dxf) {\
-    for (vcount=0; vcount < (int)_obj->size; vcount++)\
+    for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
       {\
         FIELD_3DPOINT(name[vcount], dxf);\
       }\
@@ -357,7 +357,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 
 #define HANDLE_VECTOR_N(name, size, code, dxf) \
   if (dxf) {\
-    for (vcount=0; vcount < (int)size; vcount++)\
+    for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
       {\
         FIELD_HANDLE_N(name[vcount], vcount, code, dxf);\
       }\
@@ -387,7 +387,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
       obj->tio.object->reactors) \
   { \
     VALUE_TV("{ACAD_REACTORS", 102) \
-    for (vcount=0; vcount < (int)obj->tio.object->num_reactors; vcount++)\
+    for (vcount=0; vcount < obj->tio.object->num_reactors; vcount++)\
       {\
         VALUE_HANDLE(obj->tio.object->reactors[vcount], code, 330);\
       }\
@@ -437,11 +437,11 @@ dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat, const Dwg_Object *restrict obj);
 static int \
 dwg_dxfb_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
 {\
-  int error = 0; \
-  long vcount, rcount1, rcount2, rcount3, rcount4; \
+  BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Data* dwg = obj->parent; \
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Object_Entity *_ent;\
+  int error = 0; \
   if (!strcmp(#token, "GEOPOSITIONMARKER"))\
     RECORD(POSITIONMARKER)\
   else if (dat->version < R_13 && strlen(#token) == 10 && !strcmp(#token, "LWPOLYLINE")) \
@@ -481,10 +481,11 @@ dwg_dxfb_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
 static int \
 dwg_dxfb_ ##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
 { \
-  long vcount, rcount1, rcount2, rcount3, rcount4;\
+  BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;\
   Bit_Chain *hdl_dat = dat;\
   Dwg_Data* dwg = obj->parent;\
   Dwg_Object_##token *_obj;\
+  int error = 0; \
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
   if (!dwg_obj_is_control(obj)) { \

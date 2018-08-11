@@ -87,24 +87,32 @@ extern "C" {
 #ifdef HAVE_STDINT_H
 # define BITCODE_BS uint16_t
 # define BITCODE_RS uint16_t
-# define BITCODE_BL int32_t
-# define BITCODE_RL int32_t
+# define BITCODE_BL uint32_t
+# define BITCODE_RL uint32_t
+# define BITCODE_BLd int32_t
+# define BITCODE_RLd int32_t
 #else
 # define BITCODE_BS unsigned short int
 # define BITCODE_RS unsigned short int
-# define BITCODE_BL int
-# define BITCODE_RL int
+# define BITCODE_BL unsigned int
+# define BITCODE_RL unsigned int
+# define BITCODE_BLd int
+# define BITCODE_RLd int
 #endif
 #ifdef HAVE_INTTYPES_H
 # define FORMAT_BS "%" PRIu16
 # define FORMAT_RS "%" PRIu16
-# define FORMAT_BL "%" PRId32
-# define FORMAT_RL "%" PRId32
+# define FORMAT_BL "%" PRIu32
+# define FORMAT_RL "%" PRIu32
+# define FORMAT_BLd "%" PRId32
+# define FORMAT_RLd "%" PRId32
 #else
 # define FORMAT_BS "%hu"
 # define FORMAT_RS "%hu"
-# define FORMAT_BL "%d"
-# define FORMAT_RL "%d"
+# define FORMAT_BL "%u"
+# define FORMAT_RL "%u"
+# define FORMAT_BLd "%d"
+# define FORMAT_RLd "%d"
 #endif
 #define BITCODE_RD BITCODE_DOUBLE
 #define FORMAT_RD "%f"

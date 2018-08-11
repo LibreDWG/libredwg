@@ -538,9 +538,9 @@ bit_write_BL(Bit_Chain * dat, BITCODE_BL value)
 /** Write signed bitlong (compacted data).
  */
 void
-bit_write_BLs(Bit_Chain * dat, int32_t value)
+bit_write_BLd(Bit_Chain * dat, BITCODE_BLd value)
 {
-  const uint32_t l = value;
+  const BITCODE_BL l = value;
   if (l > 255)
     {
       bit_write_BB(dat, 0);

@@ -325,7 +325,7 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 #define FIELD_VECTOR_N(name, type, size, dxf)\
   if (dxf && _obj->name)\
     {\
-      for (vcount=0; vcount < (int)size; vcount++)\
+      for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
         {\
           VALUE_##type(_obj->name[vcount], dxf); \
         }\
@@ -333,10 +333,10 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 #define FIELD_VECTOR_T(name, size, dxf)\
   if (dxf && _obj->name) {\
     PRE (R_2007) {                                                   \
-      for (vcount=0; vcount < (int)_obj->size; vcount++)             \
+      for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         VALUE_TV(_obj->name[vcount], dxf);                           \
     } else {                                                         \
-      for (vcount=0; vcount < (int)_obj->size; vcount++)             \
+      for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         VALUE_TU(_obj->name[vcount], dxf);                           \
     }                                                                \
   }
@@ -345,7 +345,7 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 
 #define FIELD_2RD_VECTOR(name, size, dxf)\
   if (dxf && _obj->name) {\
-    for (vcount=0; vcount < (int)_obj->size; vcount++)    \
+    for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)    \
       {\
         FIELD_2RD(name[vcount], dxf);\
       }\
@@ -353,14 +353,14 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 
 #define FIELD_2DD_VECTOR(name, size, dxf)\
   FIELD_2RD(name[0], dxf);\
-  for (vcount = 1; vcount < (int)_obj->size; vcount++)\
+  for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
       FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
     }\
 
 #define FIELD_3DPOINT_VECTOR(name, size, dxf)\
   if (dxf) {\
-    for (vcount=0; vcount < (int)_obj->size; vcount++)\
+    for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
       {\
         FIELD_3DPOINT(name[vcount], dxf);\
       }\
@@ -368,7 +368,7 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 
 #define VALUE_HANDLE_N(hdlptr, name, vcount, handle_code, dxf) \
   if (dxf) {\
-    for (vcount=0; vcount < (int)size; vcount++)\
+    for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
       {\
         VALUE_HANDLE(hdlptr[vcount], handle_code, dxf);\
       }\
@@ -377,7 +377,7 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
   VALUE_HANDLE(_obj->name, handle_code, dxf)
 #define HANDLE_VECTOR_N(name, size, code, dxf) \
   if (dxf) {\
-    for (vcount=0; vcount < (int)size; vcount++)\
+    for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
       {\
         FIELD_HANDLE(name[vcount], code, dxf);\
       }\
@@ -407,7 +407,7 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
       obj->tio.object->reactors) \
   { \
     fprintf(dat->fh, "102\r\n{ACAD_REACTORS\r\n");\
-    for (vcount=0; vcount < (int)obj->tio.object->num_reactors; vcount++)\
+    for (vcount=0; vcount < obj->tio.object->num_reactors; vcount++)\
       { /* soft ptr */ \
         VALUE_HANDLE(obj->tio.object->reactors[vcount], code, 330); \
       }\
@@ -552,7 +552,7 @@ dxf_write_xdata(Bit_Chain *restrict dat, Dwg_Resbuf *restrict rbuf, BITCODE_BL s
           if (type == VT_INVALID) {
             LOG_WARN("Invalid xdata code %d", dxftype);
           } else {
-            LOG_WARN("Unknown xdata code %d => %d", dxftype, (int)type);
+            LOG_WARN("Unknown xdata code %d => %d", dxftype, (BITCODE_BL)type);
           }
         }
 

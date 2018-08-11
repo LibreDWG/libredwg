@@ -147,6 +147,9 @@ bit_read_BL(Bit_Chain *dat);
 void
 bit_write_BL(Bit_Chain *dat, BITCODE_BL value);
 
+void
+bit_write_BLd(Bit_Chain * dat, BITCODE_BLd value);
+
 BITCODE_BS
 bit_read_BOT(Bit_Chain *dat);
 
@@ -307,8 +310,5 @@ bit_nan(void);
 
 int
 bit_isnan(BITCODE_BD number);
-
-void
-bit_write_BLs(Bit_Chain * dat, int32_t value);
 
 #endif

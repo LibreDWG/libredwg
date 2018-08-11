@@ -1545,9 +1545,9 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
   BITCODE_BL j;
   BITCODE_BL vcount, rcount1, rcount2;
   BITCODE_BL i = 0;
+  BITCODE_BL total_size = 0;
+  BITCODE_BL num_blocks = 0;
   int index;
-  int total_size = 0;
-  int num_blocks = 0;
   int error = 0;
 
   FIELD_B (acis_empty, 0);
