@@ -2385,7 +2385,7 @@ DWG_OBJECT(STYLE)
     //1001 1000 1071 mandatory r2007+ if .ttf
     //long truetype font’s pitch and family, charset, and italic and bold flags
     DXF {
-      char _buf[255];
+      char _buf[256];
       char *s;
       SINCE(R_2007) {
         s = bit_convert_TU((BITCODE_TU)_obj->font_name);
