@@ -11,7 +11,7 @@
 
 dwg_data g_dwg;
 
-/// This function Declaration reads DWG file
+/// This function declaration reads the DWG file
 int
 test_code(char *filename);
 
@@ -56,7 +56,7 @@ main(int argc, char *argv[])
 
   if (! input)
     {
-      input = (char *)"example_2000.dwg"; //todo: ../test-data/2000/example.dwg
+      input = (char *)"example_2000.dwg"; //todo: ../test-data/example_2018.dwg
       if (stat(input, &attrib))
         {
           fprintf (stderr, "Env var INPUT not defined, %s not found\n", input);

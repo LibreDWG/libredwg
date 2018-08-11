@@ -28,7 +28,7 @@ Add CLASSES for those
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#include <math.h>
+//#include <math.h>
 
 #include "common.h"
 #include "bits.h"
@@ -187,7 +187,7 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
     fprintf(dat->fh, "%s\r\n", buf); \
   }
 #define VALUE_RD(value, dxf) \
-  if (dxf && !isnan(value)) { \
+  if (dxf && !bit_isnan(value)) { \
     GROUP(dxf); \
     if (value == 0.0 || value == 0) \
       fprintf(dat->fh, "0.0\r\n"); \
