@@ -55,7 +55,7 @@ endif
 
 unknown:
 	-mv examples/alldwg.skip examples/alldwg.skip~
-	$(MAKE) -C examples unknown$(EXEEXT) bd$(EXEEXT) && \
+	$(MAKE) -C examples unknown$(EXEEXT) bd$(EXEEXT) bits$(EXEEXT) && \
 	$(LTEXEC) examples/unknown$(EXEEXT) >$(UNKNOWN_LOG) 2>$(UNKNOWN_SKIP)
 	if test -s examples/alldwg.skip; then true; \
 	else mv examples/alldwg.skip~ examples/alldwg.skip; fi

@@ -209,7 +209,7 @@ Then you'll never known which field in the DWG is which.
 
 Then run make -C examples regen-unknown, which does this:
 
-run ./logs.sh to create -v5 logfiles with the binary blobs for all
+run ./logs-all.sh to create -v4 logfiles with the binary blobs for all
 UNKNOWN_OBJ and UNKNOWN_ENT instances in those DWG's.
 
 Then the perl script log_unknown.pl creates the include file
@@ -244,7 +244,7 @@ this is a hole for a field which is not represented as DXF field, i.e.
 a FIELD_*(name, 0) in the dwg.spec with DXF group code 0.
 
 unknown also creates picat data files in examples/ which are then used with
-picat from picat-lang.org to enhance the search for the best layout
+picat from http://picat-lang.org to enhance the search for the best layout
 guess for each particular class. picat is a nice mix of a functional
 programming tool with an optional constraint solver. The first part in
 the picat process does almost the same as unknown.c, finding the fixed
@@ -300,15 +300,19 @@ file of the class, to get the names and description of the class.
 
 You add the names and types to dwg.h and dwg.spec, change the class
 type in classes.inc to DEBUGGING or UNSTABLE. With DEBUGGING add the
--DDEBUG_CLASSES flag to CFLAGS in src/Makefile and test the dwg's with
-programs/dwgread -v4. Some layouts are version dependent, some need
-a REPEAT loop or vector with a num_field field.
+-DDEBUG_CLASSES flag to CFLAGS in src/Makefile (e.g. by
+--enable-debug) and test the dwg's with programs/dwgread -v4 (e.g. by ./log file).
+Some layouts are version dependent, some need a REPEAT loop or vector
+with a num_field field.
 
 The picat constraints module examples/unknown.pi is still being worked
 and is getting better and better identifying all missing classes
 automatically. The problem with AutoCAD DWG's is that everybody can
 add their own custom classes as ObjectARX application, and that
 reverse-engineering them never stops. So it has to be automated somehow.
+
+There are also two more helpers bd and bits in examples/, which decode a bit
+pattern to the most likely value/type combination or all.
 
 * etc
 #+STARTUP: odd
