@@ -218,10 +218,10 @@ dnl --enable-debug sets DEBUG_CLASSES
 AC_MSG_CHECKING([--enable-debug])
 AC_ARG_ENABLE([debug],AS_HELP_STRING([--enable-debug],[
     Enable DEBUG_CLASSES (default: no).]),
-  if test x$ac_compiler_gnu = xyes; then
-    CFLAGS="-g -fno-omit-frame-pointer"
+  [if test x$ac_compiler_gnu = xyes; then
+    CFLAGS="`echo $CFLAGS|sed 's,-O2,,'` -fno-omit-frame-pointer"
   fi
-  CFLAGS="$CFLAGS -DDEBUG_CLASSES"
+  CFLAGS="$CFLAGS -DDEBUG_CLASSES"]
   AC_MSG_RESULT([yes]),
   AC_MSG_RESULT([no (default)]))
 
