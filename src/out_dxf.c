@@ -84,6 +84,7 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
     fprintf(dat->fh, "\r\n"); \
   }
 #endif
+#define VALUE_TFF(str,dxf)    VALUE_TV(str, dxf)
 #define VALUE_BINARY(value,size,dxf) \
 { \
   long len = size; \

@@ -80,6 +80,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
     fprintf(dat->fh, "%c%c", 0, 0); \
   }
 #endif
+#define VALUE_TFF(str,dxf)  VALUE_TV(str, dxf)
 #define VALUE_BINARY(value,size,dxf) \
 { \
   long len = size; \

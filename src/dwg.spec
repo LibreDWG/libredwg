@@ -335,10 +335,10 @@ DWG_ENTITY(BLOCK)
 
   DXF {
     Dwg_Bitcode_3RD pt = {0,0,0};
-    VALUE_BL(0, 70);
-    VALUE_3BD(pt, 10);
-    FIELD_TV(name, 3);
-    VALUE_TV("", 1);
+    VALUE_BL (0, 70);
+    VALUE_3BD (pt, 10);
+    FIELD_TV (name, 3);
+    VALUE_TFF ("", 1);
   }
 
 DWG_ENTITY_END
@@ -2397,8 +2397,8 @@ DWG_OBJECT(STYLE)
           (s = strstr(_buf, ".TTF")))
         {
           *s = 0;
-          VALUE_TV ("ACAD", 1001);
-          VALUE_TV (_buf, 1000);
+          VALUE_TFF ("ACAD", 1001);
+          VALUE_TFF (_buf, 1000);
           VALUE_RL (34, 1071);
         }
     }
@@ -3295,12 +3295,12 @@ DWG_OBJECT(MLINESTYLE)
     {
 #if defined(IS_DXF) && !defined(IS_ENCODE)
         switch (FIELD_VALUE(lines[rcount1].ltindex)) {
-        case 32767: VALUE_TV("BYLAYER", 6); break; /* default */
-        case 32766: VALUE_TV("BYBLOCK", 6); break;
-        case 0:     VALUE_TV("CONTINUOUS", 6); break;
+        case 32767: VALUE_TFF("BYLAYER", 6); break; /* default */
+        case 32766: VALUE_TFF("BYBLOCK", 6); break;
+        case 0:     VALUE_TFF("CONTINUOUS", 6); break;
         //else lookup on LTYPE_CONTROL list
         default:    /*FIELD_HANDLE_NAME(ltype, 5, 6);*/
-                    VALUE_TV("", 6); break;
+                    VALUE_TFF("", 6); break;
         }
 #else
         FIELD_BS (lines[rcount1].ltindex, 6);
@@ -5056,7 +5056,7 @@ DWG_ENTITY(MULTILEADER)
 
   //DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbMLeader)
-  DXF { VALUE_TV ("CONTEXT_DATA{", 300); } //AcDbObjectContextData
+  DXF { VALUE_TFF ("CONTEXT_DATA{", 300); } //AcDbObjectContextData
 
   SINCE(R_2010)
     {
@@ -5078,7 +5078,7 @@ DWG_ENTITY(MULTILEADER)
     LOG_ERROR("Invalid MULTILEADER.ctx.num_leaders %d", _obj->ctx.num_leaders);
     return DWG_ERR_VALUEOUTOFBOUNDS;
   }
-  DXF { VALUE_TV ("LEADER{", 302); }
+  DXF { VALUE_TFF ("LEADER{", 302); }
   REPEAT(ctx.num_leaders, ctx.leaders, Dwg_Leader)
     {
       #define lnode ctx.leaders[rcount1]
@@ -5102,15 +5102,15 @@ DWG_ENTITY(MULTILEADER)
       END_REPEAT(lnode.breaks);
       FIELD_BL (lnode.branch_index, 90);
       FIELD_BD (lnode.dogleg_length, 40);
-      DXF { VALUE_TV ("LEADER_LINE{", 304); }
+      DXF { VALUE_TFF ("LEADER_LINE{", 304); }
       FIELD_BL (lnode.num_lines, 0);
-      REPEAT2(lnode.num_lines, lnode.lines, Dwg_Leader_Line)
+      REPEAT2 (lnode.num_lines, lnode.lines, Dwg_Leader_Line)
         {
           #define lline lnode.lines[rcount2]
           FIELD_BL (lline.num_vertex, 0);
           FIELD_3BD (lline.vertex, 10);
           FIELD_BL (lline.num_breaks, 0);
-          REPEAT3(lline.num_breaks, lline.breaks, Dwg_Leader_Break)
+          REPEAT3 (lline.num_breaks, lline.breaks, Dwg_Leader_Break)
             {
               FIELD_3BD (lline.breaks[rcount3].start, 11);
               FIELD_3BD (lline.breaks[rcount3].end, 12);
@@ -5135,11 +5135,11 @@ DWG_ENTITY(MULTILEADER)
       END_REPEAT(lnode.lines)
       SINCE (R_2010)
         FIELD_BS (lnode.attach_dir, 271);
-      DXF { VALUE_TV ("}", 305); }
+      DXF { VALUE_TFF ("}", 305); }
     }
   SET_PARENT_OBJ(ctx.leaders)
   END_REPEAT(ctx.leaders)
-  DXF { VALUE_TV ("}", 303); }
+  DXF { VALUE_TFF ("}", 303); }
 
   FIELD_BD (ctx.scale, 40);
   FIELD_3BD (ctx.content_base, 10);
@@ -5207,7 +5207,7 @@ DWG_ENTITY(MULTILEADER)
       FIELD_BS (ctx.text_top, 273);
       FIELD_BS (ctx.text_bottom, 272);
     }
-  DXF { VALUE_TV ("}", 301); } //end CONTEXT_DATA
+  DXF { VALUE_TFF ("}", 301); } //end CONTEXT_DATA
   // END MLeaderAnnotContext
 
   FIELD_BL (flags, 90); // override flags
@@ -6900,5 +6900,3 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
-
-

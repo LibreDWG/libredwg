@@ -95,6 +95,7 @@ static Bit_Chain *dat = &pdat;
     }
 #define VALUE_TV(value,dxf) FREE_IF(value)
 #define VALUE_TF(value,dxf) FREE_IF(value)
+#define VALUE_TFF(value,dxf) 
 #define FIELD_TU(name,dxf)  FIELD_TV(name,dxf)
 #define FIELD_TF(name,len,dxf) FIELD_TV(name,dxf)
 #define FIELD_TFF(name,len,dxf) {}
