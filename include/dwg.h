@@ -5222,7 +5222,7 @@ typedef struct _dwg_object_object
     Dwg_Object_LAYER_INDEX *LAYER_INDEX;
     Dwg_Object_LAYOUT *LAYOUT;
     //TODO Dwg_Object_LEADEROBJECTCONTEXTDATA *LEADEROBJECTCONTEXTDATA;
-    //Dwg_Object_LIGHTLIST *LIGHTLIST;
+    Dwg_Object_LIGHTLIST *LIGHTLIST;
     Dwg_Object_LONG_TRANSACTION *LONG_TRANSACTION;
     Dwg_Object_MATERIAL *MATERIAL;
     Dwg_Object_MLEADERSTYLE *MLEADERSTYLE;
@@ -5867,7 +5867,7 @@ EXPORT int dwg_add_GEOPOSITIONMARKER (Dwg_Object *obj);
 //EXPORT int dwg_add_LAYER_FILTER (Dwg_Object *obj);
 //EXPORT int dwg_add_LAYOUTPRINTCONFIG (Dwg_Object *obj);
 //EXPORT int dwg_add_LEADEROBJECTCONTEXTDATA (Dwg_Object *obj);
-//EXPORT int dwg_add_LIGHTLIST (Dwg_Object *obj);
+EXPORT int dwg_add_LIGHTLIST (Dwg_Object *obj);
 EXPORT int dwg_add_MATERIAL (Dwg_Object *obj);
 //EXPORT int dwg_add_NPOCOLLECTION (Dwg_Object *obj);
 EXPORT int dwg_add_PLOTSETTINGS (Dwg_Object *obj);

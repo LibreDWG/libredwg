@@ -487,6 +487,17 @@ int match_IMAGEDEF(const char *restrict filename, const Dwg_Object *restrict obj
 }
 
 static
+int match_SCALE(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0, i;
+  const Dwg_Object_SCALE *_obj = obj->tio.object->tio.SCALE;
+
+  MATCH_OBJECT (SCALE, name, 1);
+  return found;
+}
+
+static
 int match_LAYER_INDEX(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
@@ -549,6 +560,25 @@ int match_FIELD(const char *restrict filename, const Dwg_Object *restrict obj)
 }
 
 static
+int match_TABLE(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  BITCODE_BL i;
+  const Dwg_Entity_TABLE *_obj = obj->tio.entity->tio.TABLE;
+
+  for (i=0; i<_obj->num_cells; i++)
+    {
+      if (_obj->cells[i].type == 1) {
+        MATCH_ENTITY (TABLE, cells[i].text_string, 1);
+      } else if (_obj->cells[i].type == 2 && _obj->cells[i].additional_data_flag == 1) {
+        MATCH_ENTITY (TABLE, cells[i].attr_def_text, 300);
+      }
+    }
+  return found;
+}
+
+static
 int match_TABLECONTENT(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
@@ -595,7 +625,7 @@ static
 int match_GEODATA(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
-  int found = 0, i;
+  int found = 0;
   const Dwg_Object_GEODATA *_obj = obj->tio.object->tio.GEODATA;
 
   MATCH_OBJECT (GEODATA, coord_system_def, 0);
@@ -606,6 +636,156 @@ int match_GEODATA(const char *restrict filename, const Dwg_Object *restrict obj)
   //obsolete
   MATCH_OBJECT (GEODATA, coord_system_datum, 0);
   MATCH_OBJECT (GEODATA, coord_system_wkt, 0);
+  return found;
+}
+
+static
+int match_GEOPOSITIONMARKER(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Entity_GEOPOSITIONMARKER *_obj = obj->tio.entity->tio.GEOPOSITIONMARKER;
+
+  MATCH_ENTITY (GEOPOSITIONMARKER, text, 1);
+  MATCH_ENTITY (GEOPOSITIONMARKER, notes, 3);
+  return found;
+}
+
+static
+int match_UNDERLAYDEFINITION(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_UNDERLAYDEFINITION *_obj = obj->tio.object->tio.UNDERLAYDEFINITION;
+
+  MATCH_OBJECT (UNDERLAYDEFINITION, filename, 1);
+  MATCH_OBJECT (UNDERLAYDEFINITION, name, 2);
+  return found;
+}
+
+static
+int match_VISUALSTYLE(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0, i;
+  const Dwg_Object_VISUALSTYLE *_obj = obj->tio.object->tio.VISUALSTYLE;
+
+  MATCH_OBJECT (VISUALSTYLE, desc, 1);
+  return found;
+}
+
+static
+int match_LIGHT(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Entity_LIGHT *_obj = obj->tio.entity->tio.LIGHT;
+
+  MATCH_ENTITY (LIGHT, name, 1);
+  //MATCH_ENTITY (LIGHT, web_file, 1);
+  return found;
+}
+
+static
+int match_SUNSTUDY(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_SUNSTUDY *_obj = obj->tio.object->tio.SUNSTUDY;
+
+  MATCH_OBJECT (SUNSTUDY, setup_name, 1);
+  MATCH_OBJECT (SUNSTUDY, desc, 2);
+  MATCH_OBJECT (SUNSTUDY, sheet_set_name, 3);
+  return found;
+}
+
+static
+int match_LIGHTLIST(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0, i;
+  const Dwg_Object_LIGHTLIST *_obj = obj->tio.object->tio.LIGHTLIST;
+
+  for (i=0; i<_obj->num_lights; i++)
+    {
+      //MATCH_OBJECT (LIGHTLIST, lights[i].name, 1);
+    }
+  return found;
+}
+
+static
+int match_DBCOLOR(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_DBCOLOR *_obj = obj->tio.object->tio.DBCOLOR;
+
+  MATCH_OBJECT (DBCOLOR, name, 430);
+  MATCH_OBJECT (DBCOLOR, catalog, 430);
+  return found;
+}
+
+static
+int match_MATERIAL(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_MATERIAL *_obj = obj->tio.object->tio.MATERIAL;
+
+  MATCH_OBJECT (MATERIAL, name, 1);
+  MATCH_OBJECT (MATERIAL, desc, 2);
+  MATCH_OBJECT (MATERIAL, diffusemap_filename, 3);
+  MATCH_OBJECT (MATERIAL, specularmap_filename, 4);
+  MATCH_OBJECT (MATERIAL, reflectionmap_filename, 6);
+  MATCH_OBJECT (MATERIAL, opacitymap_filename, 7);
+  MATCH_OBJECT (MATERIAL, bumpmap_filename, 8);
+  MATCH_OBJECT (MATERIAL, refractionmap_filename, 9);
+  MATCH_OBJECT (MATERIAL, normalmap_filename, 3);
+  MATCH_OBJECT (MATERIAL, genprocname, 300);
+  MATCH_OBJECT (MATERIAL, genprocvaltext, 301);
+  MATCH_OBJECT (MATERIAL, genprocvalcolorname, 430);
+  return found;
+}
+
+static
+int match_PLOTSETTINGS(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_PLOTSETTINGS *_obj = obj->tio.object->tio.PLOTSETTINGS;
+
+  MATCH_OBJECT (PLOTSETTINGS, page_setup_name, 1);
+  MATCH_OBJECT (PLOTSETTINGS, printer_cfg_file, 2);
+  MATCH_OBJECT (PLOTSETTINGS, paper_size, 4);
+  return found;
+}
+
+static
+int match_ASSOCACTION(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOCACTION *_obj = obj->tio.object->tio.ASSOCACTION;
+  MATCH_OBJECT (ASSOCACTION, body.evaluatorid, 0);
+  MATCH_OBJECT (ASSOCACTION, body.expresssion, 0);
+  return found;
+}
+static
+int match_ASSOCOSNAPPOINTREFACTIONPARAM(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOCOSNAPPOINTREFACTIONPARAM *_obj = obj->tio.object->tio.ASSOCOSNAPPOINTREFACTIONPARAM;
+  MATCH_OBJECT (ASSOCOSNAPPOINTREFACTIONPARAM, name, 1);
+  return found;
+}
+static
+int match_ACDBNAVISWORKSMODELDEF(const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ACDBNAVISWORKSMODELDEF *_obj = obj->tio.object->tio.ACDBNAVISWORKSMODELDEF;
+  MATCH_OBJECT (ACDBNAVISWORKSMODELDEF, path, 1);
   return found;
 }
 
@@ -697,12 +877,40 @@ int match_BLOCK_HEADER(const char *restrict filename, Dwg_Object_Ref *restrict r
                 found += match_LAYER_INDEX(filename, obj);
               else if (obj->type == DWG_TYPE_LAYOUT)
                 found += match_LAYOUT(filename, obj);
+              else if (obj->fixedtype == DWG_TYPE_SCALE)
+                found += match_SCALE(filename, obj);
               else if (obj->fixedtype == DWG_TYPE_FIELD)
                 found += match_FIELD(filename, obj);
+              else if (obj->fixedtype == DWG_TYPE_TABLE)
+                found += match_TABLE(filename, obj);
               else if (obj->fixedtype == DWG_TYPE_TABLECONTENT)
                 found += match_TABLECONTENT(filename, obj);
               else if (obj->fixedtype == DWG_TYPE_GEODATA)
                 found += match_GEODATA(filename, obj);
+              else if (obj->fixedtype == DWG_TYPE_GEOPOSITIONMARKER)
+                found += match_GEOPOSITIONMARKER(filename, obj);
+              else if (obj->fixedtype == DWG_TYPE_UNDERLAYDEFINITION)
+                found += match_UNDERLAYDEFINITION(filename, obj);
+              else if (obj->fixedtype == DWG_TYPE_VISUALSTYLE)
+                found += match_VISUALSTYLE(filename, obj);
+              else if (obj->fixedtype == DWG_TYPE_LIGHT)
+                found += match_LIGHT(filename, obj);
+              else if (obj->fixedtype == DWG_TYPE_SUNSTUDY)
+                found += match_SUNSTUDY(filename, obj);
+              else if (obj->fixedtype == DWG_TYPE_LIGHTLIST)
+                found += match_LIGHTLIST(filename, obj);
+              else if (obj->fixedtype == DWG_TYPE_DBCOLOR)
+                found += match_DBCOLOR(filename, obj);
+              else if (obj->fixedtype == DWG_TYPE_MATERIAL)
+                found += match_MATERIAL(filename, obj);
+              else if (obj->fixedtype == DWG_TYPE_PLOTSETTINGS)
+                found += match_PLOTSETTINGS(filename, obj);
+              else if (obj->fixedtype == DWG_TYPE_ASSOCACTION)
+                found += match_ASSOCACTION(filename, obj);
+              else if (obj->fixedtype == DWG_TYPE_ASSOCOSNAPPOINTREFACTIONPARAM)
+                found += match_ASSOCOSNAPPOINTREFACTIONPARAM(filename, obj);
+              else if (obj->fixedtype == DWG_TYPE_ACDBNAVISWORKSMODELDEF)
+                found += match_ACDBNAVISWORKSMODELDEF(filename, obj);
             }
         }
       if (!opt_text)

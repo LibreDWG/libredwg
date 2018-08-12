@@ -6784,7 +6784,7 @@ DWG_OBJECT(ACDBNAVISWORKSMODELDEF)
   XDICOBJHANDLE(3);
 
 DWG_OBJECT_END
-  
+
 #endif /* DEBUG_CLASSES */
 
 /* Those undocumented objects are also stored as raw UNKNOWN_OBJ */
@@ -6900,4 +6900,5 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+
 
