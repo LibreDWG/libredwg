@@ -604,7 +604,7 @@ dxf_write_xdata(Bit_Chain *restrict dat, Dwg_Resbuf *restrict rbuf, BITCODE_BL s
 }
 
 #undef DXF_3DSOLID
-#define DXF_3DSOLID dxf_3dsolid(dat, obj, _obj);
+#define DXF_3DSOLID dxf_3dsolid(dat, obj, (Dwg_Entity_3DSOLID*)_obj);
 
 // r13+ converts STANDARD to Standard, BYLAYER to ByLayer, BYBLOCK to ByBlock
 static void
