@@ -354,10 +354,12 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 
 #define FIELD_2DD_VECTOR(name, size, dxf)\
   FIELD_2RD(name[0], dxf);\
-  for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)\
-    {\
-      FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
-    }\
+  if (dxf && _obj->name) {\
+    for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)\
+      {\
+        FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
+      }\
+  }
 
 #define FIELD_3DPOINT_VECTOR(name, size, dxf)\
   if (dxf) {\
@@ -368,7 +370,7 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
     }
 
 #define VALUE_HANDLE_N(hdlptr, name, vcount, handle_code, dxf) \
-  if (dxf) {\
+  if (dxf && hdlptr && size) {\
     for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
       {\
         VALUE_HANDLE(hdlptr[vcount], handle_code, dxf);\
@@ -377,7 +379,7 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 #define FIELD_HANDLE_N(name, size, handle_code, dxf) \
   VALUE_HANDLE(_obj->name, handle_code, dxf)
 #define HANDLE_VECTOR_N(name, size, code, dxf) \
-  if (dxf) {\
+  if (dxf && _obj->name && size) {\
     for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
       {\
         FIELD_HANDLE(name[vcount], code, dxf);\
