@@ -330,6 +330,7 @@
       bit_fprint_bits(stderr, (unsigned char*)tmp, 68); fprintf(stderr,"\n"); \
     } \
     LOG_TRACE_TF(tmp, 24);\
+    free(tmp); \
     SINCE(R_13) {\
       *dat = here;\
       LOG_TRACE("  B  :"FORMAT_B"\t", bit_read_B(dat));\
