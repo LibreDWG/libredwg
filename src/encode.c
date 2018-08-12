@@ -183,11 +183,13 @@ static bool env_var_checked_p;
     }
 
 #define REACTORS(code)\
-  OVERFLOW_CHECK(name, obj->tio.object->num_reactors) \
-  SINCE (R_13) { \
-    for (vcount=0; vcount < (BITCODE_BL)obj->tio.object->num_reactors; vcount++) \
-    {\
-      VALUE_HANDLE(obj->tio.object->reactors[vcount], reactors, code, 330); \
+  if (obj->tio.object->reactors) { \
+    OVERFLOW_CHECK(name, obj->tio.object->num_reactors) \
+    SINCE (R_13) { \
+      for (vcount=0; vcount < (BITCODE_BL)obj->tio.object->num_reactors; vcount++) \
+      {\
+        VALUE_HANDLE(obj->tio.object->reactors[vcount], reactors, code, 330); \
+      }\
     }\
   }
     
@@ -228,7 +230,7 @@ static bool env_var_checked_p;
 //FIELD_VECTOR_N(name, type, size, dxf):
 // writes a 'size' elements vector of data of the type indicated by 'type'
 #define FIELD_VECTOR_N(name, type, size, dxf)\
-  if (size > 0)\
+  if (size > 0 && _obj->name)\
     {\
       OVERFLOW_CHECK(name, size) \
       for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
@@ -238,7 +240,7 @@ static bool env_var_checked_p;
         }\
     }
 #define FIELD_VECTOR_T(name, size, dxf)\
-  if (_obj->size > 0)\
+  if (_obj->size > 0 && _obj->name)\
     {\
       OVERFLOW_CHECK(name, _obj->size) \
       for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
@@ -306,14 +308,15 @@ static bool env_var_checked_p;
     }
 
 #define HANDLE_VECTOR_N(name, size, code, dxf)\
-  if (size>0) \
-    assert(_obj->name); \
-  OVERFLOW_CHECK(name, size) \
-  for (vcount=0; vcount < (long)size; vcount++)\
-    {\
-      assert(_obj->name[vcount]); \
-      FIELD_HANDLE_N(name[vcount], vcount, code, dxf);   \
-    }
+  if (size>0 && _obj->name) { \
+    OVERFLOW_CHECK(name, size) \
+    for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
+      {\
+        if (_obj->name[vcount]) { \
+          FIELD_HANDLE_N(name[vcount], vcount, code, dxf); \
+        } \
+      } \
+  }
 
 #define FIELD_NUM_INSERTS(num_inserts, type, dxf)   \
   FIELD_RL(num_inserts, dxf)
