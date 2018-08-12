@@ -50,6 +50,12 @@
 #ifndef VALUE_TV
 # define VALUE_TV(value, dxf)
 #endif
+#ifndef VALUE_TF
+# define VALUE_TF(value, dxf)
+#endif
+#ifndef VALUE_TFF
+# define VALUE_TFF(value, dxf)
+#endif
 #ifndef VALUE_3BD
 # define VALUE_3BD(value, dxf)
 #endif
@@ -144,7 +150,9 @@
 #define R11OPTS(b) _ent->opts_r11 & b
 #define R11FLAG(b) _ent->flag_r11 & b
 
-#define DECODE_UNKNOWN_BITS  DECODER { dwg_decode_unknown(dat, (Dwg_Object *restrict)obj); }
+#define DECODE_UNKNOWN_BITS \
+  DECODER { dwg_decode_unknown(dat, (Dwg_Object *restrict)obj); } \
+  FREE { VALUE_TF(obj->unknown_bits, 0); }
 
 #ifndef COMMON_TABLE_FLAGS
 #define COMMON_TABLE_FLAGS(owner, acdbname) \
