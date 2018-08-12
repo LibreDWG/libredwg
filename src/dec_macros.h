@@ -407,7 +407,7 @@
   if (size > 0) \
     { \
       VECTOR_CHKCOUNT(name,type,size) \
-      _obj->name = (BITCODE_##type*) malloc(size * sizeof(BITCODE_##type));\
+      _obj->name = (BITCODE_##type*) calloc(size, sizeof(BITCODE_##type)); \
       for (vcount=0; vcount<(BITCODE_BL)size; vcount++) \
         {\
           _obj->name[vcount] = bit_read_##type(dat); \
@@ -419,7 +419,7 @@
   if (_obj->size > 0) \
     { \
       _VECTOR_CHKCOUNT(name,_obj->size,dat->version>=R_2007 ? 18 : 2) \
-      _obj->name = (char**) malloc(_obj->size * sizeof(char*)); \
+      _obj->name = calloc(_obj->size, sizeof(char*)); \
       for (vcount=0; vcount<(BITCODE_BL)_obj->size; vcount++) \
         {\
           PRE (R_2007) { \
@@ -437,7 +437,7 @@
     { \
       int _dxf = dxf;\
       VECTOR_CHKCOUNT(name,type,size) \
-      _obj->name = (BITCODE_##type*) malloc(size * sizeof(BITCODE_##type));\
+      _obj->name = (BITCODE_##type*) calloc(size, sizeof(BITCODE_##type)); \
       for (vcount=0; vcount<(BITCODE_BL)size; vcount++) \
         {\
           _obj->name[vcount] = bit_read_##type(dat); \
@@ -450,7 +450,7 @@
 
 #define FIELD_2RD_VECTOR(name, size, dxf) \
   VECTOR_CHKCOUNT(name,2RD,_obj->size) \
-  _obj->name = (BITCODE_2RD *) malloc(_obj->size * sizeof(BITCODE_2RD));\
+  _obj->name = (BITCODE_2RD *) calloc(_obj->size, sizeof(BITCODE_2RD)); \
   for (vcount=0; vcount< (BITCODE_BL)_obj->size; vcount++)\
     {\
       FIELD_2RD(name[vcount], dxf); \
@@ -458,7 +458,7 @@
 
 #define FIELD_2DD_VECTOR(name, size, dxf) \
   VECTOR_CHKCOUNT(name,2DD,_obj->size) \
-  _obj->name = (BITCODE_2RD *) malloc(_obj->size * sizeof(BITCODE_2RD));\
+    _obj->name = (BITCODE_2RD *) calloc(_obj->size, sizeof(BITCODE_2RD)); \
   FIELD_2RD(name[0], dxf); \
   for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
@@ -470,7 +470,7 @@
 
 #define FIELD_3DPOINT_VECTOR(name, size, dxf) \
   VECTOR_CHKCOUNT(name,3BD,_obj->size) \
-  _obj->name = (BITCODE_3DPOINT *) malloc(_obj->size * sizeof(BITCODE_3DPOINT));\
+  _obj->name = (BITCODE_3DPOINT *) calloc(_obj->size, sizeof(BITCODE_3DPOINT)); \
   for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++) \
     {\
       FIELD_3DPOINT(name[vcount], dxf); \
@@ -479,7 +479,7 @@
 // shortest handle: 8 bit
 #define HANDLE_VECTOR_N(name, size, code, dxf) \
   VECTOR_CHKCOUNT(name,HANDLE,size) \
-  FIELD_VALUE(name) = (BITCODE_H*) malloc(sizeof(BITCODE_H) * size);\
+    FIELD_VALUE(name) = (BITCODE_H*) calloc(size, sizeof(BITCODE_H)); \
   for (vcount=0; vcount < (BITCODE_BL)size; vcount++) \
     {\
       FIELD_HANDLE_N(name[vcount], vcount, code, dxf);  \
@@ -501,14 +501,14 @@
   _obj->name = dwg_decode_xdata(dat, _obj, _obj->size)
 
 #define REACTORS(code)\
-  obj->tio.object->reactors = malloc(sizeof(BITCODE_H) * obj->tio.object->num_reactors); \
+  obj->tio.object->reactors = calloc(obj->tio.object->num_reactors, sizeof(BITCODE_H)); \
   for (vcount=0; vcount < obj->tio.object->num_reactors; vcount++) \
     {\
       VALUE_HANDLE_N(obj->tio.object->reactors[vcount], reactors, vcount, code, 330); \
     }
 
 #define ENT_REACTORS(code)\
-  _ent->reactors = malloc(sizeof(BITCODE_H) * _ent->num_reactors); \
+  _ent->reactors = calloc(_ent->num_reactors, sizeof(BITCODE_H)); \
   for (vcount=0; vcount < _ent->num_reactors; vcount++)\
     {\
       VALUE_HANDLE_N(_ent->reactors[vcount], reactors, vcount, code, 330); \
@@ -670,7 +670,7 @@ static int dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj
   int error = dwg_add_##token(obj); \
   if (error) return error; \
   if (dat->version >= R_2007) { \
-    str_dat = malloc(sizeof(Bit_Chain)); /* seperate string buffer */ \
+    str_dat = calloc(1, sizeof(Bit_Chain)); /* seperate string buffer */ \
     if (!str_dat) return DWG_ERR_OUTOFMEM; \
     *str_dat = *dat; \
   } else \
