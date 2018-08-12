@@ -171,10 +171,11 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
     /* not a string, emtpy num. must be zero */ \
     if (strcmp(_fmt, "%s") && !*buf) \
       strcpy(buf, "0"); \
-    else if (90 <= dxf && dxf < 100) \
-      /* ignore -Wpointer-to-int-cast, cannot happen with 90 */ \
-      snprintf(buf, 255, "%6i", (int32_t)(value)); \
-    else if (!strcmp(_fmt, "%-16.14f")) { \
+    else if (90 <= dxf && dxf < 100) { \
+      /* -Wpointer-to-int-cast */ \
+      const int32_t _si = (int32_t)(intptr_t)(value); \
+      snprintf(buf, 255, "%6i", _si); \
+    } else if (!strcmp(_fmt, "%-16.14f")) {      \
       if (!strcmp(buf, "0.00000000000000")) \
         strcpy(buf, "0.0"); \
       else if ((_s = strstr(buf, ".00000000000000"))) \
