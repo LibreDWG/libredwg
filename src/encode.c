@@ -162,7 +162,7 @@ static bool env_var_checked_p;
 
 #define FIELD_2RD_VECTOR(name, size, dxf) \
   OVERFLOW_CHECK(name, _obj->size) \
-  for (vcount=0; vcount < (long)_obj->size; vcount++)\
+  for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
       FIELD_2RD(name[vcount], dxf);\
     }
@@ -170,14 +170,14 @@ static bool env_var_checked_p;
 #define FIELD_2DD_VECTOR(name, size, dxf)\
   OVERFLOW_CHECK(name, _obj->size) \
   FIELD_2RD(name[0], dxf); \
-  for (vcount = 1; vcount < (long)_obj->size; vcount++)\
+  for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
       FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
     }
 
 #define FIELD_3DPOINT_VECTOR(name, size, dxf)\
   OVERFLOW_CHECK(name, _obj->size) \
-  for (vcount=0; vcount < (long)_obj->size; vcount++) \
+  for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++) \
     {\
       FIELD_3DPOINT(name[vcount], dxf);\
     }
@@ -185,7 +185,7 @@ static bool env_var_checked_p;
 #define REACTORS(code)\
   OVERFLOW_CHECK(name, obj->tio.object->num_reactors) \
   SINCE (R_13) { \
-    for (vcount=0; vcount < (long)obj->tio.object->num_reactors; vcount++) \
+    for (vcount=0; vcount < (BITCODE_BL)obj->tio.object->num_reactors; vcount++) \
     {\
       VALUE_HANDLE(obj->tio.object->reactors[vcount], reactors, code, 330); \
     }\
@@ -231,7 +231,7 @@ static bool env_var_checked_p;
   if (size > 0)\
     {\
       OVERFLOW_CHECK(name, size) \
-      for (vcount=0; vcount < (long)size; vcount++)\
+      for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
         {\
           bit_write_##type(dat, _obj->name[vcount]);\
           LOG_TRACE(#name "[%ld]: " FORMAT_##type "\n", (long)vcount, _obj->name[vcount]) \
@@ -241,7 +241,7 @@ static bool env_var_checked_p;
   if (_obj->size > 0)\
     {\
       OVERFLOW_CHECK(name, _obj->size) \
-      for (vcount=0; vcount < (long)_obj->size; vcount++)\
+      for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
         {\
           PRE (R_2007) { \
             bit_write_TV(dat, _obj->name[vcount]);\
