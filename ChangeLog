@@ -1,5 +1,1409 @@
 Full history from the git log
 -----------------------------
+2018-08-13  Reini Urban  <rurban@cpan.org>
+
+        Release 0.6
+
+2018-08-12  Reini Urban  <rurban@cpan.org>
+
+	free: not the static strings
+	but all the others
+
+	free: DECODE_UNKNOWN_BITS
+	free the unknown_bits
+
+	free: DEBUG_HERE_OBJ
+
+	decode: clean vectors
+	calloc them, not just malloc.
+
+	dxf: more empty vector protections
+	in this case ASSOCNETWORK
+
+	dxf: fix -Wpointer-to-int-cast warning
+
+	encode: protect empty vectors
+	with DEBUGGING or UNSTABLE classes vectors
+	can easily be unallocated
+
+	encode: BITCODE_BL sizes
+
+	configure: keep CFLAGS on --enable-debug
+	e.g. -I/usr/local/include is needed for dwgps
+	just remove -O2
+
+	dxf: cast SURFACE to 3DSOLID
+
+	dwggrep: add new objects
+
+2018-08-11  Reini Urban  <rurban@cpan.org>
+
+	beautify valgrind version
+
+	fix -Wstringop-truncation in strncpy
+	strncpy specified bound 255 equals destination size
+
+	fix -Wdouble-promotion, use our bit_isnan
+	don't use the math.h long double promoting isnan check,
+	at least on clang.
+
+	add seperate signed BLd type #36
+	We just changed BL to signed. revert that and add a seperate BLd to represent the two such dxf ranges.
+	BL as signed is a problem for vcount/rcount overflow detection with negative values.
+	Closes GH #36
+
+	unknown: add DEBUGGING ACSH_SWEEP_CLASS ACDBNAVISWORKSMODELDEF
+	ACSH_SWEEP_CLASS is probably the dbSweepOptions.h class
+	no coverage for ACDBNAVISWORKSMODELDEF (BIM_DICT entries)
+
+	add examples/bits: all possible values/types
+	not just the most likely as with bd
+
+	bd: print most possible types and values
+
+	rm duplicate logs.sh and log.sh
+	we already have log and logs-all.sh
+
+2018-08-10  Reini Urban  <rurban@cpan.org>
+
+	add examples/bd
+	to print the BD value of bits
+
+	move HELIX to UNSTABLE
+	found all the missing fields. It's a spline.
+	bd-unknown.inc helped a lot.
+
+	unknown: add some bd-unknown doubles
+	they do work
+
+2018-08-10  Reini Urban  <rurban@cpan.org>
+
+	add examples/bd-unknown.inc
+	to fixup wrong binary repr. of doubles,
+	if found by some manual heuristic
+
+	this is the initial empty set of all wrong BDs (with removed
+	duplicates)
+
+2018-08-10  Reini Urban  <rurban@cpan.org>
+
+	dwggrep: skip 3DSOLID encr_sat_data
+	This makes not much sense, rather search the decrypted variant.
+	It also read from uninitialized memory
+
+	make regen-swig-patch
+
+2018-08-09  Reini Urban  <rurban@cpan.org>
+
+	unknown: integrate 3DSOLID into SURFACE
+	search for "ACIS BinaryFile" revealed an ordinary ACIS v2 SAB format
+	right at the beginning of each SURFACE.
+	Ensure a common binary layout for both, as we cast the SURFACE into 3DSOLID
+	for decoding.
+
+	Update 0.6 NEWS
+
+2018-08-08  Reini Urban  <rurban@cpan.org>
+
+	unknown: LDADD and LTEXEC fixes for shared
+	link to bits and common explicitly. most functions there are not exported.
+
+	fix LTEXEC: use unexpanded \$top_builddir. This is needed for a Makefile and a script.
+
+2018-08-08  Reini Urban  <rurban@cpan.org>
+
+	unknown: LIGHT looks good now
+	fix plot_glyph, color,
+	no hole left.
+
+	unknown: regen-unknown
+
+	alive.test: skip libtool on --disable-shared
+
+	skip Unstable|Unhandled Class warning
+	on print or free action. Only relevant for
+	decode or encode really
+
+	support non-decode for common_entity_data.spec
+	enable encode and DXF support.
+	simplify CMC color fields: rgb and alpha masks
+
+	unknown: re-sort per file
+	keep the objects from one file together
+
+	fix parallel picat
+	skip libtool --mode=execute on --disable-shared
+	fix the dirname of examples/unknown with libtool.
+	fix parallel picat
+
+2018-08-07  Reini Urban  <rurban@cpan.org>
+
+	skip incompatible moreutils parallel
+	this does not support the {} and ::: syntax,
+	rather uses -- for arg seperation, and I still have to find out
+	the {} and {/.}_{//} macros.
+
+	we want the GNU parallel (in perl)
+
+2018-08-07  Reini Urban  <rurban@cpan.org>
+
+	add log script
+	usage: ./log -v5 2004/Leader example_2000
+
+	use parallel and timeout as probed
+	use logs-all-serial.sh or logs-all-parallel.sh
+
+	probe for PROGS versions
+	not just to the log, display it.
+	picat, timeout, parallel, valgrind.
+	add timeout, parallel probes.
+
+	more EMC tryouts WIP
+
+	unknown: fix cquote final 0
+	cquote forgot to close dest, leaving garbage in some strings.
+	e.g. \"%sn\">%..." in ACDBSECTIONVIEWSTYLE.pi
+
+2018-08-07  Reini Urban  <rurban@cpan.org>
+
+	add new EMC color type
+	for new truecolor support in entities.
+
+	Also, regen-unknown fixed several wrong xdicobjhandle handles in
+	ACDBDETAILVIEWSTYLE objects.
+
+2018-08-07  Reini Urban  <rurban@cpan.org>
+
+	unknown: work on VISUALSTYLE colors WIP
+	actually the color.index is always 0 >= r2004.
+	the dxf value needs to be derived from the first rbg byte somehow.
+
+2018-08-06  Reini Urban  <rurban@cpan.org>
+
+	trace CMC.flag always
+	>=2004 a CMC always contains the index, rgb and flag. print that to detect wrong
+	CMC colors, i.e. flags != 0,1 or 2.
+
+	mingw: test too many args
+
+	picat: expect also Most probable result
+	which is at the end of definite and probable results.
+	we dont want it to be killed before printing any result
+
+	unknown: fix membits overflow
+	found when overflowing possible and found bits.
+	off-by-one bitsize: when setting 2 bits at 215 with 216 bits avail,
+	it needs to set 215 and 216. so we really need to check against 217 (215+2).
+
+	unknown: fix pi_fn stack overflow
+	with path + ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION
+	it easily exceeds 80
+
+	unknown: fix the possible/found logic
+	set the bits from pos to the end of bitsize
+
+	unknown: fix num_filled stats
+	fixing the wrong summary count e.g. 292/281=103.9% for PDFDEFINITION
+
+2018-08-05  Reini Urban  <rurban@cpan.org>
+
+	unknown: re-add missing objects
+	we forgot to add DECODE_UNKNOWN_BITS for TABLE* objects.
+	just MULTILEADER is now done.
+
+	unknown: harmonize object/entity format
+	and bitsize
+
+	unknown: fix HAVE_INSRCDIR check
+	for make -C examples regen-unknown.
+	builddir is empty, ac_builddir ditto. srcdir=. is enough
+
+	unknown: check picat for Definite result
+	otherwise keep the old log. prevents bad logs from overwriting
+	old logs
+
+	windows -Wformat: fix type
+	REPEAT_CHKCOUNT_LVAL(name,_obj->times,type)
+	warning: format '%ld' expects argument of type 'long int', but argument 5
+	has type 'long long unsigned int' [-Wformat=]
+
+	unknown: next refactor
+	delete pre_bits, this was wrong. It starts uneven already.
+	rather store the useful relative handle and string offsets/sizes.
+
+	add ASSOCPLANESURFACEACTIONBODY to UNSTABLE
+	similar to ASSOCDEPENDENCY
+
+2018-08-04  Reini Urban  <rurban@cpan.org>
+
+	add 2nd FIELD_CMC dxf2 arg for rgb value
+	matching pairs 62-420, ...
+
+	decode: improve color tracing
+
+	work on VISUALSTYLE WIP
+	add and set about 50% of the missing fields
+
+	unknown: re-order in-work area in the spec
+	seperate UNSTABLE from DEBUGGING
+
+2018-08-04  Reini Urban  <rurban@cpan.org>
+
+	unknown: refactor 2/2 and regen-unknown
+	now got rid of all the slack, and we can regen-unknown even with DEBUG_CLASSES.
+	summary went from 142504/2939403=4.85% to 502764/2623166=19.17%
+
+	regen added VISUALSTYLE and many other UNSTABLE classes
+
+2018-08-04  Reini Urban  <rurban@cpan.org>
+
+	move VISUALSTYLE back to UNSTABLE
+	~480 bits missing
+
+	refactor UNKNOWN_FIELDS/DECODE_UNKNOWN_BITS
+	dwg_decode_unknown() helper, used not only for UNKNOWN_OBJ/UNKNOWN_ENT
+	but for all unstable classes.
+	change to one single bits array with pre bits (if it starts not at bit 0),
+	and num_bits (the bitsize in bits).
+
+	free: fix UNKNOWN with empty dxfname
+	on free checking an empty dxfname leads to SEGV.
+	eg:
+	{size = 91, address = 416360, type = 515, index = 240, fixedtype = DWG_TYPE_UNUSED,
+	  bitsize_address = 0, has_strings = 0 000, stringstream_size = 0, handlestream_size = 0,
+	  supertype = DWG_SUPERTYPE_UNKNOWN, tio = {entity = 0x0, object = 0x0, unknown = 0x0},
+	  dxfname = 0x0, bitsize = 0, hdlpos = 0, handle = {code = 0, size = 0, value = 0},
+	  parent = 0x7fff5fbfe0c0, common_size = 0}
+	bypass dwg_free_variable_type for UNKNOWNs.
+
+2018-08-04  Reini Urban  <rurban@cpan.org>
+
+	add signed BLs type (420,440), fix DBCOLOR
+	add a special int32_t BLs type just write the codes 420,440,
+	i.e. the DBCOLOR rgb value.
+	rename FIELD_BLh to FIELD_BLx and add more hex types.
+
+	promote DBCOLOR to UNSTABLE. The remaining unknown bits are bogus,
+	there's no CMC color field, no duplicate catalog $ name fields.
+	Just the BLx rgb field needs to mask off the first byte for DXF,
+	and there's a unknown RC. The DXF color index 21 is missing, this
+	might be computed.
+
+2018-08-03  Reini Urban  <rurban@cpan.org>
+
+	unknown: more DBCOLOR work
+
+	unknown DBCOLOR: split 430 name and catalog
+	in DXF combined, in the DWG split up
+
+	move DYNAMICBLOCKPURGEPREVENTER to UNSTABLE
+	the last remaining handles were bogus, they do not exist
+	The fiest code 70 BS looks like a class_version, but this really
+	would be code 90. Who knows.
+
+	improve UNKNOWN_{ENT,OBJ} logging to -v3
+	no -v5 needed anymore.
+	regen-unknown with some changed handles.
+
+	fix bit_write_RL/bit_write_BL
+	if <0 > 255 makes not much sense.
+	handle large negative values, detected by unknown BL node_edge1 -1 values.
+
+	move LIGHT to UNSTABLE
+	just a few unknown internal fields are remaining,
+	but the known DXF fields are done.
+
+	unknown: regen with new byte sizes
+	and without LIGHT (see next commit).
+	less overshoots into the next object
+
+	Fix -v5 overshoot errors
+	store the size of the common entity/object data, until the
+	object specific fields start. for a proper UNKNOWN_*.num_bytes size.
+	Note that bitsize does not include the size of the common handles, so we start
+	counting at obj->address, but obj->common_size starts counting after the type,
+	so we still overshoot by ~18
+
+	unknown: more work on LIGHT WIP
+
+	fix rad2deg computation
+	only needed for dxf and unknown
+
+	unknown: skip common_entity_data
+	for alldwg_1.inc. no such layer/color fields, which are
+	handled in common_entity_data.spec and are not dumped
+	into UNKNOWN_OBJ bytes at all, hindering the search
+
+2018-08-02  Reini Urban  <rurban@cpan.org>
+
+	unknown: finish UNDERLAY
+	found remaining fields via picat/unknown,
+	some RC/BS confusion.
+	simplify clip_boundary and harmonize to clip_verts.
+
+	move to UNSTABLE, passes all PDF coverages.
+	but no DGN nor DWF coverage yet.
+
+2018-08-02  Reini Urban  <rurban@cpan.org>
+
+	regen-unknown
+
+	unknown: skip common_entity_data
+	there was one case of layer "0" found as TF, which was illegal
+
+	unknown: regen for new Underlay_2004
+
+	rename normal/210 to extrusion
+	for consistency
+
+	unknown: work on PDFUNDERLAY
+	WIP
+
+	unknown: fix dupl. go1 target
+
+2018-08-01  Reini Urban  <rurban@cpan.org>
+
+	dwgread: declare setenv
+	via stdlib.h
+
+2018-08-01  Reini Urban  <rurban@cpan.org>
+
+	Fix dejagnu.h linkage
+	probe for -fgnu89-inline and use it.
+	See https://gcc.gnu.org/bugzilla//show_bug.cgi?id=63613
+	Fixes [GH #2]
+
+	Add dejagnu to cygwin and ubuntu/travis. msys2 dejagnu is not picked up,
+	macos not tested on travis.
+
+2018-08-01  Reini Urban  <rurban@cpan.org>
+
+	more bit_write_RL_tests fixes
+	this time I got all the swapping right.
+	enhance the RL testcase using 4 different bytes
+
+	dxf: implement dxf_classes_read()
+
+	VALGRIND_SUPPRESSIONS: fix make dist
+	EXTRA_DIST needs a relative pathname,
+	Cannot stat ".//Users/rurban/Software/libredwg/valgrind-darwin.supp",
+	note the ./ prefix
+
+	testcases: oops bits_test read_RL
+	another off-by-one
+
+	dxf: more null-ptr protections
+
+	check programs: use libtool
+	with --enable-shared
+
+2018-08-01  Reini Urban  <rurban@cpan.org>
+
+	add VALGRIND_SUPPRESSIONS, check-valgrind programs
+	integrate check-valgrind into alive.test,
+	add more valgrind flags to check-dwg-valgrind.
+
+	suppressions:
+	on linux-glibc bash leaks like hell:
+	  GNU bash, version 4.4.23(1)-release (x86_64-pc-linux-gnu)
+	on darwin the libc locale subsystem and objc.
+
+	on the bright side: Most LibreDWG leaks are fixed.
+
+2018-07-31  Reini Urban  <rurban@cpan.org>
+
+	move MULTILEADER to UNSTABLE
+
+	finish MULITLEADER >= 2010
+	though there are 92 bits missing before the handle stream
+
+	regen-swig-patch
+
+	change BITCODE_BL/RL to signed int32
+	harmonize all vcount/i counters and sizes to BITCODE_BL.
+
+	finished MULTILEADER <2010
+
+	more MULTILEADER work WIP
+	share ctx.content.txt and ctx.content.blk: either or.
+	2000 works now until end CONTEXT_DATA
+
+	more MULTILEADER work WIP
+	multiple breaks.
+	start with 2010+ AcDbObjectContextData at the beginning
+
+	more MULTILEADER work WIP
+	actually coming closer back to the ODA specs.
+	add back num_vertex, num_break
+
+	more MULTILEADER work WIP
+	disable to fantasy ODA structs and code.
+	favor the DXF docs, structure and reverse-engineered data.
+
+	work on MULTILEADER WIP
+	class_version 1 has at first the LEADER_LINE{ points.
+
+	fix entity picture_size BLL type
+	lshift one too many. size used as DXF code 160.
+	This fixes now 2010+ MULTILEADER entities, which did have a small picture attached.
+
+	regen unknown
+	added MLeader*.dwg for MULTILEADER, BoxUnion.dwg for REGION ACIS v2.
+	removed UNSTABLE DIMASSOC, ASSOCDEPENDENCY, PERSSUBENTMANAGER.
+
+2018-07-30  Reini Urban  <rurban@cpan.org>
+
+	Improve LOG_TF trace
+	Align the 2nd ASCII line to the left of the upper %2x hex line
+
+	Improve {VECTOR,REPEAT}_CHKCOUNT macros
+	detect buffer overflows, if AVAIL_BITS() < 0.
+	Change AVAIL_BITS to signed long.
+	This happens if the previous read (e.g. TF) read past the buffer
+
+	parse the ACIS version 2 format
+	It is just the unencrypted binary SAB version.
+	Maybe I will decode it to the ASCII variant later, but it is trivial,
+	and the binary version has higher precision.
+
+	add handle stream/padding OVERSHOOT warnings
+	log OVERSHOOT instead of MISSING when we read too far
+
+	add handle stream/padding overshoots MISSING
+	padding between the streams should be max 8.
+	display the offset, and add MISSING if >8
+
+	seperate WINEPREFIX for wine 32bit
+	keep the default 64bit tree at ~/.wine, and create/use
+	a new 32bit one.
+	This test finds many useful errors.
+
+	in_dxf: fix -Wnull-dereference warning
+
+2018-07-29  Reini Urban  <rurban@cpan.org>
+
+	fix --enable-debug
+	overriding AM_CFLAGS is ignored, DEFS also.
+	use CFLAGS.
+	Just override -g -O2 on gcc --enable-debug, ignore -std=c99 also then.
+
+	rename UNTESTED_CLASS to UNSTABLE_CLASS
+	it really is tested, just unstable
+
+	update NEWS - user-visible changes for 0.6
+	working on 0.6
+
+	decode: fix wrong has_strings offset
+	fixes many skipped r2007+ strings, because of a wrong has_strings
+	bit.
+	Fixes [GH #34]
+
+2018-07-29  Reini Urban  <rurban@cpan.org>
+
+	decode: check obj_has_strings(type)
+	and skip the obj_string_stream() has_strings bit check
+	for certain fixed types which do have no strings.
+	e.g. LINE and SEQEND entities had the has_strings bit wrongly set,
+	they just need to be ignored.
+
+	See [GH #34]. libdxfrw sets their string stream to NULL.
+
+2018-07-28  Reini Urban  <rurban@cpan.org>
+
+	remove unused duplicate reactors/xdicobjhandle
+	They are already common object/entity fields.
+	Remove them from the specific structs.
+
+	Also remove the wrong dwg_obj_proxy_get_reactors() API,
+	use dwg_obj_get_reactors() instead.
+
+2018-07-28  Reini Urban  <rurban@cpan.org>
+
+	MINSERT: harmonize with INSERT
+	use SUBCLASS,
+	better DXF layout, no attrib_handles without has_attribs
+
+	unknown: more work on LIGHT
+	got until attenuation_end_limit
+
+2018-07-28  Reini Urban  <rurban@cpan.org>
+
+	unknown: cquote C strings again
+	log_unknown_dxf.pl already quotes " and \,
+	but since unknown emits picat code, we need to do it again.
+
+	failed only in ACDB*VIEWSTYLE template strings and MULTILEADER.
+
+2018-07-28  Reini Urban  <rurban@cpan.org>
+
+	smoke.sh: new features
+	--enable-write is now default,
+	cover the other new features: --disable-write, --disable-dxf, --enable-debug
+
+	semver: seperate patch from build number
+	the appveyor build number goes into the generated github tag
+	which serves as our git generated version number.
+
+2018-07-28  Reini Urban  <rurban@cpan.org>
+
+	fix DIMASSOC
+	it has 1-4 reference points, dependent
+	on the associativity bitmask. alloc all 4, and
+	set only the ones which bit is set.
+
+	Associativity flag [90]:
+	1 = First point reference
+	2 = Second point reference
+	4 = Third point reference
+	8 = Fourth point reference
+
+2018-07-27  Reini Urban  <rurban@cpan.org>
+
+	configure: add --enable-debug
+	to set DEBUG_CLASSES.
+	remove -O2 on gcc.
+
+	api: sort dwg.h add api
+	fixes perl bindings compilation errors.
+	also add a convencience regen-swig-patch target for python.
+
+	HACKING: improve examples/unknown
+	See also https://savannah.gnu.org/forum/forum.php?forum_id=9203
+
+	testcases: fix decode_test_LDADD
+	need to link more src objects, similar to bits_test and hash_test
+
+	testcases: fix hash_test_LDADD
+	need to link to bits and hash explicitly.
+	needed with higher optimizations, when some smaller functions are dropped
+	and inlined, esp. with clang >= 5.
+
+	SURFACE: rename num_*data fields
+	the size of the encrypted data.
+
+	api: add missing dwg_object_to_TYPE converters
+	Dwg_Object -> Dwg_Object_TYPE
+	previously only for entities, now also for all objects.
+
+	testcases: fix bits_test
+	because of the bit_write_TV changes, adding the \0 to the length.
+
+	alive.test: fix for --disable-dxf
+
+	testcases: fix minor warnings
+
+	promote DIMASSOC to UNTESTED
+
+2018-07-26  Reini Urban  <rurban@cpan.org>
+
+	add DEBUGGING DIMASSOC
+	pretty good, just the last intsect_gsmarker: [BS 92]
+	and the handles do look wrong in some cases.
+
+	unknown: fix out-of-bounds write
+	detected by valgrind
+
+	unknown: no const struct _unknown_field unknown_dxf
+	we write to some fields. crashes on some ELF, with this in .rodata
+
+	.gitgnore: add minor files
+
+	unknown: find TV len+1
+	A TV testvalue usually includes the final \0.
+	Fix that in bit_write_T{VU} and unknown.
+	We find now proper TV instead of TF values, e.g. MATERIAL.name
+
+	protect ASSOCACTION VALUEOUTOFBOUNDS
+	with DEBUG_CLASSES
+
+	likewise update the docs
+	UNTESTED, DEBUGGING, UNHANDLED, ...
+
+	promote ASSOCDEPENDENCY to UNTESTED
+	no errors in the covered examples
+
+	unknown: on picat timeout try again with -g go1
+	currently for ACAD_TABLE.pi
+
+	add DEBUGGING ASSOCDEPENDENCY
+	looks pretty stable to me, needs a bit more testing
+
+	rename SURFACE to PLANESURFACE, regen.
+	add to API,
+	add coverage (2004/Surface.dwg, 2018/Surface.dwg),
+	add UNHANDLED ASSOCPLANESURFACEACTIONBODY,
+	regen unknown.
+
+	unknown: skip duplicates
+	the same class and unknown bytes.
+	This removed 996 entries.
+
+	unknown: add 2000/Helix.dxf
+
+2018-07-25  Reini Urban  <rurban@cpan.org>
+
+	autogen.sh: clean cached VERSION
+
+	swig_python.patch: redo
+	fixing Hunk #6 succeeded at 205945 (offset 13869 lines)
+	add -b to patch call for easier redoing the difforig.
+
+	r12: fix decode_entity_preR13
+	call decode_entity_preR13 from dwg_add_TYPE, the promised preR13 init
+	refactoring.
+
+	r12: set more ent fields
+	dwg_decode_TYPE calls dwg_add_TYPE, but decode_entity_preR13 needs
+	it before and dwg_add_TYPE clears it. Need to refactor preR13 init
+
+	eed: protect from empty appid->apps
+	the handle can be empty now. repro: 2013/ground_plane_outline.dwg
+
+2018-07-24  Reini Urban  <rurban@cpan.org>
+
+	decode: dont set bitsize_address
+	this is needed by encode DWG_ENTITY_END to write
+	the bitsize.
+	I hijacked it for decode DEBUGGING, but this broke
+	dwgrewrite for example_r14.dwg
+
+	dwglayers: ignore DICTIONARY
+	as layer_control member. This has no entry_name
+
+	free: fix NULL handles
+	dont allocate illegal null handles at all,
+	to be able to decide between global object_ref handles,
+	and individual header var handles, and empty refs
+
+2018-07-24  Reini Urban  <rurban@cpan.org>
+
+	free: COMMON UNKNOWN_ENT
+	also COMMON_ENTITY_DATA and COMMON_ENTITY_HANDLE_DATA,
+	esp. pictures.
+
+	e.g. frees now
+	7,308 bytes in 4 blocks are definitely lost in loss record 144 of 144
+	   at 0x10016B681: malloc (vg_replace_malloc.c:302)
+	   by 0x1000056BD: bit_read_TF (bits.c:1190)
+	   by 0x10002DFF4: dwg_decode_entity (common_entity_data.spec:24)
+	   by 0x1000C45DC: dwg_decode_UNKNOWN_ENT (dwg.spec:5423)
+	   by 0x1000CF3F4: dwg_decode_add_object (decode.c:3644)
+	   by 0x100025E12: decode_R13_R2000 (decode.c:1062)
+	   by 0x100006A4C: dwg_decode (decode.c:210)
+	   by 0x100001A2F: dwg_read_file (dwg.c:186)
+	   by 0x10000118E: main (dwgread.c:213)
+
+2018-07-24  Reini Urban  <rurban@cpan.org>
+
+	free: NULL handles
+	They were still alloced, but not globally freed, esp. in XRECORD.
+
+	Fixes 8,384 bytes in 262 blocks are definitely lost in loss record 266 of 266
+	   at 0x100165D7F: calloc (vg_replace_malloc.c:714)
+	   by 0x10002F1BC: dwg_decode_handleref_with_code (decode.c:2747)
+	   by 0x1000BEDEC: dwg_decode_XRECORD (dwg.spec:4981)
+	   by 0x1000CED60: dwg_decode_add_object (decode.c:3576)
+	   by 0x100025ADE: decode_R13_R2000 (decode.c:1062)
+	   by 0x100006718: dwg_decode (decode.c:210)
+	   by 0x1000016FB: dwg_read_file (dwg.c:186)
+	   by 0x100000E5A: main (dwgread.c:213)
+
+2018-07-24  Reini Urban  <rurban@cpan.org>
+
+	add UNDERLAYDEFINITION, DEBUGGING UNDERLAY
+	UNDERLAYDEFINITION seems to be ok, UNDERLAY still a hole before flag 280
+	and no Boundary coverage yet.
+
+2018-07-23  Reini Urban  <rurban@cpan.org>
+
+	add DEBUGGING *SURFACE entities
+
+	HATCH: is now stable
+	Closes [GH #27]
+
+	free: improve eed double-free
+	Fixes [GH #33], detected by jinyu00
+
+2018-07-22  Reini Urban  <rurban@cpan.org>
+
+	unknown: log_unknown_dxf
+	use different comment style for easier unknown.sh
+	helper script to detect all classes.
+
+	unknown: write fieldnames into pi
+
+	add DEBUGGING ASSOCALIGNEDDIMACTIONBODY
+	some logic is still missing when to skip some fields
+
+	add DEBUGGING DYNAMICBLOCKPURGEPREVENTER
+	fields ok, just after the last handle is an unknown 47bit hole
+
+2018-07-22  Reini Urban  <rurban@cpan.org>
+
+	add --disable-dxf
+	Disable DXF and other in/out modules,
+	and most helper programs, only dwgread.
+
+	Only useful for faster test/debug cycles.
+
+2018-07-22  Reini Urban  <rurban@cpan.org>
+
+	unknown: more DBCOLOR
+	got now the name and color catalog (guide) after a hole of 24bits.
+	but there are still 2 big holes.
+
+	add PERSSUBENTMANAGER to UNTESTED
+	very low coverage and no known fieldnames.
+	but the dxf groups do look stable
+
+2018-07-21  Reini Urban  <rurban@cpan.org>
+
+	unknown: finished fieldnames
+
+	unknown: ignore alldwg.skip
+	this is stderr from unknown.
+	all classes have now enough information
+
+	disable regen-unknown with !HAVE_INSRCDIR
+	Need a configure in srcdir.
+	Fixes distcheck errors, and enables proper deps
+
+	unknown: add fieldnames
+	and fix some found dxfgroup errors and missing fields
+
+2018-07-21  Reini Urban  <rurban@cpan.org>
+
+	unknown: various improvements
+	use the handle code, not just value.
+	print the found/notfound fields better.
+	print more picat statistics: Found, NotFound ratio, Missing bits.
+	add Class,Dxf,Version to the picat data for better constraints checks.
+
+	improve SUN spec
+
+2018-07-20  Reini Urban  <rurban@cpan.org>
+
+	protect dwg_obj_block_control_get_block_headers
+	from empty ctrl->block_headers. Fixes [GH #32]
+
+	add DEBUGGING ASSOC2DCONSTRAINTGROUP
+	partially, up to AcConstrainedImplicitPoint.
+	no names found yet
+
+2018-07-20  Reini Urban  <rurban@cpan.org>
+
+	add picat step to make unknown
+	Only done when picat was found in the path by configure.
+	Get picat binary or source packages from picat-lang.org
+
+	To skip or override timeout use make unknown TIMEOUT_30=
+	timeout is from coreutils.
+	https://www.gnu.org/software/coreutils/manual/html_node/timeout-invocation.html
+
+	add a basic description to HACKING
+
+2018-07-20  Reini Urban  <rurban@cpan.org>
+
+	regen-unknown
+	catch all the new classes.
+	unknown summary: 478284/2967120=16.12%
+
+	add more unhandled classes
+	to the header and classes.inc
+
+2018-07-19  Reini Urban  <rurban@cpan.org>
+
+	unknown: more EVALUATION_GRAPH fixes
+	but still some unclear options
+
+	gitignore: ignore generated picat files
+	.qi is a compiled .pi
+
+	add DEBUGGING ASSOCPERSSUBENTMANAGER
+	picat layed out the fields wonderfully, just the names
+	are now missing
+
+	configure: probe for picat
+	and add more PROG versions to config.log
+
+	unknown: sort alldwg.inc
+	new summary: 108570/1028945=10.55%
+	much less skips
+
+2018-07-19  Reini Urban  <rurban@cpan.org>
+
+	unknown: better BIT bugfix
+	finally we are finding the strings we should be finding all along.
+	we still need to sort alldwg.inc by class.
+
+	cannot tell the new summary yet, as it is crashing with overwriting some
+	malloc's, but overall it looks significantly better, between 30-40% for many:
+
+	unknown-ACAD_EVALUATION_GRAPH.log:summary: 216/1206=17.91%
+	unknown-ACAD_TABLE.log:summary: 272708/1157653=23.56%
+	unknown-ACDBASSOC2DCONSTRAINTGROUP.log:summary: 5084/46715=10.88%
+	unknown-ACDBASSOCACTION-work.log:summary: 0/193=0.00%
+	unknown-ACDBASSOCACTION.log:summary: 400/717=55.79%
+	unknown-ACDBASSOCALIGNEDDIMACTIONBODY.log:summary: 282/571=49.39%
+	unknown-ACDBASSOCDEPENDENCY.log:summary: 256/571=44.83%
+	unknown-ACDBASSOCGEOMDEPENDENCY.log:summary: 4648/11862=39.18%
+	unknown-ACDBASSOCNETWORK.log:summary: 1824/3274=55.71%
+	unknown-ACDBASSOCOSNAPPOINTREFACTIONPARAM.log:summary: 508/1043=48.71%
+	unknown-ACDBASSOCPERSSUBENTMANAGER.log:summary: 732/3457=21.17%
+	unknown-ACDBASSOCVERTEXACTIONPARAM.log:summary: 612/1307=46.82%
+	unknown-ACDBDETAILVIEWSTYLE.log:summary: 13994/138466=10.11%
+	unknown-ACDBPERSSUBENTMANAGER.log:summary: 40/743=5.38%
+	unknown-ACDBSECTIONVIEWSTYLE.log:summary: 28194/230930=12.21%
+	unknown-ACDB_LEADEROBJECTCONTEXTDATA_CLASS.log:summary: 1624/3443=47.17%
+	unknown-ACSH_HISTORY_CLASS.log:summary: 216/368=58.70%
+	unknown-ACSH_SWEEP_CLASS.log:summary: 1160/10634=10.91%
+	unknown-ARC_DIMENSION.log:summary: 31376/104047=30.16%
+	unknown-CSACDOCUMENTOPTIONS.log:summary: 0/6160=0.00%
+	unknown-DBCOLOR.log:summary: 400/39784=1.01%
+	unknown-DIMASSOC.log:summary: 6036/42548=14.19%
+	unknown-HELIX.log:summary: 33820/89830=37.65%
+	unknown-LAYOUTPRINTCONFIG.log:summary: 0/1930=0.00%
+	unknown-LIGHT.log:summary: 1642/9020=18.20%
+	unknown-MATERIAL.log:summary: 21090/276592=7.62%
+	unknown-MULTILEADER.log:summary: 20682/90631=22.82%
+	unknown-SUN.log:summary: 630/2804=22.47%
+	unknown-TABLECONTENT.log:summary: 11160/226312=4.93%
+	unknown-TABLEGEOMETRY.log:summary: 0/0=nan%
+	unknown-TABLESTYLE.log:summary: 14416/427123=3.38%
+
+2018-07-19  Reini Urban  <rurban@cpan.org>
+
+	unknown.pi: add hole detection
+	for the next solver step, to add the leftover fields rests to the holes.
+	and to fill in likely dwg-only fields, not in the dxf.
+
+	unknown: shorted HANDLE to H structname
+
+	unknown: whitespace only
+	indent class - dxf loop
+
+2018-07-19  Reini Urban  <rurban@cpan.org>
+
+	unknown: create picat data files
+	process unknowns per class, not per file anymore.
+	change bit_errprint_bits to bit_fprint_bits, without \n.
+
+	TODO: pre-sort alldwg.inc per class.
+
+2018-07-19  Reini Urban  <rurban@cpan.org>
+
+	unknown: picat module and EVALUATION_GRAPH data
+	for the picat solver helper to layout unknown fields.
+	there's no backtracking with constraints, there's not enough data yet.
+
+2018-07-17  Reini Urban  <rurban@cpan.org>
+
+	bits: add bit_errprint_bits
+	print bits to stderr, not stdout
+
+	fix EVALUATION_GRAPH Object bugs
+	the fixed unknown revealed some type errors
+
+2018-07-16  Reini Urban  <rurban@cpan.org>
+
+	unknown: fix BIT bug
+	10 is the proper representation of BL/BS 0, not 00.
+	(gdb) p/t 0x80 => 10000000
+
+	summary: 200166/2972461=6.73%
+
+2018-07-15  Reini Urban  <rurban@cpan.org>
+
+	add DEBUGGING ASSOCOSNAPPOINTREFACTIONPARAM Object
+	half-way through
+
+2018-07-15  Reini Urban  <rurban@cpan.org>
+
+	unknown: fix overlap check
+	skip the last bit+1.
+	and mark as found if num_found == num_dxf, even for >5
+
+	213008/2972461=7.17%
+
+2018-07-15  Reini Urban  <rurban@cpan.org>
+
+	unknown: reformat output
+	put bits into col 0
+	print each dxf fields at col 0
+	put search into one line
+	add num of same DXF fields to result
+	add + or ? to found
+
+	172488/2972461=5.80%
+
+2018-07-15  Reini Urban  <rurban@cpan.org>
+
+	unknown: skip duplicate handle codes
+	and skip searching for EED dxf codes, they are not stored
+	in the unknown bytes, and are not stored dupl. as DWG fields
+
+2018-07-15  Reini Urban  <rurban@cpan.org>
+
+	refactor DEBUG_HERE
+	needed to print the object offset,
+	add DEBUG_HERE_OBJ, DEBUG_POS_OBJ
+
+	note that UNKNOWN_* excludes the EED and common_entity_data
+
+	flip two SUN fields
+
+2018-07-15  Reini Urban  <rurban@cpan.org>
+
+	more DEBUGGING SUN work
+
+	stability: protect print loops
+	we bail out earlier now in REPEAT and VECTOR
+	leaving the field unallocated. Protect against that in print at least.
+
+	add DEBUGGING EVALUATION_GRAPH Object
+
+	in_dxf: no inline dxf_free_pair
+	-Winline warned: call is unlikely and code size would grow
+
+2018-07-14  Reini Urban  <rurban@cpan.org>
+
+	unknown: compile-time multiple matching fields
+	pre-calculate the number of potential same DXF fields values,
+	same basic type and same string value.
+	No need to calc num_dxf() at run-time
+
+	back to the previous 172968/2972461=5.82%
+
+2018-07-14  Reini Urban  <rurban@cpan.org>
+
+	unknown: handle multiple matching fields
+	when the same DXF value could lead to the same binary representation.
+	e.g. DBCOLOR has 2 equiv. DXF fields 330:handle, or mult. 90:"21" fields.
+	mark them as found also.
+
+	check raw numeric types also, if the bitencoded one failed.
+
+	advanced to 172692/2440879=7.07%
+	and found several unique hits in previously skipped classes
+
+2018-07-14  Reini Urban  <rurban@cpan.org>
+
+	unknown: fixup DBCOLOR status
+	it is DEBUGGING
+
+	add .c.ii rule
+	for preprocessed files without line markers. useful for debugging macros.
+
+	stability: more isnan checks
+
+	logs: add GNU parallel usage
+	This is of course massively parallel and faster.
+	See https://savannah.gnu.org/forum/forum.php?forum_id=9197
+
+2018-07-13  Reini Urban  <rurban@cpan.org>
+
+	unknown: skip empty objects
+	unknown prints all empty objects with 0.0% found to alldwg.skip
+	which will be subsequently skipped
+
+	unknown: skip some duplicates and 0%
+	egrep '0.0%|test/test-data/' unknown-0.5.1027-12-g28982958.log | grep -B1 0.0%
+
+	unknown: regen with DBCOLOR
+	fix regen-unknown to include more unknowns, esp. DBCOLOR
+
+	stability: improve REPEAT_CHKCOUNT
+	but via sizeof, not minimal bits_size.
+	abort HATCH with gradient fill on print
+
+	WIP dbcolor handle
+	See [GH #31]
+
+	Untested OBJECT DBCOLOR
+	referenced by color handle of some entities WIP
+	See 2004/CascoUrbano GH #27
+
+	fix SORTENTSTABLE
+
+2018-07-13  Reini Urban  <rurban@cpan.org>
+
+	stability: improve VECTOR_CHKCOUNT
+	add global dwg_bits_size: minimal sizes of all types
+	and check each VECTOR or REPEAT before the malloc against overflow.
+
+	move dwg_bits_name from unknown to common.{c,h}
+
+2018-07-13  Reini Urban  <rurban@cpan.org>
+
+	free: protect empty FIELD_VECTOR_N
+
+	check-syntax: add nice -O0
+	unknown flycheck lasts too long
+
+	ASSOCNETWORK: demote back to DEBUGGING
+	inline the actions, WIP. But coming very close.
+
+	unknown: log pos range
+	from-last bits
+
+	handle relative codes 6-c
+	relative offset handles do have an ref, even with size 0.
+	esp. code 6 (next) and 8 (prev).
+
+	autogen.sh: generate .tarball-version
+	this is done by dist-hook, but we are doing some extra work to be clearer
+
+2018-07-12  Reini Urban  <rurban@cpan.org>
+
+	examples: wrong EXTRA_DIST
+	we dont need to distribute the unknown sources
+
+	unknown: promote ASSOCNETWORK to UNTESTED
+	the action handles are missing, but it looks rather good and stable
+
+	unknown: fix relative c handle
+	-3 offset is stored as c.1.3
+
+	unknown: support relative reactors
+	from 150616 to 150760
+
+2018-07-12  Reini Urban  <rurban@cpan.org>
+
+	unknown: fix relative handle offsets
+	6.0.0 is +1, 8.0.0 is -1
+	a.0.1 is +1, ...
+
+	from 150560 to 150616/2490950=6.05%
+
+2018-07-12  Reini Urban  <rurban@cpan.org>
+
+	unknown: more ASSOCACTION work
+	compilation fixes with -DDEBUG_CLASSES
+
+	dwg2dxf: free only with mult. infiles
+
+	unknown: fix unprecise RD search
+	we added a RD step after BD, changing the type to RD.
+	improved from 147660/2490950=5.93% to 150560/2490950=6.04%
+
+	unknown: add --class filter, unknown.sh
+	filter by classes.
+	add the dxf to the header.
+	fix the TU is16 flag for r2010+
+	free the temp. chains (to reuse the buffers),
+	  our data-structures got bigger over time.
+
+2018-07-12  Reini Urban  <rurban@cpan.org>
+
+	unknown: regen and fix some warnings
+	generated a lot of matching DXF's to find more fields.
+
+	new summary: 147594/2490950=5.93%
+	prev. 4810/407639=1.18%, 8384/548025=1.53%
+
+2018-07-12  Reini Urban  <rurban@cpan.org>
+
+	unknown: fix restarts, esp. r2010+
+	the offset calculation was wrong, leading to wrong
+	unknown bytes being logged and analyzed for r2010+
+
+2018-07-11  Reini Urban  <rurban@cpan.org>
+
+	fix git-version-gen for tag releases
+	on a tag commit `git describe HEAD` cannot find a description,
+	use --tags to avoid an UNKNOWN version, and use the tag.
+
+	dxf: add HEADER_TU LASTSAVEDBY
+	and fix a couple of compiler warnings of unused functions
+
+	configure: print generated git version
+
+	perl: fix bash syntax error
+	syntax error near unexpected token `;'
+
+	dwg2dxf: fix -Wuninitialized
+	though practically not happening
+
+	configure: honor system CFLAGS
+	and AC_SUBST(WARN_CFLAGS) is already done by AX_COMPILER_FLAGS
+
+2018-07-11  Reini Urban  <rurban@cpan.org>
+
+	re-enable WARN_CFLAGS
+	was disabled when AM_CFLAGS was set in *.am and configure.ac
+
+	fix various minor warnings: -Wshadow, -Wsign-compare, missing-decls
+	undefine DEBUGGING_CLASS'es in the spec (-Wunused-function)
+
+2018-07-11  Reini Urban  <rurban@cpan.org>
+
+	win32 static: check ENABLE_SHARED
+	some libtool cannot build shared, but __declspec(dllimport)
+	is still set there, leading to linker errors.
+	the same happens on windows with --disable-shared.
+
+	python: stabilize
+	help with empty PYTHON.
+	dont make check without python in xmlsuite
+
+	perl: skip make with windows Makefile
+	with incompatible command.com/cmd.exe shell
+	grep for NOOP = rem and skip then.
+	This bug started with the msys update to perl-5.28
+	Before the Makefile was properly created from bash for bash.
+
+	perl: fix OBJEXT
+
+	perl: prefer local dwg.h over old installed
+	see GH #29.
+	Also disable the unused cmdline overrides
+
+	unknown: add CMC support for DXF 63
+	only for indexed color values <r2004.
+	since r2004 the color struct adds to it, but should be found nevertheless.
+
+	unknown: add SUNSTUDY object fields
+	yet unsorted and uncovered
+	The SUN object is wrongly documented in the Acad DXF docs as entity.
+
+2018-07-11  Reini Urban  <rurban@cpan.org>
+
+	unknown: regen alldwg.inc
+	add more dxf counter-parts, fixed dxf field in alldwg.inc.
+
+	work on MULTILEADER 3BD ctx.content_base -> 3RD at offset 384-576 with example_2000.dwg
+	rename leaderstyle 340 handle to mleaderstyle
+
+	summary: 8216/544344=1.51%
+
+2018-07-09  Reini Urban  <rurban@cpan.org>
+
+	patch: add build-aux/swig_python.patch to EXTRA_DIST
+	failed in distcheck
+
+	add unknown make target
+
+2018-07-08  Reini Urban  <rurban@cpan.org>
+
+	unknown: try BS-BL, and BL-BS
+	from 4720 to 4810
+
+	unknown: try RD when BD failed
+	from 2718 to 4720 (precise only, unprecise added no hits)
+
+2018-07-08  Reini Urban  <rurban@cpan.org>
+
+	unknown: restrict relative handles
+	only some code 6 and 8 offsethandles are valid,
+	only of the new handle has an +1 or -1 offset.
+	ditto for a and c: the offset must be positive.
+
+	down to 2718
+
+2018-07-08  Reini Urban  <rurban@cpan.org>
+
+	unknown: add OFFSETOBJHANDLE code>5 variants
+	relative (shorter) handle values. yet unsuccessful.
+	removed one wrong found handle c: down to 2734
+
+	unknown: try RC for BS and vice versa
+	from 2742 to 2782
+
+2018-07-08  Reini Urban  <rurban@cpan.org>
+
+	unknown: fix printing found BD
+	print the BD bitmask at the found offset and compare it the
+	DXF string (should be <0.001).
+
+	down from 3270 to 3252 bits, and with a crosscheck for <0.001
+	even down to 2742.
+
+2018-07-08  Reini Urban  <rurban@cpan.org>
+
+	unknown: more unprecise BD search
+	still 3270 bits found
+
+	unknown: add unprecise BD search
+	cut the mantissa precision from 52 bit to 44 bit.
+	finds now 23 more BD's, e.g. 10.0, 50.0, 2231.000092348011,
+	-54.05474532926735, 490.6216519543077, 20.75891407303142
+
+	unknown: try TV if TU fails (unsuccessful)
+	add summary stats
+
+	common: explain the MC0.0 magic
+	http://www.fourmilab.ch/autofile/www/section2_11_4.html
+	http://www.fourmilab.ch/autofile/www/chapter2_14.html
+
+2018-07-07  Reini Urban  <rurban@cpan.org>
+
+	unknown: add coverage stats
+	store each found and possibly bit, to continue search
+	if already reserved, and get some picture
+
+2018-07-06  Reini Urban  <rurban@cpan.org>
+
+	unknown: try more handle codes
+	now found 62 unique handles,
+	improved from 140 to 151 found 1.
+
+	stats of found fields:
+	    1 151
+	    2 118
+	    3 37
+	    4 20
+	    5 93
+	    >5 11692
+
+2018-07-06  Reini Urban  <rurban@cpan.org>
+
+	unknown: improve handle codes
+	now found 51 unique handles,
+	improved from 94 to 140 found 1
+
+2018-07-06  Reini Urban  <rurban@cpan.org>
+
+	unknown: fix bits_BS strtol
+	using sscanf is always a bad idea.
+	The data looks pretty good and solvable now.
+
+	stats of found fields:
+	1 94
+	2 109
+	3 34
+	4 17
+	5 101
+	>5 11678
+
+2018-07-06  Reini Urban  <rurban@cpan.org>
+
+	unknown: store max 5 found positions
+	stats of found fields:
+	1  94
+	2  109
+	3  34
+	4  14
+	5  101
+	>5 11678
+
+	unknown: fix alldxf_1.inc extended fields
+	add the missing fields.
+	use -1 for not-found pos, not 0. This enables the first field being at first.
+
+2018-07-06  Reini Urban  <rurban@cpan.org>
+
+	unknown: implement membits
+	use our own search, which is much easier than handling all the
+	memmem corner-cases at the beginning and end, and bit-shifting.
+
+	use strtod instead of sscanf %lf. was buggy.
+
+	print the bits to review the search (and check write API, looks wrong),
+	added bit_print_bits to bits.c
+	WIP: The doubles BB prefix looks wrong, the double values from strtod
+	also. maybe hardcode some string->double conversions.
+
+2018-07-06  Reini Urban  <rurban@cpan.org>
+
+	unknown: add TV and angle_BD types
+	non-unicode for 300-309, deg2rad angles for DXF 50 types
+
+	unknown: fix DXF 310 hexstring
+	and fix wrong dxf_size vs dxf_bitsize.
+	add dwg_bits_name[]
+
+	document libredwg.pc
+
+2018-07-05  Reini Urban  <rurban@cpan.org>
+
+	add libredwg.pc
+
+	unknown: fix search_bits
+	convert the bytes/bits to one byte stream.
+	add carry logic and remaining dxf->bits
+
+2018-07-05  Reini Urban  <rurban@cpan.org>
+
+	unknown: search_bits
+	search for the binary repr in the stream
+	and store found position if found only once.
+	try for all 8 possible shift positions.
+
+	TODO: we don't handle multiple findings yet, and we didn't find any unique
+	pos yet.  the carry logic and the remaining dxf->bits are also missing.
+
+2018-07-05  Reini Urban  <rurban@cpan.org>
+
+	unknown: store the binary repr - bits_format
+	for each dxf value
+
+2018-07-05  Reini Urban  <rurban@cpan.org>
+
+	unknown: split up generation of static array of struct
+	we need 3 parts to be able to initialize it statically.
+	disable alldwg.inc for now. we don't need to find the fields order and pos,
+	only for a consistency crosscheck against all DWG's without matching DXF afterwards.
+
+	add 2 fields to the dxf fields: type and pos, resolved by the solver.
+
+2018-07-05  Reini Urban  <rurban@cpan.org>
+
+	unknown: never build alldwg.inc
+	unless via regen-unknown.
+
+	generated sources are in builddir, only from there ./logs.sh can be run.
+
+2018-07-05  Reini Urban  <rurban@cpan.org>
+
+	unknown: implemented log_unknown_dxf.pl
+	created now alldxf.inc with all the real dxf values to find
+	in the unknown bits.
+
+	DEBUGGING_CLASSES ASSOCACTION, ASSOCNETWORK
+
+	add build-aux/swig_python.patch
+	for a warnings free swig source, for swig 3.0.12
+
+	regen-man: with version 0.5.1-dev
+
+	dwg2svg2: use getopt_long
+
+	dwg2ps: use getopt_long
+
+	dwgbmp: use getopt_long
+
+	dwg2SVG: use getopt_long
+
+	dwggrep: use getopt_long
+
+	dwglayers: use getopt_long
+
+	dxf2dwg: use getopt_long
+
+	dwg2dxf: use getopt_long
+	change -as-rNNNN to --as rNNNN resp. -a rNNNN.
+
+	dwgrewrite: use getopt_long
+	change -as-rNNNN to --as rNNNN resp. -a rNNNN.
+
+	dwgwrite: use getopt_long
+	change -as-rNNNN to --as rNNNN resp. -a rNNNN.
+
+	dwgread: without HAVE_GETOPT_LONG
+
+	dwgread: use getopt_long
+	which is a bit broken for -v3 (optional args), but we hack around it.
+	at least we can use all options in any order now.
+
+	stability: no endless loop with small files
+	dwgs are normally >1000byte. But with a wrong filename
+	avoid an endless hash_new loop with size==0 (/1000)
+
+	Doxyfile: only with doxygen
+
+	fix distcheck uninstall for perl and doc
+	the added to perllocal.pod and share/info/dir cannot be uninstalled.
+
 2018-07-05  Reini Urban  <rurban@cpan.org>
 
 	First release 0.5

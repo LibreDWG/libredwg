@@ -3,17 +3,20 @@ Copyright (C) 2018 Free Software Foundation, Inc.
 See the end for copying conditions.
 
 
-LibreDWG version 0.6 - not yet released - still alpha:
+LibreDWG version 0.6 - released 2018/08/13 - still alpha:
 
 API breaking changes:
   * Removed dwg_obj_proxy_get_reactors(), use dwg_obj_get_reactors() instead.
   * Renamed SORTENTSTABLE.owner_handle to SORTENTSTABLE.owner_dict.
   * Renamed all -as-rNNNN program options to --as-rNNNN.
-  * Changed BITCODE_RL and BITCODE_BL from unsigned to signed int32_t.
 
 Other newsworthy changes:
   * Removed all unused type-specific reactors and xdicobjhandle fields,
     use the generic object and entity fields instead.
+  * Added signed BITCODE_RLd and BITCODE_BLd (int32_t) types.
+  * Added unknown_bits field to all UNSTABLE/DEBUGGING classes.
+  * Custom CFLAGS are now honored.
+  * Support for GNU parallel and coreutils timeout logfile and picat processing.
 
 Important bugfixes:
   * Fixed previously empty strings for r2007+ for some objects and entities (#34).
@@ -37,6 +40,7 @@ New features:
     UNDERLAYDEFINITION and the entities MULTILEADER, UNDERLAY.
   * Added getopt_long() support to all programs, position independent options.
   * Implemented examples/unknown to find field layouts of unknown objects.
+    With bd and bits helpers to decode unknowns.
     Now with a http://picat-lang.org helper. See also HACKING and savannah News.
   * Implemented parsing ACIS version 2 to the binary SAB format.
   * Added all missing dwg_object_to_OBJECT() functions for objects.
@@ -44,6 +48,7 @@ New features:
   * Added --disable-dxf, --enable--debug configure options. With debug there are many
     more unstable objects available.
   * Added libredwg.pc (#30)
+  * Added valgrind supressions for known darwin/glibc leaks.
   * Changed and clarified the semver version numbering on development checkouts with
     major.minor[.patch[.build.nonmastercommits-gittag]]. See HACKING.
 
