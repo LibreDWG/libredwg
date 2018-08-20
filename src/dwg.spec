@@ -5696,7 +5696,6 @@ DWG_OBJECT(VISUALSTYLE)
   REACTORS(4);
   XDICOBJHANDLE(3);
   //FIELD_HANDLE (dictionary, 5, 0);
-  // ~480 bits missing
 DWG_OBJECT_END
 
 // (varies) In Work
