@@ -8,7 +8,7 @@ low_level_process(dwg_object *obj)
 
   printf("Radius of arc : %f\n",arc->radius);
   printf("Thickness of arc : %f\n",arc->thickness);
-  printf("extrusion of arc : x = %f, y = %f, z = %f\n", 
+  printf("extrusion of arc : x = %f, y = %f, z = %f\n",
           arc->extrusion.x, arc->extrusion.y, arc->extrusion.z);
   printf("center of arc : x = %f,y = %f,z = %f\n",
           arc->center.x, arc->center.y, arc->center.z);
@@ -23,7 +23,7 @@ api_process(dwg_object *obj)
   double radius, thickness, start_angle, end_angle;
   dwg_point_3d center, ext;
 
-  // casts an object to arc entity 
+  // casts an object to arc entity
   dwg_ent_arc *arc = dwg_object_to_ARC(obj);
 
   // returns radius of arc
@@ -39,7 +39,7 @@ api_process(dwg_object *obj)
       printf("Thickness of arc : %f\n", thickness);
   else
       printf("error in reading thickness \n");
- 
+
   // Returns arc extrusion
   dwg_ent_arc_get_extrusion(arc, &ext,
                             &error);
