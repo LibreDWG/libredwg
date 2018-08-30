@@ -767,7 +767,7 @@ int match_ASSOCACTION(const char *restrict filename, const Dwg_Object *restrict 
   int found = 0;
   const Dwg_Object_ASSOCACTION *_obj = obj->tio.object->tio.ASSOCACTION;
   MATCH_OBJECT (ASSOCACTION, body.evaluatorid, 0);
-  MATCH_OBJECT (ASSOCACTION, body.expresssion, 0);
+  MATCH_OBJECT (ASSOCACTION, body.expression, 0);
   return found;
 }
 static

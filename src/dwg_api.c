@@ -4448,7 +4448,7 @@ dwg_ent_insert_set_extrusion(dwg_ent_insert *restrict insert,
 }
 
 /** Returns the _dwg_entity_INSERT::has_attribs value, DXF 66.
-\code Usage: double attribs = dwg_ent_insert_has_attribs(intrest, &error);
+\code Usage: double attribs = dwg_ent_insert_has_attribs(interest, &error);
 \endcode
 \param[in] insert dwg_ent_insert*
 \param[out] error   int*, is set to 0 for ok, 1 on error

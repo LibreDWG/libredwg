@@ -6551,7 +6551,7 @@ DWG_OBJECT(ASSOCACTION)
   DEBUG_HERE_OBJ
   //17bit 00101000101000101:
   FIELD_T (body.evaluatorid, 0);
-  FIELD_T (body.expresssion, 0);
+  FIELD_T (body.expression, 0);
   FIELD_BL (body.value, 0); //rbuf really
   //FIELD_B (is_actionevaluation_in_progress, 90);
   DEBUG_POS_OBJ

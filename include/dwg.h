@@ -4618,7 +4618,7 @@ typedef struct _dwg_ACTIONBODY
 {
   struct _dwg_object_ASSOCNETWORK *parent;
   BITCODE_T  evaluatorid;
-  BITCODE_T  expresssion;
+  BITCODE_T  expression;
   BITCODE_BL value; //resbuf
 } Dwg_ACTIONBODY;
 
