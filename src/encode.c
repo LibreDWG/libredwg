@@ -880,7 +880,7 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           continue;
         }
       obj = &dwg->object[index];
-      obj->address = dat->byte; // change the address to the linearily sorted one
+      obj->address = dat->byte; // change the address to the linearly sorted one
       error |= dwg_encode_add_object(obj, dat, dat->byte);
       bit_write_CRC(dat, omap[j].address, 0xC0C1);
     }

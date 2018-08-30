@@ -46,7 +46,7 @@ api_process (dwg_object * obj)
   else
     fail ("error in reading num_owned");
 
-  // retuns curve type
+  // returns curve type
   curve_type = dwg_ent_polyline_mesh_get_curve_type (polyline_mesh,
 						     &error);
   if (!error  && curve_type == polyline_mesh->curve_type)	// error check

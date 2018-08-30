@@ -26,7 +26,7 @@ api_process(dwg_object *obj)
   // casts an object to arc entity 
   dwg_ent_arc *arc = dwg_object_to_ARC(obj);
 
-  // retursn radius of arc
+  // returns radius of arc
   radius = dwg_ent_arc_get_radius(arc, &error);
   if ( !error )
       printf("Radius of arc : %f\n", radius);

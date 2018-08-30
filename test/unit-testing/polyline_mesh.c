@@ -40,7 +40,7 @@ api_process(dwg_object *obj)
   else
     printf("in reading num_owned \n");
 
-  // retuns curve type
+  // returns curve type
   curve_type = dwg_ent_polyline_mesh_get_curve_type(polyline_mesh,
                                                     &error);
   if ( !error )

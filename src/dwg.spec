@@ -639,7 +639,7 @@ DWG_ENTITY(VERTEX_2D)
     FIELD_3BD (point, 10);
 
   /* Decoder and Encoder routines could be the same but then we
-     wouldn't compress data when saving. So we explicitely implemented
+     wouldn't compress data when saving. So we explicitly implemented
      the encoder routine with the compression technique described in
      the spec. --Juca */
     DXF {

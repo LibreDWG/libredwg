@@ -51,7 +51,7 @@ api_process (dwg_object * obj)
   else
     fail ("error in reading extrusion");
 
-  // retruns height of text
+  // returns height of text
   height = dwg_ent_text_get_height (text, &error);
   if (!error  && text->height == height)
     pass ("Working Properly");
