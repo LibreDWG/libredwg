@@ -2493,7 +2493,7 @@ typedef struct _dwg_HATCH_control_point
 {
   struct _dwg_HATCH_pathseg *parent;
   BITCODE_2RD point;
-  BITCODE_BD weigth;
+  BITCODE_BD weight;
 } Dwg_HATCH_ControlPoint;
 
 typedef struct _dwg_HATCH_pathseg

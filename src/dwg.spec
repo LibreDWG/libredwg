@@ -3446,7 +3446,7 @@ DWG_ENTITY(HATCH)
                           FIELD_2RD (paths[rcount1].segs[rcount2].control_points[rcount3].point, 10);
                           if (FIELD_VALUE(paths[rcount1].segs[rcount2].is_rational))
                             {
-                              FIELD_BD (paths[rcount1].segs[rcount2].control_points[rcount3].weigth, 40);
+                              FIELD_BD (paths[rcount1].segs[rcount2].control_points[rcount3].weight, 40);
                             }
                         }
                       SET_PARENT(paths[rcount1].segs[rcount2].control_points, 
