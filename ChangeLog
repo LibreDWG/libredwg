@@ -47,8 +47,8 @@ Full history from the git log
 	don't use the math.h long double promoting isnan check,
 	at least on clang.
 
-	add seperate signed BLd type #36
-	We just changed BL to signed. revert that and add a seperate BLd to represent the two such dxf ranges.
+	add separate signed BLd type #36
+	We just changed BL to signed. revert that and add a separate BLd to represent the two such dxf ranges.
 	BL as signed is a problem for vcount/rcount overflow detection with negative values.
 	Closes GH #36
 
@@ -140,7 +140,7 @@ Full history from the git log
 
 	skip incompatible moreutils parallel
 	this does not support the {} and ::: syntax,
-	rather uses -- for arg seperation, and I still have to find out
+	rather uses -- for arg separation, and I still have to find out
 	the {} and {/.}_{//} macros.
 
 	we want the GNU parallel (in perl)
@@ -188,7 +188,7 @@ Full history from the git log
 
 	picat: expect also Most probable result
 	which is at the end of definite and probable results.
-	we dont want it to be killed before printing any result
+	we don't want it to be killed before printing any result
 
 	unknown: fix membits overflow
 	found when overflowing possible and found bits.
@@ -245,7 +245,7 @@ Full history from the git log
 	add and set about 50% of the missing fields
 
 	unknown: re-order in-work area in the spec
-	seperate UNSTABLE from DEBUGGING
+	separate UNSTABLE from DEBUGGING
 
 2018-08-04  Reini Urban  <rurban@cpan.org>
 
@@ -473,7 +473,7 @@ Full history from the git log
 	padding between the streams should be max 8.
 	display the offset, and add MISSING if >8
 
-	seperate WINEPREFIX for wine 32bit
+	separate WINEPREFIX for wine 32bit
 	keep the default 64bit tree at ~/.wine, and create/use
 	a new 32bit one.
 	This test finds many useful errors.
@@ -540,7 +540,7 @@ Full history from the git log
 	--enable-write is now default,
 	cover the other new features: --disable-write, --disable-dxf, --enable-debug
 
-	semver: seperate patch from build number
+	semver: separate patch from build number
 	the appveyor build number goes into the generated github tag
 	which serves as our git generated version number.
 
@@ -661,7 +661,7 @@ Full history from the git log
 
 2018-07-24  Reini Urban  <rurban@cpan.org>
 
-	decode: dont set bitsize_address
+	decode: don't set bitsize_address
 	this is needed by encode DWG_ENTITY_END to write
 	the bitsize.
 	I hijacked it for decode DEBUGGING, but this broke
@@ -671,7 +671,7 @@ Full history from the git log
 	as layer_control member. This has no entry_name
 
 	free: fix NULL handles
-	dont allocate illegal null handles at all,
+	don't allocate illegal null handles at all,
 	to be able to decide between global object_ref handles,
 	and individual header var handles, and empty refs
 
@@ -820,7 +820,7 @@ Full history from the git log
 	.qi is a compiled .pi
 
 	add DEBUGGING ASSOCPERSSUBENTMANAGER
-	picat layed out the fields wonderfully, just the names
+	picat laid out the fields wonderfully, just the names
 	are now missing
 
 	configure: probe for picat
@@ -1056,7 +1056,7 @@ Full history from the git log
 2018-07-12  Reini Urban  <rurban@cpan.org>
 
 	examples: wrong EXTRA_DIST
-	we dont need to distribute the unknown sources
+	we don't need to distribute the unknown sources
 
 	unknown: promote ASSOCNETWORK to UNTESTED
 	the action handles are missing, but it looks rather good and stable
@@ -1082,7 +1082,7 @@ Full history from the git log
 
 	dwg2dxf: free only with mult. infiles
 
-	unknown: fix unprecise RD search
+	unknown: fix imprecise RD search
 	we added a RD step after BD, changing the type to RD.
 	improved from 147660/2490950=5.93% to 150560/2490950=6.04%
 
@@ -1144,7 +1144,7 @@ Full history from the git log
 
 	python: stabilize
 	help with empty PYTHON.
-	dont make check without python in xmlsuite
+	don't make check without python in xmlsuite
 
 	perl: skip make with windows Makefile
 	with incompatible command.com/cmd.exe shell
@@ -1492,7 +1492,7 @@ Full history from the git log
 	various serious errors in the color encoding
 	for entities, called ENC.
 
-	The bug only occured with non-indexed colors
+	The bug only occurred with non-indexed colors
 	with RGB or transparency values.
 	Thanks to @arturredzko for an example DWG.
 
@@ -1866,7 +1866,7 @@ Full history from the git log
 
 	free: enable free for num_objects < 1000
 	to catch regressions. Performance is only a problem for big DWGs.
-	dwglayers accidently always used dwg_free.
+	dwglayers accidentally always used dwg_free.
 	improve dwg_free_handleref
 
 	free: improve dwg_free_eed
@@ -1943,7 +1943,7 @@ Full history from the git log
 2018-06-19  Reini Urban  <rurban@cpan.org>
 
 	refactor: add ACTION, TABLE: call TABLECONTENT
-	Now we seperated the initializer from the field handler.
+	Now we separated the initializer from the field handler.
 	Enable experimental TABLE r2010+ support, by
 	allowing calling the sublassed TABLECONTENT decoder, from within
 	TABLE.
@@ -1959,7 +1959,7 @@ Full history from the git log
 
 	api: separate dwg_decode_OBJECT and dwg_add_OBJECT
 	dwg_decode_OBJECT calls now dwg_add_OBJECT, but dwg_add_OBJECT
-	can be called seperately, for the import modules.
+	can be called separately, for the import modules.
 	There's also a new realloced = dwg_add_object(dwg); API.
 
 	Adjust the docs.
@@ -2142,7 +2142,7 @@ Full history from the git log
 	Typo in dxfin error message:
 
 	Error in LAYER Table
-	Expected 0 LAYER or 0 ENTAB, recieved 0 DICTIONARY on line 6244.
+	Expected 0 LAYER or 0 ENTAB, received 0 DICTIONARY on line 6244.
 	Invalid or incomplete DXF input -- drawing discarded.
 
 	0 ENTAB => 0 ENDTAB
@@ -2193,7 +2193,7 @@ Full history from the git log
 
 	fix the broken REPEAT_CN macro (broke MLINESTYLE)
 
-	simplify out_dxf: VALUE macro. seperate fmt from buf and \r\n.
+	simplify out_dxf: VALUE macro. separate fmt from buf and \r\n.
 
 2018-06-15  Reini Urban  <rurban@cpan.org>
 
@@ -2228,7 +2228,7 @@ Full history from the git log
 	empty handle values are invalid, only appear with unhandled classes.
 
 	dxf: add 330 parenthandle
-	it should be under AcDbObject, but is in some cases unter the
+	it should be under AcDbObject, but is in some cases under the
 	subclass.
 
 	dxf: always write a handle
@@ -2261,7 +2261,7 @@ Full history from the git log
 	and remove logging
 
 	rm more .bak test dwgs
-	These were accidently committed.
+	These were accidentally committed.
 
 	dxfb: add _REACTORS, _XDICOBJHANDLE
 	but it fails much earlier, in the header at address 90 with a r2000 DXFB already
@@ -2327,7 +2327,7 @@ Full history from the git log
 	subsequent object_map resolver errors
 
 	dxf: remove most minimal
-	See [GH #21]. Theres not much need for minimal, just
+	See [GH #21]. There's not much need for minimal, just
 	for writing header and entities. But not for the object fields,
 	there are merely version specific.
 
@@ -2431,7 +2431,7 @@ Full history from the git log
 2018-06-11  Reini Urban  <rurban@cpan.org>
 
 	rename branches, smoke policy
-	dont smoke the open work/ branches anymore.
+	don't smoke the open work/ branches anymore.
 	just master, the tagged pre-releases and any smoke/ branches being worked on.
 
 2018-06-11  Reini Urban  <rurban@cpan.org>
@@ -2455,7 +2455,7 @@ Full history from the git log
 2018-06-11  Reini Urban  <rurban@cpan.org>
 
 	errors: print even lower errors on success
-	dont collapse < CRITICAL to 0 in dwgread, dwgwrite, ...
+	don't collapse < CRITICAL to 0 in dwgread, dwgwrite, ...
 
 	stability: low error on obj_string_stream
 	which is ignored.
@@ -2467,7 +2467,7 @@ Full history from the git log
 	hash: fix the resize logic
 	add elems for proper fillrate calculation,
 	remove the resize size arg, not needed.
-	dont realloc the array at resize, use a fresh zeroed space.
+	don't realloc the array at resize, use a fresh zeroed space.
 	this fixed getting back random wrong values after resize
 
 	added hash tracing
@@ -2495,7 +2495,7 @@ Full history from the git log
 
 	common.h: docs only
 
-	dxf: strange AcDbText class seperator expected
+	dxf: strange AcDbText class separator expected
 	move the AcDbEntity specific TEXT field upwards.
 	skip non-public LWPOLYLINE flag values.
 
@@ -2636,7 +2636,7 @@ Full history from the git log
 2018-06-09  Reini Urban  <rurban@cpan.org>
 
 	errors: pass through 2007 errors
-	dont report sucess with Failed to read 2007 meta data
+	don't report success with Failed to read 2007 meta data
 
 	stability: improve reading broken r2007 files
 	got a sample DWG which asserted. Convert assertions to proper errors.
@@ -2830,7 +2830,7 @@ Full history from the git log
 	free: FREE_IF objects
 
 	dwgrewrite: default to r2000, stability
-	write: dont error on empty fields or handles.
+	write: don't error on empty fields or handles.
 
 	more objects: GEOPOSITIONMARKER, CAMERA
 	and some minor fixes: PLOTSETTINGS, MATERIAL.
@@ -2839,7 +2839,7 @@ Full history from the git log
 	some crosschecks with the oarx docs.
 
 	more plausible SUN fields
-	light reorder. problem is that we dont have a SUN object in any
+	light reorder. problem is that we don't have a SUN object in any
 	DXF yet, just the class. will do that later.
 
 2018-06-06  Reini Urban  <rurban@cpan.org>
@@ -2953,7 +2953,7 @@ Full history from the git log
 
 	2010: fix object bitsize calculation
 	8*size - handlestream_size
-	the object string steram is now correct, missing just the handle stream offset.
+	the object string stream is now correct, missing just the handle stream offset.
 
 	2010: fix Header offsets
 	The string and handle offsets are also correct now.
@@ -3037,7 +3037,7 @@ Full history from the git log
 2018-06-01  Reini Urban  <rurban@cpan.org>
 
 	parent: SET_PARENT macros
-	this doesnt yet fix the moving obj problem from #11, but it looks much
+	this doesn't yet fix the moving obj problem from #11, but it looks much
 	better now. The next commit will fix the remaining link to the moving obj.
 
 	refman: remove flymake temp.
@@ -3051,7 +3051,7 @@ Full history from the git log
 	rename some childs to proper names.
 
 	api: rearrange the c file a bit
-	seperate generic ent section.
+	separate generic ent section.
 	improve the docs for dwg_get_type.
 
 2018-06-01  Reini Urban  <rurban@cpan.org>
@@ -3162,7 +3162,7 @@ Full history from the git log
 2018-05-31  Reini Urban  <rurban@cpan.org>
 
 	api: remove the wrong new/delete/free functions
-	these were only entity specific, and didnt add them to the DWG
+	these were only entity specific, and didn't add them to the DWG
 	an object consists of the generic Dwg_Object, a common-entity
 	Dwg_Object_Entity and the specific Dwg_Entity_ENTITY.
 
@@ -3186,7 +3186,7 @@ Full history from the git log
 
 2018-05-31  Reini Urban  <rurban@cpan.org>
 
-	api + doc: improve dwg_api for CIRLE,LINE,ARC
+	api + doc: improve dwg_api for CIRCLE,LINE,ARC
 	add const, restrict and API docs.
 	dwg_ent_*_delete: remove error arg. free can handle NULL just fine.
 
@@ -3274,7 +3274,7 @@ Full history from the git log
 	fix massive obj_string_stream bug
 	I once wrote it to take the bitsize as 2nd arg, and then refactored it
 	to take the object. (for the has_string flag).
-	Not after carefully readng the mingw gcc warnings, I didnt use it in the header,
+	Not after carefully readng the mingw gcc warnings, I didn't use it in the header,
 	but manually pasted the decl into the c files. but just the old decl!
 	Tahts why the string stream offset calculation was so unstable.
 
@@ -3357,7 +3357,7 @@ Full history from the git log
 
 	rename DWG_TYPE_3DSOLID to DWG_TYPE__3DSOLID for consistency (to create it by type)
 	ditto for PROXY rename to PROXY_OBJECT (even if the DXF name is only proxy)
-	add fixed DWG_TYPE_object enums for all variable objects, they dont
+	add fixed DWG_TYPE_object enums for all variable objects, they don't
 	match the real obj->type field, which is the class id + 500. But the
 	type is needed temp. for the add API.
 
@@ -3397,7 +3397,7 @@ Full history from the git log
 	doc: more doxygen, add refman, refman-pdf targets
 	I tried to include the generated tex files into our texinfo,
 	but this is not easily possible. The GNU stdlibc++ tried also
-	but eventually uses two seperate manuals, the texinfo and the
+	but eventually uses two separate manuals, the texinfo and the
 	doxygen generated.
 
 	TODO: Integrated the doxygen refman html output into our generated
@@ -3415,7 +3415,7 @@ Full history from the git log
 
 	api: empty args check, null malloc
 	simplify the boolean empty args checks.
-	fix wrong error messags: null malloc when out of memory,
+	fix wrong error messages: null malloc when out of memory,
 	empty arg when the arg was missing (NULL)
 
 	api: rename api lwpolyline methods back to lwpline
@@ -3521,7 +3521,7 @@ Full history from the git log
 	dxf: rename VIEWMODE, fix table num_entries
 	VIEWMODE is a systemvariable, renamed from view_mode in VPORT and VIEW.
 	combine UCSFOLLOW with it (for encode and dxf).
-	via DXF the num_entries dont count the control entities.
+	via DXF the num_entries don't count the control entities.
 	initialize and DXF the VPORT_CONTROL->flag
 
         * .appveyor.yml:
@@ -3588,7 +3588,7 @@ Full history from the git log
 2018-05-26  Reini Urban  <rurban@cpan.org>
 
 	api: rename VPORT_ENT to VPORT_ENTITY
-	for consistency. we dont use the ENT abbrevation in no
+	for consistency. we don't use the ENT abbreviation in no
 	other object, but we do use _ENTITY already
 
 	dxf: oops
@@ -3875,7 +3875,7 @@ Full history from the git log
 
 2018-05-20  Reini Urban  <rurban@cpan.org>
 
-	dxf_format: add new DXF codes upto r2014
+	dxf_format: add new DXF codes up to r2014
 
 	bits_test: improve flapping CRC tests
 	realloc creates uninitialized memory
@@ -4096,7 +4096,7 @@ Full history from the git log
 	only clang-4 -std=c99 complained
 
 	POSIX 2008 for strdup, and add M_PI
-	several stricter compilers dont have strdup nor M_PI.
+	several stricter compilers don't have strdup nor M_PI.
 	define _POSIX_C_SOURCE to 200809L
 	This fixes e.g. clang-4 -std=c99
 
@@ -4139,7 +4139,7 @@ Full history from the git log
 	(no theiga yet)
 
 	dxf: harmonize ascii/binary types more
-	ans simplify spec.h. add a special DXF (out) block
+	and simplify spec.h. add a special DXF (out) block
 
 	travis: add suggested texlive
 	suggested by verbose distcheck.
@@ -4157,7 +4157,7 @@ Full history from the git log
 	encode: harmonize handle logging
 
 	appveyor: clean tag release names
-	dont double add the prefix and suffix.
+	don't double add the prefix and suffix.
 	stay with the simple tags, ie. the build number.
 	the zip has the proper name.
 
@@ -4389,7 +4389,7 @@ Full history from the git log
 
 	2010: prepare decode_header_variables
 	add bitsize_hi, calc. bitsize.
-	seperate the 3 streams for 2010.
+	separate the 3 streams for 2010.
 	can parse now until the individual object bitsizes. (still 0)
 
 	2007: change decode warning message
@@ -4438,7 +4438,7 @@ Full history from the git log
 	use one more byte offset to the back. data_size is now correct.
 	check bit_advance_position also for underflow < 0
 
-	TODO: with no strings dont try to read strings, set them to NULL.
+	TODO: with no strings don't try to read strings, set them to NULL.
 	(MLINESTYLE)
 
 2018-04-28  Reini Urban  <rurban@cpan.org>
@@ -4650,7 +4650,7 @@ Full history from the git log
 
 	2007: add absolute last_offset tracing
 	and outcomment last_handle for each object (was used
-	for object idx plausability)
+	for object idx plausibility)
 
 2018-04-23  Reini Urban  <rurban@cpan.org>
 
@@ -4672,10 +4672,10 @@ Full history from the git log
 	LOG_TRACE_TU: harmonize
 	with logging of TV
 
-	dont typos
+	don't typos
 
-	start seperating encode version support
-	add a seperate encode_preR13(), but not for the other versions.
+	start separating encode version support
+	add a separate encode_preR13(), but not for the other versions.
 	they are all basically the same, just the sections maps are different.
 
 	dwg_decode(), dwg_encode()
@@ -4691,7 +4691,7 @@ Full history from the git log
 	bitcoded object type: single or double byte
 
 	rename APPID_CONTROL->num_apps to num_entries
-	for consistency with the other tabel control objects.
+	for consistency with the other table control objects.
 
 	abstract bit_set_position
 	and a new bit_position getter
@@ -4722,7 +4722,7 @@ Full history from the git log
 	array of bytes => fixed length text.
 
 	WIP more 2007 handle stream
-	not for entities yet. there we dont have a bitsize.
+	not for entities yet. there we don't have a bitsize.
 	initialize hdlpos after reading the object bitsize.
 	before 2007 hdl_dat is just the same as dat, ditto str_dat.
 	str_dat is a copy then because strings are interleaved.
@@ -4740,7 +4740,7 @@ Full history from the git log
 2018-04-14  Reini Urban  <rurban@cpan.org>
 
 	WIP 2007: start working on 2007 object strings
-	dont error on invalid handles (still invalid obj handle stream),
+	don't error on invalid handles (still invalid obj handle stream),
 	start with a few 2007 strings
 
 	2004: fix Data Section
@@ -4794,7 +4794,7 @@ Full history from the git log
 	r2007 header_variables
 	HANDSEED is not read from the handle stream, but the data stream.
 	PUCSORTHOREF is wrong.
-	seperate obj_string_stream and section_string_stream:
+	separate obj_string_stream and section_string_stream:
 	SECTION_STRING_STREAM got a prepared str_hdl already,
 	START_STRING_STREAM calcs the stream pos from the obj->bitsize.
 	encoding >= r2007 not yet started (need to calc. handle and string stream offsets)
@@ -4803,7 +4803,7 @@ Full history from the git log
 
 2018-04-14  Reini Urban  <rurban@cpan.org>
 
-	add seperate handle stream for r2007+
+	add separate handle stream for r2007+
 	before R2007 those two streams, dat and hdl_dat are the same.
 
 	but no extra string stream yet.
@@ -4898,7 +4898,7 @@ Full history from the git log
 	more TODO
 
 	Merge branch 'dxf' into work
-	seperate examples and programs.
+	separate examples and programs.
 	many improvements and fixes, esp. some objects, memory leaks and eed.
 
 	Update TODO for the finished dxf branch
@@ -5029,7 +5029,7 @@ Full history from the git log
 	refactor eed
 	make a raw copy, and also read into the eed union.
 
-	seperate programs dir
+	separate programs dir
 	for bin_PROGRAMS.
 	enhance alive.test to test more DWGs
 
@@ -5212,7 +5212,7 @@ Full history from the git log
 	silence free DIMSTYLE
 	some FIELD_CAST values were printed on free
 
-	examples: dont leak suffix filename_out
+	examples: don't leak suffix filename_out
 	and add one missing dwg_free()
 
 	dwgrewrite: warn when num_objects differ
@@ -5221,7 +5221,7 @@ Full history from the git log
 
 	suffix: fix . handling in ext
 	when the ext already contains a dot
-	dont add another one
+	don't add another one
 
 	encode: write empty strings
 	NULL chains.
@@ -5339,7 +5339,7 @@ Full history from the git log
 
 	finish UNKNOWN_OBJ
 	add the encode and print parts.
-	we did for encode afterall.
+	we did for encode after all.
 
 	TODO: we could store the address before trying untested objects
 	and reset if for the UNKNOWN_OBJ. that way we can look at
@@ -5435,7 +5435,7 @@ Full history from the git log
 2018-03-27  Reini Urban  <rurban@cpan.org>
 
 	fix 32bit dwg_api
-	dwg_api.o didnt load stdint.h, so had a different size than
+	dwg_api.o didn't load stdint.h, so had a different size than
 	dwg*.o
 
 	* src/dwg_api.c: include stdint.h, inttypes.h, fixing 32bit.
@@ -5447,7 +5447,7 @@ Full history from the git log
 	and https://www.embecosm.com/appnotes/ean8/ean8-howto-dejagnu-1.0.html
 
 	* test/Makefile.am: : use DEJATOOL, not RUNTESTDEFAULTFLAGS
-	* test/testcases/Makefile.am: remove unsed RUNTESTDEFAULTFLAGS
+	* test/testcases/Makefile.am: remove unused RUNTESTDEFAULTFLAGS
 	* test/testcases/common.c: remove unused code
 
 2018-03-27  Reini Urban  <rurban@cpan.org>
@@ -5665,7 +5665,7 @@ Full history from the git log
 
 	xmlsuite: fix compiler warnings and libxml2 insanity
 	they insist on using unsigned char* in their public API, oh my.
-	declare all mising funcs, and a lot more.
+	declare all missing funcs, and a lot more.
 
 	properly return the exit code.
 
@@ -5810,7 +5810,7 @@ Full history from the git log
 2018-03-27  Reini Urban  <rurban@cpan.org>
 
 	fix the dxfname, no final *
-	the last char is always \0, dont replace it with *.
+	the last char is always \0, don't replace it with *.
 	the len BS includes the final \0, but we keep that.
 	we only store the ASCIIZ anyway.
 
@@ -5886,7 +5886,7 @@ Full history from the git log
 	used in the helper macros. Fixes -Wshadow warnings
 
 	src: fix format types
-	in LOG calls, dectected by the new type strictness
+	in LOG calls, detected by the new type strictness
 
 	Fix {vert,horiz}_align type from double to short
 	and properly document it
@@ -5925,7 +5925,7 @@ Full history from the git log
 
 	new Dwg_R2004_Header, use r2004_file_header.spec
 	* src/decode.c: use new dec_macros.h,
-	  avoid -Wshadow, put spec readers into its seperate blocks,
+	  avoid -Wshadow, put spec readers into its separate blocks,
 	  indentation, unuse _2004_header_data, rather put into the global
 	  Dwg_Struct, use the new "r2004_file_header.spec".
 	* src/decode_r2007.c (decrypt_block): added
@@ -6124,7 +6124,7 @@ Full history from the git log
 	CRC was already read by header_vars.spec into the CRC field.
 	Don't read it again. The initial crc check passes now.
 
-	Seperate HANDLE from INSANE logging levels. INSANE for the individual
+	Separate HANDLE from INSANE logging levels. INSANE for the individual
 	VECTOR values, i.e. string and binary content.
 
 2018-03-27  Reini Urban  <rurban@cpan.org>
@@ -6442,7 +6442,7 @@ Full history from the git log
 	CRC was already read by header_vars.spec into the CRC field.
 	Don't read it again. The initial crc check passes now.
 
-	Seperate HANDLE from INSANE logging levels. INSANE for the individual
+	Separate HANDLE from INSANE logging levels. INSANE for the individual
 	VECTOR values, i.e. string and binary content.
 
 2018-03-15  Reini Urban  <rurban@cpan.org>
@@ -6707,7 +6707,7 @@ Full history from the git log
 	dwg.spec: handle insert_count
 	* src/decode.c, src/encode.c, src/print.c, src/dwg.spec:
 	  add FIELD_INSERT_COUNT fixing print and encode of insert_count.
-	  add FIELD_TRACE as seperate helper.
+	  add FIELD_TRACE as separate helper.
 	  add FIELD_HANDLE_N helper to print the actual vcount index.
 	* src/encode.c (FIELD_HANDLE): add assertions and LOG_ERROR
 	  when handle_code deviates
@@ -7325,7 +7325,7 @@ Full history from the git log
 
 2014-08-16  Piyush  <achyutapiyush@gmail.com>
 
-	Added dependencies. Integrated everthing
+	Added dependencies. Integrated everything
 
 2014-08-15  Piyush  <achyutapiyush@gmail.com>
 
@@ -7382,7 +7382,7 @@ Full history from the git log
 2014-06-27  Piyush  <achyutapiyush@gmail.com>
 
 	Removed the Previous DWG Files
-	The files were not completely commited and there was error in it. So removed and will add the same files in the next commit
+	The files were not completely committed and there was error in it. So removed and will add the same files in the next commit
 
 2014-06-27  Piyush  <achyutapiyush@gmail.com>
 
@@ -7510,7 +7510,7 @@ Full history from the git log
 
 2013-07-27  gaganjyot  <thegaganx@gmail.com>
 
-	added support for body, regon, 3dsolid and vertex_pface_face with error reporting
+	added support for body, region, 3dsolid and vertex_pface_face with error reporting
 
 2013-07-27  gaganjyot  <thegaganx@gmail.com>
 
@@ -8152,7 +8152,7 @@ Full history from the git log
 
 2010-02-11  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
 
-	implement version dependant iterator for owned obects of a BLOCK_HEADER
+	implement version dependent iterator for owned obects of a BLOCK_HEADER
 
 2010-02-11  Felipe Correa da Silva Sanches  <juca@members.fsf.org>
 
@@ -8490,7 +8490,7 @@ Full history from the git log
 
 2009-09-19  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
 
-	* decoding of VPORT(65) * implemented an extra (auxiliar) bitcode: BITCODE_4BITS
+	* decoding of VPORT(65) * implemented an extra (auxiliary) bitcode: BITCODE_4BITS
 
 2009-09-19  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
 
@@ -8586,7 +8586,7 @@ Full history from the git log
 
 2009-09-17  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
 
-	Translating: skt -> dwg and CKR -> CRC Fixing some mistakes made in header on previous commit due to tranlation (bitdouble and bitshort)
+	Translating: skt -> dwg and CKR -> CRC Fixing some mistakes made in header on previous commit due to translation (bitdouble and bitshort)
 
 2009-09-17  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
 
@@ -8632,7 +8632,7 @@ Full history from the git log
 
 2009-09-16  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
 
-	refactoring our code that handles handles. I have noticed that we are probably having leak issues here. But I still didnt detect exactly what is wrong. Handles are correctly parsed, but their values are corrupted before they are used by client code. Something is messing with our object_ref vector.
+	refactoring our code that handles handles. I have noticed that we are probably having leak issues here. But I still didn't detect exactly what is wrong. Handles are correctly parsed, but their values are corrupted before they are used by client code. Something is messing with our object_ref vector.
 
 2009-09-16  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
 
@@ -8814,7 +8814,7 @@ Full history from the git log
 
 2009-09-13  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
 
-	adding an auxiliar funtion to check valid handle codes. Now we should use dwg_decode_handleref_with_code whenever possible instead of dwg_decode_handleref.
+	adding an auxiliary function to check valid handle codes. Now we should use dwg_decode_handleref_with_code whenever possible instead of dwg_decode_handleref.
 
 2009-09-13  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
 
@@ -8857,7 +8857,7 @@ Full history from the git log
 
 2009-09-11  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
 
-	partial implementation of the new handleref infrastructure with Dwg_Object_Ref pointers instead of a meaningless array of handles. The core work is done, although some segfaults are still annoying me. I haven't commited to trunk, but I wouldn't reccomend working there since it may cause major conflicts. Any help to get this working right will be appreciated.
+	partial implementation of the new handleref infrastructure with Dwg_Object_Ref pointers instead of a meaningless array of handles. The core work is done, although some segfaults are still annoying me. I haven't committed to trunk, but I wouldn't recommend working there since it may cause major conflicts. Any help to get this working right will be appreciated.
 
 2009-08-18  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
 
@@ -8921,7 +8921,7 @@ Full history from the git log
 
 2009-06-25  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
 
-	removing unecessary (weird and wrong) checks
+	removing unnecessary (weird and wrong) checks
 
 2009-06-25  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
 
@@ -8929,11 +8929,11 @@ Full history from the git log
 
 2009-06-25  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
 
-	translation patch wich has been held up for a while due to recently fixed bugs
+	translation patch which has been held up for a while due to recently fixed bugs
 
 2009-06-25  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
 
-	trying to fix the read_CMC issue that gcc was not able to warn us about... Pitanga will check whether it works for him with gcc 4.3.3. It didnt even break for me in gcc 4.2.4...
+	trying to fix the read_CMC issue that gcc was not able to warn us about... Pitanga will check whether it works for him with gcc 4.3.3. It didn't even break for me in gcc 4.2.4...
 
 2009-06-25  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
 
@@ -8946,7 +8946,7 @@ Full history from the git log
 2009-06-23  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
 
 	Implemented initial support for blocks ("symbols") and "clones".
-	SVG converter alread correctly group drawing elements of a symbol (those between BLOCK_HEADER and ENDBLK) but cloning
+	SVG converter already correctly group drawing elements of a symbol (those between BLOCK_HEADER and ENDBLK) but cloning
 	them is still not working because our current implementation of dwg_decode_handlerefs is wrong. The
 	block_header_handle in an INSERT object is placed ***after*** "Common Entity Handle Data" section. So, cloning will
 	only work after we fix the parsing of this section.
@@ -9230,7 +9230,7 @@ Full history from the git log
 
 2009-06-04  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
 
-	implemented DWG version dependant parsing for ATTRIB (2)
+	implemented DWG version dependent parsing for ATTRIB (2)
 
 2009-06-04  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
 
@@ -9244,7 +9244,7 @@ Full history from the git log
 
 2009-06-03  Rodrigo Rodrigues da Silva  <pitanga@members.fsf.org>
 
-	added initial SPLINE decode support + identation fix on dwg_decode_TEXT
+	added initial SPLINE decode support + indentation fix on dwg_decode_TEXT
 
 2009-06-03  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
 
@@ -9260,7 +9260,7 @@ Full history from the git log
 
 2009-06-03  Felipe Corrêa da Silva Sanches  <juca@members.fsf.org>
 
-	*implementing version dependant behaviour for bit-thickness (read
+	*implementing version dependent behaviour for bit-thickness (read
         and write functions) *also (obviously) translating a bit more from
         Esperanto
 
