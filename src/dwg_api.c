@@ -12518,7 +12518,7 @@ dwg_object_polyline_2d_get_numpoints(const dwg_object *restrict obj,
               if ((vertex = dwg_object_to_VERTEX_2D(vobj))) {
                 num_points++;
               } else {
-                *error = 1; // return not all vertexes, but some
+                *error = 1; // return not all vertices, but some
               }
             } while ((vobj = dwg_next_object(vobj)) && vobj != vlast);
           }
@@ -12531,7 +12531,7 @@ dwg_object_polyline_2d_get_numpoints(const dwg_object *restrict obj,
               if ((vertex = dwg_object_to_VERTEX_2D(vobj)))
                 num_points++;
               else
-                *error = 1; // return not all vertexes, but some
+                *error = 1; // return not all vertices, but some
             }
         }
       return num_points;
@@ -12576,7 +12576,7 @@ dwg_object_polyline_2d_get_points(const dwg_object *restrict obj,
               ptx[i].x = vertex->point.x;
               ptx[i].y = vertex->point.y;
             } else {
-              *error = 1; // return not all vertexes, but some
+              *error = 1; // return not all vertices, but some
             }
           }
       else if (dwg->header.version >= R_13) // iterate over first_vertex - last_vertex
@@ -12598,7 +12598,7 @@ dwg_object_polyline_2d_get_points(const dwg_object *restrict obj,
                     break;
                   }
               } else {
-                *error = 1; // return not all vertexes, but some
+                *error = 1; // return not all vertices, but some
               }
             } while ((vobj = dwg_next_object(vobj)) && vobj != vlast);
           }
@@ -12622,7 +12622,7 @@ dwg_object_polyline_2d_get_points(const dwg_object *restrict obj,
                 }
               else
                 {
-                  *error = 1; // return not all vertexes, but some
+                  *error = 1; // return not all vertices, but some
                 }
             }
         }
@@ -12749,7 +12749,7 @@ dwg_object_polyline_3d_get_numpoints(const dwg_object *restrict obj,
               if ((vertex = dwg_object_to_VERTEX_3D(vobj))) {
                 num_points++;
               } else {
-                *error = 1; // return not all vertexes, but some
+                *error = 1; // return not all vertices, but some
               }
             } while ((vobj = dwg_next_object(vobj)) && vobj != vlast);
           }
@@ -12762,7 +12762,7 @@ dwg_object_polyline_3d_get_numpoints(const dwg_object *restrict obj,
               if ((vertex = dwg_object_to_VERTEX_3D(vobj)))
                 num_points++;
               else
-                *error = 1; // return not all vertexes, but some
+                *error = 1; // return not all vertices, but some
             }
         }
       return num_points;
@@ -12810,7 +12810,7 @@ dwg_object_polyline_3d_get_points(const dwg_object *restrict obj,
               ptx[i].y = vertex->point.y;
               ptx[i].z = vertex->point.z;
             } else {
-              *error = 1; // return not all vertexes, but some
+              *error = 1; // return not all vertices, but some
             }
           }
       else if (dwg->header.version >= R_13) // iterate over first_vertex - last_vertex
@@ -12833,7 +12833,7 @@ dwg_object_polyline_3d_get_points(const dwg_object *restrict obj,
                     break;
                   }
               } else {
-                *error = 1; // return not all vertexes, but some
+                *error = 1; // return not all vertices, but some
               }
             } while ((vobj = dwg_next_object(vobj)) && vobj != vlast);
           }
@@ -12858,7 +12858,7 @@ dwg_object_polyline_3d_get_points(const dwg_object *restrict obj,
                 }
               else
                 {
-                  *error = 1; // return not all vertexes, but some
+                  *error = 1; // return not all vertices, but some
                 }
             }
         }

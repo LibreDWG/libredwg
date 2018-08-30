@@ -2092,7 +2092,7 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
           if (added > 0)
             error |= added;
           //else re-allocated
-          // we dont stop encoding on single errors, but we sum them all up
+          // we don't stop encoding on single errors, but we sum them all up
           // as combined bitmask
         }
 
@@ -2759,7 +2759,7 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   return error;
 }
 
-/* Store an object reference in a seperate dwg->object_ref array
+/* Store an object reference in a separate dwg->object_ref array
    which is the id for handles, i.e. DXF 5, 330. */
 Dwg_Object_Ref *
 dwg_decode_handleref(Bit_Chain *restrict dat, Dwg_Object *restrict obj,

@@ -27,7 +27,7 @@
 # If there are no problems, exit successfully.  Otherwise display
 # the count of problem runs, the list of *.log files and finally
 # exit failurefully.
-# datadir must be set to support testing from a seperate build dir.
+# datadir must be set to support testing from a separate build dir.
 
 # Code:
 

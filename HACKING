@@ -289,7 +289,7 @@ The first hole 1-32 is filled by the 3 1 values from BL96, BL97 and
 BL95, followed by the 0 value from BL91. The second hole is clearly
 another unknown BL with value 1.  The third hole at 189-191 is padding
 before the handle stream, and can be ignored.  This is from a r2010
-file, which has seperate handle and text streams.  The last hole
+file, which has separate handle and text streams.  The last hole
 224-230 could theoretically hold almost another unknown handle, but
 practically it's also just padding. The last handles are always
 optional reactors and the xdicobject handle for objects, and 7 bits is

@@ -14,7 +14,7 @@
  * out_geojson.c: write as GeoJSON
  * written by Reini Urban
  */
-/* TODO: Arc, Circle, Ellipsis, Bulge (Curve) tesselation.
+/* TODO: Arc, Circle, Ellipsis, Bulge (Curve) tessellation.
  *       ocs/ucs transforms, explode of inserts?
  *       NOCOMMA and \n not with stdout. stdout is line-buffered,
  *       so NOCOMMA cannot backup past the previous \n to delete the comma.

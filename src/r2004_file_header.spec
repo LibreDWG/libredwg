@@ -58,7 +58,7 @@
   FIELD_RL(CRC, 0);                  // @0x68
   //end of encrypted 0x6c header
 
-  // well, the padding is also encrypted, but ODA didnt grok that
+  // well, the padding is also encrypted, but ODA didn't grok that
   // encrypted via 0
   FIELD_TFF(padding, (int)sizeof(FIELD_VALUE(padding)), 0)
 

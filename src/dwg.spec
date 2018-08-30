@@ -4497,7 +4497,7 @@ DWG_ENTITY(TABLE)
         FIELD_BL (unknown_bl1, 0);
 
       //TODO continue as 20.4.96.2 AcDbTableContent subclass: 20.4.97
-      //either as sub-struct or seperate call
+      //either as sub-struct or separate call
 #ifdef DEBUG_CLASSES
       return DWG_FUNC_N(ACTION,TABLECONTENT) (dat, obj);
 #endif

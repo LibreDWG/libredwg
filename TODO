@@ -64,7 +64,7 @@
 * add one of the easy OGR formats: gml, gpx. See the xmlsuite which does it also.
   See https://wiki.openstreetmap.org/wiki/Dxf2gpx
   https://grass.osgeo.org/grass74/manuals/v.in.dxf.html and dwg (teigha and opencad)
-* add geomutils to tesselate curves (e.g. GeoJSON),
+* add geomutils to tessellate curves (e.g. GeoJSON),
   and to transform OCS/UCS objects when being displayed (e.g. svg, ps).
   add API funcs to find table elements (layer, ltype).
 * ACIS: Maybe convert binary SAB to ASCII SAT version 2 (ASM ShapeManager,

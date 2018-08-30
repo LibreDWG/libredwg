@@ -33,7 +33,7 @@ for dir in dirs:
 # generate xml from txt files
 generatexml(path_to_dwg)
 
-#Now execute testsuite.c on all the DWG files found and create a seperate directory structure
+#Now execute testsuite.c on all the DWG files found and create a separate directory structure
 for dir in dirs:
     for file in os.listdir(os.path.join(path_to_dwg, dir)):
         if file.endswith(".dwg"):
