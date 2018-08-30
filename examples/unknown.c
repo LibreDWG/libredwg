@@ -974,7 +974,7 @@ main (int argc, char *argv[])
                     goto FOUND;
                   }
                   //print rounded found value and show bit diff
-                  printf("  unprecise BD search, 42bit mantissa precision\n");
+                  printf("  imprecise BD search, 42bit mantissa precision\n");
                   num_found = search_bits(j, &g[j], &unknown_dxf[i], &dxf[i], offset);
                   if (num_found) {
                     free (dat.chain);
@@ -983,15 +983,15 @@ main (int argc, char *argv[])
                     bit_set_position(&dat, g[j].pos[0]);
                     d = bit_read_BD(&dat);
                     if (fabs(d - strtod(g[j].value, NULL)) < 0.001) {
-                      printf("  found unprecise %f value (42bit)\n", d);
+                      printf("  found imprecise %f value (42bit)\n", d);
                       goto FOUND;
                     } else {
-                      printf("  result too unprecise %f (42bit)\n", d);
+                      printf("  result too imprecise %f (42bit)\n", d);
                     }
                   }
                   else {
                     g[j].bitsize = 54;    // from 66
-                    //printf("  more unprecise BD search, 38bit mantissa precision\n");
+                    //printf("  more imprecise BD search, 38bit mantissa precision\n");
                     num_found = search_bits(j, &g[j], &unknown_dxf[i], &dxf[i], offset);
                     free (dat.chain);
                     if (num_found) {
@@ -1000,10 +1000,10 @@ main (int argc, char *argv[])
                       bit_set_position(&dat, g[j].pos[0]);
                       d = bit_read_BD(&dat);
                       if (fabs(d - strtod(g[j].value, NULL)) < 0.001) {
-                        printf("  found unprecise BD %f value (38bit)\n", d);
+                        printf("  found imprecise BD %f value (38bit)\n", d);
                         goto FOUND;
                       } else {
-                        printf("  result too unprecise BD (38bit)\n");
+                        printf("  result too imprecise BD (38bit)\n");
                       }
                     }
                   }
@@ -1024,7 +1024,7 @@ main (int argc, char *argv[])
                     goto FOUND;
                   }
                   //print rounded found value and show bit diff
-                  printf("  unprecise RD search, 42bit mantissa precision\n");
+                  printf("  imprecise RD search, 42bit mantissa precision\n");
                   num_found = search_bits(j, &g[j], &unknown_dxf[i], &dxf[i], offset);
                   if (num_found) {
                     free (dat.chain);
@@ -1033,15 +1033,15 @@ main (int argc, char *argv[])
                     bit_set_position(&dat, g[j].pos[0]);
                     d = bit_read_BD(&dat);
                     if (fabs(d - strtod(g[j].value, NULL)) < 0.001) {
-                      printf("  found unprecise RD %f value (42bit)\n", d);
+                      printf("  found imprecise RD %f value (42bit)\n", d);
                       goto FOUND;
                     } else {
-                      printf("  result too unprecise RD %f (42bit)\n", d);
+                      printf("  result too imprecise RD %f (42bit)\n", d);
                     }
                   }
                   else {
                     g[j].bitsize = 52;    // from 64
-                    //printf("  more unprecise RD search, 38bit mantissa precision\n");
+                    //printf("  more imprecise RD search, 38bit mantissa precision\n");
                     num_found = search_bits(j, &g[j], &unknown_dxf[i], &dxf[i], offset);
                     free (dat.chain);
                     if (num_found) {
@@ -1050,10 +1050,10 @@ main (int argc, char *argv[])
                       bit_set_position(&dat, g[j].pos[0]);
                       d = bit_read_BD(&dat);
                       if (fabs(d - strtod(g[j].value, NULL)) < 0.001) {
-                        printf("  found unprecise RD %f value (38bit)\n", d);
+                        printf("  found imprecise RD %f value (38bit)\n", d);
                         goto FOUND;
                       } else {
-                        printf("  result too unprecise RD %f (38bit)\n", d);
+                        printf("  result too imprecise RD %f (38bit)\n", d);
                       }
                     }
                   }
