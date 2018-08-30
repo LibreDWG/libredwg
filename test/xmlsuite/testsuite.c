@@ -644,7 +644,7 @@ add_text (xmlNodePtr rootnode, const Dwg_Object *obj)
 }
 
 /*
- * This functions emits all the table related attribues in the XML
+ * This functions emits all the table related attributes in the XML
  * @param xmlNodePtr rootnode The root node of the XML document
  * @param const Dwg_Object *obj The DWG Object
  */

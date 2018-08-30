@@ -593,7 +593,7 @@ read_system_page(Bit_Chain* dat, int64_t size_comp, int64_t size_uncomp,
 
   // Round to a multiple of 8
   pesize = ((size_comp + 7) & ~7) * repeat_count;
-  // Devide pre encoded size by RS k-value (239)
+  // Divide pre encoded size by RS k-value (239)
   block_count = (pesize + 238) / 239;
   // Multiply with codeword size (255) and round to a multiple of 8
   page_size = (block_count * 255 + 7) & ~7;

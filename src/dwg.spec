@@ -397,7 +397,7 @@ DWG_ENTITY(INSERT)
             }
           else if (FIELD_VALUE(scale_flag) == 2)
             {
-              FIELD_RD (scale.x, 41); 
+              FIELD_RD (scale.x, 41);
               FIELD_VALUE(scale.y) = FIELD_VALUE (scale.x);
               FIELD_VALUE(scale.z) = FIELD_VALUE (scale.x);
             }
@@ -639,7 +639,7 @@ DWG_ENTITY(VERTEX_2D)
     FIELD_3BD (point, 10);
 
   /* Decoder and Encoder routines could be the same but then we
-     wouldn't compress data when saving. So we explicitely implemented
+     wouldn't compress data when saving. So we explicitly implemented
      the encoder routine with the compression technique described in
      the spec. --Juca */
     DXF {
@@ -1478,14 +1478,14 @@ DWG_ENTITY(SPLINE)
       FIELD_BL (num_knots, 72);
       FIELD_BL (num_ctrl_pts, 73);
       FIELD_B (weighted, 0);
-      
+
       FIELD_VALUE(flag) = 8 + //planar
         FIELD_VALUE(closed_b) +
         (FIELD_VALUE(periodic) << 1) +
         (FIELD_VALUE(rational) << 2) +
         (FIELD_VALUE(weighted) << 3);
     }
-  
+
   if (FIELD_VALUE(scenario) & 1) {
     FIELD_VECTOR(knots, BD, num_knots, 40)
     END_REPEAT(knots);
@@ -2457,7 +2457,7 @@ DWG_OBJECT(LTYPE)
       PRE(R_13)
       {
         FIELD_RD (dash[rcount1].length, 49);
-#ifndef IS_PRINT        
+#ifndef IS_PRINT
         FIELD_VALUE(pattern_len) += FIELD_VALUE(dash[rcount1].length);
 #endif
         FIELD_RS (dash[rcount1].complex_shapecode, 74);
@@ -2838,7 +2838,7 @@ DWG_OBJECT(VPORT)
       FIELD_BD (contrast, 142);
       FIELD_CMC (ambient_color, 63,421); // +421, 431
     }
-    
+
     FIELD_2RD (lower_left, 10);
     FIELD_2RD (upper_right, 11);
     FIELD_B (UCSFOLLOW, 0); // bit 3 of 71
@@ -3446,10 +3446,10 @@ DWG_ENTITY(HATCH)
                           FIELD_2RD (paths[rcount1].segs[rcount2].control_points[rcount3].point, 10);
                           if (FIELD_VALUE(paths[rcount1].segs[rcount2].is_rational))
                             {
-                              FIELD_BD (paths[rcount1].segs[rcount2].control_points[rcount3].weigth, 40);
+                              FIELD_BD (paths[rcount1].segs[rcount2].control_points[rcount3].weight, 40);
                             }
                         }
-                      SET_PARENT(paths[rcount1].segs[rcount2].control_points, 
+                      SET_PARENT(paths[rcount1].segs[rcount2].control_points,
                                  &_obj->paths[rcount1].segs[rcount2])
                       END_REPEAT(paths[rcount1].segs[rcount2].control_points);
                       SINCE(R_2013) // r2014 really
@@ -4371,11 +4371,11 @@ DWG_OBJECT(TABLECONTENT)
                   REPEAT_N(1, cell.geom_data, Dwg_CellContentGeometry)
                     {
 #define geom cell.geom_data[0]
-                      FIELD_3BD (geom.dist_top_left, 0); 
-                      FIELD_3BD (geom.dist_center, 0); 
-                      FIELD_BD (geom.content_width, 0); 
-                      FIELD_BD (geom.width, 0); 
-                      FIELD_BD (geom.height, 0); 
+                      FIELD_3BD (geom.dist_top_left, 0);
+                      FIELD_3BD (geom.dist_center, 0);
+                      FIELD_BD (geom.content_width, 0);
+                      FIELD_BD (geom.width, 0);
+                      FIELD_BD (geom.height, 0);
                       FIELD_BD (geom.unknown, 0);
 #undef geom
                     }
@@ -4423,7 +4423,7 @@ DWG_OBJECT(TABLECONTENT)
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (table_style, 3, 340);
-  
+
 DWG_OBJECT_END
 
 // pg.246 20.4.102
@@ -4445,7 +4445,7 @@ DWG_OBJECT(CELLSTYLEMAP)
   END_REPEAT (cells);
 
 DWG_OBJECT_END
-  
+
 //pg.246 20.4.103
 DWG_OBJECT(TABLEGEOMETRY)
 
@@ -4465,11 +4465,11 @@ DWG_OBJECT(TABLEGEOMETRY)
       REPEAT2(cell.num_geom_data, cell.geom_data, Dwg_CellContentGeometry)
         {
           #define geom cell.geom_data[rcount2]
-          FIELD_3BD (geom.dist_top_left, 0); 
-          FIELD_3BD (geom.dist_center, 0); 
-          FIELD_BD (geom.content_width, 0); 
-          FIELD_BD (geom.width, 0); 
-          FIELD_BD (geom.height, 0); 
+          FIELD_3BD (geom.dist_top_left, 0);
+          FIELD_3BD (geom.dist_center, 0);
+          FIELD_BD (geom.content_width, 0);
+          FIELD_BD (geom.width, 0);
+          FIELD_BD (geom.height, 0);
           FIELD_BD (geom.unknown, 0);
           #undef geom
         }
@@ -4498,18 +4498,18 @@ DWG_ENTITY(TABLE)
 
       //TODO continue as 20.4.96.2 AcDbTableContent subclass: 20.4.97
       //either as sub-struct or seperate call
-#ifdef DEBUG_CLASSES      
+#ifdef DEBUG_CLASSES
       return DWG_FUNC_N(ACTION,TABLECONTENT) (dat, obj);
 #endif
     }
 
   SUBCLASS (AcDbBlockReference)
   FIELD_3BD (insertion_point, 10);
-    
+
   VERSIONS(R_13, R_14) {
     FIELD_3BD_1 (scale, 41);
   }
-  
+
   SINCE(R_2000)
     {
       FIELD_BB (data_flags, 0);
@@ -4545,15 +4545,15 @@ DWG_ENTITY(TABLE)
       FIELD_3PT_TRACE(scale, DD, 41);
 #endif
     }
-  
+
   FIELD_BD (rotation, 50);
   FIELD_3BD (extrusion, 210);
   FIELD_B (has_attribs, 66);
-  
+
   SINCE(R_2004) {
     FIELD_BL (num_owned, 0);
   }
-  
+
   SUBCLASS (AcDbTable)
   FIELD_BS (flag_for_table_value, 90);
   FIELD_3BD (horiz_direction, 11);
@@ -4579,7 +4579,7 @@ DWG_ENTITY(TABLE)
       FIELD_BL (cells[rcount1].merged_width_flag, 175);
       FIELD_BL (cells[rcount1].merged_height_flag, 176);
       FIELD_BD (cells[rcount1].rotation_value, 145);
-  
+
       if (FIELD_VALUE(cells[rcount1].type) == 1)
         { /* text cell */
           FIELD_T (cells[rcount1].text_string, 1);
@@ -4607,7 +4607,7 @@ DWG_ENTITY(TABLE)
               FIELD_BL (cells[rcount1].cell_flag_override, 177);
               cell_flag = FIELD_VALUE(cells[rcount1].cell_flag_override);
               FIELD_RC (cells[rcount1].virtual_edge_flag, 178);
-  
+
               if (cell_flag & 0x01)
                 FIELD_RS (cells[rcount1].cell_alignment, 170);
               if (cell_flag & 0x02)
@@ -4644,7 +4644,7 @@ DWG_ENTITY(TABLE)
                 FIELD_BS (cells[rcount1].left_grid_linewt, 278);
               if (cell_flag & 0x20000)
                 FIELD_BS (cells[rcount1].left_visibility, 288);
-  
+
               FIELD_BL (cells[rcount1].unknown, 0);
 
               // 20.4.99 Value, page 241
@@ -4655,9 +4655,9 @@ DWG_ENTITY(TABLE)
   SET_PARENT_OBJ(cells)
   END_REPEAT(cells);
   /* End Cell Data (remaining data applies to entire table)*/
-  
+
   /* COMMON: */
-  
+
   FIELD_B (has_table_overrides, 0);
   if (FIELD_VALUE(has_table_overrides))
     {
@@ -4710,7 +4710,7 @@ DWG_ENTITY(TABLE)
       if (table_flag & 0x400000)
         FIELD_BD (data_row_height, 140);
     }
-  
+
   FIELD_B (has_border_color_overrides, 0);
   if (FIELD_VALUE(has_border_color_overrides))
     {
@@ -4754,7 +4754,7 @@ DWG_ENTITY(TABLE)
       if (border_color & 0x20000)
         FIELD_CMC (data_vert_right_color, 69,427);
     }
-  
+
   FIELD_B (has_border_lineweight_overrides, 0);
   if (FIELD_VALUE(has_border_lineweight_overrides))
     {
@@ -4798,7 +4798,7 @@ DWG_ENTITY(TABLE)
       if (border_linewt & 0x20000)
         FIELD_BS (data_vert_right_linewt, 0);
     }
-  
+
   FIELD_B (has_border_visibility_overrides, 0);
   if (FIELD_VALUE(has_border_visibility_overrides))
     {
@@ -4842,9 +4842,9 @@ DWG_ENTITY(TABLE)
       if (border_visibility & 0x20000)
         FIELD_BS (data_vert_right_visibility, 0);
     }
-  
+
   FIELD_HANDLE (block_header, 5, 2);
-  
+
   VERSIONS(R_13, R_2000)
     {
       if (FIELD_VALUE(has_attribs))
@@ -4853,15 +4853,15 @@ DWG_ENTITY(TABLE)
           FIELD_HANDLE (last_attrib, 4, 0);
         }
     }
-  
+
   SINCE(R_2004)
     {
       HANDLE_VECTOR (attribs, num_owned, 4, 0)
     }
-  
+
   if (FIELD_VALUE(has_attribs))
     FIELD_HANDLE (seqend, 3, 0);
-  
+
   FIELD_HANDLE (table_style_id, 5, 342);
 
   REPEAT(num_cells, cells, Dwg_TABLE_Cell)
@@ -5501,7 +5501,7 @@ DWG_OBJECT_END
 // in DXF as {PDF,DWF,DGN}DEFINITION
 // no DWF, DGN coverage yet
 DWG_OBJECT(UNDERLAYDEFINITION)
-  
+
   DECODE_UNKNOWN_BITS
   DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS(AcDbUnderlayDefinition)
@@ -6730,7 +6730,7 @@ DWG_OBJECT(ACSH_SWEEP_CLASS)
   FIELD_CMC (color, 62,421); //256
   FIELD_B  (shhn_b92, 92);     //1
   FIELD_BL (shhn_bl347, 347);   //269
-  
+
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShSweepBase)
   FIELD_BL (shsw_bl90, 90); //33
@@ -6798,7 +6798,7 @@ DWG_OBJECT_END
   DYNBLOCKREF XREF
   SECTIONOBJECT
 */
-  
+
 // r2000+
 DWG_OBJECT(ARCALIGNEDTEXT)
   DECODE_UNKNOWN_BITS

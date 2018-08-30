@@ -128,7 +128,7 @@ The programs and examples directories contains some application code that uses o
 
 * dwg2SVG -- Opens a DWG file and outputs an SVG (Scalable Vector Graphics)
   file.  SVG is a W3C standard for 2d vector graphics.  You can open these
-  files on several free software tools.  We recomend Inkscape, a free software
+  files on several free software tools.  We recommend Inkscape, a free software
   vector graphics editor.  The dwg2SVG program will not handle 3d content
   from DWG since SVG only supports 2-dimensional images.
 

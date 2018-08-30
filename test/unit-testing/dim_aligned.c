@@ -4,7 +4,7 @@
 void
 low_level_process(dwg_object *obj)
 {
-  // retruns dwg_object to dim aligned entity
+  // returns dwg_object to dim aligned entity
   dwg_ent_dim_aligned *dim_aligned = dwg_object_to_DIMENSION_ALIGNED(obj);
 
   printf("horiz dir of dim_aligned : %f\n",

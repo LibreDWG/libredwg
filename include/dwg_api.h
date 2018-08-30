@@ -3712,7 +3712,7 @@ dwg_ent_3dsolid_get_acis_empty2(const dwg_ent_3dsolid *restrict _3dsolid,
 
 EXPORT void
 dwg_ent_3dsolid_set_acis_empty2(dwg_ent_3dsolid *restrict _3dsolid,
-                                const unsigned char emtpy2,
+                                const unsigned char empty2,
                                 int *restrict error); 
 
 

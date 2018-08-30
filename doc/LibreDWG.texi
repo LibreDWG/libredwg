@@ -136,14 +136,14 @@ ongoing effort and not yet implemented. We write as default in the R2000 format.
 @item Reading and writing ASCII and binary DXF
 DXF support is an ongoing effort, and about halfway implemented.
 Ascii DXF's are generated fully, with much more elements and fields and other free libraries,
-but AutoCAD fails to import some of them. See the @file{TODO} file for a detailled coverage report.
+but AutoCAD fails to import some of them. See the @file{TODO} file for a detailed coverage report.
 
 Writing binary DXF is still under construction, done about 80%.
 Reading DXF is not yet fully implemented, this is under construction.
 
 @item Enabled entities and objects, but unstable, undertested. Field names may change:
 
-For a detailled overview see the files @file{TODO} or @file{src/classes.inc}.
+For a detailed overview see the files @file{TODO} or @file{src/classes.inc}.
 
   ASSOCDEPENDENCY ASSOCPLANESURFACEACTIONBODY CAMERA GEODATA HELIX
   OBJECT_PTR UNDERLAY + UNDERLAYDEFINITION (i.e. PDF,DGN,DWF)
@@ -738,7 +738,7 @@ ruby, php, D, lua, tcl, common lisp, ocaml, or others by yourself. Patches accep
 
 @cindex Reference API
 
-See the seperate @uref{../refman/index.html, refman} manual (in pdf or html format, the pdf has ~1800 pages) for a detailled API description, or see the relevant @file{dwg.h}, @file{dwg_api.h} or the @file{*.spec} files.
+See the seperate @uref{../refman/index.html, refman} manual (in pdf or html format, the pdf has ~1800 pages) for a detailed API description, or see the relevant @file{dwg.h}, @file{dwg_api.h} or the @file{*.spec} files.
 
 For reference you might also want to check the public AutoCAD DXF reference manuals,
 and the ODA @file{OpenDesign_Specification_for_dwg_files}.

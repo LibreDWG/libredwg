@@ -29,7 +29,7 @@ spointprepare (double x, double y, double z)
   result = malloc (100 * sizeof (xmlChar));
   n = sprintf ((char*)result, "(%.4f %.4f %.4f)", x, y, z);
 
-  //Check if it was transfered properly
+  //Check if it was transferred properly
   if (n < 0)
     {
       strcpy ((char*)result, ""); /* return empty string on error */
@@ -83,7 +83,7 @@ spointprepare2 (double x, double y)
   result = malloc (50 * sizeof (xmlChar));
   n = sprintf ((char*)result, "(%.4f %.4f)", x, y);
 
-  //Check if it was transfered properly
+  //Check if it was transferred properly
   if (n < 0)
     {
       strcpy ((char*)result, ""); /* return empty string on error */
@@ -109,7 +109,7 @@ doubletohex (double handle)
   result = malloc (20 * sizeof (xmlChar));
   n = sprintf ((char*)result, "%03x", (unsigned int)handle);
 
-  //Check if it was transfered properly
+  //Check if it was transferred properly
 
   if (n < 0)
     {

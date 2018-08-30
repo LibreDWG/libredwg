@@ -13671,7 +13671,7 @@ dwg_ent_image_set_boundary_pt1(dwg_ent_image *restrict image,
     }
 }
 
-/// Retuns number of clip verts
+/// Returns number of clip verts
 double
 dwg_ent_image_get_num_clip_verts(const dwg_ent_image *restrict image,
                                  int *restrict error)

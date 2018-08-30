@@ -434,7 +434,7 @@ dwg_bmp(const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
         }
     }
   dat->byte += header_size;
-  LOG_TRACE("Current adress: 0x%lx\n", dat->byte)
+  LOG_TRACE("Current address: 0x%lx\n", dat->byte)
 
   if (*size > 0)
     return (dat->chain + dat->byte);

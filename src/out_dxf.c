@@ -169,7 +169,7 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
     GCC_DIAG_IGNORE(-Wformat-nonliteral) \
     snprintf(buf, 255, _fmt, value); \
     GCC_DIAG_RESTORE \
-    /* not a string, emtpy num. must be zero */ \
+    /* not a string, empty num. must be zero */ \
     if (strcmp(_fmt, "%s") && !*buf) \
       strcpy(buf, "0"); \
     else if (90 <= dxf && dxf < 100) { \

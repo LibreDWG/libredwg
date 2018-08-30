@@ -71,7 +71,7 @@ static void hash_resize(dwg_inthash *hash)
   return;
 }
 
-// found this gem by Thomas Mueller at stackoverflow. triviality treshold.
+// found this gem by Thomas Mueller at stackoverflow. triviality threshold.
 // it's like a normal murmur or jenkins finalizer,
 // just statistically tested to be optimal.
 // Note that this is entirely "insecure", the inverse func is trivial.

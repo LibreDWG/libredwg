@@ -53,7 +53,7 @@ struct _unknown_field {
   int bitsize;
   Dwg_Bits type;
   const char *name; // in dwg.spec
-  unsigned short num; //number of occurances of this type:value pair (max 1423)
+  unsigned short num; //number of occurrences of this type:value pair (max 1423)
   int pos[5]; //5x found bit offset in dxf->bytes or -1 if not found
   // many typical values are 5x found (handle 0, BL 2)
 };

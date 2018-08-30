@@ -1433,7 +1433,7 @@ typedef struct _dwg_entity_VIEWPORT
   BITCODE_BD height;
   BITCODE_RS on_off; /* DXF 68, -1 should be accepted also */
   BITCODE_RS id;     /* DXF 69 */
-  BITCODE_3BD view_target;  
+  BITCODE_3BD view_target;
   BITCODE_3BD view_direction;
   BITCODE_BD view_twist;
   BITCODE_BD view_height;
@@ -1586,7 +1586,7 @@ typedef struct _dwg_3DSOLID_silhouette
   struct _dwg_entity_3DSOLID* extra_acis_data; \
   BITCODE_BL unknown_2007; \
   BITCODE_H history_id; \
-  BITCODE_B acis_empty_bit 
+  BITCODE_B acis_empty_bit
 
 typedef struct _dwg_entity_3DSOLID
 {
@@ -2493,7 +2493,7 @@ typedef struct _dwg_HATCH_control_point
 {
   struct _dwg_HATCH_pathseg *parent;
   BITCODE_2RD point;
-  BITCODE_BD weigth;
+  BITCODE_BD weight;
 } Dwg_HATCH_ControlPoint;
 
 typedef struct _dwg_HATCH_pathseg
@@ -2659,7 +2659,7 @@ typedef struct _dwg_Leader_Line // as documented by DXF
 
 typedef struct _dwg_ODALeader_Line //// as documented by ODA
 {
-  struct _dwg_Leader *parent;  
+  struct _dwg_Leader *parent;
   BITCODE_BL num_points;
   BITCODE_3BD * points;
   BITCODE_BL num_breaks;
@@ -2685,7 +2685,7 @@ typedef struct _dwg_Leader_ArrowHead
 
 typedef struct _dwg_Leader_BlockLabel
 {
-  struct _dwg_object_MULTILEADER *parent;  
+  struct _dwg_object_MULTILEADER *parent;
   BITCODE_H attdef;
   BITCODE_TV label_text;
   BITCODE_BS ui_index;
@@ -2725,7 +2725,7 @@ typedef struct _dwg_Leader_Node
   BITCODE_BL num_breaks;
   Dwg_Leader_Break * breaks;            /*!< DXF 12, 13 */
 
-  BITCODE_BS attach_dir; //2010+ 271  
+  BITCODE_BS attach_dir; //2010+ 271
 } Dwg_Leader;
 
 /* The MLeaderAnnotContext object (par 20.4.86), embedded into an MLEADER */
@@ -2798,7 +2798,7 @@ typedef struct _dwg_MLeaderAnnotContext
       BITCODE_BD *transform;
     } blk;
   } content;
-  
+
   BITCODE_3BD base;
   BITCODE_3BD base_dir;
   BITCODE_3BD base_vert;
@@ -2851,7 +2851,7 @@ typedef struct _dwg_object_MULTILEADER
   BITCODE_BS ipe_alignment;
   BITCODE_BS justification;
   BITCODE_BD scale_factor;
-  
+
   BITCODE_BS attach_dir;    /*!< r2010+ (0 = horizontal, 1 = vertical) */
   BITCODE_BS attach_top;    /*!< r2010+ */
   BITCODE_BS attach_bottom; /*!< r2010+ */
@@ -2912,7 +2912,7 @@ typedef struct _dwg_object_MLEADERSTYLE
   BITCODE_BS attach_dir;    /*!< r2010+ (0 = horizontal, 1 = vertical) */
   BITCODE_BS attach_top;    /*!< r2010+ */
   BITCODE_BS attach_bottom; /*!< r2010+ */
-  
+
   BITCODE_B text_extended;   /*!< r2013+ */
 } Dwg_Object_MLEADERSTYLE;
 
@@ -3688,7 +3688,7 @@ typedef struct _dwg_object_GEODATA
   BITCODE_T geo_rss_tag;
   BITCODE_T coord_system_datum; /* obsolete */
   BITCODE_T coord_system_wkt; /* obsolete */
-  
+
   BITCODE_T observation_from_tag;
   BITCODE_T observation_to_tag;
   BITCODE_T observation_coverage_tag;
@@ -4004,7 +4004,7 @@ typedef struct _dwg_object_VISUALSTYLE
   BITCODE_BS display_shadow_type;	/*!< DXF 173  */
   BITCODE_BS is_internal_use_only;	/*!< DXF 291  */
   BITCODE_BS unknown_float45;		/*!< DXF 45  */
-  
+
   BITCODE_H parenthandle;
   //BITCODE_H dictionary; /* (hard-pointer to DICTIONARY_VISUALSTYLE or reverse?) */
 } Dwg_Object_VISUALSTYLE;
@@ -4413,7 +4413,7 @@ typedef struct _dwg_entity_LOFTEDSURFACE
   BITCODE_B solid; // 295
   BITCODE_B ruled_surface; // 296
   BITCODE_B virtual_guide; // 297
-  
+
   BITCODE_H cross_section;
   BITCODE_H guide_curve;
   BITCODE_H path_curve;
@@ -4430,7 +4430,7 @@ typedef struct _dwg_entity_PLANESURFACE
   BITCODE_BS u_isolines;         /*!< DXF 71 */
   BITCODE_BS v_isolines;         /*!< DXF 72 */
   BITCODE_BL class_version; 	 /*!< DXF 90 */
-  
+
 } Dwg_Entity_PLANESURFACE;
 
 /**
@@ -4457,7 +4457,7 @@ typedef struct _dwg_entity_REVOLVEDSURFACE
   BITCODE_BD twist_angle; // 46
   BITCODE_B solid; // 290
   BITCODE_B close_to_axis; // 291
-  
+
 } Dwg_Entity_REVOLVEDSURFACE;
 
 /**
@@ -4471,7 +4471,7 @@ typedef struct _dwg_entity_SWEPTSURFACE
   BITCODE_BS u_isolines;         /*!< DXF 71 */
   BITCODE_BS v_isolines;         /*!< DXF 72 */
   BITCODE_BL class_version; /*!< DXF 90 */
-  
+
   BITCODE_BL sweep_entity_id; // 90
   BITCODE_BL size_sweepdata; // 90
   BITCODE_TF sweepdata; // 310
@@ -4775,7 +4775,7 @@ typedef struct _dwg_object_EVALUATION_GRAPH
   BITCODE_BL node_edge2;  // 92
   BITCODE_BL node_edge3;  // 92
   BITCODE_BL node_edge4;  // 92
-  
+
   BITCODE_H  parenthandle; //330
   BITCODE_H  *evalexpr;    //360
 } Dwg_Object_EVALUATION_GRAPH;
@@ -4892,7 +4892,7 @@ typedef struct _dwg_object_ACSH_SWEEP_CLASS
   BITCODE_CMC color; /*!< DXF 62 */
   BITCODE_B  shhn_b92; /*!< DXF 92 */
   BITCODE_BL shhn_bl347; /*!< DXF 347 */
-  
+
   // AcDbShPrimitive
   // AcDbShSweepBase
   BITCODE_BL shsw_bl90;       /*!< DXF 90 */
