@@ -671,7 +671,7 @@ static int dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj
   int error = dwg_add_##token(obj); \
   if (error) return error; \
   if (dat->version >= R_2007) { \
-    str_dat = calloc(1, sizeof(Bit_Chain)); /* seperate string buffer */ \
+    str_dat = calloc(1, sizeof(Bit_Chain)); /* separate string buffer */ \
     if (!str_dat) return DWG_ERR_OUTOFMEM; \
     *str_dat = *dat; \
   } else \
@@ -732,7 +732,7 @@ static int dwg_decode_ ## token (Bit_Chain *restrict dat, Dwg_Object *restrict o
   int error = dwg_add_##token(obj); \
   if (error) return error; \
   if (dat->version >= R_2007) { \
-    str_dat = calloc(1, sizeof(Bit_Chain)); /* seperate string buffer */ \
+    str_dat = calloc(1, sizeof(Bit_Chain)); /* separate string buffer */ \
     if (!str_dat) return DWG_ERR_OUTOFMEM; \
   } else \
     str_dat = dat; \

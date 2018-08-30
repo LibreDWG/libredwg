@@ -738,7 +738,7 @@ ruby, php, D, lua, tcl, common lisp, ocaml, or others by yourself. Patches accep
 
 @cindex Reference API
 
-See the seperate @uref{../refman/index.html, refman} manual (in pdf or html format, the pdf has ~1800 pages) for a detailed API description, or see the relevant @file{dwg.h}, @file{dwg_api.h} or the @file{*.spec} files.
+See the separate @uref{../refman/index.html, refman} manual (in pdf or html format, the pdf has ~1800 pages) for a detailed API description, or see the relevant @file{dwg.h}, @file{dwg_api.h} or the @file{*.spec} files.
 
 For reference you might also want to check the public AutoCAD DXF reference manuals,
 and the ODA @file{OpenDesign_Specification_for_dwg_files}.

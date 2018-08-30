@@ -18,7 +18,7 @@
 
 #include "spec.h"
 
-  // char version[6] handled seperately. older releases just had a version[12]
+  // char version[6] handled separately. older releases just had a version[12]
   for (i=0; i<5; i++) {
     FIELD_RC(zero_5[i], 0);
   }

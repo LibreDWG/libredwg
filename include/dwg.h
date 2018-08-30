@@ -153,7 +153,7 @@ extern "C" {
 #define BITCODE_4BITS BITCODE_RC
 #define FORMAT_4BITS "%1x"
 
-/* TODO: implement version dependant string parsing */
+/* TODO: implement version dependent string parsing */
 /* encode codepages/utf8 */
 #define BITCODE_T  BITCODE_TV
 #ifdef HAVE_NATIVE_WCHAR2
@@ -378,8 +378,8 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_TABLECONTENT,
   DWG_TYPE_TABLEGEOMETRY,
   DWG_TYPE_TABLESTYLE,
-  DWG_TYPE_UNDERLAY, /* not seperate DGN,DWF,PDF types */
-  DWG_TYPE_UNDERLAYDEFINITION, /* not seperate DGN,DWF,PDF types */
+  DWG_TYPE_UNDERLAY, /* not separate DGN,DWF,PDF types */
+  DWG_TYPE_UNDERLAYDEFINITION, /* not separate DGN,DWF,PDF types */
   DWG_TYPE_VISUALSTYLE,
   DWG_TYPE_WIPEOUT,
   DWG_TYPE_WIPEOUTVARIABLES,
@@ -4031,7 +4031,7 @@ typedef struct _dwg_object_LIGHTLIST
 
 Acad Naming: e.g. Materials/assetlibrary_base.fbm/shaders/AdskShaders.mi
                   Materials/assetlibrary_base.fbm/Mats/SolidGlass/Generic.xml
-TODO: maybe seperate into the various map structs
+TODO: maybe separate into the various map structs
  */
 typedef struct _dwg_object_MATERIAL
 {
@@ -4275,7 +4275,7 @@ typedef struct _dwg_entity_LIGHT
 
 /**
  Entity CAMERA (varies) UNKNOWN FIELDS
- not DWG peristent. yet unsorted, and unused.
+ not DWG persistent. yet unsorted, and unused.
  */
 typedef struct _dwg_entity_CAMERA
 {
@@ -4618,7 +4618,7 @@ typedef struct _dwg_ACTIONBODY
 {
   struct _dwg_object_ASSOCNETWORK *parent;
   BITCODE_T  evaluatorid;
-  BITCODE_T  expresssion;
+  BITCODE_T  expression;
   BITCODE_BL value; //resbuf
 } Dwg_ACTIONBODY;
 
@@ -4754,7 +4754,7 @@ typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP
   BITCODE_BD w3; //40
 } Dwg_Object_ASSOC2DCONSTRAINTGROUP;
 
-/* or maybe the nodes are layed out like this */
+/* or maybe the nodes are laid out like this */
 typedef struct _dwg_EVAL_Node
 {
   struct _dwg_object_EVALUATION_GRAPH *parent;

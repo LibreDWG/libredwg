@@ -228,7 +228,7 @@ main(int argc, char *argv[])
         dat.fh = stdout;
       dat.version = dat.from_version = dwg.header.version;
       // TODO --as-rNNNN version? for now not.
-      // we want the native dump, converters are seperate.
+      // we want the native dump, converters are separate.
 #ifndef DISABLE_DXF
       if (!strcasecmp(fmt, "json"))
         error = dwg_write_json(&dat, &dwg);
