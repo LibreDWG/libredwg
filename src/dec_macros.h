@@ -464,7 +464,7 @@
   for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
       FIELD_DD(name[vcount].x, FIELD_VALUE(name[vcount - 1].x), dxf); \
-      FIELD_DD(name[vcount].y, FIELD_VALUE(name[vcount - 1].x), dxf+10);\
+      FIELD_DD(name[vcount].y, FIELD_VALUE(name[vcount - 1].y), dxf+10);\
       LOG_TRACE(#name "[%ld]: (" FORMAT_BD ", " FORMAT_BD ") [DD %d]\n", \
                 (long)vcount, _obj->name[vcount].x, _obj->name[vcount].y, dxf) \
     }
