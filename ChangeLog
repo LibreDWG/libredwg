@@ -1,5 +1,26 @@
 Full history from the git log
 -----------------------------
+2018-11-05  Reini Urban  <rurban@cpan.org>
+
+	Release 0.6.1
+	See NEWS
+
+	spec: fix wrong FIELD_2DD_VECTOR in dwg decode
+	The 2nd .y coord was wrong. Found by @soundd1 [GH #40].
+
+2018-08-30  luzpaz  <luzpaz@users.noreply.github.com>
+
+	Misc. typos and whitespace fixes
+	Found via `codespell -q 3`.
+
+2018-08-13  Reini Urban  <rurban@cpan.org>
+
+	post-release 0.6 doc updates
+	This should have been done for 0.6 already...
+
+	Release 0.6
+	See NEWS
+
 2018-08-13  Reini Urban  <rurban@cpan.org>
 
         Release 0.6

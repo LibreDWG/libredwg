@@ -3,6 +3,13 @@ Copyright (C) 2018 Free Software Foundation, Inc.
 See the end for copying conditions.
 
 
+LibreDWG version 0.6.1 - released 2018/11/05 - still alpha:
+
+Important bugfixes:
+  * fix wrong FIELD_2DD_VECTOR in dwg decode (#40).
+
+
+
 LibreDWG version 0.6 - released 2018/08/13 - still alpha:
 
 API breaking changes:
