@@ -655,15 +655,17 @@ dxf_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
 
 // 5 written here first
 #define COMMON_TABLE_CONTROL_FLAGS \
+  if (ctrl) { \
     SINCE(R_13) { \
       fprintf(dat->fh, "%3i\r\n%lX\r\n", 5, ctrl->handle.value);\
     } \
     SINCE(R_14) { \
       VALUE_H (_ctrl->null_handle, 330); \
     } \
-    SINCE(R_2000) {\
-      VALUE_TV ("AcDbSymbolTable", 100); \
-    }
+  } \
+  SINCE(R_2000) {                        \
+    VALUE_TV ("AcDbSymbolTable", 100);   \
+  }
 
 //TODO add 340
 #define COMMON_TABLE_FLAGS(owner, acdbname) \
@@ -1230,84 +1232,95 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   {
     Dwg_Object_VPORT_CONTROL *_ctrl = &dwg->vport_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
-    TABLE(VPORT);
-    // add handle 5 here at first
-    COMMON_TABLE_CONTROL_FLAGS;
-    error |= dwg_dxf_VPORT_CONTROL(dat, ctrl);
-    //TODO how far back can DXF read 1000?
-    if (dat->version != dat->from_version && dat->from_version >= R_2000)
+    if (ctrl)
       {
-        /* if saved from newer version, eg. AC1032: */
-        VALUE_TV ("ACAD", 1001);
-        VALUE_TV ("DbSaveVer", 1000);
-        VALUE_RS ((dat->from_version * 3) + 15, 1071); // so that 69 is R_2018
+        TABLE(VPORT);
+        // add handle 5 here at first
+        COMMON_TABLE_CONTROL_FLAGS;
+        error |= dwg_dxf_VPORT_CONTROL(dat, ctrl);
+        //TODO how far back can DXF read 1000?
+        if (dat->version != dat->from_version && dat->from_version >= R_2000)
+          {
+            /* if saved from newer version, eg. AC1032: */
+            VALUE_TV ("ACAD", 1001);
+            VALUE_TV ("DbSaveVer", 1000);
+            VALUE_RS ((dat->from_version * 3) + 15, 1071); // so that 69 is R_2018
+          }
+        for (i=0; i<dwg->vport_control.num_entries; i++)
+          {
+            Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->vports[i]);
+            if (obj && obj->type == DWG_TYPE_VPORT) {
+              //reordered in the DXF: 2,70,10,11,12,13,14,15,16,...
+              //special-cased in the spec
+              error |= dwg_dxf_VPORT(dat, obj);
+            }
+          }
+        ENDTAB();
       }
-    for (i=0; i<dwg->vport_control.num_entries; i++)
-      {
-        Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->vports[i]);
-        if (obj && obj->type == DWG_TYPE_VPORT) {
-          //reordered in the DXF: 2,70,10,11,12,13,14,15,16,...
-          //special-cased in the spec
-          error |= dwg_dxf_VPORT(dat, obj);
-        }
-      }
-    ENDTAB();
   }
   {
     Dwg_Object_LTYPE_CONTROL *_ctrl = &dwg->ltype_control;
-    Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
     Dwg_Object *obj;
-
-    TABLE(LTYPE);
-    COMMON_TABLE_CONTROL_FLAGS;
-    error |= dwg_dxf_LTYPE_CONTROL(dat, ctrl);
-    // first the 2 builtin ltypes: ByBlock, ByLayer
-    if ((obj  = dwg_ref_object(dwg, dwg->header_vars.LTYPE_BYBLOCK))) {
-      dwg_dxf_LTYPE(dat, obj);
-    }
-    if ((obj  = dwg_ref_object(dwg, dwg->header_vars.LTYPE_BYLAYER))) {
-      error |= dwg_dxf_LTYPE(dat, obj);
-    }
-    // here LTYPE_CONTINUOUS is already included
-    for (i=0; i<dwg->ltype_control.num_entries; i++)
+    Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
+    if (ctrl)
       {
-        obj = dwg_ref_object(dwg, _ctrl->linetypes[i]);
-        if (obj && obj->type == DWG_TYPE_LTYPE) {
+        TABLE(LTYPE);
+        COMMON_TABLE_CONTROL_FLAGS;
+        error |= dwg_dxf_LTYPE_CONTROL(dat, ctrl);
+        // first the 2 builtin ltypes: ByBlock, ByLayer
+        if ((obj  = dwg_ref_object(dwg, dwg->header_vars.LTYPE_BYBLOCK))) {
+          dwg_dxf_LTYPE(dat, obj);
+        }
+        if ((obj  = dwg_ref_object(dwg, dwg->header_vars.LTYPE_BYLAYER))) {
           error |= dwg_dxf_LTYPE(dat, obj);
         }
+        // here LTYPE_CONTINUOUS is already included
+        for (i=0; i<dwg->ltype_control.num_entries; i++)
+          {
+            obj = dwg_ref_object(dwg, _ctrl->linetypes[i]);
+            if (obj && obj->type == DWG_TYPE_LTYPE) {
+              error |= dwg_dxf_LTYPE(dat, obj);
+            }
+          }
+        ENDTAB();
       }
-    ENDTAB();
   }
   {
     Dwg_Object_LAYER_CONTROL *_ctrl = &dwg->layer_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
-    TABLE(LAYER);
-    COMMON_TABLE_CONTROL_FLAGS;
-    error |= dwg_dxf_LAYER_CONTROL(dat, ctrl);
-    for (i=0; i<dwg->layer_control.num_entries; i++)
+    if (ctrl)
       {
-        Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->layers[i]);
-        if (obj && obj->type == DWG_TYPE_LAYER)
-          error |= dwg_dxf_LAYER(dat, obj);
-        //else if (obj && obj->type == DWG_TYPE_DICTIONARY)
-        //  error |= dwg_dxf_DICTIONARY(dat, obj);
+        TABLE(LAYER);
+        COMMON_TABLE_CONTROL_FLAGS;
+        error |= dwg_dxf_LAYER_CONTROL(dat, ctrl);
+        for (i=0; i<dwg->layer_control.num_entries; i++)
+          {
+            Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->layers[i]);
+            if (obj && obj->type == DWG_TYPE_LAYER)
+              error |= dwg_dxf_LAYER(dat, obj);
+            //else if (obj && obj->type == DWG_TYPE_DICTIONARY)
+            //  error |= dwg_dxf_DICTIONARY(dat, obj);
+          }
+        ENDTAB();
       }
-    ENDTAB();
   }  
   {
     Dwg_Object_STYLE_CONTROL *_ctrl = &dwg->style_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
-    TABLE(STYLE);
-    COMMON_TABLE_CONTROL_FLAGS;
-    error |= dwg_dxf_STYLE_CONTROL(dat, ctrl);
-    for (i=0; i<dwg->style_control.num_entries; i++)
+    if (ctrl)
       {
-        Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->styles[i]);
-        if (obj && obj->type == DWG_TYPE_STYLE) {
-          error |= dwg_dxf_STYLE(dat, obj);
-        }
+        TABLE(STYLE);
+        COMMON_TABLE_CONTROL_FLAGS;
+        error |= dwg_dxf_STYLE_CONTROL(dat, ctrl);
+        for (i=0; i<dwg->style_control.num_entries; i++)
+          {
+            Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->styles[i]);
+            if (obj && obj->type == DWG_TYPE_STYLE) {
+              error |= dwg_dxf_STYLE(dat, obj);
+            }
+          }
+        ENDTAB();
       }
-    ENDTAB();
   }
   {
     Dwg_Object_VIEW_CONTROL *_ctrl = &dwg->view_control;
