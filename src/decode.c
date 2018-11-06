@@ -1033,9 +1033,9 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
 
       section_size = bit_read_RS_LE(dat);
       LOG_TRACE("\nSection size: %u\n", section_size);
-      if (section_size > 2035)
+      if (section_size > 2040)
         {
-          LOG_ERROR("Object-map section size greater than 2035!")
+          LOG_ERROR("Object-map section size greater than 2040!")
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
 
