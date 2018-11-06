@@ -1970,4 +1970,3 @@ unknown_dxf[1967].fields = unknown_dxf_1967;
 unknown_dxf[1968].fields = unknown_dxf_1968;
 unknown_dxf[1969].fields = unknown_dxf_1969;
 unknown_dxf[1970].fields = unknown_dxf_1970;
-unknown_dxf[1971].fields = unknown_dxf_1971;
