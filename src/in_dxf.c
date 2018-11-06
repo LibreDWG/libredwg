@@ -859,6 +859,7 @@ dwg_indxf_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       return dwg_indxf_OLEFRAME(dat, obj);
     case DWG_TYPE_VBA_PROJECT:
       LOG_ERROR("Unhandled Object VBA_PROJECT. Has its own section\n");
+      return DWG_ERR_INVALIDTYPE;
       //dwg_indxf_VBA_PROJECT(dat, obj);
     case DWG_TYPE_LAYOUT:
       return dwg_indxf_LAYOUT(dat, obj);

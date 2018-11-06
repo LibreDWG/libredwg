@@ -966,7 +966,7 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   {
     struct _dwg_second_header* _obj = &dwg->second_header;
     Dwg_Object * obj = NULL;
-    long vcount;
+    BITCODE_BL vcount;
 
     dwg->header.section[3].number = 3;
     dwg->header.section[3].address = dwg->second_header.address;
