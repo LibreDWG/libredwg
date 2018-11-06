@@ -2067,9 +2067,13 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
 
       section_size = bit_read_RS_LE(&hdl_dat);
       LOG_TRACE("\nSection size: %u\n", section_size);
-      if (section_size > 2034)
+	  /* *********************************************************************************************
+      ** https://www.opendesign.com/files/guestdownloads/OpenDesign_Specification_for_.dwg_files.pdf
+      ** page 251 "Note that each section is cut off at a maximum length of 2032."
+      ** BUT in fact exist files with 2035 section size */
+      if (section_size > 2040)
         {
-          LOG_ERROR("Object-map section size greater than 2034!");
+          LOG_ERROR("Object-map section size greater than 2040!");
           free(obj_dat.chain);
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
