@@ -125,6 +125,41 @@ someone should probably think about and resolve them!
   If you want to push a branch that may be "git rebase"d in the future,
   either use the prefix "wip-" (work in progress), or your Savannah
   username followed by a slash (e.g., "juca/").
+  There are also work/* and smoke/* branches.
+
+* make release
+
+  Before a release:
+  - update NEWS manually
+  - generate the missing ChangeLog entries
+    e.g. via build-aux/gitlog-to-changelog --since='2018-11-05' >x
+  - make distcheck
+  - push a smoke/ branch to check the CI results for linux, darwin, mingw and cygwin
+  - create a temp. tag with the correct version number (see above):
+    e.g. git tag -s -m 'release 0.6.2' 0.6.2
+  - sh autogen.sh to update the version
+  - make regen-man to update the manpages
+
+  - update/create the release commit and sign it with -S
+    e.g. git commit -S --amend -a -m 'Release 0.6.2
+    see NEWS'
+  - merge it into master (ff)
+  - update the tag: git tag -d  0.6.2; git tag -s -m 'release 0.6.2' 0.6.2
+  - make dist to create the source tarballs
+  - push master and tags to run the CI and create the windows binaries on appveyor
+  - upload the dist tarballs
+    build-aux/gnupload --to ftp.gnu.org:libredwg libredwg-0.6.2.tar.gz libredwg-0.6.2.tar.xz
+  - download the appveyor artifacts and sha256sum and sign it
+    gpg -b -a libredwg-0.6.2-win32.zip; mv libredwg-0.6.2-win32.asc libredwg-0.6.2-win32.sig
+    sha256sum libredwg-0.6.2*
+  - edit the github release, copy from the previous and fix up the text with the sha256sum's,
+    upload the dists and sigs to this page.
+  - regen the docs, the refman and manual
+  - update the libredwg-cvs checkout for the docs and GNU homepage with the updated docs
+  - create the announcement via build-aux/announce-gen (needs lots of args)
+    and fixup the header with the NEWS
+  - create a savannah news item with the announcement, and post it to the announcement
+    mailinglist and twitter. maybe also to reddit.com/r/cad and similar forums.
 
 * using gdb with programs in examples/
 
@@ -319,3 +354,4 @@ pattern to the most likely value/type combination or all.
   Local variables:
   mode: org
   End:
+
