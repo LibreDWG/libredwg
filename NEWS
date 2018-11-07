@@ -2,7 +2,7 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2018 Free Software Foundation, Inc.
 See the end for copying conditions.
 
-LibreDWG version 0.6.2 - released ??? - still alpha:
+LibreDWG version 0.6.2 - released 2018/11/07 - still alpha:
 
 Important bugfixes:
   * Fixed several out_dxf segfaults (#39)
