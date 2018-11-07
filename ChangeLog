@@ -1,5 +1,31 @@
 Full history from the git log
 -----------------------------
+
+2018-11-06  Reini Urban  <rurban@cpan.org>
+
+	fix minor warnings
+	vcount: -Wsign-compare
+	case DWG_TYPE_VBA_PROJECT: -Wimplicit-fallthrough
+
+	fix several dxf segv
+	with empty ctrl blocks or tables.
+	Fixes [GH #39]
+
+	Fix one more 2035 section size limit
+	With the example from [GH #39]
+
+	Merge branch 'DenisPryt-master'
+
+2018-11-06  DenisPryt  <denis.chausy@gmail.com>
+
+	Fix section size limit
+
+	Fix eed decoding when end - dat->byte == 1
+
+2018-11-06  Reini Urban  <rurban@cpan.org>
+
+	unknown: regen
+
 2018-11-05  Reini Urban  <rurban@cpan.org>
 
 	Release 0.6.1

@@ -2,6 +2,16 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2018 Free Software Foundation, Inc.
 See the end for copying conditions.
 
+LibreDWG version 0.6.2 - released ??? - still alpha:
+
+Important bugfixes:
+  * Fixed several out_dxf segfaults (#39)
+  * Enhanced the section size limit from 2032 to 2040.
+    There were several DWG files with a section size of 2035
+    in the wild. (PR #41, Denis Pryt)
+  * Fixed EED realloc on decoding when end - dat->byte == 1
+    (PR #41, Denis Pryt)
+
 
 LibreDWG version 0.6.1 - released 2018/11/05 - still alpha:
 
