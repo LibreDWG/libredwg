@@ -129,7 +129,7 @@ dwg_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
   FILE *fp;
   struct stat attrib;
   size_t size;
-  Bit_Chain bit_chain;
+  Bit_Chain bit_chain = { 0 };
   int error;
 
   loglevel = dwg->opts;
@@ -218,7 +218,7 @@ dxf_read_file(const char *restrict filename, Dwg_Data *restrict dwg)
   FILE *fp;
   struct stat attrib;
   size_t size;
-  Bit_Chain dat;
+  Bit_Chain dat = { 0 };
 
   if (stat(filename, &attrib))
     {
@@ -310,7 +310,7 @@ dwg_write_file(const char *restrict filename, const Dwg_Data *restrict dwg)
 {
   FILE *fh;
   struct stat attrib;
-  Bit_Chain dat;
+  Bit_Chain dat = { 0 };
   int error;
 
   assert(filename);
@@ -880,6 +880,9 @@ dwg_section_type(const DWGCHAR *wname)
   char name[24];
   uint16_t c;
   int i = 0;
+
+  if (wname == NULL)
+    return SECTION_UNKNOWN;
 
   wp = (DWGCHAR *)wname;
   while ((c = *wp++)) {

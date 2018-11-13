@@ -75,28 +75,28 @@ static unsigned int cur_ver = 0;
 #define IS_PRINT
 
 #define PREFIX   for (int _i=0; _i<dat->bit; _i++) { fprintf (dat->fh, "  "); }
-#define ARRAY     PREFIX fprintf (dat->fh, "[\n"); dat->bit++
-#define SAMEARRAY PREFIX fprintf (dat->fh, "["); dat->bit++
-#define ENDARRAY  dat->bit--; PREFIX fprintf (dat->fh, "],\n")
-#define LASTENDARRAY dat->bit--; PREFIX fprintf (dat->fh, "]\n")
-#define HASH      PREFIX fprintf (dat->fh, "{\n"); dat->bit++
-#define SAMEHASH  fprintf (dat->fh, "{\n"); dat->bit++
-#define ENDHASH   dat->bit--; PREFIX fprintf (dat->fh, "},\n")
-#define LASTENDHASH dat->bit--; PREFIX fprintf (dat->fh, "}\n")
-#define SECTION(name) PREFIX fprintf (dat->fh, "\"%s\": [\n", #name); dat->bit++;
+#define ARRAY     { PREFIX fprintf (dat->fh, "[\n"); dat->bit++; }
+#define SAMEARRAY { PREFIX fprintf (dat->fh, "["); dat->bit++; }
+#define ENDARRAY  { dat->bit--; PREFIX fprintf (dat->fh, "],\n"); }
+#define LASTENDARRAY { dat->bit--; PREFIX fprintf (dat->fh, "]\n"); }
+#define HASH      { PREFIX fprintf (dat->fh, "{\n"); dat->bit++; }
+#define SAMEHASH  { fprintf (dat->fh, "{\n"); dat->bit++; }
+#define ENDHASH   { dat->bit--; PREFIX fprintf (dat->fh, "},\n"); }
+#define LASTENDHASH { dat->bit--; PREFIX fprintf (dat->fh, "}\n"); }
+#define SECTION(name) { PREFIX fprintf (dat->fh, "\"%s\": [\n", #name); dat->bit++; }
 #define ENDSEC()  ENDARRAY
 #define NOCOMMA   fseek(dat->fh, -2, SEEK_CUR)
 #define PAIR_S(name, value) \
-    PREFIX fprintf(dat->fh, "\"" #name "\": \"%s\",\n", value)
+    { PREFIX fprintf(dat->fh, "\"" #name "\": \"%s\",\n", value); }
 #define LASTPAIR_S(name, value) \
-    PREFIX fprintf(dat->fh, "\"" #name "\": \"%s\"\n", value)
+    { PREFIX fprintf(dat->fh, "\"" #name "\": \"%s\"\n", value); }
 #define PAIR_NULL(name) \
-    PREFIX fprintf(dat->fh, "\"" #name "\": null,\n")
+    { PREFIX fprintf(dat->fh, "\"" #name "\": null,\n"); }
 #define KEY(name) \
-    PREFIX fprintf(dat->fh, "\"" #name "\": ")
+    { PREFIX fprintf(dat->fh, "\"" #name "\": "); }
 #define GEOMETRY(name) \
-    KEY(geometry); SAMEHASH; \
-    PAIR_S(type, #name)
+    { KEY(geometry); SAMEHASH; \
+    PAIR_S(type, #name) }
 #define ENDGEOMETRY LASTENDHASH
 
 //#define VALUE(value,type,dxf)

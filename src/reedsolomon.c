@@ -287,6 +287,7 @@ rs_decode_block(unsigned char *blk, int fix)
   if (!errflag)
     {
       debug("No error in Reed-Solomon block\n");
+	  free(synbuf);
       return 0;
     }
 
@@ -294,7 +295,10 @@ rs_decode_block(unsigned char *blk, int fix)
   dump_syndrome(synbuf);
 
   if (!fix)
-    return -1;
+    {
+	  free(synbuf);
+	  return -1;
+    }
 
   sigma = malloc(POLY_LENGTH);
   memset(sigma, 0, POLY_LENGTH);

@@ -157,7 +157,7 @@ static void copy_bytes(char *dst, uint32_t length, uint32_t offset);
 static uint32_t read_literal_length(unsigned char **src, unsigned char opcode);
 static void copy_compressed_bytes(char *restrict dst, char *restrict src, int length);
 static void  bfr_read(void *restrict dst, char **restrict src, size_t size);
-static DWGCHAR* bfr_read_string(char **src);
+static DWGCHAR* bfr_read_string(char **src, int64_t size);
 static char* decode_rs(const char *src, int block_count, int data_size);
 static int  decompress_r2007(char *restrict dst, int dst_size,
                              char *restrict src, int src_size);
@@ -735,14 +735,17 @@ bfr_read(void *restrict dst, char **restrict src, size_t size)
 }
 
 static DWGCHAR*
-bfr_read_string(char **src)
+bfr_read_string(char **src, int64_t size)
 {
+  if (size <= 0)
+    return NULL;
+
   uint16_t *ptr = (uint16_t*)*src;
   int32_t length = 0, wsize;
   DWGCHAR *str, *str_base;
   int i;
 
-  while (*ptr != 0)
+  while (*ptr != 0 && length * 2 < size)
     {
       ptr++;
       length++;
@@ -762,7 +765,7 @@ bfr_read_string(char **src)
       *str++ = (DWGCHAR)(*ptr++);
     }
 
-  *src += length * 2 + 2;
+  *src += size;
   *str = 0;
 
   return str_base;
@@ -773,7 +776,7 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
                   int64_t size_uncomp, int64_t correction)
 {
   char *data;
-  r2007_section *sections = NULL, *last_section = NULL, *section;
+  r2007_section *sections = NULL, *last_section = NULL, *section = NULL;
   char *ptr, *ptr_end;
   int i, j = 0;
 
@@ -822,6 +825,7 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
 #endif
       section->next  = NULL;
       section->pages = NULL;
+	  section->name = NULL;
 
       if (!sections)
         {
@@ -838,7 +842,7 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
         break;
 
       // Section Name
-      section->name = bfr_read_string(&ptr);
+      section->name = bfr_read_string(&ptr, section->name_length);
 #ifdef HAVE_NATIVE_WCHAR2
       LOG_TRACE("  name:          " FORMAT_TU "\n", (BITCODE_TU)section->name)
 #else
@@ -847,6 +851,9 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
       LOG_TRACE("\n")
 #endif
       section->type = dwg_section_type(section->name);
+
+      if (section->num_pages <= 0)
+        continue;
 
       section->pages = (r2007_section_page**) malloc(
         (size_t)section->num_pages * sizeof(r2007_section_page*));
@@ -1022,6 +1029,9 @@ sections_destroy(r2007_section *section)
             }
           free(section->pages);
         }
+
+      if (section->name)
+        free(section->name);
 
       free(section);
       section = next;
@@ -1199,11 +1209,10 @@ read_2007_section_classes(Bit_Chain*restrict dat, Dwg_Data *restrict dwg,
 {
   BITCODE_RL size, i;
   BITCODE_BS max_num;
-  Bit_Chain sec_dat, str;
+  Bit_Chain sec_dat = { 0 }, str = { 0 };
   int error;
   char c;
 
-  sec_dat.chain = NULL;
   error = read_data_section(&sec_dat, dat, sections_map,
                             pages_map, SECTION_CLASSES);
   if (error)
@@ -1306,7 +1315,10 @@ read_2007_section_classes(Bit_Chain*restrict dat, Dwg_Data *restrict dwg,
       free(sec_dat.chain);
       return DWG_ERR_CLASSESNOTFOUND;
     }
-  free(sec_dat.chain);
+
+  if (sec_dat.chain)
+    free(sec_dat.chain);
+
   return 0;
 }
 
@@ -1316,9 +1328,9 @@ read_2007_section_header(Bit_Chain*restrict dat, Bit_Chain*restrict hdl_dat,
                          r2007_section *restrict sections_map,
                          r2007_page *restrict pages_map)
 {
-  Bit_Chain sec_dat, str_dat;
+  Bit_Chain sec_dat = { 0 }, str_dat = { 0 };
   int error;
-  LOG_TRACE("\nSection Header\n-------------------\n")
+  LOG_TRACE("\nSection Header\n-------------------\n");
   error = read_data_section(&sec_dat, dat, sections_map,
                             pages_map, SECTION_HEADER);
   if (error)
@@ -1367,7 +1379,7 @@ read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl,
                           r2007_section *restrict sections_map,
                           r2007_page *restrict pages_map)
 {
-  static Bit_Chain obj_dat, hdl_dat;
+  static Bit_Chain obj_dat = { 0 }, hdl_dat = { 0 };
   BITCODE_RS section_size = 0;
   long unsigned int endpos;
   int error;
@@ -1442,8 +1454,11 @@ read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl,
 
   LOG_INFO("\nNum objects: %lu\n", (unsigned long)dwg->num_objects);
 
-  free(hdl_dat.chain);
-  free(obj_dat.chain);
+  if (hdl_dat.chain)
+    free(hdl_dat.chain);
+
+  if (obj_dat.chain)
+    free(obj_dat.chain);
 
   return error;
 }

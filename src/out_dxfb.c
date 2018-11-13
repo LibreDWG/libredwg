@@ -104,7 +104,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
   { \
      uint32_t _j = (uint32_t)hdlptr->absolute_ref; \
      GROUP(dxf); \
-     fwrite(&_j, 4, 4, dat->fh); \
+     fwrite(&_j, sizeof(uint32_t), 1, dat->fh); \
   }
 #define FIELD_HANDLE(name, handle_code, dxf) VALUE_HANDLE(_obj->name, handle_code, dxf)
 
@@ -112,10 +112,10 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
     {                                \
     if (dat->version < R_14) {       \
       unsigned char icode = (unsigned char)code; \
-      fwrite(&icode, 1, 1, dat->fh); \
+      fwrite(&icode, sizeof(unsigned char), 1, dat->fh); \
     } else {                         \
       short icode = code;            \
-      fwrite(&icode, 2, 1, dat->fh); \
+      fwrite(&icode, sizeof(short), 1, dat->fh); \
     }                                \
   }
 #define FIELD_TV(name,dxf) \
@@ -199,7 +199,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
   {\
     BITCODE_RC c = (value); \
     GROUP(dxf);\
-    fwrite(&c, 1, 1, dat->fh); \
+    fwrite(&c, sizeof(BITCODE_RC), 1, dat->fh); \
   }
 #define FIELD_RC(name,dxf) VALUE_RC(_obj->name, dxf)
 #define HEADER_RC(name,dxf) \
@@ -211,7 +211,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
   {\
     BITCODE_RS s = (value); \
     GROUP(dxf);\
-    fwrite(&s, 2, 1, dat->fh);\
+    fwrite(&s, sizeof(BITCODE_RS), 1, dat->fh);\
   }
 #define FIELD_RS(name,dxf) VALUE_RS(_obj->name, dxf)
 #define HEADER_RS(name,dxf) \
@@ -222,7 +222,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
   {\
     double d = (value);\
     GROUP(dxf);\
-    fwrite(&d, 1, 8, dat->fh); \
+    fwrite(&d, sizeof(double), 1, dat->fh); \
   }
 #define FIELD_RD(name,dxf) VALUE_RD(_obj->name,dxf)
 #define HEADER_RD(name,dxf) \
@@ -233,7 +233,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
   {\
     BITCODE_RL _s = value;\
     GROUP(dxf);\
-    fwrite(&_s, 4, 1, dat->fh);\
+    fwrite(&_s, sizeof(BITCODE_RL), 1, dat->fh);\
   }
 #define FIELD_RL(name,dxf) VALUE_RL(_obj->name,dxf)
 #define HEADER_RL(name,dxf) \
@@ -276,7 +276,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
     GROUP(9);\
     fprintf (dat->fh, "$%s%c", #name, 0);\
     GROUP(dxf);\
-    fwrite(&s, 8, 1, dat->fh);\
+    fwrite(&s, sizeof(BITCODE_RLL), 1, dat->fh);\
   }
   
 #define FIELD_MC(name,dxf) FIELD_RC(name,dxf)
@@ -469,7 +469,7 @@ dwg_dxfb_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
       obj->handle.size,\
       obj->handle.value) \
     GROUP(330); \
-    fwrite(&i, 4, 4, dat->fh); \
+    fwrite(&i, sizeof(uint32_t), 1, dat->fh); \
   } \
   SINCE(R_13) { \
     VALUE_HANDLE_NAME (obj->parent->header_vars.BLOCK_RECORD_MSPACE, 330, BLOCK_HEADER); \
@@ -503,7 +503,7 @@ dwg_dxfb_ ##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
       int dxf = 5; \
       if (obj->type == DWG_TYPE_DIMSTYLE) dxf = 105; \
       GROUP(dxf);\
-      fwrite(&_i, 4, 4, dat->fh); \
+      fwrite(&_i, sizeof(uint32_t), 1, dat->fh); \
       _XDICOBJHANDLE(3); \
       _REACTORS(4); \
     } \
@@ -615,7 +615,7 @@ dxfb_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   SINCE(R_13) { \
     uint32_t _i = (uint32_t)ctrl->handle.value; \
     GROUP(5); \
-    fwrite(&_i, 4, 4, dat->fh); \
+    fwrite(&_i, sizeof(uint32_t), 1, dat->fh); \
   } \
   SINCE(R_14) \
     VALUE_H (_ctrl->null_handle, 330); \

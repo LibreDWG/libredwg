@@ -17875,15 +17875,17 @@ dwg_object_ref **
 dwg_obj_block_control_get_block_headers(const dwg_obj_block_control *restrict ctrl,
                                         int *restrict error)
 {
-  dwg_object_ref **ptx = (dwg_object_ref**)
-    malloc(ctrl->num_entries * sizeof(Dwg_Object_Ref *));
   if (ctrl->num_entries && !ctrl->block_headers)
     {
       *error = 1;
       LOG_ERROR("%s: null block_headers", __FUNCTION__);
       return NULL;
     }
-  else if (ptx)
+
+  dwg_object_ref **ptx = (dwg_object_ref**)
+	  malloc(ctrl->num_entries * sizeof(Dwg_Object_Ref *));
+
+  if (ptx)
     {
       BITCODE_BS i;
       *error = 0;

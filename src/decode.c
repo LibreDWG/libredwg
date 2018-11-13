@@ -146,7 +146,7 @@ dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
   memset(&dwg->header_vars, 0, sizeof(Dwg_Header_Variables));
   memset(&dwg->r2004_header.file_ID_string[0], 0, sizeof(dwg->r2004_header));
   memset(&dwg->auxheader.aux_intro[0], 0, sizeof(dwg->auxheader));
-  memset(&dwg->second_header.size, 0, sizeof(dwg->second_header));
+  memset(&dwg->second_header, 0, sizeof(dwg->second_header));
 
   if (dwg->opts)
     loglevel = dwg->opts & 0xf;
@@ -1868,9 +1868,8 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
   unsigned long int num_objects, dwg_version, maint_version, unknown;
   char c;
   int error;
-  Bit_Chain sec_dat, str_dat;
+  Bit_Chain sec_dat = {0}, str_dat = {0};
 
-  sec_dat.chain = NULL;
   error = read_2004_compressed_section(dat, dwg, &sec_dat, SECTION_CLASSES);
   if (error)
     {
@@ -1998,7 +1997,7 @@ static int
 read_2004_section_header(Bit_Chain* dat, Dwg_Data *dwg)
 {
   int error;
-  Bit_Chain sec_dat;
+  Bit_Chain sec_dat = { 0 };
 
   error = read_2004_compressed_section(dat, dwg, &sec_dat, SECTION_HEADER);
   if (error)
@@ -2012,7 +2011,7 @@ read_2004_section_header(Bit_Chain* dat, Dwg_Data *dwg)
       PRE (R_2007) {
         error |= dwg_decode_header_variables(&sec_dat, &sec_dat, &sec_dat, dwg);
       } else {
-        Bit_Chain hdl_dat, str_dat;
+        Bit_Chain hdl_dat = { 0 }, str_dat = { 0 };
         BITCODE_RL endbits = 160; //start bit: 16 sentinel + 4 size
         hdl_dat = sec_dat;
         str_dat = sec_dat;
@@ -2039,7 +2038,7 @@ read_2004_section_header(Bit_Chain* dat, Dwg_Data *dwg)
 static int
 read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
 {
-  Bit_Chain obj_dat, hdl_dat;
+  Bit_Chain obj_dat = { 0 }, hdl_dat = { 0 };
   BITCODE_RS section_size = 0;
   long unsigned int endpos;
   int error;
@@ -2245,7 +2244,7 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
 static int
 decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
 {
-  Bit_Chain hdl_dat;
+  Bit_Chain hdl_dat = { 0 };
   int error;
 
   hdl_dat = *dat;
@@ -3016,7 +3015,7 @@ get_base_value_type(short gc)
               if (gc <= 469) return VT_REAL;
               if (gc <= 479) return VT_STRING;
               if (gc <= 998) return VT_INVALID;
-              if (gc == 999) return VT_STRING;
+              if (gc == 999) return VT_STRING; /* dead if */
             }
         }
       else // <440
@@ -3027,7 +3026,7 @@ get_base_value_type(short gc)
               if (gc <= 409) return VT_INT16;
               if (gc <= 419) return VT_STRING;
               if (gc <= 429) return VT_INT32;
-              if (gc <= 439) return VT_STRING;
+              if (gc <= 439) return VT_STRING; /* dead if */
             }
           else            // 330-389
             {
@@ -3035,7 +3034,7 @@ get_base_value_type(short gc)
               if (gc <= 319) return VT_BINARY;
               if (gc <= 329) return VT_HANDLE;
               if (gc <= 369) return VT_OBJECTID;
-              if (gc <= 389) return VT_INT16;
+              if (gc <= 389) return VT_INT16; /* dead if */
             }
         }
     }
@@ -3047,7 +3046,7 @@ get_base_value_type(short gc)
           if (gc <= 269) return VT_INVALID;
           if (gc <= 279) return VT_INT16;
           if (gc <= 289) return VT_INT8;
-          if (gc <= 299) return VT_BOOL;
+          if (gc <= 299) return VT_BOOL; /* dead if */
         }
       else               // 105-209
         {
@@ -3056,7 +3055,7 @@ get_base_value_type(short gc)
           if (gc <= 149) return VT_REAL;
           if (gc <= 169) return VT_INVALID;
           if (gc <= 179) return VT_INT16;
-          if (gc <= 209) return VT_INVALID;
+          if (gc <= 209) return VT_INVALID; /* dead if */
         }
     }
   else  // <105
@@ -3075,7 +3074,7 @@ get_base_value_type(short gc)
           if (gc <= 4)   return VT_STRING;
           if (gc == 5)   return VT_HANDLE;
           if (gc <= 9)   return VT_STRING;
-          if (gc <= 37)  return VT_POINT3D;
+          if (gc <= 37)  return VT_POINT3D; /* dead if */
         }
     }
   return VT_INVALID;
