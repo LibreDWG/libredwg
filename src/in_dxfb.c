@@ -74,7 +74,7 @@ static char buf[4096];
   if (hdlptr) { \
      uint32_t _hdl = (uint32_t)hdlptr->absolute_ref; \
      GROUP(dxf); \
-     fwrite(&_hdl, 4, 4, dat->fh); \
+     fwrite(&_hdl, sizeof(uint32_t), 1, dat->fh); \
   }
 #define FIELD_HANDLE(name, handle_code, dxf) VALUE_HANDLE(_obj->name, handle_code, dxf)
 
@@ -82,10 +82,10 @@ static char buf[4096];
     {                                \
     if (dat->version < R_14) {       \
       unsigned char icode = (unsigned char)code; \
-      fwrite(&icode, 1, 1, dat->fh); \
+      fwrite(&icode, sizeof(unsigned char), 1, dat->fh); \
     } else {                         \
       short icode = code;            \
-      fwrite(&icode, 2, 1, dat->fh); \
+      fwrite(&icode, sizeof(short), 1, dat->fh); \
     }                                \
   }
 #define VALUE_TV(str, dxf)\
@@ -174,7 +174,7 @@ static char buf[4096];
   {\
     double _d = value;\
     GROUP(dxf);\
-    fwrite(&_d, 1, 8, dat->fh); \
+    fwrite(&_d, sizeof(double), 1, dat->fh); \
   }
 #define FIELD_RD(name,dxf) VALUE_RD(_obj->name,dxf)
 #define HEADER_RD(name,dxf) \
@@ -185,7 +185,7 @@ static char buf[4096];
   {\
     BITCODE_RL _s = value;\
     GROUP(dxf);\
-    fwrite(&_s, 4, 1, dat->fh);\
+    fwrite(&_s, sizeof(BITCODE_RL), 1, dat->fh);\
   }
 #define FIELD_RL(name,dxf) VALUE_RL(_obj->name,dxf)
 #define HEADER_RL(name,dxf) \
@@ -218,7 +218,7 @@ static char buf[4096];
     GROUP(9);\
     fprintf (dat->fh, "$%s%c", #name, 0);\
     GROUP(dxf);\
-    fwrite(&_s, 8, 1, dat->fh);\
+    fwrite(&_s, sizeof(BITCODE_RLL), 1, dat->fh);\
   }
 #define FIELD_MC(name,dxf) FIELD_RC(name,dxf)
 #define FIELD_MS(name,dxf)  FIELD_RS(name,dxf)
@@ -715,7 +715,7 @@ dwg_read_dxfb(Bit_Chain *dat, Dwg_Data * dwg)
   struct Dwg_Header *obj = &dwg->header;
 
   //TODO read header and check
-  fprintf(dat->fh, "AutoCAD Binary DXF%s", "\r\n\0x1a\0");
+  fprintf(dat->fh, "AutoCAD Binary DXF%s", "\r\n\x1a\0");
   //VALUE(999, PACKAGE_STRING);
 
   dxfb_header_read (dat, dwg);

@@ -362,7 +362,7 @@ static bool env_var_checked_p;
 */
 EXPORT long dwg_add_##token (Dwg_Data * dwg)    \
 {                                               \
-  Bit_Chain dat;                                \
+  Bit_Chain dat = { 0 };                        \
   BITCODE_BL num_objs  = dwg->num_objects;      \
   int error = 0;                                \
   dat.size = sizeof(Dwg_Entity_##token) + 40;   \
@@ -388,7 +388,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)    \
 
 EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
 {                                                \
-  Bit_Chain dat;                                 \
+  Bit_Chain dat = { 0 };                         \
   int error = 0; \
   BITCODE_BL num_objs  = dwg->num_objects;       \
   dat.size = sizeof(Dwg_Object_##token) + 40;    \
