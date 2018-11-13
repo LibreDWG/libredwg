@@ -109,18 +109,18 @@ get_bmp(char *dwgfile, char *bmpfile)
   bmp_h.file_size = 14 + size; // file header + DIB data
   bmp_h.reserved = 0;
   bmp_h.offset = 14 + 40 + 4 * 256; // file header + DIB header + color table
-  retval = fwrite(&bmp_h.magic[0], 2, sizeof(char), fh);
+  retval = fwrite(&bmp_h.magic[0], sizeof(char), 2, fh);
   if (!retval) {
     perror("writing BMP magic"); return 1;
   }
-  retval = fwrite(&bmp_h.file_size, 3, sizeof(long), fh);
+  retval = fwrite(&bmp_h.file_size, sizeof(long), 3, fh);
   if (!retval) {
     free (bmpfile);
     perror("writing BMP file_size"); return 1;
   }
 
   /* Write data (DIB header + bitmap) */
-  retval = fwrite(data, 1, size, fh);
+  retval = fwrite(data, sizeof(unsigned char), size, fh);
   if (!retval) {
     free (bmpfile);
     perror("writing BMP header"); return 1;

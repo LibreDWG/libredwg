@@ -221,7 +221,7 @@ main(int argc, char *argv[])
     }
   else
     {
-      Bit_Chain dat;
+      Bit_Chain dat = { 0 };
       if (outfile)
         dat.fh = fopen(outfile, "w");
       else

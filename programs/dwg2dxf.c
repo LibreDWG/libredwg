@@ -93,7 +93,7 @@ main (int argc, char *argv[])
   const char *version = NULL;
   char* filename_out = NULL;
   Dwg_Version_Type dwg_version;
-  Bit_Chain dat;
+  Bit_Chain dat = { 0 };
   int do_free;
   int c;
 #ifdef HAVE_GETOPT_LONG

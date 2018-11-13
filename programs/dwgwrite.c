@@ -86,7 +86,7 @@ main(int argc, char *argv[])
   const char *fmt = NULL;
   const char *infile = NULL;
   char *outfile = NULL;
-  Bit_Chain dat;
+  Bit_Chain dat = { 0 };
   const char *version = NULL;
   Dwg_Version_Type dwg_version = R_INVALID;
   int c;
