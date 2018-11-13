@@ -948,7 +948,6 @@ main (int argc, char *argv[])
   int i = 1, j;
   char* filename;
   Dwg_Data dwg;
-  Bit_Chain dat;
   int plen;
   int errcode;
 #ifdef HAVE_PCRE2_H

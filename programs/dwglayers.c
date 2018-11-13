@@ -66,7 +66,6 @@ main (int argc, char *argv[])
   int flags = 0, on = 0;
   char* filename_in;
   Dwg_Data dwg;
-  Bit_Chain dat;
   Dwg_Object_LAYER *layer;
   int c;
 #ifdef HAVE_GETOPT_LONG
