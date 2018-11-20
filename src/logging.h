@@ -91,7 +91,7 @@
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level && wstr) { \
     BITCODE_TU ws = wstr;                             \
     uint16_t _c;                                      \
-    while (ws && (_c = *ws++)) {                      \
+    while (_c = *ws++) {                              \
       HANDLER(OUTPUT, "%c", (char)(_c & 0xff));       \
     }                                                 \
   }
