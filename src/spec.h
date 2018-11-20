@@ -27,6 +27,7 @@
 #define IF_IS_ENCODER 0
 #define IF_IS_DECODER 0
 #define IF_IS_DXF 0
+#define IF_IS_FREE 0
 
 #ifndef ACTION
 # error ACTION define missing: decode, encode, dxf, ...
@@ -143,6 +144,8 @@
 #if defined(IS_FREE)
 #undef FREE
 #define FREE    if (1)
+#undef IF_IS_FREE
+#define IF_IS_FREE 1
 #else
 #define END_REPEAT(field)
 #endif
