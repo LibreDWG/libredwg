@@ -3015,7 +3015,7 @@ get_base_value_type(short gc)
               if (gc <= 469) return VT_REAL;
               if (gc <= 479) return VT_STRING;
               if (gc <= 998) return VT_INVALID;
-              /*if (gc == 999)*/ return VT_STRING;
+              if (gc == 999) return VT_STRING; /* dead if */
             }
         }
       else // <440
@@ -3026,7 +3026,7 @@ get_base_value_type(short gc)
               if (gc <= 409) return VT_INT16;
               if (gc <= 419) return VT_STRING;
               if (gc <= 429) return VT_INT32;
-              /*if (gc <= 439)*/ return VT_STRING;
+              if (gc <= 439) return VT_STRING; /* dead if */
             }
           else            // 330-389
             {
@@ -3034,7 +3034,7 @@ get_base_value_type(short gc)
               if (gc <= 319) return VT_BINARY;
               if (gc <= 329) return VT_HANDLE;
               if (gc <= 369) return VT_OBJECTID;
-              /*if (gc <= 389)*/ return VT_INT16;
+              if (gc <= 389) return VT_INT16; /* dead if */
             }
         }
     }
@@ -3046,7 +3046,7 @@ get_base_value_type(short gc)
           if (gc <= 269) return VT_INVALID;
           if (gc <= 279) return VT_INT16;
           if (gc <= 289) return VT_INT8;
-          /*if (gc <= 299)*/ return VT_BOOL;
+          if (gc <= 299) return VT_BOOL; /* dead if */
         }
       else               // 105-209
         {
@@ -3055,7 +3055,7 @@ get_base_value_type(short gc)
           if (gc <= 149) return VT_REAL;
           if (gc <= 169) return VT_INVALID;
           if (gc <= 179) return VT_INT16;
-          /*if (gc <= 209)*/ return VT_INVALID;
+          if (gc <= 209) return VT_INVALID; /* dead if */
         }
     }
   else  // <105
@@ -3074,7 +3074,7 @@ get_base_value_type(short gc)
           if (gc <= 4)   return VT_STRING;
           if (gc == 5)   return VT_HANDLE;
           if (gc <= 9)   return VT_STRING;
-          /*if (gc <= 37)*/  return VT_POINT3D;
+          if (gc <= 37)  return VT_POINT3D; /* dead if */
         }
     }
   return VT_INVALID;
