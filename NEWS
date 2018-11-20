@@ -2,6 +2,18 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2018 Free Software Foundation, Inc.
 See the end for copying conditions.
 
+LibreDWG version 0.6.3 - released 2018/11/?? - still alpha:
+
+Important bugfixes:
+  * Fixed several memory leaks and double-free's (#43, #42)
+
+Other newsworthy changes:
+  * Check for RUNNING_ON_VALGRIND and call dwg_free then, even
+    if previously skipped.
+  * renamed all remaining API "null malloc" error messages to
+    "Out of memory"
+
+
 LibreDWG version 0.6.2 - released 2018/11/07 - still alpha:
 
 Important bugfixes:
