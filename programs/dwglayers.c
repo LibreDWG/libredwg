@@ -21,6 +21,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
+#ifdef HAVE_VALGRIND_VALGRIND_H
+#include <valgrind/valgrind.h>
+#endif
 
 #include <dwg.h>
 #include "common.h"
@@ -151,7 +154,11 @@ main (int argc, char *argv[])
     }
 
   // forget about valgrind. really huge DWG's need endlessly here.
-  if (dwg.header.version && dwg.num_objects < 1000)
+  if ((dwg.header.version && dwg.num_objects < 1000)
+#ifdef HAVE_VALGRIND_VALGRIND_H
+      || (RUNNING_ON_VALGRIND)
+#endif
+      )
     dwg_free(&dwg);
   return error >= DWG_ERR_CRITICAL ? 1 : 0;
 }

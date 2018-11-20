@@ -1918,7 +1918,7 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
       if (dat->version >= R_2007)
         section_string_stream(&sec_dat, bitsize, &str_dat);
 
-      dwg->dwg_class = (Dwg_Class *) calloc(dwg->num_classes, sizeof(Dwg_Class));
+      dwg->dwg_class = (Dwg_Class *)calloc(dwg->num_classes, sizeof(Dwg_Class));
       if (!dwg->dwg_class)
         {
           LOG_ERROR("Out of memory");
