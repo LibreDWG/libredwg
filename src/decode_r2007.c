@@ -659,6 +659,7 @@ read_data_page(Bit_Chain* dat, unsigned char *decomp, int64_t page_size,
     memcpy(decomp, pedata, size_uncomp);
 
   free(pedata);
+  free(rsdata);
 
   return error;
 }
