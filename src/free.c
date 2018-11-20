@@ -605,9 +605,9 @@ dwg_free_object(Dwg_Object *obj)
     default:
       if (obj->type == obj->parent->layout_number)
         {
-          /*SINCE(R_13) {
-            dwg_free_LAYOUT(dat, obj); // avoid double-free, esp. in eed
-          }*/
+          SINCE(R_13) {
+            dwg_free_LAYOUT(dat, obj); // XXX avoid double-free, esp. in eed
+          }
         }
 
       else if ((error = dwg_free_variable_type(obj->parent, obj))
