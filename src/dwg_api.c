@@ -9533,7 +9533,7 @@ dwg_ent_lwpline_get_bulges(const dwg_ent_lwpline *restrict lwpline,
   else
     {
       *error = 1;
-      LOG_ERROR("%s: null malloc", __FUNCTION__)
+      LOG_ERROR("%s: Out of memory", __FUNCTION__)
       return NULL;
     }
 }
@@ -9559,7 +9559,7 @@ dwg_ent_lwpline_get_points(const dwg_ent_lwpline *restrict lwpline,
   else
     {
       *error = 1;
-      LOG_ERROR("%s: null malloc", __FUNCTION__)
+      LOG_ERROR("%s: Out of memory", __FUNCTION__)
       return NULL;
     }
 }
@@ -9586,7 +9586,7 @@ dwg_ent_lwpline_get_widths(const dwg_ent_lwpline *restrict lwpline,
   else
     {
       *error = 1;
-      LOG_ERROR("%s: null malloc", __FUNCTION__)
+      LOG_ERROR("%s: Out of memory", __FUNCTION__)
       return NULL;
     }
 }
@@ -10584,7 +10584,7 @@ dwg_ent_spline_get_fit_pts(const dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR("%s: null malloc", __FUNCTION__)
+      LOG_ERROR("%s: Out of memory", __FUNCTION__)
       return NULL;
     }
 }
@@ -10610,7 +10610,7 @@ dwg_ent_spline_get_ctrl_pts(const dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR("%s: null malloc", __FUNCTION__)
+      LOG_ERROR("%s: Out of memory", __FUNCTION__)
       return NULL;
     }
 }
@@ -10635,7 +10635,7 @@ dwg_ent_spline_get_knots(const dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR("%s: null malloc", __FUNCTION__)
+      LOG_ERROR("%s: Out of memory", __FUNCTION__)
       return NULL;
     }
 }
@@ -13709,7 +13709,7 @@ dwg_ent_image_get_clip_verts(const dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR("%s: null malloc", __FUNCTION__)
+      LOG_ERROR("%s: Out of memory", __FUNCTION__)
       return NULL;
     }
 }
@@ -13955,7 +13955,7 @@ dwg_mline_vertex_get_lines(const dwg_mline_vertex *restrict vertex,
   else
     {
       *error = 1;
-      LOG_ERROR("%s: null malloc", __FUNCTION__)
+      LOG_ERROR("%s: Out of memory", __FUNCTION__)
       return NULL;
     }
 }
@@ -13999,7 +13999,7 @@ dwg_ent_mline_get_verts(const dwg_ent_mline *restrict mline,
   else
     {
       *error = 1;
-      LOG_ERROR("%s: null malloc", __FUNCTION__)
+      LOG_ERROR("%s: Out of memory", __FUNCTION__)
       return NULL;
     }
 }
@@ -14381,7 +14381,7 @@ dwg_ent_3dsolid_get_wires(const dwg_ent_3dsolid *restrict _3dsolid,
   else
     {
       *error = 1;
-      LOG_ERROR("%s: null malloc", __FUNCTION__)
+      LOG_ERROR("%s: Out of memory", __FUNCTION__)
       return NULL;
     }
 }
@@ -14428,7 +14428,7 @@ dwg_ent_3dsolid_get_silhouettes(const dwg_ent_3dsolid *restrict _3dsolid,
   else
     {
       *error = 1;
-      LOG_ERROR("%s: null malloc", __FUNCTION__)
+      LOG_ERROR("%s: Out of memory", __FUNCTION__)
       return NULL;
     }
 }
@@ -17875,6 +17875,8 @@ dwg_object_ref **
 dwg_obj_block_control_get_block_headers(const dwg_obj_block_control *restrict ctrl,
                                         int *restrict error)
 {
+  dwg_object_ref **ptx;
+
   if (ctrl->num_entries && !ctrl->block_headers)
     {
       *error = 1;
@@ -17882,9 +17884,8 @@ dwg_obj_block_control_get_block_headers(const dwg_obj_block_control *restrict ct
       return NULL;
     }
 
-  dwg_object_ref **ptx = (dwg_object_ref**)
-	  malloc(ctrl->num_entries * sizeof(Dwg_Object_Ref *));
-
+  ptx = (dwg_object_ref**)malloc(ctrl->num_entries *
+                                 sizeof(Dwg_Object_Ref *));
   if (ptx)
     {
       BITCODE_BS i;
@@ -17898,7 +17899,7 @@ dwg_obj_block_control_get_block_headers(const dwg_obj_block_control *restrict ct
   else
     {
       *error = 1;
-      LOG_ERROR("%s: null malloc", __FUNCTION__)
+      LOG_ERROR("%s: Out of memory", __FUNCTION__)
       return NULL;
     }
 }

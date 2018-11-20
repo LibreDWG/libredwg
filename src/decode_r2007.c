@@ -737,14 +737,13 @@ bfr_read(void *restrict dst, char **restrict src, size_t size)
 static DWGCHAR*
 bfr_read_string(char **src, int64_t size)
 {
-  if (size <= 0)
-    return NULL;
-
   uint16_t *ptr = (uint16_t*)*src;
   int32_t length = 0, wsize;
   DWGCHAR *str, *str_base;
   int i;
 
+  if (size <= 0)
+    return NULL;
   while (*ptr != 0 && length * 2 < size)
     {
       ptr++;
