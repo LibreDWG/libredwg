@@ -638,6 +638,7 @@ dwg_free_object(Dwg_Object *obj)
           else // not a class
             {
               free(obj->tio.unknown);
+              obj->tio.unknown = NULL;
             }
         }
     }
