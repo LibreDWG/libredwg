@@ -1841,11 +1841,14 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
             (unsigned int) es.fields.checksum_2)
 
       error = decompress_R2004_section
-        (dat, &decomp[i * info->max_decomp_size], //offset
+        (dat, &decomp[i * info->max_decomp_size],     //offset
          max_decomp_size - (i*info->max_decomp_size), //bytes left
          es.fields.data_size);
-      if (error > DWG_ERR_CRITICAL)
+      if (error > DWG_ERR_CRITICAL) {
+        free(decomp);
+        decomp = NULL;
         return error;
+      }
     }
 
   sec_dat->bit     = 0;
