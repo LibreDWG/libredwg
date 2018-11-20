@@ -231,10 +231,12 @@ dwg_free_ ##token (Bit_Chain *restrict _dat, Dwg_Object *restrict obj) \
   Bit_Chain *hdl_dat = _dat;                     \
   Bit_Chain* str_dat = _dat;                     \
   Dwg_Data* dwg = obj->parent;                   \
-  int error = 0; \
+  int error = 0;                                 \
   LOG_HANDLE("Free object " #token " %p\n", obj) \
-  if (strcmp(#token, "UNKNOWN_OBJ") && obj->supertype == DWG_SUPERTYPE_UNKNOWN) \
-    return dwg_free_UNKNOWN_OBJ(_dat, obj); \
+  if (strcmp(#token, "UNKNOWN_OBJ") && obj->supertype == DWG_SUPERTYPE_UNKNOWN) { \
+    _obj = NULL;                                 \
+    return dwg_free_UNKNOWN_OBJ(_dat, obj);      \
+  }                                              \
   _obj = obj->tio.object->tio.token;
 
 /* obj itself is allocated via dwg->object[], dxfname is klass->dxfname */
@@ -292,8 +294,8 @@ static void
 dwg_free_eed(Dwg_Object* obj)
 {
   BITCODE_BL i;
-  if (obj->supertype == DWG_SUPERTYPE_OBJECT) {
-    Dwg_Object_Object* _obj = obj->tio.object;
+  if (obj->supertype == DWG_SUPERTYPE_ENTITY) {
+    Dwg_Object_Entity* _obj = obj->tio.entity;
     for (i=0; i < _obj->num_eed; i++) {
       if (_obj->eed[i].size)
         FREE_IF(_obj->eed[i].raw);
@@ -301,8 +303,8 @@ dwg_free_eed(Dwg_Object* obj)
     }
     FREE_IF(_obj->eed);
   }
-  else if (obj->supertype == DWG_SUPERTYPE_ENTITY) {
-    Dwg_Object_Entity* _obj = obj->tio.entity;
+  else {
+    Dwg_Object_Object* _obj = obj->tio.object;
     for (i=0; i < _obj->num_eed; i++) {
       if (_obj->eed[i].size)
         FREE_IF(_obj->eed[i].raw);
