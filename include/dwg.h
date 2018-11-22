@@ -4398,7 +4398,7 @@ typedef struct _dwg_entity_LOFTEDSURFACE
   BITCODE_BS modeler_format_version; /*!< DXF 70 */
   BITCODE_BS u_isolines;         /*!< DXF 71 */
   BITCODE_BS v_isolines;         /*!< DXF 72 */
-  BITCODE_BL class_version;      /*!< DXF 90 */
+  //BITCODE_BL class_version;      /*!< DXF 90 */
   BITCODE_BD* loft_entity_transmatrix; /*!< DXF 40: 16x BD */
   BITCODE_BL plane_normal_lofting_type; /*!< DXF 70 */
   BITCODE_BD start_draft_angle;     /*!< DXF 41 */
@@ -4414,8 +4414,10 @@ typedef struct _dwg_entity_LOFTEDSURFACE
   BITCODE_B ruled_surface; // 296
   BITCODE_B virtual_guide; // 297
 
-  BITCODE_H cross_section;
-  BITCODE_H guide_curve;
+  BITCODE_BS num_cross_sections;
+  BITCODE_BS num_guide_curves;
+  BITCODE_H *cross_sections;
+  BITCODE_H *guide_curves;
   BITCODE_H path_curve;
 } Dwg_Entity_LOFTEDSURFACE;
 
@@ -4712,14 +4714,14 @@ typedef struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM
   // AcDbAssocActionParam
   BITCODE_RC unknown;  // 01010101
   BITCODE_B unknown1;  //
-  BITCODE_BL status;   // 90: 0 uptodate, 1 changed_directly, 2 changed_transitive,
+  BITCODE_BS status;   // 90: 0 uptodate, 1 changed_directly, 2 changed_transitive,
                        // 3 ChangedNoDifference, 4 FailedToEvaluate, 5 Erased, 6 Suppressed
                        // 7 Unresolved
   BITCODE_T  name;     // 1 ""
   BITCODE_RS flags;    // 90 0
   // AcDbAssocCompoundActionParam
   BITCODE_BD unknown3; // 40 -1.0
-  BITCODE_BL num_params; // 90 1
+  BITCODE_BS num_params; // 90 1
   BITCODE_H actionparam;  // 330
   BITCODE_H writedep; // 360
 } Dwg_Object_ASSOCOSNAPPOINTREFACTIONPARAM;
