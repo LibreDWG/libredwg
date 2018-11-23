@@ -414,7 +414,7 @@
           _obj->name[vcount] = bit_read_##type(dat); \
           LOG_INSANE(#name "[%ld]: " FORMAT_##type "\n", \
                      (long)vcount, _obj->name[vcount]) \
-        } \
+        }\
     }
 #define FIELD_VECTOR_T(name, size, dxf) \
   if (_obj->size > 0) \
@@ -444,46 +444,58 @@
           _obj->name[vcount] = bit_read_##type(dat); \
           LOG_INSANE(#name "[%ld]: " FORMAT_##type " [" #type " %d]\n", \
                      (long)vcount, _obj->name[vcount], _dxf++) \
-        } \
+        }\
     }
 
 #define FIELD_VECTOR(name, type, size, dxf) FIELD_VECTOR_N(name, type, _obj->size, dxf)
 
 #define FIELD_2RD_VECTOR(name, size, dxf) \
   VECTOR_CHKCOUNT(name,2RD,_obj->size) \
-  _obj->name = (BITCODE_2RD *) calloc(_obj->size, sizeof(BITCODE_2RD)); \
-  for (vcount=0; vcount< (BITCODE_BL)_obj->size; vcount++)\
-    {\
-      FIELD_2RD(name[vcount], dxf); \
+  if (_obj->size > 0) \
+    { \
+      _obj->name = (BITCODE_2RD *) calloc(_obj->size, sizeof(BITCODE_2RD)); \
+      for (vcount=0; vcount< (BITCODE_BL)_obj->size; vcount++)\
+        {\
+          FIELD_2RD(name[vcount], dxf); \
+        }\
     }
 
 #define FIELD_2DD_VECTOR(name, size, dxf) \
   VECTOR_CHKCOUNT(name,2DD,_obj->size) \
-    _obj->name = (BITCODE_2RD *) calloc(_obj->size, sizeof(BITCODE_2RD)); \
-  FIELD_2RD(name[0], dxf); \
-  for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)\
-    {\
-      FIELD_DD(name[vcount].x, FIELD_VALUE(name[vcount - 1].x), dxf); \
-      FIELD_DD(name[vcount].y, FIELD_VALUE(name[vcount - 1].y), dxf+10);\
-      LOG_TRACE(#name "[%ld]: (" FORMAT_BD ", " FORMAT_BD ") [DD %d]\n", \
-                (long)vcount, _obj->name[vcount].x, _obj->name[vcount].y, dxf) \
+  if (_obj->size > 0) \
+    { \
+      _obj->name = (BITCODE_2RD *) calloc(_obj->size, sizeof(BITCODE_2RD)); \
+      FIELD_2RD(name[0], dxf); \
+      for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)\
+        {\
+          FIELD_DD(name[vcount].x, FIELD_VALUE(name[vcount - 1].x), dxf); \
+          FIELD_DD(name[vcount].y, FIELD_VALUE(name[vcount - 1].y), dxf+10);\
+          LOG_TRACE(#name "[%ld]: (" FORMAT_BD ", " FORMAT_BD ") [DD %d]\n", \
+                    (long)vcount, _obj->name[vcount].x, _obj->name[vcount].y, dxf) \
+        }\
     }
 
 #define FIELD_3DPOINT_VECTOR(name, size, dxf) \
   VECTOR_CHKCOUNT(name,3BD,_obj->size) \
-  _obj->name = (BITCODE_3DPOINT *) calloc(_obj->size, sizeof(BITCODE_3DPOINT)); \
-  for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++) \
-    {\
-      FIELD_3DPOINT(name[vcount], dxf); \
+  if (_obj->size > 0) \
+    { \
+      _obj->name = (BITCODE_3DPOINT *) calloc(_obj->size, sizeof(BITCODE_3DPOINT)); \
+      for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++) \
+        {\
+          FIELD_3DPOINT(name[vcount], dxf); \
+        }\
     }
 
 // shortest handle: 8 bit
 #define HANDLE_VECTOR_N(name, size, code, dxf) \
   VECTOR_CHKCOUNT(name,HANDLE,size) \
-    FIELD_VALUE(name) = (BITCODE_H*) calloc(size, sizeof(BITCODE_H)); \
-  for (vcount=0; vcount < (BITCODE_BL)size; vcount++) \
-    {\
-      FIELD_HANDLE_N(name[vcount], vcount, code, dxf);  \
+  if (size > 0) \
+    { \
+      FIELD_VALUE(name) = (BITCODE_H*) calloc(size, sizeof(BITCODE_H)); \
+      for (vcount=0; vcount < (BITCODE_BL)size; vcount++) \
+        {\
+          FIELD_HANDLE_N(name[vcount], vcount, code, dxf);  \
+        }\
     }
 
 #define HANDLE_VECTOR(name, sizefield, code, dxf) \
@@ -605,20 +617,20 @@
 
 // unchecked with a constant
 #define REPEAT_CN(times, name, type) \
-  if (times) _obj->name = (type *) calloc(times, sizeof(type)); \
+  if (times > 0) _obj->name = (type *) calloc(times, sizeof(type)); \
   for (rcount1=0; rcount1<(BITCODE_BL)times; rcount1++)
 #define REPEAT_N(times, name, type) \
   REPEAT_CHKCOUNT(name,times,type) \
-  if (times) _obj->name = (type *) calloc(times, sizeof(type)); \
+  if (times > 0) _obj->name = (type *) calloc(times, sizeof(type)); \
   for (rcount1=0; rcount1<(BITCODE_BL)times; rcount1++)
 
 #define _REPEAT(times, name, type, idx) \
   REPEAT_CHKCOUNT_LVAL(name,_obj->times,type) \
-  if (_obj->times) _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
+  if (_obj->times > 0) _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
   for (rcount##idx=0; rcount##idx<(BITCODE_BL)_obj->times; rcount##idx++)
 #define _REPEAT_C(times, name, type, idx) \
   REPEAT_CHKCOUNT_LVAL(name,_obj->times,type) \
-  if (_obj->times) _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
+  if (_obj->times > 0) _obj->name = (type *) calloc(_obj->times, sizeof(type)); \
   for (rcount##idx=0; rcount##idx<(BITCODE_BL)_obj->times; rcount##idx++)
 #define _REPEAT_N(times, name, type, idx) \
   if (_obj->name) \
