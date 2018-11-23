@@ -2,7 +2,8 @@
 
   #include "spec.h"
 
-  if (FIELD_VALUE(entity_mode) == 0 || IF_IS_ENCODER)
+  //free: avoid double-free #43
+  if ((FIELD_VALUE(entity_mode) == 0 && !IF_IS_FREE) || IF_IS_ENCODER)
     {
       FIELD_HANDLE(subentity, 4, 0); // doc: owner ref always?
     }

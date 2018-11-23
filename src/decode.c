@@ -1841,11 +1841,14 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
             (unsigned int) es.fields.checksum_2)
 
       error = decompress_R2004_section
-        (dat, &decomp[i * info->max_decomp_size], //offset
+        (dat, &decomp[i * info->max_decomp_size],     //offset
          max_decomp_size - (i*info->max_decomp_size), //bytes left
          es.fields.data_size);
-      if (error > DWG_ERR_CRITICAL)
+      if (error > DWG_ERR_CRITICAL) {
+        free(decomp);
+        decomp = NULL;
         return error;
+      }
     }
 
   sec_dat->bit     = 0;
@@ -1918,7 +1921,7 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
       if (dat->version >= R_2007)
         section_string_stream(&sec_dat, bitsize, &str_dat);
 
-      dwg->dwg_class = (Dwg_Class *) calloc(dwg->num_classes, sizeof(Dwg_Class));
+      dwg->dwg_class = (Dwg_Class *)calloc(dwg->num_classes, sizeof(Dwg_Class));
       if (!dwg->dwg_class)
         {
           LOG_ERROR("Out of memory");

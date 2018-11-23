@@ -6414,14 +6414,21 @@ DWG_ENTITY(LOFTEDSURFACE)
   SUBCLASS(AcDbModelerGeometry)
   ACTION_3DSOLID;
   FIELD_BS (modeler_format_version, 70); //def 1
+  if (FIELD_VALUE(modeler_format_version) > 3)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
 
   SUBCLASS(AcDbSurface)
   FIELD_BS (u_isolines, 71);
   FIELD_BS (v_isolines, 72);
   SUBCLASS(AcDbLoftedSurface)
-  FIELD_BL (class_version, 90);
-  if (FIELD_VALUE(class_version) > 10)
-    return DWG_ERR_VALUEOUTOFBOUNDS;
+  FIELD_VECTOR_N (loft_entity_transmatrix, BD, 16, 40);
+  //90 77
+  //90 544
+  //310
+  //90 77
+  //90 608
+  //310
+  //FIELD_BL (class_version, 90);
   FIELD_BL (plane_normal_lofting_type, 70);
   FIELD_BD (start_draft_angle, 41);
   FIELD_BD (end_draft_angle, 42);
@@ -6435,10 +6442,12 @@ DWG_ENTITY(LOFTEDSURFACE)
   FIELD_B (solid, 295);
   FIELD_B (ruled_surface, 296);
   FIELD_B (virtual_guide, 297);
+  FIELD_BS (num_cross_sections, 0);
+  FIELD_BS (num_guide_curves, 0);
 
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (cross_section, 5, 0);
-  FIELD_HANDLE (guide_curve, 5, 0);
+  HANDLE_VECTOR(cross_sections, num_cross_sections, 5, 310);
+  HANDLE_VECTOR(guide_curves, num_guide_curves, 5, 310);
   FIELD_HANDLE (path_curve, 5, 0);
 
 DWG_ENTITY_END

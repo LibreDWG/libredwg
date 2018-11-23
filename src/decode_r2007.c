@@ -659,6 +659,7 @@ read_data_page(Bit_Chain* dat, unsigned char *decomp, int64_t page_size,
     memcpy(decomp, pedata, size_uncomp);
 
   free(pedata);
+  free(rsdata);
 
   return error;
 }
@@ -737,14 +738,13 @@ bfr_read(void *restrict dst, char **restrict src, size_t size)
 static DWGCHAR*
 bfr_read_string(char **src, int64_t size)
 {
-  if (size <= 0)
-    return NULL;
-
   uint16_t *ptr = (uint16_t*)*src;
   int32_t length = 0, wsize;
   DWGCHAR *str, *str_base;
   int i;
 
+  if (size <= 0)
+    return NULL;
   while (*ptr != 0 && length * 2 < size)
     {
       ptr++;

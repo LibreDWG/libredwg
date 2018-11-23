@@ -23,6 +23,9 @@
 # include AX_STRCASECMP_HEADER
 #endif
 #include <getopt.h>
+#ifdef HAVE_VALGRIND_VALGRIND_H
+#include <valgrind/valgrind.h>
+#endif
 
 #include "dwg.h"
 #include "bits.h"
@@ -258,7 +261,12 @@ main(int argc, char *argv[])
     outfile = suffix (infile, "dwg");
   error |= dwg_write_file(outfile, &dwg);
   // forget about valgrind. really huge DWG's need endlessly here.
-  //dwg_free(&dwg);
+  if ((dwg.header.version && dwg.num_objects < 1000)
+#ifdef HAVE_VALGRIND_VALGRIND_H
+      || (RUNNING_ON_VALGRIND)
+#endif
+      )
+    dwg_free(&dwg);
 
   return error >= DWG_ERR_CRITICAL ? 1 : 0;
 }
