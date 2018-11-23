@@ -501,19 +501,25 @@
 #define FIELD_XDATA(name, size)\
   _obj->name = dwg_decode_xdata(dat, _obj, _obj->size)
 
-#define REACTORS(code)\
-  obj->tio.object->reactors = calloc(obj->tio.object->num_reactors, sizeof(BITCODE_H)); \
-  for (vcount=0; vcount < obj->tio.object->num_reactors; vcount++) \
-    {\
-      VALUE_HANDLE_N(obj->tio.object->reactors[vcount], reactors, vcount, code, 330); \
+#define REACTORS(code) \
+  if (obj->tio.object->num_reactors > 0) \
+    { \
+      obj->tio.object->reactors = calloc(obj->tio.object->num_reactors, sizeof(BITCODE_H)); \
+      for (vcount=0; vcount < obj->tio.object->num_reactors; vcount++) \
+        {\
+          VALUE_HANDLE_N(obj->tio.object->reactors[vcount], reactors, vcount, code, 330); \
+        } \
     }
 
-#define ENT_REACTORS(code)\
-  _ent->reactors = calloc(_ent->num_reactors, sizeof(BITCODE_H)); \
-  for (vcount=0; vcount < _ent->num_reactors; vcount++)\
-    {\
-      VALUE_HANDLE_N(_ent->reactors[vcount], reactors, vcount, code, 330); \
-    }
+#define ENT_REACTORS(code) \
+  if (_ent->num_reactors > 0) \
+    { \
+      _ent->reactors = calloc(_ent->num_reactors, sizeof(BITCODE_H)); \
+      for (vcount=0; vcount < _ent->num_reactors; vcount++) \
+        { \
+          VALUE_HANDLE_N(_ent->reactors[vcount], reactors, vcount, code, 330); \
+        } \
+     }
 
 #define XDICOBJHANDLE(code)\
   SINCE(R_2004)\
