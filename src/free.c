@@ -66,9 +66,10 @@ static Bit_Chain *dat = &pdat;
 
 #define ANYCODE -1
 #define FIELD_HANDLE(name,code,dxf) VALUE_HANDLE(_obj->name,code,dxf)
-#define VALUE_HANDLE(ref,code,dxf) \
+#define VALUE_HANDLE(ref,_code,dxf) \
   if (ref) { \
-    if (!ref->obj && !ref->handleref.size && !ref->absolute_ref) free(ref); \
+    if (!(ref->handleref.size || (obj && ref->handleref.code > 5))) \
+      free(ref); ref = NULL; \
   } /* else freed globally */
 #define FIELD_DATAHANDLE(name,code,dxf) FIELD_HANDLE(name, code, dxf)
 #define FIELD_HANDLE_N(name,vcount,code,dxf) FIELD_HANDLE(name, code, dxf)
@@ -157,7 +158,7 @@ static Bit_Chain *dat = &pdat;
   if (ent->reactors) { \
     for (vcount=0; vcount < ent->num_reactors; vcount++)\
       VALUE_HANDLE(ent->reactors[vcount], code, 330);  \
-    VALUE_TV(ent->reactors,0); \
+    VALUE_TV(ent->reactors, 0); \
   }
 #define XDICOBJHANDLE(code)\
   SINCE(R_2004)\
