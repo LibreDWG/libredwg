@@ -27,6 +27,8 @@ copyright assignment on file.
 See https://www.gnu.org/prep/maintain/html_node/Legally-Significant.html
 and https://www.gnu.org/prep/maintain/html_node/Copyright-Papers.html
 for details and contact us to obtain the relevant forms.
+The most likely proper form is
+http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=blob_plain;f=doc/Copyright/request-assign.future;hb=HEAD
 
 Coding Standards
 
