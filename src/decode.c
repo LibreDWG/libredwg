@@ -294,6 +294,7 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
   obj->tio.object->tio.name = _obj;                                     \
   obj->tio.object->objid = obj->index;                                  \
   obj->parent = dwg;                                                    \
+  obj->dxfname = (char*)#name;                                          \
   LOG_TRACE("\n-- table entry " #name " [%d]:\n", i)
 
 #define CHK_ENDPOS \

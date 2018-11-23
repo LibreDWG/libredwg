@@ -171,7 +171,7 @@
 #define FIELD_MS(name,dxf)  FIELDG(name, MS, dxf)
 #define FIELD_TF(name,len,dxf) \
   { VECTOR_CHKCOUNT(name,TF,len) \
-   _obj->name = bit_read_TF(dat,(int)len); \
+    _obj->name = bit_read_TF(dat,(int)len); \
     LOG_INSANE( #name ": [%d TF " #dxf "]\n", len); \
     LOG_INSANE_TF(FIELD_VALUE(name), (int)len); }
 #define FIELD_TFF(name,len,dxf) \
@@ -387,14 +387,16 @@
        : 0xff00L)
 #define TYPE_MAXELEMSIZE(type) (unsigned)dwg_bits_size[BITS_##type]
 #define VECTOR_CHKCOUNT(name,type,size) \
-  if ((long)((size)*TYPE_MAXELEMSIZE(type)) > AVAIL_BITS()) {           \
-    LOG_ERROR("Invalid " #name " vcount %ld. Need min. %u bits for %s, have %ld for %s.", \
-              (long)(size), (size)*TYPE_MAXELEMSIZE(type), #type, AVAIL_BITS(), obj?obj->dxfname:""); \
+  if ((long)((size)*TYPE_MAXELEMSIZE(type)) > AVAIL_BITS()) { \
+    LOG_ERROR("Invalid " #name " size %ld. Need min. %u bits for " #type ", have %ld for %s.", \
+              (long)(size), (size)*TYPE_MAXELEMSIZE(type), AVAIL_BITS(), \
+              obj && obj->dxfname ? obj->dxfname:""); \
     return DWG_ERR_VALUEOUTOFBOUNDS; }
 #define _VECTOR_CHKCOUNT(name,size,maxelemsize) \
   if ((long)(size)*(maxelemsize) > AVAIL_BITS()) { \
-    LOG_ERROR("Invalid " #name " vcount %ld. Need min. %u bits, have %ld for %s.", \
-              (long)(size), (unsigned)(size)*(maxelemsize), AVAIL_BITS(), obj?obj->dxfname:""); \
+    LOG_ERROR("Invalid " #name " size %ld. Need min. %u bits, have %ld for %s.", \
+              (long)(size), (unsigned)(size)*(maxelemsize), AVAIL_BITS(), \
+              obj && obj->dxfname ? obj->dxfname:""); \
     size = 0; \
     return DWG_ERR_VALUEOUTOFBOUNDS; }
 #define HANDLE_VECTOR_CHKCOUNT(name,size) \

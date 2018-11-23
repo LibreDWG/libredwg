@@ -240,7 +240,7 @@ dwg_free_ ##token (Bit_Chain *restrict _dat, Dwg_Object *restrict obj) \
   }                                              \
   _obj = obj->tio.object->tio.token;
 
-/* obj itself is allocated via dwg->object[], dxfname is klass->dxfname */
+/* obj itself is allocated via dwg->object[], dxfname is klass->dxfname or static */
 #define DWG_OBJECT_END       \
   dwg_free_eed(obj);         \
   FREE_IF(_obj);             \
