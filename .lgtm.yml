@@ -1,0 +1,14 @@
+#extraction:
+#  cpp:
+#    configure:
+#      command:
+#        - "sh autogen.sh"
+#        - "./configure --enable-write"
+queries:
+    - exclude: cpp/short-global-name
+path_classifiers:
+  generated:
+    - src/config.h
+  test:
+    - test
+    - exclude: test/xmlsuite
