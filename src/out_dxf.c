@@ -1100,7 +1100,7 @@ dxf_format (int code)
     return "%-16.14f";
   if (code < 80)
     return "%6i";
-  if (80 <= code && code <= 99) //BL int32
+  if (80 <= code && code <= 99) //BL int32 lgtm [cpp/constant-comparison]
     return "%9li";
   if (code == 100)
     return "%s";

@@ -15,8 +15,8 @@
  * written by Reini Urban
  */
 
-#ifndef PRINT_H
-#define PRINT_H
+#ifndef IN_JSON_H
+#define IN_JSON_H
 
 #include "dwg.h"
 #include "bits.h"
