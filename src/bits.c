@@ -1196,20 +1196,20 @@ bit_write_CRC(Bit_Chain * dat, long unsigned int start_address,
 BITCODE_TF
 bit_read_TF(Bit_Chain *restrict dat, int length)
 {
-  char *chain = malloc(length+1);
+  BITCODE_RC *chain = malloc(length+1);
 
   bit_read_fixed(dat, chain, length);
   chain[length] = '\0';
 
-  return chain;
+  return (BITCODE_TF)chain;
 }
 
 void
-bit_read_fixed(Bit_Chain *restrict dat, char *restrict dest, int length)
+bit_read_fixed(Bit_Chain *restrict dat, BITCODE_RC *restrict dest, int length)
 {
   for (int i = 0; i < length; i++)
     {
-      dest[i] = (char)bit_read_RC(dat);
+      dest[i] = (BITCODE_RC)bit_read_RC(dat);
     }
 }
 

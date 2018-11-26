@@ -65,7 +65,7 @@ extern "C" {
 #define BITCODE_DOUBLE double
 
 /* The FORMAT_* are for logging only */
-#define BITCODE_RC char
+#define BITCODE_RC unsigned char
 #ifdef _WIN32
 # define FORMAT_RC "0x%2x"
 #else

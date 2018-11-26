@@ -2672,13 +2672,13 @@ dwg_ent_ole2frame_set_data_length(dwg_ent_ole2frame *restrict frame,
                                   const BITCODE_BL data_length,
                                   int *restrict error);
 
-EXPORT char *
+EXPORT BITCODE_RC *
 dwg_ent_ole2frame_get_data(const dwg_ent_ole2frame *restrict frame,
                            int *restrict error);
 
 EXPORT void
 dwg_ent_ole2frame_set_data(dwg_ent_ole2frame *restrict frame,
-                           const char *data,
+                           const BITCODE_RC *restrict data,
                            int *restrict error);
 
 
@@ -2714,13 +2714,13 @@ dwg_obj_proxy_set_from_dxf(dwg_obj_proxy *restrict proxy,
                            const BITCODE_B from_dxf,
                            int *restrict error);
 
-EXPORT char*
+EXPORT BITCODE_RC*
 dwg_obj_proxy_get_data(const dwg_obj_proxy *restrict proxy,
                        int *restrict error);
 
 EXPORT void
 dwg_obj_proxy_set_data(dwg_obj_proxy *restrict proxy,
-                       const char* data,
+                       const BITCODE_RC* data,
                        int *restrict error);
 
 EXPORT dwg_object_ref*
@@ -3323,22 +3323,22 @@ dwg_object_polyline_2d_get_points(const dwg_object *restrict obj,
 ********************************************************************/
 
 
-EXPORT char
+EXPORT BITCODE_RC
 dwg_ent_polyline_3d_get_flag(const dwg_ent_polyline_3d *restrict pline3d,
                              int *restrict error);
 
 EXPORT void
 dwg_ent_polyline_3d_set_flag(dwg_ent_polyline_3d *restrict pline3d,
-                             const char flag,
+                             const BITCODE_RC flag,
                              int *restrict error);
 
-EXPORT char
+EXPORT BITCODE_RC
 dwg_ent_polyline_3d_get_flag2(const dwg_ent_polyline_3d *restrict pline3d,
                               int *restrict error);
 
 EXPORT void
 dwg_ent_polyline_3d_set_flag2(dwg_ent_polyline_3d *restrict pline3d,
-                              const char flag2,
+                              const BITCODE_RC flag2,
                               int *restrict error);
 
 EXPORT BITCODE_BL
@@ -3475,13 +3475,13 @@ dwg_ent_image_set_display_props(dwg_ent_image *restrict image,
                                 const BITCODE_BS display_props,
                                 int *restrict error);
 
-EXPORT unsigned char
+EXPORT BITCODE_B
 dwg_ent_image_get_clipping(const dwg_ent_image *restrict image,
                            int *restrict error);
 
 EXPORT void
 dwg_ent_image_set_clipping(dwg_ent_image *restrict image,
-                           const unsigned char clipping,
+                           const BITCODE_B clipping,
                            int *restrict error);
 
 EXPORT char

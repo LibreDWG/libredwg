@@ -9710,7 +9710,7 @@ dwg_ent_ole2frame_set_data_length(dwg_ent_ole2frame *restrict frame,
 
 /** Returns ole2frame data (binary)
  */
-char *
+BITCODE_RC *
 dwg_ent_ole2frame_get_data(const dwg_ent_ole2frame *restrict frame,
                           int *restrict error)
 {
@@ -9731,13 +9731,13 @@ dwg_ent_ole2frame_get_data(const dwg_ent_ole2frame *restrict frame,
  */
 void
 dwg_ent_ole2frame_set_data(dwg_ent_ole2frame *restrict frame,
-                           const char *restrict data,
+                           const BITCODE_RC *restrict data,
                            int *restrict error)
 {
   if (frame)
     {
       *error = 0;
-      frame->data = (char*)data;
+      frame->data = (BITCODE_RC*)data;
     }
   else
     {
@@ -9853,7 +9853,7 @@ dwg_obj_proxy_set_from_dxf(dwg_obj_proxy *restrict proxy,
     }
 }
 
-char*
+BITCODE_RC*
 dwg_obj_proxy_get_data(const dwg_obj_proxy *restrict proxy,
                           int *restrict error)
 {
@@ -9872,13 +9872,13 @@ dwg_obj_proxy_get_data(const dwg_obj_proxy *restrict proxy,
 
 void
 dwg_obj_proxy_set_data(dwg_obj_proxy *restrict proxy,
-                       const char *restrict data,
+                       const BITCODE_RC *restrict data,
                        int *restrict error)
 {
   if (proxy)
     {
       *error = 0;
-      proxy->data = (char*)data;
+      proxy->data = (BITCODE_RC*)data;
     }
   else
     {
@@ -13404,7 +13404,7 @@ dwg_ent_image_set_display_props(dwg_ent_image *restrict image,
 
 /** Returns image clipping
  */
-unsigned char
+BITCODE_B
 dwg_ent_image_get_clipping(const dwg_ent_image *restrict image,
                           int *restrict error)
 {
@@ -13425,7 +13425,7 @@ dwg_ent_image_get_clipping(const dwg_ent_image *restrict image,
  */
 void
 dwg_ent_image_set_clipping(dwg_ent_image *restrict image,
-                           unsigned char clipping,
+                           BITCODE_B clipping,
                            int *restrict error)
 {
   if (image)
@@ -13760,7 +13760,7 @@ dwg_ent_mline_get_scale(const dwg_ent_mline *restrict mline,
 */
 void
 dwg_ent_mline_set_justification(dwg_ent_mline *restrict mline,
-                                const char justification,
+                                const BITCODE_RC justification,
                                 int *restrict error)
 {
   if (mline)
@@ -13777,7 +13777,7 @@ dwg_ent_mline_set_justification(dwg_ent_mline *restrict mline,
 
 /** Returns justification value
  */
-char
+BITCODE_RC
 dwg_ent_mline_get_justification(const dwg_ent_mline *restrict mline,
                                 int *restrict error)
 {
