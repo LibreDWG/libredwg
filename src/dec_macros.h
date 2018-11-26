@@ -503,11 +503,18 @@
 #define HANDLE_VECTOR(name, sizefield, code, dxf) \
   HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
 
-//skip non-zero bytes and a terminating zero
+//count 1 bytes, until non-1 bytes or a terminating zero
 #define FIELD_NUM_INSERTS(num_inserts, type, dxf) \
       FIELD_VALUE(num_inserts)=0; vcount=0; \
       while ((vcount=(BITCODE_RC)bit_read_RC(dat))) \
         {\
+          if (vcount != 1) \
+            {\
+              LOG_ERROR("num_inserts [RC " FORMAT_RL "]: %d!\n", \
+                        FIELD_VALUE(num_inserts), (unsigned char)vcount) \
+              bit_advance_position(dat, -8); \
+              break;\
+            }\
           FIELD_VALUE(num_inserts)++;\
           LOG_INSANE("num_inserts [RC " FORMAT_RL "]: %d\n", \
                      FIELD_VALUE(num_inserts), (unsigned char)vcount)  \

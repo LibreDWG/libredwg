@@ -318,8 +318,12 @@ static bool env_var_checked_p;
       } \
   }
 
-#define FIELD_NUM_INSERTS(num_inserts, type, dxf)   \
-  FIELD_RL(num_inserts, dxf)
+#define FIELD_NUM_INSERTS(num_inserts, type, dxf) \
+  for (vcount=0; vcount<FIELD_VALUE(num_inserts); vcount++) \
+    {                       \
+      bit_write_RC(dat, 1); \
+    }                       \
+  bit_write_RC(dat, 0)
 
 #define HANDLE_VECTOR(name, sizefield, code, dxf) \
   HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
