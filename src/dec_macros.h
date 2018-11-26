@@ -505,10 +505,12 @@
 
 //skip non-zero bytes and a terminating zero
 #define FIELD_NUM_INSERTS(num_inserts, type, dxf) \
-      FIELD_VALUE(num_inserts)=0; \
-      while (bit_read_RC(dat)) \
+      FIELD_VALUE(num_inserts)=0; vcount=0; \
+      while ((vcount=(BITCODE_RC)bit_read_RC(dat))) \
         {\
           FIELD_VALUE(num_inserts)++;\
+          LOG_INSANE("num_inserts [RC " FORMAT_RL "]: %d\n", \
+                     FIELD_VALUE(num_inserts), (unsigned char)vcount)  \
         }\
       FIELD_G_TRACE(num_inserts, type, dxf)
 
