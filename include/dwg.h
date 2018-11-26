@@ -2640,8 +2640,8 @@ typedef struct _dwg_Leader_Break
 typedef struct _dwg_Leader_Line // as documented by DXF
 {
   struct _dwg_Leader_Node *parent;
-  BITCODE_BL  num_vertex;
-  BITCODE_3BD vertex;              /*!< DXF 10 */
+  BITCODE_BL  num_vertexes;
+  BITCODE_3BD* vertexes;              /*!< DXF 10 */
   BITCODE_BL num_breaks;
   Dwg_Leader_Break * breaks;       /*!< DXF 12, 13 */
   BITCODE_BL  line_index;          /*!< DXF 91 */
