@@ -81,7 +81,7 @@ static bool env_var_checked_p;
   LOG_TRACE(#name ": " FORMAT_##type "\n", _obj->name)
 #define FIELD_G_TRACE(name,type,dxfgroup) \
   LOG_TRACE(#name ": " FORMAT_##type " [" #type " " #dxfgroup "]\n", _obj->name)
-#define FIELD_CAST(name,type,cast,dxf)                    \
+#define FIELD_CAST(name,type,cast,dxf) \
   { bit_write_##type(dat, (BITCODE_##type)_obj->name); \
     FIELD_G_TRACE(name,cast,dxf); }
 
@@ -115,9 +115,11 @@ static bool env_var_checked_p;
     } \
   }
 #define FIELD_TF(name,len,dxf) \
-  { if (_obj->name && len) bit_write_TF(dat, _obj->name, len); \
+  { if (_obj->name && len) bit_write_TF(dat, (BITCODE_TF)_obj->name, len); \
     FIELD_G_TRACE(name, TF, dxf); }
-#define FIELD_TFF(name,len,dxf) FIELD_TF(name,len,dxf)
+#define FIELD_TFF(name,len,dxf) \
+  { if (_obj->name && len) bit_write_TF(dat, (BITCODE_TF)_obj->name, len); \
+    FIELD_G_TRACE(name, TF, dxf); }
 #define FIELD_TU(name,dxf) \
   { if (_obj->name) bit_write_TU(dat, (BITCODE_TU)_obj->name); \
     LOG_TRACE_TU(#name, (BITCODE_TU)_obj->name,dxf); }
@@ -721,7 +723,7 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       //dwg->picture.size = 0; // If one desires not to copy preview pictures,
       // should un-comment this line
       bit_write_sentinel(dat, dwg_sentinel(DWG_SENTINEL_PICTURE_BEGIN));
-      bit_write_TF(dat, (char *)dwg->picture.chain, dwg->picture.size);
+      bit_write_TF(dat, (char*)dwg->picture.chain, dwg->picture.size);
       if (dwg->picture.size == 0)
         {
           bit_write_RL(dat, 5);
@@ -992,7 +994,7 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
     // AC1012, AC1014 or AC1015. This is a char[11], zero padded.
     // with \n at 12.
-    bit_write_TF(dat, _obj->version, 12);
+    bit_write_TF(dat, (char*)_obj->version, 12);
     LOG_TRACE("version: %s\n", _obj->version)
 
     for (i = 0; i < 4; i++)
@@ -1451,7 +1453,7 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
                        obj->handle.code, obj->handle.size, obj->handle.value);
               // write obj->size bytes, excl. bitsize and handle.
               // overshoot the bitsize and handle size.
-              bit_write_TF(dat, (char*)obj->tio.unknown, obj->size);
+              bit_write_TF(dat, obj->tio.unknown, obj->size);
             }
         }
     }

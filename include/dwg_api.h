@@ -2672,13 +2672,13 @@ dwg_ent_ole2frame_set_data_length(dwg_ent_ole2frame *restrict frame,
                                   const BITCODE_BL data_length,
                                   int *restrict error);
 
-EXPORT BITCODE_RC *
+EXPORT char *
 dwg_ent_ole2frame_get_data(const dwg_ent_ole2frame *restrict frame,
                            int *restrict error);
 
 EXPORT void
 dwg_ent_ole2frame_set_data(dwg_ent_ole2frame *restrict frame,
-                           const BITCODE_RC *restrict data,
+                           const char *restrict data,
                            int *restrict error);
 
 
@@ -2714,13 +2714,13 @@ dwg_obj_proxy_set_from_dxf(dwg_obj_proxy *restrict proxy,
                            const BITCODE_B from_dxf,
                            int *restrict error);
 
-EXPORT BITCODE_RC*
+EXPORT char*
 dwg_obj_proxy_get_data(const dwg_obj_proxy *restrict proxy,
                        int *restrict error);
 
 EXPORT void
 dwg_obj_proxy_set_data(dwg_obj_proxy *restrict proxy,
-                       const BITCODE_RC* data,
+                       const char* data,
                        int *restrict error);
 
 EXPORT dwg_object_ref*
@@ -4667,7 +4667,7 @@ EXPORT BITCODE_BLL
 dwg_ent_get_picture_size(const dwg_obj_ent *restrict ent,
                          int *restrict error); // before r2007 only RL
 
-EXPORT BITCODE_RC *
+EXPORT char *
 dwg_ent_get_picture(const dwg_obj_ent *restrict ent,
                     int *restrict error);
 

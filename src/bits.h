@@ -236,7 +236,7 @@ void
 bit_read_fixed(Bit_Chain *restrict dat, BITCODE_RC *restrict dest, int length);
 
 void
-bit_write_TF(Bit_Chain *restrict dat, char *restrict chain, int length);
+bit_write_TF(Bit_Chain *restrict dat, BITCODE_TF restrict chain, int length);
 
 BITCODE_TV
 bit_read_TV(Bit_Chain *restrict dat);

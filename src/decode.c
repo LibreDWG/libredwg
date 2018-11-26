@@ -114,7 +114,7 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
  * and then either read from dat, or set to a default.
  */
 int
-dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
+dwg_decode(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int i;
   char version[7];
@@ -231,8 +231,8 @@ dwg_decode(Bit_Chain * dat, Dwg_Data * dwg)
 // We put the 3x 10 table fields into sections.
 // number is the number of elements in the table. >=r13 it is the id.
 static void
-decode_preR13_section_ptr(const char* name, Dwg_Section_Type_r11 id,
-                          Bit_Chain* dat, Dwg_Data * dwg)
+decode_preR13_section_ptr(const char *restrict name, Dwg_Section_Type_r11 id,
+                          Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dwg_Section *tbl = &dwg->header.section[id];
   tbl->size    = bit_read_RS(dat);
@@ -245,8 +245,8 @@ decode_preR13_section_ptr(const char* name, Dwg_Section_Type_r11 id,
 }
 
 static void
-decode_preR13_section_chk(Dwg_Section_Type_r11 id, Bit_Chain* dat,
-                          Dwg_Data * dwg)
+decode_preR13_section_chk(Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
+                          Dwg_Data *restrict dwg)
 {
   Dwg_Section *tbl = &dwg->header.section[id];
 
@@ -268,7 +268,7 @@ decode_preR13_section_chk(Dwg_Section_Type_r11 id, Bit_Chain* dat,
 
 // TABLES really
 static int
-decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg)
+decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dwg_Section *tbl = &dwg->header.section[id];
   int i;
@@ -1324,10 +1324,10 @@ dwg_resolve_objectrefs_silent(Dwg_Data *restrict dwg)
 /* R2004 Literal Length
  */
 static int
-read_literal_length(Bit_Chain* dat, unsigned char *opcode)
+read_literal_length(Bit_Chain *restrict dat, unsigned char *restrict opcode)
 {
   int total = 0;
-  unsigned char byte = bit_read_RC(dat);
+  BITCODE_RC byte = bit_read_RC(dat);
 
   *opcode = 0x00;
 
@@ -1354,7 +1354,7 @@ static int
 read_long_compression_offset(Bit_Chain* dat)
 {
   int total = 0;
-  unsigned char byte = bit_read_RC(dat);
+  BITCODE_RC byte = bit_read_RC(dat);
   if (byte == 0)
     {
       total = 0xFF;
@@ -1370,8 +1370,8 @@ static int
 read_two_byte_offset(Bit_Chain *restrict dat, int *restrict lit_length)
 {
   int offset;
-  unsigned char firstByte = bit_read_RC(dat);
-  unsigned char secondByte = bit_read_RC(dat);
+  BITCODE_RC firstByte = bit_read_RC(dat);
+  BITCODE_RC secondByte = bit_read_RC(dat);
   offset = (firstByte >> 2) | (secondByte << 6);
   *lit_length = (firstByte & 0x03);
   return offset;
@@ -1380,14 +1380,14 @@ read_two_byte_offset(Bit_Chain *restrict dat, int *restrict lit_length)
 /* Decompresses a system section of a 2004+ DWG file
  */
 static int
-decompress_R2004_section(Bit_Chain *restrict dat, char *restrict decomp,
+decompress_R2004_section(Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
                          uint32_t decomp_data_size, uint32_t comp_data_size)
 {
   int lit_length, i;
   uint32_t comp_offset, comp_bytes, bytes_left;
   unsigned char opcode1 = 0, opcode2;
   long unsigned int start_byte = dat->byte;
-  char *src, *dst = decomp;
+  BITCODE_RC *src, *dst = decomp;
 
   bytes_left = decomp_data_size; //to write to
   if (comp_data_size > dat->size - start_byte) // bytes left to read from
@@ -1505,9 +1505,9 @@ decompress_R2004_section(Bit_Chain *restrict dat, char *restrict decomp,
  * to locate the sections in the file.
  */
 static int
-read_R2004_section_map(Bit_Chain* dat, Dwg_Data * dwg)
+read_R2004_section_map(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  char *decomp, *ptr;
+  BITCODE_RC *decomp, *ptr;
   int i, error;
   int section_address;
   int bytes_remaining;
@@ -1518,7 +1518,7 @@ read_R2004_section_map(Bit_Chain* dat, Dwg_Data * dwg)
   dwg->header.section = 0;
 
   // decompressed data
-  decomp = (char *)calloc(decomp_data_size+1024, sizeof(char));
+  decomp = (BITCODE_RC *)calloc(decomp_data_size+1024, sizeof(char));
   if (!decomp)
     {
       LOG_ERROR("Out of memory");
@@ -1600,18 +1600,18 @@ find_section(Dwg_Data *dwg, unsigned long int index)
 /* Read R2004, 2010+ Section Info
  */
 static int
-read_R2004_section_info(Bit_Chain* dat, Dwg_Data *dwg,
+read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                         uint32_t comp_data_size,
                         uint32_t decomp_data_size)
 {
-  char *decomp, *ptr;
+  BITCODE_RC *decomp, *ptr;
   BITCODE_BL i, j;
   BITCODE_BL section_number = 0;
   uint32_t data_size;
   uint64_t start_offset;
   int error;
 
-  decomp = (char *)calloc(decomp_data_size+1024, 1);
+  decomp = (BITCODE_RC *)calloc(decomp_data_size+1024, 1);
   if (!decomp)
     {
       LOG_ERROR("Out of memory");
@@ -1769,14 +1769,14 @@ typedef union _encrypted_section_header
 } encrypted_section_header;
 
 static int
-read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
-                            Bit_Chain* sec_dat, BITCODE_RL section_type)
+read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *restrict dwg,
+                             Bit_Chain* sec_dat, BITCODE_RL section_type)
 {
   uint32_t address, sec_mask;
   uint32_t max_decomp_size;
   Dwg_Section_Info *info = NULL;
   encrypted_section_header es;
-  char *decomp;
+  BITCODE_RC *decomp;
   BITCODE_BL i, j;
   int error = 0;
 
@@ -1800,7 +1800,7 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
     }
 
   max_decomp_size = info->num_sections * info->max_decomp_size;
-  decomp = (char *)calloc(max_decomp_size, sizeof(char));
+  decomp = (BITCODE_RC *)calloc(max_decomp_size, sizeof(char));
   if (!decomp)
     {
       LOG_ERROR("Out of memory with %u sections", info->num_sections);
@@ -1816,7 +1816,7 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
         }
       address = info->sections[i]->address;
       dat->byte = address;
-      bit_read_fixed(dat, (char*)es.char_data, 32);
+      bit_read_fixed(dat, es.char_data, 32);
 
       sec_mask = 0x4164536b ^ address;
       for (j = 0; j < 8; ++j)
@@ -1854,7 +1854,7 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
 
   sec_dat->bit     = 0;
   sec_dat->byte    = 0;
-  sec_dat->chain   = (unsigned char *)decomp;
+  sec_dat->chain   = decomp;
   sec_dat->size    = max_decomp_size;
   sec_dat->version = dat->version;
   sec_dat->from_version = dat->from_version;
@@ -1865,7 +1865,7 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *dwg,
 /* R2004, 2010+ Class Section
  */
 static int
-read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
+read_2004_section_classes(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   BITCODE_RL size;
   BITCODE_BS max_num, i;
@@ -1998,7 +1998,7 @@ read_2004_section_classes(Bit_Chain* dat, Dwg_Data *dwg)
 /* R2004, 2010+ Header Section
  */
 static int
-read_2004_section_header(Bit_Chain* dat, Dwg_Data *dwg)
+read_2004_section_header(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error;
   Bit_Chain sec_dat = { 0 };
@@ -2040,7 +2040,7 @@ read_2004_section_header(Bit_Chain* dat, Dwg_Data *dwg)
 /* R2004, 2010+ Handles Section
  */
 static int
-read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
+read_2004_section_handles(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain obj_dat = { 0 }, hdl_dat = { 0 };
   BITCODE_RS section_size = 0;
@@ -2121,7 +2121,7 @@ read_2004_section_handles(Bit_Chain* dat, Dwg_Data *dwg)
 
 /* for 2004 and 2010+ */
 static int
-decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
+decode_R2004(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int j, error = 0;
   Dwg_Section *section;
@@ -2143,7 +2143,7 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
     struct Dwg_R2004_Header* _obj = &dwg->r2004_header;
     Bit_Chain* hdl_dat = dat;
     const unsigned size = sizeof(struct Dwg_R2004_Header);
-    char encrypted_data[size];
+    BITCODE_RC encrypted_data[size];
     unsigned int rseed = 1;
     unsigned i;
 
@@ -2246,7 +2246,7 @@ decode_R2004(Bit_Chain* dat, Dwg_Data * dwg)
 }
 
 static int
-decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
+decode_R2007(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain hdl_dat = { 0 };
   int error;
@@ -2279,7 +2279,8 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
  */
 
 static int
-dwg_decode_eed_data(Bit_Chain * dat, Dwg_Eed_Data* data, unsigned long int end, BITCODE_BS size)
+dwg_decode_eed_data(Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
+                    unsigned long int end, BITCODE_BS size)
 {
   int lenc;
   BITCODE_BS j;
@@ -2312,7 +2313,7 @@ dwg_decode_eed_data(Bit_Chain * dat, Dwg_Eed_Data* data, unsigned long int end, 
 #endif
           }
         /* code:1 + len:1 + cp:2 */
-        bit_read_fixed(dat, data->u.eed_0.string, lenc);
+        bit_read_fixed(dat, (BITCODE_RC*)data->u.eed_0.string, lenc);
         data->u.eed_0.string[lenc] = '\0';
         LOG_TRACE("string: \"%s\" len=%d cp=%d\n",
                   data->u.eed_0.string, (int)lenc,
@@ -2386,7 +2387,7 @@ dwg_decode_eed_data(Bit_Chain * dat, Dwg_Eed_Data* data, unsigned long int end, 
 
 /* for objects and entities */
 static int
-dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
+dwg_decode_eed(Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
 {
   BITCODE_BS size;
   unsigned int idx = 0;
@@ -2609,7 +2610,7 @@ obj_has_strings(unsigned int type)
  */
 static int
 dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
-                  Dwg_Object_Entity* ent)
+                  Dwg_Object_Entity *restrict ent)
 {
   unsigned int i;
   int error = 0;
@@ -2699,7 +2700,7 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
  */
 static int
 dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
-                  Dwg_Object_Object* _obj)
+                  Dwg_Object_Object *restrict _obj)
 {
   unsigned int i;
   BITCODE_BS size;
@@ -3207,7 +3208,7 @@ dwg_decode_xdata(Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj, int 
           break;
         case VT_HANDLE:
         case VT_OBJECTID:
-          bit_read_fixed(dat, (char*)rbuf->value.hdl, 8);
+          bit_read_fixed(dat, rbuf->value.hdl, 8);
           LOG_TRACE("xdata[%d]: %lX [HDL %d]\n", num_xdata,
                     (unsigned long)*(uint64_t*)rbuf->value.hdl, rbuf->type);
           break;
@@ -3820,7 +3821,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
                 }
               object_address = dat->byte;
               obj->supertype = DWG_SUPERTYPE_UNKNOWN;
-              obj->tio.unknown = (unsigned char *)bit_read_TF(dat, obj->size);
+              obj->tio.unknown = bit_read_TF(dat, obj->size);
               dat->byte = object_address;
             }
         }

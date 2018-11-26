@@ -1571,8 +1571,8 @@ typedef struct _dwg_3DSOLID_silhouette
   BITCODE_BS version; \
   BITCODE_BL num_blocks; \
   BITCODE_BL* block_size; \
-  BITCODE_RC** encr_sat_data; \
-  unsigned char* acis_data; \
+  char     ** encr_sat_data; \
+  BITCODE_RC* acis_data; \
   BITCODE_B wireframe_data_present; \
   BITCODE_B point_present; \
   BITCODE_3BD point; \
@@ -1671,7 +1671,7 @@ typedef struct _dwg_entity_OLEFRAME
   BITCODE_BS flag;
   BITCODE_BS mode;
   BITCODE_BL data_length;
-  BITCODE_RC* data;
+  char     * data;
 } Dwg_Entity_OLEFRAME;
 
 /**
@@ -1861,7 +1861,7 @@ typedef struct _dwg_object_BLOCK_HEADER
   BITCODE_RL num_inserts;
   BITCODE_TV description;
   BITCODE_BL preview_data_size;
-  BITCODE_RC* preview_data;
+  char     * preview_data;
   BITCODE_BS insert_units;
   BITCODE_B explodable;
   BITCODE_RC block_scaling;
@@ -1993,7 +1993,7 @@ typedef struct _dwg_object_LTYPE
   BITCODE_RC num_dashes;
   Dwg_LTYPE_dash* dash;
   BITCODE_RD* dashes_r11;
-  BITCODE_RC* strings_area;
+  char    * strings_area;
   BITCODE_H linetype_control;
   BITCODE_H null_handle;
   BITCODE_H* styles;
@@ -2385,7 +2385,7 @@ typedef struct _dwg_entity_OLE2FRAME
   BITCODE_BS flag;        /*!< DXF 70 */
   BITCODE_BS mode;
   BITCODE_BL data_length;
-  BITCODE_RC* data;
+  char     * data;
   BITCODE_RC unknown;
 } Dwg_Entity_OLE2FRAME;
 
@@ -2450,7 +2450,7 @@ typedef struct _dwg_entity_PROXY_ENTITY
   BITCODE_BL version;       /*!< DXF 71 */
   BITCODE_BL maint_version; /*!< DXF 97 */
   BITCODE_B from_dxf;       /*!< DXF 70 */
-  BITCODE_RC* data;
+  char    * data;
   BITCODE_H parenthandle;
   BITCODE_H* objid_object_handles;
   BITCODE_MS size;
@@ -2467,7 +2467,7 @@ typedef struct _dwg_object_PROXY_OBJECT
   BITCODE_BL version;
   BITCODE_BL maint_version;
   BITCODE_B from_dxf;
-  BITCODE_RC* data;
+  char    * data;
   BITCODE_H parenthandle;
   BITCODE_H* objid_object_handles;
 } Dwg_Object_PROXY_OBJECT;
@@ -2925,7 +2925,7 @@ typedef struct _dwg_object_VBA_PROJECT
   struct _dwg_object_object *parent;
 
   BITCODE_RL num_bytes;
-  BITCODE_RC *bytes;
+  BITCODE_TF bytes;
 
   BITCODE_H parenthandle;
 } Dwg_Object_VBA_PROJECT;
@@ -3034,7 +3034,7 @@ typedef struct _dwg_TABLE_value
   BITCODE_BL data_long;
   BITCODE_BD data_double;
   BITCODE_TV data_string;
-  BITCODE_RC* data_date;
+  char     * data_date;
   BITCODE_2RD data_point;
   BITCODE_3RD data_3dpoint;
   BITCODE_BL unit_type;
@@ -3909,7 +3909,7 @@ typedef struct _dwg_object_SPATIAL_INDEX
 
   BITCODE_BL timestamp1;
   BITCODE_BL timestamp2;
-  BITCODE_RC* unknown;
+  char     * unknown;
   BITCODE_H parenthandle;
 } Dwg_Object_SPATIAL_INDEX;
 
@@ -5110,7 +5110,7 @@ typedef struct _dwg_object_entity
   /* Common Entity Data */
   BITCODE_B   picture_exists;
   BITCODE_BLL picture_size;     /*!< DXF 160, e.g. INSERT, MULTILEADER */
-  BITCODE_RC *picture;          /*!< DXF 310 */
+  char       *picture;          /*!< DXF 310 */
   BITCODE_BB entity_mode;
   BITCODE_BL num_reactors;
   BITCODE_B xdic_missing_flag;  /*!< r2004+ */
@@ -5293,7 +5293,7 @@ typedef struct _dwg_object
   {
     Dwg_Object_Entity *entity;
     Dwg_Object_Object *object;
-    unsigned char *unknown; /* i.e. unhandled class as raw bits */
+    char *unknown; /* i.e. unhandled class as raw bits */
   } tio;
 
   char *dxfname;
@@ -5306,7 +5306,7 @@ typedef struct _dwg_object
   int handle_offset;
   int string_offset;
   unsigned long num_unknown_bits;
-  BITCODE_RC *unknown_bits;
+  char *unknown_bits;
 
 } Dwg_Object;
 
@@ -5482,7 +5482,7 @@ typedef struct _dwg_struct
 
   struct Dwg_R2004_Header /* encrypted */
     {
-      char file_ID_string[12];
+      BITCODE_RC file_ID_string[12];
       BITCODE_RL header_offset;
       BITCODE_RL header_size;
       BITCODE_RL x04;
@@ -5504,7 +5504,7 @@ typedef struct _dwg_struct
       BITCODE_RL section_array_size;
       BITCODE_RL gap_array_size;
       BITCODE_RL CRC;
-      char padding[12];
+      BITCODE_RC padding[12];
       /* System Section: Section Page Map */
       BITCODE_RL section_type; /* 0x4163043b */
       BITCODE_RL decomp_data_size;
@@ -5580,7 +5580,7 @@ typedef struct _dwg_struct
   struct _dwg_second_header {
     BITCODE_RL size;
     BITCODE_RL address;
-    char version[12];
+    BITCODE_RC version[12];
     BITCODE_B null_b[4];
     BITCODE_RC unknown_10;
     BITCODE_RC unknown_rc4[4];

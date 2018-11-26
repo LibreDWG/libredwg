@@ -9710,7 +9710,7 @@ dwg_ent_ole2frame_set_data_length(dwg_ent_ole2frame *restrict frame,
 
 /** Returns ole2frame data (binary)
  */
-BITCODE_RC *
+char *
 dwg_ent_ole2frame_get_data(const dwg_ent_ole2frame *restrict frame,
                           int *restrict error)
 {
@@ -9731,13 +9731,13 @@ dwg_ent_ole2frame_get_data(const dwg_ent_ole2frame *restrict frame,
  */
 void
 dwg_ent_ole2frame_set_data(dwg_ent_ole2frame *restrict frame,
-                           const BITCODE_RC *restrict data,
+                           const char *restrict data,
                            int *restrict error)
 {
   if (frame)
     {
       *error = 0;
-      frame->data = (BITCODE_RC*)data;
+      frame->data = (char*)data;
     }
   else
     {
@@ -9853,7 +9853,7 @@ dwg_obj_proxy_set_from_dxf(dwg_obj_proxy *restrict proxy,
     }
 }
 
-BITCODE_RC*
+char*
 dwg_obj_proxy_get_data(const dwg_obj_proxy *restrict proxy,
                           int *restrict error)
 {
@@ -9872,13 +9872,13 @@ dwg_obj_proxy_get_data(const dwg_obj_proxy *restrict proxy,
 
 void
 dwg_obj_proxy_set_data(dwg_obj_proxy *restrict proxy,
-                       const BITCODE_RC *restrict data,
+                       const char *restrict data,
                        int *restrict error)
 {
   if (proxy)
     {
       *error = 0;
-      proxy->data = (BITCODE_RC*)data;
+      proxy->data = (char*)data;
     }
   else
     {
@@ -18471,7 +18471,7 @@ dwg_ent_get_picture_size(const dwg_obj_ent *restrict ent,
   _BODY_FIELD(ent, picture_size);
 }
 
-EXPORT BITCODE_RC *
+EXPORT char *
 dwg_ent_get_picture(const dwg_obj_ent *restrict ent,
                           int *restrict error)
 {
