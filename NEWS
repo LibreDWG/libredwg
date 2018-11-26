@@ -2,16 +2,25 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2018 Free Software Foundation, Inc.
 See the end for copying conditions.
 
-LibreDWG version 0.6.3 - released 2018/11/?? - still alpha:
+LibreDWG version 0.7 - released 2018/12/?? - still alpha:
 
 Important bugfixes:
-  * Fixed several memory leaks and double-free's (#43, #42)
+  * Fixed most memory leaks and double-free's (#43, #42)
+    just a few stale NULL handle leaks are left.
+  * Fixed EED sizes (PR #48, Denis Pryt)
+  * Fixed BLOCK_HEADER.num_inserts, esp. with xref's (#44).
+    For decode and encode.
+  * Fixed LTYPE.dash, change RC to unsigned char (#44)
+  * Fixes VECTOR_CHKCOUNT segfault on unassigned obj->dxfname's
+    (esp. for <=R12)
+  * Fixed example/load_dwg.py allowing non-critical error codes
 
 Other newsworthy changes:
   * Check for RUNNING_ON_VALGRIND and call dwg_free then, even
     if previously skipped.
-  * renamed all remaining API "null malloc" error messages to
+  * Renamed all remaining API "null malloc" error messages to
     "Out of memory"
+  * Harmonized in_dxfb with in_dxf, but still WIP
 
 
 LibreDWG version 0.6.2 - released 2018/11/07 - still alpha:

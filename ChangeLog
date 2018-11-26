@@ -1,6 +1,165 @@
 Full history from the git log
 -----------------------------
 
+2018-11-26  Reini Urban  <rurban@cpan.org>
+
+	Fix LTYPE.dash, change RC to unsigned char
+	avoid such negative values. Fixes #44.
+	This changed the API, thus we must bump to 0.7
+
+	fix FIELD_NUM_INSERTS
+	Only allow RC 1 bytes, backup when != 1.
+	Fix encode for FIELD_NUM_INSERTS, write a vector of 1 bytes.
+	Fixes the example from #44 for the first wrong num_inserts
+	case.
+
+	decode FIELD_NUM_INSERTS: log -v5 values
+	The ODA spec seems to be wrong, see #44
+
+	fixup format type for size
+	from the previous PR #48
+
+2018-11-26  Denis  <DenisPryt@users.noreply.github.com>
+
+	Fix error with eed size (#48)
+
+2018-11-24  Reini Urban  <rurban@cpan.org>
+
+	Enable LGTM support (#46)
+	https://lgtm.com/projects/g/LibreDWG/libredwg/
+
+2018-11-23  Reini Urban  <rurban@cpan.org>
+
+	examples: improve load_dwg.py
+	dont fail on non-critical errors
+	dont import twice
+
+2018-11-23  Reini Urban  <rurban@cpan.org>
+
+	Fix VECTOR_CHKCOUNT segfault
+	on unassigned obj->dxfname's (esp. for <=R12). Fixes #44.
+
+	also rename the error message: vcount is only relevant for vectors, but it
+	is also used for strings.
+
+2018-11-23  Reini Urban  <rurban@cpan.org>
+
+	free: refactor VALUE_HANDLE
+	same logic as in decode. obj is NULL inside header_variables.spec.
+	but still some wrong handles are leaking.
+
+	less calloc(0) calls
+	these appear in valgrind as 0 size leaks
+
+2018-11-23  DenisPryt  <denis.chausy@gmail.com>
+	    Reini Urban  <rurban@cpan.org>
+
+	abstract dwg_decode_eed_data, fix eed segfault #45
+	move the inner eed loop into its extra function.
+	end ignored last size = bit_read_BS(dat), which must be zero.
+	If eed section is present and corrupted, happens seek into end,
+	and return inside a while loop.  As result, we missed the last
+	size = bit_read_BS(dat) in while condition.
+
+	This also fixes most of the last remaining memory leaks,
+	just a few stale handles are left.
+
+2018-11-23  DenisPryt  <denis.chausy@gmail.com>
+
+	Avoid reactors calloc(0)
+
+2018-11-23  Reini Urban  <rurban@cpan.org>
+
+	CONTRIBUTING: add link to (c) assignment form
+
+	in_dxfb: harmonize with in_dxf
+
+2018-11-22  Reini Urban  <rurban@cpan.org>
+
+	unknown: more work on LOFTEDSURFACE
+
+2018-11-20  Reini Urban  <rurban@cpan.org>
+
+	NEWS for latest changes
+
+	free: fix double-free with subentity handle in UNKNOWN_ENT
+	such handles are already freed with object_ref[]
+	Fixes #43, detected by DenisPryt
+
+	free: fix decompress_R2004_section leak
+	in case of critical errors
+
+	check RUNNING_ON_VALGRIND
+	and probe for include <valgrind/valgrind.h>
+	which is helpful when testing memory leaks with bigger DWGs.
+	It formerly just skipped dwg_free.
+	Now call dwg_free when running under valgrind
+
+	free: fix R_2007 data_page leaks
+	free the data_page's, which can be several KB, even MB on larger DWGs
+
+	free: eed in UNKNOWN_OBJ
+	which is still stored into the Dwg_Object_Object struct.
+	fixes MATERIAL eed leaks, et al.
+
+	hash: fix Uninitialised value
+	valgrind:
+	Conditional jump or move depends on uninitialised value(s)
+	   at 0x1E006E: hash_set (hash.c:137)
+	   by 0x19A9E9: dwg_decode_add_object (decode.c:3813)
+	   by 0x1A59A4: read_2004_section_handles (decode.c:2094)
+	   by 0x1A59A4: decode_R2004 (decode.c:2224)
+	   by 0x1A798F: dwg_decode (decode.c:223)
+	   by 0x10A81C: dwg_read_file (dwg.c:186)
+	   by 0x10A470: main (dwgread.c:214)
+	 Uninitialised value was created by a heap allocation
+	   at 0x483577F: malloc (vg_replace_malloc.c:299)
+	   by 0x1DFED1: hash_new (hash.c:28)
+	   by 0x1A77C7: dwg_decode (decode.c:135)
+	   by 0x10A81C: dwg_read_file (dwg.c:186)
+	   by 0x10A470: main (dwgread.c:214)
+
+	fix C99 compat, rename null malloc errors
+	fix some -Wdeclaration-after-statement from PR #42
+	Rename the api null malloc errors to Out of memory for consistency
+
+	free: avoid double-free of obj->tio.unknown
+	when it is not a class
+
+	fix LAYOUT memory leak >=R_13
+	SINCE R_13 LAYOUT is a class, free it.
+	The previous EED double-free cannot happen, as we NULL it now.
+	Todo: But there are still missing EED, esp. with UNKNOWN_OBJ
+
+2018-11-20  DenisPryt  <denis.chausy@gmail.com>
+
+	Bit_Chain initialization in programs
+
+2018-11-20  DenisPryt  <denis.chausy@gmail.com>
+
+	Some trivial warning and crash fixes
+	bracers in defines (out_geojson.c),
+	fix parameters to fwrite,
+	add Bit_Chain initialization,
+	read section name according to name_length,
+	free section name,
+	check num_pages for zero avoiding malloc(0),
+	fix possible memory leaks in dwg_api.c and reedsolomon.c
+	bfr_read_string: add 2nd size argument
+
+	minor fixups
+
+2018-11-07  Reini Urban  <rurban@cpan.org>
+
+	Release 0.6.2
+	make regen-man
+
+	.appveyor.yml: post-release version bump
+
+	HACKING: add make release paragraph
+
+	Update NEWS and ChangeLog for 0.6.2 prep
+
 2018-11-06  Reini Urban  <rurban@cpan.org>
 
 	fix minor warnings
