@@ -5107,8 +5107,8 @@ DWG_ENTITY(MULTILEADER)
       REPEAT2 (lnode.num_lines, lnode.lines, Dwg_Leader_Line)
         {
           #define lline lnode.lines[rcount2]
-          FIELD_BL (lline.num_vertex, 0);
-          FIELD_3BD (lline.vertex, 10);
+          FIELD_BL (lline.numpts, 0);
+          FIELD_3DPOINT_VECTOR (lline.points, lline.numpts, 10);
           FIELD_BL (lline.num_breaks, 0);
           REPEAT3 (lline.num_breaks, lline.breaks, Dwg_Leader_Break)
             {
