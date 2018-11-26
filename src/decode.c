@@ -2296,7 +2296,7 @@ dwg_decode_eed_data(Bit_Chain * dat, Dwg_Eed_Data* data, unsigned long int end, 
         data->u.eed_0.codepage = bit_read_RS_LE(dat);
         if ((long)lenc > size-4)
           {
-            LOG_ERROR("Invalid EED string len %d, max %ld", lenc, size-4)
+            LOG_ERROR("Invalid EED string len %d, max %d", lenc, (int)size-4)
             dat->byte = end;
             break;
 #if 0
