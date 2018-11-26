@@ -2279,12 +2279,14 @@ decode_R2007(Bit_Chain* dat, Dwg_Data * dwg)
  */
 
 static int
-dwg_decode_eed_data(Bit_Chain * dat, Dwg_Eed_Data* data, unsigned long int end)
+dwg_decode_eed_data(Bit_Chain * dat, Dwg_Eed_Data* data, unsigned long int end, BITCODE_BS size)
 {
   int lenc;
   BITCODE_BS j;
   BITCODE_RS lens;
-  long size = MIN(end, dat->size) - dat->byte;
+
+  data->code = bit_read_RC(dat);
+  LOG_TRACE("code: %d ", (int)data->code);
 
   switch (data->code)
     {
@@ -2371,6 +2373,14 @@ dwg_decode_eed_data(Bit_Chain * dat, Dwg_Eed_Data* data, unsigned long int end)
         return DWG_ERR_INVALIDTYPE; /* may continue */
       }
 
+#ifdef DEBUG
+  // sanity checks
+  if (obj->eed[idx].code == 0 || obj->eed[idx].code == 4)
+    assert(obj->eed[idx].data->u.eed_0.length <= size - 1);
+  if (obj->eed[idx].code == 10) // 3 double
+    assert(size >= 1 + 3 * 8);
+#endif
+
   return 0;
 }
 
@@ -2390,7 +2400,6 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
     {
       int i;
       BITCODE_BS j;
-      BITCODE_RC code = 0;
       long unsigned int end, offset;
       long unsigned int sav_byte;
       Dwg_Object *_obj = &dwg->object[obj->objid];
@@ -2458,19 +2467,9 @@ dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj)
       while (dat->byte < end)
         {
           obj->eed[idx].data = (Dwg_Eed_Data*)calloc(size + 8, 1);
-          obj->eed[idx].data->code = code = bit_read_RC(dat);
-          LOG_TRACE("EED[%u] code: %d\n", idx, (int)code);
           LOG_TRACE("EED[%u] ", idx);
 
-          error |= dwg_decode_eed_data(dat, obj->eed[idx].data, end);
-
-#ifdef DEBUG
-          // sanity checks
-          if (code == 0 || code == 4)
-            assert(obj->eed[idx].data->u.eed_0.length <= size-1);
-          if (code == 10) // 3 double
-            assert(size >= 1 + 3*8);
-#endif
+          error |= dwg_decode_eed_data(dat, obj->eed[idx].data, end, size);
 
           idx++;
           obj->num_eed++;
