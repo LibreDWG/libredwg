@@ -1563,14 +1563,14 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
         {
           do
             {
-              FIELD_VALUE(encr_sat_data) = (BITCODE_RC**)
-                realloc(FIELD_VALUE(encr_sat_data), (i+1) * sizeof (BITCODE_RC*));
+              FIELD_VALUE(encr_sat_data) = (char**)
+                realloc(FIELD_VALUE(encr_sat_data), (i+1) * sizeof (char*));
               FIELD_VALUE(block_size) = (BITCODE_BL*)
                 realloc(FIELD_VALUE(block_size), (i+1) * sizeof (BITCODE_BL));
               FIELD_BL (block_size[i], 0);
               FIELD_TF (encr_sat_data[i], FIELD_VALUE(block_size[i]), 1);
               total_size += FIELD_VALUE (block_size[i]);
-            } while(FIELD_VALUE (block_size[i++]));
+            } while (FIELD_VALUE (block_size[i++]));
 
           // de-obfuscate SAT data
           FIELD_VALUE(acis_data) = malloc (total_size+1);
@@ -1612,7 +1612,7 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
           //TODO string in strhdl, even <r2007
           FIELD_VALUE(num_blocks) = 2;
           FIELD_VALUE(block_size) = malloc(2 * sizeof (BITCODE_RL));
-          FIELD_VALUE(encr_sat_data) = malloc(2 * sizeof (BITCODE_RC*));
+          FIELD_VALUE(encr_sat_data) = malloc(2 * sizeof (char*));
           FIELD_TF (encr_sat_data[0], 15, 1); // "ACIS BinaryFile"
           FIELD_VALUE(block_size[0]) = 15;
           FIELD_RL (block_size[1], 0);
@@ -5107,11 +5107,8 @@ DWG_ENTITY(MULTILEADER)
       REPEAT2 (lnode.num_lines, lnode.lines, Dwg_Leader_Line)
         {
           #define lline lnode.lines[rcount2]
-          FIELD_BL (lline.num_vertexes, 0);
-          REPEAT3 (lline.num_vertexes, lline.vertexes, BITCODE_3BD)
-            {
-              FIELD_3BD (lline.vertexes[rcount3], 10);
-            }
+          FIELD_BL (lline.numpts, 0);
+          FIELD_3DPOINT_VECTOR (lline.points, lline.numpts, 10);
           FIELD_BL (lline.num_breaks, 0);
           REPEAT3 (lline.num_breaks, lline.breaks, Dwg_Leader_Break)
             {

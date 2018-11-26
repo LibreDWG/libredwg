@@ -116,7 +116,7 @@ typedef struct _r2007_section
 } r2007_section;
 
 /* imported */
-int rs_decode_block(unsigned char *blk, int fix);
+int rs_decode_block(BITCODE_RC *blk, int fix);
 
 /* private */
 static r2007_section* get_section(r2007_section *sections_map,
@@ -146,21 +146,21 @@ static int read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl_dat,
 static r2007_page* read_pages_map(Bit_Chain* dat, int64_t size_comp,
                                   int64_t size_uncomp, int64_t correction);
 static int read_file_header(Bit_Chain *restrict dat,
-                             r2007_file_header *restrict file_header);
-static void read_instructions(unsigned char **restrict src,
-                              unsigned char *restrict opcode,
+                            r2007_file_header *restrict file_header);
+static void read_instructions(BITCODE_RC *restrict *restrict src,
+                              BITCODE_RC *restrict opcode,
                               uint32_t *restrict offset,
                               uint32_t *restrict length);
-static inline char* copy_bytes_2(char *restrict dst, const char *restrict src);
-static inline char* copy_bytes_3(char *restrict dst, const char *restrict src);
-static void copy_bytes(char *dst, uint32_t length, uint32_t offset);
-static uint32_t read_literal_length(unsigned char **src, unsigned char opcode);
-static void copy_compressed_bytes(char *restrict dst, char *restrict src, int length);
-static void  bfr_read(void *restrict dst, char **restrict src, size_t size);
-static DWGCHAR* bfr_read_string(char **src, int64_t size);
-static char* decode_rs(const char *src, int block_count, int data_size);
-static int  decompress_r2007(char *restrict dst, int dst_size,
-                             char *restrict src, int src_size);
+static inline BITCODE_RC* copy_bytes_2(BITCODE_RC *restrict dst, const BITCODE_RC *restrict src);
+static inline BITCODE_RC* copy_bytes_3(BITCODE_RC *restrict dst, const BITCODE_RC *restrict src);
+static void copy_bytes(BITCODE_RC *dst, uint32_t length, uint32_t offset);
+static uint32_t read_literal_length(BITCODE_RC *restrict *restrict src, unsigned char opcode);
+static void copy_compressed_bytes(BITCODE_RC *restrict dst, BITCODE_RC *restrict src, int length);
+static void  bfr_read(void *restrict dst, BITCODE_RC *restrict *restrict src, size_t size);
+static DWGCHAR* bfr_read_string(BITCODE_RC *restrict *restrict src, int64_t size);
+static BITCODE_RC* decode_rs(const BITCODE_RC *src, int block_count, int data_size);
+static int  decompress_r2007(BITCODE_RC *restrict dst, int dst_size,
+                             BITCODE_RC *restrict src, int src_size);
 
 #define copy_1(offset) \
   *dst++ = *(src + offset);
@@ -183,16 +183,16 @@ static int  decompress_r2007(char *restrict dst, int dst_size,
   memcpy(&dst[8], &src[offset], 8); \
   dst += 16
 
-static inline char*
-copy_bytes_2(char *restrict dst, const char *restrict src)
+static inline BITCODE_RC*
+copy_bytes_2(BITCODE_RC *restrict dst, const BITCODE_RC *restrict src)
 {
   dst[0] = src[1];
   dst[1] = src[0];
   return dst + 2;
 }
 
-static inline char*
-copy_bytes_3(char *restrict dst, const char *restrict src)
+static inline BITCODE_RC*
+copy_bytes_3(BITCODE_RC *restrict dst, const BITCODE_RC *restrict src)
 {
   dst[0] = src[2];
   dst[1] = src[1];
@@ -201,9 +201,9 @@ copy_bytes_3(char *restrict dst, const char *restrict src)
 }
 
 static void
-copy_bytes(char *dst, uint32_t length, uint32_t offset)
+copy_bytes(BITCODE_RC *dst, uint32_t length, uint32_t offset)
 {
-  char *src = dst - offset;
+  BITCODE_RC *src = dst - offset;
 
   while (length-- > 0)
     *dst++ = *src++;
@@ -212,7 +212,7 @@ copy_bytes(char *dst, uint32_t length, uint32_t offset)
 
 /* See spec version 5.0 page 30 */
 static void
-copy_compressed_bytes(char *restrict dst, char *restrict src, int length)
+copy_compressed_bytes(BITCODE_RC *restrict dst, BITCODE_RC *restrict src, int length)
 {
   while (length >= 32)
     {
@@ -379,7 +379,7 @@ copy_compressed_bytes(char *restrict dst, char *restrict src, int length)
 
 /* See spec version 5.1 page 50 */
 static uint32_t
-read_literal_length(unsigned char **src, unsigned char opcode)
+read_literal_length(BITCODE_RC *restrict *src, unsigned char opcode)
 {
   uint32_t length = opcode + 8;
 
@@ -407,8 +407,8 @@ read_literal_length(unsigned char **src, unsigned char opcode)
 
 /* See spec version 5.1 page 53 */
 static void
-read_instructions(unsigned char **src, unsigned char *opcode, uint32_t *offset,
-                  uint32_t *length)
+read_instructions(BITCODE_RC *restrict *src, unsigned char *restrict opcode,
+                  uint32_t *restrict offset, uint32_t *restrict length)
 {
   switch (*opcode >> 4)
     {
@@ -459,14 +459,14 @@ read_instructions(unsigned char **src, unsigned char *opcode, uint32_t *offset,
    TODO: replace by decompress_R2004_section(dat, decomp, comp_data_size)
 */
 static int
-decompress_r2007(char *restrict dst, int dst_size,
-                 char *restrict src, int src_size)
+decompress_r2007(BITCODE_RC *restrict dst, int dst_size,
+                 BITCODE_RC *restrict src, int src_size)
 {
   uint32_t length = 0;
   uint32_t offset = 0;
 
-  char *dst_end = dst + dst_size;
-  char *src_end = src + src_size;
+  BITCODE_RC *dst_end = dst + dst_size;
+  BITCODE_RC *src_end = src + src_size;
   unsigned char opcode;
 
   if (!src)
@@ -491,7 +491,7 @@ decompress_r2007(char *restrict dst, int dst_size,
   while (src < src_end)
     {
       if (length == 0)
-        length = read_literal_length((unsigned char**)&src, opcode);
+        length = read_literal_length(&src, opcode);
 
       if ((dst + length) > dst_end) {
         LOG_ERROR("Decompression error: length overflow");
@@ -511,7 +511,7 @@ decompress_r2007(char *restrict dst, int dst_size,
 
       opcode = *src++;
 
-      read_instructions((unsigned char**)&src, &opcode, &offset, &length);
+      read_instructions(&src, &opcode, &offset, &length);
 
       while (1)
         {
@@ -546,15 +546,15 @@ decompress_r2007(char *restrict dst, int dst_size,
 
 // reed-solomon (255, 239) encoding with factor 3
 // TODO: for now disabled, until we get proper data
-static char*
-decode_rs(const char *src, int block_count, int data_size)
+static BITCODE_RC*
+decode_rs(const BITCODE_RC *src, int block_count, int data_size)
 {
   int i, j;
-  const char *src_base = src;
-  char *dst_base, *dst;
+  const BITCODE_RC *src_base = src;
+  BITCODE_RC *dst_base, *dst;
   //TODO: round up data_size from 239 to 255
 
-  dst_base = dst = (char*)calloc(block_count, data_size);
+  dst_base = dst = (BITCODE_RC*)calloc(block_count, data_size);
   if (!dst)
     {
       LOG_ERROR("Out of memory")
@@ -576,7 +576,7 @@ decode_rs(const char *src, int block_count, int data_size)
   return dst_base;
 }
 
-static char*
+static BITCODE_RC*
 read_system_page(Bit_Chain* dat, int64_t size_comp, int64_t size_uncomp,
                  int64_t repeat_count)
 {
@@ -587,9 +587,9 @@ read_system_page(Bit_Chain* dat, int64_t size_comp, int64_t size_uncomp,
   int64_t block_count; // Number of RS encoded blocks
   int64_t page_size;
 
-  char *rsdata;        // RS encoded data
-  char *pedata;        // Pre RS encoded data
-  char *data;          // The data RS unencoded and uncompressed
+  BITCODE_RC *rsdata;  // RS encoded data
+  BITCODE_RC *pedata;  // Pre RS encoded data
+  BITCODE_RC *data;    // The data RS unencoded and uncompressed
 
   // Round to a multiple of 8
   pesize = ((size_comp + 7) & ~7) * repeat_count;
@@ -609,7 +609,7 @@ read_system_page(Bit_Chain* dat, int64_t size_comp, int64_t size_uncomp,
                 (long)page_size, dat->size - dat->byte);
       return NULL;
     }
-  data = (char*)calloc(size_uncomp, page_size);
+  data = (BITCODE_RC*)calloc(size_uncomp, page_size);
   if (!data) {
     LOG_ERROR("Out of memory")
     return NULL;
@@ -629,8 +629,8 @@ read_system_page(Bit_Chain* dat, int64_t size_comp, int64_t size_uncomp,
 }
 
 static int
-read_data_page(Bit_Chain* dat, unsigned char *decomp, int64_t page_size,
-               int64_t size_comp, int64_t size_uncomp)
+read_data_page(Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
+               int64_t page_size, int64_t size_comp, int64_t size_uncomp)
 {
   int i;
   int error = 0;
@@ -638,14 +638,14 @@ read_data_page(Bit_Chain* dat, unsigned char *decomp, int64_t page_size,
   int64_t pesize;      // Pre RS encoded size
   int64_t block_count; // Number of RS encoded blocks
 
-  char *rsdata;        // RS encoded data
-  char *pedata;        // Pre RS encoded data
+  BITCODE_RC *rsdata;        // RS encoded data
+  BITCODE_RC *pedata;        // Pre RS encoded data
 
   // Round to a multiple of 8
   pesize = ((size_comp + 7) & ~7);
   block_count = (pesize + 0xFB - 1) / 0xFB;
 
-  rsdata = (char*)calloc(1, page_size);
+  rsdata = (BITCODE_RC*)calloc(1, page_size);
   if (rsdata == NULL) {
     LOG_ERROR("Out of memory")
     return DWG_ERR_OUTOFMEM;
@@ -654,7 +654,7 @@ read_data_page(Bit_Chain* dat, unsigned char *decomp, int64_t page_size,
   pedata = decode_rs(rsdata, block_count, 0xFB);
 
   if (size_comp < size_uncomp)
-    error = decompress_r2007((char*)decomp, size_uncomp, pedata, size_comp);
+    error = decompress_r2007(decomp, size_uncomp, pedata, size_comp);
   else
     memcpy(decomp, pedata, size_uncomp);
 
@@ -665,13 +665,14 @@ read_data_page(Bit_Chain* dat, unsigned char *decomp, int64_t page_size,
 }
 
 static int
-read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat, r2007_section *sections_map,
-                  r2007_page *pages_map, Dwg_Section_Type sec_type)
+read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat,
+                  r2007_section *restrict sections_map,
+                  r2007_page *restrict pages_map, Dwg_Section_Type sec_type)
 {
   r2007_section *section;
   r2007_page *page;
   int64_t max_decomp_size;
-  unsigned char *decomp;
+  BITCODE_RC *decomp;
   int error, i;
 
   section = get_section(sections_map, sec_type);
@@ -729,14 +730,14 @@ read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat, r2007_section *sections_ma
 #define bfr_read_int64(_p)   *((int64_t*)_p);  _p += 8;
 
 static void
-bfr_read(void *restrict dst, char **restrict src, size_t size)
+bfr_read(void *restrict dst, BITCODE_RC *restrict *restrict src, size_t size)
 {
   memcpy(dst, *src, size);
   *src += size;
 }
 
 static DWGCHAR*
-bfr_read_string(char **src, int64_t size)
+bfr_read_string(BITCODE_RC *restrict *restrict src, int64_t size)
 {
   uint16_t *ptr = (uint16_t*)*src;
   int32_t length = 0, wsize;
@@ -775,9 +776,9 @@ static r2007_section*
 read_sections_map(Bit_Chain* dat, int64_t size_comp,
                   int64_t size_uncomp, int64_t correction)
 {
-  char *data;
+  BITCODE_RC *data;
   r2007_section *sections = NULL, *last_section = NULL, *section = NULL;
-  char *ptr, *ptr_end;
+  BITCODE_RC *ptr, *ptr_end;
   int i, j = 0;
 
   data = read_system_page(dat, size_comp, size_uncomp, correction);
@@ -910,7 +911,7 @@ static r2007_page*
 read_pages_map(Bit_Chain* dat, int64_t size_comp,
                int64_t size_uncomp, int64_t correction)
 {
-  char *data, *ptr, *ptr_end;
+  BITCODE_RC *data, *ptr, *ptr_end;
   r2007_page *pages = 0, *last_page = 0, *page;
   int64_t offset = 0x480;   //dat->byte;
   //int64_t index;
@@ -1041,8 +1042,8 @@ sections_destroy(r2007_section *section)
 static int
 read_file_header(Bit_Chain *restrict dat, r2007_file_header *restrict file_header)
 {
-  char data[0x3d8]; //0x400 - 5 long
-  char *pedata;
+  BITCODE_RC data[0x3d8]; //0x400 - 5 long
+  BITCODE_RC *pedata;
   uint64_t seqence_crc;
   uint64_t seqence_key;
   uint64_t compr_crc;
@@ -1069,7 +1070,7 @@ read_file_header(Bit_Chain *restrict dat, r2007_file_header *restrict file_heade
   LOG_TRACE("len2:        %d\n", (int)len2); // 0 when compressed
 
   if (compr_len > 0)
-    error = decompress_r2007((char*)file_header, 0x110, &pedata[32], compr_len);
+    error = decompress_r2007((BITCODE_RC*)file_header, 0x110, &pedata[32], compr_len);
   else
     memcpy(file_header, &pedata[32], sizeof(r2007_file_header));
 

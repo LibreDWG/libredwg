@@ -1189,6 +1189,15 @@ bit_write_CRC(Bit_Chain * dat, long unsigned int start_address,
   return (crc);
 }
 
+void
+bit_read_fixed(Bit_Chain *restrict dat, BITCODE_RC *restrict dest, int length)
+{
+  for (int i = 0; i < length; i++)
+    {
+      dest[i] = bit_read_RC(dat);
+    }
+}
+
 /** Read fixed text with zero-termination.
  *  After usage, the allocated memory must be properly freed.
  *  preR11
@@ -1196,31 +1205,22 @@ bit_write_CRC(Bit_Chain * dat, long unsigned int start_address,
 BITCODE_TF
 bit_read_TF(Bit_Chain *restrict dat, int length)
 {
-  char *chain = malloc(length+1);
+  BITCODE_RC *chain = malloc(length+1);
 
   bit_read_fixed(dat, chain, length);
   chain[length] = '\0';
 
-  return chain;
-}
-
-void
-bit_read_fixed(Bit_Chain *restrict dat, char *restrict dest, int length)
-{
-  for (int i = 0; i < length; i++)
-    {
-      dest[i] = (char)bit_read_RC(dat);
-    }
+  return (BITCODE_TF)chain;
 }
 
 /** Write fixed text.
  */
 void
-bit_write_TF(Bit_Chain *restrict dat, char *restrict chain, int length)
+bit_write_TF(Bit_Chain *restrict dat, BITCODE_TF restrict chain, int length)
 {
   int i;
   for (i = 0; i < length; i++)
-    bit_write_RC(dat, (unsigned char)chain[i]);
+    bit_write_RC(dat, (BITCODE_RC)chain[i]);
 }
 
 /** Read simple text. After usage, the allocated memory must be properly freed.

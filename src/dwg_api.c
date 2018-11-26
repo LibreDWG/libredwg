@@ -13404,7 +13404,7 @@ dwg_ent_image_set_display_props(dwg_ent_image *restrict image,
 
 /** Returns image clipping
  */
-unsigned char
+BITCODE_B
 dwg_ent_image_get_clipping(const dwg_ent_image *restrict image,
                           int *restrict error)
 {
@@ -13425,7 +13425,7 @@ dwg_ent_image_get_clipping(const dwg_ent_image *restrict image,
  */
 void
 dwg_ent_image_set_clipping(dwg_ent_image *restrict image,
-                           unsigned char clipping,
+                           BITCODE_B clipping,
                            int *restrict error)
 {
   if (image)
@@ -13760,7 +13760,7 @@ dwg_ent_mline_get_scale(const dwg_ent_mline *restrict mline,
 */
 void
 dwg_ent_mline_set_justification(dwg_ent_mline *restrict mline,
-                                const char justification,
+                                const BITCODE_RC justification,
                                 int *restrict error)
 {
   if (mline)
@@ -13777,7 +13777,7 @@ dwg_ent_mline_set_justification(dwg_ent_mline *restrict mline,
 
 /** Returns justification value
  */
-char
+BITCODE_RC
 dwg_ent_mline_get_justification(const dwg_ent_mline *restrict mline,
                                 int *restrict error)
 {
@@ -18471,7 +18471,7 @@ dwg_ent_get_picture_size(const dwg_obj_ent *restrict ent,
   _BODY_FIELD(ent, picture_size);
 }
 
-EXPORT BITCODE_RC *
+EXPORT char *
 dwg_ent_get_picture(const dwg_obj_ent *restrict ent,
                           int *restrict error)
 {
