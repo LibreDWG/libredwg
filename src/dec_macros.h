@@ -383,17 +383,17 @@
 
 //check for overflow into next object (invalid num_elems)
 #define AVAIL_BITS() \
-  (obj ? (long)((obj->address + obj->size)*8 - bit_position(dat) + 20) \
-       : 0xff00L)
+  (obj ? (uint64_t)((obj->address + obj->size)*8 - bit_position(dat) + 20) \
+       : 0xff00ULL)
 #define TYPE_MAXELEMSIZE(type) (unsigned)dwg_bits_size[BITS_##type]
 #define VECTOR_CHKCOUNT(name,type,size) \
-  if ((long)((size)*TYPE_MAXELEMSIZE(type)) > AVAIL_BITS()) { \
+  if ((uint64_t)((size)*TYPE_MAXELEMSIZE(type)) > AVAIL_BITS()) { \
     LOG_ERROR("Invalid " #name " size %ld. Need min. %u bits for " #type ", have %ld for %s.", \
               (long)(size), (size)*TYPE_MAXELEMSIZE(type), AVAIL_BITS(), \
               obj && obj->dxfname ? obj->dxfname:""); \
     return DWG_ERR_VALUEOUTOFBOUNDS; }
 #define _VECTOR_CHKCOUNT(name,size,maxelemsize) \
-  if ((long)(size)*(maxelemsize) > AVAIL_BITS()) { \
+  if ((uint64_t)(size)*(maxelemsize) > AVAIL_BITS()) { \
     LOG_ERROR("Invalid " #name " size %ld. Need min. %u bits, have %ld for %s.", \
               (long)(size), (unsigned)(size)*(maxelemsize), AVAIL_BITS(), \
               obj && obj->dxfname ? obj->dxfname:""); \
