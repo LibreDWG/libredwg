@@ -3976,7 +3976,14 @@ DWG_OBJECT_END
     { \
       FIELD_BL (value.flags, 93); \
     } \
-  FIELD_BL (value.data_type, 90); \
+  if ((FIELD_VALUE(value.flags) & 0x01) == 0x00) \
+    { \
+      FIELD_BL (value.data_type, 90); \
+    } \
+  else \
+    { \
+      FIELD_VALUE(value.data_type) = 512; /* kGeneral since r2007*/ \
+    } \
   switch (FIELD_VALUE(value.data_type)) \
     { \
     case 0: /* kUnknown */ \
@@ -4014,7 +4021,14 @@ DWG_OBJECT_END
       LOG_ERROR("Unknown data type in TABLE entity: \"kResBuf\".\n") \
       break; \
     case 512: /* kGeneral since r2007*/ \
-      LOG_ERROR("Unknown data type in TABLE entity: \"kGeneral\".\n") \
+      SINCE(R_2007) \
+        { \
+          FIELD_BL (value.data_size, 0); \
+        } \
+      else \
+        { \
+          LOG_ERROR("Unknown data type in TABLE entity: \"kGeneral before R_2007\".\n") \
+        } \
       break; \
     default: \
       LOG_ERROR("Invalid data type in TABLE entity\n") \
