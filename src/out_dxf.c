@@ -1491,8 +1491,10 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   if (psref && psref->obj && psref->obj->tio.object->tio.BLOCK_HEADER->block_entity)
     hdr = psref->obj;
-  else
+  else if (_ctrl->paper_space)
     hdr = _ctrl->paper_space->obj;
+  else
+    hdr = NULL;
 
   if (hdr) {
       obj = get_first_owned_block(hdr);
