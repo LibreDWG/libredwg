@@ -3573,7 +3573,7 @@ DWG_ENTITY(IMAGE)
     FIELD_B (clip_mode, 290); // 0 outside, 1 inside
   }
   FIELD_BS (clip_boundary_type, 71); // 1 rect, 2 polygon
-  if (FIELD_VALUE(clip_mode) == 1)
+  if (FIELD_VALUE(clip_boundary_type) == 1)
     {
       FIELD_2RD (boundary_pt0, 14);
       FIELD_2RD (boundary_pt1, 14);
