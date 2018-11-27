@@ -2002,16 +2002,16 @@ DWG_ENTITY(LEADER)
   //SUBCLASS (AcDbCurve)
   SUBCLASS (AcDbLeader)
   FIELD_B (unknown_bit_1, 0);
-  FIELD_BS (annot_type, 0);
-  FIELD_BS (path_type, 0);
-  FIELD_BL (numpts, 0);
+  FIELD_BS (annot_type, 71);
+  FIELD_BS (path_type, 72);
+  FIELD_BL (numpts, 76);
   FIELD_3DPOINT_VECTOR (points, numpts, 10);
   FIELD_3DPOINT (origin, 0);
   FIELD_3DPOINT (extrusion, 210);
   FIELD_3DPOINT (x_direction, 211);
   FIELD_3DPOINT (offset_to_block_ins_pt, 212);
 
-  SINCE(R_14) {
+  VERSIONS(R_14, R_2007) {
     FIELD_3DPOINT (endptproj, 0);
   }
   VERSIONS(R_13, R_14) {
@@ -2020,8 +2020,8 @@ DWG_ENTITY(LEADER)
 
   FIELD_BD (box_height, 40);
   FIELD_BD (box_width , 41);
-  FIELD_B (hooklineonxdir, 0);
-  FIELD_B (arrowhead_on, 0);
+  FIELD_B (hooklineonxdir, 70);
+  FIELD_B (arrowhead_on, 74);
 
   VERSIONS(R_13, R_14)
     {
