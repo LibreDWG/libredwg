@@ -688,23 +688,40 @@ EXPORT int dwg_add_##token (Dwg_Object *obj) \
   _ent->tio.token->parent = obj->tio.entity;\
   return 0; \
 } \
+\
 /**Call dwg_add_##token and write the fields from the bitstream dat to the entity or object. */ \
 static int dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
-  BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4; \
-  Dwg_Entity_##token *ent, *_obj; \
-  Dwg_Object_Entity *_ent; \
-  Dwg_Data* dwg = obj->parent; \
-  Bit_Chain* hdl_dat = dat; \
   Bit_Chain* str_dat; \
   int error = dwg_add_##token(obj); \
   if (error) return error; \
+\
   if (dat->version >= R_2007) { \
     str_dat = calloc(1, sizeof(Bit_Chain)); /* separate string buffer */ \
     if (!str_dat) return DWG_ERR_OUTOFMEM; \
     *str_dat = *dat; \
-  } else \
+  } else { \
     str_dat = dat; \
+  } \
+\
+  error = dwg_decode_##token##_private (dat, str_dat, obj); \
+\
+  if (dat->version >= R_2007) { \
+    free(str_dat); \
+  } \
+  return error; \
+} \
+\
+/**Call dwg_add_##token and write the fields from the bitstream dat to the entity or object. */ \
+EXPORT int dwg_decode_##token##_private (Bit_Chain *dat, Bit_Chain *str_dat, \
+                                         Dwg_Object *restrict obj) \
+{ \
+  BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4; \
+  int error; \
+  Dwg_Entity_##token *ent, *_obj; \
+  Dwg_Object_Entity *_ent; \
+  Dwg_Data* dwg = obj->parent; \
+  Bit_Chain* hdl_dat = dat; \
   LOG_INFO("Decode entity " #token " ")\
   _ent = obj->tio.entity; \
   ent = obj->tio.entity->tio.token;\
@@ -722,7 +739,6 @@ static int dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj
 // Does size include the CRC?
 #define DWG_ENTITY_END \
   if (dat->version >= R_2007) { \
-    free(str_dat); \
     vcount  = (obj->size+obj->address)*8 - bit_position(hdl_dat); \
   } else { \
     vcount  = (obj->size+obj->address)*8 - bit_position(dat); \
@@ -751,20 +767,36 @@ EXPORT int dwg_add_ ## token (Dwg_Object *obj) \
   obj->tio.object->objid = obj->index; /* obj ptr itself might move */ \
   return 0; \
 } \
+\
 static int dwg_decode_ ## token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
-  BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4; \
-  Dwg_Object_##token *_obj;\
-  Dwg_Data* dwg = obj->parent;\
-  Bit_Chain* hdl_dat = dat; /* handle stream initially the same */ \
   Bit_Chain* str_dat; \
   int error = dwg_add_##token(obj); \
   if (error) return error; \
+\
   if (dat->version >= R_2007) { \
     str_dat = calloc(1, sizeof(Bit_Chain)); /* separate string buffer */ \
     if (!str_dat) return DWG_ERR_OUTOFMEM; \
-  } else \
+  } else { \
     str_dat = dat; \
+  } \
+\
+  error = dwg_decode_ ## token ## _private (dat, str_dat, obj); \
+\
+  if (dat->version >= R_2007) { \
+    free(str_dat); \
+  } \
+  return error; \
+} \
+\
+EXPORT int dwg_decode_ ## token ## _private (Bit_Chain *dat, Bit_Chain *str_dat, \
+                                             Dwg_Object *restrict obj) \
+{ \
+  BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4; \
+  int error; \
+  Dwg_Object_##token *_obj;\
+  Dwg_Data* dwg = obj->parent;\
+  Bit_Chain* hdl_dat = dat; /* handle stream initially the same */ \
   LOG_INFO("Decode object " #token " ")\
   _obj = obj->tio.object->tio.token;\
   error |= dwg_decode_object(dat, hdl_dat, str_dat, obj->tio.object); \
