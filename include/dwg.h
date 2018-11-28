@@ -1734,20 +1734,20 @@ typedef struct _dwg_entity_LEADER
 {
   struct _dwg_object_entity *parent;
 
-  BITCODE_B unknown_bit_1; /* always seems to be zero */
-  BITCODE_BS annot_type;
-  BITCODE_BS path_type;
-  BITCODE_BL numpts;
+  BITCODE_B unknown_bit_1;  /* always seems to be zero */
+  BITCODE_BS path_type;     /*< DXF(72) 0: line, 1: spline (oda bug) */
+  BITCODE_BS annot_type;    /*< DXF(73) 0: text, 1: tol, 2: insert, 3 (def): none */
+  BITCODE_BL numpts;        /*< DXF(76) */
   BITCODE_3DPOINT* points;
   BITCODE_3DPOINT origin;
   BITCODE_3DPOINT extrusion;
   BITCODE_3DPOINT x_direction;
   BITCODE_3DPOINT offset_to_block_ins_pt;
-  BITCODE_3DPOINT endptproj;
-  BITCODE_BD dimgap;
+  BITCODE_3DPOINT endptproj; /* R_14-R_2007 ? */
+  BITCODE_BD dimgap;         /* R_13-R_14 only */
   BITCODE_BD box_height;
   BITCODE_BD box_width;
-  BITCODE_B hooklineonxdir;
+  BITCODE_B hookline_dir;
   BITCODE_B arrowhead_on;
   BITCODE_BS arrowhead_type;
   BITCODE_BD dimasz;
@@ -1755,9 +1755,9 @@ typedef struct _dwg_entity_LEADER
   BITCODE_B unknown_bit_3;
   BITCODE_BS unknown_short_1;
   BITCODE_BS byblock_color;
-  BITCODE_B unknown_bit_4;
+  BITCODE_B hookline_on;
   BITCODE_B unknown_bit_5;
-  BITCODE_H associated_annotation;
+  BITCODE_H associated_annotation; /* DXF 340 Hard reference to associated annotation (mtext, tolerance, or insert entity) */
   BITCODE_H dimstyle;
 } Dwg_Entity_LEADER;
 

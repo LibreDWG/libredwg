@@ -8873,16 +8873,16 @@ dwg_ent_leader_get_box_width(const dwg_ent_leader *restrict leader,
     }
 }
 
-/** Sets leader hook line on x dir value
+/** Sets leader hookline_dir value
  */
 void
-dwg_ent_leader_set_hook_line_on_x_dir(dwg_ent_leader *restrict leader, char hook,
-                                      int *restrict error)
+dwg_ent_leader_set_hookline_dir(dwg_ent_leader *restrict leader, char dir,
+                                 int *restrict error)
 {
   if (leader)
     {
       *error = 0;
-      leader->hooklineonxdir = hook;
+      leader->hookline_dir = dir;
     }
   else
     {
@@ -8895,13 +8895,13 @@ dwg_ent_leader_set_hook_line_on_x_dir(dwg_ent_leader *restrict leader, char hook
 /** Returns leader hook line on x dir value
  */
 char
-dwg_ent_leader_get_hook_line_on_x_dir(const dwg_ent_leader *restrict leader,
-                          int *restrict error)
+dwg_ent_leader_get_hookline_dir(const dwg_ent_leader *restrict leader,
+                                int *restrict error)
 {
   if (leader)
     {
       *error = 0;
-      return leader->hooklineonxdir;
+      return leader->hookline_dir;
     }
   else
     {
@@ -8914,8 +8914,9 @@ dwg_ent_leader_get_hook_line_on_x_dir(const dwg_ent_leader *restrict leader,
 /** Sets leader arrowhead on
  */
 void
-dwg_ent_leader_set_arrowhead_on(dwg_ent_leader *restrict leader, char arrow,
-                          int *restrict error)
+dwg_ent_leader_set_arrowhead_on(dwg_ent_leader *restrict leader,
+                                const char arrow,
+                                int *restrict error)
 {
   if (leader)
     {
@@ -8934,7 +8935,7 @@ dwg_ent_leader_set_arrowhead_on(dwg_ent_leader *restrict leader, char arrow,
  */
 char
 dwg_ent_leader_get_arrowhead_on(const dwg_ent_leader *restrict leader,
-                          int *restrict error)
+                                int *restrict error)
 {
   if (leader)
     {

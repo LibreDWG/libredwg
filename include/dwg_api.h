@@ -2506,13 +2506,13 @@ dwg_ent_leader_get_box_width(const dwg_ent_leader *restrict leader,
                              int *restrict error);
 
 EXPORT void
-dwg_ent_leader_set_hook_line_on_x_dir(dwg_ent_leader *restrict leader,
-                                      const char hook,
-                                      int *restrict error);
+dwg_ent_leader_set_hookline_dir(dwg_ent_leader *restrict leader,
+                                const char dir,
+                                int *restrict error);
 
 EXPORT char
-dwg_ent_leader_get_hook_line_on_x_dir(const dwg_ent_leader *restrict leader,
-                                      int *restrict error);
+dwg_ent_leader_get_hookline_dir(const dwg_ent_leader *restrict leader,
+                                int *restrict error);
 
 EXPORT void
 dwg_ent_leader_set_arrowhead_on(dwg_ent_leader *restrict leader,

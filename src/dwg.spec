@@ -2002,8 +2002,8 @@ DWG_ENTITY(LEADER)
   //SUBCLASS (AcDbCurve)
   SUBCLASS (AcDbLeader)
   FIELD_B (unknown_bit_1, 0);
-  FIELD_BS (annot_type, 71);
   FIELD_BS (path_type, 72);
+  FIELD_BS (annot_type, 73); //0: text, 1: tol, 2: insert, 3 (def): none
   FIELD_BL (numpts, 76);
   FIELD_3DPOINT_VECTOR (points, numpts, 10);
   FIELD_3DPOINT (origin, 0);
@@ -2020,37 +2020,32 @@ DWG_ENTITY(LEADER)
 
   FIELD_BD (box_height, 40);
   FIELD_BD (box_width , 41);
-  FIELD_B (hooklineonxdir, 70);
-  FIELD_B (arrowhead_on, 74);
+  FIELD_B (hookline_dir, 74);
+  FIELD_B (arrowhead_on, 71);
+  FIELD_BS (arrowhead_type, 0);
 
   VERSIONS(R_13, R_14)
     {
-      FIELD_BS (arrowhead_type, 0);
       FIELD_BD (dimasz, 0);
       FIELD_B (unknown_bit_2, 0);
       FIELD_B (unknown_bit_3, 0);
       FIELD_BS (unknown_short_1, 0);
-      FIELD_BS (byblock_color, 0);
-      FIELD_B (unknown_bit_4, 0);
+      FIELD_BS (byblock_color, 77);
+      FIELD_B (hookline_on, 75);
       FIELD_B (unknown_bit_5, 0);
     }
 
   SINCE(R_2000)
     {
-      FIELD_BS (unknown_short_1, 0);
-      FIELD_B (unknown_bit_4, 0);
+      FIELD_B (hookline_on, 75);
       FIELD_B (unknown_bit_5, 0);
     }
 
   COMMON_ENTITY_HANDLE_DATA;
 
-  //FIXME reading these handles lead to a segfault
-  //TODO check if field is present in R_13.
-  //Juca thinks it is present but inactive/not used.
-  SINCE(R_13) { // TODO until 2007?
+  SINCE(R_13) {
     FIELD_HANDLE (associated_annotation, 2, 340);
   }
-  //UNTIL(R_2007) // TODO until 2007?
   {
     FIELD_HANDLE (dimstyle, 5, 2);
   }
