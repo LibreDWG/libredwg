@@ -291,27 +291,27 @@ dwg_free_xdata(Dwg_Object_XRECORD *obj, int size)
   obj->xdata = NULL;
 }
 
-static void
+void
 dwg_free_eed(Dwg_Object* obj)
 {
   BITCODE_BL i;
   if (obj->supertype == DWG_SUPERTYPE_ENTITY) {
     Dwg_Object_Entity* _obj = obj->tio.entity;
     for (i=0; i < _obj->num_eed; i++) {
-      if (_obj->eed[i].size)
-        FREE_IF(_obj->eed[i].raw);
+      FREE_IF(_obj->eed[i].raw);  
       FREE_IF(_obj->eed[i].data);
     }
     FREE_IF(_obj->eed);
+    _obj->num_eed = 0;
   }
   else {
     Dwg_Object_Object* _obj = obj->tio.object;
     for (i=0; i < _obj->num_eed; i++) {
-      if (_obj->eed[i].size)
-        FREE_IF(_obj->eed[i].raw);
+      FREE_IF(_obj->eed[i].raw);
       FREE_IF(_obj->eed[i].data);
     }
     FREE_IF(_obj->eed);
+    _obj->num_eed = 0;
   }
 }
 

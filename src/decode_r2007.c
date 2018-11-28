@@ -609,7 +609,7 @@ read_system_page(Bit_Chain* dat, int64_t size_comp, int64_t size_uncomp,
                 (long)page_size, dat->size - dat->byte);
       return NULL;
     }
-  data = (BITCODE_RC*)calloc(size_uncomp, page_size);
+  data = (BITCODE_RC*)calloc(size_uncomp + page_size, 1);
   if (!data) {
     LOG_ERROR("Out of memory")
     return NULL;
@@ -1371,6 +1371,10 @@ read_2007_section_header(Bit_Chain*restrict dat, Bit_Chain*restrict hdl_dat,
     DEBUG_HERE;
     error = DWG_ERR_SECTIONNOTFOUND;
   }
+
+  if (sec_dat.chain)
+    free(sec_dat.chain);
+
   return error;
 }
 
@@ -1401,6 +1405,8 @@ read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl,
   if (error >= DWG_ERR_CRITICAL)
     {
       LOG_ERROR("Failed to read handles section");
+      if (obj_dat.chain)
+        free(obj_dat.chain);
       if (hdl_dat.chain)
         free(hdl_dat.chain);
       return error;

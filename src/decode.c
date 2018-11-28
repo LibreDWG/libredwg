@@ -35,6 +35,7 @@
 #include "hash.h"
 #include "decode.h"
 #include "print.h"
+#include "free.h"
 
 /* The logging level for the read (decode) path.  */
 static unsigned int loglevel;
@@ -2409,7 +2410,7 @@ dwg_decode_eed(Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
       if (size > _obj->size)
         {
           LOG_ERROR("Invalid EED size " FORMAT_BS " > %u", size, _obj->size)
-          obj->num_eed = 0;
+          dwg_free_eed(_obj);
           return DWG_ERR_VALUEOUTOFBOUNDS; /* may not continue */
         }
 
@@ -2424,9 +2425,7 @@ dwg_decode_eed(Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
       end = dat->byte + size;
       if (error) {
         LOG_ERROR("No EED[%d].handle", idx);
-        obj->num_eed = 0;
-        free(obj->eed);
-        obj->eed = NULL;
+        dwg_free_eed(_obj);
         dat->byte = end; // skip eed
         continue; // continue for size = bit_read_BS(dat)
       } else {
@@ -2863,8 +2862,8 @@ dwg_decode_handleref(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       ref->absolute_ref = ref->handleref.value;
       break;
     default:
-      dwg->object_ref[dwg->num_object_refs-1] = NULL;
-      dwg->num_object_refs--;
+      //dwg->object_ref[dwg->num_object_refs-1] = NULL;
+      //dwg->num_object_refs--;
       ref->absolute_ref = 0;
       ref->obj = NULL;
       LOG_WARN("Invalid handle pointer code %d", ref->handleref.code);
