@@ -23,4 +23,7 @@
 #include "dwg.h"
 #include "bits.h"
 
+EXPORT void
+dwg_free_eed(Dwg_Object* obj);
+
 #endif
