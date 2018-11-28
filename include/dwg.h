@@ -306,8 +306,6 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_PROXY_ENTITY = 0x1f2, /* 498 */
   DWG_TYPE_PROXY_OBJECT = 0x1f3, /* 499 */
 
-  DWG_TYPE_FREED = 0x1ff,
-
   /* non-fixed types > 500. not stored as type, but as fixedtype */
 
   DWG_TYPE_ACDBNAVISWORKSMODELDEF,
@@ -386,6 +384,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_XREFPANELOBJECT,
   // after 1.0 add new types here for binary compat
 
+  DWG_TYPE_FREED       = 0xfffd,
   DWG_TYPE_UNKNOWN_ENT = 0xfffe,
   DWG_TYPE_UNKNOWN_OBJ = 0xffff,
 } Dwg_Object_Type;
