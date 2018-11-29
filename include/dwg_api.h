@@ -52,7 +52,7 @@ typedef struct _dwg_LWPLINE_widths
   double end;
 } dwg_lwpline_widths;
 
-/* Returns a NULL-terminated array of all entities/objects of a specific type from a BLOCK */
+/* Returns a NULL-terminated array of all entities of a specific type from a BLOCK */
 #define GET_DWG_ENTITY_DECL(token) \
 EXPORT \
 Dwg_Entity_##token **dwg_get_##token (Dwg_Object_Ref * hdr);
@@ -86,6 +86,43 @@ Dwg_Entity_##token **dwg_get_##token (Dwg_Object_Ref * hdr) \
           i++; \
         } \
         obj = get_next_owned_object(hdr->obj, obj); \
+    } \
+  ret_##token[i] = NULL; \
+  return ret_##token; \
+}
+
+/* Returns a NULL-terminated array of all objects of a specific type */
+#define GET_DWG_OBJECT_DECL(token) \
+EXPORT \
+Dwg_Object_##token **dwg_get_##token (Dwg_Data *dwg);
+
+#define GET_DWG_OBJECT(token) \
+EXPORT \
+Dwg_Object_##token **dwg_get_##token (Dwg_Data *dwg) \
+{ \
+  BITCODE_BL i=0, counts=0; \
+  Dwg_Object_##token ** ret_##token; \
+  for (i=0; i < dwg->num_objects; i++) \
+    { \
+      if (dwg->object[i].supertype == DWG_SUPERTYPE_OBJECT \
+          && (dwg->object[i].type == DWG_TYPE_##token \
+              || dwg->object[i].fixedtype == DWG_TYPE_##token)) \
+        { \
+          counts++; \
+        } \
+    } \
+  if (!counts) \
+    return NULL; \
+  ret_##token = (Dwg_Object_##token **)malloc ((counts+1) * sizeof(Dwg_Object_##token *)); \
+  for (i=0; i < dwg->num_objects; i++) \
+    { \
+      const Dwg_Object *const obj = &dwg->object[i]; \
+      if (obj->supertype == DWG_SUPERTYPE_OBJECT \
+          && (obj->type == DWG_TYPE_##token || obj->fixedtype == DWG_TYPE_##token)) \
+        { \
+          ret_##token[i] = obj->tio.object->tio.token; \
+          i++; \
+        } \
     } \
   ret_##token[i] = NULL; \
   return ret_##token; \
@@ -260,106 +297,61 @@ typedef struct _dwg_entity_eed			  dwg_entity_eed;
 
 ///////////////////////////////////////////////////////////////////////////
 
-/*******************************************************************
-*        Functions created from macro to extract entities           *
-********************************************************************/
+/********************************************************************
+ * Functions to return NULL-terminated array of all owned entities  *
+ ********************************************************************/
 
-/// extract all text entities from a block
+/// extract all owned entities from a block header (mspace or pspace)
 GET_DWG_ENTITY_DECL(TEXT)
-/// extract all attrib entities from a block
 GET_DWG_ENTITY_DECL(ATTRIB)
-/// extract all attdef entities from a block
 GET_DWG_ENTITY_DECL(ATTDEF)
-/// extract all block entities from a block
 GET_DWG_ENTITY_DECL(BLOCK)
-/// extract endblk entity from a block
 GET_DWG_ENTITY_DECL(ENDBLK)
-/// extract all seqend entities from a block
 GET_DWG_ENTITY_DECL(SEQEND)
-/// extract all insert entities from a block
 GET_DWG_ENTITY_DECL(INSERT)
-/// extract all minsert entities from a block
 GET_DWG_ENTITY_DECL(MINSERT)
-/// extract all vertex_2d entities from a block
 GET_DWG_ENTITY_DECL(VERTEX_2D)
-/// extract all vertex_3d entities from a block
 GET_DWG_ENTITY_DECL(VERTEX_3D)
-/// extract all vertex_mesh entities from a block
 GET_DWG_ENTITY_DECL(VERTEX_MESH)
-/// extract all vertex_pface entities from a block
 GET_DWG_ENTITY_DECL(VERTEX_PFACE)
-/// extract all vertex_pface_face entities from a block
 GET_DWG_ENTITY_DECL(VERTEX_PFACE_FACE)
-/// extract all polyline_2d entities from a block
 GET_DWG_ENTITY_DECL(POLYLINE_2D)
-/// extract all polyline_3d entities from a block
 GET_DWG_ENTITY_DECL(POLYLINE_3D)
-/// extract all arc entities from a block
 GET_DWG_ENTITY_DECL(ARC)
-/// extract all circle entities from a block
 GET_DWG_ENTITY_DECL(CIRCLE)
-/// extract all line entities from a block
 GET_DWG_ENTITY_DECL(LINE)
-/// extract all dimension ordinate entities from a block
 GET_DWG_ENTITY_DECL(DIMENSION_ORDINATE)
-/// extract all dimension linear entities from a block
 GET_DWG_ENTITY_DECL(DIMENSION_LINEAR)
-/// extract all dimension aligned entities from a block
 GET_DWG_ENTITY_DECL(DIMENSION_ALIGNED)
-/// extract all dimension ang3pt entities from a block
 GET_DWG_ENTITY_DECL(DIMENSION_ANG3PT)
-/// extract all dimension ang2ln entities from a block
 GET_DWG_ENTITY_DECL(DIMENSION_ANG2LN)
-/// extract all dimension radius entities from a block
 GET_DWG_ENTITY_DECL(DIMENSION_RADIUS)
-/// extract all dimension diameter entities from a block
 GET_DWG_ENTITY_DECL(DIMENSION_DIAMETER)
-/// extract all points entities from a block
 GET_DWG_ENTITY_DECL(POINT)
-/// extract all polyline_pface entities from a block
 GET_DWG_ENTITY_DECL(POLYLINE_PFACE)
-/// extract all polyline_mesh entities from a block
 GET_DWG_ENTITY_DECL(POLYLINE_MESH)
-/// extract all solid entities from a block
 GET_DWG_ENTITY_DECL(SOLID)
-/// extract all trace entities from a block
 GET_DWG_ENTITY_DECL(TRACE)
-/// extract all shape entities from a block
 GET_DWG_ENTITY_DECL(SHAPE)
-/// extract all viewport entities from a block
 GET_DWG_ENTITY_DECL(VIEWPORT)
-/// extract all ellipse entities from a block
 GET_DWG_ENTITY_DECL(ELLIPSE)
-/// extract all spline entities from a block
 GET_DWG_ENTITY_DECL(SPLINE)
-/// extract all region entities from a block
 GET_DWG_ENTITY_DECL(REGION)
-/// extract all body entities from a block
 GET_DWG_ENTITY_DECL(BODY)
-/// extract all ray entities from a block
 GET_DWG_ENTITY_DECL(RAY)
-/// extract all xline entities from a block
 GET_DWG_ENTITY_DECL(XLINE)
-/// extract all OLEFRAME entities from a block
 GET_DWG_ENTITY_DECL(OLEFRAME)
-/// extract all mtext entities from a block
 GET_DWG_ENTITY_DECL(MTEXT)
-/// extract all leader entities from a block
 GET_DWG_ENTITY_DECL(LEADER)
-/// extract all tolerance entities from a block
 GET_DWG_ENTITY_DECL(TOLERANCE)
-/// extract all mline entities from a block
 GET_DWG_ENTITY_DECL(MLINE)
-/// extract all OLE2FRAME entities from a block
 GET_DWG_ENTITY_DECL(OLE2FRAME)
-/// extract all lwpline entities from a block
 GET_DWG_ENTITY_DECL(LWPOLYLINE)
-/// extract all PROXY_ENTITY entities from a block
 //GET_DWG_ENTITY_DECL(PROXY_ENTITY)
-/// extract all hatch entities from a block
 GET_DWG_ENTITY_DECL(HATCH)
 
 /// extract all varying entities from a block
+//GET_DWG_ENTITY_DECL(ARC_DIMENSION)
 GET_DWG_ENTITY_DECL(IMAGE)
 GET_DWG_ENTITY_DECL(CAMERA)
 GET_DWG_ENTITY_DECL(PLANESURFACE)
@@ -375,107 +367,161 @@ GET_DWG_ENTITY_DECL(TABLE)
 GET_DWG_ENTITY_DECL(UNDERLAY)
 GET_DWG_ENTITY_DECL(WIPEOUT)
 
+/********************************************************************
+ *     Functions to return NULL-terminated array of all objects     *
+ ********************************************************************/
+
+/// extract all objects from a dwg
+
+// fixed (incl. tables)
+GET_DWG_OBJECT_DECL(BLOCK_CONTROL)
+GET_DWG_OBJECT_DECL(BLOCK_HEADER)
+GET_DWG_OBJECT_DECL(LAYER_CONTROL)
+GET_DWG_OBJECT_DECL(LAYER)
+GET_DWG_OBJECT_DECL(STYLE_CONTROL)
+GET_DWG_OBJECT_DECL(STYLE)
+GET_DWG_OBJECT_DECL(LTYPE_CONTROL)
+GET_DWG_OBJECT_DECL(LTYPE)
+GET_DWG_OBJECT_DECL(VIEW_CONTROL)
+GET_DWG_OBJECT_DECL(VIEW)
+GET_DWG_OBJECT_DECL(UCS_CONTROL)
+GET_DWG_OBJECT_DECL(UCS)
+GET_DWG_OBJECT_DECL(VPORT_CONTROL)
+GET_DWG_OBJECT_DECL(VPORT)
+GET_DWG_OBJECT_DECL(APPID_CONTROL)
+GET_DWG_OBJECT_DECL(APPID)
+GET_DWG_OBJECT_DECL(DIMSTYLE_CONTROL)
+GET_DWG_OBJECT_DECL(DIMSTYLE)
+GET_DWG_OBJECT_DECL(VPORT_ENTITY_CONTROL)
+GET_DWG_OBJECT_DECL(VPORT_ENTITY_HEADER)
+
+GET_DWG_OBJECT_DECL(DICTIONARY)
+GET_DWG_OBJECT_DECL(MLINESTYLE)
+GET_DWG_OBJECT_DECL(PROXY_OBJECT)
+// stable:
+GET_DWG_OBJECT_DECL(DICTIONARYVAR)
+GET_DWG_OBJECT_DECL(DICTIONARYWDFLT)
+GET_DWG_OBJECT_DECL(FIELD)
+GET_DWG_OBJECT_DECL(FIELDLIST)
+GET_DWG_OBJECT_DECL(GROUP)
+GET_DWG_OBJECT_DECL(IDBUFFER)
+GET_DWG_OBJECT_DECL(IMAGEDEF)
+GET_DWG_OBJECT_DECL(IMAGEDEF_REACTOR)
+GET_DWG_OBJECT_DECL(LAYER_INDEX)
+GET_DWG_OBJECT_DECL(LAYOUT)
+GET_DWG_OBJECT_DECL(MLEADERSTYLE)
+GET_DWG_OBJECT_DECL(OBJECTCONTEXTDATA)
+GET_DWG_OBJECT_DECL(PLACEHOLDER)
+GET_DWG_OBJECT_DECL(RASTERVARIABLES)
+GET_DWG_OBJECT_DECL(SCALE)
+GET_DWG_OBJECT_DECL(SORTENTSTABLE)
+GET_DWG_OBJECT_DECL(SPATIAL_FILTER)
+GET_DWG_OBJECT_DECL(SPATIAL_INDEX)
+GET_DWG_OBJECT_DECL(WIPEOUTVARIABLES)
+GET_DWG_OBJECT_DECL(XRECORD)
+// unstable:
+GET_DWG_OBJECT_DECL(ASSOCDEPENDENCY)
+GET_DWG_OBJECT_DECL(ASSOCPLANESURFACEACTIONBODY)
+GET_DWG_OBJECT_DECL(DIMASSOC)
+GET_DWG_OBJECT_DECL(DBCOLOR)
+GET_DWG_OBJECT_DECL(DYNAMICBLOCKPURGEPREVENTER)
+GET_DWG_OBJECT_DECL(GEODATA)
+GET_DWG_OBJECT_DECL(OBJECT_PTR)
+//GET_DWG_OBJECT_DECL(PROXY_OBJECT)
+GET_DWG_OBJECT_DECL(PERSSUBENTMANAGER)
+GET_DWG_OBJECT_DECL(UNDERLAYDEFINITION)
+GET_DWG_OBJECT_DECL(VISUALSTYLE)
+// debugging:
+GET_DWG_OBJECT_DECL(TABLECONTENT)
+GET_DWG_OBJECT_DECL(TABLEGEOMETRY)
+GET_DWG_OBJECT_DECL(CELLSTYLEMAP)
+GET_DWG_OBJECT_DECL(MATERIAL)
+GET_DWG_OBJECT_DECL(PLOTSETTINGS)
+GET_DWG_OBJECT_DECL(SUN)
+GET_DWG_OBJECT_DECL(SUNSTUDY)
+GET_DWG_OBJECT_DECL(VBA_PROJECT)
+GET_DWG_OBJECT_DECL(ACSH_SWEEP_CLASS)
+GET_DWG_OBJECT_DECL(ACDBNAVISWORKSMODELDEF)
+GET_DWG_OBJECT_DECL(ASSOCACTION)
+GET_DWG_OBJECT_DECL(ASSOCNETWORK)
+GET_DWG_OBJECT_DECL(ASSOCALIGNEDDIMACTIONBODY)
+GET_DWG_OBJECT_DECL(ASSOCOSNAPPOINTREFACTIONPARAM)
+GET_DWG_OBJECT_DECL(ASSOCPERSSUBENTMANAGER)
+GET_DWG_OBJECT_DECL(ASSOC2DCONSTRAINTGROUP)
+GET_DWG_OBJECT_DECL(EVALUATION_GRAPH)
+// unhandled:
+//GET_DWG_OBJECT_DECL(ACSH_HISTORY_CLASS)
+//GET_DWG_OBJECT_DECL(ARCALIGNEDTEXT)
+//GET_DWG_OBJECT_DECL(ASSOCGEOMDEPENDENCY)
+//GET_DWG_OBJECT_DECL(ASSOCOSNAPPOINTREFACTIONPARAM)
+//GET_DWG_OBJECT_DECL(ASSOCVERTEXACTIONPARAM)
+//GET_DWG_OBJECT_DECL(DATATABLE)
+//GET_DWG_OBJECT_DECL(DETAILVIEWSTYLE)
+//GET_DWG_OBJECT_DECL(DOCUMENTOPTIONS)
+//GET_DWG_OBJECT_DECL(LAYER_FILTER)
+//GET_DWG_OBJECT_DECL(LAYOUTPRINTCONFIG)
+//GET_DWG_OBJECT_DECL(LEADEROBJECTCONTEXTDATA)
+GET_DWG_OBJECT_DECL(LIGHTLIST)
+//GET_DWG_OBJECT_DECL(NPOCOLLECTION)
+//GET_DWG_OBJECT_DECL(POINTCLOUD)
+//GET_DWG_OBJECT_DECL(RTEXT)
+//GET_DWG_OBJECT_DECL(SECTIONVIEWSTYLE)
+//GET_DWG_OBJECT_DECL(TABLESTYLE)
+//GET_DWG_OBJECT_DECL(XREFPANELOBJECT)
+
 /*******************************************************************
 *     Functions created from macro to cast dwg_object to entity     *
 *                 Usage :- dwg_object_to_ENTITY(),                  *
 *                where ENTITY can be LINE or CIRCLE                 *
 ********************************************************************/
 
-/// dwg object to text
 CAST_DWG_OBJECT_TO_ENTITY_DECL(TEXT)
-/// dwg object to attrib
 CAST_DWG_OBJECT_TO_ENTITY_DECL(ATTRIB)
-/// dwg object to attdef
 CAST_DWG_OBJECT_TO_ENTITY_DECL(ATTDEF)
-/// dwg object to block
 CAST_DWG_OBJECT_TO_ENTITY_DECL(BLOCK)
-/// extract endblk entity from a block
 CAST_DWG_OBJECT_TO_ENTITY_DECL(ENDBLK)
-/// dwg object to seqend
 CAST_DWG_OBJECT_TO_ENTITY_DECL(SEQEND)
-/// dwg object to insert
 CAST_DWG_OBJECT_TO_ENTITY_DECL(INSERT)
-/// dwg object to minsert
 CAST_DWG_OBJECT_TO_ENTITY_DECL(MINSERT)
-/// dwg object to vertex_2d
 CAST_DWG_OBJECT_TO_ENTITY_DECL(VERTEX_2D)
-/// dwg object to vertex_3d
 CAST_DWG_OBJECT_TO_ENTITY_DECL(VERTEX_3D)
-/// dwg object to vertex_mesh
 CAST_DWG_OBJECT_TO_ENTITY_DECL(VERTEX_MESH)
-/// dwg object to vertex_pface
 CAST_DWG_OBJECT_TO_ENTITY_DECL(VERTEX_PFACE)
-/// dwg object to vertex_pface_face
 CAST_DWG_OBJECT_TO_ENTITY_DECL(VERTEX_PFACE_FACE)
-/// dwg object to polyline_2d
 CAST_DWG_OBJECT_TO_ENTITY_DECL(POLYLINE_2D)
-/// dwg object to polyline_3d
 CAST_DWG_OBJECT_TO_ENTITY_DECL(POLYLINE_3D)
-/// dwg object to arc
 CAST_DWG_OBJECT_TO_ENTITY_DECL(ARC)
-/// dwg object to circle
 CAST_DWG_OBJECT_TO_ENTITY_DECL(CIRCLE)
-/// dwg object to line
 CAST_DWG_OBJECT_TO_ENTITY_DECL(LINE)
-/// dwg object to common dimension
 EXPORT dwg_ent_dim * dwg_object_to_DIMENSION(dwg_object *obj);
-/// dwg object to dimension ordinate
 CAST_DWG_OBJECT_TO_ENTITY_DECL(DIMENSION_ORDINATE)
-/// dwg object to dimension linear
 CAST_DWG_OBJECT_TO_ENTITY_DECL(DIMENSION_LINEAR)
-/// dwg object to dimension aligned
 CAST_DWG_OBJECT_TO_ENTITY_DECL(DIMENSION_ALIGNED)
-/// dwg object to dimension ang3pt
 CAST_DWG_OBJECT_TO_ENTITY_DECL(DIMENSION_ANG3PT)
-/// dwg object to dimension ang2ln
 CAST_DWG_OBJECT_TO_ENTITY_DECL(DIMENSION_ANG2LN)
-/// dwg object to dimension radius
 CAST_DWG_OBJECT_TO_ENTITY_DECL(DIMENSION_RADIUS)
-/// dwg object to dimension diameter
 CAST_DWG_OBJECT_TO_ENTITY_DECL(DIMENSION_DIAMETER)
-/// dwg object to points
 CAST_DWG_OBJECT_TO_ENTITY_DECL(POINT)
-/// dwg object to polyline_pface
 CAST_DWG_OBJECT_TO_ENTITY_DECL(POLYLINE_PFACE)
-/// dwg object to polyline_mesh
 CAST_DWG_OBJECT_TO_ENTITY_DECL(POLYLINE_MESH)
-/// dwg object to solid
 CAST_DWG_OBJECT_TO_ENTITY_DECL(SOLID)
-/// dwg object to trace
 CAST_DWG_OBJECT_TO_ENTITY_DECL(TRACE)
-/// dwg object to shape
 CAST_DWG_OBJECT_TO_ENTITY_DECL(SHAPE)
-/// dwg object to viewport
 CAST_DWG_OBJECT_TO_ENTITY_DECL(VIEWPORT)
-/// dwg object to ellipse
 CAST_DWG_OBJECT_TO_ENTITY_DECL(ELLIPSE)
-/// dwg object to spline
 CAST_DWG_OBJECT_TO_ENTITY_DECL(SPLINE)
-/// dwg object to region
 CAST_DWG_OBJECT_TO_ENTITY_DECL(REGION)
-/// dwg object to body
 CAST_DWG_OBJECT_TO_ENTITY_DECL(BODY)
-/// dwg object to ray
 CAST_DWG_OBJECT_TO_ENTITY_DECL(RAY)
-/// dwg object to xline
 CAST_DWG_OBJECT_TO_ENTITY_DECL(XLINE)
-/// dwg object to oleframe
 CAST_DWG_OBJECT_TO_ENTITY_DECL(OLEFRAME)
-/// dwg object to mtext
 CAST_DWG_OBJECT_TO_ENTITY_DECL(MTEXT)
-/// dwg object to leader
 CAST_DWG_OBJECT_TO_ENTITY_DECL(LEADER)
-/// dwg object to tolerance
 CAST_DWG_OBJECT_TO_ENTITY_DECL(TOLERANCE)
-/// dwg object to mline
 CAST_DWG_OBJECT_TO_ENTITY_DECL(MLINE)
-/// dwg object to ole2frame
 CAST_DWG_OBJECT_TO_ENTITY_DECL(OLE2FRAME)
-/// dwg object to lwpline
 CAST_DWG_OBJECT_TO_ENTITY_DECL(LWPOLYLINE)
-/// dwg object to proxy_entity
 //CAST_DWG_OBJECT_TO_ENTITY_DECL(PROXY_ENTITY)
-/// dwg object to hatch
 CAST_DWG_OBJECT_TO_ENTITY_DECL(HATCH)
 
 /// dwg object to variable types

@@ -40,106 +40,61 @@
 */
 static Dwg_Version_Type dwg_version = R_INVALID;
 
-/*******************************************************************
- *        Functions created from macro to extract entities           *
+/********************************************************************
+ * Functions to return NULL-terminated array of all owned entities  *
  ********************************************************************/
 
-/// extract all text entities from a block
+/// extract all entities from a block header (mspace or pspace)
 GET_DWG_ENTITY(TEXT)
-/// extract all attrib entities from a block
 GET_DWG_ENTITY(ATTRIB)
-/// extract all attdef entities from a block
 GET_DWG_ENTITY(ATTDEF)
-/// extract all block entities from a block
 GET_DWG_ENTITY(BLOCK)
-/// extract endblk entity from a block
 GET_DWG_ENTITY(ENDBLK)
-/// extract all seqend entities from a block
 GET_DWG_ENTITY(SEQEND)
-/// extract all insert entities from a block
 GET_DWG_ENTITY(INSERT)
-/// extract all minsert entities from a block
 GET_DWG_ENTITY(MINSERT)
-/// extract all vertex_2d entities from a block
 GET_DWG_ENTITY(VERTEX_2D)
-/// extract all vertex_3d entities from a block
 GET_DWG_ENTITY(VERTEX_3D)
-/// extract all vertex_mesh entities from a block
 GET_DWG_ENTITY(VERTEX_MESH)
-/// extract all vertex_pface entities from a block
 GET_DWG_ENTITY(VERTEX_PFACE)
-/// extract all vertex_pface_face entities from a block
 GET_DWG_ENTITY(VERTEX_PFACE_FACE)
-/// extract all polyline_2d entities from a block
 GET_DWG_ENTITY(POLYLINE_2D)
-/// extract all polyline_3d entities from a block
 GET_DWG_ENTITY(POLYLINE_3D)
-/// extract all arc entities from a block
 GET_DWG_ENTITY(ARC)
-/// extract all circle entities from a block
 GET_DWG_ENTITY(CIRCLE)
-/// extract all line entities from a block
 GET_DWG_ENTITY(LINE)
-/// extract all dimension ordinate entities from a block
 GET_DWG_ENTITY(DIMENSION_ORDINATE)
-/// extract all dimension linear entities from a block
 GET_DWG_ENTITY(DIMENSION_LINEAR)
-/// extract all dimension aligned entities from a block
 GET_DWG_ENTITY(DIMENSION_ALIGNED)
-/// extract all dimension ang3pt entities from a block
 GET_DWG_ENTITY(DIMENSION_ANG3PT)
-/// extract all dimension ang2ln entities from a block
 GET_DWG_ENTITY(DIMENSION_ANG2LN)
-/// extract all dimension radius entities from a block
 GET_DWG_ENTITY(DIMENSION_RADIUS)
-/// extract all dimension diameter entities from a block
 GET_DWG_ENTITY(DIMENSION_DIAMETER)
-/// extract all points entities from a block
 GET_DWG_ENTITY(POINT)
-/// extract all polyline_pface entities from a block
 GET_DWG_ENTITY(POLYLINE_PFACE)
-/// extract all polyline_mesh entities from a block
 GET_DWG_ENTITY(POLYLINE_MESH)
-/// extract all solid entities from a block
 GET_DWG_ENTITY(SOLID)
-/// extract all trace entities from a block
 GET_DWG_ENTITY(TRACE)
-/// extract all shape entities from a block
 GET_DWG_ENTITY(SHAPE)
-/// extract all viewport entities from a block
 GET_DWG_ENTITY(VIEWPORT)
-/// extract all ellipse entities from a block
 GET_DWG_ENTITY(ELLIPSE)
-/// extract all spline entities from a block
 GET_DWG_ENTITY(SPLINE)
-/// extract all region entities from a block
 GET_DWG_ENTITY(REGION)
-/// extract all body entities from a block
 GET_DWG_ENTITY(BODY)
-/// extract all ray entities from a block
 GET_DWG_ENTITY(RAY)
-/// extract all xline entities from a block
 GET_DWG_ENTITY(XLINE)
-/// extract all OLEFRAME entities from a block
 GET_DWG_ENTITY(OLEFRAME)
-/// extract all mtext entities from a block
 GET_DWG_ENTITY(MTEXT)
-/// extract all leader entities from a block
 GET_DWG_ENTITY(LEADER)
-/// extract all tolerance entities from a block
 GET_DWG_ENTITY(TOLERANCE)
-/// extract all mline entities from a block
 GET_DWG_ENTITY(MLINE)
-/// cast dwg object to ole2frame
 GET_DWG_ENTITY(OLE2FRAME)
-/// extract all lwpline entities from a block
 GET_DWG_ENTITY(LWPOLYLINE)
-/// extract all PROXY_ENTITY entities from a block
 //GET_DWG_ENTITY(PROXY_ENTITY)
-/// extract all hatch entities from a block
 GET_DWG_ENTITY(HATCH)
 
 //untyped >500:
+//GET_DWG_ENTITY(ARC_DIMENSION)
 GET_DWG_ENTITY(IMAGE)
 GET_DWG_ENTITY(CAMERA)
 GET_DWG_ENTITY(PLANESURFACE)
@@ -154,6 +109,108 @@ GET_DWG_ENTITY(MULTILEADER)
 GET_DWG_ENTITY(TABLE)
 GET_DWG_ENTITY(UNDERLAY)
 GET_DWG_ENTITY(WIPEOUT)
+
+/********************************************************************
+ *     Functions to return NULL-terminated array of all objects     *
+ ********************************************************************/
+
+/// extract all objects from a dwg
+
+// fixed (incl. tables)
+GET_DWG_OBJECT(BLOCK_CONTROL)
+GET_DWG_OBJECT(BLOCK_HEADER)
+GET_DWG_OBJECT(LAYER_CONTROL)
+GET_DWG_OBJECT(LAYER)
+GET_DWG_OBJECT(STYLE_CONTROL)
+GET_DWG_OBJECT(STYLE)
+GET_DWG_OBJECT(LTYPE_CONTROL)
+GET_DWG_OBJECT(LTYPE)
+GET_DWG_OBJECT(VIEW_CONTROL)
+GET_DWG_OBJECT(VIEW)
+GET_DWG_OBJECT(UCS_CONTROL)
+GET_DWG_OBJECT(UCS)
+GET_DWG_OBJECT(VPORT_CONTROL)
+GET_DWG_OBJECT(VPORT)
+GET_DWG_OBJECT(APPID_CONTROL)
+GET_DWG_OBJECT(APPID)
+GET_DWG_OBJECT(DIMSTYLE_CONTROL)
+GET_DWG_OBJECT(DIMSTYLE)
+GET_DWG_OBJECT(VPORT_ENTITY_CONTROL)
+GET_DWG_OBJECT(VPORT_ENTITY_HEADER)
+
+GET_DWG_OBJECT(DICTIONARY)
+GET_DWG_OBJECT(MLINESTYLE)
+GET_DWG_OBJECT(PROXY_OBJECT)
+// stable:
+GET_DWG_OBJECT(DICTIONARYVAR)
+GET_DWG_OBJECT(DICTIONARYWDFLT)
+GET_DWG_OBJECT(FIELD)
+GET_DWG_OBJECT(FIELDLIST)
+GET_DWG_OBJECT(GROUP)
+GET_DWG_OBJECT(IDBUFFER)
+GET_DWG_OBJECT(IMAGEDEF)
+GET_DWG_OBJECT(IMAGEDEF_REACTOR)
+GET_DWG_OBJECT(LAYER_INDEX)
+GET_DWG_OBJECT(LAYOUT)
+GET_DWG_OBJECT(MLEADERSTYLE)
+GET_DWG_OBJECT(OBJECTCONTEXTDATA)
+GET_DWG_OBJECT(PLACEHOLDER)
+GET_DWG_OBJECT(RASTERVARIABLES)
+GET_DWG_OBJECT(SCALE)
+GET_DWG_OBJECT(SORTENTSTABLE)
+GET_DWG_OBJECT(SPATIAL_FILTER)
+GET_DWG_OBJECT(SPATIAL_INDEX)
+GET_DWG_OBJECT(WIPEOUTVARIABLES)
+GET_DWG_OBJECT(XRECORD)
+// unstable:
+GET_DWG_OBJECT(ASSOCDEPENDENCY)
+GET_DWG_OBJECT(ASSOCPLANESURFACEACTIONBODY)
+GET_DWG_OBJECT(DIMASSOC)
+GET_DWG_OBJECT(DBCOLOR)
+GET_DWG_OBJECT(DYNAMICBLOCKPURGEPREVENTER)
+GET_DWG_OBJECT(GEODATA)
+GET_DWG_OBJECT(OBJECT_PTR)
+//GET_DWG_OBJECT(PROXY_OBJECT)
+GET_DWG_OBJECT(PERSSUBENTMANAGER)
+GET_DWG_OBJECT(UNDERLAYDEFINITION)
+GET_DWG_OBJECT(VISUALSTYLE)
+// debugging:
+GET_DWG_OBJECT(TABLECONTENT)
+GET_DWG_OBJECT(TABLEGEOMETRY)
+GET_DWG_OBJECT(CELLSTYLEMAP)
+GET_DWG_OBJECT(MATERIAL)
+GET_DWG_OBJECT(PLOTSETTINGS)
+GET_DWG_OBJECT(SUN)
+GET_DWG_OBJECT(SUNSTUDY)
+GET_DWG_OBJECT(VBA_PROJECT)
+GET_DWG_OBJECT(ACSH_SWEEP_CLASS)
+GET_DWG_OBJECT(ACDBNAVISWORKSMODELDEF)
+GET_DWG_OBJECT(ASSOCACTION)
+GET_DWG_OBJECT(ASSOCNETWORK)
+GET_DWG_OBJECT(ASSOCALIGNEDDIMACTIONBODY)
+GET_DWG_OBJECT(ASSOCOSNAPPOINTREFACTIONPARAM)
+GET_DWG_OBJECT(ASSOCPERSSUBENTMANAGER)
+GET_DWG_OBJECT(ASSOC2DCONSTRAINTGROUP)
+GET_DWG_OBJECT(EVALUATION_GRAPH)
+// unhandled:
+//GET_DWG_OBJECT(ACSH_HISTORY_CLASS)
+//GET_DWG_OBJECT(ARCALIGNEDTEXT)
+//GET_DWG_OBJECT(ASSOCGEOMDEPENDENCY)
+//GET_DWG_OBJECT(ASSOCOSNAPPOINTREFACTIONPARAM)
+//GET_DWG_OBJECT(ASSOCVERTEXACTIONPARAM)
+//GET_DWG_OBJECT(DATATABLE)
+//GET_DWG_OBJECT(DETAILVIEWSTYLE)
+//GET_DWG_OBJECT(DOCUMENTOPTIONS)
+//GET_DWG_OBJECT(LAYER_FILTER)
+//GET_DWG_OBJECT(LAYOUTPRINTCONFIG)
+//GET_DWG_OBJECT(LEADEROBJECTCONTEXTDATA)
+GET_DWG_OBJECT(LIGHTLIST)
+//GET_DWG_OBJECT(NPOCOLLECTION)
+//GET_DWG_OBJECT(POINTCLOUD)
+//GET_DWG_OBJECT(RTEXT)
+//GET_DWG_OBJECT(SECTIONVIEWSTYLE)
+//GET_DWG_OBJECT(TABLESTYLE)
+//GET_DWG_OBJECT(XREFPANELOBJECT)
 
 /*******************************************************************
  *     Functions created from macro to cast dwg_object to entity     *

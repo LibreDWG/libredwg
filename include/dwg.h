@@ -469,8 +469,8 @@ typedef struct _dwg_color /* CmColor: R15 and earlier */
   BITCODE_BS index;
   BITCODE_BS flag;    /* 1: name follows, 2: book name follows */
   BITCODE_BL rgb;
-  char* name;
-  char* book_name;
+  BITCODE_TV name;
+  BITCODE_TV book_name;
   BITCODE_BL alpha; /* & 0xff: 0 BYLAYER, 1 BYBLOCK, 3 alpha */
 } Dwg_Color;
 
