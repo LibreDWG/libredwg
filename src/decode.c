@@ -2969,8 +2969,8 @@ dwg_decode_handleref_with_code(Bit_Chain *restrict dat,
       ref->absolute_ref = ref->handleref.value;
       break;
     default:
-      dwg->object_ref[dwg->num_object_refs-1] = NULL;
-      dwg->num_object_refs--;
+      //dwg->object_ref[dwg->num_object_refs-1] = NULL;
+      //dwg->num_object_refs--;
       ref->absolute_ref = 0;
       ref->obj = NULL;
       LOG_WARN("Invalid handle pointer code %d", ref->handleref.code);
