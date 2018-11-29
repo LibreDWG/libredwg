@@ -713,7 +713,7 @@ static int dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj
 } \
 \
 /**Call dwg_add_##token and write the fields from the bitstream dat to the entity or object. */ \
-EXPORT int dwg_decode_##token##_private (Bit_Chain *dat, Bit_Chain *str_dat, \
+static int dwg_decode_##token##_private (Bit_Chain *dat, Bit_Chain *str_dat, \
                                          Dwg_Object *restrict obj) \
 { \
   BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4; \
@@ -789,7 +789,7 @@ static int dwg_decode_ ## token (Bit_Chain *restrict dat, Dwg_Object *restrict o
   return error; \
 } \
 \
-EXPORT int dwg_decode_ ## token ## _private (Bit_Chain *dat, Bit_Chain *str_dat, \
+static int dwg_decode_ ## token ## _private (Bit_Chain *dat, Bit_Chain *str_dat, \
                                              Dwg_Object *restrict obj) \
 { \
   BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4; \
