@@ -1,3 +1,6 @@
+Denis Pruchkovksy <denis.chausy@gmail.com>
+	Many memory leak and spec fixes.
+
 Reini Urban <rurban@cpan.org>
 	Many fixes and enhancements everywhere. Start with support for all
         DWG versions, and adding the missing bits. The current maintainer.
