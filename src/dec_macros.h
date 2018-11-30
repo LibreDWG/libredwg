@@ -527,6 +527,7 @@
 #define REACTORS(code) \
   if (obj->tio.object->num_reactors > 0) \
     { \
+      _VECTOR_CHKCOUNT(reactors, obj->tio.object->num_reactors, sizeof(BITCODE_H) * 8) \
       obj->tio.object->reactors = calloc(obj->tio.object->num_reactors, sizeof(BITCODE_H)); \
       for (vcount=0; vcount < obj->tio.object->num_reactors; vcount++) \
         {\
@@ -537,6 +538,7 @@
 #define ENT_REACTORS(code) \
   if (_ent->num_reactors > 0) \
     { \
+      _VECTOR_CHKCOUNT(reactors, _ent->num_reactors, sizeof(BITCODE_H) * 8) \
       _ent->reactors = calloc(_ent->num_reactors, sizeof(BITCODE_H)); \
       for (vcount=0; vcount < _ent->num_reactors; vcount++) \
         { \
