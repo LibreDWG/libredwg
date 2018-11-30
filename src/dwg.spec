@@ -1488,7 +1488,6 @@ DWG_ENTITY(SPLINE)
 
   if (FIELD_VALUE(scenario) & 1) {
     FIELD_VECTOR(knots, BD, num_knots, 40)
-    END_REPEAT(knots);
     REPEAT(num_ctrl_pts, ctrl_pts, Dwg_SPLINE_control_point)
       {
         FIELD_3BD (ctrl_pts[rcount1], 10);
@@ -1716,6 +1715,7 @@ static int encode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj,
 #ifdef IS_FREE
 static int free_3dsolid(Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
 {
+  int error = 0;
   BITCODE_BL i;
   BITCODE_BL vcount, rcount1, rcount2;
 
@@ -3412,6 +3412,9 @@ DWG_ENTITY(HATCH)
             {
               LOG_ERROR("Invalid HATCH.num_segs_or_paths " FORMAT_BL,
                         _obj->paths[rcount1].num_segs_or_paths);
+              #ifdef IS_FREE
+                END_REPEAT(paths);
+              #endif
               return DWG_ERR_VALUEOUTOFBOUNDS;
             }
           REPEAT2(paths[rcount1].num_segs_or_paths, paths[rcount1].segs,
@@ -3449,6 +3452,10 @@ DWG_ENTITY(HATCH)
                         {
                           LOG_ERROR("Invalid HATCH.paths.segs.num_knots " FORMAT_BL,
                                     _obj->paths[rcount1].segs[rcount2].num_knots);
+                          #ifdef IS_FREE
+                            END_REPEAT(paths[rcount1].segs);
+                            END_REPEAT(paths);
+                          #endif
                           return DWG_ERR_VALUEOUTOFBOUNDS;
                         }
                       FIELD_VECTOR (paths[rcount1].segs[rcount2].knots, BD,
@@ -3457,6 +3464,10 @@ DWG_ENTITY(HATCH)
                         {
                           LOG_ERROR("Invalid HATCH.paths.segs.num_control_points " FORMAT_BL,
                                     _obj->paths[rcount1].segs[rcount2].num_control_points);
+                          #ifdef IS_FREE
+                            END_REPEAT(paths[rcount1].segs);
+                            END_REPEAT(paths);
+                          #endif
                           return DWG_ERR_VALUEOUTOFBOUNDS;
                         }
                       REPEAT3(paths[rcount1].segs[rcount2].num_control_points,
@@ -3483,6 +3494,10 @@ DWG_ENTITY(HATCH)
                       LOG_ERROR("Invalid HATCH.type_status %d\n",
                                 FIELD_VALUE(paths[rcount1].segs[rcount2].type_status));
                       DEBUG_HERE_OBJ
+                      #ifdef IS_FREE
+                        END_REPEAT(paths[rcount1].segs);
+                        END_REPEAT(paths);
+                      #endif
                       return DWG_ERR_VALUEOUTOFBOUNDS;
                 }
             }
@@ -4053,7 +4068,9 @@ DWG_OBJECT_END
     default: \
       LOG_ERROR("Invalid data type in TABLE entity\n") \
       DEBUG_HERE_OBJ \
-      return DWG_ERR_INVALIDTYPE; \
+      error |= DWG_ERR_INVALIDTYPE; \
+      break; \
+      /*return DWG_ERR_INVALIDTYPE; */ \
     } \
   SINCE(R_2007) \
     { \
@@ -4084,6 +4101,9 @@ DWG_OBJECT(FIELD)
   //DEBUG_HERE_OBJ
   FIELD_T (evaluation_error_msg, 300);
   Table_Value(value)
+  if (error & ~DWG_ERR_INVALIDTYPE)
+    return DWG_ERR_INVALIDTYPE;
+
   FIELD_T (value_string, 301); // and 9 for subsequent >255 chunks
   FIELD_BL (value_string_length, 98); //ODA bug TV
 
@@ -4092,6 +4112,11 @@ DWG_OBJECT(FIELD)
     {
       FIELD_T (childval[rcount1].key, 6);
       Table_Value(childval[rcount1].value)
+      if (error & ~DWG_ERR_INVALIDTYPE)
+        {
+          END_REPEAT(childval)
+          return DWG_ERR_INVALIDTYPE;
+        }
     }
   SET_PARENT_OBJ(childval)
   END_REPEAT(childval)
@@ -4344,6 +4369,13 @@ DWG_OBJECT(TABLECONTENT)
             {
               FIELD_T (cell.customdata_items[rcount3].name, 300);
               Table_Value(cell.customdata_items[rcount3].value);
+              if (error & ~DWG_ERR_INVALIDTYPE)
+                {
+                  END_REPEAT(cell.customdata_items)
+                  END_REPEAT(row.cells)
+                  END_REPEAT(tdata.rows)
+                  return DWG_ERR_INVALIDTYPE;
+                }
             }
           SET_PARENT_FIELD(cell.customdata_items, cell_parent, &_obj->cell)
           END_REPEAT(cell.customdata_items);
@@ -4365,6 +4397,13 @@ DWG_OBJECT(TABLECONTENT)
                 {
                   // 20.4.99 Value, page 241
                   Table_Value(content.value)
+                  if (error & ~DWG_ERR_INVALIDTYPE)
+                    {
+                      END_REPEAT(cell.cell_contents)
+                      END_REPEAT(row.cells)
+                      END_REPEAT(tdata.rows)
+                      return DWG_ERR_INVALIDTYPE;
+                    }
                 }
               else if (FIELD_VALUE(content.type) == 2) { // Field
                 FIELD_HANDLE (content.handle, 3, 340);
@@ -4427,6 +4466,12 @@ DWG_OBJECT(TABLECONTENT)
         {
           FIELD_T (row.customdata_items[rcount3].name, 300);
           Table_Value(row.customdata_items[rcount3].value);
+          if (error & ~DWG_ERR_INVALIDTYPE)
+            {
+              END_REPEAT(row.customdata_items)
+              END_REPEAT(tdata.rows)
+              return DWG_ERR_INVALIDTYPE;
+            }
         }
       SET_PARENT_FIELD(row.customdata_items, row_parent, &_obj->row)
       END_REPEAT(row.customdata_items);
@@ -4683,6 +4728,11 @@ DWG_ENTITY(TABLE)
 
               // 20.4.99 Value, page 241
               Table_Value(cells[rcount1].value)
+              if (error & ~DWG_ERR_INVALIDTYPE)
+                {
+                  END_REPEAT(cells);
+                  return DWG_ERR_INVALIDTYPE;
+                }
             }
         }
     }
@@ -5900,7 +5950,6 @@ DWG_ENTITY(HELIX)
 
   if (FIELD_VALUE(scenario) & 1) {
     FIELD_VECTOR(knots, BD, num_knots, 40)
-    END_REPEAT(knots);
     REPEAT(num_ctrl_pts, ctrl_pts, Dwg_SPLINE_control_point)
       {
         FIELD_3BD (ctrl_pts[rcount1], 10);

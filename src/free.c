@@ -124,7 +124,7 @@ static Bit_Chain *dat = &pdat;
 // it all in the vector called 'name'.
 #define FIELD_VECTOR_N(name, type, size, dxf) \
   if (size && _obj->name) { \
-    for (vcount=0; vcount < (BITCODE_BL)size; vcount++)  \
+    for (vcount=0; vcount < (BITCODE_BL)size; vcount++) \
       FIELD_##type(name[vcount], dxf); \
   } \
   FIELD_TV(name,dxf);
