@@ -183,7 +183,7 @@ Halfway:
 I.e. we need an extended @file{example_2018.dwg} with all types,
 for the following missing entities:
 
-  BODY CAMERA DIMENSION_ANG3PT DIMENSION_DIAMETER
+  ARCALIGNEDTEXT BODY CAMERA DIMENSION_ANG3PT DIMENSION_DIAMETER
   DIMENSION_RADIUS DUMMY
   GEOPOSITIONMARKER IMAGE LEADER LONG_TRANSACTION MINSERT
   OLE2FRAME OLEFRAME POLYLINE_2D POLYLINE_MESH
@@ -192,7 +192,7 @@ for the following missing entities:
 
 and objects:
 
-  ARCALIGNEDTEXT  DOCUMENTOPTIONS  DETAILVIEWSTYLE
+  DOCUMENTOPTIONS  DETAILVIEWSTYLE
   XREFPANELOBJECT GEODATA IDBUFFER IMAGEDEF
   IMAGEDEF_REACTOR LAYER_INDEX LIGHTLIST
   NPOCOLLECTION OBJECT_PTR PLOTSETTINGS PROXY_OBJECT
@@ -338,12 +338,14 @@ DWG structure, which is passed around the functions x(@pxref{Functions}).
 @end deftypevr
 @deftypevr {define} BITCODE_TV char*
 length + ASCIIZ string
+The default text type until r2004.
+@end deftypevr
+@deftypevr {define} BITCODE_TU wchar*
+length + windows 2-byte wchar string (UCS-2).
+The default text type since r2007.
 @end deftypevr
 @deftypevr {define} BITCODE_H void*
 handle-references
-@end deftypevr
-@deftypevr {define} BITCODE_L long int
-1 raw LE-encoded long
 @end deftypevr
 @deftypevr {define} BITCODE_CMC double[4]
 1 encoded Dwg_Color struct
@@ -450,7 +452,21 @@ from the block_header via:
 where @code{process_object} checks the type of each object or entity under the
 @var{Dwg_Object* obj}.
 
-The decoder is driven by the fields definition in the @file{dwg.spec}, which adds each field to the object. This is done in the @file{decode.c} or @file{decode_r2007.c}.
+For each entity or object type (i.e. a non-graphical dwg object, also tables)
+there also exist the simple and expensive @code{dwg_get_ENTITY} and @code{dwg_get_OBJECT}
+functions:
+
+@deftypefn {Function} int dwg_get_ENTITY (Dwg_Object_Ref *@var{block_header_ref})
+Return a malloc'ed NULL-terminated array of all such entities for Model Space,
+Paper Space or an individual block.
+@end deftypefn
+
+@deftypefn {Function} int dwg_get_OBJECT (Dwg_Data *@var{dwg})
+Return a malloc'ed NULL-terminated array of all such DWG objects.
+@end deftypefn
+
+The decoder is driven by the fields definition in the @file{dwg.spec}, which adds each
+field to the object. This is done in the @file{decode.c} or @file{decode_r2007.c}.
 @deftypefn {Function} int dwg_decode_OBJECT (Bit_Chain *@var{dat}, Dwg_Object *@var{obj})
 Sets the fields for the object from the DWG bitstream.
 @end deftypefn
