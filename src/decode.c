@@ -2779,6 +2779,27 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
   return error;
 }
 
+static int
+dwg_decode_add_object_ref(Dwg_Data *restrict dwg, Dwg_Object_Ref *ref)
+{
+  const Dwg_Object_Ref **object_ref_old = dwg->object_ref;
+
+  // Reserve memory space for object references
+  if (!dwg->num_object_refs)
+    dwg->object_ref = calloc(REFS_PER_REALLOC, sizeof(Dwg_Object_Ref*));
+  else if (dwg->num_object_refs % REFS_PER_REALLOC == 0)
+    dwg->object_ref = realloc(dwg->object_ref,
+          (dwg->num_object_refs + REFS_PER_REALLOC) * sizeof(Dwg_Object_Ref*));
+  if (!dwg->object_ref)
+    {
+      LOG_ERROR("Out of memory");
+      dwg->object_ref = object_ref_old;
+      return DWG_ERR_OUTOFMEM;
+    }
+  dwg->object_ref[dwg->num_object_refs++] = ref;
+  return 0;
+}
+
 /* Store an object reference in a separate dwg->object_ref array
    which is the id for handles, i.e. DXF 5, 330. */
 Dwg_Object_Ref *
@@ -2805,21 +2826,19 @@ dwg_decode_handleref(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   // It shouldn't be placed in the object ref vector.
   if (ref->handleref.size || (obj && ref->handleref.code > 5))
     {
-      // Reserve memory space for object references
-      if (!dwg->num_object_refs)
-        dwg->object_ref = calloc(REFS_PER_REALLOC, sizeof(Dwg_Object_Ref*));
-      else if (dwg->num_object_refs % REFS_PER_REALLOC == 0)
-        dwg->object_ref = realloc(dwg->object_ref,
-              (dwg->num_object_refs + REFS_PER_REALLOC) * sizeof(Dwg_Object_Ref*));
-      if (!dwg->object_ref)
+      if (dwg_decode_add_object_ref(dwg, ref))
         {
-          LOG_ERROR("Out of memory");
+          free(ref);
           return NULL;
         }
-      dwg->object_ref[dwg->num_object_refs++] = ref;
     }
   else if (!ref->handleref.value)
     {
+	  if (obj)
+        {
+          free(ref);
+          return NULL;
+        }
       ref->absolute_ref = 0;
       ref->obj = NULL;
       return ref;
@@ -2912,23 +2931,21 @@ dwg_decode_handleref_with_code(Bit_Chain *restrict dat,
   // It shouldn't be placed in the object ref vector.
   if (ref->handleref.size || (obj && ref->handleref.code > 5))
     {
-      // Reserve memory space for object references
-      if (!dwg->num_object_refs)
-        dwg->object_ref = calloc(REFS_PER_REALLOC, sizeof(Dwg_Object_Ref*));
-      else if (dwg->num_object_refs % REFS_PER_REALLOC == 0)
-        dwg->object_ref = realloc(dwg->object_ref,
-              (dwg->num_object_refs + REFS_PER_REALLOC) * sizeof(Dwg_Object_Ref*));
-      if (!dwg->object_ref)
+      if (dwg_decode_add_object_ref(dwg, ref))
         {
-          LOG_ERROR("Out of memory");
+          free(ref);
           return NULL;
         }
-      dwg->object_ref[dwg->num_object_refs++] = ref;
     }
   else if (!ref->handleref.value)
     {
-      ref->obj = NULL;
+	  if (obj)
+        {
+          free(ref);
+          return NULL;
+        }
       ref->absolute_ref = 0;
+      ref->obj = NULL;
       return ref;
     }
 
