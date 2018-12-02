@@ -11,6 +11,8 @@ Important bugfixes:
   * Fixed BLOCK_HEADER.num_inserts, esp. with xref's (#44).
     For decode and encode.
   * Fixed LTYPE.dash, change RC to unsigned char (#44)
+  * Fixup LEADER DXF values.
+  * Fixed TABLE.value.data_type with flags kGeneral (#54 Denis Pryt)
   * Fixes VECTOR_CHKCOUNT segfault on unassigned obj->dxfname's
     (esp. for <=R12)
   * Fixed example/load_dwg.py allowing non-critical error codes
