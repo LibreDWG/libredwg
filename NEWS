@@ -4,17 +4,32 @@ See the end for copying conditions.
 
 LibreDWG version 0.7 - released 2018/12/?? - still alpha:
 
+new API:
+  * add dwg_get_OBJECT(dwg) API for all objects in a DWG.
+    analog to dwg_get_ENTITY, but including all objects, tables,
+    block headers, even if unowned.
+
+API breaking changes:
+  * Changed BITCODE_RC from signed to unsigned char (#44)
+  * LEADER changes: rename hooklineonxdir to hookline_dir,
+    rename unknown_bit_4 to hookline_on,
+    endptproj only until r2007. (but still not 100% correct)
+  * MULTILEADER changes: rename num_vertex to numpts (analog to LEADER),
+    change vertex to points[] (PR #49 Denis Pryt)
+  * Fixed dwg_get_ENTITY(hdr): NULL-terminate the result (#60)
+
 Important bugfixes:
-  * Fixed most memory leaks and double-free's (#43, #42)
-    just a few stale NULL handle leaks are left.
+  * Fixed all memory leaks and double-free's (#43, #42, PR #58 Denis Pryt)
   * Fixed EED sizes (PR #48, Denis Pryt)
   * Fixed BLOCK_HEADER.num_inserts, esp. with xref's (#44).
     For decode and encode.
-  * Fixed LTYPE.dash, change RC to unsigned char (#44)
-  * Fixup LEADER DXF values.
+  * Fixed LTYPE.dash (#44)
+  * Fixup LEADER DXF values and path_type with annot_type mixup.
   * Fixed TABLE.value.data_type with flags kGeneral (#54 Denis Pryt)
   * Fixes VECTOR_CHKCOUNT segfault on unassigned obj->dxfname's
-    (esp. for <=R12)
+    (esp. for <=R12), and fix overflows (#56)
+  * dwglayers: fix for DICTIONARY breaking the list output (#51)
+  * dxf: fix dxf_blocks_write for empty paper_space (#52)
   * Fixed example/load_dwg.py allowing non-critical error codes
 
 Other newsworthy changes:
