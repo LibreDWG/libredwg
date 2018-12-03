@@ -2311,6 +2311,11 @@ DWG_OBJECT(LAYER)
   {
     FIELD_RS (color_rs, 62);     // color
     FIELD_RS (linetype_rs, 7);   // style
+
+    FIELD_VALUE(on)            = FIELD_VALUE(color_rs) >= 0;
+    FIELD_VALUE(frozen)        = FIELD_VALUE(flag) & 1;
+    FIELD_VALUE(frozen_in_new) = FIELD_VALUE(flag) & 2;
+    FIELD_VALUE(locked)        = FIELD_VALUE(flag) & 4;
   }
   VERSIONS(R_13, R_14)
   {
@@ -2397,6 +2402,9 @@ DWG_OBJECT(STYLE)
     FIELD_RC (generation, 71);
     FIELD_RD (last_height, 42);
     FIELD_TF (font_name, 128, 3);
+
+    FIELD_VALUE(shape_file) = FIELD_VALUE(flag) & 4;
+    FIELD_VALUE(vertical)   = FIELD_VALUE(flag) & 1;
   }
   LATER_VERSIONS
   {
@@ -2445,11 +2453,7 @@ DWG_OBJECT_END
 /*(56)*/
 DWG_OBJECT(LTYPE_CONTROL)
 
-  //DXF {
-  //  VALUE_RL (FIELD_VALUE(num_entries)-2, 70);
-  //} else {
-    FIELD_BS (num_entries, 70);
-  //}
+  FIELD_BS (num_entries, 70);
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (null_handle, 4, 0);
