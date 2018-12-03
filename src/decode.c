@@ -1699,7 +1699,8 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
 	      info->sections[j] = find_section(dwg, section_number);
 
-              if (section_number > info->num_sections + info->sections[0]->number)
+              if (section_number > info->num_sections +
+			      (info->sections[0] ? info->sections[0]->number : 0))
                 {
                   LOG_TRACE("Strange Section Number: 0x%lx\n",
                             (unsigned long)section_number)
