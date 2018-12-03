@@ -43,7 +43,7 @@ for CC in clang-mp-3.3 clang-mp-3.7 clang-mp-3.8 clang-mp-3.9 clang-mp-4.0 \
           clang-mp-5.0 clang-mp-6.0 clang-mp-devel
 do
     echo $CC
-    CFLAGS="-I/opt/lcoal/include" ./configure && \
+    CFLAGS="-I/opt/local/include" ./configure && \
     gmake -s -j4 check || exit
     gmake -s -j4 clean
 done
