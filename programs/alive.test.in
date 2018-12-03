@@ -111,8 +111,9 @@ for prog in $PROGS ; do
 done
 case $PROGS in
   *dwggrep*)
-    echo ./dwggrep -i -c tekst ${datadir}/example_*.dwg
-    if test x"`./dwggrep -i -c tekst ${datadir}/example_*.dwg`" != x"16"; then
+    top_builddir=..
+    echo ../libtool --mode=execute ./dwggrep -i -c tekst ${datadir}/example_*.dwg
+    if test x"`@LTEXEC@ ./dwggrep -i -c tekst ${datadir}/example_*.dwg`" != x"16"; then
       problems=$(expr 1 + $problems)
     fi
 
