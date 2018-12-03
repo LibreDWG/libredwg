@@ -2188,6 +2188,11 @@ DWG_OBJECT(BLOCK_HEADER)
     FIELD_RC (flag2, 0);
     FIELD_CAST (num_inserts, RS, RL, 0);
     FIELD_RS (flag3, 0);
+
+    FIELD_VALUE(anonymous)    = FIELD_VALUE(flag) & 1;
+    FIELD_VALUE(hasattrs)     = FIELD_VALUE(flag) & 2;
+    FIELD_VALUE(blkisxref)    = FIELD_VALUE(flag) & 4;
+    FIELD_VALUE(xrefoverlaid) = FIELD_VALUE(flag) & 8;
   }
   SINCE(R_13) {
     FIELD_B (anonymous, 0); // bit 1
