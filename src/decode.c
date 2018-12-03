@@ -1625,7 +1625,7 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
   dwg->header.num_infos = *(uint32_t*)decomp;
   dwg->header.section_info = (Dwg_Section_Info*)
-    calloc(dwg->header.num_infos, sizeof(Dwg_Section_Info));
+                              calloc(dwg->header.num_infos, sizeof(Dwg_Section_Info));
   if (!dwg->header.section_info)
     {
       LOG_ERROR("Out of memory");
@@ -1650,7 +1650,7 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       if (info->size == section_number+1 &&
           info->num_sections > 100000)
         {
-	  LOG_WARN("Oops, Section[%d] => Section_Info %d", i, info->size);
+	      LOG_WARN("Oops, Section[%d] => Section_Info %d", i, info->size);
           data_size = info->pagecount;
           section_number++;
           info = &dwg->header.section_info[i-1];
@@ -1678,8 +1678,8 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_TRACE("SectionName:     %s\n\n", info->name)
 
       if (info->num_sections < 100000)
-	{
-	  LOG_INFO("Section count %u in area %d\n", info->num_sections, i);
+	    {
+	      LOG_INFO("Section count %u in area %d\n", info->num_sections, i);
           info->sections = calloc(info->num_sections, sizeof(Dwg_Section*));
           if (!info->sections)
             {
@@ -1687,20 +1687,20 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               return error | DWG_ERR_OUTOFMEM;
             }
 
-	  for (j = 0; j < info->num_sections; j++)
-	    {
-	      section_number = *((uint32_t*)ptr);       // Index into SectionMap
-	      data_size      = *((uint32_t*)ptr + 1);
-	      //start_offset   = *((uint64_t*)ptr + 1); // avoid alignment ubsan
-	      start_offset   = *((uint32_t*)ptr + 2);
+	      for (j = 0; j < info->num_sections; j++)
+	        {
+	          section_number = *((uint32_t*)ptr);       // Index into SectionMap
+	          data_size      = *((uint32_t*)ptr + 1);
+	          //start_offset   = *((uint64_t*)ptr + 1); // avoid alignment ubsan
+	          start_offset   = *((uint32_t*)ptr + 2);
               start_offset <<= 32;
               start_offset  += *((uint32_t*)ptr + 3);
-	      ptr += 16;
+	          ptr += 16;
 
-	      info->sections[j] = find_section(dwg, section_number);
+	          info->sections[j] = find_section(dwg, section_number);
 
               if (section_number > info->num_sections +
-			      (info->sections[0] ? info->sections[0]->number : 0))
+                  (info->sections[0] ? info->sections[0]->number : 0))
                 {
                   LOG_TRACE("Strange Section Number: 0x%lx\n",
                             (unsigned long)section_number)
@@ -1710,14 +1710,14 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   LOG_TRACE("Section Number: %lu\n", (unsigned long)section_number)
                 }
               LOG_TRACE("Data size:      %d\n", data_size) //compressed
-	      LOG_TRACE("Start offset:   0x%" PRIx64 "\n", start_offset)
-	    }
-	}// sanity check
+	          LOG_TRACE("Start offset:   0x%" PRIx64 "\n", start_offset)
+	        }
+	    }// sanity check
       else if (info->size == section_number+1)
         {
           Dwg_Section* sec;
           // oops, this is really another info
-	  LOG_WARN("Oops2, Section[%d] => Section_Info %d", i, info->size);
+	      LOG_WARN("Oops2, Section[%d] => Section_Info %d", i, info->size);
           section_number = info->size;      // Index into SectionMap
           data_size      = info->pagecount;
         next_section:
@@ -1739,13 +1739,13 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           return error | DWG_ERR_VALUEOUTOFBOUNDS;
         }
       else
-	{
-	  LOG_ERROR("Section count %u in area %d too high! Skipping",
-                    info->num_sections, i);
+	    {
+	      LOG_ERROR("Section count %u in area %d too high! Skipping",
+                        info->num_sections, i);
           info->num_sections = 0;
           free (decomp);
           return error | DWG_ERR_VALUEOUTOFBOUNDS;
-	}
+	    }
     }
   free (decomp);
   return error;
