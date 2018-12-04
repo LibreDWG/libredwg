@@ -21,7 +21,7 @@ api_process (dwg_object * obj)
   dwg_ent_polyline_3d *polyline_3d = dwg_object_to_POLYLINE_3D (obj);
 
   flags1 = dwg_ent_polyline_3d_get_flag (polyline_3d, &error);
-  if (!error  && flags1 == polyline_3d->flag)	// error check
+  if (!error  && flags1 == polyline_3d->flag)   // error check
     pass ("Working Properly");
   else
     fail ("error in reading flag1");

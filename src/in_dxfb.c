@@ -508,7 +508,7 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 #define COMMON_ENTITY_HANDLE_DATA \
   SINCE(R_13) { \
     error |= dxfb_common_entity_handle_data(dat, obj); \
-  }  
+  }
 #define SECTION_STRING_STREAM
 #define START_STRING_STREAM
 #define END_STRING_STREAM

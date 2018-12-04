@@ -3,7 +3,7 @@
 #include <dejagnu.h>
 
 /* This function checks API functions for integrity
-   @params dwg_object* obj 
+   @params dwg_object* obj
  */
 void
 api_process (dwg_object * obj)

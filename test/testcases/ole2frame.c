@@ -30,19 +30,19 @@ api_process (dwg_object * obj)
     fail ("error in reading flags");
 
   mode = dwg_ent_ole2frame_get_mode (ole2frame, &error);
-  if (!error  && mode == ole2frame->mode)	// error check
+  if (!error  && mode == ole2frame->mode)       // error check
     pass ("Working Properly");
   else
     fail ("error in reading mode");
 
   data_length = dwg_ent_ole2frame_get_data_length (ole2frame, &error);
-  if (!error  && data_length == ole2frame->data_length)	// error check
+  if (!error  && data_length == ole2frame->data_length) // error check
     pass ("Working Properly");
   else
     fail ("error in data length");
 
   data = dwg_ent_ole2frame_get_data (ole2frame, &error);
-  if (!error  && ole2frame->data == data)	// error check
+  if (!error  && ole2frame->data == data)       // error check
     pass ("Working Properly");
   else
     fail ("error in reading data");

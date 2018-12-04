@@ -15,7 +15,7 @@ low_level_process (dwg_object * obj)
   printf ("wireframe data of region : " FORMAT_B "\n", region->wireframe_data_present);
   printf ("point present of region : " FORMAT_B "\n", region->point_present);
   printf ("point of region : x = %f, y = %f, z = %f\n", region->point.x,
-	  region->point.y, region->point.z);
+          region->point.y, region->point.z);
   printf ("num isolines of region : " FORMAT_BL "\n", region->num_isolines);
   printf ("isoline present of region : " FORMAT_B "\n", region->isoline_present);
   printf ("num wires of region : " FORMAT_BL "\n", region->num_wires);
@@ -36,7 +36,7 @@ api_process (dwg_object * obj)
   BITCODE_BS version;
   BITCODE_BL *block_size, num_isolines, num_wires, num_sil;
   unsigned char *acis_data;
-  BITCODE_B wireframe_data_present, point_present, isoline_present; 
+  BITCODE_B wireframe_data_present, point_present, isoline_present;
   BITCODE_B acis_empty, acis2_empty;
   dwg_point_3d point;
   dwg_ent_region *region = dwg_object_to_REGION (obj);
@@ -46,7 +46,7 @@ api_process (dwg_object * obj)
 
 
   acis_empty = dwg_ent_region_get_acis_empty (region, &error);
-  if (!error  && acis_empty == region->acis_empty)	// error check
+  if (!error  && acis_empty == region->acis_empty)      // error check
     pass ("Working Properly");
   else
     fail ("error in reading acis empty");
@@ -106,16 +106,16 @@ api_process (dwg_object * obj)
     {
       int matches = 1;
       for (i = 0; i < num_wires; i++)
-	{
-	  if (wire[i].selection_marker != region->wires[i].selection_marker)
-	    {
-	      matches = 0;
-	    }
-	}
+        {
+          if (wire[i].selection_marker != region->wires[i].selection_marker)
+            {
+              matches = 0;
+            }
+        }
       if (matches)
-	  pass ("Working Properly");
+          pass ("Working Properly");
       else
-	  fail ("no match found");
+          fail ("no match found");
     }
   else
     {
@@ -133,20 +133,20 @@ api_process (dwg_object * obj)
     {
       int matches = 1;
       for (i = 0; i < num_sil; i++)
-	{
-	  if (region->silhouettes[i].vp_id != sil[i].vp_id)
-	    {
-	      matches = 0;
-	    }
-	}
+        {
+          if (region->silhouettes[i].vp_id != sil[i].vp_id)
+            {
+              matches = 0;
+            }
+        }
       if (matches)
-	{
-	  pass ("Working Properly");
-	}
+        {
+          pass ("Working Properly");
+        }
       else
-	{
-	  fail ("error in reading silhouettes");
-	}
+        {
+          fail ("error in reading silhouettes");
+        }
     }
   else
     {

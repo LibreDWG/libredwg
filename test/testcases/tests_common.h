@@ -34,7 +34,7 @@ Bit_Chain strtobt(const char * binarystring)
   Bit_Chain bitchain;
   int i;
   int length = strlen(binarystring);
-        
+
   //Calculate the space needed
   double celi = ceil((double)length/8);
   int size_need = celi;

@@ -37,7 +37,7 @@ api_process(dwg_object *obj)
   double const_width, elevation, thickness;
   double * bulges;
   dwg_point_2d *points;
-  dwg_lwpline_widths *width; 
+  dwg_lwpline_widths *width;
   BITCODE_BL i;
   dwg_ent_lwpline *lwpline = dwg_object_to_LWPOLYLINE(obj);
 
@@ -88,7 +88,7 @@ api_process(dwg_object *obj)
   if ( !error )
      printf("flag of lwpline : %x\n", flags);
   else
-     printf("error in reading flag");  
+     printf("error in reading flag");
 
   bulges = dwg_ent_lwpline_get_bulges(lwpline, &error);
   if ( !error )
@@ -99,7 +99,7 @@ api_process(dwg_object *obj)
   else
    {
      printf("error in reading bulges \n");
-   } 
+   }
 
 
   points = dwg_ent_lwpline_get_points(lwpline, &error);
@@ -125,5 +125,5 @@ api_process(dwg_object *obj)
   else
    {
      printf("error in reading widths \n");
-   } 
+   }
 }

@@ -15,9 +15,9 @@ low_level_process(dwg_object *obj)
   printf("rect height of mtext : %f\n",mtext->rect_height);
   printf("rect width of mtext : %f\n",mtext->rect_width);
   printf("linespace factor of mtext : %f\n", mtext->linespace_factor);
-  printf("extrusion of mtext : x = %f, y = %f, z = %f\n", 
+  printf("extrusion of mtext : x = %f, y = %f, z = %f\n",
           mtext->extrusion.x, mtext->extrusion.y, mtext->extrusion.z);
-  printf("insertion point of mtext : x = %f, y = %f, z = %f\n", 
+  printf("insertion point of mtext : x = %f, y = %f, z = %f\n",
           mtext->insertion_pt.x, mtext->insertion_pt.y,
           mtext->insertion_pt.z);
   printf("x_axis_dir of mtext : x = %f,y = %f,z = %f\n",
@@ -32,7 +32,7 @@ api_process(dwg_object *obj)
         linespace_factor;
   unsigned int attachment, drawing_dir, linespace_style;
   char * text;
-  dwg_point_3d ins_pt, ext, x_axis_dir;  //3d_points 
+  dwg_point_3d ins_pt, ext, x_axis_dir;  //3d_points
 
   dwg_ent_mtext *mtext = dwg_object_to_MTEXT(obj);
 
@@ -60,7 +60,7 @@ api_process(dwg_object *obj)
   linespace_style = dwg_ent_mtext_get_linespace_style(mtext,
                     &error);
   if ( !error )
-    {  
+    {
       printf("linespace style of mtext : %ud\n", linespace_style);
     }
   else
@@ -71,7 +71,7 @@ api_process(dwg_object *obj)
 
   attachment = dwg_ent_mtext_get_attachment(mtext, &error);
   if ( !error )
-    {  
+    {
       printf("attachment of mtext : %ud\n", attachment);
     }
   else

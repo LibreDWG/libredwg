@@ -28,7 +28,7 @@ api_process(dwg_object *obj)
   dwg_ent_vertex_mesh_get_point(vertex_mesh, &point, &error);
   if ( !error )
       printf("point of vertex_mesh : x = %f, y = %f, z = %f\n",
-	     point.x, point.y, point.z);
+             point.x, point.y, point.z);
   else
       printf("error in reading point \n");
 }

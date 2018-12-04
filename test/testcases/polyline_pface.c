@@ -9,7 +9,7 @@ low_level_process (dwg_object * obj)
 
   printf ("num verts of polyline_pface : " FORMAT_BL "\n", polyline_pface->numverts);
   printf ("owned obj count of polyline_pface : " FORMAT_BL "\n",
-	  polyline_pface->num_owned);
+          polyline_pface->num_owned);
   printf ("num faces of polyline_pface : " FORMAT_BL "\n", polyline_pface->numfaces);
 
 }
@@ -31,7 +31,7 @@ api_process (dwg_object * obj)
     fail ("error in reading num_verts");
 
   num_faces = dwg_ent_polyline_pface_get_numfaces (polyline_pface,
-						   &error);
+                                                   &error);
   if (!error  && polyline_pface->numfaces == num_faces)
     pass ("Working Properly");
   else

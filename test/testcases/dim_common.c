@@ -3,7 +3,7 @@
 #include <dejagnu.h>
 
 /* This function checks API functions for integrity
-   @params dwg_object* obj 
+   @params dwg_object* obj
  */
 void
 api_process (dwg_object * obj)
@@ -27,7 +27,7 @@ api_process (dwg_object * obj)
 
 
   lspace_factor = dwg_ent_dim_get_lspace_factor (dim, &error);
-  if (!error  && dim->lspace_factor == lspace_factor)	// error check
+  if (!error  && dim->lspace_factor == lspace_factor)   // error check
     pass ("Working Properly");
   else
     fail ("error in reading lspace factor");
@@ -95,14 +95,14 @@ api_process (dwg_object * obj)
 
 
   ins_rot = dwg_ent_dim_get_ins_rotation (dim, &error);
-  if (!error  && ins_rot == dim->ins_rotation)	// error check
+  if (!error  && ins_rot == dim->ins_rotation)  // error check
     pass ("Working Properly");
   else
     fail ("error in reading ins rotation");
 
 
   flip_arrow1 = dwg_ent_dim_get_flip_arrow1 (dim, &error);
-  if (!error  && flip_arrow1 == dim->flip_arrow1)	// error check
+  if (!error  && flip_arrow1 == dim->flip_arrow1)       // error check
     pass ("Working Properly");
   else
     fail ("error in reading arrow1");

@@ -132,7 +132,7 @@ output_LINE(dwg_object* obj)
   int error, index;
   Dwg_Entity_LINE* line;
   dwg_point_3d start, end;
-  
+
   index = dwg_object_get_index(obj, &error);
   log_if_error("object_get_index");
   line = dwg_object_to_LINE(obj);
@@ -145,7 +145,7 @@ output_LINE(dwg_object* obj)
   log_if_error("line_get_end_point");
   printf(
       "\t<path id=\"dwg-object-%d\" d=\"M %f,%f %f,%f\" style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n",
-      index, transform_X(start.x), transform_Y(start.y), transform_X(end.x), 
+      index, transform_X(start.x), transform_Y(start.y), transform_X(end.x),
       transform_Y(end.y));
 }
 
@@ -156,7 +156,7 @@ output_CIRCLE(dwg_object* obj)
   int error, index;
   double radius;
   dwg_point_3d center;
-  
+
   index = dwg_object_get_index(obj, &error);
   log_if_error("object_get_index");
   circle = dwg_object_to_CIRCLE(obj);
@@ -181,7 +181,7 @@ output_ARC(dwg_object* obj)
   dwg_point_3d center;
   double x_start, y_start, x_end, y_end;
   int large_arc;
-  
+
   index = dwg_object_get_index(obj, &error);
   log_if_error("object_get_index");
   arc = dwg_object_to_ARC(obj);
@@ -196,7 +196,7 @@ output_ARC(dwg_object* obj)
   log_if_error("arc_get_end_angle");
   dwg_ent_arc_get_center(arc, &center, &error);
   log_if_error("arc_get_center");
-      
+
   x_start = center.x + radius * cos(start_angle);
   y_start = center.y + radius * sin(start_angle);
   x_end = center.x + radius * cos(end_angle);
@@ -237,7 +237,7 @@ output_INSERT(dwg_object* obj)
   log_if_error("insert_get_ref_handle");
   abs_ref = insert->block_header->absolute_ref;
   log_if_error("block_absref");
-  
+
   if (insert->block_header->handleref.code == 5)
     {
       printf(
@@ -338,7 +338,7 @@ output_SVG(dwg_data *dwg)
   unsigned int i, num_hdr_objs;
   int error;
   dwg_obj_block_control *_ctrl;
-  dwg_object_ref **hdr_refs; 
+  dwg_object_ref **hdr_refs;
 
   double dx = dwg_model_x_max(dwg) - dwg_model_x_min(dwg);
   double dy = dwg_model_y_max(dwg) - dwg_model_y_min(dwg);

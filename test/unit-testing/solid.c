@@ -35,7 +35,7 @@ api_process(dwg_object *obj)
     printf("elevation of solid : %f\n", elevation);
   else
     printf("in reading elevation\n");
- 
+
 
   thickness = dwg_ent_solid_get_thickness(solid, &error);
   if ( !error )

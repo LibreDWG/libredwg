@@ -1075,7 +1075,7 @@ main (int argc, char *argv[])
   match_data8 = pcre2_match_data_create_from_pattern_8(ri8, NULL);
   if (have_jit)
     pcre2_jit_compile_8(ri8, PCRE2_JIT_COMPILE_OPTIONS);
-  
+
 # ifdef HAVE_PCRE2_16
   pcre2_config_16(PCRE2_CONFIG_JIT, &have_jit);
   pattern16 = bit_utf8_to_TU(pattern);
@@ -1129,6 +1129,6 @@ main (int argc, char *argv[])
     }
   if (opt_count)
     printf("%d\n", count);
-  
+
   return count ? 0 : 1;
 }

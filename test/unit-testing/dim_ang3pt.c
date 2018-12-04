@@ -8,7 +8,7 @@ low_level_process(dwg_object *obj)
 
   printf("horiz dir of dim_ang3pt : %f\n",
           dim_ang3pt->horiz_dir);
-  printf("lspace factor of dim_ang3pt : %f\n", 
+  printf("lspace factor of dim_ang3pt : %f\n",
           dim_ang3pt->lspace_factor);
   printf("lspace style of dim_ang3pt : " FORMAT_BS "\n",
           dim_ang3pt->lspace_style);
@@ -45,14 +45,14 @@ low_level_process(dwg_object *obj)
   printf("arrow2 of dim_ang3pt : " FORMAT_RC "\n", dim_ang3pt->flip_arrow2);
   printf("flags1 of dim_ang3pt : " FORMAT_RC "\n", dim_ang3pt->flag1);
   printf("act_measurement of dim_ang3pt : %f\n",
-          dim_ang3pt->act_measurement); 
+          dim_ang3pt->act_measurement);
 }
 
 void
 api_process(dwg_object *obj)
 {
   int error;
-  double elevation, act_measure, horiz_dir, lspace_factor, text_rot, 
+  double elevation, act_measure, horiz_dir, lspace_factor, text_rot,
          ins_rot, ext_line_rot, dim_rot;
   BITCODE_B flip_arrow1, flip_arrow2;
   BITCODE_RC flags1;

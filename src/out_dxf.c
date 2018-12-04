@@ -1303,7 +1303,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           }
         ENDTAB();
       }
-  }  
+  }
   {
     Dwg_Object_STYLE_CONTROL *_ctrl = &dwg->style_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];

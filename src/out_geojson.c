@@ -59,10 +59,10 @@ static unsigned int cur_ver = 0;
              "Linetype": null,
              "EntityHandle": "8B",
              "Text": null
-           }, 
+           },
          "geometry":
            { "type": "LineString",
-             "coordinates": [ [ 370.858611653430728, 730.630303522043732, 0.0 ], [ 450.039756420260289, 619.219273076899071, 0.0 ] ] 
+             "coordinates": [ [ 370.858611653430728, 730.630303522043732, 0.0 ], [ 450.039756420260289, 619.219273076899071, 0.0 ] ]
            }
        },
      ], ...
@@ -111,8 +111,8 @@ static unsigned int cur_ver = 0;
 //    PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n", _ent->name)
 #define FIELD_CAST(name,type,cast,dxf) FIELD(name,cast,dxf)
 #define FIELD_TRACE(name,type)
-#define FIELD_TEXT(name,str) 
-#define FIELD_TEXT_TU(name,wstr) 
+#define FIELD_TEXT(name,str)
+#define FIELD_TEXT_TU(name,wstr)
 
 #define FIELD_VALUE(name) _obj->name
 #define ANYCODE -1
@@ -148,7 +148,7 @@ static unsigned int cur_ver = 0;
     PREFIX fprintf(dat->fh, FORMAT_DD ", ", _obj->name)
 #define FIELD_2DD(name, d1, d2, dxf)
 #define FIELD_3DD(name, def, dxf)
-#define FIELD_2RD(name,dxf) 
+#define FIELD_2RD(name,dxf)
 #define FIELD_2BD(name,dxf)
 #define FIELD_2BD_1(name,dxf)
 #define FIELD_3RD(name,dxf) ;
@@ -281,7 +281,7 @@ dwg_geojson_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   dxfname = klass->dxfname;
   // almost always false
   is_entity = dwg_class_is_entity(klass);
-  
+
   if (!strcmp(dxfname, "LWPOLYLINE"))
     {
       BITCODE_BL j;

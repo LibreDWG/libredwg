@@ -7,9 +7,9 @@ low_level_process(dwg_object *obj)
   dwg_ent_ellipse *ellipse = dwg_object_to_ELLIPSE(obj);
 
   printf("Ratio of ellipse : %f\n",ellipse->axis_ratio);
-  printf("sm axis of ellipse : x = %f, y = %f, z = %f\n", 
+  printf("sm axis of ellipse : x = %f, y = %f, z = %f\n",
           ellipse->sm_axis.x, ellipse->sm_axis.y, ellipse->sm_axis.z);
-  printf("extrusion of ellipse : x = %f, y = %f, z = %f\n", 
+  printf("extrusion of ellipse : x = %f, y = %f, z = %f\n",
           ellipse->extrusion.x, ellipse->extrusion.y, ellipse->extrusion.z);
   printf("center of ellipse : x = %f,y = %f,z = %f\n",
           ellipse->center.x, ellipse->center.y, ellipse->center.z);
@@ -84,5 +84,5 @@ api_process(dwg_object *obj)
     printf("End angle of ellipse : %f\n", end_angle);
   else
     printf("in reading end angle \n");
- 
+
 }

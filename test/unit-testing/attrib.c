@@ -7,7 +7,7 @@ low_level_process(dwg_object *obj)
   dwg_ent_attrib *attrib = dwg_object_to_ATTRIB(obj);
 
   printf("attrib of attrib : %s\n", attrib->text_value);
-  printf("insertion point of attrib : x = %f, y = %f\n", 
+  printf("insertion point of attrib : x = %f, y = %f\n",
           attrib->insertion_pt.x, attrib->insertion_pt.y);
   printf("extrusion of attrib : x = %f, y = %f, z = %f\n",
           attrib->extrusion.x, attrib->extrusion.y, attrib->extrusion.z);

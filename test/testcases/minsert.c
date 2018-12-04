@@ -9,13 +9,13 @@ low_level_process (dwg_object * obj)
   dwg_ent_minsert *minsert = dwg_object_to_MINSERT (obj);
 
   printf ("minsert points : x = %f, y = %f, z = %f\n",
-	  minsert->ins_pt.x, minsert->ins_pt.y, minsert->ins_pt.z);
+          minsert->ins_pt.x, minsert->ins_pt.y, minsert->ins_pt.z);
   printf ("scale flag for minsert : " FORMAT_BB "\n", minsert->scale_flag);
   printf ("scale points : x = %f, y = %f, z = %f\n",
-	  minsert->scale.x, minsert->scale.y, minsert->scale.z);
+          minsert->scale.x, minsert->scale.y, minsert->scale.z);
   printf ("angle for minsert : %f\n", minsert->rotation);
   printf ("extrusion points : x = %f, y = %f, z = %f\n",
-	  minsert->extrusion.x, minsert->extrusion.y, minsert->extrusion.z);
+          minsert->extrusion.x, minsert->extrusion.y, minsert->extrusion.z);
   printf ("attribs for minsert : " FORMAT_B "\n", minsert->has_attribs);
   printf ("object count for minsert : " FORMAT_BL "\n", minsert->num_owned);
   printf ("number of rows for minsert : " FORMAT_BS "\n", minsert->num_rows);

@@ -11,13 +11,13 @@ low_level_process (dwg_object * obj)
   printf ("Thickness of tolerance : %f\n", tolerance->dimgap);
   printf ("text string of tolerance : %s\n", tolerance->text_string);
   printf ("extrusion of tolerance : x = %f, y = %f, z = %f\n",
-	  tolerance->extrusion.x, tolerance->extrusion.y,
-	  tolerance->extrusion.z);
+          tolerance->extrusion.x, tolerance->extrusion.y,
+          tolerance->extrusion.z);
   printf ("ins_pt of tolerance : x = %f, y = %f, z = %f\n",
-	  tolerance->ins_pt.x, tolerance->ins_pt.y, tolerance->ins_pt.z);
+          tolerance->ins_pt.x, tolerance->ins_pt.y, tolerance->ins_pt.z);
   printf ("center of tolerance : x = %f, y = %f, z = %f\n",
-	  tolerance->x_direction.x, tolerance->x_direction.y,
-	  tolerance->x_direction.z);
+          tolerance->x_direction.x, tolerance->x_direction.y,
+          tolerance->x_direction.z);
 }
 
 void
@@ -25,7 +25,7 @@ api_process (dwg_object * obj)
 {
   int error;
   BITCODE_BD height, dimgap;
-  dwg_point_3d ins_pt, x_dir, ext;	//3d_points
+  dwg_point_3d ins_pt, x_dir, ext;      //3d_points
   char *text_string;
 
   // casting object to tolerance entity
@@ -33,21 +33,21 @@ api_process (dwg_object * obj)
 
 
   height = dwg_ent_tolerance_get_height (tolerance, &error);
-  if (!error  && height == tolerance->height)	// Error checking
+  if (!error  && height == tolerance->height)   // Error checking
     pass ("Working Properly");
   else
     fail ("error in reading height");
 
 
   dimgap = dwg_ent_tolerance_get_dimgap (tolerance, &error);
-  if (!error  && dimgap == tolerance->dimgap)	// error checking
+  if (!error  && dimgap == tolerance->dimgap)   // error checking
     pass ("Working Properly");
   else
     fail ("error in reading dimgao");
 
 
   text_string = dwg_ent_tolerance_get_text_string (tolerance, &error);
-  if (!error  && !strcmp (text_string, tolerance->text_string))	// error checking
+  if (!error  && !strcmp (text_string, tolerance->text_string)) // error checking
     pass ("Working Properly");
   else
     fail ("error in reading text");

@@ -826,7 +826,7 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
 #endif
       section->next  = NULL;
       section->pages = NULL;
-	  section->name = NULL;
+          section->name = NULL;
 
       if (!sections)
         {

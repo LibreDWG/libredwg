@@ -30,7 +30,7 @@ api_process(dwg_object *obj)
   dwg_ent_vertex_3d_get_point(vertex_3d, &point, &error);
   if ( !error )
       printf("point of vertex_3d : x = %f, y = %f, z = %f\n",
-	     point.x, point.y, point.z);
+             point.x, point.y, point.z);
   else
       printf("error in reading point \n");
 }

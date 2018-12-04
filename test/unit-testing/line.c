@@ -11,7 +11,7 @@ low_level_process(dwg_object *obj)
   printf("end of line : x = %f,y = %f\n",
           line->end.x, line->end.y);
   printf("Thickness of line : %f\n", line->thickness);
-  printf("extrusion of line : x = %f, y = %f, z = %f\n", 
+  printf("extrusion of line : x = %f, y = %f, z = %f\n",
           line->extrusion.x, line->extrusion.y, line->extrusion.z);
 }
 

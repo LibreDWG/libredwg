@@ -6,7 +6,7 @@ low_level_process(dwg_object *obj)
 {
   dwg_ent_point *point = dwg_object_to_POINT(obj);
 
-  printf("points of point : x = %f, y = %f, z = %f\n", 
+  printf("points of point : x = %f, y = %f, z = %f\n",
           point->x, point->y, point->z);
   printf("extrusion of point : x = %f, y = %f, z = %f\n",
           point->extrusion.x, point->extrusion.y, point->extrusion.z);
@@ -20,7 +20,7 @@ api_process(dwg_object *obj)
   double thickness;
   dwg_point_3d ext, points;
   dwg_ent_point *point = dwg_object_to_POINT(obj);
- 
+
 
   dwg_ent_point_get_point(point, &points,
                           &error);

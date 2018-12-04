@@ -92,8 +92,8 @@
 
   //the names?
   dat->byte = 0x229;
-  FIELD_RD (ELEVATION, 40); //ok 
-  FIELD_RD (THICKNESS, 40); //ok 
+  FIELD_RD (ELEVATION, 40); //ok
+  FIELD_RD (THICKNESS, 40); //ok
   DEBUG_HERE //239
 
   dat->byte = 0x2e5;
@@ -186,7 +186,7 @@
   FIELD_3RD (UCSXDIR, 11); //ok
   FIELD_3RD (UCSYDIR, 12); //ok
   DEBUG_HERE //443
-  
+
   dat->byte = 0x47d;
   FIELD_RC (DIMTOFL, 70); //ok
   DEBUG_HERE //47e
@@ -227,7 +227,7 @@
   FIELD_RS (SHADEDIF, 70); //ok
   FIELD_RS (UNITMODE, 70); //ok
   DEBUG_HERE //53d
-  
+
   dat->byte = 0x5df;
   FIELD_RD (DIMTFAC, 40); //ok
   FIELD_3RD (PUCSORG, 10); //ok
@@ -247,6 +247,6 @@
   dat->byte = 0x6a9;
   FIELD_RS (MAXACTVP, 70); //ok
   FIELD_RD (DIMGAP, 40);   //ok
-  FIELD_RD (PELEVATION, 40); //ok 
+  FIELD_RD (PELEVATION, 40); //ok
   FIELD_CAST (VISRETAIN, RS, B, 70); //ok
   FIELD_RS (crc, 0); // 0x6bd

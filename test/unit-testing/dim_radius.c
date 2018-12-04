@@ -8,7 +8,7 @@ low_level_process(dwg_object *obj)
 
   printf("horiz dir of dim_radius : %f\n",
           dim_radius->horiz_dir);
-  printf("lspace factor of dim_radius : %f\n", 
+  printf("lspace factor of dim_radius : %f\n",
           dim_radius->lspace_factor);
   printf("lspace style of dim_radius : " FORMAT_BS "\n",
           dim_radius->lspace_style);
@@ -31,7 +31,7 @@ low_level_process(dwg_object *obj)
   printf("arrow 2 of dim_radius : " FORMAT_B "\n", dim_radius->flip_arrow2);
   printf("flags1 of dim_radius : "  FORMAT_RC "\n", dim_radius->flag1);
   printf("act_measurement of dim_radius : %f\n",
-          dim_radius->act_measurement); 
+          dim_radius->act_measurement);
   printf("leader length of dim radius : %f\n", dim_radius->leader_len);
 }
 
@@ -39,7 +39,7 @@ void
 api_process(dwg_object *obj)
 {
   int error;
-  double elevation, act_measure, horiz_dir, lspace_factor, text_rot, 
+  double elevation, act_measure, horiz_dir, lspace_factor, text_rot,
     ins_rot, ext_line_rot, dim_rot, length ;
   BITCODE_B flip_arrow1, flip_arrow2;
   BITCODE_RC flag1;

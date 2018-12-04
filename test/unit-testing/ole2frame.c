@@ -8,7 +8,7 @@ low_level_process(dwg_object *obj)
 
   printf("flags of ole2frame : %ud\n", ole2frame->flag);
   printf("mode of ole2frame : %ud\n", ole2frame->mode);
-  printf("data length of ole2frame : " FORMAT_BL "\n", ole2frame->data_length); 
+  printf("data length of ole2frame : " FORMAT_BL "\n", ole2frame->data_length);
   printf("data of ole2frame : %s\n", ole2frame->data);
 }
 
@@ -23,7 +23,7 @@ api_process(dwg_object *obj)
 
   flags = dwg_ent_ole2frame_get_flag(ole2frame, &error);
   if ( !error )
-    {  
+    {
       printf("flags of ole2frame : %ud\n", flags);
     }
   else
@@ -45,7 +45,7 @@ api_process(dwg_object *obj)
 
   data_length = dwg_ent_ole2frame_get_data_length(ole2frame, &error);
   if ( !error )
-    {  
+    {
       printf("flags of ole2frame : " FORMAT_BL "\n", data_length);
     }
   else

@@ -9,7 +9,7 @@ low_level_process(dwg_object *obj)
 
   printf("horiz dir of dim_aligned : %f\n",
           dim_aligned->horiz_dir);
-  printf("lspace factor of dim_aligned : %f\n", 
+  printf("lspace factor of dim_aligned : %f\n",
           dim_aligned->lspace_factor);
   printf("lspace style of dim_aligned : " FORMAT_BS "\n",
           dim_aligned->lspace_style);
@@ -158,7 +158,7 @@ api_process(dwg_object *obj)
     printf("ins rotation of dim : %f\n", rotation);
   else
     printf("error in reading ins rotation \n");
-  
+
   flip_arrow1 = dwg_ent_dim_get_flip_arrow1(dim, &error);
   if (!error)
     printf("arrow1 of dim : " FORMAT_B "\n", flip_arrow1);

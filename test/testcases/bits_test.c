@@ -118,7 +118,7 @@ bit_write_3B_tests (void)
     fail ("bit_write_3B %d", bitchain.chain[0]);
 }
 
-/* This function calls tests for bit_write_4BITS_tests() 
+/* This function calls tests for bit_write_4BITS_tests()
    Used in VIEW view_mode, type 71
  */
 void
@@ -342,7 +342,7 @@ main (int argc, char const *argv[])
     pass("bit_read_BS");
   else
     fail("bit_read_BS %d", bs);
-  
+
   bit_write_BL(&bitchain, 0);
   if (bitchain.byte == 8 && bitchain.bit == 4)
     pass("bit_write_BL");
@@ -513,7 +513,7 @@ main (int argc, char const *argv[])
     pass("bit_write_L");
   else
     fail("bit_write_L @%ld.%d", bitchain.byte, bitchain.bit);
-	
+
   bit_advance_position(&bitchain, -32);
   if ((bl = bit_read_L(&bitchain)) == 20)
     pass("bit_read_L");
@@ -584,7 +584,7 @@ main (int argc, char const *argv[])
   bitchain.bit = 0;
   {
     bit_write_sentinel(&bitchain, sentinel);
-	
+
     if (bitchain.chain[--bitchain.byte] == 0x5F)
       pass("bit_write_sentinel");
     else

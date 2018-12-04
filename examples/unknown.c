@@ -851,7 +851,7 @@ main (int argc, char *argv[])
                     bits_try_handle (&g[j], handles[c], unknown_dxf[i].handle);
                     num_found = search_bits(j, &g[j], &unknown_dxf[i], &dxf[i], offset);
                     if (num_found) { // cur_hdl is set
-                      //sprintf(&g[j].value, "%x..%X", handles[c], hdl); 
+                      //sprintf(&g[j].value, "%x..%X", handles[c], hdl);
                       goto FOUND;
                     }
                   }

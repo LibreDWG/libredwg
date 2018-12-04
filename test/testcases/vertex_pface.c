@@ -9,8 +9,8 @@ low_level_process (dwg_object * obj)
 
   printf ("flag of vertex_pface : " FORMAT_RC "\n", vertex_pface->flag);
   printf ("point of vertex_pface : x = %f, y = %f, z = %f\n",
-	  vertex_pface->point.x, vertex_pface->point.y,
-	  vertex_pface->point.z);
+          vertex_pface->point.x, vertex_pface->point.y,
+          vertex_pface->point.z);
 }
 
 void

@@ -56,7 +56,7 @@ static int help(void) {
   printf("  -h            display this help and exit\n");
   printf("  -i            output version information and exit\n"
          "\n");
-#endif  
+#endif
   printf("GNU LibreDWG online manual: <https://www.gnu.org/software/libredwg/>\n");
   return 0;
 }
@@ -122,7 +122,7 @@ main (int argc, char *argv[])
   i = optind;
   if (i >= argc)
     return usage();
-  
+
   filename_in = argv[i];
   memset(&dwg, 0, sizeof(Dwg_Data));
   error = dwg_read_file(filename_in, &dwg);

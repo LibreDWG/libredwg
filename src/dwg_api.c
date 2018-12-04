@@ -374,7 +374,7 @@ dwg_object_to_DIMENSION(dwg_object *obj)
       {
         LOG_ERROR("invalid %s type: got 0x%x", "DIMENSION", obj ? obj->type : 0);
       }
-    return (dwg_ent_dim *)ret_obj;  
+    return (dwg_ent_dim *)ret_obj;
 }
 
 /*******************************************************************
@@ -18321,7 +18321,7 @@ dwg_object_tablectrl_get_objid(const dwg_object *restrict obj,
     }
 }
 
-/** Returns name of the referenced table entry (as UTF-8). Defaults to ByLayer 
+/** Returns name of the referenced table entry (as UTF-8). Defaults to ByLayer
     Since r2007 it returns a malloc'd copy, before the direct reference to the
     dwg field or the constant "ByLayer".
 \code Usage: char* name = dwg_ref_get_table_name(ref, &error);

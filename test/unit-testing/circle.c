@@ -8,7 +8,7 @@ low_level_process(dwg_object *obj)
 
   printf("Radius of circle : %f\n",circle->radius);
   printf("Thickness of circle : %f\n",circle->thickness);
-  printf("extrusion of circle : x = %f, y = %f, z = %f\n", 
+  printf("extrusion of circle : x = %f, y = %f, z = %f\n",
           circle->extrusion.x, circle->extrusion.y, circle->extrusion.z);
   printf("center of circle : x = %f,y = %f,z = %f\n",
           circle->center.x, circle->center.y, circle->center.z);

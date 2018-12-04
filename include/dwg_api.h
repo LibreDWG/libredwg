@@ -236,9 +236,9 @@ typedef struct _dwg_entity_IMAGE                  dwg_ent_image;
 typedef struct _dwg_MLINE_line                    dwg_mline_line;
 typedef struct _dwg_MLINE_vertex                  dwg_mline_vertex;
 typedef struct _dwg_entity_MLINE                  dwg_ent_mline;
-typedef struct _dwg_entity_RAY                    dwg_ent_ray, 
+typedef struct _dwg_entity_RAY                    dwg_ent_ray,
                                                   dwg_ent_xline;
-typedef struct _dwg_entity_VERTEX_3D              dwg_ent_vertex_3d, 
+typedef struct _dwg_entity_VERTEX_3D              dwg_ent_vertex_3d,
                                                   dwg_ent_vertex_mesh,
                                                   dwg_ent_vertex_pface;
 typedef struct _dwg_entity_VERTEX_2D              dwg_ent_vertex_2d;
@@ -292,8 +292,8 @@ typedef struct _dwg_object_entity                 dwg_obj_ent;
 typedef struct _dwg_object_object                 dwg_obj_obj;
 typedef struct _dwg_class                         dwg_class;
 typedef struct _dwg_struct                        dwg_data;
-typedef struct _dwg_entity_eed_data		  dwg_entity_eed_data;
-typedef struct _dwg_entity_eed			  dwg_entity_eed;
+typedef struct _dwg_entity_eed_data               dwg_entity_eed_data;
+typedef struct _dwg_entity_eed                    dwg_entity_eed;
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -3164,7 +3164,7 @@ dwg_ent_viewport_get_ucs_elevation(const dwg_ent_viewport *restrict vp,
                                    int *restrict error);
 
 EXPORT void
-dwg_ent_viewport_set_ucs_ortho_view_type(dwg_ent_viewport *restrict vp, 
+dwg_ent_viewport_set_ucs_ortho_view_type(dwg_ent_viewport *restrict vp,
                                          const BITCODE_BS type,
                                          int *restrict error);
 
@@ -3714,12 +3714,12 @@ dwg_ent_3dsolid_set_point_present(dwg_ent_3dsolid *restrict _3dsolid,
 
 EXPORT void
 dwg_ent_3dsolid_get_point(const dwg_ent_3dsolid *restrict _3dsolid,
-                          dwg_point_3d *restrict point, 
+                          dwg_point_3d *restrict point,
                           int *restrict error);
 
 EXPORT void
 dwg_ent_3dsolid_set_point(dwg_ent_3dsolid *restrict _3dsolid,
-                          const dwg_point_3d *restrict point, 
+                          const dwg_point_3d *restrict point,
                           int *restrict error);
 
 EXPORT BITCODE_BL
@@ -3763,7 +3763,7 @@ dwg_ent_3dsolid_get_acis_empty2(const dwg_ent_3dsolid *restrict _3dsolid,
 EXPORT void
 dwg_ent_3dsolid_set_acis_empty2(dwg_ent_3dsolid *restrict _3dsolid,
                                 const unsigned char empty2,
-                                int *restrict error); 
+                                int *restrict error);
 
 
 /********************************************************************
@@ -3862,7 +3862,7 @@ dwg_ent_region_get_acis_empty2(const dwg_ent_region *restrict region,
 EXPORT void
 dwg_ent_region_set_acis_empty2(dwg_ent_region *restrict region,
                                const unsigned char empty2,
-                               int *restrict error); 
+                               int *restrict error);
 
 
 /********************************************************************
@@ -3960,7 +3960,7 @@ dwg_ent_body_get_acis_empty2(const dwg_ent_body *restrict body,
 EXPORT void
 dwg_ent_body_set_acis_empty2(dwg_ent_body *restrict body,
                              unsigned char empty2,
-                             int *restrict error); 
+                             int *restrict error);
 
 /********************************************************************
 *                    FUNCTIONS FOR TABLE ENTITY                     *
@@ -4115,7 +4115,7 @@ dwg_ent_table_get_title_row_fill_none(const dwg_ent_table *restrict table,
                                       int *restrict error);
 
 EXPORT void
-dwg_ent_table_set_header_row_fill_none(dwg_ent_table *restrict table, 
+dwg_ent_table_set_header_row_fill_none(dwg_ent_table *restrict table,
                                        unsigned char fill,
                                        int *restrict error);
 EXPORT unsigned char

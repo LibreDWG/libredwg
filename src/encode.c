@@ -194,7 +194,7 @@ static bool env_var_checked_p;
       }\
     }\
   }
-    
+
 #define XDICOBJHANDLE(code)\
   RESET_VER \
   SINCE (R_2004)\
@@ -361,7 +361,7 @@ static bool env_var_checked_p;
   RESET_VER
 
 #if 0
-/** See dec_macro.h instead. 
+/** See dec_macro.h instead.
    Returns -1 if not added, else returns the new objid.
    Does a complete handleref rescan to invalidate and resolve
    all internal obj pointers after a object[] realloc.
@@ -528,7 +528,7 @@ dwg_encode_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat, Dwg_Ob
 void
 dwg_encode_handleref(Bit_Chain *hdl_dat, Dwg_Object * obj, Dwg_Data *restrict dwg,
                      Dwg_Object_Ref *restrict ref);
-void 
+void
 dwg_encode_handleref_with_code(Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Data* dwg,
                                Dwg_Object_Ref *restrict ref, unsigned int code);
 int
@@ -891,9 +891,9 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       bit_write_CRC(dat, omap[j].address, 0xC0C1);
     }
 
-  /*for (j = 0; j < dwg->num_objects; j++) 
-      LOG_INFO ("Object(%lu): %6lu / Address: %08lX / Idc: %u\n", 
-		 j, omap[j].handle, omap[j].address, omap[j].index);
+  /*for (j = 0; j < dwg->num_objects; j++)
+      LOG_INFO ("Object(%lu): %6lu / Address: %08lX / Idc: %u\n",
+                 j, omap[j].handle, omap[j].address, omap[j].index);
   */
 
   /* Unknown bitdouble between objects and object map (or short?)
@@ -1610,7 +1610,7 @@ void
 dwg_encode_handleref(Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Data* dwg, Dwg_Object_Ref* ref)
 {
   //this function should receive a Object_Ref without an abs_ref, calculate it and return a Dwg_Handle
-  //this should be a higher level function 
+  //this should be a higher level function
   //not sure if the prototype is correct
   assert(obj);
 }
@@ -1628,7 +1628,7 @@ dwg_encode_handleref(Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Data* dwg, Dwg_Obj
  *   a ref + offset
  *   c ref - offset
  */
-void 
+void
 dwg_encode_handleref_with_code(Bit_Chain* hdl_dat, Dwg_Object* obj, Dwg_Data* dwg,
                                Dwg_Object_Ref* ref, unsigned int code)
 {
@@ -1678,7 +1678,7 @@ dwg_encode_object(Dwg_Object* obj,
 {
   int error = 0;
   Dwg_Object_Object* ord = obj->tio.object;
-  
+
   VERSIONS(R_2000, R_2007)
     {
       obj->bitsize_address = bit_position(dat);

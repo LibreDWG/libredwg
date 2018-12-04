@@ -116,7 +116,7 @@ common_entity_attrs (xmlNodePtr node, const Dwg_Object *obj)
     newXMLcProp ("PlotStyleName", name); //leaks r2007+
 }
 
-/* 
+/*
  * This function is used to emit all line attributes
  * @param xmlNodePtr rootnode The root node of XML document
  * @param const Dwg_Object *obj The DWG Object
@@ -197,7 +197,7 @@ add_helix (xmlNodePtr rootnode, const Dwg_Object *obj)
 
   dtostring = doubletochar (1);
   newXMLProp ("Constrain", dtostring); // typo!
-  
+
   dtostring = doubletochar (circle->thickness);
   newXMLProp ("TopRadius", dtostring);
 
@@ -422,7 +422,7 @@ add_insert (xmlNodePtr rootnode, const Dwg_Object *obj)
 
   buf = doubletochar (block->rotation);
   newXMLProp ("Rotation", buf);
-  
+
   common_entity_attrs (node, obj);
   xmlAddChild (rootnode, node);
 }
@@ -489,12 +489,12 @@ add_mline (xmlNodePtr rootnode, const Dwg_Object *obj)
 
   dtostring = doubletochar (mline->scale);
   newXMLProp ("MLineScale", dtostring);
-  
+
   common_entity_attrs (node, obj);
   xmlAddChild (rootnode, node);
 }
 
-/* 
+/*
  * This function is used to emit all line attributes
  * @param xmlNodePtr rootnode The root node of XML document
  * @param const Dwg_Object *obj The DWG Object
@@ -692,26 +692,26 @@ load_dwg (char *dwgfilename, xmlNodePtr rootnode)
     {
       const Dwg_Object *obj = &dwg.object[i];
       switch (dwg.object[i].type)
-	{
-	case DWG_TYPE_ARC:
-	  add_arc (rootnode, obj);
-	  break;
+        {
+        case DWG_TYPE_ARC:
+          add_arc (rootnode, obj);
+          break;
 
-	case DWG_TYPE_LINE:
-	  add_line (rootnode, obj);
-	  break;
+        case DWG_TYPE_LINE:
+          add_line (rootnode, obj);
+          break;
 
-	case DWG_TYPE_CIRCLE:
-	  add_circle (rootnode, obj);
-	  break;
+        case DWG_TYPE_CIRCLE:
+          add_circle (rootnode, obj);
+          break;
 
-	case DWG_TYPE_POLYLINE_2D:
-	  add_2dpolyline (rootnode, obj);
-	  break;
+        case DWG_TYPE_POLYLINE_2D:
+          add_2dpolyline (rootnode, obj);
+          break;
 
-	case DWG_TYPE_POLYLINE_3D:
-	  add_3dpolyline (rootnode, obj);
-	  break;
+        case DWG_TYPE_POLYLINE_3D:
+          add_3dpolyline (rootnode, obj);
+          break;
 
         case DWG_TYPE_BLOCK:
           add_block(rootnode, obj);
@@ -721,37 +721,37 @@ load_dwg (char *dwgfilename, xmlNodePtr rootnode)
           add_insert(rootnode, obj);
           break;
 
-	case DWG_TYPE_MLINE:
-	  add_mline (rootnode, obj);
-	  break;
+        case DWG_TYPE_MLINE:
+          add_mline (rootnode, obj);
+          break;
 
-	case DWG_TYPE_ELLIPSE:
-	  add_ellipse (rootnode, obj);
-	  break;
+        case DWG_TYPE_ELLIPSE:
+          add_ellipse (rootnode, obj);
+          break;
 
-	case DWG_TYPE_POINT:
-	  add_point (rootnode, obj);
-	  break;
+        case DWG_TYPE_POINT:
+          add_point (rootnode, obj);
+          break;
 
-	case DWG_TYPE_RAY:
-	  add_ray (rootnode, obj);
-	  break;
+        case DWG_TYPE_RAY:
+          add_ray (rootnode, obj);
+          break;
 
         /*case DWG_TYPE_HELIX:
-	  add_helix (rootnode, obj);
-	  break;*/
+          add_helix (rootnode, obj);
+          break;*/
 
-	case DWG_TYPE_TEXT:
-	  add_text (rootnode, obj);
-	  break;
+        case DWG_TYPE_TEXT:
+          add_text (rootnode, obj);
+          break;
 
-	case DWG_TYPE_SPLINE:
-	  add_spline (rootnode, obj);
-	  break;
+        case DWG_TYPE_SPLINE:
+          add_spline (rootnode, obj);
+          break;
 
-	case DWG_TYPE_XLINE:
-	  add_xline (rootnode, obj);
-	  break;
+        case DWG_TYPE_XLINE:
+          add_xline (rootnode, obj);
+          break;
 
 /*      case DWG_TYPE_TABLE:
           add_table(rootnode, obj);
@@ -766,7 +766,7 @@ load_dwg (char *dwgfilename, xmlNodePtr rootnode)
             add_helix(rootnode, obj);
 
           break;
-	}
+        }
     }
 
   //free the dwg

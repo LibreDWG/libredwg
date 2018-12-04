@@ -3,7 +3,7 @@
 #include <dejagnu.h>
 
 /* This function checks API functions for integrity
-   @params dwg_object* obj 
+   @params dwg_object* obj
  */
 void
 api_process (dwg_object * obj)
@@ -22,7 +22,7 @@ api_process (dwg_object * obj)
   dwg_ent_dim *dim = dwg_object_to_DIMENSION(obj);
 
   horiz_dir = dwg_ent_dim_get_horiz_dir (dim, &error);
-  if (!error  && dim->horiz_dir == horiz_dir)	// error check
+  if (!error  && dim->horiz_dir == horiz_dir)   // error check
     pass ("Working Properly");
   else
     fail ("error in reading horiz dir");
@@ -52,7 +52,7 @@ api_process (dwg_object * obj)
     fail ("error in reading ecs11");
 
   dwg_ent_dim_get_extrusion (dim, &ext, &error);
-  if (!error  && dim->extrusion.x == ext.x && dim->extrusion.y == ext.y && dim->extrusion.z == ext.z)	// error check
+  if (!error  && dim->extrusion.x == ext.x && dim->extrusion.y == ext.y && dim->extrusion.z == ext.z)   // error check
     pass ("Working Properly");
   else
     fail ("error in reading extrusion");

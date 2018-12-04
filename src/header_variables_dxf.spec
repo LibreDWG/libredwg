@@ -224,7 +224,7 @@
     HEADER_RC (HANDLING, 70); //default 1
   }
 
-  HEADER_VALUE (HANDSEED, RS, 5, _obj->HANDSEED->absolute_ref); 
+  HEADER_VALUE (HANDSEED, RS, 5, _obj->HANDSEED->absolute_ref);
   //HEADER_H (HANDSEED, 5); //default: 20000, before r13: 0xB8BC
 
   HEADER_RC (SURFTAB1, 70); // 6

@@ -9,12 +9,12 @@ low_level_process(dwg_object *obj)
   printf("Radius of tolerance : %f\n",tolerance->height);
   printf("Thickness of tolerance : %f\n",tolerance->dimgap);
   printf("text string of tolerance : %s\n",tolerance->text_string);
-  printf("extrusion of tolerance : x = %f, y = %f, z = %f\n", 
+  printf("extrusion of tolerance : x = %f, y = %f, z = %f\n",
           tolerance->extrusion.x, tolerance->extrusion.y, tolerance->extrusion.z);
-  printf("ins_pt of tolerance : x = %f, y = %f, z = %f\n", 
+  printf("ins_pt of tolerance : x = %f, y = %f, z = %f\n",
           tolerance->ins_pt.x, tolerance->ins_pt.y, tolerance->ins_pt.z);
   printf("center of tolerance : x = %f,y = %f,z = %f\n",
-          tolerance->x_direction.x, tolerance->x_direction.y, 
+          tolerance->x_direction.x, tolerance->x_direction.y,
           tolerance->x_direction.z);
 }
 
@@ -23,7 +23,7 @@ api_process(dwg_object *obj)
 {
   int error;
   double height, dimgap;
-  dwg_point_3d ins_pt, x_dir, ext;  //3d_points 
+  dwg_point_3d ins_pt, x_dir, ext;  //3d_points
   char * text_string;
 
   dwg_ent_tolerance *tolerance = dwg_object_to_TOLERANCE(obj);

@@ -33,7 +33,7 @@ api_process(dwg_object *obj)
   BITCODE_BS version;
   BITCODE_BL block_size, num_isolines, num_wires, num_sil;
   unsigned char * acis_data;
-  BITCODE_B wireframe_data_present, point_present, isoline_present; 
+  BITCODE_B wireframe_data_present, point_present, isoline_present;
   BITCODE_B acis_empty, acis2_empty;
   dwg_point_3d point;
   dwg_ent_body *body = dwg_object_to_BODY(obj);
@@ -52,26 +52,26 @@ api_process(dwg_object *obj)
   else
       printf("error in reading version");
 
-  acis_data = dwg_ent_body_get_acis_data(body, &error); 
+  acis_data = dwg_ent_body_get_acis_data(body, &error);
   if ( !error )
       printf("acis data of body : %s", acis_data);
   else
       printf("error in reading acis data");
 
   wireframe_data_present = dwg_ent_body_get_wireframe_data_present(body,
-                           &error); 
+                           &error);
   if ( !error )
       printf("wireframe data of body : " FORMAT_B "\n", wireframe_data_present);
   else
       printf("error in reading wireframe data present");
 
-  point_present = dwg_ent_body_get_point_present(body, &error); 
+  point_present = dwg_ent_body_get_point_present(body, &error);
   if ( !error )
       printf("point present of body : " FORMAT_B "\n", point_present);
   else
       printf("error in reading point present");
 
-  dwg_ent_body_get_point(body, &point, &error); 
+  dwg_ent_body_get_point(body, &point, &error);
   if ( !error )
       printf("point of body : x = %f, y = %f, z = %f\n", point.x, point.y,
               point.z);
@@ -119,5 +119,5 @@ api_process(dwg_object *obj)
     }
   else
       printf("error in reading silhouettes");
-    
+
 }

@@ -9,9 +9,9 @@ low_level_process (dwg_object * obj)
 
   printf ("text of text : %s\n", text->text_value);
   printf ("insertion point of text : x = %f, y = %f\n",
-	  text->insertion_pt.x, text->insertion_pt.y);
+          text->insertion_pt.x, text->insertion_pt.y);
   printf ("extrusion of text : x = %f, y = %f, z = %f\n",
-	  text->extrusion.x, text->extrusion.y, text->extrusion.z);
+          text->extrusion.x, text->extrusion.y, text->extrusion.z);
   printf ("height of text : %f\n", text->height);
   printf ("thickness of text : %f\n", text->thickness);
   printf ("rotation of text : %f\n", text->rotation);

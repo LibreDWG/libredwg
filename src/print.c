@@ -123,7 +123,7 @@ static unsigned int cur_ver = 0;
 #define FIELD_BT(name,dxf) FIELD(name, BT, dxf);
 #define FIELD_4BITS(name,dxf) FIELD_G_TRACE(name,4BITS,dxf)
 #define FIELD_BE(name,dxf) FIELD_3RD(name,dxf)
-#define FIELD_DD(name, _default, dxf) 
+#define FIELD_DD(name, _default, dxf)
 #define FIELD_2DD(name, d1, d2, dxf) FIELD_2PT_TRACE(name, DD, dxf)
 #define FIELD_3DD(name, def, dxf) FIELD_3PT_TRACE(name, DD, dxf)
 #define FIELD_2RD(name,dxf) FIELD_2PT_TRACE(name,RD,dxf)

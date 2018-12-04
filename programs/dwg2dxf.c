@@ -111,7 +111,7 @@ main (int argc, char *argv[])
 #endif
 
   if (argc < 2)
-    return usage();  
+    return usage();
 
   while
 #ifdef HAVE_GETOPT_LONG

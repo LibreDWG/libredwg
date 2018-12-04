@@ -8,7 +8,7 @@ low_level_process(dwg_object *obj)
 
   printf("horiz dir of dim_ordinate : %f\n",
           dim_ordinate->horiz_dir);
-  printf("lspace factor of dim_ordinate : %f\n", 
+  printf("lspace factor of dim_ordinate : %f\n",
           dim_ordinate->lspace_factor);
   printf("lspace style of dim_ordinate : " FORMAT_BS "\n",
           dim_ordinate->lspace_style);
@@ -51,7 +51,7 @@ void
 api_process(dwg_object *obj)
 {
   int error;
-  double elevation, act_measure, horiz_dir, lspace_factor, text_rot, 
+  double elevation, act_measure, horiz_dir, lspace_factor, text_rot,
     ins_rot;
   BITCODE_B flip_arrow1, flip_arrow2;
   BITCODE_RC flag1, flag2;
@@ -72,7 +72,7 @@ api_process(dwg_object *obj)
   lspace_factor = dwg_ent_dim_get_lspace_factor(dim, &error);
   if ( !error )
     printf("lspace factor of dim_ordinate : %f\n", lspace_factor);
-  else	
+  else
     printf("error in reading lspace factor \n");
 
   lspace_style = dwg_ent_dim_get_elevation(dim, &error);
@@ -189,5 +189,5 @@ api_process(dwg_object *obj)
     printf("act_measurement of dim_ordinate : %f\n", act_measure);
   else
     printf("in reading act_measurement \n");
- 
+
 }

@@ -123,7 +123,7 @@ output_test(dwg_data* dwg)
   dwg_object *obj;
   dwg_obj_block_header *_hdr;
   dwg_obj_block_control *_ctrl;
-  dwg_object_ref **hdr_refs; 
+  dwg_object_ref **hdr_refs;
 
   _hdr = dwg_get_block_header(dwg, &error);
   _ctrl = dwg_block_header_get_block_control(_hdr, &error);

@@ -3,7 +3,7 @@
 #include <dejagnu.h>
 
 /* This function checks API functions for integrity
-   @params dwg_object* obj 
+   @params dwg_object* obj
  */
 void
 api_process (dwg_object * obj)
@@ -41,7 +41,7 @@ api_process (dwg_object * obj)
 
   dwg_ent_arc_get_center (arc, &center, &error);
   if (error == 0 && center.x == arc->center.x &&
-      center.y == arc->center.y && center.z == arc->center.z)	// arc checking
+      center.y == arc->center.y && center.z == arc->center.z)   // arc checking
     pass ("arc_get_center");
   else
     fail ("arc_get_center error=%d center.x=%f arc->center.x=%f",

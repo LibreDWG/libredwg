@@ -12,9 +12,9 @@ low_level_process (dwg_object * obj)
   printf ("scale of mline : %f\n", mline->scale);
   printf ("just of mline : " FORMAT_RC "\n", mline->justification);
   printf ("extrusion of mline : x = %f, y = %f, z = %f\n",
-	  mline->extrusion.x, mline->extrusion.y, mline->extrusion.z);
+          mline->extrusion.x, mline->extrusion.y, mline->extrusion.z);
   printf ("base_point of mline : x = %f, y = %f, z = %f\n",
-	  mline->base_point.x, mline->base_point.y, mline->base_point.z);
+          mline->base_point.x, mline->base_point.y, mline->base_point.z);
   printf ("number of lines : " FORMAT_RC "\n", mline->num_lines);
   printf ("number of verts : " FORMAT_BS "\n", mline->num_verts);
 
@@ -37,7 +37,7 @@ api_process (dwg_object * obj)
   dwg_ent_mline *mline = dwg_object_to_MLINE (obj);
 
   scale = dwg_ent_mline_get_scale (mline, &error);
-  if (!error  && scale == mline->scale)	// Error checking
+  if (!error  && scale == mline->scale) // Error checking
     pass ("Working Properly");
   else
     fail ("error in reading scale");
@@ -58,19 +58,19 @@ api_process (dwg_object * obj)
 
   // return mline base_point points
   dwg_ent_mline_get_base_point (mline, &base_point, &error);
-  if (!error  && mline->base_point.x == base_point.x && mline->base_point.y == base_point.y && mline->base_point.z == base_point.z)	// error checking
+  if (!error  && mline->base_point.x == base_point.x && mline->base_point.y == base_point.y && mline->base_point.z == base_point.z)     // error checking
     pass ("Working Properly");
   else
     fail ("error in reading base_point");
 
   num_lines = dwg_ent_mline_get_num_lines (mline, &error);
-  if (!error  && num_lines == mline->num_lines)	// error checking
+  if (!error  && num_lines == mline->num_lines) // error checking
     pass ("Working Properly");
   else
     fail ("error in reading num lines");
 
   num_verts = dwg_ent_mline_get_num_verts (mline, &error);
-  if (!error  && num_verts == mline->num_verts)	// error checking
+  if (!error  && num_verts == mline->num_verts) // error checking
     pass ("Working Properly");
   else
     fail ("error in reading num verts");
@@ -80,22 +80,22 @@ api_process (dwg_object * obj)
     {
       BITCODE_BS i, matches = 1;
       for (i=0; i < num_verts; i++)
-	{
-	  if (mline->verts[i].vertex.x != verts[i].vertex.x
-	      || mline->verts[i].vertex.y != verts[i].vertex.y
-	      || mline->verts[i].vertex.z != verts[i].vertex.z)
-	    {
-	      matches = 0;
-	    }
-	}
+        {
+          if (mline->verts[i].vertex.x != verts[i].vertex.x
+              || mline->verts[i].vertex.y != verts[i].vertex.y
+              || mline->verts[i].vertex.z != verts[i].vertex.z)
+            {
+              matches = 0;
+            }
+        }
       if (matches)
-	{
-	  pass ("Working Properly");
-	}
+        {
+          pass ("Working Properly");
+        }
       else
-	{
-	  fail ("error in reading verts of mline");
-	}
+        {
+          fail ("error in reading verts of mline");
+        }
     }
   else
     {

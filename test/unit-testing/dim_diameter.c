@@ -8,7 +8,7 @@ low_level_process(dwg_object *obj)
 
   printf("horiz dir of dim_diameter : %f\n",
           dim_diameter->horiz_dir);
-  printf("lspace factor of dim_diameter : %f\n", 
+  printf("lspace factor of dim_diameter : %f\n",
           dim_diameter->lspace_factor);
   printf("lspace style of dim_diameter : " FORMAT_BS "\n",
           dim_diameter->lspace_style);
@@ -47,7 +47,7 @@ void
 api_process(dwg_object *obj)
 {
   int error;
-  double elevation, act_measure, horiz_dir, lspace_factor, text_rot, 
+  double elevation, act_measure, horiz_dir, lspace_factor, text_rot,
          ins_rot, ext_line_rot, dim_rot, length;
   BITCODE_B flip_arrow1, flip_arrow2;
   BITCODE_RC flags1;

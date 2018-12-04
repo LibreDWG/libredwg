@@ -202,7 +202,7 @@ main (int argc, char *argv[])
     filename_out = argv[i+1];
   else
     filename_out = suffix (filename_in, "dwg");
-  
+
   if (strcmp(filename_in, filename_out) == 0) {
     if (filename_out != argv[2])
       free (filename_out);
@@ -223,7 +223,7 @@ main (int argc, char *argv[])
       dwg_free(&dwg);
       exit(error);
     }
-  
+
   printf("Writing DWG file %s", filename_out);
   if (version) {
     printf(" as %s\n", version);
@@ -239,7 +239,7 @@ main (int argc, char *argv[])
 #else
   error = 1;
 # error no write support
-#endif  
+#endif
   if (error)
       printf("WRITE ERROR\n");
 

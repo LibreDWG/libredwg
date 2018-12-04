@@ -36,7 +36,7 @@ api_process(dwg_object *obj)
   BITCODE_BS version;
   BITCODE_BL block_size, num_isolines, num_wires, num_sil;
   unsigned char *acis_data;
-  BITCODE_B wireframe_data_present, point_present, isoline_present; 
+  BITCODE_B wireframe_data_present, point_present, isoline_present;
   BITCODE_B acis_empty, acis2_empty;
   dwg_point_3d point;
   dwg_3dsolid_wire *wire;
@@ -56,9 +56,9 @@ api_process(dwg_object *obj)
       printf("version of 3dsolid : " FORMAT_BS "\n", version);
   else
       printf("error in reading version");
- 
 
-  acis_data = dwg_ent_3dsolid_get_acis_data(_3dsolid, &error); 
+
+  acis_data = dwg_ent_3dsolid_get_acis_data(_3dsolid, &error);
   if ( !error )
       printf("acis data of 3dsolid : %s", acis_data);
   else
@@ -66,21 +66,21 @@ api_process(dwg_object *obj)
 
   // Returns wireframe_data_present value
   wireframe_data_present = dwg_ent_3dsolid_get_wireframe_data_present(_3dsolid,
-                           &error); 
+                           &error);
   if ( !error )
       printf("wireframe data of 3dsolid : " FORMAT_B "\n", wireframe_data_present);
   else
       printf("error in reading wireframe data present");
 
 
-  point_present = dwg_ent_3dsolid_get_point_present(_3dsolid, &error); 
+  point_present = dwg_ent_3dsolid_get_point_present(_3dsolid, &error);
   if ( !error )
       printf("point present of 3dsolid : " FORMAT_B "\n", point_present);
   else
       printf("error in reading point present");
 
-  // Returns point values 
-  dwg_ent_3dsolid_get_point(_3dsolid, &point, &error); 
+  // Returns point values
+  dwg_ent_3dsolid_get_point(_3dsolid, &point, &error);
   if ( !error )
       printf("point of 3dsolid : x = %f, y = %f, z = %f\n", point.x, point.y,
               point.z);
@@ -107,7 +107,7 @@ api_process(dwg_object *obj)
       printf("num wires of 3dsolid : " FORMAT_BL "\n", num_wires);
   else
       printf("error in reading num wires");
- 
+
 
   wire = dwg_ent_3dsolid_get_wires(_3dsolid, &error);
   if ( !error )
@@ -134,5 +134,5 @@ api_process(dwg_object *obj)
     }
   else
       printf("error in reading silhouettes");
-    
+
 }

@@ -870,7 +870,7 @@ my $known = {
     71 => 'u_isolines',
     72 => 'v_isolines',
     #100 => AcDbPlaneSurface
-    90 => 'class_version',    
+    90 => 'class_version',
     ],
   UNDERLAY => [
     10 => 'insertion_pt',
@@ -946,7 +946,7 @@ print $f2 "// -*- c -*-\n";
 LINE:
 while (<>) {
   my @F = split(' ');
-  
+
   my $dxf = $F[4];
   if ($dxf eq 'NULL,' or $dxf !~ /\.dxf",/) {
     next LINE; # -n
@@ -983,7 +983,7 @@ while (<>) {
     $dupl{"$obj-$unknown"}++;
   }
   #warn "$dxf: $obj HANDLE($hdl)\n";
-  # 9080187 5160203 9080187 201AA 51E0204 90C0202 35200204 20640A8 2D22020C 90A01D1 
+  # 9080187 5160203 9080187 201AA 51E0204 90C0202 35200204 20640A8 2D22020C 90A01D1
   #if ($hdl =~ /^([0-9A-F]){1,4}0([0-9A-F]+)$/) {
   #  $hdl = $2;
   #  #warn "=> try HANDLE($hdl)\n";

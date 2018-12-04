@@ -34,7 +34,7 @@ api_process(dwg_object *obj)
   BITCODE_BS version;
   BITCODE_BL block_size, num_isolines, num_wires, num_sil;
   unsigned char * acis_data;
-  BITCODE_B wireframe_data_present, point_present, isoline_present; 
+  BITCODE_B wireframe_data_present, point_present, isoline_present;
   BITCODE_B acis_empty, acis2_empty;
   dwg_point_3d point;
   dwg_3dsolid_wire *wire;
@@ -54,31 +54,31 @@ api_process(dwg_object *obj)
   else
     printf("error in reading version\n");
 
-  acis_data = dwg_ent_region_get_acis_data(region, &error); 
+  acis_data = dwg_ent_region_get_acis_data(region, &error);
   if (!error)
     printf("acis data of region : %s\n", acis_data);
   else
     printf("error in reading acis data\n");
 
   wireframe_data_present = dwg_ent_region_get_wireframe_data_present(region,
-                                                                     &error); 
+                                                                     &error);
   if (!error)
     printf("wireframe data of region :" FORMAT_B "\n", wireframe_data_present);
   else
     printf("error in reading wireframe data present\n");
 
-  point_present = dwg_ent_region_get_point_present(region, &error); 
+  point_present = dwg_ent_region_get_point_present(region, &error);
   if (!error)
     printf("point present of region :" FORMAT_B "\n", point_present);
   else
-    printf("error in reading point present\n"); 
+    printf("error in reading point present\n");
 
-  dwg_ent_region_get_point(region, &point, &error); 
+  dwg_ent_region_get_point(region, &point, &error);
   if (!error)
     printf("point of region : x = %f, y = %f, z = %f\n", point.x, point.y,
            point.z);
   else
-    printf("error in reading point\n"); 
+    printf("error in reading point\n");
 
   num_isolines = dwg_ent_region_get_num_isolines(region, &error);
   if (!error)
@@ -91,14 +91,14 @@ api_process(dwg_object *obj)
   if (!error)
     printf("isoline present of region :" FORMAT_B "\n", isoline_present);
   else
-    printf("error in reading isoline present\n"); 
+    printf("error in reading isoline present\n");
 
 
   num_wires = dwg_ent_region_get_num_wires(region, &error);
   if (!error)
     printf("num wires of region :" FORMAT_BL "\n", num_wires);
   else
-    printf("error in reading num wires\n"); 
+    printf("error in reading num wires\n");
 
 
   wire = dwg_ent_region_get_wires(region, &error);
@@ -108,13 +108,13 @@ api_process(dwg_object *obj)
         printf("wire of region :" FORMAT_BL "\n", wire[i].selection_marker);
     }
   else
-    printf("error in reading num wires\n"); 
+    printf("error in reading num wires\n");
 
   num_sil = dwg_ent_region_get_num_silhouettes(region, &error);
   if (!error)
     printf("num_silhouettes of region :" FORMAT_BL "\n", num_sil);
   else
-    printf("error in reading num silhouettes\n"); 
+    printf("error in reading num silhouettes\n");
 
   sil = dwg_ent_region_get_silhouettes(region, &error);
   if (!error)
@@ -123,5 +123,5 @@ api_process(dwg_object *obj)
         printf("silhouettes of region :" FORMAT_BL "\n", sil[i].vp_id);
     }
   else
-    printf("error in reading silhouettes\n"); 
+    printf("error in reading silhouettes\n");
 }

@@ -96,7 +96,7 @@ static Bit_Chain *dat = &pdat;
     }
 #define VALUE_TV(value,dxf) FREE_IF(value)
 #define VALUE_TF(value,dxf) FREE_IF(value)
-#define VALUE_TFF(value,dxf) 
+#define VALUE_TFF(value,dxf)
 #define FIELD_TU(name,dxf)  FIELD_TV(name,dxf)
 #define FIELD_TF(name,len,dxf) FIELD_TV(name,dxf)
 #define FIELD_TFF(name,len,dxf) {}
@@ -323,7 +323,7 @@ dwg_free_eed(Dwg_Object* obj)
   if (obj->supertype == DWG_SUPERTYPE_ENTITY) {
     Dwg_Object_Entity* _obj = obj->tio.entity;
     for (i=0; i < _obj->num_eed; i++) {
-      FREE_IF(_obj->eed[i].raw);  
+      FREE_IF(_obj->eed[i].raw);
       FREE_IF(_obj->eed[i].data);
     }
     FREE_IF(_obj->eed);
@@ -366,7 +366,7 @@ dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
 
   #undef WARN_UNHANDLED_CLASS
   #undef WARN_UNSTABLE_CLASS
-  
+
   return DWG_ERR_UNHANDLEDCLASS;
 }
 

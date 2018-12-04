@@ -680,7 +680,7 @@ dwg_write_json(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
       if (json_tables_write (dat, dwg))
         goto fail;
-      
+
       if (json_blocks_write (dat, dwg))
         goto fail;
     }

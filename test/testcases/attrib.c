@@ -3,7 +3,7 @@
 #include <dejagnu.h>
 
 /* This function checks API functions for integrity
-   @params dwg_object* obj 
+   @params dwg_object* obj
  */
 void
 api_process (dwg_object * obj)
@@ -24,13 +24,13 @@ api_process (dwg_object * obj)
     fail ("error in reading attrib_value");
 
   dwg_ent_attrib_get_insertion_point (attrib, &ins_pt, &error);
-  if (!error  && ins_pt.x == attrib->insertion_pt.x && ins_pt.y == attrib->insertion_pt.y)	// error check
+  if (!error  && ins_pt.x == attrib->insertion_pt.x && ins_pt.y == attrib->insertion_pt.y)      // error check
     pass ("Working Properly");
   else
     fail ("error in reading insertion");
 
   dwg_ent_attrib_get_extrusion (attrib, &ext, &error);
-  if (!error  && ext.x == attrib->extrusion.x && ext.y == attrib->extrusion.y && ext.z == attrib->extrusion.z)	// error check
+  if (!error  && ext.x == attrib->extrusion.x && ext.y == attrib->extrusion.y && ext.z == attrib->extrusion.z)  // error check
     pass ("Working Properly");
   else
     fail ("error in reading extrusion");

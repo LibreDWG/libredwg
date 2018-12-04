@@ -13,11 +13,11 @@ low_level_process (dwg_object * obj)
   printf ("attachment of dim_radius : " FORMAT_BS "\n", dim->attachment);
   printf ("elevation of dim_radius : %f\n", dim->elevation);
   printf ("extrusion of dim_radius : x = %f, y = %f, z = %f\n",
-	  dim->extrusion.x, dim->extrusion.y, dim->extrusion.z);
+          dim->extrusion.x, dim->extrusion.y, dim->extrusion.z);
   printf ("ins_scale of dim_radius : x = %f, y = %f, z = %f\n",
-	  dim->ins_scale.x, dim->ins_scale.y, dim->ins_scale.z);
+          dim->ins_scale.x, dim->ins_scale.y, dim->ins_scale.z);
   printf ("text_mid_pt of dim_radius : x = %f, y = %f\n",
-	  dim->text_midpt.x, dim->text_midpt.y);
+          dim->text_midpt.x, dim->text_midpt.y);
   printf ("user text of dim_radius : %s\n", dim->user_text);
   printf ("text rotation of dim_radius : %f\n", dim->text_rotation);
   printf ("ins rotation of dim_radius : %f\n", dim->ins_rotation);

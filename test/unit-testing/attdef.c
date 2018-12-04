@@ -7,7 +7,7 @@ low_level_process(dwg_object *obj)
   dwg_ent_attdef *attdef = dwg_object_to_ATTDEF(obj);
 
   printf("attdef of attdef : %s\n", attdef->default_value);
-  printf("insertion point of attdef : x = %f, y = %f\n", 
+  printf("insertion point of attdef : x = %f, y = %f\n",
           attdef->insertion_pt.x, attdef->insertion_pt.y);
   printf("extrusion of attdef : x = %f, y = %f, z = %f\n",
           attdef->extrusion.x, attdef->extrusion.y, attdef->extrusion.z);

@@ -10,7 +10,7 @@ low_level_process(dwg_object *obj)
 
   printf("scale of mline : %f\n",mline->scale);
   printf("just of mline : " FORMAT_RC "\n", mline->justification);
-  printf("extrusion of mline : x = %f, y = %f, z = %f\n", 
+  printf("extrusion of mline : x = %f, y = %f, z = %f\n",
           mline->extrusion.x, mline->extrusion.y, mline->extrusion.z);
   printf("base_point of mline : x = %f,y = %f,z = %f\n",
           mline->base_point.x, mline->base_point.y, mline->base_point.z);
@@ -19,9 +19,9 @@ low_level_process(dwg_object *obj)
 
   for (i=0; i < mline->num_verts; i++)
     {
-      printf("vertex of mline : x = %f, y = %f, z = %f\n", 
+      printf("vertex of mline : x = %f, y = %f, z = %f\n",
               mline->verts[i].vertex.x, mline->verts[i].vertex.y,
-              mline->verts[i].vertex.z); 
+              mline->verts[i].vertex.z);
     }
 
 }
@@ -34,7 +34,7 @@ api_process(dwg_object *obj)
   BITCODE_RC just;
   BITCODE_RC num_lines;
   BITCODE_BS i, num_verts;
-  dwg_point_3d base_point, ext;  //3d_points 
+  dwg_point_3d base_point, ext;  //3d_points
   dwg_mline_vertex * verts;
 
   dwg_ent_mline *mline = dwg_object_to_MLINE(obj);
@@ -84,8 +84,8 @@ api_process(dwg_object *obj)
     {
       for (i=0; i < num_verts; i++)
         {
-          printf("vertex of mline : x = %f, y = %f, z = %f\n", 
-                 verts[i].vertex.x, verts[i].vertex.y, verts[i].vertex.z); 
+          printf("vertex of mline : x = %f, y = %f, z = %f\n",
+                 verts[i].vertex.x, verts[i].vertex.y, verts[i].vertex.z);
         }
     }
   else

@@ -60,5 +60,5 @@ api_process (dwg_object * obj)
     pass ("Working Properly");
   else
     fail ("error in reading parenthandle");
-  
+
 }

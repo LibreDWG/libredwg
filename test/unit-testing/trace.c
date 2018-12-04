@@ -35,7 +35,7 @@ api_process(dwg_object *obj)
       printf("elevation of trace : %f\n", elevation);
   else
       printf("error in reading elevation\n");
- 
+
   thickness = dwg_ent_trace_get_thickness(trace, &error);
   if ( !error )
     {

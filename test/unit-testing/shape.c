@@ -7,7 +7,7 @@ low_level_process(dwg_object *obj)
   dwg_ent_shape *shape = dwg_object_to_SHAPE(obj);
 
   printf("Thickness of shape : %f\n", shape->thickness);
-  printf("extrusion of shape : x = %f, y = %f, z = %f\n", 
+  printf("extrusion of shape : x = %f, y = %f, z = %f\n",
           shape->extrusion.x, shape->extrusion.y, shape->extrusion.z);
   printf("ins_pt of shape : x = %f,y = %f,z = %f\n",
           shape->ins_pt.x, shape->ins_pt.y, shape->ins_pt.z);
@@ -57,6 +57,6 @@ api_process(dwg_object *obj)
     {
       printf("error in reading ins_pt \n");
     }
-  
- 
+
+
 }

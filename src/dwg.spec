@@ -1598,13 +1598,13 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
         }
       // version 2, the binary, unencrypted SAT format for ACIS 7.0/ShapeManager.
       /* ACIS versions:
-         R14 release	        106   (ACIS 1.6)
-         R15 (2000) release	400   (ACIS 4.0)
-         R18 (2004) release	20800 (ASM ShapeManager, forked from ACIS 7.0)
-         R21 (2007) release	21200
-         R24 (2010) release	21500
-         R27 (2013) release	21800
-         R?? (2018) release	223.0.1.1930
+         R14 release            106   (ACIS 1.6)
+         R15 (2000) release     400   (ACIS 4.0)
+         R18 (2004) release     20800 (ASM ShapeManager, forked from ACIS 7.0)
+         R21 (2007) release     21200
+         R24 (2010) release     21500
+         R27 (2013) release     21800
+         R?? (2018) release     223.0.1.1930
        */
       else //if (FIELD_VALUE(version)==2)
         {
@@ -2644,7 +2644,7 @@ DWG_OBJECT(VIEW)
         {
           FIELD_HANDLE (base_ucs_handle, 5, 346);
           FIELD_HANDLE (named_ucs_handle, 5, 345);
-	}
+        }
     }
   SINCE(R_2007) {
     FIELD_HANDLE (live_section_handle, 4, 334);
@@ -3217,7 +3217,7 @@ DWG_OBJECT(DIMSTYLE)
 
   SINCE(R_2000)
     {
-      FIELD_HANDLE (DIMLDRBLK, 5, 341); /* Leader arrow	(DIMLDRBLK)*/
+      FIELD_HANDLE (DIMLDRBLK, 5, 341); /* Leader arrow (DIMLDRBLK)*/
       FIELD_HANDLE (DIMBLK, 5, 342);  /* Arrow */
       FIELD_HANDLE (DIMBLK1, 5, 343); /* Arrow 1 */
       FIELD_HANDLE (DIMBLK2, 5, 344); /* Arrow 2 */
@@ -6236,20 +6236,20 @@ DWG_OBJECT(PLOTSETTINGS)
   FIELD_BD (num_custom_print_scale, 142); // in paper units
   FIELD_BD (den_custom_print_scale, 143); // in drawing units
   FIELD_BS (plot_layout, 70); /*!< plot layout flag:
-				1 = PlotViewportBorders
-				2 = ShowPlotStyles
-				4 = PlotCentered
-				8 = PlotHidden
-				16 = UseStandardScale
-				32 = PlotPlotStyles
-				64 = ScaleLineweights
-				128 = PrintLineweights
-				512 = DrawViewportsFirst
-				1024 = ModelType
-				2048 = UpdatePaper
-				4096 = ZoomToPaperOnUpdate
-				8192 = Initializing
-				16384 = PrevPlotInit */
+                                1 = PlotViewportBorders
+                                2 = ShowPlotStyles
+                                4 = PlotCentered
+                                8 = PlotHidden
+                                16 = UseStandardScale
+                                32 = PlotPlotStyles
+                                64 = ScaleLineweights
+                                128 = PrintLineweights
+                                512 = DrawViewportsFirst
+                                1024 = ModelType
+                                2048 = UpdatePaper
+                                4096 = ZoomToPaperOnUpdate
+                                8192 = Initializing
+                                16384 = PrevPlotInit */
   FIELD_BS (plot_paper_units, 72); /*!< 0 inches, 1 mm, 2 pixel */
   FIELD_BS (plot_rotation, 73);    /*!< 0 normal, 1 90, 2 180, 3 270 deg */
   FIELD_BS (plot_type, 74);    /*!< 0 display, 1 extents, 2 limits, 3 view (see DXF 6),

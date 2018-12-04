@@ -278,7 +278,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
     GROUP(dxf);\
     fwrite(&s, sizeof(BITCODE_RLL), 1, dat->fh);\
   }
-  
+
 #define FIELD_MC(name,dxf) FIELD_RC(name,dxf)
 #define FIELD_MS(name,dxf)  FIELD_RS(name,dxf)
 #define FIELD_BT(name,dxf)    FIELD_BD(name, dxf);

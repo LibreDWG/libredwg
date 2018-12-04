@@ -4,7 +4,7 @@
 void
 low_level_process(dwg_object *obj)
 {
-  dwg_ent_polyline_3d *polyline_3d = dwg_object_to_POLYLINE_3D(obj); 
+  dwg_ent_polyline_3d *polyline_3d = dwg_object_to_POLYLINE_3D(obj);
 
   printf("flag1 of polyline_3d : " FORMAT_RC "\n", polyline_3d->flag);
   printf("flag2 of polyline_3d : " FORMAT_RC "\n", polyline_3d->flag2);

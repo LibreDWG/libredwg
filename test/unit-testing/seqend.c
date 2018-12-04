@@ -21,7 +21,7 @@ api_process(dwg_object *obj)
   dwg_ent_generic *seqend = (dwg_ent_generic *)dwg_object_to_SEQEND(obj);
   dwg_obj_ent *parent = dwg_ent_generic_parent(seqend, &error1);
   dwg_object *obj2 = dwg_ent_generic_to_object(seqend, &error2);
-  
+
   if (error1 || parent != obj->tio.entity)
     printf("ERROR: dwg_ent_generic_parent %p == %p", parent, obj->tio.entity);
 

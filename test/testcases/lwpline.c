@@ -9,7 +9,7 @@ low_level_process (dwg_object * obj)
   dwg_ent_lwpline *lwpline = dwg_object_to_LWPOLYLINE (obj);
 
   printf ("extrusion of lwpline : x = %f, y = %f, z = %f\n",
-	  lwpline->extrusion.x, lwpline->extrusion.y, lwpline->extrusion.z);
+          lwpline->extrusion.x, lwpline->extrusion.y, lwpline->extrusion.z);
   printf ("const width of lwpline : %f\n", lwpline->const_width);
   printf ("elevation of lwpline : %f\n", lwpline->elevation);
   printf ("thickness of lwpline : %f\n", lwpline->thickness);
@@ -123,7 +123,7 @@ api_process (dwg_object * obj)
 
 
   flags = dwg_ent_lwpline_get_flag (lwpline, &error);
-  if (error == 0 && flags == lwpline->flag)	// error check
+  if (error == 0 && flags == lwpline->flag)     // error check
     {
       pass ("lwpline_get_flags");
     }
@@ -139,20 +139,20 @@ api_process (dwg_object * obj)
     {
       BITCODE_BL i, matches = 1;
       for (i = 0; i < lwpline->num_bulges; i++)
-	{
-	  if (lwpline->bulges[i] != bulges[i])
-	    {
-	      matches = 0;
-	    }
-	}
+        {
+          if (lwpline->bulges[i] != bulges[i])
+            {
+              matches = 0;
+            }
+        }
       if (matches)
-	{
-	  pass ("lwpline_get_bulges");
-	}
+        {
+          pass ("lwpline_get_bulges");
+        }
       else
-	{
-	  fail ("lwpline_get_bulges match");
-	}
+        {
+          fail ("lwpline_get_bulges match");
+        }
     }
   else
     {
@@ -161,25 +161,25 @@ api_process (dwg_object * obj)
 
 
   points = dwg_ent_lwpline_get_points (lwpline, &error);
-  if (error == 0)	// error check
+  if (error == 0)       // error check
     {
       BITCODE_BL i, matches = 1;
       for (i = 0; i < lwpline->num_points; i++)
-	{
-	  if (lwpline->points[i].x != points[i].x
-	      || lwpline->points[i].y != points[i].y)
-	    {
-	      matches = 0;
-	    }
-	}
+        {
+          if (lwpline->points[i].x != points[i].x
+              || lwpline->points[i].y != points[i].y)
+            {
+              matches = 0;
+            }
+        }
       if (matches)
-	{
-	  pass ("lwpline_get_points");
-	}
+        {
+          pass ("lwpline_get_points");
+        }
       else
-	{
-	  fail ("lwpline_get_points match");
-	}
+        {
+          fail ("lwpline_get_points match");
+        }
     }
   else
     {
@@ -192,21 +192,21 @@ api_process (dwg_object * obj)
     {
       BITCODE_BL i, matches = 1;
       for (i = 0; i < lwpline->num_widths; i++)
-	{
-	  if (lwpline->widths[i].start != width[i].start
-	      && lwpline->widths[i].end != width[i].end)
-	    {
-	      matches = 0;
-	    }
-	}
+        {
+          if (lwpline->widths[i].start != width[i].start
+              && lwpline->widths[i].end != width[i].end)
+            {
+              matches = 0;
+            }
+        }
       if (matches)
-	{
-	  pass ("lwpline_get_widths");
-	}
+        {
+          pass ("lwpline_get_widths");
+        }
       else
-	{
-	  fail ("lwpline_get_widths matches");
-	}
+        {
+          fail ("lwpline_get_widths matches");
+        }
     }
   else
     {

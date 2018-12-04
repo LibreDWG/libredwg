@@ -30,7 +30,7 @@ api_process(dwg_object *obj)
                                  &error);
   if ( !error )
       printf("point of vertex_pface : x = %f, y = %f, z = %f\n",
-	     point.x, point.y, point.z);
+             point.x, point.y, point.z);
   else
       printf("error in reading point \n");
 }

@@ -3,7 +3,7 @@
 #include <dejagnu.h>
 
 /* This function checks API functions for integrity
-   @params dwg_object* obj 
+   @params dwg_object* obj
  */
 void
 api_process (dwg_object * obj)
@@ -12,7 +12,7 @@ api_process (dwg_object * obj)
   BITCODE_BS version;
   BITCODE_BL *block_size, num_isolines, num_wires, num_sil;
   unsigned char *acis_data;
-  BITCODE_B wireframe_data_present, point_present, isoline_present; 
+  BITCODE_B wireframe_data_present, point_present, isoline_present;
   BITCODE_B acis_empty, acis2_empty;
   dwg_point_3d point;
   dwg_3dsolid_wire *wire;
@@ -56,7 +56,7 @@ api_process (dwg_object * obj)
   else
     fail ("3dsolid_get_point_present %d " FORMAT_B " <=> " FORMAT_B,
           error, point_present, _3dsolid->point_present);
-  
+
   dwg_ent_3dsolid_get_point (_3dsolid, &point, &error);
   if (error == 0 &&
       point.x == _3dsolid->point.x &&
@@ -96,12 +96,12 @@ api_process (dwg_object * obj)
     {
       BITCODE_BL i, matches = 1;
       for (i = 0; i < num_wires; i++)
-	{
-	  if (_3dsolid->wires[i].selection_marker != wire[i].selection_marker)
-	    {
-	      matches = 0; break;
-	    }
-	}
+        {
+          if (_3dsolid->wires[i].selection_marker != wire[i].selection_marker)
+            {
+              matches = 0; break;
+            }
+        }
 
       if (matches)
         pass ("3dsolid_get_wires matches [%ld]", i);
@@ -110,7 +110,7 @@ api_process (dwg_object * obj)
     }
   else
     fail ("3dsolid_get_wire matches error %d", error);
-  
+
 
   num_sil = dwg_ent_3dsolid_get_num_silhouettes (_3dsolid, &error);
   if (error == 0 && _3dsolid->num_silhouettes == num_sil)
@@ -124,12 +124,12 @@ api_process (dwg_object * obj)
     {
       BITCODE_BL i, matches = 1;
       for (i = 0; i < num_sil; i++)
-	{
-	  if (_3dsolid->silhouettes[i].vp_id != sil[i].vp_id)
-	    {
-	      matches = 0; break;
-	    }
-	}
+        {
+          if (_3dsolid->silhouettes[i].vp_id != sil[i].vp_id)
+            {
+              matches = 0; break;
+            }
+        }
       if (matches)
         pass ("3dsolid_get_silhouettes matches");
       else
@@ -137,5 +137,5 @@ api_process (dwg_object * obj)
     }
   else
     fail ("error in reading silhouettes");
-  
+
 }

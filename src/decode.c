@@ -1645,12 +1645,12 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       Dwg_Section_Info* info = &dwg->header.section_info[i];
       info->size            = *((int32_t*)ptr);
-      info->pagecount 	    = *((int32_t*)ptr + 1);
+      info->pagecount       = *((int32_t*)ptr + 1);
       info->num_sections    = *((int32_t*)ptr + 2);
       if (info->size == section_number+1 &&
           info->num_sections > 100000)
         {
-	  LOG_WARN("Oops, Section[%d] => Section_Info %d", i, info->size);
+          LOG_WARN("Oops, Section[%d] => Section_Info %d", i, info->size);
           data_size = info->pagecount;
           section_number++;
           info = &dwg->header.section_info[i-1];
@@ -1678,8 +1678,8 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_TRACE("SectionName:     %s\n\n", info->name)
 
       if (info->num_sections > 0 && info->num_sections < 100000)
-	{
-	  LOG_INFO("Section count %u in area %d\n", info->num_sections, i);
+        {
+          LOG_INFO("Section count %u in area %d\n", info->num_sections, i);
           info->sections = calloc(info->num_sections, sizeof(Dwg_Section*));
           if (!info->sections)
             {
@@ -1687,17 +1687,17 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               return error | DWG_ERR_OUTOFMEM;
             }
 
-	  for (j = 0; j < info->num_sections; j++)
-	    {
-	      section_number = *((uint32_t*)ptr);       // Index into SectionMap
-	      data_size      = *((uint32_t*)ptr + 1);
-	      //start_offset   = *((uint64_t*)ptr + 1); // avoid alignment ubsan
-	      start_offset   = *((uint32_t*)ptr + 2);
+          for (j = 0; j < info->num_sections; j++)
+            {
+              section_number = *((uint32_t*)ptr);       // Index into SectionMap
+              data_size      = *((uint32_t*)ptr + 1);
+              //start_offset   = *((uint64_t*)ptr + 1); // avoid alignment ubsan
+              start_offset   = *((uint32_t*)ptr + 2);
               start_offset <<= 32;
               start_offset  += *((uint32_t*)ptr + 3);
-	      ptr += 16;
+              ptr += 16;
 
-	      info->sections[j] = find_section(dwg, section_number);
+              info->sections[j] = find_section(dwg, section_number);
 
               if (section_number > info->num_sections + info->sections[0]->number)
                 {
@@ -1709,14 +1709,14 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   LOG_TRACE("Section Number: %lu\n", (unsigned long)section_number)
                 }
               LOG_TRACE("Data size:      %d\n", data_size) //compressed
-	      LOG_TRACE("Start offset:   0x%" PRIx64 "\n", start_offset)
-	    }
-	}// sanity check
+              LOG_TRACE("Start offset:   0x%" PRIx64 "\n", start_offset)
+            }
+        }// sanity check
       else if (info->size == section_number+1)
         {
           Dwg_Section* sec;
           // oops, this is really another info
-	  LOG_WARN("Oops2, Section[%d] => Section_Info %d", i, info->size);
+          LOG_WARN("Oops2, Section[%d] => Section_Info %d", i, info->size);
           section_number = info->size;      // Index into SectionMap
           data_size      = info->pagecount;
         next_section:
@@ -1738,13 +1738,13 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           return error | DWG_ERR_VALUEOUTOFBOUNDS;
         }
       else if (info->num_sections >= 100000)
-	{
-	  LOG_ERROR("Section count %u in area %d too high! Skipping",
+        {
+          LOG_ERROR("Section count %u in area %d too high! Skipping",
                     info->num_sections, i);
           info->num_sections = 0;
           free (decomp);
           return error | DWG_ERR_VALUEOUTOFBOUNDS;
-	}
+        }
     }
   free (decomp);
   return error;
@@ -1991,7 +1991,7 @@ read_2004_section_classes(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // then RS: CRC
   // dwg_sentinel(DWG_SENTINEL_CLASS_END)
   // SINCE(R_2004) 8 unknown bytes
-  
+
   free(sec_dat.chain);
   return 0;
 }
@@ -2071,7 +2071,7 @@ read_2004_section_handles(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
       section_size = bit_read_RS_LE(&hdl_dat);
       LOG_TRACE("\nSection size: %u\n", section_size);
-	  /* *********************************************************************************************
+          /* *********************************************************************************************
       ** https://www.opendesign.com/files/guestdownloads/OpenDesign_Specification_for_.dwg_files.pdf
       ** page 251 "Note that each section is cut off at a maximum length of 2032."
       ** BUT in fact exist files with 2035 section size */
@@ -2939,7 +2939,7 @@ dwg_decode_handleref_with_code(Bit_Chain *restrict dat,
     }
   else if (!ref->handleref.value)
     {
-	  if (obj)
+          if (obj)
         {
           free(ref);
           return NULL;
@@ -3775,7 +3775,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
 
           /* restart and read into the UNKNOWN_OBJ object */
           /* the relative offset from type after common_entity_data */
-          //obj->common_size = bit_position(dat) - object_address; 
+          //obj->common_size = bit_position(dat) - object_address;
           //LOG_HANDLE("common_size: %lu\n", obj->common_size); // needed for unknown
           bit_set_position(dat, object_address);
           //obj->unknown_off = obj->unknown_pos - object_address;
@@ -3857,7 +3857,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
   }
 #if 1
   bit_check_CRC(dat, address, 0xC0C1);
-#else  
+#else
   {
     BITCODE_RS seed, calc;
     BITCODE_RS crc = bit_read_RS(dat);
