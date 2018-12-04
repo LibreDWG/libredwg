@@ -1677,7 +1677,7 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_TRACE("Encrypted:       %d (0=no, 1=yes, 2=unknown)\n", info->encrypted)
       LOG_TRACE("SectionName:     %s\n\n", info->name)
 
-      if (info->num_sections < 100000)
+      if (info->num_sections > 0 && info->num_sections < 100000)
 	{
 	  LOG_INFO("Section count %u in area %d\n", info->num_sections, i);
           info->sections = calloc(info->num_sections, sizeof(Dwg_Section*));
@@ -1737,7 +1737,7 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           free (decomp);
           return error | DWG_ERR_VALUEOUTOFBOUNDS;
         }
-      else
+      else if (info->num_sections >= 100000)
 	{
 	  LOG_ERROR("Section count %u in area %d too high! Skipping",
                     info->num_sections, i);
