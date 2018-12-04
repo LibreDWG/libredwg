@@ -26,7 +26,7 @@
 
 static int decode(Bit_Chain *dat, int off, const int size)
 {
-  int pos;
+  int pos = 0;
   int bs = 0;
   printf ("decode offset:%d, size:%d\n", off, size);
   if (off >= size) return 0;
