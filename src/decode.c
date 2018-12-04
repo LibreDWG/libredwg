@@ -1625,7 +1625,7 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
   dwg->header.num_infos = *(uint32_t*)decomp;
   dwg->header.section_info = (Dwg_Section_Info*)
-                              calloc(dwg->header.num_infos, sizeof(Dwg_Section_Info));
+    calloc(dwg->header.num_infos, sizeof(Dwg_Section_Info));
   if (!dwg->header.section_info)
     {
       LOG_ERROR("Out of memory");
