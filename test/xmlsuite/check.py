@@ -1,10 +1,5 @@
-# beware: python2 syntax
 import os
-import glob
-import string
 import sys
-import libxml2
-import re
 
 # Divide the scripts into two files
 srcdir = os.path.dirname(__file__)
