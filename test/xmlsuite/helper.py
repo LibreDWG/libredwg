@@ -27,8 +27,8 @@ comparison later.
 def generatexml(dwgdir):
 	# This beats ‘sys.argv[0]’, which is not guaranteed to be set.
 	me = os.getenv ("PYTHON")
-        if not me:
-            me = "python"
+	if not me:
+		me = "python"
 	srcdir = os.path.dirname(__file__)
 	current_dir = os.getcwd()
 	os.chdir(dwgdir)
