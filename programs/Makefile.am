@@ -17,15 +17,15 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-WARN_CFLAGS  = @WARN_CFLAGS@
-AM_CFLAGS  = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
-LDADD      = $(top_builddir)/src/libredwg.la -lm
+WARN_CFLAGS = @WARN_CFLAGS@
+AM_CFLAGS   = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
+LDADD       = $(top_builddir)/src/libredwg.la -lm
 
-bin_PROGRAMS = dwgread
-if !DISABLE_DXF
-bin_PROGRAMS += dwgbmp dwg2dxf dwg2SVG dwglayers dwggrep
-endif
+bin_PROGRAMS    = dwgread
 noinst_PROGRAMS =
+if !DISABLE_DXF
+bin_PROGRAMS   += dwgbmp dwg2dxf dwg2SVG dwglayers dwggrep
+endif
 dist_man1_MANS = $(srcdir)/dwgread.1 $(srcdir)/dwgbmp.1 $(srcdir)/dwg2dxf.1 \
 	         $(srcdir)/dwg2SVG.1 $(srcdir)/dwglayers.1 $(srcdir)/dwg2ps.1 \
 		 $(srcdir)/dwggrep.1
@@ -33,24 +33,24 @@ DISTCLEANFILES = core
 
 if !DISABLE_DXF
 if HAVE_LIBPS
-bin_PROGRAMS += dwg2ps
+bin_PROGRAMS  += dwg2ps
 dwg2ps_SOURCES = dwg2ps.c
-dwg2ps_LDADD = $(LDADD) -lps
+dwg2ps_LDADD   = $(LDADD) -lps
 endif
 endif
 
-dwgread_SOURCES  = dwgread.c
-dwgbmp_SOURCES   = dwgbmp.c
-dwg2dxf_SOURCES  = dwg2dxf.c
+dwgread_SOURCES   = dwgread.c
+dwgbmp_SOURCES    = dwgbmp.c
+dwg2dxf_SOURCES   = dwg2dxf.c
 dwglayers_SOURCES = dwglayers.c
-dwg2SVG_SOURCES  = dwg2SVG.c
-dwggrep_SOURCES = dwggrep.c
-dwggrep_CFLAGS  = $(CFLAGS) $(AM_CFLAGS) $(PCRE2_CFLAGS)
-dwggrep_LDADD   = $(LDADD) $(PCRE2_LIBS)
+dwg2SVG_SOURCES   = dwg2SVG.c
+dwggrep_SOURCES   = dwggrep.c
+dwggrep_CFLAGS    = $(CFLAGS) $(AM_CFLAGS) $(PCRE2_CFLAGS)
+dwggrep_LDADD     = $(LDADD) $(PCRE2_LIBS)
 
 if !DISABLE_DXF
 if USE_WRITE
-bin_PROGRAMS += dwgrewrite
+bin_PROGRAMS    += dwgrewrite
 # not yet ready
 noinst_PROGRAMS += dxf2dwg dwgwrite
 dist_man1_MANS  += $(srcdir)/dwgrewrite.1 $(srcdir)/dwgwrite.1 $(srcdir)/dxf2dwg.1
@@ -81,8 +81,8 @@ endif
 
 TESTS = alive.test
 
-EXTRA_DIST = suffix.inc common.inc $(TESTS) cmp_dxf.pl
-CLEANFILES = {example_,sample_}*.{bmp,ps,svg,dxf,log}
+EXTRA_DIST  = suffix.inc common.inc $(TESTS) cmp_dxf.pl
+CLEANFILES  = {example_,sample_}*.{bmp,ps,svg,dxf,log}
 CLEANFILES += {example_,sample_}*rewrite.{dwg,log}
 MAINTAINERCLEANFILES = *_flymake.[ch] *~ *.i
 
