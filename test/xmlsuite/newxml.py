@@ -2,7 +2,7 @@ import re
 import sys
 import os
 def processData(line):
-	First_line = re.compile(r"\w{3}\s\w{3}\s\d+\s\d{1,2}:\d{1,2}:\d{1,2}\s\d{4}")
+	re.compile(r"\w{3}\s\w{3}\s\d+\s\d{1,2}:\d{1,2}:\d{1,2}\s\d{4}")
 
 
 DwgTxtFileName = sys.argv[1]
