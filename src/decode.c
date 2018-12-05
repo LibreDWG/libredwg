@@ -17,6 +17,7 @@
  * modified by Rodrigo Rodrigues da Silva
  * modified by Till Heuschmann
  * modified by Reini Urban
+ * modified by Denis Pruchkovksy
  */
 
 #include "config.h"

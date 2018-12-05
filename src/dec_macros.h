@@ -1,6 +1,22 @@
-/*--------------------------------------------------------------------------------
- * Welcome to the dark side of the moon...
- * MACROS
+/*****************************************************************************/
+/*  LibreDWG - free implementation of the DWG file format                    */
+/*                                                                           */
+/*  Copyright (C) 2009, 2010, 2018 Free Software Foundation, Inc.            */
+/*                                                                           */
+/*  This library is free software, licensed under the terms of the GNU       */
+/*  General Public License as published by the Free Software Foundation,     */
+/*  either version 3 of the License, or (at your option) any later version.  */
+/*  You should have received a copy of the GNU General Public License        */
+/*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
+/*****************************************************************************/
+
+/*
+ * dec_macros.h: decoding macros (for encode, print, free in the C files)
+ * written by Felipe Castro
+ * modified by Felipe Corrêa da Silva Sances
+ * modified by Rodrigo Rodrigues da Silva
+ * modified by Reini Urban
+ * modified by Denis Pruchkovksy
  */
 
 #ifdef HAVE_CTYPE_H
