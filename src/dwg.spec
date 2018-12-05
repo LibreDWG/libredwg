@@ -1441,7 +1441,8 @@ DWG_ENTITY(SPLINE)
   FIELD_BL (scenario, 0);
   UNTIL(R_2013) {
     if (FIELD_VALUE(scenario) != 1 && FIELD_VALUE(scenario) != 2)
-      fprintf(stderr, "Error: unknown scenario %d", FIELD_VALUE (scenario));
+      LOG_ERROR("Error: unknown scenario %d", (int)FIELD_VALUE(scenario));
+      return DWG_ERR_INVALIDTYPE;
   }
   SINCE(R_2013) {
     FIELD_BL (splineflags1, 0);
@@ -1489,21 +1490,14 @@ DWG_ENTITY(SPLINE)
 
   if (FIELD_VALUE(scenario) & 1) {
     FIELD_VECTOR(knots, BD, num_knots, 40)
-    REPEAT(num_ctrl_pts, ctrl_pts, Dwg_SPLINE_control_point)
-      {
-        FIELD_3BD (ctrl_pts[rcount1], 10);
-        if (!FIELD_VALUE(weighted))
-          FIELD_VALUE(ctrl_pts[rcount1].w) = 0; // skipped when encoding
-        else
-          FIELD_BD (ctrl_pts[rcount1].w, 41);
-      }
-    END_REPEAT(ctrl_pts);
+	SPLINE_CONTROL_POINT_VECTOR(ctrl_pts, num_ctrl_pts, weighted)
   }
   if (FIELD_VALUE(scenario) & 2) {
     REPEAT(num_fit_pts, fit_pts, Dwg_SPLINE_point)
       {
         FIELD_3BD (fit_pts[rcount1], 11);
       }
+	SET_PARENT_OBJ(fit_pts);
     END_REPEAT(fit_pts);
   }
 
@@ -2122,22 +2116,9 @@ DWG_ENTITY(MLINE)
       REPEAT2_C(num_lines, verts[rcount1].lines, Dwg_MLINE_line)
         {
           FIELD_BS (verts[rcount1].lines[rcount2].num_segparms, 74);
-          REPEAT3(verts[rcount1].lines[rcount2].num_segparms,
-                  verts[rcount1].lines[rcount2].segparms,
-                  BITCODE_BD)
-            {
-              FIELD_BD (verts[rcount1].lines[rcount2].segparms[rcount3], 41);
-            }
-          END_REPEAT(verts[rcount1].lines[rcount2].segparms);
-
+          FIELD_VECTOR(verts[rcount1].lines[rcount2].segparms, BD, verts[rcount1].lines[rcount2].num_segparms, 41);
           FIELD_BS (verts[rcount1].lines[rcount2].num_areafillparms, 75);
-          REPEAT3(verts[rcount1].lines[rcount2].num_areafillparms,
-                  verts[rcount1].lines[rcount2].areafillparms,
-                  BITCODE_BD)
-            {
-              FIELD_BD (verts[rcount1].lines[rcount2].areafillparms[rcount3], 42);
-            }
-          END_REPEAT(verts[rcount1].lines[rcount2].areafillparms);
+          FIELD_VECTOR(verts[rcount1].lines[rcount2].areafillparms, BD, verts[rcount1].lines[rcount2].num_areafillparms, 42);
         }
       SET_PARENT(verts[rcount1].lines, &_obj->verts[rcount1])
       END_REPEAT(verts[rcount1].lines);
@@ -2482,38 +2463,45 @@ DWG_OBJECT(LTYPE)
     FIELD_RC (alignment, 72);
   }
   FIELD_RC (num_dashes, 73);
-  REPEAT_C(num_dashes, dash, Dwg_LTYPE_dash)
+  PRE(R_13)
     {
-      PRE(R_13)
-      {
-        FIELD_RD (dash[rcount1].length, 49);
+      _VECTOR_CHKCOUNT(FIELD_VALUE(dash), FIELD_VALUE(num_dashes), 352);
+      REPEAT_C(num_dashes, dash, Dwg_LTYPE_dash)
+        {
+          FIELD_RD (dash[rcount1].length, 49);
 #ifndef IS_PRINT
-        FIELD_VALUE(pattern_len) += FIELD_VALUE(dash[rcount1].length);
+          FIELD_VALUE(pattern_len) += FIELD_VALUE(dash[rcount1].length);
 #endif
-        FIELD_RS (dash[rcount1].complex_shapecode, 74);
-        FIELD_RD (dash[rcount1].x_offset, 44);
-        FIELD_RD (dash[rcount1].y_offset, 45);
-        FIELD_RD (dash[rcount1].scale, 46);
-        FIELD_RD (dash[rcount1].rotation, 50);
-        FIELD_RS (dash[rcount1].shape_flag, 75);
-        if (FIELD_VALUE(dash[rcount1].shape_flag) & 0x2)
-          FIELD_VALUE(text_area_is_present) = 1;
-      }
-      LATER_VERSIONS
-      {
-        FIELD_BD (dash[rcount1].length, 49);
-        FIELD_BS (dash[rcount1].complex_shapecode, 74);
-        FIELD_RD (dash[rcount1].x_offset, 44);
-        FIELD_RD (dash[rcount1].y_offset, 45);
-        FIELD_BD (dash[rcount1].scale, 46);
-        FIELD_BD (dash[rcount1].rotation, 50);
-        FIELD_BS (dash[rcount1].shape_flag, 75);
-        if (FIELD_VALUE(dash[rcount1].shape_flag) & 0x2)
-          FIELD_VALUE(text_area_is_present) = 1;
-      }
+          FIELD_RS (dash[rcount1].complex_shapecode, 74);
+          FIELD_RD (dash[rcount1].x_offset, 44);
+          FIELD_RD (dash[rcount1].y_offset, 45);
+          FIELD_RD (dash[rcount1].scale, 46);
+          FIELD_RD (dash[rcount1].rotation, 50);
+          FIELD_RS (dash[rcount1].shape_flag, 75);
+          if (FIELD_VALUE(dash[rcount1].shape_flag) & 0x2)
+            FIELD_VALUE(text_area_is_present) = 1;
+        }
+      SET_PARENT_OBJ(dash)
+      END_REPEAT(dash);
     }
-  SET_PARENT_OBJ(dash)
-  END_REPEAT(dash);
+  LATER_VERSIONS
+    {
+      _VECTOR_CHKCOUNT(FIELD_VALUE(dash), FIELD_VALUE(num_dashes), 138);
+      REPEAT_C(num_dashes, dash, Dwg_LTYPE_dash)
+        {
+          FIELD_BD (dash[rcount1].length, 49);
+          FIELD_BS (dash[rcount1].complex_shapecode, 74);
+          FIELD_RD (dash[rcount1].x_offset, 44);
+          FIELD_RD (dash[rcount1].y_offset, 45);
+          FIELD_BD (dash[rcount1].scale, 46);
+          FIELD_BD (dash[rcount1].rotation, 50);
+          FIELD_BS (dash[rcount1].shape_flag, 75);
+          if (FIELD_VALUE(dash[rcount1].shape_flag) & 0x2)
+            FIELD_VALUE(text_area_is_present) = 1;
+        }
+      SET_PARENT_OBJ(dash)
+      END_REPEAT(dash);
+    }
 
   UNTIL(R_2004) {
     FIELD_TF (strings_area, 256, 3);
@@ -3554,11 +3542,7 @@ DWG_ENTITY(HATCH)
           FIELD_2BD_1 (deflines[rcount1].pt0, 43);
           FIELD_2BD_1 (deflines[rcount1].offset, 45);
           FIELD_BS (deflines[rcount1].num_dashes, 79);
-          REPEAT2 (deflines[rcount1].num_dashes, deflines[rcount1].dashes, BITCODE_BD)
-            {
-              FIELD_BD (deflines[rcount1].dashes[rcount2], 49);
-            }
-          END_REPEAT(deflines[rcount1].dashes);
+          FIELD_VECTOR(deflines[rcount1].dashes, BD, deflines[rcount1].num_dashes, 49);
         }
       SET_PARENT_OBJ(deflines)
       END_REPEAT(deflines);
@@ -5910,7 +5894,8 @@ DWG_ENTITY(HELIX)
   FIELD_BL (scenario, 0);
   UNTIL(R_2013) {
     if (FIELD_VALUE(scenario) != 1 && FIELD_VALUE(scenario) != 2)
-      fprintf(stderr, "Error: unknown scenario %d", FIELD_VALUE (scenario));
+      LOG_ERROR("Error: unknown scenario %d", (int)FIELD_VALUE(scenario));
+      return DWG_ERR_INVALIDTYPE;
   }
   SINCE(R_2013) {
     FIELD_BL (splineflags1, 0);
@@ -5958,21 +5943,14 @@ DWG_ENTITY(HELIX)
 
   if (FIELD_VALUE(scenario) & 1) {
     FIELD_VECTOR(knots, BD, num_knots, 40)
-    REPEAT(num_ctrl_pts, ctrl_pts, Dwg_SPLINE_control_point)
-      {
-        FIELD_3BD (ctrl_pts[rcount1], 10);
-        if (!FIELD_VALUE(weighted))
-          FIELD_VALUE(ctrl_pts[rcount1].w) = 0; // skipped when encoding
-        else
-          FIELD_BD (ctrl_pts[rcount1].w, 41);
-      }
-    END_REPEAT(ctrl_pts);
+    SPLINE_CONTROL_POINT_VECTOR(ctrl_pts, num_ctrl_pts, weighted)
   }
   if (FIELD_VALUE(scenario) & 2) {
     REPEAT(num_fit_pts, fit_pts, Dwg_SPLINE_point)
       {
         FIELD_3BD (fit_pts[rcount1], 11);
       }
+	SET_PARENT_OBJ(fit_pts);
     END_REPEAT(fit_pts);
   }
 

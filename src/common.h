@@ -128,7 +128,32 @@ typedef enum DWG_BITS
   BITS_2DD, /** 2 doubles with default **/
   BITS_3DD, /** 3 doubles with default **/
   BITS_CRC,
-  BITS_CRC64
+  BITS_CRC64,
+  BITS_Dwg_SPLINE_control_point,
+  BITS_Dwg_SPLINE_point,
+  BITS_Dwg_3DSOLID_wire,
+  BITS_Dwg_3DSOLID_silhouette,
+  BITS_Dwg_MLINE_vertex,
+  BITS_Dwg_MLINE_line,
+  BITS_Dwg_LTYPE_dash,
+  BITS_Dwg_MLINESTYLE_line,
+  BITS_Dwg_HATCH_Color,
+  BITS_Dwg_HATCH_Path,
+  BITS_Dwg_HATCH_PathSeg,
+  BITS_Dwg_HATCH_ControlPoint,
+  BITS_Dwg_HATCH_PolylinePath,
+  BITS_Dwg_HATCH_DefLine,
+  BITS_Dwg_LAYER_entry,
+  BITS_Dwg_LWPOLYLINE_width,
+  BITS_Dwg_FIELD_ChildValue,
+  BITS_Dwg_GEODATA_meshpt,
+  BITS_Dwg_GEODATA_meshface,
+  BITS_Dwg_Leader,
+  BITS_Dwg_Leader_Break,
+  BITS_Dwg_Leader_Line,
+  BITS_Dwg_Leader_ArrowHead,
+  BITS_Dwg_Leader_BlockLabel,
+  BITS_Dwg_Bitcode_2RD,
 } Dwg_Bits;
 
 extern const char* dwg_bits_name[];

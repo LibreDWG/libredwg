@@ -256,4 +256,17 @@
 
 #endif
 
+#define SPLINE_CONTROL_POINT_VECTOR(name, size, weighted) \
+  REPEAT(size, name, Dwg_SPLINE_control_point) \
+    { \
+      FIELD_3BD(name[rcount1], 10); \
+      if (!FIELD_VALUE(weighted)) \
+        FIELD_VALUE(name[rcount1].w) = 0; \
+      else \
+        FIELD_BD(name[rcount1].w, 41); \
+    } \
+  END_REPEAT(name);
+
+#define _VECTOR_CHKCOUNT(name,size,maxelemsize) {}
+
 #endif /* SPEC_H */

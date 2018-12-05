@@ -188,6 +188,8 @@ static Bit_Chain *dat = &pdat;
 
 #define END_REPEAT(field) FIELD_TV(field,0)
 
+#define SPLINE_CONTROL_POINT_VECTOR(name, size, weighted) FIELD_TV(name, 0)
+
 #define COMMON_ENTITY_HANDLE_DATA \
   SINCE(R_13) {\
     dwg_free_common_entity_handle_data(obj); \

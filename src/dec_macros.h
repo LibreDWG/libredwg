@@ -401,7 +401,7 @@
 #define AVAIL_BITS() \
   (obj ? (long long)((long long)(obj->address + obj->size)*8 - bit_position(dat) + 20) \
        : 0xff00LL)
-#define TYPE_MAXELEMSIZE(type) (unsigned)dwg_bits_size[BITS_##type]
+#define TYPE_MAXELEMSIZE(type) (long long)dwg_bits_size[BITS_##type]
 #define VECTOR_CHKCOUNT(name,type,size) \
   if ((long long)((size)*TYPE_MAXELEMSIZE(type)) > AVAIL_BITS()) { \
     LOG_ERROR("Invalid " #name " size %lld. Need min. %u bits for " #type ", have %lld for %s.", \
@@ -516,6 +516,19 @@
         }\
     }
 
+#define SPLINE_CONTROL_POINT_VECTOR(name, size, weighted) \
+  if (!FIELD_VALUE(weighted)) \
+    { \
+      VECTOR_CHKCOUNT(name, 3BD, size); \
+      FIELD_VALUE(name) = (Dwg_SPLINE_control_point*) calloc(size, sizeof(Dwg_SPLINE_control_point)); \
+      FIELD_3BD (ctrl_pts[rcount1], 10); \
+      FIELD_VALUE(ctrl_pts[rcount1].w) = 0; /*skipped when encoding*/ \
+    } else { \
+      _VECTOR_CHKCOUNT(name, size, TYPE_MAXELEMSIZE(3BD) + TYPE_MAXELEMSIZE(BD)); \
+      FIELD_3BD (ctrl_pts[rcount1], 10); \
+      FIELD_BD (ctrl_pts[rcount1].w, 41); \
+    }
+
 #define HANDLE_VECTOR(name, sizefield, code, dxf) \
   HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
 
@@ -626,23 +639,21 @@
     LOG_ERROR("Invalid " #name " in %s. No bytes left.\n", obj->dxfname); \
     return DWG_ERR_VALUEOUTOFBOUNDS; \
   } \
-  LOG_INSANE("REPEAT_CHKCOUNT %s." #name " x %ld: %lld > %lld?\n", \
-    obj->dxfname, (long)times, (long long)((times)*sizeof(type)), AVAIL_BITS()); \
-  if (dat->version >= R_2004 && (long long)((times)*sizeof(type)) > AVAIL_BITS()) { \
+  if ((long long)((times)*TYPE_MAXELEMSIZE(type)) > AVAIL_BITS()) { \
     LOG_ERROR("Invalid %s." #name " x %ld\n", obj->dxfname, (long)times); \
     return DWG_ERR_VALUEOUTOFBOUNDS; }
+
 #define REPEAT_CHKCOUNT_LVAL(name,times,type) \
   if (AVAIL_BITS() < 0) { \
     LOG_ERROR("Invalid %s." #name ". No bytes left.\n", obj->dxfname); \
     times = 0; \
     return DWG_ERR_VALUEOUTOFBOUNDS; \
   } \
-  LOG_INSANE("REPEAT_CHKCOUNT_LVAL %s." #name " x %ld: %lld > %lld?\n", \
-    obj->dxfname, (long)times, (long long)((times)*sizeof(type)), AVAIL_BITS()); \
-  if (dat->version >= R_2004 && (long long)((times)*sizeof(type)) > AVAIL_BITS()) { \
+  if ((long long)((times)*TYPE_MAXELEMSIZE(type)) > AVAIL_BITS()) { \
     LOG_ERROR("Invalid %s." #name " x %ld\n", obj->dxfname, (long)times); \
     times = 0; \
-    return DWG_ERR_VALUEOUTOFBOUNDS; }
+    return DWG_ERR_VALUEOUTOFBOUNDS; \
+  }
 
 // unchecked with a constant
 #define REPEAT_CN(times, name, type) \
