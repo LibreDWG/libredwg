@@ -56,6 +56,10 @@ gcov.log
 /test/test-data-20*/
 /unknown-*.log
 /fuzz-*/
+/libredwg-0.*.tar.gz*
+/libredwg-0.*.tar.xz*
+/libredwg-0.*.zip
+/libredwg-0.*.zip.sig
 
 # specific filenames
 /libredwg.pc
@@ -77,10 +81,12 @@ gcov.log
 /INSTALL
 /unknown-*.log
 /unknown.lst
+/regen-unknown.sh
 /x.p
 /aclocal.m4
 /autom4te.cache/
 /bindings/perl/LibreDWG.pm
+/bindings/perl/libredwg.so.0
 /bindings/perl/Makefile.PL
 /bindings/perl/Makefile.old
 /bindings/perl/swig_perl.c
@@ -130,6 +136,7 @@ gcov.log
 /programs/dwgwrite
 /programs/dwglayers
 /programs/dwggrep
+/programs/alive.test
 # temp. mingw gcc DLLs for wine
 /programs/lib*.dll
 /programs/dwg2SVG

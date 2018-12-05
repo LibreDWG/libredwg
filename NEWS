@@ -2,12 +2,17 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2018 Free Software Foundation, Inc.
 See the end for copying conditions.
 
-LibreDWG version 0.7 - released 2018/12/?? - still alpha:
+LibreDWG version 0.7 - released 2018/12/6 - still alpha:
 
 new API:
   * add dwg_get_OBJECT(dwg) API for all objects in a DWG.
     analog to dwg_get_ENTITY, but including all objects, tables,
     block headers, even if unowned.
+  Note that the dwg_api will be revamped from static to dynamic before 1.0.
+  field accessors will be by name argument and ... (va_args)
+  See the work/dynapi branch #59 (in progress).
+  dwg_get_OBJECT(dwg) will be renamed to dwg_getall_OBJECT(dwg),
+  dwg_get_ENTITY(blkhdr) to dwg_getall_ENTITY(blkhdr).
 
 API breaking changes:
   * Changed BITCODE_RC from signed to unsigned char (#44)

@@ -1,6 +1,213 @@
 Full history from the git log
 -----------------------------
 
+2018-12-05  Reini Urban  <rurban@cpan.org>
+
+	Release 0.7
+
+2018-12-05  Reini Urban  <rurban@cpan.org>
+
+	api: convert IMAGE.size.{width,height} to 2RD
+	no inline structs in WIPEOUT and IMAGE.
+	convert inline struct { width; height } to 2RD (x,y).
+	The size is documented as size (u,v),
+	not width/height in the AutoCAD DXF docs.
+
+	This is mostly to simplify the dynapi #59
+
+	xmlsuite: simplify newxml.py
+	remove unused local var
+
+	xmlsuite: simplify check.py
+	remove unused imports
+
+2018-12-04  Reini Urban  <rurban@cpan.org>
+
+	examples/bits: initialize pos
+	pos -Wmaybe-uninitialized in return decode(dat, pos, size)
+
+	detab all sources
+	some editors are obviously confused about tabs
+
+	Protect from calloc(0,) returning non-NULL (#61)
+	when info->num_sections == 0 (on some broken DWG), calloc(0,...)
+	might return a non-NULL ptr on some broken libc's (glibc).
+	This is a better fix than on PR #61, thanks @DenisPryt
+	for finding the problem.
+
+2018-12-03  Reini Urban  <rurban@cpan.org>
+
+	alive.test: use libtool for 2nd dwggrep test
+
+	pre-r13: set LAYER,STYLE flag bits
+	set on,frozen,frozen_in_new,locked bits from LAYER flag,
+	shape_file,vertical from STYLE flag.
+
+	pre-r13: set BLOCK_HEADER flag bits
+	anonymous,hasattrs,blkisxref,xrefoverlaid from flag.
+	to unify the api
+
+	smoke: CFLAGS typo
+
+2018-12-02  Reini Urban  <rurban@cpan.org>
+
+	NEWS: add latest changes for 0.7
+
+	guard get_first_owned_object first_entity
+	ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 (pc 0x7f782e1db8b5 bp 0x7fffb
+	a38ff70 sp 0x7fffba38ff50 T0)
+	The signal is caused by a READ memory access.
+	Hint: address points to the zero page.
+	 #0 0x7f782e1db8b4 in get_first_owned_object /home/rurban/Software/libredwg/src/dwg.c:748:34
+	 #1 0x5048fb in output_BLOCK_HEADER /home/rurban/Software/libredwg/programs/dwg2SVG.c:211:9
+	 #2 0x50453d in output_SVG /home/rurban/Software/libredwg/programs/dwg2SVG.c:252:3
+	 #3 0x50453d in main /home/rurban/Software/libredwg/programs/dwg2SVG.c:361
+
+	add missing _private decls
+
+	fixup _VECTOR_CHKCOUNT for REACTORS macros
+	A minimal HANDLE (i.e. a NULL handle) need much less bits than 8
+
+2018-12-02  DenisPryt  <denis.chausy@gmail.com>
+
+	Add _VECTOR_CHKCOUNT to REACTORS macros.
+
+2018-12-02  DenisPryt  <denis.chausy@gmail.com>
+
+	Add dwg_decode_add_object_ref
+	function for adding Dwg_Object_Ref.
+
+	Revert dwg->object_ref pointer to old state if realloc is failed.
+	Fix Dwg_Object_Ref leaks.
+
+2018-12-02  Reini Urban  <rurban@cpan.org>
+
+	fixup TABLE DWG_ERR_INVALIDTYPE error
+	Table_Value sets DWG_ERR_INVALIDTYPE, check it and return
+	the sum of all errors.
+
+2018-12-02  DenisPryt  <denis.chausy@gmail.com>
+
+	call END_REPEAT before return inside a loops
+
+	fix 3dsolid memory leak
+
+	switch dwg_decode_##token##_private function from EXPORT to static
+
+	returned dwg objects non-fixed types values to its original state
+
+	Fix memory leak objects with invalid handleref code
+
+	Guard function in dwg_free_ ##token for all frees
+	in DWG_ENTITY_END and DWG_OBJECT_END
+
+	Guard function for free(str_dat) in decode object and entity macroses
+
+	DWG_TYPE_FREED collision
+
+	free: several fixes
+	Fix eed free on eed decode error.
+	Objects with unknown handleref.code don't remove from dwg->object_ref array.
+	Fix read_system_page space allocate.
+	Free Bit_Chain in read_2007_section_header and other.
+
+2018-11-30  Reini Urban  <rurban@cpan.org>
+
+	LEADER fields
+	fixup more fields:
+	switch path_type with annot_type
+	rename hooklineonxdir to hookline_dir
+	rename unknown_bit_4 to hookline_on
+	fixup DXF values
+
+	LEADER.endptproj <= r2007
+	most likely. there are still discrepancies with the DXF.
+	The ODA spec is wrong for sure.
+	i.e. box_width,box_height is rather a 213/223/233 3DPOINT
+	DXF 340 is also missing
+
+	doc: add dwg_get_ API
+	and some more fixups
+
+	rename internal macro GET_DWG_* to DWG_GET_
+	to better reflect the external API names
+	dwg_get_<OBJECT> and dwg_get_<ENTITY>.
+
+	add GET_DWG_OBJECT for all objects in a DWG
+	analog to dwg_get_ENTITY,
+	but including all objects, tables, block headers, even if unowned.
+
+2018-11-29  Reini Urban  <rurban@cpan.org>
+
+	fix GET_DWG_ENTITY (#60)
+	Either the last member of the array needs to be NULL, or we need to return
+	the count.  Since we don't want to change the API, we NULL-terminate it.
+
+	We also need to guard from an empty BLOCK_HEADER argument.
+
+2018-11-29  Reini Urban  <rurban@cpan.org>
+
+	AUTHORS: add Denis Pruchkovsky (Pryt)
+
+2018-11-28  Reini Urban  <rurban@cpan.org>
+
+	fixup VECTOR_CHKCOUNT overflow (#56)
+	all values need to stay signed, just promote them to long long
+	for the checks.
+
+2018-11-28  DenisPryt  <denis.chausy@gmail.com>
+
+	fix VECTOR_CHKCOUNT overflow (#56)
+	VECTOR_CHKCOUNT cast bit size to long.  As result big numbers is multiplied
+	by 8 and becomes negative
+
+2018-11-27  Reini Urban  <rurban@cpan.org>
+
+	dwglayers: fix DICTIONARY loop (#51)
+	skip a DICTIONARY, but dont skip the loop.
+	Fixes #51
+
+	dxf: fix empty paper_space (#52)
+	Fixes dxf_blocks_write #52
+
+2018-11-27  DenisPryt  <denis.chausy@gmail.com>
+	    Reini Urban  <rurban@cpan.org>
+
+	Fix multileader bug. vertexes should be array.
+	Renamed vertexes to points analog to LEADER.
+
+	Closes PR #49
+
+2018-11-27  Reini Urban  <rurban@cpan.org>
+
+	fixup BITCODE_RC* vs char*
+	fix -Wpointer-sign and -Wincompatible-pointer-type warnings.
+	strings are still char*
+
+	bump to 0.7, prep NEWS ChangeLog
+	We had to change the API in the previous commit,
+	RC is now unsigned char
+
+	Fix LTYPE.dash, change RC to unsigned char
+	avoid such negative values. Fixes #44.
+	This changed the API, thus we must bump to 0.7
+
+	fix FIELD_NUM_INSERTS
+	Only allow RC 1 bytes, backup when != 1.
+	Fix encode for FIELD_NUM_INSERTS, write a vector of 1 bytes.
+	Fixes the example from #44 for the first wrong num_inserts
+	case.
+
+	decode FIELD_NUM_INSERTS: log -v5 values
+	The ODA spec seems to be wrong, see #44
+
+	fixup format type for size
+	from the previous PR #48
+
+2018-11-27  DenisPryt  <denis.chausy@gmail.com>
+
+	Fix image decode: rectangle or polygon flag mistake
+
 2018-11-26  Reini Urban  <rurban@cpan.org>
 
 	Fix LTYPE.dash, change RC to unsigned char
