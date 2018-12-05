@@ -3727,11 +3727,7 @@ typedef struct _dwg_entity_IMAGE
   BITCODE_3BD pt0;
   BITCODE_3BD uvec;
   BITCODE_3BD vvec;
-  struct
-  {
-    BITCODE_RD width;
-    BITCODE_RD height;
-  } size;
+  BITCODE_2RD size; /*!< DXF 13/23; width, height in pixel */
   BITCODE_BS display_props;
   BITCODE_B clipping;
   BITCODE_RC brightness;
@@ -3924,11 +3920,7 @@ typedef struct _dwg_entity_WIPEOUT
   BITCODE_3BD pt0;
   BITCODE_3BD uvec;
   BITCODE_3BD vvec;
-  struct
-  {
-    BITCODE_RD width;
-    BITCODE_RD height;
-  } size;
+  BITCODE_2RD size;
   BITCODE_BS display_props;
   BITCODE_B clipping;
   BITCODE_RC brightness;

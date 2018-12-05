@@ -3606,8 +3606,7 @@ DWG_ENTITY(IMAGE)
   FIELD_3DPOINT (pt0, 10);
   FIELD_3DPOINT (uvec, 11);
   FIELD_3DPOINT (vvec, 12);
-  FIELD_RD (size.width, 13);
-  FIELD_RD (size.height, 23);
+  FIELD_2RD (size, 13);
   FIELD_BS (display_props, 70);
   FIELD_B (clipping, 280);
   FIELD_RC (brightness, 281);
@@ -5481,8 +5480,7 @@ DWG_ENTITY(WIPEOUT)
   FIELD_3DPOINT (pt0, 10);
   FIELD_3DPOINT (uvec, 11);
   FIELD_3DPOINT (vvec, 12);
-  FIELD_RD (size.width, 13);
-  FIELD_RD (size.height, 23);
+  FIELD_2RD (size, 13);
   FIELD_BS (display_props, 70);
   FIELD_B (clipping, 280);
   FIELD_RC (brightness, 281);

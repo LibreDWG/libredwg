@@ -13350,12 +13350,12 @@ dwg_ent_image_set_v_vector(dwg_ent_image *restrict image,
  */
 double
 dwg_ent_image_get_size_height(const dwg_ent_image *restrict image,
-                          int *restrict error)
+                              int *restrict error)
 {
   if (image)
     {
       *error = 0;
-      return image->size.height;
+      return image->size.y;
     }
   else
     {
@@ -13369,13 +13369,13 @@ dwg_ent_image_get_size_height(const dwg_ent_image *restrict image,
  */
 void
 dwg_ent_image_set_size_height(dwg_ent_image *restrict image,
-                          const double size_height,
+                              const double size_height,
                               int *restrict error)
 {
   if (image)
     {
       *error = 0;
-      image->size.height = size_height;
+      image->size.y = size_height;
     }
   else
     {
@@ -13388,12 +13388,12 @@ dwg_ent_image_set_size_height(dwg_ent_image *restrict image,
  */
 double
 dwg_ent_image_get_size_width(const dwg_ent_image *restrict image,
-                          int *restrict error)
+                             int *restrict error)
 {
   if (image)
     {
       *error = 0;
-      return image->size.width;
+      return image->size.x;
     }
   else
     {
@@ -13407,13 +13407,13 @@ dwg_ent_image_get_size_width(const dwg_ent_image *restrict image,
  */
 void
 dwg_ent_image_set_size_width(dwg_ent_image *restrict image,
-                          const double size_width,
+                             const double size_width,
                              int *restrict error)
 {
   if (image)
     {
       *error = 0;
-      image->size.width = size_width;
+      image->size.x = size_width;
     }
   else
     {
@@ -13751,7 +13751,7 @@ dwg_ent_image_get_num_clip_verts(const dwg_ent_image *restrict image,
  */
 BITCODE_2RD *
 dwg_ent_image_get_clip_verts(const dwg_ent_image *restrict image,
-                          int *restrict error)
+                             int *restrict error)
 {
   BITCODE_2RD *ptx = calloc(image->num_clip_verts, sizeof(BITCODE_2RD));
   if (ptx)
