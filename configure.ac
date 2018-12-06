@@ -88,7 +88,7 @@ dnl Avoid rpl_malloc when cross-compiling. we don't need malloc.h
 dnl We just want to know if it's needed
 ac_cv_func_malloc_0_nonnull=yes
 ac_cv_func_realloc_0_nonnull=yes
-AC_CHECK_HEADERS([stdlib.h string.h unistd.h malloc.h wchar.h ctype.h \
+AC_CHECK_HEADERS([stdlib.h string.h stddef.h unistd.h malloc.h wchar.h ctype.h \
                   libgen.h getopt.h alloca.h valgrind/valgrind.h])
 AX_INCLUDE_STRCASECMP
 
@@ -122,6 +122,7 @@ dnl AC_CHECK_TYPE([wchar_t],[],[],[[#include <wchar.h>]])
 if test x$ac_cv_header_wchar_h = xyes; then
    AX_COMPILE_CHECK_SIZEOF([wchar_t], [#include <wchar.h>])
 fi
+dnl AX_GCC_BUILTIN(__builtin_offsetof)
 AC_DEFINE([_POSIX_C_SOURCE],[200809L],[Needed for strdup])
 AC_DEFINE([__XSI_VISIBLE],[700],[Needed for cygwin strdup])
 

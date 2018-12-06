@@ -75,6 +75,7 @@ EXTRA_HEADERS = \
         print.h \
 	logging.h \
         hash.h \
+	dynapi.h \
 	out_json.h
 if !DISABLE_DXF
 EXTRA_HEADERS += \
