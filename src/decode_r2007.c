@@ -1117,10 +1117,20 @@ obj_string_stream(Bit_Chain *dat,
 {
   BITCODE_RL start = obj->bitsize - 1; // in bits
   BITCODE_RL data_size = 0; // in byte
+  BITCODE_RL old_size; // in byte
+  BITCODE_RL old_byte;
+  old_size = str->size;
+  old_byte = str->byte;
+
   str->chain += str->byte;
   str->byte = 0; str->bit = 0;
-  str->size = (obj->bitsize / 8) + 1;
+  str->size = (obj->bitsize / 8) + ((obj->bitsize % 8) ? 1 : 0);
   bit_advance_position(str, start-8);
+  if (str->byte >= old_size - old_byte)
+    {
+	  LOG_WARN("obj_string_stream overflow");
+	  return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
   LOG_TRACE(" obj string stream +%u: @%lu.%u (%lu)", start,
             str->byte, str->bit & 7, bit_position(str));
   obj->has_strings = bit_read_B(str);
@@ -1430,24 +1440,34 @@ read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl,
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
 
-      //last_handle = 0;
-      last_offset = 0;
-      while (hdl_dat.byte - startpos < section_size)
+	  if (bit_check_CRC(&hdl_dat, startpos, section_size, 0xC0C1))
         {
-          int added;
-          long handle, offset;
-          oldpos = hdl_dat.byte;
+          //last_handle = 0;
+          last_offset = 0;
+          while (hdl_dat.byte - startpos < section_size)
+            {
+              int added;
+              BITCODE_UMC handle;
+              BITCODE_MC offset;
 
-          handle = bit_read_MC(&hdl_dat);
-          offset = bit_read_MC(&hdl_dat);
-          //last_handle += handle;
-          last_offset += offset;
-          LOG_TRACE("\nNext object: %lu\t", (unsigned long)dwg->num_objects)
-          LOG_TRACE("Handle: %lX\tOffset: %ld @%lu\n", handle, offset, last_offset)
-
-          added = dwg_decode_add_object(dwg, &obj_dat, hdl, last_offset);
-          if (added > 0)
-            error |= added;
+              oldpos = hdl_dat.byte;
+	      
+              handle = bit_read_UMC(&hdl_dat);
+              offset = bit_read_MC(&hdl_dat);
+              //last_handle += handle;
+              last_offset += offset;
+			  
+              LOG_TRACE("\nNext object: %lu\t", (unsigned long)dwg->num_objects)
+              LOG_TRACE("Handle: %lX\tOffset: %ld @%lu\n", handle, offset, last_offset)
+	      
+              added = dwg_decode_add_object(dwg, &obj_dat, hdl, last_offset);
+              if (added > 0)
+                error |= added;
+            }
+        }
+	  else
+        {
+          hdl_dat.byte += section_size;
         }
 
       if (hdl_dat.byte == oldpos)

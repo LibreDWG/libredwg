@@ -743,12 +743,12 @@ bit_read_MC(Bit_Chain * dat)
 {
   int i, j;
   int negative;
-  unsigned char byte[4];
+  unsigned char byte[5];
   long unsigned int result;
 
   negative = 0;
   result = 0;
-  for (i = 3, j = 0; i >= 0; i--, j += 7)
+  for (i = 4, j = 0; i >= 0; i--, j += 7)
     {
       byte[i] = bit_read_RC(dat);
       if (!(byte[i] & 0x80))
@@ -777,7 +777,7 @@ bit_write_MC(Bit_Chain * dat, BITCODE_MC val)
 {
   int i, j;
   int negative;
-  unsigned char byte[4];
+  unsigned char byte[5];
   long unsigned int mask;
   long unsigned int value;
 
@@ -792,7 +792,7 @@ bit_write_MC(Bit_Chain * dat, BITCODE_MC val)
       value = (long unsigned int) val;
     }
   mask = 0x0000007f;
-  for (i = 3, j = 0; i > -1; i--, j += 7)
+  for (i = 4, j = 0; i > -1; i--, j += 7)
     {
       byte[i] = (unsigned char) ((value & mask) >> j);
       byte[i] |= 0x80;
@@ -817,11 +817,11 @@ BITCODE_UMC
 bit_read_UMC(Bit_Chain * dat)
 {
   int i, j;
-  unsigned char byte[4];
+  unsigned char byte[5];
   long unsigned int result;
 
   result = 0;
-  for (i = 3, j = 0; i >= 0; i--, j += 7)
+  for (i = 4, j = 0; i >= 0; i--, j += 7)
     {
       byte[i] = bit_read_RC(dat);
       if (!(byte[i] & 0x80))
@@ -845,13 +845,13 @@ bit_write_UMC(Bit_Chain * dat, BITCODE_UMC val)
 {
   int i, j;
   int negative;
-  unsigned char byte[4];
+  unsigned char byte[5];
   long unsigned int mask;
   long unsigned int value;
 
   value = (long unsigned int) val;
   mask = 0x0000007f;
-  for (i = 3, j = 0; i > -1; i--, j += 7)
+  for (i = 4, j = 0; i > -1; i--, j += 7)
     {
       byte[i] = (unsigned char) ((value & mask) >> j);
       byte[i] |= 0x80;
@@ -1147,22 +1147,32 @@ bit_read_CRC(Bit_Chain * dat)
 /** Read and check CRC-number.
  */
 int
-bit_check_CRC(Bit_Chain * dat, long unsigned int start_address,
-              uint16_t seed)
+bit_check_CRC(Bit_Chain * dat, long unsigned int start_address, 
+              long unsigned int size, uint16_t seed)
 {
   unsigned int calculated;
   unsigned int read;
   unsigned char res[2];
+  long unsigned int old_byte;
+  long unsigned int old_bit;
 
-  if (dat->bit > 0)
-    dat->byte++;
+  if (start_address + size >= dat->size)
+    {
+      LOG_WARN("bit_check_CRC out of range");
+      return 0;
+    }
+
+  old_byte = dat->byte;
+  old_bit = dat->bit;
+
+  calculated = bit_calc_CRC(seed, &(dat->chain[start_address]), size);
+
+  dat->byte = start_address + size;
   dat->bit = 0;
-
-  calculated = bit_calc_CRC(seed, &(dat->chain[start_address]),
-                            dat->byte - start_address);
-
   res[0] = bit_read_RC(dat);
   res[1] = bit_read_RC(dat);
+  dat->byte = old_byte;
+  dat->bit = old_bit;
 
   read = (unsigned int) (res[0] << 8 | res[1]);
   LOG_TRACE("check CRC at %lx: 0x%x <=> 0x%x\n", start_address, calculated, read)
