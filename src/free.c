@@ -207,14 +207,17 @@ dwg_free_ ##token## _private (Bit_Chain *restrict _dat, Dwg_Object *restrict obj
 static int \
 dwg_free_ ##token (Bit_Chain *restrict _dat, Dwg_Object *restrict obj) \
 { \
-  int error;                \
-  LOG_HANDLE("Free entity " #token "\n") \
-  error = dwg_free_ ##token## _private(_dat, obj); \
-                            \
-  dwg_free_common_entity_data(obj); \
-  dwg_free_eed(obj);        \
-  FREE_IF(obj->tio.entity->tio.token); \
-  FREE_IF(obj->tio.entity); \
+  int error = 0;            \
+  if (obj->tio.entity)      \
+    {                       \
+      LOG_HANDLE("Free entity " #token "\n") \
+      error = dwg_free_ ##token## _private(_dat, obj); \
+                                \
+      dwg_free_common_entity_data(obj); \
+      dwg_free_eed(obj);    \
+      FREE_IF(obj->tio.entity->tio.token); \
+      FREE_IF(obj->tio.entity); \
+    }                       \
   obj->parent = NULL;       \
   return error;             \
 } \
@@ -242,19 +245,22 @@ dwg_free_ ##token## _private (Bit_Chain *restrict _dat, Dwg_Object *restrict obj
 static int \
 dwg_free_ ##token (Bit_Chain *restrict _dat, Dwg_Object *restrict obj) \
 { \
-  int error;                                     \
-  Dwg_Object_##token *_obj;                      \
-  _obj = obj->tio.object->tio.token;             \
-  LOG_HANDLE("Free object " #token " %p\n", obj) \
-  if (strcmp(#token, "UNKNOWN_OBJ") && obj->supertype == DWG_SUPERTYPE_UNKNOWN) { \
-    _obj = NULL;                                 \
-    error = dwg_free_UNKNOWN_OBJ(_dat, obj);     \
-  } else {                                       \
-    error = dwg_free_ ##token## _private (_dat, obj); \
-  }                                              \
-  dwg_free_eed(obj);                             \
-  FREE_IF(_obj);                                 \
-  FREE_IF(obj->tio.object);                      \
+  int error = 0;                                 \
+  Dwg_Object_##token *_obj = NULL;               \
+  if (obj->tio.object)                           \
+    {                                            \
+      _obj = obj->tio.object->tio.token;         \
+      LOG_HANDLE("Free object " #token " %p\n", obj) \
+      if (strcmp(#token, "UNKNOWN_OBJ") && obj->supertype == DWG_SUPERTYPE_UNKNOWN) { \
+        _obj = NULL;                             \
+        error = dwg_free_UNKNOWN_OBJ(_dat, obj); \
+      } else {                                   \
+        error = dwg_free_ ##token## _private (_dat, obj); \
+      }                                          \
+      dwg_free_eed(obj);                         \
+      FREE_IF(_obj);                             \
+      FREE_IF(obj->tio.object);                  \
+    }                                            \
   obj->parent = NULL;                            \
   return error;                                  \
 } \
