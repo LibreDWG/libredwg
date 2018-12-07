@@ -1820,6 +1820,14 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *restrict dwg,
     }
 
   max_decomp_size = info->num_sections * info->max_decomp_size;
+  if (max_decomp_size == 0)
+    {
+      LOG_ERROR("Section's count or max decompression size is zero. "
+                "Sections: %u, Max size: %u",
+                info->num_sections, info->max_decomp_size);
+      return DWG_ERR_INVALIDDWG;
+    }
+
   decomp = (BITCODE_RC *)calloc(max_decomp_size, sizeof(char));
   if (!decomp)
     {
