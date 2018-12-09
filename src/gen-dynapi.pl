@@ -19,7 +19,8 @@ use Convert::Binary::C;
 #use Data::Dumper;
 BEGIN { chdir 'src' if $0 =~ /src/; }
 my $c = Convert::Binary::C->new->Include(".")->Define('HAVE_CONFIG_H');
-$c->parse_file("../include/dwg.h");
+my $hdr = "../include/dwg.h";
+$c->parse_file($hdr);
 
 #print Data::Dumper->Dump([$c->struct('_dwg_entity_TEXT')], ['_dwg_entity_TEXT']);
 #print Data::Dumper->Dump([$c->struct('struct _dwg_header_variables')], ['Dwg_Header_Variables']);
@@ -39,6 +40,23 @@ for (sort $c->struct_names) {
     #print " (?)";
   }
 }
+# todo: get BITCODE_ macro types for each struct field
+my (%h, $n);
+open my $in, "<", $hdr or die;
+while (<$in>) {
+  if (!$n) {
+    if (/^typedef struct (_dwg_.+) \{/) {
+      $n = $1;
+    } elsif (/^typedef struct (_dwg_\S+)$/) {
+      $n = $1;
+    }
+  } elsif (/^\}/) { # close the struct
+    $n = '';
+  } elsif (/^ +BITCODE_(.+) (\w.*);/) {
+    $h{$n}{$2} = $1;
+  }
+}
+close $in;
 
 open my $fh, ">dynapi.c" or die;
 
@@ -54,17 +72,20 @@ sub out_struct {
     my $decl = $d->{declarators}->[0];
     my $name = $decl->{declarator};
     $name =~ s/^\*//g;
-    if (ref $type and ref $type =~ /(HASH|ARRAY)/) { # inlined struct
-      die "inlined type $type";
+    # unexpand BITCODE_ macros: e.g. unsigned int -> BITCODE_BL
+    my $s = $tmpl;
+    $s =~ s/^struct //;
+    my $bc = exists $h{$s} ? $h{$s}{$name} : undef;
+    $type = $bc if $bc;
+    # TODO: DIMENSION_COMMON, _3DSOLID_FIELDS macros
+    if ($type =~ /\b(unsigned|char|int|long|double)\b/) {
+      warn "unexpanded $type $n.$name\n";
+    }
+    if ($type =~ /^HASH\(/) { # inlined struct or union
+      warn "inlined type $type  $n.$name";
       #$type = $type->{type}; # size.width, size.height
     }
-    # TODO: unexpand BITCODE_ macros: unsigned int -> BITCODE_BL
-    if ($type =~ /\b(unsigned|char|int|long|double)\b/) {
-      #if ($type eq 'double') {
-      #  $type = 'BITCODE_BD'; # or RD DD BT
-      #}
-    }
-    printf $fh "  { \"%s\", \"%s\", OFF(%s,%s,%d) },\n",
+    printf $fh "  { \"%s\", \"%s\", OFF(%s,%s, %d) },\n",
       $name, $type, $tmpl,$name,$decl->{offset};
   }
   print $fh "};\n";
@@ -79,15 +100,17 @@ for (<DATA>) {
       #print $fh "\n/* ";
       #print $fh Data::Dumper->Dump([$s], [$1]);
       #print $fh "\n*/";
+      my $i = 0;
       for (sort keys %{$s->{enumerators}}) {
         my ($k,$v) = ($_, $s->{enumerators}->{$_});
         $k =~ s/^DWG_TYPE_//;
-        print $fh "  { \"$k\", $v },\n";
+        printf $fh "  { \"%s\", %d },\t/* %d */\n", $k, $v, $i++;
       }
     } elsif ($tmpl =~ /^list (\w+)/) {
       no strict 'refs';
+      my $i = 0;
       for (@{$1}) {
-        print $fh "  \"$_\",\n";
+        printf $fh "  \"%s\",\t/* %d */\n", $_, $i++;
       }
     } elsif ($tmpl =~ /^for dwg_entity_ENTITY/) {
       for (@entity_names) {

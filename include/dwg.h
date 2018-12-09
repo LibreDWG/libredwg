@@ -1592,7 +1592,7 @@ typedef struct _dwg_entity_3DSOLID
   BITCODE_BL num_blocks;
   BITCODE_BL* block_size;
   BITCODE_RC** encr_sat_data;
-  unsigned char* acis_data; /*!< DXF 1, the decryted SAT data */
+  BITCODE_RC*  acis_data; /*!< DXF 1, the decryted SAT data */
   BITCODE_B wireframe_data_present;
   BITCODE_B point_present;
   BITCODE_3BD point;
@@ -2719,36 +2719,9 @@ typedef struct _dwg_LEADER_Node
   BITCODE_BS attach_dir; //2010+ 271
 } Dwg_LEADER;
 
-/* The MLeaderAnnotContext object (par 20.4.86), embedded into an MLEADER */
-typedef struct _dwg_MLEADER_AnnotContext
+typedef union _dwg_MLEADER_Content
 {
-  //AcDbObjectContextData:
-  BITCODE_BS class_version;  /*!< r2010+ DXF 70 */
-  BITCODE_B has_xdic_file;   /*!< r2010+ default true */
-  BITCODE_B is_default;      /*!< r2010+ DXF 290 */
-
-  // AcDbAnnotScaleObjectContextData:
-  BITCODE_H scale_handle;      /*!< DXF 340 hard ptr to AcDbScale */
-
-  BITCODE_BL num_leaders;
-  Dwg_LEADER * leaders;
-
-  BITCODE_BS attach_dir;
-
-  BITCODE_BD scale;
-  BITCODE_3BD content_base;
-  BITCODE_BD text_height;
-  BITCODE_BD arrow_size;
-  BITCODE_BD landing_gap;
-  BITCODE_BS text_left;
-  BITCODE_BS text_right;
-  BITCODE_BS text_alignment;
-  BITCODE_BS attach_type;
-
-  BITCODE_B has_content; // DXF doc bug: has_mtext
-  BITCODE_B has_content_block;
-  union {
-    struct _text_content
+  struct _text_content
     {
       BITCODE_TV default_text;
       BITCODE_3BD normal; // 11
@@ -2778,7 +2751,7 @@ typedef struct _dwg_MLEADER_AnnotContext
       BITCODE_B word_break;
       BITCODE_B unknown;
     } txt;
-    struct _content_block
+  struct _content_block
     {
       BITCODE_H block_table;
       BITCODE_3BD normal; // 14
@@ -2788,7 +2761,37 @@ typedef struct _dwg_MLEADER_AnnotContext
       BITCODE_CMC color;
       BITCODE_BD *transform;
     } blk;
-  } content;
+} Dwg_MLEADER_Content;
+
+/* The MLeaderAnnotContext object (par 20.4.86), embedded into an MLEADER */
+typedef struct _dwg_MLEADER_AnnotContext
+{
+  //AcDbObjectContextData:
+  BITCODE_BS class_version;  /*!< r2010+ DXF 70 */
+  BITCODE_B has_xdic_file;   /*!< r2010+ default true */
+  BITCODE_B is_default;      /*!< r2010+ DXF 290 */
+
+  // AcDbAnnotScaleObjectContextData:
+  BITCODE_H scale_handle;      /*!< DXF 340 hard ptr to AcDbScale */
+
+  BITCODE_BL num_leaders;
+  Dwg_LEADER * leaders;
+
+  BITCODE_BS attach_dir;
+
+  BITCODE_BD scale;
+  BITCODE_3BD content_base;
+  BITCODE_BD text_height;
+  BITCODE_BD arrow_size;
+  BITCODE_BD landing_gap;
+  BITCODE_BS text_left;
+  BITCODE_BS text_right;
+  BITCODE_BS text_alignment;
+  BITCODE_BS attach_type;
+
+  BITCODE_B has_content; // DXF doc bug: has_mtext
+  BITCODE_B has_content_block;
+  Dwg_MLEADER_Content content;
 
   BITCODE_3BD base;
   BITCODE_3BD base_dir;
