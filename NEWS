@@ -2,6 +2,13 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2018 Free Software Foundation, Inc.
 See the end for copying conditions.
 
+
+LibreDWG version 0.8 - released ?? - still alpha:
+
+API breaking changes:
+  * Renamed HEADER.MENU to HEADER.MENUNAME
+
+
 LibreDWG version 0.7 - released 2018/12/6 - still alpha:
 
 new API:
