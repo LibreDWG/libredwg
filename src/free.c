@@ -13,7 +13,7 @@
 /*
  * free.c: helper functions to free all spec fields
  * written by Reini Urban
- * modified by Denis Pruchkovksy
+ * modified by Denis Pruchkovsky
  */
 
 #include "config.h"
