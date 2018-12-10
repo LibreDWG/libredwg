@@ -80,17 +80,22 @@ sub out_struct {
     $s =~ s/^struct //;
     my $bc = exists $h{$s} ? $h{$s}{$name} : undef;
     $type = $bc if $bc;
+    my $size = $bc ? "sizeof(BITCODE_$type)" : "sizeof($type)";
     # TODO: DIMENSION_COMMON, _3DSOLID_FIELDS macros
     if ($type =~ /\b(unsigned|char|int|long|double)\b/) {
       warn "unexpanded $type $n.$name\n";
-    }
-    if ($type =~ /^HASH\(/) { # inlined struct or union
+    } elsif ($type =~ /^struct/) {
+      $size = "sizeof(void*)";
+    } elsif ($type =~ /^HASH\(/) { # inlined struct or union
       warn "inlined type $type  $n.$name";
+      $size = "0";
       #$type = $type->{type}; # size.width, size.height
     }
-    printf $fh "  { \"%s\", \"%s\", OFF(%s,%s, %d) },\n",
-      $name, $type, $tmpl,$name,$decl->{offset};
+    printf $fh "  { \"%s\", \"%s\", %s, OFF(%s,%s, %d) },\n",
+      $name, $type, $size,
+      $tmpl,$name,$decl->{offset};
   }
+  print $fh "  {NULL, NULL, 0},\n";
   print $fh "};\n";
 }
 
@@ -255,3 +260,87 @@ dwg_dynapi_object_fields(const char* name) {
     bsearch(name, dwg_object_names, NUM_OBJECTS, MAXLEN_OBJECTS, _name_cmp);
   return f ? f->fields : NULL;
 }
+
+const Dwg_DYNAPI_field*
+dwg_dynapi_object_field(const char* obj, const char* field) {
+  const Dwg_DYNAPI_field* fields = dwg_dynapi_object_fields(obj);
+  if (fields)
+    { /* linear search */
+      Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)fields;
+      for (; f->name; f++)
+        {
+          if (strcmp(f->name, field) == 0)
+            return f;
+        }
+    }
+  return NULL;
+}
+
+
+const Dwg_DYNAPI_field*
+dwg_dynapi_entity_field(const char* obj, const char* field) {
+  const Dwg_DYNAPI_field* fields = dwg_dynapi_entity_fields(obj);
+  if (fields)
+    { /* linear search */
+      Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)fields;
+      for (; f->name; f++)
+        {
+          if (strcmp(f->name, field) == 0)
+            return f;
+        }
+    }
+  return NULL;
+}
+
+/* generic field getters */
+bool
+dwg_dynapi_entity_value(void *obj, const char* name, const char* fieldname, void *out, Dwg_DYNAPI_field* fp) {
+  const Dwg_DYNAPI_field* f = dwg_dynapi_entity_field(name, fieldname);
+  if (f)
+    {
+      memcpy(fp, f, sizeof(Dwg_DYNAPI_field));
+      memcpy(out, &((char*)obj)[f->offset], f->size);
+      return true;
+    }
+  else
+    {
+      return false;
+    }
+}
+
+bool
+dwg_dynapi_object_value(void *obj, const char* name, const char* fieldname, void *out, Dwg_DYNAPI_field* fp) {
+  const Dwg_DYNAPI_field* f = dwg_dynapi_object_field(name, fieldname);
+  if (f)
+    {
+      memcpy(fp, f, sizeof(Dwg_DYNAPI_field));
+      memcpy(out, &((char*)obj)[f->offset], f->size);
+      return true;
+    }
+  else
+    {
+      return false;
+    }
+}
+
+bool
+dwg_dynapi_header_value(Dwg_Data *dwg, const char* fieldname, void *out, Dwg_DYNAPI_field* fp) {
+  Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)bsearch(fieldname, _dwg_header_variables_fields,
+                          sizeof(_dwg_header_variables_fields)/sizeof(_dwg_header_variables_fields[0]),
+                          sizeof(_dwg_header_variables_fields[0]), _name_cmp);
+  if (f)
+    {
+      Dwg_Header_Variables* _obj = &dwg->header_vars;
+      memcpy(fp, f, sizeof(Dwg_DYNAPI_field));
+      memcpy(out, &((char*)_obj)[f->offset], f->size);
+      return true;
+    }
+  else
+    {
+      return false;
+    }
+}
+
+/* Local Variables: */
+/* mode: c */
+/* End: */

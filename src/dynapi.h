@@ -29,10 +29,16 @@
 #define OFF(st,f,def) def
 #endif
 
+EXPORT bool
+is_dwg_entity(const char* name);
+EXPORT bool
+is_dwg_object(const char* name);
+
 typedef struct _name_type_offset {
-  const char *const name;
-  const char *const type;
-  int offset;
+  const char *const name; /* field name */
+  const char *const type; /* e.g "RS" for BITCODE_RS */
+  const int size;         /* e.g. 2 for RS, 4 for BL */
+  const int offset;
 } Dwg_DYNAPI_field;
 
 const Dwg_DYNAPI_field*
@@ -40,10 +46,16 @@ dwg_dynapi_entity_fields(const char* name);
 const Dwg_DYNAPI_field*
 dwg_dynapi_object_fields(const char* name);
 
-EXPORT bool
-is_dwg_entity(const char* name);
+const Dwg_DYNAPI_field*
+dwg_dynapi_entity_field(const char* name, const char* fieldname);
+const Dwg_DYNAPI_field*
+dwg_dynapi_object_field(const char* name, const char* fieldname);
 
-EXPORT bool
-is_dwg_object(const char* name);
+bool
+dwg_dynapi_entity_value(void *obj, const char* name, const char* fieldname, void *out, Dwg_DYNAPI_field* fp);
+bool
+dwg_dynapi_object_value(void *obj, const char* name, const char* fieldname, void *out, Dwg_DYNAPI_field* fp);
+bool
+dwg_dynapi_header_value(Dwg_Data *dwg, const char* fieldname, void *out, Dwg_DYNAPI_field* fp);
 
 #endif
