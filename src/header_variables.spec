@@ -209,7 +209,7 @@
   FIELD_BD (CMLSCALE, 40);
   FIELD_BD (CELTSCALE, 40);
   PRE(R_2007) {
-    FIELD_TV (MENUNAME, 1); // stored in registry
+    FIELD_TV (MENU, 1);
   }
   FIELD_TIMEBLL (TDCREATE, 40);
   FIELD_TIMEBLL (TDUPDATE, 40);
@@ -630,7 +630,7 @@
     FIELD_TU (unknown_text2, 0);
     FIELD_TU (unknown_text3, 0);
     FIELD_TU (unknown_text4, 0);
-    FIELD_TU (MENUNAME, 1);
+    FIELD_TU (MENU, 1);
     FIELD_TU (DIMPOST, 1);
     FIELD_TU (DIMAPOST, 1);
     SINCE(R_2010) {

@@ -65,7 +65,7 @@
   //RS 25
   dat->byte = 0x192;
   FIELD_RS (ATTMODE, 70);
-  FIELD_TF (MENUNAME, 15, 1);
+  FIELD_TF (MENU, 15, 1);
   FIELD_RD (DIMSCALE, 40); //ok 0x1a3
   FIELD_RD (DIMASZ, 40); //ok
   FIELD_RD (DIMEXO, 40); //ok
