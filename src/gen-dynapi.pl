@@ -25,24 +25,27 @@ $c->parse_file($hdr);
 #print Data::Dumper->Dump([$c->struct('_dwg_entity_TEXT')], ['_dwg_entity_TEXT']);
 #print Data::Dumper->Dump([$c->struct('struct _dwg_header_variables')], ['Dwg_Header_Variables']);
 
+my (%h, $n, %structs);
 local (@entity_names, @object_names, @subtypes);
 # todo: harmonize more subtypes
 for (sort $c->struct_names) {
   if (/_dwg_entity_([A-Z0-9_]+)/) {
+    $structs{$1}++;
     push @entity_names, $1;
   } elsif (/_dwg_object_([A-Z0-9_]+)/) {
+    $structs{$1}++;
     push @object_names, $1;
   } elsif (/_dwg_header_variables/) {
     ;
   } elsif (/_dwg_([A-Z0-9]+)(_|$)/) {
+    $structs{$_}++;
     push @subtypes, $_;
   } else {
     #print " (?)";
   }
 }
 # todo: get BITCODE_ macro types for each struct field
-my (%h, $n);
-open my $in, "<", $hdr or die;
+open my $in, "<", $hdr or die "hdr: $!";
 while (<$in>) {
   if (!$n) {
     if (/^typedef struct (_dwg_.+) \{/) {
@@ -58,7 +61,7 @@ while (<$in>) {
 }
 close $in;
 
-open my $fh, ">dynapi.c" or die;
+open my $fh, ">", "dynapi.c" or die "dynapi.c: $!";
 
 sub out_struct {
   my ($tmpl, $n) = @_;
@@ -66,7 +69,7 @@ sub out_struct {
   #print $fh " /* ", Data::Dumper->Dump([$s], [$n]), "*/\n";
   $n = "_dwg_$n" unless $n =~ /^_dwg_/;
   print $fh "/* from typedef $tmpl: */\n",
-    "struct _name_type_offset $n","_fields[] = {\n";
+    "const struct _name_type_offset $n","_fields[] = {\n";
   for my $d (@{$s->{declarations}}) {
     my $type = $d->{type};
     my $decl = $d->{declarators}->[0];
@@ -104,7 +107,15 @@ for (<DATA>) {
       for (sort keys %{$s->{enumerators}}) {
         my ($k,$v) = ($_, $s->{enumerators}->{$_});
         $k =~ s/^DWG_TYPE_//;
-        printf $fh "  { \"%s\", %d },\t/* %d */\n", $k, $v, $i++;
+        if ($tmpl eq 'enum DWG_OBJECT_TYPE') {
+          # see if the fields do exist:
+          my $fields = exists $structs{$k} ? "_dwg_".$k."_fields" : "NULL";
+            printf $fh "  { \"%s\", %d, %s },\t/* %d */\n",
+              $k, $v, $fields, $i++;
+        } else {
+          printf $fh "  { \"%s\", %d },\t/* %d */\n",
+            $k, $v, $i++;
+        }
       }
     } elsif ($tmpl =~ /^list (\w+)/) {
       no strict 'refs';
@@ -139,21 +150,11 @@ __DATA__
 
 #include "dynapi.h"
 
-struct _name_type {
-  const char *const name;
-  int type;
-};
-
-/* from enum DWG_OBJECT_TYPE: */
-const struct _name_type dwg_name_types[] = {
-  @@enum DWG_OBJECT_TYPE@@
-};
-
-/* from typedef struct _dwg_entity_*: */
+/* sorted for bsearch. from typedef struct _dwg_entity_*: */
 const char *const dwg_entity_names[] = {
   @@list entity_names@@
 };
-/* from typedef struct _dwg_object_*: */
+/* sorted for bsearch. from typedef struct _dwg_object_*: */
 const char *const dwg_object_names[] = {
   @@list object_names@@
 };
@@ -168,3 +169,14 @@ struct _name_type_offset {
 @@for dwg_entity_ENTITY@@
 @@for dwg_object_OBJECT@@
 @@for dwg_subtypes@@
+
+struct _name_type_fields {
+  const char *const name;
+  int type;
+  const struct _name_type_offset *const fields;
+};
+
+/* sorted for bsearch. from enum DWG_OBJECT_TYPE: */
+const struct _name_type_fields dwg_name_types[] = {
+  @@enum DWG_OBJECT_TYPE@@
+};

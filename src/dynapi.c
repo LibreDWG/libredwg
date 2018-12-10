@@ -3,173 +3,7 @@
 
 #include "dynapi.h"
 
-struct _name_type {
-  const char *const name;
-  int type;
-};
-
-/* from enum DWG_OBJECT_TYPE: */
-const struct _name_type dwg_name_types[] = {
-  { "ACDBNAVISWORKSMODELDEF", 512 },	/* 0 */
-  { "ACSH_HISTORY_CLASS", 513 },	/* 1 */
-  { "ACSH_SWEEP_CLASS", 514 },	/* 2 */
-  { "APPID", 67 },	/* 3 */
-  { "APPID_CONTROL", 66 },	/* 4 */
-  { "ARC", 17 },	/* 5 */
-  { "ARCALIGNEDTEXT", 515 },	/* 6 */
-  { "ARC_DIMENSION", 516 },	/* 7 */
-  { "ASSOC2DCONSTRAINTGROUP", 517 },	/* 8 */
-  { "ASSOCACTION", 518 },	/* 9 */
-  { "ASSOCALIGNEDDIMACTIONBODY", 519 },	/* 10 */
-  { "ASSOCDEPENDENCY", 520 },	/* 11 */
-  { "ASSOCGEOMDEPENDENCY", 521 },	/* 12 */
-  { "ASSOCNETWORK", 522 },	/* 13 */
-  { "ASSOCOSNAPPOINTREFACTIONPARAM", 523 },	/* 14 */
-  { "ASSOCPERSSUBENTMANAGER", 524 },	/* 15 */
-  { "ASSOCPLANESURFACEACTIONBODY", 525 },	/* 16 */
-  { "ASSOCVERTEXACTIONPARAM", 526 },	/* 17 */
-  { "ATTDEF", 3 },	/* 18 */
-  { "ATTRIB", 2 },	/* 19 */
-  { "BLOCK", 4 },	/* 20 */
-  { "BLOCK_CONTROL", 48 },	/* 21 */
-  { "BLOCK_HEADER", 49 },	/* 22 */
-  { "BODY", 39 },	/* 23 */
-  { "CAMERA", 527 },	/* 24 */
-  { "CELLSTYLEMAP", 528 },	/* 25 */
-  { "CIRCLE", 18 },	/* 26 */
-  { "DATATABLE", 529 },	/* 27 */
-  { "DBCOLOR", 530 },	/* 28 */
-  { "DETAILVIEWSTYLE", 531 },	/* 29 */
-  { "DICTIONARY", 42 },	/* 30 */
-  { "DICTIONARYVAR", 532 },	/* 31 */
-  { "DICTIONARYWDFLT", 533 },	/* 32 */
-  { "DIMASSOC", 534 },	/* 33 */
-  { "DIMENSION_ALIGNED", 22 },	/* 34 */
-  { "DIMENSION_ANG2LN", 24 },	/* 35 */
-  { "DIMENSION_ANG3PT", 23 },	/* 36 */
-  { "DIMENSION_DIAMETER", 26 },	/* 37 */
-  { "DIMENSION_LINEAR", 21 },	/* 38 */
-  { "DIMENSION_ORDINATE", 20 },	/* 39 */
-  { "DIMENSION_RADIUS", 25 },	/* 40 */
-  { "DIMSTYLE", 69 },	/* 41 */
-  { "DIMSTYLE_CONTROL", 68 },	/* 42 */
-  { "DOCUMENTOPTIONS", 535 },	/* 43 */
-  { "DUMMY", 75 },	/* 44 */
-  { "DYNAMICBLOCKPURGEPREVENTER", 536 },	/* 45 */
-  { "ELLIPSE", 35 },	/* 46 */
-  { "ENDBLK", 5 },	/* 47 */
-  { "EVALUATION_GRAPH", 537 },	/* 48 */
-  { "EXTRUDEDSURFACE", 572 },	/* 49 */
-  { "FIELD", 538 },	/* 50 */
-  { "FIELDLIST", 539 },	/* 51 */
-  { "FREED", 65533 },	/* 52 */
-  { "GEODATA", 540 },	/* 53 */
-  { "GEOPOSITIONMARKER", 541 },	/* 54 */
-  { "GROUP", 72 },	/* 55 */
-  { "HATCH", 78 },	/* 56 */
-  { "HELIX", 542 },	/* 57 */
-  { "IDBUFFER", 543 },	/* 58 */
-  { "IMAGE", 544 },	/* 59 */
-  { "IMAGEDEF", 545 },	/* 60 */
-  { "IMAGEDEF_REACTOR", 546 },	/* 61 */
-  { "INSERT", 7 },	/* 62 */
-  { "LAYER", 51 },	/* 63 */
-  { "LAYER_CONTROL", 50 },	/* 64 */
-  { "LAYER_FILTER", 547 },	/* 65 */
-  { "LAYER_INDEX", 548 },	/* 66 */
-  { "LAYOUT", 82 },	/* 67 */
-  { "LAYOUTPRINTCONFIG", 549 },	/* 68 */
-  { "LEADER", 45 },	/* 69 */
-  { "LEADEROBJECTCONTEXTDATA", 550 },	/* 70 */
-  { "LIGHT", 551 },	/* 71 */
-  { "LIGHTLIST", 552 },	/* 72 */
-  { "LINE", 19 },	/* 73 */
-  { "LOFTEDSURFACE", 573 },	/* 74 */
-  { "LONG_TRANSACTION", 76 },	/* 75 */
-  { "LTYPE", 57 },	/* 76 */
-  { "LTYPE_CONTROL", 56 },	/* 77 */
-  { "LWPOLYLINE", 77 },	/* 78 */
-  { "MATERIAL", 553 },	/* 79 */
-  { "MINSERT", 8 },	/* 80 */
-  { "MLEADERSTYLE", 554 },	/* 81 */
-  { "MLINE", 47 },	/* 82 */
-  { "MLINESTYLE", 73 },	/* 83 */
-  { "MTEXT", 44 },	/* 84 */
-  { "MULTILEADER", 555 },	/* 85 */
-  { "NPOCOLLECTION", 556 },	/* 86 */
-  { "OBJECTCONTEXTDATA", 557 },	/* 87 */
-  { "OBJECT_PTR", 558 },	/* 88 */
-  { "OLE2FRAME", 74 },	/* 89 */
-  { "OLEFRAME", 43 },	/* 90 */
-  { "PERSSUBENTMANAGER", 559 },	/* 91 */
-  { "PLACEHOLDER", 80 },	/* 92 */
-  { "PLANESURFACE", 571 },	/* 93 */
-  { "PLOTSETTINGS", 560 },	/* 94 */
-  { "POINT", 27 },	/* 95 */
-  { "POINTCLOUD", 561 },	/* 96 */
-  { "POLYLINE_2D", 15 },	/* 97 */
-  { "POLYLINE_3D", 16 },	/* 98 */
-  { "POLYLINE_MESH", 30 },	/* 99 */
-  { "POLYLINE_PFACE", 29 },	/* 100 */
-  { "PROXY_ENTITY", 498 },	/* 101 */
-  { "PROXY_OBJECT", 499 },	/* 102 */
-  { "RASTERVARIABLES", 562 },	/* 103 */
-  { "RAY", 40 },	/* 104 */
-  { "REGION", 37 },	/* 105 */
-  { "REVOLVEDSURFACE", 574 },	/* 106 */
-  { "RTEXT", 563 },	/* 107 */
-  { "SCALE", 564 },	/* 108 */
-  { "SECTIONVIEWSTYLE", 565 },	/* 109 */
-  { "SEQEND", 6 },	/* 110 */
-  { "SHAPE", 33 },	/* 111 */
-  { "SOLID", 31 },	/* 112 */
-  { "SORTENTSTABLE", 566 },	/* 113 */
-  { "SPATIAL_FILTER", 567 },	/* 114 */
-  { "SPATIAL_INDEX", 568 },	/* 115 */
-  { "SPLINE", 36 },	/* 116 */
-  { "STYLE", 53 },	/* 117 */
-  { "STYLE_CONTROL", 52 },	/* 118 */
-  { "SUN", 569 },	/* 119 */
-  { "SUNSTUDY", 570 },	/* 120 */
-  { "SWEPTSURFACE", 575 },	/* 121 */
-  { "TABLE", 576 },	/* 122 */
-  { "TABLECONTENT", 577 },	/* 123 */
-  { "TABLEGEOMETRY", 578 },	/* 124 */
-  { "TABLESTYLE", 579 },	/* 125 */
-  { "TEXT", 1 },	/* 126 */
-  { "TOLERANCE", 46 },	/* 127 */
-  { "TRACE", 32 },	/* 128 */
-  { "UCS", 63 },	/* 129 */
-  { "UCS_CONTROL", 62 },	/* 130 */
-  { "UNDERLAY", 580 },	/* 131 */
-  { "UNDERLAYDEFINITION", 581 },	/* 132 */
-  { "UNKNOWN_ENT", 65534 },	/* 133 */
-  { "UNKNOWN_OBJ", 65535 },	/* 134 */
-  { "UNUSED", 0 },	/* 135 */
-  { "VBA_PROJECT", 81 },	/* 136 */
-  { "VERTEX_2D", 10 },	/* 137 */
-  { "VERTEX_3D", 11 },	/* 138 */
-  { "VERTEX_MESH", 12 },	/* 139 */
-  { "VERTEX_PFACE", 13 },	/* 140 */
-  { "VERTEX_PFACE_FACE", 14 },	/* 141 */
-  { "VIEW", 61 },	/* 142 */
-  { "VIEWPORT", 34 },	/* 143 */
-  { "VIEW_CONTROL", 60 },	/* 144 */
-  { "VISUALSTYLE", 582 },	/* 145 */
-  { "VPORT", 65 },	/* 146 */
-  { "VPORT_CONTROL", 64 },	/* 147 */
-  { "VPORT_ENTITY_CONTROL", 70 },	/* 148 */
-  { "VPORT_ENTITY_HEADER", 71 },	/* 149 */
-  { "WIPEOUT", 583 },	/* 150 */
-  { "WIPEOUTVARIABLES", 584 },	/* 151 */
-  { "XLINE", 41 },	/* 152 */
-  { "XRECORD", 79 },	/* 153 */
-  { "XREFPANELOBJECT", 585 },	/* 154 */
-  { "_3DFACE", 28 },	/* 155 */
-  { "_3DSOLID", 38 },	/* 156 */
-};
-
-/* from typedef struct _dwg_entity_*: */
+/* sorted for bsearch. from typedef struct _dwg_entity_*: */
 const char *const dwg_entity_names[] = {
   "3DFACE",	/* 0 */
   "3DSOLID",	/* 1 */
@@ -232,7 +66,7 @@ const char *const dwg_entity_names[] = {
   "VIEWPORT",	/* 58 */
   "WIPEOUT",	/* 59 */
 };
-/* from typedef struct _dwg_object_*: */
+/* sorted for bsearch. from typedef struct _dwg_object_*: */
 const char *const dwg_object_names[] = {
   "ACDBNAVISWORKSMODELDEF",	/* 0 */
   "ACSH_SWEEP_CLASS",	/* 1 */
@@ -320,7 +154,7 @@ struct _name_type_offset {
 };
 
 /* from typedef struct _dwg_header_variables: */
-struct _name_type_offset _dwg_header_variables_fields[] = {
+const struct _name_type_offset _dwg_header_variables_fields[] = {
   { "size", "RL", OFF(struct _dwg_header_variables,size, 0) },
   { "bitsize_hi", "RL", OFF(struct _dwg_header_variables,bitsize_hi, 4) },
   { "bitsize", "RL", OFF(struct _dwg_header_variables,bitsize, 8) },
@@ -678,7 +512,7 @@ struct _name_type_offset _dwg_header_variables_fields[] = {
   { "crc", "RS", OFF(struct _dwg_header_variables,crc, 2374) },
 };
 /* from typedef struct _dwg_entity_3DFACE: */
-struct _name_type_offset _dwg_3DFACE_fields[] = {
+const struct _name_type_offset _dwg_3DFACE_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_3DFACE,parent, 0) },
   { "has_no_flags", "B", OFF(struct _dwg_entity_3DFACE,has_no_flags, 8) },
   { "z_is_zero", "B", OFF(struct _dwg_entity_3DFACE,z_is_zero, 9) },
@@ -689,7 +523,7 @@ struct _name_type_offset _dwg_3DFACE_fields[] = {
   { "invis_flags", "BS", OFF(struct _dwg_entity_3DFACE,invis_flags, 106) },
 };
 /* from typedef struct _dwg_entity_3DSOLID: */
-struct _name_type_offset _dwg_3DSOLID_fields[] = {
+const struct _name_type_offset _dwg_3DSOLID_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_3DSOLID,parent, 0) },
   { "acis_empty", "B", OFF(struct _dwg_entity_3DSOLID,acis_empty, 8) },
   { "unknown", "B", OFF(struct _dwg_entity_3DSOLID,unknown, 9) },
@@ -714,7 +548,7 @@ struct _name_type_offset _dwg_3DSOLID_fields[] = {
   { "acis_empty_bit", "B", OFF(struct _dwg_entity_3DSOLID,acis_empty_bit, 116) },
 };
 /* from typedef struct _dwg_entity_ARC: */
-struct _name_type_offset _dwg_ARC_fields[] = {
+const struct _name_type_offset _dwg_ARC_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_ARC,parent, 0) },
   { "center", "3BD", OFF(struct _dwg_entity_ARC,center, 8) },
   { "radius", "BD", OFF(struct _dwg_entity_ARC,radius, 32) },
@@ -724,7 +558,7 @@ struct _name_type_offset _dwg_ARC_fields[] = {
   { "end_angle", "BD", OFF(struct _dwg_entity_ARC,end_angle, 80) },
 };
 /* from typedef struct _dwg_entity_ATTDEF: */
-struct _name_type_offset _dwg_ATTDEF_fields[] = {
+const struct _name_type_offset _dwg_ATTDEF_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_ATTDEF,parent, 0) },
   { "elevation", "BD", OFF(struct _dwg_entity_ATTDEF,elevation, 8) },
   { "insertion_pt", "2DPOINT", OFF(struct _dwg_entity_ATTDEF,insertion_pt, 16) },
@@ -749,7 +583,7 @@ struct _name_type_offset _dwg_ATTDEF_fields[] = {
   { "style", "H", OFF(struct _dwg_entity_ATTDEF,style, 148) },
 };
 /* from typedef struct _dwg_entity_ATTRIB: */
-struct _name_type_offset _dwg_ATTRIB_fields[] = {
+const struct _name_type_offset _dwg_ATTRIB_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_ATTRIB,parent, 0) },
   { "elevation", "BD", OFF(struct _dwg_entity_ATTRIB,elevation, 8) },
   { "insertion_pt", "2DPOINT", OFF(struct _dwg_entity_ATTRIB,insertion_pt, 16) },
@@ -779,17 +613,17 @@ struct _name_type_offset _dwg_ATTRIB_fields[] = {
   { "annotative_short", "BS", OFF(struct _dwg_entity_ATTRIB,annotative_short, 168) },
 };
 /* from typedef struct _dwg_entity_BLOCK: */
-struct _name_type_offset _dwg_BLOCK_fields[] = {
+const struct _name_type_offset _dwg_BLOCK_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_BLOCK,parent, 0) },
   { "name", "TV", OFF(struct _dwg_entity_BLOCK,name, 8) },
 };
 /* from typedef struct _dwg_entity_CAMERA: */
-struct _name_type_offset _dwg_CAMERA_fields[] = {
+const struct _name_type_offset _dwg_CAMERA_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_CAMERA,parent, 0) },
   { "view", "H", OFF(struct _dwg_entity_CAMERA,view, 8) },
 };
 /* from typedef struct _dwg_entity_CIRCLE: */
-struct _name_type_offset _dwg_CIRCLE_fields[] = {
+const struct _name_type_offset _dwg_CIRCLE_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_CIRCLE,parent, 0) },
   { "center", "3BD", OFF(struct _dwg_entity_CIRCLE,center, 8) },
   { "radius", "BD", OFF(struct _dwg_entity_CIRCLE,radius, 32) },
@@ -797,7 +631,7 @@ struct _name_type_offset _dwg_CIRCLE_fields[] = {
   { "extrusion", "BE", OFF(struct _dwg_entity_CIRCLE,extrusion, 48) },
 };
 /* from typedef struct _dwg_entity_DIMENSION_ALIGNED: */
-struct _name_type_offset _dwg_DIMENSION_ALIGNED_fields[] = {
+const struct _name_type_offset _dwg_DIMENSION_ALIGNED_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_DIMENSION_ALIGNED,parent, 0) },
   { "class_version", "unsigned char", OFF(struct _dwg_entity_DIMENSION_ALIGNED,class_version, 8) },
   { "extrusion", "Dwg_Bitcode_3BD", OFF(struct _dwg_entity_DIMENSION_ALIGNED,extrusion, 9) },
@@ -825,7 +659,7 @@ struct _name_type_offset _dwg_DIMENSION_ALIGNED_fields[] = {
   { "block", "H", OFF(struct _dwg_entity_DIMENSION_ALIGNED,block, 241) },
 };
 /* from typedef struct _dwg_entity_DIMENSION_ANG2LN: */
-struct _name_type_offset _dwg_DIMENSION_ANG2LN_fields[] = {
+const struct _name_type_offset _dwg_DIMENSION_ANG2LN_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_DIMENSION_ANG2LN,parent, 0) },
   { "class_version", "unsigned char", OFF(struct _dwg_entity_DIMENSION_ANG2LN,class_version, 8) },
   { "extrusion", "Dwg_Bitcode_3BD", OFF(struct _dwg_entity_DIMENSION_ANG2LN,extrusion, 9) },
@@ -854,7 +688,7 @@ struct _name_type_offset _dwg_DIMENSION_ANG2LN_fields[] = {
   { "block", "H", OFF(struct _dwg_entity_DIMENSION_ANG2LN,block, 273) },
 };
 /* from typedef struct _dwg_entity_DIMENSION_ANG3PT: */
-struct _name_type_offset _dwg_DIMENSION_ANG3PT_fields[] = {
+const struct _name_type_offset _dwg_DIMENSION_ANG3PT_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_DIMENSION_ANG3PT,parent, 0) },
   { "class_version", "unsigned char", OFF(struct _dwg_entity_DIMENSION_ANG3PT,class_version, 8) },
   { "extrusion", "Dwg_Bitcode_3BD", OFF(struct _dwg_entity_DIMENSION_ANG3PT,extrusion, 9) },
@@ -882,7 +716,7 @@ struct _name_type_offset _dwg_DIMENSION_ANG3PT_fields[] = {
   { "block", "H", OFF(struct _dwg_entity_DIMENSION_ANG3PT,block, 257) },
 };
 /* from typedef struct _dwg_entity_DIMENSION_DIAMETER: */
-struct _name_type_offset _dwg_DIMENSION_DIAMETER_fields[] = {
+const struct _name_type_offset _dwg_DIMENSION_DIAMETER_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_DIMENSION_DIAMETER,parent, 0) },
   { "class_version", "unsigned char", OFF(struct _dwg_entity_DIMENSION_DIAMETER,class_version, 8) },
   { "extrusion", "Dwg_Bitcode_3BD", OFF(struct _dwg_entity_DIMENSION_DIAMETER,extrusion, 9) },
@@ -909,7 +743,7 @@ struct _name_type_offset _dwg_DIMENSION_DIAMETER_fields[] = {
   { "block", "H", OFF(struct _dwg_entity_DIMENSION_DIAMETER,block, 217) },
 };
 /* from typedef struct _dwg_entity_DIMENSION_LINEAR: */
-struct _name_type_offset _dwg_DIMENSION_LINEAR_fields[] = {
+const struct _name_type_offset _dwg_DIMENSION_LINEAR_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_DIMENSION_LINEAR,parent, 0) },
   { "class_version", "unsigned char", OFF(struct _dwg_entity_DIMENSION_LINEAR,class_version, 8) },
   { "extrusion", "Dwg_Bitcode_3BD", OFF(struct _dwg_entity_DIMENSION_LINEAR,extrusion, 9) },
@@ -938,7 +772,7 @@ struct _name_type_offset _dwg_DIMENSION_LINEAR_fields[] = {
   { "block", "H", OFF(struct _dwg_entity_DIMENSION_LINEAR,block, 249) },
 };
 /* from typedef struct _dwg_entity_DIMENSION_ORDINATE: */
-struct _name_type_offset _dwg_DIMENSION_ORDINATE_fields[] = {
+const struct _name_type_offset _dwg_DIMENSION_ORDINATE_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_DIMENSION_ORDINATE,parent, 0) },
   { "class_version", "unsigned char", OFF(struct _dwg_entity_DIMENSION_ORDINATE,class_version, 8) },
   { "extrusion", "Dwg_Bitcode_3BD", OFF(struct _dwg_entity_DIMENSION_ORDINATE,extrusion, 9) },
@@ -966,7 +800,7 @@ struct _name_type_offset _dwg_DIMENSION_ORDINATE_fields[] = {
   { "block", "H", OFF(struct _dwg_entity_DIMENSION_ORDINATE,block, 234) },
 };
 /* from typedef struct _dwg_entity_DIMENSION_RADIUS: */
-struct _name_type_offset _dwg_DIMENSION_RADIUS_fields[] = {
+const struct _name_type_offset _dwg_DIMENSION_RADIUS_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_DIMENSION_RADIUS,parent, 0) },
   { "class_version", "unsigned char", OFF(struct _dwg_entity_DIMENSION_RADIUS,class_version, 8) },
   { "extrusion", "Dwg_Bitcode_3BD", OFF(struct _dwg_entity_DIMENSION_RADIUS,extrusion, 9) },
@@ -993,10 +827,10 @@ struct _name_type_offset _dwg_DIMENSION_RADIUS_fields[] = {
   { "block", "H", OFF(struct _dwg_entity_DIMENSION_RADIUS,block, 217) },
 };
 /* from typedef struct _dwg_entity_DIMENSION_: */
-struct _name_type_offset _dwg_DIMENSION__fields[] = {
+const struct _name_type_offset _dwg_DIMENSION__fields[] = {
 };
 /* from typedef struct _dwg_entity_ELLIPSE: */
-struct _name_type_offset _dwg_ELLIPSE_fields[] = {
+const struct _name_type_offset _dwg_ELLIPSE_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_ELLIPSE,parent, 0) },
   { "center", "3BD", OFF(struct _dwg_entity_ELLIPSE,center, 8) },
   { "sm_axis", "3BD", OFF(struct _dwg_entity_ELLIPSE,sm_axis, 32) },
@@ -1006,11 +840,11 @@ struct _name_type_offset _dwg_ELLIPSE_fields[] = {
   { "end_angle", "BD", OFF(struct _dwg_entity_ELLIPSE,end_angle, 96) },
 };
 /* from typedef struct _dwg_entity_ENDBLK: */
-struct _name_type_offset _dwg_ENDBLK_fields[] = {
+const struct _name_type_offset _dwg_ENDBLK_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_ENDBLK,parent, 0) },
 };
 /* from typedef struct _dwg_entity_EXTRUDEDSURFACE: */
-struct _name_type_offset _dwg_EXTRUDEDSURFACE_fields[] = {
+const struct _name_type_offset _dwg_EXTRUDEDSURFACE_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_EXTRUDEDSURFACE,parent, 0) },
   { "acis_empty", "unsigned char", OFF(struct _dwg_entity_EXTRUDEDSURFACE,acis_empty, 8) },
   { "unknown", "unsigned char", OFF(struct _dwg_entity_EXTRUDEDSURFACE,unknown, 9) },
@@ -1062,7 +896,7 @@ struct _name_type_offset _dwg_EXTRUDEDSURFACE_fields[] = {
   { "path_entity", "H", OFF(struct _dwg_entity_EXTRUDEDSURFACE,path_entity, 283) },
 };
 /* from typedef struct _dwg_entity_GEOPOSITIONMARKER: */
-struct _name_type_offset _dwg_GEOPOSITIONMARKER_fields[] = {
+const struct _name_type_offset _dwg_GEOPOSITIONMARKER_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_GEOPOSITIONMARKER,parent, 0) },
   { "type", "BS", OFF(struct _dwg_entity_GEOPOSITIONMARKER,type, 8) },
   { "position", "3BD", OFF(struct _dwg_entity_GEOPOSITIONMARKER,position, 10) },
@@ -1078,7 +912,7 @@ struct _name_type_offset _dwg_GEOPOSITIONMARKER_fields[] = {
   { "text_style", "H", OFF(struct _dwg_entity_GEOPOSITIONMARKER,text_style, 102) },
 };
 /* from typedef struct _dwg_entity_HATCH: */
-struct _name_type_offset _dwg_HATCH_fields[] = {
+const struct _name_type_offset _dwg_HATCH_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_HATCH,parent, 0) },
   { "is_gradient_fill", "BL", OFF(struct _dwg_entity_HATCH,is_gradient_fill, 8) },
   { "reserved", "BL", OFF(struct _dwg_entity_HATCH,reserved, 12) },
@@ -1111,7 +945,7 @@ struct _name_type_offset _dwg_HATCH_fields[] = {
   { "boundary_handles", "H*", OFF(struct _dwg_entity_HATCH,boundary_handles, 174) },
 };
 /* from typedef struct _dwg_entity_HELIX: */
-struct _name_type_offset _dwg_HELIX_fields[] = {
+const struct _name_type_offset _dwg_HELIX_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_HELIX,parent, 0) },
   { "flag", "BS", OFF(struct _dwg_entity_HELIX,flag, 8) },
   { "scenario", "BS", OFF(struct _dwg_entity_HELIX,scenario, 10) },
@@ -1145,7 +979,7 @@ struct _name_type_offset _dwg_HELIX_fields[] = {
   { "constraint_type", "BS", OFF(struct _dwg_entity_HELIX,constraint_type, 233) },
 };
 /* from typedef struct _dwg_entity_IMAGE: */
-struct _name_type_offset _dwg_IMAGE_fields[] = {
+const struct _name_type_offset _dwg_IMAGE_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_IMAGE,parent, 0) },
   { "class_version", "BL", OFF(struct _dwg_entity_IMAGE,class_version, 8) },
   { "pt0", "3BD", OFF(struct _dwg_entity_IMAGE,pt0, 12) },
@@ -1167,7 +1001,7 @@ struct _name_type_offset _dwg_IMAGE_fields[] = {
   { "imagedefreactor", "H", OFF(struct _dwg_entity_IMAGE,imagedefreactor, 161) },
 };
 /* from typedef struct _dwg_entity_INSERT: */
-struct _name_type_offset _dwg_INSERT_fields[] = {
+const struct _name_type_offset _dwg_INSERT_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_INSERT,parent, 0) },
   { "ins_pt", "3DPOINT  ", OFF(struct _dwg_entity_INSERT,ins_pt, 8) },
   { "scale_flag", "BB       ", OFF(struct _dwg_entity_INSERT,scale_flag, 32) },
@@ -1183,7 +1017,7 @@ struct _name_type_offset _dwg_INSERT_fields[] = {
   { "seqend", "H  ", OFF(struct _dwg_entity_INSERT,seqend, 126) },
 };
 /* from typedef struct _dwg_entity_LEADER: */
-struct _name_type_offset _dwg_LEADER_fields[] = {
+const struct _name_type_offset _dwg_LEADER_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_LEADER,parent, 0) },
   { "unknown_bit_1", "B", OFF(struct _dwg_entity_LEADER,unknown_bit_1, 8) },
   { "path_type", "BS", OFF(struct _dwg_entity_LEADER,path_type, 9) },
@@ -1212,7 +1046,7 @@ struct _name_type_offset _dwg_LEADER_fields[] = {
   { "dimstyle", "H", OFF(struct _dwg_entity_LEADER,dimstyle, 197) },
 };
 /* from typedef struct _dwg_entity_LIGHT: */
-struct _name_type_offset _dwg_LIGHT_fields[] = {
+const struct _name_type_offset _dwg_LIGHT_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_LIGHT,parent, 0) },
   { "class_version", "BL", OFF(struct _dwg_entity_LIGHT,class_version, 8) },
   { "name", "T", OFF(struct _dwg_entity_LIGHT,name, 12) },
@@ -1236,7 +1070,7 @@ struct _name_type_offset _dwg_LIGHT_fields[] = {
   { "lights_layer", "H", OFF(struct _dwg_entity_LIGHT,lights_layer, 149) },
 };
 /* from typedef struct _dwg_entity_LINE: */
-struct _name_type_offset _dwg_LINE_fields[] = {
+const struct _name_type_offset _dwg_LINE_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_LINE,parent, 0) },
   { "Zs_are_zero", "RC", OFF(struct _dwg_entity_LINE,Zs_are_zero, 8) },
   { "start", "3BD", OFF(struct _dwg_entity_LINE,start, 9) },
@@ -1245,7 +1079,7 @@ struct _name_type_offset _dwg_LINE_fields[] = {
   { "extrusion", "BE", OFF(struct _dwg_entity_LINE,extrusion, 65) },
 };
 /* from typedef struct _dwg_entity_LOFTEDSURFACE: */
-struct _name_type_offset _dwg_LOFTEDSURFACE_fields[] = {
+const struct _name_type_offset _dwg_LOFTEDSURFACE_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_LOFTEDSURFACE,parent, 0) },
   { "acis_empty", "unsigned char", OFF(struct _dwg_entity_LOFTEDSURFACE,acis_empty, 8) },
   { "unknown", "unsigned char", OFF(struct _dwg_entity_LOFTEDSURFACE,unknown, 9) },
@@ -1292,7 +1126,7 @@ struct _name_type_offset _dwg_LOFTEDSURFACE_fields[] = {
   { "path_curve", "H", OFF(struct _dwg_entity_LOFTEDSURFACE,path_curve, 195) },
 };
 /* from typedef struct _dwg_entity_LWPOLYLINE: */
-struct _name_type_offset _dwg_LWPOLYLINE_fields[] = {
+const struct _name_type_offset _dwg_LWPOLYLINE_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_LWPOLYLINE,parent, 0) },
   { "flag", "BS", OFF(struct _dwg_entity_LWPOLYLINE,flag, 8) },
   { "const_width", "BD", OFF(struct _dwg_entity_LWPOLYLINE,const_width, 10) },
@@ -1309,7 +1143,7 @@ struct _name_type_offset _dwg_LWPOLYLINE_fields[] = {
   { "widths", "Dwg_LWPOLYLINE_width", OFF(struct _dwg_entity_LWPOLYLINE,widths, 98) },
 };
 /* from typedef struct _dwg_entity_MINSERT: */
-struct _name_type_offset _dwg_MINSERT_fields[] = {
+const struct _name_type_offset _dwg_MINSERT_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_MINSERT,parent, 0) },
   { "ins_pt", "3DPOINT  ", OFF(struct _dwg_entity_MINSERT,ins_pt, 8) },
   { "scale_flag", "BB       ", OFF(struct _dwg_entity_MINSERT,scale_flag, 32) },
@@ -1329,7 +1163,7 @@ struct _name_type_offset _dwg_MINSERT_fields[] = {
   { "seqend", "H  ", OFF(struct _dwg_entity_MINSERT,seqend, 146) },
 };
 /* from typedef struct _dwg_entity_MLINE: */
-struct _name_type_offset _dwg_MLINE_fields[] = {
+const struct _name_type_offset _dwg_MLINE_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_MLINE,parent, 0) },
   { "scale", "BD", OFF(struct _dwg_entity_MLINE,scale, 8) },
   { "justification", "RC", OFF(struct _dwg_entity_MLINE,justification, 16) },
@@ -1342,7 +1176,7 @@ struct _name_type_offset _dwg_MLINE_fields[] = {
   { "mlinestyle", "H", OFF(struct _dwg_entity_MLINE,mlinestyle, 78) },
 };
 /* from typedef struct _dwg_entity_MTEXT: */
-struct _name_type_offset _dwg_MTEXT_fields[] = {
+const struct _name_type_offset _dwg_MTEXT_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_MTEXT,parent, 0) },
   { "insertion_pt", "3BD", OFF(struct _dwg_entity_MTEXT,insertion_pt, 8) },
   { "extrusion", "3BD", OFF(struct _dwg_entity_MTEXT,extrusion, 32) },
@@ -1376,7 +1210,7 @@ struct _name_type_offset _dwg_MTEXT_fields[] = {
   { "column_heights", "double", OFF(struct _dwg_entity_MTEXT,column_heights, 229) },
 };
 /* from typedef struct _dwg_entity_OLE2FRAME: */
-struct _name_type_offset _dwg_OLE2FRAME_fields[] = {
+const struct _name_type_offset _dwg_OLE2FRAME_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_OLE2FRAME,parent, 0) },
   { "flag", "BS", OFF(struct _dwg_entity_OLE2FRAME,flag, 8) },
   { "mode", "BS", OFF(struct _dwg_entity_OLE2FRAME,mode, 10) },
@@ -1385,7 +1219,7 @@ struct _name_type_offset _dwg_OLE2FRAME_fields[] = {
   { "unknown", "RC", OFF(struct _dwg_entity_OLE2FRAME,unknown, 24) },
 };
 /* from typedef struct _dwg_entity_OLEFRAME: */
-struct _name_type_offset _dwg_OLEFRAME_fields[] = {
+const struct _name_type_offset _dwg_OLEFRAME_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_OLEFRAME,parent, 0) },
   { "flag", "BS", OFF(struct _dwg_entity_OLEFRAME,flag, 8) },
   { "mode", "BS", OFF(struct _dwg_entity_OLEFRAME,mode, 10) },
@@ -1393,7 +1227,7 @@ struct _name_type_offset _dwg_OLEFRAME_fields[] = {
   { "data", "char", OFF(struct _dwg_entity_OLEFRAME,data, 16) },
 };
 /* from typedef struct _dwg_entity_PLANESURFACE: */
-struct _name_type_offset _dwg_PLANESURFACE_fields[] = {
+const struct _name_type_offset _dwg_PLANESURFACE_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_PLANESURFACE,parent, 0) },
   { "acis_empty", "unsigned char", OFF(struct _dwg_entity_PLANESURFACE,acis_empty, 8) },
   { "unknown", "unsigned char", OFF(struct _dwg_entity_PLANESURFACE,unknown, 9) },
@@ -1422,7 +1256,7 @@ struct _name_type_offset _dwg_PLANESURFACE_fields[] = {
   { "class_version", "BL", OFF(struct _dwg_entity_PLANESURFACE,class_version, 123) },
 };
 /* from typedef struct _dwg_entity_POINT: */
-struct _name_type_offset _dwg_POINT_fields[] = {
+const struct _name_type_offset _dwg_POINT_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_POINT,parent, 0) },
   { "x", "BD", OFF(struct _dwg_entity_POINT,x, 8) },
   { "y", "BD", OFF(struct _dwg_entity_POINT,y, 16) },
@@ -1432,7 +1266,7 @@ struct _name_type_offset _dwg_POINT_fields[] = {
   { "x_ang", "BD", OFF(struct _dwg_entity_POINT,x_ang, 64) },
 };
 /* from typedef struct _dwg_entity_POLYLINE_2D: */
-struct _name_type_offset _dwg_POLYLINE_2D_fields[] = {
+const struct _name_type_offset _dwg_POLYLINE_2D_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_POLYLINE_2D,parent, 0) },
   { "flag", "BS", OFF(struct _dwg_entity_POLYLINE_2D,flag, 8) },
   { "curve_type", "BS", OFF(struct _dwg_entity_POLYLINE_2D,curve_type, 10) },
@@ -1448,7 +1282,7 @@ struct _name_type_offset _dwg_POLYLINE_2D_fields[] = {
   { "seqend", "H", OFF(struct _dwg_entity_POLYLINE_2D,seqend, 96) },
 };
 /* from typedef struct _dwg_entity_POLYLINE_3D: */
-struct _name_type_offset _dwg_POLYLINE_3D_fields[] = {
+const struct _name_type_offset _dwg_POLYLINE_3D_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_POLYLINE_3D,parent, 0) },
   { "flag", "RC", OFF(struct _dwg_entity_POLYLINE_3D,flag, 8) },
   { "flag2", "RC", OFF(struct _dwg_entity_POLYLINE_3D,flag2, 9) },
@@ -1459,7 +1293,7 @@ struct _name_type_offset _dwg_POLYLINE_3D_fields[] = {
   { "seqend", "H", OFF(struct _dwg_entity_POLYLINE_3D,seqend, 38) },
 };
 /* from typedef struct _dwg_entity_POLYLINE_MESH: */
-struct _name_type_offset _dwg_POLYLINE_MESH_fields[] = {
+const struct _name_type_offset _dwg_POLYLINE_MESH_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_POLYLINE_MESH,parent, 0) },
   { "flag", "BS", OFF(struct _dwg_entity_POLYLINE_MESH,flag, 8) },
   { "curve_type", "BS", OFF(struct _dwg_entity_POLYLINE_MESH,curve_type, 10) },
@@ -1474,7 +1308,7 @@ struct _name_type_offset _dwg_POLYLINE_MESH_fields[] = {
   { "seqend", "H", OFF(struct _dwg_entity_POLYLINE_MESH,seqend, 48) },
 };
 /* from typedef struct _dwg_entity_POLYLINE_PFACE: */
-struct _name_type_offset _dwg_POLYLINE_PFACE_fields[] = {
+const struct _name_type_offset _dwg_POLYLINE_PFACE_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_POLYLINE_PFACE,parent, 0) },
   { "numverts", "BS", OFF(struct _dwg_entity_POLYLINE_PFACE,numverts, 8) },
   { "numfaces", "BS", OFF(struct _dwg_entity_POLYLINE_PFACE,numfaces, 10) },
@@ -1485,7 +1319,7 @@ struct _name_type_offset _dwg_POLYLINE_PFACE_fields[] = {
   { "seqend", "H", OFF(struct _dwg_entity_POLYLINE_PFACE,seqend, 40) },
 };
 /* from typedef struct _dwg_entity_PROXY_ENTITY: */
-struct _name_type_offset _dwg_PROXY_ENTITY_fields[] = {
+const struct _name_type_offset _dwg_PROXY_ENTITY_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_PROXY_ENTITY,parent, 0) },
   { "class_id", "BL", OFF(struct _dwg_entity_PROXY_ENTITY,class_id, 8) },
   { "version", "BL", OFF(struct _dwg_entity_PROXY_ENTITY,version, 12) },
@@ -1497,7 +1331,7 @@ struct _name_type_offset _dwg_PROXY_ENTITY_fields[] = {
   { "size", "MS", OFF(struct _dwg_entity_PROXY_ENTITY,size, 45) },
 };
 /* from typedef struct _dwg_entity_PROXY_LWPOLYLINE: */
-struct _name_type_offset _dwg_PROXY_LWPOLYLINE_fields[] = {
+const struct _name_type_offset _dwg_PROXY_LWPOLYLINE_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_PROXY_LWPOLYLINE,parent, 0) },
   { "size", "RL", OFF(struct _dwg_entity_PROXY_LWPOLYLINE,size, 8) },
   { "flags", "BS", OFF(struct _dwg_entity_PROXY_LWPOLYLINE,flags, 12) },
@@ -1516,13 +1350,13 @@ struct _name_type_offset _dwg_PROXY_LWPOLYLINE_fields[] = {
   { "unknown_3", "RC", OFF(struct _dwg_entity_PROXY_LWPOLYLINE,unknown_3, 100) },
 };
 /* from typedef struct _dwg_entity_RAY: */
-struct _name_type_offset _dwg_RAY_fields[] = {
+const struct _name_type_offset _dwg_RAY_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_RAY,parent, 0) },
   { "point", "3BD", OFF(struct _dwg_entity_RAY,point, 8) },
   { "vector", "3BD", OFF(struct _dwg_entity_RAY,vector, 32) },
 };
 /* from typedef struct _dwg_entity_REVOLVEDSURFACE: */
-struct _name_type_offset _dwg_REVOLVEDSURFACE_fields[] = {
+const struct _name_type_offset _dwg_REVOLVEDSURFACE_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_REVOLVEDSURFACE,parent, 0) },
   { "acis_empty", "unsigned char", OFF(struct _dwg_entity_REVOLVEDSURFACE,acis_empty, 8) },
   { "unknown", "unsigned char", OFF(struct _dwg_entity_REVOLVEDSURFACE,unknown, 9) },
@@ -1563,11 +1397,11 @@ struct _name_type_offset _dwg_REVOLVEDSURFACE_fields[] = {
   { "close_to_axis", "B", OFF(struct _dwg_entity_REVOLVEDSURFACE,close_to_axis, 236) },
 };
 /* from typedef struct _dwg_entity_SEQEND: */
-struct _name_type_offset _dwg_SEQEND_fields[] = {
+const struct _name_type_offset _dwg_SEQEND_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_SEQEND,parent, 0) },
 };
 /* from typedef struct _dwg_entity_SHAPE: */
-struct _name_type_offset _dwg_SHAPE_fields[] = {
+const struct _name_type_offset _dwg_SHAPE_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_SHAPE,parent, 0) },
   { "ins_pt", "3BD", OFF(struct _dwg_entity_SHAPE,ins_pt, 8) },
   { "scale", "BD", OFF(struct _dwg_entity_SHAPE,scale, 32) },
@@ -1580,7 +1414,7 @@ struct _name_type_offset _dwg_SHAPE_fields[] = {
   { "style", "H", OFF(struct _dwg_entity_SHAPE,style, 98) },
 };
 /* from typedef struct _dwg_entity_SOLID: */
-struct _name_type_offset _dwg_SOLID_fields[] = {
+const struct _name_type_offset _dwg_SOLID_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_SOLID,parent, 0) },
   { "thickness", "BT", OFF(struct _dwg_entity_SOLID,thickness, 8) },
   { "elevation", "BD", OFF(struct _dwg_entity_SOLID,elevation, 16) },
@@ -1591,7 +1425,7 @@ struct _name_type_offset _dwg_SOLID_fields[] = {
   { "extrusion", "BE", OFF(struct _dwg_entity_SOLID,extrusion, 88) },
 };
 /* from typedef struct _dwg_entity_SPLINE: */
-struct _name_type_offset _dwg_SPLINE_fields[] = {
+const struct _name_type_offset _dwg_SPLINE_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_SPLINE,parent, 0) },
   { "flag", "RS", OFF(struct _dwg_entity_SPLINE,flag, 8) },
   { "scenario", "BS", OFF(struct _dwg_entity_SPLINE,scenario, 10) },
@@ -1615,7 +1449,7 @@ struct _name_type_offset _dwg_SPLINE_fields[] = {
   { "ctrl_pts", "Dwg_SPLINE_control_point", OFF(struct _dwg_entity_SPLINE,ctrl_pts, 124) },
 };
 /* from typedef struct _dwg_entity_SWEPTSURFACE: */
-struct _name_type_offset _dwg_SWEPTSURFACE_fields[] = {
+const struct _name_type_offset _dwg_SWEPTSURFACE_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_SWEPTSURFACE,parent, 0) },
   { "acis_empty", "unsigned char", OFF(struct _dwg_entity_SWEPTSURFACE,acis_empty, 8) },
   { "unknown", "unsigned char", OFF(struct _dwg_entity_SWEPTSURFACE,unknown, 9) },
@@ -1668,7 +1502,7 @@ struct _name_type_offset _dwg_SWEPTSURFACE_fields[] = {
   { "reference_vector_for_controlling_twist", "3BD", OFF(struct _dwg_entity_SWEPTSURFACE,reference_vector_for_controlling_twist, 246) },
 };
 /* from typedef struct _dwg_entity_TABLE: */
-struct _name_type_offset _dwg_TABLE_fields[] = {
+const struct _name_type_offset _dwg_TABLE_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_TABLE,parent, 0) },
   { "unknown_rc", "RC", OFF(struct _dwg_entity_TABLE,unknown_rc, 8) },
   { "unknown_h", "H", OFF(struct _dwg_entity_TABLE,unknown_h, 9) },
@@ -1798,7 +1632,7 @@ struct _name_type_offset _dwg_TABLE_fields[] = {
   { "break_rows", "Dwg_TABLE_BreakRow", OFF(struct _dwg_entity_TABLE,break_rows, 1161) },
 };
 /* from typedef struct _dwg_entity_TEXT: */
-struct _name_type_offset _dwg_TEXT_fields[] = {
+const struct _name_type_offset _dwg_TEXT_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_TEXT,parent, 0) },
   { "dataflags", "RC", OFF(struct _dwg_entity_TEXT,dataflags, 8) },
   { "elevation", "RD", OFF(struct _dwg_entity_TEXT,elevation, 9) },
@@ -1817,7 +1651,7 @@ struct _name_type_offset _dwg_TEXT_fields[] = {
   { "style", "H", OFF(struct _dwg_entity_TEXT,style, 127) },
 };
 /* from typedef struct _dwg_entity_TOLERANCE: */
-struct _name_type_offset _dwg_TOLERANCE_fields[] = {
+const struct _name_type_offset _dwg_TOLERANCE_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_TOLERANCE,parent, 0) },
   { "unknown_short", "BS", OFF(struct _dwg_entity_TOLERANCE,unknown_short, 8) },
   { "height", "BD", OFF(struct _dwg_entity_TOLERANCE,height, 10) },
@@ -1829,7 +1663,7 @@ struct _name_type_offset _dwg_TOLERANCE_fields[] = {
   { "dimstyle", "H", OFF(struct _dwg_entity_TOLERANCE,dimstyle, 106) },
 };
 /* from typedef struct _dwg_entity_TRACE: */
-struct _name_type_offset _dwg_TRACE_fields[] = {
+const struct _name_type_offset _dwg_TRACE_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_TRACE,parent, 0) },
   { "thickness", "BT", OFF(struct _dwg_entity_TRACE,thickness, 8) },
   { "elevation", "BD", OFF(struct _dwg_entity_TRACE,elevation, 16) },
@@ -1840,7 +1674,7 @@ struct _name_type_offset _dwg_TRACE_fields[] = {
   { "extrusion", "BE", OFF(struct _dwg_entity_TRACE,extrusion, 88) },
 };
 /* from typedef struct _dwg_entity_UNDERLAY: */
-struct _name_type_offset _dwg_UNDERLAY_fields[] = {
+const struct _name_type_offset _dwg_UNDERLAY_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_UNDERLAY,parent, 0) },
   { "extrusion", "3BD", OFF(struct _dwg_entity_UNDERLAY,extrusion, 8) },
   { "insertion_pt", "3BD", OFF(struct _dwg_entity_UNDERLAY,insertion_pt, 32) },
@@ -1855,11 +1689,11 @@ struct _name_type_offset _dwg_UNDERLAY_fields[] = {
   { "definition_id", "H", OFF(struct _dwg_entity_UNDERLAY,definition_id, 111) },
 };
 /* from typedef struct _dwg_entity_UNKNOWN_ENT: */
-struct _name_type_offset _dwg_UNKNOWN_ENT_fields[] = {
+const struct _name_type_offset _dwg_UNKNOWN_ENT_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_UNKNOWN_ENT,parent, 0) },
 };
 /* from typedef struct _dwg_entity_VERTEX_2D: */
-struct _name_type_offset _dwg_VERTEX_2D_fields[] = {
+const struct _name_type_offset _dwg_VERTEX_2D_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_VERTEX_2D,parent, 0) },
   { "flag", "RC", OFF(struct _dwg_entity_VERTEX_2D,flag, 8) },
   { "point", "3BD", OFF(struct _dwg_entity_VERTEX_2D,point, 9) },
@@ -1870,18 +1704,18 @@ struct _name_type_offset _dwg_VERTEX_2D_fields[] = {
   { "tangent_dir", "BD", OFF(struct _dwg_entity_VERTEX_2D,tangent_dir, 61) },
 };
 /* from typedef struct _dwg_entity_VERTEX_3D: */
-struct _name_type_offset _dwg_VERTEX_3D_fields[] = {
+const struct _name_type_offset _dwg_VERTEX_3D_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_VERTEX_3D,parent, 0) },
   { "flag", "RC", OFF(struct _dwg_entity_VERTEX_3D,flag, 8) },
   { "point", "3BD", OFF(struct _dwg_entity_VERTEX_3D,point, 9) },
 };
 /* from typedef struct _dwg_entity_VERTEX_PFACE_FACE: */
-struct _name_type_offset _dwg_VERTEX_PFACE_FACE_fields[] = {
+const struct _name_type_offset _dwg_VERTEX_PFACE_FACE_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_VERTEX_PFACE_FACE,parent, 0) },
   { "vertind[4]", "BS", OFF(struct _dwg_entity_VERTEX_PFACE_FACE,vertind[4], 8) },
 };
 /* from typedef struct _dwg_entity_VIEWPORT: */
-struct _name_type_offset _dwg_VIEWPORT_fields[] = {
+const struct _name_type_offset _dwg_VIEWPORT_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_VIEWPORT,parent, 0) },
   { "center", "3BD", OFF(struct _dwg_entity_VIEWPORT,center, 8) },
   { "width", "BD", OFF(struct _dwg_entity_VIEWPORT,width, 32) },
@@ -1921,7 +1755,7 @@ struct _name_type_offset _dwg_VIEWPORT_fields[] = {
   { "ambient_color", "CMC", OFF(struct _dwg_entity_VIEWPORT,ambient_color, 337) },
 };
 /* from typedef struct _dwg_entity_WIPEOUT: */
-struct _name_type_offset _dwg_WIPEOUT_fields[] = {
+const struct _name_type_offset _dwg_WIPEOUT_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_entity_WIPEOUT,parent, 0) },
   { "class_version", "BL", OFF(struct _dwg_entity_WIPEOUT,class_version, 8) },
   { "pt0", "3BD", OFF(struct _dwg_entity_WIPEOUT,pt0, 12) },
@@ -1943,7 +1777,7 @@ struct _name_type_offset _dwg_WIPEOUT_fields[] = {
   { "imagedefreactor", "H", OFF(struct _dwg_entity_WIPEOUT,imagedefreactor, 161) },
 };
 /* from typedef struct _dwg_object_ACDBNAVISWORKSMODELDEF: */
-struct _name_type_offset _dwg_ACDBNAVISWORKSMODELDEF_fields[] = {
+const struct _name_type_offset _dwg_ACDBNAVISWORKSMODELDEF_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_ACDBNAVISWORKSMODELDEF,parent, 0) },
   { "parenthandle", "H", OFF(struct _dwg_object_ACDBNAVISWORKSMODELDEF,parenthandle, 8) },
   { "path", "T", OFF(struct _dwg_object_ACDBNAVISWORKSMODELDEF,path, 16) },
@@ -1953,7 +1787,7 @@ struct _name_type_offset _dwg_ACDBNAVISWORKSMODELDEF_fields[] = {
   { "host_drawing_visibility", "B", OFF(struct _dwg_object_ACDBNAVISWORKSMODELDEF,host_drawing_visibility, 73) },
 };
 /* from typedef struct _dwg_object_ACSH_SWEEP_CLASS: */
-struct _name_type_offset _dwg_ACSH_SWEEP_CLASS_fields[] = {
+const struct _name_type_offset _dwg_ACSH_SWEEP_CLASS_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_ACSH_SWEEP_CLASS,parent, 0) },
   { "class_version", "BL", OFF(struct _dwg_object_ACSH_SWEEP_CLASS,class_version, 8) },
   { "ee_bl98", "BL", OFF(struct _dwg_object_ACSH_SWEEP_CLASS,ee_bl98, 12) },
@@ -1992,7 +1826,7 @@ struct _name_type_offset _dwg_ACSH_SWEEP_CLASS_fields[] = {
   { "pt2", "3BD", OFF(struct _dwg_object_ACSH_SWEEP_CLASS,pt2, 205) },
 };
 /* from typedef struct _dwg_object_APPID: */
-struct _name_type_offset _dwg_APPID_fields[] = {
+const struct _name_type_offset _dwg_APPID_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_APPID,parent, 0) },
   { "flag", "RC", OFF(struct _dwg_object_APPID,flag, 8) },
   { "entry_name", "TV", OFF(struct _dwg_object_APPID,entry_name, 9) },
@@ -2005,7 +1839,7 @@ struct _name_type_offset _dwg_APPID_fields[] = {
   { "null_handle", "H", OFF(struct _dwg_object_APPID,null_handle, 32) },
 };
 /* from typedef struct _dwg_object_APPID_CONTROL: */
-struct _name_type_offset _dwg_APPID_CONTROL_fields[] = {
+const struct _name_type_offset _dwg_APPID_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_APPID_CONTROL,parent, 0) },
   { "num_entries", "unsigned short int", OFF(struct _dwg_object_APPID_CONTROL,num_entries, 8) },
   { "null_handle", "Dwg_Object_Ref", OFF(struct _dwg_object_APPID_CONTROL,null_handle, 10) },
@@ -2015,7 +1849,7 @@ struct _name_type_offset _dwg_APPID_CONTROL_fields[] = {
   { "reactors", "Dwg_Object_Ref", OFF(struct _dwg_object_APPID_CONTROL,reactors, 38) },
 };
 /* from typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP: */
-struct _name_type_offset _dwg_ASSOC2DCONSTRAINTGROUP_fields[] = {
+const struct _name_type_offset _dwg_ASSOC2DCONSTRAINTGROUP_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_ASSOC2DCONSTRAINTGROUP,parent, 0) },
   { "solution_status", "BL", OFF(struct _dwg_object_ASSOC2DCONSTRAINTGROUP,solution_status, 8) },
   { "geometry_status", "BL", OFF(struct _dwg_object_ASSOC2DCONSTRAINTGROUP,geometry_status, 12) },
@@ -2041,7 +1875,7 @@ struct _name_type_offset _dwg_ASSOC2DCONSTRAINTGROUP_fields[] = {
   { "w3", "BD", OFF(struct _dwg_object_ASSOC2DCONSTRAINTGROUP,w3, 222) },
 };
 /* from typedef struct _dwg_object_ASSOCACTION: */
-struct _name_type_offset _dwg_ASSOCACTION_fields[] = {
+const struct _name_type_offset _dwg_ASSOCACTION_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_ASSOCACTION,parent, 0) },
   { "is_body_a_proxy", "B ", OFF(struct _dwg_object_ASSOCACTION,is_body_a_proxy, 8) },
   { "body", "Dwg_ACTIONBODY", OFF(struct _dwg_object_ASSOCACTION,body, 9) },
@@ -2055,7 +1889,7 @@ struct _name_type_offset _dwg_ASSOCACTION_fields[] = {
   { "unknown_assoc", "BL", OFF(struct _dwg_object_ASSOCACTION,unknown_assoc, 85) },
 };
 /* from typedef struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY: */
-struct _name_type_offset _dwg_ASSOCALIGNEDDIMACTIONBODY_fields[] = {
+const struct _name_type_offset _dwg_ASSOCALIGNEDDIMACTIONBODY_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY,parent, 0) },
   { "aab_status", "BL", OFF(struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY,aab_status, 8) },
   { "pab_status", "BL", OFF(struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY,pab_status, 12) },
@@ -2072,7 +1906,7 @@ struct _name_type_offset _dwg_ASSOCALIGNEDDIMACTIONBODY_fields[] = {
   { "r_node", "H ", OFF(struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY,r_node, 72) },
 };
 /* from typedef struct _dwg_object_ASSOCDEPENDENCY: */
-struct _name_type_offset _dwg_ASSOCDEPENDENCY_fields[] = {
+const struct _name_type_offset _dwg_ASSOCDEPENDENCY_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_ASSOCDEPENDENCY,parent, 0) },
   { "class_version", "BL", OFF(struct _dwg_object_ASSOCDEPENDENCY,class_version, 8) },
   { "status", "BL", OFF(struct _dwg_object_ASSOCDEPENDENCY,status, 12) },
@@ -2090,7 +1924,7 @@ struct _name_type_offset _dwg_ASSOCDEPENDENCY_fields[] = {
   { "node", "H ", OFF(struct _dwg_object_ASSOCDEPENDENCY,node, 61) },
 };
 /* from typedef struct _dwg_object_ASSOCNETWORK: */
-struct _name_type_offset _dwg_ASSOCNETWORK_fields[] = {
+const struct _name_type_offset _dwg_ASSOCNETWORK_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_ASSOCNETWORK,parent, 0) },
   { "status", "BL", OFF(struct _dwg_object_ASSOCNETWORK,status, 8) },
   { "num_deps", "BL", OFF(struct _dwg_object_ASSOCNETWORK,num_deps, 12) },
@@ -2103,7 +1937,7 @@ struct _name_type_offset _dwg_ASSOCNETWORK_fields[] = {
   { "actions", "H*", OFF(struct _dwg_object_ASSOCNETWORK,actions, 48) },
 };
 /* from typedef struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM: */
-struct _name_type_offset _dwg_ASSOCOSNAPPOINTREFACTIONPARAM_fields[] = {
+const struct _name_type_offset _dwg_ASSOCOSNAPPOINTREFACTIONPARAM_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM,parent, 0) },
   { "unknown", "RC", OFF(struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM,unknown, 8) },
   { "unknown1", "B", OFF(struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM,unknown1, 9) },
@@ -2116,7 +1950,7 @@ struct _name_type_offset _dwg_ASSOCOSNAPPOINTREFACTIONPARAM_fields[] = {
   { "writedep", "H", OFF(struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM,writedep, 40) },
 };
 /* from typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER: */
-struct _name_type_offset _dwg_ASSOCPERSSUBENTMANAGER_fields[] = {
+const struct _name_type_offset _dwg_ASSOCPERSSUBENTMANAGER_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_ASSOCPERSSUBENTMANAGER,parent, 0) },
   { "class_version", "BL", OFF(struct _dwg_object_ASSOCPERSSUBENTMANAGER,class_version, 8) },
   { "unknown_bl1", "BL", OFF(struct _dwg_object_ASSOCPERSSUBENTMANAGER,unknown_bl1, 12) },
@@ -2161,7 +1995,7 @@ struct _name_type_offset _dwg_ASSOCPERSSUBENTMANAGER_fields[] = {
   { "parenthandle", "H ", OFF(struct _dwg_object_ASSOCPERSSUBENTMANAGER,parenthandle, 165) },
 };
 /* from typedef struct _dwg_object_ASSOCPLANESURFACEACTIONBODY: */
-struct _name_type_offset _dwg_ASSOCPLANESURFACEACTIONBODY_fields[] = {
+const struct _name_type_offset _dwg_ASSOCPLANESURFACEACTIONBODY_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_ASSOCPLANESURFACEACTIONBODY,parent, 0) },
   { "aab_status", "BL", OFF(struct _dwg_object_ASSOCPLANESURFACEACTIONBODY,aab_status, 8) },
   { "pab_status", "BL", OFF(struct _dwg_object_ASSOCPLANESURFACEACTIONBODY,pab_status, 12) },
@@ -2181,7 +2015,7 @@ struct _name_type_offset _dwg_ASSOCPLANESURFACEACTIONBODY_fields[] = {
   { "parenthandle", "H ", OFF(struct _dwg_object_ASSOCPLANESURFACEACTIONBODY,parenthandle, 68) },
 };
 /* from typedef struct _dwg_object_BLOCK_CONTROL: */
-struct _name_type_offset _dwg_BLOCK_CONTROL_fields[] = {
+const struct _name_type_offset _dwg_BLOCK_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_BLOCK_CONTROL,parent, 0) },
   { "num_entries", "unsigned short int", OFF(struct _dwg_object_BLOCK_CONTROL,num_entries, 8) },
   { "null_handle", "Dwg_Object_Ref", OFF(struct _dwg_object_BLOCK_CONTROL,null_handle, 10) },
@@ -2193,7 +2027,7 @@ struct _name_type_offset _dwg_BLOCK_CONTROL_fields[] = {
   { "paper_space", "H", OFF(struct _dwg_object_BLOCK_CONTROL,paper_space, 54) },
 };
 /* from typedef struct _dwg_object_BLOCK_HEADER: */
-struct _name_type_offset _dwg_BLOCK_HEADER_fields[] = {
+const struct _name_type_offset _dwg_BLOCK_HEADER_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_BLOCK_HEADER,parent, 0) },
   { "flag", "RC", OFF(struct _dwg_object_BLOCK_HEADER,flag, 8) },
   { "entry_name", "TV", OFF(struct _dwg_object_BLOCK_HEADER,entry_name, 9) },
@@ -2230,17 +2064,17 @@ struct _name_type_offset _dwg_BLOCK_HEADER_fields[] = {
   { "layout_handle", "H", OFF(struct _dwg_object_BLOCK_HEADER,layout_handle, 163) },
 };
 /* from typedef struct _dwg_object_CELLSTYLEMAP: */
-struct _name_type_offset _dwg_CELLSTYLEMAP_fields[] = {
+const struct _name_type_offset _dwg_CELLSTYLEMAP_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_CELLSTYLEMAP,parent, 0) },
   { "num_cells", "BL", OFF(struct _dwg_object_CELLSTYLEMAP,num_cells, 8) },
   { "cells", "Dwg_CELLSTYLEMAP_Cell", OFF(struct _dwg_object_CELLSTYLEMAP,cells, 12) },
 };
 /* from typedef struct _dwg_object_DATATABLE: */
-struct _name_type_offset _dwg_DATATABLE_fields[] = {
+const struct _name_type_offset _dwg_DATATABLE_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_DATATABLE,parent, 0) },
 };
 /* from typedef struct _dwg_object_DBCOLOR: */
-struct _name_type_offset _dwg_DBCOLOR_fields[] = {
+const struct _name_type_offset _dwg_DBCOLOR_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_DBCOLOR,parent, 0) },
   { "class_version", "BL", OFF(struct _dwg_object_DBCOLOR,class_version, 8) },
   { "unknown1", "BB", OFF(struct _dwg_object_DBCOLOR,unknown1, 12) },
@@ -2251,7 +2085,7 @@ struct _name_type_offset _dwg_DBCOLOR_fields[] = {
   { "parenthandle", "H", OFF(struct _dwg_object_DBCOLOR,parenthandle, 34) },
 };
 /* from typedef struct _dwg_object_DICTIONARY: */
-struct _name_type_offset _dwg_DICTIONARY_fields[] = {
+const struct _name_type_offset _dwg_DICTIONARY_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_DICTIONARY,parent, 0) },
   { "numitems", "BL", OFF(struct _dwg_object_DICTIONARY,numitems, 8) },
   { "text", "TV*", OFF(struct _dwg_object_DICTIONARY,text, 12) },
@@ -2262,14 +2096,14 @@ struct _name_type_offset _dwg_DICTIONARY_fields[] = {
   { "itemhandles", "H*", OFF(struct _dwg_object_DICTIONARY,itemhandles, 32) },
 };
 /* from typedef struct _dwg_object_DICTIONARYVAR: */
-struct _name_type_offset _dwg_DICTIONARYVAR_fields[] = {
+const struct _name_type_offset _dwg_DICTIONARYVAR_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_DICTIONARYVAR,parent, 0) },
   { "intval", "RC", OFF(struct _dwg_object_DICTIONARYVAR,intval, 8) },
   { "str", "TV", OFF(struct _dwg_object_DICTIONARYVAR,str, 9) },
   { "parenthandle", "H", OFF(struct _dwg_object_DICTIONARYVAR,parenthandle, 17) },
 };
 /* from typedef struct _dwg_object_DICTIONARYWDFLT: */
-struct _name_type_offset _dwg_DICTIONARYWDFLT_fields[] = {
+const struct _name_type_offset _dwg_DICTIONARYWDFLT_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_DICTIONARYWDFLT,parent, 0) },
   { "numitems", "BL", OFF(struct _dwg_object_DICTIONARYWDFLT,numitems, 8) },
   { "cloning_rl", "RL", OFF(struct _dwg_object_DICTIONARYWDFLT,cloning_rl, 12) },
@@ -2281,7 +2115,7 @@ struct _name_type_offset _dwg_DICTIONARYWDFLT_fields[] = {
   { "defaultid", "H", OFF(struct _dwg_object_DICTIONARYWDFLT,defaultid, 43) },
 };
 /* from typedef struct _dwg_object_DIMASSOC: */
-struct _name_type_offset _dwg_DIMASSOC_fields[] = {
+const struct _name_type_offset _dwg_DIMASSOC_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_DIMASSOC,parent, 0) },
   { "associativity", "BL", OFF(struct _dwg_object_DIMASSOC,associativity, 8) },
   { "trans_space_flag", "RC", OFF(struct _dwg_object_DIMASSOC,trans_space_flag, 12) },
@@ -2295,7 +2129,7 @@ struct _name_type_offset _dwg_DIMASSOC_fields[] = {
   { "intsectobj", "H", OFF(struct _dwg_object_DIMASSOC,intsectobj, 65) },
 };
 /* from typedef struct _dwg_object_DIMSTYLE: */
-struct _name_type_offset _dwg_DIMSTYLE_fields[] = {
+const struct _name_type_offset _dwg_DIMSTYLE_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_DIMSTYLE,parent, 0) },
   { "flag", "RC", OFF(struct _dwg_object_DIMSTYLE,flag, 8) },
   { "entry_name", "TV", OFF(struct _dwg_object_DIMSTYLE,entry_name, 9) },
@@ -2395,7 +2229,7 @@ struct _name_type_offset _dwg_DIMSTYLE_fields[] = {
   { "DIMLTEX2", "H", OFF(struct _dwg_object_DIMSTYLE,DIMLTEX2, 517) },
 };
 /* from typedef struct _dwg_object_DIMSTYLE_CONTROL: */
-struct _name_type_offset _dwg_DIMSTYLE_CONTROL_fields[] = {
+const struct _name_type_offset _dwg_DIMSTYLE_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_DIMSTYLE_CONTROL,parent, 0) },
   { "num_entries", "unsigned short int", OFF(struct _dwg_object_DIMSTYLE_CONTROL,num_entries, 8) },
   { "null_handle", "Dwg_Object_Ref", OFF(struct _dwg_object_DIMSTYLE_CONTROL,null_handle, 10) },
@@ -2407,18 +2241,18 @@ struct _name_type_offset _dwg_DIMSTYLE_CONTROL_fields[] = {
   { "morehandles", "H*", OFF(struct _dwg_object_DIMSTYLE_CONTROL,morehandles, 47) },
 };
 /* from typedef struct _dwg_object_DUMMY: */
-struct _name_type_offset _dwg_DUMMY_fields[] = {
+const struct _name_type_offset _dwg_DUMMY_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_DUMMY,parent, 0) },
 };
 /* from typedef struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER: */
-struct _name_type_offset _dwg_DYNAMICBLOCKPURGEPREVENTER_fields[] = {
+const struct _name_type_offset _dwg_DYNAMICBLOCKPURGEPREVENTER_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER,parent, 0) },
   { "flag", "BS", OFF(struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER,flag, 8) },
   { "unknown_rs1", "RS", OFF(struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER,unknown_rs1, 10) },
   { "parenthandle", "H ", OFF(struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER,parenthandle, 12) },
 };
 /* from typedef struct _dwg_object_EVALUATION_GRAPH: */
-struct _name_type_offset _dwg_EVALUATION_GRAPH_fields[] = {
+const struct _name_type_offset _dwg_EVALUATION_GRAPH_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_EVALUATION_GRAPH,parent, 0) },
   { "has_graph", "BL", OFF(struct _dwg_object_EVALUATION_GRAPH,has_graph, 8) },
   { "unknown1", "BL", OFF(struct _dwg_object_EVALUATION_GRAPH,unknown1, 12) },
@@ -2434,7 +2268,7 @@ struct _name_type_offset _dwg_EVALUATION_GRAPH_fields[] = {
   { "evalexpr", "Dwg_Object_Ref", OFF(struct _dwg_object_EVALUATION_GRAPH,evalexpr, 56) },
 };
 /* from typedef struct _dwg_object_FIELD: */
-struct _name_type_offset _dwg_FIELD_fields[] = {
+const struct _name_type_offset _dwg_FIELD_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_FIELD,parent, 0) },
   { "id", "TV", OFF(struct _dwg_object_FIELD,id, 8) },
   { "code", "TV", OFF(struct _dwg_object_FIELD,code, 16) },
@@ -2456,14 +2290,14 @@ struct _name_type_offset _dwg_FIELD_fields[] = {
   { "childval", "Dwg_FIELD_ChildValue", OFF(struct _dwg_object_FIELD,childval, 200) },
 };
 /* from typedef struct _dwg_object_FIELDLIST: */
-struct _name_type_offset _dwg_FIELDLIST_fields[] = {
+const struct _name_type_offset _dwg_FIELDLIST_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_FIELDLIST,parent, 0) },
   { "num_fields", "BL", OFF(struct _dwg_object_FIELDLIST,num_fields, 8) },
   { "unknown", "B", OFF(struct _dwg_object_FIELDLIST,unknown, 12) },
   { "field_handles", "H *", OFF(struct _dwg_object_FIELDLIST,field_handles, 13) },
 };
 /* from typedef struct _dwg_object_GEODATA: */
-struct _name_type_offset _dwg_GEODATA_fields[] = {
+const struct _name_type_offset _dwg_GEODATA_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_GEODATA,parent, 0) },
   { "class_version", "BL", OFF(struct _dwg_object_GEODATA,class_version, 8) },
   { "host_block", "H", OFF(struct _dwg_object_GEODATA,host_block, 12) },
@@ -2499,7 +2333,7 @@ struct _name_type_offset _dwg_GEODATA_fields[] = {
   { "north_dir_angle_rad", "BD", OFF(struct _dwg_object_GEODATA,north_dir_angle_rad, 285) },
 };
 /* from typedef struct _dwg_object_GROUP: */
-struct _name_type_offset _dwg_GROUP_fields[] = {
+const struct _name_type_offset _dwg_GROUP_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_GROUP,parent, 0) },
   { "name", "TV", OFF(struct _dwg_object_GROUP,name, 8) },
   { "unnamed", "BS", OFF(struct _dwg_object_GROUP,unnamed, 16) },
@@ -2509,7 +2343,7 @@ struct _name_type_offset _dwg_GROUP_fields[] = {
   { "group_entries", "H*", OFF(struct _dwg_object_GROUP,group_entries, 32) },
 };
 /* from typedef struct _dwg_object_IDBUFFER: */
-struct _name_type_offset _dwg_IDBUFFER_fields[] = {
+const struct _name_type_offset _dwg_IDBUFFER_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_IDBUFFER,parent, 0) },
   { "unknown", "RC", OFF(struct _dwg_object_IDBUFFER,unknown, 8) },
   { "num_obj_ids", "BL", OFF(struct _dwg_object_IDBUFFER,num_obj_ids, 9) },
@@ -2517,7 +2351,7 @@ struct _name_type_offset _dwg_IDBUFFER_fields[] = {
   { "obj_ids", "H*", OFF(struct _dwg_object_IDBUFFER,obj_ids, 21) },
 };
 /* from typedef struct _dwg_object_IMAGEDEF: */
-struct _name_type_offset _dwg_IMAGEDEF_fields[] = {
+const struct _name_type_offset _dwg_IMAGEDEF_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_IMAGEDEF,parent, 0) },
   { "class_version", "BL", OFF(struct _dwg_object_IMAGEDEF,class_version, 8) },
   { "image_size", "2RD", OFF(struct _dwg_object_IMAGEDEF,image_size, 12) },
@@ -2528,13 +2362,13 @@ struct _name_type_offset _dwg_IMAGEDEF_fields[] = {
   { "parenthandle", "H", OFF(struct _dwg_object_IMAGEDEF,parenthandle, 54) },
 };
 /* from typedef struct _dwg_object_IMAGEDEF_REACTOR: */
-struct _name_type_offset _dwg_IMAGEDEF_REACTOR_fields[] = {
+const struct _name_type_offset _dwg_IMAGEDEF_REACTOR_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_IMAGEDEF_REACTOR,parent, 0) },
   { "class_version", "BL", OFF(struct _dwg_object_IMAGEDEF_REACTOR,class_version, 8) },
   { "parenthandle", "H", OFF(struct _dwg_object_IMAGEDEF_REACTOR,parenthandle, 12) },
 };
 /* from typedef struct _dwg_object_LAYER: */
-struct _name_type_offset _dwg_LAYER_fields[] = {
+const struct _name_type_offset _dwg_LAYER_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_LAYER,parent, 0) },
   { "flag", "BS", OFF(struct _dwg_object_LAYER,flag, 8) },
   { "entry_name", "TV", OFF(struct _dwg_object_LAYER,entry_name, 10) },
@@ -2559,7 +2393,7 @@ struct _name_type_offset _dwg_LAYER_fields[] = {
   { "null_handle", "H", OFF(struct _dwg_object_LAYER,null_handle, 103) },
 };
 /* from typedef struct _dwg_object_LAYER_CONTROL: */
-struct _name_type_offset _dwg_LAYER_CONTROL_fields[] = {
+const struct _name_type_offset _dwg_LAYER_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_LAYER_CONTROL,parent, 0) },
   { "num_entries", "unsigned short int", OFF(struct _dwg_object_LAYER_CONTROL,num_entries, 8) },
   { "null_handle", "Dwg_Object_Ref", OFF(struct _dwg_object_LAYER_CONTROL,null_handle, 10) },
@@ -2569,7 +2403,7 @@ struct _name_type_offset _dwg_LAYER_CONTROL_fields[] = {
   { "reactors", "Dwg_Object_Ref", OFF(struct _dwg_object_LAYER_CONTROL,reactors, 38) },
 };
 /* from typedef struct _dwg_object_LAYER_INDEX: */
-struct _name_type_offset _dwg_LAYER_INDEX_fields[] = {
+const struct _name_type_offset _dwg_LAYER_INDEX_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_LAYER_INDEX,parent, 0) },
   { "timestamp1", "BL", OFF(struct _dwg_object_LAYER_INDEX,timestamp1, 8) },
   { "timestamp2", "BL", OFF(struct _dwg_object_LAYER_INDEX,timestamp2, 12) },
@@ -2579,7 +2413,7 @@ struct _name_type_offset _dwg_LAYER_INDEX_fields[] = {
   { "entry_handles", "H*", OFF(struct _dwg_object_LAYER_INDEX,entry_handles, 36) },
 };
 /* from typedef struct _dwg_object_LAYOUT: */
-struct _name_type_offset _dwg_LAYOUT_fields[] = {
+const struct _name_type_offset _dwg_LAYOUT_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_LAYOUT,parent, 0) },
   { "page_setup_name", "TV", OFF(struct _dwg_object_LAYOUT,page_setup_name, 8) },
   { "printer_or_config", "TV", OFF(struct _dwg_object_LAYOUT,printer_or_config, 16) },
@@ -2631,7 +2465,7 @@ struct _name_type_offset _dwg_LAYOUT_fields[] = {
   { "viewports", "H*", OFF(struct _dwg_object_LAYOUT,viewports, 458) },
 };
 /* from typedef struct _dwg_object_LIGHTLIST: */
-struct _name_type_offset _dwg_LIGHTLIST_fields[] = {
+const struct _name_type_offset _dwg_LIGHTLIST_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_LIGHTLIST,parent, 0) },
   { "dictionary", "H*", OFF(struct _dwg_object_LIGHTLIST,dictionary, 8) },
   { "class_version", "BS", OFF(struct _dwg_object_LIGHTLIST,class_version, 16) },
@@ -2640,11 +2474,11 @@ struct _name_type_offset _dwg_LIGHTLIST_fields[] = {
   { "light_name", "TV", OFF(struct _dwg_object_LIGHTLIST,light_name, 28) },
 };
 /* from typedef struct _dwg_object_LONG_TRANSACTION: */
-struct _name_type_offset _dwg_LONG_TRANSACTION_fields[] = {
+const struct _name_type_offset _dwg_LONG_TRANSACTION_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_LONG_TRANSACTION,parent, 0) },
 };
 /* from typedef struct _dwg_object_LTYPE: */
-struct _name_type_offset _dwg_LTYPE_fields[] = {
+const struct _name_type_offset _dwg_LTYPE_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_LTYPE,parent, 0) },
   { "flag", "RC", OFF(struct _dwg_object_LTYPE,flag, 8) },
   { "entry_name", "TV", OFF(struct _dwg_object_LTYPE,entry_name, 9) },
@@ -2665,7 +2499,7 @@ struct _name_type_offset _dwg_LTYPE_fields[] = {
   { "text_area_is_present", "B ", OFF(struct _dwg_object_LTYPE,text_area_is_present, 89) },
 };
 /* from typedef struct _dwg_object_LTYPE_CONTROL: */
-struct _name_type_offset _dwg_LTYPE_CONTROL_fields[] = {
+const struct _name_type_offset _dwg_LTYPE_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_LTYPE_CONTROL,parent, 0) },
   { "num_entries", "unsigned short int", OFF(struct _dwg_object_LTYPE_CONTROL,num_entries, 8) },
   { "null_handle", "Dwg_Object_Ref", OFF(struct _dwg_object_LTYPE_CONTROL,null_handle, 10) },
@@ -2677,7 +2511,7 @@ struct _name_type_offset _dwg_LTYPE_CONTROL_fields[] = {
   { "byblock", "H", OFF(struct _dwg_object_LTYPE_CONTROL,byblock, 54) },
 };
 /* from typedef struct _dwg_object_MATERIAL: */
-struct _name_type_offset _dwg_MATERIAL_fields[] = {
+const struct _name_type_offset _dwg_MATERIAL_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_MATERIAL,parent, 0) },
   { "name", "T", OFF(struct _dwg_object_MATERIAL,name, 8) },
   { "desc", "T", OFF(struct _dwg_object_MATERIAL,desc, 16) },
@@ -2771,7 +2605,7 @@ struct _name_type_offset _dwg_MATERIAL_fields[] = {
   { "channel_flags", "BL", OFF(struct _dwg_object_MATERIAL,channel_flags, 536) },
 };
 /* from typedef struct _dwg_object_MLEADERSTYLE: */
-struct _name_type_offset _dwg_MLEADERSTYLE_fields[] = {
+const struct _name_type_offset _dwg_MLEADERSTYLE_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_MLEADERSTYLE,parent, 0) },
   { "class_version", "BS", OFF(struct _dwg_object_MLEADERSTYLE,class_version, 8) },
   { "content_type", "BS", OFF(struct _dwg_object_MLEADERSTYLE,content_type, 10) },
@@ -2820,7 +2654,7 @@ struct _name_type_offset _dwg_MLEADERSTYLE_fields[] = {
   { "text_extended", "B", OFF(struct _dwg_object_MLEADERSTYLE,text_extended, 287) },
 };
 /* from typedef struct _dwg_object_MLINESTYLE: */
-struct _name_type_offset _dwg_MLINESTYLE_fields[] = {
+const struct _name_type_offset _dwg_MLINESTYLE_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_MLINESTYLE,parent, 0) },
   { "entry_name", "TV", OFF(struct _dwg_object_MLINESTYLE,entry_name, 8) },
   { "desc", "TV", OFF(struct _dwg_object_MLINESTYLE,desc, 16) },
@@ -2833,7 +2667,7 @@ struct _name_type_offset _dwg_MLINESTYLE_fields[] = {
   { "parenthandle", "H", OFF(struct _dwg_object_MLINESTYLE,parenthandle, 79) },
 };
 /* from typedef struct _dwg_object_MULTILEADER: */
-struct _name_type_offset _dwg_MULTILEADER_fields[] = {
+const struct _name_type_offset _dwg_MULTILEADER_fields[] = {
   { "parent", "struct _dwg_object_entity", OFF(struct _dwg_object_MULTILEADER,parent, 0) },
   { "class_version", "BS", OFF(struct _dwg_object_MULTILEADER,class_version, 8) },
   { "ctx", "Dwg_MLEADER_AnnotContext", OFF(struct _dwg_object_MULTILEADER,ctx, 10) },
@@ -2876,18 +2710,18 @@ struct _name_type_offset _dwg_MULTILEADER_fields[] = {
   { "text_extended", "B", OFF(struct _dwg_object_MULTILEADER,text_extended, 650) },
 };
 /* from typedef struct _dwg_object_OBJECTCONTEXTDATA: */
-struct _name_type_offset _dwg_OBJECTCONTEXTDATA_fields[] = {
+const struct _name_type_offset _dwg_OBJECTCONTEXTDATA_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_OBJECTCONTEXTDATA,parent, 0) },
   { "class_version", "BS", OFF(struct _dwg_object_OBJECTCONTEXTDATA,class_version, 8) },
   { "has_file", "B", OFF(struct _dwg_object_OBJECTCONTEXTDATA,has_file, 10) },
   { "defaultflag", "B", OFF(struct _dwg_object_OBJECTCONTEXTDATA,defaultflag, 11) },
 };
 /* from typedef struct _dwg_object_OBJECT_PTR: */
-struct _name_type_offset _dwg_OBJECT_PTR_fields[] = {
+const struct _name_type_offset _dwg_OBJECT_PTR_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_OBJECT_PTR,parent, 0) },
 };
 /* from typedef struct _dwg_object_PERSSUBENTMANAGER: */
-struct _name_type_offset _dwg_PERSSUBENTMANAGER_fields[] = {
+const struct _name_type_offset _dwg_PERSSUBENTMANAGER_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_PERSSUBENTMANAGER,parent, 0) },
   { "class_version", "BL", OFF(struct _dwg_object_PERSSUBENTMANAGER,class_version, 8) },
   { "unknown_bl1", "BL", OFF(struct _dwg_object_PERSSUBENTMANAGER,unknown_bl1, 12) },
@@ -2899,12 +2733,12 @@ struct _name_type_offset _dwg_PERSSUBENTMANAGER_fields[] = {
   { "parenthandle", "H ", OFF(struct _dwg_object_PERSSUBENTMANAGER,parenthandle, 36) },
 };
 /* from typedef struct _dwg_object_PLACEHOLDER: */
-struct _name_type_offset _dwg_PLACEHOLDER_fields[] = {
+const struct _name_type_offset _dwg_PLACEHOLDER_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_PLACEHOLDER,parent, 0) },
   { "parenthandle", "H", OFF(struct _dwg_object_PLACEHOLDER,parenthandle, 8) },
 };
 /* from typedef struct _dwg_object_PLOTSETTINGS: */
-struct _name_type_offset _dwg_PLOTSETTINGS_fields[] = {
+const struct _name_type_offset _dwg_PLOTSETTINGS_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_PLOTSETTINGS,parent, 0) },
   { "page_setup_name", "T", OFF(struct _dwg_object_PLOTSETTINGS,page_setup_name, 8) },
   { "printer_cfg_file", "T", OFF(struct _dwg_object_PLOTSETTINGS,printer_cfg_file, 16) },
@@ -2936,7 +2770,7 @@ struct _name_type_offset _dwg_PLOTSETTINGS_fields[] = {
   { "shade_plot_id", "H  ", OFF(struct _dwg_object_PLOTSETTINGS,shade_plot_id, 201) },
 };
 /* from typedef struct _dwg_object_PROXY_OBJECT: */
-struct _name_type_offset _dwg_PROXY_OBJECT_fields[] = {
+const struct _name_type_offset _dwg_PROXY_OBJECT_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_PROXY_OBJECT,parent, 0) },
   { "class_id", "BL", OFF(struct _dwg_object_PROXY_OBJECT,class_id, 8) },
   { "version", "BL", OFF(struct _dwg_object_PROXY_OBJECT,version, 12) },
@@ -2947,7 +2781,7 @@ struct _name_type_offset _dwg_PROXY_OBJECT_fields[] = {
   { "objid_object_handles", "H*", OFF(struct _dwg_object_PROXY_OBJECT,objid_object_handles, 37) },
 };
 /* from typedef struct _dwg_object_RASTERVARIABLES: */
-struct _name_type_offset _dwg_RASTERVARIABLES_fields[] = {
+const struct _name_type_offset _dwg_RASTERVARIABLES_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_RASTERVARIABLES,parent, 0) },
   { "class_version", "BL", OFF(struct _dwg_object_RASTERVARIABLES,class_version, 8) },
   { "display_frame", "BS", OFF(struct _dwg_object_RASTERVARIABLES,display_frame, 12) },
@@ -2956,7 +2790,7 @@ struct _name_type_offset _dwg_RASTERVARIABLES_fields[] = {
   { "parenthandle", "H", OFF(struct _dwg_object_RASTERVARIABLES,parenthandle, 18) },
 };
 /* from typedef struct _dwg_object_SCALE: */
-struct _name_type_offset _dwg_SCALE_fields[] = {
+const struct _name_type_offset _dwg_SCALE_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_SCALE,parent, 0) },
   { "flag", "BS", OFF(struct _dwg_object_SCALE,flag, 8) },
   { "name", "TV", OFF(struct _dwg_object_SCALE,name, 10) },
@@ -2966,7 +2800,7 @@ struct _name_type_offset _dwg_SCALE_fields[] = {
   { "parenthandle", "H", OFF(struct _dwg_object_SCALE,parenthandle, 35) },
 };
 /* from typedef struct _dwg_object_SORTENTSTABLE: */
-struct _name_type_offset _dwg_SORTENTSTABLE_fields[] = {
+const struct _name_type_offset _dwg_SORTENTSTABLE_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_SORTENTSTABLE,parent, 0) },
   { "num_ents", "BL", OFF(struct _dwg_object_SORTENTSTABLE,num_ents, 8) },
   { "sort_handles", "H*", OFF(struct _dwg_object_SORTENTSTABLE,sort_handles, 12) },
@@ -2975,7 +2809,7 @@ struct _name_type_offset _dwg_SORTENTSTABLE_fields[] = {
   { "ents", "H*", OFF(struct _dwg_object_SORTENTSTABLE,ents, 36) },
 };
 /* from typedef struct _dwg_object_SPATIAL_FILTER: */
-struct _name_type_offset _dwg_SPATIAL_FILTER_fields[] = {
+const struct _name_type_offset _dwg_SPATIAL_FILTER_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_SPATIAL_FILTER,parent, 0) },
   { "num_points", "BS", OFF(struct _dwg_object_SPATIAL_FILTER,num_points, 8) },
   { "points", "2RD*", OFF(struct _dwg_object_SPATIAL_FILTER,points, 10) },
@@ -2991,7 +2825,7 @@ struct _name_type_offset _dwg_SPATIAL_FILTER_fields[] = {
   { "parenthandle", "H", OFF(struct _dwg_object_SPATIAL_FILTER,parenthandle, 104) },
 };
 /* from typedef struct _dwg_object_SPATIAL_INDEX: */
-struct _name_type_offset _dwg_SPATIAL_INDEX_fields[] = {
+const struct _name_type_offset _dwg_SPATIAL_INDEX_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_SPATIAL_INDEX,parent, 0) },
   { "timestamp1", "BL", OFF(struct _dwg_object_SPATIAL_INDEX,timestamp1, 8) },
   { "timestamp2", "BL", OFF(struct _dwg_object_SPATIAL_INDEX,timestamp2, 12) },
@@ -2999,7 +2833,7 @@ struct _name_type_offset _dwg_SPATIAL_INDEX_fields[] = {
   { "parenthandle", "H", OFF(struct _dwg_object_SPATIAL_INDEX,parenthandle, 24) },
 };
 /* from typedef struct _dwg_object_STYLE: */
-struct _name_type_offset _dwg_STYLE_fields[] = {
+const struct _name_type_offset _dwg_STYLE_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_STYLE,parent, 0) },
   { "flag", "RC", OFF(struct _dwg_object_STYLE,flag, 8) },
   { "entry_name", "TV", OFF(struct _dwg_object_STYLE,entry_name, 9) },
@@ -3020,7 +2854,7 @@ struct _name_type_offset _dwg_STYLE_fields[] = {
   { "null_handle", "H", OFF(struct _dwg_object_STYLE,null_handle, 82) },
 };
 /* from typedef struct _dwg_object_STYLE_CONTROL: */
-struct _name_type_offset _dwg_STYLE_CONTROL_fields[] = {
+const struct _name_type_offset _dwg_STYLE_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_STYLE_CONTROL,parent, 0) },
   { "num_entries", "unsigned short int", OFF(struct _dwg_object_STYLE_CONTROL,num_entries, 8) },
   { "null_handle", "Dwg_Object_Ref", OFF(struct _dwg_object_STYLE_CONTROL,null_handle, 10) },
@@ -3030,7 +2864,7 @@ struct _name_type_offset _dwg_STYLE_CONTROL_fields[] = {
   { "reactors", "Dwg_Object_Ref", OFF(struct _dwg_object_STYLE_CONTROL,reactors, 38) },
 };
 /* from typedef struct _dwg_object_SUN: */
-struct _name_type_offset _dwg_SUN_fields[] = {
+const struct _name_type_offset _dwg_SUN_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_SUN,parent, 0) },
   { "class_version", "BL", OFF(struct _dwg_object_SUN,class_version, 8) },
   { "is_on", "B", OFF(struct _dwg_object_SUN,is_on, 12) },
@@ -3048,7 +2882,7 @@ struct _name_type_offset _dwg_SUN_fields[] = {
   { "parenthandle", "H", OFF(struct _dwg_object_SUN,parenthandle, 75) },
 };
 /* from typedef struct _dwg_object_SUNSTUDY: */
-struct _name_type_offset _dwg_SUNSTUDY_fields[] = {
+const struct _name_type_offset _dwg_SUNSTUDY_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_SUNSTUDY,parent, 0) },
   { "class_version", "BL", OFF(struct _dwg_object_SUNSTUDY,class_version, 8) },
   { "setup_name", "T", OFF(struct _dwg_object_SUNSTUDY,setup_name, 12) },
@@ -3080,7 +2914,7 @@ struct _name_type_offset _dwg_SUNSTUDY_fields[] = {
   { "text_style", "H ", OFF(struct _dwg_object_SUNSTUDY,text_style, 145) },
 };
 /* from typedef struct _dwg_object_TABLECONTENT: */
-struct _name_type_offset _dwg_TABLECONTENT_fields[] = {
+const struct _name_type_offset _dwg_TABLECONTENT_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_TABLECONTENT,parent, 0) },
   { "ldata", "Dwg_LinkedData", OFF(struct _dwg_object_TABLECONTENT,ldata, 8) },
   { "tdata", "Dwg_LinkedTableData", OFF(struct _dwg_object_TABLECONTENT,tdata, 24) },
@@ -3088,7 +2922,7 @@ struct _name_type_offset _dwg_TABLECONTENT_fields[] = {
   { "table_style", "H", OFF(struct _dwg_object_TABLECONTENT,table_style, 292) },
 };
 /* from typedef struct _dwg_object_TABLEGEOMETRY: */
-struct _name_type_offset _dwg_TABLEGEOMETRY_fields[] = {
+const struct _name_type_offset _dwg_TABLEGEOMETRY_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_TABLEGEOMETRY,parent, 0) },
   { "num_rows", "BL", OFF(struct _dwg_object_TABLEGEOMETRY,num_rows, 8) },
   { "num_cols", "BL", OFF(struct _dwg_object_TABLEGEOMETRY,num_cols, 12) },
@@ -3096,7 +2930,7 @@ struct _name_type_offset _dwg_TABLEGEOMETRY_fields[] = {
   { "cells", "Dwg_TABLEGEOMETRY_Cell", OFF(struct _dwg_object_TABLEGEOMETRY,cells, 20) },
 };
 /* from typedef struct _dwg_object_TABLESTYLE: */
-struct _name_type_offset _dwg_TABLESTYLE_fields[] = {
+const struct _name_type_offset _dwg_TABLESTYLE_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_TABLESTYLE,parent, 0) },
   { "class_version", "BS", OFF(struct _dwg_object_TABLESTYLE,class_version, 8) },
   { "name", "TV", OFF(struct _dwg_object_TABLESTYLE,name, 10) },
@@ -3110,7 +2944,7 @@ struct _name_type_offset _dwg_TABLESTYLE_fields[] = {
   { "cells", "Dwg_TABLESTYLE_Cell", OFF(struct _dwg_object_TABLESTYLE,cells, 46) },
 };
 /* from typedef struct _dwg_object_UCS: */
-struct _name_type_offset _dwg_UCS_fields[] = {
+const struct _name_type_offset _dwg_UCS_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_UCS,parent, 0) },
   { "flag", "RC", OFF(struct _dwg_object_UCS,flag, 8) },
   { "entry_name", "TV", OFF(struct _dwg_object_UCS,entry_name, 9) },
@@ -3130,7 +2964,7 @@ struct _name_type_offset _dwg_UCS_fields[] = {
   { "unknown", "H", OFF(struct _dwg_object_UCS,unknown, 131) },
 };
 /* from typedef struct _dwg_object_UCS_CONTROL: */
-struct _name_type_offset _dwg_UCS_CONTROL_fields[] = {
+const struct _name_type_offset _dwg_UCS_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_UCS_CONTROL,parent, 0) },
   { "num_entries", "unsigned short int", OFF(struct _dwg_object_UCS_CONTROL,num_entries, 8) },
   { "null_handle", "Dwg_Object_Ref", OFF(struct _dwg_object_UCS_CONTROL,null_handle, 10) },
@@ -3140,25 +2974,25 @@ struct _name_type_offset _dwg_UCS_CONTROL_fields[] = {
   { "reactors", "Dwg_Object_Ref", OFF(struct _dwg_object_UCS_CONTROL,reactors, 38) },
 };
 /* from typedef struct _dwg_object_UNDERLAYDEFINITION: */
-struct _name_type_offset _dwg_UNDERLAYDEFINITION_fields[] = {
+const struct _name_type_offset _dwg_UNDERLAYDEFINITION_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_UNDERLAYDEFINITION,parent, 0) },
   { "filename", "TV", OFF(struct _dwg_object_UNDERLAYDEFINITION,filename, 8) },
   { "name", "TV", OFF(struct _dwg_object_UNDERLAYDEFINITION,name, 16) },
   { "parenthandle", "H", OFF(struct _dwg_object_UNDERLAYDEFINITION,parenthandle, 24) },
 };
 /* from typedef struct _dwg_object_UNKNOWN_OBJ: */
-struct _name_type_offset _dwg_UNKNOWN_OBJ_fields[] = {
+const struct _name_type_offset _dwg_UNKNOWN_OBJ_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_UNKNOWN_OBJ,parent, 0) },
 };
 /* from typedef struct _dwg_object_VBA_PROJECT: */
-struct _name_type_offset _dwg_VBA_PROJECT_fields[] = {
+const struct _name_type_offset _dwg_VBA_PROJECT_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_VBA_PROJECT,parent, 0) },
   { "num_bytes", "RL", OFF(struct _dwg_object_VBA_PROJECT,num_bytes, 8) },
   { "bytes", "TF", OFF(struct _dwg_object_VBA_PROJECT,bytes, 12) },
   { "parenthandle", "H", OFF(struct _dwg_object_VBA_PROJECT,parenthandle, 20) },
 };
 /* from typedef struct _dwg_object_VIEW: */
-struct _name_type_offset _dwg_VIEW_fields[] = {
+const struct _name_type_offset _dwg_VIEW_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_VIEW,parent, 0) },
   { "flag", "RC", OFF(struct _dwg_object_VIEW,flag, 8) },
   { "entry_name", "TV", OFF(struct _dwg_object_VIEW,entry_name, 9) },
@@ -3200,7 +3034,7 @@ struct _name_type_offset _dwg_VIEW_fields[] = {
   { "live_section_handle", "H", OFF(struct _dwg_object_VIEW,live_section_handle, 324) },
 };
 /* from typedef struct _dwg_object_VIEW_CONTROL: */
-struct _name_type_offset _dwg_VIEW_CONTROL_fields[] = {
+const struct _name_type_offset _dwg_VIEW_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_VIEW_CONTROL,parent, 0) },
   { "num_entries", "unsigned short int", OFF(struct _dwg_object_VIEW_CONTROL,num_entries, 8) },
   { "null_handle", "Dwg_Object_Ref", OFF(struct _dwg_object_VIEW_CONTROL,null_handle, 10) },
@@ -3210,7 +3044,7 @@ struct _name_type_offset _dwg_VIEW_CONTROL_fields[] = {
   { "reactors", "Dwg_Object_Ref", OFF(struct _dwg_object_VIEW_CONTROL,reactors, 38) },
 };
 /* from typedef struct _dwg_object_VISUALSTYLE: */
-struct _name_type_offset _dwg_VISUALSTYLE_fields[] = {
+const struct _name_type_offset _dwg_VISUALSTYLE_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_VISUALSTYLE,parent, 0) },
   { "desc", "T", OFF(struct _dwg_object_VISUALSTYLE,desc, 8) },
   { "type", "BS", OFF(struct _dwg_object_VISUALSTYLE,type, 16) },
@@ -3249,7 +3083,7 @@ struct _name_type_offset _dwg_VISUALSTYLE_fields[] = {
   { "parenthandle", "H", OFF(struct _dwg_object_VISUALSTYLE,parenthandle, 270) },
 };
 /* from typedef struct _dwg_object_VPORT: */
-struct _name_type_offset _dwg_VPORT_fields[] = {
+const struct _name_type_offset _dwg_VPORT_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_VPORT,parent, 0) },
   { "flag", "RC", OFF(struct _dwg_object_VPORT,flag, 8) },
   { "entry_name", "TV", OFF(struct _dwg_object_VPORT,entry_name, 9) },
@@ -3305,7 +3139,7 @@ struct _name_type_offset _dwg_VPORT_fields[] = {
   { "base_ucs_handle", "H", OFF(struct _dwg_object_VPORT,base_ucs_handle, 417) },
 };
 /* from typedef struct _dwg_object_VPORT_CONTROL: */
-struct _name_type_offset _dwg_VPORT_CONTROL_fields[] = {
+const struct _name_type_offset _dwg_VPORT_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_VPORT_CONTROL,parent, 0) },
   { "num_entries", "unsigned short int", OFF(struct _dwg_object_VPORT_CONTROL,num_entries, 8) },
   { "null_handle", "Dwg_Object_Ref", OFF(struct _dwg_object_VPORT_CONTROL,null_handle, 10) },
@@ -3315,7 +3149,7 @@ struct _name_type_offset _dwg_VPORT_CONTROL_fields[] = {
   { "reactors", "Dwg_Object_Ref", OFF(struct _dwg_object_VPORT_CONTROL,reactors, 38) },
 };
 /* from typedef struct _dwg_object_VPORT_ENTITY_CONTROL: */
-struct _name_type_offset _dwg_VPORT_ENTITY_CONTROL_fields[] = {
+const struct _name_type_offset _dwg_VPORT_ENTITY_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_VPORT_ENTITY_CONTROL,parent, 0) },
   { "num_entries", "unsigned short int", OFF(struct _dwg_object_VPORT_ENTITY_CONTROL,num_entries, 8) },
   { "null_handle", "Dwg_Object_Ref", OFF(struct _dwg_object_VPORT_ENTITY_CONTROL,null_handle, 10) },
@@ -3325,7 +3159,7 @@ struct _name_type_offset _dwg_VPORT_ENTITY_CONTROL_fields[] = {
   { "reactors", "Dwg_Object_Ref", OFF(struct _dwg_object_VPORT_ENTITY_CONTROL,reactors, 38) },
 };
 /* from typedef struct _dwg_object_VPORT_ENTITY_HEADER: */
-struct _name_type_offset _dwg_VPORT_ENTITY_HEADER_fields[] = {
+const struct _name_type_offset _dwg_VPORT_ENTITY_HEADER_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_VPORT_ENTITY_HEADER,parent, 0) },
   { "flag", "RC", OFF(struct _dwg_object_VPORT_ENTITY_HEADER,flag, 8) },
   { "entry_name", "TV", OFF(struct _dwg_object_VPORT_ENTITY_HEADER,entry_name, 9) },
@@ -3339,13 +3173,13 @@ struct _name_type_offset _dwg_VPORT_ENTITY_HEADER_fields[] = {
   { "vport_entity", "H", OFF(struct _dwg_object_VPORT_ENTITY_HEADER,vport_entity, 40) },
 };
 /* from typedef struct _dwg_object_WIPEOUTVARIABLES: */
-struct _name_type_offset _dwg_WIPEOUTVARIABLES_fields[] = {
+const struct _name_type_offset _dwg_WIPEOUTVARIABLES_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_WIPEOUTVARIABLES,parent, 0) },
   { "display_frame", "BS", OFF(struct _dwg_object_WIPEOUTVARIABLES,display_frame, 8) },
   { "parenthandle", "H", OFF(struct _dwg_object_WIPEOUTVARIABLES,parenthandle, 10) },
 };
 /* from typedef struct _dwg_object_XRECORD: */
-struct _name_type_offset _dwg_XRECORD_fields[] = {
+const struct _name_type_offset _dwg_XRECORD_fields[] = {
   { "parent", "struct _dwg_object_object", OFF(struct _dwg_object_XRECORD,parent, 0) },
   { "num_databytes", "BL", OFF(struct _dwg_object_XRECORD,num_databytes, 8) },
   { "cloning_flags", "BS", OFF(struct _dwg_object_XRECORD,cloning_flags, 12) },
@@ -3356,7 +3190,7 @@ struct _name_type_offset _dwg_XRECORD_fields[] = {
   { "objid_handles", "H*", OFF(struct _dwg_object_XRECORD,objid_handles, 38) },
 };
 /* from typedef struct _dwg_3DSOLID_silhouette: */
-struct _name_type_offset _dwg_3DSOLID_silhouette_fields[] = {
+const struct _name_type_offset _dwg_3DSOLID_silhouette_fields[] = {
   { "parent", "struct _dwg_entity_3DSOLID", OFF(struct _dwg_3DSOLID_silhouette,parent, 0) },
   { "vp_id", "BL", OFF(struct _dwg_3DSOLID_silhouette,vp_id, 8) },
   { "vp_target", "3BD", OFF(struct _dwg_3DSOLID_silhouette,vp_target, 12) },
@@ -3367,7 +3201,7 @@ struct _name_type_offset _dwg_3DSOLID_silhouette_fields[] = {
   { "wires", "Dwg_3DSOLID_wire", OFF(struct _dwg_3DSOLID_silhouette,wires, 89) },
 };
 /* from typedef struct _dwg_3DSOLID_wire: */
-struct _name_type_offset _dwg_3DSOLID_wire_fields[] = {
+const struct _name_type_offset _dwg_3DSOLID_wire_fields[] = {
   { "parent", "struct _dwg_entity_3DSOLID", OFF(struct _dwg_3DSOLID_wire,parent, 0) },
   { "type", "RC", OFF(struct _dwg_3DSOLID_wire,type, 8) },
   { "selection_marker", "BL", OFF(struct _dwg_3DSOLID_wire,selection_marker, 9) },
@@ -3386,14 +3220,14 @@ struct _name_type_offset _dwg_3DSOLID_wire_fields[] = {
   { "has_shear", "B", OFF(struct _dwg_3DSOLID_wire,has_shear, 138) },
 };
 /* from typedef struct _dwg_ACTIONBODY: */
-struct _name_type_offset _dwg_ACTIONBODY_fields[] = {
+const struct _name_type_offset _dwg_ACTIONBODY_fields[] = {
   { "parent", "struct _dwg_object_ASSOCNETWORK", OFF(struct _dwg_ACTIONBODY,parent, 0) },
   { "evaluatorid", "T ", OFF(struct _dwg_ACTIONBODY,evaluatorid, 8) },
   { "expression", "T ", OFF(struct _dwg_ACTIONBODY,expression, 16) },
   { "value", "BL", OFF(struct _dwg_ACTIONBODY,value, 24) },
 };
 /* from typedef struct _dwg_CELLSTYLEMAP_Cell: */
-struct _name_type_offset _dwg_CELLSTYLEMAP_Cell_fields[] = {
+const struct _name_type_offset _dwg_CELLSTYLEMAP_Cell_fields[] = {
   { "style", "Dwg_CellStyle", OFF(struct _dwg_CELLSTYLEMAP_Cell,style, 0) },
   { "id", "BL", OFF(struct _dwg_CELLSTYLEMAP_Cell,id, 212) },
   { "type", "BL", OFF(struct _dwg_CELLSTYLEMAP_Cell,type, 216) },
@@ -3401,7 +3235,7 @@ struct _name_type_offset _dwg_CELLSTYLEMAP_Cell_fields[] = {
   { "parent", "struct _dwg_object_CELLSTYLEMAP", OFF(struct _dwg_CELLSTYLEMAP_Cell,parent, 228) },
 };
 /* from typedef struct _dwg_DIMASSOC_ref: */
-struct _name_type_offset _dwg_DIMASSOC_ref_fields[] = {
+const struct _name_type_offset _dwg_DIMASSOC_ref_fields[] = {
   { "parent", "struct _dwg_object_DIMASSOC", OFF(struct _dwg_DIMASSOC_ref,parent, 0) },
   { "rotated_type", "BS", OFF(struct _dwg_DIMASSOC_ref,rotated_type, 8) },
   { "osnap_type", "RC", OFF(struct _dwg_DIMASSOC_ref,osnap_type, 10) },
@@ -3414,30 +3248,30 @@ struct _name_type_offset _dwg_DIMASSOC_ref_fields[] = {
   { "has_lastpt_ref", "B", OFF(struct _dwg_DIMASSOC_ref,has_lastpt_ref, 59) },
 };
 /* from typedef struct _dwg_EVAL_Node: */
-struct _name_type_offset _dwg_EVAL_Node_fields[] = {
+const struct _name_type_offset _dwg_EVAL_Node_fields[] = {
   { "parent", "struct _dwg_object_EVALUATION_GRAPH", OFF(struct _dwg_EVAL_Node,parent, 0) },
   { "edge[4]", "BL ", OFF(struct _dwg_EVAL_Node,edge[4], 8) },
 };
 /* from typedef struct _dwg_FIELD_ChildValue: */
-struct _name_type_offset _dwg_FIELD_ChildValue_fields[] = {
+const struct _name_type_offset _dwg_FIELD_ChildValue_fields[] = {
   { "key", "TV", OFF(struct _dwg_FIELD_ChildValue,key, 0) },
   { "value", "Dwg_TABLE_value", OFF(struct _dwg_FIELD_ChildValue,value, 8) },
   { "parent", "struct _dwg_object_FIELD", OFF(struct _dwg_FIELD_ChildValue,parent, 108) },
 };
 /* from typedef struct _dwg_GEODATA_meshface: */
-struct _name_type_offset _dwg_GEODATA_meshface_fields[] = {
+const struct _name_type_offset _dwg_GEODATA_meshface_fields[] = {
   { "face1", "BL", OFF(struct _dwg_GEODATA_meshface,face1, 0) },
   { "face2", "BL", OFF(struct _dwg_GEODATA_meshface,face2, 4) },
   { "face3", "BL", OFF(struct _dwg_GEODATA_meshface,face3, 8) },
   { "face4", "BL", OFF(struct _dwg_GEODATA_meshface,face4, 12) },
 };
 /* from typedef struct _dwg_GEODATA_meshpt: */
-struct _name_type_offset _dwg_GEODATA_meshpt_fields[] = {
+const struct _name_type_offset _dwg_GEODATA_meshpt_fields[] = {
   { "source_pt", "2RD", OFF(struct _dwg_GEODATA_meshpt,source_pt, 0) },
   { "dest_pt", "2RD", OFF(struct _dwg_GEODATA_meshpt,dest_pt, 16) },
 };
 /* from typedef struct _dwg_HATCH_DefLine: */
-struct _name_type_offset _dwg_HATCH_DefLine_fields[] = {
+const struct _name_type_offset _dwg_HATCH_DefLine_fields[] = {
   { "parent", "struct _dwg_entity_HATCH", OFF(struct _dwg_HATCH_DefLine,parent, 0) },
   { "angle", "BD ", OFF(struct _dwg_HATCH_DefLine,angle, 8) },
   { "pt0", "2BD", OFF(struct _dwg_HATCH_DefLine,pt0, 16) },
@@ -3446,7 +3280,7 @@ struct _name_type_offset _dwg_HATCH_DefLine_fields[] = {
   { "dashes", "BD *", OFF(struct _dwg_HATCH_DefLine,dashes, 50) },
 };
 /* from typedef struct _dwg_HATCH_color: */
-struct _name_type_offset _dwg_HATCH_color_fields[] = {
+const struct _name_type_offset _dwg_HATCH_color_fields[] = {
   { "parent", "struct _dwg_entity_HATCH", OFF(struct _dwg_HATCH_color,parent, 0) },
   { "unknown_double", "BD", OFF(struct _dwg_HATCH_color,unknown_double, 8) },
   { "unknown_short", "BS", OFF(struct _dwg_HATCH_color,unknown_short, 16) },
@@ -3454,13 +3288,13 @@ struct _name_type_offset _dwg_HATCH_color_fields[] = {
   { "ignored_color_byte", "RC", OFF(struct _dwg_HATCH_color,ignored_color_byte, 22) },
 };
 /* from typedef struct _dwg_HATCH_control_point: */
-struct _name_type_offset _dwg_HATCH_control_point_fields[] = {
+const struct _name_type_offset _dwg_HATCH_control_point_fields[] = {
   { "parent", "struct _dwg_HATCH_pathseg", OFF(struct _dwg_HATCH_control_point,parent, 0) },
   { "point", "2RD", OFF(struct _dwg_HATCH_control_point,point, 8) },
   { "weight", "BD", OFF(struct _dwg_HATCH_control_point,weight, 24) },
 };
 /* from typedef struct _dwg_HATCH_path: */
-struct _name_type_offset _dwg_HATCH_path_fields[] = {
+const struct _name_type_offset _dwg_HATCH_path_fields[] = {
   { "parent", "struct _dwg_entity_HATCH", OFF(struct _dwg_HATCH_path,parent, 0) },
   { "flag", "BL", OFF(struct _dwg_HATCH_path,flag, 8) },
   { "num_segs_or_paths", "BL", OFF(struct _dwg_HATCH_path,num_segs_or_paths, 12) },
@@ -3471,7 +3305,7 @@ struct _name_type_offset _dwg_HATCH_path_fields[] = {
   { "num_boundary_handles", "BL", OFF(struct _dwg_HATCH_path,num_boundary_handles, 34) },
 };
 /* from typedef struct _dwg_HATCH_pathseg: */
-struct _name_type_offset _dwg_HATCH_pathseg_fields[] = {
+const struct _name_type_offset _dwg_HATCH_pathseg_fields[] = {
   { "parent", "struct _dwg_HATCH_path", OFF(struct _dwg_HATCH_pathseg,parent, 0) },
   { "type_status", "RC", OFF(struct _dwg_HATCH_pathseg,type_status, 8) },
   { "first_endpoint", "2RD", OFF(struct _dwg_HATCH_pathseg,first_endpoint, 9) },
@@ -3496,19 +3330,19 @@ struct _name_type_offset _dwg_HATCH_pathseg_fields[] = {
   { "end_tangent", "2RD", OFF(struct _dwg_HATCH_pathseg,end_tangent, 164) },
 };
 /* from typedef struct _dwg_HATCH_polylinepath: */
-struct _name_type_offset _dwg_HATCH_polylinepath_fields[] = {
+const struct _name_type_offset _dwg_HATCH_polylinepath_fields[] = {
   { "parent", "struct _dwg_HATCH_path", OFF(struct _dwg_HATCH_polylinepath,parent, 0) },
   { "point", "2RD", OFF(struct _dwg_HATCH_polylinepath,point, 8) },
   { "bulge", "BD", OFF(struct _dwg_HATCH_polylinepath,bulge, 24) },
 };
 /* from typedef struct _dwg_LEADER_ArrowHead: */
-struct _name_type_offset _dwg_LEADER_ArrowHead_fields[] = {
+const struct _name_type_offset _dwg_LEADER_ArrowHead_fields[] = {
   { "parent", "struct _dwg_object_MULTILEADER", OFF(struct _dwg_LEADER_ArrowHead,parent, 0) },
   { "is_default", "BL", OFF(struct _dwg_LEADER_ArrowHead,is_default, 8) },
   { "arrowhead", "H", OFF(struct _dwg_LEADER_ArrowHead,arrowhead, 12) },
 };
 /* from typedef struct _dwg_LEADER_BlockLabel: */
-struct _name_type_offset _dwg_LEADER_BlockLabel_fields[] = {
+const struct _name_type_offset _dwg_LEADER_BlockLabel_fields[] = {
   { "parent", "struct _dwg_object_MULTILEADER", OFF(struct _dwg_LEADER_BlockLabel,parent, 0) },
   { "attdef", "H", OFF(struct _dwg_LEADER_BlockLabel,attdef, 8) },
   { "label_text", "TV", OFF(struct _dwg_LEADER_BlockLabel,label_text, 16) },
@@ -3516,13 +3350,13 @@ struct _name_type_offset _dwg_LEADER_BlockLabel_fields[] = {
   { "width", "BD", OFF(struct _dwg_LEADER_BlockLabel,width, 26) },
 };
 /* from typedef struct _dwg_LEADER_Break: */
-struct _name_type_offset _dwg_LEADER_Break_fields[] = {
+const struct _name_type_offset _dwg_LEADER_Break_fields[] = {
   { "parent", "struct _dwg_LEADER_Line", OFF(struct _dwg_LEADER_Break,parent, 0) },
   { "start", "3BD", OFF(struct _dwg_LEADER_Break,start, 8) },
   { "end", "3BD", OFF(struct _dwg_LEADER_Break,end, 32) },
 };
 /* from typedef struct _dwg_LEADER_Line: */
-struct _name_type_offset _dwg_LEADER_Line_fields[] = {
+const struct _name_type_offset _dwg_LEADER_Line_fields[] = {
   { "parent", "struct _dwg_LEADER_Node", OFF(struct _dwg_LEADER_Line,parent, 0) },
   { "numpts", "unsigned int", OFF(struct _dwg_LEADER_Line,numpts, 8) },
   { "points", "Dwg_Bitcode_3BD", OFF(struct _dwg_LEADER_Line,points, 12) },
@@ -3538,7 +3372,7 @@ struct _name_type_offset _dwg_LEADER_Line_fields[] = {
   { "flags", "unsigned int", OFF(struct _dwg_LEADER_Line,flags, 94) },
 };
 /* from typedef struct _dwg_LEADER_Node: */
-struct _name_type_offset _dwg_LEADER_Node_fields[] = {
+const struct _name_type_offset _dwg_LEADER_Node_fields[] = {
   { "parent", "struct _dwg_object_MULTILEADER", OFF(struct _dwg_LEADER_Node,parent, 0) },
   { "has_lastleaderlinepoint", "B", OFF(struct _dwg_LEADER_Node,has_lastleaderlinepoint, 8) },
   { "has_dogleg", "B", OFF(struct _dwg_LEADER_Node,has_dogleg, 9) },
@@ -3553,7 +3387,7 @@ struct _name_type_offset _dwg_LEADER_Node_fields[] = {
   { "attach_dir", "BS", OFF(struct _dwg_LEADER_Node,attach_dir, 94) },
 };
 /* from typedef struct _dwg_LTYPE_dash: */
-struct _name_type_offset _dwg_LTYPE_dash_fields[] = {
+const struct _name_type_offset _dwg_LTYPE_dash_fields[] = {
   { "parent", "struct _dwg_object_LTYPE", OFF(struct _dwg_LTYPE_dash,parent, 0) },
   { "length", "BD", OFF(struct _dwg_LTYPE_dash,length, 8) },
   { "complex_shapecode", "BS", OFF(struct _dwg_LTYPE_dash,complex_shapecode, 16) },
@@ -3564,12 +3398,12 @@ struct _name_type_offset _dwg_LTYPE_dash_fields[] = {
   { "shape_flag", "BS", OFF(struct _dwg_LTYPE_dash,shape_flag, 50) },
 };
 /* from typedef struct _dwg_LWPOLYLINE_width: */
-struct _name_type_offset _dwg_LWPOLYLINE_width_fields[] = {
+const struct _name_type_offset _dwg_LWPOLYLINE_width_fields[] = {
   { "start", "BD", OFF(struct _dwg_LWPOLYLINE_width,start, 0) },
   { "end", "BD", OFF(struct _dwg_LWPOLYLINE_width,end, 8) },
 };
 /* from typedef struct _dwg_MLEADER_AnnotContext: */
-struct _name_type_offset _dwg_MLEADER_AnnotContext_fields[] = {
+const struct _name_type_offset _dwg_MLEADER_AnnotContext_fields[] = {
   { "class_version", "BS", OFF(struct _dwg_MLEADER_AnnotContext,class_version, 0) },
   { "has_xdic_file", "B", OFF(struct _dwg_MLEADER_AnnotContext,has_xdic_file, 2) },
   { "is_default", "B", OFF(struct _dwg_MLEADER_AnnotContext,is_default, 3) },
@@ -3597,7 +3431,7 @@ struct _name_type_offset _dwg_MLEADER_AnnotContext_fields[] = {
   { "text_bottom", "BS", OFF(struct _dwg_MLEADER_AnnotContext,text_bottom, 397) },
 };
 /* from typedef struct _dwg_MLINESTYLE_line: */
-struct _name_type_offset _dwg_MLINESTYLE_line_fields[] = {
+const struct _name_type_offset _dwg_MLINESTYLE_line_fields[] = {
   { "parent", "struct _dwg_object_MLINESTYLE", OFF(struct _dwg_MLINESTYLE_line,parent, 0) },
   { "offset", "BD", OFF(struct _dwg_MLINESTYLE_line,offset, 8) },
   { "color", "CMC", OFF(struct _dwg_MLINESTYLE_line,color, 16) },
@@ -3605,7 +3439,7 @@ struct _name_type_offset _dwg_MLINESTYLE_line_fields[] = {
   { "ltype", "H", OFF(struct _dwg_MLINESTYLE_line,ltype, 46) },
 };
 /* from typedef struct _dwg_MLINE_line: */
-struct _name_type_offset _dwg_MLINE_line_fields[] = {
+const struct _name_type_offset _dwg_MLINE_line_fields[] = {
   { "parent", "struct _dwg_MLINE_vertex", OFF(struct _dwg_MLINE_line,parent, 0) },
   { "num_segparms", "BS", OFF(struct _dwg_MLINE_line,num_segparms, 8) },
   { "segparms", "BD *", OFF(struct _dwg_MLINE_line,segparms, 10) },
@@ -3613,7 +3447,7 @@ struct _name_type_offset _dwg_MLINE_line_fields[] = {
   { "areafillparms", "BD*", OFF(struct _dwg_MLINE_line,areafillparms, 20) },
 };
 /* from typedef struct _dwg_MLINE_vertex: */
-struct _name_type_offset _dwg_MLINE_vertex_fields[] = {
+const struct _name_type_offset _dwg_MLINE_vertex_fields[] = {
   { "parent", "struct _dwg_entity_MLINE", OFF(struct _dwg_MLINE_vertex,parent, 0) },
   { "vertex", "3BD", OFF(struct _dwg_MLINE_vertex,vertex, 8) },
   { "vertex_direction", "3BD", OFF(struct _dwg_MLINE_vertex,vertex_direction, 32) },
@@ -3622,7 +3456,7 @@ struct _name_type_offset _dwg_MLINE_vertex_fields[] = {
   { "lines", "Dwg_MLINE_line", OFF(struct _dwg_MLINE_vertex,lines, 81) },
 };
 /* from typedef struct _dwg_SPLINE_control_point: */
-struct _name_type_offset _dwg_SPLINE_control_point_fields[] = {
+const struct _name_type_offset _dwg_SPLINE_control_point_fields[] = {
   { "parent", "struct _dwg__entity_SPLINE", OFF(struct _dwg_SPLINE_control_point,parent, 0) },
   { "x", "double", OFF(struct _dwg_SPLINE_control_point,x, 8) },
   { "y", "double", OFF(struct _dwg_SPLINE_control_point,y, 16) },
@@ -3630,19 +3464,19 @@ struct _name_type_offset _dwg_SPLINE_control_point_fields[] = {
   { "w", "double", OFF(struct _dwg_SPLINE_control_point,w, 32) },
 };
 /* from typedef struct _dwg_SPLINE_point: */
-struct _name_type_offset _dwg_SPLINE_point_fields[] = {
+const struct _name_type_offset _dwg_SPLINE_point_fields[] = {
   { "parent", "struct _dwg__entity_SPLINE", OFF(struct _dwg_SPLINE_point,parent, 0) },
   { "x", "double", OFF(struct _dwg_SPLINE_point,x, 8) },
   { "y", "double", OFF(struct _dwg_SPLINE_point,y, 16) },
   { "z", "double", OFF(struct _dwg_SPLINE_point,z, 24) },
 };
 /* from typedef struct _dwg_SUNSTUDY_Dates: */
-struct _name_type_offset _dwg_SUNSTUDY_Dates_fields[] = {
+const struct _name_type_offset _dwg_SUNSTUDY_Dates_fields[] = {
   { "julian_day", "BL", OFF(struct _dwg_SUNSTUDY_Dates,julian_day, 0) },
   { "time", "BL", OFF(struct _dwg_SUNSTUDY_Dates,time, 4) },
 };
 /* from typedef struct _dwg_TABLEGEOMETRY_Cell: */
-struct _name_type_offset _dwg_TABLEGEOMETRY_Cell_fields[] = {
+const struct _name_type_offset _dwg_TABLEGEOMETRY_Cell_fields[] = {
   { "flag", "BL", OFF(struct _dwg_TABLEGEOMETRY_Cell,flag, 0) },
   { "width_w_gap", "BD", OFF(struct _dwg_TABLEGEOMETRY_Cell,width_w_gap, 4) },
   { "height_w_gap", "BD", OFF(struct _dwg_TABLEGEOMETRY_Cell,height_w_gap, 12) },
@@ -3652,7 +3486,7 @@ struct _name_type_offset _dwg_TABLEGEOMETRY_Cell_fields[] = {
   { "parent", "struct _dwg_object_TABLEGEOMETRY", OFF(struct _dwg_TABLEGEOMETRY_Cell,parent, 40) },
 };
 /* from typedef struct _dwg_TABLESTYLE_Cell: */
-struct _name_type_offset _dwg_TABLESTYLE_Cell_fields[] = {
+const struct _name_type_offset _dwg_TABLESTYLE_Cell_fields[] = {
   { "cell", "Dwg_TABLE_Cell", OFF(struct _dwg_TABLESTYLE_Cell,cell, 0) },
   { "id", "BL", OFF(struct _dwg_TABLESTYLE_Cell,id, 395) },
   { "type", "BL", OFF(struct _dwg_TABLESTYLE_Cell,type, 399) },
@@ -3660,28 +3494,28 @@ struct _name_type_offset _dwg_TABLESTYLE_Cell_fields[] = {
   { "parent", "struct _dwg_object_TABLESTYLE", OFF(struct _dwg_TABLESTYLE_Cell,parent, 411) },
 };
 /* from typedef struct _dwg_TABLE_BreakHeight: */
-struct _name_type_offset _dwg_TABLE_BreakHeight_fields[] = {
+const struct _name_type_offset _dwg_TABLE_BreakHeight_fields[] = {
   { "position", "3BD", OFF(struct _dwg_TABLE_BreakHeight,position, 0) },
   { "height", "BD", OFF(struct _dwg_TABLE_BreakHeight,height, 24) },
   { "flag", "BL", OFF(struct _dwg_TABLE_BreakHeight,flag, 32) },
   { "parent", "struct _dwg_entity_TABLE", OFF(struct _dwg_TABLE_BreakHeight,parent, 36) },
 };
 /* from typedef struct _dwg_TABLE_BreakRow: */
-struct _name_type_offset _dwg_TABLE_BreakRow_fields[] = {
+const struct _name_type_offset _dwg_TABLE_BreakRow_fields[] = {
   { "position", "3BD", OFF(struct _dwg_TABLE_BreakRow,position, 0) },
   { "start", "BL", OFF(struct _dwg_TABLE_BreakRow,start, 24) },
   { "end", "BL", OFF(struct _dwg_TABLE_BreakRow,end, 28) },
   { "parent", "struct _dwg_entity_TABLE", OFF(struct _dwg_TABLE_BreakRow,parent, 32) },
 };
 /* from typedef struct _dwg_TABLE_CustomDataItem: */
-struct _name_type_offset _dwg_TABLE_CustomDataItem_fields[] = {
+const struct _name_type_offset _dwg_TABLE_CustomDataItem_fields[] = {
   { "name", "TV", OFF(struct _dwg_TABLE_CustomDataItem,name, 0) },
   { "value", "Dwg_TABLE_value", OFF(struct _dwg_TABLE_CustomDataItem,value, 8) },
   { "cell_parent", "struct _dwg_TableCell", OFF(struct _dwg_TABLE_CustomDataItem,cell_parent, 108) },
   { "row_parent", "struct _dwg_TableRow", OFF(struct _dwg_TABLE_CustomDataItem,row_parent, 116) },
 };
 /* from typedef struct _dwg_TABLE_cell: */
-struct _name_type_offset _dwg_TABLE_cell_fields[] = {
+const struct _name_type_offset _dwg_TABLE_cell_fields[] = {
   { "type", "BS", OFF(struct _dwg_TABLE_cell,type, 0) },
   { "flags", "RC", OFF(struct _dwg_TABLE_cell,flags, 2) },
   { "merged_value", "B", OFF(struct _dwg_TABLE_cell,merged_value, 3) },
@@ -3724,7 +3558,7 @@ struct _name_type_offset _dwg_TABLE_cell_fields[] = {
   { "parent", "struct _dwg_entity_TABLE", OFF(struct _dwg_TABLE_cell,parent, 387) },
 };
 /* from typedef struct _dwg_TABLE_value: */
-struct _name_type_offset _dwg_TABLE_value_fields[] = {
+const struct _name_type_offset _dwg_TABLE_value_fields[] = {
   { "flags", "BL", OFF(struct _dwg_TABLE_value,flags, 0) },
   { "data_type", "BL", OFF(struct _dwg_TABLE_value,data_type, 4) },
   { "data_size", "BL", OFF(struct _dwg_TABLE_value,data_size, 8) },
@@ -3737,4 +3571,171 @@ struct _name_type_offset _dwg_TABLE_value_fields[] = {
   { "unit_type", "BL", OFF(struct _dwg_TABLE_value,unit_type, 80) },
   { "format_string", "TV", OFF(struct _dwg_TABLE_value,format_string, 84) },
   { "value_string", "TV", OFF(struct _dwg_TABLE_value,value_string, 92) },
+};
+
+struct _name_type_fields {
+  const char *const name;
+  int type;
+  const struct _name_type_offset *const fields;
+};
+
+/* sorted for bsearch. from enum DWG_OBJECT_TYPE: */
+const struct _name_type_fields dwg_name_types[] = {
+  { "ACDBNAVISWORKSMODELDEF", 512, _dwg_ACDBNAVISWORKSMODELDEF_fields },	/* 0 */
+  { "ACSH_HISTORY_CLASS", 513, NULL },	/* 1 */
+  { "ACSH_SWEEP_CLASS", 514, _dwg_ACSH_SWEEP_CLASS_fields },	/* 2 */
+  { "APPID", 67, _dwg_APPID_fields },	/* 3 */
+  { "APPID_CONTROL", 66, _dwg_APPID_CONTROL_fields },	/* 4 */
+  { "ARC", 17, _dwg_ARC_fields },	/* 5 */
+  { "ARCALIGNEDTEXT", 515, NULL },	/* 6 */
+  { "ARC_DIMENSION", 516, NULL },	/* 7 */
+  { "ASSOC2DCONSTRAINTGROUP", 517, _dwg_ASSOC2DCONSTRAINTGROUP_fields },	/* 8 */
+  { "ASSOCACTION", 518, _dwg_ASSOCACTION_fields },	/* 9 */
+  { "ASSOCALIGNEDDIMACTIONBODY", 519, _dwg_ASSOCALIGNEDDIMACTIONBODY_fields },	/* 10 */
+  { "ASSOCDEPENDENCY", 520, _dwg_ASSOCDEPENDENCY_fields },	/* 11 */
+  { "ASSOCGEOMDEPENDENCY", 521, NULL },	/* 12 */
+  { "ASSOCNETWORK", 522, _dwg_ASSOCNETWORK_fields },	/* 13 */
+  { "ASSOCOSNAPPOINTREFACTIONPARAM", 523, _dwg_ASSOCOSNAPPOINTREFACTIONPARAM_fields },	/* 14 */
+  { "ASSOCPERSSUBENTMANAGER", 524, _dwg_ASSOCPERSSUBENTMANAGER_fields },	/* 15 */
+  { "ASSOCPLANESURFACEACTIONBODY", 525, _dwg_ASSOCPLANESURFACEACTIONBODY_fields },	/* 16 */
+  { "ASSOCVERTEXACTIONPARAM", 526, NULL },	/* 17 */
+  { "ATTDEF", 3, _dwg_ATTDEF_fields },	/* 18 */
+  { "ATTRIB", 2, _dwg_ATTRIB_fields },	/* 19 */
+  { "BLOCK", 4, _dwg_BLOCK_fields },	/* 20 */
+  { "BLOCK_CONTROL", 48, _dwg_BLOCK_CONTROL_fields },	/* 21 */
+  { "BLOCK_HEADER", 49, _dwg_BLOCK_HEADER_fields },	/* 22 */
+  { "BODY", 39, NULL },	/* 23 */
+  { "CAMERA", 527, _dwg_CAMERA_fields },	/* 24 */
+  { "CELLSTYLEMAP", 528, _dwg_CELLSTYLEMAP_fields },	/* 25 */
+  { "CIRCLE", 18, _dwg_CIRCLE_fields },	/* 26 */
+  { "DATATABLE", 529, _dwg_DATATABLE_fields },	/* 27 */
+  { "DBCOLOR", 530, _dwg_DBCOLOR_fields },	/* 28 */
+  { "DETAILVIEWSTYLE", 531, NULL },	/* 29 */
+  { "DICTIONARY", 42, _dwg_DICTIONARY_fields },	/* 30 */
+  { "DICTIONARYVAR", 532, _dwg_DICTIONARYVAR_fields },	/* 31 */
+  { "DICTIONARYWDFLT", 533, _dwg_DICTIONARYWDFLT_fields },	/* 32 */
+  { "DIMASSOC", 534, _dwg_DIMASSOC_fields },	/* 33 */
+  { "DIMENSION_ALIGNED", 22, _dwg_DIMENSION_ALIGNED_fields },	/* 34 */
+  { "DIMENSION_ANG2LN", 24, _dwg_DIMENSION_ANG2LN_fields },	/* 35 */
+  { "DIMENSION_ANG3PT", 23, _dwg_DIMENSION_ANG3PT_fields },	/* 36 */
+  { "DIMENSION_DIAMETER", 26, _dwg_DIMENSION_DIAMETER_fields },	/* 37 */
+  { "DIMENSION_LINEAR", 21, _dwg_DIMENSION_LINEAR_fields },	/* 38 */
+  { "DIMENSION_ORDINATE", 20, _dwg_DIMENSION_ORDINATE_fields },	/* 39 */
+  { "DIMENSION_RADIUS", 25, _dwg_DIMENSION_RADIUS_fields },	/* 40 */
+  { "DIMSTYLE", 69, _dwg_DIMSTYLE_fields },	/* 41 */
+  { "DIMSTYLE_CONTROL", 68, _dwg_DIMSTYLE_CONTROL_fields },	/* 42 */
+  { "DOCUMENTOPTIONS", 535, NULL },	/* 43 */
+  { "DUMMY", 75, _dwg_DUMMY_fields },	/* 44 */
+  { "DYNAMICBLOCKPURGEPREVENTER", 536, _dwg_DYNAMICBLOCKPURGEPREVENTER_fields },	/* 45 */
+  { "ELLIPSE", 35, _dwg_ELLIPSE_fields },	/* 46 */
+  { "ENDBLK", 5, _dwg_ENDBLK_fields },	/* 47 */
+  { "EVALUATION_GRAPH", 537, _dwg_EVALUATION_GRAPH_fields },	/* 48 */
+  { "EXTRUDEDSURFACE", 572, _dwg_EXTRUDEDSURFACE_fields },	/* 49 */
+  { "FIELD", 538, _dwg_FIELD_fields },	/* 50 */
+  { "FIELDLIST", 539, _dwg_FIELDLIST_fields },	/* 51 */
+  { "FREED", 65533, NULL },	/* 52 */
+  { "GEODATA", 540, _dwg_GEODATA_fields },	/* 53 */
+  { "GEOPOSITIONMARKER", 541, _dwg_GEOPOSITIONMARKER_fields },	/* 54 */
+  { "GROUP", 72, _dwg_GROUP_fields },	/* 55 */
+  { "HATCH", 78, _dwg_HATCH_fields },	/* 56 */
+  { "HELIX", 542, _dwg_HELIX_fields },	/* 57 */
+  { "IDBUFFER", 543, _dwg_IDBUFFER_fields },	/* 58 */
+  { "IMAGE", 544, _dwg_IMAGE_fields },	/* 59 */
+  { "IMAGEDEF", 545, _dwg_IMAGEDEF_fields },	/* 60 */
+  { "IMAGEDEF_REACTOR", 546, _dwg_IMAGEDEF_REACTOR_fields },	/* 61 */
+  { "INSERT", 7, _dwg_INSERT_fields },	/* 62 */
+  { "LAYER", 51, _dwg_LAYER_fields },	/* 63 */
+  { "LAYER_CONTROL", 50, _dwg_LAYER_CONTROL_fields },	/* 64 */
+  { "LAYER_FILTER", 547, NULL },	/* 65 */
+  { "LAYER_INDEX", 548, _dwg_LAYER_INDEX_fields },	/* 66 */
+  { "LAYOUT", 82, _dwg_LAYOUT_fields },	/* 67 */
+  { "LAYOUTPRINTCONFIG", 549, NULL },	/* 68 */
+  { "LEADER", 45, _dwg_LEADER_fields },	/* 69 */
+  { "LEADEROBJECTCONTEXTDATA", 550, NULL },	/* 70 */
+  { "LIGHT", 551, _dwg_LIGHT_fields },	/* 71 */
+  { "LIGHTLIST", 552, _dwg_LIGHTLIST_fields },	/* 72 */
+  { "LINE", 19, _dwg_LINE_fields },	/* 73 */
+  { "LOFTEDSURFACE", 573, _dwg_LOFTEDSURFACE_fields },	/* 74 */
+  { "LONG_TRANSACTION", 76, _dwg_LONG_TRANSACTION_fields },	/* 75 */
+  { "LTYPE", 57, _dwg_LTYPE_fields },	/* 76 */
+  { "LTYPE_CONTROL", 56, _dwg_LTYPE_CONTROL_fields },	/* 77 */
+  { "LWPOLYLINE", 77, _dwg_LWPOLYLINE_fields },	/* 78 */
+  { "MATERIAL", 553, _dwg_MATERIAL_fields },	/* 79 */
+  { "MINSERT", 8, _dwg_MINSERT_fields },	/* 80 */
+  { "MLEADERSTYLE", 554, _dwg_MLEADERSTYLE_fields },	/* 81 */
+  { "MLINE", 47, _dwg_MLINE_fields },	/* 82 */
+  { "MLINESTYLE", 73, _dwg_MLINESTYLE_fields },	/* 83 */
+  { "MTEXT", 44, _dwg_MTEXT_fields },	/* 84 */
+  { "MULTILEADER", 555, _dwg_MULTILEADER_fields },	/* 85 */
+  { "NPOCOLLECTION", 556, NULL },	/* 86 */
+  { "OBJECTCONTEXTDATA", 557, _dwg_OBJECTCONTEXTDATA_fields },	/* 87 */
+  { "OBJECT_PTR", 558, _dwg_OBJECT_PTR_fields },	/* 88 */
+  { "OLE2FRAME", 74, _dwg_OLE2FRAME_fields },	/* 89 */
+  { "OLEFRAME", 43, _dwg_OLEFRAME_fields },	/* 90 */
+  { "PERSSUBENTMANAGER", 559, _dwg_PERSSUBENTMANAGER_fields },	/* 91 */
+  { "PLACEHOLDER", 80, _dwg_PLACEHOLDER_fields },	/* 92 */
+  { "PLANESURFACE", 571, _dwg_PLANESURFACE_fields },	/* 93 */
+  { "PLOTSETTINGS", 560, _dwg_PLOTSETTINGS_fields },	/* 94 */
+  { "POINT", 27, _dwg_POINT_fields },	/* 95 */
+  { "POINTCLOUD", 561, NULL },	/* 96 */
+  { "POLYLINE_2D", 15, _dwg_POLYLINE_2D_fields },	/* 97 */
+  { "POLYLINE_3D", 16, _dwg_POLYLINE_3D_fields },	/* 98 */
+  { "POLYLINE_MESH", 30, _dwg_POLYLINE_MESH_fields },	/* 99 */
+  { "POLYLINE_PFACE", 29, _dwg_POLYLINE_PFACE_fields },	/* 100 */
+  { "PROXY_ENTITY", 498, _dwg_PROXY_ENTITY_fields },	/* 101 */
+  { "PROXY_OBJECT", 499, _dwg_PROXY_OBJECT_fields },	/* 102 */
+  { "RASTERVARIABLES", 562, _dwg_RASTERVARIABLES_fields },	/* 103 */
+  { "RAY", 40, _dwg_RAY_fields },	/* 104 */
+  { "REGION", 37, NULL },	/* 105 */
+  { "REVOLVEDSURFACE", 574, _dwg_REVOLVEDSURFACE_fields },	/* 106 */
+  { "RTEXT", 563, NULL },	/* 107 */
+  { "SCALE", 564, _dwg_SCALE_fields },	/* 108 */
+  { "SECTIONVIEWSTYLE", 565, NULL },	/* 109 */
+  { "SEQEND", 6, _dwg_SEQEND_fields },	/* 110 */
+  { "SHAPE", 33, _dwg_SHAPE_fields },	/* 111 */
+  { "SOLID", 31, _dwg_SOLID_fields },	/* 112 */
+  { "SORTENTSTABLE", 566, _dwg_SORTENTSTABLE_fields },	/* 113 */
+  { "SPATIAL_FILTER", 567, _dwg_SPATIAL_FILTER_fields },	/* 114 */
+  { "SPATIAL_INDEX", 568, _dwg_SPATIAL_INDEX_fields },	/* 115 */
+  { "SPLINE", 36, _dwg_SPLINE_fields },	/* 116 */
+  { "STYLE", 53, _dwg_STYLE_fields },	/* 117 */
+  { "STYLE_CONTROL", 52, _dwg_STYLE_CONTROL_fields },	/* 118 */
+  { "SUN", 569, _dwg_SUN_fields },	/* 119 */
+  { "SUNSTUDY", 570, _dwg_SUNSTUDY_fields },	/* 120 */
+  { "SWEPTSURFACE", 575, _dwg_SWEPTSURFACE_fields },	/* 121 */
+  { "TABLE", 576, _dwg_TABLE_fields },	/* 122 */
+  { "TABLECONTENT", 577, _dwg_TABLECONTENT_fields },	/* 123 */
+  { "TABLEGEOMETRY", 578, _dwg_TABLEGEOMETRY_fields },	/* 124 */
+  { "TABLESTYLE", 579, _dwg_TABLESTYLE_fields },	/* 125 */
+  { "TEXT", 1, _dwg_TEXT_fields },	/* 126 */
+  { "TOLERANCE", 46, _dwg_TOLERANCE_fields },	/* 127 */
+  { "TRACE", 32, _dwg_TRACE_fields },	/* 128 */
+  { "UCS", 63, _dwg_UCS_fields },	/* 129 */
+  { "UCS_CONTROL", 62, _dwg_UCS_CONTROL_fields },	/* 130 */
+  { "UNDERLAY", 580, _dwg_UNDERLAY_fields },	/* 131 */
+  { "UNDERLAYDEFINITION", 581, _dwg_UNDERLAYDEFINITION_fields },	/* 132 */
+  { "UNKNOWN_ENT", 65534, _dwg_UNKNOWN_ENT_fields },	/* 133 */
+  { "UNKNOWN_OBJ", 65535, _dwg_UNKNOWN_OBJ_fields },	/* 134 */
+  { "UNUSED", 0, NULL },	/* 135 */
+  { "VBA_PROJECT", 81, _dwg_VBA_PROJECT_fields },	/* 136 */
+  { "VERTEX_2D", 10, _dwg_VERTEX_2D_fields },	/* 137 */
+  { "VERTEX_3D", 11, _dwg_VERTEX_3D_fields },	/* 138 */
+  { "VERTEX_MESH", 12, NULL },	/* 139 */
+  { "VERTEX_PFACE", 13, NULL },	/* 140 */
+  { "VERTEX_PFACE_FACE", 14, _dwg_VERTEX_PFACE_FACE_fields },	/* 141 */
+  { "VIEW", 61, _dwg_VIEW_fields },	/* 142 */
+  { "VIEWPORT", 34, _dwg_VIEWPORT_fields },	/* 143 */
+  { "VIEW_CONTROL", 60, _dwg_VIEW_CONTROL_fields },	/* 144 */
+  { "VISUALSTYLE", 582, _dwg_VISUALSTYLE_fields },	/* 145 */
+  { "VPORT", 65, _dwg_VPORT_fields },	/* 146 */
+  { "VPORT_CONTROL", 64, _dwg_VPORT_CONTROL_fields },	/* 147 */
+  { "VPORT_ENTITY_CONTROL", 70, _dwg_VPORT_ENTITY_CONTROL_fields },	/* 148 */
+  { "VPORT_ENTITY_HEADER", 71, _dwg_VPORT_ENTITY_HEADER_fields },	/* 149 */
+  { "WIPEOUT", 583, _dwg_WIPEOUT_fields },	/* 150 */
+  { "WIPEOUTVARIABLES", 584, _dwg_WIPEOUTVARIABLES_fields },	/* 151 */
+  { "XLINE", 41, NULL },	/* 152 */
+  { "XRECORD", 79, _dwg_XRECORD_fields },	/* 153 */
+  { "XREFPANELOBJECT", 585, NULL },	/* 154 */
+  { "_3DFACE", 28, NULL },	/* 155 */
+  { "_3DSOLID", 38, NULL },	/* 156 */
 };
