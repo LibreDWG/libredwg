@@ -1117,10 +1117,20 @@ obj_string_stream(Bit_Chain *dat,
 {
   BITCODE_RL start = obj->bitsize - 1; // in bits
   BITCODE_RL data_size = 0; // in byte
+  BITCODE_RL old_size; // in byte
+  BITCODE_RL old_byte;
+  old_size = str->size;
+  old_byte = str->byte;
+
   str->chain += str->byte;
   str->byte = 0; str->bit = 0;
-  str->size = (obj->bitsize / 8) + 1;
+  str->size = (obj->bitsize / 8) + ((obj->bitsize % 8) ? 1 : 0);
   bit_advance_position(str, start-8);
+  if (str->byte >= old_size - old_byte)
+    {
+	  LOG_WARN("obj_string_stream overflow");
+	  return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
   LOG_TRACE(" obj string stream +%u: @%lu.%u (%lu)", start,
             str->byte, str->bit & 7, bit_position(str));
   obj->has_strings = bit_read_B(str);
