@@ -1325,89 +1325,104 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   {
     Dwg_Object_VIEW_CONTROL *_ctrl = &dwg->view_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
-    TABLE(VIEW);
-    COMMON_TABLE_CONTROL_FLAGS;
-    error |= dwg_dxf_VIEW_CONTROL(dat, ctrl);
-    for (i=0; i<dwg->view_control.num_entries; i++)
+    if (ctrl)
       {
-        Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->views[i]);
-        //FIXME implement the other two
-        if (obj && obj->type == DWG_TYPE_VIEW)
-          error |= dwg_dxf_VIEW(dat, obj);
-        /*
-        else if (obj && obj->fixedtype == DWG_TYPE_SECTIONVIEWSTYLE)
-          error |= dwg_dxf_SECTIONVIEWSTYLE(dat, obj);
-        if (obj && obj->fixedtype == DWG_TYPE_DETAILVIEWSTYLE) {
-          error |= dwg_dxf_DETAILVIEWSTYLE(dat, obj);
-        */
+        TABLE(VIEW);
+        COMMON_TABLE_CONTROL_FLAGS;
+        error |= dwg_dxf_VIEW_CONTROL(dat, ctrl);
+        for (i=0; i<dwg->view_control.num_entries; i++)
+          {
+            Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->views[i]);
+            //FIXME implement the other two
+            if (obj && obj->type == DWG_TYPE_VIEW)
+              error |= dwg_dxf_VIEW(dat, obj);
+            /*
+              else if (obj && obj->fixedtype == DWG_TYPE_SECTIONVIEWSTYLE)
+              error |= dwg_dxf_SECTIONVIEWSTYLE(dat, obj);
+              if (obj && obj->fixedtype == DWG_TYPE_DETAILVIEWSTYLE) {
+              error |= dwg_dxf_DETAILVIEWSTYLE(dat, obj);
+            */
+          }
+        ENDTAB();
       }
-    ENDTAB();
   }
   {
     Dwg_Object_UCS_CONTROL *_ctrl = &dwg->ucs_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
-    TABLE(UCS);
-    COMMON_TABLE_CONTROL_FLAGS;
-    error |= dwg_dxf_UCS_CONTROL(dat, ctrl);
-    for (i=0; i<dwg->ucs_control.num_entries; i++)
+    if (ctrl)
       {
-        Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->ucs[i]);
-        if (obj && obj->type == DWG_TYPE_UCS) {
-          error |= dwg_dxf_UCS(dat, obj);
-        }
+        TABLE(UCS);
+        COMMON_TABLE_CONTROL_FLAGS;
+        error |= dwg_dxf_UCS_CONTROL(dat, ctrl);
+        for (i=0; i<dwg->ucs_control.num_entries; i++)
+          {
+            Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->ucs[i]);
+            if (obj && obj->type == DWG_TYPE_UCS) {
+              error |= dwg_dxf_UCS(dat, obj);
+            }
+          }
+        ENDTAB();
       }
-    ENDTAB();
   }
   SINCE (R_13)
   {
     Dwg_Object_APPID_CONTROL *_ctrl = &dwg->appid_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
-    TABLE(APPID);
-    COMMON_TABLE_CONTROL_FLAGS;
-    error |= dwg_dxf_APPID_CONTROL(dat, ctrl);
-    for (i=0; i<dwg->appid_control.num_entries; i++)
+    if (ctrl)
       {
-        Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->apps[i]);
-        if (obj && obj->type == DWG_TYPE_APPID) {
-          error |= dwg_dxf_APPID(dat, obj);
-        }
+        TABLE(APPID);
+        COMMON_TABLE_CONTROL_FLAGS;
+        error |= dwg_dxf_APPID_CONTROL(dat, ctrl);
+        for (i=0; i<dwg->appid_control.num_entries; i++)
+          {
+            Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->apps[i]);
+            if (obj && obj->type == DWG_TYPE_APPID) {
+              error |= dwg_dxf_APPID(dat, obj);
+            }
+          }
+        ENDTAB();
       }
-    ENDTAB();
   }
   {
     Dwg_Object_DIMSTYLE_CONTROL *_ctrl = &dwg->dimstyle_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
-    TABLE(DIMSTYLE);
-    COMMON_TABLE_CONTROL_FLAGS;
-    error |= dwg_dxf_DIMSTYLE_CONTROL(dat, ctrl);
-    //ignoring morehandles
-    for (i=0; i<dwg->dimstyle_control.num_entries; i++)
+    if (ctrl)
       {
-        Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->dimstyles[i]);
-        if (obj && obj->type == DWG_TYPE_DIMSTYLE) {
-          error |= dwg_dxf_DIMSTYLE(dat, obj);
-        }
+        TABLE(DIMSTYLE);
+        COMMON_TABLE_CONTROL_FLAGS;
+        error |= dwg_dxf_DIMSTYLE_CONTROL(dat, ctrl);
+        //ignoring morehandles
+        for (i=0; i<dwg->dimstyle_control.num_entries; i++)
+          {
+            Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->dimstyles[i]);
+            if (obj && obj->type == DWG_TYPE_DIMSTYLE) {
+              error |= dwg_dxf_DIMSTYLE(dat, obj);
+            }
+          }
+        ENDTAB();
       }
-    ENDTAB();
   }
   // fool the warnings. this table is nowhere to be found in the wild. maybe pre-R_11
   if (0 && dwg->vport_entity_control.num_entries)
     {
       Dwg_Object_VPORT_ENTITY_CONTROL *_ctrl = &dwg->vport_entity_control;
       Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
-      TABLE(VPORT_ENTITY);
-      COMMON_TABLE_CONTROL_FLAGS;
-      error |= dwg_dxf_VPORT_ENTITY_CONTROL(dat, ctrl);
-      for (i=0; i<dwg->vport_entity_control.num_entries; i++)
+      if (ctrl)
         {
-          Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->vport_entity_headers[i]);
-          if (obj && obj->type == DWG_TYPE_VPORT_ENTITY_HEADER) {
-            error |= dwg_dxf_VPORT_ENTITY_HEADER(dat, obj);
-          }
+          TABLE(VPORT_ENTITY);
+          COMMON_TABLE_CONTROL_FLAGS;
+          error |= dwg_dxf_VPORT_ENTITY_CONTROL(dat, ctrl);
+          for (i=0; i<dwg->vport_entity_control.num_entries; i++)
+            {
+              Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->vport_entity_headers[i]);
+              if (obj && obj->type == DWG_TYPE_VPORT_ENTITY_HEADER) {
+                error |= dwg_dxf_VPORT_ENTITY_HEADER(dat, obj);
+              }
+            }
+          // avoid unused warnings
+          dwg_dxf_PROXY_ENTITY(dat, &dwg->object[0]);
+          ENDTAB();
         }
-      // avoid unused warnings
-      dwg_dxf_PROXY_ENTITY(dat, &dwg->object[0]);
-      ENDTAB();
     }
   SINCE (R_13)
   {
