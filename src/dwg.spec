@@ -1497,6 +1497,7 @@ DWG_ENTITY(SPLINE)
         else
           FIELD_BD (ctrl_pts[rcount1].w, 41);
       }
+    SET_PARENT_OBJ(ctrl_pts);
     END_REPEAT(ctrl_pts);
   }
   if (FIELD_VALUE(scenario) & 2) {
@@ -1504,6 +1505,7 @@ DWG_ENTITY(SPLINE)
       {
         FIELD_3BD (fit_pts[rcount1], 11);
       }
+    SET_PARENT_OBJ(fit_pts);
     END_REPEAT(fit_pts);
   }
 
@@ -5966,6 +5968,7 @@ DWG_ENTITY(HELIX)
         else
           FIELD_BD (ctrl_pts[rcount1].w, 41);
       }
+    SET_PARENT(ctrl_pts, (Dwg_Entity_SPLINE*)_obj);
     END_REPEAT(ctrl_pts);
   }
   if (FIELD_VALUE(scenario) & 2) {
@@ -5973,6 +5976,7 @@ DWG_ENTITY(HELIX)
       {
         FIELD_3BD (fit_pts[rcount1], 11);
       }
+    SET_PARENT(fit_pts, (Dwg_Entity_SPLINE*)_obj);
     END_REPEAT(fit_pts);
   }
 

@@ -1485,7 +1485,7 @@ typedef struct _dwg_entity_ELLIPSE
  */
 typedef struct _dwg_SPLINE_point
 {
-  struct _dwg__entity_SPLINE *parent;
+  struct _dwg_entity_SPLINE *parent;
 
   double x;
   double y;
@@ -1494,7 +1494,7 @@ typedef struct _dwg_SPLINE_point
 
 typedef struct _dwg_SPLINE_control_point
 {
-  struct _dwg__entity_SPLINE *parent;
+  struct _dwg_entity_SPLINE *parent;
 
   double x;
   double y;
