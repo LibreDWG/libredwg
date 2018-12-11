@@ -736,7 +736,7 @@ bit_write_BD(Bit_Chain * dat, double value)
     }
 }
 
-/** Read 1 modular char (max 4 bytes, signed).
+/** Read 1 modular char (max 5 bytes, signed).
  */
 BITCODE_MC
 bit_read_MC(Bit_Chain * dat)
@@ -770,7 +770,7 @@ bit_read_MC(Bit_Chain * dat)
   return 0; /* error... */
 }
 
-/** Write 1 modular char (max 4 bytes, signed).
+/** Write 1 modular char (max 5 bytes, signed).
  */
 void
 bit_write_MC(Bit_Chain * dat, BITCODE_MC val)
@@ -798,7 +798,7 @@ bit_write_MC(Bit_Chain * dat, BITCODE_MC val)
       byte[i] |= 0x80;
       mask = mask << 7;
     }
-  for (i = 0; i < 3; i++)
+  for (i = 0; i < 4; i++)
     if (byte[i] & 0x7f)
       break;
 
@@ -807,11 +807,11 @@ bit_write_MC(Bit_Chain * dat, BITCODE_MC val)
   byte[i] &= 0x7f;
   if (negative)
     byte[i] |= 0x40;
-  for (j = 3; j >= i; j--)
+  for (j = 4; j >= i; j--)
     bit_write_RC(dat, byte[j]);
 }
 
-/** Read 1 modular char (max 4 bytes, unsigned).
+/** Read 1 modular char (max 5 bytes, unsigned).
  */
 BITCODE_UMC
 bit_read_UMC(Bit_Chain * dat)
@@ -838,7 +838,7 @@ bit_read_UMC(Bit_Chain * dat)
   return 0; /* error... */
 }
 
-/** Write 1 modular char (max 4 bytes, unsigned).
+/** Write 1 modular char (max 5 bytes, unsigned).
  */
 void
 bit_write_UMC(Bit_Chain * dat, BITCODE_UMC val)
@@ -857,14 +857,14 @@ bit_write_UMC(Bit_Chain * dat, BITCODE_UMC val)
       byte[i] |= 0x80;
       mask = mask << 7;
     }
-  for (i = 0; i < 3; i++)
+  for (i = 0; i < 4; i++)
     if (byte[i] & 0x7f)
       break;
 
   if (byte[i] & 0x40)
     i--;
   byte[i] &= 0x7f;
-  for (j = 3; j >= i; j--)
+  for (j = 4; j >= i; j--)
     bit_write_RC(dat, byte[j]);
 }
 

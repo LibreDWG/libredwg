@@ -24,8 +24,8 @@ void bit_read_RL_tests (void);
 void bit_write_RL_tests (void);
 void bit_read_RD_tests (void);
 void bit_write_RD_tests (void);
-void bit_read_H_tests (void);
-void bit_write_H_tests (void);
+//void bit_read_H_tests (void);
+//void bit_write_H_tests (void);
 
 void
 bit_advance_position_tests (void)
@@ -477,12 +477,12 @@ main (int argc, char const *argv[])
   }
 
   bit_advance_position(&bitchain, -16);
-  if (bit_check_CRC(&bitchain, 0, 0x64))
+  if (bit_check_CRC(&bitchain, 0, bitchain.byte, 0x64))
     pass("bit_check_CRC");
   else
     fail("bit_check_CRC");
 
-  bit_advance_position(&bitchain, -16);
+  //bit_advance_position(&bitchain, -16);
   if ((bs = bit_read_CRC(&bitchain)) == _CRC)
     pass("bit_read_CRC");
   else
