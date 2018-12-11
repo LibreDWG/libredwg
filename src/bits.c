@@ -744,7 +744,7 @@ bit_read_MC(Bit_Chain * dat)
   int i, j;
   int negative;
   unsigned char byte[4];
-  long unsigned int result;
+  BITCODE_UMC result;
 
   negative = 0;
   result = 0;
@@ -758,12 +758,13 @@ bit_read_MC(Bit_Chain * dat)
               negative = 1;
               byte[i] &= 0xbf;
             }
-          result |= (((long unsigned int) byte[i]) << j);
-          return (negative ? -((long int) result) : (long int) result);
+          result |= (((BITCODE_UMC) byte[i]) << j);
+          return (negative ? -((BITCODE_MC) result) : (BITCODE_MC) result);
         }
       else
         byte[i] &= 0x7f;
-      result |= ((long unsigned int) byte[i]) << j;
+
+      result |= ((BITCODE_UMC) byte[i]) << j;
     }
 
   LOG_ERROR("bit_read_MC: error parsing modular char.")
@@ -818,7 +819,7 @@ bit_read_UMC(Bit_Chain * dat)
 {
   int i, j;
   unsigned char byte[4];
-  long unsigned int result;
+  BITCODE_UMC result;
 
   result = 0;
   for (i = 3, j = 0; i >= 0; i--, j += 7)
@@ -831,6 +832,7 @@ bit_read_UMC(Bit_Chain * dat)
         }
       else
         byte[i] &= 0x7f;
+
       result |= ((long unsigned int) byte[i]) << j;
     }
 
@@ -846,10 +848,10 @@ bit_write_UMC(Bit_Chain * dat, BITCODE_UMC val)
   int i, j;
   int negative;
   unsigned char byte[4];
-  long unsigned int mask;
-  long unsigned int value;
+  BITCODE_UMC mask;
+  BITCODE_UMC value;
 
-  value = (long unsigned int) val;
+  value = val;
   mask = 0x0000007f;
   for (i = 3, j = 0; i > -1; i--, j += 7)
     {
@@ -861,7 +863,7 @@ bit_write_UMC(Bit_Chain * dat, BITCODE_UMC val)
     if (byte[i] & 0x7f)
       break;
 
-  if (byte[i] & 0x40)
+  if (byte[i] & 0x40) /* 0x40 typo? */
     i--;
   byte[i] &= 0x7f;
   for (j = 3; j >= i; j--)
@@ -875,7 +877,7 @@ bit_read_MS(Bit_Chain * dat)
 {
   int i, j;
   unsigned int word[2];
-  long unsigned int result;
+  BITCODE_MS result;
 
   result = 0;
   for (i = 1, j = 0; i > -1; i--, j += 15)
@@ -883,12 +885,12 @@ bit_read_MS(Bit_Chain * dat)
       word[i] = bit_read_RS(dat);
       if (!(word[i] & 0x8000))
         {
-          result |= (((long unsigned int) word[i]) << j);
-          return result;
+          result |= (((BITCODE_MS) word[i]) << j);
+          return (BITCODE_MS)result;
         }
       else
         word[i] &= 0x7fff;
-      result |= ((long unsigned int) word[i]) << j;
+      result |= ((BITCODE_MS) word[i]) << j;
     }
   LOG_ERROR("bit_read_MS: error parsing modular short.")
   return 0; /* error... */
@@ -897,7 +899,7 @@ bit_read_MS(Bit_Chain * dat)
 /** Write 1 modular short (max 2 words).
  */
 void
-bit_write_MS(Bit_Chain * dat, long unsigned int value)
+bit_write_MS(Bit_Chain * dat, BITCODE_MS value)
 {
   if (value > 0x7fff)
     {
