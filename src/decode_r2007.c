@@ -1435,10 +1435,11 @@ read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl,
       while (hdl_dat.byte - startpos < section_size)
         {
           int added;
-          long handle, offset;
-          oldpos = hdl_dat.byte;
+          BITCODE_UMC handle;
+          BITCODE_MC offset;
 
-          handle = bit_read_MC(&hdl_dat);
+          oldpos = hdl_dat.byte;
+          handle = bit_read_UMC(&hdl_dat);
           offset = bit_read_MC(&hdl_dat);
           //last_handle += handle;
           last_offset += offset;
