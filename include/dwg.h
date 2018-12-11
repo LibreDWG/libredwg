@@ -71,12 +71,6 @@ extern "C" {
 #else
 # define FORMAT_RC "0x%hhx"
 # endif
-#define BITCODE_MC long int
-#define FORMAT_MC "%ld"
-#define BITCODE_UMC long unsigned int
-#define FORMAT_UMC "%lu"
-#define BITCODE_MS long unsigned int
-#define FORMAT_MS "%lu"
 #define BITCODE_B unsigned char
 #define FORMAT_B "%d"
 #define BITCODE_BB unsigned char
@@ -106,6 +100,7 @@ extern "C" {
 # define FORMAT_RL "%" PRIu32
 # define FORMAT_BLd "%" PRId32
 # define FORMAT_RLd "%" PRId32
+# define FORMAT_BLX "%" PRIX32
 #else
 # define FORMAT_BS "%hu"
 # define FORMAT_RS "%hu"
@@ -113,7 +108,14 @@ extern "C" {
 # define FORMAT_RL "%u"
 # define FORMAT_BLd "%d"
 # define FORMAT_RLd "%d"
+# define FORMAT_BLX "%X"
 #endif
+#define BITCODE_MC BITCODE_BLd
+#define FORMAT_MC  FORMAT_BLd
+#define BITCODE_UMC BITCODE_BL
+#define FORMAT_UMC FORMAT_BL
+#define BITCODE_MS BITCODE_BL
+#define FORMAT_MS FORMAT_BL
 #define BITCODE_RD BITCODE_DOUBLE
 #define FORMAT_RD "%f"
 #ifdef HAVE_STDINT_H

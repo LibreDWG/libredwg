@@ -1454,7 +1454,11 @@ read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl,
           //last_handle += handle;
           last_offset += offset;
           LOG_TRACE("\nNext object: %lu\t", (unsigned long)dwg->num_objects)
-          LOG_TRACE("Handle: %lX\tOffset: %ld @%lu\n", handle, offset, last_offset)
+          LOG_TRACE("Handle: " FORMAT_BLX "\tOffset: " FORMAT_MC " @%lu\n",
+                    handle, offset, last_offset)
+
+          if (hdl_dat.byte == oldpos)
+            break;
 
           added = dwg_decode_add_object(dwg, &obj_dat, hdl, last_offset);
           if (added > 0)
