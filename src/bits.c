@@ -1121,8 +1121,8 @@ bit_write_H(Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
     bit_write_RC(dat, val[i]);
 }
 
-/** Only read CRK-numbers, without checking, only in order to go to
- * the next byte, while jumping contingent non-used bits
+/** Only read CRC-numbers, without checking, only in order to go to
+ *  the next byte, while skipping non-aligned bits.
  */
 uint16_t
 bit_read_CRC(Bit_Chain * dat)
@@ -1137,10 +1137,7 @@ bit_read_CRC(Bit_Chain * dat)
       dat->bit = 0;
     }
   start_address = dat->byte;
-  res[0] = bit_read_RC(dat);
-  res[1] = bit_read_RC(dat);
-
-  result = (res[0] << 8 | res[1]);
+  result = bit_read_RS(dat);
   LOG_TRACE("read CRC at %lx: 0x%x\n", start_address, result)
 
   return result;
@@ -1152,21 +1149,18 @@ int
 bit_check_CRC(Bit_Chain * dat, long unsigned int start_address,
               uint16_t seed)
 {
-  unsigned int calculated;
-  unsigned int read;
-  unsigned char res[2];
+  uint16_t calculated;
+  uint16_t read;
 
   if (dat->bit > 0)
-    dat->byte++;
-  dat->bit = 0;
+    {
+      dat->byte++;
+      dat->bit = 0;
+    }
 
   calculated = bit_calc_CRC(seed, &(dat->chain[start_address]),
                             dat->byte - start_address);
-
-  res[0] = bit_read_RC(dat);
-  res[1] = bit_read_RC(dat);
-
-  read = (unsigned int) (res[0] << 8 | res[1]);
+  read = bit_read_RS(dat);
   LOG_TRACE("check CRC at %lx: 0x%x <=> 0x%x\n", start_address, calculated, read)
 
   return (calculated == read);
@@ -1185,9 +1179,8 @@ bit_write_CRC(Bit_Chain * dat, long unsigned int start_address,
 
   crc = bit_calc_CRC(seed, &(dat->chain[start_address]), dat->byte - start_address);
 
-  bit_write_RC(dat, (unsigned char) (crc >> 8));
-  bit_write_RC(dat, (unsigned char) (crc & 0xFF));
-  LOG_TRACE("write CRC at %lx: 0x%x\n", start_address, crc)
+  bit_write_RS(dat, crc);
+  LOG_TRACE("write CRC at %lx: %04X\n", start_address, crc)
   return (crc);
 }
 

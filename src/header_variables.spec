@@ -622,7 +622,7 @@
     }
 
   /* TODO: This really is the section[0] crc not related to the header */
-  FIELD_RS (crc, 0);
+  FIELD_RSx (crc, 0);
 
   SINCE(R_2007) {
     SECTION_STRING_STREAM

@@ -222,7 +222,7 @@ bit_read_RL_tests (void)
   Bit_Chain bitchain = strtobt ("01111111" "11110111" "10111111" "01111101");
   BITCODE_RL result = bit_read_RL (&bitchain);
 
-  if (result == (BITCODE_RL)0x7dbff77f)
+  if (result == (BITCODE_RL)0x7DBFF77F)
       pass ("bit_read_RL");
   else
     fail ("bit_read_RL 0x%x", (unsigned)result);
@@ -608,11 +608,11 @@ main (int argc, char const *argv[])
       fail("bit_search_sentinel %d", bitchain.byte);
   }
   {
-    unsigned int check = bit_calc_CRC(0xc0c1, (unsigned char *)bitchain.chain, 108);
-    if (check == 0xe497)
+    unsigned int check = bit_calc_CRC(0xC0C1, (unsigned char *)bitchain.chain, 108);
+    if (check == 0xEB57)
       pass("bit_calc_CRC");
     else
-      fail("bit_calc_CRC 0x%x", check);
+      fail("bit_calc_CRC %04X", check);
   }
 
   bit_chain_alloc(&bitchain);
