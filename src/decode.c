@@ -1046,11 +1046,9 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
       last_offset = 0;
       while (dat->byte - startpos < section_size)
         {
-          BITCODE_UMC handle;
-          BITCODE_MC offset;
-
+          long handle, offset;
           oldpos = dat->byte;
-          handle = bit_read_UMC(dat);
+          handle = bit_read_MC(dat);
           offset = bit_read_MC(dat);
           //last_handle += handle;
           last_offset += offset;
@@ -2090,11 +2088,9 @@ read_2004_section_handles(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       while (hdl_dat.byte - startpos < section_size)
         {
           int added;
-          BITCODE_UMC handle;
-          BITCODE_MC offset;
-
+          long handle, offset;
           oldpos = dat->byte;
-          handle = bit_read_UMC(&hdl_dat);
+          handle = bit_read_MC(&hdl_dat);
           offset = bit_read_MC(&hdl_dat);
           //last_handle += handle;
           last_offset += offset;
@@ -3861,7 +3857,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
     bit_advance_position(dat, r);
   }
 #if 1
-  bit_check_CRC(dat, obj->address, obj->size, 0xC0C1);
+  bit_check_CRC(dat, address, 0xC0C1);
 #else
   {
     BITCODE_RS seed, calc;
@@ -3874,7 +3870,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
       if (calc == crc)
         break;
     }
-    bit_check_CRC(dat, obj->address, obj->size, seed);
+    bit_check_CRC(dat, address, seed);
     LOG_TRACE("seed: %X [RS]\n", seed);
     LOG_TRACE("size: %d\n", (int)(dat->byte - address - 2));
   }
