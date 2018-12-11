@@ -743,12 +743,12 @@ bit_read_MC(Bit_Chain * dat)
 {
   int i, j;
   int negative;
-  unsigned char byte[4];
+  unsigned char byte[5];
   long unsigned int result;
 
   negative = 0;
   result = 0;
-  for (i = 3, j = 0; i >= 0; i--, j += 7)
+  for (i = 4, j = 0; i >= 0; i--, j += 7)
     {
       byte[i] = bit_read_RC(dat);
       if (!(byte[i] & 0x80))
@@ -777,7 +777,7 @@ bit_write_MC(Bit_Chain * dat, BITCODE_MC val)
 {
   int i, j;
   int negative;
-  unsigned char byte[4];
+  unsigned char byte[5];
   long unsigned int mask;
   long unsigned int value;
 
@@ -792,7 +792,7 @@ bit_write_MC(Bit_Chain * dat, BITCODE_MC val)
       value = (long unsigned int) val;
     }
   mask = 0x0000007f;
-  for (i = 3, j = 0; i > -1; i--, j += 7)
+  for (i = 4, j = 0; i > -1; i--, j += 7)
     {
       byte[i] = (unsigned char) ((value & mask) >> j);
       byte[i] |= 0x80;
@@ -817,11 +817,11 @@ BITCODE_UMC
 bit_read_UMC(Bit_Chain * dat)
 {
   int i, j;
-  unsigned char byte[4];
+  unsigned char byte[5];
   long unsigned int result;
 
   result = 0;
-  for (i = 3, j = 0; i >= 0; i--, j += 7)
+  for (i = 4, j = 0; i >= 0; i--, j += 7)
     {
       byte[i] = bit_read_RC(dat);
       if (!(byte[i] & 0x80))
@@ -845,13 +845,13 @@ bit_write_UMC(Bit_Chain * dat, BITCODE_UMC val)
 {
   int i, j;
   int negative;
-  unsigned char byte[4];
+  unsigned char byte[5];
   long unsigned int mask;
   long unsigned int value;
 
   value = (long unsigned int) val;
   mask = 0x0000007f;
-  for (i = 3, j = 0; i > -1; i--, j += 7)
+  for (i = 4, j = 0; i > -1; i--, j += 7)
     {
       byte[i] = (unsigned char) ((value & mask) >> j);
       byte[i] |= 0x80;
