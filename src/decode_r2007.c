@@ -1430,24 +1430,34 @@ read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl,
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
 
-      //last_handle = 0;
-      last_offset = 0;
-      while (hdl_dat.byte - startpos < section_size)
+	  if (bit_check_CRC(&hdl_dat, startpos, section_size, 0xC0C1))
         {
-          int added;
-          long handle, offset;
-          oldpos = hdl_dat.byte;
+          //last_handle = 0;
+          last_offset = 0;
+          while (hdl_dat.byte - startpos < section_size)
+            {
+              int added;
+              BITCODE_UMC handle;
+              BITCODE_MC offset;
 
-          handle = bit_read_MC(&hdl_dat);
-          offset = bit_read_MC(&hdl_dat);
-          //last_handle += handle;
-          last_offset += offset;
-          LOG_TRACE("\nNext object: %lu\t", (unsigned long)dwg->num_objects)
-          LOG_TRACE("Handle: %lX\tOffset: %ld @%lu\n", handle, offset, last_offset)
-
-          added = dwg_decode_add_object(dwg, &obj_dat, hdl, last_offset);
-          if (added > 0)
-            error |= added;
+              oldpos = hdl_dat.byte;
+	      
+              handle = bit_read_UMC(&hdl_dat);
+              offset = bit_read_MC(&hdl_dat);
+              //last_handle += handle;
+              last_offset += offset;
+			  
+              LOG_TRACE("\nNext object: %lu\t", (unsigned long)dwg->num_objects)
+              LOG_TRACE("Handle: %lX\tOffset: %ld @%lu\n", handle, offset, last_offset)
+	      
+              added = dwg_decode_add_object(dwg, &obj_dat, hdl, last_offset);
+              if (added > 0)
+                error |= added;
+            }
+        }
+	  else
+        {
+          hdl_dat.byte += section_size;
         }
 
       if (hdl_dat.byte == oldpos)

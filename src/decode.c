@@ -3861,7 +3861,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
     bit_advance_position(dat, r);
   }
 #if 1
-  bit_check_CRC(dat, address, 0xC0C1);
+  bit_check_CRC(dat, obj->address, obj->size, 0xC0C1);
 #else
   {
     BITCODE_RS seed, calc;
@@ -3874,7 +3874,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
       if (calc == crc)
         break;
     }
-    bit_check_CRC(dat, address, 0xC0C1);
+    bit_check_CRC(dat, obj->address, obj->size, seed);
     LOG_TRACE("seed: %X [RS]\n", seed);
     LOG_TRACE("size: %d\n", (int)(dat->byte - address - 2));
   }

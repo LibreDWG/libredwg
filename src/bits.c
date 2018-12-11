@@ -1147,22 +1147,32 @@ bit_read_CRC(Bit_Chain * dat)
 /** Read and check CRC-number.
  */
 int
-bit_check_CRC(Bit_Chain * dat, long unsigned int start_address,
-              uint16_t seed)
+bit_check_CRC(Bit_Chain * dat, long unsigned int start_address, 
+              long unsigned int size, uint16_t seed)
 {
   unsigned int calculated;
   unsigned int read;
   unsigned char res[2];
+  long unsigned int old_byte;
+  long unsigned int old_bit;
 
-  if (dat->bit > 0)
-    dat->byte++;
+  if (start_address + size >= dat->size)
+    {
+      LOG_WARN("bit_check_CRC out of range");
+      return 0;
+    }
+
+  old_byte = dat->byte;
+  old_bit = dat->bit;
+
+  calculated = bit_calc_CRC(seed, &(dat->chain[start_address]), size);
+
+  dat->byte = start_address + size;
   dat->bit = 0;
-
-  calculated = bit_calc_CRC(seed, &(dat->chain[start_address]),
-                            dat->byte - start_address);
-
   res[0] = bit_read_RC(dat);
   res[1] = bit_read_RC(dat);
+  dat->byte = old_byte;
+  dat->bit = old_bit;
 
   read = (unsigned int) (res[0] << 8 | res[1]);
   LOG_TRACE("check CRC at %lx: 0x%x <=> 0x%x\n", start_address, calculated, read)
