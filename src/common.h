@@ -148,11 +148,11 @@ typedef enum DWG_BITS
   BITS_Dwg_FIELD_ChildValue,
   BITS_Dwg_GEODATA_meshpt,
   BITS_Dwg_GEODATA_meshface,
-  BITS_Dwg_Leader,
-  BITS_Dwg_Leader_Break,
-  BITS_Dwg_Leader_Line,
-  BITS_Dwg_Leader_ArrowHead,
-  BITS_Dwg_Leader_BlockLabel,
+  BITS_Dwg_LEADER,
+  BITS_Dwg_LEADER_Break,
+  BITS_Dwg_LEADER_Line,
+  BITS_Dwg_LEADER_ArrowHead,
+  BITS_Dwg_LEADER_BlockLabel,
   BITS_Dwg_Bitcode_2RD,
 } Dwg_Bits;
 
