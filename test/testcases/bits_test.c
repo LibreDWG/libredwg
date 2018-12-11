@@ -273,6 +273,7 @@ main (int argc, char const *argv[])
   BITCODE_BD dbl;
   BITCODE_BL bl;
   BITCODE_BS bs;
+  BITCODE_MC mc;
   unsigned long pos;
   long size;
   unsigned char sentinel[] =
@@ -313,18 +314,20 @@ main (int argc, char const *argv[])
     fail("bit_write_RD @%d.%d", bitchain.byte, bitchain.bit);
 
   bit_advance_position(&bitchain, -64);
-  if (bit_read_RD(&bitchain) == 0xBA43B7400)
+  bit_print(&bitchain, sizeof(double));
+  if ((dbl = bit_read_RD(&bitchain)) == 0xBA43B7400)
     pass("bit_read_RD");
   else
-    fail("bit_read_RD");
+    fail("bit_read_RD %g", dbl);
 
   bit_write_BS(&bitchain, 32767);
   if (bitchain.byte == 10 && bitchain.bit == 2)
     pass("bit_write_BS");
   else
     fail("bit_write_BS @%d.%d", bitchain.byte, bitchain.bit);
-  bit_advance_position(&bitchain, -18);
 
+  bit_advance_position(&bitchain, -18);
+  bit_print(&bitchain, 4);
   if ((bs = bit_read_BS(&bitchain)) == 32767)
     pass("bit_read_BS");
   else
@@ -338,6 +341,7 @@ main (int argc, char const *argv[])
     fail("bit_write_BS @%d.%d", bitchain.byte, bitchain.bit);
 
   bit_advance_position(&bitchain, -2);
+  bit_print(&bitchain, 1);
   if ((bs = bit_read_BS(&bitchain)) == 256)
     pass("bit_read_BS");
   else
@@ -350,6 +354,7 @@ main (int argc, char const *argv[])
     fail("bit_write_BL @%d.%d", bitchain.byte, bitchain.bit);
 
   bit_advance_position(&bitchain, -2);
+  bit_print(&bitchain, 1);
   if ((bl = bit_read_BL(&bitchain)) == 0)
     pass("bit_read_BL");
   else
@@ -363,23 +368,25 @@ main (int argc, char const *argv[])
     fail("bit_write_BD @%d.%d", bitchain.byte, bitchain.bit);
 
   bit_set_position(&bitchain, pos);
+  bit_print(&bitchain, 8);
   if ((dbl = bit_read_BD(&bitchain)) == 1.0)
     pass("bit_read_BD");
   else
     fail("bit_read_BD %f", dbl);
 
   bit_advance_position(&bitchain, 2);
+  pos = bit_position(&bitchain);
   bit_write_MC(&bitchain, 300);
   if (bitchain.byte == 11)
     pass("bit_write_MC");
   else
     fail("bit_write_MC @%d.%d", bitchain.byte, bitchain.bit);
 
-  bit_advance_position(&bitchain, -16);
-  if (bit_read_MC(&bitchain) == 300)
+  bit_set_position(&bitchain, pos);
+  if ((mc = bit_read_MC(&bitchain) == 300))
     pass("bit_read_MC");
   else
-    fail("bit_read_MC");
+    fail("bit_read_MC %d", (int)mc);
 
   bit_write_MS(&bitchain, 5000);
   if (bitchain.byte == 13)
