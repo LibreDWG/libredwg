@@ -3535,7 +3535,11 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
    */
   realloced = dwg_add_object(dwg);
   if (realloced > 0)
-    return realloced; // i.e. DWG_ERR_OUTOFMEM
+    {
+      dat->byte = oldpos;
+      dat->bit = previous_bit;
+      return realloced; // i.e. DWG_ERR_OUTOFMEM
+    }
   obj = &dwg->object[num];
   LOG_INFO("==========================================\n"
            "Object number: %lu/%lX", (unsigned long)num, (unsigned long)num)
