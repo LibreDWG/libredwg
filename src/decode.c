@@ -1054,7 +1054,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
           //last_handle += handle;
           last_offset += offset;
           LOG_TRACE("\nNext object: %lu\t", (unsigned long)dwg->num_objects)
-          LOG_TRACE("Handle: " FORMAT_BLX "\tOffset: " FORMAT_MC " @%lu\n",
+          LOG_TRACE("Handle: %lX\tOffset: " FORMAT_MC " @%lu\n",
                     handle, offset, last_offset)
 
           if (dat->byte == oldpos)
@@ -2126,7 +2126,7 @@ read_2004_section_handles(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           //last_handle += handle;
           last_offset += offset;
           LOG_TRACE("\n< Next object: %lu\t", (unsigned long)dwg->num_objects)
-          LOG_HANDLE("Handle: " FORMAT_BLX "\tOffset: " FORMAT_MC " @%lu\n",
+          LOG_HANDLE("Handle: %lX\tOffset: " FORMAT_MC " @%lu\n",
                      handle, offset, last_offset)
 
           if (hdl_dat.byte == oldpos)

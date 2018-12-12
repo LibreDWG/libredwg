@@ -274,6 +274,7 @@ main (int argc, char const *argv[])
   BITCODE_BL bl;
   BITCODE_BS bs;
   BITCODE_MC mc;
+  BITCODE_UMC umc;
   unsigned long pos;
   long size;
   unsigned char sentinel[] =
@@ -374,20 +375,44 @@ main (int argc, char const *argv[])
   else
     fail("bit_read_BD %f", dbl);
 
-  bit_advance_position(&bitchain, 2);
-  pos = bit_position(&bitchain);
-  bit_write_MC(&bitchain, 300);
-  if (bitchain.byte == 11)
-    pass("bit_write_MC");
-  else
-    fail("bit_write_MC @%d.%d", bitchain.byte, bitchain.bit);
+  bit_advance_position(&bitchain, 2); //9.0
+  for (umc=1; umc<0xf0000000; umc <<= 4) {
+    umc++;
+    pos = bit_position(&bitchain);
+    bit_write_MC(&bitchain, umc);
+    if (bitchain.byte <= 14)
+      pass("bit_write_MC 0x%x", umc);
+    else
+      fail("bit_write_MC @%d.%d", bitchain.byte, bitchain.bit);
 
-  bit_set_position(&bitchain, pos);
-  if ((mc = bit_read_MC(&bitchain) == 300))
-    pass("bit_read_MC");
-  else
-    fail("bit_read_MC %d", (int)mc);
+    bit_set_position(&bitchain, pos);
+    bit_print(&bitchain, 5);
+    if ((mc = bit_read_MC(&bitchain) == (BITCODE_MC)umc))
+      pass("bit_read_MC");
+    else
+      fail("bit_read_MC %ld", (long)mc);
+    bit_set_position(&bitchain, pos);
+  }
 
+  for (umc=1; umc<0xf0000000; umc <<= 4) {
+    umc++;
+    pos = bit_position(&bitchain);
+    bit_write_UMC(&bitchain, umc);
+    if (bitchain.byte <= 14)
+      pass("bit_write_UMC 0x%x", umc);
+    else
+      fail("bit_write_UMC @%d.%d", bitchain.byte, bitchain.bit);
+
+    bit_set_position(&bitchain, pos);
+    bit_print(&bitchain, 5);
+    if ((mc = (BITCODE_UMC)bit_read_UMC(&bitchain) == umc))
+      pass("bit_read_UMC");
+    else
+      fail("bit_read_UMC %lu", (BITCODE_UMC)mc);
+    bit_set_position(&bitchain, pos);
+  }
+
+  bit_advance_position(&bitchain, 16);
   bit_write_MS(&bitchain, 5000);
   if (bitchain.byte == 13)
     pass("bit_write_MS");
@@ -473,7 +498,7 @@ main (int argc, char const *argv[])
         bit_set_position(&bitchain, pos);
       }
   }
-#define _CRC 0xEAE6
+#define _CRC 0x7EE5
   bit_advance_position(&bitchain, -2);
   {
     unsigned int crc = bit_write_CRC(&bitchain, 0, 0x64);

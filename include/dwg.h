@@ -110,10 +110,10 @@ extern "C" {
 # define FORMAT_RLd "%d"
 # define FORMAT_BLX "%X"
 #endif
-#define BITCODE_MC BITCODE_BLd
-#define FORMAT_MC  FORMAT_BLd
-#define BITCODE_UMC BITCODE_BL
-#define FORMAT_UMC FORMAT_BL
+#define BITCODE_MC long
+#define FORMAT_MC  "%ld"
+#define BITCODE_UMC unsigned long
+#define FORMAT_UMC "%lu"
 #define BITCODE_MS BITCODE_BL
 #define FORMAT_MS FORMAT_BL
 #define BITCODE_RD BITCODE_DOUBLE
