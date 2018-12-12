@@ -164,7 +164,7 @@ bit_read_3BLL(Bit_Chain *dat); /*unused but as documented*/
 void
 bit_write_BLL(Bit_Chain *dat, BITCODE_BLL value);
 void
-bit_write_3BLL(Bit_Chain * dat, BITCODE_BLL value);
+bit_write_3BLL(Bit_Chain *dat, BITCODE_BLL value);
 
 BITCODE_BD
 bit_read_BD(Bit_Chain *dat);

@@ -81,6 +81,14 @@ bits_test.cbmc: bits_test.c ../../src/bits.c
 	cbmc -I. -I../../include -I/opt/local/include bits_test.c ../../src/bits.c \
 	     --unwind 6  --cover decision > bits_test.cbmc
 
+.c.i:
+	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -E -o $@ $<
+
+.c.ii: # no linemarkers
+	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -E -P -o $@ $<
+
 @VALGRIND_CHECK_RULES@
 VALGRIND_SUPPRESSIONS_FILE = @VALGRIND_SUPPRESSIONS_FILE@
 VALGRIND_SUPPRESSIONS = @VALGRIND_SUPPRESSIONS@

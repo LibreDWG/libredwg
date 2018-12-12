@@ -16,7 +16,7 @@
  * modified by Felipe Corrêa da Silva Sances
  * modified by Rodrigo Rodrigues da Silva
  * modified by Reini Urban
- * modified by Denis Pruchkovksy
+ * modified by Denis Pruchkovsky
  */
 
 #ifdef HAVE_CTYPE_H
@@ -174,6 +174,9 @@
   { _obj->name = bit_read_RC(dat); \
     LOG_TRACE(#name ": %d [RC %d]\n", (int)((signed char)_obj->name), dxf); }
 #define FIELD_RS(name,dxf) FIELDG(name, RS, dxf)
+#define FIELD_RSx(name,dxf) \
+  { _obj->name = bit_read_RS(dat); \
+    LOG_TRACE(#name ": %04X [RSx %d]\n", (uint16_t)_obj->name, dxf); }
 #define FIELD_RD(name,dxf) { \
   FIELDG(name, RD, dxf); \
   if (bit_isnan(_obj->name)) { \

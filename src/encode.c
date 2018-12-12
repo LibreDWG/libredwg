@@ -377,7 +377,8 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)    \
   dat.from_version = dwg->header.from_version;  \
   bit_write_MS(&dat, dat.size);                 \
   if (dat.version >= R_2010) {                  \
-    bit_write_MC(&dat, 8*sizeof(Dwg_Entity_##token)); \
+    /* FIXME: should be UMC handlestream_size */ \
+    bit_write_UMC(&dat, 8*sizeof(Dwg_Entity_##token)); \
     bit_write_BOT(&dat, DWG_TYPE_##token);      \
   } else {                                      \
     bit_write_BS(&dat, DWG_TYPE_##token);       \
@@ -403,7 +404,8 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
   dat.from_version = dwg->header.from_version;   \
   bit_write_MS(&dat, dat.size);                  \
   if (dat.version >= R_2010) {                   \
-    bit_write_MC(&dat, 8*sizeof(Dwg_Object_##token)); \
+    /* FIXME: should be UMC handlestream_size */ \
+    bit_write_UMC(&dat, 8*sizeof(Dwg_Object_##token)); \
     bit_write_BOT(&dat, DWG_TYPE_##token);       \
   } else {                                       \
     bit_write_BS(&dat, DWG_TYPE_##token);        \
@@ -920,7 +922,7 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       index = omap[j].index;
 
       pvz = omap[index].handle - last_handle;
-      bit_write_MC(dat, pvz);
+      bit_write_UMC(dat, pvz);
       //printf ("Handle(%i): %6lu / ", j, pvz);
       last_handle = omap[index].handle;
 
@@ -1162,6 +1164,9 @@ dwg_encode_add_object(Dwg_Object* obj, Bit_Chain* dat,
   PRE(R_2010) {
     bit_write_BS(dat, obj->type);
   } LATER_VERSIONS {
+    if (!obj->handlestream_size && obj->bitsize)
+      obj->handlestream_size = obj->size * 8 - obj->bitsize;
+    bit_write_UMC(dat, obj->handlestream_size);
     bit_write_BOT(dat, obj->type);
   }
 

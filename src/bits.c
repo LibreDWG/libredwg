@@ -736,19 +736,26 @@ bit_write_BD(Bit_Chain * dat, double value)
     }
 }
 
-/** Read 1 modular char (max 4 bytes, signed).
+/** Read 1 modular char (max 5 bytes, signed).
+    Read bytes until the high bit of the byte is 0, drop the highest bit and pad with 0.
+    If the last byte has 0x40 set, it's negative.
+    Since the result is int32_t (4 byte), but there needs to be the high/follow bit set,
+    the stream can be max 5 byte long (5*7 = 35 bit)
+    10000000 10000000 10000000 10000000 00000100
+ =>  0000000  0000000  0000000  0000000  0000100 (5*7 = 35)
+ => 00001000 00000000 00000000 00000000          (4*8 = 32)
  */
 BITCODE_MC
 bit_read_MC(Bit_Chain * dat)
 {
   int i, j;
   int negative;
-  unsigned char byte[4];
-  long unsigned int result;
+  unsigned char byte[5];
+  BITCODE_UMC result;
 
   negative = 0;
   result = 0;
-  for (i = 3, j = 0; i >= 0; i--, j += 7)
+  for (i = 4, j = 0; i >= 0; i--, j += 7)
     {
       byte[i] = bit_read_RC(dat);
       if (!(byte[i] & 0x80))
@@ -758,47 +765,42 @@ bit_read_MC(Bit_Chain * dat)
               negative = 1;
               byte[i] &= 0xbf;
             }
-          result |= (((long unsigned int) byte[i]) << j);
-          return (negative ? -((long int) result) : (long int) result);
+          result |= (((BITCODE_UMC) byte[i]) << j);
+          return (negative ? -((BITCODE_MC) result) : (BITCODE_MC) result);
         }
       else
         byte[i] &= 0x7f;
-      result |= ((long unsigned int) byte[i]) << j;
+
+      result |= ((BITCODE_UMC) byte[i]) << j;
     }
 
-  LOG_ERROR("bit_read_MC: error parsing modular char.")
+  LOG_ERROR("bit_read_MC: error parsing modular char, i=%d,j=%d,result=0x%lx", i,j,result)
   return 0; /* error... */
 }
 
-/** Write 1 modular char (max 4 bytes, signed).
+/** Write 1 modular char (max 5 bytes, signed).
  */
 void
 bit_write_MC(Bit_Chain * dat, BITCODE_MC val)
 {
   int i, j;
-  int negative;
-  unsigned char byte[4];
-  long unsigned int mask;
-  long unsigned int value;
+  int negative = 0;
+  unsigned char byte[5];
+  BITCODE_UMC mask = 0x0000007f;
+  BITCODE_UMC value = (BITCODE_UMC)val;
 
   if (val < 0)
     {
       negative = 1;
-      value = (long unsigned int) -val;
+      value = (BITCODE_UMC) -val;
     }
-  else
-    {
-      negative = 0;
-      value = (long unsigned int) val;
-    }
-  mask = 0x0000007f;
-  for (i = 3, j = 0; i > -1; i--, j += 7)
+  for (i = 4, j = 0; i >= 0; i--, j += 7)
     {
       byte[i] = (unsigned char) ((value & mask) >> j);
       byte[i] |= 0x80;
       mask = mask << 7;
     }
-  for (i = 0; i < 3; i++)
+  for (i = 0; i < 4; i++)
     if (byte[i] & 0x7f)
       break;
 
@@ -807,64 +809,65 @@ bit_write_MC(Bit_Chain * dat, BITCODE_MC val)
   byte[i] &= 0x7f;
   if (negative)
     byte[i] |= 0x40;
-  for (j = 3; j >= i; j--)
+  for (j = 4; j >= i; j--)
     bit_write_RC(dat, byte[j]);
 }
 
-/** Read 1 modular char (max 4 bytes, unsigned).
+/** Read 1 modular char (max 5 bytes, unsigned).
  */
 BITCODE_UMC
 bit_read_UMC(Bit_Chain * dat)
 {
   int i, j;
-  unsigned char byte[4];
-  long unsigned int result;
+  unsigned char byte[5];
+  BITCODE_UMC result;
 
   result = 0;
-  for (i = 3, j = 0; i >= 0; i--, j += 7)
+  for (i = 4, j = 0; i >= 0; i--, j += 7)
     {
       byte[i] = bit_read_RC(dat);
       if (!(byte[i] & 0x80))
         {
-          result |= (((long unsigned int) byte[i]) << j);
+          result |= (((BITCODE_UMC) byte[i]) << j);
           return result;
         }
       else
         byte[i] &= 0x7f;
-      result |= ((long unsigned int) byte[i]) << j;
+
+      result |= ((BITCODE_UMC) byte[i]) << j;
     }
 
-  LOG_ERROR("bit_read_MC: error parsing modular char.")
+  LOG_ERROR("bit_read_UMC: error parsing modular char, i=%d,j=%d,result=0x%lx", i,j,result)
   return 0; /* error... */
 }
 
-/** Write 1 modular char (max 4 bytes, unsigned).
+/** Write 1 modular char (max 5 bytes, unsigned).
  */
 void
 bit_write_UMC(Bit_Chain * dat, BITCODE_UMC val)
 {
   int i, j;
   int negative;
-  unsigned char byte[4];
-  long unsigned int mask;
-  long unsigned int value;
+  unsigned char byte[5];
+  BITCODE_UMC mask;
+  BITCODE_UMC value;
 
-  value = (long unsigned int) val;
+  value = val;
   mask = 0x0000007f;
-  for (i = 3, j = 0; i > -1; i--, j += 7)
+  for (i = 4, j = 0; i >= 0; i--, j += 7)
     {
       byte[i] = (unsigned char) ((value & mask) >> j);
       byte[i] |= 0x80;
       mask = mask << 7;
     }
-  for (i = 0; i < 3; i++)
+  for (i = 0; i < 4; i++)
     if (byte[i] & 0x7f)
       break;
 
   if (byte[i] & 0x40)
     i--;
   byte[i] &= 0x7f;
-  for (j = 3; j >= i; j--)
+  for (j = 4; j >= i; j--)
     bit_write_RC(dat, byte[j]);
 }
 
@@ -874,8 +877,8 @@ BITCODE_MS
 bit_read_MS(Bit_Chain * dat)
 {
   int i, j;
-  unsigned int word[2];
-  long unsigned int result;
+  BITCODE_RS word[2];
+  BITCODE_MS result;
 
   result = 0;
   for (i = 1, j = 0; i > -1; i--, j += 15)
@@ -883,21 +886,21 @@ bit_read_MS(Bit_Chain * dat)
       word[i] = bit_read_RS(dat);
       if (!(word[i] & 0x8000))
         {
-          result |= (((long unsigned int) word[i]) << j);
-          return result;
+          result |= (((BITCODE_MS) word[i]) << j);
+          return (BITCODE_MS)result;
         }
       else
         word[i] &= 0x7fff;
-      result |= ((long unsigned int) word[i]) << j;
+      result |= ((BITCODE_MS) word[i]) << j;
     }
-  LOG_ERROR("bit_read_MS: error parsing modular short.")
+  LOG_ERROR("bit_read_MS: error parsing modular short, i=%d,j=%d", i,j)
   return 0; /* error... */
 }
 
 /** Write 1 modular short (max 2 words).
  */
 void
-bit_write_MS(Bit_Chain * dat, long unsigned int value)
+bit_write_MS(Bit_Chain * dat, BITCODE_MS value)
 {
   if (value > 0x7fff)
     {
@@ -1119,8 +1122,8 @@ bit_write_H(Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
     bit_write_RC(dat, val[i]);
 }
 
-/** Only read CRK-numbers, without checking, only in order to go to
- * the next byte, while jumping contingent non-used bits
+/** Only read CRC-numbers, without checking, only in order to go to
+ *  the next byte, while skipping non-aligned bits.
  */
 uint16_t
 bit_read_CRC(Bit_Chain * dat)
@@ -1135,10 +1138,7 @@ bit_read_CRC(Bit_Chain * dat)
       dat->bit = 0;
     }
   start_address = dat->byte;
-  res[0] = bit_read_RC(dat);
-  res[1] = bit_read_RC(dat);
-
-  result = (res[0] << 8 | res[1]);
+  result = bit_read_RS(dat);
   LOG_TRACE("read CRC at %lx: 0x%x\n", start_address, result)
 
   return result;
@@ -1150,21 +1150,18 @@ int
 bit_check_CRC(Bit_Chain * dat, long unsigned int start_address,
               uint16_t seed)
 {
-  unsigned int calculated;
-  unsigned int read;
-  unsigned char res[2];
+  uint16_t calculated;
+  uint16_t read;
 
   if (dat->bit > 0)
-    dat->byte++;
-  dat->bit = 0;
+    {
+      dat->byte++;
+      dat->bit = 0;
+    }
 
   calculated = bit_calc_CRC(seed, &(dat->chain[start_address]),
                             dat->byte - start_address);
-
-  res[0] = bit_read_RC(dat);
-  res[1] = bit_read_RC(dat);
-
-  read = (unsigned int) (res[0] << 8 | res[1]);
+  read = bit_read_RS(dat);
   LOG_TRACE("check CRC at %lx: 0x%x <=> 0x%x\n", start_address, calculated, read)
 
   return (calculated == read);
@@ -1183,9 +1180,8 @@ bit_write_CRC(Bit_Chain * dat, long unsigned int start_address,
 
   crc = bit_calc_CRC(seed, &(dat->chain[start_address]), dat->byte - start_address);
 
-  bit_write_RC(dat, (unsigned char) (crc >> 8));
-  bit_write_RC(dat, (unsigned char) (crc & 0xFF));
-  LOG_TRACE("write CRC at %lx: 0x%x\n", start_address, crc)
+  bit_write_RS(dat, crc);
+  LOG_TRACE("write CRC at %lx: %04X\n", start_address, crc)
   return (crc);
 }
 
@@ -1609,7 +1605,7 @@ bit_print(Bit_Chain * dat, long unsigned int size)
     {
       if (i % 16 == 0)
         printf("\n[0x%04X]: ", (unsigned int) i);
-      printf("%02X ", dat->chain[i]);
+      printf("%02X ", (unsigned char)dat->chain[i]);
       if (i % 16 == 15)
         for (j = i - 15; j <= i; j++)
           {

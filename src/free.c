@@ -13,7 +13,7 @@
 /*
  * free.c: helper functions to free all spec fields
  * written by Reini Urban
- * modified by Denis Pruchkovksy
+ * modified by Denis Pruchkovsky
  */
 
 #include "config.h"
@@ -92,8 +92,7 @@ static Bit_Chain *dat = &pdat;
 #define FIELD_TV(name,dxf) \
   if (FIELD_VALUE(name))\
     {\
-      free (FIELD_VALUE(name)); \
-      FIELD_VALUE(name) = NULL; \
+      FREE_IF (FIELD_VALUE(name)); \
     }
 #define VALUE_TV(value,dxf) FREE_IF(value)
 #define VALUE_TF(value,dxf) FREE_IF(value)
@@ -672,8 +671,7 @@ dwg_free_object(Dwg_Object *obj)
             }
           else // not a class
             {
-              free(obj->tio.unknown);
-              obj->tio.unknown = NULL;
+              FREE_IF(obj->tio.unknown);
             }
         }
     }
@@ -716,7 +714,7 @@ dwg_free(Dwg_Data * dwg)
       FREE_IF(dwg->header.section);
       dwg_free_header_vars(dwg);
       if (dwg->picture.size && dwg->picture.chain)
-        free(dwg->picture.chain);
+        FREE_IF(dwg->picture.chain);
       for (i=0; i < dwg->header.num_infos; ++i)
         FREE_IF(dwg->header.section_info[i].sections);
       if (dwg->header.num_infos)
