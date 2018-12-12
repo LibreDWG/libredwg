@@ -62,6 +62,8 @@ static Bit_Chain *dat = &pdat;
 #define FIELD(name,type) {}
 #define FIELD_TRACE(name,type) \
   LOG_TRACE(#name ": " FORMAT_##type "\n", _obj->name)
+#define FIELD_G_TRACE(name,type,dxfgroup) \
+  LOG_TRACE(#name ": " FORMAT_##type " [" #type " %d]\n", _obj->name, dxfgroup)
 #define FIELD_CAST(name,type,cast,dxf) {}
 #define FIELD_VALUE(name) _obj->name
 

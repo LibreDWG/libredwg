@@ -64,6 +64,7 @@ static unsigned int cur_ver = 0;
     PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n", _ent->name)
 #define FIELD_CAST(name,type,cast,dxf) FIELD(name,cast,dxf)
 #define FIELD_TRACE(name,type)
+#define FIELD_G_TRACE(name,type,dxf)
 #define FIELD_TEXT(name,str) \
     PREFIX fprintf(dat->fh, "\"" #name "\": \"%s\",\n", str ? str : "")
 #ifdef HAVE_NATIVE_WCHAR2
