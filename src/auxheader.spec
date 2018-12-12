@@ -59,7 +59,7 @@
   FIELD_RD(TDCREATE, 0);
   DEBUG_HERE;
   FIELD_RD(TDUPDATE, 0);
-  FIELD_RL(HANDSEED, 0);
+  FIELD_RLx(HANDSEED, 0);
   FIELD_RL(plot_stamp, 0);
   FIELD_RS(zero_1, 0);
   FIELD_RS(num_saves_3, 0);
