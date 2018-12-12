@@ -1812,21 +1812,22 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *restrict dwg,
     }
   if (!info)
     {
-      LOG_WARN("Failed to find section_info with type 0x%x", section_type);
+      LOG_WARN("Failed to find section_info %s with type 0x%x",
+               info->name, section_type);
       return DWG_ERR_SECTIONNOTFOUND;
     }
   else
     {
-      LOG_TRACE("\nFound section_info %s type 0x%x with %d sections\n",
+      LOG_TRACE("\nFound section_info %s type 0x%x with %d sections:\n",
                 info->name, section_type, info->num_sections);
     }
 
   max_decomp_size = info->num_sections * info->max_decomp_size;
   if (max_decomp_size == 0)
     {
-      LOG_ERROR("Section's count or max decompression size is zero. "
+      LOG_ERROR("Section %s count or max decompression size is zero. "
                 "Sections: %u, Max size: %u",
-                info->num_sections, info->max_decomp_size);
+                info->name, info->num_sections, info->max_decomp_size);
       return DWG_ERR_INVALIDDWG;
     }
 
@@ -1841,7 +1842,7 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *restrict dwg,
     {
       if (!info->sections[i])
         {
-          LOG_WARN("Skip empty class section %d", i);
+          LOG_WARN("Skip empty section %u %s", i, info->name);
           continue;
         }
       address = info->sections[i]->address;
@@ -1852,34 +1853,34 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *restrict dwg,
       for (j = 0; j < 8; ++j)
         es.long_data[j] ^= sec_mask;
 
-      LOG_INFO("\n=== Section (Class) ===\n")
-      LOG_INFO("Section Tag:      0x%x (should be 0x4163043b)\n",
-              (unsigned int) es.fields.tag)
-      LOG_INFO("Section Type:     0x%x\n",
-              (unsigned int) es.fields.section_type)
+      LOG_INFO("=== Section %s (%u) ===\n", info->name, i)
+      if (es.fields.tag != 0x4163043b)
+        {
+          LOG_WARN("Section Tag:      0x%x  (should be 0x4163043b)",
+                   (unsigned)es.fields.tag);
+        }
+      else
+        {
+          LOG_INFO("Section Tag:      0x%x\n", (unsigned)es.fields.tag);
+        }
+      LOG_INFO("Section Type:     0x%x\n", (unsigned)es.fields.section_type)
       // this is the number of bytes that is read in decompress_R2004_section (+ 2bytes)
-      LOG_INFO("Data size:        0x%x\n",
-              (unsigned int) es.fields.data_size)
-      LOG_INFO("Comp data size:   0x%x\n",
-              (unsigned int) es.fields.section_size)
-      LOG_TRACE("StartOffset:      0x%x\n",
-              (unsigned int) es.fields.start_offset)
-      LOG_HANDLE("Unknown:          0x%x\n",
-              (unsigned int) es.fields.unknown);
-      LOG_HANDLE("Checksum1:        0x%x\n",
-            (unsigned int) es.fields.checksum_1)
-      LOG_HANDLE("Checksum2:        0x%x\n\n",
-            (unsigned int) es.fields.checksum_2)
+      LOG_INFO("Data size:        0x%x\n", (unsigned)es.fields.data_size)
+      LOG_INFO("Comp data size:   0x%x\n", (unsigned)es.fields.section_size)
+      LOG_TRACE("StartOffset:      0x%x\n",(unsigned)es.fields.start_offset)
+      LOG_HANDLE("Unknown:          0x%x\n",(unsigned)es.fields.unknown);
+      LOG_HANDLE("Checksum1:        0x%x\n",(unsigned)es.fields.checksum_1)
+      LOG_HANDLE("Checksum2:        0x%x\n\n",(unsigned)es.fields.checksum_2)
 
       error = decompress_R2004_section
         (dat, &decomp[i * info->max_decomp_size],     //offset
          max_decomp_size - (i*info->max_decomp_size), //bytes left
          es.fields.data_size);
-      if (error > DWG_ERR_CRITICAL) {
-        free(decomp);
-        decomp = NULL;
-        return error;
-      }
+      if (error > DWG_ERR_CRITICAL)
+        {
+          free(decomp);
+          return error;
+        }
     }
 
   sec_dat->bit     = 0;
