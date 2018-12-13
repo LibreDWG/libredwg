@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <alloca.h>
 
 #include "common.h"
 #include "bits.h"
@@ -32,6 +33,8 @@
 
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
+/* see also examples/unknown.c */
+static char* cquote(char *restrict dest, const char *restrict src);
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -77,9 +80,9 @@ static unsigned int cur_ver = 0;
 #define FIELD_TEXT(name,str) \
   { \
     PREFIX \
-    if (str && str[0] == '"') { \
-      /* TODO: escape " with \" */ \
-      fprintf(dat->fh, "\"" #name "\": %s,\n", str); \
+    if (str && (strchr(str, '"') || strchr(str, '\\'))) { \
+      char *_buf = alloca(2*strlen(str)); \
+      fprintf(dat->fh, "\"%s\": \"%s\",\n", #name, cquote(_buf, str)); \
     } else { \
       fprintf(dat->fh, "\"" #name "\": \"%s\",\n", str ? str : ""); \
     } \
@@ -331,6 +334,20 @@ dwg_json_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 #define DWG_OBJECT_END return 0; }
 
 #include "dwg.spec"
+
+static char*
+cquote(char *restrict dest, const char *restrict src) {
+  char c;
+  char *d = dest;
+  char *s = (char*)src;
+  while ((c = *s++)) {
+    if      (c == '"')  { *dest++ = '\\'; *dest++ = c; }
+    else if (c == '\\') { *dest++ = '\\'; *dest++ = c; }
+    else                                  *dest++ = c;
+  }
+  *dest = 0; //add final delim, skipped above
+  return d;
+}
 
 /* returns 0 on success
  */
