@@ -1452,7 +1452,7 @@ DWG_ENTITY(SPLINE)
       FIELD_VALUE(scenario) = 1;
   }
 
-  DXF_OR_PRINT {
+  DXF {
     // extrusion on planar
     VALUE_RD(0.0, 210); VALUE_RD(0.0, 220); VALUE_RD(1.0, 230);
     FIELD_BL(flag, 70);
