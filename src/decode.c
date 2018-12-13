@@ -744,7 +744,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
   Dwg_Object *obj = NULL;
   unsigned int section_size = 0;
   unsigned char sgdc[2];
-  unsigned int ckr, ckr2;
+  unsigned int crc, crc2;
   long unsigned int size;
   long unsigned int lasta;
   long unsigned int lastmap;
@@ -798,12 +798,12 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
     }
 
   // Check CRC
-  ckr = bit_calc_CRC(0xC0C1, dat->chain, dat->byte);
-  ckr2 = bit_read_RS(dat);
-  LOG_TRACE("crc: %04X [RSx]\n", ckr2);
-  if (ckr != ckr2)
+  crc = bit_calc_CRC(0xC0C1, dat->chain, dat->byte);
+  crc2 = bit_read_RS(dat);
+  LOG_TRACE("crc: %04X [RSx]\n", crc2);
+  if (crc != crc2)
     {
-      LOG_ERROR("Header CRC mismatch %04X <=> %04X", ckr, ckr2);
+      LOG_ERROR("Header CRC mismatch %04X <=> %04X", crc, crc2);
       //if (dwg->header.version != R_2000)
       //  return DWG_ERR_WRONGCRC;
       /* The CRC depends on num_sections. XOR result with
@@ -887,7 +887,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
 
   // Check CRC-on
   dat->bit = 0;
-  ckr = dwg->header_vars.crc;
+  crc = dwg->header_vars.crc;
   pvz = dwg->header.section[SECTION_HEADER_R13].address + 16;
   LOG_TRACE("HEADER_R13.address 0x%lx\n", pvz);
   LOG_TRACE("HEADER_R13.size %d\n", dwg->header.section[SECTION_HEADER_R13].size);
@@ -897,13 +897,13 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
       pvz + dwg->header.section[SECTION_HEADER_R13].size < dat->size)
     {
       // TODO: r14-2000: xor with num_sections
-      ckr2 = bit_calc_CRC(0xC0C1, &(dat->chain[pvz]),
+      crc2 = bit_calc_CRC(0xC0C1, &(dat->chain[pvz]),
                           dwg->header.section[SECTION_HEADER_R13].size - 34);
     }
-  if (ckr != ckr2)
+  if (crc != crc2)
     {
       LOG_WARN("Section[%ld] CRC mismatch %04X <=> %04X",
-               dwg->header.section[SECTION_HEADER_R13].number, ckr, ckr2);
+               dwg->header.section[SECTION_HEADER_R13].number, crc, crc2);
       if (dwg->header.version != R_14 && dwg->header.version != R_2000)
         error |= DWG_ERR_WRONGCRC;
     }
@@ -988,20 +988,20 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
   dat->byte = dwg->header.section[SECTION_CLASSES_R13].address
               + dwg->header.section[SECTION_CLASSES_R13].size - 18;
   dat->bit = 0;
-  ckr = bit_read_RS(dat);
-  LOG_TRACE("crc: %04X [RSx]\n", ckr);
+  crc = bit_read_RS(dat);
+  LOG_TRACE("crc: %04X [RSx]\n", crc);
   pvz = dwg->header.section[SECTION_CLASSES_R13].address + 16;
   if (dwg->header.section[SECTION_CLASSES_R13].size < 0xfff &&
       pvz < dat->byte &&
       pvz + dwg->header.section[SECTION_CLASSES_R13].size < dat->size)
     {
-      ckr2 = bit_calc_CRC(0xC0C1, &(dat->chain[pvz]),
+      crc2 = bit_calc_CRC(0xC0C1, &(dat->chain[pvz]),
                       dwg->header.section[SECTION_CLASSES_R13].size - 34);
     }
-  if (ckr != ckr2 && dwg->header.version != R_2000)
+  if (crc != crc2 && dwg->header.version != R_2000)
     {
       LOG_ERROR("Section[%ld] CRC mismatch %04X <=> %04X",
-                dwg->header.section[SECTION_CLASSES_R13].number, ckr, ckr2);
+                dwg->header.section[SECTION_CLASSES_R13].number, crc, crc2);
       //if (dwg->header.version != R_2000)
       //  return DWG_ERR_WRONGCRC;
       error |= DWG_ERR_WRONGCRC;
@@ -1085,12 +1085,12 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
           dat->bit = 0;
         }
 
-      ckr = bit_read_RS_LE(dat);
-      LOG_TRACE("crc: %04X\n", ckr);
-      ckr2 = bit_calc_CRC(0xC0C1, dat->chain + startpos, section_size);
-      if (ckr != ckr2)
+      crc = bit_read_RS_LE(dat);
+      LOG_TRACE("crc: %04X\n", crc);
+      crc2 = bit_calc_CRC(0xC0C1, dat->chain + startpos, section_size);
+      if (crc != crc2)
         {
-          LOG_ERROR("Section CRC mismatch %04X <=> %04X", ckr, ckr2);
+          LOG_ERROR("Section CRC mismatch %04X <=> %04X", crc, crc2);
           // fails with r14
           //if (dwg->header.version == R_2000)
           //  return DWG_ERR_WRONGCRC;
@@ -1115,11 +1115,11 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
   /*
    dat->byte = dwg->header.section[SECTION_OBJECTS_R13].address - 2;
    // Unknown bitdouble inter object data and object map
-   antckr = bit_read_CRC (dat);
-   LOG_TRACE("Address: %08X / Content: 0x%04X", dat->byte - 2, antckr)
+   antcrc = bit_read_CRC (dat);
+   LOG_TRACE("Address: %08X / Content: 0x%04X", dat->byte - 2, antcrc)
 
    // check CRC-on
-   antckr = 0xC0C1;
+   antcrc = 0xC0C1;
    do
    {
      startpos = dat->byte;
@@ -1128,14 +1128,14 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
      section_size = (sgdc[0] << 8) | sgdc[1];
      section_size -= 2;
      dat->byte += section_size;
-     ckr = bit_read_CRC (dat);
+     crc = bit_read_CRC (dat);
      dat->byte -= 2;
-     bit_write_CRC (dat, startpos, antckr);
+     bit_write_CRC (dat, startpos, antcrc);
      dat->byte -= 2;
-     ckr2 = bit_read_CRC (dat);
+     crc2 = bit_read_CRC (dat);
      if (loglevel) fprintf (stderr, "Read: %X\nCreated: %X\t SEMO: %X\n",
-                            ckr, ckr2, antckr);
-     //antckr = ckr;
+                            crc, crc2, antcrc);
+     //antcrc = crc;
    } while (section_size > 0);
    */
   LOG_INFO("\n"
@@ -1229,7 +1229,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
           }
 
         // TODO: CRC check
-        ckr = bit_read_CRC(dat);
+        crc = bit_read_CRC(dat);
 
         VERSION(R_14) {
           FIELD_RL (junk_r14_1, 0);
@@ -2152,8 +2152,8 @@ read_2004_section_handles(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       crc2 = bit_read_RS_LE(&hdl_dat);
       if (crc1 == crc2)
         {
-          LOG_TRACE("Handles section page CRC: %04X from %lx-%lx\n",
-                    crc2, startpos, hdl_dat.byte-2);
+          LOG_INSANE("Handles section page CRC: %04X from %lx-%lx\n",
+                     crc2, startpos, hdl_dat.byte-2);
         }
       else
         {

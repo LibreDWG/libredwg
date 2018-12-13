@@ -220,14 +220,17 @@ bit_read_CRC(Bit_Chain *dat);
 
 int
 bit_check_CRC(Bit_Chain *dat, long unsigned int start_address,
-              uint16_t seed);
+              const uint16_t seed);
 
 uint16_t
 bit_write_CRC(Bit_Chain *dat, long unsigned int start_address,
-              uint16_t seed);
+              const uint16_t seed);
 
 uint16_t
-bit_calc_CRC(uint16_t seed, unsigned char *adr, long len);
+bit_calc_CRC(const uint16_t seed, unsigned char *adr, long len);
+
+uint32_t
+bit_calc_CRC32(const uint32_t seed, unsigned char *adr, long len);
 
 BITCODE_TF
 bit_read_TF(Bit_Chain *dat, int length);

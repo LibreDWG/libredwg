@@ -892,9 +892,9 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
                     section->pages[i]->uncomp_size);
           LOG_HANDLE("   comp_size:     %"PRIu64"\n",
                     section->pages[i]->comp_size);
-          LOG_HANDLE("   checksum:      %"PRIx64"\n",
+          LOG_HANDLE("   checksum:      %016"PRIx64"\n",
                     section->pages[i]->checksum);
-          LOG_HANDLE("   crc:           %"PRIx64"\n\n", section->pages[i]->crc);
+          LOG_HANDLE("   crc64:         %016"PRIx64"\n\n", section->pages[i]->crc);
           //debugging sanity
           assert(section->pages[i]->size < DBG_MAX_SIZE);
           assert(section->pages[i]->uncomp_size < DBG_MAX_SIZE);
@@ -1063,11 +1063,11 @@ read_file_header(Bit_Chain *restrict dat, r2007_file_header *restrict file_heade
   compr_crc   = *((uint64_t*)&pedata[16]);
   compr_len   = *((int32_t*)&pedata[24]);
   len2        = *((int32_t*)&pedata[28]);
-  LOG_TRACE("seqence_crc: %lX\n", (unsigned long)seqence_crc);
-  LOG_TRACE("seqence_key: %lX\n", (unsigned long)seqence_key);
-  LOG_TRACE("compr_crc:   %lX\n", (unsigned long)compr_crc);
-  LOG_TRACE("compr_len:   %d\n", (int)compr_len); // only this is used
-  LOG_TRACE("len2:        %d\n", (int)len2); // 0 when compressed
+  LOG_TRACE("seqence_crc64: %016lX\n", (unsigned long)seqence_crc);
+  LOG_TRACE("seqence_key:   %016lX\n", (unsigned long)seqence_key);
+  LOG_TRACE("compr_crc64:   %016lX\n", (unsigned long)compr_crc);
+  LOG_TRACE("compr_len:     %d\n", (int)compr_len); // only this is used
+  LOG_TRACE("len2:          %d\n", (int)len2); // 0 when compressed
 
   if (compr_len > 0)
     error = decompress_r2007((BITCODE_RC*)file_header, 0x110, &pedata[32], compr_len);
@@ -1478,8 +1478,8 @@ read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl,
       crc2 = bit_read_RS_LE(&hdl_dat);
       if (crc1 == crc2)
         {
-          LOG_TRACE("Handles section page CRC: %04X from %lx-%lx\n",
-                    crc2, startpos, hdl_dat.byte-2);
+          LOG_INSANE("Handles section page CRC: %04X from %lx-%lx\n",
+                     crc2, startpos, hdl_dat.byte-2);
         }
       else
         {

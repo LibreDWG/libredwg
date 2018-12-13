@@ -5496,7 +5496,7 @@ typedef struct _dwg_struct
       BITCODE_RL section_info_id;
       BITCODE_RL section_array_size;
       BITCODE_RL gap_array_size;
-      BITCODE_RL CRC;
+      BITCODE_RL crc32; /* p 2.14.2 32bit CRC 2004+ */
       BITCODE_RC padding[12];
       /* System Section: Section Page Map */
       BITCODE_RL section_type; /* 0x4163043b */

@@ -55,7 +55,7 @@
   FIELD_RL(section_info_id, 0);      // @0x5c
   FIELD_RL(section_array_size, 0);   // @0x60 =0x13
   FIELD_RL(gap_array_size, 0);       // @0x64 =0
-  FIELD_RL(CRC, 0);                  // @0x68
+  FIELD_RLx(crc32, 0);               // @0x68
   //end of encrypted 0x6c header
 
   // well, the padding is also encrypted, but ODA didn't grok that
