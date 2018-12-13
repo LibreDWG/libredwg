@@ -376,8 +376,9 @@ main (int argc, char const *argv[])
     fail("bit_read_BD %f", dbl);
 
   bit_advance_position(&bitchain, 2); //9.0
-  for (umc=1; umc<0xf0000000; umc <<= 4) {
-    umc++;
+
+  for (umc=1; umc <= 0x88000000UL; umc <<= 4) {
+    umc += 7;
     pos = bit_position(&bitchain);
     bit_write_MC(&bitchain, umc);
     if (bitchain.byte <= 14)
@@ -392,10 +393,13 @@ main (int argc, char const *argv[])
     else
       fail("bit_read_MC %ld", (long)mc);
     bit_set_position(&bitchain, pos);
+    // beware of wrap here on 32bit: 0x8777 7777 => 0x7777 7777
+    if (umc >= 0x87777777UL)
+      break;
   }
 
-  for (umc=1; umc<0xf0000000; umc <<= 4) {
-    umc++;
+  for (umc=1; umc <= 0x88000000UL; umc <<= 4) {
+    umc += 7;
     pos = bit_position(&bitchain);
     bit_write_UMC(&bitchain, umc);
     if (bitchain.byte <= 14)
@@ -410,6 +414,9 @@ main (int argc, char const *argv[])
     else
       fail("bit_read_UMC %lu", (BITCODE_UMC)mc);
     bit_set_position(&bitchain, pos);
+    // beware of wrap here on 32bit: 0x8777 7777 => 0x7777 7777
+    if (umc >= 0x87777777UL)
+      break;
   }
 
   bit_advance_position(&bitchain, 16);
@@ -498,7 +505,7 @@ main (int argc, char const *argv[])
         bit_set_position(&bitchain, pos);
       }
   }
-#define _CRC 0x7EE5
+#define _CRC 0x6024
   bit_advance_position(&bitchain, -2);
   {
     unsigned int crc = bit_write_CRC(&bitchain, 0, 0x64);
