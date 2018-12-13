@@ -21,6 +21,7 @@
 #define PRINT   if (0)
 #define DXF     if (0)
 #define FREE    if (0)
+#define DXF_OR_PRINT if (0)
 #define IF_ENCODE_FROM_EARLIER   if (0)
 #define IF_ENCODE_FROM_PRE_R13   if (0)
 #define IF_ENCODE_FROM_SINCE_R13 if (0)
@@ -136,11 +137,15 @@
 #if defined(IS_PRINT)
 #undef  PRINT
 #define PRINT   if (1)
+#undef  DXF_OR_PRINT
+#define DXF_OR_PRINT if (1)
 #endif
 #if defined(IS_DXF)
 #undef  DXF
-#undef  IF_IS_DXF
 #define DXF   if (1)
+#undef  DXF_OR_PRINT
+#define DXF_OR_PRINT if (1)
+#undef  IF_IS_DXF
 #define IF_IS_DXF 1
 #endif
 

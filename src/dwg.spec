@@ -334,7 +334,7 @@ DWG_ENTITY(BLOCK)
 
   COMMON_ENTITY_HANDLE_DATA;
 
-  DXF {
+  DXF_OR_PRINT {
     Dwg_Bitcode_3RD pt = {0,0,0};
     VALUE_BL (0, 70);
     VALUE_3BD (pt, 10);
@@ -378,7 +378,7 @@ DWG_ENTITY(INSERT)
 
   SINCE(R_2000)
     {
-      DXF {
+      DXF_OR_PRINT {
         FIELD_3BD_1 (scale, 41);
       }
       DECODER
@@ -505,7 +505,7 @@ DWG_ENTITY(MINSERT)
 
   SINCE(R_2000)
     {
-      DXF {
+      DXF_OR_PRINT {
         FIELD_3BD_1 (scale, 41);
       }
       DECODER
@@ -643,7 +643,7 @@ DWG_ENTITY(VERTEX_2D)
      wouldn't compress data when saving. So we explicitly implemented
      the encoder routine with the compression technique described in
      the spec. --Juca */
-    DXF {
+    DXF_OR_PRINT {
       FIELD_BD (start_width, 40);
       FIELD_BD (end_width, 41);
     }
@@ -901,7 +901,7 @@ DWG_ENTITY(LINE)
     }
   SINCE(R_2000)
     {
-      DXF
+      DXF_OR_PRINT
         {
           FIELD_3DPOINT (start, 10);
           FIELD_3DPOINT (end, 11);
@@ -1167,7 +1167,7 @@ DWG_ENTITY(_3DFACE)
     {
       FIELD_B (has_no_flags, 0);
 
-      DXF
+      DXF_OR_PRINT
         {
           FIELD_3DPOINT (corner1, 10);
         }
@@ -1452,7 +1452,7 @@ DWG_ENTITY(SPLINE)
       FIELD_VALUE(scenario) = 1;
   }
 
-  DXF {
+  DXF_OR_PRINT {
     // extrusion on planar
     VALUE_RD(0.0, 210); VALUE_RD(0.0, 220); VALUE_RD(1.0, 230);
     FIELD_BL(flag, 70);
@@ -1761,7 +1761,7 @@ static int free_3dsolid(Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
 #endif
 
 #define ACTION_3DSOLID \
-  DXF { \
+  DXF_OR_PRINT { \
     DXF_3DSOLID \
   } \
   DECODER { \
@@ -2345,7 +2345,7 @@ DWG_OBJECT(LAYER)
     FIELD_VALUE(locked) = flag & 8;
     FIELD_VALUE(plotflag) = flag & (1<<15) ? 1 : 0;
     FIELD_VALUE(linewidth) = (flag & 0x03E0) >> 5;
-    DXF {
+    DXF_OR_PRINT {
       FIELD_B(plotflag, 290);
       FIELD_RS(linewidth, 370);
     }
@@ -5151,7 +5151,7 @@ DWG_ENTITY(MULTILEADER)
 
   //DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbMLeader)
-  DXF { VALUE_TFF ("CONTEXT_DATA{", 300); } //AcDbObjectContextData
+  DXF_OR_PRINT { VALUE_TFF ("CONTEXT_DATA{", 300); } //AcDbObjectContextData
 
   SINCE(R_2010)
     {
@@ -5173,7 +5173,7 @@ DWG_ENTITY(MULTILEADER)
     LOG_ERROR("Invalid MULTILEADER.ctx.num_leaders %d", _obj->ctx.num_leaders);
     return DWG_ERR_VALUEOUTOFBOUNDS;
   }
-  DXF { VALUE_TFF ("LEADER{", 302); }
+  DXF_OR_PRINT { VALUE_TFF ("LEADER{", 302); }
   REPEAT(ctx.num_leaders, ctx.leaders, Dwg_LEADER)
     {
       #define lnode ctx.leaders[rcount1]
@@ -5197,7 +5197,7 @@ DWG_ENTITY(MULTILEADER)
       END_REPEAT(lnode.breaks);
       FIELD_BL (lnode.branch_index, 90);
       FIELD_BD (lnode.dogleg_length, 40);
-      DXF { VALUE_TFF ("LEADER_LINE{", 304); }
+      DXF_OR_PRINT { VALUE_TFF ("LEADER_LINE{", 304); }
       FIELD_BL (lnode.num_lines, 0);
       REPEAT2 (lnode.num_lines, lnode.lines, Dwg_LEADER_Line)
         {
@@ -5230,11 +5230,11 @@ DWG_ENTITY(MULTILEADER)
       END_REPEAT(lnode.lines)
       SINCE (R_2010)
         FIELD_BS (lnode.attach_dir, 271);
-      DXF { VALUE_TFF ("}", 305); }
+      DXF_OR_PRINT { VALUE_TFF ("}", 305); }
     }
   SET_PARENT_OBJ(ctx.leaders)
   END_REPEAT(ctx.leaders)
-  DXF { VALUE_TFF ("}", 303); }
+  DXF_OR_PRINT { VALUE_TFF ("}", 303); }
 
   FIELD_BD (ctx.scale, 40);
   FIELD_3BD (ctx.content_base, 10);
@@ -5302,7 +5302,7 @@ DWG_ENTITY(MULTILEADER)
       FIELD_BS (ctx.text_top, 273);
       FIELD_BS (ctx.text_bottom, 272);
     }
-  DXF { VALUE_TFF ("}", 301); } //end CONTEXT_DATA
+  DXF_OR_PRINT { VALUE_TFF ("}", 301); } //end CONTEXT_DATA
   // END MLEADER_AnnotContext
 
   FIELD_BL (flags, 90); // override flags
@@ -7003,3 +7003,4 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+
