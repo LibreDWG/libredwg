@@ -1129,7 +1129,6 @@ uint16_t
 bit_read_CRC(Bit_Chain * dat)
 {
   uint16_t result;
-  unsigned char res[2];
   long unsigned int start_address;
 
   if (dat->bit > 0)

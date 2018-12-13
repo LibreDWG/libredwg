@@ -803,7 +803,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
   LOG_TRACE("crc: %04X [RSx]\n", ckr2);
   if (ckr != ckr2)
     {
-      LOG_ERROR("Header CRC mismatch %X <=> %X", ckr, ckr2);
+      LOG_ERROR("Header CRC mismatch %04X <=> %04X", ckr, ckr2);
       //if (dwg->header.version != R_2000)
       //  return DWG_ERR_WRONGCRC;
       /* The CRC depends on num_sections. XOR result with
@@ -1228,7 +1228,7 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
             FIELD_VECTOR (handlers[i].data, RC, handlers[i].size, 0);
           }
 
-        // Check CRC-on
+        // TODO: CRC check
         ckr = bit_read_CRC(dat);
 
         VERSION(R_14) {
@@ -2079,11 +2079,11 @@ read_2004_section_handles(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int error;
 
   error = read_2004_compressed_section(dat, dwg, &obj_dat, SECTION_OBJECTS);
-  if (error)
+  if (error >= DWG_ERR_CRITICAL)
     return error;
 
   error = read_2004_compressed_section(dat, dwg, &hdl_dat, SECTION_HANDLES);
-  if (error)
+  if (error >= DWG_ERR_CRITICAL)
     {
       free(obj_dat.chain);
       return error;
@@ -2098,6 +2098,7 @@ read_2004_section_handles(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       //long unsigned int last_handle;
       long unsigned int oldpos = 0;
       long unsigned int startpos = hdl_dat.byte;
+      uint16_t crc1, crc2;
 
       section_size = bit_read_RS_LE(&hdl_dat);
       LOG_TRACE("\nSection size: %u\n", section_size);
@@ -2107,7 +2108,7 @@ read_2004_section_handles(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       ** BUT in fact exist files with 2035 section size */
       if (section_size > 2040)
         {
-          LOG_ERROR("Object-map section size greater than 2040!");
+          LOG_ERROR("Object-map/handles section size greater than 2040!");
           free(obj_dat.chain);
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
@@ -2142,7 +2143,25 @@ read_2004_section_handles(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
       if (hdl_dat.byte == oldpos)
         break;
-      hdl_dat.byte += 2; // CRC
+#if 0
+      if (!bit_check_CRC(&hdl_dat, startpos, 0xC0C1))
+        LOG_WARN("Handles section CRC mismatch at offset %lx", startpos);
+#else
+      crc1 = bit_calc_CRC(0xC0C1, &(hdl_dat.chain[startpos]),
+                          hdl_dat.byte - startpos);
+      crc2 = bit_read_RS_LE(&hdl_dat);
+      if (crc1 == crc2)
+        {
+          LOG_TRACE("Handles section page CRC: %04X from %lx-%lx\n",
+                    crc2, startpos, hdl_dat.byte-2);
+        }
+      else
+        {
+          LOG_WARN("Handles section page CRC: %04X vs calc. %04X from %lx-%lx\n",
+                   crc2, crc1, startpos, hdl_dat.byte-2);
+          error |= DWG_ERR_WRONGCRC;
+        }
+#endif
 
       if (hdl_dat.byte >= endpos)
         break;
@@ -2150,7 +2169,6 @@ read_2004_section_handles(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   while (section_size > 2);
 
   LOG_TRACE("\nNum objects: %lu\n", (unsigned long)dwg->num_objects);
-
   free(hdl_dat.chain);
   free(obj_dat.chain);
   return error;
@@ -2326,14 +2344,15 @@ decode_R2007(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   // this includes classes, header, handles + objects
   error = read_r2007_meta_data(dat, &hdl_dat, dwg);
+
+  LOG_INFO("Num objects: %lu\n", (unsigned long)dwg->num_objects)
+  LOG_TRACE("  num object_refs: %lu\n", (unsigned long)dwg->num_object_refs)
   if (error >= DWG_ERR_CRITICAL)
     {
       LOG_ERROR("Failed to read 2007 meta data")
       return error;
     }
 
-  LOG_INFO("Num objects: %lu\n", (unsigned long)dwg->num_objects)
-  LOG_TRACE("  num object_refs: %lu\n", (unsigned long)dwg->num_object_refs)
   return error | resolve_objectref_vector(dat, dwg);
 }
 

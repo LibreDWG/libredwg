@@ -1422,6 +1422,7 @@ read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl,
       return error;
     }
 
+  /* From here on the same code as in decode:read_2004_section_handles */
   endpos = hdl_dat.byte + hdl_dat.size;
   dwg->num_objects = 0;
 
@@ -1431,12 +1432,13 @@ read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl,
       //long unsigned int last_handle;
       long unsigned int oldpos = 0;
       long unsigned int startpos = hdl_dat.byte;
+      uint16_t crc1, crc2;
 
       section_size = bit_read_RS_LE(&hdl_dat);
       LOG_TRACE("\nSection size: %u\n", section_size);
       if (section_size > 2050)
         {
-          LOG_ERROR("Object-map section size greater than 2050!");
+          LOG_ERROR("Object-map/handles section size greater than 2050!");
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
 
@@ -1467,21 +1469,35 @@ read_2007_section_handles(Bit_Chain* dat, Bit_Chain* hdl,
 
       if (hdl_dat.byte == oldpos)
         break;
-      hdl_dat.byte += 2; // CRC
+#if 0
+      if (!bit_check_CRC(&hdl_dat, startpos, 0xC0C1))
+        LOG_WARN("Handles section CRC mismatch at offset %lx", startpos);
+#else
+      crc1 = bit_calc_CRC(0xC0C1, &(hdl_dat.chain[startpos]),
+                          hdl_dat.byte - startpos);
+      crc2 = bit_read_RS_LE(&hdl_dat);
+      if (crc1 == crc2)
+        {
+          LOG_TRACE("Handles section page CRC: %04X from %lx-%lx\n",
+                    crc2, startpos, hdl_dat.byte-2);
+        }
+      else
+        {
+          LOG_WARN("Handles section page CRC: %04X vs calc. %04X from %lx-%lx\n",
+                   crc2, crc1, startpos, hdl_dat.byte-2);
+          error |= DWG_ERR_WRONGCRC;
+        }
+#endif
 
       if (hdl_dat.byte >= endpos)
         break;
     }
   while (section_size > 2);
 
-  LOG_INFO("\nNum objects: %lu\n", (unsigned long)dwg->num_objects);
-
   if (hdl_dat.chain)
     free(hdl_dat.chain);
-
   if (obj_dat.chain)
     free(obj_dat.chain);
-
   return error;
 }
 
