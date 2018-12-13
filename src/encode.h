@@ -25,5 +25,6 @@
 #include "dwg.h"
 
 int dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat);
+uint32_t dwg_section_page_checksum(const uint32_t seed, Bit_Chain *dat, uint32_t size);
 
 #endif

@@ -2237,7 +2237,7 @@ decode_R2004_header(Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     FIELD_RL(decomp_data_size, 0);
     FIELD_RL(comp_data_size, 0);
     FIELD_RL(compression_type, 0);
-    FIELD_RL(checksum, 0);
+    FIELD_RL(checksum, 0); // see dwg_section_page_checksum()
   }
 
   return error;

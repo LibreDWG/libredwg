@@ -658,7 +658,7 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         uint32_t decomp_data_size;
         uint32_t comp_data_size;
         uint32_t compression_type;
-        uint32_t checksum;
+        uint32_t checksum; //see section_page_checksum
       } fields;
     } system_section;
 
@@ -670,6 +670,7 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     const int size = sizeof(struct Dwg_R2004_Header);
     char encrypted_data[size];
     unsigned int rseed = 1;
+    uint32_t checksum;
 
     LOG_ERROR(WE_CAN "We don't encode the R2004_section_map yet")
 
@@ -694,6 +695,9 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
     #include "r2004_file_header.spec"
 
+    dwg->r2004_header.checksum = 0;
+    dwg->r2004_header.checksum = dwg_section_page_checksum(0, dat, size);
+
     /*-------------------------------------------------------------------------
      * Section Page Map
      */
@@ -708,11 +712,13 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     FIELD_RL(decomp_data_size, 0);
     FIELD_RL(comp_data_size, 0);
     FIELD_RL(compression_type, 0);
+    dwg_section_page_checksum(dwg->r2004_header.checksum, dat, size);
     FIELD_RL(checksum, 0);
     LOG_TRACE("\n")
 
     LOG_WARN("TODO write_R2004_section_map(dat, dwg)")
     LOG_TRACE("\n")
+
     return DWG_ERR_NOTYETSUPPORTED;
   }
 
@@ -1100,6 +1106,30 @@ encode_preR13(Dwg_Data* dwg, Bit_Chain* dat)
   return DWG_ERR_NOTYETSUPPORTED;
 }
 
+// needed for r2004+ encode and decode (check-only) (unused)
+// p 4.3: first calc with seed 0, then compress, then recalc with prev. checksum
+uint32_t
+dwg_section_page_checksum(const uint32_t seed, Bit_Chain *dat, uint32_t size)
+{
+  uint32_t sum1 = seed & 0xffff;
+  uint32_t sum2 = seed >> 0x10;
+  unsigned char *data = &(dat->chain[dat->byte]);
+
+  while (size)
+    {
+      uint32_t i;
+      uint32_t chunksize = size < 0x15b0 ? size : 0x15b0;
+      size -= chunksize;
+      for (i = 0; i < chunksize; i++)
+        {
+          sum1 += *data++;
+          sum2 += sum1;
+        }
+      sum1 %= 0xFFF1;
+      sum2 %= 0xFFF1;
+    }
+  return (sum2 << 0x10) | (sum1 & 0xffff);
+}
 
 #include "dwg.spec"
 
