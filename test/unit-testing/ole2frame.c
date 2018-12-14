@@ -16,7 +16,7 @@ void
 api_process(dwg_object *obj)
 {
   int error;
-  unsigned int flags, mode;
+  BITCODE_BS flags, mode;
   BITCODE_BL data_length;
   char * data;
   dwg_ent_ole2frame *ole2frame = dwg_object_to_OLE2FRAME(obj);
