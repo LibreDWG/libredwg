@@ -20,7 +20,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+
+#ifdef HAVE_ALLOCA_H
 #include <alloca.h>
+#define HAVE_ALLOCA
+#elif defined(_WIN32) && defined(HAVE_MALLOC_H)
+#include <malloc.h>
+#define alloca(s) _alloca(s)
+#define HAVE_ALLOCA
+#endif
 
 #include "common.h"
 #include "bits.h"
@@ -35,6 +43,13 @@
 static unsigned int cur_ver = 0;
 /* see also examples/unknown.c */
 static char* cquote(char *restrict dest, const char *restrict src);
+
+#ifndef HAVE_ALLOCA
+char* alloca(size_t size);
+char* alloca(size_t size) {
+  return malloc(size);
+}
+#endif
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -77,6 +92,7 @@ static char* cquote(char *restrict dest, const char *restrict src);
 #define FIELD_CAST(name,type,cast,dxf) FIELD(name,cast,dxf)
 #define FIELD_TRACE(name,type)
 #define FIELD_G_TRACE(name,type,dxf)
+#ifdef HAVE_ALLOCA
 #define FIELD_TEXT(name,str) \
   { \
     PREFIX \
@@ -87,6 +103,19 @@ static char* cquote(char *restrict dest, const char *restrict src);
       fprintf(dat->fh, "\"" #name "\": \"%s\",\n", str ? str : ""); \
     } \
   }
+#else
+#define FIELD_TEXT(name,str) \
+  { \
+    PREFIX \
+    if (str && (strchr(str, '"') || strchr(str, '\\'))) { \
+      char *_buf = malloc(2*strlen(str)); \
+      fprintf(dat->fh, "\"%s\": \"%s\",\n", #name, cquote(_buf, str)); \
+      free(_buf); \
+    } else { \
+      fprintf(dat->fh, "\"" #name "\": \"%s\",\n", str ? str : ""); \
+    } \
+  }
+#endif
 
 #ifdef HAVE_NATIVE_WCHAR2
 # define FIELD_TEXT_TU(name,wstr) \

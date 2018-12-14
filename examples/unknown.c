@@ -27,9 +27,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <alloca.h>
 #include <math.h>
 #include <libgen.h> //dirname,basename
+
+#ifdef HAVE_ALLOCA_H
+#define HAVE_ALLOCA
+#include <alloca.h>
+#elif defined(_WIN32) && defined(HAVE_MALLOC_H)
+#include <malloc.h>
+#define alloca(s) _alloca(s)
+#define HAVE_ALLOCA
+#endif
 
 #include "dwg.h"
 #include "../src/bits.h"
@@ -41,6 +49,13 @@
 #endif
 #define rad2deg(ang) (ang)*90.0/M_PI_2
 #define deg2rad(ang) (ang) ? M_PI_2/((ang)*90.0) : 0.0
+
+#ifndef HAVE_ALLOCA
+char* alloca(size_t size);
+char* alloca(size_t size) {
+  return malloc(size);
+}
+#endif
 
 void *memmem(const void *big, size_t big_len, const void *little, size_t little_len);
 
@@ -667,6 +682,9 @@ search_bits(int j, struct _unknown_field *g, struct _unknown_dxf *udxf,
     //  break;
     offset++;
   }
+#ifndef HAVE_ALLOCA
+  free(s);
+#endif  
   return num_found;
 }
 
@@ -1120,6 +1138,9 @@ main (int argc, char *argv[])
                         char *buf = alloca(2*strlen(g[j].value));
                         fprintf(pi, "\", \"%s\", [], \"%s\", %d])\n", cquote(buf, g[j].value),
                                 g[j].name, g[j].code);
+#ifndef HAVE_ALLOCA
+                        free(buf);
+#endif
                       }
                     else
                       {
@@ -1156,6 +1177,9 @@ main (int argc, char *argv[])
                   char *buf = alloca(2*strlen(g[j].value));
                   fprintf(pi, "\", \"%s\", [], \"%s\", %d])\n", cquote(buf, g[j].value),
                           g[j].name, g[j].code);
+#ifndef HAVE_ALLOCA
+                  free(buf);
+#endif
                 }
               else
                 {
