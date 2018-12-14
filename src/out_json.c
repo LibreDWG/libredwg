@@ -84,11 +84,11 @@ char* alloca(size_t size) {
 #define VALUE_2DD(name,d1,d2,dxf) VALUE_2RD(name,dxf)
 
 #define FIELD(name,type,dxf) \
-    PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n", _obj->name)
+  { PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n", _obj->name); }
 #define _FIELD(name,type,value) \
-    PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n", obj->name)
+  { PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n", obj->name); }
 #define ENT_FIELD(name,type,value) \
-    PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n", _ent->name)
+  { PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n", _ent->name); }
 #define FIELD_CAST(name,type,cast,dxf) FIELD(name,cast,dxf)
 #define FIELD_TRACE(name,type)
 #define FIELD_G_TRACE(name,type,dxf)
@@ -257,7 +257,7 @@ char* alloca(size_t size) {
 #define FIELD_2DD_VECTOR(name, size, dxf)\
   KEY(name) \
   ARRAY;\
-  VALUE_2RD(name[0], 0);\
+  PREFIX VALUE_2RD(name[0], 0);\
   for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
       PREFIX VALUE_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
@@ -298,7 +298,7 @@ char* alloca(size_t size) {
   ARRAY; \
   for (vcount=0; vcount < obj->tio.object->num_reactors; vcount++)\
     {\
-      VALUE_HANDLE(obj->tio.object->reactors[vcount], reactors, code, 330); \
+      PREFIX VALUE_HANDLE(obj->tio.object->reactors[vcount], reactors, code, 330); \
     }\
   if (obj->tio.object->num_reactors) NOCOMMA;\
   ENDARRAY;
@@ -372,6 +372,12 @@ cquote(char *restrict dest, const char *restrict src) {
   while ((c = *s++)) {
     if      (c == '"')  { *dest++ = '\\'; *dest++ = c; }
     else if (c == '\\') { *dest++ = '\\'; *dest++ = c; }
+    else if (c == '\n') { *dest++ = '\\'; *dest++ = 'n'; }
+    else if (c == '\r') { *dest++ = '\\'; *dest++ = 'r'; }
+    else if (c < 0x1f)  { *dest++ = '\\'; *dest++ = 'u';
+                          *dest++ = '0';  *dest++ = '0';
+                          *dest++ = c < 0x10 ? '0' : '1';
+                          *dest++ = (c % 16 > 10 ? 'a' + (c%16) : '0' + (c%16)); }
     else                                  *dest++ = c;
   }
   *dest = 0; //add final delim, skipped above
@@ -705,7 +711,8 @@ json_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       ENDHASH;
     }
   NOCOMMA;
-  ENDSEC();
+  /* ENDSEC without comma */
+  fprintf (dat->fh, "\n"); dat->bit--; PREFIX fprintf (dat->fh, "]\n");
   return 0;
 }
 
