@@ -61,13 +61,21 @@ char* alloca(size_t size) {
 #define PREFIX   for (int _i=0; _i<dat->bit; _i++) { fprintf (dat->fh, "  "); }
 #define ARRAY    fprintf (dat->fh, "[\n"); dat->bit++
 #define ENDARRAY fprintf (dat->fh, "\n"); dat->bit--; PREFIX fprintf (dat->fh, "],\n")
+#define LASTENDARRAY fprintf (dat->fh, "\n"); dat->bit--; PREFIX fprintf (dat->fh, "]\n")
 #define KEYs(name) PREFIX fprintf (dat->fh, "\"%s\": ", name);
 #define KEY(name) PREFIX fprintf (dat->fh, "\"%s\": ", #name);
-#define HASH     fprintf (dat->fh, "\n"); PREFIX fprintf (dat->fh, "{\n"); dat->bit++
+#define HASH     PREFIX fprintf (dat->fh, "{\n"); dat->bit++
 #define ENDHASH  fprintf (dat->fh, "\n"); dat->bit--; PREFIX fprintf (dat->fh, "},\n")
-#define SECTION(name) PREFIX fprintf (dat->fh, "\"%s\": [\n", #name); dat->bit++;
-#define ENDSEC()  ENDARRAY
 #define NOCOMMA   fseek(dat->fh, -2, SEEK_CUR)
+
+#define TABLE(name) KEY(name); HASH
+#define ENDTAB()    NOCOMMA; ENDHASH
+// a named hash
+#define RECORD(name) KEY(name); HASH
+#define ENDRECORD()  NOCOMMA; ENDHASH
+// a named list
+#define SECTION(name) PREFIX fprintf (dat->fh, "\"%s\": [\n", #name); dat->bit++;
+#define ENDSEC()      ENDARRAY
 
 #undef  FORMAT_RC
 #define FORMAT_RC "%d"
@@ -82,6 +90,7 @@ char* alloca(size_t size) {
 #define VALUE_3RD(name,dxf) \
   fprintf(dat->fh, "[ %f, %f, %f ],\n", _obj->name.x, _obj->name.y, _obj->name.z)
 #define VALUE_2DD(name,d1,d2,dxf) VALUE_2RD(name,dxf)
+#define VALUE_TV(name,dxf)
 
 #define FIELD(name,type,dxf) \
   { PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n", _obj->name); }
@@ -144,14 +153,19 @@ char* alloca(size_t size) {
             hdlptr->handleref.code, \
             hdlptr->handleref.size, \
             hdlptr->handleref.value); \
-  } else { fprintf(dat->fh, "\"\",\n"); }
+  } else { fprintf(dat->fh, "\"0.0.0\",\n"); }
+#define VALUE_H(hdl, dxf) \
+  fprintf(dat->fh, "\"%d.%d.%lu\",\n", \
+            (hdl).code,    \
+            (hdl).size,    \
+            (hdl).value)
 #define FIELD_HANDLE(name, handle_code, dxf) \
   PREFIX if (_obj->name) { \
     fprintf(dat->fh, "\"" #name "\": \"%d.%d.%lu\",\n", \
             _obj->name->handleref.code, \
             _obj->name->handleref.size, \
             _obj->name->handleref.value); \
-  } else { fprintf(dat->fh, "\"" #name "\": \"\",\n"); }
+  } else { fprintf(dat->fh, "\"" #name "\": \"0.0.0\",\n"); }
 #define FIELD_DATAHANDLE(name, code, dxf) FIELD_HANDLE(name, code, dxf)
 #define FIELD_HANDLE_N(name, vcount, handle_code, dxf) \
   PREFIX if (_obj->name) { \
@@ -160,8 +174,20 @@ char* alloca(size_t size) {
             _obj->name->handleref.size, \
             _obj->name->handleref.value); \
   } else {\
-    fprintf(dat->fh, "\"\",\n"); \
+    fprintf(dat->fh, "\"0.0.0\",\n"); \
   }
+#define FIELD_BINARY(name,size,dxf) \
+{ \
+  long len = size; \
+  KEY(name); \
+  fprintf(dat->fh, "\""); \
+  if (_obj->name) { \
+    for (long j=0; j < len; j++) { \
+      fprintf(dat->fh, "%02X", _obj->name[j]); \
+    } \
+  } \
+  fprintf(dat->fh, "\""); \
+}
 
 #define FIELD_B(name,dxf)   FIELD(name, B, dxf)
 #define FIELD_BB(name,dxf)  FIELD(name, BB, dxf)
@@ -638,20 +664,18 @@ json_header_write(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       ? "UTF-8"
       : "ANSI_1252";
 
-  KEY(HEADER); HASH;
+  RECORD(HEADER); // single hash
   #include "header_variables.spec"
-  NOCOMMA;
-  ENDHASH;
+  ENDRECORD();
   return 0;
 }
 
 static int
 json_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  BITCODE_BS i;
+  BITCODE_BL i;
 
-  SECTION(CLASSES);
-  LOG_TRACE("num_classes: " FORMAT_BS "\n", dwg->num_classes);
+  SECTION(CLASSES); //list of classes
   for (i=0; i < dwg->num_classes; i++)
     {
       Dwg_Class *_obj = &dwg->dwg_class[i];
@@ -664,8 +688,6 @@ json_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       FIELD_BL (num_instances, 91);
       FIELD_B  (wasazombie, 280);
       FIELD_BS (item_class_id, 281);
-      // Is-an-entity. 1f2 for entities, 1f3 for objects
-      //VALUE (281, dwg->dwg_class[i].item_class_id == 0x1F2 ? 1 : 0);
       NOCOMMA;
       ENDHASH;
     }
@@ -675,33 +697,11 @@ json_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 static int
-json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
-{
-  (void)dwg;
-
-  SECTION(TABLES);
-  //...
-  ENDSEC();
-  return 0;
-}
-
-static int
-json_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
-{
-  (void)dwg;
-
-  SECTION(BLOCKS);
-  //...
-  ENDSEC();
-  return 0;
-}
-
-static int
-json_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+json_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   BITCODE_BL i;
 
-  SECTION(ENTITIES);
+  SECTION(OBJECTS);
   for (i=0; i < dwg->num_objects; i++)
     {
       Dwg_Object *obj = &dwg->object[i];
@@ -711,14 +711,13 @@ json_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       ENDHASH;
     }
   NOCOMMA;
-  /* ENDSEC without comma */
-  fprintf (dat->fh, "\n"); dat->bit--; PREFIX fprintf (dat->fh, "]\n");
+  LASTENDARRAY; /* ENDSEC without comma */
   return 0;
 }
 
-/* The object map: we skip this
+/* The object map/handles section
 static int
-json_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+json_handles_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   BITCODE_BL i;
 
@@ -747,38 +746,36 @@ dwg_write_json(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   fprintf (dat->fh, "{\n"
                      "  \"created_by\": \"%s\",\n", PACKAGE_STRING);
-  dat->bit++;
-  // a minimal header requires only $ACADVER, $HANDSEED, and then ENTITIES
-  // see https://pythonhosted.org/ezdxf/dxfinternals/filestructure.html
+  dat->bit++; // ident
+
+  if (!minimal) {
+    // TODO: header.spec + 3-5 sections:
+    // auxheader.spec
+    // r2004_file_header.spec
+
+    if (dat->version >= R_2000) {
+      if (json_preview_write (dat, dwg) >= DWG_ERR_CRITICAL)
+        goto fail;
+    }
+  }
+
+  // A minimal HEADER requires only $ACADVER, $HANDSEED, and then ENTITIES
   json_header_write (dat, dwg);
 
   if (!minimal && dat->version >= R_13)
     {
-      SINCE(R_2000) {
-        if (json_classes_write (dat, dwg))
-          goto fail;
-      }
-
-      if (json_tables_write (dat, dwg))
-        goto fail;
-
-      if (json_blocks_write (dat, dwg))
+      if (json_classes_write (dat, dwg) >= DWG_ERR_CRITICAL)
         goto fail;
     }
 
-  if (json_entities_write (dat, dwg))
+  if (json_objects_write (dat, dwg) >= DWG_ERR_CRITICAL)
     goto fail;
 
-  /* only the object map
-  SINCE(R_13) {
-    if (json_objects_write (dat, dwg))
+  /* object map:
+  if (!minimal && dat->version >= R_13) {
+    if (json_handles_write (dat, dwg) >= DWG_ERR_CRITICAL)
       goto fail;
   }*/
-
-  if (!minimal && dat->version >= R_2000) {
-    if (json_preview_write (dat, dwg))
-      goto fail;
-  }
 
   dat->bit--;
   fprintf (dat->fh, "}\n");
