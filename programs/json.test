@@ -1,0 +1,45 @@
+#!/bin/sh
+# json.test
+#
+# Copyright (C) 2018 Free Software Foundation, Inc.
+#
+# This program is free software, licensed under the terms of the GNU
+# General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Author: Reini Urban
+
+test "$datadir" || { echo ERROR: Env var datadir not set ; exit 1 ; }
+
+problems=0
+DATA="sample_2000 example_2000 example_2004 example_2007 example_2010"
+DATA="$DATA example_2013 example_2018 example_r14"
+TODO="r11/ACEL10"
+
+for d in $DATA; do
+    b=$(basename $d)
+    rm $b.json 2>/dev/null
+done
+
+for dwg in $DATA; do
+    json=`basename $dwg .dwg`.json
+    dwg=${datadir}/$dwg.dwg
+    echo dwgread -Ojson -o$json $dwg
+    if ../libtool --mode=execute ./dwgread -Ojson -o$json $dwg && jq . $json >$json.log 2>&1; then
+        rm $json.log $json
+        echo ok
+    else
+        cat $json.log
+        problems=$(expr 1 + $problems)
+    fi
+done
+
+if test x0 = x$problems ; then
+    exit 0
+else
+    echo `basename $0`: $problems failures
+    ls -l *json.log
+    exit 1
+fi

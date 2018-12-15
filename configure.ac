@@ -382,6 +382,14 @@ if test -n "$DOXYGEN"; then
 fi
 AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
 
+AC_CHECK_PROGS([JQ], [jq])
+if test -n "$JQ"; then
+  AC_MSG_CHECKING([JQ version])
+  [jq_version=`$JQ --version 2>&1 | grep 'jq-' | cut -c4-`]
+  AC_MSG_RESULT([$jq_version])
+fi
+AM_CONDITIONAL([HAVE_JQ], [test -n "$JQ"])
+
 dnl help2man only by the maintainer
 
 if test x$cross_compiling = xno; then
