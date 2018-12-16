@@ -43,6 +43,10 @@
 static unsigned int cur_ver = 0;
 /* see also examples/unknown.c */
 static char* cquote(char *restrict dest, const char *restrict src);
+#ifdef HAVE_NATIVE_WCHAR2
+static wchar_t* wcquote(wchar_t *restrict dest, const wchar_t *restrict src);
+#endif
+static void  print_wcquote(Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr);
 
 #ifndef HAVE_ALLOCA
 char* alloca(size_t size);
@@ -127,22 +131,19 @@ char* alloca(size_t size) {
 #endif
 
 #ifdef HAVE_NATIVE_WCHAR2
-# define FIELD_TEXT_TU(name,wstr) \
-    PREFIX fprintf(dat->fh, "\"" #name "\": \"%ls\",\n", wstr ? (wchar_t*)wstr : L"")
+# define VALUE_TEXT_TU(wstr) \
+    if (wstr && (wcschr(wstr, L'"') || wcschr(wstr, L'\\'))) { \
+      wchar_t *_buf = malloc(2*wcslen(wstr)); \
+      fprintf(dat->fh, "\"%s\",\n", wcquote(_buf, wstr)); \
+      free(_buf); \
+    } else { \
+      fprintf(dat->fh, "\"%ls\",\n", wstr ? (wchar_t*)wstr : L""); \
+    }
 #else
-# define FIELD_TEXT_TU(name,wstr) \
-  { \
-    BITCODE_TU ws = (BITCODE_TU)wstr;\
-    uint16_t _c; PREFIX \
-    fprintf(dat->fh, "\"" #name "\": \""); \
-    if (ws) { \
-      while ((_c = *ws++)) { \
-        fprintf(dat->fh, "%c", (char)(_c & 0xff)); \
-      } \
-    }\
-    fprintf(dat->fh, "\",\n"); \
-  }
+# define VALUE_TEXT_TU(wstr) print_wcquote(dat, (BITCODE_TU)wstr)
 #endif
+#define FIELD_TEXT_TU(name, wstr) \
+  KEY(name); VALUE_TEXT_TU(wstr)
 
 #define FIELD_VALUE(name) _obj->name
 #define ANYCODE -1
@@ -229,14 +230,18 @@ char* alloca(size_t size) {
 #define FIELD_3BD_1(name,dxf) FIELD_3RD(name,dxf)
 #define FIELD_3DPOINT(name,dxf) FIELD_3BD(name,dxf)
 #define FIELD_CMC(color,dxf1,dxf2) { \
-  PREFIX fprintf(dat->fh, "\"" #color "\": %d,\n", _obj->color.index); \
   if (dat->version >= R_2004) { \
-      PREFIX fprintf(dat->fh, "\"" #color "\".rgb: %06x,\n", (unsigned)_obj->color.rgb); \
-    if (_obj->color.flag & 1) { \
-        PREFIX fprintf(dat->fh, "\"" #color ".name\": \"%s\",\n", _obj->color.name); } \
+    RECORD(color); \
+    PREFIX fprintf(dat->fh, "\"index\": %d,\n", _obj->color.index); \
+    PREFIX fprintf(dat->fh, "\"" #color ".rgb\": \"%06x\",\n", (unsigned)_obj->color.rgb); \
+    /*if (_obj->color.flag & 1) { \
+      PREFIX fprintf(dat->fh, "\"" #color ".name\": \"%s\",\n", _obj->color.name); } \
     if (_obj->color.flag & 2) { \
-      PREFIX fprintf(dat->fh, "\"" #color ".bookname\": \"%s\",\n", _obj->color.book_name); } \
-  }\
+      PREFIX fprintf(dat->fh, "\"" #color ".bookname\": \"%s\",\n", _obj->color.book_name); } */\
+    ENDRECORD(); \
+  } else { \
+    PREFIX fprintf(dat->fh, "\"" #color "\": %d,\n", _obj->color.index); \
+  } \
 }
 #define FIELD_TIMEBLL(name,dxf) \
     PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_BL "." FORMAT_BL ",\n", \
@@ -248,24 +253,29 @@ char* alloca(size_t size) {
 #define FIELD_VECTOR_N(name, type, size, dxf)\
     KEY(name) \
     ARRAY; \
-    for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
-      {\
-        PREFIX fprintf(dat->fh, FORMAT_##type ",\n", _obj->name[vcount]); \
-      }\
-    if (size) NOCOMMA;\
+    if (_obj->name) { \
+      for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
+        {\
+          PREFIX fprintf(dat->fh, FORMAT_##type ",\n", _obj->name[vcount]); \
+        }\
+      if (size) NOCOMMA;\
+    } \
     ENDARRAY;
 #define FIELD_VECTOR_T(name, size, dxf)\
     KEY(name) \
     ARRAY; \
-    PRE (R_2007) { \
-      for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++) { \
-        PREFIX fprintf(dat->fh, "\"%s\",\n", _obj->name[vcount]); \
-      }\
-    } else { \
-      for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
-        FIELD_TEXT_TU(name, _obj->name[vcount]); \
+    if (_obj->name) { \
+      PRE (R_2007) { \
+        for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++) { \
+          PREFIX fprintf(dat->fh, "\"%s\",\n", _obj->name[vcount]); \
+        } \
+      } else { \
+        for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++) { \
+          PREFIX VALUE_TEXT_TU(_obj->name[vcount]); \
+        } \
+      } \
+      if (_obj->size) NOCOMMA;\
     } \
-    if (_obj->size) NOCOMMA;\
     ENDARRAY;
 
 #define FIELD_VECTOR(name, type, size, dxf) FIELD_VECTOR_N(name, type, _obj->size, dxf)
@@ -322,11 +332,13 @@ char* alloca(size_t size) {
 #define REACTORS(code)\
   KEY(reactors) \
   ARRAY; \
-  for (vcount=0; vcount < obj->tio.object->num_reactors; vcount++)\
-    {\
-      PREFIX VALUE_HANDLE(obj->tio.object->reactors[vcount], reactors, code, 330); \
-    }\
-  if (obj->tio.object->num_reactors) NOCOMMA;\
+  if (obj->tio.object->reactors) { \
+    for (vcount=0; vcount < obj->tio.object->num_reactors; vcount++)    \
+      {                                                                 \
+        PREFIX VALUE_HANDLE(obj->tio.object->reactors[vcount], reactors, code, 330); \
+      }                                                                 \
+    NOCOMMA; \
+  } \
   ENDARRAY;
 
 #define XDICOBJHANDLE(code)\
@@ -390,6 +402,27 @@ dwg_json_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 
 #include "dwg.spec"
 
+static void
+print_wcquote(Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr) {
+  BITCODE_TU ws = (BITCODE_TU)wstr;
+  uint16_t c;
+  fprintf(dat->fh, "\"");
+  if (ws) {
+    while ((c = *ws++)) {
+      if      (c == L'"')  { fprintf(dat->fh, "\\\""); }
+      else if (c == L'\\') { fprintf(dat->fh, "\\\\"); }
+      else if (c == L'\n') { fprintf(dat->fh, "\\n"); }
+      else if (c == L'\r') { fprintf(dat->fh, "\\r"); }
+      else if (c < 0x1f || c > 0xff) {
+        fprintf(dat->fh, "\\u%04x", c);
+      }
+      else
+        fprintf(dat->fh, "%c", (char)(c & 0xff));
+    }
+  }
+  fprintf(dat->fh, "\",\n");
+}
+
 static char*
 cquote(char *restrict dest, const char *restrict src) {
   char c;
@@ -409,6 +442,28 @@ cquote(char *restrict dest, const char *restrict src) {
   *dest = 0; //add final delim, skipped above
   return d;
 }
+
+#ifdef HAVE_NATIVE_WCHAR2
+static wchar_t*
+wcquote(wchar_t *restrict dest, const wchar_t *restrict src) {
+  wchar_t c;
+  wchar_t *d = dest;
+  wchar_t *s = (wchar_t*)src;
+  while ((c = *s++)) {
+    if      (c == L'"')  { *dest++ = L'\\'; *dest++ = c; }
+    else if (c == L'\\') { *dest++ = L'\\'; *dest++ = c; }
+    else if (c == L'\n') { *dest++ = L'\\'; *dest++ = L'n'; }
+    else if (c == L'\r') { *dest++ = L'\\'; *dest++ = L'r'; }
+    else if (c < 0x1f)   { *dest++ = L'\\'; *dest++ = L'u';
+                          *dest++ = L'0';  *dest++ = L'0';
+                          *dest++ = c < 0x10 ? L'0' : L'1';
+                          *dest++ = (c % 16 > 10 ? L'a' + (c%16) : L'0' + (c%16)); }
+    else                                  *dest++ = c;
+  }
+  *dest = 0; //add final delim, skipped above
+  return d;
+}
+#endif
 
 /* returns 0 on success
  */
