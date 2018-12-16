@@ -112,7 +112,7 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 // names on: 6 7 8. which else? there are more styles: plot, ...
 // rather skip unknown handles
 #define FIELD_HANDLE(nam, handle_code, dxf) \
-  if (dxf && _obj->nam) { \
+  if (dxf != 0 && _obj->nam) { \
     if (dxf == 6) \
       FIELD_HANDLE_NAME(nam, dxf, LTYPE) \
     else if (dxf == 7) \

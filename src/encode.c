@@ -115,10 +115,10 @@ static bool env_var_checked_p;
     } \
   }
 #define FIELD_TF(nam,len,dxf) \
-  { if (_obj->nam && len) bit_write_TF(dat, (BITCODE_TF)_obj->nam, len); \
+  { if (_obj->nam && len > 0) bit_write_TF(dat, (BITCODE_TF)_obj->nam, len); \
     FIELD_G_TRACE(nam, TF, dxf); }
 #define FIELD_TFF(nam,len,dxf) \
-  { if (_obj->nam && len) bit_write_TF(dat, (BITCODE_TF)_obj->nam, len); \
+  { if (_obj->nam && len > 0) bit_write_TF(dat, (BITCODE_TF)_obj->nam, len); \
     FIELD_G_TRACE(nam, TF, dxf); }
 #define FIELD_TU(nam,dxf) \
   { if (_obj->nam) bit_write_TU(dat, (BITCODE_TU)_obj->nam); \
