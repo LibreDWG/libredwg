@@ -1842,7 +1842,7 @@ typedef struct _dwg_object_BLOCK_HEADER
 {
   struct _dwg_object_object *parent;
   BITCODE_RC flag;  /* preR13 */
-  BITCODE_TV entry_name;
+  BITCODE_TV name;
   BITCODE_RS used;  /* preR13 */
   BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
@@ -1892,7 +1892,7 @@ typedef struct _dwg_object_LAYER
 {
   struct _dwg_object_object *parent;
   BITCODE_BS flag;
-  BITCODE_TV entry_name;
+  BITCODE_TV name;
   BITCODE_RS used; /* preR13 */
   BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
@@ -1932,7 +1932,7 @@ typedef struct _dwg_object_STYLE
 {
   struct _dwg_object_object *parent;
   BITCODE_RC flag; /* preR13 */
-  BITCODE_TV entry_name;
+  BITCODE_TV name;
   BITCODE_RS used; /* preR13 */
   BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
@@ -1982,7 +1982,7 @@ typedef struct _dwg_object_LTYPE
 {
   struct _dwg_object_object *parent;
   BITCODE_RC flag; /* preR13 */
-  BITCODE_TV entry_name;
+  BITCODE_TV name;
   BITCODE_RS used; /* preR13 */
   BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
@@ -2018,7 +2018,7 @@ typedef struct _dwg_object_VIEW
 {
   struct _dwg_object_object *parent;
   BITCODE_RC flag; /* preR13 */
-  BITCODE_TV entry_name;
+  BITCODE_TV name;
   BITCODE_RS used; /* preR13 */
   BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
@@ -2073,7 +2073,7 @@ typedef struct _dwg_object_UCS
 {
   struct _dwg_object_object *parent;
   BITCODE_RC flag; /* preR13 */
-  BITCODE_TV entry_name;
+  BITCODE_TV name;
   BITCODE_RS used; /* preR13 */
   BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
@@ -2106,7 +2106,7 @@ typedef struct _dwg_object_VPORT
 {
   struct _dwg_object_object *parent;
   BITCODE_RC flag;
-  BITCODE_TV entry_name;
+  BITCODE_TV name;
   BITCODE_RS used; /* preR13 */
   BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
@@ -2177,7 +2177,7 @@ typedef struct _dwg_object_APPID
 {
   struct _dwg_object_object *parent;
   BITCODE_RC flag; /* preR13 */
-  BITCODE_TV entry_name;
+  BITCODE_TV name;
   BITCODE_RS used; /* preR13 */
   BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
@@ -2206,7 +2206,7 @@ typedef struct _dwg_object_DIMSTYLE
 {
   struct _dwg_object_object *parent;
   BITCODE_RC flag; /* preR13 */
-  BITCODE_TV entry_name;
+  BITCODE_TV name;
   BITCODE_RS used; /* preR13 */
   BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
@@ -2324,7 +2324,7 @@ typedef struct _dwg_object_VPORT_ENTITY_HEADER
 {
   struct _dwg_object_object *parent;
   BITCODE_RC flag; /* preR13 */
-  BITCODE_TV entry_name;
+  BITCODE_TV name;
   BITCODE_RS used; /* preR13 */
   BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
@@ -2365,7 +2365,7 @@ typedef struct _dwg_MLINESTYLE_line
 typedef struct _dwg_object_MLINESTYLE
 {
   struct _dwg_object_object *parent;
-  BITCODE_TV entry_name;
+  BITCODE_TV name;
   BITCODE_TV desc;
   BITCODE_BS flag;
   BITCODE_CMC fill_color;

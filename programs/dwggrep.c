@@ -453,7 +453,7 @@ int match_MLINESTYLE(const char *restrict filename, const Dwg_Object *restrict o
 {
   char *text;
   int found = 0;
-  MATCH_OBJECT (MLINESTYLE, entry_name, 2);
+  MATCH_OBJECT (MLINESTYLE, name, 2);
   MATCH_OBJECT (MLINESTYLE, desc, 3);
   return found;
 }

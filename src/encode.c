@@ -71,122 +71,122 @@ static bool env_var_checked_p;
 #define VALUE_RL(value,dxf) VALUE(value, RL, dxf)
 #define VALUE_RD(value,dxf) VALUE(value, RD, dxf)
 
-#define FIELD(name,type)\
-  { bit_write_##type(dat, _obj->name); \
-    FIELD_TRACE(name, type); }
-#define FIELDG(name,type,dxf) \
-  { bit_write_##type(dat, _obj->name); \
-    FIELD_G_TRACE(name, type, dxf); }
-#define FIELD_TRACE(name,type) \
-  LOG_TRACE(#name ": " FORMAT_##type "\n", _obj->name)
-#define FIELD_G_TRACE(name,type,dxfgroup) \
-  LOG_TRACE(#name ": " FORMAT_##type " [" #type " " #dxfgroup "]\n", _obj->name)
-#define FIELD_CAST(name,type,cast,dxf) \
-  { bit_write_##type(dat, (BITCODE_##type)_obj->name); \
-    FIELD_G_TRACE(name,cast,dxf); }
+#define FIELD(nam,type)\
+  { bit_write_##type(dat, _obj->nam); \
+    FIELD_TRACE(nam, type); }
+#define FIELDG(nam,type,dxf) \
+  { bit_write_##type(dat, _obj->nam); \
+    FIELD_G_TRACE(nam, type, dxf); }
+#define FIELD_TRACE(nam,type) \
+  LOG_TRACE(#nam ": " FORMAT_##type "\n", _obj->nam)
+#define FIELD_G_TRACE(nam,type,dxfgroup) \
+  LOG_TRACE(#nam ": " FORMAT_##type " [" #type " " #dxfgroup "]\n", _obj->nam)
+#define FIELD_CAST(nam,type,cast,dxf) \
+  { bit_write_##type(dat, (BITCODE_##type)_obj->nam); \
+    FIELD_G_TRACE(nam,cast,dxf); }
 
-#define FIELD_VALUE(name) _obj->name
+#define FIELD_VALUE(nam) _obj->nam
 
-#define FIELD_B(name,dxf) FIELDG(name, B, dxf)
-#define FIELD_BB(name,dxf) FIELDG(name, BB, dxf)
-#define FIELD_3B(name,dxf) FIELDG(name, 3B, dxf)
-#define FIELD_BS(name,dxf) FIELDG(name, BS, dxf)
-#define FIELD_BL(name,dxf) FIELDG(name, BL, dxf)
-#define FIELD_BLL(name,dxf) FIELDG(name, BLL, dxf)
-#define FIELD_BD(name,dxf) FIELDG(name, BD, dxf)
-#define FIELD_RC(name,dxf) FIELDG(name, RC, dxf)
-#define FIELD_RS(name,dxf) FIELDG(name, RS, dxf)
-#define FIELD_RD(name,dxf) FIELDG(name, RD, dxf)
-#define FIELD_RL(name,dxf) FIELDG(name, RL, dxf)
-#define FIELD_RLL(name,dxf) FIELDG(name, RLL, dxf)
-#define FIELD_MC(name,dxf) FIELDG(name, MC, dxf)
-#define FIELD_MS(name,dxf) FIELDG(name, MS, dxf)
-#define FIELD_TV(name,dxf) \
-  { IF_ENCODE_FROM_EARLIER { _obj->name = strdup(""); } FIELDG(name, TV, dxf); }
-#define FIELD_T(name,dxf) \
+#define FIELD_B(nam,dxf) FIELDG(nam, B, dxf)
+#define FIELD_BB(nam,dxf) FIELDG(nam, BB, dxf)
+#define FIELD_3B(nam,dxf) FIELDG(nam, 3B, dxf)
+#define FIELD_BS(nam,dxf) FIELDG(nam, BS, dxf)
+#define FIELD_BL(nam,dxf) FIELDG(nam, BL, dxf)
+#define FIELD_BLL(nam,dxf) FIELDG(nam, BLL, dxf)
+#define FIELD_BD(nam,dxf) FIELDG(nam, BD, dxf)
+#define FIELD_RC(nam,dxf) FIELDG(nam, RC, dxf)
+#define FIELD_RS(nam,dxf) FIELDG(nam, RS, dxf)
+#define FIELD_RD(nam,dxf) FIELDG(nam, RD, dxf)
+#define FIELD_RL(nam,dxf) FIELDG(nam, RL, dxf)
+#define FIELD_RLL(nam,dxf) FIELDG(nam, RLL, dxf)
+#define FIELD_MC(nam,dxf) FIELDG(nam, MC, dxf)
+#define FIELD_MS(nam,dxf) FIELDG(nam, MS, dxf)
+#define FIELD_TV(nam,dxf) \
+  { IF_ENCODE_FROM_EARLIER { _obj->nam = strdup(""); } FIELDG(nam, TV, dxf); }
+#define FIELD_T(nam,dxf) \
   { if (dat->version < R_2007) { \
-      FIELD_TV(name,dxf) \
+      FIELD_TV(nam,dxf) \
     } else { \
       if (obj->has_strings) { \
-        FIELD_TU(name,dxf) \
+        FIELD_TU(nam,dxf) \
       } else { \
-        LOG_TRACE_TU(#name, L"", dxf); \
+        LOG_TRACE_TU(#nam, L"", dxf); \
       } \
     } \
   }
-#define FIELD_TF(name,len,dxf) \
-  { if (_obj->name && len) bit_write_TF(dat, (BITCODE_TF)_obj->name, len); \
-    FIELD_G_TRACE(name, TF, dxf); }
-#define FIELD_TFF(name,len,dxf) \
-  { if (_obj->name && len) bit_write_TF(dat, (BITCODE_TF)_obj->name, len); \
-    FIELD_G_TRACE(name, TF, dxf); }
-#define FIELD_TU(name,dxf) \
-  { if (_obj->name) bit_write_TU(dat, (BITCODE_TU)_obj->name); \
-    LOG_TRACE_TU(#name, (BITCODE_TU)_obj->name,dxf); }
-#define FIELD_BT(name, dxf) FIELDG(name, BT, dxf);
+#define FIELD_TF(nam,len,dxf) \
+  { if (_obj->nam && len) bit_write_TF(dat, (BITCODE_TF)_obj->nam, len); \
+    FIELD_G_TRACE(nam, TF, dxf); }
+#define FIELD_TFF(nam,len,dxf) \
+  { if (_obj->nam && len) bit_write_TF(dat, (BITCODE_TF)_obj->nam, len); \
+    FIELD_G_TRACE(nam, TF, dxf); }
+#define FIELD_TU(nam,dxf) \
+  { if (_obj->nam) bit_write_TU(dat, (BITCODE_TU)_obj->nam); \
+    LOG_TRACE_TU(#nam, (BITCODE_TU)_obj->nam,dxf); }
+#define FIELD_BT(nam, dxf) FIELDG(nam, BT, dxf);
 
-#define FIELD_DD(name, _default, dxf) bit_write_DD(dat, FIELD_VALUE(name), _default);
-#define FIELD_2DD(name, d1, d2, dxf) { FIELD_DD(name.x, d1, dxf); FIELD_DD(name.y, d2, dxf+10); }
-#define FIELD_3DD(name, def, dxf) { \
-    FIELD_DD(name.x, FIELD_VALUE(def.x), dxf); \
-    FIELD_DD(name.y, FIELD_VALUE(def.y), dxf+10); \
-    FIELD_DD(name.z, FIELD_VALUE(def.z), dxf+20); }
-#define FIELD_2RD(name,dxf) { FIELDG(name.x, RD, dxf); FIELDG(name.y, RD, dxf+10); }
-#define FIELD_2BD(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+10); }
-#define FIELD_2BD_1(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+1); }
-#define FIELD_3RD(name,dxf) { FIELDG(name.x, RD, dxf); FIELDG(name.y, RD, dxf+10); \
-                              FIELDG(name.z, RD,dxf+20); }
-#define FIELD_3BD(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+10); \
-                              FIELDG(name.z, BD, dxf+20); }
-#define FIELD_3BD_1(name,dxf) { FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+1); \
-                                FIELDG(name.z, BD, dxf+2); }
-#define FIELD_3DPOINT(name,dxf) FIELD_3BD(name,dxf)
-#define FIELD_4BITS(name,dxf) bit_write_4BITS(dat,_obj->name);
-#define FIELD_TIMEBLL(name,dxf) \
-  { bit_write_TIMEBLL(dat, (BITCODE_TIMEBLL)_obj->name); \
-    LOG_TRACE(#name ": " FORMAT_BL "." FORMAT_BL "\n", _obj->name.days, _obj->name.ms); }
+#define FIELD_DD(nam, _default, dxf) bit_write_DD(dat, FIELD_VALUE(nam), _default);
+#define FIELD_2DD(nam, d1, d2, dxf) { FIELD_DD(nam.x, d1, dxf); FIELD_DD(nam.y, d2, dxf+10); }
+#define FIELD_3DD(nam, def, dxf) { \
+    FIELD_DD(nam.x, FIELD_VALUE(def.x), dxf); \
+    FIELD_DD(nam.y, FIELD_VALUE(def.y), dxf+10); \
+    FIELD_DD(nam.z, FIELD_VALUE(def.z), dxf+20); }
+#define FIELD_2RD(nam,dxf) { FIELDG(nam.x, RD, dxf); FIELDG(nam.y, RD, dxf+10); }
+#define FIELD_2BD(nam,dxf) { FIELDG(nam.x, BD, dxf); FIELDG(nam.y, BD, dxf+10); }
+#define FIELD_2BD_1(nam,dxf) { FIELDG(nam.x, BD, dxf); FIELDG(nam.y, BD, dxf+1); }
+#define FIELD_3RD(nam,dxf) { FIELDG(nam.x, RD, dxf); FIELDG(nam.y, RD, dxf+10); \
+                              FIELDG(nam.z, RD,dxf+20); }
+#define FIELD_3BD(nam,dxf) { FIELDG(nam.x, BD, dxf); FIELDG(nam.y, BD, dxf+10); \
+                              FIELDG(nam.z, BD, dxf+20); }
+#define FIELD_3BD_1(nam,dxf) { FIELDG(nam.x, BD, dxf); FIELDG(nam.y, BD, dxf+1); \
+                                FIELDG(nam.z, BD, dxf+2); }
+#define FIELD_3DPOINT(nam,dxf) FIELD_3BD(nam,dxf)
+#define FIELD_4BITS(nam,dxf) bit_write_4BITS(dat,_obj->nam);
+#define FIELD_TIMEBLL(nam,dxf) \
+  { bit_write_TIMEBLL(dat, (BITCODE_TIMEBLL)_obj->nam); \
+    LOG_TRACE(#nam ": " FORMAT_BL "." FORMAT_BL "\n", _obj->nam.days, _obj->nam.ms); }
 
-#define FIELD_CMC(name,dxf1,dxf2) bit_write_CMC(dat, &_obj->name)
+#define FIELD_CMC(nam,dxf1,dxf2) bit_write_CMC(dat, &_obj->nam)
 
-#define FIELD_BE(name, dxf)\
-  bit_write_BE(dat, FIELD_VALUE(name.x), FIELD_VALUE(name.y), FIELD_VALUE(name.z));
+#define FIELD_BE(nam, dxf)\
+  bit_write_BE(dat, FIELD_VALUE(nam.x), FIELD_VALUE(nam.y), FIELD_VALUE(nam.z));
 
 // No overflow check with IS_RELEASE
 #ifdef IS_RELEASE
-# define OVERFLOW_CHECK(name, size)
+# define OVERFLOW_CHECK(nam, size)
 #else
-# define OVERFLOW_CHECK(name, size) \
+# define OVERFLOW_CHECK(nam, size) \
   if ((size) > 0xff00) { \
-    LOG_ERROR("Invalid " #name " %ld", (long)size); \
+    LOG_ERROR("Invalid " #nam " %ld", (long)size); \
     return DWG_ERR_VALUEOUTOFBOUNDS; \
   }
 #endif
 
-#define FIELD_2RD_VECTOR(name, size, dxf) \
-  OVERFLOW_CHECK(name, _obj->size) \
+#define FIELD_2RD_VECTOR(nam, size, dxf) \
+  OVERFLOW_CHECK(nam, _obj->size) \
   for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
-      FIELD_2RD(name[vcount], dxf);\
+      FIELD_2RD(nam[vcount], dxf);\
     }
 
-#define FIELD_2DD_VECTOR(name, size, dxf)\
-  OVERFLOW_CHECK(name, _obj->size) \
-  FIELD_2RD(name[0], dxf); \
+#define FIELD_2DD_VECTOR(nam, size, dxf)\
+  OVERFLOW_CHECK(nam, _obj->size) \
+  FIELD_2RD(nam[0], dxf); \
   for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
-      FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
+      FIELD_2DD(nam[vcount], FIELD_VALUE(nam[vcount - 1].x), FIELD_VALUE(nam[vcount - 1].y), dxf);\
     }
 
-#define FIELD_3DPOINT_VECTOR(name, size, dxf)\
-  OVERFLOW_CHECK(name, _obj->size) \
+#define FIELD_3DPOINT_VECTOR(nam, size, dxf)\
+  OVERFLOW_CHECK(nam, _obj->size) \
   for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++) \
     {\
-      FIELD_3DPOINT(name[vcount], dxf);\
+      FIELD_3DPOINT(nam[vcount], dxf);\
     }
 
 #define REACTORS(code)\
   if (obj->tio.object->reactors) { \
-    OVERFLOW_CHECK(name, obj->tio.object->num_reactors) \
+    OVERFLOW_CHECK(nam, obj->tio.object->num_reactors) \
     SINCE (R_13) { \
       for (vcount=0; vcount < (BITCODE_BL)obj->tio.object->num_reactors; vcount++) \
       {\
@@ -229,45 +229,45 @@ static bool env_var_checked_p;
   } \
   RESET_VER
 
-//FIELD_VECTOR_N(name, type, size, dxf):
+//FIELD_VECTOR_N(nam, type, size, dxf):
 // writes a 'size' elements vector of data of the type indicated by 'type'
-#define FIELD_VECTOR_N(name, type, size, dxf)\
-  if (size > 0 && _obj->name)\
+#define FIELD_VECTOR_N(nam, type, size, dxf)\
+  if (size > 0 && _obj->nam)\
     {\
-      OVERFLOW_CHECK(name, size) \
+      OVERFLOW_CHECK(nam, size) \
       for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
         {\
-          bit_write_##type(dat, _obj->name[vcount]);\
-          LOG_TRACE(#name "[%ld]: " FORMAT_##type "\n", (long)vcount, _obj->name[vcount]) \
+          bit_write_##type(dat, _obj->nam[vcount]);\
+          LOG_TRACE(#nam "[%ld]: " FORMAT_##type "\n", (long)vcount, _obj->nam[vcount]) \
         }\
     }
-#define FIELD_VECTOR_T(name, size, dxf)\
-  if (_obj->size > 0 && _obj->name)\
+#define FIELD_VECTOR_T(nam, size, dxf)\
+  if (_obj->size > 0 && _obj->nam)\
     {\
-      OVERFLOW_CHECK(name, _obj->size) \
+      OVERFLOW_CHECK(nam, _obj->size) \
       for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
         {\
           PRE (R_2007) { \
-            bit_write_TV(dat, _obj->name[vcount]);\
-            LOG_TRACE(#name "[%d]: %s\n", (int)vcount, _obj->name[vcount]) \
+            bit_write_TV(dat, _obj->nam[vcount]);\
+            LOG_TRACE(#nam "[%d]: %s\n", (int)vcount, _obj->nam[vcount]) \
           } else { \
-            bit_write_TU(dat, (BITCODE_TU)_obj->name[vcount]); \
-            LOG_TRACE_TU(#name, _obj->name[vcount], dxf) \
+            bit_write_TU(dat, (BITCODE_TU)_obj->nam[vcount]); \
+            LOG_TRACE_TU(#nam, _obj->nam[vcount], dxf) \
           } \
         }\
       RESET_VER \
     }
 
-#define FIELD_VECTOR(name, type, size, dxf) \
-  FIELD_VECTOR_N(name, type, _obj->size, dxf)
+#define FIELD_VECTOR(nam, type, size, dxf) \
+  FIELD_VECTOR_N(nam, type, _obj->size, dxf)
 
-#define VALUE_HANDLE(hdlptr, name, handle_code, dxf)  \
+#define VALUE_HANDLE(hdlptr, nam, handle_code, dxf)  \
   IF_ENCODE_SINCE_R13 { \
     RESET_VER \
     if (!hdlptr) { \
       Dwg_Handle null_handle = {0,0,0}; \
       bit_write_H(hdl_dat, &null_handle); \
-      LOG_TRACE(#name ": HANDLE(0.0.0) absolute:0 [%d]\n", dxf) \
+      LOG_TRACE(#nam ": HANDLE(0.0.0) absolute:0 [%d]\n", dxf) \
     } else { \
       if (handle_code != ANYCODE && hdlptr->handleref.code != handle_code) \
         { \
@@ -275,7 +275,7 @@ static bool env_var_checked_p;
                     handle_code, hdlptr->handleref.code); \
         } \
       bit_write_H(hdl_dat, &hdlptr->handleref); \
-      LOG_TRACE(#name ": HANDLE(%x.%d.%lX) absolute:%lu [%d]\n", \
+      LOG_TRACE(#nam ": HANDLE(%x.%d.%lX) absolute:%lu [%d]\n", \
                 hdlptr->handleref.code,\
                 hdlptr->handleref.size,\
                 hdlptr->handleref.value,\
@@ -283,39 +283,39 @@ static bool env_var_checked_p;
       } \
     }
 
-#define FIELD_HANDLE(name, handle_code, dxf) \
-  VALUE_HANDLE(_obj->name, name, handle_code, dxf)
-#define FIELD_DATAHANDLE(name, handle_code, dxf) \
-  { bit_write_H(dat, _obj->name ? &_obj->name->handleref : NULL); }
+#define FIELD_HANDLE(nam, handle_code, dxf) \
+  VALUE_HANDLE(_obj->nam, nam, handle_code, dxf)
+#define FIELD_DATAHANDLE(nam, handle_code, dxf) \
+  { bit_write_H(dat, _obj->nam ? &_obj->nam->handleref : NULL); }
 
-#define FIELD_HANDLE_N(name, vcount, handle_code, dxf)\
+#define FIELD_HANDLE_N(nam, vcount, handle_code, dxf)\
     IF_ENCODE_SINCE_R13 { \
       RESET_VER \
-      if (!_obj->name) \
+      if (!_obj->nam) \
         bit_write_H(hdl_dat, NULL); \
       else { \
-        if (handle_code != ANYCODE && _obj->name->handleref.code != handle_code) \
+        if (handle_code != ANYCODE && _obj->nam->handleref.code != handle_code) \
           { \
             LOG_WARN("Expected a CODE %x handle, got a %x", \
-                      handle_code, _obj->name->handleref.code); \
+                      handle_code, _obj->nam->handleref.code); \
           } \
-        bit_write_H(hdl_dat, &_obj->name->handleref); \
-        LOG_TRACE(#name "[%d]: HANDLE(%x.%d.%lX) absolute:%lu [%d]\n", \
+        bit_write_H(hdl_dat, &_obj->nam->handleref); \
+        LOG_TRACE(#nam "[%d]: HANDLE(%x.%d.%lX) absolute:%lu [%d]\n", \
                   (int)vcount, \
-                  _obj->name->handleref.code,\
-                  _obj->name->handleref.size,\
-                  _obj->name->handleref.value,\
-                  _obj->name->absolute_ref, dxf) \
+                  _obj->nam->handleref.code,\
+                  _obj->nam->handleref.size,\
+                  _obj->nam->handleref.value,\
+                  _obj->nam->absolute_ref, dxf) \
       }\
     }
 
-#define HANDLE_VECTOR_N(name, size, code, dxf)\
-  if (size>0 && _obj->name) { \
-    OVERFLOW_CHECK(name, size) \
+#define HANDLE_VECTOR_N(nam, size, code, dxf)\
+  if (size>0 && _obj->nam) { \
+    OVERFLOW_CHECK(nam, size) \
     for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
       {\
-        if (_obj->name[vcount]) { \
-          FIELD_HANDLE_N(name[vcount], vcount, code, dxf); \
+        if (_obj->nam[vcount]) { \
+          FIELD_HANDLE_N(nam[vcount], vcount, code, dxf); \
         } \
       } \
   }
@@ -327,10 +327,10 @@ static bool env_var_checked_p;
     }                       \
   bit_write_RC(dat, 0)
 
-#define HANDLE_VECTOR(name, sizefield, code, dxf) \
-  HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
+#define HANDLE_VECTOR(nam, sizefield, code, dxf) \
+  HANDLE_VECTOR_N(nam, FIELD_VALUE(sizefield), code, dxf)
 
-#define FIELD_XDATA(name, size) \
+#define FIELD_XDATA(nam, size) \
   error |= dwg_encode_xdata(dat, _obj, _obj->size)
 
 #define COMMON_ENTITY_HANDLE_DATA  \

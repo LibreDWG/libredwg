@@ -145,12 +145,12 @@ main (int argc, char *argv[])
                layer->locked ? "l" : " ");
       // since r2007 unicode, converted to utf-8
       if (dwg.header.version >= R_2007) {
-        char *utf8 = bit_convert_TU((BITCODE_TU)layer->entry_name);
+        char *utf8 = bit_convert_TU((BITCODE_TU)layer->name);
         printf("%s\n", utf8);
         free(utf8);
       }
       else
-        printf("%s\n", layer->entry_name);
+        printf("%s\n", layer->name);
     }
 
   // forget about valgrind. really huge DWG's need endlessly here.

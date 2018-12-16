@@ -170,12 +170,12 @@
   PRE (R_13) \
   { \
     FIELD_RC (flag, 70); \
-    FIELD_TF (entry_name, 32, 2); \
+    FIELD_TF (name, 32, 2); \
     FIELD_RS (used, 0); \
   } \
   LATER_VERSIONS \
   { \
-    FIELD_T (entry_name, 2); \
+    FIELD_T (name, 2); \
     FIELD_B (xrefref, 0); /* 70 bit 7 */ \
     PRE (R_2007) \
     { \
@@ -200,12 +200,12 @@
   PRE (R_13) \
   { \
     FIELD_CAST (flag, RC, RS, 70); \
-    FIELD_TF (entry_name, 32, 2); \
+    FIELD_TF (name, 32, 2); \
     FIELD_RS (used, 0); \
   } \
   LATER_VERSIONS \
   { \
-    FIELD_T (entry_name, 2); \
+    FIELD_T (name, 2); \
     FIELD_B (xrefref, 0); /* 70 bit 7 */ \
     PRE (R_2007) \
     { \

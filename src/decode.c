@@ -316,7 +316,7 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain *restrict dat, Dwg_Data
           PREP_TABLE (BLOCK_HEADER);
           //TODO DXF 8: layer name
           FIELD_RC (flag, 70);
-          FIELD_TF (entry_name, 32, 2);
+          FIELD_TF (name, 32, 2);
           FIELD_RS (used, 0);
 
           //TODO RD elevation 30, 2RD base_pt 10: 24
@@ -335,7 +335,7 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain *restrict dat, Dwg_Data
           PREP_TABLE (LAYER);
 
           FIELD_CAST (flag, RC, RS, 70); //860
-          FIELD_TF (entry_name, 32, 2);
+          FIELD_TF (name, 32, 2);
           FIELD_RS (used, 0);
 
           FIELD_RS (color_rs, 62);   // color, off if negative
@@ -352,7 +352,7 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain *restrict dat, Dwg_Data
           PREP_TABLE (STYLE);
 
           FIELD_RC (flag, 70);
-          FIELD_TF (entry_name, 32, 2);
+          FIELD_TF (name, 32, 2);
           FIELD_RS (used, 0);
 
           FIELD_RD (fixed_height, 40); //ok
@@ -372,7 +372,7 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain *restrict dat, Dwg_Data
           PREP_TABLE (LTYPE);
 
           FIELD_RC (flag, 70);
-          FIELD_TF (entry_name, 32, 2);
+          FIELD_TF (name, 32, 2);
           FIELD_RS (used, 0);
           FIELD_TF (description, 48, 3);
           FIELD_RC (alignment, 72);
@@ -391,7 +391,7 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain *restrict dat, Dwg_Data
           PREP_TABLE (VIEW);
 
           FIELD_RC (flag, 70);
-          FIELD_TF (entry_name, 32, 2);
+          FIELD_TF (name, 32, 2);
           FIELD_RS (used, 0);
 
           FIELD_RD (height, 40);
@@ -414,7 +414,7 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain *restrict dat, Dwg_Data
           PREP_TABLE (UCS);
 
           FIELD_RC (flag, 70);
-          FIELD_TF (entry_name, 32, 2);
+          FIELD_TF (name, 32, 2);
           FIELD_RS (used, 0);
           FIELD_2RD (origin, 10);
           FIELD_2RD (x_direction, 11);
@@ -430,7 +430,7 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain *restrict dat, Dwg_Data
           PREP_TABLE (VPORT);
 
           FIELD_RC (flag, 70);
-          FIELD_TF (entry_name, 32, 2);
+          FIELD_TF (name, 32, 2);
           FIELD_RS (used, 0);
 
           FIELD_RD (VIEWSIZE, 40);
@@ -470,7 +470,7 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain *restrict dat, Dwg_Data
           PREP_TABLE (APPID);
 
           FIELD_RC (flag, 70);
-          FIELD_TF (entry_name, 32, 2);
+          FIELD_TF (name, 32, 2);
           FIELD_RS (used, 0);
           CHK_ENDPOS;
         }
@@ -483,7 +483,7 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain *restrict dat, Dwg_Data
           PREP_TABLE (DIMSTYLE); //d1f
 
           FIELD_RC (flag, 70);
-          FIELD_TF (entry_name, 32, 2);
+          FIELD_TF (name, 32, 2);
           //off = dat->byte;
           FIELD_RS (used, 0);    //d40
           FIELD_RD (DIMSCALE, 40); //d42

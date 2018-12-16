@@ -3293,7 +3293,7 @@ DWG_OBJECT(MLINESTYLE)
 
   DXF { FIELD_HANDLE (parenthandle, 4, 330); }
   SUBCLASS (AcDbMlineStyle)
-  FIELD_T (entry_name, 2);
+  FIELD_T (name, 2);
   FIELD_T (desc, 3);
   FIELD_BS (flag, 70);  /*!< 1 = Fill on,
                              2 = Display miters,

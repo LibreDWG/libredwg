@@ -206,7 +206,7 @@ void output_BLOCK_HEADER(Dwg_Object_Ref* ref)
 
   hdr = ref->obj->tio.object->tio.BLOCK_HEADER;
   printf(
-      "\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", ref->absolute_ref, hdr->entry_name);
+      "\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", ref->absolute_ref, hdr->name);
 
   obj = get_first_owned_object(ref->obj);
   while (obj)

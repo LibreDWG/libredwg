@@ -5050,7 +5050,7 @@ dwg_ent_minsert_get_block_header(const dwg_ent_minsert *restrict minsert,
 *                FUNCTIONS FOR MLINESTYLE OBJECT                    *
 ********************************************************************/
 
-/** Returns the  _dwg_entity_MLINESTYLE::entry_name, DXF 2 (utf-8 encoded)
+/** Returns the  _dwg_entity_MLINESTYLE::name, DXF 2 (utf-8 encoded)
 \code Usage: char * name = dwg_obj_mlinestyle_get_name(mlinestyle, &error);
 \endcode
 \param[in]  mlinestyle dwg_obj_mlinestyle
@@ -5064,9 +5064,9 @@ dwg_obj_mlinestyle_get_name(const dwg_obj_mlinestyle *restrict mlinestyle,
     {
       *error = 0;
       if (dwg_version >= R_2007)
-        return bit_convert_TU((BITCODE_TU)mlinestyle->entry_name);
+        return bit_convert_TU((BITCODE_TU)mlinestyle->name);
       else
-        return mlinestyle->entry_name;
+        return mlinestyle->name;
     }
   else
     {
@@ -5076,7 +5076,7 @@ dwg_obj_mlinestyle_get_name(const dwg_obj_mlinestyle *restrict mlinestyle,
     }
 }
 
-/** Sets the _dwg_entity_MLINESTYLE::entry_name
+/** Sets the _dwg_entity_MLINESTYLE::name
 \code Usage: dwg_obj_mlinestyle_set_name(minsert, "mstylename", &error);
 \endcode
 \param[out] mlinestyle dwg_obj_mlinestyle
@@ -5092,9 +5092,9 @@ dwg_obj_mlinestyle_set_name(dwg_obj_mlinestyle *restrict mlinestyle,
     {
       *error = 0;
       if (dwg_version >= R_2007)
-        mlinestyle->entry_name = (char*)bit_utf8_to_TU((char*)name);
+        mlinestyle->name = (char*)bit_utf8_to_TU((char*)name);
       else
-        mlinestyle->entry_name = (char*)name;
+        mlinestyle->name = (char*)name;
     }
   else
     {
@@ -5376,7 +5376,7 @@ dwg_obj_appid_control_get_appid(const dwg_obj_appid_control *restrict appid,
 *                    FUNCTIONS FOR APPID OBJECT                     *
 ********************************************************************/
 
-/** Returns the _dwg_entity_APPID::entry_name, DXF 2. (utf-8 encoded)
+/** Returns the _dwg_entity_APPID::name, DXF 2. (utf-8 encoded)
 \code Usage: char * name = dwg_obj_appid_get_name(mlinestyle, &error);
 \endcode
 \param[in]  appid  dwg_obj_appid
@@ -5390,9 +5390,9 @@ dwg_obj_appid_get_name(const dwg_obj_appid *restrict appid,
     {
       *error = 0;
       if (dwg_version >= R_2007)
-        return bit_convert_TU((BITCODE_TU)appid->entry_name);
+        return bit_convert_TU((BITCODE_TU)appid->name);
       else
-        return appid->entry_name;
+        return appid->name;
     }
   else
     {
@@ -5494,7 +5494,7 @@ dwg_ent_dim_get_block_name(const dwg_ent_dim *restrict dim,
   if (dim)
     {
       char *name = ((dwg_ent_dim_linear *)dim)->
-                     block->obj->tio.object->tio.BLOCK_HEADER->entry_name;
+                     block->obj->tio.object->tio.BLOCK_HEADER->name;
       *error = 0;
       if (dwg_version >= R_2007)
         return bit_convert_TU((BITCODE_TU)name);
@@ -18043,9 +18043,9 @@ dwg_obj_block_header_get_name(const dwg_obj_block_header *restrict hdr,
     {
       *error = 0;
       if (dwg_version >= R_2007)
-        return bit_convert_TU((BITCODE_TU)hdr->entry_name);
+        return bit_convert_TU((BITCODE_TU)hdr->name);
       else
-        return hdr->entry_name;
+        return hdr->name;
     }
   else
     {
@@ -18096,9 +18096,9 @@ dwg_get_block_header(dwg_data *restrict dwg,
           return NULL;
         }
       blk = obj->tio.object->tio.BLOCK_HEADER;
-      if (!strcmp(blk->entry_name, "*Paper_Space"))
+      if (!strcmp(blk->name, "*Paper_Space"))
         dwg->pspace_block = obj;
-      else if (!strcmp(blk->entry_name, "*Model_Space"))
+      else if (!strcmp(blk->name, "*Model_Space"))
         dwg->mspace_block = obj;
       return blk;
     }
@@ -18128,9 +18128,9 @@ dwg_obj_layer_get_name(const dwg_obj_layer *restrict layer,
     {
       *error = 0;
       if (dwg_version >= R_2007)
-        return bit_convert_TU((BITCODE_TU)layer->entry_name);
+        return bit_convert_TU((BITCODE_TU)layer->name);
       else
-        return layer->entry_name;
+        return layer->name;
     }
   else
     {
@@ -18359,15 +18359,15 @@ dwg_obj_table_get_name(const dwg_object *restrict obj,
       obj->supertype == DWG_SUPERTYPE_OBJECT &&
       (dwg_obj_is_table(obj) || obj->type == DWG_TYPE_DICTIONARY))
     {
-      // HACK: we can guarantee that the table entry_name is always the first field,
+      // HACK: we can guarantee that the table name is always the first field,
       // by using COMMON_TABLE_FLAGS.
       // TODO: Dictionary also?
       Dwg_Object_STYLE *table = obj->tio.object->tio.STYLE;
       *error = 0;
       if (obj->parent->header.version >= R_2007)
-        return bit_convert_TU((BITCODE_TU)table->entry_name); //creates a copy
+        return bit_convert_TU((BITCODE_TU)table->name); //creates a copy
       else
-        return table->entry_name;
+        return table->name;
     }
   else
     {

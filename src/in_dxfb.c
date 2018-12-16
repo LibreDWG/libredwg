@@ -289,7 +289,7 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
     if (ref && ref->obj && pair->type == VT_HANDLE) { \
       /* TODO: set the table handle */ \
       ;/*ref->obj->handle.absolute_ref = pair->value.i; */ \
-      /*ref->obj->tio.object->tio.section->entry_name = strdup(pair->value.s);*/ \
+      /*ref->obj->tio.object->tio.section->name = strdup(pair->value.s);*/ \
     } \
   }
 //FIXME
