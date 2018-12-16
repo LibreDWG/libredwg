@@ -1911,7 +1911,7 @@ const struct _name_type_offset _dwg_ACSH_SWEEP_CLASS_fields[] = {
 const struct _name_type_offset _dwg_APPID_fields[] = {
   { "parent", "struct _dwg_object_object", sizeof(void*), OFF(struct _dwg_object_APPID,parent, 0) },
   { "flag", "RC", sizeof(BITCODE_RC), OFF(struct _dwg_object_APPID,flag, 8) },
-  { "entry_name", "TV", sizeof(BITCODE_TV), OFF(struct _dwg_object_APPID,entry_name, 9) },
+  { "name", "TV", sizeof(BITCODE_TV), OFF(struct _dwg_object_APPID,name, 9) },
   { "used", "RS", sizeof(BITCODE_RS), OFF(struct _dwg_object_APPID,used, 17) },
   { "xrefref", "B", sizeof(BITCODE_B), OFF(struct _dwg_object_APPID,xrefref, 19) },
   { "xrefindex_plus1", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_object_APPID,xrefindex_plus1, 20) },
@@ -2123,7 +2123,7 @@ const struct _name_type_offset _dwg_BLOCK_CONTROL_fields[] = {
 const struct _name_type_offset _dwg_BLOCK_HEADER_fields[] = {
   { "parent", "struct _dwg_object_object", sizeof(void*), OFF(struct _dwg_object_BLOCK_HEADER,parent, 0) },
   { "flag", "RC", sizeof(BITCODE_RC), OFF(struct _dwg_object_BLOCK_HEADER,flag, 8) },
-  { "entry_name", "TV", sizeof(BITCODE_TV), OFF(struct _dwg_object_BLOCK_HEADER,entry_name, 9) },
+  { "name", "TV", sizeof(BITCODE_TV), OFF(struct _dwg_object_BLOCK_HEADER,name, 9) },
   { "used", "RS", sizeof(BITCODE_RS), OFF(struct _dwg_object_BLOCK_HEADER,used, 17) },
   { "xrefref", "B", sizeof(BITCODE_B), OFF(struct _dwg_object_BLOCK_HEADER,xrefref, 19) },
   { "xrefindex_plus1", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_object_BLOCK_HEADER,xrefindex_plus1, 20) },
@@ -2233,7 +2233,7 @@ const struct _name_type_offset _dwg_DIMASSOC_fields[] = {
 const struct _name_type_offset _dwg_DIMSTYLE_fields[] = {
   { "parent", "struct _dwg_object_object", sizeof(void*), OFF(struct _dwg_object_DIMSTYLE,parent, 0) },
   { "flag", "RC", sizeof(BITCODE_RC), OFF(struct _dwg_object_DIMSTYLE,flag, 8) },
-  { "entry_name", "TV", sizeof(BITCODE_TV), OFF(struct _dwg_object_DIMSTYLE,entry_name, 9) },
+  { "name", "TV", sizeof(BITCODE_TV), OFF(struct _dwg_object_DIMSTYLE,name, 9) },
   { "used", "RS", sizeof(BITCODE_RS), OFF(struct _dwg_object_DIMSTYLE,used, 17) },
   { "xrefref", "B", sizeof(BITCODE_B), OFF(struct _dwg_object_DIMSTYLE,xrefref, 19) },
   { "xrefindex_plus1", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_object_DIMSTYLE,xrefindex_plus1, 20) },
@@ -2484,7 +2484,7 @@ const struct _name_type_offset _dwg_IMAGEDEF_REACTOR_fields[] = {
 const struct _name_type_offset _dwg_LAYER_fields[] = {
   { "parent", "struct _dwg_object_object", sizeof(void*), OFF(struct _dwg_object_LAYER,parent, 0) },
   { "flag", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_object_LAYER,flag, 8) },
-  { "entry_name", "TV", sizeof(BITCODE_TV), OFF(struct _dwg_object_LAYER,entry_name, 10) },
+  { "name", "TV", sizeof(BITCODE_TV), OFF(struct _dwg_object_LAYER,name, 10) },
   { "used", "RS", sizeof(BITCODE_RS), OFF(struct _dwg_object_LAYER,used, 18) },
   { "xrefref", "B", sizeof(BITCODE_B), OFF(struct _dwg_object_LAYER,xrefref, 20) },
   { "xrefindex_plus1", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_object_LAYER,xrefindex_plus1, 21) },
@@ -2600,7 +2600,7 @@ const struct _name_type_offset _dwg_LONG_TRANSACTION_fields[] = {
 const struct _name_type_offset _dwg_LTYPE_fields[] = {
   { "parent", "struct _dwg_object_object", sizeof(void*), OFF(struct _dwg_object_LTYPE,parent, 0) },
   { "flag", "RC", sizeof(BITCODE_RC), OFF(struct _dwg_object_LTYPE,flag, 8) },
-  { "entry_name", "TV", sizeof(BITCODE_TV), OFF(struct _dwg_object_LTYPE,entry_name, 9) },
+  { "name", "TV", sizeof(BITCODE_TV), OFF(struct _dwg_object_LTYPE,name, 9) },
   { "used", "RS", sizeof(BITCODE_RS), OFF(struct _dwg_object_LTYPE,used, 17) },
   { "xrefref", "B", sizeof(BITCODE_B), OFF(struct _dwg_object_LTYPE,xrefref, 19) },
   { "xrefindex_plus1", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_object_LTYPE,xrefindex_plus1, 20) },
@@ -2779,7 +2779,7 @@ const struct _name_type_offset _dwg_MLEADERSTYLE_fields[] = {
 /* from typedef struct _dwg_object_MLINESTYLE: */
 const struct _name_type_offset _dwg_MLINESTYLE_fields[] = {
   { "parent", "struct _dwg_object_object", sizeof(void*), OFF(struct _dwg_object_MLINESTYLE,parent, 0) },
-  { "entry_name", "TV", sizeof(BITCODE_TV), OFF(struct _dwg_object_MLINESTYLE,entry_name, 8) },
+  { "name", "TV", sizeof(BITCODE_TV), OFF(struct _dwg_object_MLINESTYLE,name, 8) },
   { "desc", "TV", sizeof(BITCODE_TV), OFF(struct _dwg_object_MLINESTYLE,desc, 16) },
   { "flag", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_object_MLINESTYLE,flag, 24) },
   { "fill_color", "CMC", sizeof(BITCODE_CMC), OFF(struct _dwg_object_MLINESTYLE,fill_color, 26) },
@@ -2972,7 +2972,7 @@ const struct _name_type_offset _dwg_SPATIAL_INDEX_fields[] = {
 const struct _name_type_offset _dwg_STYLE_fields[] = {
   { "parent", "struct _dwg_object_object", sizeof(void*), OFF(struct _dwg_object_STYLE,parent, 0) },
   { "flag", "RC", sizeof(BITCODE_RC), OFF(struct _dwg_object_STYLE,flag, 8) },
-  { "entry_name", "TV", sizeof(BITCODE_TV), OFF(struct _dwg_object_STYLE,entry_name, 9) },
+  { "name", "TV", sizeof(BITCODE_TV), OFF(struct _dwg_object_STYLE,name, 9) },
   { "used", "RS", sizeof(BITCODE_RS), OFF(struct _dwg_object_STYLE,used, 17) },
   { "xrefref", "B", sizeof(BITCODE_B), OFF(struct _dwg_object_STYLE,xrefref, 19) },
   { "xrefindex_plus1", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_object_STYLE,xrefindex_plus1, 20) },
@@ -3090,7 +3090,7 @@ const struct _name_type_offset _dwg_TABLESTYLE_fields[] = {
 const struct _name_type_offset _dwg_UCS_fields[] = {
   { "parent", "struct _dwg_object_object", sizeof(void*), OFF(struct _dwg_object_UCS,parent, 0) },
   { "flag", "RC", sizeof(BITCODE_RC), OFF(struct _dwg_object_UCS,flag, 8) },
-  { "entry_name", "TV", sizeof(BITCODE_TV), OFF(struct _dwg_object_UCS,entry_name, 9) },
+  { "name", "TV", sizeof(BITCODE_TV), OFF(struct _dwg_object_UCS,name, 9) },
   { "used", "RS", sizeof(BITCODE_RS), OFF(struct _dwg_object_UCS,used, 17) },
   { "xrefref", "B", sizeof(BITCODE_B), OFF(struct _dwg_object_UCS,xrefref, 19) },
   { "xrefindex_plus1", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_object_UCS,xrefindex_plus1, 20) },
@@ -3143,7 +3143,7 @@ const struct _name_type_offset _dwg_VBA_PROJECT_fields[] = {
 const struct _name_type_offset _dwg_VIEW_fields[] = {
   { "parent", "struct _dwg_object_object", sizeof(void*), OFF(struct _dwg_object_VIEW,parent, 0) },
   { "flag", "RC", sizeof(BITCODE_RC), OFF(struct _dwg_object_VIEW,flag, 8) },
-  { "entry_name", "TV", sizeof(BITCODE_TV), OFF(struct _dwg_object_VIEW,entry_name, 9) },
+  { "name", "TV", sizeof(BITCODE_TV), OFF(struct _dwg_object_VIEW,name, 9) },
   { "used", "RS", sizeof(BITCODE_RS), OFF(struct _dwg_object_VIEW,used, 17) },
   { "xrefref", "B", sizeof(BITCODE_B), OFF(struct _dwg_object_VIEW,xrefref, 19) },
   { "xrefindex_plus1", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_object_VIEW,xrefindex_plus1, 20) },
@@ -3237,7 +3237,7 @@ const struct _name_type_offset _dwg_VISUALSTYLE_fields[] = {
 const struct _name_type_offset _dwg_VPORT_fields[] = {
   { "parent", "struct _dwg_object_object", sizeof(void*), OFF(struct _dwg_object_VPORT,parent, 0) },
   { "flag", "RC", sizeof(BITCODE_RC), OFF(struct _dwg_object_VPORT,flag, 8) },
-  { "entry_name", "TV", sizeof(BITCODE_TV), OFF(struct _dwg_object_VPORT,entry_name, 9) },
+  { "name", "TV", sizeof(BITCODE_TV), OFF(struct _dwg_object_VPORT,name, 9) },
   { "used", "RS", sizeof(BITCODE_RS), OFF(struct _dwg_object_VPORT,used, 17) },
   { "xrefref", "B", sizeof(BITCODE_B), OFF(struct _dwg_object_VPORT,xrefref, 19) },
   { "xrefindex_plus1", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_object_VPORT,xrefindex_plus1, 20) },
@@ -3316,7 +3316,7 @@ const struct _name_type_offset _dwg_VPORT_ENTITY_CONTROL_fields[] = {
 const struct _name_type_offset _dwg_VPORT_ENTITY_HEADER_fields[] = {
   { "parent", "struct _dwg_object_object", sizeof(void*), OFF(struct _dwg_object_VPORT_ENTITY_HEADER,parent, 0) },
   { "flag", "RC", sizeof(BITCODE_RC), OFF(struct _dwg_object_VPORT_ENTITY_HEADER,flag, 8) },
-  { "entry_name", "TV", sizeof(BITCODE_TV), OFF(struct _dwg_object_VPORT_ENTITY_HEADER,entry_name, 9) },
+  { "name", "TV", sizeof(BITCODE_TV), OFF(struct _dwg_object_VPORT_ENTITY_HEADER,name, 9) },
   { "used", "RS", sizeof(BITCODE_RS), OFF(struct _dwg_object_VPORT_ENTITY_HEADER,used, 17) },
   { "xrefref", "B", sizeof(BITCODE_B), OFF(struct _dwg_object_VPORT_ENTITY_HEADER,xrefref, 19) },
   { "xrefindex_plus1", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_object_VPORT_ENTITY_HEADER,xrefindex_plus1, 20) },
@@ -3641,7 +3641,7 @@ const struct _name_type_offset _dwg_MLINE_vertex_fields[] = {
 };
 /* from typedef struct _dwg_SPLINE_control_point: */
 const struct _name_type_offset _dwg_SPLINE_control_point_fields[] = {
-  { "parent", "struct _dwg__entity_SPLINE", sizeof(void*), OFF(struct _dwg_SPLINE_control_point,parent, 0) },
+  { "parent", "struct _dwg_entity_SPLINE", sizeof(void*), OFF(struct _dwg_SPLINE_control_point,parent, 0) },
   { "x", "double", sizeof(double), OFF(struct _dwg_SPLINE_control_point,x, 8) },
   { "y", "double", sizeof(double), OFF(struct _dwg_SPLINE_control_point,y, 16) },
   { "z", "double", sizeof(double), OFF(struct _dwg_SPLINE_control_point,z, 24) },
@@ -3650,7 +3650,7 @@ const struct _name_type_offset _dwg_SPLINE_control_point_fields[] = {
 };
 /* from typedef struct _dwg_SPLINE_point: */
 const struct _name_type_offset _dwg_SPLINE_point_fields[] = {
-  { "parent", "struct _dwg__entity_SPLINE", sizeof(void*), OFF(struct _dwg_SPLINE_point,parent, 0) },
+  { "parent", "struct _dwg_entity_SPLINE", sizeof(void*), OFF(struct _dwg_SPLINE_point,parent, 0) },
   { "x", "double", sizeof(double), OFF(struct _dwg_SPLINE_point,x, 8) },
   { "y", "double", sizeof(double), OFF(struct _dwg_SPLINE_point,y, 16) },
   { "z", "double", sizeof(double), OFF(struct _dwg_SPLINE_point,z, 24) },
