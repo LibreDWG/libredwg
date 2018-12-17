@@ -1812,14 +1812,14 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *restrict dwg,
     }
   if (!info)
     {
-      LOG_WARN("Failed to find section_info %s with type 0x%x",
-               info->name, section_type);
+      LOG_WARN("Failed to find section_info[" FORMAT_BL "] with type 0x%x",
+               i, section_type);
       return DWG_ERR_SECTIONNOTFOUND;
     }
   else
     {
-      LOG_TRACE("\nFound section_info %s type 0x%x with %d sections:\n",
-                info->name, section_type, info->num_sections);
+      LOG_TRACE("\nFound section_info[" FORMAT_BL "] %s type 0x%x with %d sections:\n",
+                i, info->name, section_type, info->num_sections);
     }
 
   max_decomp_size = info->num_sections * info->max_decomp_size;
