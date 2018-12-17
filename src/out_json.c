@@ -63,15 +63,16 @@ char* alloca(size_t size) {
 #define IS_PRINT
 #define IS_JSON
 
-#define PREFIX   for (int _i=0; _i<dat->bit; _i++) { fprintf (dat->fh, "  "); }
+#define PREFIX   _prefix(dat);
 #define ARRAY    fprintf (dat->fh, "[\n"); dat->bit++
 #define ENDARRAY fprintf (dat->fh, "\n"); dat->bit--; PREFIX fprintf (dat->fh, "],\n")
 #define LASTENDARRAY fprintf (dat->fh, "\n"); dat->bit--; PREFIX fprintf (dat->fh, "]\n")
-#define KEYs(nam) PREFIX fprintf (dat->fh, "\"%s\": ", nam);
-#define KEY(nam) PREFIX fprintf (dat->fh, "\"%s\": ", #nam);
+#define KEYs(nam) PREFIX fprintf (dat->fh, "\"%s\": ", nam)
+#define KEY(nam) PREFIX fprintf (dat->fh, "\"%s\": ", #nam)
 #define HASH     PREFIX fprintf (dat->fh, "{\n"); dat->bit++
 #define ENDHASH  fprintf (dat->fh, "\n"); dat->bit--; PREFIX fprintf (dat->fh, "},\n")
-#define NOCOMMA   fseek(dat->fh, -2, SEEK_CUR)
+#define LASTENDHASH fprintf (dat->fh, "\n"); dat->bit--; PREFIX fprintf (dat->fh, "}")
+#define NOCOMMA  fseek(dat->fh, -2, SEEK_CUR)
 
 #define TABLE(nam) KEY(nam); HASH
 #define ENDTAB()    NOCOMMA; ENDHASH
@@ -85,16 +86,17 @@ char* alloca(size_t size) {
 #undef  FORMAT_RC
 #define FORMAT_RC "%d"
 #define VALUE(value,type,dxf) \
-    fprintf(dat->fh, FORMAT_##type, value)
+  fprintf(dat->fh, FORMAT_##type ",\n", value)
 #define VALUE_RC(value,dxf) VALUE(value, RC, dxf)
 #define VALUE_RS(value,dxf) VALUE(value, RS, dxf)
 #define VALUE_RL(value,dxf) VALUE(value, RL, dxf)
 #define VALUE_RD(value,dxf) VALUE(value, RD, dxf)
 #define VALUE_2RD(nam,dxf) \
     fprintf(dat->fh, "[ %f, %f ],\n", _obj->nam.x, _obj->nam.y)
+#define VALUE_2DD(nam,d1,d2,dxf) VALUE_2RD(nam,dxf)
 #define VALUE_3RD(nam,dxf) \
   fprintf(dat->fh, "[ %f, %f, %f ],\n", _obj->nam.x, _obj->nam.y, _obj->nam.z)
-#define VALUE_2DD(nam,d1,d2,dxf) VALUE_2RD(nam,dxf)
+#define VALUE_3BD(nam,dxf) VALUE_3RD(nam,dxf)
 #define VALUE_TV(nam,dxf)
 
 #define FIELD(nam,type,dxf) \
@@ -103,6 +105,9 @@ char* alloca(size_t size) {
   { PREFIX fprintf(dat->fh, "\"" #nam "\": " FORMAT_##type ",\n", obj->nam); }
 #define ENT_FIELD(nam,type,value) \
   { PREFIX fprintf(dat->fh, "\"" #nam "\": " FORMAT_##type ",\n", _ent->nam); }
+#define SUB_FIELD(o,nam,type,dxf) \
+  { PREFIX fprintf(dat->fh, "\"" #nam "\": " FORMAT_##type ",\n", _obj->o.nam); }
+
 #define FIELD_CAST(nam,type,cast,dxf) FIELD(nam,cast,dxf)
 #define FIELD_TRACE(nam,type)
 #define FIELD_G_TRACE(nam,type,dxf)
@@ -144,7 +149,7 @@ char* alloca(size_t size) {
 # define VALUE_TEXT_TU(wstr) print_wcquote(dat, (BITCODE_TU)wstr)
 #endif
 #define FIELD_TEXT_TU(nam, wstr) \
-  KEY(nam); VALUE_TEXT_TU(wstr)
+  KEY(nam); VALUE_TEXT_TU((BITCODE_TU)wstr)
 
 #define FIELD_VALUE(nam) _obj->nam
 #define ANYCODE -1
@@ -167,6 +172,13 @@ char* alloca(size_t size) {
             _obj->nam->handleref.code, \
             _obj->nam->handleref.size, \
             _obj->nam->handleref.value); \
+  } else { fprintf(dat->fh, "\"" #nam "\": \"0.0.0\",\n"); }
+#define SUB_FIELD_HANDLE(o,nam,handle_code, dxf) \
+  PREFIX if (_obj->o.nam) { \
+    fprintf(dat->fh, "\"" #nam "\": \"%d.%d.%lu\",\n", \
+            _obj->o.nam->handleref.code, \
+            _obj->o.nam->handleref.size, \
+            _obj->o.nam->handleref.value); \
   } else { fprintf(dat->fh, "\"" #nam "\": \"0.0.0\",\n"); }
 #define FIELD_DATAHANDLE(nam, code, dxf) FIELD_HANDLE(nam, code, dxf)
 #define FIELD_HANDLE_N(nam, vcount, handle_code, dxf) \
@@ -227,9 +239,34 @@ char* alloca(size_t size) {
 #define FIELD_3RD(nam,dxf) { \
     PREFIX fprintf(dat->fh, "\"" #nam "\": [ %f, %f, %f ],\n", \
                    _obj->nam.x, _obj->nam.y, _obj->nam.z); }
-#define FIELD_3BD(nam,dxf) FIELD_3RD(nam,dxf)
-#define FIELD_3BD_1(nam,dxf) FIELD_3RD(nam,dxf)
+#define FIELD_3BD(nam,dxf)     FIELD_3RD(nam,dxf)
+#define FIELD_3BD_1(nam,dxf)   FIELD_3RD(nam,dxf)
 #define FIELD_3DPOINT(nam,dxf) FIELD_3BD(nam,dxf)
+
+#define SUB_FIELD_T(o,nam,dxf) \
+  { if (dat->version >= R_2007) { KEY(nam); VALUE_TEXT_TU((BITCODE_TU)_obj->o.nam); } \
+    else                        { PREFIX; fprintf(dat->fh, "\"" #nam "\": \"%s\",\n", \
+                                                    _obj->o.nam); } }
+#define SUB_FIELD_B(o,nam,dxf)   SUB_FIELD(o, nam, B, dxf)
+#define SUB_FIELD_BB(o,nam,dxf)  SUB_FIELD(o, nam, BB, dxf)
+#define SUB_FIELD_3B(o,nam,dxf)  SUB_FIELD(o, nam, 3B, dxf)
+#define SUB_FIELD_BS(o,nam,dxf)  SUB_FIELD(o, nam, BS, dxf)
+#define SUB_FIELD_BL(o,nam,dxf)  SUB_FIELD(o, nam, BL, dxf)
+#define SUB_FIELD_BLx(o,nam,dxf) SUB_FIELD(o, nam, BLx, dxf)
+#define SUB_FIELD_BD(o,nam,dxf)  SUB_FIELD(o, nam, BD, dxf)
+#define SUB_FIELD_RC(o,nam,dxf)  SUB_FIELD(o, nam, RC, dxf)
+#define SUB_FIELD_RS(o,nam,dxf)  SUB_FIELD(o, nam, RS, dxf)
+#define SUB_FIELD_RD(o,nam,dxf)  SUB_FIELD(o, nam, RD, dxf)
+#define SUB_FIELD_RL(o,nam,dxf)  SUB_FIELD(o, nam, RL, dxf)
+#define SUB_FIELD_BLL(o,nam,dxf) SUB_FIELD(o, nam, BLL, dxf)
+#define SUB_FIELD_RLL(o,nam,dxf) SUB_FIELD(o, nam, RLL, dxf)
+#define SUB_FIELD_3BD_inl(o,nam,dxf) KEY(nam); VALUE_3RD(o, dxf)
+#define SUB_FIELD_2BD_1(o,nam,dxf) KEY(nam); VALUE_2RD(o.nam, dxf)
+#define SUB_FIELD_2RD(o,nam,dxf)   KEY(nam); VALUE_2RD(o.nam, dxf)
+#define SUB_FIELD_3RD(o,nam,dxf)   KEY(nam); VALUE_3RD(o.nam, dxf)
+#define SUB_FIELD_3BD(o,nam,dxf)   KEY(nam); VALUE_3RD(o.nam, dxf)
+#define SUB_FIELD_3DPOINT(o,nam,dxf) KEY(nam); VALUE_3RD(o.nam, dxf)
+
 #define FIELD_CMC(color,dxf1,dxf2) { \
   if (dat->version >= R_2004) { \
     RECORD(color); \
@@ -244,6 +281,20 @@ char* alloca(size_t size) {
     PREFIX fprintf(dat->fh, "\"" #color "\": %d,\n", _obj->color.index); \
   } \
 }
+#define SUB_FIELD_CMC(o,color,dxf1,dxf2) {    \
+  if (dat->version >= R_2004) { \
+    RECORD(color); \
+    PREFIX fprintf(dat->fh, "\"index\": %d,\n", _obj->o.color.index); \
+    PREFIX fprintf(dat->fh, "\"" #color ".rgb\": \"%06x\",\n", (unsigned)_obj->o.color.rgb); \
+    /*if (_obj->color.flag & 1) { \
+      PREFIX fprintf(dat->fh, "\"" #color ".name\": \"%s\",\n", _obj->o.color.name); } \
+    if (_obj->color.flag & 2) { \
+      PREFIX fprintf(dat->fh, "\"" #color ".bookname\": \"%s\",\n", _obj->o.color.book_name); } */\
+    ENDRECORD(); \
+  } else { \
+    PREFIX fprintf(dat->fh, "\"" #color "\": %d,\n", _obj->o.color.index); \
+  } \
+}
 #define FIELD_TIMEBLL(nam,dxf) \
     PREFIX fprintf(dat->fh, "\"" #nam "\": " FORMAT_BL "." FORMAT_BL ",\n", \
             _obj->nam.days, _obj->nam.ms)
@@ -252,8 +303,7 @@ char* alloca(size_t size) {
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'nam'.
 #define FIELD_VECTOR_N(nam, type, size, dxf)\
-    KEY(nam) \
-    ARRAY; \
+    KEY(nam); ARRAY; \
     if (_obj->nam) { \
       for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
         {\
@@ -263,8 +313,7 @@ char* alloca(size_t size) {
     } \
     ENDARRAY;
 #define FIELD_VECTOR_T(nam, size, dxf)\
-    KEY(nam) \
-    ARRAY; \
+    KEY(nam); ARRAY; \
     if (_obj->nam) { \
       PRE (R_2007) { \
         for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++) { \
@@ -282,8 +331,7 @@ char* alloca(size_t size) {
 #define FIELD_VECTOR(nam, type, size, dxf) FIELD_VECTOR_N(nam, type, _obj->size, dxf)
 
 #define FIELD_2RD_VECTOR(nam, size, dxf)\
-  KEY(nam) \
-  ARRAY;\
+  KEY(nam); ARRAY;\
   for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
       PREFIX VALUE_2RD(nam[vcount], dxf); \
@@ -292,8 +340,7 @@ char* alloca(size_t size) {
   ENDARRAY;
 
 #define FIELD_2DD_VECTOR(nam, size, dxf)\
-  KEY(nam) \
-  ARRAY;\
+  KEY(nam); ARRAY;\
   PREFIX VALUE_2RD(nam[0], 0);\
   for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
@@ -303,8 +350,7 @@ char* alloca(size_t size) {
   ENDARRAY;
 
 #define FIELD_3DPOINT_VECTOR(nam, size, dxf)\
-  KEY(nam) \
-  ARRAY;\
+  KEY(nam); ARRAY;\
   for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
       PREFIX VALUE_3BD(nam[vcount], dxf);\
@@ -313,17 +359,47 @@ char* alloca(size_t size) {
   ENDARRAY;
 
 #define HANDLE_VECTOR_N(nam, size, code, dxf) \
-  KEY(nam) \
+  KEY(nam); \
   ARRAY;\
   for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
     {\
       FIELD_HANDLE_N(nam[vcount], vcount, code, dxf);\
     }\
-  if (size) NOCOMMA;                            \
+  if (size) NOCOMMA; \
   ENDARRAY;
 
 #define HANDLE_VECTOR(nam, sizefield, code, dxf) \
   HANDLE_VECTOR_N(nam, FIELD_VALUE(sizefield), code, dxf)
+
+#define REPEAT_CN(times, nam, type) \
+  if (_obj->nam) { KEY(nam); ARRAY; } \
+  if (_obj->nam) \
+    for (rcount1=0; rcount1<(BITCODE_BL)times; rcount1++)
+#define REPEAT_N(times, nam, type) \
+  if (_obj->nam) { KEY(nam); ARRAY; } \
+  if (_obj->nam) \
+    for (rcount1=0; rcount1<(BITCODE_BL)times; rcount1++)
+#define _REPEAT_N(times, nam, type, idx) \
+  if (_obj->nam) { KEY(nam); ARRAY; } \
+  if (_obj->nam) \
+    for (rcount##idx=0; rcount##idx<(BITCODE_BL)times; rcount##idx++)
+#define _REPEAT_C(times, nam, type, idx) _REPEAT_N(_obj->times, nam, type, idx)
+#define _REPEAT(times, nam, type, idx)   _REPEAT_N(_obj->times, nam, type, idx)
+#define REPEAT(times, nam, type)  _REPEAT(times, nam, type, 1)
+#define REPEAT2(times, nam, type) _REPEAT(times, nam, type, 2)
+#define REPEAT3(times, nam, type) _REPEAT(times, nam, type, 3)
+#define REPEAT4(times, nam, type) _REPEAT(times, nam, type, 4)
+#define REPEAT_C(times, nam, type)  _REPEAT_C(times, nam, type, 1)
+#define REPEAT2_C(times, nam, type) _REPEAT_C(times, nam, type, 2)
+#define REPEAT3_C(times, nam, type) _REPEAT_C(times, nam, type, 3)
+#define REPEAT4_C(times, nam, type) _REPEAT_C(times, nam, type, 4)
+
+#undef  REPEAT_BLOCK
+#define REPEAT_BLOCK     { HASH;
+#undef  END_REPEAT_BLOCK
+#define END_REPEAT_BLOCK NOCOMMA; ENDHASH; }
+#undef  END_REPEAT
+#define END_REPEAT(nam) if (_obj->nam) { NOCOMMA; ENDARRAY; }
 
 #define FIELD_NUM_INSERTS(num_inserts, type, dxf) \
   FIELD(num_inserts, type, dxf)
@@ -331,8 +407,7 @@ char* alloca(size_t size) {
 #define FIELD_XDATA(nam, size)
 
 #define REACTORS(code)\
-  KEY(reactors) \
-  ARRAY; \
+  KEY(reactors); ARRAY; \
   if (obj->tio.object->reactors) { \
     for (vcount=0; vcount < obj->tio.object->num_reactors; vcount++)    \
       {                                                                 \
@@ -361,6 +436,13 @@ char* alloca(size_t size) {
 #define START_STRING_STREAM
 #define END_STRING_STREAM
 #define START_HANDLE_STREAM
+
+
+static void
+_prefix(Bit_Chain* dat) {
+  for (int _i=0; _i < dat->bit; _i++) { fprintf (dat->fh, "  "); }
+}
+
 
 #define DWG_ENTITY(token) \
 static int \
@@ -715,6 +797,22 @@ dwg_json_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 }
 
 static int
+json_fileheader_write(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  struct Dwg_Header* _obj = &dwg->header;
+  Dwg_Object* obj = NULL;
+  int i;
+
+  RECORD(FILEHEADER); // single hash
+  KEY(version); fprintf(dat->fh, "\"%s\",\n", version_codes[dwg->header.version]);
+
+  #include "header.spec"
+
+  ENDRECORD();
+  return 0;
+}
+
+static int
 json_header_write(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables* _obj = &dwg->header_vars;
@@ -823,7 +921,8 @@ dwg_write_json(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dat->bit++; // ident
 
   if (!minimal) {
-    // TODO: header.spec + 3-5 sections:
+    json_fileheader_write (dat, dwg);
+    // TODO: 3-5 sections:
     // auxheader.spec
     // r2004_file_header.spec
   }

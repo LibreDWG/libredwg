@@ -19,9 +19,10 @@
 #define DECODER if (0)
 #define ENCODER if (0)
 #define PRINT   if (0)
-#define DXF     if (0)
-#define FREE    if (0)
 #define DXF_OR_PRINT if (0)
+#define DXF     if (0)
+#define JSON    if (0)
+#define FREE    if (0)
 #define IF_ENCODE_FROM_EARLIER   if (0)
 #define IF_ENCODE_FROM_PRE_R13   if (0)
 #define IF_ENCODE_FROM_SINCE_R13 if (0)
@@ -63,6 +64,33 @@
 #endif
 #ifndef VALUE_BL
 # define VALUE_BL(value, dxf)
+#endif
+// sub fields
+#ifndef FIELDG
+# define FIELDG(nam,type,dxf)  FIELD(nam,type)
+#endif
+#ifndef SUB_FIELD_BL
+# define SUB_FIELD_T(o,nam,dxf)   FIELD_T(o.nam, dxf)
+# define SUB_FIELD_B(o,nam,dxf)   FIELDG(o.nam, B, dxf)
+# define SUB_FIELD_BL(o,nam,dxf)  FIELDG(o.nam, BL, dxf)
+# define SUB_FIELD_BB(o,nam,dxf)  FIELDG(o.nam, BB, dxf)
+# define SUB_FIELD_3B(o,nam,dxf)  FIELDG(o.nam, 3B, dxf)
+# define SUB_FIELD_BS(o,nam,dxf)  FIELDG(o.nam, BS, dxf)
+# define SUB_FIELD_BL(o,nam,dxf)  FIELDG(o.nam, BL, dxf)
+# define SUB_FIELD_BLx(o,nam,dxf) FIELD_BLx(o.nam, dxf)
+# define SUB_FIELD_BD(o,nam,dxf)  FIELDG(o.nam, BD, dxf)
+# define SUB_FIELD_RC(o,nam,dxf)  FIELDG(o.nam, RC, dxf)
+# define SUB_FIELD_RS(o,nam,dxf)  FIELDG(o.nam, RS, dxf)
+# define SUB_FIELD_RD(o,nam,dxf)  FIELDG(o.nam, RD, dxf)
+# define SUB_FIELD_RL(o,nam,dxf)  FIELDG(o.nam, RL, dxf)
+# define SUB_FIELD_BLL(o,nam,dxf) FIELDG(o.nam, BLL, dxf)
+# define SUB_FIELD_RLL(o,nam,dxf) FIELDG(o.nam, RLL, dxf)
+# define SUB_FIELD_2RD(o,nam,dxf)   FIELD_2RD(o.nam, dxf)
+# define SUB_FIELD_2BD_1(o,nam,dxf) FIELD_2BD_1(o.nam, dxf)
+# define SUB_FIELD_3RD(o,nam,dxf)   FIELD_3RD(o.nam, dxf)
+# define SUB_FIELD_3BD(o,nam,dxf)   FIELD_3BD(o.nam, dxf)
+# define SUB_FIELD_3BD_inl(o,nam,dxf)  FIELD_3BD(o, dxf)
+# define SUB_FIELD_3DPOINT(o,nam,dxf) FIELD_3BD(o.nam, dxf)
 #endif
 // logging format overrides
 #ifndef FIELD_RLx
@@ -149,13 +177,20 @@
 #define IF_IS_DXF 1
 #endif
 
+#if defined(IS_JSON)
+#undef  JSON
+#define JSON   if (1)
+#endif
+
 #if defined(IS_FREE)
 #undef FREE
 #define FREE    if (1)
 #undef IF_IS_FREE
 #define IF_IS_FREE 1
 #else
-#define END_REPEAT(field)
+# ifndef END_REPEAT
+#  define END_REPEAT(field)
+# endif
 #endif
 
 #define R11OPTS(b) _ent->opts_r11 & b
@@ -231,8 +266,12 @@
 # define FIELD_VECTOR_N1(name, type, size, dxf) FIELD_VECTOR_N(name, type, size, dxf)
 #endif
 
-#ifndef REPEAT
+#ifndef REPEAT_BLOCK
+#define REPEAT_BLOCK     {
+#define END_REPEAT_BLOCK }
+#endif
 
+#ifndef REPEAT
 #define REPEAT_CN(times, name, type) \
   if (_obj->name) \
     for (rcount1=0; rcount1<(BITCODE_BL)times; rcount1++)
@@ -247,9 +286,11 @@
     fprintf(stderr, "Invalid rcount " #idx " %ld", (long)_obj->times); return DWG_ERR_VALUEOUTOFBOUNDS; } \
   if (_obj->name) \
     for (rcount##idx=0; rcount##idx<(BITCODE_BL)_obj->times; rcount##idx++)
+#ifndef _REPEAT_C
 #define _REPEAT_C(times, name, type, idx) \
   if (_obj->name) \
     for (rcount##idx=0; rcount##idx<(BITCODE_BL)_obj->times; rcount##idx++)
+#endif
 #define _REPEAT_N(times, name, type, idx) \
   if (_obj->name) \
     for (rcount##idx=0; rcount##idx<(BITCODE_BL)times; rcount##idx++)

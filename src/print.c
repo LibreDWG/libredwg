@@ -41,7 +41,9 @@ static unsigned int cur_ver = 0;
 #define ACTION print
 #define IS_PRINT
 
-#define FIELD(name,type,dxf) \
+#define FIELD(name,type) \
+  FIELD_TRACE(name,type)
+#define FIELDG(name,type,dxf) \
   FIELD_G_TRACE(name,type,dxf)
 #define FIELD_TRACE(name,type) \
   LOG_TRACE(#name ": " FORMAT_##type " [" #type "]\n", _obj->name)
@@ -49,6 +51,7 @@ static unsigned int cur_ver = 0;
   LOG_TRACE(#name ": " FORMAT_##type " [" #type " " #dxf "]\n", _obj->name)
 #define FIELD_CAST(name,type,cast,dxf)             \
   FIELD_G_TRACE(name,cast,dxf)
+#define SUB_FIELD(o,nam,type,dxf) FIELDG(o.nam,type,dxf)
 
 #define LOG_INSANE_TF(var,len)
 #define FIELD_VALUE(name) _obj->name
@@ -68,8 +71,9 @@ static unsigned int cur_ver = 0;
               handleptr->handleref.value,\
               handleptr->absolute_ref, handleptr->absolute_ref, dxf);  \
   }
-#define FIELD_HANDLE(name, handle_code, dxf) VALUE_HANDLE(_obj->name, name, handle_code, dxf)
-#define FIELD_DATAHANDLE(name, code, dxf) FIELD_HANDLE(name, code, dxf)
+#define FIELD_HANDLE(nam, handle_code, dxf) VALUE_HANDLE(_obj->nam, nam, handle_code, dxf)
+#define SUB_FIELD_HANDLE(o, nam, handle_code, dxf) VALUE_HANDLE(_obj->o.nam, nam, handle_code, dxf)
+#define FIELD_DATAHANDLE(nam, code, dxf) FIELD_HANDLE(nam, code, dxf)
 #define VALUE_HANDLE_N(handleptr, name, vcount, handle_code, dxf)\
   if (handleptr) { \
     LOG_TRACE(#name "[%d]: HANDLE(%d.%d.%lX) absolute:%lX/%lu [%d]\n",\
@@ -82,34 +86,34 @@ static unsigned int cur_ver = 0;
 #define FIELD_HANDLE_N(name, vcount, handle_code, dxf) \
   VALUE_HANDLE_N(_obj->name, name, vcount, handle_code, dxf)
 
-#define FIELD_B(name,dxf) FIELD(name, B, dxf);
-#define FIELD_BB(name,dxf) FIELD(name, BB, dxf);
-#define FIELD_3B(name,dxf) FIELD(name, 3B, dxf);
-#define FIELD_BS(name,dxf) FIELD(name, BS, dxf);
-#define FIELD_BL(name,dxf) FIELD(name, BL, dxf);
-#define FIELD_BLL(name,dxf) FIELD(name, BLL, dxf);
+#define FIELD_B(name,dxf)  FIELDG(name, B, dxf);
+#define FIELD_BB(name,dxf) FIELDG(name, BB, dxf);
+#define FIELD_3B(name,dxf) FIELDG(name, 3B, dxf);
+#define FIELD_BS(name,dxf) FIELDG(name, BS, dxf);
+#define FIELD_BL(name,dxf) FIELDG(name, BL, dxf);
+#define FIELD_BLL(name,dxf) FIELDG(name, BLL, dxf);
 #define FIELD_BD(name,dxf) { \
   if (bit_isnan(_obj->name)) { \
     LOG_ERROR("Invalid BD " #name); \
     return DWG_ERR_VALUEOUTOFBOUNDS; \
   } \
-  FIELD(name, BD, dxf); \
+  FIELDG(name, BD, dxf); \
 }
-#define FIELD_RC(name,dxf) FIELD(name, RC, dxf);
-#define FIELD_RS(name,dxf) FIELD(name, RS, dxf);
+#define FIELD_RC(name,dxf) FIELDG(name, RC, dxf);
+#define FIELD_RS(name,dxf) FIELDG(name, RS, dxf);
 #define FIELD_RD(name,dxf) { \
   if (bit_isnan(_obj->name)) { \
     LOG_ERROR("Invalid BD " #name); \
     return DWG_ERR_VALUEOUTOFBOUNDS; \
   } \
-  FIELD(name, RD, dxf); \
+  FIELDG(name, RD, dxf); \
 }
-#define FIELD_RL(name,dxf) FIELD(name, RL, dxf);
-#define FIELD_RLL(name,dxf) FIELD(name, RLL, dxf);
+#define FIELD_RL(name,dxf)  FIELDG(name, RL, dxf);
+#define FIELD_RLL(name,dxf) FIELDG(name, RLL, dxf);
 #define FIELD_RLx(name,dxf) \
   LOG_TRACE(#name ": %x [RL " #dxf "]\n", _obj->name)
-#define FIELD_MC(name,dxf) FIELD(name, MC, dxf);
-#define FIELD_MS(name,dxf) FIELD(name, MS, dxf);
+#define FIELD_MC(name,dxf) FIELDG(name, MC, dxf);
+#define FIELD_MS(name,dxf) FIELDG(name, MS, dxf);
 #define FIELD_TF(name,len,dxf) { \
     LOG_TRACE( #name ": [%d TF " #dxf "]\n", len); \
     LOG_INSANE_TF(FIELD_VALUE(name), (int)len); }
@@ -117,10 +121,10 @@ static unsigned int cur_ver = 0;
     LOG_TRACE( #name ": [%d TFF " #dxf "]\n", len); \
     LOG_INSANE_TF(FIELD_VALUE(name), (int)len); }
 
-#define FIELD_TV(name,dxf) FIELD(name, TV, dxf);
+#define FIELD_TV(name,dxf) FIELDG(name, TV, dxf);
 #define FIELD_TU(name,dxf) LOG_TRACE_TU(#name, (BITCODE_TU)_obj->name, dxf)
 #define FIELD_T FIELD_TV /*TODO: implement version dependent string fields */
-#define FIELD_BT(name,dxf) FIELD(name, BT, dxf);
+#define FIELD_BT(name,dxf) FIELDG(name, BT, dxf);
 #define FIELD_4BITS(name,dxf) FIELD_G_TRACE(name,4BITS,dxf)
 #define FIELD_BE(name,dxf) FIELD_3RD(name,dxf)
 #define FIELD_DD(name, _default, dxf)
@@ -142,6 +146,17 @@ static unsigned int cur_ver = 0;
       LOG_TRACE(#color ".name: %s [CMC.TV]\n", _obj->color.name); \
     if (_obj->color.flag & 2) \
       LOG_TRACE(#color ".bookname: %s [CMC.TV]\n", _obj->color.book_name); \
+  }\
+}
+#define SUB_FIELD_CMC(o,color,dxf1,dxf2) {                      \
+  LOG_TRACE(#color ".index [CMC.BS %d]\n", _obj->o.color.index) \
+  if (dat->version >= R_2004) { \
+    LOG_TRACE(#color ".rgb: 0x%06x [CMC.BL %d]\n", (unsigned)_obj->o.color.rgb, dxf2); \
+    LOG_TRACE(#color ".flag: 0x%x [CMC.RC]\n", (unsigned)_obj->o.color.flag); \
+    if (_obj->o.color.flag & 1) \
+      LOG_TRACE(#color ".name: %s [CMC.TV]\n", _obj->o.color.name); \
+    if (_obj->o.color.flag & 2) \
+      LOG_TRACE(#color ".bookname: %s [CMC.TV]\n", _obj->o.color.book_name); \
   }\
 }
 #define FIELD_EMC(color,dxf1,dxf2) { \

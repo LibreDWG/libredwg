@@ -203,9 +203,12 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 #define FORMAT_BD "%lf"
 
 // add the name/type/dxf combo to some structure for this element.
-#define FIELD(name,type,dxf) dxf_add_field(obj, #name, #type, dxf)
-#define FIELD_CAST(name,type,cast,dxf) FIELD(name,cast,dxf)
+#define FIELDG(name,type,dxf) dxf_add_field(obj, #name, #type, dxf)
+//#define FIELD(name,type)     dxf_add_field(obj, #name, #type, 0)
+#define FIELD_CAST(name,type,cast,dxf) FIELDG(name,cast,dxf)
 #define FIELD_TRACE(name,type)
+//TODO
+#define SUB_FIELD(o,name,type,dxf) dxf_add_field(obj, #name, #type, dxf)
 #define VALUE_TV(value, dxf)  dxfb_read_string(dat, (char**)&value, 0)
 #define SUBCLASS(text) VALUE_TV(buf, 100);
 
@@ -227,7 +230,8 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
       dat->byte += i; \
     } \
   }
-#define FIELD_HANDLE(name, handle_code, dxf) VALUE_HANDLE(_obj->name, handle_code, dxf)
+#define FIELD_HANDLE(nam,handle_code,dxf) VALUE_HANDLE(_obj->nam, handle_code, dxf)
+#define SUB_FIELD_HANDLE(o,nam,handle_code,dxf) VALUE_HANDLE(_obj->o.nam, handle_code, dxf)
 #define HEADER_9(name) \
     GROUP(9)
 #define VALUE_H(value,dxf) \
@@ -249,7 +253,7 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
       VALUE (value, type, dxf); \
     } \
     else { \
-      FIELD(name,type,dxf); \
+      FIELDG(name,type,dxf); \
     } \
   }
 #define HEADER_VAR(name, type, dxf) \
@@ -304,18 +308,18 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 #define FIELD_DATAHANDLE(name, code, dxf) FIELD_HANDLE(name, code, dxf)
 #define FIELD_HANDLE_N(name, vcount, handle_code, dxf) FIELD_HANDLE(name, handle_code, dxf)
 
-#define HEADER_RC(name,dxf)  HEADER_9(name); FIELD(name, RC, dxf)
-#define HEADER_RS(name,dxf)  HEADER_9(name); FIELD(name, RS, dxf)
-#define HEADER_RL(name,dxf)  HEADER_9(name); FIELD(name, RL, dxf)
-#define HEADER_RD(name,dxf)  HEADER_9(name); FIELD(name, RD, dxf)
-#define HEADER_RLL(name,dxf) HEADER_9(name); FIELD(name, RLL, dxf)
+#define HEADER_RC(name,dxf)  HEADER_9(name); FIELDG(name, RC, dxf)
+#define HEADER_RS(name,dxf)  HEADER_9(name); FIELDG(name, RS, dxf)
+#define HEADER_RL(name,dxf)  HEADER_9(name); FIELDG(name, RL, dxf)
+#define HEADER_RD(name,dxf)  HEADER_9(name); FIELDG(name, RD, dxf)
+#define HEADER_RLL(name,dxf) HEADER_9(name); FIELDG(name, RLL, dxf)
 #define HEADER_TV(name,dxf)  HEADER_9(name); VALUE_TV(_obj->name,dxf)
 #define HEADER_TU(name,dxf)  HEADER_9(name); VALUE_TU(_obj->name,dxf)
 #define HEADER_T(name,dxf)   HEADER_9(name); VALUE_T(_obj->name, dxf)
-#define HEADER_B(name,dxf)   HEADER_9(name); FIELD(name, B, dxf)
-#define HEADER_BS(name,dxf)  HEADER_9(name); FIELD(name, BS, dxf)
-#define HEADER_BL(name,dxf)  HEADER_9(name); FIELD(name, BL, dxf)
-#define HEADER_BD(name,dxf)  HEADER_9(name); FIELD(name, BD, dxf)
+#define HEADER_B(name,dxf)   HEADER_9(name); FIELDG(name, B, dxf)
+#define HEADER_BS(name,dxf)  HEADER_9(name); FIELDG(name, BS, dxf)
+#define HEADER_BL(name,dxf)  HEADER_9(name); FIELDG(name, BL, dxf)
+#define HEADER_BD(name,dxf)  HEADER_9(name); FIELDG(name, BD, dxf)
 
 #define VALUE_B(value,dxf)   VALUE(value, RC, dxf)
 #define VALUE_BB(value,dxf)  VALUE(value, RC, dxf)
@@ -331,20 +335,20 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 #define VALUE_RLL(value,dxf) VALUE(value, RLL, dxf)
 #define VALUE_MC(value,dxf)  VALUE(value, MC, dxf)
 #define VALUE_MS(value,dxf)  VALUE(value, MS, dxf)
-#define FIELD_B(name,dxf)   FIELD(name, B, dxf)
-#define FIELD_BB(name,dxf)  FIELD(name, BB, dxf)
-#define FIELD_3B(name,dxf)  FIELD(name, 3B, dxf)
-#define FIELD_BS(name,dxf)  FIELD(name, BS, dxf)
-#define FIELD_BL(name,dxf)  FIELD(name, BL, dxf)
-#define FIELD_BLL(name,dxf) FIELD(name, BLL, dxf)
-#define FIELD_BD(name,dxf)  FIELD(name, BD, dxf)
-#define FIELD_RC(name,dxf)  FIELD(name, RC, dxf)
-#define FIELD_RS(name,dxf)  FIELD(name, RS, dxf)
-#define FIELD_RD(name,dxf)  FIELD(name, RD, dxf)
-#define FIELD_RL(name,dxf)  FIELD(name, RL, dxf)
-#define FIELD_RLL(name,dxf) FIELD(name, RLL, dxf)
-#define FIELD_MC(name,dxf)  FIELD(name, MC, dxf)
-#define FIELD_MS(name,dxf)  FIELD(name, MS, dxf)
+#define FIELD_B(name,dxf)   FIELDG(name, B, dxf)
+#define FIELD_BB(name,dxf)  FIELDG(name, BB, dxf)
+#define FIELD_3B(name,dxf)  FIELDG(name, 3B, dxf)
+#define FIELD_BS(name,dxf)  FIELDG(name, BS, dxf)
+#define FIELD_BL(name,dxf)  FIELDG(name, BL, dxf)
+#define FIELD_BLL(name,dxf) FIELDG(name, BLL, dxf)
+#define FIELD_BD(name,dxf)  FIELDG(name, BD, dxf)
+#define FIELD_RC(name,dxf)  FIELDG(name, RC, dxf)
+#define FIELD_RS(name,dxf)  FIELDG(name, RS, dxf)
+#define FIELD_RD(name,dxf)  FIELDG(name, RD, dxf)
+#define FIELD_RL(name,dxf)  FIELDG(name, RL, dxf)
+#define FIELD_RLL(name,dxf) FIELDG(name, RLL, dxf)
+#define FIELD_MC(name,dxf)  FIELDG(name, MC, dxf)
+#define FIELD_MS(name,dxf)  FIELDG(name, MS, dxf)
 #define FIELD_TF(name,len,dxf)  VALUE_TV(_obj->name, dxf)
 #define FIELD_TFF(name,len,dxf) VALUE_TV(_obj->name, dxf)
 #define FIELD_TV(name,dxf) \
@@ -357,8 +361,8 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 #define VALUE_T(value,dxf) \
   { if (dat->version >= R_2007) { VALUE_TU(value, dxf); } \
     else                        { VALUE_TV(value, dxf); } }
-#define FIELD_BT(name,dxf)     FIELD(name, BT, dxf);
-#define FIELD_4BITS(name,dxf)  FIELD(name,4BITS,dxf)
+#define FIELD_BT(name,dxf)     FIELDG(name, BT, dxf);
+#define FIELD_4BITS(name,dxf)  FIELDG(name,4BITS,dxf)
 #define FIELD_BE(name,dxf)     FIELD_3RD(name,dxf)
 #define FIELD_DD(name, _default, dxf) FIELD_BD(name, dxf)
 #define FIELD_2DD(name, d1, d2, dxf) { FIELD_DD(name.x, d1, dxf); FIELD_DD(name.y, d2, dxf+10); }
@@ -366,15 +370,17 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
     FIELD_DD(name.x, FIELD_VALUE(def.x), dxf); \
     FIELD_DD(name.y, FIELD_VALUE(def.y), dxf+10); \
     FIELD_DD(name.z, FIELD_VALUE(def.z), dxf+20); }
-#define FIELD_2RD(name,dxf) {FIELD(name.x, RD, dxf); FIELD(name.y, RD, dxf+10);}
-#define FIELD_2BD(name,dxf) {FIELD(name.x, BD, dxf); FIELD(name.y, BD, dxf+10);}
-#define FIELD_2BD_1(name,dxf) {FIELD(name.x, BD, dxf); FIELD(name.y, BD, dxf+1);}
-#define FIELD_3RD(name,dxf) {FIELD(name.x, RD, dxf); FIELD(name.y, RD, dxf+10); FIELD(name.z, RD, dxf+20);}
-#define FIELD_3BD(name,dxf) {FIELD(name.x, BD, dxf); FIELD(name.y, BD, dxf+10); FIELD(name.z, BD, dxf+20);}
-#define FIELD_3BD_1(name,dxf) {FIELD(name.x, BD, dxf); FIELD(name.y, BD, dxf+1); FIELD(name.z, BD, dxf+2);}
+#define FIELD_2RD(name,dxf) {FIELDG(name.x, RD, dxf); FIELDG(name.y, RD, dxf+10);}
+#define FIELD_2BD(name,dxf) {FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+10);}
+#define FIELD_2BD_1(name,dxf) {FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+1);}
+#define FIELD_3RD(name,dxf) {FIELDG(name.x, RD, dxf); FIELDG(name.y, RD, dxf+10); FIELDG(name.z, RD, dxf+20);}
+#define FIELD_3BD(name,dxf) {FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+10); FIELDG(name.z, BD, dxf+20);}
+#define FIELD_3BD_1(name,dxf) {FIELDG(name.x, BD, dxf); FIELDG(name.y, BD, dxf+1); FIELDG(name.z, BD, dxf+2);}
 #define FIELD_3DPOINT(name,dxf) FIELD_3BD(name,dxf)
 #define FIELD_CMC(color,dxf1,dxf2) \
   VALUE_RS(_obj->color.index, dxf1)
+#define SUB_FIELD_CMC(o,color,dxf1,dxf2) \
+  VALUE_RS(_obj->o.color.index, dxf1)
 // TODO: rgb
 #define FIELD_TIMEBLL(name,dxf) \
   GROUP(dxf);\
@@ -476,7 +482,7 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
   HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
 
 #define FIELD_NUM_INSERTS(num_inserts, type, dxf) \
-  FIELD(num_inserts, type, dxf)
+  FIELDG(num_inserts, type, dxf)
 
 #define FIELD_XDATA(name, size)
 

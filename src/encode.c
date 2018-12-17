@@ -84,6 +84,7 @@ static bool env_var_checked_p;
 #define FIELD_CAST(nam,type,cast,dxf) \
   { bit_write_##type(dat, (BITCODE_##type)_obj->nam); \
     FIELD_G_TRACE(nam,cast,dxf); }
+#define SUB_FIELD(o,nam,type,dxf) FIELD(o.nam,type)
 
 #define FIELD_VALUE(nam) _obj->nam
 
@@ -147,6 +148,7 @@ static bool env_var_checked_p;
     LOG_TRACE(#nam ": " FORMAT_BL "." FORMAT_BL "\n", _obj->nam.days, _obj->nam.ms); }
 
 #define FIELD_CMC(nam,dxf1,dxf2) bit_write_CMC(dat, &_obj->nam)
+#define SUB_FIELD_CMC(o,nam,dxf1,dxf2) bit_write_CMC(dat, &_obj->o.nam)
 
 #define FIELD_BE(nam, dxf)\
   bit_write_BE(dat, FIELD_VALUE(nam.x), FIELD_VALUE(nam.y), FIELD_VALUE(nam.z));
@@ -285,6 +287,8 @@ static bool env_var_checked_p;
 
 #define FIELD_HANDLE(nam, handle_code, dxf) \
   VALUE_HANDLE(_obj->nam, nam, handle_code, dxf)
+#define SUB_FIELD_HANDLE(o, nam, handle_code, dxf) \
+  VALUE_HANDLE(_obj->o.nam, nam, handle_code, dxf)
 #define FIELD_DATAHANDLE(nam, handle_code, dxf) \
   { bit_write_H(dat, _obj->nam ? &_obj->nam->handleref : NULL); }
 

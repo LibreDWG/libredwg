@@ -66,9 +66,11 @@ static Bit_Chain *dat = &pdat;
   LOG_TRACE(#name ": " FORMAT_##type " [" #type " %d]\n", _obj->name, dxfgroup)
 #define FIELD_CAST(name,type,cast,dxf) {}
 #define FIELD_VALUE(name) _obj->name
+#define SUB_FIELD(o,nam,type,dxf) FIELD(_obj->o.nam,type)
 
 #define ANYCODE -1
-#define FIELD_HANDLE(name,code,dxf) VALUE_HANDLE(_obj->name,code,dxf)
+#define FIELD_HANDLE(nam,code,dxf) VALUE_HANDLE(_obj->nam,code,dxf)
+#define SUB_FIELD_HANDLE(o,nam,code,dxf) VALUE_HANDLE(_obj->o.nam,code,dxf)
 #define VALUE_HANDLE(ref,_code,dxf) \
   if (ref) { \
     if (!(ref->handleref.size || (obj && ref->handleref.code > 5))) \
@@ -120,6 +122,9 @@ static Bit_Chain *dat = &pdat;
 #define FIELD_CMC(color,dxf1,dxf2) \
   { FIELD_TV(color.name, 0); \
     FIELD_TV(color.book_name, 0); }
+#define SUB_FIELD_CMC(o,color,dxf1,dxf2) \
+  { VALUE_TV(_obj->o.color.name, 0); \
+    VALUE_TV(_obj->o.color.book_name, 0); }
 
 //FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores

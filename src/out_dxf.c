@@ -60,9 +60,11 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 #define IS_PRINT
 #define IS_DXF
 
-#define FIELD(nam,type,dxf) VALUE(_obj->nam,type,dxf)
-#define FIELD_CAST(nam,type,cast,dxf) FIELD(nam,cast,dxf)
+#define FIELD(nam,type)               VALUE(_obj->nam,type,0)
+#define FIELDG(nam,type,dxf)          VALUE(_obj->nam,type,dxf)
+#define FIELD_CAST(nam,type,cast,dxf) FIELDG(nam,cast,dxf)
 #define FIELD_TRACE(nam,type)
+#define SUB_FIELD(o,nam,type,dxf)     FIELDG(o.nam,type,dxf)
 
 #define VALUE_TV(value,dxf) \
   { GROUP(dxf); \
@@ -121,6 +123,17 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
       FIELD_HANDLE_NAME(nam, dxf, LAYER) \
     else if (dat->version >= R_13) \
       fprintf(dat->fh, "%3i\r\n%lX\r\n", dxf, _obj->nam->absolute_ref); \
+  }
+#define SUB_FIELD_HANDLE(o, nam, handle_code, dxf) \
+  if (dxf != 0 && _obj->o.nam) { \
+    if (dxf == 6) \
+      SUB_FIELD_HANDLE_NAME(o, nam, dxf, LTYPE)  \
+    else if (dxf == 7) \
+      SUB_FIELD_HANDLE_NAME(o, nam, dxf, STYLE)  \
+    else if (dxf == 8) \
+      SUB_FIELD_HANDLE_NAME(o, nam, dxf, LAYER)  \
+    else if (dat->version >= R_13) \
+      fprintf(dat->fh, "%3i\r\n%lX\r\n", dxf, _obj->o.nam->absolute_ref); \
   }
 #define HEADER_9(nam) \
     GROUP(9);\
@@ -215,23 +228,29 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
     Dwg_Object *o = ref ? ref->obj : NULL;\
     dxf_cvt_tablerecord(dat, o, o ? o->tio.object->tio.table->name : (char*)"0", dxf); \
   }
+#define SUB_FIELD_HANDLE_NAME(ob, nam, dxf, table) \
+  {\
+    Dwg_Object_Ref *ref = _obj->ob.nam;\
+    Dwg_Object *o = ref ? ref->obj : NULL;\
+    dxf_cvt_tablerecord(dat, o, o ? o->tio.object->tio.table->name : (char*)"0", dxf); \
+  }
 #define HEADER_HANDLE_NAME(nam, dxf, table) \
   HEADER_9(nam); FIELD_HANDLE_NAME(nam, dxf, table)
 
 #define FIELD_DATAHANDLE(nam, code, dxf) FIELD_HANDLE(nam, code, dxf)
 
-#define HEADER_RC(nam,dxf)  HEADER_9(nam); FIELD(nam, RC, dxf)
-#define HEADER_RS(nam,dxf)  HEADER_9(nam); FIELD(nam, RS, dxf)
+#define HEADER_RC(nam,dxf)  HEADER_9(nam); FIELDG(nam, RC, dxf)
+#define HEADER_RS(nam,dxf)  HEADER_9(nam); FIELDG(nam, RS, dxf)
 #define HEADER_RD(nam,dxf)  HEADER_9(nam); FIELD_RD(nam, dxf)
-#define HEADER_RL(nam,dxf)  HEADER_9(nam); FIELD(nam, RL, dxf)
-#define HEADER_RLL(nam,dxf) HEADER_9(nam); FIELD(nam, RLL, dxf)
+#define HEADER_RL(nam,dxf)  HEADER_9(nam); FIELDG(nam, RL, dxf)
+#define HEADER_RLL(nam,dxf) HEADER_9(nam); FIELDG(nam, RLL, dxf)
 #define HEADER_TV(nam,dxf)  HEADER_9(nam); VALUE_TV(_obj->nam, dxf)
 #define HEADER_TU(nam,dxf)  HEADER_9(nam); VALUE_TU(_obj->nam, dxf)
 #define HEADER_T(nam,dxf)   HEADER_9(nam); VALUE_T((char*)_obj->nam, dxf)
 #define HEADER_B(nam,dxf)   HEADER_9(nam); FIELD_B(nam, dxf)
-#define HEADER_BS(nam,dxf)  HEADER_9(nam); FIELD(nam, BS, dxf)
+#define HEADER_BS(nam,dxf)  HEADER_9(nam); FIELDG(nam, BS, dxf)
 #define HEADER_BD(nam,dxf)  HEADER_9(nam); FIELD_BD(nam, dxf)
-#define HEADER_BL(nam,dxf)  HEADER_9(nam); FIELD(nam, BL, dxf)
+#define HEADER_BL(nam,dxf)  HEADER_9(nam); FIELDG(nam, BL, dxf)
 
 //#define VALUE_B(value,dxf)   VALUE(value, RC, dxf)
 #define VALUE_BB(value,dxf)  VALUE(value, RC, dxf)
@@ -252,20 +271,20 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 
 #define FIELD_RD(nam,dxf)  VALUE_RD(_obj->nam, dxf)
 #define FIELD_B(nam,dxf)   VALUE_B(_obj->nam, dxf)
-#define FIELD_BB(nam,dxf)  FIELD(nam, BB, dxf)
-#define FIELD_3B(nam,dxf)  FIELD(nam, 3B, dxf)
-#define FIELD_BS(nam,dxf)  FIELD(nam, BS, dxf)
-#define FIELD_BL(nam,dxf)  FIELD(nam, BL, dxf)
-#define FIELD_BLL(nam,dxf) FIELD(nam, BLL, dxf)
+#define FIELD_BB(nam,dxf)  FIELDG(nam, BB, dxf)
+#define FIELD_3B(nam,dxf)  FIELDG(nam, 3B, dxf)
+#define FIELD_BS(nam,dxf)  FIELDG(nam, BS, dxf)
+#define FIELD_BL(nam,dxf)  FIELDG(nam, BL, dxf)
+#define FIELD_BLL(nam,dxf) FIELDG(nam, BLL, dxf)
 #define FIELD_BD(nam,dxf)  \
   { if (dxf >= 50 && dxf < 55) _obj->nam = rad2deg(_obj->nam); \
     FIELD_RD(nam, dxf); }
-#define FIELD_RC(nam,dxf)  FIELD(nam, RC, dxf)
-#define FIELD_RS(nam,dxf)  FIELD(nam, RS, dxf)
-#define FIELD_RL(nam,dxf)  FIELD(nam, RL, dxf)
-#define FIELD_RLL(nam,dxf) FIELD(nam, RLL, dxf)
-#define FIELD_MC(nam,dxf)  FIELD(nam, MC, dxf)
-#define FIELD_MS(nam,dxf)  FIELD(nam, MS, dxf)
+#define FIELD_RC(nam,dxf)  FIELDG(nam, RC, dxf)
+#define FIELD_RS(nam,dxf)  FIELDG(nam, RS, dxf)
+#define FIELD_RL(nam,dxf)  FIELDG(nam, RL, dxf)
+#define FIELD_RLL(nam,dxf) FIELDG(nam, RLL, dxf)
+#define FIELD_MC(nam,dxf)  FIELDG(nam, MC, dxf)
+#define FIELD_MS(nam,dxf)  FIELDG(nam, MS, dxf)
 #define FIELD_TF(nam,len,dxf)  VALUE_TV(_obj->nam, dxf)
 #define FIELD_TFF(nam,len,dxf) VALUE_TV(_obj->nam, dxf)
 #define FIELD_TV(nam,dxf) \
@@ -278,8 +297,8 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 #define VALUE_T(value,dxf) \
   { if (dat->from_version >= R_2007) { VALUE_TU(value, dxf); } \
     else                             { VALUE_TV(value, dxf); } }
-#define FIELD_BT(nam,dxf)     FIELD(nam, BT, dxf);
-#define FIELD_4BITS(nam,dxf)  FIELD(nam,4BITS,dxf)
+#define FIELD_BT(nam,dxf)     FIELDG(nam, BT, dxf);
+#define FIELD_4BITS(nam,dxf)  FIELDG(nam,4BITS,dxf)
 #define FIELD_BE(nam,dxf)     FIELD_3RD(nam,dxf)
 #define FIELD_DD(nam, _default, dxf) FIELD_BD(nam, dxf)
 #define FIELD_2DD(nam, d1, d2, dxf) { FIELD_DD(nam.x, d1, dxf); FIELD_DD(nam.y, d2, dxf+10); }
@@ -298,6 +317,12 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
   VALUE_RS(_obj->color.index, dxf1); \
   if (dat->version >= R_2004 && dxf2 && _obj->color.rgb) { \
     VALUE_RL(_obj->color.rgb, dxf2); \
+  } \
+}
+#define SUB_FIELD_CMC(o,color,dxf1,dxf2) { \
+  VALUE_RS(_obj->o.color.index, dxf1); \
+  if (dat->version >= R_2004 && dxf2 && _obj->o.color.rgb) { \
+    VALUE_RL(_obj->o.color.rgb, dxf2); \
   } \
 }
 #define HEADER_TIMEBLL(nam, dxf) \
@@ -391,7 +416,7 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
   HANDLE_VECTOR_N(nam, FIELD_VALUE(sizefield), code, dxf)
 
 #define FIELD_NUM_INSERTS(num_inserts, type, dxf) \
-  FIELD(num_inserts, type, dxf)
+  FIELDG(num_inserts, type, dxf)
 
 #define FIELD_XDATA(nam, size) \
   dxf_write_xdata(dat, _obj->nam, _obj->size)

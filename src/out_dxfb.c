@@ -47,8 +47,10 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 #define IS_PRINT
 #define IS_DXF
 
-#define FIELD(nam,type,dxf) \
+#define FIELD(nam,type)
+#define FIELDG(nam,type,dxf) \
     if (dxf) { FIELD_##type(nam, dxf); }
+#define SUB_FIELD(o,nam,type,dxf) FIELDG(o.nam,type,dxf)
 
 #define HEADER_VALUE(nam, type, dxf, value) \
     GROUP(9);\
@@ -58,7 +60,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 #define HEADER_VAR(nam, type, dxf) \
   HEADER_VALUE(nam, type, dxf, dwg->header_vars.nam)
 
-#define FIELD_CAST(nam,type,cast,dxf) FIELD(nam,cast,dxf)
+#define FIELD_CAST(nam,type,cast,dxf) FIELDG(nam,cast,dxf)
 #define FIELD_TRACE(nam,type)
 //TODO length?
 #define VALUE_TV(value,dxf) \
@@ -107,6 +109,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
      fwrite(&_j, sizeof(uint32_t), 1, dat->fh); \
   }
 #define FIELD_HANDLE(nam, handle_code, dxf) VALUE_HANDLE(_obj->nam, handle_code, dxf)
+#define SUB_FIELD_HANDLE(o, nam, handle_code, dxf) VALUE_HANDLE(_obj->o.nam, handle_code, dxf)
 
 #define GROUP(code)                  \
     {                                \
@@ -279,8 +282,8 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
     fwrite(&s, sizeof(BITCODE_RLL), 1, dat->fh);\
   }
 
-#define FIELD_MC(nam,dxf) FIELD_RC(nam,dxf)
-#define FIELD_MS(nam,dxf)  FIELD_RS(nam,dxf)
+#define FIELD_MC(nam,dxf)    FIELD_RC(nam,dxf)
+#define FIELD_MS(nam,dxf)    FIELD_RS(nam,dxf)
 #define FIELD_BT(nam,dxf)    FIELD_BD(nam, dxf);
 #define FIELD_4BITS(nam,dxf) FIELD_RC(nam, dxf)
 #define FIELD_BE(nam,dxf)    FIELD_3RD(nam,dxf)
@@ -301,6 +304,12 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
   VALUE_RS(_obj->color.index, dxf1); \
   if (dat->version >= R_2004 && dxf2 && _obj->color.rgb) { \
     VALUE_RL(_obj->color.rgb, dxf2); \
+  } \
+}
+#define SUB_FIELD_CMC(o,color,dxf1,dxf2) {      \
+  VALUE_RS(_obj->o.color.index, dxf1); \
+  if (dat->version >= R_2004 && dxf2 && _obj->o.color.rgb) { \
+    VALUE_RL(_obj->o.color.rgb, dxf2); \
   } \
 }
 #define HEADER_CMC(nam,dxf) \
@@ -368,7 +377,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
   HANDLE_VECTOR_N(nam, FIELD_VALUE(sizefield), code, dxf)
 
 #define FIELD_NUM_INSERTS(num_inserts, type, dxf) \
-  FIELD(num_inserts, type, dxf)
+  FIELDG(num_inserts, type, dxf)
 
 #define FIELD_XDATA(nam, size) \
   dxfb_write_xdata(dat, _obj->nam, _obj->size)

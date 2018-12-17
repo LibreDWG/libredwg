@@ -101,6 +101,7 @@ extern "C" {
 # define FORMAT_BLd "%" PRId32
 # define FORMAT_RLd "%" PRId32
 # define FORMAT_BLX "%" PRIX32
+# define FORMAT_BLx "%" PRIx32
 #else
 # define FORMAT_BS "%hu"
 # define FORMAT_RS "%hu"
@@ -109,6 +110,7 @@ extern "C" {
 # define FORMAT_BLd "%d"
 # define FORMAT_RLd "%d"
 # define FORMAT_BLX "%X"
+# define FORMAT_BLx "%x"
 #endif
 #define BITCODE_MC long
 #define FORMAT_MC  "%ld"

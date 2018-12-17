@@ -19,9 +19,15 @@
 #include "spec.h"
 
   // char version[6] handled separately. older releases just had a version[12]
+#ifdef IS_JSON
+  KEY(zero_5);
+  fprintf(dat->fh, "[ %d, %d, %d, %d, %d ],\n",
+          _obj->zero_5[0], _obj->zero_5[1], _obj->zero_5[2], _obj->zero_5[3], _obj->zero_5[4]);
+#else
   for (i=0; i<5; i++) {
     FIELD_RC(zero_5[i], 0);
   }
+#endif
   FIELD_RC(is_maint, 0);
 
   PRE(R_13) {
@@ -63,5 +69,6 @@
     }
     /* now at 0x80 follows the encrypted header data */
   }
+
 
 
