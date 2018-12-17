@@ -2239,7 +2239,11 @@ DWG_OBJECT(BLOCK_HEADER)
         }
       else
         {
+#ifndef IS_JSON
           FIELD_TF (preview_data, FIELD_VALUE(preview_data_size), 310);
+#else
+          FIELD_BINARY (preview_data, FIELD_VALUE(preview_data_size), 310);
+#endif
         }
     }
 

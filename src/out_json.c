@@ -61,6 +61,7 @@ char* alloca(size_t size) {
 
 #define ACTION json
 #define IS_PRINT
+#define IS_JSON
 
 #define PREFIX   for (int _i=0; _i<dat->bit; _i++) { fprintf (dat->fh, "  "); }
 #define ARRAY    fprintf (dat->fh, "[\n"); dat->bit++
@@ -157,8 +158,8 @@ char* alloca(size_t size) {
   } else { fprintf(dat->fh, "\"0.0.0\",\n"); }
 #define VALUE_H(hdl, dxf) \
   fprintf(dat->fh, "\"%d.%d.%lu\",\n", \
-            (hdl).code,    \
-            (hdl).size,    \
+            (hdl).code, \
+            (hdl).size, \
             (hdl).value)
 #define FIELD_HANDLE(nam, handle_code, dxf) \
   PREFIX if (_obj->nam) { \
@@ -187,7 +188,7 @@ char* alloca(size_t size) {
       fprintf(dat->fh, "%02X", _obj->nam[j]); \
     } \
   } \
-  fprintf(dat->fh, "\""); \
+  fprintf(dat->fh, "\",\n"); \
 }
 
 #define FIELD_B(nam,dxf)   FIELD(nam, B, dxf)
@@ -375,10 +376,17 @@ dwg_json_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
   _ent = obj->tio.entity;\
   _obj = ent = _ent->tio.token;\
   FIELD_TEXT(entity, #token);\
+  if (strcmp(obj->dxfname, #token)) \
+    FIELD_TEXT(dxfname,obj->dxfname);\
   _FIELD(type,RL,0);\
+  KEY(handle);VALUE_H(obj->handle, 5);\
   _FIELD(size,RL,0);\
   _FIELD(bitsize,BL,0);\
-  ENT_FIELD(picture_exists,B,0);
+  if (_ent->picture_exists) ENT_FIELD(picture_exists,B,0);\
+  SINCE(R_13) { \
+    KEY(owner); VALUE_HANDLE (obj->parent->header_vars.BLOCK_RECORD_MSPACE,owner,0,330); \
+    error |= json_common_entity_handle_data(dat, obj); \
+  }
 
 #define DWG_ENTITY_END return 0; }
 
@@ -394,11 +402,21 @@ dwg_json_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
   LOG_INFO("Object " #token ":\n")\
   _obj = obj->tio.object->tio.token;\
   FIELD_TEXT(object, #token);\
+  if (strcmp(obj->dxfname, #token)) \
+    FIELD_TEXT(dxfname,obj->dxfname);\
   _FIELD(type,RL,0);\
+  KEY(handle);VALUE_H(obj->handle, 5);\
   _FIELD(size,RL,0);\
   _FIELD(bitsize,BL,0);
 
 #define DWG_OBJECT_END return 0; }
+
+static int
+json_common_entity_handle_data(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
+{
+  (void)dat; (void)obj;
+  return 0;
+}
 
 #include "dwg.spec"
 
@@ -696,14 +714,6 @@ dwg_json_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   return DWG_ERR_INVALIDTYPE;
 }
 
-/*
-static void
-json_common_entity_handle_data(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
-{
-  (void)dat; (void)obj;
-}
-*/
-
 static int
 json_header_write(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
@@ -766,7 +776,7 @@ json_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       ENDHASH;
     }
   NOCOMMA;
-  LASTENDARRAY; /* ENDSEC without comma */
+  ENDSEC();
   return 0;
 }
 
@@ -788,8 +798,15 @@ json_handles_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static int
 json_preview_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  (void)dat; (void)dwg;
-  //...
+  Bit_Chain *_obj = (Bit_Chain*) &dwg->picture;
+  if (_obj->chain && _obj->size && _obj->size > 10)
+    {
+      KEY(THUMBNAILIMAGE); HASH;
+      PREFIX fprintf(dat->fh, "\"size\": %lu,\n", _obj->size);
+      FIELD_BINARY(chain, _obj->size, 310);
+      NOCOMMA;
+      ENDHASH;
+    }
   return 0;
 }
 
@@ -807,11 +824,6 @@ dwg_write_json(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     // TODO: header.spec + 3-5 sections:
     // auxheader.spec
     // r2004_file_header.spec
-
-    if (dat->version >= R_2000) {
-      if (json_preview_write (dat, dwg) >= DWG_ERR_CRITICAL)
-        goto fail;
-    }
   }
 
   // A minimal HEADER requires only $ACADVER, $HANDSEED, and then ENTITIES
@@ -826,12 +838,18 @@ dwg_write_json(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (json_objects_write (dat, dwg) >= DWG_ERR_CRITICAL)
     goto fail;
 
+  if (!minimal && dat->version >= R_2000) {
+    if (json_preview_write (dat, dwg) >= DWG_ERR_CRITICAL)
+      goto fail;
+  }
+
   /* object map:
   if (!minimal && dat->version >= R_13) {
     if (json_handles_write (dat, dwg) >= DWG_ERR_CRITICAL)
       goto fail;
   }*/
 
+  NOCOMMA;
   dat->bit--;
   fprintf (dat->fh, "}\n");
   return 0;
