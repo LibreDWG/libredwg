@@ -117,7 +117,7 @@ char* alloca(size_t size) {
     PREFIX \
     if (str && (strchr(str, '"') || strchr(str, '\\'))) { \
       char *_buf = alloca(2*strlen(str)); \
-      fprintf(dat->fh, "\"%s\": \"%s\",\n", #nam, cquote(_buf, str)); \
+      fprintf(dat->fh, "\"" #nam "\": \"%s\",\n", cquote(_buf, str)); \
     } else { \
       fprintf(dat->fh, "\"" #nam "\": \"%s\",\n", str ? str : ""); \
     } \
@@ -128,7 +128,7 @@ char* alloca(size_t size) {
     PREFIX \
     if (str && (strchr(str, '"') || strchr(str, '\\'))) { \
       char *_buf = malloc(2*strlen(str)); \
-      fprintf(dat->fh, "\"%s\": \"%s\",\n", #nam, cquote(_buf, str)); \
+      fprintf(dat->fh, "\"" #nam "\": \"%s\",\n", cquote(_buf, str)); \
       free(_buf); \
     } else { \
       fprintf(dat->fh, "\"" #nam "\": \"%s\",\n", str ? str : ""); \
@@ -140,7 +140,7 @@ char* alloca(size_t size) {
 # define VALUE_TEXT_TU(wstr) \
     if (wstr && (wcschr(wstr, L'"') || wcschr(wstr, L'\\'))) { \
       wchar_t *_buf = malloc(2*wcslen(wstr)); \
-      fprintf(dat->fh, "\"%s\",\n", wcquote(_buf, wstr)); \
+      fprintf(dat->fh, "\"%ls\",\n", wcquote(_buf, wstr)); \
       free(_buf); \
     } else { \
       fprintf(dat->fh, "\"%ls\",\n", wstr ? (wchar_t*)wstr : L""); \
