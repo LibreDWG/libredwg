@@ -347,8 +347,8 @@ The default text type since r2007.
 @deftypevr {define} BITCODE_H void*
 handle-references
 @end deftypevr
-@deftypevr {define} BITCODE_CMC double[4]
-1 encoded Dwg_Color struct
+@deftypevr {define} BITCODE_CMC struct Dwg_Color
+Dwg_Color struct with index or rgb, alpha and optional name and book_name.
 @end deftypevr
 [and some more]
 
@@ -554,12 +554,11 @@ Reading DXFB is under construction.
 
 @cindex JSON
 
-We write and read to our own JSON format, which is a readable 1:1
-mapping of the DWG structures, and carries much more information than
-the DXF format.
+We write and read @i{(not yet)} to our own JSON format, which is a readable 1:1 mapping of the DWG structures, and carries much more information than the DXF format. The idea is to dump a DWG to JSON and filter/query or postprocess it with more powerful JSON query tools such as @b{jq} (@url{https://stedolan.github.io/jq/}), and optionally import it back in. JSON is much better structured than DXF.
 
-Writing a JSON to stdout is not recommended, as then ending commas are
-still there, which is strictly not valid JSON.
+Writing a JSON to stdout via a pipe is not yet recommended, as then ending commas are still there, which is strictly not valid JSON.
+
+The current first level objects are ``HEADER'', ``CLASSES'' and ``OBJECTS'', for more see the specs.
 
 @node GeoJSON
 @subsection GeoJSON
@@ -643,7 +642,7 @@ Options:
        -O fmt,  --format fmt
               fmt: JSON, DXF, DXFB, GeoJSON
 
-              Planned formats: YAML, XML/OGR, GPX, SVG, PS
+              More planned formats: YAML, XML/OGR, GPX, SVG, PS
 
        -o outfile
               also defines the output fmt. Default: stdout
@@ -665,8 +664,7 @@ For now can only create r2000 DWG files.
 @item @file{dwgrewrite}
 @cindex dwgrewrite
 
-Read and write the DWG, optionally via @code{--as-rNNNN} as another
-version, an earlier or later version. The default is writing as r2000.
+Read and write the DWG, optionally via @code{--as-rNNNN} as another version, an earlier or later version. The default is writing as r2000.
 
 @item @file{dwglayers}
 @cindex dwglayers
@@ -675,10 +673,18 @@ Prints all layers in a DWG.
 With @code{-f} or @code{--flags} also the status of frown, on/off and locked.
 With @code{--on} only the visible layers, which are on and not frozen.
 
+You can get the same effect via this json filter:
+@verbatim
+  dwgread -O json -o out.json example.dwg && \
+    cat out.json | jq '.OBJECTS[]' | \
+    grep -A5 '"object": "LAYER"' | grep name
+@end verbatim
+
 @item @file{dwggrep}
 @cindex dwggrep
 
-Search regex pattern in all text values in a list of DWGs. The order of options is still important.
+Search regex pattern in all text values in a list of DWGs. dwggrep uses PCRE.
+
 With @code{-i} searches case-insensitive.
 With @code{-c} prints only the count of found texts.
 With @code{-h} or @code{--no-filename} does not print the filename.
