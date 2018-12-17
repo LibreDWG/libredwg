@@ -242,11 +242,11 @@ main(int argc, char *argv[])
       fprintf(stderr, "Missing input format for '%s'\n", infile);
     else
       fprintf(stderr, "Missing input format\n");
-    if (argc)
+    if (infile)
       fclose(dat.fh);
     exit(1);
   }
-  if (argc)
+  if (infile)
     fclose(dat.fh);
 
   if (dwg.header.from_version != dwg.header.version)
