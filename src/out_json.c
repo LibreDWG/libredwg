@@ -780,20 +780,22 @@ json_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
-/* The object map/handles section
+/* The object map/handles section */
 static int
 json_handles_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  BITCODE_BL i;
-
-  SECTION(OBJECTS);
+  BITCODE_BL j;
+  SECTION(HANDLES);
   for (j = 0; j < dwg->num_objects; j++)
     {
+      Dwg_Object *obj = &dwg->object[j];
+      // handle => abs. offset
+      PREFIX; fprintf(dat->fh, "[ %lu, %lu ],\n", obj->handle.value, obj->address);
     }
+  NOCOMMA;
   ENDSEC();
   return 0;
 }
-*/
 
 static int
 json_preview_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
@@ -843,11 +845,11 @@ dwg_write_json(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       goto fail;
   }
 
-  /* object map:
+  /* object map */
   if (!minimal && dat->version >= R_13) {
     if (json_handles_write (dat, dwg) >= DWG_ERR_CRITICAL)
       goto fail;
-  }*/
+  }
 
   NOCOMMA;
   dat->bit--;
