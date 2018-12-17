@@ -368,9 +368,13 @@ int match_3DSOLID(const char *restrict filename, const Dwg_Object *restrict obj)
   char *text = NULL;
   int found = 0;
   BITCODE_BL j;
-  Dwg_Entity_3DSOLID *_obj = obj->tio.entity->tio._3DSOLID;
+  Dwg_Entity_3DSOLID *_obj;
 
-  if (!_obj || !obj->tio.entity) return 0;
+  if (!obj || !obj->tio.entity)
+    return 0;
+  _obj = obj->tio.entity->tio._3DSOLID;
+  if (!_obj)
+    return 0;
   if (_obj->acis_data) {
     MATCH_NO16 (entity, _3DSOLID, acis_data, 1);
     //MATCH_ENTITY (_3DSOLID, acis_data, 1);
