@@ -918,20 +918,22 @@ dwg_indxf_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 }
 
 #define DXF_CHECK_ENDSEC \
-  if (dat->byte >= dat->size || pair->code == 0) \
+  if (pair != NULL && (dat->byte >= dat->size || pair->code == 0)) \
     return 0
 #define DXF_BREAK_ENDSEC \
-  if (dat->byte >= dat->size || \
-      (pair->code == 0 && !strcmp(pair->value.s, "ENDSEC"))) \
+  if (pair != NULL && (dat->byte >= dat->size || \
+                       (pair->code == 0 && !strcmp(pair->value.s, "ENDSEC")))) \
     break
 #define DXF_RETURN_ENDSEC(what) \
-  if (dat->byte >= dat->size || \
-      (pair->code == 0 && !strcmp(pair->value.s, "ENDSEC"))) { \
-    dxf_free_pair(pair); \
-    return what; \
+  if (pair != NULL) { \
+    if (dat->byte >= dat->size || \
+        (pair->code == 0 && !strcmp(pair->value.s, "ENDSEC"))) { \
+      dxf_free_pair(pair); \
+      return what; \
+    } \
   }
 
-static int dxf_expect_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
+static int dxf_expect_code(Bit_Chain *restrict dat, Dxf_Pair *restrict pair, int code)
 {
   while (pair->code != code)
     {
@@ -948,7 +950,7 @@ static int dxf_expect_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 }
 
 static int
-dxf_header_read(Bit_Chain *dat, Dwg_Data* dwg)
+dxf_header_read(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables* _obj = &dwg->header_vars;
   Dwg_Object* obj = NULL;
@@ -978,7 +980,7 @@ dxf_header_read(Bit_Chain *dat, Dwg_Data* dwg)
 }
 
 static int
-dxf_classes_read (Bit_Chain *dat, Dwg_Data * dwg)
+dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   BITCODE_BL i;
   Dxf_Pair *pair = dxf_read_pair(dat);
