@@ -41,7 +41,7 @@ suffix (const char *filename, const char *ext);
 char *
 suffix (const char *filename, const char *ext)
 {
-  char *copy = strdup (filename);
+  char *copy = strdup (filename ? filename : "");
 #ifdef HAVE_BASENAME
   char *base = basename (copy);
 #else
