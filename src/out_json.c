@@ -87,16 +87,17 @@ char* alloca(size_t size) {
 #define FORMAT_RC "%d"
 #define VALUE(value,type,dxf) \
   fprintf(dat->fh, FORMAT_##type ",\n", value)
+#define VALUE_B(value,dxf)  VALUE(value, B, dxf)
 #define VALUE_RC(value,dxf) VALUE(value, RC, dxf)
 #define VALUE_RS(value,dxf) VALUE(value, RS, dxf)
 #define VALUE_RL(value,dxf) VALUE(value, RL, dxf)
 #define VALUE_RD(value,dxf) VALUE(value, RD, dxf)
-#define VALUE_2RD(nam,dxf) \
-    fprintf(dat->fh, "[ %f, %f ],\n", _obj->nam.x, _obj->nam.y)
-#define VALUE_2DD(nam,d1,d2,dxf) VALUE_2RD(nam,dxf)
-#define VALUE_3RD(nam,dxf) \
-  fprintf(dat->fh, "[ %f, %f, %f ],\n", _obj->nam.x, _obj->nam.y, _obj->nam.z)
-#define VALUE_3BD(nam,dxf) VALUE_3RD(nam,dxf)
+#define VALUE_2RD(pt,dxf) \
+    fprintf(dat->fh, "[ %f, %f ],\n", pt.x, pt.y)
+#define VALUE_2DD(pt,d1,d2,dxf) VALUE_2RD(pt,dxf)
+#define VALUE_3RD(pt,dxf) \
+  fprintf(dat->fh, "[ %f, %f, %f ],\n", pt.x, pt.y, pt.z)
+#define VALUE_3BD(pt,dxf) VALUE_3RD(pt,dxf)
 #define VALUE_TV(nam,dxf)
 
 #define FIELD(nam,type,dxf) \
@@ -260,12 +261,12 @@ char* alloca(size_t size) {
 #define SUB_FIELD_RL(o,nam,dxf)  SUB_FIELD(o, nam, RL, dxf)
 #define SUB_FIELD_BLL(o,nam,dxf) SUB_FIELD(o, nam, BLL, dxf)
 #define SUB_FIELD_RLL(o,nam,dxf) SUB_FIELD(o, nam, RLL, dxf)
-#define SUB_FIELD_3BD_inl(o,nam,dxf) KEY(nam); VALUE_3RD(o, dxf)
-#define SUB_FIELD_2BD_1(o,nam,dxf) KEY(nam); VALUE_2RD(o.nam, dxf)
-#define SUB_FIELD_2RD(o,nam,dxf)   KEY(nam); VALUE_2RD(o.nam, dxf)
-#define SUB_FIELD_3RD(o,nam,dxf)   KEY(nam); VALUE_3RD(o.nam, dxf)
-#define SUB_FIELD_3BD(o,nam,dxf)   KEY(nam); VALUE_3RD(o.nam, dxf)
-#define SUB_FIELD_3DPOINT(o,nam,dxf) KEY(nam); VALUE_3RD(o.nam, dxf)
+#define SUB_FIELD_3BD_inl(o,nam,dxf) KEY(nam); VALUE_3RD(_obj->o, dxf)
+#define SUB_FIELD_2BD_1(o,nam,dxf) KEY(nam); VALUE_2RD(_obj->o.nam, dxf)
+#define SUB_FIELD_2RD(o,nam,dxf)   KEY(nam); VALUE_2RD(_obj->o.nam, dxf)
+#define SUB_FIELD_3RD(o,nam,dxf)   KEY(nam); VALUE_3RD(_obj->o.nam, dxf)
+#define SUB_FIELD_3BD(o,nam,dxf)   KEY(nam); VALUE_3RD(_obj->o.nam, dxf)
+#define SUB_FIELD_3DPOINT(o,nam,dxf) KEY(nam); VALUE_3RD(_obj->o.nam, dxf)
 
 #define FIELD_CMC(color,dxf1,dxf2) { \
   if (dat->version >= R_2004) { \
@@ -334,17 +335,16 @@ char* alloca(size_t size) {
   KEY(nam); ARRAY;\
   for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
-      PREFIX VALUE_2RD(nam[vcount], dxf); \
+      VALUE_2RD(FIELD_VALUE(nam[vcount]), dxf); \
     }\
   if (_obj->size) NOCOMMA;\
   ENDARRAY;
 
 #define FIELD_2DD_VECTOR(nam, size, dxf)\
   KEY(nam); ARRAY;\
-  PREFIX VALUE_2RD(nam[0], 0);\
-  for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)\
+  for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
-      PREFIX VALUE_2DD(nam[vcount], FIELD_VALUE(nam[vcount - 1].x), FIELD_VALUE(nam[vcount - 1].y), dxf);\
+      PREFIX VALUE_2RD(_obj->nam[vcount], dxf); \
     }\
   if (_obj->size) NOCOMMA;\
   ENDARRAY;
@@ -353,7 +353,7 @@ char* alloca(size_t size) {
   KEY(nam); ARRAY;\
   for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
-      PREFIX VALUE_3BD(nam[vcount], dxf);\
+      PREFIX VALUE_3BD(FIELD_VALUE(nam[vcount]), dxf);\
     }\
   if (_obj->size) NOCOMMA;\
   ENDARRAY;

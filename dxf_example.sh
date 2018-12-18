@@ -9,15 +9,15 @@ for f in test/test-data/Drawing_2*.dwg \
          test/test-data/example_2000.dwg
 do
     echo
-    echo programs/dwg2dxf $f
-    programs/dwg2dxf $f
+    echo programs/dwg2dxf -v0 $f
+    programs/dwg2dxf -v0 $f
 done
 
 for d in 2000 2004 2007 2010 2013 2018; do
     for f in test/test-data/$d/*.dwg; do
         b=`basename $f .dwg`
         echo
-        echo programs/dwg2dxf -v1 -o ${b}_${d}.dxf $f
-        programs/dwg2dxf -v1 -o ${b}_${d}.dxf $f
+        echo programs/dwg2dxf -v0 -o ${b}_${d}.dxf $f
+        programs/dwg2dxf -v0 -o ${b}_${d}.dxf $f
     done
 done

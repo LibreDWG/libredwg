@@ -51,6 +51,9 @@
 #ifndef VALUE_HANDLE
 # define VALUE_HANDLE(value, handle_code, dxf)
 #endif
+#ifndef VALUE_B
+# define VALUE_B(value, dxf)
+#endif
 #ifndef VALUE_TV
 # define VALUE_TV(value, dxf)
 #endif

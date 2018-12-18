@@ -762,12 +762,24 @@ DWG_ENTITY(POLYLINE_2D)
   }
   SINCE (R_13)
   {
-    FIELD_BS (flag, 70);
-    FIELD_BS (curve_type, 75);
+    DXF { // i.e. has_attrib
+      KEY(has_vertex); VALUE_B (1, 66);
+    }
+    FIELD_BS (flag, 70);       // skip on dxf if 0
+    FIELD_BS (curve_type, 75); // skip on dxf if 0
     FIELD_BD (start_width, 40);
     FIELD_BD (end_width, 41);
-    FIELD_BT (thickness, 39);
-    FIELD_BD (elevation, 30);
+    DECODER_OR_ENCODER {
+      FIELD_BT (thickness, 39);
+      FIELD_BD (elevation, 30);
+    }
+    DXF {
+      BITCODE_3RD pt = { 0.0, 0.0, 0.0 };
+      pt.z = FIELD_VALUE(elevation);
+      if (FIELD_VALUE(thickness != 0.0))
+        FIELD_BT (thickness, 39);
+      KEY(elevation); VALUE_3BD (pt, 10);
+    }
     FIELD_BE (extrusion, 210);
 
     SINCE(R_2004) {

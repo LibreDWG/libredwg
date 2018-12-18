@@ -252,7 +252,6 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 #define HEADER_BD(nam,dxf)  HEADER_9(nam); FIELD_BD(nam, dxf)
 #define HEADER_BL(nam,dxf)  HEADER_9(nam); FIELDG(nam, BL, dxf)
 
-//#define VALUE_B(value,dxf)   VALUE(value, RC, dxf)
 #define VALUE_BB(value,dxf)  VALUE(value, RC, dxf)
 #define VALUE_3B(value,dxf)  VALUE(value, RC, dxf)
 #define VALUE_BS(value,dxf)  VALUE(value, RS, dxf)
@@ -299,7 +298,13 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
     else                             { VALUE_TV(value, dxf); } }
 #define FIELD_BT(nam,dxf)     FIELDG(nam, BT, dxf);
 #define FIELD_4BITS(nam,dxf)  FIELDG(nam,4BITS,dxf)
-#define FIELD_BE(nam,dxf)     FIELD_3RD(nam,dxf)
+#define FIELD_BE(nam,dxf) { \
+  if (!(_obj->nam.x == 0.0 \
+      && _obj->nam.y == 0.0 \
+      && _obj->nam.z == 1.0)) \
+  FIELD_3RD(nam,dxf) \
+}
+
 #define FIELD_DD(nam, _default, dxf) FIELD_BD(nam, dxf)
 #define FIELD_2DD(nam, d1, d2, dxf) { FIELD_DD(nam.x, d1, dxf); FIELD_DD(nam.y, d2, dxf+10); }
 #define FIELD_3DD(nam, def, dxf) { \

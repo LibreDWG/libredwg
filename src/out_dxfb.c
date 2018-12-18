@@ -287,7 +287,12 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 #define FIELD_MS(nam,dxf)    FIELD_RS(nam,dxf)
 #define FIELD_BT(nam,dxf)    FIELD_BD(nam, dxf);
 #define FIELD_4BITS(nam,dxf) FIELD_RC(nam, dxf)
-#define FIELD_BE(nam,dxf)    FIELD_3RD(nam,dxf)
+#define FIELD_BE(nam,dxf) { \
+  if (!(_obj->nam.x == 0.0 \
+      && _obj->nam.y == 0.0 \
+      && _obj->nam.z == 1.0)) \
+  FIELD_3RD(nam,dxf) \
+}
 #define FIELD_DD(nam, _default, dxf) FIELD_RD(nam,dxf)
 #define FIELD_2DD(nam, d1, d2, dxf) { FIELD_DD(nam.x, d1, dxf); FIELD_DD(nam.y, d2, dxf+10); }
 #define FIELD_3DD(nam, def, dxf) { \
