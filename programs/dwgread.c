@@ -151,7 +151,7 @@ main(int argc, char *argv[])
         break;
       case 'o':
         outfile = optarg;
-        if (!fmt)
+        if (!fmt && outfile != NULL)
           {
 #ifndef DISABLE_DXF
             if (strstr(outfile, ".json") || strstr(outfile, ".JSON"))
