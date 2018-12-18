@@ -1522,7 +1522,7 @@ read_R2004_section_map(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dwg->header.section = 0;
 
   // decompressed data
-  decomp = (BITCODE_RC *)calloc(decomp_data_size+1024, sizeof(char));
+  decomp = (BITCODE_RC *)calloc(decomp_data_size+1024, sizeof(BITCODE_RC));
   if (!decomp)
     {
       LOG_ERROR("Out of memory");
@@ -1615,7 +1615,7 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   uint64_t start_offset;
   int error;
 
-  decomp = (BITCODE_RC *)calloc(decomp_data_size+1024, 1);
+  decomp = (BITCODE_RC *)calloc(decomp_data_size+1024, sizeof(BITCODE_RC));
   if (!decomp)
     {
       LOG_ERROR("Out of memory");
@@ -1831,7 +1831,7 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *restrict dwg,
       return DWG_ERR_INVALIDDWG;
     }
 
-  decomp = (BITCODE_RC *)calloc(max_decomp_size, sizeof(char));
+  decomp = (BITCODE_RC *)calloc(max_decomp_size, sizeof(BITCODE_RC));
   if (!decomp)
     {
       LOG_ERROR("Out of memory with %u sections", info->num_sections);
