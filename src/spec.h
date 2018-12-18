@@ -19,6 +19,7 @@
 #define DECODER if (0)
 #define ENCODER if (0)
 #define PRINT   if (0)
+#define DECODER_OR_ENCODER if (0)
 #define DXF_OR_PRINT if (0)
 #define DXF     if (0)
 #define JSON    if (0)
@@ -64,6 +65,9 @@
 #endif
 #ifndef VALUE_BL
 # define VALUE_BL(value, dxf)
+#endif
+#ifndef KEY
+# define KEY(nam)
 #endif
 // sub fields
 #ifndef FIELDG
@@ -136,6 +140,8 @@
 #undef IF_IS_ENCODER
 #define IF_IS_ENCODER 1
 #define ENCODER if (1)
+#undef DECODER_OR_ENCODER
+#define DECODER_OR_ENCODER if (1)
 // when writing, check also rewriting from an earlier version and fill in a default then
 #undef IF_ENCODE_FROM_EARLIER
 #undef IF_ENCODE_FROM_PRE_R13
@@ -151,8 +157,10 @@
 #ifdef IS_DECODER
 #undef DECODER
 #undef IF_IS_DECODER
+#undef DECODER_OR_ENCODER
 #define IF_IS_DECODER 1
 #define DECODER if (1)
+#define DECODER_OR_ENCODER if (1)
 #undef SET_PARENT
 #undef SET_PARENT_OBJ
 #undef SET_PARENT_FIELD

@@ -4783,11 +4783,12 @@ dwg_ent_has_edge_visualstyle(dwg_obj_ent *restrict ent,
 
 EXPORT BITCODE_BS
 dwg_ent_get_invisible(const dwg_obj_ent *restrict ent,
-                          int *restrict error);
+                      int *restrict error);
 
+/* See dxf_cvt_lweight() for the mm value */
 EXPORT BITCODE_RC
-dwg_ent_get_lineweight(const dwg_obj_ent *restrict ent,
-                          int *restrict error); //r2000+
+dwg_ent_get_linewt(const dwg_obj_ent *restrict ent,
+                   int *restrict error); //r2000+
 
 EXPORT dwg_object_ref*
 dwg_ent_get_subentity(const dwg_obj_ent *restrict ent,

@@ -3,6 +3,7 @@
 
 xmlChar *spointprepare (double x, double y, double z);
 xmlChar *doubletochar (double x);
+xmlChar *inttochar (int x);
 xmlChar *spointprepare2 (double x, double y);
 xmlChar *doubletohex (double handle);
 
@@ -54,6 +55,28 @@ doubletochar (double x)
   result = malloc (50 * sizeof (xmlChar));
   n = sprintf ((char*)result, "%.4f", x);
 
+  if (n < 0)
+    {
+      strcpy ((char*)result, ""); /* Return empty string on error */
+    }
+
+  return result;
+}
+
+/*
+ * This functions coverts int format in char to be emitted in the XML
+ *
+ * @return char* Return the converted double in string. Return empty string if error
+ */
+xmlChar *
+inttochar (int x)
+{
+  xmlChar *result;
+  int n;
+
+  /* Allocate memory for the string */
+  result = malloc (16 * sizeof (xmlChar));
+  n = sprintf ((char*)result, "%d", x);
   if (n < 0)
     {
       strcpy ((char*)result, ""); /* Return empty string on error */

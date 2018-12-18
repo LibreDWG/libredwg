@@ -318,14 +318,9 @@
   HEADER_VALUE (MEASUREMENT, RC, 70,
                 dwg->header.num_sections > SECTION_MEASUREMENT_R13 ? 1 : 0);
   SINCE(R_2000) {
-    // See https://sourceforge.net/p/libdwg/tickets/7/
-    const int celweights[] = {0, 5, 9, 13, 15, 18, 20, 25, 30, 35,
-                              40, 50, 53, 60, 70, 80, 90, 100, 106,
-                              120, 140, 158, 200, 211, /*??:*/0,0,0,0,0,
-                              /*29:*/-1, -2, -3};
     PRINT {
       HEADER_9(CELWEIGHT);
-      VALUE(celweights[_obj->CELWEIGHT % 32], RC, 370);
+      VALUE(dxf_cvt_lweight(_obj->CELWEIGHT), RCs, 370);
     }
     ENCODER {
       // TODO reverse lookup

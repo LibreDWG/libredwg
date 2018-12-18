@@ -104,7 +104,7 @@ common_entity_attrs (xmlNodePtr node, const Dwg_Object *obj)
   buf = doubletochar (ent->linetype_scale);
   newXMLProp ("LinetypeScale", buf);
 
-  buf = doubletochar (ent->lineweight);
+  buf = inttochar (dxf_cvt_lweight(ent->linewt));
   newXMLProp ("Lineweight", buf);
 
   name = dwg_ref_get_table_name(ent->material, &error);
@@ -596,7 +596,7 @@ add_spline (xmlNodePtr rootnode, const Dwg_Object *obj)
   newXMLProp ("Degree", dtostring);
 
   buf = spointprepare (spline->end_tan_vec.x, spline->end_tan_vec.y,
-                                spline->end_tan_vec.z);
+                       spline->end_tan_vec.z);
   newXMLProp ("EndTangent", buf);
 
   dtostring = doubletochar (spline->fit_tol);
@@ -623,8 +623,8 @@ add_text (xmlNodePtr rootnode, const Dwg_Object *obj)
   xmlChar *buf, *dtostring;
   xmlNodePtr node = newXMLEntity (rootnode);
 
-  newXMLcProp ("type", "IAcadMText");
-  newXMLcProp ("desc", "IAcadMText: AutoCAD MText Interface");
+  newXMLcProp ("type", "IAcadText");
+  newXMLcProp ("desc", "IAcadText: AutoCAD Text Interface");
 
   dtostring = doubletochar (text->height);
   newXMLProp ("Height", dtostring);

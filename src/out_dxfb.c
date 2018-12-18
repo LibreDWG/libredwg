@@ -195,6 +195,7 @@ dxfb_common_entity_handle_data(Bit_Chain *restrict dat,
 #define VALUE_B(value,dxf) VALUE_RC(value,dxf)
 #define VALUE_BB(value,dxf) VALUE_RC(value,dxf)
 #define VALUE_3B(value,dxf) VALUE_RC(value,dxf)
+#define VALUE_RCs(value,dxf) VALUE_RC(value,dxf)
 #define VALUE_BS(value,dxf) VALUE_RS(value,dxf)
 #define VALUE_BL(value,dxf) VALUE_RL(value,dxf)
 #define VALUE_BD(value,dxf) VALUE_RD(value,dxf)

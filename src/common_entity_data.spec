@@ -185,7 +185,11 @@
   FIELD_BS (invisible, 60); //bit 0: 0 visible, 1 invisible
 
   SINCE(R_2000)
-    {
-      FIELD_RCu (lineweight, 370);
+    DECODER_OR_ENCODER {
+      FIELD_RC (linewt, 370);
+    }
+    DXF_OR_PRINT {
+      int lw = dxf_cvt_lweight(FIELD_VALUE(linewt));
+      KEY(linewt); VALUE_RC((signed char)lw, 370);
     }
 

@@ -2350,17 +2350,18 @@ DWG_OBJECT(LAYER)
     int flag = FIELD_VALUE(flag);
     FIELD_BS (flag, 0); // 70,290,370
     // contains frozen (1 bit), on (2 bit), frozen by default in new viewports (4 bit),
-    // locked (8 bit), plotting flag (16 bit), and lineweight (mask with 0x03E0)
+    // locked (8 bit), plotting flag (16 bit), and linewt (mask with 0x03E0)
     //FIELD_VALUE(flag) = (BITCODE_RC)FIELD_VALUE(flag_s) & 0xff;
     FIELD_VALUE(frozen) = flag & 1;
     FIELD_VALUE(on) = flag & 2;
     FIELD_VALUE(frozen_in_new) = flag & 4;
     FIELD_VALUE(locked) = flag & 8;
     FIELD_VALUE(plotflag) = flag & (1<<15) ? 1 : 0;
-    FIELD_VALUE(linewidth) = (flag & 0x03E0) >> 5;
+    FIELD_VALUE(linewt) = (flag & 0x03E0) >> 5;
     DXF_OR_PRINT {
+      int lw = dxf_cvt_lweight(FIELD_VALUE(linewt));
       FIELD_B(plotflag, 290);
-      FIELD_RS(linewidth, 370);
+      KEY(linewt); VALUE_RC((signed char)lw, 370);
     }
   }
   FIELD_CMC (color, 62,420);
@@ -7055,4 +7056,3 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
-

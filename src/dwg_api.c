@@ -18635,10 +18635,10 @@ dwg_ent_get_invisible(const dwg_obj_ent *restrict ent,
 }
 
 EXPORT BITCODE_RC
-dwg_ent_get_lineweight(const dwg_obj_ent *restrict ent,
-                          int *restrict error) //r2000+
+dwg_ent_get_linewt(const dwg_obj_ent *restrict ent,
+                   int *restrict error) //r2000+
 {
-  _BODY_FIELD(ent, lineweight);
+  _BODY_FIELD(ent, linewt);
 }
 
 //TODO: dwg_object_ref* or dwg_handle*, not handle
