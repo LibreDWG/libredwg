@@ -2933,11 +2933,20 @@ dwg_decode_handleref(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 
   // We receive a null obj when we are reading
   // handles in the header variables section
-  if (!obj && ref->handleref.value)
+  if (!obj)
     {
-      ref->absolute_ref = ref->handleref.value;
-      ref->obj = NULL;
-      return ref;
+      if (ref->handleref.value)
+        {
+          ref->absolute_ref = ref->handleref.value;
+          ref->obj = NULL;
+          return ref;
+        }
+      if (ref->handleref.code >= 6)
+        {
+          LOG_ERROR("Empty obj argument for handleref code %d", ref->handleref.code);
+          free(ref);
+          return NULL;
+        }
     }
 
   /*
