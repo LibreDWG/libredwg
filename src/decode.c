@@ -1748,6 +1748,12 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           ptr -= 64;
           ptr += 16;
 
+          if (!info->sections)
+            {
+              free(decomp);
+              LOG_ERROR("Empty info->sections %d", info->num_sections);
+              return error | DWG_ERR_OUTOFMEM;
+            }
           sec = find_section(dwg, section_number);
           if (section_number < dwg->header.num_infos)
             info->sections[section_number] = sec;
