@@ -769,8 +769,26 @@ static int dwg_decode_##token##_private (Bit_Chain *dat, Bit_Chain *str_dat, \
   } else { \
     error = decode_entity_preR13(dat, obj, _ent); \
   } \
-  if (error >= DWG_ERR_CRITICAL) return error;
-
+  if (error >= DWG_ERR_CRITICAL) return error; \
+  if (!strcmp(#token, "POLYLINE_2D") || \
+      !strcmp(#token, "POLYLINE_3D") || \
+      !strcmp(#token, "POLYLINE_PFACE") || \
+      !strcmp(#token, "POLYLINE_MESH") || \
+      !strcmp(#token, "BLOCK")) { \
+    dwg->old_parent = dwg->cur_parent; \
+    dwg->cur_parent = obj; \
+  } \
+  if (!strcmp(#token, "VERTEX_2D") || \
+      !strcmp(#token, "VERTEX_3D") || \
+      !strcmp(#token, "ATTRIB") || \
+      !strcmp(#token, "ATTDEF")) { \
+    _ent->parent = dwg->cur_parent; \
+  } \
+  if (!strcmp(#token, "ENDBLK") || \
+      !strcmp(#token, "SEQEND")) { \
+    _ent->parent = dwg->cur_parent; \
+    dwg->cur_parent = dwg->old_parent; \
+  }
 
 // Does size include the CRC?
 #define DWG_ENTITY_END \

@@ -5137,6 +5137,7 @@ typedef struct _dwg_object_entity
   /* preR13 in the obj: eed, elevation/pt.z, thickness, paper */
 
   /* Common Entity Handle Data */
+  struct _dwg_object *parent; /*!< mspace, pspace or parent of subentity */
   BITCODE_H subentity;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
@@ -5557,8 +5558,10 @@ typedef struct _dwg_struct
   struct _inthash *object_map;   /*!< map of all handles */
   int dirty_refs; /* 1 if we added an entity, and invalidated all the internal ref->obj's */
 
-  Dwg_Object * mspace_block;
-  Dwg_Object * pspace_block;
+  Dwg_Object *mspace_block;
+  Dwg_Object *pspace_block;
+  Dwg_Object *cur_parent;       /* cur mspace, pspace or parent of subentity */
+  Dwg_Object *old_parent;       /* cur mspace, pspace */
   /* Those TABLES might be empty with num_entries=0 */
   Dwg_Object_BLOCK_CONTROL      block_control;
   Dwg_Object_LAYER_CONTROL      layer_control;

@@ -525,7 +525,12 @@ dwg_dxf_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
     fprintf(dat->fh, "%3i\r\n%lX\r\n", 5, obj->handle.value); \
   } \
   SINCE(R_13) { \
-    VALUE_HANDLE (obj->parent->header_vars.BLOCK_RECORD_MSPACE, 5, 330); \
+    /* parent: mspace block_record or polyline for vertex, block until blkend */ \
+    if (_ent->parent) { \
+      fprintf(dat->fh, "%3i\r\n%lX\r\n", 330, _ent->parent->handle.value); \
+    } else { \
+      VALUE_HANDLE (obj->parent->header_vars.BLOCK_RECORD_MSPACE, 5, 330); \
+    } \
     error |= dxf_common_entity_handle_data(dat, obj); \
   }
 

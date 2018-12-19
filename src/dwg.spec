@@ -488,8 +488,13 @@ DWG_ENTITY(INSERT)
         }
     }
 
-  if (FIELD_VALUE(has_attribs))
+  if (FIELD_VALUE(has_attribs)) {
+    DECODER {
+      dwg->old_parent = dwg->cur_parent;
+      dwg->cur_parent = (Dwg_Object*)obj;
+    }
     FIELD_HANDLE (seqend, 3, 0);
+  }
 
 DWG_ENTITY_END
 
@@ -613,7 +618,13 @@ DWG_ENTITY(MINSERT)
     }
 
   if (FIELD_VALUE(has_attribs))
-    FIELD_HANDLE (seqend, 3, 0);
+    {
+      DECODER {
+        dwg->old_parent = dwg->cur_parent;
+        dwg->cur_parent = (Dwg_Object*)obj;
+      }
+      FIELD_HANDLE (seqend, 3, 0);
+    }
 
 DWG_ENTITY_END
 
@@ -702,7 +713,7 @@ DWG_ENTITY_END
 DWG_ENTITY(VERTEX_3D)
 
   SUBCLASS (AcDbVertex)
-  SUBCLASS (AcDb3dPolylineVertex)
+  SUBCLASS (AcDb3dPolylineVertex) //SUBCLASS (AcDb3dVertex)?
   FIELD_RC (flag, 0);
   FIELD_3BD (point, 10);
   DXF { FIELD_RC (flag, 70); }
@@ -5042,8 +5053,13 @@ DWG_ENTITY(TABLE)
       HANDLE_VECTOR (attribs, num_owned, 4, 0)
     }
 
-  if (FIELD_VALUE(has_attribs))
+  if (FIELD_VALUE(has_attribs)) {
     FIELD_HANDLE (seqend, 3, 0);
+    DECODER {
+      dwg->old_parent = dwg->cur_parent;
+      dwg->cur_parent = (Dwg_Object*)obj;
+    }
+  }
 
   FIELD_HANDLE (table_style_id, 5, 342);
 
