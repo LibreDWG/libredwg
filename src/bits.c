@@ -1314,9 +1314,13 @@ bit_convert_TU(BITCODE_TU restrict wstr)
   BITCODE_TU tmp = wstr;
   char *str;
   int i, len = 0;
-  uint16_t c;
-  while (*tmp++) {
+  uint16_t c = 0;
+  while ((c = *tmp++)) {
     len++;
+    if (c >= 256)
+      len++;
+    if (c >= 0x800)
+      len++;
   }
   str = malloc(len+1);
   i = 0;
@@ -1325,24 +1329,24 @@ bit_convert_TU(BITCODE_TU restrict wstr)
       str[i++] = c & 0xff;
     }
     else if (c < 0x800) {
-      if (i+3 > len) {
+      /*if (i+3 > len) {
         str = realloc(str, i+3);
         len = i+2;
-      }
+      }*/
       str[i+1] = (c & 0x3f) | 0x80;
-      str[i] = (c >> 6) & 0xc0;
+      str[i]   = (c >> 6) | 0xc0;
       i += 2;
     }
     else { /* windows ucs-2 has no D800-DC00 surrogate pairs. go straight up */
-      if (i+3 > len) {
+      /*if (i+3 > len) {
         str = realloc(str, i+4);
         len = i+3;
-      }
-      str[i+3] = (c & 0x3f) | 0x80;
-      c >>= 6;
+      }*/
       str[i+2] = (c & 0x3f) | 0x80;
       c >>= 6;
-      str[i] = c & 0xe0;
+      str[i+1] = (c & 0x3f) | 0x80;
+      c >>= 6;
+      str[i] = c | 0xe0;
       i += 3;
     }
   }
