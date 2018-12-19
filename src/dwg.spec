@@ -996,7 +996,13 @@ DWG_ENTITY_END
         if (FIELD_VALUE(class_version) > 10) \
           return DWG_ERR_VALUEOUTOFBOUNDS; \
       } \
-    FIELD_3BD (extrusion, 210); \
+    DXF { \
+      FIELD_BE (extrusion, 210); \
+      FIELD_TV (blockname, 2); \
+      FIELD_3BD (def_pt, 10); \
+    } else { \
+      FIELD_3BD (extrusion, 210); \
+    } \
     FIELD_2RD (text_midpt, 11); \
     FIELD_BD (elevation, 31); \
     FIELD_RC (flag1, 70); \
@@ -1027,7 +1033,9 @@ DWG_ENTITY(DIMENSION_ORDINATE)
   SUBCLASS (AcDbDimension)
   DIMENSION_COMMON_DECODE;
   SUBCLASS (AcDbOrdinateDimension)
-  FIELD_3BD (ucsorigin_pt, 10);
+  DECODER_OR_ENCODER {
+    FIELD_3BD (def_pt, 10);
+  }
   FIELD_3BD (feature_location_pt, 13);
   FIELD_3BD (leader_endpt, 14);
   FIELD_RC (flag2, 70);
@@ -1072,7 +1080,9 @@ DWG_ENTITY(DIMENSION_ALIGNED)
   SUBCLASS (AcDbAlignedDimension)
   FIELD_3BD (_13_pt, 13);
   FIELD_3BD (_14_pt, 14);
-  FIELD_3BD (def_pt, 10);
+  DECODER_OR_ENCODER {
+    FIELD_3BD (def_pt, 10);
+  }
   FIELD_BD (ext_line_rotation, 52);
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -1090,7 +1100,9 @@ DWG_ENTITY(DIMENSION_ANG3PT)
   SUBCLASS (AcDbDimension)
   DIMENSION_COMMON_DECODE;
   SUBCLASS (AcDb3PointAngularDimension)
-  FIELD_3BD (def_pt, 10);
+  DECODER_OR_ENCODER {
+    FIELD_3BD (def_pt, 10);
+  }
   FIELD_3BD (_13_pt, 13);
   FIELD_3BD (_14_pt, 14);
   FIELD_3BD (first_arc_pt, 15);
@@ -1114,7 +1126,9 @@ DWG_ENTITY(DIMENSION_ANG2LN)
   FIELD_3BD (_13_pt, 13);
   FIELD_3BD (_14_pt, 14);
   FIELD_3BD (first_arc_pt, 15);
-  FIELD_3BD (def_pt, 10);
+  DECODER_OR_ENCODER {
+    FIELD_3BD (def_pt, 10);
+  }
 
   COMMON_ENTITY_HANDLE_DATA;
   UNTIL(R_2007)
@@ -1131,7 +1145,9 @@ DWG_ENTITY(DIMENSION_RADIUS)
   SUBCLASS (AcDbDimension)
   DIMENSION_COMMON_DECODE;
   SUBCLASS (AcDbRadialDimension)
-  FIELD_3BD (def_pt, 10);
+  DECODER_OR_ENCODER {
+    FIELD_3BD (def_pt, 10);
+  }
   FIELD_3BD (first_arc_pt, 15);
   FIELD_BD (leader_len, 40);
 
@@ -1151,7 +1167,9 @@ DWG_ENTITY(DIMENSION_DIAMETER)
   DIMENSION_COMMON_DECODE;
   SUBCLASS (AcDbDiametricDimension)
   FIELD_3BD (first_arc_pt, 15);
-  FIELD_3BD (def_pt, 10);
+  DECODER_OR_ENCODER {
+    FIELD_3BD (def_pt, 10);
+  }
   FIELD_BD (leader_len, 40);
 
   COMMON_ENTITY_HANDLE_DATA;

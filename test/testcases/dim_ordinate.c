@@ -16,8 +16,8 @@ low_level_process (dwg_object * obj)
           dim->extrusion.x, dim->extrusion.y, dim->extrusion.z);
   printf ("ins_scale of dim_ordinate : x = %f, y = %f, z = %f\n",
           dim->ins_scale.x, dim->ins_scale.y, dim->ins_scale.z);
-  printf ("ucsorigin_pt of dim_ordinate : x = %f, y = %f, z = %f\n",
-          dim->ucsorigin_pt.x, dim->ucsorigin_pt.y, dim->ucsorigin_pt.z);
+  printf ("def_pt of dim_ordinate : x = %f, y = %f, z = %f\n",
+          dim->def_pt.x, dim->def_pt.y, dim->def_pt.z);
   printf ("feature_location_pt of dim_ordinate : x = %f, y = %f, z = %f\n",
           dim->feature_location_pt.x, dim->feature_location_pt.y,
           dim->feature_location_pt.z);
@@ -47,11 +47,11 @@ api_process (dwg_object * obj)
   dwg_ent_dim_ordinate *dim_ordinate = dwg_object_to_DIMENSION_ORDINATE (obj);
   dwg_ent_dim *dim = dwg_object_to_DIMENSION(obj);
 
-  dwg_ent_dim_ordinate_get_ucsorigin_pt (dim_ordinate, &pt10, &error);
-  if (!error  && pt10.x == dim_ordinate->ucsorigin_pt.x && pt10.y == dim_ordinate->ucsorigin_pt.y && pt10.z == dim_ordinate->ucsorigin_pt.z)
+  dwg_ent_dim_ordinate_get_def_pt (dim_ordinate, &pt10, &error);
+  if (!error  && pt10.x == dim_ordinate->def_pt.x && pt10.y == dim_ordinate->def_pt.y && pt10.z == dim_ordinate->def_pt.z)
     pass ("Working Properly");
   else
-    fail ("error in reading ucsorigin_pt");
+    fail ("error in reading def_pt");
 
   dwg_ent_dim_ordinate_get_feature_location_pt (dim_ordinate, &pt13, &error);
   if (!error  && pt13.x == dim_ordinate->feature_location_pt.x && pt13.y == dim_ordinate->feature_location_pt.y && pt13.z == dim_ordinate->feature_location_pt.z)

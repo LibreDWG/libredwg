@@ -1893,14 +1893,14 @@ dwg_ent_dim_get_clone_ins_pt(const dwg_ent_dim *restrict dim,
 
 
 EXPORT void
-dwg_ent_dim_ordinate_set_ucsorigin_pt(dwg_ent_dim_ordinate *ord,
-                                      const dwg_point_3d *restrict point,
-                                      int *restrict error);
+dwg_ent_dim_ordinate_set_def_pt(dwg_ent_dim_ordinate *ord,
+                                const dwg_point_3d *restrict point,
+                                int *restrict error);
 
 EXPORT void
-dwg_ent_dim_ordinate_get_ucsorigin_pt(const dwg_ent_dim_ordinate *restrict ord,
-                                      dwg_point_3d *restrict point,
-                                      int *restrict error);
+dwg_ent_dim_ordinate_get_def_pt(const dwg_ent_dim_ordinate *restrict ord,
+                                dwg_point_3d *restrict point,
+                                int *restrict error);
 
 EXPORT void
 dwg_ent_dim_ordinate_set_feature_location_pt(dwg_ent_dim_ordinate *restrict ord,

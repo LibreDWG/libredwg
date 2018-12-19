@@ -179,6 +179,7 @@
 #undef  DXF_OR_PRINT
 #define DXF_OR_PRINT if (1)
 #endif
+
 #if defined(IS_DXF)
 #undef  DXF
 #define DXF   if (1)

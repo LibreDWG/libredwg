@@ -6335,23 +6335,23 @@ dwg_ent_dim_ordinate_set_flag2(dwg_ent_dim_ordinate *restrict dim,
 }
 
 /** Sets the 10 ucsorigin point
-\code Usage: dwg_ent_dim_ordinate_set_ucsorigin_pt(dim, &point, &error);
+\code Usage: dwg_ent_dim_ordinate_set_def_pt(dim, &point, &error);
 \endcode
 \param[in] dim_ordinate dwg_ent_dim_ordinate*
 \param[out] dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_ordinate_set_ucsorigin_pt(dwg_ent_dim_ordinate *restrict dim,
+dwg_ent_dim_ordinate_set_def_pt(dwg_ent_dim_ordinate *restrict dim,
                                       const dwg_point_3d *restrict point,
                                       int *restrict error)
 {
   if (dim && point)
     {
       *error = 0;
-      dim->ucsorigin_pt.x = point->x;
-      dim->ucsorigin_pt.y = point->y;
-      dim->ucsorigin_pt.z = point->z;
+      dim->def_pt.x = point->x;
+      dim->def_pt.y = point->y;
+      dim->def_pt.z = point->z;
     }
   else
     {
@@ -6360,24 +6360,24 @@ dwg_ent_dim_ordinate_set_ucsorigin_pt(dwg_ent_dim_ordinate *restrict dim,
     }
 }
 
-/** Returns the 10 ucsorigin point
-\code Usage: dwg_ent_dim_ordinate_get_ucsorigin_pt(dim, &point, &error);
+/** Returns the 10 def point (ucsorigin)
+\code Usage: dwg_ent_dim_ordinate_get_def_pt(dim, &point, &error);
 \endcode
 \param[in] dim_ordinate dwg_ent_dim_ordinate*
 \param[out] dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 void
-dwg_ent_dim_ordinate_get_ucsorigin_pt(const dwg_ent_dim_ordinate *restrict dim,
+dwg_ent_dim_ordinate_get_def_pt(const dwg_ent_dim_ordinate *restrict dim,
                                       dwg_point_3d *restrict point,
                                       int *restrict error)
 {
   if (dim && point)
     {
       *error = 0;
-      point->x = dim->ucsorigin_pt.x;
-      point->y = dim->ucsorigin_pt.y;
-      point->z = dim->ucsorigin_pt.z;
+      point->x = dim->def_pt.x;
+      point->y = dim->def_pt.y;
+      point->z = dim->def_pt.z;
     }
   else
     {

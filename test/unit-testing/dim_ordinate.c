@@ -22,9 +22,9 @@ low_level_process(dwg_object *obj)
   printf("ins_scale of dim_ordinate : x = %f, y = %f, z = %f\n",
           dim_ordinate->ins_scale.x, dim_ordinate->ins_scale.y,
           dim_ordinate->ins_scale.z);
-  printf("ucsorigin_pt of dim_ordinate : x = %f, y = %f, z = %f\n",
-          dim_ordinate->ucsorigin_pt.x, dim_ordinate->ucsorigin_pt.y,
-          dim_ordinate->ucsorigin_pt.z);
+  printf("def_pt of dim_ordinate : x = %f, y = %f, z = %f\n",
+          dim_ordinate->def_pt.x, dim_ordinate->def_pt.y,
+          dim_ordinate->def_pt.z);
   printf("feature_location_pt of dim_ordinate : x = %f, y = %f, z = %f\n",
           dim_ordinate->feature_location_pt.x, dim_ordinate->feature_location_pt.y,
           dim_ordinate->feature_location_pt.z);
@@ -107,9 +107,9 @@ api_process(dwg_object *obj)
   else
     printf("error in reading ins_scale \n");
 
-  dwg_ent_dim_ordinate_get_ucsorigin_pt(dim_ordinate, &pt10, &error);
+  dwg_ent_dim_ordinate_get_def_pt(dim_ordinate, &pt10, &error);
   if ( !error )
-    printf("ucsorigin_pt of dim_ordinate : x = %f, y = %f, z = %f\n",
+    printf("def_pt of dim_ordinate : x = %f, y = %f, z = %f\n",
            pt10.x, pt10.y, pt10.z);
   else
     printf("error in reading pt10 \n");
