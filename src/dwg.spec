@@ -638,7 +638,12 @@ DWG_ENTITY(VERTEX_2D)
   }
   SINCE(R_13)
   {
-    FIELD_RC (flag, 70);
+    DXF {
+      if (FIELD_VALUE(flag) != 0)
+        FIELD_RC (flag, 70);
+    } else {
+      FIELD_RC (flag, 70);
+    }
     FIELD_3BD (point, 10);
 
   /* Decoder and Encoder routines could be the same but then we
@@ -646,8 +651,10 @@ DWG_ENTITY(VERTEX_2D)
      the encoder routine with the compression technique described in
      the spec. --Juca */
     DXF_OR_PRINT {
-      FIELD_BD (start_width, 40);
-      FIELD_BD (end_width, 41);
+      if (FIELD_VALUE(start_width) != 0.0)
+        FIELD_BD (start_width, 40);
+      if (FIELD_VALUE(end_width) != 0.0)
+        FIELD_BD (end_width, 41);
     }
     DECODER
     {
@@ -765,11 +772,18 @@ DWG_ENTITY(POLYLINE_2D)
     DXF { // i.e. has_attrib
       KEY(has_vertex); VALUE_B (1, 66);
     }
-    FIELD_BS (flag, 70);       // skip on dxf if 0
-    FIELD_BS (curve_type, 75); // skip on dxf if 0
-    FIELD_BD (start_width, 40);
-    FIELD_BD (end_width, 41);
+    DXF {
+      if (FIELD_VALUE(flag) != 0)
+        FIELD_BS (flag, 70);
+      if (FIELD_VALUE(curve_type) != 0)
+        FIELD_BS (curve_type, 75);
+    } else {
+      FIELD_BS (flag, 70);
+      FIELD_BS (curve_type, 75);
+    }
     DECODER_OR_ENCODER {
+      FIELD_BD (start_width, 40);
+      FIELD_BD (end_width, 41);
       FIELD_BT (thickness, 39);
       FIELD_BD (elevation, 30);
     }
@@ -779,6 +793,8 @@ DWG_ENTITY(POLYLINE_2D)
       if (FIELD_VALUE(thickness != 0.0))
         FIELD_BT (thickness, 39);
       KEY(elevation); VALUE_3BD (pt, 10);
+      FIELD_BD (start_width, 40);
+      FIELD_BD (end_width, 41);
     }
     FIELD_BE (extrusion, 210);
 
