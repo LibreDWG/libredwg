@@ -158,7 +158,12 @@
   OTHER_VERSIONS
     FIELD_CMC(color, 62,420);
 
-  FIELD_BD (linetype_scale, 48);
+  DXF {
+    if (FIELD_VALUE(linetype_scale) != 1.0)
+      FIELD_BD (linetype_scale, 48);
+  } else {
+    FIELD_BD (linetype_scale, 48);
+  }
   SINCE(R_2000)
     {
       // 00 BYLAYER, 01 BYBLOCK, 10 CONTINUOUS, 11 ltype handle
@@ -182,14 +187,20 @@
       FIELD_B (has_edge_visualstyle, 0);
     }
 
-  FIELD_BS (invisible, 60); //bit 0: 0 visible, 1 invisible
+  DXF {
+    if (FIELD_VALUE(invisible))
+      FIELD_BS (invisible, 60);
+  } else {
+    FIELD_BS (invisible, 60); //bit 0: 0 visible, 1 invisible
+  }
 
-  SINCE(R_2000)
-    DECODER_OR_ENCODER {
+  SINCE(R_2000) {
+    DXF_OR_PRINT {
+      if (FIELD_VALUE(linewt) != 29) {
+        int lw = dxf_cvt_lweight(FIELD_VALUE(linewt));
+        KEY(linewt); VALUE_RC((signed char)lw, 370);
+      }
+    } else {
       FIELD_RC (linewt, 370);
     }
-    DXF_OR_PRINT {
-      int lw = dxf_cvt_lweight(FIELD_VALUE(linewt));
-      KEY(linewt); VALUE_RC((signed char)lw, 370);
-    }
-
+  }
