@@ -1554,6 +1554,26 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             }
         }
     }
+
+  /* more pspace blocks */
+  for (int i=0; i<_ctrl->num_entries; i++)
+    {
+      hdr = _ctrl->block_headers[i] ? _ctrl->block_headers[i]->obj : NULL;
+      if (hdr) {
+        obj = get_first_owned_block(hdr);
+        while (obj)
+          {
+            error |= dwg_dxf_object(dat, obj);
+            obj = get_next_owned_block(hdr, obj);
+            if (obj && obj->type == DWG_TYPE_ENDBLK)
+              {
+                error |= dwg_dxf_ENDBLK(dat, obj);
+                obj = NULL;
+              }
+          }
+      }
+    }
+
   ENDSEC();
   return error;
 }
