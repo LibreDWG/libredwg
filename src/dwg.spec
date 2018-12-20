@@ -490,8 +490,8 @@ DWG_ENTITY(INSERT)
 
   if (FIELD_VALUE(has_attribs)) {
     DECODER {
-      dwg->old_parent = dwg->cur_parent;
-      dwg->cur_parent = (Dwg_Object*)obj;
+      dwg->old_owner = dwg->cur_owner;
+      dwg->cur_owner = (Dwg_Object*)obj;
     }
     FIELD_HANDLE (seqend, 3, 0);
   }
@@ -620,8 +620,8 @@ DWG_ENTITY(MINSERT)
   if (FIELD_VALUE(has_attribs))
     {
       DECODER {
-        dwg->old_parent = dwg->cur_parent;
-        dwg->cur_parent = (Dwg_Object*)obj;
+        dwg->old_owner = dwg->cur_owner;
+        dwg->cur_owner = (Dwg_Object*)obj;
       }
       FIELD_HANDLE (seqend, 3, 0);
     }
@@ -5056,8 +5056,8 @@ DWG_ENTITY(TABLE)
   if (FIELD_VALUE(has_attribs)) {
     FIELD_HANDLE (seqend, 3, 0);
     DECODER {
-      dwg->old_parent = dwg->cur_parent;
-      dwg->cur_parent = (Dwg_Object*)obj;
+      dwg->old_owner = dwg->cur_owner;
+      dwg->cur_owner = (Dwg_Object*)obj;
     }
   }
 

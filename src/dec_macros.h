@@ -775,19 +775,25 @@ static int dwg_decode_##token##_private (Bit_Chain *dat, Bit_Chain *str_dat, \
       !strcmp(#token, "POLYLINE_PFACE") || \
       !strcmp(#token, "POLYLINE_MESH") || \
       !strcmp(#token, "BLOCK")) { \
-    dwg->old_parent = dwg->cur_parent; \
-    dwg->cur_parent = obj; \
+    dwg->old_owner = dwg->cur_owner; \
+    dwg->cur_owner = obj; \
   } \
   if (!strcmp(#token, "VERTEX_2D") || \
       !strcmp(#token, "VERTEX_3D") || \
       !strcmp(#token, "ATTRIB") || \
       !strcmp(#token, "ATTDEF")) { \
-    _ent->parent = dwg->cur_parent; \
+    _ent->owner = dwg->cur_owner; \
+  } \
+  if (_ent->owner) { \
+    LOG_TRACE("Entity owner: %d.%d.%lX [H 330]\n", \
+              _ent->owner->handle.code, \
+              _ent->owner->handle.size, \
+              _ent->owner->handle.value); \
   } \
   if (!strcmp(#token, "ENDBLK") || \
       !strcmp(#token, "SEQEND")) { \
-    _ent->parent = dwg->cur_parent; \
-    dwg->cur_parent = dwg->old_parent; \
+    _ent->owner = dwg->cur_owner; \
+    dwg->cur_owner = dwg->old_owner; \
   }
 
 // Does size include the CRC?
@@ -854,6 +860,5 @@ static int dwg_decode_##token##_private (Bit_Chain *dat, Bit_Chain *str_dat, \
   _obj = obj->tio.object->tio.token;\
   error = dwg_decode_object(dat, hdl_dat, str_dat, obj->tio.object); \
   if (error >= DWG_ERR_CRITICAL) return error;
-
 
 #define DWG_OBJECT_END DWG_ENTITY_END
