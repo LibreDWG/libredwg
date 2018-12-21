@@ -37,7 +37,7 @@ VALGRIND_SUPPRESSIONS = @VALGRIND_SUPPRESSIONS@
 VALGRIND_SUPPRESSIONS_FILE = @VALGRIND_SUPPRESSIONS_FILE@
 EXTRA_DIST = $(top_srcdir)/.version \
              README README-alpha \
-	     dxf_example.lsp dxf_example.sh test-dxf.sh \
+	     dxf-allcvt.lsp dxf-allcvt.sh test-dxf.sh \
 	     log.in logs-all-parallel.sh.in logs-all-serial.sh.in unknown.sh \
 	     build-aux/swig_python.patch \
 	     $(VALGRIND_SUPPRESSIONS_FILE)

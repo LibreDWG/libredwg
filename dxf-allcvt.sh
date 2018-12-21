@@ -1,8 +1,8 @@
 #!/bin/sh
+make -s
 make -s -j4 -C src && \
 make -s -j4 -C programs dwg2dxf && \
-  dsymutil programs/dwg2dxf && \
-  programs/dwg2dxf -m -o Drawing_2000_min.dxf test/test-data-2000/Drawing_2000.dwg
+  programs/dwg2dxf -m -o Drawing_2000_min.dxf test/test-data/Drawing_2000.dwg
 
 for f in test/test-data/Drawing_2*.dwg \
          test/test-data/sample_2*.dwg \
@@ -13,7 +13,7 @@ do
     programs/dwg2dxf -v0 $f
 done
 
-for d in 2000 2004 2007 2010 2013 2018; do
+for d in r14 2000 2004 2007 2010 2013 2018; do
     for f in test/test-data/$d/*.dwg; do
         b=`basename $f .dwg`
         echo

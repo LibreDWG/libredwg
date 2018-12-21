@@ -10,15 +10,17 @@
 ;*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 ;*****************************************************************************/
 ;
-;;; dxf_examples.lsp: DXFIN all generated dxf files
+;;; dxf-allcvt.lsp: DXFIN all generated dxf files
 ;;; first load a dxf from the root dir manually to set the DWGPREFIX path
 ;;; written by Reini Urban
 
-;;; Usage: (load (strcat (getvar "DWGPREFIX") "dxf_example.lsp"))
-;;;        DXF_EXAMPLE
+;;; Usage: ./dxf-allcvt.sh
+;;;        OPEN libredwg/Drawing_2000.dxf
+;;;        (load (strcat (getvar "DWGPREFIX") "dxf-allcvt.lsp"))
+;;;        DXF-ALLCVT
 (setvar "FILEDIA" 1)
 
-(defun C:dxf_example ()
+(defun C:dxf-allcvt ()
   (setvar "FILEDIA" 0)
   (setvar "CMDDIA" 1)
   (setvar "CMDECHO" 1)
