@@ -318,14 +318,19 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 #define FIELD_3BD(nam,dxf) {FIELD_BD(nam.x, dxf); FIELD_BD(nam.y, dxf+10); FIELD_BD(nam.z, dxf+20);}
 #define FIELD_3BD_1(nam,dxf) {FIELD_BD(nam.x, dxf); FIELD_BD(nam.y, dxf+1); FIELD_BD(nam.z, dxf+2);}
 #define FIELD_3DPOINT(nam,dxf) FIELD_3BD(nam,dxf)
+//TODO r2004+: lookup the rgb index for 62
 #define FIELD_CMC(color,dxf1,dxf2) { \
-  VALUE_RS(_obj->color.index, dxf1); \
+  if (dat->version < R_2004) { \
+    VALUE_RS(_obj->color.index, dxf1); \
+  } \
   if (dat->version >= R_2004 && dxf2 && _obj->color.rgb) { \
     VALUE_RL(_obj->color.rgb, dxf2); \
   } \
 }
 #define SUB_FIELD_CMC(o,color,dxf1,dxf2) { \
-  VALUE_RS(_obj->o.color.index, dxf1); \
+  if (dat->version < R_2004) { \
+    VALUE_RS(_obj->o.color.index, dxf1); \
+  } \
   if (dat->version >= R_2004 && dxf2 && _obj->o.color.rgb) { \
     VALUE_RL(_obj->o.color.rgb, dxf2); \
   } \
@@ -705,6 +710,7 @@ dxf_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
 //TODO add 340
 #define COMMON_TABLE_FLAGS(owner, acdbname) \
     SINCE(R_14) { \
+      /* TODO: ACAD_XDICTIONARY */ \
       FIELD_HANDLE (owner, 4, 330); \
     } \
     SINCE(R_2000) { \
@@ -712,10 +718,11 @@ dxf_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
     }\
     if (_obj->name) dxf_cvt_tablerecord(dat, obj, _obj->name, 2); \
-    FIELD_RC (flag, 70)
+    if (_obj->flag != 64) { FIELD_RC (flag, 70); }
 
 #define LAYER_TABLE_FLAGS(owner, acdbname) \
     SINCE(R_14) { \
+      /* TODO: ACAD_XDICTIONARY */ \
       FIELD_HANDLE (owner, 4, 330); \
     } \
     SINCE(R_2000) { \
@@ -723,7 +730,7 @@ dxf_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
     } \
     if (_obj->name) dxf_cvt_tablerecord(dat, obj, _obj->name, 2); \
-    FIELD_RS (flag, 70)
+    if (_obj->flag != 64) { FIELD_RS (flag, 70); }
 
 #include "dwg.spec"
 
