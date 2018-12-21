@@ -1242,23 +1242,23 @@ dxf_header_write(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static int
 dxf_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  unsigned int i;
+  BITCODE_BS j;
 
   SECTION (CLASSES);
   LOG_TRACE("num_classes: %u\n", dwg->num_classes);
-  for (i=0; i < dwg->num_classes; i++)
+  for (j=0; j < dwg->num_classes; j++)
     {
       RECORD (CLASS);
-      VALUE_TV (dwg->dwg_class[i].dxfname, 1);
-      VALUE_T (dwg->dwg_class[i].cppname, 2);
-      VALUE_T (dwg->dwg_class[i].appname, 3);
-      VALUE_RS (dwg->dwg_class[i].proxyflag, 90);
+      VALUE_TV (dwg->dwg_class[j].dxfname, 1);
+      VALUE_T (dwg->dwg_class[j].cppname, 2);
+      VALUE_T (dwg->dwg_class[j].appname, 3);
+      VALUE_RS (dwg->dwg_class[j].proxyflag, 90);
       SINCE (R_2004) {
-        VALUE_RC (dwg->dwg_class[i].num_instances, 91);
+        VALUE_RC (dwg->dwg_class[j].num_instances, 91);
       }
-      VALUE_RC (dwg->dwg_class[i].wasazombie, 280);
+      VALUE_RC (dwg->dwg_class[j].wasazombie, 280);
       // Is-an-entity. 1f2 for entities, 1f3 for objects
-      VALUE_RC (dwg->dwg_class[i].item_class_id == 0x1F2 ? 1 : 0, 281);
+      VALUE_RC (dwg->dwg_class[j].item_class_id == 0x1F2 ? 1 : 0, 281);
     }
   ENDSEC();
   return 0;
@@ -1470,12 +1470,25 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   {
     Dwg_Object_BLOCK_CONTROL *_ctrl = &dwg->block_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
-    Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->model_space);
-    Dwg_Object *mspace = NULL, *pspace = NULL;
+    //Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->model_space);
+    //Dwg_Object *mspace = NULL, *pspace = NULL;
 
     TABLE(BLOCK_RECORD);
     COMMON_TABLE_CONTROL_FLAGS;
     error |= dwg_dxf_BLOCK_CONTROL(dat, ctrl);
+
+#if 1
+    for (i=0; i < dwg->num_objects; i++)
+      {
+        Dwg_Object *hdr = &dwg->object[i];
+        if (hdr->supertype == DWG_SUPERTYPE_OBJECT
+            && hdr->type == DWG_TYPE_BLOCK_HEADER)
+          {
+            RECORD(BLOCK_RECORD);
+            error |= dwg_dxf_BLOCK_HEADER(dat, hdr);
+          }
+      }
+#else
     if (obj && obj->type == DWG_TYPE_BLOCK_HEADER) {
       mspace = obj;
       RECORD(BLOCK_RECORD);
@@ -1499,6 +1512,8 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             error |= dwg_dxf_BLOCK_HEADER(dat, obj);
           }
       }
+#endif
+
     ENDTAB();
   }
   ENDSEC();
