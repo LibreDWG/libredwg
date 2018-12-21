@@ -2242,9 +2242,11 @@ DWG_OBJECT_END
 /* (49/1) */
 DWG_OBJECT(BLOCK_HEADER)
 
+  //DXF: the name must be from the block_entity!
   COMMON_TABLE_FLAGS(block_control, Block)
   DXF {
     FIELD_HANDLE (layout_handle, 5, 340);
+    // The DXF TABLE.BLOCK_RECORD only has this. More later in the BLOCKS section.
     return 0;
   }
 
@@ -2354,7 +2356,7 @@ DWG_OBJECT(BLOCK_HEADER)
       if (FIELD_VALUE(num_inserts) && FIELD_VALUE(num_inserts) < 0xf00000) {
         HANDLE_VECTOR(insert_handles, num_inserts, ANYCODE, 0);
       }
-      FIELD_HANDLE (layout_handle, 5, 0);
+      FIELD_HANDLE (layout_handle, 5, 340);
     }
 
 DWG_OBJECT_END
