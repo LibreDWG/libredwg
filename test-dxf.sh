@@ -1,4 +1,5 @@
 #!/bin/sh
+# see also dxf-roundtrip.sh
 arg=${1:-sample_2000}
 dir=$(dirname $arg)
 base=$(basename $arg)
@@ -7,7 +8,7 @@ else out=${base}_${dir}
 fi
 echo "$arg => $out.dxf"
 
-gmake -s -j4 && dsymutil programs/dwg2dxf && \
+gmake -s -j4 && \
   echo programs/dwg2dxf -v4 -o $out.dxf test/test-data/$arg.dwg && \
   programs/dwg2dxf -v4 -o $out.dxf test/test-data/$arg.dwg 2>${out}.log && \
   programs/filt_dxf.pl $out.dxf > _${out}.dxf; mv _${out}.dxf ${out}.dxf;
