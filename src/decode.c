@@ -3904,11 +3904,15 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
           // properly dwg_decode_object/_entity for eed, reactors, xdic
           if (klass && !is_entity)
             {
-              error |= dwg_decode_UNKNOWN_OBJ(dat, obj);
+              int err = dwg_decode_UNKNOWN_OBJ(dat, obj);
+              error |= err;
               obj->supertype = DWG_SUPERTYPE_UNKNOWN;
+              if (err >= DWG_ERR_CRITICAL || !dat)
+                return error;
             }
           else if (klass)
             {
+              int err;
 #if 0 && !defined(IS_RELEASE)
               if (!strcmp(klass->dxfname, "MULTILEADER")) { //debug CED
                 char *mleader = bit_read_TF(dat, obj->size);
@@ -3917,8 +3921,11 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
                 free (mleader);
               }
 #endif
-              error |= dwg_decode_UNKNOWN_ENT(dat, obj);
+              err = dwg_decode_UNKNOWN_ENT(dat, obj);
+              error |= err;
               obj->supertype = DWG_SUPERTYPE_UNKNOWN;
+              if (err >= DWG_ERR_CRITICAL || !dat)
+                return error;
             }
           else // not a class
             {
