@@ -1395,6 +1395,16 @@ bit_utf8_to_TU(char* restrict str)
   return wstr;
 }
 
+/* compare an ASCII/utf-8 string to a r2007+ name */
+int
+bit_eq_TU(const char *restrict str, BITCODE_TU restrict wstr)
+{
+  char* utf8 = bit_convert_TU(wstr);
+  int result = strcmp(str, utf8) ? 0 : 1;
+  free(utf8);
+  return result;
+}
+
 /** Read 1 bitlong according to normal order
  */
 BITCODE_RL

@@ -1499,6 +1499,24 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 static int
+dxf_block_write(Bit_Chain *restrict dat, Dwg_Object *restrict hdr)
+{
+  int error = 0;
+  Dwg_Object *obj = get_first_owned_block(hdr);
+  while (obj)
+    {
+      error |= dwg_dxf_object(dat, obj);
+      obj = get_next_owned_block(hdr, obj);
+      if (obj && obj->type == DWG_TYPE_ENDBLK)
+        {
+          error |= dwg_dxf_ENDBLK(dat, obj);
+          obj = NULL;
+        }
+    }
+  return error;
+}
+
+static int
 dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
@@ -1539,6 +1557,7 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
     }
 
+#if 0
   if (psref && psref->obj && psref->obj->tio.object->tio.BLOCK_HEADER->block_entity)
     hdr = psref->obj;
   else if (_ctrl->paper_space)
@@ -1546,19 +1565,8 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   else
     hdr = NULL;
 
-  if (hdr) {
-      obj = get_first_owned_block(hdr);
-      while (obj)
-        {
-          error |= dwg_dxf_object(dat, obj);
-          obj = get_next_owned_block(hdr, obj);
-          if (obj && obj->type == DWG_TYPE_ENDBLK)
-            {
-              error |= dwg_dxf_ENDBLK(dat, obj);
-              obj = NULL;
-            }
-        }
-    }
+  if (hdr)
+    error |= dxf_block_write(dat, hdr);
 
   /* more pspace blocks */
   for (int i=0; i<_ctrl->num_entries; i++)
@@ -1578,6 +1586,29 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           }
       }
     }
+#endif
+
+  /* There may be unconnected pspace blocks (not caught by above),
+     such as referred by a LAYOUT, so for simplicity just scan all
+     BLOCK_HEADER's for a pspace block. #81
+   */
+  {
+    Dwg_Object_BLOCK_HEADER *_hdr;
+    for (BITCODE_BL i=0; i < dwg->num_objects; i++)
+      {
+        hdr = &dwg->object[i];
+        if (hdr->supertype == DWG_SUPERTYPE_OBJECT
+            && (hdr->type == DWG_TYPE_BLOCK_HEADER)
+            && ((_hdr = hdr->tio.object->tio.BLOCK_HEADER)
+                && (dat->version >= R_2007
+                    ? bit_eq_TU("*Paper_Space", (BITCODE_TU)_hdr->name)
+                    : !strcmp("*Paper_Space", _hdr->name)
+                    )))
+          {
+            error |= dxf_block_write(dat, hdr);
+          }
+      }
+  }
 
   ENDSEC();
   return error;

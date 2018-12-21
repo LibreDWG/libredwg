@@ -262,6 +262,10 @@ bit_convert_TU(BITCODE_TU restrict wstr);
 EXPORT BITCODE_TU
 bit_utf8_to_TU(char* restrict str);
 
+/* compare an ASCII/utf-8 string to a r2007+ name */
+int
+bit_eq_TU(const char* str, BITCODE_TU restrict wstr);
+
 BITCODE_RL
 bit_read_L(Bit_Chain *dat);
 
