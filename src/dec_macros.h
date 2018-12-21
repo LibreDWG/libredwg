@@ -132,11 +132,13 @@
 #define FIELD_DATAHANDLE(nam, handle_code, dxf) \
   { \
     _obj->nam = dwg_decode_handleref(dat, obj, dwg);\
-    LOG_TRACE(#nam ": HANDLE(%x.%d.%lX) absolute:%lX [%d]\n",\
-              _obj->nam->handleref.code,  \
-              _obj->nam->handleref.size,  \
-              _obj->nam->handleref.value, \
-              _obj->nam->absolute_ref, dxf);\
+    if (_obj->nam) { \
+      LOG_TRACE(#nam ": HANDLE(%x.%d.%lX) absolute:%lX [%d]\n",\
+                _obj->nam->handleref.code,                     \
+                _obj->nam->handleref.size,                     \
+                _obj->nam->handleref.value,                    \
+                _obj->nam->absolute_ref, dxf);                 \
+    } \
   }
 
 #define FIELD_B(nam,dxf) FIELDG(nam, B, dxf)
