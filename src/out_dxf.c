@@ -721,7 +721,7 @@ dxf_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
     }\
     if (!strcmp(#acdbname, "Block") && dat->version >= R_13) { \
       Dwg_Object *blk = dwg_ref_object(dwg, ((Dwg_Object_BLOCK_HEADER*)_obj)->block_entity); \
-      if (blk && obj->type == DWG_TYPE_BLOCK) { \
+      if (blk && blk->type == DWG_TYPE_BLOCK) { \
           Dwg_Entity_BLOCK *_blk = blk->tio.entity->tio.BLOCK; \
           if (dat->from_version >= R_2007) \
             VALUE_TU (_blk->name, 2) \
