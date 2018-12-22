@@ -23,6 +23,9 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <getopt.h>
+#ifdef HAVE_VALGRIND_VALGRIND_H
+#include <valgrind/valgrind.h>
+#endif
 
 #include <dwg.h>
 #include "common.h"
@@ -262,7 +265,11 @@ main (int argc, char *argv[])
         fclose (dat.fh);
 
       // forget about valgrind. really huge DWG's need endlessly here.
-      if (do_free) {
+      if (do_free
+#ifdef HAVE_VALGRIND_VALGRIND_H
+      || (RUNNING_ON_VALGRIND)
+#endif
+          ) {
         dwg_free(&dwg);
         free (filename_out);
       }
