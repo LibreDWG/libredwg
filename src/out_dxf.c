@@ -1494,7 +1494,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     for (i=0; i < dwg->num_objects; i++)
       {
         Dwg_Object *hdr = &dwg->object[i];
-        if (hdr->supertype == DWG_SUPERTYPE_OBJECT
+        if (hdr && hdr->supertype == DWG_SUPERTYPE_OBJECT
             && hdr->type == DWG_TYPE_BLOCK_HEADER)
           {
             RECORD(BLOCK_RECORD);
