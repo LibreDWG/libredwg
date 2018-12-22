@@ -687,6 +687,8 @@ dxf_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           else
             fprintf(dat->fh, "%3i\r\n%s\r\n", dxf, name);
         }
+      if (dat->version >= R_2007)
+        free (name);
     }
   else {
     fprintf(dat->fh, "%3i\r\n\r\n", dxf);
