@@ -733,7 +733,7 @@ dxf_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       else \
         dxf_cvt_tablerecord(dat, obj, _obj->name, 2); \
     } \
-    if (_obj->flag != 64) { FIELD_RC (flag, 70); }
+    FIELD_RC (flag, 70);
 
 #define LAYER_TABLE_FLAGS(owner, acdbname) \
     SINCE(R_14) { \
