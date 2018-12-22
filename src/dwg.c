@@ -623,8 +623,8 @@ dwg_ref_object(const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
  */
 Dwg_Object*
 dwg_ref_object_relative(const Dwg_Data *restrict dwg,
-                            Dwg_Object_Ref *restrict ref,
-                            const Dwg_Object *restrict obj)
+                        Dwg_Object_Ref *restrict ref,
+                        const Dwg_Object *restrict obj)
 {
   if (ref->obj && !dwg->dirty_refs)
     return ref->obj;

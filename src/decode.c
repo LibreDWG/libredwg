@@ -1304,6 +1304,22 @@ resolve_objectref_vector(Bit_Chain* dat, Dwg_Data * dwg)
   return dwg->num_object_refs ? 0 : DWG_ERR_VALUEOUTOFBOUNDS;
 }
 
+/* Find the BITCODE_H for an object */
+Dwg_Object_Ref*
+dwg_find_objectref(Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
+{
+  for (BITCODE_BL i = 0; i < dwg->num_object_refs; i++)
+    {
+      Dwg_Object_Ref *ref = dwg->object_ref[i];
+      Dwg_Object* found;
+      // search the handle in all objects
+      found = dwg_resolve_handle(dwg, ref->absolute_ref);
+      if (found == obj)
+        return ref;
+    }
+  return NULL;
+}
+
 void
 dwg_resolve_objectrefs_silent(Dwg_Data *restrict dwg)
 {

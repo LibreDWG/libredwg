@@ -531,8 +531,8 @@ dwg_dxf_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
   } \
   SINCE(R_13) { \
     /* parent: {m,p}space block_record or polyline for vertex, block until blkend */ \
-    if (_ent->owner) { \
-      fprintf(dat->fh, "%3i\r\n%lX\r\n", 330, _ent->owner->handle.value); \
+    if (_ent->ownerhandle) { \
+      VALUE_HANDLE (_ent->ownerhandle, 5, 330); \
     } else { \
       VALUE_HANDLE (obj->parent->header_vars.BLOCK_RECORD_MSPACE, 5, 330); \
     } \

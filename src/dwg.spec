@@ -491,7 +491,7 @@ DWG_ENTITY(INSERT)
   if (FIELD_VALUE(has_attribs)) {
     DECODER {
       dwg->old_owner = dwg->cur_owner;
-      dwg->cur_owner = (Dwg_Object*)obj;
+      dwg->cur_owner = dwg_find_objectref(dwg, obj);
     }
     FIELD_HANDLE (seqend, 3, 0);
   }
@@ -621,7 +621,7 @@ DWG_ENTITY(MINSERT)
     {
       DECODER {
         dwg->old_owner = dwg->cur_owner;
-        dwg->cur_owner = (Dwg_Object*)obj;
+        dwg->cur_owner = dwg_find_objectref(dwg, obj);
       }
       FIELD_HANDLE (seqend, 3, 0);
     }
@@ -5060,7 +5060,7 @@ DWG_ENTITY(TABLE)
     FIELD_HANDLE (seqend, 3, 0);
     DECODER {
       dwg->old_owner = dwg->cur_owner;
-      dwg->cur_owner = (Dwg_Object*)obj;
+      dwg->cur_owner = dwg_find_objectref(dwg, obj);
     }
   }
 
