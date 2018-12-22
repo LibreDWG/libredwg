@@ -9946,13 +9946,13 @@ dwg_obj_proxy_set_data(dwg_obj_proxy *restrict proxy,
 }
 
 dwg_object_ref*
-dwg_obj_proxy_get_parenthandle(const dwg_obj_proxy *restrict proxy,
+dwg_obj_proxy_get_ownerhandle(const dwg_obj_proxy *restrict proxy,
                                int *restrict error)
 {
   if (proxy)
     {
       *error = 0;
-      return proxy->parenthandle;
+      return proxy->ownerhandle;
     }
   else
     {
@@ -10087,13 +10087,13 @@ dwg_obj_xrecord_set_xdata(dwg_obj_xrecord *restrict xrecord,
 }
 
 dwg_object_ref*
-dwg_obj_xrecord_get_parenthandle(const dwg_obj_xrecord *restrict xrecord,
+dwg_obj_xrecord_get_ownerhandle(const dwg_obj_xrecord *restrict xrecord,
                                  int *restrict error)
 {
   if (xrecord)
     {
       *error = 0;
-      return xrecord->parenthandle;
+      return xrecord->ownerhandle;
     }
   else
     {

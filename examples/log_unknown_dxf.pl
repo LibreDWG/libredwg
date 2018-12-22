@@ -76,7 +76,7 @@ my $known = {
     62  => 'color',
     420 => 'rgb',
     430 => 'name',
-    330 => 'parenthandle',
+    330 => 'ownerhandle',
     ],
   MATERIAL => [
     1 => 'name',
@@ -219,7 +219,7 @@ my $known = {
     290 => 'unknown_b4',
     90 => 'order',
     290 => 'unknown_b5',
-    #330 => 'parenthandle',
+    #330 => 'ownerhandle',
     330 => 'owner',
     330 => 'readdep',
     330 => 'node',
@@ -334,7 +334,7 @@ my $known = {
     70 => 'shadow_type',
     280 => 'shadow_softness',
     71 => 'shadow_mapsize',
-    330 => 'parenthandle',
+    330 => 'ownerhandle',
     63 => 'color',
     ],
   SUNSTUDY => [
@@ -362,7 +362,7 @@ my $known = {
     40 => 'spacing',
     293 => 'lock_viewports',
     294 => 'label_viewports',
-    330 => 'parenthandle',
+    330 => 'ownerhandle',
     340 => 'page_setup_wizard',
     341 => 'view',
     342 => 'visual_style',
@@ -1052,7 +1052,7 @@ while (<>) {
           $name = "reactors[$react]";
           $react++; $react++;
         } elsif (!$seen100) {
-          $name = "parenthandle";
+          $name = "ownerhandle";
         }
       } elsif ($code == 360 and $xdict) {
         $name = "xdicobjhandle";

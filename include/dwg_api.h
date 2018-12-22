@@ -2774,7 +2774,7 @@ dwg_obj_proxy_set_data(dwg_obj_proxy *restrict proxy,
                        int *restrict error);
 
 EXPORT dwg_object_ref*
-dwg_obj_proxy_get_parenthandle(const dwg_obj_proxy *restrict proxy,
+dwg_obj_proxy_get_ownerhandle(const dwg_obj_proxy *restrict proxy,
                                int *restrict error);
 
 EXPORT dwg_object_ref**
@@ -4665,7 +4665,7 @@ dwg_obj_xrecord_set_xdata(dwg_obj_xrecord *restrict xrecord,
                           int *restrict error);
 
 EXPORT dwg_object_ref*
-dwg_obj_xrecord_get_parenthandle(const dwg_obj_xrecord *restrict xrecord,
+dwg_obj_xrecord_get_ownerhandle(const dwg_obj_xrecord *restrict xrecord,
                                  int *restrict error);
 
 EXPORT BITCODE_BL

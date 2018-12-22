@@ -308,7 +308,7 @@ FIELD_BL (node_edge2, 92);	// -1 [87,120]
 FIELD_BL (node_edge3, 92);	// -1 [121,154]
 FIELD_BL (node_edge4, 92);	// -1 [155,188]
 HOLE([189,191],100) len = 3
-FIELD_H (parenthandle, 330);	// 6.0.0 [192,199]
+FIELD_H (ownerhandle, 330);	// 6.0.0 [192,199]
 FIELD_H (evalexpr, 360);	// 3.2.2E2 [200,223]
 HOLE([224,230],1100111) len = 7
 ----------------
