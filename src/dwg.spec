@@ -2499,6 +2499,7 @@ DWG_OBJECT(STYLE)
       SINCE(R_2007) {
         s = bit_convert_TU((BITCODE_TU)_obj->font_name);
         strncpy(_buf, s, 255);
+        free (s);
       } else {
         strncpy(_buf, _obj->font_name, 255);
       }
@@ -7120,3 +7121,4 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+
