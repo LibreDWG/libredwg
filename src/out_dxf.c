@@ -719,20 +719,27 @@ dxf_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       VALUE_TV ("AcDbSymbolTableRecord", 100); \
       VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
     }\
-    if (_obj->name) { \
-      if (!strcmp(#acdbname, "Block") && dat->version >= R_13) { \
-        Dwg_Object *blk = dwg_ref_object(dwg, ((Dwg_Object_BLOCK_HEADER*)_obj)->block_entity); \
-        if (blk && obj->type == DWG_TYPE_BLOCK) { \
+    if (!strcmp(#acdbname, "Block") && dat->version >= R_13) { \
+      Dwg_Object *blk = dwg_ref_object(dwg, ((Dwg_Object_BLOCK_HEADER*)_obj)->block_entity); \
+      if (blk && obj->type == DWG_TYPE_BLOCK) { \
           Dwg_Entity_BLOCK *_blk = blk->tio.entity->tio.BLOCK; \
           if (dat->from_version >= R_2007) \
             VALUE_TU (_blk->name, 2) \
           else \
             VALUE_TV (_blk->name, 2) \
-        } \
       } \
-      else \
-        dxf_cvt_tablerecord(dat, obj, _obj->name, 2); \
+      else if (_obj->name) { \
+        if (dat->from_version >= R_2007) \
+          VALUE_TU (_obj->name, 2) \
+        else \
+          VALUE_TV (_obj->name, 2) \
+      } else \
+        VALUE_TV ("*", 2) \
     } \
+    else if (_obj->name) \
+      dxf_cvt_tablerecord(dat, obj, _obj->name, 2); \
+    else \
+      VALUE_TV ("*", 2) \
     FIELD_RC (flag, 70);
 
 #define LAYER_TABLE_FLAGS(owner, acdbname) \
