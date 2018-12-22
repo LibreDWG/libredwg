@@ -2823,7 +2823,7 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
         error |= obj_string_stream(dat, obj, str_dat);
     }
 
-  error = bit_read_H(dat, &obj->handle);
+  error |= bit_read_H(dat, &obj->handle);
   if(error & DWG_ERR_INVALIDHANDLE)
     {
       LOG_ERROR("Wrong object handle at pos 0x%0lx", dat->byte)
