@@ -822,7 +822,12 @@ EXPORT int dwg_add_##token (Dwg_Object *obj) \
   obj->tio.object = calloc (1, sizeof(Dwg_Object_Object)); \
   if (!obj->tio.object) return DWG_ERR_OUTOFMEM; \
   _obj = obj->tio.object->tio.token = calloc (1, sizeof(Dwg_Object_##token)); \
-  if (!_obj) return DWG_ERR_OUTOFMEM; \
+  if (!_obj) { \
+    free (obj->tio.object); \
+    obj->tio.object = NULL; \
+    obj->fixedtype = DWG_TYPE_FREED; \
+    return DWG_ERR_OUTOFMEM; \
+  } \
   obj->dxfname = (char*)#token; \
   _obj->parent = obj->tio.object; \
   obj->tio.object->dwg = obj->parent; \
