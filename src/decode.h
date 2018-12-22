@@ -74,6 +74,11 @@ dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf);
 void
 dwg_resolve_objectrefs_silent(Dwg_Data *restrict dwg);
 
+/* reused with out_dxf */
+char*
+dwg_dim_blockname(Dwg_Data *restrict dwg, const Dwg_Object *restrict obj);
+
+
 /* from decode_r2007.c */
 int
 obj_string_stream(Bit_Chain *dat,

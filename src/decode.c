@@ -4037,4 +4037,20 @@ dwg_decode_unknown(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   return 0;
 }
 
+/* A dimension is immediately followed by BLOCK_HEADER - BLOCK.name - ENDBLK */
+char*
+dwg_dim_blockname(Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
+{
+  BITCODE_BL id = obj->tio.entity->objid;
+  Dwg_Object *hdr = &dwg->object[id + 1];
+  Dwg_Object *blk = &dwg->object[id + 2];
+  if (hdr->type == DWG_TYPE_BLOCK_HEADER
+      && blk->type == DWG_TYPE_BLOCK)
+    {
+      Dwg_Entity_BLOCK *_blk = blk->tio.entity->tio.BLOCK;
+      return _blk->name;
+    }
+  return NULL;
+}
+
 #undef IS_DECODER

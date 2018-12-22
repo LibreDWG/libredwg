@@ -1008,8 +1008,9 @@ DWG_ENTITY_END
           return DWG_ERR_VALUEOUTOFBOUNDS; \
       } \
     DXF { \
+      FIELD_VALUE(blockname) = dwg_dim_blockname(dwg,obj); \
       FIELD_BE (extrusion, 210); \
-      FIELD_TV (blockname, 2); \
+      FIELD_T (blockname, 2); \
       FIELD_3BD (def_pt, 10); \
     } else { \
       FIELD_3BD (extrusion, 210); \

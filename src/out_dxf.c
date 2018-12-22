@@ -1590,6 +1590,8 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     return 1;
 
   SECTION(BLOCKS);
+
+#if 0
   while (obj)
     {
       error |= dwg_dxf_object(dat, obj);
@@ -1601,7 +1603,6 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
     }
 
-#if 0
   if (psref && psref->obj && psref->obj->tio.object->tio.BLOCK_HEADER->block_entity)
     hdr = psref->obj;
   else if (_ctrl->paper_space)
@@ -1643,12 +1644,7 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       {
         hdr = &dwg->object[i];
         if (hdr->supertype == DWG_SUPERTYPE_OBJECT
-            && (hdr->type == DWG_TYPE_BLOCK_HEADER)
-            && ((_hdr = hdr->tio.object->tio.BLOCK_HEADER)
-                && (dat->version >= R_2007
-                    ? bit_eq_TU("*Paper_Space", (BITCODE_TU)_hdr->name)
-                    : !strcmp("*Paper_Space", _hdr->name)
-                    )))
+            && hdr->type == DWG_TYPE_BLOCK_HEADER)
           {
             error |= dxf_block_write(dat, hdr);
           }
