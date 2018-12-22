@@ -928,7 +928,6 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
    */
   dwg->layout_number = 0;
   dwg->num_classes = 0;
-  j = 0;
   do
     {
       BITCODE_BS i;
