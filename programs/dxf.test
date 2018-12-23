@@ -75,7 +75,7 @@ for dwg in $datadir/sample_2*.dwg; do
     tgt=../`basename $dxf`
     log=`basename $tgt`.log
     rm $log 2>/dev/null
-    for dxfname in ACDBDICTIONARYWDFLT ACDBPLACEHOLDER
+    for dxfname in ACDBDICTIONARYWDFLT ACDBPLACEHOLDER LAYOUT
     do
         check_acdb_dxfname
     done

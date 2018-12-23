@@ -1264,8 +1264,13 @@ dxf_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_TRACE("num_classes: %u\n", dwg->num_classes);
   for (j=0; j < dwg->num_classes; j++)
     {
+      const char* dxfname = dwg->dwg_class[j].dxfname;
+      // some classes are now builtin
+      if (dat->version >= R_2004 && (!strcmp(dxfname, "ACDBPLACEHOLDER")
+                                  || !strcmp(dxfname, "LAYOUT")))
+          continue;
       RECORD (CLASS);
-      VALUE_TV (dwg->dwg_class[j].dxfname, 1);
+      VALUE_TV (dxfname, 1);
       VALUE_T (dwg->dwg_class[j].cppname, 2);
       VALUE_T (dwg->dwg_class[j].appname, 3);
       VALUE_RS (dwg->dwg_class[j].proxyflag, 90);
