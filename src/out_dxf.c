@@ -550,8 +550,6 @@ dwg_dxf_ ##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
   if (!dwg_obj_is_control(obj)) { \
     if (obj->fixedtype == DWG_TYPE_TABLE) \
       ; \
-    else if (!strcmp(#token, "DICTIONARYWDFLT")) \
-      RECORD(ACDBDICTIONARYWDFLT); \
     else if (obj->type >= 500 && obj->dxfname)        \
       fprintf(dat->fh, "  0\r\n%s\r\n", obj->dxfname); \
     else if (obj->type == DWG_TYPE_PLACEHOLDER) \

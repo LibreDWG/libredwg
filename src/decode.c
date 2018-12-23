@@ -3512,8 +3512,6 @@ dwg_decode_variable_type(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_
   // global class dispatcher
   #include "classes.inc"
 
-  // TODO: ACSH_BOX_CLASS, ACAD_EVALUATION_GRAPH, ACSH_HISTORY_CLASS
-
   LOG_WARN("Unknown Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object", \
            klass->number, klass->dxfname, klass->proxyflag,                    \
            klass->wasazombie ? " was proxy" : "")

@@ -48,54 +48,66 @@
 #define STABLE_CLASS(ACTION, name) \
   if (!strcmp(klass->dxfname, #name)) \
     { \
-      if (!strcmp(#ACTION, "decode")) \
+      if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) { \
+        obj->dxfname = (char*)#name; \
         obj->fixedtype = DWG_TYPE_##name; \
+      } \
       return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
 #define STABLE_CLASS_DXF(ACTION, name, _dxfname) \
   if (!strcmp(klass->dxfname, #_dxfname)) \
     { \
-      if (!strcmp(#ACTION, "decode")) \
+      if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) { \
+        obj->dxfname = (char*)#_dxfname; \
         obj->fixedtype = DWG_TYPE_##name; \
+      } \
       return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
 #define STABLE_CLASS_CPP(ACTION, name, _cppname) \
   if (!strcmp(klass->cppname, #name)) \
     { \
-      if (!strcmp(#ACTION, "decode")) \
+      if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) { \
+        obj->dxfname = (char*)#name; \
         obj->fixedtype = DWG_TYPE_##name; \
+      } \
       return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
 #define UNSTABLE_CLASS(ACTION, name) \
   if (!strcmp(klass->dxfname, #name)) \
     { \
       WARN_UNSTABLE_CLASS; \
-      if (!strcmp(#ACTION, "decode")) \
+      if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) { \
+        obj->dxfname = (char*)#name; \
         obj->fixedtype = DWG_TYPE_##name; \
+      } \
       return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
 #define UNSTABLE_CLASS_DXF(ACTION, name, _dxfname) \
   if (!strcmp(klass->dxfname, #_dxfname)) \
     { \
       WARN_UNSTABLE_CLASS; \
-      if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) \
+      if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) { \
+        obj->dxfname = (char*)#_dxfname; \
         obj->fixedtype = DWG_TYPE_##name; \
+      } \
       return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
 #define UNSTABLE_CLASS_CPP(ACTION, name, _cppname) \
   if (!strcmp(klass->cppname, #_cppname)) \
     { \
       WARN_UNSTABLE_CLASS; \
-      if (!strcmp(#ACTION, "decode")) \
-        obj->fixedtype = DWG_TYPE_##name; \
+      if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) { \
+        obj->dxfname = (char*)#name; \
+      } \
       return DWG_FUNC_N(ACTION,name)(dat, obj); \
     }
 #define UNHANDLED_CLASS(ACTION, name) \
   if (!strcmp(klass->dxfname, #name)) \
     { \
       WARN_UNHANDLED_CLASS; \
-      if (!strcmp(#ACTION, "decode")) \
-        obj->fixedtype = DWG_TYPE_##name; \
+      if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) { \
+        obj->dxfname = (char*)#name; \
+      } \
       /* return dwg_##ACTION_##name(dat, obj); */ \
       return DWG_ERR_UNHANDLEDCLASS; \
     }
@@ -103,8 +115,9 @@
   if (!strcmp(klass->dxfname, #_dxfname)) \
     { \
       WARN_UNHANDLED_CLASS; \
-      if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) \
-        obj->fixedtype = DWG_TYPE_##name; \
+      if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) { \
+        obj->dxfname = (char*)#_dxfname; \
+      } \
       /* return dwg_##ACTION_##name(dat, obj); */ \
       return DWG_ERR_UNHANDLEDCLASS; \
     }
@@ -223,6 +236,7 @@
   UNHANDLED_CLASS_DXF (ACTION, XREFPANELOBJECT, EXACXREFPANELOBJECT)
 
 /* Missing DXF names:
+  ACSH_BOX_CLASS
   ACAD_PROXY_ENTITY  ACDBPOINTCLOUDEX  ARRAY
   ATTDYNBLOCKREF  GEOMAPIMAGE
   ATTBLOCKREF  ATTDYNBLOCKREF  BLOCKREF  CENTERMARK CENTERLINE
