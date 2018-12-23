@@ -15,14 +15,20 @@
 if [ -d test/test-data ]; then cd ..; fi
 datadir=${datadir:-../test/test-data}
 problems=0
-#DATA="sample_2000 example_2000 example_2004 example_2007 example_2010"
-#DATA="$DATA example_2013 example_2018 example_r14"
-#TODO="r11/ACEL10"
-#
-#for d in $DATA; do
-#    b=$(basename $d)
-#    rm $b.dxf 2>/dev/null
-#done
+
+function check_subentity {
+    if [ -f $dwg ] && [ -f $dxf ]; then
+        ../libtool --mode=execute ./dwg2dxf -v4 -o $tgt $dwg 2>/dev/null
+        d="`diff -b <(grep -A8 ^VERTEX $dxf) <(grep -A8 ^VERTEX $tgt)`"
+        test -z "$d" || echo VERTEX $tgt $d
+        d="`diff -b <(grep -A8 ^SEQEND $dxf) <(grep -A8 ^SEQEND $tgt)`"
+        test -z "$d" || echo SEQEND $tgt $d
+        d="`diff -b <(grep -A8 ^POLYLINE $dxf) <(grep -A8 ^POLYLINE $tgt)`"
+        test -z "$d" || echo POLYLINE $tgt $d
+#   else
+#       echo skip $dxf missing
+    fi
+}
 
 # check subentity owners
 for year in r14 2000 2004 2007 2010 2013 2018
@@ -32,16 +38,7 @@ do
         dwg=$datadir/${year}/${base}.dwg
         dxf=$datadir/${year}/${base}.dxf
         tgt=../${base}_${year}.dxf
-        log=../${base}_${year}.log
-        if [ -f $dwg ] && [ -f $dxf ]; then
-            ../libtool --mode=execute ./dwg2dxf -v4 -o $tgt $dwg 2>$log
-            diff -bu <(grep -A8 ^VERTEX $dxf) <(grep -A8 ^VERTEX $tgt)
-            diff -bu <(grep -A8 ^SEQEND $dxf) <(grep -A8 ^SEQEND $tgt)
-            diff -bu <(grep -A8 ^POLYLINE $dxf) <(grep -A8 ^POLYLINE $tgt) && \
-              echo $tgt ok
-#        else
-#            echo skip $dxf missing
-        fi
+        check_subentity
     done
 done
 for year in r14 2000 2004 2007 2010 2013 2018
@@ -51,33 +48,61 @@ do
         dwg=$datadir/${base}_${year}.dwg
         dxf=$datadir/${base}_${year}.dxf
         tgt=../${base}_${year}.dxf
-        log=../${base}_${year}.log
-        if [ -f $dwg ] && [ -f $dxf ]; then
-            ../libtool --mode=execute ./dwg2dxf -v4 -o $tgt $dwg 2>$log
-            diff -bu <(grep -A8 ^VERTEX $dxf) <(grep -A8 ^VERTEX $tgt)
-            diff -bu <(grep -A8 ^SEQEND $dxf) <(grep -A8 ^SEQEND $tgt)
-            diff -bu <(grep -A8 ^POLYLINE $dxf) <(grep -A8 ^POLYLINE $tgt) && \
-              echo $tgt ok
-#        else
-#            echo skip $dxf missing
-        fi
+        check_subentity
     done
 done
 
-#for dwg in $DATA; do
-#    dxf=`basename $dwg .dwg`.dxf
-#    dwg=${datadir}/$dwg.dwg
-#    echo dwg2dxf -o$dxf $dwg
-#    if ../libtool --mode=execute ./dwg2dxf -o$dxf $dwg; then
-#        rm $dxf.log $dxf
-#        echo ok
-#    else
-#        cat $dxf.log
-#        problems=$(expr 1 + $problems)
-#    fi
-#done
+function check_acdb_dxfname {
+    if [ -f $dwg ] && [ -f $dxf ]; then
+        ../libtool --mode=execute ./dwg2dxf -v0 -o $tgt $dwg 2>/dev/null >/dev/null
+        expect=`grep ^$dxfname $dxf | wc -l`
+        got=`grep ^$dxfname $tgt | wc -l`
+        if [ $got = $expect ]
+        then
+            echo $tgt $dxfname ok
+        else
+            echo $tgt $dxfname fail: $got != $expect
+            problems=$(expr 1 + $problems)
+            grep -2 ^$dxfname $tgt >$log
+        fi
+    fi
+}
+
+# check handled ACDB* dxfname's
+# UNHANDLED: ACDBDETAILVIEWSTYLE ACDBSECTIONVIEWSTYLE
+for dwg in $datadir/sample_2*.dwg; do
+    dxf=`echo $dwg | sed 's,.dwg,.dxf,'`
+    tgt=../`basename $dxf`
+    log=`basename $tgt`.log
+    rm $log 2>/dev/null
+    for dxfname in ACDBDICTIONARYWDFLT ACDBPLACEHOLDER
+    do
+        check_acdb_dxfname
+    done
+done
+for dwg in $datadir/example_*.dwg; do
+    dxf=`echo $dwg | sed 's,.dwg,.dxf,'`
+    tgt=../`basename $dxf`
+    log=`basename $tgt`.log
+    rm $log 2>/dev/null
+    for dxfname in ACDBPERSSUBENTMANAGER ACDBASSOCDEPENDENCY
+    do
+        check_acdb_dxfname
+    done
+done
+for dwg in $datadir/2004/Underlay.dwg; do
+    dxf=`echo $dwg | sed 's,.dwg,.dxf,'`
+    tgt=../`basename $dxf .dxf`_2004.dxf
+    log=`basename $tgt`.log
+    rm $log 2>/dev/null
+    for dxfname in PDFDEFINITION PDFUNDERLAY
+    do
+        check_acdb_dxfname
+    done
+done
 
 if test x0 = x$problems ; then
+    rm *.dxf.log 2>/dev/null
     exit 0
 else
     echo `basename $0`: $problems failures
