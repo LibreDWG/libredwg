@@ -88,7 +88,7 @@
       }\
     if (handleptr)\
       {\
-        LOG_TRACE(#nam ": HANDLE(%x.%d.%lX) absolute:%lX [%d]\n", \
+        LOG_TRACE(#nam ": HANDLE(%x.%d.%lX) absolute:%lX [H %d]\n", \
                   handleptr->handleref.code, \
                   handleptr->handleref.size, \
                   handleptr->handleref.value,\
@@ -96,7 +96,7 @@
       }\
     else \
       {\
-        LOG_TRACE(#nam ": NULL HANDLE(%x) [%d]\n", handle_code, dxf); \
+        LOG_TRACE(#nam ": NULL HANDLE(%x) [H %d]\n", handle_code, dxf); \
       }\
   }
 #define FIELD_HANDLE(nam, handle_code, dxf) VALUE_HANDLE(_obj->nam, nam, handle_code, dxf)
@@ -114,7 +114,7 @@
       }\
     if (handleptr)\
       {\
-        LOG_TRACE(#nam "[%d]: %d HANDLE(%x.%d.%lX) absolute:%lX [%d]\n",  \
+        LOG_TRACE(#nam "[%d]: %d HANDLE(%x.%d.%lX) absolute:%lX [H %d]\n", \
               (int)vcount, handle_code,   \
               handleptr->handleref.code,  \
               handleptr->handleref.size,  \
@@ -123,7 +123,7 @@
       }\
     else \
       {\
-        LOG_TRACE(#nam "[%d]: NULL HANDLE(%x) [%d]\n", (int)vcount, handle_code, dxf); \
+        LOG_TRACE(#nam "[%d]: NULL HANDLE(%x) [H %d]\n", (int)vcount, handle_code, dxf); \
       }\
   }
 #define FIELD_HANDLE_N(nam, vcount, handle_code, dxf) \
@@ -133,7 +133,7 @@
   { \
     _obj->nam = dwg_decode_handleref(dat, obj, dwg);\
     if (_obj->nam) { \
-      LOG_TRACE(#nam ": HANDLE(%x.%d.%lX) absolute:%lX [%d]\n",\
+      LOG_TRACE(#nam ": HANDLE(%x.%d.%lX) absolute:%lX [H %d]\n",\
                 _obj->nam->handleref.code,                     \
                 _obj->nam->handleref.size,                     \
                 _obj->nam->handleref.value,                    \
