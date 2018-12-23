@@ -4791,7 +4791,7 @@ dwg_ent_get_linewt(const dwg_obj_ent *restrict ent,
                    int *restrict error); //r2000+
 
 EXPORT dwg_object_ref*
-dwg_ent_get_subentity(const dwg_obj_ent *restrict ent,
+dwg_ent_get_ownerhandle(const dwg_obj_ent *restrict ent,
                           int *restrict error);
 
 EXPORT dwg_object_ref**

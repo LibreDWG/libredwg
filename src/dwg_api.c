@@ -18643,10 +18643,10 @@ dwg_ent_get_linewt(const dwg_obj_ent *restrict ent,
 
 //TODO: dwg_object_ref* or dwg_handle*, not handle
 EXPORT dwg_object_ref *
-dwg_ent_get_subentity(const dwg_obj_ent *restrict ent,
+dwg_ent_get_ownerhandle(const dwg_obj_ent *restrict ent,
                           int *restrict error)
 {
-  _BODY_FIELD(ent, subentity);
+  _BODY_FIELD(ent, ownerhandle);
 }
 
 EXPORT dwg_object_ref **

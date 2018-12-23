@@ -5138,7 +5138,6 @@ typedef struct _dwg_object_entity
 
   /* Common Entity Handle Data */
   BITCODE_H ownerhandle; /*!< mspace, pspace or owner of subentity */
-  BITCODE_H subentity;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
   BITCODE_H prev_entity;  /*!< r13-r2000 */

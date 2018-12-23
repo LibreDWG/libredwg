@@ -771,30 +771,7 @@ static int dwg_decode_##token##_private (Bit_Chain *dat, Bit_Chain *str_dat, \
   } else { \
     error = decode_entity_preR13(dat, obj, _ent); \
   } \
-  if (error >= DWG_ERR_CRITICAL) return error; \
-  if (!strcmp(#token, "POLYLINE_2D") || \
-      !strcmp(#token, "POLYLINE_3D") || \
-      !strcmp(#token, "POLYLINE_PFACE") || \
-      !strcmp(#token, "POLYLINE_MESH") || \
-      !strcmp(#token, "BLOCK")) { \
-    dwg->old_owner = dwg->cur_owner; \
-    dwg->cur_owner = dwg_find_objectref(dwg, obj); \
-  } \
-  if (!strcmp(#token, "VERTEX_2D") || \
-      !strcmp(#token, "VERTEX_3D") || \
-      !strcmp(#token, "ATTRIB") || \
-      !strcmp(#token, "ATTDEF")) { \
-    _ent->ownerhandle = dwg->cur_owner; \
-  } \
-  if (_ent->ownerhandle) { \
-    LOG_TRACE("Entity owner: %lX [H 330]\n", \
-              _ent->ownerhandle->absolute_ref);    \
-  } \
-  if (!strcmp(#token, "ENDBLK") || \
-      !strcmp(#token, "SEQEND")) { \
-    _ent->ownerhandle = dwg->cur_owner; \
-    dwg->cur_owner = dwg->old_owner; \
-  }
+  if (error >= DWG_ERR_CRITICAL) return error;
 
 // Does size include the CRC?
 #define DWG_ENTITY_END \
