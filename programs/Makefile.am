@@ -81,6 +81,7 @@ endif
 
 TESTS = alive.test
 if !DISABLE_DXF
+TESTS += dxf.test
 if HAVE_JQ
 TESTS += json.test
 endif
