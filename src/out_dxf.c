@@ -649,7 +649,7 @@ static void
 dxf_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                     char *restrict name, const int dxf)
 {
-  if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT && name)
+  if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT && name != NULL)
     {
       if (dat->version >= R_2007) // r2007+ unicode names
         {
@@ -685,7 +685,7 @@ dxf_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         free (name);
     }
   else {
-    fprintf(dat->fh, "%3i\r\n\r\n", dxf);
+    fprintf(dat->fh, "%3i\r\n0\r\n", dxf);
   }
 }
 
@@ -1094,19 +1094,6 @@ dxf_common_entity_handle_data(Bit_Chain *restrict dat, const Dwg_Object *restric
   BITCODE_BL vcount = 0;
   ent = obj->tio.entity;
   _obj = ent;
-
-  /* parent: {m,p}space block_record or polyline for vertex, block until blkend */
-  if (ent->entmode != 0) {
-    if (ent->ownerhandle) {
-      //assert(ent->entmode == 3); /* does not exist */
-      VALUE_HANDLE (ent->ownerhandle, 5, 330);
-    } else if (ent->entmode == 1) {
-      VALUE_HANDLE (obj->parent->header_vars.BLOCK_RECORD_PSPACE, 5, 330);
-    } else {
-      assert(ent->entmode == 2);
-      VALUE_HANDLE (obj->parent->header_vars.BLOCK_RECORD_MSPACE, 5, 330);
-    }
-  }
 
   #include "common_entity_handle_data.spec"
 

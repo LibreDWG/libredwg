@@ -48,6 +48,8 @@
 #define rad2deg(ang) (ang)*90.0/M_PI_2
 #define deg2rad(ang) (ang) ? M_PI_2/((ang)*90.0) : 0.0
 
+#endif /* SPEC_H */
+
 #ifndef VALUE_HANDLE
 # define VALUE_HANDLE(value, handle_code, dxf)
 #endif
@@ -316,5 +318,3 @@
 #define REPEAT4_C(times, name, type) _REPEAT_C(times, name, type, 4)
 
 #endif
-
-#endif /* SPEC_H */

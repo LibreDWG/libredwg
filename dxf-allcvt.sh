@@ -6,7 +6,7 @@ make -s -j4 -C programs dwg2dxf && \
 
 for f in test/test-data/Drawing_2*.dwg \
          test/test-data/sample_2*.dwg \
-         test/test-data/example_2000.dwg
+         test/test-data/example_*.dwg
 do
     echo
     echo programs/dwg2dxf -v0 $f

@@ -91,12 +91,12 @@
         LOG_HANDLE("color.index: %d [EMC 62]\n", ent->color.index);
       }
       DXF {
-        FIELD_BS (color.index, 62);
+        if (FIELD_VALUE(color.index) != 256)
+          FIELD_BS (color.index, 62);
       }
 
       if (flags & 0x40)
-        {
-          // r2004+ in handle stream
+        { // r2004+ in handle stream
           FIELD_HANDLE(color_handle, 0, 0);
         }
       if (flags & 0x20)
