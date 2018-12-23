@@ -123,7 +123,7 @@
       }\
     else \
       {\
-        LOG_TRACE(#nam ": NULL HANDLE(%x) [%d]\n", handle_code, dxf); \
+        LOG_TRACE(#nam "[%d]: NULL HANDLE(%x) [%d]\n", (int)vcount, handle_code, dxf); \
       }\
   }
 #define FIELD_HANDLE_N(nam, vcount, handle_code, dxf) \
