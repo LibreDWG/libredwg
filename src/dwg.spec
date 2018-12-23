@@ -3361,7 +3361,7 @@ DWG_OBJECT(MLINESTYLE)
   DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbMlineStyle)
   FIELD_T (name, 2);
-  FIELD_T (desc, 3);
+  FIELD_T (desc, 0);
   FIELD_BS (flag, 70);  /*!< 1 = Fill on,
                              2 = Display miters,
                              16 = Start square end (line) cap,
@@ -3370,6 +3370,7 @@ DWG_OBJECT(MLINESTYLE)
                              256 = End square (line) cap,
                              512 = End inner arcs cap,
                              1024 = End round (outer arcs) cap */
+  DXF { FIELD_T (desc, 3); }
   FIELD_CMC (fill_color, 62,420); /*!< default 256 */
 #ifdef IS_DXF
   // 0 - 90
