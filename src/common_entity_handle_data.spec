@@ -2,13 +2,19 @@
 
   #include "spec.h"
 
+  DXF {
+    ENT_REACTORS(4)
+    ENT_XDICOBJHANDLE(3)
+  }
   //free: avoid double-free #43
   if (FIELD_VALUE(entmode) == 0 && (!IF_IS_FREE || IF_IS_ENCODER))
     {
       FIELD_HANDLE(ownerhandle, 4, 330);
     }
-  ENT_REACTORS(4)
-  ENT_XDICOBJHANDLE(3)
+  DECODER_OR_ENCODER {
+    ENT_REACTORS(4)
+    ENT_XDICOBJHANDLE(3)
+  }
   SUBCLASS(AcDbEntity)
 
   VERSIONS(R_13, R_14)
