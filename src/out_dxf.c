@@ -890,6 +890,40 @@ dwg_dxf_variable_type(const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   return DWG_ERR_UNHANDLEDCLASS;
 }
 
+#define dxf_process_VERTEX(token) \
+static int \
+dxf_process_VERTEX_##token(Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
+{ \
+  int error = 0; \
+  Dwg_Entity_POLYLINE_##token *_obj = obj->tio.entity->tio.POLYLINE_##token; \
+\
+  UNTIL(R_2000) { \
+    Dwg_Object *last_vertex = _obj->last_vertex->obj; \
+    error |= dwg_dxf_VERTEX_##token(dat, _obj->first_vertex->obj); \
+    do { \
+      obj = dwg_next_object(obj); \
+      if (!strcmp(#token, "PFACE") \
+          && obj->fixedtype == DWG_TYPE_VERTEX_PFACE_FACE) { \
+        error |= dwg_dxf_VERTEX_PFACE_FACE(dat, obj); \
+      } else \
+        error |= dwg_dxf_VERTEX_##token(dat, obj); \
+    } while (obj != last_vertex); \
+    error |= dwg_dxf_SEQEND(dat, _obj->seqend->obj); \
+  } \
+  SINCE(R_2004) { \
+    for (BITCODE_BL i=0; i<_obj->num_owned; i++) \
+      { \
+        error |= dwg_dxf_VERTEX_##token(dat, _obj->vertex[i]->obj); \
+      } \
+    error |= dwg_dxf_SEQEND(dat, _obj->seqend->obj); \
+  } \
+  return error; \
+}
+dxf_process_VERTEX(2D)
+dxf_process_VERTEX(3D)
+dxf_process_VERTEX(MESH)
+dxf_process_VERTEX(PFACE)
+
 static int
 dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
 {
@@ -915,25 +949,36 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
     case DWG_TYPE_ENDBLK:
       return dwg_dxf_ENDBLK(dat, obj);
     case DWG_TYPE_SEQEND:
-      return dwg_dxf_SEQEND(dat, obj);
+      return 0;
     case DWG_TYPE_INSERT:
       return dwg_dxf_INSERT(dat, obj);
     case DWG_TYPE_MINSERT:
       return dwg_dxf_MINSERT(dat, obj);
     case DWG_TYPE_VERTEX_2D:
-      return dwg_dxf_VERTEX_2D(dat, obj);
+      //return dwg_dxf_VERTEX_2D(dat, obj);
     case DWG_TYPE_VERTEX_3D:
-      return dwg_dxf_VERTEX_3D(dat, obj);
+      //return dwg_dxf_VERTEX_3D(dat, obj);
     case DWG_TYPE_VERTEX_MESH:
-      return dwg_dxf_VERTEX_MESH(dat, obj);
+      //return dwg_dxf_VERTEX_MESH(dat, obj);
     case DWG_TYPE_VERTEX_PFACE:
-      return dwg_dxf_VERTEX_PFACE(dat, obj);
+      //return dwg_dxf_VERTEX_PFACE(dat, obj);
     case DWG_TYPE_VERTEX_PFACE_FACE:
-      return dwg_dxf_VERTEX_PFACE_FACE(dat, obj);
+      //return dwg_dxf_VERTEX_PFACE_FACE(dat, obj);
+      return 0;
+
     case DWG_TYPE_POLYLINE_2D:
-      return dwg_dxf_POLYLINE_2D(dat, obj);
+      error = dwg_dxf_POLYLINE_2D(dat, obj);
+      return error | dxf_process_VERTEX_2D(dat, obj);
     case DWG_TYPE_POLYLINE_3D:
-      return dwg_dxf_POLYLINE_3D(dat, obj);
+      error = dwg_dxf_POLYLINE_3D(dat, obj);
+      return error | dxf_process_VERTEX_3D(dat, obj);
+    case DWG_TYPE_POLYLINE_PFACE:
+      error = dwg_dxf_POLYLINE_PFACE(dat, obj);
+      return error | dxf_process_VERTEX_PFACE(dat, obj);
+    case DWG_TYPE_POLYLINE_MESH:
+      error = dwg_dxf_POLYLINE_MESH(dat, obj);
+      return error | dxf_process_VERTEX_MESH(dat, obj);
+
     case DWG_TYPE_ARC:
       return dwg_dxf_ARC(dat, obj);
     case DWG_TYPE_CIRCLE:
@@ -958,10 +1003,6 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
       return dwg_dxf_POINT(dat, obj);
     case DWG_TYPE__3DFACE:
       return dwg_dxf__3DFACE(dat, obj);
-    case DWG_TYPE_POLYLINE_PFACE:
-      return dwg_dxf_POLYLINE_PFACE(dat, obj);
-    case DWG_TYPE_POLYLINE_MESH:
-      return dwg_dxf_POLYLINE_MESH(dat, obj);
     case DWG_TYPE_SOLID:
       return dwg_dxf_SOLID(dat, obj);
     case DWG_TYPE_TRACE:
