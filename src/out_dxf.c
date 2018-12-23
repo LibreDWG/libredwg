@@ -320,18 +320,18 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 #define FIELD_3DPOINT(nam,dxf) FIELD_3BD(nam,dxf)
 //TODO r2004+: lookup the rgb index for 62
 #define FIELD_CMC(color,dxf1,dxf2) { \
-  if (dat->version < R_2004) { \
+  if (dxf1 > 0 && (dat->version < R_2004 || _obj->color.index == 256)) { \
     VALUE_RS(_obj->color.index, dxf1); \
   } \
-  if (dat->version >= R_2004 && dxf2 && _obj->color.rgb) { \
+  if (dat->version >= R_2004 && dxf2 > 0 && _obj->color.index != 256) { \
     VALUE_RL(_obj->color.rgb, dxf2); \
   } \
 }
 #define SUB_FIELD_CMC(o,color,dxf1,dxf2) { \
-  if (dat->version < R_2004) { \
+  if (dxf1 > 0 && (dat->version < R_2004 || _obj->o.color.index == 256)) { \
     VALUE_RS(_obj->o.color.index, dxf1); \
   } \
-  if (dat->version >= R_2004 && dxf2 && _obj->o.color.rgb) { \
+  if (dat->version >= R_2004 && dxf2 > 0 && _obj->o.color.index != 256) { \
     VALUE_RL(_obj->o.color.rgb, dxf2); \
   } \
 }
