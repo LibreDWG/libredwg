@@ -5105,7 +5105,9 @@ typedef struct _dwg_object_entity
   BITCODE_B   picture_exists;
   BITCODE_BLL picture_size;     /*!< DXF 160, e.g. INSERT, MULTILEADER */
   char       *picture;          /*!< DXF 310 */
-  BITCODE_BB entity_mode;
+  BITCODE_BB entmode;           /*!< has no owner handle:
+                                  0 has no ownerhandle, 1 is PSPACE, 2 is MSPACE
+                                  3 has ownerhandle. */
   BITCODE_BL num_reactors;
   BITCODE_B xdic_missing_flag;  /*!< r2004+ */
   BITCODE_B isbylayerlt;        /*!< r13-r14 */
@@ -5559,8 +5561,6 @@ typedef struct _dwg_struct
 
   Dwg_Object *mspace_block;
   Dwg_Object *pspace_block;
-  BITCODE_H  cur_owner;       /* cur mspace, pspace or owner of subentity */
-  BITCODE_H  old_owner;       /* cur mspace, pspace */
   /* Those TABLES might be empty with num_entries=0 */
   Dwg_Object_BLOCK_CONTROL      block_control;
   Dwg_Object_LAYER_CONTROL      layer_control;

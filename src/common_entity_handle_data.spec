@@ -3,9 +3,9 @@
   #include "spec.h"
 
   //free: avoid double-free #43
-  if ((FIELD_VALUE(entity_mode) == 0 && !IF_IS_FREE) || IF_IS_ENCODER)
+  if (FIELD_VALUE(entmode) == 0 && (!IF_IS_FREE || IF_IS_ENCODER))
     {
-      FIELD_HANDLE(ownerhandle, 4, 330); // doc: owner ref always?
+      FIELD_HANDLE(ownerhandle, 4, 330);
     }
   ENT_REACTORS(4)
   ENT_XDICOBJHANDLE(3)

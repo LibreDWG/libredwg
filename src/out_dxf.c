@@ -530,12 +530,6 @@ dwg_dxf_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
     fprintf(dat->fh, "%3i\r\n%lX\r\n", 5, obj->handle.value); \
   } \
   SINCE(R_13) { \
-    /* parent: {m,p}space block_record or polyline for vertex, block until blkend */ \
-    if (_ent->ownerhandle) { \
-      VALUE_HANDLE (_ent->ownerhandle, 5, 330); \
-    } else { \
-      VALUE_HANDLE (obj->parent->header_vars.BLOCK_RECORD_MSPACE, 5, 330); \
-    } \
     error |= dxf_common_entity_handle_data(dat, obj); \
   }
 
@@ -1100,6 +1094,19 @@ dxf_common_entity_handle_data(Bit_Chain *restrict dat, const Dwg_Object *restric
   BITCODE_BL vcount = 0;
   ent = obj->tio.entity;
   _obj = ent;
+
+  /* parent: {m,p}space block_record or polyline for vertex, block until blkend */
+  if (ent->entmode != 0) {
+    if (ent->ownerhandle) {
+      //assert(ent->entmode == 3); /* does not exist */
+      VALUE_HANDLE (ent->ownerhandle, 5, 330);
+    } else if (ent->entmode == 1) {
+      VALUE_HANDLE (obj->parent->header_vars.BLOCK_RECORD_PSPACE, 5, 330);
+    } else {
+      assert(ent->entmode == 2);
+      VALUE_HANDLE (obj->parent->header_vars.BLOCK_RECORD_MSPACE, 5, 330);
+    }
+  }
 
   #include "common_entity_handle_data.spec"
 

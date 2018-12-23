@@ -489,10 +489,6 @@ DWG_ENTITY(INSERT)
     }
 
   if (FIELD_VALUE(has_attribs)) {
-    DECODER {
-      dwg->old_owner = dwg->cur_owner;
-      dwg->cur_owner = dwg_find_objectref(dwg, obj);
-    }
     FIELD_HANDLE (seqend, 3, 0);
   }
 
@@ -619,10 +615,6 @@ DWG_ENTITY(MINSERT)
 
   if (FIELD_VALUE(has_attribs))
     {
-      DECODER {
-        dwg->old_owner = dwg->cur_owner;
-        dwg->cur_owner = dwg_find_objectref(dwg, obj);
-      }
       FIELD_HANDLE (seqend, 3, 0);
     }
 
@@ -5059,10 +5051,6 @@ DWG_ENTITY(TABLE)
 
   if (FIELD_VALUE(has_attribs)) {
     FIELD_HANDLE (seqend, 3, 0);
-    DECODER {
-      dwg->old_owner = dwg->cur_owner;
-      dwg->cur_owner = dwg_find_objectref(dwg, obj);
-    }
   }
 
   FIELD_HANDLE (table_style_id, 5, 342);

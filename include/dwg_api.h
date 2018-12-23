@@ -4722,7 +4722,7 @@ dwg_ent_get_picture(const dwg_obj_ent *restrict ent,
                     int *restrict error);
 
 EXPORT BITCODE_BB
-dwg_ent_get_entity_mode(const dwg_obj_ent *restrict ent,
+dwg_ent_get_entmode(const dwg_obj_ent *restrict ent,
                         int *restrict error);
 
 EXPORT BITCODE_BL

@@ -18537,10 +18537,10 @@ dwg_ent_get_picture(const dwg_obj_ent *restrict ent,
 }
 
 EXPORT BITCODE_BB
-dwg_ent_get_entity_mode(const dwg_obj_ent *restrict ent,
+dwg_ent_get_entmode(const dwg_obj_ent *restrict ent,
                           int *restrict error)
 {
-  _BODY_FIELD(ent, entity_mode);
+  _BODY_FIELD(ent, entmode);
 }
 
 EXPORT BITCODE_BL

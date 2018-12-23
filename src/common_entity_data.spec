@@ -43,18 +43,18 @@
     {
 #ifdef IS_DECODER
       obj->bitsize = bit_read_RL(dat); // until the handles
-      LOG_TRACE("Entity bitsize: " FORMAT_BL " @%lu.%u\n", obj->bitsize,
-                dat->byte, dat->bit)
 #endif
 #ifdef IS_ENCODER
       bit_write_RL(dat, obj->bitsize);
+#endif
       LOG_TRACE("Entity bitsize: " FORMAT_BL " @%lu.%u\n", obj->bitsize,
                 dat->byte, dat->bit)
-#endif
     }
 
-  FIELD_BB (entity_mode, 0);  //ODA bug
-  FIELD_BL (num_reactors, 0); //ODA bug
+  // TODO: r13-r14: 6B flags + 6B common params
+  FIELD_BB (entmode, 0);
+  // TODO: 2 more BB's
+  FIELD_BL (num_reactors, 0); //ODA bug: BB as BS
 
   VERSIONS(R_13, R_14) //ODA bug
     {
