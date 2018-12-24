@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # dxf.test
 #
 # Copyright (C) 2018 Free Software Foundation, Inc.
