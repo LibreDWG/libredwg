@@ -67,7 +67,7 @@ jobs:
       run: |
         sudo apt-get -y update
         sudo apt-get -y install texlive help2man libconvert-binary-c-perl shellcheck \
-          swig python3-dev python3-libxml2 libxml2-dev libpcre2-dev libpcre2-32-0 jq \
+          swig python3-dev python3-lxml libxml2-dev libpcre2-dev libpcre2-32-0 jq \
           pkg-config shellcheck parallel rpmlint shfmt doxygen jing valgrind cppcheck \
           gperf intltool latexml
         build-aux/install-libxslt
@@ -234,6 +234,7 @@ jobs:
       with:
         path-type: minimal
         update: true
+        cache: true
         install: >-
           git
           base-devel
@@ -241,6 +242,7 @@ jobs:
           mingw-w64-x86_64-libtool
           mingw-w64-x86_64-libiconv
           mingw-w64-x86_64-libxml2
+          mingw-w64-x86_64-libxslt
           mingw-w64-x86_64-swig
           mingw-w64-x86_64-python
           libtool
@@ -250,6 +252,7 @@ jobs:
           gperf
           mingw-w64-x86_64-perl
           mingw-w64-x86_64-pcre2
+          python-lxml
     - run: reg add "HKLM\Software\Microsoft\Windows\Windows Error Reporting" /f /v DontShowUI /d 1
     - name: checkout
       uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2

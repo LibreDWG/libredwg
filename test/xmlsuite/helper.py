@@ -1,17 +1,12 @@
 # -*- indent-tabs-mode:1 tab-width:4 mode:python minor-mode:whitespace -*-
-import libxml2
-import re
 import os
 import glob
-
-
-"""
-This class has all the colors to be used with colored output
-terminal.
-"""
+import re
+from lxml import etree
 
 
 class bcolors:
+    """This class has all the colors to be used with colored output terminal."""
     HEADER = "\033[95m"
     OKBLUE = "\033[94m"
     OKGREEN = "\033[92m"
@@ -20,16 +15,13 @@ class bcolors:
     ENDC = "\033[0m"
 
 
-"""
-This functions uses the script to generate xml which can be used for
-comparison later.
-
-@param string dwgdir The path to DWG dir
-"""
-
-
 def generatexml(dwgdir):
-    # This beats ‘sys.argv[0]’, which is not guaranteed to be set.
+    """
+    This function uses the script to generate xml which can be used for
+    comparison later.
+
+    @param str dwgdir: The path to DWG dir
+    """
     me = os.getenv("PYTHON")
     if not me:
         me = "python"
@@ -37,7 +29,6 @@ def generatexml(dwgdir):
     current_dir = os.getcwd()
     os.chdir(dwgdir)
     for filename in glob.glob("*/*.txt"):
-        # maybe add double-quotes for the script?
         os.system(
             me
             + " "
@@ -51,27 +42,20 @@ def generatexml(dwgdir):
     os.chdir(current_dir)
 
 
-"""
-This functions main aim is to process special types of attributes
-which are difficult to equate to each other. Currently this only
-handles 2D and 3D point. It converts these string in certain format
-so that they can be equated
-
-@param string attr the attribute to be processed
-@return string The processed attribute
-"""
-
-
 def processattr(attr):
-    pattern = re.compile(r"(\d+\.\d{1,})\s{0,1}")
-    if re.search(pattern, attr):
-        # extract the numbers and adjust them
-        extract_pattern = re.compile(r"(\d+\.\d{1,})\s{0,1}")
-        result = extract_pattern.findall(attr)
-        for no in range(len(result)):
-            result[no] = float(result[no])
+    """
+    This function's main aim is to process special types of attributes
+    which are difficult to equate to each other. Currently this only
+    handles 2D and 3D point. It converts these strings in certain format
+    so that they can be equated.
 
-        # if its a 3d point
+    @param str attr: the attribute to be processed
+    @return str: The processed attribute
+    """
+    pattern = re.compile(r"(\d+\.\d+)\s?")
+    if re.search(pattern, attr):
+        result = [float(x) for x in pattern.findall(attr)]
+
         if len(result) == 3:
             return "(%.2f %.2f %.2f)" % (
                 round(result[0], 2),
@@ -79,56 +63,43 @@ def processattr(attr):
                 round(result[2], 2),
             )
         elif len(result) == 2:
-            return "(%.2f %.2f)" % round(round(result[0], 2), round(result[1], 2))
-    else:
-        return attr
-
-
-"""
-This function takes handle to both ideal file which came from AutoCAD and
-practical file which came from LibreDWG and compares them to emit out the
-result
-
-@param ideal Name of the ideal file
-@param practical Name of the practical file
-
-return array[2]
-[0] = The percentage of entity that matched
-[1] = The unmatched attributes with following format
-	{attrname, original, duplicate}
-	attrname =  Name of the attribute
-	original = Value came from AutoCAD
-	duplicate = Value that came from LibreDWG.
-"""
+            return "(%.2f %.2f)" % (
+                round(result[0], 2),
+                round(result[1], 2)
+            )
+    return attr
 
 
 def xmlprocess(ideal, practical):
-    doc = libxml2.parseFile(ideal)
+    """
+    This function takes handle to both ideal file which came from AutoCAD and
+    practical file which came from LibreDWG and compares them to emit out the
+    result.
 
-    root = doc.getRootElement()
-    child = root.children
+    @param str ideal: Name of the ideal file
+    @param str practical: Name of the practical file
+    @return list: array[2]
+        [0] = The percentage of entity that matched
+        [1] = The unmatched attributes with following format
+            {attrname, original, duplicate}
+            attrname = Name of the attribute
+            original = Value came from AutoCAD
+            duplicate = Value that came from LibreDWG.
+    """
+    doc = etree.parse(ideal)
+    root = doc.getroot()
 
-    # Let's first collect all the entities present in the file
-    original_entities = []
+    # Collect all entity elements (direct children of root)
+    original_entities = [child for child in root if isinstance(child.tag, str)]
 
-    while child is not None:
-        if child.type == "element":
-            original_entities.insert(len(original_entities), child)
-        child = child.next
+    doc2 = etree.parse(practical)
+    root2 = doc2.getroot()
 
-    doc2 = libxml2.parseFile(practical)
-
-    root2 = doc2.getRootElement()
-    child2 = root2.children
-
-    duplicate_entities = []
-
-    while child2 is not None:
-        if child2.type == "element":
-            duplicate_entities.insert(len(duplicate_entities), child2)
-        child2 = child2.next
+    # Collect all entity elements (direct children of root)
+    duplicate_entities = [child for child in root2 if isinstance(child.tag, str)]
 
     match = 0
+    total_unmatched = []
 
     # Now its time for comparison, For each dwg entity
     for original, duplicate in zip(original_entities, duplicate_entities):
@@ -144,32 +115,30 @@ def xmlprocess(ideal, practical):
             "Hyperlinks",
         ]
 
-        # collect original attributes. Removing the attributes here, so the
-        # total length is also set
+        # Collect original attributes
         try:
-            # print (ideal + " original.properties")
-            for attr in original.properties:
-                if attr.name not in excluded_attributes:
-                    original_attributes[attr.name] = processattr(attr.content)
-        except TypeError:
+            for attr_name, attr_value in original.attrib.items():
+                if attr_name not in excluded_attributes:
+                    original_attributes[attr_name] = processattr(attr_value)
+        except AttributeError:
             print("Need python3 compatible libxml2 with __next__ iterator")
 
+        # Collect duplicate attributes
         try:
-            for attr in duplicate.properties:
-                duplicate_attributes[attr.name] = processattr(attr.content)
-        except TypeError:
+            for attr_name, attr_value in duplicate.attrib.items():
+                if attr_name not in excluded_attributes:
+                    duplicate_attributes[attr_name] = processattr(attr_value)
+        except AttributeError:
             pass
 
         unmatched_attr = []
-        # collect duplicate attributes and check if it matches with
-        # original ones
+
+        # Compare attributes
         for key, value in original_attributes.items():
             try:
                 if value == duplicate_attributes[key]:
                     match += 1
                 else:
-                    # The attributes didn't match.
-                    # Report the unmatched attribute
                     unmatched_attr.append(
                         {
                             "attrname": key,
@@ -177,29 +146,23 @@ def xmlprocess(ideal, practical):
                             "duplicate": duplicate_attributes[key],
                         }
                     )
-
-            except Exception:
-                # This exception would occur when
-                # We can't find the given attribute
-
+            except KeyError:
+                # Attribute not found in duplicate
                 unmatched_attr.append(
                     {"attrname": key, "original": value, "duplicate": ""}
                 )
-                continue
 
-    # What are the total number of attributes
+        total_unmatched.extend(unmatched_attr)
+
+    # Calculate percentage
     try:
         total_attr = len(original_attributes)
         if total_attr == 0:
-            percent_each = 0
-        else:
-            percent_each = 100 / total_attr
+            return [0, []]
+        percent_each = 100 / total_attr
     except NameError:
         return [0, []]
-        raise
 
     res_percent = percent_each * match
-    doc.freeDoc()
-    doc2.freeDoc()
 
-    return [res_percent, unmatched_attr]
+    return [res_percent, total_unmatched]

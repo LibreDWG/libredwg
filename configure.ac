@@ -730,20 +730,20 @@ fi
 
 if test x$enable_python != xno && test -n "$XML2_LIBS" && test x$cross_compiling = xno
 then
-  AC_MSG_CHECKING([for the libxml2 Python package])
-  ac_python_libxml2_result=`$PYTHON -c "import libxml2" 2>&1`
+  AC_MSG_CHECKING([for the lxml Python package])
+  ac_python_lxml_result=`$PYTHON -c "import lxml" 2>&1`
   if test $? -eq 0; then
-    ac_have_python_libxml2=1
+    ac_have_python_lxml=1
     AC_MSG_RESULT([yes])
   else
-    ac_have_python_libxml2=
+    ac_have_python_lxml=
     AC_MSG_RESULT([no])
     AC_MSG_WARN([disable test/xmlsuite.
 The import error was:
-$ac_python_libxml2_result])
+$ac_python_lxml_result])
   fi
 fi
-AM_CONDITIONAL([HAVE_PYTHON_LIBXML2], [test x$ac_have_python_libxml2 = x1])
+AM_CONDITIONAL([HAVE_PYTHON_LXML], [test x$ac_have_python_lxml = x1])
 
 if test -n "$PERL"; then
   ac_cv_perl="$PERL"
@@ -1049,7 +1049,7 @@ AM_COND_IF([DISABLE_BINDINGS], [],
            [AC_CONFIG_FILES([bindings/Makefile bindings/python/Makefile])])
 AM_COND_IF([DISABLE_BINDINGS], [],
            [AM_COND_IF([HAVE_PERL], [AC_CONFIG_FILES([bindings/perl/Makefile.PL])])])
-AM_COND_IF([HAVE_PYTHON_LIBXML2],  [AC_CONFIG_FILES([test/xmlsuite/Makefile])])
+AM_COND_IF([HAVE_PYTHON_LXML],  [AC_CONFIG_FILES([test/xmlsuite/Makefile])])
 AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([doc/Doxyfile doc/footer])])
 AC_CONFIG_FILES([programs/dwgfilter], [chmod +x programs/dwgfilter])
 AC_CONFIG_FILES([programs/alive.test], [chmod +x programs/alive.test])
