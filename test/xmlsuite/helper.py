@@ -1,5 +1,5 @@
 # -*- indent-tabs-mode:1 tab-width:4 mode:python minor-mode:whitespace -*-
-import libxml2
+import lxml
 import re
 import os
 import glob
@@ -82,10 +82,10 @@ return array[2]
 	duplicate = Value that came from LibreDWG.
 '''
 def xmlprocess(ideal, practical):
-	doc = libxml2.parseFile(ideal)
+	doc = etree.parse(ideal)
 
-	root = doc.getRootElement()
-	child = root.children
+	root = doc.getroot()
+	child = root.getchildren
 
 	# Let's first collect all the entities present in the file
 	original_entities = []
@@ -95,10 +95,10 @@ def xmlprocess(ideal, practical):
 			original_entities.insert(len(original_entities), child)
 		child = child.next
 
-	doc2 = libxml2.parseFile(practical)
+	doc2 = etree.parse(practical)
 
-	root2 = doc2.getRootElement()
-	child2 = root2.children
+	root2 = doc2.getroot()
+	child2 = root2.getchildren
 
 	duplicate_entities = []
 
@@ -167,7 +167,7 @@ def xmlprocess(ideal, practical):
 
 	res_percent = percent_each*match;
 
-	doc.freeDoc()
-	doc2.freeDoc()
+	#doc.freeDoc()
+	#doc2.freeDoc()
 
 	return [res_percent, unmatched_attr]
