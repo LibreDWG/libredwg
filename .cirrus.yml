@@ -5,11 +5,12 @@ freebsd_instance:
 
 task:
   install_script:
-    - pkg install -y autoconf automake libtool pkgconf python36 py36-lxml pcre2 libxml2 dejagnu texinfo
+    - pkg install -y autoconf automake libtool pkgconf python36 py36-libxml2 pcre2 libxml2 dejagnu texinfo
   build_script:
     - sh ./autogen.sh
+    # --disable-python
     # xmlsuite/check.py fails: import: not found. 5: Syntax error: "(" unexpected
-    - CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib ./configure --disable-python
+    - CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib ./configure
     - make
   test_script:
     - make check
