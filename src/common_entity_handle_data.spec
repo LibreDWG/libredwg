@@ -7,7 +7,7 @@
     ENT_XDICOBJHANDLE(3)
 #endif
   //free: avoid double-free #43
-  if (FIELD_VALUE(entmode) == 0 && (!IF_IS_FREE || IF_IS_ENCODER))
+  if (FIELD_VALUE(entmode) == 0 && !IF_IS_FREE)
     {
       FIELD_HANDLE(ownerhandle, 4, 330);
     }

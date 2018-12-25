@@ -1101,12 +1101,20 @@ typedef struct _dwg_entity_VERTEX_PFACE_FACE
   BITCODE_BS vertind[4];
 } Dwg_Entity_VERTEX_PFACE_FACE;
 
+#define COMMON_ENTITY_POLYLINE \
+  struct _dwg_object_entity *parent; \
+  BITCODE_BL num_owned; \
+  BITCODE_H first_vertex; \
+  BITCODE_H last_vertex; \
+  BITCODE_H* vertex; \
+  BITCODE_H seqend
+
 /**
  2D POLYLINE (15) entity
  */
 typedef struct _dwg_entity_POLYLINE_2D
 {
-  struct _dwg_object_entity *parent;
+  COMMON_ENTITY_POLYLINE;
 
   BITCODE_BS flag;
   BITCODE_BS curve_type;
@@ -1115,11 +1123,6 @@ typedef struct _dwg_entity_POLYLINE_2D
   BITCODE_BT thickness;
   BITCODE_BD elevation;
   BITCODE_BE extrusion;
-  BITCODE_BL num_owned;
-  BITCODE_H first_vertex;
-  BITCODE_H last_vertex;
-  BITCODE_H* vertex;
-  BITCODE_H seqend;
 } Dwg_Entity_POLYLINE_2D;
 
 /**
@@ -1127,15 +1130,10 @@ typedef struct _dwg_entity_POLYLINE_2D
  */
 typedef struct _dwg_entity_POLYLINE_3D
 {
-  struct _dwg_object_entity *parent;
+  COMMON_ENTITY_POLYLINE;
 
   BITCODE_RC flag;
   BITCODE_RC flag2;
-  BITCODE_BL num_owned;
-  BITCODE_H first_vertex;
-  BITCODE_H last_vertex;
-  BITCODE_H* vertex;
-  BITCODE_H seqend;
 } Dwg_Entity_POLYLINE_3D;
 
 /**
@@ -1338,15 +1336,10 @@ typedef struct _dwg_entity_3DFACE
  */
 typedef struct _dwg_entity_POLYLINE_PFACE
 {
-  struct _dwg_object_entity *parent;
+  COMMON_ENTITY_POLYLINE;
 
   BITCODE_BS numverts;
   BITCODE_BS numfaces;
-  BITCODE_BL num_owned;
-  BITCODE_H first_vertex;
-  BITCODE_H last_vertex;
-  BITCODE_H* vertex;
-  BITCODE_H seqend;
 } Dwg_Entity_POLYLINE_PFACE;
 
 /**
@@ -1354,7 +1347,7 @@ typedef struct _dwg_entity_POLYLINE_PFACE
  */
 typedef struct _dwg_entity_POLYLINE_MESH
 {
-  struct _dwg_object_entity *parent;
+  COMMON_ENTITY_POLYLINE;
 
   BITCODE_BS flag;
   BITCODE_BS curve_type;
@@ -1362,11 +1355,6 @@ typedef struct _dwg_entity_POLYLINE_MESH
   BITCODE_BS num_n_verts;
   BITCODE_BS m_density;
   BITCODE_BS n_density;
-  BITCODE_BL num_owned;
-  BITCODE_H first_vertex;
-  BITCODE_H last_vertex;
-  BITCODE_H* vertex;
-  BITCODE_H seqend;
 } Dwg_Entity_POLYLINE_MESH;
 
 /**

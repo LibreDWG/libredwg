@@ -16,11 +16,12 @@
  */
 
 /* Works for most r13-r2000 files, but not for many r2004+
-TODO: down-conversions from unsupported entities on older DXF versions.
-
-Since r13:
-Entities: LWPOLYLINE, HATCH, SPLINE, LEADER, DIMENSION, MTEXT, IMAGE, BLOCK_RECORD.
-Add CLASSES for those
+TODO:
+* down-conversions from unsupported entities on older DXF versions.
+  Since r13:
+    Entities: LWPOLYLINE, HATCH, SPLINE, LEADER, DIMENSION, MTEXT, IMAGE, BLOCK_RECORD.
+    Add CLASSES for those
+* sort PLINE - VERTEX - SEQEND
 */
 
 #include "config.h"
@@ -36,12 +37,14 @@ Add CLASSES for those
 #include "decode.h"
 #include "out_dxf.h"
 
-#define DWG_LOGLEVEL DWG_LOGLEVEL_NONE
+static unsigned int loglevel;
+#define DWG_LOGLEVEL loglevel
 #include "logging.h"
 
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
 static char buf[255];
+static int is_sorted_PLINE = 0;
 
 // private
 static int
@@ -890,6 +893,58 @@ dwg_dxf_variable_type(const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   return DWG_ERR_UNHANDLEDCLASS;
 }
 
+/* Ensure that the given refs have rising objid's/indices (when read in natural order) */
+static inline int
+ref_after(const Dwg_Object_Ref *restrict r1, const Dwg_Object_Ref *restrict r2)
+{
+  return r1->obj->index >= r2->obj->index ? 1 : 0;
+}
+
+static int
+dxf_is_sorted_POLYLINE(const Dwg_Object *restrict obj)
+{
+  /* We ensured the commmon fields structure is shared with all 4 types */
+  Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
+  Dwg_Data *dwg = obj->parent;
+
+  if (dwg->header.version > R_11 && dwg->header.version <= R_2000) {
+    Dwg_Object_Ref *first_vertex = _obj->first_vertex;
+    Dwg_Object_Ref *last_vertex = _obj->last_vertex;
+    Dwg_Object_Ref *seqend = _obj->seqend;
+    if (ref_after(first_vertex, last_vertex) ||
+        ref_after(last_vertex, seqend)) {
+      LOG_WARN("unsorted POLYLINE VERTEX SEQEND")
+      return 0;
+    }
+  } else if (dwg->header.version >= R_2004) {
+    BITCODE_BL i = 1;
+    Dwg_Object_Ref *first_vertex = _obj->vertex[0];
+    Dwg_Object_Ref *seqend = _obj->seqend;
+    if (ref_after(first_vertex, seqend)) {
+      if (first_vertex->obj->index < obj->index) {
+        LOG_WARN("skip wrong POLYLINE.vertex[0] handle %lX < %lX\n",
+                 first_vertex->obj->handle.value, obj->handle.value);
+        if (_obj->num_owned > 1)
+          first_vertex = _obj->vertex[1];
+        i = 2;
+      } else {
+        LOG_WARN("unsorted POLYLINE VERTEX SEQEND")
+        return 0;
+      }
+    }
+    for (; i < _obj->num_owned; i++)
+      {
+        if (ref_after(first_vertex, _obj->vertex[i]) ||
+            ref_after(_obj->vertex[i], seqend)) {
+          LOG_WARN("unsorted POLYLINE VERTEX SEQEND")
+          return 0;
+        }
+      }
+  }
+  return 1;
+}
+
+/* process unsorted vertices */
 #define dxf_process_VERTEX(token) \
 static int \
 dxf_process_VERTEX_##token(Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
@@ -949,35 +1004,50 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
     case DWG_TYPE_ENDBLK:
       return dwg_dxf_ENDBLK(dat, obj);
     case DWG_TYPE_SEQEND:
-      return 0;
+      return is_sorted_PLINE ? dwg_dxf_SEQEND(dat, obj) : 0;
     case DWG_TYPE_INSERT:
       return dwg_dxf_INSERT(dat, obj);
     case DWG_TYPE_MINSERT:
       return dwg_dxf_MINSERT(dat, obj);
     case DWG_TYPE_VERTEX_2D:
-      //return dwg_dxf_VERTEX_2D(dat, obj);
+      return is_sorted_PLINE ? dwg_dxf_VERTEX_2D(dat, obj) : 0;
     case DWG_TYPE_VERTEX_3D:
-      //return dwg_dxf_VERTEX_3D(dat, obj);
+      return is_sorted_PLINE ? dwg_dxf_VERTEX_3D(dat, obj) : 0;
     case DWG_TYPE_VERTEX_MESH:
-      //return dwg_dxf_VERTEX_MESH(dat, obj);
+      return is_sorted_PLINE ? dwg_dxf_VERTEX_MESH(dat, obj) : 0;
     case DWG_TYPE_VERTEX_PFACE:
-      //return dwg_dxf_VERTEX_PFACE(dat, obj);
+      return is_sorted_PLINE ? dwg_dxf_VERTEX_PFACE(dat, obj) : 0;
     case DWG_TYPE_VERTEX_PFACE_FACE:
-      //return dwg_dxf_VERTEX_PFACE_FACE(dat, obj);
-      return 0;
+      return is_sorted_PLINE ? dwg_dxf_VERTEX_PFACE_FACE(dat, obj) : 0;
 
     case DWG_TYPE_POLYLINE_2D:
+      is_sorted_PLINE = dxf_is_sorted_POLYLINE(obj);
       error = dwg_dxf_POLYLINE_2D(dat, obj);
-      return error | dxf_process_VERTEX_2D(dat, obj);
+      if (is_sorted_PLINE)
+        return error;
+      else
+        return error | dxf_process_VERTEX_2D(dat, obj);
     case DWG_TYPE_POLYLINE_3D:
+      is_sorted_PLINE = dxf_is_sorted_POLYLINE(obj);
       error = dwg_dxf_POLYLINE_3D(dat, obj);
-      return error | dxf_process_VERTEX_3D(dat, obj);
+      if (is_sorted_PLINE)
+        return error;
+      else
+        return error | dxf_process_VERTEX_3D(dat, obj);
     case DWG_TYPE_POLYLINE_PFACE:
+      is_sorted_PLINE = dxf_is_sorted_POLYLINE(obj);
       error = dwg_dxf_POLYLINE_PFACE(dat, obj);
-      return error | dxf_process_VERTEX_PFACE(dat, obj);
+      if (is_sorted_PLINE)
+        return error;
+      else
+        return error | dxf_process_VERTEX_PFACE(dat, obj);
     case DWG_TYPE_POLYLINE_MESH:
+      is_sorted_PLINE = dxf_is_sorted_POLYLINE(obj);
       error = dwg_dxf_POLYLINE_MESH(dat, obj);
-      return error | dxf_process_VERTEX_MESH(dat, obj);
+      if (is_sorted_PLINE)
+        return error;
+      else
+        return error | dxf_process_VERTEX_MESH(dat, obj);
 
     case DWG_TYPE_ARC:
       return dwg_dxf_ARC(dat, obj);
@@ -1751,6 +1821,7 @@ dwg_write_dxf(Bit_Chain *dat, Dwg_Data * dwg)
   const int minimal = dwg->opts & 0x10;
   struct Dwg_Header *obj = &dwg->header;
 
+  loglevel = dwg->opts & 0xf;
   if (dat->from_version == R_INVALID)
     dat->from_version = dat->version;
 

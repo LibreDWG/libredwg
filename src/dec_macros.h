@@ -633,7 +633,7 @@
     vcount = bit_position(dat); \
     if (obj->hdlpos != (unsigned long)vcount) { \
       bit_set_position(hdl_dat, obj->hdlpos); \
-      LOG_HANDLE(" handle stream: %+ld @%lu.%u %s\n", obj->hdlpos - vcount, \
+      LOG_HANDLE(" handle stream: %+ld @%lu.%u %s\n", (long)obj->hdlpos - (long)vcount, \
         dat->byte, dat->bit, \
         ((long)obj->hdlpos - (long)vcount) >= 8 ? "MISSING" \
           : ((long)obj->hdlpos < (long)vcount) ? "OVERSHOOT" : ""); \

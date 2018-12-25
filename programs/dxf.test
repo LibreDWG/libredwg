@@ -108,6 +108,34 @@ for dwg in $datadir/2004/Underlay.dwg; do
     done
 done
 
+# check vertex - seqend order
+check_pline_order() {
+    if [ -f "$dwg" ] && [ -f $dxf ]; then
+        ../libtool --mode=execute ./dwg2dxf -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
+        got=$(egrep '^(POLYLINE|VERTEX|SEQEND)' "$tgt")
+        expect=$(egrep '^(POLYLINE|VERTEX|SEQEND)' "$dxf")
+        if [ "$got" = "$expect" ]
+        then
+            echo "$tgt" pline order ok
+        else
+            echo "$tgt" pline order fail: "$got"
+            problems=$(expr 1 + $problems)
+            echo "$got" >$log
+        fi
+    fi
+}
+
+for year in 2007 2018
+do
+    base=PolyLine3D
+    dwg=$datadir/${year}/${base}.dwg
+    dxf=$datadir/2013/${base}.dxf
+    tgt=../${base}_${year}.dxf
+    log=$(basename "$tgt").log
+    rm "$log" 2>/dev/null
+    check_pline_order
+done
+
 if test x0 = x$problems ; then
     rm *.dxf.log 2>/dev/null
     exit 0
