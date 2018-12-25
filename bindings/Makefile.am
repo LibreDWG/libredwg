@@ -23,7 +23,9 @@
 ACLOCAL_AMFLAGS = -I m4
 
 # The perl subdir is for the perl Makefile.PL tool and is driven from here
+if HAVE_PYTHON
 SUBDIRS = python
+endif
 
 if HAVE_SWIG_PERL
 
