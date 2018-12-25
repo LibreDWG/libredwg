@@ -3407,12 +3407,12 @@ dwg_ent_polyline_3d_set_flag(dwg_ent_polyline_3d *restrict pline3d,
                              int *restrict error);
 
 EXPORT BITCODE_RC
-dwg_ent_polyline_3d_get_flag2(const dwg_ent_polyline_3d *restrict pline3d,
+dwg_ent_polyline_3d_get_curve_type(const dwg_ent_polyline_3d *restrict pline3d,
                               int *restrict error);
 
 EXPORT void
-dwg_ent_polyline_3d_set_flag2(dwg_ent_polyline_3d *restrict pline3d,
-                              const BITCODE_RC flag2,
+dwg_ent_polyline_3d_set_curve_type(dwg_ent_polyline_3d *restrict pline3d,
+                              const BITCODE_RC curve_type,
                               int *restrict error);
 
 EXPORT BITCODE_BL

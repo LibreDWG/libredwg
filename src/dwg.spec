@@ -829,13 +829,12 @@ DWG_ENTITY_END
 DWG_ENTITY(POLYLINE_3D)
 
   SUBCLASS (AcDb3dPolyline)
-  FIELD_RC (flag, 0); // => 70, 75 TODO for dxf
-  FIELD_RC (flag2, 0);
+  FIELD_RC (curve_type, 75);
+  FIELD_RC (flag, 70);
 
   SINCE(R_2004) {
     FIELD_BL (num_owned, 0);
   }
-
   COMMON_ENTITY_HANDLE_DATA;
 
   VERSIONS(R_13, R_2000)

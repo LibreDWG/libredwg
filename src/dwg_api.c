@@ -12786,16 +12786,16 @@ dwg_ent_polyline_3d_set_flag(dwg_ent_polyline_3d *restrict pline3d,
     }
 }
 
-/** Returns polyline 3d flag2
+/** Returns polyline 3d curve_type
  */
 BITCODE_RC
-dwg_ent_polyline_3d_get_flag2(const dwg_ent_polyline_3d *restrict pline3d,
-                              int *restrict error)
+dwg_ent_polyline_3d_get_curve_type(const dwg_ent_polyline_3d *restrict pline3d,
+                                   int *restrict error)
 {
   if (pline3d)
     {
       *error = 0;
-      return pline3d->flag2;
+      return pline3d->curve_type;
     }
   else
     {
@@ -12805,17 +12805,17 @@ dwg_ent_polyline_3d_get_flag2(const dwg_ent_polyline_3d *restrict pline3d,
     }
 }
 
-/** Sets polyline 3d flag2
+/** Sets polyline 3d curve_type
  */
 void
-dwg_ent_polyline_3d_set_flag2(dwg_ent_polyline_3d *restrict pline3d,
-                              const BITCODE_RC flag2,
-                              int *restrict error)
+dwg_ent_polyline_3d_set_curve_type(dwg_ent_polyline_3d *restrict pline3d,
+                                   const BITCODE_RC curve_type,
+                                   int *restrict error)
 {
   if (pline3d)
     {
       *error = 0;
-      pline3d->flag2 = flag2;
+      pline3d->curve_type = curve_type;
     }
   else
     {

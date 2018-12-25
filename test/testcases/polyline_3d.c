@@ -7,8 +7,8 @@ low_level_process (dwg_object * obj)
 {
   dwg_ent_polyline_3d *polyline_3d = dwg_object_to_POLYLINE_3D (obj);
 
-  printf ("flag1 of polyline : " FORMAT_RC "\n", polyline_3d->flag);
-  printf ("flag2 of polyline : " FORMAT_RC "\n", polyline_3d->flag2);
+  printf ("flag of polyline : " FORMAT_RC "\n", polyline_3d->flag);
+  printf ("curve_type of polyline : " FORMAT_RC "\n", polyline_3d->curve_type);
   printf("numpoints of polyline_3d (r2004+): " FORMAT_BL "\n", polyline_3d->num_owned);
 }
 
@@ -17,20 +17,20 @@ api_process (dwg_object * obj)
 {
   int error;
   BITCODE_BL numpoints;
-  BITCODE_RC flags1, flags2;
+  BITCODE_RC flag, curve_type;
   dwg_ent_polyline_3d *polyline_3d = dwg_object_to_POLYLINE_3D (obj);
 
-  flags1 = dwg_ent_polyline_3d_get_flag (polyline_3d, &error);
-  if (!error  && flags1 == polyline_3d->flag)   // error check
+  flag = dwg_ent_polyline_3d_get_flag (polyline_3d, &error);
+  if (!error  && flag == polyline_3d->flag)
     pass ("Working Properly");
   else
-    fail ("error in reading flag1");
+    fail ("error in reading flag");
 
-  flags2 = dwg_ent_polyline_3d_get_flag2 (polyline_3d, &error);
-  if (!error  && flags2 == polyline_3d->flag2)
+  curve_type = dwg_ent_polyline_3d_get_curve_type (polyline_3d, &error);
+  if (!error  && curve_type == polyline_3d->curve_type)
     pass ("Working Properly");
   else
-    fail ("error in reading flag2");
+    fail ("error in reading curve_type");
 
   numpoints = dwg_object_polyline_3d_get_numpoints(obj, &error);
   //FIXME: only valid for r2004+
