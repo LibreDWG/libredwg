@@ -19,19 +19,18 @@ DATA="$DATA example_2013 example_2018 example_r14"
 TODO="r11/ACEL10"
 
 for d in $DATA; do
-    b=$(basename $d)
-    rm $b.json 2>/dev/null
+    b=$(basename "$d")
+    rm "$b.json" 2>/dev/null
 done
 
 for dwg in $DATA; do
-    json=`basename $dwg .dwg`.json
-    dwg=${datadir}/$dwg.dwg
-    echo dwgread -Ojson -o$json $dwg
-    if ../libtool --mode=execute ./dwgread -Ojson -o$json $dwg && jq . $json >$json.log 2>&1; then
-        rm $json.log $json
-        echo ok
+    json="$(basename "$dwg" .dwg).json"
+    dwg="${datadir}/$dwg.dwg"
+    echo dwgread -Ojson -o"$json" "$dwg"
+    if ../libtool --mode=execute ./dwgread -Ojson -o"$json" "$dwg" && jq . "$json" >"$json.log" 2>&1; then
+        rm "$json.log" "$json"
     else
-        cat $json.log
+        cat "$json.log"
         problems=$(expr 1 + $problems)
     fi
 done
@@ -39,7 +38,7 @@ done
 if test x0 = x$problems ; then
     exit 0
 else
-    echo `basename $0`: $problems failures
-    ls -l *json.log
+    echo $(basename "$0"): $problems failures
+    ls -l ./*json.log
     exit 1
 fi

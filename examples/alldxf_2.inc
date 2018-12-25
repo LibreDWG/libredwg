@@ -2011,4 +2011,3 @@ unknown_dxf[2008].fields = unknown_dxf_2008;
 unknown_dxf[2009].fields = unknown_dxf_2009;
 unknown_dxf[2010].fields = unknown_dxf_2010;
 unknown_dxf[2011].fields = unknown_dxf_2011;
-unknown_dxf[2012].fields = unknown_dxf_2012;
