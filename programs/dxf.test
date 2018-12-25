@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # dxf.test
 #
 # Copyright (C) 2018 Free Software Foundation, Inc.
@@ -16,15 +16,22 @@ if [ -d test/test-data ]; then cd ..; fi
 datadir=${datadir:-../test/test-data}
 problems=0
 
-function check_subentity {
-    if [ -f $dwg ] && [ -f $dxf ]; then
-        ../libtool --mode=execute ./dwg2dxf -v4 -o $tgt $dwg 2>/dev/null
-        d="`diff -b <(grep -A8 ^VERTEX $dxf) <(grep -A8 ^VERTEX $tgt)`"
-        test -z "$d" || echo VERTEX $tgt $d
-        d="`diff -b <(grep -A8 ^SEQEND $dxf) <(grep -A8 ^SEQEND $tgt)`"
-        test -z "$d" || echo SEQEND $tgt $d
-        d="`diff -b <(grep -A8 ^POLYLINE $dxf) <(grep -A8 ^POLYLINE $tgt)`"
-        test -z "$d" || echo POLYLINE $tgt $d
+check_subentity() {
+    if [ -f "$dwg" ] && [ -f "$dxf" ]; then
+        ../libtool --mode=execute ./dwg2dxf -v4 -o "$tgt" "$dwg" 2>/dev/null
+        grep -A8 ^VERTEX "$dxf" >tmp1
+        grep -A8 ^VERTEX "$tgt" >tmp2
+        d="$(diff -b tmp1 tmp2)"
+        test -z "$d" || echo VERTEX "$tgt" $d
+        grep -A8 ^SEQEND "$dxf" >tmp1
+        grep -A8 ^SEQEND "$tgt" >tmp2
+        d="$(diff -b tmp1 tmp2)"
+        test -z "$d" || echo SEQEND "$tgt" $d
+        grep -A8 ^POLYLINE "$dxf" >tmp1
+        grep -A8 ^POLYLINE "$tgt" >tmp2
+        d="$(diff -b tmp1 tmp2)"
+        test -z "$d" || echo POLYLINE "$tgt" $d
+        rm tmp1 tmp2
 #   else
 #       echo skip $dxf missing
     fi
@@ -52,18 +59,18 @@ do
     done
 done
 
-function check_acdb_dxfname {
-    if [ -f $dwg ] && [ -f $dxf ]; then
-        ../libtool --mode=execute ./dwg2dxf -v0 -o $tgt $dwg 2>/dev/null >/dev/null
-        expect=`grep ^$dxfname $dxf | wc -l`
-        got=`grep ^$dxfname $tgt | wc -l`
+check_acdb_dxfname() {
+    if [ -f "$dwg" ] && [ -f $dxf ]; then
+        ../libtool --mode=execute ./dwg2dxf -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
+        expect=$(grep -c ^$dxfname "$dxf")
+        got=$(grep -c ^$dxfname "$tgt")
         if [ $got = $expect ]
         then
-            echo $tgt $dxfname ok
+            echo "$tgt" $dxfname ok
         else
-            echo $tgt $dxfname fail: $got != $expect
+            echo "$tgt" $dxfname fail: $got != $expect
             problems=$(expr 1 + $problems)
-            grep -2 ^$dxfname $tgt >$log
+            grep -2 ^$dxfname "$tgt" >$log
         fi
     fi
 }
@@ -71,30 +78,30 @@ function check_acdb_dxfname {
 # check handled ACDB* dxfname's
 # UNHANDLED: ACDBDETAILVIEWSTYLE ACDBSECTIONVIEWSTYLE
 for dwg in $datadir/sample_2*.dwg; do
-    dxf=`echo $dwg | sed 's,.dwg,.dxf,'`
-    tgt=../`basename $dxf`
-    log=`basename $tgt`.log
-    rm $log 2>/dev/null
+    dxf=$(echo "$dwg" | sed 's,.dwg,.dxf,')
+    tgt=../$(basename "$dxf")
+    log=$(basename "$tgt").log
+    rm "$log" 2>/dev/null
     for dxfname in ACDBDICTIONARYWDFLT ACDBPLACEHOLDER LAYOUT
     do
         check_acdb_dxfname
     done
 done
 for dwg in $datadir/example_*.dwg; do
-    dxf=`echo $dwg | sed 's,.dwg,.dxf,'`
-    tgt=../`basename $dxf`
-    log=`basename $tgt`.log
-    rm $log 2>/dev/null
+    dxf=$(echo "$dwg" | sed 's,.dwg,.dxf,')
+    tgt=../$(basename "$dxf")
+    log=$(basename "$tgt").log
+    rm "$log" 2>/dev/null
     for dxfname in ACDBPERSSUBENTMANAGER ACDBASSOCDEPENDENCY
     do
         check_acdb_dxfname
     done
 done
 for dwg in $datadir/2004/Underlay.dwg; do
-    dxf=`echo $dwg | sed 's,.dwg,.dxf,'`
-    tgt=../`basename $dxf .dxf`_2004.dxf
-    log=`basename $tgt`.log
-    rm $log 2>/dev/null
+    dxf=$(echo "$dwg" | sed 's,.dwg,.dxf,')
+    tgt=../$(basename "$dxf" .dxf)_2004.dxf
+    log=$(basename "$tgt").log
+    rm "$log" 2>/dev/null
     for dxfname in PDFDEFINITION PDFUNDERLAY
     do
         check_acdb_dxfname
@@ -105,7 +112,7 @@ if test x0 = x$problems ; then
     rm *.dxf.log 2>/dev/null
     exit 0
 else
-    echo `basename $0`: $problems failures
-    ls -l *dxf.log
+    echo $(basename "$0"): $problems failures
+    ls -l ./*dxf.log
     exit 1
 fi
