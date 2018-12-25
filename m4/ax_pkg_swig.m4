@@ -35,6 +35,7 @@
 #   Copyright (c) 2008 Alan W. Irwin <irwin@beluga.phys.uvic.ca>
 #   Copyright (c) 2008 Rafael Laboissiere <rafael@laboissiere.net>
 #   Copyright (c) 2008 Andrew Collier <colliera@ukzn.ac.za>
+#   Copyright (c) 2018 Reini Urban <rurban@cpan.org>
 #
 #   This program is free software; you can redistribute it and/or modify it
 #   under the terms of the GNU General Public License as published by the
@@ -62,10 +63,14 @@
 #   modified version of the Autoconf Macro, you may extend this special
 #   exception to the GPL to apply to your modified version as well.
 
-#serial 7
+#serial 8
 
 AC_DEFUN([AX_PKG_SWIG],[
         AC_PATH_PROG([SWIG],[swig])
+        if test -z "$SWIG" ; then
+                # FreeBSD pkg
+                AC_PATH_PROG([SWIG],[swig3.0])
+        fi
         if test -z "$SWIG" ; then
                 m4_ifval([$3],[$3],[:])
         elif test -n "$1" ; then

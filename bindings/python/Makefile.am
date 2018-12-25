@@ -54,13 +54,13 @@ SWIG_PYTHON_PATCH = $(top_srcdir)/build-aux/swig_python.patch
 $(dist_python_PYTHON) : swig_python.c
 if HAVE_PATCH
 swig_python.c : $(SWIG_SOURCES) Makefile.am
-	swig -python -I$(top_srcdir)/include -o swig_python.c $(srcdir)/../dwg.i
+	$(SWIG) -python -I$(top_srcdir)/include -o swig_python.c $(srcdir)/../dwg.i
 	-$(PATCH) -t --dry-run -N -p2 -i $(SWIG_PYTHON_PATCH) && \
 	  $(PATCH) -t -N -p2 -b -i $(SWIG_PYTHON_PATCH)
 CLEANFILES = swig_python.c.orig
 else
 swig_python.c : $(SWIG_SOURCES) Makefile.am
-	swig -python -I$(top_srcdir)/include -o swig_python.c $(srcdir)/../dwg.i
+	$(SWIG) -python -I$(top_srcdir)/include -o swig_python.c $(srcdir)/../dwg.i
 endif
 
 ## should work out of the box, but $(SWIG) resolves to swig -c++
