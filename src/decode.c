@@ -2754,7 +2754,7 @@ dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       obj->handle_offset = obj->bitsize;
       SINCE(R_2010)
       {
-        obj->hdlpos += 8;
+        obj->hdlpos += 8; /* FIXME why 8? wrong with polyline3d */
         obj->handle_offset += 8;
         LOG_HANDLE("(bitsize: " FORMAT_RL ", ", obj->bitsize);
         LOG_HANDLE("hdlpos: %lu)\n", obj->hdlpos);
@@ -2829,7 +2829,7 @@ dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
       obj->handle_offset = obj->bitsize;
       SINCE(R_2010)
       {
-        obj->hdlpos += 8;
+        obj->hdlpos += 8; /* FIXME */
         obj->handle_offset += 8;
         LOG_HANDLE("(bitsize: " FORMAT_RL ", ", obj->bitsize);
         LOG_HANDLE("hdlpos: %lu)\n", obj->hdlpos);

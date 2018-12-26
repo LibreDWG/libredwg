@@ -634,7 +634,7 @@
     if (obj->hdlpos != (unsigned long)vcount) { \
       bit_set_position(hdl_dat, obj->hdlpos); \
       LOG_HANDLE(" handle stream: %+ld @%lu.%u %s\n", (long)obj->hdlpos - (long)vcount, \
-        dat->byte, dat->bit, \
+        dat->byte - obj->address, dat->bit, \
         ((long)obj->hdlpos - (long)vcount) >= 8 ? "MISSING" \
           : ((long)obj->hdlpos < (long)vcount) ? "OVERSHOOT" : ""); \
     } \
@@ -777,15 +777,13 @@ static int dwg_decode_##token##_private (Bit_Chain *dat, Bit_Chain *str_dat, \
 
 // Does size include the CRC?
 #define DWG_ENTITY_END \
-  if (dat->version >= R_2007) { \
-    vcount  = (obj->size+obj->address)*8 - bit_position(hdl_dat); \
-  } else { \
-    vcount  = (obj->size+obj->address)*8 - bit_position(dat); \
+  { \
+    int64_t pos = (obj->size+obj->address)*8 \
+                - bit_position(dat->version >= R_2007 ? hdl_dat : dat); \
+    if (pos) \
+      LOG_HANDLE(" padding: %+ld %s\n", (long)pos, pos >= 8 \
+               ? "MISSING" : (pos < 0) ? "OVERSHOOT" : ""); \
   } \
-  if (vcount) \
-    LOG_HANDLE(" padding: %+ld %s\n", (long)vcount, (BITCODE_BLd)vcount >= 8 \
-               ? "MISSING" \
-               : ((BITCODE_BLd)vcount < 0) ? "OVERSHOOT" : "");  \
   return error & ~DWG_ERR_UNHANDLEDCLASS; \
 }
 
