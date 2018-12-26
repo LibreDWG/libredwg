@@ -120,7 +120,25 @@ check_pline_order() {
         else
             echo "$tgt" pline order fail: "$got"
             problems=$(expr 1 + $problems)
-            echo "$got" >$log
+            echo "expect=$expect" >$log
+            echo "got=$got" >>$log
+        fi
+    fi
+}
+# check insert - attrib - seqend order
+check_insert_order() {
+    if [ -f "$dwg" ] && [ -f $dxf ]; then
+        ../libtool --mode=execute ./dwg2dxf -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
+        got=$(egrep '^(INSERT|ATTRIB|SEQEND)' "$tgt")
+        expect=$(egrep '^(INSERT|ATTRIB|SEQEND)' "$dxf")
+        if [ "$got" = "$expect" ]
+        then
+            echo "$tgt" insert order ok
+        else
+            echo "$tgt" insert order fail: "$got"
+            problems=$(expr 1 + $problems)
+            echo "expect=$expect" >$log
+            echo "got=$got" >>$log
         fi
     fi
 }
@@ -131,13 +149,35 @@ do
     dwg=$datadir/${year}/${base}.dwg
     dxf=$datadir/2013/${base}.dxf
     tgt=../${base}_${year}.dxf
-    log=$(basename "$tgt").log
+    log=$(basename "$tgt" .dxf)_pline.dxf.log
     rm "$log" 2>/dev/null
     check_pline_order
 done
 
+for year in 2000 2004 2007 2010 2013 2018
+do
+    base=example
+    dwg=$datadir/${base}_${year}.dwg
+    dxf=$datadir/${base}_${year}.dxf
+    tgt=../${base}_${year}.dxf
+    log=$(basename "$tgt" .dxf)_pline.dxf.log
+    rm "$log" 2>/dev/null
+    check_pline_order
+done
+
+for year in 2000 2004 2007 2010 2013 2018
+do
+    base=example
+    dwg=$datadir/${base}_${year}.dwg
+    dxf=$datadir/${base}_${year}.dxf
+    tgt=../${base}_${year}.dxf
+    log=$(basename "$tgt" .dxf)_insert.dxf.log
+    rm "$log" 2>/dev/null
+    check_insert_order
+done
+
 if test x0 = x$problems ; then
-    rm *.dxf.log 2>/dev/null
+    rm ./*.dxf.log 2>/dev/null
     exit 0
 else
     echo $(basename "$0"): $problems failures
