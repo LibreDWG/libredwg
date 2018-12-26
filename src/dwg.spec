@@ -219,6 +219,7 @@ DWG_ENTITY(ATTRIB)
         }
     }
 
+  DXF { FIELD_HANDLE (style, 5, 7); }
   SUBCLASS (AcDbAttribute)
   FIELD_T (tag, 2);
   FIELD_BS (field_length, 73);
@@ -236,7 +237,7 @@ DWG_ENTITY(ATTRIB)
     FIELD_TU (tag, 2);
     END_STRING_STREAM
   }
-  FIELD_HANDLE (style, 5, 7);
+  FIELD_HANDLE (style, 5, 0); // unexpected here in DXF
 
 DWG_ENTITY_END
 
@@ -1367,6 +1368,7 @@ DWG_ENTITY_END
 /* (33/4) */
 DWG_ENTITY(SHAPE)
 
+  DXF { FIELD_HANDLE (style, 5, 7); }
   SUBCLASS (AcDbShape)
   PRE(R_13) {
     FIELD_HANDLE (style, 5, 0);
@@ -1999,6 +2001,9 @@ DWG_ENTITY_END
 /*(44)*/
 DWG_ENTITY(MTEXT)
 
+  DXF { UNTIL(R_2007) {
+    FIELD_HANDLE (style, 5, 7);
+  } }
   SUBCLASS (AcDbMText)
   FIELD_3BD (insertion_pt, 10);
   FIELD_3BD (extrusion, 210);
@@ -2017,7 +2022,7 @@ DWG_ENTITY(MTEXT)
   FIELD_T (text, 1); // or 3 if >250
   /* doc error:
   UNTIL(R_2007) {
-    FIELD_HANDLE (style, 5, 7);
+    FIELD_HANDLE (style, 5, 0);
   }
   */
 
@@ -2075,7 +2080,7 @@ DWG_ENTITY(MTEXT)
 
   COMMON_ENTITY_HANDLE_DATA;
   UNTIL(R_2007) {
-    FIELD_HANDLE (style, 5, 7);
+    FIELD_HANDLE (style, 5, 0);
   }
 
 DWG_ENTITY_END
