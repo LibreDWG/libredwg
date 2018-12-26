@@ -977,16 +977,18 @@ is_sorted_POLYLINE(const Dwg_Object *restrict obj)
             _obj->seqend = seqend;
             LOG_WARN("fixed empty POLYLINE.seqend with +1 obj")
           }
-        next = dwg_next_object(_obj->vertex[_obj->num_owned-1]->obj);
-        if (next && next->fixedtype == DWG_TYPE_SEQEND)
-          {
-            seqend = (Dwg_Object_Ref*)calloc(1, sizeof(Dwg_Object_Ref));
-            seqend->obj = next;
-            seqend->handleref = next->handle;
-            seqend->absolute_ref = next->handle.value;
-            _obj->seqend = seqend;
-            LOG_WARN("fixed empty POLYLINE.seqend with last vertex +1")
-          }
+        else {
+          next = dwg_next_object(_obj->vertex[_obj->num_owned-1]->obj);
+          if (next && next->fixedtype == DWG_TYPE_SEQEND)
+            {
+              seqend = (Dwg_Object_Ref*)calloc(1, sizeof(Dwg_Object_Ref));
+              seqend->obj = next;
+              seqend->handleref = next->handle;
+              seqend->absolute_ref = next->handle.value;
+              _obj->seqend = seqend;
+              LOG_WARN("fixed empty POLYLINE.seqend with last vertex +1")
+            }
+        }
       }
     if (ref_after(first_vertex, seqend)) {
       /* r2010+ often mix up the hdlstream offset:
