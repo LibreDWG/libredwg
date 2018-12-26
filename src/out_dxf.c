@@ -21,7 +21,7 @@ TODO:
   Since r13:
     Entities: LWPOLYLINE, HATCH, SPLINE, LEADER, DIMENSION, MTEXT, IMAGE, BLOCK_RECORD.
     Add CLASSES for those
-* sort PLINE - VERTEX - SEQEND
+* sort POLYLINE - VERTEX - SEQEND, INSERT - ATTRIB - SEQEND
 */
 
 #include "config.h"
@@ -44,7 +44,7 @@ static unsigned int loglevel;
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
 static char buf[255];
-static int is_sorted_PLINE = 0;
+static int is_sorted = 0;
 
 // private
 static int
@@ -903,6 +903,41 @@ ref_after(const Dwg_Object_Ref *restrict r1, const Dwg_Object_Ref *restrict r2)
   return r1->obj->index >= r2->obj->index ? 1 : 0;
 }
 
+/* just look at the next object, if it's a SEQEND */
+static int
+is_sorted_INSERT(const Dwg_Object *restrict obj)
+{
+  Dwg_Object *next = dwg_next_object(obj);
+
+  if (obj->fixedtype == DWG_TYPE_INSERT)
+    {
+      Dwg_Entity_INSERT *_obj = obj->tio.entity->tio.INSERT;
+      Dwg_Object_Ref *seqend = _obj->seqend;
+      if (!_obj->has_attribs)
+        return 1;
+      if (!seqend || next == seqend->obj) {
+        LOG_WARN("unsorted INSERT %lX SEQEND %lX ATTRIB",
+                 obj->handle.value,
+                 seqend && seqend->obj ? seqend->obj->handle.value : 0)
+        return 0;
+      }
+    }
+  else if (obj->fixedtype == DWG_TYPE_MINSERT)
+    {
+      Dwg_Entity_MINSERT *_obj = obj->tio.entity->tio.MINSERT;
+      Dwg_Object_Ref *seqend = _obj->seqend;
+      if (!_obj->has_attribs)
+        return 1;
+      if (!seqend || next == seqend->obj) {
+        LOG_WARN("unsorted INSERT %lX SEQEND %lX ATTRIB",
+                 obj->handle.value,
+                 seqend && seqend->obj ? seqend->obj->handle.value : 0)
+        return 0;
+      }
+    }
+  return 1;
+}
+
 static int
 is_sorted_POLYLINE(const Dwg_Object *restrict obj)
 {
@@ -974,45 +1009,106 @@ is_sorted_POLYLINE(const Dwg_Object *restrict obj)
 }
 
 /* process unsorted vertices */
-#define dxf_process_VERTEX(token) \
+#define decl_dxf_process_VERTEX(token) \
 static int \
 dxf_process_VERTEX_##token(Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
-{ \
-  int error = 0; \
+{                                                                       \
+  int error = 0;                                                        \
   Dwg_Entity_POLYLINE_##token *_obj = obj->tio.entity->tio.POLYLINE_##token; \
-\
-  UNTIL(R_2000) { \
-    Dwg_Object *last_vertex = _obj->last_vertex->obj; \
-    error |= dwg_dxf_VERTEX_##token(dat, _obj->first_vertex->obj); \
-    do { \
-      obj = dwg_next_object(obj); \
-      if (!strcmp(#token, "PFACE") \
-          && obj->fixedtype == DWG_TYPE_VERTEX_PFACE_FACE) { \
-        error |= dwg_dxf_VERTEX_PFACE_FACE(dat, obj); \
-      } else \
-        error |= dwg_dxf_VERTEX_##token(dat, obj); \
-    } while (obj != last_vertex); \
-    error |= dwg_dxf_SEQEND(dat, _obj->seqend->obj); \
-  } \
-  SINCE(R_2004) { \
-    for (BITCODE_BL i=0; i<_obj->num_owned; i++) \
-      { \
-        error |= dwg_dxf_VERTEX_##token(dat, _obj->vertex[i]->obj); \
-      } \
-    error |= dwg_dxf_SEQEND(dat, _obj->seqend->obj); \
-  } \
-  return error; \
+  is_sorted = 1;                                                        \
+                                                                        \
+  VERSIONS(R_13, R_2000) {                                              \
+    Dwg_Object *last_vertex = _obj->last_vertex->obj;                   \
+    Dwg_Object *o = _obj->first_vertex ? _obj->first_vertex->obj : NULL; \
+    if (!o) return DWG_ERR_INVALIDHANDLE;                               \
+    if (o->fixedtype == DWG_TYPE_VERTEX_##token)                        \
+      error |= dwg_dxf_VERTEX_##token(dat, o);                          \
+    do {                                                                \
+      o = dwg_next_object(o);                                           \
+      if (!o) return DWG_ERR_INVALIDHANDLE;                             \
+      if (!strcmp(#token, "PFACE")                                      \
+          && o->fixedtype == DWG_TYPE_VERTEX_PFACE_FACE) {              \
+        error |= dwg_dxf_VERTEX_PFACE_FACE(dat, o);                     \
+      } else if (o->fixedtype == DWG_TYPE_VERTEX_##token) {             \
+        error |= dwg_dxf_VERTEX_##token(dat, o);                        \
+      }                                                                 \
+    } while (o != last_vertex);                                         \
+    o = _obj->seqend ? _obj->seqend->obj : NULL;                        \
+    if (o && o->fixedtype == DWG_TYPE_SEQEND)                           \
+      error |= dwg_dxf_SEQEND(dat, o);                                  \
+  }                                                                     \
+  SINCE(R_2004) {                                                       \
+    Dwg_Object *o;                                                      \
+    for (BITCODE_BL i=0; i<_obj->num_owned; i++)                        \
+      {                                                                 \
+        o = _obj->vertex[i] ? _obj->vertex[i]->obj : NULL;              \
+        if (!strcmp(#token, "PFACE")                                    \
+            && o && o->fixedtype == DWG_TYPE_VERTEX_PFACE_FACE) {       \
+          error |= dwg_dxf_VERTEX_PFACE_FACE(dat, o);                   \
+        } else if (o && o->fixedtype == DWG_TYPE_VERTEX_##token) {      \
+          error |= dwg_dxf_VERTEX_##token(dat, o);                      \
+        }                                                               \
+      }                                                                 \
+    o = _obj->seqend ? _obj->seqend->obj : NULL;                        \
+    if (o && o->fixedtype == DWG_TYPE_SEQEND)                           \
+      error |= dwg_dxf_SEQEND(dat, o);                                  \
+  }                                                                     \
+  return error;                                                         \
 }
-dxf_process_VERTEX(2D)
-dxf_process_VERTEX(3D)
-dxf_process_VERTEX(MESH)
-dxf_process_VERTEX(PFACE)
+decl_dxf_process_VERTEX(2D)
+decl_dxf_process_VERTEX(3D)
+decl_dxf_process_VERTEX(MESH)
+decl_dxf_process_VERTEX(PFACE)
+
+/* process seqend before attribs */
+#define decl_dxf_process_INSERT(token) \
+static int \
+dxf_process_##token(Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
+{                                                                       \
+  int error = 0;                                                        \
+  Dwg_Entity_##token *_obj = obj->tio.entity->tio.token;                \
+  is_sorted = 1;                                                        \
+                                                                        \
+  VERSIONS(R_13, R_2000) {                                              \
+    Dwg_Object *last_attrib = _obj->last_attrib->obj;                   \
+    Dwg_Object *o = _obj->first_attrib ? _obj->first_attrib->obj : NULL; \
+    if (!o) return DWG_ERR_INVALIDHANDLE;                               \
+    if (o->fixedtype == DWG_TYPE_ATTRIB)                                \
+      error |= dwg_dxf_ATTRIB(dat, o);                                  \
+    do {                                                                \
+      o = dwg_next_object(o);                                           \
+      if (!o) return DWG_ERR_INVALIDHANDLE;                             \
+      if (o && o->fixedtype == DWG_TYPE_ATTRIB)                         \
+        error |= dwg_dxf_ATTRIB(dat, o);                                \
+    } while (o != last_attrib);                                         \
+    o = _obj->seqend ? _obj->seqend->obj : NULL;                        \
+    if (o && o->fixedtype == DWG_TYPE_SEQEND)                           \
+      error |= dwg_dxf_SEQEND(dat, o);                                  \
+  }                                                                     \
+  SINCE(R_2004) {                                                       \
+    Dwg_Object *o;                                                      \
+    for (BITCODE_BL i=0; i<_obj->num_owned; i++)                        \
+      {                                                                 \
+        o = _obj->attrib_handles[i] ? _obj->attrib_handles[i]->obj : NULL; \
+        if (o && o->fixedtype == DWG_TYPE_ATTRIB)                       \
+          error |= dwg_dxf_ATTRIB(dat, o);                              \
+      }                                                                 \
+    o = _obj->seqend ? _obj->seqend->obj : NULL;                        \
+    if (o && o->fixedtype == DWG_TYPE_SEQEND)                           \
+      error |= dwg_dxf_SEQEND(dat, o);                                  \
+  }                                                                     \
+  return error;                                                         \
+}
+decl_dxf_process_INSERT(INSERT)
+decl_dxf_process_INSERT(MINSERT)
+
 
 static int
 dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
 {
   int error = 0;
   int minimal;
+
   if (!obj || !obj->parent)
     return DWG_ERR_INTERNALERROR;
   minimal = obj->parent->opts & 0x10;
@@ -1024,59 +1120,83 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
     {
     case DWG_TYPE_TEXT:
       return dwg_dxf_TEXT(dat, obj);
-    case DWG_TYPE_ATTRIB:
-      return dwg_dxf_ATTRIB(dat, obj);
     case DWG_TYPE_ATTDEF:
       return dwg_dxf_ATTDEF(dat, obj);
     case DWG_TYPE_BLOCK:
       return dwg_dxf_BLOCK(dat, obj);
     case DWG_TYPE_ENDBLK:
       return dwg_dxf_ENDBLK(dat, obj);
-    case DWG_TYPE_SEQEND:
-      return is_sorted_PLINE ? dwg_dxf_SEQEND(dat, obj) : 0;
-    case DWG_TYPE_INSERT:
-      return dwg_dxf_INSERT(dat, obj);
-    case DWG_TYPE_MINSERT:
-      return dwg_dxf_MINSERT(dat, obj);
-    case DWG_TYPE_VERTEX_2D:
-      return is_sorted_PLINE ? dwg_dxf_VERTEX_2D(dat, obj) : 0;
-    case DWG_TYPE_VERTEX_3D:
-      return is_sorted_PLINE ? dwg_dxf_VERTEX_3D(dat, obj) : 0;
-    case DWG_TYPE_VERTEX_MESH:
-      return is_sorted_PLINE ? dwg_dxf_VERTEX_MESH(dat, obj) : 0;
-    case DWG_TYPE_VERTEX_PFACE:
-      return is_sorted_PLINE ? dwg_dxf_VERTEX_PFACE(dat, obj) : 0;
-    case DWG_TYPE_VERTEX_PFACE_FACE:
-      return is_sorted_PLINE ? dwg_dxf_VERTEX_PFACE_FACE(dat, obj) : 0;
 
+    case DWG_TYPE_INSERT:
+      is_sorted = is_sorted_INSERT(obj);
+      error = dwg_dxf_INSERT(dat, obj);
+      if (is_sorted)
+        return error;
+      else {
+        Dwg_Entity_INSERT *_obj = obj->tio.entity->tio.INSERT;
+        if (_obj->has_attribs)
+          return error | dxf_process_INSERT(dat, obj);
+        else
+          return error;
+      }
+    case DWG_TYPE_MINSERT:
+      is_sorted = is_sorted_INSERT(obj);
+      error = dwg_dxf_MINSERT(dat, obj);
+      if (is_sorted)
+        return error;
+      else {
+        Dwg_Entity_MINSERT *_obj = obj->tio.entity->tio.MINSERT;
+        if (_obj->has_attribs)
+          return error | dxf_process_MINSERT(dat, obj);
+        else
+          return error;
+      }
     case DWG_TYPE_POLYLINE_2D:
-      is_sorted_PLINE = is_sorted_POLYLINE(obj);
+      is_sorted = is_sorted_POLYLINE(obj);
       error = dwg_dxf_POLYLINE_2D(dat, obj);
-      if (is_sorted_PLINE)
+      if (is_sorted)
         return error;
       else
         return error | dxf_process_VERTEX_2D(dat, obj);
     case DWG_TYPE_POLYLINE_3D:
-      is_sorted_PLINE = is_sorted_POLYLINE(obj);
+      is_sorted = is_sorted_POLYLINE(obj);
       error = dwg_dxf_POLYLINE_3D(dat, obj);
-      if (is_sorted_PLINE)
+      if (is_sorted)
         return error;
       else
         return error | dxf_process_VERTEX_3D(dat, obj);
     case DWG_TYPE_POLYLINE_PFACE:
-      is_sorted_PLINE = is_sorted_POLYLINE(obj);
+      is_sorted = is_sorted_POLYLINE(obj);
       error = dwg_dxf_POLYLINE_PFACE(dat, obj);
-      if (is_sorted_PLINE)
+      if (is_sorted)
         return error;
       else
         return error | dxf_process_VERTEX_PFACE(dat, obj);
     case DWG_TYPE_POLYLINE_MESH:
-      is_sorted_PLINE = is_sorted_POLYLINE(obj);
+      is_sorted = is_sorted_POLYLINE(obj);
       error = dwg_dxf_POLYLINE_MESH(dat, obj);
-      if (is_sorted_PLINE)
+      if (is_sorted)
         return error;
       else
         return error | dxf_process_VERTEX_MESH(dat, obj);
+
+    case DWG_TYPE_ATTRIB:
+      return is_sorted ? dwg_dxf_ATTRIB(dat, obj) : 0;
+    case DWG_TYPE_VERTEX_2D:
+      return is_sorted ? dwg_dxf_VERTEX_2D(dat, obj) : 0;
+    case DWG_TYPE_VERTEX_3D:
+      return is_sorted ? dwg_dxf_VERTEX_3D(dat, obj) : 0;
+    case DWG_TYPE_VERTEX_MESH:
+      return is_sorted ? dwg_dxf_VERTEX_MESH(dat, obj) : 0;
+    case DWG_TYPE_VERTEX_PFACE:
+      return is_sorted ? dwg_dxf_VERTEX_PFACE(dat, obj) : 0;
+    case DWG_TYPE_VERTEX_PFACE_FACE:
+      return is_sorted ? dwg_dxf_VERTEX_PFACE_FACE(dat, obj) : 0;
+
+    case DWG_TYPE_SEQEND:
+      if (is_sorted)
+        error = dwg_dxf_SEQEND(dat, obj);
+      return error;
 
     case DWG_TYPE_ARC:
       return dwg_dxf_ARC(dat, obj);
