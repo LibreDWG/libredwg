@@ -229,13 +229,15 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
   {\
     Dwg_Object_Ref *ref = _obj->nam;\
     Dwg_Object *o = ref ? ref->obj : NULL;\
-    dxf_cvt_tablerecord(dat, o, o ? o->tio.object->tio.table->name : (char*)"0", dxf); \
+    if (o && !strcmp(o->dxfname, #table)) \
+      dxf_cvt_tablerecord(dat, o, o ? o->tio.object->tio.table->name : (char*)"0", dxf); \
   }
 #define SUB_FIELD_HANDLE_NAME(ob, nam, dxf, table) \
   {\
     Dwg_Object_Ref *ref = _obj->ob.nam;\
     Dwg_Object *o = ref ? ref->obj : NULL;\
-    dxf_cvt_tablerecord(dat, o, o ? o->tio.object->tio.table->name : (char*)"0", dxf); \
+    if (o && !strcmp(o->dxfname, #table)) \
+      dxf_cvt_tablerecord(dat, o, o ? o->tio.object->tio.table->name : (char*)"0", dxf); \
   }
 #define HEADER_HANDLE_NAME(nam, dxf, table) \
   HEADER_9(nam); FIELD_HANDLE_NAME(nam, dxf, table)
