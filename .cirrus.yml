@@ -10,7 +10,7 @@ task:
     - sh ./autogen.sh
     # --disable-python
     # xmlsuite/check.py fails: import: not found. 5: Syntax error: "(" unexpected
-    - CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib ./configure
+    - CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib ./configure --disable-python
     - make
   test_script:
     - make check
