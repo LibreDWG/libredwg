@@ -3370,6 +3370,84 @@ dwg_decode_xdata(Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj, int 
  * Private functions which depend on the preceding
  */
 
+/* check the types of all referenced handles.
+   r2010+ often mix up the hdlstream offset:
+   layer,vertex*,seqend. check the types then also.
+ */
+static void
+check_POLYLINE_handles(Dwg_Object *obj)
+{
+  /* We ensured the commmon fields structure is shared with all 4 types */
+  Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
+  Dwg_Data *dwg = obj->parent;
+
+  if (dwg->header.version >= R_2004)
+    {
+      BITCODE_BL i = 0;
+      Dwg_Object_Ref *layer = obj->tio.entity->layer;
+      Dwg_Object_Ref *seqend = _obj->seqend;
+
+      // resolve prev. object
+      if (layer && !layer->obj)
+        layer->obj = dwg_ref_object_relative(dwg, layer, obj);
+      if (!layer || !layer->obj)
+        { // maybe a reactor pointing forwards or vertex
+          LOG_WARN("Wrong POLYLINE.layer %lX", layer ? layer->handleref.value : 0UL);
+          if (_obj->num_owned > 0)
+            {
+              Dwg_Object_Ref *vertex = _obj->vertex[0];
+              if (vertex && !vertex->obj)
+                vertex->obj = dwg_ref_object_relative(dwg, vertex, obj);
+              if (vertex && vertex->obj /* pointing backwards */
+                  && vertex->obj->fixedtype == DWG_TYPE_LAYER)
+                {
+                  obj->tio.entity->layer = layer = vertex;
+                  LOG_WARN("POLYLINE.layer is vertex[0] %lX, shift em, NULL seqend",
+                           layer->handleref.value);
+                  /* shift vertices one back */
+                  for (i=0; i<_obj->num_owned-1; i++)
+                    {
+                      _obj->vertex[i] = _obj->vertex[i+1];
+                    }
+                  _obj->vertex[_obj->num_owned-1] = seqend;
+                  _obj->seqend = NULL;
+                  /* now just seqend is empty.
+                     either 1+ last_vertex, or one before the first */
+                }
+            }
+        }
+      else if (   layer->obj->fixedtype != DWG_TYPE_LAYER
+               && layer->obj->fixedtype != DWG_TYPE_DICTIONARY)
+        { // a vertex would be after, a reactor before
+          LOG_WARN("Wrong POLYLINE.layer %s", layer->obj->dxfname)
+        }
+      // a SEQEND is always after the polyline, so it cannot be resolved yet
+      if (!seqend || !seqend->handleref.value)
+        {
+          LOG_WARN("Empty POLYLINE.seqend")
+        }
+      else if (seqend->obj && seqend->obj->fixedtype != DWG_TYPE_SEQEND)
+        { // most likely a vertex, off by one
+          LOG_WARN("Wrong POLYLINE.seqend %s", seqend->obj->dxfname)
+        }
+      for (; i < _obj->num_owned; i++)
+        {
+          Dwg_Object_Ref *v = _obj->vertex[i];
+          if (!v || !v->handleref.value) {
+            LOG_WARN("Empty POLYLINE.vertex[%d]", i);
+          } else if (   v->obj
+                     && v->obj->fixedtype != DWG_TYPE_VERTEX_2D
+                     && v->obj->fixedtype != DWG_TYPE_VERTEX_3D
+                     && v->obj->fixedtype != DWG_TYPE_VERTEX_MESH
+                     && v->obj->fixedtype != DWG_TYPE_VERTEX_PFACE
+                     && v->obj->fixedtype != DWG_TYPE_VERTEX_PFACE_FACE) {
+            LOG_WARN("Wrong POLYLINE.vertex[%d] %lX %s", i, v->handleref.value,
+                     v->obj->dxfname)
+          }
+        }
+    }
+}
+
 static int
 decode_preR13_entities(unsigned long start, unsigned long end,
                        unsigned long offset,
@@ -3653,9 +3731,13 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
       break;
     case DWG_TYPE_POLYLINE_2D:
       error = dwg_decode_POLYLINE_2D(dat, obj);
+      if (dat->version >= R_2010)
+        check_POLYLINE_handles(obj);
       break;
     case DWG_TYPE_POLYLINE_3D:
       error = dwg_decode_POLYLINE_3D(dat, obj);
+      if (dat->version >= R_2010)
+        check_POLYLINE_handles(obj);
       break;
     case DWG_TYPE_ARC:
       error = dwg_decode_ARC(dat, obj);
@@ -3695,9 +3777,13 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
       break;
     case DWG_TYPE_POLYLINE_PFACE:
       error = dwg_decode_POLYLINE_PFACE(dat, obj);
+      if (dat->version >= R_2010)
+        check_POLYLINE_handles(obj);
       break;
     case DWG_TYPE_POLYLINE_MESH:
       error = dwg_decode_POLYLINE_MESH(dat, obj);
+      if (dat->version >= R_2010)
+        check_POLYLINE_handles(obj);
       break;
     case DWG_TYPE_SOLID:
       error = dwg_decode_SOLID(dat, obj);

@@ -899,11 +899,12 @@ dwg_dxf_variable_type(const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
 static inline int
 ref_after(const Dwg_Object_Ref *restrict r1, const Dwg_Object_Ref *restrict r2)
 {
+  if (!r1 || !r2 || !r1->obj || !r2->obj) return 0;
   return r1->obj->index >= r2->obj->index ? 1 : 0;
 }
 
 static int
-dxf_is_sorted_POLYLINE(const Dwg_Object *restrict obj)
+is_sorted_POLYLINE(const Dwg_Object *restrict obj)
 {
   /* We ensured the commmon fields structure is shared with all 4 types */
   Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
@@ -923,6 +924,8 @@ dxf_is_sorted_POLYLINE(const Dwg_Object *restrict obj)
     Dwg_Object_Ref *first_vertex = _obj->vertex[0];
     Dwg_Object_Ref *seqend = _obj->seqend;
     if (ref_after(first_vertex, seqend)) {
+      /* r2010+ often mix up the hdlstream offset:
+         layer,vertex*,seqend. check the types then also */
       if (first_vertex->obj->index < obj->index) {
         LOG_WARN("skip wrong POLYLINE.vertex[0] handle %lX < %lX\n",
                  first_vertex->obj->handle.value, obj->handle.value);
@@ -1023,28 +1026,28 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
       return is_sorted_PLINE ? dwg_dxf_VERTEX_PFACE_FACE(dat, obj) : 0;
 
     case DWG_TYPE_POLYLINE_2D:
-      is_sorted_PLINE = dxf_is_sorted_POLYLINE(obj);
+      is_sorted_PLINE = is_sorted_POLYLINE(obj);
       error = dwg_dxf_POLYLINE_2D(dat, obj);
       if (is_sorted_PLINE)
         return error;
       else
         return error | dxf_process_VERTEX_2D(dat, obj);
     case DWG_TYPE_POLYLINE_3D:
-      is_sorted_PLINE = dxf_is_sorted_POLYLINE(obj);
+      is_sorted_PLINE = is_sorted_POLYLINE(obj);
       error = dwg_dxf_POLYLINE_3D(dat, obj);
       if (is_sorted_PLINE)
         return error;
       else
         return error | dxf_process_VERTEX_3D(dat, obj);
     case DWG_TYPE_POLYLINE_PFACE:
-      is_sorted_PLINE = dxf_is_sorted_POLYLINE(obj);
+      is_sorted_PLINE = is_sorted_POLYLINE(obj);
       error = dwg_dxf_POLYLINE_PFACE(dat, obj);
       if (is_sorted_PLINE)
         return error;
       else
         return error | dxf_process_VERTEX_PFACE(dat, obj);
     case DWG_TYPE_POLYLINE_MESH:
-      is_sorted_PLINE = dxf_is_sorted_POLYLINE(obj);
+      is_sorted_PLINE = is_sorted_POLYLINE(obj);
       error = dwg_dxf_POLYLINE_MESH(dat, obj);
       if (is_sorted_PLINE)
         return error;
