@@ -1028,8 +1028,10 @@ DWG_ENTITY_END
         FIELD_B (flip_arrow1, 74); \
         FIELD_B (flip_arrow2, 75); \
       } \
-    FIELD_2RD (clone_ins_pt, 12);
-
+    FIELD_2RD (clone_ins_pt, 12); \
+    DXF { UNTIL(R_2007) { \
+      FIELD_HANDLE (dimstyle, 5, 3); \
+    } }
 
 /*(20)*/
 DWG_ENTITY(DIMENSION_ORDINATE)
@@ -1070,8 +1072,8 @@ DWG_ENTITY(DIMENSION_LINEAR)
   COMMON_ENTITY_HANDLE_DATA;
   UNTIL(R_2007)
     {
-      FIELD_HANDLE (dimstyle, 5, 3);
-      FIELD_HANDLE (block, 5, 2);
+      FIELD_HANDLE (dimstyle, 5, 0);
+      FIELD_HANDLE (block, 5, 0);
     }
 
 DWG_ENTITY_END
@@ -1087,13 +1089,13 @@ DWG_ENTITY(DIMENSION_ALIGNED)
   DECODER_OR_ENCODER {
     FIELD_3BD (def_pt, 10);
   }
-  FIELD_BD (ext_line_rotation, 52);
+  FIELD_BD (ext_line_rotation, 0); /* 52 */
 
   COMMON_ENTITY_HANDLE_DATA;
   UNTIL(R_2007)
     {
-      FIELD_HANDLE (dimstyle, 5, 3);
-      FIELD_HANDLE (block, 5, 2);
+      FIELD_HANDLE (dimstyle, 5, 0);
+      FIELD_HANDLE (block, 5, 0);
     }
 
 DWG_ENTITY_END
@@ -1114,8 +1116,8 @@ DWG_ENTITY(DIMENSION_ANG3PT)
   COMMON_ENTITY_HANDLE_DATA;
   UNTIL(R_2007)
     {
-      FIELD_HANDLE (dimstyle, 5, 3);
-      FIELD_HANDLE (block, 5, 2);
+      FIELD_HANDLE (dimstyle, 5, 0);
+      FIELD_HANDLE (block, 5, 0);
     }
 
 DWG_ENTITY_END
@@ -1137,8 +1139,8 @@ DWG_ENTITY(DIMENSION_ANG2LN)
   COMMON_ENTITY_HANDLE_DATA;
   UNTIL(R_2007)
     {
-      FIELD_HANDLE (dimstyle, 5, 3);
-      FIELD_HANDLE (block, 5, 2);
+      FIELD_HANDLE (dimstyle, 5, 0);
+      FIELD_HANDLE (block, 5, 0);
     }
 
 DWG_ENTITY_END
@@ -1158,8 +1160,8 @@ DWG_ENTITY(DIMENSION_RADIUS)
   COMMON_ENTITY_HANDLE_DATA;
   UNTIL(R_2007)
     {
-      FIELD_HANDLE (dimstyle, 5, 3);
-      FIELD_HANDLE (block, 5, 2);
+      FIELD_HANDLE (dimstyle, 5, 0);
+      FIELD_HANDLE (block, 5, 0);
     }
 
 DWG_ENTITY_END
@@ -1179,8 +1181,8 @@ DWG_ENTITY(DIMENSION_DIAMETER)
   COMMON_ENTITY_HANDLE_DATA;
   UNTIL(R_2007)
     {
-      FIELD_HANDLE (dimstyle, 5, 3);
-      FIELD_HANDLE (block, 5, 2);
+      FIELD_HANDLE (dimstyle, 5, 0);
+      FIELD_HANDLE (block, 5, 0);
     }
 
 DWG_ENTITY_END
