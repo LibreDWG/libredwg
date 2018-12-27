@@ -30,6 +30,15 @@ TODO:
 #include <assert.h>
 //#include <math.h>
 
+#ifdef HAVE_ALLOCA_H
+#include <alloca.h>
+#define HAVE_ALLOCA
+#elif defined(_WIN32) && defined(HAVE_MALLOC_H)
+#include <malloc.h>
+#define alloca(s) _alloca(s)
+#define HAVE_ALLOCA
+#endif
+
 #include "common.h"
 #include "bits.h"
 #include "dwg.h"
@@ -53,6 +62,15 @@ dwg_dxf_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj, int *res
 static int dxf_3dsolid(Bit_Chain *restrict dat,
                        const Dwg_Object *restrict obj,
                        Dwg_Entity_3DSOLID *restrict _obj);
+static void
+dxf_fixup_string(Bit_Chain *restrict dat, char *restrict str);
+
+#ifndef HAVE_ALLOCA
+char* alloca(size_t size);
+char* alloca(size_t size) {
+  return malloc(size);
+}
+#endif
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -70,11 +88,7 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 
 #define VALUE_TV(value,dxf) \
   { GROUP(dxf); \
-    if (value) \
-      fprintf(dat->fh, "%s\r\n", value); \
-    else \
-      fprintf(dat->fh, "\r\n"); \
-  }
+    dxf_fixup_string(dat, (char*)value); }
 #ifdef HAVE_NATIVE_WCHAR2
 # define VALUE_TU(value,dxf)\
   { GROUP(dxf); \
@@ -666,6 +680,42 @@ dxf_write_xdata(Bit_Chain *restrict dat, Dwg_Resbuf *restrict rbuf, BITCODE_BL s
 
 #undef DXF_3DSOLID
 #define DXF_3DSOLID dxf_3dsolid(dat, obj, (Dwg_Entity_3DSOLID*)_obj);
+
+static char*
+cquote(char *restrict dest, const char *restrict src)
+{
+  char c;
+  char *d = dest;
+  char *s = (char*)src;
+  while ((c = *s++)) {
+    if      (c == '\n') { *dest++ = '^'; *dest++ = 'J'; }
+    else if (c == '\r') { *dest++ = '^'; *dest++ = 'M'; }
+    else                                 *dest++ = c;
+  }
+  *dest = 0; //add final delim, skipped above
+  return d;
+}
+
+/* \n => ^J */
+static void
+dxf_fixup_string(Bit_Chain *restrict dat, char *restrict str)
+{
+  if (str)
+    {
+      if (strchr(str, '\n') || strchr(str, '\r'))
+        {
+          char *_buf = alloca(2*strlen(str));
+          fprintf(dat->fh, "%s\r\n", cquote(_buf, str));
+#ifndef HAVE_ALLOCA
+          free(_buf);
+#endif
+        }
+      else
+        fprintf(dat->fh, "%s\r\n", str);
+    }
+  else
+    fprintf(dat->fh, "\r\n");
+}
 
 // r13+ converts STANDARD to Standard, BYLAYER to ByLayer, BYBLOCK to ByBlock
 static void
