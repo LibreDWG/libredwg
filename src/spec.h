@@ -118,6 +118,12 @@
 #ifndef FIELD_RCd
 # define FIELD_RCd(name, dxf) FIELD_RC(name, dxf)
 #endif
+#ifndef VALUE_BINARY
+# define VALUE_BINARY(value, dxf, size)
+#endif
+#ifndef FIELD_BINARY
+# define FIELD_BINARY(name, dxf, size) VALUE_BINARY(_obj->name, dxf, size)
+#endif
 #ifndef SUBCLASS
 # define SUBCLASS(text)
 #endif

@@ -104,6 +104,7 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
     len -= 127; \
   } while (len > 127); \
 }
+#define FIELD_BINARY(name,size,dxf) VALUE_BINARY(_obj->name,size,dxf)
 
 #define FIELD_VALUE(nam) _obj->nam
 #define ANYCODE -1
@@ -1382,7 +1383,7 @@ dxf_common_entity_handle_data(Bit_Chain *restrict dat, const Dwg_Object *restric
 #else
   if (ent->picture_exists && ent->picture_size >= 0 && ent->picture_size < 210210) {
     FIELD_RL(picture_size, 160);
-    VALUE_BINARY(ent->picture, ent->picture_size, 310); //chunked hex encoding
+    FIELD_BINARY(picture, ent->picture_size, 310); //chunked hex encoding
   }
   SINCE(R_2004) {
     if (ent->color.index > 0)

@@ -110,6 +110,7 @@ dxfb_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
     len -= 127; \
   } while (len > 127); \
 }
+#define FIELD_BINARY(name,size,dxf) VALUE_BINARY(_obj->name,size,dxf)
 
 #define FIELD_VALUE(nam) _obj->nam
 #define ANYCODE -1
