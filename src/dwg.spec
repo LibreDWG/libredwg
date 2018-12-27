@@ -3475,7 +3475,13 @@ DWG_ENTITY(HATCH)
       FIELD_T (gradient_name, 470);
     }
 
-  FIELD_BD (elevation, 30);
+  DXF {
+    BITCODE_3RD pt = { 0.0, 0.0, 0.0 };
+    pt.z = FIELD_VALUE(elevation);
+    KEY(elevation); VALUE_3BD (pt, 10);
+  } else {
+    FIELD_BD (elevation, 30);
+  }
   FIELD_3BD (extrusion, 210);
   FIELD_T (name, 2); //default: SOLID
   FIELD_B (solid_fill, 70); //default: 1, pattern_fill: 0
