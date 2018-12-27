@@ -24,6 +24,9 @@
 const char *dxf_format (int code);
 const char* dxf_codepage (int code, Dwg_Data* dwg);
 
+int dxf_is_sorted_INSERT(const Dwg_Object *restrict obj);
+int dxf_is_sorted_POLYLINE(const Dwg_Object *restrict obj);
+
 EXPORT int dwg_write_dxf(Bit_Chain *dat, Dwg_Data* dwg);
 EXPORT int dwg_write_dxfb(Bit_Chain *dat, Dwg_Data* dwg);
 
