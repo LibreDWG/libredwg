@@ -1009,8 +1009,33 @@ DWG_ENTITY_END
     } \
     FIELD_2RD (text_midpt, 11); \
     FIELD_BD (elevation, 31); \
-    FIELD_RC (flag1, 70); \
-    FIELD_T (user_text, 1); \
+    DXF { \
+      FIELD_RC (flag, 70); \
+    } else { \
+      FIELD_RC (flag1, 0); \
+    } \
+    DECODER { \
+      BITCODE_RC flag = FIELD_VALUE(flag1); \
+      flag = (flag & 1) ? flag & 0x7F : flag | 0x80; /* clear bit 7 */ \
+      flag = (flag & 2) ? flag | 0x20 : flag & 0xDF; /* set bit 5 */ \
+      flag &= 0xF8; /* clear the 3 flag bits, and set them: */ \
+      if (_obj->flag == DWG_TYPE_DIMENSION_ALIGNED)       flag |= 1; \
+      else if (_obj->flag == DWG_TYPE_DIMENSION_ANG2LN)   flag |= 2; \
+      else if (_obj->flag == DWG_TYPE_DIMENSION_DIAMETER) flag |= 3; \
+      else if (_obj->flag == DWG_TYPE_DIMENSION_RADIUS)   flag |= 4; \
+      else if (_obj->flag == DWG_TYPE_DIMENSION_ANG3PT)   flag |= 5; \
+      else if (_obj->flag == DWG_TYPE_DIMENSION_ORDINATE) flag |= 6; \
+      FIELD_VALUE(flag) = flag; \
+    } \
+    DXF { \
+      if (dat->from_version >= R_2007) { \
+        FIELD_TU (user_text, 1); \
+      } else if (_obj->user_text && strlen(_obj->user_text)) { \
+        FIELD_TV (user_text, 1); \
+      } \
+    } else { \
+      FIELD_T (user_text, 1); \
+    } \
     FIELD_BD (text_rotation, 53); \
     FIELD_BD (horiz_dir, 51); \
     FIELD_3BD_1 (ins_scale, 41); \
@@ -1045,6 +1070,12 @@ DWG_ENTITY(DIMENSION_ORDINATE)
   FIELD_3BD (feature_location_pt, 13);
   FIELD_3BD (leader_endpt, 14);
   FIELD_RC (flag2, 70);
+  DECODER {
+    BITCODE_RC flag = FIELD_VALUE(flag);
+    flag = (FIELD_VALUE(flag2) & 1)
+            ? flag | 0x80 : flag & 0xBF; /* set bit 6 */
+    FIELD_VALUE(flag) = flag;
+  }
 
   COMMON_ENTITY_HANDLE_DATA;
   UNTIL(R_2007)

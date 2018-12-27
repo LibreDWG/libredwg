@@ -1189,6 +1189,7 @@ typedef struct _dwg_entity_LINE
     BITCODE_3BD def_pt; \
     BITCODE_2RD text_midpt; \
     BITCODE_BD elevation; \
+    BITCODE_RC flag; /* calculated, DXF only */ \
     BITCODE_RC flag1; \
     BITCODE_TV user_text; \
     BITCODE_BD text_rotation; \
