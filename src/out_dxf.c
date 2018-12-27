@@ -70,7 +70,11 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 
 #define VALUE_TV(value,dxf) \
   { GROUP(dxf); \
-    fprintf(dat->fh, "%s\r\n", value); }
+    if (value) \
+      fprintf(dat->fh, "%s\r\n", value); \
+    else \
+      fprintf(dat->fh, "\r\n"); \
+  }
 #ifdef HAVE_NATIVE_WCHAR2
 # define VALUE_TU(value,dxf)\
   { GROUP(dxf); \
@@ -88,7 +92,8 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
     fprintf(dat->fh, "\r\n"); \
   }
 #endif
-#define VALUE_TFF(str,dxf)    VALUE_TV(str, dxf)
+#define VALUE_TFF(str,dxf) \
+  { GROUP(dxf); fprintf(dat->fh, "%s\r\n", str); }
 #define VALUE_BINARY(value,size,dxf) \
 { \
   long len = size; \
@@ -696,7 +701,7 @@ dxf_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         free (name);
     }
   else {
-    fprintf(dat->fh, "%3i\r\n0\r\n", dxf);
+    fprintf(dat->fh, "%3i\r\n\r\n", dxf);
   }
 }
 
