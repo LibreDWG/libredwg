@@ -66,8 +66,8 @@ static void
 dxf_fixup_string(Bit_Chain *restrict dat, char *restrict str);
 
 #ifndef HAVE_ALLOCA
-char* alloca(size_t size);
-char* alloca(size_t size) {
+static inline char* alloca(size_t size);
+static inline char* alloca(size_t size) {
   return malloc(size);
 }
 #endif

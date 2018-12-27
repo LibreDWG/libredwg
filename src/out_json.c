@@ -49,8 +49,8 @@ static wchar_t* wcquote(wchar_t *restrict dest, const wchar_t *restrict src);
 static void  print_wcquote(Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr);
 
 #ifndef HAVE_ALLOCA
-char* alloca(size_t size);
-char* alloca(size_t size) {
+static inline char* alloca(size_t size);
+static inline char* alloca(size_t size) {
   return malloc(size);
 }
 #endif
