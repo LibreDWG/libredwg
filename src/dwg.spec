@@ -3619,6 +3619,9 @@ DWG_ENTITY(HATCH)
           END_REPEAT(paths[rcount1].polyline_paths);
         }
       SUB_FIELD_BL (paths[rcount1],num_boundary_handles, 97);
+#ifdef IS_DXF
+      DXF { FIELD_HANDLE (boundary_handles[rcount1], H, 330) }
+#endif
       DECODER {
         FIELD_VALUE (num_boundary_handles) += FIELD_VALUE (paths[rcount1].num_boundary_handles);
         FIELD_VALUE (has_derived) =
@@ -3664,7 +3667,7 @@ DWG_ENTITY(HATCH)
   FIELD_2RD_VECTOR (seeds, num_seeds, 10);
 
   COMMON_ENTITY_HANDLE_DATA;
-  HANDLE_VECTOR (boundary_handles, num_boundary_handles, 4, 330);
+  HANDLE_VECTOR (boundary_handles, num_boundary_handles, 4, 0); /* DXF: inlined above */
 
 DWG_OBJECT_END
 
@@ -7121,4 +7124,5 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+
 
