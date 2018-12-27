@@ -716,8 +716,12 @@ EXPORT int dwg_add_##token (Dwg_Object *obj) \
   obj->supertype = DWG_SUPERTYPE_ENTITY;\
   if (!(int)obj->fixedtype)\
     obj->fixedtype = DWG_TYPE_##token;\
-  if (!obj->dxfname)\
-    obj->dxfname = (char*)#token;\
+  if (!obj->dxfname) { \
+    if (strlen(#token) > 3 && !memcmp(#token,  "_3D", 3)) \
+      obj->dxfname = (char*)&#token[1]; \
+    else \
+      obj->dxfname = (char*)#token; \
+  } \
   _ent = obj->tio.entity = calloc(1, sizeof(Dwg_Object_Entity));\
   if (!_ent) return DWG_ERR_OUTOFMEM; \
   _ent->tio.token = calloc(1, sizeof (Dwg_Entity_##token));\

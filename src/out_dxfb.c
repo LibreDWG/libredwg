@@ -177,7 +177,7 @@ dxfb_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
     VALUE_TV("TABLE", 0);\
     VALUE_TV(#token, 2)
 #define ENDTAB()        VALUE_TV("ENDTAB", 0)
-#define RECORD(record)  VALUE_TV(#record, 0)
+#define RECORD(token)   VALUE_TV(#token, 0)
 #define SUBCLASS(text)  if (dat->from_version >= R_2000) { VALUE_TV(#text, 100) }
 
 /*
@@ -484,10 +484,13 @@ dwg_dxfb_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
     RECORD(VERTEX)\
   else if (dat->version >= R_2010 && !strcmp(#token, "TABLE")) { \
     RECORD(ACAD_TABLE);\
-    return dwg_dxfb_TABLECONTENT(dat, obj); \
-  } \
-  else\
-    RECORD(token);\
+    return dwg_dxfb_TABLECONTENT(dat, obj); } \
+  else if (strlen(#token) > 3 && !memcmp(#token,  "_3D", 3)) \
+    VALUE_TV(obj->dxfname, 0) \
+  else if (obj->type >= 500 && obj->dxfname) \
+    VALUE_TV(obj->dxfname, 0) \
+  else \
+    RECORD(token) \
   LOG_INFO("Entity " #token ":\n")\
   _ent = obj->tio.entity;\
   _obj = ent = _ent->tio.token;\

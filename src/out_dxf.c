@@ -181,6 +181,7 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
 #define TABLE(table)     fprintf(dat->fh, "  0\r\nTABLE\r\n  2\r\n" #table "\r\n")
 #define ENDTAB()         fprintf(dat->fh, "  0\r\nENDTAB\r\n")
 #define RECORD(record)   fprintf(dat->fh, "  0\r\n" #record "\r\n")
+#define record(record)   fprintf(dat->fh, "  0\r\n%s\r\n", record)
 #define SUBCLASS(text)   if (dat->from_version >= R_2000) { VALUE_TV(#text, 100); }
 
 #define GROUP(dxf) \
@@ -535,8 +536,10 @@ dwg_dxf_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
     RECORD(ACAD_TABLE);\
     return dwg_dxf_TABLECONTENT(dat, obj); \
   } \
+  else if (strlen(#token) > 3 && !memcmp(#token,  "_3D", 3)) \
+    record(obj->dxfname);\
   else if (obj->type >= 500 && obj->dxfname) \
-    fprintf(dat->fh, "  0\r\n%s\r\n", obj->dxfname); \
+    record(obj->dxfname);\
   else\
     RECORD(token);\
   _ent = obj->tio.entity;\
