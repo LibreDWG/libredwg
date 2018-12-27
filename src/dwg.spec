@@ -718,10 +718,11 @@ DWG_ENTITY_END
 /*(12)*/
 DWG_ENTITY(VERTEX_MESH)
 
-  //SUBCLASS (AcDbVertex)
-  //SUBCLASS (AcDbPolygonMeshVertex)
-  FIELD_RC (flag, 70);
+  SUBCLASS (AcDbVertex)
+  SUBCLASS (AcDbPolyFaceMeshVertex) //?
+  FIELD_RC (flag, 0);
   FIELD_3BD (point, 10);
+  DXF { FIELD_RC (flag, 70); }
 
   COMMON_ENTITY_HANDLE_DATA;
 
@@ -730,10 +731,11 @@ DWG_ENTITY_END
 /*(13)*/
 DWG_ENTITY(VERTEX_PFACE)
 
-  //SUBCLASS (AcDbVertex)
-  //SUBCLASS (AcDbPolyFaceMeshVertex)
-  FIELD_RC (flag, 70);
+  SUBCLASS (AcDbVertex)
+  SUBCLASS (AcDbPolyFaceMeshVertex)
+  FIELD_RC (flag, 0);
   FIELD_3BD (point, 10);
+  DXF { FIELD_RC (flag, 70); }
 
   COMMON_ENTITY_HANDLE_DATA;
 
@@ -742,12 +744,24 @@ DWG_ENTITY_END
 /*(14)*/
 DWG_ENTITY(VERTEX_PFACE_FACE)
 
-  //SUBCLASS (AcDbVertex)
-  //SUBCLASS (AcDbFaceRecord)
-  FIELD_BS (vertind[0], 71);
-  FIELD_BS (vertind[1], 72);
-  FIELD_BS (vertind[2], 73);
-  FIELD_BS (vertind[3], 74);
+  SUBCLASS (AcDbFaceRecord)
+  DXF {
+    BITCODE_3RD pt = { 0.0, 0.0, 0.0 };
+    VALUE_3BD (pt, 10);
+    VALUE_RC (128, 70);
+    FIELD_BS (vertind[0], 71);
+    if (FIELD_VALUE(vertind[1]))
+      FIELD_BS (vertind[1], 72);
+    if (FIELD_VALUE(vertind[2]))
+      FIELD_BS (vertind[2], 73);
+    if (FIELD_VALUE(vertind[3]))
+      FIELD_BS (vertind[3], 74);
+  } else {
+    FIELD_BS (vertind[0], 71);
+    FIELD_BS (vertind[1], 72);
+    FIELD_BS (vertind[2], 73);
+    FIELD_BS (vertind[3], 74);
+  }
   //TODO R13 has color_rs and linetype_rs for all vertices, not in DXF
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -2178,6 +2192,7 @@ DWG_ENTITY_END
 DWG_ENTITY(TOLERANCE)
 
   SUBCLASS (AcDbFcf)   // for Feature Control Frames
+  DXF { FIELD_HANDLE (dimstyle, 5, 3); }
   VERSIONS(R_13, R_14)
     {
       FIELD_BS (unknown_short, 0); //spec-typo? Spec says S instead of BS.
@@ -2187,7 +2202,8 @@ DWG_ENTITY(TOLERANCE)
 
   FIELD_3DPOINT (ins_pt, 10);
   FIELD_3DPOINT (x_direction, 11);
-  FIELD_3DPOINT (extrusion, 210);
+  DXF  { FIELD_BE (extrusion, 210); }
+  else { FIELD_3DPOINT (extrusion, 210); }
   FIELD_T (text_string, 1);
 
   COMMON_ENTITY_HANDLE_DATA;
