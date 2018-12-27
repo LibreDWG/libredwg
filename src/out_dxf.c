@@ -125,6 +125,8 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
   if (dxf != 0 && _obj->nam) { \
     if (dxf == 6) \
       FIELD_HANDLE_NAME(nam, dxf, LTYPE) \
+    else if (dxf == 3) \
+      FIELD_HANDLE_NAME(nam, dxf, DIMSTYLE) \
     else if (dxf == 7) \
       FIELD_HANDLE_NAME(nam, dxf, STYLE) \
     else if (dxf == 8) \
@@ -136,6 +138,8 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
   if (dxf != 0 && _obj->o.nam) { \
     if (dxf == 6) \
       SUB_FIELD_HANDLE_NAME(o, nam, dxf, LTYPE)  \
+    else if (dxf == 3) \
+      SUB_FIELD_HANDLE_NAME(o, nam, dxf, DIMSTYLE) \
     else if (dxf == 7) \
       SUB_FIELD_HANDLE_NAME(o, nam, dxf, STYLE)  \
     else if (dxf == 8) \
