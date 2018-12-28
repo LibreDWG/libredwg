@@ -4130,7 +4130,7 @@ dwg_dim_blockname(Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
   Dwg_Object *hdr = &dwg->object[id + 1];
   Dwg_Object *blk = &dwg->object[id + 2];
 
-  if (hdr->type == DWG_TYPE_LAYER &&
+  if ((hdr->type == DWG_TYPE_LAYER || hdr->type == DWG_TYPE_DICTIONARY) &&
       blk->type == DWG_TYPE_BLOCK_HEADER)
     {
       hdr = blk;
