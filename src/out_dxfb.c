@@ -117,7 +117,7 @@ dxfb_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
 //TODO
 #define VALUE_HANDLE(hdlptr, handle_code, dxf) \
   if (dxf) { \
-    uint32_t _j = (uint32_t)hdlptr->absolute_ref; \
+    uint32_t _j = hdlptr != NULL ? (uint32_t)((BITCODE_H)hdlptr)->absolute_ref : 0; \
     GROUP(dxf); \
     fwrite(&_j, sizeof(uint32_t), 1, dat->fh); \
   }

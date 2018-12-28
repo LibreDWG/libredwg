@@ -130,7 +130,8 @@ static inline char* alloca(size_t size) {
 // the hex code
 #define VALUE_HANDLE(value, handle_code, dxf) \
   if (dxf) { \
-    fprintf(dat->fh, "%3i\r\n%lX\r\n", dxf, value ? value->absolute_ref : 0); \
+    fprintf(dat->fh, "%3i\r\n%lX\r\n", dxf, \
+            value != NULL ? ((BITCODE_H)value)->absolute_ref : 0); \
   }
 // the name in the table, referenced by the handle
 // names on: 6 7 8. which else? there are more styles: plot, ...

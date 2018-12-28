@@ -748,7 +748,7 @@ DWG_ENTITY(VERTEX_PFACE_FACE)
   DXF {
     BITCODE_3RD pt = { 0.0, 0.0, 0.0 };
     VALUE_3BD (pt, 10);
-    VALUE_RC (128, 70);
+    VALUE_RC ((BITCODE_RC)128, 70);
     FIELD_BS (vertind[0], 71);
     if (FIELD_VALUE(vertind[1]))
       FIELD_BS (vertind[1], 72);
@@ -3668,8 +3668,15 @@ DWG_ENTITY(HATCH)
           END_REPEAT(paths[rcount1].polyline_paths);
         }
       SUB_FIELD_BL (paths[rcount1],num_boundary_handles, 97);
-#ifdef IS_DXF
-      DXF { FIELD_HANDLE (boundary_handles[rcount1], H, 330) }
+#if defined(IS_DXF) && !defined(IS_ENCODER)
+      DXF {
+        if (rcount1 < _obj->num_boundary_handles) {
+          FIELD_HANDLE (boundary_handles[rcount1], 0, 330)
+        } else {
+          LOG_WARN("HATCH.num_path < num_boundary_handles")
+          VALUE_HANDLE ((BITCODE_H)NULL, 0, 330)
+        }
+      }
 #endif
       DECODER {
         FIELD_VALUE (num_boundary_handles) += FIELD_VALUE (paths[rcount1].num_boundary_handles);
