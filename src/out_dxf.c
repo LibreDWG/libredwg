@@ -1561,12 +1561,22 @@ dxf_format (int code)
   return "(unknown code)";
 }
 
+/* missing: ANSI_874 ANSI_932 ANSI_950 ANSI_1250 ANSI_1250 ANSI_1255 ANSI_1256 ANSI_1257 ANSI_1258
+ */
 const char* dxf_codepage (int code, Dwg_Data* dwg)
 {
   if (code == 30 || code == 0)
     return "ANSI_1252";
   else if (code == 29)
     return "ANSI_1251";
+  else if (code == 32)
+    return "ANSI_1253"; //?
+  else if (code == 33)
+    return "ANSI_1254";
+  else if (code == 39)
+    return "ANSI_936";
+  else if (code == 40)
+    return "ANSI_949";
   else if (dwg->header.version >= R_2007)
     return "UTF-8"; // dwg internally: UCS-16, for DXF: UTF-8
   else
