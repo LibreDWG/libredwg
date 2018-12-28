@@ -4599,8 +4599,8 @@ DWG_OBJECT(TABLECONTENT)
           END_REPEAT_BLOCK
           SET_PARENT(cell.cell_contents, &_obj->cell)
           END_REPEAT(cell.cell_contents);
-          SUB_FIELD_BL (cell.style_id, 90);
-          SUB_FIELD_BL (cell.has_geom_data, 91);
+          SUB_FIELD_BL (cell, style_id, 90);
+          SUB_FIELD_BL (cell, has_geom_data, 91);
           if (FIELD_VALUE(cell.has_geom_data))
             {
               SUB_FIELD_BL (cell,geom_data_flag, 91);
@@ -4838,13 +4838,13 @@ DWG_ENTITY(TABLE)
         }
       if (FIELD_VALUE(cells[rcount1].type) == 2)
         { /* block cell */
-          SUB_FIELD_BD (cells[rcount1].block_scale, 144);
-          SUB_FIELD_B (cells[rcount1].additional_data_flag, 0);
+          SUB_FIELD_BD (cells[rcount1],block_scale, 144);
+          SUB_FIELD_B (cells[rcount1],additional_data_flag, 0);
           if (FIELD_VALUE(cells[rcount1].additional_data_flag) == 1)
             {
-              SUB_FIELD_BS (cells[rcount1].num_attr_defs, 179);
-              SUB_FIELD_BS (cells[rcount1].attr_def_index, 0);
-              SUB_FIELD_T (cells[rcount1].attr_def_text, 300);
+              SUB_FIELD_BS (cells[rcount1],num_attr_defs, 179);
+              SUB_FIELD_BS (cells[rcount1],attr_def_index, 0);
+              SUB_FIELD_T (cells[rcount1],attr_def_text, 300);
               //total_num_attr_defs += FIELD_VALUE (cells[rcount1].num_attr_defs);
             }
         }
