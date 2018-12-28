@@ -217,12 +217,15 @@ dwg_free_ ##token (Bit_Chain *restrict _dat, Dwg_Object *restrict obj) \
   if (obj->tio.entity)      \
     {                       \
       LOG_HANDLE("Free entity " #token "\n") \
-      error = dwg_free_ ##token## _private(_dat, obj); \
-                                \
+      if (obj->tio.entity->tio.token) \
+        error = dwg_free_ ##token## _private(_dat, obj); \
+                                                         \
       dwg_free_common_entity_data(obj); \
       dwg_free_eed(obj);    \
-      FREE_IF(obj->tio.entity->tio.token); \
-      FREE_IF(obj->tio.entity); \
+      if (obj->tio.object) { \
+        FREE_IF(obj->tio.entity->tio.token); \
+        FREE_IF(obj->tio.entity); \
+      } \
     }                       \
   obj->parent = NULL;       \
   return error;             \
@@ -236,8 +239,8 @@ dwg_free_ ##token## _private (Bit_Chain *restrict _dat, Dwg_Object *restrict obj
   Bit_Chain *hdl_dat = _dat;\
   Bit_Chain* str_dat = _dat;\
   Dwg_Data* dwg = obj->parent;\
-  int error = 0;            \
-  _ent = obj->tio.entity;   \
+  int error = 0; \
+  _ent = obj->tio.entity; \
   _obj = ent = _ent->tio.token;
 
 #define DWG_ENTITY_END      \
@@ -280,6 +283,7 @@ dwg_free_ ##token## _private (Bit_Chain *restrict _dat, Dwg_Object *restrict obj
   Bit_Chain* str_dat = _dat;                     \
   Dwg_Data* dwg = obj->parent;                   \
   int error = 0;                                 \
+  if (!obj->tio.object) return 0;                \
   _obj = obj->tio.object->tio.token;
 
 /* obj itself is allocated via dwg->object[], dxfname is klass->dxfname or static */
@@ -298,6 +302,8 @@ dwg_free_common_entity_handle_data(Dwg_Object* obj)
   int error = 0;
 
   ent = obj->tio.entity;
+  if (!ent)
+    return;
   _obj = ent;
 
   #include "common_entity_handle_data.spec"
@@ -316,6 +322,8 @@ dwg_free_common_entity_data(Dwg_Object* obj)
   int error = 0;
 
   ent = obj->tio.entity;
+  if (!ent)
+    return;
   _obj = ent;
 
   #include "common_entity_data.spec"
@@ -344,6 +352,7 @@ dwg_free_eed(Dwg_Object* obj)
   }
   else {
     Dwg_Object_Object* _obj = obj->tio.object;
+    if (!_obj) return;
     for (i=0; i < _obj->num_eed; i++) {
       FREE_IF(_obj->eed[i].raw);
       FREE_IF(_obj->eed[i].data);
@@ -396,7 +405,7 @@ dwg_free_object(Dwg_Object *obj)
     dat->version = dwg->header.version;
   } else
     return;
-  if (obj->type == DWG_TYPE_FREED)
+  if (obj->type == DWG_TYPE_FREED || obj->tio.object == NULL)
     return;
   dat->from_version = dat->version;
   if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)

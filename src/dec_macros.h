@@ -525,7 +525,6 @@
 
 // shortest handle: 8 bit
 #define HANDLE_VECTOR_N(name, size, code, dxf) \
-  VECTOR_CHKCOUNT(name,HANDLE,size) \
   if (size > 0) \
     { \
       FIELD_VALUE(name) = (BITCODE_H*) calloc(size, sizeof(BITCODE_H)); \
@@ -536,6 +535,7 @@
     }
 
 #define HANDLE_VECTOR(name, sizefield, code, dxf) \
+  _VECTOR_CHKCOUNT(name, FIELD_VALUE(sizefield), TYPE_MAXELEMSIZE(HANDLE)) \
   HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code, dxf)
 
 //count 1 bytes, until non-1 bytes or a terminating zero
