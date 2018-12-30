@@ -2145,7 +2145,7 @@ typedef struct _dwg_object_VPORT
   BITCODE_H null_handle;
   BITCODE_H background_handle;
   BITCODE_H visual_style_handle;
-  BITCODE_H shade_plot_handle;
+  BITCODE_H sun_handle;
   BITCODE_H named_ucs_handle;
   BITCODE_H base_ucs_handle;
 } Dwg_Object_VPORT;

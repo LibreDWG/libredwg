@@ -2848,7 +2848,8 @@ DWG_OBJECT(VPORT)
 
   COMMON_TABLE_FLAGS(vport_control, Viewport)
 
-  DXF { // has a different order of fields
+ DXF { // has a different order of fields
+
   FIELD_2RD (lower_left, 10);
   FIELD_2RD (upper_right, 11);
   FIELD_2RD (VIEWCTR, 12);
@@ -2906,8 +2907,7 @@ DWG_OBJECT(VPORT)
     FIELD_BS (grid_flags, 60);
     FIELD_BS (grid_major, 61);
     FIELD_HANDLE (background_handle, 4, 332);
-    //FIELD_HANDLE (sun_handle, 3, 361); //ODA bug
-    FIELD_HANDLE (shade_plot_handle, 5, 333);
+    FIELD_HANDLE (sun_handle, 5, 361); //was shade_plot_handle
 
     IF_ENCODE_FROM_EARLIER {
       FIELD_VALUE(use_default_lights) = 1;
@@ -3034,8 +3034,7 @@ DWG_OBJECT(VPORT)
     {
       FIELD_HANDLE (background_handle, 4, 332); //soft ptr
       FIELD_HANDLE (visual_style_handle, 5, 348); //hard ptr
-      //FIELD_HANDLE (sun_handle, 3, 361); //ODA bug
-      FIELD_HANDLE (shade_plot_handle, 3, 333); //hard owner
+      FIELD_HANDLE (sun_handle, 3, 361); //hard owner
     }
 
   SINCE(R_2000)
@@ -6173,7 +6172,7 @@ DWG_ENTITY_END
 
 /* In work area:
    The following entities/objects are only stored as raw UNKNOWN_ENT/OBJ,
-   unless enabled via -DDEBUG_CLASSES */
+   unless enabled via --enable-debug/-DDEBUG_CLASSES */
 
 #ifdef DEBUG_CLASSES
 
