@@ -655,10 +655,12 @@ DWG_ENTITY(VERTEX_2D)
      the encoder routine with the compression technique described in
      the spec. --Juca */
     DXF_OR_PRINT {
-      if (FIELD_VALUE(start_width) != 0.0)
-        FIELD_BD (start_width, 40);
-      if (FIELD_VALUE(end_width) != 0.0)
-        FIELD_BD (end_width, 41);
+      if (FIELD_VALUE(flag) != 0) {
+        if (FIELD_VALUE(start_width) != 0.0)
+          FIELD_BD (start_width, 40);
+        if (FIELD_VALUE(end_width) != 0.0)
+          FIELD_BD (end_width, 41);
+      }
     }
     DECODER
     {
@@ -691,11 +693,21 @@ DWG_ENTITY(VERTEX_2D)
         }
     }
 
-    FIELD_BD (bulge, 42);
+    DXF {
+      if (FIELD_VALUE(flag) != 0 && FIELD_VALUE(bulge) != 0.0)
+        FIELD_BD (bulge, 42);
+    } else {
+      FIELD_BD (bulge, 42);
+    }
     SINCE(R_2010) {
       FIELD_BL (id, 91);
     }
-    FIELD_BD (tangent_dir, 50);
+    DXF {
+      if (FIELD_VALUE(flag) != 0)
+        FIELD_BD (tangent_dir, 50);
+    } else {
+      FIELD_BD (tangent_dir, 50);
+    }
   }
 
   COMMON_ENTITY_HANDLE_DATA;
