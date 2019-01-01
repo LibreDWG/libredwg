@@ -1965,7 +1965,7 @@ DWG_OBJECT(DICTIONARY)
       REPEAT(numitems, text, T)
       {
         FIELD_T (text[rcount1], 3);
-        VALUE_HANDLE (_obj->itemhandles[rcount1], 2, 350);
+        VALUE_HANDLE (_obj->itemhandles[rcount1], itemhandles, 2, 350);
       }
       END_REPEAT(text)
     }
@@ -2017,7 +2017,7 @@ DWG_OBJECT(DICTIONARYWDFLT)
       REPEAT(numitems, text, T)
       {
         FIELD_T (text[rcount1], 3);
-        VALUE_HANDLE (_obj->itemhandles[rcount1], 2, 350);
+        VALUE_HANDLE (_obj->itemhandles[rcount1], itemhandles, 2, 350);
       }
       END_REPEAT(text)
     }
@@ -2303,7 +2303,8 @@ DWG_OBJECT(BLOCK_HEADER)
   //DXF: the name must be from the block_entity!
   COMMON_TABLE_FLAGS(block_control, Block)
   DXF {
-    FIELD_HANDLE (layout_handle, 5, 340);
+    // not allowed to be skipped, can be 0
+    VALUE_HANDLE (_obj->layout_handle, layout_handle, 5, 340);
     // The DXF TABLE.BLOCK_RECORD only has this. More later in the BLOCKS section.
     return 0;
   }
@@ -3685,7 +3686,7 @@ DWG_ENTITY(HATCH)
           FIELD_HANDLE (boundary_handles[rcount1], 0, 330)
         } else {
           LOG_WARN("HATCH.num_path < num_boundary_handles")
-          VALUE_HANDLE ((BITCODE_H)NULL, 0, 330)
+          VALUE_HANDLE ((BITCODE_H)NULL, boundary_handles, 0, 330)
         }
       }
 #endif

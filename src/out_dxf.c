@@ -128,7 +128,7 @@ static inline char* alloca(size_t size) {
 #define FIELD_VALUE(nam) _obj->nam
 #define ANYCODE -1
 // the hex code
-#define VALUE_HANDLE(value, handle_code, dxf) \
+#define VALUE_HANDLE(value, nam, handle_code, dxf)       \
   if (dxf) { \
     fprintf(dat->fh, "%3i\r\n%lX\r\n", dxf, \
             value != NULL ? ((BITCODE_H)value)->absolute_ref : 0); \
@@ -445,11 +445,11 @@ static inline char* alloca(size_t size) {
   if (dxf && hdlptr && size) {\
     for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
       {\
-        VALUE_HANDLE(hdlptr[vcount], handle_code, dxf);\
+        VALUE_HANDLE(hdlptr[vcount], nam, handle_code, dxf);\
       }\
     }
 #define FIELD_HANDLE_N(nam, size, handle_code, dxf) \
-  VALUE_HANDLE(_obj->nam, handle_code, dxf)
+  VALUE_HANDLE(_obj->nam, nam, handle_code, dxf)
 #define HANDLE_VECTOR_N(nam, size, code, dxf) \
   if (dxf && _obj->nam && size) {\
     for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
@@ -473,7 +473,7 @@ static inline char* alloca(size_t size) {
       obj->tio.object->xdicobjhandle->absolute_ref) \
   { \
     fprintf(dat->fh, "102\r\n{ACAD_XDICTIONARY\r\n");\
-    VALUE_HANDLE(obj->tio.object->xdicobjhandle, code, 360); \
+    VALUE_HANDLE(obj->tio.object->xdicobjhandle, xdicobjhandle, code, 360); \
     fprintf(dat->fh, "102\r\n}\r\n");\
   }
 #define _REACTORS(code)\
@@ -484,7 +484,7 @@ static inline char* alloca(size_t size) {
     fprintf(dat->fh, "102\r\n{ACAD_REACTORS\r\n");\
     for (vcount=0; vcount < obj->tio.object->num_reactors; vcount++)\
       { /* soft ptr */ \
-        VALUE_HANDLE(obj->tio.object->reactors[vcount], code, 330); \
+        VALUE_HANDLE(obj->tio.object->reactors[vcount], reactors, code, 330); \
       }\
     fprintf(dat->fh, "102\r\n}\r\n");\
   }
@@ -493,7 +493,7 @@ static inline char* alloca(size_t size) {
     fprintf(dat->fh, "102\r\n{ACAD_REACTORS\r\n");\
     for (vcount=0; vcount < _obj->num_reactors; vcount++)\
       {\
-        VALUE_HANDLE(_obj->reactors[vcount], code, 330); \
+        VALUE_HANDLE(_obj->reactors[vcount], reactors, code, 330);       \
       }\
     fprintf(dat->fh, "102\r\n}\r\n");\
   }
@@ -505,7 +505,7 @@ static inline char* alloca(size_t size) {
       obj->tio.entity->xdicobjhandle->absolute_ref) \
   { \
     fprintf(dat->fh, "102\r\n{ACAD_XDICTIONARY\r\n");\
-    VALUE_HANDLE(obj->tio.entity->xdicobjhandle, code, 360); \
+    VALUE_HANDLE(obj->tio.entity->xdicobjhandle, xdicobjhandle, code, 360); \
     fprintf(dat->fh, "102\r\n}\r\n");\
   }
 

@@ -222,7 +222,7 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 #define FIELD_VALUE(name) _obj->name
 #define ANYCODE -1
 //TODO read
-#define VALUE_HANDLE(hdlptr, handle_code, dxf) \
+#define VALUE_HANDLE(hdlptr, nam, handle_code, dxf)      \
   if (dxf && hdlptr) { \
     if (GROUP(dxf)) { \
       int i = sscanf((char*)&dat->chain[dat->byte], "%lX", \
@@ -230,8 +230,8 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
       dat->byte += i; \
     } \
   }
-#define FIELD_HANDLE(nam,handle_code,dxf) VALUE_HANDLE(_obj->nam, handle_code, dxf)
-#define SUB_FIELD_HANDLE(o,nam,handle_code,dxf) VALUE_HANDLE(_obj->o.nam, handle_code, dxf)
+#define FIELD_HANDLE(nam,handle_code,dxf) VALUE_HANDLE(_obj->nam, nam, handle_code, dxf)
+#define SUB_FIELD_HANDLE(o,nam,handle_code,dxf) VALUE_HANDLE(_obj->o.nam, nam, handle_code, dxf)
 #define HEADER_9(name) \
     GROUP(9)
 #define VALUE_H(value,dxf) \
@@ -424,49 +424,49 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 //FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'name'.
-#define FIELD_VECTOR_N(name, type, size, dxf)\
+#define FIELD_VECTOR_N(nam, type, size, dxf)\
   if (dxf)\
     {\
       for (vcount=0; vcount < (BITCODE_BL)size; vcount++)\
         {\
-          sscanf((char*)&dat->chain[dat->byte], #name ": " FORMAT_##type ",\n", \
-                 &_obj->name[vcount]);\
+          sscanf((char*)&dat->chain[dat->byte], #nam ": " FORMAT_##type ",\n", \
+                 &_obj->nam[vcount]);\
         }\
     }
 
-#define FIELD_VECTOR_T(name, size, dxf)\
-  if (dxf) {\
-    PRE (R_2007) {                                                   \
-      for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
-        VALUE_TV(_obj->name[vcount], dxf);                           \
-    } else {                                                         \
-      for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
-        VALUE_TU(_obj->name[vcount], dxf);                           \
-    }                                                                \
+#define FIELD_VECTOR_T(nam, size, dxf)\
+  if (dxf) {                                                            \
+    PRE (R_2007) {                                                      \
+      for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)         \
+        VALUE_TV(_obj->nam[vcount], dxf);                               \
+    } else {                                                            \
+      for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)         \
+        VALUE_TU(_obj->nam[vcount], dxf);                               \
+    }                                                                   \
   }
 
-#define FIELD_VECTOR(name, type, size, dxf) FIELD_VECTOR_N(name, type, _obj->size, dxf)
+#define FIELD_VECTOR(nam, type, size, dxf) FIELD_VECTOR_N(nam, type, _obj->size, dxf)
 
-#define FIELD_2RD_VECTOR(name, size, dxf)\
+#define FIELD_2RD_VECTOR(nam, size, dxf)\
   if (dxf) {\
     for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)    \
       {\
-        FIELD_2RD(name[vcount], dxf);\
+        FIELD_2RD(nam[vcount], dxf);\
       }\
   }
 
-#define FIELD_2DD_VECTOR(name, size, dxf)\
-  FIELD_2RD(name[0], dxf);\
+#define FIELD_2DD_VECTOR(nam, size, dxf)\
+  FIELD_2RD(nam[0], dxf);\
   for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)\
     {\
-      FIELD_2DD(name[vcount], FIELD_VALUE(name[vcount - 1].x), FIELD_VALUE(name[vcount - 1].y), dxf);\
+      FIELD_2DD(nam[vcount], FIELD_VALUE(nam[vcount - 1].x), FIELD_VALUE(nam[vcount - 1].y), dxf);\
     }\
 
-#define FIELD_3DPOINT_VECTOR(name, size, dxf)\
+#define FIELD_3DPOINT_VECTOR(nam, size, dxf)\
   if (dxf) {\
     for (vcount=0; vcount < (BITCODE_BL)_obj->size; vcount++)\
       {\
-        FIELD_3DPOINT(name[vcount], dxf);\
+        FIELD_3DPOINT(nam[vcount], dxf);\
       }\
     }
 
@@ -492,7 +492,7 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
     dxf_free_pair(pair); vcount = 0; \
     while (dxf_check_code(dat, pair, 330)) { \
       vcount++; obj->tio.object->num_reactors++; \
-      VALUE_HANDLE(obj->tio.object->reactors[vcount], code, 330); \
+      VALUE_HANDLE(obj->tio.object->reactors[vcount], reactors, code, 330); \
     } \
     dxf_check_code(dat, pair, 102); \
   }
@@ -503,7 +503,7 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
     dxf_free_pair(pair); vcount = 0; \
     while (dxf_check_code(dat, pair, 330)) { \
       vcount++; _obj->num_reactors++; \
-      VALUE_HANDLE(obj->tio.entity->reactors[vcount], code, 330); \
+      VALUE_HANDLE(obj->tio.entity->reactors[vcount], reactors, code, 330); \
     } \
     dxf_check_code(dat, pair, 102); \
   }

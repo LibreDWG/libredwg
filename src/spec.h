@@ -51,7 +51,7 @@
 #endif /* SPEC_H */
 
 #ifndef VALUE_HANDLE
-# define VALUE_HANDLE(value, handle_code, dxf)
+# define VALUE_HANDLE(value, nam, handle_code, dxf)
 #endif
 #ifndef VALUE_B
 # define VALUE_B(value, dxf)

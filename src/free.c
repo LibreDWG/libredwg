@@ -69,9 +69,9 @@ static Bit_Chain *dat = &pdat;
 #define SUB_FIELD(o,nam,type,dxf) FIELD(_obj->o.nam,type)
 
 #define ANYCODE -1
-#define FIELD_HANDLE(nam,code,dxf) VALUE_HANDLE(_obj->nam,code,dxf)
-#define SUB_FIELD_HANDLE(o,nam,code,dxf) VALUE_HANDLE(_obj->o.nam,code,dxf)
-#define VALUE_HANDLE(ref,_code,dxf) \
+#define FIELD_HANDLE(nam,code,dxf) VALUE_HANDLE(_obj->nam,nam,code,dxf)
+#define SUB_FIELD_HANDLE(o,nam,code,dxf) VALUE_HANDLE(_obj->o.nam,nam,code,dxf)
+#define VALUE_HANDLE(ref,nam,_code,dxf)         \
   if (ref) { \
     if (!(ref->handleref.size || (obj && ref->handleref.code > 5))) \
       free(ref); ref = NULL; \
@@ -158,13 +158,13 @@ static Bit_Chain *dat = &pdat;
 #define REACTORS(code) \
   if (obj->tio.object->reactors) { \
     for (vcount=0; vcount < obj->tio.object->num_reactors; vcount++) \
-      VALUE_HANDLE(obj->tio.object->reactors[vcount], code, 330);  \
+      VALUE_HANDLE(obj->tio.object->reactors[vcount], reactors, code, 330); \
     VALUE_TV(obj->tio.object->reactors, 0); \
   }
 #define ENT_REACTORS(code) \
   if (ent->reactors) { \
     for (vcount=0; vcount < ent->num_reactors; vcount++)\
-      VALUE_HANDLE(ent->reactors[vcount], code, 330);  \
+      VALUE_HANDLE(ent->reactors[vcount], reactors, code, 330);  \
     VALUE_TV(ent->reactors, 0); \
   }
 #define XDICOBJHANDLE(code)\
@@ -172,24 +172,24 @@ static Bit_Chain *dat = &pdat;
     {\
       if (!obj->tio.object->xdic_missing_flag)\
         {\
-          VALUE_HANDLE(obj->tio.object->xdicobjhandle, code, 0); \
+          VALUE_HANDLE(obj->tio.object->xdicobjhandle, xdicobjhandle, code, 0); \
         }\
     }\
   PRIOR_VERSIONS\
     {\
-      VALUE_HANDLE(obj->tio.object->xdicobjhandle, code, 0); \
+      VALUE_HANDLE(obj->tio.object->xdicobjhandle, xdicobjhandle, code, 0); \
     }
 #define ENT_XDICOBJHANDLE(code)\
   SINCE(R_2004)\
     {\
       if (!ent->xdic_missing_flag)\
         {\
-          VALUE_HANDLE(ent->xdicobjhandle, code, 0); \
+          VALUE_HANDLE(ent->xdicobjhandle, xdicobjhandle, code, 0);      \
         }\
     }\
   PRIOR_VERSIONS\
     {\
-      VALUE_HANDLE(ent->xdicobjhandle, code, 0); \
+      VALUE_HANDLE(ent->xdicobjhandle, xdicobjhandle, code, 0);  \
     }
 
 #define END_REPEAT(field) FIELD_TV(field,0)

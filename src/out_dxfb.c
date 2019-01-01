@@ -115,14 +115,14 @@ dxfb_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
 #define FIELD_VALUE(nam) _obj->nam
 #define ANYCODE -1
 //TODO
-#define VALUE_HANDLE(hdlptr, handle_code, dxf) \
+#define VALUE_HANDLE(hdlptr, nam, handle_code, dxf)      \
   if (dxf) { \
     uint32_t _j = hdlptr != NULL ? (uint32_t)((BITCODE_H)hdlptr)->absolute_ref : 0; \
     GROUP(dxf); \
     fwrite(&_j, sizeof(uint32_t), 1, dat->fh); \
   }
-#define FIELD_HANDLE(nam, handle_code, dxf) VALUE_HANDLE(_obj->nam, handle_code, dxf)
-#define SUB_FIELD_HANDLE(o, nam, handle_code, dxf) VALUE_HANDLE(_obj->o.nam, handle_code, dxf)
+#define FIELD_HANDLE(nam, handle_code, dxf) VALUE_HANDLE(_obj->nam, nam, handle_code, dxf)
+#define SUB_FIELD_HANDLE(o, nam, handle_code, dxf) VALUE_HANDLE(_obj->o.nam, nam, handle_code, dxf)
 
 #define GROUP(code)                  \
   {                                  \
@@ -408,7 +408,7 @@ dxfb_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       obj->tio.object->xdicobjhandle->absolute_ref) \
   { \
     VALUE_TV("{ACAD_XDICTIONARY", 102);\
-    VALUE_HANDLE(obj->tio.object->xdicobjhandle, code, 360); \
+    VALUE_HANDLE(obj->tio.object->xdicobjhandle, xdicobjhandle, code, 360); \
     VALUE_TV("}", 102);\
   }
 #define _REACTORS(code)\
@@ -419,7 +419,7 @@ dxfb_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
     VALUE_TV("{ACAD_REACTORS", 102) \
     for (vcount=0; vcount < obj->tio.object->num_reactors; vcount++)\
       {\
-        VALUE_HANDLE(obj->tio.object->reactors[vcount], code, 330);\
+        VALUE_HANDLE(obj->tio.object->reactors[vcount], reactors, code, 330); \
       }\
     VALUE_TV("}", 102) \
   }
@@ -428,7 +428,7 @@ dxfb_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
     VALUE_TV("{ACAD_REACTORS", 102) \
     for (vcount=0; vcount < _obj->num_reactors; vcount++)\
       {\
-        VALUE_HANDLE(_obj->reactors[vcount], code, 330);\
+        VALUE_HANDLE(_obj->reactors[vcount], reactors, code, 330);       \
       }\
     VALUE_TV("}", 102) \
   }
@@ -441,7 +441,7 @@ dxfb_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       obj->tio.entity->xdicobjhandle->absolute_ref) \
   { \
     VALUE_TV("{ACAD_XDICTIONARY", 102);\
-    VALUE_HANDLE(obj->tio.entity->xdicobjhandle, code, 360); \
+    VALUE_HANDLE(obj->tio.entity->xdicobjhandle, xdicobjhandle, code, 360); \
     VALUE_TV("}", 102);\
   }
 

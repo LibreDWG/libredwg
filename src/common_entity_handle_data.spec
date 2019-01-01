@@ -17,12 +17,12 @@
     {
       if (ent->ownerhandle) {
         //assert(ent->entmode == 3); /* does not exist */
-        VALUE_HANDLE (ent->ownerhandle, 5, 330);
+        VALUE_HANDLE (ent->ownerhandle, ownerhandle, 5, 330);
       } else if (ent->entmode == 1) {
-        VALUE_HANDLE (obj->parent->header_vars.BLOCK_RECORD_PSPACE, 5, 330);
+        VALUE_HANDLE (obj->parent->header_vars.BLOCK_RECORD_PSPACE, BLOCK_RECORD_PSPACE, 5, 330);
       } else {
         assert(ent->entmode == 2);
-        VALUE_HANDLE (obj->parent->header_vars.BLOCK_RECORD_MSPACE, 5, 330);
+        VALUE_HANDLE (obj->parent->header_vars.BLOCK_RECORD_MSPACE, BLOCK_RECORD_PSPACE, 5, 330);
       }
     }
 #else
