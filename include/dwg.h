@@ -4591,7 +4591,7 @@ typedef struct _dwg_object_DIMASSOC
   BITCODE_RC trans_space_flag;/*!< DXF 70 */
   Dwg_DIMASSOC_Ref *ref;       /* 1-4x */
   BITCODE_BL intsect_gsmarker; /*!< DXF 92 */
-  BITCODE_H ownerhandle;     /*!< DXF 330 */
+  BITCODE_H ownerhandle;      /*!< DXF 330 */
   BITCODE_H dimensionobj;     /*!< DXF 330 */
   BITCODE_H xrefobj;          /*!< DXF 301 */
   BITCODE_H intsectxrefobj;   /*!< DXF 302 */

@@ -805,7 +805,17 @@ get_first_owned_block(const Dwg_Object *hdr)
     }
 
   if (version >= R_13)
-    return _hdr->block_entity ? _hdr->block_entity->obj : NULL;
+    {
+      if (_hdr->block_entity)
+        return _hdr->block_entity->obj;
+      else
+        {
+          Dwg_Object *obj = (Dwg_Object *)hdr;
+          while (obj && obj->type != DWG_TYPE_BLOCK)
+            obj = dwg_next_object(obj);
+          return obj;
+        }
+    }
 
   //TODO: preR13 block table
   LOG_ERROR("Unsupported version: %d\n", version);
