@@ -551,47 +551,50 @@ dxfb_write_xdata(Bit_Chain *restrict dat, Dwg_Resbuf *restrict rbuf, BITCODE_BL 
 
   while (rbuf)
     {
+      int dxftype = rbuf->type + 1000;
       //const char* fmt = dxf_format(rbuf->type);
-      short type = get_base_value_type(rbuf->type);
+      short type = get_base_value_type(dxftype);
 
       tmp = rbuf->next;
       switch (type)
         {
         case VT_STRING:
           UNTIL(R_2007) {
-            VALUE_TV(rbuf->value.str.u.data, rbuf->type)
+            VALUE_TV(rbuf->value.str.u.data, dxftype)
           } LATER_VERSIONS {
-            VALUE_TU(rbuf->value.str.u.wdata, rbuf->type)
+            VALUE_TU(rbuf->value.str.u.wdata, dxftype)
           }
           break;
         case VT_REAL:
-          VALUE_RD(rbuf->value.dbl, rbuf->type);
+          VALUE_RD(rbuf->value.dbl, dxftype);
           break;
         case VT_BOOL:
         case VT_INT8:
-          VALUE_RC(rbuf->value.i8, rbuf->type);
+          VALUE_RC(rbuf->value.i8, dxftype);
           break;
         case VT_INT16:
-          VALUE_RS(rbuf->value.i16, rbuf->type);
+          VALUE_RS(rbuf->value.i16, dxftype);
           break;
         case VT_INT32:
-          VALUE_RL(rbuf->value.i32, rbuf->type);
+          VALUE_RL(rbuf->value.i32, dxftype);
           break;
         case VT_POINT3D:
-          VALUE_RD(rbuf->value.pt[0], rbuf->type);
-          VALUE_RD(rbuf->value.pt[1], rbuf->type+1);
-          VALUE_RD(rbuf->value.pt[2], rbuf->type+2);
+          VALUE_RD(rbuf->value.pt[0], dxftype);
+          VALUE_RD(rbuf->value.pt[1], dxftype+1);
+          VALUE_RD(rbuf->value.pt[2], dxftype+2);
           break;
         case VT_BINARY:
-          VALUE_BINARY(rbuf->value.str.u.data, rbuf->value.str.size, rbuf->type);
+          VALUE_BINARY(rbuf->value.str.u.data, rbuf->value.str.size, dxftype);
           break;
         case VT_HANDLE:
         case VT_OBJECTID:
-          fprintf(dat->fh, "%lX\r\n", (unsigned long)*(uint64_t*)rbuf->value.hdl);
+          //fprintf(dat->fh, "%lX\r\n", (unsigned long)*(uint64_t*)rbuf->value.hdl);
+          GROUP(dxftype);
+          fwrite(&rbuf->value.hdl, sizeof(uint32_t), 1, dat->fh);
           break;
         case VT_INVALID:
         default:
-          fprintf(dat->fh, "\r\n");
+          //fprintf(dat->fh, "");
           break;
         }
       rbuf = tmp;

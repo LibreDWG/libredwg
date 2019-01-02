@@ -620,9 +620,14 @@ dxf_write_xdata(Bit_Chain *restrict dat, Dwg_Resbuf *restrict rbuf, BITCODE_BL s
 
   while (rbuf)
     {
-      int dxftype = rbuf->type;
-      const char* fmt = dxf_format(rbuf->type);
-      short type = get_base_value_type(rbuf->type);
+      const char* fmt;
+      short type;
+      int dxftype = rbuf->type + 1000;
+
+      fmt = dxf_format(rbuf->type);
+      type = get_base_value_type(rbuf->type);
+      dxftype = rbuf->type > 1000 ? rbuf->type : rbuf->type + 1000;
+
       if (!strcmp(fmt, "(unknown code)"))
         {
           if (type == VT_INVALID) {
