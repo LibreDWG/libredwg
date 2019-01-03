@@ -1968,6 +1968,8 @@ dxf_block_write(Bit_Chain *restrict dat, Dwg_Object *restrict hdr, int *restrict
   obj = get_first_owned_object(hdr); //first_entity
   while (obj)
     {
+      if (dat->version >= R_2004)
+        is_sorted = 0; // next_owned_object returns next entity, skipping vertices
       if (obj->supertype == DWG_SUPERTYPE_ENTITY)
         error |= dwg_dxf_object(dat, obj, i);
       obj = get_next_owned_object(hdr, obj); // until last_entity
