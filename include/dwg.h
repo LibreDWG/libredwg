@@ -5655,6 +5655,9 @@ dwg_obj_is_control(const Dwg_Object *obj);
 EXPORT int
 dwg_obj_is_table(const Dwg_Object *obj);
 
+EXPORT int
+dwg_obj_is_subentity(const Dwg_Object *obj);
+
 EXPORT BITCODE_BL
 dwg_get_num_entities(const Dwg_Data *);
 

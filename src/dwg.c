@@ -905,33 +905,48 @@ dwg_class_is_entity(const Dwg_Class *klass)
 int
 dwg_obj_is_control(const Dwg_Object *obj)
 {
-  unsigned int type = obj->type;
-  return type == DWG_TYPE_BLOCK_CONTROL ||
-         type == DWG_TYPE_LAYER_CONTROL ||
-         type == DWG_TYPE_STYLE_CONTROL ||
-         type == DWG_TYPE_LTYPE_CONTROL ||
-         type == DWG_TYPE_VIEW_CONTROL ||
-         type == DWG_TYPE_UCS_CONTROL ||
-         type == DWG_TYPE_VPORT_CONTROL ||
-         type == DWG_TYPE_APPID_CONTROL ||
-         type == DWG_TYPE_DIMSTYLE_CONTROL ||
-         type == DWG_TYPE_VPORT_ENTITY_CONTROL;
+  const unsigned int type = obj->type;
+  return (obj->supertype == DWG_SUPERTYPE_OBJECT) &&
+    (type == DWG_TYPE_BLOCK_CONTROL ||
+     type == DWG_TYPE_LAYER_CONTROL ||
+     type == DWG_TYPE_STYLE_CONTROL ||
+     type == DWG_TYPE_LTYPE_CONTROL ||
+     type == DWG_TYPE_VIEW_CONTROL ||
+     type == DWG_TYPE_UCS_CONTROL ||
+     type == DWG_TYPE_VPORT_CONTROL ||
+     type == DWG_TYPE_APPID_CONTROL ||
+     type == DWG_TYPE_DIMSTYLE_CONTROL ||
+     type == DWG_TYPE_VPORT_ENTITY_CONTROL);
 }
 
 int
 dwg_obj_is_table(const Dwg_Object *obj)
 {
-  unsigned int type = obj->type;
-  return type == DWG_TYPE_BLOCK_HEADER ||
-         type == DWG_TYPE_LAYER ||
-         type == DWG_TYPE_STYLE ||
-         type == DWG_TYPE_LTYPE ||
-         type == DWG_TYPE_VIEW ||
-         type == DWG_TYPE_UCS ||
-         type == DWG_TYPE_VPORT ||
-         type == DWG_TYPE_APPID ||
-         type == DWG_TYPE_DIMSTYLE ||
-         type == DWG_TYPE_VPORT_ENTITY_HEADER;
+  const unsigned int type = obj->type;
+  return (obj->supertype == DWG_SUPERTYPE_OBJECT) &&
+    (type == DWG_TYPE_BLOCK_HEADER ||
+     type == DWG_TYPE_LAYER ||
+     type == DWG_TYPE_STYLE ||
+     type == DWG_TYPE_LTYPE ||
+     type == DWG_TYPE_VIEW ||
+     type == DWG_TYPE_UCS ||
+     type == DWG_TYPE_VPORT ||
+     type == DWG_TYPE_APPID ||
+     type == DWG_TYPE_DIMSTYLE ||
+     type == DWG_TYPE_VPORT_ENTITY_HEADER);
+}
+
+int
+dwg_obj_is_subentity(const Dwg_Object *obj)
+{
+  const unsigned int type = obj->type;
+  return (obj->supertype == DWG_SUPERTYPE_ENTITY) &&
+    (type == DWG_TYPE_ATTRIB ||
+     type == DWG_TYPE_VERTEX_2D ||
+     type == DWG_TYPE_VERTEX_3D ||
+     type == DWG_TYPE_VERTEX_MESH ||
+     type == DWG_TYPE_VERTEX_PFACE ||
+     type == DWG_TYPE_VERTEX_PFACE_FACE);
 }
 
 Dwg_Section_Type
