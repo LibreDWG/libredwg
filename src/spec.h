@@ -74,6 +74,9 @@
 #ifndef KEY
 # define KEY(nam)
 #endif
+#ifndef BLOCK_NAME
+# define BLOCK_NAME(nam, dxf) FIELD_T(nam, dxf)
+#endif
 // sub fields
 #ifndef FIELDG
 # define FIELDG(nam,type,dxf)  FIELD(nam,type)

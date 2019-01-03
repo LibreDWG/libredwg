@@ -444,6 +444,8 @@ dxfb_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
     VALUE_HANDLE(obj->tio.entity->xdicobjhandle, xdicobjhandle, code, 360); \
     VALUE_TV("}", 102);\
   }
+#define BLOCK_NAME(nam, dxf) \
+  dxfb_cvt_blockname(dat, _obj->nam, dxf)
 
 #define COMMON_ENTITY_HANDLE_DATA
 #define SECTION_STRING_STREAM
@@ -647,6 +649,62 @@ dxfb_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   else {
     VALUE_TV ("", dxf)
   }
+}
+
+/* pre-r13 mspace and pspace blocks have different names:
+   *Model_Space => $MODEL_SPACE
+   *Paper_Space => $PAPER_SPACE
+ */
+static void
+dxfb_cvt_blockname(Bit_Chain *restrict dat, char *restrict name, const int dxf)
+{
+  if (!name)
+    {
+      VALUE_TV ("", dxf)
+      return;
+    }
+  if (dat->from_version >= R_2007) // r2007+ unicode names
+    {
+      name = bit_convert_TU((BITCODE_TU)name);
+    }
+  if (dat->version == dat->from_version) // no conversion
+    {
+      VALUE_TV (name, dxf)
+    }
+  else if (dat->version < R_13 && dat->from_version >= R_13) // to older
+    {
+      if (strlen(name) < 10)
+        VALUE_TV (name, dxf)
+      else if (!strcmp(name, "*Model_Space"))
+        VALUE_TV ("$MODEL_SPACE", dxf)
+      else if (!strcmp(name, "*Paper_Space"))
+        VALUE_TV ("$PAPER_SPACE", dxf)
+      else if (!memcmp(name, "*Paper_Space", sizeof("*Paper_Space")-1))
+        {
+          GROUP(dxf);
+          fprintf(dat->fh, "$PAPER_SPACE%s%c", &name[12], 0);
+        }
+      else
+        VALUE_TV (name, dxf)
+    }
+  else if (dat->version >= R_13 && dat->from_version < R_13) // to newer
+    {
+      if (strlen(name) < 10)
+        VALUE_TV (name, dxf)
+      else if (!strcmp(name, "$MODEL_SPACE"))
+        VALUE_TV ("*Model_Space", dxf)
+      else if (!strcmp(name, "$PAPER_SPACE"))
+        VALUE_TV ("*Paper_Space", dxf)
+      else if (!memcmp(name, "$PAPER_SPACE", sizeof("$PAPER_SPACE")-1))
+        {
+          GROUP(dxf);
+          fprintf(dat->fh, "*Paper_Space%s%c", &name[12], 0);
+        }
+      else
+        VALUE_TV (name, dxf)
+    }
+  if (dat->from_version >= R_2007)
+    free (name);
 }
 
 // 5 written here first

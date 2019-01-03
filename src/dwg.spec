@@ -331,7 +331,7 @@ DWG_ENTITY_END
 DWG_ENTITY(BLOCK)
 
   SUBCLASS (AcDbBlockBegin)
-  FIELD_T (name, 2);
+  BLOCK_NAME(name, 2) //special pre-R13 naming rules
 
   COMMON_ENTITY_HANDLE_DATA;
 
@@ -340,7 +340,7 @@ DWG_ENTITY(BLOCK)
     Dwg_Bitcode_3RD pt = {0,0,0};
     VALUE_BL (0, 70);
     VALUE_3BD (pt, 10);
-    FIELD_TV (name, 3);
+    BLOCK_NAME(name, 3); //special pre-R13 naming rules
     VALUE_TFF ("", 1);
   }
 #endif

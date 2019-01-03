@@ -508,6 +508,8 @@ static inline char* alloca(size_t size) {
     VALUE_HANDLE(obj->tio.entity->xdicobjhandle, xdicobjhandle, code, 360); \
     fprintf(dat->fh, "102\r\n}\r\n");\
   }
+#define BLOCK_NAME(nam, dxf) \
+  dxf_cvt_blockname(dat, _obj->nam, dxf)
 
 #define COMMON_ENTITY_HANDLE_DATA
 #define SECTION_STRING_STREAM
@@ -768,7 +770,57 @@ dxf_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   }
 }
 
-// 5 written here first
+/* pre-r13 mspace and pspace blocks have different names:
+   *Model_Space => $MODEL_SPACE
+   *Paper_Space => $PAPER_SPACE
+ */
+static void
+dxf_cvt_blockname(Bit_Chain *restrict dat, char *restrict name, const int dxf)
+{
+  if (!name)
+    {
+      fprintf(dat->fh, "%3i\r\n\r\n", dxf);
+      return;
+    }
+  if (dat->from_version >= R_2007) // r2007+ unicode names
+    {
+      name = bit_convert_TU((BITCODE_TU)name);
+    }
+  if (dat->version == dat->from_version) // no conversion
+    {
+      fprintf(dat->fh, "%3i\r\n%s\r\n", dxf, name);
+    }
+  else if (dat->version < R_13 && dat->from_version >= R_13) // to older
+    {
+      if (strlen(name) < 10)
+        fprintf(dat->fh, "%3i\r\n%s\r\n", dxf, name);
+      else if (!strcmp(name, "*Model_Space"))
+        fprintf(dat->fh, "%3i\r\n$MODEL_SPACE\r\n", dxf);
+      else if (!strcmp(name, "*Paper_Space"))
+        fprintf(dat->fh, "%3i\r\n$PAPER_SPACE\r\n", dxf);
+      else if (!memcmp(name, "*Paper_Space", sizeof("*Paper_Space")-1))
+        fprintf(dat->fh, "%3i\r\n$PAPER_SPACE%s\r\n", dxf, &name[12]);
+      else
+        fprintf(dat->fh, "%3i\r\n%s\r\n", dxf, name);
+    }
+  else if (dat->version >= R_13 && dat->from_version < R_13) // to newer
+    {
+      if (strlen(name) < 10)
+        fprintf(dat->fh, "%3i\r\n%s\r\n", dxf, name);
+      else if (!strcmp(name, "$MODEL_SPACE"))
+        fprintf(dat->fh, "%3i\r\n*Model_Space\r\n", dxf);
+      else if (!strcmp(name, "$PAPER_SPACE"))
+        fprintf(dat->fh, "%3i\r\n*Paper_Space\r\n", dxf);
+      else if (!memcmp(name, "$PAPER_SPACE", sizeof("$PAPER_SPACE")-1))
+        fprintf(dat->fh, "%3i\r\n*Paper_Space%s\r\n", dxf, &name[12]);
+      else
+        fprintf(dat->fh, "%3i\r\n%s\r\n", dxf, name);
+    }
+  if (dat->from_version >= R_2007)
+    free (name);
+}
+
+// Handle 5 written here first
 #define COMMON_TABLE_CONTROL_FLAGS \
   if (ctrl) { \
     SINCE(R_13) { \
