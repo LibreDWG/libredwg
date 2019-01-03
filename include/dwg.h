@@ -5684,6 +5684,8 @@ get_next_owned_object(const Dwg_Object *restrict hdr,
 EXPORT Dwg_Object*
 get_first_owned_block(const Dwg_Object *hdr);
 EXPORT Dwg_Object*
+get_last_owned_block(const Dwg_Object *hdr);
+EXPORT Dwg_Object*
 get_next_owned_block(const Dwg_Object *restrict hdr,
                      const Dwg_Object *restrict current);
 

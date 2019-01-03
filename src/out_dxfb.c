@@ -1590,7 +1590,7 @@ dxfb_block_write(Bit_Chain *restrict dat, Dwg_Object *restrict hdr, int *restric
         error |= dwg_dxfb_object(dat, obj, i);
       obj = get_next_owned_object(hdr, obj);
     }
-  error |= dwg_dxfb_ENDBLK(dat, _hdr->endblk_entity->obj);
+  error |= dwg_dxfb_ENDBLK(dat, get_last_owned_block(hdr));
   return error;
 }
 

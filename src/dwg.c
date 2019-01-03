@@ -793,6 +793,7 @@ get_next_owned_object(const Dwg_Object *restrict hdr,
   return NULL;
 }
 
+/* The BLOCK entity */
 Dwg_Object*
 get_first_owned_block(const Dwg_Object *hdr)
 {
@@ -839,6 +840,35 @@ get_next_owned_block(const Dwg_Object *restrict hdr,
       if (!_hdr->endblk_entity || current == _hdr->endblk_entity->obj)
         return NULL;
       return dwg_next_object(current);
+    }
+
+  LOG_ERROR("Unsupported version: %d\n", version);
+  return NULL;
+}
+
+/* The ENDBLK entity */
+Dwg_Object*
+get_last_owned_block(const Dwg_Object *restrict hdr)
+{
+  unsigned int version = hdr->parent->header.version;
+  const Dwg_Object_BLOCK_HEADER *restrict _hdr = hdr->tio.object->tio.BLOCK_HEADER;
+  if (hdr->type != DWG_TYPE_BLOCK_HEADER)
+    {
+      LOG_ERROR("Invalid BLOCK_HEADER type %d", hdr->type);
+      return NULL;
+    }
+
+  if (version >= R_13)
+    {
+      if (_hdr->endblk_entity)
+        return _hdr->endblk_entity->obj;
+      else
+        {
+          Dwg_Object *obj = (Dwg_Object *)hdr;
+          while (obj && obj->type != DWG_TYPE_ENDBLK)
+            obj = dwg_next_object(obj);
+          return obj;
+        }
     }
 
   LOG_ERROR("Unsupported version: %d\n", version);
