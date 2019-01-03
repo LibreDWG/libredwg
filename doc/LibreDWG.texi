@@ -414,14 +414,14 @@ via two ways:
 
 @verbatim
   Dwg_Object_BLOCK_CONTROL* block_control = dwg->block_control;
-  //first all objects in the model space
+  // first all entities in the model space
   process_BLOCK_HEADER(dwg->header_vars.BLOCK_RECORD_MSPACE);
-  //then all objects in the blocks
+  // then all entities in the blocks
   for (i=0; i < block_control->num_entries; i++)
     {
       process_BLOCK_HEADER(block_control->block_headers[i]);
     }
-  //and last all objects in the paper space
+  // and last all entities in the paper space
   process_BLOCK_HEADER(dwg->header_vars.BLOCK_RECORD_PSPACE);
 @end verbatim
 
@@ -437,19 +437,19 @@ or 2. by using the API functions from @file{dwg_api.h}:
   process_BLOCK_HEADER(dwg_paper_space_ref(dwg));
 @end verbatim
 
-and inside the @code{process_BLOCK_HEADER} function, you iterate over the objects
+and inside the @code{process_BLOCK_HEADER} function, you iterate over the entities
 from the block_header via:
 
 @verbatim
-  Dwg_Object* obj = get_first_owned_object(ref->obj);
+  Dwg_Object* obj = get_first_owned_entity(ref->obj);
   while (obj)
     {
       process_object(obj);
-      obj = get_next_owned_object(ref->obj, obj);
+      obj = get_next_owned_entity(ref->obj, obj);
     }
 @end verbatim
 
-where @code{process_object} checks the type of each object or entity under the
+where @code{process_object} checks the type of each entity under the
 @var{Dwg_Object* obj}.
 
 For each entity or object type (i.e. a non-graphical dwg object, also tables)

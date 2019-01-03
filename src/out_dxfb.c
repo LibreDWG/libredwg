@@ -1583,14 +1583,14 @@ dxfb_block_write(Bit_Chain *restrict dat, Dwg_Object *restrict hdr, int *restric
   const Dwg_Object_BLOCK_HEADER *restrict _hdr = hdr->tio.object->tio.BLOCK_HEADER;
   if (obj)
     error |= dwg_dxfb_object(dat, obj, i);
-  obj = get_first_owned_object(hdr);
+  obj = get_first_owned_entity(hdr);
   while (obj)
     {
       if (dat->version >= R_2004)
         is_sorted = 0; // next_owned_object returns next entity, skipping vertices
       if (obj->supertype == DWG_SUPERTYPE_ENTITY)
         error |= dwg_dxfb_object(dat, obj, i);
-      obj = get_next_owned_object(hdr, obj);
+      obj = get_next_owned_entity(hdr, obj);
     }
   error |= dwg_dxfb_ENDBLK(dat, get_last_owned_block(hdr));
   return error;

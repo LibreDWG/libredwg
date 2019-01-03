@@ -813,9 +813,9 @@ int match_BLOCK_HEADER(const char *restrict filename, Dwg_Object_Ref *restrict r
   MATCH_OBJECT (BLOCK_HEADER, description, 4);
 
   //fprintf(stderr, "HDR: %d, HANDLE: %X\n", hdr->address, hdr->handle.value);
-  for (obj = get_first_owned_object(hdr);
+  for (obj = get_first_owned_entity(hdr);
        obj;
-       obj = get_next_owned_object(hdr, obj))
+       obj = get_next_owned_entity(hdr, obj))
     {
       if (numtype) //search for allowed --type and skip if not
         {

@@ -92,11 +92,11 @@ output_BLOCK_HEADER (dwg_object_ref * ref)
       return;
     }
 
-  obj = get_first_owned_object (hdr);
+  obj = get_first_owned_entity (hdr);
   while (obj)
     {
       output_object (obj);
-      obj = get_next_owned_object (hdr, obj);
+      obj = get_next_owned_entity (hdr, obj);
     }
 }
 

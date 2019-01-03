@@ -208,11 +208,11 @@ void output_BLOCK_HEADER(Dwg_Object_Ref* ref)
   printf(
       "\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", ref->absolute_ref, hdr->name);
 
-  obj = get_first_owned_object(ref->obj);
+  obj = get_first_owned_entity(ref->obj);
   while (obj)
     {
       output_object(obj);
-      obj = get_next_owned_object(ref->obj, obj);
+      obj = get_next_owned_entity(ref->obj, obj);
     }
 
   printf("\t</g>\n");

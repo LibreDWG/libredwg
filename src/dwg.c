@@ -732,8 +732,10 @@ dwg_paper_space_ref(Dwg_Data *dwg)
     ? dwg->block_control.paper_space : NULL;
 }
 
+/** Returns the first entity owned by the block hdr, or NULL.
+ */
 Dwg_Object*
-get_first_owned_object(const Dwg_Object *hdr)
+get_first_owned_entity(const Dwg_Object *hdr)
 {
   unsigned int version = hdr->parent->header.version;
   Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
@@ -747,8 +749,7 @@ get_first_owned_object(const Dwg_Object *hdr)
     {
       return _hdr->first_entity ? _hdr->first_entity->obj : NULL;
     }
-
-  if (version >= R_2004)
+  else if (version >= R_2004)
     {
       _hdr->__iterator = 0;
       if (_hdr->entities && _hdr->num_owned && _hdr->entities[0])
@@ -762,8 +763,11 @@ get_first_owned_object(const Dwg_Object *hdr)
   return NULL;
 }
 
+/** Returns the next entity owned by the block hdr, or NULL.
+ *  Not subentities: ATTRIB, VERTEX.
+ */
 Dwg_Object*
-get_next_owned_object(const Dwg_Object *restrict hdr,
+get_next_owned_entity(const Dwg_Object *restrict hdr,
                       const Dwg_Object *restrict current)
 {
   unsigned int version = hdr->parent->header.version;
@@ -776,12 +780,23 @@ get_next_owned_object(const Dwg_Object *restrict hdr,
 
   if (R_13 <= version && version <= R_2000)
     {
+      Dwg_Object *obj;
       if (current == _hdr->last_entity->obj)
         return NULL;
-      return dwg_next_object(current);
+      obj = dwg_next_object(current);
+      while (obj &&
+             (obj->supertype != DWG_SUPERTYPE_ENTITY ||
+              obj->type == DWG_TYPE_ATTDEF ||
+              obj->type == DWG_TYPE_ATTRIB ||
+              obj->type == DWG_TYPE_VERTEX_2D ||
+              obj->type == DWG_TYPE_VERTEX_3D ||
+              obj->type == DWG_TYPE_VERTEX_MESH ||
+              obj->type == DWG_TYPE_VERTEX_PFACE ||
+              obj->type == DWG_TYPE_VERTEX_PFACE_FACE))
+        obj = dwg_next_object(obj);
+      return obj == _hdr->last_entity->obj ? NULL : obj;
     }
-
-  if (version >= R_2004)
+  else if (version >= R_2004)
     {
       _hdr->__iterator++;
       if (_hdr->__iterator == _hdr->num_owned)
@@ -793,7 +808,9 @@ get_next_owned_object(const Dwg_Object *restrict hdr,
   return NULL;
 }
 
-/* The BLOCK entity */
+/** Returns the BLOCK entity owned by the block hdr.
+ *  Only NULL on illegal hdr argument or dwg version.
+ */
 Dwg_Object*
 get_first_owned_block(const Dwg_Object *hdr)
 {
@@ -823,6 +840,8 @@ get_first_owned_block(const Dwg_Object *hdr)
   return NULL;
 }
 
+/** Returns the next block object after current owned by the block hdr, or NULL.
+ */
 Dwg_Object*
 get_next_owned_block(const Dwg_Object *restrict hdr,
                      const Dwg_Object *restrict current)
@@ -846,7 +865,9 @@ get_next_owned_block(const Dwg_Object *restrict hdr,
   return NULL;
 }
 
-/* The ENDBLK entity */
+/** Returns the last ENDBLK entity owned by the block hdr.
+ *  Only NULL on illegal hdr argument or dwg version.
+ */
 Dwg_Object*
 get_last_owned_block(const Dwg_Object *restrict hdr)
 {

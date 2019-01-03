@@ -5677,9 +5677,9 @@ dwg_ref_object_relative(const Dwg_Data *restrict dwg,
                         const Dwg_Object *restrict obj);
 
 EXPORT Dwg_Object*
-get_first_owned_object(const Dwg_Object *restrict hdr);
+get_first_owned_entity(const Dwg_Object *restrict hdr);
 EXPORT Dwg_Object*
-get_next_owned_object(const Dwg_Object *restrict hdr,
+get_next_owned_entity(const Dwg_Object *restrict hdr,
                       const Dwg_Object *restrict current);
 EXPORT Dwg_Object*
 get_first_owned_block(const Dwg_Object *hdr);

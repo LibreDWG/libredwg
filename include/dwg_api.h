@@ -67,17 +67,17 @@ Dwg_Entity_##token **dwg_get_##token (Dwg_Object_Ref * hdr) \
   Dwg_Object * obj; \
   if (!hdr || !hdr->obj) \
     return NULL; \
-  obj = get_first_owned_object(hdr->obj); \
+  obj = get_first_owned_entity(hdr->obj); \
   while (obj) \
     { \
       if (obj->type == DWG_TYPE_##token || obj->fixedtype == DWG_TYPE_##token) \
         counts++; \
-      obj = get_next_owned_object(hdr->obj, obj); \
+      obj = get_next_owned_entity(hdr->obj, obj); \
     } \
   if (!counts) \
     return NULL; \
   ret_##token = (Dwg_Entity_##token **)malloc ((counts+1) * sizeof(Dwg_Entity_##token *)); \
-  obj = get_first_owned_object(hdr->obj); \
+  obj = get_first_owned_entity(hdr->obj); \
   while (obj) \
     { \
       if (obj->type == DWG_TYPE_##token || obj->fixedtype == DWG_TYPE_##token) \
@@ -85,7 +85,7 @@ Dwg_Entity_##token **dwg_get_##token (Dwg_Object_Ref * hdr) \
           ret_##token[i] = obj->tio.entity->tio.token; \
           i++; \
         } \
-        obj = get_next_owned_object(hdr->obj, obj); \
+        obj = get_next_owned_entity(hdr->obj, obj); \
     } \
   ret_##token[i] = NULL; \
   return ret_##token; \
