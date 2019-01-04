@@ -15,6 +15,7 @@
 if [ -d test/test-data ]; then cd ..; fi
 datadir=${datadir:-../test/test-data}
 problems=0
+rm -f *dxf.log
 
 check_subentity() {
     if [ -f "$dwg" ] && [ -f "$dxf" ]; then
