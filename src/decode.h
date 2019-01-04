@@ -78,6 +78,10 @@ dwg_resolve_objectrefs_silent(Dwg_Data *restrict dwg);
 char*
 dwg_dim_blockname(Dwg_Data *restrict dwg, const Dwg_Object *restrict obj);
 
+int
+dwg_validate_INSERT(Dwg_Object *obj);
+int
+dwg_validate_POLYLINE(Dwg_Object *obj);
 
 /* from decode_r2007.c */
 int
