@@ -465,7 +465,7 @@ static inline char* alloca(size_t size) {
   FIELDG(num_inserts, type, dxf)
 
 #define FIELD_XDATA(nam, size) \
-  dxf_write_xdata(dat, _obj->nam, _obj->size)
+  dxf_write_xdata(dat, obj, _obj->nam, _obj->size)
 
 #define _XDICOBJHANDLE(code) \
   if (dat->version >= R_13 && \
@@ -615,7 +615,8 @@ dwg_dxf_ ##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
 }
 
 static int
-dxf_write_xdata(Bit_Chain *restrict dat, Dwg_Resbuf *restrict rbuf, BITCODE_BL size)
+dxf_write_xdata(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
+                Dwg_Resbuf *restrict rbuf, BITCODE_BL size)
 {
   Dwg_Resbuf *tmp;
   int i;
@@ -628,7 +629,9 @@ dxf_write_xdata(Bit_Chain *restrict dat, Dwg_Resbuf *restrict rbuf, BITCODE_BL s
 
       fmt = dxf_format(rbuf->type);
       type = get_base_value_type(rbuf->type);
-      dxftype = rbuf->type > 1000 ? rbuf->type : rbuf->type + 1000;
+      dxftype = (rbuf->type > 1000 || obj->fixedtype == DWG_TYPE_XRECORD)
+        ? rbuf->type
+        : rbuf->type + 1000;
 
       if (!strcmp(fmt, "(unknown code)"))
         {

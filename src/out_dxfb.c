@@ -400,7 +400,7 @@ dxfb_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   FIELDG(num_inserts, type, dxf)
 
 #define FIELD_XDATA(nam, size) \
-  dxfb_write_xdata(dat, _obj->nam, _obj->size)
+  dxfb_write_xdata(dat, obj, _obj->nam, _obj->size)
 
 #define _XDICOBJHANDLE(code) \
   if (dat->version >= R_13 && \
@@ -546,16 +546,19 @@ dwg_dxfb_ ##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
 #define DWG_OBJECT_END return 0; }
 
 static void
-dxfb_write_xdata(Bit_Chain *restrict dat, Dwg_Resbuf *restrict rbuf, BITCODE_BL size)
+dxfb_write_xdata(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
+                 Dwg_Resbuf *restrict rbuf, BITCODE_BL size)
 {
   Dwg_Resbuf *tmp;
   int i;
 
   while (rbuf)
     {
-      int dxftype = rbuf->type + 1000;
       //const char* fmt = dxf_format(rbuf->type);
-      short type = get_base_value_type(dxftype);
+      short type = get_base_value_type(rbuf->type);
+      int dxftype = (rbuf->type > 1000 || obj->fixedtype == DWG_TYPE_XRECORD)
+        ? rbuf->type
+        : rbuf->type + 1000;
 
       tmp = rbuf->next;
       switch (type)
