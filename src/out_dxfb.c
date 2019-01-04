@@ -1560,13 +1560,22 @@ dxfb_block_write(Bit_Chain *restrict dat, Dwg_Object *restrict hdr, int *restric
   int error = 0;
   Dwg_Object *restrict obj = get_first_owned_block(hdr); //BLOCK
   const Dwg_Object_BLOCK_HEADER *restrict _hdr = hdr->tio.object->tio.BLOCK_HEADER;
+  Dwg_Data *dwg = hdr->parent;
+
   if (obj)
     error |= dwg_dxfb_object(dat, obj, i);
-  obj = get_first_owned_entity(hdr);
+  else
+    {
+      LOG_ERROR("BLOCK_HEADER.block_entity missing");
+      return DWG_ERR_INVALIDDWG;
+    }
+  // skip *Model_Space UNDERLAY's, they are all under ENTITIES
+  if (hdr == dwg->header_vars.BLOCK_RECORD_MSPACE->obj)
+    obj = NULL;
+  else
+    obj = get_first_owned_entity(hdr); //first_entity
   while (obj)
     {
-      if (dat->version >= R_2004)
-        is_sorted = 0; // next_owned_object returns next entity, skipping vertices
       if (obj->supertype == DWG_SUPERTYPE_ENTITY)
         error |= dwg_dxfb_object(dat, obj, i);
       obj = get_next_owned_entity(hdr, obj);
