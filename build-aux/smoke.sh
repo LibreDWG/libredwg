@@ -192,6 +192,10 @@ $make -s -j4 clean
     $make -s -j4 check || exit
 $make -s -j4 clean
 
+./configure --disable-bindings && \
+    $make -s -j4 check || exit
+$make -s -j4 clean
+
 ./configure --enable-debug && \
     $make -s -j4 check || exit
 $make -s -j4 clean
@@ -206,5 +210,6 @@ WINEARCH=win64 ./configure --host=x86_64-w64-mingw32 && \
 $make -s -j4 clean
 
 # and at last keep the cfg for typical fast debugging
-./configure --disable-python --disable-shared --enable-debug --disable-dxf --disable-write && \
+./configure --disable-bindings --disable-python --disable-shared --enable-debug \
+            --disable-dxf --disable-write && \
     $make -s -j4 check || exit

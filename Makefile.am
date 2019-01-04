@@ -21,7 +21,9 @@ ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = src programs examples test doc
 if HAVE_SWIG_PYTHON
+if !DISABLE_BINDINGS
 SUBDIRS += bindings
+endif
 endif
 
 include_HEADERS = \
