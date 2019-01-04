@@ -34,7 +34,6 @@ static unsigned int loglevel;
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
 static char buf[4096];
-static int is_sorted = 0;
 
 //private
 static int
@@ -913,7 +912,6 @@ dxfb_process_VERTEX_##token(Bit_Chain *restrict dat,                     \
 {                                                                       \
   int error = 0;                                                        \
   Dwg_Entity_POLYLINE_##token *_obj = obj->tio.entity->tio.POLYLINE_##token; \
-  is_sorted = 1;                                                        \
                                                                         \
   VERSIONS(R_13, R_2000) {                                              \
     Dwg_Object *last_vertex = _obj->last_vertex->obj;                   \
@@ -971,7 +969,6 @@ dxfb_process_##token(Bit_Chain *restrict dat,                            \
 {                                                                       \
   int error = 0;                                                        \
   Dwg_Entity_##token *_obj = obj->tio.entity->tio.token;                \
-  is_sorted = 1;                                                        \
                                                                         \
   VERSIONS(R_13, R_2000) {                                              \
     Dwg_Object *last_attrib = _obj->last_attrib->obj;                   \
@@ -1014,12 +1011,13 @@ static int
 dwg_dxfb_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj, int *restrict i)
 {
   int error = 0;
-  const int minimal = obj->parent->opts & 0x10;
+  int minimal;
 
   if (!obj || !obj->parent)
     return DWG_ERR_INTERNALERROR;
   if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
     return 0;
+  minimal = obj->parent->opts & 0x10;
 
   switch (obj->type)
     {
@@ -1031,13 +1029,12 @@ dwg_dxfb_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj, int *re
       return dwg_dxfb_BLOCK(dat, obj);
     case DWG_TYPE_ENDBLK:
       return dwg_dxfb_ENDBLK(dat, obj);
+    case DWG_TYPE_SEQEND:
+      return dwg_dxfb_SEQEND(dat, obj);
 
     case DWG_TYPE_INSERT:
-      is_sorted = dxf_is_sorted_INSERT(obj);
       error = dwg_dxfb_INSERT(dat, obj);
-      if (is_sorted)
-        return error;
-      else {
+      {
         Dwg_Entity_INSERT *_obj = obj->tio.entity->tio.INSERT;
         if (_obj->has_attribs)
           return error | dxfb_process_INSERT(dat, obj, i);
@@ -1045,11 +1042,8 @@ dwg_dxfb_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj, int *re
           return error;
       }
     case DWG_TYPE_MINSERT:
-      is_sorted = dxf_is_sorted_INSERT(obj);
       error = dwg_dxfb_MINSERT(dat, obj);
-      if (is_sorted)
-        return error;
-      else {
+      {
         Dwg_Entity_MINSERT *_obj = obj->tio.entity->tio.MINSERT;
         if (_obj->has_attribs)
           return error | dxfb_process_MINSERT(dat, obj, i);
@@ -1058,51 +1052,36 @@ dwg_dxfb_object(Bit_Chain *restrict dat, const Dwg_Object *restrict obj, int *re
       }
 
     case DWG_TYPE_POLYLINE_2D:
-      is_sorted = dxf_is_sorted_POLYLINE(obj);
       error = dwg_dxfb_POLYLINE_2D(dat, obj);
-      if (is_sorted)
-        return error;
-      else
-        return error | dxfb_process_VERTEX_2D(dat, obj, i);
+      return error | dxfb_process_VERTEX_2D(dat, obj, i);
     case DWG_TYPE_POLYLINE_3D:
-      is_sorted = dxf_is_sorted_POLYLINE(obj);
       error = dwg_dxfb_POLYLINE_3D(dat, obj);
-      if (is_sorted)
-        return error;
-      else
-        return error | dxfb_process_VERTEX_3D(dat, obj, i);
+      return error | dxfb_process_VERTEX_3D(dat, obj, i);
     case DWG_TYPE_POLYLINE_PFACE:
-      is_sorted = dxf_is_sorted_POLYLINE(obj);
       error = dwg_dxfb_POLYLINE_PFACE(dat, obj);
-      if (is_sorted)
-        return error;
-      else
-        return error | dxfb_process_VERTEX_PFACE(dat, obj, i);
+      return error | dxfb_process_VERTEX_PFACE(dat, obj, i);
     case DWG_TYPE_POLYLINE_MESH:
-      is_sorted = dxf_is_sorted_POLYLINE(obj);
       error = dwg_dxfb_POLYLINE_MESH(dat, obj);
-      if (is_sorted)
-        return error;
-      else
-        return error | dxfb_process_VERTEX_MESH(dat, obj, i);
+      return error | dxfb_process_VERTEX_MESH(dat, obj, i);
 
     case DWG_TYPE_ATTRIB:
-      return is_sorted ? dwg_dxfb_ATTRIB(dat, obj) : 0;
+      LOG_WARN("stale %s subentity", obj->dxfname);
+      return dwg_dxfb_ATTRIB(dat, obj);
     case DWG_TYPE_VERTEX_2D:
-      return is_sorted ? dwg_dxfb_VERTEX_2D(dat, obj) : 0;
+      LOG_WARN("stale %s subentity", obj->dxfname);
+      return dwg_dxfb_VERTEX_2D(dat, obj);
     case DWG_TYPE_VERTEX_3D:
-      return is_sorted ? dwg_dxfb_VERTEX_3D(dat, obj) : 0;
+      LOG_WARN("stale %s subentity", obj->dxfname);
+      return dwg_dxfb_VERTEX_3D(dat, obj);
     case DWG_TYPE_VERTEX_MESH:
-      return is_sorted ? dwg_dxfb_VERTEX_MESH(dat, obj) : 0;
+      LOG_WARN("stale %s subentity", obj->dxfname);
+      return dwg_dxfb_VERTEX_MESH(dat, obj);
     case DWG_TYPE_VERTEX_PFACE:
-      return is_sorted ? dwg_dxfb_VERTEX_PFACE(dat, obj) : 0;
+      LOG_WARN("stale %s subentity", obj->dxfname);
+      return dwg_dxfb_VERTEX_PFACE(dat, obj);
     case DWG_TYPE_VERTEX_PFACE_FACE:
-      return is_sorted ? dwg_dxfb_VERTEX_PFACE_FACE(dat, obj) : 0;
-
-    case DWG_TYPE_SEQEND:
-      if (is_sorted)
-        error = dwg_dxfb_SEQEND(dat, obj);
-      return error;
+      LOG_WARN("stale %s subentity", obj->dxfname);
+      return dwg_dxfb_VERTEX_PFACE_FACE(dat, obj);
 
     case DWG_TYPE_ARC:
       return dwg_dxfb_ARC(dat, obj);
