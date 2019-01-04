@@ -1938,7 +1938,11 @@ DWG_OBJECT(DICTIONARY)
   FIELD_HANDLE (ownerhandle, 4, 330);
   SUBCLASS (AcDbDictionary)
   SINCE(R_2000)
+  {
+    if (FIELD_VALUE(hard_owner))
+      FIELD_RC (hard_owner, 280);
     FIELD_BS (cloning, 281);
+  }
 #else
   FIELD_BL (numitems, 0);
   VERSION(R_14)
@@ -1964,8 +1968,9 @@ DWG_OBJECT(DICTIONARY)
     if (FIELD_VALUE(itemhandles) && FIELD_VALUE(text)) {
       REPEAT(numitems, text, T)
       {
+        int dxf = FIELD_VALUE(hard_owner) & 1 ? 360 : 350;
         FIELD_T (text[rcount1], 3);
-        VALUE_HANDLE (_obj->itemhandles[rcount1], itemhandles, 2, 350);
+        VALUE_HANDLE (_obj->itemhandles[rcount1], itemhandles, 2, dxf);
       }
       END_REPEAT(text)
     }
@@ -1991,7 +1996,11 @@ DWG_OBJECT(DICTIONARYWDFLT)
   FIELD_HANDLE (ownerhandle, 4, 330);
   SUBCLASS (AcDbDictionary)
   SINCE(R_2000)
+  {
+    if (FIELD_VALUE(hard_owner))
+      FIELD_RC (hard_owner, 280);
     FIELD_BS (cloning, 281);
+  }
 #else
   FIELD_BL (numitems, 0);
   VERSION(R_14)
@@ -2016,8 +2025,9 @@ DWG_OBJECT(DICTIONARYWDFLT)
     if (FIELD_VALUE(itemhandles) && FIELD_VALUE(text)) {
       REPEAT(numitems, text, T)
       {
+        int dxf = FIELD_VALUE(hard_owner) & 1 ? 360 : 350;
         FIELD_T (text[rcount1], 3);
-        VALUE_HANDLE (_obj->itemhandles[rcount1], itemhandles, 2, 350);
+        VALUE_HANDLE (_obj->itemhandles[rcount1], itemhandles, 2, dxf);
       }
       END_REPEAT(text)
     }
@@ -7192,5 +7202,3 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
-
-
