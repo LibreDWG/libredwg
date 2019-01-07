@@ -1268,16 +1268,16 @@ decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
 }
 
 static int
-resolve_objectref_vector(Bit_Chain* dat, Dwg_Data * dwg)
+resolve_objectref_vector(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   BITCODE_BL i;
-  Dwg_Object * obj;
+  Dwg_Object *obj;
 
   for (i = 0; i < dwg->num_object_refs; i++)
     {
       Dwg_Object_Ref *ref = dwg->object_ref[i];
       LOG_INSANE("==========\n")
-        LOG_TRACE("-objref[%3ld]: HANDLE(%d.%d.%lX) Absolute:%lX\n", (long)i,
+      LOG_TRACE("-objref[%3ld]: HANDLE(%d.%d.%lX) Absolute:%lX\n", (long)i,
                 ref->handleref.code, ref->handleref.size,
                 ref->handleref.value,
                 ref->absolute_ref)
@@ -1290,7 +1290,7 @@ resolve_objectref_vector(Bit_Chain* dat, Dwg_Data * dwg)
                     obj->handle.code, obj->handle.size,
                     obj->handle.value, obj->index)
         }
-      //assign found pointer to objectref vector
+      // assign found pointer to objectref vector
       ref->obj = obj;
 
       if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)
@@ -1304,16 +1304,27 @@ resolve_objectref_vector(Bit_Chain* dat, Dwg_Data * dwg)
   return dwg->num_object_refs ? 0 : DWG_ERR_VALUEOUTOFBOUNDS;
 }
 
+/**
+ * Silent variant of dwg_resolve_handle
+ */
+static Dwg_Object *
+dwg_resolve_handle_silent(const Dwg_Data * dwg, const BITCODE_BL absref)
+{
+  uint32_t i = hash_get(dwg->object_map, (uint32_t)absref);
+  if (i == HASH_NOT_FOUND ||
+      (BITCODE_BL)i >= dwg->num_objects) //the latter being an invalid handle (read from DWG)
+      return NULL;
+  return &dwg->object[i]; // allow value 0
+}
+
 /* Find the BITCODE_H for an object */
 Dwg_Object_Ref*
-dwg_find_objectref(Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
+dwg_find_objectref(const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   for (BITCODE_BL i = 0; i < dwg->num_object_refs; i++)
     {
       Dwg_Object_Ref *ref = dwg->object_ref[i];
-      Dwg_Object* found;
-      // search the handle in all objects
-      found = dwg_resolve_handle(dwg, ref->absolute_ref);
+      Dwg_Object* found = dwg_resolve_handle_silent(dwg, ref->absolute_ref);
       if (found == obj)
         return ref;
     }
@@ -3128,9 +3139,8 @@ dwg_decode_common_entity_handle_data(Bit_Chain* dat, Bit_Chain* hdl_dat,
 {
 
   Dwg_Data *dwg = obj->parent;
-  Dwg_Object_Entity *_obj;
+  Dwg_Object_Entity *_obj, *_ent;
   BITCODE_BL vcount;
-  Dwg_Object_Entity *_ent;
   int error = 0;
 
   _obj = _ent = obj->tio.entity;
@@ -3401,6 +3411,7 @@ check_POLYLINE_handles(Dwg_Object *obj)
               if (vertex && vertex->obj /* pointing backwards */
                   && vertex->obj->fixedtype == DWG_TYPE_LAYER)
                 {
+                  Dwg_Object *seq;
                   obj->tio.entity->layer = layer = vertex;
                   LOG_WARN("POLYLINE.layer is vertex[0] %lX, shift em, NULL seqend",
                            layer->handleref.value);
@@ -3412,7 +3423,23 @@ check_POLYLINE_handles(Dwg_Object *obj)
                   _obj->vertex[_obj->num_owned-1] = seqend;
                   _obj->seqend = NULL;
                   /* now just seqend is empty.
-                     either 1+ last_vertex, or one before the first */
+                     either 1+ last_vertex, or one before the first.
+                     Here the next object might not be read yet. */
+                  seq = dwg_next_object(obj);
+                  if (seq && seq->type == DWG_TYPE_SEQEND)
+                    {
+                      LOG_WARN("POLYLINE.seqend = POLYLINE+1 %lX", seq->handle.value);
+                      seqend = _obj->seqend = dwg_find_objectref(dwg, seq);
+                    }
+                  else
+                    {
+                      seq = dwg_next_object(seqend->obj);
+                      if (seq && seq->type == DWG_TYPE_SEQEND)
+                        {
+                          LOG_WARN("POLYLINE.seqend = VERTEX+1 %lX", seq->handle.value);
+                          seqend = _obj->seqend = dwg_find_objectref(dwg, seq);
+                        }
+                    }
                 }
             }
         }
@@ -3707,6 +3734,33 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
       break;
     case DWG_TYPE_SEQEND:
       error = dwg_decode_SEQEND(dat, obj);
+      if (dat->version >= R_13 && obj->tio.entity->ownerhandle)
+        {
+          Dwg_Object *owner = dwg_resolve_handle(dwg,
+                                obj->tio.entity->ownerhandle->absolute_ref);
+          if (!owner)
+            {
+              LOG_WARN("no SEQEND.ownerhandle")
+            }
+          else if (owner->fixedtype == DWG_TYPE_INSERT ||
+                   owner->fixedtype == DWG_TYPE_MINSERT)
+            {
+              /* SEQEND handle for the owner needed in validate_INSERT */
+              hash_set(dwg->object_map, obj->handle.value, (uint32_t)num);
+              (void)dwg_validate_INSERT(owner);
+            }
+          else if (owner->fixedtype == DWG_TYPE_POLYLINE_2D ||
+                   owner->fixedtype == DWG_TYPE_POLYLINE_3D ||
+                   owner->fixedtype == DWG_TYPE_POLYLINE_PFACE ||
+                   owner->fixedtype == DWG_TYPE_POLYLINE_MESH)
+            {
+              Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
+              if (!_obj->seqend)
+                /* SEQEND handle for the owner needed in validate_POLYLINE */
+                hash_set(dwg->object_map, obj->handle.value, (uint32_t)num);
+              (void)dwg_validate_POLYLINE(owner);
+            }
+        }
       break;
     case DWG_TYPE_INSERT:
       error = dwg_decode_INSERT(dat, obj);
@@ -4194,8 +4248,47 @@ dwg_validate_POLYLINE(Dwg_Object *obj)
 {
   /* We ensured the commmon fields structure is shared with all 4 types */
   Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
-  const Dwg_Data *dwg = obj->parent;
+  Dwg_Data *dwg = obj->parent;
 
+  if (dwg->header.version > R_11) {
+    Dwg_Object_Ref *seqend = _obj->seqend;
+    /* if shifted in check_POLYLINE_handles() seqend might be empty */
+    if (!seqend)
+      { /* either the first or last */
+        Dwg_Object *next = dwg_next_object(obj);
+        if (next && next->fixedtype == DWG_TYPE_SEQEND)
+          {
+            seqend = dwg_find_objectref(dwg, next); //usually not found, even with set hash
+            if (seqend == NULL)
+              {
+                seqend = (Dwg_Object_Ref*)calloc(1, sizeof(Dwg_Object_Ref));
+                seqend->obj = next;
+                seqend->handleref = next->handle;
+                seqend->absolute_ref = next->handle.value;
+                dwg_decode_add_object_ref(dwg, seqend);
+              }
+            _obj->seqend = seqend;
+            LOG_WARN("fixed empty POLYLINE.seqend with +1 obj")
+          }
+        else {
+          next = dwg_next_object(_obj->vertex[_obj->num_owned-1]->obj);
+          if (next && next->fixedtype == DWG_TYPE_SEQEND)
+            {
+              seqend = dwg_find_objectref(dwg, next);
+              if (seqend == NULL)
+                {
+                  seqend = (Dwg_Object_Ref*)calloc(1, sizeof(Dwg_Object_Ref));
+                  seqend->obj = next;
+                  seqend->handleref = next->handle;
+                  seqend->absolute_ref = next->handle.value;
+                  dwg_decode_add_object_ref(dwg, seqend);
+                }
+              _obj->seqend = seqend;
+              LOG_WARN("fixed empty POLYLINE.seqend with last vertex +1")
+            }
+        }
+      }
+  }
   if (dwg->header.version > R_11 && dwg->header.version <= R_2000) {
     Dwg_Object_Ref *first_vertex = _obj->first_vertex;
     Dwg_Object_Ref *last_vertex = _obj->last_vertex;
@@ -4209,32 +4302,6 @@ dwg_validate_POLYLINE(Dwg_Object *obj)
     BITCODE_BL i = 1;
     Dwg_Object_Ref *first_vertex = _obj->vertex[0];
     Dwg_Object_Ref *seqend = _obj->seqend;
-    /* if shifted in check_POLYLINE_handles() seqend might be empty */
-    if (!seqend)
-      { /* either the first or last */
-        Dwg_Object *next = dwg_next_object(obj);
-        if (next && next->fixedtype == DWG_TYPE_SEQEND)
-          {
-            seqend = (Dwg_Object_Ref*)calloc(1, sizeof(Dwg_Object_Ref));
-            seqend->obj = next;
-            seqend->handleref = next->handle;
-            seqend->absolute_ref = next->handle.value;
-            _obj->seqend = seqend;
-            LOG_WARN("fixed empty POLYLINE.seqend with +1 obj")
-          }
-        else {
-          next = dwg_next_object(_obj->vertex[_obj->num_owned-1]->obj);
-          if (next && next->fixedtype == DWG_TYPE_SEQEND)
-            {
-              seqend = (Dwg_Object_Ref*)calloc(1, sizeof(Dwg_Object_Ref));
-              seqend->obj = next;
-              seqend->handleref = next->handle;
-              seqend->absolute_ref = next->handle.value;
-              _obj->seqend = seqend;
-              LOG_WARN("fixed empty POLYLINE.seqend with last vertex +1")
-            }
-        }
-      }
     if (ref_after(first_vertex, seqend)) {
       /* r2010+ often mix up the hdlstream offset:
          layer,vertex*,seqend. check the types then also */

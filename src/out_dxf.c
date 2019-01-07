@@ -1154,9 +1154,11 @@ dwg_dxf_object(Bit_Chain *restrict dat,
     case DWG_TYPE_BLOCK:
       return dwg_dxf_BLOCK(dat, obj);
     case DWG_TYPE_ENDBLK:
-      return dwg_dxf_ENDBLK(dat, obj);
+      LOG_WARN("stale %s subentity", obj->dxfname);
+      return 0; //dwg_dxf_ENDBLK(dat, obj);
     case DWG_TYPE_SEQEND:
-      return dwg_dxf_SEQEND(dat, obj);
+      LOG_WARN("stale %s subentity", obj->dxfname);
+      return 0; //dwg_dxf_SEQEND(dat, obj);
 
     case DWG_TYPE_INSERT:
       error = dwg_dxf_INSERT(dat, obj);

@@ -27,6 +27,7 @@ for dwg in $DATA; do
     json="$(basename "$dwg" .dwg).json"
     dwg="${datadir}/$dwg.dwg"
     echo dwgread -Ojson -o"$json" "$dwg"
+    #TODO --enable-debug: sed -i 's/ nan / "nan" /g;s/ nan,/ "nan",/g'
     if ../libtool --mode=execute ./dwgread -Ojson -o"$json" "$dwg" && jq . "$json" >"$json.log" 2>&1; then
         rm "$json.log" "$json"
     else
