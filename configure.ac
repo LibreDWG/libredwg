@@ -305,7 +305,7 @@ dnl Feature: --disable-python or --enable-python=python3.6
 AC_MSG_CHECKING([for --disable-python])
 AC_ARG_ENABLE(python,
 	AS_HELP_STRING([--disable-python],
-		       [Disable python bindings @<:@default=check@:>@]),
+		       [Disable python bindings and tests @<:@default=check@:>@]),
 	[case "${enableval}" in
 	yes) enable_python=yes; AC_MSG_RESULT([enabled]) ;;
 	no)  enable_python=no; AC_MSG_RESULT([disabled]) ;;
@@ -325,6 +325,9 @@ if test x$cross_compiling = xno -a x$enable_bindings = xyes; then
     dnl SWIG_MULTI_MODULE_SUPPORT
 else
     AC_MSG_WARN([disabled swig bindings])
+    if test x$enable_python != xno; then
+        AM_PATH_PYTHON([2.7])
+    fi
 fi
 
 if test -n "$PERL"; then
