@@ -49,6 +49,8 @@ static bool env_var_checked_p;
 /*------------------------------------------------------------------------------
  * Public functions
  */
+Dwg_Object *
+dwg_resolve_handle_silent(const Dwg_Data * dwg, const BITCODE_BL absref);
 
 static int dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
                           const char *restrict filename)
@@ -793,7 +795,14 @@ get_next_owned_entity(const Dwg_Object *restrict hdr,
               obj->type == DWG_TYPE_VERTEX_MESH ||
               obj->type == DWG_TYPE_VERTEX_PFACE ||
               obj->type == DWG_TYPE_VERTEX_PFACE_FACE))
-        obj = dwg_next_object(obj);
+        {
+          obj = dwg_next_object(obj);
+          // this may happen with r2000 attribs
+          if (obj && obj->supertype == DWG_SUPERTYPE_ENTITY &&
+              obj->tio.entity->ownerhandle != NULL &&
+              obj->tio.entity->ownerhandle->absolute_ref != hdr->handle.value)
+            obj = NULL;
+        }
       return obj == _hdr->last_entity->obj ? NULL : obj;
     }
   else if (version >= R_2004)
