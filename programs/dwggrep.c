@@ -304,6 +304,7 @@ int match_ATTRIB(const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
+  //printf("--ATTRIB %lX %s\n", obj->handle.value, filename);
   MATCH_ENTITY (ATTRIB, text_value, 1);
   MATCH_ENTITY (ATTRIB, tag, 2);
   if (!opt_text)
@@ -815,7 +816,7 @@ int match_BLOCK_HEADER(const char *restrict filename, Dwg_Object_Ref *restrict r
   //fprintf(stderr, "HDR: %d, HANDLE: %X\n", hdr->address, hdr->handle.value);
   for (obj = get_first_owned_entity(hdr);
        obj;
-       obj = get_next_owned_entity(hdr, obj))
+       obj = get_next_owned_entity(hdr, obj)) // no subentities
     {
       if (numtype) //search for allowed --type and skip if not
         {
@@ -833,12 +834,68 @@ int match_BLOCK_HEADER(const char *restrict filename, Dwg_Object_Ref *restrict r
         { // opt_text:
           if (obj->type == DWG_TYPE_TEXT)
             found += match_TEXT(filename, obj);
-          else if (obj->type == DWG_TYPE_ATTRIB)
-            found += match_ATTRIB(filename, obj);
+          /*else if (obj->type == DWG_TYPE_ATTRIB)
+            found += match_ATTRIB(filename, obj);*/
           else if (obj->type == DWG_TYPE_ATTDEF)
             found += match_ATTDEF(filename, obj);
           else if (obj->type == DWG_TYPE_MTEXT)
             found += match_MTEXT(filename, obj);
+          else if (obj->type == DWG_TYPE_INSERT)
+            {
+              const Dwg_Data *dwg = obj->parent;
+              Dwg_Entity_INSERT *_obj = obj->tio.entity->tio.INSERT;
+              if (_obj->has_attribs)
+                {
+                  if (dwg->header.version >= R_13 && dwg->header.version <= R_2000) {
+                    Dwg_Object *last_attrib = _obj->last_attrib->obj;
+                    Dwg_Object *o = _obj->first_attrib ? _obj->first_attrib->obj : NULL;
+                    while (o && o->type == DWG_TYPE_ATTRIB)
+                      {
+                        found += match_ATTRIB(filename, o);
+                        o = dwg_next_object(o);
+                        if (o == last_attrib)
+                          break;
+                      }
+                  }
+                  else if (dwg->header.version >= R_2004) {
+                    Dwg_Object *o;                                                      
+                    for (BITCODE_BL j=0; j<_obj->num_owned; j++)                        
+                      {                                                                 
+                        o = _obj->attrib_handles[j] ? _obj->attrib_handles[j]->obj : NULL; 
+                        if (o && o->type == DWG_TYPE_ATTRIB)                       
+                          found += match_ATTRIB(filename, o);
+                      }                                                                 
+                  }
+                }
+            }
+          else if (obj->type == DWG_TYPE_MINSERT)
+            {
+              const Dwg_Data *dwg = obj->parent;
+              Dwg_Entity_MINSERT *_obj = obj->tio.entity->tio.MINSERT;
+              if (_obj->has_attribs)
+                {
+                  if (dwg->header.version >= R_13 && dwg->header.version <= R_2000) {
+                    Dwg_Object *last_attrib = _obj->last_attrib->obj;
+                    Dwg_Object *o = _obj->first_attrib ? _obj->first_attrib->obj : NULL;
+                    while (o && o->type == DWG_TYPE_ATTRIB)
+                      {
+                        found += match_ATTRIB(filename, o);
+                        o = dwg_next_object(o);
+                        if (o == last_attrib)
+                          break;
+                      }
+                  }
+                  else if (dwg->header.version >= R_2004) {
+                    Dwg_Object *o;                                                      
+                    for (BITCODE_BL j=0; j<_obj->num_owned; j++)                        
+                      {                                                                 
+                        o = _obj->attrib_handles[j] ? _obj->attrib_handles[j]->obj : NULL; 
+                        if (o && o->type == DWG_TYPE_ATTRIB)                       
+                          found += match_ATTRIB(filename, o);
+                      }                                                                 
+                  }
+                }
+            }
           if (!opt_text)
             {
               if (obj->type == DWG_TYPE_BLOCK)
