@@ -1827,12 +1827,16 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 static int
-dxf_block_write(Bit_Chain *restrict dat, Dwg_Object *restrict hdr, int *restrict i)
+dxf_block_write(Bit_Chain *restrict dat,
+                const Dwg_Object *restrict mspace,
+                const Dwg_Object *restrict hdr,
+                int *restrict i)
 {
   int error = 0;
   Dwg_Object *restrict obj = get_first_owned_block(hdr); //BLOCK
   const Dwg_Object_BLOCK_HEADER *restrict _hdr = hdr->tio.object->tio.BLOCK_HEADER;
   Dwg_Data *dwg = hdr->parent;
+  unsigned long int mspace_ref = mspace->handle.value;
 
   if (obj)
     error |= dwg_dxf_object(dat, obj, i);
@@ -1841,14 +1845,18 @@ dxf_block_write(Bit_Chain *restrict dat, Dwg_Object *restrict hdr, int *restrict
       LOG_ERROR("BLOCK_HEADER.block_entity missing");
       return DWG_ERR_INVALIDDWG;
     }
-  // skip *Model_Space UNDERLAY's, they are all under ENTITIES
-  if (hdr == dwg->header_vars.BLOCK_RECORD_MSPACE->obj)
+  // Skip all *Model_Space entities, esp. new ones: UNDERLAY, MULTILEADER, ...
+  // They are all under ENTITIES later.
+  // Note: the objects may vary (e.g. example_2000), but the index not
+  if ((hdr == mspace) || (hdr->index == mspace->index))
     obj = NULL;
   else
     obj = get_first_owned_entity(hdr); //first_entity
   while (obj)
     {
-      if (obj->supertype == DWG_SUPERTYPE_ENTITY)
+      if (obj->supertype == DWG_SUPERTYPE_ENTITY &&
+          obj->tio.entity->ownerhandle != NULL &&
+          obj->tio.entity->ownerhandle->absolute_ref != mspace_ref)
         error |= dwg_dxf_object(dat, obj, i);
       obj = get_next_owned_entity(hdr, obj); // until last_entity
     }
@@ -1888,26 +1896,16 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   SECTION(BLOCKS);
   /* There may be unconnected pspace blocks (not caught by above),
      such as pspace referred by a LAYOUT or DIMENSION, so for simplicity just scan all
-     BLOCK_HEADER's. #81
+     BLOCK_HEADER's and just skip *Model_Space. #81
      BLOCK_HEADER - LAYOUT - BLOCK - ENDBLK
    */
   {
     for (i=0; (BITCODE_BL)i < dwg->num_objects; i++)
       {
-        /*if (dwg->object[i].supertype == DWG_SUPERTYPE_ENTITY)
-          {
-            Dwg_Object *obj = &dwg->object[i];
-            Dwg_Object_Ref *owner = obj->tio.entity->ownerhandle;
-            // all paper space entities
-            if (owner && owner->obj != mspace)
-              error |= dwg_dxf_object(dat, obj, &i);
-          }
-        // and all blocks
-        else */
         if (dwg->object[i].supertype == DWG_SUPERTYPE_OBJECT &&
             dwg->object[i].type == DWG_TYPE_BLOCK_HEADER)
           {
-            error |= dxf_block_write(dat, &dwg->object[i], &i);
+            error |= dxf_block_write(dat, mspace, &dwg->object[i], &i);
           }
       }
   }
