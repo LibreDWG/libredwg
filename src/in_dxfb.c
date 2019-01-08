@@ -203,12 +203,12 @@ static int dxf_check_code(Bit_Chain *dat, Dxf_Pair *pair, int code)
 #define FORMAT_BD "%lf"
 
 // add the name/type/dxf combo to some structure for this element.
-#define FIELDG(name,type,dxf) dxf_add_field(obj, #name, #type, dxf)
-//#define FIELD(name,type)     dxf_add_field(obj, #name, #type, 0)
+#define FIELDG(name,type,dxf) dxf_add_field((Dwg_Object*)obj, #name, #type, dxf)
+//#define FIELD(name,type)     dxf_add_field((Dwg_Object*)obj, #name, #type, 0)
 #define FIELD_CAST(name,type,cast,dxf) FIELDG(name,cast,dxf)
 #define FIELD_TRACE(name,type)
 //TODO
-#define SUB_FIELD(o,name,type,dxf) dxf_add_field(obj, #name, #type, dxf)
+#define SUB_FIELD(o,name,type,dxf) dxf_add_field((Dwg_Object*)obj, #name, #type, dxf)
 #define VALUE_TV(value, dxf)  dxfb_read_string(dat, (char**)&value, 0)
 #define SUBCLASS(text) VALUE_TV(buf, 100);
 
@@ -527,6 +527,7 @@ dwg_indxfb_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
   BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Entity_##token *ent, *_obj;\
   Bit_Chain *hdl_dat = dat;\
+  Bit_Chain *str_dat = dat;\
   Dwg_Data* dwg = obj->parent;\
   Dwg_Object_Entity *_ent;\
   Dxf_Pair *pair; \

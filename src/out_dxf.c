@@ -539,6 +539,7 @@ dwg_dxf_##token (Bit_Chain *restrict dat, const Dwg_Object *restrict obj) \
   BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4; \
   int error = 0; \
   Dwg_Data* dwg = obj->parent; \
+  Bit_Chain *str_dat = dat;\
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Object_Entity *_ent;\
   if (!strcmp(#token, "GEOPOSITIONMARKER"))\

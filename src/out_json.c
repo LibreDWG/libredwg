@@ -450,6 +450,7 @@ dwg_json_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 {\
   BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4; \
   int error = 0; \
+  Bit_Chain *str_dat = dat;\
   Bit_Chain *hdl_dat = dat;\
   Dwg_Data* dwg = obj->parent; \
   Dwg_Entity_##token *ent, *_obj;\
