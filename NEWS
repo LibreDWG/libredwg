@@ -2,6 +2,70 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2018 Free Software Foundation, Inc.
 See the end for copying conditions.
 
+LibreDWG version 0.8 - released 2019/?? - still alpha:
+
+new API:
+  * add calculated DIMENSION.flag from flag1 and flag2
+  * add BITCODE_UMC type for Object-map section_handles
+  * add reverse dwg_find_objectref lookup: linear search, only done for
+    entities with subentities to find the ref for the current object.
+
+API breaking changes:
+  * rename get_first_owned_object to get_first_owned_entity,
+    get_next_owned_object to get_next_owned_entity.
+  * Changed these iterators in handling subentites (VERTEX, ATTRIB),
+    these are now skipped.
+  * rename <TABLE>.entry_name to name (#76)
+  * rename VPORT.shade_plot_handle back to sun_handle, dxf 361
+  * rename POLYLINE_3D.flag2 to curvetype, dxf 75.
+  * rename linewidth fields to linewt (#79)
+  * rename DIMENSION_ORDINATE.ucsorigin_pt to def.pt
+  * rename parenthandle fields to ownerhandle (#80)
+  * rename ent->parent to ent->ownerhandle (#82)
+  * replace ENTITY.subentity by ownerhandle 330
+  * rename _ent->entity_mode to entmode (as in ODA)
+
+Important bugfixes:
+  * Fixed many errors in DXF output:
+    * split BLOCKS and ENTITIES (#88)
+      esp. in respect to Paper_Space (#81) and Model_Space entities.
+    * DICTIONARY: fix hard_owner DXF 350/360.
+    * Fix xdata dxf groups: +1000 or XRECORD.
+    * Fix block names (#81), take it from its linked BLOCK entity
+    * Fix DIMENSION blocknames, ditto (#81).
+    * Fix c-quote of strings with different quoting rules than json.
+    * Fix _3DSOLID,_3DFACE dxfname and 3DSOLID, BODY subclass names
+    * Add missing DIMSTYLE 3 handle
+    * Support DXF elevation and extrusion as pt,
+    * Add dxf.test to be shell compatible
+    * convert CELWEIGHT and linewt values (#79)
+    * Support proper 330 ent->parent->handle (#82) which is not always the
+      MSPACE record.
+    * fix colors a bit
+    * print HANDSEED as hex (#71)
+  * Fixed JSON output, add tests with jq. just not yet via pipes (NOCOMMA hack).
+    make HEADER a hash, better ARRAY, POINTS, VECTORs, c-quote strings.
+    Resemble more to the DWG structure, not DXF: Rename ENTITIES to OBJECTS,
+    TODO: FILEHEADER sections (#76)
+  * Validate decoded and sort DXF output of entities with subentities
+    (POLYLINE, INSERT) (#83). In DWG they have different orderings,
+    fixup some off-by-one decoding errors (e.g. wrong handle stream offset).
+  * decode: set proper ->dxfname from classes.inc, Fixes ACDBDICTIONARYWDFLT
+    DXF object and simplifies out_dxf.
+  * Fix some CRC checks: RSx vs RS_LE, add unused crc64 code.
+  * More overflow and free protections added by Denis Pruchkovsky
+  * Extend read/write bit_MC/UMC from 4 to 5 bytes (denis #70, PR #65)
+    This is broken in all other dwg libraries.
+  * Fix bit_convert_TU for >U+800 (#80)
+  * Fixed more memory leaks (denis and rurban)
+
+Other newsworthy changes:
+  * add --disable-bindings configure switch (#86)
+  * add more codepages to dxf: ANSI_1253, ANSI_1254, ANSI_936, ANSI_949
+  * add cirrus FreeBSD smoker
+  * rename dxf_example.{lsp,sh} to dxf-allcvt.*
+  * add dxf-roundtrip.sh, via TeighaFileConverter
+
 LibreDWG version 0.7 - released 2018/12/6 - still alpha:
 
 new API:

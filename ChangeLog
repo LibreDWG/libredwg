@@ -1,6 +1,842 @@
 Full history from the git log
 -----------------------------
 
+2019-01-09  Reini Urban  <rurban@cpan.org>
+
+	test-data/2007: add missing DXF files
+	XRECORD and DICTIONARY circle.dxf is wrong with ODA and our decoder.
+	Check against acad versions
+
+	dxf: skip XRECORD xdata 80-90
+	These are most likely decode errors, and throw dxfin errors.
+	But the circle_2007 XRECORD's all look wrong.
+
+	dxf: _HATCH_gradientfill, fix dxf 91=>93 WIP
+	num_polypaths is 93
+	add missing str_dat to DWG_ENTITY decls.
+
+2019-01-07  Reini Urban  <rurban@cpan.org>
+
+	python: probe also without swig
+	many checks need python.
+
+	alive.test: dwggrep -c now returns 21
+	The block_header iterator get_next_owned_entity finds now more.
+
+	fixup get_next_owned_entity
+	check the actual entity owner.
+	it did fail with some r14-2000 attribs, belonging to 2 seperate
+	block headers
+
+2019-01-07  Reini Urban  <rurban@cpan.org>
+
+	dxf: skip *Model_Space BLOCK entities
+	check ptr and index;
+	improves 7cad11cc68887b, the ptr check is sometimes not good enough.
+
+	Skip all block entities which are owned by *Model_Space.
+	Some newer entities (UNDERLAY, MLEADER) are under some other blocks
+	(e.g. pspace) but owned by mspace.
+
+2019-01-07  Reini Urban  <rurban@cpan.org>
+
+	decode: apply dwg_validate_POLYLINE/INSERT
+	after having read the SEQEND, to fill in a missing
+	owner->seqend handle.
+	Fixes the r2010+ SEQEND errors.
+
+2019-01-05  Reini Urban  <rurban@cpan.org>
+
+	move dxf_is_sorted_POLYLINE to decode
+	as dwg_validate_POLYLINE(), yet unused. Needs to be called after the last
+	POLYLINE entity was read, which is not clear.
+
+2019-01-05  Reini Urban  <rurban@cpan.org>
+
+	dxf: skip *Model_Space UNDERLAY entities
+	The *Model_Space BLOCK contains UNDERLAY's, but they
+	only appear in the ENTITIES section, not as BLOCK entity.
+	Ditto for all other *Model_Space entities.
+
+	Error with INVALIDDWG when the BLOCK_HEADER contains no BLOCK entity.
+
+2019-01-05  Reini Urban  <rurban@cpan.org>
+
+	dxf: remove is_sorted, always process with subentities
+	This logic was too fragile, esp. vs BLOCKS
+
+	api: add dwg_obj_is_subentity
+
+2019-01-05  Reini Urban  <rurban@cpan.org>
+
+	api: rename get_*_owned_object to _entity
+	get_next_owned_object only returned the next block entity,
+	not any object associated and located in this block, and neither
+	any VERTEX/ATTRIB.
+	esp. since r2004+ with its BLOCK_HEADER.entities array.
+	This skips objects and subentities (ATTRIB, VERTEX).
+
+	Add API docs for these
+
+2019-01-05  Reini Urban  <rurban@cpan.org>
+
+	dxf: process VERTEX r2004+
+	get_next_owned_object returns the next main entity, no VERTEX.
+	set is_sorted=0 then, forcing dxf_process_* for subentities then.
+
+	api: add get_last_owned_block()
+	to return the ENDBLK for a BLOCK_HEADER.
+	use it in dxf
+
+	dxf: split BLOCKS and ENTITIES (#88) WIP
+	ENTITIES only if owned by MSPACE, all other as BLOCK members.
+	BLOCKS contains all pspace entities, and all blocks, but no objects.
+	OBJECTS contains all objects but BLOCK_HEADER and *_CONTROL (TABLEs)
+
+2019-01-04  Reini Urban  <rurban@cpan.org>
+
+	--disable-bindings (#86)
+
+	dxf.test: clear *dxf.log
+
+	DICTIONARY: fix hard_owner DXF 350/360
+	and emit it for DXF
+
+	dxf: fix XRECORD xdata, no +1000
+	XRECORD xdata has normal dxftypes
+
+2019-01-03  Reini Urban  <rurban@cpan.org>
+
+	dxf: BLOCK_NAME via cvt_blockname for pre-R13 names
+	$MODEL_SPACE <=> *Model_Space
+
+2019-01-02  Reini Urban  <rurban@cpan.org>
+
+	dxf: fix EED/xdata dxfcode + 1000
+
+2019-01-02  Reini Urban  <rurban@cpan.org>
+
+	VALUE_HANDLE: harmonize to 4 args
+	for the name logging.
+
+	Caused by the effort to emit a 340 0 DXF pair
+	for a BLOCK_RECORD layout_handle on NULL.
+
+2018-12-31  Reini Urban  <rurban@cpan.org>
+
+	dxf: skip more VERTEX_2D defaults
+
+2018-12-30  Reini Urban  <rurban@cpan.org>
+
+	VPORT: revert shade_plot_handle back to 361 sun_handle
+	several DXFs have the sun there
+
+2018-12-28  Reini Urban  <rurban@cpan.org>
+
+	free: protect empty TABLE ent with --enable-debug
+	and HANDLE_VECTOR overflow.
+	Actually set an invalid size field to 0
+
+	debug: more missing api DECLs
+	with --enable-debug classes
+
+	debug: more missing SUB_FIELDs
+	with --enable-debug classes
+
+	dwg_dim_blockname: treat DICTIONARY as LAYER
+	some DWGs: 2013/gh55-ltype.dwg
+
+	dxf: protect wrong HATCH.num_path
+	and cast some NULL ptrs, and wrong formats
+
+	dxf: more codepages
+	add ANSI_1253, ANSI_1254, ANSI_936, ANSI_949
+
+2018-12-27  Reini Urban  <rurban@cpan.org>
+
+	multiple definition of alloca
+	only complaint on freebsd
+
+	dxf: cquote dxf_fixup_string
+	for newlines and such (text 1)
+	different quoting rules than json
+
+	dxf: fix VERTEX sub classing
+	tested ok
+
+	dxf: fix 3DSOLID, BODY subclass names
+
+	dxf: fix _3DSOLID,_3DFACE dxfname
+	special case it in DXF and decoder
+
+	api: add DIMENSION.flag from flag1 and flag2
+	calculate the DXF value 70 (some bits from flag1 and 2)
+	skip empty DXF user_text (at least ASCII for now)
+
+	dxf: support DIMSTYLE 3
+
+	dxf: add DIMSTYLE 3, skip 52
+	move 3 to COMMON (before the subclass)
+	skip DXF 52 ext_line_rotation: invalid
+
+	improve dwg_dim_blockname
+	sometimes a LAYER is mixed in
+
+	dxf: add FIELD_BINARY for picture 310
+
+	dxf: add HATCH.boundary_handles 330
+
+	out_dxfb: sync with out_dxf
+
+	dxf: HATCH.elevation as pt
+
+2018-12-26  Reini Urban  <rurban@cpan.org>
+
+	dxf: style name 7 before the subclass
+
+	examples: add alldwg.inc to dist
+	to avoid regen-unknown on make distcheck, and
+	to ship it with the tar
+
+	dxf: fixup empty POLYLINE.seqend with +1 obj
+	don't try the other variant then, also to avoid a leak.
+
+	dxf: write empty HANDLE_NAME
+	otherwise DXFIN complains. e g $DIMBLK
+
+2018-12-26  Reini Urban  <rurban@cpan.org>
+
+	dxf: destructive i++ for the loop
+	the unsorted process handlers need to advance the loop
+	variable, otherwise we process some entities them twice.
+
+	Closes #83
+
+2018-12-26  Reini Urban  <rurban@cpan.org>
+
+	dxf: sort INSERT-ATTRIB-SEQEND (#83)
+	use one global/static is_sorted variable, for both
+	POLYLINE and INSERT, both ended by SEQEND.
+
+	add type and NULL checks in the dxf_process_##token() handler.
+
+	reset is_sorted to the default 1.
+
+2018-12-26  Reini Urban  <rurban@cpan.org>
+
+	dxf.test: extend SEQEND check also to INSERT-ATTRIB (#83)
+	which fails on example_20*
+
+	cirrus: only allow master + smoke/*
+
+	cirrus: --disable-python for the xmlsuite/check.py
+
+	fixup empty SEQENDs in dxf is_sorted_POLYLINE
+	in the decoder it is too early, so do it in one of the outputters.
+	the empty SEQEND is an artefact of the previous decoder shiftup,
+	the real fix would be a correct handlestream_offset (#85)
+
+	decode: check_POLYLINE_handles
+	check for if vertex[0] is the layer and shift the vertices then.
+	since we cannot look forward and resolve unread objects
+	its not yet good enough. we really need to check them after the seqend
+	or last vertex. or later in out_dxf in the is_sorted_POLYLINE check.
+
+	decode: log relative handle stream offset
+	it is still wrong. see #85
+
+	indent common_entity_handle_data.spec
+
+	dxf: protect wrong FIELD_HANDLE_NAME table
+	when a handle points to a wrong object
+
+2018-12-25  Reini Urban  <rurban@cpan.org>
+
+	POLYLINE_3D: rename flag2 to curvetype (75)
+
+2018-12-25  Reini Urban  <rurban@cpan.org>
+
+	dxf: WIP is_sorted_POLYLINE shortcut (#83)
+	COMMON_ENTITY_POLYLINE: ensure that the common POLYLINE_*
+	fields are shared with all 4 types.
+
+	Some vertex[] handles are even worse than a wrong SEQEND,
+	check when the first vertex[0] is corrupt and ignore it then.
+
+	enable loglevel LOG in out_dxf, mainly to warn about this
+	wrong POLYLINE.vertex[0] handle %lX < %lX
+
+2018-12-25  Reini Urban  <rurban@cpan.org>
+
+	dxf: POLYLINE - SEQEND - VERTEX (#83)
+	Some dwg's (r2007, r2018) have the SEQEND following the POLYLINE.
+	Iterate over the vertex handles, not over the object id's.
+
+	shellcheck json.test
+	and regen-unknowns
+
+2018-12-25  Reini Urban  <rurban@cpan.org>
+
+	bindings: add missing Object APIs
+	parallel to the Entity getters and converters,
+	recently added to dwg_api.
+
+	remove some DEBUG_CLASS function from the public api (getall, converter)
+
+2018-12-25  Reini Urban  <rurban@cpan.org>
+
+	cirrus: re-enable python, install py36-libxml2 instead
+
+	suffix.inc: _XOPEN_SOURCE 700
+	for snprintf on FreeBSD.
+	Sets __ISO_C_VISIBLE 1999
+
+	bindings: honor --disable-python
+
+	m4: fix swig and python probes for FreeBSD
+	swig defaults to swig3.0 on FreeBSD pkg
+	python needs proper LDFLAGS (-lpthread) and SYSLIBS (-lm)
+	use $SWIG in Makefile
+
+	dxf.test: bash => sh
+	no bashisms, checked with shellcheck
+
+	.cirrus: install bash, --disable-python
+	bash needed for dxf.test
+	py36-lxml (the libxml2 binding) needed for xmlsuite,
+	but the xmlsuite/check.py is failing with python3.6
+	with --disable-python only distcheck is failing on binding/python
+
+2018-12-24  Reini Urban  <rurban@cpan.org>
+
+	fix dxf.test for FreeBSD
+	where bash is in /usr/local/bin
+
+2018-12-23  Reini Urban  <rurban@cpan.org>
+
+	dxf: emit 62 256
+	or 420 rgb if index not 256. See MLINESTYLE
+
+	dxf: reorder MLINESTYLE 3 <-> 70 fields
+	it is apparently critical
+
+	dxf: some classes are builtin since r2004+
+	ACDBPLACEHOLDER and LAYOUT do not appear in CLASSES anymore,
+	but it depends which version exports it.
+
+	dxf.test: add check_acdb_dxfname
+
+	decode: set proper dxfname
+	from classes.inc STABLE_CLASS_DXF (also for the importers),
+	and from dwg_add_##token (for the API).
+	Fixes ACDBDICTIONARYWDFLT DXF object and simplifies out_dxf.
+
+	dxf: use ACDBDICTIONARYWDFLT
+	no dxfname set?
+
+	add programs/dxf.test
+	a few minor failures, but was important to catch missing layers.
+	it doesn't check diff error codes yet.
+
+	dxf: more missing common_entity_handle_data
+	r2004+: read layer, ltype (was missing)
+	skip dxf color 62 256
+	put dxf 330 ownerhandle after reactors
+	print empty layer (wrong handle stream e g POLYFACE_MESH) as 0
+	handle other .spec fields if undefined (e.g. VALUE_HANDLE in
+	  common_entity_handle_data)
+
+	dxf: entity.ownerhandle 330 after ACAD_REACTORS
+
+	test-dxf.sh: no gmake
+
+	log: add [H ] type to handle logs
+
+	api: rename _ent->entity_mode
+	to entmode. (as in the ODA docs)
+	add proper pspace owner handling in DXF
+	fix common_entity_handle_data encoding of ownerhandle:
+	  skip if implied by entmode.
+	cur_owner tracking is not needed anymore. entmode is enough
+
+	api: replace ENTITY.subentity by ownerhandle 330
+	this handle really is the ownerhandle, not the subentity.
+	it only appears in subentities (VERTEX, ATT*) pointing to its
+	owner.
+	Now we don't need the cur_owner/old_owner anymore.
+
+	make regen-unknown
+	now with ODA generated 2000_dxf.log counterpairs
+
+	add PolyLine2D .dxg/.dxf pairs
+	for VERTEX_2D and VERTEX_3D samples (which crash on DXFIN import)
+
+	decode VALUE_HANDLE_N: [vcount]: NULL HANDLE
+	itemhandles[vcount]: NULL HANDLE(2) [0]
+	vs
+	itemhandles[vcount][15]: 2 HANDLE(2.1.66) absolute:66 [0]
+
+2018-12-22  Reini Urban  <rurban@cpan.org>
+
+	dxf: add dwg_dim_blockname (#81)
+	need to out_dxf more blocks: anon. *Dn for DIMENSION.
+	Get the name from the BLOCK_HEADER - BLOCK.name, following
+	the DIMENSION.
+
+	Now simply dump all BLOCK and BLOCK_RECORD's.
+
+2018-12-22  Reini Urban  <rurban@cpan.org>
+
+	dxf: fixup AcDbBlockTableRecord name (#81)
+	for ccd50fd121544c0c3a638b1d5c5512083bdf3df3
+
+	dxf: Error in BLOCK_RECORD Table
+	Did not receive AcDbBlockTableRecord name
+
+	dxf: Did not receive AcDbViewportTableRecord flags
+	dxfin error. the flag 70 is not optional with COMMON_TABLE_FLAGS
+
+	api: rename parenthandle to ownerhandle (#80)
+
+2018-12-22  Reini Urban  <rurban@cpan.org>
+
+	change _ent->owner to ownerhandle
+	entities gets realloced, and thus their pointers invalidated.
+	we need to store the BITCODE_H ref instead.
+	valgrind: Invalid read of size 8, dwg_dxf_ENDBLK, dxf_blocks_write.
+
+	add reverse dwg_find_objectref lookup: linear search, only done for
+	entities with subentities to find the ref for the current object
+
+2018-12-22  Reini Urban  <rurban@cpan.org>
+
+	dwg_dxf_STYLE: fix TU memleak
+	free temp. bit_convert_TU result
+
+	dxf: fix dxf_cvt_tablerecord memleak
+	free temp. bit_convert_TU result
+
+	decode: use after free
+	when dwg_decode_UNKNOWN_ENT failed and freed dat.
+
+	dwg2dxf: call free within valgrind
+	fixes some articial memory leaks
+
+	dwg_add_TOKEN: potential obj->tio.object mem leak
+
+	dxf_tables_write: fix potential NULL deref
+	very unlikely, but still
+
+	dxf_free_pair: fix NULL deref
+
+	decode: dead increment
+	error from obj_string_stream was ignored
+
+	decode: dead assignment
+
+2018-12-21  Reini Urban  <rurban@cpan.org>
+
+	decode HANDSEED: protect from empty handle
+	Fixes most dxf roundtrips, where HANDSEED turns up empty.
+	Only a few DXFs break now on dxf-roundtrip's
+
+	dxf: use proper AcDbBlockTableRecord name (#81)
+	Not the BLOCK_HEADER.name (which is only *Paper_Space)
+	but the name of its BLOCK entity (which is *Paper_Space0).
+	This fixed most #81 dxfin errors, but not all.
+
+	dxf: all BLOCK_HEADER records
+	analog to the pspace BLOCK objects, some are missing.
+	Note that the basic dxfs survive now a teigha roundtrip.
+
+	dxf: no r2004+ color 62 index 0
+	TODO: lookup the index for rgb color (e.g. 7 for 0xc3000007)
+	index is invalid
+
+	dxf: add dxf-roundtrip.sh
+	via TeighaFileConverter.
+	dwg2dxf for a DWG, convert it back to a DWG via Teigha
+	to see if the DXF is somewhat correct, and then read the
+	converted DWG. Create Teigha error logs as .dwg.err
+
+	dxf: rename dxf_example to dxf-allcvt
+	we are mass-converting all DWGs to DXFs, and then
+	use a LSP to DXFIN all those generated DXFs.
+
+	dxf: more missing PSPACE blocks (#81)
+	The first attempt 975c8f3deb was unsuccessful.
+	There may be unconnected pspace blocks not referenced
+	by the BLOCK_CONTROL, such as pspace blocks from a pspace
+	LAYOUT, so for simplicity just scan all BLOCK_HEADER's for
+	a pspace block.
+
+2018-12-20  Reini Urban  <rurban@cpan.org>
+
+	dxf: rename new ent->parent to ent->owner (#82)
+	its confusing both ways. the corresponding object ptr is called
+	parenthandle, but the obj->parent is something else: inheritance.
+
+	officially we have hard and soft owners, owning the reference,
+	for liveness on deletion.
+
+	in the end it would be just too confusing mixing up the _obj->parent and
+	obj->parent with _ent->parent. maybe rename _obj->parenthandle to ownerhandle
+	also.
+
+2018-12-20  Reini Urban  <rurban@cpan.org>
+
+	dxf: Support 330 ent->parent->handle (#82)
+	which is not always the MSPACE record.
+	On subentities (VERTEX, ...) it is the parent.
+
+2018-12-19  Reini Urban  <rurban@cpan.org>
+
+	dxf: add missing PSPACE blocks (#81)
+	also iterate over the block_headers array of the
+	first BLOCK_CONTROL, which are usually PSPACE blocks.
+
+	api: rename DIMENSION_ORDINATE.ucsorigin_pt to def.pt
+	move def_pt to DIMENSION_COMMON, add blockname field
+
+2018-12-19  Reini Urban  <rurban@cpan.org>
+
+	fix bit_convert_TU for >U+800 (#80)
+	wrong UCS-2 to UTF-8 converter:
+	fix the first byte of a 2 and 3-byte sequences
+
+	only found out with chinese drawings
+
+2018-12-19  Reini Urban  <rurban@cpan.org>
+
+	dxf: more POLYLINE_2D,VERTEX_2D defaults
+	default values are left out in DXF
+
+	dxf: more common_entity_data defaults
+	default values are left out in DXF
+
+	dxf: more POLYLINE_2D work WIP
+	extrusion is a vector on DXF.
+	BE can be skipped on DXF if default.
+	But acad still crashes on DXFIN (2DVertex)
+
+	make regen-swig-patch
+
+2018-12-19  Reini Urban  <rurban@cpan.org>
+
+	add dxf_cvt_lweight, rename linewidth to linewt (#79)
+	The DXF output of CELWEIGHT/linewt needs to be decoded to
+	some signed int, the 100th of a mm, and 3 special default values
+	-1 .. -3 for dxf. (BYLAYER, BYBLOCK, BYLWDEFAULT)
+	This fixes DXF import with lineweights.
+
+	Rename the API to linewt for consistency.
+
+2018-12-18  Reini Urban  <rurban@cpan.org>
+
+	dwg_decode_handleref: obj NULL deref
+	Empty obj argument for code >= 6
+
+	suffix: Argument with 'nonnull' attribute passed null
+	empty filename
+
+	dwgread: Argument with 'nonnull' attribute passed null
+	protect against empty outfile (only a theoretical getopt problem)
+
+	read_R2004_section_info: NULL deref
+	Array access (via field 'sections') results in a null pointer dereference
+
+	in_dxf: Argument with 'nonnull' attribute passed null
+	protect pair
+
+	clang-analysis: Allocator sizeof operand mismatch
+	Result of 'calloc' is converted to a pointer of type 'unsigned char', which
+	is incompatible with sizeof operand type 'char'.
+
+2018-12-17  Reini Urban  <rurban@cpan.org>
+
+	json: fix wcquote format tmpl %s => %ls
+
+	dwgwrite: fix wrong infile check (#77)
+	Thanks to @shlyakpavel
+
+	fix dwggrep NULL deref (#77)
+	Thanks to @shlyakpavel
+
+	fix NULL deref (#77)
+	added recently. Thanks to @shlyakpavel
+
+2018-12-17  Reini Urban  <rurban@cpan.org>
+
+	json: add SUB_FIELD, REPEAT_BLOCK. fix LEADER
+	Need to seperate the parent[i] from the struct field.
+	arrays esp. in json should not print field[rcount1]: value, just
+	an array of values. With REPEAT an array of structs.
+
+	Also set a few more missing parents,
+	and fix LEADER subelements: allow multiple
+
+2018-12-17  Reini Urban  <rurban@cpan.org>
+
+	json: add HANDLES object map
+	But not the relative offset, just the absolute offset.
+	We don't yet store the DWG relative offset.
+
+	json: add preview, handle, owner, dxfname
+	Add some more missing fields
+
+	json: skip duplicate BLOCK.name
+	FIELD_T (name, 2) already prints the name
+	skip the duplicate dxf group 3 with the name
+
+	doc: enhance json docs
+
+2018-12-16  Reini Urban  <rurban@cpan.org>
+
+	silence gcc -Wlogical-op
+	&& len => && len > 0
+	warning: logical ‘and’ applied to non-boolean constant
+
+	api: rename TABLE.entry_name field to name
+	Closes #76
+
+2018-12-16  Reini Urban  <rurban@cpan.org>
+
+	json: 2007 text fixes
+	disable wrong color.name and bookname fields. They are all wrong.
+	r14 might have NULL reactors.
+
+	make check passes now
+
+2018-12-16  Reini Urban  <rurban@cpan.org>
+
+	json: probe for jq, add tests
+
+2018-12-15  Reini Urban  <rurban@cpan.org>
+
+	json: more DWG like structure
+	Rename ENTITIES to OBJECTS,
+	moved preview before header (vars).
+	TODO: FILEHEADER sections, object map.
+
+	See #76
+
+2018-12-14  Reini Urban  <rurban@cpan.org>
+
+	fix 2 test/*/ole2frame types
+	-Wsign-compare (detected only on cygwin)
+
+2018-12-14  Reini Urban  <rurban@cpan.org>
+
+	json: final fixes
+	add more cquote rules, esp. \n
+	escape more unicode stuff <0x1f as \u00xx
+	skip the very last COMMA in ENTITIES ENDSEC.
+	add {} around FIELDs, so that VERSION(R_14) FIELD_RC (hard_owner, 0)
+	  will not only skip the PREFIX block.
+	add proper PREFIX for FIELD_2DD_VECTOR.
+
+	jq can now read the generated json, when being written to a file,
+	not a pipe (NOCOMMA hack skipping the last comma of a list)
+
+2018-12-14  Reini Urban  <rurban@cpan.org>
+
+	Add alloca workaround: _alloca or malloc
+	needed for out_json and examples/unknown.
+	Windows MSVC defines _alloca in malloc.h
+
+2018-12-13  Reini Urban  <rurban@cpan.org>
+
+	json: cquote strings
+	now only Invalid string: control characters from U+0000 through U+001F must be escaped
+	are missing
+
+	json: produce better output WIP
+	but still not JSON conformant.
+	make HEADER a hash.
+	better ARRAY, POINTS, VECTORs.
+	HACK: skip dquotes on classnames wiich are already in dquotes.
+	      TODO escape it properly.
+
+2018-12-13  Reini Urban  <rurban@cpan.org>
+
+	json: use DXF_OR_PRINT blocks (#73)
+	Most entities only have DXF, DECODER and ENCODER blocks defined (e.g. LINE)
+	but no special PRINT block, which would be needed for all other
+	formatter outputs.
+	For easier spec go with the DXF_OR_PRINT block then, and
+	define it for those formatters IS_PRINT settings.
+	This fixes out_json with only IS_PRINT but no IS_DXF action.
+
+	We don't want to duplicate DXF {} blocks for PRINT.
+	And those formatters also go into both directions, in and out.
+
+	Thanks to @nick-bull for asking about this.
+	Closes #73
+
+2018-12-13  Reini Urban  <rurban@cpan.org>
+
+	encode: add WIP dwg_section_page_checksum
+	for writing a r2004+ section map. untested.
+
+	more crc work: crc64 and crc32
+	rename 2004_file_header.CRC to crc32,
+	format crc64 properly (leading 0),
+	add crc32 code (generated crc32 table) for r2004+ (for file header),
+	not the crc64 code yet for r2007+ (for compressed pages),
+	rename some internal old libdwg vars from crk to crc.
+
+	Add handles section CRC check
+	This CRC is LE (not byte-swapped).
+
+	fix testcases/bits_test.c on 32bit
+	use better MC/UMC test values: 0x8777 7777 instead of 0x2111 1111
+	causing the previous 4bit lossage.
+	beware of uint32 wraparound causing an endless loop
+	(cygwin32)
+
+2018-12-12  DenisPryt  <denis.chausy@gmail.com>
+
+	Restore dat position in dwg_decode_add_object
+	for all return cases
+
+2018-12-12  Reini Urban  <rurban@cpan.org>
+
+	dxf: fix CELWEIGHT values
+	from https://sourceforge.net/p/libdwg/tickets/7/
+	CELWEIGHT is encoded into special values.
+	Thanks to Guruprasad Rane for the value translations.
+
+	Add logging for some calculated values
+
+2018-12-12  Reini Urban  <rurban@cpan.org>
+
+	print HANDSEED as hex handle
+	as AUXHEADER RL, and as HEADER handle.
+	See #71
+
+2018-12-12  Reini Urban  <rurban@cpan.org>
+
+	change MC back to long
+	document and simplify MC bits
+	Explain why 4 byte are not enough.
+	on 64bit MC offsets just need to be natural.
+	Add more MC and UMC tests.
+
+	Closes #70
+
+2018-12-12  DenisPryt  <denis.chausy@gmail.com>
+
+	read/write bit_MC/UMC fix (max byte length change from 4 to 5)
+	See #70
+
+2018-12-12  Reini Urban  <rurban@cpan.org>
+
+	fixup read_2004_compressed_section messages
+	Fix wrong logging messages for the section types.
+	Not Class, but OBJECTS and HANDLES mostly.
+
+2018-12-11  Reini Urban  <rurban@cpan.org>
+
+	swap CRC type to RSx
+	not RS_LE.
+
+	Now only the r14,r2000 Section[0] CRC fails, a known problem.
+	relax the WRONGCRC error with those.
+
+2018-12-11  Reini Urban  <rurban@cpan.org>
+
+	bits: change BITCODE_MC/MS from long to int32
+	we are not on 32bit anymore.
+	also add read_200{4,7}_section_handles and breaks
+
+	bits: use BITCODE_* types
+	not the intsize dependent long unsigned int
+
+	dxf: guard empty table ctrl objects
+
+2018-12-11  DenisPryt  <denis.chausy@gmail.com>
+
+	Add r2007+ obj_string_stream overflow guard
+
+2018-12-11  Reini Urban  <rurban@cpan.org>
+
+	SPLINE/HELIX: set parents
+	We cannot use FIELD_VECTOR with 3BD here unfortunately
+
+	perl: fix make check
+	use LD_LIBRARY_PATH, not LD_RUN_PATH to be able to find libredwg.so.0
+
+2018-12-11  Reini Urban  <rurban@cpan.org>
+
+	CLANG_DIAG_IGNORE(-Wpragma-pack)
+	-Wpragma-pack is clang-only
+	silences test/testcases/decode_test warning:
+	warning: unknown option after ‘#pragma GCC diagnostic’ kind [-Wpragmas]
+
+	The gcc variant would be -Wpragmas, which is not needed here:
+	-Wno-pragmas -Wunknown-pragmas
+
+2018-12-11  DenisPryt  <denis.chausy@gmail.com>
+	    Reini Urban  <rurban@cpan.org>
+
+	Object-map section_handles: handle is BITCODE_UMC
+	unsigned, not signed.
+	confirmed with libdxfrw
+
+	encode: obj->handlestream_size needs to be encoded as UMC also.
+	(forgotten in encode r2010+)
+
+2018-12-11  Reini Urban  <rurban@cpan.org>
+
+	extend bits_test
+	print more bits and fail result
+
+2018-12-11  DenisPryt  <denis.chausy@gmail.com>
+
+	free -> FREE_IF migration
+
+2018-12-10  DenisPryt  <denis.chausy@gmail.com>
+
+	Error on zero section max_decomp_size (#66)
+
+2018-12-10  DenisPryt  <denis.chausy@gmail.com>
+	    Reini Urban  <rurban@cpan.org>
+
+	read_R2004_section_info buffer overflow protection (#68)
+	Fix decode R2004_header encryption section.
+
+2018-12-10  DenisPryt  <denis.chausy@gmail.com>
+
+	typo fix Pruchkovksy -> Pruchkovsky
+
+2018-12-10  Reini Urban  <rurban@cpan.org>
+
+	r11: add OSMODE
+	even if stored in DXF as zeroed value
+
+2018-12-10  Reini Urban  <rurban@cpan.org>
+
+	Revert "Renamed HEADER.MENU to HEADER.MENUNAME"
+	The DXF file has it as $MENU, so it was correct.
+	The DXF docs are just wrong.
+
+	This reverts commit 419f4eade8d9b32942a1d0a26097081f09a54c71.
+
+2018-12-09  Reini Urban  <rurban@cpan.org>
+
+	Renamed HEADER.MENU to HEADER.MENUNAME
+	MENU is the command, but MENUNAME is the variable name
+
+2018-12-07  DenisPryt  <denis.chausy@gmail.com>
+
+	Fix unknown class free problem
+
+2018-12-06  Reini Urban  <rurban@cpan.org>
+
+	Harmonize Dwg_Leader_ subtype names
+	Dwg_Leader_* => Dwg_LEADER_*
+	Dwg_MLeaderAnnotContext => Dwg_MLEADER_AnnotContext
+
 2018-12-05  Reini Urban  <rurban@cpan.org>
 
 	Release 0.7
