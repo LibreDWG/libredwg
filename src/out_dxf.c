@@ -635,6 +635,11 @@ dxf_write_xdata(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       dxftype = (rbuf->type > 1000 || obj->fixedtype == DWG_TYPE_XRECORD)
         ? rbuf->type
         : rbuf->type + 1000;
+      if (obj->fixedtype == DWG_TYPE_XRECORD && dxftype >= 80 && dxftype < 90)
+        {
+          fmt= "(unknown code)";
+          type = VT_INVALID;
+        }
 
       if (!strcmp(fmt, "(unknown code)"))
         {
