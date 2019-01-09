@@ -1877,19 +1877,19 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_Object_BLOCK_CONTROL *_ctrl = &dwg->block_control;
   //Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
   /* let's see if this control block is correct... */
-  Dwg_Object_Ref *msref = dwg->header_vars.BLOCK_RECORD_MSPACE;
-  //Dwg_Object_Ref *psref = dwg->header_vars.BLOCK_RECORD_PSPACE;
+  Dwg_Object_Ref *msref = dwg_model_space_ref(dwg);
   Dwg_Object *mspace;
   int i = 0;
 
   // The modelspace header needs to have an block_entity.
   // There are cases (r2010 AEC dwgs) where they don't have one.
   if (msref && msref->obj &&
-      msref->obj->type == DWG_TYPE_BLOCK_HEADER &&
-      msref->obj->tio.object->tio.BLOCK_HEADER->block_entity)
+      msref->obj->type == DWG_TYPE_BLOCK_HEADER)
     mspace = msref->obj;
-  else
+  else if (_ctrl->model_space)
     mspace = _ctrl->model_space->obj; // these two really should be the same
+  else
+    mspace = dwg->block_control.model_space->obj;
 
   // If there's no *Model_Space block skip this BLOCKS section.
   // Or try handle 1F with r2000+, 17 with r14
