@@ -3754,7 +3754,7 @@ dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat
                    owner->fixedtype == DWG_TYPE_POLYLINE_PFACE ||
                    owner->fixedtype == DWG_TYPE_POLYLINE_MESH)
             {
-              Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
+              Dwg_Entity_POLYLINE_2D *_obj = owner->tio.entity->tio.POLYLINE_2D;
               if (!_obj->seqend)
                 /* SEQEND handle for the owner needed in validate_POLYLINE */
                 hash_set(dwg->object_map, obj->handle.value, (uint32_t)num);
