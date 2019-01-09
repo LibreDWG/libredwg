@@ -21,7 +21,7 @@
 #
 # It relies on the TESTS_ENVIRONMENT Makefile.am variable to set
 # `PROGS'.  Each prog in PROGS is run against a set of example DWGs,
-# and if *not* successful the verbose output from -v4 is saved in a
+# and if *not* successful the verbose output from -v2 is saved in a
 # file whose name is DWG-PROG.log.
 #
 # If there are no problems, exit successfully.  Otherwise display
@@ -50,8 +50,8 @@ run ()
     case $bprog in
     dwglayers)  ;;
     dwggrep)    arg="-i tekst $arg" ;;
-    dwgrewrite) arg="-v2 $arg" ;;
-    *)          arg="-v4 $arg" ;;
+    #dwgrewrite) arg="-v2 $arg" ;;
+    *)          arg="-v2 $arg" ;;
     esac
     if [ -n "$VALGRIND" -a -n "$LOG_COMPILER" ]; then
         TESTPROG="$LOG_COMPILER $LOG_FLAGS"
