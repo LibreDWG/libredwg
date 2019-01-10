@@ -128,11 +128,10 @@
 #ifdef IS_DECODER
           LOG_TRACE("color.rgb: %06x [EMC.BL 420] (%d)\n", (unsigned)ent->color.rgb,
                     (int32_t)(ent->color.rgb & 0x00ffffff));
-#endif
-#ifdef IS_ENCODER
-          DXF { FIELD_BL (color.rgb & 0x00ffffff, 420); }
-#else
+#elif defined(IS_ENCODER) && defined(IS_DXF)
           DXF { FIELD_BL (color.rgb, 420); }
+#elif defined(IS_DXF)
+          DXF { FIELD_BL (color.rgb & 0x00ffffff, 420); }
 #endif
         }
       /* not with entities, only with CMC or dbcolor handle */
