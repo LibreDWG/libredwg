@@ -320,13 +320,13 @@ dxfb_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
 #define FIELD_3BD_1(nam,dxf) {FIELD_RD(nam.x,dxf); FIELD_RD(nam.y,dxf+1); FIELD_RD(nam.z,dxf+2);}
 #define FIELD_3DPOINT(nam,dxf) FIELD_3RD(nam,dxf)
 #define FIELD_CMC(color,dxf1,dxf2) { \
-  VALUE_RS(_obj->color.index, dxf1); \
+  VALUE_RS((_obj->color.index & 255), dxf1);             \
   if (dat->version >= R_2004 && dxf2 && _obj->color.rgb) { \
     VALUE_RL(_obj->color.rgb, dxf2); \
   } \
 }
 #define SUB_FIELD_CMC(o,color,dxf1,dxf2) {      \
-  VALUE_RS(_obj->o.color.index, dxf1); \
+  VALUE_RS((_obj->o.color.index & 255), dxf1);               \
   if (dat->version >= R_2004 && dxf2 && _obj->o.color.rgb) { \
     VALUE_RL(_obj->o.color.rgb, dxf2); \
   } \

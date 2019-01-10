@@ -359,7 +359,7 @@ static inline char* alloca(size_t size) {
 //TODO r2004+: lookup the rgb index for 62
 #define FIELD_CMC(color,dxf1,dxf2) { \
   if (dxf1 > 0 && (dat->version < R_2004 || _obj->color.index == 256)) { \
-    VALUE_RS(_obj->color.index, dxf1); \
+    VALUE_RS((_obj->color.index & 255), dxf1); \
   } \
   if (dat->version >= R_2004 && dxf2 > 0 && _obj->color.index != 256) { \
     VALUE_RL(_obj->color.rgb, dxf2); \
@@ -367,7 +367,7 @@ static inline char* alloca(size_t size) {
 }
 #define SUB_FIELD_CMC(o,color,dxf1,dxf2) { \
   if (dxf1 > 0 && (dat->version < R_2004 || _obj->o.color.index == 256)) { \
-    VALUE_RS(_obj->o.color.index, dxf1); \
+    VALUE_RS((_obj->o.color.index & 255), dxf1); \
   } \
   if (dat->version >= R_2004 && dxf2 > 0 && _obj->o.color.index != 256) { \
     VALUE_RL(_obj->o.color.rgb, dxf2); \
