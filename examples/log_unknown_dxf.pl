@@ -79,6 +79,7 @@ my $known = {
     330 => 'ownerhandle',
     ],
   MATERIAL => [
+    330 => 'ownerhandle',
     1 => 'name',
     2 => 'desc',
     70 => 'ambient_color_flag',

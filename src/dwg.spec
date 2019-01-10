@@ -6321,9 +6321,19 @@ DWG_OBJECT_END
 DWG_OBJECT(MATERIAL)
 
   DECODE_UNKNOWN_BITS
+  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbMaterial)
   FIELD_T (name, 1);
   FIELD_T (desc, 2);
+#ifdef IS_DXF
+  FIELD_BS (normalmap_projection, 73);
+  FIELD_BS (specularmap_projection, 78);
+  FIELD_BS (reflectionmap_projection, 172);
+  FIELD_BS (opacitymap_projection, 176);
+  FIELD_BS (bumpmap_projection, 270);
+  FIELD_BS (refractionmap_projection, 274);
+  return 0;
+#endif
 
   DEBUG_HERE_OBJ; // TODO from here on the order of the fields is unknown
   FIELD_BS (ambient_color_flag, 70); // 0 Use current color, 1 Override
@@ -6441,6 +6451,10 @@ DWG_OBJECT(MATERIAL)
   //176
   //270
   //274
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (ownerhandle, 3, 0);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
 DWG_OBJECT_END
 
 // (varies) DEBUGGING

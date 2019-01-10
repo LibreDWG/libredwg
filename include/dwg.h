@@ -4136,6 +4136,7 @@ typedef struct _dwg_object_MATERIAL
   //? BD backface_cull
   //? BD self_illum_luminance
   //? BD self_illum_color_temperature
+  BITCODE_H ownerhandle;        /*!< DXF 330 */
 } Dwg_Object_MATERIAL;
 
 /**
