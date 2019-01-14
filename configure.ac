@@ -337,8 +337,12 @@ else
   ac_cv_perl=perl
 fi
 AC_PATH_PROG([PERL], [$ac_cv_perl])
-AM_RUN_LOG([$PERL --version])
-AM_RUN_LOG([$PERL -V:cc])
+if test -n "$PERL"; then
+  AC_MSG_CHECKING([PERL version])
+  [perl_version=`$PERL --version 2>&1 | grep ' version' | cut -c14-`]
+  AC_MSG_RESULT([$perl_version])
+  AM_RUN_LOG([$PERL -V:cc])
+fi
 
 AM_CONDITIONAL([HAVE_SWIG_PYTHON], [test -n "$SWIG" && test -n "$PYTHON_VERSION"])
 AM_CONDITIONAL([HAVE_PYTHON], [test x$enable_python != xno])
