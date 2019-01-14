@@ -734,6 +734,22 @@ dwg_paper_space_ref(Dwg_Data *dwg)
     ? dwg->block_control.paper_space : NULL;
 }
 
+/** Returns the model space block object for the DWG.
+*/
+Dwg_Object*
+dwg_model_space_object(Dwg_Data *dwg)
+{
+  Dwg_Object_Ref *msref = dwg_model_space_ref(dwg);
+  Dwg_Object_BLOCK_CONTROL *ctrl;
+
+  if (msref && msref->obj && msref->obj->type == DWG_TYPE_BLOCK_HEADER)
+    return msref->obj;
+  ctrl = dwg_block_control(dwg);
+  if (ctrl->model_space && ctrl->model_space->obj)
+    return ctrl->model_space->obj;
+  return dwg_resolve_handle(dwg, dwg->header.version >= R_2000 ? 0x1F : 0x17);
+}
+
 /** Returns the first entity owned by the block hdr, or NULL.
  */
 Dwg_Object*
