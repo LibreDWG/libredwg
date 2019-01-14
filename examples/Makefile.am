@@ -26,7 +26,7 @@ EXTRA_PROGRAMS = unknown bd bits
 
 load_dwg_SOURCES = load_dwg.c
 dwg2svg2_SOURCES = dwg2svg2.c
-unknown_SOURCES  = unknown.c alldxf_0.inc alldxf_1.inc alldxf_2.inc alldwg.inc
+unknown_SOURCES  = unknown.c
 unknown_LDADD  = ../src/bits.lo ../src/common.lo
 bd_SOURCE  = bd.c
 bd_LDADD  = ../src/bits.lo
@@ -80,7 +80,8 @@ endif
 
 TESTS = $(top_srcdir)/programs/alive.test
 
-EXTRA_DIST = load_dwg.py
+EXTRA_DIST = alldxf_0.inc alldxf_1.inc alldxf_2.inc alldwg.inc
+EXTRA_DIST += load_dwg.py
 CLEANFILES = {example,sample}_2000.svg alldwg.inc~ \
 	     alldxf_0.inc~ alldxf_1.inc~ alldxf_2.inc~
 MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
