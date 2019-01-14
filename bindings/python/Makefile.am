@@ -30,6 +30,7 @@ ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 pkgpythondir = $(pythondir)
 
 if HAVE_SWIG_PYTHON
+if HAVE_PYTHON
 
 BUILT_SOURCES = swig_python.c
 SWIG_SOURCES  = $(top_srcdir)/bindings/dwg.i \
@@ -72,4 +73,5 @@ endif
 
 DISTCLEANFILES = LibreDWG.py swig_python.c
 
+endif
 endif
