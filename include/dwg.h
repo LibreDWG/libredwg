@@ -5129,6 +5129,7 @@ typedef struct _dwg_object_entity
   /* preR13 in the obj: eed, elevation/pt.z, thickness, paper */
 
   /* Common Entity Handle Data */
+  BITCODE_BL __iterator;
   BITCODE_H ownerhandle; /*!< mspace, pspace or owner of subentity */
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
@@ -5683,6 +5684,11 @@ get_first_owned_entity(const Dwg_Object *restrict hdr);
 EXPORT Dwg_Object*
 get_next_owned_entity(const Dwg_Object *restrict hdr,
                       const Dwg_Object *restrict current);
+EXPORT Dwg_Object*
+get_first_owned_subentity(const Dwg_Object *restrict owner);
+EXPORT Dwg_Object*
+get_next_owned_subentity(const Dwg_Object *restrict owner,
+                         const Dwg_Object *restrict current);
 EXPORT Dwg_Object*
 get_first_owned_block(const Dwg_Object *hdr);
 EXPORT Dwg_Object*

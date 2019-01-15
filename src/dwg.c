@@ -833,6 +833,123 @@ get_next_owned_entity(const Dwg_Object *restrict hdr,
   return NULL;
 }
 
+/** Returns the first subentity owned by the insert or polyline.
+ */
+Dwg_Object*
+get_first_owned_subentity(const Dwg_Object *owner)
+{
+  unsigned int version = owner->parent->header.version;
+  const unsigned int type = owner->type;
+  if (type == DWG_TYPE_INSERT)
+    {
+      Dwg_Entity_INSERT *_obj = owner->tio.entity->tio.INSERT;
+      if (version <= R_2000)
+        return _obj->first_attrib ? _obj->first_attrib->obj : NULL;
+      else
+        return _obj->attrib_handles[0] ? _obj->attrib_handles[0]->obj : NULL;
+    }
+  else
+  if (type == DWG_TYPE_MINSERT)
+    {
+      Dwg_Entity_MINSERT *_obj = owner->tio.entity->tio.MINSERT;
+      if (version <= R_2000)
+        return _obj->first_attrib ? _obj->first_attrib->obj : NULL;
+      else
+        return _obj->attrib_handles[0] ? _obj->attrib_handles[0]->obj : NULL;
+    }
+  else
+  if (type == DWG_TYPE_POLYLINE_2D ||
+      type == DWG_TYPE_POLYLINE_3D ||
+      type == DWG_TYPE_POLYLINE_PFACE ||
+      type == DWG_TYPE_POLYLINE_MESH)
+    {
+      // guaranteed structure
+      Dwg_Entity_POLYLINE_2D *_obj = owner->tio.entity->tio.POLYLINE_2D;
+      if (version <= R_2000)
+        return _obj->first_vertex ? _obj->first_vertex->obj : NULL;
+      else
+        return _obj->vertex[0] ? _obj->vertex[0]->obj : NULL;
+    }
+  else
+    {
+      LOG_ERROR("Wrong type %d, has no subentity", type);
+    }
+  return NULL;
+}
+
+/** Returns the next subentity owned by the object.
+ */
+Dwg_Object*
+get_next_owned_subentity(const Dwg_Object *restrict owner,
+                         const Dwg_Object *restrict current)
+{
+  unsigned int version = owner->parent->header.version;
+  const unsigned int type = owner->type;
+  Dwg_Object_Entity *ent = owner->tio.entity;
+  Dwg_Object *obj = dwg_next_object(current);
+
+  if (type == DWG_TYPE_INSERT)
+    {
+      Dwg_Entity_INSERT *_obj = owner->tio.entity->tio.INSERT;
+      if (version <= R_2000)
+          return (current != _obj->last_attrib->obj) ? obj : NULL;
+      else
+        {
+          ent->__iterator++;
+          if (ent->__iterator == _obj->num_owned)
+            {
+              ent->__iterator = 0;
+              return NULL;
+            }
+          else
+            return _obj->attrib_handles[ent->__iterator]->obj;
+        }
+    }
+  else
+  if (type == DWG_TYPE_MINSERT)
+    {
+      Dwg_Entity_MINSERT *_obj = owner->tio.entity->tio.MINSERT;
+      if (version <= R_2000)
+          return (current != _obj->last_attrib->obj) ? obj : NULL;
+      else
+        {
+          ent->__iterator++;
+          if (ent->__iterator == _obj->num_owned)
+            {
+              ent->__iterator = 0;
+              return NULL;
+            } else
+              return _obj->attrib_handles[ent->__iterator]->obj;
+        }
+    }
+  else
+  if (type == DWG_TYPE_POLYLINE_2D ||
+      type == DWG_TYPE_POLYLINE_3D ||
+      type == DWG_TYPE_POLYLINE_PFACE ||
+      type == DWG_TYPE_POLYLINE_MESH)
+    {
+      // guaranteed structure
+      Dwg_Entity_POLYLINE_2D *_obj = owner->tio.entity->tio.POLYLINE_2D;
+      if (version <= R_2000)
+          return (current != _obj->last_vertex->obj) ? obj : NULL;
+      else
+        {
+          ent->__iterator++;
+          if (ent->__iterator == _obj->num_owned)
+            {
+              ent->__iterator = 0;
+              return NULL;
+            } else
+              return _obj->vertex[ent->__iterator]->obj;
+        }
+    }
+  else
+    {
+      LOG_ERROR("Wrong type %d, has no subentity", type);
+    }
+  return NULL;
+}
+
 /** Returns the BLOCK entity owned by the block hdr.
  *  Only NULL on illegal hdr argument or dwg version.
  */
