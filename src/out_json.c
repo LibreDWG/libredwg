@@ -117,8 +117,15 @@ static inline char* alloca(size_t size) {
   { \
     PREFIX \
     if (str && (1 || strchr(str, '"') || strchr(str, '\\') || strchr(str, '\n'))) { \
-      char *_buf = alloca(4*strlen(str)); \
-      fprintf(dat->fh, "\"" #nam "\": \"%s\",\n", cquote(_buf, str)); \
+      const int len = strlen(str); \
+      if (len < 4096/6) { \
+        char *_buf = alloca(6*len+1); \
+        fprintf(dat->fh, "\"" #nam "\": \"%s\",\n", cquote(_buf, str)); \
+      } else { \
+        char *_buf = malloc(6*len+1); \
+        fprintf(dat->fh, "\"" #nam "\": \"%s\",\n", cquote(_buf, str)); \
+        free(_buf); \
+      } \
     } else { \
       fprintf(dat->fh, "\"" #nam "\": \"%s\",\n", str ? str : ""); \
     } \
@@ -128,7 +135,8 @@ static inline char* alloca(size_t size) {
   { \
     PREFIX \
     if (str && (1 || strchr(str, '"') || strchr(str, '\\') || strchr(str, '\n'))) { \
-      char *_buf = malloc(4*strlen(str)); \
+      const int len = strlen(str); \
+      char *_buf = malloc(6*len+1); \
       fprintf(dat->fh, "\"" #nam "\": \"%s\",\n", cquote(_buf, str)); \
       free(_buf); \
     } else { \
@@ -140,7 +148,7 @@ static inline char* alloca(size_t size) {
 #ifdef HAVE_NATIVE_WCHAR2
 # define VALUE_TEXT_TU(wstr) \
     if (wstr && (1 || wcschr(wstr, L'"') || wcschr(wstr, L'\\') || wcschr(wstr, L'\n'))) { \
-      wchar_t *_buf = malloc(4*wcslen(wstr)); \
+      wchar_t *_buf = malloc(6*wcslen(wstr)+1); \
       fprintf(dat->fh, "\"%ls\",\n", wcquote(_buf, wstr)); \
       free(_buf); \
     } else { \
