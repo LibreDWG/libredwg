@@ -336,7 +336,9 @@ dwg_print_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
    Dispatches on the variable types.
  */
 static int
-dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
+dwg_print_variable_type(Dwg_Data *restrict dwg,
+                        Bit_Chain *restrict dat,
+                        Dwg_Object *restrict obj)
 {
   int i;
   int is_entity;
@@ -361,7 +363,7 @@ dwg_print_variable_type(Dwg_Data * dwg, Bit_Chain * dat, Dwg_Object* obj)
    Dispatches on the fixed types.
 */
 int
-dwg_print_object(Bit_Chain* dat, Dwg_Object *obj)
+dwg_print_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   int error = 0;
   //Bit_Chain * dat = (Bit_Chain *)obj->parent->bit_chain;

@@ -1815,8 +1815,9 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
 #ifdef IS_ENCODER
 
 #define ENCODE_3DSOLID encode_3dsolid(dat, hdl_dat, obj, (Dwg_Entity_3DSOLID *)_obj);
-static int encode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj,
-                          Dwg_Entity_3DSOLID* _obj)
+static int encode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
+                          Dwg_Object *restrict obj,
+                          Dwg_Entity_3DSOLID *restrict _obj)
 {
   int error = 0;
   //TODO Implement-me
@@ -1831,11 +1832,12 @@ static int encode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat, Dwg_Object* obj,
 #endif //#if IS_ENCODER
 
 #ifdef IS_FREE
-static int free_3dsolid(Dwg_Object* obj, Dwg_Entity_3DSOLID* _obj)
+static int free_3dsolid(Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
 {
   int error = 0;
   BITCODE_BL i;
   BITCODE_BL vcount, rcount1, rcount2;
+  Bit_Chain *dat = &pdat;
 
   for (i=0; i < FIELD_VALUE(num_blocks); i++)
     {

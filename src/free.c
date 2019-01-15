@@ -42,7 +42,6 @@ static int env_var_checked_p;
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
 static Bit_Chain pdat = {NULL,0,0,0,0,0};
-static Bit_Chain *dat = &pdat;
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -208,17 +207,17 @@ static int dwg_free_UNKNOWN_OBJ (Bit_Chain *restrict dat, Dwg_Object *restrict o
 
 #define DWG_ENTITY(token) \
 static int \
-dwg_free_ ##token## _private (Bit_Chain *restrict _dat, Dwg_Object *restrict obj); \
+dwg_free_ ##token## _private (Bit_Chain *restrict dat, Dwg_Object *restrict obj); \
 \
 static int \
-dwg_free_ ##token (Bit_Chain *restrict _dat, Dwg_Object *restrict obj) \
+dwg_free_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
   int error = 0;            \
   if (obj->tio.entity)      \
     {                       \
       LOG_HANDLE("Free entity " #token "\n") \
       if (obj->tio.entity->tio.token) \
-        error = dwg_free_ ##token## _private(_dat, obj); \
+        error = dwg_free_ ##token## _private(dat, obj); \
                                                          \
       dwg_free_common_entity_data(obj); \
       dwg_free_eed(obj);    \
@@ -231,13 +230,13 @@ dwg_free_ ##token (Bit_Chain *restrict _dat, Dwg_Object *restrict obj) \
   return error;             \
 } \
 static int \
-dwg_free_ ##token## _private (Bit_Chain *restrict _dat, Dwg_Object *restrict obj) \
+dwg_free_ ##token## _private (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
   BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;\
   Dwg_Entity_##token *ent, *_obj;\
   Dwg_Object_Entity *_ent;  \
-  Bit_Chain *hdl_dat = _dat;\
-  Bit_Chain* str_dat = _dat;\
+  Bit_Chain *hdl_dat = dat;\
+  Bit_Chain* str_dat = dat;\
   Dwg_Data* dwg = obj->parent;\
   int error = 0; \
   _ent = obj->tio.entity; \
@@ -249,10 +248,10 @@ dwg_free_ ##token## _private (Bit_Chain *restrict _dat, Dwg_Object *restrict obj
 
 #define DWG_OBJECT(token) \
 static int \
-dwg_free_ ##token## _private (Bit_Chain *restrict _dat, Dwg_Object *restrict obj); \
+dwg_free_ ##token## _private (Bit_Chain *restrict dat, Dwg_Object *restrict obj); \
 \
 static int \
-dwg_free_ ##token (Bit_Chain *restrict _dat, Dwg_Object *restrict obj) \
+dwg_free_ ##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
   int error = 0;                                 \
   Dwg_Object_##token *_obj = NULL;               \
@@ -262,9 +261,9 @@ dwg_free_ ##token (Bit_Chain *restrict _dat, Dwg_Object *restrict obj) \
       LOG_HANDLE("Free object " #token " %p\n", obj) \
       if (strcmp(#token, "UNKNOWN_OBJ") && obj->supertype == DWG_SUPERTYPE_UNKNOWN) { \
         _obj = NULL;                             \
-        error = dwg_free_UNKNOWN_OBJ(_dat, obj); \
+        error = dwg_free_UNKNOWN_OBJ(dat, obj); \
       } else {                                   \
-        error = dwg_free_ ##token## _private (_dat, obj); \
+        error = dwg_free_ ##token## _private (dat, obj); \
       }                                          \
       dwg_free_eed(obj);                         \
       FREE_IF(_obj);                             \
@@ -275,12 +274,12 @@ dwg_free_ ##token (Bit_Chain *restrict _dat, Dwg_Object *restrict obj) \
 } \
 \
 static int \
-dwg_free_ ##token## _private (Bit_Chain *restrict _dat, Dwg_Object *restrict obj) \
+dwg_free_ ##token## _private (Bit_Chain *restrict dat, Dwg_Object *restrict obj) \
 { \
   BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4; \
   Dwg_Object_##token *_obj;                      \
-  Bit_Chain *hdl_dat = _dat;                     \
-  Bit_Chain* str_dat = _dat;                     \
+  Bit_Chain *hdl_dat = dat;                     \
+  Bit_Chain* str_dat = dat;                     \
   Dwg_Data* dwg = obj->parent;                   \
   int error = 0;                                 \
   if (!obj->tio.object) return 0;                \
@@ -296,6 +295,7 @@ dwg_free_common_entity_handle_data(Dwg_Object* obj)
 {
 
   Dwg_Data *dwg = obj->parent;
+  Bit_Chain *dat = &pdat;
   Dwg_Object_Entity *_obj;
   BITCODE_BL vcount;
   Dwg_Object_Entity *ent;
@@ -315,6 +315,7 @@ dwg_free_common_entity_data(Dwg_Object* obj)
 {
 
   Dwg_Data *dwg = obj->parent;
+  Bit_Chain *dat = &pdat;
   Dwg_Object_Entity *_obj;
   Dwg_Object_Entity *ent;
   Bit_Chain *hdl_dat = NULL;
@@ -367,11 +368,12 @@ dwg_free_eed(Dwg_Object* obj)
 /* returns 1 if object could be freed and 0 otherwise
  */
 static int
-dwg_free_variable_type(Dwg_Data * dwg, Dwg_Object* obj)
+dwg_free_variable_type(Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
 {
   int i;
   int is_entity;
   Dwg_Class *klass;
+  Bit_Chain *dat = &pdat;
 
   i = obj->type - 500;
   if (i < 0 || i > (int)dwg->num_classes)
@@ -399,7 +401,8 @@ dwg_free_object(Dwg_Object *obj)
   int error = 0;
   long unsigned int j;
   Dwg_Data *dwg;
-
+  Bit_Chain *dat = &pdat;
+ 
   if (obj && obj->parent) {
     dwg = obj->parent;
     dat->version = dwg->header.version;
@@ -698,6 +701,7 @@ static int dwg_free_header_vars(Dwg_Data * dwg)
 {
   Dwg_Header_Variables* _obj = &dwg->header_vars;
   Dwg_Object* obj = NULL;
+  Bit_Chain *dat = &pdat;
   #include "header_variables.spec"
   return 0;
 }
@@ -708,6 +712,8 @@ dwg_free(Dwg_Data * dwg)
   BITCODE_BL i;
   if (dwg)
     {
+      pdat.version = dwg->header.version;
+      pdat.from_version = dwg->header.version;
       if (dwg->opts)
         loglevel = dwg->opts & 0xf;
 #ifdef USE_TRACING
