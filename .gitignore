@@ -21,9 +21,14 @@ gcov.log
 # globs, in specific dirs
 /00*.patch
 /*_20*.log
-/*_r[0-9]*.log
+/*_r1*.log
 /*_20*.dxf
-/*_r[0-9]*.dxf
+/*_r1*.dxf
+/*_20*.dwg
+/*_r1*.dwg
+/cfg-*
+/cvt-*.sh
+/announce-*
 /libredwg-*.zip
 /libredwg-*.tar.{xz,gz}
 /libredwg-*.tar.{xz,gz}.sig
@@ -60,6 +65,8 @@ gcov.log
 /libredwg-0.*.tar.xz*
 /libredwg-0.*.zip
 /libredwg-0.*.zip.sig
+/test/test-data/
+/test/test-big/
 
 # specific filenames
 /libredwg.pc
@@ -129,6 +136,8 @@ gcov.log
 /doc/refman/
 /doc/stamp-vti
 /doc/version.texi
+/examples/bd
+/examples/bits
 /examples/unknown
 /programs/dwgbmp
 /programs/dwgrewrite
@@ -154,3 +163,5 @@ gcov.log
 /src/config.h
 /src/config.h.in
 /src/stamp-h1
+# test-data symlink
+/td
