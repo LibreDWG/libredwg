@@ -103,6 +103,7 @@
 # define SUB_FIELD_3BD(o,nam,dxf)   FIELD_3BD(o.nam, dxf)
 # define SUB_FIELD_3BD_inl(o,nam,dxf)  FIELD_3BD(o, dxf)
 # define SUB_FIELD_3DPOINT(o,nam,dxf) FIELD_3BD(o.nam, dxf)
+//# define SUB_FIELD_EMC(o,nam,dxf1,dxf2) FIELD_EMC(o.nam, dxf1,dxf2)
 #endif
 // logging format overrides
 #ifndef FIELD_RLx
@@ -147,6 +148,9 @@
 #endif
 #ifndef FIELD_EMC
 #define FIELD_EMC(a,b,c) FIELD_CMC(a,b,c)
+#endif
+#ifndef SUB_FIELD_EMC
+#define SUB_FIELD_EMC(a,b,c,d) SUB_FIELD_CMC(a,b,c,d)
 #endif
 
 #ifdef IS_ENCODER

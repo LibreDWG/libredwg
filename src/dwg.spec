@@ -3548,10 +3548,8 @@ int DWG_FUNC_N(ACTION,_HATCH_gradientfill)(
         }
       REPEAT(num_colors, colors, Dwg_HATCH_Color)
       REPEAT_BLOCK
-          SUB_FIELD_BD (colors[rcount1], unknown_double, 463); //value
-          SUB_FIELD_BS (colors[rcount1], unknown_short, 0);
-          SUB_FIELD_BLx (colors[rcount1], rgb_color, 63); // 63 for color as ACI. 421 for rgb
-          SUB_FIELD_RC (colors[rcount1], ignored_color_byte, 0);
+          SUB_FIELD_BD (colors[rcount1], shift_value, 463);
+          SUB_FIELD_CMC (colors[rcount1], color, 63,421);
       END_REPEAT_BLOCK
       SET_PARENT_OBJ(colors)
       END_REPEAT(colors);
@@ -7245,3 +7243,4 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+

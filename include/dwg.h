@@ -2474,10 +2474,8 @@ typedef struct _dwg_object_PROXY_OBJECT
 typedef struct _dwg_HATCH_color
 {
   struct _dwg_entity_HATCH *parent;
-  BITCODE_BD unknown_double;
-  BITCODE_BS unknown_short;
-  BITCODE_BL rgb_color;
-  BITCODE_RC ignored_color_byte;
+  BITCODE_BD shift_value; //0.0 non-shifted, 1.0 shifted
+  BITCODE_CMC color;
 } Dwg_HATCH_Color;
 
 typedef struct _dwg_HATCH_control_point

@@ -50,6 +50,7 @@ Important bugfixes:
   * Validate decoded and sort DXF output of entities with subentities
     (POLYLINE, INSERT) (#83). In DWG they have different orderings,
     fixup some off-by-one decoding errors (e.g. wrong handle stream offset).
+  * Fixed HATCH gradientfill color (#89)
   * decode: set proper ->dxfname from classes.inc, Fixes ACDBDICTIONARYWDFLT
     DXF object and simplifies out_dxf.
   * Fix some CRC checks: RSx vs RS_LE, add unused crc64 code.
