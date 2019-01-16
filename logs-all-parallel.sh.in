@@ -7,3 +7,7 @@ make -s -j4
 cd test/test-data
 @PARALLEL@ @TIMEOUT_10@ ../../libtool --mode=execute ../../programs/dwgread -v4 {} \2\>../../{/.}_{//}.log ::: */*.dwg
 cd ../..
+
+cd test/test-big
+@PARALLEL@ @TIMEOUT_10@ ../../libtool --mode=execute ../../programs/dwgread -v3 {} \2\>../../{/.}_{//}.log ::: */*.dwg
+cd ../..
