@@ -5735,6 +5735,55 @@ DWG_ENTITY(WIPEOUT)
 
 DWG_ENTITY_END
 
+// (varies)
+// in DXF as {PDF,DWF,DGN}DEFINITION
+// no DWF, DGN coverage yet
+DWG_OBJECT(UNDERLAYDEFINITION)
+
+  //DECODE_UNKNOWN_BITS
+  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
+  SUBCLASS(AcDbUnderlayDefinition)
+  FIELD_T (filename, 1);
+  FIELD_T (name, 2);
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (ownerhandle, 4, 0);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+
+DWG_OBJECT_END
+
+// (varies)
+// in DXF as 0 DGNUNDERLAY DWFUNDERLAY PDFUNDERLAY
+// looks perfect, but no DWF, DGN coverage yet
+DWG_ENTITY(UNDERLAY)
+
+  //DECODE_UNKNOWN_BITS
+  SUBCLASS(AcDbUnderlayReference)
+  FIELD_3BD (extrusion, 210);
+  FIELD_3DPOINT (insertion_pt, 10);
+  FIELD_BD (angle, 50);
+  FIELD_3BD_1 (scale, 41);
+  FIELD_RC (flag, 280);
+  FIELD_RCd (contrast, 281); // 20-100. def: 100
+  FIELD_RCd (fade, 282);  // 0-80
+
+  FIELD_BL (num_clip_verts, 0);
+  FIELD_2RD_VECTOR (clip_verts, num_clip_verts, 11);
+
+  COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE (underlay_layer, 5, 0);
+  FIELD_HANDLE (definition_id, 5, 340);
+
+DWG_ENTITY_END
+
+DWG_ENTITY(CAMERA) // i.e. a named view, not persistent in a DWG. CAMERADISPLAY=1
+
+  //DECODE_UNKNOWN_BITS
+  COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE(view, 5, 0);
+
+DWG_ENTITY_END
+
 #ifndef IS_DXF
 
 /* UNKNOWN (varies)
@@ -5777,14 +5826,6 @@ DWG_OBJECT(OBJECT_PTR) //empty? only xdata. CAseDLPNTableRecord
 
 DWG_OBJECT_END
 
-DWG_ENTITY(CAMERA) // i.e. a named view, not persistent in a DWG. CAMERADISPLAY=1
-
-  DECODE_UNKNOWN_BITS
-  COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE(view, 5, 0);
-
-DWG_ENTITY_END
-
 /* In work area:
    The following entities/objects are all stored with partial fields,
    plus as raw bits for examples/unknown.
@@ -5811,47 +5852,6 @@ DWG_OBJECT(PERSSUBENTMANAGER)
   REACTORS(4);
   XDICOBJHANDLE(3);
 DWG_OBJECT_END
-
-// (varies) UNSTABLE
-// in DXF as {PDF,DWF,DGN}DEFINITION
-// no DWF, DGN coverage yet
-DWG_OBJECT(UNDERLAYDEFINITION)
-
-  DECODE_UNKNOWN_BITS
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
-  SUBCLASS(AcDbUnderlayDefinition)
-  FIELD_T (filename, 1);
-  FIELD_T (name, 2);
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
-
-DWG_OBJECT_END
-
-// (varies) UNSTABLE
-// in DXF as 0 DGNUNDERLAY DWFUNDERLAY PDFUNDERLAY
-// looks perfect, but no DWF, DGN coverage yet
-DWG_ENTITY(UNDERLAY)
-
-  DECODE_UNKNOWN_BITS
-  SUBCLASS(AcDbUnderlayReference)
-  FIELD_3BD (extrusion, 210);
-  FIELD_3DPOINT (insertion_pt, 10);
-  FIELD_BD (angle, 50);
-  FIELD_3BD_1 (scale, 41);
-  FIELD_RC (flag, 280);
-  FIELD_RCd (contrast, 281); // 20-100. def: 100
-  FIELD_RCd (fade, 282);  // 0-80
-
-  FIELD_BL (num_clip_verts, 0);
-  FIELD_2RD_VECTOR (clip_verts, num_clip_verts, 11);
-
-  COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (underlay_layer, 5, 0);
-  FIELD_HANDLE (definition_id, 5, 340);
-
-DWG_ENTITY_END
 
 // (varies) UNSTABLE
 // works ok on all Surface_20* but this coverage seems limited.

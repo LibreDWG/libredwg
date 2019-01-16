@@ -9,6 +9,7 @@ new API:
   * add BITCODE_UMC type for Object-map section_handles
   * add reverse dwg_find_objectref lookup: linear search, only done for
     entities with subentities to find the ref for the current object.
+  * added to stable: UNDERLAY entities, UNDERLAYDEFINITION, CAMERA objects
 
 API breaking changes:
   * rename get_first_owned_object to get_first_owned_entity,
