@@ -3783,8 +3783,8 @@ const struct _name_type_offset _dwg_TABLE_value_fields[] = {
 
 struct _name_type_fields {
   const char *const name;
-  int type;
-  const struct _name_type_offset *const fields;
+  const int type;
+  const Dwg_DYNAPI_field *const fields;
 };
 
 /* sorted for bsearch. from enum DWG_OBJECT_TYPE: */
@@ -3950,66 +3950,61 @@ const struct _name_type_fields dwg_name_types[] = {
 };
 
 static int
-_name_cmp (const void *restrict n1, const void *restrict n2)
+_name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
-  return strcmp((const char*)n1, (const char*)n2);
+  //https://en.cppreference.com/w/c/algorithm/bsearch
+  return strcmp((const char*)key, (const char*)elem); //inlined
 }
 
-#define NUM_ENTITIES \
-  (sizeof(dwg_entity_names)/sizeof(dwg_entity_names[0]))
-#define NUM_OBJECTS \
-  (sizeof(dwg_object_names)/sizeof(dwg_object_names[0]))
+static int
+_name_struct_cmp (const void *restrict key, const void *restrict elem)
+{
+  //https://en.cppreference.com/w/c/algorithm/bsearch
+  const struct _name_type_fields *f = (struct _name_type_fields *)elem;
+  return strcmp((const char*)key, f->name); //deref
+}
+
+#define ARRAY_SIZE(arr) (sizeof(arr)/sizeof(arr[0]))
+#define NUM_ENTITIES    ARRAY_SIZE(dwg_entity_names)
+#define NUM_OBJECTS     ARRAY_SIZE(dwg_object_names)
+#define NUM_NAME_TYPES  ARRAY_SIZE(dwg_name_types)
 
 EXPORT bool
-is_dwg_entity(const char* name) {
-  return bsearch(name, dwg_entity_names, NUM_ENTITIES, MAXLEN_ENTITIES, _name_cmp)
+is_dwg_entity(const char* dxfname) {
+  return bsearch(dxfname, dwg_entity_names, NUM_ENTITIES, MAXLEN_ENTITIES,
+                 _name_inl_cmp)
          ? true : false;
 }
 
 EXPORT bool
-is_dwg_object(const char* name) {
-  return bsearch(name, dwg_object_names, NUM_OBJECTS, MAXLEN_OBJECTS, _name_cmp)
+is_dwg_object(const char* dxfname) {
+  return bsearch(dxfname, dwg_object_names, NUM_OBJECTS, MAXLEN_OBJECTS,
+                 _name_inl_cmp)
          ? true : false;
 }
 
 const Dwg_DYNAPI_field*
-dwg_dynapi_entity_fields(const char* name)
+dwg_dynapi_entity_fields(const char* dxfname)
 {
-  struct _name_type_fields *f = (struct _name_type_fields*)
-    bsearch(name, dwg_entity_names, NUM_ENTITIES, MAXLEN_ENTITIES, _name_cmp);
-  return f ? f->fields : NULL;
-}
-
-const Dwg_DYNAPI_field*
-dwg_dynapi_object_fields(const char* name)
-{
-  struct _name_type_fields *f = (struct _name_type_fields*)
-    bsearch(name, dwg_object_names, NUM_OBJECTS, MAXLEN_OBJECTS, _name_cmp);
-  return f ? f->fields : NULL;
-}
-
-const Dwg_DYNAPI_field*
-dwg_dynapi_object_field(const char *restrict obj, const char *restrict field)
-{
-  const Dwg_DYNAPI_field* fields = dwg_dynapi_object_fields(obj);
-  if (fields)
-    { /* linear search */
-      Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)fields;
-      for (; f->name; f++)
-        {
-          if (strcmp(f->name, field) == 0)
-            return f;
-        }
+  const char* p = bsearch(dxfname, dwg_name_types,
+                          NUM_NAME_TYPES, sizeof(dwg_name_types[0]),
+                          _name_struct_cmp);
+  if (p)
+    {
+      const int i = (p - (char*)dwg_name_types) / sizeof(dwg_name_types[0]);
+      const struct _name_type_fields *f = &dwg_name_types[i];
+      return f->fields;
     }
-  return NULL;
+  else
+    return NULL;
 }
 
 const Dwg_DYNAPI_field*
-dwg_dynapi_entity_field(const char *restrict obj, const char *restrict field)
+dwg_dynapi_entity_field(const char *restrict dxfname, const char *restrict field)
 {
-  const Dwg_DYNAPI_field* fields = dwg_dynapi_entity_fields(obj);
+  const Dwg_DYNAPI_field* fields = dwg_dynapi_entity_fields(dxfname);
   if (fields)
-    { /* linear search */
+    { /* linear search (unsorted) */
       Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)fields;
       for (; f->name; f++)
         {
@@ -4022,29 +4017,11 @@ dwg_dynapi_entity_field(const char *restrict obj, const char *restrict field)
 
 /* generic field getters */
 bool
-dwg_dynapi_entity_value(void *restrict obj, const char *restrict name,
+dwg_dynapi_entity_value(void *restrict obj, const char *restrict dxfname,
                         const char *restrict fieldname,
                         void *restrict out, Dwg_DYNAPI_field *restrict fp)
 {
-  const Dwg_DYNAPI_field* f = dwg_dynapi_entity_field(name, fieldname);
-  if (f)
-    {
-      memcpy(fp, f, sizeof(Dwg_DYNAPI_field));
-      memcpy(out, &((char*)obj)[f->offset], f->size);
-      return true;
-    }
-  else
-    {
-      return false;
-    }
-}
-
-bool
-dwg_dynapi_object_value(void *restrict obj, const char *restrict name,
-                        const char *restrict fieldname,
-                        void *restrict out, Dwg_DYNAPI_field *restrict fp)
-{
-  const Dwg_DYNAPI_field* f = dwg_dynapi_object_field(name, fieldname);
+  const Dwg_DYNAPI_field* f = dwg_dynapi_entity_field(dxfname, fieldname);
   if (f)
     {
       memcpy(fp, f, sizeof(Dwg_DYNAPI_field));
@@ -4061,12 +4038,13 @@ bool
 dwg_dynapi_header_value(Dwg_Data *restrict dwg, const char *restrict fieldname,
                         void *restrict out, Dwg_DYNAPI_field *restrict fp)
 {
-  Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)bsearch(fieldname, _dwg_header_variables_fields,
-                          sizeof(_dwg_header_variables_fields)/sizeof(_dwg_header_variables_fields[0]),
-                          sizeof(_dwg_header_variables_fields[0]), _name_cmp);
+  Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)
+    bsearch(fieldname, _dwg_header_variables_fields,
+            ARRAY_SIZE(_dwg_header_variables_fields),
+            sizeof(_dwg_header_variables_fields[0]), _name_struct_cmp);
   if (f)
     {
-      Dwg_Header_Variables* _obj = &dwg->header_vars;
+      const Dwg_Header_Variables *const _obj = &dwg->header_vars;
       memcpy(fp, f, sizeof(Dwg_DYNAPI_field));
       memcpy(out, &((char*)_obj)[f->offset], f->size);
       return true;

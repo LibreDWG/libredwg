@@ -30,9 +30,9 @@
 #endif
 
 EXPORT bool
-is_dwg_entity(const char* name);
+is_dwg_entity(const char* dxfname);
 EXPORT bool
-is_dwg_object(const char* name);
+is_dwg_object(const char* dxfname);
 
 typedef struct _name_type_offset {
   const char *const name; /* field name */
@@ -41,22 +41,15 @@ typedef struct _name_type_offset {
   const int offset;
 } Dwg_DYNAPI_field;
 
+/* Also for all objects */
 const Dwg_DYNAPI_field*
-dwg_dynapi_entity_fields(const char *restrict name);
-const Dwg_DYNAPI_field*
-dwg_dynapi_object_fields(const char *restrict name);
+dwg_dynapi_entity_fields(const char *restrict dxfname);
 
 const Dwg_DYNAPI_field*
-dwg_dynapi_entity_field(const char *restrict name, const char *restrict fieldname);
-const Dwg_DYNAPI_field*
-dwg_dynapi_object_field(const char *restrict name, const char *restrict fieldname);
+dwg_dynapi_entity_field(const char *restrict dxfname, const char *restrict fieldname);
 
 bool
-dwg_dynapi_entity_value(void *restrict obj, const char *restrict name,
-                        const char *restrict fieldname, void *restrict out,
-                        Dwg_DYNAPI_field *restrict fp);
-bool
-dwg_dynapi_object_value(void *restrict obj, const char *restrict name,
+dwg_dynapi_entity_value(void *restrict obj, const char *restrict dxfname,
                         const char *restrict fieldname, void *restrict out,
                         Dwg_DYNAPI_field *restrict fp);
 bool
