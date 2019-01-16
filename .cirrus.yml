@@ -15,4 +15,4 @@ task:
     - make
   test_script:
     - make check
-    - make distcheck
+    #- make distcheck
