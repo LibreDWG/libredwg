@@ -225,7 +225,7 @@ const struct _name_type_fields dwg_name_types[] = {
 };
 
 static int
-_name_cmp (const void *n1, const void *n2)
+_name_cmp (const void *restrict n1, const void *restrict n2)
 {
   return strcmp((const char*)n1, (const char*)n2);
 }
@@ -248,21 +248,24 @@ is_dwg_object(const char* name) {
 }
 
 const Dwg_DYNAPI_field*
-dwg_dynapi_entity_fields(const char* name) {
+dwg_dynapi_entity_fields(const char* name)
+{
   struct _name_type_fields *f = (struct _name_type_fields*)
     bsearch(name, dwg_entity_names, NUM_ENTITIES, MAXLEN_ENTITIES, _name_cmp);
   return f ? f->fields : NULL;
 }
 
 const Dwg_DYNAPI_field*
-dwg_dynapi_object_fields(const char* name) {
+dwg_dynapi_object_fields(const char* name)
+{
   struct _name_type_fields *f = (struct _name_type_fields*)
     bsearch(name, dwg_object_names, NUM_OBJECTS, MAXLEN_OBJECTS, _name_cmp);
   return f ? f->fields : NULL;
 }
 
 const Dwg_DYNAPI_field*
-dwg_dynapi_object_field(const char* obj, const char* field) {
+dwg_dynapi_object_field(const char *restrict obj, const char *restrict field)
+{
   const Dwg_DYNAPI_field* fields = dwg_dynapi_object_fields(obj);
   if (fields)
     { /* linear search */
@@ -276,9 +279,9 @@ dwg_dynapi_object_field(const char* obj, const char* field) {
   return NULL;
 }
 
-
 const Dwg_DYNAPI_field*
-dwg_dynapi_entity_field(const char* obj, const char* field) {
+dwg_dynapi_entity_field(const char *restrict obj, const char *restrict field)
+{
   const Dwg_DYNAPI_field* fields = dwg_dynapi_entity_fields(obj);
   if (fields)
     { /* linear search */
@@ -294,7 +297,10 @@ dwg_dynapi_entity_field(const char* obj, const char* field) {
 
 /* generic field getters */
 bool
-dwg_dynapi_entity_value(void *obj, const char* name, const char* fieldname, void *out, Dwg_DYNAPI_field* fp) {
+dwg_dynapi_entity_value(void *restrict obj, const char *restrict name,
+                        const char *restrict fieldname,
+                        void *restrict out, Dwg_DYNAPI_field *restrict fp)
+{
   const Dwg_DYNAPI_field* f = dwg_dynapi_entity_field(name, fieldname);
   if (f)
     {
@@ -309,7 +315,10 @@ dwg_dynapi_entity_value(void *obj, const char* name, const char* fieldname, void
 }
 
 bool
-dwg_dynapi_object_value(void *obj, const char* name, const char* fieldname, void *out, Dwg_DYNAPI_field* fp) {
+dwg_dynapi_object_value(void *restrict obj, const char *restrict name,
+                        const char *restrict fieldname,
+                        void *restrict out, Dwg_DYNAPI_field *restrict fp)
+{
   const Dwg_DYNAPI_field* f = dwg_dynapi_object_field(name, fieldname);
   if (f)
     {
@@ -324,7 +333,9 @@ dwg_dynapi_object_value(void *obj, const char* name, const char* fieldname, void
 }
 
 bool
-dwg_dynapi_header_value(Dwg_Data *dwg, const char* fieldname, void *out, Dwg_DYNAPI_field* fp) {
+dwg_dynapi_header_value(Dwg_Data *restrict dwg, const char *restrict fieldname,
+                        void *restrict out, Dwg_DYNAPI_field *restrict fp)
+{
   Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)bsearch(fieldname, _dwg_header_variables_fields,
                           sizeof(_dwg_header_variables_fields)/sizeof(_dwg_header_variables_fields[0]),
                           sizeof(_dwg_header_variables_fields[0]), _name_cmp);

@@ -42,20 +42,25 @@ typedef struct _name_type_offset {
 } Dwg_DYNAPI_field;
 
 const Dwg_DYNAPI_field*
-dwg_dynapi_entity_fields(const char* name);
+dwg_dynapi_entity_fields(const char *restrict name);
 const Dwg_DYNAPI_field*
-dwg_dynapi_object_fields(const char* name);
+dwg_dynapi_object_fields(const char *restrict name);
 
 const Dwg_DYNAPI_field*
-dwg_dynapi_entity_field(const char* name, const char* fieldname);
+dwg_dynapi_entity_field(const char *restrict name, const char *restrict fieldname);
 const Dwg_DYNAPI_field*
-dwg_dynapi_object_field(const char* name, const char* fieldname);
+dwg_dynapi_object_field(const char *restrict name, const char *restrict fieldname);
 
 bool
-dwg_dynapi_entity_value(void *obj, const char* name, const char* fieldname, void *out, Dwg_DYNAPI_field* fp);
+dwg_dynapi_entity_value(void *restrict obj, const char *restrict name,
+                        const char *restrict fieldname, void *restrict out,
+                        Dwg_DYNAPI_field *restrict fp);
 bool
-dwg_dynapi_object_value(void *obj, const char* name, const char* fieldname, void *out, Dwg_DYNAPI_field* fp);
+dwg_dynapi_object_value(void *restrict obj, const char *restrict name,
+                        const char *restrict fieldname, void *restrict out,
+                        Dwg_DYNAPI_field *restrict fp);
 bool
-dwg_dynapi_header_value(Dwg_Data *dwg, const char* fieldname, void *out, Dwg_DYNAPI_field* fp);
+dwg_dynapi_header_value(Dwg_Data *restrict dwg, const char *restrict fieldname,
+                        void *restrict out, Dwg_DYNAPI_field *restrict fp);
 
 #endif
