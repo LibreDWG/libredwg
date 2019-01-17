@@ -69,7 +69,7 @@ sub out_struct {
   #print $fh " /* ", Data::Dumper->Dump([$s], [$n]), "*/\n";
   $n = "_dwg_$n" unless $n =~ /^_dwg_/;
   print $fh "/* from typedef $tmpl: */\n",
-    "const struct _name_type_offset $n","_fields[] = {\n";
+    "const Dwg_DYNAPI_field $n","_fields[] = {\n";
   for my $d (@{$s->{declarations}}) {
     my $type = $d->{type};
     my $decl = $d->{declarators}->[0];
@@ -291,7 +291,7 @@ dwg_dynapi_entity_field(const char *restrict dxfname, const char *restrict field
 }
 
 /* generic field getters */
-bool
+EXPORT bool
 dwg_dynapi_entity_value(void *restrict obj, const char *restrict dxfname,
                         const char *restrict fieldname,
                         void *restrict out, Dwg_DYNAPI_field *restrict fp)
@@ -299,7 +299,8 @@ dwg_dynapi_entity_value(void *restrict obj, const char *restrict dxfname,
   const Dwg_DYNAPI_field* f = dwg_dynapi_entity_field(dxfname, fieldname);
   if (f)
     {
-      memcpy(fp, f, sizeof(Dwg_DYNAPI_field));
+      if (fp)
+        memcpy(fp, f, sizeof(Dwg_DYNAPI_field));
       memcpy(out, &((char*)obj)[f->offset], f->size);
       return true;
     }
@@ -309,7 +310,7 @@ dwg_dynapi_entity_value(void *restrict obj, const char *restrict dxfname,
     }
 }
 
-bool
+EXPORT bool
 dwg_dynapi_header_value(Dwg_Data *restrict dwg, const char *restrict fieldname,
                         void *restrict out, Dwg_DYNAPI_field *restrict fp)
 {
@@ -320,7 +321,8 @@ dwg_dynapi_header_value(Dwg_Data *restrict dwg, const char *restrict fieldname,
   if (f)
     {
       const Dwg_Header_Variables *const _obj = &dwg->header_vars;
-      memcpy(fp, f, sizeof(Dwg_DYNAPI_field));
+      if (fp)
+        memcpy(fp, f, sizeof(Dwg_DYNAPI_field));
       memcpy(out, &((char*)_obj)[f->offset], f->size);
       return true;
     }

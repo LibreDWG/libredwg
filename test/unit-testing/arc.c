@@ -1,6 +1,5 @@
 #define DWG_TYPE DWG_TYPE_ARC
 #include "common.c"
-#include "dynapi.h"
 
 void
 low_level_process(dwg_object *obj)
@@ -23,7 +22,6 @@ api_process(dwg_object *obj)
   int error;
   double radius, thickness, start_angle, end_angle;
   dwg_point_3d center, ext;
-  Dwg_DYNAPI_field f;
 
   // casts an object to arc entity
   dwg_ent_arc *arc = dwg_object_to_ARC(obj);
@@ -33,7 +31,7 @@ api_process(dwg_object *obj)
     printf("arc_get_radius   : %f\n", radius);
   else
     printf("error in reading radius \n");
-  if (dwg_dynapi_entity_value(arc, "ARC", "radius", &radius, &f) &&
+  if (dwg_dynapi_entity_value(arc, "ARC", "radius", &radius, NULL) &&
       radius == arc->radius)
     printf("ARC.radius       : %f\n", radius);
   else
@@ -44,7 +42,7 @@ api_process(dwg_object *obj)
       printf("arc_get_thickness: %f\n", thickness);
   else
       printf("error in reading thickness \n");
-  if (dwg_dynapi_entity_value(arc, "ARC", "thickness", &thickness, &f) &&
+  if (dwg_dynapi_entity_value(arc, "ARC", "thickness", &thickness, NULL) &&
       thickness == arc->thickness)
     printf("ARC.thickness    : %f\n", thickness);
   else
@@ -57,7 +55,7 @@ api_process(dwg_object *obj)
            ext.x, ext.y, ext.z);
   else
     printf("error in reading extrusion \n");
-  if (dwg_dynapi_entity_value(arc, "ARC", "extrusion", &ext, &f) &&
+  if (dwg_dynapi_entity_value(arc, "ARC", "extrusion", &ext, NULL) &&
       ext.x == arc->extrusion.x &&
       ext.y == arc->extrusion.y &&
       ext.z == arc->extrusion.z)
@@ -71,7 +69,7 @@ api_process(dwg_object *obj)
               center.x, center.y, center.z);
   else
       printf("error in reading center \n");
-  if (dwg_dynapi_entity_value(arc, "ARC", "center", &center, &f) &&
+  if (dwg_dynapi_entity_value(arc, "ARC", "center", &center, NULL) &&
       center.x == arc->center.x &&
       center.y == arc->center.y &&
       center.z == arc->center.z)
@@ -84,7 +82,7 @@ api_process(dwg_object *obj)
     printf("get_start_angle  : %f\n", start_angle);
   else
     printf("error in reading start angle\n");
-  if (dwg_dynapi_entity_value(arc, "ARC", "start_angle", &start_angle, &f) &&
+  if (dwg_dynapi_entity_value(arc, "ARC", "start_angle", &start_angle, NULL) &&
       start_angle == arc->start_angle)
       printf("ARC.start_angle  : %f\n", start_angle);
   else
@@ -95,7 +93,7 @@ api_process(dwg_object *obj)
       printf("arc_get_end_angle: %f\n", end_angle);
   else
       printf("error in reading end angle \n");
-  if (dwg_dynapi_entity_value(arc, "ARC", "end_angle", &end_angle, &f) &&
+  if (dwg_dynapi_entity_value(arc, "ARC", "end_angle", &end_angle, NULL) &&
       end_angle == arc->end_angle)
       printf("ARC.end_angle    : %f\n", end_angle);
   else

@@ -22,6 +22,7 @@
 #define _DWG_API_H_
 
 #include <stdio.h>
+#include <stdbool.h>
 #include "dwg.h"
 
 #ifdef __cplusplus
@@ -33,6 +34,27 @@ extern "C" {
    fprintf(stderr, msg, name, (type))
 #endif
 
+typedef struct dwg_field_name_type_offset {
+  const char *const name; /* field name */
+  const char *const type; /* e.g "RS" for BITCODE_RS */
+  const int size;         /* e.g. 2 for RS, 4 for BL */
+  const int offset;
+} Dwg_DYNAPI_field;
+
+/** dynapi */
+EXPORT bool
+is_dwg_entity(const char* dxfname);
+EXPORT bool
+is_dwg_object(const char* dxfname);
+EXPORT bool
+dwg_dynapi_entity_value(void *restrict entity, const char *restrict dxfname,
+                        const char *restrict fieldname, void *restrict out,
+                        Dwg_DYNAPI_field *restrict fp);
+EXPORT bool
+dwg_dynapi_header_value(Dwg_Data *restrict dwg, const char *restrict fieldname,
+                        void *restrict out, Dwg_DYNAPI_field *restrict fp);
+
+/* static api */
 typedef struct dwg_point_3d
 {
   double x;
