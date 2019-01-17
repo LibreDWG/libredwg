@@ -339,8 +339,8 @@ fi
 AC_PATH_PROG([PERL], [$ac_cv_perl])
 if test -n "$PERL"; then
   AC_MSG_CHECKING([PERL version])
-  [perl_version=`$PERL --version 2>&1 | grep ' version' | cut -c14-`]
-  AC_MSG_RESULT([$perl_version])
+  [PERL_VERSION=`$PERL -e'print $^V' 2>&1`]
+  AC_MSG_RESULT([$PERL_VERSION])
   AM_RUN_LOG([$PERL -V:cc])
 fi
 
