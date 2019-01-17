@@ -12,6 +12,8 @@ decode_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/decode_r2007.lo \
 	$(top_builddir)/src/common.lo \
 	$(top_builddir)/src/print.lo
+dynapi_test_LDADD = $(LDADD) \
+	$(top_builddir)/src/dynapi.lo
 
 paired = \
 	3dsolid \
@@ -62,9 +64,14 @@ unpaired = \
 
 private = bits_test \
 	  decode_test \
-	  hash_test
+	  hash_test \
+	  dynapi_test
 
 check_PROGRAMS = $(paired) $(unpaired) $(private)
+
+dynapi_test.c: dynapi_test.c.in $(top_srcdir)/include/dwg.h \
+	       $(top_srcdir)/src/gen-dynapi.pl
+	cd $(top_srcdir)/src && $(PERL) gen-dynapi.pl
 
 # todo: more dwg versions, from test/test-data
 EXTRA_DIST = \

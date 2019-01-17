@@ -3956,11 +3956,15 @@ _name_inl_cmp (const void *restrict key, const void *restrict elem)
   return strcmp((const char*)key, (const char*)elem); //inlined
 }
 
+struct _name {
+  const char *const name;
+};
+
 static int
 _name_struct_cmp (const void *restrict key, const void *restrict elem)
 {
   //https://en.cppreference.com/w/c/algorithm/bsearch
-  const struct _name_type_fields *f = (struct _name_type_fields *)elem;
+  const struct _name *f = (struct _name *)elem;
   return strcmp((const char*)key, f->name); //deref
 }
 
@@ -3987,7 +3991,7 @@ const Dwg_DYNAPI_field*
 dwg_dynapi_entity_fields(const char* dxfname)
 {
   const char* p = bsearch(dxfname, dwg_name_types,
-                          NUM_NAME_TYPES, sizeof(dwg_name_types[0]),
+                          NUM_NAME_TYPES-1, sizeof(dwg_name_types[0]),
                           _name_struct_cmp);
   if (p)
     {
@@ -4036,12 +4040,12 @@ dwg_dynapi_entity_value(void *restrict obj, const char *restrict dxfname,
 }
 
 EXPORT bool
-dwg_dynapi_header_value(Dwg_Data *restrict dwg, const char *restrict fieldname,
+dwg_dynapi_header_value(const Dwg_Data *restrict dwg, const char *restrict fieldname,
                         void *restrict out, Dwg_DYNAPI_field *restrict fp)
 {
   Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)
     bsearch(fieldname, _dwg_header_variables_fields,
-            ARRAY_SIZE(_dwg_header_variables_fields),
+            ARRAY_SIZE(_dwg_header_variables_fields)-1,
             sizeof(_dwg_header_variables_fields[0]), _name_struct_cmp);
   if (f)
     {

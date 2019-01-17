@@ -1,0 +1,18 @@
+load_lib "dejagnu.exp"
+
+# If tracing has been enabled at the top level, then turn it on here
+# too.
+if $tracelevel {
+    strace $tracelevel
+}
+
+# Execute everything in the subdir so all the output files go there.
+cd $subdir
+
+# Execute the test case, and analyse the output
+if { [host_execute "dynapi_test"] != "" } {
+    perror "dynapi_test had an execution error" 0
+}
+
+# All done, back to the top level directory
+cd ..
