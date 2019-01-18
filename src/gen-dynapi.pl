@@ -1,9 +1,11 @@
 #!/usr/bin/perl -w
-# generate c structs/arrays for all dwg objects and its fields for a dynamic API.
+# Copyright (C) 2019 Free Software Foundation, Inc.
+# Generate c structs/arrays for all dwg objects and its fields for a dynamic API.
 # -> name, type, offset
 # linear search is good enough.
 # This is needed for in_dxf, dwgfilter,
 # a maintainable and shorter dwg_api and shorter language bindings.
+# Written by: Reini Urban
 
 #dwg.h:
 # typedef struct _dwg_header_variables
@@ -25,7 +27,7 @@ $c->parse_file($hdr);
 #print Data::Dumper->Dump([$c->struct('_dwg_entity_TEXT')], ['_dwg_entity_TEXT']);
 #print Data::Dumper->Dump([$c->struct('struct _dwg_header_variables')], ['Dwg_Header_Variables']);
 
-my (%h, $n, %structs);
+my (%h, $n, %structs, %ENT, %HDR);
 local (@entity_names, @object_names, @subtypes, $max_entity_names, $max_object_names);
 # todo: harmonize more subtypes
 for (sort $c->struct_names) {
@@ -55,18 +57,26 @@ while (<$in>) {
     }
   } elsif (/^\}/) { # close the struct
     $n = '';
-  } elsif (/^ +BITCODE_(.+) (\w.*);/) {
+  } elsif ($n and $_ =~ /^ +BITCODE_(.+) (\w.*);/) {
     $h{$n}{$2} = $1;
   }
 }
+$h{Dwg_Bitcode_3BD} = '3BD';
+$h{Dwg_Bitcode_2BD} = '2BD';
+$h{Dwg_Bitcode_3RD} = '3RD';
+$h{Dwg_Bitcode_2RD} = '2RD';
+#$h{Dwg_Bitcode_2RD} = '2RD';
 close $in;
 
-open my $fh, ">", "dynapi.c" or die "dynapi.c: $!";
+my $cfile = "dynapi.c";
+chmod 0644, $cfile if -e $cfile;
+open my $fh, ">", $cfile or die "$cfile: $!";
 
 sub out_struct {
   my ($tmpl, $n) = @_;
   my $s = $c->struct($tmpl);
   #print $fh " /* ", Data::Dumper->Dump([$s], [$n]), "*/\n";
+  my $key = $n;
   $n = "_dwg_$n" unless $n =~ /^_dwg_/;
   print $fh "/* from typedef $tmpl: */\n",
     "const Dwg_DYNAPI_field $n","_fields[] = {\n";
@@ -91,9 +101,9 @@ sub out_struct {
       $size = "0";
       #$type = $type->{type}; # size.width, size.height
     }
+    $ENT{$key}->{$name} = $type;
     printf $fh "  { \"%s\", \"%s\", %s, OFF(%s,%s, %d) },\n",
-      $name, $type, $size,
-      $tmpl,$name,$decl->{offset};
+      $name, $type, $size, $tmpl, $name, $decl->{offset};
   }
   print $fh "  {NULL, NULL, 0},\n";
   print $fh "};\n";
@@ -170,6 +180,106 @@ for (<DATA>) {
     print $fh $_;
   }
 }
+chmod 0444, $fh;
+close $fh;
+
+my $infile = '../test/testcases/dynapi_test.c.in';
+open $in, $infile or die "$infile: $!";
+$cfile  = '../test/testcases/dynapi_test.c';
+chmod 0644, $cfile if -e $cfile;
+open $fh, ">", $cfile or die "$cfile: $!";
+print $fh "/* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */\n";
+for (<$in>) {
+  print $fh $_;
+  if (m{/\* \@\@for test_HEADER\@@ \*/}) {
+  }
+  # TODO: use dwg.h formats
+  my %FMT = (
+    'TV' => '%s',
+    'T'  => '%s',
+    'TU' => '%s',
+    'TFF' => '%s',
+    'BD' => '%g',
+    'BL' => '%u',
+    'BS' => '%d',
+    'RC' => '%d',
+    'RC*' => '%s',
+    'RC**' => '%s',
+    'BLL' => '%lu',
+    );
+  if (m{/\* \@\@for test_OBJECT\@\@ \*/}) {
+    for my $name (@entity_names, @object_names) {
+      next if $name eq 'DIMENSION_';
+      next if $name eq 'PROXY_LWPOLYLINE';
+      my $is_ent = grep { $name eq $_ } @entity_names;
+      my ($Entity, $lentity) = $is_ent ? ('Entity', 'entity') : ('Object', 'object');
+      my $xname = $name =~ /^3/ ? "_$name" : $name;
+      my $lname = lc $xname;
+      my $struct = "Dwg_$Entity" . "_$xname";
+      print $fh <<"EOF";
+static int test_$xname (const Dwg_Object *obj)
+{
+  int error = 0;
+  $struct *$lname = obj->tio.$lentity->tio.$xname;
+EOF
+
+  for my $var (sort keys %{$ENT{$name}}) {
+    my $type = $ENT{$name}->{$var};
+    my $fmt = exists $FMT{$type} ? $FMT{$type} : "%s";
+    my $is_struct = ($type =~ /^(struct|Dwg_)/ or
+                     $type =~ /^[23]/ or
+                     $type =~ /^(BE|CMC|RC\*)/)
+      ? 1 : 0;
+    $type = 'BITCODE_'.$type unless ($type =~ /^(struct|Dwg_)/ or $type =~ /^[a-z]/);
+    if (!$is_struct) {
+      print $fh <<"EOF";
+  {
+    $type $var;
+    if (dwg_dynapi_entity_value($lname, "$name", "$var", &$var, NULL) &&
+        $var == $lname->$var)
+      pass ("$name.$var");
+    else
+      {
+        fail ("$name.$var $fmt != $fmt", $lname->$var, $var); error++;
+      }
+  }
+EOF
+    } else { # is_struct
+      print $fh <<"EOF";
+  {
+    $type $var;
+    if (dwg_dynapi_entity_value($lname, "$name", "$var", &$var, NULL) &&
+        !memcmp(&$var, &$lname->$var, sizeof($lname->$var)))
+      pass ("$name.$var");
+    else
+      {
+        fail ("$name.$var"); error++;
+      }
+  }
+EOF
+      }
+    }
+    print $fh <<"EOF";
+  return error;
+}
+EOF
+    }
+  }
+  if (m{/\* \@\@for if_test_OBJECT\@\@ \*/}) {
+    for my $name (@entity_names, @object_names) {
+      my $xname = $name =~ /^3/ ? "_$name" : $name; # 3DFACE, 3DSOLID
+      next if $name eq 'DIMENSION_';
+      next if $name eq 'PROXY_LWPOLYLINE';
+      print $fh "  else" if $name ne '3DFACE'; # the first
+      print $fh <<"EOF";
+  if (obj->fixedtype == DWG_TYPE_$xname)
+    error += test_$xname(obj);
+EOF
+    }
+  }
+}
+close $in;
+chmod 0444, $fh;
 close $fh;
 
 __DATA__
@@ -177,7 +287,7 @@ __DATA__
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018 Free Software Foundation, Inc.                        */
+/*  Copyright (C) 2018,2019 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */

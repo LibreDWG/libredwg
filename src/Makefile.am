@@ -1,6 +1,6 @@
 ## Makefile.am
 ##
-## Copyright (C) 2010,2018 Free Software Foundation, Inc.
+## Copyright (C) 2010,2018,2019 Free Software Foundation, Inc.
 ##
 ## This file is part of LibreDWG.
 ##
