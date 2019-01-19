@@ -158,11 +158,14 @@ for (<DATA>) {
       #print $fh Data::Dumper->Dump([$s], [$1]);
       #print $fh "\n*/";
       my $i = 0;
-      for (sort keys %{$s->{enumerators}}) {
+      my @keys = map { s/^DWG_TYPE__3D/DWG_TYPE_3D/; $_ } keys %{$s->{enumerators}};
+      for (sort @keys) {
         my ($k,$v) = ($_, $s->{enumerators}->{$_});
-        $k =~ s/^DWG_TYPE_//;
-        $k =~ s/^_3D/3D/;
         if ($tmpl eq 'enum DWG_OBJECT_TYPE') {
+          $k =~ s/^DWG_TYPE_//;
+          if (!$v && $k =~ /^3D/) {
+            $v = $s->{enumerators}->{'DWG_TYPE__'.$k};
+          }
           # see if the fields do exist:
           my $fields = exists $structs{$k} ? "_dwg_".$k."_fields" : "NULL";
           if ($k =~ /^(BODY|REGION)$/) {
