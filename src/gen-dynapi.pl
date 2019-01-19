@@ -74,13 +74,28 @@ open my $fh, ">", $cfile or die "$cfile: $!";
 
 sub out_struct {
   my ($tmpl, $n) = @_;
-  my $s = $c->struct($tmpl);
   #print $fh " /* ", Data::Dumper->Dump([$s], [$n]), "*/\n";
   my $key = $n;
   $n = "_dwg_$n" unless $n =~ /^_dwg_/;
-  print $fh "/* from typedef $tmpl: */\n",
+  my $ns = $tmpl;
+  $ns =~ s/^struct //;
+  my $sortedby = 'offset';
+  my $s = $c->struct($tmpl);
+  return unless $s->{declarations};
+  my @declarations = @{$s->{declarations}};
+  if ($n eq '_dwg_header_variables') {
+    @declarations = sort {
+      my $aname = $a->{declarators}->[0]->{declarator};
+      my $bname = $b->{declarators}->[0]->{declarator};
+      $aname =~ s/^\*//g;
+      $bname =~ s/^\*//g;
+      return $aname cmp $bname
+    } @declarations;
+    $sortedby = 'name';
+  }
+  print $fh "/* from typedef $tmpl: (sorted by $sortedby) */\n",
     "const Dwg_DYNAPI_field $n","_fields[] = {\n";
-  for my $d (@{$s->{declarations}}) {
+  for my $d (@declarations) {
     my $type = $d->{type};
     my $decl = $d->{declarators}->[0];
     my $name = $decl->{declarator};
@@ -89,9 +104,7 @@ sub out_struct {
       $type .= '*';
     }
     # unexpand BITCODE_ macros: e.g. unsigned int -> BITCODE_BL
-    my $s = $tmpl;
-    $s =~ s/^struct //;
-    my $bc = exists $h{$s} ? $h{$s}{$name} : undef;
+    my $bc = exists $h{$ns} ? $h{$ns}{$name} : undef;
     $type = $bc if $bc;
     my $size = $bc ? "sizeof(BITCODE_$type)" : "sizeof($type)";
     # TODO: DIMENSION_COMMON, _3DSOLID_FIELDS macros
@@ -186,18 +199,14 @@ for (<DATA>) {
 chmod 0444, $fh;
 close $fh;
 
-my $infile = '../test/testcases/dynapi_test.c.in';
-open $in, $infile or die "$infile: $!";
-$cfile  = '../test/testcases/dynapi_test.c';
-chmod 0644, $cfile if -e $cfile;
-open $fh, ">", $cfile or die "$cfile: $!";
-print $fh "/* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */\n";
-for (<$in>) {
-  print $fh $_;
-  if (m{/\* \@\@for test_HEADER\@@ \*/}) {
-  }
-  # TODO: use dwg.h formats
-  my %FMT = (
+# TODO: use dwg.h formats
+my %FMT = (
+    'double' => '%g',
+    'unsigned char' => '%c',
+    'unsigned int' => '%u',
+    'unsigned short int' => '%hu',
+    'short' => '%hd',
+    'long' => '%l',
     'TV' => '%s',
     'T'  => '%s',
     'TU' => '%s',
@@ -210,6 +219,84 @@ for (<$in>) {
     'RC**' => '%s',
     'BLL' => '%lu',
     );
+
+my $infile = '../test/testcases/dynapi_test.c.in';
+open $in, $infile or die "$infile: $!";
+$cfile  = '../test/testcases/dynapi_test.c';
+chmod 0644, $cfile if -e $cfile;
+open $fh, ">", $cfile or die "$cfile: $!";
+print $fh "/* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */\n";
+for (<$in>) {
+  print $fh $_;
+  if (m{/\* \@\@for test_HEADER\@@ \*/}) {
+    my $s = $c->struct('_dwg_header_variables');
+    for my $d (@{$s->{declarations}}) {
+      my $type = $d->{type};
+      my $decl = $d->{declarators}->[0];
+      my $name = $decl->{declarator};
+      while ($name =~ /^\*/) {
+        $name =~ s/^\*//;
+        $type .= '*';
+      }
+      $type =~ s/ $//g;
+      my $xname = $name =~ /^3/ ? "_$name" : $name;
+      my $lname = lc $xname;
+      my $var = $lname;
+      my $fmt = exists $FMT{$type} ? $FMT{$type} : undef;
+      if (!$fmt) {
+        if ($type =~ /[ \*]/ or $type eq 'H') {
+          $fmt = '%p';
+        } else {
+          $fmt = "\" FORMAT_$type \"";
+        }
+      }
+      my $is_ptr = ($type =~ /^(struct|Dwg_)/ or
+                  $type =~ /^[23]/ or
+                  $type =~ /\*$/ or
+                  $type =~ /^(BE|CMC|RC\*)/)
+        ? 1 : 0;
+      $type = 'BITCODE_'.$type unless ($type =~ /^(struct|Dwg_)/ or $type =~ /^[a-z]/);
+      if (!$is_ptr) {
+        print $fh <<"EOF";
+  {
+    $type $var;
+    if (dwg_dynapi_header_value(dwg, "$name", &$var, NULL) &&
+        $var == dwg->header_vars.$name)
+      pass ("HEADER.$var [$type]");
+    else
+      {
+        fail ("HEADER.$var [$type] $fmt != $fmt", dwg->header_vars.$name, $var); error++;
+      }
+  }
+EOF
+    } else { # is_ptr
+      print $fh <<"EOF";
+  {
+    $type $var;
+    if (dwg_dynapi_header_value(dwg, "$name", &$var, NULL) &&
+        !memcmp(&$var, &dwg->header_vars.$name, sizeof(dwg->header_vars.$name)))
+      pass ("HEADER.$var [$type]");
+    else
+      {
+        fail ("HEADER.$var [$type]"); error++;
+      }
+  }
+EOF
+      }
+    }
+  }
+  if (m{/\* \@\@for if_test_OBJECT\@\@ \*/}) {
+    for my $name (@entity_names, @object_names) {
+      my $xname = $name =~ /^3/ ? "_$name" : $name; # 3DFACE, 3DSOLID
+      next if $name eq 'DIMENSION_';
+      next if $name eq 'PROXY_LWPOLYLINE';
+      print $fh "  else" if $name ne '3DFACE'; # the first
+      print $fh <<"EOF";
+  if (obj->fixedtype == DWG_TYPE_$xname)
+    error += test_$xname(obj);
+EOF
+    }
+  }
   if (m{/\* \@\@for test_OBJECT\@\@ \*/}) {
     for my $name (@entity_names, @object_names) {
       next if $name eq 'DIMENSION_';
@@ -228,10 +315,18 @@ EOF
 
   for my $var (sort keys %{$ENT{$name}}) {
     my $type = $ENT{$name}->{$var};
-    my $fmt = exists $FMT{$type} ? $FMT{$type} : "FORMAT_$type";
+    my $fmt = exists $FMT{$type} ? $FMT{$type} : undef;
+    if (!$fmt) {
+      if ($type =~ /[ \*]/ or $type eq 'H') {
+        $fmt = '%p';
+      } else {
+        $fmt = "\" FORMAT_$type \"";
+      }
+    }
     my $is_struct = ($type =~ /^(struct|Dwg_)/ or
                      $type =~ /^[23]/ or
-                     $type =~ /^(BE|CMC|RC\*)/)
+                     $type =~ /\*$/ or
+                     $type =~ /^(BE|CMC|BLL)/)
       ? 1 : 0;
     $type = 'BITCODE_'.$type unless ($type =~ /^(struct|Dwg_)/ or $type =~ /^[a-z]/);
     if (!$is_struct) {
@@ -240,10 +335,10 @@ EOF
     $type $var;
     if (dwg_dynapi_entity_value($lname, "$name", "$var", &$var, NULL) &&
         $var == $lname->$var)
-      pass ("$name.$var");
+      pass ("$name.$var [$type]");
     else
       {
-        fail ("$name.$var $fmt != $fmt", $lname->$var, $var); error++;
+        fail ("$name.$var [$type] $fmt != $fmt", $lname->$var, $var); error++;
       }
   }
 EOF
@@ -379,7 +474,7 @@ const Dwg_DYNAPI_field*
 dwg_dynapi_entity_fields(const char* dxfname)
 {
   const char* p = bsearch(dxfname, dwg_name_types,
-                          NUM_NAME_TYPES-1, sizeof(dwg_name_types[0]),
+                          NUM_NAME_TYPES-1, sizeof(dwg_name_types[0]), /* NULL terminated */
                           _name_struct_cmp);
   if (p)
     {
@@ -433,7 +528,7 @@ dwg_dynapi_header_value(const Dwg_Data *restrict dwg, const char *restrict field
 {
   Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)
     bsearch(fieldname, _dwg_header_variables_fields,
-            ARRAY_SIZE(_dwg_header_variables_fields)-1,
+            ARRAY_SIZE(_dwg_header_variables_fields)-1, /* NULL terminated */
             sizeof(_dwg_header_variables_fields[0]), _name_struct_cmp);
   if (f)
     {
