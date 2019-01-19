@@ -12,8 +12,8 @@ decode_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/decode_r2007.lo \
 	$(top_builddir)/src/common.lo \
 	$(top_builddir)/src/print.lo
-dynapi_test_LDADD = $(LDADD) \
-	$(top_builddir)/src/dynapi.lo
+#dynapi_test_LDADD = $(LDADD) \
+#	$(top_builddir)/src/dynapi.lo
 
 paired = \
 	3dsolid \

@@ -84,7 +84,10 @@ sub out_struct {
     my $type = $d->{type};
     my $decl = $d->{declarators}->[0];
     my $name = $decl->{declarator};
-    $name =~ s/^\*//g;
+    while ($name =~ /^\*/) {
+      $name =~ s/^\*//;
+      $type .= '*';
+    }
     # unexpand BITCODE_ macros: e.g. unsigned int -> BITCODE_BL
     my $s = $tmpl;
     $s =~ s/^struct //;
@@ -225,7 +228,7 @@ EOF
 
   for my $var (sort keys %{$ENT{$name}}) {
     my $type = $ENT{$name}->{$var};
-    my $fmt = exists $FMT{$type} ? $FMT{$type} : "%s";
+    my $fmt = exists $FMT{$type} ? $FMT{$type} : "FORMAT_$type";
     my $is_struct = ($type =~ /^(struct|Dwg_)/ or
                      $type =~ /^[23]/ or
                      $type =~ /^(BE|CMC|RC\*)/)
