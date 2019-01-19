@@ -106,9 +106,20 @@ sub out_struct {
     # unexpand BITCODE_ macros: e.g. unsigned int -> BITCODE_BL
     my $bc = exists $h{$ns} ? $h{$ns}{$name} : undef;
     $type = $bc if $bc;
+    $type =~ s/ $//g;
     my $size = $bc ? "sizeof(BITCODE_$type)" : "sizeof($type)";
     # TODO: DIMENSION_COMMON, _3DSOLID_FIELDS macros
-    if ($type =~ /\b(unsigned|char|int|long|double)\b/) {
+    if ($type eq 'unsigned char') {
+      $type = 'RC';
+    } elsif ($type eq 'double') {
+      $type = 'BD';
+    } elsif ($type eq 'char*') {
+      $type = 'TV';
+    } elsif ($type eq 'unsigned short int') {
+      $type = 'BS';
+    } elsif ($type eq 'unsigned int') {
+      $type = 'BL';
+    } elsif ($type =~ /\b(unsigned|char|int|long|double)\b/) {
       warn "unexpanded $type $n.$name\n";
     } elsif ($type =~ /^struct/) {
       $size = "sizeof(void*)";
@@ -150,10 +161,16 @@ for (<DATA>) {
       for (sort keys %{$s->{enumerators}}) {
         my ($k,$v) = ($_, $s->{enumerators}->{$_});
         $k =~ s/^DWG_TYPE_//;
+        $k =~ s/^_3D/3D/;
         if ($tmpl eq 'enum DWG_OBJECT_TYPE') {
           # see if the fields do exist:
           my $fields = exists $structs{$k} ? "_dwg_".$k."_fields" : "NULL";
-            printf $fh "  { \"%s\", %d, %s },\t/* %d */\n",
+          if ($k =~ /^(BODY|REGION)$/) {
+            $fields = "_dwg_3DSOLID_fields";
+          } elsif ($k =~ /^ VERTEX_(MESH|PFACE)$/) {
+            $fields = "_dwg_VERTEX_3D_fields";
+          }
+          printf $fh "  { \"%s\", %d, %s },\t/* %d */\n",
               $k, $v, $fields, $i++;
         } else {
           printf $fh "  { \"%s\", %d },\t/* %d */\n",
@@ -214,9 +231,8 @@ my %FMT = (
     'BD' => '%g',
     'BL' => '%u',
     'BS' => '%d',
-    'RC' => '%d',
+    'RC' => '%c',
     'RC*' => '%s',
-    'RC**' => '%s',
     'BLL' => '%lu',
     );
 
@@ -269,12 +285,19 @@ for (<$in>) {
       }
   }
 EOF
-    } else { # is_ptr
-      print $fh <<"EOF";
+      } else {
+        print $fh <<"EOF";
   {
     $type $var;
-    if (dwg_dynapi_header_value(dwg, "$name", &$var, NULL) &&
-        !memcmp(&$var, &dwg->header_vars.$name, sizeof(dwg->header_vars.$name)))
+    if (dwg_dynapi_header_value(dwg, "$name", &$var, NULL)
+EOF
+        if ($type !~ /\*\*/) {
+          print $fh <<"EOF";
+        && !memcmp(&$var, &dwg->header_vars.$name, sizeof(dwg->header_vars.$name))
+EOF
+        }
+        print $fh <<"EOF";
+       )
       pass ("HEADER.$var [$type]");
     else
       {
@@ -323,31 +346,40 @@ EOF
         $fmt = "\" FORMAT_$type \"";
       }
     }
-    my $is_struct = ($type =~ /^(struct|Dwg_)/ or
-                     $type =~ /^[23]/ or
-                     $type =~ /\*$/ or
-                     $type =~ /^(BE|CMC|BLL)/)
+    my $is_ptr = ($type =~ /^(struct|Dwg_)/ or
+                  $type =~ /^[23]/ or
+                  $type =~ /\*$/ or
+                  $type =~ /^(T|TV|TFF|TU|BE|CMC|BLL)$/)
       ? 1 : 0;
+    my $stype = $type;
     $type = 'BITCODE_'.$type unless ($type =~ /^(struct|Dwg_)/ or $type =~ /^[a-z]/);
-    if (!$is_struct) {
+    if (!$is_ptr) {
       print $fh <<"EOF";
   {
     $type $var;
     if (dwg_dynapi_entity_value($lname, "$name", "$var", &$var, NULL) &&
         $var == $lname->$var)
-      pass ("$name.$var [$type]");
+      pass ("$name.$var [$stype]");
     else
       {
-        fail ("$name.$var [$type] $fmt != $fmt", $lname->$var, $var); error++;
+        fail ("$name.$var [$stype] $fmt != $fmt", $lname->$var, $var); error++;
       }
   }
 EOF
-    } else { # is_struct
+    } else { # is_ptr
       print $fh <<"EOF";
   {
     $type $var;
-    if (dwg_dynapi_entity_value($lname, "$name", "$var", &$var, NULL) &&
-        !memcmp(&$var, &$lname->$var, sizeof($lname->$var)))
+    if (dwg_dynapi_entity_value($lname, "$name", "$var", &$var, NULL)
+EOF
+        if ($stype =~ /^(TV|RC\*|unsigned char\*|char\*)$/) {
+          print $fh "        && !strcmp((char*)&$var, (char*)&$lname->$var))\n";
+        } elsif ($type !~ /\*\*/) {
+          print $fh "        && !memcmp(&$var, &$lname->$var, sizeof($lname->$var)))\n";
+        } else {
+          print $fh ")\n";
+        }
+        print $fh <<"EOF";
       pass ("$name.$var");
     else
       {
