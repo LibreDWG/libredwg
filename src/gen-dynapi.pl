@@ -281,10 +281,10 @@ for (<$in>) {
     $type $var;
     if (dwg_dynapi_header_value(dwg, "$name", &$var, NULL) &&
         $var == dwg->header_vars.$name)
-      pass ("HEADER.$var [$type]");
+      pass ("HEADER.$name [$type]");
     else
       {
-        fail ("HEADER.$var [$type] $fmt != $fmt", dwg->header_vars.$name, $var); error++;
+        fail ("HEADER.$name [$type] $fmt != $fmt", dwg->header_vars.$name, $var); error++;
       }
   }
 EOF
@@ -301,10 +301,10 @@ EOF
         }
         print $fh <<"EOF";
        )
-      pass ("HEADER.$var [$type]");
+      pass ("HEADER.$name [$type]");
     else
       {
-        fail ("HEADER.$var [$type]"); error++;
+        fail ("HEADER.$name [$type]"); error++;
       }
   }
 EOF

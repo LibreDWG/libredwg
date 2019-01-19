@@ -71,13 +71,14 @@ check_PROGRAMS = $(paired) $(unpaired) $(private)
 
 dynapi_test.c: dynapi_test.c.in $(top_srcdir)/include/dwg.h \
 	       $(top_srcdir)/src/gen-dynapi.pl
-	cd $(top_srcdir)/src && $(PERL) gen-dynapi.pl
+	-cd $(top_srcdir)/src && $(PERL) gen-dynapi.pl
 
 # todo: more dwg versions, from test/test-data
 EXTRA_DIST = \
 	example_2000.dwg \
 	vertex.mesh \
 	tests_common.h common.c \
+	dynapi_test.c.in \
 	$(paired:=.exp) \
 	$(private:=.exp)
 
