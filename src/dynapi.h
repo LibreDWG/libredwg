@@ -24,9 +24,12 @@
 
 #ifdef HAVE_STDDEF_H
 #include <stddef.h>
-#define OFF(st,f,def) offsetof(st, f)
-#else
-#define OFF(st,f,def) def
+#define OFF(st,f) offsetof(st, f)
+#else /* cygwin */
+#ifndef offsetof
+#define	offsetof(type, member)	((size_t) &(((type *)0)->member))
+#endif
+#define OFF(st,f) offsetof(st, f)
 #endif
 
 #ifndef _DWG_API_H_

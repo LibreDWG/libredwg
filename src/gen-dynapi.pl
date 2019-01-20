@@ -129,8 +129,8 @@ sub out_struct {
       #$type = $type->{type}; # size.width, size.height
     }
     $ENT{$key}->{$name} = $type;
-    printf $fh "  { \"%s\", \"%s\", %s, OFF(%s,%s, %d) },\n",
-      $name, $type, $size, $tmpl, $name, $decl->{offset};
+    printf $fh "  { \"%s\", \"%s\", %s, OFF(%s,%s) },\n",
+      $name, $type, $size, $tmpl, $name;
   }
   print $fh "  {NULL, NULL, 0},\n";
   print $fh "};\n";
