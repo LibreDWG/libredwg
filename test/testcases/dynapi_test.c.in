@@ -44,68 +44,24 @@ static int test_header (const Dwg_Data *dwg)
   BITCODE_BD bd;
   BITCODE_TV tv;
 
-  /*for (i=0; i<ARRAY_SIZE(_dwg_header_variables_fields)-1; i++) {
-    const Dwg_DYNAPI_field *f = &_dwg_header_variables_fields[0];
-    const char *name = f->name;
-  }*/
-#if 0
-  if (dwg_dynapi_header_value(dwg, "unknown_0", &bd, NULL) &&
-      dwg->header_vars.unknown_0 == bd) {
-    pass ("HEADER.unknown_0");
-  }  else {
-    fail ("HEADER.unknown_0 %g != %g", dwg->header_vars.unknown_0, bd); error++;
-  }
-  if (dwg_dynapi_header_value(dwg, "unknown_text1", &tv, NULL) &&
-      tv && dwg->header_vars.unknown_text1 &&
-      !strcmp(dwg->header_vars.unknown_text1, tv)) {
-    pass ("HEADER.unknown_text1");
-  } else {
-    fail ("HEADER.unknown_0 %s != %s", dwg->header_vars.unknown_text1, tv); error++;
-  }
-#endif
-  /* ... */
-#line 63 "dynapi_test.c"
+#line 48 "dynapi_test.c"
   /* @@for test_HEADER@@ */
-#line 64 "dynapi_test.c.in"
+#line 49 "dynapi_test.c.in"
   return error;
 }
 
-#line 3619 "dynapi_test.c"
+#line 5639 "dynapi_test.c"
 /* @@for test_OBJECT@@ */
 
-#line 71 "dynapi_test.c.in"
-#if 0
-static int test_ARC (const Dwg_Object *obj)
-{
-  int error = 0;
-  BITCODE_BD radius, thickness, start_angle, end_angle;
-  dwg_point_3d center, ext;
-  Dwg_Entity_ARC *arc = obj->tio.entity->tio.ARC;
-
-  if (dwg_dynapi_entity_value(arc, "ARC", "radius", &radius, NULL) &&
-      radius == arc->radius)
-    pass ("ARC.radius");
-  else
-    {
-      fail ("ARC.radius %g != %g", arc->radius, radius); error++;
-    }
-  /* ... */
-  return error;
-}
-#endif
-
+#line 56 "dynapi_test.c.in"
 static int test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
   if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
     return 0;
-#line 27118 "dynapi_test.c"
+#line 41502 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
-#line 99 "dynapi_test.c.in"
-  /*
-  if (obj->fixedtype == DWG_TYPE_ARC)
-    error += test_ARC(obj);
-  */
+#line 64 "dynapi_test.c.in"
   return error;
 }
 

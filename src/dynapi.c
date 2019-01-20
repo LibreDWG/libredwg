@@ -4017,7 +4017,7 @@ dwg_dynapi_entity_field(const char *restrict dxfname, const char *restrict field
 
 /* generic field getters */
 EXPORT bool
-dwg_dynapi_entity_value(void *restrict obj, const char *restrict dxfname,
+dwg_dynapi_entity_value(void *restrict _obj, const char *restrict dxfname,
                         const char *restrict fieldname,
                         void *restrict out, Dwg_DYNAPI_field *restrict fp)
 {
@@ -4026,7 +4026,7 @@ dwg_dynapi_entity_value(void *restrict obj, const char *restrict dxfname,
     {
       if (fp)
         memcpy(fp, f, sizeof(Dwg_DYNAPI_field));
-      memcpy(out, &((char*)obj)[f->offset], f->size);
+      memcpy(out, &((char*)_obj)[f->offset], f->size);
       return true;
     }
   else
@@ -4049,6 +4049,43 @@ dwg_dynapi_header_value(const Dwg_Data *restrict dwg, const char *restrict field
       if (fp)
         memcpy(fp, f, sizeof(Dwg_DYNAPI_field));
       memcpy(out, &((char*)_obj)[f->offset], f->size);
+      return true;
+    }
+  else
+    {
+      return false;
+    }
+}
+
+/* generic field setters */
+EXPORT bool
+dwg_dynapi_entity_set_value(void *restrict _obj, const char *restrict dxfname,
+                            const char *restrict fieldname, void *restrict value)
+{
+  const Dwg_DYNAPI_field* f = dwg_dynapi_entity_field(dxfname, fieldname);
+  if (f)
+    {
+      memcpy(&((char*)_obj)[f->offset], value, f->size);
+      return true;
+    }
+  else
+    {
+      return false;
+    }
+}
+
+EXPORT bool
+dwg_dynapi_header_set_value(const Dwg_Data *restrict dwg, const char *restrict fieldname,
+                            void *restrict value)
+{
+  Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)
+    bsearch(fieldname, _dwg_header_variables_fields,
+            ARRAY_SIZE(_dwg_header_variables_fields)-1, /* NULL terminated */
+            sizeof(_dwg_header_variables_fields[0]), _name_struct_cmp);
+  if (f)
+    {
+      const Dwg_Header_Variables *const _obj = &dwg->header_vars;
+      memcpy(&((char*)_obj)[f->offset], value, f->size);
       return true;
     }
   else
