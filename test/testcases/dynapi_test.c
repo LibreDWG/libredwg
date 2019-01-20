@@ -14735,12 +14735,12 @@ static int test_VERTEX_PFACE_FACE (const Dwg_Object *obj)
   }
   {
     BITCODE_BS vertind[4];
-    if (dwg_dynapi_entity_value(vertex_pface_face, "VERTEX_PFACE_FACE", "vertind[4]", &vertind[4], NULL) &&
-        vertind[4] == vertex_pface_face->vertind[4])
-      pass ("VERTEX_PFACE_FACE.vertind[4] [BS]");
+    if (dwg_dynapi_entity_value(vertex_pface_face, "VERTEX_PFACE_FACE", "vertind[4]", &vertind, NULL)
+        && !memcmp(&vertind, &vertex_pface_face->vertind, sizeof(vertex_pface_face->vertind)))
+      pass ("VERTEX_PFACE_FACE.vertind[4]");
     else
       {
-        fail ("VERTEX_PFACE_FACE.vertind[4] [BS] %d != %d", vertex_pface_face->vertind[4], vertind[4]); error++;
+        fail ("VERTEX_PFACE_FACE.vertind[4]"); error++;
       }
   }
   return error;
@@ -16167,8 +16167,8 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
   }
   {
     BITCODE_3BD workplane[3];
-    if (dwg_dynapi_entity_value(assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "workplane[3]", &workplane[3], NULL)
-        && !memcmp(&workplane[3], &assoc2dconstraintgroup->workplane[3], sizeof(assoc2dconstraintgroup->workplane[3])))
+    if (dwg_dynapi_entity_value(assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "workplane[3]", &workplane, NULL)
+        && !memcmp(&workplane, &assoc2dconstraintgroup->workplane, sizeof(assoc2dconstraintgroup->workplane)))
       pass ("ASSOC2DCONSTRAINTGROUP.workplane[3]");
     else
       {

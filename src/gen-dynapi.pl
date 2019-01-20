@@ -128,9 +128,14 @@ sub out_struct {
       $size = "0";
       #$type = $type->{type}; # size.width, size.height
     }
+    my $sname = $name;
+    if ($name =~ /\[(\d+)\]$/) {
+      $size = "$1*$size";
+      $sname =~ s/\[(\d+)\]$//;
+    }
     $ENT{$key}->{$name} = $type;
     printf $fh "  { \"%s\", \"%s\", %s, OFF(%s,%s) },\n",
-      $name, $type, $size, $tmpl, $name;
+      $name, $type, $size, $tmpl, $sname;
   }
   print $fh "  {NULL, NULL, 0},\n";
   print $fh "};\n";
@@ -261,6 +266,7 @@ for (<$in>) {
       my $xname = $name =~ /^3/ ? "_$name" : $name;
       my $lname = lc $xname;
       my $var = $lname;
+      my $sname = $name;
       my $fmt = exists $FMT{$type} ? $FMT{$type} : undef;
       if (!$fmt) {
         if ($type =~ /[ \*]/ or $type eq 'H') {
@@ -272,8 +278,13 @@ for (<$in>) {
       my $is_ptr = ($type =~ /^(struct|Dwg_)/ or
                   $type =~ /^[23]/ or
                   $type =~ /\*$/ or
+                  $var  =~ /\[\d+\]$/ or
                   $type =~ /^(BE|CMC|RC\*)/)
         ? 1 : 0;
+      if ($var  =~ /\[\d+\]$/) {
+        $lname =~ s/\[\d+\]$//g;
+        $sname =~ s/\[\d+\]$//g;
+      }
       $type = 'BITCODE_'.$type unless ($type =~ /^(struct|Dwg_)/ or $type =~ /^[a-z]/);
       if (!$is_ptr) {
         print $fh <<"EOF";
@@ -284,7 +295,7 @@ for (<$in>) {
       pass ("HEADER.$name [$type]");
     else
       {
-        fail ("HEADER.$name [$type] $fmt != $fmt", dwg->header_vars.$name, $var); error++;
+        fail ("HEADER.$name [$type] $fmt != $fmt", dwg->header_vars.$sname, $var); error++;
       }
   }
 EOF
@@ -292,11 +303,11 @@ EOF
         print $fh <<"EOF";
   {
     $type $var;
-    if (dwg_dynapi_header_value(dwg, "$name", &$var, NULL)
+    if (dwg_dynapi_header_value(dwg, "$name", &$lname, NULL)
 EOF
         if ($type !~ /\*\*/) {
           print $fh <<"EOF";
-        && !memcmp(&$var, &dwg->header_vars.$name, sizeof(dwg->header_vars.$name))
+        && !memcmp(&$lname, &dwg->header_vars.$sname, sizeof(dwg->header_vars.$sname))
 EOF
         }
         print $fh <<"EOF";
@@ -349,23 +360,28 @@ EOF
         $fmt = "\" FORMAT_$type \"";
       }
     }
+    my $svar = $var;
     my $is_ptr = ($type =~ /^(struct|Dwg_)/ or
                   $type =~ /^[23]/ or
                   $type =~ /\*$/ or
+                  $var =~ /\[\d+\]$/ or
                   $type =~ /^(T|TV|TFF|TU|BE|CMC|BLL)$/)
       ? 1 : 0;
+    if ($var  =~ /\[\d+\]$/) {
+      $svar =~ s/\[\d+\]$//g;
+    }
     my $stype = $type;
     $type = 'BITCODE_'.$type unless ($type =~ /^(struct|Dwg_)/ or $type =~ /^[a-z]/);
     if (!$is_ptr) {
       print $fh <<"EOF";
   {
     $type $var;
-    if (dwg_dynapi_entity_value($lname, "$name", "$var", &$var, NULL) &&
-        $var == $lname->$var)
+    if (dwg_dynapi_entity_value($lname, "$name", "$var", &$svar, NULL) &&
+        $var == $lname->$svar)
       pass ("$name.$var [$stype]");
     else
       {
-        fail ("$name.$var [$stype] $fmt != $fmt", $lname->$var, $var); error++;
+        fail ("$name.$var [$stype] $fmt != $fmt", $lname->$svar, $svar); error++;
       }
   }
 EOF
@@ -373,12 +389,12 @@ EOF
       print $fh <<"EOF";
   {
     $type $var;
-    if (dwg_dynapi_entity_value($lname, "$name", "$var", &$var, NULL)
+    if (dwg_dynapi_entity_value($lname, "$name", "$var", &$svar, NULL)
 EOF
         if ($stype =~ /^(TV|RC\*|unsigned char\*|char\*)$/) {
-          print $fh "        && !strcmp((char*)&$var, (char*)&$lname->$var))\n";
+          print $fh "        && !strcmp((char*)&$svar, (char*)&$lname->$svar))\n";
         } elsif ($type !~ /\*\*/) {
-          print $fh "        && !memcmp(&$var, &$lname->$var, sizeof($lname->$var)))\n";
+          print $fh "        && !memcmp(&$svar, &$lname->$svar, sizeof($lname->$svar)))\n";
         } else {
           print $fh ")\n";
         }

@@ -1842,7 +1842,7 @@ const Dwg_DYNAPI_field _dwg_VERTEX_3D_fields[] = {
 /* from typedef struct _dwg_entity_VERTEX_PFACE_FACE: (sorted by offset) */
 const Dwg_DYNAPI_field _dwg_VERTEX_PFACE_FACE_fields[] = {
   { "parent", "struct _dwg_object_entity*", sizeof(void*), OFF(struct _dwg_entity_VERTEX_PFACE_FACE,parent) },
-  { "vertind[4]", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_entity_VERTEX_PFACE_FACE,vertind[4]) },
+  { "vertind[4]", "BS", 4*sizeof(BITCODE_BS), OFF(struct _dwg_entity_VERTEX_PFACE_FACE,vertind) },
   {NULL, NULL, 0},
 };
 /* from typedef struct _dwg_entity_VIEWPORT: (sorted by offset) */
@@ -1996,7 +1996,7 @@ const Dwg_DYNAPI_field _dwg_ASSOC2DCONSTRAINTGROUP_fields[] = {
   { "l4", "BL", sizeof(BITCODE_BL), OFF(struct _dwg_object_ASSOC2DCONSTRAINTGROUP,l4) },
   { "l5", "BL", sizeof(BITCODE_BL), OFF(struct _dwg_object_ASSOC2DCONSTRAINTGROUP,l5) },
   { "b1", "B", sizeof(BITCODE_B), OFF(struct _dwg_object_ASSOC2DCONSTRAINTGROUP,b1) },
-  { "workplane[3]", "3BD", sizeof(BITCODE_3BD), OFF(struct _dwg_object_ASSOC2DCONSTRAINTGROUP,workplane[3]) },
+  { "workplane[3]", "3BD", 3*sizeof(BITCODE_3BD), OFF(struct _dwg_object_ASSOC2DCONSTRAINTGROUP,workplane) },
   { "l6", "BL", sizeof(BITCODE_BL), OFF(struct _dwg_object_ASSOC2DCONSTRAINTGROUP,l6) },
   { "l7", "BL", sizeof(BITCODE_BL), OFF(struct _dwg_object_ASSOC2DCONSTRAINTGROUP,l7) },
   { "l8", "BL", sizeof(BITCODE_BL), OFF(struct _dwg_object_ASSOC2DCONSTRAINTGROUP,l8) },
@@ -3424,7 +3424,7 @@ const Dwg_DYNAPI_field _dwg_DIMASSOC_ref_fields[] = {
 /* from typedef struct _dwg_EVAL_Node: (sorted by offset) */
 const Dwg_DYNAPI_field _dwg_EVAL_Node_fields[] = {
   { "parent", "struct _dwg_object_EVALUATION_GRAPH*", sizeof(void*), OFF(struct _dwg_EVAL_Node,parent) },
-  { "edge[4]", "BL", sizeof(BITCODE_BL), OFF(struct _dwg_EVAL_Node,edge[4]) },
+  { "edge[4]", "BL", 4*sizeof(BITCODE_BL), OFF(struct _dwg_EVAL_Node,edge) },
   {NULL, NULL, 0},
 };
 /* from typedef struct _dwg_FIELD_ChildValue: (sorted by offset) */
