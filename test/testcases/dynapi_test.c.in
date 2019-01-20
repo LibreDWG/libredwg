@@ -25,7 +25,12 @@
 #include "dwg.h"
 #include "dwg_api.h"
 #include "../../src/dynapi.h"
+#include "../../src/common.h"
+CLANG_DIAG_IGNORE(-Wformat-nonliteral)
+CLANG_DIAG_IGNORE(-Wmissing-prototypes)
 #include <dejagnu.h>
+CLANG_DIAG_RESTORE
+CLANG_DIAG_RESTORE
 
 /* for all objects/entities/header_vars:
    compare direct api vs dynapi values
