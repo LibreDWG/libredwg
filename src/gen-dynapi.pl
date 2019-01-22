@@ -329,8 +329,11 @@ EOF
       {
         fail ("HEADER.$name [$stype] set+1 $fmt != $fmt", dwg->header_vars.$sname, $var); error++;
       }
-  }
 EOF
+        if ($type =~ /(int|long|short|char ||double|_B\b|_B[BSLD]\b|_R[CSLD])/) {
+          print $fh "    $var--; dwg_dynapi_header_set_value(dwg, \"$name\", &$var);\n";
+        }
+        print $fh "\n  }\n";
       } else {
         print $fh <<"EOF";
   {
@@ -427,8 +430,11 @@ EOF
       {
         fail ("$name.$var [$stype] set+1 $fmt != $fmt", $lname->$svar, $svar); error++;
       }
-  }
 EOF
+      if ($type =~ /(int|long|short|char ||double|_B\b|_B[BSLD]\b|_R[CSLD])/) {
+        print $fh "    $lname->$svar--;\n";
+      }
+      print $fh "\n  }\n";
     } else { # is_ptr
       print $fh <<"EOF";
   {
@@ -630,6 +636,7 @@ dwg_dynapi_entity_value(void *restrict _obj, const char *restrict name,
         {
           int loglevel;
           if (obj) loglevel = obj->parent->opts & 0xf;
+          else     loglevel = DWG_LOGLEVEL_ERROR;
           LOG_ERROR("%s: Invalid %s field %s", __FUNCTION__, name, fieldname);
           return false;
         }
