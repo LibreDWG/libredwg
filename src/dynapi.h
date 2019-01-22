@@ -39,6 +39,8 @@ typedef struct dwg_field_name_type_offset {
   const char *const type; /* e.g "RS" for BITCODE_RS */
   const int size;         /* e.g. 2 for RS, 4 for BL */
   const int offset;
+  const short need_malloc; // e.g. int or 3RD not, TV yes.
+  const short dxf;
 } Dwg_DYNAPI_field;
 
 EXPORT bool

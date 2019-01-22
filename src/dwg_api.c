@@ -19291,7 +19291,7 @@ dwg_obj_obj_to_object(const dwg_obj_obj *restrict obj,
 
   if (!obj) {
     *error = 1;
-    LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__)
+    //LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__)
     return NULL;
   }
   dwg = obj->dwg;
@@ -19333,7 +19333,7 @@ dwg_obj_generic_to_object(const dwg_obj_generic *restrict obj,
   else
     {
       *error = 1;
-      LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__)
+      //LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__)
       return NULL;
     }
 }

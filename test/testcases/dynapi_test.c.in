@@ -13,7 +13,7 @@
    do not modify */
 /* written by: Reini Urban */
 
-#line 16 "dynapi_test.c.in"
+#line 17 "dynapi_test.c.in"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -59,7 +59,7 @@ static int test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict
   int error = 0;
   if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
     return 0;
-#line 41502 "dynapi_test.c"
+#line 39836 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
 #line 64 "dynapi_test.c.in"
   return error;
