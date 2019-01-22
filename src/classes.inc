@@ -45,78 +45,87 @@
 //#define _DWG_FUNC_N(ACTION,name) dwg_ ## ACTION ## _ ## name
 //#define DWG_FUNC_N(ACTION,name) _DWG_FUNC_N(ACTION,name)
 
-#define STABLE_CLASS(ACTION, name) \
-  if (!strcmp(klass->dxfname, #name)) \
+#define STABLE_CLASS(ACTION, _name) \
+  if (!strcmp(klass->dxfname, #_name)) \
     { \
       if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) { \
-        obj->dxfname = (char*)#name; \
-        obj->fixedtype = DWG_TYPE_##name; \
+        obj->name = (char*) #_name; \
+        obj->dxfname = (char*) #_name; \
+        obj->fixedtype = DWG_TYPE_##_name; \
       } \
-      return DWG_FUNC_N(ACTION,name)(dat, obj); \
+      return DWG_FUNC_N(ACTION,_name)(dat, obj); \
     }
-#define STABLE_CLASS_DXF(ACTION, name, _dxfname) \
+#define STABLE_CLASS_DXF(ACTION, _name, _dxfname) \
   if (!strcmp(klass->dxfname, #_dxfname)) \
     { \
       if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) { \
-        obj->dxfname = (char*)#_dxfname; \
-        obj->fixedtype = DWG_TYPE_##name; \
+        obj->name = (char*) #_name; \
+        obj->dxfname = (char*) #_name; \
+        obj->fixedtype = DWG_TYPE_##_name; \
       } \
-      return DWG_FUNC_N(ACTION,name)(dat, obj); \
+      return DWG_FUNC_N(ACTION,_name)(dat, obj); \
     }
-#define STABLE_CLASS_CPP(ACTION, name, _cppname) \
-  if (!strcmp(klass->cppname, #name)) \
+#define STABLE_CLASS_CPP(ACTION, _name, _cppname) \
+  if (!strcmp(klass->cppname, #_name)) \
     { \
       if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) { \
-        obj->dxfname = (char*)#name; \
-        obj->fixedtype = DWG_TYPE_##name; \
+        obj->name = (char*) #_name; \
+        obj->dxfname = (char*) #_name; \
+        obj->fixedtype = DWG_TYPE_##_name; \
       } \
-      return DWG_FUNC_N(ACTION,name)(dat, obj); \
+      return DWG_FUNC_N(ACTION,_name)(dat, obj); \
     }
-#define UNSTABLE_CLASS(ACTION, name) \
-  if (!strcmp(klass->dxfname, #name)) \
+#define UNSTABLE_CLASS(ACTION, _name) \
+  if (!strcmp(klass->dxfname, #_name)) \
     { \
       WARN_UNSTABLE_CLASS; \
       if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) { \
-        obj->dxfname = (char*)#name; \
-        obj->fixedtype = DWG_TYPE_##name; \
+        obj->name = (char*) #_name; \
+        obj->dxfname = (char*) #_name; \
+        obj->fixedtype = DWG_TYPE_##_name; \
       } \
-      return DWG_FUNC_N(ACTION,name)(dat, obj); \
+      return DWG_FUNC_N(ACTION,_name)(dat, obj); \
     }
-#define UNSTABLE_CLASS_DXF(ACTION, name, _dxfname) \
+#define UNSTABLE_CLASS_DXF(ACTION, _name, _dxfname) \
   if (!strcmp(klass->dxfname, #_dxfname)) \
     { \
       WARN_UNSTABLE_CLASS; \
       if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) { \
-        obj->dxfname = (char*)#_dxfname; \
-        obj->fixedtype = DWG_TYPE_##name; \
+        obj->name = (char*) #_name; \
+        obj->dxfname = (char*) #_dxfname; \
+        obj->fixedtype = DWG_TYPE_##_name; \
       } \
-      return DWG_FUNC_N(ACTION,name)(dat, obj); \
+      return DWG_FUNC_N(ACTION,_name)(dat, obj); \
     }
-#define UNSTABLE_CLASS_CPP(ACTION, name, _cppname) \
+#define UNSTABLE_CLASS_CPP(ACTION, _name, _cppname) \
   if (!strcmp(klass->cppname, #_cppname)) \
     { \
       WARN_UNSTABLE_CLASS; \
       if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) { \
-        obj->dxfname = (char*)#name; \
+        obj->name = (char*) #_name; \
+        obj->dxfname = (char*) #_name; \
+        obj->fixedtype = DWG_TYPE_##_name; \
       } \
-      return DWG_FUNC_N(ACTION,name)(dat, obj); \
+      return DWG_FUNC_N(ACTION,_name)(dat, obj); \
     }
-#define UNHANDLED_CLASS(ACTION, name) \
-  if (!strcmp(klass->dxfname, #name)) \
+#define UNHANDLED_CLASS(ACTION, _name) \
+  if (!strcmp(klass->dxfname, #_name)) \
     { \
       WARN_UNHANDLED_CLASS; \
       if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) { \
-        obj->dxfname = (char*)#name; \
+        obj->name = (char*) #_name; \
+        obj->dxfname = (char*) #_name; \
       } \
-      /* return dwg_##ACTION_##name(dat, obj); */ \
+      /* return dwg_##ACTION_##_name(dat, obj); */ \
       return DWG_ERR_UNHANDLEDCLASS; \
     }
-#define UNHANDLED_CLASS_DXF(ACTION, name, _dxfname) \
+#define UNHANDLED_CLASS_DXF(ACTION, _name, _dxfname) \
   if (!strcmp(klass->dxfname, #_dxfname)) \
     { \
       WARN_UNHANDLED_CLASS; \
       if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) { \
-        obj->dxfname = (char*)#_dxfname; \
+        obj->name = (char*) #_name; \
+        obj->dxfname = (char*) #_dxfname; \
       } \
       /* return dwg_##ACTION_##name(dat, obj); */ \
       return DWG_ERR_UNHANDLEDCLASS; \

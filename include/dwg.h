@@ -5273,6 +5273,8 @@ typedef struct _dwg_object
   unsigned int type;     /*!< fixed or variable (class - 500) */
   BITCODE_RL index;      /*!< into dwg->object[] */
   enum DWG_OBJECT_TYPE fixedtype; /*!< into a global list */
+  char *name;            /*!< our public entity/object name */
+  char *dxfname;         /*!< the internal dxf classname, often with a ACDB prefix */
 
   unsigned long bitsize_address; /* bitsize offset: r13-2007 */
   BITCODE_B  has_strings;        /*!< r2007+ */
@@ -5287,7 +5289,6 @@ typedef struct _dwg_object
     char *unknown; /* i.e. unhandled class as raw bits */
   } tio;
 
-  char *dxfname;
   BITCODE_RL bitsize;   /* common + object fields, but no handles */
   unsigned long hdlpos; /* absolute */
   Dwg_Handle handle;

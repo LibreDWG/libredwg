@@ -3978,23 +3978,23 @@ _name_struct_cmp (const void *restrict key, const void *restrict elem)
 #define NUM_NAME_TYPES  ARRAY_SIZE(dwg_name_types)
 
 EXPORT bool
-is_dwg_entity(const char* dxfname) {
-  return bsearch(dxfname, dwg_entity_names, NUM_ENTITIES, MAXLEN_ENTITIES,
+is_dwg_entity(const char* name) {
+  return bsearch(name, dwg_entity_names, NUM_ENTITIES, MAXLEN_ENTITIES,
                  _name_inl_cmp)
          ? true : false;
 }
 
 EXPORT bool
-is_dwg_object(const char* dxfname) {
-  return bsearch(dxfname, dwg_object_names, NUM_OBJECTS, MAXLEN_OBJECTS,
+is_dwg_object(const char* name) {
+  return bsearch(name, dwg_object_names, NUM_OBJECTS, MAXLEN_OBJECTS,
                  _name_inl_cmp)
          ? true : false;
 }
 
 const Dwg_DYNAPI_field*
-dwg_dynapi_entity_fields(const char* dxfname)
+dwg_dynapi_entity_fields(const char* name)
 {
-  const char* p = bsearch(dxfname, dwg_name_types,
+  const char* p = bsearch(name, dwg_name_types,
                           NUM_NAME_TYPES-1, sizeof(dwg_name_types[0]), /* NULL terminated */
                           _name_struct_cmp);
   if (p)
@@ -4008,9 +4008,9 @@ dwg_dynapi_entity_fields(const char* dxfname)
 }
 
 const Dwg_DYNAPI_field*
-dwg_dynapi_entity_field(const char *restrict dxfname, const char *restrict field)
+dwg_dynapi_entity_field(const char *restrict name, const char *restrict field)
 {
-  const Dwg_DYNAPI_field* fields = dwg_dynapi_entity_fields(dxfname);
+  const Dwg_DYNAPI_field* fields = dwg_dynapi_entity_fields(name);
   if (fields)
     { /* linear search (unsorted) */
       Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)fields;
@@ -4025,7 +4025,7 @@ dwg_dynapi_entity_field(const char *restrict dxfname, const char *restrict field
 
 /* generic field getters */
 EXPORT bool
-dwg_dynapi_entity_value(void *restrict _obj, const char *restrict dxfname,
+dwg_dynapi_entity_value(void *restrict _obj, const char *restrict name,
                         const char *restrict fieldname,
                         void *restrict out, Dwg_DYNAPI_field *restrict fp)
 {
@@ -4035,21 +4035,21 @@ dwg_dynapi_entity_value(void *restrict _obj, const char *restrict dxfname,
     Dwg_Object* obj;
     int error;
     obj = dwg_obj_generic_to_object(_obj, &error);
-    if (obj && strcmp(obj->dxfname, dxfname)) // objid may be 0
+    if (obj && strcmp(obj->name, name)) // objid may be 0
       {
         int loglevel = obj->parent->opts & 0xf;
-        LOG_ERROR("%s: Invalid entity type %s, wanted %s", __FUNCTION__, obj->dxfname, dxfname);
+        LOG_ERROR("%s: Invalid entity type %s, wanted %s", __FUNCTION__, obj->name, name);
         return false;
       }
     {
       const Dwg_DYNAPI_field* f;
-      f = dwg_dynapi_entity_field(dxfname, fieldname);
+      f = dwg_dynapi_entity_field(name, fieldname);
       if (!f)
         {
           int loglevel;
           if (obj) loglevel = obj->parent->opts & 0xf;
           else     loglevel = DWG_LOGLEVEL_ERROR;
-          LOG_ERROR("%s: Invalid %s field %s", __FUNCTION__, dxfname, fieldname);
+          LOG_ERROR("%s: Invalid %s field %s", __FUNCTION__, name, fieldname);
           return false;
         }
       if (fp)
@@ -4088,7 +4088,7 @@ dwg_dynapi_header_value(const Dwg_Data *restrict dwg, const char *restrict field
 
 /* generic field setters */
 EXPORT bool
-dwg_dynapi_entity_set_value(void *restrict _obj, const char *restrict dxfname,
+dwg_dynapi_entity_set_value(void *restrict _obj, const char *restrict name,
                             const char *restrict fieldname, const void *restrict value)
 {
   if (!_obj)
@@ -4097,24 +4097,24 @@ dwg_dynapi_entity_set_value(void *restrict _obj, const char *restrict dxfname,
     Dwg_Object* obj;
     int error;
     obj = dwg_obj_generic_to_object(_obj, &error);
-    if (obj && obj->dxfname != dxfname)
+    if (obj && strcmp(obj->name, name))
       {
         int loglevel = obj->parent->opts & 0xf;
-        LOG_ERROR("%s: Invalid entity type %s, wanted %s", __FUNCTION__, obj->dxfname, dxfname);
+        LOG_ERROR("%s: Invalid entity type %s, wanted %s", __FUNCTION__, obj->name, name);
         return false;
       }
     {
       const Dwg_DYNAPI_field* f;
-      f = dwg_dynapi_entity_field(dxfname, fieldname);
+      f = dwg_dynapi_entity_field(name, fieldname);
       if (!f)
         {
           int loglevel = obj->parent->opts & 0xf;
-          LOG_ERROR("%s: Invalid %s field %s", __FUNCTION__, dxfname, fieldname);
+          LOG_ERROR("%s: Invalid %s field %s", __FUNCTION__, name, fieldname);
           return false;
         }
       //if (f->need_malloc)
       //  which size? if text strcpy. if TU wcscpy. if struct num_fieldname * f->size
-      memcpy(&((char*)_obj)[f->offset], value, f->size);
+       memcpy(&((char*)_obj)[f->offset], value, f->size);
       return true;
     }
   }
