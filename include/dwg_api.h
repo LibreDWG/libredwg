@@ -25,6 +25,41 @@
 #include <stdbool.h>
 #include "dwg.h"
 
+/* Since version 3.2, gcc allows marking deprecated functions.  */
+#if (defined( __GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 302)
+# define __attribute_deprecated__ __attribute__ ((__deprecated__))
+#else
+# define __attribute_deprecated__
+#endif
+
+#if defined(__clang__) && defined(__has_extension)
+# define _clang_has_extension(ext) __has_extension(ext)
+#else
+# define _clang_has_extension(ext) 0
+#endif
+
+/* Since version 4.5, gcc also allows one to specify the message printed
+   when a deprecated function is used.  clang claims to be gcc 4.2, but
+   may also support this feature.  */
+#if (defined( __GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 405) \
+  || _clang_has_extension (attribute_deprecated_with_message)
+# define __attribute_deprecated_msg__(msg) \
+         __attribute__ ((__deprecated__ (msg)))
+#else
+# define __attribute_deprecated_msg__(msg) __attribute_deprecated__
+#endif
+
+/* The __nonnull function attribute marks pointer arguments which
+   must not be NULL.  */
+#if (defined( __GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 303)
+# undef __nonnull
+# define __nonnull(params) __attribute__ ((__nonnull__ params))
+# define HAVE_NONNULL
+#else
+# undef HAVE_NONNULL
+# define __nonnull(params)
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -664,6 +699,11 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL(VBA_PROJECT)
 /// and pre-R13 field variants. unneeded for r13-r2004
 EXPORT void dwg_api_init_version(Dwg_Data *dwg);
 
+#define _deprecated_dynapi_getter \
+  __attribute_deprecated_msg__("use ‘dwg_dynapi_entity_value‘ instead")
+#define _deprecated_dynapi_setter \
+  __attribute_deprecated_msg__("use ‘dwg_dynapi_entity_set_value‘ instead")
+
 /********************************************************************
 *                FUNCTIONS START HERE ENTITY SPECIFIC               *
 ********************************************************************/
@@ -677,43 +717,51 @@ EXPORT void dwg_api_init_version(Dwg_Data *dwg);
 EXPORT void
 dwg_ent_circle_get_center(const dwg_ent_circle *restrict circle,
                           dwg_point_3d *restrict point,
-                          int *restrict error);
+                          int *restrict error)
+  __nonnull ((1, 2, 3)) _deprecated_dynapi_getter;
 
 void
 dwg_ent_circle_set_center(dwg_ent_circle *restrict circle,
                           const dwg_point_3d *restrict point,
-                          int *restrict error);
+                          int *restrict error)
+  __nonnull ((1, 2, 3)) _deprecated_dynapi_setter;
 
 // Get/Set the radius of a circle
 EXPORT double
 dwg_ent_circle_get_radius(const dwg_ent_circle *restrict circle,
-                          int *restrict error);
+                          int *restrict error)
+  __nonnull ((1, 2)) _deprecated_dynapi_getter;
 
 EXPORT void
 dwg_ent_circle_set_radius(dwg_ent_circle *restrict circle,
                           const BITCODE_BD radius,
-                          int *restrict error);
+                          int *restrict error)
+  __nonnull ((1, 3)) _deprecated_dynapi_setter;
 
 // Get/Set the thickness of a circle
 EXPORT double
 dwg_ent_circle_get_thickness(const dwg_ent_circle *restrict circle,
-                          int *restrict error);
+                          int *restrict error)
+  __nonnull ((1, 2)) _deprecated_dynapi_getter;
 
 EXPORT void
 dwg_ent_circle_set_thickness(dwg_ent_circle *restrict circle,
                              const double  thickness,
-                             int *restrict error);
+                             int *restrict error)
+  __nonnull ((1, 3)) _deprecated_dynapi_setter;
 
 // Get/Set the extrusion of a circle
 EXPORT void
 dwg_ent_circle_get_extrusion(const dwg_ent_circle *restrict circle,
                              dwg_point_3d *restrict vector,
-                          int *restrict error);
+                             int *restrict error)
+  __nonnull ((1, 2, 3)) _deprecated_dynapi_getter;
 
 EXPORT void
 dwg_ent_circle_set_extrusion(dwg_ent_circle *restrict circle,
                              const dwg_point_3d *restrict vector,
-                          int *restrict error);
+                             int *restrict error)
+  __nonnull ((1, 2, 3)) _deprecated_dynapi_setter;
 
 
 /********************************************************************
@@ -724,44 +772,52 @@ dwg_ent_circle_set_extrusion(dwg_ent_circle *restrict circle,
 EXPORT void
 dwg_ent_line_get_start_point(const dwg_ent_line *restrict line,
                              dwg_point_3d *restrict point,
-                             int *restrict error);
+                             int *restrict error)
+  __nonnull ((1, 2, 3)) _deprecated_dynapi_getter;
 
 EXPORT void
 dwg_ent_line_set_start_point(dwg_ent_line *restrict line,
                              const dwg_point_3d *restrict point,
-                             int *restrict error);
+                             int *restrict error)
+  __nonnull ((1, 2, 3)) _deprecated_dynapi_setter;
 
 // Get/Set the end point of a line
 EXPORT void
 dwg_ent_line_get_end_point(const dwg_ent_line *restrict line,
                            dwg_point_3d *restrict point,
-                           int *restrict error);
+                           int *restrict error)
+  __nonnull ((1, 2, 3)) _deprecated_dynapi_getter;
 
 EXPORT void
 dwg_ent_line_set_end_point(dwg_ent_line *restrict line,
                            const dwg_point_3d *restrict point,
-                           int *restrict error);
+                           int *restrict error)
+  __nonnull ((1, 2, 3)) _deprecated_dynapi_setter;
 
 // Get/Set the thickness of a line
 EXPORT double
 dwg_ent_line_get_thickness(const dwg_ent_line *restrict line,
-                          int *restrict error);
+                          int *restrict error)
+  __nonnull ((1, 2)) _deprecated_dynapi_getter;
 
 EXPORT void
 dwg_ent_line_set_thickness(dwg_ent_line *restrict line,
                            const BITCODE_BD thickness,
-                          int *restrict error);
+                          int *restrict error)
+  __nonnull ((1, 3)) _deprecated_dynapi_setter;
 
 // Get/Set the extrusion of a line
 EXPORT void
 dwg_ent_line_set_extrusion(dwg_ent_line *restrict line,
                            const dwg_point_3d *restrict vector,
-                           int *restrict error);
+                           int *restrict error)
+  __nonnull ((1, 2, 3)) _deprecated_dynapi_setter;
 
 EXPORT void
 dwg_ent_line_get_extrusion(const dwg_ent_line *restrict line,
                            dwg_point_3d *restrict vector,
-                           int *restrict error);
+                           int *restrict error)
+  __nonnull ((1, 2, 3)) _deprecated_dynapi_getter;
 
 
 /********************************************************************

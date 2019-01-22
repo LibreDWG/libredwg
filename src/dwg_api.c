@@ -442,7 +442,11 @@ dwg_ent_circle_get_center(const dwg_ent_circle *restrict circle,
                           int *restrict error)
 {
   
-  if (circle && dwg_dynapi_entity_value((void*)circle, "CIRCLE", "center", point, NULL))
+  if (
+#ifndef HAVE_NONNULL
+      circle && point &&
+#endif
+      dwg_dynapi_entity_value((void*)circle, "CIRCLE", "center", point, NULL))
     *error = 0;
   else
     {
@@ -463,7 +467,11 @@ dwg_ent_circle_set_center(dwg_ent_circle *restrict circle,
                           const dwg_point_3d *restrict point,
                           int *restrict error)
 {
-  if (circle && dwg_dynapi_entity_set_value(circle, "CIRCLE", "center", point))
+  if (
+#ifndef HAVE_NONNULL
+      circle && point &&
+#endif
+      dwg_dynapi_entity_set_value(circle, "CIRCLE", "center", point))
     *error = 0;
   else
     {
@@ -476,12 +484,15 @@ dwg_ent_circle_set_center(dwg_ent_circle *restrict circle,
 \code Usage: double radius = dwg_ent_circle_get_radius(circle, &error);
 \endcode
 \param[in]  circle  dwg_ent_circle*
-\param[out] error   int*, is set to 0 for ok, 1 on error
+\param[out] error   int*, on gcc<3.3 is set to 0 for ok, 1 on error
 */
 double
 dwg_ent_circle_get_radius(const dwg_ent_circle *restrict circle,
                           int *restrict error)
 {
+#ifdef HAVE_NONNULL
+  return circle->radius;
+#else
   if (circle)
     {
       *error = 0;
@@ -493,6 +504,7 @@ dwg_ent_circle_get_radius(const dwg_ent_circle *restrict circle,
       *error = 1;
       return bit_nan();
     }
+#endif
 }
 
 /** Sets the _dwg_entity_CIRCLE::radius, DXF 40.
@@ -500,13 +512,16 @@ dwg_ent_circle_get_radius(const dwg_ent_circle *restrict circle,
 \endcode
 \param[in,out] circle  dwg_ent_circle*
 \param[in]     radius  double
-\param[out]    error   int*, is set to 0 for ok, 1 on error
+\param[out]    error   int*, on gcc<3.3 is set to 0 for ok, 1 on error
 */
 void
 dwg_ent_circle_set_radius(dwg_ent_circle *restrict circle,
                           const double radius,
                           int *restrict error)
 {
+#ifdef HAVE_NONNULL
+  circle->radius = radius;
+#else
   if (circle)
     {
       *error = 0;
@@ -517,6 +532,7 @@ dwg_ent_circle_set_radius(dwg_ent_circle *restrict circle,
       LOG_ERROR("%s: empty circle", __FUNCTION__)
       *error = 1;
     }
+#endif
 }
 
 /** Returns the_dwg_entity_CIRCLE::thickness, DXF 39 (the cylinder height)
@@ -529,6 +545,9 @@ double
 dwg_ent_circle_get_thickness(const dwg_ent_circle *restrict circle,
                              int *restrict error)
 {
+#ifdef HAVE_NONNULL
+  return circle->thickness;
+#else
   if (circle)
     {
       *error = 0;
@@ -540,6 +559,7 @@ dwg_ent_circle_get_thickness(const dwg_ent_circle *restrict circle,
       *error = 1;
       return bit_nan();
     }
+#endif
 }
 
 /** Sets the_dwg_entity_CIRCLE::thickness, DXF 39 (the cylinder height)
@@ -554,6 +574,9 @@ dwg_ent_circle_set_thickness(dwg_ent_circle *restrict circle,
                              const double thickness,
                              int *restrict error)
 {
+#ifdef HAVE_NONNULL
+  circle->thickness = thickness;
+#else
   if (circle)
     {
       *error = 0;
@@ -564,6 +587,7 @@ dwg_ent_circle_set_thickness(dwg_ent_circle *restrict circle,
       LOG_ERROR("%s: empty circle", __FUNCTION__)
       *error = 1;
     }
+#endif
 }
 
 /** Sets the_dwg_entity_CIRCLE::extrusion vector, DXF 210
@@ -578,16 +602,15 @@ dwg_ent_circle_set_extrusion(dwg_ent_circle *restrict circle,
                              const dwg_point_3d *restrict vector,
                              int *restrict error)
 {
-  if (circle && vector)
-    {
-      *error = 0;
-      circle->extrusion.x = vector->x;
-      circle->extrusion.y = vector->y;
-      circle->extrusion.z = vector->z;
-    }
+  if (
+#ifndef HAVE_NONNULL
+      circle && vector &&
+#endif
+      dwg_dynapi_entity_set_value((void*)circle, "CIRCLE", "extrusion", vector))
+    *error = 0;
   else
     {
-      LOG_ERROR("%s: empty circle", __FUNCTION__)
+      LOG_ERROR("%s: empty vector or circle", __FUNCTION__)
       *error = 1;
     }
 }
@@ -604,16 +627,15 @@ dwg_ent_circle_get_extrusion(const dwg_ent_circle *restrict circle,
                              dwg_point_3d *restrict vector,
                              int *restrict error)
 {
-  if (circle && vector)
-    {
-      *error = 0;
-      vector->x = circle->extrusion.x;
-      vector->y = circle->extrusion.y;
-      vector->z = circle->extrusion.z;
-    }
+  if (
+#ifndef HAVE_NONNULL
+      circle && vector &&
+#endif
+      dwg_dynapi_entity_value((void*)circle, "CIRCLE", "extrusion", vector, NULL))
+    *error = 0;
   else
     {
-      LOG_ERROR("%s: empty circle", __FUNCTION__)
+      LOG_ERROR("%s: empty vector or circle", __FUNCTION__)
       *error = 1;
     }
 }
@@ -634,13 +656,12 @@ dwg_ent_line_get_start_point(const dwg_ent_line *restrict line,
                              dwg_point_3d *restrict point,
                              int *restrict error)
 {
-  if (line)
-    {
+  if (
+#ifndef HAVE_NONNULL
+      line && point &&
+#endif
+      dwg_dynapi_entity_value((void*)line, "LINE", "start", point, NULL))
       *error = 0;
-      point->x = line->start.x;
-      point->y = line->start.y;
-      point->z = line->start.z;
-    }
   else
     {
       LOG_ERROR("%s: empty line", __FUNCTION__)
@@ -660,13 +681,12 @@ dwg_ent_line_set_start_point(dwg_ent_line *restrict line,
                              const dwg_point_3d *restrict point,
                              int *restrict error)
 {
-  if (line)
-    {
-      *error = 0;
-      line->start.x = point->x;
-      line->start.y = point->y;
-      line->start.z = point->z;
-    }
+  if (
+#ifndef HAVE_NONNULL
+      line && point &&
+#endif
+      dwg_dynapi_entity_set_value((void*)line, "LINE", "start", point))
+    *error = 0;
   else
     {
       LOG_ERROR("%s: empty line", __FUNCTION__)
@@ -686,7 +706,13 @@ dwg_ent_line_get_end_point(const dwg_ent_line *restrict line,
                            dwg_point_3d *restrict point,
                            int *restrict error)
 {
-  if (line)
+  if (
+#ifndef HAVE_NONNULL
+      line && point
+#else
+      1
+#endif
+      )
     {
       *error = 0;
       point->x = line->end.x;
@@ -712,7 +738,13 @@ dwg_ent_line_set_end_point(dwg_ent_line *restrict line,
                            const dwg_point_3d *restrict point,
                            int *restrict error)
 {
-  if (line)
+  if (
+#ifndef HAVE_NONNULL
+      line && point
+#else
+      1
+#endif
+      )
     {
       *error = 0;
       line->end.x = point->x;
@@ -736,7 +768,13 @@ double
 dwg_ent_line_get_thickness(const dwg_ent_line *restrict line,
                           int *restrict error)
 {
-  if (line)
+  if (
+#ifndef HAVE_NONNULL
+      line
+#else
+      1
+#endif
+      )
     {
       *error = 0;
       return line->thickness;
@@ -761,7 +799,13 @@ dwg_ent_line_set_thickness(dwg_ent_line *restrict line,
                            const double thickness,
                            int *restrict error)
 {
-  if (line)
+  if (
+#ifndef HAVE_NONNULL
+      line
+#else
+      1
+#endif
+      )
     {
       *error = 0;
       line->thickness = thickness;
@@ -784,7 +828,13 @@ void
 dwg_ent_line_get_extrusion(const dwg_ent_line *restrict line, dwg_point_3d *restrict vector,
                            int *restrict error)
 {
-  if (line && vector)
+  if (
+#ifndef HAVE_NONNULL
+      line && vector
+#else
+      1
+#endif
+      )
     {
       *error = 0;
       vector->x = line->extrusion.x;
@@ -810,7 +860,13 @@ dwg_ent_line_set_extrusion(dwg_ent_line *restrict line,
                           const dwg_point_3d *restrict vector,
                            int *restrict error)
 {
-  if (line && vector)
+  if (
+#ifndef HAVE_NONNULL
+      line && vector
+#else
+      1
+#endif
+      )
     {
       *error = 0;
       line->extrusion.x = vector->x;

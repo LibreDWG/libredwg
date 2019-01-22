@@ -30,7 +30,7 @@ dwg_obj_generic_to_object(const void *restrict obj,
 #endif
 
 static unsigned int loglevel = DWG_LOGLEVEL_ERROR;
- 
+
 #define MAXLEN_ENTITIES 19
 #define MAXLEN_OBJECTS  30
 
@@ -4050,7 +4050,9 @@ dwg_dynapi_entity_value(void *restrict _obj, const char *restrict dxfname,
       f = dwg_dynapi_entity_field(dxfname, fieldname);
       if (!f)
         {
-          loglevel = obj->parent->opts & 0xf;
+          int loglevel;
+          if (obj) loglevel = obj->parent->opts & 0xf;
+          else     loglevel = DWG_LOGLEVEL_ERROR;
           LOG_ERROR("%s: Invalid %s field %s", __FUNCTION__, dxfname, fieldname);
           return false;
         }
