@@ -478,6 +478,16 @@ __DATA__
 #include "dynapi.h"
 #include <string.h>
 #include <stdlib.h>
+#define DWG_LOGLEVEL loglevel
+#include "logging.h"
+
+#ifndef _DWG_API_H_
+Dwg_Object *
+dwg_obj_generic_to_object(const void *restrict obj,
+                          int *restrict error);
+#endif
+
+static unsigned int loglevel = DWG_LOGLEVEL_ERROR;
 
 #define MAXLEN_ENTITIES @@scalar max_entity_names@@
 #define MAXLEN_OBJECTS  @@scalar max_object_names@@
@@ -583,18 +593,35 @@ dwg_dynapi_entity_value(void *restrict _obj, const char *restrict dxfname,
                         const char *restrict fieldname,
                         void *restrict out, Dwg_DYNAPI_field *restrict fp)
 {
-  const Dwg_DYNAPI_field* f = dwg_dynapi_entity_field(dxfname, fieldname);
-  if (f)
+  if (!_obj)
+    return false;
+  {
+    Dwg_Object* obj;
+    int error;
+    obj = dwg_obj_generic_to_object(_obj, &error);
+    if (!obj)
+      return false;
+    else if (strcmp(obj->dxfname, dxfname))
+      {
+        loglevel = obj->parent->opts & 0xf;
+        LOG_ERROR("%s: Invalid entity type %s, wanted %s", __FUNCTION__, obj->dxfname, dxfname);
+        return false;
+      }
     {
+      const Dwg_DYNAPI_field* f;
+      f = dwg_dynapi_entity_field(dxfname, fieldname);
+      if (!f)
+        {
+          loglevel = obj->parent->opts & 0xf;
+          LOG_ERROR("%s: Invalid %s field %s", __FUNCTION__, dxfname, fieldname);
+          return false;
+        }
       if (fp)
         memcpy(fp, f, sizeof(Dwg_DYNAPI_field));
       memcpy(out, &((char*)_obj)[f->offset], f->size);
       return true;
     }
-  else
-    {
-      return false;
-    }
+  }
 }
 
 EXPORT bool
@@ -615,6 +642,8 @@ dwg_dynapi_header_value(const Dwg_Data *restrict dwg, const char *restrict field
     }
   else
     {
+      loglevel = dwg->opts & 0xf;
+      LOG_ERROR("%s: Invalid header field %s", __FUNCTION__, fieldname);
       return false;
     }
 }
@@ -622,23 +651,40 @@ dwg_dynapi_header_value(const Dwg_Data *restrict dwg, const char *restrict field
 /* generic field setters */
 EXPORT bool
 dwg_dynapi_entity_set_value(void *restrict _obj, const char *restrict dxfname,
-                            const char *restrict fieldname, void *restrict value)
+                            const char *restrict fieldname, const void *restrict value)
 {
-  const Dwg_DYNAPI_field* f = dwg_dynapi_entity_field(dxfname, fieldname);
-  if (f)
+  if (!_obj)
+    return false;
+  {
+    Dwg_Object* obj;
+    int error;
+    obj = dwg_obj_generic_to_object(_obj, &error);
+    if (!obj)
+      return false;
+    else if (obj->dxfname != dxfname)
+      {
+        loglevel = obj->parent->opts & 0xf;
+        LOG_ERROR("%s: Invalid entity type %s, wanted %s", __FUNCTION__, obj->dxfname, dxfname);
+        return false;
+      }
     {
+      const Dwg_DYNAPI_field* f;
+      f = dwg_dynapi_entity_field(dxfname, fieldname);
+      if (!f)
+        {
+          loglevel = obj->parent->opts & 0xf;
+          LOG_ERROR("%s: Invalid %s field %s", __FUNCTION__, dxfname, fieldname);
+          return false;
+        }
       memcpy(&((char*)_obj)[f->offset], value, f->size);
       return true;
     }
-  else
-    {
-      return false;
-    }
+  }
 }
 
 EXPORT bool
 dwg_dynapi_header_set_value(const Dwg_Data *restrict dwg, const char *restrict fieldname,
-                            void *restrict value)
+                            const void *restrict value)
 {
   Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)
     bsearch(fieldname, _dwg_header_variables_fields,
@@ -652,6 +698,8 @@ dwg_dynapi_header_set_value(const Dwg_Data *restrict dwg, const char *restrict f
     }
   else
     {
+      loglevel = dwg->opts & 0xf;
+      LOG_ERROR("%s: Invalid header field %s", __FUNCTION__, fieldname);
       return false;
     }
 }
