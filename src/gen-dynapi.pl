@@ -48,19 +48,35 @@ for (sort $c->struct_names) {
 }
 # get BITCODE_ macro types for each struct field
 open my $in, "<", $hdr or die "hdr: $!";
+my $f;
 while (<$in>) {
   if (!$n) {
     if (/^typedef struct (_dwg_.+) \{/) {
       $n = $1;
     } elsif (/^typedef struct (_dwg_\S+)$/) {
       $n = $1;
+    } elsif (/^#define (COMMON_\w+)\((\w+)\)/) {
+      # BUG: Convert::Binary::C cannot seperate H* from H, both are just Dwg_Object_Ref
+      # So we need to parse the defines
+      $n = $1;
+      $f = $2;
+      $h{$n}{reactors} = 'H*'; # has no ;
+    } elsif (/^#define (COMMON_\w+)/) {
+      $n = $1;
+      $h{$n}{seqend}   = 'H'; # has no ;
     }
   } elsif (/^\}/) { # close the struct
     $n = '';
   } elsif ($n and $_ =~ /^ +BITCODE_([\w\*]+)\s+(\w.*);/) {
     my $type = $1;
+    my $v = $2;
     $type =~ s/\s+$//;
-    $h{$n}{$2} = $type;
+    if ($n eq 'COMMON_TABLE_CONTROL_FIELDS' && $v eq 'entries') {
+      for (qw(block_headers layers styles linetypes views ucs vports apps dimstyles vport_entity_headers)) {
+        $h{$n}{$_} = 'H*';
+      }
+    }
+    $h{$n}{$v} = $type;
   }
 }
 #$h{Dwg_Bitcode_3BD} = '3BD';
@@ -106,6 +122,11 @@ sub out_struct {
     }
     # unexpand BITCODE_ macros: e.g. unsigned int -> BITCODE_BL
     my $bc = exists $h{$ns} ? $h{$ns}{$name} : undef;
+    if (!$bc && $ns =~ /_CONTROL$/) {
+      $bc = $h{COMMON_TABLE_CONTROL_FIELDS}{$name};
+    } elsif (!$bc && $ns =~ /_entity_POLYLINE_/) {
+      $bc = $h{COMMON_ENTITY_POLYLINE}{$name};
+    }
     $type = $bc if $bc;
     $type =~ s/\s+$//;
     my $size = $bc ? "sizeof(BITCODE_$type)" : "sizeof($type)";
@@ -130,6 +151,8 @@ sub out_struct {
       $type = 'BL*';
     } elsif ($type eq 'Dwg_Object_Ref*') {
       $type = 'H';
+    } elsif ($type eq 'Dwg_Object_Ref**') {
+      $type = 'H*';
     } elsif ($type =~ /\b(unsigned|char|int|long|double)\b/) {
       warn "unexpanded $type $n.$name\n";
     } elsif ($type =~ /^struct/) {

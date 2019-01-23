@@ -1388,11 +1388,11 @@ const Dwg_DYNAPI_field _dwg_POINT_fields[] = {
 /* from typedef struct _dwg_entity_POLYLINE_2D: (sorted by offset) */
 const Dwg_DYNAPI_field _dwg_POLYLINE_2D_fields[] = {
   { "parent", "struct _dwg_object_entity*", sizeof(void*), OFF(struct _dwg_entity_POLYLINE_2D,parent), 1,1,0, /*DXF:*/ 0 },
-  { "num_owned", "BL", sizeof(unsigned int), OFF(struct _dwg_entity_POLYLINE_2D,num_owned), 0,0,0, /*DXF:*/ 0 },
-  { "first_vertex", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_entity_POLYLINE_2D,first_vertex), 1,0,0, /*DXF:*/ 0 },
-  { "last_vertex", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_entity_POLYLINE_2D,last_vertex), 1,0,0, /*DXF:*/ 0 },
-  { "vertex", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_entity_POLYLINE_2D,vertex), 1,0,0, /*DXF:*/ 0 },
-  { "seqend", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_entity_POLYLINE_2D,seqend), 1,0,0, /*DXF:*/ 0 },
+  { "num_owned", "BL", sizeof(BITCODE_BL), OFF(struct _dwg_entity_POLYLINE_2D,num_owned), 0,0,0, /*DXF:*/ 0 },
+  { "first_vertex", "H", sizeof(BITCODE_H), OFF(struct _dwg_entity_POLYLINE_2D,first_vertex), 1,0,0, /*DXF:*/ 0 },
+  { "last_vertex", "H", sizeof(BITCODE_H), OFF(struct _dwg_entity_POLYLINE_2D,last_vertex), 1,0,0, /*DXF:*/ 0 },
+  { "vertex", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_entity_POLYLINE_2D,vertex), 1,1,0, /*DXF:*/ 0 },
+  { "seqend", "H", sizeof(BITCODE_H), OFF(struct _dwg_entity_POLYLINE_2D,seqend), 1,0,0, /*DXF:*/ 0 },
   { "flag", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_entity_POLYLINE_2D,flag), 0,0,0, /*DXF:*/ 0 },
   { "curve_type", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_entity_POLYLINE_2D,curve_type), 0,0,0, /*DXF:*/ 0 },
   { "start_width", "BD", sizeof(BITCODE_BD), OFF(struct _dwg_entity_POLYLINE_2D,start_width), 0,0,0, /*DXF:*/ 0 },
@@ -1405,11 +1405,11 @@ const Dwg_DYNAPI_field _dwg_POLYLINE_2D_fields[] = {
 /* from typedef struct _dwg_entity_POLYLINE_3D: (sorted by offset) */
 const Dwg_DYNAPI_field _dwg_POLYLINE_3D_fields[] = {
   { "parent", "struct _dwg_object_entity*", sizeof(void*), OFF(struct _dwg_entity_POLYLINE_3D,parent), 1,1,0, /*DXF:*/ 0 },
-  { "num_owned", "BL", sizeof(unsigned int), OFF(struct _dwg_entity_POLYLINE_3D,num_owned), 0,0,0, /*DXF:*/ 0 },
-  { "first_vertex", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_entity_POLYLINE_3D,first_vertex), 1,0,0, /*DXF:*/ 0 },
-  { "last_vertex", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_entity_POLYLINE_3D,last_vertex), 1,0,0, /*DXF:*/ 0 },
-  { "vertex", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_entity_POLYLINE_3D,vertex), 1,0,0, /*DXF:*/ 0 },
-  { "seqend", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_entity_POLYLINE_3D,seqend), 1,0,0, /*DXF:*/ 0 },
+  { "num_owned", "BL", sizeof(BITCODE_BL), OFF(struct _dwg_entity_POLYLINE_3D,num_owned), 0,0,0, /*DXF:*/ 0 },
+  { "first_vertex", "H", sizeof(BITCODE_H), OFF(struct _dwg_entity_POLYLINE_3D,first_vertex), 1,0,0, /*DXF:*/ 0 },
+  { "last_vertex", "H", sizeof(BITCODE_H), OFF(struct _dwg_entity_POLYLINE_3D,last_vertex), 1,0,0, /*DXF:*/ 0 },
+  { "vertex", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_entity_POLYLINE_3D,vertex), 1,1,0, /*DXF:*/ 0 },
+  { "seqend", "H", sizeof(BITCODE_H), OFF(struct _dwg_entity_POLYLINE_3D,seqend), 1,0,0, /*DXF:*/ 0 },
   { "curve_type", "RC", sizeof(BITCODE_RC), OFF(struct _dwg_entity_POLYLINE_3D,curve_type), 0,0,0, /*DXF:*/ 0 },
   { "flag", "RC", sizeof(BITCODE_RC), OFF(struct _dwg_entity_POLYLINE_3D,flag), 0,0,0, /*DXF:*/ 0 },
   {NULL, NULL, 0, 0,0,0,0,0},
@@ -1417,11 +1417,11 @@ const Dwg_DYNAPI_field _dwg_POLYLINE_3D_fields[] = {
 /* from typedef struct _dwg_entity_POLYLINE_MESH: (sorted by offset) */
 const Dwg_DYNAPI_field _dwg_POLYLINE_MESH_fields[] = {
   { "parent", "struct _dwg_object_entity*", sizeof(void*), OFF(struct _dwg_entity_POLYLINE_MESH,parent), 1,1,0, /*DXF:*/ 0 },
-  { "num_owned", "BL", sizeof(unsigned int), OFF(struct _dwg_entity_POLYLINE_MESH,num_owned), 0,0,0, /*DXF:*/ 0 },
-  { "first_vertex", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_entity_POLYLINE_MESH,first_vertex), 1,0,0, /*DXF:*/ 0 },
-  { "last_vertex", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_entity_POLYLINE_MESH,last_vertex), 1,0,0, /*DXF:*/ 0 },
-  { "vertex", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_entity_POLYLINE_MESH,vertex), 1,0,0, /*DXF:*/ 0 },
-  { "seqend", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_entity_POLYLINE_MESH,seqend), 1,0,0, /*DXF:*/ 0 },
+  { "num_owned", "BL", sizeof(BITCODE_BL), OFF(struct _dwg_entity_POLYLINE_MESH,num_owned), 0,0,0, /*DXF:*/ 0 },
+  { "first_vertex", "H", sizeof(BITCODE_H), OFF(struct _dwg_entity_POLYLINE_MESH,first_vertex), 1,0,0, /*DXF:*/ 0 },
+  { "last_vertex", "H", sizeof(BITCODE_H), OFF(struct _dwg_entity_POLYLINE_MESH,last_vertex), 1,0,0, /*DXF:*/ 0 },
+  { "vertex", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_entity_POLYLINE_MESH,vertex), 1,1,0, /*DXF:*/ 0 },
+  { "seqend", "H", sizeof(BITCODE_H), OFF(struct _dwg_entity_POLYLINE_MESH,seqend), 1,0,0, /*DXF:*/ 0 },
   { "flag", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_entity_POLYLINE_MESH,flag), 0,0,0, /*DXF:*/ 0 },
   { "curve_type", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_entity_POLYLINE_MESH,curve_type), 0,0,0, /*DXF:*/ 0 },
   { "num_m_verts", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_entity_POLYLINE_MESH,num_m_verts), 0,0,0, /*DXF:*/ 0 },
@@ -1433,11 +1433,11 @@ const Dwg_DYNAPI_field _dwg_POLYLINE_MESH_fields[] = {
 /* from typedef struct _dwg_entity_POLYLINE_PFACE: (sorted by offset) */
 const Dwg_DYNAPI_field _dwg_POLYLINE_PFACE_fields[] = {
   { "parent", "struct _dwg_object_entity*", sizeof(void*), OFF(struct _dwg_entity_POLYLINE_PFACE,parent), 1,1,0, /*DXF:*/ 0 },
-  { "num_owned", "BL", sizeof(unsigned int), OFF(struct _dwg_entity_POLYLINE_PFACE,num_owned), 0,0,0, /*DXF:*/ 0 },
-  { "first_vertex", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_entity_POLYLINE_PFACE,first_vertex), 1,0,0, /*DXF:*/ 0 },
-  { "last_vertex", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_entity_POLYLINE_PFACE,last_vertex), 1,0,0, /*DXF:*/ 0 },
-  { "vertex", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_entity_POLYLINE_PFACE,vertex), 1,0,0, /*DXF:*/ 0 },
-  { "seqend", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_entity_POLYLINE_PFACE,seqend), 1,0,0, /*DXF:*/ 0 },
+  { "num_owned", "BL", sizeof(BITCODE_BL), OFF(struct _dwg_entity_POLYLINE_PFACE,num_owned), 0,0,0, /*DXF:*/ 0 },
+  { "first_vertex", "H", sizeof(BITCODE_H), OFF(struct _dwg_entity_POLYLINE_PFACE,first_vertex), 1,0,0, /*DXF:*/ 0 },
+  { "last_vertex", "H", sizeof(BITCODE_H), OFF(struct _dwg_entity_POLYLINE_PFACE,last_vertex), 1,0,0, /*DXF:*/ 0 },
+  { "vertex", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_entity_POLYLINE_PFACE,vertex), 1,1,0, /*DXF:*/ 0 },
+  { "seqend", "H", sizeof(BITCODE_H), OFF(struct _dwg_entity_POLYLINE_PFACE,seqend), 1,0,0, /*DXF:*/ 0 },
   { "numverts", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_entity_POLYLINE_PFACE,numverts), 0,0,0, /*DXF:*/ 0 },
   { "numfaces", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_entity_POLYLINE_PFACE,numfaces), 0,0,0, /*DXF:*/ 0 },
   {NULL, NULL, 0, 0,0,0,0,0},
@@ -1989,12 +1989,12 @@ const Dwg_DYNAPI_field _dwg_APPID_fields[] = {
 /* from typedef struct _dwg_object_APPID_CONTROL: (sorted by offset) */
 const Dwg_DYNAPI_field _dwg_APPID_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object*", sizeof(void*), OFF(struct _dwg_object_APPID_CONTROL,parent), 1,1,0, /*DXF:*/ 0 },
-  { "num_entries", "BS", sizeof(unsigned short int), OFF(struct _dwg_object_APPID_CONTROL,num_entries), 0,0,0, /*DXF:*/ 0 },
-  { "null_handle", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_APPID_CONTROL,null_handle), 1,0,0, /*DXF:*/ 0 },
-  { "xdicobjhandle", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_APPID_CONTROL,xdicobjhandle), 1,0,0, /*DXF:*/ 0 },
-  { "apps", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_APPID_CONTROL,apps), 1,0,0, /*DXF:*/ 0 },
-  { "objid", "BL", sizeof(unsigned int), OFF(struct _dwg_object_APPID_CONTROL,objid), 0,0,0, /*DXF:*/ 0 },
-  { "reactors", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_APPID_CONTROL,reactors), 1,0,0, /*DXF:*/ 0 },
+  { "num_entries", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_object_APPID_CONTROL,num_entries), 0,0,0, /*DXF:*/ 0 },
+  { "null_handle", "H", sizeof(BITCODE_H), OFF(struct _dwg_object_APPID_CONTROL,null_handle), 1,0,0, /*DXF:*/ 0 },
+  { "xdicobjhandle", "H", sizeof(BITCODE_H), OFF(struct _dwg_object_APPID_CONTROL,xdicobjhandle), 1,0,0, /*DXF:*/ 0 },
+  { "apps", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_object_APPID_CONTROL,apps), 1,1,0, /*DXF:*/ 0 },
+  { "objid", "BL", sizeof(BITCODE_BL), OFF(struct _dwg_object_APPID_CONTROL,objid), 0,0,0, /*DXF:*/ 0 },
+  { "reactors", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_object_APPID_CONTROL,reactors), 1,1,0, /*DXF:*/ 0 },
   {NULL, NULL, 0, 0,0,0,0,0},
 };
 /* from typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP: (sorted by offset) */
@@ -2174,12 +2174,12 @@ const Dwg_DYNAPI_field _dwg_ASSOCPLANESURFACEACTIONBODY_fields[] = {
 /* from typedef struct _dwg_object_BLOCK_CONTROL: (sorted by offset) */
 const Dwg_DYNAPI_field _dwg_BLOCK_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object*", sizeof(void*), OFF(struct _dwg_object_BLOCK_CONTROL,parent), 1,1,0, /*DXF:*/ 0 },
-  { "num_entries", "BS", sizeof(unsigned short int), OFF(struct _dwg_object_BLOCK_CONTROL,num_entries), 0,0,0, /*DXF:*/ 0 },
-  { "null_handle", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_BLOCK_CONTROL,null_handle), 1,0,0, /*DXF:*/ 0 },
-  { "xdicobjhandle", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_BLOCK_CONTROL,xdicobjhandle), 1,0,0, /*DXF:*/ 0 },
-  { "block_headers", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_BLOCK_CONTROL,block_headers), 1,0,0, /*DXF:*/ 0 },
-  { "objid", "BL", sizeof(unsigned int), OFF(struct _dwg_object_BLOCK_CONTROL,objid), 0,0,0, /*DXF:*/ 0 },
-  { "reactors", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_BLOCK_CONTROL,reactors), 1,0,0, /*DXF:*/ 0 },
+  { "num_entries", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_object_BLOCK_CONTROL,num_entries), 0,0,0, /*DXF:*/ 0 },
+  { "null_handle", "H", sizeof(BITCODE_H), OFF(struct _dwg_object_BLOCK_CONTROL,null_handle), 1,0,0, /*DXF:*/ 0 },
+  { "xdicobjhandle", "H", sizeof(BITCODE_H), OFF(struct _dwg_object_BLOCK_CONTROL,xdicobjhandle), 1,0,0, /*DXF:*/ 0 },
+  { "block_headers", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_object_BLOCK_CONTROL,block_headers), 1,1,0, /*DXF:*/ 0 },
+  { "objid", "BL", sizeof(BITCODE_BL), OFF(struct _dwg_object_BLOCK_CONTROL,objid), 0,0,0, /*DXF:*/ 0 },
+  { "reactors", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_object_BLOCK_CONTROL,reactors), 1,1,0, /*DXF:*/ 0 },
   { "model_space", "H", sizeof(BITCODE_H), OFF(struct _dwg_object_BLOCK_CONTROL,model_space), 1,0,0, /*DXF:*/ 0 },
   { "paper_space", "H", sizeof(BITCODE_H), OFF(struct _dwg_object_BLOCK_CONTROL,paper_space), 1,0,0, /*DXF:*/ 0 },
   {NULL, NULL, 0, 0,0,0,0,0},
@@ -2398,12 +2398,12 @@ const Dwg_DYNAPI_field _dwg_DIMSTYLE_fields[] = {
 /* from typedef struct _dwg_object_DIMSTYLE_CONTROL: (sorted by offset) */
 const Dwg_DYNAPI_field _dwg_DIMSTYLE_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object*", sizeof(void*), OFF(struct _dwg_object_DIMSTYLE_CONTROL,parent), 1,1,0, /*DXF:*/ 0 },
-  { "num_entries", "BS", sizeof(unsigned short int), OFF(struct _dwg_object_DIMSTYLE_CONTROL,num_entries), 0,0,0, /*DXF:*/ 0 },
-  { "null_handle", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_DIMSTYLE_CONTROL,null_handle), 1,0,0, /*DXF:*/ 0 },
-  { "xdicobjhandle", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_DIMSTYLE_CONTROL,xdicobjhandle), 1,0,0, /*DXF:*/ 0 },
-  { "dimstyles", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_DIMSTYLE_CONTROL,dimstyles), 1,0,0, /*DXF:*/ 0 },
-  { "objid", "BL", sizeof(unsigned int), OFF(struct _dwg_object_DIMSTYLE_CONTROL,objid), 0,0,0, /*DXF:*/ 0 },
-  { "reactors", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_DIMSTYLE_CONTROL,reactors), 1,0,0, /*DXF:*/ 0 },
+  { "num_entries", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_object_DIMSTYLE_CONTROL,num_entries), 0,0,0, /*DXF:*/ 0 },
+  { "null_handle", "H", sizeof(BITCODE_H), OFF(struct _dwg_object_DIMSTYLE_CONTROL,null_handle), 1,0,0, /*DXF:*/ 0 },
+  { "xdicobjhandle", "H", sizeof(BITCODE_H), OFF(struct _dwg_object_DIMSTYLE_CONTROL,xdicobjhandle), 1,0,0, /*DXF:*/ 0 },
+  { "dimstyles", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_object_DIMSTYLE_CONTROL,dimstyles), 1,1,0, /*DXF:*/ 0 },
+  { "objid", "BL", sizeof(BITCODE_BL), OFF(struct _dwg_object_DIMSTYLE_CONTROL,objid), 0,0,0, /*DXF:*/ 0 },
+  { "reactors", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_object_DIMSTYLE_CONTROL,reactors), 1,1,0, /*DXF:*/ 0 },
   { "num_morehandles", "RC", sizeof(BITCODE_RC), OFF(struct _dwg_object_DIMSTYLE_CONTROL,num_morehandles), 0,0,0, /*DXF:*/ 0 },
   { "morehandles", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_object_DIMSTYLE_CONTROL,morehandles), 1,1,0, /*DXF:*/ 0 },
   {NULL, NULL, 0, 0,0,0,0,0},
@@ -2574,12 +2574,12 @@ const Dwg_DYNAPI_field _dwg_LAYER_fields[] = {
 /* from typedef struct _dwg_object_LAYER_CONTROL: (sorted by offset) */
 const Dwg_DYNAPI_field _dwg_LAYER_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object*", sizeof(void*), OFF(struct _dwg_object_LAYER_CONTROL,parent), 1,1,0, /*DXF:*/ 0 },
-  { "num_entries", "BS", sizeof(unsigned short int), OFF(struct _dwg_object_LAYER_CONTROL,num_entries), 0,0,0, /*DXF:*/ 0 },
-  { "null_handle", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_LAYER_CONTROL,null_handle), 1,0,0, /*DXF:*/ 0 },
-  { "xdicobjhandle", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_LAYER_CONTROL,xdicobjhandle), 1,0,0, /*DXF:*/ 0 },
-  { "layers", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_LAYER_CONTROL,layers), 1,0,0, /*DXF:*/ 0 },
-  { "objid", "BL", sizeof(unsigned int), OFF(struct _dwg_object_LAYER_CONTROL,objid), 0,0,0, /*DXF:*/ 0 },
-  { "reactors", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_LAYER_CONTROL,reactors), 1,0,0, /*DXF:*/ 0 },
+  { "num_entries", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_object_LAYER_CONTROL,num_entries), 0,0,0, /*DXF:*/ 0 },
+  { "null_handle", "H", sizeof(BITCODE_H), OFF(struct _dwg_object_LAYER_CONTROL,null_handle), 1,0,0, /*DXF:*/ 0 },
+  { "xdicobjhandle", "H", sizeof(BITCODE_H), OFF(struct _dwg_object_LAYER_CONTROL,xdicobjhandle), 1,0,0, /*DXF:*/ 0 },
+  { "layers", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_object_LAYER_CONTROL,layers), 1,1,0, /*DXF:*/ 0 },
+  { "objid", "BL", sizeof(BITCODE_BL), OFF(struct _dwg_object_LAYER_CONTROL,objid), 0,0,0, /*DXF:*/ 0 },
+  { "reactors", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_object_LAYER_CONTROL,reactors), 1,1,0, /*DXF:*/ 0 },
   {NULL, NULL, 0, 0,0,0,0,0},
 };
 /* from typedef struct _dwg_object_LAYER_INDEX: (sorted by offset) */
@@ -2686,12 +2686,12 @@ const Dwg_DYNAPI_field _dwg_LTYPE_fields[] = {
 /* from typedef struct _dwg_object_LTYPE_CONTROL: (sorted by offset) */
 const Dwg_DYNAPI_field _dwg_LTYPE_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object*", sizeof(void*), OFF(struct _dwg_object_LTYPE_CONTROL,parent), 1,1,0, /*DXF:*/ 0 },
-  { "num_entries", "BS", sizeof(unsigned short int), OFF(struct _dwg_object_LTYPE_CONTROL,num_entries), 0,0,0, /*DXF:*/ 0 },
-  { "null_handle", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_LTYPE_CONTROL,null_handle), 1,0,0, /*DXF:*/ 0 },
-  { "xdicobjhandle", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_LTYPE_CONTROL,xdicobjhandle), 1,0,0, /*DXF:*/ 0 },
-  { "linetypes", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_LTYPE_CONTROL,linetypes), 1,0,0, /*DXF:*/ 0 },
-  { "objid", "BL", sizeof(unsigned int), OFF(struct _dwg_object_LTYPE_CONTROL,objid), 0,0,0, /*DXF:*/ 0 },
-  { "reactors", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_LTYPE_CONTROL,reactors), 1,0,0, /*DXF:*/ 0 },
+  { "num_entries", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_object_LTYPE_CONTROL,num_entries), 0,0,0, /*DXF:*/ 0 },
+  { "null_handle", "H", sizeof(BITCODE_H), OFF(struct _dwg_object_LTYPE_CONTROL,null_handle), 1,0,0, /*DXF:*/ 0 },
+  { "xdicobjhandle", "H", sizeof(BITCODE_H), OFF(struct _dwg_object_LTYPE_CONTROL,xdicobjhandle), 1,0,0, /*DXF:*/ 0 },
+  { "linetypes", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_object_LTYPE_CONTROL,linetypes), 1,1,0, /*DXF:*/ 0 },
+  { "objid", "BL", sizeof(BITCODE_BL), OFF(struct _dwg_object_LTYPE_CONTROL,objid), 0,0,0, /*DXF:*/ 0 },
+  { "reactors", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_object_LTYPE_CONTROL,reactors), 1,1,0, /*DXF:*/ 0 },
   { "bylayer", "H", sizeof(BITCODE_H), OFF(struct _dwg_object_LTYPE_CONTROL,bylayer), 1,0,0, /*DXF:*/ 0 },
   { "byblock", "H", sizeof(BITCODE_H), OFF(struct _dwg_object_LTYPE_CONTROL,byblock), 1,0,0, /*DXF:*/ 0 },
   {NULL, NULL, 0, 0,0,0,0,0},
@@ -3015,12 +3015,12 @@ const Dwg_DYNAPI_field _dwg_STYLE_fields[] = {
 /* from typedef struct _dwg_object_STYLE_CONTROL: (sorted by offset) */
 const Dwg_DYNAPI_field _dwg_STYLE_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object*", sizeof(void*), OFF(struct _dwg_object_STYLE_CONTROL,parent), 1,1,0, /*DXF:*/ 0 },
-  { "num_entries", "BS", sizeof(unsigned short int), OFF(struct _dwg_object_STYLE_CONTROL,num_entries), 0,0,0, /*DXF:*/ 0 },
-  { "null_handle", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_STYLE_CONTROL,null_handle), 1,0,0, /*DXF:*/ 0 },
-  { "xdicobjhandle", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_STYLE_CONTROL,xdicobjhandle), 1,0,0, /*DXF:*/ 0 },
-  { "styles", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_STYLE_CONTROL,styles), 1,0,0, /*DXF:*/ 0 },
-  { "objid", "BL", sizeof(unsigned int), OFF(struct _dwg_object_STYLE_CONTROL,objid), 0,0,0, /*DXF:*/ 0 },
-  { "reactors", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_STYLE_CONTROL,reactors), 1,0,0, /*DXF:*/ 0 },
+  { "num_entries", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_object_STYLE_CONTROL,num_entries), 0,0,0, /*DXF:*/ 0 },
+  { "null_handle", "H", sizeof(BITCODE_H), OFF(struct _dwg_object_STYLE_CONTROL,null_handle), 1,0,0, /*DXF:*/ 0 },
+  { "xdicobjhandle", "H", sizeof(BITCODE_H), OFF(struct _dwg_object_STYLE_CONTROL,xdicobjhandle), 1,0,0, /*DXF:*/ 0 },
+  { "styles", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_object_STYLE_CONTROL,styles), 1,1,0, /*DXF:*/ 0 },
+  { "objid", "BL", sizeof(BITCODE_BL), OFF(struct _dwg_object_STYLE_CONTROL,objid), 0,0,0, /*DXF:*/ 0 },
+  { "reactors", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_object_STYLE_CONTROL,reactors), 1,1,0, /*DXF:*/ 0 },
   {NULL, NULL, 0, 0,0,0,0,0},
 };
 /* from typedef struct _dwg_object_SUN: (sorted by offset) */
@@ -3132,12 +3132,12 @@ const Dwg_DYNAPI_field _dwg_UCS_fields[] = {
 /* from typedef struct _dwg_object_UCS_CONTROL: (sorted by offset) */
 const Dwg_DYNAPI_field _dwg_UCS_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object*", sizeof(void*), OFF(struct _dwg_object_UCS_CONTROL,parent), 1,1,0, /*DXF:*/ 0 },
-  { "num_entries", "BS", sizeof(unsigned short int), OFF(struct _dwg_object_UCS_CONTROL,num_entries), 0,0,0, /*DXF:*/ 0 },
-  { "null_handle", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_UCS_CONTROL,null_handle), 1,0,0, /*DXF:*/ 0 },
-  { "xdicobjhandle", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_UCS_CONTROL,xdicobjhandle), 1,0,0, /*DXF:*/ 0 },
-  { "ucs", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_UCS_CONTROL,ucs), 1,0,0, /*DXF:*/ 0 },
-  { "objid", "BL", sizeof(unsigned int), OFF(struct _dwg_object_UCS_CONTROL,objid), 0,0,0, /*DXF:*/ 0 },
-  { "reactors", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_UCS_CONTROL,reactors), 1,0,0, /*DXF:*/ 0 },
+  { "num_entries", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_object_UCS_CONTROL,num_entries), 0,0,0, /*DXF:*/ 0 },
+  { "null_handle", "H", sizeof(BITCODE_H), OFF(struct _dwg_object_UCS_CONTROL,null_handle), 1,0,0, /*DXF:*/ 0 },
+  { "xdicobjhandle", "H", sizeof(BITCODE_H), OFF(struct _dwg_object_UCS_CONTROL,xdicobjhandle), 1,0,0, /*DXF:*/ 0 },
+  { "ucs", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_object_UCS_CONTROL,ucs), 1,1,0, /*DXF:*/ 0 },
+  { "objid", "BL", sizeof(BITCODE_BL), OFF(struct _dwg_object_UCS_CONTROL,objid), 0,0,0, /*DXF:*/ 0 },
+  { "reactors", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_object_UCS_CONTROL,reactors), 1,1,0, /*DXF:*/ 0 },
   {NULL, NULL, 0, 0,0,0,0,0},
 };
 /* from typedef struct _dwg_object_UNDERLAYDEFINITION: (sorted by offset) */
@@ -3207,12 +3207,12 @@ const Dwg_DYNAPI_field _dwg_VIEW_fields[] = {
 /* from typedef struct _dwg_object_VIEW_CONTROL: (sorted by offset) */
 const Dwg_DYNAPI_field _dwg_VIEW_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object*", sizeof(void*), OFF(struct _dwg_object_VIEW_CONTROL,parent), 1,1,0, /*DXF:*/ 0 },
-  { "num_entries", "BS", sizeof(unsigned short int), OFF(struct _dwg_object_VIEW_CONTROL,num_entries), 0,0,0, /*DXF:*/ 0 },
-  { "null_handle", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_VIEW_CONTROL,null_handle), 1,0,0, /*DXF:*/ 0 },
-  { "xdicobjhandle", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_VIEW_CONTROL,xdicobjhandle), 1,0,0, /*DXF:*/ 0 },
-  { "views", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_VIEW_CONTROL,views), 1,0,0, /*DXF:*/ 0 },
-  { "objid", "BL", sizeof(unsigned int), OFF(struct _dwg_object_VIEW_CONTROL,objid), 0,0,0, /*DXF:*/ 0 },
-  { "reactors", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_VIEW_CONTROL,reactors), 1,0,0, /*DXF:*/ 0 },
+  { "num_entries", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_object_VIEW_CONTROL,num_entries), 0,0,0, /*DXF:*/ 0 },
+  { "null_handle", "H", sizeof(BITCODE_H), OFF(struct _dwg_object_VIEW_CONTROL,null_handle), 1,0,0, /*DXF:*/ 0 },
+  { "xdicobjhandle", "H", sizeof(BITCODE_H), OFF(struct _dwg_object_VIEW_CONTROL,xdicobjhandle), 1,0,0, /*DXF:*/ 0 },
+  { "views", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_object_VIEW_CONTROL,views), 1,1,0, /*DXF:*/ 0 },
+  { "objid", "BL", sizeof(BITCODE_BL), OFF(struct _dwg_object_VIEW_CONTROL,objid), 0,0,0, /*DXF:*/ 0 },
+  { "reactors", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_object_VIEW_CONTROL,reactors), 1,1,0, /*DXF:*/ 0 },
   {NULL, NULL, 0, 0,0,0,0,0},
 };
 /* from typedef struct _dwg_object_VISUALSTYLE: (sorted by offset) */
@@ -3315,23 +3315,23 @@ const Dwg_DYNAPI_field _dwg_VPORT_fields[] = {
 /* from typedef struct _dwg_object_VPORT_CONTROL: (sorted by offset) */
 const Dwg_DYNAPI_field _dwg_VPORT_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object*", sizeof(void*), OFF(struct _dwg_object_VPORT_CONTROL,parent), 1,1,0, /*DXF:*/ 0 },
-  { "num_entries", "BS", sizeof(unsigned short int), OFF(struct _dwg_object_VPORT_CONTROL,num_entries), 0,0,0, /*DXF:*/ 0 },
-  { "null_handle", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_VPORT_CONTROL,null_handle), 1,0,0, /*DXF:*/ 0 },
-  { "xdicobjhandle", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_VPORT_CONTROL,xdicobjhandle), 1,0,0, /*DXF:*/ 0 },
-  { "vports", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_VPORT_CONTROL,vports), 1,0,0, /*DXF:*/ 0 },
-  { "objid", "BL", sizeof(unsigned int), OFF(struct _dwg_object_VPORT_CONTROL,objid), 0,0,0, /*DXF:*/ 0 },
-  { "reactors", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_VPORT_CONTROL,reactors), 1,0,0, /*DXF:*/ 0 },
+  { "num_entries", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_object_VPORT_CONTROL,num_entries), 0,0,0, /*DXF:*/ 0 },
+  { "null_handle", "H", sizeof(BITCODE_H), OFF(struct _dwg_object_VPORT_CONTROL,null_handle), 1,0,0, /*DXF:*/ 0 },
+  { "xdicobjhandle", "H", sizeof(BITCODE_H), OFF(struct _dwg_object_VPORT_CONTROL,xdicobjhandle), 1,0,0, /*DXF:*/ 0 },
+  { "vports", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_object_VPORT_CONTROL,vports), 1,1,0, /*DXF:*/ 0 },
+  { "objid", "BL", sizeof(BITCODE_BL), OFF(struct _dwg_object_VPORT_CONTROL,objid), 0,0,0, /*DXF:*/ 0 },
+  { "reactors", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_object_VPORT_CONTROL,reactors), 1,1,0, /*DXF:*/ 0 },
   {NULL, NULL, 0, 0,0,0,0,0},
 };
 /* from typedef struct _dwg_object_VPORT_ENTITY_CONTROL: (sorted by offset) */
 const Dwg_DYNAPI_field _dwg_VPORT_ENTITY_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object*", sizeof(void*), OFF(struct _dwg_object_VPORT_ENTITY_CONTROL,parent), 1,1,0, /*DXF:*/ 0 },
-  { "num_entries", "BS", sizeof(unsigned short int), OFF(struct _dwg_object_VPORT_ENTITY_CONTROL,num_entries), 0,0,0, /*DXF:*/ 0 },
-  { "null_handle", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_VPORT_ENTITY_CONTROL,null_handle), 1,0,0, /*DXF:*/ 0 },
-  { "xdicobjhandle", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_VPORT_ENTITY_CONTROL,xdicobjhandle), 1,0,0, /*DXF:*/ 0 },
-  { "vport_entity_headers", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_VPORT_ENTITY_CONTROL,vport_entity_headers), 1,0,0, /*DXF:*/ 0 },
-  { "objid", "BL", sizeof(unsigned int), OFF(struct _dwg_object_VPORT_ENTITY_CONTROL,objid), 0,0,0, /*DXF:*/ 0 },
-  { "reactors", "H", sizeof(Dwg_Object_Ref*), OFF(struct _dwg_object_VPORT_ENTITY_CONTROL,reactors), 1,0,0, /*DXF:*/ 0 },
+  { "num_entries", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_object_VPORT_ENTITY_CONTROL,num_entries), 0,0,0, /*DXF:*/ 0 },
+  { "null_handle", "H", sizeof(BITCODE_H), OFF(struct _dwg_object_VPORT_ENTITY_CONTROL,null_handle), 1,0,0, /*DXF:*/ 0 },
+  { "xdicobjhandle", "H", sizeof(BITCODE_H), OFF(struct _dwg_object_VPORT_ENTITY_CONTROL,xdicobjhandle), 1,0,0, /*DXF:*/ 0 },
+  { "vport_entity_headers", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_object_VPORT_ENTITY_CONTROL,vport_entity_headers), 1,1,0, /*DXF:*/ 0 },
+  { "objid", "BL", sizeof(BITCODE_BL), OFF(struct _dwg_object_VPORT_ENTITY_CONTROL,objid), 0,0,0, /*DXF:*/ 0 },
+  { "reactors", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_object_VPORT_ENTITY_CONTROL,reactors), 1,1,0, /*DXF:*/ 0 },
   {NULL, NULL, 0, 0,0,0,0,0},
 };
 /* from typedef struct _dwg_object_VPORT_ENTITY_HEADER: (sorted by offset) */
