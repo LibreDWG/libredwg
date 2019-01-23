@@ -139,18 +139,20 @@ sub out_struct {
       $size = "0";
       #$type = $type->{type}; # size.width, size.height
     }
-    my $need_malloc = ($type =~ /\*$/ or $type =~ /^(T|CMC$|H$)/) ? 1 : 0;
+    my $is_malloc = ($type =~ /\*$/ or $type =~ /^(T$|T[UVF])/) ? 1 : 0;
+    my $is_indirect = ($is_malloc or $type =~ /^(struct|[23T]|CMC|H$)/) ? 1 : 0;
+    my $is_string = ($is_malloc and $type =~ /^T[UV]?$/) ? 1 : 0; # not TF or TFF
     my $sname = $name;
     if ($name =~ /\[(\d+)\]$/) {
-      $need_malloc = 0;
+      $is_malloc = 0;
       $size = "$1*$size";
       $sname =~ s/\[(\d+)\]$//;
     }
     $ENT{$key}->{$name} = $type;
-    printf $fh "  { \"%s\", \"%s\", %s, OFF(%s,%s), %d, %d },\n",
-      $name, $type, $size, $tmpl, $sname, $need_malloc, 0; #TODO: DXF
+    printf $fh "  { \"%s\", \"%s\", %s, OFF(%s,%s), %d,%d,%d, /*DXF:*/ %d },\n",
+      $name, $type, $size, $tmpl, $sname, $is_indirect, $is_malloc, $is_string, 0; #TODO: DXF
   }
-  print $fh "  {NULL, NULL, 0},\n";
+  print $fh "  {NULL, NULL, 0, 0,0,0,0,0},\n";
   print $fh "};\n";
 }
 
@@ -642,7 +644,7 @@ dwg_dynapi_entity_value(void *restrict _obj, const char *restrict name,
         }
       if (fp)
         memcpy(fp, f, sizeof(Dwg_DYNAPI_field));
-      //if (f->need_malloc)
+      //if (f->malloc)
       //  which size? if text strcpy. if TU wcscpy. if struct num_fieldname * f->size
       memcpy(out, &((char*)_obj)[f->offset], f->size);
       return true;
@@ -700,7 +702,7 @@ dwg_dynapi_entity_set_value(void *restrict _obj, const char *restrict name,
           LOG_ERROR("%s: Invalid %s field %s", __FUNCTION__, name, fieldname);
           return false;
         }
-      //if (f->need_malloc)
+      //if (f->malloc)
       //  which size? if text strcpy. if TU wcscpy. if struct num_fieldname * f->size
        memcpy(&((char*)_obj)[f->offset], value, f->size);
       return true;
