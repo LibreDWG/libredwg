@@ -3059,7 +3059,6 @@ typedef struct _dwg_TABLE_cell
   BITCODE_TV text_string;
   BITCODE_BD block_scale;
   BITCODE_B additional_data_flag;
-  BITCODE_BS num_attr_defs;
   BITCODE_BS attr_def_index;
   BITCODE_TV attr_def_text;
   BITCODE_B additional_data_flag2;
@@ -3086,6 +3085,7 @@ typedef struct _dwg_TABLE_cell
   BITCODE_BL unknown;
   Dwg_TABLE_value value;
   BITCODE_H cell_handle;
+  BITCODE_BS num_attr_defs;
   BITCODE_H* attr_def_id;
   BITCODE_H text_style_override;
 
