@@ -14632,7 +14632,8 @@ unsigned char
 dwg_ent_region_get_acis_empty(const dwg_ent_region *restrict region,
                               int *restrict error)
 {
-  return dwg_ent_3dsolid_get_acis_empty((const dwg_ent_3dsolid *)region, error);
+  return region->acis_empty;
+  //return dwg_ent_3dsolid_get_acis_empty((const dwg_ent_3dsolid *)region, error);
 }
 
 /** Sets the Dwg_Entity_REGION::acis_empty bit
