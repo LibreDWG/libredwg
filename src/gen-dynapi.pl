@@ -413,7 +413,8 @@ EOF
 static int test_$xname (const Dwg_Object *obj)
 {
   int error = 0;
-  $struct *$lname = obj->tio.$lentity->tio.$xname;
+  const Dwg_Object_$Entity *restrict obj_obj = obj->tio.$lentity;
+  $struct *restrict $lname = obj->tio.$lentity->tio.$xname;
 EOF
 
   for my $var (sort keys %{$ENT{$name}}) {
@@ -502,27 +503,45 @@ EOF
       my $countfield = exists $countfield{$var} ? $countfield{$var} : "num_$var";
       $countfield = 'num_dashes' if $name eq 'LTYPE' and $var eq 'styles';
       my $count = 1;
-      print $fh <<"EOF";
+      if ($var eq 'reactors' and $type eq 'BITCODE_H*') {
+        print $fh <<"EOF";
   {
     $type $var;
-    int count = 0;
+    BITCODE_BL count = obj_obj->num_reactors;
+    if (dwg_dynapi_entity_value($lname, "$name", "$var", &$svar, NULL)
+        && $svar == $lname->$svar)
+      {
+        pass ("$name.$var [$stype] * %u $countfield", count);
+      }
+    else
+      {
+        fail ("$name.$var [$stype] * %u $countfield", count); error++;
+      }
+  }
+EOF
+      } else {
+        print $fh <<"EOF";
+  {
+    $type $var;
+    BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value($lname, "$name", "$countfield", &count, NULL) &&
         dwg_dynapi_entity_value($lname, "$name", "$var", &$svar, NULL)
 EOF
         if ($type !~ /\*\*/) {
-          print $fh "        && (!count || !memcmp(&$svar, &$lname->$svar, count * sizeof($lname->$svar)))\n";
+          print $fh "        && $svar == $lname->$svar";
         }
         print $fh ")\n";
         print $fh <<"EOF";
       {
-        pass ("$name.$var [$stype] * %d $countfield", count);
+        pass ("$name.$var [$stype] * %u $countfield", count);
       }
     else
       {
-        fail ("$name.$var [$stype] * %d $countfield", count); error++;
+        fail ("$name.$var [$stype] * %u $countfield", count); error++;
       }
   }
 EOF
+      }
     } else { # is_ptr
       print $fh <<"EOF";
   {
