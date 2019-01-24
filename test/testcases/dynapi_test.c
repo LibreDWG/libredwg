@@ -7538,16 +7538,14 @@ static int test__3DSOLID (const Dwg_Object *obj)
   }
   {
     BITCODE_BL* block_size;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(_3dsolid, "3DSOLID", "num_block_size", &count, NULL) &&
-        dwg_dynapi_entity_value(_3dsolid, "3DSOLID", "block_size", &block_size, NULL)
-        && block_size == _3dsolid->block_size)
+    if (dwg_dynapi_entity_value(_3dsolid, "3DSOLID", "block_size", &block_size, NULL)
+        && !memcmp(&block_size, &_3dsolid->block_size, sizeof(_3dsolid->block_size)))
       {
-        pass ("3DSOLID.block_size [BL*] * %u num_block_size", count);
+        pass ("3DSOLID.block_size [BL*]");
       }
     else
       {
-        fail ("3DSOLID.block_size [BL*] * %u num_block_size", count); error++;
+        fail ("3DSOLID.block_size [BL*]"); error++;
       }
   }
   {
@@ -7564,16 +7562,14 @@ static int test__3DSOLID (const Dwg_Object *obj)
   }
   {
     struct _dwg_entity_3DSOLID* extra_acis_data;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(_3dsolid, "3DSOLID", "num_extra_acis_data", &count, NULL) &&
-        dwg_dynapi_entity_value(_3dsolid, "3DSOLID", "extra_acis_data", &extra_acis_data, NULL)
-        && extra_acis_data == _3dsolid->extra_acis_data)
+    if (dwg_dynapi_entity_value(_3dsolid, "3DSOLID", "extra_acis_data", &extra_acis_data, NULL)
+        && !memcmp(&extra_acis_data, &_3dsolid->extra_acis_data, sizeof(_3dsolid->extra_acis_data)))
       {
-        pass ("3DSOLID.extra_acis_data [struct _dwg_entity_3DSOLID*] * %u num_extra_acis_data", count);
+        pass ("3DSOLID.extra_acis_data [struct _dwg_entity_3DSOLID*]");
       }
     else
       {
-        fail ("3DSOLID.extra_acis_data [struct _dwg_entity_3DSOLID*] * %u num_extra_acis_data", count); error++;
+        fail ("3DSOLID.extra_acis_data [struct _dwg_entity_3DSOLID*]"); error++;
       }
   }
   {
@@ -13068,16 +13064,14 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
   }
   {
     BITCODE_BL* block_size;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(extrudedsurface, "EXTRUDEDSURFACE", "num_block_size", &count, NULL) &&
-        dwg_dynapi_entity_value(extrudedsurface, "EXTRUDEDSURFACE", "block_size", &block_size, NULL)
-        && block_size == extrudedsurface->block_size)
+    if (dwg_dynapi_entity_value(extrudedsurface, "EXTRUDEDSURFACE", "block_size", &block_size, NULL)
+        && !memcmp(&block_size, &extrudedsurface->block_size, sizeof(extrudedsurface->block_size)))
       {
-        pass ("EXTRUDEDSURFACE.block_size [BL*] * %u num_block_size", count);
+        pass ("EXTRUDEDSURFACE.block_size [BL*]");
       }
     else
       {
-        fail ("EXTRUDEDSURFACE.block_size [BL*] * %u num_block_size", count); error++;
+        fail ("EXTRUDEDSURFACE.block_size [BL*]"); error++;
       }
   }
   {
@@ -13190,16 +13184,14 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
   }
   {
     struct _dwg_entity_3DSOLID* extra_acis_data;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(extrudedsurface, "EXTRUDEDSURFACE", "num_extra_acis_data", &count, NULL) &&
-        dwg_dynapi_entity_value(extrudedsurface, "EXTRUDEDSURFACE", "extra_acis_data", &extra_acis_data, NULL)
-        && extra_acis_data == extrudedsurface->extra_acis_data)
+    if (dwg_dynapi_entity_value(extrudedsurface, "EXTRUDEDSURFACE", "extra_acis_data", &extra_acis_data, NULL)
+        && !memcmp(&extra_acis_data, &extrudedsurface->extra_acis_data, sizeof(extrudedsurface->extra_acis_data)))
       {
-        pass ("EXTRUDEDSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*] * %u num_extra_acis_data", count);
+        pass ("EXTRUDEDSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*]");
       }
     else
       {
-        fail ("EXTRUDEDSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*] * %u num_extra_acis_data", count); error++;
+        fail ("EXTRUDEDSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*]"); error++;
       }
   }
   {
@@ -17136,16 +17128,14 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
   }
   {
     BITCODE_BL* block_size;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(loftedsurface, "LOFTEDSURFACE", "num_block_size", &count, NULL) &&
-        dwg_dynapi_entity_value(loftedsurface, "LOFTEDSURFACE", "block_size", &block_size, NULL)
-        && block_size == loftedsurface->block_size)
+    if (dwg_dynapi_entity_value(loftedsurface, "LOFTEDSURFACE", "block_size", &block_size, NULL)
+        && !memcmp(&block_size, &loftedsurface->block_size, sizeof(loftedsurface->block_size)))
       {
-        pass ("LOFTEDSURFACE.block_size [BL*] * %u num_block_size", count);
+        pass ("LOFTEDSURFACE.block_size [BL*]");
       }
     else
       {
-        fail ("LOFTEDSURFACE.block_size [BL*] * %u num_block_size", count); error++;
+        fail ("LOFTEDSURFACE.block_size [BL*]"); error++;
       }
   }
   {
@@ -17246,16 +17236,14 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
   }
   {
     struct _dwg_entity_3DSOLID* extra_acis_data;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(loftedsurface, "LOFTEDSURFACE", "num_extra_acis_data", &count, NULL) &&
-        dwg_dynapi_entity_value(loftedsurface, "LOFTEDSURFACE", "extra_acis_data", &extra_acis_data, NULL)
-        && extra_acis_data == loftedsurface->extra_acis_data)
+    if (dwg_dynapi_entity_value(loftedsurface, "LOFTEDSURFACE", "extra_acis_data", &extra_acis_data, NULL)
+        && !memcmp(&extra_acis_data, &loftedsurface->extra_acis_data, sizeof(loftedsurface->extra_acis_data)))
       {
-        pass ("LOFTEDSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*] * %u num_extra_acis_data", count);
+        pass ("LOFTEDSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*]");
       }
     else
       {
-        fail ("LOFTEDSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*] * %u num_extra_acis_data", count); error++;
+        fail ("LOFTEDSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*]"); error++;
       }
   }
   {
@@ -20472,16 +20460,14 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
   }
   {
     BITCODE_BL* block_size;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(planesurface, "PLANESURFACE", "num_block_size", &count, NULL) &&
-        dwg_dynapi_entity_value(planesurface, "PLANESURFACE", "block_size", &block_size, NULL)
-        && block_size == planesurface->block_size)
+    if (dwg_dynapi_entity_value(planesurface, "PLANESURFACE", "block_size", &block_size, NULL)
+        && !memcmp(&block_size, &planesurface->block_size, sizeof(planesurface->block_size)))
       {
-        pass ("PLANESURFACE.block_size [BL*] * %u num_block_size", count);
+        pass ("PLANESURFACE.block_size [BL*]");
       }
     else
       {
-        fail ("PLANESURFACE.block_size [BL*] * %u num_block_size", count); error++;
+        fail ("PLANESURFACE.block_size [BL*]"); error++;
       }
   }
   {
@@ -20522,16 +20508,14 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
   }
   {
     struct _dwg_entity_3DSOLID* extra_acis_data;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(planesurface, "PLANESURFACE", "num_extra_acis_data", &count, NULL) &&
-        dwg_dynapi_entity_value(planesurface, "PLANESURFACE", "extra_acis_data", &extra_acis_data, NULL)
-        && extra_acis_data == planesurface->extra_acis_data)
+    if (dwg_dynapi_entity_value(planesurface, "PLANESURFACE", "extra_acis_data", &extra_acis_data, NULL)
+        && !memcmp(&extra_acis_data, &planesurface->extra_acis_data, sizeof(planesurface->extra_acis_data)))
       {
-        pass ("PLANESURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*] * %u num_extra_acis_data", count);
+        pass ("PLANESURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*]");
       }
     else
       {
-        fail ("PLANESURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*] * %u num_extra_acis_data", count); error++;
+        fail ("PLANESURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*]"); error++;
       }
   }
   {
@@ -22163,16 +22147,14 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
   }
   {
     BITCODE_BL* block_size;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(revolvedsurface, "REVOLVEDSURFACE", "num_block_size", &count, NULL) &&
-        dwg_dynapi_entity_value(revolvedsurface, "REVOLVEDSURFACE", "block_size", &block_size, NULL)
-        && block_size == revolvedsurface->block_size)
+    if (dwg_dynapi_entity_value(revolvedsurface, "REVOLVEDSURFACE", "block_size", &block_size, NULL)
+        && !memcmp(&block_size, &revolvedsurface->block_size, sizeof(revolvedsurface->block_size)))
       {
-        pass ("REVOLVEDSURFACE.block_size [BL*] * %u num_block_size", count);
+        pass ("REVOLVEDSURFACE.block_size [BL*]");
       }
     else
       {
-        fail ("REVOLVEDSURFACE.block_size [BL*] * %u num_block_size", count); error++;
+        fail ("REVOLVEDSURFACE.block_size [BL*]"); error++;
       }
   }
   {
@@ -22309,16 +22291,14 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
   }
   {
     struct _dwg_entity_3DSOLID* extra_acis_data;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(revolvedsurface, "REVOLVEDSURFACE", "num_extra_acis_data", &count, NULL) &&
-        dwg_dynapi_entity_value(revolvedsurface, "REVOLVEDSURFACE", "extra_acis_data", &extra_acis_data, NULL)
-        && extra_acis_data == revolvedsurface->extra_acis_data)
+    if (dwg_dynapi_entity_value(revolvedsurface, "REVOLVEDSURFACE", "extra_acis_data", &extra_acis_data, NULL)
+        && !memcmp(&extra_acis_data, &revolvedsurface->extra_acis_data, sizeof(revolvedsurface->extra_acis_data)))
       {
-        pass ("REVOLVEDSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*] * %u num_extra_acis_data", count);
+        pass ("REVOLVEDSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*]");
       }
     else
       {
-        fail ("REVOLVEDSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*] * %u num_extra_acis_data", count); error++;
+        fail ("REVOLVEDSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*]"); error++;
       }
   }
   {
@@ -23809,16 +23789,14 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
   }
   {
     BITCODE_BL* block_size;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(sweptsurface, "SWEPTSURFACE", "num_block_size", &count, NULL) &&
-        dwg_dynapi_entity_value(sweptsurface, "SWEPTSURFACE", "block_size", &block_size, NULL)
-        && block_size == sweptsurface->block_size)
+    if (dwg_dynapi_entity_value(sweptsurface, "SWEPTSURFACE", "block_size", &block_size, NULL)
+        && !memcmp(&block_size, &sweptsurface->block_size, sizeof(sweptsurface->block_size)))
       {
-        pass ("SWEPTSURFACE.block_size [BL*] * %u num_block_size", count);
+        pass ("SWEPTSURFACE.block_size [BL*]");
       }
     else
       {
-        fail ("SWEPTSURFACE.block_size [BL*] * %u num_block_size", count); error++;
+        fail ("SWEPTSURFACE.block_size [BL*]"); error++;
       }
   }
   {
@@ -23931,16 +23909,14 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
   }
   {
     struct _dwg_entity_3DSOLID* extra_acis_data;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(sweptsurface, "SWEPTSURFACE", "num_extra_acis_data", &count, NULL) &&
-        dwg_dynapi_entity_value(sweptsurface, "SWEPTSURFACE", "extra_acis_data", &extra_acis_data, NULL)
-        && extra_acis_data == sweptsurface->extra_acis_data)
+    if (dwg_dynapi_entity_value(sweptsurface, "SWEPTSURFACE", "extra_acis_data", &extra_acis_data, NULL)
+        && !memcmp(&extra_acis_data, &sweptsurface->extra_acis_data, sizeof(sweptsurface->extra_acis_data)))
       {
-        pass ("SWEPTSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*] * %u num_extra_acis_data", count);
+        pass ("SWEPTSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*]");
       }
     else
       {
-        fail ("SWEPTSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*] * %u num_extra_acis_data", count); error++;
+        fail ("SWEPTSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*]"); error++;
       }
   }
   {
@@ -35062,16 +35038,14 @@ static int test_DIMASSOC (const Dwg_Object *obj)
   }
   {
     Dwg_DIMASSOC_Ref* ref;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(dimassoc, "DIMASSOC", "num_ref", &count, NULL) &&
-        dwg_dynapi_entity_value(dimassoc, "DIMASSOC", "ref", &ref, NULL)
-        && ref == dimassoc->ref)
+    if (dwg_dynapi_entity_value(dimassoc, "DIMASSOC", "ref", &ref, NULL)
+        && !memcmp(&ref, &dimassoc->ref, sizeof(dimassoc->ref)))
       {
-        pass ("DIMASSOC.ref [Dwg_DIMASSOC_Ref*] * %u num_ref", count);
+        pass ("DIMASSOC.ref [Dwg_DIMASSOC_Ref*]");
       }
     else
       {
-        fail ("DIMASSOC.ref [Dwg_DIMASSOC_Ref*] * %u num_ref", count); error++;
+        fail ("DIMASSOC.ref [Dwg_DIMASSOC_Ref*]"); error++;
       }
   }
   {

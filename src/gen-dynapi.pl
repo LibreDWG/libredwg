@@ -471,7 +471,8 @@ EOF
         print $fh "    $lname->$svar--;\n";
       }
       print $fh "\n  }\n";
-    } elsif ($type =~ /\*$/ and $type !~ /(RC\*|struct _dwg_object_)/) { # array
+    } elsif ($type =~ /\*$/ and $type !~ /(RC\*|struct _dwg_object_)/
+             and $var !~ /^(ref|block_size|extra_acis_data)$/) { # array
       my %countfield = (
         attrib_handles => 'num_owned',
         attribs => 'num_owned', # XXX TABLE
