@@ -40850,31 +40850,31 @@ static int test_LTYPE (const Dwg_Object *obj)
 
   }
   {
-    Dwg_LTYPE_dash* dash;
+    Dwg_LTYPE_dash* dashes;
     BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(ltype, "LTYPE", "num_dash", &count, NULL) &&
-        dwg_dynapi_entity_value(ltype, "LTYPE", "dash", &dash, NULL)
-        && dash == ltype->dash)
+    if (dwg_dynapi_entity_value(ltype, "LTYPE", "num_dashes", &count, NULL) &&
+        dwg_dynapi_entity_value(ltype, "LTYPE", "dashes", &dashes, NULL)
+        && dashes == ltype->dashes)
       {
-        pass ("LTYPE.dash [Dwg_LTYPE_dash*] * %u num_dash", count);
+        pass ("LTYPE.dashes [Dwg_LTYPE_dash*] * %u num_dashes", count);
       }
     else
       {
-        fail ("LTYPE.dash [Dwg_LTYPE_dash*] * %u num_dash", count); error++;
+        fail ("LTYPE.dashes [Dwg_LTYPE_dash*] * %u num_dashes", count); error++;
       }
   }
   {
     BITCODE_RD* dashes_r11;
     BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(ltype, "LTYPE", "num_dashes_r11", &count, NULL) &&
+    if (dwg_dynapi_entity_value(ltype, "LTYPE", "num_dashes", &count, NULL) &&
         dwg_dynapi_entity_value(ltype, "LTYPE", "dashes_r11", &dashes_r11, NULL)
         && dashes_r11 == ltype->dashes_r11)
       {
-        pass ("LTYPE.dashes_r11 [RD*] * %u num_dashes_r11", count);
+        pass ("LTYPE.dashes_r11 [RD*] * %u num_dashes", count);
       }
     else
       {
-        fail ("LTYPE.dashes_r11 [RD*] * %u num_dashes_r11", count); error++;
+        fail ("LTYPE.dashes_r11 [RD*] * %u num_dashes", count); error++;
       }
   }
   {
@@ -51684,30 +51684,6 @@ static int test_XRECORD (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_BL num_eed;
-    if (dwg_dynapi_entity_value(xrecord, "XRECORD", "num_eed", &num_eed, NULL) &&
-        num_eed == xrecord->num_eed)
-      {
-        pass ("XRECORD.num_eed [BL] %u", num_eed);
-      }
-    else
-      {
-        fail ("XRECORD.num_eed [BL] %u != %u", xrecord->num_eed, num_eed); error++;
-      }
-    num_eed++;
-    if (dwg_dynapi_entity_set_value(xrecord, "XRECORD", "num_eed", &num_eed) &&
-        num_eed == xrecord->num_eed)
-      {
-        pass ("XRECORD.num_eed [BL] set+1 %u", num_eed);
-      }
-    else
-      {
-        fail ("XRECORD.num_eed [BL] set+1 %u != %u", xrecord->num_eed, num_eed); error++;
-      }
-    xrecord->num_eed--;
-
-  }
-  {
     BITCODE_BL num_objid_handles;
     if (dwg_dynapi_entity_value(xrecord, "XRECORD", "num_objid_handles", &num_objid_handles, NULL) &&
         num_objid_handles == xrecord->num_objid_handles)
@@ -51729,6 +51705,30 @@ static int test_XRECORD (const Dwg_Object *obj)
         fail ("XRECORD.num_objid_handles [BL] set+1 %u != %u", xrecord->num_objid_handles, num_objid_handles); error++;
       }
     xrecord->num_objid_handles--;
+
+  }
+  {
+    BITCODE_BL num_xdata;
+    if (dwg_dynapi_entity_value(xrecord, "XRECORD", "num_xdata", &num_xdata, NULL) &&
+        num_xdata == xrecord->num_xdata)
+      {
+        pass ("XRECORD.num_xdata [BL] %u", num_xdata);
+      }
+    else
+      {
+        fail ("XRECORD.num_xdata [BL] %u != %u", xrecord->num_xdata, num_xdata); error++;
+      }
+    num_xdata++;
+    if (dwg_dynapi_entity_set_value(xrecord, "XRECORD", "num_xdata", &num_xdata) &&
+        num_xdata == xrecord->num_xdata)
+      {
+        pass ("XRECORD.num_xdata [BL] set+1 %u", num_xdata);
+      }
+    else
+      {
+        fail ("XRECORD.num_xdata [BL] set+1 %u != %u", xrecord->num_xdata, num_xdata); error++;
+      }
+    xrecord->num_xdata--;
 
   }
   {

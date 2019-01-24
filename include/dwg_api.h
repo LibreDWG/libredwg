@@ -5478,8 +5478,8 @@ dwg_obj_xrecord_set_cloning_flags(dwg_obj_xrecord *restrict xrecord,
                                   int *restrict error)
   __nonnull ((1, 3)) _deprecated_dynapi_setter;
 EXPORT BITCODE_BL
-dwg_obj_xrecord_get_num_eed(const dwg_obj_xrecord *restrict xrecord,
-                            int *restrict error)
+dwg_obj_xrecord_get_num_xdata(const dwg_obj_xrecord *restrict xrecord,
+                              int *restrict error)
   __nonnull ((1, 2)) _deprecated_dynapi_getter;
 
 //EXPORT Dwg_Eed*

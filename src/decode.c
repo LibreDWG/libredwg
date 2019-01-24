@@ -3354,7 +3354,7 @@ dwg_decode_xdata(Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj, int 
           LOG_ERROR("Invalid group code in xdata: %d", rbuf->type)
           dwg_free_xdata_resbuf(rbuf);
           dat->byte = end_address;
-          obj->num_eed = num_xdata;
+          obj->num_xdata = num_xdata;
           return root;
         }
 
@@ -3368,7 +3368,7 @@ dwg_decode_xdata(Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj, int 
           curr = rbuf;
         }
     }
-    obj->num_eed = num_xdata;
+    obj->num_xdata = num_xdata;
     return root;
 }
 

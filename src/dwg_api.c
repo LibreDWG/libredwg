@@ -10131,13 +10131,13 @@ dwg_obj_xrecord_set_cloning_flags(dwg_obj_xrecord *restrict xrecord,
 }
 
 BITCODE_BL
-dwg_obj_xrecord_get_num_eed(const dwg_obj_xrecord *restrict xrecord,
+dwg_obj_xrecord_get_num_xdata(const dwg_obj_xrecord *restrict xrecord,
                           int *restrict error)
 {
   if (xrecord)
     {
       *error = 0;
-      return xrecord->num_eed;
+      return xrecord->num_xdata;
     }
   else
     {

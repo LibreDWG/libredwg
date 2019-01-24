@@ -485,6 +485,7 @@ EOF
         attr_def_id => 'num_attr_defs',
         readdeps  => 'num_deps',
         writedeps => 'num_deps',
+        dashes_r11 => 'num_dashes',
 
         text => 'numitems',
 

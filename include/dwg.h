@@ -1985,7 +1985,7 @@ typedef struct _dwg_object_LTYPE
   BITCODE_BD pattern_len;
   BITCODE_RC alignment;
   BITCODE_RC num_dashes;
-  Dwg_LTYPE_dash* dash;
+  Dwg_LTYPE_dash* dashes;
   BITCODE_RD* dashes_r11;
   char    * strings_area;
   BITCODE_H linetype_control;
@@ -2599,7 +2599,7 @@ typedef struct _dwg_object_XRECORD
 
   BITCODE_BL num_databytes;
   BITCODE_BS cloning_flags;
-  BITCODE_BL num_eed;
+  BITCODE_BL num_xdata; /* computed */
   Dwg_Resbuf* xdata;
   BITCODE_H ownerhandle;
   BITCODE_BL num_objid_handles;
