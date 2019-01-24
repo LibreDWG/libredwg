@@ -24635,17 +24635,17 @@ static int test_TABLE (const Dwg_Object *obj)
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_TABLE *restrict table = obj->tio.entity->tio.TABLE;
   {
-    BITCODE_H* attribs;
+    BITCODE_H* attrib_handles;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value(table, "TABLE", "num_owned", &count, NULL) &&
-        dwg_dynapi_entity_value(table, "TABLE", "attribs", &attribs, NULL)
-        && attribs == table->attribs)
+        dwg_dynapi_entity_value(table, "TABLE", "attrib_handles", &attrib_handles, NULL)
+        && attrib_handles == table->attrib_handles)
       {
-        pass ("TABLE.attribs [H*] * %u num_owned", count);
+        pass ("TABLE.attrib_handles [H*] * %u num_owned", count);
       }
     else
       {
-        fail ("TABLE.attribs [H*] * %u num_owned", count); error++;
+        fail ("TABLE.attrib_handles [H*] * %u num_owned", count); error++;
       }
   }
   {

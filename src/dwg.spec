@@ -5164,7 +5164,7 @@ DWG_ENTITY(TABLE)
 
   SINCE(R_2004)
     {
-      HANDLE_VECTOR (attribs, num_owned, 4, 0)
+      HANDLE_VECTOR (attrib_handles, num_owned, 4, 0)
     }
 
   if (FIELD_VALUE(has_attribs)) {

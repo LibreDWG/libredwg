@@ -1745,7 +1745,7 @@ const Dwg_DYNAPI_field _dwg_TABLE_fields[] = {
   { "block_header", "H", sizeof(BITCODE_H), OFF(struct _dwg_entity_TABLE,block_header), 1,0,0, /*DXF:*/ 0 },
   { "first_attrib", "H", sizeof(BITCODE_H), OFF(struct _dwg_entity_TABLE,first_attrib), 1,0,0, /*DXF:*/ 0 },
   { "last_attrib", "H", sizeof(BITCODE_H), OFF(struct _dwg_entity_TABLE,last_attrib), 1,0,0, /*DXF:*/ 0 },
-  { "attribs", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_entity_TABLE,attribs), 1,1,0, /*DXF:*/ 0 },
+  { "attrib_handles", "H*", sizeof(BITCODE_H*), OFF(struct _dwg_entity_TABLE,attrib_handles), 1,1,0, /*DXF:*/ 0 },
   { "seqend", "H", sizeof(BITCODE_H), OFF(struct _dwg_entity_TABLE,seqend), 1,0,0, /*DXF:*/ 0 },
   { "table_style_id", "H", sizeof(BITCODE_H), OFF(struct _dwg_entity_TABLE,table_style_id), 1,0,0, /*DXF:*/ 0 },
   { "title_row_style_override", "H", sizeof(BITCODE_H), OFF(struct _dwg_entity_TABLE,title_row_style_override), 1,0,0, /*DXF:*/ 0 },
