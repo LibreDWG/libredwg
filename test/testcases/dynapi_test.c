@@ -16217,27 +16217,27 @@ static int test_LEADER (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_BL numpts;
-    if (dwg_dynapi_entity_value(leader, "LEADER", "numpts", &numpts, NULL) &&
-        numpts == leader->numpts)
+    BITCODE_BL num_points;
+    if (dwg_dynapi_entity_value(leader, "LEADER", "num_points", &num_points, NULL) &&
+        num_points == leader->num_points)
       {
-        pass ("LEADER.numpts [BL] %u", numpts);
+        pass ("LEADER.num_points [BL] %u", num_points);
       }
     else
       {
-        fail ("LEADER.numpts [BL] %u != %u", leader->numpts, numpts); error++;
+        fail ("LEADER.num_points [BL] %u != %u", leader->num_points, num_points); error++;
       }
-    numpts++;
-    if (dwg_dynapi_entity_set_value(leader, "LEADER", "numpts", &numpts) &&
-        numpts == leader->numpts)
+    num_points++;
+    if (dwg_dynapi_entity_set_value(leader, "LEADER", "num_points", &num_points) &&
+        num_points == leader->num_points)
       {
-        pass ("LEADER.numpts [BL] set+1 %u", numpts);
+        pass ("LEADER.num_points [BL] set+1 %u", num_points);
       }
     else
       {
-        fail ("LEADER.numpts [BL] set+1 %u != %u", leader->numpts, numpts); error++;
+        fail ("LEADER.num_points [BL] set+1 %u != %u", leader->num_points, num_points); error++;
       }
-    leader->numpts--;
+    leader->num_points--;
 
   }
   {

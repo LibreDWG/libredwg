@@ -8654,16 +8654,16 @@ dwg_ent_leader_get_path_type(const dwg_ent_leader *restrict leader,
     }
 }
 
-/** Returns leader numpts
+/** Returns leader num_points
  */
 BITCODE_BL
-dwg_ent_leader_get_numpts(const dwg_ent_leader *restrict leader,
+dwg_ent_leader_get_num_points(const dwg_ent_leader *restrict leader,
                           int *restrict error)
 {
   if (leader)
     {
       *error = 0;
-      return leader->numpts;
+      return leader->num_points;
     }
   else
     {

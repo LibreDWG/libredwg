@@ -1086,7 +1086,7 @@ const Dwg_DYNAPI_field _dwg_LEADER_fields[] = {
   { "unknown_bit_1", "B", sizeof(BITCODE_B), OFF(struct _dwg_entity_LEADER,unknown_bit_1), 0,0,0, /*DXF:*/ 0 },
   { "path_type", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_entity_LEADER,path_type), 0,0,0, /*DXF:*/ 0 },
   { "annot_type", "BS", sizeof(BITCODE_BS), OFF(struct _dwg_entity_LEADER,annot_type), 0,0,0, /*DXF:*/ 0 },
-  { "numpts", "BL", sizeof(BITCODE_BL), OFF(struct _dwg_entity_LEADER,numpts), 0,0,0, /*DXF:*/ 0 },
+  { "num_points", "BL", sizeof(BITCODE_BL), OFF(struct _dwg_entity_LEADER,num_points), 0,0,0, /*DXF:*/ 0 },
   { "points", "3DPOINT*", sizeof(BITCODE_3DPOINT*), OFF(struct _dwg_entity_LEADER,points), 1,1,0, /*DXF:*/ 0 },
   { "origin", "3DPOINT", sizeof(BITCODE_3DPOINT), OFF(struct _dwg_entity_LEADER,origin), 1,0,0, /*DXF:*/ 0 },
   { "extrusion", "3DPOINT", sizeof(BITCODE_3DPOINT), OFF(struct _dwg_entity_LEADER,extrusion), 1,0,0, /*DXF:*/ 0 },
@@ -3554,7 +3554,7 @@ const Dwg_DYNAPI_field _dwg_LEADER_Break_fields[] = {
 /* from typedef struct _dwg_LEADER_Line: (sorted by offset) */
 const Dwg_DYNAPI_field _dwg_LEADER_Line_fields[] = {
   { "parent", "struct _dwg_LEADER_Node*", sizeof(void*), OFF(struct _dwg_LEADER_Line,parent), 1,1,0, /*DXF:*/ 0 },
-  { "numpts", "BL", sizeof(unsigned int), OFF(struct _dwg_LEADER_Line,numpts), 0,0,0, /*DXF:*/ 0 },
+  { "num_points", "BL", sizeof(unsigned int), OFF(struct _dwg_LEADER_Line,num_points), 0,0,0, /*DXF:*/ 0 },
   { "points", "3BD", sizeof(Dwg_Bitcode_3BD*), OFF(struct _dwg_LEADER_Line,points), 1,0,0, /*DXF:*/ 0 },
   { "num_breaks", "BL", sizeof(unsigned int), OFF(struct _dwg_LEADER_Line,num_breaks), 0,0,0, /*DXF:*/ 0 },
   { "breaks", "Dwg_LEADER_Break*", sizeof(Dwg_LEADER_Break*), OFF(struct _dwg_LEADER_Line,breaks), 1,1,0, /*DXF:*/ 0 },

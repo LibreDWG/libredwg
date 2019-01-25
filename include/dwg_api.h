@@ -2905,12 +2905,12 @@ dwg_ent_leader_set_path_type(dwg_ent_leader *restrict leader,
 
 EXPORT BITCODE_BS
 dwg_ent_leader_get_path_type(const dwg_ent_leader *restrict leader,
-                          int *restrict error)
+                             int *restrict error)
   __nonnull ((1, 2)) _deprecated_dynapi_getter;
 
 EXPORT BITCODE_BL
-dwg_ent_leader_get_numpts(const dwg_ent_leader *restrict leader,
-                          int *restrict error)
+dwg_ent_leader_get_num_points(const dwg_ent_leader *restrict leader,
+                              int *restrict error)
   __nonnull ((1, 2)) _deprecated_dynapi_getter;
 
 EXPORT void

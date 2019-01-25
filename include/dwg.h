@@ -1731,7 +1731,7 @@ typedef struct _dwg_entity_LEADER
   BITCODE_B unknown_bit_1;  /* always seems to be zero */
   BITCODE_BS path_type;     /*< DXF(72) 0: line, 1: spline (oda bug) */
   BITCODE_BS annot_type;    /*< DXF(73) 0: text, 1: tol, 2: insert, 3 (def): none */
-  BITCODE_BL numpts;        /*< DXF(76) */
+  BITCODE_BL num_points;    /*< DXF(76) */
   BITCODE_3DPOINT* points;
   BITCODE_3DPOINT origin;
   BITCODE_3DPOINT extrusion;
@@ -2632,7 +2632,7 @@ typedef struct _dwg_LEADER_Break
 typedef struct _dwg_LEADER_Line // as documented by DXF
 {
   struct _dwg_LEADER_Node *parent;
-  BITCODE_BL numpts;
+  BITCODE_BL num_points;
   BITCODE_3DPOINT* points;         /*!< DXF 10 */
   BITCODE_BL num_breaks;
   Dwg_LEADER_Break * breaks;       /*!< DXF 12, 13 */

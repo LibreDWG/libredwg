@@ -2164,8 +2164,8 @@ DWG_ENTITY(LEADER)
   FIELD_B (unknown_bit_1, 0);
   FIELD_BS (path_type, 72);
   FIELD_BS (annot_type, 73); //0: text, 1: tol, 2: insert, 3 (def): none
-  FIELD_BL (numpts, 76);
-  FIELD_3DPOINT_VECTOR (points, numpts, 10);
+  FIELD_BL (num_points, 76);
+  FIELD_3DPOINT_VECTOR (points, num_points, 10);
   FIELD_3DPOINT (origin, 0);
   FIELD_3DPOINT (extrusion, 210);
   FIELD_3DPOINT (x_direction, 211);
@@ -5417,8 +5417,8 @@ DWG_ENTITY(MULTILEADER)
       REPEAT2 (lnode.num_lines, lnode.lines, Dwg_LEADER_Line)
       REPEAT_BLOCK
           #define lline lnode.lines[rcount2]
-          SUB_FIELD_BL (lline, numpts, 0);
-          FIELD_3DPOINT_VECTOR (lline.points, lline.numpts, 10);
+          SUB_FIELD_BL (lline, num_points, 0);
+          FIELD_3DPOINT_VECTOR (lline.points, lline.num_points, 10);
           SUB_FIELD_BL (lline, num_breaks, 0);
           REPEAT3 (lline.num_breaks, lline.breaks, Dwg_LEADER_Break)
           REPEAT_BLOCK
@@ -7242,3 +7242,4 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+
