@@ -2441,8 +2441,8 @@ typedef struct _dwg_entity_PROXY_ENTITY
   struct _dwg_object_entity *parent;
 
   BITCODE_BL class_id;      /*!< DXF 91 */
-  BITCODE_BL version;       /*!< DXF 71 */
-  BITCODE_BL maint_version; /*!< DXF 97 */
+  BITCODE_BL version;       /*!< DXF 95 <r2018, 71 r2018+ */
+  BITCODE_BL maint_version; /*!< DXF 97 r2018+ */
   BITCODE_B from_dxf;       /*!< DXF 70 */
   char    * data;
   BITCODE_H ownerhandle;

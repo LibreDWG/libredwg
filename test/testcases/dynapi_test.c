@@ -21896,16 +21896,14 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
   }
   {
     BITCODE_H* objid_object_handles;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(proxy_entity, "PROXY_ENTITY", "num_objid_object_handles", &count, NULL) &&
-        dwg_dynapi_entity_value(proxy_entity, "PROXY_ENTITY", "objid_object_handles", &objid_object_handles, NULL)
-        && objid_object_handles == proxy_entity->objid_object_handles)
+    if (dwg_dynapi_entity_value(proxy_entity, "PROXY_ENTITY", "objid_object_handles", &objid_object_handles, NULL)
+        && !memcmp(&objid_object_handles, &proxy_entity->objid_object_handles, sizeof(proxy_entity->objid_object_handles)))
       {
-        pass ("PROXY_ENTITY.objid_object_handles [H*] * %u num_objid_object_handles", count);
+        pass ("PROXY_ENTITY.objid_object_handles [H*]");
       }
     else
       {
-        fail ("PROXY_ENTITY.objid_object_handles [H*] * %u num_objid_object_handles", count); error++;
+        fail ("PROXY_ENTITY.objid_object_handles [H*]"); error++;
       }
   }
   {
@@ -45322,16 +45320,14 @@ static int test_PROXY_OBJECT (const Dwg_Object *obj)
   }
   {
     BITCODE_H* objid_object_handles;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(proxy_object, "PROXY_OBJECT", "num_objid_object_handles", &count, NULL) &&
-        dwg_dynapi_entity_value(proxy_object, "PROXY_OBJECT", "objid_object_handles", &objid_object_handles, NULL)
-        && objid_object_handles == proxy_object->objid_object_handles)
+    if (dwg_dynapi_entity_value(proxy_object, "PROXY_OBJECT", "objid_object_handles", &objid_object_handles, NULL)
+        && !memcmp(&objid_object_handles, &proxy_object->objid_object_handles, sizeof(proxy_object->objid_object_handles)))
       {
-        pass ("PROXY_OBJECT.objid_object_handles [H*] * %u num_objid_object_handles", count);
+        pass ("PROXY_OBJECT.objid_object_handles [H*]");
       }
     else
       {
-        fail ("PROXY_OBJECT.objid_object_handles [H*] * %u num_objid_object_handles", count); error++;
+        fail ("PROXY_OBJECT.objid_object_handles [H*]"); error++;
       }
   }
   {
