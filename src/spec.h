@@ -304,13 +304,15 @@
     for (rcount1=0; rcount1<(BITCODE_BL)times; rcount1++)
 #define REPEAT_N(times, name, type) \
   if (dat->version >= R_2000 && times > 0x1000) { \
-    fprintf(stderr, "Invalid rcount1 %ld", (long)times); return DWG_ERR_VALUEOUTOFBOUNDS; } \
+    LOG_ERROR("Invalid %s." #name " rcount1 %ld", obj->dxfname, (long)times); \
+    return DWG_ERR_VALUEOUTOFBOUNDS; } \
   if (_obj->name) \
     for (rcount1=0; rcount1<(BITCODE_BL)times; rcount1++)
 
 #define _REPEAT(times, name, type, idx) \
   if (dat->version >= R_2000 && _obj->times > 0x1000) { \
-    fprintf(stderr, "Invalid rcount " #idx " %ld", (long)_obj->times); return DWG_ERR_VALUEOUTOFBOUNDS; } \
+    LOG_ERROR("Invalid %s." #name " rcount" #idx " %ld", obj->dxfname, (long)_obj->times); \
+    return DWG_ERR_VALUEOUTOFBOUNDS; } \
   if (_obj->name) \
     for (rcount##idx=0; rcount##idx<(BITCODE_BL)_obj->times; rcount##idx++)
 #ifndef _REPEAT_C
