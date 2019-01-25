@@ -23,7 +23,7 @@
 ACLOCAL_AMFLAGS = -I m4
 
 # The perl subdir is for the perl Makefile.PL tool and is driven from here
-if HAVE_PYTHON
+if HAVE_SWIG_PYTHON
 SUBDIRS = python
 endif
 
@@ -39,7 +39,7 @@ all-am: $(dist_perl_PERL)
 # building perl bindings is optional. Most setup's don't have all the deps, like
 # crypt.h, sys/wait.h on windows.
 # grep rem: with a command.com compat Makefile we cannot continue from bash
-perl/LibreDWG.$(OBJEXT): perl/LibreDWG.pm perl/LibreDWG.xs perl/Makefile
+perl/LibreDWG.$(OBJEXT): perl/LibreDWG.pm perl/Makefile perl/LibreDWG.xs
 	@echo Note swig_perl.c is huge. This will need some time...
 	-if grep "NOOP = rem" perl/Makefile; then false; else cd perl &&  $(MAKE) OPTIMIZE=""; fi
 
