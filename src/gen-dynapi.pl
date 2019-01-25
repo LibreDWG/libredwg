@@ -100,7 +100,7 @@ sub out_struct {
   my $s = $c->struct($tmpl);
   return unless $s->{declarations};
   my @declarations = @{$s->{declarations}};
-  if ($n eq '_dwg_header_variables') {
+  if ($n =~ /^_dwg_(header_variables|object_object|object_entity)$/) {
     @declarations = sort {
       my $aname = $a->{declarators}->[0]->{declarator};
       my $bname = $b->{declarators}->[0]->{declarator};
@@ -111,7 +111,7 @@ sub out_struct {
     $sortedby = 'name';
   }
   print $fh "/* from typedef $tmpl: (sorted by $sortedby) */\n",
-    "const Dwg_DYNAPI_field $n","_fields[] = {\n";
+    "static const Dwg_DYNAPI_field $n","_fields[] = {\n";
   for my $d (@declarations) {
     my $type = $d->{type};
     my $decl = $d->{declarators}->[0];
@@ -158,9 +158,8 @@ sub out_struct {
     } elsif ($type =~ /^struct/) {
       $size = "sizeof(void*)";
     } elsif ($type =~ /^HASH\(/) { # inlined struct or union
-      warn "inlined type $type  $n.$name";
-      $size = "0";
-      #$type = $type->{type}; # size.width, size.height
+      warn "ignore inlined field $n.$name\n";
+      next;
     }
     my $is_malloc = ($type =~ /\*$/ or $type =~ /^(T$|T[UVF])/) ? 1 : 0;
     my $is_indirect = ($is_malloc or $type =~ /^(struct|[23T]|CMC|H$)/) ? 1 : 0;
@@ -647,6 +646,10 @@ static const char dwg_object_names[][MAXLEN_OBJECTS] = {
 @@for dwg_object_OBJECT@@
 @@for dwg_subtypes@@
 
+/* common fields: */
+@@struct _dwg_object_entity@@
+@@struct _dwg_object_object@@
+
 struct _name_type_fields {
   const char *const name;
   const int type;
@@ -654,7 +657,7 @@ struct _name_type_fields {
 };
 
 /* sorted for bsearch. from enum DWG_OBJECT_TYPE: */
-const struct _name_type_fields dwg_name_types[] = {
+static const struct _name_type_fields dwg_name_types[] = {
   @@enum DWG_OBJECT_TYPE@@
 };
 
@@ -734,7 +737,7 @@ dwg_dynapi_entity_value(void *restrict _obj, const char *restrict name,
                         const char *restrict fieldname,
                         void *restrict out, Dwg_DYNAPI_field *restrict fp)
 {
-  if (!_obj)
+  if (!_obj || !name || !fieldname || !out)
     return false;
   {
     int error;
@@ -767,24 +770,78 @@ EXPORT bool
 dwg_dynapi_header_value(const Dwg_Data *restrict dwg, const char *restrict fieldname,
                         void *restrict out, Dwg_DYNAPI_field *restrict fp)
 {
-  Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)
-    bsearch(fieldname, _dwg_header_variables_fields,
-            ARRAY_SIZE(_dwg_header_variables_fields)-1, /* NULL terminated */
-            sizeof(_dwg_header_variables_fields[0]), _name_struct_cmp);
-  if (f)
-    {
-      const Dwg_Header_Variables *const _obj = &dwg->header_vars;
-      if (fp)
-        memcpy(fp, f, sizeof(Dwg_DYNAPI_field));
-      memcpy(out, &((char*)_obj)[f->offset], f->size);
-      return true;
-    }
-  else
-    {
-      const int loglevel = dwg->opts & 0xf;
-      LOG_ERROR("%s: Invalid header field %s", __FUNCTION__, fieldname);
-      return false;
-    }
+  if (!dwg || !fieldname || !out)
+    return false;
+  {
+    Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)
+      bsearch(fieldname, _dwg_header_variables_fields,
+              ARRAY_SIZE(_dwg_header_variables_fields)-1, /* NULL terminated */
+              sizeof(_dwg_header_variables_fields[0]), _name_struct_cmp);
+    if (f)
+      {
+        const Dwg_Header_Variables *const _obj = &dwg->header_vars;
+        if (fp)
+          memcpy(fp, f, sizeof(Dwg_DYNAPI_field));
+        memcpy(out, &((char*)_obj)[f->offset], f->size);
+        return true;
+      }
+    else
+      {
+        const int loglevel = dwg->opts & 0xf;
+        LOG_ERROR("%s: Invalid header field %s", __FUNCTION__, fieldname);
+        return false;
+      }
+  }
+}
+
+EXPORT bool
+dwg_dynapi_common_value(void *restrict _obj, const char *restrict fieldname,
+                        void *restrict out, Dwg_DYNAPI_field *restrict fp)
+{
+  if (!_obj || !fieldname || !out)
+    return false;
+  {
+    Dwg_DYNAPI_field *f;
+    int error;
+    const Dwg_Object* obj = dwg_obj_generic_to_object(_obj, &error);
+    if (!obj)
+      {
+        const int loglevel = DWG_LOGLEVEL_ERROR;
+        LOG_ERROR("%s: dwg_obj_generic_to_object failed", __FUNCTION__);
+        return false;
+      }
+    if (obj->supertype == DWG_SUPERTYPE_ENTITY)
+      {
+        f = (Dwg_DYNAPI_field *)bsearch(fieldname, _dwg_object_entity_fields,
+              ARRAY_SIZE(_dwg_object_entity_fields)-1, /* NULL terminated */
+              sizeof(_dwg_object_entity_fields[0]), _name_struct_cmp);
+      }
+    else if (obj->supertype == DWG_SUPERTYPE_OBJECT)
+      {
+        f = (Dwg_DYNAPI_field *)bsearch(fieldname, _dwg_object_object_fields,
+              ARRAY_SIZE(_dwg_object_object_fields)-1, /* NULL terminated */
+              sizeof(_dwg_object_object_fields[0]), _name_struct_cmp);
+      }
+    else
+      {
+        const int loglevel = DWG_LOGLEVEL_ERROR;
+        LOG_ERROR("%s: Unhandled %s.supertype ", __FUNCTION__, obj->name);
+        return false;
+      }
+    if (f)
+      {
+        if (fp)
+          memcpy(fp, f, sizeof(Dwg_DYNAPI_field));
+        memcpy(out, &((char*)_obj)[f->offset], f->size);
+        return true;
+      }
+    else
+      {
+        const int loglevel = obj->parent->opts & 0xf;
+        LOG_ERROR("%s: Invalid common field %s", __FUNCTION__, fieldname);
+        return false;
+      }
+  }
 }
 
 /* generic field setters */
@@ -860,23 +917,27 @@ EXPORT bool
 dwg_dynapi_header_set_value(const Dwg_Data *restrict dwg, const char *restrict fieldname,
                             const void *restrict value)
 {
-  Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)
-    bsearch(fieldname, _dwg_header_variables_fields,
-            ARRAY_SIZE(_dwg_header_variables_fields)-1, /* NULL terminated */
-            sizeof(_dwg_header_variables_fields[0]), _name_struct_cmp);
-  if (f)
-    {
-      // there are no malloc'd fields in the HEADER, so no need to free().
-      const Dwg_Header_Variables *const _obj = &dwg->header_vars;
-      memcpy(&((char*)_obj)[f->offset], value, f->size);
-      return true;
-    }
-  else
-    {
-      const int loglevel = dwg->opts & 0xf;
-      LOG_ERROR("%s: Invalid header field %s", __FUNCTION__, fieldname);
-      return false;
-    }
+  if (!dwg || !fieldname)
+    return false;
+  {
+    Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)
+      bsearch(fieldname, _dwg_header_variables_fields,
+              ARRAY_SIZE(_dwg_header_variables_fields)-1, /* NULL terminated */
+              sizeof(_dwg_header_variables_fields[0]), _name_struct_cmp);
+    if (f)
+      {
+        // there are no malloc'd fields in the HEADER, so no need to free().
+        const Dwg_Header_Variables *const _obj = &dwg->header_vars;
+        memcpy(&((char*)_obj)[f->offset], value, f->size);
+        return true;
+      }
+    else
+      {
+        const int loglevel = dwg->opts & 0xf;
+        LOG_ERROR("%s: Invalid header field %s", __FUNCTION__, fieldname);
+        return false;
+      }
+  }
 }
 
 /* Local Variables: */

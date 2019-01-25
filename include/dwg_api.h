@@ -84,12 +84,12 @@ typedef struct dwg_field_name_type_offset {
 /** Check if the name is a valid ENTITY name, not an OBJECT.
  */
 EXPORT bool
-is_dwg_entity(const char* dxfname);
+is_dwg_entity(const char* name);
 
 /** Check if the name is a valid OBJECT name, not an ENTITY.
  */
 EXPORT bool
-is_dwg_object(const char* dxfname);
+is_dwg_object(const char* name);
 
 /** Returns the HEADER.fieldname value in out.
     The optional Dwg_DYNAPI_field *fp is filled with the field types from dynapi.c
@@ -106,6 +106,15 @@ EXPORT bool
 dwg_dynapi_entity_value(void *restrict entity, const char *restrict dxfname,
                         const char *restrict fieldname, void *restrict out,
                         Dwg_DYNAPI_field *restrict fp);
+
+/** Returns the common ENTITY|OBJECT.fieldname value in out.
+    entity is the Dwg_Entity_ENTITY or Dwg_Object_OBJECT struct with the specific fields.
+    The optional Dwg_DYNAPI_field *fp is filled with the field types from dynapi.c
+ */
+EXPORT bool
+dwg_dynapi_common_value(void *restrict _obj, const char *restrict fieldname,
+                        void *restrict out, Dwg_DYNAPI_field *restrict fp);
+
 /** Sets the HEADER.fieldname to a value.
     A malloc'ed struct or string is passed by ptr, not by the content.
     A non-malloc'ed struct is set by content.
@@ -124,6 +133,15 @@ EXPORT bool
 dwg_dynapi_entity_set_value(void *restrict entity, const char *restrict dxfname,
                             const char *restrict fieldname, const void *restrict value);
 
+/** Sets the common ENTITY or OBJECT.fieldname to a value.
+    A malloc'ed struct is passed by ptr, not by the content.
+    A non-malloc'ed struct is set by content.
+    Arrays or strings must be malloced before. We just set the new pointer,
+    the old value will be freed.
+ */
+EXPORT bool
+dwg_dynapi_common_set_value(void *restrict entity, const char *restrict dxfname,
+                            const char *restrict fieldname, const void *restrict value);
 
 /* static api */
 typedef struct dwg_point_3d
@@ -733,6 +751,10 @@ EXPORT void dwg_api_init_version(Dwg_Data *dwg);
   __attribute_deprecated_msg__("use ‘dwg_dynapi_entity_value‘ instead")
 #define _deprecated_dynapi_setter \
   __attribute_deprecated_msg__("use ‘dwg_dynapi_entity_set_value‘ instead")
+#define _deprecated_dynapi_common_getter \
+  __attribute_deprecated_msg__("use ‘dwg_dynapi_common_value‘ instead")
+#define _deprecated_dynapi_common_setter \
+  __attribute_deprecated_msg__("use ‘dwg_dynapi_common_set_value‘ instead")
 
 /********************************************************************
 *                FUNCTIONS START HERE ENTITY SPECIFIC               *
@@ -5576,8 +5598,8 @@ dwg_obj_block_control_get_paper_space(const dwg_obj_block_control *restrict ctrl
 // Get Layer Name
 EXPORT char *
 dwg_obj_layer_get_name(const dwg_obj_layer *restrict layer,
-                          int *restrict error)
-  __nonnull ((1, 2)) _deprecated_dynapi_getter;
+                       int *restrict error)
+  __nonnull ((1, 2)) _deprecated_dynapi_common_getter;
 
 /*******************************************************************
 *                    FUNCTIONS FOR TABLES                          *

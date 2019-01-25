@@ -46,9 +46,9 @@ typedef struct dwg_field_name_type_offset {
 } Dwg_DYNAPI_field;
 
 EXPORT bool
-is_dwg_entity(const char* dxfname);
+is_dwg_entity(const char* name);
 EXPORT bool
-is_dwg_object(const char* dxfname);
+is_dwg_object(const char* name);
 EXPORT bool
 dwg_dynapi_header_value(const Dwg_Data *restrict dwg, const char *restrict fieldname,
                         void *restrict out, Dwg_DYNAPI_field *restrict fp);
@@ -57,10 +57,17 @@ dwg_dynapi_entity_value(void *restrict entity, const char *restrict dxfname,
                         const char *restrict fieldname, void *restrict out,
                         Dwg_DYNAPI_field *restrict fp);
 EXPORT bool
+dwg_dynapi_common_value(void *restrict _obj, const char *restrict fieldname,
+                        void *restrict out, Dwg_DYNAPI_field *restrict fp);
+
+EXPORT bool
 dwg_dynapi_header_set_value(const Dwg_Data *restrict dwg, const char *restrict fieldname,
                             const void *restrict value);
 EXPORT bool
 dwg_dynapi_entity_set_value(void *restrict entity, const char *restrict dxfname,
+                            const char *restrict fieldname, const void *restrict value);
+EXPORT bool
+dwg_dynapi_common_set_value(void *restrict entity, const char *restrict dxfname,
                             const char *restrict fieldname, const void *restrict value);
 #endif
 
@@ -68,9 +75,10 @@ dwg_dynapi_entity_set_value(void *restrict entity, const char *restrict dxfname,
 
 /* Also for all objects */
 const Dwg_DYNAPI_field*
-dwg_dynapi_entity_fields(const char *restrict dxfname);
+dwg_dynapi_entity_fields(const char *restrict name)
+  __nonnull((1));
 
 const Dwg_DYNAPI_field*
-dwg_dynapi_entity_field(const char *restrict dxfname, const char *restrict fieldname);
-
+dwg_dynapi_entity_field(const char *restrict name, const char *restrict fieldname)
+  __nonnull((1, 2));
 #endif

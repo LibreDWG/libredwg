@@ -47,6 +47,17 @@
 #  define CLANG_DIAG_RESTORE
 #endif
 
+/* The __nonnull function attribute marks pointer arguments which
+   must not be NULL.  */
+#if (defined( __GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 303)
+# undef __nonnull
+# define __nonnull(params) __attribute__ ((__nonnull__ params))
+# define HAVE_NONNULL
+#else
+# undef HAVE_NONNULL
+# define __nonnull(params)
+#endif
+
 #ifndef EXPORT
 # if defined(_WIN32) && defined(ENABLE_SHARED)
 #   ifdef DLL_EXPORT
