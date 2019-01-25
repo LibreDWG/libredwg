@@ -310,12 +310,12 @@ TESTDATA = \
     test-data/r11/ACEB10.stp \
     test-data/r11/Constraints_12.dxf \
     test-data/r12/Constraints.dxf \
-    test-data/r12/Leader_r12.dxf \
+    test-data/r12/Leader.dxf \
+    test-data/r13/v.dxf \
     test-data/r14/Constraints.dwg \
     test-data/r14/Leader.dwg \
     test-data/r14/Leader.dxf \
     test-data/r14/v.dwg \
-    test-data/r14/v.dxf \
     test-data/sample_2000.dwg \
     test-data/sample_2000.dxf \
     test-data/sample_2004.dxf \

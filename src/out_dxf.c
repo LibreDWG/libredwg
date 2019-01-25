@@ -199,7 +199,7 @@ static inline char* alloca(size_t size) {
 #define ENDTAB()         fprintf(dat->fh, "  0\r\nENDTAB\r\n")
 #define RECORD(record)   fprintf(dat->fh, "  0\r\n" #record "\r\n")
 #define record(record)   fprintf(dat->fh, "  0\r\n%s\r\n", record)
-#define SUBCLASS(text)   if (dat->from_version >= R_2000) { VALUE_TV(#text, 100); }
+#define SUBCLASS(text)   if (dat->from_version >= R_13) { VALUE_TV(#text, 100); }
 
 #define GROUP(dxf) \
     fprintf (dat->fh, "%3i\r\n", dxf)
@@ -841,7 +841,7 @@ dxf_cvt_blockname(Bit_Chain *restrict dat, char *restrict name, const int dxf)
       VALUE_H (_ctrl->null_handle, 330); \
     } \
   } \
-  SINCE(R_2000) { \
+  SINCE(R_13) { \
     VALUE_TV ("AcDbSymbolTable", 100); \
   }
 
@@ -851,7 +851,7 @@ dxf_cvt_blockname(Bit_Chain *restrict dat, char *restrict name, const int dxf)
       /* TODO: ACAD_XDICTIONARY */ \
       FIELD_HANDLE (owner, 4, 330); \
     } \
-    SINCE(R_2000) { \
+    SINCE(R_13) { \
       VALUE_TV ("AcDbSymbolTableRecord", 100); \
       VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
     }\
@@ -883,7 +883,7 @@ dxf_cvt_blockname(Bit_Chain *restrict dat, char *restrict name, const int dxf)
       /* TODO: ACAD_XDICTIONARY */ \
       FIELD_HANDLE (owner, 4, 330); \
     } \
-    SINCE(R_2000) { \
+    SINCE(R_13) { \
       VALUE_TV ("AcDbSymbolTableRecord", 100); \
       VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
     } \

@@ -177,7 +177,7 @@ dxfb_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
     VALUE_TV(#token, 2)
 #define ENDTAB()        VALUE_TV("ENDTAB", 0)
 #define RECORD(token)   VALUE_TV(#token, 0)
-#define SUBCLASS(text)  if (dat->from_version >= R_2000) { VALUE_TV(#text, 100) }
+#define SUBCLASS(text)  if (dat->from_version >= R_13) { VALUE_TV(#text, 100) }
 
 /*
 #define VALUE(code, value)                   \
@@ -719,14 +719,14 @@ dxfb_cvt_blockname(Bit_Chain *restrict dat, char *restrict name, const int dxf)
   } \
   SINCE(R_14) \
     VALUE_H (_ctrl->null_handle, 330); \
-  SINCE(R_2000) \
+  SINCE(R_13) \
     VALUE_TV ("AcDbSymbolTable", 100)
 
 #define COMMON_TABLE_FLAGS(owner, acdbname) \
   SINCE(R_14) \
     /* TODO: ACAD_XDICTIONARY */  \
     FIELD_HANDLE (owner, 4, 330); \
-  SINCE(R_2000) { \
+  SINCE(R_13) { \
     VALUE_TV ("AcDbSymbolTableRecord", 100) \
     VALUE_TV ("AcDb" #acdbname "TableRecord", 100) \
   } \
@@ -756,7 +756,7 @@ dxfb_cvt_blockname(Bit_Chain *restrict dat, char *restrict name, const int dxf)
 #define LAYER_TABLE_FLAGS(owner, acdbname) \
     SINCE(R_14) \
       FIELD_HANDLE (owner, 4, 330); \
-    SINCE(R_2000) { \
+    SINCE(R_13) { \
       VALUE_TV ("AcDbSymbolTableRecord", 100) \
       VALUE_TV ("AcDb" #acdbname "TableRecord", 100) \
     } \
