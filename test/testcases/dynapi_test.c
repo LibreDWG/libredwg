@@ -14,7 +14,7 @@
    do not modify */
 /* written by: Reini Urban */
 
-#line 17 "dynapi_test.c.in"
+#line 16 "dynapi_test.c.in"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

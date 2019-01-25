@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 # Copyright (C) 2019 Free Software Foundation, Inc.
 # Generate c structs/arrays for all dwg objects and its fields for a dynamic API.
-# -> name, type, offset
+# -> name, type, size, offset, memory
 # linear search is good enough.
 # This is needed for in_dxf, dwgfilter,
 # a maintainable and shorter dwg_api and shorter language bindings.
