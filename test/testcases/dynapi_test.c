@@ -13424,16 +13424,14 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
   }
   {
     BITCODE_BD* path_entity_transmatrix;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(extrudedsurface, "EXTRUDEDSURFACE", "num_path_entity_transmatrix", &count, NULL) &&
-        dwg_dynapi_entity_value(extrudedsurface, "EXTRUDEDSURFACE", "path_entity_transmatrix", &path_entity_transmatrix, NULL)
-        && path_entity_transmatrix == extrudedsurface->path_entity_transmatrix)
+    if (dwg_dynapi_entity_value(extrudedsurface, "EXTRUDEDSURFACE", "path_entity_transmatrix", &path_entity_transmatrix, NULL)
+        && !memcmp(&path_entity_transmatrix, &extrudedsurface->path_entity_transmatrix, sizeof(extrudedsurface->path_entity_transmatrix)))
       {
-        pass ("EXTRUDEDSURFACE.path_entity_transmatrix [BD*] * %u num_path_entity_transmatrix", count);
+        pass ("EXTRUDEDSURFACE.path_entity_transmatrix [BD*]");
       }
     else
       {
-        fail ("EXTRUDEDSURFACE.path_entity_transmatrix [BD*] * %u num_path_entity_transmatrix", count); error++;
+        fail ("EXTRUDEDSURFACE.path_entity_transmatrix [BD*]"); error++;
       }
   }
   {
@@ -13632,30 +13630,26 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
   }
   {
     BITCODE_BD* sweep_entity_transmatrix;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(extrudedsurface, "EXTRUDEDSURFACE", "num_sweep_entity_transmatrix", &count, NULL) &&
-        dwg_dynapi_entity_value(extrudedsurface, "EXTRUDEDSURFACE", "sweep_entity_transmatrix", &sweep_entity_transmatrix, NULL)
-        && sweep_entity_transmatrix == extrudedsurface->sweep_entity_transmatrix)
+    if (dwg_dynapi_entity_value(extrudedsurface, "EXTRUDEDSURFACE", "sweep_entity_transmatrix", &sweep_entity_transmatrix, NULL)
+        && !memcmp(&sweep_entity_transmatrix, &extrudedsurface->sweep_entity_transmatrix, sizeof(extrudedsurface->sweep_entity_transmatrix)))
       {
-        pass ("EXTRUDEDSURFACE.sweep_entity_transmatrix [BD*] * %u num_sweep_entity_transmatrix", count);
+        pass ("EXTRUDEDSURFACE.sweep_entity_transmatrix [BD*]");
       }
     else
       {
-        fail ("EXTRUDEDSURFACE.sweep_entity_transmatrix [BD*] * %u num_sweep_entity_transmatrix", count); error++;
+        fail ("EXTRUDEDSURFACE.sweep_entity_transmatrix [BD*]"); error++;
       }
   }
   {
     BITCODE_BD* sweep_transmatrix;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(extrudedsurface, "EXTRUDEDSURFACE", "num_sweep_transmatrix", &count, NULL) &&
-        dwg_dynapi_entity_value(extrudedsurface, "EXTRUDEDSURFACE", "sweep_transmatrix", &sweep_transmatrix, NULL)
-        && sweep_transmatrix == extrudedsurface->sweep_transmatrix)
+    if (dwg_dynapi_entity_value(extrudedsurface, "EXTRUDEDSURFACE", "sweep_transmatrix", &sweep_transmatrix, NULL)
+        && !memcmp(&sweep_transmatrix, &extrudedsurface->sweep_transmatrix, sizeof(extrudedsurface->sweep_transmatrix)))
       {
-        pass ("EXTRUDEDSURFACE.sweep_transmatrix [BD*] * %u num_sweep_transmatrix", count);
+        pass ("EXTRUDEDSURFACE.sweep_transmatrix [BD*]");
       }
     else
       {
-        fail ("EXTRUDEDSURFACE.sweep_transmatrix [BD*] * %u num_sweep_transmatrix", count); error++;
+        fail ("EXTRUDEDSURFACE.sweep_transmatrix [BD*]"); error++;
       }
   }
   {
@@ -17296,16 +17290,14 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
   }
   {
     BITCODE_BD* loft_entity_transmatrix;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(loftedsurface, "LOFTEDSURFACE", "num_loft_entity_transmatrix", &count, NULL) &&
-        dwg_dynapi_entity_value(loftedsurface, "LOFTEDSURFACE", "loft_entity_transmatrix", &loft_entity_transmatrix, NULL)
-        && loft_entity_transmatrix == loftedsurface->loft_entity_transmatrix)
+    if (dwg_dynapi_entity_value(loftedsurface, "LOFTEDSURFACE", "loft_entity_transmatrix", &loft_entity_transmatrix, NULL)
+        && !memcmp(&loft_entity_transmatrix, &loftedsurface->loft_entity_transmatrix, sizeof(loftedsurface->loft_entity_transmatrix)))
       {
-        pass ("LOFTEDSURFACE.loft_entity_transmatrix [BD*] * %u num_loft_entity_transmatrix", count);
+        pass ("LOFTEDSURFACE.loft_entity_transmatrix [BD*]");
       }
     else
       {
-        fail ("LOFTEDSURFACE.loft_entity_transmatrix [BD*] * %u num_loft_entity_transmatrix", count); error++;
+        fail ("LOFTEDSURFACE.loft_entity_transmatrix [BD*]"); error++;
       }
   }
   {
@@ -22555,16 +22547,14 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
   }
   {
     BITCODE_BD* revolved_entity_transmatrix;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(revolvedsurface, "REVOLVEDSURFACE", "num_revolved_entity_transmatrix", &count, NULL) &&
-        dwg_dynapi_entity_value(revolvedsurface, "REVOLVEDSURFACE", "revolved_entity_transmatrix", &revolved_entity_transmatrix, NULL)
-        && revolved_entity_transmatrix == revolvedsurface->revolved_entity_transmatrix)
+    if (dwg_dynapi_entity_value(revolvedsurface, "REVOLVEDSURFACE", "revolved_entity_transmatrix", &revolved_entity_transmatrix, NULL)
+        && !memcmp(&revolved_entity_transmatrix, &revolvedsurface->revolved_entity_transmatrix, sizeof(revolvedsurface->revolved_entity_transmatrix)))
       {
-        pass ("REVOLVEDSURFACE.revolved_entity_transmatrix [BD*] * %u num_revolved_entity_transmatrix", count);
+        pass ("REVOLVEDSURFACE.revolved_entity_transmatrix [BD*]");
       }
     else
       {
-        fail ("REVOLVEDSURFACE.revolved_entity_transmatrix [BD*] * %u num_revolved_entity_transmatrix", count); error++;
+        fail ("REVOLVEDSURFACE.revolved_entity_transmatrix [BD*]"); error++;
       }
   }
   {
@@ -24137,30 +24127,26 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
   }
   {
     BITCODE_BD* path_entity_transmatrix;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(sweptsurface, "SWEPTSURFACE", "num_path_entity_transmatrix", &count, NULL) &&
-        dwg_dynapi_entity_value(sweptsurface, "SWEPTSURFACE", "path_entity_transmatrix", &path_entity_transmatrix, NULL)
-        && path_entity_transmatrix == sweptsurface->path_entity_transmatrix)
+    if (dwg_dynapi_entity_value(sweptsurface, "SWEPTSURFACE", "path_entity_transmatrix", &path_entity_transmatrix, NULL)
+        && !memcmp(&path_entity_transmatrix, &sweptsurface->path_entity_transmatrix, sizeof(sweptsurface->path_entity_transmatrix)))
       {
-        pass ("SWEPTSURFACE.path_entity_transmatrix [BD*] * %u num_path_entity_transmatrix", count);
+        pass ("SWEPTSURFACE.path_entity_transmatrix [BD*]");
       }
     else
       {
-        fail ("SWEPTSURFACE.path_entity_transmatrix [BD*] * %u num_path_entity_transmatrix", count); error++;
+        fail ("SWEPTSURFACE.path_entity_transmatrix [BD*]"); error++;
       }
   }
   {
     BITCODE_BD* path_entity_transmatrix1;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(sweptsurface, "SWEPTSURFACE", "num_path_entity_transmatrix1", &count, NULL) &&
-        dwg_dynapi_entity_value(sweptsurface, "SWEPTSURFACE", "path_entity_transmatrix1", &path_entity_transmatrix1, NULL)
-        && path_entity_transmatrix1 == sweptsurface->path_entity_transmatrix1)
+    if (dwg_dynapi_entity_value(sweptsurface, "SWEPTSURFACE", "path_entity_transmatrix1", &path_entity_transmatrix1, NULL)
+        && !memcmp(&path_entity_transmatrix1, &sweptsurface->path_entity_transmatrix1, sizeof(sweptsurface->path_entity_transmatrix1)))
       {
-        pass ("SWEPTSURFACE.path_entity_transmatrix1 [BD*] * %u num_path_entity_transmatrix1", count);
+        pass ("SWEPTSURFACE.path_entity_transmatrix1 [BD*]");
       }
     else
       {
-        fail ("SWEPTSURFACE.path_entity_transmatrix1 [BD*] * %u num_path_entity_transmatrix1", count); error++;
+        fail ("SWEPTSURFACE.path_entity_transmatrix1 [BD*]"); error++;
       }
   }
   {
@@ -24407,30 +24393,26 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
   }
   {
     BITCODE_BD* sweep_entity_transmatrix;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(sweptsurface, "SWEPTSURFACE", "num_sweep_entity_transmatrix", &count, NULL) &&
-        dwg_dynapi_entity_value(sweptsurface, "SWEPTSURFACE", "sweep_entity_transmatrix", &sweep_entity_transmatrix, NULL)
-        && sweep_entity_transmatrix == sweptsurface->sweep_entity_transmatrix)
+    if (dwg_dynapi_entity_value(sweptsurface, "SWEPTSURFACE", "sweep_entity_transmatrix", &sweep_entity_transmatrix, NULL)
+        && !memcmp(&sweep_entity_transmatrix, &sweptsurface->sweep_entity_transmatrix, sizeof(sweptsurface->sweep_entity_transmatrix)))
       {
-        pass ("SWEPTSURFACE.sweep_entity_transmatrix [BD*] * %u num_sweep_entity_transmatrix", count);
+        pass ("SWEPTSURFACE.sweep_entity_transmatrix [BD*]");
       }
     else
       {
-        fail ("SWEPTSURFACE.sweep_entity_transmatrix [BD*] * %u num_sweep_entity_transmatrix", count); error++;
+        fail ("SWEPTSURFACE.sweep_entity_transmatrix [BD*]"); error++;
       }
   }
   {
     BITCODE_BD* sweep_entity_transmatrix1;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(sweptsurface, "SWEPTSURFACE", "num_sweep_entity_transmatrix1", &count, NULL) &&
-        dwg_dynapi_entity_value(sweptsurface, "SWEPTSURFACE", "sweep_entity_transmatrix1", &sweep_entity_transmatrix1, NULL)
-        && sweep_entity_transmatrix1 == sweptsurface->sweep_entity_transmatrix1)
+    if (dwg_dynapi_entity_value(sweptsurface, "SWEPTSURFACE", "sweep_entity_transmatrix1", &sweep_entity_transmatrix1, NULL)
+        && !memcmp(&sweep_entity_transmatrix1, &sweptsurface->sweep_entity_transmatrix1, sizeof(sweptsurface->sweep_entity_transmatrix1)))
       {
-        pass ("SWEPTSURFACE.sweep_entity_transmatrix1 [BD*] * %u num_sweep_entity_transmatrix1", count);
+        pass ("SWEPTSURFACE.sweep_entity_transmatrix1 [BD*]");
       }
     else
       {
-        fail ("SWEPTSURFACE.sweep_entity_transmatrix1 [BD*] * %u num_sweep_entity_transmatrix1", count); error++;
+        fail ("SWEPTSURFACE.sweep_entity_transmatrix1 [BD*]"); error++;
       }
   }
   {
@@ -29713,16 +29695,14 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
   }
   {
     BITCODE_BD* pathentity_transform;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(acsh_sweep_class, "ACSH_SWEEP_CLASS", "num_pathentity_transform", &count, NULL) &&
-        dwg_dynapi_entity_value(acsh_sweep_class, "ACSH_SWEEP_CLASS", "pathentity_transform", &pathentity_transform, NULL)
-        && pathentity_transform == acsh_sweep_class->pathentity_transform)
+    if (dwg_dynapi_entity_value(acsh_sweep_class, "ACSH_SWEEP_CLASS", "pathentity_transform", &pathentity_transform, NULL)
+        && !memcmp(&pathentity_transform, &acsh_sweep_class->pathentity_transform, sizeof(acsh_sweep_class->pathentity_transform)))
       {
-        pass ("ACSH_SWEEP_CLASS.pathentity_transform [BD*] * %u num_pathentity_transform", count);
+        pass ("ACSH_SWEEP_CLASS.pathentity_transform [BD*]");
       }
     else
       {
-        fail ("ACSH_SWEEP_CLASS.pathentity_transform [BD*] * %u num_pathentity_transform", count); error++;
+        fail ("ACSH_SWEEP_CLASS.pathentity_transform [BD*]"); error++;
       }
   }
   {
@@ -29859,16 +29839,14 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
   }
   {
     BITCODE_BD* shhn_pts;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(acsh_sweep_class, "ACSH_SWEEP_CLASS", "num_shhn_pts", &count, NULL) &&
-        dwg_dynapi_entity_value(acsh_sweep_class, "ACSH_SWEEP_CLASS", "shhn_pts", &shhn_pts, NULL)
-        && shhn_pts == acsh_sweep_class->shhn_pts)
+    if (dwg_dynapi_entity_value(acsh_sweep_class, "ACSH_SWEEP_CLASS", "shhn_pts", &shhn_pts, NULL)
+        && !memcmp(&shhn_pts, &acsh_sweep_class->shhn_pts, sizeof(acsh_sweep_class->shhn_pts)))
       {
-        pass ("ACSH_SWEEP_CLASS.shhn_pts [BD*] * %u num_shhn_pts", count);
+        pass ("ACSH_SWEEP_CLASS.shhn_pts [BD*]");
       }
     else
       {
-        fail ("ACSH_SWEEP_CLASS.shhn_pts [BD*] * %u num_shhn_pts", count); error++;
+        fail ("ACSH_SWEEP_CLASS.shhn_pts [BD*]"); error++;
       }
   }
   {
@@ -30137,16 +30115,14 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
   }
   {
     BITCODE_BD* sweepentity_transform;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(acsh_sweep_class, "ACSH_SWEEP_CLASS", "num_sweepentity_transform", &count, NULL) &&
-        dwg_dynapi_entity_value(acsh_sweep_class, "ACSH_SWEEP_CLASS", "sweepentity_transform", &sweepentity_transform, NULL)
-        && sweepentity_transform == acsh_sweep_class->sweepentity_transform)
+    if (dwg_dynapi_entity_value(acsh_sweep_class, "ACSH_SWEEP_CLASS", "sweepentity_transform", &sweepentity_transform, NULL)
+        && !memcmp(&sweepentity_transform, &acsh_sweep_class->sweepentity_transform, sizeof(acsh_sweep_class->sweepentity_transform)))
       {
-        pass ("ACSH_SWEEP_CLASS.sweepentity_transform [BD*] * %u num_sweepentity_transform", count);
+        pass ("ACSH_SWEEP_CLASS.sweepentity_transform [BD*]");
       }
     else
       {
-        fail ("ACSH_SWEEP_CLASS.sweepentity_transform [BD*] * %u num_sweepentity_transform", count); error++;
+        fail ("ACSH_SWEEP_CLASS.sweepentity_transform [BD*]"); error++;
       }
   }
   {
@@ -41472,16 +41448,14 @@ static int test_MATERIAL (const Dwg_Object *obj)
   }
   {
     BITCODE_BD* bumpmap_transmatrix;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(material, "MATERIAL", "num_bumpmap_transmatrix", &count, NULL) &&
-        dwg_dynapi_entity_value(material, "MATERIAL", "bumpmap_transmatrix", &bumpmap_transmatrix, NULL)
-        && bumpmap_transmatrix == material->bumpmap_transmatrix)
+    if (dwg_dynapi_entity_value(material, "MATERIAL", "bumpmap_transmatrix", &bumpmap_transmatrix, NULL)
+        && !memcmp(&bumpmap_transmatrix, &material->bumpmap_transmatrix, sizeof(material->bumpmap_transmatrix)))
       {
-        pass ("MATERIAL.bumpmap_transmatrix [BD*] * %u num_bumpmap_transmatrix", count);
+        pass ("MATERIAL.bumpmap_transmatrix [BD*]");
       }
     else
       {
-        fail ("MATERIAL.bumpmap_transmatrix [BD*] * %u num_bumpmap_transmatrix", count); error++;
+        fail ("MATERIAL.bumpmap_transmatrix [BD*]"); error++;
       }
   }
   {
@@ -41738,16 +41712,14 @@ static int test_MATERIAL (const Dwg_Object *obj)
   }
   {
     BITCODE_BD* diffusemap_transmatrix;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(material, "MATERIAL", "num_diffusemap_transmatrix", &count, NULL) &&
-        dwg_dynapi_entity_value(material, "MATERIAL", "diffusemap_transmatrix", &diffusemap_transmatrix, NULL)
-        && diffusemap_transmatrix == material->diffusemap_transmatrix)
+    if (dwg_dynapi_entity_value(material, "MATERIAL", "diffusemap_transmatrix", &diffusemap_transmatrix, NULL)
+        && !memcmp(&diffusemap_transmatrix, &material->diffusemap_transmatrix, sizeof(material->diffusemap_transmatrix)))
       {
-        pass ("MATERIAL.diffusemap_transmatrix [BD*] * %u num_diffusemap_transmatrix", count);
+        pass ("MATERIAL.diffusemap_transmatrix [BD*]");
       }
     else
       {
-        fail ("MATERIAL.diffusemap_transmatrix [BD*] * %u num_diffusemap_transmatrix", count); error++;
+        fail ("MATERIAL.diffusemap_transmatrix [BD*]"); error++;
       }
   }
   {
@@ -42304,16 +42276,14 @@ static int test_MATERIAL (const Dwg_Object *obj)
   }
   {
     BITCODE_BD* normalmap_transmatrix;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(material, "MATERIAL", "num_normalmap_transmatrix", &count, NULL) &&
-        dwg_dynapi_entity_value(material, "MATERIAL", "normalmap_transmatrix", &normalmap_transmatrix, NULL)
-        && normalmap_transmatrix == material->normalmap_transmatrix)
+    if (dwg_dynapi_entity_value(material, "MATERIAL", "normalmap_transmatrix", &normalmap_transmatrix, NULL)
+        && !memcmp(&normalmap_transmatrix, &material->normalmap_transmatrix, sizeof(material->normalmap_transmatrix)))
       {
-        pass ("MATERIAL.normalmap_transmatrix [BD*] * %u num_normalmap_transmatrix", count);
+        pass ("MATERIAL.normalmap_transmatrix [BD*]");
       }
     else
       {
-        fail ("MATERIAL.normalmap_transmatrix [BD*] * %u num_normalmap_transmatrix", count); error++;
+        fail ("MATERIAL.normalmap_transmatrix [BD*]"); error++;
       }
   }
   {
@@ -42474,16 +42444,14 @@ static int test_MATERIAL (const Dwg_Object *obj)
   }
   {
     BITCODE_BD* opacitymap_transmatrix;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(material, "MATERIAL", "num_opacitymap_transmatrix", &count, NULL) &&
-        dwg_dynapi_entity_value(material, "MATERIAL", "opacitymap_transmatrix", &opacitymap_transmatrix, NULL)
-        && opacitymap_transmatrix == material->opacitymap_transmatrix)
+    if (dwg_dynapi_entity_value(material, "MATERIAL", "opacitymap_transmatrix", &opacitymap_transmatrix, NULL)
+        && !memcmp(&opacitymap_transmatrix, &material->opacitymap_transmatrix, sizeof(material->opacitymap_transmatrix)))
       {
-        pass ("MATERIAL.opacitymap_transmatrix [BD*] * %u num_opacitymap_transmatrix", count);
+        pass ("MATERIAL.opacitymap_transmatrix [BD*]");
       }
     else
       {
-        fail ("MATERIAL.opacitymap_transmatrix [BD*] * %u num_opacitymap_transmatrix", count); error++;
+        fail ("MATERIAL.opacitymap_transmatrix [BD*]"); error++;
       }
   }
   {
@@ -42668,16 +42636,14 @@ static int test_MATERIAL (const Dwg_Object *obj)
   }
   {
     BITCODE_BD* reflectionmap_transmatrix;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(material, "MATERIAL", "num_reflectionmap_transmatrix", &count, NULL) &&
-        dwg_dynapi_entity_value(material, "MATERIAL", "reflectionmap_transmatrix", &reflectionmap_transmatrix, NULL)
-        && reflectionmap_transmatrix == material->reflectionmap_transmatrix)
+    if (dwg_dynapi_entity_value(material, "MATERIAL", "reflectionmap_transmatrix", &reflectionmap_transmatrix, NULL)
+        && !memcmp(&reflectionmap_transmatrix, &material->reflectionmap_transmatrix, sizeof(material->reflectionmap_transmatrix)))
       {
-        pass ("MATERIAL.reflectionmap_transmatrix [BD*] * %u num_reflectionmap_transmatrix", count);
+        pass ("MATERIAL.reflectionmap_transmatrix [BD*]");
       }
     else
       {
-        fail ("MATERIAL.reflectionmap_transmatrix [BD*] * %u num_reflectionmap_transmatrix", count); error++;
+        fail ("MATERIAL.reflectionmap_transmatrix [BD*]"); error++;
       }
   }
   {
@@ -42862,16 +42828,14 @@ static int test_MATERIAL (const Dwg_Object *obj)
   }
   {
     BITCODE_BD* refractionmap_transmatrix;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(material, "MATERIAL", "num_refractionmap_transmatrix", &count, NULL) &&
-        dwg_dynapi_entity_value(material, "MATERIAL", "refractionmap_transmatrix", &refractionmap_transmatrix, NULL)
-        && refractionmap_transmatrix == material->refractionmap_transmatrix)
+    if (dwg_dynapi_entity_value(material, "MATERIAL", "refractionmap_transmatrix", &refractionmap_transmatrix, NULL)
+        && !memcmp(&refractionmap_transmatrix, &material->refractionmap_transmatrix, sizeof(material->refractionmap_transmatrix)))
       {
-        pass ("MATERIAL.refractionmap_transmatrix [BD*] * %u num_refractionmap_transmatrix", count);
+        pass ("MATERIAL.refractionmap_transmatrix [BD*]");
       }
     else
       {
-        fail ("MATERIAL.refractionmap_transmatrix [BD*] * %u num_refractionmap_transmatrix", count); error++;
+        fail ("MATERIAL.refractionmap_transmatrix [BD*]"); error++;
       }
   }
   {
@@ -43116,16 +43080,14 @@ static int test_MATERIAL (const Dwg_Object *obj)
   }
   {
     BITCODE_BD* specularmap_transmatrix;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(material, "MATERIAL", "num_specularmap_transmatrix", &count, NULL) &&
-        dwg_dynapi_entity_value(material, "MATERIAL", "specularmap_transmatrix", &specularmap_transmatrix, NULL)
-        && specularmap_transmatrix == material->specularmap_transmatrix)
+    if (dwg_dynapi_entity_value(material, "MATERIAL", "specularmap_transmatrix", &specularmap_transmatrix, NULL)
+        && !memcmp(&specularmap_transmatrix, &material->specularmap_transmatrix, sizeof(material->specularmap_transmatrix)))
       {
-        pass ("MATERIAL.specularmap_transmatrix [BD*] * %u num_specularmap_transmatrix", count);
+        pass ("MATERIAL.specularmap_transmatrix [BD*]");
       }
     else
       {
-        fail ("MATERIAL.specularmap_transmatrix [BD*] * %u num_specularmap_transmatrix", count); error++;
+        fail ("MATERIAL.specularmap_transmatrix [BD*]"); error++;
       }
   }
   {
@@ -45850,16 +45812,14 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
   }
   {
     BITCODE_BD* clip_bound_transform;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(spatial_filter, "SPATIAL_FILTER", "num_clip_bound_transform", &count, NULL) &&
-        dwg_dynapi_entity_value(spatial_filter, "SPATIAL_FILTER", "clip_bound_transform", &clip_bound_transform, NULL)
-        && clip_bound_transform == spatial_filter->clip_bound_transform)
+    if (dwg_dynapi_entity_value(spatial_filter, "SPATIAL_FILTER", "clip_bound_transform", &clip_bound_transform, NULL)
+        && !memcmp(&clip_bound_transform, &spatial_filter->clip_bound_transform, sizeof(spatial_filter->clip_bound_transform)))
       {
-        pass ("SPATIAL_FILTER.clip_bound_transform [BD*] * %u num_clip_bound_transform", count);
+        pass ("SPATIAL_FILTER.clip_bound_transform [BD*]");
       }
     else
       {
-        fail ("SPATIAL_FILTER.clip_bound_transform [BD*] * %u num_clip_bound_transform", count); error++;
+        fail ("SPATIAL_FILTER.clip_bound_transform [BD*]"); error++;
       }
   }
   {
@@ -45948,16 +45908,14 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
   }
   {
     BITCODE_BD* inverse_block_transform;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value(spatial_filter, "SPATIAL_FILTER", "num_inverse_block_transform", &count, NULL) &&
-        dwg_dynapi_entity_value(spatial_filter, "SPATIAL_FILTER", "inverse_block_transform", &inverse_block_transform, NULL)
-        && inverse_block_transform == spatial_filter->inverse_block_transform)
+    if (dwg_dynapi_entity_value(spatial_filter, "SPATIAL_FILTER", "inverse_block_transform", &inverse_block_transform, NULL)
+        && !memcmp(&inverse_block_transform, &spatial_filter->inverse_block_transform, sizeof(spatial_filter->inverse_block_transform)))
       {
-        pass ("SPATIAL_FILTER.inverse_block_transform [BD*] * %u num_inverse_block_transform", count);
+        pass ("SPATIAL_FILTER.inverse_block_transform [BD*]");
       }
     else
       {
-        fail ("SPATIAL_FILTER.inverse_block_transform [BD*] * %u num_inverse_block_transform", count); error++;
+        fail ("SPATIAL_FILTER.inverse_block_transform [BD*]"); error++;
       }
   }
   {

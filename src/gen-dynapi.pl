@@ -472,7 +472,8 @@ EOF
       }
       print $fh "\n  }\n";
     } elsif ($type =~ /\*$/ and $type !~ /(RC\*|struct _dwg_object_)/
-             and $var !~ /^(ref|block_size|extra_acis_data)$/) { # array
+             and $var !~ /^(ref|block_size|extra_acis_data)$/ # RC**
+             and $var !~ /(_transform|_transmatrix1?|shhn_pts)$/) { # VECTOR_N
       my %countfield = (
         attrib_handles => 'num_owned',
         attribs => 'num_owned', # XXX TABLE
