@@ -1500,27 +1500,24 @@ bit_write_CMC(Bit_Chain *restrict dat, Dwg_Color *restrict color)
  *  Does also references, DBCOLOR lookups (not yet, needs hdl_dat stream)
  */
 void
-bit_read_EMC(Bit_Chain *restrict dat, Dwg_Color *restrict color)
+bit_read_ENC(Bit_Chain *restrict dat, Dwg_Color *restrict color)
 {
   color->index = bit_read_BS(dat);
   if (dat->version >= R_2004)
     {
       uint16_t flag = color->index >> 8;
       color->index &= 0x1ff;
-      //if (flag & 0x40) {
-      //  color.handle = dwg_decode_handleref(hdl_dat, obj, dwg);
-      //}
+      if (flag & 0x80)
+        color->rgb = bit_read_BL(dat); //ODA bug, documented as BS
+      if (flag & 0x40) {
+        color->handle = calloc(1,sizeof(color->handle));
+        bit_read_H(dat, color->handle); // => DBCOLOR
+      }
       if (flag & 0x20) {
         BITCODE_BL alpha = bit_read_BL(dat);
-        //color->transparency_type = trlong & 0xff;
-        //color->alpha = trlong >> 8;
+        color->alpha_type = alpha & 0xff; //0, 1 or 3
+        color->alpha = alpha >> 8;
       }
-      if (!(flag & 0x40) && (flag & 0x80))
-        color->rgb = bit_read_BL(dat);
-      if ((flag & 0x41) == 0x41)
-        color->name = (char*)bit_read_TV(dat); //str_dat?
-      if ((flag & 0x42) == 0x42)
-        color->book_name = (char*)bit_read_TV(dat); //str_dat?
       color->flag = flag;
     }
 }
@@ -1528,7 +1525,7 @@ bit_read_EMC(Bit_Chain *restrict dat, Dwg_Color *restrict color)
 /** Write entity color (2004+)
  */
 void
-bit_write_EMC(Bit_Chain *restrict dat, Dwg_Color *restrict color)
+bit_write_ENC(Bit_Chain *restrict dat, Dwg_Color *restrict color)
 {
   bit_write_BS(dat, (color->index & 0x1ff) | (color->flag << 8));
   if (dat->version >= R_2004)

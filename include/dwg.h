@@ -156,7 +156,7 @@ extern "C" {
 #define FORMAT_BD "%f"
 #define BITCODE_BE BITCODE_3BD
 #define BITCODE_CMC Dwg_Color
-#define BITCODE_EMC Dwg_Color
+#define BITCODE_ENC Dwg_Color
 #define BITCODE_H Dwg_Object_Ref*
 #define BITCODE_4BITS BITCODE_RC
 #define FORMAT_4BITS "%1x"
@@ -476,9 +476,11 @@ typedef struct _dwg_color /* CmColor: R15 and earlier */
   BITCODE_BS index;
   BITCODE_BS flag;    /* 1: name follows, 2: book name follows */
   BITCODE_BL rgb;
+  Dwg_Handle *handle;
   BITCODE_TV name;
   BITCODE_TV book_name;
-  BITCODE_BL alpha; /* & 0xff: 0 BYLAYER, 1 BYBLOCK, 3 alpha */
+  BITCODE_BB alpha_type; /* 0 BYLAYER, 1 BYBLOCK, 3 alpha */
+  BITCODE_RC alpha;      /* 0-255 */
 } Dwg_Color;
 
 /**

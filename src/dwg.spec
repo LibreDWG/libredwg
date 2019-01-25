@@ -5996,10 +5996,10 @@ DWG_OBJECT(VISUALSTYLE)
   FIELD_CMC (color, 62,420);
   FIELD_BS (edge_obscured_line_pattern, 75);
 
-  FIELD_EMC (edge_color, 66,424);
+  FIELD_CMC (edge_color, 66,424);
   FIELD_BS (edge_width, 76);
   FIELD_BS (edge_overhang, 77);
-  FIELD_EMC (edge_silhouette_color, 67,425);
+  FIELD_CMC (edge_silhouette_color, 67,425);
   FIELD_BS (edge_silhouette_width, 79);
   FIELD_BS (num_edge_isolines, 171);
   FIELD_BS (edge_hide_precision_flag, 290);
@@ -6338,12 +6338,12 @@ DWG_OBJECT(MATERIAL)
   DEBUG_HERE_OBJ; // TODO from here on the order of the fields is unknown
   FIELD_BS (ambient_color_flag, 70); // 0 Use current color, 1 Override
   FIELD_BD (ambient_color_factor, 40); // 0.0 - 1.0
-  FIELD_EMC (ambient_color, 90,0);
+  FIELD_ENC (ambient_color, 90,0);
 
   DEBUG_HERE_OBJ;
   FIELD_BS (diffuse_color_flag, 71); // 0 Use current color, 1 Override
   FIELD_BD (diffuse_color_factor, 41); // 0.0 - 1.0
-  FIELD_EMC (diffuse_color, 91,0);
+  FIELD_ENC (diffuse_color, 91,0);
   FIELD_BS (diffusemap_source, 72);  // 0 scene, 1 file (def), 2 procedural
   FIELD_T  (diffusemap_filename, 3); // if NULL no diffuse map
   FIELD_BD (diffusemap_blendfactor, 42); // 1.0
@@ -6357,7 +6357,7 @@ DWG_OBJECT(MATERIAL)
   FIELD_BD (specular_gloss_factor, 44); //def: 0.5
   FIELD_BS (specular_color_flag, 76); // 0 Use current color, 1 Override
   FIELD_BD (specular_color_factor, 45); // 0.0 - 1.0
-  FIELD_EMC (specular_color, 92,0);
+  FIELD_ENC (specular_color, 92,0);
 
   FIELD_BS (specularmap_source, 77); // 0 current, 1 image file (default)
   FIELD_T  (specularmap_filename, 4); // if NULL no specular map
@@ -6436,7 +6436,7 @@ DWG_OBJECT(MATERIAL)
   FIELD_BD (genprocvalreal, 469);
   FIELD_T (genprocvaltext, 301);
   FIELD_B (genproctableend, 292);
-  FIELD_EMC (genprocvalcolorindex, 62,420);
+  FIELD_ENC (genprocvalcolorindex, 62,420);
   FIELD_BL (genprocvalcolorrgb, 420); //int32
   FIELD_T (genprocvalcolorname, 430);
   FIELD_BS (map_utile, 270);

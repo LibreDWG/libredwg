@@ -323,36 +323,33 @@
         LOG_TRACE(#color ".bookname: %s [CMC.TV]\n", _obj->o.color.book_name); \
     }\
   }
-#define FIELD_EMC(color,dxf1,dxf2) \
-  { bit_read_EMC(dat, &_obj->color); \
-    LOG_TRACE(#color ".index: %d [EMC.BS %d]\n", _obj->color.index, dxf1); \
+#define FIELD_ENC(color,dxf1,dxf2) \
+  { bit_read_ENC(dat, &_obj->color); \
+    LOG_TRACE(#color ".index: %d [ENC.BS %d]\n", _obj->color.index, dxf1); \
     if (dat->version >= R_2004) { \
       if (_obj->color.flag) \
         LOG_TRACE(#color ".flag: 0x%x\n", (unsigned)_obj->color.flag); \
       if (_obj->color.flag & 0x20) \
-        LOG_TRACE(#color ".alpha: 0x%06x [EMC.BL %d]\n", (unsigned)_obj->color.alpha, dxf2+20); \
+        LOG_TRACE(#color ".alpha: %d [ENC.BL %d]\n", (int)_obj->color.alpha, dxf2+20); \
+      if (_obj->color.flag & 0x40) \
+        LOG_TRACE(#color ".handle: %lX [ENC.H %d]\n", _obj->color.handle->value, dxf2+10); \
       if (_obj->color.flag & 0x80) \
-        LOG_TRACE(#color ".rgb: 0x%06x [EMC.BL %d]\n", (unsigned)_obj->color.rgb, dxf2); \
-      if ((_obj->color.flag & 0x41) == 0x41) \
-        LOG_TRACE(#color ".name: %s [EMC.TV %d]\n", _obj->color.name, dxf2+10);    \
-      if ((_obj->color.flag & 0x42) == 0x42) \
-        LOG_TRACE(#color ".bookname: %s [EMC.TV]\n", _obj->color.book_name); \
+        LOG_TRACE(#color ".rgb: 0x%06x [ENC.BL %d]\n", (unsigned)_obj->color.rgb, dxf2); \
     }\
   }
-#define SUB_FIELD_EMC(o,color,dxf1,dxf2)        \
-  { bit_read_EMC(dat, &_obj->o.color); \
-    LOG_TRACE(#color ".index: %d [EMC.BS %d]\n", _obj->o.color.index, dxf1); \
+#define SUB_FIELD_ENC(o,color,dxf1,dxf2)        \
+  { bit_read_ENC(dat, &_obj->o.color); \
+    LOG_TRACE(#color ".index: %d [ENC.BS %d]\n", _obj->o.color.index, dxf1); \
     if (dat->version >= R_2004) { \
       if (_obj->o.color.flag) \
         LOG_TRACE(#color ".flag: 0x%x\n", (unsigned)_obj->o.color.flag); \
       if (_obj->o.color.flag & 0x20) \
-        LOG_TRACE(#color ".alpha: 0x%06x [EMC.BL %d]\n", (unsigned)_obj->o.color.alpha, dxf2+20); \
+        LOG_TRACE(#color ".alpha: %d [ENC.BL %d]\n", (unsigned)_obj->o.color.alpha, dxf2+20); \
+      if (_obj->color.flag & 0x40) \
+        LOG_TRACE(#color ".handle: (%X) [ENC.H %d]\n", \
+                  _obj->o.color.handle->value, dxf2+10); \
       if (_obj->o.color.flag & 0x80) \
-        LOG_TRACE(#color ".rgb: 0x%06x [EMC.BL %d]\n", (unsigned)_obj->o.color.rgb, dxf2); \
-      if ((_obj->o.color.flag & 0x41) == 0x41) \
-        LOG_TRACE(#color ".name: %s [EMC.TV %d]\n", _obj->o.color.name, dxf2+10);    \
-      if ((_obj->o.color.flag & 0x42) == 0x42) \
-        LOG_TRACE(#color ".bookname: %s [EMC.TV]\n", _obj->o.color.book_name); \
+        LOG_TRACE(#color ".rgb: 0x%06x [ENC.BL %d]\n", (unsigned)_obj->o.color.rgb, dxf2); \
     }\
   }
 

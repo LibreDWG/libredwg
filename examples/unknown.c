@@ -310,7 +310,7 @@ bits_CMC(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 
 // needs to know color.index (62) and color.rgb (421) at least, opt. also alpha (441)
 static void
-bits_EMC(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
+bits_ENC(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
   //dat should know if >= R_2004, but we just search for the index
   Dwg_Color color;
@@ -341,8 +341,8 @@ bits_EMC(Bit_Chain *restrict dat, struct _unknown_field *restrict g)
       color.alpha = strtol(ng->value, NULL, 10);
     }
   }
-  bit_write_EMC(dat, &color);
-  g->type = BITS_EMC;
+  bit_write_ENC(dat, &color);
+  g->type = BITS_ENC;
 }
 
 static void
@@ -456,7 +456,7 @@ bits_format (struct _unknown_field *g, const int version)
     bits_angle_BD(&dat, g); //deg2rad for angles
   else if (code < 70)
     if (version >= R_2004)
-      bits_EMC(&dat, g);
+      bits_ENC(&dat, g);
     else
       bits_CMC(&dat, g);
   else if (code < 80)
@@ -874,7 +874,7 @@ main (int argc, char *argv[])
                     }
                   }
                 }
-                if (g[j].type == BITS_EMC) {
+                if (g[j].type == BITS_ENC) {
                   Bit_Chain dat = {NULL,16,0,0,NULL,0,0};
                   dat.chain = calloc(1,16);
 
