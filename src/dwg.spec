@@ -3534,13 +3534,7 @@ int DWG_FUNC_N(ACTION,_HATCH_gradientfill)(
       FIELD_BL (single_color_gradient, 452);
       FIELD_BD (gradient_tint, 462);
       FIELD_BL (num_colors, 453); //default: 2
-      PRINT {
-        if (FIELD_VALUE(is_gradient_fill)) {
-          LOG_ERROR("Unsupported HATCH.is_gradient_fill");
-          return DWG_ERR_NOTYETSUPPORTED;
-        }
-      }
-      if (FIELD_VALUE(is_gradient_fill) && FIELD_VALUE(num_colors > 1000))
+      if (FIELD_VALUE(is_gradient_fill) != 0 && FIELD_VALUE(num_colors) > 1000)
         {
           LOG_ERROR("Invalid gradient fill HATCH.num_colors " FORMAT_BL,
                     _obj->num_colors);
@@ -7243,4 +7237,3 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
-
