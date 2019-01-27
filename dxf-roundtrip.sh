@@ -18,7 +18,12 @@ case $r in
     20*)      ;;
     r9)       r=9 ;;
     r1[0234]) r=${r:1} ;;
-    *)        echo wrong version $r; exit ;;
+    *)  case $f in
+            *_20*)      r=${f:(-4)} ;;
+            *_r9)       r=9 ;;
+            *_r1[0234]) r=${f:(-2)} ;;
+            *) echo wrong version $r; exit ;;
+        esac ;;
 esac
 
 echo programs/dwg2dxf -v4 -o ${f}_${r}.dxf $full
