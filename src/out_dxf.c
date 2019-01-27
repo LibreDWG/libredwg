@@ -362,7 +362,8 @@ static inline char* alloca(size_t size) {
     VALUE_RS((_obj->color.index & 255), dxf1); \
   } \
   if (dat->version >= R_2004 && dxf2 > 0 && _obj->color.index != 256) { \
-    VALUE_RL(_obj->color.rgb, dxf2); \
+    VALUE_RS(_obj->color.rgb >> 24, dxf1); \
+    VALUE_RL(_obj->color.rgb & 0x00ffffff, dxf2); \
   } \
 }
 #define SUB_FIELD_CMC(o,color,dxf1,dxf2) { \
@@ -370,7 +371,8 @@ static inline char* alloca(size_t size) {
     VALUE_RS((_obj->o.color.index & 255), dxf1); \
   } \
   if (dat->version >= R_2004 && dxf2 > 0 && _obj->o.color.index != 256) { \
-    VALUE_RL(_obj->o.color.rgb, dxf2); \
+    VALUE_RS(_obj->o.color.rgb >> 24, dxf1); \
+    VALUE_RL(_obj->o.color.rgb & 0x00ffffff, dxf2); \
   } \
 }
 #define HEADER_TIMEBLL(nam, dxf) \
