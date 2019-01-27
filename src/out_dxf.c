@@ -888,7 +888,7 @@ dxf_cvt_blockname(Bit_Chain *restrict dat, char *restrict name, const int dxf)
       VALUE_TV ("AcDb" #acdbname "TableRecord", 100); \
     } \
     if (_obj->name) dxf_cvt_tablerecord(dat, obj, _obj->name, 2); \
-    if (_obj->flag != 64) { FIELD_RS (flag, 70); }
+    FIELD_RS (flag, 70)
 
 #include "dwg.spec"
 

@@ -2451,7 +2451,7 @@ DWG_OBJECT_END
 /* (51/2) */
 DWG_OBJECT(LAYER)
 
-  LAYER_TABLE_FLAGS(layer_control, Layer)
+  LAYER_TABLE_FLAGS(layer_control, Layer);
 
   PRE(R_13)
   {
