@@ -1388,8 +1388,8 @@ dwg_ent_text_get_vert_alignment(const dwg_ent_text *restrict text,
 
 EXPORT void
 dwg_ent_text_set_vert_alignment(dwg_ent_text *restrict text,
-                            const BITCODE_BS alignment,
-                          int *restrict error)
+                                const BITCODE_BS alignment,
+                                int *restrict error)
   __nonnull ((3)) _deprecated_dynapi_setter;
 
 //Get/Set vertical alignment of text

@@ -35,10 +35,10 @@
 #include "dwg_api.h"
 
 /** We don't pass in Dwg_Object*'s, so we don't know if the object
-   is >= r2007 or <r13 or what. Default is r2000.
-   So we need some dwg_api_init_version(&dwg) to store the version.
-   This is not thread-safe, don't use different DWG versions in parallel threads!
-*/
+ *  is >= r2007 or <r13 or what. Default is r2000.
+ *  So we need some dwg_api_init_version(&dwg) to store the version.
+ *  This is not thread-safe, don't use different DWG versions in parallel threads!
+ */
 static Dwg_Version_Type dwg_version = R_INVALID;
 static unsigned int loglevel = DWG_LOGLEVEL_ERROR;
 
@@ -46,8 +46,17 @@ static unsigned int loglevel = DWG_LOGLEVEL_ERROR;
  * Functions to return NULL-terminated array of all owned entities  *
  ********************************************************************/
 
-/// extract all entities from a block header (mspace or pspace)
-DWG_GETALL_ENTITY(TEXT)
+/**
+ * \fn Dwg_Entity_ENTITY* dwg_getall_ENTITY(Dwg_Object_Ref *hdr)
+ * \code Usage: Dwg_Entity_TEXT* texts = dwg_getall_TEXT(text, dwg->header_vars.mspace_block);
+ * \endcode
+ * \param[in]    hdr     Dwg_Object_Ref * to a BLOCK_CONTROL obj
+ * \return       malloced NULL-terminated array
+ *
+ * Extracts all entities of this type from a block header (mspace or pspace),
+ * and returns a malloced NULL-terminated array.
+ */
+DWG_GETALL_ENTITY(TEXT)   //< \fn Dwg_Entity_TEXT* dwg_getall_TEXT(Dwg_Object_Ref *hdr)
 DWG_GETALL_ENTITY(ATTRIB)
 DWG_GETALL_ENTITY(ATTDEF)
 DWG_GETALL_ENTITY(BLOCK)
@@ -118,7 +127,10 @@ DWG_GETALL_ENTITY(SWEPTSURFACE)
  *     Functions to return NULL-terminated array of all objects     *
  ********************************************************************/
 
-/// extract all objects from a dwg
+/**
+ * \fn Dwg_Object_OBJECT dwg_getall_OBJECT(Dwg_Data *dwg)
+ * Extracts all objects of this type from a dwg, and returns a malloced NULL-terminated array.
+ */
 
 // fixed (incl. tables)
 DWG_GETALL_OBJECT(BLOCK_CONTROL)
@@ -223,6 +235,10 @@ DWG_GETALL_OBJECT(EVALUATION_GRAPH)
  *                where ENTITY can be LINE or CIRCLE                 *
  ********************************************************************/
 
+/**
+ * \fn Dwg_Entity_ENTITY *dwg_object_to_ENTITY(Dwg_Object *obj)
+ * cast a Dwg_Object to Entity
+ */
 CAST_DWG_OBJECT_TO_ENTITY(TEXT)
 CAST_DWG_OBJECT_TO_ENTITY(ATTRIB)
 CAST_DWG_OBJECT_TO_ENTITY(ATTDEF)
@@ -293,6 +309,10 @@ CAST_DWG_OBJECT_TO_ENTITY_BYNAME(SWEPTSURFACE)
  *                 Usage :- dwg_object_to_OBJECT(),                  *
  *            where OBJECT can be LAYER or BLOCK_HEADER              *
  ********************************************************************/
+/**
+ * \fn Dwg_Object_OBJECT *dwg_object_to_OBJECT(Dwg_Object *obj)
+ * cast a Dwg_Object to Object
+ */
 CAST_DWG_OBJECT_TO_OBJECT(BLOCK_CONTROL)
 CAST_DWG_OBJECT_TO_OBJECT(BLOCK_HEADER)
 CAST_DWG_OBJECT_TO_OBJECT(LAYER_CONTROL)
@@ -391,7 +411,8 @@ CAST_DWG_OBJECT_TO_OBJECT(EVALUATION_GRAPH)
  ********************************************************************/
 
 /** not thread safe. Deprecated.
-    TODO: replace with walking parents up to the dwg.
+ *  TODO: replace with walking parents up to the dwg.
+ * \deprecated
  */
 void dwg_api_init_version(Dwg_Data *dwg)
 {
@@ -400,9 +421,9 @@ void dwg_api_init_version(Dwg_Data *dwg)
 }
 
 /** To access the common DIMENSION fields (only).
-    There is no generic call dwg_get_DIMENSION, for this you have to
-    specify the exact DIMENSION_* type.
-*/
+ *  There is no generic call dwg_get_DIMENSION, for this you have to
+ *  specify the exact DIMENSION_* type.
+ */
 dwg_ent_dim *
 dwg_object_to_DIMENSION(dwg_object *obj)
 {
@@ -429,6 +450,9 @@ dwg_object_to_DIMENSION(dwg_object *obj)
  *                    DYNAPI FUNCTIONS                              *
  ********************************************************************/
 
+/**
+ * Return an object fieldvalue
+ */
 #ifndef HAVE_NONNULL
 #define dwg_get_OBJECT(name, OBJECT) \
 EXPORT bool \
@@ -635,6 +659,7 @@ dwg_get_OBJECT(obj_evaluation_graph, GRAPH)
 \param[in]  circle  dwg_ent_circle*
 \param[out] point   dwg_point_3d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_circle_get_center(const dwg_ent_circle *restrict circle,
@@ -660,6 +685,7 @@ dwg_ent_circle_get_center(const dwg_ent_circle *restrict circle,
 \param[in,out] circle dwg_ent_circle*
 \param[in]     point  dwg_point_3d*
 \param[out]    error  set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_circle_set_center(dwg_ent_circle *restrict circle,
@@ -684,6 +710,7 @@ dwg_ent_circle_set_center(dwg_ent_circle *restrict circle,
 \endcode
 \param[in]  circle  dwg_ent_circle*
 \param[out] error   int*, on gcc<3.3 is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_circle_get_radius(const dwg_ent_circle *restrict circle,
@@ -710,6 +737,7 @@ dwg_ent_circle_get_radius(const dwg_ent_circle *restrict circle,
 \param[in,out] circle  dwg_ent_circle*
 \param[in]     radius  double
 \param[out]    error   int*, on gcc<3.3 is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_circle_set_radius(dwg_ent_circle *restrict circle,
@@ -733,6 +761,7 @@ dwg_ent_circle_set_radius(dwg_ent_circle *restrict circle,
 \endcode
 \param[in]  circle  dwg_ent_circle*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_circle_get_thickness(const dwg_ent_circle *restrict circle,
@@ -759,6 +788,7 @@ dwg_ent_circle_get_thickness(const dwg_ent_circle *restrict circle,
 \param[in,out] circle dwg_ent_circle*
 \param[in]  thickness double
 \param[out] error     int*, set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_circle_set_thickness(dwg_ent_circle *restrict circle,
@@ -783,6 +813,7 @@ dwg_ent_circle_set_thickness(dwg_ent_circle *restrict circle,
 \param[in,out] circle dwg_ent_circle*
 \param[out] vector  dwg_point_3d*
 \param[out] error   int*, set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_circle_set_extrusion(dwg_ent_circle *restrict circle,
@@ -841,6 +872,7 @@ dwg_ent_circle_get_extrusion(const dwg_ent_circle *restrict circle,
 \param[in]  line    dwg_ent_line*
 \param[out] point   dwg_point_2d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_line_get_start_point(const dwg_ent_line *restrict line,
@@ -868,6 +900,7 @@ dwg_ent_line_get_start_point(const dwg_ent_line *restrict line,
 \param[in,out] line dwg_ent_line*
 \param[out] point   dwg_point_2d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_line_set_start_point(dwg_ent_line *restrict line,
@@ -895,6 +928,7 @@ dwg_ent_line_set_start_point(dwg_ent_line *restrict line,
 \param[in]  line    dwg_ent_line*
 \param[out] point   dwg_point_2d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_line_get_end_point(const dwg_ent_line *restrict line,
@@ -925,6 +959,7 @@ dwg_ent_line_get_end_point(const dwg_ent_line *restrict line,
 \param[in,out] line dwg_ent_line*
 \param[out] point   dwg_point_2d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_line_set_end_point(dwg_ent_line *restrict line,
@@ -978,6 +1013,7 @@ dwg_ent_line_get_thickness(const dwg_ent_line *restrict line,
 \param[in,out] line   dwg_ent_line*
 \param[out] thickness double
 \param[out] error     int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_line_set_thickness(dwg_ent_line *restrict line,
@@ -1002,6 +1038,7 @@ dwg_ent_line_set_thickness(dwg_ent_line *restrict line,
 \param[in]  line    dwg_ent_line*
 \param[out] vector  dwg_point_3d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_line_get_extrusion(const dwg_ent_line *restrict line,
@@ -1032,6 +1069,7 @@ dwg_ent_line_get_extrusion(const dwg_ent_line *restrict line,
 \param[in,out] line  dwg_ent_line*
 \param[out] vector   dwg_point_3d*
 \param[out] error    int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_line_set_extrusion(dwg_ent_line *restrict line,
@@ -1066,6 +1104,7 @@ dwg_ent_line_set_extrusion(dwg_ent_line *restrict line,
 \param[in]   arc    dwg_ent_arc*
 \param[out] dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_arc_get_center(const dwg_ent_arc *restrict arc, dwg_point_3d *restrict point,
@@ -1095,6 +1134,7 @@ dwg_ent_arc_get_center(const dwg_ent_arc *restrict arc, dwg_point_3d *restrict p
 \param[in,out] arc     dwg_ent_arc*
 \param[out]    center  dwg_point_3d*
 \param[out]    error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_arc_set_center(dwg_ent_arc *restrict arc,
@@ -1124,6 +1164,7 @@ dwg_ent_arc_set_center(dwg_ent_arc *restrict arc,
 \endcode
 \param[in]   arc    dwg_ent_arc*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_arc_get_radius(const dwg_ent_arc *restrict arc,
@@ -1148,6 +1189,7 @@ dwg_ent_arc_get_radius(const dwg_ent_arc *restrict arc,
 \param[in,out] arc     dwg_ent_arc*
 \param[out]    radius  double
 \param[out]    error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_arc_set_radius(dwg_ent_arc *restrict arc,
@@ -1171,6 +1213,7 @@ dwg_ent_arc_set_radius(dwg_ent_arc *restrict arc,
 \endcode
 \param[in]   arc    dwg_ent_arc*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_arc_get_thickness(const dwg_ent_arc *restrict arc,
@@ -1195,6 +1238,7 @@ dwg_ent_arc_get_thickness(const dwg_ent_arc *restrict arc,
 \param[in,out] arc       dwg_ent_arc*
 \param[out]    thickness double
 \param[out]    error     int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_arc_set_thickness(dwg_ent_arc *restrict arc,
@@ -1219,6 +1263,7 @@ dwg_ent_arc_set_thickness(dwg_ent_arc *restrict arc,
 \param[in]     arc      dwg_ent_arc*
 \param[out]    vector   dwg_point_3d*
 \param[out]    error    int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_arc_get_extrusion(const dwg_ent_arc *restrict arc, dwg_point_3d *restrict vector,
@@ -1248,6 +1293,7 @@ dwg_ent_arc_get_extrusion(const dwg_ent_arc *restrict arc, dwg_point_3d *restric
 \param[in,out] arc      dwg_ent_arc*
 \param[in]     vector   dwg_point_3d*
 \param[out]    error    int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_arc_set_extrusion(dwg_ent_arc *restrict arc,
@@ -1277,6 +1323,7 @@ dwg_ent_arc_set_extrusion(dwg_ent_arc *restrict arc,
 \endcode
 \param[in]  arc     dwg_ent_arc*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_arc_get_start_angle(const dwg_ent_arc *restrict arc,
@@ -1301,6 +1348,7 @@ dwg_ent_arc_get_start_angle(const dwg_ent_arc *restrict arc,
 \param[in,out] arc      dwg_ent_arc*
 \param[in]     angle    double (in radians)
 \param[out]    error    int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_arc_set_start_angle(dwg_ent_arc *restrict arc,
@@ -1325,6 +1373,7 @@ dwg_ent_arc_set_start_angle(dwg_ent_arc *restrict arc,
 \endcode
 \param[in]  arc     dwg_ent_arc*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_arc_get_end_angle(const dwg_ent_arc *restrict arc,
@@ -1349,6 +1398,7 @@ dwg_ent_arc_get_end_angle(const dwg_ent_arc *restrict arc,
 \param[in,out] arc      dwg_ent_arc*
 \param[in]     angle    double (in radians)
 \param[out]    error    int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_arc_set_end_angle(dwg_ent_arc *restrict arc,
@@ -1378,6 +1428,7 @@ dwg_ent_arc_set_end_angle(dwg_ent_arc *restrict arc,
 \param[in]  ellipse dwg_ent_ellipse*
 \param[out] point   dwg_point_3d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_ellipse_get_center(const dwg_ent_ellipse *restrict ellipse,
@@ -1408,6 +1459,7 @@ dwg_ent_ellipse_get_center(const dwg_ent_ellipse *restrict ellipse,
 \param[in,out] ellipse dwg_ent_ellipse*
 \param[in]     point   dwg_point_3d*
 \param[out]    error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_ellipse_set_center(dwg_ent_ellipse *restrict ellipse,
@@ -1438,6 +1490,7 @@ dwg_ent_ellipse_set_center(dwg_ent_ellipse *restrict ellipse,
 \param[in]  ellipse dwg_ent_ellipse*
 \param[out] point   dwg_point_3d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_ellipse_get_sm_axis(const dwg_ent_ellipse *restrict ellipse,
@@ -1468,6 +1521,7 @@ dwg_ent_ellipse_get_sm_axis(const dwg_ent_ellipse *restrict ellipse,
 \param[in,out] ellipse dwg_ent_ellipse*
 \param[in]  point   dwg_point_3d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_ellipse_set_sm_axis(dwg_ent_ellipse *restrict ellipse,
@@ -1498,6 +1552,7 @@ dwg_ent_ellipse_set_sm_axis(dwg_ent_ellipse *restrict ellipse,
 \param[in] ellipse  dwg_ent_ellipse*
 \param[out] vector  dwg_point_3d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_ellipse_get_extrusion(const dwg_ent_ellipse *restrict ellipse,
@@ -1528,6 +1583,7 @@ dwg_ent_ellipse_get_extrusion(const dwg_ent_ellipse *restrict ellipse,
 \param[in,out] ellipse dwg_ent_ellipse*
 \param[in]  vector  dwg_point_3d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_ellipse_set_extrusion(dwg_ent_ellipse *restrict ellipse,
@@ -1557,6 +1613,7 @@ dwg_ent_ellipse_set_extrusion(dwg_ent_ellipse *restrict ellipse,
 \endcode
 \param[in] ellipse dwg_ent_ellipse*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_ellipse_get_axis_ratio(const dwg_ent_ellipse *restrict ellipse,
@@ -1581,6 +1638,7 @@ dwg_ent_ellipse_get_axis_ratio(const dwg_ent_ellipse *restrict ellipse,
 \param[in] ellipse dwg_ent_ellipse*
 \param[in] double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_ellipse_set_axis_ratio(dwg_ent_ellipse *restrict ellipse,
@@ -1604,6 +1662,7 @@ dwg_ent_ellipse_set_axis_ratio(dwg_ent_ellipse *restrict ellipse,
 \endcode
 \param[in] ellipse dwg_ent_ellipse*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_ellipse_get_start_angle(const dwg_ent_ellipse *restrict ellipse,
@@ -1628,6 +1687,7 @@ dwg_ent_ellipse_get_start_angle(const dwg_ent_ellipse *restrict ellipse,
 \param[in] ellipse dwg_ent_ellipse*
 \param[in] double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_ellipse_set_start_angle(dwg_ent_ellipse *restrict ellipse,
@@ -1651,6 +1711,7 @@ dwg_ent_ellipse_set_start_angle(dwg_ent_ellipse *restrict ellipse,
 \endcode
 \param[in]  ellipse dwg_ent_ellipse*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_ellipse_get_end_angle(const dwg_ent_ellipse *restrict ellipse,
@@ -1675,6 +1736,7 @@ dwg_ent_ellipse_get_end_angle(const dwg_ent_ellipse *restrict ellipse,
 \param[in,out] ellipse    dwg_ent_ellipse*
 \param[in]     end_angle  double
 \param[out]    error      int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_ellipse_set_end_angle(dwg_ent_ellipse *restrict ellipse,
@@ -1703,6 +1765,7 @@ dwg_ent_ellipse_set_end_angle(dwg_ent_ellipse *restrict ellipse,
 \param[in] text dwg_ent_text*
 \param[in] utf-8 string ( char * )
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_text_set_text(dwg_ent_text *restrict ent,
@@ -1729,6 +1792,7 @@ dwg_ent_text_set_text(dwg_ent_text *restrict ent,
 \endcode
 \param[in] text dwg_ent_text*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 char *
 dwg_ent_text_get_text(const dwg_ent_text *restrict ent,
@@ -1756,6 +1820,7 @@ dwg_ent_text_get_text(const dwg_ent_text *restrict ent,
 \param[in] text     dwg_ent_text*
 \param[out] point   dwg_2d_point*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_text_get_insertion_point(const dwg_ent_text *restrict text,
@@ -1785,6 +1850,7 @@ dwg_ent_text_get_insertion_point(const dwg_ent_text *restrict text,
 \param[in,out] text    dwg_ent_text*
 \param[in]     point   dwg_2d_point*
 \param[out]    error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_text_set_insertion_point(dwg_ent_text *restrict text,
@@ -1813,6 +1879,7 @@ dwg_ent_text_set_insertion_point(dwg_ent_text *restrict text,
 \endcode
 \param[in]  text    dwg_ent_text*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_text_get_height(const dwg_ent_text *restrict text,
@@ -1834,14 +1901,15 @@ dwg_ent_text_get_height(const dwg_ent_text *restrict text,
 /** Sets the _dwg_entity_TEXT::height, DXF 40.
 \code Usage: dwg_ent_text_set_height(text, 100.0, &error);
 \endcode
-\param[in,out] text     dwg_ent_text*
-\param[int] height  double
-\param[out] error   int*, is set to 0 for ok, 1 on error
+\param[in,out] text    dwg_ent_text*
+\param[in]    height  double
+\param[out]    error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_text_set_height(dwg_ent_text *restrict text,
-                          const double height,
-                          int *restrict error)
+                        const double height,
+                        int *restrict error)
 {
   if (text)
     {
@@ -1861,6 +1929,7 @@ dwg_ent_text_set_height(dwg_ent_text *restrict text,
 \param[in]  text   dwg_ent_text*
 \param[out] vector dwg_point_3d*
 \param[out] error  int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_text_get_extrusion(const dwg_ent_text *restrict text,
@@ -1891,6 +1960,7 @@ dwg_ent_text_get_extrusion(const dwg_ent_text *restrict text,
 \param[in,out] text dwg_ent_text*
 \param[in]     vector dwg_point_3d*
 \param[out]    error  int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_text_set_extrusion(dwg_ent_text *restrict text,
@@ -1920,10 +1990,11 @@ dwg_ent_text_set_extrusion(dwg_ent_text *restrict text,
 \endcode
 \param[in]  text  dwg_ent_text*
 \param[out] error int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_text_get_thickness(const dwg_ent_text *restrict text,
-                          int *restrict error)
+                           int *restrict error)
 {
   if (text)
     {
@@ -1944,6 +2015,7 @@ dwg_ent_text_get_thickness(const dwg_ent_text *restrict text,
 \param[in,out] text      dwg_ent_text*
 \param[in]     thickness double
 \param[out]    error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_text_set_thickness(dwg_ent_text *restrict text,
@@ -1967,6 +2039,7 @@ dwg_ent_text_set_thickness(dwg_ent_text *restrict text,
 \endcode
 \param[in] text dwg_ent_text*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_text_get_rotation(const dwg_ent_text *restrict text,
@@ -1991,6 +2064,7 @@ dwg_ent_text_get_rotation(const dwg_ent_text *restrict text,
 \param[in,out] text   dwg_ent_text*
 \param[in] angle  double
 \param[out] error int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_text_set_rotation(dwg_ent_text *restrict text,
@@ -2018,7 +2092,7 @@ dwg_ent_text_set_rotation(dwg_ent_text *restrict text,
 */
 BITCODE_BS
 dwg_ent_text_get_vert_alignment(const dwg_ent_text *restrict text,
-                            int *restrict error)
+                                int *restrict error)
 {
   if (text)
     {
@@ -2039,10 +2113,12 @@ dwg_ent_text_get_vert_alignment(const dwg_ent_text *restrict text,
 \param[in] text dwg_ent_text*
 \param[in] alignment  short (1 = bottom, 2 = middle, 3 = top)
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
-dwg_ent_text_set_vert_alignment(dwg_ent_text *restrict text, BITCODE_BS alignment,
-                          int *restrict error)
+dwg_ent_text_set_vert_alignment(dwg_ent_text *restrict text,
+                                const BITCODE_BS alignment,
+                                int *restrict error)
 {
   if (text)
     {
@@ -2066,7 +2142,7 @@ dwg_ent_text_set_vert_alignment(dwg_ent_text *restrict text, BITCODE_BS alignmen
 */
 BITCODE_BS
 dwg_ent_text_get_horiz_alignment(const dwg_ent_text *restrict text,
-                          int *restrict error)
+                                 int *restrict error)
 {
   if (text)
     {
@@ -2087,6 +2163,7 @@ dwg_ent_text_get_horiz_alignment(const dwg_ent_text *restrict text,
 \param[in] text      dwg_ent_text*
 \param[in] alignment short (1 = left, 2 = center, 3 = right)
 \param[out] error    int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_text_set_horiz_alignment(dwg_ent_text *restrict text,
@@ -2116,6 +2193,7 @@ dwg_ent_text_set_horiz_alignment(dwg_ent_text *restrict text,
 \param[out] attrib     dwg_ent_attrib*
 \param[in]  text_value utf-8 string (char *)
 \param[out] error      int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_attrib_set_text(dwg_ent_attrib *restrict ent,
@@ -2142,10 +2220,11 @@ dwg_ent_attrib_set_text(dwg_ent_attrib *restrict ent,
 \endcode
 \param[in] attrib dwg_ent_attrib*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 char *
 dwg_ent_attrib_get_text(const dwg_ent_attrib *restrict ent,
-                          int *restrict error)
+                        int *restrict error)
 {
   if (ent)
     {
@@ -2169,6 +2248,7 @@ dwg_ent_attrib_get_text(const dwg_ent_attrib *restrict ent,
 \param[in] attrib   dwg_ent_attrib*
 \param[out] point   dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_attrib_get_insertion_point(const dwg_ent_attrib *restrict attrib,
@@ -2198,6 +2278,7 @@ dwg_ent_attrib_get_insertion_point(const dwg_ent_attrib *restrict attrib,
 \param[in] attrib   dwg_ent_attrib*
 \param[in] point    dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_attrib_set_insertion_point(dwg_ent_attrib *restrict attrib,
@@ -2226,6 +2307,7 @@ dwg_ent_attrib_set_insertion_point(dwg_ent_attrib *restrict attrib,
 \endcode
 \param[in] attrib dwg_ent_attrib*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_attrib_get_height(const dwg_ent_attrib *restrict attrib,
@@ -2250,6 +2332,7 @@ dwg_ent_attrib_get_height(const dwg_ent_attrib *restrict attrib,
 \param[in] attrib   dwg_ent_attrib*
 \param[in] height   double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_attrib_set_height(dwg_ent_attrib *restrict attrib,
@@ -2274,6 +2357,7 @@ dwg_ent_attrib_set_height(dwg_ent_attrib *restrict attrib,
 \param[in]  attrib  dwg_ent_attrib*
 \param[out] vector  dwg_point_3d *
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_attrib_get_extrusion(const dwg_ent_attrib *restrict attrib,
@@ -2304,6 +2388,7 @@ dwg_ent_attrib_get_extrusion(const dwg_ent_attrib *restrict attrib,
 \param[out]  attrib  dwg_ent_attrib*
 \param[in] vector  dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_attrib_set_extrusion(dwg_ent_attrib *restrict attrib,
@@ -2333,6 +2418,7 @@ dwg_ent_attrib_set_extrusion(dwg_ent_attrib *restrict attrib,
 \endcode
 \param[in] attrib dwg_ent_attrib*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_attrib_get_thickness(const dwg_ent_attrib *restrict attrib,
@@ -2357,6 +2443,7 @@ dwg_ent_attrib_get_thickness(const dwg_ent_attrib *restrict attrib,
 \param[out] attrib dwg_ent_attrib*
 \param[in] thickness double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_attrib_set_thickness(dwg_ent_attrib *restrict attrib,
@@ -2380,6 +2467,7 @@ dwg_ent_attrib_set_thickness(dwg_ent_attrib *restrict attrib,
 \endcode
 \param[in] attrib dwg_ent_attrib*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_attrib_get_rotation(const dwg_ent_attrib *restrict attrib,
@@ -2404,6 +2492,7 @@ dwg_ent_attrib_get_rotation(const dwg_ent_attrib *restrict attrib,
 \param[out] attrib  dwg_ent_attrib*
 \param[in] angle   double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_attrib_set_rotation(dwg_ent_attrib *restrict attrib,
@@ -2452,6 +2541,7 @@ dwg_ent_attrib_get_vert_alignment(const dwg_ent_attrib *restrict attrib,
 \param[in] attrib dwg_ent_attrib*
 \param[in] short (1 = bottom, 2 = middle, 3 = top)
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_attrib_set_vert_alignment(dwg_ent_attrib *restrict attrib, BITCODE_BS alignment,
@@ -2499,6 +2589,7 @@ dwg_ent_attrib_get_horiz_alignment(const dwg_ent_attrib *restrict attrib,
 \param[out] attrib dwg_ent_attrib*
 \param[in]  alignment short (1 = left, 2 = center, 3 = right)
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_attrib_set_horiz_alignment(dwg_ent_attrib *restrict attrib,
@@ -2527,6 +2618,7 @@ dwg_ent_attrib_set_horiz_alignment(dwg_ent_attrib *restrict attrib,
 \param[in]  attdef dwg_ent_attdef*
 \param[in]  default_value utf-8 string (char *)
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_attdef_set_default_value(dwg_ent_attdef *restrict ent,
@@ -2553,6 +2645,7 @@ dwg_ent_attdef_set_default_value(dwg_ent_attdef *restrict ent,
 \endcode
 \param[in] attdef dwg_ent_attdef*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 char *
 dwg_ent_attdef_get_default_value(const dwg_ent_attdef *restrict ent,
@@ -2580,6 +2673,7 @@ dwg_ent_attdef_get_default_value(const dwg_ent_attdef *restrict ent,
 \param[in]  attdef  dwg_ent_attdef*
 \param[out] point   dwg_point_2d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_attdef_get_insertion_point(const dwg_ent_attdef *restrict attdef,
@@ -2609,6 +2703,7 @@ dwg_ent_attdef_get_insertion_point(const dwg_ent_attdef *restrict attdef,
 \param[in] attdef   dwg_ent_attdef*
 \param[in] point    dwg_point_2d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_attdef_set_insertion_point(dwg_ent_attdef *restrict attdef,
@@ -2637,6 +2732,7 @@ dwg_ent_attdef_set_insertion_point(dwg_ent_attdef *restrict attdef,
 \endcode
 \param[in] attdef dwg_ent_attdef*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_attdef_get_height(const dwg_ent_attdef *restrict attdef,
@@ -2661,6 +2757,7 @@ dwg_ent_attdef_get_height(const dwg_ent_attdef *restrict attdef,
 \param[in] attdef dwg_ent_attdef*
 \param[in] height double
 \param[out] error int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_attdef_set_height(dwg_ent_attdef *restrict attdef,
@@ -2685,6 +2782,7 @@ dwg_ent_attdef_set_height(dwg_ent_attdef *restrict attdef,
 \param[in]  attdef  dwg_ent_attdef*
 \param[out] vector  dwg_point_3d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_attdef_get_extrusion(const dwg_ent_attdef *restrict attdef,
@@ -2715,6 +2813,7 @@ dwg_ent_attdef_get_extrusion(const dwg_ent_attdef *restrict attdef,
 \param[in] attdef dwg_ent_attdef*
 \param[in] vector  dwg_point_3d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_attdef_set_extrusion(dwg_ent_attdef *restrict attdef,
@@ -2744,6 +2843,7 @@ dwg_ent_attdef_set_extrusion(dwg_ent_attdef *restrict attdef,
 \endcode
 \param[in] attdef dwg_ent_attdef*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_attdef_get_thickness(const dwg_ent_attdef *restrict attdef,
@@ -2768,6 +2868,7 @@ dwg_ent_attdef_get_thickness(const dwg_ent_attdef *restrict attdef,
 \param[in] attdef dwg_ent_attdef*
 \param[in] thickness double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_attdef_set_thickness(dwg_ent_attdef *restrict attdef,
@@ -2791,6 +2892,7 @@ dwg_ent_attdef_set_thickness(dwg_ent_attdef *restrict attdef,
 \endcode
 \param[in] attdef dwg_ent_attdef*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_attdef_get_rotation(const dwg_ent_attdef *restrict attdef,
@@ -2815,6 +2917,7 @@ dwg_ent_attdef_get_rotation(const dwg_ent_attdef *restrict attdef,
 \param[in] attdef dwg_ent_attdef*
 \param[in] angle double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_attdef_set_rotation(dwg_ent_attdef *restrict attdef,
@@ -2863,6 +2966,7 @@ dwg_ent_attdef_get_vert_alignment(const dwg_ent_attdef *restrict attdef,
 \param[in] attdef dwg_ent_attdef*
 \param[in] alignment (1 = bottom, 2 = middle, 3 = top)
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_attdef_set_vert_alignment(dwg_ent_attdef *restrict attdef,
@@ -2911,6 +3015,7 @@ dwg_ent_attdef_get_horiz_alignment(const dwg_ent_attdef *restrict attdef,
 \param[in] attdef dwg_ent_attdef*
 \param[in] alignment short (1 = left, 2 = center, 3 = right)
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_attdef_set_horiz_alignment(dwg_ent_attdef *restrict attdef,
@@ -2939,6 +3044,7 @@ dwg_ent_attdef_set_horiz_alignment(dwg_ent_attdef *restrict attdef,
 \param[out] point dwg_ent_point*
 \param[in]  retpoint dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_point_set_point(dwg_ent_point *restrict point,
@@ -2969,6 +3075,7 @@ dwg_ent_point_set_point(dwg_ent_point *restrict point,
 \param[in]  point dwg_ent_point*
 \param[out] retpoint dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_point_get_point(const dwg_ent_point *restrict point,
@@ -2998,6 +3105,7 @@ dwg_ent_point_get_point(const dwg_ent_point *restrict point,
 \endcode
 \param[in] point dwg_ent_point*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_point_get_thickness(const dwg_ent_point *restrict point,
@@ -3022,6 +3130,7 @@ dwg_ent_point_get_thickness(const dwg_ent_point *restrict point,
 \param[out] point dwg_ent_point*
 \param[in] double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_point_set_thickness(dwg_ent_point *restrict point,
@@ -3046,6 +3155,7 @@ dwg_ent_point_set_thickness(dwg_ent_point *restrict point,
 \param[out]  point dwg_ent_point*
 \param[in] vector dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_point_set_extrusion(dwg_ent_point *restrict point,
@@ -3076,6 +3186,7 @@ dwg_ent_point_set_extrusion(dwg_ent_point *restrict point,
 \param[in]  point dwg_ent_point*
 \param[out] vector dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_point_get_extrusion(const dwg_ent_point *restrict point,
@@ -3109,6 +3220,7 @@ dwg_ent_point_get_extrusion(const dwg_ent_point *restrict point,
 \endcode
 \param[in] solid dwg_ent_solid*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_solid_get_thickness(const dwg_ent_solid *restrict solid,
@@ -3133,6 +3245,7 @@ dwg_ent_solid_get_thickness(const dwg_ent_solid *restrict solid,
 \param[out] solid dwg_ent_solid*
 \param[in] thickness double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_solid_set_thickness(dwg_ent_solid *restrict solid,
@@ -3156,6 +3269,7 @@ dwg_ent_solid_set_thickness(dwg_ent_solid *restrict solid,
 \endcode
 \param[in] solid dwg_ent_solid*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_solid_get_elevation(const dwg_ent_solid *restrict solid,
@@ -3180,6 +3294,7 @@ dwg_ent_solid_get_elevation(const dwg_ent_solid *restrict solid,
 \param[in] solid dwg_ent_solid*
 \param[in] elevation double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_solid_set_elevation(dwg_ent_solid *restrict solid,
@@ -3204,6 +3319,7 @@ dwg_ent_solid_set_elevation(dwg_ent_solid *restrict solid,
 \param[in] solid dwg_ent_solid*
 \param[out] dwg_point_2d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_solid_get_corner1(const dwg_ent_solid *restrict solid,
@@ -3233,6 +3349,7 @@ dwg_ent_solid_get_corner1(const dwg_ent_solid *restrict solid,
 \param[out] solid dwg_ent_solid*
 \param[in]  point dwg_point_2d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_solid_set_corner1(dwg_ent_solid *restrict solid,
@@ -3262,6 +3379,7 @@ dwg_ent_solid_set_corner1(dwg_ent_solid *restrict solid,
 \param[in] solid dwg_ent_solid*
 \param[out] point dwg_point_2d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_solid_get_corner2(const dwg_ent_solid *restrict solid,
@@ -3291,6 +3409,7 @@ dwg_ent_solid_get_corner2(const dwg_ent_solid *restrict solid,
 \param[in] solid dwg_ent_solid*
 \param[out] dwg_point_2d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_solid_set_corner2(dwg_ent_solid *restrict solid,
@@ -3320,6 +3439,7 @@ dwg_ent_solid_set_corner2(dwg_ent_solid *restrict solid,
 \param[in] solid dwg_ent_solid*
 \param[out] point dwg_point_2d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_solid_get_corner3(const dwg_ent_solid *restrict solid,
@@ -3349,6 +3469,7 @@ dwg_ent_solid_get_corner3(const dwg_ent_solid *restrict solid,
 \param[in] solid dwg_ent_solid*
 \param[out] point dwg_point_2d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_solid_set_corner3(dwg_ent_solid *restrict solid,
@@ -3378,6 +3499,7 @@ dwg_ent_solid_set_corner3(dwg_ent_solid *restrict solid,
 \param[in] solid dwg_ent_solid*
 \param[out] point dwg_point_2d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_solid_get_corner4(const dwg_ent_solid *restrict solid,
@@ -3407,6 +3529,7 @@ dwg_ent_solid_get_corner4(const dwg_ent_solid *restrict solid,
 \param[in] solid dwg_ent_solid*
 \param[out] point dwg_point_2d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_solid_set_corner4(dwg_ent_solid *restrict solid,
@@ -3436,6 +3559,7 @@ dwg_ent_solid_set_corner4(dwg_ent_solid *restrict solid,
 \param[in] solid dwg_ent_solid*
 \param[out] vector dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_solid_get_extrusion(const dwg_ent_solid *restrict solid,
@@ -3466,6 +3590,7 @@ dwg_ent_solid_get_extrusion(const dwg_ent_solid *restrict solid,
 \param[in] solid dwg_ent_solid*
 \param[out] vector dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_solid_set_extrusion(dwg_ent_solid *restrict solid,
@@ -3500,6 +3625,7 @@ dwg_ent_solid_set_extrusion(dwg_ent_solid *restrict solid,
 \param[out] block dwg_ent_block*
 \param[in]  name utf-8 char *
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_block_set_name(dwg_ent_block *restrict ent,
@@ -3527,6 +3653,7 @@ If dwg_version >= R_2007, the return value is malloc'ed
 \endcode
 \param[in] block dwg_ent_block*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 char *
 dwg_ent_block_get_name(const dwg_ent_block *restrict block,
@@ -3558,6 +3685,7 @@ dwg_ent_block_get_name(const dwg_ent_block *restrict block,
 \param[in] ray dwg_ent_ray*
 \param[out] point dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_ray_get_point(const dwg_ent_ray *restrict ray,
@@ -3588,6 +3716,7 @@ dwg_ent_ray_get_point(const dwg_ent_ray *restrict ray,
 \param[in] ray dwg_ent_ray*
 \param[out] point dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_ray_set_point(dwg_ent_ray *restrict ray,
@@ -3618,6 +3747,7 @@ dwg_ent_ray_set_point(dwg_ent_ray *restrict ray,
 \param[in] ray dwg_ent_ray*
 \param[out] vector dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_ray_get_vector(const dwg_ent_ray *restrict ray,
@@ -3648,6 +3778,7 @@ dwg_ent_ray_get_vector(const dwg_ent_ray *restrict ray,
 \param[in] ray dwg_ent_ray*
 \param[out] vector dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_ray_set_vector(dwg_ent_ray *restrict ray,
@@ -3682,6 +3813,7 @@ dwg_ent_ray_set_vector(dwg_ent_ray *restrict ray,
 \param[in] xline dwg_ent_xline*
 \param[out] point dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_xline_get_point(const dwg_ent_xline *restrict xline,
@@ -3712,6 +3844,7 @@ dwg_ent_xline_get_point(const dwg_ent_xline *restrict xline,
 \param[out]  xline dwg_ent_xline*
 \param[in] point dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_xline_set_point(dwg_ent_xline *restrict xline,
@@ -3742,6 +3875,7 @@ dwg_ent_xline_set_point(dwg_ent_xline *restrict xline,
 \param[in] xline dwg_ent_xline*
 \param[out] vector dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_xline_get_vector(const dwg_ent_xline *restrict xline,
@@ -3771,6 +3905,7 @@ Usage: dwg_ent_xline_set_vector(xline, &point, &error);
 \param[out]  xline dwg_ent_xline*
 \param[in] vector dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_xline_set_vector(dwg_ent_xline *restrict xline,
@@ -3804,6 +3939,7 @@ dwg_ent_xline_set_vector(dwg_ent_xline *restrict xline,
 \endcode
 \param[in] trace dwg_ent_trace*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_trace_get_thickness(const dwg_ent_trace *restrict trace,
@@ -3828,6 +3964,7 @@ dwg_ent_trace_get_thickness(const dwg_ent_trace *restrict trace,
 \param[out] trace dwg_ent_trace*
 \param[in] thickness double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_trace_set_thickness(dwg_ent_trace *restrict trace,
@@ -3851,6 +3988,7 @@ dwg_ent_trace_set_thickness(dwg_ent_trace *restrict trace,
 \endcode
 \param[in] trace dwg_ent_trace*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_trace_get_elevation(const dwg_ent_trace *restrict trace,
@@ -3875,6 +4013,7 @@ dwg_ent_trace_get_elevation(const dwg_ent_trace *restrict trace,
 \param[out] trace dwg_ent_trace*
 \param[in] elevation double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_trace_set_elevation(dwg_ent_trace *restrict trace,
@@ -3899,6 +4038,7 @@ dwg_ent_trace_set_elevation(dwg_ent_trace *restrict trace,
 \param[in] trace dwg_ent_trace*
 \param[out] point dwg_point_2d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_trace_get_corner1(const dwg_ent_trace *restrict trace,
@@ -3928,6 +4068,7 @@ dwg_ent_trace_get_corner1(const dwg_ent_trace *restrict trace,
 \param[in] trace dwg_ent_trace*
 \param[out] point dwg_point_2d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_trace_set_corner1(dwg_ent_trace *restrict trace,
@@ -3957,6 +4098,7 @@ dwg_ent_trace_set_corner1(dwg_ent_trace *restrict trace,
 \param[in] trace dwg_ent_trace*
 \param[out] point dwg_point_2d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_trace_get_corner2(const dwg_ent_trace *restrict trace,
@@ -3986,6 +4128,7 @@ dwg_ent_trace_get_corner2(const dwg_ent_trace *restrict trace,
 \param[out] trace dwg_ent_trace*
 \param[in] point dwg_point_2d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_trace_set_corner2(dwg_ent_trace *restrict trace,
@@ -4015,6 +4158,7 @@ dwg_ent_trace_set_corner2(dwg_ent_trace *restrict trace,
 \param[in] trace dwg_ent_trace*
 \param[out] point dwg_point_2d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_trace_get_corner3(const dwg_ent_trace *restrict trace,
@@ -4044,6 +4188,7 @@ dwg_ent_trace_get_corner3(const dwg_ent_trace *restrict trace,
 \param[out] trace dwg_ent_trace*
 \param[in] point dwg_point_2d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_trace_set_corner3(dwg_ent_trace *restrict trace,
@@ -4073,6 +4218,7 @@ dwg_ent_trace_set_corner3(dwg_ent_trace *restrict trace,
 \param[in] trace dwg_ent_trace*
 \param[out] point dwg_point_2d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_trace_get_corner4(const dwg_ent_trace *restrict trace,
@@ -4102,6 +4248,7 @@ dwg_ent_trace_get_corner4(const dwg_ent_trace *restrict trace,
 \param[out] trace dwg_ent_trace*
 \param[in] point dwg_point_2d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_trace_set_corner4(dwg_ent_trace *restrict trace,
@@ -4131,6 +4278,7 @@ dwg_ent_trace_set_corner4(dwg_ent_trace *restrict trace,
 \param[in] trace dwg_ent_trace*
 \param[out] vector dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_trace_get_extrusion(const dwg_ent_trace *restrict trace,
@@ -4161,6 +4309,7 @@ dwg_ent_trace_get_extrusion(const dwg_ent_trace *restrict trace,
 \param[in] trace dwg_ent_trace*
 \param[out] vector dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_trace_set_extrusion(dwg_ent_trace *restrict trace,
@@ -4194,6 +4343,7 @@ dwg_ent_trace_set_extrusion(dwg_ent_trace *restrict trace,
 \endcode
 \param[in]  vert    dwg_ent_vertex_3d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 char
 dwg_ent_vertex_3d_get_flag(const dwg_ent_vertex_3d *restrict vert,
@@ -4218,6 +4368,7 @@ dwg_ent_vertex_3d_get_flag(const dwg_ent_vertex_3d *restrict vert,
 \param[out] vert   dwg_ent_vertex_3d*
 \param[in]  flag   char
 \param[out] error  int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_vertex_3d_set_flag(dwg_ent_vertex_3d *restrict vert,
@@ -4242,6 +4393,7 @@ dwg_ent_vertex_3d_set_flag(dwg_ent_vertex_3d *restrict vert,
 \param[in]  vert   dwg_ent_vertex_3d*
 \param[out] point  dwg_point_3d
 \param[out] error  int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_vertex_3d_get_point(const dwg_ent_vertex_3d *restrict vert,
@@ -4272,6 +4424,7 @@ dwg_ent_vertex_3d_get_point(const dwg_ent_vertex_3d *restrict vert,
 \param[in]  vert  dwg_ent_vertex_3d*
 \param[out] point dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_vertex_3d_set_point(dwg_ent_vertex_3d *restrict vert,
@@ -4305,6 +4458,7 @@ dwg_ent_vertex_3d_set_point(dwg_ent_vertex_3d *restrict vert,
 \endcode
 \param[in]  vert   dwg_ent_vertex_mesh*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 char
 dwg_ent_vertex_mesh_get_flag(const dwg_ent_vertex_mesh *restrict vert,
@@ -4329,6 +4483,7 @@ dwg_ent_vertex_mesh_get_flag(const dwg_ent_vertex_mesh *restrict vert,
 \param[out] vert   dwg_ent_vertex_mesh*
 \param[in] flag    char
 \param[out] error  int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_vertex_mesh_set_flag(dwg_ent_vertex_mesh *restrict vert,
@@ -4353,6 +4508,7 @@ dwg_ent_vertex_mesh_set_flag(dwg_ent_vertex_mesh *restrict vert,
 \param[in]  vert    dwg_ent_vertex_mesh*
 \param[out] point   dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_vertex_mesh_get_point(const dwg_ent_vertex_mesh *restrict vert,
@@ -4383,6 +4539,7 @@ dwg_ent_vertex_mesh_get_point(const dwg_ent_vertex_mesh *restrict vert,
 \param[in]  vert    dwg_ent_vertex_mesh*
 \param[out] point   dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_vertex_mesh_set_point(dwg_ent_vertex_mesh *restrict vert,
@@ -4416,6 +4573,7 @@ dwg_ent_vertex_mesh_set_point(dwg_ent_vertex_mesh *restrict vert,
 \endcode
 \param[in] vertex_pface dwg_ent_vertex_pface*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 char
 dwg_ent_vertex_pface_get_flag(const dwg_ent_vertex_pface *restrict vert,
@@ -4440,6 +4598,7 @@ dwg_ent_vertex_pface_get_flag(const dwg_ent_vertex_pface *restrict vert,
 \param[out] vertex_pface dwg_ent_vertex_pface*
 \param[in] flag
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_vertex_pface_set_flag(dwg_ent_vertex_pface *restrict vert,
@@ -4464,6 +4623,7 @@ dwg_ent_vertex_pface_set_flag(dwg_ent_vertex_pface *restrict vert,
 \param[in]  vert    dwg_ent_vertex_pface*
 \param[out] point   dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_vertex_pface_get_point(const dwg_ent_vertex_pface *restrict vert,
@@ -4494,6 +4654,7 @@ dwg_ent_vertex_pface_get_point(const dwg_ent_vertex_pface *restrict vert,
 \param[out] vert    dwg_ent_vertex_pface*
 \param[in]  point   dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_vertex_pface_set_point(dwg_ent_vertex_pface *restrict vert,
@@ -4527,6 +4688,7 @@ dwg_ent_vertex_pface_set_point(dwg_ent_vertex_pface *restrict vert,
 \endcode
 \param[in]  vert    dwg_ent_vertex_2d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 char
 dwg_ent_vertex_2d_get_flag(const dwg_ent_vertex_2d *restrict vert,
@@ -4551,6 +4713,7 @@ dwg_ent_vertex_2d_get_flag(const dwg_ent_vertex_2d *restrict vert,
 \param[out] vert dwg_ent_vertex_mesh*
 \param[in]  flag char
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_vertex_2d_set_flag(dwg_ent_vertex_2d *restrict vert,
@@ -4575,6 +4738,7 @@ dwg_ent_vertex_2d_set_flag(dwg_ent_vertex_2d *restrict vert,
 \param[in]  vert    dwg_ent_vertex_2d*
 \param[out] point   dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_vertex_2d_get_point(const dwg_ent_vertex_2d *restrict vert,
@@ -4605,6 +4769,7 @@ dwg_ent_vertex_2d_get_point(const dwg_ent_vertex_2d *restrict vert,
 \param[out] vert    dwg_ent_vertex_2d*
 \param[in]  point   dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_vertex_2d_set_point(dwg_ent_vertex_2d *restrict vert,
@@ -4634,6 +4799,7 @@ dwg_ent_vertex_2d_set_point(dwg_ent_vertex_2d *restrict vert,
 \endcode
 \param[in]  vert    dwg_ent_vertex_2d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_vertex_2d_get_start_width(const dwg_ent_vertex_2d *restrict vert,
@@ -4658,6 +4824,7 @@ dwg_ent_vertex_2d_get_start_width(const dwg_ent_vertex_2d *restrict vert,
 \param[out] vert        dwg_ent_vertex_2d*
 \param[in] start_width double
 \param[out] error      int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_vertex_2d_set_start_width(dwg_ent_vertex_2d *restrict vert,
@@ -4681,6 +4848,7 @@ dwg_ent_vertex_2d_set_start_width(dwg_ent_vertex_2d *restrict vert,
 \endcode
 \param[in] vert     dwg_ent_vertex_2d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_vertex_2d_get_end_width(const dwg_ent_vertex_2d *restrict vert,
@@ -4705,6 +4873,7 @@ dwg_ent_vertex_2d_get_end_width(const dwg_ent_vertex_2d *restrict vert,
 \param[out] vert dwg_ent_vertex_2d*
 \param[in] end_width double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_vertex_2d_set_end_width(dwg_ent_vertex_2d *restrict vert,
@@ -4728,6 +4897,7 @@ dwg_ent_vertex_2d_set_end_width(dwg_ent_vertex_2d *restrict vert,
 \endcode
 \param[in] vert dwg_ent_vertex_2d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_vertex_2d_get_bulge(const dwg_ent_vertex_2d *restrict vert,
@@ -4752,6 +4922,7 @@ dwg_ent_vertex_2d_get_bulge(const dwg_ent_vertex_2d *restrict vert,
 \param[in] vert dwg_ent_vertex_2d*
 \param[in] bulge double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_vertex_2d_set_bulge(dwg_ent_vertex_2d *restrict vert,
@@ -4775,6 +4946,7 @@ dwg_ent_vertex_2d_set_bulge(dwg_ent_vertex_2d *restrict vert,
 \endcode
 \param[in] vert dwg_ent_vertex_2d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_vertex_2d_get_tangent_dir(const dwg_ent_vertex_2d *restrict vert,
@@ -4799,6 +4971,7 @@ dwg_ent_vertex_2d_get_tangent_dir(const dwg_ent_vertex_2d *restrict vert,
 \param[in] vert dwg_ent_vertex_2d*
 \param[in] tangent_dir double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_vertex_2d_set_tangent_dir(dwg_ent_vertex_2d *restrict vert,
@@ -4827,6 +5000,7 @@ dwg_ent_vertex_2d_set_tangent_dir(dwg_ent_vertex_2d *restrict vert,
 \param[in] insert dwg_ent_insert*
 \param[out] point dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_insert_get_ins_pt(const dwg_ent_insert *restrict insert,
@@ -4946,6 +5120,7 @@ dwg_ent_insert_set_scale(dwg_ent_insert *restrict insert,
 \endcode
 \param[in] insert dwg_ent_insert*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_insert_get_rotation(const dwg_ent_insert *restrict insert,
@@ -4970,6 +5145,7 @@ dwg_ent_insert_get_rotation(const dwg_ent_insert *restrict insert,
 \param[in] insert dwg_ent_insert*
 \param[in] rotation double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_insert_set_rotation(dwg_ent_insert *restrict insert,
@@ -4994,6 +5170,7 @@ dwg_ent_insert_set_rotation(dwg_ent_insert *restrict insert,
 \param[in]  insert  dwg_ent_insert*
 \param[out] vector  dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_insert_get_extrusion(const dwg_ent_insert *restrict insert,
@@ -5024,6 +5201,7 @@ dwg_ent_insert_get_extrusion(const dwg_ent_insert *restrict insert,
 \param[out] insert  dwg_ent_insert*
 \param[in]  vector  dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_insert_set_extrusion(dwg_ent_insert *restrict insert,
@@ -5053,6 +5231,7 @@ dwg_ent_insert_set_extrusion(dwg_ent_insert *restrict insert,
 \endcode
 \param[in] insert dwg_ent_insert*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 char
 dwg_ent_insert_has_attribs(dwg_ent_insert *restrict insert,
@@ -5076,6 +5255,7 @@ dwg_ent_insert_has_attribs(dwg_ent_insert *restrict insert,
 \endcode
 \param[in] insert dwg_ent_insert*
 \param[out] error int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BL
 dwg_ent_insert_get_num_owned(const dwg_ent_insert *restrict insert,
@@ -5103,6 +5283,7 @@ dwg_ent_insert_get_num_owned(const dwg_ent_insert *restrict insert,
 \endcode
 \param[in]  insert  dwg_ent_insert*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 dwg_object *
 dwg_ent_insert_get_block_header(const dwg_ent_insert *restrict insert,
@@ -5131,6 +5312,7 @@ dwg_ent_insert_get_block_header(const dwg_ent_insert *restrict insert,
 \param[in]  minsert dwg_ent_minsert*
 \param[out] point dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_minsert_get_ins_pt(const dwg_ent_minsert *restrict minsert,
@@ -5161,6 +5343,7 @@ dwg_ent_minsert_get_ins_pt(const dwg_ent_minsert *restrict minsert,
 \param[out] minsert dwg_ent_minsert*
 \param[in]  point dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_minsert_set_ins_pt(dwg_ent_minsert *restrict minsert,
@@ -5250,6 +5433,7 @@ dwg_ent_minsert_set_scale(dwg_ent_minsert *restrict minsert,
 \endcode
 \param[in] minsert dwg_ent_minsert*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_minsert_get_rotation(const dwg_ent_minsert *restrict minsert,
@@ -5274,6 +5458,7 @@ dwg_ent_minsert_get_rotation(const dwg_ent_minsert *restrict minsert,
 \param[in] minsert dwg_ent_minsert*
 \param[in] double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_minsert_set_rotation(dwg_ent_minsert *restrict minsert,
@@ -5298,6 +5483,7 @@ dwg_ent_minsert_set_rotation(dwg_ent_minsert *restrict minsert,
 \param[in]  minsert dwg_ent_minsert*
 \param[out] vector dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_minsert_get_extrusion(const dwg_ent_minsert *restrict minsert,
@@ -5328,6 +5514,7 @@ dwg_ent_minsert_get_extrusion(const dwg_ent_minsert *restrict minsert,
 \param[out] minsert dwg_ent_minsert*
 \param[in]  vector dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_minsert_set_extrusion(dwg_ent_minsert *restrict minsert,
@@ -5357,6 +5544,7 @@ dwg_ent_minsert_set_extrusion(dwg_ent_minsert *restrict minsert,
 \endcode
 \param[in] minsert dwg_ent_minsert*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 char
 dwg_ent_minsert_has_attribs(dwg_ent_minsert *restrict minsert,
@@ -5381,6 +5569,7 @@ dwg_ent_minsert_has_attribs(dwg_ent_minsert *restrict minsert,
 \endcode
 \param[in] minsert dwg_ent_minsert*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BL
 dwg_ent_minsert_get_num_owned(const dwg_ent_minsert *restrict minsert,
@@ -5409,6 +5598,7 @@ dwg_ent_minsert_get_num_owned(const dwg_ent_minsert *restrict minsert,
 \param[out] minsert dwg_ent_minsert*
 \param[in] num_cols
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_minsert_set_num_cols(dwg_ent_minsert *restrict minsert,
@@ -5432,6 +5622,7 @@ dwg_ent_minsert_set_num_cols(dwg_ent_minsert *restrict minsert,
 \endcode
 \param[in] minsert dwg_ent_minsert*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BL
 dwg_ent_minsert_get_num_cols(const dwg_ent_minsert *restrict minsert,
@@ -5456,6 +5647,7 @@ dwg_ent_minsert_get_num_cols(const dwg_ent_minsert *restrict minsert,
 \param[out] minsert dwg_ent_minsert*
 \param[in]  num_rows
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_minsert_set_num_rows(dwg_ent_minsert *restrict minsert,
@@ -5479,6 +5671,7 @@ dwg_ent_minsert_set_num_rows(dwg_ent_minsert *restrict minsert,
 \endcode
 \param[in] minsert dwg_ent_minsert*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BL
 dwg_ent_minsert_get_num_rows(const dwg_ent_minsert *restrict minsert,
@@ -5502,6 +5695,7 @@ dwg_ent_minsert_get_num_rows(const dwg_ent_minsert *restrict minsert,
 \endcode
 \param[in] minsert dwg_ent_minsert*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_minsert_get_col_spacing(const dwg_ent_minsert *restrict minsert,
@@ -5526,6 +5720,7 @@ dwg_ent_minsert_get_col_spacing(const dwg_ent_minsert *restrict minsert,
 \param[out] minsert dwg_ent_insert*
 \param[in]  spacing double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_minsert_set_col_spacing(dwg_ent_minsert *restrict minsert,
@@ -5549,6 +5744,7 @@ dwg_ent_minsert_set_col_spacing(dwg_ent_minsert *restrict minsert,
 \endcode
 \param[in] minsert dwg_ent_minsert*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_minsert_get_row_spacing(const dwg_ent_minsert *restrict minsert,
@@ -5573,6 +5769,7 @@ dwg_ent_minsert_get_row_spacing(const dwg_ent_minsert *restrict minsert,
 \param[out] insert dwg_ent_insert*
 \param[in]  spacing double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_minsert_set_row_spacing(dwg_ent_minsert *restrict minsert,
@@ -5596,6 +5793,7 @@ dwg_ent_minsert_set_row_spacing(dwg_ent_minsert *restrict minsert,
 \endcode
 \param[in]  minsert dwg_ent_minsert*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 dwg_object *
 dwg_ent_minsert_get_block_header(const dwg_ent_minsert *restrict minsert,
@@ -5623,6 +5821,7 @@ dwg_ent_minsert_get_block_header(const dwg_ent_minsert *restrict minsert,
 \endcode
 \param[in]  mlinestyle dwg_obj_mlinestyle
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 char *
 dwg_obj_mlinestyle_get_name(const dwg_obj_mlinestyle *restrict mlinestyle,
@@ -5650,6 +5849,7 @@ dwg_obj_mlinestyle_get_name(const dwg_obj_mlinestyle *restrict mlinestyle,
 \param[out] mlinestyle dwg_obj_mlinestyle
 \param[in]  name char *
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_obj_mlinestyle_set_name(dwg_obj_mlinestyle *restrict mlinestyle,
@@ -5676,6 +5876,7 @@ dwg_obj_mlinestyle_set_name(dwg_obj_mlinestyle *restrict mlinestyle,
 \endcode
 \param[in]  mlinestyle dwg_obj_mlinestyle
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 char *
 dwg_obj_mlinestyle_get_desc(const dwg_obj_mlinestyle *restrict mlinestyle,
@@ -5703,6 +5904,7 @@ dwg_obj_mlinestyle_get_desc(const dwg_obj_mlinestyle *restrict mlinestyle,
 \param[out] mlinestyle dwg_obj_mlinestyle
 \param[in] desc utf-8 char *
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_obj_mlinestyle_set_desc(dwg_obj_mlinestyle *restrict mlinestyle,
@@ -5729,6 +5931,7 @@ dwg_obj_mlinestyle_set_desc(dwg_obj_mlinestyle *restrict mlinestyle,
 \endcode
 \param[in]  mlinestyle dwg_obj_mlinestyle
 \param[out] error      int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 int
 dwg_obj_mlinestyle_get_flag(const dwg_obj_mlinestyle *restrict mlinestyle,
@@ -5753,6 +5956,7 @@ dwg_obj_mlinestyle_get_flag(const dwg_obj_mlinestyle *restrict mlinestyle,
 \param[out] mlinestyle  dwg_ent_mlinestyle*
 \param[in]  flags int
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_obj_mlinestyle_set_flag(dwg_obj_mlinestyle *restrict mlinestyle,
@@ -5776,6 +5980,7 @@ dwg_obj_mlinestyle_set_flag(dwg_obj_mlinestyle *restrict mlinestyle,
 \endcode
 \param[in]  mlinestyle  dwg_obj_mlinestyle
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_obj_mlinestyle_get_start_angle(const dwg_obj_mlinestyle *restrict mlinestyle,
@@ -5800,6 +6005,7 @@ dwg_obj_mlinestyle_get_start_angle(const dwg_obj_mlinestyle *restrict mlinestyle
 \param[out] mlinestyle  dwg_obj_mlinestyle
 \param[in]  start_angle double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_obj_mlinestyle_set_start_angle(dwg_obj_mlinestyle *restrict mlinestyle,
@@ -5823,6 +6029,7 @@ dwg_obj_mlinestyle_set_start_angle(dwg_obj_mlinestyle *restrict mlinestyle,
 \endcode
 \param[in]  mlinestyle dwg_obj_mlinestyle
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_obj_mlinestyle_get_end_angle(const dwg_obj_mlinestyle *restrict mlinestyle,
@@ -5847,6 +6054,7 @@ dwg_obj_mlinestyle_get_end_angle(const dwg_obj_mlinestyle *restrict mlinestyle,
 \param[out] mlinestyle dwg_obj_mlinestyle
 \param[in]  end_angle double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_obj_mlinestyle_set_end_angle(dwg_obj_mlinestyle *restrict mlinestyle,
@@ -5870,6 +6078,7 @@ dwg_obj_mlinestyle_set_end_angle(dwg_obj_mlinestyle *restrict mlinestyle,
 \endcode
 \param[in]  mlinestyle dwg_obj_mlinestyle
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 char
 dwg_obj_mlinestyle_get_num_lines(const dwg_obj_mlinestyle *restrict mlinestyle,
@@ -5897,6 +6106,7 @@ dwg_obj_mlinestyle_get_num_lines(const dwg_obj_mlinestyle *restrict mlinestyle,
 \endcode
 \param[in]  appid dwg_obj_appid_control
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_obj_appid_control_get_num_entries(const dwg_obj_appid_control *restrict appid,
@@ -5921,6 +6131,7 @@ dwg_obj_appid_control_get_num_entries(const dwg_obj_appid_control *restrict appi
 \param[in]  appid dwg_obj_appid_control*
 \param[in]  index
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 dwg_object_ref *
 dwg_obj_appid_control_get_appid(const dwg_obj_appid_control *restrict appid,
@@ -5949,6 +6160,7 @@ dwg_obj_appid_control_get_appid(const dwg_obj_appid_control *restrict appid,
 \endcode
 \param[in]  appid  dwg_obj_appid
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 char *
 dwg_obj_appid_get_name(const dwg_obj_appid *restrict appid,
@@ -5975,6 +6187,7 @@ dwg_obj_appid_get_name(const dwg_obj_appid *restrict appid,
 \endcode
 \param[in]  appid   dwg_obj_appid
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_RC
 dwg_obj_appid_get_flag(const dwg_obj_appid *restrict appid,
@@ -6002,6 +6215,7 @@ dwg_obj_appid_get_flag(const dwg_obj_appid *restrict appid,
 \param[out] appid  dwg_obj_appid*
 \param[in]  flag
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_obj_appid_set_flag(dwg_obj_appid *restrict appid,
@@ -6027,6 +6241,7 @@ dwg_obj_appid_set_flag(dwg_obj_appid *restrict appid,
 \endcode
 \param[in]  appid  dwg_obj_appid*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 dwg_obj_appid_control*
 dwg_obj_appid_get_appid_control(const dwg_obj_appid *restrict appid,
@@ -6054,6 +6269,7 @@ dwg_obj_appid_get_appid_control(const dwg_obj_appid *restrict appid,
 \endcode
 \param[in]  dim     dwg_ent_dim *
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 char *
 dwg_ent_dim_get_block_name(const dwg_ent_dim *restrict dim,
@@ -6082,6 +6298,7 @@ dwg_ent_dim_get_block_name(const dwg_ent_dim *restrict dim,
 \endcode
 \param[in]  dim     dwg_ent_dim*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_dim_get_elevation(const dwg_ent_dim *restrict dim,
@@ -6106,6 +6323,7 @@ dwg_ent_dim_get_elevation(const dwg_ent_dim *restrict dim,
 \param[out] dim       dwg_ent_dim*
 \param[in]  elevation double
 \param[out] error     int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_set_elevation(dwg_ent_dim *restrict dim,
@@ -6129,6 +6347,7 @@ dwg_ent_dim_set_elevation(dwg_ent_dim *restrict dim,
 \endcode
 \param[in]  dim     dwg_ent_dim*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 char
 dwg_ent_dim_get_flag1(const dwg_ent_dim *restrict dim,
@@ -6153,6 +6372,7 @@ dwg_ent_dim_get_flag1(const dwg_ent_dim *restrict dim,
 \param[in] dim dwg_ent_dim*
 \param 2 char
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_set_flag1(dwg_ent_dim *restrict dim,
@@ -6176,6 +6396,7 @@ dwg_ent_dim_set_flag1(dwg_ent_dim *restrict dim,
 \endcode
 \param[in] dim dwg_ent_dim*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_dim_get_act_measurement(const dwg_ent_dim *restrict dim,
@@ -6200,6 +6421,7 @@ dwg_ent_dim_get_act_measurement(const dwg_ent_dim *restrict dim,
 \param[out]  dim     dwg_ent_dim*
 \param[in]   act_measurement double
 \param[out]  error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_set_act_measurement(dwg_ent_dim *restrict dim,
@@ -6223,6 +6445,7 @@ dwg_ent_dim_set_act_measurement(dwg_ent_dim *restrict dim,
 \endcode
 \param[in]  dim     dwg_ent_dim*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_dim_get_horiz_dir(const dwg_ent_dim *restrict dim,
@@ -6247,6 +6470,7 @@ dwg_ent_dim_get_horiz_dir(const dwg_ent_dim *restrict dim,
 \param[out] dim      dwg_ent_dim*
 \param[in]  horiz_dir  double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_set_horiz_dir(dwg_ent_dim *restrict dim,
@@ -6270,6 +6494,7 @@ dwg_ent_dim_set_horiz_dir(dwg_ent_dim *restrict dim,
 \endcode
 \param[in]  dim dwg_ent_dim*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_dim_get_lspace_factor(const dwg_ent_dim *restrict dim,
@@ -6294,6 +6519,7 @@ dwg_ent_dim_get_lspace_factor(const dwg_ent_dim *restrict dim,
 \param[out] dim     dwg_ent_dim*
 \param[in] factor   double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_set_lspace_factor(dwg_ent_dim *restrict dim,
@@ -6317,6 +6543,7 @@ dwg_ent_dim_set_lspace_factor(dwg_ent_dim *restrict dim,
 \endcode
 \param[in] dim dwg_ent_dim*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_dim_get_lspace_style(const dwg_ent_dim *restrict dim,
@@ -6341,6 +6568,7 @@ dwg_ent_dim_get_lspace_style(const dwg_ent_dim *restrict dim,
 \param[out] dim     dwg_ent_dim*
 \param[in]  style   BITCODE_BS
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_set_lspace_style(dwg_ent_dim *restrict dim,
@@ -6364,6 +6592,7 @@ dwg_ent_dim_set_lspace_style(dwg_ent_dim *restrict dim,
 \endcode
 \param[in] dim dwg_ent_dim*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_dim_get_attachment(const dwg_ent_dim *restrict dim,
@@ -6388,6 +6617,7 @@ dwg_ent_dim_get_attachment(const dwg_ent_dim *restrict dim,
 \param[out] dim        dwg_ent_dim*
 \param[in]  attachment BITCODE_BS point index
 \param[out] error      int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_set_attachment(dwg_ent_dim *restrict dim,
@@ -6412,6 +6642,7 @@ dwg_ent_dim_set_attachment(dwg_ent_dim *restrict dim,
 \param[out] dim     dwg_ent_dim*
 \param[in]  vector  dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_set_extrusion(dwg_ent_dim *restrict dim,
@@ -6442,6 +6673,7 @@ dwg_ent_dim_set_extrusion(dwg_ent_dim *restrict dim,
 \param[in]  dim     dwg_ent_dim*
 \param[out] vector  dwg_point_3d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_get_extrusion(const dwg_ent_dim *restrict dim,
@@ -6471,6 +6703,7 @@ dwg_ent_dim_get_extrusion(const dwg_ent_dim *restrict dim,
 \endcode
 \param[in]  dim dwg_ent_dim*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 char *
 dwg_ent_dim_get_user_text(const dwg_ent_dim *restrict dim,
@@ -6498,6 +6731,7 @@ dwg_ent_dim_get_user_text(const dwg_ent_dim *restrict dim,
 \param[out] dim    dwg_ent_dim*
 \param[in]  text   char*
 \param[out] error  int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_set_user_text(dwg_ent_dim *restrict dim,
@@ -6524,6 +6758,7 @@ dwg_ent_dim_set_user_text(dwg_ent_dim *restrict dim,
 \endcode
 \param[in]  dim     dwg_ent_dim*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_dim_get_text_rotation(const dwg_ent_dim *restrict dim,
@@ -6548,6 +6783,7 @@ dwg_ent_dim_get_text_rotation(const dwg_ent_dim *restrict dim,
 \param[out] dim      dwg_ent_dim*
 \param[in]  rotation double
 \param[out] error    int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_set_text_rotation(dwg_ent_dim *restrict dim,
@@ -6571,6 +6807,7 @@ dwg_ent_dim_set_text_rotation(dwg_ent_dim *restrict dim,
 \endcode
 \param[in] dim dwg_ent_dim*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_dim_get_ins_rotation(const dwg_ent_dim *restrict dim,
@@ -6595,6 +6832,7 @@ dwg_ent_dim_get_ins_rotation(const dwg_ent_dim *restrict dim,
 \param[out] dim      dwg_ent_dim*
 \param[in]  rotation double
 \param[out] error    int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_set_ins_rotation(dwg_ent_dim *restrict dim,
@@ -6618,6 +6856,7 @@ dwg_ent_dim_set_ins_rotation(dwg_ent_dim *restrict dim,
 \endcode
 \param[in]  dim     dwg_ent_dim*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 char
 dwg_ent_dim_get_flip_arrow1(const dwg_ent_dim *restrict dim,
@@ -6642,6 +6881,7 @@ dwg_ent_dim_get_flip_arrow1(const dwg_ent_dim *restrict dim,
 \param[out] dim        dwg_ent_dim*
 \param[in]  flip_arrow char
 \param[out] error      int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_set_flip_arrow1(dwg_ent_dim *restrict dim,
@@ -6665,6 +6905,7 @@ dwg_ent_dim_set_flip_arrow1(dwg_ent_dim *restrict dim,
 \endcode
 \param[in] dim dwg_ent_dim*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 char
 dwg_ent_dim_get_flip_arrow2(const dwg_ent_dim *restrict dim,
@@ -6689,6 +6930,7 @@ dwg_ent_dim_get_flip_arrow2(const dwg_ent_dim *restrict dim,
 \param[out] dim        dwg_ent_dim*
 \param[in]  flip_arrow char
 \param[out] error      int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_set_flip_arrow2(dwg_ent_dim *restrict dim,
@@ -6713,6 +6955,7 @@ dwg_ent_dim_set_flip_arrow2(dwg_ent_dim *restrict dim,
 \param[out] dim     dwg_ent_dim*
 \param[in]  point   dwg_point_2d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_set_text_midpt(dwg_ent_dim *restrict dim,
@@ -6742,6 +6985,7 @@ dwg_ent_dim_set_text_midpt(dwg_ent_dim *restrict dim,
 \param[in]  dim     dwg_ent_dim*
 \param[out] point   dwg_point_2d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_get_text_midpt(const dwg_ent_dim *restrict dim,
@@ -6831,6 +7075,7 @@ dwg_ent_dim_get_ins_scale(const dwg_ent_dim *restrict dim,
 \param[out] dim    dwg_ent_dim*
 \param[in]  point  dwg_point_2d
 \param[out] error  int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_set_clone_ins_pt(dwg_ent_dim *restrict dim,
@@ -6860,6 +7105,7 @@ dwg_ent_dim_set_clone_ins_pt(dwg_ent_dim *restrict dim,
 \param[in]  dim    dwg_ent_dim*
 \param[out] point  dwg_point_2d
 \param[out] error  int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_get_clone_ins_pt(const dwg_ent_dim *restrict dim,
@@ -6892,6 +7138,7 @@ dwg_ent_dim_get_clone_ins_pt(const dwg_ent_dim *restrict dim,
 \endcode
 \param[in]  dim     dwg_ent_dim_ordinate*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 char
 dwg_ent_dim_ordinate_get_flag2(const dwg_ent_dim_ordinate *restrict dim,
@@ -6916,6 +7163,7 @@ dwg_ent_dim_ordinate_get_flag2(const dwg_ent_dim_ordinate *restrict dim,
 \param[out] dim    dwg_ent_dim_ordinate*
 \param[in]  flag   char
 \param[out] error  int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_ordinate_set_flag2(dwg_ent_dim_ordinate *restrict dim,
@@ -6940,6 +7188,7 @@ dwg_ent_dim_ordinate_set_flag2(dwg_ent_dim_ordinate *restrict dim,
 \param[in] dim_ordinate dwg_ent_dim_ordinate*
 \param[out] dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_ordinate_set_def_pt(dwg_ent_dim_ordinate *restrict dim,
@@ -6970,6 +7219,7 @@ dwg_ent_dim_ordinate_set_def_pt(dwg_ent_dim_ordinate *restrict dim,
 \param[in] dim_ordinate dwg_ent_dim_ordinate*
 \param[out] dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_ordinate_get_def_pt(const dwg_ent_dim_ordinate *restrict dim,
@@ -7000,6 +7250,7 @@ dwg_ent_dim_ordinate_get_def_pt(const dwg_ent_dim_ordinate *restrict dim,
 \param[in] dim_ordinate dwg_ent_dim_ordinate*
 \param[out] dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_ordinate_set_feature_location_pt(dwg_ent_dim_ordinate *restrict dim,
@@ -7030,6 +7281,7 @@ dwg_ent_dim_ordinate_set_feature_location_pt(dwg_ent_dim_ordinate *restrict dim,
 \param[in] dim_ordinate dwg_ent_dim_ordinate*
 \param[out] dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_ordinate_get_feature_location_pt(const dwg_ent_dim_ordinate *restrict dim,
@@ -7060,6 +7312,7 @@ dwg_ent_dim_ordinate_get_feature_location_pt(const dwg_ent_dim_ordinate *restric
 \param[in] dim_ordinate dwg_ent_dim_ordinate*
 \param[out] dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_ordinate_set_leader_endpt(dwg_ent_dim_ordinate *restrict dim,
@@ -7090,6 +7343,7 @@ dwg_ent_dim_ordinate_set_leader_endpt(dwg_ent_dim_ordinate *restrict dim,
 \param[in] dim_ordinate dwg_ent_dim_ordinate*
 \param[out] dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_ordinate_get_leader_endpt(const dwg_ent_dim_ordinate *restrict dim,
@@ -7124,6 +7378,7 @@ dwg_ent_dim_ordinate_get_leader_endpt(const dwg_ent_dim_ordinate *restrict dim,
 \param[in] dim_linear dwg_ent_dim_linear*
 \param[out] dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_linear_set_def_pt(dwg_ent_dim_linear *restrict dim,
@@ -7154,6 +7409,7 @@ dwg_ent_dim_linear_set_def_pt(dwg_ent_dim_linear *restrict dim,
 \param[in] dim_linear dwg_ent_dim_linear*
 \param[out] dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_linear_get_def_pt(const dwg_ent_dim_linear *restrict dim,
@@ -7184,6 +7440,7 @@ dwg_ent_dim_linear_get_def_pt(const dwg_ent_dim_linear *restrict dim,
 \param[in] dim_linear dwg_ent_dim_linear*
 \param[out] dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_linear_set_13_pt(dwg_ent_dim_linear *restrict dim,
@@ -7214,6 +7471,7 @@ dwg_ent_dim_linear_set_13_pt(dwg_ent_dim_linear *restrict dim,
 \param[in] dim_linear dwg_ent_dim_linear*
 \param[out] dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_linear_get_13_pt(const dwg_ent_dim_linear *restrict dim,
@@ -7244,6 +7502,7 @@ dwg_ent_dim_linear_get_13_pt(const dwg_ent_dim_linear *restrict dim,
 \param[in] dim   dwg_ent_dim_linear*
 \param[out] dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_linear_set_14_pt(dwg_ent_dim_linear *restrict dim,
@@ -7274,6 +7533,7 @@ dwg_ent_dim_linear_set_14_pt(dwg_ent_dim_linear *restrict dim,
 \param[in] dim   dwg_ent_dim_linear*
 \param[out] dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_linear_get_14_pt(const dwg_ent_dim_linear *restrict dim,
@@ -7303,6 +7563,7 @@ dwg_ent_dim_linear_get_14_pt(const dwg_ent_dim_linear *restrict dim,
 \endcode
 \param[in] dim   dwg_ent_dim_linear*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_dim_linear_get_ext_line_rotation(const dwg_ent_dim_linear *restrict dim,
@@ -7327,6 +7588,7 @@ dwg_ent_dim_linear_get_ext_line_rotation(const dwg_ent_dim_linear *restrict dim,
 \param[out] dim   dwg_ent_dim_linear*
 \param[in]  rotation double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_linear_set_ext_line_rotation(dwg_ent_dim_linear *restrict dim,
@@ -7350,6 +7612,7 @@ dwg_ent_dim_linear_set_ext_line_rotation(dwg_ent_dim_linear *restrict dim,
 \endcode
 \param[in]  dim   dwg_ent_dim_linear*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_dim_linear_get_dim_rotation(const dwg_ent_dim_linear *restrict dim,
@@ -7374,6 +7637,7 @@ dwg_ent_dim_linear_get_dim_rotation(const dwg_ent_dim_linear *restrict dim,
 \param[out] dim   dwg_ent_dim_linear*
 \param[in]  rotation double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_linear_set_dim_rotation(dwg_ent_dim_linear *restrict dim,
@@ -7402,6 +7666,7 @@ dwg_ent_dim_linear_set_dim_rotation(dwg_ent_dim_linear *restrict dim,
 \param[out] dim   dwg_ent_dim_aligned*
 \param[in] dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_aligned_set_def_pt(dwg_ent_dim_aligned *restrict dim,
@@ -7432,6 +7697,7 @@ dwg_ent_dim_aligned_set_def_pt(dwg_ent_dim_aligned *restrict dim,
 \param[in] dim   dwg_ent_dim_aligned*
 \param[out] dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_aligned_get_def_pt(const dwg_ent_dim_aligned *restrict dim,
@@ -7462,6 +7728,7 @@ dwg_ent_dim_aligned_get_def_pt(const dwg_ent_dim_aligned *restrict dim,
 \param[out] dim   dwg_ent_dim_aligned*
 \param[in] dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_aligned_set_13_pt(dwg_ent_dim_aligned *restrict dim,
@@ -7492,6 +7759,7 @@ dwg_ent_dim_aligned_set_13_pt(dwg_ent_dim_aligned *restrict dim,
 \param[in]  dim   dwg_ent_dim_aligned*
 \param[out] dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_aligned_get_13_pt(const dwg_ent_dim_aligned *restrict dim,
@@ -7522,6 +7790,7 @@ dwg_ent_dim_aligned_get_13_pt(const dwg_ent_dim_aligned *restrict dim,
 \param[out] dim   dwg_ent_dim_aligned*
 \param[in]  dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_aligned_set_14_pt(dwg_ent_dim_aligned *restrict dim,
@@ -7552,6 +7821,7 @@ dwg_ent_dim_aligned_set_14_pt(dwg_ent_dim_aligned *restrict dim,
 \param[in] dim   dwg_ent_dim_aligned*
 \param[out] dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_aligned_get_14_pt(const dwg_ent_dim_aligned *restrict dim,
@@ -7577,6 +7847,7 @@ dwg_ent_dim_aligned_get_14_pt(const dwg_ent_dim_aligned *restrict dim,
 \endcode
 \param[in] dim   dwg_ent_dim_aligned*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_dim_aligned_get_ext_line_rotation(const dwg_ent_dim_aligned *restrict dim,
@@ -7601,6 +7872,7 @@ dwg_ent_dim_aligned_get_ext_line_rotation(const dwg_ent_dim_aligned *restrict di
 \param[out] dim   dwg_ent_dim_aligned*
 \param[in]  rotation double
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_aligned_set_ext_line_rotation(dwg_ent_dim_aligned *restrict dim,
@@ -7629,6 +7901,7 @@ dwg_ent_dim_aligned_set_ext_line_rotation(dwg_ent_dim_aligned *restrict dim,
 \param[out] ang    dwg_ent_dim_ang3pt*
 \param[in]  point  dwg_point_3d
 \param[out] error  int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_ang3pt_set_def_pt(dwg_ent_dim_ang3pt *restrict ang,
@@ -7659,6 +7932,7 @@ dwg_ent_dim_ang3pt_set_def_pt(dwg_ent_dim_ang3pt *restrict ang,
 \param[in]  ang     dwg_ent_dim_ang3pt*
 \param[out] point   dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_ang3pt_get_def_pt(const dwg_ent_dim_ang3pt *restrict ang,
@@ -7685,6 +7959,7 @@ dwg_ent_dim_ang3pt_get_def_pt(const dwg_ent_dim_ang3pt *restrict ang,
 \param[out] ang     dwg_ent_dim_ang3pt*
 \param[in]  point   dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_ang3pt_set_13_pt(dwg_ent_dim_ang3pt *restrict ang,
@@ -7715,6 +7990,7 @@ dwg_ent_dim_ang3pt_set_13_pt(dwg_ent_dim_ang3pt *restrict ang,
 \param[in]  ang     dwg_ent_dim_ang3pt*
 \param[out] point   dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_ang3pt_get_13_pt(const dwg_ent_dim_ang3pt *restrict ang,
@@ -7745,6 +8021,7 @@ dwg_ent_dim_ang3pt_get_13_pt(const dwg_ent_dim_ang3pt *restrict ang,
 \param[out] ang     dwg_ent_dim_ang3pt*
 \param[in]  point   dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_ang3pt_set_14_pt(dwg_ent_dim_ang3pt *restrict ang,
@@ -7775,6 +8052,7 @@ dwg_ent_dim_ang3pt_set_14_pt(dwg_ent_dim_ang3pt *restrict ang,
 \param[in]  ang     dwg_ent_dim_ang3pt*
 \param[out] point   dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_ang3pt_get_14_pt(const dwg_ent_dim_ang3pt *restrict ang,
@@ -7806,6 +8084,7 @@ dwg_ent_dim_ang3pt_get_14_pt(const dwg_ent_dim_ang3pt *restrict ang,
 \param[out] ang dwg_ent_dim_ang3pt*
 \param[in]  dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_ang3pt_set_first_arc_pt(dwg_ent_dim_ang3pt *restrict ang,
@@ -7836,6 +8115,7 @@ dwg_ent_dim_ang3pt_set_first_arc_pt(dwg_ent_dim_ang3pt *restrict ang,
 \param[in] ang dwg_ent_dim_ang3pt*
 \param[out] dwg_point_2d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_dim_ang3pt_get_first_arc_pt(const dwg_ent_dim_ang3pt *restrict ang,
@@ -13231,6 +13511,7 @@ dwg_ent_polyline_mesh_get_num_owned(const dwg_ent_polyline_mesh *restrict mesh,
 \param[in]  pline2d dwg_ent_polyline_2d*
 \param[out] vector  dwg_point_3d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_polyline_2d_get_extrusion(const dwg_ent_polyline_2d *restrict pline2d,
@@ -13259,6 +13540,7 @@ dwg_ent_polyline_2d_get_extrusion(const dwg_ent_polyline_2d *restrict pline2d,
 \param[out] pline2d dwg_ent_polyline_2d*
 \param[in]  vector  dwg_point_3d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_polyline_2d_set_extrusion(dwg_ent_polyline_2d *restrict pline2d,
@@ -13286,6 +13568,7 @@ dwg_ent_polyline_2d_set_extrusion(dwg_ent_polyline_2d *restrict pline2d,
 /** Returns the _dwg_entity_POLYLINE_2D::start_width, DXF 40.
 \param[in]  pline2d dwg_ent_polyline_2d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_polyline_2d_get_start_width(const dwg_ent_polyline_2d *restrict pline2d,
@@ -13308,6 +13591,7 @@ dwg_ent_polyline_2d_get_start_width(const dwg_ent_polyline_2d *restrict pline2d,
 \param[out] pline2d     dwg_ent_polyline_2d*
 \param[in]  start_width double
 \param[out] error       int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_polyline_2d_set_start_width(dwg_ent_polyline_2d *restrict pline2d,
@@ -13443,6 +13727,7 @@ dwg_ent_polyline_2d_set_elevation(dwg_ent_polyline_2d *restrict pline2d,
 /** Returns the _dwg_entity_POLYLINE_2D::flag, DXF 70.
 \param[in]  pline2d dwg_ent_polyline_2d *
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_polyline_2d_get_flag(const dwg_ent_polyline_2d *restrict pline2d,
@@ -13465,6 +13750,7 @@ dwg_ent_polyline_2d_get_flag(const dwg_ent_polyline_2d *restrict pline2d,
 \param[out] pline2d dwg_ent_polyline_2d*
 \param[in]  flag    BITCODE_RC
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_polyline_2d_set_flag(dwg_ent_polyline_2d *restrict pline2d,
@@ -13683,6 +13969,7 @@ dwg_object_polyline_2d_get_points(const dwg_object *restrict obj,
 /** Returns the _dwg_entity_POLYLINE_3D:: flag, DXF 70.
 \param[in]  pline3d dwg_ent_polyline_3d *
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_RC
 dwg_ent_polyline_3d_get_flag(const dwg_ent_polyline_3d *restrict pline3d,
@@ -13705,6 +13992,7 @@ dwg_ent_polyline_3d_get_flag(const dwg_ent_polyline_3d *restrict pline3d,
 \param[out] pline3d dwg_ent_polyline_3d *
 \param[in]  flag    BITCODE_RC
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_polyline_3d_set_flag(dwg_ent_polyline_3d *restrict pline3d,
@@ -13930,6 +14218,7 @@ dwg_object_polyline_3d_get_points(const dwg_object *restrict obj,
 \endcode
 \param[in] _3dface  dwg_ent_3dface*
 \param[out] error   set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_3dface_get_invis_flags(const dwg_ent_3dface *restrict _3dface,
@@ -13954,6 +14243,7 @@ dwg_ent_3dface_get_invis_flags(const dwg_ent_3dface *restrict _3dface,
 \param[in,out] 3dface      dwg_ent_3dface*
 \param[in]     invis_flags BITCODE_BS
 \param[out]    error       int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_3dface_set_invis_flags(dwg_ent_3dface *restrict _3dface,
@@ -13978,6 +14268,7 @@ dwg_ent_3dface_set_invis_flags(dwg_ent_3dface *restrict _3dface,
 \param[in]  3dface  dwg_ent_3dface*
 \param[out] point   dwg_point_2d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_3dface_get_corner1(const dwg_ent_3dface *restrict _3dface,
@@ -14007,6 +14298,7 @@ dwg_ent_3dface_get_corner1(const dwg_ent_3dface *restrict _3dface,
 \param[in,out] 3dface   dwg_ent_3dface*
 \param[in]     point    dwg_point_2d*
 \param[out]    error    int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_3dface_set_corner1(dwg_ent_3dface *restrict _3dface,
@@ -14036,6 +14328,7 @@ dwg_ent_3dface_set_corner1(dwg_ent_3dface *restrict _3dface,
 \param[in]  3dface  dwg_ent_3dface*
 \param[out] point   dwg_point_2d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_3dface_get_corner2(const dwg_ent_3dface *restrict _3dface,
@@ -14065,6 +14358,7 @@ dwg_ent_3dface_get_corner2(const dwg_ent_3dface *restrict _3dface,
 \param[in,out] 3dface   dwg_ent_3dface*
 \param[in]     point    dwg_point_2d*
 \param[out]    error    int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_3dface_set_corner2(dwg_ent_3dface *restrict _3dface,
@@ -14094,6 +14388,7 @@ dwg_ent_3dface_set_corner2(dwg_ent_3dface *restrict _3dface,
 \param[in]  3dface  dwg_ent_3dface*
 \param[out] point   dwg_point_2d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_3dface_get_corner3(const dwg_ent_3dface *restrict _3dface,
@@ -14123,6 +14418,7 @@ dwg_ent_3dface_get_corner3(const dwg_ent_3dface *restrict _3dface,
 \param[in,out] 3dface   dwg_ent_3dface*
 \param[in]     point    dwg_point_2d*
 \param[out]    error    int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_3dface_set_corner3(dwg_ent_3dface *restrict _3dface,
@@ -14152,6 +14448,7 @@ dwg_ent_3dface_set_corner3(dwg_ent_3dface *restrict _3dface,
 \param[in]  3dface  dwg_ent_3dface*
 \param[out] point   dwg_point_2d
 \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_3dface_get_corner4(const dwg_ent_3dface *restrict _3dface,
@@ -14181,6 +14478,7 @@ dwg_ent_3dface_get_corner4(const dwg_ent_3dface *restrict _3dface,
 \param[out]  3dface  dwg_ent_3dface*
 \param[in]   point   dwg_point_2d*
 \param[out]  error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_3dface_set_corner4(dwg_ent_3dface *restrict _3dface,
@@ -16036,9 +16334,10 @@ dwg_ent_body_set_acis_empty2(dwg_ent_body *restrict body, unsigned char empty2,
 ********************************************************************/
 
 /** Sets _dwg_entity_TABLE::insertion_point, DXF 10.
-\param[in]  table      dwg_ent_table *
-\param[in] point      dwg_point_3d *
-\param[out] error      set to 0 for ok, 1 on error
+\param[in,out] table      dwg_ent_table*
+\param[in]     point      dwg_point_3d *
+\param[out]    error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_insertion_point(dwg_ent_table *restrict table,
@@ -16067,6 +16366,7 @@ dwg_ent_table_set_insertion_point(dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[out] point      dwg_point_3d *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_get_insertion_point(const dwg_ent_table *restrict table,
@@ -16092,9 +16392,10 @@ dwg_ent_table_get_insertion_point(const dwg_ent_table *restrict table,
 }
 
 /** Sets _dwg_entity_TABLE::scale, DXF 41. if r13+
-\param[in]  table      dwg_ent_table*
-\param[in]  scale3d    dwg_point_3d*, scale in x, y, z
-\param[out] error      set to 0 for ok, 1 on error
+\param[in,out] table      dwg_ent_table*
+\param[in]     scale3d    dwg_point_3d*, scale in x, y, z
+\param[out]    error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_scale(dwg_ent_table *restrict table,
@@ -16136,6 +16437,7 @@ dwg_ent_table_set_scale(dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[out] scale3d    dwg_point_3d *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_get_scale(const dwg_ent_table *restrict table,
@@ -16164,6 +16466,7 @@ dwg_ent_table_get_scale(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  flags      0 - 3
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_data_flags(dwg_ent_table *restrict table,
@@ -16185,6 +16488,7 @@ dwg_ent_table_set_data_flags(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::data_flags, no DXF.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 unsigned char
 dwg_ent_table_get_data_flags(const dwg_ent_table *restrict table,
@@ -16207,6 +16511,7 @@ dwg_ent_table_get_data_flags(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  rotation   double
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_rotation(dwg_ent_table *restrict table,
@@ -16228,6 +16533,7 @@ dwg_ent_table_set_rotation(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::rotation, DXF 50.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_table_get_rotation(const dwg_ent_table *restrict table,
@@ -16247,9 +16553,10 @@ dwg_ent_table_get_rotation(const dwg_ent_table *restrict table,
 }
 
 /** Sets _dwg_entity_TABLE::extrusion, DXF 210.
-\param[in,out]  table      dwg_ent_table *
-\param[int] vector     dwg_point_3d *
-\param[out] error      set to 0 for ok, 1 on error
+\param[in,out] table      dwg_ent_table *
+\param[in]     vector     dwg_point_3d *
+\param[out]    error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_extrusion(dwg_ent_table *restrict table,
@@ -16278,6 +16585,7 @@ dwg_ent_table_set_extrusion(dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[out] vector     dwg_point_3d *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_get_extrusion(const dwg_ent_table *restrict table,
@@ -16306,6 +16614,7 @@ dwg_ent_table_get_extrusion(const dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::has_attribs boolean, DXF 66.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 unsigned char
 dwg_ent_table_has_attribs(dwg_ent_table *restrict table,
@@ -16330,6 +16639,7 @@ dwg_ent_table_has_attribs(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::num_owned, no DXF.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BL
 dwg_ent_table_get_num_owned(const dwg_ent_table *restrict table,
@@ -16357,6 +16667,7 @@ dwg_ent_table_get_num_owned(const dwg_ent_table *restrict table,
     set.
 
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_flag_for_table_value(dwg_ent_table *restrict table,
@@ -16383,6 +16694,7 @@ dwg_ent_table_set_flag_for_table_value(dwg_ent_table *restrict table,
     \sa dwg_ent_table_set_flag_for_table_value
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_flag_for_table_value(const dwg_ent_table *restrict table,
@@ -16405,6 +16717,7 @@ dwg_ent_table_get_flag_for_table_value(const dwg_ent_table *restrict table,
 \param[out] table      dwg_ent_table *
 \param[in]  vector      dwg_point_3d *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_horiz_direction(dwg_ent_table *restrict table,
@@ -16433,6 +16746,7 @@ dwg_ent_table_set_horiz_direction(dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[out]  vector      dwg_point_3d *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_get_horiz_direction(const dwg_ent_table *restrict table,
@@ -16460,6 +16774,7 @@ dwg_ent_table_get_horiz_direction(const dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::num_cols number of columns, DXF 91.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BL
 dwg_ent_table_get_num_cols(const dwg_ent_table *restrict table,
@@ -16481,6 +16796,7 @@ dwg_ent_table_get_num_cols(const dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::num_cols number of rows, DXF 92.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BL
 dwg_ent_table_get_num_rows(const dwg_ent_table *restrict table,
@@ -16506,6 +16822,7 @@ dwg_ent_table_get_num_rows(const dwg_ent_table *restrict table,
 /** Returns array of _dwg_entity_TABLE::col_widths, DXF 142
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 double *
 dwg_ent_table_get_col_widths(const dwg_ent_table *restrict table,
@@ -16527,6 +16844,7 @@ dwg_ent_table_get_col_widths(const dwg_ent_table *restrict table,
 /** Returns array of _dwg_entity_TABLE::row_heights, DXF 141
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 double *
 dwg_ent_table_get_row_heights(const dwg_ent_table *restrict table,
@@ -16548,6 +16866,7 @@ dwg_ent_table_get_row_heights(const dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::has_table_overrides boolean, no DXF.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_B
 dwg_ent_table_has_table_overrides(dwg_ent_table *restrict table,
@@ -16570,6 +16889,7 @@ dwg_ent_table_has_table_overrides(dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  override   0 - 0x7fffff
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_table_flag_override(dwg_ent_table *restrict table,
@@ -16592,6 +16912,7 @@ dwg_ent_table_set_table_flag_override(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::table_flag_override, DXF 93.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BL
 dwg_ent_table_get_table_flag_override(const dwg_ent_table *restrict table,
@@ -16614,6 +16935,7 @@ dwg_ent_table_get_table_flag_override(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  yesno      0 or 1
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_title_suppressed(dwg_ent_table *restrict table,
@@ -16636,6 +16958,7 @@ dwg_ent_table_set_title_suppressed(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::title_suppressed, DXF 280.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 unsigned char
 dwg_ent_table_get_title_suppressed(const dwg_ent_table *restrict table,
@@ -16658,6 +16981,7 @@ dwg_ent_table_get_title_suppressed(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  header     0 or 1
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_header_suppressed(dwg_ent_table *restrict table,
@@ -16679,6 +17003,7 @@ dwg_ent_table_set_header_suppressed(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::header_suppressed, DXF 281.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 unsigned char
 dwg_ent_table_get_header_suppressed(const dwg_ent_table *restrict table,
@@ -16701,6 +17026,7 @@ dwg_ent_table_get_header_suppressed(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  dir        short?
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_flow_direction(dwg_ent_table *restrict table,
@@ -16723,6 +17049,7 @@ dwg_ent_table_set_flow_direction(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::flow_direction, DXF 70.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_flow_direction(const dwg_ent_table *restrict table,
@@ -16745,6 +17072,7 @@ dwg_ent_table_get_flow_direction(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  margin     double
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_horiz_cell_margin(dwg_ent_table *restrict table,
@@ -16768,6 +17096,7 @@ dwg_ent_table_set_horiz_cell_margin(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::horiz_cell_margin, DXF 41.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_table_get_horiz_cell_margin(const dwg_ent_table *restrict table,
@@ -16790,6 +17119,7 @@ dwg_ent_table_get_horiz_cell_margin(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  margin     double
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_vert_cell_margin(dwg_ent_table *restrict table,
@@ -16813,6 +17143,7 @@ dwg_ent_table_set_vert_cell_margin(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::vert_cell_margin, DXF 41.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_table_get_vert_cell_margin(const dwg_ent_table *restrict table,
@@ -16835,6 +17166,7 @@ dwg_ent_table_get_vert_cell_margin(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  fill       ?
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_title_row_fill_none(dwg_ent_table *restrict table,
@@ -16857,6 +17189,7 @@ dwg_ent_table_set_title_row_fill_none(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::title_row_fill_none, DXF 283.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 unsigned char
 dwg_ent_table_get_title_row_fill_none(const dwg_ent_table *restrict table,
@@ -16879,6 +17212,7 @@ dwg_ent_table_get_title_row_fill_none(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  fill       ?
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_header_row_fill_none(dwg_ent_table *restrict table,
@@ -16901,6 +17235,7 @@ dwg_ent_table_set_header_row_fill_none(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::header_row_fill_none, DXF 283.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 unsigned char
 dwg_ent_table_get_header_row_fill_none(const dwg_ent_table *restrict table,
@@ -16923,6 +17258,7 @@ dwg_ent_table_get_header_row_fill_none(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  fill       ?
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_data_row_fill_none(dwg_ent_table *restrict table,
@@ -16945,6 +17281,7 @@ dwg_ent_table_set_data_row_fill_none(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::data_row_fill_none, DXF 283.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 unsigned char
 dwg_ent_table_get_data_row_fill_none(const dwg_ent_table *restrict table,
@@ -16969,6 +17306,7 @@ dwg_ent_table_get_data_row_fill_none(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  align      short?
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_title_row_alignment(dwg_ent_table *restrict table,
@@ -16991,6 +17329,7 @@ dwg_ent_table_set_title_row_alignment(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::title_row_align, DXF 170.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_title_row_alignment(const dwg_ent_table *restrict table,
@@ -17014,6 +17353,7 @@ dwg_ent_table_get_title_row_alignment(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  alignment      short?
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_header_row_alignment(dwg_ent_table *restrict table,
@@ -17037,6 +17377,7 @@ dwg_ent_table_set_header_row_alignment(dwg_ent_table *restrict table,
     Might be ignored if bit of 0x8000 of table_flag_override DXF 93 is not set.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_header_row_alignment(const dwg_ent_table *restrict table,
@@ -17062,6 +17403,7 @@ dwg_ent_table_get_header_row_alignment(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  alignment      short?
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_data_row_alignment(dwg_ent_table *restrict table,
@@ -17085,6 +17427,7 @@ dwg_ent_table_set_data_row_alignment(dwg_ent_table *restrict table,
     Might be ignored if bit of 0x10000 of table_flag_override, DXF 93 is not set.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_data_row_alignment(const dwg_ent_table *restrict table,
@@ -17107,6 +17450,7 @@ dwg_ent_table_get_data_row_alignment(const dwg_ent_table *restrict table,
     and en/disables the _dwg_entity_TABLE::table_flag_override
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_title_row_height(dwg_ent_table *restrict table,
@@ -17130,6 +17474,7 @@ dwg_ent_table_set_title_row_height(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::title_row_height, DXF 140.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_table_get_title_row_height(const dwg_ent_table *restrict table,
@@ -17152,6 +17497,7 @@ dwg_ent_table_get_title_row_height(const dwg_ent_table *restrict table,
     and en/disables the _dwg_entity_TABLE::table_flag_override.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_header_row_height(dwg_ent_table *restrict table,
@@ -17175,6 +17521,7 @@ dwg_ent_table_set_header_row_height(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::header_row_height, DXF 140.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_table_get_header_row_height(const dwg_ent_table *restrict table,
@@ -17197,6 +17544,7 @@ dwg_ent_table_get_header_row_height(const dwg_ent_table *restrict table,
     and en/disables the _dwg_entity_TABLE::table_flag_override.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_data_row_height(dwg_ent_table *restrict table,
@@ -17220,6 +17568,7 @@ dwg_ent_table_set_data_row_height(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::data_row_height, DXF 140.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 double
 dwg_ent_table_get_data_row_height(const dwg_ent_table *restrict table,
@@ -17241,6 +17590,7 @@ dwg_ent_table_get_data_row_height(const dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::has_border_color_overrides, if DXF 94 > 0.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 unsigned char
 dwg_ent_table_has_border_color_overrides(dwg_ent_table *restrict table,
@@ -17263,6 +17613,7 @@ dwg_ent_table_has_border_color_overrides(dwg_ent_table *restrict table,
     \sa dwg_ent_table_get_border_color_overrides_flag
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_border_color_overrides_flag(dwg_ent_table *restrict table,
@@ -17315,6 +17666,7 @@ dwg_ent_table_get_border_color_overrides_flag(const dwg_ent_table *restrict tabl
 /** Returns _dwg_entity_TABLE::has_border_lineweight_overrides, if DXF 95 > 0
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 unsigned char
 dwg_ent_table_has_border_lineweight_overrides(dwg_ent_table *restrict table,
@@ -17337,6 +17689,7 @@ dwg_ent_table_has_border_lineweight_overrides(dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  overrides  0 or 1
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_border_lineweight_overrides_flag(dwg_ent_table *restrict table,
@@ -17359,6 +17712,7 @@ dwg_ent_table_set_border_lineweight_overrides_flag(dwg_ent_table *restrict table
 /** Returns _dwg_entity_TABLE::border_lineweight_overrides_flag, DXF 95.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BL
 dwg_ent_table_get_border_lineweight_overrides_flag(const dwg_ent_table *restrict table,
@@ -17381,6 +17735,7 @@ dwg_ent_table_get_border_lineweight_overrides_flag(const dwg_ent_table *restrict
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_title_horiz_top_linewt(dwg_ent_table *restrict table,
@@ -17403,6 +17758,7 @@ dwg_ent_table_set_title_horiz_top_linewt(dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_title_horiz_top_linewt(const dwg_ent_table *restrict table,
@@ -17425,6 +17781,7 @@ dwg_ent_table_get_title_horiz_top_linewt(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_title_horiz_ins_linewt(dwg_ent_table *restrict table,
@@ -17447,6 +17804,7 @@ dwg_ent_table_set_title_horiz_ins_linewt(dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_title_horiz_ins_linewt(const dwg_ent_table *restrict table,
@@ -17469,6 +17827,7 @@ dwg_ent_table_get_title_horiz_ins_linewt(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_title_horiz_bottom_linewt(dwg_ent_table *restrict table,
@@ -17491,6 +17850,7 @@ dwg_ent_table_set_title_horiz_bottom_linewt(dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_title_horiz_bottom_linewt(const dwg_ent_table *restrict table,
@@ -17513,6 +17873,7 @@ dwg_ent_table_get_title_horiz_bottom_linewt(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_title_vert_left_linewt(dwg_ent_table *restrict table,
@@ -17535,6 +17896,7 @@ dwg_ent_table_set_title_vert_left_linewt(dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_title_vert_left_linewt(const dwg_ent_table *restrict table,
@@ -17557,6 +17919,7 @@ dwg_ent_table_get_title_vert_left_linewt(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_title_vert_ins_linewt(dwg_ent_table *restrict table,
@@ -17579,6 +17942,7 @@ dwg_ent_table_set_title_vert_ins_linewt(dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_title_vert_ins_linewt(const dwg_ent_table *restrict table,
@@ -17601,6 +17965,7 @@ dwg_ent_table_get_title_vert_ins_linewt(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_title_vert_right_linewt(dwg_ent_table *restrict table,
@@ -17623,6 +17988,7 @@ dwg_ent_table_set_title_vert_right_linewt(dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_title_vert_right_linewt(const dwg_ent_table *restrict table,
@@ -17645,6 +18011,7 @@ dwg_ent_table_get_title_vert_right_linewt(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_header_horiz_top_linewt(dwg_ent_table *restrict table,
@@ -17667,6 +18034,7 @@ dwg_ent_table_set_header_horiz_top_linewt(dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_header_horiz_top_linewt(const dwg_ent_table *restrict table,
@@ -17689,6 +18057,7 @@ dwg_ent_table_get_header_horiz_top_linewt(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_header_horiz_ins_linewt(dwg_ent_table *restrict table,
@@ -17711,6 +18080,7 @@ dwg_ent_table_set_header_horiz_ins_linewt(dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_header_horiz_ins_linewt(const dwg_ent_table *restrict table,
@@ -17733,6 +18103,7 @@ dwg_ent_table_get_header_horiz_ins_linewt(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_header_horiz_bottom_linewt(dwg_ent_table *restrict table,
@@ -17755,6 +18126,7 @@ dwg_ent_table_set_header_horiz_bottom_linewt(dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_header_horiz_bottom_linewt(const dwg_ent_table *restrict table,
@@ -17777,6 +18149,7 @@ dwg_ent_table_get_header_horiz_bottom_linewt(const dwg_ent_table *restrict table
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_header_vert_left_linewt(dwg_ent_table *restrict table,
@@ -17799,6 +18172,7 @@ dwg_ent_table_set_header_vert_left_linewt(dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_header_vert_left_linewt(const dwg_ent_table *restrict table,
@@ -17821,6 +18195,7 @@ dwg_ent_table_get_header_vert_left_linewt(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_header_vert_ins_linewt(dwg_ent_table *restrict table,
@@ -17842,6 +18217,7 @@ dwg_ent_table_set_header_vert_ins_linewt(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::header_vert_ins_linewt
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_header_vert_ins_linewt(const dwg_ent_table *restrict table,
@@ -17864,6 +18240,7 @@ dwg_ent_table_get_header_vert_ins_linewt(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_header_vert_right_linewt(dwg_ent_table *restrict table,
@@ -17885,6 +18262,7 @@ dwg_ent_table_set_header_vert_right_linewt(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::header_vert_right_linewt
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_header_vert_right_linewt(const dwg_ent_table *restrict table,
@@ -17907,6 +18285,7 @@ dwg_ent_table_get_header_vert_right_linewt(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_data_horiz_top_linewt(dwg_ent_table *restrict table,
@@ -17929,6 +18308,7 @@ dwg_ent_table_set_data_horiz_top_linewt(dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_data_horiz_top_linewt(const dwg_ent_table *restrict table,
@@ -17951,6 +18331,7 @@ dwg_ent_table_get_data_horiz_top_linewt(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_data_horiz_ins_linewt(dwg_ent_table *restrict table,
@@ -17973,6 +18354,7 @@ dwg_ent_table_set_data_horiz_ins_linewt(dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_data_horiz_ins_linewt(const dwg_ent_table *restrict table,
@@ -17995,6 +18377,7 @@ dwg_ent_table_get_data_horiz_ins_linewt(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_data_horiz_bottom_linewt(dwg_ent_table *restrict table,
@@ -18016,6 +18399,7 @@ dwg_ent_table_set_data_horiz_bottom_linewt(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::data_horiz_bottom_linewt
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_data_horiz_bottom_linewt(const dwg_ent_table *restrict table,
@@ -18038,6 +18422,7 @@ dwg_ent_table_get_data_horiz_bottom_linewt(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_data_vert_ins_linewt(dwg_ent_table *restrict table,
@@ -18059,6 +18444,7 @@ dwg_ent_table_set_data_vert_ins_linewt(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::data_vert_ins_linewt
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_data_vert_ins_linewt(const dwg_ent_table *restrict table,
@@ -18081,6 +18467,7 @@ dwg_ent_table_get_data_vert_ins_linewt(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_data_vert_right_linewt(dwg_ent_table *restrict table,
@@ -18102,6 +18489,7 @@ dwg_ent_table_set_data_vert_right_linewt(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::data_vert_right_linewt
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_data_vert_right_linewt(const dwg_ent_table *restrict table,
@@ -18124,6 +18512,7 @@ dwg_ent_table_get_data_vert_right_linewt(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  linewt     short
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_data_vert_left_linewt(dwg_ent_table *restrict table,
@@ -18145,6 +18534,7 @@ dwg_ent_table_set_data_vert_left_linewt(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::data_vert_left_linewt
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_data_vert_left_linewt(const dwg_ent_table *restrict table,
@@ -18166,6 +18556,7 @@ dwg_ent_table_get_data_vert_left_linewt(const dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::has_border_visibility_overrides
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 unsigned char
 dwg_ent_table_has_border_visibility_overrides(dwg_ent_table *restrict table,
@@ -18188,6 +18579,7 @@ dwg_ent_table_has_border_visibility_overrides(dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  overrides  0 or 1
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_border_visibility_overrides_flag(dwg_ent_table *restrict table,
@@ -18209,6 +18601,7 @@ dwg_ent_table_set_border_visibility_overrides_flag(dwg_ent_table *restrict table
 /** Returns _dwg_entity_TABLE::border_visibility_overrides_flag, DXF 96.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BL
 dwg_ent_table_get_border_visibility_overrides_flag(const dwg_ent_table *restrict table,
@@ -18231,6 +18624,7 @@ dwg_ent_table_get_border_visibility_overrides_flag(const dwg_ent_table *restrict
 \param[in]  table      dwg_ent_table *
 \param[in]  visibility 0 or 1
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_title_horiz_top_visibility(dwg_ent_table *restrict table,
@@ -18253,6 +18647,7 @@ dwg_ent_table_set_title_horiz_top_visibility(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::title_horiz_top_visibility, DXF ??.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_title_horiz_top_visibility(const dwg_ent_table *restrict table,
@@ -18275,6 +18670,7 @@ dwg_ent_table_get_title_horiz_top_visibility(const dwg_ent_table *restrict table
 \param[in]  table      dwg_ent_table *
 \param[in]  visibility 0 or 1
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_title_horiz_ins_visibility(dwg_ent_table *restrict table,
@@ -18297,6 +18693,7 @@ dwg_ent_table_set_title_horiz_ins_visibility(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::title_horiz_ins_visibility, DXF ??.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_title_horiz_ins_visibility(const dwg_ent_table *restrict table,
@@ -18319,6 +18716,7 @@ dwg_ent_table_get_title_horiz_ins_visibility(const dwg_ent_table *restrict table
 \param[in]  table      dwg_ent_table *
 \param[in]  visibility 0 or 1
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_title_horiz_bottom_visibility(dwg_ent_table *restrict table,
@@ -18341,6 +18739,7 @@ dwg_ent_table_set_title_horiz_bottom_visibility(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::title_horiz_bottom_visibility, DXF ??.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_title_horiz_bottom_visibility(const dwg_ent_table *restrict table,
@@ -18363,6 +18762,7 @@ dwg_ent_table_get_title_horiz_bottom_visibility(const dwg_ent_table *restrict ta
 \param[in]  table      dwg_ent_table *
 \param[in]  visibility 0 or 1
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_title_vert_left_visibility(dwg_ent_table *restrict table,
@@ -18385,6 +18785,7 @@ dwg_ent_table_set_title_vert_left_visibility(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::title_vert_left_visibility, DXF ??.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_title_vert_left_visibility(const dwg_ent_table *restrict table,
@@ -18407,6 +18808,7 @@ dwg_ent_table_get_title_vert_left_visibility(const dwg_ent_table *restrict table
 \param[in]  table      dwg_ent_table *
 \param[in]  visibility 0 or 1
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_title_vert_ins_visibility(dwg_ent_table *restrict table,
@@ -18429,6 +18831,7 @@ dwg_ent_table_set_title_vert_ins_visibility(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::title_vert_ins_visibility, DXF ??.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_title_vert_ins_visibility(const dwg_ent_table *restrict table,
@@ -18451,6 +18854,7 @@ dwg_ent_table_get_title_vert_ins_visibility(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  visibility 0 or 1
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_title_vert_right_visibility(dwg_ent_table *restrict table,
@@ -18473,6 +18877,7 @@ dwg_ent_table_set_title_vert_right_visibility(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::title_vert_right_visibility, DXF ??.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_title_vert_right_visibility(const dwg_ent_table *restrict table,
@@ -18495,6 +18900,7 @@ dwg_ent_table_get_title_vert_right_visibility(const dwg_ent_table *restrict tabl
 \param[in]  table      dwg_ent_table *
 \param[in]  visibility 0 or 1
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_header_horiz_top_visibility(dwg_ent_table *restrict table,
@@ -18517,6 +18923,7 @@ dwg_ent_table_set_header_horiz_top_visibility(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::header_horiz_top_visibility, DXF ??.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_header_horiz_top_visibility(const dwg_ent_table *restrict table,
@@ -18539,6 +18946,7 @@ dwg_ent_table_get_header_horiz_top_visibility(const dwg_ent_table *restrict tabl
 \param[in]  table      dwg_ent_table *
 \param[in]  visibility 0 or 1
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_header_horiz_ins_visibility(dwg_ent_table *restrict table,
@@ -18561,6 +18969,7 @@ dwg_ent_table_set_header_horiz_ins_visibility(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::header_horiz_ins_visibility, DXF ??.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_header_horiz_ins_visibility(const dwg_ent_table *restrict table,
@@ -18583,6 +18992,7 @@ dwg_ent_table_get_header_horiz_ins_visibility(const dwg_ent_table *restrict tabl
 \param[in]  table      dwg_ent_table *
 \param[in]  visibility 0 or 1
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_header_horiz_bottom_visibility(dwg_ent_table *restrict table,
@@ -18605,6 +19015,7 @@ dwg_ent_table_set_header_horiz_bottom_visibility(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::header_horiz_bottom_visibility, DXF ??.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_header_horiz_bottom_visibility(const dwg_ent_table *restrict table,
@@ -18627,6 +19038,7 @@ dwg_ent_table_get_header_horiz_bottom_visibility(const dwg_ent_table *restrict t
 \param[in]  table      dwg_ent_table *
 \param[in]  visibility 0 or 1
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_header_vert_left_visibility(dwg_ent_table *restrict table,
@@ -18649,6 +19061,7 @@ dwg_ent_table_set_header_vert_left_visibility(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::header_vert_left_visibility, DXF ??.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_header_vert_left_visibility(const dwg_ent_table *restrict table,
@@ -18671,6 +19084,7 @@ dwg_ent_table_get_header_vert_left_visibility(const dwg_ent_table *restrict tabl
 \param[in]  table      dwg_ent_table *
 \param[in]  visibility 0 or 1
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_header_vert_ins_visibility(dwg_ent_table *restrict table,
@@ -18693,6 +19107,7 @@ dwg_ent_table_set_header_vert_ins_visibility(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::header_vert_ins_visibility, DXF ??.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_header_vert_ins_visibility(const dwg_ent_table *restrict table,
@@ -18715,6 +19130,7 @@ dwg_ent_table_get_header_vert_ins_visibility(const dwg_ent_table *restrict table
 \param[in]  table      dwg_ent_table *
 \param[in]  visibility 0 or 1
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_header_vert_right_visibility(dwg_ent_table *restrict table,
@@ -18737,6 +19153,7 @@ dwg_ent_table_set_header_vert_right_visibility(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::header_vert_right_visibility, DXF ??.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_header_vert_right_visibility(const dwg_ent_table *restrict table,
@@ -18759,6 +19176,7 @@ dwg_ent_table_get_header_vert_right_visibility(const dwg_ent_table *restrict tab
 \param[in]  table      dwg_ent_table *
 \param[in]  visibility 0 or 1
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_data_horiz_top_visibility(dwg_ent_table *restrict table,
@@ -18781,6 +19199,7 @@ dwg_ent_table_set_data_horiz_top_visibility(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::data_horiz_top_visibility, DXF ??.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_data_horiz_top_visibility(const dwg_ent_table *restrict table,
@@ -18803,6 +19222,7 @@ dwg_ent_table_get_data_horiz_top_visibility(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  visibility 0 or 1
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_data_horiz_ins_visibility(dwg_ent_table *restrict table,
@@ -18825,6 +19245,7 @@ dwg_ent_table_set_data_horiz_ins_visibility(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::data_horiz_ins_visibility, DXF ?
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_data_horiz_ins_visibility(const dwg_ent_table *restrict table,
@@ -18847,6 +19268,7 @@ dwg_ent_table_get_data_horiz_ins_visibility(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  visibility 0 or 1
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_data_horiz_bottom_visibility(dwg_ent_table *restrict table,
@@ -18869,6 +19291,7 @@ dwg_ent_table_set_data_horiz_bottom_visibility(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::data_horiz_bottom_visibility, DXF ?.
 \param[in]  table      dwg_ent_table *
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_data_horiz_bottom_visibility(const dwg_ent_table *restrict table,
@@ -18891,6 +19314,7 @@ dwg_ent_table_get_data_horiz_bottom_visibility(const dwg_ent_table *restrict tab
 \param[in]  table      dwg_ent_table *
 \param[in]  visibility 0 or 1
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_data_vert_left_visibility(dwg_ent_table *restrict table,
@@ -18913,6 +19337,7 @@ dwg_ent_table_set_data_vert_left_visibility(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::data_vert_left_visibility, DXF ?.
 \param[in]  table  dwg_ent_table *
 \param[out] error  set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_data_vert_left_visibility(const dwg_ent_table *restrict table,
@@ -18935,6 +19360,7 @@ dwg_ent_table_get_data_vert_left_visibility(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  visibility 0 or 1
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_data_vert_ins_visibility(dwg_ent_table *restrict table,
@@ -18957,6 +19383,7 @@ dwg_ent_table_set_data_vert_ins_visibility(dwg_ent_table *restrict table,
 /** Returns _dwg_entity_TABLE::data_vert_ins_visibility, DXF ?.
 \param[in]  table  dwg_ent_table *
 \param[out] error  set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_data_vert_ins_visibility(const dwg_ent_table *restrict table,
@@ -18980,6 +19407,7 @@ dwg_ent_table_get_data_vert_ins_visibility(const dwg_ent_table *restrict table,
 \param[in]  table      dwg_ent_table *
 \param[in]  visibility short: 0 = visible, 1 = invisible
 \param[out] error      set to 0 for ok, 1 on error
+\deprecated
 */
 void
 dwg_ent_table_set_data_vert_right_visibility(dwg_ent_table *restrict table,
@@ -19003,6 +19431,7 @@ dwg_ent_table_set_data_vert_right_visibility(dwg_ent_table *restrict table,
     Bit 0x20000 of border_visibility override flag, DXF 96
 \param[in]  table  dwg_ent_table *
 \param[out] error  set to 0 for ok, 1 on error
+\deprecated
 */
 BITCODE_BS
 dwg_ent_table_get_data_vert_right_visibility(const dwg_ent_table *restrict table,
@@ -20449,4 +20878,3 @@ dwg_ref_get_absref(const dwg_object_ref *restrict ref,
       return (BITCODE_BL)-1;
     }
 }
-
