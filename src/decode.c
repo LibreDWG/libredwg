@@ -3283,7 +3283,7 @@ dwg_decode_xdata(Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj, int 
       switch (get_base_value_type(rbuf->type))
         {
         case VT_STRING:
-          UNTIL(R_2007) {
+          PRE (R_2007) {
             length = rbuf->value.str.size = bit_read_RS(dat);
             rbuf->value.str.codepage = bit_read_RC(dat);
             rbuf->value.str.u.data = bit_read_TF(dat, length);
