@@ -3868,8 +3868,13 @@ DWG_OBJECT(LAYER_INDEX)
 
   DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbLayerIndex)
-  FIELD_BL (timestamp1, 40);
-  FIELD_BL (timestamp2, 40);
+  DXF {
+    VALUE_BL (1.0 * FIELD_VALUE(timestamp1), 40);
+    VALUE_BL (1.0 * FIELD_VALUE(timestamp2), 40);
+  } else {
+    FIELD_BL (timestamp1, 40);
+    FIELD_BL (timestamp2, 40);
+  }
   FIELD_BL (num_entries, 0);
   REPEAT (num_entries, entries, Dwg_LAYER_entry)
   REPEAT_BLOCK
