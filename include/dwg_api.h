@@ -865,6 +865,15 @@ EXPORT void dwg_api_init_version(Dwg_Data *dwg);
 *                FUNCTIONS START HERE ENTITY SPECIFIC               *
 ********************************************************************/
 
+EXPORT bool
+dwg_get_HEADER(const Dwg_Data *restrict dwg,
+               const char *restrict fieldname, void *restrict out)
+  __nonnull ((1, 2, 3));
+EXPORT bool
+dwg_set_HEADER(Dwg_Data *restrict dwg,
+               const char *restrict fieldname, const void *restrict value)
+  __nonnull ((1, 2, 3));
+
 #define dwg_get_OBJECT_DECL(name, OBJECT) \
 EXPORT bool \
 dwg_get_##OBJECT(const dwg_##name *restrict name, \

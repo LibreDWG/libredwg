@@ -450,6 +450,35 @@ dwg_object_to_DIMENSION(dwg_object *obj)
  *                    DYNAPI FUNCTIONS                              *
  ********************************************************************/
 
+EXPORT bool
+dwg_get_HEADER(const Dwg_Data *restrict dwg,
+               const char *restrict fieldname, void *restrict out)
+{
+#ifndef HAVE_NONNULL
+  if (dwg && fieldname && out)
+#endif
+    return dwg_dynapi_header_value(dwg, fieldname, out, NULL);
+#ifndef HAVE_NONNULL
+  else
+    return false;
+#endif
+}
+
+EXPORT bool
+dwg_set_HEADER(Dwg_Data *restrict dwg,
+               const char *restrict fieldname, const void *restrict value)
+{
+#ifndef HAVE_NONNULL
+  if (dwg && fieldname && value)
+#endif
+    return dwg_dynapi_header_set_value(dwg, fieldname, value);
+#ifndef HAVE_NONNULL
+  else
+    return false;
+#endif
+}
+
+
 /**
  * Return an object fieldvalue
  */
