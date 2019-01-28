@@ -429,93 +429,201 @@ dwg_object_to_DIMENSION(dwg_object *obj)
  *                    DYNAPI FUNCTIONS                              *
  ********************************************************************/
 
-#define dwg_get_ENTITY(name, OBJECT) _dwg_get_OBJECT(ent, name, OBJECT)
-#define dwg_get_OBJECT(name, OBJECT) _dwg_get_OBJECT(obj, name, OBJECT)
 #ifndef HAVE_NONNULL
-#define _dwg_get_OBJECT(ent, name, OBJECT) \
+#define dwg_get_OBJECT(name, OBJECT) \
 EXPORT bool \
-dwg_get_##OBJECT(const dwg_##ent_##name *restrict name, \
+dwg_get_##OBJECT(const dwg_##name *restrict name, \
                  const char *restrict fieldname, void *restrict out) \
 { \
   if (name && fieldname && out) \
     return dwg_dynapi_entity_value((void*)name, #OBJECT, fieldname, out, NULL); \
   else \
     return false; \
+} \
+EXPORT bool \
+dwg_set_##OBJECT(const dwg_##name *restrict name, \
+                 const char *restrict fieldname, void *restrict value) \
+{ \
+  if (name && fieldname && out) \
+    return dwg_dynapi_entity_set_value((void*)name, #OBJECT, fieldname, value); \
+  else \
+    return false; \
 }
 #else
-#define _dwg_get_OBJECT(ent, name, OBJECT) \
+#define dwg_get_OBJECT(name, OBJECT) \
 EXPORT bool \
-dwg_get_##OBJECT(const dwg_##ent_##name *restrict name, \
-               const char *restrict fieldname, void *restrict out) \
+dwg_get_##OBJECT(const dwg_##name *restrict name, \
+                 const char *restrict fieldname, void *restrict out) \
 { \
   return dwg_dynapi_entity_value((void*)name, #OBJECT, fieldname, out, NULL); \
+} \
+EXPORT bool \
+dwg_set_##OBJECT(const dwg_##name *restrict name, \
+                 const char *restrict fieldname, void *restrict value) \
+{ \
+  return dwg_dynapi_entity_set_value((void*)name, #OBJECT, fieldname, value); \
 }
 #endif
 
-dwg_get_ENTITY(text, TEXT)
-dwg_get_ENTITY(attrib, ATTRIB)
-dwg_get_ENTITY(attdef, ATTDEF)
-dwg_get_ENTITY(block, BLOCK)
-dwg_get_ENTITY(endblk, ENDBLK)
-dwg_get_ENTITY(seqend, SEQEND)
-dwg_get_ENTITY(insert, INSERT)
-dwg_get_ENTITY(minsert, MINSERT)
-dwg_get_ENTITY(vertex_2d, VERTEX_2D)
-dwg_get_ENTITY(vertex_3d, VERTEX_3D)
-dwg_get_ENTITY(vertex_mesh, VERTEX_MESH)
-dwg_get_ENTITY(vertex_pface, VERTEX_PFACE)
-dwg_get_ENTITY(vertex_pface_face, VERTEX_PFACE_FACE)
-dwg_get_ENTITY(polyline_2d, POLYLINE_2D)
-dwg_get_ENTITY(polyline_3d, POLYLINE_3D)
-dwg_get_ENTITY(arc, ARC)
-dwg_get_ENTITY(circle, CIRCLE)
-dwg_get_ENTITY(line, LINE)
-dwg_get_ENTITY(dim_ordinate, DIMENSION_ORDINATE)
-dwg_get_ENTITY(dim_linear, DIMENSION_LINEAR)
-dwg_get_ENTITY(dim_aligned, DIMENSION_ALIGNED)
-dwg_get_ENTITY(dim_ang3pt, DIMENSION_ANG3PT)
-dwg_get_ENTITY(dim_ang2ln, DIMENSION_ANG2LN)
-dwg_get_ENTITY(dim_radius, DIMENSION_RADIUS)
-dwg_get_ENTITY(dim_diameter, DIMENSION_DIAMETER)
-dwg_get_ENTITY(point, POINT)
-dwg_get_ENTITY(polyline_pface, POLYLINE_PFACE)
-dwg_get_ENTITY(polyline_mesh, POLYLINE_MESH)
-dwg_get_ENTITY(solid, SOLID)
-dwg_get_ENTITY(trace, TRACE)
-dwg_get_ENTITY(shape, SHAPE)
-dwg_get_ENTITY(viewport, VIEWPORT)
-dwg_get_ENTITY(ellipse, ELLIPSE)
-dwg_get_ENTITY(spline, SPLINE)
-dwg_get_ENTITY(region, REGION)
-dwg_get_ENTITY(body, BODY)
-dwg_get_ENTITY(ray, RAY)
-dwg_get_ENTITY(xline, XLINE)
-dwg_get_ENTITY(oleframe, OLEFRAME)
-dwg_get_ENTITY(mtext, MTEXT)
-dwg_get_ENTITY(leader, LEADER)
-dwg_get_ENTITY(tolerance, TOLERANCE)
-dwg_get_ENTITY(mline, MLINE)
-dwg_get_ENTITY(ole2frame, OLE2FRAME)
-dwg_get_ENTITY(lwpline, LWPOLYLINE)
-//dwg_get_ENTITY(proxy_entity, PROXY_ENTITY)
-dwg_get_ENTITY(hatch, HATCH)
-//dwg_get_ENTITY(arc_dimension, ARC_DIMENSION)
-dwg_get_ENTITY(image, IMAGE)
-dwg_get_ENTITY(camera, CAMERA)
-dwg_get_ENTITY(helix, HELIX)
-dwg_get_ENTITY(light, LIGHT)
-dwg_get_ENTITY(mleader, MULTILEADER)
-dwg_get_ENTITY(underlay, UNDERLAY)
-dwg_get_ENTITY(wipeout, WIPEOUT)
+dwg_get_OBJECT(ent_text, TEXT)
+dwg_get_OBJECT(ent_attrib, ATTRIB)
+dwg_get_OBJECT(ent_attdef, ATTDEF)
+dwg_get_OBJECT(ent_block, BLOCK)
+dwg_get_OBJECT(ent_endblk, ENDBLK)
+dwg_get_OBJECT(ent_seqend, SEQEND)
+dwg_get_OBJECT(ent_insert, INSERT)
+dwg_get_OBJECT(ent_minsert, MINSERT)
+dwg_get_OBJECT(ent_vertex_2d, VERTEX_2D)
+dwg_get_OBJECT(ent_vertex_3d, VERTEX_3D)
+dwg_get_OBJECT(ent_vertex_mesh, VERTEX_MESH)
+dwg_get_OBJECT(ent_vertex_pface, VERTEX_PFACE)
+dwg_get_OBJECT(ent_vertex_pface_face, VERTEX_PFACE_FACE)
+dwg_get_OBJECT(ent_polyline_2d, POLYLINE_2D)
+dwg_get_OBJECT(ent_polyline_3d, POLYLINE_3D)
+dwg_get_OBJECT(ent_arc, ARC)
+dwg_get_OBJECT(ent_circle, CIRCLE)
+dwg_get_OBJECT(ent_line, LINE)
+dwg_get_OBJECT(ent_dim_ordinate, DIMENSION_ORDINATE)
+dwg_get_OBJECT(ent_dim_linear, DIMENSION_LINEAR)
+dwg_get_OBJECT(ent_dim_aligned, DIMENSION_ALIGNED)
+dwg_get_OBJECT(ent_dim_ang3pt, DIMENSION_ANG3PT)
+dwg_get_OBJECT(ent_dim_ang2ln, DIMENSION_ANG2LN)
+dwg_get_OBJECT(ent_dim_radius, DIMENSION_RADIUS)
+dwg_get_OBJECT(ent_dim_diameter, DIMENSION_DIAMETER)
+dwg_get_OBJECT(ent_point, POINT)
+dwg_get_OBJECT(ent_polyline_pface, POLYLINE_PFACE)
+dwg_get_OBJECT(ent_polyline_mesh, POLYLINE_MESH)
+dwg_get_OBJECT(ent_solid, SOLID)
+dwg_get_OBJECT(ent_trace, TRACE)
+dwg_get_OBJECT(ent_shape, SHAPE)
+dwg_get_OBJECT(ent_viewport, VIEWPORT)
+dwg_get_OBJECT(ent_ellipse, ELLIPSE)
+dwg_get_OBJECT(ent_spline, SPLINE)
+dwg_get_OBJECT(ent_region, REGION)
+dwg_get_OBJECT(ent_body, BODY)
+dwg_get_OBJECT(ent_ray, RAY)
+dwg_get_OBJECT(ent_xline, XLINE)
+dwg_get_OBJECT(ent_oleframe, OLEFRAME)
+dwg_get_OBJECT(ent_mtext, MTEXT)
+dwg_get_OBJECT(ent_leader, LEADER)
+dwg_get_OBJECT(ent_tolerance, TOLERANCE)
+dwg_get_OBJECT(ent_mline, MLINE)
+dwg_get_OBJECT(ent_ole2frame, OLE2FRAME)
+dwg_get_OBJECT(ent_lwpline, LWPOLYLINE)
+//dwg_get_OBJECT(ent_proxy_entity, PROXY_ENTITY)
+dwg_get_OBJECT(ent_hatch, HATCH)
+//dwg_get_OBJECT(ent_arc_dimension, ARC_DIMENSION)
+dwg_get_OBJECT(ent_image, IMAGE)
+dwg_get_OBJECT(ent_camera, CAMERA)
+dwg_get_OBJECT(ent_helix, HELIX)
+dwg_get_OBJECT(ent_light, LIGHT)
+dwg_get_OBJECT(ent_mleader, MULTILEADER)
+dwg_get_OBJECT(ent_underlay, UNDERLAY)
+dwg_get_OBJECT(ent_wipeout, WIPEOUT)
 #ifdef DEBUG_CLASSES
-dwg_get_ENTITY(planesurface, PLANESURFACE)
-dwg_get_ENTITY(extrudedsurface, EXTRUDEDSURFACE)
-dwg_get_ENTITY(loftedsurface, LOFTEDSURFACE)
-dwg_get_ENTITY(revolvedsurface, REVOLVEDSURFACE)
-dwg_get_ENTITY(sweptsurface, SWEPTSURFACE)
-dwg_get_ENTITY(geopositionmarker, GEOPOSITIONMARKER)
-dwg_get_ENTITY(table, TABLE)
+dwg_get_OBJECT(ent_planesurface, PLANESURFACE)
+dwg_get_OBJECT(ent_extrudedsurface, EXTRUDEDSURFACE)
+dwg_get_OBJECT(ent_loftedsurface, LOFTEDSURFACE)
+dwg_get_OBJECT(ent_revolvedsurface, REVOLVEDSURFACE)
+dwg_get_OBJECT(ent_sweptsurface, SWEPTSURFACE)
+dwg_get_OBJECT(ent_geopositionmarker, GEOPOSITIONMARKER)
+dwg_get_OBJECT(ent_table, TABLE)
 #endif
+
+dwg_get_OBJECT(obj_block_control, BLOCK_CONTROL)
+dwg_get_OBJECT(obj_block_header, BLOCK_HEADER)
+dwg_get_OBJECT(obj_layer_control, LAYER_CONTROL)
+dwg_get_OBJECT(obj_layer, LAYER)
+dwg_get_OBJECT(obj_style_control, CONTROL)
+dwg_get_OBJECT(obj_style, STYLE)
+dwg_get_OBJECT(obj_ltype_control, LTYPE_CONTROL)
+dwg_get_OBJECT(obj_ltype, LTYPE)
+dwg_get_OBJECT(obj_view_control, VIEW_CONTROL)
+dwg_get_OBJECT(obj_view, VIEW)
+dwg_get_OBJECT(obj_ucs_control, UCS_CONTROL)
+dwg_get_OBJECT(obj_ucs, UCS)
+dwg_get_OBJECT(obj_vport_control, VPORT_CONTROL)
+dwg_get_OBJECT(obj_vport, VPORT)
+dwg_get_OBJECT(obj_appid_control, APPID_CONTROL)
+dwg_get_OBJECT(obj_appid, APPID)
+dwg_get_OBJECT(obj_dimstyle_control, DIMSTYLE_CONTROL)
+dwg_get_OBJECT(obj_dimstyle, DIMSTYLE)
+dwg_get_OBJECT(obj_vport_entity_control, VPORT_ENTITY_CONTROL)
+dwg_get_OBJECT(obj_vport_entity_header, VPORT_ENTITY_HEADER)
+dwg_get_OBJECT(obj_dictionary, DICTIONARY)
+dwg_get_OBJECT(obj_mlinestyle, MLINESTYLE)
+dwg_get_OBJECT(obj_proxy_object, OBJECT)
+// stable:
+dwg_get_OBJECT(obj_dictionaryvar, DICTIONARYVAR)
+dwg_get_OBJECT(obj_dictionarywdflt, DICTIONARYWDFLT)
+dwg_get_OBJECT(obj_field, FIELD)
+dwg_get_OBJECT(obj_fieldlist, FIELDLIST)
+dwg_get_OBJECT(obj_group, GROUP)
+dwg_get_OBJECT(obj_idbuffer, IDBUFFER)
+dwg_get_OBJECT(obj_imagedef, IMAGEDEF)
+dwg_get_OBJECT(obj_imagedef_reactor, REACTOR)
+dwg_get_OBJECT(obj_layer_index, LAYER_INDEX)
+dwg_get_OBJECT(obj_layout, LAYOUT)
+dwg_get_OBJECT(obj_mleaderstyle, MLEADERSTYLE)
+dwg_get_OBJECT(obj_objectcontextdata, OBJECTCONTEXTDATA)
+dwg_get_OBJECT(obj_placeholder, PLACEHOLDER)
+dwg_get_OBJECT(obj_rastervariables, RASTERVARIABLES)
+dwg_get_OBJECT(obj_scale, SCALE)
+dwg_get_OBJECT(obj_sortentstable, SORTENTSTABLE)
+dwg_get_OBJECT(obj_spatial_filter, FILTER)
+dwg_get_OBJECT(obj_spatial_index, INDEX)
+dwg_get_OBJECT(obj_wipeoutvariables, WIPEOUTVARIABLES)
+dwg_get_OBJECT(obj_xrecord, XRECORD)
+// unstable:
+dwg_get_OBJECT(obj_assocdependency, ASSOCDEPENDENCY)
+dwg_get_OBJECT(obj_assocplanesurfaceactionbody, ASSOCPLANESURFACEACTIONBODY)
+dwg_get_OBJECT(obj_dimassoc, DIMASSOC)
+dwg_get_OBJECT(obj_dbcolor, DBCOLOR)
+dwg_get_OBJECT(obj_dynamicblockpurgepreventer, DYNAMICBLOCKPURGEPREVENTER)
+dwg_get_OBJECT(obj_geodata, GEODATA)
+dwg_get_OBJECT(obj_object_ptr, PTR)
+//dwg_get_OBJECT(obj_proxy_object, OBJECT)
+dwg_get_OBJECT(obj_perssubentmanager, PERSSUBENTMANAGER)
+dwg_get_OBJECT(obj_underlaydefinition, UNDERLAYDEFINITION)
+dwg_get_OBJECT(obj_visualstyle, VISUALSTYLE)
+#ifdef DEBUG_CLASSES
+dwg_get_OBJECT(obj_tablecontent, TABLECONTENT)
+dwg_get_OBJECT(obj_tablegeometry, TABLEGEOMETRY)
+dwg_get_OBJECT(obj_cellstylemap, CELLSTYLEMAP)
+dwg_get_OBJECT(obj_material, MATERIAL)
+dwg_get_OBJECT(obj_plotsettings, PLOTSETTINGS)
+dwg_get_OBJECT(obj_sun, SUN)
+dwg_get_OBJECT(obj_sunstudy, SUNSTUDY)
+dwg_get_OBJECT(obj_vba_project, PROJECT)
+dwg_get_OBJECT(obj_acsh_sweep_class, CLASS)
+dwg_get_OBJECT(obj_acdbnavisworksmodeldef, ACDBNAVISWORKSMODELDEF)
+dwg_get_OBJECT(obj_assocaction, ASSOCACTION)
+dwg_get_OBJECT(obj_assocnetwork, ASSOCNETWORK)
+dwg_get_OBJECT(obj_assocaligneddimactionbody, ASSOCALIGNEDDIMACTIONBODY)
+dwg_get_OBJECT(obj_assocosnappointrefactionparam, ASSOCOSNAPPOINTREFACTIONPARAM)
+dwg_get_OBJECT(obj_assocperssubentmanager, ASSOCPERSSUBENTMANAGER)
+dwg_get_OBJECT(obj_assoc2dconstraintgroup, ASSOC2DCONSTRAINTGROUP)
+dwg_get_OBJECT(obj_evaluation_graph, GRAPH)
+#endif
+// unhandled:
+//dwg_get_OBJECT(obj_acsh_history_class, ACSH_HISTORY_CLASS)
+//dwg_get_OBJECT(obj_arcalignedtext, ARCALIGNEDTEXT)
+//dwg_get_OBJECT(obj_assocgeomdependency, ASSOCGEOMDEPENDENCY)
+//dwg_get_OBJECT(obj_assocosnappointrefactionparam, ASSOCOSNAPPOINTREFACTIONPARAM)
+//dwg_get_OBJECT(obj_assocvertexactionparam, ASSOCVERTEXACTIONPARAM)
+//dwg_get_OBJECT(obj_datatable, DATATABLE)
+//dwg_get_OBJECT(obj_detailviewstyle, DETAILVIEWSTYLE)
+//dwg_get_OBJECT(obj_documentoptions, DOCUMENTOPTIONS)
+//dwg_get_OBJECT(obj_layer_filter, LAYER_FILTER)
+//dwg_get_OBJECT(obj_layoutprintconfig, LAYOUTPRINTCONFIG)
+//dwg_get_OBJECT(obj_leaderobjectcontextdata, LEADEROBJECTCONTEXTDATA)
+//dwg_get_OBJECT(obj_lightlist, LIGHTLIST)
+//dwg_get_OBJECT(obj_npocollection, NPOCOLLECTION)
+//dwg_get_OBJECT(obj_pointcloud, POINTCLOUD)
+//dwg_get_OBJECT(obj_rtext, RTEXT)
+//dwg_get_OBJECT(obj_sectionviewstyle, SECTIONVIEWSTYLE)
+//dwg_get_OBJECT(obj_tablestyle, TABLESTYLE)
+//dwg_get_OBJECT(obj_xrefpanelobject, XREFPANELOBJECT)
 
 /*******************************************************************
  *                    FUNCTIONS FOR CIRCLE ENTITY                    *
