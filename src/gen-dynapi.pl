@@ -616,12 +616,12 @@ __DATA__
 
 #include <string.h>
 #include <stdlib.h>
-#include "dwg.h"
 #include "config.h"
 #include "common.h"
 #include "dynapi.h"
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
+#include "dwg.h"
 
 #ifndef _DWG_API_H_
 Dwg_Object *

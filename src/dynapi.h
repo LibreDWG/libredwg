@@ -20,17 +20,17 @@
 
 #include "config.h"
 #include <stdbool.h>
+#include "common.h"
 #include "dwg.h"
 
 #ifdef HAVE_STDDEF_H
-#include <stddef.h>
-#define OFF(st,f) offsetof(st, f)
+# include <stddef.h>
 #else /* cygwin */
-#ifndef offsetof
-#define	offsetof(type, member)	((size_t) &(((type *)0)->member))
+# ifndef offsetof
+#  define offsetof(type, member)	((size_t) &(((type *)0)->member))
+# endif
 #endif
 #define OFF(st,f) offsetof(st, f)
-#endif
 
 #ifndef _DWG_API_H_
 /* Public API, duplicate of dwg_api.h */
