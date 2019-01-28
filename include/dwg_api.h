@@ -356,6 +356,7 @@ typedef struct _dwg_entity_RAY                    dwg_ent_ray,
 typedef struct _dwg_entity_VERTEX_3D              dwg_ent_vertex_3d,
                                                   dwg_ent_vertex_mesh,
                                                   dwg_ent_vertex_pface;
+typedef struct _dwg_entity_VERTEX_PFACE_FACE      dwg_ent_vertex_pface_face;
 typedef struct _dwg_entity_VERTEX_2D              dwg_ent_vertex_2d;
 typedef struct _dwg_entity_DIMENSION_common       dwg_ent_dim;
 typedef struct _dwg_entity_DIMENSION_ORDINATE     dwg_ent_dim_ordinate;
@@ -366,6 +367,7 @@ typedef struct _dwg_entity_DIMENSION_ANG2LN       dwg_ent_dim_ang2ln;
 typedef struct _dwg_entity_DIMENSION_RADIUS       dwg_ent_dim_radius;
 typedef struct _dwg_entity_DIMENSION_DIAMETER     dwg_ent_dim_diameter;
 typedef struct _dwg_entity_LEADER                 dwg_ent_leader;
+typedef struct _dwg_entity_MULTILEADER            dwg_ent_mleader;
 typedef struct _dwg_entity_SHAPE                  dwg_ent_shape;
 typedef struct _dwg_entity_MTEXT                  dwg_ent_mtext;
 typedef struct _dwg_entity_TOLERANCE              dwg_ent_tolerance;
@@ -386,6 +388,17 @@ typedef struct _dwg_entity_TABLE                  dwg_ent_table;
 typedef struct _dwg_entity_HATCH                  dwg_ent_hatch;
 typedef struct _dwg_entity_VERTEX_PFACE_FACE      dwg_ent_vert_pface_face;
 typedef struct _dwg_entity_POINT                  dwg_ent_generic;
+typedef struct _dwg_entity_CAMERA                 dwg_ent_camera;
+typedef struct _dwg_entity_HELIX                  dwg_ent_helix;
+typedef struct _dwg_entity_LIGHT                  dwg_ent_light;
+typedef struct _dwg_entity_UNDERLAY               dwg_ent_underlay;
+typedef struct _dwg_entity_WIPEOUT                dwg_ent_wipeout;
+typedef struct _dwg_entity_PLANESURFACE           dwg_ent_planesurface;
+typedef struct _dwg_entity_EXTRUDEDSURFACE        dwg_ent_extrudedsurface;
+typedef struct _dwg_entity_LOFTEDSURFACE          dwg_ent_loftedsurface;
+typedef struct _dwg_entity_REVOLVEDSURFACE        dwg_ent_revolvedsurface;
+typedef struct _dwg_entity_SWEPTSURFACE           dwg_ent_sweptsurface;
+typedef struct _dwg_entity_GEOPOSITIONMARKER      dwg_ent_geopositionmarker;
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -760,6 +773,79 @@ EXPORT void dwg_api_init_version(Dwg_Data *dwg);
 *                FUNCTIONS START HERE ENTITY SPECIFIC               *
 ********************************************************************/
 
+#define dwg_get_ENTITY_DECL(name, OBJECT) \
+EXPORT bool \
+dwg_get_##OBJECT(const dwg_ent_##name *restrict name, \
+                 const char *restrict fieldname, void *restrict out);
+#define dwg_get_OBJECT_DECL(name, OBJECT) \
+EXPORT bool \
+dwg_get_##OBJECT(const dwg_obj_##name *restrict name, \
+                 const char *restrict fieldname, void *restrict out);
+
+dwg_get_ENTITY_DECL(text, TEXT)
+dwg_get_ENTITY_DECL(attrib, ATTRIB)
+dwg_get_ENTITY_DECL(attdef, ATTDEF)
+dwg_get_ENTITY_DECL(block, BLOCK)
+dwg_get_ENTITY_DECL(endblk, ENDBLK)
+dwg_get_ENTITY_DECL(seqend, SEQEND)
+dwg_get_ENTITY_DECL(insert, INSERT)
+dwg_get_ENTITY_DECL(minsert, MINSERT)
+dwg_get_ENTITY_DECL(vertex_2d, VERTEX_2D)
+dwg_get_ENTITY_DECL(vertex_3d, VERTEX_3D)
+dwg_get_ENTITY_DECL(vertex_mesh, VERTEX_MESH)
+dwg_get_ENTITY_DECL(vertex_pface, VERTEX_PFACE)
+dwg_get_ENTITY_DECL(vertex_pface_face, VERTEX_PFACE_FACE)
+dwg_get_ENTITY_DECL(polyline_2d, POLYLINE_2D)
+dwg_get_ENTITY_DECL(polyline_3d, POLYLINE_3D)
+dwg_get_ENTITY_DECL(arc, ARC)
+dwg_get_ENTITY_DECL(circle, CIRCLE)
+dwg_get_ENTITY_DECL(line, LINE)
+dwg_get_ENTITY_DECL(dim_ordinate, DIMENSION_ORDINATE)
+dwg_get_ENTITY_DECL(dim_linear, DIMENSION_LINEAR)
+dwg_get_ENTITY_DECL(dim_aligned, DIMENSION_ALIGNED)
+dwg_get_ENTITY_DECL(dim_ang3pt, DIMENSION_ANG3PT)
+dwg_get_ENTITY_DECL(dim_ang2ln, DIMENSION_ANG2LN)
+dwg_get_ENTITY_DECL(dim_radius, DIMENSION_RADIUS)
+dwg_get_ENTITY_DECL(dim_diameter, DIMENSION_DIAMETER)
+dwg_get_ENTITY_DECL(point, POINT)
+dwg_get_ENTITY_DECL(polyline_pface, POLYLINE_PFACE)
+dwg_get_ENTITY_DECL(polyline_mesh, POLYLINE_MESH)
+dwg_get_ENTITY_DECL(solid, SOLID)
+dwg_get_ENTITY_DECL(trace, TRACE)
+dwg_get_ENTITY_DECL(shape, SHAPE)
+dwg_get_ENTITY_DECL(viewport, VIEWPORT)
+dwg_get_ENTITY_DECL(ellipse, ELLIPSE)
+dwg_get_ENTITY_DECL(spline, SPLINE)
+dwg_get_ENTITY_DECL(region, REGION)
+dwg_get_ENTITY_DECL(body, BODY)
+dwg_get_ENTITY_DECL(ray, RAY)
+dwg_get_ENTITY_DECL(xline, XLINE)
+dwg_get_ENTITY_DECL(oleframe, OLEFRAME)
+dwg_get_ENTITY_DECL(mtext, MTEXT)
+dwg_get_ENTITY_DECL(leader, LEADER)
+dwg_get_ENTITY_DECL(tolerance, TOLERANCE)
+dwg_get_ENTITY_DECL(mline, MLINE)
+dwg_get_ENTITY_DECL(ole2frame, OLE2FRAME)
+dwg_get_ENTITY_DECL(lwpline, LWPOLYLINE)
+//dwg_get_ENTITY_DECL(proxy_entity, PROXY_ENTITY)
+dwg_get_ENTITY_DECL(hatch, HATCH)
+//dwg_get_ENTITY_DECL(arc_dimension, ARC_DIMENSION)
+dwg_get_ENTITY_DECL(image, IMAGE)
+dwg_get_ENTITY_DECL(camera, CAMERA)
+dwg_get_ENTITY_DECL(helix, HELIX)
+dwg_get_ENTITY_DECL(light, LIGHT)
+dwg_get_ENTITY_DECL(mleader, MULTILEADER)
+dwg_get_ENTITY_DECL(underlay, UNDERLAY)
+dwg_get_ENTITY_DECL(wipeout, WIPEOUT)
+#ifdef DEBUG_CLASSES
+dwg_get_ENTITY_DECL(planesurface, PLANESURFACE)
+dwg_get_ENTITY_DECL(extrudedsurface, EXTRUDEDSURFACE)
+dwg_get_ENTITY_DECL(loftedsurface, LOFTEDSURFACE)
+dwg_get_ENTITY_DECL(revolvedsurface, REVOLVEDSURFACE)
+dwg_get_ENTITY_DECL(sweptsurface, SWEPTSURFACE)
+dwg_get_ENTITY_DECL(geopositionmarker, GEOPOSITIONMARKER)
+dwg_get_ENTITY_DECL(table, TABLE)
+#endif
 
 /********************************************************************
 *                    FUNCTIONS FOR CIRCLE ENTITY                    *

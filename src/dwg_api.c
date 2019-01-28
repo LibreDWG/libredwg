@@ -425,6 +425,98 @@ dwg_object_to_DIMENSION(dwg_object *obj)
     return (dwg_ent_dim *)ret_obj;
 }
 
+/********************************************************************
+ *                    DYNAPI FUNCTIONS                              *
+ ********************************************************************/
+
+#define dwg_get_ENTITY(name, OBJECT) _dwg_get_OBJECT(ent, name, OBJECT)
+#define dwg_get_OBJECT(name, OBJECT) _dwg_get_OBJECT(obj, name, OBJECT)
+#ifndef HAVE_NONNULL
+#define _dwg_get_OBJECT(ent, name, OBJECT) \
+EXPORT bool \
+dwg_get_##OBJECT(const dwg_##ent_##name *restrict name, \
+                 const char *restrict fieldname, void *restrict out) \
+{ \
+  if (name && fieldname && out) \
+    return dwg_dynapi_entity_value((void*)name, #OBJECT, fieldname, out, NULL); \
+  else \
+    return false; \
+}
+#else
+#define _dwg_get_OBJECT(ent, name, OBJECT) \
+EXPORT bool \
+dwg_get_##OBJECT(const dwg_##ent_##name *restrict name, \
+               const char *restrict fieldname, void *restrict out) \
+{ \
+  return dwg_dynapi_entity_value((void*)name, #OBJECT, fieldname, out, NULL); \
+}
+#endif
+
+dwg_get_ENTITY(text, TEXT)
+dwg_get_ENTITY(attrib, ATTRIB)
+dwg_get_ENTITY(attdef, ATTDEF)
+dwg_get_ENTITY(block, BLOCK)
+dwg_get_ENTITY(endblk, ENDBLK)
+dwg_get_ENTITY(seqend, SEQEND)
+dwg_get_ENTITY(insert, INSERT)
+dwg_get_ENTITY(minsert, MINSERT)
+dwg_get_ENTITY(vertex_2d, VERTEX_2D)
+dwg_get_ENTITY(vertex_3d, VERTEX_3D)
+dwg_get_ENTITY(vertex_mesh, VERTEX_MESH)
+dwg_get_ENTITY(vertex_pface, VERTEX_PFACE)
+dwg_get_ENTITY(vertex_pface_face, VERTEX_PFACE_FACE)
+dwg_get_ENTITY(polyline_2d, POLYLINE_2D)
+dwg_get_ENTITY(polyline_3d, POLYLINE_3D)
+dwg_get_ENTITY(arc, ARC)
+dwg_get_ENTITY(circle, CIRCLE)
+dwg_get_ENTITY(line, LINE)
+dwg_get_ENTITY(dim_ordinate, DIMENSION_ORDINATE)
+dwg_get_ENTITY(dim_linear, DIMENSION_LINEAR)
+dwg_get_ENTITY(dim_aligned, DIMENSION_ALIGNED)
+dwg_get_ENTITY(dim_ang3pt, DIMENSION_ANG3PT)
+dwg_get_ENTITY(dim_ang2ln, DIMENSION_ANG2LN)
+dwg_get_ENTITY(dim_radius, DIMENSION_RADIUS)
+dwg_get_ENTITY(dim_diameter, DIMENSION_DIAMETER)
+dwg_get_ENTITY(point, POINT)
+dwg_get_ENTITY(polyline_pface, POLYLINE_PFACE)
+dwg_get_ENTITY(polyline_mesh, POLYLINE_MESH)
+dwg_get_ENTITY(solid, SOLID)
+dwg_get_ENTITY(trace, TRACE)
+dwg_get_ENTITY(shape, SHAPE)
+dwg_get_ENTITY(viewport, VIEWPORT)
+dwg_get_ENTITY(ellipse, ELLIPSE)
+dwg_get_ENTITY(spline, SPLINE)
+dwg_get_ENTITY(region, REGION)
+dwg_get_ENTITY(body, BODY)
+dwg_get_ENTITY(ray, RAY)
+dwg_get_ENTITY(xline, XLINE)
+dwg_get_ENTITY(oleframe, OLEFRAME)
+dwg_get_ENTITY(mtext, MTEXT)
+dwg_get_ENTITY(leader, LEADER)
+dwg_get_ENTITY(tolerance, TOLERANCE)
+dwg_get_ENTITY(mline, MLINE)
+dwg_get_ENTITY(ole2frame, OLE2FRAME)
+dwg_get_ENTITY(lwpline, LWPOLYLINE)
+//dwg_get_ENTITY(proxy_entity, PROXY_ENTITY)
+dwg_get_ENTITY(hatch, HATCH)
+//dwg_get_ENTITY(arc_dimension, ARC_DIMENSION)
+dwg_get_ENTITY(image, IMAGE)
+dwg_get_ENTITY(camera, CAMERA)
+dwg_get_ENTITY(helix, HELIX)
+dwg_get_ENTITY(light, LIGHT)
+dwg_get_ENTITY(mleader, MULTILEADER)
+dwg_get_ENTITY(underlay, UNDERLAY)
+dwg_get_ENTITY(wipeout, WIPEOUT)
+#ifdef DEBUG_CLASSES
+dwg_get_ENTITY(planesurface, PLANESURFACE)
+dwg_get_ENTITY(extrudedsurface, EXTRUDEDSURFACE)
+dwg_get_ENTITY(loftedsurface, LOFTEDSURFACE)
+dwg_get_ENTITY(revolvedsurface, REVOLVEDSURFACE)
+dwg_get_ENTITY(sweptsurface, SWEPTSURFACE)
+dwg_get_ENTITY(geopositionmarker, GEOPOSITIONMARKER)
+dwg_get_ENTITY(table, TABLE)
+#endif
+
 /*******************************************************************
  *                    FUNCTIONS FOR CIRCLE ENTITY                    *
  ********************************************************************/
@@ -6743,8 +6835,8 @@ dwg_ent_dim_ordinate_set_flag2(dwg_ent_dim_ordinate *restrict dim,
 */
 void
 dwg_ent_dim_ordinate_set_def_pt(dwg_ent_dim_ordinate *restrict dim,
-                                      const dwg_point_3d *restrict point,
-                                      int *restrict error)
+                                const dwg_point_3d *restrict point,
+                                int *restrict error)
 {
   if (dim
 #ifndef HAVE_NONNULL
