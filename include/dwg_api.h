@@ -863,7 +863,7 @@ EXPORT void dwg_api_init_version(Dwg_Data *dwg);
 
 /********************************************************************
 *                FUNCTIONS START HERE ENTITY SPECIFIC               *
-********************************************************************/
+*********************************************************************/
 
 EXPORT bool
 dwg_get_HEADER(const Dwg_Data *restrict dwg,
@@ -1042,9 +1042,105 @@ dwg_get_OBJECT_DECL(obj_evaluation_graph, GRAPH)
 //dwg_get_OBJECT_DECL(obj_tablestyle, TABLESTYLE)
 //dwg_get_OBJECT_DECL(obj_xrefpanelobject, XREFPANELOBJECT)
 
+
+/********************************************************************
+*                FUNCTIONS TYPE SPECIFIC                            *
+*********************************************************************/
+
+/* Should we accept dwg and entities? or add dwg_header_get_TYPE */
+EXPORT dwg_point_2d*
+dwg_ent_get_POINT2D(const void *restrict _obj,
+                    const char *restrict fieldname)
+  __nonnull ((1, 2));
+EXPORT bool
+dwg_ent_set_POINT2D(void *restrict _obj,
+                    const char *restrict fieldname,
+                    const dwg_point_2d *point)
+  __nonnull ((1, 2, 3));
+
+EXPORT dwg_point_3d*
+dwg_ent_get_POINT3D(const void *restrict _obj,
+                    const char *restrict fieldname)
+  __nonnull ((1, 2));
+EXPORT bool
+dwg_ent_set_POINT3D(void *restrict _obj,
+                    const char *restrict fieldname,
+                    const dwg_point_3d *point)
+  __nonnull ((1, 2, 3));
+
+EXPORT char*
+dwg_ent_get_STRING(const void *restrict _obj,
+                   const char *restrict fieldname)
+  __nonnull ((1, 2));
+EXPORT bool
+dwg_ent_set_STRING(void *restrict _obj,
+                   const char *restrict fieldname,
+                   const char *restrict string)
+  __nonnull ((1, 2, 3));
+
+EXPORT BITCODE_BD
+dwg_ent_get_REAL(const void *restrict _obj,
+                 const char *restrict fieldname)
+  __nonnull ((1, 2));
+EXPORT bool
+dwg_ent_set_REAL(void *restrict _obj,
+                 const char *restrict fieldname,
+                 const BITCODE_BD num)
+  __nonnull ((1, 2));
+
+EXPORT BITCODE_BS
+dwg_ent_get_INT16(const void *restrict _obj,
+                 const char *restrict fieldname)
+  __nonnull ((1, 2));
+EXPORT bool
+dwg_ent_set_INT16(void *restrict _obj,
+                  const char *restrict fieldname,
+                  const BITCODE_BS num)
+  __nonnull ((1, 2));
+
+EXPORT BITCODE_BL
+dwg_ent_get_INT32(const void *restrict _obj,
+                  const char *restrict fieldname)
+  __nonnull ((1, 2));
+EXPORT bool
+dwg_ent_set_INT32(void *restrict _obj,
+                  const char *restrict fieldname,
+                  const BITCODE_BL num)
+  __nonnull ((1, 2));
+
+EXPORT char*
+dwg_ent_get_BINARY(const void *restrict _obj,
+                   const char *restrict fieldname)
+  __nonnull ((1, 2));
+EXPORT bool
+dwg_ent_set_BINARY(void *restrict _obj,
+                   const char *restrict fieldname,
+                   const char* string)
+  __nonnull ((1, 2, 3));
+
+EXPORT BITCODE_H
+dwg_ent_get_HANDLE(const void *restrict _obj,
+                   const char *restrict fieldname)
+  __nonnull ((1, 2));
+EXPORT bool
+dwg_ent_set_HANDLE(void *restrict _obj,
+                   const char *restrict fieldname,
+                   const BITCODE_H handle)
+  __nonnull ((1, 2, 3));
+
+EXPORT BITCODE_B
+dwg_ent_get_BOOL(const void *restrict _obj,
+                 const char *restrict fieldname)
+  __nonnull ((1, 2));
+EXPORT bool
+dwg_ent_set_BOOL(void *restrict _obj,
+                 const char *restrict fieldname,
+                 const BITCODE_B num)
+  __nonnull ((1, 2));
+
 /********************************************************************
 *                    FUNCTIONS FOR CIRCLE ENTITY                    *
-********************************************************************/
+*********************************************************************/
 
 // Get/Set the center point of a _dwg_entity_CIRCLE::
 EXPORT void

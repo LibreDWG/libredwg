@@ -914,7 +914,8 @@ dwg_dynapi_entity_set_value(void *restrict _obj, const char *restrict name,
 }
 
 EXPORT bool
-dwg_dynapi_header_set_value(const Dwg_Data *restrict dwg, const char *restrict fieldname,
+dwg_dynapi_header_set_value(const Dwg_Data *restrict dwg,
+                            const char *restrict fieldname,
                             const void *restrict value)
 {
   if (!dwg || !fieldname)

@@ -678,6 +678,404 @@ dwg_get_OBJECT(obj_evaluation_graph, GRAPH)
 //dwg_get_OBJECT(obj_tablestyle, TABLESTYLE)
 //dwg_get_OBJECT(obj_xrefpanelobject, XREFPANELOBJECT)
 
+
+/********************************************************************
+*                FUNCTIONS TYPE SPECIFIC                            *
+*********************************************************************/
+
+/* Should we accept dwg and entities? or add dwg_header_get_TYPE */
+EXPORT dwg_point_2d*
+dwg_ent_get_POINT2D(const void *restrict _obj,
+                    const char *restrict fieldname)
+{
+#ifndef HAVE_NONNULL
+  if (!_obj || !fieldname)
+    return NULL;
+#endif
+    {
+      dwg_point_2d *point;
+      Dwg_DYNAPI_field field;
+      int error;
+      const Dwg_Object* obj = dwg_obj_generic_to_object(_obj, &error);
+      if (!obj || !obj->name)
+        return NULL;
+      point = calloc(1, sizeof(Dwg_Bitcode_2RD));
+      if (!dwg_dynapi_entity_value((void*)_obj, obj->name, fieldname, &point, &field))
+        return NULL;
+      if (!strcmp(field.type, "2RD") ||
+          !strcmp(field.type, "2BD") ||
+          !strcmp(field.type, "2DPOINT"))
+        {
+          return point;
+        }
+      else
+        {
+          LOG_ERROR("%s has type %s, which is not a POINT2D (2RD,2BD,2DPOINT)",
+                    fieldname, field.type)
+          return NULL;
+        }
+    }
+}
+
+EXPORT bool
+dwg_ent_set_POINT2D(void *restrict _obj,
+                    const char *restrict fieldname,
+                    const dwg_point_2d *point)
+{
+#ifndef HAVE_NONNULL
+  if (!_obj || !fieldname || !point)
+    return NULL;
+#endif
+    {
+      dwg_point_2d dummy;
+      Dwg_DYNAPI_field field;
+      int error;
+      const Dwg_Object* obj = dwg_obj_generic_to_object(_obj, &error);
+      if (!obj || !obj->name)
+        return NULL;
+      point = calloc(1, sizeof(dummy));
+      if (!dwg_dynapi_entity_value((void*)_obj, obj->name, fieldname, &dummy, &field))
+        return false;
+      if (!strcmp(field.type, "2RD") ||
+          !strcmp(field.type, "2BD") ||
+          !strcmp(field.type, "2DPOINT"))
+        {
+          return dwg_dynapi_entity_set_value((void*)_obj, obj->name, fieldname, point);
+        }
+      else
+        {
+          LOG_ERROR("%s has type %s, which is not a POINT2D (2RD,2BD,2DPOINT)",
+                    fieldname, field.type)
+          return false;
+        }
+    }
+}
+
+EXPORT dwg_point_3d*
+dwg_ent_get_POINT3D(const void *restrict _obj,
+                    const char *restrict fieldname)
+{
+#ifndef HAVE_NONNULL
+  if (!_obj || !fieldname)
+    return NULL;
+#endif
+    {
+      dwg_point_3d *point;
+      Dwg_DYNAPI_field field;
+      int error;
+      const Dwg_Object* obj = dwg_obj_generic_to_object(_obj, &error);
+      if (!obj || !obj->name)
+        return NULL;
+      point = calloc(1, sizeof(point));
+      if (!dwg_dynapi_entity_value((void*)_obj, obj->name, fieldname, &point, &field))
+        return NULL;
+      if (!strcmp(field.type, "3RD") ||
+          !strcmp(field.type, "3BD") ||
+          !strcmp(field.type, "BE") ||
+          !strcmp(field.type, "3DPOINT"))
+        {
+          return point;
+        }
+      else
+        {
+          LOG_ERROR("%s has type %s, which is not a POINT3D (3RD,3BD,BE,3DPOINT)",
+                    fieldname, field.type)
+          return NULL;
+        }
+    }
+}
+
+EXPORT bool
+dwg_ent_set_POINT3D(void *restrict _obj,
+                    const char *restrict fieldname,
+                    const dwg_point_3d *point)
+{
+#ifndef HAVE_NONNULL
+  if (!_obj || !fieldname || !point)
+    return NULL;
+#endif
+    {
+      dwg_point_3d dummy;
+      Dwg_DYNAPI_field field;
+      int error;
+      const Dwg_Object* obj = dwg_obj_generic_to_object(_obj, &error);
+      if (!obj || !obj->name)
+        return NULL;
+      point = calloc(1, sizeof(dummy));
+      if (!dwg_dynapi_entity_value((void*)_obj, obj->name, fieldname, &dummy, &field))
+        return false;
+      if (!strcmp(field.type, "3RD") ||
+          !strcmp(field.type, "3BD") ||
+          !strcmp(field.type, "BE")  ||
+          !strcmp(field.type, "3DPOINT"))
+        {
+          return dwg_dynapi_entity_set_value((void*)_obj, obj->name, fieldname, point);
+        }
+      else
+        {
+          LOG_ERROR("%s has type %s, which is not a POINT3D (3RD,3BD,BE,3DPOINT)",
+                    fieldname, field.type)
+          return false;
+        }
+    }
+}
+
+EXPORT char*
+dwg_ent_get_STRING(const void *restrict _obj,
+                   const char *restrict fieldname)
+{
+#ifndef HAVE_NONNULL
+  if (!_obj || !fieldname)
+    return NULL;
+#endif
+    {
+      char *str;
+      Dwg_DYNAPI_field field;
+      int error;
+      const Dwg_Object* obj = dwg_obj_generic_to_object(_obj, &error);
+      if (!obj || !obj->name)
+        return NULL;
+      str = calloc(1, sizeof(str));
+      if (!dwg_dynapi_entity_value((void*)_obj, obj->name, fieldname, &str, &field))
+        return NULL;
+      if (!strcmp(field.type, "T") ||
+          !strcmp(field.type, "TV") ||
+          !strcmp(field.type, "TU") ||
+          !strcmp(field.type, "TF"))
+        {
+          return str;
+        }
+      else
+        {
+          LOG_ERROR("%s has type %s, which is not a STRING (T,TV,TU,TF)",
+                    fieldname, field.type)
+          return NULL;
+        }
+    }
+}
+
+EXPORT bool
+dwg_ent_set_STRING(void *restrict _obj,
+                    const char *restrict fieldname,
+                    const char *restrict str)
+{
+#ifndef HAVE_NONNULL
+  if (!_obj || !fieldname || !str)
+    return false;
+#endif
+  {
+    char *dummy;
+    Dwg_DYNAPI_field field;
+    int error;
+    const Dwg_Object* obj = dwg_obj_generic_to_object(_obj, &error);
+    if (!obj || !obj->name)
+      return false;
+    dummy = calloc(1, sizeof(dummy));
+    if (!dwg_dynapi_entity_value((void*)_obj, obj->name, fieldname, &dummy, &field))
+      return false;
+    if (!strcmp(field.type, "T") ||
+        !strcmp(field.type, "TV") ||
+        !strcmp(field.type, "TU") ||
+        !strcmp(field.type, "TF"))
+      {
+        return dwg_dynapi_entity_set_value((void*)_obj, obj->name, fieldname, str);
+      }
+    else
+      {
+        LOG_ERROR("%s has type %s, which is not a STRING (T,TV,TU,TF)",
+                  fieldname, field.type)
+        return false;
+      }
+   }
+}
+
+EXPORT BITCODE_BD
+dwg_ent_get_REAL(const void *restrict _obj,
+                 const char *restrict fieldname)
+{
+#ifndef HAVE_NONNULL
+  if (!_obj || !fieldname)
+    return 0.0;
+#endif
+    {
+      BITCODE_BD num;
+      Dwg_DYNAPI_field field;
+      int error;
+      const Dwg_Object* obj = dwg_obj_generic_to_object(_obj, &error);
+      if (!obj || !obj->name)
+        return 0.0;
+      if (!dwg_dynapi_entity_value((void*)_obj, obj->name, fieldname, &num, &field))
+        return 0.0;
+      if (!strcmp(field.type, "RD") ||
+          !strcmp(field.type, "BD"))
+        {
+          return num;
+        }
+      else
+        {
+          LOG_ERROR("%s has type %s, which is not a REAL (RD,BD)", fieldname, field.type)
+          return 0.0;
+        }
+    }
+}
+
+EXPORT bool
+dwg_ent_set_REAL(void *restrict _obj,
+                 const char *restrict fieldname,
+                 const BITCODE_BD num)
+{
+#ifndef HAVE_NONNULL
+  if (!_obj || !fieldname)
+    return false;
+#endif
+  {
+    BITCODE_BD dummy;
+    Dwg_DYNAPI_field field;
+    int error;
+    const Dwg_Object* obj = dwg_obj_generic_to_object(_obj, &error);
+    if (!obj || !obj->name)
+      return false;
+    if (!dwg_dynapi_entity_value((void*)_obj, obj->name, fieldname, &dummy, &field))
+      return false;
+    if (!strcmp(field.type, "RD") ||
+        !strcmp(field.type, "BD"))
+      {
+        return dwg_dynapi_entity_set_value((void*)_obj, obj->name, fieldname, &num);
+      }
+    else
+      {
+        LOG_ERROR("%s has type %s, which is not a REAL (RD,BD)", fieldname, field.type)
+        return false;
+      }
+   }
+}
+
+EXPORT BITCODE_BS
+dwg_ent_get_INT16(const void *restrict _obj,
+                  const char *restrict fieldname)
+{
+#ifndef HAVE_NONNULL
+  if (!_obj || !fieldname)
+    return 0;
+#endif
+  {
+    BITCODE_BS num;
+    Dwg_DYNAPI_field field;
+    int error;
+    const Dwg_Object* obj = dwg_obj_generic_to_object(_obj, &error);
+    if (!obj || !obj->name)
+      return 0;
+    if (!dwg_dynapi_entity_value((void*)_obj, obj->name, fieldname, &num, &field))
+      return 0;
+    if (!strcmp(field.type, "RS") ||
+        !strcmp(field.type, "BS"))
+      {
+        return num;
+      }
+    else
+      {
+        LOG_ERROR("%s has type %s, which is not a INT16 (RS,BS)", fieldname, field.type)
+        return 0;
+      }
+  }
+}
+
+EXPORT bool
+dwg_ent_set_INT16(void *restrict _obj,
+                  const char *restrict fieldname,
+                  const BITCODE_BS num)
+{
+#ifndef HAVE_NONNULL
+  if (!_obj || !fieldname)
+    return false;
+#endif
+  {
+    BITCODE_BS dummy;
+    Dwg_DYNAPI_field field;
+    int error;
+    const Dwg_Object* obj = dwg_obj_generic_to_object(_obj, &error);
+    if (!obj || !obj->name)
+      return false;
+    if (!dwg_dynapi_entity_value((void*)_obj, obj->name, fieldname, &dummy, &field))
+      return false;
+    if (!strcmp(field.type, "RS") ||
+        !strcmp(field.type, "BS"))
+      {
+        return dwg_dynapi_entity_set_value((void*)_obj, obj->name, fieldname, &num);
+      }
+    else
+      {
+        LOG_ERROR("%s has type %s, which is not a INT16 (RS,BS)", fieldname, field.type)
+        return false;
+      }
+   }
+}
+
+EXPORT BITCODE_BL
+dwg_ent_get_INT32(const void *restrict _obj,
+                  const char *restrict fieldname)
+{
+#ifndef HAVE_NONNULL
+  if (!_obj || !fieldname)
+    return 0;
+#endif
+  {
+    BITCODE_BL num;
+    Dwg_DYNAPI_field field;
+    int error;
+    const Dwg_Object* obj = dwg_obj_generic_to_object(_obj, &error);
+    if (!obj || !obj->name)
+      return 0;
+    if (!dwg_dynapi_entity_value((void*)_obj, obj->name, fieldname, &num, &field))
+      return 0;
+    if (!strcmp(field.type, "RL") ||
+        !strcmp(field.type, "BL") ||
+        !strcmp(field.type, "MS"))
+      {
+        return num;
+      }
+    else
+      {
+        LOG_ERROR("%s has type %s, which is not a INT32 (RL,BL,MS)",
+                  fieldname, field.type)
+        return 0;
+      }
+  }
+}
+
+EXPORT bool
+dwg_ent_set_INT32(void *restrict _obj,
+                  const char *restrict fieldname,
+                  const BITCODE_BL num)
+{
+#ifndef HAVE_NONNULL
+  if (!_obj || !fieldname)
+    return false;
+#endif
+  {
+    BITCODE_BL dummy;
+    Dwg_DYNAPI_field field;
+    int error;
+    const Dwg_Object* obj = dwg_obj_generic_to_object(_obj, &error);
+    if (!obj || !obj->name)
+      return false;
+    if (!dwg_dynapi_entity_value((void*)_obj, obj->name, fieldname, &dummy, &field))
+      return false;
+    if (!strcmp(field.type, "RL") ||
+        !strcmp(field.type, "BL") ||
+        !strcmp(field.type, "MS"))
+      {
+        return dwg_dynapi_entity_set_value((void*)_obj, obj->name, fieldname, &num);
+      }
+    else
+      {
+        LOG_ERROR("%s has type %s, which is not a INT32 (RL,BL,MS)",
+                    fieldname, field.type)
+        return false;
+      }
+   }
+}
+
 /*******************************************************************
  *                    FUNCTIONS FOR CIRCLE ENTITY                    *
  ********************************************************************/
