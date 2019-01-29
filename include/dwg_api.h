@@ -5975,7 +5975,7 @@ dwg_obj_block_control_get_paper_space(const dwg_obj_block_control *restrict ctrl
 EXPORT char *
 dwg_obj_layer_get_name(const dwg_obj_layer *restrict layer,
                        int *restrict error)
-  __nonnull ((2)) _deprecated_dynapi_common_getter;
+  __nonnull ((2));
 
 /*******************************************************************
 *                    FUNCTIONS FOR TABLES                          *
