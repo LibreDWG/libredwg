@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009, 2010, 2018 Free Software Foundation, Inc.            */
+/*  Copyright (C) 2009, 2010, 2018, 2019 Free Software Foundation, Inc.      */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -27,8 +27,10 @@
 #ifndef SWIGIMPORTED
 #  include <stdint.h>
 #  include <inttypes.h>
-/* wchar for R2007+ support.
- * But we need the WIN32 UTF-16 variant, not UTF-32.
+
+/* wchar for R2007+ support
+ * But we need the win32 UTF-16 variant, not UTF-32.
+ * i.e. only on Windows, AIX, Solaris
  */
 # if defined(HAVE_WCHAR_H) && defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
 #  include <wchar.h>
@@ -60,7 +62,7 @@ extern "C" {
 #define BITCODE_DOUBLE double
 
 /* The FORMAT_* are for logging only */
-#define BITCODE_RC unsigned char
+typedef unsigned char BITCODE_RC;
 #ifdef _WIN32
 # define FORMAT_RC "0x%2x"
 #else
@@ -68,38 +70,44 @@ extern "C" {
 #endif
 #define FORMAT_RCd "%d"
 #define FORMAT_RCu "%u"
-#define BITCODE_RCd signed char
-#define BITCODE_RCu unsigned char
-#define BITCODE_B unsigned char
+typedef signed char BITCODE_RCd;
+typedef unsigned char BITCODE_RCu;
+typedef unsigned char BITCODE_B;
 #define FORMAT_B "%d"
-#define BITCODE_BB unsigned char
+typedef unsigned char BITCODE_BB;
 #define FORMAT_BB "%u"
 /* Since R24 */
-#define BITCODE_3B unsigned char
+typedef unsigned char BITCODE_3B;
 #define FORMAT_3B "%u"
 //#ifdef HAVE_STDINT_H
-# define BITCODE_BS uint16_t
-# define BITCODE_RS uint16_t
-# define BITCODE_BL uint32_t
-# define BITCODE_RL uint32_t
-# define BITCODE_BLd int32_t
-# define BITCODE_RLd int32_t
+#define BITCODE_BS uint16_t
+#define BITCODE_RS uint16_t
+#define BITCODE_BL uint32_t
+#define BITCODE_RL uint32_t
+#define BITCODE_BLd int32_t
+#define BITCODE_RLd int32_t
+typedef uint16_t BITCODE_BS;
+typedef uint16_t BITCODE_RS;
+typedef uint32_t BITCODE_BL;
+typedef uint32_t BITCODE_RL;
+typedef int32_t BITCODE_BLd;
+typedef int32_t BITCODE_RLd;
 /* e.g. old cygwin 64 vs 32 */
 /*#else
 # if defined(__WORDSIZE) && __WORDSIZE == 64
-# define BITCODE_BS unsigned short int
-# define BITCODE_RS unsigned short int
-# define BITCODE_BL unsigned int
-# define BITCODE_RL unsigned int
-# define BITCODE_BLd int
-# define BITCODE_RLd int
+  typedef unsigned short int BITCODE_BS;
+  typedef unsigned short int BITCODE_RS;
+  typedef unsigned int BITCODE_BL;
+  typedef unsigned int BITCODE_RL;
+  typedef int BITCODE_BLd;
+  typedef int BITCODE_RLd;
 # else
-# define BITCODE_BS unsigned short int
-# define BITCODE_RS unsigned short int
-# define BITCODE_BL unsigned long int
-# define BITCODE_RL unsigned long int
-# define BITCODE_BLd long int
-# define BITCODE_RLd long int
+  typedef unsigned short int BITCODE_BS;
+  typedef unsigned short int BITCODE_RS;
+  typedef unsigned long BITCODE_BL;
+  typedef unsigned long BITCODE_RL;
+  typedef long BITCODE_BLd;
+  typedef long BITCODE_RLd;
 # endif
 #endif
 */
@@ -123,61 +131,50 @@ extern "C" {
 # define FORMAT_BLx "%x"
 #endif
 */
-#define BITCODE_MC long
+typedef long BITCODE_MC;
 #define FORMAT_MC  "%ld"
-#define BITCODE_UMC unsigned long
+typedef unsigned long BITCODE_UMC;
 #define FORMAT_UMC "%lu"
-#define BITCODE_MS BITCODE_BL
+typedef BITCODE_BL BITCODE_MS;
 #define FORMAT_MS FORMAT_BL
-#define BITCODE_RD BITCODE_DOUBLE
+typedef BITCODE_DOUBLE BITCODE_RD;
 #define FORMAT_RD "%f"
-//#ifdef HAVE_STDINT_H
-# define BITCODE_RLL int64_t
+#define BITCODE_RLL int64_t
 /* Since R2004 */
-# define BITCODE_BLL int64_t
-//#else
-/* on 64bit just long */
-//# define BITCODE_RLL long
-//# define BITCODE_BLL long
-//#endif
-//#ifdef HAVE_INTTYPES_H
-# define FORMAT_RLL "%" PRId64
-# define FORMAT_BLL "%" PRId64
-/*#else
-# define FORMAT_RLL "%ld"
-# define FORMAT_BLL "%ld"
-#endif
-*/
+#define BITCODE_BLL int64_t
+typedef int64_t BITCODE_RLL;
+/* Since R2004 */
+typedef int64_t BITCODE_BLL;
+typedef long BITCODE_RLL;
+typedef long BITCODE_BLL;
+#define FORMAT_RLL "%" PRId64
+#define FORMAT_BLL "%" PRId64
 #ifndef HAVE_NATIVE_WCHAR2
   typedef BITCODE_RS dwg_wchar_t;
 # define DWGCHAR dwg_wchar_t
 #endif
-#define BITCODE_TF char *
+typedef char* BITCODE_TF;
 #define FORMAT_TF "\"%s\""
-#define BITCODE_TV char *
+typedef char* BITCODE_TV;
 #define FORMAT_TV "\"%s\""
-#define BITCODE_BT BITCODE_DOUBLE
+typedef BITCODE_DOUBLE BITCODE_BT;
 #define FORMAT_BT "%f"
-#define BITCODE_DD BITCODE_DOUBLE
+typedef BITCODE_DOUBLE BITCODE_DD;
 #define FORMAT_DD "%f"
-#define BITCODE_BD BITCODE_DOUBLE
+typedef BITCODE_DOUBLE BITCODE_BD;
 #define FORMAT_BD "%f"
-#define BITCODE_BE BITCODE_3BD
-#define BITCODE_CMC Dwg_Color
-#define BITCODE_ENC Dwg_Color
-#define BITCODE_H Dwg_Object_Ref*
-#define BITCODE_4BITS BITCODE_RC
+typedef BITCODE_RC BITCODE_4BITS;
 #define FORMAT_4BITS "%1x"
 
 /* TODO: implement version dependent string parsing */
 /* encode codepages/utf8 */
 #define BITCODE_T  BITCODE_TV
 #ifdef HAVE_NATIVE_WCHAR2
-# define BITCODE_TU dwg_wchar_t*  /* native UCS-2 wchar_t */
+  typedef dwg_wchar_t* BITCODE_TU; /* native UCS-2 wchar_t */
 # define FORMAT_TU "\"%ls\""
 #else
-# define BITCODE_TU BITCODE_RS*   /* UCS-2 unicode text */
-# define FORMAT_TU "\"%hn\""      /* will print garbage */
+  typedef BITCODE_RS* BITCODE_TU;  /* UCS-2 unicode text */
+# define FORMAT_TU "\"%hn\""       /* will print garbage */
 #endif
 
 typedef struct _dwg_time_bll
@@ -213,14 +210,16 @@ typedef struct _dwg_bitcode_3bd
   BITCODE_BD z;
 } Dwg_Bitcode_3BD;
 
-#define BITCODE_TIMEBLL Dwg_Bitcode_TimeBLL
+typedef Dwg_Bitcode_TimeBLL BITCODE_TIMEBLL;
 /* #define FORMAT_TIMEBLL FORMAT_BL "." FORMAT_BL */
-#define BITCODE_2RD Dwg_Bitcode_2RD
-#define BITCODE_2BD Dwg_Bitcode_2BD
-#define BITCODE_2DPOINT BITCODE_2RD
-#define BITCODE_3RD Dwg_Bitcode_3RD
-#define BITCODE_3BD Dwg_Bitcode_3BD
-#define BITCODE_3DPOINT BITCODE_3BD
+typedef Dwg_Bitcode_2RD  BITCODE_2RD;
+typedef Dwg_Bitcode_2BD  BITCODE_2BD;
+typedef Dwg_Bitcode_2BD  BITCODE_2DPOINT;
+typedef Dwg_Bitcode_3RD  BITCODE_3RD;
+typedef Dwg_Bitcode_3BD  BITCODE_3BD;
+typedef Dwg_Bitcode_3BD  BITCODE_3DPOINT;
+typedef Dwg_Bitcode_3BD  BITCODE_3BD_1;
+typedef Dwg_Bitcode_3BD  BITCODE_BE;
 #define BITCODE_3DVECTOR BITCODE_3BD_1
 
 /**
@@ -496,6 +495,10 @@ typedef struct _dwg_color /* CmColor: R15 and earlier */
   BITCODE_BB alpha_type; /* 0 BYLAYER, 1 BYBLOCK, 3 alpha */
   BITCODE_RC alpha;      /* 0-255 */
 } Dwg_Color;
+
+typedef Dwg_Color BITCODE_CMC;
+typedef Dwg_Color BITCODE_ENC;
+typedef Dwg_Object_Ref* BITCODE_H;
 
 /**
  ASCII or Unicode text in xdata \ref Dwg_Resbuf

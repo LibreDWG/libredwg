@@ -22,7 +22,9 @@ use vars qw(@entity_names @object_names @subtypes $max_entity_names $max_object_
 use Convert::Binary::C;
 #use Data::Dumper;
 BEGIN { chdir 'src' if $0 =~ /src/; }
-my $c = Convert::Binary::C->new->Include(".")->Define('HAVE_CONFIG_H');
+my $c = Convert::Binary::C->new
+  ->Include('.', '/usr/include')
+  ->Define('HAVE_CONFIG_H HAVE_STDINT_H HAVE_INTTYPES_H __WORDSIZE=64');
 my $hdr = "../include/dwg.h";
 $c->parse_file($hdr);
 
@@ -222,6 +224,7 @@ sub out_struct {
     $type = $bc if $bc;
     $type =~ s/\s+$//;
     my $size = $bc ? "sizeof(BITCODE_$type)" : "sizeof($type)";
+    $type =~ s/BITCODE_//;
     # TODO: DIMENSION_COMMON, _3DSOLID_FIELDS macros
     if ($type eq 'unsigned char') {
       $type = 'RC';
