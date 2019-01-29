@@ -547,19 +547,33 @@ EOF
 EOF
       }
     } else { # is_ptr
+      my $is_str;
       print $fh <<"EOF";
   {
     $type $var;
     if (dwg_dynapi_entity_value($lname, "$name", "$var", &$svar, NULL)
 EOF
         if ($stype =~ /^(TV|RC\*|unsigned char\*|char\*)$/) {
-          print $fh "        && !strcmp((char*)&$svar, (char*)&$lname->$svar))\n";
+          $is_str = 1;
+          print $fh "        && !strcmp((char*)$svar, (char*)$lname->$svar))\n";
         } elsif ($type !~ /\*\*/) {
           print $fh "        && !memcmp(&$svar, &$lname->$svar, sizeof($lname->$svar)))\n";
         } else {
           print $fh ")\n";
         }
-        print $fh <<"EOF";
+        if ($is_str) {
+          print $fh <<"EOF";
+      {
+        pass ("$name.$var [$stype] '$fmt' <> '$fmt'", $svar, $lname->$svar);
+      }
+    else
+      {
+        fail ("$name.$var [$stype] '$fmt' <> '$fmt'", $svar, $lname->$svar); error++;
+      }
+  }
+EOF
+        } else {
+          print $fh <<"EOF";
       {
         pass ("$name.$var [$stype]");
       }
@@ -569,6 +583,7 @@ EOF
       }
   }
 EOF
+        }
       }
     }
     print $fh <<"EOF";

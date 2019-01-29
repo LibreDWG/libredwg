@@ -7455,13 +7455,13 @@ static int test__3DSOLID (const Dwg_Object *obj)
   {
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value(_3dsolid, "3DSOLID", "acis_data", &acis_data, NULL)
-        && !strcmp((char*)&acis_data, (char*)&_3dsolid->acis_data))
+        && !strcmp((char*)acis_data, (char*)_3dsolid->acis_data))
       {
-        pass ("3DSOLID.acis_data [RC*]");
+        pass ("3DSOLID.acis_data [RC*] '%s' <> '%s'", acis_data, _3dsolid->acis_data);
       }
     else
       {
-        fail ("3DSOLID.acis_data [RC*]"); error++;
+        fail ("3DSOLID.acis_data [RC*] '%s' <> '%s'", acis_data, _3dsolid->acis_data); error++;
       }
   }
   {
@@ -8084,13 +8084,13 @@ static int test_ATTDEF (const Dwg_Object *obj)
   {
     BITCODE_TV default_value;
     if (dwg_dynapi_entity_value(attdef, "ATTDEF", "default_value", &default_value, NULL)
-        && !strcmp((char*)&default_value, (char*)&attdef->default_value))
+        && !strcmp((char*)default_value, (char*)attdef->default_value))
       {
-        pass ("ATTDEF.default_value [TV]");
+        pass ("ATTDEF.default_value [TV] '%s' <> '%s'", default_value, attdef->default_value);
       }
     else
       {
-        fail ("ATTDEF.default_value [TV]"); error++;
+        fail ("ATTDEF.default_value [TV] '%s' <> '%s'", default_value, attdef->default_value); error++;
       }
   }
   {
@@ -8324,13 +8324,13 @@ static int test_ATTDEF (const Dwg_Object *obj)
   {
     BITCODE_TV prompt;
     if (dwg_dynapi_entity_value(attdef, "ATTDEF", "prompt", &prompt, NULL)
-        && !strcmp((char*)&prompt, (char*)&attdef->prompt))
+        && !strcmp((char*)prompt, (char*)attdef->prompt))
       {
-        pass ("ATTDEF.prompt [TV]");
+        pass ("ATTDEF.prompt [TV] '%s' <> '%s'", prompt, attdef->prompt);
       }
     else
       {
-        fail ("ATTDEF.prompt [TV]"); error++;
+        fail ("ATTDEF.prompt [TV] '%s' <> '%s'", prompt, attdef->prompt); error++;
       }
   }
   {
@@ -8372,13 +8372,13 @@ static int test_ATTDEF (const Dwg_Object *obj)
   {
     BITCODE_TV tag;
     if (dwg_dynapi_entity_value(attdef, "ATTDEF", "tag", &tag, NULL)
-        && !strcmp((char*)&tag, (char*)&attdef->tag))
+        && !strcmp((char*)tag, (char*)attdef->tag))
       {
-        pass ("ATTDEF.tag [TV]");
+        pass ("ATTDEF.tag [TV] '%s' <> '%s'", tag, attdef->tag);
       }
     else
       {
-        fail ("ATTDEF.tag [TV]"); error++;
+        fail ("ATTDEF.tag [TV] '%s' <> '%s'", tag, attdef->tag); error++;
       }
   }
   {
@@ -8883,25 +8883,25 @@ static int test_ATTRIB (const Dwg_Object *obj)
   {
     BITCODE_TV tag;
     if (dwg_dynapi_entity_value(attrib, "ATTRIB", "tag", &tag, NULL)
-        && !strcmp((char*)&tag, (char*)&attrib->tag))
+        && !strcmp((char*)tag, (char*)attrib->tag))
       {
-        pass ("ATTRIB.tag [TV]");
+        pass ("ATTRIB.tag [TV] '%s' <> '%s'", tag, attrib->tag);
       }
     else
       {
-        fail ("ATTRIB.tag [TV]"); error++;
+        fail ("ATTRIB.tag [TV] '%s' <> '%s'", tag, attrib->tag); error++;
       }
   }
   {
     BITCODE_TV text_value;
     if (dwg_dynapi_entity_value(attrib, "ATTRIB", "text_value", &text_value, NULL)
-        && !strcmp((char*)&text_value, (char*)&attrib->text_value))
+        && !strcmp((char*)text_value, (char*)attrib->text_value))
       {
-        pass ("ATTRIB.text_value [TV]");
+        pass ("ATTRIB.text_value [TV] '%s' <> '%s'", text_value, attrib->text_value);
       }
     else
       {
-        fail ("ATTRIB.text_value [TV]"); error++;
+        fail ("ATTRIB.text_value [TV] '%s' <> '%s'", text_value, attrib->text_value); error++;
       }
   }
   {
@@ -9010,13 +9010,13 @@ static int test_BLOCK (const Dwg_Object *obj)
   {
     BITCODE_TV name;
     if (dwg_dynapi_entity_value(block, "BLOCK", "name", &name, NULL)
-        && !strcmp((char*)&name, (char*)&block->name))
+        && !strcmp((char*)name, (char*)block->name))
       {
-        pass ("BLOCK.name [TV]");
+        pass ("BLOCK.name [TV] '%s' <> '%s'", name, block->name);
       }
     else
       {
-        fail ("BLOCK.name [TV]"); error++;
+        fail ("BLOCK.name [TV] '%s' <> '%s'", name, block->name); error++;
       }
   }
   {
@@ -9246,13 +9246,13 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
   {
     BITCODE_TV blockname;
     if (dwg_dynapi_entity_value(dimension_aligned, "DIMENSION_ALIGNED", "blockname", &blockname, NULL)
-        && !strcmp((char*)&blockname, (char*)&dimension_aligned->blockname))
+        && !strcmp((char*)blockname, (char*)dimension_aligned->blockname))
       {
-        pass ("DIMENSION_ALIGNED.blockname [TV]");
+        pass ("DIMENSION_ALIGNED.blockname [TV] '%s' <> '%s'", blockname, dimension_aligned->blockname);
       }
     else
       {
-        fail ("DIMENSION_ALIGNED.blockname [TV]"); error++;
+        fail ("DIMENSION_ALIGNED.blockname [TV] '%s' <> '%s'", blockname, dimension_aligned->blockname); error++;
       }
   }
   {
@@ -9654,13 +9654,13 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
   {
     BITCODE_TV user_text;
     if (dwg_dynapi_entity_value(dimension_aligned, "DIMENSION_ALIGNED", "user_text", &user_text, NULL)
-        && !strcmp((char*)&user_text, (char*)&dimension_aligned->user_text))
+        && !strcmp((char*)user_text, (char*)dimension_aligned->user_text))
       {
-        pass ("DIMENSION_ALIGNED.user_text [TV]");
+        pass ("DIMENSION_ALIGNED.user_text [TV] '%s' <> '%s'", user_text, dimension_aligned->user_text);
       }
     else
       {
-        fail ("DIMENSION_ALIGNED.user_text [TV]"); error++;
+        fail ("DIMENSION_ALIGNED.user_text [TV] '%s' <> '%s'", user_text, dimension_aligned->user_text); error++;
       }
   }
   return error;
@@ -9769,13 +9769,13 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
   {
     BITCODE_TV blockname;
     if (dwg_dynapi_entity_value(dimension_ang2ln, "DIMENSION_ANG2LN", "blockname", &blockname, NULL)
-        && !strcmp((char*)&blockname, (char*)&dimension_ang2ln->blockname))
+        && !strcmp((char*)blockname, (char*)dimension_ang2ln->blockname))
       {
-        pass ("DIMENSION_ANG2LN.blockname [TV]");
+        pass ("DIMENSION_ANG2LN.blockname [TV] '%s' <> '%s'", blockname, dimension_ang2ln->blockname);
       }
     else
       {
-        fail ("DIMENSION_ANG2LN.blockname [TV]"); error++;
+        fail ("DIMENSION_ANG2LN.blockname [TV] '%s' <> '%s'", blockname, dimension_ang2ln->blockname); error++;
       }
   }
   {
@@ -10165,13 +10165,13 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
   {
     BITCODE_TV user_text;
     if (dwg_dynapi_entity_value(dimension_ang2ln, "DIMENSION_ANG2LN", "user_text", &user_text, NULL)
-        && !strcmp((char*)&user_text, (char*)&dimension_ang2ln->user_text))
+        && !strcmp((char*)user_text, (char*)dimension_ang2ln->user_text))
       {
-        pass ("DIMENSION_ANG2LN.user_text [TV]");
+        pass ("DIMENSION_ANG2LN.user_text [TV] '%s' <> '%s'", user_text, dimension_ang2ln->user_text);
       }
     else
       {
-        fail ("DIMENSION_ANG2LN.user_text [TV]"); error++;
+        fail ("DIMENSION_ANG2LN.user_text [TV] '%s' <> '%s'", user_text, dimension_ang2ln->user_text); error++;
       }
   }
   return error;
@@ -10268,13 +10268,13 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
   {
     BITCODE_TV blockname;
     if (dwg_dynapi_entity_value(dimension_ang3pt, "DIMENSION_ANG3PT", "blockname", &blockname, NULL)
-        && !strcmp((char*)&blockname, (char*)&dimension_ang3pt->blockname))
+        && !strcmp((char*)blockname, (char*)dimension_ang3pt->blockname))
       {
-        pass ("DIMENSION_ANG3PT.blockname [TV]");
+        pass ("DIMENSION_ANG3PT.blockname [TV] '%s' <> '%s'", blockname, dimension_ang3pt->blockname);
       }
     else
       {
-        fail ("DIMENSION_ANG3PT.blockname [TV]"); error++;
+        fail ("DIMENSION_ANG3PT.blockname [TV] '%s' <> '%s'", blockname, dimension_ang3pt->blockname); error++;
       }
   }
   {
@@ -10664,13 +10664,13 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
   {
     BITCODE_TV user_text;
     if (dwg_dynapi_entity_value(dimension_ang3pt, "DIMENSION_ANG3PT", "user_text", &user_text, NULL)
-        && !strcmp((char*)&user_text, (char*)&dimension_ang3pt->user_text))
+        && !strcmp((char*)user_text, (char*)dimension_ang3pt->user_text))
       {
-        pass ("DIMENSION_ANG3PT.user_text [TV]");
+        pass ("DIMENSION_ANG3PT.user_text [TV] '%s' <> '%s'", user_text, dimension_ang3pt->user_text);
       }
     else
       {
-        fail ("DIMENSION_ANG3PT.user_text [TV]"); error++;
+        fail ("DIMENSION_ANG3PT.user_text [TV] '%s' <> '%s'", user_text, dimension_ang3pt->user_text); error++;
       }
   }
   return error;
@@ -10743,13 +10743,13 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
   {
     BITCODE_TV blockname;
     if (dwg_dynapi_entity_value(dimension_diameter, "DIMENSION_DIAMETER", "blockname", &blockname, NULL)
-        && !strcmp((char*)&blockname, (char*)&dimension_diameter->blockname))
+        && !strcmp((char*)blockname, (char*)dimension_diameter->blockname))
       {
-        pass ("DIMENSION_DIAMETER.blockname [TV]");
+        pass ("DIMENSION_DIAMETER.blockname [TV] '%s' <> '%s'", blockname, dimension_diameter->blockname);
       }
     else
       {
-        fail ("DIMENSION_DIAMETER.blockname [TV]"); error++;
+        fail ("DIMENSION_DIAMETER.blockname [TV] '%s' <> '%s'", blockname, dimension_diameter->blockname); error++;
       }
   }
   {
@@ -11163,13 +11163,13 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
   {
     BITCODE_TV user_text;
     if (dwg_dynapi_entity_value(dimension_diameter, "DIMENSION_DIAMETER", "user_text", &user_text, NULL)
-        && !strcmp((char*)&user_text, (char*)&dimension_diameter->user_text))
+        && !strcmp((char*)user_text, (char*)dimension_diameter->user_text))
       {
-        pass ("DIMENSION_DIAMETER.user_text [TV]");
+        pass ("DIMENSION_DIAMETER.user_text [TV] '%s' <> '%s'", user_text, dimension_diameter->user_text);
       }
     else
       {
-        fail ("DIMENSION_DIAMETER.user_text [TV]"); error++;
+        fail ("DIMENSION_DIAMETER.user_text [TV] '%s' <> '%s'", user_text, dimension_diameter->user_text); error++;
       }
   }
   return error;
@@ -11266,13 +11266,13 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
   {
     BITCODE_TV blockname;
     if (dwg_dynapi_entity_value(dimension_linear, "DIMENSION_LINEAR", "blockname", &blockname, NULL)
-        && !strcmp((char*)&blockname, (char*)&dimension_linear->blockname))
+        && !strcmp((char*)blockname, (char*)dimension_linear->blockname))
       {
-        pass ("DIMENSION_LINEAR.blockname [TV]");
+        pass ("DIMENSION_LINEAR.blockname [TV] '%s' <> '%s'", blockname, dimension_linear->blockname);
       }
     else
       {
-        fail ("DIMENSION_LINEAR.blockname [TV]"); error++;
+        fail ("DIMENSION_LINEAR.blockname [TV] '%s' <> '%s'", blockname, dimension_linear->blockname); error++;
       }
   }
   {
@@ -11698,13 +11698,13 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
   {
     BITCODE_TV user_text;
     if (dwg_dynapi_entity_value(dimension_linear, "DIMENSION_LINEAR", "user_text", &user_text, NULL)
-        && !strcmp((char*)&user_text, (char*)&dimension_linear->user_text))
+        && !strcmp((char*)user_text, (char*)dimension_linear->user_text))
       {
-        pass ("DIMENSION_LINEAR.user_text [TV]");
+        pass ("DIMENSION_LINEAR.user_text [TV] '%s' <> '%s'", user_text, dimension_linear->user_text);
       }
     else
       {
-        fail ("DIMENSION_LINEAR.user_text [TV]"); error++;
+        fail ("DIMENSION_LINEAR.user_text [TV] '%s' <> '%s'", user_text, dimension_linear->user_text); error++;
       }
   }
   return error;
@@ -11777,13 +11777,13 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
   {
     BITCODE_TV blockname;
     if (dwg_dynapi_entity_value(dimension_ordinate, "DIMENSION_ORDINATE", "blockname", &blockname, NULL)
-        && !strcmp((char*)&blockname, (char*)&dimension_ordinate->blockname))
+        && !strcmp((char*)blockname, (char*)dimension_ordinate->blockname))
       {
-        pass ("DIMENSION_ORDINATE.blockname [TV]");
+        pass ("DIMENSION_ORDINATE.blockname [TV] '%s' <> '%s'", blockname, dimension_ordinate->blockname);
       }
     else
       {
-        fail ("DIMENSION_ORDINATE.blockname [TV]"); error++;
+        fail ("DIMENSION_ORDINATE.blockname [TV] '%s' <> '%s'", blockname, dimension_ordinate->blockname); error++;
       }
   }
   {
@@ -12209,13 +12209,13 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
   {
     BITCODE_TV user_text;
     if (dwg_dynapi_entity_value(dimension_ordinate, "DIMENSION_ORDINATE", "user_text", &user_text, NULL)
-        && !strcmp((char*)&user_text, (char*)&dimension_ordinate->user_text))
+        && !strcmp((char*)user_text, (char*)dimension_ordinate->user_text))
       {
-        pass ("DIMENSION_ORDINATE.user_text [TV]");
+        pass ("DIMENSION_ORDINATE.user_text [TV] '%s' <> '%s'", user_text, dimension_ordinate->user_text);
       }
     else
       {
-        fail ("DIMENSION_ORDINATE.user_text [TV]"); error++;
+        fail ("DIMENSION_ORDINATE.user_text [TV] '%s' <> '%s'", user_text, dimension_ordinate->user_text); error++;
       }
   }
   return error;
@@ -12288,13 +12288,13 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
   {
     BITCODE_TV blockname;
     if (dwg_dynapi_entity_value(dimension_radius, "DIMENSION_RADIUS", "blockname", &blockname, NULL)
-        && !strcmp((char*)&blockname, (char*)&dimension_radius->blockname))
+        && !strcmp((char*)blockname, (char*)dimension_radius->blockname))
       {
-        pass ("DIMENSION_RADIUS.blockname [TV]");
+        pass ("DIMENSION_RADIUS.blockname [TV] '%s' <> '%s'", blockname, dimension_radius->blockname);
       }
     else
       {
-        fail ("DIMENSION_RADIUS.blockname [TV]"); error++;
+        fail ("DIMENSION_RADIUS.blockname [TV] '%s' <> '%s'", blockname, dimension_radius->blockname); error++;
       }
   }
   {
@@ -12708,13 +12708,13 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
   {
     BITCODE_TV user_text;
     if (dwg_dynapi_entity_value(dimension_radius, "DIMENSION_RADIUS", "user_text", &user_text, NULL)
-        && !strcmp((char*)&user_text, (char*)&dimension_radius->user_text))
+        && !strcmp((char*)user_text, (char*)dimension_radius->user_text))
       {
-        pass ("DIMENSION_RADIUS.user_text [TV]");
+        pass ("DIMENSION_RADIUS.user_text [TV] '%s' <> '%s'", user_text, dimension_radius->user_text);
       }
     else
       {
-        fail ("DIMENSION_RADIUS.user_text [TV]"); error++;
+        fail ("DIMENSION_RADIUS.user_text [TV] '%s' <> '%s'", user_text, dimension_radius->user_text); error++;
       }
   }
   return error;
@@ -12873,13 +12873,13 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value(extrudedsurface, "EXTRUDEDSURFACE", "acis_data", &acis_data, NULL)
-        && !strcmp((char*)&acis_data, (char*)&extrudedsurface->acis_data))
+        && !strcmp((char*)acis_data, (char*)extrudedsurface->acis_data))
       {
-        pass ("EXTRUDEDSURFACE.acis_data [RC*]");
+        pass ("EXTRUDEDSURFACE.acis_data [RC*] '%s' <> '%s'", acis_data, extrudedsurface->acis_data);
       }
     else
       {
-        fail ("EXTRUDEDSURFACE.acis_data [RC*]"); error++;
+        fail ("EXTRUDEDSURFACE.acis_data [RC*] '%s' <> '%s'", acis_data, extrudedsurface->acis_data); error++;
       }
   }
   {
@@ -13173,13 +13173,13 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_TV encr_sat_data;
     if (dwg_dynapi_entity_value(extrudedsurface, "EXTRUDEDSURFACE", "encr_sat_data", &encr_sat_data, NULL)
-        && !strcmp((char*)&encr_sat_data, (char*)&extrudedsurface->encr_sat_data))
+        && !strcmp((char*)encr_sat_data, (char*)extrudedsurface->encr_sat_data))
       {
-        pass ("EXTRUDEDSURFACE.encr_sat_data [TV]");
+        pass ("EXTRUDEDSURFACE.encr_sat_data [TV] '%s' <> '%s'", encr_sat_data, extrudedsurface->encr_sat_data);
       }
     else
       {
-        fail ("EXTRUDEDSURFACE.encr_sat_data [TV]"); error++;
+        fail ("EXTRUDEDSURFACE.encr_sat_data [TV] '%s' <> '%s'", encr_sat_data, extrudedsurface->encr_sat_data); error++;
       }
   }
   {
@@ -14265,13 +14265,13 @@ static int test_HATCH (const Dwg_Object *obj)
   {
     BITCODE_TV gradient_name;
     if (dwg_dynapi_entity_value(hatch, "HATCH", "gradient_name", &gradient_name, NULL)
-        && !strcmp((char*)&gradient_name, (char*)&hatch->gradient_name))
+        && !strcmp((char*)gradient_name, (char*)hatch->gradient_name))
       {
-        pass ("HATCH.gradient_name [TV]");
+        pass ("HATCH.gradient_name [TV] '%s' <> '%s'", gradient_name, hatch->gradient_name);
       }
     else
       {
-        fail ("HATCH.gradient_name [TV]"); error++;
+        fail ("HATCH.gradient_name [TV] '%s' <> '%s'", gradient_name, hatch->gradient_name); error++;
       }
   }
   {
@@ -14373,13 +14373,13 @@ static int test_HATCH (const Dwg_Object *obj)
   {
     BITCODE_TV name;
     if (dwg_dynapi_entity_value(hatch, "HATCH", "name", &name, NULL)
-        && !strcmp((char*)&name, (char*)&hatch->name))
+        && !strcmp((char*)name, (char*)hatch->name))
       {
-        pass ("HATCH.name [TV]");
+        pass ("HATCH.name [TV] '%s' <> '%s'", name, hatch->name);
       }
     else
       {
-        fail ("HATCH.name [TV]"); error++;
+        fail ("HATCH.name [TV] '%s' <> '%s'", name, hatch->name); error++;
       }
   }
   {
@@ -16991,13 +16991,13 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value(loftedsurface, "LOFTEDSURFACE", "acis_data", &acis_data, NULL)
-        && !strcmp((char*)&acis_data, (char*)&loftedsurface->acis_data))
+        && !strcmp((char*)acis_data, (char*)loftedsurface->acis_data))
       {
-        pass ("LOFTEDSURFACE.acis_data [RC*]");
+        pass ("LOFTEDSURFACE.acis_data [RC*] '%s' <> '%s'", acis_data, loftedsurface->acis_data);
       }
     else
       {
-        fail ("LOFTEDSURFACE.acis_data [RC*]"); error++;
+        fail ("LOFTEDSURFACE.acis_data [RC*] '%s' <> '%s'", acis_data, loftedsurface->acis_data); error++;
       }
   }
   {
@@ -17171,13 +17171,13 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_TV encr_sat_data;
     if (dwg_dynapi_entity_value(loftedsurface, "LOFTEDSURFACE", "encr_sat_data", &encr_sat_data, NULL)
-        && !strcmp((char*)&encr_sat_data, (char*)&loftedsurface->encr_sat_data))
+        && !strcmp((char*)encr_sat_data, (char*)loftedsurface->encr_sat_data))
       {
-        pass ("LOFTEDSURFACE.encr_sat_data [TV]");
+        pass ("LOFTEDSURFACE.encr_sat_data [TV] '%s' <> '%s'", encr_sat_data, loftedsurface->encr_sat_data);
       }
     else
       {
-        fail ("LOFTEDSURFACE.encr_sat_data [TV]"); error++;
+        fail ("LOFTEDSURFACE.encr_sat_data [TV] '%s' <> '%s'", encr_sat_data, loftedsurface->encr_sat_data); error++;
       }
   }
   {
@@ -19245,13 +19245,13 @@ static int test_MTEXT (const Dwg_Object *obj)
   {
     BITCODE_TV text;
     if (dwg_dynapi_entity_value(mtext, "MTEXT", "text", &text, NULL)
-        && !strcmp((char*)&text, (char*)&mtext->text))
+        && !strcmp((char*)text, (char*)mtext->text))
       {
-        pass ("MTEXT.text [TV]");
+        pass ("MTEXT.text [TV] '%s' <> '%s'", text, mtext->text);
       }
     else
       {
-        fail ("MTEXT.text [TV]"); error++;
+        fail ("MTEXT.text [TV] '%s' <> '%s'", text, mtext->text); error++;
       }
   }
   {
@@ -20139,13 +20139,13 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
   {
     BITCODE_TV data;
     if (dwg_dynapi_entity_value(ole2frame, "OLE2FRAME", "data", &data, NULL)
-        && !strcmp((char*)&data, (char*)&ole2frame->data))
+        && !strcmp((char*)data, (char*)ole2frame->data))
       {
-        pass ("OLE2FRAME.data [TV]");
+        pass ("OLE2FRAME.data [TV] '%s' <> '%s'", data, ole2frame->data);
       }
     else
       {
-        fail ("OLE2FRAME.data [TV]"); error++;
+        fail ("OLE2FRAME.data [TV] '%s' <> '%s'", data, ole2frame->data); error++;
       }
   }
   {
@@ -20266,13 +20266,13 @@ static int test_OLEFRAME (const Dwg_Object *obj)
   {
     BITCODE_TV data;
     if (dwg_dynapi_entity_value(oleframe, "OLEFRAME", "data", &data, NULL)
-        && !strcmp((char*)&data, (char*)&oleframe->data))
+        && !strcmp((char*)data, (char*)oleframe->data))
       {
-        pass ("OLEFRAME.data [TV]");
+        pass ("OLEFRAME.data [TV] '%s' <> '%s'", data, oleframe->data);
       }
     else
       {
-        fail ("OLEFRAME.data [TV]"); error++;
+        fail ("OLEFRAME.data [TV] '%s' <> '%s'", data, oleframe->data); error++;
       }
   }
   {
@@ -20369,13 +20369,13 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
   {
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value(planesurface, "PLANESURFACE", "acis_data", &acis_data, NULL)
-        && !strcmp((char*)&acis_data, (char*)&planesurface->acis_data))
+        && !strcmp((char*)acis_data, (char*)planesurface->acis_data))
       {
-        pass ("PLANESURFACE.acis_data [RC*]");
+        pass ("PLANESURFACE.acis_data [RC*] '%s' <> '%s'", acis_data, planesurface->acis_data);
       }
     else
       {
-        fail ("PLANESURFACE.acis_data [RC*]"); error++;
+        fail ("PLANESURFACE.acis_data [RC*] '%s' <> '%s'", acis_data, planesurface->acis_data); error++;
       }
   }
   {
@@ -20489,13 +20489,13 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
   {
     BITCODE_TV encr_sat_data;
     if (dwg_dynapi_entity_value(planesurface, "PLANESURFACE", "encr_sat_data", &encr_sat_data, NULL)
-        && !strcmp((char*)&encr_sat_data, (char*)&planesurface->encr_sat_data))
+        && !strcmp((char*)encr_sat_data, (char*)planesurface->encr_sat_data))
       {
-        pass ("PLANESURFACE.encr_sat_data [TV]");
+        pass ("PLANESURFACE.encr_sat_data [TV] '%s' <> '%s'", encr_sat_data, planesurface->encr_sat_data);
       }
     else
       {
-        fail ("PLANESURFACE.encr_sat_data [TV]"); error++;
+        fail ("PLANESURFACE.encr_sat_data [TV] '%s' <> '%s'", encr_sat_data, planesurface->encr_sat_data); error++;
       }
   }
   {
@@ -21837,13 +21837,13 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
   {
     BITCODE_TV data;
     if (dwg_dynapi_entity_value(proxy_entity, "PROXY_ENTITY", "data", &data, NULL)
-        && !strcmp((char*)&data, (char*)&proxy_entity->data))
+        && !strcmp((char*)data, (char*)proxy_entity->data))
       {
-        pass ("PROXY_ENTITY.data [TV]");
+        pass ("PROXY_ENTITY.data [TV] '%s' <> '%s'", data, proxy_entity->data);
       }
     else
       {
-        fail ("PROXY_ENTITY.data [TV]"); error++;
+        fail ("PROXY_ENTITY.data [TV] '%s' <> '%s'", data, proxy_entity->data); error++;
       }
   }
   {
@@ -22030,13 +22030,13 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value(revolvedsurface, "REVOLVEDSURFACE", "acis_data", &acis_data, NULL)
-        && !strcmp((char*)&acis_data, (char*)&revolvedsurface->acis_data))
+        && !strcmp((char*)acis_data, (char*)revolvedsurface->acis_data))
       {
-        pass ("REVOLVEDSURFACE.acis_data [RC*]");
+        pass ("REVOLVEDSURFACE.acis_data [RC*] '%s' <> '%s'", acis_data, revolvedsurface->acis_data);
       }
     else
       {
-        fail ("REVOLVEDSURFACE.acis_data [RC*]"); error++;
+        fail ("REVOLVEDSURFACE.acis_data [RC*] '%s' <> '%s'", acis_data, revolvedsurface->acis_data); error++;
       }
   }
   {
@@ -22270,13 +22270,13 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_TV encr_sat_data;
     if (dwg_dynapi_entity_value(revolvedsurface, "REVOLVEDSURFACE", "encr_sat_data", &encr_sat_data, NULL)
-        && !strcmp((char*)&encr_sat_data, (char*)&revolvedsurface->encr_sat_data))
+        && !strcmp((char*)encr_sat_data, (char*)revolvedsurface->encr_sat_data))
       {
-        pass ("REVOLVEDSURFACE.encr_sat_data [TV]");
+        pass ("REVOLVEDSURFACE.encr_sat_data [TV] '%s' <> '%s'", encr_sat_data, revolvedsurface->encr_sat_data);
       }
     else
       {
-        fail ("REVOLVEDSURFACE.encr_sat_data [TV]"); error++;
+        fail ("REVOLVEDSURFACE.encr_sat_data [TV] '%s' <> '%s'", encr_sat_data, revolvedsurface->encr_sat_data); error++;
       }
   }
   {
@@ -23598,13 +23598,13 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
   {
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value(sweptsurface, "SWEPTSURFACE", "acis_data", &acis_data, NULL)
-        && !strcmp((char*)&acis_data, (char*)&sweptsurface->acis_data))
+        && !strcmp((char*)acis_data, (char*)sweptsurface->acis_data))
       {
-        pass ("SWEPTSURFACE.acis_data [RC*]");
+        pass ("SWEPTSURFACE.acis_data [RC*] '%s' <> '%s'", acis_data, sweptsurface->acis_data);
       }
     else
       {
-        fail ("SWEPTSURFACE.acis_data [RC*]"); error++;
+        fail ("SWEPTSURFACE.acis_data [RC*] '%s' <> '%s'", acis_data, sweptsurface->acis_data); error++;
       }
   }
   {
@@ -23886,13 +23886,13 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
   {
     BITCODE_TV encr_sat_data;
     if (dwg_dynapi_entity_value(sweptsurface, "SWEPTSURFACE", "encr_sat_data", &encr_sat_data, NULL)
-        && !strcmp((char*)&encr_sat_data, (char*)&sweptsurface->encr_sat_data))
+        && !strcmp((char*)encr_sat_data, (char*)sweptsurface->encr_sat_data))
       {
-        pass ("SWEPTSURFACE.encr_sat_data [TV]");
+        pass ("SWEPTSURFACE.encr_sat_data [TV] '%s' <> '%s'", encr_sat_data, sweptsurface->encr_sat_data);
       }
     else
       {
-        fail ("SWEPTSURFACE.encr_sat_data [TV]"); error++;
+        fail ("SWEPTSURFACE.encr_sat_data [TV] '%s' <> '%s'", encr_sat_data, sweptsurface->encr_sat_data); error++;
       }
   }
   {
@@ -27336,13 +27336,13 @@ static int test_TEXT (const Dwg_Object *obj)
   {
     BITCODE_TV text_value;
     if (dwg_dynapi_entity_value(text, "TEXT", "text_value", &text_value, NULL)
-        && !strcmp((char*)&text_value, (char*)&text->text_value))
+        && !strcmp((char*)text_value, (char*)text->text_value))
       {
-        pass ("TEXT.text_value [TV]");
+        pass ("TEXT.text_value [TV] '%s' <> '%s'", text_value, text->text_value);
       }
     else
       {
-        fail ("TEXT.text_value [TV]"); error++;
+        fail ("TEXT.text_value [TV] '%s' <> '%s'", text_value, text->text_value); error++;
       }
   }
   {
@@ -27523,13 +27523,13 @@ static int test_TOLERANCE (const Dwg_Object *obj)
   {
     BITCODE_TV text_string;
     if (dwg_dynapi_entity_value(tolerance, "TOLERANCE", "text_string", &text_string, NULL)
-        && !strcmp((char*)&text_string, (char*)&tolerance->text_string))
+        && !strcmp((char*)text_string, (char*)tolerance->text_string))
       {
-        pass ("TOLERANCE.text_string [TV]");
+        pass ("TOLERANCE.text_string [TV] '%s' <> '%s'", text_string, tolerance->text_string);
       }
     else
       {
-        fail ("TOLERANCE.text_string [TV]"); error++;
+        fail ("TOLERANCE.text_string [TV] '%s' <> '%s'", text_string, tolerance->text_string); error++;
       }
   }
   {
@@ -28651,13 +28651,13 @@ static int test_VIEWPORT (const Dwg_Object *obj)
   {
     BITCODE_TV style_sheet;
     if (dwg_dynapi_entity_value(viewport, "VIEWPORT", "style_sheet", &style_sheet, NULL)
-        && !strcmp((char*)&style_sheet, (char*)&viewport->style_sheet))
+        && !strcmp((char*)style_sheet, (char*)viewport->style_sheet))
       {
-        pass ("VIEWPORT.style_sheet [TV]");
+        pass ("VIEWPORT.style_sheet [TV] '%s' <> '%s'", style_sheet, viewport->style_sheet);
       }
     else
       {
-        fail ("VIEWPORT.style_sheet [TV]"); error++;
+        fail ("VIEWPORT.style_sheet [TV] '%s' <> '%s'", style_sheet, viewport->style_sheet); error++;
       }
   }
   {
@@ -30193,13 +30193,13 @@ static int test_APPID (const Dwg_Object *obj)
   {
     BITCODE_TV name;
     if (dwg_dynapi_entity_value(appid, "APPID", "name", &name, NULL)
-        && !strcmp((char*)&name, (char*)&appid->name))
+        && !strcmp((char*)name, (char*)appid->name))
       {
-        pass ("APPID.name [TV]");
+        pass ("APPID.name [TV] '%s' <> '%s'", name, appid->name);
       }
     else
       {
-        fail ("APPID.name [TV]"); error++;
+        fail ("APPID.name [TV] '%s' <> '%s'", name, appid->name); error++;
       }
   }
   {
@@ -33762,13 +33762,13 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
   {
     BITCODE_TV description;
     if (dwg_dynapi_entity_value(block_header, "BLOCK_HEADER", "description", &description, NULL)
-        && !strcmp((char*)&description, (char*)&block_header->description))
+        && !strcmp((char*)description, (char*)block_header->description))
       {
-        pass ("BLOCK_HEADER.description [TV]");
+        pass ("BLOCK_HEADER.description [TV] '%s' <> '%s'", description, block_header->description);
       }
     else
       {
-        fail ("BLOCK_HEADER.description [TV]"); error++;
+        fail ("BLOCK_HEADER.description [TV] '%s' <> '%s'", description, block_header->description); error++;
       }
   }
   {
@@ -34018,13 +34018,13 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
   {
     BITCODE_TV name;
     if (dwg_dynapi_entity_value(block_header, "BLOCK_HEADER", "name", &name, NULL)
-        && !strcmp((char*)&name, (char*)&block_header->name))
+        && !strcmp((char*)name, (char*)block_header->name))
       {
-        pass ("BLOCK_HEADER.name [TV]");
+        pass ("BLOCK_HEADER.name [TV] '%s' <> '%s'", name, block_header->name);
       }
     else
       {
-        fail ("BLOCK_HEADER.name [TV]"); error++;
+        fail ("BLOCK_HEADER.name [TV] '%s' <> '%s'", name, block_header->name); error++;
       }
   }
   {
@@ -34102,13 +34102,13 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
   {
     BITCODE_TV preview_data;
     if (dwg_dynapi_entity_value(block_header, "BLOCK_HEADER", "preview_data", &preview_data, NULL)
-        && !strcmp((char*)&preview_data, (char*)&block_header->preview_data))
+        && !strcmp((char*)preview_data, (char*)block_header->preview_data))
       {
-        pass ("BLOCK_HEADER.preview_data [TV]");
+        pass ("BLOCK_HEADER.preview_data [TV] '%s' <> '%s'", preview_data, block_header->preview_data);
       }
     else
       {
-        fail ("BLOCK_HEADER.preview_data [TV]"); error++;
+        fail ("BLOCK_HEADER.preview_data [TV] '%s' <> '%s'", preview_data, block_header->preview_data); error++;
       }
   }
   {
@@ -34162,13 +34162,13 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
   {
     BITCODE_TV xref_pname;
     if (dwg_dynapi_entity_value(block_header, "BLOCK_HEADER", "xref_pname", &xref_pname, NULL)
-        && !strcmp((char*)&xref_pname, (char*)&block_header->xref_pname))
+        && !strcmp((char*)xref_pname, (char*)block_header->xref_pname))
       {
-        pass ("BLOCK_HEADER.xref_pname [TV]");
+        pass ("BLOCK_HEADER.xref_pname [TV] '%s' <> '%s'", xref_pname, block_header->xref_pname);
       }
     else
       {
-        fail ("BLOCK_HEADER.xref_pname [TV]"); error++;
+        fail ("BLOCK_HEADER.xref_pname [TV] '%s' <> '%s'", xref_pname, block_header->xref_pname); error++;
       }
   }
   {
@@ -34707,13 +34707,13 @@ static int test_DICTIONARYVAR (const Dwg_Object *obj)
   {
     BITCODE_TV str;
     if (dwg_dynapi_entity_value(dictionaryvar, "DICTIONARYVAR", "str", &str, NULL)
-        && !strcmp((char*)&str, (char*)&dictionaryvar->str))
+        && !strcmp((char*)str, (char*)dictionaryvar->str))
       {
-        pass ("DICTIONARYVAR.str [TV]");
+        pass ("DICTIONARYVAR.str [TV] '%s' <> '%s'", str, dictionaryvar->str);
       }
     else
       {
-        fail ("DICTIONARYVAR.str [TV]"); error++;
+        fail ("DICTIONARYVAR.str [TV] '%s' <> '%s'", str, dictionaryvar->str); error++;
       }
   }
   return error;
@@ -37000,13 +37000,13 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
   {
     BITCODE_TV name;
     if (dwg_dynapi_entity_value(dimstyle, "DIMSTYLE", "name", &name, NULL)
-        && !strcmp((char*)&name, (char*)&dimstyle->name))
+        && !strcmp((char*)name, (char*)dimstyle->name))
       {
-        pass ("DIMSTYLE.name [TV]");
+        pass ("DIMSTYLE.name [TV] '%s' <> '%s'", name, dimstyle->name);
       }
     else
       {
-        fail ("DIMSTYLE.name [TV]"); error++;
+        fail ("DIMSTYLE.name [TV] '%s' <> '%s'", name, dimstyle->name); error++;
       }
   }
   {
@@ -37690,13 +37690,13 @@ static int test_FIELD (const Dwg_Object *obj)
   {
     BITCODE_TV code;
     if (dwg_dynapi_entity_value(field, "FIELD", "code", &code, NULL)
-        && !strcmp((char*)&code, (char*)&field->code))
+        && !strcmp((char*)code, (char*)field->code))
       {
-        pass ("FIELD.code [TV]");
+        pass ("FIELD.code [TV] '%s' <> '%s'", code, field->code);
       }
     else
       {
-        fail ("FIELD.code [TV]"); error++;
+        fail ("FIELD.code [TV] '%s' <> '%s'", code, field->code); error++;
       }
   }
   {
@@ -37726,13 +37726,13 @@ static int test_FIELD (const Dwg_Object *obj)
   {
     BITCODE_TV evaluation_error_msg;
     if (dwg_dynapi_entity_value(field, "FIELD", "evaluation_error_msg", &evaluation_error_msg, NULL)
-        && !strcmp((char*)&evaluation_error_msg, (char*)&field->evaluation_error_msg))
+        && !strcmp((char*)evaluation_error_msg, (char*)field->evaluation_error_msg))
       {
-        pass ("FIELD.evaluation_error_msg [TV]");
+        pass ("FIELD.evaluation_error_msg [TV] '%s' <> '%s'", evaluation_error_msg, field->evaluation_error_msg);
       }
     else
       {
-        fail ("FIELD.evaluation_error_msg [TV]"); error++;
+        fail ("FIELD.evaluation_error_msg [TV] '%s' <> '%s'", evaluation_error_msg, field->evaluation_error_msg); error++;
       }
   }
   {
@@ -37834,25 +37834,25 @@ static int test_FIELD (const Dwg_Object *obj)
   {
     BITCODE_TV format;
     if (dwg_dynapi_entity_value(field, "FIELD", "format", &format, NULL)
-        && !strcmp((char*)&format, (char*)&field->format))
+        && !strcmp((char*)format, (char*)field->format))
       {
-        pass ("FIELD.format [TV]");
+        pass ("FIELD.format [TV] '%s' <> '%s'", format, field->format);
       }
     else
       {
-        fail ("FIELD.format [TV]"); error++;
+        fail ("FIELD.format [TV] '%s' <> '%s'", format, field->format); error++;
       }
   }
   {
     BITCODE_TV id;
     if (dwg_dynapi_entity_value(field, "FIELD", "id", &id, NULL)
-        && !strcmp((char*)&id, (char*)&field->id))
+        && !strcmp((char*)id, (char*)field->id))
       {
-        pass ("FIELD.id [TV]");
+        pass ("FIELD.id [TV] '%s' <> '%s'", id, field->id);
       }
     else
       {
-        fail ("FIELD.id [TV]"); error++;
+        fail ("FIELD.id [TV] '%s' <> '%s'", id, field->id); error++;
       }
   }
   {
@@ -37966,13 +37966,13 @@ static int test_FIELD (const Dwg_Object *obj)
   {
     BITCODE_TV value_string;
     if (dwg_dynapi_entity_value(field, "FIELD", "value_string", &value_string, NULL)
-        && !strcmp((char*)&value_string, (char*)&field->value_string))
+        && !strcmp((char*)value_string, (char*)field->value_string))
       {
-        pass ("FIELD.value_string [TV]");
+        pass ("FIELD.value_string [TV] '%s' <> '%s'", value_string, field->value_string);
       }
     else
       {
-        fail ("FIELD.value_string [TV]"); error++;
+        fail ("FIELD.value_string [TV] '%s' <> '%s'", value_string, field->value_string); error++;
       }
   }
   {
@@ -38713,13 +38713,13 @@ static int test_GROUP (const Dwg_Object *obj)
   {
     BITCODE_TV name;
     if (dwg_dynapi_entity_value(group, "GROUP", "name", &name, NULL)
-        && !strcmp((char*)&name, (char*)&group->name))
+        && !strcmp((char*)name, (char*)group->name))
       {
-        pass ("GROUP.name [TV]");
+        pass ("GROUP.name [TV] '%s' <> '%s'", name, group->name);
       }
     else
       {
-        fail ("GROUP.name [TV]"); error++;
+        fail ("GROUP.name [TV] '%s' <> '%s'", name, group->name); error++;
       }
   }
   {
@@ -38945,13 +38945,13 @@ static int test_IMAGEDEF (const Dwg_Object *obj)
   {
     BITCODE_TV file_path;
     if (dwg_dynapi_entity_value(imagedef, "IMAGEDEF", "file_path", &file_path, NULL)
-        && !strcmp((char*)&file_path, (char*)&imagedef->file_path))
+        && !strcmp((char*)file_path, (char*)imagedef->file_path))
       {
-        pass ("IMAGEDEF.file_path [TV]");
+        pass ("IMAGEDEF.file_path [TV] '%s' <> '%s'", file_path, imagedef->file_path);
       }
     else
       {
-        fail ("IMAGEDEF.file_path [TV]"); error++;
+        fail ("IMAGEDEF.file_path [TV] '%s' <> '%s'", file_path, imagedef->file_path); error++;
       }
   }
   {
@@ -39331,13 +39331,13 @@ static int test_LAYER (const Dwg_Object *obj)
   {
     BITCODE_TV name;
     if (dwg_dynapi_entity_value(layer, "LAYER", "name", &name, NULL)
-        && !strcmp((char*)&name, (char*)&layer->name))
+        && !strcmp((char*)name, (char*)layer->name))
       {
-        pass ("LAYER.name [TV]");
+        pass ("LAYER.name [TV] '%s' <> '%s'", name, layer->name);
       }
     else
       {
-        fail ("LAYER.name [TV]"); error++;
+        fail ("LAYER.name [TV] '%s' <> '%s'", name, layer->name); error++;
       }
   }
   {
@@ -39827,13 +39827,13 @@ static int test_LAYOUT (const Dwg_Object *obj)
   {
     BITCODE_TV current_style_sheet;
     if (dwg_dynapi_entity_value(layout, "LAYOUT", "current_style_sheet", &current_style_sheet, NULL)
-        && !strcmp((char*)&current_style_sheet, (char*)&layout->current_style_sheet))
+        && !strcmp((char*)current_style_sheet, (char*)layout->current_style_sheet))
       {
-        pass ("LAYOUT.current_style_sheet [TV]");
+        pass ("LAYOUT.current_style_sheet [TV] '%s' <> '%s'", current_style_sheet, layout->current_style_sheet);
       }
     else
       {
-        fail ("LAYOUT.current_style_sheet [TV]"); error++;
+        fail ("LAYOUT.current_style_sheet [TV] '%s' <> '%s'", current_style_sheet, layout->current_style_sheet); error++;
       }
   }
   {
@@ -39959,13 +39959,13 @@ static int test_LAYOUT (const Dwg_Object *obj)
   {
     BITCODE_TV layout_name;
     if (dwg_dynapi_entity_value(layout, "LAYOUT", "layout_name", &layout_name, NULL)
-        && !strcmp((char*)&layout_name, (char*)&layout->layout_name))
+        && !strcmp((char*)layout_name, (char*)layout->layout_name))
       {
-        pass ("LAYOUT.layout_name [TV]");
+        pass ("LAYOUT.layout_name [TV] '%s' <> '%s'", layout_name, layout->layout_name);
       }
     else
       {
-        fail ("LAYOUT.layout_name [TV]"); error++;
+        fail ("LAYOUT.layout_name [TV] '%s' <> '%s'", layout_name, layout->layout_name); error++;
       }
   }
   {
@@ -40091,13 +40091,13 @@ static int test_LAYOUT (const Dwg_Object *obj)
   {
     BITCODE_TV page_setup_name;
     if (dwg_dynapi_entity_value(layout, "LAYOUT", "page_setup_name", &page_setup_name, NULL)
-        && !strcmp((char*)&page_setup_name, (char*)&layout->page_setup_name))
+        && !strcmp((char*)page_setup_name, (char*)layout->page_setup_name))
       {
-        pass ("LAYOUT.page_setup_name [TV]");
+        pass ("LAYOUT.page_setup_name [TV] '%s' <> '%s'", page_setup_name, layout->page_setup_name);
       }
     else
       {
-        fail ("LAYOUT.page_setup_name [TV]"); error++;
+        fail ("LAYOUT.page_setup_name [TV] '%s' <> '%s'", page_setup_name, layout->page_setup_name); error++;
       }
   }
   {
@@ -40139,13 +40139,13 @@ static int test_LAYOUT (const Dwg_Object *obj)
   {
     BITCODE_TV paper_size;
     if (dwg_dynapi_entity_value(layout, "LAYOUT", "paper_size", &paper_size, NULL)
-        && !strcmp((char*)&paper_size, (char*)&layout->paper_size))
+        && !strcmp((char*)paper_size, (char*)layout->paper_size))
       {
-        pass ("LAYOUT.paper_size [TV]");
+        pass ("LAYOUT.paper_size [TV] '%s' <> '%s'", paper_size, layout->paper_size);
       }
     else
       {
-        fail ("LAYOUT.paper_size [TV]"); error++;
+        fail ("LAYOUT.paper_size [TV] '%s' <> '%s'", paper_size, layout->paper_size); error++;
       }
   }
   {
@@ -40307,25 +40307,25 @@ static int test_LAYOUT (const Dwg_Object *obj)
   {
     BITCODE_TV plot_view_name;
     if (dwg_dynapi_entity_value(layout, "LAYOUT", "plot_view_name", &plot_view_name, NULL)
-        && !strcmp((char*)&plot_view_name, (char*)&layout->plot_view_name))
+        && !strcmp((char*)plot_view_name, (char*)layout->plot_view_name))
       {
-        pass ("LAYOUT.plot_view_name [TV]");
+        pass ("LAYOUT.plot_view_name [TV] '%s' <> '%s'", plot_view_name, layout->plot_view_name);
       }
     else
       {
-        fail ("LAYOUT.plot_view_name [TV]"); error++;
+        fail ("LAYOUT.plot_view_name [TV] '%s' <> '%s'", plot_view_name, layout->plot_view_name); error++;
       }
   }
   {
     BITCODE_TV printer_or_config;
     if (dwg_dynapi_entity_value(layout, "LAYOUT", "printer_or_config", &printer_or_config, NULL)
-        && !strcmp((char*)&printer_or_config, (char*)&layout->printer_or_config))
+        && !strcmp((char*)printer_or_config, (char*)layout->printer_or_config))
       {
-        pass ("LAYOUT.printer_or_config [TV]");
+        pass ("LAYOUT.printer_or_config [TV] '%s' <> '%s'", printer_or_config, layout->printer_or_config);
       }
     else
       {
-        fail ("LAYOUT.printer_or_config [TV]"); error++;
+        fail ("LAYOUT.printer_or_config [TV] '%s' <> '%s'", printer_or_config, layout->printer_or_config); error++;
       }
   }
   {
@@ -40702,13 +40702,13 @@ static int test_LIGHTLIST (const Dwg_Object *obj)
   {
     BITCODE_TV light_name;
     if (dwg_dynapi_entity_value(lightlist, "LIGHTLIST", "light_name", &light_name, NULL)
-        && !strcmp((char*)&light_name, (char*)&lightlist->light_name))
+        && !strcmp((char*)light_name, (char*)lightlist->light_name))
       {
-        pass ("LIGHTLIST.light_name [TV]");
+        pass ("LIGHTLIST.light_name [TV] '%s' <> '%s'", light_name, lightlist->light_name);
       }
     else
       {
-        fail ("LIGHTLIST.light_name [TV]"); error++;
+        fail ("LIGHTLIST.light_name [TV] '%s' <> '%s'", light_name, lightlist->light_name); error++;
       }
   }
   {
@@ -40828,13 +40828,13 @@ static int test_LTYPE (const Dwg_Object *obj)
   {
     BITCODE_TV description;
     if (dwg_dynapi_entity_value(ltype, "LTYPE", "description", &description, NULL)
-        && !strcmp((char*)&description, (char*)&ltype->description))
+        && !strcmp((char*)description, (char*)ltype->description))
       {
-        pass ("LTYPE.description [TV]");
+        pass ("LTYPE.description [TV] '%s' <> '%s'", description, ltype->description);
       }
     else
       {
-        fail ("LTYPE.description [TV]"); error++;
+        fail ("LTYPE.description [TV] '%s' <> '%s'", description, ltype->description); error++;
       }
   }
   {
@@ -40876,13 +40876,13 @@ static int test_LTYPE (const Dwg_Object *obj)
   {
     BITCODE_TV name;
     if (dwg_dynapi_entity_value(ltype, "LTYPE", "name", &name, NULL)
-        && !strcmp((char*)&name, (char*)&ltype->name))
+        && !strcmp((char*)name, (char*)ltype->name))
       {
-        pass ("LTYPE.name [TV]");
+        pass ("LTYPE.name [TV] '%s' <> '%s'", name, ltype->name);
       }
     else
       {
-        fail ("LTYPE.name [TV]"); error++;
+        fail ("LTYPE.name [TV] '%s' <> '%s'", name, ltype->name); error++;
       }
   }
   {
@@ -40960,13 +40960,13 @@ static int test_LTYPE (const Dwg_Object *obj)
   {
     BITCODE_TV strings_area;
     if (dwg_dynapi_entity_value(ltype, "LTYPE", "strings_area", &strings_area, NULL)
-        && !strcmp((char*)&strings_area, (char*)&ltype->strings_area))
+        && !strcmp((char*)strings_area, (char*)ltype->strings_area))
       {
-        pass ("LTYPE.strings_area [TV]");
+        pass ("LTYPE.strings_area [TV] '%s' <> '%s'", strings_area, ltype->strings_area);
       }
     else
       {
-        fail ("LTYPE.strings_area [TV]"); error++;
+        fail ("LTYPE.strings_area [TV] '%s' <> '%s'", strings_area, ltype->strings_area); error++;
       }
   }
   {
@@ -43530,13 +43530,13 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
   {
     BITCODE_TV description;
     if (dwg_dynapi_entity_value(mleaderstyle, "MLEADERSTYLE", "description", &description, NULL)
-        && !strcmp((char*)&description, (char*)&mleaderstyle->description))
+        && !strcmp((char*)description, (char*)mleaderstyle->description))
       {
-        pass ("MLEADERSTYLE.description [TV]");
+        pass ("MLEADERSTYLE.description [TV] '%s' <> '%s'", description, mleaderstyle->description);
       }
     else
       {
-        fail ("MLEADERSTYLE.description [TV]"); error++;
+        fail ("MLEADERSTYLE.description [TV] '%s' <> '%s'", description, mleaderstyle->description); error++;
       }
   }
   {
@@ -43974,13 +43974,13 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
   {
     BITCODE_TV text_default;
     if (dwg_dynapi_entity_value(mleaderstyle, "MLEADERSTYLE", "text_default", &text_default, NULL)
-        && !strcmp((char*)&text_default, (char*)&mleaderstyle->text_default))
+        && !strcmp((char*)text_default, (char*)mleaderstyle->text_default))
       {
-        pass ("MLEADERSTYLE.text_default [TV]");
+        pass ("MLEADERSTYLE.text_default [TV] '%s' <> '%s'", text_default, mleaderstyle->text_default);
       }
     else
       {
-        fail ("MLEADERSTYLE.text_default [TV]"); error++;
+        fail ("MLEADERSTYLE.text_default [TV] '%s' <> '%s'", text_default, mleaderstyle->text_default); error++;
       }
   }
   {
@@ -44149,13 +44149,13 @@ static int test_MLINESTYLE (const Dwg_Object *obj)
   {
     BITCODE_TV desc;
     if (dwg_dynapi_entity_value(mlinestyle, "MLINESTYLE", "desc", &desc, NULL)
-        && !strcmp((char*)&desc, (char*)&mlinestyle->desc))
+        && !strcmp((char*)desc, (char*)mlinestyle->desc))
       {
-        pass ("MLINESTYLE.desc [TV]");
+        pass ("MLINESTYLE.desc [TV] '%s' <> '%s'", desc, mlinestyle->desc);
       }
     else
       {
-        fail ("MLINESTYLE.desc [TV]"); error++;
+        fail ("MLINESTYLE.desc [TV] '%s' <> '%s'", desc, mlinestyle->desc); error++;
       }
   }
   {
@@ -44235,13 +44235,13 @@ static int test_MLINESTYLE (const Dwg_Object *obj)
   {
     BITCODE_TV name;
     if (dwg_dynapi_entity_value(mlinestyle, "MLINESTYLE", "name", &name, NULL)
-        && !strcmp((char*)&name, (char*)&mlinestyle->name))
+        && !strcmp((char*)name, (char*)mlinestyle->name))
       {
-        pass ("MLINESTYLE.name [TV]");
+        pass ("MLINESTYLE.name [TV] '%s' <> '%s'", name, mlinestyle->name);
       }
     else
       {
-        fail ("MLINESTYLE.name [TV]"); error++;
+        fail ("MLINESTYLE.name [TV] '%s' <> '%s'", name, mlinestyle->name); error++;
       }
   }
   {
@@ -45261,13 +45261,13 @@ static int test_PROXY_OBJECT (const Dwg_Object *obj)
   {
     BITCODE_TV data;
     if (dwg_dynapi_entity_value(proxy_object, "PROXY_OBJECT", "data", &data, NULL)
-        && !strcmp((char*)&data, (char*)&proxy_object->data))
+        && !strcmp((char*)data, (char*)proxy_object->data))
       {
-        pass ("PROXY_OBJECT.data [TV]");
+        pass ("PROXY_OBJECT.data [TV] '%s' <> '%s'", data, proxy_object->data);
       }
     else
       {
-        fail ("PROXY_OBJECT.data [TV]"); error++;
+        fail ("PROXY_OBJECT.data [TV] '%s' <> '%s'", data, proxy_object->data); error++;
       }
   }
   {
@@ -45587,13 +45587,13 @@ static int test_SCALE (const Dwg_Object *obj)
   {
     BITCODE_TV name;
     if (dwg_dynapi_entity_value(scale, "SCALE", "name", &name, NULL)
-        && !strcmp((char*)&name, (char*)&scale->name))
+        && !strcmp((char*)name, (char*)scale->name))
       {
-        pass ("SCALE.name [TV]");
+        pass ("SCALE.name [TV] '%s' <> '%s'", name, scale->name);
       }
     else
       {
-        fail ("SCALE.name [TV]"); error++;
+        fail ("SCALE.name [TV] '%s' <> '%s'", name, scale->name); error++;
       }
   }
   {
@@ -46058,13 +46058,13 @@ static int test_SPATIAL_INDEX (const Dwg_Object *obj)
   {
     BITCODE_TV unknown;
     if (dwg_dynapi_entity_value(spatial_index, "SPATIAL_INDEX", "unknown", &unknown, NULL)
-        && !strcmp((char*)&unknown, (char*)&spatial_index->unknown))
+        && !strcmp((char*)unknown, (char*)spatial_index->unknown))
       {
-        pass ("SPATIAL_INDEX.unknown [TV]");
+        pass ("SPATIAL_INDEX.unknown [TV] '%s' <> '%s'", unknown, spatial_index->unknown);
       }
     else
       {
-        fail ("SPATIAL_INDEX.unknown [TV]"); error++;
+        fail ("SPATIAL_INDEX.unknown [TV] '%s' <> '%s'", unknown, spatial_index->unknown); error++;
       }
   }
   return error;
@@ -46077,13 +46077,13 @@ static int test_STYLE (const Dwg_Object *obj)
   {
     BITCODE_TV bigfont_name;
     if (dwg_dynapi_entity_value(style, "STYLE", "bigfont_name", &bigfont_name, NULL)
-        && !strcmp((char*)&bigfont_name, (char*)&style->bigfont_name))
+        && !strcmp((char*)bigfont_name, (char*)style->bigfont_name))
       {
-        pass ("STYLE.bigfont_name [TV]");
+        pass ("STYLE.bigfont_name [TV] '%s' <> '%s'", bigfont_name, style->bigfont_name);
       }
     else
       {
-        fail ("STYLE.bigfont_name [TV]"); error++;
+        fail ("STYLE.bigfont_name [TV] '%s' <> '%s'", bigfont_name, style->bigfont_name); error++;
       }
   }
   {
@@ -46137,13 +46137,13 @@ static int test_STYLE (const Dwg_Object *obj)
   {
     BITCODE_TV font_name;
     if (dwg_dynapi_entity_value(style, "STYLE", "font_name", &font_name, NULL)
-        && !strcmp((char*)&font_name, (char*)&style->font_name))
+        && !strcmp((char*)font_name, (char*)style->font_name))
       {
-        pass ("STYLE.font_name [TV]");
+        pass ("STYLE.font_name [TV] '%s' <> '%s'", font_name, style->font_name);
       }
     else
       {
-        fail ("STYLE.font_name [TV]"); error++;
+        fail ("STYLE.font_name [TV] '%s' <> '%s'", font_name, style->font_name); error++;
       }
   }
   {
@@ -46197,13 +46197,13 @@ static int test_STYLE (const Dwg_Object *obj)
   {
     BITCODE_TV name;
     if (dwg_dynapi_entity_value(style, "STYLE", "name", &name, NULL)
-        && !strcmp((char*)&name, (char*)&style->name))
+        && !strcmp((char*)name, (char*)style->name))
       {
-        pass ("STYLE.name [TV]");
+        pass ("STYLE.name [TV] '%s' <> '%s'", name, style->name);
       }
     else
       {
-        fail ("STYLE.name [TV]"); error++;
+        fail ("STYLE.name [TV] '%s' <> '%s'", name, style->name); error++;
       }
   }
   {
@@ -47750,13 +47750,13 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
   {
     BITCODE_TV name;
     if (dwg_dynapi_entity_value(tablestyle, "TABLESTYLE", "name", &name, NULL)
-        && !strcmp((char*)&name, (char*)&tablestyle->name))
+        && !strcmp((char*)name, (char*)tablestyle->name))
       {
-        pass ("TABLESTYLE.name [TV]");
+        pass ("TABLESTYLE.name [TV] '%s' <> '%s'", name, tablestyle->name);
       }
     else
       {
-        fail ("TABLESTYLE.name [TV]"); error++;
+        fail ("TABLESTYLE.name [TV] '%s' <> '%s'", name, tablestyle->name); error++;
       }
   }
   {
@@ -47913,13 +47913,13 @@ static int test_UCS (const Dwg_Object *obj)
   {
     BITCODE_TV name;
     if (dwg_dynapi_entity_value(ucs, "UCS", "name", &name, NULL)
-        && !strcmp((char*)&name, (char*)&ucs->name))
+        && !strcmp((char*)name, (char*)ucs->name))
       {
-        pass ("UCS.name [TV]");
+        pass ("UCS.name [TV] '%s' <> '%s'", name, ucs->name);
       }
     else
       {
-        fail ("UCS.name [TV]"); error++;
+        fail ("UCS.name [TV] '%s' <> '%s'", name, ucs->name); error++;
       }
   }
   {
@@ -48278,25 +48278,25 @@ static int test_UNDERLAYDEFINITION (const Dwg_Object *obj)
   {
     BITCODE_TV filename;
     if (dwg_dynapi_entity_value(underlaydefinition, "UNDERLAYDEFINITION", "filename", &filename, NULL)
-        && !strcmp((char*)&filename, (char*)&underlaydefinition->filename))
+        && !strcmp((char*)filename, (char*)underlaydefinition->filename))
       {
-        pass ("UNDERLAYDEFINITION.filename [TV]");
+        pass ("UNDERLAYDEFINITION.filename [TV] '%s' <> '%s'", filename, underlaydefinition->filename);
       }
     else
       {
-        fail ("UNDERLAYDEFINITION.filename [TV]"); error++;
+        fail ("UNDERLAYDEFINITION.filename [TV] '%s' <> '%s'", filename, underlaydefinition->filename); error++;
       }
   }
   {
     BITCODE_TV name;
     if (dwg_dynapi_entity_value(underlaydefinition, "UNDERLAYDEFINITION", "name", &name, NULL)
-        && !strcmp((char*)&name, (char*)&underlaydefinition->name))
+        && !strcmp((char*)name, (char*)underlaydefinition->name))
       {
-        pass ("UNDERLAYDEFINITION.name [TV]");
+        pass ("UNDERLAYDEFINITION.name [TV] '%s' <> '%s'", name, underlaydefinition->name);
       }
     else
       {
-        fail ("UNDERLAYDEFINITION.name [TV]"); error++;
+        fail ("UNDERLAYDEFINITION.name [TV] '%s' <> '%s'", name, underlaydefinition->name); error++;
       }
   }
   {
@@ -48778,13 +48778,13 @@ static int test_VIEW (const Dwg_Object *obj)
   {
     BITCODE_TV name;
     if (dwg_dynapi_entity_value(view, "VIEW", "name", &name, NULL)
-        && !strcmp((char*)&name, (char*)&view->name))
+        && !strcmp((char*)name, (char*)view->name))
       {
-        pass ("VIEW.name [TV]");
+        pass ("VIEW.name [TV] '%s' <> '%s'", name, view->name);
       }
     else
       {
-        fail ("VIEW.name [TV]"); error++;
+        fail ("VIEW.name [TV] '%s' <> '%s'", name, view->name); error++;
       }
   }
   {
@@ -50649,13 +50649,13 @@ static int test_VPORT (const Dwg_Object *obj)
   {
     BITCODE_TV name;
     if (dwg_dynapi_entity_value(vport, "VPORT", "name", &name, NULL)
-        && !strcmp((char*)&name, (char*)&vport->name))
+        && !strcmp((char*)name, (char*)vport->name))
       {
-        pass ("VPORT.name [TV]");
+        pass ("VPORT.name [TV] '%s' <> '%s'", name, vport->name);
       }
     else
       {
-        fail ("VPORT.name [TV]"); error++;
+        fail ("VPORT.name [TV] '%s' <> '%s'", name, vport->name); error++;
       }
   }
   {
@@ -51348,13 +51348,13 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
   {
     BITCODE_TV name;
     if (dwg_dynapi_entity_value(vport_entity_header, "VPORT_ENTITY_HEADER", "name", &name, NULL)
-        && !strcmp((char*)&name, (char*)&vport_entity_header->name))
+        && !strcmp((char*)name, (char*)vport_entity_header->name))
       {
-        pass ("VPORT_ENTITY_HEADER.name [TV]");
+        pass ("VPORT_ENTITY_HEADER.name [TV] '%s' <> '%s'", name, vport_entity_header->name);
       }
     else
       {
-        fail ("VPORT_ENTITY_HEADER.name [TV]"); error++;
+        fail ("VPORT_ENTITY_HEADER.name [TV] '%s' <> '%s'", name, vport_entity_header->name); error++;
       }
   }
   {
