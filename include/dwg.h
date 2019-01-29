@@ -84,13 +84,23 @@ extern "C" {
 # define BITCODE_RL uint32_t
 # define BITCODE_BLd int32_t
 # define BITCODE_RLd int32_t
+/* e.g. old cygwin 64 vs 32 */
 /*#else
+# if defined(__WORDSIZE) && __WORDSIZE == 64
 # define BITCODE_BS unsigned short int
 # define BITCODE_RS unsigned short int
 # define BITCODE_BL unsigned int
 # define BITCODE_RL unsigned int
 # define BITCODE_BLd int
 # define BITCODE_RLd int
+# else
+# define BITCODE_BS unsigned short int
+# define BITCODE_RS unsigned short int
+# define BITCODE_BL unsigned long int
+# define BITCODE_RL unsigned long int
+# define BITCODE_BLd long int
+# define BITCODE_RLd long int
+# endif
 #endif
 */
 //#ifdef HAVE_INTTYPES_H
