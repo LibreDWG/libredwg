@@ -23,10 +23,10 @@
 #include <sys/stat.h>
 
 #define DWG_LOGLEVEL DWG_LOGLEVEL_NONE
+#include "../../src/config.h"
+#include "../../src/common.h"
 #include "dwg.h"
 #include "dwg_api.h"
-#include "../../src/dynapi.h"
-#include "../../src/common.h"
 CLANG_DIAG_IGNORE(-Wformat-nonliteral)
 CLANG_DIAG_IGNORE(-Wmissing-prototypes)
 #include <dejagnu.h>
