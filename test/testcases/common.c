@@ -154,6 +154,8 @@ print_api (dwg_object * obj)
   api_process (obj);
 }
 
+// for the unmaintained dejagnu.h
 CLANG_DIAG_IGNORE(-Wformat-nonliteral)
 CLANG_DIAG_IGNORE(-Wmissing-prototypes)
-// for the unmaintained dejagnu.h
+// allow out deprecated API
+GCC31_DIAG_IGNORE(-Wdeprecated-declarations)

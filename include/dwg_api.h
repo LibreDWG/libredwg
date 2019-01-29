@@ -3588,7 +3588,7 @@ dwg_ent_lwpline_set_extrusion(dwg_ent_lwpline *restrict lwpline,
 EXPORT BITCODE_BL
 dwg_ent_lwpline_get_numpoints(const dwg_ent_lwpline *restrict lwpline,
                               int *restrict error)
-  __nonnull ((2)) _deprecated_dynapi_getter;
+  __nonnull ((2));
 
 EXPORT BITCODE_BL
 dwg_ent_lwpline_get_numbulges(const dwg_ent_lwpline *restrict lwpline,
