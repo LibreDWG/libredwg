@@ -172,7 +172,8 @@ extern "C" {
 # define FORMAT_TU "\"%hn\""      /* will print garbage */
 #endif
 
-typedef struct _dwg_time_bll {
+typedef struct _dwg_time_bll
+{
   BITCODE_BL days;
   BITCODE_BL ms;
   BITCODE_BD value;
@@ -1592,7 +1593,7 @@ typedef struct _dwg_entity_3DSOLID
   BITCODE_BL num_blocks;
   BITCODE_BL* block_size;
   BITCODE_RC** encr_sat_data;
-  unsigned char* acis_data; /*!< DXF 1, the decryted SAT data */
+  BITCODE_RC*  acis_data; /*!< DXF 1, the decryted SAT data */
   BITCODE_B wireframe_data_present;
   BITCODE_B point_present;
   BITCODE_3BD point;
@@ -1730,7 +1731,7 @@ typedef struct _dwg_entity_LEADER
   BITCODE_B unknown_bit_1;  /* always seems to be zero */
   BITCODE_BS path_type;     /*< DXF(72) 0: line, 1: spline (oda bug) */
   BITCODE_BS annot_type;    /*< DXF(73) 0: text, 1: tol, 2: insert, 3 (def): none */
-  BITCODE_BL numpts;        /*< DXF(76) */
+  BITCODE_BL num_points;    /*< DXF(76) */
   BITCODE_3DPOINT* points;
   BITCODE_3DPOINT origin;
   BITCODE_3DPOINT extrusion;
@@ -1984,7 +1985,7 @@ typedef struct _dwg_object_LTYPE
   BITCODE_BD pattern_len;
   BITCODE_RC alignment;
   BITCODE_RC num_dashes;
-  Dwg_LTYPE_dash* dash;
+  Dwg_LTYPE_dash* dashes;
   BITCODE_RD* dashes_r11;
   char    * strings_area;
   BITCODE_H linetype_control;
@@ -2440,8 +2441,8 @@ typedef struct _dwg_entity_PROXY_ENTITY
   struct _dwg_object_entity *parent;
 
   BITCODE_BL class_id;      /*!< DXF 91 */
-  BITCODE_BL version;       /*!< DXF 71 */
-  BITCODE_BL maint_version; /*!< DXF 97 */
+  BITCODE_BL version;       /*!< DXF 95 <r2018, 71 r2018+ */
+  BITCODE_BL maint_version; /*!< DXF 97 r2018+ */
   BITCODE_B from_dxf;       /*!< DXF 70 */
   char    * data;
   BITCODE_H ownerhandle;
@@ -2598,7 +2599,7 @@ typedef struct _dwg_object_XRECORD
 
   BITCODE_BL num_databytes;
   BITCODE_BS cloning_flags;
-  BITCODE_BL num_eed;
+  BITCODE_BL num_xdata; /* computed */
   Dwg_Resbuf* xdata;
   BITCODE_H ownerhandle;
   BITCODE_BL num_objid_handles;
@@ -2631,7 +2632,7 @@ typedef struct _dwg_LEADER_Break
 typedef struct _dwg_LEADER_Line // as documented by DXF
 {
   struct _dwg_LEADER_Node *parent;
-  BITCODE_BL numpts;
+  BITCODE_BL num_points;
   BITCODE_3DPOINT* points;         /*!< DXF 10 */
   BITCODE_BL num_breaks;
   Dwg_LEADER_Break * breaks;       /*!< DXF 12, 13 */
@@ -2669,14 +2670,14 @@ typedef struct _dwg_ODALeader_Line //// as documented by ODA
 
 typedef struct _dwg_LEADER_ArrowHead
 {
-  struct _dwg_object_MULTILEADER *parent;
+  struct _dwg_entity_MULTILEADER *parent;
   BITCODE_BL is_default;
   BITCODE_H arrowhead;
 } Dwg_LEADER_ArrowHead;
 
 typedef struct _dwg_LEADER_BlockLabel
 {
-  struct _dwg_object_MULTILEADER *parent;
+  struct _dwg_entity_MULTILEADER *parent;
   BITCODE_H attdef;
   BITCODE_TV label_text;
   BITCODE_BS ui_index;
@@ -2687,7 +2688,7 @@ typedef struct _dwg_LEADER_BlockLabel
    the reverse-engineered format */
 typedef struct _dwg_ODALeader
 {
-  struct _dwg_object_MULTILEADER *parent;
+  struct _dwg_entity_MULTILEADER *parent;
   BITCODE_B is_valid;
   BITCODE_B unknown;
   BITCODE_3BD connection;
@@ -2704,7 +2705,7 @@ typedef struct _dwg_ODALeader
 
 typedef struct _dwg_LEADER_Node
 {
-  struct _dwg_object_MULTILEADER *parent;
+  struct _dwg_entity_MULTILEADER *parent;
   BITCODE_B has_lastleaderlinepoint;    /*!< DXF 290 */
   BITCODE_B has_dogleg;                 /*!< DXF 291 */
   BITCODE_3BD lastleaderlinepoint;      /*!< DXF 10 */
@@ -2719,36 +2720,9 @@ typedef struct _dwg_LEADER_Node
   BITCODE_BS attach_dir; //2010+ 271
 } Dwg_LEADER;
 
-/* The MLeaderAnnotContext object (par 20.4.86), embedded into an MLEADER */
-typedef struct _dwg_MLEADER_AnnotContext
+typedef union _dwg_MLEADER_Content
 {
-  //AcDbObjectContextData:
-  BITCODE_BS class_version;  /*!< r2010+ DXF 70 */
-  BITCODE_B has_xdic_file;   /*!< r2010+ default true */
-  BITCODE_B is_default;      /*!< r2010+ DXF 290 */
-
-  // AcDbAnnotScaleObjectContextData:
-  BITCODE_H scale_handle;      /*!< DXF 340 hard ptr to AcDbScale */
-
-  BITCODE_BL num_leaders;
-  Dwg_LEADER * leaders;
-
-  BITCODE_BS attach_dir;
-
-  BITCODE_BD scale;
-  BITCODE_3BD content_base;
-  BITCODE_BD text_height;
-  BITCODE_BD arrow_size;
-  BITCODE_BD landing_gap;
-  BITCODE_BS text_left;
-  BITCODE_BS text_right;
-  BITCODE_BS text_alignment;
-  BITCODE_BS attach_type;
-
-  BITCODE_B has_content; // DXF doc bug: has_mtext
-  BITCODE_B has_content_block;
-  union {
-    struct _text_content
+  struct _text_content
     {
       BITCODE_TV default_text;
       BITCODE_3BD normal; // 11
@@ -2778,7 +2752,7 @@ typedef struct _dwg_MLEADER_AnnotContext
       BITCODE_B word_break;
       BITCODE_B unknown;
     } txt;
-    struct _content_block
+  struct _content_block
     {
       BITCODE_H block_table;
       BITCODE_3BD normal; // 14
@@ -2788,7 +2762,37 @@ typedef struct _dwg_MLEADER_AnnotContext
       BITCODE_CMC color;
       BITCODE_BD *transform;
     } blk;
-  } content;
+} Dwg_MLEADER_Content;
+
+/* The MLeaderAnnotContext object (par 20.4.86), embedded into an MLEADER */
+typedef struct _dwg_MLEADER_AnnotContext
+{
+  //AcDbObjectContextData:
+  BITCODE_BS class_version;  /*!< r2010+ DXF 70 */
+  BITCODE_B has_xdic_file;   /*!< r2010+ default true */
+  BITCODE_B is_default;      /*!< r2010+ DXF 290 */
+
+  // AcDbAnnotScaleObjectContextData:
+  BITCODE_H scale_handle;      /*!< DXF 340 hard ptr to AcDbScale */
+
+  BITCODE_BL num_leaders;
+  Dwg_LEADER * leaders;
+
+  BITCODE_BS attach_dir;
+
+  BITCODE_BD scale;
+  BITCODE_3BD content_base;
+  BITCODE_BD text_height;
+  BITCODE_BD arrow_size;
+  BITCODE_BD landing_gap;
+  BITCODE_BS text_left;
+  BITCODE_BS text_right;
+  BITCODE_BS text_alignment;
+  BITCODE_BS attach_type;
+
+  BITCODE_B has_content; // DXF doc bug: has_mtext
+  BITCODE_B has_content_block;
+  Dwg_MLEADER_Content content;
 
   BITCODE_3BD base;
   BITCODE_3BD base_dir;
@@ -2801,7 +2805,7 @@ typedef struct _dwg_MLEADER_AnnotContext
 } Dwg_MLEADER_AnnotContext;
 
 // dbmleader.h
-typedef struct _dwg_object_MULTILEADER
+typedef struct _dwg_entity_MULTILEADER
 {
   struct _dwg_object_entity *parent;
 
@@ -3055,7 +3059,6 @@ typedef struct _dwg_TABLE_cell
   BITCODE_TV text_string;
   BITCODE_BD block_scale;
   BITCODE_B additional_data_flag;
-  BITCODE_BS num_attr_defs;
   BITCODE_BS attr_def_index;
   BITCODE_TV attr_def_text;
   BITCODE_B additional_data_flag2;
@@ -3082,6 +3085,7 @@ typedef struct _dwg_TABLE_cell
   BITCODE_BL unknown;
   Dwg_TABLE_value value;
   BITCODE_H cell_handle;
+  BITCODE_BS num_attr_defs;
   BITCODE_H* attr_def_id;
   BITCODE_H text_style_override;
 
@@ -3226,7 +3230,7 @@ typedef struct _dwg_entity_TABLE
   BITCODE_H block_header;
   BITCODE_H first_attrib;
   BITCODE_H last_attrib;
-  BITCODE_H* attribs;
+  BITCODE_H* attrib_handles;
   BITCODE_H seqend;
   BITCODE_H table_style_id;
   BITCODE_H title_row_style_override;
@@ -5190,7 +5194,7 @@ typedef struct _dwg_object_object
     Dwg_Object_ASSOCPERSSUBENTMANAGER *ASSOCPERSSUBENTMANAGER;
     Dwg_Object_ASSOCPLANESURFACEACTIONBODY *ASSOCPLANESURFACEACTIONBODY;
     Dwg_Object_CELLSTYLEMAP *CELLSTYLEMAP;
-    //TODO Dwg_Object_DATATABLE *DATATABLE;
+    Dwg_Object_DATATABLE *DATATABLE;
     Dwg_Object_DBCOLOR *DBCOLOR;
     //TODO Dwg_Object_DETAILVIEWSTYLE *DETAILVIEWSTYLE;
     Dwg_Object_DICTIONARY *DICTIONARY;
@@ -5269,6 +5273,8 @@ typedef struct _dwg_object
   unsigned int type;     /*!< fixed or variable (class - 500) */
   BITCODE_RL index;      /*!< into dwg->object[] */
   enum DWG_OBJECT_TYPE fixedtype; /*!< into a global list */
+  char *name;            /*!< our public entity/object name */
+  char *dxfname;         /*!< the internal dxf classname, often with a ACDB prefix */
 
   unsigned long bitsize_address; /* bitsize offset: r13-2007 */
   BITCODE_B  has_strings;        /*!< r2007+ */
@@ -5283,7 +5289,6 @@ typedef struct _dwg_object
     char *unknown; /* i.e. unhandled class as raw bits */
   } tio;
 
-  char *dxfname;
   BITCODE_RL bitsize;   /* common + object fields, but no handles */
   unsigned long hdlpos; /* absolute */
   Dwg_Handle handle;

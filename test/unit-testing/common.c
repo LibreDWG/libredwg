@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <math.h>
 #include <sys/stat.h>
+#include "../../src/common.h"
 
 #include "dwg.h"
 #include "dwg_api.h"
@@ -177,3 +178,6 @@ print_api(dwg_object *obj)
   api_process(obj);
   printf("\n");
 }
+
+// allow out deprecated API
+GCC31_DIAG_IGNORE(-Wdeprecated-declarations)

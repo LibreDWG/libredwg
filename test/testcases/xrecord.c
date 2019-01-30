@@ -6,7 +6,7 @@ void
 api_process (dwg_object * obj)
 {
   int error;
-  BITCODE_BL i, num_databytes, num_eed, num_objid_handles;
+  BITCODE_BL i, num_databytes, num_xdata, num_objid_handles;
   BITCODE_BS cloning_flags;
   dwg_object_ref* parent;
 
@@ -24,14 +24,14 @@ api_process (dwg_object * obj)
   else
     fail ("error in reading cloning_flags");
 
-  num_eed = dwg_obj_xrecord_get_num_eed (xrecord, &error);
-  if (!error && num_eed == xrecord->num_eed)
+  num_xdata = dwg_obj_xrecord_get_num_xdata (xrecord, &error);
+  if (!error && num_xdata == xrecord->num_xdata)
     pass ("Working Properly");
   else
-    fail ("error in reading num_eed");
+    fail ("error in reading num_xdata");
 
 #if 0
-  for (i=0; i<num_eed; i++)
+  for (i=0; i<num_xdata; i++)
     {
       Dwg_Eed *eed = dwg_obj_xrecord_get_eed (xrecord, i, &error);
       if (!error && eed[0] == xrecord->eed[i])

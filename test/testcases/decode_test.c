@@ -3,7 +3,11 @@ CLANG_DIAG_IGNORE(-Wpragma-pack)
 #include "../../src/decode.c"
 CLANG_DIAG_RESTORE
 
+CLANG_DIAG_IGNORE(-Wformat-nonliteral)
+CLANG_DIAG_IGNORE(-Wmissing-prototypes)
 #include <dejagnu.h>
+CLANG_DIAG_RESTORE
+CLANG_DIAG_RESTORE
 #include "tests_common.h"
 
 void read_literal_length_tests (void);

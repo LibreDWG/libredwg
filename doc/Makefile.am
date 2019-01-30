@@ -26,8 +26,8 @@ manual:
 	../build-aux/gendocs.sh LibreDWG "GNU LibreDWG - Manual"
 
 if HAVE_DOXYGEN
-refman doxygen html/index.html: Doxyfile ../include/dwg_api.h ../include/dwg.h
-	-rm ../{src,include}/*_flymake.{c,h}
+refman doxygen html/index.html: Doxyfile ../include/dwg_api.h ../include/dwg.h ../src/dynapi.c
+	-rm ../{src,include}/*_flymake.{c,h} ../{src,include}/*.ii
 	cd .. && $(DOXYGEN) doc/Doxyfile
 refman-pdf: html/index.html
 	$(MAKE) -C latex

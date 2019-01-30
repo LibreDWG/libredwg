@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # test dwg2dxf via teigha roundtrips
 # for f in test/test-data/20*/*.dwg; do ./dxf-roundtrip.sh $f; done
 case `uname` in

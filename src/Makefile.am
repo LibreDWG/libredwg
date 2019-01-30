@@ -1,6 +1,6 @@
 ## Makefile.am
 ##
-## Copyright (C) 2010,2018 Free Software Foundation, Inc.
+## Copyright (C) 2010,2018,2019 Free Software Foundation, Inc.
 ##
 ## This file is part of LibreDWG.
 ##
@@ -31,6 +31,7 @@ libredwg_la_SOURCES = \
         print.c \
         free.c \
         hash.c \
+	dynapi.c \
 	dwg_api.c \
 	$(EXTRA_HEADERS)
 if !DISABLE_DXF
@@ -74,6 +75,7 @@ EXTRA_HEADERS = \
         print.h \
 	logging.h \
         hash.h \
+	dynapi.h \
 	out_json.h
 if !DISABLE_DXF
 EXTRA_HEADERS += \
@@ -88,7 +90,11 @@ endif
 
 EXTRA_DIST = \
 	$(include_HEADERS) \
-	$(EXTRA_HEADERS)
+	$(EXTRA_HEADERS) \
+	gen-dynapi.pl
+
+dynapi.c: gen-dynapi.pl $(top_srcdir)/include/dwg.h
+	-$(PERL) gen-dynapi.pl
 
 .c.i:
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\

@@ -46,6 +46,26 @@
 #  define CLANG_DIAG_IGNORE(w)
 #  define CLANG_DIAG_RESTORE
 #endif
+/* for GCC31_DIAG_IGNORE(-Wdeprecated-declarations) */
+#if defined( __GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 310
+#  define GCC31_DIAG_PRAGMA(x) _Pragma (#x)
+#  define GCC31_DIAG_IGNORE(x) _Pragma("GCC diagnostic push") \
+                               GCC31_DIAG_PRAGMA(GCC diagnostic ignored #x)
+#else
+#  define GCC31_DIAG_IGNORE(w)
+#  define GCC31_DIAG_RESTORE
+#endif
+
+/* The __nonnull function attribute marks pointer arguments which
+   must not be NULL.  */
+#if (defined( __GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 303)
+# undef __nonnull
+# define __nonnull(params) __attribute__ ((__nonnull__ params))
+# define HAVE_NONNULL
+#else
+# undef HAVE_NONNULL
+# define __nonnull(params)
+#endif
 
 #ifndef EXPORT
 # if defined(_WIN32) && defined(ENABLE_SHARED)

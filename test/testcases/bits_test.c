@@ -1,7 +1,11 @@
 #include "../../src/bits.h"
 
-//-Wno-format-nonliteral
+#include "../../src/common.h"
+CLANG_DIAG_IGNORE(-Wformat-nonliteral)
+CLANG_DIAG_IGNORE(-Wmissing-prototypes)
 #include <dejagnu.h>
+CLANG_DIAG_RESTORE
+CLANG_DIAG_RESTORE
 #include <string.h>
 #include <stdlib.h>
 #include "tests_common.h"

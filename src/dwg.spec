@@ -2164,8 +2164,8 @@ DWG_ENTITY(LEADER)
   FIELD_B (unknown_bit_1, 0);
   FIELD_BS (path_type, 72);
   FIELD_BS (annot_type, 73); //0: text, 1: tol, 2: insert, 3 (def): none
-  FIELD_BL (numpts, 76);
-  FIELD_3DPOINT_VECTOR (points, numpts, 10);
+  FIELD_BL (num_points, 76);
+  FIELD_3DPOINT_VECTOR (points, num_points, 10);
   FIELD_3DPOINT (origin, 0);
   FIELD_3DPOINT (extrusion, 210);
   FIELD_3DPOINT (x_direction, 211);
@@ -2629,38 +2629,38 @@ DWG_OBJECT(LTYPE)
     FIELD_RC (alignment, 72);
   }
   FIELD_RC (num_dashes, 73);
-  REPEAT_C(num_dashes, dash, Dwg_LTYPE_dash)
+  REPEAT_C(num_dashes, dashes, Dwg_LTYPE_dash)
   REPEAT_BLOCK
       PRE(R_13)
       {
-        FIELD_RD (dash[rcount1].length, 49);
+        FIELD_RD (dashes[rcount1].length, 49);
 #ifndef IS_PRINT
-        FIELD_VALUE(pattern_len) += FIELD_VALUE(dash[rcount1].length);
+        FIELD_VALUE(pattern_len) += FIELD_VALUE(dashes[rcount1].length);
 #endif
-        FIELD_RS (dash[rcount1].complex_shapecode, 74);
-        FIELD_RD (dash[rcount1].x_offset, 44);
-        FIELD_RD (dash[rcount1].y_offset, 45);
-        FIELD_RD (dash[rcount1].scale, 46);
-        FIELD_RD (dash[rcount1].rotation, 50);
-        FIELD_RS (dash[rcount1].shape_flag, 75);
-        if (FIELD_VALUE(dash[rcount1].shape_flag) & 0x2)
+        FIELD_RS (dashes[rcount1].complex_shapecode, 74);
+        FIELD_RD (dashes[rcount1].x_offset, 44);
+        FIELD_RD (dashes[rcount1].y_offset, 45);
+        FIELD_RD (dashes[rcount1].scale, 46);
+        FIELD_RD (dashes[rcount1].rotation, 50);
+        FIELD_RS (dashes[rcount1].shape_flag, 75);
+        if (FIELD_VALUE(dashes[rcount1].shape_flag) & 0x2)
           FIELD_VALUE(text_area_is_present) = 1;
       }
       LATER_VERSIONS
       {
-        SUB_FIELD_BD (dash[rcount1],length, 49);
-        SUB_FIELD_BS (dash[rcount1],complex_shapecode, 74);
-        SUB_FIELD_RD (dash[rcount1],x_offset, 44);
-        SUB_FIELD_RD (dash[rcount1],y_offset, 45);
-        SUB_FIELD_BD (dash[rcount1],scale, 46);
-        SUB_FIELD_BD (dash[rcount1],rotation, 50);
-        SUB_FIELD_BS (dash[rcount1],shape_flag, 75);
-        if (FIELD_VALUE(dash[rcount1].shape_flag) & 0x2)
+        SUB_FIELD_BD (dashes[rcount1],length, 49);
+        SUB_FIELD_BS (dashes[rcount1],complex_shapecode, 74);
+        SUB_FIELD_RD (dashes[rcount1],x_offset, 44);
+        SUB_FIELD_RD (dashes[rcount1],y_offset, 45);
+        SUB_FIELD_BD (dashes[rcount1],scale, 46);
+        SUB_FIELD_BD (dashes[rcount1],rotation, 50);
+        SUB_FIELD_BS (dashes[rcount1],shape_flag, 75);
+        if (FIELD_VALUE(dashes[rcount1].shape_flag) & 0x2)
           FIELD_VALUE(text_area_is_present) = 1;
       }
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ(dash)
-  END_REPEAT(dash);
+  SET_PARENT_OBJ(dashes)
+  END_REPEAT(dashes);
 
   UNTIL(R_2004) {
     FIELD_TF (strings_area, 256, 3);
@@ -5164,7 +5164,7 @@ DWG_ENTITY(TABLE)
 
   SINCE(R_2004)
     {
-      HANDLE_VECTOR (attribs, num_owned, 4, 0)
+      HANDLE_VECTOR (attrib_handles, num_owned, 4, 0)
     }
 
   if (FIELD_VALUE(has_attribs)) {
@@ -5417,8 +5417,8 @@ DWG_ENTITY(MULTILEADER)
       REPEAT2 (lnode.num_lines, lnode.lines, Dwg_LEADER_Line)
       REPEAT_BLOCK
           #define lline lnode.lines[rcount2]
-          SUB_FIELD_BL (lline, numpts, 0);
-          FIELD_3DPOINT_VECTOR (lline.points, lline.numpts, 10);
+          SUB_FIELD_BL (lline, num_points, 0);
+          FIELD_3DPOINT_VECTOR (lline.points, lline.num_points, 10);
           SUB_FIELD_BL (lline, num_breaks, 0);
           REPEAT3 (lline.num_breaks, lline.breaks, Dwg_LEADER_Break)
           REPEAT_BLOCK
@@ -7242,3 +7242,4 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+

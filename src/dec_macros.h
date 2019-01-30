@@ -727,13 +727,19 @@ EXPORT int dwg_add_##token (Dwg_Object *obj) \
   LOG_INFO("Add entity " #token " ")\
   obj->parent->num_entities++;\
   obj->supertype = DWG_SUPERTYPE_ENTITY;\
-  if (!(int)obj->fixedtype)\
+  if (!(int)obj->fixedtype) {\
     obj->fixedtype = DWG_TYPE_##token;\
+  } \
   if (!obj->dxfname) { \
     if (strlen(#token) > 3 && !memcmp(#token,  "_3D", 3)) \
-      obj->dxfname = (char*)&#token[1]; \
+      obj->name = obj->dxfname = (char*)&#token[1]; \
     else \
-      obj->dxfname = (char*)#token; \
+      obj->name = obj->dxfname = (char*) #token; \
+  } else if (!obj->name) { \
+    if (strlen(#token) > 3 && !memcmp(#token,  "_3D", 3)) \
+      obj->name = (char*)&#token[1]; \
+    else \
+      obj->name = (char*) #token; \
   } \
   _ent = obj->tio.entity = calloc(1, sizeof(Dwg_Object_Entity));\
   if (!_ent) return DWG_ERR_OUTOFMEM; \
@@ -819,8 +825,10 @@ EXPORT int dwg_add_##token (Dwg_Object *obj) \
     obj->fixedtype = DWG_TYPE_FREED; \
     return DWG_ERR_OUTOFMEM; \
   } \
-  if (!(int)obj->fixedtype)\
+  if (!(int)obj->fixedtype) { \
     obj->fixedtype = DWG_TYPE_##token;\
+    obj->name = (char*) #token; \
+  } \
   if (!obj->dxfname) { \
     if (!strcmp(#token, "PLACEHOLDER")) \
       obj->dxfname = (char*)"ACDBPLACEHOLDER"; \
