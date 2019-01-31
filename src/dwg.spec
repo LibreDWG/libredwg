@@ -306,10 +306,38 @@ DWG_ENTITY(ATTDEF)
         FIELD_BS (vert_alignment, 74);
     }
 
+  SINCE(R_2010)
+    {
+      FIELD_RC (class_version, 280); // 0 = r2010
+      if (FIELD_VALUE(class_version) > 10)
+        return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
+  SINCE(R_2018)
+    {
+      FIELD_RC (type, 70); // 1=single line, 2=multi line attrib, 4=multi line attdef
+
+      if (FIELD_VALUE(type) > 1)
+        {
+          SUBCLASS (AcDbMText)
+          LOG_WARN("MTEXT fields")
+          // TODO fields handles to MTEXT entities. how many?
+          FIELD_HANDLE (mtext_handles, 0, 340); //TODO
+
+          FIELD_BS (annotative_data_size, 70);
+          if (FIELD_VALUE(annotative_data_size) > 1)
+            {
+              FIELD_RC (annotative_data_bytes, 0);
+              FIELD_HANDLE (annotative_app, 0, 0); //TODO
+              FIELD_BS (annotative_short, 0);
+            }
+        }
+    }
+
+  DXF { FIELD_HANDLE (style, 5, 7); }
   SUBCLASS (AcDbAttributeDefinition)
   DXF {
     SINCE(R_2010) {
-      FIELD_RC (class_version, 280);
+      //FIELD_RC (class_version, 280);
       FIELD_T (prompt, 3);
     }
   }
@@ -320,14 +348,24 @@ DWG_ENTITY(ATTDEF)
   SINCE(R_2007) {
     FIELD_B (lock_position_flag, 70);
   }
+
+  COMMON_ENTITY_HANDLE_DATA;
+
+  SINCE(R_2007) {
+    START_STRING_STREAM
+    FIELD_TU (default_value, 1);
+    FIELD_TU (tag, 2);
+    END_STRING_STREAM
+  }
+  FIELD_HANDLE (style, 5, 0); // unexpected here in DXF
+
+  // specific to ATTDEF
   SINCE(R_2010) {
-    FIELD_RC (class_version, 0);
+    FIELD_RC (attdef_class_version, 280);
     if (FIELD_VALUE(class_version) > 10)
       return DWG_ERR_VALUEOUTOFBOUNDS;
   }
   FIELD_T (prompt, 0);
-
-  COMMON_ENTITY_HANDLE_DATA;
 
   //FIELD_HANDLE (style, 5, 7);
 
@@ -7248,4 +7286,5 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+
 

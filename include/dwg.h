@@ -972,14 +972,21 @@ typedef struct _dwg_entity_ATTDEF
   BITCODE_BS horiz_alignment;
   BITCODE_BS vert_alignment;
   BITCODE_RC dataflags;
+  BITCODE_RC class_version; /* R2010+ */
+  BITCODE_RC type;    /* R2018+ */
   BITCODE_TV tag;
   BITCODE_BS field_length;
   BITCODE_RC flags;
   BITCODE_B lock_position_flag;
-
-  BITCODE_RC class_version; /* R2010+ */
-  BITCODE_TV prompt;
   BITCODE_H style;
+  BITCODE_H mtext_handles; /* R2018+ TODO */
+  BITCODE_BS annotative_data_size; /* R2018+ */
+  BITCODE_RC annotative_data_bytes;
+  BITCODE_H  annotative_app;
+  BITCODE_BS annotative_short;
+
+  BITCODE_RC attdef_class_version; /* R2010+ */
+  BITCODE_TV prompt;
 } Dwg_Entity_ATTDEF;
 
 /**

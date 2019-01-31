@@ -8034,6 +8034,114 @@ static int test_ATTDEF (const Dwg_Object *obj)
       }
   }
   {
+    BITCODE_H annotative_app;
+    if (dwg_dynapi_entity_value(attdef, "ATTDEF", "annotative_app", &annotative_app, NULL)
+        && !memcmp(&annotative_app, &attdef->annotative_app, sizeof(attdef->annotative_app)))
+      {
+        pass ("ATTDEF.annotative_app [H]");
+      }
+    else
+      {
+        fail ("ATTDEF.annotative_app [H]"); error++;
+      }
+  }
+  {
+    BITCODE_RC annotative_data_bytes;
+    if (dwg_dynapi_entity_value(attdef, "ATTDEF", "annotative_data_bytes", &annotative_data_bytes, NULL) &&
+        annotative_data_bytes == attdef->annotative_data_bytes)
+      {
+        pass ("ATTDEF.annotative_data_bytes [RC] %u", annotative_data_bytes);
+      }
+    else
+      {
+        fail ("ATTDEF.annotative_data_bytes [RC] %u != %u", attdef->annotative_data_bytes, annotative_data_bytes); error++;
+      }
+    annotative_data_bytes++;
+    if (dwg_dynapi_entity_set_value(attdef, "ATTDEF", "annotative_data_bytes", &annotative_data_bytes) &&
+        annotative_data_bytes == attdef->annotative_data_bytes)
+      {
+        pass ("ATTDEF.annotative_data_bytes [RC] set+1 %u", annotative_data_bytes);
+      }
+    else
+      {
+        fail ("ATTDEF.annotative_data_bytes [RC] set+1 %u != %u", attdef->annotative_data_bytes, annotative_data_bytes); error++;
+      }
+    attdef->annotative_data_bytes--;
+
+  }
+  {
+    BITCODE_BS annotative_data_size;
+    if (dwg_dynapi_entity_value(attdef, "ATTDEF", "annotative_data_size", &annotative_data_size, NULL) &&
+        annotative_data_size == attdef->annotative_data_size)
+      {
+        pass ("ATTDEF.annotative_data_size [BS] %hu", annotative_data_size);
+      }
+    else
+      {
+        fail ("ATTDEF.annotative_data_size [BS] %hu != %hu", attdef->annotative_data_size, annotative_data_size); error++;
+      }
+    annotative_data_size++;
+    if (dwg_dynapi_entity_set_value(attdef, "ATTDEF", "annotative_data_size", &annotative_data_size) &&
+        annotative_data_size == attdef->annotative_data_size)
+      {
+        pass ("ATTDEF.annotative_data_size [BS] set+1 %hu", annotative_data_size);
+      }
+    else
+      {
+        fail ("ATTDEF.annotative_data_size [BS] set+1 %hu != %hu", attdef->annotative_data_size, annotative_data_size); error++;
+      }
+    attdef->annotative_data_size--;
+
+  }
+  {
+    BITCODE_BS annotative_short;
+    if (dwg_dynapi_entity_value(attdef, "ATTDEF", "annotative_short", &annotative_short, NULL) &&
+        annotative_short == attdef->annotative_short)
+      {
+        pass ("ATTDEF.annotative_short [BS] %hu", annotative_short);
+      }
+    else
+      {
+        fail ("ATTDEF.annotative_short [BS] %hu != %hu", attdef->annotative_short, annotative_short); error++;
+      }
+    annotative_short++;
+    if (dwg_dynapi_entity_set_value(attdef, "ATTDEF", "annotative_short", &annotative_short) &&
+        annotative_short == attdef->annotative_short)
+      {
+        pass ("ATTDEF.annotative_short [BS] set+1 %hu", annotative_short);
+      }
+    else
+      {
+        fail ("ATTDEF.annotative_short [BS] set+1 %hu != %hu", attdef->annotative_short, annotative_short); error++;
+      }
+    attdef->annotative_short--;
+
+  }
+  {
+    BITCODE_RC attdef_class_version;
+    if (dwg_dynapi_entity_value(attdef, "ATTDEF", "attdef_class_version", &attdef_class_version, NULL) &&
+        attdef_class_version == attdef->attdef_class_version)
+      {
+        pass ("ATTDEF.attdef_class_version [RC] %u", attdef_class_version);
+      }
+    else
+      {
+        fail ("ATTDEF.attdef_class_version [RC] %u != %u", attdef->attdef_class_version, attdef_class_version); error++;
+      }
+    attdef_class_version++;
+    if (dwg_dynapi_entity_set_value(attdef, "ATTDEF", "attdef_class_version", &attdef_class_version) &&
+        attdef_class_version == attdef->attdef_class_version)
+      {
+        pass ("ATTDEF.attdef_class_version [RC] set+1 %u", attdef_class_version);
+      }
+    else
+      {
+        fail ("ATTDEF.attdef_class_version [RC] set+1 %u != %u", attdef->attdef_class_version, attdef_class_version); error++;
+      }
+    attdef->attdef_class_version--;
+
+  }
+  {
     BITCODE_RC class_version;
     if (dwg_dynapi_entity_value(attdef, "ATTDEF", "class_version", &class_version, NULL) &&
         class_version == attdef->class_version)
@@ -8286,6 +8394,18 @@ static int test_ATTDEF (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_H mtext_handles;
+    if (dwg_dynapi_entity_value(attdef, "ATTDEF", "mtext_handles", &mtext_handles, NULL)
+        && !memcmp(&mtext_handles, &attdef->mtext_handles, sizeof(attdef->mtext_handles)))
+      {
+        pass ("ATTDEF.mtext_handles [H]");
+      }
+    else
+      {
+        fail ("ATTDEF.mtext_handles [H]"); error++;
+      }
+  }
+  {
     BITCODE_RD oblique_ang;
     if (dwg_dynapi_entity_value(attdef, "ATTDEF", "oblique_ang", &oblique_ang, NULL) &&
         oblique_ang == attdef->oblique_ang)
@@ -8403,6 +8523,30 @@ static int test_ATTDEF (const Dwg_Object *obj)
         fail ("ATTDEF.thickness [RD] set+1 %g != %g", attdef->thickness, thickness); error++;
       }
     attdef->thickness--;
+
+  }
+  {
+    BITCODE_RC type;
+    if (dwg_dynapi_entity_value(attdef, "ATTDEF", "type", &type, NULL) &&
+        type == attdef->type)
+      {
+        pass ("ATTDEF.type [RC] %u", type);
+      }
+    else
+      {
+        fail ("ATTDEF.type [RC] %u != %u", attdef->type, type); error++;
+      }
+    type++;
+    if (dwg_dynapi_entity_set_value(attdef, "ATTDEF", "type", &type) &&
+        type == attdef->type)
+      {
+        pass ("ATTDEF.type [RC] set+1 %u", type);
+      }
+    else
+      {
+        fail ("ATTDEF.type [RC] set+1 %u != %u", attdef->type, type); error++;
+      }
+    attdef->type--;
 
   }
   {
