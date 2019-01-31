@@ -1627,7 +1627,7 @@ find_section(Dwg_Data *dwg, unsigned long int index)
   return NULL;
 }
 
-/* Read R2004, 2010+ Section Info
+/* Read R2004, 2010+ Section Info, aka 2004 Data section map
  */
 static int
 read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
@@ -1662,14 +1662,14 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     }
 
   LOG_TRACE("\n#### Read 2004 Section Info fields ####\n")
-  LOG_TRACE("NumDescriptions:   %d\n", *((int32_t*)decomp))
-  LOG_TRACE("Compressed:      0x%x\n", *((int32_t*)decomp + 1))
+  LOG_TRACE("NumDescriptions:   %d\n", dwg->header.num_infos)
+  LOG_TRACE("Compressed:      %d\n", *((int32_t*)decomp + 1))
   LOG_TRACE("MaxSize:         0x%x\n", *((int32_t*)decomp + 2))
-  LOG_TRACE("Encrypted:       0x%x\n", *((int32_t*)decomp + 3))
+  LOG_TRACE("Encrypted:       %d\n", *((int32_t*)decomp + 3))
   LOG_TRACE("NumDescriptions2:  %d/0x%x\n", *((int32_t*)decomp + 4),
                                             *((int32_t*)decomp + 4))
 
-  ptr = decomp + 20; // section name char[64]
+  ptr = decomp + 20; // 5*4
   decomp_end = decomp + decomp_data_size + 1024;
   for (i = 0; i < dwg->header.num_infos; ++i)
     {
@@ -1682,9 +1682,9 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           return DWG_ERR_INVALIDDWG;
         }
       info = &dwg->header.section_info[i];
-      info->size            = *((int32_t*)ptr);
-      info->pagecount       = *((int32_t*)ptr + 1);
-      info->num_sections    = *((int32_t*)ptr + 2);
+      info->size            = *((uint64_t*)ptr);
+      info->pagecount       = *((int32_t*)ptr + 2);
+      /*info->num_sections    = *((int32_t*)ptr + 3);
       if (info->size == (BITCODE_RL)section_number+1 &&
           info->num_sections > 100000)
         {
@@ -1694,47 +1694,48 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           info = &dwg->header.section_info[i-1];
           goto next_section;
         }
+      */
       info->max_decomp_size = *((int32_t*)ptr + 3);
       info->unknown2        = *((int32_t*)ptr + 4);
       info->compressed      = *((int32_t*)ptr + 5);
       info->type            = *((int32_t*)ptr + 6);
       info->encrypted       = *((int32_t*)ptr + 7);
-      ptr += 32;
+      ptr += 32; /* 8*4 */
       memcpy(info->name, ptr, 64);
       ptr += 64;
 
       LOG_TRACE("\nSection Info[%d] description fields\n", i)
       LOG_TRACE("Size:            %u\n", info->size)
       LOG_TRACE("PageCount:       %u\n", info->pagecount)
-      LOG_TRACE("Num sections:    %u\n", info->num_sections)
+      //LOG_TRACE("Num sections:    %u\n", info->num_sections)
       LOG_TRACE("Max decomp size: %u / 0x%x\n", // normally 0x7400
                 info->max_decomp_size, info->max_decomp_size)
       LOG_TRACE("Unknown:         %u\n", info->unknown2)
       LOG_TRACE("Compressed:      %u (1=no, 2=yes)\n", info->compressed)
-      LOG_TRACE("Section Type:  0x%x\n", (unsigned)info->type)
+      LOG_TRACE("Section ID:    0x%x\n", (unsigned)info->type)
       LOG_TRACE("Encrypted:       %d (0=no, 1=yes, 2=unknown)\n", info->encrypted)
       LOG_TRACE("SectionName:     %s\n\n", info->name)
 
-      if (ptr + (16 * info->num_sections) >= decomp_end)
+      if (ptr + (16 * info->pagecount) >= decomp_end)
         {
-          info->num_sections = 0;
+          info->pagecount = 0;
           free (decomp);
           LOG_ERROR("read_R2004_section_info out of range");
           return DWG_ERR_INVALIDDWG;
         }
 
-      if (info->num_sections < 1000000)
+      if (info->pagecount < 1000000)
         {
-          LOG_INFO("Section count %u in area %d\n", info->num_sections, i);
-          info->sections = calloc(info->num_sections, sizeof(Dwg_Section*));
+          LOG_INFO("Page count %u in area %d\n", info->pagecount, i);
+          info->sections = calloc(info->pagecount, sizeof(Dwg_Section*));
           if (!info->sections)
             {
               free(decomp);
-              LOG_ERROR("Out of memory with %u sections", info->num_sections);
+              LOG_ERROR("Out of memory with %u sections", info->pagecount);
               return error | DWG_ERR_OUTOFMEM;
             }
 
-          for (j = 0; j < info->num_sections; j++)
+          for (j = 0; j < info->pagecount; j++)
             {
               section_number = *((int32_t*)ptr);     // Index into SectionMap
               data_size      = *((uint32_t*)ptr + 1);
@@ -1751,7 +1752,8 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   LOG_TRACE("Section Number: %" PRId32" (unused)\t", section_number)
                 }
               else
-              if (section_number > info->num_sections + info->sections[0]->number)
+              if (info->sections[0] &&
+                  section_number > info->pagecount + info->sections[0]->number)
                 {
                   LOG_WARN("!Section Number: %" PRId32, section_number)
                   LOG_TRACE("\t\t")
@@ -1771,7 +1773,7 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           LOG_WARN("Oops2, Section[%d] => Section_Info %d", i, info->size);
           section_number = info->size;      // Index into SectionMap
           data_size      = info->pagecount;
-        next_section:
+        //next_section:
           start_offset   = *((uint32_t*)ptr + 2);
           start_offset <<= 32;
           start_offset  += *((uint32_t*)ptr + 3);
@@ -1782,7 +1784,7 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           if (!info->sections)
             {
               free(decomp);
-              LOG_ERROR("Empty info->sections %d", info->num_sections);
+              LOG_ERROR("Empty info->sections %d", info->pagecount);
               return error | DWG_ERR_OUTOFMEM;
             }
           sec = find_section(dwg, section_number);
@@ -1795,11 +1797,11 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           free (decomp);
           return error | DWG_ERR_VALUEOUTOFBOUNDS;
         }
-      else if (info->num_sections >= 100000)
+      else if (info->pagecount >= 100000)
         {
           LOG_ERROR("Section count %u in area %d too high! Skipping",
-                    info->num_sections, i);
-          info->num_sections = 0;
+                    info->pagecount, i);
+          info->pagecount = 0;
           free (decomp);
           return error | DWG_ERR_VALUEOUTOFBOUNDS;
         }
@@ -1856,26 +1858,26 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *restrict dwg,
   else
     {
       LOG_TRACE("\nFound section_info[" FORMAT_BL "] %s type 0x%x with %d sections:\n",
-                i, info->name, section_type, info->num_sections);
+                i, info->name, section_type, info->pagecount);
     }
 
-  max_decomp_size = info->num_sections * info->max_decomp_size;
+  max_decomp_size = info->pagecount * info->max_decomp_size;
   if (max_decomp_size == 0)
     {
       LOG_ERROR("Section %s count or max decompression size is zero. "
                 "Sections: %u, Max size: %u",
-                info->name, info->num_sections, info->max_decomp_size);
+                info->name, info->pagecount, info->max_decomp_size);
       return DWG_ERR_INVALIDDWG;
     }
 
   decomp = (BITCODE_RC *)calloc(max_decomp_size, sizeof(BITCODE_RC));
   if (!decomp)
     {
-      LOG_ERROR("Out of memory with %u sections", info->num_sections);
+      LOG_ERROR("Out of memory with %u sections", info->pagecount);
       return DWG_ERR_OUTOFMEM;
     }
 
-  for (i=0; i < info->num_sections; ++i)
+  for (i=0; i < info->pagecount; ++i)
     {
       if (!info->sections[i])
         {
@@ -2264,7 +2266,7 @@ decode_R2004_header(Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     dat->byte = dwg->r2004_header.section_map_address + 0x100;
 
     LOG_TRACE("\n=== Read System Section (Section Page Map) ===\n\n")
-    FIELD_RL(section_type, 0);
+    FIELD_RLx(section_type, 0);
     if (FIELD_VALUE(section_type) != 0x41630e3b)
       {
         LOG_ERROR("Invalid System Section Page Map type 0x%x != 0x41630e3b",
@@ -2274,7 +2276,7 @@ decode_R2004_header(Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     FIELD_RL(decomp_data_size, 0);
     FIELD_RL(comp_data_size, 0);
     FIELD_RL(compression_type, 0);
-    FIELD_RL(checksum, 0); // see dwg_section_page_checksum()
+    FIELD_RLx(checksum, 0); // see dwg_section_page_checksum()
   }
 
   return error;
@@ -2322,7 +2324,7 @@ decode_R2004(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 dwg->r2004_header.section_info_id)
       dat->byte = section->address;
 
-      FIELD_RL(section_type, 0);
+      FIELD_RLx(section_type, 0);
       if (FIELD_VALUE(section_type) != 0x4163003b)
         {
           LOG_ERROR("Invalid Data Section Page Map type 0x%x != 0x4163003b",
@@ -2332,7 +2334,7 @@ decode_R2004(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       FIELD_RL(decomp_data_size, 0);
       FIELD_RL(comp_data_size, 0);
       FIELD_RL(compression_type, 0);
-      FIELD_RL(checksum, 0);
+      FIELD_RLx(checksum, 0);
 
       // Data section map, par 4.5
       error |= read_R2004_section_info(dat, dwg,
