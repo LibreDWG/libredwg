@@ -15,15 +15,19 @@ done
 
 for d in r9 r10 r11 r12 r13 r14 2000 2004 2007 2010 2013 2018; do
     for f in test/test-data/$d/*.dwg; do
-        b=`basename "$f" .dwg`
-        echo
-        echo programs/dwg2dxf -v0 -o "${b}_${d}.dxf" "$f"
-        programs/dwg2dxf -v0 -o "${b}_${d}.dxf" "$f"
+        if [ "$f" != "test/test-data/$d/*.dwg" ]; then
+            b=`basename "$f" .dwg`
+            echo
+            echo programs/dwg2dxf -v0 -o "${b}_${d}.dxf" "$f"
+            programs/dwg2dxf -v0 -o "${b}_${d}.dxf" "$f"
+        fi
     done
     for f in test/test-big/$d/*.dwg; do
-        b=`basename "$f" .dwg`
-        echo
-        echo programs/dwg2dxf -v0 -o "${b}_${d}.dxf" "$f"
-        programs/dwg2dxf -v0 -o "${b}_${d}.dxf" "$f"
+        if [ "$f" != "test/test-big/$d/*.dwg" ]; then
+            b=`basename "$f" .dwg`
+            echo
+            echo programs/dwg2dxf -v0 -o "${b}_${d}.dxf" "$f"
+            programs/dwg2dxf -v0 -o "${b}_${d}.dxf" "$f"
+        fi
     done
 done
