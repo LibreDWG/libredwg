@@ -307,19 +307,25 @@ DWG_ENTITY(ATTDEF)
     }
 
   SUBCLASS (AcDbAttributeDefinition)
+  DXF {
+    SINCE(R_2010) {
+      FIELD_RC (class_version, 280);
+      FIELD_T (prompt, 3);
+    }
+  }
   FIELD_T (tag, 2);
-  FIELD_BS (field_length, 73); //unused
+  FIELD_BS (field_length, 0); //DXF 73, unused
   FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify, 8 preset
 
   SINCE(R_2007) {
     FIELD_B (lock_position_flag, 70);
   }
   SINCE(R_2010) {
-    FIELD_RC (class_version, 280);
+    FIELD_RC (class_version, 0);
     if (FIELD_VALUE(class_version) > 10)
       return DWG_ERR_VALUEOUTOFBOUNDS;
   }
-  FIELD_T (prompt, 3);
+  FIELD_T (prompt, 0);
 
   COMMON_ENTITY_HANDLE_DATA;
 
