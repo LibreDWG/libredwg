@@ -231,12 +231,6 @@ DWG_ENTITY(ATTRIB)
 
   COMMON_ENTITY_HANDLE_DATA;
 
-  SINCE(R_2007) {
-    START_STRING_STREAM
-    FIELD_TU (text_value, 1);
-    FIELD_TU (tag, 2);
-    END_STRING_STREAM
-  }
   FIELD_HANDLE (style, 5, 0); // unexpected here in DXF
 
 DWG_ENTITY_END
@@ -349,16 +343,6 @@ DWG_ENTITY(ATTDEF)
     FIELD_B (lock_position_flag, 70);
   }
 
-  COMMON_ENTITY_HANDLE_DATA;
-
-  SINCE(R_2007) {
-    START_STRING_STREAM
-    FIELD_TU (default_value, 1);
-    FIELD_TU (tag, 2);
-    END_STRING_STREAM
-  }
-  FIELD_HANDLE (style, 5, 0); // unexpected here in DXF
-
   // specific to ATTDEF
   SINCE(R_2010) {
     FIELD_RC (attdef_class_version, 280);
@@ -367,7 +351,8 @@ DWG_ENTITY(ATTDEF)
   }
   FIELD_T (prompt, 0);
 
-  //FIELD_HANDLE (style, 5, 7);
+  COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE (style, 5, 0); // unexpected here in DXF
 
 DWG_ENTITY_END
 
