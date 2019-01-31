@@ -885,16 +885,16 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
           bfr_read(section->pages[i], &ptr, 56);
 
           LOG_TRACE("\n Page[%d]:\n", i)
-          LOG_TRACE("   offset:        %"PRIu64"\n", section->pages[i]->offset);
-          LOG_TRACE("   size:          %"PRIu64"\n", section->pages[i]->size);
-          LOG_TRACE("   id:            %"PRIu64"\n", section->pages[i]->id);
-          LOG_TRACE("   uncomp_size:   %"PRIu64"\n",
+          LOG_TRACE("   offset: 0x%"PRIx64, section->pages[i]->offset);
+          LOG_TRACE("   size: %"PRIu64, section->pages[i]->size);
+          LOG_TRACE("   id: %"PRIu64" ", section->pages[i]->id);
+          LOG_TRACE("   uncomp_size: %"PRIu64"\n",
                     section->pages[i]->uncomp_size);
-          LOG_HANDLE("   comp_size:     %"PRIu64"\n",
+          LOG_HANDLE("   comp_size: %"PRIu64,
                     section->pages[i]->comp_size);
-          LOG_HANDLE("   checksum:      %016"PRIx64"\n",
+          LOG_HANDLE("   checksum: %016"PRIx64,
                     section->pages[i]->checksum);
-          LOG_HANDLE("   crc64:         %016"PRIx64"\n", section->pages[i]->crc);
+          LOG_HANDLE("   crc64: %016"PRIx64"\n", section->pages[i]->crc);
           //debugging sanity
           assert(section->pages[i]->size < DBG_MAX_SIZE);
           assert(section->pages[i]->uncomp_size < DBG_MAX_SIZE);
@@ -946,8 +946,8 @@ read_pages_map(Bit_Chain* dat, int64_t size_comp,
       //index = page->id > 0 ? page->id : -page->id;
 
       LOG_TRACE("Page [%3"PRId64"]: ", page->id)
-      LOG_TRACE("size: 0x%05"PRIx64" ", page->size)
-      LOG_TRACE("id: 0x%"PRIx64" ", page->id)
+      LOG_TRACE("size: %6"PRIu64" ", page->size)
+      LOG_TRACE("id: 0x%04"PRIx64" ", page->id)
       LOG_TRACE("offset: 0x%"PRIx64" \n", page->offset)
 
       page->next = 0;

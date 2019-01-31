@@ -1587,8 +1587,8 @@ read_R2004_section_map(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       ptr += 8;
 
       LOG_TRACE("Section[%2d]  %2ld:", i, dwg->header.section[i].number)
-      LOG_TRACE(" size=0x%04x", dwg->header.section[i].size)
-      LOG_TRACE(" addr=0x%04x\n", dwg->header.section[i].address)
+      LOG_TRACE(" size: %5u", dwg->header.section[i].size)
+      LOG_TRACE(" addr: 0x%04x\n", dwg->header.section[i].address)
 
       if (dwg->header.section[i].number < 0) // negative: gap/unused data
         {
@@ -1636,7 +1636,7 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 {
   BITCODE_RC *decomp, *ptr, *decomp_end;
   BITCODE_BL i, j;
-  BITCODE_BL section_number = 0;
+  int32_t section_number = 0;
   uint32_t data_size;
   uint64_t start_offset;
   int error;
@@ -1685,7 +1685,7 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       info->size            = *((int32_t*)ptr);
       info->pagecount       = *((int32_t*)ptr + 1);
       info->num_sections    = *((int32_t*)ptr + 2);
-      if (info->size == section_number+1 &&
+      if (info->size == (BITCODE_RL)section_number+1 &&
           info->num_sections > 100000)
         {
           LOG_WARN("Oops, Section[%d] => Section_Info %d", i, info->size);
@@ -1723,9 +1723,9 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           return DWG_ERR_INVALIDDWG;
         }
 
-      if (info->num_sections < 100000)
-	    {
-	      LOG_INFO("Section count %u in area %d\n", info->num_sections, i);
+      if (info->num_sections < 1000000)
+        {
+          LOG_INFO("Section count %u in area %d\n", info->num_sections, i);
           info->sections = calloc(info->num_sections, sizeof(Dwg_Section*));
           if (!info->sections)
             {
@@ -1736,30 +1736,35 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
           for (j = 0; j < info->num_sections; j++)
             {
-              section_number = *((uint32_t*)ptr);       // Index into SectionMap
+              section_number = *((int32_t*)ptr);     // Index into SectionMap
               data_size      = *((uint32_t*)ptr + 1);
-              //start_offset   = *((uint64_t*)ptr + 1); // avoid alignment ubsan
-              start_offset   = *((uint32_t*)ptr + 2);
-              start_offset <<= 32;
-              start_offset  += *((uint32_t*)ptr + 3);
+              start_offset   = *((uint64_t*)ptr + 2); // avoid alignment ubsan
+              //start_offset   = *((uint32_t*)ptr + 2);
+              //start_offset <<= 32;
+              //start_offset  += *((uint32_t*)ptr + 3);
               ptr += 16;
 
               info->sections[j] = find_section(dwg, section_number);
 
+              if (section_number < 0)
+                { // gap/unused data
+                  LOG_TRACE("Section Number: %" PRId32" (unused)\t", section_number)
+                }
+              else
               if (section_number > info->num_sections + info->sections[0]->number)
                 {
-                  LOG_TRACE("Strange Section Number: 0x%lx\n",
-                            (unsigned long)section_number)
+                  LOG_WARN("!Section Number: %" PRId32, section_number)
+                  LOG_TRACE("\t\t")
                 }
               else
                 {
-                  LOG_TRACE("Section Number: %lu\n", (unsigned long)section_number)
+                  LOG_TRACE("Section Number: %" PRId32"\t", section_number)
                 }
-              LOG_TRACE("Data size:      %d\n", data_size) //compressed
-              LOG_TRACE("Start offset:   0x%" PRIx64 "\n", start_offset)
+              LOG_TRACE("size: %d\t", data_size) //compressed
+              LOG_TRACE("offset: 0x%" PRIx64 "\n", start_offset)
             }
         }// sanity check
-      else if (info->size == section_number+1)
+      else if (info->size == (BITCODE_RL)section_number+1)
         {
           Dwg_Section* sec;
           // oops, this is really another info
@@ -1781,7 +1786,7 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               return error | DWG_ERR_OUTOFMEM;
             }
           sec = find_section(dwg, section_number);
-          if (section_number < dwg->header.num_infos)
+          if ((BITCODE_RL)section_number < dwg->header.num_infos)
             info->sections[section_number] = sec;
 
           LOG_TRACE("Section Number: %d\n", section_number)
