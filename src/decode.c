@@ -1684,17 +1684,6 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       info = &dwg->header.section_info[i];
       info->size            = *((uint64_t*)ptr);
       info->pagecount       = *((int32_t*)ptr + 2);
-      /*info->num_sections    = *((int32_t*)ptr + 3);
-      if (info->size == (BITCODE_RL)section_number+1 &&
-          info->num_sections > 100000)
-        {
-          LOG_WARN("Oops, Section[%d] => Section_Info %d", i, info->size);
-          data_size = info->pagecount;
-          section_number++;
-          info = &dwg->header.section_info[i-1];
-          goto next_section;
-        }
-      */
       info->max_decomp_size = *((int32_t*)ptr + 3);
       info->unknown2        = *((int32_t*)ptr + 4);
       info->compressed      = *((int32_t*)ptr + 5);
@@ -1743,7 +1732,7 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               //start_offset   = *((uint32_t*)ptr + 2);
               //start_offset <<= 32;
               //start_offset  += *((uint32_t*)ptr + 3);
-              ptr += 16;
+              ptr += 16; /* 4*4 */
 
               info->sections[j] = find_section(dwg, section_number);
 
@@ -1765,39 +1754,8 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               LOG_TRACE("size: %d\t", data_size) //compressed
               LOG_TRACE("offset: 0x%" PRIx64 "\n", start_offset)
             }
-        }// sanity check
-      else if (info->size == (BITCODE_RL)section_number+1)
-        {
-          Dwg_Section* sec;
-          // oops, this is really another info
-          LOG_WARN("Oops2, Section[%d] => Section_Info %d", i, info->size);
-          section_number = info->size;      // Index into SectionMap
-          data_size      = info->pagecount;
-        //next_section:
-          start_offset   = *((uint32_t*)ptr + 2);
-          start_offset <<= 32;
-          start_offset  += *((uint32_t*)ptr + 3);
-          ptr -= 32;
-          ptr -= 64;
-          ptr += 16;
-
-          if (!info->sections)
-            {
-              free(decomp);
-              LOG_ERROR("Empty info->sections %d", info->pagecount);
-              return error | DWG_ERR_OUTOFMEM;
-            }
-          sec = find_section(dwg, section_number);
-          if ((BITCODE_RL)section_number < dwg->header.num_infos)
-            info->sections[section_number] = sec;
-
-          LOG_TRACE("Section Number: %d\n", section_number)
-          LOG_TRACE("Data size:      %d\n", data_size) //compressed
-          LOG_TRACE("Start offset:   0x%" PRIx64 "\n", start_offset);
-          free (decomp);
-          return error | DWG_ERR_VALUEOUTOFBOUNDS;
         }
-      else if (info->pagecount >= 100000)
+      else
         {
           LOG_ERROR("Section count %u in area %d too high! Skipping",
                     info->pagecount, i);
