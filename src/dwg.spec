@@ -5711,7 +5711,8 @@ DWG_OBJECT(WIPEOUTVARIABLES)
 
   DXF { FIELD_HANDLE (ownerhandle, 3, 330); }
   SUBCLASS (AcDbWipeoutVariables)
-  FIELD_BS (display_frame, 0);
+  //DXF { VALUE_BL (0, 90); } /* class_version */
+  FIELD_BS (display_frame, 70);
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (ownerhandle, 3, 0);
@@ -7156,6 +7157,55 @@ DWG_OBJECT(ACDBNAVISWORKSMODELDEF)
 
 DWG_OBJECT_END
 
+// officially documented, dbRender.h
+DWG_OBJECT(RENDERENVIRONMENT)
+  DECODE_UNKNOWN_BITS
+
+  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
+  SUBCLASS (AcDbRenderEnvironment)
+  DEBUG_HERE_OBJ
+  FIELD_BL (class_version, 90);     /*!< default 1 */
+  FIELD_B (fog_enabled, 290);
+  FIELD_B (fog_background_enabled, 290);
+  FIELD_CMC (fog_color, 0,280);
+  FIELD_BD (fog_density_near, 40); /* default 100.0 (opaque fog) */
+  FIELD_BD (fog_density_far, 40);
+  FIELD_BD (fog_distance_near, 40); /* default 100.0 (at the far clipping plane) */
+  FIELD_BD (fog_distance_far, 40);
+  FIELD_B (environ_image_enabled, 290);
+  FIELD_T (environ_image_filename, 1);
+
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (ownerhandle, 3, 0);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+
+DWG_OBJECT_END
+
+// officially documented, dbRender.h
+DWG_OBJECT(RENDERGLOBAL)
+  DECODE_UNKNOWN_BITS
+
+  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
+  SUBCLASS (AcDbRenderGlobal)
+  DEBUG_HERE_OBJ
+  FIELD_BL (class_version, 90);     /*!< default 2 */
+  FIELD_BL (procedure, 90);         /*!< 0 view, 1 crop, 2 selection */
+  FIELD_BL (destination, 90);       /*!< 0 window, 1 viewport */
+  FIELD_B (save_enabled, 290);
+  FIELD_T (save_filename, 1);
+  FIELD_BL (image_width, 90);
+  FIELD_BL (image_height, 90);
+  FIELD_B (predef_presets_first, 290);
+  FIELD_B (highlevel_info, 290);
+
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (ownerhandle, 3, 0);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+
+DWG_OBJECT_END
+
 #endif /* DEBUG_CLASSES */
 
 /* Those undocumented objects are also stored as raw UNKNOWN_OBJ */
@@ -7271,5 +7321,3 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
-
-

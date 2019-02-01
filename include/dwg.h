@@ -368,6 +368,11 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_PLOTSETTINGS,
   DWG_TYPE_POINTCLOUD,
   DWG_TYPE_RASTERVARIABLES,
+  DWG_TYPE_RENDERENVIRONMENT,
+  DWG_TYPE_RENDERGLOBAL,
+  DWG_TYPE_MENTALRAYRENDERSETTINGS,
+  DWG_TYPE_RAPIDRTRENDERENVIRONMENT,
+  DWG_TYPE_RAPIDRTRENDERSETTINGS,
   DWG_TYPE_RTEXT,
   DWG_TYPE_SCALE,
   DWG_TYPE_SECTIONVIEWSTYLE,
@@ -637,9 +642,9 @@ typedef struct _dwg_header_variables {
   BITCODE_TIMEBLL TDINDWG;
   BITCODE_TIMEBLL TDUSRTIMER;
   BITCODE_CMC CECOLOR;
-  BITCODE_RS CECOLOR_idx; /* <r13 */
+  //BITCODE_RS CECOLOR_idx; /* <r13 */
   BITCODE_BS HANDLING; /* <r14: default 1 */
-  BITCODE_RS HANDSEED_R11;
+  //BITCODE_RS HANDSEED_R11;
   BITCODE_H HANDSEED;
   BITCODE_H CLAYER;
   BITCODE_H TEXTSTYLE;
@@ -940,7 +945,7 @@ typedef struct _dwg_entity_ATTRIB
   BITCODE_RC class_version; /* R2010+ */
   BITCODE_RC type;    /* R2018+ */
   BITCODE_TV tag;
-  BITCODE_BS field_length;
+  BITCODE_BS field_length; /* DXF 73 but unused */
   BITCODE_RC flags;
   BITCODE_B lock_position_flag;
   BITCODE_H style;
@@ -1599,8 +1604,8 @@ typedef struct _dwg_entity_3DSOLID
   BITCODE_BS version;    /*!< DXF 70 Modeler format version =1*/
   BITCODE_BL num_blocks;
   BITCODE_BL* block_size;
-  BITCODE_RC** encr_sat_data;
-  BITCODE_RC*  acis_data; /*!< DXF 1, the decryted SAT data */
+  BITCODE_RC** encr_sat_data; /*!< DXF 1, the encrypted SAT data */
+  BITCODE_RC*  acis_data;     /*!< decrypted SAT data */
   BITCODE_B wireframe_data_present;
   BITCODE_B point_present;
   BITCODE_3BD point;
@@ -3946,9 +3951,9 @@ typedef struct _dwg_entity_WIPEOUT
 typedef struct _dwg_object_WIPEOUTVARIABLES
 {
   struct _dwg_object_object *parent;
-
-  BITCODE_BS display_frame;
-  BITCODE_H ownerhandle;
+  //BITCODE_BL class_version;  /*!< DXF 90 NY */
+  BITCODE_BS display_frame;    /*!< DXF 70  */
+  BITCODE_H ownerhandle;       /*!< DXF 330  */
 } Dwg_Object_WIPEOUTVARIABLES;
 
 /**
@@ -4938,6 +4943,45 @@ typedef struct _dwg_object_ACDBNAVISWORKSMODELDEF
 } Dwg_Object_ACDBNAVISWORKSMODELDEF;
 
 /**
+ Class RENDERENVIRONMENT (varies)
+ */
+typedef struct _dwg_object_RENDERENVIRONMENT
+{
+  struct _dwg_object_object *parent;
+
+  BITCODE_BL class_version;     /*!< DXF 90, default: 1 */
+  BITCODE_B fog_enabled;        /*!< DXF 290 */
+  BITCODE_B fog_background_enabled;  /*!< DXF 290 */
+  BITCODE_CMC fog_color;        /*!< DXF 280 */
+  BITCODE_BD fog_density_near;  /*!< DXF 40 */
+  BITCODE_BD fog_density_far;   /*!< DXF 40 */
+  BITCODE_BD fog_distance_near;     /*!< DXF 40 */
+  BITCODE_BD fog_distance_far;      /*!< DXF 40 */
+  BITCODE_B environ_image_enabled;  /*!< DXF 290 */
+  BITCODE_T environ_image_filename; /*!< DXF 1 */
+  BITCODE_H ownerhandle;
+} Dwg_Object_RENDERENVIRONMENT;
+
+/**
+ Class RENDERENVIRONMENT (varies)
+ */
+typedef struct _dwg_object_RENDERGLOBAL
+{
+  struct _dwg_object_object *parent;
+
+  BITCODE_BL class_version;    /*!< DXF 90 */
+  BITCODE_BL procedure;        /*!< DXF 90 */
+  BITCODE_BL destination;      /*!< DXF 90 */
+  BITCODE_B save_enabled;      /*!< DXF 290 */
+  BITCODE_T save_filename;     /*!< DXF 1 */
+  BITCODE_BL image_width;      /*!< DXF 90 */
+  BITCODE_BL image_height;     /*!< DXF 90 */
+  BITCODE_B predef_presets_first; /*!< DXF 290 */
+  BITCODE_B highlevel_info;    /*!< DXF 290 */
+  BITCODE_H ownerhandle;
+} Dwg_Object_RENDERGLOBAL;
+
+/**
  -----------------------------------
  */
 
@@ -5235,6 +5279,8 @@ typedef struct _dwg_object_object
     Dwg_Object_PLOTSETTINGS *PLOTSETTINGS;
     Dwg_Object_PROXY_OBJECT *PROXY_OBJECT;
     Dwg_Object_RASTERVARIABLES *RASTERVARIABLES;
+    Dwg_Object_RENDERENVIRONMENT *RENDERENVIRONMENT;
+    Dwg_Object_RENDERGLOBAL *RENDERGLOBAL;
     //TODO Dwg_Object_RTEXT *RTEXT;
     Dwg_Object_SCALE *SCALE;
     //TODO Dwg_Object_SECTIONVIEWSTYLE *SECTIONVIEWSTYLE;
@@ -5889,6 +5935,8 @@ EXPORT int dwg_add_PLOTSETTINGS (Dwg_Object *obj);
 //EXPORT int dwg_add_SECTIONVIEWSTYLE (Dwg_Object *obj);
 EXPORT int dwg_add_CELLSTYLEMAP (Dwg_Object *obj);
 //EXPORT int dwg_add_DOCUMENTOPTIONS (Dwg_Object *obj);
+EXPORT int dwg_add_RENDERENVIRONMENT (Dwg_Object *obj);
+EXPORT int dwg_add_RENDERGLOBAL (Dwg_Object *obj);
 //EXPORT int dwg_add_RTEXT (Dwg_Object *obj);
 EXPORT int dwg_add_PLANESURFACE (Dwg_Object *obj);
 EXPORT int dwg_add_EXTRUDEDSURFACE (Dwg_Object *obj);

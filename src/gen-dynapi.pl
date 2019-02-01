@@ -1,8 +1,10 @@
 #!/usr/bin/perl -w
-# Copyright (C) 2019 Free Software Foundation, Inc.
-# Generate c structs/arrays for all dwg objects and its fields for a dynamic API.
-# -> name, type, size, offset, memory
-# linear search is good enough.
+# Copyright (C) 2019 Free Software Foundation, Inc., GPL3
+#
+# Generate src/dynapi.c and test/testcases/dynapi_test.c
+# C structs/arrays for all dwg objects and its fields for a dynamic API.
+#   -> name, type, size, offset, dxfgroup, memory-type
+# Within each object linear search is good enough.
 # This is needed for in_dxf, dwgfilter,
 # a maintainable and shorter dwg_api and shorter language bindings.
 # Written by: Reini Urban
@@ -27,7 +29,7 @@ $c->parse_file($hdr);
 #print Data::Dumper->Dump([$c->struct('_dwg_entity_TEXT')], ['_dwg_entity_TEXT']);
 #print Data::Dumper->Dump([$c->struct('struct _dwg_header_variables')], ['Dwg_Header_Variables']);
 
-my (%h, $n, %structs, %ENT, %HDR);
+my (%h, $n, %structs, %ENT, %DXF);
 local (@entity_names, @object_names, @subtypes, $max_entity_names, $max_object_names);
 # todo: harmonize more subtypes
 for (sort $c->struct_names) {
@@ -70,6 +72,7 @@ while (<$in>) {
   } elsif ($n and $_ =~ /^ +BITCODE_([\w\*]+)\s+(\w.*);/) {
     my $type = $1;
     my $v = $2;
+    $v =~ s/^_3/3/;
     $type =~ s/\s+$//;
     if ($n eq 'COMMON_TABLE_CONTROL_FIELDS' && $v eq 'entries') {
       for (qw(block_headers layers styles linetypes views ucs vports apps dimstyles vport_entity_headers)) {
@@ -84,6 +87,81 @@ while (<$in>) {
 #$h{Dwg_Bitcode_3RD} = '3RD';
 #$h{Dwg_Bitcode_2RD} = '2RD';
 close $in;
+
+sub dxf_in {
+  $in = shift;
+  while (<$in>) {
+    $f = '';
+    s/DXF \{ //;
+    if (!$n) {
+      if (/^DWG_(ENTITY|OBJECT)\((\w+)\)/) {
+        $n = $2;
+        $n =~ s/^_3/3/;
+        warn $n;
+      }
+      elsif (/^\s*SECTION\(HEADER\)/) {
+        $n = 'header_variables';
+        warn $n;
+      }
+      elsif (/^int DWG_FUNC_N\(ACTION,(\w+)\)/) {
+        $n = $1;
+        warn $n;
+      }
+    } elsif (/^DWG_(ENTITY|OBJECT)_END/) { # close
+      $n = '';
+    } elsif (!$n) {
+      ;
+    } elsif (/^\s+FIELD_HANDLE\s*\((\w+),\s*\d+,\s*(\d+)\)/) {
+      $f = $1;
+      $DXF{$n}->{$f} = $2 if $2;
+    } elsif (/^\s+VALUE_HANDLE\s*\(.+,\s*(\w+),\s*\d,\s*(\d+)\)/) {
+      $f = $1;
+      $DXF{$n}->{$f} = $2 if $2;
+    } elsif (/^\s+FIELD_.+\s*\((\w+),\s*(\d+)\)/) {
+      $f = $1;
+      $DXF{$n}->{$f} = $2 if $2;
+    } elsif (/^\s+FIELD_.+\s*\((\w+),.*,\s*(\d+)\)/) {
+      $f = $1;
+      $DXF{$n}->{$f} = $2 if $2;
+    } elsif (/^\s+HEADER_.+\s*\((\w+),\s*(\d+)\)/) { # HEADER_RC
+      $f = $1;
+      $DXF{$n}->{$f} = $2 if $2;
+    } elsif (/^\s+HEADER_.+\s*\((\w+),\s*(\d+),\s*\w+\)/) {
+      $f = $1;
+      $DXF{$n}->{$f} = $2 if $2;
+    } elsif (/^\s+HEADER_.+\s*\((\w+),\s*\w+,\s*(\d+),\s*\D.+\)/) {
+      $f = $1;
+      #$f =~ s/^_3/3/;
+      $DXF{$n}->{$f} = $2 if $2;
+    } elsif (/^\s+HEADER_([23])D\s*\((\w+)\)/) {
+      $f = $2;
+      $DXF{$n}->{$f} = $1 eq '2' ? 20 : 30;
+    } elsif (/^\s+VALUE_.+\s*\((\w.+),.*,\s*(\d+)\)/) {
+      $f = $1;
+      $DXF{$n}->{$f} = $2 if $2;
+    }
+    if ($f and $n and exists $DXF{$n}->{$f}) {
+      warn "  $f $DXF{$n}->{$f}\n";
+    }
+  }
+}
+
+# get dxf group for each struct field
+open $in, "<", 'dwg.spec' or die "dwg.spec: $!";
+dxf_in($in);
+close $in;
+$DXF{'3DSOLID'}->{'version'} = 70;
+$DXF{'REGION'}->{'version'} = 70;
+$DXF{'BODY'}->{'version'} = 70;
+$DXF{'3DSOLID'}->{'encr_sat_data'} = 1;
+$DXF{'REGION'}->{'encr_sat_data'} = 1;
+$DXF{'BODY'}->{'encr_sat_data'} = 1;
+$DXF{'BLOCK'}->{'name'} = 2; # and 3
+
+open $in, "<", 'header_variables_dxf.spec' or die "header_variables_dxf.spec: $!";
+dxf_in($in);
+close $in;
+$DXF{header_variables}->{'_3DDWFPREC'} = 40;
 
 my $cfile = "dynapi.c";
 chmod 0644, $cfile if -e $cfile;
@@ -171,10 +249,16 @@ sub out_struct {
       $sname =~ s/\[(\d+)\]$//;
     }
     $ENT{$key}->{$name} = $type;
-    printf $fh "  { \"%s\", \"%s\", %s, OFF(%s,%s), %d,%d,%d, /*DXF:*/ %d },\n",
-      $name, $type, $size, $tmpl, $sname, $is_indirect, $is_malloc, $is_string, 0; #TODO: DXF
+    my $dxf = $DXF{$key}->{$name};
+    $dxf = 0 unless $dxf;
+    warn "no dxf for $key: $name 0\n" unless $dxf or
+      ($name eq 'parent') or
+      ($key eq 'header_variables' and $name eq lc($name));
+
+    printf $fh "  { \"%s\", \"%s\", %s, OFF(%s,%s), %d,%d,%d, %d },\n",
+      $name, $type, $size, $tmpl, $sname, $is_indirect, $is_malloc, $is_string, $dxf;
   }
-  print $fh "  {NULL, NULL, 0, 0,0,0,0,0},\n";
+  print $fh "  {NULL, NULL, 0, 0, 0,0,0, 0},\n";
   print $fh "};\n";
 }
 

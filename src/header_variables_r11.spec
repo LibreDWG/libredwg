@@ -131,7 +131,7 @@
 
   */
   dat->byte = 0x31b;
-  FIELD_RS (CECOLOR_idx, 62);
+  FIELD_RS (CECOLOR.index, 62);
   DECODER {
     _obj->CELTYPE = calloc(1, sizeof(Dwg_Object_Ref));
     _obj->CELTYPE->absolute_ref = bit_read_RS(dat); // 6, ff for BYLAYER, fe for BYBLOCK

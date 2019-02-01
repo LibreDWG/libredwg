@@ -2593,30 +2593,6 @@ static int test_header (const Dwg_Data *dwg)
       }
   }
   {
-    BITCODE_RS cecolor_idx;
-    if (dwg_dynapi_header_value(dwg, "CECOLOR_idx", &cecolor_idx, NULL) &&
-        cecolor_idx == dwg->header_vars.CECOLOR_idx)
-      {
-        pass ("HEADER.CECOLOR_idx [RS] %hu", cecolor_idx);
-      }
-    else
-      {
-        fail ("HEADER.CECOLOR_idx [RS] %hu != %hu", dwg->header_vars.CECOLOR_idx, cecolor_idx); error++;
-      }
-    cecolor_idx++;
-    if (dwg_dynapi_header_set_value(dwg, "CECOLOR_idx", &cecolor_idx) &&
-        cecolor_idx == dwg->header_vars.CECOLOR_idx)
-      {
-        pass ("HEADER.CECOLOR_idx [RS] set+1 %hu", cecolor_idx);
-      }
-    else
-      {
-        fail ("HEADER.CECOLOR_idx [RS] set+1 %hu != %hu", dwg->header_vars.CECOLOR_idx, cecolor_idx); error++;
-      }
-    cecolor_idx--; dwg_dynapi_header_set_value(dwg, "CECOLOR_idx", &cecolor_idx);
-
-  }
-  {
     BITCODE_BS handling;
     if (dwg_dynapi_header_value(dwg, "HANDLING", &handling, NULL) &&
         handling == dwg->header_vars.HANDLING)
@@ -2638,30 +2614,6 @@ static int test_header (const Dwg_Data *dwg)
         fail ("HEADER.HANDLING [BS] set+1 %hu != %hu", dwg->header_vars.HANDLING, handling); error++;
       }
     handling--; dwg_dynapi_header_set_value(dwg, "HANDLING", &handling);
-
-  }
-  {
-    BITCODE_RS handseed_r11;
-    if (dwg_dynapi_header_value(dwg, "HANDSEED_R11", &handseed_r11, NULL) &&
-        handseed_r11 == dwg->header_vars.HANDSEED_R11)
-      {
-        pass ("HEADER.HANDSEED_R11 [RS] %hu", handseed_r11);
-      }
-    else
-      {
-        fail ("HEADER.HANDSEED_R11 [RS] %hu != %hu", dwg->header_vars.HANDSEED_R11, handseed_r11); error++;
-      }
-    handseed_r11++;
-    if (dwg_dynapi_header_set_value(dwg, "HANDSEED_R11", &handseed_r11) &&
-        handseed_r11 == dwg->header_vars.HANDSEED_R11)
-      {
-        pass ("HEADER.HANDSEED_R11 [RS] set+1 %hu", handseed_r11);
-      }
-    else
-      {
-        fail ("HEADER.HANDSEED_R11 [RS] set+1 %hu != %hu", dwg->header_vars.HANDSEED_R11, handseed_r11); error++;
-      }
-    handseed_r11--; dwg_dynapi_header_set_value(dwg, "HANDSEED_R11", &handseed_r11);
 
   }
   {
@@ -45651,6 +45603,488 @@ static int test_RASTERVARIABLES (const Dwg_Object *obj)
   }
   return error;
 }
+static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_RENDERENVIRONMENT *restrict renderenvironment = obj->tio.object->tio.RENDERENVIRONMENT;
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value(renderenvironment, "RENDERENVIRONMENT", "class_version", &class_version, NULL) &&
+        class_version == renderenvironment->class_version)
+      {
+        pass ("RENDERENVIRONMENT.class_version [BL] %u", class_version);
+      }
+    else
+      {
+        fail ("RENDERENVIRONMENT.class_version [BL] %u != %u", renderenvironment->class_version, class_version); error++;
+      }
+    class_version++;
+    if (dwg_dynapi_entity_set_value(renderenvironment, "RENDERENVIRONMENT", "class_version", &class_version) &&
+        class_version == renderenvironment->class_version)
+      {
+        pass ("RENDERENVIRONMENT.class_version [BL] set+1 %u", class_version);
+      }
+    else
+      {
+        fail ("RENDERENVIRONMENT.class_version [BL] set+1 %u != %u", renderenvironment->class_version, class_version); error++;
+      }
+    renderenvironment->class_version--;
+
+  }
+  {
+    BITCODE_B environ_image_enabled;
+    if (dwg_dynapi_entity_value(renderenvironment, "RENDERENVIRONMENT", "environ_image_enabled", &environ_image_enabled, NULL) &&
+        environ_image_enabled == renderenvironment->environ_image_enabled)
+      {
+        pass ("RENDERENVIRONMENT.environ_image_enabled [B] " FORMAT_B "", environ_image_enabled);
+      }
+    else
+      {
+        fail ("RENDERENVIRONMENT.environ_image_enabled [B] " FORMAT_B " != " FORMAT_B "", renderenvironment->environ_image_enabled, environ_image_enabled); error++;
+      }
+    environ_image_enabled++;
+    if (dwg_dynapi_entity_set_value(renderenvironment, "RENDERENVIRONMENT", "environ_image_enabled", &environ_image_enabled) &&
+        environ_image_enabled == renderenvironment->environ_image_enabled)
+      {
+        pass ("RENDERENVIRONMENT.environ_image_enabled [B] set+1 " FORMAT_B "", environ_image_enabled);
+      }
+    else
+      {
+        fail ("RENDERENVIRONMENT.environ_image_enabled [B] set+1 " FORMAT_B " != " FORMAT_B "", renderenvironment->environ_image_enabled, environ_image_enabled); error++;
+      }
+    renderenvironment->environ_image_enabled--;
+
+  }
+  {
+    BITCODE_T environ_image_filename;
+    if (dwg_dynapi_entity_value(renderenvironment, "RENDERENVIRONMENT", "environ_image_filename", &environ_image_filename, NULL)
+        && !memcmp(&environ_image_filename, &renderenvironment->environ_image_filename, sizeof(renderenvironment->environ_image_filename)))
+      {
+        pass ("RENDERENVIRONMENT.environ_image_filename [T]");
+      }
+    else
+      {
+        fail ("RENDERENVIRONMENT.environ_image_filename [T]"); error++;
+      }
+  }
+  {
+    BITCODE_B fog_background_enabled;
+    if (dwg_dynapi_entity_value(renderenvironment, "RENDERENVIRONMENT", "fog_background_enabled", &fog_background_enabled, NULL) &&
+        fog_background_enabled == renderenvironment->fog_background_enabled)
+      {
+        pass ("RENDERENVIRONMENT.fog_background_enabled [B] " FORMAT_B "", fog_background_enabled);
+      }
+    else
+      {
+        fail ("RENDERENVIRONMENT.fog_background_enabled [B] " FORMAT_B " != " FORMAT_B "", renderenvironment->fog_background_enabled, fog_background_enabled); error++;
+      }
+    fog_background_enabled++;
+    if (dwg_dynapi_entity_set_value(renderenvironment, "RENDERENVIRONMENT", "fog_background_enabled", &fog_background_enabled) &&
+        fog_background_enabled == renderenvironment->fog_background_enabled)
+      {
+        pass ("RENDERENVIRONMENT.fog_background_enabled [B] set+1 " FORMAT_B "", fog_background_enabled);
+      }
+    else
+      {
+        fail ("RENDERENVIRONMENT.fog_background_enabled [B] set+1 " FORMAT_B " != " FORMAT_B "", renderenvironment->fog_background_enabled, fog_background_enabled); error++;
+      }
+    renderenvironment->fog_background_enabled--;
+
+  }
+  {
+    BITCODE_CMC fog_color;
+    if (dwg_dynapi_entity_value(renderenvironment, "RENDERENVIRONMENT", "fog_color", &fog_color, NULL)
+        && !memcmp(&fog_color, &renderenvironment->fog_color, sizeof(renderenvironment->fog_color)))
+      {
+        pass ("RENDERENVIRONMENT.fog_color [CMC]");
+      }
+    else
+      {
+        fail ("RENDERENVIRONMENT.fog_color [CMC]"); error++;
+      }
+  }
+  {
+    BITCODE_BD fog_density_far;
+    if (dwg_dynapi_entity_value(renderenvironment, "RENDERENVIRONMENT", "fog_density_far", &fog_density_far, NULL) &&
+        fog_density_far == renderenvironment->fog_density_far)
+      {
+        pass ("RENDERENVIRONMENT.fog_density_far [BD] %g", fog_density_far);
+      }
+    else
+      {
+        fail ("RENDERENVIRONMENT.fog_density_far [BD] %g != %g", renderenvironment->fog_density_far, fog_density_far); error++;
+      }
+    fog_density_far++;
+    if (dwg_dynapi_entity_set_value(renderenvironment, "RENDERENVIRONMENT", "fog_density_far", &fog_density_far) &&
+        fog_density_far == renderenvironment->fog_density_far)
+      {
+        pass ("RENDERENVIRONMENT.fog_density_far [BD] set+1 %g", fog_density_far);
+      }
+    else
+      {
+        fail ("RENDERENVIRONMENT.fog_density_far [BD] set+1 %g != %g", renderenvironment->fog_density_far, fog_density_far); error++;
+      }
+    renderenvironment->fog_density_far--;
+
+  }
+  {
+    BITCODE_BD fog_density_near;
+    if (dwg_dynapi_entity_value(renderenvironment, "RENDERENVIRONMENT", "fog_density_near", &fog_density_near, NULL) &&
+        fog_density_near == renderenvironment->fog_density_near)
+      {
+        pass ("RENDERENVIRONMENT.fog_density_near [BD] %g", fog_density_near);
+      }
+    else
+      {
+        fail ("RENDERENVIRONMENT.fog_density_near [BD] %g != %g", renderenvironment->fog_density_near, fog_density_near); error++;
+      }
+    fog_density_near++;
+    if (dwg_dynapi_entity_set_value(renderenvironment, "RENDERENVIRONMENT", "fog_density_near", &fog_density_near) &&
+        fog_density_near == renderenvironment->fog_density_near)
+      {
+        pass ("RENDERENVIRONMENT.fog_density_near [BD] set+1 %g", fog_density_near);
+      }
+    else
+      {
+        fail ("RENDERENVIRONMENT.fog_density_near [BD] set+1 %g != %g", renderenvironment->fog_density_near, fog_density_near); error++;
+      }
+    renderenvironment->fog_density_near--;
+
+  }
+  {
+    BITCODE_BD fog_distance_far;
+    if (dwg_dynapi_entity_value(renderenvironment, "RENDERENVIRONMENT", "fog_distance_far", &fog_distance_far, NULL) &&
+        fog_distance_far == renderenvironment->fog_distance_far)
+      {
+        pass ("RENDERENVIRONMENT.fog_distance_far [BD] %g", fog_distance_far);
+      }
+    else
+      {
+        fail ("RENDERENVIRONMENT.fog_distance_far [BD] %g != %g", renderenvironment->fog_distance_far, fog_distance_far); error++;
+      }
+    fog_distance_far++;
+    if (dwg_dynapi_entity_set_value(renderenvironment, "RENDERENVIRONMENT", "fog_distance_far", &fog_distance_far) &&
+        fog_distance_far == renderenvironment->fog_distance_far)
+      {
+        pass ("RENDERENVIRONMENT.fog_distance_far [BD] set+1 %g", fog_distance_far);
+      }
+    else
+      {
+        fail ("RENDERENVIRONMENT.fog_distance_far [BD] set+1 %g != %g", renderenvironment->fog_distance_far, fog_distance_far); error++;
+      }
+    renderenvironment->fog_distance_far--;
+
+  }
+  {
+    BITCODE_BD fog_distance_near;
+    if (dwg_dynapi_entity_value(renderenvironment, "RENDERENVIRONMENT", "fog_distance_near", &fog_distance_near, NULL) &&
+        fog_distance_near == renderenvironment->fog_distance_near)
+      {
+        pass ("RENDERENVIRONMENT.fog_distance_near [BD] %g", fog_distance_near);
+      }
+    else
+      {
+        fail ("RENDERENVIRONMENT.fog_distance_near [BD] %g != %g", renderenvironment->fog_distance_near, fog_distance_near); error++;
+      }
+    fog_distance_near++;
+    if (dwg_dynapi_entity_set_value(renderenvironment, "RENDERENVIRONMENT", "fog_distance_near", &fog_distance_near) &&
+        fog_distance_near == renderenvironment->fog_distance_near)
+      {
+        pass ("RENDERENVIRONMENT.fog_distance_near [BD] set+1 %g", fog_distance_near);
+      }
+    else
+      {
+        fail ("RENDERENVIRONMENT.fog_distance_near [BD] set+1 %g != %g", renderenvironment->fog_distance_near, fog_distance_near); error++;
+      }
+    renderenvironment->fog_distance_near--;
+
+  }
+  {
+    BITCODE_B fog_enabled;
+    if (dwg_dynapi_entity_value(renderenvironment, "RENDERENVIRONMENT", "fog_enabled", &fog_enabled, NULL) &&
+        fog_enabled == renderenvironment->fog_enabled)
+      {
+        pass ("RENDERENVIRONMENT.fog_enabled [B] " FORMAT_B "", fog_enabled);
+      }
+    else
+      {
+        fail ("RENDERENVIRONMENT.fog_enabled [B] " FORMAT_B " != " FORMAT_B "", renderenvironment->fog_enabled, fog_enabled); error++;
+      }
+    fog_enabled++;
+    if (dwg_dynapi_entity_set_value(renderenvironment, "RENDERENVIRONMENT", "fog_enabled", &fog_enabled) &&
+        fog_enabled == renderenvironment->fog_enabled)
+      {
+        pass ("RENDERENVIRONMENT.fog_enabled [B] set+1 " FORMAT_B "", fog_enabled);
+      }
+    else
+      {
+        fail ("RENDERENVIRONMENT.fog_enabled [B] set+1 " FORMAT_B " != " FORMAT_B "", renderenvironment->fog_enabled, fog_enabled); error++;
+      }
+    renderenvironment->fog_enabled--;
+
+  }
+  {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(renderenvironment, "RENDERENVIRONMENT", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp(&ownerhandle, &renderenvironment->ownerhandle, sizeof(renderenvironment->ownerhandle)))
+      {
+        pass ("RENDERENVIRONMENT.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("RENDERENVIRONMENT.ownerhandle [H]"); error++;
+      }
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value(renderenvironment, "RENDERENVIRONMENT", "parent", &parent, NULL)
+        && !memcmp(&parent, &renderenvironment->parent, sizeof(renderenvironment->parent)))
+      {
+        pass ("RENDERENVIRONMENT.parent [struct _dwg_object_object*]");
+      }
+    else
+      {
+        fail ("RENDERENVIRONMENT.parent [struct _dwg_object_object*]"); error++;
+      }
+  }
+  return error;
+}
+static int test_RENDERGLOBAL (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_RENDERGLOBAL *restrict renderglobal = obj->tio.object->tio.RENDERGLOBAL;
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value(renderglobal, "RENDERGLOBAL", "class_version", &class_version, NULL) &&
+        class_version == renderglobal->class_version)
+      {
+        pass ("RENDERGLOBAL.class_version [BL] %u", class_version);
+      }
+    else
+      {
+        fail ("RENDERGLOBAL.class_version [BL] %u != %u", renderglobal->class_version, class_version); error++;
+      }
+    class_version++;
+    if (dwg_dynapi_entity_set_value(renderglobal, "RENDERGLOBAL", "class_version", &class_version) &&
+        class_version == renderglobal->class_version)
+      {
+        pass ("RENDERGLOBAL.class_version [BL] set+1 %u", class_version);
+      }
+    else
+      {
+        fail ("RENDERGLOBAL.class_version [BL] set+1 %u != %u", renderglobal->class_version, class_version); error++;
+      }
+    renderglobal->class_version--;
+
+  }
+  {
+    BITCODE_BL destination;
+    if (dwg_dynapi_entity_value(renderglobal, "RENDERGLOBAL", "destination", &destination, NULL) &&
+        destination == renderglobal->destination)
+      {
+        pass ("RENDERGLOBAL.destination [BL] %u", destination);
+      }
+    else
+      {
+        fail ("RENDERGLOBAL.destination [BL] %u != %u", renderglobal->destination, destination); error++;
+      }
+    destination++;
+    if (dwg_dynapi_entity_set_value(renderglobal, "RENDERGLOBAL", "destination", &destination) &&
+        destination == renderglobal->destination)
+      {
+        pass ("RENDERGLOBAL.destination [BL] set+1 %u", destination);
+      }
+    else
+      {
+        fail ("RENDERGLOBAL.destination [BL] set+1 %u != %u", renderglobal->destination, destination); error++;
+      }
+    renderglobal->destination--;
+
+  }
+  {
+    BITCODE_B highlevel_info;
+    if (dwg_dynapi_entity_value(renderglobal, "RENDERGLOBAL", "highlevel_info", &highlevel_info, NULL) &&
+        highlevel_info == renderglobal->highlevel_info)
+      {
+        pass ("RENDERGLOBAL.highlevel_info [B] " FORMAT_B "", highlevel_info);
+      }
+    else
+      {
+        fail ("RENDERGLOBAL.highlevel_info [B] " FORMAT_B " != " FORMAT_B "", renderglobal->highlevel_info, highlevel_info); error++;
+      }
+    highlevel_info++;
+    if (dwg_dynapi_entity_set_value(renderglobal, "RENDERGLOBAL", "highlevel_info", &highlevel_info) &&
+        highlevel_info == renderglobal->highlevel_info)
+      {
+        pass ("RENDERGLOBAL.highlevel_info [B] set+1 " FORMAT_B "", highlevel_info);
+      }
+    else
+      {
+        fail ("RENDERGLOBAL.highlevel_info [B] set+1 " FORMAT_B " != " FORMAT_B "", renderglobal->highlevel_info, highlevel_info); error++;
+      }
+    renderglobal->highlevel_info--;
+
+  }
+  {
+    BITCODE_BL image_height;
+    if (dwg_dynapi_entity_value(renderglobal, "RENDERGLOBAL", "image_height", &image_height, NULL) &&
+        image_height == renderglobal->image_height)
+      {
+        pass ("RENDERGLOBAL.image_height [BL] %u", image_height);
+      }
+    else
+      {
+        fail ("RENDERGLOBAL.image_height [BL] %u != %u", renderglobal->image_height, image_height); error++;
+      }
+    image_height++;
+    if (dwg_dynapi_entity_set_value(renderglobal, "RENDERGLOBAL", "image_height", &image_height) &&
+        image_height == renderglobal->image_height)
+      {
+        pass ("RENDERGLOBAL.image_height [BL] set+1 %u", image_height);
+      }
+    else
+      {
+        fail ("RENDERGLOBAL.image_height [BL] set+1 %u != %u", renderglobal->image_height, image_height); error++;
+      }
+    renderglobal->image_height--;
+
+  }
+  {
+    BITCODE_BL image_width;
+    if (dwg_dynapi_entity_value(renderglobal, "RENDERGLOBAL", "image_width", &image_width, NULL) &&
+        image_width == renderglobal->image_width)
+      {
+        pass ("RENDERGLOBAL.image_width [BL] %u", image_width);
+      }
+    else
+      {
+        fail ("RENDERGLOBAL.image_width [BL] %u != %u", renderglobal->image_width, image_width); error++;
+      }
+    image_width++;
+    if (dwg_dynapi_entity_set_value(renderglobal, "RENDERGLOBAL", "image_width", &image_width) &&
+        image_width == renderglobal->image_width)
+      {
+        pass ("RENDERGLOBAL.image_width [BL] set+1 %u", image_width);
+      }
+    else
+      {
+        fail ("RENDERGLOBAL.image_width [BL] set+1 %u != %u", renderglobal->image_width, image_width); error++;
+      }
+    renderglobal->image_width--;
+
+  }
+  {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(renderglobal, "RENDERGLOBAL", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp(&ownerhandle, &renderglobal->ownerhandle, sizeof(renderglobal->ownerhandle)))
+      {
+        pass ("RENDERGLOBAL.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("RENDERGLOBAL.ownerhandle [H]"); error++;
+      }
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value(renderglobal, "RENDERGLOBAL", "parent", &parent, NULL)
+        && !memcmp(&parent, &renderglobal->parent, sizeof(renderglobal->parent)))
+      {
+        pass ("RENDERGLOBAL.parent [struct _dwg_object_object*]");
+      }
+    else
+      {
+        fail ("RENDERGLOBAL.parent [struct _dwg_object_object*]"); error++;
+      }
+  }
+  {
+    BITCODE_B predef_presets_first;
+    if (dwg_dynapi_entity_value(renderglobal, "RENDERGLOBAL", "predef_presets_first", &predef_presets_first, NULL) &&
+        predef_presets_first == renderglobal->predef_presets_first)
+      {
+        pass ("RENDERGLOBAL.predef_presets_first [B] " FORMAT_B "", predef_presets_first);
+      }
+    else
+      {
+        fail ("RENDERGLOBAL.predef_presets_first [B] " FORMAT_B " != " FORMAT_B "", renderglobal->predef_presets_first, predef_presets_first); error++;
+      }
+    predef_presets_first++;
+    if (dwg_dynapi_entity_set_value(renderglobal, "RENDERGLOBAL", "predef_presets_first", &predef_presets_first) &&
+        predef_presets_first == renderglobal->predef_presets_first)
+      {
+        pass ("RENDERGLOBAL.predef_presets_first [B] set+1 " FORMAT_B "", predef_presets_first);
+      }
+    else
+      {
+        fail ("RENDERGLOBAL.predef_presets_first [B] set+1 " FORMAT_B " != " FORMAT_B "", renderglobal->predef_presets_first, predef_presets_first); error++;
+      }
+    renderglobal->predef_presets_first--;
+
+  }
+  {
+    BITCODE_BL procedure;
+    if (dwg_dynapi_entity_value(renderglobal, "RENDERGLOBAL", "procedure", &procedure, NULL) &&
+        procedure == renderglobal->procedure)
+      {
+        pass ("RENDERGLOBAL.procedure [BL] %u", procedure);
+      }
+    else
+      {
+        fail ("RENDERGLOBAL.procedure [BL] %u != %u", renderglobal->procedure, procedure); error++;
+      }
+    procedure++;
+    if (dwg_dynapi_entity_set_value(renderglobal, "RENDERGLOBAL", "procedure", &procedure) &&
+        procedure == renderglobal->procedure)
+      {
+        pass ("RENDERGLOBAL.procedure [BL] set+1 %u", procedure);
+      }
+    else
+      {
+        fail ("RENDERGLOBAL.procedure [BL] set+1 %u != %u", renderglobal->procedure, procedure); error++;
+      }
+    renderglobal->procedure--;
+
+  }
+  {
+    BITCODE_B save_enabled;
+    if (dwg_dynapi_entity_value(renderglobal, "RENDERGLOBAL", "save_enabled", &save_enabled, NULL) &&
+        save_enabled == renderglobal->save_enabled)
+      {
+        pass ("RENDERGLOBAL.save_enabled [B] " FORMAT_B "", save_enabled);
+      }
+    else
+      {
+        fail ("RENDERGLOBAL.save_enabled [B] " FORMAT_B " != " FORMAT_B "", renderglobal->save_enabled, save_enabled); error++;
+      }
+    save_enabled++;
+    if (dwg_dynapi_entity_set_value(renderglobal, "RENDERGLOBAL", "save_enabled", &save_enabled) &&
+        save_enabled == renderglobal->save_enabled)
+      {
+        pass ("RENDERGLOBAL.save_enabled [B] set+1 " FORMAT_B "", save_enabled);
+      }
+    else
+      {
+        fail ("RENDERGLOBAL.save_enabled [B] set+1 " FORMAT_B " != " FORMAT_B "", renderglobal->save_enabled, save_enabled); error++;
+      }
+    renderglobal->save_enabled--;
+
+  }
+  {
+    BITCODE_T save_filename;
+    if (dwg_dynapi_entity_value(renderglobal, "RENDERGLOBAL", "save_filename", &save_filename, NULL)
+        && !memcmp(&save_filename, &renderglobal->save_filename, sizeof(renderglobal->save_filename)))
+      {
+        pass ("RENDERGLOBAL.save_filename [T]");
+      }
+    else
+      {
+        fail ("RENDERGLOBAL.save_filename [T]"); error++;
+      }
+  }
+  return error;
+}
 static int test_SCALE (const Dwg_Object *obj)
 {
   int error = 0;
@@ -52086,6 +52520,10 @@ static int test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict
     error += test_PROXY_OBJECT(obj);
   else  if (obj->fixedtype == DWG_TYPE_RASTERVARIABLES)
     error += test_RASTERVARIABLES(obj);
+  else  if (obj->fixedtype == DWG_TYPE_RENDERENVIRONMENT)
+    error += test_RENDERENVIRONMENT(obj);
+  else  if (obj->fixedtype == DWG_TYPE_RENDERGLOBAL)
+    error += test_RENDERGLOBAL(obj);
   else  if (obj->fixedtype == DWG_TYPE_SCALE)
     error += test_SCALE(obj);
   else  if (obj->fixedtype == DWG_TYPE_SORTENTSTABLE)
@@ -52356,6 +52794,10 @@ static int test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict
     error += test_PROXY_OBJECT(obj);
   else  if (obj->fixedtype == DWG_TYPE_RASTERVARIABLES)
     error += test_RASTERVARIABLES(obj);
+  else  if (obj->fixedtype == DWG_TYPE_RENDERENVIRONMENT)
+    error += test_RENDERENVIRONMENT(obj);
+  else  if (obj->fixedtype == DWG_TYPE_RENDERGLOBAL)
+    error += test_RENDERGLOBAL(obj);
   else  if (obj->fixedtype == DWG_TYPE_SCALE)
     error += test_SCALE(obj);
   else  if (obj->fixedtype == DWG_TYPE_SORTENTSTABLE)

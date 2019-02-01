@@ -937,6 +937,29 @@ my $known = {
     290 => 'handedness',
     280 => 'constraint_type',
     ],
+  RENDERENVIRONMENT => [
+    90 => 'class_version',
+    290 => 'fog_enabled',
+    290 => 'fog_background_enabled',
+    280 => 'fog_color', # 3*rgb?
+    40 => 'fog_density_near',
+    40 => 'fog_density_far',
+    40 => 'fog_distance_near',
+    40 => 'fog_distance_far',
+    290 => 'environ_image_enabled',
+    1 => 'environ_image_filename',
+    ],
+  RENDERGLOBAL => [
+    90 => 'class_version',
+    90 => 'procedure',
+    90 => 'destination',
+    290 => 'save_enabled',
+    1 => 'save_filename',
+    90 => 'image_width',
+    90 => 'image_height',
+    290 => 'predef_presets_first',
+    290 => 'highlevel_info',
+    ]
 };
 
 print $f0 "// -*- c -*-\n";
