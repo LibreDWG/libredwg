@@ -726,6 +726,7 @@ read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat,
   return 0;
 }
 
+/* endian specific code: */
 #define bfr_read_int16(_p)   *((int16_t*)_p);  _p += 2;
 #define bfr_read_int64(_p)   *((int64_t*)_p);  _p += 8;
 

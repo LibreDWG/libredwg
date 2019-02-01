@@ -1579,12 +1579,13 @@ read_R2004_section_map(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           return DWG_ERR_OUTOFMEM;
         }
 
+      /* endian specific code: */
       dwg->header.section[i].number  = *((int32_t*)ptr);
       dwg->header.section[i].size    = *((uint32_t*)ptr+1);
       dwg->header.section[i].address = section_address;
       section_address += dwg->header.section[i].size;
       bytes_remaining -= 8;
-      ptr += 8;
+      ptr += 8; /* 2*4 */
 
       LOG_TRACE("Section[%2d]  %2ld:", i, dwg->header.section[i].number)
       LOG_TRACE(" size: %5u", dwg->header.section[i].size)
@@ -1592,12 +1593,13 @@ read_R2004_section_map(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
       if (dwg->header.section[i].number < 0) // negative: gap/unused data
         {
+          /* endian specific code: */
           dwg->header.section[i].parent  = *((int32_t*)ptr);
           dwg->header.section[i].left    = *((int32_t*)ptr+1);
           dwg->header.section[i].right   = *((int32_t*)ptr+2);
           dwg->header.section[i].x00     = *((int32_t*)ptr+3);
           bytes_remaining -= 16;
-          ptr += 16;
+          ptr += 16; /* 4*4 */
 
           LOG_TRACE("Parent: %d ", dwg->header.section[i].parent)
           LOG_TRACE("Left:   %d ", dwg->header.section[i].left)
@@ -1682,6 +1684,7 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           return DWG_ERR_INVALIDDWG;
         }
       info = &dwg->header.section_info[i];
+      /* endian specific code: */
       info->size            = *((uint64_t*)ptr);
       info->pagecount       = *((int32_t*)ptr + 2);
       info->max_decomp_size = *((int32_t*)ptr + 3);
@@ -1726,6 +1729,7 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
           for (j = 0; j < info->pagecount; j++)
             {
+              /* endian specific code: */
               section_number = *((int32_t*)ptr);     // Index into SectionMap
               data_size      = *((uint32_t*)ptr + 1);
               start_offset   = *((uint64_t*)ptr + 2); // avoid alignment ubsan
