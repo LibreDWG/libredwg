@@ -40,64 +40,65 @@ static const char dwg_entity_names[][MAXLEN_ENTITIES] = {
     "3DFACE" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 0 */
   "3DSOLID" "\0\0\0\0\0\0\0\0\0\0\0",	/* 1 */
   "ARC" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 2 */
-  "ATTDEF" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 3 */
-  "ATTRIB" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 4 */
-  "BLOCK" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 5 */
-  "CAMERA" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 6 */
-  "CIRCLE" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 7 */
-  "DIMENSION_ALIGNED" "\0",	/* 8 */
-  "DIMENSION_ANG2LN" "\0\0",	/* 9 */
-  "DIMENSION_ANG3PT" "\0\0",	/* 10 */
-  "DIMENSION_DIAMETER" "",	/* 11 */
-  "DIMENSION_LINEAR" "\0\0",	/* 12 */
-  "DIMENSION_ORDINATE" "",	/* 13 */
-  "DIMENSION_RADIUS" "\0\0",	/* 14 */
-  "DIMENSION_" "\0\0\0\0\0\0\0\0",	/* 15 */
-  "ELLIPSE" "\0\0\0\0\0\0\0\0\0\0\0",	/* 16 */
-  "ENDBLK" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 17 */
-  "EXTRUDEDSURFACE" "\0\0\0",	/* 18 */
-  "GEOPOSITIONMARKER" "\0",	/* 19 */
-  "HATCH" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 20 */
-  "HELIX" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 21 */
-  "IMAGE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 22 */
-  "INSERT" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 23 */
-  "LEADER" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 24 */
-  "LIGHT" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 25 */
-  "LINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 26 */
-  "LOFTEDSURFACE" "\0\0\0\0\0",	/* 27 */
-  "LWPOLYLINE" "\0\0\0\0\0\0\0\0",	/* 28 */
-  "MINSERT" "\0\0\0\0\0\0\0\0\0\0\0",	/* 29 */
-  "MLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 30 */
-  "MTEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 31 */
-  "MULTILEADER" "\0\0\0\0\0\0\0",	/* 32 */
-  "OLE2FRAME" "\0\0\0\0\0\0\0\0\0",	/* 33 */
-  "OLEFRAME" "\0\0\0\0\0\0\0\0\0\0",	/* 34 */
-  "PLANESURFACE" "\0\0\0\0\0\0",	/* 35 */
-  "POINT" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 36 */
-  "POLYLINE_2D" "\0\0\0\0\0\0\0",	/* 37 */
-  "POLYLINE_3D" "\0\0\0\0\0\0\0",	/* 38 */
-  "POLYLINE_MESH" "\0\0\0\0\0",	/* 39 */
-  "POLYLINE_PFACE" "\0\0\0\0",	/* 40 */
-  "PROXY_ENTITY" "\0\0\0\0\0\0",	/* 41 */
-  "PROXY_LWPOLYLINE" "\0\0",	/* 42 */
-  "RAY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 43 */
-  "REVOLVEDSURFACE" "\0\0\0",	/* 44 */
-  "SEQEND" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 45 */
-  "SHAPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 46 */
-  "SOLID" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 47 */
-  "SPLINE" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 48 */
-  "SWEPTSURFACE" "\0\0\0\0\0\0",	/* 49 */
-  "TABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 50 */
-  "TEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 51 */
-  "TOLERANCE" "\0\0\0\0\0\0\0\0\0",	/* 52 */
-  "TRACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 53 */
-  "UNDERLAY" "\0\0\0\0\0\0\0\0\0\0",	/* 54 */
-  "UNKNOWN_ENT" "\0\0\0\0\0\0\0",	/* 55 */
-  "VERTEX_2D" "\0\0\0\0\0\0\0\0\0",	/* 56 */
-  "VERTEX_3D" "\0\0\0\0\0\0\0\0\0",	/* 57 */
-  "VERTEX_PFACE_FACE" "\0",	/* 58 */
-  "VIEWPORT" "\0\0\0\0\0\0\0\0\0\0",	/* 59 */
-  "WIPEOUT" "\0\0\0\0\0\0\0\0\0\0\0",	/* 60 */
+  "ARC_DIMENSION" "\0\0\0\0\0",	/* 3 */
+  "ATTDEF" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 4 */
+  "ATTRIB" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 5 */
+  "BLOCK" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 6 */
+  "CAMERA" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 7 */
+  "CIRCLE" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 8 */
+  "DIMENSION_ALIGNED" "\0",	/* 9 */
+  "DIMENSION_ANG2LN" "\0\0",	/* 10 */
+  "DIMENSION_ANG3PT" "\0\0",	/* 11 */
+  "DIMENSION_DIAMETER" "",	/* 12 */
+  "DIMENSION_LINEAR" "\0\0",	/* 13 */
+  "DIMENSION_ORDINATE" "",	/* 14 */
+  "DIMENSION_RADIUS" "\0\0",	/* 15 */
+  "DIMENSION_" "\0\0\0\0\0\0\0\0",	/* 16 */
+  "ELLIPSE" "\0\0\0\0\0\0\0\0\0\0\0",	/* 17 */
+  "ENDBLK" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 18 */
+  "EXTRUDEDSURFACE" "\0\0\0",	/* 19 */
+  "GEOPOSITIONMARKER" "\0",	/* 20 */
+  "HATCH" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 21 */
+  "HELIX" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 22 */
+  "IMAGE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 23 */
+  "INSERT" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 24 */
+  "LEADER" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 25 */
+  "LIGHT" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 26 */
+  "LINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 27 */
+  "LOFTEDSURFACE" "\0\0\0\0\0",	/* 28 */
+  "LWPOLYLINE" "\0\0\0\0\0\0\0\0",	/* 29 */
+  "MINSERT" "\0\0\0\0\0\0\0\0\0\0\0",	/* 30 */
+  "MLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 31 */
+  "MTEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 32 */
+  "MULTILEADER" "\0\0\0\0\0\0\0",	/* 33 */
+  "OLE2FRAME" "\0\0\0\0\0\0\0\0\0",	/* 34 */
+  "OLEFRAME" "\0\0\0\0\0\0\0\0\0\0",	/* 35 */
+  "PLANESURFACE" "\0\0\0\0\0\0",	/* 36 */
+  "POINT" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 37 */
+  "POLYLINE_2D" "\0\0\0\0\0\0\0",	/* 38 */
+  "POLYLINE_3D" "\0\0\0\0\0\0\0",	/* 39 */
+  "POLYLINE_MESH" "\0\0\0\0\0",	/* 40 */
+  "POLYLINE_PFACE" "\0\0\0\0",	/* 41 */
+  "PROXY_ENTITY" "\0\0\0\0\0\0",	/* 42 */
+  "PROXY_LWPOLYLINE" "\0\0",	/* 43 */
+  "RAY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 44 */
+  "REVOLVEDSURFACE" "\0\0\0",	/* 45 */
+  "SEQEND" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 46 */
+  "SHAPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 47 */
+  "SOLID" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 48 */
+  "SPLINE" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 49 */
+  "SWEPTSURFACE" "\0\0\0\0\0\0",	/* 50 */
+  "TABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 51 */
+  "TEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 52 */
+  "TOLERANCE" "\0\0\0\0\0\0\0\0\0",	/* 53 */
+  "TRACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 54 */
+  "UNDERLAY" "\0\0\0\0\0\0\0\0\0\0",	/* 55 */
+  "UNKNOWN_ENT" "\0\0\0\0\0\0\0",	/* 56 */
+  "VERTEX_2D" "\0\0\0\0\0\0\0\0\0",	/* 57 */
+  "VERTEX_3D" "\0\0\0\0\0\0\0\0\0",	/* 58 */
+  "VERTEX_PFACE_FACE" "\0",	/* 59 */
+  "VIEWPORT" "\0\0\0\0\0\0\0\0\0\0",	/* 60 */
+  "WIPEOUT" "\0\0\0\0\0\0\0\0\0\0\0",	/* 61 */
 
 };
 /* sorted for bsearch. from typedef struct _dwg_object_*: */
@@ -588,6 +589,42 @@ static const Dwg_DYNAPI_field _dwg_ARC_fields[] = {
   { "extrusion", "BE", sizeof(BITCODE_BE), OFF(struct _dwg_entity_ARC,extrusion), 0,0,0, 210 },
   { "start_angle", "BD", sizeof(BITCODE_BD), OFF(struct _dwg_entity_ARC,start_angle), 0,0,0, 50 },
   { "end_angle", "BD", sizeof(BITCODE_BD), OFF(struct _dwg_entity_ARC,end_angle), 0,0,0, 51 },
+  {NULL, NULL, 0, 0, 0,0,0, 0},
+};
+/* from typedef struct _dwg_entity_ARC_DIMENSION: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_ARC_DIMENSION_fields[] = {
+  { "parent", "struct _dwg_object_entity*", sizeof(void*), OFF(struct _dwg_entity_ARC_DIMENSION,parent), 1,1,0, 0 },
+  { "class_version", "RC", sizeof(unsigned char), OFF(struct _dwg_entity_ARC_DIMENSION,class_version), 0,0,0, 0 },
+  { "blockname", "TV", sizeof(char*), OFF(struct _dwg_entity_ARC_DIMENSION,blockname), 1,1,1, 0 },
+  { "extrusion", "3BD", sizeof(Dwg_Bitcode_3BD), OFF(struct _dwg_entity_ARC_DIMENSION,extrusion), 1,0,0, 0 },
+  { "def_pt", "3BD", sizeof(Dwg_Bitcode_3BD), OFF(struct _dwg_entity_ARC_DIMENSION,def_pt), 1,0,0, 10 },
+  { "text_midpt", "2RD", sizeof(Dwg_Bitcode_2RD), OFF(struct _dwg_entity_ARC_DIMENSION,text_midpt), 1,0,0, 0 },
+  { "elevation", "BD", sizeof(double), OFF(struct _dwg_entity_ARC_DIMENSION,elevation), 0,0,0, 0 },
+  { "flag", "RC", sizeof(unsigned char), OFF(struct _dwg_entity_ARC_DIMENSION,flag), 0,0,0, 0 },
+  { "flag1", "RC", sizeof(unsigned char), OFF(struct _dwg_entity_ARC_DIMENSION,flag1), 0,0,0, 0 },
+  { "user_text", "TV", sizeof(char*), OFF(struct _dwg_entity_ARC_DIMENSION,user_text), 1,1,1, 0 },
+  { "text_rotation", "BD", sizeof(double), OFF(struct _dwg_entity_ARC_DIMENSION,text_rotation), 0,0,0, 0 },
+  { "horiz_dir", "BD", sizeof(double), OFF(struct _dwg_entity_ARC_DIMENSION,horiz_dir), 0,0,0, 0 },
+  { "ins_scale", "3BD", sizeof(Dwg_Bitcode_3BD), OFF(struct _dwg_entity_ARC_DIMENSION,ins_scale), 1,0,0, 0 },
+  { "ins_rotation", "BD", sizeof(double), OFF(struct _dwg_entity_ARC_DIMENSION,ins_rotation), 0,0,0, 0 },
+  { "attachment", "BS", sizeof(unsigned short int), OFF(struct _dwg_entity_ARC_DIMENSION,attachment), 0,0,0, 0 },
+  { "lspace_style", "BS", sizeof(unsigned short int), OFF(struct _dwg_entity_ARC_DIMENSION,lspace_style), 0,0,0, 0 },
+  { "lspace_factor", "BD", sizeof(double), OFF(struct _dwg_entity_ARC_DIMENSION,lspace_factor), 0,0,0, 0 },
+  { "act_measurement", "BD", sizeof(double), OFF(struct _dwg_entity_ARC_DIMENSION,act_measurement), 0,0,0, 0 },
+  { "unknown", "RC", sizeof(unsigned char), OFF(struct _dwg_entity_ARC_DIMENSION,unknown), 0,0,0, 0 },
+  { "flip_arrow1", "RC", sizeof(unsigned char), OFF(struct _dwg_entity_ARC_DIMENSION,flip_arrow1), 0,0,0, 0 },
+  { "flip_arrow2", "RC", sizeof(unsigned char), OFF(struct _dwg_entity_ARC_DIMENSION,flip_arrow2), 0,0,0, 0 },
+  { "clone_ins_pt", "2RD", sizeof(Dwg_Bitcode_2RD), OFF(struct _dwg_entity_ARC_DIMENSION,clone_ins_pt), 1,0,0, 0 },
+  { "_13_pt", "3BD", sizeof(BITCODE_3BD), OFF(struct _dwg_entity_ARC_DIMENSION,_13_pt), 1,0,0, 13 },
+  { "_14_pt", "3BD", sizeof(BITCODE_3BD), OFF(struct _dwg_entity_ARC_DIMENSION,_14_pt), 1,0,0, 14 },
+  { "_15_pt", "3BD", sizeof(BITCODE_3BD), OFF(struct _dwg_entity_ARC_DIMENSION,_15_pt), 1,0,0, 15 },
+  { "unknown_pt", "3BD", sizeof(BITCODE_3BD), OFF(struct _dwg_entity_ARC_DIMENSION,unknown_pt), 1,0,0, 0 },
+  { "_16_pt", "3BD", sizeof(BITCODE_3BD), OFF(struct _dwg_entity_ARC_DIMENSION,_16_pt), 1,0,0, 16 },
+  { "_17_pt", "3BD", sizeof(BITCODE_3BD), OFF(struct _dwg_entity_ARC_DIMENSION,_17_pt), 1,0,0, 17 },
+  { "leader_len", "BD", sizeof(BITCODE_BD), OFF(struct _dwg_entity_ARC_DIMENSION,leader_len), 0,0,0, 40 },
+  { "flag2", "RC", sizeof(BITCODE_RC), OFF(struct _dwg_entity_ARC_DIMENSION,flag2), 0,0,0, 71 },
+  { "dimstyle", "H", sizeof(BITCODE_H), OFF(struct _dwg_entity_ARC_DIMENSION,dimstyle), 1,0,0, 0 },
+  { "block", "H", sizeof(BITCODE_H), OFF(struct _dwg_entity_ARC_DIMENSION,block), 1,0,0, 0 },
   {NULL, NULL, 0, 0, 0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_ATTDEF: (sorted by offset) */
@@ -3915,7 +3952,7 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "APPID_CONTROL", 66, _dwg_APPID_CONTROL_fields },	/* 6 */
   { "ARC", 17, _dwg_ARC_fields },	/* 7 */
   { "ARCALIGNEDTEXT", 515, NULL },	/* 8 */
-  { "ARC_DIMENSION", 516, NULL },	/* 9 */
+  { "ARC_DIMENSION", 516, _dwg_ARC_DIMENSION_fields },	/* 9 */
   { "ASSOC2DCONSTRAINTGROUP", 517, _dwg_ASSOC2DCONSTRAINTGROUP_fields },	/* 10 */
   { "ASSOCACTION", 518, _dwg_ASSOCACTION_fields },	/* 11 */
   { "ASSOCALIGNEDDIMACTIONBODY", 519, _dwg_ASSOCALIGNEDDIMACTIONBODY_fields },	/* 12 */

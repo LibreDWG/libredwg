@@ -7968,6 +7968,589 @@ static int test_ARC (const Dwg_Object *obj)
   }
   return error;
 }
+static int test_ARC_DIMENSION (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_ARC_DIMENSION *restrict arc_dimension = obj->tio.entity->tio.ARC_DIMENSION;
+  {
+    BITCODE_3BD _13_pt;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "_13_pt", &_13_pt, NULL)
+        && !memcmp(&_13_pt, &arc_dimension->_13_pt, sizeof(arc_dimension->_13_pt)))
+      {
+        pass ("ARC_DIMENSION._13_pt [3BD]");
+      }
+    else
+      {
+        fail ("ARC_DIMENSION._13_pt [3BD]"); error++;
+      }
+  }
+  {
+    BITCODE_3BD _14_pt;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "_14_pt", &_14_pt, NULL)
+        && !memcmp(&_14_pt, &arc_dimension->_14_pt, sizeof(arc_dimension->_14_pt)))
+      {
+        pass ("ARC_DIMENSION._14_pt [3BD]");
+      }
+    else
+      {
+        fail ("ARC_DIMENSION._14_pt [3BD]"); error++;
+      }
+  }
+  {
+    BITCODE_3BD _15_pt;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "_15_pt", &_15_pt, NULL)
+        && !memcmp(&_15_pt, &arc_dimension->_15_pt, sizeof(arc_dimension->_15_pt)))
+      {
+        pass ("ARC_DIMENSION._15_pt [3BD]");
+      }
+    else
+      {
+        fail ("ARC_DIMENSION._15_pt [3BD]"); error++;
+      }
+  }
+  {
+    BITCODE_3BD _16_pt;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "_16_pt", &_16_pt, NULL)
+        && !memcmp(&_16_pt, &arc_dimension->_16_pt, sizeof(arc_dimension->_16_pt)))
+      {
+        pass ("ARC_DIMENSION._16_pt [3BD]");
+      }
+    else
+      {
+        fail ("ARC_DIMENSION._16_pt [3BD]"); error++;
+      }
+  }
+  {
+    BITCODE_3BD _17_pt;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "_17_pt", &_17_pt, NULL)
+        && !memcmp(&_17_pt, &arc_dimension->_17_pt, sizeof(arc_dimension->_17_pt)))
+      {
+        pass ("ARC_DIMENSION._17_pt [3BD]");
+      }
+    else
+      {
+        fail ("ARC_DIMENSION._17_pt [3BD]"); error++;
+      }
+  }
+  {
+    BITCODE_BD act_measurement;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "act_measurement", &act_measurement, NULL) &&
+        act_measurement == arc_dimension->act_measurement)
+      {
+        pass ("ARC_DIMENSION.act_measurement [BD] %g", act_measurement);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.act_measurement [BD] %g != %g", arc_dimension->act_measurement, act_measurement); error++;
+      }
+    act_measurement++;
+    if (dwg_dynapi_entity_set_value(arc_dimension, "ARC_DIMENSION", "act_measurement", &act_measurement) &&
+        act_measurement == arc_dimension->act_measurement)
+      {
+        pass ("ARC_DIMENSION.act_measurement [BD] set+1 %g", act_measurement);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.act_measurement [BD] set+1 %g != %g", arc_dimension->act_measurement, act_measurement); error++;
+      }
+    arc_dimension->act_measurement--;
+
+  }
+  {
+    BITCODE_BS attachment;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "attachment", &attachment, NULL) &&
+        attachment == arc_dimension->attachment)
+      {
+        pass ("ARC_DIMENSION.attachment [BS] %hu", attachment);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.attachment [BS] %hu != %hu", arc_dimension->attachment, attachment); error++;
+      }
+    attachment++;
+    if (dwg_dynapi_entity_set_value(arc_dimension, "ARC_DIMENSION", "attachment", &attachment) &&
+        attachment == arc_dimension->attachment)
+      {
+        pass ("ARC_DIMENSION.attachment [BS] set+1 %hu", attachment);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.attachment [BS] set+1 %hu != %hu", arc_dimension->attachment, attachment); error++;
+      }
+    arc_dimension->attachment--;
+
+  }
+  {
+    BITCODE_H block;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "block", &block, NULL)
+        && !memcmp(&block, &arc_dimension->block, sizeof(arc_dimension->block)))
+      {
+        pass ("ARC_DIMENSION.block [H]");
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.block [H]"); error++;
+      }
+  }
+  {
+    BITCODE_TV blockname;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "blockname", &blockname, NULL)
+        && !strcmp((char*)blockname, (char*)arc_dimension->blockname))
+      {
+        pass ("ARC_DIMENSION.blockname [TV] '%s' <> '%s'", blockname, arc_dimension->blockname);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.blockname [TV] '%s' <> '%s'", blockname, arc_dimension->blockname); error++;
+      }
+  }
+  {
+    BITCODE_RC class_version;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "class_version", &class_version, NULL) &&
+        class_version == arc_dimension->class_version)
+      {
+        pass ("ARC_DIMENSION.class_version [RC] %u", class_version);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.class_version [RC] %u != %u", arc_dimension->class_version, class_version); error++;
+      }
+    class_version++;
+    if (dwg_dynapi_entity_set_value(arc_dimension, "ARC_DIMENSION", "class_version", &class_version) &&
+        class_version == arc_dimension->class_version)
+      {
+        pass ("ARC_DIMENSION.class_version [RC] set+1 %u", class_version);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.class_version [RC] set+1 %u != %u", arc_dimension->class_version, class_version); error++;
+      }
+    arc_dimension->class_version--;
+
+  }
+  {
+    BITCODE_2RD clone_ins_pt;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "clone_ins_pt", &clone_ins_pt, NULL)
+        && !memcmp(&clone_ins_pt, &arc_dimension->clone_ins_pt, sizeof(arc_dimension->clone_ins_pt)))
+      {
+        pass ("ARC_DIMENSION.clone_ins_pt [2RD]");
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.clone_ins_pt [2RD]"); error++;
+      }
+  }
+  {
+    BITCODE_3BD def_pt;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "def_pt", &def_pt, NULL)
+        && !memcmp(&def_pt, &arc_dimension->def_pt, sizeof(arc_dimension->def_pt)))
+      {
+        pass ("ARC_DIMENSION.def_pt [3BD]");
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.def_pt [3BD]"); error++;
+      }
+  }
+  {
+    BITCODE_H dimstyle;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "dimstyle", &dimstyle, NULL)
+        && !memcmp(&dimstyle, &arc_dimension->dimstyle, sizeof(arc_dimension->dimstyle)))
+      {
+        pass ("ARC_DIMENSION.dimstyle [H]");
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.dimstyle [H]"); error++;
+      }
+  }
+  {
+    BITCODE_BD elevation;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "elevation", &elevation, NULL) &&
+        elevation == arc_dimension->elevation)
+      {
+        pass ("ARC_DIMENSION.elevation [BD] %g", elevation);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.elevation [BD] %g != %g", arc_dimension->elevation, elevation); error++;
+      }
+    elevation++;
+    if (dwg_dynapi_entity_set_value(arc_dimension, "ARC_DIMENSION", "elevation", &elevation) &&
+        elevation == arc_dimension->elevation)
+      {
+        pass ("ARC_DIMENSION.elevation [BD] set+1 %g", elevation);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.elevation [BD] set+1 %g != %g", arc_dimension->elevation, elevation); error++;
+      }
+    arc_dimension->elevation--;
+
+  }
+  {
+    BITCODE_3BD extrusion;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "extrusion", &extrusion, NULL)
+        && !memcmp(&extrusion, &arc_dimension->extrusion, sizeof(arc_dimension->extrusion)))
+      {
+        pass ("ARC_DIMENSION.extrusion [3BD]");
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.extrusion [3BD]"); error++;
+      }
+  }
+  {
+    BITCODE_RC flag;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "flag", &flag, NULL) &&
+        flag == arc_dimension->flag)
+      {
+        pass ("ARC_DIMENSION.flag [RC] %u", flag);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.flag [RC] %u != %u", arc_dimension->flag, flag); error++;
+      }
+    flag++;
+    if (dwg_dynapi_entity_set_value(arc_dimension, "ARC_DIMENSION", "flag", &flag) &&
+        flag == arc_dimension->flag)
+      {
+        pass ("ARC_DIMENSION.flag [RC] set+1 %u", flag);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.flag [RC] set+1 %u != %u", arc_dimension->flag, flag); error++;
+      }
+    arc_dimension->flag--;
+
+  }
+  {
+    BITCODE_RC flag1;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "flag1", &flag1, NULL) &&
+        flag1 == arc_dimension->flag1)
+      {
+        pass ("ARC_DIMENSION.flag1 [RC] %u", flag1);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.flag1 [RC] %u != %u", arc_dimension->flag1, flag1); error++;
+      }
+    flag1++;
+    if (dwg_dynapi_entity_set_value(arc_dimension, "ARC_DIMENSION", "flag1", &flag1) &&
+        flag1 == arc_dimension->flag1)
+      {
+        pass ("ARC_DIMENSION.flag1 [RC] set+1 %u", flag1);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.flag1 [RC] set+1 %u != %u", arc_dimension->flag1, flag1); error++;
+      }
+    arc_dimension->flag1--;
+
+  }
+  {
+    BITCODE_RC flag2;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "flag2", &flag2, NULL) &&
+        flag2 == arc_dimension->flag2)
+      {
+        pass ("ARC_DIMENSION.flag2 [RC] %u", flag2);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.flag2 [RC] %u != %u", arc_dimension->flag2, flag2); error++;
+      }
+    flag2++;
+    if (dwg_dynapi_entity_set_value(arc_dimension, "ARC_DIMENSION", "flag2", &flag2) &&
+        flag2 == arc_dimension->flag2)
+      {
+        pass ("ARC_DIMENSION.flag2 [RC] set+1 %u", flag2);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.flag2 [RC] set+1 %u != %u", arc_dimension->flag2, flag2); error++;
+      }
+    arc_dimension->flag2--;
+
+  }
+  {
+    BITCODE_RC flip_arrow1;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "flip_arrow1", &flip_arrow1, NULL) &&
+        flip_arrow1 == arc_dimension->flip_arrow1)
+      {
+        pass ("ARC_DIMENSION.flip_arrow1 [RC] %u", flip_arrow1);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.flip_arrow1 [RC] %u != %u", arc_dimension->flip_arrow1, flip_arrow1); error++;
+      }
+    flip_arrow1++;
+    if (dwg_dynapi_entity_set_value(arc_dimension, "ARC_DIMENSION", "flip_arrow1", &flip_arrow1) &&
+        flip_arrow1 == arc_dimension->flip_arrow1)
+      {
+        pass ("ARC_DIMENSION.flip_arrow1 [RC] set+1 %u", flip_arrow1);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.flip_arrow1 [RC] set+1 %u != %u", arc_dimension->flip_arrow1, flip_arrow1); error++;
+      }
+    arc_dimension->flip_arrow1--;
+
+  }
+  {
+    BITCODE_RC flip_arrow2;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "flip_arrow2", &flip_arrow2, NULL) &&
+        flip_arrow2 == arc_dimension->flip_arrow2)
+      {
+        pass ("ARC_DIMENSION.flip_arrow2 [RC] %u", flip_arrow2);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.flip_arrow2 [RC] %u != %u", arc_dimension->flip_arrow2, flip_arrow2); error++;
+      }
+    flip_arrow2++;
+    if (dwg_dynapi_entity_set_value(arc_dimension, "ARC_DIMENSION", "flip_arrow2", &flip_arrow2) &&
+        flip_arrow2 == arc_dimension->flip_arrow2)
+      {
+        pass ("ARC_DIMENSION.flip_arrow2 [RC] set+1 %u", flip_arrow2);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.flip_arrow2 [RC] set+1 %u != %u", arc_dimension->flip_arrow2, flip_arrow2); error++;
+      }
+    arc_dimension->flip_arrow2--;
+
+  }
+  {
+    BITCODE_BD horiz_dir;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "horiz_dir", &horiz_dir, NULL) &&
+        horiz_dir == arc_dimension->horiz_dir)
+      {
+        pass ("ARC_DIMENSION.horiz_dir [BD] %g", horiz_dir);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.horiz_dir [BD] %g != %g", arc_dimension->horiz_dir, horiz_dir); error++;
+      }
+    horiz_dir++;
+    if (dwg_dynapi_entity_set_value(arc_dimension, "ARC_DIMENSION", "horiz_dir", &horiz_dir) &&
+        horiz_dir == arc_dimension->horiz_dir)
+      {
+        pass ("ARC_DIMENSION.horiz_dir [BD] set+1 %g", horiz_dir);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.horiz_dir [BD] set+1 %g != %g", arc_dimension->horiz_dir, horiz_dir); error++;
+      }
+    arc_dimension->horiz_dir--;
+
+  }
+  {
+    BITCODE_BD ins_rotation;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "ins_rotation", &ins_rotation, NULL) &&
+        ins_rotation == arc_dimension->ins_rotation)
+      {
+        pass ("ARC_DIMENSION.ins_rotation [BD] %g", ins_rotation);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.ins_rotation [BD] %g != %g", arc_dimension->ins_rotation, ins_rotation); error++;
+      }
+    ins_rotation++;
+    if (dwg_dynapi_entity_set_value(arc_dimension, "ARC_DIMENSION", "ins_rotation", &ins_rotation) &&
+        ins_rotation == arc_dimension->ins_rotation)
+      {
+        pass ("ARC_DIMENSION.ins_rotation [BD] set+1 %g", ins_rotation);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.ins_rotation [BD] set+1 %g != %g", arc_dimension->ins_rotation, ins_rotation); error++;
+      }
+    arc_dimension->ins_rotation--;
+
+  }
+  {
+    BITCODE_3BD ins_scale;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "ins_scale", &ins_scale, NULL)
+        && !memcmp(&ins_scale, &arc_dimension->ins_scale, sizeof(arc_dimension->ins_scale)))
+      {
+        pass ("ARC_DIMENSION.ins_scale [3BD]");
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.ins_scale [3BD]"); error++;
+      }
+  }
+  {
+    BITCODE_BD leader_len;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "leader_len", &leader_len, NULL) &&
+        leader_len == arc_dimension->leader_len)
+      {
+        pass ("ARC_DIMENSION.leader_len [BD] %g", leader_len);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.leader_len [BD] %g != %g", arc_dimension->leader_len, leader_len); error++;
+      }
+    leader_len++;
+    if (dwg_dynapi_entity_set_value(arc_dimension, "ARC_DIMENSION", "leader_len", &leader_len) &&
+        leader_len == arc_dimension->leader_len)
+      {
+        pass ("ARC_DIMENSION.leader_len [BD] set+1 %g", leader_len);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.leader_len [BD] set+1 %g != %g", arc_dimension->leader_len, leader_len); error++;
+      }
+    arc_dimension->leader_len--;
+
+  }
+  {
+    BITCODE_BD lspace_factor;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "lspace_factor", &lspace_factor, NULL) &&
+        lspace_factor == arc_dimension->lspace_factor)
+      {
+        pass ("ARC_DIMENSION.lspace_factor [BD] %g", lspace_factor);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.lspace_factor [BD] %g != %g", arc_dimension->lspace_factor, lspace_factor); error++;
+      }
+    lspace_factor++;
+    if (dwg_dynapi_entity_set_value(arc_dimension, "ARC_DIMENSION", "lspace_factor", &lspace_factor) &&
+        lspace_factor == arc_dimension->lspace_factor)
+      {
+        pass ("ARC_DIMENSION.lspace_factor [BD] set+1 %g", lspace_factor);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.lspace_factor [BD] set+1 %g != %g", arc_dimension->lspace_factor, lspace_factor); error++;
+      }
+    arc_dimension->lspace_factor--;
+
+  }
+  {
+    BITCODE_BS lspace_style;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "lspace_style", &lspace_style, NULL) &&
+        lspace_style == arc_dimension->lspace_style)
+      {
+        pass ("ARC_DIMENSION.lspace_style [BS] %hu", lspace_style);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.lspace_style [BS] %hu != %hu", arc_dimension->lspace_style, lspace_style); error++;
+      }
+    lspace_style++;
+    if (dwg_dynapi_entity_set_value(arc_dimension, "ARC_DIMENSION", "lspace_style", &lspace_style) &&
+        lspace_style == arc_dimension->lspace_style)
+      {
+        pass ("ARC_DIMENSION.lspace_style [BS] set+1 %hu", lspace_style);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.lspace_style [BS] set+1 %hu != %hu", arc_dimension->lspace_style, lspace_style); error++;
+      }
+    arc_dimension->lspace_style--;
+
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "parent", &parent, NULL)
+        && !memcmp(&parent, &arc_dimension->parent, sizeof(arc_dimension->parent)))
+      {
+        pass ("ARC_DIMENSION.parent [struct _dwg_object_entity*]");
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.parent [struct _dwg_object_entity*]"); error++;
+      }
+  }
+  {
+    BITCODE_2RD text_midpt;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "text_midpt", &text_midpt, NULL)
+        && !memcmp(&text_midpt, &arc_dimension->text_midpt, sizeof(arc_dimension->text_midpt)))
+      {
+        pass ("ARC_DIMENSION.text_midpt [2RD]");
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.text_midpt [2RD]"); error++;
+      }
+  }
+  {
+    BITCODE_BD text_rotation;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "text_rotation", &text_rotation, NULL) &&
+        text_rotation == arc_dimension->text_rotation)
+      {
+        pass ("ARC_DIMENSION.text_rotation [BD] %g", text_rotation);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.text_rotation [BD] %g != %g", arc_dimension->text_rotation, text_rotation); error++;
+      }
+    text_rotation++;
+    if (dwg_dynapi_entity_set_value(arc_dimension, "ARC_DIMENSION", "text_rotation", &text_rotation) &&
+        text_rotation == arc_dimension->text_rotation)
+      {
+        pass ("ARC_DIMENSION.text_rotation [BD] set+1 %g", text_rotation);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.text_rotation [BD] set+1 %g != %g", arc_dimension->text_rotation, text_rotation); error++;
+      }
+    arc_dimension->text_rotation--;
+
+  }
+  {
+    BITCODE_RC unknown;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "unknown", &unknown, NULL) &&
+        unknown == arc_dimension->unknown)
+      {
+        pass ("ARC_DIMENSION.unknown [RC] %u", unknown);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.unknown [RC] %u != %u", arc_dimension->unknown, unknown); error++;
+      }
+    unknown++;
+    if (dwg_dynapi_entity_set_value(arc_dimension, "ARC_DIMENSION", "unknown", &unknown) &&
+        unknown == arc_dimension->unknown)
+      {
+        pass ("ARC_DIMENSION.unknown [RC] set+1 %u", unknown);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.unknown [RC] set+1 %u != %u", arc_dimension->unknown, unknown); error++;
+      }
+    arc_dimension->unknown--;
+
+  }
+  {
+    BITCODE_3BD unknown_pt;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "unknown_pt", &unknown_pt, NULL)
+        && !memcmp(&unknown_pt, &arc_dimension->unknown_pt, sizeof(arc_dimension->unknown_pt)))
+      {
+        pass ("ARC_DIMENSION.unknown_pt [3BD]");
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.unknown_pt [3BD]"); error++;
+      }
+  }
+  {
+    BITCODE_TV user_text;
+    if (dwg_dynapi_entity_value(arc_dimension, "ARC_DIMENSION", "user_text", &user_text, NULL)
+        && !strcmp((char*)user_text, (char*)arc_dimension->user_text))
+      {
+        pass ("ARC_DIMENSION.user_text [TV] '%s' <> '%s'", user_text, arc_dimension->user_text);
+      }
+    else
+      {
+        fail ("ARC_DIMENSION.user_text [TV] '%s' <> '%s'", user_text, arc_dimension->user_text); error++;
+      }
+  }
+  return error;
+}
 static int test_ATTDEF (const Dwg_Object *obj)
 {
   int error = 0;
@@ -52306,6 +52889,8 @@ static int test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict
     error += test__3DSOLID(obj);
   else  if (obj->fixedtype == DWG_TYPE_ARC)
     error += test_ARC(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ARC_DIMENSION)
+    error += test_ARC_DIMENSION(obj);
   else  if (obj->fixedtype == DWG_TYPE_ATTDEF)
     error += test_ATTDEF(obj);
   else  if (obj->fixedtype == DWG_TYPE_ATTRIB)
@@ -52580,6 +53165,8 @@ static int test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict
     error += test__3DSOLID(obj);
   else  if (obj->fixedtype == DWG_TYPE_ARC)
     error += test_ARC(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ARC_DIMENSION)
+    error += test_ARC_DIMENSION(obj);
   else  if (obj->fixedtype == DWG_TYPE_ATTDEF)
     error += test_ATTDEF(obj);
   else  if (obj->fixedtype == DWG_TYPE_ATTRIB)

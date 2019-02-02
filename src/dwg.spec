@@ -7206,6 +7206,29 @@ DWG_OBJECT(RENDERGLOBAL)
 
 DWG_OBJECT_END
 
+DWG_ENTITY(ARC_DIMENSION)
+  DECODE_UNKNOWN_BITS
+
+  SUBCLASS (AcDbDimension)
+  DIMENSION_COMMON_DECODE;
+  SUBCLASS (AcDbArcDimension)
+  FIELD_3BD (def_pt, 10);
+  FIELD_3BD (_13_pt, 13);
+  FIELD_3BD (_14_pt, 14);
+  FIELD_3BD (_15_pt, 15);
+  FIELD_3BD (unknown_pt, 0); // clone_ins_pt?
+  FIELD_3BD (_16_pt, 16);
+  FIELD_3BD (_17_pt, 17);
+  //FIELD_B (unknown_b, 0);
+  DEBUG_HERE_OBJ
+  FIELD_BD (leader_len, 40);
+  FIELD_BD (ins_scale.x, 41);
+  FIELD_RC (flag2, 71);
+
+  COMMON_ENTITY_HANDLE_DATA;
+DWG_ENTITY_END
+
+
 #endif /* DEBUG_CLASSES */
 
 /* Those undocumented objects are also stored as raw UNKNOWN_OBJ */
