@@ -18,11 +18,11 @@
  */
 
 /**
- * Variable-typed classes and it's stability
+ * Variable-typed classes and its stability
  */
 
 #ifndef ACTION
-# error ACTION define missing (decode, encode, dxf, ...)
+# error ACTION define missing: decode, encode, dxf, indxf, print, free, ...
 #endif
 
 #define WARN_UNHANDLED_CLASS \
@@ -84,7 +84,10 @@
         obj->dxfname = (char*) #_name; \
         obj->fixedtype = DWG_TYPE_##_name; \
       } \
-      return DWG_FUNC_N(ACTION,_name)(dat, obj); \
+      if (!strcmp(#ACTION, "dxf")) \
+        return DWG_ERR_NOTYETSUPPORTED; \
+      else \
+        return DWG_FUNC_N(ACTION,_name)(dat, obj); \
     }
 #define UNSTABLE_CLASS_DXF(ACTION, _name, _dxfname) \
   if (!strcmp(klass->dxfname, #_dxfname)) \
@@ -95,7 +98,10 @@
         obj->dxfname = (char*) #_dxfname; \
         obj->fixedtype = DWG_TYPE_##_name; \
       } \
-      return DWG_FUNC_N(ACTION,_name)(dat, obj); \
+      if (!strcmp(#ACTION, "dxf")) \
+        return DWG_ERR_NOTYETSUPPORTED; \
+      else \
+        return DWG_FUNC_N(ACTION,_name)(dat, obj); \
     }
 #define UNSTABLE_CLASS_CPP(ACTION, _name, _cppname) \
   if (!strcmp(klass->cppname, #_cppname)) \
@@ -106,7 +112,10 @@
         obj->dxfname = (char*) #_name; \
         obj->fixedtype = DWG_TYPE_##_name; \
       } \
-      return DWG_FUNC_N(ACTION,_name)(dat, obj); \
+      if (!strcmp(#ACTION, "dxf")) \
+        return DWG_ERR_NOTYETSUPPORTED; \
+      else \
+        return DWG_FUNC_N(ACTION,_name)(dat, obj); \
     }
 #define UNHANDLED_CLASS(ACTION, _name) \
   if (!strcmp(klass->dxfname, #_name)) \
