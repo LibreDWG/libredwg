@@ -64,6 +64,7 @@ check_acdb_dxfname() {
     if [ -f "$dwg" ] && [ -f $dxf ]; then
         ../libtool --mode=execute ./dwg2dxf -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
         expect=$(grep -c ^$dxfname "$dxf")
+        if [ -n "$1" ]; then expect=$1; fi
         got=$(grep -c ^$dxfname "$tgt")
         if [ $got = $expect ]
         then
@@ -88,6 +89,7 @@ for dwg in $datadir/sample_2*.dwg; do
         check_acdb_dxfname
     done
 done
+# Note that UNSTABLE classes are now skipped, just the single CLASS entry
 for dwg in $datadir/example_*.dwg; do
     dxf=$(echo "$dwg" | sed 's,.dwg,.dxf,')
     tgt=../$(basename "$dxf")
@@ -95,7 +97,7 @@ for dwg in $datadir/example_*.dwg; do
     rm "$log" 2>/dev/null
     for dxfname in ACDBPERSSUBENTMANAGER ACDBASSOCDEPENDENCY
     do
-        check_acdb_dxfname
+        check_acdb_dxfname 1
     done
 done
 for dwg in $datadir/2004/Underlay.dwg; do

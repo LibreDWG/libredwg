@@ -25,6 +25,9 @@
 # error ACTION define missing: decode, encode, dxf, indxf, print, free, ...
 #endif
 
+#define _XSTR(s) _STR(s)
+#define _STR(s)  #s
+
 #define WARN_UNHANDLED_CLASS \
       LOG_WARN("Unhandled Class %s %d %s (0x%x%s) %u/%lX", is_entity ? "entity" : "object",\
                klass->number, klass->dxfname, klass->proxyflag,\
@@ -42,110 +45,112 @@
 # define WARN_UNHANDLED_CLASS
 #endif
 
-//#define _DWG_FUNC_N(ACTION,name) dwg_ ## ACTION ## _ ## name
-//#define DWG_FUNC_N(ACTION,name) _DWG_FUNC_N(ACTION,name)
+//#define _DWG_FUNC_N(action,name) dwg_ ## action ## _ ## name
+//#define DWG_FUNC_N(action,name) _DWG_FUNC_N(action,name)
 
-#define STABLE_CLASS(ACTION, _name) \
+#define STABLE_CLASS(action, _name) \
   if (!strcmp(klass->dxfname, #_name)) \
     { \
-      if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) { \
+      if (!strcmp(_STR(action), "decode") || !memcmp(_STR(action), "in", 2)) { \
         obj->name = (char*) #_name; \
         obj->dxfname = (char*) #_name; \
         obj->fixedtype = DWG_TYPE_##_name; \
       } \
-      return DWG_FUNC_N(ACTION,_name)(dat, obj); \
+      return DWG_FUNC_N(action,_name)(dat, obj); \
     }
-#define STABLE_CLASS_DXF(ACTION, _name, _dxfname) \
+#define STABLE_CLASS_DXF(action, _name, _dxfname) \
   if (!strcmp(klass->dxfname, #_dxfname)) \
     { \
-      if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) { \
-        obj->name = (char*) #_name; \
-        obj->dxfname = (char*) #_name; \
-        obj->fixedtype = DWG_TYPE_##_name; \
-      } \
-      return DWG_FUNC_N(ACTION,_name)(dat, obj); \
-    }
-#define STABLE_CLASS_CPP(ACTION, _name, _cppname) \
-  if (!strcmp(klass->cppname, #_name)) \
-    { \
-      if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) { \
-        obj->name = (char*) #_name; \
-        obj->dxfname = (char*) #_name; \
-        obj->fixedtype = DWG_TYPE_##_name; \
-      } \
-      return DWG_FUNC_N(ACTION,_name)(dat, obj); \
-    }
-#define UNSTABLE_CLASS(ACTION, _name) \
-  if (!strcmp(klass->dxfname, #_name)) \
-    { \
-      WARN_UNSTABLE_CLASS; \
-      if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) { \
-        obj->name = (char*) #_name; \
-        obj->dxfname = (char*) #_name; \
-        obj->fixedtype = DWG_TYPE_##_name; \
-      } \
-      if (!strcmp(#ACTION, "dxf")) \
-        return DWG_ERR_NOTYETSUPPORTED; \
-      else \
-        return DWG_FUNC_N(ACTION,_name)(dat, obj); \
-    }
-#define UNSTABLE_CLASS_DXF(ACTION, _name, _dxfname) \
-  if (!strcmp(klass->dxfname, #_dxfname)) \
-    { \
-      WARN_UNSTABLE_CLASS; \
-      if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) { \
+      if (!strcmp(_STR(action), "decode") || !memcmp(_STR(action), "in", 2)) { \
         obj->name = (char*) #_name; \
         obj->dxfname = (char*) #_dxfname; \
         obj->fixedtype = DWG_TYPE_##_name; \
       } \
-      if (!strcmp(#ACTION, "dxf")) \
+      return DWG_FUNC_N(action,_name)(dat, obj); \
+    }
+#define STABLE_CLASS_CPP(action, _name, _cppname) \
+  if (!strcmp(klass->cppname, #_name)) \
+    { \
+      if (!strcmp(_STR(action), "decode") || !memcmp(_STR(action), "in", 2)) { \
+        obj->name = (char*) #_name; \
+        obj->dxfname = (char*) #_name; \
+        obj->fixedtype = DWG_TYPE_##_name; \
+      } \
+      return DWG_FUNC_N(action,_name)(dat, obj); \
+    }
+#define UNSTABLE_CLASS(action, _name) \
+  if (!strcmp(klass->dxfname, #_name)) \
+    { \
+      WARN_UNSTABLE_CLASS; \
+      if (!strcmp(_STR(action), "decode") || !memcmp(_STR(action), "in", 2)) { \
+        obj->name = (char*) #_name; \
+        obj->dxfname = (char*) #_name; \
+        obj->fixedtype = DWG_TYPE_##_name; \
+      } \
+      if (!strcmp(_STR(action), "dxf")) \
         return DWG_ERR_NOTYETSUPPORTED; \
       else \
-        return DWG_FUNC_N(ACTION,_name)(dat, obj); \
+        return DWG_FUNC_N(action,_name)(dat, obj); \
     }
-#define UNSTABLE_CLASS_CPP(ACTION, _name, _cppname) \
+#define UNSTABLE_CLASS_DXF(action, _name, _dxfname) \
+  if (!strcmp(klass->dxfname, #_dxfname)) \
+    { \
+      WARN_UNSTABLE_CLASS; \
+      if (!strcmp(_STR(action), "decode") || !memcmp(_STR(action), "in", 2)) { \
+        obj->name = (char*) #_name; \
+        obj->dxfname = (char*) #_dxfname; \
+        obj->fixedtype = DWG_TYPE_##_name; \
+      } \
+      if (!strcmp(_STR(action), "dxf")) \
+        return DWG_ERR_NOTYETSUPPORTED; \
+      else \
+        return DWG_FUNC_N(action,_name)(dat, obj); \
+    }
+#define UNSTABLE_CLASS_CPP(action, _name, _cppname) \
   if (!strcmp(klass->cppname, #_cppname)) \
     { \
       WARN_UNSTABLE_CLASS; \
-      if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) { \
+      if (!strcmp(_STR(action), "decode") || !memcmp(_STR(action), "in", 2)) { \
         obj->name = (char*) #_name; \
         obj->dxfname = (char*) #_name; \
         obj->fixedtype = DWG_TYPE_##_name; \
       } \
-      if (!strcmp(#ACTION, "dxf")) \
+      if (!strcmp(_STR(action), "dxf")) \
         return DWG_ERR_NOTYETSUPPORTED; \
       else \
-        return DWG_FUNC_N(ACTION,_name)(dat, obj); \
+        return DWG_FUNC_N(action,_name)(dat, obj); \
     }
-#define UNHANDLED_CLASS(ACTION, _name) \
+#define UNHANDLED_CLASS(action, _name) \
   if (!strcmp(klass->dxfname, #_name)) \
     { \
       WARN_UNHANDLED_CLASS; \
-      if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) { \
+      if (!strcmp(_STR(action), "decode") || !memcmp(_STR(action), "in", 2)) { \
         obj->name = (char*) #_name; \
         obj->dxfname = (char*) #_name; \
+        /*obj->fixedtype = DWG_TYPE_##_name; */ \
       } \
-      /* return dwg_##ACTION_##_name(dat, obj); */ \
+      /* return dwg_##action_##_name(dat, obj); */ \
       return DWG_ERR_UNHANDLEDCLASS; \
     }
-#define UNHANDLED_CLASS_DXF(ACTION, _name, _dxfname) \
+#define UNHANDLED_CLASS_DXF(action, _name, _dxfname) \
   if (!strcmp(klass->dxfname, #_dxfname)) \
     { \
       WARN_UNHANDLED_CLASS; \
-      if (!strcmp(#ACTION, "decode") || !memcmp(#ACTION, "in", 2)) { \
+      if (!strcmp(_STR(action), "decode") || !memcmp(_STR(action), "in", 2)) { \
         obj->name = (char*) #_name; \
         obj->dxfname = (char*) #_dxfname; \
+        /*obj->fixedtype = DWG_TYPE_##_name; */ \
       } \
-      /* return dwg_##ACTION_##name(dat, obj); */ \
+      /* return dwg_##action_##name(dat, obj); */ \
       return DWG_ERR_UNHANDLEDCLASS; \
     }
 
 #ifdef DEBUG_CLASSES
-#define DEBUGGING_CLASS(ACTION, name)               UNSTABLE_CLASS(ACTION, name)
-#define DEBUGGING_CLASS_DXF(ACTION, name, _dxfname) UNSTABLE_CLASS_DXF(ACTION, name, _dxfname)
+#define DEBUGGING_CLASS(action, name)               UNSTABLE_CLASS(action, name)
+#define DEBUGGING_CLASS_DXF(action, name, _dxfname) UNSTABLE_CLASS_DXF(action, name, _dxfname)
 #else
-#define DEBUGGING_CLASS(ACTION, name)               UNHANDLED_CLASS(ACTION, name)
-#define DEBUGGING_CLASS_DXF(ACTION, name, _dxfname) UNHANDLED_CLASS_DXF(ACTION, name, _dxfname)
+#define DEBUGGING_CLASS(action, name)               UNHANDLED_CLASS(action, name)
+#define DEBUGGING_CLASS_DXF(action, name, _dxfname) UNHANDLED_CLASS_DXF(action, name, _dxfname)
 #endif
 
   /* Entities */
@@ -189,6 +194,7 @@
 
   // unstable/undertested.
   // not enough coverage, but assumed mostly ok. field names may change.
+  // DXF output skipped
   UNSTABLE_CLASS     (ACTION, MULTILEADER)  /* ent */
   UNSTABLE_CLASS_DXF (ACTION, ASSOCDEPENDENCY, ACDBASSOCDEPENDENCY)
   UNSTABLE_CLASS_DXF (ACTION, ASSOCPLANESURFACEACTIONBODY, ACDBASSOCPLANESURFACEACTIONBODY)
@@ -206,7 +212,8 @@
 
   // coverage exists, but broken and being worked on. needs -DDEBUG_CLASSES. See also
   // examples/unknown with all the unknown blobs of these.
-  //PROXY_ENTITY has a fixed type
+  // PROXY_ENTITY has a fixed type
+  // DXF output skipped
   DEBUGGING_CLASS     (ACTION, GEOPOSITIONMARKER) /*ent, yet unsorted. no coverage */
   DEBUGGING_CLASS     (ACTION, PLANESURFACE)      /*ent */
   DEBUGGING_CLASS     (ACTION, EXTRUDEDSURFACE)   /*ent */
@@ -236,6 +243,7 @@
   DEBUGGING_CLASS     (ACTION, RENDERGLOBAL)      //no coverage
 
   // unimplemented, passed through. coverage exists mostly, but documentation not.
+  // DXF output skipped
   UNHANDLED_CLASS     (ACTION, ACSH_HISTORY_CLASS)
   UNHANDLED_CLASS     (ACTION, ARCALIGNEDTEXT)
   UNHANDLED_CLASS_DXF (ACTION, ASSOCGEOMDEPENDENCY, ACDBASSOCGEOMDEPENDENCY)
