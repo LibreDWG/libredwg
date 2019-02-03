@@ -1265,7 +1265,13 @@ dwg_dxf_object(Bit_Chain *restrict dat,
     case DWG_TYPE_XLINE:
       return dwg_dxf_XLINE(dat, obj);
     case DWG_TYPE_DICTIONARY:
-      return minimal ? 0 : dwg_dxf_DICTIONARY(dat, obj);
+      if (!minimal)
+        {
+          dxf_validate_DICTIONARY((Dwg_Object*)obj);
+          return dwg_dxf_DICTIONARY(dat, obj);
+        }
+      else
+        return 0;
     case DWG_TYPE_MTEXT:
       return dwg_dxf_MTEXT(dat, obj);
     case DWG_TYPE_LEADER:
@@ -1930,6 +1936,14 @@ dxf_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
   ENDSEC();
   return error;
+}
+
+// check for valid ownerhandle. set to 0 if not
+int dxf_validate_DICTIONARY(Dwg_Object* obj)
+{
+  Dwg_Object_Ref *ownerhandle = obj->tio.object->tio.DICTIONARY->ownerhandle;
+  if (ownerhandle && !dwg_ref_object(obj->parent, ownerhandle))
+    ownerhandle->absolute_ref = 0;
 }
 
 static int
