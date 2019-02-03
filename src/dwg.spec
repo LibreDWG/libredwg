@@ -6031,12 +6031,14 @@ DWG_OBJECT(VISUALSTYLE)
   FIELD_CMC (edge_silhouette_color, 67,425);
   FIELD_BS (edge_silhouette_width, 79);
   FIELD_BS (num_edge_isolines, 171);
-  FIELD_BS (edge_hide_precision_flag, 290);
+  DXF  { FIELD_B (edge_hide_precision_flag, 290); }
+  else { FIELD_BS (edge_hide_precision_flag, 290); }
   FIELD_BS (edge_style_apply_flag, 174);
   FIELD_BS (display_style, 93);
   FIELD_BD (display_brightness, 44);
   FIELD_BS (display_shadow_type, 173);
-  FIELD_BS (is_internal_use_only, 291);
+  DXF  { FIELD_B (is_internal_use_only, 290); }
+  else { FIELD_BS (is_internal_use_only, 290); }
   //FIELD_BS (unknown_float45, 45); // only in DXF, not in header
 #endif
 
