@@ -113,13 +113,15 @@ dxfb_cvt_tablerecord(Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
 
 #define FIELD_VALUE(nam) _obj->nam
 #define ANYCODE -1
-//TODO
 #define VALUE_HANDLE(hdlptr, nam, handle_code, dxf)      \
   if (dxf) { \
-    uint32_t _j = hdlptr != NULL ? (uint32_t)((BITCODE_H)hdlptr)->absolute_ref : 0; \
+    uint32_t _j = (hdlptr != NULL) \
+      ? (uint32_t)((BITCODE_H)hdlptr)->absolute_ref : 0; \
     GROUP(dxf); \
     fwrite(&_j, sizeof(uint32_t), 1, dat->fh); \
   }
+//TODO: try to resolve the handle. rather write 0 than in invalid handle:
+// if (_obj->nam->obj) ...
 #define FIELD_HANDLE(nam, handle_code, dxf) VALUE_HANDLE(_obj->nam, nam, handle_code, dxf)
 #define SUB_FIELD_HANDLE(o, nam, handle_code, dxf) VALUE_HANDLE(_obj->o.nam, nam, handle_code, dxf)
 

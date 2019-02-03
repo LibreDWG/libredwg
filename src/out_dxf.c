@@ -147,7 +147,8 @@ static inline char* alloca(size_t size) {
     else if (dxf == 8) \
       FIELD_HANDLE_NAME(nam, dxf, LAYER) \
     else if (dat->version >= R_13) \
-      fprintf(dat->fh, "%3i\r\n%lX\r\n", dxf, _obj->nam->absolute_ref); \
+      fprintf(dat->fh, "%3i\r\n%lX\r\n", dxf, \
+              _obj->nam->obj ? _obj->nam->absolute_ref : 0); \
   }
 #define SUB_FIELD_HANDLE(o, nam, handle_code, dxf) \
   if (dxf != 0 && _obj->o.nam) { \
@@ -160,7 +161,8 @@ static inline char* alloca(size_t size) {
     else if (dxf == 8) \
       SUB_FIELD_HANDLE_NAME(o, nam, dxf, LAYER)  \
     else if (dat->version >= R_13) \
-      fprintf(dat->fh, "%3i\r\n%lX\r\n", dxf, _obj->o.nam->absolute_ref); \
+      fprintf(dat->fh, "%3i\r\n%lX\r\n", dxf, \
+              _obj->o.nam->obj ? _obj->o.nam->absolute_ref : 0); \
   }
 #define HEADER_9(nam) \
     GROUP(9);\
@@ -1265,13 +1267,7 @@ dwg_dxf_object(Bit_Chain *restrict dat,
     case DWG_TYPE_XLINE:
       return dwg_dxf_XLINE(dat, obj);
     case DWG_TYPE_DICTIONARY:
-      if (!minimal)
-        {
-          dxf_validate_DICTIONARY((Dwg_Object*)obj);
-          return dwg_dxf_DICTIONARY(dat, obj);
-        }
-      else
-        return 0;
+      return minimal ? 0 : dwg_dxf_DICTIONARY(dat, obj);
     case DWG_TYPE_MTEXT:
       return dwg_dxf_MTEXT(dat, obj);
     case DWG_TYPE_LEADER:
@@ -1943,7 +1939,13 @@ int dxf_validate_DICTIONARY(Dwg_Object* obj)
 {
   Dwg_Object_Ref *ownerhandle = obj->tio.object->tio.DICTIONARY->ownerhandle;
   if (ownerhandle && !dwg_ref_object(obj->parent, ownerhandle))
-    ownerhandle->absolute_ref = 0;
+    {
+      LOG_INFO("Wrong DICTIONARY.ownerhandle %X\n",
+               (unsigned)ownerhandle->absolute_ref);
+      ownerhandle->absolute_ref = 0;
+      return 0;
+    }
+  return 1;
 }
 
 static int
