@@ -45,6 +45,20 @@
 # define WARN_UNHANDLED_CLASS
 #endif
 
+#define DISALLOW_DXF(action, _name) \
+  (!strcmp(_STR(action), "dxf")) ? DWG_ERR_NOTYETSUPPORTED :
+#define ALLOW_DXF(action, _name)
+
+#ifdef DEBUG_CLASSES
+#define DEBUGGING_DXF(action, name)                 ALLOW_DXF(action, name)
+#define DEBUGGING_CLASS(action, name)               UNSTABLE_CLASS(action, name)
+#define DEBUGGING_CLASS_DXF(action, name, _dxfname) UNSTABLE_CLASS_DXF(action, name, _dxfname)
+#else
+#define DEBUGGING_DXF(action, name)                 DISALLOW_DXF(action, name)
+#define DEBUGGING_CLASS(action, name)               UNHANDLED_CLASS(action, name)
+#define DEBUGGING_CLASS_DXF(action, name, _dxfname) UNHANDLED_CLASS_DXF(action, name, _dxfname)
+#endif
+
 //#define _DWG_FUNC_N(action,name) dwg_ ## action ## _ ## name
 //#define DWG_FUNC_N(action,name) _DWG_FUNC_N(action,name)
 
@@ -87,10 +101,7 @@
         obj->dxfname = (char*) #_name; \
         obj->fixedtype = DWG_TYPE_##_name; \
       } \
-      if (!strcmp(_STR(action), "dxf")) \
-        return DWG_ERR_NOTYETSUPPORTED; \
-      else \
-        return DWG_FUNC_N(action,_name)(dat, obj); \
+      return DEBUGGING_DXF(action, name) DWG_FUNC_N(action,_name)(dat, obj); \
     }
 #define UNSTABLE_CLASS_DXF(action, _name, _dxfname) \
   if (!strcmp(klass->dxfname, #_dxfname)) \
@@ -101,10 +112,7 @@
         obj->dxfname = (char*) #_dxfname; \
         obj->fixedtype = DWG_TYPE_##_name; \
       } \
-      if (!strcmp(_STR(action), "dxf")) \
-        return DWG_ERR_NOTYETSUPPORTED; \
-      else \
-        return DWG_FUNC_N(action,_name)(dat, obj); \
+      return DEBUGGING_DXF(action, name) DWG_FUNC_N(action,_name)(dat, obj); \
     }
 #define UNSTABLE_CLASS_CPP(action, _name, _cppname) \
   if (!strcmp(klass->cppname, #_cppname)) \
@@ -115,10 +123,7 @@
         obj->dxfname = (char*) #_name; \
         obj->fixedtype = DWG_TYPE_##_name; \
       } \
-      if (!strcmp(_STR(action), "dxf")) \
-        return DWG_ERR_NOTYETSUPPORTED; \
-      else \
-        return DWG_FUNC_N(action,_name)(dat, obj); \
+      return DEBUGGING_DXF(action, name) DWG_FUNC_N(action,_name)(dat, obj); \
     }
 #define UNHANDLED_CLASS(action, _name) \
   if (!strcmp(klass->dxfname, #_name)) \
@@ -144,14 +149,6 @@
       /* return dwg_##action_##name(dat, obj); */ \
       return DWG_ERR_UNHANDLEDCLASS; \
     }
-
-#ifdef DEBUG_CLASSES
-#define DEBUGGING_CLASS(action, name)               UNSTABLE_CLASS(action, name)
-#define DEBUGGING_CLASS_DXF(action, name, _dxfname) UNSTABLE_CLASS_DXF(action, name, _dxfname)
-#else
-#define DEBUGGING_CLASS(action, name)               UNHANDLED_CLASS(action, name)
-#define DEBUGGING_CLASS_DXF(action, name, _dxfname) UNHANDLED_CLASS_DXF(action, name, _dxfname)
-#endif
 
   /* Entities */
   STABLE_CLASS    (ACTION, CAMERA)    /*ent, not persistent in a DWG */
