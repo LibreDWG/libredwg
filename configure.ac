@@ -225,6 +225,7 @@ AC_ARG_ENABLE([debug],AS_HELP_STRING([--enable-debug],[
   CFLAGS="$CFLAGS -DDEBUG_CLASSES"]
   AC_MSG_RESULT([yes]),
   AC_MSG_RESULT([no (default)]))
+AM_CONDITIONAL([ENABLE_DEBUG], [test x$enable_debug = xyes])
 
 dnl --disable-dxf only useful for faster debug/test cycles
 AC_MSG_CHECKING([--disable-dxf])

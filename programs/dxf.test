@@ -16,6 +16,7 @@ if [ -d test/test-data ]; then cd ..; fi
 datadir=${datadir:-../test/test-data}
 problems=0
 rm -f *dxf.log
+enable_debug="$(grep '^CFLAGS =' Makefile | grep 'DDEBUG_CLASSES')"
 
 check_subentity() {
     if [ -f "$dwg" ] && [ -f "$dxf" ]; then
@@ -97,7 +98,11 @@ for dwg in $datadir/example_*.dwg; do
     rm "$log" 2>/dev/null
     for dxfname in ACDBPERSSUBENTMANAGER ACDBASSOCDEPENDENCY
     do
-        check_acdb_dxfname 1
+        if [ -z "$enable_debug" ]; then
+            check_acdb_dxfname 1
+        else
+            check_acdb_dxfname
+        fi
     done
 done
 for dwg in $datadir/2004/Underlay.dwg; do
