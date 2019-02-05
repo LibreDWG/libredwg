@@ -104,7 +104,7 @@
   SINCE(R_2000)
     {
       if (FIELD_VALUE(plotstyle_flags) == 3)
-        FIELD_HANDLE(plotstyle, 5, 0);
+        FIELD_HANDLE(plotstyle, 5, 390);
     }
 
   SINCE(R_2010)

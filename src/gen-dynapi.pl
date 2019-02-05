@@ -147,9 +147,13 @@ sub dxf_in {
 }
 
 # get dxf group for each struct field
-open $in, "<", 'dwg.spec' or die "dwg.spec: $!";
-dxf_in($in);
-close $in;
+sub dxfin_spec {
+  my $fn = shift;
+  open my $in, "<", $fn  or die "$fn: $!";
+  dxf_in($in);
+  close $in;
+}
+dxfin_spec 'dwg.spec';
 $DXF{'3DSOLID'}->{'version'} = 70;
 $DXF{'REGION'}->{'version'} = 70;
 $DXF{'BODY'}->{'version'} = 70;
@@ -157,11 +161,21 @@ $DXF{'3DSOLID'}->{'encr_sat_data'} = 1;
 $DXF{'REGION'}->{'encr_sat_data'} = 1;
 $DXF{'BODY'}->{'encr_sat_data'} = 1;
 $DXF{'BLOCK'}->{'name'} = 2; # and 3
+$DXF{'VISUALSTYLE'}->{'edge_hide_precision_flag'} = 290;
+$DXF{'VISUALSTYLE'}->{'is_internal_use_only'} = 291;
 
-open $in, "<", 'header_variables_dxf.spec' or die "header_variables_dxf.spec: $!";
-dxf_in($in);
-close $in;
+dxfin_spec 'header_variables_dxf.spec';
 $DXF{header_variables}->{'_3DDWFPREC'} = 40;
+
+$n = 'object_entity';
+dxfin_spec 'common_entity_data.spec';
+dxfin_spec 'common_entity_handle_data.spec';
+$DXF{$n}->{'color'} = $DXF{$n}->{'color_r11'} = 62;
+$DXF{$n}->{'color_handle'} = 420;
+$DXF{$n}->{'paper_r11'} = 67;
+$DXF{$n}->{'plotstyle'} = 390;
+$DXF{$n}->{'xdicobjhandle'} = 360;
+$DXF{$n}->{'reactors'} = 330;
 
 my $cfile = "dynapi.c";
 chmod 0644, $cfile if -e $cfile;

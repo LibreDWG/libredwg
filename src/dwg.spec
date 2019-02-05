@@ -6037,8 +6037,8 @@ DWG_OBJECT(VISUALSTYLE)
   FIELD_BS (display_style, 93);
   FIELD_BD (display_brightness, 44);
   FIELD_BS (display_shadow_type, 173);
-  DXF  { FIELD_B (is_internal_use_only, 290); }
-  else { FIELD_BS (is_internal_use_only, 290); }
+  DXF  { FIELD_B (is_internal_use_only, 291); }
+  else { FIELD_BS (is_internal_use_only, 291); }
   //FIELD_BS (unknown_float45, 45); // only in DXF, not in header
 #endif
 
