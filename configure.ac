@@ -215,10 +215,10 @@ AC_ARG_ENABLE([trace],AS_HELP_STRING([--enable-trace],[
   AC_MSG_RESULT([yes]),
   AC_MSG_RESULT([no (default)]))
 
-dnl --enable-debug sets DEBUG_CLASSES
+dnl --enable-debug sets DEBUG_CLASSES, will crash acad import
 AC_MSG_CHECKING([--enable-debug])
 AC_ARG_ENABLE([debug],AS_HELP_STRING([--enable-debug],[
-    Enable DEBUG_CLASSES (default: no).]),
+    Enable unstable DEBUG_CLASSES (default: no).]),
   [if test x$ac_compiler_gnu = xyes; then
     CFLAGS="`echo $CFLAGS|sed 's,-O2,,'` -fno-omit-frame-pointer"
   fi
