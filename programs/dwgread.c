@@ -218,9 +218,9 @@ main(int argc, char *argv[])
   if (!fmt)
     {
       if (error >= DWG_ERR_CRITICAL)
-        printf("\nERROR 0x%x\n", error);
+        printf("ERROR 0x%x\n", error);
       else
-        printf("\nSUCCESS 0x%x\n", error);
+        printf("SUCCESS 0x%x\n", error);
     }
   else
     {
@@ -249,9 +249,9 @@ main(int argc, char *argv[])
         {
           fclose(dat.fh);
           if (error >= DWG_ERR_CRITICAL)
-            printf("\nERROR 0x%x\n", error);
+            printf("ERROR 0x%x\n", error);
           else
-            printf("\nSUCCESS 0x%x\n", error);
+            printf("SUCCESS 0x%x\n", error);
         }
     }
   // forget about valgrind. really huge DWG's need endlessly here.
