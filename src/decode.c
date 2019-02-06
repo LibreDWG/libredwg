@@ -63,42 +63,42 @@ static bool env_var_checked_p;
  */
 
 static int
-resolve_objectref_vector(Bit_Chain* dat, Dwg_Data * dwg);
+resolve_objectref_vector(Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 
 static void
-decode_preR13_section_ptr(const char* name, Dwg_Section_Type_r11 id,
-                          Bit_Chain* dat, Dwg_Data * dwg);
+decode_preR13_section_ptr(const char *restrict name, Dwg_Section_Type_r11 id,
+                          Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 static void
-decode_preR13_section_chk(Dwg_Section_Type_r11 id, Bit_Chain* dat,
-                          Dwg_Data * dwg);
+decode_preR13_section_chk(Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
+                          Dwg_Data *restrict dwg);
 static int
-decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain* dat, Dwg_Data * dwg);
+decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 static int
 decode_preR13_entities(unsigned long start, unsigned long end,
-                       unsigned long offset, Bit_Chain* dat, Dwg_Data * dwg);
+                       unsigned long offset, Bit_Chain* dat, Dwg_Data *restrict dwg);
 
 static int
-decode_preR13(Bit_Chain* dat, Dwg_Data * dwg);
+decode_preR13(Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 static int
-decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg);
+decode_R13_R2000(Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 static int
-decode_R2004(Bit_Chain* dat, Dwg_Data * dwg);
+decode_R2004(Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 static int
-decode_R2007(Bit_Chain* dat, Dwg_Data * dwg);
+decode_R2007(Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 
 static Dwg_Resbuf*
-dwg_decode_xdata(Bit_Chain * dat, Dwg_Object_XRECORD * obj, int size);
+dwg_decode_xdata(Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj, int size);
 
 static int
-dwg_decode_eed(Bit_Chain * dat, Dwg_Object_Object * obj);
+dwg_decode_eed(Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj);
 
 static int
 dwg_decode_object(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
-                  Dwg_Object_Object * obj);
+                  Dwg_Object_Object *restrict obj);
 
 static int
 dwg_decode_entity(Bit_Chain* dat, Bit_Chain* hdl_dat, Bit_Chain* str_dat,
-                  Dwg_Object_Entity * ent);
+                  Dwg_Object_Entity *restrict ent);
 
 /*----------------------------------------------------------------------------
  * Public variables
@@ -550,7 +550,8 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain *restrict dat, Dwg_Data
 }
 
 static int
-decode_entity_preR13(Bit_Chain* dat, Dwg_Object *obj, Dwg_Object_Entity *ent)
+decode_entity_preR13(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
+                     Dwg_Object_Entity *ent)
 {
   Dwg_Object_Entity *_obj = ent;
   obj->type = bit_read_RC(dat);
@@ -585,7 +586,7 @@ decode_entity_preR13(Bit_Chain* dat, Dwg_Object *obj, Dwg_Object_Entity *ent)
 }
 
 static int
-decode_preR13(Bit_Chain* dat, Dwg_Data * dwg)
+decode_preR13(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   BITCODE_RL entities_start, entities_end, blocks_start, blocks_end;
   BITCODE_RL rl1, rl2;
@@ -739,7 +740,7 @@ decode_preR13(Bit_Chain* dat, Dwg_Data * dwg)
 }
 
 static int
-decode_R13_R2000(Bit_Chain* dat, Dwg_Data * dwg)
+decode_R13_R2000(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dwg_Object *obj = NULL;
   unsigned int section_size = 0;
