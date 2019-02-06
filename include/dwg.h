@@ -25,13 +25,8 @@
 
 /* for uint64_t, but not in swig */
 #ifndef SWIGIMPORTED
-/* with autotools you get better int types, esp. on 64bit */
-# ifdef HAVE_STDINT_H
 #  include <stdint.h>
-# endif
-# ifdef HAVE_INTTYPES_H
 #  include <inttypes.h>
-# endif
 /* wchar for R2007+ support.
  * But we need the WIN32 UTF-16 variant, not UTF-32.
  */
@@ -82,14 +77,14 @@ extern "C" {
 /* Since R24 */
 #define BITCODE_3B unsigned char
 #define FORMAT_3B "%u"
-#ifdef HAVE_STDINT_H
+//#ifdef HAVE_STDINT_H
 # define BITCODE_BS uint16_t
 # define BITCODE_RS uint16_t
 # define BITCODE_BL uint32_t
 # define BITCODE_RL uint32_t
 # define BITCODE_BLd int32_t
 # define BITCODE_RLd int32_t
-#else
+/*#else
 # define BITCODE_BS unsigned short int
 # define BITCODE_RS unsigned short int
 # define BITCODE_BL unsigned int
@@ -97,7 +92,8 @@ extern "C" {
 # define BITCODE_BLd int
 # define BITCODE_RLd int
 #endif
-#ifdef HAVE_INTTYPES_H
+*/
+//#ifdef HAVE_INTTYPES_H
 # define FORMAT_BS "%" PRIu16
 # define FORMAT_RS "%" PRIu16
 # define FORMAT_BL "%" PRIu32
@@ -106,7 +102,7 @@ extern "C" {
 # define FORMAT_RLd "%" PRId32
 # define FORMAT_BLX "%" PRIX32
 # define FORMAT_BLx "%" PRIx32
-#else
+/*#else
 # define FORMAT_BS "%hu"
 # define FORMAT_RS "%hu"
 # define FORMAT_BL "%u"
@@ -116,6 +112,7 @@ extern "C" {
 # define FORMAT_BLX "%X"
 # define FORMAT_BLx "%x"
 #endif
+*/
 #define BITCODE_MC long
 #define FORMAT_MC  "%ld"
 #define BITCODE_UMC unsigned long
@@ -124,22 +121,23 @@ extern "C" {
 #define FORMAT_MS FORMAT_BL
 #define BITCODE_RD BITCODE_DOUBLE
 #define FORMAT_RD "%f"
-#ifdef HAVE_STDINT_H
+//#ifdef HAVE_STDINT_H
 # define BITCODE_RLL int64_t
 /* Since R2004 */
 # define BITCODE_BLL int64_t
-#else
+//#else
 /* on 64bit just long */
-# define BITCODE_RLL long
-# define BITCODE_BLL long
-#endif
-#ifdef HAVE_INTTYPES_H
+//# define BITCODE_RLL long
+//# define BITCODE_BLL long
+//#endif
+//#ifdef HAVE_INTTYPES_H
 # define FORMAT_RLL "%" PRId64
 # define FORMAT_BLL "%" PRId64
-#else
+/*#else
 # define FORMAT_RLL "%ld"
 # define FORMAT_BLL "%ld"
 #endif
+*/
 #ifndef HAVE_NATIVE_WCHAR2
   typedef BITCODE_RS dwg_wchar_t;
 # define DWGCHAR dwg_wchar_t

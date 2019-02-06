@@ -42,7 +42,8 @@ http://www.gnu.org/software/libredwg
 == Building and installing the library ==
 
 You need the following dependencies:
-- Basic development tools (a C99 compiler like gcc/clang, make, autoconf, automake and libtool)
+- Basic development tools (a C99 compiler like gcc/clang, make, autoconf, automake
+  and libtool)
 
 Optionally:
 
@@ -96,6 +97,7 @@ See the following scripts how we build on Windows:
 * .appveyor.yml: windows smoker
 
 We only support C99 compilers and POSIX environments, i.e. cygwin or msys or cross.
+stdint.h and inttypes.h must be available.
 Pre-compiled Windows binaries are here: https://github.com/LibreDWG/libredwg/releases
 
 == Example usage of the library ==
@@ -144,7 +146,7 @@ The programs and examples directories contains some application code that uses o
   features is in the test/xmlsuite directory. It also features code to output entities
   in XML, but does not use the python bindings.
 
-Copyright (C) 2009, 2010, 2015, 2018 Free Software Foundation, Inc.
+Copyright (C) 2009, 2010, 2015, 2018, 2019 Free Software Foundation, Inc.
 
 This library is free software, licensed under the terms of the GNU
 General Public License as published by the Free Software Foundation,

@@ -5,6 +5,8 @@ See the end for copying conditions.
 LibreDWG version 0.8 - released 2019/?? - still alpha:
 
 new API:
+  * added a new dynamic API, read and write all header and object fields
+    by name. Many of the old dwg_api.h field accessors are deprecated.
   * add calculated DIMENSION.flag from flag1 and flag2
   * add BITCODE_UMC type for Object-map section_handles
   * add reverse dwg_find_objectref lookup: linear search, only done for
@@ -27,6 +29,8 @@ API breaking changes:
   * rename _ent->entity_mode to entmode (as in ODA)
 
 Important bugfixes:
+  * dwg.h now always includes stdint.h and inttypes.h, no more
+    int vs int32_t confusion
   * Fixed many errors in DXF output:
     * split BLOCKS and ENTITIES (#88)
       esp. in respect to Paper_Space (#81) and Model_Space entities.

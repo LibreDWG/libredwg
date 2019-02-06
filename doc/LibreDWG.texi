@@ -359,13 +359,9 @@ Dwg_Color struct with index or rgb, alpha and optional name and book_name.
 Two types that do not derive from the type system of the DWG file format
 are the enums for return codes and error codes.
 
-Esp. on 32-bit and windows systems ensure that you define
-@code{HAVE_STDINT_H} and @code{HAVE_INTTYPES_H} before including
-@file{dwg.h} to use the proper C99 @code{int32_t},... types, and not
-just the native fallback types int/long, which are different across
-platforms.  Or include @file{<stdint.h>} and @file{<inttypes.h>} by
-your own before @file{dwg.h}.
-With the GNU autotools this usually happens automatically.
+On non-C99 systems ensure that stdint.h and inttypes.h are available
+to use the proper C99 @code{int32_t},... types, and not just the
+native fallback types int/long, which are different across platforms.
 
 @node Functions
 @chapter Functions
