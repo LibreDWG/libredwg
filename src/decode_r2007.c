@@ -846,11 +846,11 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
       // Section Name
       section->name = bfr_read_string(&ptr, section->name_length);
 #ifdef HAVE_NATIVE_WCHAR2
-      LOG_TRACE("  name:          " FORMAT_TU "\n", (BITCODE_TU)section->name)
+      LOG_TRACE("  name:          " FORMAT_TU "\n\n", (BITCODE_TU)section->name)
 #else
       LOG_TRACE("  name:          ")
       LOG_TEXT_UNICODE(TRACE, section->name)
-      LOG_TRACE("\n")
+      LOG_TRACE("\n\n")
 #endif
       section->type = dwg_section_type(section->name);
 
@@ -885,17 +885,17 @@ read_sections_map(Bit_Chain* dat, int64_t size_comp,
 
           bfr_read(section->pages[i], &ptr, 56);
 
-          LOG_TRACE("\n Page[%d]:\n", i)
-          LOG_TRACE("   offset: 0x%"PRIx64, section->pages[i]->offset);
-          LOG_TRACE("   size: %"PRIu64, section->pages[i]->size);
-          LOG_TRACE("   id: %"PRIu64" ", section->pages[i]->id);
-          LOG_TRACE("   uncomp_size: %"PRIu64"\n",
+          LOG_TRACE(" Page[%d]: ", i)
+          LOG_TRACE(" offset: 0x%07"PRIx64, section->pages[i]->offset);
+          LOG_TRACE(" size: %5"PRIu64, section->pages[i]->size);
+          LOG_TRACE(" id: %4"PRIu64, section->pages[i]->id);
+          LOG_TRACE(" uncomp_size: %5"PRIu64"\n",
                     section->pages[i]->uncomp_size);
-          LOG_HANDLE("   comp_size: %"PRIu64,
+          LOG_HANDLE(" comp_size: %5"PRIu64,
                     section->pages[i]->comp_size);
-          LOG_HANDLE("   checksum: %016"PRIx64,
+          LOG_HANDLE(" checksum: %016"PRIx64,
                     section->pages[i]->checksum);
-          LOG_HANDLE("   crc64: %016"PRIx64"\n", section->pages[i]->crc);
+          LOG_HANDLE(" crc64: %016"PRIx64"\n", section->pages[i]->crc);
           //debugging sanity
           assert(section->pages[i]->size < DBG_MAX_SIZE);
           assert(section->pages[i]->uncomp_size < DBG_MAX_SIZE);

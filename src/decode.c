@@ -1532,16 +1532,16 @@ decompress_R2004_section(Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
 }
 
 /* Read R2004, 2010+ Section Map
- * The Section Map is a vector of number, size, and address triples used
- * to locate the sections in the file.
+ * The Section Map is a vector of number, size, and address(offset) triples
+ * used to locate the sections in the file.
  */
 static int
 read_R2004_section_map(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   BITCODE_RC *decomp, *ptr;
   int i, error;
-  int section_address;
-  int bytes_remaining;
+  BITCODE_RL section_address;
+  BITCODE_RL bytes_remaining;
   uint32_t comp_data_size   = dwg->r2004_header.comp_data_size;
   uint32_t decomp_data_size = dwg->r2004_header.decomp_data_size;
 
@@ -1588,9 +1588,9 @@ read_R2004_section_map(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       bytes_remaining -= 8;
       ptr += 8; /* 2*4 */
 
-      LOG_TRACE("Section[%2d]  %2ld:", i, dwg->header.section[i].number)
-      LOG_TRACE(" size: %5u", dwg->header.section[i].size)
-      LOG_TRACE(" addr: 0x%04x\n", dwg->header.section[i].address)
+      LOG_TRACE("Section[%2d] %2ld,", i, dwg->header.section[i].number)
+      LOG_TRACE(" size: %5u,", dwg->header.section[i].size)
+      LOG_TRACE(" address: 0x%04x\n", dwg->header.section[i].address)
 
       if (dwg->header.section[i].number < 0) // negative: gap/unused data
         {
@@ -1640,7 +1640,7 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   BITCODE_RC *decomp, *ptr, *decomp_end;
   BITCODE_BL i, j;
   int32_t section_number = 0;
-  uint32_t data_size;
+  uint32_t data_size, maxsize;
   uint64_t start_offset;
   int error;
 
@@ -1663,21 +1663,22 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_ERROR("Out of memory");
       return error | DWG_ERR_OUTOFMEM;
     }
-
+  maxsize = *((int32_t*)decomp + 2);
   LOG_TRACE("\n#### Read 2004 Section Info fields ####\n")
-  LOG_TRACE("NumDescriptions:   %d\n", dwg->header.num_infos)
-  LOG_TRACE("Compressed:      %d\n", *((int32_t*)decomp + 1))
-  LOG_TRACE("MaxSize:         0x%x\n", *((int32_t*)decomp + 2))
-  LOG_TRACE("Encrypted:       %d\n", *((int32_t*)decomp + 3))
-  LOG_TRACE("NumDescriptions2:  %d/0x%x\n", *((int32_t*)decomp + 4),
-                                            *((int32_t*)decomp + 4))
+  LOG_TRACE("NumDescriptions:  %d\n",   dwg->header.num_infos)
+  LOG_TRACE("Compressed:       %d\n",   *((int32_t*)decomp + 1))
+  LOG_TRACE("MaxSize:          0x%x\n", maxsize)
+  LOG_TRACE("Encrypted:        %d\n",   *((int32_t*)decomp + 3))
+  LOG_TRACE("NumDescriptions2: %d/0x%x\n", *((int32_t*)decomp + 4),
+                                           *((int32_t*)decomp + 4))
 
   ptr = decomp + 20; // 5*4
   decomp_end = decomp + decomp_data_size + 1024;
   for (i = 0; i < dwg->header.num_infos; ++i)
     {
       Dwg_Section_Info* info;
-
+      uint64_t sum_decomp = 0;
+  
       if (ptr + 64 >= decomp_end)
         {
           free (decomp);
@@ -1686,7 +1687,10 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         }
       info = &dwg->header.section_info[i];
       /* endian specific code: */
-      info->size            = *((uint64_t*)ptr);
+      info->size            = *((int64_t*)ptr);
+      //info->size          = *((uint32_t*)ptr);
+      //info->size        <<= 32;
+      //info->size         += *((uint32_t*)ptr + 1);
       info->pagecount       = *((int32_t*)ptr + 2);
       info->max_decomp_size = *((int32_t*)ptr + 3);
       info->unknown2        = *((int32_t*)ptr + 4);
@@ -1698,7 +1702,7 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       ptr += 64;
 
       LOG_TRACE("\nSection Info[%d] description fields\n", i)
-      LOG_TRACE("Size:            %u\n", info->size)
+      LOG_TRACE("Size:            %ld\n", (long)info->size)
       LOG_TRACE("PageCount:       %u\n", info->pagecount)
       //LOG_TRACE("Num sections:    %u\n", info->num_sections)
       LOG_TRACE("Max decomp size: %u / 0x%x\n", // normally 0x7400
@@ -1719,6 +1723,7 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
       if (info->pagecount < 1000000)
         {
+          int32_t old_section_number;
           LOG_INFO("Page count %u in area %d\n", info->pagecount, i);
           info->sections = calloc(info->pagecount, sizeof(Dwg_Section*));
           if (!info->sections)
@@ -1733,28 +1738,52 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               /* endian specific code: */
               section_number = *((int32_t*)ptr);     // Index into SectionMap
               data_size      = *((uint32_t*)ptr + 1);
-              start_offset   = *((uint64_t*)ptr + 2); // avoid alignment ubsan
+              start_offset   = *((uint64_t*)ptr + 2); // TODO avoid alignment ubsan
               //start_offset   = *((uint32_t*)ptr + 2);
               //start_offset <<= 32;
               //start_offset  += *((uint32_t*)ptr + 3);
               ptr += 16; /* 4*4 */
+              sum_decomp += data_size; /* TODO: uncompressed size */
 
+#if 0
+              if (start_offset < sum_decomp)
+                {
+                  /* ODA: "If the start offset is smaller than the sum of the decompressed
+                   * size of all previous pages, then this page is to be preceded by
+                   * zero pages until this condition is met. */
+                  LOG_WARN("address %lu < sum_decomp %lu", page.address, sum_decomp)
+                }
+#endif
               info->sections[j] = find_section(dwg, section_number);
 
               if (section_number < 0)
                 { // gap/unused data
-                  LOG_TRACE("Section Number: %" PRId32" (unused)\t", section_number)
+                  LOG_TRACE("Section Number: %" PRId32" (unused)\n", section_number)
+                  LOG_TRACE("%p \t\t\t", info->sections[j]);
                 }
               else
               if (info->sections[0] &&
                   section_number > info->pagecount + info->sections[0]->number)
                 {
-                  LOG_WARN("!Section Number: %" PRId32, section_number)
-                  LOG_TRACE("\t\t")
+                  // for [7] ptr+160 seems to be AcDb:ObjFreeSpace
+                  LOG_WARN("!Section Number: %" PRId32 " (unused)", section_number)
+                  LOG_TRACE("%p \t\t\t", info->sections[j]);
+                  //LOG_TRACE("size: %d\t", data_size) //compressed
+                  //LOG_TRACE("offset: 0x%" PRIx64 "\n", start_offset)
+                  //ptr -= 16;
+                  //break;
+                }
+              else
+              if (!info->sections[j] && section_number != old_section_number + 1)
+                {
+                  LOG_WARN("!Section Number: %" PRId32 " (break)", section_number)
+                  ptr -= 16;
+                  break;
                 }
               else
                 {
                   LOG_TRACE("Section Number: %" PRId32"\t", section_number)
+                  old_section_number = section_number;
                 }
               LOG_TRACE("size: %d\t", data_size) //compressed
               LOG_TRACE("offset: 0x%" PRIx64 "\n", start_offset)
@@ -1865,11 +1894,11 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *restrict dwg,
         {
           LOG_INFO("Section Tag:      0x%x\n", (unsigned)es.fields.tag);
         }
-      LOG_INFO("Section Type:     0x%x\n", (unsigned)es.fields.section_type)
+      LOG_INFO  ("Section Type:     0x%x\n", (unsigned)es.fields.section_type)
       // this is the number of bytes that is read in decompress_R2004_section (+ 2bytes)
-      LOG_INFO("Data size:        0x%x\n", (unsigned)es.fields.data_size)
-      LOG_INFO("Comp data size:   0x%x\n", (unsigned)es.fields.section_size)
-      LOG_TRACE("StartOffset:      0x%x\n",(unsigned)es.fields.start_offset)
+      LOG_INFO  ("Data size:        0x%x\n", (unsigned)es.fields.data_size)
+      LOG_INFO  ("Comp data size:   0x%x\n", (unsigned)es.fields.section_size)
+      LOG_TRACE ("StartOffset:      0x%x\n",(unsigned)es.fields.start_offset)
       LOG_HANDLE("Unknown:          0x%x\n",(unsigned)es.fields.unknown);
       LOG_HANDLE("Checksum1:        0x%x\n",(unsigned)es.fields.checksum_1)
       LOG_HANDLE("Checksum2:        0x%x\n\n",(unsigned)es.fields.checksum_2)
@@ -1908,7 +1937,7 @@ read_2004_section_classes(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Bit_Chain sec_dat = {0}, str_dat = {0};
 
   error = read_2004_compressed_section(dat, dwg, &sec_dat, SECTION_CLASSES);
-  if (error)
+  if (error >= DWG_ERR_CRITICAL)
     {
       LOG_ERROR("Failed to read compressed class section");
       if (sec_dat.chain)
@@ -2037,8 +2066,13 @@ read_2004_section_header(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Bit_Chain sec_dat = { 0 };
 
   error = read_2004_compressed_section(dat, dwg, &sec_dat, SECTION_HEADER);
-  if (error)
-    return error;
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      LOG_ERROR("Failed to read compressed header section");
+      if (sec_dat.chain)
+        free(sec_dat.chain);
+      return error;
+    }
 
   if (bit_search_sentinel(&sec_dat, dwg_sentinel(DWG_SENTINEL_VARIABLE_BEGIN)))
     {
@@ -2082,12 +2116,20 @@ read_2004_section_handles(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   error = read_2004_compressed_section(dat, dwg, &obj_dat, SECTION_OBJECTS);
   if (error >= DWG_ERR_CRITICAL)
-    return error;
+    {
+      LOG_ERROR("Failed to read compressed objects section");
+      if (obj_dat.chain)
+        free(obj_dat.chain);
+      return error;
+    }
 
   error = read_2004_compressed_section(dat, dwg, &hdl_dat, SECTION_HANDLES);
   if (error >= DWG_ERR_CRITICAL)
     {
+      LOG_ERROR("Failed to read compressed handles section");
       free(obj_dat.chain);
+      if (hdl_dat.chain)
+        free(hdl_dat.chain);
       return error;
     }
 
@@ -2104,10 +2146,9 @@ read_2004_section_handles(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
       section_size = bit_read_RS_LE(&hdl_dat);
       LOG_TRACE("\nSection size: %u\n", section_size);
-          /* *********************************************************************************************
-      ** https://www.opendesign.com/files/guestdownloads/OpenDesign_Specification_for_.dwg_files.pdf
-      ** page 251 "Note that each section is cut off at a maximum length of 2032."
-      ** BUT in fact exist files with 2035 section size */
+      /* ***********************************************
+       * ODA p. 251 "Note that each section is cut off at a maximum length of 2032."
+       * BUT in fact exist files with 2035 section size */
       if (section_size > 2040)
         {
           LOG_ERROR("Object-map/handles section size greater than 2040!");

@@ -5472,9 +5472,9 @@ typedef enum DWG_SECTION_TYPE_R11 /* tables */
 
 typedef struct _dwg_section
 {
-  long number; /* preR13: count of entries */
+  int32_t    number; /* preR13: count of entries */
+  uint32_t   size;
   BITCODE_RL address;
-  BITCODE_RL size;
   BITCODE_RL parent;
   BITCODE_RL left;
   BITCODE_RL right;
@@ -5506,7 +5506,7 @@ typedef struct _dwg_section
 
 typedef struct
 {
-  BITCODE_RL size;
+  int64_t    size;
   BITCODE_RL pagecount;
   BITCODE_RL num_sections;
   BITCODE_RL max_decomp_size;
