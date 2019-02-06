@@ -139,14 +139,9 @@ typedef BITCODE_BL BITCODE_MS;
 #define FORMAT_MS FORMAT_BL
 typedef BITCODE_DOUBLE BITCODE_RD;
 #define FORMAT_RD "%f"
-#define BITCODE_RLL int64_t
 /* Since R2004 */
-#define BITCODE_BLL int64_t
 typedef int64_t BITCODE_RLL;
-/* Since R2004 */
 typedef int64_t BITCODE_BLL;
-typedef long BITCODE_RLL;
-typedef long BITCODE_BLL;
 #define FORMAT_RLL "%" PRId64
 #define FORMAT_BLL "%" PRId64
 #ifndef HAVE_NATIVE_WCHAR2
