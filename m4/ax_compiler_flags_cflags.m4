@@ -52,6 +52,8 @@ AC_DEFUN([AX_COMPILER_FLAGS_CFLAGS],[
     # Clang warns on them for every compilation unit.
     # If this is passed to GCC, it will explode, so the flag must be enabled
     # conditionally.
+    ac_save_c_werror_flag=$ac_c_werror_flag
+    ac_c_werror_flag=yes
     AX_CHECK_COMPILE_FLAG([-Werror=unknown-warning-option],[
         ax_compiler_flags_test="-Werror=unknown-warning-option"
     ],[
@@ -138,6 +140,7 @@ AC_DEFUN([AX_COMPILER_FLAGS_CFLAGS],[
             ],ax_warn_cflags_variable,[$ax_compiler_flags_test])
         fi
     ])
+    ac_c_werror_flag=$ac_save_c_werror_flag
     AS_IF([test "$ax_enable_compile_warnings" = "error"],[
         # "error" flags; -Werror has to be appended unconditionally because
         # it's not possible to test for
