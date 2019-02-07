@@ -22,7 +22,7 @@ use vars qw(@entity_names @object_names @subtypes $max_entity_names $max_object_
 use Convert::Binary::C;
 #use Data::Dumper;
 BEGIN { chdir 'src' if $0 =~ /src/; }
-# add gcc/clang print-search-dirs paths
+# add gcc/clang -print-search-dirs paths
 my $c = Convert::Binary::C->new
   ->Include('.', '/usr/include')
   ->Define('HAVE_CONFIG_H HAVE_STDINT_H HAVE_INTTYPES_H __WORDSIZE=64');

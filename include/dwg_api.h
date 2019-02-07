@@ -39,10 +39,14 @@
 #endif
 
 /* Since version 4.5, gcc also allows one to specify the message printed
-   when a deprecated function is used.  clang claims to be gcc 4.2, but
-   may also support this feature.  */
-#if (defined( __GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 405) \
+   when a deprecated function is used.
+   clang claims to be gcc 4.2, but may also support this feature.
+   icc (at least 12) not.
+   glibc 2.28 /usr/include/sys/cdefs.h is wrong about icc compat. */
+#if (defined( __GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 405 \
+     && !defined(__ICC)) \
   || _clang_has_extension (attribute_deprecated_with_message)
+# undef __attribute_deprecated_msg
 # define __attribute_deprecated_msg__(msg) \
          __attribute__ ((__deprecated__ (msg)))
 #else
