@@ -22,10 +22,30 @@ use vars qw(@entity_names @object_names @subtypes $max_entity_names $max_object_
 use Convert::Binary::C;
 #use Data::Dumper;
 BEGIN { chdir 'src' if $0 =~ /src/; }
+
 # add gcc/clang -print-search-dirs paths
+my @ccincdir;
+my $CC = `grep '^CC =' Makefile`;
+if ($CC) {
+  $CC =~ s/^CC =//;
+  chomp $CC;
+  my $out = `$CC -print-search-dirs`;
+  if ($out) {
+    if ($out =~ /^install: (.+?)$/m) {
+      my $d = $1;
+      $d =~ s/\/$//;
+      @ccincdir = ("$d/include") if -d "$d/include";
+    } elsif ($out =~ /^libraries: =(.+?):/m) {
+      my $d = $1;
+      $d =~ s/\/$//;
+      @ccincdir = ("$d/include") if -d "$d/include";
+    }
+  }
+}
+#__WORDSIZE=64 
 my $c = Convert::Binary::C->new
-  ->Include('.', '/usr/include')
-  ->Define('HAVE_CONFIG_H HAVE_STDINT_H HAVE_INTTYPES_H __WORDSIZE=64');
+  ->Include('.', '/usr/include', @ccincdir)
+  ->Define('__GNUC__=4', '__inline=inline', '__THROW=', '__attribute__(x)=');
 my $hdr = "../include/dwg.h";
 $c->parse_file($hdr);
 
@@ -241,9 +261,15 @@ sub out_struct {
       $type = 'TV';
     } elsif ($type eq 'unsigned short int') {
       $type = 'BS';
+    } elsif ($type eq 'uint16_t') {
+      $type = 'BS';
     } elsif ($type eq 'unsigned int') {
       $type = 'BL';
     } elsif ($type eq 'unsigned int*') {
+      $type = 'BL*';
+    } elsif ($type eq 'uint32_t') {
+      $type = 'BL';
+    } elsif ($type eq 'uint32_t*') {
       $type = 'BL*';
     } elsif ($type eq 'Dwg_Object_Ref*') {
       $type = 'H';
