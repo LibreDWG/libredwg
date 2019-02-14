@@ -34,6 +34,13 @@ for dwg in $DATA; do
         cat "$json.log"
         problems=$(expr 1 + $problems)
     fi
+    geojson="$(basename "$dwg" .dwg).geojson"
+    if ../libtool --mode=execute ./dwgread -Ogeojson -o"$geojson" "$dwg" && jq . "$geojson" >>"$json.log" 2>&1; then
+        rm "$json.log" "$geojson"
+    else
+        cat "$json.log"
+        problems=$(expr 1 + $problems)
+    fi
 done
 
 if test x0 = x$problems ; then
