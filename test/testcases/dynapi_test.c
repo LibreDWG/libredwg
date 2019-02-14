@@ -13742,15 +13742,15 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
       }
   }
   {
-    uint32_t* block_size;
+    BITCODE_BL* block_size;
     if (dwg_dynapi_entity_value(extrudedsurface, "EXTRUDEDSURFACE", "block_size", &block_size, NULL)
         && !memcmp(&block_size, &extrudedsurface->block_size, sizeof(extrudedsurface->block_size)))
       {
-        pass ("EXTRUDEDSURFACE.block_size [uint32_t*]");
+        pass ("EXTRUDEDSURFACE.block_size [BL*]");
       }
     else
       {
-        fail ("EXTRUDEDSURFACE.block_size [uint32_t*]"); error++;
+        fail ("EXTRUDEDSURFACE.block_size [BL*]"); error++;
       }
   }
   {
@@ -17802,15 +17802,15 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
 
   }
   {
-    uint32_t* block_size;
+    BITCODE_BL* block_size;
     if (dwg_dynapi_entity_value(loftedsurface, "LOFTEDSURFACE", "block_size", &block_size, NULL)
         && !memcmp(&block_size, &loftedsurface->block_size, sizeof(loftedsurface->block_size)))
       {
-        pass ("LOFTEDSURFACE.block_size [uint32_t*]");
+        pass ("LOFTEDSURFACE.block_size [BL*]");
       }
     else
       {
-        fail ("LOFTEDSURFACE.block_size [uint32_t*]"); error++;
+        fail ("LOFTEDSURFACE.block_size [BL*]"); error++;
       }
   }
   {
@@ -21136,15 +21136,15 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
 
   }
   {
-    uint32_t* block_size;
+    BITCODE_BL* block_size;
     if (dwg_dynapi_entity_value(planesurface, "PLANESURFACE", "block_size", &block_size, NULL)
         && !memcmp(&block_size, &planesurface->block_size, sizeof(planesurface->block_size)))
       {
-        pass ("PLANESURFACE.block_size [uint32_t*]");
+        pass ("PLANESURFACE.block_size [BL*]");
       }
     else
       {
-        fail ("PLANESURFACE.block_size [uint32_t*]"); error++;
+        fail ("PLANESURFACE.block_size [BL*]"); error++;
       }
   }
   {
@@ -22821,15 +22821,15 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
       }
   }
   {
-    uint32_t* block_size;
+    BITCODE_BL* block_size;
     if (dwg_dynapi_entity_value(revolvedsurface, "REVOLVEDSURFACE", "block_size", &block_size, NULL)
         && !memcmp(&block_size, &revolvedsurface->block_size, sizeof(revolvedsurface->block_size)))
       {
-        pass ("REVOLVEDSURFACE.block_size [uint32_t*]");
+        pass ("REVOLVEDSURFACE.block_size [BL*]");
       }
     else
       {
-        fail ("REVOLVEDSURFACE.block_size [uint32_t*]"); error++;
+        fail ("REVOLVEDSURFACE.block_size [BL*]"); error++;
       }
   }
   {
@@ -24461,15 +24461,15 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
 
   }
   {
-    uint32_t* block_size;
+    BITCODE_BL* block_size;
     if (dwg_dynapi_entity_value(sweptsurface, "SWEPTSURFACE", "block_size", &block_size, NULL)
         && !memcmp(&block_size, &sweptsurface->block_size, sizeof(sweptsurface->block_size)))
       {
-        pass ("SWEPTSURFACE.block_size [uint32_t*]");
+        pass ("SWEPTSURFACE.block_size [BL*]");
       }
     else
       {
-        fail ("SWEPTSURFACE.block_size [uint32_t*]"); error++;
+        fail ("SWEPTSURFACE.block_size [BL*]"); error++;
       }
   }
   {
