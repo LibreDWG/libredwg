@@ -35,6 +35,7 @@ for dwg in $DATA; do
         problems=$(expr 1 + $problems)
     fi
     geojson="$(basename "$dwg" .dwg).geojson"
+    echo dwgread -o"$geojson" "$dwg"
     if ../libtool --mode=execute ./dwgread -Ogeojson -o"$geojson" "$dwg" && jq . "$geojson" >>"$json.log" 2>&1; then
         rm "$json.log" "$geojson"
     else

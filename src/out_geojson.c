@@ -92,6 +92,8 @@ static unsigned int cur_ver = 0;
     { PREFIX fprintf(dat->fh, "\"" #name "\": \"%s\"\n", value); }
 #define PAIR_NULL(name) \
     { PREFIX fprintf(dat->fh, "\"" #name "\": null,\n"); }
+#define LASTPAIR_NULL(name) \
+    { PREFIX fprintf(dat->fh, "\"" #name "\": null\n"); }
 #define KEY(name) \
     { PREFIX fprintf(dat->fh, "\"" #name "\": "); }
 #define GEOMETRY(name) \
@@ -250,10 +252,10 @@ dwg_geojson_feature(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     //TODO if has name or text
     if (obj->type == DWG_TYPE_GEOPOSITIONMARKER) {
       Dwg_Entity_GEOPOSITIONMARKER *_obj = obj->tio.entity->tio.GEOPOSITIONMARKER;
-      PAIR_S(Text, _obj->text);
+      LASTPAIR_S(Text, _obj->text);
     }
     else
-      PAIR_NULL(Text);
+      LASTPAIR_NULL(Text);
   ENDHASH;
 }
 
@@ -443,11 +445,11 @@ dwg_geojson_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         KEY(coordinates);
         if (fabs(_obj->z) > 0.000001)
           {
-            VALUE_3DPOINT(_obj->x, _obj->y, _obj->z);
+            LASTVALUE_3DPOINT(_obj->x, _obj->y, _obj->z);
           }
         else
           {
-            VALUE_2DPOINT(_obj->x, _obj->y);
+            LASTVALUE_2DPOINT(_obj->x, _obj->y);
           }
         ENDGEOMETRY;
         ENDFEATURE;
@@ -545,7 +547,7 @@ dwg_write_geojson(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     PAIR_S(creation_date, date);
     KEY(generator);
     HASH;
-      KEY(author); HASH; PAIR_S(name, "dwgread"); ENDHASH;
+      KEY(author); HASH; LASTPAIR_S(name, "dwgread"); ENDHASH;
       PAIR_S(package, PACKAGE_NAME);
       LASTPAIR_S(version, PACKAGE_VERSION);
     LASTENDHASH;
