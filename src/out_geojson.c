@@ -260,6 +260,29 @@ dwg_geojson_feature(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 #define FEATURE(subclass, obj) HASH; dwg_geojson_feature(dat, obj, #subclass)
 #define ENDFEATURE ENDHASH
 
+static int
+dwg_geojson_LWPOLYLINE(Bit_Chain *restrict dat,
+                       Dwg_Object *restrict obj)
+{
+  BITCODE_BL j;
+  Dwg_Entity_LWPOLYLINE *_obj = obj->tio.entity->tio.LWPOLYLINE;
+  //TODO: if closed and num_points > 3 use a Polygon
+  FEATURE(AcDbEntity:AcDbLwPolyline, obj);
+  GEOMETRY(LineString);
+  KEY(coordinates);
+  ARRAY;
+  for (j = 0; j < _obj->num_points-1 ; j++)
+    {
+      FIELD_2DPOINT(points[j]);
+    }
+  LASTFIELD_2DPOINT(points[j+1]);
+  LASTENDARRAY;
+  ENDGEOMETRY;
+  ENDFEATURE;
+  return 0;
+}
+
+
 /* returns 0 if object could be printed
  */
 static int
@@ -284,22 +307,7 @@ dwg_geojson_variable_type(Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
 
   if (!strcmp(dxfname, "LWPOLYLINE"))
     {
-      BITCODE_BL j;
-      Dwg_Entity_LWPOLYLINE *_obj = obj->tio.entity->tio.LWPOLYLINE;
-      //TODO: if closed and num_points > 3 use a Polygon
-      FEATURE(AcDbEntity:AcDbLwPolyline, obj);
-      GEOMETRY(LineString);
-      KEY(coordinates);
-        ARRAY;
-        for (j = 0; j < _obj->num_points-1 ; j++)
-        {
-          FIELD_2DPOINT(points[j]);
-        }
-        LASTFIELD_2DPOINT(points[j+1]);
-        LASTENDARRAY;
-      ENDGEOMETRY;
-      ENDFEATURE;
-      return 0;
+      return dwg_geojson_LWPOLYLINE(dat, obj);
     }
   if (!strcmp(dxfname, "GEODATA"))
     {
@@ -353,21 +361,6 @@ dwg_geojson_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       break;
     case DWG_TYPE_MINSERT:
       //dwg_geojson_MINSERT(dat, obj);
-      break;
-    case DWG_TYPE_VERTEX_2D:
-      //dwg_geojson_VERTEX_2D(dat, obj);
-      break;
-    case DWG_TYPE_VERTEX_3D:
-      //dwg_geojson_VERTEX_3D(dat, obj);
-      break;
-    case DWG_TYPE_VERTEX_MESH:
-      //dwg_geojson_VERTEX_MESH(dat, obj);
-      break;
-    case DWG_TYPE_VERTEX_PFACE:
-      //dwg_geojson_VERTEX_PFACE(dat, obj);
-      break;
-    case DWG_TYPE_VERTEX_PFACE_FACE:
-      //dwg_geojson_VERTEX_PFACE_FACE(dat, obj);
       break;
     case DWG_TYPE_POLYLINE_2D:
       {
@@ -507,7 +500,7 @@ dwg_geojson_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       //dwg_geojson_MLINE(dat, obj);
       break;
     case DWG_TYPE_LWPOLYLINE:
-      //dwg_geojson_LWPOLYLINE(dat, obj);
+      (void)dwg_geojson_LWPOLYLINE(dat, obj);
       break;
     default:
       if (obj->type != obj->parent->layout_number)

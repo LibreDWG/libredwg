@@ -563,7 +563,11 @@ The current first level objects are ``HEADER'', ``CLASSES'' and ``OBJECTS'', for
 Work is ongoing to write to the GeoJSON format as specified at @uref{http://geojson.org/geojson-spec.html}.
 See @code{dwgread} with the @code{--fmt GeoJSON} option.
 
-This is about 70% finished. Check the covered entity types.
+This is about 70% finished.
+
+Covered entity types are so far:
+INSERT, POLYLINE_2D, POLYLINE_3D, LINE, POINT,
+LWPOLYLINE, GEOPOSITIONMARKER
 
 @node Errors
 @chapter Errors
