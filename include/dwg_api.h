@@ -6107,6 +6107,11 @@ dwg_ent_get_layer_name(const dwg_obj_ent *restrict ent,
                        int *restrict error)
   __nonnull ((2));
 
+EXPORT char *
+dwg_ent_get_ltype_name(const dwg_obj_ent *restrict ent,
+                       int *restrict error)
+  __nonnull ((2));
+
 EXPORT BITCODE_B
 dwg_ent_get_isbylayerlt(const dwg_obj_ent *restrict ent,
                         int *restrict error) //r13-r14 only

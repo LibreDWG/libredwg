@@ -20052,7 +20052,7 @@ dwg_obj_block_header_get_name(const dwg_obj_block_header *restrict hdr,
 */
 dwg_obj_block_header *
 dwg_get_block_header(dwg_data *restrict dwg,
-                          int *restrict error)
+                     int *restrict error)
 {
   Dwg_Object *obj;
   Dwg_Object_BLOCK_HEADER *blk;
@@ -20390,6 +20390,28 @@ dwg_ent_get_layer_name(const dwg_obj_ent *restrict ent,
     name = dwg_obj_table_get_name(layer, error);
   if (!name)
     name = (char*)"0";
+  return name;
+}
+
+/** Returns the entity linetype name (as UTF-8), or "ByLayer"
+    Since r2007 it returns a malloc'd copy, before the direct reference
+    to the dwg field or the constant "0".
+\code Usage: char* layer = dwg_ent_get_layer_name(ent, &error);
+\endcode
+\param[in]  ent     dwg_obj_ent*
+\param[out] error   int*, is set to 0 for ok, 1 on error
+*/
+char *
+dwg_ent_get_ltype_name(const dwg_obj_ent *restrict ent,
+                       int *restrict error)
+{
+  char *name = NULL;
+  Dwg_Object* ltype = ent->ltype ? ent->ltype->obj : NULL;
+
+  if (ltype)
+    name = dwg_obj_table_get_name(ltype, error);
+  if (!name)
+    name = (char*)"ByLayer";
   return name;
 }
 

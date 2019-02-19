@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018 Free Software Foundation, Inc.                        */
+/*  Copyright (C) 2018-2019 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -43,6 +43,13 @@
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
 
+static char* cquote(char *restrict dest, const char *restrict src);
+#ifndef HAVE_ALLOCA
+static inline char* alloca(size_t size);
+static inline char* alloca(size_t size) {
+  return malloc(size);
+}
+#endif
 
 /*--------------------------------------------------------------------------------
  * See http://geojson.org/geojson-spec.html
@@ -233,29 +240,122 @@ static unsigned int cur_ver = 0;
                klass->wasazombie ? " was proxy" : "",\
                obj->address + obj->size)
 
+#define LASTTEXT(str) \
+  { \
+    const int len = strlen(str); \
+    if (len < 4096/6) { \
+        char *_buf = alloca(6*len+1); \
+        PREFIX fprintf(dat->fh, "\"Text\": \"%s\"\n", cquote(_buf, str)); \
+      } else { \
+        char *_buf = malloc(6*len+1); \
+        PREFIX fprintf(dat->fh, "\"Text\": \"%s\"\n", cquote(_buf, str)); \
+        free(_buf); \
+      } \
+  }
+
+static char*
+cquote(char *restrict dest, const char *restrict src) {
+  unsigned char c;
+  unsigned char *s = (unsigned char*)src;
+  char *d = dest;
+  while ((c = *s++)) {
+    if      (c == '"')  { *dest++ = '\\'; *dest++ = c; }
+    else if (c == '\\') { *dest++ = '\\'; *dest++ = c; }
+    else if (c == '\n') { *dest++ = '\\'; *dest++ = 'n'; }
+    else if (c == '\r') { *dest++ = '\\'; *dest++ = 'r'; }
+    else if (c < 0x1f)  { *dest++ = '\\'; *dest++ = 'u';
+                          *dest++ = '0';  *dest++ = '0';
+                          *dest++ = c < 0x10 ? '0' : '1';
+                          *dest++ = (c%16) > 10 ? 'a' + (c%16) - 10 : '0' + (c%16);
+                        }
+    else                  *dest++ = c;
+  }
+  *dest = 0; //add final delim, skipped above
+  return d;
+}
+
 // common properties
 static void
 dwg_geojson_feature(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
                     const char *restrict subclass)
 {
+  int error;
+  char *name;
   char tmp[64];
+
   PAIR_S(type, "Feature");
   KEY(properties);
   SAMEHASH;
-  PAIR_S(Layer, "0"); //TODO layer name
+    if (obj->supertype == DWG_SUPERTYPE_ENTITY)
+      {
+        name = dwg_ent_get_layer_name(obj->tio.entity, &error);
+        if (!error)
+          PAIR_S(Layer, name)
+        else
+          PAIR_NULL(Layer)
+      }
+    else
+      PAIR_NULL(Layer);
     PAIR_S(SubClasses, subclass);
     PAIR_NULL(ExtendedEntity);
-    PAIR_NULL(Linetype);
+    if (obj->supertype == DWG_SUPERTYPE_ENTITY)
+      {
+        name = dwg_ent_get_ltype_name(obj->tio.entity, &error);
+        if (!error)
+          PAIR_S(Linetype, name)
+        else
+          PAIR_NULL(Linetype)
+      }
+    else
+      PAIR_NULL(Linetype);
 
     sprintf(tmp, "%lX", obj->handle.value);
     PAIR_S(EntityHandle, tmp);
-    //TODO if has name or text
+    //if has name or text
     if (obj->type == DWG_TYPE_GEOPOSITIONMARKER) {
       Dwg_Entity_GEOPOSITIONMARKER *_obj = obj->tio.entity->tio.GEOPOSITIONMARKER;
-      LASTPAIR_S(Text, _obj->text);
+      LASTTEXT(_obj->text)
+    }
+    else if (obj->type == DWG_TYPE_TEXT) {
+      Dwg_Entity_TEXT *_obj = obj->tio.entity->tio.TEXT;
+      LASTTEXT(_obj->text_value)
+    }
+    else if (obj->type == DWG_TYPE_MTEXT) {
+      Dwg_Entity_MTEXT *_obj = obj->tio.entity->tio.MTEXT;
+      LASTTEXT(_obj->text)
+    }
+    else if (obj->type == DWG_TYPE_INSERT) {
+      Dwg_Entity_INSERT *_obj = obj->tio.entity->tio.INSERT;
+      Dwg_Object *hdr = dwg_ent_insert_get_block_header(_obj, &error);
+      if (!error && hdr->type == DWG_TYPE_BLOCK_HEADER)
+        {
+          Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
+          char *text = dwg_obj_block_header_get_name(_hdr, &error);
+          if (!error && text)
+            LASTTEXT(text)
+          else
+            LASTPAIR_NULL(Text)
+        }
+      else
+        LASTPAIR_NULL(Text)
+    }
+    else if (obj->type == DWG_TYPE_MINSERT) {
+      Dwg_Entity_MINSERT *_obj = obj->tio.entity->tio.MINSERT;
+      Dwg_Object *hdr = dwg_ent_insert_get_block_header(_obj, &error);
+      if (!error && hdr->type == DWG_TYPE_BLOCK_HEADER)
+        {
+          Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
+          char *text = dwg_obj_block_header_get_name(_hdr, &error);
+          if (!error && text)
+            LASTTEXT(text)
+          else
+            LASTPAIR_NULL(Text)
+        }
+      else
+        LASTPAIR_NULL(Text)
     }
     else
-      LASTPAIR_NULL(Text);
+      LASTPAIR_NULL(Text)
   ENDHASH;
 }
 
@@ -350,7 +450,7 @@ dwg_geojson_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   switch (obj->type)
     {
-    case DWG_TYPE_INSERT:
+    case DWG_TYPE_INSERT: // Just the insertion point yet
       {
         Dwg_Entity_INSERT *_obj = obj->tio.entity->tio.INSERT;
         FEATURE(AcDbEntity:AcDbBlockReference, obj);
@@ -363,7 +463,9 @@ dwg_geojson_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       }
       break;
     case DWG_TYPE_MINSERT:
+      // a grid of INSERT's (named points)
       //dwg_geojson_MINSERT(dat, obj);
+      LOG_TRACE("MINSERT not yet supported")
       break;
     case DWG_TYPE_POLYLINE_2D:
       {
@@ -420,10 +522,14 @@ dwg_geojson_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       }
       break;
     case DWG_TYPE_ARC:
+      //needs explosion of arc into lines
       //dwg_geojson_ARC(dat, obj);
+      LOG_TRACE("ARC not yet supported")
       break;
     case DWG_TYPE_CIRCLE:
+      //needs explosion of arc into lines
       //dwg_geojson_CIRCLE(dat, obj);
+      LOG_TRACE("CIRCLE not yet supported")
       break;
     case DWG_TYPE_LINE:
       {
@@ -458,49 +564,79 @@ dwg_geojson_object(Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       break;
     case DWG_TYPE__3DFACE:
       //dwg_geojson__3DFACE(dat, obj);
+      LOG_TRACE("3DFACE not yet supported")
       break;
     case DWG_TYPE_POLYLINE_PFACE:
       //dwg_geojson_POLYLINE_PFACE(dat, obj);
+      LOG_TRACE("POLYLINE_PFACE not yet supported")
       break;
     case DWG_TYPE_POLYLINE_MESH:
       //dwg_geojson_POLYLINE_MESH(dat, obj);
+      LOG_TRACE("POLYLINE_MESH not yet supported")
       break;
     case DWG_TYPE_SOLID:
       //dwg_geojson_SOLID(dat, obj);
+      LOG_TRACE("SOLID not yet supported")
       break;
     case DWG_TYPE_TRACE:
       //dwg_geojson_TRACE(dat, obj);
+      LOG_TRACE("TRACE not yet supported")
       break;
     case DWG_TYPE_ELLIPSE:
       //dwg_geojson_ELLIPSE(dat, obj);
+      LOG_TRACE("ELLIPSE not yet supported")
       break;
     case DWG_TYPE_SPLINE:
       //dwg_geojson_SPLINE(dat, obj);
-      break;
-    case DWG_TYPE_REGION:
-      //dwg_geojson_REGION(dat, obj);
+      LOG_TRACE("SPLINE not yet supported")
       break;
     case DWG_TYPE_HATCH:
       //dwg_geojson_HATCH(dat, obj);
       break;
     case DWG_TYPE__3DSOLID:
       //dwg_geojson__3DSOLID(dat, obj);
-      break; /* Check the type of the object
-              */
+      break; /* Check the type of the object */
+    case DWG_TYPE_REGION:
+      //dwg_geojson_REGION(dat, obj);
+      break;
     case DWG_TYPE_BODY:
       //dwg_geojson_BODY(dat, obj);
       break;
     case DWG_TYPE_RAY:
       //dwg_geojson_RAY(dat, obj);
+      LOG_TRACE("RAY not yet supported")
       break;
     case DWG_TYPE_XLINE:
       //dwg_geojson_XLINE(dat, obj);
+      LOG_TRACE("XLINE not yet supported")
+      break;
+    case DWG_TYPE_TEXT:
+      {
+        // add Text property to a point
+        Dwg_Entity_TEXT *_obj = obj->tio.entity->tio.TEXT;
+        FEATURE(AcDbEntity:AcDbText, obj);
+        GEOMETRY(Point);
+        KEY(coordinates);
+        ARRAY; LASTFIELD_2DPOINT(insertion_pt); LASTENDARRAY;
+        ENDGEOMETRY;
+        ENDFEATURE;
+      }
       break;
     case DWG_TYPE_MTEXT:
-      //dwg_geojson_MTEXT(dat, obj);
+      {
+        // add Text property to a point
+        Dwg_Entity_MTEXT *_obj = obj->tio.entity->tio.MTEXT;
+        FEATURE(AcDbEntity:AcDbMText, obj);
+        GEOMETRY(Point);
+        KEY(coordinates);
+        ARRAY; LASTFIELD_3DPOINT(insertion_pt); LASTENDARRAY;
+        ENDGEOMETRY;
+        ENDFEATURE;
+      }
       break;
     case DWG_TYPE_MLINE:
       //dwg_geojson_MLINE(dat, obj);
+      LOG_TRACE("MLINE not yet supported")
       break;
     case DWG_TYPE_LWPOLYLINE:
       (void)dwg_geojson_LWPOLYLINE(dat, obj);
