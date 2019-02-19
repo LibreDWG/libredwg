@@ -81,30 +81,30 @@ typedef struct r2007_file_header
 typedef struct _r2007_page
 {
   int64_t id;
-  int64_t size;
-  int64_t offset;
+  uint64_t size;
+  uint64_t offset;
   struct _r2007_page *next;
 } r2007_page;
 
 /* section page */
 typedef struct _r2007_section_page
 {
-  int64_t offset;
-  int64_t size;
+  uint64_t offset;
+  uint64_t size;
   int64_t id;
-  int64_t uncomp_size;  // src_size
-  int64_t comp_size;
-  int64_t checksum;
-  int64_t crc;
+  uint64_t uncomp_size;  // src_size
+  uint64_t comp_size;
+  uint64_t checksum;
+  uint64_t crc;
 } r2007_section_page;
 
 /* section map */
 typedef struct _r2007_section
 {
-  int64_t  data_size;    // max size of page
-  int64_t  max_size;
+  uint64_t  data_size;    // max size of page
+  uint64_t  max_size;
   int64_t  encrypted;
-  int64_t  hashcode;
+  uint64_t  hashcode;
   int64_t  name_length;  // 0x22
   int64_t  unknown;      // 0x00
   int64_t  encoded;
@@ -156,7 +156,6 @@ static inline BITCODE_RC* copy_bytes_3(BITCODE_RC *restrict dst, const BITCODE_R
 static void copy_bytes(BITCODE_RC *dst, uint32_t length, uint32_t offset);
 static uint32_t read_literal_length(BITCODE_RC *restrict *restrict src, unsigned char opcode);
 static void copy_compressed_bytes(BITCODE_RC *restrict dst, BITCODE_RC *restrict src, int length);
-static void  bfr_read(void *restrict dst, BITCODE_RC *restrict *restrict src, size_t size);
 static DWGCHAR* bfr_read_string(BITCODE_RC *restrict *restrict src, int64_t size);
 static BITCODE_RC* decode_rs(const BITCODE_RC *src, int block_count, int data_size);
 static int  decompress_r2007(BITCODE_RC *restrict dst, int dst_size,
@@ -671,7 +670,7 @@ read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat,
 {
   r2007_section *section;
   r2007_page *page;
-  int64_t max_decomp_size;
+  uint64_t max_decomp_size;
   BITCODE_RC *decomp;
   int error, i;
 
@@ -729,13 +728,7 @@ read_data_section(Bit_Chain *sec_dat, Bit_Chain *dat,
 /* endian specific code: */
 #define bfr_read_int16(_p)   *((int16_t*)_p);  _p += 2;
 #define bfr_read_int64(_p)   *((int64_t*)_p);  _p += 8;
-
-static void
-bfr_read(void *restrict dst, BITCODE_RC *restrict *restrict src, size_t size)
-{
-  memcpy(dst, *src, size);
-  *src += size;
-}
+#define bfr_read_uint64(_p)  *((uint64_t*)_p);  _p += 8;
 
 static DWGCHAR*
 bfr_read_string(BITCODE_RC *restrict *restrict src, int64_t size)
@@ -939,7 +932,7 @@ read_pages_map(Bit_Chain* dat, int64_t size_comp,
           return NULL;
         }
 
-      page->size   = bfr_read_int64(ptr);
+      page->size   = bfr_read_uint64(ptr);
       page->id     = bfr_read_int64(ptr);
       page->offset = offset;
       offset += page->size;

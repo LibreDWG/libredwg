@@ -1353,6 +1353,14 @@ dwg_resolve_objectrefs_silent(Dwg_Data *restrict dwg)
   loglevel = oldloglevel;
 }
 
+/* endian specific */
+void
+bfr_read(void *restrict dst, BITCODE_RC *restrict *restrict src, size_t size)
+{
+  memcpy(dst, *src, size);
+  *src += size;
+}
+
 /* R2004 Literal Length
  */
 static int
@@ -1582,12 +1590,13 @@ read_R2004_section_map(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
 
       /* endian specific code: */
-      dwg->header.section[i].number  = *((int32_t*)ptr);
-      dwg->header.section[i].size    = *((uint32_t*)ptr+1);
+      bfr_read(&dwg->header.section[i], &ptr, 8);
+      //dwg->header.section[i].number  = *((int32_t*)ptr);
+      //dwg->header.section[i].size    = *((uint32_t*)ptr+1);
       dwg->header.section[i].address  = section_address;
       section_address += dwg->header.section[i].size;
       bytes_remaining -= 8;
-      ptr += 8; /* 2*4 */
+      //ptr += 8; /* 2*4 */
 
       LOG_TRACE("Section[%2d]=%2d,", i, (int)dwg->header.section[i].number)
       LOG_TRACE(" size: %5u,", dwg->header.section[i].size)
@@ -1596,13 +1605,15 @@ read_R2004_section_map(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       if (dwg->header.section[i].number < 0) // negative: gap/unused data
         {
           /* endian specific code: */
+          bfr_read(&dwg->header.section[i].parent, &ptr, 16);
+          bytes_remaining -= 16;
+#if 0
           dwg->header.section[i].parent  = *((int32_t*)ptr);
           dwg->header.section[i].left    = *((int32_t*)ptr+1);
           dwg->header.section[i].right   = *((int32_t*)ptr+2);
           dwg->header.section[i].x00     = *((int32_t*)ptr+3);
-          bytes_remaining -= 16;
           ptr += 16; /* 4*4 */
-
+#endif
           LOG_TRACE("Parent: %d ", dwg->header.section[i].parent)
           LOG_TRACE("Left:   %d ", dwg->header.section[i].left)
           LOG_TRACE("Right:  %d ", dwg->header.section[i].right)
@@ -1740,58 +1751,65 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
           for (j = 0; j < info->pagecount; j++)
             {
+              struct _section_page { /* unused */
+                int32_t number;
+                uint32_t size;
+                uint64_t address;
+              } page;
               /* endian specific code: */
+              bfr_read(&page, &ptr, 16);
+#if 0
               section_number = *((int32_t*)ptr);     // Index into SectionMap
               data_size      = *((uint32_t*)ptr + 1);
-              offset   = *((uint64_t*)ptr + 2); // TODO avoid alignment ubsan
-              //offset   = *((uint32_t*)ptr + 2);
-              //offset <<= 32;
-              //offset  += *((uint32_t*)ptr + 3);
+              address        = *((uint64_t*)ptr + 2); // TODO avoid alignment ubsan
+              //address   = *((uint32_t*)ptr + 2);
+              //address <<= 32;
+              //address  += *((uint32_t*)ptr + 3);
               ptr += 16; /* 4*4 */
-              sum_decomp += data_size; /* TODO: uncompressed size */
-
+#endif
+              sum_decomp += page.size; /* TODO: uncompressed size */
 #if 0
-              if (offset < sum_decomp)
+              if (page.address < sum_decomp)
                 {
                   /* ODA: "If the start offset is smaller than the sum of the decompressed
                    * size of all previous pages, then this page is to be preceded by
                    * zero pages until this condition is met. */
-                  LOG_WARN("offset %lu < sum_decomp %lu", offset, sum_decomp)
+                  LOG_WARN("address %lu < sum_decomp %lu", page.address, sum_decomp)
                 }
 #endif
-              info->sections[j] = find_section(dwg, section_number);
+              info->sections[j] = find_section(dwg, page.number);
 
-              if (section_number < 0)
+              if (page.number < 0)
                 { // gap/unused data
-                  LOG_TRACE("Section Number: %" PRId32" (unused)\n", section_number)
+                  LOG_TRACE("Section Number: %" PRId32" (unused)\n", page.number)
                   LOG_TRACE("%p \t\t\t", info->sections[j]);
                 }
               else
               if (info->sections[0] &&
-                  section_number > (int32_t)(info->pagecount + info->sections[0]->number))
+                  page.number > (int32_t)(info->pagecount + info->sections[0]->number))
                 {
                   // for [7] ptr+160 seems to be AcDb:ObjFreeSpace
-                  LOG_WARN("!Section Number: %" PRId32 " (unused)", section_number)
+                  LOG_WARN("!Section Number: %" PRId32 " (unused)", page.number)
                   LOG_TRACE("%p \t\t\t", info->sections[j]);
-                  //LOG_TRACE("size: %d\t", data_size) //compressed
+                  //LOG_TRACE("size: %" PRIu32 "\t", data_size) //compressed
                   //LOG_TRACE("offset: 0x%" PRIx64 "\n", offset)
                   //ptr -= 16;
                   //break;
                 }
               else
-              if (!info->sections[j] && section_number != old_section_number + 1)
+              if (!info->sections[j] && page.number != old_section_number + 1)
                 {
-                  LOG_WARN("!Section Number: %" PRId32 " (break)", section_number)
+                  LOG_WARN("!Section Number: %" PRId32 " (break)", page.number)
                   ptr -= 16;
                   break;
                 }
               else
                 {
-                  LOG_TRACE("Section Number: %" PRId32"\t", section_number)
-                  old_section_number = section_number;
+                  LOG_TRACE("Section Number: %" PRId32"\t", page.number)
+                  old_section_number = page.number;
                 }
-              LOG_TRACE("size: %d\t", data_size) //compressed
-              LOG_TRACE("offset: 0x%" PRIx64 "\n", offset)
+              LOG_TRACE("size: %" PRIu32 "\t", page.size) //compressed
+              LOG_TRACE("address: 0x%" PRIx64 "\n", page.address)
             }
         }
       else
