@@ -34,7 +34,7 @@
     }
   }
   FIELD_TFF(file_ID_string, 12, 0) //pre-allocated
-  FIELD_RL(header_offset, 0);
+  FIELD_RL(header_address, 0);
   FIELD_RL(header_size, 0);
   FIELD_RL(x04, 0);
 
@@ -61,4 +61,5 @@
   // well, the padding is also encrypted, but ODA didn't grok that
   // encrypted via 0
   FIELD_TFF(padding, (int)sizeof(FIELD_VALUE(padding)), 0)
+
 

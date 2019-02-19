@@ -238,11 +238,11 @@ decode_preR13_section_ptr(const char *restrict name, Dwg_Section_Type_r11 id,
 {
   Dwg_Section *tbl = &dwg->header.section[id];
   tbl->size    = bit_read_RS(dat);
-  tbl->number  = (long)bit_read_RL(dat);
-  tbl->address = bit_read_RL(dat);
+  tbl->number  = bit_read_RL(dat);
+  tbl->address  = bit_read_RL(dat);
   tbl->name    = (BITCODE_TV)name;
   LOG_TRACE("ptr table %-8s [%2d]: size:%-4u nr:%-2ld (0x%x-0x%lx)\n",
-            tbl->name, id, tbl->size, tbl->number, tbl->address,
+            tbl->name, id, tbl->size, (long)tbl->number, tbl->address,
             (long)(tbl->address + tbl->number * tbl->size))
 }
 
@@ -258,14 +258,14 @@ decode_preR13_section_chk(Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   //LOG_ERROR(name "->" #f " " FORMAT_##type " != " #f " " FORMAT_##type)
   BITCODE_RS id1, size;
   BITCODE_RL address;
-  long number;
+  BITCODE_RLd number;
   id1 = bit_read_RS(dat);
   size = bit_read_RS(dat); CMP(size, RS);
-  number = (long)bit_read_RS(dat); CMP(number, RL);
+  number = (BITCODE_RLd)bit_read_RS(dat); CMP(number, RL);
   address = bit_read_RL(dat); CMP(address, RL)
 #undef CMP
   LOG_TRACE("chk table %-8s [%2d]: size:%-4u nr:%-3ld (0x%x)\n",
-            tbl->name, id, size, tbl->number, address)
+            tbl->name, id, size, (long)tbl->number, address)
 }
 
 // TABLES really
@@ -282,8 +282,8 @@ decode_preR13_section(Dwg_Section_Type_r11 id, Bit_Chain *restrict dat, Dwg_Data
   long unsigned int pos;
 
   LOG_TRACE("\ncontents table %-8s [%2d]: size:%-4u nr:%-3ld (0x%x-0x%lx)\n",
-            tbl->name, id, tbl->size, tbl->number, tbl->address,
-            (long)(tbl->address + tbl->number * tbl->size))
+            tbl->name, id, tbl->size, (long)tbl->number, tbl->address,
+            (unsigned long)(tbl->address + tbl->number * tbl->size))
   dat->byte = tbl->address;
   if (dwg->num_objects % REFS_PER_REALLOC == 0)
     dwg->object = realloc(dwg->object, old_size + size + REFS_PER_REALLOC);
@@ -790,9 +790,9 @@ decode_R13_R2000(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   for (j = 0; j < dwg->header.num_sections; j++)
     {
       dwg->header.section[j].number  = bit_read_RC(dat);
-      dwg->header.section[j].address = bit_read_RL(dat);
+      dwg->header.section[j].address  = bit_read_RL(dat);
       dwg->header.section[j].size    = bit_read_RL(dat);
-      LOG_TRACE("section[%u]: number=%2d address=0x%8x size=%4d\n",
+      LOG_TRACE("section[%u]: number=%2d offset=0x%8x size=%4d\n",
                 j, (int)dwg->header.section[j].number,
                 (unsigned)dwg->header.section[j].address,
                 (int)dwg->header.section[j].size)
@@ -904,7 +904,7 @@ decode_R13_R2000(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (crc != crc2)
     {
       LOG_WARN("Section[%ld] CRC mismatch %04X <=> %04X",
-               dwg->header.section[SECTION_HEADER_R13].number, crc, crc2);
+               (long)dwg->header.section[SECTION_HEADER_R13].number, crc, crc2);
       if (dwg->header.version != R_14 && dwg->header.version != R_2000)
         error |= DWG_ERR_WRONGCRC;
     }
@@ -1001,7 +1001,7 @@ decode_R13_R2000(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (crc != crc2 && dwg->header.version != R_2000)
     {
       LOG_ERROR("Section[%ld] CRC mismatch %04X <=> %04X",
-                dwg->header.section[SECTION_CLASSES_R13].number, crc, crc2);
+                (long)dwg->header.section[SECTION_CLASSES_R13].number, crc, crc2);
       //if (dwg->header.version != R_2000)
       //  return DWG_ERR_WRONGCRC;
       error |= DWG_ERR_WRONGCRC;
@@ -1152,7 +1152,7 @@ decode_R13_R2000(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   if (bit_search_sentinel(dat, dwg_sentinel(DWG_SENTINEL_SECOND_HEADER_BEGIN)))
     {
-      int i;
+      BITCODE_RL i;
       BITCODE_RC sig, sig2;
       BITCODE_BL vcount;
       long unsigned int pvzadr;
@@ -1205,10 +1205,11 @@ decode_R13_R2000(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
           {
             LOG_HANDLE("1st header was:\n");
-            for (i = 0; i < (int)dwg->header.num_sections; i++)
+            for (i = 0; i < dwg->header.num_sections; i++)
               {
-                LOG_HANDLE("section[%d] %ld %u %u\n", i,
-                           dwg->header.section[i].number,
+                LOG_HANDLE("section[" FORMAT_RL "] " FORMAT_RLd
+                           " " FORMAT_RL " " FORMAT_RL" \n",
+                           i, dwg->header.section[i].number,
                            dwg->header.section[i].address,
                            dwg->header.section[i].size);
               }
@@ -1583,12 +1584,12 @@ read_R2004_section_map(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       /* endian specific code: */
       dwg->header.section[i].number  = *((int32_t*)ptr);
       dwg->header.section[i].size    = *((uint32_t*)ptr+1);
-      dwg->header.section[i].address = section_address;
+      dwg->header.section[i].address  = section_address;
       section_address += dwg->header.section[i].size;
       bytes_remaining -= 8;
       ptr += 8; /* 2*4 */
 
-      LOG_TRACE("Section[%2d] %2ld,", i, dwg->header.section[i].number)
+      LOG_TRACE("Section[%2d]=%2d,", i, (int)dwg->header.section[i].number)
       LOG_TRACE(" size: %5u,", dwg->header.section[i].size)
       LOG_TRACE(" address: 0x%04x\n", dwg->header.section[i].address)
 
@@ -1641,7 +1642,7 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   BITCODE_BL i, j;
   int32_t section_number = 0;
   uint32_t data_size, maxsize;
-  uint64_t start_offset;
+  uint64_t offset;
   int error;
 
   decomp = (BITCODE_RC *)calloc(decomp_data_size+1024, sizeof(BITCODE_RC));
@@ -1686,8 +1687,11 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           return DWG_ERR_INVALIDDWG;
         }
       info = &dwg->header.section_info[i];
-      /* endian specific code: */
-      info->size            = *((int64_t*)ptr);
+      /* endian specific code: see bfr_read() */
+      memcpy(info, ptr, 32+64);
+      ptr += 32+64;
+#if 0
+      info->size          = *((int64_t*)ptr);
       //info->size          = *((uint32_t*)ptr);
       //info->size        <<= 32;
       //info->size         += *((uint32_t*)ptr + 1);
@@ -1697,9 +1701,10 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       info->compressed      = *((int32_t*)ptr + 5);
       info->type            = *((int32_t*)ptr + 6);
       info->encrypted       = *((int32_t*)ptr + 7);
-      ptr += 32; /* 8*4 */
+      ptr += 32; // 8*4
       memcpy(info->name, ptr, 64);
       ptr += 64;
+#endif
 
       LOG_TRACE("\nSection Info[%d] description fields\n", i)
       LOG_TRACE("Size:            %ld\n", (long)info->size)
@@ -1738,20 +1743,20 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               /* endian specific code: */
               section_number = *((int32_t*)ptr);     // Index into SectionMap
               data_size      = *((uint32_t*)ptr + 1);
-              start_offset   = *((uint64_t*)ptr + 2); // TODO avoid alignment ubsan
-              //start_offset   = *((uint32_t*)ptr + 2);
-              //start_offset <<= 32;
-              //start_offset  += *((uint32_t*)ptr + 3);
+              offset   = *((uint64_t*)ptr + 2); // TODO avoid alignment ubsan
+              //offset   = *((uint32_t*)ptr + 2);
+              //offset <<= 32;
+              //offset  += *((uint32_t*)ptr + 3);
               ptr += 16; /* 4*4 */
               sum_decomp += data_size; /* TODO: uncompressed size */
 
 #if 0
-              if (start_offset < sum_decomp)
+              if (offset < sum_decomp)
                 {
                   /* ODA: "If the start offset is smaller than the sum of the decompressed
                    * size of all previous pages, then this page is to be preceded by
                    * zero pages until this condition is met. */
-                  LOG_WARN("address %lu < sum_decomp %lu", page.address, sum_decomp)
+                  LOG_WARN("offset %lu < sum_decomp %lu", offset, sum_decomp)
                 }
 #endif
               info->sections[j] = find_section(dwg, section_number);
@@ -1763,13 +1768,13 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 }
               else
               if (info->sections[0] &&
-                  section_number > info->pagecount + info->sections[0]->number)
+                  section_number > (int32_t)(info->pagecount + info->sections[0]->number))
                 {
                   // for [7] ptr+160 seems to be AcDb:ObjFreeSpace
                   LOG_WARN("!Section Number: %" PRId32 " (unused)", section_number)
                   LOG_TRACE("%p \t\t\t", info->sections[j]);
                   //LOG_TRACE("size: %d\t", data_size) //compressed
-                  //LOG_TRACE("offset: 0x%" PRIx64 "\n", start_offset)
+                  //LOG_TRACE("offset: 0x%" PRIx64 "\n", offset)
                   //ptr -= 16;
                   //break;
                 }
@@ -1786,7 +1791,7 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   old_section_number = section_number;
                 }
               LOG_TRACE("size: %d\t", data_size) //compressed
-              LOG_TRACE("offset: 0x%" PRIx64 "\n", start_offset)
+              LOG_TRACE("offset: 0x%" PRIx64 "\n", offset)
             }
         }
       else
@@ -1814,7 +1819,7 @@ typedef union _encrypted_section_header
     uint32_t section_type;
     uint32_t data_size;
     uint32_t section_size;
-    uint32_t start_offset;
+    uint32_t address;
     uint32_t unknown;
     uint32_t checksum_1;
     uint32_t checksum_2;
@@ -1898,7 +1903,7 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *restrict dwg,
       // this is the number of bytes that is read in decompress_R2004_section (+ 2bytes)
       LOG_INFO  ("Data size:        0x%x\n", (unsigned)es.fields.data_size)
       LOG_INFO  ("Comp data size:   0x%x\n", (unsigned)es.fields.section_size)
-      LOG_TRACE ("StartOffset:      0x%x\n",(unsigned)es.fields.start_offset)
+      LOG_TRACE ("StartOffset:      0x%x\n",(unsigned)es.fields.address)
       LOG_HANDLE("Unknown:          0x%x\n",(unsigned)es.fields.unknown);
       LOG_HANDLE("Checksum1:        0x%x\n",(unsigned)es.fields.checksum_1)
       LOG_HANDLE("Checksum2:        0x%x\n\n",(unsigned)es.fields.checksum_2)

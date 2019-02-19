@@ -5473,7 +5473,7 @@ typedef enum DWG_SECTION_TYPE_R11 /* tables */
 typedef struct _dwg_section
 {
   int32_t    number; /* preR13: count of entries */
-  uint32_t   size;
+  BITCODE_RL size;
   BITCODE_RL address;
   BITCODE_RL parent;
   BITCODE_RL left;
@@ -5508,13 +5508,13 @@ typedef struct
 {
   int64_t    size;
   BITCODE_RL pagecount;
-  BITCODE_RL num_sections;
   BITCODE_RL max_decomp_size;
   BITCODE_RL unknown2;
   BITCODE_RL compressed; /* Compressed (1 = no, 2 = yes, normally 2) */
   BITCODE_RL type;
   BITCODE_RL encrypted; /* (0 = no, 1 = yes, 2 = unknown) */
   char name[64];
+  BITCODE_RL num_sections;
   Dwg_Section **sections;
 } Dwg_Section_Info;
 
@@ -5552,7 +5552,7 @@ typedef struct _dwg_struct
   struct Dwg_R2004_Header /* encrypted */
     {
       BITCODE_RC file_ID_string[12];
-      BITCODE_RL header_offset;
+      BITCODE_RL header_address;
       BITCODE_RL header_size;
       BITCODE_RL x04;
       BITCODE_RL root_tree_node_gap;
