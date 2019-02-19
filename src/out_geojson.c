@@ -266,18 +266,19 @@ static int
 dwg_geojson_LWPOLYLINE(Bit_Chain *restrict dat,
                        Dwg_Object *restrict obj)
 {
-  BITCODE_BL j;
+  BITCODE_BL j, last_j;
   Dwg_Entity_LWPOLYLINE *_obj = obj->tio.entity->tio.LWPOLYLINE;
+  last_j = _obj->num_points - 1;
   //TODO: if closed and num_points > 3 use a Polygon
   FEATURE(AcDbEntity:AcDbLwPolyline, obj);
   GEOMETRY(LineString);
   KEY(coordinates);
   ARRAY;
-  for (j = 0; j < _obj->num_points-1 ; j++)
+  for (j = 0; j < last_j ; j++)
     {
       FIELD_2DPOINT(points[j]);
     }
-  LASTFIELD_2DPOINT(points[j+1]);
+  LASTFIELD_2DPOINT(points[last_j]);
   LASTENDARRAY;
   ENDGEOMETRY;
   ENDFEATURE;
