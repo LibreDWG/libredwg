@@ -21,13 +21,21 @@
 #include <string.h>
 #include <assert.h>
 
-#ifdef HAVE_ALLOCA_H
-#include <alloca.h>
-#define HAVE_ALLOCA
-#elif defined(_WIN32) && defined(HAVE_MALLOC_H)
-#include <malloc.h>
-#define alloca(s) _alloca(s)
-#define HAVE_ALLOCA
+#if HAVE_ALLOCA_H
+# include <alloca.h>
+#elif defined __GNUC__
+# define alloca __builtin_alloca
+#elif defined _AIX
+# define alloca __alloca
+#elif defined _MSC_VER
+# include <malloc.h>
+# define alloca _alloca
+#else
+# include <stddef.h>
+# ifdef  __cplusplus
+extern "C"
+# endif
+void *alloca (size_t);
 #endif
 
 #include "common.h"
@@ -47,13 +55,6 @@ static char* cquote(char *restrict dest, const char *restrict src);
 static wchar_t* wcquote(wchar_t *restrict dest, const wchar_t *restrict src);
 #endif
 static void  print_wcquote(Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr);
-
-#ifndef HAVE_ALLOCA
-static inline char* alloca(size_t size);
-static inline char* alloca(size_t size) {
-  return malloc(size);
-}
-#endif
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -112,7 +113,6 @@ static inline char* alloca(size_t size) {
 #define FIELD_CAST(nam,type,cast,dxf) FIELD(nam,cast,dxf)
 #define FIELD_TRACE(nam,type)
 #define FIELD_G_TRACE(nam,type,dxf)
-#ifdef HAVE_ALLOCA
 #define FIELD_TEXT(nam,str) \
   { \
     PREFIX \
@@ -130,20 +130,6 @@ static inline char* alloca(size_t size) {
       fprintf(dat->fh, "\"" #nam "\": \"%s\",\n", str ? str : ""); \
     } \
   }
-#else
-#define FIELD_TEXT(nam,str) \
-  { \
-    PREFIX \
-    if (str && (1 || strchr(str, '"') || strchr(str, '\\') || strchr(str, '\n'))) { \
-      const int len = strlen(str); \
-      char *_buf = malloc(6*len+1); \
-      fprintf(dat->fh, "\"" #nam "\": \"%s\",\n", cquote(_buf, str)); \
-      free(_buf); \
-    } else { \
-      fprintf(dat->fh, "\"" #nam "\": \"%s\",\n", str ? str : ""); \
-    } \
-  }
-#endif
 
 #ifdef HAVE_NATIVE_WCHAR2
 # define VALUE_TEXT_TU(wstr) \

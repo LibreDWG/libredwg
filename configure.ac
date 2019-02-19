@@ -186,6 +186,7 @@ dnl Checks for library functions
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_FUNC_STAT
+AC_FUNC_ALLOCA
 AC_CHECK_FUNC([strdup],[],
   AC_MSG_ERROR([strdup not found. Check your _POSIX_C_SOURCE vs ANSI settings.]))
 AC_CHECK_FUNCS([getopt_long],[],
