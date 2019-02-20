@@ -671,6 +671,7 @@ search_bits(int j, struct _unknown_field *g, struct _unknown_dxf *udxf,
   return num_found;
 }
 
+/* Not the same as json_cquote. This is only for C */
 static char*
 cquote(char *restrict dest, const char *restrict src) {
   char c;

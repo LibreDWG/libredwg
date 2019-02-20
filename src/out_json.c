@@ -39,7 +39,6 @@
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
 /* see also examples/unknown.c */
-static char* cquote(char *restrict dest, const char *restrict src);
 #ifdef HAVE_NATIVE_WCHAR2
 static wchar_t* wcquote(wchar_t *restrict dest, const wchar_t *restrict src);
 #endif
@@ -109,11 +108,11 @@ static void  print_wcquote(Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr);
       const int len = strlen(str); \
       if (len < 4096/6) { \
         char *_buf = alloca(6*len+1); \
-        fprintf(dat->fh, "\"" #nam "\": \"%s\",\n", cquote(_buf, str)); \
+        fprintf(dat->fh, "\"" #nam "\": \"%s\",\n", json_cquote(_buf, str)); \
         freea(_buf); \
       } else { \
         char *_buf = malloc(6*len+1); \
-        fprintf(dat->fh, "\"" #nam "\": \"%s\",\n", cquote(_buf, str)); \
+        fprintf(dat->fh, "\"" #nam "\": \"%s\",\n", json_cquote(_buf, str)); \
         free(_buf); \
       } \
     } else { \
@@ -515,8 +514,8 @@ print_wcquote(Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr) {
   fprintf(dat->fh, "\",\n");
 }
 
-static char*
-cquote(char *restrict dest, const char *restrict src) {
+char*
+json_cquote(char *restrict dest, const char *restrict src) {
   unsigned char c;
   unsigned char *s = (unsigned char*)src;
   char *d = dest;

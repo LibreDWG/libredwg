@@ -44,8 +44,6 @@
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
 
-static char* cquote(char *restrict dest, const char *restrict src);
-
 /*--------------------------------------------------------------------------------
  * See http://geojson.org/geojson-spec.html
  * Arc, AttributeDefinition, BlockReference, Ellipse, Hatch, Line,
@@ -240,35 +238,14 @@ static char* cquote(char *restrict dest, const char *restrict src);
     const int len = strlen(str); \
     if (len < 4096/6) { \
         char *_buf = alloca(6*len+1); \
-        PREFIX fprintf(dat->fh, "\"Text\": \"%s\"\n", cquote(_buf, str)); \
+        PREFIX fprintf(dat->fh, "\"Text\": \"%s\"\n", json_cquote(_buf, str)); \
         freea(_buf); \
       } else { \
         char *_buf = malloc(6*len+1); \
-        PREFIX fprintf(dat->fh, "\"Text\": \"%s\"\n", cquote(_buf, str)); \
+        PREFIX fprintf(dat->fh, "\"Text\": \"%s\"\n", json_cquote(_buf, str)); \
         free(_buf); \
       } \
   }
-
-static char*
-cquote(char *restrict dest, const char *restrict src) {
-  unsigned char c;
-  unsigned char *s = (unsigned char*)src;
-  char *d = dest;
-  while ((c = *s++)) {
-    if      (c == '"')  { *dest++ = '\\'; *dest++ = c; }
-    else if (c == '\\') { *dest++ = '\\'; *dest++ = c; }
-    else if (c == '\n') { *dest++ = '\\'; *dest++ = 'n'; }
-    else if (c == '\r') { *dest++ = '\\'; *dest++ = 'r'; }
-    else if (c < 0x1f)  { *dest++ = '\\'; *dest++ = 'u';
-                          *dest++ = '0';  *dest++ = '0';
-                          *dest++ = c < 0x10 ? '0' : '1';
-                          *dest++ = (c%16) > 10 ? 'a' + (c%16) - 10 : '0' + (c%16);
-                        }
-    else                  *dest++ = c;
-  }
-  *dest = 0; //add final delim, skipped above
-  return d;
-}
 
 // common properties
 static void
