@@ -16,6 +16,7 @@ for d in "$@"; do
         fi
         dir=_$(basename `dirname "$d"`)
         if [ x$dir = x_test-data ]; then dir=""; fi
+        if [ x$dir = x_td ]; then dir=""; fi
         log=`basename "$d" .dwg`$dir.log
         echo programs/dwgread $v "$d" 2\>$log
         # (sleep 12s; killall dwgread 2>/dev/null) &
