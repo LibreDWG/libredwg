@@ -2487,32 +2487,29 @@ DWG_OBJECT(LAYER)
     FIELD_RS (color_rs, 62);     // color
     FIELD_RS (linetype_rs, 7);   // style
 
-    FIELD_VALUE(on)            = FIELD_VALUE(color_rs) >= 0;
-    FIELD_VALUE(frozen)        = FIELD_VALUE(flag) & 1;
-    FIELD_VALUE(frozen_in_new) = FIELD_VALUE(flag) & 2;
-    FIELD_VALUE(locked)        = FIELD_VALUE(flag) & 4;
+    DECODER {
+      FIELD_VALUE(on)            = FIELD_VALUE(color_rs) >= 0;
+      FIELD_VALUE(frozen)        = FIELD_VALUE(flag) & 1;
+      FIELD_VALUE(frozen_in_new) = FIELD_VALUE(flag) & 2;
+      FIELD_VALUE(locked)        = FIELD_VALUE(flag) & 4;
+    }
   }
   VERSIONS(R_13, R_14)
   {
     FIELD_B (frozen, 0); // bit 1
-    FIELD_B (on, 0); // unused, negate the color
+    FIELD_B (on, 0);     // really: negate the color
     FIELD_B (frozen_in_new, 0);
     FIELD_B (locked, 0);
-    FIELD_VALUE(flag) = FIELD_VALUE(frozen) |
-      (FIELD_VALUE(frozen_in_new) << 1) |
-      (FIELD_VALUE(locked) << 2) |
-      (FIELD_VALUE(color_rs) < 0 ? 32 : 0) |
-      (FIELD_VALUE(xrefdep) << 4) |
-      (FIELD_VALUE(xrefref) << 6);
   }
   SINCE(R_2000) {
     int flag = FIELD_VALUE(flag);
-    FIELD_BS (flag, 0); // 70,290,370
+    FIELD_BSx (flag, 0); // 70,290,370
+    flag = FIELD_VALUE(flag);
     // contains frozen (1 bit), on (2 bit), frozen by default in new viewports (4 bit),
     // locked (8 bit), plotting flag (16 bit), and linewt (mask with 0x03E0)
     //FIELD_VALUE(flag) = (BITCODE_RC)FIELD_VALUE(flag_s) & 0xff;
     FIELD_VALUE(frozen) = flag & 1;
-    FIELD_VALUE(on) = flag & 2;
+    FIELD_VALUE(on) = !(flag & 2);
     FIELD_VALUE(frozen_in_new) = flag & 4;
     FIELD_VALUE(locked) = flag & 8;
     FIELD_VALUE(plotflag) = flag & (1<<15) ? 1 : 0;
@@ -2524,6 +2521,16 @@ DWG_OBJECT(LAYER)
     }
   }
   FIELD_CMC (color, 62,420);
+  VERSIONS(R_13, R_14)
+  {
+    DECODER { FIELD_VALUE(on) = FIELD_VALUE(color.index) >= 0; }
+    FIELD_VALUE(flag) = FIELD_VALUE(frozen) |
+      (FIELD_VALUE(frozen_in_new) << 1) |
+      (FIELD_VALUE(locked) << 2) |
+      (FIELD_VALUE(color.index) < 0 ? 32 : 0) |
+      (FIELD_VALUE(xrefdep) << 4) |
+      (FIELD_VALUE(xrefref) << 6);
+  }
 
   START_HANDLE_STREAM;
   FIELD_HANDLE (layer_control, 4, 0);
