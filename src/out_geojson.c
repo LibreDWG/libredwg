@@ -86,8 +86,19 @@ static unsigned int cur_ver = 0;
 #define SECTION(name) { PREFIX fprintf (dat->fh, "\"%s\": [\n", #name); dat->bit++; }
 #define ENDSEC()  ENDARRAY
 #define NOCOMMA   fseek(dat->fh, -2, SEEK_CUR)
-#define PAIR_S(name, value) \
-    { PREFIX fprintf(dat->fh, "\"" #name "\": \"%s\",\n", value); }
+#define PAIR_S(name, str) \
+  { \
+    const int len = strlen(str); \
+    if (len < 4096/6) { \
+      char *_buf = alloca(6*len+1); \
+      PREFIX fprintf(dat->fh, "\"" #name "\": \"%s\",\n", json_cquote(_buf, str)); \
+      freea(_buf); \
+    } else { \
+      char *_buf = malloc(6*len+1); \
+      PREFIX fprintf(dat->fh, "\"" #name "\": \"%s\",\n", json_cquote(_buf, str)); \
+      free(_buf); \
+    } \
+  }
 #define PAIR_D(name, value) \
     { PREFIX fprintf(dat->fh, "\"" #name "\": %d,\n", value); }
 #define LASTPAIR_S(name, value) \
@@ -235,20 +246,6 @@ static unsigned int cur_ver = 0;
                klass->wasazombie ? " was proxy" : "",\
                obj->address + obj->size)
 
-#define LASTTEXT(str) \
-  { \
-    const int len = strlen(str); \
-    if (len < 4096/6) { \
-        char *_buf = alloca(6*len+1); \
-        PREFIX fprintf(dat->fh, "\"Text\": \"%s\"\n", json_cquote(_buf, str)); \
-        freea(_buf); \
-      } else { \
-        char *_buf = malloc(6*len+1); \
-        PREFIX fprintf(dat->fh, "\"Text\": \"%s\"\n", json_cquote(_buf, str)); \
-        free(_buf); \
-      } \
-  }
-
 // common properties
 static void
 dwg_geojson_feature(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
@@ -264,65 +261,68 @@ dwg_geojson_feature(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     PAIR_S(SubClasses, subclass);
     if (obj->supertype == DWG_SUPERTYPE_ENTITY)
       {
-        name = dwg_ent_get_layer_name(obj->tio.entity, &error);
-        if (!error)
-          PAIR_S(Layer, name)
+        Dwg_Object *layer = obj->tio.entity->layer ? obj->tio.entity->layer->obj : NULL;
+        if (layer && (layer->type == DWG_TYPE_LAYER || layer->type == DWG_TYPE_DICTIONARY))
+          {
+            name = dwg_obj_table_get_name(layer, &error);
+            if (!error)
+              PAIR_S(Layer, name)
+          }
 
+        // How to encode colors? See #95: index, rgb, name, alpha
         PAIR_D(color, obj->tio.entity->color.index);
 
         name = dwg_ent_get_ltype_name(obj->tio.entity, &error);
-        if (!error && strcmp(name, "ByLayer"))
+        if (!error && strcmp(name, "ByLayer")) // skip the default
           PAIR_S(Linetype, name)
       }
 
     sprintf(tmp, "%lX", obj->handle.value);
-    PAIR_S(EntityHandle, tmp);
-    //PAIR_NULL(ExtendedEntity);
     //if has name or text
     if (obj->type == DWG_TYPE_GEOPOSITIONMARKER) {
       Dwg_Entity_GEOPOSITIONMARKER *_obj = obj->tio.entity->tio.GEOPOSITIONMARKER;
-      LASTTEXT(_obj->text)
+      PAIR_S(Text, _obj->text)
     }
     else if (obj->type == DWG_TYPE_TEXT) {
       Dwg_Entity_TEXT *_obj = obj->tio.entity->tio.TEXT;
-      LASTTEXT(_obj->text_value)
+      PAIR_S(Text, _obj->text_value)
     }
     else if (obj->type == DWG_TYPE_MTEXT) {
       Dwg_Entity_MTEXT *_obj = obj->tio.entity->tio.MTEXT;
-      LASTTEXT(_obj->text)
+      PAIR_S(Text, _obj->text)
     }
     else if (obj->type == DWG_TYPE_INSERT) {
       Dwg_Entity_INSERT *_obj = obj->tio.entity->tio.INSERT;
-      Dwg_Object *hdr = dwg_ent_insert_get_block_header(_obj, &error);
+      Dwg_Object *hdr = dwg_ref_get_object(_obj->block_header, &error);
       if (!error && hdr->type == DWG_TYPE_BLOCK_HEADER)
         {
           Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
-          char *text = dwg_obj_block_header_get_name(_hdr, &error);
-          if (!error && text)
-            LASTTEXT(text)
+          char *text;
+          if (dat->version >= R_2007)
+            text = bit_convert_TU((BITCODE_TU)_hdr->name);
           else
-            LASTPAIR_NULL(Text)
+            text = _hdr->name;
+          if (text)
+            PAIR_S(name, text)
         }
-      else
-        LASTPAIR_NULL(Text)
     }
     else if (obj->type == DWG_TYPE_MINSERT) {
       Dwg_Entity_MINSERT *_obj = obj->tio.entity->tio.MINSERT;
-      Dwg_Object *hdr = dwg_ent_insert_get_block_header(_obj, &error);
+      Dwg_Object *hdr = dwg_ref_get_object(_obj->block_header, &error);
       if (!error && hdr->type == DWG_TYPE_BLOCK_HEADER)
         {
           Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
-          char *text = dwg_obj_block_header_get_name(_hdr, &error);
-          if (!error && text)
-            LASTTEXT(text)
+          char *text;
+          if (dat->version >= R_2007)
+            text = bit_convert_TU((BITCODE_TU)_hdr->name);
           else
-            LASTPAIR_NULL(Text)
+            text = _hdr->name;
+          if (text)
+            PAIR_S(name, text)
         }
-      else
-        LASTPAIR_NULL(Text)
     }
-    else
-      LASTPAIR_NULL(Text)
+    //PAIR_NULL(ExtendedEntity);
+    LASTPAIR_S(EntityHandle, tmp);
   ENDHASH;
 }
 
