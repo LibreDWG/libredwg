@@ -265,8 +265,6 @@ dwg_geojson_feature(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         name = dwg_ent_get_layer_name(obj->tio.entity, &error);
         if (!error)
           PAIR_S(Layer, name)
-        else
-          PAIR_NULL(Layer)
 
         sprintf(tmp, "%d", obj->tio.entity->color.index);
         PAIR_S(color, tmp)
@@ -274,14 +272,6 @@ dwg_geojson_feature(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         name = dwg_ent_get_ltype_name(obj->tio.entity, &error);
         if (!error)
           PAIR_S(Linetype, name)
-        else
-          PAIR_NULL(Linetype)
-      }
-    else
-      {
-        PAIR_NULL(Layer);
-        PAIR_NULL(color);
-        PAIR_NULL(Linetype);
       }
 
     sprintf(tmp, "%lX", obj->handle.value);
