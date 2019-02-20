@@ -259,6 +259,7 @@ dwg_geojson_feature(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   PAIR_S(type, "Feature");
   KEY(properties);
   SAMEHASH;
+    PAIR_S(SubClasses, subclass);
     if (obj->supertype == DWG_SUPERTYPE_ENTITY)
       {
         name = dwg_ent_get_layer_name(obj->tio.entity, &error);
@@ -266,13 +267,10 @@ dwg_geojson_feature(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           PAIR_S(Layer, name)
         else
           PAIR_NULL(Layer)
-      }
-    else
-      PAIR_NULL(Layer);
-    PAIR_S(SubClasses, subclass);
-    PAIR_NULL(ExtendedEntity);
-    if (obj->supertype == DWG_SUPERTYPE_ENTITY)
-      {
+
+        sprintf(tmp, "%d", obj->tio.entity->color.index);
+        PAIR_S(color, tmp)
+
         name = dwg_ent_get_ltype_name(obj->tio.entity, &error);
         if (!error)
           PAIR_S(Linetype, name)
@@ -280,10 +278,15 @@ dwg_geojson_feature(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           PAIR_NULL(Linetype)
       }
     else
-      PAIR_NULL(Linetype);
+      {
+        PAIR_NULL(Layer);
+        PAIR_NULL(color);
+        PAIR_NULL(Linetype);
+      }
 
     sprintf(tmp, "%lX", obj->handle.value);
     PAIR_S(EntityHandle, tmp);
+    PAIR_NULL(ExtendedEntity);
     //if has name or text
     if (obj->type == DWG_TYPE_GEOPOSITIONMARKER) {
       Dwg_Entity_GEOPOSITIONMARKER *_obj = obj->tio.entity->tio.GEOPOSITIONMARKER;
