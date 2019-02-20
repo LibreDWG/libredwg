@@ -1708,7 +1708,7 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       //info->size         += *((uint32_t*)ptr + 1);
       info->pagecount       = *((int32_t*)ptr + 2);
       info->max_decomp_size = *((int32_t*)ptr + 3);
-      info->unknown2        = *((int32_t*)ptr + 4);
+      info->unknown         = *((int32_t*)ptr + 4);
       info->compressed      = *((int32_t*)ptr + 5);
       info->type            = *((int32_t*)ptr + 6);
       info->encrypted       = *((int32_t*)ptr + 7);
@@ -1723,11 +1723,11 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       //LOG_TRACE("Num sections:    %u\n", info->num_sections)
       LOG_TRACE("Max decomp size: %u / 0x%x\n", // normally 0x7400
                 info->max_decomp_size, info->max_decomp_size)
-      LOG_TRACE("Unknown:         %u\n", info->unknown2)
+      LOG_TRACE("Unknown:         %u\n", info->unknown)
       LOG_TRACE("Compressed:      %u (1=no, 2=yes)\n", info->compressed)
-      LOG_TRACE("Section ID:    0x%x\n", (unsigned)info->type)
+      LOG_TRACE("Type:          0x%x\n", (unsigned)info->type)
       LOG_TRACE("Encrypted:       %d (0=no, 1=yes, 2=unknown)\n", info->encrypted)
-      LOG_TRACE("SectionName:     %s\n\n", info->name)
+      LOG_TRACE("Name:            %s\n\n", info->name)
 
       if (ptr + (16 * info->pagecount) >= decomp_end)
         {

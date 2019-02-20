@@ -5509,7 +5509,7 @@ typedef struct
   int64_t    size;
   BITCODE_RL pagecount;
   BITCODE_RL max_decomp_size;
-  BITCODE_RL unknown2;
+  BITCODE_RL unknown;
   BITCODE_RL compressed; /* Compressed (1 = no, 2 = yes, normally 2) */
   BITCODE_RL type;
   BITCODE_RL encrypted; /* (0 = no, 1 = yes, 2 = unknown) */
