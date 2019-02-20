@@ -30,27 +30,11 @@
 #include <math.h>
 #include <libgen.h> //dirname,basename
 
-#if HAVE_ALLOCA_H
-# include <alloca.h>
-#elif defined __GNUC__
-# define alloca __builtin_alloca
-#elif defined _AIX
-# define alloca __alloca
-#elif defined _MSC_VER
-# include <malloc.h>
-# define alloca _alloca
-#else
-# include <stddef.h>
-# ifdef  __cplusplus
-extern "C"
-# endif
-void *alloca (size_t);
-#endif
-
 #include "dwg.h"
 #include "../src/bits.h"
 #include "../src/logging.h"
 #include "../src/common.h"
+#include "../src/myalloca.h"
 
 #ifndef M_PI_2
 # define M_PI_2      1.57079632679489661923132169163975144
@@ -683,6 +667,7 @@ search_bits(int j, struct _unknown_field *g, struct _unknown_dxf *udxf,
     //  break;
     offset++;
   }
+  freea(s);
   return num_found;
 }
 
@@ -1136,6 +1121,7 @@ main (int argc, char *argv[])
                         char *buf = alloca(2*strlen(g[j].value));
                         fprintf(pi, "\", \"%s\", [], \"%s\", %d])\n", cquote(buf, g[j].value),
                                 g[j].name, g[j].code);
+                        freea(buf);
                       }
                     else
                       {
@@ -1172,6 +1158,7 @@ main (int argc, char *argv[])
                   char *buf = alloca(2*strlen(g[j].value));
                   fprintf(pi, "\", \"%s\", [], \"%s\", %d])\n", cquote(buf, g[j].value),
                           g[j].name, g[j].code);
+                  freea(buf);
                 }
               else
                 {

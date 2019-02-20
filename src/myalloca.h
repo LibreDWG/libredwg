@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2019 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2019 Free Software Foundation, Inc.                        */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -11,17 +11,39 @@
 /*****************************************************************************/
 
 /*
- * out_json.h: write dwg as json
+ * myalloca.h: alloca checks and replacement, use with freea()
  * written by Reini Urban
  */
 
-#ifndef OUT_JSON_H
-#define OUT_JSON_H
+#ifndef MYALLOCA_H
+#define MYALLOCA_H
 
-#include "dwg.h"
-#include "bits.h"
+#include "config.h"
+#if HAVE_ALLOCA_H
+# include <alloca.h>
+#elif defined __GNUC__
+# define alloca __builtin_alloca
+#elif defined _AIX
+# define alloca __alloca
+#elif defined _MSC_VER
+# include <malloc.h>
+# define alloca _alloca
+#else
+# include <stddef.h>
+# ifdef  __cplusplus
+extern "C"
+# endif
+void *alloca (size_t);
+#endif
 
-EXPORT int dwg_write_json(Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
-EXPORT int dwg_write_geojson(Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
+#ifndef HAVE_ALLOCA
+static inline char* alloca(size_t size);
+static inline char* alloca(size_t size) {
+  return malloc(size);
+}
+#define freea(ptr) free(ptr)
+#else
+#define freea(ptr)
+#endif
 
 #endif

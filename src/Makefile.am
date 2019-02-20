@@ -69,6 +69,7 @@ EXTRA_HEADERS = \
 	spec.h \
 	common.h \
 	bits.h \
+	myalloca.h \
 	decode.h \
 	dec_macros.h \
 	free.h \

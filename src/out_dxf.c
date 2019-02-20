@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018 Free Software Foundation, Inc.                        */
+/*  Copyright (C) 2018-2019 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -30,17 +30,9 @@ TODO:
 #include <assert.h>
 //#include <math.h>
 
-#ifdef HAVE_ALLOCA_H
-#include <alloca.h>
-#define HAVE_ALLOCA
-#elif defined(_WIN32) && defined(HAVE_MALLOC_H)
-#include <malloc.h>
-#define alloca(s) _alloca(s)
-#define HAVE_ALLOCA
-#endif
-
 #include "common.h"
 #include "bits.h"
+#include "myalloca.h"
 #include "dwg.h"
 #include "decode.h"
 #include "out_dxf.h"
@@ -64,13 +56,6 @@ static int dxf_3dsolid(Bit_Chain *restrict dat,
                        Dwg_Entity_3DSOLID *restrict _obj);
 static void
 dxf_fixup_string(Bit_Chain *restrict dat, char *restrict str);
-
-#ifndef HAVE_ALLOCA
-static inline char* alloca(size_t size);
-static inline char* alloca(size_t size) {
-  return malloc(size);
-}
-#endif
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -729,9 +714,7 @@ dxf_fixup_string(Bit_Chain *restrict dat, char *restrict str)
         {
           char *_buf = alloca(2*strlen(str));
           fprintf(dat->fh, "%s\r\n", cquote(_buf, str));
-#ifndef HAVE_ALLOCA
-          free(_buf);
-#endif
+          freea(_buf);
         }
       else
         fprintf(dat->fh, "%s\r\n", str);

@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018 Free Software Foundation, Inc.                        */
+/*  Copyright (C) 2018-2019 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -14,6 +14,11 @@
  * out_json.c: write as JSON
  * written by Reini Urban
  */
+/* TODO: NOCOMMA and \n not with stdout. stdout is line-buffered (#75),
+ *       so NOCOMMA cannot backup past the previous \n to delete the comma.
+ *       We really have to add the comma before, not after, and special case the first
+ *       field, not the last to omit the comma.
+ */
 
 #include "config.h"
 #include <stdio.h>
@@ -21,25 +26,9 @@
 #include <string.h>
 #include <assert.h>
 
-#if HAVE_ALLOCA_H
-# include <alloca.h>
-#elif defined __GNUC__
-# define alloca __builtin_alloca
-#elif defined _AIX
-# define alloca __alloca
-#elif defined _MSC_VER
-# include <malloc.h>
-# define alloca _alloca
-#else
-# include <stddef.h>
-# ifdef  __cplusplus
-extern "C"
-# endif
-void *alloca (size_t);
-#endif
-
 #include "common.h"
 #include "bits.h"
+#include "myalloca.h"
 #include "dwg.h"
 #include "decode.h"
 #include "out_json.h"
@@ -121,6 +110,7 @@ static void  print_wcquote(Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr);
       if (len < 4096/6) { \
         char *_buf = alloca(6*len+1); \
         fprintf(dat->fh, "\"" #nam "\": \"%s\",\n", cquote(_buf, str)); \
+        freea(_buf); \
       } else { \
         char *_buf = malloc(6*len+1); \
         fprintf(dat->fh, "\"" #nam "\": \"%s\",\n", cquote(_buf, str)); \
