@@ -867,6 +867,7 @@ decode_R13_R2000(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             }
           memcpy(dwg->picture.chain, &dat->chain[start_address],
                  dwg->picture.size);
+          dat->byte += dwg->picture.size;
         }
     }
 
