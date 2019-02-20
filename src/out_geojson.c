@@ -88,6 +88,8 @@ static unsigned int cur_ver = 0;
 #define NOCOMMA   fseek(dat->fh, -2, SEEK_CUR)
 #define PAIR_S(name, value) \
     { PREFIX fprintf(dat->fh, "\"" #name "\": \"%s\",\n", value); }
+#define PAIR_D(name, value) \
+    { PREFIX fprintf(dat->fh, "\"" #name "\": %d,\n", value); }
 #define LASTPAIR_S(name, value) \
     { PREFIX fprintf(dat->fh, "\"" #name "\": \"%s\"\n", value); }
 #define PAIR_NULL(name) \
@@ -266,17 +268,16 @@ dwg_geojson_feature(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         if (!error)
           PAIR_S(Layer, name)
 
-        sprintf(tmp, "%d", obj->tio.entity->color.index);
-        PAIR_S(color, tmp)
+        PAIR_D(color, obj->tio.entity->color.index);
 
         name = dwg_ent_get_ltype_name(obj->tio.entity, &error);
-        if (!error)
+        if (!error && strcmp(name, "ByLayer"))
           PAIR_S(Linetype, name)
       }
 
     sprintf(tmp, "%lX", obj->handle.value);
     PAIR_S(EntityHandle, tmp);
-    PAIR_NULL(ExtendedEntity);
+    //PAIR_NULL(ExtendedEntity);
     //if has name or text
     if (obj->type == DWG_TYPE_GEOPOSITIONMARKER) {
       Dwg_Entity_GEOPOSITIONMARKER *_obj = obj->tio.entity->tio.GEOPOSITIONMARKER;
