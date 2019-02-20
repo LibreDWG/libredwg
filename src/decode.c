@@ -1698,9 +1698,8 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           return DWG_ERR_INVALIDDWG;
         }
       info = &dwg->header.section_info[i];
-      /* endian specific code: see bfr_read() */
-      memcpy(info, ptr, 32+64);
-      ptr += 32+64;
+      /* endian specific code */
+      bfr_read(info, &ptr, 32+64);
 #if 0
       info->size          = *((int64_t*)ptr);
       //info->size          = *((uint32_t*)ptr);
