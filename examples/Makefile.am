@@ -37,8 +37,12 @@ all: $(check_PROGRAMS)
 .PHONY: check-syntax regen-unknown dsymutil gcov
 
 if HAVE_PERL
-if HAVE_INSRCDIR
 # maintainer rules only. srcdir = builddir only
+if HAVE_INSRCDIR
+unknown.c: bd-unknown.inc alldxf_2.inc alldwg.inc
+bd-unknown.inc: bd-unknown.pl
+	$(PERL) bd-unknown.pl | sort | uniq >bd-unknown.inc
+
 alldxf_2.inc: alldxf_1.inc
 alldxf_1.inc: alldxf_0.inc
 alldxf_0.inc: alldwg.inc log_unknown_dxf.pl
