@@ -269,8 +269,13 @@ dwg_geojson_feature(Bit_Chain *restrict dat, Dwg_Object *restrict obj,
               PAIR_S(Layer, name)
           }
 
-        // How to encode colors? See #95: index, rgb, name, alpha
-        PAIR_D(color, obj->tio.entity->color.index);
+        // See #95: index as int or rgb as hexstring
+        if (dat->version >= R_2004) {
+          sprintf(tmp, "%06X", obj->tio.entity->color.rgb & 0xffffff);
+          PAIR_S(color, tmp);
+        } else {
+          PAIR_D(color, obj->tio.entity->color.index);
+        }
 
         name = dwg_ent_get_ltype_name(obj->tio.entity, &error);
         if (!error && strcmp(name, "ByLayer")) // skip the default

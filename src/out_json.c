@@ -266,7 +266,7 @@ field_cmc(Bit_Chain *restrict dat, const char *restrict key,
           const Dwg_Color *restrict color)
 {
   if (dat->version >= R_2004) {
-    PREFIX fprintf (dat->fh, "\"%s\": ", key); fprintf (dat->fh, "{\n"); dat->bit++;
+    PREFIX fprintf (dat->fh, "\"%s\": {\n", key); dat->bit++;
     if (color->index) {
       PREFIX fprintf(dat->fh, "\"index\": %d,\n", color->index); }
     PREFIX fprintf(dat->fh, "\"rgb\": \"%06x\",\n", (unsigned)color->rgb);
