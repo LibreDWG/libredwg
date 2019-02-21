@@ -262,28 +262,30 @@ static void _prefix(Bit_Chain* dat);
 #define SUB_FIELD_3DPOINT(o,nam,dxf) KEY(nam); VALUE_3RD(_obj->o.nam, dxf)
 
 static void
-field_cmc(Bit_Chain* dat, const char* key, BITCODE_CMC color) {
+field_cmc(Bit_Chain *restrict dat, const char *restrict key,
+          const Dwg_Color *restrict color)
+{
   if (dat->version >= R_2004) {
     PREFIX fprintf (dat->fh, "\"%s\": ", key); fprintf (dat->fh, "{\n"); dat->bit++;
-    if (color.index) {
-      PREFIX fprintf(dat->fh, "\"index\": %d,\n", color.index); }
-    PREFIX fprintf(dat->fh, "\"rgb\": \"%06x\",\n", (unsigned)color.rgb);
-    if (color.flag) {
-      PREFIX fprintf(dat->fh, "\"flag\": %d,\n", color.flag); }
-    if (color.flag > 0 && color.flag < 8) { \
-      if (color.flag & 1) \
-        _FIELD_TV_ALPHA(name, color.name) \
-      if (color.flag & 2) \
-        _FIELD_TV_ALPHA(book_name, color.book_name)
+    if (color->index) {
+      PREFIX fprintf(dat->fh, "\"index\": %d,\n", color->index); }
+    PREFIX fprintf(dat->fh, "\"rgb\": \"%06x\",\n", (unsigned)color->rgb);
+    if (color->flag) {
+      PREFIX fprintf(dat->fh, "\"flag\": %d,\n", color->flag); }
+    if (color->flag > 0 && color->flag < 8) { \
+      if (color->flag & 1) \
+        _FIELD_TV_ALPHA(name, color->name) \
+      if (color->flag & 2) \
+        _FIELD_TV_ALPHA(book_name, color->book_name)
     }
     ENDRECORD();
   } else {
-    PREFIX fprintf(dat->fh, "\"%s\": %d,\n", key, color.index);
+    PREFIX fprintf(dat->fh, "\"%s\": %d,\n", key, color->index);
   }
 }
 
-#define FIELD_CMC(color,dxf1,dxf2) field_cmc(dat, #color, _obj->color)
-#define SUB_FIELD_CMC(o,color,dxf1,dxf2) field_cmc(dat, #color, _obj->o.color)
+#define FIELD_CMC(color,dxf1,dxf2) field_cmc(dat, #color, &_obj->color)
+#define SUB_FIELD_CMC(o,color,dxf1,dxf2) field_cmc(dat, #color, &_obj->o.color)
 
 #define FIELD_TIMEBLL(nam,dxf) \
     PREFIX fprintf(dat->fh, "\"" #nam "\": " FORMAT_BL "." FORMAT_BL ",\n", \
