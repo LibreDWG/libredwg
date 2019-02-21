@@ -208,6 +208,9 @@ static void  print_wcquote(Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr);
 #define FIELD_T(nam,dxf) \
   { if (dat->version >= R_2007) { FIELD_TU(nam, dxf); } \
     else                        { FIELD_TV(nam, dxf); } }
+#define _FIELD_T(nam,str) \
+  { if (dat->version >= R_2007) { FIELD_TEXT_TU(nam, str); } \
+    else                        { FIELD_TEXT(nam, str); } }
 #define FIELD_BT(nam,dxf)    FIELD(nam, BT, dxf);
 #define FIELD_4BITS(nam,dxf) FIELD(nam,4BITS,dxf)
 #define FIELD_BE(nam,dxf)    FIELD_3RD(nam,dxf)
@@ -254,12 +257,15 @@ static void  print_wcquote(Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr);
 #define FIELD_CMC(color,dxf1,dxf2) { \
   if (dat->version >= R_2004) { \
     RECORD(color); \
-    PREFIX fprintf(dat->fh, "\"index\": %d,\n", _obj->color.index); \
-    PREFIX fprintf(dat->fh, "\"" #color ".rgb\": \"%06x\",\n", (unsigned)_obj->color.rgb); \
-    /*if (_obj->color.flag & 1) { \
-      PREFIX fprintf(dat->fh, "\"" #color ".name\": \"%s\",\n", _obj->color.name); } \
+    if (_obj->color.index) { \
+      PREFIX fprintf(dat->fh, "\"index\": %d,\n", _obj->color.index); } \
+    PREFIX fprintf(dat->fh, "\"rgb\": \"%06x\",\n", (unsigned)_obj->color.rgb); \
+    if (_obj->color.flag) { \
+      PREFIX fprintf(dat->fh, "\"flag\": %d,\n", _obj->color.flag); } \
+    if (_obj->color.flag & 1) { \
+      _FIELD_T(name, _obj->color.name) } \
     if (_obj->color.flag & 2) { \
-      PREFIX fprintf(dat->fh, "\"" #color ".bookname\": \"%s\",\n", _obj->color.book_name); } */\
+      _FIELD_T(book_name, _obj->color.book_name) } \
     ENDRECORD(); \
   } else { \
     PREFIX fprintf(dat->fh, "\"" #color "\": %d,\n", _obj->color.index); \
@@ -268,12 +274,15 @@ static void  print_wcquote(Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr);
 #define SUB_FIELD_CMC(o,color,dxf1,dxf2) {    \
   if (dat->version >= R_2004) { \
     RECORD(color); \
-    PREFIX fprintf(dat->fh, "\"index\": %d,\n", _obj->o.color.index); \
-    PREFIX fprintf(dat->fh, "\"" #color ".rgb\": \"%06x\",\n", (unsigned)_obj->o.color.rgb); \
-    /*if (_obj->color.flag & 1) { \
-      PREFIX fprintf(dat->fh, "\"" #color ".name\": \"%s\",\n", _obj->o.color.name); } \
-    if (_obj->color.flag & 2) { \
-      PREFIX fprintf(dat->fh, "\"" #color ".bookname\": \"%s\",\n", _obj->o.color.book_name); } */\
+    if (_obj->o.color.index) { \
+      PREFIX fprintf(dat->fh, "\"index\": %d,\n", _obj->o.color.index); } \
+    PREFIX fprintf(dat->fh, "\"rgb\": \"%06x\",\n", (unsigned)_obj->o.color.rgb); \
+    if (_obj->o.color.flag) { \
+      PREFIX fprintf(dat->fh, "\"flag\": %d,\n", _obj->o.color.flag); } \
+    if (_obj->o.color.flag & 1) { \
+      _FIELD_T(book_name, _obj->o.color.name) } \
+    if (_obj->o.color.flag & 2) { \
+      _FIELD_T(book_name, _obj->o.color.book_name) } \
     ENDRECORD(); \
   } else { \
     PREFIX fprintf(dat->fh, "\"" #color "\": %d,\n", _obj->o.color.index); \
