@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <ctype.h>
 
 #include "common.h"
 #include "bits.h"
@@ -123,7 +124,7 @@ static void  print_wcquote(Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr);
 #ifdef HAVE_NATIVE_WCHAR2
 # define VALUE_TEXT_TU(wstr) \
     if (wstr && (1 || wcschr(wstr, L'"') || wcschr(wstr, L'\\') || wcschr(wstr, L'\n'))) { \
-      wchar_t *_buf = malloc(6*wcslen(wstr)+1); \
+      wchar_t *_buf = malloc(6*wcslen(wstr)+2); \
       fprintf(dat->fh, "\"%ls\",\n", wcquote(_buf, wstr)); \
       free(_buf); \
     } else { \
@@ -261,11 +262,14 @@ static void  print_wcquote(Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr);
       PREFIX fprintf(dat->fh, "\"index\": %d,\n", _obj->color.index); } \
     PREFIX fprintf(dat->fh, "\"rgb\": \"%06x\",\n", (unsigned)_obj->color.rgb); \
     if (_obj->color.flag) { \
-      PREFIX fprintf(dat->fh, "\"flag\": %d,\n", _obj->color.flag); } \
-    if (_obj->color.flag & 1) { \
-      _FIELD_T(name, _obj->color.name) } \
-    if (_obj->color.flag & 2) { \
-      _FIELD_T(book_name, _obj->color.book_name) } \
+      PREFIX fprintf(dat->fh, "\"flag\": %d,\n", _obj->color.flag); \
+      if ((_obj->color.flag & 1) && _obj->color.name && \
+          isalpha(_obj->color.name[0])) { \
+        _FIELD_T(name, _obj->color.name) } \
+      if ((_obj->color.flag & 2) && _obj->color.book_name && \
+          isalpha(_obj->color.book_name[0])) { \
+        _FIELD_T(book_name, _obj->color.book_name) } \
+    } \
     ENDRECORD(); \
   } else { \
     PREFIX fprintf(dat->fh, "\"" #color "\": %d,\n", _obj->color.index); \
@@ -278,11 +282,14 @@ static void  print_wcquote(Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr);
       PREFIX fprintf(dat->fh, "\"index\": %d,\n", _obj->o.color.index); } \
     PREFIX fprintf(dat->fh, "\"rgb\": \"%06x\",\n", (unsigned)_obj->o.color.rgb); \
     if (_obj->o.color.flag) { \
-      PREFIX fprintf(dat->fh, "\"flag\": %d,\n", _obj->o.color.flag); } \
-    if (_obj->o.color.flag & 1) { \
-      _FIELD_T(book_name, _obj->o.color.name) } \
-    if (_obj->o.color.flag & 2) { \
-      _FIELD_T(book_name, _obj->o.color.book_name) } \
+      PREFIX fprintf(dat->fh, "\"flag\": %d,\n", _obj->o.color.flag); \
+      if ((_obj->o.color.flag & 1) && _obj->o.color.name && \
+          isalpha(_obj->o.color.name[0])) { \
+        _FIELD_T(book_name, _obj->o.color.name) } \
+      if ((_obj->o.color.flag & 2) && _obj->o.color.book_name && \
+          isalpha(_obj->o.color.book_name[0])) { \
+        _FIELD_T(book_name, _obj->o.color.book_name) } \
+    } \
     ENDRECORD(); \
   } else { \
     PREFIX fprintf(dat->fh, "\"" #color "\": %d,\n", _obj->o.color.index); \
