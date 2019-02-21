@@ -214,18 +214,9 @@ static void _prefix(Bit_Chain* dat);
 #define _FIELD_T(nam,str) \
   { if (dat->version >= R_2007) { FIELD_TEXT_TU(nam, str); } \
     else                        { FIELD_TEXT(nam, str); } }
-#define _FIELD_T_ALPHA(nam,str) \
-  { if (str) { \
-      if (dat->version >= R_2007) { \
-        uint16_t c = *(BITCODE_TU)(str); \
-        if (c > 64 && c < 123) { \
-          FIELD_TEXT_TU(nam, str); \
-        } \
-      } else { \
-        if (isalpha(*(str))) \
-          FIELD_TEXT(nam, str) \
-      } \
-    } \
+#define _FIELD_TV_ALPHA(nam,str) \
+  if ((str) && isalpha(*(str))) { \
+    FIELD_TEXT(nam, str) \
   }
 #define FIELD_BT(nam,dxf)    FIELD(nam, BT, dxf);
 #define FIELD_4BITS(nam,dxf) FIELD(nam,4BITS,dxf)
@@ -281,9 +272,9 @@ field_cmc(Bit_Chain* dat, const char* key, BITCODE_CMC color) {
       PREFIX fprintf(dat->fh, "\"flag\": %d,\n", color.flag); }
     if (color.flag > 0 && color.flag < 8) { \
       if (color.flag & 1) \
-        _FIELD_T_ALPHA(name, color.name) \
+        _FIELD_TV_ALPHA(name, color.name) \
       if (color.flag & 2) \
-        _FIELD_T_ALPHA(book_name, color.book_name)
+        _FIELD_TV_ALPHA(book_name, color.book_name)
     }
     ENDRECORD();
   } else {

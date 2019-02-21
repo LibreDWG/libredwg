@@ -1470,12 +1470,10 @@ bit_read_CMC(Bit_Chain *restrict dat, Dwg_Color *restrict color)
   color->index = bit_read_BS(dat);
   if (dat->version >= R_2004)
     {
-      color->rgb = bit_read_BL(dat);
+      color->rgb  = bit_read_BL(dat);
       color->flag = bit_read_RC(dat);
-      if (color->flag & 1)
-        color->name = (char*)bit_read_TV(dat);
-      if (color->flag & 2)
-        color->book_name = (char*)bit_read_TV(dat);
+      color->name      = (color->flag & 1) ? (char*)bit_read_TV(dat) : NULL;
+      color->book_name = (color->flag & 2) ? (char*)bit_read_TV(dat) : NULL;
     }
 }
 
