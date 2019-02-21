@@ -45,6 +45,8 @@ static wchar_t* wcquote(wchar_t *restrict dest, const wchar_t *restrict src);
 #endif
 static void  print_wcquote(Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr);
 
+static void _prefix(Bit_Chain* dat);
+
 /*--------------------------------------------------------------------------------
  * MACROS
  */
@@ -212,6 +214,19 @@ static void  print_wcquote(Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr);
 #define _FIELD_T(nam,str) \
   { if (dat->version >= R_2007) { FIELD_TEXT_TU(nam, str); } \
     else                        { FIELD_TEXT(nam, str); } }
+#define _FIELD_T_ALPHA(nam,str) \
+  { if (str) { \
+      if (dat->version >= R_2007) { \
+        uint16_t c = *(BITCODE_TU)(str); \
+        if (c > 64 && c < 123) { \
+          FIELD_TEXT_TU(nam, str); \
+        } \
+      } else { \
+        if (isalpha(*(str))) \
+          FIELD_TEXT(nam, str) \
+      } \
+    } \
+  }
 #define FIELD_BT(nam,dxf)    FIELD(nam, BT, dxf);
 #define FIELD_4BITS(nam,dxf) FIELD(nam,4BITS,dxf)
 #define FIELD_BE(nam,dxf)    FIELD_3RD(nam,dxf)
@@ -255,46 +270,30 @@ static void  print_wcquote(Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr);
 #define SUB_FIELD_3BD(o,nam,dxf)   KEY(nam); VALUE_3RD(_obj->o.nam, dxf)
 #define SUB_FIELD_3DPOINT(o,nam,dxf) KEY(nam); VALUE_3RD(_obj->o.nam, dxf)
 
-#define FIELD_CMC(color,dxf1,dxf2) { \
-  if (dat->version >= R_2004) { \
-    RECORD(color); \
-    if (_obj->color.index) { \
-      PREFIX fprintf(dat->fh, "\"index\": %d,\n", _obj->color.index); } \
-    PREFIX fprintf(dat->fh, "\"rgb\": \"%06x\",\n", (unsigned)_obj->color.rgb); \
-    if (_obj->color.flag) { \
-      PREFIX fprintf(dat->fh, "\"flag\": %d,\n", _obj->color.flag); \
-      if ((_obj->color.flag & 1) && _obj->color.name && \
-          isalpha(_obj->color.name[0])) { \
-        _FIELD_T(name, _obj->color.name) } \
-      if ((_obj->color.flag & 2) && _obj->color.book_name && \
-          isalpha(_obj->color.book_name[0])) { \
-        _FIELD_T(book_name, _obj->color.book_name) } \
-    } \
-    ENDRECORD(); \
-  } else { \
-    PREFIX fprintf(dat->fh, "\"" #color "\": %d,\n", _obj->color.index); \
-  } \
+static void
+field_cmc(Bit_Chain* dat, const char* key, BITCODE_CMC color) {
+  if (dat->version >= R_2004) {
+    PREFIX fprintf (dat->fh, "\"%s\": ", key); fprintf (dat->fh, "{\n"); dat->bit++;
+    if (color.index) {
+      PREFIX fprintf(dat->fh, "\"index\": %d,\n", color.index); }
+    PREFIX fprintf(dat->fh, "\"rgb\": \"%06x\",\n", (unsigned)color.rgb);
+    if (color.flag) {
+      PREFIX fprintf(dat->fh, "\"flag\": %d,\n", color.flag); }
+    if (color.flag > 0 && color.flag < 8) { \
+      if (color.flag & 1) \
+        _FIELD_T_ALPHA(name, color.name) \
+      if (color.flag & 2) \
+        _FIELD_T_ALPHA(book_name, color.book_name)
+    }
+    ENDRECORD();
+  } else {
+    PREFIX fprintf(dat->fh, "\"%s\": %d,\n", key, color.index);
+  }
 }
-#define SUB_FIELD_CMC(o,color,dxf1,dxf2) {    \
-  if (dat->version >= R_2004) { \
-    RECORD(color); \
-    if (_obj->o.color.index) { \
-      PREFIX fprintf(dat->fh, "\"index\": %d,\n", _obj->o.color.index); } \
-    PREFIX fprintf(dat->fh, "\"rgb\": \"%06x\",\n", (unsigned)_obj->o.color.rgb); \
-    if (_obj->o.color.flag) { \
-      PREFIX fprintf(dat->fh, "\"flag\": %d,\n", _obj->o.color.flag); \
-      if ((_obj->o.color.flag & 1) && _obj->o.color.name && \
-          isalpha(_obj->o.color.name[0])) { \
-        _FIELD_T(book_name, _obj->o.color.name) } \
-      if ((_obj->o.color.flag & 2) && _obj->o.color.book_name && \
-          isalpha(_obj->o.color.book_name[0])) { \
-        _FIELD_T(book_name, _obj->o.color.book_name) } \
-    } \
-    ENDRECORD(); \
-  } else { \
-    PREFIX fprintf(dat->fh, "\"" #color "\": %d,\n", _obj->o.color.index); \
-  } \
-}
+
+#define FIELD_CMC(color,dxf1,dxf2) field_cmc(dat, #color, _obj->color)
+#define SUB_FIELD_CMC(o,color,dxf1,dxf2) field_cmc(dat, #color, _obj->o.color)
+
 #define FIELD_TIMEBLL(nam,dxf) \
     PREFIX fprintf(dat->fh, "\"" #nam "\": " FORMAT_BL "." FORMAT_BL ",\n", \
             _obj->nam.days, _obj->nam.ms)
@@ -436,12 +435,10 @@ static void  print_wcquote(Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr);
 #define END_STRING_STREAM
 #define START_HANDLE_STREAM
 
-
 static void
 _prefix(Bit_Chain* dat) {
   for (int _i=0; _i < dat->bit; _i++) { fprintf (dat->fh, "  "); }
 }
-
 
 #define DWG_ENTITY(token) \
 static int \
