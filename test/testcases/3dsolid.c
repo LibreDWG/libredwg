@@ -104,7 +104,7 @@ api_process (dwg_object * obj)
         }
 
       if (matches)
-        pass ("3dsolid_get_wires matches [%ld]", i);
+        pass ("3dsolid_get_wires matches [" FORMAT_BL "]", i);
       else
         fail ("3dsolid_get_wires matches");
     }

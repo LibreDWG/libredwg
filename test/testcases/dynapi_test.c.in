@@ -50,7 +50,7 @@ static int test_header (const Dwg_Data *dwg)
   return error;
 }
 
-#line 7309 "dynapi_test.c"
+#line 7261 "dynapi_test.c"
 /* @@for test_OBJECT@@ */
 
 #line 56 "dynapi_test.c.in"
@@ -59,7 +59,7 @@ static int test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict
   int error = 0;
   if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
     return 0;
-#line 51732 "dynapi_test.c"
+#line 52912 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
 #line 64 "dynapi_test.c.in"
   return error;

@@ -158,7 +158,7 @@ bit_read_BLL_tests (void)
   if (result == 3)
     pass ("bit_read_BLL");
   else
-    fail ("bit_read_BLL %lu", result);
+    fail ("bit_read_BLL " FORMAT_BLL, result);
 }
 
 void
@@ -316,7 +316,7 @@ main (int argc, char const *argv[])
   if (bitchain.byte == 8 && bitchain.bit == 0)
     pass("bit_write_RD");
   else
-    fail("bit_write_RD @%d.%d", bitchain.byte, bitchain.bit);
+    fail("bit_write_RD @%lu.%d", bitchain.byte, bitchain.bit);
 
   bit_advance_position(&bitchain, -64);
   bit_print(&bitchain, sizeof(double));
@@ -329,7 +329,7 @@ main (int argc, char const *argv[])
   if (bitchain.byte == 10 && bitchain.bit == 2)
     pass("bit_write_BS");
   else
-    fail("bit_write_BS @%d.%d", bitchain.byte, bitchain.bit);
+    fail("bit_write_BS @%lu.%d", bitchain.byte, bitchain.bit);
 
   bit_advance_position(&bitchain, -18);
   bit_print(&bitchain, 4);
@@ -343,7 +343,7 @@ main (int argc, char const *argv[])
   if (bitchain.byte == 8 && bitchain.bit == 2)
     pass("bit_write_BS");
   else
-    fail("bit_write_BS @%d.%d", bitchain.byte, bitchain.bit);
+    fail("bit_write_BS @%lu.%d", bitchain.byte, bitchain.bit);
 
   bit_advance_position(&bitchain, -2);
   bit_print(&bitchain, 1);
@@ -356,7 +356,7 @@ main (int argc, char const *argv[])
   if (bitchain.byte == 8 && bitchain.bit == 4)
     pass("bit_write_BL");
   else
-    fail("bit_write_BL @%d.%d", bitchain.byte, bitchain.bit);
+    fail("bit_write_BL @%lu.%d", bitchain.byte, bitchain.bit);
 
   bit_advance_position(&bitchain, -2);
   bit_print(&bitchain, 1);
@@ -370,7 +370,7 @@ main (int argc, char const *argv[])
   if (bitchain.byte == 8 && bitchain.bit == 6)
     pass("bit_write_BD");
   else
-    fail("bit_write_BD @%d.%d", bitchain.byte, bitchain.bit);
+    fail("bit_write_BD @%lu.%d", bitchain.byte, bitchain.bit);
 
   bit_set_position(&bitchain, pos);
   bit_print(&bitchain, 8);
@@ -386,9 +386,9 @@ main (int argc, char const *argv[])
     pos = bit_position(&bitchain);
     bit_write_MC(&bitchain, umc);
     if (bitchain.byte <= 14)
-      pass("bit_write_MC 0x%x", umc);
+      pass("bit_write_MC 0x%lx", umc);
     else
-      fail("bit_write_MC @%d.%d", bitchain.byte, bitchain.bit);
+      fail("bit_write_MC @%lu.%d", bitchain.byte, bitchain.bit);
 
     bit_set_position(&bitchain, pos);
     bit_print(&bitchain, 5);
@@ -407,9 +407,9 @@ main (int argc, char const *argv[])
     pos = bit_position(&bitchain);
     bit_write_UMC(&bitchain, umc);
     if (bitchain.byte <= 14)
-      pass("bit_write_UMC 0x%x", umc);
+      pass("bit_write_UMC 0x%lx", umc);
     else
-      fail("bit_write_UMC @%d.%d", bitchain.byte, bitchain.bit);
+      fail("bit_write_UMC @%lu.%d", bitchain.byte, bitchain.bit);
 
     bit_set_position(&bitchain, pos);
     bit_print(&bitchain, 5);
@@ -428,7 +428,7 @@ main (int argc, char const *argv[])
   if (bitchain.byte == 13)
     pass("bit_write_MS");
   else
-    fail("bit_write_MS @%d.%d", bitchain.byte, bitchain.bit);
+    fail("bit_write_MS @%lu.%d", bitchain.byte, bitchain.bit);
 
   bit_advance_position(&bitchain, -16);
   if ((bs = bit_read_MS(&bitchain)) == 5000)
@@ -440,7 +440,7 @@ main (int argc, char const *argv[])
   if (bitchain.bit == 7 && bitchain.byte == 37)
     pass("bit_write_BE");
   else
-    fail("bit_write_BE @%d.%d", bitchain.byte, bitchain.bit);
+    fail("bit_write_BE @%lu.%d", bitchain.byte, bitchain.bit);
 
   bit_advance_position(&bitchain, -199);
   {
@@ -457,7 +457,7 @@ main (int argc, char const *argv[])
   if (bitchain.bit == 1 && bitchain.byte == 46)
     pass("bit_write_DD");
   else
-    fail("bit_write_DD @%d.%d", bitchain.byte, bitchain.bit);
+    fail("bit_write_DD @%lu.%d", bitchain.byte, bitchain.bit);
 
   bit_set_position(&bitchain, pos);
   if ((dbl = bit_read_DD(&bitchain, 50.252)) == 20.256)
@@ -471,7 +471,7 @@ main (int argc, char const *argv[])
   if (bitchain.bit == 4 && bitchain.byte == 62)
     pass("bit_write_BT");
   else
-    fail("bit_write_BT @%d.%d", bitchain.byte, bitchain.bit);
+    fail("bit_write_BT @%lu.%d", bitchain.byte, bitchain.bit);
 
   bit_set_position(&bitchain, pos);
   if ((dbl = bit_read_BT(&bitchain)) == 3.0)
@@ -493,7 +493,7 @@ main (int argc, char const *argv[])
           pass("bit_write_H (%d.%d.%ld)",
                handles[i].code, handles[i].size, handles[i].value);
         else
-          fail("bit_write_H (%d.%d.%ld) @%d.%d",
+          fail("bit_write_H (%d.%d.%ld) @%lu.%d",
                handles[i].code, handles[i].size, handles[i].value,
                bitchain.byte, bitchain.bit);
 
@@ -619,7 +619,7 @@ main (int argc, char const *argv[])
         !strcmp(color.name, "Some name"))
       pass("bit_read_CMC r2004");
     else
-      fail("bit_read_CMC (%d,%ld,%d) %s",
+      fail("bit_read_CMC (%d,%u,%d) %s",
            color.index, color.rgb, color.flag, color.name);
   }
 
@@ -641,7 +641,7 @@ main (int argc, char const *argv[])
     if (bitchain.byte == 108)
       pass("bit_search_sentinel");
     else
-      fail("bit_search_sentinel %d", bitchain.byte);
+      fail("bit_search_sentinel %lu", bitchain.byte);
   }
   {
     unsigned int check = bit_calc_CRC(0xC0C1, (unsigned char *)bitchain.chain, 108);

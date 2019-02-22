@@ -148,21 +148,21 @@ static int test_header (const Dwg_Data *dwg)
     if (dwg_dynapi_header_value(dwg, "REQUIREDVERSIONS", &requiredversions, NULL) &&
         requiredversions == dwg->header_vars.REQUIREDVERSIONS)
       {
-        pass ("HEADER.REQUIREDVERSIONS [BLL] %lu", requiredversions);
+        pass ("HEADER.REQUIREDVERSIONS [BLL] " FORMAT_BLL "", requiredversions);
       }
     else
       {
-        fail ("HEADER.REQUIREDVERSIONS [BLL] %lu != %lu", dwg->header_vars.REQUIREDVERSIONS, requiredversions); error++;
+        fail ("HEADER.REQUIREDVERSIONS [BLL] " FORMAT_BLL " != " FORMAT_BLL "", dwg->header_vars.REQUIREDVERSIONS, requiredversions); error++;
       }
     requiredversions++;
     if (dwg_dynapi_header_set_value(dwg, "REQUIREDVERSIONS", &requiredversions) &&
         requiredversions == dwg->header_vars.REQUIREDVERSIONS)
       {
-        pass ("HEADER.REQUIREDVERSIONS [BLL] set+1 %lu", requiredversions);
+        pass ("HEADER.REQUIREDVERSIONS [BLL] set+1 " FORMAT_BLL "", requiredversions);
       }
     else
       {
-        fail ("HEADER.REQUIREDVERSIONS [BLL] set+1 %lu != %lu", dwg->header_vars.REQUIREDVERSIONS, requiredversions); error++;
+        fail ("HEADER.REQUIREDVERSIONS [BLL] set+1 " FORMAT_BLL " != " FORMAT_BLL "", dwg->header_vars.REQUIREDVERSIONS, requiredversions); error++;
       }
     requiredversions--; dwg_dynapi_header_set_value(dwg, "REQUIREDVERSIONS", &requiredversions);
 
@@ -7258,7 +7258,7 @@ static int test_header (const Dwg_Data *dwg)
   return error;
 }
 
-#line 7309 "dynapi_test.c"
+#line 7261 "dynapi_test.c"
 /* @@for test_OBJECT@@ */
 static int test__3DFACE (const Dwg_Object *obj)
 {
@@ -7501,15 +7501,17 @@ static int test__3DSOLID (const Dwg_Object *obj)
       }
   }
   {
-    BITCODE_RC** encr_sat_data;
-    if (dwg_dynapi_entity_value(_3dsolid, "3DSOLID", "encr_sat_data", &encr_sat_data, NULL)
+    char** encr_sat_data;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value(_3dsolid, "3DSOLID", "num_encr_sat_data", &count, NULL) &&
+        dwg_dynapi_entity_value(_3dsolid, "3DSOLID", "encr_sat_data", &encr_sat_data, NULL)
 )
       {
-        pass ("3DSOLID.encr_sat_data [RC**]");
+        pass ("3DSOLID.encr_sat_data [char**] * %u num_encr_sat_data", count);
       }
     else
       {
-        fail ("3DSOLID.encr_sat_data [RC**]"); error++;
+        fail ("3DSOLID.encr_sat_data [char**] * %u num_encr_sat_data", count); error++;
       }
   }
   {
@@ -13850,15 +13852,17 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_TV encr_sat_data;
-    if (dwg_dynapi_entity_value(extrudedsurface, "EXTRUDEDSURFACE", "encr_sat_data", &encr_sat_data, NULL)
-        && !strcmp((char*)encr_sat_data, (char*)extrudedsurface->encr_sat_data))
+    char** encr_sat_data;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value(extrudedsurface, "EXTRUDEDSURFACE", "num_encr_sat_data", &count, NULL) &&
+        dwg_dynapi_entity_value(extrudedsurface, "EXTRUDEDSURFACE", "encr_sat_data", &encr_sat_data, NULL)
+)
       {
-        pass ("EXTRUDEDSURFACE.encr_sat_data [TV] '%s' <> '%s'", encr_sat_data, extrudedsurface->encr_sat_data);
+        pass ("EXTRUDEDSURFACE.encr_sat_data [char**] * %u num_encr_sat_data", count);
       }
     else
       {
-        fail ("EXTRUDEDSURFACE.encr_sat_data [TV] '%s' <> '%s'", encr_sat_data, extrudedsurface->encr_sat_data); error++;
+        fail ("EXTRUDEDSURFACE.encr_sat_data [char**] * %u num_encr_sat_data", count); error++;
       }
   }
   {
@@ -17852,15 +17856,17 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
       }
   }
   {
-    BITCODE_TV encr_sat_data;
-    if (dwg_dynapi_entity_value(loftedsurface, "LOFTEDSURFACE", "encr_sat_data", &encr_sat_data, NULL)
-        && !strcmp((char*)encr_sat_data, (char*)loftedsurface->encr_sat_data))
+    char** encr_sat_data;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value(loftedsurface, "LOFTEDSURFACE", "num_encr_sat_data", &count, NULL) &&
+        dwg_dynapi_entity_value(loftedsurface, "LOFTEDSURFACE", "encr_sat_data", &encr_sat_data, NULL)
+)
       {
-        pass ("LOFTEDSURFACE.encr_sat_data [TV] '%s' <> '%s'", encr_sat_data, loftedsurface->encr_sat_data);
+        pass ("LOFTEDSURFACE.encr_sat_data [char**] * %u num_encr_sat_data", count);
       }
     else
       {
-        fail ("LOFTEDSURFACE.encr_sat_data [TV] '%s' <> '%s'", encr_sat_data, loftedsurface->encr_sat_data); error++;
+        fail ("LOFTEDSURFACE.encr_sat_data [char**] * %u num_encr_sat_data", count); error++;
       }
   }
   {
@@ -21172,15 +21178,17 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_TV encr_sat_data;
-    if (dwg_dynapi_entity_value(planesurface, "PLANESURFACE", "encr_sat_data", &encr_sat_data, NULL)
-        && !strcmp((char*)encr_sat_data, (char*)planesurface->encr_sat_data))
+    char** encr_sat_data;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value(planesurface, "PLANESURFACE", "num_encr_sat_data", &count, NULL) &&
+        dwg_dynapi_entity_value(planesurface, "PLANESURFACE", "encr_sat_data", &encr_sat_data, NULL)
+)
       {
-        pass ("PLANESURFACE.encr_sat_data [TV] '%s' <> '%s'", encr_sat_data, planesurface->encr_sat_data);
+        pass ("PLANESURFACE.encr_sat_data [char**] * %u num_encr_sat_data", count);
       }
     else
       {
-        fail ("PLANESURFACE.encr_sat_data [TV] '%s' <> '%s'", encr_sat_data, planesurface->encr_sat_data); error++;
+        fail ("PLANESURFACE.encr_sat_data [char**] * %u num_encr_sat_data", count); error++;
       }
   }
   {
@@ -22953,15 +22961,17 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_TV encr_sat_data;
-    if (dwg_dynapi_entity_value(revolvedsurface, "REVOLVEDSURFACE", "encr_sat_data", &encr_sat_data, NULL)
-        && !strcmp((char*)encr_sat_data, (char*)revolvedsurface->encr_sat_data))
+    char** encr_sat_data;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value(revolvedsurface, "REVOLVEDSURFACE", "num_encr_sat_data", &count, NULL) &&
+        dwg_dynapi_entity_value(revolvedsurface, "REVOLVEDSURFACE", "encr_sat_data", &encr_sat_data, NULL)
+)
       {
-        pass ("REVOLVEDSURFACE.encr_sat_data [TV] '%s' <> '%s'", encr_sat_data, revolvedsurface->encr_sat_data);
+        pass ("REVOLVEDSURFACE.encr_sat_data [char**] * %u num_encr_sat_data", count);
       }
     else
       {
-        fail ("REVOLVEDSURFACE.encr_sat_data [TV] '%s' <> '%s'", encr_sat_data, revolvedsurface->encr_sat_data); error++;
+        fail ("REVOLVEDSURFACE.encr_sat_data [char**] * %u num_encr_sat_data", count); error++;
       }
   }
   {
@@ -24569,15 +24579,17 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_TV encr_sat_data;
-    if (dwg_dynapi_entity_value(sweptsurface, "SWEPTSURFACE", "encr_sat_data", &encr_sat_data, NULL)
-        && !strcmp((char*)encr_sat_data, (char*)sweptsurface->encr_sat_data))
+    char** encr_sat_data;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value(sweptsurface, "SWEPTSURFACE", "num_encr_sat_data", &count, NULL) &&
+        dwg_dynapi_entity_value(sweptsurface, "SWEPTSURFACE", "encr_sat_data", &encr_sat_data, NULL)
+)
       {
-        pass ("SWEPTSURFACE.encr_sat_data [TV] '%s' <> '%s'", encr_sat_data, sweptsurface->encr_sat_data);
+        pass ("SWEPTSURFACE.encr_sat_data [char**] * %u num_encr_sat_data", count);
       }
     else
       {
-        fail ("SWEPTSURFACE.encr_sat_data [TV] '%s' <> '%s'", encr_sat_data, sweptsurface->encr_sat_data); error++;
+        fail ("SWEPTSURFACE.encr_sat_data [char**] * %u num_encr_sat_data", count); error++;
       }
   }
   {
@@ -26922,21 +26934,21 @@ static int test_TABLE (const Dwg_Object *obj)
     if (dwg_dynapi_entity_value(table, "TABLE", "num_cells", &num_cells, NULL) &&
         num_cells == table->num_cells)
       {
-        pass ("TABLE.num_cells [unsigned long] %p", num_cells);
+        pass ("TABLE.num_cells [unsigned long] %lu", num_cells);
       }
     else
       {
-        fail ("TABLE.num_cells [unsigned long] %p != %p", table->num_cells, num_cells); error++;
+        fail ("TABLE.num_cells [unsigned long] %lu != %lu", table->num_cells, num_cells); error++;
       }
     num_cells++;
     if (dwg_dynapi_entity_set_value(table, "TABLE", "num_cells", &num_cells) &&
         num_cells == table->num_cells)
       {
-        pass ("TABLE.num_cells [unsigned long] set+1 %p", num_cells);
+        pass ("TABLE.num_cells [unsigned long] set+1 %lu", num_cells);
       }
     else
       {
-        fail ("TABLE.num_cells [unsigned long] set+1 %p != %p", table->num_cells, num_cells); error++;
+        fail ("TABLE.num_cells [unsigned long] set+1 %lu != %lu", table->num_cells, num_cells); error++;
       }
     table->num_cells--;
 
@@ -52897,7 +52909,7 @@ static int test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict
   int error = 0;
   if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
     return 0;
-#line 51732 "dynapi_test.c"
+#line 52912 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);

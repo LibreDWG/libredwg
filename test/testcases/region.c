@@ -49,7 +49,7 @@ api_process (dwg_object * obj)
   if (!error && acis_empty == region->acis_empty)
     pass ("Working Properly");
   else
-    fail ("error in reading acis empty. error:%d, acis_empty:%d", acis_empty);
+    fail ("error in reading acis empty. error:%d, acis_empty:%d", error, acis_empty);
 
   version = dwg_ent_region_get_version (region, &error);
   if (!error  && version == region->version)

@@ -250,6 +250,9 @@ sub out_struct {
       $bc = $h{COMMON_ENTITY_POLYLINE}{$name};
     }
     $type = $bc if $bc;
+    if ($name eq 'encr_sat_data') {
+      $type = 'char**'; $bc = '';
+    }
     $type =~ s/\s+$//;
     my $size = $bc ? "sizeof(BITCODE_$type)" : "sizeof($type)";
     $type =~ s/BITCODE_//;
@@ -401,9 +404,11 @@ my %FMT = (
     'double' => '%g',
     'unsigned char' => '%c',
     'unsigned int' => '%u',
+    'unsigned long' => '%lu',
     'unsigned short int' => '%hu',
     'short' => '%hd',
     'long' => '%l',
+    'char**' => '%p',
     'TV' => '%s',
     'T'  => '%s',
     'TU' => '%ls',
@@ -416,7 +421,6 @@ my %FMT = (
     'RS' => '%hu',
     'RC' => '%u',
     'RC*' => '%s',
-    'BLL' => '%lu',
     );
 
 my $infile = '../test/testcases/dynapi_test.c.in';
