@@ -80,7 +80,7 @@ typedef struct r2007_file_header
 /* page map */
 typedef struct _r2007_page
 {
-  int64_t id;
+  int64_t  id;
   uint64_t size;
   uint64_t offset;
   struct _r2007_page *next;
@@ -91,7 +91,7 @@ typedef struct _r2007_section_page
 {
   uint64_t offset;
   uint64_t size;
-  int64_t id;
+  int64_t  id;
   uint64_t uncomp_size;  // src_size
   uint64_t comp_size;
   uint64_t checksum;
@@ -104,7 +104,7 @@ typedef struct _r2007_section
   uint64_t  data_size;    // max size of page
   uint64_t  max_size;
   int64_t  encrypted;
-  uint64_t  hashcode;
+  uint64_t  hashcode;    // checksum in r2004
   int64_t  name_length;  // 0x22
   int64_t  unknown;      // 0x00
   int64_t  encoded;
@@ -906,7 +906,7 @@ read_pages_map(Bit_Chain* dat, int64_t size_comp,
                int64_t size_uncomp, int64_t correction)
 {
   BITCODE_RC *data, *ptr, *ptr_end;
-  r2007_page *pages = 0, *last_page = 0, *page;
+  r2007_page *pages = NULL, *last_page = NULL, *page;
   int64_t offset = 0x480;   //dat->byte;
   //int64_t index;
 
@@ -944,9 +944,9 @@ read_pages_map(Bit_Chain* dat, int64_t size_comp,
       LOG_TRACE("id: 0x%04"PRIx64" ", page->id)
       LOG_TRACE("offset: 0x%"PRIx64" \n", page->offset)
 
-      page->next = 0;
+      page->next = NULL;
 
-      if (pages == 0)
+      if (pages == NULL)
         pages = last_page = page;
       else
         {
@@ -954,9 +954,7 @@ read_pages_map(Bit_Chain* dat, int64_t size_comp,
           last_page = page;
         }
     }
-
   free(data);
-
   return pages;
 }
 
