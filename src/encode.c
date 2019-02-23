@@ -1548,7 +1548,7 @@ encode_preR13 (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   return DWG_ERR_NOTYETSUPPORTED;
 }
 
-// needed for r2004+ encode and decode (check-only) (unused)
+// needed for r2004+ encode and decode (check-only)
 // p 4.3: first calc with seed 0, then compress, then recalc with prev.
 // checksum
 uint32_t

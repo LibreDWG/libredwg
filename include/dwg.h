@@ -5704,7 +5704,7 @@ typedef struct _dwg_struct
       BITCODE_RL x40;
       BITCODE_RL section_map_id;
       BITCODE_RLL section_map_address;
-      BITCODE_RL section_info_id;
+      int32_t    section_info_id;
       BITCODE_RL section_array_size;
       BITCODE_RL gap_array_size;
       BITCODE_RLx crc32; /* p 2.14.2 32bit CRC 2004+ */
