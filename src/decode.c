@@ -1691,6 +1691,7 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       Dwg_Section_Info* info;
       uint64_t sum_decomp = 0;
+      uint64_t prev_address = 0;
   
       if (ptr + 64 >= decomp_end)
         {
@@ -1748,6 +1749,7 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               LOG_ERROR("Out of memory with %u sections", info->pagecount);
               return error | DWG_ERR_OUTOFMEM;
             }
+          prev_address = 0;
 
           for (j = 0; j < info->pagecount; j++)
             {
@@ -1781,16 +1783,21 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
               if (page.number < 0)
                 { // gap/unused data
-                  LOG_TRACE("Section Number: %" PRId32" (unused)\n", page.number)
-                  LOG_TRACE("%p \t\t\t", info->sections[j]);
+                  LOG_TRACE("Section: %" PRId32" (!)", page.number)
+                    //LOG_TRACE("%p \t\t\t", info->sections[j]);
                 }
+              else
+              if (page.address < prev_address) {
+                  LOG_TRACE("Section: %" PRId32" (!)", page.number)
+                    //LOG_TRACE("%p \t\t", info->sections[j]);
+              }
               else
               if (info->sections[0] &&
                   page.number > (int32_t)(info->pagecount + info->sections[0]->number))
                 {
                   // for [7] ptr+160 seems to be AcDb:ObjFreeSpace
-                  LOG_WARN("!Section Number: %" PRId32 " (unused)", page.number)
-                  LOG_TRACE("%p \t\t\t", info->sections[j]);
+                  LOG_INFO("Section: %" PRId32 " (!)", page.number)
+                    //LOG_TRACE("%p \t\t\t", info->sections[j]);
                   //LOG_TRACE("size: %" PRIu32 "\t", data_size) //compressed
                   //LOG_TRACE("offset: 0x%" PRIx64 "\n", offset)
                   //ptr -= 16;
@@ -1799,17 +1806,18 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               else
               if (!info->sections[j] && page.number != old_section_number + 1)
                 {
-                  LOG_WARN("!Section Number: %" PRId32 " (break)", page.number)
+                  LOG_INFO("Section: %" PRId32 " (b)", page.number)
                   ptr -= 16;
                   break;
                 }
               else
                 {
-                  LOG_TRACE("Section Number: %" PRId32"\t", page.number)
+                  LOG_TRACE("Section: %" PRId32 "    ", page.number)
                   old_section_number = page.number;
+                  prev_address = page.address;
                 }
-              LOG_TRACE("size: %" PRIu32 "\t", page.size) //compressed
-              LOG_TRACE("address: 0x%" PRIx64 "\n", page.address)
+              LOG_TRACE(" size: %" PRIu32 " ", page.size) //compressed
+              LOG_TRACE(" address: 0x%" PRIx64 "\n", page.address)
             }
         }
       else
