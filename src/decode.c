@@ -1853,10 +1853,10 @@ static int
 read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   BITCODE_RC *decomp, *ptr;
-  int i, error = 0, found_section_map_id = 0;
   uint64_t section_address;
   long bytes_remaining;
-  BITCODE_RL checksum, orig_checksum;
+  int i, error = 0, found_section_map_id = 0;
+  BITCODE_RL checksum;
   const uint32_t comp_data_size = dwg->r2004_header.comp_data_size;
   const uint32_t decomp_data_size = dwg->r2004_header.decomp_data_size;
   const int32_t section_array_size = (int32_t)dwg->r2004_header.section_array_size;
@@ -1895,20 +1895,25 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
 #ifdef USE_WRITE
   // FIXME: check checksum (ODA p.27)
-  bytes_remaining = (long)dat->byte; // after decomp
-  dat->byte = 0;
-  orig_checksum = dwg->r2004_header.checksum;
-  // maybe we need to reset the two sizes also
-  dwg->r2004_header.checksum = 0;
-  checksum = dwg_section_page_checksum (0, dat, sizeof (dwg->r2004_header));
-  dwg->r2004_header.checksum = orig_checksum;
-  dat->byte = section_address; // before decomp
-  checksum = dwg_section_page_checksum (checksum, dat, decomp_data_size);
-  if (checksum != orig_checksum)
-    LOG_INFO (
-        "Invalid 2004 System Section Page checksum 0x%08x != 0x%08x (TODO)\n",
-        checksum, orig_checksum)
-  dat->byte = bytes_remaining;
+  {
+    BITCODE_RL after_decomp, calc_checksum;
+    after_decomp = dat->byte; // after decomp
+    dat->byte = 0;
+    checksum = dwg->r2004_header.checksum;
+    dwg->r2004_header.checksum = 0;
+    calc_checksum
+        = dwg_section_page_checksum (0, dat, sizeof (dwg->r2004_header));
+    LOG_TRACE ("First r2004_header.checksum 0x%08x\n", calc_checksum);
+    dwg->r2004_header.checksum = checksum;
+    dat->byte = section_address; // before decomp
+    calc_checksum
+        = dwg_section_page_checksum (calc_checksum, dat, decomp_data_size);
+    if (calc_checksum != checksum)
+      LOG_INFO ("Invalid 2004 System Section Page checksum 0x%08x != 0x%08x "
+                "(TODO)\n",
+                calc_checksum, checksum)
+    dat->byte = after_decomp;
+  }
 #endif
 
   section_address = 0x100; // starting address
@@ -3435,6 +3440,7 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     BITCODE_RC decrypted_data[size];
     Bit_Chain decrypted_header_dat = *file_dat;
     Bit_Chain *dat;
+    BITCODE_RL crc32, calc_crc32;
 
     decrypted_header_dat.size = size;
     decrypted_header_dat.chain = decrypted_data;
@@ -3450,6 +3456,16 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     // clang-format off
     #include "r2004_file_header.spec"
     // clang-format on
+
+    // FIXME: only really needed for r2004 encode later
+    crc32 = _obj->crc32;
+    _obj->crc32 = 0;
+    calc_crc32
+        = bit_calc_CRC32 (0, &decrypted_data[0], 0x72); // without the padding
+    _obj->crc32 = crc32;
+    if (calc_crc32 != crc32)
+      LOG_INFO ("r2004_file_header CRC mismatch 0x%08x != 0x%08x (TODO)\n",
+                calc_crc32, crc32)
   }
 
   /*-------------------------------------------------------------------------
