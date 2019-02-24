@@ -25,8 +25,6 @@
 #include "dwg.h"
 
 int dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat);
-uint32_t dwg_section_page_checksum (const uint32_t seed, Bit_Chain *restrict dat,
-                                    uint32_t size);
 /** Returns the class for the object.
     First searching class by name, not offset
     because indxf has a different class order. Fixes up the obj->type then.

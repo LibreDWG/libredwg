@@ -67,14 +67,6 @@ static bool env_var_checked_p;
 #define MIN(X, Y) ((X) < (Y) ? (X) : (Y))
 
 /*------------------------------------------------------------------------------
- * Imported from
- */
-#ifdef USE_WRITE
-uint32_t dwg_section_page_checksum (const uint32_t seed, Bit_Chain *dat,
-                                    uint32_t size);
-#endif
-
-/*------------------------------------------------------------------------------
  * Private functions
  */
 
@@ -1820,6 +1812,33 @@ add_section (Dwg_Data *dwg)
   return 0;
 }
 
+// needed for r2004+ encode and decode (check-only)
+// p 4.3: first calc with seed 0, then compress, then recalc with prev.
+// checksum
+uint32_t
+dwg_section_page_checksum (const uint32_t seed, Bit_Chain *restrict dat,
+                           uint32_t size)
+{
+  uint32_t sum1 = seed & 0xffff;
+  uint32_t sum2 = seed >> 0x10;
+  unsigned char *data = &(dat->chain[dat->byte]);
+
+  while (size)
+    {
+      uint32_t i;
+      uint32_t chunksize = size < 0x15b0 ? size : 0x15b0;
+      size -= chunksize;
+      for (i = 0; i < chunksize; i++)
+        {
+          sum1 += *data++;
+          sum2 += sum1;
+        }
+      sum1 %= 0xFFF1;
+      sum2 %= 0xFFF1;
+    }
+  return (sum2 << 0x10) | (sum1 & 0xffff);
+}
+
 /* Read R2004, 2010+ Section Map
  * The Section Map is a vector of number, size, and address(offset) triples
  * used to locate the sections in the file.
@@ -1873,6 +1892,7 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   bytes_remaining = (long)dat->byte; // after decomp
   dat->byte = 0;
   orig_checksum = dwg->r2004_header.checksum;
+  // maybe we need to reset the two sizes also
   dwg->r2004_header.checksum = 0;
   checksum = dwg_section_page_checksum (0, dat, sizeof (dwg->r2004_header));
   dwg->r2004_header.checksum = orig_checksum;
