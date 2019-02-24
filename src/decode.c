@@ -1377,7 +1377,7 @@ read_literal_length(Bit_Chain *restrict dat, unsigned char *restrict opcode)
   else if (byte == 0)
     {
       total = 0x0F;
-      while ((byte = bit_read_RC(dat)) == 0x00)
+      while ((byte = bit_read_RC(dat)) == 0)
         {
           total += 0xFF;
         }
@@ -1399,7 +1399,7 @@ read_long_compression_offset(Bit_Chain* dat)
   if (byte == 0)
     {
       total = 0xFF;
-      while ((byte = bit_read_RC(dat)) == 0x00)
+      while ((byte = bit_read_RC(dat)) == 0)
         total += 0xFF;
     }
   return total + byte;
@@ -1446,13 +1446,17 @@ decompress_R2004_section(Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
   opcode1 = 0x00;
   while (dat->byte - start_byte < comp_data_size)
     {
-      if (opcode1 == 0x00)
+      LOG_INSANE("-O %x ", opcode1)
+      if (opcode1 == 0x00) {
         opcode1 = bit_read_RC(dat);
+        LOG_INSANE("<O %x ", opcode1)
+      }
 
       if (opcode1 >= 0x40)
         {
           comp_bytes = ((opcode1 & 0xF0) >> 4) - 1;
           opcode2 = bit_read_RC(dat);
+          LOG_INSANE("<O %x ", opcode2)
           comp_offset = (opcode2 << 2) | ((opcode1 & 0x0C) >> 2);
 
           if (opcode1 & 0x03)
@@ -1512,30 +1516,35 @@ decompress_R2004_section(Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
           return DWG_ERR_INTERNALERROR;  // error in input stream
         }
 
-      LOG_INSANE("<C %d\n", comp_bytes)
-      // copy "compressed data"
       src = dst - comp_offset - 1;
       assert(src >= decomp);
-      if ((uint32_t)comp_bytes > bytes_left) // bytes left to write
+      if (comp_bytes)
         {
-          LOG_ERROR("Invalid comp_bytes %lu > %lu bytes left",
-                    (unsigned long)comp_bytes, (unsigned long)bytes_left)
-          return DWG_ERR_VALUEOUTOFBOUNDS;
+          LOG_INSANE("<C %d ", comp_bytes)
+          // copy "compressed data"
+          if ((uint32_t)comp_bytes > bytes_left) // bytes left to write
+            {
+              LOG_ERROR("Invalid comp_bytes %lu > %lu bytes left",
+                        (unsigned long)comp_bytes, (unsigned long)bytes_left)
+                return DWG_ERR_VALUEOUTOFBOUNDS;
+            }
+          for (i = 0; (uint32_t)i < comp_bytes; ++i)
+            *dst++ = *src++;
+          bytes_left -= comp_bytes;
         }
-      for (i = 0; (uint32_t)i < comp_bytes; ++i)
-        *dst++ = *src++;
-      bytes_left -= comp_bytes;
-
       // copy "literal data"
       LOG_INSANE("<L %d\n", lit_length)
-      if ((uint32_t)lit_length > bytes_left) // bytes left to write
+      if (lit_length)
         {
-          LOG_ERROR("Invalid lit_length %lu > %lu bytes left",
-                    (unsigned long)lit_length, (unsigned long)bytes_left)
-          return DWG_ERR_VALUEOUTOFBOUNDS;
+          if ((uint32_t)lit_length > bytes_left) // bytes left to write
+            {
+              LOG_ERROR("Invalid lit_length %lu > %lu bytes left",
+                        (unsigned long)lit_length, (unsigned long)bytes_left)
+                return DWG_ERR_VALUEOUTOFBOUNDS;
+            }
+          for (i = 0; i < lit_length; ++i)
+            *dst++ = bit_read_RC(dat);
         }
-      for (i = 0; i < lit_length; ++i)
-        *dst++ = bit_read_RC(dat);
     }
 
   return 0;  // Success
@@ -1783,41 +1792,43 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
               if (page.number < 0)
                 { // gap/unused data
-                  LOG_TRACE("Section: %" PRId32" (!)", page.number)
-                    //LOG_TRACE("%p \t\t\t", info->sections[j]);
+                  LOG_TRACE("Page: %4" PRId32" (-)", page.number)
+                  info->pagecount++;
                 }
               else
               if (page.address < prev_address) {
-                  LOG_TRACE("Section: %" PRId32" (!)", page.number)
-                    //LOG_TRACE("%p \t\t", info->sections[j]);
+                  LOG_TRACE("Page: %4" PRId32" (a)", page.number)
               }
               else
               if (info->sections[0] &&
                   page.number > (int32_t)(info->pagecount + info->sections[0]->number))
                 {
                   // for [7] ptr+160 seems to be AcDb:ObjFreeSpace
-                  LOG_INFO("Section: %" PRId32 " (!)", page.number)
-                    //LOG_TRACE("%p \t\t\t", info->sections[j]);
-                  //LOG_TRACE("size: %" PRIu32 "\t", data_size) //compressed
-                  //LOG_TRACE("offset: 0x%" PRIx64 "\n", offset)
-                  //ptr -= 16;
-                  //break;
+                  LOG_INFO("Page: %4" PRId32 " (n)", page.number)
                 }
               else
               if (!info->sections[j] && page.number != old_section_number + 1)
                 {
-                  LOG_INFO("Section: %" PRId32 " (b)", page.number)
+                  LOG_INFO("Page: %4" PRId32 " (b)", page.number)
+                  LOG_TRACE(" size: %5" PRIu32, page.size) //compressed
+                  LOG_TRACE(" address: 0x%" PRIx64, page.address)
+                  if (info->sections[j])
+                    LOG_TRACE(" info: 0x%x", info->sections[j]->address);
+                  LOG_TRACE("\n")
                   ptr -= 16;
                   break;
                 }
               else
                 {
-                  LOG_TRACE("Section: %" PRId32 "    ", page.number)
+                  LOG_TRACE("Page: %4" PRId32 "    ", page.number)
                   old_section_number = page.number;
                   prev_address = page.address;
                 }
-              LOG_TRACE(" size: %" PRIu32 " ", page.size) //compressed
-              LOG_TRACE(" address: 0x%" PRIx64 "\n", page.address)
+              LOG_TRACE(" size: %5" PRIu32, page.size) //compressed
+              LOG_TRACE(" address: 0x%" PRIx64 "", page.address)
+              if (info->sections[j])
+                LOG_TRACE(" info: 0x%x", info->sections[j]->address);
+              LOG_TRACE("\n")
             }
         }
       else
