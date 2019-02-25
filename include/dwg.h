@@ -80,12 +80,12 @@ typedef unsigned char BITCODE_BB;
 typedef unsigned char BITCODE_3B;
 #define FORMAT_3B "%u"
 //#ifdef HAVE_STDINT_H
-#define BITCODE_BS uint16_t
-#define BITCODE_RS uint16_t
-#define BITCODE_BL uint32_t
-#define BITCODE_RL uint32_t
-#define BITCODE_BLd int32_t
-#define BITCODE_RLd int32_t
+//#define BITCODE_BS uint16_t
+//#define BITCODE_RS uint16_t
+//#define BITCODE_BL uint32_t
+//#define BITCODE_RL uint32_t
+//#define BITCODE_BLd int32_t
+//#define BITCODE_RLd int32_t
 typedef uint16_t BITCODE_BS;
 typedef uint16_t BITCODE_RS;
 typedef uint32_t BITCODE_BL;
