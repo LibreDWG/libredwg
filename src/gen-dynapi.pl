@@ -50,8 +50,17 @@ my @defines = ('__GNUC__=4', '__x86_64__', '__inline=inline',
 if ($^O =~ /darwin|bsd/) {
   push @defines, ('__signed=signed', '__builtin_va_list=void*');
 }
+if ($CC =~ /clang/) { # FIXME /usr/lib/llvm-7/lib/clang/7.0.1/include/stddef.h...
+  warn "clang still unsupported, need to use gcc to regen dynapi.c";
+  push @defines, ('__has_feature(x)=0', '__has_include_next(x)=0',
+                  '__INTPTR_TYPE__=long int', '__UINTPTR_TYPE__=unsigned long int',
+                  '__INTMAX_TYPE__=long int', '__UINTMAX_TYPE__=unsigned long int',
+                  '__gwchar_t=int', '_WCHAR_T=int');
+}
+
+warn "using $CC with @ccincdir\n" if @ccincdir;
 my $c = Convert::Binary::C->new
-  ->Include('.', '/usr/include', @ccincdir)
+  ->Include('.', @ccincdir, '/usr/include')
   ->Define(@defines);
 my $hdr = "../include/dwg.h";
 $c->parse_file($hdr);
