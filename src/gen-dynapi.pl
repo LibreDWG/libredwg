@@ -47,7 +47,7 @@ if ($CC) {
 my @defines = ('__GNUC__=4', '__x86_64__', '__inline=inline',
                '__THROW=', '__attribute__(x)=');
 if ($^O =~ /darwin|bsd/) {
-  push @defines, ('__signed=signed', '__builtin_va_list=void*');
+  push @defines, ('__signed=signed', '__builtin_va_list=void*', '__extension__=');
 }
 if (@ccincdir and join(" ",@ccincdir) =~ /clang/) {
   push @defines, ('__has_feature(x)=0', '__has_include_next(x)=0',
