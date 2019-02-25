@@ -737,10 +737,12 @@ dwg_free(Dwg_Data * dwg)
       dwg_free_header_vars(dwg);
       if (dwg->picture.size && dwg->picture.chain)
         FREE_IF(dwg->picture.chain);
-      for (i=0; i < dwg->header.num_infos; ++i)
-        FREE_IF(dwg->header.section_info[i].sections);
-      if (dwg->header.num_infos)
-        FREE_IF(dwg->header.section_info);
+      if (dwg->header.section_infohdr.num_desc)
+        {
+          for (i=0; i < dwg->header.section_infohdr.num_desc; ++i)
+            FREE_IF(dwg->header.section_info[i].sections);
+          FREE_IF(dwg->header.section_info);
+        }
       for (i=0; i < dwg->second_header.num_handlers; i++)
         FREE_IF(dwg->second_header.handlers[i].data);
       for (i=0; i < dwg->num_objects; ++i)

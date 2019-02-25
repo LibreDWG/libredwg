@@ -129,7 +129,7 @@ dwg_decode(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dwg->picture.size = 0;
   dwg->picture.chain = NULL;
   dwg->header.num_sections = 0;
-  dwg->header.num_infos = 0;
+  dwg->header.section_infohdr.num_desc = 0;
   dwg->measurement = 0;
   dwg->dwg_class = NULL;
   dwg->object_ref = NULL;
@@ -1601,12 +1601,9 @@ read_R2004_section_map(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
       /* endian specific code: */
       bfr_read(&dwg->header.section[i], &ptr, 8);
-      //dwg->header.section[i].number  = *((int32_t*)ptr);
-      //dwg->header.section[i].size    = *((uint32_t*)ptr+1);
       dwg->header.section[i].address  = section_address;
       section_address += dwg->header.section[i].size;
       bytes_remaining -= 8;
-      //ptr += 8; /* 2*4 */
 
       LOG_TRACE("Section[%2d]=%2d,", i, (int)dwg->header.section[i].number)
       LOG_TRACE(" size: %5u,", dwg->header.section[i].size)
@@ -1617,13 +1614,6 @@ read_R2004_section_map(Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           /* endian specific code: */
           bfr_read(&dwg->header.section[i].parent, &ptr, 16);
           bytes_remaining -= 16;
-#if 0
-          dwg->header.section[i].parent  = *((int32_t*)ptr);
-          dwg->header.section[i].left    = *((int32_t*)ptr+1);
-          dwg->header.section[i].right   = *((int32_t*)ptr+2);
-          dwg->header.section[i].x00     = *((int32_t*)ptr+3);
-          ptr += 16; /* 4*4 */
-#endif
           LOG_TRACE("Parent: %d ", dwg->header.section[i].parent)
           LOG_TRACE("Left:   %d ", dwg->header.section[i].left)
           LOG_TRACE("Right:  %d ", dwg->header.section[i].right)
@@ -1677,26 +1667,24 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   if (error > DWG_ERR_CRITICAL)
     return error;
 
-  dwg->header.num_infos = *(uint32_t*)decomp;
+  ptr = decomp;
+  bfr_read(&dwg->header.section_infohdr, &ptr, 20);
+  LOG_TRACE("\n#### Read 2004 section_infohdr ####\n")
+  LOG_TRACE("num_desc:   %d\n",   dwg->header.section_infohdr.num_desc)
+  LOG_TRACE("compressed: %d\n",   dwg->header.section_infohdr.compressed)
+  LOG_TRACE("max_size:   0x%x\n", dwg->header.section_infohdr.max_size)
+  LOG_TRACE("encrypted:  %d\n",   dwg->header.section_infohdr.encrypted)
+  LOG_TRACE("num_desc2:  %d/0x%x\n", dwg->header.section_infohdr.num_desc2,
+                                  dwg->header.section_infohdr.num_desc2)
   dwg->header.section_info = (Dwg_Section_Info*)
-    calloc(dwg->header.num_infos, sizeof(Dwg_Section_Info));
+    calloc(dwg->header.section_infohdr.num_desc, sizeof(Dwg_Section_Info));
   if (!dwg->header.section_info)
     {
       LOG_ERROR("Out of memory");
       return error | DWG_ERR_OUTOFMEM;
     }
-  maxsize = *((int32_t*)decomp + 2);
-  LOG_TRACE("\n#### Read 2004 Section Info fields ####\n")
-  LOG_TRACE("NumDescriptions:  %d\n",   dwg->header.num_infos)
-  LOG_TRACE("Compressed:       %d\n",   *((int32_t*)decomp + 1))
-  LOG_TRACE("MaxSize:          0x%x\n", maxsize)
-  LOG_TRACE("Encrypted:        %d\n",   *((int32_t*)decomp + 3))
-  LOG_TRACE("NumDescriptions2: %d/0x%x\n", *((int32_t*)decomp + 4),
-                                           *((int32_t*)decomp + 4))
-
-  ptr = decomp + 20; // 5*4
   decomp_end = decomp + decomp_data_size + 1024;
-  for (i = 0; i < dwg->header.num_infos; ++i)
+  for (i = 0; i < dwg->header.section_infohdr.num_desc; ++i)
     {
       Dwg_Section_Info* info;
       uint64_t sum_decomp = 0;
@@ -1711,33 +1699,18 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       info = &dwg->header.section_info[i];
       /* endian specific code */
       bfr_read(info, &ptr, 32+64);
-#if 0
-      info->size          = *((int64_t*)ptr);
-      //info->size          = *((uint32_t*)ptr);
-      //info->size        <<= 32;
-      //info->size         += *((uint32_t*)ptr + 1);
-      info->pagecount       = *((int32_t*)ptr + 2);
-      info->max_decomp_size = *((int32_t*)ptr + 3);
-      info->unknown         = *((int32_t*)ptr + 4);
-      info->compressed      = *((int32_t*)ptr + 5);
-      info->type            = *((int32_t*)ptr + 6);
-      info->encrypted       = *((int32_t*)ptr + 7);
-      ptr += 32; // 8*4
-      memcpy(info->name, ptr, 64);
-      ptr += 64;
-#endif
 
-      LOG_TRACE("\nSection Info[%d] description fields\n", i)
-      LOG_TRACE("Size:            %ld\n", (long)info->size)
-      LOG_TRACE("PageCount:       %u\n", info->pagecount)
+      LOG_TRACE("\nsection_info[%d] fields:\n", i)
+      LOG_TRACE("size:            %ld\n", (long)info->size)
+      LOG_TRACE("pagecount:       %u\n", info->pagecount)
       //LOG_TRACE("Num sections:    %u\n", info->num_sections)
-      LOG_TRACE("Max decomp size: %u / 0x%x\n", // normally 0x7400
+      LOG_TRACE("max_decomp_size: %u / 0x%x\n", // normally 0x7400
                 info->max_decomp_size, info->max_decomp_size)
-      LOG_TRACE("Unknown:         %u\n", info->unknown)
-      LOG_TRACE("Compressed:      %u (1=no, 2=yes)\n", info->compressed)
-      LOG_TRACE("Type:          0x%x\n", (unsigned)info->type)
-      LOG_TRACE("Encrypted:       %d (0=no, 1=yes, 2=unknown)\n", info->encrypted)
-      LOG_TRACE("Name:            %s\n\n", info->name)
+      LOG_TRACE("unknown:         %u\n", info->unknown)
+      LOG_TRACE("compressed:      %u (1=no, 2=yes)\n", info->compressed)
+      LOG_TRACE("type:            0x%x\n", (unsigned)info->type)
+      LOG_TRACE("encrypted:       %d (0=no, 1=yes, 2=unknown)\n", info->encrypted)
+      LOG_TRACE("name:            %s\n\n", info->name)
 
       if (ptr + (16 * info->pagecount) >= decomp_end)
         {
@@ -1875,7 +1848,7 @@ read_2004_compressed_section(Bit_Chain* dat, Dwg_Data *restrict dwg,
   BITCODE_BL i, j;
   int error = 0;
 
-  for (i=0; i < dwg->header.num_infos && !info; ++i)
+  for (i=0; i < dwg->header.section_infohdr.num_desc && !info; ++i)
     {
       if (dwg->header.section_info[i].type == section_type)
         {

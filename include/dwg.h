@@ -5504,6 +5504,16 @@ typedef struct _dwg_section
   struct _r2007_section *next;
  */
 
+// ODA 4.5
+typedef struct
+{
+  BITCODE_RL num_desc;
+  BITCODE_RL compressed; /* Compressed (1 = no, 2 = yes, normally 2) */
+  BITCODE_RL max_size;
+  BITCODE_RL encrypted; /* (0 = no, 1 = yes, 2 = unknown) */
+  BITCODE_RL num_desc2;
+} Dwg_Section_InfoHdr;
+
 typedef struct
 {
   int64_t    size;
@@ -5545,7 +5555,7 @@ typedef struct _dwg_struct
     BITCODE_RL   rl_28_80;             /* R2004+ */
     BITCODE_RL   num_sections;
     Dwg_Section* section;
-    BITCODE_RL   num_infos;
+    Dwg_Section_InfoHdr section_infohdr; /* R2004+ */
     Dwg_Section_Info* section_info;
   } header;
 

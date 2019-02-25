@@ -678,8 +678,9 @@ dwg_encode(Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
     LOG_ERROR(WE_CAN "We don't encode the R2004_section_map yet")
 
-    if (dwg->header.num_infos && !dwg->header.section_info)
-      dwg->header.section_info = calloc(dwg->header.num_infos, sizeof(Dwg_Section_Info));
+    if (dwg->header.section_infohdr.num_desc && !dwg->header.section_info)
+      dwg->header.section_info = calloc(dwg->header.section_infohdr.num_desc,
+                                        sizeof(Dwg_Section_Info));
 
     dat->byte = 0x80;
     for (i = 0; i < size; i++)
