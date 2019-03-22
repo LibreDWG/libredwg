@@ -25,7 +25,7 @@ Full history from the git log
 
 	fixup get_next_owned_entity
 	check the actual entity owner.
-	it did fail with some r14-2000 attribs, belonging to 2 seperate
+	it did fail with some r14-2000 attribs, belonging to 2 separate
 	block headers
 
 2019-01-07  Reini Urban  <rurban@cpan.org>
@@ -568,7 +568,7 @@ Full history from the git log
 2018-12-17  Reini Urban  <rurban@cpan.org>
 
 	json: add SUB_FIELD, REPEAT_BLOCK. fix LEADER
-	Need to seperate the parent[i] from the struct field.
+	Need to separate the parent[i] from the struct field.
 	arrays esp. in json should not print field[rcount1]: value, just
 	an array of values. With REPEAT an array of structs.
 
@@ -944,7 +944,7 @@ Full history from the git log
 	Guard function in dwg_free_ ##token for all frees
 	in DWG_ENTITY_END and DWG_OBJECT_END
 
-	Guard function for free(str_dat) in decode object and entity macroses
+	Guard function for free(str_dat) in decode object and entity macros
 
 	DWG_TYPE_FREED collision
 
@@ -1007,7 +1007,7 @@ Full history from the git log
 2018-11-27  Reini Urban  <rurban@cpan.org>
 
 	dwglayers: fix DICTIONARY loop (#51)
-	skip a DICTIONARY, but dont skip the loop.
+	skip a DICTIONARY, but don't skip the loop.
 	Fixes #51
 
 	dxf: fix empty paper_space (#52)
@@ -1081,8 +1081,8 @@ Full history from the git log
 2018-11-23  Reini Urban  <rurban@cpan.org>
 
 	examples: improve load_dwg.py
-	dont fail on non-critical errors
-	dont import twice
+	don't fail on non-critical errors
+	don't import twice
 
 2018-11-23  Reini Urban  <rurban@cpan.org>
 

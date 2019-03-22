@@ -1689,7 +1689,7 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       Dwg_Section_Info* info;
       uint64_t sum_decomp = 0;
       uint64_t prev_address = 0;
-  
+
       if (ptr + 64 >= decomp_end)
         {
           free (decomp);
@@ -3413,7 +3413,7 @@ dwg_decode_xdata(Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj, int 
 static void
 check_POLYLINE_handles(Dwg_Object *obj)
 {
-  /* We ensured the commmon fields structure is shared with all 4 types */
+  /* We ensured the common fields structure is shared with all 4 types */
   Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
   Dwg_Data *dwg = obj->parent;
 
@@ -4272,7 +4272,7 @@ dwg_validate_INSERT(Dwg_Object *obj)
 int
 dwg_validate_POLYLINE(Dwg_Object *obj)
 {
-  /* We ensured the commmon fields structure is shared with all 4 types */
+  /* We ensured the common fields structure is shared with all 4 types */
   Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
   Dwg_Data *dwg = obj->parent;
 
