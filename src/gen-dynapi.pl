@@ -96,7 +96,7 @@ while (<$in>) {
     } elsif (/^typedef struct (_dwg_\S+)$/) {
       $n = $1;
     } elsif (/^#define (COMMON_\w+)\((\w+)\)/) {
-      # BUG: Convert::Binary::C cannot seperate H* from H, both are just Dwg_Object_Ref
+      # BUG: Convert::Binary::C cannot separate H* from H, both are just Dwg_Object_Ref
       # So we need to parse the defines
       $n = $1;
       $f = $2;
