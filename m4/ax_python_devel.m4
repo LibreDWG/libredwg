@@ -1,5 +1,5 @@
 # ===========================================================================
-#      http://www.gnu.org/software/autoconf-archive/ax_python_devel.html
+#     https://www.gnu.org/software/autoconf-archive/ax_python_devel.html
 # ===========================================================================
 #
 # SYNOPSIS
@@ -12,8 +12,8 @@
 #   in your configure.ac.
 #
 #   This macro checks for Python and tries to get the include path to
-#   'Python.h'. It provides the $(PYTHON_CPPFLAGS) and $(PYTHON_LDFLAGS)
-#   output variables. It also exports $(PYTHON_EXTRA_LIBS) and
+#   'Python.h'. It provides the $(PYTHON_CPPFLAGS) and $(PYTHON_LIBS) output
+#   variables. It also exports $(PYTHON_EXTRA_LIBS) and
 #   $(PYTHON_EXTRA_LDFLAGS) for embedding Python in your code.
 #
 #   You can search for some particular version of Python by passing a
@@ -34,12 +34,12 @@
 # LICENSE
 #
 #   Copyright (c) 2009 Sebastian Huber <sebastian-huber@web.de>
-#   Copyright (c) 2009 Alan W. Irwin <irwin@beluga.phys.uvic.ca>
+#   Copyright (c) 2009 Alan W. Irwin
 #   Copyright (c) 2009 Rafael Laboissiere <rafael@laboissiere.net>
-#   Copyright (c) 2009 Andrew Collier <colliera@ukzn.ac.za>
+#   Copyright (c) 2009 Andrew Collier
 #   Copyright (c) 2009 Matteo Settenvini <matteo@member.fsf.org>
 #   Copyright (c) 2009 Horst Knorr <hk_classes@knoda.org>
-#   Copyright (c) 2018 Reini Urban <rurban@cpan.org>
+#   Copyright (c) 2013 Daniel Mullner <muellner@math.stanford.edu>
 #
 #   This program is free software: you can redistribute it and/or modify it
 #   under the terms of the GNU General Public License as published by the
@@ -52,7 +52,7 @@
 #   Public License for more details.
 #
 #   You should have received a copy of the GNU General Public License along
-#   with this program. If not, see <http://www.gnu.org/licenses/>.
+#   with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 #   As a special exception, the respective Autoconf Macro's copyright owner
 #   gives unlimited permission to copy, distribute and modify the configure
@@ -67,7 +67,7 @@
 #   modified version of the Autoconf Macro, you may extend this special
 #   exception to the GPL to apply to your modified version as well.
 
-#serial 6
+#serial 21
 
 AU_ALIAS([AC_PYTHON_DEVEL], [AX_PYTHON_DEVEL])
 AC_DEFUN([AX_PYTHON_DEVEL],[
@@ -99,7 +99,7 @@ AC_DEFUN([AX_PYTHON_DEVEL],[
 This version of the AC@&t@_PYTHON_DEVEL macro
 doesn't work properly with versions of Python before
 2.1.0. You may need to re-run configure, setting the
-variables PYTHON_CPPFLAGS, PYTHON_LDFLAGS, PYTHON_SITE_PKG,
+variables PYTHON_CPPFLAGS, PYTHON_LIBS, PYTHON_SITE_PKG,
 PYTHON_EXTRA_LIBS and PYTHON_EXTRA_LDFLAGS by hand.
 Moreover, to disable this check, set PYTHON_NOVERSIONCHECK
 to something else than an empty string.
@@ -120,7 +120,7 @@ to something else than an empty string.
 			ver = sys.version.split ()[[0]]; \
 			print (ver $1)"`
 		if test "$ac_supports_python_ver" = "True"; then
-	   	   AC_MSG_RESULT([yes])
+		   AC_MSG_RESULT([yes])
 		else
 			AC_MSG_RESULT([no])
 			AC_MSG_ERROR([this package requires Python $1.
@@ -137,7 +137,7 @@ variable to configure. See ``configure --help'' for reference.
 	#
 	AC_MSG_CHECKING([for the distutils Python package])
 	ac_distutils_result=`$PYTHON -c "import distutils" 2>&1`
-	if test -z "$ac_distutils_result"; then
+	if test $? -eq 0; then
 		AC_MSG_RESULT([yes])
 	else
 		AC_MSG_RESULT([no])
@@ -153,9 +153,15 @@ $ac_distutils_result])
 	AC_MSG_CHECKING([for Python include path])
 	if test -z "$PYTHON_CPPFLAGS"; then
 		python_path=`$PYTHON -c "import distutils.sysconfig; \
-           		print (distutils.sysconfig.get_python_inc ());"`
+			print (distutils.sysconfig.get_python_inc ());"`
+		plat_python_path=`$PYTHON -c "import distutils.sysconfig; \
+			print (distutils.sysconfig.get_python_inc (plat_specific=1));"`
 		if test -n "${python_path}"; then
-		   	python_path="-I$python_path"
+			if test "${plat_python_path}" != "${python_path}"; then
+				python_path="-I$python_path -I$plat_python_path"
+			else
+				python_path="-I$python_path"
+			fi
 		fi
 		PYTHON_CPPFLAGS=$python_path
 	fi
@@ -166,7 +172,7 @@ $ac_distutils_result])
 	# Check for Python library path
 	#
 	AC_MSG_CHECKING([for Python library path])
-	if test -z "$PYTHON_LDFLAGS"; then
+	if test -z "$PYTHON_LIBS"; then
 		# (makes two attempts to ensure we've got a version number
 		# from the interpreter)
 		ac_python_version=`cat<<EOD | $PYTHON -
@@ -174,11 +180,9 @@ $ac_distutils_result])
 # join all versioning strings, on some systems
 # major/minor numbers could be in different list elements
 from distutils.sysconfig import *
-ret = ''
-for e in get_config_vars ('VERSION'):
-	if (e != None):
-		ret += e
-print (ret)
+e = get_config_var('VERSION')
+if e is not None:
+	print(e)
 EOD`
 
 		if test -z "$ac_python_version"; then
@@ -195,73 +199,53 @@ EOD`
                                    [If available, contains the Python version number currently in use.])
 
 		# First, the library directory:
-		ac_python_libdir=`$PYTHON -c \
-		  "import distutils.sysconfig; \
-		  print (distutils.sysconfig.get_config_vars('LIBPL')[[0]])"`
-		if test -z "$ac_python_libdir"; then
-                	ac_python_libdir=`cat<<EOD | $PYTHON -
+		ac_python_libdir=`cat<<EOD | $PYTHON -
 
 # There should be only one
 import distutils.sysconfig
-for e in distutils.sysconfig.get_config_vars('LIBDIR'):
-	if e != None:
-		print (e)
-		break
+e = distutils.sysconfig.get_config_var('LIBDIR')
+if e is not None:
+	print (e)
 EOD`
-                fi
-
-		# Before checking for libpythonX.Y, we need to know
-		# the extension the OS we're on uses for libraries
-		# (we take the first one, if there's more than one fix me!):
-		ac_python_soext=`$PYTHON -c \
-		  "import distutils.sysconfig; \
-		  print (distutils.sysconfig.get_config_vars('SO')[[0]])"`
 
 		# Now, for the library:
-		ac_python_soname=`$PYTHON -c \
-		  "import distutils.sysconfig; \
-		  print (distutils.sysconfig.get_config_vars('LDLIBRARY')[[0]])"`
+		ac_python_library=`cat<<EOD | $PYTHON -
 
-		# Strip away extension from the end to canonicalize its name:
-		ac_python_library=`echo "$ac_python_soname" | sed "s/${ac_python_soext}$//"`
-                echo ""
-                echo ac_python_libdir=$ac_python_libdir
-                echo ac_python_library=$ac_python_library
-                echo ac_python_soname=$ac_python_soname
+import distutils.sysconfig
+c = distutils.sysconfig.get_config_vars()
+if 'LDVERSION' in c:
+	print ('python'+c[['LDVERSION']])
+else:
+	print ('python'+c[['VERSION']])
+EOD`
 
-		# adapted from the PostgreSQL and LibreDWG python macros
-                # macports uses --enable-framework=/opt/local/Library/Frameworks
+		# This small piece shamelessly adapted from PostgreSQL python macro;
+		# credits goes to momjian, I think. I'd like to put the right name
+		# in the credits, if someone can point me in the right direction... ?
 		#
-		if test -n "$ac_python_libdir" -a -n "$ac_python_library" \
-                        -a -e "$ac_python_libdir" -a ! -e "$ac_python_library"
+		if test -n "$ac_python_libdir" -a -n "$ac_python_library"
 		then
-                        echo use the --enable-frameworked shared library
+			# use the official shared library
 			ac_python_library=`echo "$ac_python_library" | sed "s/^lib//"`
-			PYTHON_LDFLAGS="-L$ac_python_libdir -lpython$ac_python_version"
-                elif test -n "$ac_python_libdir" -a -n "$ac_python_library" \
-                          -a x"$ac_python_library" != x"$ac_python_soname"
-                then
-                        echo use the official shared library
-			ac_python_library=`echo "$ac_python_library" | sed "s/^lib//"`
-			PYTHON_LDFLAGS="-L$ac_python_libdir -l$ac_python_library"
+			PYTHON_LIBS="-L$ac_python_libdir -l$ac_python_library"
 		else
-                        echo old way: use libpython from python_configdir
+			# old way: use libpython from python_configdir
 			ac_python_libdir=`$PYTHON -c \
 			  "from distutils.sysconfig import get_python_lib as f; \
 			  import os; \
 			  print (os.path.join(f(plat_specific=1, standard_lib=1), 'config'));"`
-			PYTHON_LDFLAGS="-L$ac_python_libdir -lpython$ac_python_version"
+			PYTHON_LIBS="-L$ac_python_libdir -lpython$ac_python_version"
 		fi
 
-		if test -z "PYTHON_LDFLAGS"; then
+		if test -z "PYTHON_LIBS"; then
 			AC_MSG_ERROR([
   Cannot determine location of your Python DSO. Please check it was installed with
-  dynamic libraries enabled, or try setting PYTHON_LDFLAGS by hand.
+  dynamic libraries enabled, or try setting PYTHON_LIBS by hand.
 			])
 		fi
 	fi
-	AC_MSG_RESULT([$PYTHON_LDFLAGS])
-	AC_SUBST([PYTHON_LDFLAGS])
+	AC_MSG_RESULT([$PYTHON_LIBS])
+	AC_SUBST([PYTHON_LIBS])
 
 	#
 	# Check for site packages
@@ -269,7 +253,7 @@ EOD`
 	AC_MSG_CHECKING([for Python site-packages path])
 	if test -z "$PYTHON_SITE_PKG"; then
 		PYTHON_SITE_PKG=`$PYTHON -c "import distutils.sysconfig; \
-		        print (distutils.sysconfig.get_python_lib(0,0));"`
+			print (distutils.sysconfig.get_python_lib(0,0));"`
 	fi
 	AC_MSG_RESULT([$PYTHON_SITE_PKG])
 	AC_SUBST([PYTHON_SITE_PKG])
@@ -281,25 +265,19 @@ EOD`
 	if test -z "$PYTHON_EXTRA_LIBS"; then
 	   PYTHON_EXTRA_LIBS=`$PYTHON -c "import distutils.sysconfig; \
                 conf = distutils.sysconfig.get_config_var; \
-                print (conf('LDFLAGS') + ' ' + conf('LOCALMODLIBS') + ' ' + conf('LIBS') + ' ' + conf('SYSLIBS'))"`
+                print (conf('LIBS') + ' ' + conf('SYSLIBS'))"`
 	fi
 	AC_MSG_RESULT([$PYTHON_EXTRA_LIBS])
 	AC_SUBST(PYTHON_EXTRA_LIBS)
 
 	#
-	# linking flags needed when embedding. broken for macports:
-        # --enable-framework=/opt/local/Library/Frameworks -L prefix is missing.
-        # -Wl,-stack_size,1000000  -framework CoreFoundation Python.framework/Versions/3.6/Python
+	# linking flags needed when embedding
 	#
 	AC_MSG_CHECKING(python extra linking flags)
 	if test -z "$PYTHON_EXTRA_LDFLAGS"; then
-          case $PYTHON_SITE_PKG in
-            /opt/local/Library/Frameworks*) ;;
-            *) PYTHON_EXTRA_LDFLAGS=`$PYTHON -c "import distutils.sysconfig; \
+		PYTHON_EXTRA_LDFLAGS=`$PYTHON -c "import distutils.sysconfig; \
 			conf = distutils.sysconfig.get_config_var; \
 			print (conf('LINKFORSHARED'))"`
-               ;;
-          esac
 	fi
 	AC_MSG_RESULT([$PYTHON_EXTRA_LDFLAGS])
 	AC_SUBST(PYTHON_EXTRA_LDFLAGS)
@@ -310,8 +288,10 @@ EOD`
 	AC_MSG_CHECKING([consistency of all components of python development environment])
 	# save current global flags
 	ac_save_LIBS="$LIBS"
+	ac_save_LDFLAGS="$LDFLAGS"
 	ac_save_CPPFLAGS="$CPPFLAGS"
-	LIBS="$ac_save_LIBS $PYTHON_LDFLAGS $PYTHON_EXTRA_LDFLAGS $PYTHON_EXTRA_LIBS"
+	LIBS="$ac_save_LIBS $PYTHON_LIBS $PYTHON_EXTRA_LIBS $PYTHON_EXTRA_LIBS"
+	LDFLAGS="$ac_save_LDFLAGS $PYTHON_EXTRA_LDFLAGS"
 	CPPFLAGS="$ac_save_CPPFLAGS $PYTHON_CPPFLAGS"
 	AC_LANG_PUSH([C])
 	AC_LINK_IFELSE([
@@ -322,6 +302,7 @@ EOD`
 	# turn back to default flags
 	CPPFLAGS="$ac_save_CPPFLAGS"
 	LIBS="$ac_save_LIBS"
+	LDFLAGS="$ac_save_LDFLAGS"
 
 	AC_MSG_RESULT([$pythonexists])
 
@@ -329,8 +310,8 @@ EOD`
 	   AC_MSG_FAILURE([
   Could not link test program to Python. Maybe the main Python library has been
   installed in some non-standard library path. If so, pass it to configure,
-  via the LDFLAGS environment variable.
-  Example: ./configure LDFLAGS="-L/usr/non-standard-path/python/lib"
+  via the LIBS environment variable.
+  Example: ./configure LIBS="-L/usr/non-standard-path/python/lib"
   ============================================================================
    ERROR!
    You probably have to install the development version of the Python package
