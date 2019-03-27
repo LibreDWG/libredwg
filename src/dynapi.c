@@ -4332,6 +4332,7 @@ dwg_dynapi_entity_set_value(void *restrict _obj, const char *restrict name,
             {
               str = malloc(strlen((char*)value)+1);
               strcpy(str, value);
+              memcpy(old, str, f->size); // size of ptr
             }
           else
           if (!strcmp(f->type, "TU") ||
@@ -4348,8 +4349,8 @@ dwg_dynapi_entity_set_value(void *restrict _obj, const char *restrict name,
               str = malloc(2*length);
               memcpy(str, value, length*2);
 #endif
+              memcpy(old, str, f->size); // size of ptr
             }
-          memcpy(old, str, f->size); // size of ptr
         }
       else
         memcpy(old, value, f->size);

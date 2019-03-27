@@ -1722,7 +1722,7 @@ read_R2004_section_info(Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
       if (info->pagecount < 1000000)
         {
-          int32_t old_section_number;
+          int32_t old_section_number = 0;
           LOG_INFO("Page count %u in area %d\n", info->pagecount, i);
           info->sections = calloc(info->pagecount, sizeof(Dwg_Section*));
           if (!info->sections)
