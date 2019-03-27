@@ -58,14 +58,21 @@ init:
   - if "%PLATFORM%"=="x64" set P=64
   - if "%CYGWIN%"=="1" set CYG_ROOT=c:\cygwin%P%
   - if "%CYGWIN%"=="1" appveyor DownloadFile http://cygwin.com/%ISETUP%.exe -FileName %CYG_ROOT%\setup.exe
-  - if "%CYGWIN%"=="1" %CYG_ROOT%\setup.exe -qnNdO -R "%CYG_ROOT%" -s "%CYG_MIRROR%" -l "%CYG_ROOT%\var\cache\setup" -P libxml2,libxml2-devel,libiconv-devel,python2-devel,python2-libxml2,swig,help2man,libcrypt-devel,dejagnu
+  - if "%PLATFORM%"=="x86" set CYG_PY=python27-devel,python27-libxml2
+  - if "%PLATFORM%"=="x64" set CYG_PY=python36-devel,python36-libxml2
+  - if "%CYGWIN%"=="1" %CYG_ROOT%\setup.exe -qnNdO -R "%CYG_ROOT%" -s "%CYG_MIRROR%" -l "%CYG_ROOT%\var\cache\setup" -P libxml2,libxml2-devel,libiconv-devel,%CYG_PY%,swig,help2man,libcrypt-devel,dejagnu,libpcre2-devel,pcre2
 
 build_script:
   - if "%CYGWIN%"=="1" set PATH=%CYG_ROOT%\bin;c:\Windows\system32;c:\Windows;c:\Windows\system32\Wbem
   - if "%CYGWIN%"=="1" %CYG_ROOT%\bin\sh -lc "cygcheck -dc cygwin"
+  #- if "%PLATFORM%"=="x86" set CFG_ARG="--disable-python"
+  #- if "%PLATFORM%"=="x86" set CFG_ARG="--enable-python=python3.6m"
+  - if "%CYGWIN%"=="1" set CFG_ARG="--enable-python=/usr/bin/python3.6m"
+  #-bash -c "rm /usr/bin/python{,2,2.7.exe}; ls -al /usr/bin/python*"
   - if "%MINGW%"=="1" call build-aux\msys2.bat
   - bash -c "sh ./autogen.sh"
-  - bash -c "./configure"
+  - echo %CFG_ARG%
+  - bash -c ./configure %CFG_ARG%
   - bash -c "make"
 
 test_script:
