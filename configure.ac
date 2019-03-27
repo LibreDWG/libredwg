@@ -157,6 +157,8 @@ then
     [Define if __attribute__((visibility("default"))) is supported.])
 fi
 
+AX_ADD_FORTIFY_SOURCE
+
 if test x$ac_cv_header_dejagnu_h = xyes; then
   dnl check if dejagnu needs -fgnu89-inline
   dnl https://gcc.gnu.org/bugzilla//show_bug.cgi?id=63613
