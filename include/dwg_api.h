@@ -406,18 +406,14 @@ typedef struct _dwg_entity_GEOPOSITIONMARKER      dwg_ent_geopositionmarker;
 
 ///////////////////////////////////////////////////////////////////////////
 
+typedef struct _dwg_object_STYLE_CONTROL          dwg_tbl_generic;
+typedef struct _dwg_object_UNKNOWN_OBJ            dwg_obj_generic;
+typedef struct _dwg_object_LAYER_CONTROL          dwg_obj_layer_control;
 typedef struct _dwg_object_LAYER                  dwg_obj_layer;
 typedef struct _dwg_object_BLOCK_HEADER           dwg_obj_block_header;
 typedef struct _dwg_object_BLOCK_CONTROL          dwg_obj_block_control;
-typedef struct _dwg_object_MLINESTYLE             dwg_obj_mlinestyle;
-typedef struct _dwg_object_APPID                  dwg_obj_appid;
 typedef struct _dwg_object_APPID_CONTROL          dwg_obj_appid_control;
-typedef struct _dwg_object_PROXY_OBJECT           dwg_obj_proxy;
-typedef struct _dwg_object_XRECORD                dwg_obj_xrecord;
-typedef struct _dwg_object_UNKNOWN_OBJ            dwg_obj_generic;
-typedef struct _dwg_object_STYLE_CONTROL          dwg_tbl_generic;
-typedef struct _dwg_object_LAYER_CONTROL          dwg_obj_layer_control;
-typedef struct _dwg_object_LAYER                  dwg_obj_layer;
+typedef struct _dwg_object_APPID                  dwg_obj_appid;
 typedef struct _dwg_object_STYLE_CONTROL          dwg_obj_style_control;
 typedef struct _dwg_object_STYLE                  dwg_obj_style;
 typedef struct _dwg_object_LTYPE_CONTROL          dwg_obj_ltype_control;
@@ -428,14 +424,13 @@ typedef struct _dwg_object_UCS_CONTROL            dwg_obj_ucs_control;
 typedef struct _dwg_object_UCS                    dwg_obj_ucs;
 typedef struct _dwg_object_VPORT_CONTROL          dwg_obj_vport_control;
 typedef struct _dwg_object_VPORT                  dwg_obj_vport;
-typedef struct _dwg_object_APPID_CONTROL          dwg_obj_appid_control;
-typedef struct _dwg_object_APPID                  dwg_obj_appid;
 typedef struct _dwg_object_DIMSTYLE_CONTROL       dwg_obj_dimstyle_control;
 typedef struct _dwg_object_DIMSTYLE               dwg_obj_dimstyle;
 typedef struct _dwg_object_VPORT_ENTITY_CONTROL   dwg_obj_vport_entity_control;
 typedef struct _dwg_object_VPORT_ENTITY_HEADER    dwg_obj_vport_entity_header;
 typedef struct _dwg_object_DICTIONARY             dwg_obj_dictionary;
 typedef struct _dwg_object_MLINESTYLE             dwg_obj_mlinestyle;
+typedef struct _dwg_object_PROXY_OBJECT           dwg_obj_proxy;
 typedef struct _dwg_object_PROXY_OBJECT           dwg_obj_proxy_object;
 // stable:
 typedef struct _dwg_object_DICTIONARYVAR          dwg_obj_dictionaryvar;

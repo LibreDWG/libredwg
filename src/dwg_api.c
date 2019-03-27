@@ -6552,23 +6552,23 @@ dwg_obj_appid_control_get_num_entries(const dwg_obj_appid_control *restrict appi
     }
 }
 
-/** Returns the index'th _dwg_entity_APPID:: object.
+/** Returns the idx'th _dwg_entity_APPID:: object.
 \code Usage: int num = dwg_obj_appid_control_get_appid(appcontrol, 0, &error);
 \endcode
 \param[in]  appid dwg_obj_appid_control*
-\param[in]  index
+\param[in]  idx
 \param[out] error   int*, is set to 0 for ok, 1 on error
 \deprecated
 */
 dwg_object_ref *
 dwg_obj_appid_control_get_appid(const dwg_obj_appid_control *restrict appid,
-                                const BITCODE_BS index,
+                                const BITCODE_BS idx,
                                 int *restrict error)
 {
-  if (appid != NULL && index < appid->num_entries)
+  if (appid != NULL && idx < appid->num_entries)
     {
       *error = 0;
-      return appid->apps[index];
+      return appid->apps[idx];
     }
   else
     {
@@ -6965,7 +6965,7 @@ dwg_ent_dim_set_lspace_factor(dwg_ent_dim *restrict dim,
     }
 }
 
-/** Returns the _dwg_entity_DIMENSION_common::lspace_style index, DXF 72.
+/** Returns the _dwg_entity_DIMENSION_common::lspace_style idx, DXF 72.
 \code Usage: BITCODE_BS lspace_style = dwg_ent_dim_get_lspace_style(dim, &error);
 \endcode
 \param[in] dim dwg_ent_dim*
@@ -6989,7 +6989,7 @@ dwg_ent_dim_get_lspace_style(const dwg_ent_dim *restrict dim,
     }
 }
 
-/** Sets the _dwg_entity_DIMENSION_common::lspace_style index, DXF 72.
+/** Sets the _dwg_entity_DIMENSION_common::lspace_style idx, DXF 72.
 \code Usage: dwg_ent_dim_set_lspace_style(dim, style, &error);
 \endcode
 \param[out] dim     dwg_ent_dim*
@@ -7014,7 +7014,7 @@ dwg_ent_dim_set_lspace_style(dwg_ent_dim *restrict dim,
     }
 }
 
-/** Returns the _dwg_entity_DIMENSION_common::attachment index, DXF 71.
+/** Returns the _dwg_entity_DIMENSION_common::attachment idx, DXF 71.
 \code Usage: BITCODE_BS attachment = dwg_ent_dim_get_attachment(dim, &error);
 \endcode
 \param[in] dim dwg_ent_dim*
@@ -7038,11 +7038,11 @@ dwg_ent_dim_get_attachment(const dwg_ent_dim *restrict dim,
     }
 }
 
-/** Sets the _dwg_entity_DIMENSION_common::attachment index, DXF 71.
+/** Sets the _dwg_entity_DIMENSION_common::attachment idx, DXF 71.
 \code Usage: dwg_ent_dim_set_attachment(dim, attachment, &error);
 \endcode
 \param[out] dim        dwg_ent_dim*
-\param[in]  attachment BITCODE_BS point index
+\param[in]  attachment BITCODE_BS point idx
 \param[out] error      int*, is set to 0 for ok, 1 on error
 \deprecated
 */
@@ -20191,12 +20191,12 @@ dwg_object_tablectrl_get_entries(const dwg_object *restrict obj,
 \code Usage: dwg_object_ref *ref = dwg_object_tablectrl_get_entry(obj, 0, &error);
 \endcode
 \param[in]  obj    a TABLE_CONTROL dwg_object*
-\param[in]  index  BITCODE_BS
+\param[in]  idx  BITCODE_BS
 \param[out] error  set to 0 for ok, >0 if not found.
 */
 dwg_object_ref *
 dwg_object_tablectrl_get_entry(const dwg_object *restrict obj,
-                               const BITCODE_BS index,
+                               const BITCODE_BS idx,
                                int *restrict error)
 {
   if (obj &&
@@ -20206,16 +20206,16 @@ dwg_object_tablectrl_get_entry(const dwg_object *restrict obj,
       // HACK: we can guarantee a common layout of the common fields
       Dwg_Object_STYLE_CONTROL *ctrl = obj->tio.object->tio.STYLE_CONTROL;
       const BITCODE_BS count = ctrl->num_entries;
-      if (index < count)
+      if (idx < count)
         {
           *error = 0;
-          return ctrl->styles[index];
+          return ctrl->styles[idx];
         }
       else
         {
           *error = 2;
-          LOG_ERROR("%s: index %d out of bounds %d",
-                    __FUNCTION__, index, count);
+          LOG_ERROR("%s: idx %d out of bounds %d",
+                    __FUNCTION__, idx, count);
           return NULL;
         }
     }
@@ -20455,12 +20455,12 @@ dwg_ent_get_num_eed(const dwg_obj_ent *restrict ent,
 \code Usage: dwg_entity_eed *eed = dwg_ent_get_eed(ent,0,&error);
 \endcode
 \param[in]  ent    dwg_obj_ent*
-\param[in]  index  [0 - num_eed-1]
-\param[out] error  set to 0 for ok, 1 if ent == NULL or 2 if index out of bounds.
+\param[in]  idx  [0 - num_eed-1]
+\param[out] error  set to 0 for ok, 1 if ent == NULL or 2 if idx out of bounds.
 */
 dwg_entity_eed *
 dwg_ent_get_eed(const dwg_obj_ent *restrict ent,
-                const BITCODE_BL index,
+                const BITCODE_BL idx,
                 int *restrict error)
 {
   if (!ent) {
@@ -20468,13 +20468,13 @@ dwg_ent_get_eed(const dwg_obj_ent *restrict ent,
     LOG_ERROR("%s: empty or invalid ent", __FUNCTION__)
     return NULL;
   }
-  else if (index >= ent->num_eed) {
+  else if (idx >= ent->num_eed) {
     *error = 2;
     return NULL;
   }
   else {
     *error = 0;
-    return &ent->eed[index];
+    return &ent->eed[idx];
   }
 }
 
@@ -20482,12 +20482,12 @@ dwg_ent_get_eed(const dwg_obj_ent *restrict ent,
 \code Usage: dwg_entity_eed_data *eed = dwg_ent_get_eed_data(ent,0,&error);
 \endcode
 \param[in]  ent    dwg_obj_ent*
-\param[in]  index  [0 - num_eed-1]
-\param[out] error  set to 0 for ok, 1 if ent == NULL or 2 if index out of bounds.
+\param[in]  idx  [0 - num_eed-1]
+\param[out] error  set to 0 for ok, 1 if ent == NULL or 2 if idx out of bounds.
 */
 dwg_entity_eed_data *
 dwg_ent_get_eed_data(const dwg_obj_ent *restrict ent,
-                     const BITCODE_BL index,
+                     const BITCODE_BL idx,
                      int *restrict error)
 {
   if (!ent) {
@@ -20495,13 +20495,13 @@ dwg_ent_get_eed_data(const dwg_obj_ent *restrict ent,
     LOG_ERROR("%s: empty or invalid ent", __FUNCTION__)
     return NULL;
   }
-  else if (index >= ent->num_eed) {
+  else if (idx >= ent->num_eed) {
     *error = 2;
     return NULL;
   }
   else {
     *error = 0;
-    return ent->eed[index].data;
+    return ent->eed[idx].data;
   }
 }
 
@@ -20862,33 +20862,33 @@ dwg_get_num_classes(const dwg_data *dwg)
 \code Usage: dwg_object* obj = dwg_get_object(dwg, 0);
 \endcode
 \param[in]  dwg   dwg_data*
-\param[in]  index
+\param[in]  idx
 */
 dwg_class *
-dwg_get_class(const dwg_data *dwg, unsigned int index)
+dwg_get_class(const dwg_data *dwg, unsigned int idx)
 {
   if (!dwg)
     return NULL;
   if (dwg_version == R_INVALID)
     dwg_version = (Dwg_Version_Type)dwg->header.version;
-  return (index < dwg->num_classes) ? &dwg->dwg_class[index] : NULL;
+  return (idx < dwg->num_classes) ? &dwg->dwg_class[idx] : NULL;
 }
 
 /** Returns the nth object or NULL
 \code Usage: dwg_object* obj = dwg_get_object(dwg, 0);
 \endcode
 \param[in]  dwg   dwg_data*
-\param[in]  index
+\param[in]  idx
 */
 dwg_object *
 dwg_get_object(dwg_data *dwg,
-               const BITCODE_BL index)
+               const BITCODE_BL idx)
 {
   if (!dwg)
     return NULL;
   if (dwg_version == R_INVALID)
     dwg_version = (Dwg_Version_Type)dwg->header.version;
-  return (index < dwg->num_objects) ? &dwg->object[index] : NULL;
+  return (idx < dwg->num_objects) ? &dwg->object[idx] : NULL;
 }
 
 
@@ -20923,11 +20923,11 @@ dwg_object_get_bitsize(const dwg_object *obj)
   return obj ? obj->bitsize : 0;
 }
 
-/** Returns the global index/objid in the list of all objects.
+/** Returns the global idx/objid in the list of all objects.
     This is the same as a dwg_handle absolute_ref value.
     \sa dwg_obj_get_objid
 
-\code Usage: int index = dwg_object_get_index(obj, &error);
+\code Usage: int idx = dwg_object_get_index(obj, &error);
 \endcode
 \param[in]  obj     dwg_object*
 \param[out] error   int*, is set to 0 for ok, 1 on error
@@ -21077,12 +21077,12 @@ dwg_obj_get_num_eed(const dwg_obj_obj *restrict obj,
 \code Usage: dwg_entity_eed *eed = dwg_obj_get_eed(obj,0,&error);
 \endcode
 \param[in]  obj    dwg_obj_obj*
-\param[in]  index  [0 - num_eed-1]
+\param[in]  idx  [0 - num_eed-1]
 \param[out] error  set to 0 for ok, 1 if obj == NULL or 2 if index out of bounds.
 */
 dwg_entity_eed *
 dwg_obj_get_eed(const dwg_obj_obj *restrict obj,
-                const BITCODE_BL index,
+                const BITCODE_BL idx,
                 int *restrict error)
 {
   if (!obj) {
@@ -21090,13 +21090,13 @@ dwg_obj_get_eed(const dwg_obj_obj *restrict obj,
     LOG_ERROR("%s: empty or invalid obj", __FUNCTION__)
     return NULL;
   }
-  else if (index >= obj->num_eed) {
+  else if (idx >= obj->num_eed) {
     *error = 2;
     return NULL;
   }
   else {
     *error = 0;
-    return &obj->eed[index];
+    return &obj->eed[idx];
   }
 }
 
@@ -21104,12 +21104,12 @@ dwg_obj_get_eed(const dwg_obj_obj *restrict obj,
 \code Usage: dwg_entity_eed_data *eed = dwg_obj_get_eed_data(obj,0,&error);
 \endcode
 \param[in]  obj    dwg_obj_obj*
-\param[in]  index  [0 - num_eed-1]
+\param[in]  idx  [0 - num_eed-1]
 \param[out] error  set to 0 for ok, 1 if obj == NULL or 2 if index out of bounds.
 */
 dwg_entity_eed_data *
 dwg_obj_get_eed_data(const dwg_obj_obj *restrict obj,
-                     const BITCODE_BL index,
+                     const BITCODE_BL idx,
                      int *restrict error)
 {
   if (!obj) {
@@ -21117,13 +21117,13 @@ dwg_obj_get_eed_data(const dwg_obj_obj *restrict obj,
     LOG_ERROR("%s: empty or invalid obj", __FUNCTION__)
     return NULL;
   }
-  else if (index >= obj->num_eed) {
+  else if (idx >= obj->num_eed) {
     *error = 2;
     return NULL;
   }
   else {
     *error = 0;
-    return obj->eed[index].data;
+    return obj->eed[idx].data;
   }
 }
 
