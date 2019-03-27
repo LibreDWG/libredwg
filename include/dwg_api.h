@@ -1137,6 +1137,8 @@ dwg_ent_set_BOOL(void *restrict _obj,
                  const BITCODE_B num)
   __nonnull ((1, 2));
 
+#ifndef SWIGIMPORTED
+
 /********************************************************************
 *                    FUNCTIONS FOR CIRCLE ENTITY                    *
 *********************************************************************/
@@ -4803,116 +4805,116 @@ dwg_ent_mline_get_verts(const dwg_ent_mline *restrict mline,
 EXPORT unsigned char
 dwg_ent_3dsolid_get_acis_empty(const dwg_ent_3dsolid *restrict _3dsolid,
                           int *restrict error)
-  __nonnull ((2));
+  __nonnull ((2)) /*_deprecated_dynapi_getter*/;
 
 EXPORT void
 dwg_ent_3dsolid_set_acis_empty(dwg_ent_3dsolid *restrict _3dsolid,
                                const unsigned char acis,
                                int *restrict error)
-  __nonnull ((3));
+  __nonnull ((3)) /*_deprecated_dynapi_setter*/;
 
 EXPORT BITCODE_BS
 dwg_ent_3dsolid_get_version(const dwg_ent_3dsolid *restrict _3dsolid,
                             int *restrict error)
-  __nonnull ((2));
+  __nonnull ((2)) /*_deprecated_dynapi_getter*/;
 
 EXPORT unsigned char*
 dwg_ent_3dsolid_get_acis_data(const dwg_ent_3dsolid *restrict _3dsolid,
                               int *restrict error)
-  __nonnull ((2));
+  __nonnull ((2)) /*_deprecated_dynapi_getter*/;
 
 EXPORT void
 dwg_ent_3dsolid_set_acis_data(dwg_ent_3dsolid *restrict _3dsolid,
                               const unsigned char *restrict sat_data,
                               int *restrict error)
-  __nonnull ((2, 3));
+  __nonnull ((2, 3)) /*_deprecated_dynapi_setter*/;
 
 EXPORT char
 dwg_ent_3dsolid_get_wireframe_data_present(const dwg_ent_3dsolid *restrict _3dsolid,
                                            int *restrict error)
-  __nonnull ((2));
+  __nonnull ((2)) /*_deprecated_dynapi_getter*/;
 
 EXPORT void
 dwg_ent_3dsolid_set_wireframe_data_present(dwg_ent_3dsolid *restrict _3dsolid,
                                            const char present,
                                            int *restrict error)
-  __nonnull ((3));
+  __nonnull ((3)) /*_deprecated_dynapi_setter*/;
 
 EXPORT char
 dwg_ent_3dsolid_get_point_present(const dwg_ent_3dsolid *restrict _3dsolid,
                                   int *restrict error)
-  __nonnull ((2));
+  __nonnull ((2)) /*_deprecated_dynapi_getter*/;
 
 EXPORT void
 dwg_ent_3dsolid_set_point_present(dwg_ent_3dsolid *restrict _3dsolid,
                                   const char present,
                                   int *restrict error)
-  __nonnull ((3));
+  __nonnull ((3)) /*_deprecated_dynapi_setter*/;
 
 EXPORT void
 dwg_ent_3dsolid_get_point(const dwg_ent_3dsolid *restrict _3dsolid,
                           dwg_point_3d *restrict point,
                           int *restrict error)
-  __nonnull ((2, 3));
+  __nonnull ((2, 3)) /*_deprecated_dynapi_getter*/;
 
 EXPORT void
 dwg_ent_3dsolid_set_point(dwg_ent_3dsolid *restrict _3dsolid,
                           const dwg_point_3d *restrict point,
                           int *restrict error)
-  __nonnull ((2, 3));
+  __nonnull ((2, 3)) /*_deprecated_dynapi_setter*/;
 
 EXPORT BITCODE_BL
 dwg_ent_3dsolid_get_num_isolines(const dwg_ent_3dsolid *restrict _3dsolid,
                                  int *restrict error)
-  __nonnull ((2));
+  __nonnull ((2)) /*_deprecated_dynapi_getter*/;
 
 EXPORT void
 dwg_ent_3dsolid_set_num_isolines(dwg_ent_3dsolid *restrict _3dsolid,
                                  const BITCODE_BL num,
                                  int *restrict error)
-  __nonnull ((3));
+  __nonnull ((3)) /*_deprecated_dynapi_setter*/;
 
 EXPORT char
 dwg_ent_3dsolid_get_isoline_present(const dwg_ent_3dsolid *restrict _3dsolid,
                                     int *restrict error)
-  __nonnull ((2));
+  __nonnull ((2)) /*_deprecated_dynapi_getter*/;
 
 EXPORT void
 dwg_ent_3dsolid_set_isoline_present(dwg_ent_3dsolid *restrict _3dsolid,
                                     const char present,
                                     int *restrict error)
-  __nonnull ((3));
+  __nonnull ((3)) /*_deprecated_dynapi_setter*/;
 
 EXPORT BITCODE_BL
 dwg_ent_3dsolid_get_num_wires(const dwg_ent_3dsolid *restrict _3dsolid,
                               int *restrict error)
-  __nonnull ((2));
+  __nonnull ((2)) /*_deprecated_dynapi_getter*/;
 
 EXPORT dwg_3dsolid_wire *
 dwg_ent_3dsolid_get_wires(const dwg_ent_3dsolid *restrict _3dsolid,
                           int *restrict error)
-  __nonnull ((2));
+  __nonnull ((2)) /*_deprecated_dynapi_getter*/;
 
 EXPORT BITCODE_BL
 dwg_ent_3dsolid_get_num_silhouettes(const dwg_ent_3dsolid *restrict _3dsolid,
                                     int *restrict error)
-  __nonnull ((2));
+  __nonnull ((2)) /*_deprecated_dynapi_getter*/;
 
 EXPORT dwg_3dsolid_silhouette *
 dwg_ent_3dsolid_get_silhouettes(const dwg_ent_3dsolid *restrict _3dsolid,
                                 int *restrict error)
-  __nonnull ((2));
+  __nonnull ((2)) /*_deprecated_dynapi_getter*/;
 
 EXPORT unsigned char
 dwg_ent_3dsolid_get_acis_empty2(const dwg_ent_3dsolid *restrict _3dsolid,
                                 int *restrict error)
-  __nonnull ((2));
+  __nonnull ((2)) /*_deprecated_dynapi_getter*/;
 
 EXPORT void
 dwg_ent_3dsolid_set_acis_empty2(dwg_ent_3dsolid *restrict _3dsolid,
                                 const unsigned char empty2,
                                 int *restrict error)
-  __nonnull ((3));
+  __nonnull ((3)) /*_deprecated_dynapi_setter*/;
 
 /********************************************************************
 *                   FUNCTIONS FOR REGION ENTITY                     *
@@ -5850,11 +5852,13 @@ dwg_ent_table_get_data_vert_right_visibility(const dwg_ent_table *restrict table
 
 // Get/Set vertind of a vertex_pface_face entity
 EXPORT BITCODE_BS
-dwg_ent_vertex_pface_face_get_vertind(const dwg_ent_vert_pface_face *face);
+dwg_ent_vertex_pface_face_get_vertind(const dwg_ent_vert_pface_face *face)
+  _deprecated_dynapi_getter;
 
 EXPORT void
 dwg_ent_vertex_pface_face_set_vertind(dwg_ent_vert_pface_face *restrict face,
-                                      const BITCODE_BS vertind[4]);
+                                      const BITCODE_BS vertind[4])
+  __nonnull ((2)) _deprecated_dynapi_setter;
 
 /********************************************************************
 *                    FUNCTIONS FOR XRECORD OBJECT                     *
@@ -5911,6 +5915,7 @@ dwg_obj_xrecord_get_objid_handles(const dwg_obj_xrecord *restrict xrecord,
                                   int *restrict error)
   __nonnull ((2)) _deprecated_dynapi_getter;
 
+#endif /* SWIGIMPORTED */
 
 /*******************************************************************
 *                    FUNCTIONS FOR TABLES                          *

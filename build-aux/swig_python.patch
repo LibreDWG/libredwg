@@ -1,9 +1,9 @@
 difforig bindings/python/swig_python.c
 
 diff -u bindings/python/swig_python.c.orig bindings/python/swig_python.c
---- bindings/python/swig_python.c.orig	2018-12-25 13:32:08.801919400 +0100
-+++ bindings/python/swig_python.c	2018-12-25 13:32:08.945918101 +0100
-@@ -2498,7 +2498,7 @@
+--- bindings/python/swig_python.c.orig	2019-03-27 13:37:08.000000000 +0100
++++ bindings/python/swig_python.c	2019-03-27 13:37:08.000000000 +0100
+@@ -2480,7 +2480,7 @@
  */
  
  SWIGRUNTIME PyObject* 
@@ -12,7 +12,7 @@ diff -u bindings/python/swig_python.c.orig bindings/python/swig_python.c
  {
  #if (PY_VERSION_HEX >= 0x02020000)
    PyObject *inst = 0;
-@@ -2513,25 +2513,25 @@
+@@ -2495,25 +2495,25 @@
  	if (dict == NULL) {
  	  dict = PyDict_New();
  	  *dictptr = dict;
@@ -42,7 +42,7 @@ diff -u bindings/python/swig_python.c.orig bindings/python/swig_python.c
        inst = PyInstance_NewRaw(data->newargs, dict);
        Py_DECREF(dict);
      }
-@@ -2543,7 +2543,7 @@
+@@ -2525,7 +2525,7 @@
    PyObject *inst = 0;
    PyObject *dict = PyDict_New();
    if (dict) {
@@ -51,7 +51,7 @@ diff -u bindings/python/swig_python.c.orig bindings/python/swig_python.c
      inst = PyInstance_NewRaw(data->newargs, dict);
      Py_DECREF(dict);
    }
-@@ -2566,14 +2566,14 @@
+@@ -2548,14 +2548,14 @@
  #ifdef Py_TPFLAGS_GC
    PyObject_GC_Init(inst);
  #endif
@@ -68,7 +68,7 @@ diff -u bindings/python/swig_python.c.orig bindings/python/swig_python.c
  {
   PyObject *dict;
  #if (PY_VERSION_HEX >= 0x02020000) && !defined(SWIG_PYTHON_SLOW_GETSET_THIS)
-@@ -2584,12 +2584,12 @@
+@@ -2566,12 +2566,12 @@
       dict = PyDict_New();
       *dictptr = dict;
     }
@@ -83,11 +83,10 @@ diff -u bindings/python/swig_python.c.orig bindings/python/swig_python.c
   Py_DECREF(dict);
  } 
  
-@@ -219649,6 +219649,17 @@
- 
+@@ -230852,6 +230852,17 @@
  #ifdef __cplusplus
  extern "C"
-+#endif
+ #endif
 +SWIGEXPORT 
 +#if PY_VERSION_HEX >= 0x03000000
 +PyObject*
@@ -98,6 +97,7 @@ diff -u bindings/python/swig_python.c.orig bindings/python/swig_python.c
 +
 +#ifdef __cplusplus
 +extern "C"
- #endif
++#endif
  
  SWIGEXPORT 
+ #if PY_VERSION_HEX >= 0x03000000
