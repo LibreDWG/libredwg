@@ -40,6 +40,7 @@
 #   Copyright (c) 2009 Matteo Settenvini <matteo@member.fsf.org>
 #   Copyright (c) 2009 Horst Knorr <hk_classes@knoda.org>
 #   Copyright (c) 2013 Daniel Mullner <muellner@math.stanford.edu>
+#   Copyright (c) 2018 Reini Urban
 #
 #   This program is free software: you can redistribute it and/or modify it
 #   under the terms of the GNU General Public License as published by the
@@ -67,7 +68,7 @@
 #   modified version of the Autoconf Macro, you may extend this special
 #   exception to the GPL to apply to your modified version as well.
 
-#serial 21
+#serial 22
 
 AU_ALIAS([AC_PYTHON_DEVEL], [AX_PYTHON_DEVEL])
 AC_DEFUN([AX_PYTHON_DEVEL],[
@@ -219,17 +220,22 @@ else:
 	print ('python'+c[['VERSION']])
 EOD`
 
-		# This small piece shamelessly adapted from PostgreSQL python macro;
-		# credits goes to momjian, I think. I'd like to put the right name
-		# in the credits, if someone can point me in the right direction... ?
-		#
-		if test -n "$ac_python_libdir" -a -n "$ac_python_library"
-		then
-			# use the official shared library
+		# adapted from the PostgreSQL and LibreDWG python macros
+		# macports uses --enable-framework=/opt/local/Library/Frameworks
+		if test -n "$ac_python_libdir" -a -n "$ac_python_library" \
+                        -a -e "$ac_python_libdir" -a ! -e "$ac_python_library"
+                then
+                       echo use the --enable-frameworked shared library
+                       ac_python_library=`echo "$ac_python_library" | sed "s/^lib//"`
+                       PYTHON_LIBS="-L$ac_python_libdir -lpython$ac_python_version"
+                elif test -n "$ac_python_libdir" -a -n "$ac_python_library" \
+                          -a x"$ac_python_library" != x"$ac_python_soname"
+                then
+                        echo use the official shared library
 			ac_python_library=`echo "$ac_python_library" | sed "s/^lib//"`
 			PYTHON_LIBS="-L$ac_python_libdir -l$ac_python_library"
 		else
-			# old way: use libpython from python_configdir
+			echo old way: use libpython from python_configdir
 			ac_python_libdir=`$PYTHON -c \
 			  "from distutils.sysconfig import get_python_lib as f; \
 			  import os; \
@@ -265,19 +271,25 @@ EOD`
 	if test -z "$PYTHON_EXTRA_LIBS"; then
 	   PYTHON_EXTRA_LIBS=`$PYTHON -c "import distutils.sysconfig; \
                 conf = distutils.sysconfig.get_config_var; \
-                print (conf('LIBS') + ' ' + conf('SYSLIBS'))"`
+                print (conf('LOCALMODLIBS') + ' ' + conf('LIBS') + ' ' + conf('SYSLIBS'))"`
 	fi
 	AC_MSG_RESULT([$PYTHON_EXTRA_LIBS])
 	AC_SUBST(PYTHON_EXTRA_LIBS)
 
 	#
-	# linking flags needed when embedding
+	# linking flags needed when embedding. broken for macports:
+        # --enable-framework=/opt/local/Library/Frameworks -L prefix is missing.
+        # -Wl,-stack_size,1000000  -framework CoreFoundation Python.framework/Versions/3.6/Python
 	#
 	AC_MSG_CHECKING(python extra linking flags)
 	if test -z "$PYTHON_EXTRA_LDFLAGS"; then
-		PYTHON_EXTRA_LDFLAGS=`$PYTHON -c "import distutils.sysconfig; \
+             case $PYTHON_SITE_PKG in
+             /opt/local/Library/Frameworks*) ;;
+             *) PYTHON_EXTRA_LDFLAGS=`$PYTHON -c "import distutils.sysconfig; \
 			conf = distutils.sysconfig.get_config_var; \
 			print (conf('LINKFORSHARED'))"`
+                ;;
+             esac
 	fi
 	AC_MSG_RESULT([$PYTHON_EXTRA_LDFLAGS])
 	AC_SUBST(PYTHON_EXTRA_LDFLAGS)
@@ -290,7 +302,7 @@ EOD`
 	ac_save_LIBS="$LIBS"
 	ac_save_LDFLAGS="$LDFLAGS"
 	ac_save_CPPFLAGS="$CPPFLAGS"
-	LIBS="$ac_save_LIBS $PYTHON_LIBS $PYTHON_EXTRA_LIBS $PYTHON_EXTRA_LIBS"
+	LIBS="$ac_save_LIBS $PYTHON_LIBS $PYTHON_EXTRA_LIBS"
 	LDFLAGS="$ac_save_LDFLAGS $PYTHON_EXTRA_LDFLAGS"
 	CPPFLAGS="$ac_save_CPPFLAGS $PYTHON_CPPFLAGS"
 	AC_LANG_PUSH([C])
