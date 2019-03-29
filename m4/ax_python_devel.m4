@@ -221,18 +221,10 @@ else:
 EOD`
 
 		# adapted from the PostgreSQL and LibreDWG python macros
-		# macports uses --enable-framework=/opt/local/Library/Frameworks
-		if test -n "$ac_python_libdir" -a -n "$ac_python_library" \
-                        -a -e "$ac_python_libdir" -a ! -e "$ac_python_library"
-                then
-                       echo use the --enable-frameworked shared library
-                       ac_python_library=`echo "$ac_python_library" | sed "s/^lib//"`
-                       PYTHON_LIBS="-L$ac_python_libdir -lpython$ac_python_version"
-                elif test -n "$ac_python_libdir" -a -n "$ac_python_library" \
-                          -a x"$ac_python_library" != x"$ac_python_soname"
+                if test -n "$ac_python_libdir" -a -n "$ac_python_library"
                 then
                         echo use the official shared library
-			ac_python_library=`echo "$ac_python_library" | sed "s/^lib//"`
+			ac_python_library=`echo "$ac_python_library" | sed "s/^lib//;s/\.a$//;s/\.dll$//"`
 			PYTHON_LIBS="-L$ac_python_libdir -l$ac_python_library"
 		else
 			echo old way: use libpython from python_configdir

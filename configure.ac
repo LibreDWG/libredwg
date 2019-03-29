@@ -218,6 +218,13 @@ AC_ARG_ENABLE([trace],AS_HELP_STRING([--enable-trace],[
   AC_MSG_RESULT([yes]),
   AC_MSG_RESULT([no (default)]))
 
+AC_CHECK_FUNCS([setenv],[],
+  AS_IF([test x$enable_trace = xyes],
+    [AC_MSG_WARN([setenv not found. --enable-trace is limited with cmdline apps.
+      Only -v args are taken for verbosity not the LIBREDWG_TRACE env var.])],
+    [AC_MSG_RESULT([setenv not needed. no --enable-trace.])]
+    ))
+
 dnl --enable-debug sets DEBUG_CLASSES, will crash acad import
 AC_MSG_CHECKING([--enable-debug])
 AC_ARG_ENABLE([debug],AS_HELP_STRING([--enable-debug],[
@@ -282,13 +289,6 @@ else
 fi
 AM_CONDITIONAL(ENABLE_GCOV, test "x$enable_gcov" = "xtrue")
 
-AC_CHECK_FUNCS([setenv],[],
-  AS_IF([test x$enable_trace = xyes],
-    [AC_MSG_WARN([setenv not found. --enable-trace is limited with cmdline apps.
-      Only -v args are taken for verbosity not the LIBREDWG_TRACE env var.])],
-    [AC_MSG_RESULT([setenv not needed. no --enable-trace.])]
-    ))
-
 dnl Check for mingw, cross and wine
 AM_CONDITIONAL([HAVE_MINGW], [test "x$host_os" = "xmingw32"])
 AM_CONDITIONAL([HAVE_MINGW_CROSS],
@@ -314,8 +314,8 @@ AC_ARG_ENABLE(python,
 	[case "${enableval}" in
 	yes) enable_python=yes; AC_MSG_RESULT([enabled]) ;;
 	no)  enable_python=no; AC_MSG_RESULT([disabled]) ;;
-	*)   enable_python=yes ; PYTHON="${enableval}"; AC_MSG_RESULT([enabled]) ;;
-	esac], [enable_python=check; AC_MSG_RESULT([check]) ])
+	*)   enable_python=yes; PYTHON="${enableval}"; AC_MSG_RESULT([enabled ($PYTHON)]) ;;
+	esac], [enable_python=check; AC_MSG_RESULT([check (default)]) ])
 
 if test x$cross_compiling = xno -a x$enable_bindings = xyes; then
     AX_PKG_SWIG([1.3.17], [],
