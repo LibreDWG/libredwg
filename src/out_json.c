@@ -42,8 +42,9 @@ static unsigned int cur_ver = 0;
 /* see also examples/unknown.c */
 #ifdef HAVE_NATIVE_WCHAR2
 static wchar_t* wcquote(wchar_t *restrict dest, const wchar_t *restrict src);
-#endif
+#else
 static void  print_wcquote(Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr);
+#endif
 
 static void _prefix(Bit_Chain* dat);
 
@@ -125,9 +126,9 @@ static void _prefix(Bit_Chain* dat);
 
 #ifdef HAVE_NATIVE_WCHAR2
 # define VALUE_TEXT_TU(wstr) \
-    if (wstr && (1 || wcschr(wstr, L'"') || wcschr(wstr, L'\\') || wcschr(wstr, L'\n'))) { \
-      wchar_t *_buf = malloc(6*wcslen(wstr)+2); \
-      fprintf(dat->fh, "\"%ls\",\n", wcquote(_buf, wstr)); \
+    if (wstr && (1 || wcschr((wchar_t*)wstr, L'"') || wcschr((wchar_t*)wstr, L'\\') || wcschr((wchar_t*)wstr, L'\n'))) { \
+      wchar_t *_buf = malloc(6*wcslen((wchar_t*)wstr)+2); \
+      fprintf(dat->fh, "\"%ls\",\n", wcquote(_buf, (wchar_t*)wstr)); \
       free(_buf); \
     } else { \
       fprintf(dat->fh, "\"%ls\",\n", wstr ? (wchar_t*)wstr : L""); \
@@ -492,6 +493,8 @@ json_common_entity_handle_data(Bit_Chain *restrict dat, Dwg_Object *restrict obj
 
 #include "dwg.spec"
 
+#ifndef HAVE_NATIVE_WCHAR2
+
 static void
 print_wcquote(Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr) {
   BITCODE_TU ws = (BITCODE_TU)wstr;
@@ -520,28 +523,8 @@ print_wcquote(Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr) {
   fprintf(dat->fh, "\",\n");
 }
 
-char*
-json_cquote(char *restrict dest, const char *restrict src) {
-  unsigned char c;
-  unsigned char *s = (unsigned char*)src;
-  char *d = dest;
-  while ((c = *s++)) {
-    if      (c == '"')  { *dest++ = '\\'; *dest++ = c; }
-    else if (c == '\\') { *dest++ = '\\'; *dest++ = c; }
-    else if (c == '\n') { *dest++ = '\\'; *dest++ = 'n'; }
-    else if (c == '\r') { *dest++ = '\\'; *dest++ = 'r'; }
-    else if (c < 0x1f)  { *dest++ = '\\'; *dest++ = 'u';
-                          *dest++ = '0';  *dest++ = '0';
-                          *dest++ = c < 0x10 ? '0' : '1';
-                          *dest++ = (c%16) > 10 ? 'a' + (c%16) - 10 : '0' + (c%16);
-                        }
-    else                  *dest++ = c;
-  }
-  *dest = 0; //add final delim, skipped above
-  return d;
-}
+#else
 
-#ifdef HAVE_NATIVE_WCHAR2
 static wchar_t*
 wcquote(wchar_t *restrict dest, const wchar_t *restrict src) {
   wchar_t c;
@@ -562,7 +545,29 @@ wcquote(wchar_t *restrict dest, const wchar_t *restrict src) {
   *dest = 0; //add final delim, skipped above
   return d;
 }
-#endif
+
+#endif /* HAVE_NATIVE_WCHAR2 */
+
+char*
+json_cquote(char *restrict dest, const char *restrict src) {
+  unsigned char c;
+  unsigned char *s = (unsigned char*)src;
+  char *d = dest;
+  while ((c = *s++)) {
+    if      (c == '"')  { *dest++ = '\\'; *dest++ = c; }
+    else if (c == '\\') { *dest++ = '\\'; *dest++ = c; }
+    else if (c == '\n') { *dest++ = '\\'; *dest++ = 'n'; }
+    else if (c == '\r') { *dest++ = '\\'; *dest++ = 'r'; }
+    else if (c < 0x1f)  { *dest++ = '\\'; *dest++ = 'u';
+                          *dest++ = '0';  *dest++ = '0';
+                          *dest++ = c < 0x10 ? '0' : '1';
+                          *dest++ = (c%16) > 10 ? 'a' + (c%16) - 10 : '0' + (c%16);
+                        }
+    else                  *dest++ = c;
+  }
+  *dest = 0; //add final delim, skipped above
+  return d;
+}
 
 /* returns 0 on success
  */

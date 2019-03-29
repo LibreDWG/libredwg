@@ -4341,7 +4341,7 @@ dwg_dynapi_entity_set_value(void *restrict _obj, const char *restrict name,
             {
 #if defined(HAVE_WCHAR_H) && defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
               str = malloc(2*(wcslen((wchar_t*)value)+1));
-              wcscpy(str, value);
+              wcscpy((wchar_t*)str, value);
 #else
               int length=0;
               for (; ((BITCODE_TU)value)[length]; length++) ;
