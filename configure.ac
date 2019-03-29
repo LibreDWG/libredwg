@@ -321,6 +321,7 @@ if test x$cross_compiling = xno -a x$enable_bindings = xyes; then
     AX_PKG_SWIG([1.3.17], [],
       AC_MSG_WARN([SWIG is required for python bindings. disabled]))
     if test -n "$SWIG" -a x$enable_python != xno; then
+      dnl ls -al /usr/bin/python* >&6
       if test x$enable_python = xyes; then
         dnl die on error
         AM_PATH_PYTHON([2.7])
