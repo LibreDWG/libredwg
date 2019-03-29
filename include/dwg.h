@@ -86,6 +86,7 @@ typedef unsigned char BITCODE_3B;
 //#define BITCODE_RL uint32_t
 //#define BITCODE_BLd int32_t
 //#define BITCODE_RLd int32_t
+typedef int16_t BITCODE_BSd;
 typedef uint16_t BITCODE_BS;
 typedef uint16_t BITCODE_RS;
 typedef uint32_t BITCODE_BL;
@@ -481,7 +482,7 @@ typedef struct _dwg_object_ref
  */
 typedef struct _dwg_color /* CmColor: R15 and earlier */
 {
-  BITCODE_BS index;
+  BITCODE_BSd index;  /* may be negative */
   BITCODE_BS flag;    /* 1: name follows, 2: book name follows */
   BITCODE_BL rgb;
   Dwg_Handle *handle;
