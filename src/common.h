@@ -21,6 +21,9 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#ifdef __XSI_VISIBLE
+#  undef __XSI_VISIBLE /* redefined in config.h */
+#endif
 #include "config.h"
 #include <stdint.h>
 #include <inttypes.h>
