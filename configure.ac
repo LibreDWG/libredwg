@@ -321,7 +321,14 @@ if test x$cross_compiling = xno -a x$enable_bindings = xyes; then
     AX_PKG_SWIG([1.3.17], [],
       AC_MSG_WARN([SWIG is required for python bindings. disabled]))
     if test -n "$SWIG" -a x$enable_python != xno; then
-      AM_PATH_PYTHON([2.7])
+      if test x$enable_python = xyes; then
+        dnl die on error
+        AM_PATH_PYTHON([2.7])
+      else
+        dnl skip on error
+        AM_PATH_PYTHON
+        PYTHON_NOVERSIONCHECK=1
+      fi
       SWIG_PYTHON
       AC_CHECK_PROGS([PATCH], [patch])
     fi
@@ -331,7 +338,14 @@ if test x$cross_compiling = xno -a x$enable_bindings = xyes; then
 else
     AC_MSG_WARN([disabled swig bindings])
     if test x$enable_python != xno; then
+      if test x$enable_python = xyes; then
+        dnl die on error
         AM_PATH_PYTHON([2.7])
+      else
+        dnl skip on error
+        AM_PATH_PYTHON
+        PYTHON_NOVERSIONCHECK=1
+      fi
     fi
 fi
 
