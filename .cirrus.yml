@@ -1,10 +1,11 @@
-# Build configuration for https://cirrus-ci.org
+# Build configuration for https://cirrus-ci.com/github/LibreDWG/libredwg
 
 freebsd_instance:
   image: freebsd-11-2-release-amd64
 
 task:
   auto_cancellation: $CIRRUS_BRANCH != 'master' && $CIRRUS_BRANCH !=~ 'smoke/.*'
+  only_if: $CIRRUS_BRANCH =~ 'smoke/.*' || $CIRRUS_BRANCH == 'master'
   install_script:
     - pkg install -y autoconf automake libtool pkgconf python36 py36-libxml2 pcre2 libxml2 dejagnu texinfo
   build_script:
