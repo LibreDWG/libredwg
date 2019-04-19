@@ -95,13 +95,13 @@ while (<$in>) {
       $n = $1;
     } elsif (/^typedef struct (_dwg_\S+)$/) {
       $n = $1;
-    } elsif (/^#define (COMMON_\w+)\((\w+)\)/) {
+    } elsif (/^#define (COMMON_\w+)\((\w+)\)/) { # COMMON_TABLE_CONTROL_FIELDS
       # BUG: Convert::Binary::C cannot separate H* from H, both are just Dwg_Object_Ref
       # So we need to parse the defines
       $n = $1;
       $f = $2;
       $h{$n}{reactors} = 'H*'; # has no ;
-    } elsif (/^#define (COMMON_\w+)/) {
+    } elsif (/^#define (COMMON_\w+)/) { # COMMON_ENTITY_POLYLINE
       $n = $1;
       $h{$n}{seqend}   = 'H'; # has no ;
     }
@@ -113,9 +113,9 @@ while (<$in>) {
     $v =~ s/^_3/3/;
     $type =~ s/\s+$//;
     if ($n eq 'COMMON_TABLE_CONTROL_FIELDS' && $v eq 'entries') {
-      for (qw(block_headers layers styles linetypes views ucs vports apps dimstyles vport_entity_headers)) {
-        $h{$n}{$_} = 'H*';
-      }
+      $h{$n}{$_} = 'H*'
+        for qw(block_headers layers styles linetypes views ucs vports apps
+               dimstyles vport_entity_headers);
     }
     $h{$n}{$v} = $type;
   }
@@ -259,10 +259,10 @@ sub out_struct {
     }
     $type = $bc if $bc;
     if ($name eq 'encr_sat_data') {
-      $type = 'char**'; $bc = '';
+      $type = 'char **'; $bc = '';
     }
     $type =~ s/\s+$//;
-    my $size = $bc ? "sizeof(BITCODE_$type)" : "sizeof($type)";
+    my $size = $bc ? "sizeof (BITCODE_$type)" : "sizeof ($type)";
     $type =~ s/BITCODE_//;
     # TODO: DIMENSION_COMMON, _3DSOLID_FIELDS macros
     if ($type eq 'unsigned char') {
@@ -296,7 +296,7 @@ sub out_struct {
     } elsif ($type =~ /\b(unsigned|char|int|long|double)\b/) {
       warn "unexpanded $type $n.$name\n";
     } elsif ($type =~ /^struct/) {
-      $size = "sizeof(void*)";
+      $size = "sizeof (void *)";
     } elsif ($type =~ /^HASH\(/) { # inlined struct or union
       warn "ignore inlined field $n.$name\n";
       next;
@@ -307,7 +307,7 @@ sub out_struct {
     my $sname = $name;
     if ($name =~ /\[(\d+)\]$/) {
       $is_malloc = 0;
-      $size = "$1*$size";
+      $size = "$1 * $size";
       $sname =~ s/\[(\d+)\]$//;
     }
     $ENT{$key}->{$name} = $type;
@@ -317,7 +317,7 @@ sub out_struct {
       ($name eq 'parent') or
       ($key eq 'header_variables' and $name eq lc($name));
 
-    printf $fh "  { \"%s\", \"%s\", %s, OFF(%s,%s), %d,%d,%d, %d },\n",
+    printf $fh "  { \"%s\", \"%s\", %s, OFF (%s,%s), %d,%d,%d, %d },\n",
       $name, $type, $size, $tmpl, $sname, $is_indirect, $is_malloc, $is_string, $dxf;
   }
   print $fh "  {NULL, NULL, 0, 0, 0,0,0, 0},\n";
@@ -481,43 +481,47 @@ for (<$in>) {
         print $fh <<"EOF";
   {
     $type $var;
-    if (dwg_dynapi_header_value(dwg, "$name", &$var, NULL) &&
-        $var == dwg->header_vars.$name)
+    if (dwg_dynapi_header_value (dwg, "$name", &$var, NULL)
+        && $var == dwg->header_vars.$name)
       {
         pass ("HEADER.$name [$stype] $fmt", $var);
       }
     else
       {
-        fail ("HEADER.$name [$stype] $fmt != $fmt", dwg->header_vars.$sname, $var); error++;
+        fail ("HEADER.$name [$stype] $fmt != $fmt", dwg->header_vars.$sname, $var);
+        error++;
       }
 EOF
         if ($type =~ /(int|long|short|char ||double|_B\b|_B[BSLD]\b|_R[CSLD])/) {
           print $fh "    $var++;\n";
         }
         print $fh <<"EOF";
-    if (dwg_dynapi_header_set_value(dwg, "$name", &$var) &&
-        $var == dwg->header_vars.$name)
+    if (dwg_dynapi_header_set_value (dwg, "$name", &$var)
+        && $var == dwg->header_vars.$name)
       {
         pass ("HEADER.$name [$stype] set+1 $fmt", $var);
       }
     else
       {
-        fail ("HEADER.$name [$stype] set+1 $fmt != $fmt", dwg->header_vars.$sname, $var); error++;
+        fail ("HEADER.$name [$stype] set+1 $fmt != $fmt",
+              dwg->header_vars.$sname, $var);
+        error++;
       }
 EOF
         if ($type =~ /(int|long|short|char ||double|_B\b|_B[BSLD]\b|_R[CSLD])/) {
-          print $fh "    $var--; dwg_dynapi_header_set_value(dwg, \"$name\", &$var);\n";
+          print $fh "    $var--;\n";
+          print $fh "    dwg_dynapi_header_set_value (dwg, \"$name\", &$var);\n";
         }
         print $fh "\n  }\n";
       } else {
         print $fh <<"EOF";
   {
     $type $var;
-    if (dwg_dynapi_header_value(dwg, "$name", &$lname, NULL)
+    if (dwg_dynapi_header_value (dwg, "$name", &$lname, NULL)
 EOF
         if ($type !~ /\*\*/) {
           print $fh <<"EOF";
-        && !memcmp(&$lname, &dwg->header_vars.$sname, sizeof(dwg->header_vars.$sname))
+        && !memcmp (&$lname, &dwg->header_vars.$sname, sizeof (dwg->header_vars.$sname))
 EOF
         }
         print $fh <<"EOF";
@@ -527,7 +531,8 @@ EOF
       }
     else
       {
-        fail ("HEADER.$name [$stype]"); error++;
+        fail ("HEADER.$name [$stype]");
+        error++;
       }
   }
 EOF
@@ -589,28 +594,30 @@ EOF
       print $fh <<"EOF";
   {
     $type $var;
-    if (dwg_dynapi_entity_value($lname, "$name", "$var", &$svar, NULL) &&
-        $var == $lname->$svar)
+    if (dwg_dynapi_entity_value($lname, "$name", "$var", &$svar, NULL)
+        && $var == $lname->$svar)
       {
         pass ("$name.$var [$stype] $fmt", $svar);
       }
     else
       {
-        fail ("$name.$var [$stype] $fmt != $fmt", $lname->$svar, $svar); error++;
+        fail ("$name.$var [$stype] $fmt != $fmt", $lname->$svar, $svar);
+        error++;
       }
 EOF
       if ($type =~ /(int|long|short|char|double|_B\b|_B[BSLD]\b|_R[CSLD])/) {
         print $fh "    $svar++;\n";
       }
       print $fh <<"EOF";
-    if (dwg_dynapi_entity_set_value($lname, "$name", "$var", &$svar) &&
-        $var == $lname->$svar)
+    if (dwg_dynapi_entity_set_value ($lname, "$name", "$var", &$svar)
+        && $var == $lname->$svar)
       {
         pass ("$name.$var [$stype] set+1 $fmt", $svar);
       }
     else
       {
-        fail ("$name.$var [$stype] set+1 $fmt != $fmt", $lname->$svar, $svar); error++;
+        fail ("$name.$var [$stype] set+1 $fmt != $fmt", $lname->$svar, $svar);
+        error++;
       }
 EOF
       if ($type =~ /(int|long|short|char ||double|_B\b|_B[BSLD]\b|_R[CSLD])/) {
@@ -659,14 +666,15 @@ EOF
   {
     $type $var;
     BITCODE_BL count = obj_obj->num_reactors;
-    if (dwg_dynapi_entity_value($lname, "$name", "$var", &$svar, NULL)
+    if (dwg_dynapi_entity_value ($lname, "$name", "$var", &$svar, NULL)
         && $svar == $lname->$svar)
       {
         pass ("$name.$var [$stype] * %u $countfield", count);
       }
     else
       {
-        fail ("$name.$var [$stype] * %u $countfield", count); error++;
+        fail ("$name.$var [$stype] * %u $countfield", count);
+        error++;
       }
   }
 EOF
@@ -675,8 +683,8 @@ EOF
   {
     $type $var;
     BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value($lname, "$name", "$countfield", &count, NULL) &&
-        dwg_dynapi_entity_value($lname, "$name", "$var", &$svar, NULL)
+    if (dwg_dynapi_entity_value ($lname, "$name", "$countfield", &count, NULL)
+        && dwg_dynapi_entity_value ($lname, "$name", "$var", &$svar, NULL)
 EOF
         if ($type !~ /\*\*/) {
           print $fh "        && $svar == $lname->$svar";
@@ -688,7 +696,8 @@ EOF
       }
     else
       {
-        fail ("$name.$var [$stype] * %u $countfield", count); error++;
+        fail ("$name.$var [$stype] * %u $countfield", count);
+        error++;
       }
   }
 EOF
@@ -702,9 +711,9 @@ EOF
 EOF
         if ($stype =~ /^(TV|RC\*|unsigned char\*|char\*)$/) {
           $is_str = 1;
-          print $fh "        && !strcmp((char*)$svar, (char*)$lname->$svar))\n";
+          print $fh "        && !strcmp ((char *)$svar, (char *)$lname->$svar))\n";
         } elsif ($type !~ /\*\*/) {
-          print $fh "        && !memcmp(&$svar, &$lname->$svar, sizeof($lname->$svar)))\n";
+          print $fh "        && !memcmp (&$svar, &$lname->$svar, sizeof ($lname->$svar)))\n";
         } else {
           print $fh ")\n";
         }
@@ -715,7 +724,8 @@ EOF
       }
     else
       {
-        fail ("$name.$var [$stype] '$fmt' <> '$fmt'", $svar, $lname->$svar); error++;
+        fail ("$name.$var [$stype] '$fmt' <> '$fmt'", $svar, $lname->$svar);
+        error++;
       }
   }
 EOF
@@ -726,7 +736,8 @@ EOF
       }
     else
       {
-        fail ("$name.$var [$stype]"); error++;
+        fail ("$name.$var [$stype]");
+        error++;
       }
   }
 EOF
@@ -747,7 +758,7 @@ EOF
       print $fh "  else" if $name ne '3DFACE'; # the first
       print $fh <<"EOF";
   if (obj->fixedtype == DWG_TYPE_$xname)
-    error += test_$xname(obj);
+    error += test_$xname (obj);
 EOF
     }
   }
@@ -786,21 +797,20 @@ __DATA__
 #include "dwg.h"
 
 #ifndef _DWG_API_H_
-Dwg_Object *
-dwg_obj_generic_to_object(const void *restrict obj,
-                          int *restrict error);
+Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
+                                       int *restrict error);
 #endif
 
 #define MAXLEN_ENTITIES @@scalar max_entity_names@@
-#define MAXLEN_OBJECTS  @@scalar max_object_names@@
+#define MAXLEN_OBJECTS @@scalar max_object_names@@
 
 /* sorted for bsearch. from typedef struct _dwg_entity_*: */
 static const char dwg_entity_names[][MAXLEN_ENTITIES] = {
-  @@list entity_names@@
+@@list entity_names@@
 };
 /* sorted for bsearch. from typedef struct _dwg_object_*: */
 static const char dwg_object_names[][MAXLEN_OBJECTS] = {
-  @@list object_names@@
+@@list object_names@@
 };
 
 @@struct _dwg_header_variables@@
@@ -827,10 +837,11 @@ static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
   //https://en.cppreference.com/w/c/algorithm/bsearch
-  return strcmp((const char*)key, (const char*)elem); //inlined
+  return strcmp ((const char *)key, (const char *)elem); //inlined
 }
 
-struct _name {
+struct _name
+{
   const char *const name;
 };
 
@@ -839,37 +850,41 @@ _name_struct_cmp (const void *restrict key, const void *restrict elem)
 {
   //https://en.cppreference.com/w/c/algorithm/bsearch
   const struct _name *f = (struct _name *)elem;
-  return strcmp((const char*)key, f->name); //deref
+  return strcmp ((const char *)key, f->name); //deref
 }
 
-#define ARRAY_SIZE(arr) (sizeof(arr)/sizeof(arr[0]))
+#define ARRAY_SIZE(arr) (sizeof (arr) / sizeof (arr[0]))
 #define NUM_ENTITIES    ARRAY_SIZE(dwg_entity_names)
 #define NUM_OBJECTS     ARRAY_SIZE(dwg_object_names)
 #define NUM_NAME_TYPES  ARRAY_SIZE(dwg_name_types)
 
 EXPORT bool
-is_dwg_entity(const char* name) {
-  return bsearch(name, dwg_entity_names, NUM_ENTITIES, MAXLEN_ENTITIES,
-                 _name_inl_cmp)
-         ? true : false;
+is_dwg_entity (const char *name)
+{
+  return bsearch (name, dwg_entity_names, NUM_ENTITIES, MAXLEN_ENTITIES,
+                  _name_inl_cmp)
+             ? true
+             : false;
 }
 
 EXPORT bool
-is_dwg_object(const char* name) {
-  return bsearch(name, dwg_object_names, NUM_OBJECTS, MAXLEN_OBJECTS,
-                 _name_inl_cmp)
-         ? true : false;
+is_dwg_object (const char *name)
+{
+  return bsearch (name, dwg_object_names, NUM_OBJECTS, MAXLEN_OBJECTS,
+                  _name_inl_cmp)
+             ? true
+             : false;
 }
 
-const Dwg_DYNAPI_field*
-dwg_dynapi_entity_fields(const char* name)
+const Dwg_DYNAPI_field *
+dwg_dynapi_entity_fields (const char *name)
 {
-  const char* p = bsearch(name, dwg_name_types,
-                          NUM_NAME_TYPES-1, sizeof(dwg_name_types[0]), /* NULL terminated */
-                          _name_struct_cmp);
+  const char *p = bsearch (name, dwg_name_types, NUM_NAME_TYPES - 1,
+                           sizeof (dwg_name_types[0]), /* NULL terminated */
+                           _name_struct_cmp);
   if (p)
     {
-      const int i = (p - (char*)dwg_name_types) / sizeof(dwg_name_types[0]);
+      const int i = (p - (char *)dwg_name_types) / sizeof (dwg_name_types[0]);
       const struct _name_type_fields *f = &dwg_name_types[i];
       return f->fields;
     }
@@ -878,15 +893,15 @@ dwg_dynapi_entity_fields(const char* name)
 }
 
 const Dwg_DYNAPI_field*
-dwg_dynapi_entity_field(const char *restrict name, const char *restrict field)
+dwg_dynapi_entity_field (const char *restrict name, const char *restrict field)
 {
-  const Dwg_DYNAPI_field* fields = dwg_dynapi_entity_fields(name);
+  const Dwg_DYNAPI_field *fields = dwg_dynapi_entity_fields (name);
   if (fields)
     { /* linear search (unsorted) */
       Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)fields;
       for (; f->name; f++)
         {
-          if (strcmp(f->name, field) == 0)
+          if (strcmp (f->name, field) == 0)
             return f;
         }
     }
@@ -895,62 +910,66 @@ dwg_dynapi_entity_field(const char *restrict name, const char *restrict field)
 
 /* generic field getters */
 EXPORT bool
-dwg_dynapi_entity_value(void *restrict _obj, const char *restrict name,
-                        const char *restrict fieldname,
-                        void *restrict out, Dwg_DYNAPI_field *restrict fp)
+dwg_dynapi_entity_value (void *restrict _obj, const char *restrict name,
+                         const char *restrict fieldname,
+                         void *restrict out, Dwg_DYNAPI_field *restrict fp)
 {
   if (!_obj || !name || !fieldname || !out)
     return false;
   {
     int error;
-    const Dwg_Object* obj = dwg_obj_generic_to_object(_obj, &error);
-    if (obj && strcmp(obj->name, name)) // objid may be 0
+    const Dwg_Object* obj = dwg_obj_generic_to_object (_obj, &error);
+    if (obj && strcmp (obj->name, name)) // objid may be 0
       {
         const int loglevel = obj->parent->opts & 0xf;
-        LOG_ERROR("%s: Invalid entity type %s, wanted %s", __FUNCTION__, obj->name, name);
+        LOG_ERROR ("%s: Invalid entity type %s, wanted %s", __FUNCTION__,
+                   obj->name, name);
         return false;
       }
     {
-      const Dwg_DYNAPI_field* f = dwg_dynapi_entity_field(name, fieldname);
+      const Dwg_DYNAPI_field *f = dwg_dynapi_entity_field (name, fieldname);
       if (!f)
         {
           int loglevel;
-          if (obj) loglevel = obj->parent->opts & 0xf;
-          else     loglevel = DWG_LOGLEVEL_ERROR;
-          LOG_ERROR("%s: Invalid %s field %s", __FUNCTION__, name, fieldname);
+          if (obj)
+            loglevel = obj->parent->opts & 0xf;
+          else
+            loglevel = DWG_LOGLEVEL_ERROR;
+          LOG_ERROR ("%s: Invalid %s field %s", __FUNCTION__, name, fieldname);
           return false;
         }
       if (fp)
-        memcpy(fp, f, sizeof(Dwg_DYNAPI_field));
-      memcpy(out, &((char*)_obj)[f->offset], f->size);
+        memcpy (fp, f, sizeof (Dwg_DYNAPI_field));
+      memcpy (out, &((char *)_obj)[f->offset], f->size);
       return true;
     }
   }
 }
 
 EXPORT bool
-dwg_dynapi_header_value(const Dwg_Data *restrict dwg, const char *restrict fieldname,
-                        void *restrict out, Dwg_DYNAPI_field *restrict fp)
+dwg_dynapi_header_value (const Dwg_Data *restrict dwg,
+                         const char *restrict fieldname, void *restrict out,
+                         Dwg_DYNAPI_field *restrict fp)
 {
   if (!dwg || !fieldname || !out)
     return false;
   {
-    Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)
-      bsearch(fieldname, _dwg_header_variables_fields,
-              ARRAY_SIZE(_dwg_header_variables_fields)-1, /* NULL terminated */
-              sizeof(_dwg_header_variables_fields[0]), _name_struct_cmp);
+    Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)bsearch (
+        fieldname, _dwg_header_variables_fields,
+        ARRAY_SIZE (_dwg_header_variables_fields) - 1, /* NULL terminated */
+        sizeof (_dwg_header_variables_fields[0]), _name_struct_cmp);
     if (f)
       {
         const Dwg_Header_Variables *const _obj = &dwg->header_vars;
         if (fp)
-          memcpy(fp, f, sizeof(Dwg_DYNAPI_field));
-        memcpy(out, &((char*)_obj)[f->offset], f->size);
+          memcpy (fp, f, sizeof (Dwg_DYNAPI_field));
+        memcpy (out, &((char*)_obj)[f->offset], f->size);
         return true;
       }
     else
       {
         const int loglevel = dwg->opts & 0xf;
-        LOG_ERROR("%s: Invalid header field %s", __FUNCTION__, fieldname);
+        LOG_ERROR ("%s: Invalid header field %s", __FUNCTION__, fieldname);
         return false;
       }
   }
@@ -965,42 +984,44 @@ dwg_dynapi_common_value(void *restrict _obj, const char *restrict fieldname,
   {
     Dwg_DYNAPI_field *f;
     int error;
-    const Dwg_Object* obj = dwg_obj_generic_to_object(_obj, &error);
+    const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
     if (!obj)
       {
         const int loglevel = DWG_LOGLEVEL_ERROR;
-        LOG_ERROR("%s: dwg_obj_generic_to_object failed", __FUNCTION__);
+        LOG_ERROR ("%s: dwg_obj_generic_to_object failed", __FUNCTION__);
         return false;
       }
     if (obj->supertype == DWG_SUPERTYPE_ENTITY)
       {
-        f = (Dwg_DYNAPI_field *)bsearch(fieldname, _dwg_object_entity_fields,
-              ARRAY_SIZE(_dwg_object_entity_fields)-1, /* NULL terminated */
-              sizeof(_dwg_object_entity_fields[0]), _name_struct_cmp);
+        f = (Dwg_DYNAPI_field *)bsearch (
+            fieldname, _dwg_object_entity_fields,
+            ARRAY_SIZE (_dwg_object_entity_fields) - 1, /* NULL terminated */
+            sizeof (_dwg_object_entity_fields[0]), _name_struct_cmp);
       }
     else if (obj->supertype == DWG_SUPERTYPE_OBJECT)
       {
-        f = (Dwg_DYNAPI_field *)bsearch(fieldname, _dwg_object_object_fields,
-              ARRAY_SIZE(_dwg_object_object_fields)-1, /* NULL terminated */
-              sizeof(_dwg_object_object_fields[0]), _name_struct_cmp);
+        f = (Dwg_DYNAPI_field *)bsearch (
+            fieldname, _dwg_object_object_fields,
+            ARRAY_SIZE (_dwg_object_object_fields) - 1, /* NULL terminated */
+            sizeof (_dwg_object_object_fields[0]), _name_struct_cmp);
       }
     else
       {
         const int loglevel = DWG_LOGLEVEL_ERROR;
-        LOG_ERROR("%s: Unhandled %s.supertype ", __FUNCTION__, obj->name);
+        LOG_ERROR ("%s: Unhandled %s.supertype ", __FUNCTION__, obj->name);
         return false;
       }
     if (f)
       {
         if (fp)
-          memcpy(fp, f, sizeof(Dwg_DYNAPI_field));
-        memcpy(out, &((char*)_obj)[f->offset], f->size);
+          memcpy (fp, f, sizeof(Dwg_DYNAPI_field));
+        memcpy (out, &((char *)_obj)[f->offset], f->size);
         return true;
       }
     else
       {
         const int loglevel = obj->parent->opts & 0xf;
-        LOG_ERROR("%s: Invalid common field %s", __FUNCTION__, fieldname);
+        LOG_ERROR ("%s: Invalid common field %s", __FUNCTION__, fieldname);
         return false;
       }
   }
@@ -1008,29 +1029,33 @@ dwg_dynapi_common_value(void *restrict _obj, const char *restrict fieldname,
 
 /* generic field setters */
 EXPORT bool
-dwg_dynapi_entity_set_value(void *restrict _obj, const char *restrict name,
-                            const char *restrict fieldname, const void *restrict value)
+dwg_dynapi_entity_set_value (void *restrict _obj, const char *restrict name,
+                             const char *restrict fieldname,
+                             const void *restrict value)
 {
   if (!_obj)
     return false;
   {
     int error;
-    const Dwg_Object* obj = dwg_obj_generic_to_object(_obj, &error);
-    if (obj && strcmp(obj->name, name))
+    const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+    if (obj && strcmp (obj->name, name))
       {
         const int loglevel = obj->parent->opts & 0xf;
-        LOG_ERROR("%s: Invalid entity type %s, wanted %s", __FUNCTION__, obj->name, name);
+        LOG_ERROR ("%s: Invalid entity type %s, wanted %s", __FUNCTION__,
+                   obj->name, name);
         return false;
       }
     {
       void *old;
-      const Dwg_DYNAPI_field* f;
-      f = dwg_dynapi_entity_field(name, fieldname);
+      const Dwg_DYNAPI_field *f;
+      f = dwg_dynapi_entity_field (name, fieldname);
       if (!f)
         {
-          const Dwg_Data *dwg = obj ? obj->parent : ((Dwg_Object_UNKNOWN_OBJ*)_obj)->parent->dwg;
+          const Dwg_Data *dwg
+            = obj ? obj->parent
+                  : ((Dwg_Object_UNKNOWN_OBJ *)_obj)->parent->dwg;
           const int loglevel = dwg->opts & 0xf;
-          LOG_ERROR("%s: Invalid %s field %s", __FUNCTION__, name, fieldname);
+          LOG_ERROR ("%s: Invalid %s field %s", __FUNCTION__, name, fieldname);
           return false;
         }
       old = &((char*)_obj)[f->offset];
@@ -1038,67 +1063,69 @@ dwg_dynapi_entity_set_value(void *restrict _obj, const char *restrict name,
       // if text strcpy or wcscpy
       if (f->is_string)
         {
-          const Dwg_Data *dwg = obj ? obj->parent : ((Dwg_Object_UNKNOWN_OBJ*)_obj)->parent->dwg;
+          const Dwg_Data *dwg
+              = obj ? obj->parent
+                    : ((Dwg_Object_UNKNOWN_OBJ *)_obj)->parent->dwg;
           char *str;
           //ascii or wide?
-          if (!strcmp(f->type, "TF") ||
-              ((!strcmp(f->type, "T") || !strcmp(f->type, "TV")) &&
-               dwg->header.version < R_2007))
+          if (!strcmp (f->type, "TF")
+              || ((!strcmp (f->type, "T") || !strcmp (f->type, "TV"))
+                  && dwg->header.version < R_2007))
             {
-              str = malloc(strlen((char*)value)+1);
-              strcpy(str, value);
-              memcpy(old, str, f->size); // size of ptr
+              str = malloc (strlen ((char*)value)+1);
+              strcpy (str, value);
+              memcpy (old, str, f->size); // size of ptr
             }
-          else
-          if (!strcmp(f->type, "TU") ||
-              ((!strcmp(f->type, "T") || !strcmp(f->type, "TV")) &&
-               dwg->header.version >= R_2007))
+          else if (!strcmp(f->type, "TU")
+                   || ((!strcmp(f->type, "T") || !strcmp(f->type, "TV"))
+                       && dwg->header.version >= R_2007))
             {
 #if defined(HAVE_WCHAR_H) && defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
-              str = malloc(2*(wcslen((wchar_t*)value)+1));
-              wcscpy((wchar_t*)str, value);
+              str = malloc (2 * (wcslen ((wchar_t *)value) + 1));
+              wcscpy ((wchar_t *)str, value);
 #else
-              int length=0;
-              for (; ((BITCODE_TU)value)[length]; length++) ;
+              int length = 0;
+              for (; ((BITCODE_TU)value)[length]; length++)
+                ;
               length++;
-              str = malloc(2*length);
-              memcpy(str, value, length*2);
+              str = malloc (2 * length);
+              memcpy (str, value, length * 2);
 #endif
-              memcpy(old, str, f->size); // size of ptr
+              memcpy (old, str, f->size); // size of ptr
             }
         }
       else
-        memcpy(old, value, f->size);
+        memcpy (old, value, f->size);
       if (f->is_malloc)
-        free(old);
+        free (old);
       return true;
     }
   }
 }
 
 EXPORT bool
-dwg_dynapi_header_set_value(const Dwg_Data *restrict dwg,
-                            const char *restrict fieldname,
-                            const void *restrict value)
+dwg_dynapi_header_set_value (const Dwg_Data *restrict dwg,
+                             const char *restrict fieldname,
+                             const void *restrict value)
 {
   if (!dwg || !fieldname)
     return false;
   {
-    Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)
-      bsearch(fieldname, _dwg_header_variables_fields,
-              ARRAY_SIZE(_dwg_header_variables_fields)-1, /* NULL terminated */
-              sizeof(_dwg_header_variables_fields[0]), _name_struct_cmp);
+    Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)bsearch (
+        fieldname, _dwg_header_variables_fields,
+        ARRAY_SIZE (_dwg_header_variables_fields) - 1, /* NULL terminated */
+        sizeof (_dwg_header_variables_fields[0]), _name_struct_cmp);
     if (f)
       {
         // there are no malloc'd fields in the HEADER, so no need to free().
         const Dwg_Header_Variables *const _obj = &dwg->header_vars;
-        memcpy(&((char*)_obj)[f->offset], value, f->size);
+        memcpy (&((char *)_obj)[f->offset], value, f->size);
         return true;
       }
     else
       {
         const int loglevel = dwg->opts & 0xf;
-        LOG_ERROR("%s: Invalid header field %s", __FUNCTION__, fieldname);
+        LOG_ERROR ("%s: Invalid header field %s", __FUNCTION__, fieldname);
         return false;
       }
   }

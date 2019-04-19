@@ -37,10 +37,8 @@
 #ifdef HAVE_WCHAR_H
 # include <wchar.h>
 #endif
-#ifndef DWG_H
-# include "dwg.h"
-#endif
 #include "common.h"
+#include "dwg.h"
 
 /**
  Structure for DWG-files raw data storage

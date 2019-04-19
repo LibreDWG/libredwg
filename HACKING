@@ -24,9 +24,18 @@ someone should probably think about and resolve them!
   - from Emacs: (info "(standards)")
   - from shell: $ info standards
 
+  We format the code now with clang-format. For include/*.h we would
+  require >= 8.0 for the new StatementMacros option, but we don't process
+  include yet, because src/gen-dynapi.pl is too fragile.
+  You can use
+
+    $ bash build-aux/clang-format-all.sh src programs examples test
+
+  or use some clang-format editor integration.
+  See https://clang.llvm.org/docs/ClangFormat.html
+
   The exceptions are:
   - [[change log maintenance]]
-  - [??? other]
 
 * version numbers
 
@@ -125,7 +134,7 @@ someone should probably think about and resolve them!
   If you want to push a branch that may be "git rebase"d in the future,
   either use the prefix "wip-" (work in progress), or your Savannah
   username followed by a slash (e.g., "juca/").
-  There are also work/* and smoke/* branches.
+  There are also "work/*" and "smoke/*" branches.
 
 * make release
 

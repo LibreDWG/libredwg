@@ -26,8 +26,8 @@
 #include "../../src/common.h"
 #include "dwg.h"
 #include "dwg_api.h"
-CLANG_DIAG_IGNORE(-Wformat-nonliteral)
-CLANG_DIAG_IGNORE(-Wmissing-prototypes)
+CLANG_DIAG_IGNORE (-Wformat-nonliteral)
+CLANG_DIAG_IGNORE (-Wmissing-prototypes)
 #include <dejagnu.h>
 CLANG_DIAG_RESTORE
 CLANG_DIAG_RESTORE
@@ -35,7 +35,8 @@ CLANG_DIAG_RESTORE
 /* for all objects/entities/header_vars:
    compare direct api vs dynapi values
 */
-static int test_header (const Dwg_Data *dwg)
+static int
+test_header (const Dwg_Data *dwg)
 {
   int error = 0;
   BITCODE_RL rl;
@@ -53,19 +54,21 @@ static int test_header (const Dwg_Data *dwg)
 #line 7261 "dynapi_test.c"
 /* @@for test_OBJECT@@ */
 
-#line 56 "dynapi_test.c.in"
-static int test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
+#line 57 "dynapi_test.c.in"
+static int
+test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
   if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
     return 0;
 #line 52912 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
-#line 64 "dynapi_test.c.in"
+#line 66 "dynapi_test.c.in"
   return error;
 }
 
-static int test_dynapi (const char *filename)
+static int
+test_dynapi (const char *filename)
 {
   int error;
   Dwg_Data dwg;
@@ -77,14 +80,15 @@ static int test_dynapi (const char *filename)
       dwg_free (&dwg);
       return 1;
     }
+
   /* On cygwin32 the dynapi works fine, but the dwg->header_vars.VARS
      reference is broken somehow (some wrong offset) */
 #if !defined(__CYGWIN__) || defined(__amd64__)
   error = test_header (&dwg);
 #endif
-  for (i=0; i<dwg.num_objects; i++)
+  for (i = 0; i < dwg.num_objects; i++)
     {
-      error += test_object(&dwg, &dwg.object[i]);
+      error += test_object (&dwg, &dwg.object[i]);
     }
   dwg_free (&dwg);
   /* This value is the return value for `main',
@@ -100,8 +104,8 @@ main (int argc, char *argv[])
   if (input == NULL)
     {
       struct stat attrib;
-      input = (char*)"example_2000.dwg";
-      if (stat(input, &attrib))
+      input = (char *)"example_2000.dwg";
+      if (stat (input, &attrib))
         {
           fprintf (stderr, "Env var INPUT not defined, %s not found\n", input);
           return EXIT_FAILURE;
