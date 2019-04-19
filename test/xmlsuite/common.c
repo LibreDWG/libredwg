@@ -1,5 +1,5 @@
-//This file contains the helper function which are used in the XML Suite
-//to prepare the result
+// This file contains the helper function which are used in the XML Suite
+// to prepare the result
 
 xmlChar *spointprepare (double x, double y, double z);
 xmlChar *doubletochar (double x);
@@ -28,12 +28,12 @@ spointprepare (double x, double y, double z)
 
   // Allocating memory for the string
   result = malloc (100 * sizeof (xmlChar));
-  n = sprintf ((char*)result, "(%.4f %.4f %.4f)", x, y, z);
+  n = sprintf ((char *)result, "(%.4f %.4f %.4f)", x, y, z);
 
-  //Check if it was transferred properly
+  // Check if it was transferred properly
   if (n < 0)
     {
-      strcpy ((char*)result, ""); /* return empty string on error */
+      strcpy ((char *)result, ""); /* return empty string on error */
     }
 
   return result;
@@ -43,7 +43,8 @@ spointprepare (double x, double y, double z)
  * This functions coverts double format in char to be emitted in the XML
  * @param double x The double digis to be converted in string
  *
- * @return char* Return the converted double in string. Return empty string if error
+ * @return char* Return the converted double in string. Return empty string if
+ * error
  */
 xmlChar *
 doubletochar (double x)
@@ -53,11 +54,11 @@ doubletochar (double x)
 
   /* Allocate memory for the string */
   result = malloc (50 * sizeof (xmlChar));
-  n = sprintf ((char*)result, "%.4f", x);
+  n = sprintf ((char *)result, "%.4f", x);
 
   if (n < 0)
     {
-      strcpy ((char*)result, ""); /* Return empty string on error */
+      strcpy ((char *)result, ""); /* Return empty string on error */
     }
 
   return result;
@@ -66,7 +67,8 @@ doubletochar (double x)
 /*
  * This functions coverts int format in char to be emitted in the XML
  *
- * @return char* Return the converted double in string. Return empty string if error
+ * @return char* Return the converted double in string. Return empty string if
+ * error
  */
 xmlChar *
 inttochar (int x)
@@ -76,10 +78,10 @@ inttochar (int x)
 
   /* Allocate memory for the string */
   result = malloc (16 * sizeof (xmlChar));
-  n = sprintf ((char*)result, "%d", x);
+  n = sprintf ((char *)result, "%d", x);
   if (n < 0)
     {
-      strcpy ((char*)result, ""); /* Return empty string on error */
+      strcpy ((char *)result, ""); /* Return empty string on error */
     }
 
   return result;
@@ -94,7 +96,8 @@ inttochar (int x)
  * @param double x The x co-ordinate of the point
  * @param double y The y co-ordinate of the point
  *
- * @return xmlChar* Returns the string in the given format. Return empty string on error
+ * @return xmlChar* Returns the string in the given format. Return empty string
+ * on error
  */
 xmlChar *
 spointprepare2 (double x, double y)
@@ -104,17 +107,16 @@ spointprepare2 (double x, double y)
 
   /* allocate memory for the string */
   result = malloc (50 * sizeof (xmlChar));
-  n = sprintf ((char*)result, "(%.4f %.4f)", x, y);
+  n = sprintf ((char *)result, "(%.4f %.4f)", x, y);
 
-  //Check if it was transferred properly
+  // Check if it was transferred properly
   if (n < 0)
     {
-      strcpy ((char*)result, ""); /* return empty string on error */
+      strcpy ((char *)result, ""); /* return empty string on error */
     }
 
   return result;
 }
-
 
 /*
  * This function converts double in hex to be used in the XML
@@ -130,13 +132,13 @@ doubletohex (double handle)
 
   /* allocate memory for the string */
   result = malloc (20 * sizeof (xmlChar));
-  n = sprintf ((char*)result, "%03x", (unsigned int)handle);
+  n = sprintf ((char *)result, "%03x", (unsigned int)handle);
 
-  //Check if it was transferred properly
+  // Check if it was transferred properly
 
   if (n < 0)
     {
-      strcpy ((char*)result, ""); /* return empty string on error */
+      strcpy ((char *)result, ""); /* return empty string on error */
     }
 
   return result;

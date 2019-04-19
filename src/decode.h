@@ -39,65 +39,52 @@ enum RES_BUF_VALUE_TYPE
   VT_BOOL = 10
 };
 
-enum RES_BUF_VALUE_TYPE
-get_base_value_type(short gc);
+enum RES_BUF_VALUE_TYPE get_base_value_type (short gc);
 
-int
-dwg_decode(Bit_Chain *dat, Dwg_Data *dwg);
-int
-dwg_decode_unknown(Bit_Chain *restrict dat, Dwg_Object *restrict obj);
-Dwg_Object_Ref*
-dwg_find_objectref(const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj);
+int dwg_decode (Bit_Chain *dat, Dwg_Data *dwg);
+int dwg_decode_unknown (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+Dwg_Object_Ref *dwg_find_objectref (const Dwg_Data *restrict dwg,
+                                    const Dwg_Object *restrict obj);
 
 /*------------------------------------------------------------------------------
  * Functions reused with decode_r2007
  */
-Dwg_Object_Ref *
-dwg_decode_handleref(Bit_Chain *restrict hdl_dat, Dwg_Object *restrict obj,
-                     Dwg_Data *restrict dwg);
+Dwg_Object_Ref *dwg_decode_handleref (Bit_Chain *restrict hdl_dat,
+                                      Dwg_Object *restrict obj,
+                                      Dwg_Data *restrict dwg);
 
-Dwg_Object_Ref *
-dwg_decode_handleref_with_code(Bit_Chain *restrict hdl_dat, Dwg_Object *restrict obj,
-                               Dwg_Data *restrict dwg, unsigned int code);
-int
-dwg_decode_header_variables(Bit_Chain* dat, Bit_Chain* hdl_dat,
-                            Bit_Chain* str_dat, Dwg_Data *restrict dwg);
-int
-dwg_decode_add_object(Dwg_Data *restrict dwg, Bit_Chain* dat, Bit_Chain* hdl_dat,
-                      long unsigned int address);
-void
-bfr_read(void *restrict dst, BITCODE_RC *restrict *restrict src, size_t size);
+Dwg_Object_Ref *dwg_decode_handleref_with_code (Bit_Chain *restrict hdl_dat,
+                                                Dwg_Object *restrict obj,
+                                                Dwg_Data *restrict dwg,
+                                                unsigned int code);
+int dwg_decode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
+                                 Bit_Chain *str_dat, Dwg_Data *restrict dwg);
+int dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
+                           Bit_Chain *hdl_dat, long unsigned int address);
+void bfr_read (void *restrict dst, BITCODE_RC *restrict *restrict src,
+               size_t size);
 
 /* reused with free */
-void
-dwg_free_xdata_resbuf(Dwg_Resbuf *rbuf);
+void dwg_free_xdata_resbuf (Dwg_Resbuf *rbuf);
 
 /* reused with encode */
-void
-dwg_resolve_objectrefs_silent(Dwg_Data *restrict dwg);
+void dwg_resolve_objectrefs_silent (Dwg_Data *restrict dwg);
 
 /* reused with out_dxf */
-char*
-dwg_dim_blockname(Dwg_Data *restrict dwg, const Dwg_Object *restrict obj);
+char *dwg_dim_blockname (Dwg_Data *restrict dwg,
+                         const Dwg_Object *restrict obj);
 
-int
-dwg_validate_INSERT(Dwg_Object *obj);
-int
-dwg_validate_POLYLINE(Dwg_Object *obj);
+int dwg_validate_INSERT (Dwg_Object *obj);
+int dwg_validate_POLYLINE (Dwg_Object *obj);
 
 /* from decode_r2007.c */
-int
-obj_string_stream(Bit_Chain *dat,
-                  Dwg_Object *restrict obj,
-                  Bit_Chain *str);
+int obj_string_stream (Bit_Chain *dat, Dwg_Object *restrict obj,
+                       Bit_Chain *str);
 
-void
-read_r2007_init(Dwg_Data *dwg);
-int
-read_r2007_meta_data(Bit_Chain *dat, Bit_Chain *hdl_dat,
-                     Dwg_Data *restrict dwg);
-void
-section_string_stream(Bit_Chain *restrict dat, BITCODE_RL bitsize,
-                      Bit_Chain *restrict str);
+void read_r2007_init (Dwg_Data *dwg);
+int read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
+                          Dwg_Data *restrict dwg);
+void section_string_stream (Bit_Chain *restrict dat, BITCODE_RL bitsize,
+                            Bit_Chain *restrict str);
 
 #endif

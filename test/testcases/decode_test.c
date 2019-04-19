@@ -1,10 +1,10 @@
 #include "../../src/common.h"
-CLANG_DIAG_IGNORE(-Wpragma-pack)
+CLANG_DIAG_IGNORE (-Wpragma-pack)
 #include "../../src/decode.c"
 CLANG_DIAG_RESTORE
 
-CLANG_DIAG_IGNORE(-Wformat-nonliteral)
-CLANG_DIAG_IGNORE(-Wmissing-prototypes)
+CLANG_DIAG_IGNORE (-Wformat-nonliteral)
+CLANG_DIAG_IGNORE (-Wmissing-prototypes)
 #include <dejagnu.h>
 CLANG_DIAG_RESTORE
 CLANG_DIAG_RESTORE
@@ -17,7 +17,7 @@ void read_two_byte_offset_tests (void);
 void
 read_literal_length_tests (void)
 {
-  //Prepare the sample data
+  // Prepare the sample data
   Bit_Chain bitchain = strtobt ("00000101");
   unsigned char opcode = 0x05;
   if (read_literal_length (&bitchain, &opcode) == 0x08)

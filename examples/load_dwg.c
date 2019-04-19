@@ -21,41 +21,48 @@
 
 #include "config.h"
 #ifdef __STDC_ALLOC_LIB__ /* for strdup */
-# define __STDC_WANT_LIB_EXT2__ 1
+#  define __STDC_WANT_LIB_EXT2__ 1
 #endif
 #ifndef _XOPEN_SOURCE /* for strdup, snprintf */
-# define _XOPEN_SOURCE 700
+#  define _XOPEN_SOURCE 700
 #endif
 #include <stdio.h>
 #include "dwg.h"
 
 #include "../programs/suffix.inc"
-static int help(void);
-int verbosity(int argc, char **argv, int i, unsigned int *opts);
+static int help (void);
+int verbosity (int argc, char **argv, int i, unsigned int *opts);
 #include "../programs/common.inc"
 
-static int usage(void) {
-  printf("\nUsage: load_dwg [-v[0-9]] DWGFILE\n");
+static int
+usage (void)
+{
+  printf ("\nUsage: load_dwg [-v[0-9]] DWGFILE\n");
   return 1;
 }
-static int opt_version(void) {
-  printf("load_dwg %s\n", PACKAGE_VERSION);
+static int
+opt_version (void)
+{
+  printf ("load_dwg %s\n", PACKAGE_VERSION);
   return 0;
 }
-static int help(void) {
-  printf("\nUsage: load_dwg [OPTION]... DWGFILE\n");
-  printf("Example to add fingerprint elements to a DWG.\n"
-         "\n");
-  printf("  -v[0-9], --verbose [0-9]  verbosity\n");
-  printf("           --help           display this help and exit\n");
-  printf("           --version        output version information and exit\n"
-         "\n");
-  printf("GNU LibreDWG online manual: <https://www.gnu.org/software/libredwg/>\n");
+static int
+help (void)
+{
+  printf ("\nUsage: load_dwg [OPTION]... DWGFILE\n");
+  printf ("Example to add fingerprint elements to a DWG.\n"
+          "\n");
+  printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
+  printf ("           --help           display this help and exit\n");
+  printf ("           --version        output version information and exit\n"
+          "\n");
+  printf ("GNU LibreDWG online manual: "
+          "<https://www.gnu.org/software/libredwg/>\n");
   return 0;
 }
 
 static void
-add_line(double x1, double y1, double x2, double y2)
+add_line (double x1, double y1, double x2, double y2)
 {
   // Make something with that
   (void)x1;
@@ -65,7 +72,7 @@ add_line(double x1, double y1, double x2, double y2)
 }
 
 static void
-add_circle(double x, double y, double R)
+add_circle (double x, double y, double R)
 {
   // Make something with that
   (void)x;
@@ -74,7 +81,7 @@ add_circle(double x, double y, double R)
 }
 
 static void
-add_text(double x, double y, char *txt)
+add_text (double x, double y, char *txt)
 {
   // Make something with that
   (void)x;
@@ -83,15 +90,15 @@ add_text(double x, double y, char *txt)
 }
 
 static int
-load_dwg(char *filename, unsigned int opts)
+load_dwg (char *filename, unsigned int opts)
 {
   BITCODE_BL i;
   int success;
   Dwg_Data dwg;
 
-  memset(&dwg, 0, sizeof(Dwg_Data));
+  memset (&dwg, 0, sizeof (Dwg_Data));
   dwg.opts = opts;
-  success = dwg_read_file(filename, &dwg);
+  success = dwg_read_file (filename, &dwg);
   for (i = 0; i < dwg.num_objects; i++)
     {
       Dwg_Entity_LINE *line;
@@ -102,20 +109,22 @@ load_dwg(char *filename, unsigned int opts)
         {
         case DWG_TYPE_LINE:
           line = dwg.object[i].tio.entity->tio.LINE;
-          add_line(line->start.x, line->end.x, line->start.y, line->end.y);
+          add_line (line->start.x, line->end.x, line->start.y, line->end.y);
           break;
         case DWG_TYPE_CIRCLE:
           circle = dwg.object[i].tio.entity->tio.CIRCLE;
-          add_circle(circle->center.x, circle->center.y, circle->radius);
+          add_circle (circle->center.x, circle->center.y, circle->radius);
           break;
         case DWG_TYPE_TEXT:
           text = dwg.object[i].tio.entity->tio.TEXT;
-          add_text(text->insertion_pt.x, text->insertion_pt.y, text->text_value);
+          add_text (text->insertion_pt.x, text->insertion_pt.y,
+                    text->text_value);
           break;
-        default: break;
+        default:
+          break;
         }
     }
-  dwg_free(&dwg);
+  dwg_free (&dwg);
   return success;
 }
 
@@ -126,22 +135,21 @@ main (int argc, char *argv[])
   unsigned int opts = 1;
 
   if (argc < 2)
-    return usage();
+    return usage ();
 #if defined(USE_TRACING) && defined(HAVE_SETENV)
-  setenv("LIBREDWG_TRACE", "1", 0);
+  setenv ("LIBREDWG_TRACE", "1", 0);
 #endif
-  if (argc > 2 &&
-      (!strcmp(argv[i], "--verbose") ||
-       !strncmp(argv[i], "-v", 2)))
+  if (argc > 2
+      && (!strcmp (argv[i], "--verbose") || !strncmp (argv[i], "-v", 2)))
     {
-      int num_args = verbosity(argc, argv, i, &opts);
+      int num_args = verbosity (argc, argv, i, &opts);
       argc -= num_args;
       i += num_args;
     }
-  if (argc > 1 && !strcmp(argv[i], "--help"))
-    return help();
-  if (argc > 1 && !strcmp(argv[i], "--version"))
-    return opt_version();
+  if (argc > 1 && !strcmp (argv[i], "--help"))
+    return help ();
+  if (argc > 1 && !strcmp (argv[i], "--version"))
+    return opt_version ();
 
   REQUIRE_INPUT_FILE_ARG (argc);
   load_dwg (argv[i], opts);

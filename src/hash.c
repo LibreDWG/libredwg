@@ -23,52 +23,58 @@
 #include <string.h>
 //#include "logging.h"
 
-dwg_inthash *hash_new(uint32_t size)
+dwg_inthash *
+hash_new (uint32_t size)
 {
-  dwg_inthash *hash = malloc(sizeof(dwg_inthash));
+  dwg_inthash *hash = malloc (sizeof (dwg_inthash));
   uint32_t cap;
   if (!hash)
     return NULL;
   // multiply with load factor,
   // and round size to next power of 2 (fast) or prime (secure),
-  if (!size) size = 15;
-  cap = (uint32_t)(size * 100.0/HASH_LOAD);
-  while (size <= cap) // this is slow, but only done once. clz would be much faster
+  if (!size)
+    size = 15;
+  cap = (uint32_t) (size * 100.0 / HASH_LOAD);
+  while (size
+         <= cap) // this is slow, but only done once. clz would be much faster
     size <<= 1U;
-  hash->array = calloc(size, sizeof(struct _hashbucket)); // key+value pairs
+  hash->array = calloc (size, sizeof (struct _hashbucket)); // key+value pairs
   hash->elems = 0;
   hash->size = size;
   return hash;
 }
 
 // if exceeds load factor
-static inline int hash_need_resize(dwg_inthash *hash)
+static inline int
+hash_need_resize (dwg_inthash *hash)
 {
-  return (uint32_t)(hash->elems * 100.0/HASH_LOAD) > hash->size;
+  return (uint32_t) (hash->elems * 100.0 / HASH_LOAD) > hash->size;
 }
 
-static void hash_resize(dwg_inthash *hash)
+static void
+hash_resize (dwg_inthash *hash)
 {
   dwg_inthash oldhash = *hash;
   uint32_t size = hash->size * 2;
   uint32_t i;
 
   // allocate key+value pairs afresh
-  hash->array = calloc(size, sizeof(struct _hashbucket));
-  if (!hash->array) {
-    *hash = oldhash;
-    return;
-  }
+  hash->array = calloc (size, sizeof (struct _hashbucket));
+  if (!hash->array)
+    {
+      *hash = oldhash;
+      return;
+    }
   hash->elems = 0;
   hash->size = size;
-  memset(hash->array, 0, size * sizeof(struct _hashbucket));
+  memset (hash->array, 0, size * sizeof (struct _hashbucket));
   // spread out the old elements in double space, less collisions
-  for (i=0; i<oldhash.size; i++)
+  for (i = 0; i < oldhash.size; i++)
     {
       if (oldhash.array[i].key)
-        hash_set(hash, oldhash.array[i].key, oldhash.array[i].value);
+        hash_set (hash, oldhash.array[i].key, oldhash.array[i].value);
     }
-  free(oldhash.array);
+  free (oldhash.array);
   return;
 }
 
@@ -77,7 +83,8 @@ static void hash_resize(dwg_inthash *hash)
 // just statistically tested to be optimal.
 // Note that this is entirely "insecure", the inverse func is trivial.
 // We don't care as we deal with DWG and had linear search before.
-static inline uint32_t hash_func(uint32_t key)
+static inline uint32_t
+hash_func (uint32_t key)
 {
   key = ((key >> 16) ^ key) * 0x45d9f3b;
   key = ((key >> 16) ^ key) * 0x45d9f3b;
@@ -86,13 +93,14 @@ static inline uint32_t hash_func(uint32_t key)
 }
 
 // 0 is disallowed as key, even if there's no deletion.
-uint32_t hash_get(dwg_inthash *hash, uint32_t key)
+uint32_t
+hash_get (dwg_inthash *hash, uint32_t key)
 {
-  uint32_t i = hash_func(key) % hash->size;
+  uint32_t i = hash_func (key) % hash->size;
   uint32_t j = i;
   while (hash->array[i].key && hash->array[i].key != key)
     {
-      //fprintf(stderr, "get collision at %d\n", i);
+      // fprintf(stderr, "get collision at %d\n", i);
       i++; // linear probing with wrap around
       if (i == hash->size)
         i = 0;
@@ -106,52 +114,57 @@ uint32_t hash_get(dwg_inthash *hash, uint32_t key)
 }
 
 // search or insert. key 0 is forbidden.
-void hash_set(dwg_inthash *hash, uint32_t key, uint32_t value)
+void
+hash_set (dwg_inthash *hash, uint32_t key, uint32_t value)
 {
-  uint32_t i = hash_func(key) % hash->size;
+  uint32_t i = hash_func (key) % hash->size;
   uint32_t j = i;
-  if (key == 0) {
-      fprintf(stderr, "forbidden 0 key\n");
+  if (key == 0)
+    {
+      fprintf (stderr, "forbidden 0 key\n");
       return;
-  }
+    }
   // empty slot
-  if (!hash->array[i].key) {
-    hash->array[i].key = key;
-    hash->array[i].value = value;
-    hash->elems++;
-    return;
-  }
+  if (!hash->array[i].key)
+    {
+      hash->array[i].key = key;
+      hash->array[i].value = value;
+      hash->elems++;
+      return;
+    }
   while (hash->array[i].key)
     {
-      if (hash->array[i].key == key) { // found
-        hash->array[i].value = value;
-        return;
-      }
-      //fprintf(stderr, "set collision at %d\n", i);
+      if (hash->array[i].key == key)
+        { // found
+          hash->array[i].value = value;
+          return;
+        }
+      // fprintf(stderr, "set collision at %d\n", i);
       i++; // linear probing with wrap around
       if (i == hash->size)
         i = 0;
       if (i == j) // not found
         {
-          //fprintf(stderr, "set not found at %d\n", i);
+          // fprintf(stderr, "set not found at %d\n", i);
           // if does not exist, add at i+1
-          if (hash_need_resize(hash)) {
-            //fprintf(stderr, "resize at %d\n", hash->size);
-            hash_resize(hash);
-            return hash_set(hash, key, value);
-          }
+          if (hash_need_resize (hash))
+            {
+              // fprintf(stderr, "resize at %d\n", hash->size);
+              hash_resize (hash);
+              return hash_set (hash, key, value);
+            }
           while (hash->array[i].key) // find next empty slot
             {
               // up to here we have no coverage!
-              //fprintf(stderr, "set 2nd collision at %d\n", i);
+              // fprintf(stderr, "set 2nd collision at %d\n", i);
               i++; // again linear probing with wrap around
               if (i == hash->size)
                 i = 0;
               if (i == j) // not found
                 {
-                  //fprintf(stderr, "not found resize at %d\n", hash->size);
-                  hash_resize(hash); // guarantees new empty slots
-                  hash_set(hash, key, value);
+                  // fprintf(stderr, "not found resize at %d\n", hash->size);
+                  hash_resize (hash); // guarantees new empty slots
+                  hash_set (hash, key, value);
                   return;
                 }
               else
@@ -171,7 +184,8 @@ void hash_set(dwg_inthash *hash, uint32_t key, uint32_t value)
   return;
 }
 
-void hash_free(dwg_inthash *hash)
+void
+hash_free (dwg_inthash *hash)
 {
   free (hash->array);
   hash->array = NULL;

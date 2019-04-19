@@ -22,28 +22,29 @@
 #include "bits.h"
 
 // global array of [obj -> [fields], ...]
-typedef struct _dxf_field {
+typedef struct _dxf_field
+{
   char *name;
   char *type;
   int dxf;
 } Dxf_Field;
 
 // to search obj ptr in array
-typedef struct _dxf_objs {
+typedef struct _dxf_objs
+{
   Dwg_Object *obj;
   int num_fields;
   int size_fields;
   Dxf_Field *fields;
 } Dxf_Objs;
 
-void dxf_add_field(Dwg_Object *restrict obj, const char *restrict name,
-                   const char *restrict type, int dxf);
-Dxf_Field* dxf_search_field(Dwg_Object *restrict obj, const char *restrict name,
-                            const char *restrict type, int dxf);
+void dxf_add_field (Dwg_Object *restrict obj, const char *restrict name,
+                    const char *restrict type, int dxf);
+Dxf_Field *dxf_search_field (Dwg_Object *restrict obj,
+                             const char *restrict name,
+                             const char *restrict type, int dxf);
 
-EXPORT int
-dwg_read_dxf(Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
-EXPORT int
-dwg_read_dxfb(Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
+EXPORT int dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
+EXPORT int dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 
 #endif

@@ -3,7 +3,7 @@
 #include <dejagnu.h>
 
 void
-low_level_process (dwg_object * obj)
+low_level_process (dwg_object *obj)
 {
   dwg_ent_dim_ordinate *dim = dwg_object_to_DIMENSION_ORDINATE (obj);
 
@@ -16,8 +16,8 @@ low_level_process (dwg_object * obj)
           dim->extrusion.x, dim->extrusion.y, dim->extrusion.z);
   printf ("ins_scale of dim_ordinate : x = %f, y = %f, z = %f\n",
           dim->ins_scale.x, dim->ins_scale.y, dim->ins_scale.z);
-  printf ("def_pt of dim_ordinate : x = %f, y = %f, z = %f\n",
-          dim->def_pt.x, dim->def_pt.y, dim->def_pt.z);
+  printf ("def_pt of dim_ordinate : x = %f, y = %f, z = %f\n", dim->def_pt.x,
+          dim->def_pt.y, dim->def_pt.z);
   printf ("feature_location_pt of dim_ordinate : x = %f, y = %f, z = %f\n",
           dim->feature_location_pt.x, dim->feature_location_pt.y,
           dim->feature_location_pt.z);
@@ -25,8 +25,8 @@ low_level_process (dwg_object * obj)
           dim->leader_endpt.x, dim->leader_endpt.y, dim->leader_endpt.z);
   printf ("clone_ins_pt of dim_ordinate : x = %f, y = %f\n",
           dim->clone_ins_pt.x, dim->clone_ins_pt.y);
-  printf ("text_mid_pt of dim_ordinate : x = %f, y = %f\n",
-          dim->text_midpt.x, dim->text_midpt.y);
+  printf ("text_mid_pt of dim_ordinate : x = %f, y = %f\n", dim->text_midpt.x,
+          dim->text_midpt.y);
   printf ("user text of dim_ordinate : %s\n", dim->user_text);
   printf ("text rotation of dim_ordinate : %f\n", dim->text_rotation);
   printf ("ins rotation of dim_ordinate : %f\n", dim->ins_rotation);
@@ -35,34 +35,37 @@ low_level_process (dwg_object * obj)
   printf ("flags1 of dim_ordinate : " FORMAT_RC "\n", dim->flag1);
   printf ("flags2 of dim_ordinate : " FORMAT_RC "\n", dim->flag2);
   printf ("act_measurement of dim_ordinate : %f\n", dim->act_measurement);
-
 }
 
 void
-api_process (dwg_object * obj)
+api_process (dwg_object *obj)
 {
   int error;
   BITCODE_RC flags2;
   dwg_point_3d pt10, pt13, pt14;
   dwg_ent_dim_ordinate *dim_ordinate = dwg_object_to_DIMENSION_ORDINATE (obj);
-  dwg_ent_dim *dim = dwg_object_to_DIMENSION(obj);
+  dwg_ent_dim *dim = dwg_object_to_DIMENSION (obj);
 
   dwg_ent_dim_ordinate_get_def_pt (dim_ordinate, &pt10, &error);
-  if (!error  && pt10.x == dim_ordinate->def_pt.x && pt10.y == dim_ordinate->def_pt.y && pt10.z == dim_ordinate->def_pt.z)
+  if (!error && pt10.x == dim_ordinate->def_pt.x
+      && pt10.y == dim_ordinate->def_pt.y && pt10.z == dim_ordinate->def_pt.z)
     pass ("Working Properly");
   else
     fail ("error in reading def_pt");
 
   dwg_ent_dim_ordinate_get_feature_location_pt (dim_ordinate, &pt13, &error);
-  if (!error  && pt13.x == dim_ordinate->feature_location_pt.x && pt13.y == dim_ordinate->feature_location_pt.y && pt13.z == dim_ordinate->feature_location_pt.z)
+  if (!error && pt13.x == dim_ordinate->feature_location_pt.x
+      && pt13.y == dim_ordinate->feature_location_pt.y
+      && pt13.z == dim_ordinate->feature_location_pt.z)
     pass ("Working Properly");
   else
     fail ("error in reading feature_location_pt");
 
   dwg_ent_dim_ordinate_get_leader_endpt (dim_ordinate, &pt14, &error);
-  if (!error  && dim_ordinate->leader_endpt.x == pt14.x && dim_ordinate->leader_endpt.y == pt14.y && dim_ordinate->leader_endpt.z == pt14.z)
+  if (!error && dim_ordinate->leader_endpt.x == pt14.x
+      && dim_ordinate->leader_endpt.y == pt14.y
+      && dim_ordinate->leader_endpt.z == pt14.z)
     pass ("Working Properly");
   else
     fail ("error in reading leader_endpt");
-
 }

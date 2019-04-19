@@ -25,21 +25,23 @@
 #include <inttypes.h>
 
 #define HASH_LOAD 75 // in percent. recommended is 50
-#define HASH_NOT_FOUND (uint32_t)-1
+#define HASH_NOT_FOUND (uint32_t) - 1
 
-struct _hashbucket {
+struct _hashbucket
+{
   uint32_t key;
   uint32_t value;
 };
-typedef struct _inthash {
+typedef struct _inthash
+{
   struct _hashbucket *array; /* of key, value pairs */
   uint32_t size;
   uint32_t elems; // to get the fill rate
 } dwg_inthash;
 
-dwg_inthash *hash_new(uint32_t size);
-uint32_t hash_get(dwg_inthash *hash, uint32_t key);
-void hash_set(dwg_inthash *hash, uint32_t key, uint32_t value);
-void hash_free(dwg_inthash *hash);
+dwg_inthash *hash_new (uint32_t size);
+uint32_t hash_get (dwg_inthash *hash, uint32_t key);
+void hash_set (dwg_inthash *hash, uint32_t key, uint32_t value);
+void hash_free (dwg_inthash *hash);
 
 #endif

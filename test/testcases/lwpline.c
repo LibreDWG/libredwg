@@ -3,7 +3,7 @@
 #include <dejagnu.h>
 
 void
-low_level_process (dwg_object * obj)
+low_level_process (dwg_object *obj)
 {
   BITCODE_BL i;
   dwg_ent_lwpline *lwpline = dwg_object_to_LWPOLYLINE (obj);
@@ -22,16 +22,16 @@ low_level_process (dwg_object * obj)
     printf ("bulges[%u] of lwpline : %f\n", i, lwpline->bulges[i]);
 
   for (i = 0; i < lwpline->num_points; i++)
-    printf ("points[%u] of lwpline : x =%f\ty = %f\n",
-            i, lwpline->points[i].x, lwpline->points[i].y);
+    printf ("points[%u] of lwpline : x =%f\ty = %f\n", i, lwpline->points[i].x,
+            lwpline->points[i].y);
 
   for (i = 0; i < lwpline->num_widths; i++)
-    printf ("points[%u] of lwpline : x =%f\ty = %f\n",
-            i, lwpline->widths[i].start, lwpline->widths[i].end);
+    printf ("points[%u] of lwpline : x =%f\ty = %f\n", i,
+            lwpline->widths[i].start, lwpline->widths[i].end);
 }
 
 void
-api_process (dwg_object * obj)
+api_process (dwg_object *obj)
 {
   int error;
   BITCODE_BL num_points, num_bulges, num_widths;
@@ -45,8 +45,9 @@ api_process (dwg_object * obj)
   dwg_ent_lwpline *lwpline = dwg_object_to_LWPOLYLINE (obj);
 
   dwg_ent_lwpline_get_extrusion (lwpline, &extrusion, &error);
-  if (error == 0 && lwpline->extrusion.x == extrusion.x &&
-      lwpline->extrusion.y == extrusion.y && lwpline->extrusion.z == extrusion.z)
+  if (error == 0 && lwpline->extrusion.x == extrusion.x
+      && lwpline->extrusion.y == extrusion.y
+      && lwpline->extrusion.z == extrusion.z)
     {
       pass ("lwpline_get_extrusion");
     }
@@ -54,7 +55,6 @@ api_process (dwg_object * obj)
     {
       fail ("lwpline_get_extrusion");
     }
-
 
   const_width = dwg_ent_lwpline_get_const_width (lwpline, &error);
   if (error == 0 && const_width == lwpline->const_width)
@@ -66,7 +66,6 @@ api_process (dwg_object * obj)
       fail ("lwpline_get_const_width");
     }
 
-
   elevation = dwg_ent_lwpline_get_elevation (lwpline, &error);
   if (error == 0 && elevation == lwpline->elevation)
     {
@@ -76,7 +75,6 @@ api_process (dwg_object * obj)
     {
       fail ("lwpline_get_elevation");
     }
-
 
   thickness = dwg_ent_lwpline_get_thickness (lwpline, &error);
   if (error == 0 && lwpline->thickness == thickness)
@@ -88,7 +86,6 @@ api_process (dwg_object * obj)
       fail ("lwpline_get_thickness");
     }
 
-
   num_widths = dwg_ent_lwpline_get_numwidths (lwpline, &error);
   if (error == 0 && num_widths == lwpline->num_widths)
     {
@@ -98,7 +95,6 @@ api_process (dwg_object * obj)
     {
       fail ("lwpline_get_num_widths");
     }
-
 
   num_bulges = dwg_ent_lwpline_get_numbulges (lwpline, &error);
   if (error == 0 && num_bulges == lwpline->num_bulges)
@@ -110,7 +106,6 @@ api_process (dwg_object * obj)
       fail ("lwpline_get_num_bulges");
     }
 
-
   num_points = dwg_ent_lwpline_get_numpoints (lwpline, &error);
   if (error == 0 && num_points == lwpline->num_points)
     {
@@ -121,18 +116,16 @@ api_process (dwg_object * obj)
       fail ("lwpline_get_num_points");
     }
 
-
   flags = dwg_ent_lwpline_get_flag (lwpline, &error);
-  if (error == 0 && flags == lwpline->flag)     // error check
+  if (error == 0 && flags == lwpline->flag) // error check
     {
       pass ("lwpline_get_flags");
     }
   else
     {
-      fail ("lwpline_get_flags error=%d flags=%x lwpline->flags=%x",
-            error, flags, lwpline->flag);
+      fail ("lwpline_get_flags error=%d flags=%x lwpline->flags=%x", error,
+            flags, lwpline->flag);
     }
-
 
   bulges = dwg_ent_lwpline_get_bulges (lwpline, &error);
   if (error == 0)
@@ -159,9 +152,8 @@ api_process (dwg_object * obj)
       fail ("lwpline_get_bulges error=1");
     }
 
-
   points = dwg_ent_lwpline_get_points (lwpline, &error);
-  if (error == 0)       // error check
+  if (error == 0) // error check
     {
       BITCODE_BL i, matches = 1;
       for (i = 0; i < lwpline->num_points; i++)
@@ -185,7 +177,6 @@ api_process (dwg_object * obj)
     {
       fail ("lwpline_get_points error=1");
     }
-
 
   width = dwg_ent_lwpline_get_widths (lwpline, &error);
   if (error == 0)

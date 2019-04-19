@@ -23,7 +23,6 @@
 #include "dwg.h"
 #include "bits.h"
 
-int
-dwg_print_object(Bit_Chain* dat, Dwg_Object *obj);
+int dwg_print_object (Bit_Chain *dat, Dwg_Object *obj);
 
 #endif

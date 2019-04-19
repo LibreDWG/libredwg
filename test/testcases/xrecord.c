@@ -3,17 +3,17 @@
 #include <dejagnu.h>
 
 void
-api_process (dwg_object * obj)
+api_process (dwg_object *obj)
 {
   int error;
   BITCODE_BL i, num_databytes, num_xdata, num_objid_handles;
   BITCODE_BS cloning_flags;
-  dwg_object_ref* parent;
+  dwg_object_ref *parent;
 
   dwg_obj_xrecord *xrecord = dwg_object_to_XRECORD (obj);
 
   num_databytes = dwg_obj_xrecord_get_num_databytes (xrecord, &error);
-  if (!error  && num_databytes == xrecord->num_databytes)
+  if (!error && num_databytes == xrecord->num_databytes)
     pass ("Working Properly");
   else
     fail ("error in reading num_databytes");
@@ -50,15 +50,14 @@ api_process (dwg_object * obj)
 #endif
 
   num_objid_handles = dwg_obj_xrecord_get_num_objid_handles (xrecord, &error);
-  if (!error  && num_objid_handles == xrecord->num_objid_handles)
+  if (!error && num_objid_handles == xrecord->num_objid_handles)
     pass ("Working Properly");
   else
     fail ("error in reading num_objid_handles");
 
   parent = dwg_obj_xrecord_get_ownerhandle (xrecord, &error);
-  if (!error  && parent == xrecord->ownerhandle)
+  if (!error && parent == xrecord->ownerhandle)
     pass ("Working Properly");
   else
     fail ("error in reading ownerhandle");
-
 }

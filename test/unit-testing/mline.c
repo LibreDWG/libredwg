@@ -2,94 +2,92 @@
 #include "common.c"
 
 void
-low_level_process(dwg_object *obj)
+low_level_process (dwg_object *obj)
 {
   unsigned int i;
 
-  dwg_ent_mline *mline = dwg_object_to_MLINE(obj);
+  dwg_ent_mline *mline = dwg_object_to_MLINE (obj);
 
-  printf("scale of mline : %f\n",mline->scale);
-  printf("just of mline : " FORMAT_RC "\n", mline->justification);
-  printf("extrusion of mline : x = %f, y = %f, z = %f\n",
-          mline->extrusion.x, mline->extrusion.y, mline->extrusion.z);
-  printf("base_point of mline : x = %f,y = %f,z = %f\n",
-          mline->base_point.x, mline->base_point.y, mline->base_point.z);
-  printf("number of lines : " FORMAT_RC "\n", mline->num_lines);
-  printf("number of verts : %ud\n", mline->num_verts);
+  printf ("scale of mline : %f\n", mline->scale);
+  printf ("just of mline : " FORMAT_RC "\n", mline->justification);
+  printf ("extrusion of mline : x = %f, y = %f, z = %f\n", mline->extrusion.x,
+          mline->extrusion.y, mline->extrusion.z);
+  printf ("base_point of mline : x = %f,y = %f,z = %f\n", mline->base_point.x,
+          mline->base_point.y, mline->base_point.z);
+  printf ("number of lines : " FORMAT_RC "\n", mline->num_lines);
+  printf ("number of verts : %ud\n", mline->num_verts);
 
-  for (i=0; i < mline->num_verts; i++)
+  for (i = 0; i < mline->num_verts; i++)
     {
-      printf("vertex of mline : x = %f, y = %f, z = %f\n",
+      printf ("vertex of mline : x = %f, y = %f, z = %f\n",
               mline->verts[i].vertex.x, mline->verts[i].vertex.y,
               mline->verts[i].vertex.z);
     }
-
 }
 
 void
-api_process(dwg_object *obj)
+api_process (dwg_object *obj)
 {
   int error;
   double scale;
   BITCODE_RC just;
   BITCODE_RC num_lines;
   BITCODE_BS i, num_verts;
-  dwg_point_3d base_point, ext;  //3d_points
-  dwg_mline_vertex * verts;
+  dwg_point_3d base_point, ext; // 3d_points
+  dwg_mline_vertex *verts;
 
-  dwg_ent_mline *mline = dwg_object_to_MLINE(obj);
+  dwg_ent_mline *mline = dwg_object_to_MLINE (obj);
 
-
-  scale = dwg_ent_mline_get_scale(mline, &error);
+  scale = dwg_ent_mline_get_scale (mline, &error);
   if (!error)
-    printf("scale of mline : %f\n", scale);
+    printf ("scale of mline : %f\n", scale);
   else
-    printf("error in reading scale \n");
+    printf ("error in reading scale \n");
 
-  just = dwg_ent_mline_get_justification(mline, &error);
+  just = dwg_ent_mline_get_justification (mline, &error);
   if (!error)
-    printf("just of mline : " FORMAT_RC "\n", just);
+    printf ("just of mline : " FORMAT_RC "\n", just);
   else
-    printf("error in reading just \n");
+    printf ("error in reading just \n");
 
-  dwg_ent_mline_get_extrusion(mline, &ext, &error);
+  dwg_ent_mline_get_extrusion (mline, &ext, &error);
   if (!error)
-    printf("extrusion of mline : x = %f, y = %f, z = %f\n",
-           ext.x, ext.y, ext.z);
+    printf ("extrusion of mline : x = %f, y = %f, z = %f\n", ext.x, ext.y,
+            ext.z);
   else
-    printf("error in reading extrusion \n");
+    printf ("error in reading extrusion \n");
 
   // return mline base_point points
-  dwg_ent_mline_get_base_point(mline, &base_point, &error);
+  dwg_ent_mline_get_base_point (mline, &base_point, &error);
   if (!error)
-    printf("base_point of mline : x = %f, y = %f, z = %f\n",
-           base_point.x, base_point.y, base_point.z);
+    printf ("base_point of mline : x = %f, y = %f, z = %f\n", base_point.x,
+            base_point.y, base_point.z);
   else
-    printf("error in reading base_point \n");
+    printf ("error in reading base_point \n");
 
-  num_lines = dwg_ent_mline_get_num_lines(mline, &error);
+  num_lines = dwg_ent_mline_get_num_lines (mline, &error);
   if (!error)
-    printf("num lines of mline : " FORMAT_RC "\n", num_lines);
+    printf ("num lines of mline : " FORMAT_RC "\n", num_lines);
   else
-    printf("error in reading num lines \n");
+    printf ("error in reading num lines \n");
 
-  num_verts = dwg_ent_mline_get_num_verts(mline, &error);
+  num_verts = dwg_ent_mline_get_num_verts (mline, &error);
   if (!error)
-    printf("num verts of mline : " FORMAT_BS "\n", num_verts);
+    printf ("num verts of mline : " FORMAT_BS "\n", num_verts);
   else
-    printf("error in reading num verts \n");
+    printf ("error in reading num verts \n");
 
-  verts = dwg_ent_mline_get_verts(mline, &error);
+  verts = dwg_ent_mline_get_verts (mline, &error);
   if (!error)
     {
-      for (i=0; i < num_verts; i++)
+      for (i = 0; i < num_verts; i++)
         {
-          printf("vertex of mline : x = %f, y = %f, z = %f\n",
-                 verts[i].vertex.x, verts[i].vertex.y, verts[i].vertex.z);
+          printf ("vertex of mline : x = %f, y = %f, z = %f\n",
+                  verts[i].vertex.x, verts[i].vertex.y, verts[i].vertex.z);
         }
     }
   else
     {
-      printf("error in reading verts of mline");
+      printf ("error in reading verts of mline");
     }
 }

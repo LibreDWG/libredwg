@@ -21,7 +21,7 @@
 #include "dwg.h"
 #include "bits.h"
 
-int  dwg_read_json(Bit_Chain *dat, Dwg_Data* dwg);
-void dwg_json_object(Bit_Chain *dat, Dwg_Object *obj);
+int dwg_read_json (Bit_Chain *dat, Dwg_Data *dwg);
+void dwg_json_object (Bit_Chain *dat, Dwg_Object *obj);
 
 #endif

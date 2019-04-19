@@ -3,7 +3,7 @@
 #include <dejagnu.h>
 
 void
-low_level_process (dwg_object * obj)
+low_level_process (dwg_object *obj)
 {
   dwg_ent_dim_radius *dim = dwg_object_to_DIMENSION_RADIUS (obj);
 
@@ -16,8 +16,8 @@ low_level_process (dwg_object * obj)
           dim->extrusion.x, dim->extrusion.y, dim->extrusion.z);
   printf ("ins_scale of dim_radius : x = %f, y = %f, z = %f\n",
           dim->ins_scale.x, dim->ins_scale.y, dim->ins_scale.z);
-  printf ("text_mid_pt of dim_radius : x = %f, y = %f\n",
-          dim->text_midpt.x, dim->text_midpt.y);
+  printf ("text_mid_pt of dim_radius : x = %f, y = %f\n", dim->text_midpt.x,
+          dim->text_midpt.y);
   printf ("user text of dim_radius : %s\n", dim->user_text);
   printf ("text rotation of dim_radius : %f\n", dim->text_rotation);
   printf ("ins rotation of dim_radius : %f\n", dim->ins_rotation);
@@ -29,16 +29,16 @@ low_level_process (dwg_object * obj)
 }
 
 void
-api_process (dwg_object * obj)
+api_process (dwg_object *obj)
 {
   int error;
   double length;
   BITCODE_RC flags2;
   dwg_ent_dim_radius *dim_radius = dwg_object_to_DIMENSION_RADIUS (obj);
-  dwg_ent_dim *dim = dwg_object_to_DIMENSION(obj);
+  dwg_ent_dim *dim = dwg_object_to_DIMENSION (obj);
 
   length = dwg_ent_dim_radius_get_leader_length (dim_radius, &error);
-  if (!error  && length == dim_radius->leader_len)
+  if (!error && length == dim_radius->leader_len)
     pass ("Working Properly");
   else
     fail ("error in reading leader length");

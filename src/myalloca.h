@@ -20,30 +20,32 @@
 
 #include "config.h"
 #if defined HAVE_ALLOCA_H
-# include <alloca.h>
+#  include <alloca.h>
 #elif defined __GNUC__
-# define alloca __builtin_alloca
+#  define alloca __builtin_alloca
 #elif defined _AIX
-# define alloca __alloca
+#  define alloca __alloca
 #elif defined _MSC_VER
-# include <malloc.h>
-# define alloca _alloca
+#  include <malloc.h>
+#  define alloca _alloca
 #else
-# include <stddef.h>
-# ifdef  __cplusplus
+#  include <stddef.h>
+#  ifdef __cplusplus
 extern "C"
-# endif
-void *alloca (size_t);
+#  endif
+    void *alloca (size_t);
 #endif
 
 #ifndef HAVE_ALLOCA
-static inline char* alloca(size_t size);
-static inline char* alloca(size_t size) {
-  return malloc(size);
+static inline char *alloca (size_t size);
+static inline char *
+alloca (size_t size)
+{
+  return malloc (size);
 }
-#define freea(ptr) free(ptr)
+#  define freea(ptr) free (ptr)
 #else
-#define freea(ptr)
+#  define freea(ptr)
 #endif
 
 #endif

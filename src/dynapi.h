@@ -24,61 +24,67 @@
 #include "dwg.h"
 
 #ifdef HAVE_STDDEF_H
-# include <stddef.h>
+#  include <stddef.h>
 #else /* cygwin */
-# ifndef offsetof
-#  define offsetof(type, member)	((size_t) &(((type *)0)->member))
-# endif
+#  ifndef offsetof
+#    define offsetof(type, member) ((size_t) & (((type *)0)->member))
+#  endif
 #endif
-#define OFF(st,f) offsetof(st, f)
+#define OFF(st, f) offsetof (st, f)
 
 #ifndef _DWG_API_H_
 /* Public API, duplicate of dwg_api.h */
-typedef struct dwg_field_name_type_offset {
-  const char *const name; /* field name */
-  const char *const type; /* e.g "RS" for BITCODE_RS */
-  const unsigned short size;        /* e.g. 2 for RS, 4 for BL */
+typedef struct dwg_field_name_type_offset
+{
+  const char *const name;    /* field name */
+  const char *const type;    /* e.g "RS" for BITCODE_RS */
+  const unsigned short size; /* e.g. 2 for RS, 4 for BL */
   const unsigned short offset;
-  const unsigned short is_indirect:1;  // for pointers, references, like 3BD, CMC, H, TV
-  const unsigned short is_malloc:1;    // for strings and dynamic arrays only, H*, TV, unknown size
-  const unsigned short is_string:1;    // for null-terminated strings, use strcpy/wcscpy. not memcpy
+  const unsigned short
+      is_indirect : 1; // for pointers, references, like 3BD, CMC, H, TV
+  const unsigned short is_malloc : 1; // for strings and dynamic arrays only,
+                                      // H*, TV, unknown size
+  const unsigned short is_string : 1; // for null-terminated strings, use
+                                      // strcpy/wcscpy. not memcpy
   const short dxf;
 } Dwg_DYNAPI_field;
 
-EXPORT bool
-is_dwg_entity(const char* name);
-EXPORT bool
-is_dwg_object(const char* name);
-EXPORT bool
-dwg_dynapi_header_value(const Dwg_Data *restrict dwg, const char *restrict fieldname,
-                        void *restrict out, Dwg_DYNAPI_field *restrict fp);
-EXPORT bool
-dwg_dynapi_entity_value(void *restrict entity, const char *restrict dxfname,
-                        const char *restrict fieldname, void *restrict out,
-                        Dwg_DYNAPI_field *restrict fp);
-EXPORT bool
-dwg_dynapi_common_value(void *restrict _obj, const char *restrict fieldname,
-                        void *restrict out, Dwg_DYNAPI_field *restrict fp);
+EXPORT bool is_dwg_entity (const char *name);
+EXPORT bool is_dwg_object (const char *name);
+EXPORT bool dwg_dynapi_header_value (const Dwg_Data *restrict dwg,
+                                     const char *restrict fieldname,
+                                     void *restrict out,
+                                     Dwg_DYNAPI_field *restrict fp);
+EXPORT bool dwg_dynapi_entity_value (void *restrict entity,
+                                     const char *restrict dxfname,
+                                     const char *restrict fieldname,
+                                     void *restrict out,
+                                     Dwg_DYNAPI_field *restrict fp);
+EXPORT bool dwg_dynapi_common_value (void *restrict _obj,
+                                     const char *restrict fieldname,
+                                     void *restrict out,
+                                     Dwg_DYNAPI_field *restrict fp);
 
-EXPORT bool
-dwg_dynapi_header_set_value(const Dwg_Data *restrict dwg, const char *restrict fieldname,
-                            const void *restrict value);
-EXPORT bool
-dwg_dynapi_entity_set_value(void *restrict entity, const char *restrict dxfname,
-                            const char *restrict fieldname, const void *restrict value);
-EXPORT bool
-dwg_dynapi_common_set_value(void *restrict entity, const char *restrict dxfname,
-                            const char *restrict fieldname, const void *restrict value);
+EXPORT bool dwg_dynapi_header_set_value (const Dwg_Data *restrict dwg,
+                                         const char *restrict fieldname,
+                                         const void *restrict value);
+EXPORT bool dwg_dynapi_entity_set_value (void *restrict entity,
+                                         const char *restrict dxfname,
+                                         const char *restrict fieldname,
+                                         const void *restrict value);
+EXPORT bool dwg_dynapi_common_set_value (void *restrict entity,
+                                         const char *restrict dxfname,
+                                         const char *restrict fieldname,
+                                         const void *restrict value);
 #endif
 
 /* Private API: */
 
 /* Also for all objects */
-const Dwg_DYNAPI_field*
-dwg_dynapi_entity_fields(const char *restrict name)
-  __nonnull((1));
+const Dwg_DYNAPI_field *dwg_dynapi_entity_fields (const char *restrict name)
+    __nonnull ((1));
 
-const Dwg_DYNAPI_field*
-dwg_dynapi_entity_field(const char *restrict name, const char *restrict fieldname)
-  __nonnull((1, 2));
+const Dwg_DYNAPI_field *
+dwg_dynapi_entity_field (const char *restrict name,
+                         const char *restrict fieldname) __nonnull ((1, 2));
 #endif

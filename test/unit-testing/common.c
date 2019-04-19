@@ -13,52 +13,43 @@
 dwg_data g_dwg;
 
 /// This function declaration reads the DWG file
-int
-test_code(char *filename);
+int test_code (char *filename);
 
 /// Declaration of function to iterate over objects of a block
-void
-output_BLOCK_HEADER(dwg_object_ref *ref);
+void output_BLOCK_HEADER (dwg_object_ref *ref);
 
 /// Declaration for function that checks the dwg type and calls output_process
-void
-output_object(dwg_object *obj);
+void output_object (dwg_object *obj);
 
 /// Function declaration for blocks to be iterated over
-void
-output_test(dwg_data *dwg);
+void output_test (dwg_data *dwg);
 
-void
-output_process(dwg_object *obj);
+void output_process (dwg_object *obj);
 
 /// Low Level processing function declaration
-void
-low_level_process(dwg_object *obj);
+void low_level_process (dwg_object *obj);
 
 /// API based processing function declaration
-void
-api_process(dwg_object *obj);
+void api_process (dwg_object *obj);
 
 /// API based printing function declaration
-void
-print_api(dwg_object *obj);
+void print_api (dwg_object *obj);
 
 /// Low level printing function declaration
-void
-print_low_level(dwg_object *obj);
-
+void print_low_level (dwg_object *obj);
 
 /// Main function
 int
-main(int argc, char *argv[])
+main (int argc, char *argv[])
 {
   char *input = getenv ("INPUT");
   struct stat attrib;
 
-  if (! input)
+  if (!input)
     {
-      input = (char *)"example_2000.dwg"; //todo: ../test-data/example_2018.dwg
-      if (stat(input, &attrib))
+      input = (char *)"example_2000.dwg"; // todo:
+                                          // ../test-data/example_2018.dwg
+      if (stat (input, &attrib))
         {
           fprintf (stderr, "Env var INPUT not defined, %s not found\n", input);
           return EXIT_FAILURE;
@@ -70,15 +61,15 @@ main(int argc, char *argv[])
 
 /// read the DWG file
 int
-test_code(char *filename)
+test_code (char *filename)
 {
   int error;
 
-  error = dwg_read_file(filename, &g_dwg);
+  error = dwg_read_file (filename, &g_dwg);
   if (error < DWG_ERR_CRITICAL)
     {
-      output_test(&g_dwg);
-      dwg_free(&g_dwg);
+      output_test (&g_dwg);
+      dwg_free (&g_dwg);
     }
 
   /* This value is the return value for `main',
@@ -86,10 +77,9 @@ test_code(char *filename)
   return error >= DWG_ERR_CRITICAL ? 1 : 0;
 }
 
-
 /// This function is used to iterate over the objects in a block
 void
-output_BLOCK_HEADER (dwg_object_ref * ref)
+output_BLOCK_HEADER (dwg_object_ref *ref)
 {
   dwg_object *hdr, *obj;
   int error;
@@ -97,8 +87,8 @@ output_BLOCK_HEADER (dwg_object_ref * ref)
   hdr = dwg_ref_get_object (ref, &error);
   if (!ref)
     {
-      fprintf (stderr,
-        "Found null object reference. Could not output an SVG symbol for this BLOCK\n");
+      fprintf (stderr, "Found null object reference. Could not output an SVG "
+                       "symbol for this BLOCK\n");
       return;
     }
   if (!hdr)
@@ -117,7 +107,7 @@ output_BLOCK_HEADER (dwg_object_ref * ref)
 
 /// Iterate over both modelspace and paperspace blocks
 void
-output_test(dwg_data* dwg)
+output_test (dwg_data *dwg)
 {
   unsigned int i, num_hdr_objs;
   int error;
@@ -126,58 +116,59 @@ output_test(dwg_data* dwg)
   dwg_obj_block_control *_ctrl;
   dwg_object_ref **hdr_refs;
 
-  _hdr = dwg_get_block_header(dwg, &error);
-  _ctrl = dwg_block_header_get_block_control(_hdr, &error);
+  _hdr = dwg_get_block_header (dwg, &error);
+  _ctrl = dwg_block_header_get_block_control (_hdr, &error);
   /*
   hdr_refs = dwg_obj_block_control_get_block_headers(ctrl, &error);
   num_hdr_objs = dwg_obj_block_control_get_num_entries(ctrl, &error);
   */
-  output_BLOCK_HEADER(dwg_obj_block_control_get_model_space(_ctrl, &error));
-  output_BLOCK_HEADER(dwg_obj_block_control_get_paper_space(_ctrl, &error));
-
+  output_BLOCK_HEADER (dwg_obj_block_control_get_model_space (_ctrl, &error));
+  output_BLOCK_HEADER (dwg_obj_block_control_get_paper_space (_ctrl, &error));
 }
 
 /// Main output function that prints to the terminal
-void output_process(dwg_object *obj)
+void
+output_process (dwg_object *obj)
 {
-  print_low_level(obj);
-  print_api(obj);
+  print_low_level (obj);
+  print_api (obj);
 }
 
 #ifdef DWG_TYPE
 void
-output_object(dwg_object* obj){
+output_object (dwg_object *obj)
+{
   if (!obj)
     {
-      printf("object is NULL\n");
+      printf ("object is NULL\n");
       return;
     }
 
-  if (dwg_object_get_type(obj) == DWG_TYPE)
+  if (dwg_object_get_type (obj) == DWG_TYPE)
     {
-      output_process(obj);
+      output_process (obj);
     }
 }
 #endif
 
 /// Low level printing function
 void
-print_low_level(dwg_object *obj)
+print_low_level (dwg_object *obj)
 {
-  printf("\n");
-  printf("PRINTED VIA LOW LEVEL ACCESS:\n");
-  low_level_process(obj);
-  printf("\n");
+  printf ("\n");
+  printf ("PRINTED VIA LOW LEVEL ACCESS:\n");
+  low_level_process (obj);
+  printf ("\n");
 }
 
 /// API based printing function
 void
-print_api(dwg_object *obj)
+print_api (dwg_object *obj)
 {
-  printf("PRINTED VIA API:\n");
-  api_process(obj);
-  printf("\n");
+  printf ("PRINTED VIA API:\n");
+  api_process (obj);
+  printf ("\n");
 }
 
 // allow out deprecated API
-GCC31_DIAG_IGNORE(-Wdeprecated-declarations)
+GCC31_DIAG_IGNORE (-Wdeprecated-declarations)

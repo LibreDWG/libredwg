@@ -6,7 +6,7 @@
    @params dwg_object* obj
  */
 void
-api_process (dwg_object * obj)
+api_process (dwg_object *obj)
 {
   int error;
   char *name;
@@ -14,11 +14,9 @@ api_process (dwg_object * obj)
   // casts dwg object to block
   dwg_ent_block *block = dwg_object_to_BLOCK (obj);
 
-
   name = dwg_ent_block_get_name (block, &error);
-  if (!error  && block->name == name)
+  if (!error && block->name == name)
     pass ("Working Properly");
   else
     fail ("error in reading name");
-
 }

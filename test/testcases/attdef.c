@@ -6,7 +6,7 @@
    @params dwg_object* obj
  */
 void
-api_process (dwg_object * obj)
+api_process (dwg_object *obj)
 {
   int error;
   BITCODE_BD thickness, rotation, height;
@@ -18,58 +18,52 @@ api_process (dwg_object * obj)
 
   // return attdef value
   attdef_value = dwg_ent_attdef_get_default_value (attdef, &error);
-  if (!error  && attdef_value == attdef->default_value) // error checking
+  if (!error && attdef_value == attdef->default_value) // error checking
     pass ("Working Properly");
   else
     fail ("error in reading attdef_value");
 
-
   dwg_ent_attdef_get_insertion_point (attdef, &ins_pt, &error);
-  if (!error  && ins_pt.x == attdef->insertion_pt.x && ins_pt.y == attdef->insertion_pt.y)      // error checking
+  if (!error && ins_pt.x == attdef->insertion_pt.x
+      && ins_pt.y == attdef->insertion_pt.y) // error checking
     pass ("Working Properly");
   else
     fail ("error in reading insertion");
 
-
   dwg_ent_attdef_get_extrusion (attdef, &ext, &error);
-  if (!error  && ext.x == attdef->extrusion.x && ext.y == attdef->extrusion.y && ext.z == attdef->extrusion.z)  // error checking
+  if (!error && ext.x == attdef->extrusion.x && ext.y == attdef->extrusion.y
+      && ext.z == attdef->extrusion.z) // error checking
     pass ("Working Properly");
   else
     fail ("error in reading extrusion");
 
-
   height = dwg_ent_attdef_get_height (attdef, &error);
-  if (!error  && height == attdef->height)      // error checking
+  if (!error && height == attdef->height) // error checking
     pass ("Working Properly");
   else
     fail ("error in reading height");
 
-
   thickness = dwg_ent_attdef_get_thickness (attdef, &error);
-  if (!error  && attdef->thickness == thickness)        // error check
+  if (!error && attdef->thickness == thickness) // error check
     pass ("Working Properly");
   else
     fail ("error in reading thickness");
 
-
   rotation = dwg_ent_attdef_get_rotation (attdef, &error);
-  if (!error  && attdef->rotation == rotation)
+  if (!error && attdef->rotation == rotation)
     pass ("Working Properly");
   else
     fail ("error in reading rotation");
 
-
   vert_align = dwg_ent_attdef_get_vert_alignment (attdef, &error);
-  if (!error  && attdef->vert_alignment == vert_align)
+  if (!error && attdef->vert_alignment == vert_align)
     pass ("Working Properly");
   else
     fail ("error in reading vertical alignment");
 
-
   horiz_align = dwg_ent_attdef_get_horiz_alignment (attdef, &error);
-  if (!error  && horiz_align == attdef->horiz_alignment)
+  if (!error && horiz_align == attdef->horiz_alignment)
     pass ("Working Properly");
   else
     fail ("error in reading horizontal alignment");
-
 }
