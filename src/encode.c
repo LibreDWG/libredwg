@@ -218,6 +218,7 @@ static bool env_var_checked_p;
 // No overflow check with IS_RELEASE
 #ifdef IS_RELEASE
 #  define OVERFLOW_CHECK(nam, size)
+#  define OVERFLOW_CHECK_LV(nam, size)
 #else
 #  define OVERFLOW_CHECK(nam, size)                                           \
     if ((size) > 0xff00)                                                      \
@@ -225,10 +226,17 @@ static bool env_var_checked_p;
         LOG_ERROR ("Invalid " #nam " %ld", (long)size);                       \
         return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
       }
+#  define OVERFLOW_CHECK_LV(nam, size)                                        \
+    if ((size) > 0xff00)                                                      \
+      {                                                                       \
+        LOG_ERROR ("Invalid " #nam " %ld, set to 0", (long)size);             \
+        size = 0;                                                             \
+        return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
+      }
 #endif
 
 #define FIELD_2RD_VECTOR(nam, size, dxf)                                      \
-  OVERFLOW_CHECK (nam, _obj->size)                                            \
+  OVERFLOW_CHECK_LV (nam, _obj->size)                                         \
   for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)                 \
     {                                                                         \
       FIELD_2RD (nam[vcount], dxf);                                           \
@@ -244,7 +252,7 @@ static bool env_var_checked_p;
     }
 
 #define FIELD_3DPOINT_VECTOR(nam, size, dxf)                                  \
-  OVERFLOW_CHECK (nam, _obj->size)                                            \
+  OVERFLOW_CHECK_LV (nam, _obj->size)                                         \
   for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)                 \
     {                                                                         \
       FIELD_3DPOINT (nam[vcount], dxf);                                       \
@@ -253,7 +261,7 @@ static bool env_var_checked_p;
 #define REACTORS(code)                                                        \
   if (obj->tio.object->reactors)                                              \
     {                                                                         \
-      OVERFLOW_CHECK (nam, obj->tio.object->num_reactors)                     \
+      OVERFLOW_CHECK_LV (nam, obj->tio.object->num_reactors)                  \
       SINCE (R_13)                                                            \
       {                                                                       \
         for (vcount = 0; vcount < (BITCODE_BL)obj->tio.object->num_reactors;  \
@@ -321,7 +329,7 @@ static bool env_var_checked_p;
 #define FIELD_VECTOR_T(nam, size, dxf)                                        \
   if (_obj->size > 0 && _obj->nam)                                            \
     {                                                                         \
-      OVERFLOW_CHECK (nam, _obj->size)                                        \
+      OVERFLOW_CHECK_LV (nam, _obj->size)                                     \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
           PRE (R_2007)                                                        \

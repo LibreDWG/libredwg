@@ -15,14 +15,14 @@
     /* parent: {m,p}space block_record or polyline for vertex, block until blkend */
   if (FIELD_VALUE(entmode) != 0)
     {
-      if (ent->ownerhandle) {
+      if (ent->ownerhandle || ent->entmode == 3) {
         //assert(ent->entmode == 3); /* does not exist */
         VALUE_HANDLE (ent->ownerhandle, ownerhandle, 5, 330);
       } else if (ent->entmode == 1) {
         VALUE_HANDLE (obj->parent->header_vars.BLOCK_RECORD_PSPACE, BLOCK_RECORD_PSPACE, 5, 330);
       } else {
-        assert(ent->entmode == 2);
-        VALUE_HANDLE (obj->parent->header_vars.BLOCK_RECORD_MSPACE, BLOCK_RECORD_PSPACE, 5, 330);
+        //assert(ent->entmode == 2);
+        VALUE_HANDLE (obj->parent->header_vars.BLOCK_RECORD_MSPACE, BLOCK_RECORD_MSPACE, 5, 330);
       }
     }
 #else

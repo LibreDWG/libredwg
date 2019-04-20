@@ -565,6 +565,16 @@
                  AVAIL_BITS (), obj && obj->dxfname ? obj->dxfname : "");     \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }
+#define VECTOR_CHKCOUNT_LV(nam, type, size)                                   \
+  if ((long long)((size)*TYPE_MAXELEMSIZE (type)) > AVAIL_BITS ())            \
+    {                                                                         \
+      LOG_ERROR ("Invalid " #nam " size %lld. Need min. %u bits for " #type   \
+                 ", have %lld for %s.",                                       \
+                 (long long)(size), (unsigned)(size)*TYPE_MAXELEMSIZE (type), \
+                 AVAIL_BITS (), obj && obj->dxfname ? obj->dxfname : "");     \
+      size = 0;                                                               \
+      return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
+    }
 #define _VECTOR_CHKCOUNT(name, size, maxelemsize)                             \
   if ((long long)(size) * (maxelemsize) > AVAIL_BITS ())                      \
     {                                                                         \
@@ -630,7 +640,7 @@
   FIELD_VECTOR_N (name, type, _obj->size, dxf)
 
 #define FIELD_2RD_VECTOR(name, size, dxf)                                     \
-  VECTOR_CHKCOUNT (name, 2RD, _obj->size)                                     \
+  VECTOR_CHKCOUNT_LV (name, 2RD, _obj->size)                                  \
   if (_obj->size > 0)                                                         \
     {                                                                         \
       _obj->name = (BITCODE_2RD *)calloc (_obj->size, sizeof (BITCODE_2RD));  \
@@ -641,7 +651,7 @@
     }
 
 #define FIELD_2DD_VECTOR(name, size, dxf)                                     \
-  VECTOR_CHKCOUNT (name, 2DD, _obj->size)                                     \
+  VECTOR_CHKCOUNT_LV (name, 2DD, _obj->size)                                  \
   if (_obj->size > 0)                                                         \
     {                                                                         \
       _obj->name = (BITCODE_2RD *)calloc (_obj->size, sizeof (BITCODE_2RD));  \
@@ -658,7 +668,7 @@
     }
 
 #define FIELD_3DPOINT_VECTOR(name, size, dxf)                                 \
-  VECTOR_CHKCOUNT (name, 3BD, _obj->size)                                     \
+  VECTOR_CHKCOUNT_LV (name, 3BD, _obj->size)                                  \
   if (_obj->size > 0)                                                         \
     {                                                                         \
       _obj->name                                                              \
