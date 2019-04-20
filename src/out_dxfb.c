@@ -1724,6 +1724,24 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
+static void
+dxfb_ENDBLK_empty (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr)
+{
+  Dwg_Object *obj = calloc (1, sizeof (Dwg_Object));
+  obj->parent = hdr->parent;
+  obj->index = obj->parent->num_objects;
+  dwg_add_ENDBLK (obj);
+  obj->tio.entity->ownerhandle = calloc (1, sizeof (Dwg_Object_Ref));
+  obj->tio.entity->ownerhandle->obj = (Dwg_Object *)hdr;
+  obj->tio.entity->ownerhandle->handleref = hdr->handle;
+  obj->tio.entity->ownerhandle->absolute_ref = hdr->handle.value;
+  dwg_dxfb_ENDBLK (dat, obj);
+  free (obj->tio.entity->tio.ENDBLK);
+  free (obj->tio.entity->ownerhandle);
+  free (obj->tio.entity);
+  free (obj);
+}
+
 static int
 dxfb_block_write (Bit_Chain *restrict dat, Dwg_Object *restrict hdr,
                   int *restrict i)
@@ -1732,6 +1750,7 @@ dxfb_block_write (Bit_Chain *restrict dat, Dwg_Object *restrict hdr,
   Dwg_Object *restrict obj = get_first_owned_block (hdr); // BLOCK
   const Dwg_Object_BLOCK_HEADER *restrict _hdr
       = hdr->tio.object->tio.BLOCK_HEADER;
+  Dwg_Object *restrict endblk;
   Dwg_Data *dwg = hdr->parent;
 
   if (obj)
@@ -1752,7 +1771,15 @@ dxfb_block_write (Bit_Chain *restrict dat, Dwg_Object *restrict hdr,
         error |= dwg_dxfb_object (dat, obj, i);
       obj = get_next_owned_entity (hdr, obj);
     }
-  error |= dwg_dxfb_ENDBLK (dat, get_last_owned_block (hdr));
+  endblk = get_last_owned_block (hdr);
+  if (endblk)
+    error |= dwg_dxfb_ENDBLK (dat, endblk);
+  else
+    {
+      LOG_WARN ("Empty ENDBLK for \"%s\" " FORMAT_BL, _hdr->name,
+                hdr ? hdr->tio.object->objid : 0);
+      dxfb_ENDBLK_empty (dat, hdr);
+    }
   return error;
 }
 

@@ -214,7 +214,7 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
       char *_s;                                                               \
       const char *_fmt = dxf_format (dxf);                                    \
       GROUP (dxf);                                                            \
-      GCC_DIAG_IGNORE (-Wformat-nonliteral)                                 \
+      GCC_DIAG_IGNORE (-Wformat-nonliteral)                                   \
       snprintf (buf, 255, _fmt, value);                                       \
       GCC_DIAG_RESTORE                                                        \
       /* not a string, empty num. must be zero */                             \
@@ -2029,6 +2029,26 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
+static void
+dxf_ENDBLK_empty (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr)
+{
+  Dwg_Object *obj = calloc (1, sizeof (Dwg_Object));
+  // Dwg_Entity_ENDBLK *_obj;
+  obj->parent = hdr->parent;
+  obj->index = obj->parent->num_objects;
+  dwg_add_ENDBLK (obj);
+  obj->tio.entity->ownerhandle = calloc (1, sizeof (Dwg_Object_Ref));
+  obj->tio.entity->ownerhandle->obj = (Dwg_Object *)hdr;
+  obj->tio.entity->ownerhandle->handleref = hdr->handle;
+  obj->tio.entity->ownerhandle->absolute_ref = hdr->handle.value;
+  //_obj = obj->tio.entity->tio.ENDBLK;
+  dwg_dxf_ENDBLK (dat, obj);
+  free (obj->tio.entity->tio.ENDBLK);
+  free (obj->tio.entity->ownerhandle);
+  free (obj->tio.entity);
+  free (obj);
+}
+
 static int
 dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict mspace,
                  const Dwg_Object *restrict hdr, int *restrict i)
@@ -2037,6 +2057,7 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict mspace,
   Dwg_Object *restrict obj = get_first_owned_block (hdr); // BLOCK
   const Dwg_Object_BLOCK_HEADER *restrict _hdr
       = hdr->tio.object->tio.BLOCK_HEADER;
+  Dwg_Object *restrict endblk;
   Dwg_Data *dwg = hdr->parent;
   unsigned long int mspace_ref = mspace->handle.value;
 
@@ -2062,7 +2083,15 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict mspace,
         error |= dwg_dxf_object (dat, obj, i);
       obj = get_next_owned_entity (hdr, obj); // until last_entity
     }
-  error |= dwg_dxf_ENDBLK (dat, get_last_owned_block (hdr));
+  endblk = get_last_owned_block (hdr);
+  if (endblk)
+    error |= dwg_dxf_ENDBLK (dat, endblk);
+  else
+    {
+      LOG_WARN ("Empty ENDBLK for \"%s\" %lX", _hdr->name,
+                hdr ? hdr->handle.value : 0);
+      dxf_ENDBLK_empty (dat, hdr);
+    }
   return error;
 }
 

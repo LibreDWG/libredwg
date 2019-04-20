@@ -5815,7 +5815,7 @@ dwg_free_object(Dwg_Object *obj);
 /** Add the empty object to the DWG.
     Returns DWG_ERR_OUTOFMEM, -1 for realloced or 0 if not.
 */
-EXPORT int dwg_add_object (Dwg_Data * dwg);
+EXPORT int dwg_add_object (Dwg_Data *dwg);
 
 /** Initialize the empty entity or object with its three structs.
     All fields are zero'd, some are initialized with default values, as

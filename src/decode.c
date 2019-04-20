@@ -4347,7 +4347,7 @@ ref_after (const Dwg_Object_Ref *restrict r1,
   return r1->obj->index >= r2->obj->index ? 1 : 0;
 }
 
-/* just look at the next object, if it's a SEQEND */
+/* just look at the next object, if it's a SEQEND (i.e ENDBLK) */
 int
 dwg_validate_INSERT (Dwg_Object *obj)
 {
