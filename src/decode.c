@@ -2468,7 +2468,6 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
             dat->byte = end;
             break;
 #if 0
-
             obj->num_eed = 0;
             if (obj->eed[idx].size)
               free(obj->eed[idx].raw);
