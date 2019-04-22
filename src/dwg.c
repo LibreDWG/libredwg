@@ -1035,9 +1035,10 @@ get_next_owned_block (const Dwg_Object *restrict hdr,
 Dwg_Object *
 get_last_owned_block (const Dwg_Object *restrict hdr)
 {
-  unsigned int version = hdr->parent->header.version;
-  const Dwg_Object_BLOCK_HEADER *restrict _hdr
+  Dwg_Data *dwg = hdr->parent;
+  Dwg_Object_BLOCK_HEADER *restrict _hdr
       = hdr->tio.object->tio.BLOCK_HEADER;
+  unsigned int version = dwg->header.version;
   if (hdr->type != DWG_TYPE_BLOCK_HEADER)
     {
       LOG_ERROR ("Invalid BLOCK_HEADER type %d", hdr->type);
@@ -1046,13 +1047,25 @@ get_last_owned_block (const Dwg_Object *restrict hdr)
 
   if (version >= R_13)
     {
-      if (_hdr->endblk_entity)
+      if (_hdr->endblk_entity && _hdr->endblk_entity->obj)
         return _hdr->endblk_entity->obj;
       else
         {
           Dwg_Object *obj = (Dwg_Object *)hdr;
           while (obj && obj->type != DWG_TYPE_ENDBLK)
             obj = dwg_next_object (obj);
+          if (obj->type == DWG_TYPE_ENDBLK)
+            {
+              if (!_hdr->endblk_entity)
+                {
+                  _hdr->endblk_entity = dwg_new_ref (dwg);
+                  _hdr->endblk_entity->obj = obj;
+                  _hdr->endblk_entity->handleref.value
+                      = _hdr->endblk_entity->absolute_ref = obj->handle.value;
+                }
+              else if (!_hdr->endblk_entity->obj)
+                _hdr->endblk_entity->obj = obj;
+            }
           return obj;
         }
     }

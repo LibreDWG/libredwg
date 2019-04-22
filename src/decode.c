@@ -2970,6 +2970,23 @@ dwg_decode_add_object_ref (Dwg_Data *restrict dwg, Dwg_Object_Ref *ref)
   return 0;
 }
 
+Dwg_Object_Ref *
+dwg_new_ref (Dwg_Data *restrict dwg)
+{
+  Dwg_Object_Ref *ref = (Dwg_Object_Ref *)calloc (1, sizeof (Dwg_Object_Ref));
+  if (!ref)
+    {
+      LOG_ERROR ("Out of memory");
+      return NULL;
+    }
+  if (dwg_decode_add_object_ref (dwg, ref))
+    {
+      free (ref);
+      return NULL;
+    }
+  return ref;
+}
+
 /* Store an object reference in a separate dwg->object_ref array
    which is the id for handles, i.e. DXF 5, 330. */
 Dwg_Object_Ref *

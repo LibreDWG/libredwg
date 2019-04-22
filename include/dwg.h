@@ -5812,6 +5812,10 @@ dwg_free(Dwg_Data * dwg);
 EXPORT void
 dwg_free_object(Dwg_Object *obj);
 
+/** Add the empty ref to the DWG, or NULL.
+*/
+EXPORT Dwg_Object_Ref * dwg_new_ref (Dwg_Data *dwg);
+
 /** Add the empty object to the DWG.
     Returns DWG_ERR_OUTOFMEM, -1 for realloced or 0 if not.
 */
