@@ -573,7 +573,7 @@
                  (long long)(size), (unsigned)(size)*TYPE_MAXELEMSIZE (type), \
                  AVAIL_BITS (), obj && obj->dxfname ? obj->dxfname : "");     \
       size = 0;                                                               \
-      return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
+      /* return DWG_ERR_VALUEOUTOFBOUNDS; */                                  \
     }
 #define _VECTOR_CHKCOUNT(name, size, maxelemsize)                             \
   if ((long long)(size) * (maxelemsize) > AVAIL_BITS ())                      \
@@ -648,7 +648,14 @@
         {                                                                     \
           FIELD_2RD (name[vcount], dxf);                                      \
         }                                                                     \
-    }
+    }                                                                         \
+  else if (dat->version >= R_2007 && obj->supertype == DWG_SUPERTYPE_ENTITY)  \
+    {                                                                         \
+      COMMON_ENTITY_HANDLE_DATA;                                              \
+      return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
+    }                                                                         \
+  else                                                                        \
+    return DWG_ERR_VALUEOUTOFBOUNDS;
 
 #define FIELD_2DD_VECTOR(name, size, dxf)                                     \
   VECTOR_CHKCOUNT_LV (name, 2DD, _obj->size)                                  \
@@ -665,7 +672,14 @@
                      (long)vcount, _obj->name[vcount].x,                      \
                      _obj->name[vcount].y, dxf)                               \
         }                                                                     \
-    }
+    }                                                                         \
+  else if (dat->version >= R_2007 && obj->supertype == DWG_SUPERTYPE_ENTITY)  \
+    {                                                                         \
+      COMMON_ENTITY_HANDLE_DATA;                                              \
+      return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
+    }                                                                         \
+  else                                                                        \
+    return DWG_ERR_VALUEOUTOFBOUNDS;
 
 #define FIELD_3DPOINT_VECTOR(name, size, dxf)                                 \
   VECTOR_CHKCOUNT_LV (name, 3BD, _obj->size)                                  \
@@ -677,7 +691,14 @@
         {                                                                     \
           FIELD_3DPOINT (name[vcount], dxf);                                  \
         }                                                                     \
-    }
+    }                                                                         \
+  else if (dat->version >= R_2007 && obj->supertype == DWG_SUPERTYPE_ENTITY)  \
+    {                                                                         \
+      COMMON_ENTITY_HANDLE_DATA;                                              \
+      return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
+    }                                                                         \
+  else                                                                        \
+    return DWG_ERR_VALUEOUTOFBOUNDS;
 
 // shortest handle: 8 bit
 #define HANDLE_VECTOR_N(name, size, code, dxf)                                \

@@ -2185,7 +2185,7 @@ DWG_ENTITY(MTEXT)
 
 DWG_ENTITY_END
 
-/*(45)*/
+/* (45) unstable */
 DWG_ENTITY(LEADER)
 
   //SUBCLASS (AcDbCurve)
