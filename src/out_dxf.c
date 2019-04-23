@@ -1805,11 +1805,13 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         COMMON_TABLE_CONTROL_FLAGS;
         error |= dwg_dxf_LTYPE_CONTROL (dat, ctrl);
         // first the 2 builtin ltypes: ByBlock, ByLayer
-        if ((obj = dwg_ref_object (dwg, dwg->header_vars.LTYPE_BYBLOCK)))
+        if ((obj = dwg_ref_object (dwg, dwg->header_vars.LTYPE_BYBLOCK))
+            && obj->type == DWG_TYPE_LTYPE)
           {
-            dwg_dxf_LTYPE (dat, obj);
+            error |= dwg_dxf_LTYPE (dat, obj);
           }
-        if ((obj = dwg_ref_object (dwg, dwg->header_vars.LTYPE_BYLAYER)))
+        if ((obj = dwg_ref_object (dwg, dwg->header_vars.LTYPE_BYLAYER))
+            && obj->type == DWG_TYPE_LTYPE)
           {
             error |= dwg_dxf_LTYPE (dat, obj);
           }
