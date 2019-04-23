@@ -741,9 +741,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
           RECORD (token);                                                     \
         SINCE (R_13)                                                          \
         {                                                                     \
-          int dxf = 5;                                                        \
-          if (obj->type == DWG_TYPE_DIMSTYLE)                                 \
-            dxf = 105;                                                        \
+          const int dxf = obj->type == DWG_TYPE_DIMSTYLE ? 105 : 5;           \
           fprintf (dat->fh, "%3i\r\n%lX\r\n", dxf, obj->handle.value);        \
           _XDICOBJHANDLE (3);                                                 \
           _REACTORS (4);                                                      \

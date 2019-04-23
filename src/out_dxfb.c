@@ -655,10 +655,8 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
           RECORD (token)                                                      \
         SINCE (R_13)                                                          \
         {                                                                     \
-          uint32_t _i = (uint32_t)obj->handle.value;                          \
-          int dxf = 5;                                                        \
-          if (obj->type == DWG_TYPE_DIMSTYLE)                                 \
-            dxf = 105;                                                        \
+          const uint32_t _i = (uint32_t)obj->handle.value;                    \
+          const int dxf = obj->type == DWG_TYPE_DIMSTYLE ? 105 : 5;           \
           GROUP (dxf);                                                        \
           fwrite (&_i, sizeof (uint32_t), 1, dat->fh);                        \
           _XDICOBJHANDLE (3);                                                 \
