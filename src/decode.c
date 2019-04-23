@@ -2563,9 +2563,11 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
   unsigned int idx = 0;
   int error = 0;
   Dwg_Data *dwg = obj->dwg;
+  Dwg_Object *_obj;
+
   if (!dwg)
     return DWG_ERR_INVALIDEED;
-
+  _obj = &dwg->object[obj->objid]; /* Note that obj->objid may be 0 */
   obj->num_eed = 0;
   while ((size = bit_read_BS (dat)))
     {
@@ -2573,7 +2575,6 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
       BITCODE_BS j;
       long unsigned int end, offset;
       long unsigned int sav_byte;
-      Dwg_Object *_obj = &dwg->object[obj->objid];
 
       LOG_TRACE ("EED[%u] size: " FORMAT_BS "\n", idx, size);
       if (size > _obj->size)
