@@ -576,6 +576,12 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
     Dwg_Entity_##token *ent, *_obj;                                           \
     Dwg_Object_Entity *_ent;                                                  \
     int error = 0;                                                            \
+    if (obj->fixedtype != DWG_TYPE_##token)                                   \
+      {                                                                       \
+        LOG_ERROR ("Invalid type 0x%x, expected 0x%x %s", obj->fixedtype,     \
+                   DWG_TYPE_##token, #token);                                 \
+        return DWG_ERR_INVALIDTYPE;                                           \
+      }                                                                       \
     if (!strcmp (#token, "GEOPOSITIONMARKER"))                                \
       RECORD (POSITIONMARKER)                                                 \
     else if (dat->version < R_13 && strlen (#token) == 10                     \
@@ -630,6 +636,12 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
     Dwg_Object_##token *_obj;                                                 \
     int error = 0;                                                            \
     LOG_INFO ("Object " #token ":\n")                                         \
+    if (obj->fixedtype != DWG_TYPE_##token)                                   \
+      {                                                                       \
+        LOG_ERROR ("Invalid type 0x%x, expected 0x%x %s", obj->fixedtype,     \
+                   DWG_TYPE_##token, #token);                                 \
+        return DWG_ERR_INVALIDTYPE;                                           \
+      }                                                                       \
     _obj = obj->tio.object->tio.token;                                        \
     if (!dwg_obj_is_control (obj))                                            \
       {                                                                       \
