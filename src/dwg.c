@@ -725,6 +725,11 @@ dwg_resolve_handleref (Dwg_Object_Ref *restrict ref,
 Dwg_Object_BLOCK_CONTROL *
 dwg_block_control (Dwg_Data *dwg)
 {
+  if (!dwg->block_control.parent)
+    {
+      LOG_ERROR ("dwg->block_control missing");
+      return NULL;
+    }
   return &(dwg->block_control);
 }
 

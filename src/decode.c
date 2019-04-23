@@ -4036,7 +4036,10 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
     case DWG_TYPE_BLOCK_CONTROL:
       error = dwg_decode_BLOCK_CONTROL (dat, obj);
       obj->tio.object->tio.BLOCK_CONTROL->objid = num;
-      dwg->block_control = *obj->tio.object->tio.BLOCK_CONTROL;
+      if (!dwg->block_control.parent) // only once
+        dwg->block_control = *obj->tio.object->tio.BLOCK_CONTROL;
+      else
+        LOG_WARN ("Second BLOCK_CONTROL object ignored");
       break;
     case DWG_TYPE_BLOCK_HEADER:
       error = dwg_decode_BLOCK_HEADER (dat, obj);

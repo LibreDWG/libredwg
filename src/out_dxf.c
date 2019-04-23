@@ -1973,10 +1973,13 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
   SINCE (R_13)
   {
-    Dwg_Object_BLOCK_CONTROL *_ctrl = &dwg->block_control;
-    Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
+    Dwg_Object *ctrl;
+    Dwg_Object_BLOCK_CONTROL *_ctrl = dwg_block_control (dwg);
     // Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->model_space);
     // Dwg_Object *mspace = NULL, *pspace = NULL;
+    if (!_ctrl)
+      return DWG_ERR_INVALIDDWG;
+    ctrl = &dwg->object[_ctrl->objid];
 
     TABLE (BLOCK_RECORD);
     COMMON_TABLE_CONTROL_FLAGS;
