@@ -1343,6 +1343,9 @@ bit_convert_TU (BITCODE_TU restrict wstr)
   char *str;
   int i, len = 0;
   uint16_t c = 0;
+
+  if (!wstr)
+    return NULL;
   while ((c = *tmp++))
     {
       len++;

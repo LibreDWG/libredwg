@@ -2603,20 +2603,24 @@ DWG_OBJECT(STYLE)
     DXF {
       char _buf[256];
       char *s;
-      SINCE(R_2007) {
-        s = bit_convert_TU((BITCODE_TU)_obj->font_name);
-        strncpy(_buf, s, 255);
-        free (s);
-      } else {
-        strncpy(_buf, _obj->font_name, 255);
-      }
-      if ((s = strstr(_buf, ".ttf")) ||
-          (s = strstr(_buf, ".TTF")))
+      if (_obj->font_name)
         {
-          *s = 0;
-          VALUE_TFF ("ACAD", 1001);
-          VALUE_TFF (_buf, 1000);
-          VALUE_RL (34, 1071);
+          SINCE(R_2007) {
+            s = bit_convert_TU((BITCODE_TU)_obj->font_name);
+            strncpy(_buf, s, 255);
+            free (s);
+          }
+          else {
+            strncpy(_buf, _obj->font_name, 255);
+          }
+          if ((s = strstr(_buf, ".ttf")) ||
+              (s = strstr(_buf, ".TTF")))
+            {
+              *s = 0;
+              VALUE_TFF ("ACAD", 1001);
+              VALUE_TFF (_buf, 1000);
+              VALUE_RL (34, 1071);
+            }
         }
     }
 
