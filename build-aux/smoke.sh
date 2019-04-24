@@ -79,8 +79,8 @@ gmake -s -j4 clean
 Linux)
 make -s -j4 clean
 
-echo clang-3.9 -fsanitize=address -fno-omit-frame-pointer
-CC="clang-3.9 -fsanitize=address -fno-omit-frame-pointer" \
+echo clang-7 -fsanitize=address -fno-omit-frame-pointer
+CC="clang-7 -fsanitize=address -fno-omit-frame-pointer" \
     ./configure && \
     make -s -j4 check || exit
 make -s -j4 clean
@@ -89,8 +89,8 @@ CC="clang-5.0 -march=native" \
     ./configure && \
     make -s -j4 check
 make -s -j4 clean
-echo clang-4.0 -std=c99
-CC="clang-4.0 -std=c99" \
+echo clang-5.0 -std=c99
+CC="clang-5.0 -std=c99" \
     ./configure  && \
     make -s -j4 check || exit
 make -s -j4 clean
@@ -129,8 +129,8 @@ do
     make -s -j4 clean
 done
 
-for CC in clang-3.0 clang-3.4 clang-3.5 clang-3.6 clang-3.7 clang-3.8 clang-3.9 \
-          clang-4.0 clang-5.0 clang-6.0 clang-7
+for CC in clang-3.0 clang-3.4 clang-3.5 clang-3.6 clang-3.7 \
+          clang-5.0 clang-6.0 clang-7
 do
     echo $CC
     ./configure && \
