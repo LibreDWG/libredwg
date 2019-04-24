@@ -2447,6 +2447,7 @@ decode_R2007 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
  * Each eed member has size, handle, the raw[size] buffer and the decoded data.
  * Each obj->eed[].data member is further seperated into DXF+1000 codes, for
  * strings, numbers, points, ...
+ * Those subgroups have an empty raw, size, and the prev. handle.
  */
 
 static int
@@ -2632,7 +2633,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
       if (error)
         {
           LOG_ERROR ("No EED[%d].handle", idx);
-          dwg_free_eed (_obj);
+          // dwg_free_eed (_obj);
           dat->byte = end; // skip eed
           continue;        // continue for size = bit_read_BS(dat)
         }
