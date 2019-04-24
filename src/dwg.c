@@ -1059,7 +1059,7 @@ get_last_owned_block (const Dwg_Object *restrict hdr)
           Dwg_Object *obj = (Dwg_Object *)hdr;
           while (obj && obj->type != DWG_TYPE_ENDBLK)
             obj = dwg_next_object (obj);
-          if (obj->type == DWG_TYPE_ENDBLK)
+          if (obj && obj->type == DWG_TYPE_ENDBLK)
             {
               if (!_hdr->endblk_entity)
                 {
