@@ -1041,8 +1041,7 @@ Dwg_Object *
 get_last_owned_block (const Dwg_Object *restrict hdr)
 {
   Dwg_Data *dwg = hdr->parent;
-  Dwg_Object_BLOCK_HEADER *restrict _hdr
-      = hdr->tio.object->tio.BLOCK_HEADER;
+  Dwg_Object_BLOCK_HEADER *restrict _hdr = hdr->tio.object->tio.BLOCK_HEADER;
   unsigned int version = dwg->header.version;
   if (hdr->type != DWG_TYPE_BLOCK_HEADER)
     {
