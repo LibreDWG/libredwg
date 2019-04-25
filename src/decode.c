@@ -1781,6 +1781,9 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 { // gap/unused data
                   LOG_TRACE ("Page: %4" PRId32 " (-)", page.number)
                   info->pagecount++;
+                  info->sections
+                      = realloc (info->sections,
+                                 info->pagecount * sizeof (Dwg_Section *));
                 }
               else if (page.address < prev_address)
                 {
