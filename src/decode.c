@@ -2648,7 +2648,8 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
       if (error)
         {
           LOG_ERROR ("No EED[%d].handle", idx);
-          // dwg_free_eed (_obj);
+          obj->eed[idx].size = 0;
+          obj->num_eed--;
           dat->byte = end; // skip eed
           continue;        // continue for size = bit_read_BS(dat)
         }
@@ -2699,7 +2700,9 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
           error |= dwg_decode_eed_data (dat, obj->eed[idx].data, end, size);
           if (error & DWG_ERR_INVALIDEED)
             {
-              dwg_free_eed (_obj);
+              free (obj->eed[idx].data);
+              obj->eed[idx].data = NULL;
+              obj->num_eed--;
               dat->byte = end; // skip eed
               continue;        // continue for next size = bit_read_BS(dat)
             }
@@ -2707,7 +2710,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
           if (dat->byte < end - 1)
             {
               idx++;
-              obj->num_eed++;
+              obj->num_eed = idx + 1;
               size = (long)(end - dat->byte + 1);
               LOG_INSANE ("EED[%u] size remaining: %ld\n", idx, (long)size);
 
