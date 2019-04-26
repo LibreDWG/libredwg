@@ -284,7 +284,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   if (dwg->num_objects % REFS_PER_REALLOC == 0)
     dwg->object = realloc (dwg->object, old_size + size + REFS_PER_REALLOC);
 
-  // TODO: move to a spec dwg_r11.spec, and dwg_decode_r11_NAME
+    // TODO: move to a spec dwg_r11.spec, and dwg_decode_r11_NAME
 #define PREP_TABLE(token)                                                     \
   Dwg_Object *obj = &dwg->object[num + i];                                    \
   Dwg_Object_##token *_obj = calloc (1, sizeof (Dwg_Object_##token));         \
