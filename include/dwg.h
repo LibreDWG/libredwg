@@ -5694,127 +5694,127 @@ typedef struct _dwg_struct
  */
 
 EXPORT int
-dwg_read_file(const char *restrict filename, Dwg_Data *restrict dwg);
+dwg_read_file (const char *restrict filename, Dwg_Data *restrict dwg);
 EXPORT int
-dxf_read_file(const char *restrict filename, Dwg_Data *restrict dwg);
+dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg);
 
 #ifdef USE_WRITE
 EXPORT int
-dwg_write_file(const char *restrict filename, const Dwg_Data *restrict dwg);
+dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg);
 #endif
 
 EXPORT unsigned char*
-dwg_bmp(const Dwg_Data *restrict, BITCODE_RL *restrict);
+dwg_bmp (const Dwg_Data *restrict, BITCODE_RL *restrict);
 
 /** Converts the internal enum RC into 100th mm lineweight, with
  *  -1 BYLAYER, -2 BYBLOCK, -3 BYLWDEFAULT.
  */
-EXPORT int dxf_cvt_lweight(const BITCODE_RC value);
+EXPORT int dxf_cvt_lweight (const BITCODE_RC value);
 
-EXPORT double dwg_model_x_min(const Dwg_Data *);
-EXPORT double dwg_model_x_max(const Dwg_Data *);
-EXPORT double dwg_model_y_min(const Dwg_Data *);
-EXPORT double dwg_model_y_max(const Dwg_Data *);
-EXPORT double dwg_model_z_min(const Dwg_Data *);
-EXPORT double dwg_model_z_max(const Dwg_Data *);
-EXPORT double dwg_page_x_min(const Dwg_Data *);
-EXPORT double dwg_page_x_max(const Dwg_Data *);
-EXPORT double dwg_page_y_min(const Dwg_Data *);
-EXPORT double dwg_page_y_max(const Dwg_Data *);
+EXPORT double dwg_model_x_min (const Dwg_Data *);
+EXPORT double dwg_model_x_max (const Dwg_Data *);
+EXPORT double dwg_model_y_min (const Dwg_Data *);
+EXPORT double dwg_model_y_max (const Dwg_Data *);
+EXPORT double dwg_model_z_min (const Dwg_Data *);
+EXPORT double dwg_model_z_max (const Dwg_Data *);
+EXPORT double dwg_page_x_min (const Dwg_Data *);
+EXPORT double dwg_page_x_max (const Dwg_Data *);
+EXPORT double dwg_page_y_min (const Dwg_Data *);
+EXPORT double dwg_page_y_max (const Dwg_Data *);
 
 EXPORT Dwg_Object_BLOCK_CONTROL*
-dwg_block_control(Dwg_Data *dwg);
+dwg_block_control (Dwg_Data *dwg);
 
-EXPORT Dwg_Object_Ref* dwg_model_space_ref(Dwg_Data *dwg);
-EXPORT Dwg_Object_Ref* dwg_paper_space_ref(Dwg_Data *dwg);
-EXPORT Dwg_Object*     dwg_model_space_object(Dwg_Data *dwg);
+EXPORT Dwg_Object_Ref* dwg_model_space_ref (Dwg_Data *dwg);
+EXPORT Dwg_Object_Ref* dwg_paper_space_ref (Dwg_Data *dwg);
+EXPORT Dwg_Object*     dwg_model_space_object (Dwg_Data *dwg);
 
 EXPORT unsigned int
-dwg_get_layer_count(const Dwg_Data *dwg);
+dwg_get_layer_count (const Dwg_Data *dwg);
 
 EXPORT Dwg_Object_LAYER**
-dwg_get_layers(const Dwg_Data *dwg);
+dwg_get_layers (const Dwg_Data *dwg);
 
 EXPORT BITCODE_BL
-dwg_get_num_objects(const Dwg_Data *dwg);
+dwg_get_num_objects (const Dwg_Data *dwg);
 
 EXPORT BITCODE_BL
-dwg_get_object_num_objects(const Dwg_Data *dwg);
+dwg_get_object_num_objects (const Dwg_Data *dwg);
 
 EXPORT int
-dwg_class_is_entity(const Dwg_Class *klass);
+dwg_class_is_entity (const Dwg_Class *klass);
 
 EXPORT int
-dwg_obj_is_control(const Dwg_Object *obj);
+dwg_obj_is_control (const Dwg_Object *obj);
 
 EXPORT int
-dwg_obj_is_table(const Dwg_Object *obj);
+dwg_obj_is_table (const Dwg_Object *obj);
 
 EXPORT int
-dwg_obj_is_subentity(const Dwg_Object *obj);
+dwg_obj_is_subentity (const Dwg_Object *obj);
 
 EXPORT BITCODE_BL
-dwg_get_num_entities(const Dwg_Data *);
+dwg_get_num_entities (const Dwg_Data *);
 
 EXPORT Dwg_Object_Entity **
-dwg_get_entities(const Dwg_Data *);
+dwg_get_entities (const Dwg_Data *);
 
 EXPORT Dwg_Object_LAYER *
-dwg_get_entity_layer(const Dwg_Object_Entity *);
+dwg_get_entity_layer (const Dwg_Object_Entity *);
 
 EXPORT Dwg_Object*
-dwg_next_object(const Dwg_Object* obj);
+dwg_next_object (const Dwg_Object* obj);
 
 EXPORT Dwg_Object*
-dwg_ref_object(const Dwg_Data *restrict dwg,
-               Dwg_Object_Ref *restrict ref);
+dwg_ref_object (const Dwg_Data *restrict dwg,
+                Dwg_Object_Ref *restrict ref);
 
 EXPORT Dwg_Object*
-dwg_ref_object_relative(const Dwg_Data *restrict dwg,
-                        Dwg_Object_Ref *restrict ref,
-                        const Dwg_Object *restrict obj);
+dwg_ref_object_relative (const Dwg_Data *restrict dwg,
+                         Dwg_Object_Ref *restrict ref,
+                         const Dwg_Object *restrict obj);
 
 EXPORT Dwg_Object*
-get_first_owned_entity(const Dwg_Object *restrict hdr);
+get_first_owned_entity (const Dwg_Object *restrict hdr);
 EXPORT Dwg_Object*
-get_next_owned_entity(const Dwg_Object *restrict hdr,
-                      const Dwg_Object *restrict current);
+get_next_owned_entity (const Dwg_Object *restrict hdr,
+                       const Dwg_Object *restrict current);
 EXPORT Dwg_Object*
-get_first_owned_subentity(const Dwg_Object *restrict owner);
+get_first_owned_subentity (const Dwg_Object *restrict owner);
 EXPORT Dwg_Object*
-get_next_owned_subentity(const Dwg_Object *restrict owner,
-                         const Dwg_Object *restrict current);
+get_next_owned_subentity (const Dwg_Object *restrict owner,
+                          const Dwg_Object *restrict current);
 EXPORT Dwg_Object*
-get_first_owned_block(const Dwg_Object *hdr);
+get_first_owned_block (const Dwg_Object *hdr);
 EXPORT Dwg_Object*
-get_last_owned_block(const Dwg_Object *hdr);
+get_last_owned_block (const Dwg_Object *hdr);
 EXPORT Dwg_Object*
-get_next_owned_block(const Dwg_Object *restrict hdr,
+get_next_owned_block (const Dwg_Object *restrict hdr,
                      const Dwg_Object *restrict current);
 
 EXPORT Dwg_Object *
-dwg_resolve_handle(const Dwg_Data* dwg,
-                   const BITCODE_BL absref);
+dwg_resolve_handle (const Dwg_Data* dwg,
+                    const BITCODE_BL absref);
 EXPORT int
-dwg_resolve_handleref(Dwg_Object_Ref *restrict ref,
+dwg_resolve_handleref (Dwg_Object_Ref *restrict ref,
                       const Dwg_Object *restrict obj);
 
 EXPORT Dwg_Section_Type
-dwg_section_type(const DWGCHAR *wname);
+dwg_section_type (const DWGCHAR *wname);
 
 /** Free the whole DWG. all tables, sections, objects, ...
 */
 EXPORT void
-dwg_free(Dwg_Data * dwg);
+dwg_free (Dwg_Data * dwg);
 
 /** Free the object (all three structs and its fields)
 */
 EXPORT void
-dwg_free_object(Dwg_Object *obj);
+dwg_free_object (Dwg_Object *obj);
 
 /** Add the empty ref to the DWG, or NULL.
 */
-EXPORT Dwg_Object_Ref * dwg_new_ref (Dwg_Data *dwg);
+EXPORT Dwg_Object_Ref *dwg_new_ref (Dwg_Data *dwg);
 
 /** Add the empty object to the DWG.
     Returns DWG_ERR_OUTOFMEM, -1 for realloced or 0 if not.
