@@ -113,7 +113,7 @@ const unsigned char dwg_bits_size[] = {
   2,   //"TV",
   18,  //"TU",
   2,   //"T",
-  0,   //"TF",
+  1,   //"TF",
   8,   //"HANDLE",
   1,   //"BE", or 3BD
   2,   //"DD",
