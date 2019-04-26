@@ -284,16 +284,24 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   if (dwg->num_objects % REFS_PER_REALLOC == 0)
     dwg->object = realloc (dwg->object, old_size + size + REFS_PER_REALLOC);
 
-    // TODO: move to a spec dwg_r11.spec, and dwg_decode_r11_NAME
-#define PREP_TABLE(name)                                                      \
+  // TODO: move to a spec dwg_r11.spec, and dwg_decode_r11_NAME
+#define PREP_TABLE(token)                                                     \
   Dwg_Object *obj = &dwg->object[num + i];                                    \
-  Dwg_Object_##name *_obj = calloc (1, sizeof (Dwg_Object_##name));           \
+  Dwg_Object_##token *_obj = calloc (1, sizeof (Dwg_Object_##token));         \
+  obj->index = num + i;                                                       \
   obj->tio.object = calloc (1, sizeof (Dwg_Object_Object));                   \
-  obj->tio.object->tio.name = _obj;                                           \
+  if (!_obj || !obj->tio.object)                                              \
+    return DWG_ERR_OUTOFMEM;                                                  \
+  obj->tio.object->tio.token = _obj;                                          \
   obj->tio.object->objid = obj->index;                                        \
+  obj->supertype = DWG_SUPERTYPE_OBJECT;                                      \
   obj->parent = dwg;                                                          \
-  obj->dxfname = (char *)#name;                                               \
-  LOG_TRACE ("\n-- table entry " #name " [%d]:\n", i)
+  obj->name = obj->dxfname = (char *)#token;                                  \
+  obj->type = obj->fixedtype = DWG_TYPE_##token;                              \
+  _obj->parent = obj->tio.object;                                             \
+  obj->tio.object->dwg = obj->parent;                                         \
+  obj->tio.object->objid = obj->index; /* obj ptr itself might move */        \
+  LOG_TRACE ("\n-- table entry " #token " [%d]:\n", i)
 
 #define CHK_ENDPOS                                                            \
   pos = tbl->address + (i + 1) * tbl->size;                                   \
