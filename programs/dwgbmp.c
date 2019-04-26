@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009, 2018 Free Software Foundation, Inc.                  */
+/*  Copyright (C) 2009, 2018, 2019 Free Software Foundation, Inc.            */
 /*  Copyright (C) 2010 Thien-Thi Nguyen                                      */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
@@ -25,6 +25,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
+#ifdef HAVE_VALGRIND_VALGRIND_H
+#  include <valgrind/valgrind.h>
+#endif
 
 #include <dwg.h>
 #include "suffix.inc"
@@ -66,6 +69,18 @@ help (void)
   return 0;
 }
 
+static void
+bmp_free_dwg (Dwg_Data *dwg)
+{
+  // really huge DWG's need endlessly here.
+  if ((dwg->header.version && dwg->num_objects < 1000)
+#ifdef HAVE_VALGRIND_VALGRIND_H
+      || (RUNNING_ON_VALGRIND)
+#endif
+  )
+    dwg_free (dwg);
+}
+
 static int
 get_bmp (char *dwgfile, char *bmpfile)
 {
@@ -90,6 +105,8 @@ get_bmp (char *dwgfile, char *bmpfile)
   if (error >= DWG_ERR_CRITICAL)
     {
       fprintf (stderr, "Unable to read file %s: 0x%x\n", dwgfile, error);
+      free (bmpfile);
+      bmp_free_dwg (&dwg);
       return error;
     }
 
@@ -98,11 +115,15 @@ get_bmp (char *dwgfile, char *bmpfile)
   if (!data)
     {
       fprintf (stderr, "No thumb in dwg file\n");
+      free (bmpfile);
+      bmp_free_dwg (&dwg);
       return 0;
     }
   if (size < 1)
     {
       fprintf (stderr, "Empty thumb data in dwg file\n");
+      free (bmpfile);
+      bmp_free_dwg (&dwg);
       return -3;
     }
 
@@ -111,6 +132,7 @@ get_bmp (char *dwgfile, char *bmpfile)
     {
       fprintf (stderr, "Unable to write BMP file '%s'\n", bmpfile);
       free (bmpfile);
+      bmp_free_dwg (&dwg);
       return -4;
     }
 
@@ -123,6 +145,8 @@ get_bmp (char *dwgfile, char *bmpfile)
   retval = fwrite (&bmp_h.magic[0], sizeof (char), 2, fh);
   if (!retval)
     {
+      free (bmpfile);
+      bmp_free_dwg (&dwg);
       perror ("writing BMP magic");
       return 1;
     }
@@ -130,6 +154,7 @@ get_bmp (char *dwgfile, char *bmpfile)
   if (!retval)
     {
       free (bmpfile);
+      bmp_free_dwg (&dwg);
       perror ("writing BMP file_size");
       return 1;
     }
@@ -139,6 +164,7 @@ get_bmp (char *dwgfile, char *bmpfile)
   if (!retval)
     {
       free (bmpfile);
+      bmp_free_dwg (&dwg);
       perror ("writing BMP header");
       return 1;
     }
@@ -146,7 +172,8 @@ get_bmp (char *dwgfile, char *bmpfile)
 
   printf ("Success. Written preview image to '%s'\n", bmpfile);
   free (bmpfile);
-  dwg_free (&dwg);
+  bmp_free_dwg (&dwg);
+
   return 0;
 }
 
