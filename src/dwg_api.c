@@ -21122,16 +21122,27 @@ dwg_obj_generic_parent (const dwg_obj_generic *restrict obj,
  ********************************************************************/
 
 /** Returns object from reference or NULL
-\code Usage: dwg_object obj = dwg_ref_get_object(obj, &error);
+\code Usage: dwg_object obj = dwg_ref_get_object(ref, &error);
 \endcode
 \param[in]  ref     dwg_object_ref*
-\param[out] error   int*, is set to 0 for ok, 1 on error
+\param[out] error   int*, is set to 0 for ok, 1 or 2 on error
 */
 dwg_object *
 dwg_ref_get_object (const dwg_object_ref *restrict ref, int *restrict error)
 {
   if (ref)
     {
+      if (!ref->obj) {
+        /* It is not possible to get the dwg from the ref only, only from an obj.
+           The caller has to call the code below: */
+        /* Dwg_Data *dwg = ;
+        ref->obj = dwg_resolve_handle (dwg, ref->absolute_ref);
+        if (!ref->obj) {
+        */
+        *error = 2;
+        LOG_ERROR ("%s: empty ref", __FUNCTION__)
+        //}
+      }
       *error = 0;
       return ref->obj;
     }
