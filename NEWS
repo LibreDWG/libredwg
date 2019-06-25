@@ -1,8 +1,8 @@
 GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
-Copyright (C) 2018 Free Software Foundation, Inc.
+Copyright (C) 2019 Free Software Foundation, Inc.
 See the end for copying conditions.
 
-LibreDWG version 0.8 - released 2019/?? - still alpha:
+LibreDWG version 0.8 - released 2019/6/25 - still alpha:
 
 new API:
   * added a new dynamic API, read and write all header and object fields
@@ -64,6 +64,7 @@ Important bugfixes:
     This is broken in all other dwg libraries.
   * Fix bit_convert_TU for >U+800 (#80)
   * Fixed more memory leaks (denis and rurban)
+  * Fixed some double-free's and oob errors in EED (#99, #104)
 
 Other newsworthy changes:
   * add --disable-bindings configure switch (#86)

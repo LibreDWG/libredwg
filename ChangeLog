@@ -1,6 +1,870 @@
 Full history from the git log
 -----------------------------
 
+2019-04-26  Reini Urban  <rurban@cpan.org>
+
+	redo build-aux/clang-format-all.sh src test examples programs
+
+	bump copyright years to 2019
+
+	dwgbmp: skip free unless on valgrind
+	and add some missing free calls.
+	test: make check-valgrind -C programs/ bin_PROGRAMS=dwgbmp
+
+	preR13: initialize more missing TABLE obj fields
+	fixing various valgrind errors, esp. with dwg_obj_is_control()
+
+	Partially clang-format include *.h
+	Not the typedef's and struct's, as gen-dynapi.pl
+	cannot yet parse the changes properly.
+	See the work/clang-format-inc branch.
+
+	preR13: fix wrong FIELD_TF check
+	preR13 we have no obj->address and obj->size, leading all
+	VECTOR_CHKCOUNT to fail. skip that for now.
+	only detected with valgrind
+
+2019-04-25  Reini Urban  <rurban@cpan.org>
+
+	EED: fix invalid free on failing EED
+	on final free with 2007/Leader.dwg.
+	This fails early with No EED[9].handle
+
+	Also fix a double-free when failing dwg_decode_eed_data.
+
+2019-04-25  Reini Urban  <rurban@cpan.org>
+
+	clang-format-all
+
+	fix read_R2004_section_info heap overflow
+	on a page gap (info->pagecount++), we need to realloc the sections,
+	or info->sections[j] might overflow.
+
+2019-04-24  Reini Urban  <rurban@cpan.org>
+
+	smoke.sh: debian testing broke a few clangs
+	clang 3.8, 3.9 and 4.0 are now broken
+
+	get_last_owned_block: fix -Wnull-dereference
+
+	EED: no free with handle errors
+	fixes asan errors with #99 cases
+
+2019-04-23  Reini Urban  <rurban@cpan.org>
+
+	EED: add more eed_need_size checks
+	Check also individual dwg_decode_eed_data decoded sizes,
+	to abort not enough room for wrong codes.
+	Fixes #104.
+
+	EED: detect invalid objects earlier
+
+	STYLE: protect from empty font_name
+	May be a NULL ptr.
+	Fixes case bit_convert_TU@bits.c:1323-3___null-pointer-dereference
+	of #99.
+
+	dxf: simplify dxf type 5 vs 105 for DIMSTYLE
+	only one write, not two
+
+	dxf: check object types
+	which is a more general fix for wrong object, as in
+	#99 case dwg_dxf_LTYPE@dwg.spec:2523-11___heap-buffer-overflow
+
+	dxf: protect invalid LTYPE_BYBLOCK
+	check LTYPE header reference for the correct type.
+	Fixes case dwg_dxf_LTYPE@dwg.spec:2523-11___heap-buffer-overflow at #99
+
+	dwg_block_control: add error handling
+	fuzzing created an invalid DWG without initial BLOCK_CONTROL
+	object. Check this and error. Fixes case dwg_dxf_BLOCK_CONTROL@dwg.spec:2154-1___out-of-bounds-read of #99
+
+2019-04-22  Reini Urban  <rurban@cpan.org>
+
+	continue with COMMON_ENTITY_HANDLE_DATA
+	if possible, and the entity-specific decoding had an
+	VECTOR_CHKCOUNT_LV error.
+	This is only possible with r2007+ entities
+
+	validate _hdr->endblk_entity in get_last_owned_block
+	and add if missing.
+	This fixes the problem of the previous commit much better, it is not
+	only a DXF-specific hack anymore.
+	Closes part 2 of #99, the bit_read_B@___out-of-bounds-read testcase.
+	Unlike as with the previous fix, the generated/found ENDBLK entity has
+	now the correct groups 5 and 330, and the missing object_ref handle is
+	fixed up.
+
+2019-04-21  Reini Urban  <rurban@cpan.org>
+
+	dxf: WIP fix for empty ENDBLK entity
+	This from the #99 bit_read_B@___out-of-bounds-read fuzzer case.
+
+	TODO: The real fix should be put into dwg_validate_INSERT
+	so that get_last_owned_block can never fail, and always return
+	a valid ENDBLK even if it couldn't be found at decode.
+
+2019-04-20  Reini Urban  <rurban@cpan.org>
+
+	fix #99 first SEGV
+	dwg_dxf_LEADER@dwg.spec:2034-3___null-pointer-dereference
+	This is at FIELD_3DPOINT_VECTOR in LEADER.
+	There are illegal size fields (num_points) in LEADER on decode, which are not yet set to 0.
+	Add a _LV macro variant for size lvalue, which can be set to 0.
+
+	Also found an entity with entmode 3 but empty ownerhandle.
+	Write an empty ownerhandle then.
+	Fixed also a typo in writing the mspace block_record with entmode 2: PSPACE => MSPACE
+
+2019-04-20  Reini Urban  <rurban@cpan.org>
+
+	dwg_decode_eed_data: whitespace only
+
+2019-04-19  Reini Urban  <rurban@cpan.org>
+
+	run bash clang-format-all.sh src programs examples test
+	excluding include bindings, with clang-format-mp-devel.
+
+	with an older clang-format than devel (i.e. 8.0)
+	you can also just run it with the -style=GNU option, but I
+	changed three options: SortIncludes:false, SortUsingDeclarations: false,
+	IndentPPDirectives: AfterHash
+
+2019-04-19  Reini Urban  <rurban@cpan.org>
+
+	fixup includes and generators a bit
+	avoid EXPORT redef after clang-format-all.
+	also improve the generated C sources to match the formatting
+	more.
+
+	add .clang-format
+	created with the undocumented GNU style:
+	clang-format -style=GNU -dump-config > .clang-format
+
+2019-04-07  Reini Urban  <rurban@cpan.org>
+
+	cirrus: add branch filter
+
+2019-03-30  Reini Urban  <rurban@cpan.org>
+
+	--disable-python on cygwin
+	it's just too broken to be repairable for now.
+	python3.6m works on x64 though.
+
+	--enable-python=yes vs check/default
+	only die with yes, disable if not found instead
+
+2019-03-29  Reini Urban  <rurban@cpan.org>
+
+	appveyor: cygwin defaulted to python3 now
+	/usr/bin/python3 is now the default, but there's still an old /usr/bin/python around.
+	it couldn't be linked, because python36-devel was missing.
+
+2019-03-29  Reini Urban  <rurban@cpan.org>
+
+	config.h: silence __XSI_VISIBLE redefined warnings
+	guard __XSI_VISIBLE redefinition, only needed for cygwin strdup.
+
+	add config.h.in to git, autoheader does not overwrite it.
+
+2019-03-29  Reini Urban  <rurban@cpan.org>
+
+	patch ax_python_devel.m4 for cygwin
+	keep using ac_python_library (esp. for the m suffix)
+
+	patch ax_python_devel.m4 for --enable-framework
+	and LOCALMODLIBS. Reapply our old patches
+
+	revert ax_python_devel.m4 to upstream
+	skip our python probe improvements, they caught up in between
+
+	windows: fix type warnings
+	-Wincompatible-pointer-type, -Wunused-function
+
+	add AX_ADD_FORTIFY_SOURCE probe
+	for faster glibc calls, and some compile-time safety
+
+	fix 2 -Wmaybe-uninitialized vars
+
+	api: add some missing deprecation decls
+	dwg_api.h is not included into swig at all.
+
+	fix gcc-4.4 -ansi errors
+	duplicate typedefs
+	shadowed index variable decl
+
+	color.index: signed short
+	may be negavtive. Only cygwin gcc emitted this -Wtype-limits warning
+
+2019-03-22  luz.paz  <luzpaz@users.noreply.github.com>
+
+	Misc. typos
+	Found via `codespell`
+
+2019-03-01  Reini Urban  <rurban@cpan.org>
+
+	myalloca.h: fixup wrong #if HAVE_ALLOCA_H
+	need #ifdef
+
+2019-02-25  Reini Urban  <rurban@cpan.org>
+
+	add section_infohdr struct
+	its num_desc replaces num_info
+
+	Fix gen-dynapi.pl for FreeBSD 12
+
+2019-02-25  Reini Urban  <rurban@cpan.org>
+
+	Fix clang support for gen-dynapi.pl (#98)
+	Add all the -print-search-dirs, not just the first.
+	For clang /usr/lib/gcc/x86_64-linux-gnu/8 is needed also.
+
+	Stabilize clang detection by checking for the include dirs,
+	not the executable name (which is cc on FreeBSD e.g.)
+
+	Also remove BITCODE_BS defines clashing with the typedef, leading to
+	typedef uint16_t uint16_t; This also fixes many wrong dynapi types
+	to proper BITCODE_BS.
+
+	Closes #98
+
+2019-02-25  Reini Urban  <rurban@cpan.org>
+
+	WIP clang support for gen-dynapi.pl (#98)
+	Some more defines still needed
+
+2019-02-24  Reini Urban  <rurban@cpan.org>
+
+	section: add more tracing
+
+	section: add one more invalid Section info check
+	The addresses must raise.
+	Reformat logging a bit
+
+2019-02-22  Reini Urban  <rurban@cpan.org>
+
+	fix some compiler warnings
+	and wrong types, esp. encr_sat_data TV => char**
+
+	section: cosmetics
+	r2007 calls the SECTION.number id. We call it number because of R11
+
+2019-02-21  Reini Urban  <rurban@cpan.org>
+
+	geojson: encode color as rgb (r2004+) or index
+	Closes #95
+
+	json: field_cmc use Dwg_Color* by ref
+	don't copy the struct. for consistency
+
+	json: color names are only TV
+	no unicode
+
+	json: abstract field_cmc() function
+	no macros needed. makes for much smaler code and easier debugging.
+	the color struct is passed by copy for now.
+
+	json: print only alpha color names
+	many names are still garbled, like VIEWSTYLE.edge_obscured_color
+	don't print them if they don't start with an alpha character.
+
+	json: enhance color map
+	skip defaults, index default is 0,
+	add flag, name and bookname
+
+	geojson: better Layer, use name or Text properties
+	Skip empty Text, use name for INSERT
+
+2019-02-20  Reini Urban  <rurban@cpan.org>
+
+	geojson: skip default Linetype
+	print color as number
+
+	geojson: skip null properties
+
+	geojson: add color property
+	but not the color name, just the index.
+	Google Maps expects a name, e.g. blue
+
+	log: accept td/*.dwg symlinks
+
+2019-02-20  Reini Urban  <rurban@cpan.org>
+
+	fix LAYER.on flag (#96)
+	set it for r13-r14,
+	and fix the flag field also (no color_rs there).
+	fix it for r2000+ (reverse).
+
+	use it in dwglayers
+
+2019-02-20  Reini Urban  <rurban@cpan.org>
+
+	regen unknown: depend on bd-unknown.inc
+	add bd-unknown.inc generation rule
+
+	decode: advance chain ptr for picture (unused)
+	just for consistency.
+	the ptr is set absolutely in the next lines for the header.
+
+	replace memcpy with bfr_read
+
+	api: rename section.unknown2 to unknown
+
+	harmonize 2007 section types with 2004
+	sizes and addresses are unsigned.
+	re-use bfr_read with 2004
+
+	harmonize Dwg_Section_Info, memcpy struct
+	similar to 2007 bfr_read()
+	rename start_offset to offset,
+	use RLd section.number (i.e. int32_t)
+
+2019-02-20  Reini Urban  <rurban@cpan.org>
+
+	Improve/harmonize logging 2004 section sizes (#93)
+	read_R2004_section_info still has a problem with wrong page sizes,
+	the 2007 variant read_data_section not.
+	Continue on fc3fd1c14eb08f6e06f516753bfac1fa59029d3a
+	The section_size is uint64, not int32. (ODA p28)
+
+	$ programs/dwgread test/test-big/2004/HARTA_E_PRISHTINES.dwg
+	ERROR: read_R2004_section_info out of range
+	Warning: Failed to find section_info[13] with type 0x3
+	ERROR: Failed to read compressed class section
+
+2019-02-20  Reini Urban  <rurban@cpan.org>
+
+	json: share cquote with geojson
+
+	add myalloca.h and freea(ptr)
+	for all the various alloca usages.
+	freea() is a noop, only used on old systems without alloca (where
+	malloc is used instead).
+
+2019-02-19  Reini Urban  <rurban@cpan.org>
+
+	use AC_FUNC_ALLOCA probe
+	and use the recommended prologue, assuming it
+	exists everywhere (C99)
+
+2019-02-19  Reini Urban  <rurban@cpan.org>
+
+	more GeoJSON support (#95)
+	TEXT, MTEXT: Text feature and insertion point
+	proper Layer and Linetype names
+
+	add dwg_ent_get_ltype_name API
+
+2019-02-19  Reini Urban  <rurban@cpan.org>
+
+	geojson: fix undefined behaviour with loop counter
+	dwg_geojson_LWPOLYLINE: don't use the counter after the loop.
+	fails with ubsan
+
+2019-02-14  Reini Urban  <rurban@cpan.org>
+
+	more gen-dynapi.pl fixups: bsd
+	define more new libc-specific macros, for darwin.
+	BL is now fixed up again.
+
+	fixup gen-dynapi.pl for cc-specific stddef.h
+	and unify uint16_t to BS, uint32_t to BL, needed since
+	fcfbe04fd338627e7713c48ddd51cbdc5384dd6c (typedefs)
+
+	GeoJSON: fix json commas
+	passes now jq
+
+	add geojson jq tests to json.test
+
+	GeoJSON: LWPOLYLINE also as direct type
+	seperate it into its own function to handle it
+	directly or as variable type
+
+2019-02-07  Reini Urban  <rurban@cpan.org>
+
+	skip attribute_deprecated_with_message with icc
+	The msg arg is not supported with icc 12
+
+	ax_compiler_flags_cflags: set ac_c_werror_flag=yes
+	This ensures compilers like icc read the actual stderr
+	conftest.err when -Werror=unknown-warning-option is invalid.
+
+	more restrict
+
+2019-02-06  Reini Urban  <rurban@cpan.org>
+
+	dwg.h: fixup RLL confusion
+
+2019-02-06  Reini Urban  <rurban@cpan.org>
+
+	api: change BITCODE defines to typedefs
+	This pins down the types, and helps in debugging and the dynapi.
+	eg fieldhandles is now a H*
+
+	BITCODE's were added with 19ccf73769024991c43e08c012db010790ffd9dc to
+	d28470bcaa61d0ce811aeb8ba8aa77ff6a010f1d
+
+2019-02-06  Reini Urban  <rurban@cpan.org>
+
+	cygwin32: fix include/dwg.h types
+	The cygwin probes fail to check HAVE_STDINT_H, and these
+	config.h defines are not available in the public header anyway.
+	Need to fallback on defines for a pure non-autotooled system.
+
+	on 32bit without HAVE_STDINT_H the sizes are different.
+	Should fix the dynapi HEADER tests.
+
+2019-02-06  Reini Urban  <rurban@cpan.org>
+
+	demand C99 stdint.h
+	we already demand that via AC_PROG_CC_C99
+	assume in dwg.h stdint.h and inttypes.h,
+	without demanding autotools HAVE_STDINT_H defines
+
+	e.g. freebsd
+	insert.c:21:56: warning: format specifies type 'unsigned int' but the argument has type 'BITCODE_BL' (aka 'unsigned long') [-Wformat]
+	printf ("object count for insert : " FORMAT_BL "\n", insert->num_owned);
+
+2019-02-05  Reini Urban  <rurban@cpan.org>
+
+	dwgread: no extra \n
+
+	dxf: add object_entity dxfgroups to dynapi
+	and fixup some wrong/missing groups
+
+	dxf.test: honor --enable-debug setting
+	works now with and without --enable-debug
+
+	dxf: honor --enable-debug
+	to test out_dxf and DXFIN with unstable objects
+
+	configure: document --enable-debug as unstable
+	it should have really been called --enable-unstable, but there we are.
+	it also disables -O2 and sets -fno-omit-frame-pointer, which makes for
+	easier debugging.
+
+2019-02-04  Reini Urban  <rurban@cpan.org>
+
+	dxf: fix ACTION => "dxf" expansion in classes.inc
+	fixes detection of UNSTABLE_CLASS in dxf ACTION, and
+	force setting of name, dxfname and fixedtype for all varying classes
+	with decode and all importers
+
+	override the dxf.test for UNSTABLE_CLASS to expect only the CLASS entry,
+	no object entries.
+
+2019-02-03  Reini Urban  <rurban@cpan.org>
+
+	dxf: disable ACTION dxf with UNSTABLE_CLASS
+	as acad import might crash with them.
+	WIP ACTION needs to be passed 2x as arg to be expanded.
+	The other ACTION check is also not working.
+
+	dxf: VISUALSTYLE
+	restrict 290, 291 to FIELD_B (not BS)
+	They are most likely wrong, and fail to import if not 0/1
+
+	skip dxf_validate_DICTIONARY
+	NULL all invalid handles in out_dxf
+
+	dxf_validate_DICTIONARY
+	skip invalid ownerhandles
+
+	dxf-roundtrip: fixup outname
+	with e.g. example_2000 not being example_2000_2000.dxf
+
+2019-02-02  Reini Urban  <rurban@cpan.org>
+
+	add Dwg_Entity_ARC_DIMENSION with --enable-debug
+	yet untested
+
+	dynapi: add dxfgroups (#92) WIP
+	also add new RENDERENVIRONMENT, RENDERGLOBAL objects
+	(untested, but documented as DXF)
+
+2019-02-01  Reini Urban  <rurban@cpan.org>
+
+	mark endian specific code
+	The lib only works on LE (little-endian) so far,
+	for BE we would need to abstract some section code to bits_*LE
+
+	read_R2004_section_info: remove unused Oops
+	The rootcause is now fixed,
+	Closes #93
+
+2019-01-31  Reini Urban  <rurban@cpan.org>
+
+	read_R2004_section_info (#93) num_sections => pagecount
+	use uin64_t section_size, not int32.
+	remove the wrong num_sections field, which is documented
+	as PageCount.
+
+	decode: signed read_R2004_section_info section_number (#93)
+	a negative number denotes a gap/unused section
+
+	decode: harmonize r2007 section logging
+	mostly whitespace, one wrong 0x6 in the offset
+
+2019-01-31  Reini Urban  <rurban@cpan.org>
+
+	ATTDEF: fix r2007+ STRING_STREAM
+	also for ATTRIB, now we get the right style handle
+	and for ATTDEF the right prompt.
+
+	{START,END}_STRING_STREAM now only used within header_variables.spec
+
+2019-01-31  Reini Urban  <rurban@cpan.org>
+
+	ATTDEF: add missing ATTRIB fields
+	it is defined as ATTRIB plus some 2 more fields
+
+	fix dxf-allcvt.sh
+	skip not existing globbed files
+
+	dxf: re-order ATTDEF
+	3 prompt needs to be before 2 tag.
+	But the prompt is not read properly, TODO
+
+2019-01-30  Reini Urban  <rurban@cpan.org>
+
+	Merge branch 'smoke/dynapi'
+
+2019-01-29  Reini Urban  <rurban@cpan.org>
+
+	dynapi_test: special-case strcmp
+	which interestingly only failed on 32bit
+
+	api: not deprecated dwg_obj_layer_get_name
+	analog to the other tables
+
+	dynapi_test: include config before public api
+	even freebsd-amd64 started failing
+
+	suppress -Wdeprecated-declarations
+	on gcc and clang for the unit-tests and testcases
+
+	dynapi_test: disable broken cygwin32 header test
+	There the dynapi works fine, but the dwg->header_vars.VAR
+	reference is broken somehow (some wrong offset?).
+
+	api: add type getters and setters WIP
+
+2019-01-28  Reini Urban  <rurban@cpan.org>
+
+	api: add dwg_get_HEADER, dwg_set_HEADER by name
+
+	doc: fixup refman
+	doxygen: expand macros to generate decls for docs,
+	add deprecations
+
+	dynapi: fix EXPORT of internal syms
+	need to generate imp_dwg_dynapi_* functions in .dll.a
+	for windows
+
+	dynapi: add dwg_get_OBJECT (#59)
+	all entites and objects, also all missing typedefs.
+	The api should be now complete, sans the common fields
+
+	dynapi: add dwg_get_ENTITY (#59)
+	objects not yet
+
+	api: remove wrong nonnull attribs
+	we need to allow API NULL args, which we cannot control
+
+	dynapi: add dwg_dynapi_common_value
+	and its structs, sorted by name.
+	check more dynapi args for NULL
+
+	api: revert dwg_ent_region_get_acis_empty
+	we need to pass through the api.
+	failed on FreeBSD
+
+	bump copyright years, fixup #lines
+
+	harmonize REPEAT Invalid rcount errors
+	print the dxfname and fieldname similar to REPEAT_CHKCOUNT
+
+	dynapi_test: skip count for objid_object_handles
+	PROXY.objid_object_handles has a computed count (TODO)
+
+	dynapi_test: skip count for VECTOR_N
+	_transform or _transmatrix fields are malloced, but have no countfield.
+	they have a fixed size of 12 or 16
+
+	rename LEADER.numpts to num_points
+	for consistency with the points* field, and a consistent
+	num_ prefix
+
+	api: rename TABLE.attribs to attrib_handles
+	for consistency with all other attrib_handles
+
+	dynapi_test: skip more fields without a count
+
+2019-01-28  Reini Urban  <rurban@cpan.org>
+
+	api: rename LTYPE.dash, XRECORD.num_eed
+	LTYPE.dash => LTYPE.dashes
+	XRECORD.num_eed => RECORD.num_xdata.
+
+	Found those api errors only with dynapi_test
+
+2019-01-28  Reini Urban  <rurban@cpan.org>
+
+	dynapi_test: special-case num_reactors count
+
+	dwg_api.h: finish deprecations and nonnull decls
+
+	doc: improve refman target
+
+	dynapi: fixup some H* fields
+	Convert::Binary::C cannot seperate H* from H, both are just Dwg_Object_Ref*
+	So we need to parse the defines.
+	Fixes the COMMON_TABLE_CONTROL_FIELDS H* fields,
+	and COMMON_ENTITY_POLYLINE vertex H*
+
+	dynapi: check countfields
+	of arrays.
+	copy strings, do the malloc in the API.
+
+	dynapi: extend need_malloc to indirect+malloc+string
+	fixed-size structs like H, TIMEBLL, CMC
+	don't need malloc, only dynamic arrays like TV, H*.
+	add a seperate indirect field for structs ($is_ptr),
+	and if it's a null-terminated string (ascii or wide).
+	These are needed for the memcpy/strcpy in the getter/setter.
+
+	dynapi_test: undo var++
+	fixes invalid free when incr num_textfield
+
+	dynapi: add obj->name field
+	not the dxfname, but almost: DICTIONARYDFLT and PLACEHOLDER are e.g. different
+
+	dynapi: more type cleanup
+	resolve more  BITCODE types, esp ptrs.
+	add need_malloc field, and reserve dxf field.
+
+2019-01-28  Reini Urban  <rurban@cpan.org>
+
+	dwg_api: more refactoring WIP
+	add nonnull compile-time checks, add deprecation messages.
+
+	because of the static loglevel we cannot inline the api functions
+	with LOG_ERROR
+
+2019-01-28  Reini Urban  <rurban@cpan.org>
+
+	dynapi: refactor dwg_api WIP
+	add error handling and logging to dynapi.
+	rename dwg_get_OBJECT to dwg_getall_OBJECT
+	check entity type for dwg_dynapi_entity_*value()
+
+	dynapi: add setter API (and tests)
+
+	silence dejagnu warnings on clang
+	e.g. freebsd. dejagnu.h is long unmaintained
+
+	dynapi: fixup name[4] to types
+	is ptr then, and skip the suffix
+
+	dynapi: workaround missing stddef.h
+	on cygwin32 stddef.h is missing. provide an offsetof workaround.
+	the other possibility would have been to provide static offsets for 64bit
+	and 32bit machines, but there are other ABIs, such as x32 (ptrsize 4, intsize 8).
+
+	dynapi: skip gen-dynapi for testcases
+
+	dynapi: fixup sorting of dwg_name_types for _3D
+	3DFACE and 3DSOLID are now proper names to be searched for
+
+	dynapi: fixup more types
+
+2019-01-28  Reini Urban  <rurban@cpan.org>
+
+	dynapi_test: add HEADER tests
+	sort the header_variables_fields by name, not offset
+
+	still failing: 3DFACE, 3DSOLID
+
+2019-01-28  Reini Urban  <rurban@cpan.org>
+
+	dynapi: fix name* to type*
+	fixes compilation of dynapi_test.
+	Now just the HEADER dynapi is failing
+
+2019-01-28  Reini Urban  <rurban@cpan.org>
+
+	dynapi: more dynapi_test objects WIP
+	add all the entities, objects and fields.
+
+	change MULTILEADER from object to struct _dwg_entity_MULTILEADER
+	for internal consistency with the dynapi.
+
+2019-01-28  Reini Urban  <rurban@cpan.org>
+
+	add testcases/dynapi_test WIP
+	generated from all fields
+
+	dynapi: move to public dwg_api.h
+	allow NULL Dwg_DYNAPI_field *fp, rarely needed to
+	get the type, size or offset
+
+	dynapi: test it, refactor a bit
+
+	dynapi: regen
+
+	dynapi: rename TABLE.entry_name field to name
+
+	dynapi: add generic getters, NULL terminate the fields
+	and add size to Dwg_DYNAPI_field for easier memcpy
+	without the need to lookup the BITCODE_ type.
+
+	dynapi: add api functions
+	make dwg_entity_names and dwg_object_names bsearchable (equal size)
+
+	dynapi: add _fields access to dwg_name_types[]
+	We need to bsearch the OBJECT to get to the _dwg_OBJECT_fields.
+
+	dynapi: unexpand BITCODE_* macros
+	TODO: DIMENSION_COMMON, _3DSOLID_FIELDS macros
+	      union _dwg_MLEADER_Content_u
+
+	dynapi: add dynapi.h with OFF macro
+	use builtin offsetof(struct,field) and only the default value
+	if stddef.h is not found
+
+2019-01-28  Reini Urban  <rurban@cpan.org>
+
+	Add gen-dynapi.pl, dynapi.c WIP
+	Generate dwg.h struct names and field types, offsets.
+	TODO: types not as string?
+	      link _fields[] to some name array,
+	        either dwg_name_types or dwg_entity_names
+
+	See #59
+
+2019-01-28  Reini Urban  <rurban@cpan.org>
+
+	dxf: print BL LAYER_INDEX.timestamp1 as float
+	out_dxf overflows BL/%u in snprintf
+
+	dxf-allcvt: fix test-big
+
+	fix r2007 XRECORD strings
+
+2019-01-27  Reini Urban  <rurban@cpan.org>
+
+	dxf-roundtrip.sh: support td/example_20*.dwg
+
+	fix HATCH_gradientfill logic
+	wrong cond
+
+	dxf: use a better CMC index
+	for a given rgb value. The index is still wrong,
+	(e.g. 194 instead of 250 for rgb 0xcccccc)
+	but helps importing the DXF. The index is mandatory, even for truecolor.
+
+	dxf: mandatory LAYER.flag 70
+	may not be left out, even if value 64
+
+	doc: better links
+
+	rename type EMC to ENC (entity color)
+	and change some VISUALSTYLE colors from CMC to ENC
+
+2019-01-25  Reini Urban  <rurban@cpan.org>
+
+	configure: skip bindings/python without swig
+
+	dxf: print subclass markers since r13 (#90)
+	not just since r2000. Fixes dxf-roundtrip for the #90 example.
+	Thanks to @Febfire for the example dwg to find the problem
+
+	dxf: DIMSAV is not in r14
+
+2019-01-17  Reini Urban  <rurban@cpan.org>
+
+	configure: improve PERL_VERSION
+	unused, just for printing
+
+2019-01-16  Reini Urban  <rurban@cpan.org>
+
+	dxf-allcvt: add test-big
+
+	added to stable: UNDERLAY entities, UNDERLAYDEFINITION, CAMERA
+
+	regen-unknown without test-big dwgs
+
+	logs-all: add test/test-big
+	seperate huge DWGs/logs from the normal test-data.
+	there exists no logs-all.sh.in.only the parallel and serial variants
+	(parallel ignored)
+
+	improve HATCH_gradientfill: type CMC
+	and the double is the shift_value: 0.0 or 1.0.
+	also fixes the wrong ODA docs for Repeats # of Gradient Colors
+
+	cirrus freebsd: disable distcheck
+	for the failing bindings/python target
+
+2019-01-15  Reini Urban  <rurban@cpan.org>
+
+	free: fix -Wshadow for static dat
+	use local dat's
+
+	json: fix asan dynamic-stack-buffer-overflow
+	too small alloca, also switch to heap on overlarge alloca (security)
+
+	api: add get_{first,next}_owned_subentity iterator
+
+	.gitignore: more
+
+2019-01-14  Reini Urban  <rurban@cpan.org>
+
+	configure: print PERL version
+	not just logging to config.log
+
+	api: add dwg_model_space_object(dwg)
+	with all the checks, needed for dxf_blocks_write()
+
+	json: fix \u00XX cquote
+	and FIXME/skip surrogate pairs, U+10000+ chars.
+	A lone low or high pair is forbidden, TODO.
+	These mostly came from invalid binary chunk anyway.
+	It fixes the json tests with --enable-debug
+
+	cirrus: try python again
+	m distdir: don't know how to make ./LibreDWG.py
+
+	examples: speed-up make distdir
+	alldwg.inc doesn't need to be generated there, make regen-unknown is enough.
+
+2019-01-10  Reini Urban  <rurban@cpan.org>
+
+	dxf: EMC color.rgb & 0x00ffffff only
+	out_dxf needs to filter the type from the rgb value,
+	in_dxf not.
+
+	dxf: color.index & 255
+	256 would be 1 then.
+	AcDbHatch(1C48E9): Color index 65535
+	AcDbVisualStyle(F4): Color index 3368
+	...
+
+	MATERIAL: add ownerhandle, REACTORS, XDICOBJHANDLE
+	and add the mandatory DXF fields.
+
+2019-01-09  Reini Urban  <rurban@cpan.org>
+
+	alive.test: speed up
+	only -v2. not -v4 needed.
+	from 32.7s to 11.4s
+
+	dxf: improve mspace dxf_blocks_write
+	esp. for some r2010+ dwgs
+
+	regen-unknown
+	with the new DXFs
+
 2019-01-09  Reini Urban  <rurban@cpan.org>
 
 	test-data/2007: add missing DXF files
