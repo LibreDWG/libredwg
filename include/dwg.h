@@ -5061,7 +5061,7 @@ typedef struct _dwg_entity_eed_data
       char data[1];
     } eed_4;
     struct { /* 5 (1005) entity */
-      BITCODE_RL entity;
+      BITCODE_RLL entity;
     } eed_5;
     struct { /* 10-13 point */
       BITCODE_3RD point;

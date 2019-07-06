@@ -2543,11 +2543,10 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       LOG_TRACE ("byte: " FORMAT_RC "\n", data->u.eed_2.byte);
       break;
     case 3:
-    case 5:
       if (eed_need_size (4, size))
         return DWG_ERR_INVALIDEED;
       data->u.eed_3.layer = bit_read_RL (dat);
-      LOG_TRACE ("layer/...: " FORMAT_RL "\n", data->u.eed_3.layer);
+      LOG_TRACE ("layer: " FORMAT_RL "\n", data->u.eed_3.layer);
       break;
     case 4:
       if (eed_need_size (1, size))
@@ -2559,6 +2558,12 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       for (j = 0; j < MIN (lenc, size - 2); j++)
         data->u.eed_4.data[j] = bit_read_RC (dat);
       LOG_TRACE ("raw: %s\n", data->u.eed_4.data);
+      break;
+    case 5:
+      if (eed_need_size (8, size))
+        return DWG_ERR_INVALIDEED;
+      data->u.eed_5.entity = bit_read_RLL (dat);
+      LOG_TRACE ("entity: %" PRIx64 "\n", data->u.eed_5.entity);
       break;
     case 10:
     case 11:
