@@ -21125,17 +21125,18 @@ dwg_ref_get_object (const dwg_object_ref *restrict ref, int *restrict error)
 {
   if (ref)
     {
-      if (!ref->obj) {
-        /* It is not possible to get the dwg from the ref only, only from an obj.
-           The caller has to call the code below: */
-        /* Dwg_Data *dwg = ;
-        ref->obj = dwg_resolve_handle (dwg, ref->absolute_ref);
-        if (!ref->obj) {
-        */
-        *error = 2;
-        LOG_ERROR ("%s: empty ref", __FUNCTION__)
-        //}
-      }
+      if (!ref->obj)
+        {
+          /* It is not possible to get the dwg from the ref only, only from an
+             obj. The caller has to call the code below: */
+          /* Dwg_Data *dwg = ;
+          ref->obj = dwg_resolve_handle (dwg, ref->absolute_ref);
+          if (!ref->obj) {
+          */
+          *error = 2;
+          LOG_ERROR ("%s: empty ref", __FUNCTION__)
+          //}
+        }
       *error = 0;
       return ref->obj;
     }

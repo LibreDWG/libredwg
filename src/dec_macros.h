@@ -444,9 +444,9 @@
           LOG_TRACE (#color ".rgb: 0x%06x [ENC.BL %d]\n",                     \
                      (unsigned)_obj->o.color.rgb, dxf2);                      \
         if (_obj->o.color.flag & 0x40 && _obj->o.color.handle)                \
-          LOG_TRACE (#color ".handle: %lX [ENC.H %d]\n",                     \
+          LOG_TRACE (#color ".handle: %lX [ENC.H %d]\n",                      \
                      _obj->o.color.handle->handleref.value, dxf2 + 10);       \
-     }                                                                        \
+      }                                                                       \
   }
 
 #undef DEBUG_POS

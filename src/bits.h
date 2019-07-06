@@ -238,15 +238,11 @@ void bit_read_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color);
 
 void bit_write_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color);
 
-void bit_read_ENC (Bit_Chain *restrict dat,
-                   Bit_Chain *restrict hdl_dat,
-                   Bit_Chain *restrict str_dat,
-                   Dwg_Color *restrict color);
+void bit_read_ENC (Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,
+                   Bit_Chain *restrict str_dat, Dwg_Color *restrict color);
 
-void bit_write_ENC (Bit_Chain *restrict dat,
-                    Bit_Chain *restrict hdl_dat,
-                    Bit_Chain *restrict str_dat,
-                    Dwg_Color *restrict color);
+void bit_write_ENC (Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,
+                    Bit_Chain *restrict str_dat, Dwg_Color *restrict color);
 
 int bit_search_sentinel (Bit_Chain *dat, unsigned char sentinel[16]);
 

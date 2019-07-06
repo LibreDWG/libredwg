@@ -3299,7 +3299,7 @@ dwg_decode_common_entity_handle_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
 
   // deferred from common_entity_data, which has no hdl_dat
   if (dat->version >= R_2007 && _ent->color.flag & 0x40)
-    FIELD_HANDLE(color.handle, 0, 430);
+    FIELD_HANDLE (color.handle, 0, 430);
 
 #include "common_entity_handle_data.spec"
 
