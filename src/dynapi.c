@@ -3867,7 +3867,6 @@ static const Dwg_DYNAPI_field _dwg_TABLE_value_fields[] = {
 static const Dwg_DYNAPI_field _dwg_object_entity_fields[] = {
   { "__iterator", "BL", sizeof (BITCODE_BL), OFF (struct _dwg_object_entity,__iterator), 0,0,0, 0 },
   { "color", "CMC", sizeof (BITCODE_CMC), OFF (struct _dwg_object_entity,color), 1,0,0, 62 },
-  { "color_handle", "H", sizeof (BITCODE_H), OFF (struct _dwg_object_entity,color_handle), 1,0,0, 420 },
   { "color_r11", "RC", sizeof (BITCODE_RC), OFF (struct _dwg_object_entity,color_r11), 0,0,0, 62 },
   { "dwg", "struct _dwg_struct*", sizeof (void *), OFF (struct _dwg_object_entity,dwg), 1,1,0, 0 },
   { "edge_visualstyle", "H", sizeof (BITCODE_H), OFF (struct _dwg_object_entity,edge_visualstyle), 1,0,0, 0 },

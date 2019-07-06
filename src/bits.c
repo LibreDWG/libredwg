@@ -1540,19 +1540,27 @@ bit_write_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color)
  *  Does also references, DBCOLOR lookups (not yet, needs hdl_dat stream)
  */
 void
-bit_read_ENC (Bit_Chain *restrict dat, Dwg_Color *restrict color)
+bit_read_ENC (Bit_Chain *restrict dat,
+              Bit_Chain *restrict hdl_dat,
+              Bit_Chain *restrict str_dat,
+              Dwg_Color *restrict color)
 {
   color->index = bit_read_BS (dat);
   if (dat->version >= R_2004)
     {
-      uint16_t flag = color->index >> 8;
+      uint16_t flag = (((uint32_t)color->index) >> 8) & 0xff;
       color->index &= 0x1ff;
       if (flag & 0x80)
         color->rgb = bit_read_BL (dat); // ODA bug, documented as BS
       if (flag & 0x40)
         {
-          color->handle = calloc (1, sizeof (color->handle));
-          bit_read_H (dat, color->handle); // => DBCOLOR
+          // if we don't have a hdl_dat stream yet
+          if (dat->version < R_2007 || hdl_dat != dat)
+            {
+              color->handle = calloc (1, sizeof (Dwg_Object_Ref));
+              bit_read_H (hdl_dat, &(color->handle->handleref)); // => DBCOLOR
+            }
+          // else defer to dwg_decode_common_entity_handle_data ()
         }
       if (flag & 0x20)
         {
@@ -1560,32 +1568,33 @@ bit_read_ENC (Bit_Chain *restrict dat, Dwg_Color *restrict color)
           color->alpha_type = alpha & 0xff; // 0, 1 or 3
           color->alpha = alpha >> 8;
         }
-      color->flag = flag;
+      color->flag = (uint16_t)flag;
     }
 }
 
 /** Write entity color (2004+)
  */
 void
-bit_write_ENC (Bit_Chain *restrict dat, Dwg_Color *restrict color)
+bit_write_ENC (Bit_Chain *restrict dat,
+               Bit_Chain *restrict hdl_dat,
+               Bit_Chain *restrict str_dat,
+               Dwg_Color *restrict color)
 {
   bit_write_BS (dat, (color->index & 0x1ff) | (color->flag << 8));
   if (dat->version >= R_2004)
     {
       uint16_t flag = color->flag;
-      // if (flag & 0x40) {
-      //  color.handle = dwg_decode_handleref(dat, obj, dwg); //hdl_dat!
-      //}
       if (flag & 0x20)
-        {
-          bit_write_BL (dat, color->alpha);
-        }
+        bit_write_BL (dat, color->alpha);
       if (!(flag & 0x40) && (flag & 0x80))
         bit_write_BL (dat, color->rgb);
+      // ??
       if ((flag & 0x41) == 0x41)
-        bit_write_TV (dat, color->name); // str_dat
+        bit_write_TV (str_dat, color->name);
       if ((flag & 0x42) == 0x42)
-        bit_write_TV (dat, color->book_name); // str_dat
+        bit_write_TV (str_dat, color->book_name);
+      if (flag & 0x40)
+        bit_write_H (hdl_dat, &(color->handle->handleref)); // => DBCOLOR
     }
 }
 

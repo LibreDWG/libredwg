@@ -412,7 +412,7 @@
   }
 #define FIELD_ENC(color, dxf1, dxf2)                                          \
   {                                                                           \
-    bit_read_ENC (dat, &_obj->color);                                         \
+    bit_read_ENC (dat, hdl_dat, str_dat, &_obj->color);                       \
     LOG_TRACE (#color ".index: %d [ENC.BS %d]\n", _obj->color.index, dxf1);   \
     if (dat->version >= R_2004)                                               \
       {                                                                       \
@@ -421,17 +421,17 @@
         if (_obj->color.flag & 0x20)                                          \
           LOG_TRACE (#color ".alpha: %d [ENC.BL %d]\n",                       \
                      (int)_obj->color.alpha, dxf2 + 20);                      \
-        if (_obj->color.flag & 0x40)                                          \
-          LOG_TRACE (#color ".handle: %lX [ENC.H %d]\n",                      \
-                     _obj->color.handle->value, dxf2 + 10);                   \
         if (_obj->color.flag & 0x80)                                          \
           LOG_TRACE (#color ".rgb: 0x%06x [ENC.BL %d]\n",                     \
                      (unsigned)_obj->color.rgb, dxf2);                        \
+        if (_obj->color.flag & 0x40 && _obj->color.handle)                    \
+          LOG_TRACE (#color ".handle: %lX [ENC.H %d]\n",                      \
+                     _obj->color.handle->handleref.value, dxf2 + 10);         \
       }                                                                       \
   }
 #define SUB_FIELD_ENC(o, color, dxf1, dxf2)                                   \
   {                                                                           \
-    bit_read_ENC (dat, &_obj->o.color);                                       \
+    bit_read_ENC (dat, hdl_dat, str_dat, &_obj->o.color);                     \
     LOG_TRACE (#color ".index: %d [ENC.BS %d]\n", _obj->o.color.index, dxf1); \
     if (dat->version >= R_2004)                                               \
       {                                                                       \
@@ -440,13 +440,13 @@
         if (_obj->o.color.flag & 0x20)                                        \
           LOG_TRACE (#color ".alpha: %d [ENC.BL %d]\n",                       \
                      (unsigned)_obj->o.color.alpha, dxf2 + 20);               \
-        if (_obj->color.flag & 0x40)                                          \
-          LOG_TRACE (#color ".handle: (%X) [ENC.H %d]\n",                     \
-                     _obj->o.color.handle->value, dxf2 + 10);                 \
         if (_obj->o.color.flag & 0x80)                                        \
           LOG_TRACE (#color ".rgb: 0x%06x [ENC.BL %d]\n",                     \
                      (unsigned)_obj->o.color.rgb, dxf2);                      \
-      }                                                                       \
+        if (_obj->o.color.flag & 0x40 && _obj->o.color.handle)                \
+          LOG_TRACE (#color ".handle: %lX [ENC.H %d]\n",                     \
+                     _obj->o.color.handle->handleref.value, dxf2 + 10);       \
+     }                                                                        \
   }
 
 #undef DEBUG_POS

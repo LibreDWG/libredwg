@@ -60,15 +60,6 @@
         }
     }
 
-#ifndef IS_DXF
-  SINCE(R_2004)
-    {
-      if (FIELD_VALUE(color.flag) & 0x40) {
-        FIELD_HANDLE(color_handle, 5, 0);
-      }
-    }
-#endif
-
   SINCE(R_2000)
     {
       FIELD_HANDLE(layer, 5, 8);
@@ -84,14 +75,6 @@
       if (FIELD_VALUE(linetype_flags) == 3)
         FIELD_HANDLE(ltype, 5, 6);
     }
-#ifdef IS_DXF
-  SINCE(R_2004)
-    {
-      if (FIELD_VALUE(color.flag) & 0x40) {
-        FIELD_HANDLE(color_handle, 5, 0);
-      }
-    }
-#endif
 
   SINCE(R_2007)
     {

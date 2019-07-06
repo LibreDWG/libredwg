@@ -82,26 +82,27 @@
 
   SINCE(R_2004) // ENC (entity color encoding)
     {
-#if 0
+#if 0 /* FIXME */
       //FIELD_CMC(color, 62,420);
       FIELD_ENC(color,62,420); // in ODA as CMC(B)
 #else
       BITCODE_BS flags;
-      FIELD_BS (color.flag, 0);
+      FIELD_BSx (color.flag, 0);
       flags = ent->color.flag >> 8;
       DECODER {
         ent->color.rgb = 0L;
         ent->color.index = ent->color.flag & 0x1ff; // or 0xff?
-        LOG_HANDLE("color.index: %d [ENC 62]\n", ent->color.index);
+        ent->color.flag = flags;
+        LOG_HANDLE(" color.index: %d [ENC 62]\n", ent->color.index);
       }
       DXF {
         if (FIELD_VALUE(color.index) != 256)
           FIELD_BS (color.index, 62);
       }
 
-      if (flags & 0x40)
+      if (flags & 0x40 && dat->version < R_2007)
         { // r2004+ in handle stream
-          FIELD_HANDLE(color_handle, 0, 0); // DBCOLOR 1E9F74 => 1F05B9
+          FIELD_HANDLE(color.handle, 0, 430); // DBCOLOR 1E9F74 => 1F05B9
         }
       if (flags & 0x20)
         {
@@ -115,7 +116,7 @@
           alpha = ent->color.alpha >> 8;
           //LOG_HANDLE("alpha: %06x [BL 0]\n", ent->color.alpha);
 #ifdef IS_DECODER
-          LOG_TRACE("color.alpha_type: %d\n", ent->color.alpha_type);
+          LOG_TRACE(" color.alpha_type: %d\n", ent->color.alpha_type);
 #endif
           if (ent->color.alpha_type == 3) {
 #ifdef IS_ENCODER

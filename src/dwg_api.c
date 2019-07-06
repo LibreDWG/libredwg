@@ -20534,13 +20534,6 @@ dwg_ent_get_next_entity (const dwg_obj_ent *restrict ent,
 }
 
 EXPORT dwg_object_ref *
-dwg_ent_get_color_handle (const dwg_obj_ent *restrict ent,
-                          int *restrict error) // r2004+
-{
-  _BODY_FIELD (ent, color_handle);
-}
-
-EXPORT dwg_object_ref *
 dwg_ent_get_layer (const dwg_obj_ent *restrict ent, int *restrict error)
 {
   _BODY_FIELD (ent, layer);

@@ -478,16 +478,19 @@ typedef struct _dwg_object_ref
   long unsigned int absolute_ref;
 } Dwg_Object_Ref;
 
+typedef Dwg_Object_Ref* BITCODE_H;
+
 /**
- CMC colors: color index or rgb value. layers are off when the index is negative.
+ CMC or ENC colors: color index or rgb value. layers are off when the index
+ is negative.
  Used as \ref Dwg_Color
  */
 typedef struct _dwg_color /* CmColor: R15 and earlier */
 {
   BITCODE_BSd index;  /* may be negative */
-  BITCODE_BS flag;    /* 1: name follows, 2: book name follows */
+  BITCODE_BS flag;    /* 1: name follows, 2: book name follows, ... */
   BITCODE_BL rgb;
-  Dwg_Handle *handle;
+  BITCODE_H  handle;
   BITCODE_TV name;
   BITCODE_TV book_name;
   BITCODE_BB alpha_type; /* 0 BYLAYER, 1 BYBLOCK, 3 alpha */
@@ -496,7 +499,6 @@ typedef struct _dwg_color /* CmColor: R15 and earlier */
 
 typedef Dwg_Color BITCODE_CMC;
 typedef Dwg_Color BITCODE_ENC;
-typedef Dwg_Object_Ref* BITCODE_H;
 
 /**
  ASCII or Unicode text in xdata \ref Dwg_Resbuf
@@ -5218,7 +5220,6 @@ typedef struct _dwg_object_entity
   BITCODE_H xdicobjhandle;
   BITCODE_H prev_entity;  /*!< r13-r2000 */
   BITCODE_H next_entity;  /*!< r13-r2000 */
-  BITCODE_H color_handle; /*!< r2004+ */
   BITCODE_H layer;
   BITCODE_H ltype;
   BITCODE_H material;     /*!< r2007+ */
