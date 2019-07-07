@@ -5506,7 +5506,7 @@ DWG_ENTITY(MULTILEADER)
       FIELD_B (ctx.has_content_block, 0);
       if (FIELD_VALUE (ctx.has_content_block))
         {
-          FIELD_HANDLE (ctx.content.blk.block_table, 4, 341);
+          //FIELD_HANDLE (ctx.content.blk.block_table, 4, 341);
           FIELD_3BD (ctx.content.blk.normal, 14);
           FIELD_3BD (ctx.content.blk.location, 15);
           FIELD_3BD (ctx.content.blk.scale, 16);
@@ -5603,7 +5603,11 @@ DWG_ENTITY(MULTILEADER)
   END_REPEAT_BLOCK
   SET_PARENT_OBJ(ctx.leaders)
   END_REPEAT(ctx.leaders)
-  FIELD_HANDLE (ctx.content.txt.style, 5, 340);
+  if (FIELD_VALUE (ctx.has_content)) {
+    FIELD_HANDLE (ctx.content.txt.style, 5, 340);
+  } else if (FIELD_VALUE (ctx.has_content_block)) {
+    FIELD_HANDLE (ctx.content.blk.block_table, 4, 341);
+  }
   FIELD_HANDLE (mleaderstyle, 5, 340);
   FIELD_HANDLE (ltype, 5, 341);
   FIELD_HANDLE (arrow_handle, 5, 342);
