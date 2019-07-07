@@ -192,7 +192,7 @@ static unsigned int cur_ver = 0;
                      (int)_obj->color.alpha, dxf2 + 20);                      \
         if (_obj->color.flag & 0x40)                                          \
           LOG_TRACE (#color ".handle: %lX [ENC.H %d]\n",                      \
-                     _obj->color.handle->value, dxf2 + 10);                   \
+                     _obj->color.handle->handleref.value, dxf2 + 10);         \
         if (_obj->color.flag & 0x80)                                          \
           LOG_TRACE (#color ".rgb: 0x%06x [ENC.BL %d]\n",                     \
                      (unsigned)_obj->color.rgb, dxf2);                        \
