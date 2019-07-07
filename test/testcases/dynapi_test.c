@@ -42392,6 +42392,19 @@ static int test_FIELDLIST (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(fieldlist, "FIELDLIST", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &fieldlist->ownerhandle, sizeof (fieldlist->ownerhandle)))
+      {
+        pass ("FIELDLIST.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("FIELDLIST.ownerhandle [H]");
+        error++;
+      }
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value(fieldlist, "FIELDLIST", "parent", &parent, NULL)
         && !memcmp (&parent, &fieldlist->parent, sizeof (fieldlist->parent)))

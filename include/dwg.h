@@ -3678,6 +3678,7 @@ typedef struct _dwg_object_FIELDLIST
   BITCODE_BL num_fields;
   BITCODE_B unknown;
   BITCODE_H * field_handles;
+  BITCODE_H ownerhandle;
 } Dwg_Object_FIELDLIST;
 
 /**

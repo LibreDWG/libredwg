@@ -4349,13 +4349,16 @@ DWG_OBJECT_END
 
 DWG_OBJECT(FIELDLIST)
 
-  //SUBCLASS (AcDbFieldList)
-  //SINCE(R_2018) {
+  SUBCLASS (AcDbFieldList)
+  //SINCE(R_2018)
   FIELD_BL (num_fields, 0); //DXF 70?
   FIELD_B (unknown, 0); // has handles?
+
   START_HANDLE_STREAM;
+  FIELD_HANDLE (ownerhandle, 4, 0);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
   HANDLE_VECTOR (field_handles, num_fields, 0, 330); // 2 or 4, or 3.0.0
-  //}
 
 DWG_OBJECT_END
 

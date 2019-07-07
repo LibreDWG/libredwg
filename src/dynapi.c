@@ -2511,6 +2511,7 @@ static const Dwg_DYNAPI_field _dwg_FIELDLIST_fields[] = {
   { "num_fields", "BL", sizeof (BITCODE_BL), OFF (struct _dwg_object_FIELDLIST,num_fields), 0,0,0, 0 },
   { "unknown", "B", sizeof (BITCODE_B), OFF (struct _dwg_object_FIELDLIST,unknown), 0,0,0, 0 },
   { "field_handles", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_FIELDLIST,field_handles), 1,1,0, 0 },
+  { "ownerhandle", "H", sizeof (BITCODE_H), OFF (struct _dwg_object_FIELDLIST,ownerhandle), 1,0,0, 0 },
   {NULL, NULL, 0, 0, 0,0,0, 0},
 };
 /* from typedef struct _dwg_object_GEODATA: (sorted by offset) */
