@@ -51595,6 +51595,19 @@ static int test_STYLE (const Dwg_Object *obj)
       }
   }
   {
+    BITCODE_H extref_handle;
+    if (dwg_dynapi_entity_value(style, "STYLE", "extref_handle", &extref_handle, NULL)
+        && !memcmp (&extref_handle, &style->extref_handle, sizeof (style->extref_handle)))
+      {
+        pass ("STYLE.extref_handle [H]");
+      }
+    else
+      {
+        fail ("STYLE.extref_handle [H]");
+        error++;
+      }
+  }
+  {
     BITCODE_BD fixed_height;
     if (dwg_dynapi_entity_value(style, "STYLE", "fixed_height", &fixed_height, NULL)
         && fixed_height == style->fixed_height)
@@ -51721,19 +51734,6 @@ static int test_STYLE (const Dwg_Object *obj)
     else
       {
         fail ("STYLE.name [TV] '%s' <> '%s'", name, style->name);
-        error++;
-      }
-  }
-  {
-    BITCODE_H null_handle;
-    if (dwg_dynapi_entity_value(style, "STYLE", "null_handle", &null_handle, NULL)
-        && !memcmp (&null_handle, &style->null_handle, sizeof (style->null_handle)))
-      {
-        pass ("STYLE.null_handle [H]");
-      }
-    else
-      {
-        fail ("STYLE.null_handle [H]");
         error++;
       }
   }

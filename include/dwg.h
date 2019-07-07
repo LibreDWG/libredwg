@@ -1982,7 +1982,7 @@ typedef struct _dwg_object_STYLE
   BITCODE_TV font_name;
   BITCODE_TV bigfont_name;
   BITCODE_H style_control;
-  BITCODE_H null_handle;
+  BITCODE_H extref_handle;
 } Dwg_Object_STYLE;
 
 /* 54 and 55 are UNKNOWN OBJECTS */

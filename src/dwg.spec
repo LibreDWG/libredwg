@@ -112,8 +112,7 @@ DWG_ENTITY(TEXT)
     }
 
   COMMON_ENTITY_HANDLE_DATA;
-
-  VERSIONS(R_13, R_2007)
+  SINCE(R_13)
     {
       IF_ENCODE_FROM_PRE_R13 {
         //FIXME: should really just lookup the style table; style is the index.
@@ -1109,9 +1108,9 @@ DWG_ENTITY_END
         FIELD_B (flip_arrow2, 75); \
       } \
     FIELD_2RD (clone_ins_pt, 12); \
-    DXF { UNTIL(R_2007) { \
+    DXF { \
       FIELD_HANDLE (dimstyle, 5, 3); \
-    } }
+    }
 
 /*(20)*/
 DWG_ENTITY(DIMENSION_ORDINATE)
@@ -1133,11 +1132,8 @@ DWG_ENTITY(DIMENSION_ORDINATE)
   }
 
   COMMON_ENTITY_HANDLE_DATA;
-  UNTIL(R_2007)
-    {
-      FIELD_HANDLE (dimstyle, 5, 3);
-      FIELD_HANDLE (block, 5, 2);
-    }
+  FIELD_HANDLE (dimstyle, 5, 3);
+  FIELD_HANDLE (block, 5, 2);
 
 DWG_ENTITY_END
 
@@ -1156,11 +1152,8 @@ DWG_ENTITY(DIMENSION_LINEAR)
   SUBCLASS (AcDbRotatedDimension)
 
   COMMON_ENTITY_HANDLE_DATA;
-  UNTIL(R_2007)
-    {
-      FIELD_HANDLE (dimstyle, 5, 0);
-      FIELD_HANDLE (block, 5, 0);
-    }
+  FIELD_HANDLE (dimstyle, 5, 0);
+  FIELD_HANDLE (block, 5, 0);
 
 DWG_ENTITY_END
 
@@ -1178,11 +1171,8 @@ DWG_ENTITY(DIMENSION_ALIGNED)
   FIELD_BD (ext_line_rotation, 0); /* 52 */
 
   COMMON_ENTITY_HANDLE_DATA;
-  UNTIL(R_2007)
-    {
-      FIELD_HANDLE (dimstyle, 5, 0);
-      FIELD_HANDLE (block, 5, 0);
-    }
+  FIELD_HANDLE (dimstyle, 5, 0);
+  FIELD_HANDLE (block, 5, 0);
 
 DWG_ENTITY_END
 
@@ -1200,11 +1190,8 @@ DWG_ENTITY(DIMENSION_ANG3PT)
   FIELD_3BD (first_arc_pt, 15);
 
   COMMON_ENTITY_HANDLE_DATA;
-  UNTIL(R_2007)
-    {
-      FIELD_HANDLE (dimstyle, 5, 0);
-      FIELD_HANDLE (block, 5, 0);
-    }
+  FIELD_HANDLE (dimstyle, 5, 0);
+  FIELD_HANDLE (block, 5, 0);
 
 DWG_ENTITY_END
 
@@ -1223,11 +1210,8 @@ DWG_ENTITY(DIMENSION_ANG2LN)
   }
 
   COMMON_ENTITY_HANDLE_DATA;
-  UNTIL(R_2007)
-    {
-      FIELD_HANDLE (dimstyle, 5, 0);
-      FIELD_HANDLE (block, 5, 0);
-    }
+  FIELD_HANDLE (dimstyle, 5, 0);
+  FIELD_HANDLE (block, 5, 0);
 
 DWG_ENTITY_END
 
@@ -1244,11 +1228,8 @@ DWG_ENTITY(DIMENSION_RADIUS)
   FIELD_BD (leader_len, 40);
 
   COMMON_ENTITY_HANDLE_DATA;
-  UNTIL(R_2007)
-    {
-      FIELD_HANDLE (dimstyle, 5, 0);
-      FIELD_HANDLE (block, 5, 0);
-    }
+  FIELD_HANDLE (dimstyle, 5, 0);
+  FIELD_HANDLE (block, 5, 0);
 
 DWG_ENTITY_END
 
@@ -1265,11 +1246,8 @@ DWG_ENTITY(DIMENSION_DIAMETER)
   FIELD_BD (leader_len, 40);
 
   COMMON_ENTITY_HANDLE_DATA;
-  UNTIL(R_2007)
-    {
-      FIELD_HANDLE (dimstyle, 5, 0);
-      FIELD_HANDLE (block, 5, 0);
-    }
+  FIELD_HANDLE (dimstyle, 5, 0);
+  FIELD_HANDLE (block, 5, 0);
 
 DWG_ENTITY_END
 
@@ -2179,9 +2157,7 @@ DWG_ENTITY(MTEXT)
     }
 
   COMMON_ENTITY_HANDLE_DATA;
-  UNTIL(R_2007) {
-    FIELD_HANDLE (style, 5, 0);
-  }
+  FIELD_HANDLE (style, 5, 0);
 
 DWG_ENTITY_END
 
@@ -2235,9 +2211,7 @@ DWG_ENTITY(LEADER)
   SINCE(R_13) {
     FIELD_HANDLE (associated_annotation, 2, 340);
   }
-  {
-    FIELD_HANDLE (dimstyle, 5, 2);
-  }
+  FIELD_HANDLE (dimstyle, 5, 2);
 
 DWG_ENTITY_END
 
@@ -2563,7 +2537,7 @@ DWG_OBJECT(STYLE_CONTROL)
 
 DWG_OBJECT_END
 
-/* (53/3) preR13+DXF: STYLE */
+/* (53/3) preR13+DXF: STYLE, documented as SHAPEFILE */
 DWG_OBJECT(STYLE)
 
   COMMON_TABLE_FLAGS(style_control, TextStyle)
@@ -2626,9 +2600,7 @@ DWG_OBJECT(STYLE)
     FIELD_HANDLE (style_control, 4, 0);
     REACTORS(4);
     XDICOBJHANDLE(3);
-    UNTIL(R_2007) {
-      FIELD_HANDLE (null_handle, 5, 0);
-    }
+    FIELD_HANDLE (extref_handle, 5, 0);
   }
 
 DWG_OBJECT_END
@@ -4483,9 +4455,7 @@ DWG_OBJECT(SORTENTSTABLE)
   HANDLE_VECTOR (sort_handles, num_ents, 0, 5);
 
   START_HANDLE_STREAM;
-  UNTIL(R_2007) {
-    FIELD_HANDLE (owner_dict, 4, 330); //always the prev handle 8.0.0
-  }
+  FIELD_HANDLE (owner_dict, 4, 330); //the parenthandle, always the prev handle 8.0.0
   REACTORS(4);
   XDICOBJHANDLE(3);
   FIELD_HANDLE (ownerhandle, 4, 0);

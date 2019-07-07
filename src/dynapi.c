@@ -3083,7 +3083,7 @@ static const Dwg_DYNAPI_field _dwg_STYLE_fields[] = {
   { "font_name", "TV", sizeof (BITCODE_TV), OFF (struct _dwg_object_STYLE,font_name), 1,1,1, 3 },
   { "bigfont_name", "TV", sizeof (BITCODE_TV), OFF (struct _dwg_object_STYLE,bigfont_name), 1,1,1, 4 },
   { "style_control", "H", sizeof (BITCODE_H), OFF (struct _dwg_object_STYLE,style_control), 1,0,0, 0 },
-  { "null_handle", "H", sizeof (BITCODE_H), OFF (struct _dwg_object_STYLE,null_handle), 1,0,0, 0 },
+  { "extref_handle", "H", sizeof (BITCODE_H), OFF (struct _dwg_object_STYLE,extref_handle), 1,0,0, 0 },
   {NULL, NULL, 0, 0, 0,0,0, 0},
 };
 /* from typedef struct _dwg_object_STYLE_CONTROL: (sorted by offset) */
