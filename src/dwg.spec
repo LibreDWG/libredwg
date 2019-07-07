@@ -2332,9 +2332,7 @@ DWG_OBJECT(BLOCK_CONTROL)
   XDICOBJHANDLE(3);
   HANDLE_VECTOR(block_headers, num_entries, 2, 0);
   FIELD_HANDLE (model_space, 3, 0);
-  UNTIL (R_2007) {
-    FIELD_HANDLE (paper_space, 3, 0);
-  }
+  FIELD_HANDLE (paper_space, 3, 0);
 
 DWG_OBJECT_END
 

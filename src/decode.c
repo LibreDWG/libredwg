@@ -1798,8 +1798,9 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   LOG_TRACE ("Page: %4" PRId32 " (a)", page.number)
                 }
               else if (info->sections[0]
-                       && page.number > (int32_t) (
-                              info->pagecount + info->sections[0]->number))
+                       && page.number
+                              > (int32_t) (info->pagecount
+                                           + info->sections[0]->number))
                 {
                   // for [7] ptr+160 seems to be AcDb:ObjFreeSpace
                   LOG_INFO ("Page: %4" PRId32 " (n)", page.number)
@@ -2902,10 +2903,9 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
     obj->handle_offset = obj->bitsize;
     SINCE (R_2010)
     {
-      obj->hdlpos += 8; /* FIXME why 8? wrong with polyline3d */
-      obj->handle_offset += 8;
       LOG_HANDLE ("(bitsize: " FORMAT_RL ", ", obj->bitsize);
-      LOG_HANDLE ("hdlpos: %lu)\n", obj->hdlpos);
+      LOG_HANDLE ("hdlpos: @%lu.%u)\n", obj->hdlpos / 8,
+                  (unsigned)(obj->hdlpos % 8));
     }
     // and set the string stream (restricted to size)
     // skip for all types without strings
@@ -2974,10 +2974,9 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
     obj->handle_offset = obj->bitsize;
     SINCE (R_2010)
     {
-      obj->hdlpos += 8; /* FIXME */
-      obj->handle_offset += 8;
       LOG_HANDLE ("(bitsize: " FORMAT_RL ", ", obj->bitsize);
-      LOG_HANDLE ("hdlpos: %lu)\n", obj->hdlpos);
+      LOG_HANDLE ("hdlpos: @%lu.%u)\n", obj->hdlpos / 8,
+                  (unsigned)(obj->hdlpos % 8));
     }
     // and set the string stream (restricted to size)
     if (obj->type >= 500 || obj_has_strings (obj->type))
@@ -3920,16 +3919,18 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
 
   obj->size = bit_read_MS (dat);
   LOG_INFO (", Size: %d/0x%x", obj->size, obj->size)
-  obj->address = dat->byte;
-  end_address = obj->address + obj->size; /* (calculate the bitsize) */
-
   SINCE (R_2010)
   {
+    /* This is not counted in the object size */
     obj->handlestream_size = bit_read_UMC (dat);
     LOG_INFO (", Hdlsize: " FORMAT_UMC, obj->handlestream_size);
     obj->bitsize = obj->size * 8 - obj->handlestream_size;
-    obj->type = bit_read_BOT (dat);
   }
+
+  obj->address = dat->byte;
+  end_address = obj->address + obj->size; /* (calculate the bitsize) */
+
+  SINCE (R_2010) { obj->type = bit_read_BOT (dat); }
   else { obj->type = bit_read_BS (dat); }
   LOG_INFO (", Type: %d\n", obj->type)
   object_address = bit_position (dat);
