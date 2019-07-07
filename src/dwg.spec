@@ -1987,10 +1987,7 @@ DWG_OBJECT(DICTIONARY)
   FIELD_VECTOR_T (text, numitems, 3);
 #endif
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   SINCE(R_2000)
     {
       HANDLE_VECTOR(itemhandles, numitems, 2, 0);
@@ -2044,10 +2041,7 @@ DWG_OBJECT(DICTIONARYWDFLT)
   FIELD_VECTOR_T (text, numitems, 3);
 #endif
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   SINCE(R_2000)
     {
       HANDLE_VECTOR(itemhandles, numitems, 2, 0);
@@ -2301,9 +2295,7 @@ DWG_OBJECT(BLOCK_CONTROL)
     FIELD_BL (num_entries, 70);
   }
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (null_handle, 4, 0);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   HANDLE_VECTOR(block_headers, num_entries, 2, 0);
   FIELD_HANDLE (model_space, 3, 0);
   FIELD_HANDLE (paper_space, 3, 0);
@@ -2314,7 +2306,7 @@ DWG_OBJECT_END
 DWG_OBJECT(BLOCK_HEADER)
 
   //DXF: the name must be from the block_entity!
-  COMMON_TABLE_FLAGS(block_control, Block)
+  COMMON_TABLE_FLAGS(Block)
   DXF {
     // not allowed to be skipped, can be 0
     VALUE_HANDLE (_obj->layout_handle, layout_handle, 5, 340);
@@ -2395,10 +2387,7 @@ DWG_OBJECT(BLOCK_HEADER)
     }
 
   SINCE(R_13) {
-    START_HANDLE_STREAM;
-    FIELD_HANDLE (block_control, 4, 0);
-    REACTORS(4);
-    XDICOBJHANDLE(3);
+    START_OBJECT_HANDLE_STREAM;
     FIELD_HANDLE (null_handle, 5, 0);
     FIELD_HANDLE (block_entity, 3, 0);
   }
@@ -2442,9 +2431,7 @@ DWG_OBJECT(LAYER_CONTROL)
     FIELD_BL (num_entries, 70);
   }
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (null_handle, 4, 0);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   HANDLE_VECTOR(layers, num_entries, 2, 0);
 
 DWG_OBJECT_END
@@ -2452,7 +2439,7 @@ DWG_OBJECT_END
 /* (51/2) */
 DWG_OBJECT(LAYER)
 
-  LAYER_TABLE_FLAGS(layer_control, Layer);
+  LAYER_TABLE_FLAGS(Layer);
 
   PRE(R_13)
   {
@@ -2504,10 +2491,7 @@ DWG_OBJECT(LAYER)
       (FIELD_VALUE(xrefref) << 6);
   }
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (layer_control, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (xref, 5, 0);
   SINCE(R_2000) {
     FIELD_HANDLE (plotstyle, 5, 390);
@@ -2530,9 +2514,7 @@ DWG_OBJECT(STYLE_CONTROL)
     FIELD_BL (num_entries, 70);
   }
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (null_handle, 4, 0);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   HANDLE_VECTOR(styles, num_entries, 2, 0);
 
 DWG_OBJECT_END
@@ -2540,7 +2522,7 @@ DWG_OBJECT_END
 /* (53/3) preR13+DXF: STYLE, documented as SHAPEFILE */
 DWG_OBJECT(STYLE)
 
-  COMMON_TABLE_FLAGS(style_control, TextStyle)
+  COMMON_TABLE_FLAGS(TextStyle)
 
   SINCE(R_13)
   {
@@ -2596,10 +2578,7 @@ DWG_OBJECT(STYLE)
         }
     }
 
-    START_HANDLE_STREAM;
-    FIELD_HANDLE (style_control, 4, 0);
-    REACTORS(4);
-    XDICOBJHANDLE(3);
+    START_OBJECT_HANDLE_STREAM;
     FIELD_HANDLE (extref_handle, 5, 0);
   }
 
@@ -2613,9 +2592,7 @@ DWG_OBJECT(LTYPE_CONTROL)
 
   FIELD_BS (num_entries, 70);
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (null_handle, 4, 0);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   HANDLE_VECTOR(linetypes, num_entries, 2, 0);
   FIELD_HANDLE (bylayer, 3, 0);
   FIELD_HANDLE (byblock, 3, 0);
@@ -2625,7 +2602,7 @@ DWG_OBJECT_END
 /* (57/5) */
 DWG_OBJECT(LTYPE)
 
-  COMMON_TABLE_FLAGS(linetype_control, Linetype)
+  COMMON_TABLE_FLAGS(Linetype)
 
   PRE(R_13)
   {
@@ -2683,11 +2660,8 @@ DWG_OBJECT(LTYPE)
         }
     }
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (linetype_control, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
-  FIELD_HANDLE (null_handle, 5, 0);
+  START_OBJECT_HANDLE_STREAM;
+  FIELD_HANDLE (extref_handle, 5, 0);
   HANDLE_VECTOR(styles, num_dashes, 5, 340);
 
 DWG_OBJECT_END
@@ -2704,9 +2678,7 @@ DWG_OBJECT(VIEW_CONTROL)
     FIELD_BL (num_entries, 70);
   }
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (null_handle, 4, 0);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   HANDLE_VECTOR(views, num_entries, 2, 0);
 
 DWG_OBJECT_END
@@ -2714,7 +2686,7 @@ DWG_OBJECT_END
 /* (61/6) */
 DWG_OBJECT(VIEW)
 
-  COMMON_TABLE_FLAGS(view_control, View)
+  COMMON_TABLE_FLAGS(View)
 
   PRE(R_13)
   {
@@ -2785,10 +2757,7 @@ DWG_OBJECT(VIEW)
     FIELD_B (camera_plottable, 73);
   }
   SINCE(R_13) {
-    START_HANDLE_STREAM;
-    FIELD_HANDLE (view_control, 4, 0);
-    REACTORS(4);
-    XDICOBJHANDLE(3);
+    START_OBJECT_HANDLE_STREAM;
     FIELD_HANDLE (null_handle, 5, 0);
   }
   SINCE(R_2007) {
@@ -2815,9 +2784,7 @@ DWG_OBJECT(UCS_CONTROL)
 
   FIELD_BS (num_entries, 70); //BS or BL?
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (null_handle, 4, 0);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   HANDLE_VECTOR(ucs, num_entries, 2, 0);
 
 DWG_OBJECT_END
@@ -2825,7 +2792,7 @@ DWG_OBJECT_END
 /* (63/7) */
 DWG_OBJECT(UCS)
 
-  COMMON_TABLE_FLAGS(ucs_control, Ucs)
+  COMMON_TABLE_FLAGS(Ucs)
 
   PRE(R_13)
   {
@@ -2849,17 +2816,15 @@ DWG_OBJECT(UCS)
 
   SINCE(R_13)
   {
-    START_HANDLE_STREAM;
-    FIELD_HANDLE (ucs_control, 4, 0);
-    REACTORS(4);
-    XDICOBJHANDLE(3);
+    START_OBJECT_HANDLE_STREAM;
     FIELD_HANDLE (null_handle, 5, 0);
   }
   SINCE(R_2000)
-    {
-      FIELD_HANDLE (base_ucs_handle, ANYCODE, 346);
-      FIELD_HANDLE (unknown, ANYCODE, 0);
-    }
+  {
+    FIELD_HANDLE (base_ucs_handle, ANYCODE, 346);
+    FIELD_HANDLE (unknown, ANYCODE, 0);
+  }
+
 DWG_OBJECT_END
 
 /* (0x40/64) */
@@ -2871,9 +2836,7 @@ DWG_OBJECT(VPORT_CONTROL)
     FIELD_BS (num_entries, 70);
   }
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (null_handle, 4, 0);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   HANDLE_VECTOR(vports, num_entries, 2, 0);
 
 DWG_OBJECT_END
@@ -2881,7 +2844,7 @@ DWG_OBJECT_END
 /* 0x41/65 /8 */
 DWG_OBJECT(VPORT)
 
-  COMMON_TABLE_FLAGS(vport_control, Viewport)
+  COMMON_TABLE_FLAGS(Viewport)
 
  DXF { // has a different order of fields
 
@@ -3058,10 +3021,7 @@ DWG_OBJECT(VPORT)
       FIELD_BS (grid_major, 61);
     }
 
-    START_HANDLE_STREAM;
-    FIELD_HANDLE (vport_control, 4, 0);
-    REACTORS(4);
-    XDICOBJHANDLE(3);
+    START_OBJECT_HANDLE_STREAM;
     FIELD_HANDLE (null_handle, 5, 0);
   }
 
@@ -3086,9 +3046,7 @@ DWG_OBJECT(APPID_CONTROL)
 
   FIELD_BS (num_entries, 70);
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (null_handle, 4, 0);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   HANDLE_VECTOR(apps, num_entries, 2, 0);
 
 DWG_OBJECT_END
@@ -3096,7 +3054,7 @@ DWG_OBJECT_END
 /* (67/9) Registered Apps */
 DWG_OBJECT(APPID)
 
-  COMMON_TABLE_FLAGS(app_control, RegApp)
+  COMMON_TABLE_FLAGS(RegApp)
 
   SINCE(R_13) {
     DXF {
@@ -3107,10 +3065,7 @@ DWG_OBJECT(APPID)
     }
   }
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (app_control, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (null_handle, 5, 0);
 
 DWG_OBJECT_END
@@ -3125,9 +3080,7 @@ DWG_OBJECT(DIMSTYLE_CONTROL)
       FIELD_RC (num_morehandles, 71);
     }
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (null_handle, 4, 0);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   HANDLE_VECTOR (dimstyles, num_entries, 2, 0);
   HANDLE_VECTOR (morehandles, num_morehandles, 5, 0);
 
@@ -3136,7 +3089,7 @@ DWG_OBJECT_END
 /* (69/10) */
 DWG_OBJECT(DIMSTYLE)
 
-  COMMON_TABLE_FLAGS(dimstyle_control, DimStyle)
+  COMMON_TABLE_FLAGS(DimStyle)
 
   PRE(R_13)
     {
@@ -3362,10 +3315,7 @@ DWG_OBJECT(DIMSTYLE)
                         FIELD_VALUE(xrefdep) << 4 |
                         FIELD_VALUE(xrefref) << 6;
 
-    START_HANDLE_STREAM;
-    FIELD_HANDLE (dimstyle_control, 4, 0);
-    REACTORS(4);
-    XDICOBJHANDLE(3);
+    START_OBJECT_HANDLE_STREAM;
     FIELD_HANDLE (extref_handle, 5, 0);
     FIELD_HANDLE (DIMTXSTY, 5, 340); /* Text style (DIMTXSTY) */
   }
@@ -3392,9 +3342,7 @@ DWG_OBJECT(VPORT_ENTITY_CONTROL)
 
   FIELD_BS (num_entries, 70);
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (null_handle, 4, 0);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   HANDLE_VECTOR (vport_entity_headers, num_entries, 4, 0);
 
 DWG_OBJECT_END
@@ -3402,7 +3350,7 @@ DWG_OBJECT_END
 /* VIEWPORT ENTITY HEADER (71/11) */
 DWG_OBJECT(VPORT_ENTITY_HEADER)
 
-  COMMON_TABLE_FLAGS(vport_entity_control, ViewportEntity) //??
+  COMMON_TABLE_FLAGS(ViewportEntity) //??
 
   SINCE(R_13) {
     DXF {
@@ -3415,9 +3363,7 @@ DWG_OBJECT(VPORT_ENTITY_HEADER)
       (FIELD_VALUE(xrefdep) << 4) |
       (FIELD_VALUE(xrefref) << 6);
 
-    START_HANDLE_STREAM;
-    FIELD_HANDLE (vport_entity_control, 4, 0);
-    XDICOBJHANDLE(3);
+    START_OBJECT_HANDLE_STREAM;
     FIELD_HANDLE (vport_entity, 5, 0);
   }
 
@@ -3433,10 +3379,7 @@ DWG_OBJECT(GROUP)
   FIELD_BS (selectable, 71);
   FIELD_BL (num_handles, 0);
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   HANDLE_VECTOR(group_entries, num_handles, 5, 340);
 
 DWG_OBJECT_END
@@ -3496,10 +3439,7 @@ DWG_OBJECT(MLINESTYLE)
   SET_PARENT_OBJ(lines)
   END_REPEAT(lines);
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   SINCE(R_2018)
   {
     _REPEAT_N (FIELD_VALUE (num_lines), lines, Dwg_MLINESTYLE_line, 1)
@@ -3518,10 +3458,7 @@ DWG_OBJECT(DICTIONARYVAR)
   FIELD_RC (intval, 280);
   FIELD_T (str, 1);
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
 
 DWG_OBJECT_END
 
@@ -3792,10 +3729,7 @@ DWG_OBJECT(IDBUFFER)
   FIELD_RC (unknown, 0);
   FIELD_BL (num_obj_ids, 0);
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   HANDLE_VECTOR(obj_ids, num_obj_ids, 4, 330);
 
 DWG_OBJECT_END
@@ -3852,12 +3786,9 @@ DWG_OBJECT(IMAGEDEF)
   FIELD_RC (resunits, 281);
   FIELD_2RD (pixel_size, 11);
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 3, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   //DEBUG_POS_OBJ
-  //FIELD_HANDLE (xrefctrl, 0, 0); ///libdxfrw bug
+  //FIELD_HANDLE (xrefctrl, 0, 0); ///libdxfrw bug?
 
 DWG_OBJECT_END
 
@@ -3870,10 +3801,7 @@ DWG_OBJECT(IMAGEDEF_REACTOR)
   if (FIELD_VALUE(class_version) > 10)
     return DWG_ERR_VALUEOUTOFBOUNDS;
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
 
 DWG_OBJECT_END
 
@@ -3898,10 +3826,7 @@ DWG_OBJECT(LAYER_INDEX)
   SET_PARENT_OBJ(entries)
   END_REPEAT(entries)
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   HANDLE_VECTOR(entry_handles, num_entries, ANYCODE, 0);
 
 DWG_OBJECT_END
@@ -3965,11 +3890,7 @@ DWG_OBJECT(LAYOUT)
     FIELD_BL (num_viewports, 0);
   }
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
-
+  START_OBJECT_HANDLE_STREAM;
   SINCE(R_2004) {
     FIELD_HANDLE (plot_view, 5, 6);
   }
@@ -4200,11 +4121,9 @@ DWG_OBJECT(PROXY_OBJECT)
   //TODO: save at least the remaining bytes
   //TODO: figure out how to deal with the arbitrary size vector databits
   FIELD_RC (*data);
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 330);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
   */
+
+  START_OBJECT_HANDLE_STREAM;
 
 DWG_OBJECT_END
 
@@ -4339,10 +4258,7 @@ DWG_OBJECT(FIELD)
   SET_PARENT_OBJ(childval)
   END_REPEAT(childval)
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   HANDLE_VECTOR (childs, num_childs, 3, 360);
   HANDLE_VECTOR (objects, num_objects, 5, 331);
 
@@ -4356,10 +4272,7 @@ DWG_OBJECT(FIELDLIST)
   FIELD_BL (num_fields, 0); //DXF 70?
   FIELD_B (unknown, 0); // has handles?
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   HANDLE_VECTOR (field_handles, num_fields, 0, 330); // 2 or 4, or 3.0.0
 
 DWG_OBJECT_END
@@ -4450,10 +4363,7 @@ DWG_OBJECT(RASTERVARIABLES)
   FIELD_BS (display_quality, 71);
   FIELD_BS (units, 72);
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
 
 DWG_OBJECT_END
 
@@ -4465,11 +4375,8 @@ DWG_OBJECT(SORTENTSTABLE)
   FIELD_BL (num_ents, 0);
   HANDLE_VECTOR (sort_handles, num_ents, 0, 5);
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (owner_dict, 4, 330); //the parenthandle, always the prev handle 8.0.0
-  REACTORS(4);
-  XDICOBJHANDLE(3);
-  FIELD_HANDLE (ownerhandle, 4, 0);
+  START_OBJECT_HANDLE_STREAM;
+  FIELD_HANDLE (dict_handle, 4, 0);
   HANDLE_VECTOR (ents, num_ents, 4, 331);
 
 DWG_OBJECT_END
@@ -7358,3 +7265,4 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+

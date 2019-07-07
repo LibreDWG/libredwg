@@ -988,16 +988,16 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
       {                                                                       \
         fprintf (dat->fh, "%3i\r\n%lX\r\n", 5, ctrl->handle.value);           \
       }                                                                       \
-      SINCE (R_14) { VALUE_H (_ctrl->null_handle, 330); }                     \
+      SINCE (R_14) { VALUE_H (_ctrl->ownerhandle, 330); }                     \
     }                                                                         \
   SINCE (R_13) { VALUE_TV ("AcDbSymbolTable", 100); }
 
 // TODO add 340
-#define COMMON_TABLE_FLAGS(owner, acdbname)                                   \
+#define COMMON_TABLE_FLAGS(acdbname)                                          \
   SINCE (R_14)                                                                \
   {                                                                           \
     /* TODO: ACAD_XDICTIONARY */                                              \
-    FIELD_HANDLE (owner, 4, 330);                                             \
+    FIELD_HANDLE (ownerhandle, 4, 330);                                       \
   }                                                                           \
   SINCE (R_13)                                                                \
   {                                                                           \
@@ -1032,11 +1032,11 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
     VALUE_TV ("*", 2)                                                         \
   FIELD_RC (flag, 70);
 
-#define LAYER_TABLE_FLAGS(owner, acdbname)                                    \
+#define LAYER_TABLE_FLAGS(acdbname)                                           \
   SINCE (R_14)                                                                \
   {                                                                           \
     /* TODO: ACAD_XDICTIONARY */                                              \
-    FIELD_HANDLE (owner, 4, 330);                                             \
+    FIELD_HANDLE (ownerhandle, 4, 330);                                       \
   }                                                                           \
   SINCE (R_13)                                                                \
   {                                                                           \

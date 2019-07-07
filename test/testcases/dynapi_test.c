@@ -33856,19 +33856,6 @@ static int test_APPID (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_APPID *restrict appid = obj->tio.object->tio.APPID;
   {
-    BITCODE_H app_control;
-    if (dwg_dynapi_entity_value(appid, "APPID", "app_control", &app_control, NULL)
-        && !memcmp (&app_control, &appid->app_control, sizeof (appid->app_control)))
-      {
-        pass ("APPID.app_control [H]");
-      }
-    else
-      {
-        fail ("APPID.app_control [H]");
-        error++;
-      }
-  }
-  {
     BITCODE_RC flag;
     if (dwg_dynapi_entity_value(appid, "APPID", "flag", &flag, NULL)
         && flag == appid->flag)
@@ -33917,6 +33904,19 @@ static int test_APPID (const Dwg_Object *obj)
     else
       {
         fail ("APPID.null_handle [H]");
+        error++;
+      }
+  }
+  {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(appid, "APPID", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &appid->ownerhandle, sizeof (appid->ownerhandle)))
+      {
+        pass ("APPID.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("APPID.ownerhandle [H]");
         error++;
       }
   }
@@ -34086,19 +34086,6 @@ static int test_APPID_CONTROL (const Dwg_Object *obj)
       }
   }
   {
-    BITCODE_H null_handle;
-    if (dwg_dynapi_entity_value(appid_control, "APPID_CONTROL", "null_handle", &null_handle, NULL)
-        && !memcmp (&null_handle, &appid_control->null_handle, sizeof (appid_control->null_handle)))
-      {
-        pass ("APPID_CONTROL.null_handle [H]");
-      }
-    else
-      {
-        fail ("APPID_CONTROL.null_handle [H]");
-        error++;
-      }
-  }
-  {
     BITCODE_BS num_entries;
     if (dwg_dynapi_entity_value(appid_control, "APPID_CONTROL", "num_entries", &num_entries, NULL)
         && num_entries == appid_control->num_entries)
@@ -34149,6 +34136,19 @@ static int test_APPID_CONTROL (const Dwg_Object *obj)
       }
     appid_control->objid--;
 
+  }
+  {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(appid_control, "APPID_CONTROL", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &appid_control->ownerhandle, sizeof (appid_control->ownerhandle)))
+      {
+        pass ("APPID_CONTROL.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("APPID_CONTROL.ownerhandle [H]");
+        error++;
+      }
   }
   {
     struct _dwg_object_object* parent;
@@ -37538,19 +37538,6 @@ static int test_BLOCK_CONTROL (const Dwg_Object *obj)
       }
   }
   {
-    BITCODE_H null_handle;
-    if (dwg_dynapi_entity_value(block_control, "BLOCK_CONTROL", "null_handle", &null_handle, NULL)
-        && !memcmp (&null_handle, &block_control->null_handle, sizeof (block_control->null_handle)))
-      {
-        pass ("BLOCK_CONTROL.null_handle [H]");
-      }
-    else
-      {
-        fail ("BLOCK_CONTROL.null_handle [H]");
-        error++;
-      }
-  }
-  {
     BITCODE_BS num_entries;
     if (dwg_dynapi_entity_value(block_control, "BLOCK_CONTROL", "num_entries", &num_entries, NULL)
         && num_entries == block_control->num_entries)
@@ -37601,6 +37588,19 @@ static int test_BLOCK_CONTROL (const Dwg_Object *obj)
       }
     block_control->objid--;
 
+  }
+  {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(block_control, "BLOCK_CONTROL", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &block_control->ownerhandle, sizeof (block_control->ownerhandle)))
+      {
+        pass ("BLOCK_CONTROL.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("BLOCK_CONTROL.ownerhandle [H]");
+        error++;
+      }
   }
   {
     BITCODE_H paper_space;
@@ -37752,19 +37752,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
       }
     block_header->blkisxref--;
 
-  }
-  {
-    BITCODE_H block_control;
-    if (dwg_dynapi_entity_value(block_header, "BLOCK_HEADER", "block_control", &block_control, NULL)
-        && !memcmp (&block_control, &block_header->block_control, sizeof (block_header->block_control)))
-      {
-        pass ("BLOCK_HEADER.block_control [H]");
-      }
-    else
-      {
-        fail ("BLOCK_HEADER.block_control [H]");
-        error++;
-      }
   }
   {
     BITCODE_H block_entity;
@@ -38159,6 +38146,19 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
       }
     block_header->num_owned--;
 
+  }
+  {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(block_header, "BLOCK_HEADER", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &block_header->ownerhandle, sizeof (block_header->ownerhandle)))
+      {
+        pass ("BLOCK_HEADER.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("BLOCK_HEADER.ownerhandle [H]");
+        error++;
+      }
   }
   {
     struct _dwg_object_object* parent;
@@ -41256,19 +41256,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_H dimstyle_control;
-    if (dwg_dynapi_entity_value(dimstyle, "DIMSTYLE", "dimstyle_control", &dimstyle_control, NULL)
-        && !memcmp (&dimstyle_control, &dimstyle->dimstyle_control, sizeof (dimstyle->dimstyle_control)))
-      {
-        pass ("DIMSTYLE.dimstyle_control [H]");
-      }
-    else
-      {
-        fail ("DIMSTYLE.dimstyle_control [H]");
-        error++;
-      }
-  }
-  {
     BITCODE_H extref_handle;
     if (dwg_dynapi_entity_value(dimstyle, "DIMSTYLE", "extref_handle", &extref_handle, NULL)
         && !memcmp (&extref_handle, &dimstyle->extref_handle, sizeof (dimstyle->extref_handle)))
@@ -41317,6 +41304,19 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       {
         fail ("DIMSTYLE.name [TV] '%s' <> '%s'", name, dimstyle->name);
+        error++;
+      }
+  }
+  {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(dimstyle, "DIMSTYLE", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &dimstyle->ownerhandle, sizeof (dimstyle->ownerhandle)))
+      {
+        pass ("DIMSTYLE.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("DIMSTYLE.ownerhandle [H]");
         error++;
       }
   }
@@ -41475,19 +41475,6 @@ static int test_DIMSTYLE_CONTROL (const Dwg_Object *obj)
       }
   }
   {
-    BITCODE_H null_handle;
-    if (dwg_dynapi_entity_value(dimstyle_control, "DIMSTYLE_CONTROL", "null_handle", &null_handle, NULL)
-        && !memcmp (&null_handle, &dimstyle_control->null_handle, sizeof (dimstyle_control->null_handle)))
-      {
-        pass ("DIMSTYLE_CONTROL.null_handle [H]");
-      }
-    else
-      {
-        fail ("DIMSTYLE_CONTROL.null_handle [H]");
-        error++;
-      }
-  }
-  {
     BITCODE_BS num_entries;
     if (dwg_dynapi_entity_value(dimstyle_control, "DIMSTYLE_CONTROL", "num_entries", &num_entries, NULL)
         && num_entries == dimstyle_control->num_entries)
@@ -41564,6 +41551,19 @@ static int test_DIMSTYLE_CONTROL (const Dwg_Object *obj)
       }
     dimstyle_control->objid--;
 
+  }
+  {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(dimstyle_control, "DIMSTYLE_CONTROL", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &dimstyle_control->ownerhandle, sizeof (dimstyle_control->ownerhandle)))
+      {
+        pass ("DIMSTYLE_CONTROL.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("DIMSTYLE_CONTROL.ownerhandle [H]");
+        error++;
+      }
   }
   {
     struct _dwg_object_object* parent;
@@ -43742,19 +43742,6 @@ static int test_LAYER (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_H layer_control;
-    if (dwg_dynapi_entity_value(layer, "LAYER", "layer_control", &layer_control, NULL)
-        && !memcmp (&layer_control, &layer->layer_control, sizeof (layer->layer_control)))
-      {
-        pass ("LAYER.layer_control [H]");
-      }
-    else
-      {
-        fail ("LAYER.layer_control [H]");
-        error++;
-      }
-  }
-  {
     BITCODE_H linetype;
     if (dwg_dynapi_entity_value(layer, "LAYER", "linetype", &linetype, NULL)
         && !memcmp (&linetype, &layer->linetype, sizeof (layer->linetype)))
@@ -43872,19 +43859,6 @@ static int test_LAYER (const Dwg_Object *obj)
       }
   }
   {
-    BITCODE_H null_handle;
-    if (dwg_dynapi_entity_value(layer, "LAYER", "null_handle", &null_handle, NULL)
-        && !memcmp (&null_handle, &layer->null_handle, sizeof (layer->null_handle)))
-      {
-        pass ("LAYER.null_handle [H]");
-      }
-    else
-      {
-        fail ("LAYER.null_handle [H]");
-        error++;
-      }
-  }
-  {
     BITCODE_B on;
     if (dwg_dynapi_entity_value(layer, "LAYER", "on", &on, NULL)
         && on == layer->on)
@@ -43909,6 +43883,19 @@ static int test_LAYER (const Dwg_Object *obj)
       }
     layer->on--;
 
+  }
+  {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(layer, "LAYER", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &layer->ownerhandle, sizeof (layer->ownerhandle)))
+      {
+        pass ("LAYER.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("LAYER.ownerhandle [H]");
+        error++;
+      }
   }
   {
     struct _dwg_object_object* parent;
@@ -44102,19 +44089,6 @@ static int test_LAYER_CONTROL (const Dwg_Object *obj)
       }
   }
   {
-    BITCODE_H null_handle;
-    if (dwg_dynapi_entity_value(layer_control, "LAYER_CONTROL", "null_handle", &null_handle, NULL)
-        && !memcmp (&null_handle, &layer_control->null_handle, sizeof (layer_control->null_handle)))
-      {
-        pass ("LAYER_CONTROL.null_handle [H]");
-      }
-    else
-      {
-        fail ("LAYER_CONTROL.null_handle [H]");
-        error++;
-      }
-  }
-  {
     BITCODE_BS num_entries;
     if (dwg_dynapi_entity_value(layer_control, "LAYER_CONTROL", "num_entries", &num_entries, NULL)
         && num_entries == layer_control->num_entries)
@@ -44165,6 +44139,19 @@ static int test_LAYER_CONTROL (const Dwg_Object *obj)
       }
     layer_control->objid--;
 
+  }
+  {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(layer_control, "LAYER_CONTROL", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &layer_control->ownerhandle, sizeof (layer_control->ownerhandle)))
+      {
+        pass ("LAYER_CONTROL.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("LAYER_CONTROL.ownerhandle [H]");
+        error++;
+      }
   }
   {
     struct _dwg_object_object* parent;
@@ -45489,6 +45476,19 @@ static int test_LTYPE (const Dwg_Object *obj)
       }
   }
   {
+    BITCODE_H extref_handle;
+    if (dwg_dynapi_entity_value(ltype, "LTYPE", "extref_handle", &extref_handle, NULL)
+        && !memcmp (&extref_handle, &ltype->extref_handle, sizeof (ltype->extref_handle)))
+      {
+        pass ("LTYPE.extref_handle [H]");
+      }
+    else
+      {
+        fail ("LTYPE.extref_handle [H]");
+        error++;
+      }
+  }
+  {
     BITCODE_RC flag;
     if (dwg_dynapi_entity_value(ltype, "LTYPE", "flag", &flag, NULL)
         && flag == ltype->flag)
@@ -45515,19 +45515,6 @@ static int test_LTYPE (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_H linetype_control;
-    if (dwg_dynapi_entity_value(ltype, "LTYPE", "linetype_control", &linetype_control, NULL)
-        && !memcmp (&linetype_control, &ltype->linetype_control, sizeof (ltype->linetype_control)))
-      {
-        pass ("LTYPE.linetype_control [H]");
-      }
-    else
-      {
-        fail ("LTYPE.linetype_control [H]");
-        error++;
-      }
-  }
-  {
     BITCODE_TV name;
     if (dwg_dynapi_entity_value(ltype, "LTYPE", "name", &name, NULL)
         && !strcmp ((char *)name, (char *)ltype->name))
@@ -45537,19 +45524,6 @@ static int test_LTYPE (const Dwg_Object *obj)
     else
       {
         fail ("LTYPE.name [TV] '%s' <> '%s'", name, ltype->name);
-        error++;
-      }
-  }
-  {
-    BITCODE_H null_handle;
-    if (dwg_dynapi_entity_value(ltype, "LTYPE", "null_handle", &null_handle, NULL)
-        && !memcmp (&null_handle, &ltype->null_handle, sizeof (ltype->null_handle)))
-      {
-        pass ("LTYPE.null_handle [H]");
-      }
-    else
-      {
-        fail ("LTYPE.null_handle [H]");
         error++;
       }
   }
@@ -45578,6 +45552,19 @@ static int test_LTYPE (const Dwg_Object *obj)
       }
     ltype->num_dashes--;
 
+  }
+  {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(ltype, "LTYPE", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &ltype->ownerhandle, sizeof (ltype->ownerhandle)))
+      {
+        pass ("LTYPE.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("LTYPE.ownerhandle [H]");
+        error++;
+      }
   }
   {
     struct _dwg_object_object* parent;
@@ -45825,19 +45812,6 @@ static int test_LTYPE_CONTROL (const Dwg_Object *obj)
       }
   }
   {
-    BITCODE_H null_handle;
-    if (dwg_dynapi_entity_value(ltype_control, "LTYPE_CONTROL", "null_handle", &null_handle, NULL)
-        && !memcmp (&null_handle, &ltype_control->null_handle, sizeof (ltype_control->null_handle)))
-      {
-        pass ("LTYPE_CONTROL.null_handle [H]");
-      }
-    else
-      {
-        fail ("LTYPE_CONTROL.null_handle [H]");
-        error++;
-      }
-  }
-  {
     BITCODE_BS num_entries;
     if (dwg_dynapi_entity_value(ltype_control, "LTYPE_CONTROL", "num_entries", &num_entries, NULL)
         && num_entries == ltype_control->num_entries)
@@ -45888,6 +45862,19 @@ static int test_LTYPE_CONTROL (const Dwg_Object *obj)
       }
     ltype_control->objid--;
 
+  }
+  {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(ltype_control, "LTYPE_CONTROL", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &ltype_control->ownerhandle, sizeof (ltype_control->ownerhandle)))
+      {
+        pass ("LTYPE_CONTROL.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("LTYPE_CONTROL.ownerhandle [H]");
+        error++;
+      }
   }
   {
     struct _dwg_object_object* parent;
@@ -51217,6 +51204,19 @@ static int test_SORTENTSTABLE (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_SORTENTSTABLE *restrict sortentstable = obj->tio.object->tio.SORTENTSTABLE;
   {
+    BITCODE_H dict_handle;
+    if (dwg_dynapi_entity_value(sortentstable, "SORTENTSTABLE", "dict_handle", &dict_handle, NULL)
+        && !memcmp (&dict_handle, &sortentstable->dict_handle, sizeof (sortentstable->dict_handle)))
+      {
+        pass ("SORTENTSTABLE.dict_handle [H]");
+      }
+    else
+      {
+        fail ("SORTENTSTABLE.dict_handle [H]");
+        error++;
+      }
+  }
+  {
     BITCODE_H* ents;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (sortentstable, "SORTENTSTABLE", "num_ents", &count, NULL)
@@ -51256,19 +51256,6 @@ static int test_SORTENTSTABLE (const Dwg_Object *obj)
       }
     sortentstable->num_ents--;
 
-  }
-  {
-    BITCODE_H owner_dict;
-    if (dwg_dynapi_entity_value(sortentstable, "SORTENTSTABLE", "owner_dict", &owner_dict, NULL)
-        && !memcmp (&owner_dict, &sortentstable->owner_dict, sizeof (sortentstable->owner_dict)))
-      {
-        pass ("SORTENTSTABLE.owner_dict [H]");
-      }
-    else
-      {
-        fail ("SORTENTSTABLE.owner_dict [H]");
-        error++;
-      }
   }
   {
     BITCODE_H ownerhandle;
@@ -51855,6 +51842,19 @@ static int test_STYLE (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(style, "STYLE", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &style->ownerhandle, sizeof (style->ownerhandle)))
+      {
+        pass ("STYLE.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("STYLE.ownerhandle [H]");
+        error++;
+      }
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value(style, "STYLE", "parent", &parent, NULL)
         && !memcmp (&parent, &style->parent, sizeof (style->parent)))
@@ -51892,19 +51892,6 @@ static int test_STYLE (const Dwg_Object *obj)
       }
     style->shape_file--;
 
-  }
-  {
-    BITCODE_H style_control;
-    if (dwg_dynapi_entity_value(style, "STYLE", "style_control", &style_control, NULL)
-        && !memcmp (&style_control, &style->style_control, sizeof (style->style_control)))
-      {
-        pass ("STYLE.style_control [H]");
-      }
-    else
-      {
-        fail ("STYLE.style_control [H]");
-        error++;
-      }
   }
   {
     BITCODE_RS used;
@@ -52070,19 +52057,6 @@ static int test_STYLE_CONTROL (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_STYLE_CONTROL *restrict style_control = obj->tio.object->tio.STYLE_CONTROL;
   {
-    BITCODE_H null_handle;
-    if (dwg_dynapi_entity_value(style_control, "STYLE_CONTROL", "null_handle", &null_handle, NULL)
-        && !memcmp (&null_handle, &style_control->null_handle, sizeof (style_control->null_handle)))
-      {
-        pass ("STYLE_CONTROL.null_handle [H]");
-      }
-    else
-      {
-        fail ("STYLE_CONTROL.null_handle [H]");
-        error++;
-      }
-  }
-  {
     BITCODE_BS num_entries;
     if (dwg_dynapi_entity_value(style_control, "STYLE_CONTROL", "num_entries", &num_entries, NULL)
         && num_entries == style_control->num_entries)
@@ -52133,6 +52107,19 @@ static int test_STYLE_CONTROL (const Dwg_Object *obj)
       }
     style_control->objid--;
 
+  }
+  {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(style_control, "STYLE_CONTROL", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &style_control->ownerhandle, sizeof (style_control->ownerhandle)))
+      {
+        pass ("STYLE_CONTROL.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("STYLE_CONTROL.ownerhandle [H]");
+        error++;
+      }
   }
   {
     struct _dwg_object_object* parent;
@@ -53748,6 +53735,19 @@ static int test_UCS (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(ucs, "UCS", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &ucs->ownerhandle, sizeof (ucs->ownerhandle)))
+      {
+        pass ("UCS.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("UCS.ownerhandle [H]");
+        error++;
+      }
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value(ucs, "UCS", "parent", &parent, NULL)
         && !memcmp (&parent, &ucs->parent, sizeof (ucs->parent)))
@@ -53757,19 +53757,6 @@ static int test_UCS (const Dwg_Object *obj)
     else
       {
         fail ("UCS.parent [struct _dwg_object_object*]");
-        error++;
-      }
-  }
-  {
-    BITCODE_H ucs_control;
-    if (dwg_dynapi_entity_value(ucs, "UCS", "ucs_control", &ucs_control, NULL)
-        && !memcmp (&ucs_control, &ucs->ucs_control, sizeof (ucs->ucs_control)))
-      {
-        pass ("UCS.ucs_control [H]");
-      }
-    else
-      {
-        fail ("UCS.ucs_control [H]");
         error++;
       }
   }
@@ -53924,19 +53911,6 @@ static int test_UCS_CONTROL (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_UCS_CONTROL *restrict ucs_control = obj->tio.object->tio.UCS_CONTROL;
   {
-    BITCODE_H null_handle;
-    if (dwg_dynapi_entity_value(ucs_control, "UCS_CONTROL", "null_handle", &null_handle, NULL)
-        && !memcmp (&null_handle, &ucs_control->null_handle, sizeof (ucs_control->null_handle)))
-      {
-        pass ("UCS_CONTROL.null_handle [H]");
-      }
-    else
-      {
-        fail ("UCS_CONTROL.null_handle [H]");
-        error++;
-      }
-  }
-  {
     BITCODE_BS num_entries;
     if (dwg_dynapi_entity_value(ucs_control, "UCS_CONTROL", "num_entries", &num_entries, NULL)
         && num_entries == ucs_control->num_entries)
@@ -53987,6 +53961,19 @@ static int test_UCS_CONTROL (const Dwg_Object *obj)
       }
     ucs_control->objid--;
 
+  }
+  {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(ucs_control, "UCS_CONTROL", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &ucs_control->ownerhandle, sizeof (ucs_control->ownerhandle)))
+      {
+        pass ("UCS_CONTROL.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("UCS_CONTROL.ownerhandle [H]");
+        error++;
+      }
   }
   {
     struct _dwg_object_object* parent;
@@ -54669,6 +54656,19 @@ static int test_VIEW (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(view, "VIEW", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &view->ownerhandle, sizeof (view->ownerhandle)))
+      {
+        pass ("VIEW.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("VIEW.ownerhandle [H]");
+        error++;
+      }
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value(view, "VIEW", "parent", &parent, NULL)
         && !memcmp (&parent, &view->parent, sizeof (view->parent)))
@@ -54838,19 +54838,6 @@ static int test_VIEW (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_H view_control;
-    if (dwg_dynapi_entity_value(view, "VIEW", "view_control", &view_control, NULL)
-        && !memcmp (&view_control, &view->view_control, sizeof (view->view_control)))
-      {
-        pass ("VIEW.view_control [H]");
-      }
-    else
-      {
-        fail ("VIEW.view_control [H]");
-        error++;
-      }
-  }
-  {
     BITCODE_H visual_style_handle;
     if (dwg_dynapi_entity_value(view, "VIEW", "visual_style_handle", &visual_style_handle, NULL)
         && !memcmp (&visual_style_handle, &view->visual_style_handle, sizeof (view->visual_style_handle)))
@@ -55001,19 +54988,6 @@ static int test_VIEW_CONTROL (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_VIEW_CONTROL *restrict view_control = obj->tio.object->tio.VIEW_CONTROL;
   {
-    BITCODE_H null_handle;
-    if (dwg_dynapi_entity_value(view_control, "VIEW_CONTROL", "null_handle", &null_handle, NULL)
-        && !memcmp (&null_handle, &view_control->null_handle, sizeof (view_control->null_handle)))
-      {
-        pass ("VIEW_CONTROL.null_handle [H]");
-      }
-    else
-      {
-        fail ("VIEW_CONTROL.null_handle [H]");
-        error++;
-      }
-  }
-  {
     BITCODE_BS num_entries;
     if (dwg_dynapi_entity_value(view_control, "VIEW_CONTROL", "num_entries", &num_entries, NULL)
         && num_entries == view_control->num_entries)
@@ -55064,6 +55038,19 @@ static int test_VIEW_CONTROL (const Dwg_Object *obj)
       }
     view_control->objid--;
 
+  }
+  {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(view_control, "VIEW_CONTROL", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &view_control->ownerhandle, sizeof (view_control->ownerhandle)))
+      {
+        pass ("VIEW_CONTROL.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("VIEW_CONTROL.ownerhandle [H]");
+        error++;
+      }
   }
   {
     struct _dwg_object_object* parent;
@@ -56655,6 +56642,19 @@ static int test_VPORT (const Dwg_Object *obj)
       }
   }
   {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(vport, "VPORT", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &vport->ownerhandle, sizeof (vport->ownerhandle)))
+      {
+        pass ("VPORT.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("VPORT.ownerhandle [H]");
+        error++;
+      }
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value(vport, "VPORT", "parent", &parent, NULL)
         && !memcmp (&parent, &vport->parent, sizeof (vport->parent)))
@@ -56967,19 +56967,6 @@ static int test_VPORT (const Dwg_Object *obj)
       }
   }
   {
-    BITCODE_H vport_control;
-    if (dwg_dynapi_entity_value(vport, "VPORT", "vport_control", &vport_control, NULL)
-        && !memcmp (&vport_control, &vport->vport_control, sizeof (vport->vport_control)))
-      {
-        pass ("VPORT.vport_control [H]");
-      }
-    else
-      {
-        fail ("VPORT.vport_control [H]");
-        error++;
-      }
-  }
-  {
     BITCODE_B xrefdep;
     if (dwg_dynapi_entity_value(vport, "VPORT", "xrefdep", &xrefdep, NULL)
         && xrefdep == vport->xrefdep)
@@ -57065,19 +57052,6 @@ static int test_VPORT_CONTROL (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_VPORT_CONTROL *restrict vport_control = obj->tio.object->tio.VPORT_CONTROL;
   {
-    BITCODE_H null_handle;
-    if (dwg_dynapi_entity_value(vport_control, "VPORT_CONTROL", "null_handle", &null_handle, NULL)
-        && !memcmp (&null_handle, &vport_control->null_handle, sizeof (vport_control->null_handle)))
-      {
-        pass ("VPORT_CONTROL.null_handle [H]");
-      }
-    else
-      {
-        fail ("VPORT_CONTROL.null_handle [H]");
-        error++;
-      }
-  }
-  {
     BITCODE_BS num_entries;
     if (dwg_dynapi_entity_value(vport_control, "VPORT_CONTROL", "num_entries", &num_entries, NULL)
         && num_entries == vport_control->num_entries)
@@ -57128,6 +57102,19 @@ static int test_VPORT_CONTROL (const Dwg_Object *obj)
       }
     vport_control->objid--;
 
+  }
+  {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(vport_control, "VPORT_CONTROL", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &vport_control->ownerhandle, sizeof (vport_control->ownerhandle)))
+      {
+        pass ("VPORT_CONTROL.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("VPORT_CONTROL.ownerhandle [H]");
+        error++;
+      }
   }
   {
     struct _dwg_object_object* parent;
@@ -57192,19 +57179,6 @@ static int test_VPORT_ENTITY_CONTROL (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_VPORT_ENTITY_CONTROL *restrict vport_entity_control = obj->tio.object->tio.VPORT_ENTITY_CONTROL;
   {
-    BITCODE_H null_handle;
-    if (dwg_dynapi_entity_value(vport_entity_control, "VPORT_ENTITY_CONTROL", "null_handle", &null_handle, NULL)
-        && !memcmp (&null_handle, &vport_entity_control->null_handle, sizeof (vport_entity_control->null_handle)))
-      {
-        pass ("VPORT_ENTITY_CONTROL.null_handle [H]");
-      }
-    else
-      {
-        fail ("VPORT_ENTITY_CONTROL.null_handle [H]");
-        error++;
-      }
-  }
-  {
     BITCODE_BS num_entries;
     if (dwg_dynapi_entity_value(vport_entity_control, "VPORT_ENTITY_CONTROL", "num_entries", &num_entries, NULL)
         && num_entries == vport_entity_control->num_entries)
@@ -57255,6 +57229,19 @@ static int test_VPORT_ENTITY_CONTROL (const Dwg_Object *obj)
       }
     vport_entity_control->objid--;
 
+  }
+  {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(vport_entity_control, "VPORT_ENTITY_CONTROL", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &vport_entity_control->ownerhandle, sizeof (vport_entity_control->ownerhandle)))
+      {
+        pass ("VPORT_ENTITY_CONTROL.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("VPORT_ENTITY_CONTROL.ownerhandle [H]");
+        error++;
+      }
   }
   {
     struct _dwg_object_object* parent;
@@ -57384,6 +57371,19 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
       }
   }
   {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(vport_entity_header, "VPORT_ENTITY_HEADER", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &vport_entity_header->ownerhandle, sizeof (vport_entity_header->ownerhandle)))
+      {
+        pass ("VPORT_ENTITY_HEADER.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("VPORT_ENTITY_HEADER.ownerhandle [H]");
+        error++;
+      }
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value(vport_entity_header, "VPORT_ENTITY_HEADER", "parent", &parent, NULL)
         && !memcmp (&parent, &vport_entity_header->parent, sizeof (vport_entity_header->parent)))
@@ -57432,19 +57432,6 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
     else
       {
         fail ("VPORT_ENTITY_HEADER.vport_entity [H]");
-        error++;
-      }
-  }
-  {
-    BITCODE_H vport_entity_control;
-    if (dwg_dynapi_entity_value(vport_entity_header, "VPORT_ENTITY_HEADER", "vport_entity_control", &vport_entity_control, NULL)
-        && !memcmp (&vport_entity_control, &vport_entity_header->vport_entity_control, sizeof (vport_entity_header->vport_entity_control)))
-      {
-        pass ("VPORT_ENTITY_HEADER.vport_entity_control [H]");
-      }
-    else
-      {
-        fail ("VPORT_ENTITY_HEADER.vport_entity_control [H]");
         error++;
       }
   }

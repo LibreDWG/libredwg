@@ -1853,7 +1853,7 @@ typedef struct _dwg_entity_MLINE
 #define COMMON_TABLE_CONTROL_FIELDS(entries) \
   struct _dwg_object_object *parent; \
   BITCODE_BS num_entries; \
-  BITCODE_H null_handle; \
+  BITCODE_H ownerhandle; \
   BITCODE_H xdicobjhandle; \
   BITCODE_H* entries; \
   BITCODE_BL objid; \
@@ -1900,7 +1900,7 @@ typedef struct _dwg_object_BLOCK_HEADER
   BITCODE_BS insert_units;
   BITCODE_B explodable;
   BITCODE_RC block_scaling;
-  BITCODE_H block_control;
+  BITCODE_H ownerhandle;  /* block_control */
   BITCODE_H null_handle;
   BITCODE_H block_entity;
   BITCODE_H first_entity;
@@ -1942,12 +1942,11 @@ typedef struct _dwg_object_LAYER
   BITCODE_CMC color;
   short      color_rs;    /* preR13, needs to be signed */
   BITCODE_RS linetype_rs; /* preR13 */
-  BITCODE_H layer_control;
+  BITCODE_H ownerhandle;  /* layer_control */
   BITCODE_H xref;
   BITCODE_H plotstyle;
   BITCODE_H material;
   BITCODE_H linetype;
-  BITCODE_H null_handle; /* unused, doc error */
 } Dwg_Object_LAYER;
 
 /**
@@ -1981,7 +1980,7 @@ typedef struct _dwg_object_STYLE
   BITCODE_BD last_height;
   BITCODE_TV font_name;
   BITCODE_TV bigfont_name;
-  BITCODE_H style_control;
+  BITCODE_H ownerhandle; /* style_control */
   BITCODE_H extref_handle;
 } Dwg_Object_STYLE;
 
@@ -2028,11 +2027,11 @@ typedef struct _dwg_object_LTYPE
   BITCODE_RC num_dashes;
   Dwg_LTYPE_dash* dashes;
   BITCODE_RD* dashes_r11;
+  BITCODE_B text_area_is_present; /* if some shape_flag & 2 */
   char    * strings_area;
-  BITCODE_H linetype_control;
-  BITCODE_H null_handle;
+  BITCODE_H ownerhandle; /* i.e. linetype_control */
+  BITCODE_H extref_handle;
   BITCODE_H* styles;
-  BITCODE_B  text_area_is_present; /* if some shape_flag & 2 */
 } Dwg_Object_LTYPE;
 
 /* 58 and 59 are UNKNOWN OBJECTS */
@@ -2082,7 +2081,7 @@ typedef struct _dwg_object_VIEW
   BITCODE_BD elevation;
   BITCODE_BS orthographic_view_type;
   BITCODE_B camera_plottable;
-  BITCODE_H view_control;
+  BITCODE_H ownerhandle; /* view_control */
   BITCODE_H null_handle;
   BITCODE_H background_handle;
   BITCODE_H visual_style_handle;
@@ -2119,9 +2118,9 @@ typedef struct _dwg_object_UCS
   BITCODE_BD elevation;
   BITCODE_BS orthographic_view_type;
   BITCODE_BS orthographic_type;
-  BITCODE_H ucs_control;
+  BITCODE_H ownerhandle;  /* ucs_control */
   BITCODE_H null_handle;
-  BITCODE_H base_ucs_handle;
+  BITCODE_H base_ucs_handle; /*! DXF 346 */
   BITCODE_H unknown;
 } Dwg_Object_UCS;
 
@@ -2185,7 +2184,7 @@ typedef struct _dwg_object_VPORT
   BITCODE_BS ucs_orthografic_type;
   BITCODE_BS grid_flags;
   BITCODE_BS grid_major;
-  BITCODE_H vport_control;
+  BITCODE_H ownerhandle;  /* vport_control; */
   BITCODE_H null_handle;
   BITCODE_H background_handle;
   BITCODE_H visual_style_handle;
@@ -2216,9 +2215,9 @@ typedef struct _dwg_object_APPID
   BITCODE_B xrefref;
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
-
   BITCODE_RC unknown;
-  BITCODE_H app_control;
+
+  BITCODE_H ownerhandle;  /* app_control */
   BITCODE_H null_handle;
 } Dwg_Object_APPID;
 
@@ -2328,7 +2327,7 @@ typedef struct _dwg_object_DIMSTYLE
   BITCODE_BS DIMLWD;
   BITCODE_BS DIMLWE;
 
-  BITCODE_H dimstyle_control;
+  BITCODE_H ownerhandle;  /* dimstyle_control */
   BITCODE_H extref_handle;
   BITCODE_H DIMTXSTY;
 
@@ -2365,7 +2364,7 @@ typedef struct _dwg_object_VPORT_ENTITY_HEADER
   BITCODE_B xrefdep;
 
   BITCODE_B flag1;
-  BITCODE_H vport_entity_control;
+  BITCODE_H ownerhandle;  /* vport_entity_control */
   BITCODE_H xref_handle;
   BITCODE_H vport_entity;
 } Dwg_Object_VPORT_ENTITY_HEADER;
@@ -3909,7 +3908,7 @@ typedef struct _dwg_object_SORTENTSTABLE
   BITCODE_BL num_ents;
   BITCODE_H* sort_handles;
   BITCODE_H ownerhandle; /* MSPACE 1F */
-  BITCODE_H owner_dict;   /* <= r2007 */
+  BITCODE_H dict_handle;
   BITCODE_H* ents;
 } Dwg_Object_SORTENTSTABLE;
 
@@ -5341,6 +5340,8 @@ typedef struct _dwg_object_object
   Dwg_Eed *eed;
 
   long unsigned int datpos; /* the data stream offset */
+
+  BITCODE_H ownerhandle;        /*!< DXF 330 */
   BITCODE_BL num_reactors;
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;

@@ -232,8 +232,16 @@
   DECODER { dwg_decode_unknown (dat, (Dwg_Object * restrict) obj); }          \
   FREE { VALUE_TF (obj->unknown_bits, 0); }
 
+#ifndef START_OBJECT_HANDLE_STREAM
+#  define START_OBJECT_HANDLE_STREAM                                          \
+  START_HANDLE_STREAM;                                                        \
+  FIELD_HANDLE (ownerhandle, 4, 0);                                           \
+  REACTORS(4);                                                                \
+  XDICOBJHANDLE(3)
+#endif
+
 #ifndef COMMON_TABLE_FLAGS
-#  define COMMON_TABLE_FLAGS(owner, acdbname)                                 \
+#  define COMMON_TABLE_FLAGS(acdbname)                                        \
     PRE (R_13)                                                                \
     {                                                                         \
       FIELD_RC (flag, 70);                                                    \
@@ -263,7 +271,7 @@
     RESET_VER
 
 // Same as above. just _dwg_object_LAYER::flags is short, not RC
-#  define LAYER_TABLE_FLAGS(owner, acdbname)                                  \
+#  define LAYER_TABLE_FLAGS(acdbname)                                         \
     PRE (R_13)                                                                \
     {                                                                         \
       FIELD_CAST (flag, RC, RS, 70);                                          \

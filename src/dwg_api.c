@@ -6636,7 +6636,7 @@ dwg_obj_appid_get_appid_control (const dwg_obj_appid *restrict appid,
   if (appid)
     {
       *error = 0;
-      return appid->app_control->obj->tio.object->tio.APPID_CONTROL;
+      return appid->ownerhandle->obj->tio.object->tio.APPID_CONTROL;
     }
   else
     {
@@ -19771,13 +19771,13 @@ dwg_obj_block_control *
 dwg_block_header_get_block_control (const dwg_obj_block_header *block_header,
                                     int *restrict error)
 {
-  if (block_header && block_header->block_control
-      && block_header->block_control->obj
-      && block_header->block_control->obj->type == DWG_TYPE_BLOCK_CONTROL
-      && block_header->block_control->obj->tio.object)
+  if (block_header && block_header->ownerhandle
+      && block_header->ownerhandle->obj
+      && block_header->ownerhandle->obj->type == DWG_TYPE_BLOCK_CONTROL
+      && block_header->ownerhandle->obj->tio.object)
     {
       *error = 0;
-      return block_header->block_control->obj->tio.object->tio.BLOCK_CONTROL;
+      return block_header->ownerhandle->obj->tio.object->tio.BLOCK_CONTROL;
     }
   else
     {
@@ -20099,7 +20099,7 @@ dwg_object_tablectrl_get_entry (const dwg_object *restrict obj,
 error  set to 0 for ok, >0 if not found.
 */
 dwg_object_ref *
-dwg_object_tablectrl_get_null_handle (const dwg_object *restrict obj,
+dwg_object_tablectrl_get_ownerhandle (const dwg_object *restrict obj,
                                       int *restrict error)
 {
   if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT
@@ -20107,7 +20107,7 @@ dwg_object_tablectrl_get_null_handle (const dwg_object *restrict obj,
     {
       // HACK: we can guarantee a common layout of the common fields
       Dwg_Object_STYLE_CONTROL *ctrl = obj->tio.object->tio.STYLE_CONTROL;
-      return ctrl->null_handle;
+      return ctrl->ownerhandle;
     }
   else
     {

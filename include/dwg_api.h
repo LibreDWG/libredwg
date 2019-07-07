@@ -5048,7 +5048,7 @@ dwg_object_tablectrl_get_entries (const dwg_object *restrict obj,
                                   int *restrict error) __nonnull ((2));
 
 EXPORT dwg_object_ref *
-dwg_object_tablectrl_get_null_handle (const dwg_object *restrict obj,
+dwg_object_tablectrl_get_ownerhandle (const dwg_object *restrict obj,
                                       int *restrict error) __nonnull ((2));
 EXPORT dwg_object_ref *
 dwg_object_tablectrl_get_xdicobjhandle (const dwg_object *restrict obj,
