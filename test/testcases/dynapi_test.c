@@ -42266,6 +42266,19 @@ static int test_FIELD (const Dwg_Object *obj)
       }
   }
   {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(field, "FIELD", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &field->ownerhandle, sizeof (field->ownerhandle)))
+      {
+        pass ("FIELD.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("FIELD.ownerhandle [H]");
+        error++;
+      }
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value(field, "FIELD", "parent", &parent, NULL)
         && !memcmp (&parent, &field->parent, sizeof (field->parent)))

@@ -3665,6 +3665,7 @@ typedef struct _dwg_object_FIELD
   BITCODE_BL value_string_length; /* 98 ODA bug: TV */
   BITCODE_BL num_childval;      /* 93 */
   Dwg_FIELD_ChildValue *childval;
+  BITCODE_H ownerhandle;
 } Dwg_Object_FIELD;
 
 /**

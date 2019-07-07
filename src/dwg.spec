@@ -4303,11 +4303,7 @@ DWG_OBJECT(FIELD)
   FIELD_T (id, 1);
   FIELD_T (code, 2); // and code 3 for subsequent >255 chunks
   FIELD_BL (num_childs, 90);
-  DECODER { if (_obj->num_childs) _obj->num_childs--; }
-  //DEBUG_HERE_OBJ
-  HANDLE_VECTOR (childs, num_childs, 3, 360);
   FIELD_BL (num_objects, 97);
-  HANDLE_VECTOR (objects, num_objects, 5, 331);
   PRE(R_2007) {
     FIELD_TV (format, 4);
   }
@@ -4326,7 +4322,7 @@ DWG_OBJECT(FIELD)
   FIELD_BL (value_string_length, 98); //ODA bug TV
 
   FIELD_BL (num_childval, 93);
-  REPEAT_N((long)FIELD_VALUE(num_childval), childval, Dwg_FIELD_ChildValue)
+  REPEAT(num_childval, childval, Dwg_FIELD_ChildValue)
   REPEAT_BLOCK
       SUB_FIELD_T (childval[rcount1],key, 6);
       Table_Value(childval[rcount1].value)
@@ -4341,6 +4337,13 @@ DWG_OBJECT(FIELD)
   END_REPEAT_BLOCK
   SET_PARENT_OBJ(childval)
   END_REPEAT(childval)
+
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (ownerhandle, 4, 0);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  HANDLE_VECTOR (childs, num_childs, 3, 360);
+  HANDLE_VECTOR (objects, num_objects, 5, 331);
 
 DWG_OBJECT_END
 
