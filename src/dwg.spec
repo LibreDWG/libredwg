@@ -4299,6 +4299,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT(FIELD)
 
+  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbField)
   FIELD_T (id, 1);
   FIELD_T (code, 2); // and code 3 for subsequent >255 chunks
@@ -4349,6 +4350,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT(FIELDLIST)
 
+  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbFieldList)
   //SINCE(R_2018)
   FIELD_BL (num_fields, 0); //DXF 70?
@@ -6914,6 +6916,8 @@ DWG_ENTITY_END
 // (varies) DEBUGGING
 DWG_OBJECT(ASSOCACTION)
   DECODE_UNKNOWN_BITS
+  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
+  SUBCLASS(AcDbAssocAction)
   rcount1 = bit_position(dat);
   FIELD_B (is_body_a_proxy, 90); //0-9
   DEBUG_HERE_OBJ
@@ -6941,11 +6945,17 @@ DWG_OBJECT(ASSOCACTION)
   HANDLE_VECTOR(readdeps, num_deps, 5, 330);
   HANDLE_VECTOR(writedeps, num_deps, 0, 360);
   FIELD_BL (unknown_assoc, 90);
+
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (ownerhandle, 4, 0);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
 DWG_OBJECT_END
 
 // DEBUGGING
 DWG_OBJECT(ASSOCOSNAPPOINTREFACTIONPARAM)
   DECODE_UNKNOWN_BITS
+  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS(AcDbAssocActionParam)
   FIELD_B  (unknown1, 0); //
   FIELD_RC (unknown, 0); //01010101
@@ -6969,6 +6979,7 @@ DWG_OBJECT(ASSOCOSNAPPOINTREFACTIONPARAM)
 
   bit_advance_position(dat, 122-118);
   START_HANDLE_STREAM;
+  FIELD_HANDLE (ownerhandle, 3, 0);
   DEBUG_POS_OBJ
   FIELD_HANDLE (writedep, ANYCODE, 360); //122-129
   bit_advance_position(dat, 168-130);
@@ -6976,6 +6987,7 @@ DWG_OBJECT(ASSOCOSNAPPOINTREFACTIONPARAM)
   FIELD_HANDLE (actionparam, 4, 330); //168-175
   REACTORS(4);
   XDICOBJHANDLE(3);
+
 DWG_OBJECT_END
 
 // See AcDbAssocPersSubentIdPE.h?
@@ -7029,12 +7041,14 @@ DWG_OBJECT(ASSOCPERSSUBENTMANAGER)
   FIELD_HANDLE (ownerhandle, 3, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
+
 DWG_OBJECT_END
 
 // Class AcDbAssoc2dConstraintGroup
 // see https://help.autodesk.com/view/OARX/2018/ENU/?guid=OREF-AcDbAssoc2dConstraintGroup
 DWG_OBJECT(ASSOC2DCONSTRAINTGROUP)
   DECODE_UNKNOWN_BITS
+  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbAssocAction)
   // This has multiple handles and types.
   FIELD_BL (solution_status, 90); // 0 WellDefined, 1 UnderConstrained, 2 OverConstrained,
@@ -7073,12 +7087,11 @@ DWG_OBJECT(ASSOC2DCONSTRAINTGROUP)
 
   //DXF { FIELD_TV("AcConstrainedImplicitPoint", 1); }
   // ...
-  /*
   START_HANDLE_STREAM;
   FIELD_HANDLE (ownerhandle, 3, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
-  */
+
 DWG_OBJECT_END
 
 // Class AcDbSweepOptions? DEBUGGING
@@ -7086,6 +7099,7 @@ DWG_OBJECT_END
 DWG_OBJECT(ACSH_SWEEP_CLASS)
 
   DECODE_UNKNOWN_BITS
+  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbEvalExpr)
   FIELD_BL (class_version, 90); //1
   FIELD_BL (ee_bl98, 98); //33 major/minor?
@@ -7128,6 +7142,11 @@ DWG_OBJECT(ACSH_SWEEP_CLASS)
   FIELD_3BD (pt2, 11); //0,0,0
 
   SUBCLASS (AcDbShSweep)
+
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (ownerhandle, 3, 0);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
 
 DWG_OBJECT_END
 

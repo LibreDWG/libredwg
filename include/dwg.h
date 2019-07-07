@@ -4066,6 +4066,7 @@ TODO: maybe separate into the various map structs
 typedef struct _dwg_object_MATERIAL
 {
   struct _dwg_object_object *parent;
+  BITCODE_H ownerhandle; /*!< DXF 330 */
 
   BITCODE_T name; /*!< DXF 1 */
   BITCODE_T desc; /*!< DXF 2 optional */
@@ -4183,7 +4184,6 @@ typedef struct _dwg_object_MATERIAL
   //? BD backface_cull
   //? BD self_illum_luminance
   //? BD self_illum_color_temperature
-  BITCODE_H ownerhandle;        /*!< DXF 330 */
 } Dwg_Object_MATERIAL;
 
 /**
@@ -4658,6 +4658,7 @@ typedef struct _dwg_ACTIONBODY
 typedef struct _dwg_object_ASSOCACTION
 {
   struct _dwg_object_object *parent;
+  BITCODE_H ownerhandle; /*!< DXF 330 */
   BITCODE_B  is_body_a_proxy;
   //BITCODE_B is_actionevaluation_in_progress; // 90
   Dwg_ACTIONBODY body;
@@ -4684,7 +4685,7 @@ typedef struct _dwg_object_ASSOCDEPENDENCY
   BITCODE_B unknown_b5; // 290
   BITCODE_BL depbodyid; // 90
 
-  BITCODE_H  ownerhandle; //330
+  BITCODE_H ownerhandle; /*!< DXF 330 */
   BITCODE_H  owner; // 330
   BITCODE_H  readdep; // 330
   BITCODE_H  writedep; // 360
@@ -4694,6 +4695,7 @@ typedef struct _dwg_object_ASSOCDEPENDENCY
 typedef struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY
 {
   struct _dwg_object_object *parent;
+  BITCODE_H ownerhandle; /*!< DXF 330 */
   BITCODE_BL aab_status; // 90
   BITCODE_BL pab_status; // 90:0
   BITCODE_BL pab_l2; // 90:0
@@ -4704,7 +4706,6 @@ typedef struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY
   BITCODE_BL pab_l6; // 90:0
   BITCODE_H  readdep; // 330
   BITCODE_BL dcm_status; // 90:0
-  BITCODE_H  ownerhandle; //330
   BITCODE_H  d_node; // 330
   BITCODE_H  r_node; // 330
 } Dwg_Object_ASSOCALIGNEDDIMACTIONBODY;
@@ -4717,6 +4718,7 @@ typedef struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY
 typedef struct _dwg_object_ASSOCNETWORK
 {
   struct _dwg_object_object *parent;
+  BITCODE_H ownerhandle; /*!< DXF 330 */
   BITCODE_BL status; // 90
   //BITCODE_H assocaction;
   //or inlined:
@@ -4742,6 +4744,7 @@ typedef struct _dwg_object_ASSOCNETWORK
 typedef struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM
 {
   struct _dwg_object_object *parent;
+  BITCODE_H ownerhandle; /*!< DXF 330 */
   // AcDbAssocActionParam
   BITCODE_RC unknown;  // 01010101
   BITCODE_B unknown1;  //
@@ -4760,6 +4763,7 @@ typedef struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM
 typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP
 {
   struct _dwg_object_object *parent;
+  BITCODE_H ownerhandle; /*!< DXF 330 */
   BITCODE_BL solution_status;   //90 1
   BITCODE_BL geometry_status;   //90 0
   BITCODE_BL constraint_status; //90 1
@@ -4809,7 +4813,7 @@ typedef struct _dwg_object_EVALUATION_GRAPH
   BITCODE_BL node_edge3;  // 92
   BITCODE_BL node_edge4;  // 92
 
-  BITCODE_H  ownerhandle; //330
+  BITCODE_H ownerhandle; /*!< DXF 330 */
   BITCODE_H  *evalexpr;    //360
 } Dwg_Object_EVALUATION_GRAPH;
 
@@ -4834,7 +4838,7 @@ typedef struct _dwg_object_PERSSUBENTMANAGER
   BITCODE_BL unknown_bl5;   /*!< DXF 90 1 */
   BITCODE_BL unknown_bl6;   /*!< DXF 90 1 */
 
-  BITCODE_H  ownerhandle; //3. 330
+  BITCODE_H ownerhandle; /*!< DXF 330 */
 } Dwg_Object_PERSSUBENTMANAGER;
 
 typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER
@@ -4881,12 +4885,13 @@ typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER
   BITCODE_BL unknown_bl36;  /*!< DXF 90 0 */
   BITCODE_B  unknown_b37;   /*!< DXF 290 0 */
 
-  BITCODE_H  ownerhandle; //3. 330
+  BITCODE_H ownerhandle; /*!< DXF 330 */
 } Dwg_Object_ASSOCPERSSUBENTMANAGER;
 
 typedef struct _dwg_object_ASSOCPLANESURFACEACTIONBODY
 {
   struct _dwg_object_object *parent;
+  BITCODE_H ownerhandle; /*!< DXF 330 */
   // AcDbAssocActionBody
   BITCODE_BL aab_status; // 90
   // AcDbAssocParamBasedActionBody
@@ -4908,12 +4913,12 @@ typedef struct _dwg_object_ASSOCPLANESURFACEACTIONBODY
   // AcDbAssocPlaneSurfaceActionBody
   BITCODE_BL psab_status;       /*!< DXF 90  */
 
-  BITCODE_H  ownerhandle; //330
 } Dwg_Object_ASSOCPLANESURFACEACTIONBODY;
 
 typedef struct _dwg_object_ACSH_SWEEP_CLASS
 {
   struct _dwg_object_object *parent;
+  BITCODE_H ownerhandle; /*!< DXF 330 */
   // AcDbEvalExpr
   BITCODE_BL class_version; // 90
   BITCODE_BL ee_bl98; //98

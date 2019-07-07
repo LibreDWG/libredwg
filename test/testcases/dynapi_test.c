@@ -33329,6 +33329,19 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(acsh_sweep_class, "ACSH_SWEEP_CLASS", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &acsh_sweep_class->ownerhandle, sizeof (acsh_sweep_class->ownerhandle)))
+      {
+        pass ("ACSH_SWEEP_CLASS.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("ACSH_SWEEP_CLASS.ownerhandle [H]");
+        error++;
+      }
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value(acsh_sweep_class, "ACSH_SWEEP_CLASS", "parent", &parent, NULL)
         && !memcmp (&parent, &acsh_sweep_class->parent, sizeof (acsh_sweep_class->parent)))
@@ -34588,6 +34601,19 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &assoc2dconstraintgroup->ownerhandle, sizeof (assoc2dconstraintgroup->ownerhandle)))
+      {
+        pass ("ASSOC2DCONSTRAINTGROUP.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("ASSOC2DCONSTRAINTGROUP.ownerhandle [H]");
+        error++;
+      }
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value(assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "parent", &parent, NULL)
         && !memcmp (&parent, &assoc2dconstraintgroup->parent, sizeof (assoc2dconstraintgroup->parent)))
@@ -34814,6 +34840,19 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
       }
     assocaction->num_deps--;
 
+  }
+  {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(assocaction, "ASSOCACTION", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &assocaction->ownerhandle, sizeof (assocaction->ownerhandle)))
+      {
+        pass ("ASSOCACTION.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("ASSOCACTION.ownerhandle [H]");
+        error++;
+      }
   }
   {
     BITCODE_H owningnetwork;
@@ -35610,6 +35649,19 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(assocnetwork, "ASSOCNETWORK", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &assocnetwork->ownerhandle, sizeof (assocnetwork->ownerhandle)))
+      {
+        pass ("ASSOCNETWORK.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("ASSOCNETWORK.ownerhandle [H]");
+        error++;
+      }
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value(assocnetwork, "ASSOCNETWORK", "parent", &parent, NULL)
         && !memcmp (&parent, &assocnetwork->parent, sizeof (assocnetwork->parent)))
@@ -35836,6 +35888,19 @@ static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
       }
     assocosnappointrefactionparam->num_params--;
 
+  }
+  {
+    BITCODE_H ownerhandle;
+    if (dwg_dynapi_entity_value(assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "ownerhandle", &ownerhandle, NULL)
+        && !memcmp (&ownerhandle, &assocosnappointrefactionparam->ownerhandle, sizeof (assocosnappointrefactionparam->ownerhandle)))
+      {
+        pass ("ASSOCOSNAPPOINTREFACTIONPARAM.ownerhandle [H]");
+      }
+    else
+      {
+        fail ("ASSOCOSNAPPOINTREFACTIONPARAM.ownerhandle [H]");
+        error++;
+      }
   }
   {
     struct _dwg_object_object* parent;
