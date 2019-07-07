@@ -3492,10 +3492,6 @@ DWG_OBJECT(MLINESTYLE)
         SUB_FIELD_BS (lines[rcount1], ltindex, 6);
 #endif
     }
-    SINCE(R_2018)
-    {
-      SUB_FIELD_HANDLE (lines[rcount1], ltype, 5, 6);
-    }
   END_REPEAT_BLOCK
   SET_PARENT_OBJ(lines)
   END_REPEAT(lines);
@@ -3504,6 +3500,13 @@ DWG_OBJECT(MLINESTYLE)
   FIELD_HANDLE (ownerhandle, 4, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
+  SINCE(R_2018)
+  {
+    _REPEAT_N (FIELD_VALUE (num_lines), lines, Dwg_MLINESTYLE_line, 1)
+    REPEAT_BLOCK
+    SUB_FIELD_HANDLE (lines[rcount1], ltype, 5, 6);
+    END_REPEAT_BLOCK
+  }
 
 DWG_OBJECT_END
 
