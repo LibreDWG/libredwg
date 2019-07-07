@@ -4644,7 +4644,6 @@ typedef struct _dwg_object_ASSOCDEPENDENCY
 typedef struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY
 {
   struct _dwg_object_object *parent;
-  BITCODE_H ownerhandle; /*!< DXF 330 */
   BITCODE_BL aab_status; // 90
   BITCODE_BL pab_status; // 90:0
   BITCODE_BL pab_l2; // 90:0
@@ -4667,7 +4666,6 @@ typedef struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY
 typedef struct _dwg_object_ASSOCNETWORK
 {
   struct _dwg_object_object *parent;
-  BITCODE_H ownerhandle; /*!< DXF 330 */
   BITCODE_BL status; // 90
   //BITCODE_H assocaction;
   //or inlined:
@@ -4693,7 +4691,6 @@ typedef struct _dwg_object_ASSOCNETWORK
 typedef struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM
 {
   struct _dwg_object_object *parent;
-  BITCODE_H ownerhandle; /*!< DXF 330 */
   // AcDbAssocActionParam
   BITCODE_RC unknown;  // 01010101
   BITCODE_B unknown1;  //
@@ -4712,7 +4709,6 @@ typedef struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM
 typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP
 {
   struct _dwg_object_object *parent;
-  BITCODE_H ownerhandle; /*!< DXF 330 */
   BITCODE_BL solution_status;   //90 1
   BITCODE_BL geometry_status;   //90 0
   BITCODE_BL constraint_status; //90 1
@@ -4761,8 +4757,6 @@ typedef struct _dwg_object_EVALUATION_GRAPH
   BITCODE_BL node_edge2;  // 92
   BITCODE_BL node_edge3;  // 92
   BITCODE_BL node_edge4;  // 92
-
-  BITCODE_H ownerhandle; /*!< DXF 330 */
   BITCODE_H  *evalexpr;    //360
 } Dwg_Object_EVALUATION_GRAPH;
 
@@ -4772,8 +4766,6 @@ typedef struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER
   struct _dwg_object_object *parent;
   BITCODE_BS flag;         /*!< DXF 70 0 */
   BITCODE_RS unknown_rs1;
-
-  BITCODE_H  ownerhandle; /* DXF 330 => BLOCK_HEADER */
 } Dwg_Object_DYNAMICBLOCKPURGEPREVENTER;
 
 typedef struct _dwg_object_PERSSUBENTMANAGER
@@ -4786,8 +4778,6 @@ typedef struct _dwg_object_PERSSUBENTMANAGER
   BITCODE_BL unknown_bl4;   /*!< DXF 90 0 */
   BITCODE_BL unknown_bl5;   /*!< DXF 90 1 */
   BITCODE_BL unknown_bl6;   /*!< DXF 90 1 */
-
-  BITCODE_H ownerhandle; /*!< DXF 330 */
 } Dwg_Object_PERSSUBENTMANAGER;
 
 typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER
@@ -4833,14 +4823,11 @@ typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER
   BITCODE_BL unknown_bl35;  /*!< DXF 90 3 0100000011 */
   BITCODE_BL unknown_bl36;  /*!< DXF 90 0 */
   BITCODE_B  unknown_b37;   /*!< DXF 290 0 */
-
-  BITCODE_H ownerhandle; /*!< DXF 330 */
 } Dwg_Object_ASSOCPERSSUBENTMANAGER;
 
 typedef struct _dwg_object_ASSOCPLANESURFACEACTIONBODY
 {
   struct _dwg_object_object *parent;
-  BITCODE_H ownerhandle; /*!< DXF 330 */
   // AcDbAssocActionBody
   BITCODE_BL aab_status; // 90
   // AcDbAssocParamBasedActionBody
@@ -4867,7 +4854,6 @@ typedef struct _dwg_object_ASSOCPLANESURFACEACTIONBODY
 typedef struct _dwg_object_ACSH_SWEEP_CLASS
 {
   struct _dwg_object_object *parent;
-  BITCODE_H ownerhandle; /*!< DXF 330 */
   // AcDbEvalExpr
   BITCODE_BL class_version; // 90
   BITCODE_BL ee_bl98; //98
@@ -4916,7 +4902,6 @@ typedef struct _dwg_object_ACSH_SWEEP_CLASS
 typedef struct _dwg_object_ACDBNAVISWORKSMODELDEF
 {
   struct _dwg_object_object *parent;
-  BITCODE_H ownerhandle; /*!< DXF 330 */
 
   // AcDbNavisworksModelDef
   BITCODE_T path;       /*!< DXF 1 */
@@ -4944,7 +4929,6 @@ typedef struct _dwg_object_RENDERENVIRONMENT
   BITCODE_BD fog_distance_far;      /*!< DXF 40 */
   BITCODE_B environ_image_enabled;  /*!< DXF 290 */
   BITCODE_T environ_image_filename; /*!< DXF 1 */
-  BITCODE_H ownerhandle;
 } Dwg_Object_RENDERENVIRONMENT;
 
 /**
@@ -4963,7 +4947,6 @@ typedef struct _dwg_object_RENDERGLOBAL
   BITCODE_BL image_height;     /*!< DXF 90 */
   BITCODE_B predef_presets_first; /*!< DXF 290 */
   BITCODE_B highlevel_info;    /*!< DXF 290 */
-  BITCODE_H ownerhandle;
 } Dwg_Object_RENDERGLOBAL;
 
 /**

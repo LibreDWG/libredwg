@@ -32932,19 +32932,6 @@ static int test_ACDBNAVISWORKSMODELDEF (const Dwg_Object *obj)
       }
   }
   {
-    BITCODE_H ownerhandle;
-    if (dwg_dynapi_entity_value(acdbnavisworksmodeldef, "ACDBNAVISWORKSMODELDEF", "ownerhandle", &ownerhandle, NULL)
-        && !memcmp (&ownerhandle, &acdbnavisworksmodeldef->ownerhandle, sizeof (acdbnavisworksmodeldef->ownerhandle)))
-      {
-        pass ("ACDBNAVISWORKSMODELDEF.ownerhandle [H]");
-      }
-    else
-      {
-        fail ("ACDBNAVISWORKSMODELDEF.ownerhandle [H]");
-        error++;
-      }
-  }
-  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value(acdbnavisworksmodeldef, "ACDBNAVISWORKSMODELDEF", "parent", &parent, NULL)
         && !memcmp (&parent, &acdbnavisworksmodeldef->parent, sizeof (acdbnavisworksmodeldef->parent)))
@@ -33314,19 +33301,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
       }
     acsh_sweep_class->miter_option--;
 
-  }
-  {
-    BITCODE_H ownerhandle;
-    if (dwg_dynapi_entity_value(acsh_sweep_class, "ACSH_SWEEP_CLASS", "ownerhandle", &ownerhandle, NULL)
-        && !memcmp (&ownerhandle, &acsh_sweep_class->ownerhandle, sizeof (acsh_sweep_class->ownerhandle)))
-      {
-        pass ("ACSH_SWEEP_CLASS.ownerhandle [H]");
-      }
-    else
-      {
-        fail ("ACSH_SWEEP_CLASS.ownerhandle [H]");
-        error++;
-      }
   }
   {
     struct _dwg_object_object* parent;
@@ -34535,19 +34509,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_H ownerhandle;
-    if (dwg_dynapi_entity_value(assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "ownerhandle", &ownerhandle, NULL)
-        && !memcmp (&ownerhandle, &assoc2dconstraintgroup->ownerhandle, sizeof (assoc2dconstraintgroup->ownerhandle)))
-      {
-        pass ("ASSOC2DCONSTRAINTGROUP.ownerhandle [H]");
-      }
-    else
-      {
-        fail ("ASSOC2DCONSTRAINTGROUP.ownerhandle [H]");
-        error++;
-      }
-  }
-  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value(assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "parent", &parent, NULL)
         && !memcmp (&parent, &assoc2dconstraintgroup->parent, sizeof (assoc2dconstraintgroup->parent)))
@@ -34954,19 +34915,6 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
       }
     assocaligneddimactionbody->dcm_status--;
 
-  }
-  {
-    BITCODE_H ownerhandle;
-    if (dwg_dynapi_entity_value(assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "ownerhandle", &ownerhandle, NULL)
-        && !memcmp (&ownerhandle, &assocaligneddimactionbody->ownerhandle, sizeof (assocaligneddimactionbody->ownerhandle)))
-      {
-        pass ("ASSOCALIGNEDDIMACTIONBODY.ownerhandle [H]");
-      }
-    else
-      {
-        fail ("ASSOCALIGNEDDIMACTIONBODY.ownerhandle [H]");
-        error++;
-      }
   }
   {
     BITCODE_BL pab_l2;
@@ -35557,19 +35505,6 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_H ownerhandle;
-    if (dwg_dynapi_entity_value(assocnetwork, "ASSOCNETWORK", "ownerhandle", &ownerhandle, NULL)
-        && !memcmp (&ownerhandle, &assocnetwork->ownerhandle, sizeof (assocnetwork->ownerhandle)))
-      {
-        pass ("ASSOCNETWORK.ownerhandle [H]");
-      }
-    else
-      {
-        fail ("ASSOCNETWORK.ownerhandle [H]");
-        error++;
-      }
-  }
-  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value(assocnetwork, "ASSOCNETWORK", "parent", &parent, NULL)
         && !memcmp (&parent, &assocnetwork->parent, sizeof (assocnetwork->parent)))
@@ -35798,19 +35733,6 @@ static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_H ownerhandle;
-    if (dwg_dynapi_entity_value(assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "ownerhandle", &ownerhandle, NULL)
-        && !memcmp (&ownerhandle, &assocosnappointrefactionparam->ownerhandle, sizeof (assocosnappointrefactionparam->ownerhandle)))
-      {
-        pass ("ASSOCOSNAPPOINTREFACTIONPARAM.ownerhandle [H]");
-      }
-    else
-      {
-        fail ("ASSOCOSNAPPOINTREFACTIONPARAM.ownerhandle [H]");
-        error++;
-      }
-  }
-  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value(assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "parent", &parent, NULL)
         && !memcmp (&parent, &assocosnappointrefactionparam->parent, sizeof (assocosnappointrefactionparam->parent)))
@@ -35972,19 +35894,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
       }
     assocperssubentmanager->class_version--;
 
-  }
-  {
-    BITCODE_H ownerhandle;
-    if (dwg_dynapi_entity_value(assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "ownerhandle", &ownerhandle, NULL)
-        && !memcmp (&ownerhandle, &assocperssubentmanager->ownerhandle, sizeof (assocperssubentmanager->ownerhandle)))
-      {
-        pass ("ASSOCPERSSUBENTMANAGER.ownerhandle [H]");
-      }
-    else
-      {
-        fail ("ASSOCPERSSUBENTMANAGER.ownerhandle [H]");
-        error++;
-      }
   }
   {
     struct _dwg_object_object* parent;
@@ -37045,19 +36954,6 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
       }
     assocplanesurfaceactionbody->aab_status--;
 
-  }
-  {
-    BITCODE_H ownerhandle;
-    if (dwg_dynapi_entity_value(assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "ownerhandle", &ownerhandle, NULL)
-        && !memcmp (&ownerhandle, &assocplanesurfaceactionbody->ownerhandle, sizeof (assocplanesurfaceactionbody->ownerhandle)))
-      {
-        pass ("ASSOCPLANESURFACEACTIONBODY.ownerhandle [H]");
-      }
-    else
-      {
-        fail ("ASSOCPLANESURFACEACTIONBODY.ownerhandle [H]");
-        error++;
-      }
   }
   {
     BITCODE_BL pab_l2;
@@ -41396,19 +41292,6 @@ static int test_DYNAMICBLOCKPURGEPREVENTER (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_H ownerhandle;
-    if (dwg_dynapi_entity_value(dynamicblockpurgepreventer, "DYNAMICBLOCKPURGEPREVENTER", "ownerhandle", &ownerhandle, NULL)
-        && !memcmp (&ownerhandle, &dynamicblockpurgepreventer->ownerhandle, sizeof (dynamicblockpurgepreventer->ownerhandle)))
-      {
-        pass ("DYNAMICBLOCKPURGEPREVENTER.ownerhandle [H]");
-      }
-    else
-      {
-        fail ("DYNAMICBLOCKPURGEPREVENTER.ownerhandle [H]");
-        error++;
-      }
-  }
-  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value(dynamicblockpurgepreventer, "DYNAMICBLOCKPURGEPREVENTER", "parent", &parent, NULL)
         && !memcmp (&parent, &dynamicblockpurgepreventer->parent, sizeof (dynamicblockpurgepreventer->parent)))
@@ -41676,19 +41559,6 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
       }
     evaluation_graph->num_evalexpr--;
 
-  }
-  {
-    BITCODE_H ownerhandle;
-    if (dwg_dynapi_entity_value(evaluation_graph, "EVALUATION_GRAPH", "ownerhandle", &ownerhandle, NULL)
-        && !memcmp (&ownerhandle, &evaluation_graph->ownerhandle, sizeof (evaluation_graph->ownerhandle)))
-      {
-        pass ("EVALUATION_GRAPH.ownerhandle [H]");
-      }
-    else
-      {
-        fail ("EVALUATION_GRAPH.ownerhandle [H]");
-        error++;
-      }
   }
   {
     struct _dwg_object_object* parent;
@@ -48894,19 +48764,6 @@ static int test_PERSSUBENTMANAGER (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_H ownerhandle;
-    if (dwg_dynapi_entity_value(perssubentmanager, "PERSSUBENTMANAGER", "ownerhandle", &ownerhandle, NULL)
-        && !memcmp (&ownerhandle, &perssubentmanager->ownerhandle, sizeof (perssubentmanager->ownerhandle)))
-      {
-        pass ("PERSSUBENTMANAGER.ownerhandle [H]");
-      }
-    else
-      {
-        fail ("PERSSUBENTMANAGER.ownerhandle [H]");
-        error++;
-      }
-  }
-  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value(perssubentmanager, "PERSSUBENTMANAGER", "parent", &parent, NULL)
         && !memcmp (&parent, &perssubentmanager->parent, sizeof (perssubentmanager->parent)))
@@ -50229,19 +50086,6 @@ static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_H ownerhandle;
-    if (dwg_dynapi_entity_value(renderenvironment, "RENDERENVIRONMENT", "ownerhandle", &ownerhandle, NULL)
-        && !memcmp (&ownerhandle, &renderenvironment->ownerhandle, sizeof (renderenvironment->ownerhandle)))
-      {
-        pass ("RENDERENVIRONMENT.ownerhandle [H]");
-      }
-    else
-      {
-        fail ("RENDERENVIRONMENT.ownerhandle [H]");
-        error++;
-      }
-  }
-  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value(renderenvironment, "RENDERENVIRONMENT", "parent", &parent, NULL)
         && !memcmp (&parent, &renderenvironment->parent, sizeof (renderenvironment->parent)))
@@ -50390,19 +50234,6 @@ static int test_RENDERGLOBAL (const Dwg_Object *obj)
       }
     renderglobal->image_width--;
 
-  }
-  {
-    BITCODE_H ownerhandle;
-    if (dwg_dynapi_entity_value(renderglobal, "RENDERGLOBAL", "ownerhandle", &ownerhandle, NULL)
-        && !memcmp (&ownerhandle, &renderglobal->ownerhandle, sizeof (renderglobal->ownerhandle)))
-      {
-        pass ("RENDERGLOBAL.ownerhandle [H]");
-      }
-    else
-      {
-        fail ("RENDERGLOBAL.ownerhandle [H]");
-        error++;
-      }
   }
   {
     struct _dwg_object_object* parent;

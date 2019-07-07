@@ -209,9 +209,15 @@ $n = 'object_entity';
 dxfin_spec 'common_entity_data.spec';
 dxfin_spec 'common_entity_handle_data.spec';
 $DXF{$n}->{'color'} = $DXF{$n}->{'color_r11'} = 62;
-$DXF{$n}->{'color_handle'} = 420;
+$DXF{$n}->{'color.handle'} = 420;
 $DXF{$n}->{'paper_r11'} = 67;
 $DXF{$n}->{'plotstyle'} = 390;
+$DXF{$n}->{'ownerhandle'} = 330;
+$DXF{$n}->{'xdicobjhandle'} = 360;
+$DXF{$n}->{'reactors'} = 330;
+
+$n = 'object_object';
+$DXF{$n}->{'ownerhandle'} = 330;
 $DXF{$n}->{'xdicobjhandle'} = 360;
 $DXF{$n}->{'reactors'} = 330;
 
