@@ -5240,6 +5240,9 @@ EXPORT dwg_entity_eed_data *
 dwg_obj_get_eed_data (const dwg_obj_obj *restrict obj, const BITCODE_BL index,
                       int *restrict error) __nonnull ((3));
 
+EXPORT BITCODE_H dwg_obj_get_ownerhandle (const dwg_obj_obj *restrict obj,
+                                           int *restrict error)
+    __nonnull ((2));
 EXPORT BITCODE_BL dwg_obj_get_num_reactors (const dwg_obj_obj *restrict obj,
                                             int *restrict error)
     __nonnull ((2));

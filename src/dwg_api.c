@@ -6636,7 +6636,7 @@ dwg_obj_appid_get_appid_control (const dwg_obj_appid *restrict appid,
   if (appid)
     {
       *error = 0;
-      return appid->ownerhandle->obj->tio.object->tio.APPID_CONTROL;
+      return appid->parent->ownerhandle->obj->tio.object->tio.APPID_CONTROL;
     }
   else
     {
@@ -11382,7 +11382,7 @@ dwg_obj_proxy_get_ownerhandle (const dwg_obj_proxy *restrict proxy,
   if (proxy)
     {
       *error = 0;
-      return proxy->ownerhandle;
+      return proxy->parent->ownerhandle;
     }
   else
     {
@@ -11521,7 +11521,7 @@ dwg_obj_xrecord_get_ownerhandle (const dwg_obj_xrecord *restrict xrecord,
   if (xrecord)
     {
       *error = 0;
-      return xrecord->ownerhandle;
+      return xrecord->parent->ownerhandle;
     }
   else
     {
@@ -19771,13 +19771,13 @@ dwg_obj_block_control *
 dwg_block_header_get_block_control (const dwg_obj_block_header *block_header,
                                     int *restrict error)
 {
-  if (block_header && block_header->ownerhandle
-      && block_header->ownerhandle->obj
-      && block_header->ownerhandle->obj->type == DWG_TYPE_BLOCK_CONTROL
-      && block_header->ownerhandle->obj->tio.object)
+  if (block_header && block_header->parent && block_header->parent->ownerhandle
+      && block_header->parent->ownerhandle->obj
+      && block_header->parent->ownerhandle->obj->type == DWG_TYPE_BLOCK_CONTROL
+      && block_header->parent->ownerhandle->obj->tio.object)
     {
       *error = 0;
-      return block_header->ownerhandle->obj->tio.object->tio.BLOCK_CONTROL;
+      return block_header->parent->ownerhandle->obj->tio.object->tio.BLOCK_CONTROL;
     }
   else
     {
@@ -20105,9 +20105,7 @@ dwg_object_tablectrl_get_ownerhandle (const dwg_object *restrict obj,
   if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT
       && dwg_obj_is_control (obj))
     {
-      // HACK: we can guarantee a common layout of the common fields
-      Dwg_Object_STYLE_CONTROL *ctrl = obj->tio.object->tio.STYLE_CONTROL;
-      return ctrl->ownerhandle;
+      return obj->tio.object->ownerhandle;
     }
   else
     {
@@ -20130,9 +20128,7 @@ dwg_object_tablectrl_get_xdicobjhandle (const dwg_object *restrict obj,
   if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT
       && dwg_obj_is_control (obj))
     {
-      // HACK: we can guarantee a common layout of the common fields
-      Dwg_Object_STYLE_CONTROL *ctrl = obj->tio.object->tio.STYLE_CONTROL;
-      return ctrl->xdicobjhandle;
+      return obj->tio.object->xdicobjhandle;
     }
   else
     {
@@ -20960,6 +20956,11 @@ dwg_obj_get_eed_data (const dwg_obj_obj *restrict obj, const BITCODE_BL idx,
     }
 }
 
+EXPORT BITCODE_H
+dwg_obj_get_ownerhandle (const dwg_obj_obj *restrict obj, int *restrict error)
+{
+  _BODY_FIELD (obj, ownerhandle);
+}
 EXPORT BITCODE_BL
 dwg_obj_get_num_reactors (const dwg_obj_obj *restrict obj, int *restrict error)
 {

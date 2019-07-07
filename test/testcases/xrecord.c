@@ -56,7 +56,7 @@ api_process (dwg_object *obj)
     fail ("error in reading num_objid_handles");
 
   parent = dwg_obj_xrecord_get_ownerhandle (xrecord, &error);
-  if (!error && parent == xrecord->ownerhandle)
+  if (!error && parent == xrecord->parent->ownerhandle)
     pass ("Working Properly");
   else
     fail ("error in reading ownerhandle");

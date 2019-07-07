@@ -836,6 +836,8 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
     free (name);
 }
 
+#define START_OBJECT_HANDLE_STREAM
+
 // 5 written here first
 #define COMMON_TABLE_CONTROL_FLAGS                                            \
   SINCE (R_13)                                                                \
@@ -845,14 +847,20 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
     fwrite (&_i, sizeof (uint32_t), 1, dat->fh);                              \
   }                                                                           \
   SINCE (R_14)                                                                \
-  VALUE_H (_ctrl->ownerhandle, 330);                                          \
+  {                                                                           \
+    VALUE_HANDLE (ctrl->tio.object->ownerhandle, ownerhandle, 3, 330);        \
+  }                                                                           \
   SINCE (R_13)                                                                \
-  VALUE_TV ("AcDbSymbolTable", 100)
+  {                                                                           \
+    VALUE_TV ("AcDbSymbolTable", 100);                                        \
+  }                                                                           \
 
 #define COMMON_TABLE_FLAGS(acdbname)                                          \
-  SINCE (R_14)                                                                \
   /* TODO: ACAD_XDICTIONARY */                                                \
-  FIELD_HANDLE (ownerhandle, 4, 330);                                         \
+  SINCE (R_14)                                                                \
+  {                                                                           \
+    VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 3, 330);         \
+  }                                                                           \
   SINCE (R_13)                                                                \
   {                                                                           \
     VALUE_TV ("AcDbSymbolTableRecord", 100)                                   \
@@ -888,7 +896,9 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
 
 #define LAYER_TABLE_FLAGS(acdbname)                                           \
   SINCE (R_14)                                                                \
-  FIELD_HANDLE (ownerhandle, 4, 330);                                         \
+  {                                                                           \
+    VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 3, 330);         \
+  }                                                                           \
   SINCE (R_13)                                                                \
   {                                                                           \
     VALUE_TV ("AcDbSymbolTableRecord", 100)                                   \

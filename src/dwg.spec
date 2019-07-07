@@ -1944,7 +1944,6 @@ DWG_ENTITY_END
 DWG_OBJECT(DICTIONARY)
 
 #ifdef IS_DXF
-  FIELD_HANDLE (ownerhandle, 4, 330);
   SUBCLASS (AcDbDictionary)
   SINCE(R_2000)
   {
@@ -1999,7 +1998,6 @@ DWG_OBJECT_END
 DWG_OBJECT(DICTIONARYWDFLT)
 
 #ifdef IS_DXF
-  FIELD_HANDLE (ownerhandle, 4, 330);
   SUBCLASS (AcDbDictionary)
   SINCE(R_2000)
   {
@@ -3372,7 +3370,6 @@ DWG_OBJECT_END
 /*(72)*/
 DWG_OBJECT(GROUP)
 
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbGroup)
   FIELD_T (name, 300);
   FIELD_BS (unnamed, 70);
@@ -3387,7 +3384,6 @@ DWG_OBJECT_END
 /* (73) */
 DWG_OBJECT(MLINESTYLE)
 
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbMlineStyle)
   FIELD_T (name, 2);
   FIELD_T (desc, 0);
@@ -3453,7 +3449,6 @@ DWG_OBJECT_END
 //pg.135
 DWG_OBJECT(DICTIONARYVAR)
 
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (DictionaryVariables)
   FIELD_RC (intval, 280);
   FIELD_T (str, 1);
@@ -3724,7 +3719,6 @@ DWG_OBJECT_END
 //pg.139
 DWG_OBJECT(IDBUFFER)
 
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbIdBuffer)
   FIELD_RC (unknown, 0);
   FIELD_BL (num_obj_ids, 0);
@@ -3775,7 +3769,6 @@ DWG_ENTITY_END
 //pg.142 test-data/*/Leader_*.dwg
 DWG_OBJECT(IMAGEDEF)
 
-  DXF { FIELD_HANDLE (ownerhandle, 3, 330); }
   SUBCLASS (AcDbRasterImageDef)
   FIELD_BL (class_version, 90);
   if (FIELD_VALUE(class_version) > 10)
@@ -3795,7 +3788,6 @@ DWG_OBJECT_END
 //PG.143
 DWG_OBJECT(IMAGEDEF_REACTOR)
 
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbRasterImageDefReactor)
   FIELD_BL (class_version, 90);
   if (FIELD_VALUE(class_version) > 10)
@@ -3808,7 +3800,6 @@ DWG_OBJECT_END
 //pg.144
 DWG_OBJECT(LAYER_INDEX)
 
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbLayerIndex)
   DXF {
     VALUE_BL (1.0 * FIELD_VALUE(timestamp1), 40);
@@ -3834,7 +3825,6 @@ DWG_OBJECT_END
 //pg.145
 DWG_OBJECT(LAYOUT)
 
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbPlotSettings)
   SUBCLASS (AcDbLayout)
   FIELD_T (page_setup_name, 1);
@@ -4100,7 +4090,6 @@ DWG_ENTITY_END
 DWG_OBJECT(PROXY_OBJECT)
 
   DECODE_UNKNOWN_BITS
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   FIELD_BL (class_id, 91);
   PRE(R_2018)
   {
@@ -4139,6 +4128,8 @@ DWG_OBJECT(OBJECTCONTEXTDATA)
   }
   FIELD_B (has_file, 0);
   FIELD_B (defaultflag, 0);
+
+  START_OBJECT_HANDLE_STREAM;
 
 DWG_OBJECT_END
 
@@ -4218,7 +4209,6 @@ DWG_OBJECT_END
 
 DWG_OBJECT(FIELD)
 
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbField)
   FIELD_T (id, 1);
   FIELD_T (code, 2); // and code 3 for subsequent >255 chunks
@@ -4266,7 +4256,6 @@ DWG_OBJECT_END
 
 DWG_OBJECT(FIELDLIST)
 
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbFieldList)
   //SINCE(R_2018)
   FIELD_BL (num_fields, 0); //DXF 70?
@@ -4348,13 +4337,13 @@ DWG_OBJECT(GEODATA)
       FIELD_BD (sea_level_elev, 0);
       FIELD_BD (coord_proj_radius, 143);
     }
+  START_OBJECT_HANDLE_STREAM;
 
 DWG_OBJECT_END
 
 //pg.220, 20.4.91
 DWG_OBJECT(RASTERVARIABLES)
 
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbRasterVariables)
   FIELD_BL (class_version, 90);
   if (FIELD_VALUE(class_version) > 10)
@@ -4370,7 +4359,6 @@ DWG_OBJECT_END
 // 20.4.93 page 221
 DWG_OBJECT(SORTENTSTABLE)
 
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbSortentsTable)
   FIELD_BL (num_ents, 0);
   HANDLE_VECTOR (sort_handles, num_ents, 0, 5);
@@ -4384,7 +4372,6 @@ DWG_OBJECT_END
 //pg.222, 20.4.94 to clip external references
 DWG_OBJECT(SPATIAL_FILTER)
 
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbSpatialFilter)
   FIELD_BS (num_points, 70);
   FIELD_2RD_VECTOR (points, num_points, 10);
@@ -4402,25 +4389,18 @@ DWG_OBJECT(SPATIAL_FILTER)
   FIELD_VECTOR_N (inverse_block_transform, BD, 12, 40);
   FIELD_VECTOR_N (clip_bound_transform, BD, 12, 40);
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
 
 DWG_OBJECT_END
 
 //pg.153
 DWG_OBJECT(SPATIAL_INDEX)
 
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbSpatialIndex)
   FIELD_BL (timestamp1, 0);
   FIELD_BL (timestamp2, 0);
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
 
 DWG_OBJECT_END
 
@@ -4474,7 +4454,7 @@ DWG_OBJECT_END
 DWG_OBJECT(TABLECONTENT)
 
   DECODE_UNKNOWN_BITS
-  //SUBCLASS (AcDbDataTableContent)
+  SUBCLASS (AcDbDataTableContent)
   FIELD_T (ldata.name, 1);
   FIELD_T (ldata.desc, 300);
 
@@ -4648,7 +4628,7 @@ DWG_OBJECT(TABLECONTENT)
   SET_PARENT(fdata.merged_cells, &_obj->fdata)
   END_REPEAT(fdata.merged_cells);
 
-  START_HANDLE_STREAM;
+  START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (table_style, 3, 340);
 
 DWG_OBJECT_END
@@ -4659,7 +4639,7 @@ DWG_OBJECT_END
 DWG_OBJECT(CELLSTYLEMAP)
 
   DECODE_UNKNOWN_BITS
-  //SUBCLASS (AcDbCellStyleMap)
+  SUBCLASS (AcDbCellStyleMap)
   FIELD_BL (num_cells, 90);
   REPEAT(num_cells, cells, Dwg_CELLSTYLEMAP_Cell)
   REPEAT_BLOCK
@@ -4677,7 +4657,7 @@ DWG_OBJECT_END
 DWG_OBJECT(TABLEGEOMETRY)
 
   DECODE_UNKNOWN_BITS
-  //SUBCLASS (AcDbTableGeometry)
+  SUBCLASS (AcDbTableGeometry)
   FIELD_BL (num_rows, 90);
   FIELD_BL (num_cols, 91);
   FIELD_BL (num_cells, 92);
@@ -5183,7 +5163,6 @@ DWG_ENTITY_END
 DWG_OBJECT(XRECORD)
 
   DXF {
-    FIELD_HANDLE (ownerhandle, 4, 330);
     SUBCLASS (AcDbXrecord)
     SINCE(R_2000) {
       FIELD_BS (cloning_flags, 280);
@@ -5195,13 +5174,9 @@ DWG_OBJECT(XRECORD)
   SINCE(R_2000) {
     FIELD_BS (cloning_flags, 280);
   }
-
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 330); // 3 or 8
 #endif
-  REACTORS(4);
-  XDICOBJHANDLE(3);
 
+  START_OBJECT_HANDLE_STREAM;
   DECODER
     {
       for (vcount=0;
@@ -5237,11 +5212,8 @@ DWG_OBJECT_END
 DWG_OBJECT(PLACEHOLDER)
 
   // no own data members
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 330);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
-// no SUBCLASS marker
+  START_OBJECT_HANDLE_STREAM;
+  // no SUBCLASS marker
 
 DWG_OBJECT_END
 
@@ -5249,7 +5221,6 @@ DWG_OBJECT_END
 // 20.4.92 page 221
 DWG_OBJECT(SCALE)
 
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbScale)
   FIELD_BS (flag, 70);
   FIELD_T (name, 300);
@@ -5257,10 +5228,7 @@ DWG_OBJECT(SCALE)
   FIELD_BD (drawing_units, 141);
   FIELD_B (has_unit_scale, 290);
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
 
 DWG_OBJECT_END
 
@@ -5271,15 +5239,11 @@ DWG_OBJECT_END
 DWG_OBJECT(VBA_PROJECT)
 
   DECODE_UNKNOWN_BITS
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbVbaProject)
   FIELD_RL (num_bytes, 0);
   FIELD_TF (bytes, FIELD_VALUE(num_bytes), 0);
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
 
 DWG_OBJECT_END
 
@@ -5596,8 +5560,7 @@ DWG_OBJECT(MLEADERSTYLE)
       FIELD_BS (attach_bottom, 272);
     }
 
-  START_HANDLE_STREAM;
-  // wrong documentation in the ODA. the handles are at the end.
+  START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (line_type, 5, 340);
   FIELD_HANDLE (arrow_head, 5, 341);
   FIELD_HANDLE (text_style, 5, 342);
@@ -5611,15 +5574,11 @@ DWG_OBJECT_END
 
 DWG_OBJECT(WIPEOUTVARIABLES)
 
-  DXF { FIELD_HANDLE (ownerhandle, 3, 330); }
   SUBCLASS (AcDbWipeoutVariables)
   //DXF { VALUE_BL (0, 90); } /* class_version */
   FIELD_BS (display_frame, 70);
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 3, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
 
 DWG_OBJECT_END
 
@@ -5672,14 +5631,10 @@ DWG_ENTITY_END
 DWG_OBJECT(UNDERLAYDEFINITION)
 
   //DECODE_UNKNOWN_BITS
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS(AcDbUnderlayDefinition)
   FIELD_T (filename, 1);
   FIELD_T (name, 2);
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
 
 DWG_OBJECT_END
 
@@ -5736,25 +5691,23 @@ DWG_OBJECT_END
 
 // just a dummy dwg filer, ignored for dxf
 DWG_OBJECT(DUMMY)
-  //COMMON_ENTITY_HANDLE_DATA;
+  DECODE_UNKNOWN_BITS
 DWG_OBJECT_END
 
 #endif /* IS_DXF */
 
 DWG_OBJECT(LONG_TRANSACTION)
-
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbLongTransaction)
   LOG_INFO("TODO LONG_TRANSACTION\n");
-  //COMMON_ENTITY_HANDLE_DATA;
+  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 // (varies) UNSTABLE
 DWG_OBJECT(OBJECT_PTR) //empty? only xdata. CAseDLPNTableRecord
-
   DECODE_UNKNOWN_BITS
   DEBUG_HERE_OBJ
-
+  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 /* In work area:
@@ -5768,7 +5721,6 @@ DWG_OBJECT_END
 DWG_OBJECT(PERSSUBENTMANAGER)
 
   DECODE_UNKNOWN_BITS
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbPersSubentManager)
   FIELD_BL (class_version, 90); //2
   FIELD_BL (unknown_bl1, 90); //0
@@ -5778,10 +5730,8 @@ DWG_OBJECT(PERSSUBENTMANAGER)
   FIELD_BL (unknown_bl5, 90); //1
   FIELD_BL (unknown_bl6, 90); //1
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
+
 DWG_OBJECT_END
 
 // (varies) UNSTABLE
@@ -5791,7 +5741,6 @@ DWG_OBJECT_END
 DWG_OBJECT(ASSOCDEPENDENCY)
 
   DECODE_UNKNOWN_BITS
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbAssocDependency)
   FIELD_BL (class_version, 90); //2
   FIELD_BL (status, 90); //1 or depbody
@@ -5803,11 +5752,7 @@ DWG_OBJECT(ASSOCDEPENDENCY)
   FIELD_B  (unknown_b5, 290); //0
   FIELD_BL (depbodyid, 90); //1
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 0);
-  FIELD_HANDLE (owner, 4, 330); // => e.g. SURFACE linked to polygon
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (writedep, 4, 360);
   FIELD_HANDLE (readdep, 4, 330);
   FIELD_HANDLE (node, 3, 330);
@@ -5820,7 +5765,6 @@ DWG_OBJECT_END
 // summary: 78/98=79.59%
 DWG_OBJECT(ASSOCPLANESURFACEACTIONBODY)
   DECODE_UNKNOWN_BITS
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbAssocActionBody)
   FIELD_BL (aab_status, 90); //1 or ownerid?
   SUBCLASS (AcDbAssocParamBasedActionBody)
@@ -5840,10 +5784,7 @@ DWG_OBJECT(ASSOCPLANESURFACEACTIONBODY)
   SUBCLASS (AcDbAssocPlaneSurfaceActionBody)
   FIELD_BL (psab_status, 90);
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 3, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (writedep, 0, 360);
   FIELD_HANDLE (readdep, 0, 330);
 DWG_OBJECT_END
@@ -5853,7 +5794,6 @@ DWG_OBJECT_END
 DWG_OBJECT(DIMASSOC)
 
   DECODE_UNKNOWN_BITS
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS(AcDbDimAssoc)
   FIELD_BL (associativity, 90);
   FIELD_RC (trans_space_flag, 70);
@@ -5880,11 +5820,7 @@ DWG_OBJECT(DIMASSOC)
   END_REPEAT(ref)
   //FIELD_BL (intsect_gsmarker, 92);
 
-  START_HANDLE_STREAM;
-  UNTIL(R_2004) { DEBUG_POS_OBJ }
-  FIELD_HANDLE (ownerhandle, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (dimensionobj, 4, 330);
   FIELD_HANDLE (mainobj, 4, 331);
   FIELD_HANDLE (intsectobj, 4, 332);
@@ -5898,7 +5834,6 @@ DWG_OBJECT_END
 DWG_OBJECT(VISUALSTYLE)
 
   DECODE_UNKNOWN_BITS
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbVisualStyle)
   FIELD_T (desc, 2);
   FIELD_BS (type, 70);
@@ -5944,10 +5879,7 @@ DWG_OBJECT(VISUALSTYLE)
   //FIELD_BS (unknown_float45, 45); // only in DXF, not in header
 #endif
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   //FIELD_HANDLE (dictionary, 5, 0);
 DWG_OBJECT_END
 
@@ -6014,22 +5946,17 @@ DWG_ENTITY_END
 DWG_OBJECT(DYNAMICBLOCKPURGEPREVENTER)
 
   DECODE_UNKNOWN_BITS
-  DXF { FIELD_HANDLE (ownerhandle, 5, 330); }
   SUBCLASS (AcDbDynamicBlockPurgePreventer)
   FIELD_BS (flag, 70); //1 class_version would be 90
   FIELD_RS (unknown_rs1, 0);
 
-  START_HANDLE_STREAM;
-  REACTORS(4); // BLOCK_HEADER
-  FIELD_HANDLE (ownerhandle, 5, 0); // dict
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 // UNSTABLE. missing color index 62: 21
 DWG_OBJECT(DBCOLOR)
 
   DECODE_UNKNOWN_BITS
-  DXF { FIELD_HANDLE (ownerhandle, 3, 330); }
   SUBCLASS (AcDbColor)
   FIELD_BL (class_version, 0); //0
 #if 0
@@ -6056,10 +5983,7 @@ DWG_OBJECT(DBCOLOR)
   FIELD_T (name, 0);    //2nd part of 430: DIC \d+
   FIELD_T (catalog, 0); //1st part of 430: DIC COLOR GUIDE(R)
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 3, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 // (varies) UNSTABLE
@@ -6163,7 +6087,6 @@ DWG_ENTITY_END
 DWG_OBJECT(EVALUATION_GRAPH)
 
   DECODE_UNKNOWN_BITS
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS(AcDbEvalGraph)
   FIELD_BL(has_graph, 96);        // 1
   FIELD_BL(unknown1, 97);         // 1
@@ -6182,12 +6105,8 @@ DWG_OBJECT(EVALUATION_GRAPH)
         return DWG_ERR_VALUEOUTOFBOUNDS;
     }
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 3, 0);
+  START_OBJECT_HANDLE_STREAM;
   HANDLE_VECTOR(evalexpr, num_evalexpr, 5, 360);
-  //FIELD_HANDLE (evalexpr, 5, 360); // VECTOR?
-  REACTORS(4);
-  XDICOBJHANDLE(3);
 DWG_OBJECT_END
 
 // DEBUGGING
@@ -6209,10 +6128,7 @@ DWG_OBJECT(ASSOCALIGNEDDIMACTIONBODY)
   FIELD_BL (dcm_status, 90); //has d_node or r_node
 
   //TODO: DXF has a different order
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 330);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
   VERSION (R_2013) {
     FIELD_HANDLE (readdep, 4, 330);
     FIELD_HANDLE (writedep, 3, 360);
@@ -6243,18 +6159,15 @@ DWG_OBJECT(ASSOCNETWORK)
   FIELD_BL (unknown_n1, 90);
   FIELD_BL (unknown_n2, 90);
   FIELD_BL (num_actions, 90);
-  START_HANDLE_STREAM;
+
+  START_OBJECT_HANDLE_STREAM;
   HANDLE_VECTOR(actions, num_actions, 5, 330);
-  //FIELD_BL (unknown_n3, 90);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
 DWG_OBJECT_END
 
 // (varies) working on DEBUGGING
 DWG_OBJECT(MATERIAL)
 
   DECODE_UNKNOWN_BITS
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbMaterial)
   FIELD_T (name, 1);
   FIELD_T (desc, 2);
@@ -6384,10 +6297,7 @@ DWG_OBJECT(MATERIAL)
   //176
   //270
   //274
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 3, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 // (varies) DEBUGGING
@@ -6462,7 +6372,6 @@ DWG_OBJECT_END
 DWG_OBJECT(SUN)
 
   DECODE_UNKNOWN_BITS
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS(AcDbSun)
   FIELD_BL (class_version, 90); //1
   if (FIELD_VALUE(class_version) > 10)
@@ -6523,7 +6432,7 @@ DWG_OBJECT(SUN)
       DEBUG_POS_OBJ
       // @9979.6 5.0.0, @9980.0 4.0.0, @9991.1 3.0.0
       // search for a valid code=4 handle followed by a valid code=3
-      FIELD_HANDLE(ownerhandle, 4, 330);
+      FIELD_HANDLE(ownerhandle, 4, 0);
       if (_obj->ownerhandle &&
           _obj->ownerhandle->handleref.code == 4 &&
           _obj->ownerhandle->absolute_ref < dwg->num_object_refs)
@@ -6541,12 +6450,9 @@ DWG_OBJECT(SUN)
     }
 #endif
 
-  FIELD_HANDLE (ownerhandle, 4, 0); //DXF 330
   FIELD_CMC (color, 63,421);
 
-  START_HANDLE_STREAM;
-  REACTORS(4);
-  XDICOBJHANDLE(3); //@9991.1
+  START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (skyparams, 5, 0); //AcGiSkyParameters class?
   DEBUG_POS_OBJ //@9992.1
 
@@ -6556,7 +6462,6 @@ DWG_OBJECT_END
 DWG_OBJECT(SUNSTUDY)
 
   DECODE_UNKNOWN_BITS
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS(AcDbSunStudy)
   FIELD_BL (class_version, 90);
   if (FIELD_VALUE(class_version) > 10)
@@ -6596,14 +6501,11 @@ DWG_OBJECT(SUNSTUDY)
   FIELD_B (lock_viewports, 293);
   FIELD_B (label_viewports, 294);
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 3, 0);
+  START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (page_setup_wizard, 5, 340);
   FIELD_HANDLE (view, 5, 341);
   FIELD_HANDLE (visual_style, 2, 342);
   FIELD_HANDLE (text_style, 2, 343);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
 
 DWG_OBJECT_END
 
@@ -6823,7 +6725,6 @@ DWG_ENTITY_END
 // (varies) DEBUGGING
 DWG_OBJECT(ASSOCACTION)
   DECODE_UNKNOWN_BITS
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS(AcDbAssocAction)
   rcount1 = bit_position(dat);
   FIELD_B (is_body_a_proxy, 90); //0-9
@@ -6853,16 +6754,12 @@ DWG_OBJECT(ASSOCACTION)
   HANDLE_VECTOR(writedeps, num_deps, 0, 360);
   FIELD_BL (unknown_assoc, 90);
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 4, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 // DEBUGGING
 DWG_OBJECT(ASSOCOSNAPPOINTREFACTIONPARAM)
   DECODE_UNKNOWN_BITS
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS(AcDbAssocActionParam)
   FIELD_B  (unknown1, 0); //
   FIELD_RC (unknown, 0); //01010101
@@ -6885,22 +6782,18 @@ DWG_OBJECT(ASSOCOSNAPPOINTREFACTIONPARAM)
   DEBUG_HERE_OBJ
 
   bit_advance_position(dat, 122-118);
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 3, 0);
+  START_OBJECT_HANDLE_STREAM;
   DEBUG_POS_OBJ
   FIELD_HANDLE (writedep, ANYCODE, 360); //122-129
   bit_advance_position(dat, 168-130);
   DEBUG_POS_OBJ
   FIELD_HANDLE (actionparam, 4, 330); //168-175
-  REACTORS(4);
-  XDICOBJHANDLE(3);
 
 DWG_OBJECT_END
 
 // See AcDbAssocPersSubentIdPE.h?
 DWG_OBJECT(ASSOCPERSSUBENTMANAGER)
   DECODE_UNKNOWN_BITS
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbAssocPersSubentManager)
   FIELD_BL (class_version, 90); //1
   FIELD_BL (unknown_bl1, 90); //3
@@ -6944,10 +6837,7 @@ DWG_OBJECT(ASSOCPERSSUBENTMANAGER)
   FIELD_BL (unknown_bl36, 90); //0
   FIELD_B  (unknown_b37, 290); //0
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 3, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
 
 DWG_OBJECT_END
 
@@ -6955,7 +6845,6 @@ DWG_OBJECT_END
 // see https://help.autodesk.com/view/OARX/2018/ENU/?guid=OREF-AcDbAssoc2dConstraintGroup
 DWG_OBJECT(ASSOC2DCONSTRAINTGROUP)
   DECODE_UNKNOWN_BITS
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbAssocAction)
   // This has multiple handles and types.
   FIELD_BL (solution_status, 90); // 0 WellDefined, 1 UnderConstrained, 2 OverConstrained,
@@ -6994,10 +6883,7 @@ DWG_OBJECT(ASSOC2DCONSTRAINTGROUP)
 
   //DXF { FIELD_TV("AcConstrainedImplicitPoint", 1); }
   // ...
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 3, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
 
 DWG_OBJECT_END
 
@@ -7006,7 +6892,6 @@ DWG_OBJECT_END
 DWG_OBJECT(ACSH_SWEEP_CLASS)
 
   DECODE_UNKNOWN_BITS
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbEvalExpr)
   FIELD_BL (class_version, 90); //1
   FIELD_BL (ee_bl98, 98); //33 major/minor?
@@ -7050,10 +6935,7 @@ DWG_OBJECT(ACSH_SWEEP_CLASS)
 
   SUBCLASS (AcDbShSweep)
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 3, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
 
 DWG_OBJECT_END
 
@@ -7062,7 +6944,6 @@ DWG_OBJECT_END
 DWG_OBJECT(ACDBNAVISWORKSMODELDEF)
 
   DECODE_UNKNOWN_BITS
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbNavisworksModelDef)
   DEBUG_HERE_OBJ
   FIELD_T (path, 1);
@@ -7071,10 +6952,7 @@ DWG_OBJECT(ACDBNAVISWORKSMODELDEF)
   FIELD_3BD (max_extent, 11);
   FIELD_B (host_drawing_visibility, 290);
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 3, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
 
 DWG_OBJECT_END
 
@@ -7082,7 +6960,6 @@ DWG_OBJECT_END
 DWG_OBJECT(RENDERENVIRONMENT)
   DECODE_UNKNOWN_BITS
 
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbRenderEnvironment)
   DEBUG_HERE_OBJ
   FIELD_BL (class_version, 90);     /*!< default 1 */
@@ -7096,10 +6973,7 @@ DWG_OBJECT(RENDERENVIRONMENT)
   FIELD_B (environ_image_enabled, 290);
   FIELD_T (environ_image_filename, 1);
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 3, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
 
 DWG_OBJECT_END
 
@@ -7107,7 +6981,6 @@ DWG_OBJECT_END
 DWG_OBJECT(RENDERGLOBAL)
   DECODE_UNKNOWN_BITS
 
-  DXF { FIELD_HANDLE (ownerhandle, 4, 330); }
   SUBCLASS (AcDbRenderGlobal)
   DEBUG_HERE_OBJ
   FIELD_BL (class_version, 90);     /*!< default 2 */
@@ -7120,10 +6993,7 @@ DWG_OBJECT(RENDERGLOBAL)
   FIELD_B (predef_presets_first, 290);
   FIELD_B (highlevel_info, 290);
 
-  START_HANDLE_STREAM;
-  FIELD_HANDLE (ownerhandle, 3, 0);
-  REACTORS(4);
-  XDICOBJHANDLE(3);
+  START_OBJECT_HANDLE_STREAM;
 
 DWG_OBJECT_END
 
@@ -7201,6 +7071,7 @@ DWG_OBJECT(DATATABLE)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbDataTable)
   DEBUG_HERE_OBJ
+  START_OBJECT_HANDLE_STREAM;
 
 DWG_OBJECT_END
 

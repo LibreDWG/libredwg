@@ -581,7 +581,8 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
 #define SECTION_STRING_STREAM
 #define START_STRING_STREAM
 #define END_STRING_STREAM
-#define START_HANDLE_STREAM
+#define START_HANDLE_STREAM \
+    KEY (ownerhandle)
 
 static void
 _prefix (Bit_Chain *dat)
@@ -612,6 +613,8 @@ _prefix (Bit_Chain *dat)
     _FIELD (type, RL, 0);                                                     \
     KEY (handle);                                                             \
     VALUE_H (obj->handle, 5);                                                 \
+    KEY (ownerhandle);                                                        \
+    VALUE_HANDLE (_ent->ownerhandle, ownerhandle, 3, 330);                    \
     _FIELD (size, RL, 0);                                                     \
     _FIELD (bitsize, BL, 0);                                                  \
     if (_ent->picture_exists)                                                 \

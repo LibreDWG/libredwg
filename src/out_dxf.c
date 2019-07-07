@@ -746,6 +746,10 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
           _XDICOBJHANDLE (3);                                                 \
           _REACTORS (4);                                                      \
         }                                                                     \
+        SINCE (R_14)                                                          \
+        {                                                                     \
+          VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 3, 330);   \
+        }                                                                     \
       }                                                                       \
     LOG_TRACE ("Object handle: %d.%d.%lX\n", obj->handle.code,                \
                obj->handle.size, obj->handle.value)
@@ -980,6 +984,8 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
     free (name);
 }
 
+#define START_OBJECT_HANDLE_STREAM
+
 // Handle 5 written here first
 #define COMMON_TABLE_CONTROL_FLAGS                                            \
   if (ctrl)                                                                   \
@@ -988,7 +994,9 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
       {                                                                       \
         fprintf (dat->fh, "%3i\r\n%lX\r\n", 5, ctrl->handle.value);           \
       }                                                                       \
-      SINCE (R_14) { VALUE_H (_ctrl->ownerhandle, 330); }                     \
+      SINCE (R_14) {                                                          \
+        VALUE_HANDLE (ctrl->tio.object->ownerhandle, ownerhandle, 3, 330);    \
+      }                                                                       \
     }                                                                         \
   SINCE (R_13) { VALUE_TV ("AcDbSymbolTable", 100); }
 
@@ -997,7 +1005,7 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
   SINCE (R_14)                                                                \
   {                                                                           \
     /* TODO: ACAD_XDICTIONARY */                                              \
-    FIELD_HANDLE (ownerhandle, 4, 330);                                       \
+    VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 3, 330);         \
   }                                                                           \
   SINCE (R_13)                                                                \
   {                                                                           \
@@ -1036,7 +1044,7 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
   SINCE (R_14)                                                                \
   {                                                                           \
     /* TODO: ACAD_XDICTIONARY */                                              \
-    FIELD_HANDLE (ownerhandle, 4, 330);                                       \
+    VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 3, 330);         \
   }                                                                           \
   SINCE (R_13)                                                                \
   {                                                                           \
@@ -2174,7 +2182,7 @@ dxf_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 int
 dxf_validate_DICTIONARY (Dwg_Object *obj)
 {
-  Dwg_Object_Ref *ownerhandle = obj->tio.object->tio.DICTIONARY->ownerhandle;
+  Dwg_Object_Ref *ownerhandle = obj->tio.object->ownerhandle;
   if (ownerhandle && !dwg_ref_object (obj->parent, ownerhandle))
     {
       LOG_INFO ("Wrong DICTIONARY.ownerhandle %X\n",
