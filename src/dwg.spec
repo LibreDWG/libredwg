@@ -3134,14 +3134,12 @@ DWG_OBJECT(APPID)
       FIELD_RC (unknown, 71);
     }
   }
-  VERSIONS(R_13, R_2007)
-    {
-      //START_HANDLE_STREAM;
-      FIELD_HANDLE (app_control, 4, 0);
-      REACTORS(4);
-      XDICOBJHANDLE(3);
-      FIELD_HANDLE (null_handle, 5, 0);
-    }
+
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (app_control, 4, 0);
+  REACTORS(4);
+  XDICOBJHANDLE(3);
+  FIELD_HANDLE (null_handle, 5, 0);
 
 DWG_OBJECT_END
 
@@ -3445,6 +3443,7 @@ DWG_OBJECT(VPORT_ENTITY_HEADER)
       (FIELD_VALUE(xrefdep) << 4) |
       (FIELD_VALUE(xrefref) << 6);
 
+    START_HANDLE_STREAM;
     FIELD_HANDLE (vport_entity_control, 4, 0);
     XDICOBJHANDLE(3);
     FIELD_HANDLE (vport_entity, 5, 0);
@@ -3543,6 +3542,8 @@ DWG_OBJECT(DICTIONARYVAR)
   SUBCLASS (DictionaryVariables)
   FIELD_RC (intval, 280);
   FIELD_T (str, 1);
+
+  START_HANDLE_STREAM;
   FIELD_HANDLE (ownerhandle, 4, 0);
   REACTORS(4);
   XDICOBJHANDLE(3);
