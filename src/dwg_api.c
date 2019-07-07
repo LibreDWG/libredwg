@@ -11375,23 +11375,6 @@ dwg_obj_proxy_set_data (dwg_obj_proxy *restrict proxy,
     }
 }
 
-dwg_object_ref *
-dwg_obj_proxy_get_ownerhandle (const dwg_obj_proxy *restrict proxy,
-                               int *restrict error)
-{
-  if (proxy)
-    {
-      *error = 0;
-      return proxy->parent->ownerhandle;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR ("%s: empty arg", __FUNCTION__)
-      return NULL;
-    }
-}
-
 dwg_object_ref **
 dwg_obj_proxy_get_objid_object_handles (const dwg_obj_proxy *restrict proxy,
                                         int *restrict error)
@@ -11511,23 +11494,6 @@ dwg_obj_xrecord_set_xdata (dwg_obj_xrecord *restrict xrecord,
     {
       *error = 1;
       LOG_ERROR ("%s: empty arg", __FUNCTION__)
-    }
-}
-
-dwg_object_ref *
-dwg_obj_xrecord_get_ownerhandle (const dwg_obj_xrecord *restrict xrecord,
-                                 int *restrict error)
-{
-  if (xrecord)
-    {
-      *error = 0;
-      return xrecord->parent->ownerhandle;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR ("%s: empty arg", __FUNCTION__)
-      return NULL;
     }
 }
 

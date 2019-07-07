@@ -3208,11 +3208,6 @@ EXPORT void dwg_obj_proxy_set_data (dwg_obj_proxy *restrict proxy,
                                     const char *data, int *restrict error)
     __nonnull ((2, 3)) _deprecated_dynapi_setter;
 
-EXPORT dwg_object_ref *
-dwg_obj_proxy_get_ownerhandle (const dwg_obj_proxy *restrict proxy,
-                               int *restrict error)
-    __nonnull ((2)) _deprecated_dynapi_getter;
-
 EXPORT dwg_object_ref **
 dwg_obj_proxy_get_objid_object_handles (const dwg_obj_proxy *restrict proxy,
                                         int *restrict error)
@@ -4947,11 +4942,6 @@ EXPORT void dwg_obj_xrecord_set_xdata (dwg_obj_xrecord *restrict xrecord,
                                        const Dwg_Resbuf *xdata,
                                        int *restrict error)
     __nonnull ((2, 3)) _deprecated_dynapi_setter;
-
-EXPORT dwg_object_ref *
-dwg_obj_xrecord_get_ownerhandle (const dwg_obj_xrecord *restrict xrecord,
-                                 int *restrict error)
-    __nonnull ((2)) _deprecated_dynapi_getter;
 
 EXPORT BITCODE_BL dwg_obj_xrecord_get_num_objid_handles (
     const dwg_obj_xrecord *restrict xrecord, int *restrict error)
