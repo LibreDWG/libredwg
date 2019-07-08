@@ -850,10 +850,7 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
   {                                                                           \
     VALUE_HANDLE (ctrl->tio.object->ownerhandle, ownerhandle, 3, 330);        \
   }                                                                           \
-  SINCE (R_13)                                                                \
-  {                                                                           \
-    VALUE_TV ("AcDbSymbolTable", 100);                                        \
-  }                                                                           \
+  SINCE (R_13) { VALUE_TV ("AcDbSymbolTable", 100); }
 
 #define COMMON_TABLE_FLAGS(acdbname)                                          \
   /* TODO: ACAD_XDICTIONARY */                                                \

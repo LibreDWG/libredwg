@@ -78,8 +78,13 @@ int dwg_validate_INSERT (Dwg_Object *obj);
 int dwg_validate_POLYLINE (Dwg_Object *obj);
 
 /* from decode_r2007.c */
+int obj_handle_stream (Bit_Chain *dat, Dwg_Object *restrict obj,
+                       Bit_Chain *hdl_dat);
 int obj_string_stream (Bit_Chain *dat, Dwg_Object *restrict obj,
-                       Bit_Chain *str);
+                       Bit_Chain *str_dat);
+unsigned long obj_stream_position (Bit_Chain *restrict dat,
+                                   Bit_Chain *restrict hdl_dat,
+                                   Bit_Chain *restrict str_dat);
 
 void read_r2007_init (Dwg_Data *dwg);
 int read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,

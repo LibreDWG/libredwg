@@ -93,6 +93,16 @@ bit_set_position (Bit_Chain *dat, unsigned long bitpos)
       LOG_ERROR ("buffer overflow at %lu, have %lu", dat->byte, dat->size)
     }
 }
+/* Set the chain so that dat->byte starts at 0 */
+void
+bit_reset_chain (Bit_Chain *dat)
+{
+  unsigned long pos = dat->byte;
+  dat->byte = 0;
+  dat->chain += pos;
+  if (dat->size > 0)
+    dat->size -= pos;
+}
 
 /** Read 1 bit.
  */
@@ -1098,8 +1108,8 @@ bit_write_BT (Bit_Chain *dat, double value)
     }
 }
 
-/** Read handle-references. Returns error code: DWG_ERR_INVALIDHANDLE or 0 on
- * success
+/** Read handle-references. Returns error code: DWG_ERR_INVALIDHANDLE
+ *  or 0 on success.
  */
 int
 bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)

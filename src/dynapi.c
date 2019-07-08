@@ -3839,7 +3839,6 @@ static const Dwg_DYNAPI_field _dwg_object_entity_fields[] = {
 
 /* from typedef struct _dwg_object_object: (sorted by name) */
 static const Dwg_DYNAPI_field _dwg_object_object_fields[] = {
-  { "datpos", "unsigned long int", sizeof (unsigned long int), OFF (struct _dwg_object_object,datpos), 0,0,0, 0 },
   { "dwg", "struct _dwg_struct*", sizeof (void *), OFF (struct _dwg_object_object,dwg), 1,1,0, 0 },
   { "eed", "Dwg_Eed*", sizeof (Dwg_Eed*), OFF (struct _dwg_object_object,eed), 1,1,0, 0 },
   { "handleref", "Dwg_Handle*", sizeof (Dwg_Handle*), OFF (struct _dwg_object_object,handleref), 1,1,0, 0 },

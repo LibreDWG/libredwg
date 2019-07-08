@@ -994,7 +994,8 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
       {                                                                       \
         fprintf (dat->fh, "%3i\r\n%lX\r\n", 5, ctrl->handle.value);           \
       }                                                                       \
-      SINCE (R_14) {                                                          \
+      SINCE (R_14)                                                            \
+      {                                                                       \
         VALUE_HANDLE (ctrl->tio.object->ownerhandle, ownerhandle, 3, 330);    \
       }                                                                       \
     }                                                                         \

@@ -581,8 +581,7 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
 #define SECTION_STRING_STREAM
 #define START_STRING_STREAM
 #define END_STRING_STREAM
-#define START_HANDLE_STREAM \
-    KEY (ownerhandle)
+#define START_HANDLE_STREAM KEY (ownerhandle)
 
 static void
 _prefix (Bit_Chain *dat)

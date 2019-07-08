@@ -1125,8 +1125,57 @@ read_file_header (Bit_Chain *restrict dat,
   return error;
 }
 
+/* Return the latest dat position for all three independent streams
+   data, handle and string.
+*/
+unsigned long
+obj_stream_position (Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,
+                     Bit_Chain *restrict str_dat)
+{
+  unsigned long p1 = bit_position (dat);
+  SINCE (R_2007)
+  {
+    /* all 3 now relative to obj */
+    unsigned long p2 = bit_position (hdl_dat);
+    unsigned long p3 = bit_position (str_dat);
+
+    if (p2 > p1)
+      return p3 > p2 ? p3 : p2;
+    else
+      return p3 > p1 ? p3 : p1;
+  }
+  else { return p1; }
+}
+
 int
-obj_string_stream (Bit_Chain *dat, Dwg_Object *restrict obj, Bit_Chain *str)
+obj_handle_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
+                   Bit_Chain *restrict hdl_dat)
+{
+  long unsigned int bit8 = obj->bitsize / 8;
+  long unsigned int pos = dat->byte;
+  // The handle stream offset, i.e. end of the object, right after
+  // the has_strings bit.
+  obj->hdlpos = obj->bitsize; // relative to dat
+  // restrict it to 0-end
+  hdl_dat->byte = bit8;
+  hdl_dat->bit = obj->bitsize % 8;
+  //bit_reset_chain (hdl_dat); //but keep the same start
+  if (!obj->handlestream_size)
+    {
+      obj->handlestream_size = (obj->size * 8) - obj->bitsize;
+      LOG_TRACE (" Hdlsize: %lu,", obj->handlestream_size);
+    }
+  hdl_dat->size = obj->size + obj->address;
+  pos = (pos*8) + obj->bitsize + obj->handlestream_size;
+  LOG_HANDLE (" hdl_dat: @%lu.%u - @%lu.%lu", bit8, hdl_dat->bit, pos / 8,
+              pos % 8);
+  LOG_TRACE ("\n")
+  return 0;
+}
+
+int
+obj_string_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
+                   Bit_Chain *restrict str)
 {
   BITCODE_RL start = obj->bitsize - 1; // in bits
   BITCODE_RL data_size = 0;            // in byte
@@ -1136,10 +1185,18 @@ obj_string_stream (Bit_Chain *dat, Dwg_Object *restrict obj, Bit_Chain *str)
   old_byte = str->byte;
 
   str->chain += str->byte;
+  //obj->strpos = str->byte * 8 + str->bit;
+
   str->byte = 0;
   str->bit = 0;
   str->size = (obj->bitsize / 8) + ((obj->bitsize % 8) ? 1 : 0);
   bit_advance_position (str, start - 8);
+
+  if (obj->supertype == DWG_SUPERTYPE_UNKNOWN) {
+    str->size = 0;
+    //bit_reset_chain (str);
+    return 0;
+  }
   if (str->byte >= old_size - old_byte)
     {
       LOG_WARN ("obj_string_stream overflow");
@@ -1149,8 +1206,11 @@ obj_string_stream (Bit_Chain *dat, Dwg_Object *restrict obj, Bit_Chain *str)
              str->bit & 7, bit_position (str));
   obj->has_strings = bit_read_B (str);
   LOG_TRACE (" has_strings: %d\n", (int)obj->has_strings);
-  if (!obj->has_strings)
+  if (!obj->has_strings) {
+    str->size = 0;
+    //bit_reset_chain (str);
     return 0;
+  }
 
   bit_advance_position (str, -1); //-17
   str->byte -= 2;
@@ -1166,22 +1226,27 @@ obj_string_stream (Bit_Chain *dat, Dwg_Object *restrict obj, Bit_Chain *str)
       data_size &= 0x7FFF;
       hi_size = bit_read_RS (str);
       data_size |= (hi_size << 15);
-      LOG_HANDLE (" data_size: %u/0x%x", data_size, data_size);
+      LOG_HANDLE (" data_size: %u/0x%x\n", data_size, data_size);
       // LOG_TRACE("  -33: @%lu\n", str->byte);
     }
+  else
+    LOG_HANDLE ("\n");
   str->byte -= 2;
   if (data_size > obj->bitsize)
     {
-      LOG_TRACE ("Invalid string stream data_size: @%lu.%u\n", str->byte,
+      LOG_WARN ("Invalid string stream data_size: @%lu.%u\n", str->byte,
                  str->bit & 7);
       obj->has_strings = 0;
+      bit_reset_chain (str);
       return DWG_ERR_NOTYETSUPPORTED; // a very low severity error
     }
   obj->stringstream_size = data_size;
   bit_advance_position (str, -(int)data_size);
+  //bit_reset_chain (str);
   // LOG_TRACE(" %d: @%lu.%u (%lu)\n", -(int)data_size - 16, str->byte,
   // str->bit & 7,
   //          bit_position(str));
+  //obj->strpos = obj->bitsize_pos + obj->bitsize - obj->stringstream_size;
   return 0;
 }
 
@@ -1193,15 +1258,15 @@ section_string_stream (Bit_Chain *restrict dat, BITCODE_RL bitsize,
   BITCODE_RL data_size; // in bits
   BITCODE_B endbit;
   PRE (R_2010)
-  {
-    // r2007: + 24 bytes (sentinel+size+hsize) - 1 bit (endbit)
-    start = bitsize + 159;
-  }
+    {
+      // r2007: + 24 bytes (sentinel+size+hsize) - 1 bit (endbit)
+      start = bitsize + 159;
+    }
   else
-  {
-    // r2010: + 24 bytes (sentinel+size+hSize) - 1 bit (endbit)
-    start = bitsize + 191; /* 8*24 = 192 */
-  }
+    {
+      // r2010: + 24 bytes (sentinel+size+hSize) - 1 bit (endbit)
+      start = bitsize + 191; /* 8*24 = 192 */
+    }
   *str = *dat;
   bit_set_position (str, start);
   LOG_TRACE ("section string stream\n  pos: " FORMAT_RL ", %lu/%u\n", start,
