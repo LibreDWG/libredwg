@@ -412,6 +412,13 @@ fi
 AM_CONDITIONAL([HAVE_TIMEOUT], [test -n "$TIMEOUT"])
 AC_SUBST([TIMEOUT_10])
 
+if test x$enable_debug = xyes; then
+   JSON_SED_NAN="\$SED -i -e's/ nan/ \"nan\"/g;'"
+else
+   JSON_SED_NAN="true"
+fi
+AC_SUBST([JSON_SED_NAN])
+
 AC_CHECK_PROGS([DOXYGEN], [doxygen])
 if test -n "$DOXYGEN"; then
   AC_MSG_CHECKING([DOXYGEN version])
@@ -487,6 +494,7 @@ AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([doc/Doxyfile])])
 AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([doc/footer])])
 AM_COND_IF([HAVE_PERL], [AC_CONFIG_FILES([bindings/perl/Makefile.PL])])
 AC_CONFIG_FILES([programs/alive.test], [chmod +x programs/alive.test])
+AC_CONFIG_FILES([programs/json.test], [chmod +x programs/json.test])
 AC_CONFIG_FILES([logs-all.sh:$logs_all], [chmod +x logs-all.sh])
 AC_CONFIG_FILES([log], [chmod +x log])
 

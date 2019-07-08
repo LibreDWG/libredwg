@@ -17,6 +17,8 @@ problems=0
 DATA="sample_2000 example_2000 example_2004 example_2007 example_2010"
 DATA="$DATA example_2013 example_2018 example_r14"
 TODO="r11/ACEL10"
+SED=@SED@
+JQ=@JQ@
 
 for d in $DATA; do
     b=$(basename "$d")
@@ -27,8 +29,11 @@ for dwg in $DATA; do
     json="$(basename "$dwg" .dwg).json"
     dwg="${datadir}/$dwg.dwg"
     echo dwgread -Ojson -o"$json" "$dwg"
-    #TODO --enable-debug: sed -i 's/ nan / "nan" /g;s/ nan,/ "nan",/g'
-    if ../libtool --mode=execute ./dwgread -Ojson -o"$json" "$dwg" && jq . "$json" >"$json.log" 2>&1; then
+    # With --enable-debug fixup nan
+    if ../libtool --mode=execute ./dwgread -Ojson -o"$json" "$dwg" && \
+       @JSON_SED_NAN@ "$json" && \
+       $JQ . "$json" >"$json.log" 2>&1
+    then
         rm "$json.log" "$json"
     else
         cat "$json.log"
@@ -36,7 +41,10 @@ for dwg in $DATA; do
     fi
     geojson="$(basename "$dwg" .dwg).geojson"
     echo dwgread -o"$geojson" "$dwg"
-    if ../libtool --mode=execute ./dwgread -Ogeojson -o"$geojson" "$dwg" && jq . "$geojson" >>"$json.log" 2>&1; then
+    if ../libtool --mode=execute ./dwgread -Ogeojson -o"$geojson" "$dwg" && \
+       @JSON_SED_NAN@ "$geojson" && \
+       $JQ . "$geojson" >>"$json.log" 2>&1
+    then
         rm "$json.log" "$geojson"
     else
         cat "$json.log"
