@@ -1284,9 +1284,10 @@ decl_dxf_process_VERTEX (PFACE)
                                                                               \
     VERSIONS (R_13, R_2000)                                                   \
     {                                                                         \
-      Dwg_Object *last_attrib = _obj->last_attrib->obj;                       \
+      Dwg_Object *last_attrib = _obj->last_attrib                             \
+       ? _obj->last_attrib->obj : NULL;                                       \
       Dwg_Object *o = _obj->first_attrib ? _obj->first_attrib->obj : NULL;    \
-      if (!o)                                                                 \
+      if (!o || !last_attrib)                                                                 \
         return DWG_ERR_INVALIDHANDLE;                                         \
       if (o->fixedtype == DWG_TYPE_ATTRIB)                                    \
         error |= dwg_dxf_ATTRIB (dat, o);                                     \
