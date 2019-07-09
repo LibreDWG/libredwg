@@ -1267,8 +1267,11 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     }                                                                         \
     return error;                                                             \
   }
-decl_dxf_process_VERTEX (2D) decl_dxf_process_VERTEX (3D)
-    decl_dxf_process_VERTEX (MESH) decl_dxf_process_VERTEX (PFACE)
+
+decl_dxf_process_VERTEX (2D)
+decl_dxf_process_VERTEX (3D)
+decl_dxf_process_VERTEX (MESH)
+decl_dxf_process_VERTEX (PFACE)
 
 /* process if seqend before attribs */
 #define decl_dxf_process_INSERT(token)                                        \
@@ -1319,11 +1322,13 @@ decl_dxf_process_VERTEX (2D) decl_dxf_process_VERTEX (3D)
     }                                                                         \
     return error;                                                             \
   }
-        decl_dxf_process_INSERT (INSERT) decl_dxf_process_INSERT (MINSERT)
 
-            static int dwg_dxf_object (Bit_Chain *restrict dat,
-                                       const Dwg_Object *restrict obj,
-                                       int *restrict i)
+decl_dxf_process_INSERT (INSERT)
+decl_dxf_process_INSERT (MINSERT)
+
+static int dwg_dxf_object (Bit_Chain *restrict dat,
+                           const Dwg_Object *restrict obj,
+                           int *restrict i)
 {
   int error = 0;
   int minimal;
