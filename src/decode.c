@@ -2160,7 +2160,7 @@ read_2004_section_header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static int
 read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  Bit_Chain obj_dat = { 0 }, hdl_dat = { 0 };
+  Bit_Chain obj_dat = { NULL }, hdl_dat = { NULL };
   BITCODE_RS section_size = 0;
   long unsigned int endpos;
   int error;
@@ -2264,8 +2264,10 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   while (section_size > 2);
 
   LOG_TRACE ("\nNum objects: %lu\n", (unsigned long)dwg->num_objects);
-  free (hdl_dat.chain);
-  free (obj_dat.chain);
+  if (hdl_dat.chain)
+    free (hdl_dat.chain);
+  if (obj_dat.chain)
+    free (obj_dat.chain);
   return error;
 }
 
