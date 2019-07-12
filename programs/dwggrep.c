@@ -304,8 +304,8 @@ do_match (const int is16, const char *restrict filename,
 #  define MATCH_TYPE(type, ENTITY, text_field, dxfgroup)                      \
     text = (char *)obj->tio.type->tio.ENTITY->text_field;                     \
     if (text)                                                                 \
-    found += do_match (obj->parent->header.version >= R_2007, filename,       \
-                       #ENTITY, dxfgroup, text)
+      found += do_match (obj->parent->header.version >= R_2007, filename,     \
+                         #ENTITY, dxfgroup, text)
 #else
 #  define MATCH_TYPE(type, ENTITY, text_field, dxfgroup)                      \
     text = (char *)obj->tio.type->tio.ENTITY->text_field;                     \
@@ -1229,6 +1229,7 @@ main (int argc, char *argv[])
                            NULL
 #    endif
   );
+  free (pattern16);
   if (errcode != 0 && errcode != 100)
     {
       pcre2_get_error_message_8 (errcode, (PCRE2_UCHAR8 *)buf, 4096);

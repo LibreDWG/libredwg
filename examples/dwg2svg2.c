@@ -133,14 +133,13 @@ output_TEXT (dwg_object *obj)
   fontsize = dwg_ent_text_get_height (text, &error);
   log_if_error ("text_get_height");
 
-  /*TODO: Juca, fix it properly: */
-  if (text_value[0] == '&')
-    return;
-
   printf ("\t<text id=\"dwg-object-%d\" x=\"%f\" y=\"%f\" "
           "font-family=\"Verdana\" font-size=\"%f\" fill=\"blue\">%s</text>\n",
           index, transform_X (ins_pt.x), transform_Y (ins_pt.y), fontsize,
           text_value);
+
+  if (text_value && obj->parent->header.version >= 15)
+    free (text_value);  
 }
 
 static void
@@ -345,6 +344,8 @@ output_BLOCK_HEADER (dwg_object_ref *ref)
   name = dwg_obj_block_header_get_name (_hdr, &error);
   log_if_error ("block_header_get_name");
   printf ("\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", abs_ref, name);
+  if (name != NULL && name != _hdr->name && hdr->parent->header.version >= 15)
+    free (name);
 
   obj = get_first_owned_entity (hdr);
   while (obj)
@@ -404,6 +405,7 @@ output_SVG (dwg_data *dwg)
 
   output_BLOCK_HEADER (dwg_model_space_ref (dwg));
   output_BLOCK_HEADER (dwg_paper_space_ref (dwg));
+  free (hdr_refs);
 
   printf ("</svg>\n");
 }

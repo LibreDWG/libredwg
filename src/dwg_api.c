@@ -20214,7 +20214,7 @@ dwg_ent_get_layer_name (const dwg_obj_ent *restrict ent, int *restrict error)
 /** Returns the entity linetype name (as UTF-8), or "ByLayer"
     Since r2007 it returns a malloc'd copy, before the direct reference
     to the dwg field or the constant "0".
-\code Usage: char* layer = dwg_ent_get_layer_name(ent, &error);
+\code Usage: char* ltype = dwg_ent_get_ltype_name(ent, &error);
 \endcode
 \param[in]  ent     dwg_obj_ent*
 \param[out] error   int*, is set to 0 for ok, 1 on error

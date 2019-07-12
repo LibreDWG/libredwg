@@ -39,6 +39,7 @@ main (int argc, char *argv[])
 {
   char *input = getenv ("INPUT");
   struct stat attrib;
+  int ret;
 
   if (!input)
     {
@@ -50,7 +51,9 @@ main (int argc, char *argv[])
           return EXIT_FAILURE;
         }
     }
-  return test_code (input);
+  ret = test_code (input);
+  free (input);
+  return ret;
 }
 
 /// This function is used to read the DWG file

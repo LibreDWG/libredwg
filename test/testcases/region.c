@@ -116,6 +116,7 @@ api_process (dwg_object *obj)
               matches = 0;
             }
         }
+      free (wire);
       if (matches)
         pass ("Working Properly");
       else
@@ -143,6 +144,7 @@ api_process (dwg_object *obj)
               matches = 0;
             }
         }
+      free (sil);
       if (matches)
         {
           pass ("Working Properly");
