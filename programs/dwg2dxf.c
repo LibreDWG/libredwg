@@ -108,6 +108,7 @@ main (int argc, char *argv[])
   Dwg_Version_Type dwg_version;
   Bit_Chain dat = { 0 };
   int do_free;
+  int need_free = 0;
   int c;
 #ifdef HAVE_GETOPT_LONG
   int option_index = 0;
@@ -229,7 +230,10 @@ main (int argc, char *argv[])
       filename_in = argv[i];
       i++;
       if (!filename_out)
-        filename_out = suffix (filename_in, "dxf");
+        {
+          need_free = 1;
+          filename_out = suffix (filename_in, "dxf");
+        }
 
       memset (&dwg, 0, sizeof (Dwg_Data));
       dwg.opts = opts;
@@ -288,7 +292,8 @@ main (int argc, char *argv[])
       )
         {
           dwg_free (&dwg);
-          free (filename_out);
+          if (need_free)
+            free (filename_out);
         }
       filename_out = NULL;
     }
