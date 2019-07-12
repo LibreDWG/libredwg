@@ -347,7 +347,11 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         {
           name = dwg_obj_table_get_name (layer, &error);
           if (!error)
-            PAIR_S (Layer, name)
+            {
+              PAIR_S (Layer, name);
+              if (dat->version >= R_2007)
+                free (name);
+            }
         }
 
       // See #95: index as int or rgb as hexstring
@@ -363,7 +367,11 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 
       name = dwg_ent_get_ltype_name (obj->tio.entity, &error);
       if (!error && strcmp (name, "ByLayer")) // skip the default
-        PAIR_S (Linetype, name)
+        {
+          PAIR_S (Linetype, name);
+          if (dat->version >= R_2007)
+            free (name);
+        }
     }
 
   sprintf (tmp, "%lX", obj->handle.value);
@@ -397,7 +405,11 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           else
             text = _hdr->name;
           if (text)
-            PAIR_S (name, text)
+            {
+              PAIR_S (name, text);
+              if (dat->version >= R_2007)
+                free (text);
+            }
         }
     }
   else if (obj->type == DWG_TYPE_MINSERT)
@@ -413,7 +425,11 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           else
             text = _hdr->name;
           if (text)
-            PAIR_S (name, text)
+            {
+              PAIR_S (name, text);
+              if (dat->version >= R_2007)
+                free (text);
+            }
         }
     }
   // PAIR_NULL(ExtendedEntity);
@@ -554,6 +570,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
                 VALUE_2DPOINT (pts[j].x, pts[j].y);
               }
           }
+        free (pts);
         LASTENDARRAY;
         ENDGEOMETRY;
         ENDFEATURE;
@@ -581,6 +598,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
                 VALUE_3DPOINT (pts[j].x, pts[j].y, pts[j].z);
               }
           }
+        free (pts);
         LASTENDARRAY;
         ENDGEOMETRY;
         ENDFEATURE;
