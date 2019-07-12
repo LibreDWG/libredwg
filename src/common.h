@@ -61,6 +61,10 @@
 #  define GCC31_DIAG_RESTORE
 #endif
 
+#ifndef __has_feature
+#  define __has_feature(x) 0
+#endif
+
 /* The __nonnull function attribute marks pointer arguments which
    must not be NULL.  */
 #if (defined(__GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 303)
