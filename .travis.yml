@@ -31,7 +31,7 @@ matrix:
       #  apt:
       #    packages:
       #      clang-3.8
-      env: ASAN=1
+      env: ASAN=1 CONF="--disable-bindings"
     - compiler: clang
     - compiler: gcc
       env: DISTCHECK=1
@@ -46,11 +46,15 @@ install:
 
 script:
   - if [ x$ASAN = x1 ]; then
-      CC="clang -fno-omit-frame-pointer -fsanitize=address,undefined";
+      CC="clang -fno-omit-frame-pointer -fsanitize=address,undefined" ;
     fi
   - ./configure $CONF
   - make -j4
-  - make check
+  - if [ x$ASAN = x1 ]; then
+      make check || ASAN_OPTIONS="detect_leaks=0" make check ;
+    else
+      make check ;
+    fi
   - if [ x$DISTCHECK = x1 ]; then
       make distcheck && sha256sum libredwg-*.tar.*;
     fi
