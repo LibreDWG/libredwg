@@ -1672,109 +1672,111 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
   int error = 0;
 
   FIELD_B (acis_empty, 0);
-  if (!FIELD_VALUE(acis_empty))
+  if (!FIELD_VALUE (acis_empty))
     {
       FIELD_B (unknown, 0);
       IF_ENCODE_FROM_EARLIER {
-        FIELD_VALUE(version) = 1;
+        FIELD_VALUE (version) = 1;
       }
       FIELD_BS (version, 70);
       // which is SAT format ACIS 4.0 (since r2000+)
-      if (FIELD_VALUE(version) == 1)
+      if (FIELD_VALUE (version) == 1)
         {
           do
             {
-              FIELD_VALUE(encr_sat_data) = (char**)
-                realloc(FIELD_VALUE(encr_sat_data), (i+1) * sizeof (char*));
-              FIELD_VALUE(block_size) = (BITCODE_BL*)
-                realloc(FIELD_VALUE(block_size), (i+1) * sizeof (BITCODE_BL));
+              FIELD_VALUE (encr_sat_data) = (char**)
+                realloc(FIELD_VALUE (encr_sat_data), (i+1) * sizeof (char*));
+              FIELD_VALUE (block_size) = (BITCODE_BL*)
+                realloc (FIELD_VALUE (block_size), (i+1) * sizeof (BITCODE_BL));
               FIELD_BL (block_size[i], 0);
-              FIELD_TF (encr_sat_data[i], FIELD_VALUE(block_size[i]), 1);
+              FIELD_TF (encr_sat_data[i], FIELD_VALUE (block_size[i]), 1);
               total_size += FIELD_VALUE (block_size[i]);
             } while (FIELD_VALUE (block_size[i++]));
 
           // de-obfuscate SAT data
-          FIELD_VALUE(acis_data) = malloc (total_size+1);
+          FIELD_VALUE (acis_data) = malloc (total_size+1);
           num_blocks = i-1;
-          FIELD_VALUE(num_blocks) = num_blocks;
+          FIELD_VALUE (num_blocks) = num_blocks;
+          LOG_TRACE ("num_blocks: " FORMAT_BL "\n", FIELD_VALUE (num_blocks));
           index = 0;
           for (i=0; i<num_blocks; i++)
             {
               for (j=0; j < FIELD_VALUE (block_size[i]); j++)
                 {
-                  if (FIELD_VALUE(encr_sat_data[i][j] <= 32))
+                  if (FIELD_VALUE (encr_sat_data[i][j] <= 32))
                     {
-                      FIELD_VALUE(acis_data)[index++]
+                      FIELD_VALUE (acis_data)[index++]
                         = FIELD_VALUE (encr_sat_data[i][j]);
                     }
                   else
                     {
-                      FIELD_VALUE(acis_data)[index++]
+                      FIELD_VALUE (acis_data)[index++]
                         = 159 - FIELD_VALUE (encr_sat_data[i][j]);
                     }
                 }
             }
-          FIELD_VALUE(acis_data)[index] = '\0';
+          FIELD_VALUE (acis_data)[index] = '\0';
           // DXF 1 + 3 if >255
-          LOG_TRACE("acis_data [1]:\n%s\n", FIELD_VALUE (acis_data));
+          LOG_TRACE("acis_data:\n%s\n", FIELD_VALUE (acis_data));
         }
-      // version 2, the binary, unencrypted SAT format for ACIS 7.0/ShapeManager.
-      /* ACIS versions:
-         R14 release            106   (ACIS 1.6)
-         R15 (2000) release     400   (ACIS 4.0)
-         R18 (2004) release     20800 (ASM ShapeManager, forked from ACIS 7.0)
-         R21 (2007) release     21200
-         R24 (2010) release     21500
-         R27 (2013) release     21800
-         R?? (2018) release     223.0.1.1930
-       */
       else //if (FIELD_VALUE(version)==2)
+        /* version 2, SAB: binary, unencrypted SAT format for ACIS 7.0/ShapeManager.
+           ACIS versions:
+           R14 release            106   (ACIS 1.6)
+           R15 (2000) release     400   (ACIS 4.0)
+           R18 (2004) release     20800 (ASM ShapeManager, forked from ACIS 7.0)
+           R21 (2007) release     21200
+           R24 (2010) release     21500
+           R27 (2013) release     21800
+           R?? (2018) release     223.0.1.1930
+        */
         {
-          FIELD_VALUE(acis_data) = NULL;
+          FIELD_VALUE (acis_data) = NULL;
           //TODO string in strhdl, even <r2007
-          FIELD_VALUE(num_blocks) = 2;
-          FIELD_VALUE(block_size) = calloc(2, sizeof (BITCODE_RL));
-          FIELD_VALUE(encr_sat_data) = calloc(2, sizeof (char*));
+          FIELD_VALUE (num_blocks) = 2;
+          LOG_TRACE ("num_blocks: 2\n");
+          FIELD_VALUE (block_size) = calloc(3, sizeof (BITCODE_RL));
+          FIELD_VALUE (encr_sat_data) = calloc(3, sizeof (char*));
           FIELD_TF (encr_sat_data[0], 15, 1); // "ACIS BinaryFile"
-          FIELD_VALUE(block_size[0]) = 15;
+          FIELD_VALUE (block_size[0]) = 15;
           FIELD_RL (block_size[1], 0);
-          if (_obj->block_size[1] > obj->size) {
-            LOG_ERROR("Invalid ACIS 2 SAB block_size[1] %d. Max. %d",
+          if (FIELD_VALUE (block_size[1]) > obj->size) {
+            LOG_ERROR ("Invalid ACIS 2 SAB block_size[1] %d. Max. %d",
                       _obj->block_size[1], obj->size);
             return DWG_ERR_VALUEOUTOFBOUNDS;
           }
           // Binary SAB, unencrypted
-          FIELD_TF (encr_sat_data[1], FIELD_VALUE(block_size[1]), 1);
+          FIELD_TF (encr_sat_data[1], FIELD_VALUE (block_size[1]), 1);
           total_size = FIELD_VALUE (block_size[1]);
         }
 
       FIELD_B (wireframe_data_present, 0);
-      if (FIELD_VALUE(wireframe_data_present))
+      if (FIELD_VALUE (wireframe_data_present))
         {
           FIELD_B (point_present, 0);
-          if (FIELD_VALUE(point_present))
+          if (FIELD_VALUE (point_present))
             {
               FIELD_3BD (point, 0);
             }
           else
             {
-              FIELD_VALUE(point.x) = 0;
-              FIELD_VALUE(point.y) = 0;
-              FIELD_VALUE(point.z) = 0;
+              FIELD_VALUE (point.x) = 0;
+              FIELD_VALUE (point.y) = 0;
+              FIELD_VALUE (point.z) = 0;
             }
           FIELD_BL (num_isolines, 0);
           FIELD_B (isoline_present, 0);
-          if (FIELD_VALUE(isoline_present))
+          if (FIELD_VALUE (isoline_present))
             {
               FIELD_BL (num_wires, 0);
-              REPEAT(num_wires, wires, Dwg_3DSOLID_wire)
+              REPEAT (num_wires, wires, Dwg_3DSOLID_wire)
               REPEAT_BLOCK
-                  PARSE_WIRE_STRUCT(wires[rcount1])
+                  PARSE_WIRE_STRUCT (wires[rcount1])
               END_REPEAT_BLOCK
-              SET_PARENT_OBJ(wires)
-              END_REPEAT(wires);
+              SET_PARENT_OBJ (wires)
+              END_REPEAT (wires);
               FIELD_BL (num_silhouettes, 0);
-              REPEAT(num_silhouettes, silhouettes, Dwg_3DSOLID_silhouette)
+              REPEAT (num_silhouettes, silhouettes, Dwg_3DSOLID_silhouette)
               REPEAT_BLOCK
                   SUB_FIELD_BL (silhouettes[rcount1], vp_id, 0);
                   SUB_FIELD_3BD (silhouettes[rcount1], vp_target, 0);
@@ -1782,33 +1784,33 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
                   SUB_FIELD_3BD (silhouettes[rcount1], vp_up_dir, 0);
                   SUB_FIELD_B (silhouettes[rcount1], vp_perspective, 0);
                   SUB_FIELD_BL (silhouettes[rcount1], num_wires, 0);
-                  REPEAT2(silhouettes[rcount1].num_wires, silhouettes[rcount1].wires,
+                  REPEAT2 (silhouettes[rcount1].num_wires, silhouettes[rcount1].wires,
                           Dwg_3DSOLID_wire)
                   REPEAT_BLOCK
-                      PARSE_WIRE_STRUCT(silhouettes[rcount1].wires[rcount2])
+                      PARSE_WIRE_STRUCT (silhouettes[rcount1].wires[rcount2])
                   END_REPEAT_BLOCK
-                  SET_PARENT_OBJ(silhouettes[rcount1].wires)
-                  END_REPEAT(silhouettes[rcount1].wires);
+                  SET_PARENT_OBJ (silhouettes[rcount1].wires)
+                  END_REPEAT (silhouettes[rcount1].wires);
               END_REPEAT_BLOCK
-              SET_PARENT_OBJ(silhouettes)
-              END_REPEAT(silhouettes);
+              SET_PARENT_OBJ (silhouettes)
+              END_REPEAT (silhouettes);
             }
         }
 
       FIELD_B (acis_empty_bit, 0);
-      if (!FIELD_VALUE(acis_empty_bit))
+      if (!FIELD_VALUE (acis_empty_bit))
         {
           LOG_ERROR("TODO: Implement parsing of ACIS data at the end "
                     "of 3dsolid object parsing (acis_empty_bit==0).\n");
         }
 
-      SINCE(R_2007) {
+      SINCE (R_2007) {
           FIELD_BL (unknown_2007, 0);
       }
 
       COMMON_ENTITY_HANDLE_DATA;
 
-      SINCE(R_2007) {
+      SINCE (R_2007) {
           FIELD_HANDLE (history_id, ANYCODE, 350);
       }
     }
@@ -1846,40 +1848,48 @@ static int free_3dsolid(Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _
   BITCODE_BL vcount, rcount1, rcount2;
   Bit_Chain *dat = &pdat;
 
-  for (i=0; i < FIELD_VALUE(num_blocks); i++)
+  if (!FIELD_VALUE (acis_empty))
     {
-      FIELD_TF (encr_sat_data[i], block_size[i], 0);
+      for (i=0; i <= FIELD_VALUE (num_blocks); i++)
+        {
+          if (FIELD_VALUE (encr_sat_data[i]) != NULL)
+            FIELD_TF (encr_sat_data[i], block_size[i], 0);
+        }
+      FREE_IF (FIELD_VALUE (encr_sat_data));
+      FREE_IF (FIELD_VALUE (block_size));
+      FREE_IF (FIELD_VALUE (acis_data));
+
+      REPEAT (num_wires, wires, Dwg_3DSOLID_wire)
+      REPEAT_BLOCK
+        PARSE_WIRE_STRUCT (wires[rcount1])
+        END_REPEAT_BLOCK
+        SET_PARENT_OBJ (wires)
+      END_REPEAT (wires);
+
+      REPEAT (num_silhouettes, silhouettes, Dwg_3DSOLID_silhouette)
+      REPEAT_BLOCK
+        SUB_FIELD_BL (silhouettes[rcount1], vp_id, 0);
+        SUB_FIELD_3BD (silhouettes[rcount1], vp_target, 0);
+        SUB_FIELD_3BD (silhouettes[rcount1], vp_dir_from_target, 0);
+        SUB_FIELD_3BD (silhouettes[rcount1], vp_up_dir, 0);
+        SUB_FIELD_B (silhouettes[rcount1], vp_perspective, 0);
+        SUB_FIELD_BL (silhouettes[rcount1], num_wires, 0);
+        REPEAT2 (silhouettes[rcount1].num_wires, silhouettes[rcount1].wires,
+                Dwg_3DSOLID_wire)
+        REPEAT_BLOCK
+          PARSE_WIRE_STRUCT (silhouettes[rcount1].wires[rcount2])
+        END_REPEAT_BLOCK
+        END_REPEAT (silhouettes[rcount1].wires);
+      END_REPEAT_BLOCK
+      SET_PARENT_OBJ (silhouettes)
+      END_REPEAT (silhouettes);
     }
-  FREE_IF(FIELD_VALUE(encr_sat_data));
-  FREE_IF(FIELD_VALUE(block_size));
-  FREE_IF(FIELD_VALUE(acis_data));
-
-  REPEAT(num_wires, wires, Dwg_3DSOLID_wire)
-  REPEAT_BLOCK
-    PARSE_WIRE_STRUCT(wires[rcount1])
-  END_REPEAT_BLOCK
-  SET_PARENT_OBJ(wires)
-  END_REPEAT(wires);
-
-  REPEAT(num_silhouettes, silhouettes, Dwg_3DSOLID_silhouette)
-  REPEAT_BLOCK
-    SUB_FIELD_BL (silhouettes[rcount1], vp_id, 0);
-    SUB_FIELD_3BD (silhouettes[rcount1], vp_target, 0);
-    SUB_FIELD_3BD (silhouettes[rcount1], vp_dir_from_target, 0);
-    SUB_FIELD_3BD (silhouettes[rcount1], vp_up_dir, 0);
-    SUB_FIELD_B (silhouettes[rcount1], vp_perspective, 0);
-    SUB_FIELD_BL (silhouettes[rcount1], num_wires, 0);
-    REPEAT2(silhouettes[rcount1].num_wires, silhouettes[rcount1].wires,
-            Dwg_3DSOLID_wire)
-    REPEAT_BLOCK
-       PARSE_WIRE_STRUCT(silhouettes[rcount1].wires[rcount2])
-    END_REPEAT_BLOCK
-    END_REPEAT(silhouettes[rcount1].wires);
-  END_REPEAT_BLOCK
-  SET_PARENT_OBJ(silhouettes)
-  END_REPEAT(silhouettes);
 
   COMMON_ENTITY_HANDLE_DATA;
+
+  SINCE (R_2007) {
+    FIELD_HANDLE (history_id, ANYCODE, 350);
+  }
   return error;
 }
 #undef FREE_3DSOLID
