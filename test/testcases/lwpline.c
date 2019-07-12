@@ -138,6 +138,7 @@ api_process (dwg_object *obj)
               matches = 0;
             }
         }
+      free (bulges);
       if (matches)
         {
           pass ("lwpline_get_bulges");
@@ -164,6 +165,7 @@ api_process (dwg_object *obj)
               matches = 0;
             }
         }
+      free (points);
       if (matches)
         {
           pass ("lwpline_get_points");
@@ -190,6 +192,7 @@ api_process (dwg_object *obj)
               matches = 0;
             }
         }
+      free (width);
       if (matches)
         {
           pass ("lwpline_get_widths");

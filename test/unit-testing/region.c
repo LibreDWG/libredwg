@@ -109,6 +109,7 @@ api_process (dwg_object *obj)
     {
       for (i = 0; i < num_wires; i++)
         printf ("wire of region :" FORMAT_BL "\n", wire[i].selection_marker);
+      free (wire);
     }
   else
     printf ("error in reading num wires\n");
@@ -124,6 +125,7 @@ api_process (dwg_object *obj)
     {
       for (i = 0; i < num_sil; i++)
         printf ("silhouettes of region :" FORMAT_BL "\n", sil[i].vp_id);
+      free (sil);
     }
   else
     printf ("error in reading silhouettes\n");

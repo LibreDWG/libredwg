@@ -95,6 +95,7 @@ api_process (dwg_object *obj)
     {
       for (i = 0; i < lwpline->num_bulges; i++)
         printf ("bulge[%d] of lwpline : %f\n", (int)i, bulges[i]);
+      free (bulges);
     }
   else
     {
@@ -107,6 +108,7 @@ api_process (dwg_object *obj)
       for (i = 0; i < lwpline->num_points; i++)
         printf ("point[%d] of lwpline : x = %f\ty = %f\n", (int)i, points[i].x,
                 points[i].y);
+      free (points);
     }
   else
     {
@@ -119,6 +121,7 @@ api_process (dwg_object *obj)
       for (i = 0; i < lwpline->num_widths; i++)
         printf ("widths[%d] of lwpline : x = %f\ty = %f\n", (int)i,
                 width[i].start, width[i].end);
+      free (width);
     }
   else
     {
