@@ -1229,6 +1229,7 @@ main (int argc, char *argv[])
                            NULL
 #    endif
   );
+  free (pattern16);
   if (errcode != 0 && errcode != 100)
     {
       pcre2_get_error_message_8 (errcode, (PCRE2_UCHAR8 *)buf, 4096);
