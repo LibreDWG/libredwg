@@ -1,5 +1,6 @@
 language: c
 sudo: false
+dist: xenial
 os:
   - linux
 #  - osx
@@ -13,6 +14,9 @@ addons:
       - swig
       - help2man
       - dejagnu
+      - libpcre2-dev
+      - libpcre2-32-0
+      - libconvert-binary-c-perl
 matrix:
   fast_finish: true
   include:
@@ -22,16 +26,15 @@ matrix:
       #  apt:
       #    packages:
       #      - valgrind
+    - compiler: clang
+      #addons:
+      #  apt:
+      #    packages:
+      #      clang-3.8
+      env: ASAN=1
+    - compiler: clang
     - compiler: gcc
       env: DISTCHECK=1
-    - compiler: clang
-    - compiler: clang
-      dist: xenial
-      addons:
-        apt:
-          packages:
-            clang-3.8
-      env: ASAN=1
 
 branches:
   except:
@@ -42,11 +45,13 @@ install:
   - sh autogen.sh
 
 script:
-  - if [ $ASAN = "1" ]; then CC="clang-3.8 -fno-omit-frame-pointer -fsanitize=address,undefined"; fi
+  - if [ x$ASAN = x1 ]; then
+      CC="clang -fno-omit-frame-pointer -fsanitize=address,undefined";
+    fi
   - ./configure $CONF
   - make -j4
   - make check
-  - if [ "$DISTCHECK" = "1" ]; then
+  - if [ x$DISTCHECK = x1 ]; then
       make distcheck && sha256sum libredwg-*.tar.*;
     fi
 
