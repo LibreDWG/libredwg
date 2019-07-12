@@ -50,13 +50,9 @@ script:
     fi
   - ./configure $CONF
   - make -j4
-  - if [ x$ASAN = x1 ]; then
-      make check || ASAN_OPTIONS="detect_leaks=0" make check ;
-    else
-      make check ;
-    fi
+  - make -j4 check
   - if [ x$DISTCHECK = x1 ]; then
-      make distcheck && sha256sum libredwg-*.tar.*;
+      make -j4 distcheck && sha256sum libredwg-*.tar.*;
     fi
 
 deploy:
