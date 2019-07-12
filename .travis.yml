@@ -25,11 +25,13 @@ matrix:
     - compiler: gcc
       env: DISTCHECK=1
     - compiler: clang
-      #env: ASAN=1
-      #addons:
-      #  apt:
-      #    packages:
-      #      - clang-3.8
+    - compiler: clang
+      dist: xenial
+      addons:
+        apt:
+          packages:
+            clang-3.8
+      env: ASAN=1
 
 branches:
   except:
@@ -40,7 +42,7 @@ install:
   - sh autogen.sh
 
 script:
-  #- if [ $ASAN = "1" ]; then CC="clang-3.8 -fsanitize=address"; fi
+  - if [ $ASAN = "1" ]; then CC="clang-3.8 -fno-omit-frame-pointer -fsanitize=address,undefined"; fi
   - ./configure $CONF
   - make -j4
   - make check
