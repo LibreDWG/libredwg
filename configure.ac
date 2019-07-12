@@ -436,9 +436,10 @@ fi
 AM_CONDITIONAL([HAVE_JQ], [test -n "$JQ"])
 
 case $host_os in
-  darwin*) DSYMUTIL=dymutil ;;
+  darwin*) DSYMUTIL=dsymutil ;;
   *) DSYMUTIL=echo ;;
 esac
+AC_SUBST([DSYMUTIL])
 
 dnl help2man only by the maintainer
 

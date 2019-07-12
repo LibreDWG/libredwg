@@ -1,6 +1,7 @@
 #!/bin/sh
 # create -v4 logs for DWGs, you can override -v?
 make -s -j4
+@DSYMUTIL@ programs/dwgread
 v=-v4
 
 for d in "$@"; do
