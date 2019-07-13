@@ -89,25 +89,25 @@
 #define ANYCODE -1
 #define VALUE_HANDLE(handleptr, nam, handle_code, dxf)                        \
   {                                                                           \
+    unsigned long pos = bit_position (hdl_dat);                               \
     if (handle_code >= 0)                                                     \
-      {                                                                       \
         handleptr = dwg_decode_handleref_with_code (hdl_dat, obj, dwg,        \
                                                     handle_code);             \
-      }                                                                       \
     else                                                                      \
-      {                                                                       \
         handleptr = dwg_decode_handleref (hdl_dat, obj, dwg);                 \
-      }                                                                       \
     if (handleptr)                                                            \
       {                                                                       \
-        LOG_TRACE (#nam ": HANDLE(%x.%d.%lX) absolute:%lX [H %d]\n",          \
+        LOG_TRACE (#nam ": HANDLE(%x.%d.%lX)/%x absolute:%lX [H %d]",         \
                    handleptr->handleref.code, handleptr->handleref.size,      \
-                   handleptr->handleref.value, handleptr->absolute_ref, dxf)  \
+                   handleptr->handleref.value, handle_code,                   \
+                   handleptr->absolute_ref, dxf)                              \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        LOG_TRACE (#nam ": NULL HANDLE(%x) [H %d]\n", handle_code, dxf);      \
+        LOG_TRACE (#nam ": NULL HANDLE/%x [H %d]", handle_code, dxf);         \
       }                                                                       \
+    LOG_HANDLE (" @%lu.%u", pos / 8, (unsigned)(pos % 8));                    \
+    LOG_TRACE ("\n");                                                         \
   }
 #define FIELD_HANDLE(nam, handle_code, dxf)                                   \
   VALUE_HANDLE (_obj->nam, nam, handle_code, dxf)
@@ -116,27 +116,26 @@
 
 #define VALUE_HANDLE_N(handleptr, nam, vcount, handle_code, dxf)              \
   {                                                                           \
+    unsigned long pos = bit_position (hdl_dat);                               \
     if (handle_code >= 0)                                                     \
-      {                                                                       \
         handleptr = dwg_decode_handleref_with_code (hdl_dat, obj, dwg,        \
                                                     handle_code);             \
-      }                                                                       \
     else                                                                      \
-      {                                                                       \
         handleptr = dwg_decode_handleref (hdl_dat, obj, dwg);                 \
-      }                                                                       \
     if (handleptr)                                                            \
       {                                                                       \
-        LOG_TRACE (#nam "[%d]: %d HANDLE(%x.%d.%lX) absolute:%lX [H %d]\n",   \
-                   (int)vcount, handle_code, handleptr->handleref.code,       \
+        LOG_TRACE (#nam "[%d]: HANDLE(%x.%d.%lX)/%x absolute:%lX [H %d]",     \
+                   (int)vcount, handleptr->handleref.code,                    \
                    handleptr->handleref.size, handleptr->handleref.value,     \
-                   handleptr->absolute_ref, dxf)                              \
+                   handle_code, handleptr->absolute_ref, dxf)                 \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        LOG_TRACE (#nam "[%d]: NULL HANDLE(%x) [H %d]\n", (int)vcount,        \
+        LOG_TRACE (#nam "[%d]: NULL HANDLE/%x [H %d]", (int)vcount,           \
                    handle_code, dxf);                                         \
       }                                                                       \
+    LOG_HANDLE (" @%lu.%u", pos / 8, (unsigned)(pos % 8));                    \
+    LOG_TRACE ("\n");                                                         \
   }
 #define FIELD_HANDLE_N(nam, vcount, handle_code, dxf)                         \
   VALUE_HANDLE_N (_obj->nam, nam, vcount, handle_code, dxf)
@@ -576,17 +575,17 @@
       size = 0;                                                               \
       /* return DWG_ERR_VALUEOUTOFBOUNDS; */                                  \
     }
-#define _VECTOR_CHKCOUNT(name, size, maxelemsize)                             \
+#define _VECTOR_CHKCOUNT(nam, size, maxelemsize)                              \
   if ((long long)(size) * (maxelemsize) > AVAIL_BITS ())                      \
     {                                                                         \
-      LOG_ERROR ("Invalid " #name                                             \
+      LOG_ERROR ("Invalid " #nam                                              \
                  " size %lld. Need min. %u bits, have %lld for %s.",          \
                  (long long)(size), (unsigned)(size) * (maxelemsize),         \
                  AVAIL_BITS (), obj && obj->dxfname ? obj->dxfname : "");     \
       size = 0;                                                               \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }
-#define HANDLE_VECTOR_CHKCOUNT(name, size) VECTOR_CHKCOUNT (name, HANDLE, size)
+#define HANDLE_VECTOR_CHKCOUNT(nam, size) VECTOR_CHKCOUNT (nam, HANDLE, size)
 
 // FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
@@ -702,19 +701,19 @@
     return DWG_ERR_VALUEOUTOFBOUNDS;
 
 // shortest handle: 8 bit
-#define HANDLE_VECTOR_N(name, size, code, dxf)                                \
+#define HANDLE_VECTOR_N(nam, size, code, dxf)                                 \
   if (size > 0)                                                               \
     {                                                                         \
-      FIELD_VALUE (name) = (BITCODE_H *)calloc (size, sizeof (BITCODE_H));    \
+      FIELD_VALUE (nam) = (BITCODE_H *)calloc (size, sizeof (BITCODE_H));     \
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
-          FIELD_HANDLE_N (name[vcount], vcount, code, dxf);                   \
+          FIELD_HANDLE_N (nam[vcount], vcount, code, dxf);                    \
         }                                                                     \
     }
 
-#define HANDLE_VECTOR(name, sizefield, code, dxf)                             \
-  _VECTOR_CHKCOUNT (name, FIELD_VALUE (sizefield), TYPE_MAXELEMSIZE (HANDLE)) \
-  HANDLE_VECTOR_N (name, FIELD_VALUE (sizefield), code, dxf)
+#define HANDLE_VECTOR(nam, sizefield, code, dxf)                              \
+  _VECTOR_CHKCOUNT (nam, FIELD_VALUE (sizefield), TYPE_MAXELEMSIZE (HANDLE))  \
+  HANDLE_VECTOR_N (nam, FIELD_VALUE (sizefield), code, dxf)
 
 // count 1 bytes, until non-1 bytes or a terminating zero
 #define FIELD_NUM_INSERTS(num_inserts, type, dxf)                             \
