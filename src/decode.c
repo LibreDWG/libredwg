@@ -4407,13 +4407,18 @@ dwg_decode_unknown (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   obj->num_unknown_bits = bitsize;
   num_bytes = bitsize / 8;
   if (bitsize % 8)
-    num_bytes++;
+    {
+      num_bytes++;
+      dat->size++; // allow overshoot by one byte (for missing bits)
+    }
 
   obj->unknown_bits = bit_read_TF (dat, num_bytes);
   LOG_TRACE ("unknown_bits [%ld (%lu,%ld,%d) TF]: ", bitsize, obj->common_size,
              obj->bitsize - obj->common_size, (int)obj->stringstream_size);
   LOG_TRACE_TF (obj->unknown_bits, num_bytes);
   bit_set_position (dat, pos);
+  if (bitsize % 8)
+      dat->size--;
   return 0;
 }
 
