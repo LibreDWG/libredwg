@@ -31,7 +31,11 @@
 #endif
 // else we roll our own, Latin-1 only.
 
-#define DWG_LOGLEVEL DWG_LOGLEVEL_NONE
+#ifdef IS_RELEASE
+#  define DWG_LOGLEVEL DWG_LOGLEVEL_NONE
+#else
+#  define DWG_LOGLEVEL DWG_LOGLEVEL_ERROR
+#endif
 #include "logging.h"
 #include "bits.h"
 
