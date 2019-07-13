@@ -826,7 +826,7 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
   if (R_13 <= version && version <= R_2000)
     {
       Dwg_Object *obj;
-      if (current == _hdr->last_entity->obj)
+      if (_hdr->last_entity == NULL || current == _hdr->last_entity->obj)
         return NULL;
       obj = dwg_next_object (current);
       while (obj
@@ -847,14 +847,17 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
                      != hdr->handle.value)
             obj = NULL;
         }
-      return obj == _hdr->last_entity->obj ? NULL : obj;
+      return (!_hdr->last_entity || obj == _hdr->last_entity->obj) ? NULL
+                                                                   : obj;
     }
   else if (version >= R_2004)
     {
+      Dwg_Object_Ref *ref;
       _hdr->__iterator++;
       if (_hdr->__iterator == _hdr->num_owned)
         return NULL;
-      return _hdr->entities[_hdr->__iterator]->obj;
+      ref = _hdr->entities[_hdr->__iterator];
+      return ref ? ref->obj : NULL;
     }
 
   LOG_ERROR ("Unsupported version: %d\n", version);
