@@ -91,6 +91,8 @@ void bfr_read_64 (void *restrict dst, BITCODE_RC *restrict *restrict src,
                   size_t size);
 
 /* reused with decode2.c */
+int dwg_decode_common (Bit_Chain *dat, Bit_Chain *hdl_dat,
+                       Bit_Chain *str_dat, Dwg_Object *restrict obj);
 int dwg_decode_entity (Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,
                        Bit_Chain *str_dat, Dwg_Object_Entity *restrict ent);
 int dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
