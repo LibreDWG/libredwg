@@ -1656,7 +1656,7 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
 {
   Dwg_Data* dwg = obj->parent;
   BITCODE_BL j;
-  BITCODE_BL vcount, rcount1, rcount2;
+  BITCODE_BL vcount;
   BITCODE_BL i = 0;
   BITCODE_BL total_size = 0;
   BITCODE_BL num_blocks = 0;
@@ -3470,32 +3470,35 @@ int DWG_FUNC_N(ACTION,_HATCH_gradientfill)(
                         const Dwg_Object *restrict obj,
                         Dwg_Entity_HATCH *restrict _obj)
 {
-  BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;
+  BITCODE_BL vcount, rcount3, rcount4;
+#ifndef IS_DECODER
+  BITCODE_BL rcount1, rcount2;
+#endif
   int error = 0;
   Dwg_Data* dwg = obj->parent;
 
-      FIELD_BL (is_gradient_fill, 450);
-      FIELD_BL (reserved, 451);
-      FIELD_BD (gradient_angle, 460);
-      FIELD_BD (gradient_shift, 461);
-      FIELD_BL (single_color_gradient, 452);
-      FIELD_BD (gradient_tint, 462);
-      FIELD_BL (num_colors, 453); //default: 2
-      if (FIELD_VALUE(is_gradient_fill) != 0 && FIELD_VALUE(num_colors) > 1000)
-        {
-          LOG_ERROR("Invalid gradient fill HATCH.num_colors " FORMAT_BL,
-                    _obj->num_colors);
-          return DWG_ERR_VALUEOUTOFBOUNDS;
-        }
-      REPEAT(num_colors, colors, Dwg_HATCH_Color)
-      REPEAT_BLOCK
-          SUB_FIELD_BD (colors[rcount1], shift_value, 463);
-          SUB_FIELD_CMC (colors[rcount1], color, 63,421);
-      END_REPEAT_BLOCK
-      SET_PARENT_OBJ(colors)
-      END_REPEAT(colors);
-      FIELD_T (gradient_name, 470);
-      return error;
+  FIELD_BL (is_gradient_fill, 450);
+  FIELD_BL (reserved, 451);
+  FIELD_BD (gradient_angle, 460);
+  FIELD_BD (gradient_shift, 461);
+  FIELD_BL (single_color_gradient, 452);
+  FIELD_BD (gradient_tint, 462);
+  FIELD_BL (num_colors, 453); //default: 2
+  if (FIELD_VALUE(is_gradient_fill) != 0 && FIELD_VALUE(num_colors) > 1000)
+    {
+      LOG_ERROR("Invalid gradient fill HATCH.num_colors " FORMAT_BL,
+                _obj->num_colors);
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
+  REPEAT(num_colors, colors, Dwg_HATCH_Color)
+  REPEAT_BLOCK
+      SUB_FIELD_BD (colors[rcount1], shift_value, 463);
+      SUB_FIELD_CMC (colors[rcount1], color, 63,421);
+  END_REPEAT_BLOCK
+  SET_PARENT_OBJ(colors)
+  END_REPEAT(colors);
+  FIELD_T (gradient_name, 470);
+  return error;
 }
 
 //(78 + varies) pg.136

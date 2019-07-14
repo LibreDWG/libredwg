@@ -42,6 +42,7 @@
 static unsigned int loglevel;
 /* the current version per spec block */
 static int cur_ver = 0;
+static BITCODE_BL rcount1 = 0, rcount2 = 0;
 
 #ifdef USE_TRACING
 /* This flag means we have checked the environment variable
@@ -563,6 +564,7 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
                       Dwg_Object_Entity *ent)
 {
   Dwg_Object_Entity *_obj = ent;
+
   obj->type = bit_read_RC (dat);
   _obj->flag_r11 = bit_read_RC (dat); // dxf 70
   obj->size = bit_read_RS (dat);
@@ -609,7 +611,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Bit_Chain *hdl_dat = dat;
     dat->byte = 0x06;
 
-#include "header.spec"
+    #include "header.spec"
   }
   LOG_TRACE ("@0x%lx\n", dat->byte); // 0x14
 
@@ -648,7 +650,8 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   {
     Dwg_Header_Variables *_obj = &dwg->header_vars;
     Bit_Chain *hdl_dat = dat;
-#include "header_variables_r11.spec"
+
+    #include "header_variables_r11.spec"
   }
   LOG_TRACE ("@0x%lx\n", dat->byte); // 0x23a
 
@@ -774,7 +777,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Bit_Chain *hdl_dat = dat;
     dat->byte = 0x06;
 
-#include "header.spec"
+    #include "header.spec"
   }
 
   /* Section Locator Records 0x15 */
@@ -841,8 +844,8 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       int i;
       struct Dwg_AuxHeader *_obj = &dwg->auxheader;
       Bit_Chain *hdl_dat = dat;
-      obj = NULL;
 
+      obj = NULL;
       LOG_TRACE (
           "\n=======> AuxHeader: %8X\n",
           (unsigned int)dwg->header.section[SECTION_AUXHEADER_R2000].address)
@@ -852,7 +855,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                          + dwg->header.section[SECTION_AUXHEADER_R2000].size))
       dat->byte = dwg->header.section[SECTION_AUXHEADER_R2000].address;
 
-#include "auxheader.spec"
+      #include "auxheader.spec"
     }
 
   /*-------------------------------------------------------------------------
@@ -2320,7 +2323,7 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     dat->bit = dat->byte = 0;
     LOG_TRACE ("\n#### 2004 File Header ####\n");
 
-#include "r2004_file_header.spec"
+    #include "r2004_file_header.spec"
   }
 
   /*-------------------------------------------------------------------------
@@ -2362,7 +2365,7 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
     dat->byte = 0x06;
 
-#include "header.spec"
+    #include "header.spec"
   }
 
   error |= decode_R2004_header (dat, dwg);
@@ -2443,7 +2446,7 @@ decode_R2007 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object *obj = NULL;
 
     dat->byte = 0x06;
-#include "header.spec"
+    #include "header.spec"
   }
 
   // this includes classes, header, handles + objects
@@ -2942,7 +2945,7 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   if (error & (DWG_ERR_INVALIDEED | DWG_ERR_VALUEOUTOFBOUNDS))
     return error;
 
-#include "common_entity_data.spec"
+  #include "common_entity_data.spec"
 
   // elsewhere: object data, handles, padding bits, crc
   obj->common_size = bit_position (dat) - objectpos;
@@ -3295,7 +3298,7 @@ dwg_decode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
   Dwg_Object *obj = NULL;
   int error = 0;
 
-#include "header_variables.spec"
+  #include "header_variables.spec"
 
   return error;
 }

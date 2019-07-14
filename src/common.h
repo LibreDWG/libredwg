@@ -220,5 +220,6 @@ typedef enum DWG_SENTINEL
 } Dwg_Sentinel;
 
 unsigned char *dwg_sentinel (Dwg_Sentinel sentinel);
+char *strrplc (const char* s, const char *from, const char *to);
 
 #endif

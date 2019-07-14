@@ -21,6 +21,7 @@
 #include "config.h"
 #include "common.h"
 //#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 unsigned char *
@@ -178,4 +179,22 @@ dwg_version_as (const char *version)
     return R_1_1;
   else
     return R_INVALID;
+}
+
+/* replace from ("[rcount2].") with to ("[%d].") in s */
+char *strrplc (const char* s, const char *from, const char *to)
+{
+  char *p = strstr (s, from);
+  if (p)
+    {
+      int len = strlen (s) - (strlen (from) - strlen (to));
+      char *dest = (char *)calloc (1, 80);
+      int i = p - s;
+      memcpy (dest, s, i);
+      strcat (dest, to);
+      strcat (dest, s + i + strlen (from));
+      return dest;
+    }
+  else
+    return NULL;
 }

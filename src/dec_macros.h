@@ -53,9 +53,50 @@
   }
 
 #define FIELD_G_TRACE(nam, type, dxfgroup)                                    \
-  LOG_TRACE (#nam ": " FORMAT_##type " [" #type " %d]\n", _obj->nam, dxfgroup)
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE) {                                   \
+    char *s1 = strrplc (#nam, "[rcount1]", "[%d]");                           \
+    if (s1)                                                                   \
+      {                                                                       \
+        char *s2 = strrplc (s1, "[rcount2]", "[%d]");                         \
+        if (s2)                                                               \
+          {                                                                   \
+            LOG_TRACE (strcat(s2, ": " FORMAT_##type " [" #type " %d]\n"),    \
+                       rcount1, rcount2, _obj->nam, dxfgroup);                \
+            free (s2); free (s1);                                             \
+          }                                                                   \
+        else                                                                  \
+          {                                                                   \
+            LOG_TRACE (strcat(s1, ": " FORMAT_##type " [" #type " %d]\n"),    \
+                       rcount1, _obj->nam, dxfgroup);                         \
+            free (s1);                                                        \
+          }                                                                   \
+      }                                                                       \
+    else                                                                      \
+      LOG_TRACE (#nam ": " FORMAT_##type " [" #type " %d]\n", _obj->nam,      \
+                 dxfgroup)                                                    \
+  }
 #define FIELD_TRACE(nam, type)                                                \
-  LOG_TRACE (#nam ": " FORMAT_##type " " #type "\n", _obj->nam)
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE) {                                   \
+    char *s1 = strrplc (#nam, "[rcount1]", "[%d]");                           \
+    if (s1)                                                                   \
+      {                                                                       \
+        char *s2 = strrplc (s1, "[rcount2]", "[%d]");                         \
+        if (s2)                                                               \
+          {                                                                   \
+            LOG_TRACE (strcat(s2, ": " FORMAT_##type " " #type "\n"),         \
+                       rcount1, rcount2, _obj->nam)                           \
+            free (s2); free (s1);                                             \
+          }                                                                   \
+        else                                                                  \
+          {                                                                   \
+            LOG_TRACE (strcat(s1, ": " FORMAT_##type " " #type "\n"),         \
+                       rcount1, _obj->nam)                                    \
+            free (s1);                                                        \
+          }                                                                   \
+      }                                                                       \
+    else                                                                      \
+      LOG_TRACE (#nam ": " FORMAT_##type " [" #type "]\n", _obj->nam)         \
+  }
 #define LOG_TF(level, var, len)                                               \
   {                                                                           \
     int _i;                                                                   \
@@ -77,12 +118,58 @@
 #define LOG_TRACE_TF(var, len) LOG_TF (TRACE, var, len)
 #define LOG_INSANE_TF(var, len) LOG_TF (INSANE, var, len)
 #define FIELD_2PT_TRACE(nam, type, dxf)                                       \
-  LOG_TRACE (#nam ": (" FORMAT_BD ", " FORMAT_BD ") [" #type " %d]\n",        \
-             _obj->nam.x, _obj->nam.y, dxf)
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE) {                                   \
+    char *s1 = strrplc (#nam, "[rcount1]", "[%d]");                           \
+    if (s1)                                                                   \
+      {                                                                       \
+        char *s2 = strrplc (s1, "[rcount2]", "[%d]");                         \
+        if (s2)                                                               \
+          {                                                                   \
+            LOG_TRACE (strcat(s2, ": (" FORMAT_BD ", " FORMAT_BD ") ["        \
+                              #type " %d]\n"),                                \
+                       rcount1, rcount2, _obj->nam.x, _obj->nam.y, dxf)       \
+            free (s2); free (s1);                                             \
+          }                                                                   \
+        else                                                                  \
+          {                                                                   \
+            LOG_TRACE (strcat(s1, ": (" FORMAT_BD ", " FORMAT_BD ") ["        \
+                                   #type " %d]\n"),                           \
+                       rcount1, _obj->nam.x, _obj->nam.y, dxf)                \
+            free (s1);                                                        \
+          }                                                                   \
+      }                                                                       \
+    else                                                                      \
+      LOG_TRACE (#nam ": (" FORMAT_BD ", " FORMAT_BD ") [" #type " %d]\n",    \
+             _obj->nam.x, _obj->nam.y, dxf) \
+  }
 #define FIELD_3PT_TRACE(nam, type, dxf)                                       \
-  LOG_TRACE (#nam ": (" FORMAT_BD ", " FORMAT_BD ", " FORMAT_BD ") [" #type   \
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE) {                                   \
+    char *s1 = strrplc (#nam, "[rcount1]", "[%d]");                           \
+    if (s1)                                                                   \
+      {                                                                       \
+        char *s2 = strrplc (s1, "[rcount2]", "[%d]");                         \
+        if (s2)                                                               \
+          {                                                                   \
+            LOG_TRACE (strcat(s2, ": (" FORMAT_BD ", " FORMAT_BD ", "         \
+                                  FORMAT_BD ") [" #type " %d]\n"),            \
+                       rcount1, rcount2, _obj->nam.x, _obj->nam.y,            \
+                       _obj->nam.z, dxf)                                      \
+            free (s2); free (s1);                                             \
+          }                                                                   \
+        else                                                                  \
+          {                                                                   \
+            LOG_TRACE (strcat(s1, ": (" FORMAT_BD ", " FORMAT_BD ", "         \
+                                  FORMAT_BD ") [" #type " %d]\n"),            \
+                       rcount1, _obj->nam.x, _obj->nam.y,                     \
+                       _obj->nam.z, dxf)                                      \
+            free (s1);                                                        \
+          }                                                                   \
+      }                                                                       \
+    else                                                                      \
+      LOG_TRACE (#nam ": (" FORMAT_BD ", " FORMAT_BD ", " FORMAT_BD ") [" #type \
                   " %d]\n",                                                   \
-             _obj->nam.x, _obj->nam.y, _obj->nam.z, dxf)
+                _obj->nam.x, _obj->nam.y, _obj->nam.z, dxf)                   \
+  }
 
 #define FIELD_VALUE(nam) _obj->nam
 
@@ -984,7 +1071,7 @@
       Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,                   \
       Bit_Chain *restrict str_dat, Dwg_Object *restrict obj)                  \
   {                                                                           \
-    BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;                    \
+    BITCODE_BL vcount, rcount3, rcount4;                                      \
     int error;                                                                \
     Dwg_Entity_##token *ent, *_obj;                                           \
     Dwg_Object_Entity *_ent;                                                  \
@@ -1086,7 +1173,7 @@
       Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,                   \
       Bit_Chain *restrict str_dat, Dwg_Object *restrict obj)                  \
   {                                                                           \
-    BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;                    \
+    BITCODE_BL vcount, rcount3, rcount4;                                      \
     int error;                                                                \
     Dwg_Object_##token *_obj;                                                 \
     Dwg_Data *dwg = obj->parent;                                              \
