@@ -151,7 +151,11 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   memset (&dwg->second_header, 0, sizeof (dwg->second_header));
 
   if (dwg->opts)
-    loglevel = dwg->opts & 0xf;
+    {
+      loglevel = dwg->opts & 0xf;
+      dat->opts = dwg->opts;
+    }
+
 #ifdef USE_TRACING
   /* Before starting, set the logging level, but only do so once.  */
   if (!env_var_checked_p)
@@ -1085,6 +1089,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             dwg->object[dwg->num_objects - 1].handle.value = last_handle;
           //TODO: blame Juca
 #endif
+          LOG_HANDLE ("dat: @%lu.%u\n", dat->byte, dat->bit);
         }
       if (dat->byte == oldpos)
         break;
@@ -1097,11 +1102,11 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
 
       crc = bit_read_RS_LE (dat);
-      LOG_TRACE ("crc: %04X\n", crc);
+      LOG_TRACE ("\nsection_crc: %04X\n", crc);
       crc2 = bit_calc_CRC (0xC0C1, dat->chain + startpos, section_size);
       if (crc != crc2)
         {
-          LOG_ERROR ("Section CRC mismatch %04X <=> %04X", crc, crc2);
+          LOG_ERROR ("Object Section CRC mismatch %04X <=> %04X", crc, crc2);
           // fails with r14
           // if (dwg->header.version == R_2000)
           //  return DWG_ERR_WRONGCRC;
@@ -2109,6 +2114,7 @@ read_2004_section_header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int error;
   Bit_Chain sec_dat = { 0 };
 
+  sec_dat.opts = dwg->opts & 0xf;
   error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_HEADER);
   if (error >= DWG_ERR_CRITICAL)
     {
@@ -2131,7 +2137,7 @@ read_2004_section_header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       }
       else
       {
-        Bit_Chain hdl_dat = { 0 }, str_dat = { 0 };
+        Bit_Chain hdl_dat, str_dat;
         BITCODE_RL endbits = 160; // start bit: 16 sentinel + 4 size
         hdl_dat = sec_dat;
         str_dat = sec_dat;
@@ -2165,6 +2171,7 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   long unsigned int endpos;
   int error;
 
+  obj_dat.opts = hdl_dat.opts = dwg->opts & 0xf;
   error = read_2004_compressed_section (dat, dwg, &obj_dat, SECTION_OBJECTS);
   if (error >= DWG_ERR_CRITICAL)
     {
@@ -3922,12 +3929,12 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
   obj->size = bit_read_MS (dat);
   LOG_INFO (", Size: %d/0x%x", obj->size, obj->size)
   SINCE (R_2010)
-  {
-    /* This is not counted in the object size */
-    obj->handlestream_size = bit_read_UMC (dat);
-    LOG_INFO (", Hdlsize: " FORMAT_UMC, obj->handlestream_size);
-    obj->bitsize = obj->size * 8 - obj->handlestream_size;
-  }
+    {
+      /* This is not counted in the object size */
+      obj->handlestream_size = bit_read_UMC (dat);
+      LOG_INFO (", Hdlsize: " FORMAT_UMC, obj->handlestream_size);
+      obj->bitsize = obj->size * 8 - obj->handlestream_size;
+    }
 
   obj->address = dat->byte;
   end_address = obj->address + obj->size; /* (calculate the bitsize) */
@@ -4356,27 +4363,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
                   dat->chain[dat->byte] & ((1 << r) - 1), r);
       bit_advance_position (dat, r);
     }
-#if 1
   bit_check_CRC (dat, address, 0xC0C1);
-#else
-  {
-    BITCODE_RS seed, calc;
-    BITCODE_RS crc = bit_read_RS (dat);
-    LOG_TRACE ("crc: %04X [RSx]\n", crc);
-    dat->byte -= 2;
-    // experimentally verify the seed 0xC0C1, for all objects
-    for (seed = 0; seed < 0xffff; seed++)
-      {
-        calc
-            = bit_calc_CRC (seed, &(dat->chain[address]), dat->byte - address);
-        if (calc == crc)
-          break;
-      }
-    bit_check_CRC (dat, address, 0xC0C1);
-    LOG_TRACE ("seed: %04X [RSx]\n", seed);
-    LOG_TRACE ("size: %d\n", (int)(dat->byte - address - 2));
-  }
-#endif
 
   /* Register the previous addresses for return
    */
