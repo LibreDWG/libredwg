@@ -990,7 +990,7 @@
     Dwg_Object_Entity *_ent;                                                  \
     Dwg_Data *dwg = obj->parent;                                              \
     Bit_Chain *hdl_dat = dat;                                                 \
-    LOG_INFO ("Decode entity " #token " ")                                    \
+    LOG_INFO ("Decode entity " #token "\n")                                   \
     _ent = obj->tio.entity;                                                   \
     ent = obj->tio.entity->tio.token;                                         \
     _obj = ent;                                                               \
@@ -1091,7 +1091,7 @@
     Dwg_Object_##token *_obj;                                                 \
     Dwg_Data *dwg = obj->parent;                                              \
     Bit_Chain *hdl_dat = dat; /* handle stream initially the same */          \
-    LOG_INFO ("Decode object " #token " ")                                    \
+    LOG_INFO ("Decode object " #token "\n")                                    \
     _obj = obj->tio.object->tio.token;                                        \
     error = dwg_decode_object (dat, hdl_dat, str_dat, obj->tio.object);       \
     if (error >= DWG_ERR_CRITICAL)                                            \

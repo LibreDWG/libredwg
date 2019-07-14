@@ -1145,7 +1145,7 @@ obj_string_stream (Bit_Chain *dat, Dwg_Object *restrict obj, Bit_Chain *str)
       LOG_WARN ("obj_string_stream overflow");
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
-  LOG_TRACE (" obj string stream +%u: @%lu.%u (%lu)", start, str->byte,
+  LOG_HANDLE (" obj string stream +%u: @%lu.%u (%lu)", start, str->byte,
              str->bit & 7, bit_position (str));
   obj->has_strings = bit_read_B (str);
   LOG_TRACE (" has_strings: %d\n", (int)obj->has_strings);
@@ -1156,7 +1156,7 @@ obj_string_stream (Bit_Chain *dat, Dwg_Object *restrict obj, Bit_Chain *str)
   str->byte -= 2;
   LOG_HANDLE (" @%lu.%u", str->byte, str->bit & 7);
   data_size = (BITCODE_RL)bit_read_RS (str);
-  LOG_HANDLE (" data_size: %u/0x%x\n", data_size, data_size);
+  LOG_HANDLE (" data_size: %u/0x%x", data_size, data_size);
 
   if (data_size & 0x8000)
     {
@@ -1166,7 +1166,7 @@ obj_string_stream (Bit_Chain *dat, Dwg_Object *restrict obj, Bit_Chain *str)
       data_size &= 0x7FFF;
       hi_size = bit_read_RS (str);
       data_size |= (hi_size << 15);
-      LOG_HANDLE (" data_size: %u/0x%x\n", data_size, data_size);
+      LOG_HANDLE (" data_size: %u/0x%x", data_size, data_size);
       // LOG_TRACE("  -33: @%lu\n", str->byte);
     }
   str->byte -= 2;

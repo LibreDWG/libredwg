@@ -567,8 +567,8 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   _obj->flag_r11 = bit_read_RC (dat); // dxf 70
   obj->size = bit_read_RS (dat);
   LOG_INFO ("\n===========================\n"
-            "Entity number: %d, Type: %d, Size: %d/0x%x\n",
-            obj->index, obj->type, obj->size, obj->size);
+            "Entity number: %d, Type: %d, Size: %d\n",
+            obj->index, obj->type, obj->size);
   LOG_TRACE ("flag_r11: " FORMAT_RC "\n", _obj->flag_r11);
   FIELD_RS (layer_r11, 8);
   FIELD_RS (opts_r11, 0);
@@ -2912,7 +2912,7 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
     obj->handle_offset = obj->bitsize;
     SINCE (R_2010)
     {
-      LOG_HANDLE ("(bitsize: " FORMAT_RL ", ", obj->bitsize);
+      LOG_HANDLE (" bitsize: " FORMAT_RL ", ", obj->bitsize);
       LOG_HANDLE ("hdlpos: @%lu.%u)\n", obj->hdlpos / 8,
                   (unsigned)(obj->hdlpos % 8));
     }
@@ -2968,11 +2968,11 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   _obj->datpos = dat->byte; // the data stream offset
   SINCE (R_2007) { *str_dat = *dat; }
   VERSIONS (R_2000, R_2007)
-  {
-    obj->bitsize = bit_read_RL (dat);
-    LOG_TRACE ("bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize, dat->byte,
-               dat->bit)
-  }
+    {
+      obj->bitsize = bit_read_RL (dat);
+      LOG_TRACE ("bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize, dat->byte,
+                 dat->bit)
+    }
   SINCE (R_2007)
   {
     // LOG_HANDLE("Object bitsize: " FORMAT_RL " @%lu.%u %lu\n", _obj->bitsize,
@@ -2983,8 +2983,8 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
     obj->handle_offset = obj->bitsize;
     SINCE (R_2010)
     {
-      LOG_HANDLE ("(bitsize: " FORMAT_RL ", ", obj->bitsize);
-      LOG_HANDLE ("hdlpos: @%lu.%u)\n", obj->hdlpos / 8,
+      LOG_HANDLE (" bitsize: " FORMAT_RL ", ", obj->bitsize);
+      LOG_HANDLE ("hdlpos: @%lu.%u\n", obj->hdlpos / 8,
                   (unsigned)(obj->hdlpos % 8));
     }
     // and set the string stream (restricted to size)
@@ -3927,7 +3927,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
             (unsigned long)num, (unsigned long)num)
 
   obj->size = bit_read_MS (dat);
-  LOG_INFO (", Size: %d/0x%x", obj->size, obj->size)
+  LOG_INFO (", Size: %d", obj->size)
   SINCE (R_2010)
     {
       /* This is not counted in the object size */
