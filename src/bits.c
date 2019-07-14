@@ -158,6 +158,15 @@ bit_reset_chain (Bit_Chain *dat)
       return retval;                                                          \
     }
 
+/* Convert the relative position of dat to the absolute of abs_dat.
+   dat already moved away from abs_dat.
+ */
+unsigned long
+bit_rel2abs (Bit_Chain *restrict dat, Bit_Chain *restrict abs_dat)
+{
+  return bit_position (dat) + bit_position (abs_dat);
+}
+
 /** Read 1 bit.
  */
 BITCODE_B

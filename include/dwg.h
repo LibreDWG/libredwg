@@ -9410,6 +9410,7 @@ enum {
 typedef struct _dwg_object_entity
 {
   BITCODE_BL objid; /*!< link to the parent */
+  struct _dwg_struct *dwg;
   union
   {
     Dwg_Entity_UNUSED *UNUSED;
@@ -9522,7 +9523,6 @@ typedef struct _dwg_object_entity
     // clang-format on
   } tio;
 
-  struct _dwg_struct *dwg;
   BITCODE_BL num_eed;
   Dwg_Eed *eed; /* see also Dwg_Resbuf* xdata */
 
@@ -9586,6 +9586,7 @@ typedef struct _dwg_object_entity
 typedef struct _dwg_object_object
 {
   BITCODE_BL objid; /*!< link to the parent */
+  struct _dwg_struct *dwg;
   union
   {
     // clang-format off
@@ -10623,7 +10624,6 @@ typedef struct _dwg_object_object
     // clang-format on
   } tio;
 
-  struct _dwg_struct *dwg;
   BITCODE_BL num_eed;
   Dwg_Eed *eed;
 
