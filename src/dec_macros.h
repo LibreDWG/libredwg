@@ -106,7 +106,7 @@
       {                                                                       \
         LOG_TRACE (#nam ": NULL HANDLE/%x [H %d]", handle_code, dxf);         \
       }                                                                       \
-    LOG_HANDLE (" @%lu.%u", pos / 8, (unsigned)(pos % 8));                    \
+    LOG_INSANE (" @%lu.%u", pos / 8, (unsigned)(pos % 8));                    \
     LOG_TRACE ("\n");                                                         \
   }
 #define FIELD_HANDLE(nam, handle_code, dxf)                                   \
@@ -134,7 +134,7 @@
         LOG_TRACE (#nam "[%d]: NULL HANDLE/%x [H %d]", (int)vcount,           \
                    handle_code, dxf);                                         \
       }                                                                       \
-    LOG_HANDLE (" @%lu.%u", pos / 8, (unsigned)(pos % 8));                    \
+    LOG_INSANE (" @%lu.%u", pos / 8, (unsigned)(pos % 8));                    \
     LOG_TRACE ("\n");                                                         \
   }
 #define FIELD_HANDLE_N(nam, vcount, handle_code, dxf)                         \
