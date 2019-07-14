@@ -2246,20 +2246,21 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         break;
 #if 0
       if (!bit_check_CRC(&hdl_dat, startpos, 0xC0C1))
-        LOG_WARN("Handles section CRC mismatch at offset %lx", startpos);
+        error |= DWG_ERR_WRONGCRC;
+      //LOG_WARN("Handles section CRC mismatch at offset %lx", startpos);
 #else
       crc1 = bit_calc_CRC (0xC0C1, &(hdl_dat.chain[startpos]),
                            hdl_dat.byte - startpos);
       crc2 = bit_read_RS_LE (&hdl_dat);
       if (crc1 == crc2)
         {
-          LOG_INSANE ("Handles section page CRC: %04X from %lx-%lx\n", crc2,
+          LOG_INSANE ("Handles section page CRC: %04X from %lu-%lu\n", crc2,
                       startpos, hdl_dat.byte - 2);
         }
       else
         {
           LOG_WARN (
-              "Handles section page CRC: %04X vs calc. %04X from %lx-%lx\n",
+              "Handles section page CRC: %04X vs calc. %04X from %lu-%lu\n",
               crc2, crc1, startpos, hdl_dat.byte - 2);
           error |= DWG_ERR_WRONGCRC;
         }
@@ -4344,7 +4345,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
 
   if (obj->handle.value)
     { // empty only with UNKNOWN
-      LOG_HANDLE ("object_map{%lX} = %lu\n", obj->handle.value,
+      LOG_HANDLE (" object_map{%lX} = %lu\n", obj->handle.value,
                   (unsigned long)num);
       hash_set (dwg->object_map, obj->handle.value, (uint32_t)num);
     }
@@ -4359,11 +4360,12 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
   if (dat->bit)
     {
       unsigned char r = 8 - dat->bit;
-      LOG_HANDLE ("padding: %X/%X (%d bits)\n", dat->chain[dat->byte],
+      LOG_HANDLE (" padding: %X/%X (%d bits)\n", dat->chain[dat->byte],
                   dat->chain[dat->byte] & ((1 << r) - 1), r);
       bit_advance_position (dat, r);
     }
-  bit_check_CRC (dat, address, 0xC0C1);
+  if (!bit_check_CRC (dat, address, 0xC0C1))
+    error |= DWG_ERR_WRONGCRC;
 
   /* Register the previous addresses for return
    */

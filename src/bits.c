@@ -1180,7 +1180,7 @@ bit_read_CRC (Bit_Chain *dat)
     }
   start_address = dat->byte;
   result = bit_read_RS (dat);
-  LOG_TRACE ("read CRC at %lx: 0x%x\n", start_address, result)
+  LOG_TRACE ("read CRC at %lu: %04X\n", start_address, result)
 
   return result;
 }
@@ -1203,10 +1203,19 @@ bit_check_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
   calculated = bit_calc_CRC (seed, &(dat->chain[start_address]),
                              dat->byte - start_address);
   read = bit_read_RS (dat);
-  LOG_TRACE ("check CRC %lu - %lu: 0x%x <=> 0x%x\n", start_address,
-             dat->byte, calculated, read)
-
-  return (calculated == read);
+  LOG_HANDLE ("crc: %04X [RSx]\n", read);
+  if (calculated == read)
+    {
+      LOG_HANDLE (" check_CRC %lu-%lu: %04X == %04X\n", start_address,
+                  dat->byte-2, calculated, read);
+      return 1;
+    }
+  else
+    {
+      LOG_WARN ("check_CRC mismatch %lu-%lu: %04X <=> %04X\n", start_address,
+                 dat->byte-2, calculated, read)
+      return 0;
+    }
 }
 
 /** Create and write old 16bit CRC.
@@ -1224,7 +1233,7 @@ bit_write_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
                       dat->byte - start_address);
 
   bit_write_RS (dat, crc);
-  LOG_TRACE ("write CRC at %lx: %04X\n", start_address, crc)
+  LOG_TRACE ("write CRC at %lu: %04X\n", start_address, crc)
   return (crc);
 }
 
