@@ -1089,7 +1089,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             dwg->object[dwg->num_objects - 1].handle.value = last_handle;
           //TODO: blame Juca
 #endif
-          LOG_HANDLE ("dat: @%lu.%u\n", dat->byte, dat->bit);
+          //LOG_HANDLE ("dat: @%lu.%u\n", dat->byte, dat->bit);
         }
       if (dat->byte == oldpos)
         break;
@@ -3898,8 +3898,7 @@ int
 dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
                        Bit_Chain *hdl_dat, long unsigned int address)
 {
-  long unsigned int oldpos;
-  long unsigned int restartpos, end_address;
+  long unsigned int objpos, restartpos;
   Bit_Chain abs_dat = { NULL };
   unsigned char previous_bit;
   Dwg_Object *obj;
@@ -3941,8 +3940,8 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
       obj->bitsize = obj->size * 8 - obj->handlestream_size;
     }
 
+  objpos = bit_position (dat); // absolute
   obj->address = dat->byte;
-  end_address = obj->address + obj->size; /* (calculate the bitsize) */
 
   /* Until here dat is absolute. now restrict it */
   bit_reset_chain (dat);
@@ -4369,6 +4368,13 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
                  8 * dat->size);
       return error | DWG_ERR_INVALIDDWG;
     }
+
+  /* Restore the old absolute chain.
+     CRC needs to be calculated from address, which is before our 0 position. */
+  restartpos = bit_position (dat);
+  *dat = abs_dat;
+  bit_set_position (dat, objpos + restartpos);
+
   /* Now 1 padding bits until next byte, and then a RS CRC */
   if (dat->bit)
     {
@@ -4377,11 +4383,13 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
                   dat->chain[dat->byte] & ((1 << r) - 1), r);
       bit_advance_position (dat, r);
     }
+  bit_set_position (dat, (obj->address + obj->size) * 8 - 2);
   if (!bit_check_CRC (dat, address, 0xC0C1))
     error |= DWG_ERR_WRONGCRC;
 
-  /* Restore the old chain */
+  /* Reset to previous addresses for return */
   *dat = abs_dat;
+
   return realloced ? -1 : error; // re-alloced or not
 }
 

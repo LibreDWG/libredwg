@@ -1012,7 +1012,6 @@
     {                                                                         \
       unsigned long pos = obj_stream_position (dat, hdl_dat, str_dat);        \
       int64_t padding = (obj->size * 8) - pos;                                \
-      /* Advance obj_dat to max(all 3) */                                     \
       SINCE(R_2007) bit_set_position(dat, pos);                               \
       if (padding)                                                            \
         LOG_HANDLE (" padding: %+ld %s\n", (long)padding,                     \
