@@ -95,6 +95,7 @@ void bit_advance_position (Bit_Chain *dat, long advance);
 size_t bit_position (Bit_Chain *dat);
 void bit_set_position (Bit_Chain *dat, size_t bitpos);
 void bit_reset_chain (Bit_Chain *dat);
+unsigned long bit_rel2abs (Bit_Chain *restrict dat, Bit_Chain *restrict abs_dat);
 
 BITCODE_B bit_read_B (Bit_Chain *dat);
 void bit_write_B (Bit_Chain *dat, unsigned char value);
