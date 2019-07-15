@@ -351,7 +351,7 @@ bits_ENC (Bit_Chain *restrict dat, struct _unknown_field *restrict g)
           color.alpha = strtol (ng->value, NULL, 10);
         }
     }
-  bit_write_ENC (dat, &color);
+  bit_write_ENC (dat, dat, dat, &color);
   g->type = BITS_ENC;
 }
 

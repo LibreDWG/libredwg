@@ -1575,8 +1575,8 @@ bit_write_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color)
  *  Does also references, DBCOLOR lookups (not yet, needs hdl_dat stream)
  */
 void
-bit_read_ENC (Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,
-              Bit_Chain *restrict str_dat, Dwg_Color *restrict color)
+bit_read_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat,
+              Bit_Chain *str_dat, Dwg_Color *restrict color)
 {
   color->index = bit_read_BS (dat);
   if (dat->version >= R_2004)
@@ -1608,8 +1608,8 @@ bit_read_ENC (Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,
 /** Write entity color (2004+)
  */
 void
-bit_write_ENC (Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,
-               Bit_Chain *restrict str_dat, Dwg_Color *restrict color)
+bit_write_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat,
+               Bit_Chain *str_dat, Dwg_Color *restrict color)
 {
   bit_write_BS (dat, (color->index & 0x1ff) | (color->flag << 8));
   if (dat->version >= R_2004)
