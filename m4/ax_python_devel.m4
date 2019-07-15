@@ -235,7 +235,7 @@ EOD`
 			PYTHON_LIBS="-L$ac_python_libdir -lpython$ac_python_version"
 		fi
 
-		if test -z "PYTHON_LIBS"; then
+		if test -z "$PYTHON_LIBS"; then
 			AC_MSG_ERROR([
   Cannot determine location of your Python DSO. Please check it was installed with
   dynamic libraries enabled, or try setting PYTHON_LIBS by hand.
