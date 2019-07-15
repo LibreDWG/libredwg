@@ -1057,8 +1057,8 @@
   }                                                                           \
                                                                               \
   static int dwg_decode_##token##_private (                                   \
-      Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,                   \
-      Bit_Chain *restrict str_dat, Dwg_Object *restrict obj);                 \
+      Bit_Chain *dat, Bit_Chain *hdl_dat,                                     \
+      Bit_Chain *str_dat, Dwg_Object *restrict obj);                          \
                                                                               \
   /**Call dwg_add_##token and write the fields from the bitstream dat to the  \
    * entity or object. */                                                     \
@@ -1084,8 +1084,8 @@
   }                                                                           \
                                                                               \
   static int dwg_decode_##token##_private (                                   \
-      Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,                   \
-      Bit_Chain *restrict str_dat, Dwg_Object *restrict obj)                  \
+      Bit_Chain *dat, Bit_Chain *hdl_dat,                                     \
+      Bit_Chain *str_dat, Dwg_Object *restrict obj)                           \
   {                                                                           \
     BITCODE_BL vcount, rcount3, rcount4;                                      \
     int error;                                                                \
@@ -1161,8 +1161,8 @@
     return 0;                                                                 \
   }                                                                           \
   static int dwg_decode_##token##_private (                                   \
-      Bit_Chain *restrict obj_dat, Bit_Chain *restrict hdl_dat,               \
-      Bit_Chain *restrict str_dat, Dwg_Object *restrict obj);                 \
+      Bit_Chain *obj_dat, Bit_Chain *hdl_dat,                                 \
+      Bit_Chain *str_dat, Dwg_Object *restrict obj);                          \
                                                                               \
   static int dwg_decode_##token (Bit_Chain *restrict dat,                     \
                                  Dwg_Object *restrict obj)                    \
@@ -1186,8 +1186,8 @@
   }                                                                           \
                                                                               \
   static int dwg_decode_##token##_private (                                   \
-      Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,                   \
-      Bit_Chain *restrict str_dat, Dwg_Object *restrict obj)                  \
+      Bit_Chain *dat, Bit_Chain *hdl_dat,                                     \
+      Bit_Chain *str_dat, Dwg_Object *restrict obj)                           \
   {                                                                           \
     BITCODE_BL vcount, rcount3, rcount4;                                      \
     int error;                                                                \
