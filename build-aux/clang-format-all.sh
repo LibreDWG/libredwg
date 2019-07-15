@@ -33,7 +33,8 @@ FMT=""
 # that the version number be part of the command. We prefer clang-format if
 # that's present, otherwise we work backwards from highest version to lowest
 # version. macports adds an -mp suffix and has newer versions, so prefer that.
-for clangfmt in clang-format{-mp,}{-devel,-{8,7,6,5,4,3}.{9,8,7,6,5,4,3,2,1,0},}; do
+for clangfmt in clang-format{-mp,}{-devel,-{8,7,6,5,4,3}{,.9,.8,.7,.6,.5,.4,.3,.2,.1,.0},}
+do
     if which "$clangfmt" &>/dev/null; then
         FMT="$clangfmt"
         break

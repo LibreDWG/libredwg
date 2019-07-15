@@ -105,6 +105,12 @@ dynapi.c: gen-dynapi.pl $(top_srcdir)/include/dwg.h
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
 	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -E -P -o $@ $<
 
+.c.ic: # replace the original .c with the expanded version. keep a backup!
+	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -E -P -o $@ $<
+	$(CLANG_FORMAT) -i $@
+	$(am__mv) $@ $<
+
 # emacs flymake-mode
 check-syntax:
 	test -n "$(CHK_SOURCES)" && \

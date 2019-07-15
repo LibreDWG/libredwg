@@ -289,6 +289,25 @@ else
 fi
 AM_CONDITIONAL(ENABLE_GCOV, test "x$enable_gcov" = "xtrue")
 
+AC_MSG_CHECKING([for latest clang-format])
+CLANG_FORMAT=
+for clangfmt in clang-format{-mp,}{-devel,-{8,7,6,5,4,3}{,.9,.8,.7,.6,.5,.4,.3,.2,.1,.0},}
+do
+    if which "$clangfmt" &>/dev/null; then
+        CLANG_FORMAT="$clangfmt"
+        break
+    fi
+done
+if test -z $CLANG_FORMAT; then
+    if which indent &>/dev/null; then
+        CLANG_FORMAT="indent"
+    else
+        CLANG_FORMAT=echo
+    fi
+fi
+AC_MSG_RESULT($CLANG_FORMAT)
+AC_SUBST(CLANG_FORMAT)
+
 dnl Check for mingw, cross and wine
 AM_CONDITIONAL([HAVE_MINGW], [test "x$host_os" = "xmingw32"])
 AM_CONDITIONAL([HAVE_MINGW_CROSS],
