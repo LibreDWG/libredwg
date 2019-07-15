@@ -1,0 +1,281 @@
+import unknown.
+
+/* ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION field packing problem.
+   examples/unknown generated example, needs picat-lang.org.
+   Usage: picat [-g go2] examples/ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION.pi
+*/
+def(0, Data) =>
+  println("ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0x1E9E4E (97) test/test-data/2004/CascoUrbano.dxf:"),
+  Class="ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION",
+  Dxf="test/test-data/2004/CascoUrbano.dxf",
+  Version=2004,
+  Offsets=[28, 0, 77, 10], % hdloff, strsize, commonsize, bitsize
+  S="0100000001110000010000001101000011000111101001111001001011010100110001110001000100000100111111111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["01000011000111101001111001001011", '4.3.1E9E4B', [], "reactors[0]", 330])
+    ,new_struct('H330', ["01000011000111101001111001001011", '4.3.1E9E4B', [], "ownerhandle", 330])
+    %new_struct('_H330', ["1100000100000011", 'c.1.3', [], "ownerhandle", 330])
+    ,new_struct('BS70', ["0100000001", '1', [], "", 70])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(1, Data) =>
+  println("ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0x88C (80) test/test-data/2013/gh55-ltype.dxf:"),
+  Class="ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION",
+  Dxf="test/test-data/2013/gh55-ltype.dxf",
+  Version=2013,
+  Offsets=[21, 0, 38, 5], % hdloff, strsize, commonsize, bitsize
+  S="01000000010110000010000011001000010000010001000011001010010000010001000010111111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["010000100000100010000110", '4.2.886', [], "reactors[0]", 330])
+    ,new_struct('H330', ["010000100000100010000110", '4.2.886', [], "ownerhandle", 330])
+    ,new_struct('BS70', ["0100000001", '1', [], "", 70])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(2, Data) =>
+  println("ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0xBF2 (80) test/test-data/2013/gh55-ltype.dxf:"),
+  Class="ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION",
+  Dxf="test/test-data/2013/gh55-ltype.dxf",
+  Version=2013,
+  Offsets=[21, 0, 38, 5], % hdloff, strsize, commonsize, bitsize
+  S="01000000010110000010000011001000010000010111110110001010010000010111110101111111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["010000100000101111101100", '4.2.BEC', [], "reactors[0]", 330])
+    ,new_struct('H330', ["010000100000101111101100", '4.2.BEC', [], "ownerhandle", 330])
+    ,new_struct('BS70', ["0100000001", '1', [], "", 70])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(3, Data) =>
+  println("ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0xC0B (80) test/test-data/2013/gh55-ltype.dxf:"),
+  Class="ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION",
+  Dxf="test/test-data/2013/gh55-ltype.dxf",
+  Version=2013,
+  Offsets=[21, 0, 38, 5], % hdloff, strsize, commonsize, bitsize
+  S="01000000010110000010000011001000010000011000000010101010010000011000000010011111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["010000100000110000000101", '4.2.C05', [], "reactors[0]", 330])
+    ,new_struct('H330', ["010000100000110000000101", '4.2.C05', [], "ownerhandle", 330])
+    ,new_struct('BS70', ["0100000001", '1', [], "", 70])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(4, Data) =>
+  println("ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0xC24 (80) test/test-data/2013/gh55-ltype.dxf:"),
+  Class="ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION",
+  Dxf="test/test-data/2013/gh55-ltype.dxf",
+  Version=2013,
+  Offsets=[21, 0, 38, 5], % hdloff, strsize, commonsize, bitsize
+  S="01000000010110000010000011001000010000011000001111001010010000011000001110111111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["010000100000110000011110", '4.2.C1E', [], "reactors[0]", 330])
+    ,new_struct('H330', ["010000100000110000011110", '4.2.C1E', [], "ownerhandle", 330])
+    ,new_struct('BS70', ["0100000001", '1', [], "", 70])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(5, Data) =>
+  println("ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0xC7D (80) test/test-data/2013/gh55-ltype.dxf:"),
+  Class="ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION",
+  Dxf="test/test-data/2013/gh55-ltype.dxf",
+  Version=2013,
+  Offsets=[21, 0, 38, 5], % hdloff, strsize, commonsize, bitsize
+  S="01000000010110000010000011001000010000011000111011101010010000011000111011011111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["010000100000110001110111", '4.2.C77', [], "reactors[0]", 330])
+    ,new_struct('H330', ["010000100000110001110111", '4.2.C77', [], "ownerhandle", 330])
+    ,new_struct('BS70', ["0100000001", '1', [], "", 70])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(6, Data) =>
+  println("ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0xC9B (80) test/test-data/2013/gh55-ltype.dxf:"),
+  Class="ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION",
+  Dxf="test/test-data/2013/gh55-ltype.dxf",
+  Version=2013,
+  Offsets=[21, 0, 38, 5], % hdloff, strsize, commonsize, bitsize
+  S="01000000010110000010000011001000010000011001001010101010010000011001001010011111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["010000100000110010010101", '4.2.C95', [], "reactors[0]", 330])
+    ,new_struct('H330', ["010000100000110010010101", '4.2.C95', [], "ownerhandle", 330])
+    ,new_struct('BS70', ["0100000001", '1', [], "", 70])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(7, Data) =>
+  println("ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0xCB9 (80) test/test-data/2013/gh55-ltype.dxf:"),
+  Class="ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION",
+  Dxf="test/test-data/2013/gh55-ltype.dxf",
+  Version=2013,
+  Offsets=[21, 0, 38, 5], % hdloff, strsize, commonsize, bitsize
+  S="01000000010110000010000011001000010000011001011001101010010000011001011001011111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["010000100000110010110011", '4.2.CB3', [], "reactors[0]", 330])
+    ,new_struct('H330', ["010000100000110010110011", '4.2.CB3', [], "ownerhandle", 330])
+    ,new_struct('BS70', ["0100000001", '1', [], "", 70])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(8, Data) =>
+  println("ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0xCDC (80) test/test-data/2013/gh55-ltype.dxf:"),
+  Class="ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION",
+  Dxf="test/test-data/2013/gh55-ltype.dxf",
+  Version=2013,
+  Offsets=[21, 0, 38, 5], % hdloff, strsize, commonsize, bitsize
+  S="01000000010110000010000011001000010000011001101011001010010000011001101010111111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["010000100000110011010110", '4.2.CD6', [], "reactors[0]", 330])
+    ,new_struct('H330', ["010000100000110011010110", '4.2.CD6', [], "ownerhandle", 330])
+    ,new_struct('BS70', ["0100000001", '1', [], "", 70])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(9, Data) =>
+  println("ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0xCFA (80) test/test-data/2013/gh55-ltype.dxf:"),
+  Class="ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION",
+  Dxf="test/test-data/2013/gh55-ltype.dxf",
+  Version=2013,
+  Offsets=[21, 0, 38, 5], % hdloff, strsize, commonsize, bitsize
+  S="01000000010110000010000011001000010000011001111010001010010000011001111001111111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["010000100000110011110100", '4.2.CF4', [], "reactors[0]", 330])
+    ,new_struct('H330', ["010000100000110011110100", '4.2.CF4', [], "ownerhandle", 330])
+    ,new_struct('BS70', ["0100000001", '1', [], "", 70])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(10, Data) =>
+  println("ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0x6684 (80) test/test-data/2013/gh55-ltype.dxf:"),
+  Class="ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION",
+  Dxf="test/test-data/2013/gh55-ltype.dxf",
+  Version=2013,
+  Offsets=[21, 0, 38, 5], % hdloff, strsize, commonsize, bitsize
+  S="01000000010110000010000100101000010011001100111101101010010000011111100011011111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["010000100110011001111011", '4.2.667B', [], "reactors[0]", 330])
+    ,new_struct('H330', ["010000100110011001111011", '4.2.667B', [], "ownerhandle", 330])
+    ,new_struct('BS70', ["0100000001", '1', [], "", 70])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(11, Data) =>
+  println("ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0x65E1 (80) test/test-data/2013/gh55-ltype.dxf:"),
+  Class="ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION",
+  Dxf="test/test-data/2013/gh55-ltype.dxf",
+  Version=2013,
+  Offsets=[21, 0, 38, 5], % hdloff, strsize, commonsize, bitsize
+  S="01000000010110000010000101101000010011001011101011001010010000011110111101111111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["010000100110010111010110", '4.2.65D6', [], "reactors[0]", 330])
+    ,new_struct('H330', ["010000100110010111010110", '4.2.65D6', [], "ownerhandle", 330])
+    ,new_struct('BS70', ["0100000001", '1', [], "", 70])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(12, Data) =>
+  println("ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0x4DB6 (80) test/test-data/2013/gh55-ltype.dxf:"),
+  Class="ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION",
+  Dxf="test/test-data/2013/gh55-ltype.dxf",
+  Version=2013,
+  Offsets=[21, 0, 38, 5], % hdloff, strsize, commonsize, bitsize
+  S="01000000010110000010010010101000010010011011001000101010010000011110100000011111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["010000100100110110010001", '4.2.4D91', [], "reactors[0]", 330])
+    ,new_struct('H330', ["010000100100110110010001", '4.2.4D91', [], "ownerhandle", 330])
+    ,new_struct('BS70', ["0100000001", '1', [], "", 70])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(13, Data) =>
+  println("ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0x1D79 (80) test/test-data/2013/gh55-ltype.dxf:"),
+  Class="ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION",
+  Dxf="test/test-data/2013/gh55-ltype.dxf",
+  Version=2013,
+  Offsets=[21, 0, 38, 5], % hdloff, strsize, commonsize, bitsize
+  S="01000000010110000010111100001000010000111010000000101010010000010110001010111111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["010000100001110100000001", '4.2.1D01', [], "reactors[0]", 330])
+    ,new_struct('H330', ["010000100001110100000001", '4.2.1D01', [], "ownerhandle", 330])
+    ,new_struct('BS70', ["0100000001", '1', [], "", 70])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(14, Data) =>
+  println("ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0x5EFA (88) test/test-data/2013/gh55-ltype.dxf:"),
+  Class="ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION",
+  Dxf="test/test-data/2013/gh55-ltype.dxf",
+  Version=2013,
+  Offsets=[21, 0, 38, 5], % hdloff, strsize, commonsize, bitsize
+  S="0100000001011000010000001001000011101000010010110100111001101010010000100000000110111111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["010000100101101001110011", '4.2.5A73', [], "reactors[0]", 330])
+    ,new_struct('H330', ["010000100101101001110011", '4.2.5A73', [], "ownerhandle", 330])
+    ,new_struct('BS70', ["0100000001", '1', [], "", 70])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+
+% summary: 140/1225=11.4%
+
+go0 ?=> def(0,Data).
+go1 ?=> def(1,Data).
+go2 ?=> def(2,Data).
+go3 ?=> def(3,Data).
+go4 ?=> def(4,Data).
+go5 ?=> def(5,Data).
+go6 ?=> def(6,Data).
+go7 ?=> def(7,Data).
+go8 ?=> def(8,Data).
+go9 ?=> def(9,Data).
+go10 ?=> def(10,Data).
+go11 ?=> def(11,Data).
+go12 ?=> def(12,Data).
+go13 ?=> def(13,Data).
+go14 ?=> def(14,Data).
+
+main => go0,
+        go1,
+        go2,
+        go3,
+        go4,
+        go5,
+        go6,
+        go7,
+        go8,
+        go9,
+        go10,
+        go11,
+        go12,
+        go13,
+        go14.
