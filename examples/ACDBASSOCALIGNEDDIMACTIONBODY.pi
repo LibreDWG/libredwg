@@ -1,0 +1,144 @@
+import unknown.
+
+/* ACDBASSOCALIGNEDDIMACTIONBODY field packing problem.
+   examples/unknown generated example, needs picat-lang.org.
+   Usage: picat [-g go2] examples/ACDBASSOCALIGNEDDIMACTIONBODY.pi
+*/
+def(0, Data) =>
+  println("ACDBASSOCALIGNEDDIMACTIONBODY: 0x392 (130) test/test-data/example_2000.dxf:"),
+  Class="ACDBASSOCALIGNEDDIMACTIONBODY",
+  Dxf="test/test-data/example_2000.dxf",
+  Version=2000,
+  Offsets=[50, 0, 60, 11], % hdloff, strsize, commonsize, bitsize
+  S="0100000001101001000000011010101010000000001100000011001000000011100100110100001000000011100101110100000001000010000000111001001111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["10000000", '8.0.0', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["0100000001", '1', [], "status", 90])
+    ,new_struct('BL90', ["10", '0', [], "unknown1", 90])
+    ,new_struct('BL90', ["10", '0', [], "unknown2", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "unknown3", 90])
+    ,new_struct('H360', ["001100100000001110010011", '3.2.393', [], "writedep", 360])
+    ,new_struct('BL90', ["10", '0', [], "unknown4", 90])
+    ,new_struct('BL90', ["10", '0', [], "unknown5", 90])
+    ,new_struct('BL90', ["10", '0', [], "unknown6", 90])
+    ,new_struct('H330', ["010000100000001110010111", '4.2.397', [], "", 330])
+    ,new_struct('BL90', ["10", '0', [], "dcm_status", 90])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["010000100000001110010011", '4.2.393', [], "", 330])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(1, Data) =>
+  println("ACDBASSOCALIGNEDDIMACTIONBODY: 0x392 (121) test/test-data/example_2004.dxf:"),
+  Class="ACDBASSOCALIGNEDDIMACTIONBODY",
+  Dxf="test/test-data/example_2004.dxf",
+  Version=2004,
+  Offsets=[50, 0, 61, 11], % hdloff, strsize, commonsize, bitsize
+  S="0100000001101001000000011010101010000000001100100000001110010011010000100000001110010111010000000100001000000011100100111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["10000000", '8.0.0', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["0100000001", '1', [], "status", 90])
+    ,new_struct('BL90', ["10", '0', [], "unknown1", 90])
+    ,new_struct('BL90', ["10", '0', [], "unknown2", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "unknown3", 90])
+    ,new_struct('H360', ["001100100000001110010011", '3.2.393', [], "writedep", 360])
+    ,new_struct('BL90', ["10", '0', [], "unknown4", 90])
+    ,new_struct('BL90', ["10", '0', [], "unknown5", 90])
+    ,new_struct('BL90', ["10", '0', [], "unknown6", 90])
+    ,new_struct('H330', ["010000100000001110010111", '4.2.397', [], "", 330])
+    ,new_struct('BL90', ["10", '0', [], "dcm_status", 90])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["010000100000001110010011", '4.2.393', [], "", 330])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(2, Data) =>
+  println("ACDBASSOCALIGNEDDIMACTIONBODY: 0x392 (121) test/test-data/example_2007.dxf:"),
+  Class="ACDBASSOCALIGNEDDIMACTIONBODY",
+  Dxf="test/test-data/example_2007.dxf",
+  Version=2007,
+  Offsets=[51, 0, 61, 11], % hdloff, strsize, commonsize, bitsize
+  S="0100000001101001000000011010101001000000000110010000000111001001101000010000000111001011101000000010000100000001110010011",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["10000000", '8.0.0', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["0100000001", '1', [], "status", 90])
+    ,new_struct('BL90', ["10", '0', [], "unknown1", 90])
+    ,new_struct('BL90', ["10", '0', [], "unknown2", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "unknown3", 90])
+    ,new_struct('H360', ["001100100000001110010011", '3.2.393', [], "writedep", 360])
+    ,new_struct('BL90', ["10", '0', [], "unknown4", 90])
+    ,new_struct('BL90', ["10", '0', [], "unknown5", 90])
+    ,new_struct('BL90', ["10", '0', [], "unknown6", 90])
+    ,new_struct('H330', ["010000100000001110010111", '4.2.397', [], "", 330])
+    ,new_struct('BL90', ["10", '0', [], "dcm_status", 90])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["1010000100000001", 'a.1.1', [], "", 330])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(3, Data) =>
+  println("ACDBASSOCALIGNEDDIMACTIONBODY: 0x392 (121) test/test-data/example_2010.dxf:"),
+  Class="ACDBASSOCALIGNEDDIMACTIONBODY",
+  Dxf="test/test-data/example_2010.dxf",
+  Version=2010,
+  Offsets=[43, 0, 29, 7], % hdloff, strsize, commonsize, bitsize
+  S="0100000001101001000000011010101001000000000110010000000111001001101000010000000111001011101000000010000100000001110010011",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["10000000", '8.0.0', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["0100000001", '1', [], "status", 90])
+    ,new_struct('BL90', ["10", '0', [], "unknown1", 90])
+    ,new_struct('BL90', ["10", '0', [], "unknown2", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "unknown3", 90])
+    ,new_struct('H360', ["001100100000001110010011", '3.2.393', [], "writedep", 360])
+    ,new_struct('BL90', ["10", '0', [], "unknown4", 90])
+    ,new_struct('BL90', ["10", '0', [], "unknown5", 90])
+    ,new_struct('BL90', ["10", '0', [], "unknown6", 90])
+    ,new_struct('H330', ["010000100000001110010111", '4.2.397', [], "", 330])
+    ,new_struct('BL90', ["10", '0', [], "dcm_status", 90])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["1010000100000001", 'a.1.1', [], "", 330])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(4, Data) =>
+  println("ACDBASSOCALIGNEDDIMACTIONBODY: 0x392 (80) test/test-data/example_2013.dxf:"),
+  Class="ACDBASSOCALIGNEDDIMACTIONBODY",
+  Dxf="test/test-data/example_2013.dxf",
+  Version=2013,
+  Offsets=[25, 0, 30, 5], % hdloff, strsize, commonsize, bitsize
+  S="01000000101010010000000010000100000001110010111010000000100001000000011100100111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["10000000", '8.0.0', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["0100000010", '2', [], "status", 90])
+    ,new_struct('BL90', ["10", '0', [], "unknown1", 90])
+    ,new_struct('H330', ["010000100000001110010111", '4.2.397', [], "", 330])
+    ,new_struct('BL90', ["10", '0', [], "unknown2", 90])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["010000100000001110010011", '4.2.393', [], "", 330])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+
+% summary: 154/573=26.9%
+
+go0 ?=> def(0,Data).
+go1 ?=> def(1,Data).
+go2 ?=> def(2,Data).
+go3 ?=> def(3,Data).
+go4 ?=> def(4,Data).
+
+main => go0,
+        go1,
+        go2,
+        go3,
+        go4.

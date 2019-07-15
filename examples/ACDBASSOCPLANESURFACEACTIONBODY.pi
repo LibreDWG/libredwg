@@ -1,0 +1,41 @@
+import unknown.
+
+/* ACDBASSOCPLANESURFACEACTIONBODY field packing problem.
+   examples/unknown generated example, needs picat-lang.org.
+   Usage: picat [-g go2] examples/ACDBASSOCPLANESURFACEACTIONBODY.pi
+*/
+def(0, Data) =>
+  println("ACDBASSOCPLANESURFACEACTIONBODY: 0x50C (105) test/test-data/2004/Surface.dxf:"),
+  Class="ACDBASSOCPLANESURFACEACTIONBODY",
+  Dxf="test/test-data/2004/Surface.dxf",
+  Version=2004,
+  Offsets=[66, 0, 61, 12], % hdloff, strsize, commonsize, bitsize
+  S="010000000110100100000001101010001000001110101010100000000011001000000101000011100100001000000101000011011",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["10000000", '8.0.0', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
+    ,new_struct('H360', ["001100100000010100001110", '3.2.50E', [], "", 360])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('H330', ["010000100000010100001101", '4.2.50D', [], "", 330])
+    ,new_struct('B290', ["0", '0', [], "", 290])
+    ,new_struct('BL90', ["0100000111", '7', [], "", 90])
+    ,new_struct('B290', ["0", '0', [], "", 290])
+    ,new_struct('BS70', ["10", '0', [], "", 70])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+
+% summary: 78/105=74.3%
+
+go0 ?=> def(0,Data).
+
+main => go0.
