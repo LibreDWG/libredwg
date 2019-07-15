@@ -1,6 +1,6 @@
 dnl configure.ac
 
-dnl Copyright (C) 2010, 2014-2015, 2018 Free Software Foundation, Inc.
+dnl Copyright (C) 2010, 2014-2015, 2018-2019 Free Software Foundation, Inc.
 dnl
 dnl This program is free software, licensed under the terms of the GNU
 dnl General Public License as published by the Free Software Foundation,
