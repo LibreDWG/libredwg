@@ -1,0 +1,151 @@
+import unknown.
+
+/* ACDBASSOCOSNAPPOINTREFACTIONPARAM field packing problem.
+   examples/unknown generated example, needs picat-lang.org.
+   Usage: picat [-g go2] examples/ACDBASSOCOSNAPPOINTREFACTIONPARAM.pi
+*/
+def(0, Data) =>
+  println("ACDBASSOCOSNAPPOINTREFACTIONPARAM: 0x393 (146) test/test-data/example_2000.dxf:"),
+  Class="ACDBASSOCOSNAPPOINTREFACTIONPARAM",
+  Dxf="test/test-data/example_2000.dxf",
+  Version=2000,
+  Offsets=[116, 0, 60, 17], % hdloff, strsize, commonsize, bitsize
+  S="10101010010000000110101000000001000000000000000000000000000000000000000000000000001111000010111111100000000011000000110010000000111001010001000000",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["10000000", '8.0.0', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    %new_struct('_TV1', ["010000000100000000", '', [], "", 1])
+    ,new_struct('BL90', ["10", '0', [], "flags", 90])
+    ,new_struct('BL90', ["10", '0', [], "num_params", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
+    ,new_struct('H360', ["001100100000001110010100", '3.2.394', [], "writedep", 360])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
+    ,new_struct('BD40', ["000000000000000000000000000000000000000000000000001111000010111111", '-1.0', [], "", 40])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(1, Data) =>
+  println("ACDBASSOCOSNAPPOINTREFACTIONPARAM: 0x393 (145) test/test-data/example_2004.dxf:"),
+  Class="ACDBASSOCOSNAPPOINTREFACTIONPARAM",
+  Dxf="test/test-data/example_2004.dxf",
+  Version=2004,
+  Offsets=[116, 0, 61, 17], % hdloff, strsize, commonsize, bitsize
+  S="1010101001000000011010100000000100000000000000000000000000000000000000000000000000111100001011111110000000001100100000001110010100010000001111111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["10000000", '8.0.0', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    %new_struct('_TV1', ["010000000100000000", '', [], "", 1])
+    ,new_struct('BL90', ["10", '0', [], "flags", 90])
+    ,new_struct('BL90', ["10", '0', [], "num_params", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
+    ,new_struct('H360', ["001100100000001110010100", '3.2.394', [], "writedep", 360])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
+    ,new_struct('BD40', ["000000000000000000000000000000000000000000000000001111000010111111", '-1.0', [], "", 40])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(2, Data) =>
+  println("ACDBASSOCOSNAPPOINTREFACTIONPARAM: 0x393 (161) test/test-data/example_2007.dxf:"),
+  Class="ACDBASSOCOSNAPPOINTREFACTIONPARAM",
+  Dxf="test/test-data/example_2007.dxf",
+  Version=2007,
+  Offsets=[133, 0, 61, 19], % hdloff, strsize, commonsize, bitsize
+  S="10101001000000011010100000000100000000000000000000000000000000000000000000000000111100001011111110000000100000000011000000000110010000000111001010001000000111111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["10000000", '8.0.0', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    %new_struct('_TV1', ["000000000000000000", '', [], "", 1])
+    ,new_struct('BL90', ["10", '0', [], "flags", 90])
+    ,new_struct('BL90', ["10", '0', [], "num_params", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
+    ,new_struct('H360', ["001100100000001110010100", '3.2.394', [], "writedep", 360])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
+    ,new_struct('BD40', ["000000000000000000000000000000000000000000000000001111000010111111", '-1.0', [], "", 40])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(3, Data) =>
+  println("ACDBASSOCOSNAPPOINTREFACTIONPARAM: 0x393 (161) test/test-data/example_2010.dxf:"),
+  Class="ACDBASSOCOSNAPPOINTREFACTIONPARAM",
+  Dxf="test/test-data/example_2010.dxf",
+  Version=2010,
+  Offsets=[125, 2, 29, 15], % hdloff, strsize, commonsize, bitsize
+  S="10101001000000011010100000000100000000000000000000000000000000000000000000000000111100001011111110000000100000000011000000000110010000000111001010001000000111111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["10000000", '8.0.0', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    %new_struct('_TV1', ["000000000000000000", '', [], "", 1])
+    ,new_struct('BL90', ["10", '0', [], "flags", 90])
+    ,new_struct('BL90', ["10", '0', [], "num_params", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
+    ,new_struct('H360', ["001100100000001110010100", '3.2.394', [], "writedep", 360])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
+    ,new_struct('BD40', ["000000000000000000000000000000000000000000000000001111000010111111", '-1.0', [], "", 40])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(4, Data) =>
+  println("ACDBASSOCOSNAPPOINTREFACTIONPARAM: 0x393 (176) test/test-data/example_2013.dxf:"),
+  Class="ACDBASSOCOSNAPPOINTREFACTIONPARAM",
+  Dxf="test/test-data/example_2013.dxf",
+  Version=2013,
+  Offsets=[135, 2, 30, 16], % hdloff, strsize, commonsize, bitsize
+  S="01000000011010100100000001101010000000010000000000000000000000000000000000000000000000000011110000101111111000000010000000001110000010000001000110010000000111001010001000000111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["1100000100000010", 'c.1.2', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["0100000001", '1', [], "status", 90])
+    ,new_struct('BL90', ["10", '0', [], "flags", 90])
+    %new_struct('_TV1', ["000000000000000000", '', [], "", 1])
+    ,new_struct('BL90', ["10", '0', [], "num_params", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
+    ,new_struct('H360', ["001100100000001110010100", '3.2.394', [], "writedep", 360])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
+    ,new_struct('BD40', ["000000000000000000000000000000000000000000000000001111000010111111", '-1.0', [], "", 40])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+
+% summary: 576/789=73.0%
+
+go0 ?=> def(0,Data).
+go1 ?=> def(1,Data).
+go2 ?=> def(2,Data).
+go3 ?=> def(3,Data).
+go4 ?=> def(4,Data).
+
+main => go0,
+        go1,
+        go2,
+        go3,
+        go4.
