@@ -64,6 +64,10 @@ void bfr_read (void *restrict dst, BITCODE_RC *restrict *restrict src,
                size_t size);
 void decrypt_R2004_header (BITCODE_RC *restrict dest,
                            const BITCODE_RC *restrict src, unsigned size);
+void bfr_read_32 (void *restrict dst, BITCODE_RC *restrict *restrict src,
+                  size_t size);
+void bfr_read_64 (void *restrict dst, BITCODE_RC *restrict *restrict src,
+                  size_t size);
 
 /* reused with free */
 void dwg_free_xdata_resbuf (Dwg_Resbuf *restrict rbuf);

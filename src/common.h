@@ -31,6 +31,64 @@
 #include <time.h>
 #include "dwg.h"
 
+#ifdef HAVE_ENDIAN_H
+#  include <endian.h>
+#elif defined HAVE_SYS_ENDIAN_H
+#  include <sys/endian.h>
+#elif defined HAVE_MACHINE_ENDIAN_H && defined __APPLE__
+# include <machine/endian.h>
+# include <libkern/OSByteOrder.h>
+# define htole16 OSSwapHostToLittleInt16
+# define le16toh OSSwapLittleToHostInt16
+# define htole32 OSSwapHostToLittleInt32
+# define le32toh OSSwapLittleToHostInt32
+# define htole64 OSSwapHostToLittleInt64
+# define le64toh OSSwapLittleToHostInt64
+#elif defined HAVE_WINSOCK2_H && defined __WINDOWS__
+# include <winsock2.h>
+# if BYTE_ORDER == LITTLE_ENDIAN
+#  define htole16(x) (x)
+#  define le16toh(x) (x)
+#  define htole32(x) (x)
+#  define le32toh(x) (x)
+#  define htole64(x) (x)
+#  define le64toh(x) (x)
+# elif BYTE_ORDER == BIG_ENDIAN /*e.g xbox 360 */
+#  define htole16(x) __builtin_bswap16(x)
+#  define le16toh(x) __builtin_bswap16(x)
+#  define htole32(x) __builtin_bswap32(x)
+#  define le32toh(x) __builtin_bswap32(x)
+#  define htole64(x) __builtin_bswap32(x)
+#  define le64toh(x) __builtin_bswap32(x)
+# else
+#  error unsupported byte order /* should not happen */
+# endif
+#elif defined WORDS_BIGENDIAN
+# error unsupported big-endian platform
+#else /* most likely little endian */
+/* TODO: */
+# if defined HAVE_SYS_PARAM_H
+#  include <sys/param.h>
+# endif
+# if defined HAVE_BYTEORDER_H
+#  include <byteorder.h>
+# elif defined HAVE_SYS_BYTEORDER_H
+#  include <sys/byteorder.h>
+# elif defined HAVE_BYTESWAP_H
+#  include <byteswap.h>
+# endif
+# if defined __LITTLE_ENDIAN__
+#  define htole16(x) (x)
+#  define le16toh(x) (x)
+#  define htole32(x) (x)
+#  define le32toh(x) (x)
+#  define htole64(x) (x)
+#  define le64toh(x) (x)
+# else
+#  error unknown byte order
+# endif
+#endif
+
 /* Used warning suppressions:
    CLANG_DIAG_IGNORE (-Wpragma-pack)
    CLANG_DIAG_IGNORE (-Wmissing-prototypes) - also in gcc since 2.95, but not

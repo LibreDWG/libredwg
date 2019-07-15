@@ -119,9 +119,32 @@ ac_cv_func_malloc_0_nonnull=yes
 ac_cv_func_realloc_0_nonnull=yes
 AC_CHECK_HEADERS([stdlib.h string.h stddef.h unistd.h malloc.h wchar.h ctype.h \
                   float.h limits.h \
-                  libgen.h getopt.h alloca.h valgrind/valgrind.h])
+                  libgen.h getopt.h alloca.h valgrind/valgrind.h \
+                  sys/param.h])
+AC_CHECK_HEADERS([endian.h sys/endian.h machine/endian.h winsock2.h \
+                  byteorder.h byteswap.h sys/byteorder.h], [break])
+AC_C_BIGENDIAN
 AC_CHECK_HEADER_STDBOOL
 AX_INCLUDE_STRCASECMP
+
+# test for correct byteswap.h
+if test x$ac_cv_header_byteswap_h = xyes ; then
+   m4_foreach([FUNC], [le32toh,le64toh,htole32], [
+     AC_MSG_CHECKING([if FUNC is available])
+     AC_LINK_IFELSE([AC_LANG_SOURCE([
+#include <byteswap.h>
+int
+main(void)
+{
+	FUNC[](42);
+	return 0;
+}
+        ])], [AC_DEFINE(HAVE_[]m4_toupper(FUNC), [1],
+                [Define to 1 if] FUNC [is available.])
+              AC_MSG_RESULT([yes])
+        ], [AC_MSG_RESULT([no])])
+        ])dnl
+fi
 
 # Don't bother testing for libps headers if libps is not available.
 if test yes = "$libredwg_have_libps" ; then

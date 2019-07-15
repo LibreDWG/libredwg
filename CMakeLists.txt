@@ -90,7 +90,7 @@ if(CMAKE_MAJOR_VERSION GREATER 2)
   test_big_endian(IS_BIG_ENDIAN)
   if(IS_BIG_ENDIAN)
     message(ERROR "Big Endian not supported: <${error}>")
-    add_definitions(-DBIG_ENDIAN)
+    add_definitions(-DWORDS_BIGENDIAN)
   endif()
 endif()
 

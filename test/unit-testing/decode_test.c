@@ -1,5 +1,9 @@
 #define DECODE_TEST_C
-//#include "../../src/common.h"
+#define _POSIX_SOURCE 1
+#define _DEFAULT_SOURCE 1
+#define _BSD_SOURCE 1
+#include "../../src/common.h"
+#include "../../src/config.h"
 #include <stddef.h>
 #ifdef CLANG_DIAG_IGNORE
 CLANG_DIAG_IGNORE (-Wpragma-pack)

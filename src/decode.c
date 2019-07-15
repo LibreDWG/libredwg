@@ -20,6 +20,9 @@
  * modified by Denis Pruchkovsky
  */
 
+#define _POSIX_SOURCE 1
+#define _DEFAULT_SOURCE 1
+#define _BSD_SOURCE 1
 #include "config.h"
 #ifdef __STDC_ALLOC_LIB__
 #  define __STDC_WANT_LIB_EXT2__ 1 /* for strdup */
@@ -1075,12 +1078,45 @@ dwg_resolve_objectrefs_silent (Dwg_Data *restrict dwg)
   loglevel = oldloglevel;
 }
 
-/* endian specific */
 void
 bfr_read (void *restrict dst, BITCODE_RC *restrict *restrict src, size_t size)
 {
   memcpy (dst, *src, size);
   *src += size;
+}
+
+/* endian specific */
+void
+bfr_read_32 (void *restrict dst, BITCODE_RC *restrict *restrict src,
+             size_t size)
+{
+  size_t n;
+  uint32_t *dp = (uint32_t *)dst;
+
+  for (n = 0; n < size / sizeof (uint32_t); n++)
+    {
+      *dp++ = le32toh (*(uint32_t *)*src);
+      *src += sizeof (uint32_t);
+    }
+  size -= n * sizeof (uint32_t);
+  assert (size == 0);
+}
+
+/* endian specific */
+void
+bfr_read_64 (void *restrict dst, BITCODE_RC *restrict *restrict src,
+             size_t size)
+{
+  size_t n;
+  uint64_t *dp = (uint64_t *)dst;
+
+  for (n = 0; n < size / sizeof (uint64_t); n++)
+    {
+      *dp++ = le64toh (*(uint64_t *)*src);
+      *src += sizeof (uint64_t);
+    }
+  size -= n * sizeof (uint64_t);
+  assert (size == 0);
 }
 
 /* R2004 Literal Length
@@ -1432,8 +1468,7 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       if (error > DWG_ERR_CRITICAL)
         return error;
 
-      /* endian specific code: */
-      bfr_read (&dwg->header.section[i], &ptr, 8); // only the first two fields
+      bfr_read_32 (&dwg->header.section[i], &ptr, 8); // only the first two fields
       bytes_remaining -= 8;
       LOG_TRACE ("Section[%2d]=%2d,", i, (int)dwg->header.section[i].number)
       LOG_TRACE (" size: %5u,", dwg->header.section[i].size)
@@ -1476,8 +1511,7 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           && dwg->header.section[i].number < 0) // negative: gap/unused data
         //|| dwg->header.section[i].number > section_array_size))
         {
-          /* endian specific code: */
-          bfr_read (&dwg->header.section[i].parent, &ptr, 16);
+          bfr_read_32 (&dwg->header.section[i].parent, &ptr, 16);
           bytes_remaining -= 16;
           LOG_TRACE ("  Parent: %d, ", dwg->header.section[i].parent)
           LOG_TRACE ("Left:   %d, ", dwg->header.section[i].left)
@@ -1650,7 +1684,7 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     }
 
   ptr = decomp;
-  bfr_read (&dwg->header.section_infohdr, &ptr, 20);
+  bfr_read_32 (&dwg->header.section_infohdr, &ptr, 20);
   LOG_TRACE ("\n#### Read 2004 section_infohdr ####\n")
   LOG_TRACE ("num_desc:   %d\n", dwg->header.section_infohdr.num_desc)
   LOG_TRACE ("compressed: %d\n", dwg->header.section_infohdr.compressed)
@@ -1689,11 +1723,12 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           return DWG_ERR_INVALIDDWG;
         }
       info = &dwg->header.section_info[i];
-      /* endian specific code */
-      bfr_read (info, &ptr, 32 + 64); // fields + name[64]
+      bfr_read_64 (&info->size, &ptr, 8);
+      bfr_read_32 (&info->num_sections, &ptr, 32 - 8);
+      bfr_read (&info->name, &ptr, 64);
 
       LOG_TRACE ("\nsection_info[%d] fields:\n", i)
-      LOG_TRACE ("size:            %" PRIu64 "\n", info->size)
+      LOG_TRACE ("size:            %" PRId64 "\n", info->size)
       LOG_TRACE ("num_sections:    " FORMAT_RL "\n", info->num_sections)
       LOG_TRACE ("max_decomp_size: %u / 0x%x\n", // normally 0x7400, max 0x8000
                  info->max_decomp_size, info->max_decomp_size)
@@ -1786,7 +1821,8 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   break;
                 }
               /* endian specific code: */
-              bfr_read (&page, &ptr, 16);
+              bfr_read_32 (&page, &ptr, 8);
+              bfr_read_64 (&page.address, &ptr, 8);
               sum_decomp += page.size; /* TODO: uncompressed size */
 #if 0
               if (page.address < sum_decomp)
@@ -2011,11 +2047,11 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       bit_read_fixed (dat, es.char_data, 32);
 
       //? if encrypted properties: security_type & 2 ??
-      sec_mask = 0x4164536b ^ address;
+      sec_mask = htole32(0x4164536b ^ address);
       {
         int k;
         for (k = 0; k < 8; ++k)
-          es.long_data[k] ^= sec_mask;
+          es.long_data[k] = le32toh(es.long_data[k] ^ sec_mask);
       }
 
       LOG_INFO ("=== Section %s (%u) @%u ===\n", info->name, i, address)
