@@ -18,6 +18,16 @@ dnl for older systems use this:
 dnl AM_INIT_AUTOMAKE([1.11.6 gnu no-define])
 AM_INIT_AUTOMAKE([1.12.2 gnu no-define serial-tests dist-xz])
 
+# Keep this in sync with what is passed in AC_INIT
+TARBALL_VERSION_FILE=".tarball-version"
+dnl Define these substitutions here to keep all version information in
+dnl one place. For information on how to properly maintain the library
+dnl version information, refer to the libtool manual, section "Updating
+dnl library version information":
+dnl http://www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html
+AC_SUBST([LIBREDWG_SO_VERSION], [0:8:0])
+AC_SUBST([TARBALL_VERSION_FILE])
+
 AC_CONFIG_MACRO_DIR([m4])
 
 # Check if automake supports 'pretty' builds, if so enable them by default
@@ -27,6 +37,8 @@ dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
 AM_CONFIG_HEADER([src/config.h])
 AC_MSG_CHECKING([git version])
 AC_MSG_RESULT($PACKAGE_VERSION)
+AC_MSG_CHECKING([so version-info])
+AC_MSG_RESULT($LIBREDWG_SO_VERSION)
 
 ISODATE=`date +%Y-%m-%d`
 AC_SUBST(ISODATE)

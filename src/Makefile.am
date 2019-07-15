@@ -53,7 +53,7 @@ libredwg_la_SOURCES += \
 endif
 endif
 
-libredwg_la_LDFLAGS = -version-info 0:0:0 -no-undefined -lm
+libredwg_la_LDFLAGS = -version-info $(LIBREDWG_SO_VERSION) -no-undefined -lm
 
 EXTRA_HEADERS = \
 	dwg.spec \
