@@ -12,11 +12,11 @@ if (/^Warning: (?:Unhandled|Unstable) Class (?:object|entity) \d+ (\w+) /) {
 }
 next unless $object;
 
-if (/ \(bitsize: (.\d+), hdlpos/) {
-  print "//bitsize hdlpos=$1\n";
+if (/ bitsize: (\d+), hdl_dat/) {
+  print "//bitsize computed=$1\n";
   $bitsize = $1; next;
 }
-elsif (/ Decode (?:object|entity) \w+ bitsize: (\d+)/) {
+elsif (/^bitsize: (\d+)/) {
   print "//bitsize decode=$1\n";
   $bitsize = $1; next;
 }
