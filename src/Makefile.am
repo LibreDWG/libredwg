@@ -20,6 +20,7 @@
 lib_LTLIBRARIES = libredwg.la
 WARN_CFLAGS = @WARN_CFLAGS@
 AM_CFLAGS   = -I$(top_srcdir)/include -I. $(WARN_CFLAGS)
+libredwg_la_LDFLAGS = -version-info $(LIBREDWG_SO_VERSION) -no-undefined -lm
 
 libredwg_la_SOURCES = \
 	dwg.c \
@@ -52,8 +53,6 @@ libredwg_la_SOURCES += \
 	in_dxfb.c
 endif
 endif
-
-libredwg_la_LDFLAGS = -version-info $(LIBREDWG_SO_VERSION) -no-undefined -lm
 
 EXTRA_HEADERS = \
 	dwg.spec \
