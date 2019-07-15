@@ -1,0 +1,230 @@
+ACDBPERSSUBENTMANAGER: 0x27C (73) test/test-data/2004/BoxUnion.dxf:
+0100000010100100000010010000001010100100000100001100010000010000110011111
+
+[hdloff, strsize, commonsize, bitsize]=[54,0,69,12]
+H330 4.1.C: 0100000100001100 2 positions
+H330 4.1.C: 0100000100001100 2 positions
+distribute positions: H330 H330 
+BL90 2: 0100000010 3 positions
+BL90 0: 10 15 positions
+BL90 2: 0100000010 3 positions
+BL90 2: 0100000010 3 positions
+distribute positions: BL90 BL90 BL90 
+BL90 0: 10 15 positions
+BL90 0: 10 15 positions
+
+fixed = [[1,10],[13,22],[23,32],[37,52],[53,68]]
+sortd = [[1,10],[13,22],[23,32],[37,52],[53,68]]
+
+Definite result: 62/73	2004/BoxUnion.dxf
+----------------
+FIELD_BL ([], 90);	// 2 [1,10]
+HOLE([11,12],10) len = 2
+FIELD_BL ([], 90);	// 2 [13,22]
+FIELD_BL ([], 90);	// 2 [23,32]
+HOLE([33,36],1010) len = 4
+FIELD_H (reactors[0], 330);	// 4.1.C [37,52]
+FIELD_H (ownerhandle, 330);	// 4.1.C [53,68]
+HOLE([69,73],11111) len = 5
+----------------
+Todo: 6 + 62 = 68, Missing: 5
+FIELD_BL ([], 90);	// 0 10 [[11,12],[33,34],[35,36]]
+FIELD_BL ([], 90);	// 0 10 [[11,12],[33,34],[35,36]]
+FIELD_BL ([], 90);	// 0 10 [[11,12],[33,34],[35,36]]
+
+Most probable result: (TODO)
+
+ACDBPERSSUBENTMANAGER: 0x2E0 (98) test/test-data/example_2000.dxf:
+01000000101001000000100100000011100100000001010000000101000001000011000100000100001100001100001111
+
+[hdloff, strsize, commonsize, bitsize]=[72,0,68,14]
+H330 4.1.C: 0100000100001100 2 positions
+H330 4.1.C: 0100000100001100 2 positions
+distribute positions: H330 H330 
+BL90 2: 0100000010 2 positions
+BL90 0: 10 18 positions
+BL90 2: 0100000010 2 positions
+distribute positions: BL90 BL90 
+BL90 3: 0100000011 fixed = [23,32]
+BL90 0: 10 18 positions
+BL90 1: 0100000001 2 positions
+BL90 1: 0100000001 2 positions
+distribute positions: BL90 BL90 
+
+fixed = [[1,10],[13,22],[23,32],[35,44],[45,54],[55,70],[71,86]]
+sortd = [[1,10],[13,22],[23,32],[35,44],[45,54],[55,70],[71,86]]
+
+Definite result: 82/98	example_2000.dxf
+----------------
+FIELD_BL ([], 90);	// 2 [1,10]
+HOLE([11,12],10) len = 2
+FIELD_BL ([], 90);	// 2 [13,22]
+FIELD_BL ([], 90);	// 3 [23,32]
+HOLE([33,34],10) len = 2
+FIELD_BL ([], 90);	// 1 [35,44]
+FIELD_BL ([], 90);	// 1 [45,54]
+FIELD_H (reactors[0], 330);	// 4.1.C [55,70]
+FIELD_H (ownerhandle, 330);	// 4.1.C [71,86]
+HOLE([87,98],001100001111) len = 12
+----------------
+Todo: 4 + 82 = 86, Missing: 12
+FIELD_BL ([], 90);	// 0 10 [[11,12],[33,34],[90,91]]
+FIELD_BL ([], 90);	// 0 10 [[11,12],[33,34],[90,91]]
+
+Most probable result: (TODO)
+
+ACDBPERSSUBENTMANAGER: 0x2E0 (89) test/test-data/example_2004.dxf:
+01000000101001000000100100000011100100000001010000000101000001000011000100000100001100111
+
+[hdloff, strsize, commonsize, bitsize]=[72,0,69,14]
+H330 4.1.C: 0100000100001100 2 positions
+H330 4.1.C: 0100000100001100 2 positions
+distribute positions: H330 H330 
+BL90 2: 0100000010 2 positions
+BL90 0: 10 17 positions
+BL90 2: 0100000010 2 positions
+distribute positions: BL90 BL90 
+BL90 3: 0100000011 fixed = [23,32]
+BL90 0: 10 17 positions
+BL90 1: 0100000001 2 positions
+BL90 1: 0100000001 2 positions
+distribute positions: BL90 BL90 
+
+fixed = [[1,10],[13,22],[23,32],[35,44],[45,54],[55,70],[71,86]]
+sortd = [[1,10],[13,22],[23,32],[35,44],[45,54],[55,70],[71,86]]
+
+Definite result: 82/89	example_2004.dxf
+----------------
+FIELD_BL ([], 90);	// 2 [1,10]
+HOLE([11,12],10) len = 2
+FIELD_BL ([], 90);	// 2 [13,22]
+FIELD_BL ([], 90);	// 3 [23,32]
+HOLE([33,34],10) len = 2
+FIELD_BL ([], 90);	// 1 [35,44]
+FIELD_BL ([], 90);	// 1 [45,54]
+FIELD_H (reactors[0], 330);	// 4.1.C [55,70]
+FIELD_H (ownerhandle, 330);	// 4.1.C [71,86]
+HOLE([87,89],111) len = 3
+----------------
+Todo: 4 + 82 = 86, Missing: 3
+FIELD_BL ([], 90);	// 0 10 [[11,12],[33,34]]
+FIELD_BL ([], 90);	// 0 10 [[11,12],[33,34]]
+
+Most probable result: (TODO)
+
+ACDBPERSSUBENTMANAGER: 0x2E0 (89) test/test-data/example_2007.dxf:
+01000000101001000000100100000011100100000001010000000100100000100001100010000010000110011
+
+[hdloff, strsize, commonsize, bitsize]=[73,0,69,14]
+H330 4.1.C: 0100000100001100 2 positions
+H330 4.1.C: 0100000100001100 2 positions
+distribute positions: H330 H330 
+BL90 2: 0100000010 2 positions
+BL90 0: 10 17 positions
+BL90 2: 0100000010 2 positions
+distribute positions: BL90 BL90 
+BL90 3: 0100000011 fixed = [23,32]
+BL90 0: 10 17 positions
+BL90 1: 0100000001 2 positions
+BL90 1: 0100000001 2 positions
+distribute positions: BL90 BL90 
+
+fixed = [[1,10],[13,22],[23,32],[35,44],[45,54],[56,71],[72,87]]
+sortd = [[1,10],[13,22],[23,32],[35,44],[45,54],[56,71],[72,87]]
+
+Definite result: 82/89	example_2007.dxf
+----------------
+FIELD_BL ([], 90);	// 2 [1,10]
+HOLE([11,12],10) len = 2
+FIELD_BL ([], 90);	// 2 [13,22]
+FIELD_BL ([], 90);	// 3 [23,32]
+HOLE([33,34],10) len = 2
+FIELD_BL ([], 90);	// 1 [35,44]
+FIELD_BL ([], 90);	// 1 [45,54]
+HOLE([55,55],0) len = 1
+FIELD_H (reactors[0], 330);	// 4.1.C [56,71]
+FIELD_H (ownerhandle, 330);	// 4.1.C [72,87]
+HOLE([88,89],11) len = 2
+----------------
+Todo: 4 + 82 = 86, Missing: 3
+FIELD_BL ([], 90);	// 0 10 [[11,12],[33,34]]
+FIELD_BL ([], 90);	// 0 10 [[11,12],[33,34]]
+
+Most probable result: (TODO)
+
+ACDBPERSSUBENTMANAGER: 0x2E0 (89) test/test-data/example_2010.dxf:
+01000000101001000000100100000011100100000001010000000100100000100001100010000010000110011
+
+[hdloff, strsize, commonsize, bitsize]=[65,0,37,10]
+H330 4.1.C: 0100000100001100 2 positions
+H330 4.1.C: 0100000100001100 2 positions
+distribute positions: H330 H330 
+BL90 2: 0100000010 2 positions
+BL90 0: 10 17 positions
+BL90 2: 0100000010 2 positions
+distribute positions: BL90 BL90 
+BL90 3: 0100000011 fixed = [23,32]
+BL90 0: 10 17 positions
+BL90 1: 0100000001 2 positions
+BL90 1: 0100000001 2 positions
+distribute positions: BL90 BL90 
+
+fixed = [[1,10],[13,22],[23,32],[35,44],[45,54],[56,71],[72,87]]
+sortd = [[1,10],[13,22],[23,32],[35,44],[45,54],[56,71],[72,87]]
+
+Definite result: 82/89	example_2010.dxf
+----------------
+FIELD_BL ([], 90);	// 2 [1,10]
+HOLE([11,12],10) len = 2
+FIELD_BL ([], 90);	// 2 [13,22]
+FIELD_BL ([], 90);	// 3 [23,32]
+HOLE([33,34],10) len = 2
+FIELD_BL ([], 90);	// 1 [35,44]
+FIELD_BL ([], 90);	// 1 [45,54]
+HOLE([55,55],0) len = 1
+FIELD_H (reactors[0], 330);	// 4.1.C [56,71]
+FIELD_H (ownerhandle, 330);	// 4.1.C [72,87]
+HOLE([88,89],11) len = 2
+----------------
+Todo: 4 + 82 = 86, Missing: 3
+FIELD_BL ([], 90);	// 0 10 [[11,12],[33,34]]
+FIELD_BL ([], 90);	// 0 10 [[11,12],[33,34]]
+
+Most probable result: (TODO)
+
+ACDBPERSSUBENTMANAGER: 0x2E0 (64) test/test-data/example_2013.dxf:
+0100000010100100000010101010001000001000011000100000100001100111
+
+[hdloff, strsize, commonsize, bitsize]=[39,0,38,7]
+H330 4.1.C: 0100000100001100 2 positions
+H330 4.1.C: 0100000100001100 2 positions
+distribute positions: H330 H330 
+BL90 2: 0100000010 2 positions
+BL90 0: 10 14 positions
+BL90 2: 0100000010 2 positions
+distribute positions: BL90 BL90 
+BL90 0: 10 14 positions
+BL90 0: 10 14 positions
+BL90 0: 10 14 positions
+
+fixed = [[1,10],[13,22],[30,45],[46,61]]
+sortd = [[1,10],[13,22],[30,45],[46,61]]
+
+Definite result: 52/64	example_2013.dxf
+----------------
+FIELD_BL ([], 90);	// 2 [1,10]
+HOLE([11,12],10) len = 2
+FIELD_BL ([], 90);	// 2 [13,22]
+HOLE([23,29],1010100) len = 7
+FIELD_H (reactors[0], 330);	// 4.1.C [30,45]
+FIELD_H (ownerhandle, 330);	// 4.1.C [46,61]
+HOLE([62,64],111) len = 3
+----------------
+Todo: 8 + 52 = 60, Missing: 4
+FIELD_BL ([], 90);	// 0 10 [[11,12],[23,24],[25,26],[27,28]]
+FIELD_BL ([], 90);	// 0 10 [[11,12],[23,24],[25,26],[27,28]]
+FIELD_BL ([], 90);	// 0 10 [[11,12],[23,24],[25,26],[27,28]]
+FIELD_BL ([], 90);	// 0 10 [[11,12],[23,24],[25,26],[27,28]]
+
+Most probable result: (TODO)
+
