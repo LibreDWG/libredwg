@@ -60,14 +60,18 @@
         char *s2 = strrplc (s1, "[rcount2]", "[%d]");                         \
         if (s2)                                                               \
           {                                                                   \
+            GCC_DIAG_IGNORE(-Wformat-nonliteral)                              \
             LOG_TRACE (strcat(s2, ": " FORMAT_##type " [" #type " %d]\n"),    \
                        rcount1, rcount2, _obj->nam, dxfgroup);                \
+            GCC_DIAG_RESTORE                                                  \
             free (s2); free (s1);                                             \
           }                                                                   \
         else                                                                  \
           {                                                                   \
+            GCC_DIAG_IGNORE(-Wformat-nonliteral)                              \
             LOG_TRACE (strcat(s1, ": " FORMAT_##type " [" #type " %d]\n"),    \
                        rcount1, _obj->nam, dxfgroup);                         \
+            GCC_DIAG_RESTORE                                                  \
             free (s1);                                                        \
           }                                                                   \
       }                                                                       \
@@ -83,14 +87,18 @@
         char *s2 = strrplc (s1, "[rcount2]", "[%d]");                         \
         if (s2)                                                               \
           {                                                                   \
+            GCC_DIAG_IGNORE(-Wformat-nonliteral)                              \
             LOG_TRACE (strcat(s2, ": " FORMAT_##type " " #type "\n"),         \
                        rcount1, rcount2, _obj->nam)                           \
+            GCC_DIAG_RESTORE                                                  \
             free (s2); free (s1);                                             \
           }                                                                   \
         else                                                                  \
           {                                                                   \
+            GCC_DIAG_IGNORE(-Wformat-nonliteral)                              \
             LOG_TRACE (strcat(s1, ": " FORMAT_##type " " #type "\n"),         \
                        rcount1, _obj->nam)                                    \
+            GCC_DIAG_RESTORE                                                  \
             free (s1);                                                        \
           }                                                                   \
       }                                                                       \
@@ -125,16 +133,20 @@
         char *s2 = strrplc (s1, "[rcount2]", "[%d]");                         \
         if (s2)                                                               \
           {                                                                   \
+            GCC_DIAG_IGNORE(-Wformat-nonliteral)                              \
             LOG_TRACE (strcat(s2, ": (" FORMAT_BD ", " FORMAT_BD ") ["        \
                               #type " %d]\n"),                                \
                        rcount1, rcount2, _obj->nam.x, _obj->nam.y, dxf)       \
+            GCC_DIAG_RESTORE                                                  \
             free (s2); free (s1);                                             \
           }                                                                   \
         else                                                                  \
           {                                                                   \
+            GCC_DIAG_IGNORE(-Wformat-nonliteral)                              \
             LOG_TRACE (strcat(s1, ": (" FORMAT_BD ", " FORMAT_BD ") ["        \
                                    #type " %d]\n"),                           \
                        rcount1, _obj->nam.x, _obj->nam.y, dxf)                \
+            GCC_DIAG_RESTORE                                                  \
             free (s1);                                                        \
           }                                                                   \
       }                                                                       \
@@ -150,24 +162,28 @@
         char *s2 = strrplc (s1, "[rcount2]", "[%d]");                         \
         if (s2)                                                               \
           {                                                                   \
+            GCC_DIAG_IGNORE(-Wformat-nonliteral)                              \
             LOG_TRACE (strcat(s2, ": (" FORMAT_BD ", " FORMAT_BD ", "         \
                                   FORMAT_BD ") [" #type " %d]\n"),            \
                        rcount1, rcount2, _obj->nam.x, _obj->nam.y,            \
                        _obj->nam.z, dxf)                                      \
+            GCC_DIAG_RESTORE                                                  \
             free (s2); free (s1);                                             \
           }                                                                   \
         else                                                                  \
           {                                                                   \
+            GCC_DIAG_IGNORE(-Wformat-nonliteral)                              \
             LOG_TRACE (strcat(s1, ": (" FORMAT_BD ", " FORMAT_BD ", "         \
                                   FORMAT_BD ") [" #type " %d]\n"),            \
                        rcount1, _obj->nam.x, _obj->nam.y,                     \
                        _obj->nam.z, dxf)                                      \
+            GCC_DIAG_RESTORE                                                  \
             free (s1);                                                        \
           }                                                                   \
       }                                                                       \
     else                                                                      \
-      LOG_TRACE (#nam ": (" FORMAT_BD ", " FORMAT_BD ", " FORMAT_BD ") [" #type \
-                  " %d]\n",                                                   \
+      LOG_TRACE (#nam ": (" FORMAT_BD ", " FORMAT_BD ", " FORMAT_BD ") ["     \
+                 #type " %d]\n",                                              \
                 _obj->nam.x, _obj->nam.y, _obj->nam.z, dxf)                   \
   }
 

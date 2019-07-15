@@ -181,7 +181,9 @@ dwg_version_as (const char *version)
     return R_INVALID;
 }
 
-/* replace from ("[rcount2].") with to ("[%d].") in s */
+/* replace from ("[rcount1]") with to ("[%d]") in s (e.g. "ref[rcount1].classname").
+   s is a global constant (#nam), so we cannot change it in-place.
+ */
 char *strrplc (const char* s, const char *from, const char *to)
 {
   char *p = strstr (s, from);
