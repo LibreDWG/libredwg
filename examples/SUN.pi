@@ -1,0 +1,150 @@
+import unknown.
+
+/* SUN field packing problem.
+   examples/unknown generated example, needs picat-lang.org.
+   Usage: picat [-g go2] examples/SUN.pi
+*/
+def(0, Data) =>
+  println("SUN: 0x80 (168) test/test-data/DS_line_R2013.dxf:"),
+  Class="SUN",
+  Dxf="test/test-data/DS_line_R2013.dxf",
+  Version=2013,
+  Offsets=[158, 0, 22, 18], % hdloff, strsize, commonsize, bitsize
+  S="010000000101000111111111111111111111111110000100000000001100000100100111100100100101000000000010000000111110010011011100000011001000000101100000001001000001001010010000",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["0100000100101001", '4.1.29', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["0100000001", '1', [], "class_version", 90])
+    ,new_struct('B290', ["0", '0', [], "is_on", 290])
+    %new_struct('_CMC63', ["0000000000", '7', [], "color", 63])
+    %new_struct('_BLd421', ["0011111111111111111111111100000000", '16777215', [], "unknown", 421])
+    ,new_struct('BD40', ["01", '1.0', [], "intensity", 40])
+    ,new_struct('B291', ["0", '1', [], "has_shadow", 291])
+    ,new_struct('BL91', ["0000010010011110010010010100000000", '2455826', [], "julian_day", 91])
+    ,new_struct('BL92', ["0010000000111110010011011100000011", '54000000', [], "time", 92])
+    ,new_struct('B292', ["0", '0', [], "is_dst", 292])
+    ,new_struct('BS70', ["10", '0', [], "shadow_type", 70])
+    ,new_struct('BS71', ["11", '256', [], "shadow_mapsize", 71])
+    ,new_struct('BS280', ["0100000001", '1', [], "shadow_softness", 280])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(1, Data) =>
+  println("SUN: 0xD1 (168) test/test-data/DS_line_R2013.dxf:"),
+  Class="SUN",
+  Dxf="test/test-data/DS_line_R2013.dxf",
+  Version=2013,
+  Offsets=[158, 0, 22, 18], % hdloff, strsize, commonsize, bitsize
+  S="010000000101000111111111111111111111111110000100000000001100000100100111100100100101000000000010000000111110010011011100000011001000000101100000001001000001110011110000",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["0100000111001111", '4.1.CF', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["0100000001", '1', [], "class_version", 90])
+    ,new_struct('B290', ["0", '0', [], "is_on", 290])
+    ,new_struct('CMC63', ["0000000000", '7', [], "color", 63])
+    %new_struct('_BLd421', ["0011111111111111111111111100000000", '16777215', [], "unknown", 421])
+    ,new_struct('BD40', ["01", '1.0', [], "intensity", 40])
+    ,new_struct('B291', ["0", '1', [], "has_shadow", 291])
+    ,new_struct('BL91', ["0000010010011110010010010100000000", '2455826', [], "julian_day", 91])
+    ,new_struct('BL92', ["0010000000111110010011011100000011", '54000000', [], "time", 92])
+    ,new_struct('B292', ["0", '0', [], "is_dst", 292])
+    ,new_struct('BS70', ["10", '0', [], "shadow_type", 70])
+    ,new_struct('BS71', ["11", '256', [], "shadow_mapsize", 71])
+    ,new_struct('BS280', ["0100000001", '1', [], "shadow_softness", 280])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(2, Data) =>
+  println("SUN: 0x761 (167) test/test-data/example_2007.dxf:"),
+  Class="SUN",
+  Dxf="test/test-data/example_2007.dxf",
+  Version=2007,
+  Offsets=[158, 0, 519, 67], % hdloff, strsize, commonsize, bitsize
+  S="01000000011100011111111111111111111111111000010000000000110000001111100000110010010100000000001000000011111001001101110000001101011000000010010000100000001001011010111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["010000100000001001011010", '4.2.25A', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["0100000001", '1', [], "class_version", 90])
+    ,new_struct('B290', ["0", '1', [], "is_on", 290])
+    %new_struct('_CMC63', ["0000000000", '7', [], "color", 63])
+    %new_struct('_BLd421', ["0011111111111111111111111100000000", '16777215', [], "unknown", 421])
+    ,new_struct('BD40', ["01", '1.0', [], "intensity", 40])
+    ,new_struct('B291', ["0", '1', [], "has_shadow", 291])
+    ,new_struct('BL91', ["0000001111100000110010010100000000", '2458383', [], "julian_day", 91])
+    ,new_struct('BL92', ["0010000000111110010011011100000011", '54000000', [], "time", 92])
+    ,new_struct('B292', ["0", '0', [], "is_dst", 292])
+    ,new_struct('BS70', ["10", '0', [], "shadow_type", 70])
+    ,new_struct('BS71', ["11", '256', [], "shadow_mapsize", 71])
+    ,new_struct('BS280', ["0100000001", '1', [], "shadow_softness", 280])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(3, Data) =>
+  println("SUN: 0x761 (166) test/test-data/example_2013.dxf:"),
+  Class="SUN",
+  Dxf="test/test-data/example_2013.dxf",
+  Version=2013,
+  Offsets=[150, 0, 488, 63], % hdloff, strsize, commonsize, bitsize
+  S="0100000001110001111111111111111111111111100001000000000011000000111110000011001001010000000000100000001111100100110111000000110101100000001001000010000000100101101011",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["010000100000001001011010", '4.2.25A', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["0100000001", '1', [], "class_version", 90])
+    ,new_struct('B290', ["0", '1', [], "is_on", 290])
+    %new_struct('_CMC63', ["0000000000", '7', [], "color", 63])
+    %new_struct('_BLd421', ["0011111111111111111111111100000000", '16777215', [], "unknown", 421])
+    ,new_struct('BD40', ["01", '1.0', [], "intensity", 40])
+    ,new_struct('B291', ["0", '1', [], "has_shadow", 291])
+    ,new_struct('BL91', ["0000001111100000110010010100000000", '2458383', [], "julian_day", 91])
+    ,new_struct('BL92', ["0010000000111110010011011100000011", '54000000', [], "time", 92])
+    ,new_struct('B292', ["0", '0', [], "is_dst", 292])
+    ,new_struct('BS70', ["10", '0', [], "shadow_type", 70])
+    ,new_struct('BS71', ["11", '256', [], "shadow_mapsize", 71])
+    ,new_struct('BS280', ["0100000001", '1', [], "shadow_softness", 280])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(4, Data) =>
+  println("SUN: 0x761 (167) test/test-data/example_2018.dxf:"),
+  Class="SUN",
+  Dxf="test/test-data/example_2018.dxf",
+  Version=2018,
+  Offsets=[157, 0, 335, 49], % hdloff, strsize, commonsize, bitsize
+  S="01000000011100011111111111111111111111111000010000000000110000001111100000110010010100000000001000000011111001001101110000001101011000000011010001000000001010011001111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+    %new_struct('_H330', ["110000100000010100000111", 'c.2.507', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000001", '1', [], "class_version", 90])
+    ,new_struct('B290', ["0", '1', [], "is_on", 290])
+    %new_struct('_CMC63', ["0000000000", '7', [], "color", 63])
+    %new_struct('_BLd421', ["0011111111111111111111111100000000", '16777215', [], "unknown", 421])
+    ,new_struct('BD40', ["01", '1.0', [], "intensity", 40])
+    ,new_struct('B291', ["0", '1', [], "has_shadow", 291])
+    ,new_struct('BL91', ["0000001111100000110010010100000000", '2458383', [], "julian_day", 91])
+    ,new_struct('BL92', ["0010000000111110010011011100000011", '54000000', [], "time", 92])
+    ,new_struct('B292', ["0", '0', [], "is_dst", 292])
+    ,new_struct('BS70', ["10", '0', [], "shadow_type", 70])
+    ,new_struct('BS71', ["11", '256', [], "shadow_mapsize", 71])
+    ,new_struct('BS280', ["0100000001", '1', [], "shadow_softness", 280])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+
+% summary: 490/836=58.6%
+
+go0 ?=> def(0,Data).
+go1 ?=> def(1,Data).
+go2 ?=> def(2,Data).
+go3 ?=> def(3,Data).
+go4 ?=> def(4,Data).
+
+main => go0,
+        go1,
+        go2,
+        go3,
+        go4.

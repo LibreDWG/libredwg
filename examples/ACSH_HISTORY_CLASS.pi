@@ -1,0 +1,76 @@
+import unknown.
+
+/* ACSH_HISTORY_CLASS field packing problem.
+   examples/unknown generated example, needs picat-lang.org.
+   Usage: picat [-g go2] examples/ACSH_HISTORY_CLASS.pi
+*/
+def(0, Data) =>
+  println("ACSH_HISTORY_CLASS: 0x2E4 (73) test/test-data/example_2007.dxf:"),
+  Class="ACSH_HISTORY_CLASS",
+  Dxf="test/test-data/example_2007.dxf",
+  Version=2007,
+  Offsets=[51, 0, 61, 11], % hdloff, strsize, commonsize, bitsize
+  S="0100100001010001110101000000010001100000100000011001100100000001011100011",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["1100000100000011", 'c.1.3', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["0100100001", '33', [], "", 90])
+    ,new_struct('BL91', ["0100011101", '29', [], "", 91])
+    ,new_struct('H360', ["10000000", '8.0.0', [], "", 360])
+    ,new_struct('BL92', ["0100000001", '1', [], "", 92])
+    ,new_struct('BS280', ["10", '0', [], "", 280])
+    ,new_struct('BS281', ["10", '0', [], "", 281])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(1, Data) =>
+  println("ACSH_HISTORY_CLASS: 0x2E4 (73) test/test-data/example_2010.dxf:"),
+  Class="ACSH_HISTORY_CLASS",
+  Dxf="test/test-data/example_2010.dxf",
+  Version=2010,
+  Offsets=[43, 0, 29, 7], % hdloff, strsize, commonsize, bitsize
+  S="0100100001010001110101000000010001100000100000011001100100000001011100011",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["1100000100000011", 'c.1.3', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["0100100001", '33', [], "", 90])
+    ,new_struct('BL91', ["0100011101", '29', [], "", 91])
+    ,new_struct('H360', ["10000000", '8.0.0', [], "", 360])
+    ,new_struct('BL92', ["0100000001", '1', [], "", 92])
+    ,new_struct('BS280', ["10", '0', [], "", 280])
+    ,new_struct('BS281', ["10", '0', [], "", 281])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(2, Data) =>
+  println("ACSH_HISTORY_CLASS: 0x2E4 (80) test/test-data/example_2013.dxf:"),
+  Class="ACSH_HISTORY_CLASS",
+  Dxf="test/test-data/example_2013.dxf",
+  Version=2013,
+  Offsets=[43, 0, 30, 7], % hdloff, strsize, commonsize, bitsize
+  S="01001000010100011101010000000100011000001000000110011001000000010111000111111111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["1100000100000011", 'c.1.3', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["0100100001", '33', [], "", 90])
+    ,new_struct('BL91', ["0100011101", '29', [], "", 91])
+    ,new_struct('H360', ["001100100000001011100011", '3.2.2E3', [], "", 360])
+    ,new_struct('BL92', ["0100000001", '1', [], "", 92])
+    ,new_struct('BS280', ["10", '0', [], "", 280])
+    ,new_struct('BS281', ["10", '0', [], "", 281])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+
+% summary: 132/226=58.4%
+
+go0 ?=> def(0,Data).
+go1 ?=> def(1,Data).
+go2 ?=> def(2,Data).
+
+main => go0,
+        go1,
+        go2.
