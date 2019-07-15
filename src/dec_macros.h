@@ -801,6 +801,7 @@
     Bit_Chain sav_dat = *dat;                                                 \
     dat = str_dat;
 
+// TODO: unused
 #define START_STRING_STREAM                                                   \
   obj->has_strings = bit_read_B (dat);                                        \
   if (obj->has_strings)                                                       \
@@ -811,22 +812,25 @@
 #define END_STRING_STREAM                                                     \
   *dat = sav_dat;                                                             \
   }
-/* just skip the has_strings bit */
+/* just checking. skip the has_strings bit. hdl_dat is already set */
 #define START_HANDLE_STREAM                                                   \
-  *hdl_dat = *dat;                                                            \
   if (dat->version >= R_2007)                                                 \
     {                                                                         \
-      vcount = bit_position (dat);                                            \
+      vcount = 1 + bit_position (dat);                                        \
       if (obj->hdlpos != (unsigned long)vcount)                               \
         {                                                                     \
-          bit_set_position (hdl_dat, obj->hdlpos);                            \
-          LOG_HANDLE (" handle stream: %+ld @%lu.%u %s\n",                    \
+          LOG_HANDLE (" handle stream: %+ld @%lu.%u %s (@%lu.%u "             \
+                      " @%lu.%u)\n",                                          \
                       (long)obj->hdlpos - (long)vcount,                       \
-                      dat->byte - obj->address, dat->bit,                     \
+                      dat->byte, dat->bit,                                    \
                       ((long)obj->hdlpos - (long)vcount) >= 8                 \
                           ? "MISSING"                                         \
-                          : ((long)obj->hdlpos < (long)vcount) ? "OVERSHOOT"  \
-                                                               : "");         \
+                          : ((long)obj->hdlpos < (long)vcount)                \
+                            ? "OVERSHOOT"                                     \
+                            : "",                                             \
+                      obj->hdlpos/8, (unsigned)obj->hdlpos%8,                 \
+                      hdl_dat->byte, hdl_dat->bit);                           \
+          bit_set_position (dat, obj->hdlpos);                                \
         }                                                                     \
     }
 
@@ -950,46 +954,41 @@
   }                                                                           \
                                                                               \
   static int dwg_decode_##token##_private (                                   \
-      Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Object *restrict obj);          \
+      Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,                   \
+      Bit_Chain *restrict str_dat, Dwg_Object *restrict obj);                 \
                                                                               \
   /**Call dwg_add_##token and write the fields from the bitstream dat to the  \
    * entity or object. */                                                     \
   static int dwg_decode_##token (Bit_Chain *restrict dat,                     \
                                  Dwg_Object *restrict obj)                    \
   {                                                                           \
-    Bit_Chain *str_dat;                                                       \
     int error = dwg_add_##token (obj);                                        \
     if (error)                                                                \
       return error;                                                           \
-    if (dat->version >= R_2007)                                               \
+    SINCE (R_2007)                                                            \
       {                                                                       \
-        str_dat                                                               \
-            = calloc (1, sizeof (Bit_Chain)); /* separate string buffer */    \
-        if (!str_dat)                                                         \
-          return DWG_ERR_OUTOFMEM;                                            \
-        *str_dat = *dat;                                                      \
+        Bit_Chain obj_dat, str_dat, hdl_dat;                                  \
+        obj_dat = *dat;                                                       \
+        hdl_dat = *dat;                                                       \
+        str_dat = *dat;                                                       \
+        error = dwg_decode_##token##_private (&obj_dat, &hdl_dat, &str_dat, obj);  \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        str_dat = dat;                                                        \
-      }                                                                       \
-    error = dwg_decode_##token##_private (dat, str_dat, obj);                 \
-    if (dat->version >= R_2007)                                               \
-      {                                                                       \
-        free (str_dat);                                                       \
+        error = dwg_decode_##token##_private (dat, dat, dat, obj);            \
       }                                                                       \
     return error;                                                             \
   }                                                                           \
                                                                               \
   static int dwg_decode_##token##_private (                                   \
-      Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Object *restrict obj)           \
+      Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,                   \
+      Bit_Chain *restrict str_dat, Dwg_Object *restrict obj)                  \
   {                                                                           \
     BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;                    \
     int error;                                                                \
     Dwg_Entity_##token *ent, *_obj;                                           \
     Dwg_Object_Entity *_ent;                                                  \
     Dwg_Data *dwg = obj->parent;                                              \
-    Bit_Chain *hdl_dat = dat;                                                 \
     LOG_INFO ("Decode entity " #token "\n")                                   \
     _ent = obj->tio.entity;                                                   \
     ent = obj->tio.entity->tio.token;                                         \
@@ -997,7 +996,7 @@
     _ent->dwg = dwg;                                                          \
     _ent->objid = obj->index; /* obj ptr itself might move */                 \
     _obj->parent = obj->tio.entity;                                           \
-    if (dat->version >= R_13)                                                 \
+    SINCE (R_13)                                                              \
       {                                                                       \
         error = dwg_decode_entity (dat, hdl_dat, str_dat, _ent);              \
       }                                                                       \
@@ -1010,14 +1009,17 @@
 
 // Does size include the CRC?
 #define DWG_ENTITY_END                                                        \
-  {                                                                           \
-    int64_t pos = (obj->size + obj->address) * 8                              \
-                  - bit_position (dat->version >= R_2007 ? hdl_dat : dat);    \
-    if (pos)                                                                  \
-      LOG_HANDLE (" padding: %+ld %s\n", (long)pos,                           \
-                  pos >= 8 ? "MISSING" : (pos < 0) ? "OVERSHOOT" : "");       \
-  }                                                                           \
-  return error & ~DWG_ERR_UNHANDLEDCLASS;                                     \
+    {                                                                         \
+      unsigned long pos = obj_stream_position (dat, hdl_dat, str_dat);        \
+      int64_t padding = (obj->size * 8) - pos;                                \
+      SINCE(R_2007) bit_set_position(dat, pos);                               \
+      if (padding)                                                            \
+        LOG_HANDLE (" padding: %+ld %s\n", (long)padding,                     \
+                    padding >= 8                                              \
+                      ? "MISSING"                                             \
+                      : (padding < 0) ? "OVERSHOOT" : "");                    \
+    }                                                                         \
+    return error & ~DWG_ERR_UNHANDLEDCLASS;                                   \
   }
 
 #define DWG_OBJECT(token)                                                     \
@@ -1056,42 +1058,39 @@
     return 0;                                                                 \
   }                                                                           \
   static int dwg_decode_##token##_private (                                   \
-      Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Object *restrict obj);          \
+      Bit_Chain *restrict obj_dat, Bit_Chain *restrict hdl_dat,               \
+      Bit_Chain *restrict str_dat, Dwg_Object *restrict obj);                 \
+                                                                              \
   static int dwg_decode_##token (Bit_Chain *restrict dat,                     \
                                  Dwg_Object *restrict obj)                    \
   {                                                                           \
-    Bit_Chain *str_dat;                                                       \
     int error = dwg_add_##token (obj);                                        \
     if (error)                                                                \
       return error;                                                           \
-    if (dat->version >= R_2007)                                               \
+    SINCE (R_2007)                                                            \
       {                                                                       \
-        str_dat                                                               \
-            = calloc (1, sizeof (Bit_Chain)); /* separate string buffer */    \
-        if (!str_dat)                                                         \
-          return DWG_ERR_OUTOFMEM;                                            \
+        Bit_Chain obj_dat, str_dat, hdl_dat;                                  \
+        obj_dat = *dat;                                                       \
+        hdl_dat = *dat;                                                       \
+        str_dat = *dat;                                                       \
+        error = dwg_decode_##token##_private (&obj_dat, &hdl_dat, &str_dat, obj); \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        str_dat = dat;                                                        \
-      }                                                                       \
-    error = dwg_decode_##token##_private (dat, str_dat, obj);                 \
-    if (dat->version >= R_2007)                                               \
-      {                                                                       \
-        free (str_dat);                                                       \
+        error = dwg_decode_##token##_private (dat, dat, dat, obj);            \
       }                                                                       \
     return error;                                                             \
   }                                                                           \
                                                                               \
   static int dwg_decode_##token##_private (                                   \
-      Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Object *restrict obj)           \
+      Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,                   \
+      Bit_Chain *restrict str_dat, Dwg_Object *restrict obj)                  \
   {                                                                           \
     BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;                    \
     int error;                                                                \
     Dwg_Object_##token *_obj;                                                 \
     Dwg_Data *dwg = obj->parent;                                              \
-    Bit_Chain *hdl_dat = dat; /* handle stream initially the same */          \
-    LOG_INFO ("Decode object " #token "\n")                                    \
+    LOG_INFO ("Decode object " #token "\n")                                   \
     _obj = obj->tio.object->tio.token;                                        \
     error = dwg_decode_object (dat, hdl_dat, str_dat, obj->tio.object);       \
     if (error >= DWG_ERR_CRITICAL)                                            \

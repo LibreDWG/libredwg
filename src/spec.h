@@ -234,10 +234,10 @@
 
 #ifndef START_OBJECT_HANDLE_STREAM
 #  define START_OBJECT_HANDLE_STREAM                                          \
-  START_HANDLE_STREAM;                                                        \
-  VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 4, 0);             \
-  REACTORS(4);                                                                \
-  XDICOBJHANDLE(3)
+    START_HANDLE_STREAM;                                                      \
+    VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 4, 0);           \
+    REACTORS (4);                                                             \
+    XDICOBJHANDLE (3)
 #endif
 
 #ifndef COMMON_TABLE_FLAGS

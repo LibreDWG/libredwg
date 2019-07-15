@@ -5272,8 +5272,6 @@ typedef struct _dwg_object_object
   BITCODE_BL num_eed;
   Dwg_Eed *eed;
 
-  long unsigned int datpos; /* the data stream offset */
-
   BITCODE_H ownerhandle;        /*!< DXF 330 */
   BITCODE_BL num_reactors;
   BITCODE_H* reactors;
@@ -5298,11 +5296,6 @@ typedef struct _dwg_object
   char *name;            /*!< our public entity/object name */
   char *dxfname;         /*!< the internal dxf classname, often with a ACDB prefix */
 
-  unsigned long bitsize_address; /* bitsize offset: r13-2007 */
-  BITCODE_B  has_strings;        /*!< r2007+ */
-  BITCODE_RL stringstream_size;  /*!< r2007+ in bits, unused */
-  BITCODE_UMC handlestream_size; /*!< r2010+ in bits */
-
   Dwg_Object_Supertype supertype;
   union
   {
@@ -5311,14 +5304,17 @@ typedef struct _dwg_object
     char *unknown; /* i.e. unhandled class as raw bits */
   } tio;
 
-  BITCODE_RL bitsize;   /* common + object fields, but no handles */
-  unsigned long hdlpos; /* absolute */
   Dwg_Handle handle;
   struct _dwg_struct *parent;
 
-  unsigned long common_size; /* the relative offset from type ... end common_entity_data */
-  int handle_offset;
-  int string_offset;
+  BITCODE_RL bitsize;        /* common + object fields, but no handles */
+  unsigned long bitsize_pos; /* bitsize offset in bits: r13-2007 */
+  unsigned long hdlpos;      /* relative offset, in bits */
+  BITCODE_B  has_strings;        /*!< r2007+ */
+  BITCODE_RL stringstream_size;  /*!< r2007+ in bits, unused */
+  BITCODE_UMC handlestream_size; /*!< r2010+ in bits */
+  unsigned long common_size; /* relative offset from type ... end common_entity_data */
+
   unsigned long num_unknown_bits;
   char *unknown_bits;
 

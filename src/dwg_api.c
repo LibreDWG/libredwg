@@ -19743,7 +19743,8 @@ dwg_block_header_get_block_control (const dwg_obj_block_header *block_header,
       && block_header->parent->ownerhandle->obj->tio.object)
     {
       *error = 0;
-      return block_header->parent->ownerhandle->obj->tio.object->tio.BLOCK_CONTROL;
+      return block_header->parent->ownerhandle->obj->tio.object->tio
+          .BLOCK_CONTROL;
     }
   else
     {

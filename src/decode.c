@@ -1089,7 +1089,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             dwg->object[dwg->num_objects - 1].handle.value = last_handle;
           //TODO: blame Juca
 #endif
-          LOG_HANDLE ("dat: @%lu.%u\n", dat->byte, dat->bit);
+          //LOG_HANDLE ("dat: @%lu.%u\n", dat->byte, dat->bit);
         }
       if (dat->byte == oldpos)
         break;
@@ -2173,7 +2173,7 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   obj_dat.opts = hdl_dat.opts = dwg->opts & 0xf;
   error = read_2004_compressed_section (dat, dwg, &obj_dat, SECTION_OBJECTS);
-  if (error >= DWG_ERR_CRITICAL)
+  if (error >= DWG_ERR_CRITICAL || !obj_dat.chain)
     {
       LOG_ERROR ("Failed to read compressed objects section");
       if (obj_dat.chain)
@@ -2182,7 +2182,7 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
 
   error = read_2004_compressed_section (dat, dwg, &hdl_dat, SECTION_HANDLES);
-  if (error >= DWG_ERR_CRITICAL)
+  if (error >= DWG_ERR_CRITICAL || !hdl_dat.chain)
     {
       LOG_ERROR ("Failed to read compressed handles section");
       free (obj_dat.chain);
@@ -2210,6 +2210,7 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       if (section_size > 2040)
         {
           LOG_ERROR ("Object-map/handles section size greater than 2040!");
+          free (hdl_dat.chain);
           free (obj_dat.chain);
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
@@ -2272,10 +2273,8 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   while (section_size > 2);
 
   LOG_TRACE ("\nNum objects: %lu\n", (unsigned long)dwg->num_objects);
-  if (hdl_dat.chain)
-    free (hdl_dat.chain);
-  if (obj_dat.chain)
-    free (obj_dat.chain);
+  free (hdl_dat.chain);
+  free (obj_dat.chain);
   return error;
 }
 
@@ -2877,51 +2876,53 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   Dwg_Data *dwg = ent->dwg;
   Dwg_Object *obj = &dwg->object[ent->objid];
   Dwg_Object_Entity *_obj = ent;
-  unsigned long object_address = bit_position (dat);
+  unsigned long objectpos = bit_position (dat);
 
+  //obj->dat_address = dat->byte; // the data stream offset
+  obj->bitsize_pos = objectpos; // absolute. needed for encode
   PRE (R_13)
-  {
-
-    if (FIELD_VALUE (flag_r11) & 4 && FIELD_VALUE (kind_r11) > 2
-        && FIELD_VALUE (kind_r11) != 22)
-      FIELD_RD (elevation_r11, 30);
-    if (FIELD_VALUE (flag_r11) & 8)
-      FIELD_RD (thickness_r11, 39);
-    if (FIELD_VALUE (flag_r11) & 0x20)
-      {
-        Dwg_Object_Ref *hdl
-            = dwg_decode_handleref_with_code (dat, obj, dwg, 0);
-        if (hdl)
-          obj->handle = hdl->handleref;
-      }
-    if (FIELD_VALUE (extra_r11) & 4)
-      FIELD_RS (paper_r11, 0);
-  }
-
-  SINCE (R_2007) { *str_dat = *dat; }
-  VERSIONS (R_2000, R_2007)
-  {
-    obj->bitsize = bit_read_RL (dat); // until the handles
-    LOG_TRACE ("bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize, dat->byte,
-               dat->bit)
-  }
-  SINCE (R_2007)
-  {
-    // The handle stream offset, i.e. end of the object, right after
-    // the has_strings bit.
-    obj->hdlpos = obj->address * 8 + obj->bitsize;
-    obj->handle_offset = obj->bitsize;
-    SINCE (R_2010)
     {
-      LOG_HANDLE (" bitsize: " FORMAT_RL ", ", obj->bitsize);
-      LOG_HANDLE ("hdlpos: @%lu.%u)\n", obj->hdlpos / 8,
-                  (unsigned)(obj->hdlpos % 8));
+      if (FIELD_VALUE (flag_r11) & 4 && FIELD_VALUE (kind_r11) > 2
+          && FIELD_VALUE (kind_r11) != 22)
+        FIELD_RD (elevation_r11, 30);
+      if (FIELD_VALUE (flag_r11) & 8)
+        FIELD_RD (thickness_r11, 39);
+      if (FIELD_VALUE (flag_r11) & 0x20)
+        {
+          Dwg_Object_Ref *hdl
+            = dwg_decode_handleref_with_code (dat, obj, dwg, 0);
+          if (hdl)
+            obj->handle = hdl->handleref;
+        }
+      if (FIELD_VALUE (extra_r11) & 4)
+        FIELD_RS (paper_r11, 0);
     }
-    // and set the string stream (restricted to size)
-    // skip for all types without strings
-    if (obj->type >= 500 || obj_has_strings (obj->type))
-      error |= obj_string_stream (dat, obj, str_dat);
-  }
+
+  VERSIONS (R_2000, R_2007)
+    {
+      obj->bitsize = bit_read_RL (dat); // until the handles
+      LOG_TRACE ("bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize, dat->byte,
+                 dat->bit)
+    }
+  SINCE (R_2007)
+    {
+      SINCE (R_2010)
+        LOG_HANDLE (" bitsize: " FORMAT_RL ",", obj->bitsize);
+      // restrict the hdl_dat stream
+      error |= obj_handle_stream (dat, obj, hdl_dat);
+      // and set the string stream (restricted to size)
+      // skip for all types without strings
+      if (obj->type >= 500 || obj_has_strings (obj->type))
+        error |= obj_string_stream (dat, obj, str_dat);
+      else
+        {
+          str_dat->chain += str_dat->byte;
+          str_dat->byte = 0;
+          str_dat->bit = 0;
+          str_dat->size = 0;
+          bit_advance_position (str_dat, obj->bitsize - 1 - 8);
+        }
+    }
 
   error |= bit_read_H (dat, &(obj->handle));
   if (error & DWG_ERR_INVALIDHANDLE)
@@ -2944,7 +2945,7 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
 #include "common_entity_data.spec"
 
   // elsewhere: object data, handles, padding bits, crc
-  obj->common_size = bit_position (dat) - object_address;
+  obj->common_size = bit_position (dat) - objectpos;
   LOG_HANDLE ("--common_size: %lu\n", obj->common_size); // needed for unknown
 
   return error;
@@ -2960,14 +2961,13 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
                    Dwg_Object_Object *restrict _obj)
 {
   unsigned int i;
-  BITCODE_BS size;
   int error = 0;
   Dwg_Data *dwg = _obj->dwg;
   Dwg_Object *obj = &dwg->object[_obj->objid];
-  unsigned long object_address = bit_position (dat);
+  unsigned long objectpos = bit_position (dat);
 
-  _obj->datpos = dat->byte; // the data stream offset
-  SINCE (R_2007) { *str_dat = *dat; }
+  //obj->dat_address = dat->byte; // the data stream offset
+  obj->bitsize_pos = objectpos; // absolute. needed for encode
   VERSIONS (R_2000, R_2007)
     {
       obj->bitsize = bit_read_RL (dat);
@@ -2975,23 +2975,24 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
                  dat->bit)
     }
   SINCE (R_2007)
-  {
-    // LOG_HANDLE("Object bitsize: " FORMAT_RL " @%lu.%u %lu\n", _obj->bitsize,
-    //         dat->byte, dat->bit, bit_position(dat));
-    // The handle stream offset, i.e. end of the object, right after
-    // the has_strings bit.
-    obj->hdlpos = (obj->address * 8) + obj->bitsize;
-    obj->handle_offset = obj->bitsize;
-    SINCE (R_2010)
     {
-      LOG_HANDLE (" bitsize: " FORMAT_RL ", ", obj->bitsize);
-      LOG_HANDLE ("hdlpos: @%lu.%u\n", obj->hdlpos / 8,
-                  (unsigned)(obj->hdlpos % 8));
+      SINCE (R_2010)
+        LOG_HANDLE (" bitsize: " FORMAT_RL ",", obj->bitsize);
+      // restrict the hdl_dat stream
+      error |= obj_handle_stream (dat, obj, hdl_dat);
+
+      // and set the string stream (restricted to size)
+      if (obj->type >= 500 || obj_has_strings (obj->type))
+        error |= obj_string_stream (dat, obj, str_dat);
+      else
+        {
+          str_dat->chain += str_dat->byte;
+          str_dat->byte = 0;
+          str_dat->bit = 0;
+          str_dat->size = 0;
+          bit_advance_position (str_dat, obj->bitsize - 1 - 8);
+        }
     }
-    // and set the string stream (restricted to size)
-    if (obj->type >= 500 || obj_has_strings (obj->type))
-      error |= obj_string_stream (dat, obj, str_dat);
-  }
 
   error |= bit_read_H (dat, &obj->handle);
   if (error & DWG_ERR_INVALIDHANDLE)
@@ -3007,23 +3008,23 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
     return error;
 
   VERSIONS (R_13, R_14)
-  {
-    obj->bitsize = bit_read_RL (dat);
-    LOG_TRACE ("bitsize: %u [RL]\n", obj->bitsize);
-  }
+    {
+      obj->bitsize = bit_read_RL (dat);
+      LOG_TRACE ("bitsize: %u [RL]\n", obj->bitsize);
+    }
   // documentation bug, same BL type as with entity
   FIELD_BL (num_reactors, 0);
   SINCE (R_2010)
-  {
-    if (_obj->num_reactors > 0x1000)
-      {
-        LOG_WARN ("Invalid num_reactors %ld", (long)_obj->num_reactors)
-        _obj->num_reactors = 0;
-      }
-  }
+    {
+      if (_obj->num_reactors > 0x1000)
+        {
+          LOG_WARN ("Invalid num_reactors %ld", (long)_obj->num_reactors)
+            _obj->num_reactors = 0;
+        }
+    }
   SINCE (R_2004) { FIELD_B (xdic_missing_flag, 0); }
   SINCE (R_2013) { FIELD_B (has_ds_binary_data, 0); }
-  obj->common_size = bit_position (dat) - object_address;
+  obj->common_size = bit_position (dat) - objectpos;
   LOG_HANDLE ("--common_size: %lu\n", obj->common_size); // needed for unknown
 
   return error;
@@ -3192,6 +3193,7 @@ dwg_decode_handleref_with_code (Bit_Chain *restrict dat,
                                 Dwg_Object *restrict obj,
                                 Dwg_Data *restrict dwg, unsigned int code)
 {
+  int err;
   Dwg_Object_Ref *ref = (Dwg_Object_Ref *)calloc (1, sizeof (Dwg_Object_Ref));
   if (!ref)
     {
@@ -3199,10 +3201,14 @@ dwg_decode_handleref_with_code (Bit_Chain *restrict dat,
       return NULL;
     }
 
-  if (bit_read_H (dat, &ref->handleref))
+  err = bit_read_H (dat, &ref->handleref);
+  if (err)
     {
-      LOG_WARN ("Invalid handleref: wanted code %d, got (%d.%d.%lX)", code,
-                ref->handleref.code, ref->handleref.size, ref->handleref.value)
+      /*
+      LOG_WARN ("Invalid handleref error: 0x%x. Wanted code %d, got (%d.%d.%lX)",
+                err, code, ref->handleref.code, ref->handleref.size,
+                ref->handleref.value)
+      */
       free (ref);
       return NULL;
     }
@@ -3892,18 +3898,16 @@ int
 dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
                        Bit_Chain *hdl_dat, long unsigned int address)
 {
-  long unsigned int oldpos;
-  long unsigned int object_address, end_address;
+  long unsigned int objpos, restartpos;
+  Bit_Chain abs_dat = { NULL };
   unsigned char previous_bit;
   Dwg_Object *obj;
   BITCODE_BL num = dwg->num_objects;
   int error = 0;
   int realloced = 0;
 
-  /* Keep the previous address
-   */
-  oldpos = dat->byte;
-  previous_bit = dat->bit;
+  /* Keep the previous full chain  */
+  abs_dat = *dat;
 
   /* Use the indicated address for the object
    */
@@ -3918,8 +3922,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
   realloced = dwg_add_object (dwg);
   if (realloced > 0)
     {
-      dat->byte = oldpos;
-      dat->bit = previous_bit;
+      *dat = abs_dat;
       return realloced; // i.e. DWG_ERR_OUTOFMEM
     }
   obj = &dwg->object[num];
@@ -3937,13 +3940,17 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
       obj->bitsize = obj->size * 8 - obj->handlestream_size;
     }
 
+  objpos = bit_position (dat); // absolute
   obj->address = dat->byte;
-  end_address = obj->address + obj->size; /* (calculate the bitsize) */
+
+  /* Until here dat is absolute. now restrict it */
+  bit_reset_chain (dat);
+  dat->size = obj->size;
 
   SINCE (R_2010) { obj->type = bit_read_BOT (dat); }
   else { obj->type = bit_read_BS (dat); }
-  LOG_INFO (", Type: %d\n", obj->type)
-  object_address = bit_position (dat);
+  LOG_INFO (", Type: %d\n", obj->type);
+  restartpos = bit_position (dat); // relative
 
   /* Check the type of the object
    */
@@ -4265,11 +4272,12 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
 
           /* restart and read into the UNKNOWN_OBJ object */
           /* the relative offset from type after common_entity_data */
-          // obj->common_size = bit_position(dat) - object_address;
+          // obj->common_size = bit_position(dat) - restartpos;
           // LOG_HANDLE("common_size: %lu\n", obj->common_size); // needed for
           // unknown
-          bit_set_position (dat, object_address);
-          // obj->unknown_off = obj->unknown_pos - object_address;
+          bit_set_position (dat, restartpos);
+
+          // obj->unknown_off = obj->unknown_pos - restartpos;
           // LOG_TRACE("Unknown pos %lu, offset %lu\n", obj->unknown_pos,
           // obj->unknown_off);
 
@@ -4291,8 +4299,6 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
                 }
               obj->supertype = DWG_SUPERTYPE_UNKNOWN;
               obj->type = 0;
-              dat->byte = oldpos;
-              dat->bit = previous_bit;
               return error | DWG_ERR_VALUEOUTOFBOUNDS;
             }
           // properly dwg_decode_object/_entity for eed, reactors, xdic
@@ -4301,8 +4307,11 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
               int err = dwg_decode_UNKNOWN_OBJ (dat, obj);
               error |= err;
               obj->supertype = DWG_SUPERTYPE_UNKNOWN;
-              if (err >= DWG_ERR_CRITICAL || !dat)
+              if (!dat)
                 return error;
+              if (err >= DWG_ERR_CRITICAL) {
+                *dat = abs_dat;
+              }
             }
           else if (klass)
             {
@@ -4311,15 +4320,18 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
               if (!strcmp(klass->dxfname, "MULTILEADER")) { //debug CED
                 char *mleader = bit_read_TF(dat, obj->size);
                 LOG_INSANE_TF(mleader, (int)obj->size)
-                bit_set_position(dat, object_address);
+                bit_set_position(dat, restartpos);
                 free (mleader);
               }
 #endif
               err = dwg_decode_UNKNOWN_ENT (dat, obj);
               error |= err;
               obj->supertype = DWG_SUPERTYPE_UNKNOWN;
-              if (err >= DWG_ERR_CRITICAL || !dat)
+              if (!dat)
                 return error;
+              if (err >= DWG_ERR_CRITICAL) {
+                *dat = abs_dat;
+              }
             }
           else // not a class
             {
@@ -4335,10 +4347,10 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
                   LOG_TRACE ("handle: %d.%d.%lX [5]\n", obj->handle.code,
                              obj->handle.size, obj->handle.value);
                 }
-              object_address = dat->byte;
+              restartpos = dat->byte;
               obj->supertype = DWG_SUPERTYPE_UNKNOWN;
               obj->tio.unknown = bit_read_TF (dat, obj->size);
-              dat->byte = object_address;
+              dat->byte = restartpos;
             }
         }
     }
@@ -4352,10 +4364,17 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
 
   if (dat->byte > 8 * dat->size)
     {
-      LOG_ERROR ("Invalid object_address: %lu > %lu", dat->byte,
+      LOG_ERROR ("Invalid object address (overflow): %lu > %lu", dat->byte,
                  8 * dat->size);
       return error | DWG_ERR_INVALIDDWG;
     }
+
+  /* Restore the old absolute chain.
+     CRC needs to be calculated from address, which is before our 0 position. */
+  restartpos = bit_position (dat);
+  *dat = abs_dat;
+  bit_set_position (dat, objpos + restartpos);
+
   /* Now 1 padding bits until next byte, and then a RS CRC */
   if (dat->bit)
     {
@@ -4364,13 +4383,13 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
                   dat->chain[dat->byte] & ((1 << r) - 1), r);
       bit_advance_position (dat, r);
     }
+  bit_set_position (dat, (obj->address + obj->size) * 8 - 2);
   if (!bit_check_CRC (dat, address, 0xC0C1))
     error |= DWG_ERR_WRONGCRC;
 
-  /* Register the previous addresses for return
-   */
-  dat->byte = oldpos;
-  dat->bit = previous_bit;
+  /* Reset to previous addresses for return */
+  *dat = abs_dat;
+
   return realloced ? -1 : error; // re-alloced or not
 }
 
@@ -4380,7 +4399,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
    and string stream offsets.
    It starts after the common_entity|object_data until and goes until the end
    of final padding, to the CRC.
-   (obj->address+obj->common_size/8 .. obj->address+obj->size)
+   (obj->common_size/8 .. obj->size)
  */
 int
 dwg_decode_unknown (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
@@ -4388,7 +4407,7 @@ dwg_decode_unknown (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   // bitsize does not include the handles size
   int num_bytes;
   unsigned long pos = bit_position (dat);
-  long bitsize = 8 * (obj->address + obj->size) - pos;
+  long bitsize = (8 * obj->size) - pos;
   if (bitsize < 0)
     return DWG_ERR_VALUEOUTOFBOUNDS;
 
@@ -4396,14 +4415,18 @@ dwg_decode_unknown (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   obj->num_unknown_bits = bitsize;
   num_bytes = bitsize / 8;
   if (bitsize % 8)
-    num_bytes++;
+    {
+      num_bytes++;
+      dat->size++; // allow overshoot by one byte (for missing bits)
+    }
 
   obj->unknown_bits = bit_read_TF (dat, num_bytes);
   LOG_TRACE ("unknown_bits [%ld (%lu,%ld,%d) TF]: ", bitsize, obj->common_size,
-             obj->handle_offset - obj->common_size,
-             (int)obj->stringstream_size);
+             obj->bitsize - obj->common_size, (int)obj->stringstream_size);
   LOG_TRACE_TF (obj->unknown_bits, num_bytes);
   bit_set_position (dat, pos);
+  if (bitsize % 8)
+      dat->size--;
   return 0;
 }
 

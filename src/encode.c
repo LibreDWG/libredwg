@@ -538,15 +538,16 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
     if (error)                                                                \
       return error;
 
+/* patch in the final bitsize */
 #define DWG_ENTITY_END                                                        \
   if (obj->bitsize == 0 && dat->version >= R_13 && dat->version <= R_2010)    \
     {                                                                         \
       unsigned long address = bit_position (dat);                             \
-      unsigned long bitsize = address - obj->bitsize_address;                 \
-      bit_set_position (dat, obj->bitsize_address);                           \
+      unsigned long bitsize = address - obj->bitsize_pos;                     \
+      bit_set_position (dat, obj->bitsize_pos);                               \
       bit_write_RL (dat, bitsize);                                            \
       bit_set_position (dat, address);                                        \
-      /* CRC? */                                                              \
+      /* TODO CRC */                                                          \
     }                                                                         \
   return error;                                                               \
   }
@@ -575,8 +576,8 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
   if (obj->bitsize == 0 && dat->version >= R_13 && dat->version <= R_2007)    \
     {                                                                         \
       unsigned long address = bit_position (dat);                             \
-      unsigned long bitsize = address - obj->bitsize_address;                 \
-      bit_set_position (dat, obj->bitsize_address);                           \
+      unsigned long bitsize = address - obj->bitsize_pos;                 \
+      bit_set_position (dat, obj->bitsize_pos);                           \
       bit_write_RL (dat, bitsize);                                            \
       bit_set_position (dat, address);                                        \
       /* CRC? */                                                              \
@@ -1715,7 +1716,7 @@ dwg_encode_entity (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   SINCE (R_2007) { *str_dat = *dat; }
   VERSIONS (R_2000, R_2007)
   {
-    obj->bitsize_address = bit_position (dat);
+    obj->bitsize_pos = bit_position (dat);
     if (!obj->bitsize)
       bit_write_RL (dat, obj->size * 8);
     else
@@ -1849,7 +1850,7 @@ dwg_encode_object (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
 
   VERSIONS (R_2000, R_2007)
   {
-    obj->bitsize_address = bit_position (dat);
+    obj->bitsize_pos = bit_position (dat);
     if (!obj->bitsize)
       bit_write_RL (dat, obj->size * 8);
     else
@@ -1871,7 +1872,7 @@ dwg_encode_object (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
 
   VERSIONS (R_13, R_14)
   {
-    obj->bitsize_address = bit_position (dat);
+    obj->bitsize_pos = bit_position (dat);
     if (!obj->bitsize)
       bit_write_RL (dat, obj->size * 8);
     else
