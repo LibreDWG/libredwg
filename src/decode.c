@@ -2904,8 +2904,8 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   VERSIONS (R_2000, R_2007)
     {
       obj->bitsize = bit_read_RL (dat); // until the handles
-      LOG_TRACE ("bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize, dat->byte,
-                 dat->bit)
+      LOG_TRACE ("bitsize: " FORMAT_RL " [RL] @%lu.%u\n", obj->bitsize,
+                 dat->byte, dat->bit)
     }
   SINCE (R_2007)
     {
@@ -4424,6 +4424,7 @@ dwg_decode_unknown (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
     }
 
   obj->unknown_bits = bit_read_TF (dat, num_bytes);
+  // [bitsize (commonsize, hdlpos, strsize)]
   LOG_TRACE ("unknown_bits [%ld (%lu,%ld,%d) TF]: ", bitsize, obj->common_size,
              obj->bitsize - obj->common_size, (int)obj->stringstream_size);
   LOG_TRACE_TF (obj->unknown_bits, num_bytes);

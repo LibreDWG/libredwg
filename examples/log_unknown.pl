@@ -16,12 +16,8 @@ if (/ bitsize: (\d+), hdl_dat/) {
   print "//bitsize computed=$1\n";
   $bitsize = $1; next;
 }
-elsif (/^bitsize: (\d+)/) {
-  print "//bitsize decode=$1\n";
-  $bitsize = $1; next;
-}
-elsif (/^bitsize: (\d+) \[RL\]/) {
-  print "//bitsize r14=$1\n";
+elsif (/^bitsize: (\d+) /) {
+  print "//bitsize decoded=$1\n";
   $bitsize = $1; next;
 }
 elsif (/handle: 0\.\d+\.([0-9A-F]+) \[5\]$/) {
