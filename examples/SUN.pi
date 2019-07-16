@@ -9,7 +9,7 @@ def(0, Data) =>
   Class="SUN",
   Dxf="test/test-data/DS_line_R2013.dxf",
   Version=2013,
-  Offsets=[158, 0, 22, 18], % hdloff, strsize, commonsize, bitsize
+  Offsets=[158, 0, 22, 18, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="010000000101000111111111111111111111111110000100000000001100000100100111100100100101000000000010000000111110010011011100000011001000000101100000001001000001001010010000",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
@@ -35,7 +35,7 @@ def(1, Data) =>
   Class="SUN",
   Dxf="test/test-data/DS_line_R2013.dxf",
   Version=2013,
-  Offsets=[158, 0, 22, 18], % hdloff, strsize, commonsize, bitsize
+  Offsets=[158, 0, 22, 18, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="010000000101000111111111111111111111111110000100000000001100000100100111100100100101000000000010000000111110010011011100000011001000000101100000001001000001110011110000",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
@@ -61,7 +61,7 @@ def(2, Data) =>
   Class="SUN",
   Dxf="test/test-data/example_2007.dxf",
   Version=2007,
-  Offsets=[158, 0, 519, 67], % hdloff, strsize, commonsize, bitsize
+  Offsets=[158, 0, 519, 67, 27], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="01000000011100011111111111111111111111111000010000000000110000001111100000110010010100000000001000000011111001001101110000001101011000000010010000100000001001011010111",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
@@ -87,7 +87,7 @@ def(3, Data) =>
   Class="SUN",
   Dxf="test/test-data/example_2013.dxf",
   Version=2013,
-  Offsets=[150, 0, 488, 63], % hdloff, strsize, commonsize, bitsize
+  Offsets=[150, 0, 488, 63, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="0100000001110001111111111111111111111111100001000000000011000000111110000011001001010000000000100000001111100100110111000000110101100000001001000010000000100101101011",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
@@ -113,7 +113,7 @@ def(4, Data) =>
   Class="SUN",
   Dxf="test/test-data/example_2018.dxf",
   Version=2018,
-  Offsets=[157, 0, 335, 49], % hdloff, strsize, commonsize, bitsize
+  Offsets=[157, 0, 335, 49, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="01000000011100011111111111111111111111111000010000000000110000001111100000110010010100000000001000000011111001001101110000001101011000000011010001000000001010011001111",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
