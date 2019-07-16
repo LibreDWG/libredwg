@@ -9,7 +9,7 @@ def(0, Data) =>
   Class="ACDBASSOCPLANESURFACEACTIONBODY",
   Dxf="test/test-data/2004/Surface.dxf",
   Version=2004,
-  Offsets=[66, 0, 61, 12], % hdloff, strsize, commonsize, bitsize
+  Offsets=[66, 0, 61, 12, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="010000000110100100000001101010001000001110101010100000000011001000000101000011100100001000000101000011011",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
