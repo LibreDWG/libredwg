@@ -96,7 +96,7 @@ def(4, Data) =>
   Class="ACDBPERSSUBENTMANAGER",
   Dxf="test/test-data/example_2010.dxf",
   Version=2010,
-  Offsets=[65, 0, 37, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  Offsets=[65, 0, 37, 10, 34], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="01000000101001000000100100000011100100000001010000000100100000100001100010000010000110011",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
@@ -118,7 +118,7 @@ def(5, Data) =>
   Class="ACDBPERSSUBENTMANAGER",
   Dxf="test/test-data/example_2013.dxf",
   Version=2013,
-  Offsets=[39, 0, 38, 7, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  Offsets=[39, 0, 38, 7, 35], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="0100000010100100000010101010001000001000011000100000100001100111",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [

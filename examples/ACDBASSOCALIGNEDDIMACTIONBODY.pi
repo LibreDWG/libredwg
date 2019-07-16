@@ -87,7 +87,7 @@ def(3, Data) =>
   Class="ACDBASSOCALIGNEDDIMACTIONBODY",
   Dxf="test/test-data/example_2010.dxf",
   Version=2010,
-  Offsets=[43, 0, 29, 7, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  Offsets=[43, 0, 29, 7, 88], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="0100000001101001000000011010101001000000000110010000000111001001101000010000000111001011101000000010000100000001110010011",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
@@ -113,7 +113,7 @@ def(4, Data) =>
   Class="ACDBASSOCALIGNEDDIMACTIONBODY",
   Dxf="test/test-data/example_2013.dxf",
   Version=2013,
-  Offsets=[25, 0, 30, 5, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  Offsets=[25, 0, 30, 5, 65], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="01000000101010010000000010000100000001110010111010000000100001000000011100100111",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
