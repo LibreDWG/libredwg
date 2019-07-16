@@ -146,6 +146,7 @@ gcov.log
 /programs/dwglayers
 /programs/dwggrep
 /programs/alive.test
+/programs/json.test
 # temp. mingw gcc DLLs for wine
 /programs/lib*.dll
 /programs/dwg2SVG
