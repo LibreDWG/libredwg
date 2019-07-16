@@ -6,6 +6,9 @@
 =cut
 
 # also triggered by objectmap (print) and free
+if (/ Hdlsize: (\d+),/) {
+  $hdlsize = $1; next;
+}
 if (/^Warning: (?:Unhandled|Unstable) Class (?:object|entity) \d+ (\w+) /) {
   print "//log=$ARGV object=$1\n";
   $object = $1; next;
@@ -23,10 +26,6 @@ elsif (/^bitsize: (\d+) /) {
 elsif (/handle: 0\.\d+\.([0-9A-F]+) \[5\]$/) {
   print "//handle=$1\n";
   $handle = $1; next;
-}
-if (/ Hdlsize: (\d+),/) {
-  print "//hdlsize=$1\n";
-  $hdlsize = $1; next;
 }
 next unless $bitsize and $handle;
 
