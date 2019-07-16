@@ -29,7 +29,7 @@ def(1, Data) =>
   Class="ACSH_HISTORY_CLASS",
   Dxf="test/test-data/example_2010.dxf",
   Version=2010,
-  Offsets=[43, 0, 29, 7, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  Offsets=[43, 0, 29, 7, 40], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="0100100001010001110101000000010001100000100000011001100100000001011100011",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
@@ -49,7 +49,7 @@ def(2, Data) =>
   Class="ACSH_HISTORY_CLASS",
   Dxf="test/test-data/example_2013.dxf",
   Version=2013,
-  Offsets=[43, 0, 30, 7, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  Offsets=[43, 0, 30, 7, 47], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="01001000010100011101010000000100011000001000000110011001000000010111000111111111",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
