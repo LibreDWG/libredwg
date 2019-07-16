@@ -87,7 +87,7 @@ def(3, Data) =>
   Class="ACDBASSOCOSNAPPOINTREFACTIONPARAM",
   Dxf="test/test-data/example_2010.dxf",
   Version=2010,
-  Offsets=[125, 2, 29, 15, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  Offsets=[125, 2, 29, 15, 46], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="10101001000000011010100000000100000000000000000000000000000000000000000000000000111100001011111110000000100000000011000000000110010000000111001010001000000111111",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
@@ -113,7 +113,7 @@ def(4, Data) =>
   Class="ACDBASSOCOSNAPPOINTREFACTIONPARAM",
   Dxf="test/test-data/example_2013.dxf",
   Version=2013,
-  Offsets=[135, 2, 30, 16, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  Offsets=[135, 2, 30, 16, 51], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="01000000011010100100000001101010000000010000000000000000000000000000000000000000000000000011110000101111111000000010000000001110000010000001000110010000000111001010001000000111",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [

@@ -143,7 +143,7 @@ Most probable result: (TODO)
 ACDBASSOCDEPENDENCY: 0x397 (97) test/test-data/example_2010.dxf:
 0100000010101111100010000001001100000100000110010000100000001101111110010000000100000000110000111
 
-[hdloff, strsize, commonsize, bitsize, hdlsize]=[40,0,29,6,0]
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[40,0,29,6,67]
 H330 c.1.6: 1100000100000110 fixed = [31,46]
 BL90 2: 0100000010 2 positions
 BL90 0: 10 16 positions
@@ -191,7 +191,7 @@ Most probable result: (TODO)
 ACDBASSOCDEPENDENCY: 0x397 (96) test/test-data/example_2013.dxf:
 010000001010111110001000000100110000010000011001000010000000110111111001000000010000000011000011
 
-[hdloff, strsize, commonsize, bitsize, hdlsize]=[40,0,30,7,0]
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[40,0,30,7,66]
 H330 c.1.6: 1100000100000110 fixed = [31,46]
 BL90 2: 0100000010 2 positions
 BL90 0: 10 16 positions
@@ -795,7 +795,7 @@ Most probable result: (TODO)
 ACDBASSOCDEPENDENCY: 0x2E1 (128) test/test-data/2018/Surface.dxf:
 01000000101001110000000000000000000000000010000000001000000010110000010000001001000010000000101101100001000000010000000011000011
 
-[hdloff, strsize, commonsize, bitsize, hdlsize]=[72,0,30,10,0]
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[72,0,30,10,66]
 H330 c.1.2: 1100000100000010 fixed = [63,78]
 BL90 2: 0100000010 2 positions
 BL90 0: 10 18 positions
@@ -841,7 +841,7 @@ Most probable result: (TODO)
 ACDBASSOCDEPENDENCY: 0x350 (128) test/test-data/2018/Surface.dxf:
 01000000101001110000000000000000000000000010000000001000000010110000010000001001000010000000110100110101000000010000000011000011
 
-[hdloff, strsize, commonsize, bitsize, hdlsize]=[72,0,30,10,0]
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[72,0,30,10,66]
 H330 c.1.2: 1100000100000010 fixed = [63,78]
 BL90 2: 0100000010 2 positions
 BL90 0: 10 19 positions
@@ -887,7 +887,7 @@ Most probable result: (TODO)
 ACDBASSOCDEPENDENCY: 0x369 (128) test/test-data/2018/Surface.dxf:
 01000000101001110000000000000000000000000010000000001000000010110000010000001001000010000000110110011001000000010000000011000011
 
-[hdloff, strsize, commonsize, bitsize, hdlsize]=[72,0,30,10,0]
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[72,0,30,10,66]
 H330 c.1.2: 1100000100000010 fixed = [63,78]
 BL90 2: 0100000010 2 positions
 BL90 0: 10 18 positions
@@ -933,7 +933,7 @@ Most probable result: (TODO)
 ACDBASSOCDEPENDENCY: 0x414 (128) test/test-data/2018/Surface.dxf:
 01000000101001110000000000000000000000000010000000001000000010110000010000001001000010000001000001000101000000010000000011000011
 
-[hdloff, strsize, commonsize, bitsize, hdlsize]=[72,0,30,10,0]
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[72,0,30,10,66]
 H330 c.1.2: 1100000100000010 fixed = [63,78]
 BL90 2: 0100000010 3 positions
 BL90 0: 10 18 positions
@@ -979,7 +979,7 @@ Most probable result: (TODO)
 ACDBASSOCDEPENDENCY: 0x417 (96) test/test-data/2018/Surface.dxf:
 010000001010101110001000000100110000010000010101000010000000101100011001000000010000000011000011
 
-[hdloff, strsize, commonsize, bitsize, hdlsize]=[40,0,30,7,0]
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[40,0,30,7,66]
 H330 c.1.5: 1100000100000101 fixed = [31,46]
 BL90 2: 0100000010 2 positions
 BL90 0: 10 19 positions
@@ -1027,7 +1027,7 @@ Most probable result: (TODO)
 ACDBASSOCDEPENDENCY: 0x36C (96) test/test-data/2018/Surface.dxf:
 010000001010101110001000000100110000010000010101000010000000101100111001000000010000000011000011
 
-[hdloff, strsize, commonsize, bitsize, hdlsize]=[40,0,30,7,0]
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[40,0,30,7,66]
 H330 c.1.5: 1100000100000101 fixed = [31,46]
 BL90 2: 0100000010 2 positions
 BL90 0: 10 19 positions
@@ -1075,7 +1075,7 @@ Most probable result: (TODO)
 ACDBASSOCDEPENDENCY: 0x2E4 (96) test/test-data/2018/Surface.dxf:
 010000001010101110001000000100110000010000010101000010000000101101011101000000010000000011000011
 
-[hdloff, strsize, commonsize, bitsize, hdlsize]=[40,0,30,7,0]
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[40,0,30,7,66]
 H330 c.1.5: 1100000100000101 fixed = [31,46]
 BL90 2: 0100000010 2 positions
 BL90 0: 10 20 positions
@@ -1123,7 +1123,7 @@ Most probable result: (TODO)
 ACDBASSOCDEPENDENCY: 0x353 (96) test/test-data/2018/Surface.dxf:
 010000001010101110001000000100110000010000010101000010000000110011100001000000010000000011000011
 
-[hdloff, strsize, commonsize, bitsize, hdlsize]=[40,0,30,7,0]
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[40,0,30,7,66]
 H330 c.1.5: 1100000100000101 fixed = [31,46]
 BL90 2: 0100000010 2 positions
 BL90 0: 10 18 positions
@@ -1171,7 +1171,7 @@ Most probable result: (TODO)
 ACDBASSOCDEPENDENCY: 0x41A (96) test/test-data/2018/Surface.dxf:
 010000001010101110001000000110110000010000100001000010000000101101000101000000010000000011000011
 
-[hdloff, strsize, commonsize, bitsize, hdlsize]=[40,0,30,7,0]
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[40,0,30,7,66]
 H330 c.1.8: 1100000100001000 fixed = [31,46]
 BL90 2: 0100000010 fixed = [1,10]
 BL90 0: 10 19 positions
@@ -1218,7 +1218,7 @@ Most probable result: (TODO)
 ACDBASSOCDEPENDENCY: 0x356 (96) test/test-data/2018/Surface.dxf:
 010000001010101110001000000110110000010000100001000010000000110011101001000000010000000011000011
 
-[hdloff, strsize, commonsize, bitsize, hdlsize]=[40,0,30,7,0]
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[40,0,30,7,66]
 H330 c.1.8: 1100000100001000 fixed = [31,46]
 BL90 2: 0100000010 fixed = [1,10]
 BL90 0: 10 18 positions
