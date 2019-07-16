@@ -67,7 +67,7 @@ def(2, Data) =>
   Fields = [
      new_struct('H330', ["10000000", '8.0.0', [], "ownerhandle", 330])
     ,new_struct('BL90', ["10", '0', [], "status", 90])
-    %new_struct('_TV1', ["000000000000000000", '', [], "", 1])
+    %new_struct('_TV1', ["010000000100000000", '', [], "", 1])
     ,new_struct('BL90', ["10", '0', [], "flags", 90])
     ,new_struct('BL90', ["10", '0', [], "num_params", 90])
     ,new_struct('BL90', ["0100000001", '1', [], "", 90])
@@ -93,7 +93,7 @@ def(3, Data) =>
   Fields = [
      new_struct('H330', ["10000000", '8.0.0', [], "ownerhandle", 330])
     ,new_struct('BL90', ["10", '0', [], "status", 90])
-    %new_struct('_TV1', ["000000000000000000", '', [], "", 1])
+    %new_struct('_TV1', ["010000000100000000", '', [], "", 1])
     ,new_struct('BL90', ["10", '0', [], "flags", 90])
     ,new_struct('BL90', ["10", '0', [], "num_params", 90])
     ,new_struct('BL90', ["0100000001", '1', [], "", 90])
@@ -120,7 +120,7 @@ def(4, Data) =>
      new_struct('H330', ["1100000100000010", 'c.1.2', [], "ownerhandle", 330])
     ,new_struct('BL90', ["0100000001", '1', [], "status", 90])
     ,new_struct('BL90', ["10", '0', [], "flags", 90])
-    %new_struct('_TV1', ["000000000000000000", '', [], "", 1])
+    %new_struct('_TV1', ["010000000100000000", '', [], "", 1])
     ,new_struct('BL90', ["10", '0', [], "num_params", 90])
     ,new_struct('BL90', ["10", '0', [], "", 90])
     ,new_struct('BL90', ["0100000001", '1', [], "", 90])
