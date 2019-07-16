@@ -272,7 +272,7 @@ dxf_check_code (Bit_Chain *dat, Dxf_Pair *pair, int code)
 #define HEADER_VALUE(name, type, dxf, value)                                  \
   if (dxf)                                                                    \
     {                                                                         \
-      char *headername;                                                       \
+      char *headername = NULL;                                                \
       if (GROUP (9))                                                          \
         {                                                                     \
           dxfb_read_string (dat, &headername, 0);                             \

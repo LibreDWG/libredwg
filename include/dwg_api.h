@@ -265,13 +265,13 @@ EXPORT \
 Dwg_Entity_##token *dwg_object_to_##token (Dwg_Object *obj) \
 { \
     Dwg_Entity_##token *ret_obj = NULL; \
-    if (obj != 0 && obj->type == DWG_TYPE_##token) \
+    if (obj && obj->tio.entity && obj->type == DWG_TYPE_##token) \
       { \
         ret_obj = obj->tio.entity->tio.token; \
       } \
     else \
       { \
-        loglevel = obj->parent->opts & 0xf; \
+        loglevel = obj && obj->parent ? obj->parent->opts & 0xf : 0; \
         LOG_ERROR("Invalid %s type: got 0x%x", #token, obj ? obj->type : 0); \
       } \
   return ret_obj; \
@@ -283,13 +283,14 @@ EXPORT \
 Dwg_Entity_##token *dwg_object_to_##token (Dwg_Object *obj) \
 { \
     Dwg_Entity_##token *ret_obj = NULL; \
-    if (obj && (obj->type == DWG_TYPE_##token || obj->fixedtype == DWG_TYPE_##token)) \
+    if (obj && obj->tio.entity && \
+        (obj->type == DWG_TYPE_##token || obj->fixedtype == DWG_TYPE_##token)) \
       { \
         ret_obj = obj->tio.entity->tio.token; \
       } \
     else \
       { \
-        loglevel = obj->parent->opts & 0xf; \
+        loglevel = obj && obj->parent ? obj->parent->opts & 0xf : 0; \
         LOG_ERROR("Invalid %s type: got %s, 0x%x", #token, \
                   obj ? obj->dxfname : "<no obj>", \
                   obj ? obj->type : 0); \
@@ -307,13 +308,14 @@ EXPORT \
 Dwg_Object_##token *dwg_object_to_##token (Dwg_Object *obj) \
 { \
     Dwg_Object_##token *ret_obj = NULL; \
-    if (obj && (obj->type == DWG_TYPE_##token || obj->fixedtype == DWG_TYPE_##token)) \
+    if (obj && obj->tio.object && \
+        (obj->type == DWG_TYPE_##token || obj->fixedtype == DWG_TYPE_##token)) \
       { \
         ret_obj = obj->tio.object->tio.token; \
       } \
     else \
       { \
-        loglevel = obj->parent->opts & 0xf; \
+        loglevel = obj && obj->parent ? obj->parent->opts & 0xf : 0; \
         LOG_ERROR("Invalid %s type: got 0x%x", #token, obj ? obj->type : 0); \
       } \
   return ret_obj; \
@@ -331,7 +333,7 @@ Dwg_Object_##token *dwg_object_to_##token (Dwg_Object *obj) \
       } \
     else \
       { \
-        loglevel = obj->parent->opts & 0xf; \
+        loglevel = obj && obj->parent ? obj->parent->opts & 0xf : 0; \
         LOG_ERROR("Invalid %s type: got 0x%x", #token, obj ? obj->type : 0); \
       } \
   return ret_obj; \

@@ -772,7 +772,7 @@ dwg_model_space_object (Dwg_Data *dwg)
   if (msref && msref->obj && msref->obj->type == DWG_TYPE_BLOCK_HEADER)
     return msref->obj;
   ctrl = dwg_block_control (dwg);
-  if (ctrl->model_space && ctrl->model_space->obj)
+  if (ctrl && ctrl->model_space && ctrl->model_space->obj)
     return ctrl->model_space->obj;
   return dwg_resolve_handle (dwg, dwg->header.version >= R_2000 ? 0x1F : 0x17);
 }
@@ -1066,9 +1066,12 @@ get_last_owned_block (const Dwg_Object *restrict hdr)
               if (!_hdr->endblk_entity)
                 {
                   _hdr->endblk_entity = dwg_new_ref (dwg);
-                  _hdr->endblk_entity->obj = obj;
-                  _hdr->endblk_entity->handleref.value
-                      = _hdr->endblk_entity->absolute_ref = obj->handle.value;
+                  if (_hdr->endblk_entity)
+                    {
+                      _hdr->endblk_entity->obj = obj;
+                      _hdr->endblk_entity->handleref.value
+                        = _hdr->endblk_entity->absolute_ref = obj->handle.value;
+                    }
                 }
               else if (!_hdr->endblk_entity->obj)
                 _hdr->endblk_entity->obj = obj;

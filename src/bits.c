@@ -1544,6 +1544,7 @@ bit_write_TIMEBLL (Bit_Chain *dat, BITCODE_TIMEBLL date)
 void
 bit_read_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color)
 {
+  memset (color, 0, sizeof (Dwg_Color));
   color->index = bit_read_BS (dat);
   if (dat->version >= R_2004)
     {

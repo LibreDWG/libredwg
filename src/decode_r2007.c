@@ -624,6 +624,8 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
   rsdata = &data[size_uncomp];
   bit_read_fixed (dat, rsdata, page_size);
   pedata = decode_rs (rsdata, block_count, 239);
+  if (!pedata)
+    return NULL;
 
   if (size_comp < size_uncomp)
     (void)decompress_r2007 (data, size_uncomp, pedata, size_comp);
@@ -659,6 +661,8 @@ read_data_page (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
     }
   bit_read_fixed (dat, rsdata, page_size);
   pedata = decode_rs (rsdata, block_count, 0xFB);
+  if (!pedata)
+    return DWG_ERR_OUTOFMEM;
 
   if (size_comp < size_uncomp)
     error = decompress_r2007 (decomp, size_uncomp, pedata, size_comp);
@@ -1067,6 +1071,8 @@ read_file_header (Bit_Chain *restrict dat,
   memset (file_header, 0, sizeof (r2007_file_header));
   bit_read_fixed (dat, data, 0x3d8);
   pedata = decode_rs (data, 3, 239);
+  if (!pedata)
+    return DWG_ERR_OUTOFMEM;
 
   // Note: This is unportable to big-endian
   seqence_crc = *((uint64_t *)pedata);

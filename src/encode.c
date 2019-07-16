@@ -1695,6 +1695,8 @@ dwg_encode_entity (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   Dwg_Object_Entity *_obj = ent;
   Dwg_Data *dwg = ent->dwg;
 
+  if (!obj || !dat)
+    return DWG_ERR_INVALIDDWG;
   PRE (R_13)
   {
 
@@ -1707,7 +1709,8 @@ dwg_encode_entity (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
       {
         Dwg_Object_Ref *hdl
             = dwg_decode_handleref_with_code (dat, obj, dwg, 0);
-        obj->handle = hdl->handleref;
+        if (hdl)
+          obj->handle = hdl->handleref;
       }
     if (FIELD_VALUE (extra_r11) & 4)
       FIELD_RS (paper_r11, 0);
@@ -1746,7 +1749,7 @@ dwg_encode_entity (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   // if (error & (DWG_ERR_INVALIDTYPE|DWG_ERR_VALUEOUTOFBOUNDS))
   //  return error;
 
-#include "common_entity_data.spec"
+  #include "common_entity_data.spec"
 
   return error;
 }

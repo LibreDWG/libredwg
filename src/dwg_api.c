@@ -14051,8 +14051,8 @@ dwg_object_polyline_2d_get_numpoints (const dwg_object *restrict obj,
 
       if (dwg->header.version >= R_2004)
         return obj->tio.entity->tio.POLYLINE_2D->num_owned;
-      else if (dwg->header.version
-               >= R_13) // iterate over first_vertex - last_vertex
+      // iterate over first_vertex - last_vertex
+      else if (dwg->header.version >= R_13)
         {
           Dwg_Object *vobj = dwg_ref_object (dwg, _obj->first_vertex);
           Dwg_Object *vlast = dwg_ref_object (dwg, _obj->last_vertex);
@@ -14136,8 +14136,8 @@ dwg_object_polyline_2d_get_points (const dwg_object *restrict obj,
                 *error = 1; // return not all vertices, but some
               }
           }
-      else if (dwg->header.version
-               >= R_13) // iterate over first_vertex - last_vertex
+      // iterate over first_vertex - last_vertex
+      else if (dwg->header.version >= R_13) 
         {
           Dwg_Object *vobj = dwg_ref_object (dwg, _obj->first_vertex);
           Dwg_Object *vlast = dwg_ref_object (dwg, _obj->last_vertex);
