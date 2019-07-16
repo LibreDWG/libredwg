@@ -29,6 +29,89 @@ def(0, Data) =>
   go(Data).
 
 def(1, Data) =>
+  println("ACDBASSOCPERSSUBENTMANAGER: 0x2D9 (217) test/test-data/2004/Surface.dxf:"),
+  Class="ACDBASSOCPERSSUBENTMANAGER",
+  Dxf="test/test-data/2004/Surface.dxf",
+  Version=2004,
+  Offsets=[199, 0, 69, 26, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="0100000001010000001110010000001001000001110100000001010000011110010000000101000000110100000110101010101010100100000110010000000101000000110100000100010000010101000001100100000111100010000010000110001000001000011001111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["0100000100001100", '4.1.C', [], "reactors[0]", 330])
+    ,new_struct('H330', ["0100000100001100", '4.1.C', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
+    ,new_struct('BL90', ["0100000011", '3', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["0100000010", '2', [], "", 90])
+    ,new_struct('BL90', ["0100000111", '7', [], "", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
+    ,new_struct('BL90', ["0100000111", '7', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
+    ,new_struct('BL90', ["0100000011", '3', [], "", 90])
+    ,new_struct('BL90', ["0100000110", '6', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["0100000110", '6', [], "", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
+    ,new_struct('BL90', ["0100000011", '3', [], "", 90])
+    ,new_struct('BL90', ["0100000100", '4', [], "", 90])
+    ,new_struct('BL90', ["0100000101", '5', [], "", 90])
+    ,new_struct('BL90', ["0100000110", '6', [], "", 90])
+    ,new_struct('BL90', ["0100000111", '7', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('B290', ["0", '0', [], "", 290])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(2, Data) =>
+  println("ACDBASSOCPERSSUBENTMANAGER: 0x2D9 (200) test/test-data/2018/Surface.dxf:"),
+  Class="ACDBASSOCPERSSUBENTMANAGER",
+  Dxf="test/test-data/2018/Surface.dxf",
+  Version=2018,
+  Offsets=[174, 0, 38, 21, 36], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="01000000100100000011100100000010010000010101000000010100000111100100000001010000001101000001101010101010101001000001000100000001010000001101000001000100000101101000010000010000110001000001000011001111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["0100000100001100", '4.1.C', [], "reactors[0]", 330])
+    ,new_struct('H330', ["0100000100001100", '4.1.C', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["0100000010", '2', [], "", 90])
+    ,new_struct('BL90', ["0100000011", '3', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["0100000010", '2', [], "", 90])
+    ,new_struct('BL90', ["0100000101", '5', [], "", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
+    ,new_struct('BL90', ["0100000111", '7', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
+    ,new_struct('BL90', ["0100000011", '3', [], "", 90])
+    ,new_struct('BL90', ["0100000110", '6', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["0100000100", '4', [], "", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
+    ,new_struct('BL90', ["0100000011", '3', [], "", 90])
+    ,new_struct('BL90', ["0100000100", '4', [], "", 90])
+    ,new_struct('BL90', ["0100000101", '5', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('B290', ["0", '0', [], "", 290])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(3, Data) =>
   println("ACDBASSOCPERSSUBENTMANAGER: 0x2DF (538) test/test-data/example_2000.dxf:"),
   Class="ACDBASSOCPERSSUBENTMANAGER",
   Dxf="test/test-data/example_2000.dxf",
@@ -84,7 +167,7 @@ def(1, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(2, Data) =>
+def(4, Data) =>
   println("ACDBASSOCPERSSUBENTMANAGER: 0x2DF (529) test/test-data/example_2004.dxf:"),
   Class="ACDBASSOCPERSSUBENTMANAGER",
   Dxf="test/test-data/example_2004.dxf",
@@ -140,7 +223,7 @@ def(2, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(3, Data) =>
+def(5, Data) =>
   println("ACDBASSOCPERSSUBENTMANAGER: 0x2DF (537) test/test-data/example_2007.dxf:"),
   Class="ACDBASSOCPERSSUBENTMANAGER",
   Dxf="test/test-data/example_2007.dxf",
@@ -196,7 +279,7 @@ def(3, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(4, Data) =>
+def(6, Data) =>
   println("ACDBASSOCPERSSUBENTMANAGER: 0x2DF (537) test/test-data/example_2010.dxf:"),
   Class="ACDBASSOCPERSSUBENTMANAGER",
   Dxf="test/test-data/example_2010.dxf",
@@ -252,7 +335,7 @@ def(4, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(5, Data) =>
+def(7, Data) =>
   println("ACDBASSOCPERSSUBENTMANAGER: 0x2DF (560) test/test-data/example_2013.dxf:"),
   Class="ACDBASSOCPERSSUBENTMANAGER",
   Dxf="test/test-data/example_2013.dxf",
@@ -305,89 +388,6 @@ def(5, Data) =>
     ,new_struct('BL90', ["0100000011", '3', [], "", 90])
     ,new_struct('BL90', ["0100000001", '1', [], "", 90])
     ,new_struct('BL90', ["0100000001", '1', [], "", 90])
-    ,new_struct('BL90', ["10", '0', [], "", 90])
-    ,new_struct('B290', ["0", '0', [], "", 290])
-  ],
-  Data = [S,Fields,Class,Dxf,Version,Offsets],
-  go(Data).
-
-def(6, Data) =>
-  println("ACDBASSOCPERSSUBENTMANAGER: 0x2D9 (217) test/test-data/2004/Surface.dxf:"),
-  Class="ACDBASSOCPERSSUBENTMANAGER",
-  Dxf="test/test-data/2004/Surface.dxf",
-  Version=2004,
-  Offsets=[199, 0, 69, 26, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="0100000001010000001110010000001001000001110100000001010000011110010000000101000000110100000110101010101010100100000110010000000101000000110100000100010000010101000001100100000111100010000010000110001000001000011001111",
-  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
-  Fields = [
-     new_struct('H330', ["0100000100001100", '4.1.C', [], "reactors[0]", 330])
-    ,new_struct('H330', ["0100000100001100", '4.1.C', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
-    ,new_struct('BL90', ["0100000011", '3', [], "", 90])
-    ,new_struct('BL90', ["10", '0', [], "", 90])
-    ,new_struct('BL90', ["0100000010", '2', [], "", 90])
-    ,new_struct('BL90', ["0100000111", '7', [], "", 90])
-    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
-    ,new_struct('BL90', ["0100000111", '7', [], "", 90])
-    ,new_struct('BL90', ["10", '0', [], "", 90])
-    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
-    ,new_struct('BL90', ["0100000011", '3', [], "", 90])
-    ,new_struct('BL90', ["0100000110", '6', [], "", 90])
-    ,new_struct('BL90', ["10", '0', [], "", 90])
-    ,new_struct('BL90', ["10", '0', [], "", 90])
-    ,new_struct('BL90', ["10", '0', [], "", 90])
-    ,new_struct('BL90', ["10", '0', [], "", 90])
-    ,new_struct('BL90', ["10", '0', [], "", 90])
-    ,new_struct('BL90', ["10", '0', [], "", 90])
-    ,new_struct('BL90', ["10", '0', [], "", 90])
-    ,new_struct('BL90', ["0100000110", '6', [], "", 90])
-    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
-    ,new_struct('BL90', ["0100000011", '3', [], "", 90])
-    ,new_struct('BL90', ["0100000100", '4', [], "", 90])
-    ,new_struct('BL90', ["0100000101", '5', [], "", 90])
-    ,new_struct('BL90', ["0100000110", '6', [], "", 90])
-    ,new_struct('BL90', ["0100000111", '7', [], "", 90])
-    ,new_struct('BL90', ["10", '0', [], "", 90])
-    ,new_struct('B290', ["0", '0', [], "", 290])
-  ],
-  Data = [S,Fields,Class,Dxf,Version,Offsets],
-  go(Data).
-
-def(7, Data) =>
-  println("ACDBASSOCPERSSUBENTMANAGER: 0x2D9 (200) test/test-data/2018/Surface.dxf:"),
-  Class="ACDBASSOCPERSSUBENTMANAGER",
-  Dxf="test/test-data/2018/Surface.dxf",
-  Version=2018,
-  Offsets=[174, 0, 38, 21, 36], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="01000000100100000011100100000010010000010101000000010100000111100100000001010000001101000001101010101010101001000001000100000001010000001101000001000100000101101000010000010000110001000001000011001111",
-  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
-  Fields = [
-     new_struct('H330', ["0100000100001100", '4.1.C', [], "reactors[0]", 330])
-    ,new_struct('H330', ["0100000100001100", '4.1.C', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "", 90])
-    ,new_struct('BL90', ["0100000011", '3', [], "", 90])
-    ,new_struct('BL90', ["10", '0', [], "", 90])
-    ,new_struct('BL90', ["0100000010", '2', [], "", 90])
-    ,new_struct('BL90', ["0100000101", '5', [], "", 90])
-    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
-    ,new_struct('BL90', ["0100000111", '7', [], "", 90])
-    ,new_struct('BL90', ["10", '0', [], "", 90])
-    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
-    ,new_struct('BL90', ["0100000011", '3', [], "", 90])
-    ,new_struct('BL90', ["0100000110", '6', [], "", 90])
-    ,new_struct('BL90', ["10", '0', [], "", 90])
-    ,new_struct('BL90', ["10", '0', [], "", 90])
-    ,new_struct('BL90', ["10", '0', [], "", 90])
-    ,new_struct('BL90', ["10", '0', [], "", 90])
-    ,new_struct('BL90', ["10", '0', [], "", 90])
-    ,new_struct('BL90', ["10", '0', [], "", 90])
-    ,new_struct('BL90', ["10", '0', [], "", 90])
-    ,new_struct('BL90', ["0100000100", '4', [], "", 90])
-    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
-    ,new_struct('BL90', ["0100000011", '3', [], "", 90])
-    ,new_struct('BL90', ["0100000100", '4', [], "", 90])
-    ,new_struct('BL90', ["0100000101", '5', [], "", 90])
-    ,new_struct('BL90', ["10", '0', [], "", 90])
     ,new_struct('BL90', ["10", '0', [], "", 90])
     ,new_struct('B290', ["0", '0', [], "", 290])
   ],

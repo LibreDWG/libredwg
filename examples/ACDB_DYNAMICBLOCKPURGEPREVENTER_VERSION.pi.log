@@ -21,3 +21,324 @@ Todo: 0 + 74 = 74, Missing: 23
 
 Most probable result: (TODO)
 
+ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0x88C (80) test/test-data/2013/gh55-ltype.dxf:
+01000000010110000010000011001000010000010001000011001010010000010001000010111111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,69]
+H330 4.2.886: 010000100000100010000110 fixed = [28,51]
+H330 4.2.886: 010000100000100010000110 Ignored overlap  fixed = [28,51]
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10],[28,51]]
+sortd = [[1,10],[28,51],[28,51]]
+
+Definite result: 58/80	2013/gh55-ltype.dxf
+----------------
+FIELD_BS ([], 70);	// 1 [1,10]
+HOLE([11,27],01100000100000110) len = 17
+FIELD_H (reactors[0], 330);	// 4.2.886 [28,51]
+FIELD_H (ownerhandle, 330);	// 4.2.886 [28,51]
+HOLE([52,80],01010010000010001000010111111) len = 29
+----------------
+Todo: 0 + 58 = 58, Missing: 22
+
+Most probable result: (TODO)
+
+ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0xBF2 (80) test/test-data/2013/gh55-ltype.dxf:
+01000000010110000010000011001000010000010111110110001010010000010111110101111111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,69]
+H330 4.2.BEC: 010000100000101111101100 fixed = [28,51]
+H330 4.2.BEC: 010000100000101111101100 Ignored overlap  fixed = [28,51]
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10],[28,51]]
+sortd = [[1,10],[28,51],[28,51]]
+
+Definite result: 58/80	2013/gh55-ltype.dxf
+----------------
+FIELD_BS ([], 70);	// 1 [1,10]
+HOLE([11,27],01100000100000110) len = 17
+FIELD_H (reactors[0], 330);	// 4.2.BEC [28,51]
+FIELD_H (ownerhandle, 330);	// 4.2.BEC [28,51]
+HOLE([52,80],01010010000010111110101111111) len = 29
+----------------
+Todo: 0 + 58 = 58, Missing: 22
+
+Most probable result: (TODO)
+
+ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0xC0B (80) test/test-data/2013/gh55-ltype.dxf:
+01000000010110000010000011001000010000011000000010101010010000011000000010011111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,69]
+H330 4.2.C05: 010000100000110000000101 fixed = [28,51]
+H330 4.2.C05: 010000100000110000000101 Ignored overlap  fixed = [28,51]
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10],[28,51]]
+sortd = [[1,10],[28,51],[28,51]]
+
+Definite result: 58/80	2013/gh55-ltype.dxf
+----------------
+FIELD_BS ([], 70);	// 1 [1,10]
+HOLE([11,27],01100000100000110) len = 17
+FIELD_H (reactors[0], 330);	// 4.2.C05 [28,51]
+FIELD_H (ownerhandle, 330);	// 4.2.C05 [28,51]
+HOLE([52,80],01010010000011000000010011111) len = 29
+----------------
+Todo: 0 + 58 = 58, Missing: 22
+
+Most probable result: (TODO)
+
+ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0xC24 (80) test/test-data/2013/gh55-ltype.dxf:
+01000000010110000010000011001000010000011000001111001010010000011000001110111111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,69]
+H330 4.2.C1E: 010000100000110000011110 fixed = [28,51]
+H330 4.2.C1E: 010000100000110000011110 Ignored overlap  fixed = [28,51]
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10],[28,51]]
+sortd = [[1,10],[28,51],[28,51]]
+
+Definite result: 58/80	2013/gh55-ltype.dxf
+----------------
+FIELD_BS ([], 70);	// 1 [1,10]
+HOLE([11,27],01100000100000110) len = 17
+FIELD_H (reactors[0], 330);	// 4.2.C1E [28,51]
+FIELD_H (ownerhandle, 330);	// 4.2.C1E [28,51]
+HOLE([52,80],01010010000011000001110111111) len = 29
+----------------
+Todo: 0 + 58 = 58, Missing: 22
+
+Most probable result: (TODO)
+
+ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0xC7D (80) test/test-data/2013/gh55-ltype.dxf:
+01000000010110000010000011001000010000011000111011101010010000011000111011011111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,69]
+H330 4.2.C77: 010000100000110001110111 fixed = [28,51]
+H330 4.2.C77: 010000100000110001110111 Ignored overlap  fixed = [28,51]
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10],[28,51]]
+sortd = [[1,10],[28,51],[28,51]]
+
+Definite result: 58/80	2013/gh55-ltype.dxf
+----------------
+FIELD_BS ([], 70);	// 1 [1,10]
+HOLE([11,27],01100000100000110) len = 17
+FIELD_H (reactors[0], 330);	// 4.2.C77 [28,51]
+FIELD_H (ownerhandle, 330);	// 4.2.C77 [28,51]
+HOLE([52,80],01010010000011000111011011111) len = 29
+----------------
+Todo: 0 + 58 = 58, Missing: 22
+
+Most probable result: (TODO)
+
+ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0xC9B (80) test/test-data/2013/gh55-ltype.dxf:
+01000000010110000010000011001000010000011001001010101010010000011001001010011111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,69]
+H330 4.2.C95: 010000100000110010010101 fixed = [28,51]
+H330 4.2.C95: 010000100000110010010101 Ignored overlap  fixed = [28,51]
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10],[28,51]]
+sortd = [[1,10],[28,51],[28,51]]
+
+Definite result: 58/80	2013/gh55-ltype.dxf
+----------------
+FIELD_BS ([], 70);	// 1 [1,10]
+HOLE([11,27],01100000100000110) len = 17
+FIELD_H (reactors[0], 330);	// 4.2.C95 [28,51]
+FIELD_H (ownerhandle, 330);	// 4.2.C95 [28,51]
+HOLE([52,80],01010010000011001001010011111) len = 29
+----------------
+Todo: 0 + 58 = 58, Missing: 22
+
+Most probable result: (TODO)
+
+ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0xCB9 (80) test/test-data/2013/gh55-ltype.dxf:
+01000000010110000010000011001000010000011001011001101010010000011001011001011111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,69]
+H330 4.2.CB3: 010000100000110010110011 fixed = [28,51]
+H330 4.2.CB3: 010000100000110010110011 Ignored overlap  fixed = [28,51]
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10],[28,51]]
+sortd = [[1,10],[28,51],[28,51]]
+
+Definite result: 58/80	2013/gh55-ltype.dxf
+----------------
+FIELD_BS ([], 70);	// 1 [1,10]
+HOLE([11,27],01100000100000110) len = 17
+FIELD_H (reactors[0], 330);	// 4.2.CB3 [28,51]
+FIELD_H (ownerhandle, 330);	// 4.2.CB3 [28,51]
+HOLE([52,80],01010010000011001011001011111) len = 29
+----------------
+Todo: 0 + 58 = 58, Missing: 22
+
+Most probable result: (TODO)
+
+ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0xCDC (80) test/test-data/2013/gh55-ltype.dxf:
+01000000010110000010000011001000010000011001101011001010010000011001101010111111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,69]
+H330 4.2.CD6: 010000100000110011010110 fixed = [28,51]
+H330 4.2.CD6: 010000100000110011010110 Ignored overlap  fixed = [28,51]
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10],[28,51]]
+sortd = [[1,10],[28,51],[28,51]]
+
+Definite result: 58/80	2013/gh55-ltype.dxf
+----------------
+FIELD_BS ([], 70);	// 1 [1,10]
+HOLE([11,27],01100000100000110) len = 17
+FIELD_H (reactors[0], 330);	// 4.2.CD6 [28,51]
+FIELD_H (ownerhandle, 330);	// 4.2.CD6 [28,51]
+HOLE([52,80],01010010000011001101010111111) len = 29
+----------------
+Todo: 0 + 58 = 58, Missing: 22
+
+Most probable result: (TODO)
+
+ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0xCFA (80) test/test-data/2013/gh55-ltype.dxf:
+01000000010110000010000011001000010000011001111010001010010000011001111001111111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,69]
+H330 4.2.CF4: 010000100000110011110100 fixed = [28,51]
+H330 4.2.CF4: 010000100000110011110100 Ignored overlap  fixed = [28,51]
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10],[28,51]]
+sortd = [[1,10],[28,51],[28,51]]
+
+Definite result: 58/80	2013/gh55-ltype.dxf
+----------------
+FIELD_BS ([], 70);	// 1 [1,10]
+HOLE([11,27],01100000100000110) len = 17
+FIELD_H (reactors[0], 330);	// 4.2.CF4 [28,51]
+FIELD_H (ownerhandle, 330);	// 4.2.CF4 [28,51]
+HOLE([52,80],01010010000011001111001111111) len = 29
+----------------
+Todo: 0 + 58 = 58, Missing: 22
+
+Most probable result: (TODO)
+
+ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0x6684 (80) test/test-data/2013/gh55-ltype.dxf:
+01000000010110000010000100101000010011001100111101101010010000011111100011011111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,69]
+H330 4.2.667B: 010000100110011001111011 fixed = [28,51]
+H330 4.2.667B: 010000100110011001111011 Ignored overlap  fixed = [28,51]
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10],[28,51]]
+sortd = [[1,10],[28,51],[28,51]]
+
+Definite result: 58/80	2013/gh55-ltype.dxf
+----------------
+FIELD_BS ([], 70);	// 1 [1,10]
+HOLE([11,27],01100000100001001) len = 17
+FIELD_H (reactors[0], 330);	// 4.2.667B [28,51]
+FIELD_H (ownerhandle, 330);	// 4.2.667B [28,51]
+HOLE([52,80],01010010000011111100011011111) len = 29
+----------------
+Todo: 0 + 58 = 58, Missing: 22
+
+Most probable result: (TODO)
+
+ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0x65E1 (80) test/test-data/2013/gh55-ltype.dxf:
+01000000010110000010000101101000010011001011101011001010010000011110111101111111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,69]
+H330 4.2.65D6: 010000100110010111010110 fixed = [28,51]
+H330 4.2.65D6: 010000100110010111010110 Ignored overlap  fixed = [28,51]
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10],[28,51]]
+sortd = [[1,10],[28,51],[28,51]]
+
+Definite result: 58/80	2013/gh55-ltype.dxf
+----------------
+FIELD_BS ([], 70);	// 1 [1,10]
+HOLE([11,27],01100000100001011) len = 17
+FIELD_H (reactors[0], 330);	// 4.2.65D6 [28,51]
+FIELD_H (ownerhandle, 330);	// 4.2.65D6 [28,51]
+HOLE([52,80],01010010000011110111101111111) len = 29
+----------------
+Todo: 0 + 58 = 58, Missing: 22
+
+Most probable result: (TODO)
+
+ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0x4DB6 (80) test/test-data/2013/gh55-ltype.dxf:
+01000000010110000010010010101000010010011011001000101010010000011110100000011111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,69]
+H330 4.2.4D91: 010000100100110110010001 fixed = [28,51]
+H330 4.2.4D91: 010000100100110110010001 Ignored overlap  fixed = [28,51]
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10],[28,51]]
+sortd = [[1,10],[28,51],[28,51]]
+
+Definite result: 58/80	2013/gh55-ltype.dxf
+----------------
+FIELD_BS ([], 70);	// 1 [1,10]
+HOLE([11,27],01100000100100101) len = 17
+FIELD_H (reactors[0], 330);	// 4.2.4D91 [28,51]
+FIELD_H (ownerhandle, 330);	// 4.2.4D91 [28,51]
+HOLE([52,80],01010010000011110100000011111) len = 29
+----------------
+Todo: 0 + 58 = 58, Missing: 22
+
+Most probable result: (TODO)
+
+ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0x1D79 (80) test/test-data/2013/gh55-ltype.dxf:
+01000000010110000010111100001000010000111010000000101010010000010110001010111111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,69]
+H330 4.2.1D01: 010000100001110100000001 fixed = [28,51]
+H330 4.2.1D01: 010000100001110100000001 Ignored overlap  fixed = [28,51]
+BS70 1: 0100000001 2 positions
+
+fixed = [[28,51]]
+sortd = [[28,51],[28,51]]
+
+Definite result: 48/80	2013/gh55-ltype.dxf
+----------------
+HOLE([1,27],010000000101100000101111000) len = 27
+FIELD_H (reactors[0], 330);	// 4.2.1D01 [28,51]
+FIELD_H (ownerhandle, 330);	// 4.2.1D01 [28,51]
+HOLE([52,80],01010010000010110001010111111) len = 29
+----------------
+Todo: 0 + 48 = 48, Missing: 32
+
+Most probable result: (TODO)
+
+ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION: 0x5EFA (88) test/test-data/2013/gh55-ltype.dxf:
+0100000001011000010000001001000011101000010010110100111001101010010000100000000110111111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,77]
+H330 4.2.5A73: 010000100101101001110011 fixed = [36,59]
+H330 4.2.5A73: 010000100101101001110011 Ignored overlap  fixed = [36,59]
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10],[36,59]]
+sortd = [[1,10],[36,59],[36,59]]
+
+Definite result: 58/88	2013/gh55-ltype.dxf
+----------------
+FIELD_BS ([], 70);	// 1 [1,10]
+HOLE([11,35],0110000100000010010000111) len = 25
+FIELD_H (reactors[0], 330);	// 4.2.5A73 [36,59]
+FIELD_H (ownerhandle, 330);	// 4.2.5A73 [36,59]
+HOLE([60,88],01010010000100000000110111111) len = 29
+----------------
+Todo: 0 + 58 = 58, Missing: 30
+
+Most probable result: (TODO)
+
