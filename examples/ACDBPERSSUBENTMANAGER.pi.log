@@ -155,7 +155,7 @@ Most probable result: (TODO)
 ACDBPERSSUBENTMANAGER: 0x2E0 (89) test/test-data/example_2010.dxf:
 01000000101001000000100100000011100100000001010000000100100000100001100010000010000110011
 
-[hdloff, strsize, commonsize, bitsize, hdlsize]=[65,0,37,10,0]
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[65,0,37,10,34]
 H330 4.1.C: 0100000100001100 2 positions
 H330 4.1.C: 0100000100001100 2 positions
 distribute positions: H330 H330 
@@ -195,7 +195,7 @@ Most probable result: (TODO)
 ACDBPERSSUBENTMANAGER: 0x2E0 (64) test/test-data/example_2013.dxf:
 0100000010100100000010101010001000001000011000100000100001100111
 
-[hdloff, strsize, commonsize, bitsize, hdlsize]=[39,0,38,7,0]
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[39,0,38,7,35]
 H330 4.1.C: 0100000100001100 2 positions
 H330 4.1.C: 0100000100001100 2 positions
 distribute positions: H330 H330 

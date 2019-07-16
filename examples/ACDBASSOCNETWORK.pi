@@ -171,7 +171,7 @@ def(6, Data) =>
   Class="ACDBASSOCNETWORK",
   Dxf="test/test-data/2010/Constraints.dxf",
   Version=2010,
-  Offsets=[62, 0, 37, 9, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  Offsets=[62, 0, 37, 9, 93], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="0100000001100100000001101010010000000101000000011100100000000100001000000011110111110100001000000011111000100011000000110010000000111110001111111",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
@@ -198,7 +198,7 @@ def(7, Data) =>
   Class="ACDBASSOCNETWORK",
   Dxf="test/test-data/2010/Constraints.dxf",
   Version=2010,
-  Offsets=[54, 0, 37, 9, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  Offsets=[54, 0, 37, 9, 77], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="0100000001101010101001000000010100000001010010000000010000100000001111100001010000000011000001000010000000111110000011111",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
@@ -225,7 +225,7 @@ def(8, Data) =>
   Class="ACDBASSOCNETWORK",
   Dxf="test/test-data/2013/Constraints.dxf",
   Version=2013,
-  Offsets=[70, 0, 38, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  Offsets=[70, 0, 38, 10, 92], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="01000000101001000000011010101010101001000000010100000001110010000000010000100000001111011111010000100000001111100010001100000011001000000011111000111111",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
@@ -256,7 +256,7 @@ def(9, Data) =>
   Class="ACDBASSOCNETWORK",
   Dxf="test/test-data/2013/Constraints.dxf",
   Version=2013,
-  Offsets=[62, 0, 38, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  Offsets=[62, 0, 38, 10, 76], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="01000000101010101010101010100100000001010000000101001000000001000010000000111110000101000000001100000100001000000011111000001111",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
@@ -455,7 +455,7 @@ def(16, Data) =>
   Class="ACDBASSOCNETWORK",
   Dxf="test/test-data/example_2010.dxf",
   Version=2010,
-  Offsets=[78, 0, 37, 11, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  Offsets=[78, 0, 37, 11, 117], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="01000000010100000001010000000110101001000000010100000001101000000010100000000100001000000011100011010100001000000011100100000011000000110010000000111001000101000010000000111001000111111",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
@@ -483,7 +483,7 @@ def(17, Data) =>
   Class="ACDBASSOCNETWORK",
   Dxf="test/test-data/example_2010.dxf",
   Version=2010,
-  Offsets=[70, 0, 37, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  Offsets=[70, 0, 37, 10, 101], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="01000000010100000001101010100100000001010000000100100000001010000000010000100000001110001111010000000011000001000010000000111000111001000010000000111000111011111",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
@@ -511,7 +511,7 @@ def(18, Data) =>
   Class="ACDBASSOCNETWORK",
   Dxf="test/test-data/example_2013.dxf",
   Version=2013,
-  Offsets=[70, 0, 38, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  Offsets=[70, 0, 38, 10, 92], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="01000000101001000000011010101010101001000000010100000001110010000000010000100000001110001101010000100000001110010000001100000011001000000011100100011111",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
@@ -542,7 +542,7 @@ def(19, Data) =>
   Class="ACDBASSOCNETWORK",
   Dxf="test/test-data/example_2013.dxf",
   Version=2013,
-  Offsets=[62, 0, 38, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  Offsets=[62, 0, 38, 10, 76], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="01000000101010101010101010100100000001010000000101001000000001000010000000111000111101000000001100000100001000000011100011101111",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
@@ -637,7 +637,7 @@ def(22, Data) =>
   Class="ACDBASSOCNETWORK",
   Dxf="test/test-data/2018/Surface.dxf",
   Version=2018,
-  Offsets=[73, 0, 38, 11, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  Offsets=[73, 0, 38, 11, 161], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="01000000101001000000011010101010101001000001010100000100111110010000000010000100000001011011011010000100000001011011110001100000011001000000010110111110011001000000011010011100011001000000011011001110011001000000100000100101",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
@@ -671,7 +671,7 @@ def(23, Data) =>
   Class="ACDBASSOCNETWORK",
   Dxf="test/test-data/2018/Surface.dxf",
   Version=2018,
-  Offsets=[62, 0, 38, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  Offsets=[62, 0, 38, 10, 76], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="01000000101010101010101010100100000001010000000101001000000001000010000000101101110101000000001100000100001000000010110111001111",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
