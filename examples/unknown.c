@@ -70,6 +70,7 @@ static struct _unknown_dxf
   const char *dxf;
   const unsigned int handle;
   const char *bytes;
+  const int is_entity;
   const int num_bits; // size of dumped unknown_bits TF
   const int commonsize;
   const int hdloff;
@@ -80,7 +81,7 @@ static struct _unknown_dxf
 } unknown_dxf[] = {
   // see log_unknown_dxf.pl
   #include "alldxf_0.inc"
-  { NULL, NULL, 0, "", 0, 0, 0, 0, 0, 0, NULL }
+  { NULL, NULL, 0, "", 0, 0, 0, 0, 0, 0, 0, NULL }
 };
 
 #include "alldxf_1.inc"
@@ -105,6 +106,7 @@ static struct _unknown {
   const char *bits;
   const char *dxf;
   const unsigned int handle;
+  const int is_entity;
   const int num_bits;
   const int commonsize;
   const int hdloff;
@@ -113,7 +115,7 @@ static struct _unknown {
   const int bitsize;
 } unknowns[] =
   {
-   { "ACAD_EVALUATION_GRAPH", "example_2000.log", "40501406481013fffffffcffffffff3fffffffcffffffff980c0c80b8bee", "test/test-data/example_2000.dxf", 0x2E3, 234, 60, -60, 0, 268 },
+   { "ACAD_EVALUATION_GRAPH", "example_2000.log", "40501406481013fffffffcffffffff3fffffffcffffffff980c0c80b8bee", "test/test-data/example_2000.dxf", 0x2E3, 0, 234, 60, -60, 0, 268 },
     /* the following types:
       5 ACDBASSOCGEOMDEPENDENCY
       3 ACDBASSOCNETWORK
@@ -307,11 +309,28 @@ bits_RL (Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 static void
 bits_CMC (Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
-  // dat should know if >= R_2004, but we just search for the index
-  // we first try EMC, only if it fails CMC
+  // dat should know if >= R_2004, but we just search for the index (62)
+  // we try ENC on entities, CMC on objects
   Dwg_Color color;
   memset (&color, 0, sizeof (color));
   color.index = strtol (g->value, NULL, 10);
+  if (dat->version >= R_2004)
+    {
+      // check next g field
+      struct _unknown_field *ng = g + 1;
+      struct _unknown_field *ng2 = g + 2;
+      //TODO: need to detect book_name (flag 2)
+      if (ng->code >= 420 && ng->code < 430)
+        {
+          color.rgb = strtol (ng->value, NULL, 10);
+          if (ng2->code >= 430 && ng2->code < 440)
+            {
+              color.flag |= 0x1;
+              color.name = (char *)ng2->value;
+              ng2++;
+            }
+        }
+    }
   bit_write_CMC (dat, &color);
   g->type = BITS_CMC;
 }
@@ -467,7 +486,7 @@ bits_try_handle (struct _unknown_field *g, int code, unsigned int objhandle)
 }
 
 static void
-bits_format (struct _unknown_field *g, const int version)
+bits_format (struct _unknown_field *g, const int version, const int is_entity)
 {
   int code = g->code;
   Bit_Chain dat = { NULL, 16, 0, 0, NULL, 0, 0 };
@@ -492,7 +511,12 @@ bits_format (struct _unknown_field *g, const int version)
     bits_angle_BD (&dat, g); // deg2rad for angles
   else if (code < 70)
     if (version >= R_2004)
-      bits_ENC (&dat, g);
+      {
+        if (is_entity)
+          bits_ENC (&dat, g);
+        else
+          bits_CMC (&dat, g);
+      }
     else
       bits_CMC (&dat, g);
   else if (code < 80)
@@ -921,7 +945,7 @@ main (int argc, char *argv[])
                 }
               // if we came here from continue, i.e. not_found
               // store the binary repr
-              bits_format (&g[j], version);
+              bits_format (&g[j], version, unknown_dxf[i].is_entity);
             SEARCH:
               // searching for it in the stream and store found position if
               // found only once

@@ -9,9 +9,10 @@
 if (/ Hdlsize: (\d+),/) {
   $hdlsize = $1; next;
 }
-if (/^Warning: (?:Unhandled|Unstable) Class (?:object|entity) \d+ (\w+) /) {
-  print "//log=$ARGV object=$1\n";
-  $object = $1; next;
+if (/^Warning: (?:Unhandled|Unstable) Class (object|entity) \d+ (\w+) /) {
+  print "//log=$ARGV object=$2\n";
+  $is_entity = $1 eq "entity" ? 1 : 0;
+  $object = $2; next;
 }
 next unless $object;
 
@@ -57,8 +58,8 @@ if (/Next object: / or /^Num objects:/) {
   next if $dxf =~ /work\.orig/; # skip temp. duplicates
   $dxf = undef unless -f $dxf;
   printf "    { \"$object\", \"$ARGV\", \"$b\", %s, 0x$handle, ".
-    "$num_bits, $commonsize, $hdloff, $strsize, $hdlsize, $bitsize },\n",
+    "$is_entity, $num_bits, $commonsize, $hdloff, $strsize, $hdlsize, $bitsize },\n",
     $dxf ? "\"$dxf\"" : "NULL";
   $object = $b = $handle = undef;
-  $num_bits = $commonsize = $hdloff = $strsize = $hdlsize = $bitsize = 0;
+  $num_bits = $commonsize = $hdloff = $strsize = $hdlsize = $bitsize = $is_entity = 0;
 }
