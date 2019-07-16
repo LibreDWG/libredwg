@@ -5,126 +5,6 @@ import unknown.
    Usage: picat [-g go2] examples/ACDBASSOCACTION.pi
 */
 def(0, Data) =>
-  println("ACDBASSOCACTION: 0x391 (178) test/test-data/example_2000.dxf:"),
-  Class="ACDBASSOCACTION",
-  Dxf="test/test-data/example_2000.dxf",
-  Version=2000,
-  Offsets=[70, 0, 60, 13, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="0100000001010000000101000000010100000010010000001011110000010000001100110000010000100000001110001110001100100000001110010010001100100000001110010110001100100000001110010111111111",
-  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
-  Fields = [
-     new_struct('H330', ["010000100000001110001110", '4.2.38E', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000001", '1', [], "is_body_a_proxy", 90])
-    ,new_struct('BL90', ["0100000001", '1', [], "status", 90])
-    ,new_struct('H330', ["010000100000001110001110", '4.2.38E', [], "", 330])
-    ,new_struct('H360', ["001100100000001110010010", '3.2.392', [], "writedep", 360])
-    ,new_struct('BL90', ["0100000001", '1', [], "num_deps", 90])
-    ,new_struct('BL90', ["0100000010", '2', [], "unknown_assoc", 90])
-    ,new_struct('BL90', ["0100000010", '2', [], "", 90])
-    ,new_struct('H360', ["001100100000001110010110", '3.2.396', [], "", 360])
-    ,new_struct('H360', ["001100100000001110010111", '3.2.397', [], "", 360])
-  ],
-  Data = [S,Fields,Class,Dxf,Version,Offsets],
-  go(Data).
-
-def(1, Data) =>
-  println("ACDBASSOCACTION: 0x391 (169) test/test-data/example_2004.dxf:"),
-  Class="ACDBASSOCACTION",
-  Dxf="test/test-data/example_2004.dxf",
-  Version=2004,
-  Offsets=[70, 0, 61, 13, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="0100000001010000000101000000010100000010010000001011110000010000001101000010000000111000111000110010000000111001001000110010000000111001011000110010000000111001011111111",
-  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
-  Fields = [
-     new_struct('H330', ["010000100000001110001110", '4.2.38E', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000001", '1', [], "is_body_a_proxy", 90])
-    ,new_struct('BL90', ["0100000001", '1', [], "status", 90])
-    ,new_struct('H330', ["010000100000001110001110", '4.2.38E', [], "", 330])
-    ,new_struct('H360', ["001100100000001110010010", '3.2.392', [], "writedep", 360])
-    ,new_struct('BL90', ["0100000001", '1', [], "num_deps", 90])
-    ,new_struct('BL90', ["0100000010", '2', [], "unknown_assoc", 90])
-    ,new_struct('BL90', ["0100000010", '2', [], "", 90])
-    ,new_struct('H360', ["001100100000001110010110", '3.2.396', [], "", 360])
-    ,new_struct('H360', ["001100100000001110010111", '3.2.397', [], "", 360])
-  ],
-  Data = [S,Fields,Class,Dxf,Version,Offsets],
-  go(Data).
-
-def(2, Data) =>
-  println("ACDBASSOCACTION: 0x391 (169) test/test-data/example_2007.dxf:"),
-  Class="ACDBASSOCACTION",
-  Dxf="test/test-data/example_2007.dxf",
-  Version=2007,
-  Offsets=[71, 0, 61, 13, 116], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="0100000001010000000101000000010100000010010000001011011000001000000110100001000000011100011100011001000000011100100100011001000000011100101100011001000000011100101111111",
-  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
-  Fields = [
-     new_struct('H330', ["010000100000001110001110", '4.2.38E', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000001", '1', [], "is_body_a_proxy", 90])
-    ,new_struct('BL90', ["0100000001", '1', [], "status", 90])
-    ,new_struct('H330', ["010000100000001110001110", '4.2.38E', [], "", 330])
-    ,new_struct('H360', ["001100100000001110010010", '3.2.392', [], "writedep", 360])
-    ,new_struct('BL90', ["0100000001", '1', [], "num_deps", 90])
-    ,new_struct('BL90', ["0100000010", '2', [], "unknown_assoc", 90])
-    ,new_struct('BL90', ["0100000010", '2', [], "", 90])
-    ,new_struct('H360', ["001100100000001110010110", '3.2.396', [], "", 360])
-    ,new_struct('H360', ["001100100000001110010111", '3.2.397', [], "", 360])
-  ],
-  Data = [S,Fields,Class,Dxf,Version,Offsets],
-  go(Data).
-
-def(3, Data) =>
-  println("ACDBASSOCACTION: 0x391 (169) test/test-data/example_2010.dxf:"),
-  Class="ACDBASSOCACTION",
-  Dxf="test/test-data/example_2010.dxf",
-  Version=2010,
-  Offsets=[63, 0, 29, 9, 116], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="0100000001010000000101000000010100000010010000001011011000001000000110100001000000011100011100011001000000011100100100011001000000011100101100011001000000011100101111111",
-  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
-  Fields = [
-     new_struct('H330', ["010000100000001110001110", '4.2.38E', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000001", '1', [], "is_body_a_proxy", 90])
-    ,new_struct('BL90', ["0100000001", '1', [], "status", 90])
-    ,new_struct('H330', ["010000100000001110001110", '4.2.38E', [], "", 330])
-    ,new_struct('H360', ["001100100000001110010010", '3.2.392', [], "writedep", 360])
-    ,new_struct('BL90', ["0100000001", '1', [], "num_deps", 90])
-    ,new_struct('BL90', ["0100000010", '2', [], "unknown_assoc", 90])
-    ,new_struct('BL90', ["0100000010", '2', [], "", 90])
-    ,new_struct('H360', ["001100100000001110010110", '3.2.396', [], "", 360])
-    ,new_struct('H360', ["001100100000001110010111", '3.2.397', [], "", 360])
-  ],
-  Data = [S,Fields,Class,Dxf,Version,Offsets],
-  go(Data).
-
-def(4, Data) =>
-  println("ACDBASSOCACTION: 0x391 (200) test/test-data/example_2013.dxf:"),
-  Class="ACDBASSOCACTION",
-  Dxf="test/test-data/example_2013.dxf",
-  Version=2013,
-  Offsets=[71, 0, 30, 10, 139], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="01000000101001000000010100000010010000001011100100000001101001100000100000011010000100000001110001110001100100000001110010010001100100000001110010110001100100000001110010111001100100000001110010011111",
-  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
-  Fields = [
-     new_struct('H330', ["010000100000001110001110", '4.2.38E', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "is_body_a_proxy", 90])
-    ,new_struct('BL90', ["10", '0', [], "status", 90])
-    ,new_struct('H330', ["010000100000001110001110", '4.2.38E', [], "", 330])
-    ,new_struct('H360', ["001100100000001110010010", '3.2.392', [], "writedep", 360])
-    ,new_struct('BL90', ["0100000001", '1', [], "num_deps", 90])
-    ,new_struct('BL90', ["0100000010", '2', [], "unknown_assoc", 90])
-    ,new_struct('BL90', ["0100000010", '2', [], "", 90])
-    ,new_struct('H360', ["001100100000001110010110", '3.2.396', [], "", 360])
-    ,new_struct('H360', ["001100100000001110010111", '3.2.397', [], "", 360])
-    ,new_struct('BL90', ["10", '0', [], "", 90])
-    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
-    ,new_struct('H360', ["001100100000001110010011", '3.2.393', [], "", 360])
-    ,new_struct('BL90', ["10", '0', [], "", 90])
-    ,new_struct('BL90', ["10", '0', [], "", 90])
-  ],
-  Data = [S,Fields,Class,Dxf,Version,Offsets],
-  go(Data).
-
-def(5, Data) =>
   println("ACDBASSOCACTION: 0x2DF (167) test/test-data/2004/Surface.dxf:"),
   Class="ACDBASSOCACTION",
   Dxf="test/test-data/2004/Surface.dxf",
@@ -147,7 +27,7 @@ def(5, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(6, Data) =>
+def(1, Data) =>
   println("ACDBASSOCACTION: 0x34E (191) test/test-data/2004/Surface.dxf:"),
   Class="ACDBASSOCACTION",
   Dxf="test/test-data/2004/Surface.dxf",
@@ -171,7 +51,7 @@ def(6, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(7, Data) =>
+def(2, Data) =>
   println("ACDBASSOCACTION: 0x367 (167) test/test-data/2004/Surface.dxf:"),
   Class="ACDBASSOCACTION",
   Dxf="test/test-data/2004/Surface.dxf",
@@ -194,7 +74,7 @@ def(7, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(8, Data) =>
+def(3, Data) =>
   println("ACDBASSOCACTION: 0x412 (199) test/test-data/2004/Surface.dxf:"),
   Class="ACDBASSOCACTION",
   Dxf="test/test-data/2004/Surface.dxf",
@@ -218,7 +98,7 @@ def(8, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(9, Data) =>
+def(4, Data) =>
   println("ACDBASSOCACTION: 0x50B (175) test/test-data/2004/Surface.dxf:"),
   Class="ACDBASSOCACTION",
   Dxf="test/test-data/2004/Surface.dxf",
@@ -241,7 +121,7 @@ def(9, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(10, Data) =>
+def(5, Data) =>
   println("ACDBASSOCACTION: 0x2DF (982) test/test-data/2018/Surface.dxf:"),
   Class="ACDBASSOCACTION",
   Dxf="test/test-data/2018/Surface.dxf",
@@ -283,7 +163,7 @@ def(10, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(11, Data) =>
+def(6, Data) =>
   println("ACDBASSOCACTION: 0x34E (822) test/test-data/2018/Surface.dxf:"),
   Class="ACDBASSOCACTION",
   Dxf="test/test-data/2018/Surface.dxf",
@@ -311,7 +191,7 @@ def(11, Data) =>
     ,new_struct('BL90', ["10", '0', [], "", 90])
     ,new_struct('BL90', ["0100000010", '2', [], "", 90])
     ,new_struct('BL90', ["10", '0', [], "", 90])
-    %new_struct('_TF1', ["00000000000000000000000000000000000000000000000000000000000000000111010001111001", 'Continuity', [], "", 1])
+    %new_struct('_TF1', ["01000011011011110110111001110100011010010110111001110101011010010111010001111001", 'Continuity', [], "", 1])
     ,new_struct('BL90', ["10", '0', [], "", 90])
     ,new_struct('BL90', ["0100000010", '2', [], "", 90])
     ,new_struct('BS70', ["0100000001", '1', [], "", 70])
@@ -320,7 +200,7 @@ def(11, Data) =>
     ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
     ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
     ,new_struct('BL90', ["10", '0', [], "", 90])
-    %new_struct('_TF1', ["0000000000000000000000000000000000000000", 'Bulge', [], "", 1])
+    %new_struct('_TF1', ["0100001001110101011011000110011101100101", 'Bulge', [], "", 1])
     ,new_struct('BL90', ["10", '0', [], "", 90])
     ,new_struct('BL90', ["0100000010", '2', [], "", 90])
     ,new_struct('BD40', ["000000000000000000000000000000000000000000000000001110000000111111", '0.5', [], "", 40])
@@ -332,7 +212,7 @@ def(11, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(12, Data) =>
+def(7, Data) =>
   println("ACDBASSOCACTION: 0x367 (582) test/test-data/2018/Surface.dxf:"),
   Class="ACDBASSOCACTION",
   Dxf="test/test-data/2018/Surface.dxf",
@@ -358,7 +238,7 @@ def(12, Data) =>
     ,new_struct('BL90', ["10", '0', [], "", 90])
     ,new_struct('BL90', ["0100000001", '1', [], "", 90])
     ,new_struct('BL90', ["10", '0', [], "", 90])
-    %new_struct('_TF1', ["000000000000000000000000000000000000000000000000000000000000000001101110011001110110110001100101", 'RevolveAngle', [], "", 1])
+    %new_struct('_TF1', ["010100100110010101110110011011110110110001110110011001010100000101101110011001110110110001100101", 'RevolveAngle', [], "", 1])
     ,new_struct('BL90', ["0100000010", '2', [], "", 90])
     ,new_struct('BL90', ["0100000001", '1', [], "", 90])
     ,new_struct('BD40', ["0000000000000000000000000000000000000000000000000000000000000000", '0.1929873338236447', [], "", 40])
@@ -368,7 +248,7 @@ def(12, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(13, Data) =>
+def(8, Data) =>
   println("ACDBASSOCACTION: 0x412 (1046) test/test-data/2018/Surface.dxf:"),
   Class="ACDBASSOCACTION",
   Dxf="test/test-data/2018/Surface.dxf",
@@ -395,26 +275,146 @@ def(13, Data) =>
     ,new_struct('BL90', ["10", '0', [], "", 90])
     ,new_struct('BL90', ["0100000011", '3', [], "", 90])
     ,new_struct('BL90', ["10", '0', [], "", 90])
-    %new_struct('_TF1', ["00000000000000000000000000000000000000000000000000000000000000000100000101101110011001110110110001100101", 'RotationAngle', [], "", 1])
+    %new_struct('_TF1', ["01010010011011110111010001100001011101000110100101101111011011100100000101101110011001110110110001100101", 'RotationAngle', [], "", 1])
     ,new_struct('BL90', ["0100000010", '2', [], "", 90])
     ,new_struct('BL90', ["0100000001", '1', [], "", 90])
     ,new_struct('BD40', ["10", '0.0', [], "", 40])
     ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
     ,new_struct('H330', ["010000100000010000010100", '4.2.414', [], "", 330])
     ,new_struct('BL90', ["10", '0', [], "", 90])
-    %new_struct('_TF1', ["0000000000000000000000000000000000000000000000000000000000000000011101000110111101110010", 'ScaleFactor', [], "", 1])
+    %new_struct('_TF1', ["0101001101100011011000010110110001100101010001100110000101100011011101000110111101110010", 'ScaleFactor', [], "", 1])
     ,new_struct('BL90', ["10", '0', [], "", 90])
     ,new_struct('BL90', ["0100000001", '1', [], "", 90])
     ,new_struct('BD40', ["01", '1.0', [], "", 40])
     ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
     ,new_struct('H330', ["010000100000010000010100", '4.2.414', [], "", 330])
     ,new_struct('BL90', ["10", '0', [], "", 90])
-    %new_struct('_TF1', ["00000000000000000000000000000000000000000000000000000000000000000110110001100101", 'TwistAngle', [], "", 1])
+    %new_struct('_TF1', ["01010100011101110110100101110011011101000100000101101110011001110110110001100101", 'TwistAngle', [], "", 1])
     ,new_struct('BL90', ["0100000010", '2', [], "", 90])
     ,new_struct('BL90', ["0100000001", '1', [], "", 90])
     ,new_struct('BD40', ["10", '0.0', [], "", 40])
     ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
     ,new_struct('H330', ["010000100000010000010100", '4.2.414', [], "", 330])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(9, Data) =>
+  println("ACDBASSOCACTION: 0x391 (178) test/test-data/example_2000.dxf:"),
+  Class="ACDBASSOCACTION",
+  Dxf="test/test-data/example_2000.dxf",
+  Version=2000,
+  Offsets=[70, 0, 60, 13, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="0100000001010000000101000000010100000010010000001011110000010000001100110000010000100000001110001110001100100000001110010010001100100000001110010110001100100000001110010111111111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["010000100000001110001110", '4.2.38E', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["0100000001", '1', [], "is_body_a_proxy", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "status", 90])
+    ,new_struct('H330', ["010000100000001110001110", '4.2.38E', [], "", 330])
+    ,new_struct('H360', ["001100100000001110010010", '3.2.392', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000001", '1', [], "num_deps", 90])
+    ,new_struct('BL90', ["0100000010", '2', [], "unknown_assoc", 90])
+    ,new_struct('BL90', ["0100000010", '2', [], "", 90])
+    ,new_struct('H360', ["001100100000001110010110", '3.2.396', [], "", 360])
+    ,new_struct('H360', ["001100100000001110010111", '3.2.397', [], "", 360])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(10, Data) =>
+  println("ACDBASSOCACTION: 0x391 (169) test/test-data/example_2004.dxf:"),
+  Class="ACDBASSOCACTION",
+  Dxf="test/test-data/example_2004.dxf",
+  Version=2004,
+  Offsets=[70, 0, 61, 13, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="0100000001010000000101000000010100000010010000001011110000010000001101000010000000111000111000110010000000111001001000110010000000111001011000110010000000111001011111111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["010000100000001110001110", '4.2.38E', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["0100000001", '1', [], "is_body_a_proxy", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "status", 90])
+    ,new_struct('H330', ["010000100000001110001110", '4.2.38E', [], "", 330])
+    ,new_struct('H360', ["001100100000001110010010", '3.2.392', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000001", '1', [], "num_deps", 90])
+    ,new_struct('BL90', ["0100000010", '2', [], "unknown_assoc", 90])
+    ,new_struct('BL90', ["0100000010", '2', [], "", 90])
+    ,new_struct('H360', ["001100100000001110010110", '3.2.396', [], "", 360])
+    ,new_struct('H360', ["001100100000001110010111", '3.2.397', [], "", 360])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(11, Data) =>
+  println("ACDBASSOCACTION: 0x391 (169) test/test-data/example_2007.dxf:"),
+  Class="ACDBASSOCACTION",
+  Dxf="test/test-data/example_2007.dxf",
+  Version=2007,
+  Offsets=[71, 0, 61, 13, 116], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="0100000001010000000101000000010100000010010000001011011000001000000110100001000000011100011100011001000000011100100100011001000000011100101100011001000000011100101111111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["010000100000001110001110", '4.2.38E', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["0100000001", '1', [], "is_body_a_proxy", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "status", 90])
+    ,new_struct('H330', ["010000100000001110001110", '4.2.38E', [], "", 330])
+    ,new_struct('H360', ["001100100000001110010010", '3.2.392', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000001", '1', [], "num_deps", 90])
+    ,new_struct('BL90', ["0100000010", '2', [], "unknown_assoc", 90])
+    ,new_struct('BL90', ["0100000010", '2', [], "", 90])
+    ,new_struct('H360', ["001100100000001110010110", '3.2.396', [], "", 360])
+    ,new_struct('H360', ["001100100000001110010111", '3.2.397', [], "", 360])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(12, Data) =>
+  println("ACDBASSOCACTION: 0x391 (169) test/test-data/example_2010.dxf:"),
+  Class="ACDBASSOCACTION",
+  Dxf="test/test-data/example_2010.dxf",
+  Version=2010,
+  Offsets=[63, 0, 29, 9, 116], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="0100000001010000000101000000010100000010010000001011011000001000000110100001000000011100011100011001000000011100100100011001000000011100101100011001000000011100101111111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["010000100000001110001110", '4.2.38E', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["0100000001", '1', [], "is_body_a_proxy", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "status", 90])
+    ,new_struct('H330', ["010000100000001110001110", '4.2.38E', [], "", 330])
+    ,new_struct('H360', ["001100100000001110010010", '3.2.392', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000001", '1', [], "num_deps", 90])
+    ,new_struct('BL90', ["0100000010", '2', [], "unknown_assoc", 90])
+    ,new_struct('BL90', ["0100000010", '2', [], "", 90])
+    ,new_struct('H360', ["001100100000001110010110", '3.2.396', [], "", 360])
+    ,new_struct('H360', ["001100100000001110010111", '3.2.397', [], "", 360])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(13, Data) =>
+  println("ACDBASSOCACTION: 0x391 (200) test/test-data/example_2013.dxf:"),
+  Class="ACDBASSOCACTION",
+  Dxf="test/test-data/example_2013.dxf",
+  Version=2013,
+  Offsets=[71, 0, 30, 10, 139], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="01000000101001000000010100000010010000001011100100000001101001100000100000011010000100000001110001110001100100000001110010010001100100000001110010110001100100000001110010111001100100000001110010011111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["010000100000001110001110", '4.2.38E', [], "ownerhandle", 330])
+    ,new_struct('BL90', ["0100000010", '2', [], "is_body_a_proxy", 90])
+    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    ,new_struct('H330', ["010000100000001110001110", '4.2.38E', [], "", 330])
+    ,new_struct('H360', ["001100100000001110010010", '3.2.392', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000001", '1', [], "num_deps", 90])
+    ,new_struct('BL90', ["0100000010", '2', [], "unknown_assoc", 90])
+    ,new_struct('BL90', ["0100000010", '2', [], "", 90])
+    ,new_struct('H360', ["001100100000001110010110", '3.2.396', [], "", 360])
+    ,new_struct('H360', ["001100100000001110010111", '3.2.397', [], "", 360])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "", 90])
+    ,new_struct('H360', ["001100100000001110010011", '3.2.393', [], "", 360])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
+    ,new_struct('BL90', ["10", '0', [], "", 90])
   ],
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
