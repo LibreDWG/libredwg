@@ -1572,7 +1572,7 @@ bit_write_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color)
 }
 
 /** Read entity color (2004+) (truecolor rgb and alpha support)
- *  Does also references, DBCOLOR lookups (not yet, needs hdl_dat stream)
+ *  Does also references, DBCOLOR lookups.
  */
 void
 bit_read_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat,
@@ -1587,12 +1587,8 @@ bit_read_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat,
         color->rgb = bit_read_BL (dat); // ODA bug, documented as BS
       if (flag & 0x40)
         {
-          // if we don't have a hdl_dat stream yet
-          if (dat->version < R_2007 || hdl_dat != dat)
-            {
-              color->handle = calloc (1, sizeof (Dwg_Object_Ref));
-              bit_read_H (hdl_dat, &(color->handle->handleref)); // => DBCOLOR
-            }
+          color->handle = calloc (1, sizeof (Dwg_Object_Ref));
+          bit_read_H (hdl_dat, &(color->handle->handleref)); // => DBCOLOR
           // else defer to dwg_decode_common_entity_handle_data ()
         }
       if (flag & 0x20)
