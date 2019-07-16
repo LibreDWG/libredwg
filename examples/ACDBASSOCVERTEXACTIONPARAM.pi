@@ -9,7 +9,7 @@ def(0, Data) =>
   Class="ACDBASSOCVERTEXACTIONPARAM",
   Dxf="test/test-data/example_2000.dxf",
   Version=2000,
-  Offsets=[160, 0, 60, 22], % hdloff, strsize, commonsize, bitsize
+  Offsets=[160, 0, 60, 22, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="101010100011110000011001110001101111100101000000010000011101001011110000000000011100100011100110100000010101110100110000011011000111010000001010000000001100000100001000000011100101101111",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
@@ -31,7 +31,7 @@ def(1, Data) =>
   Class="ACDBASSOCVERTEXACTIONPARAM",
   Dxf="test/test-data/example_2004.dxf",
   Version=2004,
-  Offsets=[160, 0, 61, 22], % hdloff, strsize, commonsize, bitsize
+  Offsets=[160, 0, 61, 22, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="101010100011110000011001110001101111100101000000010000011101001011110000000000011100100011100110100000010101110100110000011011000111010000001010000000010000100000001110010110111",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
@@ -53,7 +53,7 @@ def(2, Data) =>
   Class="ACDBASSOCVERTEXACTIONPARAM",
   Dxf="test/test-data/example_2007.dxf",
   Version=2007,
-  Offsets=[177, 0, 61, 23], % hdloff, strsize, commonsize, bitsize
+  Offsets=[177, 0, 61, 23, 34], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="1010100011110000011001110001101111100101000000010000011101001011110000000000011100100011100110100000010101110100110000011011000111010000001010000000100000000011000000001000010000000111001011011",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
@@ -75,7 +75,7 @@ def(3, Data) =>
   Class="ACDBASSOCVERTEXACTIONPARAM",
   Dxf="test/test-data/example_2010.dxf",
   Version=2010,
-  Offsets=[169, 2, 29, 19], % hdloff, strsize, commonsize, bitsize
+  Offsets=[169, 2, 29, 19, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="1010100011110000011001110001101111100101000000010000011101001011110000000000011100100011100110100000010101110100110000011011000111010000001010000000100000000011000000001000010000000111001011011",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
@@ -97,7 +97,7 @@ def(4, Data) =>
   Class="ACDBASSOCVERTEXACTIONPARAM",
   Dxf="test/test-data/example_2013.dxf",
   Version=2013,
-  Offsets=[179, 2, 30, 20], % hdloff, strsize, commonsize, bitsize
+  Offsets=[179, 2, 30, 20, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="0100000001101010001111000001100111000110111110010100000001000001110100101111000000000001110010001110011010000001010111010011000001101100011101000000101000000010000000001100000000100001000000011100101101111111",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
