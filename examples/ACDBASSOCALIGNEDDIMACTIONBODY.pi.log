@@ -1,7 +1,7 @@
 ACDBASSOCALIGNEDDIMACTIONBODY: 0x392 (130) test/test-data/example_2000.dxf:
 0100000001101001000000011010101010000000001100000011001000000011100100110100001000000011100101110100000001000010000000111001001111
 
-[hdloff, strsize, commonsize, bitsize]=[50,0,60,11]
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[50,0,60,11,0]
 H330 8.0.0: 10000000 7 positions
 BL90 1: 0100000001 6 positions
 BL90 0: 10 25 positions
@@ -45,7 +45,7 @@ Most probable result: (TODO)
 ACDBASSOCALIGNEDDIMACTIONBODY: 0x392 (121) test/test-data/example_2004.dxf:
 0100000001101001000000011010101010000000001100100000001110010011010000100000001110010111010000000100001000000011100100111
 
-[hdloff, strsize, commonsize, bitsize]=[50,0,61,11]
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[50,0,61,11,0]
 H330 8.0.0: 10000000 7 positions
 BL90 1: 0100000001 6 positions
 BL90 0: 10 24 positions
@@ -89,7 +89,7 @@ Most probable result: (TODO)
 ACDBASSOCALIGNEDDIMACTIONBODY: 0x392 (121) test/test-data/example_2007.dxf:
 0100000001101001000000011010101001000000000110010000000111001001101000010000000111001011101000000010000100000001110010011
 
-[hdloff, strsize, commonsize, bitsize]=[51,0,61,11]
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[51,0,61,11,88]
 H330 8.0.0: 10000000 7 positions
 BL90 1: 0100000001 6 positions
 BL90 0: 10 24 positions
@@ -132,7 +132,7 @@ Most probable result: (TODO)
 ACDBASSOCALIGNEDDIMACTIONBODY: 0x392 (121) test/test-data/example_2010.dxf:
 0100000001101001000000011010101001000000000110010000000111001001101000010000000111001011101000000010000100000001110010011
 
-[hdloff, strsize, commonsize, bitsize]=[43,0,29,7]
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[43,0,29,7,0]
 H330 8.0.0: 10000000 7 positions
 BL90 1: 0100000001 6 positions
 BL90 0: 10 24 positions
@@ -175,7 +175,7 @@ Most probable result: (TODO)
 ACDBASSOCALIGNEDDIMACTIONBODY: 0x392 (80) test/test-data/example_2013.dxf:
 01000000101010010000000010000100000001110010111010000000100001000000011100100111
 
-[hdloff, strsize, commonsize, bitsize]=[25,0,30,5]
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[25,0,30,5,0]
 H330 8.0.0: 10000000 4 positions
 BL90 2: 0100000010 fixed = [1,10]
 BL90 0: 10 15 positions
