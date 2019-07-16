@@ -53,11 +53,11 @@ struct _unknown_field
   int code;
   const char *value;
   unsigned char *bytes;
-  int bitsize;
+  int num_bits;
   Dwg_Bits type;
   const char *name; // in dwg.spec
-  unsigned short
-      num;    // number of occurrences of this type:value pair (max 1423)
+  // number of occurrences of this type:value pair (max 1423)
+  unsigned short num;
   int pos[5]; // 5x found bit offset in dxf->bytes or -1 if not found
   // many typical values are 5x found (handle 0, BL 2)
 };
@@ -67,11 +67,11 @@ static struct _unknown_dxf
   const char *dxf;
   const unsigned int handle;
   const char *bytes;
-  const int bitsize;
+  const int num_bits;
   const int commonsize;
   const int hdloff;
   const int strsize;
-  const int objbitsize;
+  const int bitsize;
   const struct _unknown_field *fields;
 } unknown_dxf[] = {
 // see log_unknown_dxf.pl
@@ -85,7 +85,7 @@ struct _dxf
 {
   unsigned char *found;    // coverage per bit for found 1
   unsigned char *possible; // coverage for mult. finds >1
-  int bitsize;             // copy of unknown_dxf.bitsize
+  int num_bits;             // copy of unknown_dxf.num_bits
   int num_filled;
   int num_empty;
   int num_possible;
@@ -100,11 +100,11 @@ static struct _unknown {
   const char *bits;
   const char *dxf;
   const unsigned int handle;
-  const int bitsize;
+  const int num_bits;
   const int commonsize;
   const int hdloff;
   const int strsize;
-  const int objbitsize;
+  const int bitsize;
 } unknowns[] =
   {
    { "ACAD_EVALUATION_GRAPH", "example_2000.log", "40501406481013fffffffcffffffff3fffffffcffffffff980c0c80b8bee", "test/test-data/example_2000.dxf", 0x2E3, 234, 60, -60, 0, 268 },
@@ -457,7 +457,7 @@ bits_try_handle (struct _unknown_field *g, int code, unsigned int objhandle)
   bits_handle (&dat, g, code, objhandle);
 
   g->bytes = dat.chain;
-  g->bitsize = (dat.byte * 8) + dat.bit;
+  g->num_bits = (dat.byte * 8) + dat.bit;
 }
 
 static void
@@ -561,7 +561,7 @@ bits_format (struct _unknown_field *g, const int version)
   if (g->type)
     {
       g->bytes = dat.chain;
-      g->bitsize = (dat.byte * 8) + dat.bit;
+      g->num_bits = (dat.byte * 8) + dat.bit;
     }
   else
     {
@@ -596,15 +596,15 @@ set_found (struct _dxf *dxf, const struct _unknown_field *g)
 {
   // check for overlap, if already found by some other field
   int overlap = 0;
-  if (g->bitsize + g->pos[0] > dxf->bitsize)
+  if (g->num_bits + g->pos[0] > dxf->num_bits)
     {
       fprintf (stderr, "overflow with found group %d %s: %d+%d >= %d\n",
-               g->code, g->name, g->bitsize, g->pos[0], dxf->bitsize);
+               g->code, g->name, g->num_bits, g->pos[0], dxf->num_bits);
       return 1;
     }
-  for (int k = g->pos[0]; k < g->bitsize + g->pos[0]; k++)
+  for (int k = g->pos[0]; k < g->num_bits + g->pos[0]; k++)
     {
-      if (dxf->found[k] && !overlap && k < g->bitsize)
+      if (dxf->found[k] && !overlap && k < g->num_bits)
         {
           overlap = 1;
           printf ("position %d already found\n", k);
@@ -619,13 +619,13 @@ set_found_i (struct _dxf *dxf, const struct _unknown_field *g, int i)
 {
   // check for overlap, if already found by some other field
   int overlap = 0;
-  if (g->bitsize + g->pos[i] > dxf->bitsize)
+  if (g->num_bits + g->pos[i] > dxf->num_bits)
     {
       fprintf (stderr, "overflow with found group %d %s: %d+%d >= %d\n",
-               g->code, g->name, g->bitsize, g->pos[i], dxf->bitsize);
+               g->code, g->name, g->num_bits, g->pos[i], dxf->num_bits);
       return 1;
     }
-  for (int k = g->pos[i]; k < g->bitsize + g->pos[i]; k++)
+  for (int k = g->pos[i]; k < g->num_bits + g->pos[i]; k++)
     {
       if (dxf->found[k] && !overlap)
         {
@@ -642,13 +642,13 @@ set_possible_pos (struct _dxf *dxf, const struct _unknown_field *g,
                   const int pos)
 {
   // add coverage counter for each bit
-  if (g->bitsize + pos > dxf->bitsize)
+  if (g->num_bits + pos > dxf->num_bits)
     {
       fprintf (stderr, "overflow with possible group %d %s: %d+%d >= %d\n",
-               g->code, g->name, g->bitsize, pos, dxf->bitsize);
+               g->code, g->name, g->num_bits, pos, dxf->num_bits);
       return;
     }
-  for (int k = pos; k < g->bitsize + pos; k++)
+  for (int k = pos; k < g->num_bits + pos; k++)
     {
       dxf->possible[k]++;
     }
@@ -660,7 +660,7 @@ set_possible(struct _dxf *dxf, const struct _unknown_field *g, const int i)
 {
   // add coverage counter for each bit
   for (int j=0; j<i; j++) {
-    for (int k=g->pos[j]; k < g->bitsize + g->pos[j]; k++) {
+    for (int k=g->pos[j]; k < g->num_bits + g->pos[j]; k++) {
       dxf->possible[k]++;
     }
   }
@@ -706,21 +706,21 @@ search_bits (int j, struct _unknown_field *g, struct _unknown_dxf *udxf,
   unsigned char *s;
   unsigned char *found;
   int num_found = 0;
-  int dxf_bitsize = udxf->bitsize;
+  int dxf_num_bits = udxf->num_bits;
   int dxf_size = dxf_bitsize / 8;
 
-  if (!g->type || !g->bitsize || !dxf_size)
+  if (!g->type || !g->num_bits || !dxf_size)
     return 0;
-  size = (g->bitsize / 8) + (g->bitsize % 8 ? 1 : 0);
+  size = (g->num_bits / 8) + (g->num_bits % 8 ? 1 : 0);
   dxf_size += (dxf_size % 8 ? 1 : 0);
   if (size > dxf_size)
     return 0;
   s = alloca (size);
-  printf ("  search %d bits of type %s [%d] in %d:%d ", g->bitsize,
-          dwg_bits_name[g->type], j, dxf_bitsize - offset, offset);
-  bit_print_bits (g->bytes, g->bitsize);
-  while ((offset = membits ((unsigned char *)udxf->bytes, udxf->bitsize,
-                            g->bytes, g->bitsize, offset))
+  printf ("  search %d bits of type %s [%d] in %d:%d ", g->num_bits,
+          dwg_bits_name[g->type], j, dxf_num_bits - offset, offset);
+  bit_print_bits (g->bytes, g->num_bits);
+  while ((offset = membits ((unsigned char *)udxf->bytes, udxf->num_bits,
+                            g->bytes, g->num_bits, offset))
          != -1)
     {
       if (num_found < 5) // record only the first 5 offsets for the solver
@@ -841,7 +841,7 @@ main (int argc, char *argv[])
         {
           int num_fields;
           int num_found = -1;
-          int size = unknown_dxf[i].bitsize;
+          int size = unknown_dxf[i].num_bits;
           struct _unknown_field *g
               = (struct _unknown_field *)unknown_dxf[i].fields;
           const int is16 = strstr (unknown_dxf[i].dxf, "/2007/")
@@ -865,9 +865,9 @@ main (int argc, char *argv[])
           s = strstr (unknown_dxf[i].dxf, "20");
           if (s)
             sscanf (s, "%d", &version);
-          dxf[i].found = calloc (1, unknown_dxf[i].bitsize + 1);
-          dxf[i].possible = calloc (1, unknown_dxf[i].bitsize + 1);
-          dxf[i].bitsize = unknown_dxf[i].bitsize + 1;
+          dxf[i].found = calloc (1, unknown_dxf[i].num_bits + 1);
+          dxf[i].possible = calloc (1, unknown_dxf[i].num_bits + 1);
+          dxf[i].num_bits = unknown_dxf[i].num_bits + 1;
           // TODO offline: find the shortest objects.
           printf ("\n%s: 0x%X (%d) %s\n", unknown_dxf[i].name,
                   unknown_dxf[i].handle, size, unknown_dxf[i].dxf);
@@ -884,7 +884,7 @@ main (int argc, char *argv[])
                    k, class, unknown_dxf[i].handle, size, unknown_dxf[i].dxf,
                    class, unknown_dxf[i].dxf, version, unknown_dxf[i].hdloff,
                    unknown_dxf[i].strsize, unknown_dxf[i].commonsize,
-                   unknown_dxf[i].objbitsize);
+                   unknown_dxf[i].bitsize);
           fprintf (pi, "  S=\"");
           bit_fprint_bits (pi, (unsigned char *)unknown_dxf[i].bytes, size);
           fprintf (pi, "\",\n"
@@ -969,7 +969,7 @@ main (int argc, char *argv[])
 
                       bits_CMC (&dat, &g[j]);
                       g[j].bytes = dat.chain;
-                      g[j].bitsize = (dat.byte * 8) + dat.bit;
+                      g[j].num_bits = (dat.byte * 8) + dat.bit;
                       num_found = search_bits (j, &g[j], &unknown_dxf[i],
                                                &dxf[i], offset);
                       free (dat.chain);
@@ -985,7 +985,7 @@ main (int argc, char *argv[])
 
                       bits_RC (&dat, &g[j]);
                       g[j].bytes = dat.chain;
-                      g[j].bitsize = (dat.byte * 8) + dat.bit;
+                      g[j].num_bits = (dat.byte * 8) + dat.bit;
                       num_found = search_bits (j, &g[j], &unknown_dxf[i],
                                                &dxf[i], offset);
                       free (dat.chain);
@@ -1001,7 +1001,7 @@ main (int argc, char *argv[])
 
                       bits_BL (&dat, &g[j]);
                       g[j].bytes = dat.chain;
-                      g[j].bitsize = (dat.byte * 8) + dat.bit;
+                      g[j].num_bits = (dat.byte * 8) + dat.bit;
                       num_found = search_bits (j, &g[j], &unknown_dxf[i],
                                                &dxf[i], offset);
                       if (num_found)
@@ -1013,7 +1013,7 @@ main (int argc, char *argv[])
                       bit_set_position (&dat, 0);
                       bits_RS (&dat, &g[j]);
                       g[j].bytes = dat.chain;
-                      g[j].bitsize = (dat.byte * 8) + dat.bit;
+                      g[j].num_bits = (dat.byte * 8) + dat.bit;
                       num_found = search_bits (j, &g[j], &unknown_dxf[i],
                                                &dxf[i], offset);
                       free (dat.chain);
@@ -1030,7 +1030,7 @@ main (int argc, char *argv[])
 
                       bits_BS (&dat, &g[j]);
                       g[j].bytes = dat.chain;
-                      g[j].bitsize = (dat.byte * 8) + dat.bit;
+                      g[j].num_bits = (dat.byte * 8) + dat.bit;
                       num_found = search_bits (j, &g[j], &unknown_dxf[i],
                                                &dxf[i], offset);
                       if (num_found)
@@ -1042,7 +1042,7 @@ main (int argc, char *argv[])
                       bit_set_position (&dat, 0);
                       bits_RL (&dat, &g[j]);
                       g[j].bytes = dat.chain;
-                      g[j].bitsize = (dat.byte * 8) + dat.bit;
+                      g[j].num_bits = (dat.byte * 8) + dat.bit;
                       num_found = search_bits (j, &g[j], &unknown_dxf[i],
                                                &dxf[i], offset);
                       free (dat.chain);
@@ -1058,7 +1058,7 @@ main (int argc, char *argv[])
 
                       bits_BS (&dat, &g[j]);
                       g[j].bytes = dat.chain;
-                      g[j].bitsize = (dat.byte * 8) + dat.bit;
+                      g[j].num_bits = (dat.byte * 8) + dat.bit;
                       num_found = search_bits (j, &g[j], &unknown_dxf[i],
                                                &dxf[i], offset);
                       free (dat.chain);
@@ -1074,7 +1074,7 @@ main (int argc, char *argv[])
 
                       bits_RD (&dat, &g[j]);
                       g[j].bytes = dat.chain;
-                      g[j].bitsize = (dat.byte * 8) + dat.bit;
+                      g[j].num_bits = (dat.byte * 8) + dat.bit;
                       num_found = search_bits (j, &g[j], &unknown_dxf[i],
                                                &dxf[i], offset);
                       free (dat.chain);
@@ -1096,7 +1096,7 @@ main (int argc, char *argv[])
                       g[j].bytes = dat.chain;
 
                       if (dat.byte == 8)
-                        g[j].bitsize = 58; // from 66
+                        g[j].num_bits = 58; // from 66
                       else
                         {
                           free (dat.chain);
@@ -1111,7 +1111,7 @@ main (int argc, char *argv[])
                         {
                           free (dat.chain);
                           dat.chain = (unsigned char *)unknown_dxf[i].bytes;
-                          dat.size = unknown_dxf[i].bitsize / 8;
+                          dat.size = unknown_dxf[i].num_bits / 8;
                           bit_set_position (&dat, g[j].pos[0]);
                           d = bit_read_BD (&dat);
                           if (fabs (d - strtod (g[j].value, NULL)) < 0.001)
@@ -1128,7 +1128,7 @@ main (int argc, char *argv[])
                         }
                       else
                         {
-                          g[j].bitsize = 54; // from 66
+                          g[j].num_bits = 54; // from 66
                           // printf("  more imprecise BD search, 38bit mantissa
                           // precision\n");
                           num_found = search_bits (j, &g[j], &unknown_dxf[i],
@@ -1138,7 +1138,7 @@ main (int argc, char *argv[])
                             {
                               dat.chain
                                   = (unsigned char *)unknown_dxf[i].bytes;
-                              dat.size = unknown_dxf[i].bitsize / 8;
+                              dat.size = unknown_dxf[i].num_bits / 8;
                               bit_set_position (&dat, g[j].pos[0]);
                               d = bit_read_BD (&dat);
                               if (fabs (d - strtod (g[j].value, NULL)) < 0.001)
@@ -1167,7 +1167,7 @@ main (int argc, char *argv[])
                       g[j].bytes = dat.chain;
 
                       if (dat.byte == 8)
-                        g[j].bitsize = 56; // from 64
+                        g[j].num_bits = 56; // from 64
                       else
                         {
                           free (dat.chain);
@@ -1182,7 +1182,7 @@ main (int argc, char *argv[])
                         {
                           free (dat.chain);
                           dat.chain = (unsigned char *)unknown_dxf[i].bytes;
-                          dat.size = unknown_dxf[i].bitsize / 8;
+                          dat.size = unknown_dxf[i].num_bits / 8;
                           bit_set_position (&dat, g[j].pos[0]);
                           d = bit_read_BD (&dat);
                           if (fabs (d - strtod (g[j].value, NULL)) < 0.001)
@@ -1200,7 +1200,7 @@ main (int argc, char *argv[])
                         }
                       else
                         {
-                          g[j].bitsize = 52; // from 64
+                          g[j].num_bits = 52; // from 64
                           // printf("  more imprecise RD search, 38bit mantissa
                           // precision\n");
                           num_found = search_bits (j, &g[j], &unknown_dxf[i],
@@ -1210,7 +1210,7 @@ main (int argc, char *argv[])
                             {
                               dat.chain
                                   = (unsigned char *)unknown_dxf[i].bytes;
-                              dat.size = unknown_dxf[i].bitsize / 8;
+                              dat.size = unknown_dxf[i].num_bits / 8;
                               bit_set_position (&dat, g[j].pos[0]);
                               d = bit_read_BD (&dat);
                               if (fabs (d - strtod (g[j].value, NULL)) < 0.001)
@@ -1243,7 +1243,7 @@ main (int argc, char *argv[])
                           bits_TV (&dat, &g[j]);
 
                           g[j].bytes = dat.chain;
-                          g[j].bitsize = (dat.byte * 8) + dat.bit;
+                          g[j].num_bits = (dat.byte * 8) + dat.bit;
                           num_found = search_bits (j, &g[j], &unknown_dxf[i],
                                                    &dxf[i], offset);
                           if (num_found)
@@ -1260,7 +1260,7 @@ main (int argc, char *argv[])
                                    len); // search without the final \0
 
                           g[j].bytes = dat.chain;
-                          g[j].bitsize = (dat.byte * 8) + dat.bit;
+                          g[j].num_bits = (dat.byte * 8) + dat.bit;
                           num_found = search_bits (j, &g[j], &unknown_dxf[i],
                                                    &dxf[i], offset);
                           free (dat.chain);
@@ -1280,7 +1280,7 @@ main (int argc, char *argv[])
                       // later could be used as hints for the picat solver
                       fprintf (pi, "    %%new_struct('_%s%d', [\"", piname,
                                g[j].code);
-                      bit_fprint_bits (pi, g[j].bytes, g[j].bitsize);
+                      bit_fprint_bits (pi, g[j].bytes, g[j].num_bits);
                       if (g[j].type == BITS_HANDLE)
                         {
                           char buf[32];
@@ -1315,7 +1315,7 @@ main (int argc, char *argv[])
               fprintf (pi, "    %snew_struct('%s%d', [\"",
                        have_struct ? "," : " ", piname, g[j].code);
               have_struct = 1;
-              bit_fprint_bits (pi, g[j].bytes, g[j].bitsize);
+              bit_fprint_bits (pi, g[j].bytes, g[j].num_bits);
               if (g[j].type == BITS_HANDLE)
                 {
                   char buf[32];
@@ -1350,12 +1350,12 @@ main (int argc, char *argv[])
                     }
                   printf ("+ %d: %s [%s] found 1 at offset %d-%d /%d\n",
                           g[j].code, g[j].value, dwg_bits_name[g[j].type],
-                          g[j].pos[0], g[j].pos[0] + g[j].bitsize - 1, size);
+                          g[j].pos[0], g[j].pos[0] + g[j].num_bits - 1, size);
                   if (g[j].num > 1)
                     printf ("        but we have %d same DXF fields\n",
                             g[j].num);
                   else
-                    dxf[i].num_filled += g[j].bitsize;
+                    dxf[i].num_filled += g[j].num_bits;
                 }
               else if (num_found == 2)
                 {
@@ -1363,8 +1363,8 @@ main (int argc, char *argv[])
                       "%s %d: %s [%s] found 2 at offsets %d-%d, %d-%d /%d\n",
                       2 == g[j].num ? "+" : "?", g[j].code, g[j].value,
                       dwg_bits_name[g[j].type], g[j].pos[0],
-                      g[j].pos[0] + g[j].bitsize - 1, g[j].pos[1],
-                      g[j].pos[1] + g[j].bitsize - 1, size);
+                      g[j].pos[0] + g[j].num_bits - 1, g[j].pos[1],
+                      g[j].pos[1] + g[j].num_bits - 1, size);
                   // check if we have two of those fields, then it's unique
                   // also
                   if (2 == g[j].num)
@@ -1372,7 +1372,7 @@ main (int argc, char *argv[])
                       printf ("        and we have %d same DXF fields\n", 2);
                       set_found (&dxf[i], &g[j]);
                       set_found_i (&dxf[i], &g[j], 1);
-                      dxf[i].num_filled += g[j].bitsize;
+                      dxf[i].num_filled += g[j].num_bits;
                     }
                   else if (g[j].num > 1)
                     {
@@ -1386,7 +1386,7 @@ main (int argc, char *argv[])
                       "%s %d: %s [%s] found 3 at offsets %d-%d, %d, %d /%d\n",
                       3 == g[j].num ? "+" : "?", g[j].code, g[j].value,
                       dwg_bits_name[g[j].type], g[j].pos[0],
-                      g[j].pos[0] + g[j].bitsize - 1, g[j].pos[1], g[j].pos[2],
+                      g[j].pos[0] + g[j].num_bits - 1, g[j].pos[1], g[j].pos[2],
                       size);
                   if (3 == g[j].num)
                     {
@@ -1394,7 +1394,7 @@ main (int argc, char *argv[])
                       set_found (&dxf[i], &g[j]);
                       set_found_i (&dxf[i], &g[j], 1);
                       set_found_i (&dxf[i], &g[j], 2);
-                      dxf[i].num_filled += g[j].bitsize;
+                      dxf[i].num_filled += g[j].num_bits;
                     }
                   else if (g[j].num > 1)
                     {
@@ -1408,7 +1408,7 @@ main (int argc, char *argv[])
                           "%d /%d\n",
                           4 == g[j].num ? "+" : "?", g[j].code, g[j].value,
                           dwg_bits_name[g[j].type], g[j].pos[0],
-                          g[j].pos[0] + g[j].bitsize - 1, g[j].pos[1],
+                          g[j].pos[0] + g[j].num_bits - 1, g[j].pos[1],
                           g[j].pos[2], g[j].pos[3], size);
                   if (4 == g[j].num)
                     {
@@ -1417,7 +1417,7 @@ main (int argc, char *argv[])
                       set_found_i (&dxf[i], &g[j], 1);
                       set_found_i (&dxf[i], &g[j], 2);
                       set_found_i (&dxf[i], &g[j], 3);
-                      dxf[i].num_filled += g[j].bitsize;
+                      dxf[i].num_filled += g[j].num_bits;
                     }
                   else if (g[j].num > 1)
                     {
@@ -1431,7 +1431,7 @@ main (int argc, char *argv[])
                           "%d, %d /%d\n",
                           5 == g[j].num ? "+" : "?", g[j].code, g[j].value,
                           dwg_bits_name[g[j].type], g[j].pos[0],
-                          g[j].pos[0] + g[j].bitsize - 1, g[j].pos[1],
+                          g[j].pos[0] + g[j].num_bits - 1, g[j].pos[1],
                           g[j].pos[2], g[j].pos[3], g[j].pos[4], size);
                   if (5 == g[j].num)
                     {
@@ -1441,7 +1441,7 @@ main (int argc, char *argv[])
                       set_found_i (&dxf[i], &g[j], 2);
                       set_found_i (&dxf[i], &g[j], 3);
                       set_found_i (&dxf[i], &g[j], 4);
-                      dxf[i].num_filled += g[j].bitsize;
+                      dxf[i].num_filled += g[j].num_bits;
                     }
                   else if (g[j].num > 1)
                     {
@@ -1455,7 +1455,7 @@ main (int argc, char *argv[])
                           "%d, %d, ... /%d\n",
                           g[j].code, g[j].value, dwg_bits_name[g[j].type],
                           num_found, g[j].pos[0],
-                          g[j].pos[0] + g[j].bitsize - 1, g[j].pos[1],
+                          g[j].pos[0] + g[j].num_bits - 1, g[j].pos[1],
                           g[j].pos[2], g[j].pos[3], g[j].pos[4], size);
                   printf ("        and we have %d same DXF fields\n",
                           num_found);
@@ -1464,7 +1464,7 @@ main (int argc, char *argv[])
                   set_found_i (&dxf[i], &g[j], 2);
                   set_found_i (&dxf[i], &g[j], 3);
                   set_found_i (&dxf[i], &g[j], 4);
-                  dxf[i].num_filled += g[j].bitsize;
+                  dxf[i].num_filled += g[j].num_bits;
                 }
               else if (num_found > 5)
                 {
@@ -1472,7 +1472,7 @@ main (int argc, char *argv[])
                           "%d, %d, %d, ... /%d\n",
                           g[j].code, g[j].value, dwg_bits_name[g[j].type],
                           num_found, g[j].pos[0],
-                          g[j].pos[0] + g[j].bitsize - 1, g[j].pos[1],
+                          g[j].pos[0] + g[j].num_bits - 1, g[j].pos[1],
                           g[j].pos[2], g[j].pos[3], g[j].pos[4], size);
                   if (g[j].num > 1)
                     printf ("        but we have %d same DXF fields\n",
@@ -1480,7 +1480,7 @@ main (int argc, char *argv[])
                 }
               // same pos, search for next. but only if it's a bigger hit, not
               // just 1-2 bits
-              /*if (num_found >= 1 && g->bitsize > 2 && set_found(&dxf[i],
+              /*if (num_found >= 1 && g->num_bits > 2 && set_found(&dxf[i],
                 &g[j])) { offset = g[j].pos[0]+1; goto SEARCH;
                 }
                 */
@@ -1505,7 +1505,7 @@ main (int argc, char *argv[])
             {
               fprintf (stderr, "empty %s \"%s\" 0x%X %d\n",
                        unknown_dxf[i].name, unknown_dxf[i].dxf,
-                       unknown_dxf[i].handle, unknown_dxf[i].bitsize);
+                       unknown_dxf[i].handle, unknown_dxf[i].num_bits);
             }
           class_filled += dxf[i].num_filled;
           class_size += size;

@@ -4410,26 +4410,26 @@ dwg_decode_unknown (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   // bitsize does not include the handles size
   int num_bytes;
   unsigned long pos = bit_position (dat);
-  long bitsize = (8 * obj->size) - pos;
-  if (bitsize < 0)
+  long num_bits = (8 * obj->size) - pos;
+  if (num_bits < 0)
     return DWG_ERR_VALUEOUTOFBOUNDS;
 
   //*pre_bits = pos % 8;
-  obj->num_unknown_bits = bitsize;
-  num_bytes = bitsize / 8;
-  if (bitsize % 8)
+  obj->num_unknown_bits = num_bits;
+  num_bytes = num_bits / 8;
+  if (num_bits % 8)
     {
       num_bytes++;
       dat->size++; // allow overshoot by one byte (for missing bits)
     }
 
   obj->unknown_bits = bit_read_TF (dat, num_bytes);
-  // [bitsize (commonsize, hdlpos, strsize)]
-  LOG_TRACE ("unknown_bits [%ld (%lu,%ld,%d) TF]: ", bitsize, obj->common_size,
+  // [num_bits (commonsize, hdlpos, strsize)]
+  LOG_TRACE ("unknown_bits [%ld (%lu,%ld,%d) TF]: ", num_bits, obj->common_size,
              obj->bitsize - obj->common_size, (int)obj->stringstream_size);
   LOG_TRACE_TF (obj->unknown_bits, num_bytes);
   bit_set_position (dat, pos);
-  if (bitsize % 8)
+  if (num_bits % 8)
       dat->size--;
   return 0;
 }

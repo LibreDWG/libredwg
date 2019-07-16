@@ -990,6 +990,7 @@ my $known = {
 };
 
 print $f0 "// -*- c -*-\n";
+print $f0 "// name, dxf, handle, bytes, num_bits, commonsize, hdloff, strsize, bitsize, fieldptr\n";
 print $f1 "// -*- c -*-\n";
 print $f1 "// code, value, bits, pre_bits, num_bits, type, name, num, pos[]\n";
 print $f2 "// -*- c -*-\n";
