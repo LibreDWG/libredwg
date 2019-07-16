@@ -45,7 +45,8 @@ EXTRA_DIST = $(top_srcdir)/.version \
 	     $(VALGRIND_SUPPRESSIONS_FILE)
 
 .PHONY: check-dwg check-dxf check-dwg-valgrind \
-        regen-man man manual refman refman-pdf scan-build gcov unknown
+        regen-man man manual refman refman-pdf scan-build gcov \
+	unknown regen-unknown
 
 UNKNOWN_LOG = unknown-`git describe --long --tags --dirty --always`.log
 UNKNOWN_SKIP = examples/alldwg.skip
@@ -57,8 +58,9 @@ endif
 
 unknown:
 	-mv examples/alldwg.skip examples/alldwg.skip~
-	$(MAKE) -C examples unknown$(EXEEXT) bd$(EXEEXT) bits$(EXEEXT) && \
-	$(LTEXEC) examples/unknown$(EXEEXT) >$(UNKNOWN_LOG) 2>$(UNKNOWN_SKIP)
+	$(MAKE) -C src bits.lo && \
+	  $(MAKE) -C examples unknown$(EXEEXT) bd$(EXEEXT) bits$(EXEEXT) && \
+	  $(LTEXEC) examples/unknown$(EXEEXT) >$(UNKNOWN_LOG) 2>$(UNKNOWN_SKIP)
 	if test -s examples/alldwg.skip; then true; \
 	else mv examples/alldwg.skip~ examples/alldwg.skip; fi
 if HAVE_PICAT
@@ -81,6 +83,8 @@ else
 endif
 endif
 
+regen-unknown:
+	$(MAKE) -C examples $@
 regen-man:
 	$(MAKE) -C programs $@
 man:
