@@ -1,7 +1,7 @@
 ACSH_HISTORY_CLASS: 0x2E4 (73) test/test-data/example_2007.dxf:
 0100100001010001110101000000010001100000100000011001100100000001011100011
 
-[hdloff, strsize, commonsize, bitsize]=[51,0,61,11]
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[51,0,61,11,40]
 H330 c.1.3: 1100000100000011 fixed = [34,49]
 BL90 33: 0100100001 fixed = [1,10]
 BL91 29: 0100011101 fixed = [11,20]
@@ -32,7 +32,7 @@ Most probable result: (TODO)
 ACSH_HISTORY_CLASS: 0x2E4 (73) test/test-data/example_2010.dxf:
 0100100001010001110101000000010001100000100000011001100100000001011100011
 
-[hdloff, strsize, commonsize, bitsize]=[43,0,29,7]
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[43,0,29,7,0]
 H330 c.1.3: 1100000100000011 fixed = [34,49]
 BL90 33: 0100100001 fixed = [1,10]
 BL91 29: 0100011101 fixed = [11,20]
@@ -63,7 +63,7 @@ Most probable result: (TODO)
 ACSH_HISTORY_CLASS: 0x2E4 (80) test/test-data/example_2013.dxf:
 01001000010100011101010000000100011000001000000110011001000000010111000111111111
 
-[hdloff, strsize, commonsize, bitsize]=[43,0,30,7]
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[43,0,30,7,0]
 H330 c.1.3: 1100000100000011 fixed = [34,49]
 BL90 33: 0100100001 fixed = [1,10]
 BL91 29: 0100011101 fixed = [11,20]
