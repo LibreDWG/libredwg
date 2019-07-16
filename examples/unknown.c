@@ -16,12 +16,15 @@
  *
  * A sample program to find the most likely
  * fields for all unknown dwg entities and objects.
- * gather all binary raw data from all unknown dwg entities and objects
+ * Gather all binary raw data from all unknown dwg entities and objects
  * into examples/alldwg.inc and examples/alldxf_*.inc
- * with the available likely fields try permutations of most likely types.
+ * With the available likely fields try permutations of most likely types.
  * When no identifiable field value was found, (filled is empty) 0.0% is
  * printed and the entity is printed to stderr for alldwg.skip to be ignored
  * later.
+ * See also HACKING "reverse-engineering with examples/unknown"
+ * or https://savannah.gnu.org/forum/forum.php?forum_id=9197 and
+ * https://savannah.gnu.org/forum/forum.php?forum_id=9203.
  */
 
 #include "../src/config.h"
@@ -67,20 +70,22 @@ static struct _unknown_dxf
   const char *dxf;
   const unsigned int handle;
   const char *bytes;
-  const int num_bits;
+  const int num_bits; // size of dumped unknown_bits TF
   const int commonsize;
   const int hdloff;
   const int strsize;
+  const int hdlsize;
   const int bitsize;
   const struct _unknown_field *fields;
 } unknown_dxf[] = {
-// see log_unknown_dxf.pl
-#include "alldxf_0.inc"
-  { NULL, NULL, 0, "", 0, 0, 0, 0, 0, NULL }
+  // see log_unknown_dxf.pl
+  #include "alldxf_0.inc"
+  { NULL, NULL, 0, "", 0, 0, 0, 0, 0, 0, NULL }
 };
+
 #include "alldxf_1.inc"
 
-// dynamic helper companian
+// dynamic helper companion
 struct _dxf
 {
   unsigned char *found;    // coverage per bit for found 1
@@ -104,6 +109,7 @@ static struct _unknown {
   const int commonsize;
   const int hdloff;
   const int strsize;
+  const int hdlsize;
   const int bitsize;
 } unknowns[] =
   {
@@ -121,9 +127,9 @@ static struct _unknown {
      97 TABLESTYLE
     */
     // see log_unknown.pl
-#  include "alldwg.inc"
+  #include "alldwg.inc"
 
-   { 0, NULL, "", "", NULL, 0L, 0, 0, 0, 0, 0 }
+  { 0, NULL, "", "", NULL, 0L, 0, 0, 0, 0, 0, 0 }
 };
 #endif
 
@@ -132,8 +138,8 @@ static struct _bd
   const char *value;
   const char *bin;
 } bd[] = {
-// see bd-unknown.pl
-#include "bd-unknown.inc"
+  // see bd-unknown.pl
+  #include "bd-unknown.inc"
   { NULL, NULL }
 };
 
@@ -707,7 +713,7 @@ search_bits (int j, struct _unknown_field *g, struct _unknown_dxf *udxf,
   unsigned char *found;
   int num_found = 0;
   int dxf_num_bits = udxf->num_bits;
-  int dxf_size = dxf_bitsize / 8;
+  int dxf_size = dxf_num_bits / 8;
 
   if (!g->type || !g->num_bits || !dxf_size)
     return 0;
@@ -879,12 +885,12 @@ main (int argc, char *argv[])
                    "  Class=\"%s\",\n"
                    "  Dxf=\"%s\",\n"
                    "  Version=%d,\n"
-                   "  Offsets=[%d, %d, %d, %d], %% hdloff, strsize, "
-                   "commonsize, bitsize\n",
+                   "  Offsets=[%d, %d, %d, %d, %d], %% hdloff, strsize, "
+                   "commonsize, bitsize, hdlsize\n",
                    k, class, unknown_dxf[i].handle, size, unknown_dxf[i].dxf,
                    class, unknown_dxf[i].dxf, version, unknown_dxf[i].hdloff,
                    unknown_dxf[i].strsize, unknown_dxf[i].commonsize,
-                   unknown_dxf[i].bitsize);
+                   unknown_dxf[i].bitsize, unknown_dxf[i].hdlsize);
           fprintf (pi, "  S=\"");
           bit_fprint_bits (pi, (unsigned char *)unknown_dxf[i].bytes, size);
           fprintf (pi, "\",\n"

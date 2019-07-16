@@ -990,7 +990,8 @@ my $known = {
 };
 
 print $f0 "// -*- c -*-\n";
-print $f0 "// name, dxf, handle, bytes, num_bits, commonsize, hdloff, strsize, bitsize, fieldptr\n";
+print $f0 "// name, dxf, handle, bytes, num_bits, commonsize, hdloff, strsize, ".
+          "hdlsize, bitsize, fieldptr\n";
 print $f1 "// -*- c -*-\n";
 print $f1 "// code, value, bits, pre_bits, num_bits, type, name, num, pos[]\n";
 print $f2 "// -*- c -*-\n";
@@ -1019,7 +1020,8 @@ while (<>) {
   my $commonsize = substr($F[7],0,-1);
   my $hdloff     = substr($F[8],0,-1);
   my $strsize    = substr($F[9],0,-1);
-  my $bitsize    = substr($F[10],0,-1);
+  my $hdlsize    = substr($F[10],0,-1);
+  my $bitsize    = substr($F[11],0,-1);
   if ($skip{"$obj-$hdl-$num_bits"}) { # skip empty unknowns
     warn "skip empty $obj-$hdl-$num_bits $dxf\n";
     next LINE;
@@ -1082,8 +1084,8 @@ while (<>) {
       if ($foundhdl) {
         warn "found $obj $hdl in $dxf\n";
         print $f0  "  { \"$obj\", \"$dxf\", 0x$hdl, /* $i */\n";
-        printf $f0  "    \"%s\", %d, %d, %d, %d, %d, NULL },\n",
-          $unknown, $num_bits, $commonsize, $hdloff, $strsize, $bitsize;
+        printf $f0  "    \"%s\", %d, %d, %d, %d, %d, %d, NULL },\n",
+          $unknown, $num_bits, $commonsize, $hdloff, $strsize, $hdlsize, $bitsize;
 
         print $f1 "/* $obj $hdl in $dxf */\n";
         print $f1 "static struct _unknown_field unknown_dxf_$i\[\] = {\n";

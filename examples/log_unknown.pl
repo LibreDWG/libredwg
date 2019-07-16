@@ -24,11 +24,15 @@ elsif (/handle: 0\.\d+\.([0-9A-F]+) \[5\]$/) {
   print "//handle=$1\n";
   $handle = $1; next;
 }
+if (/ Hdlsize: (\d+),/) {
+  print "//hdlsize=$1\n";
+  $hdlsize = $1; next;
+}
 next unless $bitsize and $handle;
 
 if (/^unknown_bits \[(\d+) \((\d+),(-?\d+),(\d+)\) TF\]: ([0-9a-f]+$)/) {
   ($num_bits, $commonsize, $hdloff, $strsize, $b) = ($1, $2, $3, $4, $5);
-  print "//offsets=$num_bits, $commonsize, $hdloff, $strsize\n";
+  print "//offsets=$num_bits, $commonsize, $hdloff, $strsize, $hdlsize\n";
   chomp $b; next;
 }
 next unless $b;
@@ -54,8 +58,8 @@ if (/Next object: / or /^Num objects:/) {
   next if $dxf =~ /work\.orig/; # skip temp. duplicates
   $dxf = undef unless -f $dxf;
   printf "    { \"$object\", \"$ARGV\", \"$b\", %s, 0x$handle, ".
-    "$num_bits, $commonsize, $hdloff, $strsize, $bitsize },\n",
+    "$num_bits, $commonsize, $hdloff, $strsize, $hdlsize, $bitsize },\n",
     $dxf ? "\"$dxf\"" : "NULL";
   $object = $b = $handle = undef;
-  $num_bits = $commonsize = $hdloff = $strsize = $bitsize = 0;
+  $num_bits = $commonsize = $hdloff = $strsize = $hdlsize = $bitsize = 0;
 }

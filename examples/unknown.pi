@@ -32,7 +32,7 @@ go(Data) =>
   [S,Fields,Class,Dxf,Version,Offsets] = Data,
   Found = [],
   println(S), nl,
-  print("[hdloff, strsize, commonsize, bitsize]="),println(Offsets),
+  print("[hdloff, strsize, commonsize, bitsize, hdlsize]="),println(Offsets),
   S := S.delete_all(" "),
   S := S.delete_all("\n"),
   foreach(Sub in Fields)
