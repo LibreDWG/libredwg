@@ -2651,13 +2651,10 @@ DWG_OBJECT(LTYPE)
   UNTIL(R_2004) {
     FIELD_TF (strings_area, 256, 3);
   }
-  LATER_VERSIONS
-    {
-      if (FIELD_VALUE(text_area_is_present))
-        {
-          FIELD_TF (strings_area, 512, 3);
-        }
-    }
+  LATER_VERSIONS {
+    if (FIELD_VALUE(text_area_is_present))
+      FIELD_TF (strings_area, 512, 3);
+  }
 
   START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (extref_handle, 5, 0);
