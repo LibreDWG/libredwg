@@ -47,14 +47,21 @@ suffix (const char *filename, const char *ext)
 #else
   char *base = copy;
 #endif
-  int len = strlen (base) + 1 + strlen (ext) + 1;
+  int len = (base ? strlen (base) : 0) + 1 + strlen (ext) + 1;
   char *rv = malloc (len);
   char *dot;
 
-  if ((dot = strrchr (base, '.'))
-      && dot + 4 < base + len
-      && !strncmp (1 + dot, "dwg", 3))
-    *dot = '\0';
+  if (!base) // basename may fail
+    {
+      base = (char *)"";
+    }
+  else
+    {
+      if ((dot = strrchr (base, '.'))
+          && dot + 4 < base + len
+          && !strncmp (1 + dot, "dwg", 3))
+        *dot = '\0';
+    }
   if (strchr(ext, '.'))
     snprintf (rv, len, "%s%s", base, ext);
   else
