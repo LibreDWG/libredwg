@@ -1,5 +1,5 @@
 #!/bin/sh
-# create logs for all DWGs with GNU parallel
+# create logs for all DWGs with GNU parallel (fast)
 make -s -j4
 
 @PARALLEL@ @TIMEOUT_10@ ./libtool --mode=execute programs/dwgread -v4 {} \2\>{/.}.log ::: test/test-data/*.dwg

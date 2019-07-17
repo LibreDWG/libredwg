@@ -1,5 +1,5 @@
 #!/bin/sh
-# create logs for all DWGs
+# create logs for all DWGs - serial (slow)
 make -s -j4
 for d in test/test-data/2*/*.dwg test/test-data/r*/*.dwg; do
     dir=$(basename `dirname "$d"`)

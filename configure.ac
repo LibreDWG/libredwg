@@ -390,7 +390,7 @@ fi
 AC_PATH_PROG([PERL], [$ac_cv_perl])
 if test -n "$PERL"; then
   AC_MSG_CHECKING([PERL version])
-  [PERL_VERSION=`$PERL -e'print $^V' 2>&1`]
+  [PERL_VERSION=`"$PERL" -e'print $^V' 2>&1`]
   AC_MSG_RESULT([$PERL_VERSION])
   AM_RUN_LOG([$PERL -V:cc])
 fi
@@ -407,7 +407,7 @@ AM_CONDITIONAL([HAVE_INSRCDIR], [test x"$srcdir" = x"."])
 AC_CHECK_PROGS([PICAT], [picat])
 if test -n "$PICAT"; then
   AC_MSG_CHECKING([PICAT version])
-  [picat_version=`$PICAT --version 2>&1 | grep 'Picat version' | cut -c15-`]
+  [picat_version=`"$PICAT" --version 2>&1 | grep 'Picat version' | cut -c15-`]
   AC_MSG_RESULT([$picat_version])
 fi
 AM_CONDITIONAL([HAVE_PICAT], [test -n "$PICAT"])
@@ -417,12 +417,11 @@ AC_CHECK_PROGS([PARALLEL], [parallel])
 logs_all=logs-all-serial.sh.in
 if test -n "$PARALLEL"; then
   AC_MSG_CHECKING([PARALLEL version])
-  parallel_version=`$PARALLEL --version 2>&1 | head -n1 | cut -c14-`
-  case "$parallel_version" in
-    [0-9]*) AC_MSG_RESULT([$parallel_version])
-            logs_all=logs-all-parallel.sh.in
+  parallel_version=`"$PARALLEL" --version 2>&1 | head -n1 | cut -c14-`
+  case $parallel_version in
+    20* )   logs_all=logs-all-parallel.sh.in
             ;;
-    *invalid*)
+    *invalid* )
             PARALLEL=
             parallel_version="skip old moreutils version, need GNU parallel"
             #TODO
@@ -436,7 +435,7 @@ dnl coreutils timeout
 AC_CHECK_PROGS([TIMEOUT], [timeout])
 if test -n "$TIMEOUT"; then
   AC_MSG_CHECKING([TIMEOUT version])
-  [timeout_version=`$TIMEOUT --version 2>&1 | grep '^timeout ' | sed 's/.*\([0-9][0-9]*\.[0-9][0-9]*\).*/\1/g'`]
+  [timeout_version=`"$TIMEOUT" --version 2>&1 | grep '^timeout ' | sed 's/.*\([0-9][0-9]*\.[0-9][0-9]*\).*/\1/g'`]
   AC_MSG_RESULT([$timeout_version])
   TIMEOUT_10="$TIMEOUT 10"
 fi
@@ -453,7 +452,7 @@ AC_SUBST([JSON_SED_NAN])
 AC_CHECK_PROGS([DOXYGEN], [doxygen])
 if test -n "$DOXYGEN"; then
   AC_MSG_CHECKING([DOXYGEN version])
-  [doxygen_version=`$DOXYGEN --version 2>&1`]
+  [doxygen_version=`"$DOXYGEN" --version 2>&1`]
   AC_MSG_RESULT([$doxygen_version])
 fi
 AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
@@ -461,7 +460,7 @@ AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
 AC_CHECK_PROGS([JQ], [jq])
 if test -n "$JQ"; then
   AC_MSG_CHECKING([JQ version])
-  [jq_version=`$JQ --version 2>&1 | grep 'jq-' | cut -c4-`]
+  [jq_version=`"$JQ" --version 2>&1 | grep 'jq-' | cut -c4-`]
   AC_MSG_RESULT([$jq_version])
 fi
 AM_CONDITIONAL([HAVE_JQ], [test -n "$JQ"])
@@ -488,7 +487,7 @@ if test x$cross_compiling = xno; then
   if test -n "$VALGRIND"; then
      if test -n "$VALGRIND"; then
        AC_MSG_CHECKING([VALGRIND version])
-       [valgrind_version=`$VALGRIND --version 2>&1 | sed 's,valgrind-,,'`]
+       [valgrind_version=`"$VALGRIND" --version 2>&1 | sed 's,valgrind-,,'`]
        AC_MSG_RESULT([$valgrind_version])
      fi
      AC_MSG_CHECKING([for Valgrind suppressions])

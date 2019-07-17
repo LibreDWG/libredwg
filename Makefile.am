@@ -66,7 +66,7 @@ unknown:
 if HAVE_PICAT
 if HAVE_PARALLEL
 	-rm examples/*.pi.tmplog 2>/dev/null
-	echo $(PARALLEL) $(TIMEOUT_30) $(PICAT) {} \>{}.tmplog ::: examples/[A-Z]\*.pi
+	echo $(PARALLEL) $(TIMEOUT_30) $(PICAT) "{} \\>{}.tmplog ::: examples/[A-Z]*.pi"
 	-$(PARALLEL) $(TIMEOUT_30) $(PICAT) {} \>{}.tmplog ::: examples/[A-Z]*.pi
 	-for f in examples/*.pi.tmplog; do \
 	   if test -n "`grep 'Most probable result:' $$f`"; then \
