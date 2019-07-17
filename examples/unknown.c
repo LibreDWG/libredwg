@@ -146,21 +146,6 @@ static struct _bd
 };
 
 static void
-bits_string (Bit_Chain *restrict dat, struct _unknown_field *restrict g)
-{
-  if (dat->version >= R_2007)
-    {
-      bit_write_TU (dat, (BITCODE_TU)g->value);
-      g->type = BITS_TU;
-    }
-  else
-    {
-      bit_write_TV (dat, (char *)g->value);
-      g->type = BITS_TV;
-    }
-}
-
-static void
 bits_TV (Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
   bit_write_TV (dat, (char *)g->value);
@@ -168,10 +153,26 @@ bits_TV (Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 }
 
 static void
+bits_TU (Bit_Chain *restrict dat, struct _unknown_field *restrict g)
+{
+  bit_write_TU (dat, (BITCODE_TU)g->value);
+  g->type = BITS_TU;
+}
+
+static void
 bits_TF (Bit_Chain *restrict dat, struct _unknown_field *restrict g, int len)
 {
   bit_write_TF (dat, (char *)g->value, len);
   g->type = BITS_TF;
+}
+
+static void
+bits_string (Bit_Chain *restrict dat, struct _unknown_field *restrict g)
+{
+  if (dat->version >= R_2007)
+    bits_TU (dat, g);
+  else
+    bits_TV (dat, g);
 }
 
 static void
@@ -485,11 +486,22 @@ bits_try_handle (struct _unknown_field *g, int code, unsigned int objhandle)
   g->num_bits = (dat.byte * 8) + dat.bit;
 }
 
+static int
+dxf_is16 (struct _unknown_dxf *dxf)
+{
+  return strstr (dxf->dxf, "/2007/")
+    || strstr (dxf->dxf, "_2007.dxf")
+    || strstr (dxf->dxf, "/201")
+    || strstr (dxf->dxf, "_201") ? 1 : 0;
+}
+
 static void
-bits_format (struct _unknown_field *g, const int version, const int is_entity)
+bits_format (struct _unknown_field *g, const int version, struct _unknown_dxf *dxf)
 {
   int code = g->code;
   Bit_Chain dat = { NULL, 16, 0, 0, NULL, 0, 0 };
+  const int is16 = version >= 2007 ? 1 : 0;
+
   dat.chain = calloc (1, 16);
   if (version)
     {
@@ -510,15 +522,12 @@ bits_format (struct _unknown_field *g, const int version, const int is_entity)
   else if (code < 60)
     bits_angle_BD (&dat, g); // deg2rad for angles
   else if (code < 70)
-    if (version >= R_2004)
-      {
-        if (is_entity)
-          bits_ENC (&dat, g);
-        else
-          bits_CMC (&dat, g);
-      }
-    else
-      bits_CMC (&dat, g);
+    {
+      if (dat.version >= R_2004 && dxf->is_entity)
+        bits_ENC (&dat, g);
+      else
+        bits_CMC (&dat, g);
+    }
   else if (code < 80)
     bits_BS (&dat, g);
   else if (80 <= code && code <= 99) // BL int32
@@ -542,7 +551,7 @@ bits_format (struct _unknown_field *g, const int version, const int is_entity)
   else if (code <= 299)
     bits_B (&dat, g);
   else if (code <= 309)
-    bits_TV (&dat, g);
+    bits_string (&dat, g);
   else if (code <= 319)
     bits_hexstring (&dat, g);
   else if (code >= 320 && code < 360)
@@ -874,10 +883,7 @@ main (int argc, char *argv[])
           int size = unknown_dxf[i].num_bits;
           struct _unknown_field *g
               = (struct _unknown_field *)unknown_dxf[i].fields;
-          const int is16 = strstr (unknown_dxf[i].dxf, "/2007/")
-                           || strstr (unknown_dxf[i].dxf, "/201")
-                           || strstr (unknown_dxf[i].dxf, "_2007.dxf")
-                           || strstr (unknown_dxf[i].dxf, "_201");
+          const int is16 = dxf_is16 (&unknown_dxf[i]);
           int have_struct = 0;
           int is_dict = 0;
           int is_react = 0;
@@ -895,6 +901,12 @@ main (int argc, char *argv[])
           s = strstr (unknown_dxf[i].dxf, "20");
           if (s)
             sscanf (s, "%d", &version);
+          else
+            {
+              s = strstr (unknown_dxf[i].dxf, "_r");
+              if (s)
+                sscanf (s+2, "%d", &version);
+            }
           dxf[i].found = calloc (1, unknown_dxf[i].num_bits + 1);
           dxf[i].possible = calloc (1, unknown_dxf[i].num_bits + 1);
           dxf[i].num_bits = unknown_dxf[i].num_bits + 1;
@@ -945,7 +957,7 @@ main (int argc, char *argv[])
                 }
               // if we came here from continue, i.e. not_found
               // store the binary repr
-              bits_format (&g[j], version, unknown_dxf[i].is_entity);
+              bits_format (&g[j], version, &unknown_dxf[i]);
             SEARCH:
               // searching for it in the stream and store found position if
               // found only once
@@ -1268,6 +1280,8 @@ main (int argc, char *argv[])
                       int len = strlen (g[j].value);
                       dat.chain = calloc (1, 16);
 
+#if 0
+                      /* TU/TF cannot be mixed */
                       if (is16)
                         {
                           bits_TV (&dat, &g[j]);
@@ -1282,7 +1296,7 @@ main (int argc, char *argv[])
                               goto FOUND;
                             }
                         }
-
+#endif
                       if (len)
                         {
                           bit_set_position (&dat, 0);
