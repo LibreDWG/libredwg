@@ -2340,7 +2340,7 @@ dwg_ent_text_set_insertion_point (dwg_ent_text *restrict text,
     }
 }
 
-/** Returns the _dwg_entity_TEXT::height, DXF 40.
+/** Returns the _dwg_entity_TEXT::height, DXF 40. i.e. the fontsize
 \code Usage: double height = dwg_ent_text_get_height(text);
 \endcode
 \param[in]  text    dwg_ent_text*
