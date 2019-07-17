@@ -20,7 +20,7 @@ def(0, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011000000010100010101111111", '4.3.1457F', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -30,7 +30,7 @@ def(0, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["01000011000000010100010101111101", '4.3.1457D', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
@@ -59,7 +59,7 @@ def(1, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011000000010011000101100011", '4.3.13163', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000001", '1', [], "main_gsmarker", 91])
@@ -69,7 +69,7 @@ def(1, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["01000011000000010011001010010001", '4.3.13291', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
@@ -97,7 +97,7 @@ def(2, Data) =>
     ,new_struct('BL90', ["0100000001", '1', [], "associativity", 90])
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
-    %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
+    %new_struct('_TF1', ["1010000011111100010111011010000111000010011111110000000000000000101000001111110001011101101000011100001001111111000000000000000000000000", 'AcDbOsnapPointRef', [], "classname", 1])
     ,new_struct('BS72', ["0100001101", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011010111001101001100011110", '4.3.5CD31E', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
@@ -1407,64 +1407,6 @@ def(39, Data) =>
   go(Data).
 
 def(40, Data) =>
-  println("DIMASSOC: 0x32B (361) test/test-data/2004/Publish.dxf:"),
-  Class="DIMASSOC",
-  Dxf="test/test-data/2004/Publish.dxf",
-  Version=2004,
-  Offsets=[296, 0, 69, 36, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="0100000001000000000010001001001000001011000110100010001100010010011110111001101101110011000010111000001010000011011110110100101101110011101000101001001100101011001100000000000000001010000000101000000101010011010001001101001100100011111101100010100001110000110110110000101001010010000000010000100000001100101010010000100000001100100110010000100000001001111011111",
-  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
-  Fields = [
-     new_struct('H330', ["010000100000001100101010", '4.2.32A', [], "reactors[0]", 330])
-    ,new_struct('H330', ["010000100000001100101010", '4.2.32A', [], "ownerhandle", 330])
-    ,new_struct('H330', ["010000100000001100100110", '4.2.326', [], "", 330])
-    ,new_struct('BL90', ["0100000001", '1', [], "associativity", 90])
-    ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
-    ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
-    ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('BS72', ["0100000001", '1', [], "osnap_type", 72])
-    ,new_struct('H331', ["010000100000001001111011", '4.2.27B', [], "mainobj", 331])
-    ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
-    ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
-    ,new_struct('BD40', ["01", '1.0', [], "osnap_dist", 40])
-    ,new_struct('BD10', ["10", '0.0', [], "osnap_pt", 10])
-    ,new_struct('BD20', ["10", '0.0', [], "", 20])
-    ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
-    ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
-  ],
-  Data = [S,Fields,Class,Dxf,Version,Offsets],
-  go(Data).
-
-def(41, Data) =>
-  println("DIMASSOC: 0x662 (433) test/test-data/2004/Publish.dxf:"),
-  Class="DIMASSOC",
-  Dxf="test/test-data/2004/Publish.dxf",
-  Version=2004,
-  Offsets=[360, 0, 69, 42, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="0100000010000000000010001001001000001011000110100010001100010010011110111001101101110011000010111000001010000011011110110100101101110011101000101001001100101011001100000000000001101010000000101000000101010001111000001001001011011100101111011011101110010101111100100111111101000100110100110010001111110110001010000111000011011011000010100101001100000100001000010000100000011001011010010000100000011001001111010000100000010110100001111",
-  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
-  Fields = [
-     new_struct('H330', ["010000100000011001011010", '4.2.65A', [], "reactors[0]", 330])
-    ,new_struct('H330', ["010000100000011001011010", '4.2.65A', [], "ownerhandle", 330])
-    ,new_struct('H330', ["010000100000011001001111", '4.2.64F', [], "", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "associativity", 90])
-    ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
-    ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
-    ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
-    ,new_struct('H331', ["010000100000010110100001", '4.2.5A1', [], "mainobj", 331])
-    ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
-    ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
-    ,new_struct('BD40', ["0000000000000000000000000000000000000000000000000000000000000000", '1.612027520056127', [], "osnap_dist", 40])
-    ,new_struct('BD10', ["10", '0.0', [], "osnap_pt", 10])
-    ,new_struct('BD20', ["10", '0.0', [], "", 20])
-    ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
-    ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
-  ],
-  Data = [S,Fields,Class,Dxf,Version,Offsets],
-  go(Data).
-
-def(42, Data) =>
   println("DIMASSOC: 0x42F (402) test/test-data/example_2000.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2000.dxf",
@@ -1480,7 +1422,7 @@ def(42, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00000001", '1', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '1', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011010", '4.2.41A', [], "mainobj", 331])
     ,new_struct('H331', ["010000100000010000011110", '4.2.41E', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
@@ -1494,7 +1436,7 @@ def(42, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(43, Data) =>
+def(41, Data) =>
   println("DIMASSOC: 0x466 (386) test/test-data/example_2000.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2000.dxf",
@@ -1510,7 +1452,7 @@ def(43, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000001", '1', [], "main_gsmarker", 91])
@@ -1523,7 +1465,7 @@ def(43, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(44, Data) =>
+def(42, Data) =>
   println("DIMASSOC: 0x4AE (674) test/test-data/example_2000.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2000.dxf",
@@ -1539,7 +1481,7 @@ def(44, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000001", '1', [], "main_gsmarker", 91])
@@ -1549,7 +1491,7 @@ def(44, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["0100000100", '4', [], "", 91])
@@ -1562,7 +1504,7 @@ def(44, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(45, Data) =>
+def(43, Data) =>
   println("DIMASSOC: 0x47E (674) test/test-data/example_2000.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2000.dxf",
@@ -1578,7 +1520,7 @@ def(45, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000010", '2', [], "main_gsmarker", 91])
@@ -1588,7 +1530,7 @@ def(45, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["0100000011", '3', [], "", 91])
@@ -1601,7 +1543,7 @@ def(45, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(46, Data) =>
+def(44, Data) =>
   println("DIMASSOC: 0x496 (674) test/test-data/example_2000.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2000.dxf",
@@ -1617,7 +1559,7 @@ def(46, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000011", '3', [], "main_gsmarker", 91])
@@ -1627,7 +1569,7 @@ def(46, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["0100000001", '1', [], "", 91])
@@ -1640,7 +1582,7 @@ def(46, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(47, Data) =>
+def(45, Data) =>
   println("DIMASSOC: 0x4C6 (674) test/test-data/example_2000.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2000.dxf",
@@ -1656,7 +1598,7 @@ def(47, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000100", '4', [], "main_gsmarker", 91])
@@ -1679,7 +1621,7 @@ def(47, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(48, Data) =>
+def(46, Data) =>
   println("DIMASSOC: 0x3B4 (1074) test/test-data/example_2000.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2000.dxf",
@@ -1695,7 +1637,7 @@ def(48, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000001110011000", '4.2.398', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -1715,7 +1657,7 @@ def(48, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "", 75])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00000011", '3', [], "", 72])
+    ,new_struct('RC72', ["00000000", '3', [], "", 72])
     ,new_struct('H331', ["010000100000001110011000", '4.2.398', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
@@ -1728,7 +1670,7 @@ def(48, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(49, Data) =>
+def(47, Data) =>
   println("DIMASSOC: 0x452 (1514) test/test-data/example_2000.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2000.dxf",
@@ -1744,7 +1686,7 @@ def(49, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000101", '5', [], "main_gsmarker", 91])
@@ -1764,7 +1706,7 @@ def(49, Data) =>
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "", 75])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["0100000100", '4', [], "", 91])
@@ -1787,7 +1729,7 @@ def(49, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(50, Data) =>
+def(48, Data) =>
   println("DIMASSOC: 0x42F (393) test/test-data/example_2004.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2004.dxf",
@@ -1803,7 +1745,7 @@ def(50, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00000001", '1', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '1', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011010", '4.2.41A', [], "mainobj", 331])
     ,new_struct('H331', ["010000100000010000011110", '4.2.41E', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
@@ -1817,7 +1759,7 @@ def(50, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(51, Data) =>
+def(49, Data) =>
   println("DIMASSOC: 0x466 (377) test/test-data/example_2004.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2004.dxf",
@@ -1833,7 +1775,7 @@ def(51, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000001", '1', [], "main_gsmarker", 91])
@@ -1846,7 +1788,7 @@ def(51, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(52, Data) =>
+def(50, Data) =>
   println("DIMASSOC: 0x4AE (665) test/test-data/example_2004.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2004.dxf",
@@ -1862,7 +1804,7 @@ def(52, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000001", '1', [], "main_gsmarker", 91])
@@ -1872,7 +1814,7 @@ def(52, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["0100000100", '4', [], "", 91])
@@ -1885,7 +1827,7 @@ def(52, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(53, Data) =>
+def(51, Data) =>
   println("DIMASSOC: 0x47E (665) test/test-data/example_2004.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2004.dxf",
@@ -1901,7 +1843,7 @@ def(53, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000010", '2', [], "main_gsmarker", 91])
@@ -1911,7 +1853,7 @@ def(53, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["0100000011", '3', [], "", 91])
@@ -1924,7 +1866,7 @@ def(53, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(54, Data) =>
+def(52, Data) =>
   println("DIMASSOC: 0x496 (665) test/test-data/example_2004.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2004.dxf",
@@ -1940,7 +1882,7 @@ def(54, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000011", '3', [], "main_gsmarker", 91])
@@ -1950,7 +1892,7 @@ def(54, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["0100000001", '1', [], "", 91])
@@ -1963,7 +1905,7 @@ def(54, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(55, Data) =>
+def(53, Data) =>
   println("DIMASSOC: 0x4C6 (665) test/test-data/example_2004.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2004.dxf",
@@ -1979,7 +1921,7 @@ def(55, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000100", '4', [], "main_gsmarker", 91])
@@ -2002,7 +1944,7 @@ def(55, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(56, Data) =>
+def(54, Data) =>
   println("DIMASSOC: 0x3B4 (1065) test/test-data/example_2004.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2004.dxf",
@@ -2018,7 +1960,7 @@ def(56, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000001110011000", '4.2.398', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -2038,7 +1980,7 @@ def(56, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "", 75])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00000011", '3', [], "", 72])
+    ,new_struct('RC72', ["00000000", '3', [], "", 72])
     ,new_struct('H331', ["010000100000001110011000", '4.2.398', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
@@ -2051,7 +1993,7 @@ def(56, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(57, Data) =>
+def(55, Data) =>
   println("DIMASSOC: 0x452 (1505) test/test-data/example_2004.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2004.dxf",
@@ -2067,7 +2009,7 @@ def(57, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000101", '5', [], "main_gsmarker", 91])
@@ -2087,7 +2029,7 @@ def(57, Data) =>
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "", 75])
     ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["0100000100", '4', [], "", 91])
@@ -2110,7 +2052,7 @@ def(57, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(58, Data) =>
+def(56, Data) =>
   println("DIMASSOC: 0x42F (537) test/test-data/example_2007.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2007.dxf",
@@ -2126,7 +2068,7 @@ def(58, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00000001", '1', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '1', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011010", '4.2.41A', [], "mainobj", 331])
     ,new_struct('H331', ["010000100000010000011110", '4.2.41E', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
@@ -2140,7 +2082,7 @@ def(58, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(59, Data) =>
+def(57, Data) =>
   println("DIMASSOC: 0x466 (521) test/test-data/example_2007.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2007.dxf",
@@ -2156,7 +2098,7 @@ def(59, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000001", '1', [], "main_gsmarker", 91])
@@ -2169,7 +2111,7 @@ def(59, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(60, Data) =>
+def(58, Data) =>
   println("DIMASSOC: 0x4AE (945) test/test-data/example_2007.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2007.dxf",
@@ -2185,7 +2127,7 @@ def(60, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000001", '1', [], "main_gsmarker", 91])
@@ -2195,7 +2137,7 @@ def(60, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["0100000100", '4', [], "", 91])
@@ -2208,7 +2150,7 @@ def(60, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(61, Data) =>
+def(59, Data) =>
   println("DIMASSOC: 0x47E (945) test/test-data/example_2007.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2007.dxf",
@@ -2224,7 +2166,7 @@ def(61, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000010", '2', [], "main_gsmarker", 91])
@@ -2234,7 +2176,7 @@ def(61, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["0100000011", '3', [], "", 91])
@@ -2247,7 +2189,7 @@ def(61, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(62, Data) =>
+def(60, Data) =>
   println("DIMASSOC: 0x496 (945) test/test-data/example_2007.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2007.dxf",
@@ -2262,8 +2204,8 @@ def(62, Data) =>
     ,new_struct('BL90', ["0100000011", '3', [], "associativity", 90])
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
-    %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    %new_struct('_TF1', ["1010000011111100010111011010000111000010011111110000000000000000101000001111110001011101101000011100001001111111000000000000000000000000", 'AcDbOsnapPointRef', [], "classname", 1])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000011", '3', [], "main_gsmarker", 91])
@@ -2273,7 +2215,7 @@ def(62, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["0100000001", '1', [], "", 91])
@@ -2286,7 +2228,7 @@ def(62, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(63, Data) =>
+def(61, Data) =>
   println("DIMASSOC: 0x4C6 (945) test/test-data/example_2007.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2007.dxf",
@@ -2302,7 +2244,7 @@ def(63, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000100", '4', [], "main_gsmarker", 91])
@@ -2325,7 +2267,7 @@ def(63, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(64, Data) =>
+def(62, Data) =>
   println("DIMASSOC: 0x3B4 (1465) test/test-data/example_2007.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2007.dxf",
@@ -2341,7 +2283,7 @@ def(64, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000001110011000", '4.2.398', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -2361,7 +2303,7 @@ def(64, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "", 75])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00000011", '3', [], "", 72])
+    ,new_struct('RC72', ["00000000", '3', [], "", 72])
     ,new_struct('H331', ["010000100000001110011000", '4.2.398', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
@@ -2374,7 +2316,7 @@ def(64, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(65, Data) =>
+def(63, Data) =>
   println("DIMASSOC: 0x452 (2033) test/test-data/example_2007.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2007.dxf",
@@ -2390,7 +2332,7 @@ def(65, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000101", '5', [], "main_gsmarker", 91])
@@ -2410,7 +2352,7 @@ def(65, Data) =>
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "", 75])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["0100000100", '4', [], "", 91])
@@ -2433,7 +2375,7 @@ def(65, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(66, Data) =>
+def(64, Data) =>
   println("DIMASSOC: 0x42F (537) test/test-data/example_2010.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2010.dxf",
@@ -2449,7 +2391,7 @@ def(66, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00000001", '1', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '1', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011010", '4.2.41A', [], "mainobj", 331])
     ,new_struct('H331', ["010000100000010000011110", '4.2.41E', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
@@ -2463,7 +2405,7 @@ def(66, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(67, Data) =>
+def(65, Data) =>
   println("DIMASSOC: 0x466 (521) test/test-data/example_2010.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2010.dxf",
@@ -2479,7 +2421,7 @@ def(67, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000001", '1', [], "main_gsmarker", 91])
@@ -2492,7 +2434,7 @@ def(67, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(68, Data) =>
+def(66, Data) =>
   println("DIMASSOC: 0x4AE (945) test/test-data/example_2010.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2010.dxf",
@@ -2508,7 +2450,7 @@ def(68, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000001", '1', [], "main_gsmarker", 91])
@@ -2518,7 +2460,7 @@ def(68, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["0100000100", '4', [], "", 91])
@@ -2531,7 +2473,7 @@ def(68, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(69, Data) =>
+def(67, Data) =>
   println("DIMASSOC: 0x47E (945) test/test-data/example_2010.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2010.dxf",
@@ -2547,7 +2489,7 @@ def(69, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000010", '2', [], "main_gsmarker", 91])
@@ -2557,7 +2499,7 @@ def(69, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["0100000011", '3', [], "", 91])
@@ -2570,7 +2512,7 @@ def(69, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(70, Data) =>
+def(68, Data) =>
   println("DIMASSOC: 0x496 (945) test/test-data/example_2010.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2010.dxf",
@@ -2586,7 +2528,7 @@ def(70, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000011", '3', [], "main_gsmarker", 91])
@@ -2596,7 +2538,7 @@ def(70, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["0100000001", '1', [], "", 91])
@@ -2609,7 +2551,7 @@ def(70, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(71, Data) =>
+def(69, Data) =>
   println("DIMASSOC: 0x4C6 (945) test/test-data/example_2010.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2010.dxf",
@@ -2625,7 +2567,7 @@ def(71, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000100", '4', [], "main_gsmarker", 91])
@@ -2648,7 +2590,7 @@ def(71, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(72, Data) =>
+def(70, Data) =>
   println("DIMASSOC: 0x3B4 (1465) test/test-data/example_2010.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2010.dxf",
@@ -2664,7 +2606,7 @@ def(72, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000001110011000", '4.2.398', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -2684,7 +2626,7 @@ def(72, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "", 75])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00000011", '3', [], "", 72])
+    ,new_struct('RC72', ["00000000", '3', [], "", 72])
     ,new_struct('H331', ["010000100000001110011000", '4.2.398', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
@@ -2697,7 +2639,7 @@ def(72, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(73, Data) =>
+def(71, Data) =>
   println("DIMASSOC: 0x452 (2033) test/test-data/example_2010.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2010.dxf",
@@ -2713,7 +2655,7 @@ def(73, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000101", '5', [], "main_gsmarker", 91])
@@ -2733,7 +2675,7 @@ def(73, Data) =>
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "", 75])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["0100000100", '4', [], "", 91])
@@ -2756,7 +2698,7 @@ def(73, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(74, Data) =>
+def(72, Data) =>
   println("DIMASSOC: 0x42F (536) test/test-data/example_2013.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2013.dxf",
@@ -2772,7 +2714,7 @@ def(74, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00000001", '1', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '1', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011010", '4.2.41A', [], "mainobj", 331])
     ,new_struct('H331', ["010000100000010000011110", '4.2.41E', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
@@ -2786,7 +2728,7 @@ def(74, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(75, Data) =>
+def(73, Data) =>
   println("DIMASSOC: 0x466 (520) test/test-data/example_2013.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2013.dxf",
@@ -2802,7 +2744,7 @@ def(75, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000001", '1', [], "main_gsmarker", 91])
@@ -2815,7 +2757,7 @@ def(75, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(76, Data) =>
+def(74, Data) =>
   println("DIMASSOC: 0x4AE (944) test/test-data/example_2013.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2013.dxf",
@@ -2831,7 +2773,7 @@ def(76, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000001", '1', [], "main_gsmarker", 91])
@@ -2841,7 +2783,7 @@ def(76, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["0100000100", '4', [], "", 91])
@@ -2854,7 +2796,7 @@ def(76, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(77, Data) =>
+def(75, Data) =>
   println("DIMASSOC: 0x47E (944) test/test-data/example_2013.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2013.dxf",
@@ -2870,7 +2812,7 @@ def(77, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000010", '2', [], "main_gsmarker", 91])
@@ -2880,7 +2822,7 @@ def(77, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["0100000011", '3', [], "", 91])
@@ -2893,7 +2835,7 @@ def(77, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(78, Data) =>
+def(76, Data) =>
   println("DIMASSOC: 0x496 (944) test/test-data/example_2013.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2013.dxf",
@@ -2909,7 +2851,7 @@ def(78, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000011", '3', [], "main_gsmarker", 91])
@@ -2919,7 +2861,7 @@ def(78, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["0100000001", '1', [], "", 91])
@@ -2932,7 +2874,7 @@ def(78, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(79, Data) =>
+def(77, Data) =>
   println("DIMASSOC: 0x4C6 (944) test/test-data/example_2013.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2013.dxf",
@@ -2948,7 +2890,7 @@ def(79, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000100", '4', [], "main_gsmarker", 91])
@@ -2971,7 +2913,7 @@ def(79, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(80, Data) =>
+def(78, Data) =>
   println("DIMASSOC: 0x3B4 (1464) test/test-data/example_2013.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2013.dxf",
@@ -2987,7 +2929,7 @@ def(80, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000001110011000", '4.2.398', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -3007,7 +2949,7 @@ def(80, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "", 75])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00000011", '3', [], "", 72])
+    ,new_struct('RC72', ["00000000", '3', [], "", 72])
     ,new_struct('H331', ["010000100000001110011000", '4.2.398', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
@@ -3020,7 +2962,7 @@ def(80, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(81, Data) =>
+def(79, Data) =>
   println("DIMASSOC: 0x452 (2032) test/test-data/example_2013.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/example_2013.dxf",
@@ -3036,7 +2978,7 @@ def(81, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["0100000101", '5', [], "main_gsmarker", 91])
@@ -3056,7 +2998,7 @@ def(81, Data) =>
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "", 75])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["010000100000010000011001", '4.2.419', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["0100000100", '4', [], "", 91])
@@ -3079,7 +3021,7 @@ def(81, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(82, Data) =>
+def(80, Data) =>
   println("DIMASSOC: 0xAD16 (504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3108,7 +3050,7 @@ def(82, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(83, Data) =>
+def(81, Data) =>
   println("DIMASSOC: 0xAD1C (504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3137,7 +3079,7 @@ def(83, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(84, Data) =>
+def(82, Data) =>
   println("DIMASSOC: 0xF4E3 (504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3166,7 +3108,7 @@ def(84, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(85, Data) =>
+def(83, Data) =>
   println("DIMASSOC: 0x10524 (536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3195,7 +3137,7 @@ def(85, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(86, Data) =>
+def(84, Data) =>
   println("DIMASSOC: 0x1057E (536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3224,7 +3166,7 @@ def(86, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(87, Data) =>
+def(85, Data) =>
   println("DIMASSOC: 0x105E1 (536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3253,7 +3195,7 @@ def(87, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(88, Data) =>
+def(86, Data) =>
   println("DIMASSOC: 0x1159F (496) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3269,7 +3211,7 @@ def(88, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00000011", '3', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '3', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011000000010000000111111101", '4.3.101FD', [], "mainobj", 331])
     ,new_struct('H331', ["010000100001010110010010", '4.2.1592', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
@@ -3283,7 +3225,7 @@ def(88, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(89, Data) =>
+def(87, Data) =>
   println("DIMASSOC: 0x11D00 (496) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3299,7 +3241,7 @@ def(89, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00000011", '3', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '3', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011000000010000000111001010", '4.3.101CA', [], "mainobj", 331])
     ,new_struct('H331', ["010000100001010110010010", '4.2.1592', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
@@ -3313,7 +3255,7 @@ def(89, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(90, Data) =>
+def(88, Data) =>
   println("DIMASSOC: 0x104CA (968) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3333,7 +3275,7 @@ def(90, Data) =>
     ,new_struct('H331', ["01000011000000010000001111100000", '4.3.103E0', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
-    %new_struct('_BD40', ["000010000111111011111111111111111111111111111111111101", '0.4999999999999308', [], "osnap_dist", 40])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.4999999999999308', [], "osnap_dist", 40])
     ,new_struct('BD10', ["10", '0.0', [], "osnap_pt", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
@@ -3342,14 +3284,14 @@ def(90, Data) =>
     ,new_struct('BS72', ["10", '0', [], "", 72])
     ,new_struct('BD40', ["10", '0.0', [], "", 40])
     ,new_struct('BD10', ["001010101110111100000010101110110010010000010001001101001101000000", '19730.26440685677', [], "", 10])
-    %new_struct('_BD20', ["000011010011010000001101110111011101110100111000001100", '14784.90988824526', [], "", 20])
+    %new_struct('_BD20', ["000000000000000000000000000000000000000000000000000000", '14784.90988824526', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "", 75])
   ],
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(91, Data) =>
+def(89, Data) =>
   println("DIMASSOC: 0x1044C (968) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3369,7 +3311,7 @@ def(91, Data) =>
     ,new_struct('H331', ["01000011000000010000001111011110", '4.3.103DE', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
-    %new_struct('_BD40', ["001010111011111100111111111111111111111111111111111101", '0.4999999999999528', [], "osnap_dist", 40])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.4999999999999528', [], "osnap_dist", 40])
     ,new_struct('BD10', ["10", '0.0', [], "osnap_pt", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
@@ -3378,14 +3320,14 @@ def(91, Data) =>
     ,new_struct('BS72', ["10", '0', [], "", 72])
     ,new_struct('BD40', ["10", '0.0', [], "", 40])
     ,new_struct('BD10', ["000111011001111010000101011101100011100001101111101100001001000000", '9597.764406857296', [], "", 10])
-    %new_struct('_BD20', ["001111011010011110000001000110010110001000111100111100", '14823.06558282625', [], "", 20])
+    %new_struct('_BD20', ["000000000000000000000000000000000000000000000000000000", '14823.06558282625', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "", 75])
   ],
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(92, Data) =>
+def(90, Data) =>
   println("DIMASSOC: 0xAC80 (504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3401,7 +3343,7 @@ def(92, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000101010110001011100", '4.2.AC5C', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -3414,7 +3356,7 @@ def(92, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(93, Data) =>
+def(91, Data) =>
   println("DIMASSOC: 0xAC86 (504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3430,7 +3372,7 @@ def(93, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000101010110001100000", '4.2.AC60', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -3443,7 +3385,7 @@ def(93, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(94, Data) =>
+def(92, Data) =>
   println("DIMASSOC: 0xAC91 (504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3459,7 +3401,7 @@ def(94, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000101010110001100110", '4.2.AC66', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -3472,7 +3414,7 @@ def(94, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(95, Data) =>
+def(93, Data) =>
   println("DIMASSOC: 0xAC9C (504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3488,7 +3430,7 @@ def(95, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000101010110001101100", '4.2.AC6C', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -3501,7 +3443,7 @@ def(95, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(96, Data) =>
+def(94, Data) =>
   println("DIMASSOC: 0xACAC (504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3517,7 +3459,7 @@ def(96, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000101010110001011110", '4.2.AC5E', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -3530,7 +3472,7 @@ def(96, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(97, Data) =>
+def(95, Data) =>
   println("DIMASSOC: 0xACB2 (504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3546,7 +3488,7 @@ def(97, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000101010110001011110", '4.2.AC5E', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -3559,7 +3501,7 @@ def(97, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(98, Data) =>
+def(96, Data) =>
   println("DIMASSOC: 0xACB8 (504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3575,7 +3517,7 @@ def(98, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000101010110001011100", '4.2.AC5C', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -3588,7 +3530,7 @@ def(98, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(99, Data) =>
+def(97, Data) =>
   println("DIMASSOC: 0xACBE (504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3604,7 +3546,7 @@ def(99, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000101010110001100010", '4.2.AC62', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -3617,7 +3559,7 @@ def(99, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(100, Data) =>
+def(98, Data) =>
   println("DIMASSOC: 0xACC4 (504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3633,7 +3575,7 @@ def(100, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000101010110001100011", '4.2.AC63', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -3646,7 +3588,7 @@ def(100, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(101, Data) =>
+def(99, Data) =>
   println("DIMASSOC: 0xACCE (504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3662,7 +3604,7 @@ def(101, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000101010110001100011", '4.2.AC63', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -3675,7 +3617,7 @@ def(101, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(102, Data) =>
+def(100, Data) =>
   println("DIMASSOC: 0xACFE (504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3691,7 +3633,7 @@ def(102, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000101010110001110000", '4.2.AC70', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -3704,7 +3646,7 @@ def(102, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(103, Data) =>
+def(101, Data) =>
   println("DIMASSOC: 0xAD05 (504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3720,7 +3662,7 @@ def(103, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000101010110001101010", '4.2.AC6A', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -3733,7 +3675,7 @@ def(103, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(104, Data) =>
+def(102, Data) =>
   println("DIMASSOC: 0xAD0B (504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3749,7 +3691,7 @@ def(104, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000101010110001101010", '4.2.AC6A', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -3762,7 +3704,7 @@ def(104, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(105, Data) =>
+def(103, Data) =>
   println("DIMASSOC: 0xAD22 (504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3778,7 +3720,7 @@ def(105, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000101010110100000010", '4.2.AD02', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -3791,7 +3733,7 @@ def(105, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(106, Data) =>
+def(104, Data) =>
   println("DIMASSOC: 0xAD28 (504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3807,7 +3749,7 @@ def(106, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000101010110100000010", '4.2.AD02', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -3820,7 +3762,7 @@ def(106, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(107, Data) =>
+def(105, Data) =>
   println("DIMASSOC: 0xAD2E (504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3836,7 +3778,7 @@ def(107, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000101010110100001111", '4.2.AD0F', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -3849,7 +3791,7 @@ def(107, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(108, Data) =>
+def(106, Data) =>
   println("DIMASSOC: 0xAD34 (504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3865,7 +3807,7 @@ def(108, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000101010110100010001", '4.2.AD11', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -3878,7 +3820,7 @@ def(108, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(109, Data) =>
+def(107, Data) =>
   println("DIMASSOC: 0xAD3A (504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3894,7 +3836,7 @@ def(109, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["010000101010110100001111", '4.2.AD0F', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -3907,7 +3849,7 @@ def(109, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(110, Data) =>
+def(108, Data) =>
   println("DIMASSOC: 0x10500 (536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3923,7 +3865,7 @@ def(110, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011000000010000001011110111", '4.3.102F7', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -3936,7 +3878,7 @@ def(110, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(111, Data) =>
+def(109, Data) =>
   println("DIMASSOC: 0x1055A (536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3952,7 +3894,7 @@ def(111, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011000000010000001011011111", '4.3.102DF', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -3965,7 +3907,7 @@ def(111, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(112, Data) =>
+def(110, Data) =>
   println("DIMASSOC: 0x10CC6 (536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -3981,7 +3923,7 @@ def(112, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011000000010000110010110100", '4.3.10CB4', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -3994,7 +3936,7 @@ def(112, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(113, Data) =>
+def(111, Data) =>
   println("DIMASSOC: 0x10CD8 (536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -4009,8 +3951,8 @@ def(113, Data) =>
     ,new_struct('BL90', ["0100000001", '1', [], "associativity", 90])
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
-    %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    %new_struct('_TF1', ["1010000011111100010111011010000111000010011111110000000000000000101000001111110001011101101000011100001001111111000000000000000000000000", 'AcDbOsnapPointRef', [], "classname", 1])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011000000010000110010110100", '4.3.10CB4', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -4023,7 +3965,7 @@ def(113, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(114, Data) =>
+def(112, Data) =>
   println("DIMASSOC: 0x10F71 (536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -4039,7 +3981,7 @@ def(114, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011000000010000111100011101", '4.3.10F1D', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -4052,7 +3994,7 @@ def(114, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(115, Data) =>
+def(113, Data) =>
   println("DIMASSOC: 0x10F83 (536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -4068,7 +4010,7 @@ def(115, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011000000010000111100011101", '4.3.10F1D', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -4081,7 +4023,7 @@ def(115, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(116, Data) =>
+def(114, Data) =>
   println("DIMASSOC: 0x11F31 (536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -4097,7 +4039,7 @@ def(116, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011000000010001111100001101", '4.3.11F0D', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -4110,7 +4052,7 @@ def(116, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(117, Data) =>
+def(115, Data) =>
   println("DIMASSOC: 0x1205C (536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -4126,7 +4068,7 @@ def(117, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011000000010010000000011011", '4.3.1201B', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -4139,7 +4081,7 @@ def(117, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(118, Data) =>
+def(116, Data) =>
   println("DIMASSOC: 0x123A5 (536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -4155,7 +4097,7 @@ def(118, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011000000010010001100010011", '4.3.12313', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -4168,7 +4110,7 @@ def(118, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(119, Data) =>
+def(117, Data) =>
   println("DIMASSOC: 0x11E19 (1080) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -4198,8 +4140,8 @@ def(119, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["0100011001000010", 'FB', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00110010001100010011100100110110", '2196', [], "", 301])
+    %new_struct('_TF301', ["0000000000000000", 'FB', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '2196', [], "", 301])
     ,new_struct('BD40', ["000000000000000000000000000000000000000000000000001110000000111111", '0.5', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -4209,7 +4151,7 @@ def(119, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(120, Data) =>
+def(118, Data) =>
   println("DIMASSOC: 0x1200D (1112) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -4239,8 +4181,8 @@ def(120, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00111000010000010011001101000101", '8A3E', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '8A3E', [], "", 301])
     ,new_struct('BD40', ["000000000000000000000000000000000000000000000000001110000000111111", '0.5', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -4250,7 +4192,7 @@ def(120, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(121, Data) =>
+def(119, Data) =>
   println("DIMASSOC: 0x11ABA (1504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -4280,9 +4222,9 @@ def(121, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["0100011001000010", 'FB', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00110010001100000100010000111001", '20D9', [], "", 301])
-    %new_struct('_BD40', ["000001110110001101001110100101110000011100010000101101", '0.4259100819273998', [], "", 40])
+    %new_struct('_TF301', ["0000000000000000", 'FB', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '20D9', [], "", 301])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.4259100819273998', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
@@ -4301,7 +4243,7 @@ def(121, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(122, Data) =>
+def(120, Data) =>
   println("DIMASSOC: 0x11AA8 (1504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -4331,9 +4273,9 @@ def(122, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["0100011001000010", 'FB', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00110001010001100011100100110000", '1F90', [], "", 301])
-    %new_struct('_BD40', ["001100011101010111000101110101011110001110010100001110", '0.6348334980964346', [], "", 40])
+    %new_struct('_TF301', ["0000000000000000", 'FB', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '1F90', [], "", 301])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.6348334980964346', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
@@ -4352,7 +4294,7 @@ def(122, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(123, Data) =>
+def(121, Data) =>
   println("DIMASSOC: 0x11FFB (1536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -4382,8 +4324,8 @@ def(123, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00111000001101110011010100111001", '8759', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '8759', [], "", 301])
     ,new_struct('BD40', ["001101000100000010000011111100110000100011100011101101001000111111", '0.2899255268821835', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -4403,7 +4345,7 @@ def(123, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(124, Data) =>
+def(122, Data) =>
   println("DIMASSOC: 0x11A17 (1504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -4433,8 +4375,8 @@ def(124, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["0100011001000010", 'FB', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00110001010001100011010100110001", '1F51', [], "", 301])
+    %new_struct('_TF301', ["0000000000000000", 'FB', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '1F51', [], "", 301])
     ,new_struct('BD40', ["001111011000110101010000000111010110110000001001001110100000111111", '0.7544786729865212', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -4454,7 +4396,7 @@ def(124, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(125, Data) =>
+def(123, Data) =>
   println("DIMASSOC: 0x11E2B (1120) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -4480,25 +4422,25 @@ def(125, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001011", '11', [], "", 72])
+    ,new_struct('RC72', ["00000000", '11', [], "", 72])
     ,new_struct('H331', ["01000011000000010001110111100001", '4.3.11DE1', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_BD40', ["000001001110110001011000100100110100110101100111101101", '0.4315312629430689', [], "", 40])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.4315312629430689', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
     ,new_struct('H332', ["01000011000000010001011100000000", '4.3.11700', [], "intsectobj", 332])
     ,new_struct('BS74', ["0100000010", '2', [], "intsect_subent_type", 74])
     ,new_struct('BL92', ["10", '0', [], "intsect_gsmarker", 92])
-    %new_struct('_TF302', ["0100011001000010", 'FB', [], "intsectxrefobj", 302])
-    %new_struct('_TF302', ["010001100011001000110101", 'F25', [], "", 302])
+    %new_struct('_TF302', ["0000000000000000", 'FB', [], "intsectxrefobj", 302])
+    %new_struct('_TF302', ["000000000000000000000000", 'F25', [], "", 302])
     ,new_struct('BS75', ["10", '0', [], "", 75])
   ],
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(126, Data) =>
+def(124, Data) =>
   println("DIMASSOC: 0x11A29 (1120) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -4524,7 +4466,7 @@ def(126, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001011", '11', [], "", 72])
+    ,new_struct('RC72', ["00000000", '11', [], "", 72])
     ,new_struct('H331', ["01000011000000010000001101010100", '4.3.10354', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
@@ -4535,14 +4477,14 @@ def(126, Data) =>
     ,new_struct('H332', ["01000011000000010001011100000000", '4.3.11700', [], "intsectobj", 332])
     ,new_struct('BS74', ["0100000010", '2', [], "intsect_subent_type", 74])
     ,new_struct('BL92', ["10", '0', [], "intsect_gsmarker", 92])
-    %new_struct('_TF302', ["0100011001000010", 'FB', [], "intsectxrefobj", 302])
-    %new_struct('_TF302', ["010001000011100001000110", 'D8F', [], "", 302])
+    %new_struct('_TF302', ["0000000000000000", 'FB', [], "intsectxrefobj", 302])
+    %new_struct('_TF302', ["000000000000000000000000", 'D8F', [], "", 302])
     ,new_struct('BS75', ["10", '0', [], "", 75])
   ],
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(127, Data) =>
+def(125, Data) =>
   println("DIMASSOC: 0x1197C (1080) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -4572,8 +4514,8 @@ def(127, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["0100011001000010", 'FB', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00110001010000110011100101000011", '1C9C', [], "", 301])
+    %new_struct('_TF301', ["0000000000000000", 'FB', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '1C9C', [], "", 301])
     ,new_struct('BD40', ["01", '1.0', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -4583,7 +4525,7 @@ def(127, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(128, Data) =>
+def(126, Data) =>
   println("DIMASSOC: 0x11F83 (1112) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -4613,9 +4555,9 @@ def(128, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00111000001101110011010100110110", '8756', [], "", 301])
-    %new_struct('_BD40', ["001110110011111111111111111111111111111111111111111101", '0.4999999999999989', [], "", 40])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '8756', [], "", 301])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.4999999999999989', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
@@ -4624,7 +4566,7 @@ def(128, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(129, Data) =>
+def(127, Data) =>
   println("DIMASSOC: 0x109BE (936) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -4663,7 +4605,7 @@ def(129, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(130, Data) =>
+def(128, Data) =>
   println("DIMASSOC: 0x1216E (1568) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -4683,7 +4625,7 @@ def(130, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
-    %new_struct('_TF301', ["01000100001100110011001100110101", 'D335', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D335', [], "xrefobj", 301])
     ,new_struct('BD40', ["10", '0.0', [], "osnap_dist", 40])
     ,new_struct('BD10', ["10", '0.0', [], "osnap_pt", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -4694,9 +4636,9 @@ def(130, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "", 301])
-    %new_struct('_TF301', ["00111000001101100100001100110001", '86C1', [], "", 301])
-    %new_struct('_BD40', ["000010001000101111000010110011011100100100111111101101", '0.4061365640197768', [], "", 40])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '86C1', [], "", 301])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.4061365640197768', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
@@ -4706,7 +4648,7 @@ def(130, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100110011001100110101", 'D335', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D335', [], "", 301])
     ,new_struct('BD40', ["10", '0.0', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -4716,7 +4658,7 @@ def(130, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(131, Data) =>
+def(129, Data) =>
   println("DIMASSOC: 0x11A84 (1520) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -4736,7 +4678,7 @@ def(131, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
-    %new_struct('_TF301', ["00110100001101000011001100110010", '4432', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '4432', [], "xrefobj", 301])
     ,new_struct('BD40', ["10", '0.0', [], "osnap_dist", 40])
     ,new_struct('BD10', ["10", '0.0', [], "osnap_pt", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -4747,9 +4689,9 @@ def(131, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["0100011001000010", 'FB', [], "", 301])
-    %new_struct('_TF301', ["010001010011000000110111", 'E07', [], "", 301])
-    %new_struct('_BD40', ["000010010011001010000110110110001100110010110010111011", '0.0656005374874345', [], "", 40])
+    %new_struct('_TF301', ["0000000000000000", 'FB', [], "", 301])
+    %new_struct('_TF301', ["000000000000000000000000", 'E07', [], "", 301])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.0656005374874345', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
@@ -4759,7 +4701,7 @@ def(131, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["00110100001101000011001100110010", '4432', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '4432', [], "", 301])
     ,new_struct('BD40', ["10", '0.0', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -4769,7 +4711,7 @@ def(131, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(132, Data) =>
+def(130, Data) =>
   println("DIMASSOC: 0x123D3 (1568) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -4789,7 +4731,7 @@ def(132, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
-    %new_struct('_TF301', ["01000100001100100100010000110010", 'D2D2', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D2D2', [], "xrefobj", 301])
     ,new_struct('BD40', ["10", '0.0', [], "osnap_dist", 40])
     ,new_struct('BD10', ["10", '0.0', [], "osnap_pt", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -4800,9 +4742,9 @@ def(132, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "", 301])
-    %new_struct('_TF301', ["00111000001101000011011101000100", '847D', [], "", 301])
-    %new_struct('_BD40', ["000100001001110001110100100011101101101111110010011001", '0.0290887241613842', [], "", 40])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '847D', [], "", 301])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.0290887241613842', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
@@ -4812,7 +4754,7 @@ def(132, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100100100010000110010", 'D2D2', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D2D2', [], "", 301])
     ,new_struct('BD40', ["10", '0.0', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -4822,7 +4764,7 @@ def(132, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(133, Data) =>
+def(131, Data) =>
   println("DIMASSOC: 0x123E5 (1568) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -4842,7 +4784,7 @@ def(133, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
-    %new_struct('_TF301', ["01000100001100100100010000110010", 'D2D2', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D2D2', [], "xrefobj", 301])
     ,new_struct('BD40', ["10", '0.0', [], "osnap_dist", 40])
     ,new_struct('BD10', ["10", '0.0', [], "osnap_pt", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -4853,9 +4795,9 @@ def(133, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "", 301])
-    %new_struct('_TF301', ["00111000001101000100000101000010", '84AB', [], "", 301])
-    %new_struct('_BD40', ["000100100010111001101000100010011010000110001001111101", '0.393037355165593', [], "", 40])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '84AB', [], "", 301])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.393037355165593', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
@@ -4865,7 +4807,7 @@ def(133, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100100100010000110010", 'D2D2', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D2D2', [], "", 301])
     ,new_struct('BD40', ["10", '0.0', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -4875,7 +4817,7 @@ def(133, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(134, Data) =>
+def(132, Data) =>
   println("DIMASSOC: 0x119C6 (1520) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -4895,7 +4837,7 @@ def(134, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
-    %new_struct('_TF301', ["00110100001101010100000100110110", '45A6', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '45A6', [], "xrefobj", 301])
     ,new_struct('BD40', ["10", '0.0', [], "osnap_dist", 40])
     ,new_struct('BD10', ["10", '0.0', [], "osnap_pt", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -4906,8 +4848,8 @@ def(134, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["0100011001000010", 'FB', [], "", 301])
-    %new_struct('_TF301', ["010001010011000000111001", 'E09', [], "", 301])
+    %new_struct('_TF301', ["0000000000000000", 'FB', [], "", 301])
+    %new_struct('_TF301', ["000000000000000000000000", 'E09', [], "", 301])
     ,new_struct('BD40', ["000110000100001110001001101100101111110111111101011110100000111111", '0.7800253837344365', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -4918,7 +4860,7 @@ def(134, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["00110100001101010100000100110110", '45A6', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '45A6', [], "", 301])
     ,new_struct('BD40', ["10", '0.0', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -4928,7 +4870,7 @@ def(134, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(135, Data) =>
+def(133, Data) =>
   println("DIMASSOC: 0x11A96 (1408) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -4959,8 +4901,8 @@ def(135, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["0100011001000010", 'FB', [], "xrefobj", 301])
-    %new_struct('_TF301', ["010001010011000001000001", 'E0A', [], "", 301])
+    %new_struct('_TF301', ["0000000000000000", 'FB', [], "xrefobj", 301])
+    %new_struct('_TF301', ["000000000000000000000000", 'E0A', [], "", 301])
     ,new_struct('BD40', ["001100001011101101011011100111110100001010001000111110100100111111", '0.7855274629468385', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -4981,7 +4923,7 @@ def(135, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(136, Data) =>
+def(134, Data) =>
   println("DIMASSOC: 0x1195E (1424) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -5012,9 +4954,9 @@ def(136, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["0100011001000010", 'FB', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00110001001101100100010001000100", '16DD', [], "", 301])
-    %new_struct('_BD40', ["001101000011010011100111100010001101001111111010001101", '0.4048040244918498', [], "", 40])
+    %new_struct('_TF301', ["0000000000000000", 'FB', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '16DD', [], "", 301])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.4048040244918498', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
@@ -5034,7 +4976,7 @@ def(136, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(137, Data) =>
+def(135, Data) =>
   println("DIMASSOC: 0x11A05 (1064) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -5050,7 +4992,7 @@ def(137, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011000000010001100011010100", '4.3.118D4', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -5064,8 +5006,8 @@ def(137, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["0100011001000010", 'FB', [], "xrefobj", 301])
-    %new_struct('_TF301', ["010001000100010000110010", 'DD2', [], "", 301])
+    %new_struct('_TF301', ["0000000000000000", 'FB', [], "xrefobj", 301])
+    %new_struct('_TF301', ["000000000000000000000000", 'DD2', [], "", 301])
     ,new_struct('BD40', ["01", '1.0', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -5075,7 +5017,7 @@ def(137, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(138, Data) =>
+def(136, Data) =>
   println("DIMASSOC: 0x119B4 (1064) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -5091,7 +5033,7 @@ def(138, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011000000010001100101101001", '4.3.11969', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -5105,8 +5047,8 @@ def(138, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["0100011001000010", 'FB', [], "xrefobj", 301])
-    %new_struct('_TF301', ["010001010011000000111001", 'E09', [], "", 301])
+    %new_struct('_TF301', ["0000000000000000", 'FB', [], "xrefobj", 301])
+    %new_struct('_TF301', ["000000000000000000000000", 'E09', [], "", 301])
     ,new_struct('BD40', ["01", '1.0', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -5116,7 +5058,7 @@ def(138, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(139, Data) =>
+def(137, Data) =>
   println("DIMASSOC: 0x11FE9 (1112) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -5132,7 +5074,7 @@ def(139, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011000000010001111100010100", '4.3.11F14', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -5146,8 +5088,8 @@ def(139, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00111000001101110011001100110001", '8731', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '8731', [], "", 301])
     ,new_struct('BD40', ["01", '1.0', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -5157,7 +5099,7 @@ def(139, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(140, Data) =>
+def(138, Data) =>
   println("DIMASSOC: 0x11FAA (1112) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -5173,7 +5115,7 @@ def(140, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011000000010001111100011100", '4.3.11F1C', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -5187,8 +5129,8 @@ def(140, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00111000001110000011010101000110", '885F', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '885F', [], "", 301])
     ,new_struct('BD40', ["01", '1.0', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -5198,7 +5140,7 @@ def(140, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(141, Data) =>
+def(139, Data) =>
   println("DIMASSOC: 0x120BF (1112) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -5214,7 +5156,7 @@ def(141, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011000000010010000000100110", '4.3.12026', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -5228,8 +5170,8 @@ def(141, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00111000001110010011011100110110", '8976', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '8976', [], "", 301])
     ,new_struct('BD40', ["01", '1.0', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -5239,7 +5181,7 @@ def(141, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(142, Data) =>
+def(140, Data) =>
   println("DIMASSOC: 0x1234C (1112) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -5255,7 +5197,7 @@ def(142, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011000000010010001100001110", '4.3.1230E', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -5269,8 +5211,8 @@ def(142, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00111000010001000011001101000010", '8D3B', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '8D3B', [], "", 301])
     ,new_struct('BD40', ["01", '1.0', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -5280,7 +5222,7 @@ def(142, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(143, Data) =>
+def(141, Data) =>
   println("DIMASSOC: 0x11CB8 (1064) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -5296,7 +5238,7 @@ def(143, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011000000010001101111001110", '4.3.11BCE', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -5310,8 +5252,8 @@ def(143, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["0100011001000010", 'FB', [], "xrefobj", 301])
-    %new_struct('_TF301', ["010001000011000100110110", 'D16', [], "", 301])
+    %new_struct('_TF301', ["0000000000000000", 'FB', [], "xrefobj", 301])
+    %new_struct('_TF301', ["000000000000000000000000", 'D16', [], "", 301])
     ,new_struct('BD40', ["000000000000000000000000000000000000000000000000001110000000111111", '0.5', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -5321,7 +5263,7 @@ def(143, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(144, Data) =>
+def(142, Data) =>
   println("DIMASSOC: 0x11A3B (1488) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -5351,9 +5293,9 @@ def(144, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["0100011001000010", 'FB', [], "xrefobj", 301])
-    %new_struct('_TF301', ["010001000011100100110010", 'D92', [], "", 301])
-    %new_struct('_BD40', ["000000011100000101010011010010011010011111001100111010", '0.0511750921491601', [], "", 40])
+    %new_struct('_TF301', ["0000000000000000", 'FB', [], "xrefobj", 301])
+    %new_struct('_TF301', ["000000000000000000000000", 'D92', [], "", 301])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.0511750921491601', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
@@ -5372,7 +5314,7 @@ def(144, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(145, Data) =>
+def(143, Data) =>
   println("DIMASSOC: 0x11F4C (1536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -5402,9 +5344,9 @@ def(145, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00111000001101110011100100111001", '8799', [], "", 301])
-    %new_struct('_BD40', ["000000101011111000111000010011011101111111110101011100", '0.1940154097428038', [], "", 40])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '8799', [], "", 301])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.1940154097428038', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
@@ -5423,7 +5365,7 @@ def(145, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(146, Data) =>
+def(144, Data) =>
   println("DIMASSOC: 0x12409 (1536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -5453,9 +5395,9 @@ def(146, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00111000001101010100001101000011", '85CC', [], "", 301])
-    %new_struct('_BD40', ["000000111110110100001000000000111110111000101110001110", '0.5225487037147348', [], "", 40])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '85CC', [], "", 301])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.5225487037147348', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
@@ -5474,7 +5416,7 @@ def(146, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(147, Data) =>
+def(145, Data) =>
   println("DIMASSOC: 0x11869 (1504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -5504,9 +5446,9 @@ def(147, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["0100011001000010", 'FB', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00110001010001100100000101000011", '1FAC', [], "", 301])
-    %new_struct('_BD40', ["000001100101101101111010100001110000001011100111011110", '0.7379203381309792', [], "", 40])
+    %new_struct('_TF301', ["0000000000000000", 'FB', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '1FAC', [], "", 301])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.7379203381309792', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
@@ -5525,7 +5467,7 @@ def(147, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(148, Data) =>
+def(146, Data) =>
   println("DIMASSOC: 0x121FB (1536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -5555,9 +5497,9 @@ def(148, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00111000010000010100000101000010", '8AAB', [], "", 301])
-    %new_struct('_BD40', ["000001110001010110100001100010000110000001010100101101", '0.3800356700315619', [], "", 40])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '8AAB', [], "", 301])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.3800356700315619', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
@@ -5576,7 +5518,7 @@ def(148, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(149, Data) =>
+def(147, Data) =>
   println("DIMASSOC: 0x12393 (1536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -5606,8 +5548,8 @@ def(149, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00111000010000110011001000111000", '8C28', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '8C28', [], "", 301])
     ,new_struct('BD40', ["000001111101011101000101111000010110101100000101001110001000111111", '0.5650236701430095', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -5627,7 +5569,7 @@ def(149, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(150, Data) =>
+def(148, Data) =>
   println("DIMASSOC: 0x117FD (1504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -5657,9 +5599,9 @@ def(150, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["0100011001000010", 'FB', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00110001010001100100000101000011", '1FAC', [], "", 301])
-    %new_struct('_BD40', ["000100011101100101100101000011001001101110110000111101", '0.34005312861844', [], "", 40])
+    %new_struct('_TF301', ["0000000000000000", 'FB', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '1FAC', [], "", 301])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.34005312861844', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
@@ -5678,7 +5620,7 @@ def(150, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(151, Data) =>
+def(149, Data) =>
   println("DIMASSOC: 0x12107 (1536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -5708,8 +5650,8 @@ def(151, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00111000010000010100010101000001", '8AEA', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '8AEA', [], "", 301])
     ,new_struct('BD40', ["000100101100101001000111110001110111110001010010001101111000111111", '0.4732020172492823', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -5729,7 +5671,7 @@ def(151, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(152, Data) =>
+def(150, Data) =>
   println("DIMASSOC: 0x123F7 (1536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -5759,9 +5701,9 @@ def(152, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00111000010001000011010100110101", '8D55', [], "", 301])
-    %new_struct('_BD40', ["000101110001100110011001000101111011111011110111001110", '0.933225330695858', [], "", 40])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '8D55', [], "", 301])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.933225330695858', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
@@ -5780,7 +5722,7 @@ def(152, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(153, Data) =>
+def(151, Data) =>
   println("DIMASSOC: 0x12297 (1536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -5810,8 +5752,8 @@ def(153, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00111000001101100011011000110000", '8660', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '8660', [], "", 301])
     ,new_struct('BD40', ["000110101011000010000001001000001100111101101001111011111100111111", '0.1236456341619118', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -5831,7 +5773,7 @@ def(153, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(154, Data) =>
+def(152, Data) =>
   println("DIMASSOC: 0x11CEE (1488) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -5861,9 +5803,9 @@ def(154, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["0100011001000010", 'FB', [], "xrefobj", 301])
-    %new_struct('_TF301', ["010000110011010100111001", 'C59', [], "", 301])
-    %new_struct('_BD40', ["000110110010000100001100001011010010111011101100101110", '0.8030680198027205', [], "", 40])
+    %new_struct('_TF301', ["0000000000000000", 'FB', [], "xrefobj", 301])
+    %new_struct('_TF301', ["000000000000000000000000", 'C59', [], "", 301])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.8030680198027205', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
@@ -5882,7 +5824,7 @@ def(154, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(155, Data) =>
+def(153, Data) =>
   println("DIMASSOC: 0x11FD7 (1536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -5912,9 +5854,9 @@ def(155, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00111000001101110011001001000001", '872A', [], "", 301])
-    %new_struct('_BD40', ["001000100010101011110011001100110011001100110011001011", '0.1124999999998818', [], "", 40])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '872A', [], "", 301])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.1124999999998818', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
@@ -5933,7 +5875,7 @@ def(155, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(156, Data) =>
+def(154, Data) =>
   println("DIMASSOC: 0x12381 (1536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -5963,14 +5905,14 @@ def(156, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00111000001110010100010101000110", '89EF', [], "", 301])
-    %new_struct('_BD40', ["001001001010011001101100100100101001110001011110001011", '0.1112128074042629', [], "", 40])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '89EF', [], "", 301])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.1112128074042629', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
     ,new_struct('BS75', ["0100000001", '1', [], "", 75])
-    %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "", 1])
+    %new_struct('_TF1', ["1010000011111100010111011010000111000010011111110000000000000000101000001111110001011101101000011100001001111111000000000000000000000000", 'AcDbOsnapPointRef', [], "", 1])
     ,new_struct('BS72', ["0100001101", '13', [], "", 72])
     ,new_struct('H331', ["01000011000000010010001100010101", '4.3.12315', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
@@ -5984,7 +5926,7 @@ def(156, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(157, Data) =>
+def(155, Data) =>
   println("DIMASSOC: 0x119F3 (1488) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -6014,8 +5956,8 @@ def(157, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["0100011001000010", 'FB', [], "xrefobj", 301])
-    %new_struct('_TF301', ["010001010011000000110011", 'E03', [], "", 301])
+    %new_struct('_TF301', ["0000000000000000", 'FB', [], "xrefobj", 301])
+    %new_struct('_TF301', ["000000000000000000000000", 'E03', [], "", 301])
     ,new_struct('BD40', ["001011011001100101000000101100010100010000000000111100101000111111", '0.2032185518226421', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -6035,7 +5977,7 @@ def(157, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(158, Data) =>
+def(156, Data) =>
   println("DIMASSOC: 0x11F95 (1536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -6065,8 +6007,8 @@ def(158, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00111000001101110011100000110101", '8785', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '8785', [], "", 301])
     ,new_struct('BD40', ["001100101000000000000000000000000000000000000000001101000000111111", '0.2500000000000112', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -6086,7 +6028,7 @@ def(158, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(159, Data) =>
+def(157, Data) =>
   println("DIMASSOC: 0x1180F (1504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -6116,9 +6058,9 @@ def(159, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["0100011001000010", 'FB', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00110001010000110100001000111001", '1CB9', [], "", 301])
-    %new_struct('_BD40', ["001100111110111001100100001001000100110100000111001110", '0.5034430354187921', [], "", 40])
+    %new_struct('_TF301', ["0000000000000000", 'FB', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '1CB9', [], "", 301])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.5034430354187921', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
@@ -6137,7 +6079,7 @@ def(159, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(160, Data) =>
+def(158, Data) =>
   println("DIMASSOC: 0x121E9 (1536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -6167,8 +6109,8 @@ def(160, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00111001001100000011100100110010", '9092', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '9092', [], "", 301])
     ,new_struct('BD40', ["001101101110100101011010000000011111000001111100001110100100111111", '0.8106389183714627', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -6188,7 +6130,7 @@ def(160, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(161, Data) =>
+def(159, Data) =>
   println("DIMASSOC: 0x11DAF (1504) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -6218,9 +6160,9 @@ def(161, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["0100011001000010", 'FB', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00110001001110000100011001000001", '18FA', [], "", 301])
-    %new_struct('_BD40', ["001111010000101001101001100001110010011010101111111110", '0.6483889159729288', [], "", 40])
+    %new_struct('_TF301', ["0000000000000000", 'FB', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '18FA', [], "", 301])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.6483889159729288', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
@@ -6239,7 +6181,7 @@ def(161, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(162, Data) =>
+def(160, Data) =>
   println("DIMASSOC: 0x12243 (1536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -6269,8 +6211,8 @@ def(162, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00111000001101100011011000110000", '8660', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '8660', [], "", 301])
     ,new_struct('BD40', ["001111001111011000100101011101000001101000011001001110101000111111", '0.8247570108349279', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -6290,7 +6232,7 @@ def(162, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(163, Data) =>
+def(161, Data) =>
   println("DIMASSOC: 0x120D1 (1536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -6320,9 +6262,9 @@ def(163, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00111000001101010100010000110100", '85D4', [], "", 301])
-    %new_struct('_BD40', ["001111101110111101011011101100101001101101010010011101", '0.4888567425614096', [], "", 40])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '85D4', [], "", 301])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.4888567425614096', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
@@ -6341,7 +6283,7 @@ def(163, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(164, Data) =>
+def(162, Data) =>
   println("DIMASSOC: 0x120AD (1536) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -6371,9 +6313,9 @@ def(164, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00111000001110010011100000110111", '8987', [], "", 301])
-    %new_struct('_BD40', ["001111110010110000110110011010010000111001001111011110", '0.9137237758382351', [], "", 40])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '8987', [], "", 301])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.9137237758382351', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
@@ -6392,7 +6334,7 @@ def(164, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(165, Data) =>
+def(163, Data) =>
   println("DIMASSOC: 0x11857 (1576) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -6422,10 +6364,10 @@ def(165, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["0100011001000010", 'FB', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00110011001101000011100001000110", '348F', [], "", 301])
-    %new_struct('_TF301', ["00110011001100010100010101000011", '31EC', [], "", 301])
-    %new_struct('_BD40', ["000010011100111000100000111001010110011101011110001110", '0.5459735794227115', [], "", 40])
+    %new_struct('_TF301', ["0000000000000000", 'FB', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '348F', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '31EC', [], "", 301])
+    %new_struct('_BD40', ["000000000000000000000000000000000000000000000000000000", '0.5459735794227115', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["10", '0.0', [], "", 30])
@@ -6444,7 +6386,7 @@ def(165, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(166, Data) =>
+def(164, Data) =>
   println("DIMASSOC: 0x120F5 (1608) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -6474,9 +6416,9 @@ def(166, Data) =>
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00111001010001100100000100110110", '9FA6', [], "", 301])
-    %new_struct('_TF301', ["00111001010001100011010101000001", '9F5A', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '9FA6', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '9F5A', [], "", 301])
     ,new_struct('BD40', ["000100101000110001001111110000001110110101111001111101001000111111", '0.2953922778804282', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -6496,7 +6438,7 @@ def(166, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(167, Data) =>
+def(165, Data) =>
   println("DIMASSOC: 0x11C82 (1064) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -6512,7 +6454,7 @@ def(167, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011000000010001110000010101", '4.3.11C15', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -6522,12 +6464,12 @@ def(167, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["0100011001000010", 'FB', [], "xrefobj", 301])
-    %new_struct('_TF301', ["010000110011011100110101", 'C75', [], "", 301])
+    %new_struct('_TF301', ["0000000000000000", 'FB', [], "xrefobj", 301])
+    %new_struct('_TF301', ["000000000000000000000000", 'C75', [], "", 301])
     ,new_struct('BD40', ["10", '0.0', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -6537,7 +6479,7 @@ def(167, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(168, Data) =>
+def(166, Data) =>
   println("DIMASSOC: 0x11CA6 (1080) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -6553,7 +6495,7 @@ def(168, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011000000010001101111001110", '4.3.11BCE', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -6563,12 +6505,12 @@ def(168, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["0100011001000010", 'FB', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00110001010000110011011100110110", '1C76', [], "", 301])
+    %new_struct('_TF301', ["0000000000000000", 'FB', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '1C76', [], "", 301])
     ,new_struct('BD40', ["10", '0.0', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -6578,7 +6520,7 @@ def(168, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(169, Data) =>
+def(167, Data) =>
   println("DIMASSOC: 0x1206E (1112) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -6594,7 +6536,7 @@ def(169, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011000000010010000000011011", '4.3.1201B', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -6604,12 +6546,12 @@ def(169, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     ,new_struct('H331', ["01000011000000010001011100000000", '4.3.11700', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00111000001101000100001000111000", '84B8', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '84B8', [], "", 301])
     ,new_struct('BD40', ["10", '0.0', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
@@ -6619,7 +6561,7 @@ def(169, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(170, Data) =>
+def(168, Data) =>
   println("DIMASSOC: 0x122AC (1184) test/test-data/2013/gh55-ltype.dxf:"),
   Class="DIMASSOC",
   Dxf="test/test-data/2013/gh55-ltype.dxf",
@@ -6635,7 +6577,7 @@ def(170, Data) =>
     ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
     ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "classname", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "osnap_type", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
     ,new_struct('H331', ["01000011000000010010001001100000", '4.3.12260', [], "mainobj", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
     ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
@@ -6645,18 +6587,76 @@ def(170, Data) =>
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
     %new_struct('_TF1', ["0100000101100011010001000110001001001111011100110110111001100001011100000101000001101111011010010110111001110100010100100110010101100110", 'AcDbOsnapPointRef', [], "", 1])
-    ,new_struct('RC72', ["00001101", '13', [], "", 72])
+    ,new_struct('RC72', ["00000000", '13', [], "", 72])
     %new_struct('_H331', ["110000100000101110101100", 'c.2.BAC', [], "", 331])
     ,new_struct('BS73', ["0100000010", '2', [], "", 73])
     ,new_struct('BL91', ["10", '0', [], "", 91])
-    %new_struct('_TF301', ["01000100001100010011011101000011", 'D17C', [], "xrefobj", 301])
-    %new_struct('_TF301', ["00111001001100110011000000110100", '9304', [], "", 301])
-    %new_struct('_TF301', ["00111001001100110011001001000011", '932C', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", 'D17C', [], "xrefobj", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '9304', [], "", 301])
+    %new_struct('_TF301', ["00000000000000000000000000000000", '932C', [], "", 301])
     ,new_struct('BD40', ["10", '0.0', [], "", 40])
     ,new_struct('BD10', ["10", '0.0', [], "", 10])
     ,new_struct('BD20', ["10", '0.0', [], "", 20])
     ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
     ,new_struct('BS75', ["10", '0', [], "", 75])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(169, Data) =>
+  println("DIMASSOC: 0x32B (361) test/test-data/2004/Publish.dxf:"),
+  Class="DIMASSOC",
+  Dxf="test/test-data/2004/Publish.dxf",
+  Version=2004,
+  Offsets=[296, 0, 69, 36, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="0100000001000000000010001001001000001011000110100010001100010010011110111001101101110011000010111000001010000011011110110100101101110011101000101001001100101011001100000000000000001010000000101000000101010011010001001101001100100011111101100010100001110000110110110000101001010010000000010000100000001100101010010000100000001100100110010000100000001001111011111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["010000100000001100101010", '4.2.32A', [], "reactors[0]", 330])
+    ,new_struct('H330', ["010000100000001100101010", '4.2.32A', [], "ownerhandle", 330])
+    ,new_struct('H330', ["010000100000001100100110", '4.2.326', [], "", 330])
+    ,new_struct('BL90', ["0100000001", '1', [], "associativity", 90])
+    ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
+    ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
+    ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "classname", 1])
+    ,new_struct('BS72', ["0100000001", '1', [], "osnap_type", 72])
+    ,new_struct('H331', ["010000100000001001111011", '4.2.27B', [], "mainobj", 331])
+    ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
+    ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
+    ,new_struct('BD40', ["01", '1.0', [], "osnap_dist", 40])
+    ,new_struct('BD10', ["10", '0.0', [], "osnap_pt", 10])
+    ,new_struct('BD20', ["10", '0.0', [], "", 20])
+    ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
+    ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(170, Data) =>
+  println("DIMASSOC: 0x662 (433) test/test-data/2004/Publish.dxf:"),
+  Class="DIMASSOC",
+  Dxf="test/test-data/2004/Publish.dxf",
+  Version=2004,
+  Offsets=[360, 0, 69, 42, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="0100000010000000000010001001001000001011000110100010001100010010011110111001101101110011000010111000001010000011011110110100101101110011101000101001001100101011001100000000000001101010000000101000000101010001111000001001001011011100101111011011101110010101111100100111111101000100110100110010001111110110001010000111000011011011000010100101001100000100001000010000100000011001011010010000100000011001001111010000100000010110100001111",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+     new_struct('H330', ["010000100000011001011010", '4.2.65A', [], "reactors[0]", 330])
+    ,new_struct('H330', ["010000100000011001011010", '4.2.65A', [], "ownerhandle", 330])
+    ,new_struct('H330', ["010000100000011001001111", '4.2.64F', [], "", 330])
+    ,new_struct('BL90', ["0100000010", '2', [], "associativity", 90])
+    ,new_struct('BS70', ["10", '0', [], "trans_space_flag", 70])
+    ,new_struct('BS71', ["10", '0', [], "rotated_type", 71])
+    ,new_struct('TV1', ["0100010010010000010110001101000100011000100100111101110011011011100110000101110000010100000110111101101001011011100111010001010010011001010110011000000000", 'AcDbOsnapPointRef', [], "classname", 1])
+    ,new_struct('RC72', ["00000000", '13', [], "osnap_type", 72])
+    ,new_struct('H331', ["010000100000010110100001", '4.2.5A1', [], "mainobj", 331])
+    ,new_struct('BS73', ["0100000010", '2', [], "main_subent_type", 73])
+    ,new_struct('BL91', ["10", '0', [], "main_gsmarker", 91])
+    ,new_struct('BD40', ["0000000000000000000000000000000000000000000000000000000000000000", '1.612027520056127', [], "osnap_dist", 40])
+    ,new_struct('BD10', ["10", '0.0', [], "osnap_pt", 10])
+    ,new_struct('BD20', ["10", '0.0', [], "", 20])
+    ,new_struct('BD30', ["001001101001100100011111101100010100001110000110110110000101001010", '2.000000000000000E+50', [], "", 30])
+    ,new_struct('BS75', ["10", '0', [], "has_lastpt_ref", 75])
   ],
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
