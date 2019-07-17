@@ -220,6 +220,31 @@ typedef Dwg_Bitcode_3BD  BITCODE_3BD_1;
 typedef Dwg_Bitcode_3BD  BITCODE_BE;
 #define BITCODE_3DVECTOR BITCODE_3BD_1
 
+typedef enum DWG_VERSION_TYPE
+{
+  R_INVALID,
+  R_1_1,	/* MC0.0  MicroCAD Release 1.1 */
+  R_1_2,	/* AC1.2  AutoCAD Release 1.2 */
+  R_1_4,	/* AC1.4  AutoCAD Release 1.4 */
+  R_2_0,	/* AC1.50 AutoCAD Release 2.0 */
+  R_2_1,	/* AC2.10 AutoCAD Release 2.10 */
+  R_2_5,	/* AC1002 AutoCAD Release 2.5 */
+  R_2_6,	/* AC1003 AutoCAD Release 2.6 */
+  R_9,		/* AC1004 AutoCAD Release 9 */
+  R_10,		/* AC1006 AutoCAD Release 10 */
+  R_11,		/* AC1009 AutoCAD Release 11/12 (LT R1/R2) */
+  R_13,		/* AC1012 AutoCAD Release 13 */
+  R_14,		/* AC1014 AutoCAD Release 14 */
+  R_2000,	/* AC1015 AutoCAD Release 2000 */
+  R_2004,	/* AC1018 AutoCAD Release 2004 */
+  R_2007,	/* AC1021 AutoCAD Release 2007 */
+  R_2010,	/* AC1024 AutoCAD Release 2010 */
+  R_2013,	/* AC1027 AutoCAD Release 2013 */
+  R_2018,	/* AC1032 AutoCAD Release 2018 */
+  R_AFTER
+} Dwg_Version_Type;
+#define DWG_VERSIONS (int)(R_AFTER+1)
+
 /**
  Object supertypes that exist in dwg-files.
  */
@@ -5476,8 +5501,8 @@ typedef struct _dwg_struct
 {
   struct Dwg_Header
   {
-    unsigned int version; /* see Dwg_Version_Type */
-    unsigned int from_version;
+    Dwg_Version_Type version;          /* calculated from the header magic */
+    Dwg_Version_Type from_version;     /* option. set by --as (convert from) */
     BITCODE_RC   zero_5[5];
     BITCODE_RC   is_maint;
     BITCODE_RC   zero_one_or_three;
