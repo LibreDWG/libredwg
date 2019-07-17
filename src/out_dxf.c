@@ -239,19 +239,25 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
         }                                                                     \
       fprintf (dat->fh, "%s\r\n", buf);                                       \
     }
-#define VALUE_RD(value, dxf)                                                  \
-  if (dxf && !bit_isnan (value))                                              \
-    {                                                                         \
-      GROUP (dxf);                                                            \
-      if (value == 0.0 || value == 0)                                         \
-        fprintf (dat->fh, "0.0\r\n");                                         \
-      else if (value == 0.5)                                                  \
-        fprintf (dat->fh, "0.5\r\n");                                         \
-      else if (value == 0.125)                                                \
-        fprintf (dat->fh, "0.125\r\n");                                       \
-      else                                                                    \
-        fprintf (dat->fh, "%-16.14f\r\n", value);                             \
+
+static void
+dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
+{
+  if (dxf && !bit_isnan (value))
+    {
+      fprintf (dat->fh, "%3i\r\n", dxf);
+      //TODO strip ending 0 (sprintf, ...)
+      if (value == 0.0)
+        fprintf (dat->fh, "0.0\r\n");
+      else if (value == 0.5)
+        fprintf (dat->fh, "0.5\r\n");
+      else if (value == 0.125)
+        fprintf (dat->fh, "0.125\r\n");
+      else
+        fprintf (dat->fh, "%-16.14f\r\n", value);
     }
+}
+#define VALUE_RD(value, dxf)  dxf_print_rd (dat, value, dxf)
 #define VALUE_B(value, dxf)                                                   \
   if (dxf)                                                                    \
     {                                                                         \

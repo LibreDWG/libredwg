@@ -40,7 +40,7 @@
    fun:_ZL22copySwiftV1MangledNamePKcb
 }
 {
-<darwin notify_init_globals>
+   <darwin notify_init_globals>
    Memcheck:Leak
    match-leak-kinds: definite
    fun:malloc
@@ -68,4 +68,46 @@
    obj:/bin/sh
    ...
    obj:/bin/sh
+}
+{
+   <darwin fprintf_dtoa>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:__Balloc_D2A
+   ...
+   fun:__dtoa
+   fun:__vfprintf
+   fun:__v2printf
+   fun:vfprintf_l
+   fun:fprintf
+   ...
+}
+{
+   <darwin fprintf_dtoa>
+   Memcheck:Leak
+   match-leak-kinds: indirect
+   fun:malloc
+   fun:__Balloc_D2A
+   ...
+   fun:__dtoa
+   fun:__vfprintf
+   fun:__v2printf
+   fun:vfprintf_l
+   fun:fprintf
+   ...
+}
+{
+   <darwin fprintf_dtoa>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:__Balloc_D2A
+   ...
+   fun:__dtoa
+   fun:__vfprintf
+   fun:__v2printf
+   fun:vfprintf_l
+   fun:fprintf
+   ...
 }
