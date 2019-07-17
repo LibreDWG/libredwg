@@ -337,8 +337,14 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
 #define VALUE_BD(value, dxf)                                                  \
   {                                                                           \
     if (dxf >= 50 && dxf < 55)                                                \
-      value = rad2deg (value);                                                \
-    VALUE_RD (value, dxf);                                                    \
+      {                                                                       \
+        BITCODE_RD _f = rad2deg (value);                                      \
+        VALUE_RD (_f, dxf);                                                   \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        VALUE_RD (value, dxf);                                                \
+      }                                                                       \
   }
 #define VALUE_RC(value, dxf) VALUE (value, RC, dxf)
 #define VALUE_RS(value, dxf) VALUE (value, RS, dxf)
@@ -360,12 +366,7 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
 #define FIELD_BS(nam, dxf) FIELDG (nam, BS, dxf)
 #define FIELD_BL(nam, dxf) FIELDG (nam, BL, dxf)
 #define FIELD_BLL(nam, dxf) FIELDG (nam, BLL, dxf)
-#define FIELD_BD(nam, dxf)                                                    \
-  {                                                                           \
-    if (dxf >= 50 && dxf < 55)                                                \
-      _obj->nam = rad2deg (_obj->nam);                                        \
-    FIELD_RD (nam, dxf);                                                      \
-  }
+#define FIELD_BD(nam, dxf) VALUE_BD (_obj->nam, dxf)
 #define FIELD_RC(nam, dxf) FIELDG (nam, RC, dxf)
 #define FIELD_RS(nam, dxf) FIELDG (nam, RS, dxf)
 #define FIELD_RL(nam, dxf) FIELDG (nam, RL, dxf)
