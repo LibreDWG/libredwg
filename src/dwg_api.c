@@ -469,6 +469,20 @@ dwg_get_HEADER (const Dwg_Data *restrict dwg, const char *restrict fieldname,
 }
 
 EXPORT bool
+dwg_get_HEADER_utf8text (const Dwg_Data *restrict dwg, const char *restrict fieldname,
+                         char **restrict textp)
+{
+#ifndef HAVE_NONNULL
+  if (dwg && fieldname && out)
+#endif
+    return dwg_dynapi_header_utf8text (dwg, fieldname, textp, NULL);
+#ifndef HAVE_NONNULL
+  else
+    return false;
+#endif
+}
+
+EXPORT bool
 dwg_set_HEADER (Dwg_Data *restrict dwg, const char *restrict fieldname,
                 const void *restrict value)
 {
@@ -476,6 +490,132 @@ dwg_set_HEADER (Dwg_Data *restrict dwg, const char *restrict fieldname,
   if (dwg && fieldname && value)
 #endif
     return dwg_dynapi_header_set_value (dwg, fieldname, value, 0);
+#ifndef HAVE_NONNULL
+  else
+    return false;
+#endif
+}
+
+EXPORT bool
+dwg_set_HEADER_utf8text (Dwg_Data *restrict dwg, const char *restrict fieldname,
+                         const char *restrict utf8)
+{
+#ifndef HAVE_NONNULL
+  if (dwg && fieldname && utf8)
+#endif
+    return dwg_dynapi_header_set_value (dwg, fieldname, utf8, 0);
+#ifndef HAVE_NONNULL
+  else
+    return false;
+#endif
+}
+
+EXPORT bool
+dwg_get_ENTITY_common (Dwg_Object_Entity *restrict obj,
+                       const char *restrict fieldname, void *restrict out)
+{
+#ifndef HAVE_NONNULL
+  if (obj && fieldname && out)
+#endif
+    return dwg_dynapi_common_value (obj, fieldname, out, NULL);
+#ifndef HAVE_NONNULL
+  else
+    return false;
+#endif
+}
+
+EXPORT bool
+dwg_set_ENTITY_common (Dwg_Object_Entity *restrict obj, const char *restrict fieldname,
+                       const void *restrict value)
+{
+#ifndef HAVE_NONNULL
+  if (obj && fieldname && value)
+#endif
+    return dwg_dynapi_common_set_value (obj, fieldname, value, 0);
+#ifndef HAVE_NONNULL
+  else
+    return false;
+#endif
+}
+
+EXPORT bool
+dwg_get_OBJECT_common (Dwg_Object_Object *restrict obj, const char *restrict fieldname,
+                       void *restrict out)
+{
+#ifndef HAVE_NONNULL
+  if (obj && fieldname && out)
+#endif
+    return dwg_dynapi_common_value (obj, fieldname, out, NULL);
+#ifndef HAVE_NONNULL
+  else
+    return false;
+#endif
+}
+
+EXPORT bool
+dwg_set_OBJECT_common (Dwg_Object_Object *restrict obj, const char *restrict fieldname,
+                       const void *restrict value)
+{
+#ifndef HAVE_NONNULL
+  if (obj && fieldname && value)
+#endif
+    return dwg_dynapi_common_set_value (obj, fieldname, value, 0);
+#ifndef HAVE_NONNULL
+  else
+    return false;
+#endif
+}
+
+EXPORT bool
+dwg_get_ENTITY_common_utf8text (Dwg_Object_Entity *restrict obj, const char *restrict fieldname,
+                                char **restrict textp)
+{
+#ifndef HAVE_NONNULL
+  if (obj && fieldname && textp)
+#endif
+    return dwg_dynapi_common_value (obj, fieldname, textp, NULL);
+#ifndef HAVE_NONNULL
+  else
+    return false;
+#endif
+}
+
+EXPORT bool
+dwg_set_ENTITY_common_utf8text (Dwg_Object_Entity *restrict obj, const char *restrict fieldname,
+                                const char *restrict utf8)
+{
+#ifndef HAVE_NONNULL
+  if (obj && fieldname && utf8)
+#endif
+    return dwg_dynapi_common_set_value (obj, fieldname, utf8, 0);
+#ifndef HAVE_NONNULL
+  else
+    return false;
+#endif
+}
+
+EXPORT bool
+dwg_get_OBJECT_common_utf8text (Dwg_Object_Object *restrict obj, const char *restrict fieldname,
+                                char **restrict textp)
+{
+#ifndef HAVE_NONNULL
+  if (obj && fieldname && textp)
+#endif
+    return dwg_dynapi_common_value (obj, fieldname, textp, NULL);
+#ifndef HAVE_NONNULL
+  else
+    return false;
+#endif
+}
+
+EXPORT bool
+dwg_set_OBJECT_common_utf8text (Dwg_Object_Object *restrict obj, const char *restrict fieldname,
+                                const char *restrict utf8)
+{
+#ifndef HAVE_NONNULL
+  if (obj && fieldname && utf8)
+#endif
+    return dwg_dynapi_common_set_value (obj, fieldname, utf8, 1);
 #ifndef HAVE_NONNULL
   else
     return false;
@@ -501,7 +641,7 @@ dwg_set_HEADER (Dwg_Data *restrict dwg, const char *restrict fieldname,
                                   const char *restrict fieldname,             \
                                   void *restrict value)                       \
     {                                                                         \
-      if (name && fieldname && out)                                           \
+      if (name && fieldname && value)                                         \
         return dwg_dynapi_entity_set_value ((void *)name, #OBJECT, fieldname, \
                                             value, 0);                        \
       else                                                                    \
@@ -525,225 +665,173 @@ dwg_set_HEADER (Dwg_Data *restrict dwg, const char *restrict fieldname,
     }
 #endif
 
-dwg_get_OBJECT (ent_text, TEXT) dwg_get_OBJECT (ent_attrib, ATTRIB) dwg_get_OBJECT (
-    ent_attdef,
-    ATTDEF) dwg_get_OBJECT (ent_block,
-                            BLOCK) dwg_get_OBJECT (ent_endblk,
-                                                   ENDBLK) dwg_get_OBJECT (ent_seqend,
-                                                                           SEQEND)
-    dwg_get_OBJECT (ent_insert, INSERT) dwg_get_OBJECT (
-        ent_minsert,
-        MINSERT) dwg_get_OBJECT (ent_vertex_2d,
-                                 VERTEX_2D) dwg_get_OBJECT (ent_vertex_3d,
-                                                            VERTEX_3D)
-        dwg_get_OBJECT (ent_vertex_mesh, VERTEX_MESH) dwg_get_OBJECT (
-            ent_vertex_pface,
-            VERTEX_PFACE) dwg_get_OBJECT (ent_vertex_pface_face,
-                                          VERTEX_PFACE_FACE)
-            dwg_get_OBJECT (ent_polyline_2d, POLYLINE_2D) dwg_get_OBJECT (
-                ent_polyline_3d,
-                POLYLINE_3D) dwg_get_OBJECT (ent_arc,
-                                             ARC) dwg_get_OBJECT (ent_circle,
-                                                                  CIRCLE)
-                dwg_get_OBJECT (ent_line, LINE) dwg_get_OBJECT (
-                    ent_dim_ordinate,
-                    DIMENSION_ORDINATE) dwg_get_OBJECT (ent_dim_linear,
-                                                        DIMENSION_LINEAR)
-                    dwg_get_OBJECT (ent_dim_aligned, DIMENSION_ALIGNED) dwg_get_OBJECT (
-                        ent_dim_ang3pt,
-                        DIMENSION_ANG3PT) dwg_get_OBJECT (ent_dim_ang2ln,
-                                                          DIMENSION_ANG2LN)
-                        dwg_get_OBJECT (
-                            ent_dim_radius,
-                            DIMENSION_RADIUS) dwg_get_OBJECT (ent_dim_diameter,
-                                                              DIMENSION_DIAMETER)
-                            dwg_get_OBJECT (ent_point, POINT) dwg_get_OBJECT (
-                                ent_polyline_pface,
-                                POLYLINE_PFACE) dwg_get_OBJECT (ent_polyline_mesh,
-                                                                POLYLINE_MESH)
-                                dwg_get_OBJECT (ent_solid, SOLID) dwg_get_OBJECT (
-                                    ent_trace,
-                                    TRACE) dwg_get_OBJECT (ent_shape, SHAPE)
-                                    dwg_get_OBJECT (
-                                        ent_viewport,
-                                        VIEWPORT) dwg_get_OBJECT (ent_ellipse,
-                                                                  ELLIPSE)
-                                        dwg_get_OBJECT (ent_spline, SPLINE) dwg_get_OBJECT (
-                                            ent_region,
-                                            REGION) dwg_get_OBJECT (ent_body,
-                                                                    BODY)
-                                            dwg_get_OBJECT (ent_ray, RAY) dwg_get_OBJECT (
-                                                ent_xline,
-                                                XLINE) dwg_get_OBJECT (ent_oleframe,
-                                                                       OLEFRAME)
-                                                dwg_get_OBJECT (
-                                                    ent_mtext,
-                                                    MTEXT) dwg_get_OBJECT (ent_leader,
-                                                                           LEADER)
-                                                    dwg_get_OBJECT (
-                                                        ent_tolerance,
-                                                        TOLERANCE)
-                                                        dwg_get_OBJECT (
-                                                            ent_mline, MLINE)
-                                                            dwg_get_OBJECT (
-                                                                ent_ole2frame,
-                                                                OLE2FRAME)
-                                                                dwg_get_OBJECT (
-                                                                    ent_lwpline,
-                                                                    LWPOLYLINE)
-    // dwg_get_OBJECT(ent_proxy_entity, PROXY_ENTITY)
-    dwg_get_OBJECT (ent_hatch, HATCH)
-    // dwg_get_OBJECT(ent_arc_dimension, ARC_DIMENSION)
-    dwg_get_OBJECT (ent_image, IMAGE) dwg_get_OBJECT (
-        ent_camera, CAMERA) dwg_get_OBJECT (ent_helix,
-                                            HELIX) dwg_get_OBJECT (ent_light,
-                                                                   LIGHT)
-        dwg_get_OBJECT (ent_mleader, MULTILEADER) dwg_get_OBJECT (
-            ent_underlay, UNDERLAY) dwg_get_OBJECT (ent_wipeout, WIPEOUT)
+dwg_get_OBJECT(ent_text, TEXT)
+dwg_get_OBJECT(ent_attrib, ATTRIB)
+dwg_get_OBJECT(ent_attdef, ATTDEF)
+dwg_get_OBJECT(ent_block, BLOCK)
+dwg_get_OBJECT(ent_endblk, ENDBLK)
+dwg_get_OBJECT(ent_seqend, SEQEND)
+dwg_get_OBJECT(ent_insert, INSERT)
+dwg_get_OBJECT(ent_minsert, MINSERT)
+dwg_get_OBJECT(ent_vertex_2d, VERTEX_2D)
+dwg_get_OBJECT(ent_vertex_3d, VERTEX_3D)
+dwg_get_OBJECT(ent_vertex_mesh, VERTEX_MESH)
+dwg_get_OBJECT(ent_vertex_pface, VERTEX_PFACE)
+dwg_get_OBJECT(ent_vertex_pface_face, VERTEX_PFACE_FACE)
+dwg_get_OBJECT(ent_polyline_2d, POLYLINE_2D)
+dwg_get_OBJECT(ent_polyline_3d, POLYLINE_3D)
+dwg_get_OBJECT(ent_arc, ARC)
+dwg_get_OBJECT(ent_circle, CIRCLE)
+dwg_get_OBJECT(ent_line, LINE)
+dwg_get_OBJECT(ent_dim_ordinate, DIMENSION_ORDINATE)
+dwg_get_OBJECT(ent_dim_linear, DIMENSION_LINEAR)
+dwg_get_OBJECT(ent_dim_aligned, DIMENSION_ALIGNED)
+dwg_get_OBJECT(ent_dim_ang3pt, DIMENSION_ANG3PT)
+dwg_get_OBJECT(ent_dim_ang2ln, DIMENSION_ANG2LN)
+dwg_get_OBJECT(ent_dim_radius, DIMENSION_RADIUS)
+dwg_get_OBJECT(ent_dim_diameter, DIMENSION_DIAMETER)
+dwg_get_OBJECT(ent_point, POINT)
+dwg_get_OBJECT(ent_polyline_pface, POLYLINE_PFACE)
+dwg_get_OBJECT(ent_polyline_mesh, POLYLINE_MESH)
+dwg_get_OBJECT(ent_solid, SOLID)
+dwg_get_OBJECT(ent_trace, TRACE)
+dwg_get_OBJECT(ent_shape, SHAPE)
+dwg_get_OBJECT(ent_viewport, VIEWPORT)
+dwg_get_OBJECT(ent_ellipse, ELLIPSE)
+dwg_get_OBJECT(ent_spline, SPLINE)
+dwg_get_OBJECT(ent_region, REGION)
+dwg_get_OBJECT(ent_body, BODY)
+dwg_get_OBJECT(ent_ray, RAY)
+dwg_get_OBJECT(ent_xline, XLINE)
+dwg_get_OBJECT(ent_oleframe, OLEFRAME)
+dwg_get_OBJECT(ent_mtext, MTEXT)
+dwg_get_OBJECT(ent_leader, LEADER)
+dwg_get_OBJECT(ent_tolerance, TOLERANCE)
+dwg_get_OBJECT(ent_mline, MLINE)
+dwg_get_OBJECT(ent_ole2frame, OLE2FRAME)
+dwg_get_OBJECT(ent_lwpline, LWPOLYLINE)
+//dwg_get_OBJECT(ent_proxy_entity, PROXY_ENTITY)
+dwg_get_OBJECT(ent_hatch, HATCH)
+//dwg_get_OBJECT(ent_arc_dimension, ARC_DIMENSION)
+dwg_get_OBJECT(ent_image, IMAGE)
+dwg_get_OBJECT(ent_camera, CAMERA)
+dwg_get_OBJECT(ent_helix, HELIX)
+dwg_get_OBJECT(ent_light, LIGHT)
+dwg_get_OBJECT(ent_mleader, MULTILEADER)
+dwg_get_OBJECT(ent_underlay, UNDERLAY)
+dwg_get_OBJECT(ent_wipeout, WIPEOUT)
 #ifdef DEBUG_CLASSES
-            dwg_get_OBJECT (ent_planesurface, PLANESURFACE) dwg_get_OBJECT (
-                ent_extrudedsurface,
-                EXTRUDEDSURFACE) dwg_get_OBJECT (ent_loftedsurface,
-                                                 LOFTEDSURFACE) dwg_get_OBJECT (ent_revolvedsurface,
-                                                                                REVOLVEDSURFACE)
-                dwg_get_OBJECT (ent_sweptsurface, SWEPTSURFACE) dwg_get_OBJECT (
-                    ent_geopositionmarker,
-                    GEOPOSITIONMARKER) dwg_get_OBJECT (ent_table, TABLE)
+dwg_get_OBJECT(ent_planesurface, PLANESURFACE)
+dwg_get_OBJECT(ent_extrudedsurface, EXTRUDEDSURFACE)
+dwg_get_OBJECT(ent_loftedsurface, LOFTEDSURFACE)
+dwg_get_OBJECT(ent_revolvedsurface, REVOLVEDSURFACE)
+dwg_get_OBJECT(ent_sweptsurface, SWEPTSURFACE)
+dwg_get_OBJECT(ent_geopositionmarker, GEOPOSITIONMARKER)
+dwg_get_OBJECT(ent_table, TABLE)
 #endif
 
-                    dwg_get_OBJECT (obj_block_control, BLOCK_CONTROL) dwg_get_OBJECT (
-                        obj_block_header,
-                        BLOCK_HEADER) dwg_get_OBJECT (obj_layer_control,
-                                                      LAYER_CONTROL)
-                        dwg_get_OBJECT (obj_layer, LAYER) dwg_get_OBJECT (
-                            obj_style_control,
-                            CONTROL) dwg_get_OBJECT (obj_style, STYLE)
-                            dwg_get_OBJECT (obj_ltype_control, LTYPE_CONTROL) dwg_get_OBJECT (
-                                obj_ltype,
-                                LTYPE) dwg_get_OBJECT (obj_view_control,
-                                                       VIEW_CONTROL)
-                                dwg_get_OBJECT (
-                                    obj_view,
-                                    VIEW) dwg_get_OBJECT (obj_ucs_control,
-                                                          UCS_CONTROL)
-                                    dwg_get_OBJECT (
-                                        obj_ucs,
-                                        UCS) dwg_get_OBJECT (obj_vport_control,
-                                                             VPORT_CONTROL)
-                                        dwg_get_OBJECT (obj_vport, VPORT) dwg_get_OBJECT (
-                                            obj_appid_control, APPID_CONTROL)
-                                            dwg_get_OBJECT (obj_appid, APPID) dwg_get_OBJECT (
-                                                obj_dimstyle_control,
-                                                DIMSTYLE_CONTROL)
-                                                dwg_get_OBJECT (
-                                                    obj_dimstyle, DIMSTYLE)
-                                                    dwg_get_OBJECT (
-                                                        obj_vport_entity_control,
-                                                        VPORT_ENTITY_CONTROL)
-                                                        dwg_get_OBJECT (
-                                                            obj_vport_entity_header,
-                                                            VPORT_ENTITY_HEADER)
-                                                            dwg_get_OBJECT (
-                                                                obj_dictionary,
-                                                                DICTIONARY)
-                                                                dwg_get_OBJECT (
-                                                                    obj_mlinestyle,
-                                                                    MLINESTYLE)
-                                                                    dwg_get_OBJECT (
-                                                                        obj_proxy_object,
-                                                                        OBJECT)
-    // stable:
-    dwg_get_OBJECT (obj_dictionaryvar, DICTIONARYVAR) dwg_get_OBJECT (
-        obj_dictionarywdflt, DICTIONARYWDFLT) dwg_get_OBJECT (obj_field, FIELD)
-        dwg_get_OBJECT (obj_fieldlist, FIELDLIST) dwg_get_OBJECT (
-            obj_group, GROUP) dwg_get_OBJECT (obj_idbuffer, IDBUFFER)
-            dwg_get_OBJECT (obj_imagedef, IMAGEDEF) dwg_get_OBJECT (
-                obj_imagedef_reactor, REACTOR) dwg_get_OBJECT (obj_layer_index,
-                                                               LAYER_INDEX)
-                dwg_get_OBJECT (obj_layout, LAYOUT) dwg_get_OBJECT (
-                    obj_mleaderstyle,
-                    MLEADERSTYLE) dwg_get_OBJECT (obj_objectcontextdata,
-                                                  OBJECTCONTEXTDATA)
-                    dwg_get_OBJECT (obj_placeholder, PLACEHOLDER)
-                        dwg_get_OBJECT (obj_rastervariables, RASTERVARIABLES)
-                            dwg_get_OBJECT (obj_scale, SCALE) dwg_get_OBJECT (
-                                obj_sortentstable, SORTENTSTABLE)
-                                dwg_get_OBJECT (obj_spatial_filter, FILTER)
-                                    dwg_get_OBJECT (obj_spatial_index, INDEX)
-                                        dwg_get_OBJECT (obj_wipeoutvariables,
-                                                        WIPEOUTVARIABLES)
-                                            dwg_get_OBJECT (obj_xrecord,
-                                                            XRECORD)
-    // unstable:
-    dwg_get_OBJECT (obj_assocdependency, ASSOCDEPENDENCY)
-        dwg_get_OBJECT (obj_assocplanesurfaceactionbody,
-                        ASSOCPLANESURFACEACTIONBODY)
-            dwg_get_OBJECT (obj_dimassoc, DIMASSOC)
-                dwg_get_OBJECT (obj_dbcolor, DBCOLOR)
-                    dwg_get_OBJECT (obj_dynamicblockpurgepreventer,
-                                    DYNAMICBLOCKPURGEPREVENTER)
-                        dwg_get_OBJECT (obj_geodata, GEODATA)
-                            dwg_get_OBJECT (obj_object_ptr, PTR)
-    // dwg_get_OBJECT(obj_proxy_object, OBJECT)
-    dwg_get_OBJECT (obj_perssubentmanager, PERSSUBENTMANAGER) dwg_get_OBJECT (
-        obj_underlaydefinition,
-        UNDERLAYDEFINITION) dwg_get_OBJECT (obj_visualstyle, VISUALSTYLE)
+dwg_get_OBJECT(obj_block_control, BLOCK_CONTROL)
+dwg_get_OBJECT(obj_block_header, BLOCK_HEADER)
+dwg_get_OBJECT(obj_layer_control, LAYER_CONTROL)
+dwg_get_OBJECT(obj_layer, LAYER)
+dwg_get_OBJECT(obj_style_control, CONTROL)
+dwg_get_OBJECT(obj_style, STYLE)
+dwg_get_OBJECT(obj_ltype_control, LTYPE_CONTROL)
+dwg_get_OBJECT(obj_ltype, LTYPE)
+dwg_get_OBJECT(obj_view_control, VIEW_CONTROL)
+dwg_get_OBJECT(obj_view, VIEW)
+dwg_get_OBJECT(obj_ucs_control, UCS_CONTROL)
+dwg_get_OBJECT(obj_ucs, UCS)
+dwg_get_OBJECT(obj_vport_control, VPORT_CONTROL)
+dwg_get_OBJECT(obj_vport, VPORT)
+dwg_get_OBJECT(obj_appid_control, APPID_CONTROL)
+dwg_get_OBJECT(obj_appid, APPID)
+dwg_get_OBJECT(obj_dimstyle_control, DIMSTYLE_CONTROL)
+dwg_get_OBJECT(obj_dimstyle, DIMSTYLE)
+dwg_get_OBJECT(obj_vport_entity_control, VPORT_ENTITY_CONTROL)
+dwg_get_OBJECT(obj_vport_entity_header, VPORT_ENTITY_HEADER)
+dwg_get_OBJECT(obj_dictionary, DICTIONARY)
+dwg_get_OBJECT(obj_mlinestyle, MLINESTYLE)
+dwg_get_OBJECT(obj_proxy_object, OBJECT)
+// stable:
+dwg_get_OBJECT(obj_dictionaryvar, DICTIONARYVAR)
+dwg_get_OBJECT(obj_dictionarywdflt, DICTIONARYWDFLT)
+dwg_get_OBJECT(obj_field, FIELD)
+dwg_get_OBJECT(obj_fieldlist, FIELDLIST)
+dwg_get_OBJECT(obj_group, GROUP)
+dwg_get_OBJECT(obj_idbuffer, IDBUFFER)
+dwg_get_OBJECT(obj_imagedef, IMAGEDEF)
+dwg_get_OBJECT(obj_imagedef_reactor, REACTOR)
+dwg_get_OBJECT(obj_layer_index, LAYER_INDEX)
+dwg_get_OBJECT(obj_layout, LAYOUT)
+dwg_get_OBJECT(obj_mleaderstyle, MLEADERSTYLE)
+dwg_get_OBJECT(obj_objectcontextdata, OBJECTCONTEXTDATA)
+dwg_get_OBJECT(obj_placeholder, PLACEHOLDER)
+dwg_get_OBJECT(obj_rastervariables, RASTERVARIABLES)
+dwg_get_OBJECT(obj_scale, SCALE)
+dwg_get_OBJECT(obj_sortentstable, SORTENTSTABLE)
+dwg_get_OBJECT(obj_spatial_filter, FILTER)
+dwg_get_OBJECT(obj_spatial_index, INDEX)
+dwg_get_OBJECT(obj_wipeoutvariables, WIPEOUTVARIABLES)
+dwg_get_OBJECT(obj_xrecord, XRECORD)
+// unstable:
+dwg_get_OBJECT(obj_assocdependency, ASSOCDEPENDENCY)
+dwg_get_OBJECT(obj_assocplanesurfaceactionbody, ASSOCPLANESURFACEACTIONBODY)
+dwg_get_OBJECT(obj_dimassoc, DIMASSOC)
+dwg_get_OBJECT(obj_dbcolor, DBCOLOR)
+dwg_get_OBJECT(obj_dynamicblockpurgepreventer, DYNAMICBLOCKPURGEPREVENTER)
+dwg_get_OBJECT(obj_geodata, GEODATA)
+dwg_get_OBJECT(obj_object_ptr, PTR)
+//dwg_get_OBJECT(obj_proxy_object, OBJECT)
+dwg_get_OBJECT(obj_perssubentmanager, PERSSUBENTMANAGER)
+dwg_get_OBJECT(obj_underlaydefinition, UNDERLAYDEFINITION)
+dwg_get_OBJECT(obj_visualstyle, VISUALSTYLE)
 #ifdef DEBUG_CLASSES
-        dwg_get_OBJECT (obj_tablecontent, TABLECONTENT) dwg_get_OBJECT (
-            obj_tablegeometry, TABLEGEOMETRY) dwg_get_OBJECT (obj_cellstylemap,
-                                                              CELLSTYLEMAP)
-            dwg_get_OBJECT (obj_material, MATERIAL) dwg_get_OBJECT (
-                obj_plotsettings, PLOTSETTINGS) dwg_get_OBJECT (obj_sun, SUN)
-                dwg_get_OBJECT (obj_sunstudy, SUNSTUDY)
-                    dwg_get_OBJECT (obj_vba_project, PROJECT) dwg_get_OBJECT (
-                        obj_acsh_sweep_class,
-                        CLASS) dwg_get_OBJECT (obj_acdbnavisworksmodeldef,
-                                               ACDBNAVISWORKSMODELDEF)
-                        dwg_get_OBJECT (obj_assocaction, ASSOCACTION)
-                            dwg_get_OBJECT (obj_assocnetwork, ASSOCNETWORK)
-                                dwg_get_OBJECT (obj_assocaligneddimactionbody,
-                                                ASSOCALIGNEDDIMACTIONBODY)
-                                    dwg_get_OBJECT (
-                                        obj_assocosnappointrefactionparam,
-                                        ASSOCOSNAPPOINTREFACTIONPARAM)
-                                        dwg_get_OBJECT (
-                                            obj_assocperssubentmanager,
-                                            ASSOCPERSSUBENTMANAGER)
-                                            dwg_get_OBJECT (
-                                                obj_assoc2dconstraintgroup,
-                                                ASSOC2DCONSTRAINTGROUP)
-                                                dwg_get_OBJECT (
-                                                    obj_evaluation_graph,
-                                                    GRAPH)
+dwg_get_OBJECT(obj_tablecontent, TABLECONTENT)
+dwg_get_OBJECT(obj_tablegeometry, TABLEGEOMETRY)
+dwg_get_OBJECT(obj_cellstylemap, CELLSTYLEMAP)
+dwg_get_OBJECT(obj_material, MATERIAL)
+dwg_get_OBJECT(obj_plotsettings, PLOTSETTINGS)
+dwg_get_OBJECT(obj_sun, SUN)
+dwg_get_OBJECT(obj_sunstudy, SUNSTUDY)
+dwg_get_OBJECT(obj_vba_project, PROJECT)
+dwg_get_OBJECT(obj_acsh_sweep_class, CLASS)
+dwg_get_OBJECT(obj_acdbnavisworksmodeldef, ACDBNAVISWORKSMODELDEF)
+dwg_get_OBJECT(obj_assocaction, ASSOCACTION)
+dwg_get_OBJECT(obj_assocnetwork, ASSOCNETWORK)
+dwg_get_OBJECT(obj_assocaligneddimactionbody, ASSOCALIGNEDDIMACTIONBODY)
+dwg_get_OBJECT(obj_assocosnappointrefactionparam, ASSOCOSNAPPOINTREFACTIONPARAM)
+dwg_get_OBJECT(obj_assocperssubentmanager, ASSOCPERSSUBENTMANAGER)
+dwg_get_OBJECT(obj_assoc2dconstraintgroup, ASSOC2DCONSTRAINTGROUP)
+dwg_get_OBJECT(obj_evaluation_graph, GRAPH)
 #endif
-    // unhandled:
-    // dwg_get_OBJECT(obj_acsh_history_class, ACSH_HISTORY_CLASS)
-    // dwg_get_OBJECT(obj_arcalignedtext, ARCALIGNEDTEXT)
-    // dwg_get_OBJECT(obj_assocgeomdependency, ASSOCGEOMDEPENDENCY)
-    // dwg_get_OBJECT(obj_assocosnappointrefactionparam,
-    // ASSOCOSNAPPOINTREFACTIONPARAM)
-    // dwg_get_OBJECT(obj_assocvertexactionparam, ASSOCVERTEXACTIONPARAM)
-    // dwg_get_OBJECT(obj_datatable, DATATABLE)
-    // dwg_get_OBJECT(obj_detailviewstyle, DETAILVIEWSTYLE)
-    // dwg_get_OBJECT(obj_documentoptions, DOCUMENTOPTIONS)
-    // dwg_get_OBJECT(obj_layer_filter, LAYER_FILTER)
-    // dwg_get_OBJECT(obj_layoutprintconfig, LAYOUTPRINTCONFIG)
-    // dwg_get_OBJECT(obj_leaderobjectcontextdata, LEADEROBJECTCONTEXTDATA)
-    // dwg_get_OBJECT(obj_lightlist, LIGHTLIST)
-    // dwg_get_OBJECT(obj_npocollection, NPOCOLLECTION)
-    // dwg_get_OBJECT(obj_pointcloud, POINTCLOUD)
-    // dwg_get_OBJECT(obj_rtext, RTEXT)
-    // dwg_get_OBJECT(obj_sectionviewstyle, SECTIONVIEWSTYLE)
-    // dwg_get_OBJECT(obj_tablestyle, TABLESTYLE)
-    // dwg_get_OBJECT(obj_xrefpanelobject, XREFPANELOBJECT)
+// unhandled:
+//dwg_get_OBJECT(obj_acsh_history_class, ACSH_HISTORY_CLASS)
+//dwg_get_OBJECT(obj_arcalignedtext, ARCALIGNEDTEXT)
+//dwg_get_OBJECT(obj_assocgeomdependency, ASSOCGEOMDEPENDENCY)
+//dwg_get_OBJECT(obj_assocosnappointrefactionparam, ASSOCOSNAPPOINTREFACTIONPARAM)
+//dwg_get_OBJECT(obj_assocvertexactionparam, ASSOCVERTEXACTIONPARAM)
+//dwg_get_OBJECT(obj_datatable, DATATABLE)
+//dwg_get_OBJECT(obj_detailviewstyle, DETAILVIEWSTYLE)
+//dwg_get_OBJECT(obj_documentoptions, DOCUMENTOPTIONS)
+//dwg_get_OBJECT(obj_layer_filter, LAYER_FILTER)
+//dwg_get_OBJECT(obj_layoutprintconfig, LAYOUTPRINTCONFIG)
+//dwg_get_OBJECT(obj_leaderobjectcontextdata, LEADEROBJECTCONTEXTDATA)
+//dwg_get_OBJECT(obj_lightlist, LIGHTLIST)
+//dwg_get_OBJECT(obj_npocollection, NPOCOLLECTION)
+//dwg_get_OBJECT(obj_pointcloud, POINTCLOUD)
+//dwg_get_OBJECT(obj_rtext, RTEXT)
+//dwg_get_OBJECT(obj_sectionviewstyle, SECTIONVIEWSTYLE)
+//dwg_get_OBJECT(obj_tablestyle, TABLESTYLE)
+//dwg_get_OBJECT(obj_xrefpanelobject, XREFPANELOBJECT)
 
-    /********************************************************************
-     *                FUNCTIONS TYPE SPECIFIC                            *
-     *********************************************************************/
+/********************************************************************
+ *                FUNCTIONS TYPE SPECIFIC                            *
+ *********************************************************************/
 
-    /* Should we accept dwg and entities? or add dwg_header_get_TYPE */
-    EXPORT dwg_point_2d *dwg_ent_get_POINT2D (const void *restrict _obj,
-                                              const char *restrict fieldname)
+/* Should we accept dwg and entities? or add dwg_header_get_TYPE */
+EXPORT dwg_point_2d *dwg_ent_get_POINT2D (const void *restrict _obj,
+                                          const char *restrict fieldname)
 {
 #ifndef HAVE_NONNULL
   if (!_obj || !fieldname)
@@ -767,8 +855,8 @@ dwg_get_OBJECT (ent_text, TEXT) dwg_get_OBJECT (ent_attrib, ATTRIB) dwg_get_OBJE
       }
     else
       {
-        LOG_ERROR ("%s has type %s, which is not a POINT2D (2RD,2BD,2DPOINT)",
-                   fieldname, field.type)
+        LOG_ERROR ("%s.%s has type %s, which is not a POINT2D (2RD,2BD,2DPOINT)",
+                   obj->name, fieldname, field.type)
         return NULL;
       }
   }
@@ -801,8 +889,8 @@ dwg_ent_set_POINT2D (void *restrict _obj, const char *restrict fieldname,
       }
     else
       {
-        LOG_ERROR ("%s has type %s, which is not a POINT2D (2RD,2BD,2DPOINT)",
-                   fieldname, field.type)
+        LOG_ERROR ("%s.%s has type %s, which is not a POINT2D (2RD,2BD,2DPOINT)",
+                   obj->name, fieldname, field.type)
         return false;
       }
   }
@@ -834,8 +922,8 @@ dwg_ent_get_POINT3D (const void *restrict _obj, const char *restrict fieldname)
     else
       {
         LOG_ERROR (
-            "%s has type %s, which is not a POINT3D (3RD,3BD,BE,3DPOINT)",
-            fieldname, field.type)
+            "%s.%s has type %s, which is not a POINT3D (3RD,3BD,BE,3DPOINT)",
+            obj->name, fieldname, field.type)
         return NULL;
       }
   }
@@ -869,8 +957,8 @@ dwg_ent_set_POINT3D (void *restrict _obj, const char *restrict fieldname,
     else
       {
         LOG_ERROR (
-            "%s has type %s, which is not a POINT3D (3RD,3BD,BE,3DPOINT)",
-            fieldname, field.type)
+            "%s.%s has type %s, which is not a POINT3D (3RD,3BD,BE,3DPOINT)",
+            obj->name, fieldname, field.type)
         return false;
       }
   }
@@ -894,15 +982,46 @@ dwg_ent_get_STRING (const void *restrict _obj, const char *restrict fieldname)
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &str,
                                   &field))
       return NULL;
-    if (!strcmp (field.type, "T") || !strcmp (field.type, "TV")
-        || !strcmp (field.type, "TU") || !strcmp (field.type, "TF"))
+    if (field.is_string || !strcmp (field.type, "TF"))
       {
         return str;
       }
     else
       {
-        LOG_ERROR ("%s has type %s, which is not a STRING (T,TV,TU,TF)",
-                   fieldname, field.type)
+        LOG_ERROR ("%s.%s has type %s, which is not a STRING (T,TV,TU,TF)",
+                   obj->name, fieldname, field.type)
+        return NULL;
+      }
+  }
+}
+
+// convert string to UTF-8
+EXPORT char *
+dwg_ent_get_UTF8 (const void *restrict _obj, const char *restrict fieldname)
+{
+#ifndef HAVE_NONNULL
+  if (!_obj || !fieldname)
+    return NULL;
+#endif
+  {
+    char *str;
+    Dwg_DYNAPI_field field;
+    int error;
+    const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+    if (!obj || !obj->name)
+      return NULL;
+    str = calloc (1, sizeof (str));
+    if (!dwg_dynapi_entity_utf8text ((void *)_obj, obj->name, fieldname, &str,
+                                  &field))
+      return NULL;
+    if (field.is_string || !strcmp (field.type, "TF"))
+      {
+        return str;
+      }
+    else
+      {
+        LOG_ERROR ("%s.%s has type %s, which is not a STRING (T,TV,TU,TF)",
+                   obj->name, fieldname, field.type)
         return NULL;
       }
   }
@@ -927,16 +1046,48 @@ dwg_ent_set_STRING (void *restrict _obj, const char *restrict fieldname,
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &dummy,
                                   &field))
       return false;
-    if (!strcmp (field.type, "T") || !strcmp (field.type, "TV")
-        || !strcmp (field.type, "TU") || !strcmp (field.type, "TF"))
+    if (field.is_string || !strcmp (field.type, "TF"))
       {
         return dwg_dynapi_entity_set_value ((void *)_obj, obj->name, fieldname,
-                                            str, 1);
+                                            str, 0);
       }
     else
       {
-        LOG_ERROR ("%s has type %s, which is not a STRING (T,TV,TU,TF)",
-                   fieldname, field.type)
+        LOG_ERROR ("%s.%s has type %s, which is not a STRING (T,TV,TU,TF)",
+                   obj->name, fieldname, field.type)
+        return false;
+      }
+  }
+}
+
+EXPORT bool
+dwg_ent_set_UTF8 (void *restrict _obj, const char *restrict fieldname,
+                  const char *restrict utf8text)
+{
+#ifndef HAVE_NONNULL
+  if (!_obj || !fieldname || !utf8text)
+    return false;
+#endif
+  {
+    char *dummy;
+    Dwg_DYNAPI_field field;
+    int error;
+    const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+    if (!obj || !obj->name)
+      return false;
+    dummy = calloc (1, sizeof (dummy));
+    if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &dummy,
+                                  &field))
+      return false;
+    if (field.is_string || !strcmp (field.type, "TF"))
+      {
+        return dwg_dynapi_entity_set_value ((void *)_obj, obj->name, fieldname,
+                                            utf8text, 1);
+      }
+    else
+      {
+        LOG_ERROR ("%s.%s has type %s, which is not a STRING (T,TV,TU,TF)",
+                   obj->name, fieldname, field.type)
         return false;
       }
   }
@@ -965,8 +1116,8 @@ dwg_ent_get_REAL (const void *restrict _obj, const char *restrict fieldname)
       }
     else
       {
-        LOG_ERROR ("%s has type %s, which is not a REAL (RD,BD)", fieldname,
-                   field.type)
+        LOG_ERROR ("%s.%s has type %s, which is not a REAL (RD,BD)", fieldname,
+                   obj->name, field.type)
         return 0.0;
       }
   }
@@ -997,8 +1148,8 @@ dwg_ent_set_REAL (void *restrict _obj, const char *restrict fieldname,
       }
     else
       {
-        LOG_ERROR ("%s has type %s, which is not a REAL (RD,BD)", fieldname,
-                   field.type)
+        LOG_ERROR ("%s.%s has type %s, which is not a REAL (RD,BD)", fieldname,
+                   obj->name, field.type)
         return false;
       }
   }
@@ -1027,8 +1178,8 @@ dwg_ent_get_INT16 (const void *restrict _obj, const char *restrict fieldname)
       }
     else
       {
-        LOG_ERROR ("%s has type %s, which is not a INT16 (RS,BS)", fieldname,
-                   field.type)
+        LOG_ERROR ("%s.%s has type %s, which is not a INT16 (RS,BS)",
+                   obj->name, fieldname, field.type)
         return 0;
       }
   }
@@ -1059,8 +1210,8 @@ dwg_ent_set_INT16 (void *restrict _obj, const char *restrict fieldname,
       }
     else
       {
-        LOG_ERROR ("%s has type %s, which is not a INT16 (RS,BS)", fieldname,
-                   field.type)
+        LOG_ERROR ("%s.%s has type %s, which is not a INT16 (RS,BS)",
+                   obj->name, fieldname, field.type)
         return false;
       }
   }
@@ -1090,8 +1241,8 @@ dwg_ent_get_INT32 (const void *restrict _obj, const char *restrict fieldname)
       }
     else
       {
-        LOG_ERROR ("%s has type %s, which is not a INT32 (RL,BL,MS)",
-                   fieldname, field.type)
+        LOG_ERROR ("%s.%s has type %s, which is not a INT32 (RL,BL,MS)",
+                   obj->name, fieldname, field.type)
         return 0;
       }
   }
@@ -1123,8 +1274,8 @@ dwg_ent_set_INT32 (void *restrict _obj, const char *restrict fieldname,
       }
     else
       {
-        LOG_ERROR ("%s has type %s, which is not a INT32 (RL,BL,MS)",
-                   fieldname, field.type)
+        LOG_ERROR ("%s.%s has type %s, which is not a INT32 (RL,BL,MS)",
+                   obj->name, fieldname, field.type)
         return false;
       }
   }

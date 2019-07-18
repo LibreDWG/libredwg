@@ -89,7 +89,6 @@ EXPORT bool dwg_dynapi_entity_set_value (void *restrict entity,
                                          const void *restrict value,
                                          const bool is_utf8);
 EXPORT bool dwg_dynapi_common_set_value (void *restrict entity,
-                                         const char *restrict dxfname,
                                          const char *restrict fieldname,
                                          const void *restrict value,
                                          const bool is_utf8);

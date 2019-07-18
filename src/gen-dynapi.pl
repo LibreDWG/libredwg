@@ -1334,7 +1334,7 @@ dwg_dynapi_header_set_value (const Dwg_Data *restrict dwg,
 }
 
 EXPORT bool
-dwg_dynapi_common_set_value (void *restrict _obj, const char *restrict name,
+dwg_dynapi_common_set_value (void *restrict _obj,
                              const char *restrict fieldname,
                              const void *restrict value, const bool is_utf8)
 {
@@ -1375,7 +1375,7 @@ dwg_dynapi_common_set_value (void *restrict _obj, const char *restrict name,
     if (!f)
       {
         const int loglevel = obj->parent->opts & 0xf;
-        LOG_ERROR ("%s: Invalid %s common field %s", __FUNCTION__, name, fieldname);
+        LOG_ERROR ("%s: Invalid %s common field %s", __FUNCTION__, obj->name, fieldname);
         return false;
       }
 

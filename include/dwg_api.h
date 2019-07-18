@@ -125,11 +125,10 @@ EXPORT bool dwg_dynapi_common_value (void *restrict _obj,
                                      Dwg_DYNAPI_field *restrict fp);
 // Converts TU strings to utf-8
 EXPORT bool dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
-                                        const char *restrict name,
                                         const char *restrict fieldname,
                                         char **restrict textp,
                                         Dwg_DYNAPI_field *restrict fp);
-/** Returns the ENTITY|OBJECT.fieldname text value in out.
+/** Returns the ENTITY|OBJECT.fieldname text value in textp as utf-8.
    entity is the Dwg_Entity_ENTITY or Dwg_Object_OBJECT struct with the
    specific fields. The optional Dwg_DYNAPI_field *fp is filled with the field
    types from dynapi.c
@@ -144,7 +143,6 @@ EXPORT bool dwg_dynapi_entity_utf8text (void *restrict entity,
                                         char **restrict textp,
                                         Dwg_DYNAPI_field *restrict fp);
 EXPORT bool dwg_dynapi_common_utf8text (void *restrict _obj,
-                                        const char *restrict name,
                                         const char *restrict fieldname,
                                         char **restrict textp,
                                         Dwg_DYNAPI_field *restrict fp);
@@ -182,7 +180,6 @@ EXPORT bool dwg_dynapi_entity_set_value (void *restrict entity,
     converted to TV or TU.
  */
 EXPORT bool dwg_dynapi_common_set_value (void *restrict _obj,
-                                         const char *restrict dxfname,
                                          const char *restrict fieldname,
                                          const void *restrict value,
                                          const bool is_utf8);
@@ -909,177 +906,214 @@ EXPORT void dwg_api_init_version (Dwg_Data *dwg);
 EXPORT bool dwg_get_HEADER (const Dwg_Data *restrict dwg,
                             const char *restrict fieldname, void *restrict out)
     __nonnull ((1, 2, 3));
+EXPORT bool dwg_get_HEADER_utf8text (const Dwg_Data *restrict dwg,
+                            const char *restrict fieldname, char **restrict textp)
+    __nonnull ((1, 2, 3));
 EXPORT bool dwg_set_HEADER (Dwg_Data *restrict dwg,
                             const char *restrict fieldname,
                             const void *restrict value) __nonnull ((1, 2, 3));
+EXPORT bool dwg_set_HEADER_utf8text (Dwg_Data *restrict dwg,
+                                     const char *restrict fieldname,
+                                     const char *restrict utf8)
+    __nonnull ((1, 2, 3));
+EXPORT bool dwg_get_ENTITY_common (Dwg_Object_Entity *restrict obj,
+                                   const char *restrict fieldname,
+                                   void *restrict value) __nonnull ((1, 2, 3));
+EXPORT bool dwg_get_ENTITY_common_utf8text (Dwg_Object_Entity *restrict obj,
+                                     const char *restrict fieldname,
+                                     char **restrict textp)
+    __nonnull ((1, 2, 3));
+EXPORT bool dwg_get_OBJECT_common (Dwg_Object_Object *restrict obj,
+                                   const char *restrict fieldname,
+                                   void *restrict value)
+    __nonnull ((1, 2, 3));
+EXPORT bool dwg_get_OBJECT_common_utf8text (Dwg_Object_Object *restrict obj,
+                                            const char *restrict fieldname,
+                                            char **restrict textp)
+    __nonnull ((1, 2, 3));
+EXPORT bool dwg_set_ENTITY_common (Dwg_Object_Entity *restrict obj,
+                            const char *restrict fieldname,
+                            const void *restrict value) __nonnull ((1, 2, 3));
+EXPORT bool dwg_set_ENTITY_common_utf8text (Dwg_Object_Entity *restrict obj,
+                                     const char *restrict fieldname,
+                                     const char *restrict utf8)
+    __nonnull ((1, 2, 3));
+EXPORT bool dwg_set_OBJECT_common (Dwg_Object_Object *restrict obj,
+                                   const char *restrict fieldname,
+                                   const void *restrict value)
+    __nonnull ((1, 2, 3));
+EXPORT bool dwg_set_OBJECT_common_utf8text (Dwg_Object_Object *restrict obj,
+                                            const char *restrict fieldname,
+                                            const char *restrict utf8)
+    __nonnull ((1, 2, 3));
 
-#define dwg_get_OBJECT_DECL(name, OBJECT) \
-EXPORT bool \
-dwg_get_##OBJECT (const dwg_##name *restrict name, \
-                  const char *restrict fieldname, void *restrict out); \
-EXPORT bool \
-dwg_set_##OBJECT (const dwg_##name *restrict name, \
-                  const char *restrict fieldname, void *restrict value);
+#define dwg_get_OBJECT_DECL(name, OBJECT)                               \
+  EXPORT bool                                                           \
+  dwg_get_##OBJECT (const dwg_##name *restrict name,                    \
+                    const char *restrict fieldname, void *restrict out); \
+  EXPORT bool                                                           \
+  dwg_set_##OBJECT (const dwg_##name *restrict name,                    \
+                    const char *restrict fieldname, void *restrict value); \
 
-dwg_get_OBJECT_DECL(ent_text, TEXT)
-dwg_get_OBJECT_DECL(ent_attrib, ATTRIB)
-dwg_get_OBJECT_DECL(ent_attdef, ATTDEF)
-dwg_get_OBJECT_DECL(ent_block, BLOCK)
-dwg_get_OBJECT_DECL(ent_endblk, ENDBLK)
-dwg_get_OBJECT_DECL(ent_seqend, SEQEND)
-dwg_get_OBJECT_DECL(ent_insert, INSERT)
-dwg_get_OBJECT_DECL(ent_minsert, MINSERT)
-dwg_get_OBJECT_DECL(ent_vertex_2d, VERTEX_2D)
-dwg_get_OBJECT_DECL(ent_vertex_3d, VERTEX_3D)
-dwg_get_OBJECT_DECL(ent_vertex_mesh, VERTEX_MESH)
-dwg_get_OBJECT_DECL(ent_vertex_pface, VERTEX_PFACE)
-dwg_get_OBJECT_DECL(ent_vertex_pface_face, VERTEX_PFACE_FACE)
-dwg_get_OBJECT_DECL(ent_polyline_2d, POLYLINE_2D)
-dwg_get_OBJECT_DECL(ent_polyline_3d, POLYLINE_3D)
-dwg_get_OBJECT_DECL(ent_arc, ARC)
-dwg_get_OBJECT_DECL(ent_circle, CIRCLE)
-dwg_get_OBJECT_DECL(ent_line, LINE)
-dwg_get_OBJECT_DECL(ent_dim_ordinate, DIMENSION_ORDINATE)
-dwg_get_OBJECT_DECL(ent_dim_linear, DIMENSION_LINEAR)
-dwg_get_OBJECT_DECL(ent_dim_aligned, DIMENSION_ALIGNED)
-dwg_get_OBJECT_DECL(ent_dim_ang3pt, DIMENSION_ANG3PT)
-dwg_get_OBJECT_DECL(ent_dim_ang2ln, DIMENSION_ANG2LN)
-dwg_get_OBJECT_DECL(ent_dim_radius, DIMENSION_RADIUS)
-dwg_get_OBJECT_DECL(ent_dim_diameter, DIMENSION_DIAMETER)
-dwg_get_OBJECT_DECL(ent_point, POINT)
-dwg_get_OBJECT_DECL(ent_polyline_pface, POLYLINE_PFACE)
-dwg_get_OBJECT_DECL(ent_polyline_mesh, POLYLINE_MESH)
-dwg_get_OBJECT_DECL(ent_solid, SOLID)
-dwg_get_OBJECT_DECL(ent_trace, TRACE)
-dwg_get_OBJECT_DECL(ent_shape, SHAPE)
-dwg_get_OBJECT_DECL(ent_viewport, VIEWPORT)
-dwg_get_OBJECT_DECL(ent_ellipse, ELLIPSE)
-dwg_get_OBJECT_DECL(ent_spline, SPLINE)
-dwg_get_OBJECT_DECL(ent_region, REGION)
-dwg_get_OBJECT_DECL(ent_body, BODY)
-dwg_get_OBJECT_DECL(ent_ray, RAY)
-dwg_get_OBJECT_DECL(ent_xline, XLINE)
-dwg_get_OBJECT_DECL(ent_oleframe, OLEFRAME)
-dwg_get_OBJECT_DECL(ent_mtext, MTEXT)
-dwg_get_OBJECT_DECL(ent_leader, LEADER)
-dwg_get_OBJECT_DECL(ent_tolerance, TOLERANCE)
-dwg_get_OBJECT_DECL(ent_mline, MLINE)
-dwg_get_OBJECT_DECL(ent_ole2frame, OLE2FRAME)
-dwg_get_OBJECT_DECL(ent_lwpline, LWPOLYLINE)
-//dwg_get_OBJECT_DECL(ent_proxy_entity, PROXY_ENTITY)
-dwg_get_OBJECT_DECL(ent_hatch, HATCH)
-//dwg_get_OBJECT_DECL(ent_arc_dimension, ARC_DIMENSION)
-dwg_get_OBJECT_DECL(ent_image, IMAGE)
-dwg_get_OBJECT_DECL(ent_camera, CAMERA)
-dwg_get_OBJECT_DECL(ent_helix, HELIX)
-dwg_get_OBJECT_DECL(ent_light, LIGHT)
-dwg_get_OBJECT_DECL(ent_mleader, MULTILEADER)
-dwg_get_OBJECT_DECL(ent_underlay, UNDERLAY)
-dwg_get_OBJECT_DECL(ent_wipeout, WIPEOUT)
+dwg_get_OBJECT_DECL(ent_text, TEXT);
+dwg_get_OBJECT_DECL(ent_attrib, ATTRIB);
+dwg_get_OBJECT_DECL(ent_attdef, ATTDEF);
+dwg_get_OBJECT_DECL(ent_block, BLOCK);
+dwg_get_OBJECT_DECL(ent_endblk, ENDBLK);
+dwg_get_OBJECT_DECL(ent_seqend, SEQEND);
+dwg_get_OBJECT_DECL(ent_insert, INSERT);
+dwg_get_OBJECT_DECL(ent_minsert, MINSERT);
+dwg_get_OBJECT_DECL(ent_vertex_2d, VERTEX_2D);
+dwg_get_OBJECT_DECL(ent_vertex_3d, VERTEX_3D);
+dwg_get_OBJECT_DECL(ent_vertex_mesh, VERTEX_MESH);
+dwg_get_OBJECT_DECL(ent_vertex_pface, VERTEX_PFACE);
+dwg_get_OBJECT_DECL(ent_vertex_pface_face, VERTEX_PFACE_FACE);
+dwg_get_OBJECT_DECL(ent_polyline_2d, POLYLINE_2D);
+dwg_get_OBJECT_DECL(ent_polyline_3d, POLYLINE_3D);
+dwg_get_OBJECT_DECL(ent_arc, ARC);
+dwg_get_OBJECT_DECL(ent_circle, CIRCLE);
+dwg_get_OBJECT_DECL(ent_line, LINE);
+dwg_get_OBJECT_DECL(ent_dim_ordinate, DIMENSION_ORDINATE);
+dwg_get_OBJECT_DECL(ent_dim_linear, DIMENSION_LINEAR);
+dwg_get_OBJECT_DECL(ent_dim_aligned, DIMENSION_ALIGNED);
+dwg_get_OBJECT_DECL(ent_dim_ang3pt, DIMENSION_ANG3PT);
+dwg_get_OBJECT_DECL(ent_dim_ang2ln, DIMENSION_ANG2LN);
+dwg_get_OBJECT_DECL(ent_dim_radius, DIMENSION_RADIUS);
+dwg_get_OBJECT_DECL(ent_dim_diameter, DIMENSION_DIAMETER);
+dwg_get_OBJECT_DECL(ent_point, POINT);
+dwg_get_OBJECT_DECL(ent_polyline_pface, POLYLINE_PFACE);
+dwg_get_OBJECT_DECL(ent_polyline_mesh, POLYLINE_MESH);
+dwg_get_OBJECT_DECL(ent_solid, SOLID);
+dwg_get_OBJECT_DECL(ent_trace, TRACE);
+dwg_get_OBJECT_DECL(ent_shape, SHAPE);
+dwg_get_OBJECT_DECL(ent_viewport, VIEWPORT);
+dwg_get_OBJECT_DECL(ent_ellipse, ELLIPSE);
+dwg_get_OBJECT_DECL(ent_spline, SPLINE);
+dwg_get_OBJECT_DECL(ent_region, REGION);
+dwg_get_OBJECT_DECL(ent_body, BODY);
+dwg_get_OBJECT_DECL(ent_ray, RAY);
+dwg_get_OBJECT_DECL(ent_xline, XLINE);
+dwg_get_OBJECT_DECL(ent_oleframe, OLEFRAME);
+dwg_get_OBJECT_DECL(ent_mtext, MTEXT);
+dwg_get_OBJECT_DECL(ent_leader, LEADER);
+dwg_get_OBJECT_DECL(ent_tolerance, TOLERANCE);
+dwg_get_OBJECT_DECL(ent_mline, MLINE);
+dwg_get_OBJECT_DECL(ent_ole2frame, OLE2FRAME);
+dwg_get_OBJECT_DECL(ent_lwpline, LWPOLYLINE);
+//dwg_get_OBJECT_DECL(ent_proxy_entity, PROXY_ENTITY);
+dwg_get_OBJECT_DECL(ent_hatch, HATCH);
+//dwg_get_OBJECT_DECL(ent_arc_dimension, ARC_DIMENSION);
+dwg_get_OBJECT_DECL(ent_image, IMAGE);
+dwg_get_OBJECT_DECL(ent_camera, CAMERA);
+dwg_get_OBJECT_DECL(ent_helix, HELIX);
+dwg_get_OBJECT_DECL(ent_light, LIGHT);
+dwg_get_OBJECT_DECL(ent_mleader, MULTILEADER);
+dwg_get_OBJECT_DECL(ent_underlay, UNDERLAY);
+dwg_get_OBJECT_DECL(ent_wipeout, WIPEOUT);
 #ifdef DEBUG_CLASSES
-dwg_get_OBJECT_DECL(ent_planesurface, PLANESURFACE)
-dwg_get_OBJECT_DECL(ent_extrudedsurface, EXTRUDEDSURFACE)
-dwg_get_OBJECT_DECL(ent_loftedsurface, LOFTEDSURFACE)
-dwg_get_OBJECT_DECL(ent_revolvedsurface, REVOLVEDSURFACE)
-dwg_get_OBJECT_DECL(ent_sweptsurface, SWEPTSURFACE)
-dwg_get_OBJECT_DECL(ent_geopositionmarker, GEOPOSITIONMARKER)
-dwg_get_OBJECT_DECL(ent_table, TABLE)
+dwg_get_OBJECT_DECL(ent_planesurface, PLANESURFACE);
+dwg_get_OBJECT_DECL(ent_extrudedsurface, EXTRUDEDSURFACE);
+dwg_get_OBJECT_DECL(ent_loftedsurface, LOFTEDSURFACE);
+dwg_get_OBJECT_DECL(ent_revolvedsurface, REVOLVEDSURFACE);
+dwg_get_OBJECT_DECL(ent_sweptsurface, SWEPTSURFACE);
+dwg_get_OBJECT_DECL(ent_geopositionmarker, GEOPOSITIONMARKER);
+dwg_get_OBJECT_DECL(ent_table, TABLE);
 #endif
 
-dwg_get_OBJECT_DECL(obj_block_control, BLOCK_CONTROL)
-dwg_get_OBJECT_DECL(obj_block_header, BLOCK_HEADER)
-dwg_get_OBJECT_DECL(obj_layer_control, LAYER_CONTROL)
-dwg_get_OBJECT_DECL(obj_layer, LAYER)
-dwg_get_OBJECT_DECL(obj_style_control, CONTROL)
-dwg_get_OBJECT_DECL(obj_style, STYLE)
-dwg_get_OBJECT_DECL(obj_ltype_control, LTYPE_CONTROL)
-dwg_get_OBJECT_DECL(obj_ltype, LTYPE)
-dwg_get_OBJECT_DECL(obj_view_control, VIEW_CONTROL)
-dwg_get_OBJECT_DECL(obj_view, VIEW)
-dwg_get_OBJECT_DECL(obj_ucs_control, UCS_CONTROL)
-dwg_get_OBJECT_DECL(obj_ucs, UCS)
-dwg_get_OBJECT_DECL(obj_vport_control, VPORT_CONTROL)
-dwg_get_OBJECT_DECL(obj_vport, VPORT)
-dwg_get_OBJECT_DECL(obj_appid_control, APPID_CONTROL)
-dwg_get_OBJECT_DECL(obj_appid, APPID)
-dwg_get_OBJECT_DECL(obj_dimstyle_control, DIMSTYLE_CONTROL)
-dwg_get_OBJECT_DECL(obj_dimstyle, DIMSTYLE)
-dwg_get_OBJECT_DECL(obj_vport_entity_control, VPORT_ENTITY_CONTROL)
-dwg_get_OBJECT_DECL(obj_vport_entity_header, VPORT_ENTITY_HEADER)
-dwg_get_OBJECT_DECL(obj_dictionary, DICTIONARY)
-dwg_get_OBJECT_DECL(obj_mlinestyle, MLINESTYLE)
-dwg_get_OBJECT_DECL(obj_proxy_object, OBJECT)
+dwg_get_OBJECT_DECL(obj_block_control, BLOCK_CONTROL);
+dwg_get_OBJECT_DECL(obj_block_header, BLOCK_HEADER);
+dwg_get_OBJECT_DECL(obj_layer_control, LAYER_CONTROL);
+dwg_get_OBJECT_DECL(obj_layer, LAYER);
+dwg_get_OBJECT_DECL(obj_style_control, CONTROL);
+dwg_get_OBJECT_DECL(obj_style, STYLE);
+dwg_get_OBJECT_DECL(obj_ltype_control, LTYPE_CONTROL);
+dwg_get_OBJECT_DECL(obj_ltype, LTYPE);
+dwg_get_OBJECT_DECL(obj_view_control, VIEW_CONTROL);
+dwg_get_OBJECT_DECL(obj_view, VIEW);
+dwg_get_OBJECT_DECL(obj_ucs_control, UCS_CONTROL);
+dwg_get_OBJECT_DECL(obj_ucs, UCS);
+dwg_get_OBJECT_DECL(obj_vport_control, VPORT_CONTROL);
+dwg_get_OBJECT_DECL(obj_vport, VPORT);
+dwg_get_OBJECT_DECL(obj_appid_control, APPID_CONTROL);
+dwg_get_OBJECT_DECL(obj_appid, APPID);
+dwg_get_OBJECT_DECL(obj_dimstyle_control, DIMSTYLE_CONTROL);
+dwg_get_OBJECT_DECL(obj_dimstyle, DIMSTYLE);
+dwg_get_OBJECT_DECL(obj_vport_entity_control, VPORT_ENTITY_CONTROL);
+dwg_get_OBJECT_DECL(obj_vport_entity_header, VPORT_ENTITY_HEADER);
+dwg_get_OBJECT_DECL(obj_dictionary, DICTIONARY);
+dwg_get_OBJECT_DECL(obj_mlinestyle, MLINESTYLE);
+dwg_get_OBJECT_DECL(obj_proxy_object, OBJECT);
 // stable:
-dwg_get_OBJECT_DECL(obj_dictionaryvar, DICTIONARYVAR)
-dwg_get_OBJECT_DECL(obj_dictionarywdflt, DICTIONARYWDFLT)
-dwg_get_OBJECT_DECL(obj_field, FIELD)
-dwg_get_OBJECT_DECL(obj_fieldlist, FIELDLIST)
-dwg_get_OBJECT_DECL(obj_group, GROUP)
-dwg_get_OBJECT_DECL(obj_idbuffer, IDBUFFER)
-dwg_get_OBJECT_DECL(obj_imagedef, IMAGEDEF)
-dwg_get_OBJECT_DECL(obj_imagedef_reactor, REACTOR)
-dwg_get_OBJECT_DECL(obj_layer_index, LAYER_INDEX)
-dwg_get_OBJECT_DECL(obj_layout, LAYOUT)
-dwg_get_OBJECT_DECL(obj_mleaderstyle, MLEADERSTYLE)
-dwg_get_OBJECT_DECL(obj_objectcontextdata, OBJECTCONTEXTDATA)
-dwg_get_OBJECT_DECL(obj_placeholder, PLACEHOLDER)
-dwg_get_OBJECT_DECL(obj_rastervariables, RASTERVARIABLES)
-dwg_get_OBJECT_DECL(obj_scale, SCALE)
-dwg_get_OBJECT_DECL(obj_sortentstable, SORTENTSTABLE)
-dwg_get_OBJECT_DECL(obj_spatial_filter, FILTER)
-dwg_get_OBJECT_DECL(obj_spatial_index, INDEX)
-dwg_get_OBJECT_DECL(obj_wipeoutvariables, WIPEOUTVARIABLES)
-dwg_get_OBJECT_DECL(obj_xrecord, XRECORD)
+dwg_get_OBJECT_DECL(obj_dictionaryvar, DICTIONARYVAR);
+dwg_get_OBJECT_DECL(obj_dictionarywdflt, DICTIONARYWDFLT);
+dwg_get_OBJECT_DECL(obj_field, FIELD);
+dwg_get_OBJECT_DECL(obj_fieldlist, FIELDLIST);
+dwg_get_OBJECT_DECL(obj_group, GROUP);
+dwg_get_OBJECT_DECL(obj_idbuffer, IDBUFFER);
+dwg_get_OBJECT_DECL(obj_imagedef, IMAGEDEF);
+dwg_get_OBJECT_DECL(obj_imagedef_reactor, REACTOR);
+dwg_get_OBJECT_DECL(obj_layer_index, LAYER_INDEX);
+dwg_get_OBJECT_DECL(obj_layout, LAYOUT);
+dwg_get_OBJECT_DECL(obj_mleaderstyle, MLEADERSTYLE);
+dwg_get_OBJECT_DECL(obj_objectcontextdata, OBJECTCONTEXTDATA);
+dwg_get_OBJECT_DECL(obj_placeholder, PLACEHOLDER);
+dwg_get_OBJECT_DECL(obj_rastervariables, RASTERVARIABLES);
+dwg_get_OBJECT_DECL(obj_scale, SCALE);
+dwg_get_OBJECT_DECL(obj_sortentstable, SORTENTSTABLE);
+dwg_get_OBJECT_DECL(obj_spatial_filter, FILTER);
+dwg_get_OBJECT_DECL(obj_spatial_index, INDEX);
+dwg_get_OBJECT_DECL(obj_wipeoutvariables, WIPEOUTVARIABLES);
+dwg_get_OBJECT_DECL(obj_xrecord, XRECORD);
 // unstable:
-dwg_get_OBJECT_DECL(obj_assocdependency, ASSOCDEPENDENCY)
-dwg_get_OBJECT_DECL(obj_assocplanesurfaceactionbody, ASSOCPLANESURFACEACTIONBODY)
-dwg_get_OBJECT_DECL(obj_dimassoc, DIMASSOC)
-dwg_get_OBJECT_DECL(obj_dbcolor, DBCOLOR)
-dwg_get_OBJECT_DECL(obj_dynamicblockpurgepreventer, DYNAMICBLOCKPURGEPREVENTER)
-dwg_get_OBJECT_DECL(obj_geodata, GEODATA)
-dwg_get_OBJECT_DECL(obj_object_ptr, PTR)
-//dwg_get_OBJECT_DECL(obj_proxy_object, OBJECT)
-dwg_get_OBJECT_DECL(obj_perssubentmanager, PERSSUBENTMANAGER)
-dwg_get_OBJECT_DECL(obj_underlaydefinition, UNDERLAYDEFINITION)
-dwg_get_OBJECT_DECL(obj_visualstyle, VISUALSTYLE)
+dwg_get_OBJECT_DECL(obj_assocdependency, ASSOCDEPENDENCY);
+dwg_get_OBJECT_DECL(obj_assocplanesurfaceactionbody, ASSOCPLANESURFACEACTIONBODY);
+dwg_get_OBJECT_DECL(obj_dimassoc, DIMASSOC);
+dwg_get_OBJECT_DECL(obj_dbcolor, DBCOLOR);
+dwg_get_OBJECT_DECL(obj_dynamicblockpurgepreventer, DYNAMICBLOCKPURGEPREVENTER);
+dwg_get_OBJECT_DECL(obj_geodata, GEODATA);
+dwg_get_OBJECT_DECL(obj_object_ptr, PTR);
+//dwg_get_OBJECT_DECL(obj_proxy_object, OBJECT);
+dwg_get_OBJECT_DECL(obj_perssubentmanager, PERSSUBENTMANAGER);
+dwg_get_OBJECT_DECL(obj_underlaydefinition, UNDERLAYDEFINITION);
+dwg_get_OBJECT_DECL(obj_visualstyle, VISUALSTYLE);
 #ifdef DEBUG_CLASSES
-dwg_get_OBJECT_DECL(obj_tablecontent, TABLECONTENT)
-dwg_get_OBJECT_DECL(obj_tablegeometry, TABLEGEOMETRY)
-dwg_get_OBJECT_DECL(obj_cellstylemap, CELLSTYLEMAP)
-dwg_get_OBJECT_DECL(obj_material, MATERIAL)
-dwg_get_OBJECT_DECL(obj_plotsettings, PLOTSETTINGS)
-dwg_get_OBJECT_DECL(obj_sun, SUN)
-dwg_get_OBJECT_DECL(obj_sunstudy, SUNSTUDY)
-dwg_get_OBJECT_DECL(obj_vba_project, PROJECT)
-dwg_get_OBJECT_DECL(obj_acsh_sweep_class, CLASS)
-dwg_get_OBJECT_DECL(obj_acdbnavisworksmodeldef, ACDBNAVISWORKSMODELDEF)
-dwg_get_OBJECT_DECL(obj_assocaction, ASSOCACTION)
-dwg_get_OBJECT_DECL(obj_assocnetwork, ASSOCNETWORK)
-dwg_get_OBJECT_DECL(obj_assocaligneddimactionbody, ASSOCALIGNEDDIMACTIONBODY)
-dwg_get_OBJECT_DECL(obj_assocosnappointrefactionparam, ASSOCOSNAPPOINTREFACTIONPARAM)
-dwg_get_OBJECT_DECL(obj_assocperssubentmanager, ASSOCPERSSUBENTMANAGER)
-dwg_get_OBJECT_DECL(obj_assoc2dconstraintgroup, ASSOC2DCONSTRAINTGROUP)
-dwg_get_OBJECT_DECL(obj_evaluation_graph, GRAPH)
+dwg_get_OBJECT_DECL(obj_tablecontent, TABLECONTENT);
+dwg_get_OBJECT_DECL(obj_tablegeometry, TABLEGEOMETRY);
+dwg_get_OBJECT_DECL(obj_cellstylemap, CELLSTYLEMAP);
+dwg_get_OBJECT_DECL(obj_material, MATERIAL);
+dwg_get_OBJECT_DECL(obj_plotsettings, PLOTSETTINGS);
+dwg_get_OBJECT_DECL(obj_sun, SUN);
+dwg_get_OBJECT_DECL(obj_sunstudy, SUNSTUDY);
+dwg_get_OBJECT_DECL(obj_vba_project, PROJECT);
+dwg_get_OBJECT_DECL(obj_acsh_sweep_class, CLASS);
+dwg_get_OBJECT_DECL(obj_acdbnavisworksmodeldef, ACDBNAVISWORKSMODELDEF);
+dwg_get_OBJECT_DECL(obj_assocaction, ASSOCACTION);
+dwg_get_OBJECT_DECL(obj_assocnetwork, ASSOCNETWORK);
+dwg_get_OBJECT_DECL(obj_assocaligneddimactionbody, ASSOCALIGNEDDIMACTIONBODY);
+dwg_get_OBJECT_DECL(obj_assocosnappointrefactionparam, ASSOCOSNAPPOINTREFACTIONPARAM);
+dwg_get_OBJECT_DECL(obj_assocperssubentmanager, ASSOCPERSSUBENTMANAGER);
+dwg_get_OBJECT_DECL(obj_assoc2dconstraintgroup, ASSOC2DCONSTRAINTGROUP);
+dwg_get_OBJECT_DECL(obj_evaluation_graph, GRAPH);
 #endif
 // unhandled:
-//dwg_get_OBJECT_DECL(obj_acsh_history_class, ACSH_HISTORY_CLASS)
-//dwg_get_OBJECT_DECL(obj_arcalignedtext, ARCALIGNEDTEXT)
-//dwg_get_OBJECT_DECL(obj_assocgeomdependency, ASSOCGEOMDEPENDENCY)
-//dwg_get_OBJECT_DECL(obj_assocosnappointrefactionparam, ASSOCOSNAPPOINTREFACTIONPARAM)
-//dwg_get_OBJECT_DECL(obj_assocvertexactionparam, ASSOCVERTEXACTIONPARAM)
-//dwg_get_OBJECT_DECL(obj_datatable, DATATABLE)
-//dwg_get_OBJECT_DECL(obj_detailviewstyle, DETAILVIEWSTYLE)
-//dwg_get_OBJECT_DECL(obj_documentoptions, DOCUMENTOPTIONS)
-//dwg_get_OBJECT_DECL(obj_layer_filter, LAYER_FILTER)
-//dwg_get_OBJECT_DECL(obj_layoutprintconfig, LAYOUTPRINTCONFIG)
-//dwg_get_OBJECT_DECL(obj_leaderobjectcontextdata, LEADEROBJECTCONTEXTDATA)
-//dwg_get_OBJECT_DECL(obj_lightlist, LIGHTLIST)
-//dwg_get_OBJECT_DECL(obj_npocollection, NPOCOLLECTION)
-//dwg_get_OBJECT_DECL(obj_pointcloud, POINTCLOUD)
-//dwg_get_OBJECT_DECL(obj_rtext, RTEXT)
-//dwg_get_OBJECT_DECL(obj_sectionviewstyle, SECTIONVIEWSTYLE)
-//dwg_get_OBJECT_DECL(obj_tablestyle, TABLESTYLE)
-//dwg_get_OBJECT_DECL(obj_xrefpanelobject, XREFPANELOBJECT)
+//dwg_get_OBJECT_DECL(obj_acsh_history_class, ACSH_HISTORY_CLASS);
+//dwg_get_OBJECT_DECL(obj_arcalignedtext, ARCALIGNEDTEXT);
+//dwg_get_OBJECT_DECL(obj_assocgeomdependency, ASSOCGEOMDEPENDENCY);
+//dwg_get_OBJECT_DECL(obj_assocosnappointrefactionparam, ASSOCOSNAPPOINTREFACTIONPARAM);
+//dwg_get_OBJECT_DECL(obj_assocvertexactionparam, ASSOCVERTEXACTIONPARAM);
+//dwg_get_OBJECT_DECL(obj_datatable, DATATABLE);
+//dwg_get_OBJECT_DECL(obj_detailviewstyle, DETAILVIEWSTYLE);
+//dwg_get_OBJECT_DECL(obj_documentoptions, DOCUMENTOPTIONS);
+//dwg_get_OBJECT_DECL(obj_layer_filter, LAYER_FILTER);
+//dwg_get_OBJECT_DECL(obj_layoutprintconfig, LAYOUTPRINTCONFIG);
+//dwg_get_OBJECT_DECL(obj_leaderobjectcontextdata, LEADEROBJECTCONTEXTDATA);
+//dwg_get_OBJECT_DECL(obj_lightlist, LIGHTLIST);
+//dwg_get_OBJECT_DECL(obj_npocollection, NPOCOLLECTION);
+//dwg_get_OBJECT_DECL(obj_pointcloud, POINTCLOUD);
+//dwg_get_OBJECT_DECL(obj_rtext, RTEXT);
+//dwg_get_OBJECT_DECL(obj_sectionviewstyle, SECTIONVIEWSTYLE);
+//dwg_get_OBJECT_DECL(obj_tablestyle, TABLESTYLE);
+//dwg_get_OBJECT_DECL(obj_xrefpanelobject, XREFPANELOBJECT);
 
 /********************************************************************
  *                FUNCTIONS TYPE SPECIFIC                            *
@@ -1108,6 +1142,14 @@ EXPORT char *dwg_ent_get_STRING (const void *restrict _obj,
 EXPORT bool dwg_ent_set_STRING (void *restrict _obj,
                                 const char *restrict fieldname,
                                 const char *restrict string)
+    __nonnull ((1, 2, 3));
+
+EXPORT char *dwg_ent_get_UTF8 (const void *restrict _obj,
+                               const char *restrict fieldname)
+    __nonnull ((1, 2));
+EXPORT bool dwg_ent_set_UTF8 (void *restrict _obj,
+                              const char *restrict fieldname,
+                              const char *restrict string)
     __nonnull ((1, 2, 3));
 
 EXPORT BITCODE_BD dwg_ent_get_REAL (const void *restrict _obj,
