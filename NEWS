@@ -2,6 +2,67 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2019 Free Software Foundation, Inc.
 See the end for copying conditions.
 
+LibreDWG version 0.9 - released 2019/?? - beta:
+
+new API:
+  * Added utf8text conversion functions to the dynapi:
+    dwg_dynapi_header_utf8text, dwg_dynapi_entity_utf8text,
+    dwg_dynapi_common_utf8text converting unicode strings to UTF-8.
+
+API breaking changes:
+  * Added an is_utf8 arg to the dynapi setters:
+    dwg_dynapi_header_set_value, dwg_dynapi_entity_set_value,
+    dwg_dynapi_common_set_value, converting UTF-8 strings to TV or TU.
+  * Generalize object handles:
+    * Rename common field ownerhandle, exp. not NAME_control 330.
+    * Remove various null_handle fields.
+    * Rename LTYPE.null_handle to LTYPE.extref_handle
+    * Add SORTENTSTABLE.dict_handle (previous called ownerhandle,
+      it IS the ownerhandle. ok, there we do have both, the parenthandle
+      and the ownerhandle)
+    * Remove xrecord,proxy get_ownerhandle API
+    * Move ownerhandle to parent Object_Object along reactors and xdicobjhandle.
+      This field is common to all objects. (#118)
+    * Remove unneeded ownerhandle fields.
+    * Renamed STYLE.null_handle to STYLE.extref_handle
+
+Important bugfixes:
+  * Fixed all remaining null pointer dereferences and memory leaks. We added
+    a smoke with asan, ubsan and lsan. The very first clang-analyzer scan
+    revealed not a single complaint!
+  * Fixed wrong object address (#112). handlestream_size is not part of obj->size.
+    This fixes the hdlpos += 8 FIXME's and many handles.
+  * Fixed FIELDLIST standard handles (#118)
+  * Fixed FIELD.childs and objects (#117)
+  * Fixed MLINESTYLE.ltype handles (#116)
+  * Fixed MULTILEADER content_block (#113)
+  * Added many missing handles 2007+ (#115)
+    Due to the fixed handle_stream offset, we can now reliably read many
+    more handles:
+      DIMENSION_ORDINATE
+      DIMENSION_LINEAR
+      DIMENSION_ALIGNED
+      DIMENSION_ANG3PT
+      DIMENSION_ANG2LN
+      DIMENSION_RADIUS
+      DIMENSION_DIAMETER
+      MTEXT
+      BLOCK_CONTROL
+      STYLE
+      SORTENTSTABLE
+      APPID
+      DICTIONARYVAR
+      VPORT_ENTITY_HEADER
+    Closes GH #114
+  * Fixed EED code 5 as int64 (#110)
+
+Other newsworthy changes:
+  * Restricted the three dat, hdl_dat and str_dat streams in its size and
+    offset to the current object to detect every overflow. And report this
+    overflow.
+  * Better LOG_TRACE [rcount1], [rcount2] logging, expanded to the actual
+    index.
+
 LibreDWG version 0.8 - released 2019/6/25 - still alpha:
 
 new API:
