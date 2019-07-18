@@ -61,7 +61,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     size++;
-    if (dwg_dynapi_header_set_value (dwg, "size", &size)
+        if (dwg_dynapi_header_set_value (dwg, "size", &size, 0)
         && size == dwg->header_vars.size)
       {
         pass ("HEADER.size [RL] set+1 %u", size);
@@ -73,7 +73,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     size--;
-    dwg_dynapi_header_set_value (dwg, "size", &size);
+    dwg_dynapi_header_set_value (dwg, "size", &size, 0);
 
   }
   {
@@ -89,7 +89,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     bitsize_hi++;
-    if (dwg_dynapi_header_set_value (dwg, "bitsize_hi", &bitsize_hi)
+        if (dwg_dynapi_header_set_value (dwg, "bitsize_hi", &bitsize_hi, 0)
         && bitsize_hi == dwg->header_vars.bitsize_hi)
       {
         pass ("HEADER.bitsize_hi [RL] set+1 %u", bitsize_hi);
@@ -101,7 +101,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     bitsize_hi--;
-    dwg_dynapi_header_set_value (dwg, "bitsize_hi", &bitsize_hi);
+    dwg_dynapi_header_set_value (dwg, "bitsize_hi", &bitsize_hi, 0);
 
   }
   {
@@ -117,7 +117,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     bitsize++;
-    if (dwg_dynapi_header_set_value (dwg, "bitsize", &bitsize)
+        if (dwg_dynapi_header_set_value (dwg, "bitsize", &bitsize, 0)
         && bitsize == dwg->header_vars.bitsize)
       {
         pass ("HEADER.bitsize [RL] set+1 %u", bitsize);
@@ -129,7 +129,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     bitsize--;
-    dwg_dynapi_header_set_value (dwg, "bitsize", &bitsize);
+    dwg_dynapi_header_set_value (dwg, "bitsize", &bitsize, 0);
 
   }
   {
@@ -145,7 +145,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     acadmaintver++;
-    if (dwg_dynapi_header_set_value (dwg, "ACADMAINTVER", &acadmaintver)
+        if (dwg_dynapi_header_set_value (dwg, "ACADMAINTVER", &acadmaintver, 0)
         && acadmaintver == dwg->header_vars.ACADMAINTVER)
       {
         pass ("HEADER.ACADMAINTVER [RC] set+1 %u", acadmaintver);
@@ -157,7 +157,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     acadmaintver--;
-    dwg_dynapi_header_set_value (dwg, "ACADMAINTVER", &acadmaintver);
+    dwg_dynapi_header_set_value (dwg, "ACADMAINTVER", &acadmaintver, 0);
 
   }
   {
@@ -173,7 +173,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     requiredversions++;
-    if (dwg_dynapi_header_set_value (dwg, "REQUIREDVERSIONS", &requiredversions)
+        if (dwg_dynapi_header_set_value (dwg, "REQUIREDVERSIONS", &requiredversions, 0)
         && requiredversions == dwg->header_vars.REQUIREDVERSIONS)
       {
         pass ("HEADER.REQUIREDVERSIONS [BLL] set+1 " FORMAT_BLL "", requiredversions);
@@ -185,7 +185,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     requiredversions--;
-    dwg_dynapi_header_set_value (dwg, "REQUIREDVERSIONS", &requiredversions);
+    dwg_dynapi_header_set_value (dwg, "REQUIREDVERSIONS", &requiredversions, 0);
 
   }
   {
@@ -229,7 +229,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_0++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_0", &unknown_0)
+        if (dwg_dynapi_header_set_value (dwg, "unknown_0", &unknown_0, 0)
         && unknown_0 == dwg->header_vars.unknown_0)
       {
         pass ("HEADER.unknown_0 [BD] set+1 %g", unknown_0);
@@ -241,7 +241,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_0--;
-    dwg_dynapi_header_set_value (dwg, "unknown_0", &unknown_0);
+    dwg_dynapi_header_set_value (dwg, "unknown_0", &unknown_0, 0);
 
   }
   {
@@ -257,7 +257,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_1++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_1", &unknown_1)
+        if (dwg_dynapi_header_set_value (dwg, "unknown_1", &unknown_1, 0)
         && unknown_1 == dwg->header_vars.unknown_1)
       {
         pass ("HEADER.unknown_1 [BD] set+1 %g", unknown_1);
@@ -269,7 +269,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_1--;
-    dwg_dynapi_header_set_value (dwg, "unknown_1", &unknown_1);
+    dwg_dynapi_header_set_value (dwg, "unknown_1", &unknown_1, 0);
 
   }
   {
@@ -285,7 +285,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_2++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_2", &unknown_2)
+        if (dwg_dynapi_header_set_value (dwg, "unknown_2", &unknown_2, 0)
         && unknown_2 == dwg->header_vars.unknown_2)
       {
         pass ("HEADER.unknown_2 [BD] set+1 %g", unknown_2);
@@ -297,7 +297,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_2--;
-    dwg_dynapi_header_set_value (dwg, "unknown_2", &unknown_2);
+    dwg_dynapi_header_set_value (dwg, "unknown_2", &unknown_2, 0);
 
   }
   {
@@ -313,7 +313,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_3++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_3", &unknown_3)
+        if (dwg_dynapi_header_set_value (dwg, "unknown_3", &unknown_3, 0)
         && unknown_3 == dwg->header_vars.unknown_3)
       {
         pass ("HEADER.unknown_3 [BD] set+1 %g", unknown_3);
@@ -325,7 +325,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_3--;
-    dwg_dynapi_header_set_value (dwg, "unknown_3", &unknown_3);
+    dwg_dynapi_header_set_value (dwg, "unknown_3", &unknown_3, 0);
 
   }
   {
@@ -397,7 +397,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_8++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_8", &unknown_8)
+        if (dwg_dynapi_header_set_value (dwg, "unknown_8", &unknown_8, 0)
         && unknown_8 == dwg->header_vars.unknown_8)
       {
         pass ("HEADER.unknown_8 [BL] set+1 %u", unknown_8);
@@ -409,7 +409,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_8--;
-    dwg_dynapi_header_set_value (dwg, "unknown_8", &unknown_8);
+    dwg_dynapi_header_set_value (dwg, "unknown_8", &unknown_8, 0);
 
   }
   {
@@ -425,7 +425,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_9++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_9", &unknown_9)
+        if (dwg_dynapi_header_set_value (dwg, "unknown_9", &unknown_9, 0)
         && unknown_9 == dwg->header_vars.unknown_9)
       {
         pass ("HEADER.unknown_9 [BL] set+1 %u", unknown_9);
@@ -437,7 +437,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_9--;
-    dwg_dynapi_header_set_value (dwg, "unknown_9", &unknown_9);
+    dwg_dynapi_header_set_value (dwg, "unknown_9", &unknown_9, 0);
 
   }
   {
@@ -453,7 +453,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_10++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_10", &unknown_10)
+        if (dwg_dynapi_header_set_value (dwg, "unknown_10", &unknown_10, 0)
         && unknown_10 == dwg->header_vars.unknown_10)
       {
         pass ("HEADER.unknown_10 [BS] set+1 %hu", unknown_10);
@@ -465,7 +465,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_10--;
-    dwg_dynapi_header_set_value (dwg, "unknown_10", &unknown_10);
+    dwg_dynapi_header_set_value (dwg, "unknown_10", &unknown_10, 0);
 
   }
   {
@@ -495,7 +495,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimaso++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMASO", &dimaso)
+        if (dwg_dynapi_header_set_value (dwg, "DIMASO", &dimaso, 0)
         && dimaso == dwg->header_vars.DIMASO)
       {
         pass ("HEADER.DIMASO [B] set+1 " FORMAT_B "", dimaso);
@@ -507,7 +507,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimaso--;
-    dwg_dynapi_header_set_value (dwg, "DIMASO", &dimaso);
+    dwg_dynapi_header_set_value (dwg, "DIMASO", &dimaso, 0);
 
   }
   {
@@ -523,7 +523,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimsho++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMSHO", &dimsho)
+        if (dwg_dynapi_header_set_value (dwg, "DIMSHO", &dimsho, 0)
         && dimsho == dwg->header_vars.DIMSHO)
       {
         pass ("HEADER.DIMSHO [B] set+1 " FORMAT_B "", dimsho);
@@ -535,7 +535,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimsho--;
-    dwg_dynapi_header_set_value (dwg, "DIMSHO", &dimsho);
+    dwg_dynapi_header_set_value (dwg, "DIMSHO", &dimsho, 0);
 
   }
   {
@@ -551,7 +551,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimsav++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMSAV", &dimsav)
+        if (dwg_dynapi_header_set_value (dwg, "DIMSAV", &dimsav, 0)
         && dimsav == dwg->header_vars.DIMSAV)
       {
         pass ("HEADER.DIMSAV [B] set+1 " FORMAT_B "", dimsav);
@@ -563,7 +563,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimsav--;
-    dwg_dynapi_header_set_value (dwg, "DIMSAV", &dimsav);
+    dwg_dynapi_header_set_value (dwg, "DIMSAV", &dimsav, 0);
 
   }
   {
@@ -579,7 +579,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     plinegen++;
-    if (dwg_dynapi_header_set_value (dwg, "PLINEGEN", &plinegen)
+        if (dwg_dynapi_header_set_value (dwg, "PLINEGEN", &plinegen, 0)
         && plinegen == dwg->header_vars.PLINEGEN)
       {
         pass ("HEADER.PLINEGEN [B] set+1 " FORMAT_B "", plinegen);
@@ -591,7 +591,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     plinegen--;
-    dwg_dynapi_header_set_value (dwg, "PLINEGEN", &plinegen);
+    dwg_dynapi_header_set_value (dwg, "PLINEGEN", &plinegen, 0);
 
   }
   {
@@ -607,7 +607,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     orthomode++;
-    if (dwg_dynapi_header_set_value (dwg, "ORTHOMODE", &orthomode)
+        if (dwg_dynapi_header_set_value (dwg, "ORTHOMODE", &orthomode, 0)
         && orthomode == dwg->header_vars.ORTHOMODE)
       {
         pass ("HEADER.ORTHOMODE [B] set+1 " FORMAT_B "", orthomode);
@@ -619,7 +619,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     orthomode--;
-    dwg_dynapi_header_set_value (dwg, "ORTHOMODE", &orthomode);
+    dwg_dynapi_header_set_value (dwg, "ORTHOMODE", &orthomode, 0);
 
   }
   {
@@ -635,7 +635,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     regenmode++;
-    if (dwg_dynapi_header_set_value (dwg, "REGENMODE", &regenmode)
+        if (dwg_dynapi_header_set_value (dwg, "REGENMODE", &regenmode, 0)
         && regenmode == dwg->header_vars.REGENMODE)
       {
         pass ("HEADER.REGENMODE [B] set+1 " FORMAT_B "", regenmode);
@@ -647,7 +647,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     regenmode--;
-    dwg_dynapi_header_set_value (dwg, "REGENMODE", &regenmode);
+    dwg_dynapi_header_set_value (dwg, "REGENMODE", &regenmode, 0);
 
   }
   {
@@ -663,7 +663,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     fillmode++;
-    if (dwg_dynapi_header_set_value (dwg, "FILLMODE", &fillmode)
+        if (dwg_dynapi_header_set_value (dwg, "FILLMODE", &fillmode, 0)
         && fillmode == dwg->header_vars.FILLMODE)
       {
         pass ("HEADER.FILLMODE [B] set+1 " FORMAT_B "", fillmode);
@@ -675,7 +675,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     fillmode--;
-    dwg_dynapi_header_set_value (dwg, "FILLMODE", &fillmode);
+    dwg_dynapi_header_set_value (dwg, "FILLMODE", &fillmode, 0);
 
   }
   {
@@ -691,7 +691,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     qtextmode++;
-    if (dwg_dynapi_header_set_value (dwg, "QTEXTMODE", &qtextmode)
+        if (dwg_dynapi_header_set_value (dwg, "QTEXTMODE", &qtextmode, 0)
         && qtextmode == dwg->header_vars.QTEXTMODE)
       {
         pass ("HEADER.QTEXTMODE [B] set+1 " FORMAT_B "", qtextmode);
@@ -703,7 +703,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     qtextmode--;
-    dwg_dynapi_header_set_value (dwg, "QTEXTMODE", &qtextmode);
+    dwg_dynapi_header_set_value (dwg, "QTEXTMODE", &qtextmode, 0);
 
   }
   {
@@ -719,7 +719,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     psltscale++;
-    if (dwg_dynapi_header_set_value (dwg, "PSLTSCALE", &psltscale)
+        if (dwg_dynapi_header_set_value (dwg, "PSLTSCALE", &psltscale, 0)
         && psltscale == dwg->header_vars.PSLTSCALE)
       {
         pass ("HEADER.PSLTSCALE [B] set+1 " FORMAT_B "", psltscale);
@@ -731,7 +731,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     psltscale--;
-    dwg_dynapi_header_set_value (dwg, "PSLTSCALE", &psltscale);
+    dwg_dynapi_header_set_value (dwg, "PSLTSCALE", &psltscale, 0);
 
   }
   {
@@ -747,7 +747,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     limcheck++;
-    if (dwg_dynapi_header_set_value (dwg, "LIMCHECK", &limcheck)
+        if (dwg_dynapi_header_set_value (dwg, "LIMCHECK", &limcheck, 0)
         && limcheck == dwg->header_vars.LIMCHECK)
       {
         pass ("HEADER.LIMCHECK [B] set+1 " FORMAT_B "", limcheck);
@@ -759,7 +759,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     limcheck--;
-    dwg_dynapi_header_set_value (dwg, "LIMCHECK", &limcheck);
+    dwg_dynapi_header_set_value (dwg, "LIMCHECK", &limcheck, 0);
 
   }
   {
@@ -775,7 +775,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     blipmode++;
-    if (dwg_dynapi_header_set_value (dwg, "BLIPMODE", &blipmode)
+        if (dwg_dynapi_header_set_value (dwg, "BLIPMODE", &blipmode, 0)
         && blipmode == dwg->header_vars.BLIPMODE)
       {
         pass ("HEADER.BLIPMODE [B] set+1 " FORMAT_B "", blipmode);
@@ -787,7 +787,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     blipmode--;
-    dwg_dynapi_header_set_value (dwg, "BLIPMODE", &blipmode);
+    dwg_dynapi_header_set_value (dwg, "BLIPMODE", &blipmode, 0);
 
   }
   {
@@ -803,7 +803,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_11++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_11", &unknown_11)
+        if (dwg_dynapi_header_set_value (dwg, "unknown_11", &unknown_11, 0)
         && unknown_11 == dwg->header_vars.unknown_11)
       {
         pass ("HEADER.unknown_11 [B] set+1 " FORMAT_B "", unknown_11);
@@ -815,7 +815,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_11--;
-    dwg_dynapi_header_set_value (dwg, "unknown_11", &unknown_11);
+    dwg_dynapi_header_set_value (dwg, "unknown_11", &unknown_11, 0);
 
   }
   {
@@ -831,7 +831,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     usrtimer++;
-    if (dwg_dynapi_header_set_value (dwg, "USRTIMER", &usrtimer)
+        if (dwg_dynapi_header_set_value (dwg, "USRTIMER", &usrtimer, 0)
         && usrtimer == dwg->header_vars.USRTIMER)
       {
         pass ("HEADER.USRTIMER [B] set+1 " FORMAT_B "", usrtimer);
@@ -843,7 +843,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     usrtimer--;
-    dwg_dynapi_header_set_value (dwg, "USRTIMER", &usrtimer);
+    dwg_dynapi_header_set_value (dwg, "USRTIMER", &usrtimer, 0);
 
   }
   {
@@ -859,7 +859,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     skpoly++;
-    if (dwg_dynapi_header_set_value (dwg, "SKPOLY", &skpoly)
+        if (dwg_dynapi_header_set_value (dwg, "SKPOLY", &skpoly, 0)
         && skpoly == dwg->header_vars.SKPOLY)
       {
         pass ("HEADER.SKPOLY [B] set+1 " FORMAT_B "", skpoly);
@@ -871,7 +871,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     skpoly--;
-    dwg_dynapi_header_set_value (dwg, "SKPOLY", &skpoly);
+    dwg_dynapi_header_set_value (dwg, "SKPOLY", &skpoly, 0);
 
   }
   {
@@ -887,7 +887,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     angdir++;
-    if (dwg_dynapi_header_set_value (dwg, "ANGDIR", &angdir)
+        if (dwg_dynapi_header_set_value (dwg, "ANGDIR", &angdir, 0)
         && angdir == dwg->header_vars.ANGDIR)
       {
         pass ("HEADER.ANGDIR [B] set+1 " FORMAT_B "", angdir);
@@ -899,7 +899,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     angdir--;
-    dwg_dynapi_header_set_value (dwg, "ANGDIR", &angdir);
+    dwg_dynapi_header_set_value (dwg, "ANGDIR", &angdir, 0);
 
   }
   {
@@ -915,7 +915,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     splframe++;
-    if (dwg_dynapi_header_set_value (dwg, "SPLFRAME", &splframe)
+        if (dwg_dynapi_header_set_value (dwg, "SPLFRAME", &splframe, 0)
         && splframe == dwg->header_vars.SPLFRAME)
       {
         pass ("HEADER.SPLFRAME [B] set+1 " FORMAT_B "", splframe);
@@ -927,7 +927,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     splframe--;
-    dwg_dynapi_header_set_value (dwg, "SPLFRAME", &splframe);
+    dwg_dynapi_header_set_value (dwg, "SPLFRAME", &splframe, 0);
 
   }
   {
@@ -943,7 +943,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     attreq++;
-    if (dwg_dynapi_header_set_value (dwg, "ATTREQ", &attreq)
+        if (dwg_dynapi_header_set_value (dwg, "ATTREQ", &attreq, 0)
         && attreq == dwg->header_vars.ATTREQ)
       {
         pass ("HEADER.ATTREQ [B] set+1 " FORMAT_B "", attreq);
@@ -955,7 +955,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     attreq--;
-    dwg_dynapi_header_set_value (dwg, "ATTREQ", &attreq);
+    dwg_dynapi_header_set_value (dwg, "ATTREQ", &attreq, 0);
 
   }
   {
@@ -971,7 +971,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     attdia++;
-    if (dwg_dynapi_header_set_value (dwg, "ATTDIA", &attdia)
+        if (dwg_dynapi_header_set_value (dwg, "ATTDIA", &attdia, 0)
         && attdia == dwg->header_vars.ATTDIA)
       {
         pass ("HEADER.ATTDIA [B] set+1 " FORMAT_B "", attdia);
@@ -983,7 +983,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     attdia--;
-    dwg_dynapi_header_set_value (dwg, "ATTDIA", &attdia);
+    dwg_dynapi_header_set_value (dwg, "ATTDIA", &attdia, 0);
 
   }
   {
@@ -999,7 +999,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     mirrtext++;
-    if (dwg_dynapi_header_set_value (dwg, "MIRRTEXT", &mirrtext)
+        if (dwg_dynapi_header_set_value (dwg, "MIRRTEXT", &mirrtext, 0)
         && mirrtext == dwg->header_vars.MIRRTEXT)
       {
         pass ("HEADER.MIRRTEXT [B] set+1 " FORMAT_B "", mirrtext);
@@ -1011,7 +1011,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     mirrtext--;
-    dwg_dynapi_header_set_value (dwg, "MIRRTEXT", &mirrtext);
+    dwg_dynapi_header_set_value (dwg, "MIRRTEXT", &mirrtext, 0);
 
   }
   {
@@ -1027,7 +1027,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     worldview++;
-    if (dwg_dynapi_header_set_value (dwg, "WORLDVIEW", &worldview)
+        if (dwg_dynapi_header_set_value (dwg, "WORLDVIEW", &worldview, 0)
         && worldview == dwg->header_vars.WORLDVIEW)
       {
         pass ("HEADER.WORLDVIEW [B] set+1 " FORMAT_B "", worldview);
@@ -1039,7 +1039,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     worldview--;
-    dwg_dynapi_header_set_value (dwg, "WORLDVIEW", &worldview);
+    dwg_dynapi_header_set_value (dwg, "WORLDVIEW", &worldview, 0);
 
   }
   {
@@ -1055,7 +1055,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     wireframe++;
-    if (dwg_dynapi_header_set_value (dwg, "WIREFRAME", &wireframe)
+        if (dwg_dynapi_header_set_value (dwg, "WIREFRAME", &wireframe, 0)
         && wireframe == dwg->header_vars.WIREFRAME)
       {
         pass ("HEADER.WIREFRAME [B] set+1 " FORMAT_B "", wireframe);
@@ -1067,7 +1067,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     wireframe--;
-    dwg_dynapi_header_set_value (dwg, "WIREFRAME", &wireframe);
+    dwg_dynapi_header_set_value (dwg, "WIREFRAME", &wireframe, 0);
 
   }
   {
@@ -1083,7 +1083,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     tilemode++;
-    if (dwg_dynapi_header_set_value (dwg, "TILEMODE", &tilemode)
+        if (dwg_dynapi_header_set_value (dwg, "TILEMODE", &tilemode, 0)
         && tilemode == dwg->header_vars.TILEMODE)
       {
         pass ("HEADER.TILEMODE [B] set+1 " FORMAT_B "", tilemode);
@@ -1095,7 +1095,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     tilemode--;
-    dwg_dynapi_header_set_value (dwg, "TILEMODE", &tilemode);
+    dwg_dynapi_header_set_value (dwg, "TILEMODE", &tilemode, 0);
 
   }
   {
@@ -1111,7 +1111,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     plimcheck++;
-    if (dwg_dynapi_header_set_value (dwg, "PLIMCHECK", &plimcheck)
+        if (dwg_dynapi_header_set_value (dwg, "PLIMCHECK", &plimcheck, 0)
         && plimcheck == dwg->header_vars.PLIMCHECK)
       {
         pass ("HEADER.PLIMCHECK [B] set+1 " FORMAT_B "", plimcheck);
@@ -1123,7 +1123,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     plimcheck--;
-    dwg_dynapi_header_set_value (dwg, "PLIMCHECK", &plimcheck);
+    dwg_dynapi_header_set_value (dwg, "PLIMCHECK", &plimcheck, 0);
 
   }
   {
@@ -1139,7 +1139,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     visretain++;
-    if (dwg_dynapi_header_set_value (dwg, "VISRETAIN", &visretain)
+        if (dwg_dynapi_header_set_value (dwg, "VISRETAIN", &visretain, 0)
         && visretain == dwg->header_vars.VISRETAIN)
       {
         pass ("HEADER.VISRETAIN [B] set+1 " FORMAT_B "", visretain);
@@ -1151,7 +1151,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     visretain--;
-    dwg_dynapi_header_set_value (dwg, "VISRETAIN", &visretain);
+    dwg_dynapi_header_set_value (dwg, "VISRETAIN", &visretain, 0);
 
   }
   {
@@ -1167,7 +1167,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     delobj++;
-    if (dwg_dynapi_header_set_value (dwg, "DELOBJ", &delobj)
+        if (dwg_dynapi_header_set_value (dwg, "DELOBJ", &delobj, 0)
         && delobj == dwg->header_vars.DELOBJ)
       {
         pass ("HEADER.DELOBJ [B] set+1 " FORMAT_B "", delobj);
@@ -1179,7 +1179,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     delobj--;
-    dwg_dynapi_header_set_value (dwg, "DELOBJ", &delobj);
+    dwg_dynapi_header_set_value (dwg, "DELOBJ", &delobj, 0);
 
   }
   {
@@ -1195,7 +1195,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dispsilh++;
-    if (dwg_dynapi_header_set_value (dwg, "DISPSILH", &dispsilh)
+        if (dwg_dynapi_header_set_value (dwg, "DISPSILH", &dispsilh, 0)
         && dispsilh == dwg->header_vars.DISPSILH)
       {
         pass ("HEADER.DISPSILH [B] set+1 " FORMAT_B "", dispsilh);
@@ -1207,7 +1207,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dispsilh--;
-    dwg_dynapi_header_set_value (dwg, "DISPSILH", &dispsilh);
+    dwg_dynapi_header_set_value (dwg, "DISPSILH", &dispsilh, 0);
 
   }
   {
@@ -1223,7 +1223,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     pellipse++;
-    if (dwg_dynapi_header_set_value (dwg, "PELLIPSE", &pellipse)
+        if (dwg_dynapi_header_set_value (dwg, "PELLIPSE", &pellipse, 0)
         && pellipse == dwg->header_vars.PELLIPSE)
       {
         pass ("HEADER.PELLIPSE [B] set+1 " FORMAT_B "", pellipse);
@@ -1235,7 +1235,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     pellipse--;
-    dwg_dynapi_header_set_value (dwg, "PELLIPSE", &pellipse);
+    dwg_dynapi_header_set_value (dwg, "PELLIPSE", &pellipse, 0);
 
   }
   {
@@ -1251,7 +1251,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     saveimages++;
-    if (dwg_dynapi_header_set_value (dwg, "SAVEIMAGES", &saveimages)
+        if (dwg_dynapi_header_set_value (dwg, "SAVEIMAGES", &saveimages, 0)
         && saveimages == dwg->header_vars.SAVEIMAGES)
       {
         pass ("HEADER.SAVEIMAGES [BS] set+1 %hu", saveimages);
@@ -1263,7 +1263,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     saveimages--;
-    dwg_dynapi_header_set_value (dwg, "SAVEIMAGES", &saveimages);
+    dwg_dynapi_header_set_value (dwg, "SAVEIMAGES", &saveimages, 0);
 
   }
   {
@@ -1279,7 +1279,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     proxygraphics++;
-    if (dwg_dynapi_header_set_value (dwg, "PROXYGRAPHICS", &proxygraphics)
+        if (dwg_dynapi_header_set_value (dwg, "PROXYGRAPHICS", &proxygraphics, 0)
         && proxygraphics == dwg->header_vars.PROXYGRAPHICS)
       {
         pass ("HEADER.PROXYGRAPHICS [BS] set+1 %hu", proxygraphics);
@@ -1291,7 +1291,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     proxygraphics--;
-    dwg_dynapi_header_set_value (dwg, "PROXYGRAPHICS", &proxygraphics);
+    dwg_dynapi_header_set_value (dwg, "PROXYGRAPHICS", &proxygraphics, 0);
 
   }
   {
@@ -1307,7 +1307,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dragmode++;
-    if (dwg_dynapi_header_set_value (dwg, "DRAGMODE", &dragmode)
+        if (dwg_dynapi_header_set_value (dwg, "DRAGMODE", &dragmode, 0)
         && dragmode == dwg->header_vars.DRAGMODE)
       {
         pass ("HEADER.DRAGMODE [BS] set+1 %hu", dragmode);
@@ -1319,7 +1319,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dragmode--;
-    dwg_dynapi_header_set_value (dwg, "DRAGMODE", &dragmode);
+    dwg_dynapi_header_set_value (dwg, "DRAGMODE", &dragmode, 0);
 
   }
   {
@@ -1335,7 +1335,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     treedepth++;
-    if (dwg_dynapi_header_set_value (dwg, "TREEDEPTH", &treedepth)
+        if (dwg_dynapi_header_set_value (dwg, "TREEDEPTH", &treedepth, 0)
         && treedepth == dwg->header_vars.TREEDEPTH)
       {
         pass ("HEADER.TREEDEPTH [BS] set+1 %hu", treedepth);
@@ -1347,7 +1347,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     treedepth--;
-    dwg_dynapi_header_set_value (dwg, "TREEDEPTH", &treedepth);
+    dwg_dynapi_header_set_value (dwg, "TREEDEPTH", &treedepth, 0);
 
   }
   {
@@ -1363,7 +1363,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     lunits++;
-    if (dwg_dynapi_header_set_value (dwg, "LUNITS", &lunits)
+        if (dwg_dynapi_header_set_value (dwg, "LUNITS", &lunits, 0)
         && lunits == dwg->header_vars.LUNITS)
       {
         pass ("HEADER.LUNITS [BS] set+1 %hu", lunits);
@@ -1375,7 +1375,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     lunits--;
-    dwg_dynapi_header_set_value (dwg, "LUNITS", &lunits);
+    dwg_dynapi_header_set_value (dwg, "LUNITS", &lunits, 0);
 
   }
   {
@@ -1391,7 +1391,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     luprec++;
-    if (dwg_dynapi_header_set_value (dwg, "LUPREC", &luprec)
+        if (dwg_dynapi_header_set_value (dwg, "LUPREC", &luprec, 0)
         && luprec == dwg->header_vars.LUPREC)
       {
         pass ("HEADER.LUPREC [BS] set+1 %hu", luprec);
@@ -1403,7 +1403,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     luprec--;
-    dwg_dynapi_header_set_value (dwg, "LUPREC", &luprec);
+    dwg_dynapi_header_set_value (dwg, "LUPREC", &luprec, 0);
 
   }
   {
@@ -1419,7 +1419,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     aunits++;
-    if (dwg_dynapi_header_set_value (dwg, "AUNITS", &aunits)
+        if (dwg_dynapi_header_set_value (dwg, "AUNITS", &aunits, 0)
         && aunits == dwg->header_vars.AUNITS)
       {
         pass ("HEADER.AUNITS [BS] set+1 %hu", aunits);
@@ -1431,7 +1431,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     aunits--;
-    dwg_dynapi_header_set_value (dwg, "AUNITS", &aunits);
+    dwg_dynapi_header_set_value (dwg, "AUNITS", &aunits, 0);
 
   }
   {
@@ -1447,7 +1447,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     auprec++;
-    if (dwg_dynapi_header_set_value (dwg, "AUPREC", &auprec)
+        if (dwg_dynapi_header_set_value (dwg, "AUPREC", &auprec, 0)
         && auprec == dwg->header_vars.AUPREC)
       {
         pass ("HEADER.AUPREC [BS] set+1 %hu", auprec);
@@ -1459,7 +1459,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     auprec--;
-    dwg_dynapi_header_set_value (dwg, "AUPREC", &auprec);
+    dwg_dynapi_header_set_value (dwg, "AUPREC", &auprec, 0);
 
   }
   {
@@ -1475,7 +1475,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     osmode++;
-    if (dwg_dynapi_header_set_value (dwg, "OSMODE", &osmode)
+        if (dwg_dynapi_header_set_value (dwg, "OSMODE", &osmode, 0)
         && osmode == dwg->header_vars.OSMODE)
       {
         pass ("HEADER.OSMODE [BS] set+1 %hu", osmode);
@@ -1487,7 +1487,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     osmode--;
-    dwg_dynapi_header_set_value (dwg, "OSMODE", &osmode);
+    dwg_dynapi_header_set_value (dwg, "OSMODE", &osmode, 0);
 
   }
   {
@@ -1503,7 +1503,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     attmode++;
-    if (dwg_dynapi_header_set_value (dwg, "ATTMODE", &attmode)
+        if (dwg_dynapi_header_set_value (dwg, "ATTMODE", &attmode, 0)
         && attmode == dwg->header_vars.ATTMODE)
       {
         pass ("HEADER.ATTMODE [BS] set+1 %hu", attmode);
@@ -1515,7 +1515,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     attmode--;
-    dwg_dynapi_header_set_value (dwg, "ATTMODE", &attmode);
+    dwg_dynapi_header_set_value (dwg, "ATTMODE", &attmode, 0);
 
   }
   {
@@ -1531,7 +1531,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     coords++;
-    if (dwg_dynapi_header_set_value (dwg, "COORDS", &coords)
+        if (dwg_dynapi_header_set_value (dwg, "COORDS", &coords, 0)
         && coords == dwg->header_vars.COORDS)
       {
         pass ("HEADER.COORDS [BS] set+1 %hu", coords);
@@ -1543,7 +1543,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     coords--;
-    dwg_dynapi_header_set_value (dwg, "COORDS", &coords);
+    dwg_dynapi_header_set_value (dwg, "COORDS", &coords, 0);
 
   }
   {
@@ -1559,7 +1559,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     pdmode++;
-    if (dwg_dynapi_header_set_value (dwg, "PDMODE", &pdmode)
+        if (dwg_dynapi_header_set_value (dwg, "PDMODE", &pdmode, 0)
         && pdmode == dwg->header_vars.PDMODE)
       {
         pass ("HEADER.PDMODE [BS] set+1 %hu", pdmode);
@@ -1571,7 +1571,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     pdmode--;
-    dwg_dynapi_header_set_value (dwg, "PDMODE", &pdmode);
+    dwg_dynapi_header_set_value (dwg, "PDMODE", &pdmode, 0);
 
   }
   {
@@ -1587,7 +1587,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     pickstyle++;
-    if (dwg_dynapi_header_set_value (dwg, "PICKSTYLE", &pickstyle)
+        if (dwg_dynapi_header_set_value (dwg, "PICKSTYLE", &pickstyle, 0)
         && pickstyle == dwg->header_vars.PICKSTYLE)
       {
         pass ("HEADER.PICKSTYLE [BS] set+1 %hu", pickstyle);
@@ -1599,7 +1599,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     pickstyle--;
-    dwg_dynapi_header_set_value (dwg, "PICKSTYLE", &pickstyle);
+    dwg_dynapi_header_set_value (dwg, "PICKSTYLE", &pickstyle, 0);
 
   }
   {
@@ -1615,7 +1615,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_12++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_12", &unknown_12)
+        if (dwg_dynapi_header_set_value (dwg, "unknown_12", &unknown_12, 0)
         && unknown_12 == dwg->header_vars.unknown_12)
       {
         pass ("HEADER.unknown_12 [BL] set+1 %u", unknown_12);
@@ -1627,7 +1627,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_12--;
-    dwg_dynapi_header_set_value (dwg, "unknown_12", &unknown_12);
+    dwg_dynapi_header_set_value (dwg, "unknown_12", &unknown_12, 0);
 
   }
   {
@@ -1643,7 +1643,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_13++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_13", &unknown_13)
+        if (dwg_dynapi_header_set_value (dwg, "unknown_13", &unknown_13, 0)
         && unknown_13 == dwg->header_vars.unknown_13)
       {
         pass ("HEADER.unknown_13 [BL] set+1 %u", unknown_13);
@@ -1655,7 +1655,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_13--;
-    dwg_dynapi_header_set_value (dwg, "unknown_13", &unknown_13);
+    dwg_dynapi_header_set_value (dwg, "unknown_13", &unknown_13, 0);
 
   }
   {
@@ -1671,7 +1671,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_14++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_14", &unknown_14)
+        if (dwg_dynapi_header_set_value (dwg, "unknown_14", &unknown_14, 0)
         && unknown_14 == dwg->header_vars.unknown_14)
       {
         pass ("HEADER.unknown_14 [BL] set+1 %u", unknown_14);
@@ -1683,7 +1683,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_14--;
-    dwg_dynapi_header_set_value (dwg, "unknown_14", &unknown_14);
+    dwg_dynapi_header_set_value (dwg, "unknown_14", &unknown_14, 0);
 
   }
   {
@@ -1699,7 +1699,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     useri1++;
-    if (dwg_dynapi_header_set_value (dwg, "USERI1", &useri1)
+        if (dwg_dynapi_header_set_value (dwg, "USERI1", &useri1, 0)
         && useri1 == dwg->header_vars.USERI1)
       {
         pass ("HEADER.USERI1 [BS] set+1 %hu", useri1);
@@ -1711,7 +1711,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     useri1--;
-    dwg_dynapi_header_set_value (dwg, "USERI1", &useri1);
+    dwg_dynapi_header_set_value (dwg, "USERI1", &useri1, 0);
 
   }
   {
@@ -1727,7 +1727,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     useri2++;
-    if (dwg_dynapi_header_set_value (dwg, "USERI2", &useri2)
+        if (dwg_dynapi_header_set_value (dwg, "USERI2", &useri2, 0)
         && useri2 == dwg->header_vars.USERI2)
       {
         pass ("HEADER.USERI2 [BS] set+1 %hu", useri2);
@@ -1739,7 +1739,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     useri2--;
-    dwg_dynapi_header_set_value (dwg, "USERI2", &useri2);
+    dwg_dynapi_header_set_value (dwg, "USERI2", &useri2, 0);
 
   }
   {
@@ -1755,7 +1755,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     useri3++;
-    if (dwg_dynapi_header_set_value (dwg, "USERI3", &useri3)
+        if (dwg_dynapi_header_set_value (dwg, "USERI3", &useri3, 0)
         && useri3 == dwg->header_vars.USERI3)
       {
         pass ("HEADER.USERI3 [BS] set+1 %hu", useri3);
@@ -1767,7 +1767,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     useri3--;
-    dwg_dynapi_header_set_value (dwg, "USERI3", &useri3);
+    dwg_dynapi_header_set_value (dwg, "USERI3", &useri3, 0);
 
   }
   {
@@ -1783,7 +1783,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     useri4++;
-    if (dwg_dynapi_header_set_value (dwg, "USERI4", &useri4)
+        if (dwg_dynapi_header_set_value (dwg, "USERI4", &useri4, 0)
         && useri4 == dwg->header_vars.USERI4)
       {
         pass ("HEADER.USERI4 [BS] set+1 %hu", useri4);
@@ -1795,7 +1795,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     useri4--;
-    dwg_dynapi_header_set_value (dwg, "USERI4", &useri4);
+    dwg_dynapi_header_set_value (dwg, "USERI4", &useri4, 0);
 
   }
   {
@@ -1811,7 +1811,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     useri5++;
-    if (dwg_dynapi_header_set_value (dwg, "USERI5", &useri5)
+        if (dwg_dynapi_header_set_value (dwg, "USERI5", &useri5, 0)
         && useri5 == dwg->header_vars.USERI5)
       {
         pass ("HEADER.USERI5 [BS] set+1 %hu", useri5);
@@ -1823,7 +1823,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     useri5--;
-    dwg_dynapi_header_set_value (dwg, "USERI5", &useri5);
+    dwg_dynapi_header_set_value (dwg, "USERI5", &useri5, 0);
 
   }
   {
@@ -1839,7 +1839,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     splinesegs++;
-    if (dwg_dynapi_header_set_value (dwg, "SPLINESEGS", &splinesegs)
+        if (dwg_dynapi_header_set_value (dwg, "SPLINESEGS", &splinesegs, 0)
         && splinesegs == dwg->header_vars.SPLINESEGS)
       {
         pass ("HEADER.SPLINESEGS [BS] set+1 %hu", splinesegs);
@@ -1851,7 +1851,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     splinesegs--;
-    dwg_dynapi_header_set_value (dwg, "SPLINESEGS", &splinesegs);
+    dwg_dynapi_header_set_value (dwg, "SPLINESEGS", &splinesegs, 0);
 
   }
   {
@@ -1867,7 +1867,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     surfu++;
-    if (dwg_dynapi_header_set_value (dwg, "SURFU", &surfu)
+        if (dwg_dynapi_header_set_value (dwg, "SURFU", &surfu, 0)
         && surfu == dwg->header_vars.SURFU)
       {
         pass ("HEADER.SURFU [BS] set+1 %hu", surfu);
@@ -1879,7 +1879,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     surfu--;
-    dwg_dynapi_header_set_value (dwg, "SURFU", &surfu);
+    dwg_dynapi_header_set_value (dwg, "SURFU", &surfu, 0);
 
   }
   {
@@ -1895,7 +1895,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     surfv++;
-    if (dwg_dynapi_header_set_value (dwg, "SURFV", &surfv)
+        if (dwg_dynapi_header_set_value (dwg, "SURFV", &surfv, 0)
         && surfv == dwg->header_vars.SURFV)
       {
         pass ("HEADER.SURFV [BS] set+1 %hu", surfv);
@@ -1907,7 +1907,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     surfv--;
-    dwg_dynapi_header_set_value (dwg, "SURFV", &surfv);
+    dwg_dynapi_header_set_value (dwg, "SURFV", &surfv, 0);
 
   }
   {
@@ -1923,7 +1923,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     surftype++;
-    if (dwg_dynapi_header_set_value (dwg, "SURFTYPE", &surftype)
+        if (dwg_dynapi_header_set_value (dwg, "SURFTYPE", &surftype, 0)
         && surftype == dwg->header_vars.SURFTYPE)
       {
         pass ("HEADER.SURFTYPE [BS] set+1 %hu", surftype);
@@ -1935,7 +1935,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     surftype--;
-    dwg_dynapi_header_set_value (dwg, "SURFTYPE", &surftype);
+    dwg_dynapi_header_set_value (dwg, "SURFTYPE", &surftype, 0);
 
   }
   {
@@ -1951,7 +1951,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     surftab1++;
-    if (dwg_dynapi_header_set_value (dwg, "SURFTAB1", &surftab1)
+        if (dwg_dynapi_header_set_value (dwg, "SURFTAB1", &surftab1, 0)
         && surftab1 == dwg->header_vars.SURFTAB1)
       {
         pass ("HEADER.SURFTAB1 [BS] set+1 %hu", surftab1);
@@ -1963,7 +1963,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     surftab1--;
-    dwg_dynapi_header_set_value (dwg, "SURFTAB1", &surftab1);
+    dwg_dynapi_header_set_value (dwg, "SURFTAB1", &surftab1, 0);
 
   }
   {
@@ -1979,7 +1979,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     surftab2++;
-    if (dwg_dynapi_header_set_value (dwg, "SURFTAB2", &surftab2)
+        if (dwg_dynapi_header_set_value (dwg, "SURFTAB2", &surftab2, 0)
         && surftab2 == dwg->header_vars.SURFTAB2)
       {
         pass ("HEADER.SURFTAB2 [BS] set+1 %hu", surftab2);
@@ -1991,7 +1991,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     surftab2--;
-    dwg_dynapi_header_set_value (dwg, "SURFTAB2", &surftab2);
+    dwg_dynapi_header_set_value (dwg, "SURFTAB2", &surftab2, 0);
 
   }
   {
@@ -2007,7 +2007,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     splinetype++;
-    if (dwg_dynapi_header_set_value (dwg, "SPLINETYPE", &splinetype)
+        if (dwg_dynapi_header_set_value (dwg, "SPLINETYPE", &splinetype, 0)
         && splinetype == dwg->header_vars.SPLINETYPE)
       {
         pass ("HEADER.SPLINETYPE [BS] set+1 %hu", splinetype);
@@ -2019,7 +2019,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     splinetype--;
-    dwg_dynapi_header_set_value (dwg, "SPLINETYPE", &splinetype);
+    dwg_dynapi_header_set_value (dwg, "SPLINETYPE", &splinetype, 0);
 
   }
   {
@@ -2035,7 +2035,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     shadedge++;
-    if (dwg_dynapi_header_set_value (dwg, "SHADEDGE", &shadedge)
+        if (dwg_dynapi_header_set_value (dwg, "SHADEDGE", &shadedge, 0)
         && shadedge == dwg->header_vars.SHADEDGE)
       {
         pass ("HEADER.SHADEDGE [BS] set+1 %hu", shadedge);
@@ -2047,7 +2047,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     shadedge--;
-    dwg_dynapi_header_set_value (dwg, "SHADEDGE", &shadedge);
+    dwg_dynapi_header_set_value (dwg, "SHADEDGE", &shadedge, 0);
 
   }
   {
@@ -2063,7 +2063,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     shadedif++;
-    if (dwg_dynapi_header_set_value (dwg, "SHADEDIF", &shadedif)
+        if (dwg_dynapi_header_set_value (dwg, "SHADEDIF", &shadedif, 0)
         && shadedif == dwg->header_vars.SHADEDIF)
       {
         pass ("HEADER.SHADEDIF [BS] set+1 %hu", shadedif);
@@ -2075,7 +2075,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     shadedif--;
-    dwg_dynapi_header_set_value (dwg, "SHADEDIF", &shadedif);
+    dwg_dynapi_header_set_value (dwg, "SHADEDIF", &shadedif, 0);
 
   }
   {
@@ -2091,7 +2091,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unitmode++;
-    if (dwg_dynapi_header_set_value (dwg, "UNITMODE", &unitmode)
+        if (dwg_dynapi_header_set_value (dwg, "UNITMODE", &unitmode, 0)
         && unitmode == dwg->header_vars.UNITMODE)
       {
         pass ("HEADER.UNITMODE [BS] set+1 %hu", unitmode);
@@ -2103,7 +2103,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unitmode--;
-    dwg_dynapi_header_set_value (dwg, "UNITMODE", &unitmode);
+    dwg_dynapi_header_set_value (dwg, "UNITMODE", &unitmode, 0);
 
   }
   {
@@ -2119,7 +2119,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     maxactvp++;
-    if (dwg_dynapi_header_set_value (dwg, "MAXACTVP", &maxactvp)
+        if (dwg_dynapi_header_set_value (dwg, "MAXACTVP", &maxactvp, 0)
         && maxactvp == dwg->header_vars.MAXACTVP)
       {
         pass ("HEADER.MAXACTVP [BS] set+1 %hu", maxactvp);
@@ -2131,7 +2131,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     maxactvp--;
-    dwg_dynapi_header_set_value (dwg, "MAXACTVP", &maxactvp);
+    dwg_dynapi_header_set_value (dwg, "MAXACTVP", &maxactvp, 0);
 
   }
   {
@@ -2147,7 +2147,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     isolines++;
-    if (dwg_dynapi_header_set_value (dwg, "ISOLINES", &isolines)
+        if (dwg_dynapi_header_set_value (dwg, "ISOLINES", &isolines, 0)
         && isolines == dwg->header_vars.ISOLINES)
       {
         pass ("HEADER.ISOLINES [BS] set+1 %hu", isolines);
@@ -2159,7 +2159,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     isolines--;
-    dwg_dynapi_header_set_value (dwg, "ISOLINES", &isolines);
+    dwg_dynapi_header_set_value (dwg, "ISOLINES", &isolines, 0);
 
   }
   {
@@ -2175,7 +2175,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     cmljust++;
-    if (dwg_dynapi_header_set_value (dwg, "CMLJUST", &cmljust)
+        if (dwg_dynapi_header_set_value (dwg, "CMLJUST", &cmljust, 0)
         && cmljust == dwg->header_vars.CMLJUST)
       {
         pass ("HEADER.CMLJUST [BS] set+1 %hu", cmljust);
@@ -2187,7 +2187,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     cmljust--;
-    dwg_dynapi_header_set_value (dwg, "CMLJUST", &cmljust);
+    dwg_dynapi_header_set_value (dwg, "CMLJUST", &cmljust, 0);
 
   }
   {
@@ -2203,7 +2203,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     textqlty++;
-    if (dwg_dynapi_header_set_value (dwg, "TEXTQLTY", &textqlty)
+        if (dwg_dynapi_header_set_value (dwg, "TEXTQLTY", &textqlty, 0)
         && textqlty == dwg->header_vars.TEXTQLTY)
       {
         pass ("HEADER.TEXTQLTY [BS] set+1 %hu", textqlty);
@@ -2215,7 +2215,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     textqlty--;
-    dwg_dynapi_header_set_value (dwg, "TEXTQLTY", &textqlty);
+    dwg_dynapi_header_set_value (dwg, "TEXTQLTY", &textqlty, 0);
 
   }
   {
@@ -2231,7 +2231,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_14b++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_14b", &unknown_14b)
+        if (dwg_dynapi_header_set_value (dwg, "unknown_14b", &unknown_14b, 0)
         && unknown_14b == dwg->header_vars.unknown_14b)
       {
         pass ("HEADER.unknown_14b [BL] set+1 %u", unknown_14b);
@@ -2243,7 +2243,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_14b--;
-    dwg_dynapi_header_set_value (dwg, "unknown_14b", &unknown_14b);
+    dwg_dynapi_header_set_value (dwg, "unknown_14b", &unknown_14b, 0);
 
   }
   {
@@ -2259,7 +2259,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     ltscale++;
-    if (dwg_dynapi_header_set_value (dwg, "LTSCALE", &ltscale)
+        if (dwg_dynapi_header_set_value (dwg, "LTSCALE", &ltscale, 0)
         && ltscale == dwg->header_vars.LTSCALE)
       {
         pass ("HEADER.LTSCALE [BD] set+1 %g", ltscale);
@@ -2271,7 +2271,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     ltscale--;
-    dwg_dynapi_header_set_value (dwg, "LTSCALE", &ltscale);
+    dwg_dynapi_header_set_value (dwg, "LTSCALE", &ltscale, 0);
 
   }
   {
@@ -2287,7 +2287,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     textsize++;
-    if (dwg_dynapi_header_set_value (dwg, "TEXTSIZE", &textsize)
+        if (dwg_dynapi_header_set_value (dwg, "TEXTSIZE", &textsize, 0)
         && textsize == dwg->header_vars.TEXTSIZE)
       {
         pass ("HEADER.TEXTSIZE [BD] set+1 %g", textsize);
@@ -2299,7 +2299,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     textsize--;
-    dwg_dynapi_header_set_value (dwg, "TEXTSIZE", &textsize);
+    dwg_dynapi_header_set_value (dwg, "TEXTSIZE", &textsize, 0);
 
   }
   {
@@ -2315,7 +2315,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     tracewid++;
-    if (dwg_dynapi_header_set_value (dwg, "TRACEWID", &tracewid)
+        if (dwg_dynapi_header_set_value (dwg, "TRACEWID", &tracewid, 0)
         && tracewid == dwg->header_vars.TRACEWID)
       {
         pass ("HEADER.TRACEWID [BD] set+1 %g", tracewid);
@@ -2327,7 +2327,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     tracewid--;
-    dwg_dynapi_header_set_value (dwg, "TRACEWID", &tracewid);
+    dwg_dynapi_header_set_value (dwg, "TRACEWID", &tracewid, 0);
 
   }
   {
@@ -2343,7 +2343,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     sketchinc++;
-    if (dwg_dynapi_header_set_value (dwg, "SKETCHINC", &sketchinc)
+        if (dwg_dynapi_header_set_value (dwg, "SKETCHINC", &sketchinc, 0)
         && sketchinc == dwg->header_vars.SKETCHINC)
       {
         pass ("HEADER.SKETCHINC [BD] set+1 %g", sketchinc);
@@ -2355,7 +2355,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     sketchinc--;
-    dwg_dynapi_header_set_value (dwg, "SKETCHINC", &sketchinc);
+    dwg_dynapi_header_set_value (dwg, "SKETCHINC", &sketchinc, 0);
 
   }
   {
@@ -2371,7 +2371,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     filletrad++;
-    if (dwg_dynapi_header_set_value (dwg, "FILLETRAD", &filletrad)
+        if (dwg_dynapi_header_set_value (dwg, "FILLETRAD", &filletrad, 0)
         && filletrad == dwg->header_vars.FILLETRAD)
       {
         pass ("HEADER.FILLETRAD [BD] set+1 %g", filletrad);
@@ -2383,7 +2383,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     filletrad--;
-    dwg_dynapi_header_set_value (dwg, "FILLETRAD", &filletrad);
+    dwg_dynapi_header_set_value (dwg, "FILLETRAD", &filletrad, 0);
 
   }
   {
@@ -2399,7 +2399,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     thickness++;
-    if (dwg_dynapi_header_set_value (dwg, "THICKNESS", &thickness)
+        if (dwg_dynapi_header_set_value (dwg, "THICKNESS", &thickness, 0)
         && thickness == dwg->header_vars.THICKNESS)
       {
         pass ("HEADER.THICKNESS [BD] set+1 %g", thickness);
@@ -2411,7 +2411,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     thickness--;
-    dwg_dynapi_header_set_value (dwg, "THICKNESS", &thickness);
+    dwg_dynapi_header_set_value (dwg, "THICKNESS", &thickness, 0);
 
   }
   {
@@ -2427,7 +2427,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     angbase++;
-    if (dwg_dynapi_header_set_value (dwg, "ANGBASE", &angbase)
+        if (dwg_dynapi_header_set_value (dwg, "ANGBASE", &angbase, 0)
         && angbase == dwg->header_vars.ANGBASE)
       {
         pass ("HEADER.ANGBASE [BD] set+1 %g", angbase);
@@ -2439,7 +2439,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     angbase--;
-    dwg_dynapi_header_set_value (dwg, "ANGBASE", &angbase);
+    dwg_dynapi_header_set_value (dwg, "ANGBASE", &angbase, 0);
 
   }
   {
@@ -2455,7 +2455,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     pdsize++;
-    if (dwg_dynapi_header_set_value (dwg, "PDSIZE", &pdsize)
+        if (dwg_dynapi_header_set_value (dwg, "PDSIZE", &pdsize, 0)
         && pdsize == dwg->header_vars.PDSIZE)
       {
         pass ("HEADER.PDSIZE [BD] set+1 %g", pdsize);
@@ -2467,7 +2467,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     pdsize--;
-    dwg_dynapi_header_set_value (dwg, "PDSIZE", &pdsize);
+    dwg_dynapi_header_set_value (dwg, "PDSIZE", &pdsize, 0);
 
   }
   {
@@ -2483,7 +2483,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     plinewid++;
-    if (dwg_dynapi_header_set_value (dwg, "PLINEWID", &plinewid)
+        if (dwg_dynapi_header_set_value (dwg, "PLINEWID", &plinewid, 0)
         && plinewid == dwg->header_vars.PLINEWID)
       {
         pass ("HEADER.PLINEWID [BD] set+1 %g", plinewid);
@@ -2495,7 +2495,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     plinewid--;
-    dwg_dynapi_header_set_value (dwg, "PLINEWID", &plinewid);
+    dwg_dynapi_header_set_value (dwg, "PLINEWID", &plinewid, 0);
 
   }
   {
@@ -2511,7 +2511,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     userr1++;
-    if (dwg_dynapi_header_set_value (dwg, "USERR1", &userr1)
+        if (dwg_dynapi_header_set_value (dwg, "USERR1", &userr1, 0)
         && userr1 == dwg->header_vars.USERR1)
       {
         pass ("HEADER.USERR1 [BD] set+1 %g", userr1);
@@ -2523,7 +2523,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     userr1--;
-    dwg_dynapi_header_set_value (dwg, "USERR1", &userr1);
+    dwg_dynapi_header_set_value (dwg, "USERR1", &userr1, 0);
 
   }
   {
@@ -2539,7 +2539,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     userr2++;
-    if (dwg_dynapi_header_set_value (dwg, "USERR2", &userr2)
+        if (dwg_dynapi_header_set_value (dwg, "USERR2", &userr2, 0)
         && userr2 == dwg->header_vars.USERR2)
       {
         pass ("HEADER.USERR2 [BD] set+1 %g", userr2);
@@ -2551,7 +2551,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     userr2--;
-    dwg_dynapi_header_set_value (dwg, "USERR2", &userr2);
+    dwg_dynapi_header_set_value (dwg, "USERR2", &userr2, 0);
 
   }
   {
@@ -2567,7 +2567,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     userr3++;
-    if (dwg_dynapi_header_set_value (dwg, "USERR3", &userr3)
+        if (dwg_dynapi_header_set_value (dwg, "USERR3", &userr3, 0)
         && userr3 == dwg->header_vars.USERR3)
       {
         pass ("HEADER.USERR3 [BD] set+1 %g", userr3);
@@ -2579,7 +2579,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     userr3--;
-    dwg_dynapi_header_set_value (dwg, "USERR3", &userr3);
+    dwg_dynapi_header_set_value (dwg, "USERR3", &userr3, 0);
 
   }
   {
@@ -2595,7 +2595,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     userr4++;
-    if (dwg_dynapi_header_set_value (dwg, "USERR4", &userr4)
+        if (dwg_dynapi_header_set_value (dwg, "USERR4", &userr4, 0)
         && userr4 == dwg->header_vars.USERR4)
       {
         pass ("HEADER.USERR4 [BD] set+1 %g", userr4);
@@ -2607,7 +2607,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     userr4--;
-    dwg_dynapi_header_set_value (dwg, "USERR4", &userr4);
+    dwg_dynapi_header_set_value (dwg, "USERR4", &userr4, 0);
 
   }
   {
@@ -2623,7 +2623,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     userr5++;
-    if (dwg_dynapi_header_set_value (dwg, "USERR5", &userr5)
+        if (dwg_dynapi_header_set_value (dwg, "USERR5", &userr5, 0)
         && userr5 == dwg->header_vars.USERR5)
       {
         pass ("HEADER.USERR5 [BD] set+1 %g", userr5);
@@ -2635,7 +2635,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     userr5--;
-    dwg_dynapi_header_set_value (dwg, "USERR5", &userr5);
+    dwg_dynapi_header_set_value (dwg, "USERR5", &userr5, 0);
 
   }
   {
@@ -2651,7 +2651,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     chamfera++;
-    if (dwg_dynapi_header_set_value (dwg, "CHAMFERA", &chamfera)
+        if (dwg_dynapi_header_set_value (dwg, "CHAMFERA", &chamfera, 0)
         && chamfera == dwg->header_vars.CHAMFERA)
       {
         pass ("HEADER.CHAMFERA [BD] set+1 %g", chamfera);
@@ -2663,7 +2663,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     chamfera--;
-    dwg_dynapi_header_set_value (dwg, "CHAMFERA", &chamfera);
+    dwg_dynapi_header_set_value (dwg, "CHAMFERA", &chamfera, 0);
 
   }
   {
@@ -2679,7 +2679,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     chamferb++;
-    if (dwg_dynapi_header_set_value (dwg, "CHAMFERB", &chamferb)
+        if (dwg_dynapi_header_set_value (dwg, "CHAMFERB", &chamferb, 0)
         && chamferb == dwg->header_vars.CHAMFERB)
       {
         pass ("HEADER.CHAMFERB [BD] set+1 %g", chamferb);
@@ -2691,7 +2691,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     chamferb--;
-    dwg_dynapi_header_set_value (dwg, "CHAMFERB", &chamferb);
+    dwg_dynapi_header_set_value (dwg, "CHAMFERB", &chamferb, 0);
 
   }
   {
@@ -2707,7 +2707,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     chamferc++;
-    if (dwg_dynapi_header_set_value (dwg, "CHAMFERC", &chamferc)
+        if (dwg_dynapi_header_set_value (dwg, "CHAMFERC", &chamferc, 0)
         && chamferc == dwg->header_vars.CHAMFERC)
       {
         pass ("HEADER.CHAMFERC [BD] set+1 %g", chamferc);
@@ -2719,7 +2719,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     chamferc--;
-    dwg_dynapi_header_set_value (dwg, "CHAMFERC", &chamferc);
+    dwg_dynapi_header_set_value (dwg, "CHAMFERC", &chamferc, 0);
 
   }
   {
@@ -2735,7 +2735,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     chamferd++;
-    if (dwg_dynapi_header_set_value (dwg, "CHAMFERD", &chamferd)
+        if (dwg_dynapi_header_set_value (dwg, "CHAMFERD", &chamferd, 0)
         && chamferd == dwg->header_vars.CHAMFERD)
       {
         pass ("HEADER.CHAMFERD [BD] set+1 %g", chamferd);
@@ -2747,7 +2747,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     chamferd--;
-    dwg_dynapi_header_set_value (dwg, "CHAMFERD", &chamferd);
+    dwg_dynapi_header_set_value (dwg, "CHAMFERD", &chamferd, 0);
 
   }
   {
@@ -2763,7 +2763,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     facetres++;
-    if (dwg_dynapi_header_set_value (dwg, "FACETRES", &facetres)
+        if (dwg_dynapi_header_set_value (dwg, "FACETRES", &facetres, 0)
         && facetres == dwg->header_vars.FACETRES)
       {
         pass ("HEADER.FACETRES [BD] set+1 %g", facetres);
@@ -2775,7 +2775,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     facetres--;
-    dwg_dynapi_header_set_value (dwg, "FACETRES", &facetres);
+    dwg_dynapi_header_set_value (dwg, "FACETRES", &facetres, 0);
 
   }
   {
@@ -2791,7 +2791,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     cmlscale++;
-    if (dwg_dynapi_header_set_value (dwg, "CMLSCALE", &cmlscale)
+        if (dwg_dynapi_header_set_value (dwg, "CMLSCALE", &cmlscale, 0)
         && cmlscale == dwg->header_vars.CMLSCALE)
       {
         pass ("HEADER.CMLSCALE [BD] set+1 %g", cmlscale);
@@ -2803,7 +2803,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     cmlscale--;
-    dwg_dynapi_header_set_value (dwg, "CMLSCALE", &cmlscale);
+    dwg_dynapi_header_set_value (dwg, "CMLSCALE", &cmlscale, 0);
 
   }
   {
@@ -2819,7 +2819,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     celtscale++;
-    if (dwg_dynapi_header_set_value (dwg, "CELTSCALE", &celtscale)
+        if (dwg_dynapi_header_set_value (dwg, "CELTSCALE", &celtscale, 0)
         && celtscale == dwg->header_vars.CELTSCALE)
       {
         pass ("HEADER.CELTSCALE [BD] set+1 %g", celtscale);
@@ -2831,7 +2831,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     celtscale--;
-    dwg_dynapi_header_set_value (dwg, "CELTSCALE", &celtscale);
+    dwg_dynapi_header_set_value (dwg, "CELTSCALE", &celtscale, 0);
 
   }
   {
@@ -2889,7 +2889,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_15++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_15", &unknown_15)
+        if (dwg_dynapi_header_set_value (dwg, "unknown_15", &unknown_15, 0)
         && unknown_15 == dwg->header_vars.unknown_15)
       {
         pass ("HEADER.unknown_15 [BL] set+1 %u", unknown_15);
@@ -2901,7 +2901,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_15--;
-    dwg_dynapi_header_set_value (dwg, "unknown_15", &unknown_15);
+    dwg_dynapi_header_set_value (dwg, "unknown_15", &unknown_15, 0);
 
   }
   {
@@ -2917,7 +2917,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_16++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_16", &unknown_16)
+        if (dwg_dynapi_header_set_value (dwg, "unknown_16", &unknown_16, 0)
         && unknown_16 == dwg->header_vars.unknown_16)
       {
         pass ("HEADER.unknown_16 [BL] set+1 %u", unknown_16);
@@ -2929,7 +2929,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_16--;
-    dwg_dynapi_header_set_value (dwg, "unknown_16", &unknown_16);
+    dwg_dynapi_header_set_value (dwg, "unknown_16", &unknown_16, 0);
 
   }
   {
@@ -2945,7 +2945,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_17++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_17", &unknown_17)
+        if (dwg_dynapi_header_set_value (dwg, "unknown_17", &unknown_17, 0)
         && unknown_17 == dwg->header_vars.unknown_17)
       {
         pass ("HEADER.unknown_17 [BL] set+1 %u", unknown_17);
@@ -2957,7 +2957,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_17--;
-    dwg_dynapi_header_set_value (dwg, "unknown_17", &unknown_17);
+    dwg_dynapi_header_set_value (dwg, "unknown_17", &unknown_17, 0);
 
   }
   {
@@ -3015,7 +3015,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     handling++;
-    if (dwg_dynapi_header_set_value (dwg, "HANDLING", &handling)
+        if (dwg_dynapi_header_set_value (dwg, "HANDLING", &handling, 0)
         && handling == dwg->header_vars.HANDLING)
       {
         pass ("HEADER.HANDLING [BS] set+1 %hu", handling);
@@ -3027,7 +3027,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     handling--;
-    dwg_dynapi_header_set_value (dwg, "HANDLING", &handling);
+    dwg_dynapi_header_set_value (dwg, "HANDLING", &handling, 0);
 
   }
   {
@@ -3141,7 +3141,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     psvpscale++;
-    if (dwg_dynapi_header_set_value (dwg, "PSVPSCALE", &psvpscale)
+        if (dwg_dynapi_header_set_value (dwg, "PSVPSCALE", &psvpscale, 0)
         && psvpscale == dwg->header_vars.PSVPSCALE)
       {
         pass ("HEADER.PSVPSCALE [BD] set+1 %g", psvpscale);
@@ -3153,7 +3153,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     psvpscale--;
-    dwg_dynapi_header_set_value (dwg, "PSVPSCALE", &psvpscale);
+    dwg_dynapi_header_set_value (dwg, "PSVPSCALE", &psvpscale, 0);
 
   }
   {
@@ -3239,7 +3239,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     pelevation++;
-    if (dwg_dynapi_header_set_value (dwg, "PELEVATION", &pelevation)
+        if (dwg_dynapi_header_set_value (dwg, "PELEVATION", &pelevation, 0)
         && pelevation == dwg->header_vars.PELEVATION)
       {
         pass ("HEADER.PELEVATION [BD] set+1 %g", pelevation);
@@ -3251,7 +3251,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     pelevation--;
-    dwg_dynapi_header_set_value (dwg, "PELEVATION", &pelevation);
+    dwg_dynapi_header_set_value (dwg, "PELEVATION", &pelevation, 0);
 
   }
   {
@@ -3351,7 +3351,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     pucsorthoview++;
-    if (dwg_dynapi_header_set_value (dwg, "PUCSORTHOVIEW", &pucsorthoview)
+        if (dwg_dynapi_header_set_value (dwg, "PUCSORTHOVIEW", &pucsorthoview, 0)
         && pucsorthoview == dwg->header_vars.PUCSORTHOVIEW)
       {
         pass ("HEADER.PUCSORTHOVIEW [BS] set+1 %hu", pucsorthoview);
@@ -3363,7 +3363,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     pucsorthoview--;
-    dwg_dynapi_header_set_value (dwg, "PUCSORTHOVIEW", &pucsorthoview);
+    dwg_dynapi_header_set_value (dwg, "PUCSORTHOVIEW", &pucsorthoview, 0);
 
   }
   {
@@ -3547,7 +3547,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     elevation++;
-    if (dwg_dynapi_header_set_value (dwg, "ELEVATION", &elevation)
+        if (dwg_dynapi_header_set_value (dwg, "ELEVATION", &elevation, 0)
         && elevation == dwg->header_vars.ELEVATION)
       {
         pass ("HEADER.ELEVATION [BD] set+1 %g", elevation);
@@ -3559,7 +3559,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     elevation--;
-    dwg_dynapi_header_set_value (dwg, "ELEVATION", &elevation);
+    dwg_dynapi_header_set_value (dwg, "ELEVATION", &elevation, 0);
 
   }
   {
@@ -3575,7 +3575,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     viewsize++;
-    if (dwg_dynapi_header_set_value (dwg, "VIEWSIZE", &viewsize)
+        if (dwg_dynapi_header_set_value (dwg, "VIEWSIZE", &viewsize, 0)
         && viewsize == dwg->header_vars.VIEWSIZE)
       {
         pass ("HEADER.VIEWSIZE [RD] set+1 %g", viewsize);
@@ -3587,7 +3587,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     viewsize--;
-    dwg_dynapi_header_set_value (dwg, "VIEWSIZE", &viewsize);
+    dwg_dynapi_header_set_value (dwg, "VIEWSIZE", &viewsize, 0);
 
   }
   {
@@ -3603,7 +3603,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     snapmode++;
-    if (dwg_dynapi_header_set_value (dwg, "SNAPMODE", &snapmode)
+        if (dwg_dynapi_header_set_value (dwg, "SNAPMODE", &snapmode, 0)
         && snapmode == dwg->header_vars.SNAPMODE)
       {
         pass ("HEADER.SNAPMODE [RS] set+1 %hu", snapmode);
@@ -3615,7 +3615,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     snapmode--;
-    dwg_dynapi_header_set_value (dwg, "SNAPMODE", &snapmode);
+    dwg_dynapi_header_set_value (dwg, "SNAPMODE", &snapmode, 0);
 
   }
   {
@@ -3659,7 +3659,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     snapang++;
-    if (dwg_dynapi_header_set_value (dwg, "SNAPANG", &snapang)
+        if (dwg_dynapi_header_set_value (dwg, "SNAPANG", &snapang, 0)
         && snapang == dwg->header_vars.SNAPANG)
       {
         pass ("HEADER.SNAPANG [RD] set+1 %g", snapang);
@@ -3671,7 +3671,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     snapang--;
-    dwg_dynapi_header_set_value (dwg, "SNAPANG", &snapang);
+    dwg_dynapi_header_set_value (dwg, "SNAPANG", &snapang, 0);
 
   }
   {
@@ -3687,7 +3687,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     snapstyl++;
-    if (dwg_dynapi_header_set_value (dwg, "SNAPSTYL", &snapstyl)
+        if (dwg_dynapi_header_set_value (dwg, "SNAPSTYL", &snapstyl, 0)
         && snapstyl == dwg->header_vars.SNAPSTYL)
       {
         pass ("HEADER.SNAPSTYL [RS] set+1 %hu", snapstyl);
@@ -3699,7 +3699,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     snapstyl--;
-    dwg_dynapi_header_set_value (dwg, "SNAPSTYL", &snapstyl);
+    dwg_dynapi_header_set_value (dwg, "SNAPSTYL", &snapstyl, 0);
 
   }
   {
@@ -3715,7 +3715,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     snapisopair++;
-    if (dwg_dynapi_header_set_value (dwg, "SNAPISOPAIR", &snapisopair)
+        if (dwg_dynapi_header_set_value (dwg, "SNAPISOPAIR", &snapisopair, 0)
         && snapisopair == dwg->header_vars.SNAPISOPAIR)
       {
         pass ("HEADER.SNAPISOPAIR [RS] set+1 %hu", snapisopair);
@@ -3727,7 +3727,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     snapisopair--;
-    dwg_dynapi_header_set_value (dwg, "SNAPISOPAIR", &snapisopair);
+    dwg_dynapi_header_set_value (dwg, "SNAPISOPAIR", &snapisopair, 0);
 
   }
   {
@@ -3743,7 +3743,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     gridmode++;
-    if (dwg_dynapi_header_set_value (dwg, "GRIDMODE", &gridmode)
+        if (dwg_dynapi_header_set_value (dwg, "GRIDMODE", &gridmode, 0)
         && gridmode == dwg->header_vars.GRIDMODE)
       {
         pass ("HEADER.GRIDMODE [RS] set+1 %hu", gridmode);
@@ -3755,7 +3755,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     gridmode--;
-    dwg_dynapi_header_set_value (dwg, "GRIDMODE", &gridmode);
+    dwg_dynapi_header_set_value (dwg, "GRIDMODE", &gridmode, 0);
 
   }
   {
@@ -3855,7 +3855,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     ucsorthoview++;
-    if (dwg_dynapi_header_set_value (dwg, "UCSORTHOVIEW", &ucsorthoview)
+        if (dwg_dynapi_header_set_value (dwg, "UCSORTHOVIEW", &ucsorthoview, 0)
         && ucsorthoview == dwg->header_vars.UCSORTHOVIEW)
       {
         pass ("HEADER.UCSORTHOVIEW [BS] set+1 %hu", ucsorthoview);
@@ -3867,7 +3867,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     ucsorthoview--;
-    dwg_dynapi_header_set_value (dwg, "UCSORTHOVIEW", &ucsorthoview);
+    dwg_dynapi_header_set_value (dwg, "UCSORTHOVIEW", &ucsorthoview, 0);
 
   }
   {
@@ -4009,7 +4009,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtol++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMTOL", &dimtol)
+        if (dwg_dynapi_header_set_value (dwg, "DIMTOL", &dimtol, 0)
         && dimtol == dwg->header_vars.DIMTOL)
       {
         pass ("HEADER.DIMTOL [B] set+1 " FORMAT_B "", dimtol);
@@ -4021,7 +4021,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtol--;
-    dwg_dynapi_header_set_value (dwg, "DIMTOL", &dimtol);
+    dwg_dynapi_header_set_value (dwg, "DIMTOL", &dimtol, 0);
 
   }
   {
@@ -4037,7 +4037,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimlim++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMLIM", &dimlim)
+        if (dwg_dynapi_header_set_value (dwg, "DIMLIM", &dimlim, 0)
         && dimlim == dwg->header_vars.DIMLIM)
       {
         pass ("HEADER.DIMLIM [B] set+1 " FORMAT_B "", dimlim);
@@ -4049,7 +4049,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimlim--;
-    dwg_dynapi_header_set_value (dwg, "DIMLIM", &dimlim);
+    dwg_dynapi_header_set_value (dwg, "DIMLIM", &dimlim, 0);
 
   }
   {
@@ -4065,7 +4065,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtih++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMTIH", &dimtih)
+        if (dwg_dynapi_header_set_value (dwg, "DIMTIH", &dimtih, 0)
         && dimtih == dwg->header_vars.DIMTIH)
       {
         pass ("HEADER.DIMTIH [B] set+1 " FORMAT_B "", dimtih);
@@ -4077,7 +4077,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtih--;
-    dwg_dynapi_header_set_value (dwg, "DIMTIH", &dimtih);
+    dwg_dynapi_header_set_value (dwg, "DIMTIH", &dimtih, 0);
 
   }
   {
@@ -4093,7 +4093,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtoh++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMTOH", &dimtoh)
+        if (dwg_dynapi_header_set_value (dwg, "DIMTOH", &dimtoh, 0)
         && dimtoh == dwg->header_vars.DIMTOH)
       {
         pass ("HEADER.DIMTOH [B] set+1 " FORMAT_B "", dimtoh);
@@ -4105,7 +4105,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtoh--;
-    dwg_dynapi_header_set_value (dwg, "DIMTOH", &dimtoh);
+    dwg_dynapi_header_set_value (dwg, "DIMTOH", &dimtoh, 0);
 
   }
   {
@@ -4121,7 +4121,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimse1++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMSE1", &dimse1)
+        if (dwg_dynapi_header_set_value (dwg, "DIMSE1", &dimse1, 0)
         && dimse1 == dwg->header_vars.DIMSE1)
       {
         pass ("HEADER.DIMSE1 [B] set+1 " FORMAT_B "", dimse1);
@@ -4133,7 +4133,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimse1--;
-    dwg_dynapi_header_set_value (dwg, "DIMSE1", &dimse1);
+    dwg_dynapi_header_set_value (dwg, "DIMSE1", &dimse1, 0);
 
   }
   {
@@ -4149,7 +4149,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimse2++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMSE2", &dimse2)
+        if (dwg_dynapi_header_set_value (dwg, "DIMSE2", &dimse2, 0)
         && dimse2 == dwg->header_vars.DIMSE2)
       {
         pass ("HEADER.DIMSE2 [B] set+1 " FORMAT_B "", dimse2);
@@ -4161,7 +4161,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimse2--;
-    dwg_dynapi_header_set_value (dwg, "DIMSE2", &dimse2);
+    dwg_dynapi_header_set_value (dwg, "DIMSE2", &dimse2, 0);
 
   }
   {
@@ -4177,7 +4177,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimalt++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMALT", &dimalt)
+        if (dwg_dynapi_header_set_value (dwg, "DIMALT", &dimalt, 0)
         && dimalt == dwg->header_vars.DIMALT)
       {
         pass ("HEADER.DIMALT [B] set+1 " FORMAT_B "", dimalt);
@@ -4189,7 +4189,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimalt--;
-    dwg_dynapi_header_set_value (dwg, "DIMALT", &dimalt);
+    dwg_dynapi_header_set_value (dwg, "DIMALT", &dimalt, 0);
 
   }
   {
@@ -4205,7 +4205,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtofl++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMTOFL", &dimtofl)
+        if (dwg_dynapi_header_set_value (dwg, "DIMTOFL", &dimtofl, 0)
         && dimtofl == dwg->header_vars.DIMTOFL)
       {
         pass ("HEADER.DIMTOFL [B] set+1 " FORMAT_B "", dimtofl);
@@ -4217,7 +4217,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtofl--;
-    dwg_dynapi_header_set_value (dwg, "DIMTOFL", &dimtofl);
+    dwg_dynapi_header_set_value (dwg, "DIMTOFL", &dimtofl, 0);
 
   }
   {
@@ -4233,7 +4233,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimsah++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMSAH", &dimsah)
+        if (dwg_dynapi_header_set_value (dwg, "DIMSAH", &dimsah, 0)
         && dimsah == dwg->header_vars.DIMSAH)
       {
         pass ("HEADER.DIMSAH [B] set+1 " FORMAT_B "", dimsah);
@@ -4245,7 +4245,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimsah--;
-    dwg_dynapi_header_set_value (dwg, "DIMSAH", &dimsah);
+    dwg_dynapi_header_set_value (dwg, "DIMSAH", &dimsah, 0);
 
   }
   {
@@ -4261,7 +4261,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtix++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMTIX", &dimtix)
+        if (dwg_dynapi_header_set_value (dwg, "DIMTIX", &dimtix, 0)
         && dimtix == dwg->header_vars.DIMTIX)
       {
         pass ("HEADER.DIMTIX [B] set+1 " FORMAT_B "", dimtix);
@@ -4273,7 +4273,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtix--;
-    dwg_dynapi_header_set_value (dwg, "DIMTIX", &dimtix);
+    dwg_dynapi_header_set_value (dwg, "DIMTIX", &dimtix, 0);
 
   }
   {
@@ -4289,7 +4289,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimsoxd++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMSOXD", &dimsoxd)
+        if (dwg_dynapi_header_set_value (dwg, "DIMSOXD", &dimsoxd, 0)
         && dimsoxd == dwg->header_vars.DIMSOXD)
       {
         pass ("HEADER.DIMSOXD [B] set+1 " FORMAT_B "", dimsoxd);
@@ -4301,7 +4301,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimsoxd--;
-    dwg_dynapi_header_set_value (dwg, "DIMSOXD", &dimsoxd);
+    dwg_dynapi_header_set_value (dwg, "DIMSOXD", &dimsoxd, 0);
 
   }
   {
@@ -4317,7 +4317,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimaltd++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMALTD", &dimaltd)
+        if (dwg_dynapi_header_set_value (dwg, "DIMALTD", &dimaltd, 0)
         && dimaltd == dwg->header_vars.DIMALTD)
       {
         pass ("HEADER.DIMALTD [BS] set+1 %hu", dimaltd);
@@ -4329,7 +4329,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimaltd--;
-    dwg_dynapi_header_set_value (dwg, "DIMALTD", &dimaltd);
+    dwg_dynapi_header_set_value (dwg, "DIMALTD", &dimaltd, 0);
 
   }
   {
@@ -4345,7 +4345,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimzin++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMZIN", &dimzin)
+        if (dwg_dynapi_header_set_value (dwg, "DIMZIN", &dimzin, 0)
         && dimzin == dwg->header_vars.DIMZIN)
       {
         pass ("HEADER.DIMZIN [BS] set+1 %hu", dimzin);
@@ -4357,7 +4357,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimzin--;
-    dwg_dynapi_header_set_value (dwg, "DIMZIN", &dimzin);
+    dwg_dynapi_header_set_value (dwg, "DIMZIN", &dimzin, 0);
 
   }
   {
@@ -4373,7 +4373,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimsd1++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMSD1", &dimsd1)
+        if (dwg_dynapi_header_set_value (dwg, "DIMSD1", &dimsd1, 0)
         && dimsd1 == dwg->header_vars.DIMSD1)
       {
         pass ("HEADER.DIMSD1 [B] set+1 " FORMAT_B "", dimsd1);
@@ -4385,7 +4385,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimsd1--;
-    dwg_dynapi_header_set_value (dwg, "DIMSD1", &dimsd1);
+    dwg_dynapi_header_set_value (dwg, "DIMSD1", &dimsd1, 0);
 
   }
   {
@@ -4401,7 +4401,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimsd2++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMSD2", &dimsd2)
+        if (dwg_dynapi_header_set_value (dwg, "DIMSD2", &dimsd2, 0)
         && dimsd2 == dwg->header_vars.DIMSD2)
       {
         pass ("HEADER.DIMSD2 [B] set+1 " FORMAT_B "", dimsd2);
@@ -4413,7 +4413,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimsd2--;
-    dwg_dynapi_header_set_value (dwg, "DIMSD2", &dimsd2);
+    dwg_dynapi_header_set_value (dwg, "DIMSD2", &dimsd2, 0);
 
   }
   {
@@ -4429,7 +4429,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtolj++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMTOLJ", &dimtolj)
+        if (dwg_dynapi_header_set_value (dwg, "DIMTOLJ", &dimtolj, 0)
         && dimtolj == dwg->header_vars.DIMTOLJ)
       {
         pass ("HEADER.DIMTOLJ [BS] set+1 %hu", dimtolj);
@@ -4441,7 +4441,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtolj--;
-    dwg_dynapi_header_set_value (dwg, "DIMTOLJ", &dimtolj);
+    dwg_dynapi_header_set_value (dwg, "DIMTOLJ", &dimtolj, 0);
 
   }
   {
@@ -4457,7 +4457,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimjust++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMJUST", &dimjust)
+        if (dwg_dynapi_header_set_value (dwg, "DIMJUST", &dimjust, 0)
         && dimjust == dwg->header_vars.DIMJUST)
       {
         pass ("HEADER.DIMJUST [BS] set+1 %hu", dimjust);
@@ -4469,7 +4469,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimjust--;
-    dwg_dynapi_header_set_value (dwg, "DIMJUST", &dimjust);
+    dwg_dynapi_header_set_value (dwg, "DIMJUST", &dimjust, 0);
 
   }
   {
@@ -4485,7 +4485,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimfit++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMFIT", &dimfit)
+        if (dwg_dynapi_header_set_value (dwg, "DIMFIT", &dimfit, 0)
         && dimfit == dwg->header_vars.DIMFIT)
       {
         pass ("HEADER.DIMFIT [BS] set+1 %hu", dimfit);
@@ -4497,7 +4497,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimfit--;
-    dwg_dynapi_header_set_value (dwg, "DIMFIT", &dimfit);
+    dwg_dynapi_header_set_value (dwg, "DIMFIT", &dimfit, 0);
 
   }
   {
@@ -4513,7 +4513,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimupt++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMUPT", &dimupt)
+        if (dwg_dynapi_header_set_value (dwg, "DIMUPT", &dimupt, 0)
         && dimupt == dwg->header_vars.DIMUPT)
       {
         pass ("HEADER.DIMUPT [B] set+1 " FORMAT_B "", dimupt);
@@ -4525,7 +4525,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimupt--;
-    dwg_dynapi_header_set_value (dwg, "DIMUPT", &dimupt);
+    dwg_dynapi_header_set_value (dwg, "DIMUPT", &dimupt, 0);
 
   }
   {
@@ -4541,7 +4541,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtzin++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMTZIN", &dimtzin)
+        if (dwg_dynapi_header_set_value (dwg, "DIMTZIN", &dimtzin, 0)
         && dimtzin == dwg->header_vars.DIMTZIN)
       {
         pass ("HEADER.DIMTZIN [BS] set+1 %hu", dimtzin);
@@ -4553,7 +4553,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtzin--;
-    dwg_dynapi_header_set_value (dwg, "DIMTZIN", &dimtzin);
+    dwg_dynapi_header_set_value (dwg, "DIMTZIN", &dimtzin, 0);
 
   }
   {
@@ -4569,7 +4569,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimmaltz++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMMALTZ", &dimmaltz)
+        if (dwg_dynapi_header_set_value (dwg, "DIMMALTZ", &dimmaltz, 0)
         && dimmaltz == dwg->header_vars.DIMMALTZ)
       {
         pass ("HEADER.DIMMALTZ [BS] set+1 %hu", dimmaltz);
@@ -4581,7 +4581,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimmaltz--;
-    dwg_dynapi_header_set_value (dwg, "DIMMALTZ", &dimmaltz);
+    dwg_dynapi_header_set_value (dwg, "DIMMALTZ", &dimmaltz, 0);
 
   }
   {
@@ -4597,7 +4597,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimmalttz++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMMALTTZ", &dimmalttz)
+        if (dwg_dynapi_header_set_value (dwg, "DIMMALTTZ", &dimmalttz, 0)
         && dimmalttz == dwg->header_vars.DIMMALTTZ)
       {
         pass ("HEADER.DIMMALTTZ [BS] set+1 %hu", dimmalttz);
@@ -4609,7 +4609,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimmalttz--;
-    dwg_dynapi_header_set_value (dwg, "DIMMALTTZ", &dimmalttz);
+    dwg_dynapi_header_set_value (dwg, "DIMMALTTZ", &dimmalttz, 0);
 
   }
   {
@@ -4625,7 +4625,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtad++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMTAD", &dimtad)
+        if (dwg_dynapi_header_set_value (dwg, "DIMTAD", &dimtad, 0)
         && dimtad == dwg->header_vars.DIMTAD)
       {
         pass ("HEADER.DIMTAD [BS] set+1 %hu", dimtad);
@@ -4637,7 +4637,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtad--;
-    dwg_dynapi_header_set_value (dwg, "DIMTAD", &dimtad);
+    dwg_dynapi_header_set_value (dwg, "DIMTAD", &dimtad, 0);
 
   }
   {
@@ -4653,7 +4653,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimunit++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMUNIT", &dimunit)
+        if (dwg_dynapi_header_set_value (dwg, "DIMUNIT", &dimunit, 0)
         && dimunit == dwg->header_vars.DIMUNIT)
       {
         pass ("HEADER.DIMUNIT [BS] set+1 %hu", dimunit);
@@ -4665,7 +4665,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimunit--;
-    dwg_dynapi_header_set_value (dwg, "DIMUNIT", &dimunit);
+    dwg_dynapi_header_set_value (dwg, "DIMUNIT", &dimunit, 0);
 
   }
   {
@@ -4681,7 +4681,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimaunit++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMAUNIT", &dimaunit)
+        if (dwg_dynapi_header_set_value (dwg, "DIMAUNIT", &dimaunit, 0)
         && dimaunit == dwg->header_vars.DIMAUNIT)
       {
         pass ("HEADER.DIMAUNIT [BS] set+1 %hu", dimaunit);
@@ -4693,7 +4693,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimaunit--;
-    dwg_dynapi_header_set_value (dwg, "DIMAUNIT", &dimaunit);
+    dwg_dynapi_header_set_value (dwg, "DIMAUNIT", &dimaunit, 0);
 
   }
   {
@@ -4709,7 +4709,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimdec++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMDEC", &dimdec)
+        if (dwg_dynapi_header_set_value (dwg, "DIMDEC", &dimdec, 0)
         && dimdec == dwg->header_vars.DIMDEC)
       {
         pass ("HEADER.DIMDEC [BS] set+1 %hu", dimdec);
@@ -4721,7 +4721,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimdec--;
-    dwg_dynapi_header_set_value (dwg, "DIMDEC", &dimdec);
+    dwg_dynapi_header_set_value (dwg, "DIMDEC", &dimdec, 0);
 
   }
   {
@@ -4737,7 +4737,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtdec++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMTDEC", &dimtdec)
+        if (dwg_dynapi_header_set_value (dwg, "DIMTDEC", &dimtdec, 0)
         && dimtdec == dwg->header_vars.DIMTDEC)
       {
         pass ("HEADER.DIMTDEC [BS] set+1 %hu", dimtdec);
@@ -4749,7 +4749,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtdec--;
-    dwg_dynapi_header_set_value (dwg, "DIMTDEC", &dimtdec);
+    dwg_dynapi_header_set_value (dwg, "DIMTDEC", &dimtdec, 0);
 
   }
   {
@@ -4765,7 +4765,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimaltu++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMALTU", &dimaltu)
+        if (dwg_dynapi_header_set_value (dwg, "DIMALTU", &dimaltu, 0)
         && dimaltu == dwg->header_vars.DIMALTU)
       {
         pass ("HEADER.DIMALTU [BS] set+1 %hu", dimaltu);
@@ -4777,7 +4777,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimaltu--;
-    dwg_dynapi_header_set_value (dwg, "DIMALTU", &dimaltu);
+    dwg_dynapi_header_set_value (dwg, "DIMALTU", &dimaltu, 0);
 
   }
   {
@@ -4793,7 +4793,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimalttd++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMALTTD", &dimalttd)
+        if (dwg_dynapi_header_set_value (dwg, "DIMALTTD", &dimalttd, 0)
         && dimalttd == dwg->header_vars.DIMALTTD)
       {
         pass ("HEADER.DIMALTTD [BS] set+1 %hu", dimalttd);
@@ -4805,7 +4805,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimalttd--;
-    dwg_dynapi_header_set_value (dwg, "DIMALTTD", &dimalttd);
+    dwg_dynapi_header_set_value (dwg, "DIMALTTD", &dimalttd, 0);
 
   }
   {
@@ -4835,7 +4835,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimscale++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMSCALE", &dimscale)
+        if (dwg_dynapi_header_set_value (dwg, "DIMSCALE", &dimscale, 0)
         && dimscale == dwg->header_vars.DIMSCALE)
       {
         pass ("HEADER.DIMSCALE [BD] set+1 %g", dimscale);
@@ -4847,7 +4847,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimscale--;
-    dwg_dynapi_header_set_value (dwg, "DIMSCALE", &dimscale);
+    dwg_dynapi_header_set_value (dwg, "DIMSCALE", &dimscale, 0);
 
   }
   {
@@ -4863,7 +4863,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimasz++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMASZ", &dimasz)
+        if (dwg_dynapi_header_set_value (dwg, "DIMASZ", &dimasz, 0)
         && dimasz == dwg->header_vars.DIMASZ)
       {
         pass ("HEADER.DIMASZ [BD] set+1 %g", dimasz);
@@ -4875,7 +4875,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimasz--;
-    dwg_dynapi_header_set_value (dwg, "DIMASZ", &dimasz);
+    dwg_dynapi_header_set_value (dwg, "DIMASZ", &dimasz, 0);
 
   }
   {
@@ -4891,7 +4891,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimexo++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMEXO", &dimexo)
+        if (dwg_dynapi_header_set_value (dwg, "DIMEXO", &dimexo, 0)
         && dimexo == dwg->header_vars.DIMEXO)
       {
         pass ("HEADER.DIMEXO [BD] set+1 %g", dimexo);
@@ -4903,7 +4903,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimexo--;
-    dwg_dynapi_header_set_value (dwg, "DIMEXO", &dimexo);
+    dwg_dynapi_header_set_value (dwg, "DIMEXO", &dimexo, 0);
 
   }
   {
@@ -4919,7 +4919,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimdli++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMDLI", &dimdli)
+        if (dwg_dynapi_header_set_value (dwg, "DIMDLI", &dimdli, 0)
         && dimdli == dwg->header_vars.DIMDLI)
       {
         pass ("HEADER.DIMDLI [BD] set+1 %g", dimdli);
@@ -4931,7 +4931,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimdli--;
-    dwg_dynapi_header_set_value (dwg, "DIMDLI", &dimdli);
+    dwg_dynapi_header_set_value (dwg, "DIMDLI", &dimdli, 0);
 
   }
   {
@@ -4947,7 +4947,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimexe++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMEXE", &dimexe)
+        if (dwg_dynapi_header_set_value (dwg, "DIMEXE", &dimexe, 0)
         && dimexe == dwg->header_vars.DIMEXE)
       {
         pass ("HEADER.DIMEXE [BD] set+1 %g", dimexe);
@@ -4959,7 +4959,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimexe--;
-    dwg_dynapi_header_set_value (dwg, "DIMEXE", &dimexe);
+    dwg_dynapi_header_set_value (dwg, "DIMEXE", &dimexe, 0);
 
   }
   {
@@ -4975,7 +4975,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimrnd++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMRND", &dimrnd)
+        if (dwg_dynapi_header_set_value (dwg, "DIMRND", &dimrnd, 0)
         && dimrnd == dwg->header_vars.DIMRND)
       {
         pass ("HEADER.DIMRND [BD] set+1 %g", dimrnd);
@@ -4987,7 +4987,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimrnd--;
-    dwg_dynapi_header_set_value (dwg, "DIMRND", &dimrnd);
+    dwg_dynapi_header_set_value (dwg, "DIMRND", &dimrnd, 0);
 
   }
   {
@@ -5003,7 +5003,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimdle++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMDLE", &dimdle)
+        if (dwg_dynapi_header_set_value (dwg, "DIMDLE", &dimdle, 0)
         && dimdle == dwg->header_vars.DIMDLE)
       {
         pass ("HEADER.DIMDLE [BD] set+1 %g", dimdle);
@@ -5015,7 +5015,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimdle--;
-    dwg_dynapi_header_set_value (dwg, "DIMDLE", &dimdle);
+    dwg_dynapi_header_set_value (dwg, "DIMDLE", &dimdle, 0);
 
   }
   {
@@ -5031,7 +5031,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtp++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMTP", &dimtp)
+        if (dwg_dynapi_header_set_value (dwg, "DIMTP", &dimtp, 0)
         && dimtp == dwg->header_vars.DIMTP)
       {
         pass ("HEADER.DIMTP [BD] set+1 %g", dimtp);
@@ -5043,7 +5043,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtp--;
-    dwg_dynapi_header_set_value (dwg, "DIMTP", &dimtp);
+    dwg_dynapi_header_set_value (dwg, "DIMTP", &dimtp, 0);
 
   }
   {
@@ -5059,7 +5059,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtm++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMTM", &dimtm)
+        if (dwg_dynapi_header_set_value (dwg, "DIMTM", &dimtm, 0)
         && dimtm == dwg->header_vars.DIMTM)
       {
         pass ("HEADER.DIMTM [BD] set+1 %g", dimtm);
@@ -5071,7 +5071,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtm--;
-    dwg_dynapi_header_set_value (dwg, "DIMTM", &dimtm);
+    dwg_dynapi_header_set_value (dwg, "DIMTM", &dimtm, 0);
 
   }
   {
@@ -5087,7 +5087,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimfxl++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMFXL", &dimfxl)
+        if (dwg_dynapi_header_set_value (dwg, "DIMFXL", &dimfxl, 0)
         && dimfxl == dwg->header_vars.DIMFXL)
       {
         pass ("HEADER.DIMFXL [BD] set+1 %g", dimfxl);
@@ -5099,7 +5099,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimfxl--;
-    dwg_dynapi_header_set_value (dwg, "DIMFXL", &dimfxl);
+    dwg_dynapi_header_set_value (dwg, "DIMFXL", &dimfxl, 0);
 
   }
   {
@@ -5115,7 +5115,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimjogang++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMJOGANG", &dimjogang)
+        if (dwg_dynapi_header_set_value (dwg, "DIMJOGANG", &dimjogang, 0)
         && dimjogang == dwg->header_vars.DIMJOGANG)
       {
         pass ("HEADER.DIMJOGANG [BD] set+1 %g", dimjogang);
@@ -5127,7 +5127,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimjogang--;
-    dwg_dynapi_header_set_value (dwg, "DIMJOGANG", &dimjogang);
+    dwg_dynapi_header_set_value (dwg, "DIMJOGANG", &dimjogang, 0);
 
   }
   {
@@ -5143,7 +5143,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtfill++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMTFILL", &dimtfill)
+        if (dwg_dynapi_header_set_value (dwg, "DIMTFILL", &dimtfill, 0)
         && dimtfill == dwg->header_vars.DIMTFILL)
       {
         pass ("HEADER.DIMTFILL [BS] set+1 %hu", dimtfill);
@@ -5155,7 +5155,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtfill--;
-    dwg_dynapi_header_set_value (dwg, "DIMTFILL", &dimtfill);
+    dwg_dynapi_header_set_value (dwg, "DIMTFILL", &dimtfill, 0);
 
   }
   {
@@ -5185,7 +5185,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimazin++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMAZIN", &dimazin)
+        if (dwg_dynapi_header_set_value (dwg, "DIMAZIN", &dimazin, 0)
         && dimazin == dwg->header_vars.DIMAZIN)
       {
         pass ("HEADER.DIMAZIN [BS] set+1 %hu", dimazin);
@@ -5197,7 +5197,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimazin--;
-    dwg_dynapi_header_set_value (dwg, "DIMAZIN", &dimazin);
+    dwg_dynapi_header_set_value (dwg, "DIMAZIN", &dimazin, 0);
 
   }
   {
@@ -5213,7 +5213,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimarcsym++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMARCSYM", &dimarcsym)
+        if (dwg_dynapi_header_set_value (dwg, "DIMARCSYM", &dimarcsym, 0)
         && dimarcsym == dwg->header_vars.DIMARCSYM)
       {
         pass ("HEADER.DIMARCSYM [BS] set+1 %hu", dimarcsym);
@@ -5225,7 +5225,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimarcsym--;
-    dwg_dynapi_header_set_value (dwg, "DIMARCSYM", &dimarcsym);
+    dwg_dynapi_header_set_value (dwg, "DIMARCSYM", &dimarcsym, 0);
 
   }
   {
@@ -5241,7 +5241,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtxt++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMTXT", &dimtxt)
+        if (dwg_dynapi_header_set_value (dwg, "DIMTXT", &dimtxt, 0)
         && dimtxt == dwg->header_vars.DIMTXT)
       {
         pass ("HEADER.DIMTXT [BD] set+1 %g", dimtxt);
@@ -5253,7 +5253,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtxt--;
-    dwg_dynapi_header_set_value (dwg, "DIMTXT", &dimtxt);
+    dwg_dynapi_header_set_value (dwg, "DIMTXT", &dimtxt, 0);
 
   }
   {
@@ -5269,7 +5269,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimcen++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMCEN", &dimcen)
+        if (dwg_dynapi_header_set_value (dwg, "DIMCEN", &dimcen, 0)
         && dimcen == dwg->header_vars.DIMCEN)
       {
         pass ("HEADER.DIMCEN [BD] set+1 %g", dimcen);
@@ -5281,7 +5281,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimcen--;
-    dwg_dynapi_header_set_value (dwg, "DIMCEN", &dimcen);
+    dwg_dynapi_header_set_value (dwg, "DIMCEN", &dimcen, 0);
 
   }
   {
@@ -5297,7 +5297,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtsz++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMTSZ", &dimtsz)
+        if (dwg_dynapi_header_set_value (dwg, "DIMTSZ", &dimtsz, 0)
         && dimtsz == dwg->header_vars.DIMTSZ)
       {
         pass ("HEADER.DIMTSZ [BD] set+1 %g", dimtsz);
@@ -5309,7 +5309,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtsz--;
-    dwg_dynapi_header_set_value (dwg, "DIMTSZ", &dimtsz);
+    dwg_dynapi_header_set_value (dwg, "DIMTSZ", &dimtsz, 0);
 
   }
   {
@@ -5325,7 +5325,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimaltf++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMALTF", &dimaltf)
+        if (dwg_dynapi_header_set_value (dwg, "DIMALTF", &dimaltf, 0)
         && dimaltf == dwg->header_vars.DIMALTF)
       {
         pass ("HEADER.DIMALTF [BD] set+1 %g", dimaltf);
@@ -5337,7 +5337,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimaltf--;
-    dwg_dynapi_header_set_value (dwg, "DIMALTF", &dimaltf);
+    dwg_dynapi_header_set_value (dwg, "DIMALTF", &dimaltf, 0);
 
   }
   {
@@ -5353,7 +5353,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimlfac++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMLFAC", &dimlfac)
+        if (dwg_dynapi_header_set_value (dwg, "DIMLFAC", &dimlfac, 0)
         && dimlfac == dwg->header_vars.DIMLFAC)
       {
         pass ("HEADER.DIMLFAC [BD] set+1 %g", dimlfac);
@@ -5365,7 +5365,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimlfac--;
-    dwg_dynapi_header_set_value (dwg, "DIMLFAC", &dimlfac);
+    dwg_dynapi_header_set_value (dwg, "DIMLFAC", &dimlfac, 0);
 
   }
   {
@@ -5381,7 +5381,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtvp++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMTVP", &dimtvp)
+        if (dwg_dynapi_header_set_value (dwg, "DIMTVP", &dimtvp, 0)
         && dimtvp == dwg->header_vars.DIMTVP)
       {
         pass ("HEADER.DIMTVP [BD] set+1 %g", dimtvp);
@@ -5393,7 +5393,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtvp--;
-    dwg_dynapi_header_set_value (dwg, "DIMTVP", &dimtvp);
+    dwg_dynapi_header_set_value (dwg, "DIMTVP", &dimtvp, 0);
 
   }
   {
@@ -5409,7 +5409,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtfac++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMTFAC", &dimtfac)
+        if (dwg_dynapi_header_set_value (dwg, "DIMTFAC", &dimtfac, 0)
         && dimtfac == dwg->header_vars.DIMTFAC)
       {
         pass ("HEADER.DIMTFAC [BD] set+1 %g", dimtfac);
@@ -5421,7 +5421,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtfac--;
-    dwg_dynapi_header_set_value (dwg, "DIMTFAC", &dimtfac);
+    dwg_dynapi_header_set_value (dwg, "DIMTFAC", &dimtfac, 0);
 
   }
   {
@@ -5437,7 +5437,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimgap++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMGAP", &dimgap)
+        if (dwg_dynapi_header_set_value (dwg, "DIMGAP", &dimgap, 0)
         && dimgap == dwg->header_vars.DIMGAP)
       {
         pass ("HEADER.DIMGAP [BD] set+1 %g", dimgap);
@@ -5449,7 +5449,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimgap--;
-    dwg_dynapi_header_set_value (dwg, "DIMGAP", &dimgap);
+    dwg_dynapi_header_set_value (dwg, "DIMGAP", &dimgap, 0);
 
   }
   {
@@ -5535,7 +5535,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimaltrnd++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMALTRND", &dimaltrnd)
+        if (dwg_dynapi_header_set_value (dwg, "DIMALTRND", &dimaltrnd, 0)
         && dimaltrnd == dwg->header_vars.DIMALTRND)
       {
         pass ("HEADER.DIMALTRND [BD] set+1 %g", dimaltrnd);
@@ -5547,7 +5547,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimaltrnd--;
-    dwg_dynapi_header_set_value (dwg, "DIMALTRND", &dimaltrnd);
+    dwg_dynapi_header_set_value (dwg, "DIMALTRND", &dimaltrnd, 0);
 
   }
   {
@@ -5563,7 +5563,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimclrd_c++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMCLRD_C", &dimclrd_c)
+        if (dwg_dynapi_header_set_value (dwg, "DIMCLRD_C", &dimclrd_c, 0)
         && dimclrd_c == dwg->header_vars.DIMCLRD_C)
       {
         pass ("HEADER.DIMCLRD_C [RS] set+1 %hu", dimclrd_c);
@@ -5575,7 +5575,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimclrd_c--;
-    dwg_dynapi_header_set_value (dwg, "DIMCLRD_C", &dimclrd_c);
+    dwg_dynapi_header_set_value (dwg, "DIMCLRD_C", &dimclrd_c, 0);
 
   }
   {
@@ -5591,7 +5591,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimclre_c++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMCLRE_C", &dimclre_c)
+        if (dwg_dynapi_header_set_value (dwg, "DIMCLRE_C", &dimclre_c, 0)
         && dimclre_c == dwg->header_vars.DIMCLRE_C)
       {
         pass ("HEADER.DIMCLRE_C [RS] set+1 %hu", dimclre_c);
@@ -5603,7 +5603,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimclre_c--;
-    dwg_dynapi_header_set_value (dwg, "DIMCLRE_C", &dimclre_c);
+    dwg_dynapi_header_set_value (dwg, "DIMCLRE_C", &dimclre_c, 0);
 
   }
   {
@@ -5619,7 +5619,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimclrt_c++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMCLRT_C", &dimclrt_c)
+        if (dwg_dynapi_header_set_value (dwg, "DIMCLRT_C", &dimclrt_c, 0)
         && dimclrt_c == dwg->header_vars.DIMCLRT_C)
       {
         pass ("HEADER.DIMCLRT_C [RS] set+1 %hu", dimclrt_c);
@@ -5631,7 +5631,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimclrt_c--;
-    dwg_dynapi_header_set_value (dwg, "DIMCLRT_C", &dimclrt_c);
+    dwg_dynapi_header_set_value (dwg, "DIMCLRT_C", &dimclrt_c, 0);
 
   }
   {
@@ -5689,7 +5689,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimadec++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMADEC", &dimadec)
+        if (dwg_dynapi_header_set_value (dwg, "DIMADEC", &dimadec, 0)
         && dimadec == dwg->header_vars.DIMADEC)
       {
         pass ("HEADER.DIMADEC [BS] set+1 %hu", dimadec);
@@ -5701,7 +5701,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimadec--;
-    dwg_dynapi_header_set_value (dwg, "DIMADEC", &dimadec);
+    dwg_dynapi_header_set_value (dwg, "DIMADEC", &dimadec, 0);
 
   }
   {
@@ -5717,7 +5717,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimfrac++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMFRAC", &dimfrac)
+        if (dwg_dynapi_header_set_value (dwg, "DIMFRAC", &dimfrac, 0)
         && dimfrac == dwg->header_vars.DIMFRAC)
       {
         pass ("HEADER.DIMFRAC [BS] set+1 %hu", dimfrac);
@@ -5729,7 +5729,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimfrac--;
-    dwg_dynapi_header_set_value (dwg, "DIMFRAC", &dimfrac);
+    dwg_dynapi_header_set_value (dwg, "DIMFRAC", &dimfrac, 0);
 
   }
   {
@@ -5745,7 +5745,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimlunit++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMLUNIT", &dimlunit)
+        if (dwg_dynapi_header_set_value (dwg, "DIMLUNIT", &dimlunit, 0)
         && dimlunit == dwg->header_vars.DIMLUNIT)
       {
         pass ("HEADER.DIMLUNIT [BS] set+1 %hu", dimlunit);
@@ -5757,7 +5757,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimlunit--;
-    dwg_dynapi_header_set_value (dwg, "DIMLUNIT", &dimlunit);
+    dwg_dynapi_header_set_value (dwg, "DIMLUNIT", &dimlunit, 0);
 
   }
   {
@@ -5773,7 +5773,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimdsep++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMDSEP", &dimdsep)
+        if (dwg_dynapi_header_set_value (dwg, "DIMDSEP", &dimdsep, 0)
         && dimdsep == dwg->header_vars.DIMDSEP)
       {
         pass ("HEADER.DIMDSEP [BS] set+1 %hu", dimdsep);
@@ -5785,7 +5785,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimdsep--;
-    dwg_dynapi_header_set_value (dwg, "DIMDSEP", &dimdsep);
+    dwg_dynapi_header_set_value (dwg, "DIMDSEP", &dimdsep, 0);
 
   }
   {
@@ -5801,7 +5801,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtmove++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMTMOVE", &dimtmove)
+        if (dwg_dynapi_header_set_value (dwg, "DIMTMOVE", &dimtmove, 0)
         && dimtmove == dwg->header_vars.DIMTMOVE)
       {
         pass ("HEADER.DIMTMOVE [BS] set+1 %hu", dimtmove);
@@ -5813,7 +5813,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtmove--;
-    dwg_dynapi_header_set_value (dwg, "DIMTMOVE", &dimtmove);
+    dwg_dynapi_header_set_value (dwg, "DIMTMOVE", &dimtmove, 0);
 
   }
   {
@@ -5829,7 +5829,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimaltz++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMALTZ", &dimaltz)
+        if (dwg_dynapi_header_set_value (dwg, "DIMALTZ", &dimaltz, 0)
         && dimaltz == dwg->header_vars.DIMALTZ)
       {
         pass ("HEADER.DIMALTZ [BS] set+1 %hu", dimaltz);
@@ -5841,7 +5841,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimaltz--;
-    dwg_dynapi_header_set_value (dwg, "DIMALTZ", &dimaltz);
+    dwg_dynapi_header_set_value (dwg, "DIMALTZ", &dimaltz, 0);
 
   }
   {
@@ -5857,7 +5857,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimalttz++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMALTTZ", &dimalttz)
+        if (dwg_dynapi_header_set_value (dwg, "DIMALTTZ", &dimalttz, 0)
         && dimalttz == dwg->header_vars.DIMALTTZ)
       {
         pass ("HEADER.DIMALTTZ [BS] set+1 %hu", dimalttz);
@@ -5869,7 +5869,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimalttz--;
-    dwg_dynapi_header_set_value (dwg, "DIMALTTZ", &dimalttz);
+    dwg_dynapi_header_set_value (dwg, "DIMALTTZ", &dimalttz, 0);
 
   }
   {
@@ -5885,7 +5885,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimatfit++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMATFIT", &dimatfit)
+        if (dwg_dynapi_header_set_value (dwg, "DIMATFIT", &dimatfit, 0)
         && dimatfit == dwg->header_vars.DIMATFIT)
       {
         pass ("HEADER.DIMATFIT [BS] set+1 %hu", dimatfit);
@@ -5897,7 +5897,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimatfit--;
-    dwg_dynapi_header_set_value (dwg, "DIMATFIT", &dimatfit);
+    dwg_dynapi_header_set_value (dwg, "DIMATFIT", &dimatfit, 0);
 
   }
   {
@@ -5913,7 +5913,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimfxlon++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMFXLON", &dimfxlon)
+        if (dwg_dynapi_header_set_value (dwg, "DIMFXLON", &dimfxlon, 0)
         && dimfxlon == dwg->header_vars.DIMFXLON)
       {
         pass ("HEADER.DIMFXLON [B] set+1 " FORMAT_B "", dimfxlon);
@@ -5925,7 +5925,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimfxlon--;
-    dwg_dynapi_header_set_value (dwg, "DIMFXLON", &dimfxlon);
+    dwg_dynapi_header_set_value (dwg, "DIMFXLON", &dimfxlon, 0);
 
   }
   {
@@ -5941,7 +5941,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtxtdirection++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMTXTDIRECTION", &dimtxtdirection)
+        if (dwg_dynapi_header_set_value (dwg, "DIMTXTDIRECTION", &dimtxtdirection, 0)
         && dimtxtdirection == dwg->header_vars.DIMTXTDIRECTION)
       {
         pass ("HEADER.DIMTXTDIRECTION [B] set+1 " FORMAT_B "", dimtxtdirection);
@@ -5953,7 +5953,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimtxtdirection--;
-    dwg_dynapi_header_set_value (dwg, "DIMTXTDIRECTION", &dimtxtdirection);
+    dwg_dynapi_header_set_value (dwg, "DIMTXTDIRECTION", &dimtxtdirection, 0);
 
   }
   {
@@ -5969,7 +5969,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimaltmzf++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMALTMZF", &dimaltmzf)
+        if (dwg_dynapi_header_set_value (dwg, "DIMALTMZF", &dimaltmzf, 0)
         && dimaltmzf == dwg->header_vars.DIMALTMZF)
       {
         pass ("HEADER.DIMALTMZF [BD] set+1 %g", dimaltmzf);
@@ -5981,7 +5981,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimaltmzf--;
-    dwg_dynapi_header_set_value (dwg, "DIMALTMZF", &dimaltmzf);
+    dwg_dynapi_header_set_value (dwg, "DIMALTMZF", &dimaltmzf, 0);
 
   }
   {
@@ -6011,7 +6011,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimmzf++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMMZF", &dimmzf)
+        if (dwg_dynapi_header_set_value (dwg, "DIMMZF", &dimmzf, 0)
         && dimmzf == dwg->header_vars.DIMMZF)
       {
         pass ("HEADER.DIMMZF [BD] set+1 %g", dimmzf);
@@ -6023,7 +6023,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimmzf--;
-    dwg_dynapi_header_set_value (dwg, "DIMMZF", &dimmzf);
+    dwg_dynapi_header_set_value (dwg, "DIMMZF", &dimmzf, 0);
 
   }
   {
@@ -6151,7 +6151,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimlwd++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMLWD", &dimlwd)
+        if (dwg_dynapi_header_set_value (dwg, "DIMLWD", &dimlwd, 0)
         && dimlwd == dwg->header_vars.DIMLWD)
       {
         pass ("HEADER.DIMLWD [BS] set+1 %hu", dimlwd);
@@ -6163,7 +6163,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimlwd--;
-    dwg_dynapi_header_set_value (dwg, "DIMLWD", &dimlwd);
+    dwg_dynapi_header_set_value (dwg, "DIMLWD", &dimlwd, 0);
 
   }
   {
@@ -6179,7 +6179,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimlwe++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMLWE", &dimlwe)
+        if (dwg_dynapi_header_set_value (dwg, "DIMLWE", &dimlwe, 0)
         && dimlwe == dwg->header_vars.DIMLWE)
       {
         pass ("HEADER.DIMLWE [BS] set+1 %hu", dimlwe);
@@ -6191,7 +6191,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimlwe--;
-    dwg_dynapi_header_set_value (dwg, "DIMLWE", &dimlwe);
+    dwg_dynapi_header_set_value (dwg, "DIMLWE", &dimlwe, 0);
 
   }
   {
@@ -6389,7 +6389,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     tstackalign++;
-    if (dwg_dynapi_header_set_value (dwg, "TSTACKALIGN", &tstackalign)
+        if (dwg_dynapi_header_set_value (dwg, "TSTACKALIGN", &tstackalign, 0)
         && tstackalign == dwg->header_vars.TSTACKALIGN)
       {
         pass ("HEADER.TSTACKALIGN [BS] set+1 %hu", tstackalign);
@@ -6401,7 +6401,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     tstackalign--;
-    dwg_dynapi_header_set_value (dwg, "TSTACKALIGN", &tstackalign);
+    dwg_dynapi_header_set_value (dwg, "TSTACKALIGN", &tstackalign, 0);
 
   }
   {
@@ -6417,7 +6417,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     tstacksize++;
-    if (dwg_dynapi_header_set_value (dwg, "TSTACKSIZE", &tstacksize)
+        if (dwg_dynapi_header_set_value (dwg, "TSTACKSIZE", &tstacksize, 0)
         && tstacksize == dwg->header_vars.TSTACKSIZE)
       {
         pass ("HEADER.TSTACKSIZE [BS] set+1 %hu", tstacksize);
@@ -6429,7 +6429,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     tstacksize--;
-    dwg_dynapi_header_set_value (dwg, "TSTACKSIZE", &tstacksize);
+    dwg_dynapi_header_set_value (dwg, "TSTACKSIZE", &tstacksize, 0);
 
   }
   {
@@ -6585,7 +6585,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     flags++;
-    if (dwg_dynapi_header_set_value (dwg, "FLAGS", &flags)
+        if (dwg_dynapi_header_set_value (dwg, "FLAGS", &flags, 0)
         && flags == dwg->header_vars.FLAGS)
       {
         pass ("HEADER.FLAGS [BL] set+1 %u", flags);
@@ -6597,7 +6597,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     flags--;
-    dwg_dynapi_header_set_value (dwg, "FLAGS", &flags);
+    dwg_dynapi_header_set_value (dwg, "FLAGS", &flags, 0);
 
   }
   {
@@ -6613,7 +6613,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     celweight++;
-    if (dwg_dynapi_header_set_value (dwg, "CELWEIGHT", &celweight)
+        if (dwg_dynapi_header_set_value (dwg, "CELWEIGHT", &celweight, 0)
         && celweight == dwg->header_vars.CELWEIGHT)
       {
         pass ("HEADER.CELWEIGHT [RC] set+1 %u", celweight);
@@ -6625,7 +6625,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     celweight--;
-    dwg_dynapi_header_set_value (dwg, "CELWEIGHT", &celweight);
+    dwg_dynapi_header_set_value (dwg, "CELWEIGHT", &celweight, 0);
 
   }
   {
@@ -6641,7 +6641,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     endcaps++;
-    if (dwg_dynapi_header_set_value (dwg, "ENDCAPS", &endcaps)
+        if (dwg_dynapi_header_set_value (dwg, "ENDCAPS", &endcaps, 0)
         && endcaps == dwg->header_vars.ENDCAPS)
       {
         pass ("HEADER.ENDCAPS [B] set+1 " FORMAT_B "", endcaps);
@@ -6653,7 +6653,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     endcaps--;
-    dwg_dynapi_header_set_value (dwg, "ENDCAPS", &endcaps);
+    dwg_dynapi_header_set_value (dwg, "ENDCAPS", &endcaps, 0);
 
   }
   {
@@ -6669,7 +6669,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     joinstyle++;
-    if (dwg_dynapi_header_set_value (dwg, "JOINSTYLE", &joinstyle)
+        if (dwg_dynapi_header_set_value (dwg, "JOINSTYLE", &joinstyle, 0)
         && joinstyle == dwg->header_vars.JOINSTYLE)
       {
         pass ("HEADER.JOINSTYLE [B] set+1 " FORMAT_B "", joinstyle);
@@ -6681,7 +6681,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     joinstyle--;
-    dwg_dynapi_header_set_value (dwg, "JOINSTYLE", &joinstyle);
+    dwg_dynapi_header_set_value (dwg, "JOINSTYLE", &joinstyle, 0);
 
   }
   {
@@ -6697,7 +6697,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     lwdisplay++;
-    if (dwg_dynapi_header_set_value (dwg, "LWDISPLAY", &lwdisplay)
+        if (dwg_dynapi_header_set_value (dwg, "LWDISPLAY", &lwdisplay, 0)
         && lwdisplay == dwg->header_vars.LWDISPLAY)
       {
         pass ("HEADER.LWDISPLAY [B] set+1 " FORMAT_B "", lwdisplay);
@@ -6709,7 +6709,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     lwdisplay--;
-    dwg_dynapi_header_set_value (dwg, "LWDISPLAY", &lwdisplay);
+    dwg_dynapi_header_set_value (dwg, "LWDISPLAY", &lwdisplay, 0);
 
   }
   {
@@ -6725,7 +6725,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     xedit++;
-    if (dwg_dynapi_header_set_value (dwg, "XEDIT", &xedit)
+        if (dwg_dynapi_header_set_value (dwg, "XEDIT", &xedit, 0)
         && xedit == dwg->header_vars.XEDIT)
       {
         pass ("HEADER.XEDIT [B] set+1 " FORMAT_B "", xedit);
@@ -6737,7 +6737,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     xedit--;
-    dwg_dynapi_header_set_value (dwg, "XEDIT", &xedit);
+    dwg_dynapi_header_set_value (dwg, "XEDIT", &xedit, 0);
 
   }
   {
@@ -6753,7 +6753,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     extnames++;
-    if (dwg_dynapi_header_set_value (dwg, "EXTNAMES", &extnames)
+        if (dwg_dynapi_header_set_value (dwg, "EXTNAMES", &extnames, 0)
         && extnames == dwg->header_vars.EXTNAMES)
       {
         pass ("HEADER.EXTNAMES [B] set+1 " FORMAT_B "", extnames);
@@ -6765,7 +6765,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     extnames--;
-    dwg_dynapi_header_set_value (dwg, "EXTNAMES", &extnames);
+    dwg_dynapi_header_set_value (dwg, "EXTNAMES", &extnames, 0);
 
   }
   {
@@ -6781,7 +6781,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     pstylemode++;
-    if (dwg_dynapi_header_set_value (dwg, "PSTYLEMODE", &pstylemode)
+        if (dwg_dynapi_header_set_value (dwg, "PSTYLEMODE", &pstylemode, 0)
         && pstylemode == dwg->header_vars.PSTYLEMODE)
       {
         pass ("HEADER.PSTYLEMODE [B] set+1 " FORMAT_B "", pstylemode);
@@ -6793,7 +6793,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     pstylemode--;
-    dwg_dynapi_header_set_value (dwg, "PSTYLEMODE", &pstylemode);
+    dwg_dynapi_header_set_value (dwg, "PSTYLEMODE", &pstylemode, 0);
 
   }
   {
@@ -6809,7 +6809,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     olestartup++;
-    if (dwg_dynapi_header_set_value (dwg, "OLESTARTUP", &olestartup)
+        if (dwg_dynapi_header_set_value (dwg, "OLESTARTUP", &olestartup, 0)
         && olestartup == dwg->header_vars.OLESTARTUP)
       {
         pass ("HEADER.OLESTARTUP [B] set+1 " FORMAT_B "", olestartup);
@@ -6821,7 +6821,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     olestartup--;
-    dwg_dynapi_header_set_value (dwg, "OLESTARTUP", &olestartup);
+    dwg_dynapi_header_set_value (dwg, "OLESTARTUP", &olestartup, 0);
 
   }
   {
@@ -6837,7 +6837,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     insunits++;
-    if (dwg_dynapi_header_set_value (dwg, "INSUNITS", &insunits)
+        if (dwg_dynapi_header_set_value (dwg, "INSUNITS", &insunits, 0)
         && insunits == dwg->header_vars.INSUNITS)
       {
         pass ("HEADER.INSUNITS [BS] set+1 %hu", insunits);
@@ -6849,7 +6849,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     insunits--;
-    dwg_dynapi_header_set_value (dwg, "INSUNITS", &insunits);
+    dwg_dynapi_header_set_value (dwg, "INSUNITS", &insunits, 0);
 
   }
   {
@@ -6865,7 +6865,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     cepsntype++;
-    if (dwg_dynapi_header_set_value (dwg, "CEPSNTYPE", &cepsntype)
+        if (dwg_dynapi_header_set_value (dwg, "CEPSNTYPE", &cepsntype, 0)
         && cepsntype == dwg->header_vars.CEPSNTYPE)
       {
         pass ("HEADER.CEPSNTYPE [BS] set+1 %hu", cepsntype);
@@ -6877,7 +6877,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     cepsntype--;
-    dwg_dynapi_header_set_value (dwg, "CEPSNTYPE", &cepsntype);
+    dwg_dynapi_header_set_value (dwg, "CEPSNTYPE", &cepsntype, 0);
 
   }
   {
@@ -6935,7 +6935,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     sortents++;
-    if (dwg_dynapi_header_set_value (dwg, "SORTENTS", &sortents)
+        if (dwg_dynapi_header_set_value (dwg, "SORTENTS", &sortents, 0)
         && sortents == dwg->header_vars.SORTENTS)
       {
         pass ("HEADER.SORTENTS [RC] set+1 %u", sortents);
@@ -6947,7 +6947,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     sortents--;
-    dwg_dynapi_header_set_value (dwg, "SORTENTS", &sortents);
+    dwg_dynapi_header_set_value (dwg, "SORTENTS", &sortents, 0);
 
   }
   {
@@ -6963,7 +6963,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     indexctl++;
-    if (dwg_dynapi_header_set_value (dwg, "INDEXCTL", &indexctl)
+        if (dwg_dynapi_header_set_value (dwg, "INDEXCTL", &indexctl, 0)
         && indexctl == dwg->header_vars.INDEXCTL)
       {
         pass ("HEADER.INDEXCTL [RC] set+1 %u", indexctl);
@@ -6975,7 +6975,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     indexctl--;
-    dwg_dynapi_header_set_value (dwg, "INDEXCTL", &indexctl);
+    dwg_dynapi_header_set_value (dwg, "INDEXCTL", &indexctl, 0);
 
   }
   {
@@ -6991,7 +6991,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     hidetext++;
-    if (dwg_dynapi_header_set_value (dwg, "HIDETEXT", &hidetext)
+        if (dwg_dynapi_header_set_value (dwg, "HIDETEXT", &hidetext, 0)
         && hidetext == dwg->header_vars.HIDETEXT)
       {
         pass ("HEADER.HIDETEXT [RC] set+1 %u", hidetext);
@@ -7003,7 +7003,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     hidetext--;
-    dwg_dynapi_header_set_value (dwg, "HIDETEXT", &hidetext);
+    dwg_dynapi_header_set_value (dwg, "HIDETEXT", &hidetext, 0);
 
   }
   {
@@ -7019,7 +7019,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     xclipframe++;
-    if (dwg_dynapi_header_set_value (dwg, "XCLIPFRAME", &xclipframe)
+        if (dwg_dynapi_header_set_value (dwg, "XCLIPFRAME", &xclipframe, 0)
         && xclipframe == dwg->header_vars.XCLIPFRAME)
       {
         pass ("HEADER.XCLIPFRAME [RC] set+1 %u", xclipframe);
@@ -7031,7 +7031,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     xclipframe--;
-    dwg_dynapi_header_set_value (dwg, "XCLIPFRAME", &xclipframe);
+    dwg_dynapi_header_set_value (dwg, "XCLIPFRAME", &xclipframe, 0);
 
   }
   {
@@ -7047,7 +7047,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimassoc++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMASSOC", &dimassoc)
+        if (dwg_dynapi_header_set_value (dwg, "DIMASSOC", &dimassoc, 0)
         && dimassoc == dwg->header_vars.DIMASSOC)
       {
         pass ("HEADER.DIMASSOC [RC] set+1 %u", dimassoc);
@@ -7059,7 +7059,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dimassoc--;
-    dwg_dynapi_header_set_value (dwg, "DIMASSOC", &dimassoc);
+    dwg_dynapi_header_set_value (dwg, "DIMASSOC", &dimassoc, 0);
 
   }
   {
@@ -7075,7 +7075,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     halogap++;
-    if (dwg_dynapi_header_set_value (dwg, "HALOGAP", &halogap)
+        if (dwg_dynapi_header_set_value (dwg, "HALOGAP", &halogap, 0)
         && halogap == dwg->header_vars.HALOGAP)
       {
         pass ("HEADER.HALOGAP [RC] set+1 %u", halogap);
@@ -7087,7 +7087,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     halogap--;
-    dwg_dynapi_header_set_value (dwg, "HALOGAP", &halogap);
+    dwg_dynapi_header_set_value (dwg, "HALOGAP", &halogap, 0);
 
   }
   {
@@ -7103,7 +7103,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     obscolor++;
-    if (dwg_dynapi_header_set_value (dwg, "OBSCOLOR", &obscolor)
+        if (dwg_dynapi_header_set_value (dwg, "OBSCOLOR", &obscolor, 0)
         && obscolor == dwg->header_vars.OBSCOLOR)
       {
         pass ("HEADER.OBSCOLOR [BS] set+1 %hu", obscolor);
@@ -7115,7 +7115,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     obscolor--;
-    dwg_dynapi_header_set_value (dwg, "OBSCOLOR", &obscolor);
+    dwg_dynapi_header_set_value (dwg, "OBSCOLOR", &obscolor, 0);
 
   }
   {
@@ -7131,7 +7131,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     intersectioncolor++;
-    if (dwg_dynapi_header_set_value (dwg, "INTERSECTIONCOLOR", &intersectioncolor)
+        if (dwg_dynapi_header_set_value (dwg, "INTERSECTIONCOLOR", &intersectioncolor, 0)
         && intersectioncolor == dwg->header_vars.INTERSECTIONCOLOR)
       {
         pass ("HEADER.INTERSECTIONCOLOR [BS] set+1 %hu", intersectioncolor);
@@ -7143,7 +7143,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     intersectioncolor--;
-    dwg_dynapi_header_set_value (dwg, "INTERSECTIONCOLOR", &intersectioncolor);
+    dwg_dynapi_header_set_value (dwg, "INTERSECTIONCOLOR", &intersectioncolor, 0);
 
   }
   {
@@ -7159,7 +7159,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     obsltype++;
-    if (dwg_dynapi_header_set_value (dwg, "OBSLTYPE", &obsltype)
+        if (dwg_dynapi_header_set_value (dwg, "OBSLTYPE", &obsltype, 0)
         && obsltype == dwg->header_vars.OBSLTYPE)
       {
         pass ("HEADER.OBSLTYPE [RC] set+1 %u", obsltype);
@@ -7171,7 +7171,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     obsltype--;
-    dwg_dynapi_header_set_value (dwg, "OBSLTYPE", &obsltype);
+    dwg_dynapi_header_set_value (dwg, "OBSLTYPE", &obsltype, 0);
 
   }
   {
@@ -7187,7 +7187,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     intersectiondisplay++;
-    if (dwg_dynapi_header_set_value (dwg, "INTERSECTIONDISPLAY", &intersectiondisplay)
+        if (dwg_dynapi_header_set_value (dwg, "INTERSECTIONDISPLAY", &intersectiondisplay, 0)
         && intersectiondisplay == dwg->header_vars.INTERSECTIONDISPLAY)
       {
         pass ("HEADER.INTERSECTIONDISPLAY [RC] set+1 %u", intersectiondisplay);
@@ -7199,7 +7199,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     intersectiondisplay--;
-    dwg_dynapi_header_set_value (dwg, "INTERSECTIONDISPLAY", &intersectiondisplay);
+    dwg_dynapi_header_set_value (dwg, "INTERSECTIONDISPLAY", &intersectiondisplay, 0);
 
   }
   {
@@ -7299,7 +7299,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     cameradisplay++;
-    if (dwg_dynapi_header_set_value (dwg, "CAMERADISPLAY", &cameradisplay)
+        if (dwg_dynapi_header_set_value (dwg, "CAMERADISPLAY", &cameradisplay, 0)
         && cameradisplay == dwg->header_vars.CAMERADISPLAY)
       {
         pass ("HEADER.CAMERADISPLAY [B] set+1 " FORMAT_B "", cameradisplay);
@@ -7311,7 +7311,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     cameradisplay--;
-    dwg_dynapi_header_set_value (dwg, "CAMERADISPLAY", &cameradisplay);
+    dwg_dynapi_header_set_value (dwg, "CAMERADISPLAY", &cameradisplay, 0);
 
   }
   {
@@ -7327,7 +7327,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_21++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_21", &unknown_21)
+        if (dwg_dynapi_header_set_value (dwg, "unknown_21", &unknown_21, 0)
         && unknown_21 == dwg->header_vars.unknown_21)
       {
         pass ("HEADER.unknown_21 [BL] set+1 %u", unknown_21);
@@ -7339,7 +7339,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_21--;
-    dwg_dynapi_header_set_value (dwg, "unknown_21", &unknown_21);
+    dwg_dynapi_header_set_value (dwg, "unknown_21", &unknown_21, 0);
 
   }
   {
@@ -7355,7 +7355,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_22++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_22", &unknown_22)
+        if (dwg_dynapi_header_set_value (dwg, "unknown_22", &unknown_22, 0)
         && unknown_22 == dwg->header_vars.unknown_22)
       {
         pass ("HEADER.unknown_22 [BL] set+1 %u", unknown_22);
@@ -7367,7 +7367,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_22--;
-    dwg_dynapi_header_set_value (dwg, "unknown_22", &unknown_22);
+    dwg_dynapi_header_set_value (dwg, "unknown_22", &unknown_22, 0);
 
   }
   {
@@ -7383,7 +7383,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_23++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_23", &unknown_23)
+        if (dwg_dynapi_header_set_value (dwg, "unknown_23", &unknown_23, 0)
         && unknown_23 == dwg->header_vars.unknown_23)
       {
         pass ("HEADER.unknown_23 [BD] set+1 %g", unknown_23);
@@ -7395,7 +7395,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_23--;
-    dwg_dynapi_header_set_value (dwg, "unknown_23", &unknown_23);
+    dwg_dynapi_header_set_value (dwg, "unknown_23", &unknown_23, 0);
 
   }
   {
@@ -7411,7 +7411,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     stepspersec++;
-    if (dwg_dynapi_header_set_value (dwg, "STEPSPERSEC", &stepspersec)
+        if (dwg_dynapi_header_set_value (dwg, "STEPSPERSEC", &stepspersec, 0)
         && stepspersec == dwg->header_vars.STEPSPERSEC)
       {
         pass ("HEADER.STEPSPERSEC [BD] set+1 %g", stepspersec);
@@ -7423,7 +7423,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     stepspersec--;
-    dwg_dynapi_header_set_value (dwg, "STEPSPERSEC", &stepspersec);
+    dwg_dynapi_header_set_value (dwg, "STEPSPERSEC", &stepspersec, 0);
 
   }
   {
@@ -7439,7 +7439,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     stepsize++;
-    if (dwg_dynapi_header_set_value (dwg, "STEPSIZE", &stepsize)
+        if (dwg_dynapi_header_set_value (dwg, "STEPSIZE", &stepsize, 0)
         && stepsize == dwg->header_vars.STEPSIZE)
       {
         pass ("HEADER.STEPSIZE [BD] set+1 %g", stepsize);
@@ -7451,7 +7451,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     stepsize--;
-    dwg_dynapi_header_set_value (dwg, "STEPSIZE", &stepsize);
+    dwg_dynapi_header_set_value (dwg, "STEPSIZE", &stepsize, 0);
 
   }
   {
@@ -7467,7 +7467,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     _3ddwfprec++;
-    if (dwg_dynapi_header_set_value (dwg, "_3DDWFPREC", &_3ddwfprec)
+        if (dwg_dynapi_header_set_value (dwg, "_3DDWFPREC", &_3ddwfprec, 0)
         && _3ddwfprec == dwg->header_vars._3DDWFPREC)
       {
         pass ("HEADER._3DDWFPREC [BD] set+1 %g", _3ddwfprec);
@@ -7479,7 +7479,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     _3ddwfprec--;
-    dwg_dynapi_header_set_value (dwg, "_3DDWFPREC", &_3ddwfprec);
+    dwg_dynapi_header_set_value (dwg, "_3DDWFPREC", &_3ddwfprec, 0);
 
   }
   {
@@ -7495,7 +7495,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     lenslength++;
-    if (dwg_dynapi_header_set_value (dwg, "LENSLENGTH", &lenslength)
+        if (dwg_dynapi_header_set_value (dwg, "LENSLENGTH", &lenslength, 0)
         && lenslength == dwg->header_vars.LENSLENGTH)
       {
         pass ("HEADER.LENSLENGTH [BD] set+1 %g", lenslength);
@@ -7507,7 +7507,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     lenslength--;
-    dwg_dynapi_header_set_value (dwg, "LENSLENGTH", &lenslength);
+    dwg_dynapi_header_set_value (dwg, "LENSLENGTH", &lenslength, 0);
 
   }
   {
@@ -7523,7 +7523,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     cameraheight++;
-    if (dwg_dynapi_header_set_value (dwg, "CAMERAHEIGHT", &cameraheight)
+        if (dwg_dynapi_header_set_value (dwg, "CAMERAHEIGHT", &cameraheight, 0)
         && cameraheight == dwg->header_vars.CAMERAHEIGHT)
       {
         pass ("HEADER.CAMERAHEIGHT [BD] set+1 %g", cameraheight);
@@ -7535,7 +7535,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     cameraheight--;
-    dwg_dynapi_header_set_value (dwg, "CAMERAHEIGHT", &cameraheight);
+    dwg_dynapi_header_set_value (dwg, "CAMERAHEIGHT", &cameraheight, 0);
 
   }
   {
@@ -7551,7 +7551,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     solidhist++;
-    if (dwg_dynapi_header_set_value (dwg, "SOLIDHIST", &solidhist)
+        if (dwg_dynapi_header_set_value (dwg, "SOLIDHIST", &solidhist, 0)
         && solidhist == dwg->header_vars.SOLIDHIST)
       {
         pass ("HEADER.SOLIDHIST [RC] set+1 %u", solidhist);
@@ -7563,7 +7563,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     solidhist--;
-    dwg_dynapi_header_set_value (dwg, "SOLIDHIST", &solidhist);
+    dwg_dynapi_header_set_value (dwg, "SOLIDHIST", &solidhist, 0);
 
   }
   {
@@ -7579,7 +7579,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     showhist++;
-    if (dwg_dynapi_header_set_value (dwg, "SHOWHIST", &showhist)
+        if (dwg_dynapi_header_set_value (dwg, "SHOWHIST", &showhist, 0)
         && showhist == dwg->header_vars.SHOWHIST)
       {
         pass ("HEADER.SHOWHIST [RC] set+1 %u", showhist);
@@ -7591,7 +7591,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     showhist--;
-    dwg_dynapi_header_set_value (dwg, "SHOWHIST", &showhist);
+    dwg_dynapi_header_set_value (dwg, "SHOWHIST", &showhist, 0);
 
   }
   {
@@ -7607,7 +7607,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     psolwidth++;
-    if (dwg_dynapi_header_set_value (dwg, "PSOLWIDTH", &psolwidth)
+        if (dwg_dynapi_header_set_value (dwg, "PSOLWIDTH", &psolwidth, 0)
         && psolwidth == dwg->header_vars.PSOLWIDTH)
       {
         pass ("HEADER.PSOLWIDTH [BD] set+1 %g", psolwidth);
@@ -7619,7 +7619,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     psolwidth--;
-    dwg_dynapi_header_set_value (dwg, "PSOLWIDTH", &psolwidth);
+    dwg_dynapi_header_set_value (dwg, "PSOLWIDTH", &psolwidth, 0);
 
   }
   {
@@ -7635,7 +7635,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     psolheight++;
-    if (dwg_dynapi_header_set_value (dwg, "PSOLHEIGHT", &psolheight)
+        if (dwg_dynapi_header_set_value (dwg, "PSOLHEIGHT", &psolheight, 0)
         && psolheight == dwg->header_vars.PSOLHEIGHT)
       {
         pass ("HEADER.PSOLHEIGHT [BD] set+1 %g", psolheight);
@@ -7647,7 +7647,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     psolheight--;
-    dwg_dynapi_header_set_value (dwg, "PSOLHEIGHT", &psolheight);
+    dwg_dynapi_header_set_value (dwg, "PSOLHEIGHT", &psolheight, 0);
 
   }
   {
@@ -7663,7 +7663,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     loftang1++;
-    if (dwg_dynapi_header_set_value (dwg, "LOFTANG1", &loftang1)
+        if (dwg_dynapi_header_set_value (dwg, "LOFTANG1", &loftang1, 0)
         && loftang1 == dwg->header_vars.LOFTANG1)
       {
         pass ("HEADER.LOFTANG1 [BD] set+1 %g", loftang1);
@@ -7675,7 +7675,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     loftang1--;
-    dwg_dynapi_header_set_value (dwg, "LOFTANG1", &loftang1);
+    dwg_dynapi_header_set_value (dwg, "LOFTANG1", &loftang1, 0);
 
   }
   {
@@ -7691,7 +7691,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     loftang2++;
-    if (dwg_dynapi_header_set_value (dwg, "LOFTANG2", &loftang2)
+        if (dwg_dynapi_header_set_value (dwg, "LOFTANG2", &loftang2, 0)
         && loftang2 == dwg->header_vars.LOFTANG2)
       {
         pass ("HEADER.LOFTANG2 [BD] set+1 %g", loftang2);
@@ -7703,7 +7703,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     loftang2--;
-    dwg_dynapi_header_set_value (dwg, "LOFTANG2", &loftang2);
+    dwg_dynapi_header_set_value (dwg, "LOFTANG2", &loftang2, 0);
 
   }
   {
@@ -7719,7 +7719,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     loftmag1++;
-    if (dwg_dynapi_header_set_value (dwg, "LOFTMAG1", &loftmag1)
+        if (dwg_dynapi_header_set_value (dwg, "LOFTMAG1", &loftmag1, 0)
         && loftmag1 == dwg->header_vars.LOFTMAG1)
       {
         pass ("HEADER.LOFTMAG1 [BD] set+1 %g", loftmag1);
@@ -7731,7 +7731,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     loftmag1--;
-    dwg_dynapi_header_set_value (dwg, "LOFTMAG1", &loftmag1);
+    dwg_dynapi_header_set_value (dwg, "LOFTMAG1", &loftmag1, 0);
 
   }
   {
@@ -7747,7 +7747,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     loftmag2++;
-    if (dwg_dynapi_header_set_value (dwg, "LOFTMAG2", &loftmag2)
+        if (dwg_dynapi_header_set_value (dwg, "LOFTMAG2", &loftmag2, 0)
         && loftmag2 == dwg->header_vars.LOFTMAG2)
       {
         pass ("HEADER.LOFTMAG2 [BD] set+1 %g", loftmag2);
@@ -7759,7 +7759,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     loftmag2--;
-    dwg_dynapi_header_set_value (dwg, "LOFTMAG2", &loftmag2);
+    dwg_dynapi_header_set_value (dwg, "LOFTMAG2", &loftmag2, 0);
 
   }
   {
@@ -7775,7 +7775,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     loftparam++;
-    if (dwg_dynapi_header_set_value (dwg, "LOFTPARAM", &loftparam)
+        if (dwg_dynapi_header_set_value (dwg, "LOFTPARAM", &loftparam, 0)
         && loftparam == dwg->header_vars.LOFTPARAM)
       {
         pass ("HEADER.LOFTPARAM [BS] set+1 %hu", loftparam);
@@ -7787,7 +7787,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     loftparam--;
-    dwg_dynapi_header_set_value (dwg, "LOFTPARAM", &loftparam);
+    dwg_dynapi_header_set_value (dwg, "LOFTPARAM", &loftparam, 0);
 
   }
   {
@@ -7803,7 +7803,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     loftnormals++;
-    if (dwg_dynapi_header_set_value (dwg, "LOFTNORMALS", &loftnormals)
+        if (dwg_dynapi_header_set_value (dwg, "LOFTNORMALS", &loftnormals, 0)
         && loftnormals == dwg->header_vars.LOFTNORMALS)
       {
         pass ("HEADER.LOFTNORMALS [RC] set+1 %u", loftnormals);
@@ -7815,7 +7815,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     loftnormals--;
-    dwg_dynapi_header_set_value (dwg, "LOFTNORMALS", &loftnormals);
+    dwg_dynapi_header_set_value (dwg, "LOFTNORMALS", &loftnormals, 0);
 
   }
   {
@@ -7831,7 +7831,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     latitude++;
-    if (dwg_dynapi_header_set_value (dwg, "LATITUDE", &latitude)
+        if (dwg_dynapi_header_set_value (dwg, "LATITUDE", &latitude, 0)
         && latitude == dwg->header_vars.LATITUDE)
       {
         pass ("HEADER.LATITUDE [BD] set+1 %g", latitude);
@@ -7843,7 +7843,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     latitude--;
-    dwg_dynapi_header_set_value (dwg, "LATITUDE", &latitude);
+    dwg_dynapi_header_set_value (dwg, "LATITUDE", &latitude, 0);
 
   }
   {
@@ -7859,7 +7859,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     longitude++;
-    if (dwg_dynapi_header_set_value (dwg, "LONGITUDE", &longitude)
+        if (dwg_dynapi_header_set_value (dwg, "LONGITUDE", &longitude, 0)
         && longitude == dwg->header_vars.LONGITUDE)
       {
         pass ("HEADER.LONGITUDE [BD] set+1 %g", longitude);
@@ -7871,7 +7871,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     longitude--;
-    dwg_dynapi_header_set_value (dwg, "LONGITUDE", &longitude);
+    dwg_dynapi_header_set_value (dwg, "LONGITUDE", &longitude, 0);
 
   }
   {
@@ -7887,7 +7887,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     northdirection++;
-    if (dwg_dynapi_header_set_value (dwg, "NORTHDIRECTION", &northdirection)
+        if (dwg_dynapi_header_set_value (dwg, "NORTHDIRECTION", &northdirection, 0)
         && northdirection == dwg->header_vars.NORTHDIRECTION)
       {
         pass ("HEADER.NORTHDIRECTION [BD] set+1 %g", northdirection);
@@ -7899,7 +7899,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     northdirection--;
-    dwg_dynapi_header_set_value (dwg, "NORTHDIRECTION", &northdirection);
+    dwg_dynapi_header_set_value (dwg, "NORTHDIRECTION", &northdirection, 0);
 
   }
   {
@@ -7915,7 +7915,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     timezone++;
-    if (dwg_dynapi_header_set_value (dwg, "TIMEZONE", &timezone)
+        if (dwg_dynapi_header_set_value (dwg, "TIMEZONE", &timezone, 0)
         && timezone == dwg->header_vars.TIMEZONE)
       {
         pass ("HEADER.TIMEZONE [BL] set+1 %u", timezone);
@@ -7927,7 +7927,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     timezone--;
-    dwg_dynapi_header_set_value (dwg, "TIMEZONE", &timezone);
+    dwg_dynapi_header_set_value (dwg, "TIMEZONE", &timezone, 0);
 
   }
   {
@@ -7943,7 +7943,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     lightglyphdisplay++;
-    if (dwg_dynapi_header_set_value (dwg, "LIGHTGLYPHDISPLAY", &lightglyphdisplay)
+        if (dwg_dynapi_header_set_value (dwg, "LIGHTGLYPHDISPLAY", &lightglyphdisplay, 0)
         && lightglyphdisplay == dwg->header_vars.LIGHTGLYPHDISPLAY)
       {
         pass ("HEADER.LIGHTGLYPHDISPLAY [RC] set+1 %u", lightglyphdisplay);
@@ -7955,7 +7955,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     lightglyphdisplay--;
-    dwg_dynapi_header_set_value (dwg, "LIGHTGLYPHDISPLAY", &lightglyphdisplay);
+    dwg_dynapi_header_set_value (dwg, "LIGHTGLYPHDISPLAY", &lightglyphdisplay, 0);
 
   }
   {
@@ -7971,7 +7971,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     tilemodelightsynch++;
-    if (dwg_dynapi_header_set_value (dwg, "TILEMODELIGHTSYNCH", &tilemodelightsynch)
+        if (dwg_dynapi_header_set_value (dwg, "TILEMODELIGHTSYNCH", &tilemodelightsynch, 0)
         && tilemodelightsynch == dwg->header_vars.TILEMODELIGHTSYNCH)
       {
         pass ("HEADER.TILEMODELIGHTSYNCH [RC] set+1 %u", tilemodelightsynch);
@@ -7983,7 +7983,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     tilemodelightsynch--;
-    dwg_dynapi_header_set_value (dwg, "TILEMODELIGHTSYNCH", &tilemodelightsynch);
+    dwg_dynapi_header_set_value (dwg, "TILEMODELIGHTSYNCH", &tilemodelightsynch, 0);
 
   }
   {
@@ -7999,7 +7999,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dwfframe++;
-    if (dwg_dynapi_header_set_value (dwg, "DWFFRAME", &dwfframe)
+        if (dwg_dynapi_header_set_value (dwg, "DWFFRAME", &dwfframe, 0)
         && dwfframe == dwg->header_vars.DWFFRAME)
       {
         pass ("HEADER.DWFFRAME [RC] set+1 %u", dwfframe);
@@ -8011,7 +8011,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dwfframe--;
-    dwg_dynapi_header_set_value (dwg, "DWFFRAME", &dwfframe);
+    dwg_dynapi_header_set_value (dwg, "DWFFRAME", &dwfframe, 0);
 
   }
   {
@@ -8027,7 +8027,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dgnframe++;
-    if (dwg_dynapi_header_set_value (dwg, "DGNFRAME", &dgnframe)
+        if (dwg_dynapi_header_set_value (dwg, "DGNFRAME", &dgnframe, 0)
         && dgnframe == dwg->header_vars.DGNFRAME)
       {
         pass ("HEADER.DGNFRAME [RC] set+1 %u", dgnframe);
@@ -8039,7 +8039,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     dgnframe--;
-    dwg_dynapi_header_set_value (dwg, "DGNFRAME", &dgnframe);
+    dwg_dynapi_header_set_value (dwg, "DGNFRAME", &dgnframe, 0);
 
   }
   {
@@ -8055,7 +8055,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     realworldscale++;
-    if (dwg_dynapi_header_set_value (dwg, "REALWORLDSCALE", &realworldscale)
+        if (dwg_dynapi_header_set_value (dwg, "REALWORLDSCALE", &realworldscale, 0)
         && realworldscale == dwg->header_vars.REALWORLDSCALE)
       {
         pass ("HEADER.REALWORLDSCALE [B] set+1 " FORMAT_B "", realworldscale);
@@ -8067,7 +8067,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     realworldscale--;
-    dwg_dynapi_header_set_value (dwg, "REALWORLDSCALE", &realworldscale);
+    dwg_dynapi_header_set_value (dwg, "REALWORLDSCALE", &realworldscale, 0);
 
   }
   {
@@ -8139,7 +8139,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     cshadow++;
-    if (dwg_dynapi_header_set_value (dwg, "CSHADOW", &cshadow)
+        if (dwg_dynapi_header_set_value (dwg, "CSHADOW", &cshadow, 0)
         && cshadow == dwg->header_vars.CSHADOW)
       {
         pass ("HEADER.CSHADOW [RC] set+1 %u", cshadow);
@@ -8151,7 +8151,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     cshadow--;
-    dwg_dynapi_header_set_value (dwg, "CSHADOW", &cshadow);
+    dwg_dynapi_header_set_value (dwg, "CSHADOW", &cshadow, 0);
 
   }
   {
@@ -8167,7 +8167,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     shadowplanelocation++;
-    if (dwg_dynapi_header_set_value (dwg, "SHADOWPLANELOCATION", &shadowplanelocation)
+        if (dwg_dynapi_header_set_value (dwg, "SHADOWPLANELOCATION", &shadowplanelocation, 0)
         && shadowplanelocation == dwg->header_vars.SHADOWPLANELOCATION)
       {
         pass ("HEADER.SHADOWPLANELOCATION [BD] set+1 %g", shadowplanelocation);
@@ -8179,7 +8179,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     shadowplanelocation--;
-    dwg_dynapi_header_set_value (dwg, "SHADOWPLANELOCATION", &shadowplanelocation);
+    dwg_dynapi_header_set_value (dwg, "SHADOWPLANELOCATION", &shadowplanelocation, 0);
 
   }
   {
@@ -8195,7 +8195,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_54++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_54", &unknown_54)
+        if (dwg_dynapi_header_set_value (dwg, "unknown_54", &unknown_54, 0)
         && unknown_54 == dwg->header_vars.unknown_54)
       {
         pass ("HEADER.unknown_54 [BS] set+1 %hu", unknown_54);
@@ -8207,7 +8207,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_54--;
-    dwg_dynapi_header_set_value (dwg, "unknown_54", &unknown_54);
+    dwg_dynapi_header_set_value (dwg, "unknown_54", &unknown_54, 0);
 
   }
   {
@@ -8223,7 +8223,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_55++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_55", &unknown_55)
+        if (dwg_dynapi_header_set_value (dwg, "unknown_55", &unknown_55, 0)
         && unknown_55 == dwg->header_vars.unknown_55)
       {
         pass ("HEADER.unknown_55 [BS] set+1 %hu", unknown_55);
@@ -8235,7 +8235,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_55--;
-    dwg_dynapi_header_set_value (dwg, "unknown_55", &unknown_55);
+    dwg_dynapi_header_set_value (dwg, "unknown_55", &unknown_55, 0);
 
   }
   {
@@ -8251,7 +8251,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_56++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_56", &unknown_56)
+        if (dwg_dynapi_header_set_value (dwg, "unknown_56", &unknown_56, 0)
         && unknown_56 == dwg->header_vars.unknown_56)
       {
         pass ("HEADER.unknown_56 [BS] set+1 %hu", unknown_56);
@@ -8263,7 +8263,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_56--;
-    dwg_dynapi_header_set_value (dwg, "unknown_56", &unknown_56);
+    dwg_dynapi_header_set_value (dwg, "unknown_56", &unknown_56, 0);
 
   }
   {
@@ -8279,7 +8279,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_57++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_57", &unknown_57)
+        if (dwg_dynapi_header_set_value (dwg, "unknown_57", &unknown_57, 0)
         && unknown_57 == dwg->header_vars.unknown_57)
       {
         pass ("HEADER.unknown_57 [BS] set+1 %hu", unknown_57);
@@ -8291,7 +8291,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     unknown_57--;
-    dwg_dynapi_header_set_value (dwg, "unknown_57", &unknown_57);
+    dwg_dynapi_header_set_value (dwg, "unknown_57", &unknown_57, 0);
 
   }
   {
@@ -8307,7 +8307,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     crc++;
-    if (dwg_dynapi_header_set_value (dwg, "crc", &crc)
+        if (dwg_dynapi_header_set_value (dwg, "crc", &crc, 0)
         && crc == dwg->header_vars.crc)
       {
         pass ("HEADER.crc [RS] set+1 %hu", crc);
@@ -8319,7 +8319,7 @@ test_header (const Dwg_Data *dwg)
         error++;
       }
     crc--;
-    dwg_dynapi_header_set_value (dwg, "crc", &crc);
+    dwg_dynapi_header_set_value (dwg, "crc", &crc, 0);
 
   }
 #line 49 "dynapi_test.c.in"
@@ -8398,7 +8398,7 @@ static int test__3DFACE (const Dwg_Object *obj)
         error++;
       }
     has_no_flags++;
-    if (dwg_dynapi_entity_set_value (_3dface, "3DFACE", "has_no_flags", &has_no_flags)
+      if (dwg_dynapi_entity_set_value (_3dface, "3DFACE", "has_no_flags", &has_no_flags, 0)
         && has_no_flags == _3dface->has_no_flags)
       {
         pass ("3DFACE.has_no_flags [B] set+1 " FORMAT_B "", has_no_flags);
@@ -8424,7 +8424,7 @@ static int test__3DFACE (const Dwg_Object *obj)
         error++;
       }
     invis_flags++;
-    if (dwg_dynapi_entity_set_value (_3dface, "3DFACE", "invis_flags", &invis_flags)
+      if (dwg_dynapi_entity_set_value (_3dface, "3DFACE", "invis_flags", &invis_flags, 0)
         && invis_flags == _3dface->invis_flags)
       {
         pass ("3DFACE.invis_flags [BS] set+1 %hu", invis_flags);
@@ -8463,7 +8463,7 @@ static int test__3DFACE (const Dwg_Object *obj)
         error++;
       }
     z_is_zero++;
-    if (dwg_dynapi_entity_set_value (_3dface, "3DFACE", "z_is_zero", &z_is_zero)
+      if (dwg_dynapi_entity_set_value (_3dface, "3DFACE", "z_is_zero", &z_is_zero, 0)
         && z_is_zero == _3dface->z_is_zero)
       {
         pass ("3DFACE.z_is_zero [B] set+1 " FORMAT_B "", z_is_zero);
@@ -8509,7 +8509,7 @@ static int test__3DSOLID (const Dwg_Object *obj)
         error++;
       }
     acis_empty++;
-    if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "acis_empty", &acis_empty)
+      if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "acis_empty", &acis_empty, 0)
         && acis_empty == _3dsolid->acis_empty)
       {
         pass ("3DSOLID.acis_empty [B] set+1 " FORMAT_B "", acis_empty);
@@ -8535,7 +8535,7 @@ static int test__3DSOLID (const Dwg_Object *obj)
         error++;
       }
     acis_empty2++;
-    if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "acis_empty2", &acis_empty2)
+      if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "acis_empty2", &acis_empty2, 0)
         && acis_empty2 == _3dsolid->acis_empty2)
       {
         pass ("3DSOLID.acis_empty2 [B] set+1 " FORMAT_B "", acis_empty2);
@@ -8561,7 +8561,7 @@ static int test__3DSOLID (const Dwg_Object *obj)
         error++;
       }
     acis_empty_bit++;
-    if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "acis_empty_bit", &acis_empty_bit)
+      if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "acis_empty_bit", &acis_empty_bit, 0)
         && acis_empty_bit == _3dsolid->acis_empty_bit)
       {
         pass ("3DSOLID.acis_empty_bit [B] set+1 " FORMAT_B "", acis_empty_bit);
@@ -8641,7 +8641,7 @@ static int test__3DSOLID (const Dwg_Object *obj)
         error++;
       }
     isoline_present++;
-    if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "isoline_present", &isoline_present)
+      if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "isoline_present", &isoline_present, 0)
         && isoline_present == _3dsolid->isoline_present)
       {
         pass ("3DSOLID.isoline_present [B] set+1 " FORMAT_B "", isoline_present);
@@ -8667,7 +8667,7 @@ static int test__3DSOLID (const Dwg_Object *obj)
         error++;
       }
     num_blocks++;
-    if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "num_blocks", &num_blocks)
+      if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "num_blocks", &num_blocks, 0)
         && num_blocks == _3dsolid->num_blocks)
       {
         pass ("3DSOLID.num_blocks [BL] set+1 %u", num_blocks);
@@ -8693,7 +8693,7 @@ static int test__3DSOLID (const Dwg_Object *obj)
         error++;
       }
     num_isolines++;
-    if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "num_isolines", &num_isolines)
+      if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "num_isolines", &num_isolines, 0)
         && num_isolines == _3dsolid->num_isolines)
       {
         pass ("3DSOLID.num_isolines [BL] set+1 %u", num_isolines);
@@ -8719,7 +8719,7 @@ static int test__3DSOLID (const Dwg_Object *obj)
         error++;
       }
     num_silhouettes++;
-    if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "num_silhouettes", &num_silhouettes)
+      if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "num_silhouettes", &num_silhouettes, 0)
         && num_silhouettes == _3dsolid->num_silhouettes)
       {
         pass ("3DSOLID.num_silhouettes [BL] set+1 %u", num_silhouettes);
@@ -8745,7 +8745,7 @@ static int test__3DSOLID (const Dwg_Object *obj)
         error++;
       }
     num_wires++;
-    if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "num_wires", &num_wires)
+      if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "num_wires", &num_wires, 0)
         && num_wires == _3dsolid->num_wires)
       {
         pass ("3DSOLID.num_wires [BL] set+1 %u", num_wires);
@@ -8797,7 +8797,7 @@ static int test__3DSOLID (const Dwg_Object *obj)
         error++;
       }
     point_present++;
-    if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "point_present", &point_present)
+      if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "point_present", &point_present, 0)
         && point_present == _3dsolid->point_present)
       {
         pass ("3DSOLID.point_present [B] set+1 " FORMAT_B "", point_present);
@@ -8838,7 +8838,7 @@ static int test__3DSOLID (const Dwg_Object *obj)
         error++;
       }
     unknown++;
-    if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "unknown", &unknown)
+      if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "unknown", &unknown, 0)
         && unknown == _3dsolid->unknown)
       {
         pass ("3DSOLID.unknown [B] set+1 " FORMAT_B "", unknown);
@@ -8864,7 +8864,7 @@ static int test__3DSOLID (const Dwg_Object *obj)
         error++;
       }
     unknown_2007++;
-    if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "unknown_2007", &unknown_2007)
+      if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "unknown_2007", &unknown_2007, 0)
         && unknown_2007 == _3dsolid->unknown_2007)
       {
         pass ("3DSOLID.unknown_2007 [BL] set+1 %u", unknown_2007);
@@ -8890,7 +8890,7 @@ static int test__3DSOLID (const Dwg_Object *obj)
         error++;
       }
     version++;
-    if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "version", &version)
+      if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "version", &version, 0)
         && version == _3dsolid->version)
       {
         pass ("3DSOLID.version [BS] set+1 %hu", version);
@@ -8916,7 +8916,7 @@ static int test__3DSOLID (const Dwg_Object *obj)
         error++;
       }
     wireframe_data_present++;
-    if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "wireframe_data_present", &wireframe_data_present)
+      if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "wireframe_data_present", &wireframe_data_present, 0)
         && wireframe_data_present == _3dsolid->wireframe_data_present)
       {
         pass ("3DSOLID.wireframe_data_present [B] set+1 " FORMAT_B "", wireframe_data_present);
@@ -8977,7 +8977,7 @@ static int test_ARC (const Dwg_Object *obj)
         error++;
       }
     end_angle++;
-    if (dwg_dynapi_entity_set_value (arc, "ARC", "end_angle", &end_angle)
+      if (dwg_dynapi_entity_set_value (arc, "ARC", "end_angle", &end_angle, 0)
         && end_angle == arc->end_angle)
       {
         pass ("ARC.end_angle [BD] set+1 %g", end_angle);
@@ -9029,7 +9029,7 @@ static int test_ARC (const Dwg_Object *obj)
         error++;
       }
     radius++;
-    if (dwg_dynapi_entity_set_value (arc, "ARC", "radius", &radius)
+      if (dwg_dynapi_entity_set_value (arc, "ARC", "radius", &radius, 0)
         && radius == arc->radius)
       {
         pass ("ARC.radius [BD] set+1 %g", radius);
@@ -9055,7 +9055,7 @@ static int test_ARC (const Dwg_Object *obj)
         error++;
       }
     start_angle++;
-    if (dwg_dynapi_entity_set_value (arc, "ARC", "start_angle", &start_angle)
+      if (dwg_dynapi_entity_set_value (arc, "ARC", "start_angle", &start_angle, 0)
         && start_angle == arc->start_angle)
       {
         pass ("ARC.start_angle [BD] set+1 %g", start_angle);
@@ -9080,7 +9080,7 @@ static int test_ARC (const Dwg_Object *obj)
         fail ("ARC.thickness [BT] " FORMAT_BT " != " FORMAT_BT "", arc->thickness, thickness);
         error++;
       }
-    if (dwg_dynapi_entity_set_value (arc, "ARC", "thickness", &thickness)
+      if (dwg_dynapi_entity_set_value (arc, "ARC", "thickness", &thickness, 0)
         && thickness == arc->thickness)
       {
         pass ("ARC.thickness [BT] set+1 " FORMAT_BT "", thickness);
@@ -9178,7 +9178,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
         error++;
       }
     act_measurement++;
-    if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "act_measurement", &act_measurement)
+      if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "act_measurement", &act_measurement, 0)
         && act_measurement == arc_dimension->act_measurement)
       {
         pass ("ARC_DIMENSION.act_measurement [BD] set+1 %g", act_measurement);
@@ -9204,7 +9204,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
         error++;
       }
     attachment++;
-    if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "attachment", &attachment)
+      if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "attachment", &attachment, 0)
         && attachment == arc_dimension->attachment)
       {
         pass ("ARC_DIMENSION.attachment [BS] set+1 %hu", attachment);
@@ -9256,7 +9256,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "class_version", &class_version, 0)
         && class_version == arc_dimension->class_version)
       {
         pass ("ARC_DIMENSION.class_version [RC] set+1 %u", class_version);
@@ -9321,7 +9321,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
         error++;
       }
     elevation++;
-    if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "elevation", &elevation)
+      if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "elevation", &elevation, 0)
         && elevation == arc_dimension->elevation)
       {
         pass ("ARC_DIMENSION.elevation [BD] set+1 %g", elevation);
@@ -9360,7 +9360,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "flag", &flag, 0)
         && flag == arc_dimension->flag)
       {
         pass ("ARC_DIMENSION.flag [RC] set+1 %u", flag);
@@ -9386,7 +9386,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
         error++;
       }
     flag1++;
-    if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "flag1", &flag1)
+      if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "flag1", &flag1, 0)
         && flag1 == arc_dimension->flag1)
       {
         pass ("ARC_DIMENSION.flag1 [RC] set+1 %u", flag1);
@@ -9412,7 +9412,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
         error++;
       }
     flag2++;
-    if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "flag2", &flag2)
+      if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "flag2", &flag2, 0)
         && flag2 == arc_dimension->flag2)
       {
         pass ("ARC_DIMENSION.flag2 [RC] set+1 %u", flag2);
@@ -9438,7 +9438,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
         error++;
       }
     flip_arrow1++;
-    if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "flip_arrow1", &flip_arrow1)
+      if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "flip_arrow1", &flip_arrow1, 0)
         && flip_arrow1 == arc_dimension->flip_arrow1)
       {
         pass ("ARC_DIMENSION.flip_arrow1 [B] set+1 " FORMAT_B "", flip_arrow1);
@@ -9464,7 +9464,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
         error++;
       }
     flip_arrow2++;
-    if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "flip_arrow2", &flip_arrow2)
+      if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "flip_arrow2", &flip_arrow2, 0)
         && flip_arrow2 == arc_dimension->flip_arrow2)
       {
         pass ("ARC_DIMENSION.flip_arrow2 [B] set+1 " FORMAT_B "", flip_arrow2);
@@ -9490,7 +9490,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
         error++;
       }
     horiz_dir++;
-    if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "horiz_dir", &horiz_dir)
+      if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "horiz_dir", &horiz_dir, 0)
         && horiz_dir == arc_dimension->horiz_dir)
       {
         pass ("ARC_DIMENSION.horiz_dir [BD] set+1 %g", horiz_dir);
@@ -9516,7 +9516,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
         error++;
       }
     ins_rotation++;
-    if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "ins_rotation", &ins_rotation)
+      if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "ins_rotation", &ins_rotation, 0)
         && ins_rotation == arc_dimension->ins_rotation)
       {
         pass ("ARC_DIMENSION.ins_rotation [BD] set+1 %g", ins_rotation);
@@ -9555,7 +9555,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
         error++;
       }
     leader_len++;
-    if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "leader_len", &leader_len)
+      if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "leader_len", &leader_len, 0)
         && leader_len == arc_dimension->leader_len)
       {
         pass ("ARC_DIMENSION.leader_len [BD] set+1 %g", leader_len);
@@ -9581,7 +9581,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
         error++;
       }
     lspace_factor++;
-    if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "lspace_factor", &lspace_factor)
+      if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "lspace_factor", &lspace_factor, 0)
         && lspace_factor == arc_dimension->lspace_factor)
       {
         pass ("ARC_DIMENSION.lspace_factor [BD] set+1 %g", lspace_factor);
@@ -9607,7 +9607,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
         error++;
       }
     lspace_style++;
-    if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "lspace_style", &lspace_style)
+      if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "lspace_style", &lspace_style, 0)
         && lspace_style == arc_dimension->lspace_style)
       {
         pass ("ARC_DIMENSION.lspace_style [BS] set+1 %hu", lspace_style);
@@ -9659,7 +9659,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
         error++;
       }
     text_rotation++;
-    if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "text_rotation", &text_rotation)
+      if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "text_rotation", &text_rotation, 0)
         && text_rotation == arc_dimension->text_rotation)
       {
         pass ("ARC_DIMENSION.text_rotation [BD] set+1 %g", text_rotation);
@@ -9685,7 +9685,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
         error++;
       }
     unknown++;
-    if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "unknown", &unknown)
+      if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "unknown", &unknown, 0)
         && unknown == arc_dimension->unknown)
       {
         pass ("ARC_DIMENSION.unknown [B] set+1 " FORMAT_B "", unknown);
@@ -9770,7 +9770,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
         error++;
       }
     annotative_data_bytes++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "annotative_data_bytes", &annotative_data_bytes)
+      if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "annotative_data_bytes", &annotative_data_bytes, 0)
         && annotative_data_bytes == attdef->annotative_data_bytes)
       {
         pass ("ATTDEF.annotative_data_bytes [RC] set+1 %u", annotative_data_bytes);
@@ -9796,7 +9796,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
         error++;
       }
     annotative_data_size++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "annotative_data_size", &annotative_data_size)
+      if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "annotative_data_size", &annotative_data_size, 0)
         && annotative_data_size == attdef->annotative_data_size)
       {
         pass ("ATTDEF.annotative_data_size [BS] set+1 %hu", annotative_data_size);
@@ -9822,7 +9822,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
         error++;
       }
     annotative_short++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "annotative_short", &annotative_short)
+      if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "annotative_short", &annotative_short, 0)
         && annotative_short == attdef->annotative_short)
       {
         pass ("ATTDEF.annotative_short [BS] set+1 %hu", annotative_short);
@@ -9848,7 +9848,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
         error++;
       }
     attdef_class_version++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "attdef_class_version", &attdef_class_version)
+      if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "attdef_class_version", &attdef_class_version, 0)
         && attdef_class_version == attdef->attdef_class_version)
       {
         pass ("ATTDEF.attdef_class_version [RC] set+1 %u", attdef_class_version);
@@ -9874,7 +9874,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "class_version", &class_version, 0)
         && class_version == attdef->class_version)
       {
         pass ("ATTDEF.class_version [RC] set+1 %u", class_version);
@@ -9900,7 +9900,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
         error++;
       }
     dataflags++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "dataflags", &dataflags)
+      if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "dataflags", &dataflags, 0)
         && dataflags == attdef->dataflags)
       {
         pass ("ATTDEF.dataflags [RC] set+1 %u", dataflags);
@@ -9939,7 +9939,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
         error++;
       }
     elevation++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "elevation", &elevation)
+      if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "elevation", &elevation, 0)
         && elevation == attdef->elevation)
       {
         pass ("ATTDEF.elevation [BD] set+1 %g", elevation);
@@ -9978,7 +9978,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
         error++;
       }
     field_length++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "field_length", &field_length)
+      if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "field_length", &field_length, 0)
         && field_length == attdef->field_length)
       {
         pass ("ATTDEF.field_length [BS] set+1 %hu", field_length);
@@ -10004,7 +10004,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
         error++;
       }
     flags++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "flags", &flags)
+      if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "flags", &flags, 0)
         && flags == attdef->flags)
       {
         pass ("ATTDEF.flags [RC] set+1 %u", flags);
@@ -10030,7 +10030,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
         error++;
       }
     generation++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "generation", &generation)
+      if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "generation", &generation, 0)
         && generation == attdef->generation)
       {
         pass ("ATTDEF.generation [BS] set+1 %hu", generation);
@@ -10056,7 +10056,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
         error++;
       }
     height++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "height", &height)
+      if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "height", &height, 0)
         && height == attdef->height)
       {
         pass ("ATTDEF.height [RD] set+1 %g", height);
@@ -10082,7 +10082,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
         error++;
       }
     horiz_alignment++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "horiz_alignment", &horiz_alignment)
+      if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "horiz_alignment", &horiz_alignment, 0)
         && horiz_alignment == attdef->horiz_alignment)
       {
         pass ("ATTDEF.horiz_alignment [BS] set+1 %hu", horiz_alignment);
@@ -10121,7 +10121,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
         error++;
       }
     lock_position_flag++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "lock_position_flag", &lock_position_flag)
+      if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "lock_position_flag", &lock_position_flag, 0)
         && lock_position_flag == attdef->lock_position_flag)
       {
         pass ("ATTDEF.lock_position_flag [B] set+1 " FORMAT_B "", lock_position_flag);
@@ -10160,7 +10160,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
         error++;
       }
     oblique_ang++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "oblique_ang", &oblique_ang)
+      if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "oblique_ang", &oblique_ang, 0)
         && oblique_ang == attdef->oblique_ang)
       {
         pass ("ATTDEF.oblique_ang [RD] set+1 %g", oblique_ang);
@@ -10212,7 +10212,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
         error++;
       }
     rotation++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "rotation", &rotation)
+      if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "rotation", &rotation, 0)
         && rotation == attdef->rotation)
       {
         pass ("ATTDEF.rotation [RD] set+1 %g", rotation);
@@ -10264,7 +10264,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
         error++;
       }
     thickness++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "thickness", &thickness)
+      if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "thickness", &thickness, 0)
         && thickness == attdef->thickness)
       {
         pass ("ATTDEF.thickness [RD] set+1 %g", thickness);
@@ -10290,7 +10290,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
         error++;
       }
     type++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "type", &type)
+      if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "type", &type, 0)
         && type == attdef->type)
       {
         pass ("ATTDEF.type [RC] set+1 %u", type);
@@ -10316,7 +10316,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
         error++;
       }
     vert_alignment++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "vert_alignment", &vert_alignment)
+      if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "vert_alignment", &vert_alignment, 0)
         && vert_alignment == attdef->vert_alignment)
       {
         pass ("ATTDEF.vert_alignment [BS] set+1 %hu", vert_alignment);
@@ -10342,7 +10342,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
         error++;
       }
     width_factor++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "width_factor", &width_factor)
+      if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "width_factor", &width_factor, 0)
         && width_factor == attdef->width_factor)
       {
         pass ("ATTDEF.width_factor [RD] set+1 %g", width_factor);
@@ -10401,7 +10401,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
         error++;
       }
     annotative_data_bytes++;
-    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "annotative_data_bytes", &annotative_data_bytes)
+      if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "annotative_data_bytes", &annotative_data_bytes, 0)
         && annotative_data_bytes == attrib->annotative_data_bytes)
       {
         pass ("ATTRIB.annotative_data_bytes [RC] set+1 %u", annotative_data_bytes);
@@ -10427,7 +10427,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
         error++;
       }
     annotative_data_size++;
-    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "annotative_data_size", &annotative_data_size)
+      if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "annotative_data_size", &annotative_data_size, 0)
         && annotative_data_size == attrib->annotative_data_size)
       {
         pass ("ATTRIB.annotative_data_size [BS] set+1 %hu", annotative_data_size);
@@ -10453,7 +10453,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
         error++;
       }
     annotative_short++;
-    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "annotative_short", &annotative_short)
+      if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "annotative_short", &annotative_short, 0)
         && annotative_short == attrib->annotative_short)
       {
         pass ("ATTRIB.annotative_short [BS] set+1 %hu", annotative_short);
@@ -10479,7 +10479,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "class_version", &class_version, 0)
         && class_version == attrib->class_version)
       {
         pass ("ATTRIB.class_version [RC] set+1 %u", class_version);
@@ -10505,7 +10505,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
         error++;
       }
     dataflags++;
-    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "dataflags", &dataflags)
+      if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "dataflags", &dataflags, 0)
         && dataflags == attrib->dataflags)
       {
         pass ("ATTRIB.dataflags [RC] set+1 %u", dataflags);
@@ -10531,7 +10531,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
         error++;
       }
     elevation++;
-    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "elevation", &elevation)
+      if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "elevation", &elevation, 0)
         && elevation == attrib->elevation)
       {
         pass ("ATTRIB.elevation [BD] set+1 %g", elevation);
@@ -10570,7 +10570,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
         error++;
       }
     field_length++;
-    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "field_length", &field_length)
+      if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "field_length", &field_length, 0)
         && field_length == attrib->field_length)
       {
         pass ("ATTRIB.field_length [BS] set+1 %hu", field_length);
@@ -10596,7 +10596,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
         error++;
       }
     flags++;
-    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "flags", &flags)
+      if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "flags", &flags, 0)
         && flags == attrib->flags)
       {
         pass ("ATTRIB.flags [RC] set+1 %u", flags);
@@ -10622,7 +10622,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
         error++;
       }
     generation++;
-    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "generation", &generation)
+      if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "generation", &generation, 0)
         && generation == attrib->generation)
       {
         pass ("ATTRIB.generation [BS] set+1 %hu", generation);
@@ -10648,7 +10648,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
         error++;
       }
     height++;
-    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "height", &height)
+      if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "height", &height, 0)
         && height == attrib->height)
       {
         pass ("ATTRIB.height [RD] set+1 %g", height);
@@ -10674,7 +10674,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
         error++;
       }
     horiz_alignment++;
-    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "horiz_alignment", &horiz_alignment)
+      if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "horiz_alignment", &horiz_alignment, 0)
         && horiz_alignment == attrib->horiz_alignment)
       {
         pass ("ATTRIB.horiz_alignment [BS] set+1 %hu", horiz_alignment);
@@ -10713,7 +10713,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
         error++;
       }
     lock_position_flag++;
-    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "lock_position_flag", &lock_position_flag)
+      if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "lock_position_flag", &lock_position_flag, 0)
         && lock_position_flag == attrib->lock_position_flag)
       {
         pass ("ATTRIB.lock_position_flag [B] set+1 " FORMAT_B "", lock_position_flag);
@@ -10752,7 +10752,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
         error++;
       }
     oblique_ang++;
-    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "oblique_ang", &oblique_ang)
+      if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "oblique_ang", &oblique_ang, 0)
         && oblique_ang == attrib->oblique_ang)
       {
         pass ("ATTRIB.oblique_ang [RD] set+1 %g", oblique_ang);
@@ -10791,7 +10791,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
         error++;
       }
     rotation++;
-    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "rotation", &rotation)
+      if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "rotation", &rotation, 0)
         && rotation == attrib->rotation)
       {
         pass ("ATTRIB.rotation [RD] set+1 %g", rotation);
@@ -10856,7 +10856,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
         error++;
       }
     thickness++;
-    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "thickness", &thickness)
+      if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "thickness", &thickness, 0)
         && thickness == attrib->thickness)
       {
         pass ("ATTRIB.thickness [RD] set+1 %g", thickness);
@@ -10882,7 +10882,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
         error++;
       }
     type++;
-    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "type", &type)
+      if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "type", &type, 0)
         && type == attrib->type)
       {
         pass ("ATTRIB.type [RC] set+1 %u", type);
@@ -10908,7 +10908,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
         error++;
       }
     vert_alignment++;
-    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "vert_alignment", &vert_alignment)
+      if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "vert_alignment", &vert_alignment, 0)
         && vert_alignment == attrib->vert_alignment)
       {
         pass ("ATTRIB.vert_alignment [BS] set+1 %hu", vert_alignment);
@@ -10934,7 +10934,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
         error++;
       }
     width_factor++;
-    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "width_factor", &width_factor)
+      if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "width_factor", &width_factor, 0)
         && width_factor == attrib->width_factor)
       {
         pass ("ATTRIB.width_factor [RD] set+1 %g", width_factor);
@@ -11072,7 +11072,7 @@ static int test_CIRCLE (const Dwg_Object *obj)
         error++;
       }
     radius++;
-    if (dwg_dynapi_entity_set_value (circle, "CIRCLE", "radius", &radius)
+      if (dwg_dynapi_entity_set_value (circle, "CIRCLE", "radius", &radius, 0)
         && radius == circle->radius)
       {
         pass ("CIRCLE.radius [BD] set+1 %g", radius);
@@ -11097,7 +11097,7 @@ static int test_CIRCLE (const Dwg_Object *obj)
         fail ("CIRCLE.thickness [BT] " FORMAT_BT " != " FORMAT_BT "", circle->thickness, thickness);
         error++;
       }
-    if (dwg_dynapi_entity_set_value (circle, "CIRCLE", "thickness", &thickness)
+      if (dwg_dynapi_entity_set_value (circle, "CIRCLE", "thickness", &thickness, 0)
         && thickness == circle->thickness)
       {
         pass ("CIRCLE.thickness [BT] set+1 " FORMAT_BT "", thickness);
@@ -11156,7 +11156,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
         error++;
       }
     act_measurement++;
-    if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "act_measurement", &act_measurement)
+      if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "act_measurement", &act_measurement, 0)
         && act_measurement == dimension_aligned->act_measurement)
       {
         pass ("DIMENSION_ALIGNED.act_measurement [BD] set+1 %g", act_measurement);
@@ -11182,7 +11182,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
         error++;
       }
     attachment++;
-    if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "attachment", &attachment)
+      if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "attachment", &attachment, 0)
         && attachment == dimension_aligned->attachment)
       {
         pass ("DIMENSION_ALIGNED.attachment [BS] set+1 %hu", attachment);
@@ -11234,7 +11234,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "class_version", &class_version, 0)
         && class_version == dimension_aligned->class_version)
       {
         pass ("DIMENSION_ALIGNED.class_version [RC] set+1 %u", class_version);
@@ -11299,7 +11299,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
         error++;
       }
     elevation++;
-    if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "elevation", &elevation)
+      if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "elevation", &elevation, 0)
         && elevation == dimension_aligned->elevation)
       {
         pass ("DIMENSION_ALIGNED.elevation [BD] set+1 %g", elevation);
@@ -11325,7 +11325,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
         error++;
       }
     ext_line_rotation++;
-    if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "ext_line_rotation", &ext_line_rotation)
+      if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "ext_line_rotation", &ext_line_rotation, 0)
         && ext_line_rotation == dimension_aligned->ext_line_rotation)
       {
         pass ("DIMENSION_ALIGNED.ext_line_rotation [BD] set+1 %g", ext_line_rotation);
@@ -11364,7 +11364,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "flag", &flag, 0)
         && flag == dimension_aligned->flag)
       {
         pass ("DIMENSION_ALIGNED.flag [RC] set+1 %u", flag);
@@ -11390,7 +11390,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
         error++;
       }
     flag1++;
-    if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "flag1", &flag1)
+      if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "flag1", &flag1, 0)
         && flag1 == dimension_aligned->flag1)
       {
         pass ("DIMENSION_ALIGNED.flag1 [RC] set+1 %u", flag1);
@@ -11416,7 +11416,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
         error++;
       }
     flip_arrow1++;
-    if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "flip_arrow1", &flip_arrow1)
+      if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "flip_arrow1", &flip_arrow1, 0)
         && flip_arrow1 == dimension_aligned->flip_arrow1)
       {
         pass ("DIMENSION_ALIGNED.flip_arrow1 [B] set+1 " FORMAT_B "", flip_arrow1);
@@ -11442,7 +11442,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
         error++;
       }
     flip_arrow2++;
-    if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "flip_arrow2", &flip_arrow2)
+      if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "flip_arrow2", &flip_arrow2, 0)
         && flip_arrow2 == dimension_aligned->flip_arrow2)
       {
         pass ("DIMENSION_ALIGNED.flip_arrow2 [B] set+1 " FORMAT_B "", flip_arrow2);
@@ -11468,7 +11468,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
         error++;
       }
     horiz_dir++;
-    if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "horiz_dir", &horiz_dir)
+      if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "horiz_dir", &horiz_dir, 0)
         && horiz_dir == dimension_aligned->horiz_dir)
       {
         pass ("DIMENSION_ALIGNED.horiz_dir [BD] set+1 %g", horiz_dir);
@@ -11494,7 +11494,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
         error++;
       }
     ins_rotation++;
-    if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "ins_rotation", &ins_rotation)
+      if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "ins_rotation", &ins_rotation, 0)
         && ins_rotation == dimension_aligned->ins_rotation)
       {
         pass ("DIMENSION_ALIGNED.ins_rotation [BD] set+1 %g", ins_rotation);
@@ -11533,7 +11533,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
         error++;
       }
     lspace_factor++;
-    if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "lspace_factor", &lspace_factor)
+      if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "lspace_factor", &lspace_factor, 0)
         && lspace_factor == dimension_aligned->lspace_factor)
       {
         pass ("DIMENSION_ALIGNED.lspace_factor [BD] set+1 %g", lspace_factor);
@@ -11559,7 +11559,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
         error++;
       }
     lspace_style++;
-    if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "lspace_style", &lspace_style)
+      if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "lspace_style", &lspace_style, 0)
         && lspace_style == dimension_aligned->lspace_style)
       {
         pass ("DIMENSION_ALIGNED.lspace_style [BS] set+1 %hu", lspace_style);
@@ -11611,7 +11611,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
         error++;
       }
     text_rotation++;
-    if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "text_rotation", &text_rotation)
+      if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "text_rotation", &text_rotation, 0)
         && text_rotation == dimension_aligned->text_rotation)
       {
         pass ("DIMENSION_ALIGNED.text_rotation [BD] set+1 %g", text_rotation);
@@ -11637,7 +11637,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
         error++;
       }
     unknown++;
-    if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "unknown", &unknown)
+      if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "unknown", &unknown, 0)
         && unknown == dimension_aligned->unknown)
       {
         pass ("DIMENSION_ALIGNED.unknown [B] set+1 " FORMAT_B "", unknown);
@@ -11722,7 +11722,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
         error++;
       }
     act_measurement++;
-    if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "act_measurement", &act_measurement)
+      if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "act_measurement", &act_measurement, 0)
         && act_measurement == dimension_ang2ln->act_measurement)
       {
         pass ("DIMENSION_ANG2LN.act_measurement [BD] set+1 %g", act_measurement);
@@ -11748,7 +11748,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
         error++;
       }
     attachment++;
-    if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "attachment", &attachment)
+      if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "attachment", &attachment, 0)
         && attachment == dimension_ang2ln->attachment)
       {
         pass ("DIMENSION_ANG2LN.attachment [BS] set+1 %hu", attachment);
@@ -11800,7 +11800,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "class_version", &class_version, 0)
         && class_version == dimension_ang2ln->class_version)
       {
         pass ("DIMENSION_ANG2LN.class_version [RC] set+1 %u", class_version);
@@ -11865,7 +11865,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
         error++;
       }
     elevation++;
-    if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "elevation", &elevation)
+      if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "elevation", &elevation, 0)
         && elevation == dimension_ang2ln->elevation)
       {
         pass ("DIMENSION_ANG2LN.elevation [BD] set+1 %g", elevation);
@@ -11917,7 +11917,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "flag", &flag, 0)
         && flag == dimension_ang2ln->flag)
       {
         pass ("DIMENSION_ANG2LN.flag [RC] set+1 %u", flag);
@@ -11943,7 +11943,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
         error++;
       }
     flag1++;
-    if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "flag1", &flag1)
+      if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "flag1", &flag1, 0)
         && flag1 == dimension_ang2ln->flag1)
       {
         pass ("DIMENSION_ANG2LN.flag1 [RC] set+1 %u", flag1);
@@ -11969,7 +11969,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
         error++;
       }
     flip_arrow1++;
-    if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "flip_arrow1", &flip_arrow1)
+      if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "flip_arrow1", &flip_arrow1, 0)
         && flip_arrow1 == dimension_ang2ln->flip_arrow1)
       {
         pass ("DIMENSION_ANG2LN.flip_arrow1 [B] set+1 " FORMAT_B "", flip_arrow1);
@@ -11995,7 +11995,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
         error++;
       }
     flip_arrow2++;
-    if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "flip_arrow2", &flip_arrow2)
+      if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "flip_arrow2", &flip_arrow2, 0)
         && flip_arrow2 == dimension_ang2ln->flip_arrow2)
       {
         pass ("DIMENSION_ANG2LN.flip_arrow2 [B] set+1 " FORMAT_B "", flip_arrow2);
@@ -12021,7 +12021,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
         error++;
       }
     horiz_dir++;
-    if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "horiz_dir", &horiz_dir)
+      if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "horiz_dir", &horiz_dir, 0)
         && horiz_dir == dimension_ang2ln->horiz_dir)
       {
         pass ("DIMENSION_ANG2LN.horiz_dir [BD] set+1 %g", horiz_dir);
@@ -12047,7 +12047,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
         error++;
       }
     ins_rotation++;
-    if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "ins_rotation", &ins_rotation)
+      if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "ins_rotation", &ins_rotation, 0)
         && ins_rotation == dimension_ang2ln->ins_rotation)
       {
         pass ("DIMENSION_ANG2LN.ins_rotation [BD] set+1 %g", ins_rotation);
@@ -12086,7 +12086,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
         error++;
       }
     lspace_factor++;
-    if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "lspace_factor", &lspace_factor)
+      if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "lspace_factor", &lspace_factor, 0)
         && lspace_factor == dimension_ang2ln->lspace_factor)
       {
         pass ("DIMENSION_ANG2LN.lspace_factor [BD] set+1 %g", lspace_factor);
@@ -12112,7 +12112,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
         error++;
       }
     lspace_style++;
-    if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "lspace_style", &lspace_style)
+      if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "lspace_style", &lspace_style, 0)
         && lspace_style == dimension_ang2ln->lspace_style)
       {
         pass ("DIMENSION_ANG2LN.lspace_style [BS] set+1 %hu", lspace_style);
@@ -12164,7 +12164,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
         error++;
       }
     text_rotation++;
-    if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "text_rotation", &text_rotation)
+      if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "text_rotation", &text_rotation, 0)
         && text_rotation == dimension_ang2ln->text_rotation)
       {
         pass ("DIMENSION_ANG2LN.text_rotation [BD] set+1 %g", text_rotation);
@@ -12190,7 +12190,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
         error++;
       }
     unknown++;
-    if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "unknown", &unknown)
+      if (dwg_dynapi_entity_set_value (dimension_ang2ln, "DIMENSION_ANG2LN", "unknown", &unknown, 0)
         && unknown == dimension_ang2ln->unknown)
       {
         pass ("DIMENSION_ANG2LN.unknown [B] set+1 " FORMAT_B "", unknown);
@@ -12262,7 +12262,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
         error++;
       }
     act_measurement++;
-    if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "act_measurement", &act_measurement)
+      if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "act_measurement", &act_measurement, 0)
         && act_measurement == dimension_ang3pt->act_measurement)
       {
         pass ("DIMENSION_ANG3PT.act_measurement [BD] set+1 %g", act_measurement);
@@ -12288,7 +12288,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
         error++;
       }
     attachment++;
-    if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "attachment", &attachment)
+      if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "attachment", &attachment, 0)
         && attachment == dimension_ang3pt->attachment)
       {
         pass ("DIMENSION_ANG3PT.attachment [BS] set+1 %hu", attachment);
@@ -12340,7 +12340,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "class_version", &class_version, 0)
         && class_version == dimension_ang3pt->class_version)
       {
         pass ("DIMENSION_ANG3PT.class_version [RC] set+1 %u", class_version);
@@ -12405,7 +12405,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
         error++;
       }
     elevation++;
-    if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "elevation", &elevation)
+      if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "elevation", &elevation, 0)
         && elevation == dimension_ang3pt->elevation)
       {
         pass ("DIMENSION_ANG3PT.elevation [BD] set+1 %g", elevation);
@@ -12457,7 +12457,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "flag", &flag, 0)
         && flag == dimension_ang3pt->flag)
       {
         pass ("DIMENSION_ANG3PT.flag [RC] set+1 %u", flag);
@@ -12483,7 +12483,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
         error++;
       }
     flag1++;
-    if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "flag1", &flag1)
+      if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "flag1", &flag1, 0)
         && flag1 == dimension_ang3pt->flag1)
       {
         pass ("DIMENSION_ANG3PT.flag1 [RC] set+1 %u", flag1);
@@ -12509,7 +12509,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
         error++;
       }
     flip_arrow1++;
-    if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "flip_arrow1", &flip_arrow1)
+      if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "flip_arrow1", &flip_arrow1, 0)
         && flip_arrow1 == dimension_ang3pt->flip_arrow1)
       {
         pass ("DIMENSION_ANG3PT.flip_arrow1 [B] set+1 " FORMAT_B "", flip_arrow1);
@@ -12535,7 +12535,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
         error++;
       }
     flip_arrow2++;
-    if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "flip_arrow2", &flip_arrow2)
+      if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "flip_arrow2", &flip_arrow2, 0)
         && flip_arrow2 == dimension_ang3pt->flip_arrow2)
       {
         pass ("DIMENSION_ANG3PT.flip_arrow2 [B] set+1 " FORMAT_B "", flip_arrow2);
@@ -12561,7 +12561,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
         error++;
       }
     horiz_dir++;
-    if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "horiz_dir", &horiz_dir)
+      if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "horiz_dir", &horiz_dir, 0)
         && horiz_dir == dimension_ang3pt->horiz_dir)
       {
         pass ("DIMENSION_ANG3PT.horiz_dir [BD] set+1 %g", horiz_dir);
@@ -12587,7 +12587,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
         error++;
       }
     ins_rotation++;
-    if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "ins_rotation", &ins_rotation)
+      if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "ins_rotation", &ins_rotation, 0)
         && ins_rotation == dimension_ang3pt->ins_rotation)
       {
         pass ("DIMENSION_ANG3PT.ins_rotation [BD] set+1 %g", ins_rotation);
@@ -12626,7 +12626,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
         error++;
       }
     lspace_factor++;
-    if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "lspace_factor", &lspace_factor)
+      if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "lspace_factor", &lspace_factor, 0)
         && lspace_factor == dimension_ang3pt->lspace_factor)
       {
         pass ("DIMENSION_ANG3PT.lspace_factor [BD] set+1 %g", lspace_factor);
@@ -12652,7 +12652,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
         error++;
       }
     lspace_style++;
-    if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "lspace_style", &lspace_style)
+      if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "lspace_style", &lspace_style, 0)
         && lspace_style == dimension_ang3pt->lspace_style)
       {
         pass ("DIMENSION_ANG3PT.lspace_style [BS] set+1 %hu", lspace_style);
@@ -12704,7 +12704,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
         error++;
       }
     text_rotation++;
-    if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "text_rotation", &text_rotation)
+      if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "text_rotation", &text_rotation, 0)
         && text_rotation == dimension_ang3pt->text_rotation)
       {
         pass ("DIMENSION_ANG3PT.text_rotation [BD] set+1 %g", text_rotation);
@@ -12730,7 +12730,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
         error++;
       }
     unknown++;
-    if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "unknown", &unknown)
+      if (dwg_dynapi_entity_set_value (dimension_ang3pt, "DIMENSION_ANG3PT", "unknown", &unknown, 0)
         && unknown == dimension_ang3pt->unknown)
       {
         pass ("DIMENSION_ANG3PT.unknown [B] set+1 " FORMAT_B "", unknown);
@@ -12776,7 +12776,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
         error++;
       }
     act_measurement++;
-    if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "act_measurement", &act_measurement)
+      if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "act_measurement", &act_measurement, 0)
         && act_measurement == dimension_diameter->act_measurement)
       {
         pass ("DIMENSION_DIAMETER.act_measurement [BD] set+1 %g", act_measurement);
@@ -12802,7 +12802,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
         error++;
       }
     attachment++;
-    if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "attachment", &attachment)
+      if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "attachment", &attachment, 0)
         && attachment == dimension_diameter->attachment)
       {
         pass ("DIMENSION_DIAMETER.attachment [BS] set+1 %hu", attachment);
@@ -12854,7 +12854,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "class_version", &class_version, 0)
         && class_version == dimension_diameter->class_version)
       {
         pass ("DIMENSION_DIAMETER.class_version [RC] set+1 %u", class_version);
@@ -12919,7 +12919,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
         error++;
       }
     elevation++;
-    if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "elevation", &elevation)
+      if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "elevation", &elevation, 0)
         && elevation == dimension_diameter->elevation)
       {
         pass ("DIMENSION_DIAMETER.elevation [BD] set+1 %g", elevation);
@@ -12971,7 +12971,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "flag", &flag, 0)
         && flag == dimension_diameter->flag)
       {
         pass ("DIMENSION_DIAMETER.flag [RC] set+1 %u", flag);
@@ -12997,7 +12997,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
         error++;
       }
     flag1++;
-    if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "flag1", &flag1)
+      if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "flag1", &flag1, 0)
         && flag1 == dimension_diameter->flag1)
       {
         pass ("DIMENSION_DIAMETER.flag1 [RC] set+1 %u", flag1);
@@ -13023,7 +13023,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
         error++;
       }
     flip_arrow1++;
-    if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "flip_arrow1", &flip_arrow1)
+      if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "flip_arrow1", &flip_arrow1, 0)
         && flip_arrow1 == dimension_diameter->flip_arrow1)
       {
         pass ("DIMENSION_DIAMETER.flip_arrow1 [B] set+1 " FORMAT_B "", flip_arrow1);
@@ -13049,7 +13049,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
         error++;
       }
     flip_arrow2++;
-    if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "flip_arrow2", &flip_arrow2)
+      if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "flip_arrow2", &flip_arrow2, 0)
         && flip_arrow2 == dimension_diameter->flip_arrow2)
       {
         pass ("DIMENSION_DIAMETER.flip_arrow2 [B] set+1 " FORMAT_B "", flip_arrow2);
@@ -13075,7 +13075,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
         error++;
       }
     horiz_dir++;
-    if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "horiz_dir", &horiz_dir)
+      if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "horiz_dir", &horiz_dir, 0)
         && horiz_dir == dimension_diameter->horiz_dir)
       {
         pass ("DIMENSION_DIAMETER.horiz_dir [BD] set+1 %g", horiz_dir);
@@ -13101,7 +13101,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
         error++;
       }
     ins_rotation++;
-    if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "ins_rotation", &ins_rotation)
+      if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "ins_rotation", &ins_rotation, 0)
         && ins_rotation == dimension_diameter->ins_rotation)
       {
         pass ("DIMENSION_DIAMETER.ins_rotation [BD] set+1 %g", ins_rotation);
@@ -13140,7 +13140,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
         error++;
       }
     leader_len++;
-    if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "leader_len", &leader_len)
+      if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "leader_len", &leader_len, 0)
         && leader_len == dimension_diameter->leader_len)
       {
         pass ("DIMENSION_DIAMETER.leader_len [BD] set+1 %g", leader_len);
@@ -13166,7 +13166,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
         error++;
       }
     lspace_factor++;
-    if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "lspace_factor", &lspace_factor)
+      if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "lspace_factor", &lspace_factor, 0)
         && lspace_factor == dimension_diameter->lspace_factor)
       {
         pass ("DIMENSION_DIAMETER.lspace_factor [BD] set+1 %g", lspace_factor);
@@ -13192,7 +13192,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
         error++;
       }
     lspace_style++;
-    if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "lspace_style", &lspace_style)
+      if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "lspace_style", &lspace_style, 0)
         && lspace_style == dimension_diameter->lspace_style)
       {
         pass ("DIMENSION_DIAMETER.lspace_style [BS] set+1 %hu", lspace_style);
@@ -13244,7 +13244,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
         error++;
       }
     text_rotation++;
-    if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "text_rotation", &text_rotation)
+      if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "text_rotation", &text_rotation, 0)
         && text_rotation == dimension_diameter->text_rotation)
       {
         pass ("DIMENSION_DIAMETER.text_rotation [BD] set+1 %g", text_rotation);
@@ -13270,7 +13270,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
         error++;
       }
     unknown++;
-    if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "unknown", &unknown)
+      if (dwg_dynapi_entity_set_value (dimension_diameter, "DIMENSION_DIAMETER", "unknown", &unknown, 0)
         && unknown == dimension_diameter->unknown)
       {
         pass ("DIMENSION_DIAMETER.unknown [B] set+1 " FORMAT_B "", unknown);
@@ -13342,7 +13342,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
         error++;
       }
     act_measurement++;
-    if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "act_measurement", &act_measurement)
+      if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "act_measurement", &act_measurement, 0)
         && act_measurement == dimension_linear->act_measurement)
       {
         pass ("DIMENSION_LINEAR.act_measurement [BD] set+1 %g", act_measurement);
@@ -13368,7 +13368,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
         error++;
       }
     attachment++;
-    if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "attachment", &attachment)
+      if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "attachment", &attachment, 0)
         && attachment == dimension_linear->attachment)
       {
         pass ("DIMENSION_LINEAR.attachment [BS] set+1 %hu", attachment);
@@ -13420,7 +13420,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "class_version", &class_version, 0)
         && class_version == dimension_linear->class_version)
       {
         pass ("DIMENSION_LINEAR.class_version [RC] set+1 %u", class_version);
@@ -13472,7 +13472,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
         error++;
       }
     dim_rotation++;
-    if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "dim_rotation", &dim_rotation)
+      if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "dim_rotation", &dim_rotation, 0)
         && dim_rotation == dimension_linear->dim_rotation)
       {
         pass ("DIMENSION_LINEAR.dim_rotation [BD] set+1 %g", dim_rotation);
@@ -13511,7 +13511,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
         error++;
       }
     elevation++;
-    if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "elevation", &elevation)
+      if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "elevation", &elevation, 0)
         && elevation == dimension_linear->elevation)
       {
         pass ("DIMENSION_LINEAR.elevation [BD] set+1 %g", elevation);
@@ -13537,7 +13537,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
         error++;
       }
     ext_line_rotation++;
-    if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "ext_line_rotation", &ext_line_rotation)
+      if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "ext_line_rotation", &ext_line_rotation, 0)
         && ext_line_rotation == dimension_linear->ext_line_rotation)
       {
         pass ("DIMENSION_LINEAR.ext_line_rotation [BD] set+1 %g", ext_line_rotation);
@@ -13576,7 +13576,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "flag", &flag, 0)
         && flag == dimension_linear->flag)
       {
         pass ("DIMENSION_LINEAR.flag [RC] set+1 %u", flag);
@@ -13602,7 +13602,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
         error++;
       }
     flag1++;
-    if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "flag1", &flag1)
+      if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "flag1", &flag1, 0)
         && flag1 == dimension_linear->flag1)
       {
         pass ("DIMENSION_LINEAR.flag1 [RC] set+1 %u", flag1);
@@ -13628,7 +13628,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
         error++;
       }
     flip_arrow1++;
-    if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "flip_arrow1", &flip_arrow1)
+      if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "flip_arrow1", &flip_arrow1, 0)
         && flip_arrow1 == dimension_linear->flip_arrow1)
       {
         pass ("DIMENSION_LINEAR.flip_arrow1 [B] set+1 " FORMAT_B "", flip_arrow1);
@@ -13654,7 +13654,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
         error++;
       }
     flip_arrow2++;
-    if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "flip_arrow2", &flip_arrow2)
+      if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "flip_arrow2", &flip_arrow2, 0)
         && flip_arrow2 == dimension_linear->flip_arrow2)
       {
         pass ("DIMENSION_LINEAR.flip_arrow2 [B] set+1 " FORMAT_B "", flip_arrow2);
@@ -13680,7 +13680,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
         error++;
       }
     horiz_dir++;
-    if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "horiz_dir", &horiz_dir)
+      if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "horiz_dir", &horiz_dir, 0)
         && horiz_dir == dimension_linear->horiz_dir)
       {
         pass ("DIMENSION_LINEAR.horiz_dir [BD] set+1 %g", horiz_dir);
@@ -13706,7 +13706,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
         error++;
       }
     ins_rotation++;
-    if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "ins_rotation", &ins_rotation)
+      if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "ins_rotation", &ins_rotation, 0)
         && ins_rotation == dimension_linear->ins_rotation)
       {
         pass ("DIMENSION_LINEAR.ins_rotation [BD] set+1 %g", ins_rotation);
@@ -13745,7 +13745,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
         error++;
       }
     lspace_factor++;
-    if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "lspace_factor", &lspace_factor)
+      if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "lspace_factor", &lspace_factor, 0)
         && lspace_factor == dimension_linear->lspace_factor)
       {
         pass ("DIMENSION_LINEAR.lspace_factor [BD] set+1 %g", lspace_factor);
@@ -13771,7 +13771,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
         error++;
       }
     lspace_style++;
-    if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "lspace_style", &lspace_style)
+      if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "lspace_style", &lspace_style, 0)
         && lspace_style == dimension_linear->lspace_style)
       {
         pass ("DIMENSION_LINEAR.lspace_style [BS] set+1 %hu", lspace_style);
@@ -13823,7 +13823,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
         error++;
       }
     text_rotation++;
-    if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "text_rotation", &text_rotation)
+      if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "text_rotation", &text_rotation, 0)
         && text_rotation == dimension_linear->text_rotation)
       {
         pass ("DIMENSION_LINEAR.text_rotation [BD] set+1 %g", text_rotation);
@@ -13849,7 +13849,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
         error++;
       }
     unknown++;
-    if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "unknown", &unknown)
+      if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "unknown", &unknown, 0)
         && unknown == dimension_linear->unknown)
       {
         pass ("DIMENSION_LINEAR.unknown [B] set+1 " FORMAT_B "", unknown);
@@ -13895,7 +13895,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
         error++;
       }
     act_measurement++;
-    if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "act_measurement", &act_measurement)
+      if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "act_measurement", &act_measurement, 0)
         && act_measurement == dimension_ordinate->act_measurement)
       {
         pass ("DIMENSION_ORDINATE.act_measurement [BD] set+1 %g", act_measurement);
@@ -13921,7 +13921,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
         error++;
       }
     attachment++;
-    if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "attachment", &attachment)
+      if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "attachment", &attachment, 0)
         && attachment == dimension_ordinate->attachment)
       {
         pass ("DIMENSION_ORDINATE.attachment [BS] set+1 %hu", attachment);
@@ -13973,7 +13973,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "class_version", &class_version, 0)
         && class_version == dimension_ordinate->class_version)
       {
         pass ("DIMENSION_ORDINATE.class_version [RC] set+1 %u", class_version);
@@ -14038,7 +14038,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
         error++;
       }
     elevation++;
-    if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "elevation", &elevation)
+      if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "elevation", &elevation, 0)
         && elevation == dimension_ordinate->elevation)
       {
         pass ("DIMENSION_ORDINATE.elevation [BD] set+1 %g", elevation);
@@ -14090,7 +14090,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "flag", &flag, 0)
         && flag == dimension_ordinate->flag)
       {
         pass ("DIMENSION_ORDINATE.flag [RC] set+1 %u", flag);
@@ -14116,7 +14116,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
         error++;
       }
     flag1++;
-    if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "flag1", &flag1)
+      if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "flag1", &flag1, 0)
         && flag1 == dimension_ordinate->flag1)
       {
         pass ("DIMENSION_ORDINATE.flag1 [RC] set+1 %u", flag1);
@@ -14142,7 +14142,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
         error++;
       }
     flag2++;
-    if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "flag2", &flag2)
+      if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "flag2", &flag2, 0)
         && flag2 == dimension_ordinate->flag2)
       {
         pass ("DIMENSION_ORDINATE.flag2 [RC] set+1 %u", flag2);
@@ -14168,7 +14168,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
         error++;
       }
     flip_arrow1++;
-    if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "flip_arrow1", &flip_arrow1)
+      if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "flip_arrow1", &flip_arrow1, 0)
         && flip_arrow1 == dimension_ordinate->flip_arrow1)
       {
         pass ("DIMENSION_ORDINATE.flip_arrow1 [B] set+1 " FORMAT_B "", flip_arrow1);
@@ -14194,7 +14194,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
         error++;
       }
     flip_arrow2++;
-    if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "flip_arrow2", &flip_arrow2)
+      if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "flip_arrow2", &flip_arrow2, 0)
         && flip_arrow2 == dimension_ordinate->flip_arrow2)
       {
         pass ("DIMENSION_ORDINATE.flip_arrow2 [B] set+1 " FORMAT_B "", flip_arrow2);
@@ -14220,7 +14220,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
         error++;
       }
     horiz_dir++;
-    if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "horiz_dir", &horiz_dir)
+      if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "horiz_dir", &horiz_dir, 0)
         && horiz_dir == dimension_ordinate->horiz_dir)
       {
         pass ("DIMENSION_ORDINATE.horiz_dir [BD] set+1 %g", horiz_dir);
@@ -14246,7 +14246,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
         error++;
       }
     ins_rotation++;
-    if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "ins_rotation", &ins_rotation)
+      if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "ins_rotation", &ins_rotation, 0)
         && ins_rotation == dimension_ordinate->ins_rotation)
       {
         pass ("DIMENSION_ORDINATE.ins_rotation [BD] set+1 %g", ins_rotation);
@@ -14298,7 +14298,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
         error++;
       }
     lspace_factor++;
-    if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "lspace_factor", &lspace_factor)
+      if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "lspace_factor", &lspace_factor, 0)
         && lspace_factor == dimension_ordinate->lspace_factor)
       {
         pass ("DIMENSION_ORDINATE.lspace_factor [BD] set+1 %g", lspace_factor);
@@ -14324,7 +14324,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
         error++;
       }
     lspace_style++;
-    if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "lspace_style", &lspace_style)
+      if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "lspace_style", &lspace_style, 0)
         && lspace_style == dimension_ordinate->lspace_style)
       {
         pass ("DIMENSION_ORDINATE.lspace_style [BS] set+1 %hu", lspace_style);
@@ -14376,7 +14376,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
         error++;
       }
     text_rotation++;
-    if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "text_rotation", &text_rotation)
+      if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "text_rotation", &text_rotation, 0)
         && text_rotation == dimension_ordinate->text_rotation)
       {
         pass ("DIMENSION_ORDINATE.text_rotation [BD] set+1 %g", text_rotation);
@@ -14402,7 +14402,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
         error++;
       }
     unknown++;
-    if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "unknown", &unknown)
+      if (dwg_dynapi_entity_set_value (dimension_ordinate, "DIMENSION_ORDINATE", "unknown", &unknown, 0)
         && unknown == dimension_ordinate->unknown)
       {
         pass ("DIMENSION_ORDINATE.unknown [B] set+1 " FORMAT_B "", unknown);
@@ -14448,7 +14448,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
         error++;
       }
     act_measurement++;
-    if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "act_measurement", &act_measurement)
+      if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "act_measurement", &act_measurement, 0)
         && act_measurement == dimension_radius->act_measurement)
       {
         pass ("DIMENSION_RADIUS.act_measurement [BD] set+1 %g", act_measurement);
@@ -14474,7 +14474,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
         error++;
       }
     attachment++;
-    if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "attachment", &attachment)
+      if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "attachment", &attachment, 0)
         && attachment == dimension_radius->attachment)
       {
         pass ("DIMENSION_RADIUS.attachment [BS] set+1 %hu", attachment);
@@ -14526,7 +14526,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "class_version", &class_version, 0)
         && class_version == dimension_radius->class_version)
       {
         pass ("DIMENSION_RADIUS.class_version [RC] set+1 %u", class_version);
@@ -14591,7 +14591,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
         error++;
       }
     elevation++;
-    if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "elevation", &elevation)
+      if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "elevation", &elevation, 0)
         && elevation == dimension_radius->elevation)
       {
         pass ("DIMENSION_RADIUS.elevation [BD] set+1 %g", elevation);
@@ -14643,7 +14643,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "flag", &flag, 0)
         && flag == dimension_radius->flag)
       {
         pass ("DIMENSION_RADIUS.flag [RC] set+1 %u", flag);
@@ -14669,7 +14669,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
         error++;
       }
     flag1++;
-    if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "flag1", &flag1)
+      if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "flag1", &flag1, 0)
         && flag1 == dimension_radius->flag1)
       {
         pass ("DIMENSION_RADIUS.flag1 [RC] set+1 %u", flag1);
@@ -14695,7 +14695,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
         error++;
       }
     flip_arrow1++;
-    if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "flip_arrow1", &flip_arrow1)
+      if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "flip_arrow1", &flip_arrow1, 0)
         && flip_arrow1 == dimension_radius->flip_arrow1)
       {
         pass ("DIMENSION_RADIUS.flip_arrow1 [B] set+1 " FORMAT_B "", flip_arrow1);
@@ -14721,7 +14721,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
         error++;
       }
     flip_arrow2++;
-    if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "flip_arrow2", &flip_arrow2)
+      if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "flip_arrow2", &flip_arrow2, 0)
         && flip_arrow2 == dimension_radius->flip_arrow2)
       {
         pass ("DIMENSION_RADIUS.flip_arrow2 [B] set+1 " FORMAT_B "", flip_arrow2);
@@ -14747,7 +14747,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
         error++;
       }
     horiz_dir++;
-    if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "horiz_dir", &horiz_dir)
+      if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "horiz_dir", &horiz_dir, 0)
         && horiz_dir == dimension_radius->horiz_dir)
       {
         pass ("DIMENSION_RADIUS.horiz_dir [BD] set+1 %g", horiz_dir);
@@ -14773,7 +14773,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
         error++;
       }
     ins_rotation++;
-    if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "ins_rotation", &ins_rotation)
+      if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "ins_rotation", &ins_rotation, 0)
         && ins_rotation == dimension_radius->ins_rotation)
       {
         pass ("DIMENSION_RADIUS.ins_rotation [BD] set+1 %g", ins_rotation);
@@ -14812,7 +14812,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
         error++;
       }
     leader_len++;
-    if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "leader_len", &leader_len)
+      if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "leader_len", &leader_len, 0)
         && leader_len == dimension_radius->leader_len)
       {
         pass ("DIMENSION_RADIUS.leader_len [BD] set+1 %g", leader_len);
@@ -14838,7 +14838,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
         error++;
       }
     lspace_factor++;
-    if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "lspace_factor", &lspace_factor)
+      if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "lspace_factor", &lspace_factor, 0)
         && lspace_factor == dimension_radius->lspace_factor)
       {
         pass ("DIMENSION_RADIUS.lspace_factor [BD] set+1 %g", lspace_factor);
@@ -14864,7 +14864,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
         error++;
       }
     lspace_style++;
-    if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "lspace_style", &lspace_style)
+      if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "lspace_style", &lspace_style, 0)
         && lspace_style == dimension_radius->lspace_style)
       {
         pass ("DIMENSION_RADIUS.lspace_style [BS] set+1 %hu", lspace_style);
@@ -14916,7 +14916,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
         error++;
       }
     text_rotation++;
-    if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "text_rotation", &text_rotation)
+      if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "text_rotation", &text_rotation, 0)
         && text_rotation == dimension_radius->text_rotation)
       {
         pass ("DIMENSION_RADIUS.text_rotation [BD] set+1 %g", text_rotation);
@@ -14942,7 +14942,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
         error++;
       }
     unknown++;
-    if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "unknown", &unknown)
+      if (dwg_dynapi_entity_set_value (dimension_radius, "DIMENSION_RADIUS", "unknown", &unknown, 0)
         && unknown == dimension_radius->unknown)
       {
         pass ("DIMENSION_RADIUS.unknown [B] set+1 " FORMAT_B "", unknown);
@@ -14988,7 +14988,7 @@ static int test_ELLIPSE (const Dwg_Object *obj)
         error++;
       }
     axis_ratio++;
-    if (dwg_dynapi_entity_set_value (ellipse, "ELLIPSE", "axis_ratio", &axis_ratio)
+      if (dwg_dynapi_entity_set_value (ellipse, "ELLIPSE", "axis_ratio", &axis_ratio, 0)
         && axis_ratio == ellipse->axis_ratio)
       {
         pass ("ELLIPSE.axis_ratio [BD] set+1 %g", axis_ratio);
@@ -15027,7 +15027,7 @@ static int test_ELLIPSE (const Dwg_Object *obj)
         error++;
       }
     end_angle++;
-    if (dwg_dynapi_entity_set_value (ellipse, "ELLIPSE", "end_angle", &end_angle)
+      if (dwg_dynapi_entity_set_value (ellipse, "ELLIPSE", "end_angle", &end_angle, 0)
         && end_angle == ellipse->end_angle)
       {
         pass ("ELLIPSE.end_angle [BD] set+1 %g", end_angle);
@@ -15092,7 +15092,7 @@ static int test_ELLIPSE (const Dwg_Object *obj)
         error++;
       }
     start_angle++;
-    if (dwg_dynapi_entity_set_value (ellipse, "ELLIPSE", "start_angle", &start_angle)
+      if (dwg_dynapi_entity_set_value (ellipse, "ELLIPSE", "start_angle", &start_angle, 0)
         && start_angle == ellipse->start_angle)
       {
         pass ("ELLIPSE.start_angle [BD] set+1 %g", start_angle);
@@ -15158,7 +15158,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     acis_empty++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "acis_empty", &acis_empty)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "acis_empty", &acis_empty, 0)
         && acis_empty == extrudedsurface->acis_empty)
       {
         pass ("EXTRUDEDSURFACE.acis_empty [B] set+1 " FORMAT_B "", acis_empty);
@@ -15184,7 +15184,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     acis_empty2++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "acis_empty2", &acis_empty2)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "acis_empty2", &acis_empty2, 0)
         && acis_empty2 == extrudedsurface->acis_empty2)
       {
         pass ("EXTRUDEDSURFACE.acis_empty2 [B] set+1 " FORMAT_B "", acis_empty2);
@@ -15210,7 +15210,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     acis_empty_bit++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "acis_empty_bit", &acis_empty_bit)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "acis_empty_bit", &acis_empty_bit, 0)
         && acis_empty_bit == extrudedsurface->acis_empty_bit)
       {
         pass ("EXTRUDEDSURFACE.acis_empty_bit [B] set+1 " FORMAT_B "", acis_empty_bit);
@@ -15236,7 +15236,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     align_angle++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "align_angle", &align_angle)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "align_angle", &align_angle, 0)
         && align_angle == extrudedsurface->align_angle)
       {
         pass ("EXTRUDEDSURFACE.align_angle [BD] set+1 %g", align_angle);
@@ -15262,7 +15262,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     align_start++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "align_start", &align_start)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "align_start", &align_start, 0)
         && align_start == extrudedsurface->align_start)
       {
         pass ("EXTRUDEDSURFACE.align_start [B] set+1 " FORMAT_B "", align_start);
@@ -15288,7 +15288,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     bank++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "bank", &bank)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "bank", &bank, 0)
         && bank == extrudedsurface->bank)
       {
         pass ("EXTRUDEDSURFACE.bank [B] set+1 " FORMAT_B "", bank);
@@ -15314,7 +15314,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     base_point_set++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "base_point_set", &base_point_set)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "base_point_set", &base_point_set, 0)
         && base_point_set == extrudedsurface->base_point_set)
       {
         pass ("EXTRUDEDSURFACE.base_point_set [B] set+1 " FORMAT_B "", base_point_set);
@@ -15366,7 +15366,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "class_version", &class_version, 0)
         && class_version == extrudedsurface->class_version)
       {
         pass ("EXTRUDEDSURFACE.class_version [BL] set+1 %u", class_version);
@@ -15392,7 +15392,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     draft_angle++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "draft_angle", &draft_angle)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "draft_angle", &draft_angle, 0)
         && draft_angle == extrudedsurface->draft_angle)
       {
         pass ("EXTRUDEDSURFACE.draft_angle [BD] set+1 %g", draft_angle);
@@ -15418,7 +15418,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     draft_end_distance++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "draft_end_distance", &draft_end_distance)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "draft_end_distance", &draft_end_distance, 0)
         && draft_end_distance == extrudedsurface->draft_end_distance)
       {
         pass ("EXTRUDEDSURFACE.draft_end_distance [BD] set+1 %g", draft_end_distance);
@@ -15444,7 +15444,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     draft_start_distance++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "draft_start_distance", &draft_start_distance)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "draft_start_distance", &draft_start_distance, 0)
         && draft_start_distance == extrudedsurface->draft_start_distance)
       {
         pass ("EXTRUDEDSURFACE.draft_start_distance [BD] set+1 %g", draft_start_distance);
@@ -15498,7 +15498,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     height++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "height", &height)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "height", &height, 0)
         && height == extrudedsurface->height)
       {
         pass ("EXTRUDEDSURFACE.height [BD] set+1 %g", height);
@@ -15537,7 +15537,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     isoline_present++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "isoline_present", &isoline_present)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "isoline_present", &isoline_present, 0)
         && isoline_present == extrudedsurface->isoline_present)
       {
         pass ("EXTRUDEDSURFACE.isoline_present [B] set+1 " FORMAT_B "", isoline_present);
@@ -15563,7 +15563,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     modeler_format_version++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "modeler_format_version", &modeler_format_version)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "modeler_format_version", &modeler_format_version, 0)
         && modeler_format_version == extrudedsurface->modeler_format_version)
       {
         pass ("EXTRUDEDSURFACE.modeler_format_version [BS] set+1 %hu", modeler_format_version);
@@ -15589,7 +15589,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     num_blocks++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "num_blocks", &num_blocks)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "num_blocks", &num_blocks, 0)
         && num_blocks == extrudedsurface->num_blocks)
       {
         pass ("EXTRUDEDSURFACE.num_blocks [BL] set+1 %u", num_blocks);
@@ -15615,7 +15615,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     num_isolines++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "num_isolines", &num_isolines)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "num_isolines", &num_isolines, 0)
         && num_isolines == extrudedsurface->num_isolines)
       {
         pass ("EXTRUDEDSURFACE.num_isolines [BL] set+1 %u", num_isolines);
@@ -15641,7 +15641,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     num_silhouettes++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "num_silhouettes", &num_silhouettes)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "num_silhouettes", &num_silhouettes, 0)
         && num_silhouettes == extrudedsurface->num_silhouettes)
       {
         pass ("EXTRUDEDSURFACE.num_silhouettes [BL] set+1 %u", num_silhouettes);
@@ -15667,7 +15667,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     num_wires++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "num_wires", &num_wires)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "num_wires", &num_wires, 0)
         && num_wires == extrudedsurface->num_wires)
       {
         pass ("EXTRUDEDSURFACE.num_wires [BL] set+1 %u", num_wires);
@@ -15719,7 +15719,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     path_entity_transform_computed++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "path_entity_transform_computed", &path_entity_transform_computed)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "path_entity_transform_computed", &path_entity_transform_computed, 0)
         && path_entity_transform_computed == extrudedsurface->path_entity_transform_computed)
       {
         pass ("EXTRUDEDSURFACE.path_entity_transform_computed [B] set+1 " FORMAT_B "", path_entity_transform_computed);
@@ -15771,7 +15771,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     point_present++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "point_present", &point_present)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "point_present", &point_present, 0)
         && point_present == extrudedsurface->point_present)
       {
         pass ("EXTRUDEDSURFACE.point_present [B] set+1 " FORMAT_B "", point_present);
@@ -15810,7 +15810,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     scale_factor++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "scale_factor", &scale_factor)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "scale_factor", &scale_factor, 0)
         && scale_factor == extrudedsurface->scale_factor)
       {
         pass ("EXTRUDEDSURFACE.scale_factor [BD] set+1 %g", scale_factor);
@@ -15851,7 +15851,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     size_bindata++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "size_bindata", &size_bindata)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "size_bindata", &size_bindata, 0)
         && size_bindata == extrudedsurface->size_bindata)
       {
         pass ("EXTRUDEDSURFACE.size_bindata [BL] set+1 %u", size_bindata);
@@ -15877,7 +15877,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     solid++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "solid", &solid)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "solid", &solid, 0)
         && solid == extrudedsurface->solid)
       {
         pass ("EXTRUDEDSURFACE.solid [B] set+1 " FORMAT_B "", solid);
@@ -15903,7 +15903,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     sweep_alignment_flags++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "sweep_alignment_flags", &sweep_alignment_flags)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "sweep_alignment_flags", &sweep_alignment_flags, 0)
         && sweep_alignment_flags == extrudedsurface->sweep_alignment_flags)
       {
         pass ("EXTRUDEDSURFACE.sweep_alignment_flags [BS] set+1 %hu", sweep_alignment_flags);
@@ -15942,7 +15942,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     sweep_entity_transform_computed++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "sweep_entity_transform_computed", &sweep_entity_transform_computed)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "sweep_entity_transform_computed", &sweep_entity_transform_computed, 0)
         && sweep_entity_transform_computed == extrudedsurface->sweep_entity_transform_computed)
       {
         pass ("EXTRUDEDSURFACE.sweep_entity_transform_computed [B] set+1 " FORMAT_B "", sweep_entity_transform_computed);
@@ -16007,7 +16007,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     twist_angle++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "twist_angle", &twist_angle)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "twist_angle", &twist_angle, 0)
         && twist_angle == extrudedsurface->twist_angle)
       {
         pass ("EXTRUDEDSURFACE.twist_angle [BD] set+1 %g", twist_angle);
@@ -16033,7 +16033,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     u_isolines++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "u_isolines", &u_isolines)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "u_isolines", &u_isolines, 0)
         && u_isolines == extrudedsurface->u_isolines)
       {
         pass ("EXTRUDEDSURFACE.u_isolines [BS] set+1 %hu", u_isolines);
@@ -16059,7 +16059,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     unknown++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "unknown", &unknown)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "unknown", &unknown, 0)
         && unknown == extrudedsurface->unknown)
       {
         pass ("EXTRUDEDSURFACE.unknown [B] set+1 " FORMAT_B "", unknown);
@@ -16085,7 +16085,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     unknown_2007++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "unknown_2007", &unknown_2007)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "unknown_2007", &unknown_2007, 0)
         && unknown_2007 == extrudedsurface->unknown_2007)
       {
         pass ("EXTRUDEDSURFACE.unknown_2007 [BL] set+1 %u", unknown_2007);
@@ -16111,7 +16111,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     v_isolines++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "v_isolines", &v_isolines)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "v_isolines", &v_isolines, 0)
         && v_isolines == extrudedsurface->v_isolines)
       {
         pass ("EXTRUDEDSURFACE.v_isolines [BS] set+1 %hu", v_isolines);
@@ -16137,7 +16137,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     version++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "version", &version)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "version", &version, 0)
         && version == extrudedsurface->version)
       {
         pass ("EXTRUDEDSURFACE.version [BS] set+1 %hu", version);
@@ -16163,7 +16163,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     wireframe_data_present++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "wireframe_data_present", &wireframe_data_present)
+      if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "wireframe_data_present", &wireframe_data_present, 0)
         && wireframe_data_present == extrudedsurface->wireframe_data_present)
       {
         pass ("EXTRUDEDSURFACE.wireframe_data_present [B] set+1 " FORMAT_B "", wireframe_data_present);
@@ -16211,7 +16211,7 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
         error++;
       }
     enable_frame_text++;
-    if (dwg_dynapi_entity_set_value (geopositionmarker, "GEOPOSITIONMARKER", "enable_frame_text", &enable_frame_text)
+      if (dwg_dynapi_entity_set_value (geopositionmarker, "GEOPOSITIONMARKER", "enable_frame_text", &enable_frame_text, 0)
         && enable_frame_text == geopositionmarker->enable_frame_text)
       {
         pass ("GEOPOSITIONMARKER.enable_frame_text [B] set+1 " FORMAT_B "", enable_frame_text);
@@ -16250,7 +16250,7 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
         error++;
       }
     landing_gap++;
-    if (dwg_dynapi_entity_set_value (geopositionmarker, "GEOPOSITIONMARKER", "landing_gap", &landing_gap)
+      if (dwg_dynapi_entity_set_value (geopositionmarker, "GEOPOSITIONMARKER", "landing_gap", &landing_gap, 0)
         && landing_gap == geopositionmarker->landing_gap)
       {
         pass ("GEOPOSITIONMARKER.landing_gap [BD] set+1 %g", landing_gap);
@@ -16289,7 +16289,7 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
         error++;
       }
     mtext_visible++;
-    if (dwg_dynapi_entity_set_value (geopositionmarker, "GEOPOSITIONMARKER", "mtext_visible", &mtext_visible)
+      if (dwg_dynapi_entity_set_value (geopositionmarker, "GEOPOSITIONMARKER", "mtext_visible", &mtext_visible, 0)
         && mtext_visible == geopositionmarker->mtext_visible)
       {
         pass ("GEOPOSITIONMARKER.mtext_visible [B] set+1 " FORMAT_B "", mtext_visible);
@@ -16354,7 +16354,7 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
         error++;
       }
     radius++;
-    if (dwg_dynapi_entity_set_value (geopositionmarker, "GEOPOSITIONMARKER", "radius", &radius)
+      if (dwg_dynapi_entity_set_value (geopositionmarker, "GEOPOSITIONMARKER", "radius", &radius, 0)
         && radius == geopositionmarker->radius)
       {
         pass ("GEOPOSITIONMARKER.radius [BD] set+1 %g", radius);
@@ -16393,7 +16393,7 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
         error++;
       }
     text_alignment++;
-    if (dwg_dynapi_entity_set_value (geopositionmarker, "GEOPOSITIONMARKER", "text_alignment", &text_alignment)
+      if (dwg_dynapi_entity_set_value (geopositionmarker, "GEOPOSITIONMARKER", "text_alignment", &text_alignment, 0)
         && text_alignment == geopositionmarker->text_alignment)
       {
         pass ("GEOPOSITIONMARKER.text_alignment [BS] set+1 %hu", text_alignment);
@@ -16432,7 +16432,7 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
         error++;
       }
     type++;
-    if (dwg_dynapi_entity_set_value (geopositionmarker, "GEOPOSITIONMARKER", "type", &type)
+      if (dwg_dynapi_entity_set_value (geopositionmarker, "GEOPOSITIONMARKER", "type", &type, 0)
         && type == geopositionmarker->type)
       {
         pass ("GEOPOSITIONMARKER.type [BS] set+1 %hu", type);
@@ -16465,7 +16465,7 @@ static int test_HATCH (const Dwg_Object *obj)
         error++;
       }
     angle++;
-    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "angle", &angle)
+      if (dwg_dynapi_entity_set_value (hatch, "HATCH", "angle", &angle, 0)
         && angle == hatch->angle)
       {
         pass ("HATCH.angle [BD] set+1 %g", angle);
@@ -16491,7 +16491,7 @@ static int test_HATCH (const Dwg_Object *obj)
         error++;
       }
     associative++;
-    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "associative", &associative)
+      if (dwg_dynapi_entity_set_value (hatch, "HATCH", "associative", &associative, 0)
         && associative == hatch->associative)
       {
         pass ("HATCH.associative [B] set+1 " FORMAT_B "", associative);
@@ -16562,7 +16562,7 @@ static int test_HATCH (const Dwg_Object *obj)
         error++;
       }
     double_flag++;
-    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "double_flag", &double_flag)
+      if (dwg_dynapi_entity_set_value (hatch, "HATCH", "double_flag", &double_flag, 0)
         && double_flag == hatch->double_flag)
       {
         pass ("HATCH.double_flag [B] set+1 " FORMAT_B "", double_flag);
@@ -16588,7 +16588,7 @@ static int test_HATCH (const Dwg_Object *obj)
         error++;
       }
     elevation++;
-    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "elevation", &elevation)
+      if (dwg_dynapi_entity_set_value (hatch, "HATCH", "elevation", &elevation, 0)
         && elevation == hatch->elevation)
       {
         pass ("HATCH.elevation [BD] set+1 %g", elevation);
@@ -16627,7 +16627,7 @@ static int test_HATCH (const Dwg_Object *obj)
         error++;
       }
     gradient_angle++;
-    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "gradient_angle", &gradient_angle)
+      if (dwg_dynapi_entity_set_value (hatch, "HATCH", "gradient_angle", &gradient_angle, 0)
         && gradient_angle == hatch->gradient_angle)
       {
         pass ("HATCH.gradient_angle [BD] set+1 %g", gradient_angle);
@@ -16666,7 +16666,7 @@ static int test_HATCH (const Dwg_Object *obj)
         error++;
       }
     gradient_shift++;
-    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "gradient_shift", &gradient_shift)
+      if (dwg_dynapi_entity_set_value (hatch, "HATCH", "gradient_shift", &gradient_shift, 0)
         && gradient_shift == hatch->gradient_shift)
       {
         pass ("HATCH.gradient_shift [BD] set+1 %g", gradient_shift);
@@ -16692,7 +16692,7 @@ static int test_HATCH (const Dwg_Object *obj)
         error++;
       }
     gradient_tint++;
-    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "gradient_tint", &gradient_tint)
+      if (dwg_dynapi_entity_set_value (hatch, "HATCH", "gradient_tint", &gradient_tint, 0)
         && gradient_tint == hatch->gradient_tint)
       {
         pass ("HATCH.gradient_tint [BD] set+1 %g", gradient_tint);
@@ -16718,7 +16718,7 @@ static int test_HATCH (const Dwg_Object *obj)
         error++;
       }
     has_derived++;
-    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "has_derived", &has_derived)
+      if (dwg_dynapi_entity_set_value (hatch, "HATCH", "has_derived", &has_derived, 0)
         && has_derived == hatch->has_derived)
       {
         pass ("HATCH.has_derived [B] set+1 " FORMAT_B "", has_derived);
@@ -16744,7 +16744,7 @@ static int test_HATCH (const Dwg_Object *obj)
         error++;
       }
     is_gradient_fill++;
-    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "is_gradient_fill", &is_gradient_fill)
+      if (dwg_dynapi_entity_set_value (hatch, "HATCH", "is_gradient_fill", &is_gradient_fill, 0)
         && is_gradient_fill == hatch->is_gradient_fill)
       {
         pass ("HATCH.is_gradient_fill [BL] set+1 %u", is_gradient_fill);
@@ -16783,7 +16783,7 @@ static int test_HATCH (const Dwg_Object *obj)
         error++;
       }
     num_boundary_handles++;
-    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "num_boundary_handles", &num_boundary_handles)
+      if (dwg_dynapi_entity_set_value (hatch, "HATCH", "num_boundary_handles", &num_boundary_handles, 0)
         && num_boundary_handles == hatch->num_boundary_handles)
       {
         pass ("HATCH.num_boundary_handles [BL] set+1 %u", num_boundary_handles);
@@ -16809,7 +16809,7 @@ static int test_HATCH (const Dwg_Object *obj)
         error++;
       }
     num_colors++;
-    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "num_colors", &num_colors)
+      if (dwg_dynapi_entity_set_value (hatch, "HATCH", "num_colors", &num_colors, 0)
         && num_colors == hatch->num_colors)
       {
         pass ("HATCH.num_colors [BL] set+1 %u", num_colors);
@@ -16835,7 +16835,7 @@ static int test_HATCH (const Dwg_Object *obj)
         error++;
       }
     num_deflines++;
-    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "num_deflines", &num_deflines)
+      if (dwg_dynapi_entity_set_value (hatch, "HATCH", "num_deflines", &num_deflines, 0)
         && num_deflines == hatch->num_deflines)
       {
         pass ("HATCH.num_deflines [BS] set+1 %hu", num_deflines);
@@ -16861,7 +16861,7 @@ static int test_HATCH (const Dwg_Object *obj)
         error++;
       }
     num_paths++;
-    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "num_paths", &num_paths)
+      if (dwg_dynapi_entity_set_value (hatch, "HATCH", "num_paths", &num_paths, 0)
         && num_paths == hatch->num_paths)
       {
         pass ("HATCH.num_paths [BL] set+1 %u", num_paths);
@@ -16887,7 +16887,7 @@ static int test_HATCH (const Dwg_Object *obj)
         error++;
       }
     num_seeds++;
-    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "num_seeds", &num_seeds)
+      if (dwg_dynapi_entity_set_value (hatch, "HATCH", "num_seeds", &num_seeds, 0)
         && num_seeds == hatch->num_seeds)
       {
         pass ("HATCH.num_seeds [BL] set+1 %u", num_seeds);
@@ -16941,7 +16941,7 @@ static int test_HATCH (const Dwg_Object *obj)
         error++;
       }
     pattern_type++;
-    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "pattern_type", &pattern_type)
+      if (dwg_dynapi_entity_set_value (hatch, "HATCH", "pattern_type", &pattern_type, 0)
         && pattern_type == hatch->pattern_type)
       {
         pass ("HATCH.pattern_type [BS] set+1 %hu", pattern_type);
@@ -16967,7 +16967,7 @@ static int test_HATCH (const Dwg_Object *obj)
         error++;
       }
     pixel_size++;
-    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "pixel_size", &pixel_size)
+      if (dwg_dynapi_entity_set_value (hatch, "HATCH", "pixel_size", &pixel_size, 0)
         && pixel_size == hatch->pixel_size)
       {
         pass ("HATCH.pixel_size [BD] set+1 %g", pixel_size);
@@ -16993,7 +16993,7 @@ static int test_HATCH (const Dwg_Object *obj)
         error++;
       }
     reserved++;
-    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "reserved", &reserved)
+      if (dwg_dynapi_entity_set_value (hatch, "HATCH", "reserved", &reserved, 0)
         && reserved == hatch->reserved)
       {
         pass ("HATCH.reserved [BL] set+1 %u", reserved);
@@ -17019,7 +17019,7 @@ static int test_HATCH (const Dwg_Object *obj)
         error++;
       }
     scale_spacing++;
-    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "scale_spacing", &scale_spacing)
+      if (dwg_dynapi_entity_set_value (hatch, "HATCH", "scale_spacing", &scale_spacing, 0)
         && scale_spacing == hatch->scale_spacing)
       {
         pass ("HATCH.scale_spacing [BD] set+1 %g", scale_spacing);
@@ -17060,7 +17060,7 @@ static int test_HATCH (const Dwg_Object *obj)
         error++;
       }
     single_color_gradient++;
-    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "single_color_gradient", &single_color_gradient)
+      if (dwg_dynapi_entity_set_value (hatch, "HATCH", "single_color_gradient", &single_color_gradient, 0)
         && single_color_gradient == hatch->single_color_gradient)
       {
         pass ("HATCH.single_color_gradient [BL] set+1 %u", single_color_gradient);
@@ -17086,7 +17086,7 @@ static int test_HATCH (const Dwg_Object *obj)
         error++;
       }
     solid_fill++;
-    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "solid_fill", &solid_fill)
+      if (dwg_dynapi_entity_set_value (hatch, "HATCH", "solid_fill", &solid_fill, 0)
         && solid_fill == hatch->solid_fill)
       {
         pass ("HATCH.solid_fill [B] set+1 " FORMAT_B "", solid_fill);
@@ -17112,7 +17112,7 @@ static int test_HATCH (const Dwg_Object *obj)
         error++;
       }
     style++;
-    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "style", &style)
+      if (dwg_dynapi_entity_set_value (hatch, "HATCH", "style", &style, 0)
         && style == hatch->style)
       {
         pass ("HATCH.style [BS] set+1 %hu", style);
@@ -17184,7 +17184,7 @@ static int test_HELIX (const Dwg_Object *obj)
         error++;
       }
     closed_b++;
-    if (dwg_dynapi_entity_set_value (helix, "HELIX", "closed_b", &closed_b)
+      if (dwg_dynapi_entity_set_value (helix, "HELIX", "closed_b", &closed_b, 0)
         && closed_b == helix->closed_b)
       {
         pass ("HELIX.closed_b [B] set+1 " FORMAT_B "", closed_b);
@@ -17210,7 +17210,7 @@ static int test_HELIX (const Dwg_Object *obj)
         error++;
       }
     constraint_type++;
-    if (dwg_dynapi_entity_set_value (helix, "HELIX", "constraint_type", &constraint_type)
+      if (dwg_dynapi_entity_set_value (helix, "HELIX", "constraint_type", &constraint_type, 0)
         && constraint_type == helix->constraint_type)
       {
         pass ("HELIX.constraint_type [BS] set+1 %hu", constraint_type);
@@ -17251,7 +17251,7 @@ static int test_HELIX (const Dwg_Object *obj)
         error++;
       }
     ctrl_tol++;
-    if (dwg_dynapi_entity_set_value (helix, "HELIX", "ctrl_tol", &ctrl_tol)
+      if (dwg_dynapi_entity_set_value (helix, "HELIX", "ctrl_tol", &ctrl_tol, 0)
         && ctrl_tol == helix->ctrl_tol)
       {
         pass ("HELIX.ctrl_tol [BD] set+1 %g", ctrl_tol);
@@ -17277,7 +17277,7 @@ static int test_HELIX (const Dwg_Object *obj)
         error++;
       }
     degree++;
-    if (dwg_dynapi_entity_set_value (helix, "HELIX", "degree", &degree)
+      if (dwg_dynapi_entity_set_value (helix, "HELIX", "degree", &degree, 0)
         && degree == helix->degree)
       {
         pass ("HELIX.degree [BS] set+1 %hu", degree);
@@ -17331,7 +17331,7 @@ static int test_HELIX (const Dwg_Object *obj)
         error++;
       }
     fit_tol++;
-    if (dwg_dynapi_entity_set_value (helix, "HELIX", "fit_tol", &fit_tol)
+      if (dwg_dynapi_entity_set_value (helix, "HELIX", "fit_tol", &fit_tol, 0)
         && fit_tol == helix->fit_tol)
       {
         pass ("HELIX.fit_tol [BD] set+1 %g", fit_tol);
@@ -17357,7 +17357,7 @@ static int test_HELIX (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (helix, "HELIX", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (helix, "HELIX", "flag", &flag, 0)
         && flag == helix->flag)
       {
         pass ("HELIX.flag [BS] set+1 %hu", flag);
@@ -17383,7 +17383,7 @@ static int test_HELIX (const Dwg_Object *obj)
         error++;
       }
     handedness++;
-    if (dwg_dynapi_entity_set_value (helix, "HELIX", "handedness", &handedness)
+      if (dwg_dynapi_entity_set_value (helix, "HELIX", "handedness", &handedness, 0)
         && handedness == helix->handedness)
       {
         pass ("HELIX.handedness [B] set+1 " FORMAT_B "", handedness);
@@ -17409,7 +17409,7 @@ static int test_HELIX (const Dwg_Object *obj)
         error++;
       }
     knot_tol++;
-    if (dwg_dynapi_entity_set_value (helix, "HELIX", "knot_tol", &knot_tol)
+      if (dwg_dynapi_entity_set_value (helix, "HELIX", "knot_tol", &knot_tol, 0)
         && knot_tol == helix->knot_tol)
       {
         pass ("HELIX.knot_tol [BD] set+1 %g", knot_tol);
@@ -17435,7 +17435,7 @@ static int test_HELIX (const Dwg_Object *obj)
         error++;
       }
     knotparam++;
-    if (dwg_dynapi_entity_set_value (helix, "HELIX", "knotparam", &knotparam)
+      if (dwg_dynapi_entity_set_value (helix, "HELIX", "knotparam", &knotparam, 0)
         && knotparam == helix->knotparam)
       {
         pass ("HELIX.knotparam [BL] set+1 %u", knotparam);
@@ -17476,7 +17476,7 @@ static int test_HELIX (const Dwg_Object *obj)
         error++;
       }
     maint_version++;
-    if (dwg_dynapi_entity_set_value (helix, "HELIX", "maint_version", &maint_version)
+      if (dwg_dynapi_entity_set_value (helix, "HELIX", "maint_version", &maint_version, 0)
         && maint_version == helix->maint_version)
       {
         pass ("HELIX.maint_version [BS] set+1 %hu", maint_version);
@@ -17502,7 +17502,7 @@ static int test_HELIX (const Dwg_Object *obj)
         error++;
       }
     major_version++;
-    if (dwg_dynapi_entity_set_value (helix, "HELIX", "major_version", &major_version)
+      if (dwg_dynapi_entity_set_value (helix, "HELIX", "major_version", &major_version, 0)
         && major_version == helix->major_version)
       {
         pass ("HELIX.major_version [BS] set+1 %hu", major_version);
@@ -17528,7 +17528,7 @@ static int test_HELIX (const Dwg_Object *obj)
         error++;
       }
     num_ctrl_pts++;
-    if (dwg_dynapi_entity_set_value (helix, "HELIX", "num_ctrl_pts", &num_ctrl_pts)
+      if (dwg_dynapi_entity_set_value (helix, "HELIX", "num_ctrl_pts", &num_ctrl_pts, 0)
         && num_ctrl_pts == helix->num_ctrl_pts)
       {
         pass ("HELIX.num_ctrl_pts [BL] set+1 %u", num_ctrl_pts);
@@ -17554,7 +17554,7 @@ static int test_HELIX (const Dwg_Object *obj)
         error++;
       }
     num_fit_pts++;
-    if (dwg_dynapi_entity_set_value (helix, "HELIX", "num_fit_pts", &num_fit_pts)
+      if (dwg_dynapi_entity_set_value (helix, "HELIX", "num_fit_pts", &num_fit_pts, 0)
         && num_fit_pts == helix->num_fit_pts)
       {
         pass ("HELIX.num_fit_pts [BS] set+1 %hu", num_fit_pts);
@@ -17580,7 +17580,7 @@ static int test_HELIX (const Dwg_Object *obj)
         error++;
       }
     num_knots++;
-    if (dwg_dynapi_entity_set_value (helix, "HELIX", "num_knots", &num_knots)
+      if (dwg_dynapi_entity_set_value (helix, "HELIX", "num_knots", &num_knots, 0)
         && num_knots == helix->num_knots)
       {
         pass ("HELIX.num_knots [BL] set+1 %u", num_knots);
@@ -17606,7 +17606,7 @@ static int test_HELIX (const Dwg_Object *obj)
         error++;
       }
     num_turns++;
-    if (dwg_dynapi_entity_set_value (helix, "HELIX", "num_turns", &num_turns)
+      if (dwg_dynapi_entity_set_value (helix, "HELIX", "num_turns", &num_turns, 0)
         && num_turns == helix->num_turns)
       {
         pass ("HELIX.num_turns [BD] set+1 %g", num_turns);
@@ -17645,7 +17645,7 @@ static int test_HELIX (const Dwg_Object *obj)
         error++;
       }
     periodic++;
-    if (dwg_dynapi_entity_set_value (helix, "HELIX", "periodic", &periodic)
+      if (dwg_dynapi_entity_set_value (helix, "HELIX", "periodic", &periodic, 0)
         && periodic == helix->periodic)
       {
         pass ("HELIX.periodic [B] set+1 " FORMAT_B "", periodic);
@@ -17671,7 +17671,7 @@ static int test_HELIX (const Dwg_Object *obj)
         error++;
       }
     radius++;
-    if (dwg_dynapi_entity_set_value (helix, "HELIX", "radius", &radius)
+      if (dwg_dynapi_entity_set_value (helix, "HELIX", "radius", &radius, 0)
         && radius == helix->radius)
       {
         pass ("HELIX.radius [BD] set+1 %g", radius);
@@ -17697,7 +17697,7 @@ static int test_HELIX (const Dwg_Object *obj)
         error++;
       }
     rational++;
-    if (dwg_dynapi_entity_set_value (helix, "HELIX", "rational", &rational)
+      if (dwg_dynapi_entity_set_value (helix, "HELIX", "rational", &rational, 0)
         && rational == helix->rational)
       {
         pass ("HELIX.rational [B] set+1 " FORMAT_B "", rational);
@@ -17723,7 +17723,7 @@ static int test_HELIX (const Dwg_Object *obj)
         error++;
       }
     scenario++;
-    if (dwg_dynapi_entity_set_value (helix, "HELIX", "scenario", &scenario)
+      if (dwg_dynapi_entity_set_value (helix, "HELIX", "scenario", &scenario, 0)
         && scenario == helix->scenario)
       {
         pass ("HELIX.scenario [BS] set+1 %hu", scenario);
@@ -17749,7 +17749,7 @@ static int test_HELIX (const Dwg_Object *obj)
         error++;
       }
     splineflags1++;
-    if (dwg_dynapi_entity_set_value (helix, "HELIX", "splineflags1", &splineflags1)
+      if (dwg_dynapi_entity_set_value (helix, "HELIX", "splineflags1", &splineflags1, 0)
         && splineflags1 == helix->splineflags1)
       {
         pass ("HELIX.splineflags1 [BL] set+1 %u", splineflags1);
@@ -17788,7 +17788,7 @@ static int test_HELIX (const Dwg_Object *obj)
         error++;
       }
     turn_height++;
-    if (dwg_dynapi_entity_set_value (helix, "HELIX", "turn_height", &turn_height)
+      if (dwg_dynapi_entity_set_value (helix, "HELIX", "turn_height", &turn_height, 0)
         && turn_height == helix->turn_height)
       {
         pass ("HELIX.turn_height [BD] set+1 %g", turn_height);
@@ -17814,7 +17814,7 @@ static int test_HELIX (const Dwg_Object *obj)
         error++;
       }
     weighted++;
-    if (dwg_dynapi_entity_set_value (helix, "HELIX", "weighted", &weighted)
+      if (dwg_dynapi_entity_set_value (helix, "HELIX", "weighted", &weighted, 0)
         && weighted == helix->weighted)
       {
         pass ("HELIX.weighted [B] set+1 " FORMAT_B "", weighted);
@@ -17873,7 +17873,7 @@ static int test_IMAGE (const Dwg_Object *obj)
         error++;
       }
     brightness++;
-    if (dwg_dynapi_entity_set_value (image, "IMAGE", "brightness", &brightness)
+      if (dwg_dynapi_entity_set_value (image, "IMAGE", "brightness", &brightness, 0)
         && brightness == image->brightness)
       {
         pass ("IMAGE.brightness [RC] set+1 %u", brightness);
@@ -17899,7 +17899,7 @@ static int test_IMAGE (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (image, "IMAGE", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (image, "IMAGE", "class_version", &class_version, 0)
         && class_version == image->class_version)
       {
         pass ("IMAGE.class_version [BL] set+1 %u", class_version);
@@ -17925,7 +17925,7 @@ static int test_IMAGE (const Dwg_Object *obj)
         error++;
       }
     clip_boundary_type++;
-    if (dwg_dynapi_entity_set_value (image, "IMAGE", "clip_boundary_type", &clip_boundary_type)
+      if (dwg_dynapi_entity_set_value (image, "IMAGE", "clip_boundary_type", &clip_boundary_type, 0)
         && clip_boundary_type == image->clip_boundary_type)
       {
         pass ("IMAGE.clip_boundary_type [BS] set+1 %hu", clip_boundary_type);
@@ -17951,7 +17951,7 @@ static int test_IMAGE (const Dwg_Object *obj)
         error++;
       }
     clip_mode++;
-    if (dwg_dynapi_entity_set_value (image, "IMAGE", "clip_mode", &clip_mode)
+      if (dwg_dynapi_entity_set_value (image, "IMAGE", "clip_mode", &clip_mode, 0)
         && clip_mode == image->clip_mode)
       {
         pass ("IMAGE.clip_mode [B] set+1 " FORMAT_B "", clip_mode);
@@ -17992,7 +17992,7 @@ static int test_IMAGE (const Dwg_Object *obj)
         error++;
       }
     clipping++;
-    if (dwg_dynapi_entity_set_value (image, "IMAGE", "clipping", &clipping)
+      if (dwg_dynapi_entity_set_value (image, "IMAGE", "clipping", &clipping, 0)
         && clipping == image->clipping)
       {
         pass ("IMAGE.clipping [B] set+1 " FORMAT_B "", clipping);
@@ -18018,7 +18018,7 @@ static int test_IMAGE (const Dwg_Object *obj)
         error++;
       }
     contrast++;
-    if (dwg_dynapi_entity_set_value (image, "IMAGE", "contrast", &contrast)
+      if (dwg_dynapi_entity_set_value (image, "IMAGE", "contrast", &contrast, 0)
         && contrast == image->contrast)
       {
         pass ("IMAGE.contrast [RC] set+1 %u", contrast);
@@ -18044,7 +18044,7 @@ static int test_IMAGE (const Dwg_Object *obj)
         error++;
       }
     display_props++;
-    if (dwg_dynapi_entity_set_value (image, "IMAGE", "display_props", &display_props)
+      if (dwg_dynapi_entity_set_value (image, "IMAGE", "display_props", &display_props, 0)
         && display_props == image->display_props)
       {
         pass ("IMAGE.display_props [BS] set+1 %hu", display_props);
@@ -18070,7 +18070,7 @@ static int test_IMAGE (const Dwg_Object *obj)
         error++;
       }
     fade++;
-    if (dwg_dynapi_entity_set_value (image, "IMAGE", "fade", &fade)
+      if (dwg_dynapi_entity_set_value (image, "IMAGE", "fade", &fade, 0)
         && fade == image->fade)
       {
         pass ("IMAGE.fade [RC] set+1 %u", fade);
@@ -18122,7 +18122,7 @@ static int test_IMAGE (const Dwg_Object *obj)
         error++;
       }
     num_clip_verts++;
-    if (dwg_dynapi_entity_set_value (image, "IMAGE", "num_clip_verts", &num_clip_verts)
+      if (dwg_dynapi_entity_set_value (image, "IMAGE", "num_clip_verts", &num_clip_verts, 0)
         && num_clip_verts == image->num_clip_verts)
       {
         pass ("IMAGE.num_clip_verts [BL] set+1 %u", num_clip_verts);
@@ -18274,7 +18274,7 @@ static int test_INSERT (const Dwg_Object *obj)
         error++;
       }
     has_attribs++;
-    if (dwg_dynapi_entity_set_value (insert, "INSERT", "has_attribs", &has_attribs)
+      if (dwg_dynapi_entity_set_value (insert, "INSERT", "has_attribs", &has_attribs, 0)
         && has_attribs == insert->has_attribs)
       {
         pass ("INSERT.has_attribs [B] set+1 " FORMAT_B "", has_attribs);
@@ -18326,7 +18326,7 @@ static int test_INSERT (const Dwg_Object *obj)
         error++;
       }
     num_owned++;
-    if (dwg_dynapi_entity_set_value (insert, "INSERT", "num_owned", &num_owned)
+      if (dwg_dynapi_entity_set_value (insert, "INSERT", "num_owned", &num_owned, 0)
         && num_owned == insert->num_owned)
       {
         pass ("INSERT.num_owned [BL] set+1 %u", num_owned);
@@ -18365,7 +18365,7 @@ static int test_INSERT (const Dwg_Object *obj)
         error++;
       }
     rotation++;
-    if (dwg_dynapi_entity_set_value (insert, "INSERT", "rotation", &rotation)
+      if (dwg_dynapi_entity_set_value (insert, "INSERT", "rotation", &rotation, 0)
         && rotation == insert->rotation)
       {
         pass ("INSERT.rotation [BD] set+1 %g", rotation);
@@ -18404,7 +18404,7 @@ static int test_INSERT (const Dwg_Object *obj)
         error++;
       }
     scale_flag++;
-    if (dwg_dynapi_entity_set_value (insert, "INSERT", "scale_flag", &scale_flag)
+      if (dwg_dynapi_entity_set_value (insert, "INSERT", "scale_flag", &scale_flag, 0)
         && scale_flag == insert->scale_flag)
       {
         pass ("INSERT.scale_flag [BB] set+1 " FORMAT_BB "", scale_flag);
@@ -18450,7 +18450,7 @@ static int test_LEADER (const Dwg_Object *obj)
         error++;
       }
     annot_type++;
-    if (dwg_dynapi_entity_set_value (leader, "LEADER", "annot_type", &annot_type)
+      if (dwg_dynapi_entity_set_value (leader, "LEADER", "annot_type", &annot_type, 0)
         && annot_type == leader->annot_type)
       {
         pass ("LEADER.annot_type [BS] set+1 %hu", annot_type);
@@ -18476,7 +18476,7 @@ static int test_LEADER (const Dwg_Object *obj)
         error++;
       }
     arrowhead_on++;
-    if (dwg_dynapi_entity_set_value (leader, "LEADER", "arrowhead_on", &arrowhead_on)
+      if (dwg_dynapi_entity_set_value (leader, "LEADER", "arrowhead_on", &arrowhead_on, 0)
         && arrowhead_on == leader->arrowhead_on)
       {
         pass ("LEADER.arrowhead_on [B] set+1 " FORMAT_B "", arrowhead_on);
@@ -18502,7 +18502,7 @@ static int test_LEADER (const Dwg_Object *obj)
         error++;
       }
     arrowhead_type++;
-    if (dwg_dynapi_entity_set_value (leader, "LEADER", "arrowhead_type", &arrowhead_type)
+      if (dwg_dynapi_entity_set_value (leader, "LEADER", "arrowhead_type", &arrowhead_type, 0)
         && arrowhead_type == leader->arrowhead_type)
       {
         pass ("LEADER.arrowhead_type [BS] set+1 %hu", arrowhead_type);
@@ -18541,7 +18541,7 @@ static int test_LEADER (const Dwg_Object *obj)
         error++;
       }
     box_height++;
-    if (dwg_dynapi_entity_set_value (leader, "LEADER", "box_height", &box_height)
+      if (dwg_dynapi_entity_set_value (leader, "LEADER", "box_height", &box_height, 0)
         && box_height == leader->box_height)
       {
         pass ("LEADER.box_height [BD] set+1 %g", box_height);
@@ -18567,7 +18567,7 @@ static int test_LEADER (const Dwg_Object *obj)
         error++;
       }
     box_width++;
-    if (dwg_dynapi_entity_set_value (leader, "LEADER", "box_width", &box_width)
+      if (dwg_dynapi_entity_set_value (leader, "LEADER", "box_width", &box_width, 0)
         && box_width == leader->box_width)
       {
         pass ("LEADER.box_width [BD] set+1 %g", box_width);
@@ -18593,7 +18593,7 @@ static int test_LEADER (const Dwg_Object *obj)
         error++;
       }
     byblock_color++;
-    if (dwg_dynapi_entity_set_value (leader, "LEADER", "byblock_color", &byblock_color)
+      if (dwg_dynapi_entity_set_value (leader, "LEADER", "byblock_color", &byblock_color, 0)
         && byblock_color == leader->byblock_color)
       {
         pass ("LEADER.byblock_color [BS] set+1 %hu", byblock_color);
@@ -18619,7 +18619,7 @@ static int test_LEADER (const Dwg_Object *obj)
         error++;
       }
     dimasz++;
-    if (dwg_dynapi_entity_set_value (leader, "LEADER", "dimasz", &dimasz)
+      if (dwg_dynapi_entity_set_value (leader, "LEADER", "dimasz", &dimasz, 0)
         && dimasz == leader->dimasz)
       {
         pass ("LEADER.dimasz [BD] set+1 %g", dimasz);
@@ -18645,7 +18645,7 @@ static int test_LEADER (const Dwg_Object *obj)
         error++;
       }
     dimgap++;
-    if (dwg_dynapi_entity_set_value (leader, "LEADER", "dimgap", &dimgap)
+      if (dwg_dynapi_entity_set_value (leader, "LEADER", "dimgap", &dimgap, 0)
         && dimgap == leader->dimgap)
       {
         pass ("LEADER.dimgap [BD] set+1 %g", dimgap);
@@ -18710,7 +18710,7 @@ static int test_LEADER (const Dwg_Object *obj)
         error++;
       }
     hookline_dir++;
-    if (dwg_dynapi_entity_set_value (leader, "LEADER", "hookline_dir", &hookline_dir)
+      if (dwg_dynapi_entity_set_value (leader, "LEADER", "hookline_dir", &hookline_dir, 0)
         && hookline_dir == leader->hookline_dir)
       {
         pass ("LEADER.hookline_dir [B] set+1 " FORMAT_B "", hookline_dir);
@@ -18736,7 +18736,7 @@ static int test_LEADER (const Dwg_Object *obj)
         error++;
       }
     hookline_on++;
-    if (dwg_dynapi_entity_set_value (leader, "LEADER", "hookline_on", &hookline_on)
+      if (dwg_dynapi_entity_set_value (leader, "LEADER", "hookline_on", &hookline_on, 0)
         && hookline_on == leader->hookline_on)
       {
         pass ("LEADER.hookline_on [B] set+1 " FORMAT_B "", hookline_on);
@@ -18762,7 +18762,7 @@ static int test_LEADER (const Dwg_Object *obj)
         error++;
       }
     num_points++;
-    if (dwg_dynapi_entity_set_value (leader, "LEADER", "num_points", &num_points)
+      if (dwg_dynapi_entity_set_value (leader, "LEADER", "num_points", &num_points, 0)
         && num_points == leader->num_points)
       {
         pass ("LEADER.num_points [BL] set+1 %u", num_points);
@@ -18827,7 +18827,7 @@ static int test_LEADER (const Dwg_Object *obj)
         error++;
       }
     path_type++;
-    if (dwg_dynapi_entity_set_value (leader, "LEADER", "path_type", &path_type)
+      if (dwg_dynapi_entity_set_value (leader, "LEADER", "path_type", &path_type, 0)
         && path_type == leader->path_type)
       {
         pass ("LEADER.path_type [BS] set+1 %hu", path_type);
@@ -18868,7 +18868,7 @@ static int test_LEADER (const Dwg_Object *obj)
         error++;
       }
     unknown_bit_1++;
-    if (dwg_dynapi_entity_set_value (leader, "LEADER", "unknown_bit_1", &unknown_bit_1)
+      if (dwg_dynapi_entity_set_value (leader, "LEADER", "unknown_bit_1", &unknown_bit_1, 0)
         && unknown_bit_1 == leader->unknown_bit_1)
       {
         pass ("LEADER.unknown_bit_1 [B] set+1 " FORMAT_B "", unknown_bit_1);
@@ -18894,7 +18894,7 @@ static int test_LEADER (const Dwg_Object *obj)
         error++;
       }
     unknown_bit_2++;
-    if (dwg_dynapi_entity_set_value (leader, "LEADER", "unknown_bit_2", &unknown_bit_2)
+      if (dwg_dynapi_entity_set_value (leader, "LEADER", "unknown_bit_2", &unknown_bit_2, 0)
         && unknown_bit_2 == leader->unknown_bit_2)
       {
         pass ("LEADER.unknown_bit_2 [B] set+1 " FORMAT_B "", unknown_bit_2);
@@ -18920,7 +18920,7 @@ static int test_LEADER (const Dwg_Object *obj)
         error++;
       }
     unknown_bit_3++;
-    if (dwg_dynapi_entity_set_value (leader, "LEADER", "unknown_bit_3", &unknown_bit_3)
+      if (dwg_dynapi_entity_set_value (leader, "LEADER", "unknown_bit_3", &unknown_bit_3, 0)
         && unknown_bit_3 == leader->unknown_bit_3)
       {
         pass ("LEADER.unknown_bit_3 [B] set+1 " FORMAT_B "", unknown_bit_3);
@@ -18946,7 +18946,7 @@ static int test_LEADER (const Dwg_Object *obj)
         error++;
       }
     unknown_bit_5++;
-    if (dwg_dynapi_entity_set_value (leader, "LEADER", "unknown_bit_5", &unknown_bit_5)
+      if (dwg_dynapi_entity_set_value (leader, "LEADER", "unknown_bit_5", &unknown_bit_5, 0)
         && unknown_bit_5 == leader->unknown_bit_5)
       {
         pass ("LEADER.unknown_bit_5 [B] set+1 " FORMAT_B "", unknown_bit_5);
@@ -18972,7 +18972,7 @@ static int test_LEADER (const Dwg_Object *obj)
         error++;
       }
     unknown_short_1++;
-    if (dwg_dynapi_entity_set_value (leader, "LEADER", "unknown_short_1", &unknown_short_1)
+      if (dwg_dynapi_entity_set_value (leader, "LEADER", "unknown_short_1", &unknown_short_1, 0)
         && unknown_short_1 == leader->unknown_short_1)
       {
         pass ("LEADER.unknown_short_1 [BS] set+1 %hu", unknown_short_1);
@@ -19018,7 +19018,7 @@ static int test_LIGHT (const Dwg_Object *obj)
         error++;
       }
     attenuation_end_limit++;
-    if (dwg_dynapi_entity_set_value (light, "LIGHT", "attenuation_end_limit", &attenuation_end_limit)
+      if (dwg_dynapi_entity_set_value (light, "LIGHT", "attenuation_end_limit", &attenuation_end_limit, 0)
         && attenuation_end_limit == light->attenuation_end_limit)
       {
         pass ("LIGHT.attenuation_end_limit [BD] set+1 %g", attenuation_end_limit);
@@ -19044,7 +19044,7 @@ static int test_LIGHT (const Dwg_Object *obj)
         error++;
       }
     attenuation_start_limit++;
-    if (dwg_dynapi_entity_set_value (light, "LIGHT", "attenuation_start_limit", &attenuation_start_limit)
+      if (dwg_dynapi_entity_set_value (light, "LIGHT", "attenuation_start_limit", &attenuation_start_limit, 0)
         && attenuation_start_limit == light->attenuation_start_limit)
       {
         pass ("LIGHT.attenuation_start_limit [BD] set+1 %g", attenuation_start_limit);
@@ -19070,7 +19070,7 @@ static int test_LIGHT (const Dwg_Object *obj)
         error++;
       }
     attenuation_type++;
-    if (dwg_dynapi_entity_set_value (light, "LIGHT", "attenuation_type", &attenuation_type)
+      if (dwg_dynapi_entity_set_value (light, "LIGHT", "attenuation_type", &attenuation_type, 0)
         && attenuation_type == light->attenuation_type)
       {
         pass ("LIGHT.attenuation_type [BS] set+1 %hu", attenuation_type);
@@ -19096,7 +19096,7 @@ static int test_LIGHT (const Dwg_Object *obj)
         error++;
       }
     cast_shadows++;
-    if (dwg_dynapi_entity_set_value (light, "LIGHT", "cast_shadows", &cast_shadows)
+      if (dwg_dynapi_entity_set_value (light, "LIGHT", "cast_shadows", &cast_shadows, 0)
         && cast_shadows == light->cast_shadows)
       {
         pass ("LIGHT.cast_shadows [B] set+1 " FORMAT_B "", cast_shadows);
@@ -19122,7 +19122,7 @@ static int test_LIGHT (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (light, "LIGHT", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (light, "LIGHT", "class_version", &class_version, 0)
         && class_version == light->class_version)
       {
         pass ("LIGHT.class_version [BL] set+1 %u", class_version);
@@ -19161,7 +19161,7 @@ static int test_LIGHT (const Dwg_Object *obj)
         error++;
       }
     falloff_angle++;
-    if (dwg_dynapi_entity_set_value (light, "LIGHT", "falloff_angle", &falloff_angle)
+      if (dwg_dynapi_entity_set_value (light, "LIGHT", "falloff_angle", &falloff_angle, 0)
         && falloff_angle == light->falloff_angle)
       {
         pass ("LIGHT.falloff_angle [BD] set+1 %g", falloff_angle);
@@ -19187,7 +19187,7 @@ static int test_LIGHT (const Dwg_Object *obj)
         error++;
       }
     hotspot_angle++;
-    if (dwg_dynapi_entity_set_value (light, "LIGHT", "hotspot_angle", &hotspot_angle)
+      if (dwg_dynapi_entity_set_value (light, "LIGHT", "hotspot_angle", &hotspot_angle, 0)
         && hotspot_angle == light->hotspot_angle)
       {
         pass ("LIGHT.hotspot_angle [BD] set+1 %g", hotspot_angle);
@@ -19213,7 +19213,7 @@ static int test_LIGHT (const Dwg_Object *obj)
         error++;
       }
     intensity++;
-    if (dwg_dynapi_entity_set_value (light, "LIGHT", "intensity", &intensity)
+      if (dwg_dynapi_entity_set_value (light, "LIGHT", "intensity", &intensity, 0)
         && intensity == light->intensity)
       {
         pass ("LIGHT.intensity [BD] set+1 %g", intensity);
@@ -19278,7 +19278,7 @@ static int test_LIGHT (const Dwg_Object *obj)
         error++;
       }
     plot_glyph++;
-    if (dwg_dynapi_entity_set_value (light, "LIGHT", "plot_glyph", &plot_glyph)
+      if (dwg_dynapi_entity_set_value (light, "LIGHT", "plot_glyph", &plot_glyph, 0)
         && plot_glyph == light->plot_glyph)
       {
         pass ("LIGHT.plot_glyph [B] set+1 " FORMAT_B "", plot_glyph);
@@ -19317,7 +19317,7 @@ static int test_LIGHT (const Dwg_Object *obj)
         error++;
       }
     shadow_map_size++;
-    if (dwg_dynapi_entity_set_value (light, "LIGHT", "shadow_map_size", &shadow_map_size)
+      if (dwg_dynapi_entity_set_value (light, "LIGHT", "shadow_map_size", &shadow_map_size, 0)
         && shadow_map_size == light->shadow_map_size)
       {
         pass ("LIGHT.shadow_map_size [BS] set+1 %hu", shadow_map_size);
@@ -19343,7 +19343,7 @@ static int test_LIGHT (const Dwg_Object *obj)
         error++;
       }
     shadow_map_softness++;
-    if (dwg_dynapi_entity_set_value (light, "LIGHT", "shadow_map_softness", &shadow_map_softness)
+      if (dwg_dynapi_entity_set_value (light, "LIGHT", "shadow_map_softness", &shadow_map_softness, 0)
         && shadow_map_softness == light->shadow_map_softness)
       {
         pass ("LIGHT.shadow_map_softness [RC] set+1 %u", shadow_map_softness);
@@ -19369,7 +19369,7 @@ static int test_LIGHT (const Dwg_Object *obj)
         error++;
       }
     shadow_type++;
-    if (dwg_dynapi_entity_set_value (light, "LIGHT", "shadow_type", &shadow_type)
+      if (dwg_dynapi_entity_set_value (light, "LIGHT", "shadow_type", &shadow_type, 0)
         && shadow_type == light->shadow_type)
       {
         pass ("LIGHT.shadow_type [BS] set+1 %hu", shadow_type);
@@ -19395,7 +19395,7 @@ static int test_LIGHT (const Dwg_Object *obj)
         error++;
       }
     status++;
-    if (dwg_dynapi_entity_set_value (light, "LIGHT", "status", &status)
+      if (dwg_dynapi_entity_set_value (light, "LIGHT", "status", &status, 0)
         && status == light->status)
       {
         pass ("LIGHT.status [B] set+1 " FORMAT_B "", status);
@@ -19434,7 +19434,7 @@ static int test_LIGHT (const Dwg_Object *obj)
         error++;
       }
     type++;
-    if (dwg_dynapi_entity_set_value (light, "LIGHT", "type", &type)
+      if (dwg_dynapi_entity_set_value (light, "LIGHT", "type", &type, 0)
         && type == light->type)
       {
         pass ("LIGHT.type [BS] set+1 %hu", type);
@@ -19460,7 +19460,7 @@ static int test_LIGHT (const Dwg_Object *obj)
         error++;
       }
     use_attenuation_limits++;
-    if (dwg_dynapi_entity_set_value (light, "LIGHT", "use_attenuation_limits", &use_attenuation_limits)
+      if (dwg_dynapi_entity_set_value (light, "LIGHT", "use_attenuation_limits", &use_attenuation_limits, 0)
         && use_attenuation_limits == light->use_attenuation_limits)
       {
         pass ("LIGHT.use_attenuation_limits [B] set+1 " FORMAT_B "", use_attenuation_limits);
@@ -19493,7 +19493,7 @@ static int test_LINE (const Dwg_Object *obj)
         error++;
       }
     Zs_are_zero++;
-    if (dwg_dynapi_entity_set_value (line, "LINE", "Zs_are_zero", &Zs_are_zero)
+      if (dwg_dynapi_entity_set_value (line, "LINE", "Zs_are_zero", &Zs_are_zero, 0)
         && Zs_are_zero == line->Zs_are_zero)
       {
         pass ("LINE.Zs_are_zero [RC] set+1 %u", Zs_are_zero);
@@ -19570,7 +19570,7 @@ static int test_LINE (const Dwg_Object *obj)
         fail ("LINE.thickness [BT] " FORMAT_BT " != " FORMAT_BT "", line->thickness, thickness);
         error++;
       }
-    if (dwg_dynapi_entity_set_value (line, "LINE", "thickness", &thickness)
+      if (dwg_dynapi_entity_set_value (line, "LINE", "thickness", &thickness, 0)
         && thickness == line->thickness)
       {
         pass ("LINE.thickness [BT] set+1 " FORMAT_BT "", thickness);
@@ -19616,7 +19616,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     acis_empty++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "acis_empty", &acis_empty)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "acis_empty", &acis_empty, 0)
         && acis_empty == loftedsurface->acis_empty)
       {
         pass ("LOFTEDSURFACE.acis_empty [B] set+1 " FORMAT_B "", acis_empty);
@@ -19642,7 +19642,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     acis_empty2++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "acis_empty2", &acis_empty2)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "acis_empty2", &acis_empty2, 0)
         && acis_empty2 == loftedsurface->acis_empty2)
       {
         pass ("LOFTEDSURFACE.acis_empty2 [B] set+1 " FORMAT_B "", acis_empty2);
@@ -19668,7 +19668,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     acis_empty_bit++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "acis_empty_bit", &acis_empty_bit)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "acis_empty_bit", &acis_empty_bit, 0)
         && acis_empty_bit == loftedsurface->acis_empty_bit)
       {
         pass ("LOFTEDSURFACE.acis_empty_bit [B] set+1 " FORMAT_B "", acis_empty_bit);
@@ -19694,7 +19694,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     align_direction++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "align_direction", &align_direction)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "align_direction", &align_direction, 0)
         && align_direction == loftedsurface->align_direction)
       {
         pass ("LOFTEDSURFACE.align_direction [B] set+1 " FORMAT_B "", align_direction);
@@ -19720,7 +19720,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     arc_length_parameterization++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "arc_length_parameterization", &arc_length_parameterization)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "arc_length_parameterization", &arc_length_parameterization, 0)
         && arc_length_parameterization == loftedsurface->arc_length_parameterization)
       {
         pass ("LOFTEDSURFACE.arc_length_parameterization [B] set+1 " FORMAT_B "", arc_length_parameterization);
@@ -19759,7 +19759,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     closed_surfaces++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "closed_surfaces", &closed_surfaces)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "closed_surfaces", &closed_surfaces, 0)
         && closed_surfaces == loftedsurface->closed_surfaces)
       {
         pass ("LOFTEDSURFACE.closed_surfaces [B] set+1 " FORMAT_B "", closed_surfaces);
@@ -19815,7 +19815,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     end_draft_angle++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "end_draft_angle", &end_draft_angle)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "end_draft_angle", &end_draft_angle, 0)
         && end_draft_angle == loftedsurface->end_draft_angle)
       {
         pass ("LOFTEDSURFACE.end_draft_angle [BD] set+1 %g", end_draft_angle);
@@ -19841,7 +19841,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     end_draft_magnitude++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "end_draft_magnitude", &end_draft_magnitude)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "end_draft_magnitude", &end_draft_magnitude, 0)
         && end_draft_magnitude == loftedsurface->end_draft_magnitude)
       {
         pass ("LOFTEDSURFACE.end_draft_magnitude [BD] set+1 %g", end_draft_magnitude);
@@ -19908,7 +19908,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     isoline_present++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "isoline_present", &isoline_present)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "isoline_present", &isoline_present, 0)
         && isoline_present == loftedsurface->isoline_present)
       {
         pass ("LOFTEDSURFACE.isoline_present [B] set+1 " FORMAT_B "", isoline_present);
@@ -19947,7 +19947,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     modeler_format_version++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "modeler_format_version", &modeler_format_version)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "modeler_format_version", &modeler_format_version, 0)
         && modeler_format_version == loftedsurface->modeler_format_version)
       {
         pass ("LOFTEDSURFACE.modeler_format_version [BS] set+1 %hu", modeler_format_version);
@@ -19973,7 +19973,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     no_twist++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "no_twist", &no_twist)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "no_twist", &no_twist, 0)
         && no_twist == loftedsurface->no_twist)
       {
         pass ("LOFTEDSURFACE.no_twist [B] set+1 " FORMAT_B "", no_twist);
@@ -19999,7 +19999,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     num_blocks++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "num_blocks", &num_blocks)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "num_blocks", &num_blocks, 0)
         && num_blocks == loftedsurface->num_blocks)
       {
         pass ("LOFTEDSURFACE.num_blocks [BL] set+1 %u", num_blocks);
@@ -20025,7 +20025,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     num_cross_sections++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "num_cross_sections", &num_cross_sections)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "num_cross_sections", &num_cross_sections, 0)
         && num_cross_sections == loftedsurface->num_cross_sections)
       {
         pass ("LOFTEDSURFACE.num_cross_sections [BS] set+1 %hu", num_cross_sections);
@@ -20051,7 +20051,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     num_guide_curves++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "num_guide_curves", &num_guide_curves)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "num_guide_curves", &num_guide_curves, 0)
         && num_guide_curves == loftedsurface->num_guide_curves)
       {
         pass ("LOFTEDSURFACE.num_guide_curves [BS] set+1 %hu", num_guide_curves);
@@ -20077,7 +20077,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     num_isolines++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "num_isolines", &num_isolines)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "num_isolines", &num_isolines, 0)
         && num_isolines == loftedsurface->num_isolines)
       {
         pass ("LOFTEDSURFACE.num_isolines [BL] set+1 %u", num_isolines);
@@ -20103,7 +20103,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     num_silhouettes++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "num_silhouettes", &num_silhouettes)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "num_silhouettes", &num_silhouettes, 0)
         && num_silhouettes == loftedsurface->num_silhouettes)
       {
         pass ("LOFTEDSURFACE.num_silhouettes [BL] set+1 %u", num_silhouettes);
@@ -20129,7 +20129,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     num_wires++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "num_wires", &num_wires)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "num_wires", &num_wires, 0)
         && num_wires == loftedsurface->num_wires)
       {
         pass ("LOFTEDSURFACE.num_wires [BL] set+1 %u", num_wires);
@@ -20181,7 +20181,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     plane_normal_lofting_type++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "plane_normal_lofting_type", &plane_normal_lofting_type)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "plane_normal_lofting_type", &plane_normal_lofting_type, 0)
         && plane_normal_lofting_type == loftedsurface->plane_normal_lofting_type)
       {
         pass ("LOFTEDSURFACE.plane_normal_lofting_type [BL] set+1 %u", plane_normal_lofting_type);
@@ -20220,7 +20220,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     point_present++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "point_present", &point_present)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "point_present", &point_present, 0)
         && point_present == loftedsurface->point_present)
       {
         pass ("LOFTEDSURFACE.point_present [B] set+1 " FORMAT_B "", point_present);
@@ -20246,7 +20246,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     ruled_surface++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "ruled_surface", &ruled_surface)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "ruled_surface", &ruled_surface, 0)
         && ruled_surface == loftedsurface->ruled_surface)
       {
         pass ("LOFTEDSURFACE.ruled_surface [B] set+1 " FORMAT_B "", ruled_surface);
@@ -20287,7 +20287,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     simple_surfaces++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "simple_surfaces", &simple_surfaces)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "simple_surfaces", &simple_surfaces, 0)
         && simple_surfaces == loftedsurface->simple_surfaces)
       {
         pass ("LOFTEDSURFACE.simple_surfaces [B] set+1 " FORMAT_B "", simple_surfaces);
@@ -20313,7 +20313,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     solid++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "solid", &solid)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "solid", &solid, 0)
         && solid == loftedsurface->solid)
       {
         pass ("LOFTEDSURFACE.solid [B] set+1 " FORMAT_B "", solid);
@@ -20339,7 +20339,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     start_draft_angle++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "start_draft_angle", &start_draft_angle)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "start_draft_angle", &start_draft_angle, 0)
         && start_draft_angle == loftedsurface->start_draft_angle)
       {
         pass ("LOFTEDSURFACE.start_draft_angle [BD] set+1 %g", start_draft_angle);
@@ -20365,7 +20365,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     start_draft_magnitude++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "start_draft_magnitude", &start_draft_magnitude)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "start_draft_magnitude", &start_draft_magnitude, 0)
         && start_draft_magnitude == loftedsurface->start_draft_magnitude)
       {
         pass ("LOFTEDSURFACE.start_draft_magnitude [BD] set+1 %g", start_draft_magnitude);
@@ -20391,7 +20391,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     u_isolines++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "u_isolines", &u_isolines)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "u_isolines", &u_isolines, 0)
         && u_isolines == loftedsurface->u_isolines)
       {
         pass ("LOFTEDSURFACE.u_isolines [BS] set+1 %hu", u_isolines);
@@ -20417,7 +20417,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     unknown++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "unknown", &unknown)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "unknown", &unknown, 0)
         && unknown == loftedsurface->unknown)
       {
         pass ("LOFTEDSURFACE.unknown [B] set+1 " FORMAT_B "", unknown);
@@ -20443,7 +20443,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     unknown_2007++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "unknown_2007", &unknown_2007)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "unknown_2007", &unknown_2007, 0)
         && unknown_2007 == loftedsurface->unknown_2007)
       {
         pass ("LOFTEDSURFACE.unknown_2007 [BL] set+1 %u", unknown_2007);
@@ -20469,7 +20469,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     v_isolines++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "v_isolines", &v_isolines)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "v_isolines", &v_isolines, 0)
         && v_isolines == loftedsurface->v_isolines)
       {
         pass ("LOFTEDSURFACE.v_isolines [BS] set+1 %hu", v_isolines);
@@ -20495,7 +20495,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     version++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "version", &version)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "version", &version, 0)
         && version == loftedsurface->version)
       {
         pass ("LOFTEDSURFACE.version [BS] set+1 %hu", version);
@@ -20521,7 +20521,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     virtual_guide++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "virtual_guide", &virtual_guide)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "virtual_guide", &virtual_guide, 0)
         && virtual_guide == loftedsurface->virtual_guide)
       {
         pass ("LOFTEDSURFACE.virtual_guide [B] set+1 " FORMAT_B "", virtual_guide);
@@ -20547,7 +20547,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     wireframe_data_present++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "wireframe_data_present", &wireframe_data_present)
+      if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "wireframe_data_present", &wireframe_data_present, 0)
         && wireframe_data_present == loftedsurface->wireframe_data_present)
       {
         pass ("LOFTEDSURFACE.wireframe_data_present [B] set+1 " FORMAT_B "", wireframe_data_present);
@@ -20610,7 +20610,7 @@ static int test_LWPOLYLINE (const Dwg_Object *obj)
         error++;
       }
     const_width++;
-    if (dwg_dynapi_entity_set_value (lwpolyline, "LWPOLYLINE", "const_width", &const_width)
+      if (dwg_dynapi_entity_set_value (lwpolyline, "LWPOLYLINE", "const_width", &const_width, 0)
         && const_width == lwpolyline->const_width)
       {
         pass ("LWPOLYLINE.const_width [BD] set+1 %g", const_width);
@@ -20636,7 +20636,7 @@ static int test_LWPOLYLINE (const Dwg_Object *obj)
         error++;
       }
     elevation++;
-    if (dwg_dynapi_entity_set_value (lwpolyline, "LWPOLYLINE", "elevation", &elevation)
+      if (dwg_dynapi_entity_set_value (lwpolyline, "LWPOLYLINE", "elevation", &elevation, 0)
         && elevation == lwpolyline->elevation)
       {
         pass ("LWPOLYLINE.elevation [BD] set+1 %g", elevation);
@@ -20675,7 +20675,7 @@ static int test_LWPOLYLINE (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (lwpolyline, "LWPOLYLINE", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (lwpolyline, "LWPOLYLINE", "flag", &flag, 0)
         && flag == lwpolyline->flag)
       {
         pass ("LWPOLYLINE.flag [BS] set+1 %hu", flag);
@@ -20701,7 +20701,7 @@ static int test_LWPOLYLINE (const Dwg_Object *obj)
         error++;
       }
     num_bulges++;
-    if (dwg_dynapi_entity_set_value (lwpolyline, "LWPOLYLINE", "num_bulges", &num_bulges)
+      if (dwg_dynapi_entity_set_value (lwpolyline, "LWPOLYLINE", "num_bulges", &num_bulges, 0)
         && num_bulges == lwpolyline->num_bulges)
       {
         pass ("LWPOLYLINE.num_bulges [BL] set+1 %u", num_bulges);
@@ -20727,7 +20727,7 @@ static int test_LWPOLYLINE (const Dwg_Object *obj)
         error++;
       }
     num_points++;
-    if (dwg_dynapi_entity_set_value (lwpolyline, "LWPOLYLINE", "num_points", &num_points)
+      if (dwg_dynapi_entity_set_value (lwpolyline, "LWPOLYLINE", "num_points", &num_points, 0)
         && num_points == lwpolyline->num_points)
       {
         pass ("LWPOLYLINE.num_points [BL] set+1 %u", num_points);
@@ -20753,7 +20753,7 @@ static int test_LWPOLYLINE (const Dwg_Object *obj)
         error++;
       }
     num_vertexids++;
-    if (dwg_dynapi_entity_set_value (lwpolyline, "LWPOLYLINE", "num_vertexids", &num_vertexids)
+      if (dwg_dynapi_entity_set_value (lwpolyline, "LWPOLYLINE", "num_vertexids", &num_vertexids, 0)
         && num_vertexids == lwpolyline->num_vertexids)
       {
         pass ("LWPOLYLINE.num_vertexids [BL] set+1 %u", num_vertexids);
@@ -20779,7 +20779,7 @@ static int test_LWPOLYLINE (const Dwg_Object *obj)
         error++;
       }
     num_widths++;
-    if (dwg_dynapi_entity_set_value (lwpolyline, "LWPOLYLINE", "num_widths", &num_widths)
+      if (dwg_dynapi_entity_set_value (lwpolyline, "LWPOLYLINE", "num_widths", &num_widths, 0)
         && num_widths == lwpolyline->num_widths)
       {
         pass ("LWPOLYLINE.num_widths [BL] set+1 %u", num_widths);
@@ -20833,7 +20833,7 @@ static int test_LWPOLYLINE (const Dwg_Object *obj)
         error++;
       }
     thickness++;
-    if (dwg_dynapi_entity_set_value (lwpolyline, "LWPOLYLINE", "thickness", &thickness)
+      if (dwg_dynapi_entity_set_value (lwpolyline, "LWPOLYLINE", "thickness", &thickness, 0)
         && thickness == lwpolyline->thickness)
       {
         pass ("LWPOLYLINE.thickness [BD] set+1 %g", thickness);
@@ -20924,7 +20924,7 @@ static int test_MINSERT (const Dwg_Object *obj)
         error++;
       }
     col_spacing++;
-    if (dwg_dynapi_entity_set_value (minsert, "MINSERT", "col_spacing", &col_spacing)
+      if (dwg_dynapi_entity_set_value (minsert, "MINSERT", "col_spacing", &col_spacing, 0)
         && col_spacing == minsert->col_spacing)
       {
         pass ("MINSERT.col_spacing [BD] set+1 %g", col_spacing);
@@ -20976,7 +20976,7 @@ static int test_MINSERT (const Dwg_Object *obj)
         error++;
       }
     has_attribs++;
-    if (dwg_dynapi_entity_set_value (minsert, "MINSERT", "has_attribs", &has_attribs)
+      if (dwg_dynapi_entity_set_value (minsert, "MINSERT", "has_attribs", &has_attribs, 0)
         && has_attribs == minsert->has_attribs)
       {
         pass ("MINSERT.has_attribs [B] set+1 " FORMAT_B "", has_attribs);
@@ -21028,7 +21028,7 @@ static int test_MINSERT (const Dwg_Object *obj)
         error++;
       }
     num_cols++;
-    if (dwg_dynapi_entity_set_value (minsert, "MINSERT", "num_cols", &num_cols)
+      if (dwg_dynapi_entity_set_value (minsert, "MINSERT", "num_cols", &num_cols, 0)
         && num_cols == minsert->num_cols)
       {
         pass ("MINSERT.num_cols [BS] set+1 %hu", num_cols);
@@ -21054,7 +21054,7 @@ static int test_MINSERT (const Dwg_Object *obj)
         error++;
       }
     num_owned++;
-    if (dwg_dynapi_entity_set_value (minsert, "MINSERT", "num_owned", &num_owned)
+      if (dwg_dynapi_entity_set_value (minsert, "MINSERT", "num_owned", &num_owned, 0)
         && num_owned == minsert->num_owned)
       {
         pass ("MINSERT.num_owned [BL] set+1 %u", num_owned);
@@ -21080,7 +21080,7 @@ static int test_MINSERT (const Dwg_Object *obj)
         error++;
       }
     num_rows++;
-    if (dwg_dynapi_entity_set_value (minsert, "MINSERT", "num_rows", &num_rows)
+      if (dwg_dynapi_entity_set_value (minsert, "MINSERT", "num_rows", &num_rows, 0)
         && num_rows == minsert->num_rows)
       {
         pass ("MINSERT.num_rows [BS] set+1 %hu", num_rows);
@@ -21119,7 +21119,7 @@ static int test_MINSERT (const Dwg_Object *obj)
         error++;
       }
     rotation++;
-    if (dwg_dynapi_entity_set_value (minsert, "MINSERT", "rotation", &rotation)
+      if (dwg_dynapi_entity_set_value (minsert, "MINSERT", "rotation", &rotation, 0)
         && rotation == minsert->rotation)
       {
         pass ("MINSERT.rotation [BD] set+1 %g", rotation);
@@ -21145,7 +21145,7 @@ static int test_MINSERT (const Dwg_Object *obj)
         error++;
       }
     row_spacing++;
-    if (dwg_dynapi_entity_set_value (minsert, "MINSERT", "row_spacing", &row_spacing)
+      if (dwg_dynapi_entity_set_value (minsert, "MINSERT", "row_spacing", &row_spacing, 0)
         && row_spacing == minsert->row_spacing)
       {
         pass ("MINSERT.row_spacing [BD] set+1 %g", row_spacing);
@@ -21184,7 +21184,7 @@ static int test_MINSERT (const Dwg_Object *obj)
         error++;
       }
     scale_flag++;
-    if (dwg_dynapi_entity_set_value (minsert, "MINSERT", "scale_flag", &scale_flag)
+      if (dwg_dynapi_entity_set_value (minsert, "MINSERT", "scale_flag", &scale_flag, 0)
         && scale_flag == minsert->scale_flag)
       {
         pass ("MINSERT.scale_flag [BB] set+1 " FORMAT_BB "", scale_flag);
@@ -21256,7 +21256,7 @@ static int test_MLINE (const Dwg_Object *obj)
         error++;
       }
     flags++;
-    if (dwg_dynapi_entity_set_value (mline, "MLINE", "flags", &flags)
+      if (dwg_dynapi_entity_set_value (mline, "MLINE", "flags", &flags, 0)
         && flags == mline->flags)
       {
         pass ("MLINE.flags [BS] set+1 %hu", flags);
@@ -21282,7 +21282,7 @@ static int test_MLINE (const Dwg_Object *obj)
         error++;
       }
     justification++;
-    if (dwg_dynapi_entity_set_value (mline, "MLINE", "justification", &justification)
+      if (dwg_dynapi_entity_set_value (mline, "MLINE", "justification", &justification, 0)
         && justification == mline->justification)
       {
         pass ("MLINE.justification [RC] set+1 %u", justification);
@@ -21321,7 +21321,7 @@ static int test_MLINE (const Dwg_Object *obj)
         error++;
       }
     num_lines++;
-    if (dwg_dynapi_entity_set_value (mline, "MLINE", "num_lines", &num_lines)
+      if (dwg_dynapi_entity_set_value (mline, "MLINE", "num_lines", &num_lines, 0)
         && num_lines == mline->num_lines)
       {
         pass ("MLINE.num_lines [RC] set+1 %u", num_lines);
@@ -21347,7 +21347,7 @@ static int test_MLINE (const Dwg_Object *obj)
         error++;
       }
     num_verts++;
-    if (dwg_dynapi_entity_set_value (mline, "MLINE", "num_verts", &num_verts)
+      if (dwg_dynapi_entity_set_value (mline, "MLINE", "num_verts", &num_verts, 0)
         && num_verts == mline->num_verts)
       {
         pass ("MLINE.num_verts [BS] set+1 %hu", num_verts);
@@ -21386,7 +21386,7 @@ static int test_MLINE (const Dwg_Object *obj)
         error++;
       }
     scale++;
-    if (dwg_dynapi_entity_set_value (mline, "MLINE", "scale", &scale)
+      if (dwg_dynapi_entity_set_value (mline, "MLINE", "scale", &scale, 0)
         && scale == mline->scale)
       {
         pass ("MLINE.scale [BD] set+1 %g", scale);
@@ -21434,7 +21434,7 @@ static int test_MTEXT (const Dwg_Object *obj)
         error++;
       }
     annotative++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "annotative", &annotative)
+      if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "annotative", &annotative, 0)
         && annotative == mtext->annotative)
       {
         pass ("MTEXT.annotative [B] set+1 " FORMAT_B "", annotative);
@@ -21473,7 +21473,7 @@ static int test_MTEXT (const Dwg_Object *obj)
         error++;
       }
     attachment++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "attachment", &attachment)
+      if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "attachment", &attachment, 0)
         && attachment == mtext->attachment)
       {
         pass ("MTEXT.attachment [BS] set+1 %hu", attachment);
@@ -21499,7 +21499,7 @@ static int test_MTEXT (const Dwg_Object *obj)
         error++;
       }
     auto_height++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "auto_height", &auto_height)
+      if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "auto_height", &auto_height, 0)
         && auto_height == mtext->auto_height)
       {
         pass ("MTEXT.auto_height [B] set+1 " FORMAT_B "", auto_height);
@@ -21538,7 +21538,7 @@ static int test_MTEXT (const Dwg_Object *obj)
         error++;
       }
     bg_fill_flag++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "bg_fill_flag", &bg_fill_flag)
+      if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "bg_fill_flag", &bg_fill_flag, 0)
         && bg_fill_flag == mtext->bg_fill_flag)
       {
         pass ("MTEXT.bg_fill_flag [BL] set+1 %u", bg_fill_flag);
@@ -21564,7 +21564,7 @@ static int test_MTEXT (const Dwg_Object *obj)
         error++;
       }
     bg_fill_scale++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "bg_fill_scale", &bg_fill_scale)
+      if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "bg_fill_scale", &bg_fill_scale, 0)
         && bg_fill_scale == mtext->bg_fill_scale)
       {
         pass ("MTEXT.bg_fill_scale [BL] set+1 %u", bg_fill_scale);
@@ -21590,7 +21590,7 @@ static int test_MTEXT (const Dwg_Object *obj)
         error++;
       }
     bg_fill_trans++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "bg_fill_trans", &bg_fill_trans)
+      if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "bg_fill_trans", &bg_fill_trans, 0)
         && bg_fill_trans == mtext->bg_fill_trans)
       {
         pass ("MTEXT.bg_fill_trans [BL] set+1 %u", bg_fill_trans);
@@ -21616,7 +21616,7 @@ static int test_MTEXT (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "class_version", &class_version, 0)
         && class_version == mtext->class_version)
       {
         pass ("MTEXT.class_version [BS] set+1 %hu", class_version);
@@ -21657,7 +21657,7 @@ static int test_MTEXT (const Dwg_Object *obj)
         error++;
       }
     column_type++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "column_type", &column_type)
+      if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "column_type", &column_type, 0)
         && column_type == mtext->column_type)
       {
         pass ("MTEXT.column_type [BL] set+1 %u", column_type);
@@ -21683,7 +21683,7 @@ static int test_MTEXT (const Dwg_Object *obj)
         error++;
       }
     column_width++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "column_width", &column_width)
+      if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "column_width", &column_width, 0)
         && column_width == mtext->column_width)
       {
         pass ("MTEXT.column_width [BD] set+1 %g", column_width);
@@ -21709,7 +21709,7 @@ static int test_MTEXT (const Dwg_Object *obj)
         error++;
       }
     default_flag++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "default_flag", &default_flag)
+      if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "default_flag", &default_flag, 0)
         && default_flag == mtext->default_flag)
       {
         pass ("MTEXT.default_flag [B] set+1 " FORMAT_B "", default_flag);
@@ -21735,7 +21735,7 @@ static int test_MTEXT (const Dwg_Object *obj)
         error++;
       }
     drawing_dir++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "drawing_dir", &drawing_dir)
+      if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "drawing_dir", &drawing_dir, 0)
         && drawing_dir == mtext->drawing_dir)
       {
         pass ("MTEXT.drawing_dir [BS] set+1 %hu", drawing_dir);
@@ -21761,7 +21761,7 @@ static int test_MTEXT (const Dwg_Object *obj)
         error++;
       }
     extents_height++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "extents_height", &extents_height)
+      if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "extents_height", &extents_height, 0)
         && extents_height == mtext->extents_height)
       {
         pass ("MTEXT.extents_height [BD] set+1 %g", extents_height);
@@ -21787,7 +21787,7 @@ static int test_MTEXT (const Dwg_Object *obj)
         error++;
       }
     extents_width++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "extents_width", &extents_width)
+      if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "extents_width", &extents_width, 0)
         && extents_width == mtext->extents_width)
       {
         pass ("MTEXT.extents_width [BD] set+1 %g", extents_width);
@@ -21826,7 +21826,7 @@ static int test_MTEXT (const Dwg_Object *obj)
         error++;
       }
     flow_reversed++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "flow_reversed", &flow_reversed)
+      if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "flow_reversed", &flow_reversed, 0)
         && flow_reversed == mtext->flow_reversed)
       {
         pass ("MTEXT.flow_reversed [B] set+1 " FORMAT_B "", flow_reversed);
@@ -21852,7 +21852,7 @@ static int test_MTEXT (const Dwg_Object *obj)
         error++;
       }
     gutter++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "gutter", &gutter)
+      if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "gutter", &gutter, 0)
         && gutter == mtext->gutter)
       {
         pass ("MTEXT.gutter [BD] set+1 %g", gutter);
@@ -21891,7 +21891,7 @@ static int test_MTEXT (const Dwg_Object *obj)
         error++;
       }
     linespace_factor++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "linespace_factor", &linespace_factor)
+      if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "linespace_factor", &linespace_factor, 0)
         && linespace_factor == mtext->linespace_factor)
       {
         pass ("MTEXT.linespace_factor [BD] set+1 %g", linespace_factor);
@@ -21917,7 +21917,7 @@ static int test_MTEXT (const Dwg_Object *obj)
         error++;
       }
     linespace_style++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "linespace_style", &linespace_style)
+      if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "linespace_style", &linespace_style, 0)
         && linespace_style == mtext->linespace_style)
       {
         pass ("MTEXT.linespace_style [BS] set+1 %hu", linespace_style);
@@ -21943,7 +21943,7 @@ static int test_MTEXT (const Dwg_Object *obj)
         error++;
       }
     num_column_heights++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "num_column_heights", &num_column_heights)
+      if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "num_column_heights", &num_column_heights, 0)
         && num_column_heights == mtext->num_column_heights)
       {
         pass ("MTEXT.num_column_heights [BL] set+1 %u", num_column_heights);
@@ -21982,7 +21982,7 @@ static int test_MTEXT (const Dwg_Object *obj)
         error++;
       }
     rect_height++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "rect_height", &rect_height)
+      if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "rect_height", &rect_height, 0)
         && rect_height == mtext->rect_height)
       {
         pass ("MTEXT.rect_height [BD] set+1 %g", rect_height);
@@ -22008,7 +22008,7 @@ static int test_MTEXT (const Dwg_Object *obj)
         error++;
       }
     rect_width++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "rect_width", &rect_width)
+      if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "rect_width", &rect_width, 0)
         && rect_width == mtext->rect_width)
       {
         pass ("MTEXT.rect_width [BD] set+1 %g", rect_width);
@@ -22060,7 +22060,7 @@ static int test_MTEXT (const Dwg_Object *obj)
         error++;
       }
     text_height++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "text_height", &text_height)
+      if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "text_height", &text_height, 0)
         && text_height == mtext->text_height)
       {
         pass ("MTEXT.text_height [BD] set+1 %g", text_height);
@@ -22086,7 +22086,7 @@ static int test_MTEXT (const Dwg_Object *obj)
         error++;
       }
     unknown_bit++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "unknown_bit", &unknown_bit)
+      if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "unknown_bit", &unknown_bit, 0)
         && unknown_bit == mtext->unknown_bit)
       {
         pass ("MTEXT.unknown_bit [B] set+1 " FORMAT_B "", unknown_bit);
@@ -22145,7 +22145,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     arrow_size++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "arrow_size", &arrow_size)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "arrow_size", &arrow_size, 0)
         && arrow_size == multileader->arrow_size)
       {
         pass ("MULTILEADER.arrow_size [BD] set+1 %g", arrow_size);
@@ -22186,7 +22186,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     attach_bottom++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "attach_bottom", &attach_bottom)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "attach_bottom", &attach_bottom, 0)
         && attach_bottom == multileader->attach_bottom)
       {
         pass ("MULTILEADER.attach_bottom [BS] set+1 %hu", attach_bottom);
@@ -22212,7 +22212,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     attach_dir++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "attach_dir", &attach_dir)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "attach_dir", &attach_dir, 0)
         && attach_dir == multileader->attach_dir)
       {
         pass ("MULTILEADER.attach_dir [BS] set+1 %hu", attach_dir);
@@ -22238,7 +22238,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     attach_top++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "attach_top", &attach_top)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "attach_top", &attach_top, 0)
         && attach_top == multileader->attach_top)
       {
         pass ("MULTILEADER.attach_top [BS] set+1 %hu", attach_top);
@@ -22264,7 +22264,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     attach_type++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "attach_type", &attach_type)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "attach_type", &attach_type, 0)
         && attach_type == multileader->attach_type)
       {
         pass ("MULTILEADER.attach_type [BS] set+1 %hu", attach_type);
@@ -22303,7 +22303,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     block_rotation++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "block_rotation", &block_rotation)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "block_rotation", &block_rotation, 0)
         && block_rotation == multileader->block_rotation)
       {
         pass ("MULTILEADER.block_rotation [BD] set+1 %g", block_rotation);
@@ -22370,7 +22370,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "class_version", &class_version, 0)
         && class_version == multileader->class_version)
       {
         pass ("MULTILEADER.class_version [BS] set+1 %hu", class_version);
@@ -22422,7 +22422,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     flags++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "flags", &flags)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "flags", &flags, 0)
         && flags == multileader->flags)
       {
         pass ("MULTILEADER.flags [BL] set+1 %u", flags);
@@ -22448,7 +22448,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     has_dogleg++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "has_dogleg", &has_dogleg)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "has_dogleg", &has_dogleg, 0)
         && has_dogleg == multileader->has_dogleg)
       {
         pass ("MULTILEADER.has_dogleg [B] set+1 " FORMAT_B "", has_dogleg);
@@ -22474,7 +22474,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     has_landing++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "has_landing", &has_landing)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "has_landing", &has_landing, 0)
         && has_landing == multileader->has_landing)
       {
         pass ("MULTILEADER.has_landing [B] set+1 " FORMAT_B "", has_landing);
@@ -22500,7 +22500,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     has_text_frame++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "has_text_frame", &has_text_frame)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "has_text_frame", &has_text_frame, 0)
         && has_text_frame == multileader->has_text_frame)
       {
         pass ("MULTILEADER.has_text_frame [B] set+1 " FORMAT_B "", has_text_frame);
@@ -22526,7 +22526,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     ipe_alignment++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "ipe_alignment", &ipe_alignment)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "ipe_alignment", &ipe_alignment, 0)
         && ipe_alignment == multileader->ipe_alignment)
       {
         pass ("MULTILEADER.ipe_alignment [BS] set+1 %hu", ipe_alignment);
@@ -22552,7 +22552,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     is_annotative++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "is_annotative", &is_annotative)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "is_annotative", &is_annotative, 0)
         && is_annotative == multileader->is_annotative)
       {
         pass ("MULTILEADER.is_annotative [B] set+1 " FORMAT_B "", is_annotative);
@@ -22578,7 +22578,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     justification++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "justification", &justification)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "justification", &justification, 0)
         && justification == multileader->justification)
       {
         pass ("MULTILEADER.justification [BS] set+1 %hu", justification);
@@ -22604,7 +22604,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     landing_dist++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "landing_dist", &landing_dist)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "landing_dist", &landing_dist, 0)
         && landing_dist == multileader->landing_dist)
       {
         pass ("MULTILEADER.landing_dist [BD] set+1 %g", landing_dist);
@@ -22630,7 +22630,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     linewt++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "linewt", &linewt)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "linewt", &linewt, 0)
         && linewt == multileader->linewt)
       {
         pass ("MULTILEADER.linewt [BL] set+1 %u", linewt);
@@ -22682,7 +22682,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     neg_textdir++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "neg_textdir", &neg_textdir)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "neg_textdir", &neg_textdir, 0)
         && neg_textdir == multileader->neg_textdir)
       {
         pass ("MULTILEADER.neg_textdir [B] set+1 " FORMAT_B "", neg_textdir);
@@ -22708,7 +22708,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     num_arrowheads++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "num_arrowheads", &num_arrowheads)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "num_arrowheads", &num_arrowheads, 0)
         && num_arrowheads == multileader->num_arrowheads)
       {
         pass ("MULTILEADER.num_arrowheads [BL] set+1 %u", num_arrowheads);
@@ -22734,7 +22734,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     num_blocklabels++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "num_blocklabels", &num_blocklabels)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "num_blocklabels", &num_blocklabels, 0)
         && num_blocklabels == multileader->num_blocklabels)
       {
         pass ("MULTILEADER.num_blocklabels [BL] set+1 %u", num_blocklabels);
@@ -22773,7 +22773,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     scale_factor++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "scale_factor", &scale_factor)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "scale_factor", &scale_factor, 0)
         && scale_factor == multileader->scale_factor)
       {
         pass ("MULTILEADER.scale_factor [BD] set+1 %g", scale_factor);
@@ -22799,7 +22799,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     style_attachment++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "style_attachment", &style_attachment)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "style_attachment", &style_attachment, 0)
         && style_attachment == multileader->style_attachment)
       {
         pass ("MULTILEADER.style_attachment [BS] set+1 %hu", style_attachment);
@@ -22825,7 +22825,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     style_content++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "style_content", &style_content)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "style_content", &style_content, 0)
         && style_content == multileader->style_content)
       {
         pass ("MULTILEADER.style_content [BS] set+1 %hu", style_content);
@@ -22851,7 +22851,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     text_angletype++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "text_angletype", &text_angletype)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "text_angletype", &text_angletype, 0)
         && text_angletype == multileader->text_angletype)
       {
         pass ("MULTILEADER.text_angletype [BS] set+1 %hu", text_angletype);
@@ -22890,7 +22890,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     text_extended++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "text_extended", &text_extended)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "text_extended", &text_extended, 0)
         && text_extended == multileader->text_extended)
       {
         pass ("MULTILEADER.text_extended [B] set+1 " FORMAT_B "", text_extended);
@@ -22916,7 +22916,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     text_left++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "text_left", &text_left)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "text_left", &text_left, 0)
         && text_left == multileader->text_left)
       {
         pass ("MULTILEADER.text_left [BS] set+1 %hu", text_left);
@@ -22942,7 +22942,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     text_right++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "text_right", &text_right)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "text_right", &text_right, 0)
         && text_right == multileader->text_right)
       {
         pass ("MULTILEADER.text_right [BS] set+1 %hu", text_right);
@@ -22981,7 +22981,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         error++;
       }
     type++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "type", &type)
+      if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "type", &type, 0)
         && type == multileader->type)
       {
         pass ("MULTILEADER.type [BS] set+1 %hu", type);
@@ -23027,7 +23027,7 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
         error++;
       }
     data_length++;
-    if (dwg_dynapi_entity_set_value (ole2frame, "OLE2FRAME", "data_length", &data_length)
+      if (dwg_dynapi_entity_set_value (ole2frame, "OLE2FRAME", "data_length", &data_length, 0)
         && data_length == ole2frame->data_length)
       {
         pass ("OLE2FRAME.data_length [BL] set+1 %u", data_length);
@@ -23053,7 +23053,7 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (ole2frame, "OLE2FRAME", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (ole2frame, "OLE2FRAME", "flag", &flag, 0)
         && flag == ole2frame->flag)
       {
         pass ("OLE2FRAME.flag [BS] set+1 %hu", flag);
@@ -23079,7 +23079,7 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
         error++;
       }
     mode++;
-    if (dwg_dynapi_entity_set_value (ole2frame, "OLE2FRAME", "mode", &mode)
+      if (dwg_dynapi_entity_set_value (ole2frame, "OLE2FRAME", "mode", &mode, 0)
         && mode == ole2frame->mode)
       {
         pass ("OLE2FRAME.mode [BS] set+1 %hu", mode);
@@ -23118,7 +23118,7 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
         error++;
       }
     unknown++;
-    if (dwg_dynapi_entity_set_value (ole2frame, "OLE2FRAME", "unknown", &unknown)
+      if (dwg_dynapi_entity_set_value (ole2frame, "OLE2FRAME", "unknown", &unknown, 0)
         && unknown == ole2frame->unknown)
       {
         pass ("OLE2FRAME.unknown [RC] set+1 %u", unknown);
@@ -23164,7 +23164,7 @@ static int test_OLEFRAME (const Dwg_Object *obj)
         error++;
       }
     data_length++;
-    if (dwg_dynapi_entity_set_value (oleframe, "OLEFRAME", "data_length", &data_length)
+      if (dwg_dynapi_entity_set_value (oleframe, "OLEFRAME", "data_length", &data_length, 0)
         && data_length == oleframe->data_length)
       {
         pass ("OLEFRAME.data_length [BL] set+1 %u", data_length);
@@ -23190,7 +23190,7 @@ static int test_OLEFRAME (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (oleframe, "OLEFRAME", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (oleframe, "OLEFRAME", "flag", &flag, 0)
         && flag == oleframe->flag)
       {
         pass ("OLEFRAME.flag [BS] set+1 %hu", flag);
@@ -23216,7 +23216,7 @@ static int test_OLEFRAME (const Dwg_Object *obj)
         error++;
       }
     mode++;
-    if (dwg_dynapi_entity_set_value (oleframe, "OLEFRAME", "mode", &mode)
+      if (dwg_dynapi_entity_set_value (oleframe, "OLEFRAME", "mode", &mode, 0)
         && mode == oleframe->mode)
       {
         pass ("OLEFRAME.mode [BS] set+1 %hu", mode);
@@ -23275,7 +23275,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
         error++;
       }
     acis_empty++;
-    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "acis_empty", &acis_empty)
+      if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "acis_empty", &acis_empty, 0)
         && acis_empty == planesurface->acis_empty)
       {
         pass ("PLANESURFACE.acis_empty [B] set+1 " FORMAT_B "", acis_empty);
@@ -23301,7 +23301,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
         error++;
       }
     acis_empty2++;
-    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "acis_empty2", &acis_empty2)
+      if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "acis_empty2", &acis_empty2, 0)
         && acis_empty2 == planesurface->acis_empty2)
       {
         pass ("PLANESURFACE.acis_empty2 [B] set+1 " FORMAT_B "", acis_empty2);
@@ -23327,7 +23327,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
         error++;
       }
     acis_empty_bit++;
-    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "acis_empty_bit", &acis_empty_bit)
+      if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "acis_empty_bit", &acis_empty_bit, 0)
         && acis_empty_bit == planesurface->acis_empty_bit)
       {
         pass ("PLANESURFACE.acis_empty_bit [B] set+1 " FORMAT_B "", acis_empty_bit);
@@ -23366,7 +23366,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "class_version", &class_version, 0)
         && class_version == planesurface->class_version)
       {
         pass ("PLANESURFACE.class_version [BL] set+1 %u", class_version);
@@ -23433,7 +23433,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
         error++;
       }
     isoline_present++;
-    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "isoline_present", &isoline_present)
+      if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "isoline_present", &isoline_present, 0)
         && isoline_present == planesurface->isoline_present)
       {
         pass ("PLANESURFACE.isoline_present [B] set+1 " FORMAT_B "", isoline_present);
@@ -23459,7 +23459,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
         error++;
       }
     modeler_format_version++;
-    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "modeler_format_version", &modeler_format_version)
+      if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "modeler_format_version", &modeler_format_version, 0)
         && modeler_format_version == planesurface->modeler_format_version)
       {
         pass ("PLANESURFACE.modeler_format_version [BS] set+1 %hu", modeler_format_version);
@@ -23485,7 +23485,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
         error++;
       }
     num_blocks++;
-    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "num_blocks", &num_blocks)
+      if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "num_blocks", &num_blocks, 0)
         && num_blocks == planesurface->num_blocks)
       {
         pass ("PLANESURFACE.num_blocks [BL] set+1 %u", num_blocks);
@@ -23511,7 +23511,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
         error++;
       }
     num_isolines++;
-    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "num_isolines", &num_isolines)
+      if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "num_isolines", &num_isolines, 0)
         && num_isolines == planesurface->num_isolines)
       {
         pass ("PLANESURFACE.num_isolines [BL] set+1 %u", num_isolines);
@@ -23537,7 +23537,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
         error++;
       }
     num_silhouettes++;
-    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "num_silhouettes", &num_silhouettes)
+      if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "num_silhouettes", &num_silhouettes, 0)
         && num_silhouettes == planesurface->num_silhouettes)
       {
         pass ("PLANESURFACE.num_silhouettes [BL] set+1 %u", num_silhouettes);
@@ -23563,7 +23563,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
         error++;
       }
     num_wires++;
-    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "num_wires", &num_wires)
+      if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "num_wires", &num_wires, 0)
         && num_wires == planesurface->num_wires)
       {
         pass ("PLANESURFACE.num_wires [BL] set+1 %u", num_wires);
@@ -23615,7 +23615,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
         error++;
       }
     point_present++;
-    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "point_present", &point_present)
+      if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "point_present", &point_present, 0)
         && point_present == planesurface->point_present)
       {
         pass ("PLANESURFACE.point_present [B] set+1 " FORMAT_B "", point_present);
@@ -23656,7 +23656,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
         error++;
       }
     u_isolines++;
-    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "u_isolines", &u_isolines)
+      if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "u_isolines", &u_isolines, 0)
         && u_isolines == planesurface->u_isolines)
       {
         pass ("PLANESURFACE.u_isolines [BS] set+1 %hu", u_isolines);
@@ -23682,7 +23682,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
         error++;
       }
     unknown++;
-    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "unknown", &unknown)
+      if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "unknown", &unknown, 0)
         && unknown == planesurface->unknown)
       {
         pass ("PLANESURFACE.unknown [B] set+1 " FORMAT_B "", unknown);
@@ -23708,7 +23708,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
         error++;
       }
     unknown_2007++;
-    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "unknown_2007", &unknown_2007)
+      if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "unknown_2007", &unknown_2007, 0)
         && unknown_2007 == planesurface->unknown_2007)
       {
         pass ("PLANESURFACE.unknown_2007 [BL] set+1 %u", unknown_2007);
@@ -23734,7 +23734,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
         error++;
       }
     v_isolines++;
-    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "v_isolines", &v_isolines)
+      if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "v_isolines", &v_isolines, 0)
         && v_isolines == planesurface->v_isolines)
       {
         pass ("PLANESURFACE.v_isolines [BS] set+1 %hu", v_isolines);
@@ -23760,7 +23760,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
         error++;
       }
     version++;
-    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "version", &version)
+      if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "version", &version, 0)
         && version == planesurface->version)
       {
         pass ("PLANESURFACE.version [BS] set+1 %hu", version);
@@ -23786,7 +23786,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
         error++;
       }
     wireframe_data_present++;
-    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "wireframe_data_present", &wireframe_data_present)
+      if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "wireframe_data_present", &wireframe_data_present, 0)
         && wireframe_data_present == planesurface->wireframe_data_present)
       {
         pass ("PLANESURFACE.wireframe_data_present [B] set+1 " FORMAT_B "", wireframe_data_present);
@@ -23859,7 +23859,7 @@ static int test_POINT (const Dwg_Object *obj)
         fail ("POINT.thickness [BT] " FORMAT_BT " != " FORMAT_BT "", point->thickness, thickness);
         error++;
       }
-    if (dwg_dynapi_entity_set_value (point, "POINT", "thickness", &thickness)
+      if (dwg_dynapi_entity_set_value (point, "POINT", "thickness", &thickness, 0)
         && thickness == point->thickness)
       {
         pass ("POINT.thickness [BT] set+1 " FORMAT_BT "", thickness);
@@ -23885,7 +23885,7 @@ static int test_POINT (const Dwg_Object *obj)
         error++;
       }
     x++;
-    if (dwg_dynapi_entity_set_value (point, "POINT", "x", &x)
+      if (dwg_dynapi_entity_set_value (point, "POINT", "x", &x, 0)
         && x == point->x)
       {
         pass ("POINT.x [BD] set+1 %g", x);
@@ -23911,7 +23911,7 @@ static int test_POINT (const Dwg_Object *obj)
         error++;
       }
     x_ang++;
-    if (dwg_dynapi_entity_set_value (point, "POINT", "x_ang", &x_ang)
+      if (dwg_dynapi_entity_set_value (point, "POINT", "x_ang", &x_ang, 0)
         && x_ang == point->x_ang)
       {
         pass ("POINT.x_ang [BD] set+1 %g", x_ang);
@@ -23937,7 +23937,7 @@ static int test_POINT (const Dwg_Object *obj)
         error++;
       }
     y++;
-    if (dwg_dynapi_entity_set_value (point, "POINT", "y", &y)
+      if (dwg_dynapi_entity_set_value (point, "POINT", "y", &y, 0)
         && y == point->y)
       {
         pass ("POINT.y [BD] set+1 %g", y);
@@ -23963,7 +23963,7 @@ static int test_POINT (const Dwg_Object *obj)
         error++;
       }
     z++;
-    if (dwg_dynapi_entity_set_value (point, "POINT", "z", &z)
+      if (dwg_dynapi_entity_set_value (point, "POINT", "z", &z, 0)
         && z == point->z)
       {
         pass ("POINT.z [BD] set+1 %g", z);
@@ -23996,7 +23996,7 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
         error++;
       }
     curve_type++;
-    if (dwg_dynapi_entity_set_value (polyline_2d, "POLYLINE_2D", "curve_type", &curve_type)
+      if (dwg_dynapi_entity_set_value (polyline_2d, "POLYLINE_2D", "curve_type", &curve_type, 0)
         && curve_type == polyline_2d->curve_type)
       {
         pass ("POLYLINE_2D.curve_type [BS] set+1 %hu", curve_type);
@@ -24022,7 +24022,7 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
         error++;
       }
     elevation++;
-    if (dwg_dynapi_entity_set_value (polyline_2d, "POLYLINE_2D", "elevation", &elevation)
+      if (dwg_dynapi_entity_set_value (polyline_2d, "POLYLINE_2D", "elevation", &elevation, 0)
         && elevation == polyline_2d->elevation)
       {
         pass ("POLYLINE_2D.elevation [BD] set+1 %g", elevation);
@@ -24048,7 +24048,7 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
         error++;
       }
     end_width++;
-    if (dwg_dynapi_entity_set_value (polyline_2d, "POLYLINE_2D", "end_width", &end_width)
+      if (dwg_dynapi_entity_set_value (polyline_2d, "POLYLINE_2D", "end_width", &end_width, 0)
         && end_width == polyline_2d->end_width)
       {
         pass ("POLYLINE_2D.end_width [BD] set+1 %g", end_width);
@@ -24100,7 +24100,7 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (polyline_2d, "POLYLINE_2D", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (polyline_2d, "POLYLINE_2D", "flag", &flag, 0)
         && flag == polyline_2d->flag)
       {
         pass ("POLYLINE_2D.flag [BS] set+1 %hu", flag);
@@ -24139,7 +24139,7 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
         error++;
       }
     num_owned++;
-    if (dwg_dynapi_entity_set_value (polyline_2d, "POLYLINE_2D", "num_owned", &num_owned)
+      if (dwg_dynapi_entity_set_value (polyline_2d, "POLYLINE_2D", "num_owned", &num_owned, 0)
         && num_owned == polyline_2d->num_owned)
       {
         pass ("POLYLINE_2D.num_owned [BL] set+1 %u", num_owned);
@@ -24191,7 +24191,7 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
         error++;
       }
     start_width++;
-    if (dwg_dynapi_entity_set_value (polyline_2d, "POLYLINE_2D", "start_width", &start_width)
+      if (dwg_dynapi_entity_set_value (polyline_2d, "POLYLINE_2D", "start_width", &start_width, 0)
         && start_width == polyline_2d->start_width)
       {
         pass ("POLYLINE_2D.start_width [BD] set+1 %g", start_width);
@@ -24216,7 +24216,7 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
         fail ("POLYLINE_2D.thickness [BT] " FORMAT_BT " != " FORMAT_BT "", polyline_2d->thickness, thickness);
         error++;
       }
-    if (dwg_dynapi_entity_set_value (polyline_2d, "POLYLINE_2D", "thickness", &thickness)
+      if (dwg_dynapi_entity_set_value (polyline_2d, "POLYLINE_2D", "thickness", &thickness, 0)
         && thickness == polyline_2d->thickness)
       {
         pass ("POLYLINE_2D.thickness [BT] set+1 " FORMAT_BT "", thickness);
@@ -24264,7 +24264,7 @@ static int test_POLYLINE_3D (const Dwg_Object *obj)
         error++;
       }
     curve_type++;
-    if (dwg_dynapi_entity_set_value (polyline_3d, "POLYLINE_3D", "curve_type", &curve_type)
+      if (dwg_dynapi_entity_set_value (polyline_3d, "POLYLINE_3D", "curve_type", &curve_type, 0)
         && curve_type == polyline_3d->curve_type)
       {
         pass ("POLYLINE_3D.curve_type [RC] set+1 %u", curve_type);
@@ -24303,7 +24303,7 @@ static int test_POLYLINE_3D (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (polyline_3d, "POLYLINE_3D", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (polyline_3d, "POLYLINE_3D", "flag", &flag, 0)
         && flag == polyline_3d->flag)
       {
         pass ("POLYLINE_3D.flag [RC] set+1 %u", flag);
@@ -24342,7 +24342,7 @@ static int test_POLYLINE_3D (const Dwg_Object *obj)
         error++;
       }
     num_owned++;
-    if (dwg_dynapi_entity_set_value (polyline_3d, "POLYLINE_3D", "num_owned", &num_owned)
+      if (dwg_dynapi_entity_set_value (polyline_3d, "POLYLINE_3D", "num_owned", &num_owned, 0)
         && num_owned == polyline_3d->num_owned)
       {
         pass ("POLYLINE_3D.num_owned [BL] set+1 %u", num_owned);
@@ -24416,7 +24416,7 @@ static int test_POLYLINE_MESH (const Dwg_Object *obj)
         error++;
       }
     curve_type++;
-    if (dwg_dynapi_entity_set_value (polyline_mesh, "POLYLINE_MESH", "curve_type", &curve_type)
+      if (dwg_dynapi_entity_set_value (polyline_mesh, "POLYLINE_MESH", "curve_type", &curve_type, 0)
         && curve_type == polyline_mesh->curve_type)
       {
         pass ("POLYLINE_MESH.curve_type [BS] set+1 %hu", curve_type);
@@ -24455,7 +24455,7 @@ static int test_POLYLINE_MESH (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (polyline_mesh, "POLYLINE_MESH", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (polyline_mesh, "POLYLINE_MESH", "flag", &flag, 0)
         && flag == polyline_mesh->flag)
       {
         pass ("POLYLINE_MESH.flag [BS] set+1 %hu", flag);
@@ -24494,7 +24494,7 @@ static int test_POLYLINE_MESH (const Dwg_Object *obj)
         error++;
       }
     m_density++;
-    if (dwg_dynapi_entity_set_value (polyline_mesh, "POLYLINE_MESH", "m_density", &m_density)
+      if (dwg_dynapi_entity_set_value (polyline_mesh, "POLYLINE_MESH", "m_density", &m_density, 0)
         && m_density == polyline_mesh->m_density)
       {
         pass ("POLYLINE_MESH.m_density [BS] set+1 %hu", m_density);
@@ -24520,7 +24520,7 @@ static int test_POLYLINE_MESH (const Dwg_Object *obj)
         error++;
       }
     n_density++;
-    if (dwg_dynapi_entity_set_value (polyline_mesh, "POLYLINE_MESH", "n_density", &n_density)
+      if (dwg_dynapi_entity_set_value (polyline_mesh, "POLYLINE_MESH", "n_density", &n_density, 0)
         && n_density == polyline_mesh->n_density)
       {
         pass ("POLYLINE_MESH.n_density [BS] set+1 %hu", n_density);
@@ -24546,7 +24546,7 @@ static int test_POLYLINE_MESH (const Dwg_Object *obj)
         error++;
       }
     num_m_verts++;
-    if (dwg_dynapi_entity_set_value (polyline_mesh, "POLYLINE_MESH", "num_m_verts", &num_m_verts)
+      if (dwg_dynapi_entity_set_value (polyline_mesh, "POLYLINE_MESH", "num_m_verts", &num_m_verts, 0)
         && num_m_verts == polyline_mesh->num_m_verts)
       {
         pass ("POLYLINE_MESH.num_m_verts [BS] set+1 %hu", num_m_verts);
@@ -24572,7 +24572,7 @@ static int test_POLYLINE_MESH (const Dwg_Object *obj)
         error++;
       }
     num_n_verts++;
-    if (dwg_dynapi_entity_set_value (polyline_mesh, "POLYLINE_MESH", "num_n_verts", &num_n_verts)
+      if (dwg_dynapi_entity_set_value (polyline_mesh, "POLYLINE_MESH", "num_n_verts", &num_n_verts, 0)
         && num_n_verts == polyline_mesh->num_n_verts)
       {
         pass ("POLYLINE_MESH.num_n_verts [BS] set+1 %hu", num_n_verts);
@@ -24598,7 +24598,7 @@ static int test_POLYLINE_MESH (const Dwg_Object *obj)
         error++;
       }
     num_owned++;
-    if (dwg_dynapi_entity_set_value (polyline_mesh, "POLYLINE_MESH", "num_owned", &num_owned)
+      if (dwg_dynapi_entity_set_value (polyline_mesh, "POLYLINE_MESH", "num_owned", &num_owned, 0)
         && num_owned == polyline_mesh->num_owned)
       {
         pass ("POLYLINE_MESH.num_owned [BL] set+1 %u", num_owned);
@@ -24698,7 +24698,7 @@ static int test_POLYLINE_PFACE (const Dwg_Object *obj)
         error++;
       }
     num_owned++;
-    if (dwg_dynapi_entity_set_value (polyline_pface, "POLYLINE_PFACE", "num_owned", &num_owned)
+      if (dwg_dynapi_entity_set_value (polyline_pface, "POLYLINE_PFACE", "num_owned", &num_owned, 0)
         && num_owned == polyline_pface->num_owned)
       {
         pass ("POLYLINE_PFACE.num_owned [BL] set+1 %u", num_owned);
@@ -24724,7 +24724,7 @@ static int test_POLYLINE_PFACE (const Dwg_Object *obj)
         error++;
       }
     numfaces++;
-    if (dwg_dynapi_entity_set_value (polyline_pface, "POLYLINE_PFACE", "numfaces", &numfaces)
+      if (dwg_dynapi_entity_set_value (polyline_pface, "POLYLINE_PFACE", "numfaces", &numfaces, 0)
         && numfaces == polyline_pface->numfaces)
       {
         pass ("POLYLINE_PFACE.numfaces [BS] set+1 %hu", numfaces);
@@ -24750,7 +24750,7 @@ static int test_POLYLINE_PFACE (const Dwg_Object *obj)
         error++;
       }
     numverts++;
-    if (dwg_dynapi_entity_set_value (polyline_pface, "POLYLINE_PFACE", "numverts", &numverts)
+      if (dwg_dynapi_entity_set_value (polyline_pface, "POLYLINE_PFACE", "numverts", &numverts, 0)
         && numverts == polyline_pface->numverts)
       {
         pass ("POLYLINE_PFACE.numverts [BS] set+1 %hu", numverts);
@@ -24824,7 +24824,7 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
         error++;
       }
     class_id++;
-    if (dwg_dynapi_entity_set_value (proxy_entity, "PROXY_ENTITY", "class_id", &class_id)
+      if (dwg_dynapi_entity_set_value (proxy_entity, "PROXY_ENTITY", "class_id", &class_id, 0)
         && class_id == proxy_entity->class_id)
       {
         pass ("PROXY_ENTITY.class_id [BL] set+1 %u", class_id);
@@ -24863,7 +24863,7 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
         error++;
       }
     from_dxf++;
-    if (dwg_dynapi_entity_set_value (proxy_entity, "PROXY_ENTITY", "from_dxf", &from_dxf)
+      if (dwg_dynapi_entity_set_value (proxy_entity, "PROXY_ENTITY", "from_dxf", &from_dxf, 0)
         && from_dxf == proxy_entity->from_dxf)
       {
         pass ("PROXY_ENTITY.from_dxf [B] set+1 " FORMAT_B "", from_dxf);
@@ -24889,7 +24889,7 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
         error++;
       }
     maint_version++;
-    if (dwg_dynapi_entity_set_value (proxy_entity, "PROXY_ENTITY", "maint_version", &maint_version)
+      if (dwg_dynapi_entity_set_value (proxy_entity, "PROXY_ENTITY", "maint_version", &maint_version, 0)
         && maint_version == proxy_entity->maint_version)
       {
         pass ("PROXY_ENTITY.maint_version [BL] set+1 %u", maint_version);
@@ -24940,7 +24940,7 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
         fail ("PROXY_ENTITY.size [MS] " FORMAT_MS " != " FORMAT_MS "", proxy_entity->size, size);
         error++;
       }
-    if (dwg_dynapi_entity_set_value (proxy_entity, "PROXY_ENTITY", "size", &size)
+      if (dwg_dynapi_entity_set_value (proxy_entity, "PROXY_ENTITY", "size", &size, 0)
         && size == proxy_entity->size)
       {
         pass ("PROXY_ENTITY.size [MS] set+1 " FORMAT_MS "", size);
@@ -24966,7 +24966,7 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
         error++;
       }
     version++;
-    if (dwg_dynapi_entity_set_value (proxy_entity, "PROXY_ENTITY", "version", &version)
+      if (dwg_dynapi_entity_set_value (proxy_entity, "PROXY_ENTITY", "version", &version, 0)
         && version == proxy_entity->version)
       {
         pass ("PROXY_ENTITY.version [BL] set+1 %u", version);
@@ -25058,7 +25058,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     acis_empty++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "acis_empty", &acis_empty)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "acis_empty", &acis_empty, 0)
         && acis_empty == revolvedsurface->acis_empty)
       {
         pass ("REVOLVEDSURFACE.acis_empty [B] set+1 " FORMAT_B "", acis_empty);
@@ -25084,7 +25084,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     acis_empty2++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "acis_empty2", &acis_empty2)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "acis_empty2", &acis_empty2, 0)
         && acis_empty2 == revolvedsurface->acis_empty2)
       {
         pass ("REVOLVEDSURFACE.acis_empty2 [B] set+1 " FORMAT_B "", acis_empty2);
@@ -25110,7 +25110,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     acis_empty_bit++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "acis_empty_bit", &acis_empty_bit)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "acis_empty_bit", &acis_empty_bit, 0)
         && acis_empty_bit == revolvedsurface->acis_empty_bit)
       {
         pass ("REVOLVEDSURFACE.acis_empty_bit [B] set+1 " FORMAT_B "", acis_empty_bit);
@@ -25175,7 +25175,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "class_version", &class_version, 0)
         && class_version == revolvedsurface->class_version)
       {
         pass ("REVOLVEDSURFACE.class_version [BL] set+1 %u", class_version);
@@ -25201,7 +25201,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     close_to_axis++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "close_to_axis", &close_to_axis)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "close_to_axis", &close_to_axis, 0)
         && close_to_axis == revolvedsurface->close_to_axis)
       {
         pass ("REVOLVEDSURFACE.close_to_axis [B] set+1 " FORMAT_B "", close_to_axis);
@@ -25227,7 +25227,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     draft_angle++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "draft_angle", &draft_angle)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "draft_angle", &draft_angle, 0)
         && draft_angle == revolvedsurface->draft_angle)
       {
         pass ("REVOLVEDSURFACE.draft_angle [BD] set+1 %g", draft_angle);
@@ -25253,7 +25253,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     draft_end_distance++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "draft_end_distance", &draft_end_distance)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "draft_end_distance", &draft_end_distance, 0)
         && draft_end_distance == revolvedsurface->draft_end_distance)
       {
         pass ("REVOLVEDSURFACE.draft_end_distance [BD] set+1 %g", draft_end_distance);
@@ -25279,7 +25279,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     draft_start_distance++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "draft_start_distance", &draft_start_distance)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "draft_start_distance", &draft_start_distance, 0)
         && draft_start_distance == revolvedsurface->draft_start_distance)
       {
         pass ("REVOLVEDSURFACE.draft_start_distance [BD] set+1 %g", draft_start_distance);
@@ -25346,7 +25346,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     id++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "id", &id)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "id", &id, 0)
         && id == revolvedsurface->id)
       {
         pass ("REVOLVEDSURFACE.id [BL] set+1 %u", id);
@@ -25372,7 +25372,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     isoline_present++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "isoline_present", &isoline_present)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "isoline_present", &isoline_present, 0)
         && isoline_present == revolvedsurface->isoline_present)
       {
         pass ("REVOLVEDSURFACE.isoline_present [B] set+1 " FORMAT_B "", isoline_present);
@@ -25398,7 +25398,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     modeler_format_version++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "modeler_format_version", &modeler_format_version)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "modeler_format_version", &modeler_format_version, 0)
         && modeler_format_version == revolvedsurface->modeler_format_version)
       {
         pass ("REVOLVEDSURFACE.modeler_format_version [BS] set+1 %hu", modeler_format_version);
@@ -25424,7 +25424,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     num_blocks++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "num_blocks", &num_blocks)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "num_blocks", &num_blocks, 0)
         && num_blocks == revolvedsurface->num_blocks)
       {
         pass ("REVOLVEDSURFACE.num_blocks [BL] set+1 %u", num_blocks);
@@ -25450,7 +25450,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     num_isolines++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "num_isolines", &num_isolines)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "num_isolines", &num_isolines, 0)
         && num_isolines == revolvedsurface->num_isolines)
       {
         pass ("REVOLVEDSURFACE.num_isolines [BL] set+1 %u", num_isolines);
@@ -25476,7 +25476,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     num_silhouettes++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "num_silhouettes", &num_silhouettes)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "num_silhouettes", &num_silhouettes, 0)
         && num_silhouettes == revolvedsurface->num_silhouettes)
       {
         pass ("REVOLVEDSURFACE.num_silhouettes [BL] set+1 %u", num_silhouettes);
@@ -25502,7 +25502,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     num_wires++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "num_wires", &num_wires)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "num_wires", &num_wires, 0)
         && num_wires == revolvedsurface->num_wires)
       {
         pass ("REVOLVEDSURFACE.num_wires [BL] set+1 %u", num_wires);
@@ -25554,7 +25554,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     point_present++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "point_present", &point_present)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "point_present", &point_present, 0)
         && point_present == revolvedsurface->point_present)
       {
         pass ("REVOLVEDSURFACE.point_present [B] set+1 " FORMAT_B "", point_present);
@@ -25580,7 +25580,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     revolve_angle++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "revolve_angle", &revolve_angle)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "revolve_angle", &revolve_angle, 0)
         && revolve_angle == revolvedsurface->revolve_angle)
       {
         pass ("REVOLVEDSURFACE.revolve_angle [BD] set+1 %g", revolve_angle);
@@ -25634,7 +25634,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     solid++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "solid", &solid)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "solid", &solid, 0)
         && solid == revolvedsurface->solid)
       {
         pass ("REVOLVEDSURFACE.solid [B] set+1 " FORMAT_B "", solid);
@@ -25660,7 +25660,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     start_angle++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "start_angle", &start_angle)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "start_angle", &start_angle, 0)
         && start_angle == revolvedsurface->start_angle)
       {
         pass ("REVOLVEDSURFACE.start_angle [BD] set+1 %g", start_angle);
@@ -25686,7 +25686,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     twist_angle++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "twist_angle", &twist_angle)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "twist_angle", &twist_angle, 0)
         && twist_angle == revolvedsurface->twist_angle)
       {
         pass ("REVOLVEDSURFACE.twist_angle [BD] set+1 %g", twist_angle);
@@ -25712,7 +25712,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     u_isolines++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "u_isolines", &u_isolines)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "u_isolines", &u_isolines, 0)
         && u_isolines == revolvedsurface->u_isolines)
       {
         pass ("REVOLVEDSURFACE.u_isolines [BS] set+1 %hu", u_isolines);
@@ -25738,7 +25738,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     unknown++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "unknown", &unknown)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "unknown", &unknown, 0)
         && unknown == revolvedsurface->unknown)
       {
         pass ("REVOLVEDSURFACE.unknown [B] set+1 " FORMAT_B "", unknown);
@@ -25764,7 +25764,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     unknown_2007++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "unknown_2007", &unknown_2007)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "unknown_2007", &unknown_2007, 0)
         && unknown_2007 == revolvedsurface->unknown_2007)
       {
         pass ("REVOLVEDSURFACE.unknown_2007 [BL] set+1 %u", unknown_2007);
@@ -25790,7 +25790,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     v_isolines++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "v_isolines", &v_isolines)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "v_isolines", &v_isolines, 0)
         && v_isolines == revolvedsurface->v_isolines)
       {
         pass ("REVOLVEDSURFACE.v_isolines [BS] set+1 %hu", v_isolines);
@@ -25816,7 +25816,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     version++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "version", &version)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "version", &version, 0)
         && version == revolvedsurface->version)
       {
         pass ("REVOLVEDSURFACE.version [BS] set+1 %hu", version);
@@ -25842,7 +25842,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         error++;
       }
     wireframe_data_present++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "wireframe_data_present", &wireframe_data_present)
+      if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "wireframe_data_present", &wireframe_data_present, 0)
         && wireframe_data_present == revolvedsurface->wireframe_data_present)
       {
         pass ("REVOLVEDSURFACE.wireframe_data_present [B] set+1 " FORMAT_B "", wireframe_data_present);
@@ -25936,7 +25936,7 @@ static int test_SHAPE (const Dwg_Object *obj)
         error++;
       }
     oblique++;
-    if (dwg_dynapi_entity_set_value (shape, "SHAPE", "oblique", &oblique)
+      if (dwg_dynapi_entity_set_value (shape, "SHAPE", "oblique", &oblique, 0)
         && oblique == shape->oblique)
       {
         pass ("SHAPE.oblique [BD] set+1 %g", oblique);
@@ -25975,7 +25975,7 @@ static int test_SHAPE (const Dwg_Object *obj)
         error++;
       }
     rotation++;
-    if (dwg_dynapi_entity_set_value (shape, "SHAPE", "rotation", &rotation)
+      if (dwg_dynapi_entity_set_value (shape, "SHAPE", "rotation", &rotation, 0)
         && rotation == shape->rotation)
       {
         pass ("SHAPE.rotation [BD] set+1 %g", rotation);
@@ -26001,7 +26001,7 @@ static int test_SHAPE (const Dwg_Object *obj)
         error++;
       }
     scale++;
-    if (dwg_dynapi_entity_set_value (shape, "SHAPE", "scale", &scale)
+      if (dwg_dynapi_entity_set_value (shape, "SHAPE", "scale", &scale, 0)
         && scale == shape->scale)
       {
         pass ("SHAPE.scale [BD] set+1 %g", scale);
@@ -26027,7 +26027,7 @@ static int test_SHAPE (const Dwg_Object *obj)
         error++;
       }
     shape_no++;
-    if (dwg_dynapi_entity_set_value (shape, "SHAPE", "shape_no", &shape_no)
+      if (dwg_dynapi_entity_set_value (shape, "SHAPE", "shape_no", &shape_no, 0)
         && shape_no == shape->shape_no)
       {
         pass ("SHAPE.shape_no [BS] set+1 %hu", shape_no);
@@ -26066,7 +26066,7 @@ static int test_SHAPE (const Dwg_Object *obj)
         error++;
       }
     thickness++;
-    if (dwg_dynapi_entity_set_value (shape, "SHAPE", "thickness", &thickness)
+      if (dwg_dynapi_entity_set_value (shape, "SHAPE", "thickness", &thickness, 0)
         && thickness == shape->thickness)
       {
         pass ("SHAPE.thickness [BD] set+1 %g", thickness);
@@ -26092,7 +26092,7 @@ static int test_SHAPE (const Dwg_Object *obj)
         error++;
       }
     width_factor++;
-    if (dwg_dynapi_entity_set_value (shape, "SHAPE", "width_factor", &width_factor)
+      if (dwg_dynapi_entity_set_value (shape, "SHAPE", "width_factor", &width_factor, 0)
         && width_factor == shape->width_factor)
       {
         pass ("SHAPE.width_factor [BD] set+1 %g", width_factor);
@@ -26177,7 +26177,7 @@ static int test_SOLID (const Dwg_Object *obj)
         error++;
       }
     elevation++;
-    if (dwg_dynapi_entity_set_value (solid, "SOLID", "elevation", &elevation)
+      if (dwg_dynapi_entity_set_value (solid, "SOLID", "elevation", &elevation, 0)
         && elevation == solid->elevation)
       {
         pass ("SOLID.elevation [BD] set+1 %g", elevation);
@@ -26228,7 +26228,7 @@ static int test_SOLID (const Dwg_Object *obj)
         fail ("SOLID.thickness [BT] " FORMAT_BT " != " FORMAT_BT "", solid->thickness, thickness);
         error++;
       }
-    if (dwg_dynapi_entity_set_value (solid, "SOLID", "thickness", &thickness)
+      if (dwg_dynapi_entity_set_value (solid, "SOLID", "thickness", &thickness, 0)
         && thickness == solid->thickness)
       {
         pass ("SOLID.thickness [BT] set+1 " FORMAT_BT "", thickness);
@@ -26274,7 +26274,7 @@ static int test_SPLINE (const Dwg_Object *obj)
         error++;
       }
     closed_b++;
-    if (dwg_dynapi_entity_set_value (spline, "SPLINE", "closed_b", &closed_b)
+      if (dwg_dynapi_entity_set_value (spline, "SPLINE", "closed_b", &closed_b, 0)
         && closed_b == spline->closed_b)
       {
         pass ("SPLINE.closed_b [B] set+1 " FORMAT_B "", closed_b);
@@ -26315,7 +26315,7 @@ static int test_SPLINE (const Dwg_Object *obj)
         error++;
       }
     ctrl_tol++;
-    if (dwg_dynapi_entity_set_value (spline, "SPLINE", "ctrl_tol", &ctrl_tol)
+      if (dwg_dynapi_entity_set_value (spline, "SPLINE", "ctrl_tol", &ctrl_tol, 0)
         && ctrl_tol == spline->ctrl_tol)
       {
         pass ("SPLINE.ctrl_tol [BD] set+1 %g", ctrl_tol);
@@ -26341,7 +26341,7 @@ static int test_SPLINE (const Dwg_Object *obj)
         error++;
       }
     degree++;
-    if (dwg_dynapi_entity_set_value (spline, "SPLINE", "degree", &degree)
+      if (dwg_dynapi_entity_set_value (spline, "SPLINE", "degree", &degree, 0)
         && degree == spline->degree)
       {
         pass ("SPLINE.degree [BS] set+1 %hu", degree);
@@ -26395,7 +26395,7 @@ static int test_SPLINE (const Dwg_Object *obj)
         error++;
       }
     fit_tol++;
-    if (dwg_dynapi_entity_set_value (spline, "SPLINE", "fit_tol", &fit_tol)
+      if (dwg_dynapi_entity_set_value (spline, "SPLINE", "fit_tol", &fit_tol, 0)
         && fit_tol == spline->fit_tol)
       {
         pass ("SPLINE.fit_tol [BD] set+1 %g", fit_tol);
@@ -26421,7 +26421,7 @@ static int test_SPLINE (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (spline, "SPLINE", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (spline, "SPLINE", "flag", &flag, 0)
         && flag == spline->flag)
       {
         pass ("SPLINE.flag [RS] set+1 %hu", flag);
@@ -26447,7 +26447,7 @@ static int test_SPLINE (const Dwg_Object *obj)
         error++;
       }
     knot_tol++;
-    if (dwg_dynapi_entity_set_value (spline, "SPLINE", "knot_tol", &knot_tol)
+      if (dwg_dynapi_entity_set_value (spline, "SPLINE", "knot_tol", &knot_tol, 0)
         && knot_tol == spline->knot_tol)
       {
         pass ("SPLINE.knot_tol [BD] set+1 %g", knot_tol);
@@ -26473,7 +26473,7 @@ static int test_SPLINE (const Dwg_Object *obj)
         error++;
       }
     knotparam++;
-    if (dwg_dynapi_entity_set_value (spline, "SPLINE", "knotparam", &knotparam)
+      if (dwg_dynapi_entity_set_value (spline, "SPLINE", "knotparam", &knotparam, 0)
         && knotparam == spline->knotparam)
       {
         pass ("SPLINE.knotparam [BL] set+1 %u", knotparam);
@@ -26514,7 +26514,7 @@ static int test_SPLINE (const Dwg_Object *obj)
         error++;
       }
     num_ctrl_pts++;
-    if (dwg_dynapi_entity_set_value (spline, "SPLINE", "num_ctrl_pts", &num_ctrl_pts)
+      if (dwg_dynapi_entity_set_value (spline, "SPLINE", "num_ctrl_pts", &num_ctrl_pts, 0)
         && num_ctrl_pts == spline->num_ctrl_pts)
       {
         pass ("SPLINE.num_ctrl_pts [BL] set+1 %u", num_ctrl_pts);
@@ -26540,7 +26540,7 @@ static int test_SPLINE (const Dwg_Object *obj)
         error++;
       }
     num_fit_pts++;
-    if (dwg_dynapi_entity_set_value (spline, "SPLINE", "num_fit_pts", &num_fit_pts)
+      if (dwg_dynapi_entity_set_value (spline, "SPLINE", "num_fit_pts", &num_fit_pts, 0)
         && num_fit_pts == spline->num_fit_pts)
       {
         pass ("SPLINE.num_fit_pts [BS] set+1 %hu", num_fit_pts);
@@ -26566,7 +26566,7 @@ static int test_SPLINE (const Dwg_Object *obj)
         error++;
       }
     num_knots++;
-    if (dwg_dynapi_entity_set_value (spline, "SPLINE", "num_knots", &num_knots)
+      if (dwg_dynapi_entity_set_value (spline, "SPLINE", "num_knots", &num_knots, 0)
         && num_knots == spline->num_knots)
       {
         pass ("SPLINE.num_knots [BL] set+1 %u", num_knots);
@@ -26605,7 +26605,7 @@ static int test_SPLINE (const Dwg_Object *obj)
         error++;
       }
     periodic++;
-    if (dwg_dynapi_entity_set_value (spline, "SPLINE", "periodic", &periodic)
+      if (dwg_dynapi_entity_set_value (spline, "SPLINE", "periodic", &periodic, 0)
         && periodic == spline->periodic)
       {
         pass ("SPLINE.periodic [B] set+1 " FORMAT_B "", periodic);
@@ -26631,7 +26631,7 @@ static int test_SPLINE (const Dwg_Object *obj)
         error++;
       }
     rational++;
-    if (dwg_dynapi_entity_set_value (spline, "SPLINE", "rational", &rational)
+      if (dwg_dynapi_entity_set_value (spline, "SPLINE", "rational", &rational, 0)
         && rational == spline->rational)
       {
         pass ("SPLINE.rational [B] set+1 " FORMAT_B "", rational);
@@ -26657,7 +26657,7 @@ static int test_SPLINE (const Dwg_Object *obj)
         error++;
       }
     scenario++;
-    if (dwg_dynapi_entity_set_value (spline, "SPLINE", "scenario", &scenario)
+      if (dwg_dynapi_entity_set_value (spline, "SPLINE", "scenario", &scenario, 0)
         && scenario == spline->scenario)
       {
         pass ("SPLINE.scenario [BS] set+1 %hu", scenario);
@@ -26683,7 +26683,7 @@ static int test_SPLINE (const Dwg_Object *obj)
         error++;
       }
     splineflags1++;
-    if (dwg_dynapi_entity_set_value (spline, "SPLINE", "splineflags1", &splineflags1)
+      if (dwg_dynapi_entity_set_value (spline, "SPLINE", "splineflags1", &splineflags1, 0)
         && splineflags1 == spline->splineflags1)
       {
         pass ("SPLINE.splineflags1 [BL] set+1 %u", splineflags1);
@@ -26709,7 +26709,7 @@ static int test_SPLINE (const Dwg_Object *obj)
         error++;
       }
     weighted++;
-    if (dwg_dynapi_entity_set_value (spline, "SPLINE", "weighted", &weighted)
+      if (dwg_dynapi_entity_set_value (spline, "SPLINE", "weighted", &weighted, 0)
         && weighted == spline->weighted)
       {
         pass ("SPLINE.weighted [B] set+1 " FORMAT_B "", weighted);
@@ -26755,7 +26755,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     acis_empty++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "acis_empty", &acis_empty)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "acis_empty", &acis_empty, 0)
         && acis_empty == sweptsurface->acis_empty)
       {
         pass ("SWEPTSURFACE.acis_empty [B] set+1 " FORMAT_B "", acis_empty);
@@ -26781,7 +26781,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     acis_empty2++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "acis_empty2", &acis_empty2)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "acis_empty2", &acis_empty2, 0)
         && acis_empty2 == sweptsurface->acis_empty2)
       {
         pass ("SWEPTSURFACE.acis_empty2 [B] set+1 " FORMAT_B "", acis_empty2);
@@ -26807,7 +26807,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     acis_empty_bit++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "acis_empty_bit", &acis_empty_bit)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "acis_empty_bit", &acis_empty_bit, 0)
         && acis_empty_bit == sweptsurface->acis_empty_bit)
       {
         pass ("SWEPTSURFACE.acis_empty_bit [B] set+1 " FORMAT_B "", acis_empty_bit);
@@ -26833,7 +26833,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     align_angle++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "align_angle", &align_angle)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "align_angle", &align_angle, 0)
         && align_angle == sweptsurface->align_angle)
       {
         pass ("SWEPTSURFACE.align_angle [BD] set+1 %g", align_angle);
@@ -26859,7 +26859,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     align_start++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "align_start", &align_start)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "align_start", &align_start, 0)
         && align_start == sweptsurface->align_start)
       {
         pass ("SWEPTSURFACE.align_start [B] set+1 " FORMAT_B "", align_start);
@@ -26885,7 +26885,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     bank++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "bank", &bank)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "bank", &bank, 0)
         && bank == sweptsurface->bank)
       {
         pass ("SWEPTSURFACE.bank [B] set+1 " FORMAT_B "", bank);
@@ -26911,7 +26911,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     base_point_set++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "base_point_set", &base_point_set)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "base_point_set", &base_point_set, 0)
         && base_point_set == sweptsurface->base_point_set)
       {
         pass ("SWEPTSURFACE.base_point_set [B] set+1 " FORMAT_B "", base_point_set);
@@ -26950,7 +26950,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "class_version", &class_version, 0)
         && class_version == sweptsurface->class_version)
       {
         pass ("SWEPTSURFACE.class_version [BL] set+1 %u", class_version);
@@ -26976,7 +26976,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     draft_angle++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "draft_angle", &draft_angle)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "draft_angle", &draft_angle, 0)
         && draft_angle == sweptsurface->draft_angle)
       {
         pass ("SWEPTSURFACE.draft_angle [BD] set+1 %g", draft_angle);
@@ -27002,7 +27002,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     draft_end_distance++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "draft_end_distance", &draft_end_distance)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "draft_end_distance", &draft_end_distance, 0)
         && draft_end_distance == sweptsurface->draft_end_distance)
       {
         pass ("SWEPTSURFACE.draft_end_distance [BD] set+1 %g", draft_end_distance);
@@ -27028,7 +27028,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     draft_start_distance++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "draft_start_distance", &draft_start_distance)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "draft_start_distance", &draft_start_distance, 0)
         && draft_start_distance == sweptsurface->draft_start_distance)
       {
         pass ("SWEPTSURFACE.draft_start_distance [BD] set+1 %g", draft_start_distance);
@@ -27095,7 +27095,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     isoline_present++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "isoline_present", &isoline_present)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "isoline_present", &isoline_present, 0)
         && isoline_present == sweptsurface->isoline_present)
       {
         pass ("SWEPTSURFACE.isoline_present [B] set+1 " FORMAT_B "", isoline_present);
@@ -27121,7 +27121,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     modeler_format_version++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "modeler_format_version", &modeler_format_version)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "modeler_format_version", &modeler_format_version, 0)
         && modeler_format_version == sweptsurface->modeler_format_version)
       {
         pass ("SWEPTSURFACE.modeler_format_version [BS] set+1 %hu", modeler_format_version);
@@ -27147,7 +27147,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     num_blocks++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "num_blocks", &num_blocks)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "num_blocks", &num_blocks, 0)
         && num_blocks == sweptsurface->num_blocks)
       {
         pass ("SWEPTSURFACE.num_blocks [BL] set+1 %u", num_blocks);
@@ -27173,7 +27173,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     num_isolines++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "num_isolines", &num_isolines)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "num_isolines", &num_isolines, 0)
         && num_isolines == sweptsurface->num_isolines)
       {
         pass ("SWEPTSURFACE.num_isolines [BL] set+1 %u", num_isolines);
@@ -27199,7 +27199,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     num_silhouettes++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "num_silhouettes", &num_silhouettes)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "num_silhouettes", &num_silhouettes, 0)
         && num_silhouettes == sweptsurface->num_silhouettes)
       {
         pass ("SWEPTSURFACE.num_silhouettes [BL] set+1 %u", num_silhouettes);
@@ -27225,7 +27225,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     num_wires++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "num_wires", &num_wires)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "num_wires", &num_wires, 0)
         && num_wires == sweptsurface->num_wires)
       {
         pass ("SWEPTSURFACE.num_wires [BL] set+1 %u", num_wires);
@@ -27264,7 +27264,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     path_entity_id++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "path_entity_id", &path_entity_id)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "path_entity_id", &path_entity_id, 0)
         && path_entity_id == sweptsurface->path_entity_id)
       {
         pass ("SWEPTSURFACE.path_entity_id [BL] set+1 %u", path_entity_id);
@@ -27290,7 +27290,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     path_entity_transform_computed++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "path_entity_transform_computed", &path_entity_transform_computed)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "path_entity_transform_computed", &path_entity_transform_computed, 0)
         && path_entity_transform_computed == sweptsurface->path_entity_transform_computed)
       {
         pass ("SWEPTSURFACE.path_entity_transform_computed [B] set+1 " FORMAT_B "", path_entity_transform_computed);
@@ -27368,7 +27368,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     point_present++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "point_present", &point_present)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "point_present", &point_present, 0)
         && point_present == sweptsurface->point_present)
       {
         pass ("SWEPTSURFACE.point_present [B] set+1 " FORMAT_B "", point_present);
@@ -27407,7 +27407,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     scale_factor++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "scale_factor", &scale_factor)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "scale_factor", &scale_factor, 0)
         && scale_factor == sweptsurface->scale_factor)
       {
         pass ("SWEPTSURFACE.scale_factor [BD] set+1 %g", scale_factor);
@@ -27448,7 +27448,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     size_pathdata++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "size_pathdata", &size_pathdata)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "size_pathdata", &size_pathdata, 0)
         && size_pathdata == sweptsurface->size_pathdata)
       {
         pass ("SWEPTSURFACE.size_pathdata [BL] set+1 %u", size_pathdata);
@@ -27474,7 +27474,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     size_sweepdata++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "size_sweepdata", &size_sweepdata)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "size_sweepdata", &size_sweepdata, 0)
         && size_sweepdata == sweptsurface->size_sweepdata)
       {
         pass ("SWEPTSURFACE.size_sweepdata [BL] set+1 %u", size_sweepdata);
@@ -27500,7 +27500,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     solid++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "solid", &solid)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "solid", &solid, 0)
         && solid == sweptsurface->solid)
       {
         pass ("SWEPTSURFACE.solid [B] set+1 " FORMAT_B "", solid);
@@ -27526,7 +27526,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     sweep_alignment++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "sweep_alignment", &sweep_alignment)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "sweep_alignment", &sweep_alignment, 0)
         && sweep_alignment == sweptsurface->sweep_alignment)
       {
         pass ("SWEPTSURFACE.sweep_alignment [RC] set+1 %u", sweep_alignment);
@@ -27552,7 +27552,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     sweep_entity_id++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "sweep_entity_id", &sweep_entity_id)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "sweep_entity_id", &sweep_entity_id, 0)
         && sweep_entity_id == sweptsurface->sweep_entity_id)
       {
         pass ("SWEPTSURFACE.sweep_entity_id [BL] set+1 %u", sweep_entity_id);
@@ -27578,7 +27578,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     sweep_entity_transform_computed++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "sweep_entity_transform_computed", &sweep_entity_transform_computed)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "sweep_entity_transform_computed", &sweep_entity_transform_computed, 0)
         && sweep_entity_transform_computed == sweptsurface->sweep_entity_transform_computed)
       {
         pass ("SWEPTSURFACE.sweep_entity_transform_computed [B] set+1 " FORMAT_B "", sweep_entity_transform_computed);
@@ -27643,7 +27643,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     twist_angle++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "twist_angle", &twist_angle)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "twist_angle", &twist_angle, 0)
         && twist_angle == sweptsurface->twist_angle)
       {
         pass ("SWEPTSURFACE.twist_angle [BD] set+1 %g", twist_angle);
@@ -27669,7 +27669,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     u_isolines++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "u_isolines", &u_isolines)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "u_isolines", &u_isolines, 0)
         && u_isolines == sweptsurface->u_isolines)
       {
         pass ("SWEPTSURFACE.u_isolines [BS] set+1 %hu", u_isolines);
@@ -27695,7 +27695,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     unknown++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "unknown", &unknown)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "unknown", &unknown, 0)
         && unknown == sweptsurface->unknown)
       {
         pass ("SWEPTSURFACE.unknown [B] set+1 " FORMAT_B "", unknown);
@@ -27721,7 +27721,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     unknown_2007++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "unknown_2007", &unknown_2007)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "unknown_2007", &unknown_2007, 0)
         && unknown_2007 == sweptsurface->unknown_2007)
       {
         pass ("SWEPTSURFACE.unknown_2007 [BL] set+1 %u", unknown_2007);
@@ -27747,7 +27747,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     v_isolines++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "v_isolines", &v_isolines)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "v_isolines", &v_isolines, 0)
         && v_isolines == sweptsurface->v_isolines)
       {
         pass ("SWEPTSURFACE.v_isolines [BS] set+1 %hu", v_isolines);
@@ -27773,7 +27773,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     version++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "version", &version)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "version", &version, 0)
         && version == sweptsurface->version)
       {
         pass ("SWEPTSURFACE.version [BS] set+1 %hu", version);
@@ -27799,7 +27799,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         error++;
       }
     wireframe_data_present++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "wireframe_data_present", &wireframe_data_present)
+      if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "wireframe_data_present", &wireframe_data_present, 0)
         && wireframe_data_present == sweptsurface->wireframe_data_present)
       {
         pass ("SWEPTSURFACE.wireframe_data_present [B] set+1 " FORMAT_B "", wireframe_data_present);
@@ -27875,7 +27875,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     border_color_overrides_flag++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "border_color_overrides_flag", &border_color_overrides_flag)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "border_color_overrides_flag", &border_color_overrides_flag, 0)
         && border_color_overrides_flag == table->border_color_overrides_flag)
       {
         pass ("TABLE.border_color_overrides_flag [BL] set+1 %u", border_color_overrides_flag);
@@ -27901,7 +27901,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     border_lineweight_overrides_flag++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "border_lineweight_overrides_flag", &border_lineweight_overrides_flag)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "border_lineweight_overrides_flag", &border_lineweight_overrides_flag, 0)
         && border_lineweight_overrides_flag == table->border_lineweight_overrides_flag)
       {
         pass ("TABLE.border_lineweight_overrides_flag [BL] set+1 %u", border_lineweight_overrides_flag);
@@ -27927,7 +27927,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     border_visibility_overrides_flag++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "border_visibility_overrides_flag", &border_visibility_overrides_flag)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "border_visibility_overrides_flag", &border_visibility_overrides_flag, 0)
         && border_visibility_overrides_flag == table->border_visibility_overrides_flag)
       {
         pass ("TABLE.border_visibility_overrides_flag [BL] set+1 %u", border_visibility_overrides_flag);
@@ -27953,7 +27953,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     break_flag++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "break_flag", &break_flag)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "break_flag", &break_flag, 0)
         && break_flag == table->break_flag)
       {
         pass ("TABLE.break_flag [BL] set+1 %u", break_flag);
@@ -27979,7 +27979,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     break_flow_direction++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "break_flow_direction", &break_flow_direction)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "break_flow_direction", &break_flow_direction, 0)
         && break_flow_direction == table->break_flow_direction)
       {
         pass ("TABLE.break_flow_direction [BL] set+1 %u", break_flow_direction);
@@ -28035,7 +28035,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     break_spacing++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "break_spacing", &break_spacing)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "break_spacing", &break_spacing, 0)
         && break_spacing == table->break_spacing)
       {
         pass ("TABLE.break_spacing [BD] set+1 %g", break_spacing);
@@ -28061,7 +28061,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     break_unknown1++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "break_unknown1", &break_unknown1)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "break_unknown1", &break_unknown1, 0)
         && break_unknown1 == table->break_unknown1)
       {
         pass ("TABLE.break_unknown1 [BL] set+1 %u", break_unknown1);
@@ -28087,7 +28087,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     break_unknown2++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "break_unknown2", &break_unknown2)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "break_unknown2", &break_unknown2, 0)
         && break_unknown2 == table->break_unknown2)
       {
         pass ("TABLE.break_unknown2 [BL] set+1 %u", break_unknown2);
@@ -28143,7 +28143,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     data_flags++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "data_flags", &data_flags)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "data_flags", &data_flags, 0)
         && data_flags == table->data_flags)
       {
         pass ("TABLE.data_flags [BB] set+1 " FORMAT_BB "", data_flags);
@@ -28182,7 +28182,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     data_horiz_bottom_linewt++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "data_horiz_bottom_linewt", &data_horiz_bottom_linewt)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "data_horiz_bottom_linewt", &data_horiz_bottom_linewt, 0)
         && data_horiz_bottom_linewt == table->data_horiz_bottom_linewt)
       {
         pass ("TABLE.data_horiz_bottom_linewt [BS] set+1 %hu", data_horiz_bottom_linewt);
@@ -28208,7 +28208,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     data_horiz_bottom_visibility++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "data_horiz_bottom_visibility", &data_horiz_bottom_visibility)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "data_horiz_bottom_visibility", &data_horiz_bottom_visibility, 0)
         && data_horiz_bottom_visibility == table->data_horiz_bottom_visibility)
       {
         pass ("TABLE.data_horiz_bottom_visibility [BS] set+1 %hu", data_horiz_bottom_visibility);
@@ -28247,7 +28247,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     data_horiz_ins_linewt++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "data_horiz_ins_linewt", &data_horiz_ins_linewt)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "data_horiz_ins_linewt", &data_horiz_ins_linewt, 0)
         && data_horiz_ins_linewt == table->data_horiz_ins_linewt)
       {
         pass ("TABLE.data_horiz_ins_linewt [BS] set+1 %hu", data_horiz_ins_linewt);
@@ -28273,7 +28273,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     data_horiz_ins_visibility++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "data_horiz_ins_visibility", &data_horiz_ins_visibility)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "data_horiz_ins_visibility", &data_horiz_ins_visibility, 0)
         && data_horiz_ins_visibility == table->data_horiz_ins_visibility)
       {
         pass ("TABLE.data_horiz_ins_visibility [BS] set+1 %hu", data_horiz_ins_visibility);
@@ -28312,7 +28312,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     data_horiz_top_linewt++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "data_horiz_top_linewt", &data_horiz_top_linewt)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "data_horiz_top_linewt", &data_horiz_top_linewt, 0)
         && data_horiz_top_linewt == table->data_horiz_top_linewt)
       {
         pass ("TABLE.data_horiz_top_linewt [BS] set+1 %hu", data_horiz_top_linewt);
@@ -28338,7 +28338,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     data_horiz_top_visibility++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "data_horiz_top_visibility", &data_horiz_top_visibility)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "data_horiz_top_visibility", &data_horiz_top_visibility, 0)
         && data_horiz_top_visibility == table->data_horiz_top_visibility)
       {
         pass ("TABLE.data_horiz_top_visibility [BS] set+1 %hu", data_horiz_top_visibility);
@@ -28364,7 +28364,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     data_row_alignment++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "data_row_alignment", &data_row_alignment)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "data_row_alignment", &data_row_alignment, 0)
         && data_row_alignment == table->data_row_alignment)
       {
         pass ("TABLE.data_row_alignment [BS] set+1 %hu", data_row_alignment);
@@ -28416,7 +28416,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     data_row_fill_none++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "data_row_fill_none", &data_row_fill_none)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "data_row_fill_none", &data_row_fill_none, 0)
         && data_row_fill_none == table->data_row_fill_none)
       {
         pass ("TABLE.data_row_fill_none [B] set+1 " FORMAT_B "", data_row_fill_none);
@@ -28442,7 +28442,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     data_row_height++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "data_row_height", &data_row_height)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "data_row_height", &data_row_height, 0)
         && data_row_height == table->data_row_height)
       {
         pass ("TABLE.data_row_height [BD] set+1 %g", data_row_height);
@@ -28507,7 +28507,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     data_vert_ins_linewt++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "data_vert_ins_linewt", &data_vert_ins_linewt)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "data_vert_ins_linewt", &data_vert_ins_linewt, 0)
         && data_vert_ins_linewt == table->data_vert_ins_linewt)
       {
         pass ("TABLE.data_vert_ins_linewt [BS] set+1 %hu", data_vert_ins_linewt);
@@ -28533,7 +28533,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     data_vert_ins_visibility++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "data_vert_ins_visibility", &data_vert_ins_visibility)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "data_vert_ins_visibility", &data_vert_ins_visibility, 0)
         && data_vert_ins_visibility == table->data_vert_ins_visibility)
       {
         pass ("TABLE.data_vert_ins_visibility [BS] set+1 %hu", data_vert_ins_visibility);
@@ -28572,7 +28572,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     data_vert_left_linewt++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "data_vert_left_linewt", &data_vert_left_linewt)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "data_vert_left_linewt", &data_vert_left_linewt, 0)
         && data_vert_left_linewt == table->data_vert_left_linewt)
       {
         pass ("TABLE.data_vert_left_linewt [BS] set+1 %hu", data_vert_left_linewt);
@@ -28598,7 +28598,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     data_vert_left_visibility++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "data_vert_left_visibility", &data_vert_left_visibility)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "data_vert_left_visibility", &data_vert_left_visibility, 0)
         && data_vert_left_visibility == table->data_vert_left_visibility)
       {
         pass ("TABLE.data_vert_left_visibility [BS] set+1 %hu", data_vert_left_visibility);
@@ -28637,7 +28637,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     data_vert_right_linewt++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "data_vert_right_linewt", &data_vert_right_linewt)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "data_vert_right_linewt", &data_vert_right_linewt, 0)
         && data_vert_right_linewt == table->data_vert_right_linewt)
       {
         pass ("TABLE.data_vert_right_linewt [BS] set+1 %hu", data_vert_right_linewt);
@@ -28663,7 +28663,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     data_vert_right_visibility++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "data_vert_right_visibility", &data_vert_right_visibility)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "data_vert_right_visibility", &data_vert_right_visibility, 0)
         && data_vert_right_visibility == table->data_vert_right_visibility)
       {
         pass ("TABLE.data_vert_right_visibility [BS] set+1 %hu", data_vert_right_visibility);
@@ -28715,7 +28715,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     flag_for_table_value++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "flag_for_table_value", &flag_for_table_value)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "flag_for_table_value", &flag_for_table_value, 0)
         && flag_for_table_value == table->flag_for_table_value)
       {
         pass ("TABLE.flag_for_table_value [BS] set+1 %hu", flag_for_table_value);
@@ -28741,7 +28741,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     flow_direction++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "flow_direction", &flow_direction)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "flow_direction", &flow_direction, 0)
         && flow_direction == table->flow_direction)
       {
         pass ("TABLE.flow_direction [BS] set+1 %hu", flow_direction);
@@ -28767,7 +28767,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     has_attribs++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "has_attribs", &has_attribs)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "has_attribs", &has_attribs, 0)
         && has_attribs == table->has_attribs)
       {
         pass ("TABLE.has_attribs [B] set+1 " FORMAT_B "", has_attribs);
@@ -28793,7 +28793,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     has_border_color_overrides++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "has_border_color_overrides", &has_border_color_overrides)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "has_border_color_overrides", &has_border_color_overrides, 0)
         && has_border_color_overrides == table->has_border_color_overrides)
       {
         pass ("TABLE.has_border_color_overrides [B] set+1 " FORMAT_B "", has_border_color_overrides);
@@ -28819,7 +28819,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     has_border_lineweight_overrides++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "has_border_lineweight_overrides", &has_border_lineweight_overrides)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "has_border_lineweight_overrides", &has_border_lineweight_overrides, 0)
         && has_border_lineweight_overrides == table->has_border_lineweight_overrides)
       {
         pass ("TABLE.has_border_lineweight_overrides [B] set+1 " FORMAT_B "", has_border_lineweight_overrides);
@@ -28845,7 +28845,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     has_border_visibility_overrides++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "has_border_visibility_overrides", &has_border_visibility_overrides)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "has_border_visibility_overrides", &has_border_visibility_overrides, 0)
         && has_border_visibility_overrides == table->has_border_visibility_overrides)
       {
         pass ("TABLE.has_border_visibility_overrides [B] set+1 " FORMAT_B "", has_border_visibility_overrides);
@@ -28871,7 +28871,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     has_break_data++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "has_break_data", &has_break_data)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "has_break_data", &has_break_data, 0)
         && has_break_data == table->has_break_data)
       {
         pass ("TABLE.has_break_data [BL] set+1 %u", has_break_data);
@@ -28897,7 +28897,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     has_table_overrides++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "has_table_overrides", &has_table_overrides)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "has_table_overrides", &has_table_overrides, 0)
         && has_table_overrides == table->has_table_overrides)
       {
         pass ("TABLE.has_table_overrides [B] set+1 " FORMAT_B "", has_table_overrides);
@@ -28936,7 +28936,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     header_horiz_bottom_linewt++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "header_horiz_bottom_linewt", &header_horiz_bottom_linewt)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "header_horiz_bottom_linewt", &header_horiz_bottom_linewt, 0)
         && header_horiz_bottom_linewt == table->header_horiz_bottom_linewt)
       {
         pass ("TABLE.header_horiz_bottom_linewt [BS] set+1 %hu", header_horiz_bottom_linewt);
@@ -28962,7 +28962,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     header_horiz_bottom_visibility++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "header_horiz_bottom_visibility", &header_horiz_bottom_visibility)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "header_horiz_bottom_visibility", &header_horiz_bottom_visibility, 0)
         && header_horiz_bottom_visibility == table->header_horiz_bottom_visibility)
       {
         pass ("TABLE.header_horiz_bottom_visibility [BS] set+1 %hu", header_horiz_bottom_visibility);
@@ -29001,7 +29001,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     header_horiz_ins_linewt++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "header_horiz_ins_linewt", &header_horiz_ins_linewt)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "header_horiz_ins_linewt", &header_horiz_ins_linewt, 0)
         && header_horiz_ins_linewt == table->header_horiz_ins_linewt)
       {
         pass ("TABLE.header_horiz_ins_linewt [BS] set+1 %hu", header_horiz_ins_linewt);
@@ -29027,7 +29027,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     header_horiz_ins_visibility++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "header_horiz_ins_visibility", &header_horiz_ins_visibility)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "header_horiz_ins_visibility", &header_horiz_ins_visibility, 0)
         && header_horiz_ins_visibility == table->header_horiz_ins_visibility)
       {
         pass ("TABLE.header_horiz_ins_visibility [BS] set+1 %hu", header_horiz_ins_visibility);
@@ -29066,7 +29066,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     header_horiz_top_linewt++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "header_horiz_top_linewt", &header_horiz_top_linewt)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "header_horiz_top_linewt", &header_horiz_top_linewt, 0)
         && header_horiz_top_linewt == table->header_horiz_top_linewt)
       {
         pass ("TABLE.header_horiz_top_linewt [BS] set+1 %hu", header_horiz_top_linewt);
@@ -29092,7 +29092,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     header_horiz_top_visibility++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "header_horiz_top_visibility", &header_horiz_top_visibility)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "header_horiz_top_visibility", &header_horiz_top_visibility, 0)
         && header_horiz_top_visibility == table->header_horiz_top_visibility)
       {
         pass ("TABLE.header_horiz_top_visibility [BS] set+1 %hu", header_horiz_top_visibility);
@@ -29118,7 +29118,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     header_row_alignment++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "header_row_alignment", &header_row_alignment)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "header_row_alignment", &header_row_alignment, 0)
         && header_row_alignment == table->header_row_alignment)
       {
         pass ("TABLE.header_row_alignment [BS] set+1 %hu", header_row_alignment);
@@ -29170,7 +29170,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     header_row_fill_none++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "header_row_fill_none", &header_row_fill_none)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "header_row_fill_none", &header_row_fill_none, 0)
         && header_row_fill_none == table->header_row_fill_none)
       {
         pass ("TABLE.header_row_fill_none [B] set+1 " FORMAT_B "", header_row_fill_none);
@@ -29196,7 +29196,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     header_row_height++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "header_row_height", &header_row_height)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "header_row_height", &header_row_height, 0)
         && header_row_height == table->header_row_height)
       {
         pass ("TABLE.header_row_height [BD] set+1 %g", header_row_height);
@@ -29235,7 +29235,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     header_suppressed++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "header_suppressed", &header_suppressed)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "header_suppressed", &header_suppressed, 0)
         && header_suppressed == table->header_suppressed)
       {
         pass ("TABLE.header_suppressed [B] set+1 " FORMAT_B "", header_suppressed);
@@ -29287,7 +29287,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     header_vert_ins_linewt++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "header_vert_ins_linewt", &header_vert_ins_linewt)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "header_vert_ins_linewt", &header_vert_ins_linewt, 0)
         && header_vert_ins_linewt == table->header_vert_ins_linewt)
       {
         pass ("TABLE.header_vert_ins_linewt [BS] set+1 %hu", header_vert_ins_linewt);
@@ -29313,7 +29313,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     header_vert_ins_visibility++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "header_vert_ins_visibility", &header_vert_ins_visibility)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "header_vert_ins_visibility", &header_vert_ins_visibility, 0)
         && header_vert_ins_visibility == table->header_vert_ins_visibility)
       {
         pass ("TABLE.header_vert_ins_visibility [BS] set+1 %hu", header_vert_ins_visibility);
@@ -29352,7 +29352,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     header_vert_left_linewt++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "header_vert_left_linewt", &header_vert_left_linewt)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "header_vert_left_linewt", &header_vert_left_linewt, 0)
         && header_vert_left_linewt == table->header_vert_left_linewt)
       {
         pass ("TABLE.header_vert_left_linewt [BS] set+1 %hu", header_vert_left_linewt);
@@ -29378,7 +29378,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     header_vert_left_visibility++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "header_vert_left_visibility", &header_vert_left_visibility)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "header_vert_left_visibility", &header_vert_left_visibility, 0)
         && header_vert_left_visibility == table->header_vert_left_visibility)
       {
         pass ("TABLE.header_vert_left_visibility [BS] set+1 %hu", header_vert_left_visibility);
@@ -29417,7 +29417,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     header_vert_right_linewt++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "header_vert_right_linewt", &header_vert_right_linewt)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "header_vert_right_linewt", &header_vert_right_linewt, 0)
         && header_vert_right_linewt == table->header_vert_right_linewt)
       {
         pass ("TABLE.header_vert_right_linewt [BS] set+1 %hu", header_vert_right_linewt);
@@ -29443,7 +29443,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     header_vert_right_visibility++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "header_vert_right_visibility", &header_vert_right_visibility)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "header_vert_right_visibility", &header_vert_right_visibility, 0)
         && header_vert_right_visibility == table->header_vert_right_visibility)
       {
         pass ("TABLE.header_vert_right_visibility [BS] set+1 %hu", header_vert_right_visibility);
@@ -29482,7 +29482,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     horiz_cell_margin++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "horiz_cell_margin", &horiz_cell_margin)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "horiz_cell_margin", &horiz_cell_margin, 0)
         && horiz_cell_margin == table->horiz_cell_margin)
       {
         pass ("TABLE.horiz_cell_margin [BD] set+1 %g", horiz_cell_margin);
@@ -29547,7 +29547,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     num_break_heights++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "num_break_heights", &num_break_heights)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "num_break_heights", &num_break_heights, 0)
         && num_break_heights == table->num_break_heights)
       {
         pass ("TABLE.num_break_heights [BL] set+1 %u", num_break_heights);
@@ -29573,7 +29573,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     num_break_rows++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "num_break_rows", &num_break_rows)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "num_break_rows", &num_break_rows, 0)
         && num_break_rows == table->num_break_rows)
       {
         pass ("TABLE.num_break_rows [BL] set+1 %u", num_break_rows);
@@ -29599,7 +29599,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     num_cells++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "num_cells", &num_cells)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "num_cells", &num_cells, 0)
         && num_cells == table->num_cells)
       {
         pass ("TABLE.num_cells [unsigned long] set+1 %lu", num_cells);
@@ -29625,7 +29625,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     num_cols++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "num_cols", &num_cols)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "num_cols", &num_cols, 0)
         && num_cols == table->num_cols)
       {
         pass ("TABLE.num_cols [BL] set+1 %u", num_cols);
@@ -29651,7 +29651,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     num_owned++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "num_owned", &num_owned)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "num_owned", &num_owned, 0)
         && num_owned == table->num_owned)
       {
         pass ("TABLE.num_owned [BL] set+1 %u", num_owned);
@@ -29677,7 +29677,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     num_rows++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "num_rows", &num_rows)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "num_rows", &num_rows, 0)
         && num_rows == table->num_rows)
       {
         pass ("TABLE.num_rows [BL] set+1 %u", num_rows);
@@ -29716,7 +29716,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     rotation++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "rotation", &rotation)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "rotation", &rotation, 0)
         && rotation == table->rotation)
       {
         pass ("TABLE.rotation [BD] set+1 %g", rotation);
@@ -29783,7 +29783,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     table_flag_override++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "table_flag_override", &table_flag_override)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "table_flag_override", &table_flag_override, 0)
         && table_flag_override == table->table_flag_override)
       {
         pass ("TABLE.table_flag_override [BL] set+1 %u", table_flag_override);
@@ -29835,7 +29835,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     title_horiz_bottom_linewt++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "title_horiz_bottom_linewt", &title_horiz_bottom_linewt)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "title_horiz_bottom_linewt", &title_horiz_bottom_linewt, 0)
         && title_horiz_bottom_linewt == table->title_horiz_bottom_linewt)
       {
         pass ("TABLE.title_horiz_bottom_linewt [BS] set+1 %hu", title_horiz_bottom_linewt);
@@ -29861,7 +29861,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     title_horiz_bottom_visibility++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "title_horiz_bottom_visibility", &title_horiz_bottom_visibility)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "title_horiz_bottom_visibility", &title_horiz_bottom_visibility, 0)
         && title_horiz_bottom_visibility == table->title_horiz_bottom_visibility)
       {
         pass ("TABLE.title_horiz_bottom_visibility [BS] set+1 %hu", title_horiz_bottom_visibility);
@@ -29900,7 +29900,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     title_horiz_ins_linewt++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "title_horiz_ins_linewt", &title_horiz_ins_linewt)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "title_horiz_ins_linewt", &title_horiz_ins_linewt, 0)
         && title_horiz_ins_linewt == table->title_horiz_ins_linewt)
       {
         pass ("TABLE.title_horiz_ins_linewt [BS] set+1 %hu", title_horiz_ins_linewt);
@@ -29926,7 +29926,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     title_horiz_ins_visibility++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "title_horiz_ins_visibility", &title_horiz_ins_visibility)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "title_horiz_ins_visibility", &title_horiz_ins_visibility, 0)
         && title_horiz_ins_visibility == table->title_horiz_ins_visibility)
       {
         pass ("TABLE.title_horiz_ins_visibility [BS] set+1 %hu", title_horiz_ins_visibility);
@@ -29965,7 +29965,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     title_horiz_top_linewt++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "title_horiz_top_linewt", &title_horiz_top_linewt)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "title_horiz_top_linewt", &title_horiz_top_linewt, 0)
         && title_horiz_top_linewt == table->title_horiz_top_linewt)
       {
         pass ("TABLE.title_horiz_top_linewt [BS] set+1 %hu", title_horiz_top_linewt);
@@ -29991,7 +29991,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     title_horiz_top_visibility++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "title_horiz_top_visibility", &title_horiz_top_visibility)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "title_horiz_top_visibility", &title_horiz_top_visibility, 0)
         && title_horiz_top_visibility == table->title_horiz_top_visibility)
       {
         pass ("TABLE.title_horiz_top_visibility [BS] set+1 %hu", title_horiz_top_visibility);
@@ -30017,7 +30017,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     title_row_alignment++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "title_row_alignment", &title_row_alignment)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "title_row_alignment", &title_row_alignment, 0)
         && title_row_alignment == table->title_row_alignment)
       {
         pass ("TABLE.title_row_alignment [BS] set+1 %hu", title_row_alignment);
@@ -30069,7 +30069,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     title_row_fill_none++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "title_row_fill_none", &title_row_fill_none)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "title_row_fill_none", &title_row_fill_none, 0)
         && title_row_fill_none == table->title_row_fill_none)
       {
         pass ("TABLE.title_row_fill_none [B] set+1 " FORMAT_B "", title_row_fill_none);
@@ -30095,7 +30095,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     title_row_height++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "title_row_height", &title_row_height)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "title_row_height", &title_row_height, 0)
         && title_row_height == table->title_row_height)
       {
         pass ("TABLE.title_row_height [BD] set+1 %g", title_row_height);
@@ -30134,7 +30134,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     title_suppressed++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "title_suppressed", &title_suppressed)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "title_suppressed", &title_suppressed, 0)
         && title_suppressed == table->title_suppressed)
       {
         pass ("TABLE.title_suppressed [B] set+1 " FORMAT_B "", title_suppressed);
@@ -30186,7 +30186,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     title_vert_ins_linewt++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "title_vert_ins_linewt", &title_vert_ins_linewt)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "title_vert_ins_linewt", &title_vert_ins_linewt, 0)
         && title_vert_ins_linewt == table->title_vert_ins_linewt)
       {
         pass ("TABLE.title_vert_ins_linewt [BS] set+1 %hu", title_vert_ins_linewt);
@@ -30212,7 +30212,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     title_vert_ins_visibility++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "title_vert_ins_visibility", &title_vert_ins_visibility)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "title_vert_ins_visibility", &title_vert_ins_visibility, 0)
         && title_vert_ins_visibility == table->title_vert_ins_visibility)
       {
         pass ("TABLE.title_vert_ins_visibility [BS] set+1 %hu", title_vert_ins_visibility);
@@ -30251,7 +30251,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     title_vert_left_linewt++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "title_vert_left_linewt", &title_vert_left_linewt)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "title_vert_left_linewt", &title_vert_left_linewt, 0)
         && title_vert_left_linewt == table->title_vert_left_linewt)
       {
         pass ("TABLE.title_vert_left_linewt [BS] set+1 %hu", title_vert_left_linewt);
@@ -30277,7 +30277,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     title_vert_left_visibility++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "title_vert_left_visibility", &title_vert_left_visibility)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "title_vert_left_visibility", &title_vert_left_visibility, 0)
         && title_vert_left_visibility == table->title_vert_left_visibility)
       {
         pass ("TABLE.title_vert_left_visibility [BS] set+1 %hu", title_vert_left_visibility);
@@ -30316,7 +30316,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     title_vert_right_linewt++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "title_vert_right_linewt", &title_vert_right_linewt)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "title_vert_right_linewt", &title_vert_right_linewt, 0)
         && title_vert_right_linewt == table->title_vert_right_linewt)
       {
         pass ("TABLE.title_vert_right_linewt [BS] set+1 %hu", title_vert_right_linewt);
@@ -30342,7 +30342,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     title_vert_right_visibility++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "title_vert_right_visibility", &title_vert_right_visibility)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "title_vert_right_visibility", &title_vert_right_visibility, 0)
         && title_vert_right_visibility == table->title_vert_right_visibility)
       {
         pass ("TABLE.title_vert_right_visibility [BS] set+1 %hu", title_vert_right_visibility);
@@ -30368,7 +30368,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     unknown_b++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "unknown_b", &unknown_b)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "unknown_b", &unknown_b, 0)
         && unknown_b == table->unknown_b)
       {
         pass ("TABLE.unknown_b [B] set+1 " FORMAT_B "", unknown_b);
@@ -30394,7 +30394,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     unknown_bl++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "unknown_bl", &unknown_bl)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "unknown_bl", &unknown_bl, 0)
         && unknown_bl == table->unknown_bl)
       {
         pass ("TABLE.unknown_bl [BL] set+1 %u", unknown_bl);
@@ -30420,7 +30420,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     unknown_bl1++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "unknown_bl1", &unknown_bl1)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "unknown_bl1", &unknown_bl1, 0)
         && unknown_bl1 == table->unknown_bl1)
       {
         pass ("TABLE.unknown_bl1 [BL] set+1 %u", unknown_bl1);
@@ -30446,7 +30446,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     unknown_bs++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "unknown_bs", &unknown_bs)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "unknown_bs", &unknown_bs, 0)
         && unknown_bs == table->unknown_bs)
       {
         pass ("TABLE.unknown_bs [BS] set+1 %hu", unknown_bs);
@@ -30485,7 +30485,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     unknown_rc++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "unknown_rc", &unknown_rc)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "unknown_rc", &unknown_rc, 0)
         && unknown_rc == table->unknown_rc)
       {
         pass ("TABLE.unknown_rc [RC] set+1 %u", unknown_rc);
@@ -30511,7 +30511,7 @@ static int test_TABLE (const Dwg_Object *obj)
         error++;
       }
     vert_cell_margin++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "vert_cell_margin", &vert_cell_margin)
+      if (dwg_dynapi_entity_set_value (table, "TABLE", "vert_cell_margin", &vert_cell_margin, 0)
         && vert_cell_margin == table->vert_cell_margin)
       {
         pass ("TABLE.vert_cell_margin [BD] set+1 %g", vert_cell_margin);
@@ -30557,7 +30557,7 @@ static int test_TEXT (const Dwg_Object *obj)
         error++;
       }
     dataflags++;
-    if (dwg_dynapi_entity_set_value (text, "TEXT", "dataflags", &dataflags)
+      if (dwg_dynapi_entity_set_value (text, "TEXT", "dataflags", &dataflags, 0)
         && dataflags == text->dataflags)
       {
         pass ("TEXT.dataflags [RC] set+1 %u", dataflags);
@@ -30583,7 +30583,7 @@ static int test_TEXT (const Dwg_Object *obj)
         error++;
       }
     elevation++;
-    if (dwg_dynapi_entity_set_value (text, "TEXT", "elevation", &elevation)
+      if (dwg_dynapi_entity_set_value (text, "TEXT", "elevation", &elevation, 0)
         && elevation == text->elevation)
       {
         pass ("TEXT.elevation [RD] set+1 %g", elevation);
@@ -30622,7 +30622,7 @@ static int test_TEXT (const Dwg_Object *obj)
         error++;
       }
     generation++;
-    if (dwg_dynapi_entity_set_value (text, "TEXT", "generation", &generation)
+      if (dwg_dynapi_entity_set_value (text, "TEXT", "generation", &generation, 0)
         && generation == text->generation)
       {
         pass ("TEXT.generation [BS] set+1 %hu", generation);
@@ -30648,7 +30648,7 @@ static int test_TEXT (const Dwg_Object *obj)
         error++;
       }
     height++;
-    if (dwg_dynapi_entity_set_value (text, "TEXT", "height", &height)
+      if (dwg_dynapi_entity_set_value (text, "TEXT", "height", &height, 0)
         && height == text->height)
       {
         pass ("TEXT.height [RD] set+1 %g", height);
@@ -30674,7 +30674,7 @@ static int test_TEXT (const Dwg_Object *obj)
         error++;
       }
     horiz_alignment++;
-    if (dwg_dynapi_entity_set_value (text, "TEXT", "horiz_alignment", &horiz_alignment)
+      if (dwg_dynapi_entity_set_value (text, "TEXT", "horiz_alignment", &horiz_alignment, 0)
         && horiz_alignment == text->horiz_alignment)
       {
         pass ("TEXT.horiz_alignment [BS] set+1 %hu", horiz_alignment);
@@ -30713,7 +30713,7 @@ static int test_TEXT (const Dwg_Object *obj)
         error++;
       }
     oblique_ang++;
-    if (dwg_dynapi_entity_set_value (text, "TEXT", "oblique_ang", &oblique_ang)
+      if (dwg_dynapi_entity_set_value (text, "TEXT", "oblique_ang", &oblique_ang, 0)
         && oblique_ang == text->oblique_ang)
       {
         pass ("TEXT.oblique_ang [RD] set+1 %g", oblique_ang);
@@ -30752,7 +30752,7 @@ static int test_TEXT (const Dwg_Object *obj)
         error++;
       }
     rotation++;
-    if (dwg_dynapi_entity_set_value (text, "TEXT", "rotation", &rotation)
+      if (dwg_dynapi_entity_set_value (text, "TEXT", "rotation", &rotation, 0)
         && rotation == text->rotation)
       {
         pass ("TEXT.rotation [RD] set+1 %g", rotation);
@@ -30804,7 +30804,7 @@ static int test_TEXT (const Dwg_Object *obj)
         error++;
       }
     thickness++;
-    if (dwg_dynapi_entity_set_value (text, "TEXT", "thickness", &thickness)
+      if (dwg_dynapi_entity_set_value (text, "TEXT", "thickness", &thickness, 0)
         && thickness == text->thickness)
       {
         pass ("TEXT.thickness [RD] set+1 %g", thickness);
@@ -30830,7 +30830,7 @@ static int test_TEXT (const Dwg_Object *obj)
         error++;
       }
     vert_alignment++;
-    if (dwg_dynapi_entity_set_value (text, "TEXT", "vert_alignment", &vert_alignment)
+      if (dwg_dynapi_entity_set_value (text, "TEXT", "vert_alignment", &vert_alignment, 0)
         && vert_alignment == text->vert_alignment)
       {
         pass ("TEXT.vert_alignment [BS] set+1 %hu", vert_alignment);
@@ -30856,7 +30856,7 @@ static int test_TEXT (const Dwg_Object *obj)
         error++;
       }
     width_factor++;
-    if (dwg_dynapi_entity_set_value (text, "TEXT", "width_factor", &width_factor)
+      if (dwg_dynapi_entity_set_value (text, "TEXT", "width_factor", &width_factor, 0)
         && width_factor == text->width_factor)
       {
         pass ("TEXT.width_factor [RD] set+1 %g", width_factor);
@@ -30889,7 +30889,7 @@ static int test_TOLERANCE (const Dwg_Object *obj)
         error++;
       }
     dimgap++;
-    if (dwg_dynapi_entity_set_value (tolerance, "TOLERANCE", "dimgap", &dimgap)
+      if (dwg_dynapi_entity_set_value (tolerance, "TOLERANCE", "dimgap", &dimgap, 0)
         && dimgap == tolerance->dimgap)
       {
         pass ("TOLERANCE.dimgap [BD] set+1 %g", dimgap);
@@ -30941,7 +30941,7 @@ static int test_TOLERANCE (const Dwg_Object *obj)
         error++;
       }
     height++;
-    if (dwg_dynapi_entity_set_value (tolerance, "TOLERANCE", "height", &height)
+      if (dwg_dynapi_entity_set_value (tolerance, "TOLERANCE", "height", &height, 0)
         && height == tolerance->height)
       {
         pass ("TOLERANCE.height [BD] set+1 %g", height);
@@ -31006,7 +31006,7 @@ static int test_TOLERANCE (const Dwg_Object *obj)
         error++;
       }
     unknown_short++;
-    if (dwg_dynapi_entity_set_value (tolerance, "TOLERANCE", "unknown_short", &unknown_short)
+      if (dwg_dynapi_entity_set_value (tolerance, "TOLERANCE", "unknown_short", &unknown_short, 0)
         && unknown_short == tolerance->unknown_short)
       {
         pass ("TOLERANCE.unknown_short [BS] set+1 %hu", unknown_short);
@@ -31104,7 +31104,7 @@ static int test_TRACE (const Dwg_Object *obj)
         error++;
       }
     elevation++;
-    if (dwg_dynapi_entity_set_value (trace, "TRACE", "elevation", &elevation)
+      if (dwg_dynapi_entity_set_value (trace, "TRACE", "elevation", &elevation, 0)
         && elevation == trace->elevation)
       {
         pass ("TRACE.elevation [BD] set+1 %g", elevation);
@@ -31155,7 +31155,7 @@ static int test_TRACE (const Dwg_Object *obj)
         fail ("TRACE.thickness [BT] " FORMAT_BT " != " FORMAT_BT "", trace->thickness, thickness);
         error++;
       }
-    if (dwg_dynapi_entity_set_value (trace, "TRACE", "thickness", &thickness)
+      if (dwg_dynapi_entity_set_value (trace, "TRACE", "thickness", &thickness, 0)
         && thickness == trace->thickness)
       {
         pass ("TRACE.thickness [BT] set+1 " FORMAT_BT "", thickness);
@@ -31188,7 +31188,7 @@ static int test_UNDERLAY (const Dwg_Object *obj)
         error++;
       }
     angle++;
-    if (dwg_dynapi_entity_set_value (underlay, "UNDERLAY", "angle", &angle)
+      if (dwg_dynapi_entity_set_value (underlay, "UNDERLAY", "angle", &angle, 0)
         && angle == underlay->angle)
       {
         pass ("UNDERLAY.angle [BD] set+1 %g", angle);
@@ -31229,7 +31229,7 @@ static int test_UNDERLAY (const Dwg_Object *obj)
         error++;
       }
     contrast++;
-    if (dwg_dynapi_entity_set_value (underlay, "UNDERLAY", "contrast", &contrast)
+      if (dwg_dynapi_entity_set_value (underlay, "UNDERLAY", "contrast", &contrast, 0)
         && contrast == underlay->contrast)
       {
         pass ("UNDERLAY.contrast [RC] set+1 %u", contrast);
@@ -31281,7 +31281,7 @@ static int test_UNDERLAY (const Dwg_Object *obj)
         error++;
       }
     fade++;
-    if (dwg_dynapi_entity_set_value (underlay, "UNDERLAY", "fade", &fade)
+      if (dwg_dynapi_entity_set_value (underlay, "UNDERLAY", "fade", &fade, 0)
         && fade == underlay->fade)
       {
         pass ("UNDERLAY.fade [RC] set+1 %u", fade);
@@ -31307,7 +31307,7 @@ static int test_UNDERLAY (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (underlay, "UNDERLAY", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (underlay, "UNDERLAY", "flag", &flag, 0)
         && flag == underlay->flag)
       {
         pass ("UNDERLAY.flag [RC] set+1 %u", flag);
@@ -31346,7 +31346,7 @@ static int test_UNDERLAY (const Dwg_Object *obj)
         error++;
       }
     num_clip_verts++;
-    if (dwg_dynapi_entity_set_value (underlay, "UNDERLAY", "num_clip_verts", &num_clip_verts)
+      if (dwg_dynapi_entity_set_value (underlay, "UNDERLAY", "num_clip_verts", &num_clip_verts, 0)
         && num_clip_verts == underlay->num_clip_verts)
       {
         pass ("UNDERLAY.num_clip_verts [BL] set+1 %u", num_clip_verts);
@@ -31438,7 +31438,7 @@ static int test_VERTEX_2D (const Dwg_Object *obj)
         error++;
       }
     bulge++;
-    if (dwg_dynapi_entity_set_value (vertex_2d, "VERTEX_2D", "bulge", &bulge)
+      if (dwg_dynapi_entity_set_value (vertex_2d, "VERTEX_2D", "bulge", &bulge, 0)
         && bulge == vertex_2d->bulge)
       {
         pass ("VERTEX_2D.bulge [BD] set+1 %g", bulge);
@@ -31464,7 +31464,7 @@ static int test_VERTEX_2D (const Dwg_Object *obj)
         error++;
       }
     end_width++;
-    if (dwg_dynapi_entity_set_value (vertex_2d, "VERTEX_2D", "end_width", &end_width)
+      if (dwg_dynapi_entity_set_value (vertex_2d, "VERTEX_2D", "end_width", &end_width, 0)
         && end_width == vertex_2d->end_width)
       {
         pass ("VERTEX_2D.end_width [BD] set+1 %g", end_width);
@@ -31490,7 +31490,7 @@ static int test_VERTEX_2D (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (vertex_2d, "VERTEX_2D", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (vertex_2d, "VERTEX_2D", "flag", &flag, 0)
         && flag == vertex_2d->flag)
       {
         pass ("VERTEX_2D.flag [RC] set+1 %u", flag);
@@ -31516,7 +31516,7 @@ static int test_VERTEX_2D (const Dwg_Object *obj)
         error++;
       }
     id++;
-    if (dwg_dynapi_entity_set_value (vertex_2d, "VERTEX_2D", "id", &id)
+      if (dwg_dynapi_entity_set_value (vertex_2d, "VERTEX_2D", "id", &id, 0)
         && id == vertex_2d->id)
       {
         pass ("VERTEX_2D.id [BL] set+1 %u", id);
@@ -31568,7 +31568,7 @@ static int test_VERTEX_2D (const Dwg_Object *obj)
         error++;
       }
     start_width++;
-    if (dwg_dynapi_entity_set_value (vertex_2d, "VERTEX_2D", "start_width", &start_width)
+      if (dwg_dynapi_entity_set_value (vertex_2d, "VERTEX_2D", "start_width", &start_width, 0)
         && start_width == vertex_2d->start_width)
       {
         pass ("VERTEX_2D.start_width [BD] set+1 %g", start_width);
@@ -31594,7 +31594,7 @@ static int test_VERTEX_2D (const Dwg_Object *obj)
         error++;
       }
     tangent_dir++;
-    if (dwg_dynapi_entity_set_value (vertex_2d, "VERTEX_2D", "tangent_dir", &tangent_dir)
+      if (dwg_dynapi_entity_set_value (vertex_2d, "VERTEX_2D", "tangent_dir", &tangent_dir, 0)
         && tangent_dir == vertex_2d->tangent_dir)
       {
         pass ("VERTEX_2D.tangent_dir [BD] set+1 %g", tangent_dir);
@@ -31627,7 +31627,7 @@ static int test_VERTEX_3D (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (vertex_3d, "VERTEX_3D", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (vertex_3d, "VERTEX_3D", "flag", &flag, 0)
         && flag == vertex_3d->flag)
       {
         pass ("VERTEX_3D.flag [RC] set+1 %u", flag);
@@ -31732,7 +31732,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         error++;
       }
     back_clip_z++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "back_clip_z", &back_clip_z)
+      if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "back_clip_z", &back_clip_z, 0)
         && back_clip_z == viewport->back_clip_z)
       {
         pass ("VIEWPORT.back_clip_z [BD] set+1 %g", back_clip_z);
@@ -31758,7 +31758,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         error++;
       }
     brightness++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "brightness", &brightness)
+      if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "brightness", &brightness, 0)
         && brightness == viewport->brightness)
       {
         pass ("VIEWPORT.brightness [BD] set+1 %g", brightness);
@@ -31797,7 +31797,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         error++;
       }
     circle_zoom++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "circle_zoom", &circle_zoom)
+      if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "circle_zoom", &circle_zoom, 0)
         && circle_zoom == viewport->circle_zoom)
       {
         pass ("VIEWPORT.circle_zoom [BS] set+1 %hu", circle_zoom);
@@ -31823,7 +31823,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         error++;
       }
     contrast++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "contrast", &contrast)
+      if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "contrast", &contrast, 0)
         && contrast == viewport->contrast)
       {
         pass ("VIEWPORT.contrast [BD] set+1 %g", contrast);
@@ -31849,7 +31849,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         error++;
       }
     default_lighting_type++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "default_lighting_type", &default_lighting_type)
+      if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "default_lighting_type", &default_lighting_type, 0)
         && default_lighting_type == viewport->default_lighting_type)
       {
         pass ("VIEWPORT.default_lighting_type [RC] set+1 %u", default_lighting_type);
@@ -31875,7 +31875,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         error++;
       }
     front_clip_z++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "front_clip_z", &front_clip_z)
+      if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "front_clip_z", &front_clip_z, 0)
         && front_clip_z == viewport->front_clip_z)
       {
         pass ("VIEWPORT.front_clip_z [BD] set+1 %g", front_clip_z);
@@ -31901,7 +31901,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         error++;
       }
     grid_major++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "grid_major", &grid_major)
+      if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "grid_major", &grid_major, 0)
         && grid_major == viewport->grid_major)
       {
         pass ("VIEWPORT.grid_major [BS] set+1 %hu", grid_major);
@@ -31940,7 +31940,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         error++;
       }
     height++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "height", &height)
+      if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "height", &height, 0)
         && height == viewport->height)
       {
         pass ("VIEWPORT.height [BD] set+1 %g", height);
@@ -31966,7 +31966,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         error++;
       }
     id++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "id", &id)
+      if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "id", &id, 0)
         && id == viewport->id)
       {
         pass ("VIEWPORT.id [RS] set+1 %hu", id);
@@ -31992,7 +31992,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         error++;
       }
     lens_length++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "lens_length", &lens_length)
+      if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "lens_length", &lens_length, 0)
         && lens_length == viewport->lens_length)
       {
         pass ("VIEWPORT.lens_length [BD] set+1 %g", lens_length);
@@ -32018,7 +32018,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         error++;
       }
     num_frozen_layers++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "num_frozen_layers", &num_frozen_layers)
+      if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "num_frozen_layers", &num_frozen_layers, 0)
         && num_frozen_layers == viewport->num_frozen_layers)
       {
         pass ("VIEWPORT.num_frozen_layers [BL] set+1 %u", num_frozen_layers);
@@ -32044,7 +32044,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         error++;
       }
     on_off++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "on_off", &on_off)
+      if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "on_off", &on_off, 0)
         && on_off == viewport->on_off)
       {
         pass ("VIEWPORT.on_off [RS] set+1 %hu", on_off);
@@ -32083,7 +32083,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         error++;
       }
     render_mode++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "render_mode", &render_mode)
+      if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "render_mode", &render_mode, 0)
         && render_mode == viewport->render_mode)
       {
         pass ("VIEWPORT.render_mode [RC] set+1 %u", render_mode);
@@ -32109,7 +32109,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         error++;
       }
     shadeplot_mode++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "shadeplot_mode", &shadeplot_mode)
+      if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "shadeplot_mode", &shadeplot_mode, 0)
         && shadeplot_mode == viewport->shadeplot_mode)
       {
         pass ("VIEWPORT.shadeplot_mode [BS] set+1 %hu", shadeplot_mode);
@@ -32135,7 +32135,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         error++;
       }
     snap_angle++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "snap_angle", &snap_angle)
+      if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "snap_angle", &snap_angle, 0)
         && snap_angle == viewport->snap_angle)
       {
         pass ("VIEWPORT.snap_angle [BD] set+1 %g", snap_angle);
@@ -32187,7 +32187,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         error++;
       }
     status_flag++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "status_flag", &status_flag)
+      if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "status_flag", &status_flag, 0)
         && status_flag == viewport->status_flag)
       {
         pass ("VIEWPORT.status_flag [BL] set+1 %u", status_flag);
@@ -32226,7 +32226,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         error++;
       }
     ucs_at_origin++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "ucs_at_origin", &ucs_at_origin)
+      if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "ucs_at_origin", &ucs_at_origin, 0)
         && ucs_at_origin == viewport->ucs_at_origin)
       {
         pass ("VIEWPORT.ucs_at_origin [B] set+1 " FORMAT_B "", ucs_at_origin);
@@ -32252,7 +32252,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         error++;
       }
     ucs_elevation++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "ucs_elevation", &ucs_elevation)
+      if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "ucs_elevation", &ucs_elevation, 0)
         && ucs_elevation == viewport->ucs_elevation)
       {
         pass ("VIEWPORT.ucs_elevation [BD] set+1 %g", ucs_elevation);
@@ -32291,7 +32291,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         error++;
       }
     ucs_ortho_view_type++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "ucs_ortho_view_type", &ucs_ortho_view_type)
+      if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "ucs_ortho_view_type", &ucs_ortho_view_type, 0)
         && ucs_ortho_view_type == viewport->ucs_ortho_view_type)
       {
         pass ("VIEWPORT.ucs_ortho_view_type [BS] set+1 %hu", ucs_ortho_view_type);
@@ -32317,7 +32317,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         error++;
       }
     ucs_per_viewport++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "ucs_per_viewport", &ucs_per_viewport)
+      if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "ucs_per_viewport", &ucs_per_viewport, 0)
         && ucs_per_viewport == viewport->ucs_per_viewport)
       {
         pass ("VIEWPORT.ucs_per_viewport [B] set+1 " FORMAT_B "", ucs_per_viewport);
@@ -32369,7 +32369,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         error++;
       }
     use_default_lights++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "use_default_lights", &use_default_lights)
+      if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "use_default_lights", &use_default_lights, 0)
         && use_default_lights == viewport->use_default_lights)
       {
         pass ("VIEWPORT.use_default_lights [B] set+1 " FORMAT_B "", use_default_lights);
@@ -32421,7 +32421,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         error++;
       }
     view_height++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "view_height", &view_height)
+      if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "view_height", &view_height, 0)
         && view_height == viewport->view_height)
       {
         pass ("VIEWPORT.view_height [BD] set+1 %g", view_height);
@@ -32460,7 +32460,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         error++;
       }
     view_twist++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "view_twist", &view_twist)
+      if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "view_twist", &view_twist, 0)
         && view_twist == viewport->view_twist)
       {
         pass ("VIEWPORT.view_twist [BD] set+1 %g", view_twist);
@@ -32486,7 +32486,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         error++;
       }
     width++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "width", &width)
+      if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "width", &width, 0)
         && width == viewport->width)
       {
         pass ("VIEWPORT.width [BD] set+1 %g", width);
@@ -32545,7 +32545,7 @@ static int test_WIPEOUT (const Dwg_Object *obj)
         error++;
       }
     brightness++;
-    if (dwg_dynapi_entity_set_value (wipeout, "WIPEOUT", "brightness", &brightness)
+      if (dwg_dynapi_entity_set_value (wipeout, "WIPEOUT", "brightness", &brightness, 0)
         && brightness == wipeout->brightness)
       {
         pass ("WIPEOUT.brightness [RC] set+1 %u", brightness);
@@ -32571,7 +32571,7 @@ static int test_WIPEOUT (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (wipeout, "WIPEOUT", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (wipeout, "WIPEOUT", "class_version", &class_version, 0)
         && class_version == wipeout->class_version)
       {
         pass ("WIPEOUT.class_version [BL] set+1 %u", class_version);
@@ -32597,7 +32597,7 @@ static int test_WIPEOUT (const Dwg_Object *obj)
         error++;
       }
     clip_boundary_type++;
-    if (dwg_dynapi_entity_set_value (wipeout, "WIPEOUT", "clip_boundary_type", &clip_boundary_type)
+      if (dwg_dynapi_entity_set_value (wipeout, "WIPEOUT", "clip_boundary_type", &clip_boundary_type, 0)
         && clip_boundary_type == wipeout->clip_boundary_type)
       {
         pass ("WIPEOUT.clip_boundary_type [BS] set+1 %hu", clip_boundary_type);
@@ -32623,7 +32623,7 @@ static int test_WIPEOUT (const Dwg_Object *obj)
         error++;
       }
     clip_mode++;
-    if (dwg_dynapi_entity_set_value (wipeout, "WIPEOUT", "clip_mode", &clip_mode)
+      if (dwg_dynapi_entity_set_value (wipeout, "WIPEOUT", "clip_mode", &clip_mode, 0)
         && clip_mode == wipeout->clip_mode)
       {
         pass ("WIPEOUT.clip_mode [B] set+1 " FORMAT_B "", clip_mode);
@@ -32664,7 +32664,7 @@ static int test_WIPEOUT (const Dwg_Object *obj)
         error++;
       }
     clipping++;
-    if (dwg_dynapi_entity_set_value (wipeout, "WIPEOUT", "clipping", &clipping)
+      if (dwg_dynapi_entity_set_value (wipeout, "WIPEOUT", "clipping", &clipping, 0)
         && clipping == wipeout->clipping)
       {
         pass ("WIPEOUT.clipping [B] set+1 " FORMAT_B "", clipping);
@@ -32690,7 +32690,7 @@ static int test_WIPEOUT (const Dwg_Object *obj)
         error++;
       }
     contrast++;
-    if (dwg_dynapi_entity_set_value (wipeout, "WIPEOUT", "contrast", &contrast)
+      if (dwg_dynapi_entity_set_value (wipeout, "WIPEOUT", "contrast", &contrast, 0)
         && contrast == wipeout->contrast)
       {
         pass ("WIPEOUT.contrast [RC] set+1 %u", contrast);
@@ -32716,7 +32716,7 @@ static int test_WIPEOUT (const Dwg_Object *obj)
         error++;
       }
     display_props++;
-    if (dwg_dynapi_entity_set_value (wipeout, "WIPEOUT", "display_props", &display_props)
+      if (dwg_dynapi_entity_set_value (wipeout, "WIPEOUT", "display_props", &display_props, 0)
         && display_props == wipeout->display_props)
       {
         pass ("WIPEOUT.display_props [BS] set+1 %hu", display_props);
@@ -32742,7 +32742,7 @@ static int test_WIPEOUT (const Dwg_Object *obj)
         error++;
       }
     fade++;
-    if (dwg_dynapi_entity_set_value (wipeout, "WIPEOUT", "fade", &fade)
+      if (dwg_dynapi_entity_set_value (wipeout, "WIPEOUT", "fade", &fade, 0)
         && fade == wipeout->fade)
       {
         pass ("WIPEOUT.fade [RC] set+1 %u", fade);
@@ -32794,7 +32794,7 @@ static int test_WIPEOUT (const Dwg_Object *obj)
         error++;
       }
     num_clip_verts++;
-    if (dwg_dynapi_entity_set_value (wipeout, "WIPEOUT", "num_clip_verts", &num_clip_verts)
+      if (dwg_dynapi_entity_set_value (wipeout, "WIPEOUT", "num_clip_verts", &num_clip_verts, 0)
         && num_clip_verts == wipeout->num_clip_verts)
       {
         pass ("WIPEOUT.num_clip_verts [BL] set+1 %u", num_clip_verts);
@@ -32892,7 +32892,7 @@ static int test_ACDBNAVISWORKSMODELDEF (const Dwg_Object *obj)
         error++;
       }
     host_drawing_visibility++;
-    if (dwg_dynapi_entity_set_value (acdbnavisworksmodeldef, "ACDBNAVISWORKSMODELDEF", "host_drawing_visibility", &host_drawing_visibility)
+      if (dwg_dynapi_entity_set_value (acdbnavisworksmodeldef, "ACDBNAVISWORKSMODELDEF", "host_drawing_visibility", &host_drawing_visibility, 0)
         && host_drawing_visibility == acdbnavisworksmodeldef->host_drawing_visibility)
       {
         pass ("ACDBNAVISWORKSMODELDEF.host_drawing_visibility [B] set+1 " FORMAT_B "", host_drawing_visibility);
@@ -32970,7 +32970,7 @@ static int test_ACDBNAVISWORKSMODELDEF (const Dwg_Object *obj)
         error++;
       }
     status++;
-    if (dwg_dynapi_entity_set_value (acdbnavisworksmodeldef, "ACDBNAVISWORKSMODELDEF", "status", &status)
+      if (dwg_dynapi_entity_set_value (acdbnavisworksmodeldef, "ACDBNAVISWORKSMODELDEF", "status", &status, 0)
         && status == acdbnavisworksmodeldef->status)
       {
         pass ("ACDBNAVISWORKSMODELDEF.status [B] set+1 " FORMAT_B "", status);
@@ -33003,7 +33003,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     align_angle++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "align_angle", &align_angle)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "align_angle", &align_angle, 0)
         && align_angle == acsh_sweep_class->align_angle)
       {
         pass ("ACSH_SWEEP_CLASS.align_angle [BD] set+1 %g", align_angle);
@@ -33029,7 +33029,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     align_option++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "align_option", &align_option)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "align_option", &align_option, 0)
         && align_option == acsh_sweep_class->align_option)
       {
         pass ("ACSH_SWEEP_CLASS.align_option [RC] set+1 %u", align_option);
@@ -33055,7 +33055,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     bank++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "bank", &bank)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "bank", &bank, 0)
         && bank == acsh_sweep_class->bank)
       {
         pass ("ACSH_SWEEP_CLASS.bank [B] set+1 " FORMAT_B "", bank);
@@ -33094,7 +33094,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     check_intersections++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "check_intersections", &check_intersections)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "check_intersections", &check_intersections, 0)
         && check_intersections == acsh_sweep_class->check_intersections)
       {
         pass ("ACSH_SWEEP_CLASS.check_intersections [B] set+1 " FORMAT_B "", check_intersections);
@@ -33120,7 +33120,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "class_version", &class_version, 0)
         && class_version == acsh_sweep_class->class_version)
       {
         pass ("ACSH_SWEEP_CLASS.class_version [BL] set+1 %u", class_version);
@@ -33159,7 +33159,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     draft_angle++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "draft_angle", &draft_angle)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "draft_angle", &draft_angle, 0)
         && draft_angle == acsh_sweep_class->draft_angle)
       {
         pass ("ACSH_SWEEP_CLASS.draft_angle [BD] set+1 %g", draft_angle);
@@ -33185,7 +33185,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     ee_bl98++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "ee_bl98", &ee_bl98)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "ee_bl98", &ee_bl98, 0)
         && ee_bl98 == acsh_sweep_class->ee_bl98)
       {
         pass ("ACSH_SWEEP_CLASS.ee_bl98 [BL] set+1 %u", ee_bl98);
@@ -33211,7 +33211,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     ee_bl99++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "ee_bl99", &ee_bl99)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "ee_bl99", &ee_bl99, 0)
         && ee_bl99 == acsh_sweep_class->ee_bl99)
       {
         pass ("ACSH_SWEEP_CLASS.ee_bl99 [BL] set+1 %u", ee_bl99);
@@ -33237,7 +33237,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     end_draft_dist++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "end_draft_dist", &end_draft_dist)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "end_draft_dist", &end_draft_dist, 0)
         && end_draft_dist == acsh_sweep_class->end_draft_dist)
       {
         pass ("ACSH_SWEEP_CLASS.end_draft_dist [BD] set+1 %g", end_draft_dist);
@@ -33263,7 +33263,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     has_align_start++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "has_align_start", &has_align_start)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "has_align_start", &has_align_start, 0)
         && has_align_start == acsh_sweep_class->has_align_start)
       {
         pass ("ACSH_SWEEP_CLASS.has_align_start [B] set+1 " FORMAT_B "", has_align_start);
@@ -33289,7 +33289,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     miter_option++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "miter_option", &miter_option)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "miter_option", &miter_option, 0)
         && miter_option == acsh_sweep_class->miter_option)
       {
         pass ("ACSH_SWEEP_CLASS.miter_option [RC] set+1 %u", miter_option);
@@ -33354,7 +33354,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     scale_factor++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "scale_factor", &scale_factor)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "scale_factor", &scale_factor, 0)
         && scale_factor == acsh_sweep_class->scale_factor)
       {
         pass ("ACSH_SWEEP_CLASS.scale_factor [BD] set+1 %g", scale_factor);
@@ -33380,7 +33380,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     shhn_b92++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shhn_b92", &shhn_b92)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shhn_b92", &shhn_b92, 0)
         && shhn_b92 == acsh_sweep_class->shhn_b92)
       {
         pass ("ACSH_SWEEP_CLASS.shhn_b92 [B] set+1 " FORMAT_B "", shhn_b92);
@@ -33406,7 +33406,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     shhn_bl347++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shhn_bl347", &shhn_bl347)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shhn_bl347", &shhn_bl347, 0)
         && shhn_bl347 == acsh_sweep_class->shhn_bl347)
       {
         pass ("ACSH_SWEEP_CLASS.shhn_bl347 [BL] set+1 %u", shhn_bl347);
@@ -33432,7 +33432,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     shhn_bl98++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shhn_bl98", &shhn_bl98)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shhn_bl98", &shhn_bl98, 0)
         && shhn_bl98 == acsh_sweep_class->shhn_bl98)
       {
         pass ("ACSH_SWEEP_CLASS.shhn_bl98 [BL] set+1 %u", shhn_bl98);
@@ -33458,7 +33458,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     shhn_bl99++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shhn_bl99", &shhn_bl99)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shhn_bl99", &shhn_bl99, 0)
         && shhn_bl99 == acsh_sweep_class->shhn_bl99)
       {
         pass ("ACSH_SWEEP_CLASS.shhn_bl99 [BL] set+1 %u", shhn_bl99);
@@ -33497,7 +33497,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     shsw_b294++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_b294", &shsw_b294)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_b294", &shsw_b294, 0)
         && shsw_b294 == acsh_sweep_class->shsw_b294)
       {
         pass ("ACSH_SWEEP_CLASS.shsw_b294 [B] set+1 " FORMAT_B "", shsw_b294);
@@ -33523,7 +33523,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     shsw_b295++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_b295", &shsw_b295)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_b295", &shsw_b295, 0)
         && shsw_b295 == acsh_sweep_class->shsw_b295)
       {
         pass ("ACSH_SWEEP_CLASS.shsw_b295 [B] set+1 " FORMAT_B "", shsw_b295);
@@ -33549,7 +33549,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     shsw_b296++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_b296", &shsw_b296)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_b296", &shsw_b296, 0)
         && shsw_b296 == acsh_sweep_class->shsw_b296)
       {
         pass ("ACSH_SWEEP_CLASS.shsw_b296 [B] set+1 " FORMAT_B "", shsw_b296);
@@ -33575,7 +33575,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     shsw_bl90++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_bl90", &shsw_bl90)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_bl90", &shsw_bl90, 0)
         && shsw_bl90 == acsh_sweep_class->shsw_bl90)
       {
         pass ("ACSH_SWEEP_CLASS.shsw_bl90 [BL] set+1 %u", shsw_bl90);
@@ -33601,7 +33601,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     shsw_bl91++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_bl91", &shsw_bl91)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_bl91", &shsw_bl91, 0)
         && shsw_bl91 == acsh_sweep_class->shsw_bl91)
       {
         pass ("ACSH_SWEEP_CLASS.shsw_bl91 [BL] set+1 %u", shsw_bl91);
@@ -33627,7 +33627,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     shsw_bl92++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_bl92", &shsw_bl92)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_bl92", &shsw_bl92, 0)
         && shsw_bl92 == acsh_sweep_class->shsw_bl92)
       {
         pass ("ACSH_SWEEP_CLASS.shsw_bl92 [BL] set+1 %u", shsw_bl92);
@@ -33653,7 +33653,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     shsw_bl93++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_bl93", &shsw_bl93)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_bl93", &shsw_bl93, 0)
         && shsw_bl93 == acsh_sweep_class->shsw_bl93)
       {
         pass ("ACSH_SWEEP_CLASS.shsw_bl93 [BL] set+1 %u", shsw_bl93);
@@ -33679,7 +33679,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     shsw_size_text++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_size_text", &shsw_size_text)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_size_text", &shsw_size_text, 0)
         && shsw_size_text == acsh_sweep_class->shsw_size_text)
       {
         pass ("ACSH_SWEEP_CLASS.shsw_size_text [BL] set+1 %u", shsw_size_text);
@@ -33705,7 +33705,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     shsw_size_text2++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_size_text2", &shsw_size_text2)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_size_text2", &shsw_size_text2, 0)
         && shsw_size_text2 == acsh_sweep_class->shsw_size_text2)
       {
         pass ("ACSH_SWEEP_CLASS.shsw_size_text2 [BL] set+1 %u", shsw_size_text2);
@@ -33757,7 +33757,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     start_draft_dist++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "start_draft_dist", &start_draft_dist)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "start_draft_dist", &start_draft_dist, 0)
         && start_draft_dist == acsh_sweep_class->start_draft_dist)
       {
         pass ("ACSH_SWEEP_CLASS.start_draft_dist [BD] set+1 %g", start_draft_dist);
@@ -33796,7 +33796,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         error++;
       }
     twist_angle++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "twist_angle", &twist_angle)
+      if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "twist_angle", &twist_angle, 0)
         && twist_angle == acsh_sweep_class->twist_angle)
       {
         pass ("ACSH_SWEEP_CLASS.twist_angle [BD] set+1 %g", twist_angle);
@@ -33829,7 +33829,7 @@ static int test_APPID (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (appid, "APPID", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (appid, "APPID", "flag", &flag, 0)
         && flag == appid->flag)
       {
         pass ("APPID.flag [RC] set+1 %u", flag);
@@ -33894,7 +33894,7 @@ static int test_APPID (const Dwg_Object *obj)
         error++;
       }
     unknown++;
-    if (dwg_dynapi_entity_set_value (appid, "APPID", "unknown", &unknown)
+      if (dwg_dynapi_entity_set_value (appid, "APPID", "unknown", &unknown, 0)
         && unknown == appid->unknown)
       {
         pass ("APPID.unknown [RC] set+1 %u", unknown);
@@ -33920,7 +33920,7 @@ static int test_APPID (const Dwg_Object *obj)
         error++;
       }
     used++;
-    if (dwg_dynapi_entity_set_value (appid, "APPID", "used", &used)
+      if (dwg_dynapi_entity_set_value (appid, "APPID", "used", &used, 0)
         && used == appid->used)
       {
         pass ("APPID.used [RS] set+1 %hu", used);
@@ -33946,7 +33946,7 @@ static int test_APPID (const Dwg_Object *obj)
         error++;
       }
     xrefdep++;
-    if (dwg_dynapi_entity_set_value (appid, "APPID", "xrefdep", &xrefdep)
+      if (dwg_dynapi_entity_set_value (appid, "APPID", "xrefdep", &xrefdep, 0)
         && xrefdep == appid->xrefdep)
       {
         pass ("APPID.xrefdep [B] set+1 " FORMAT_B "", xrefdep);
@@ -33972,7 +33972,7 @@ static int test_APPID (const Dwg_Object *obj)
         error++;
       }
     xrefindex_plus1++;
-    if (dwg_dynapi_entity_set_value (appid, "APPID", "xrefindex_plus1", &xrefindex_plus1)
+      if (dwg_dynapi_entity_set_value (appid, "APPID", "xrefindex_plus1", &xrefindex_plus1, 0)
         && xrefindex_plus1 == appid->xrefindex_plus1)
       {
         pass ("APPID.xrefindex_plus1 [BS] set+1 %hu", xrefindex_plus1);
@@ -33998,7 +33998,7 @@ static int test_APPID (const Dwg_Object *obj)
         error++;
       }
     xrefref++;
-    if (dwg_dynapi_entity_set_value (appid, "APPID", "xrefref", &xrefref)
+      if (dwg_dynapi_entity_set_value (appid, "APPID", "xrefref", &xrefref, 0)
         && xrefref == appid->xrefref)
       {
         pass ("APPID.xrefref [B] set+1 " FORMAT_B "", xrefref);
@@ -34046,7 +34046,7 @@ static int test_APPID_CONTROL (const Dwg_Object *obj)
         error++;
       }
     num_entries++;
-    if (dwg_dynapi_entity_set_value (appid_control, "APPID_CONTROL", "num_entries", &num_entries)
+      if (dwg_dynapi_entity_set_value (appid_control, "APPID_CONTROL", "num_entries", &num_entries, 0)
         && num_entries == appid_control->num_entries)
       {
         pass ("APPID_CONTROL.num_entries [BS] set+1 %hu", num_entries);
@@ -34072,7 +34072,7 @@ static int test_APPID_CONTROL (const Dwg_Object *obj)
         error++;
       }
     objid++;
-    if (dwg_dynapi_entity_set_value (appid_control, "APPID_CONTROL", "objid", &objid)
+      if (dwg_dynapi_entity_set_value (appid_control, "APPID_CONTROL", "objid", &objid, 0)
         && objid == appid_control->objid)
       {
         pass ("APPID_CONTROL.objid [BL] set+1 %u", objid);
@@ -34118,7 +34118,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
         error++;
       }
     b1++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "b1", &b1)
+      if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "b1", &b1, 0)
         && b1 == assoc2dconstraintgroup->b1)
       {
         pass ("ASSOC2DCONSTRAINTGROUP.b1 [B] set+1 " FORMAT_B "", b1);
@@ -34183,7 +34183,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
         error++;
       }
     cl1++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "cl1", &cl1)
+      if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "cl1", &cl1, 0)
         && cl1 == assoc2dconstraintgroup->cl1)
       {
         pass ("ASSOC2DCONSTRAINTGROUP.cl1 [BL] set+1 %u", cl1);
@@ -34209,7 +34209,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
         error++;
       }
     cl2++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "cl2", &cl2)
+      if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "cl2", &cl2, 0)
         && cl2 == assoc2dconstraintgroup->cl2)
       {
         pass ("ASSOC2DCONSTRAINTGROUP.cl2 [BL] set+1 %u", cl2);
@@ -34235,7 +34235,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
         error++;
       }
     cl3++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "cl3", &cl3)
+      if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "cl3", &cl3, 0)
         && cl3 == assoc2dconstraintgroup->cl3)
       {
         pass ("ASSOC2DCONSTRAINTGROUP.cl3 [BL] set+1 %u", cl3);
@@ -34261,7 +34261,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
         error++;
       }
     cl4++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "cl4", &cl4)
+      if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "cl4", &cl4, 0)
         && cl4 == assoc2dconstraintgroup->cl4)
       {
         pass ("ASSOC2DCONSTRAINTGROUP.cl4 [BL] set+1 %u", cl4);
@@ -34287,7 +34287,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
         error++;
       }
     constraint_status++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "constraint_status", &constraint_status)
+      if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "constraint_status", &constraint_status, 0)
         && constraint_status == assoc2dconstraintgroup->constraint_status)
       {
         pass ("ASSOC2DCONSTRAINTGROUP.constraint_status [BL] set+1 %u", constraint_status);
@@ -34313,7 +34313,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
         error++;
       }
     cs1++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "cs1", &cs1)
+      if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "cs1", &cs1, 0)
         && cs1 == assoc2dconstraintgroup->cs1)
       {
         pass ("ASSOC2DCONSTRAINTGROUP.cs1 [RC] set+1 %u", cs1);
@@ -34339,7 +34339,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
         error++;
       }
     dof++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "dof", &dof)
+      if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "dof", &dof, 0)
         && dof == assoc2dconstraintgroup->dof)
       {
         pass ("ASSOC2DCONSTRAINTGROUP.dof [BL] set+1 %u", dof);
@@ -34365,7 +34365,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
         error++;
       }
     geometry_status++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "geometry_status", &geometry_status)
+      if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "geometry_status", &geometry_status, 0)
         && geometry_status == assoc2dconstraintgroup->geometry_status)
       {
         pass ("ASSOC2DCONSTRAINTGROUP.geometry_status [BL] set+1 %u", geometry_status);
@@ -34391,7 +34391,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
         error++;
       }
     l4++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "l4", &l4)
+      if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "l4", &l4, 0)
         && l4 == assoc2dconstraintgroup->l4)
       {
         pass ("ASSOC2DCONSTRAINTGROUP.l4 [BL] set+1 %u", l4);
@@ -34417,7 +34417,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
         error++;
       }
     l5++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "l5", &l5)
+      if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "l5", &l5, 0)
         && l5 == assoc2dconstraintgroup->l5)
       {
         pass ("ASSOC2DCONSTRAINTGROUP.l5 [BL] set+1 %u", l5);
@@ -34443,7 +34443,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
         error++;
       }
     l6++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "l6", &l6)
+      if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "l6", &l6, 0)
         && l6 == assoc2dconstraintgroup->l6)
       {
         pass ("ASSOC2DCONSTRAINTGROUP.l6 [BL] set+1 %u", l6);
@@ -34469,7 +34469,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
         error++;
       }
     l7++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "l7", &l7)
+      if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "l7", &l7, 0)
         && l7 == assoc2dconstraintgroup->l7)
       {
         pass ("ASSOC2DCONSTRAINTGROUP.l7 [BL] set+1 %u", l7);
@@ -34495,7 +34495,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
         error++;
       }
     l8++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "l8", &l8)
+      if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "l8", &l8, 0)
         && l8 == assoc2dconstraintgroup->l8)
       {
         pass ("ASSOC2DCONSTRAINTGROUP.l8 [BL] set+1 %u", l8);
@@ -34534,7 +34534,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
         error++;
       }
     solution_status++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "solution_status", &solution_status)
+      if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "solution_status", &solution_status, 0)
         && solution_status == assoc2dconstraintgroup->solution_status)
       {
         pass ("ASSOC2DCONSTRAINTGROUP.solution_status [BL] set+1 %u", solution_status);
@@ -34560,7 +34560,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
         error++;
       }
     w1++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "w1", &w1)
+      if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "w1", &w1, 0)
         && w1 == assoc2dconstraintgroup->w1)
       {
         pass ("ASSOC2DCONSTRAINTGROUP.w1 [BD] set+1 %g", w1);
@@ -34586,7 +34586,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
         error++;
       }
     w2++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "w2", &w2)
+      if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "w2", &w2, 0)
         && w2 == assoc2dconstraintgroup->w2)
       {
         pass ("ASSOC2DCONSTRAINTGROUP.w2 [BD] set+1 %g", w2);
@@ -34612,7 +34612,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
         error++;
       }
     w3++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "w3", &w3)
+      if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "w3", &w3, 0)
         && w3 == assoc2dconstraintgroup->w3)
       {
         pass ("ASSOC2DCONSTRAINTGROUP.w3 [BD] set+1 %g", w3);
@@ -34697,7 +34697,7 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
         error++;
       }
     is_body_a_proxy++;
-    if (dwg_dynapi_entity_set_value (assocaction, "ASSOCACTION", "is_body_a_proxy", &is_body_a_proxy)
+      if (dwg_dynapi_entity_set_value (assocaction, "ASSOCACTION", "is_body_a_proxy", &is_body_a_proxy, 0)
         && is_body_a_proxy == assocaction->is_body_a_proxy)
       {
         pass ("ASSOCACTION.is_body_a_proxy [B] set+1 " FORMAT_B "", is_body_a_proxy);
@@ -34723,7 +34723,7 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
         error++;
       }
     num_deps++;
-    if (dwg_dynapi_entity_set_value (assocaction, "ASSOCACTION", "num_deps", &num_deps)
+      if (dwg_dynapi_entity_set_value (assocaction, "ASSOCACTION", "num_deps", &num_deps, 0)
         && num_deps == assocaction->num_deps)
       {
         pass ("ASSOCACTION.num_deps [BL] set+1 %u", num_deps);
@@ -34790,7 +34790,7 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
         error++;
       }
     status++;
-    if (dwg_dynapi_entity_set_value (assocaction, "ASSOCACTION", "status", &status)
+      if (dwg_dynapi_entity_set_value (assocaction, "ASSOCACTION", "status", &status, 0)
         && status == assocaction->status)
       {
         pass ("ASSOCACTION.status [BL] set+1 %u", status);
@@ -34816,7 +34816,7 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
         error++;
       }
     unknown_assoc++;
-    if (dwg_dynapi_entity_set_value (assocaction, "ASSOCACTION", "unknown_assoc", &unknown_assoc)
+      if (dwg_dynapi_entity_set_value (assocaction, "ASSOCACTION", "unknown_assoc", &unknown_assoc, 0)
         && unknown_assoc == assocaction->unknown_assoc)
       {
         pass ("ASSOCACTION.unknown_assoc [BL] set+1 %u", unknown_assoc);
@@ -34864,7 +34864,7 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
         error++;
       }
     aab_status++;
-    if (dwg_dynapi_entity_set_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "aab_status", &aab_status)
+      if (dwg_dynapi_entity_set_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "aab_status", &aab_status, 0)
         && aab_status == assocaligneddimactionbody->aab_status)
       {
         pass ("ASSOCALIGNEDDIMACTIONBODY.aab_status [BL] set+1 %u", aab_status);
@@ -34903,7 +34903,7 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
         error++;
       }
     dcm_status++;
-    if (dwg_dynapi_entity_set_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "dcm_status", &dcm_status)
+      if (dwg_dynapi_entity_set_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "dcm_status", &dcm_status, 0)
         && dcm_status == assocaligneddimactionbody->dcm_status)
       {
         pass ("ASSOCALIGNEDDIMACTIONBODY.dcm_status [BL] set+1 %u", dcm_status);
@@ -34929,7 +34929,7 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
         error++;
       }
     pab_l2++;
-    if (dwg_dynapi_entity_set_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "pab_l2", &pab_l2)
+      if (dwg_dynapi_entity_set_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "pab_l2", &pab_l2, 0)
         && pab_l2 == assocaligneddimactionbody->pab_l2)
       {
         pass ("ASSOCALIGNEDDIMACTIONBODY.pab_l2 [BL] set+1 %u", pab_l2);
@@ -34955,7 +34955,7 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
         error++;
       }
     pab_l3++;
-    if (dwg_dynapi_entity_set_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "pab_l3", &pab_l3)
+      if (dwg_dynapi_entity_set_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "pab_l3", &pab_l3, 0)
         && pab_l3 == assocaligneddimactionbody->pab_l3)
       {
         pass ("ASSOCALIGNEDDIMACTIONBODY.pab_l3 [BL] set+1 %u", pab_l3);
@@ -34981,7 +34981,7 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
         error++;
       }
     pab_l4++;
-    if (dwg_dynapi_entity_set_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "pab_l4", &pab_l4)
+      if (dwg_dynapi_entity_set_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "pab_l4", &pab_l4, 0)
         && pab_l4 == assocaligneddimactionbody->pab_l4)
       {
         pass ("ASSOCALIGNEDDIMACTIONBODY.pab_l4 [BL] set+1 %u", pab_l4);
@@ -35007,7 +35007,7 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
         error++;
       }
     pab_l5++;
-    if (dwg_dynapi_entity_set_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "pab_l5", &pab_l5)
+      if (dwg_dynapi_entity_set_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "pab_l5", &pab_l5, 0)
         && pab_l5 == assocaligneddimactionbody->pab_l5)
       {
         pass ("ASSOCALIGNEDDIMACTIONBODY.pab_l5 [BL] set+1 %u", pab_l5);
@@ -35033,7 +35033,7 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
         error++;
       }
     pab_l6++;
-    if (dwg_dynapi_entity_set_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "pab_l6", &pab_l6)
+      if (dwg_dynapi_entity_set_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "pab_l6", &pab_l6, 0)
         && pab_l6 == assocaligneddimactionbody->pab_l6)
       {
         pass ("ASSOCALIGNEDDIMACTIONBODY.pab_l6 [BL] set+1 %u", pab_l6);
@@ -35059,7 +35059,7 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
         error++;
       }
     pab_status++;
-    if (dwg_dynapi_entity_set_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "pab_status", &pab_status)
+      if (dwg_dynapi_entity_set_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "pab_status", &pab_status, 0)
         && pab_status == assocaligneddimactionbody->pab_status)
       {
         pass ("ASSOCALIGNEDDIMACTIONBODY.pab_status [BL] set+1 %u", pab_status);
@@ -35144,7 +35144,7 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (assocdependency, "ASSOCDEPENDENCY", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (assocdependency, "ASSOCDEPENDENCY", "class_version", &class_version, 0)
         && class_version == assocdependency->class_version)
       {
         pass ("ASSOCDEPENDENCY.class_version [BL] set+1 %u", class_version);
@@ -35170,7 +35170,7 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
         error++;
       }
     depbodyid++;
-    if (dwg_dynapi_entity_set_value (assocdependency, "ASSOCDEPENDENCY", "depbodyid", &depbodyid)
+      if (dwg_dynapi_entity_set_value (assocdependency, "ASSOCDEPENDENCY", "depbodyid", &depbodyid, 0)
         && depbodyid == assocdependency->depbodyid)
       {
         pass ("ASSOCDEPENDENCY.depbodyid [BL] set+1 %u", depbodyid);
@@ -35196,7 +35196,7 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
         error++;
       }
     isobjectstate_dep++;
-    if (dwg_dynapi_entity_set_value (assocdependency, "ASSOCDEPENDENCY", "isobjectstate_dep", &isobjectstate_dep)
+      if (dwg_dynapi_entity_set_value (assocdependency, "ASSOCDEPENDENCY", "isobjectstate_dep", &isobjectstate_dep, 0)
         && isobjectstate_dep == assocdependency->isobjectstate_dep)
       {
         pass ("ASSOCDEPENDENCY.isobjectstate_dep [B] set+1 " FORMAT_B "", isobjectstate_dep);
@@ -35222,7 +35222,7 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
         error++;
       }
     isread_dep++;
-    if (dwg_dynapi_entity_set_value (assocdependency, "ASSOCDEPENDENCY", "isread_dep", &isread_dep)
+      if (dwg_dynapi_entity_set_value (assocdependency, "ASSOCDEPENDENCY", "isread_dep", &isread_dep, 0)
         && isread_dep == assocdependency->isread_dep)
       {
         pass ("ASSOCDEPENDENCY.isread_dep [B] set+1 " FORMAT_B "", isread_dep);
@@ -35248,7 +35248,7 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
         error++;
       }
     iswrite_dep++;
-    if (dwg_dynapi_entity_set_value (assocdependency, "ASSOCDEPENDENCY", "iswrite_dep", &iswrite_dep)
+      if (dwg_dynapi_entity_set_value (assocdependency, "ASSOCDEPENDENCY", "iswrite_dep", &iswrite_dep, 0)
         && iswrite_dep == assocdependency->iswrite_dep)
       {
         pass ("ASSOCDEPENDENCY.iswrite_dep [B] set+1 " FORMAT_B "", iswrite_dep);
@@ -35287,7 +35287,7 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
         error++;
       }
     order++;
-    if (dwg_dynapi_entity_set_value (assocdependency, "ASSOCDEPENDENCY", "order", &order)
+      if (dwg_dynapi_entity_set_value (assocdependency, "ASSOCDEPENDENCY", "order", &order, 0)
         && order == assocdependency->order)
       {
         pass ("ASSOCDEPENDENCY.order [BL] set+1 %u", order);
@@ -35352,7 +35352,7 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
         error++;
       }
     status++;
-    if (dwg_dynapi_entity_set_value (assocdependency, "ASSOCDEPENDENCY", "status", &status)
+      if (dwg_dynapi_entity_set_value (assocdependency, "ASSOCDEPENDENCY", "status", &status, 0)
         && status == assocdependency->status)
       {
         pass ("ASSOCDEPENDENCY.status [BL] set+1 %u", status);
@@ -35378,7 +35378,7 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
         error++;
       }
     unknown_b4++;
-    if (dwg_dynapi_entity_set_value (assocdependency, "ASSOCDEPENDENCY", "unknown_b4", &unknown_b4)
+      if (dwg_dynapi_entity_set_value (assocdependency, "ASSOCDEPENDENCY", "unknown_b4", &unknown_b4, 0)
         && unknown_b4 == assocdependency->unknown_b4)
       {
         pass ("ASSOCDEPENDENCY.unknown_b4 [B] set+1 " FORMAT_B "", unknown_b4);
@@ -35404,7 +35404,7 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
         error++;
       }
     unknown_b5++;
-    if (dwg_dynapi_entity_set_value (assocdependency, "ASSOCDEPENDENCY", "unknown_b5", &unknown_b5)
+      if (dwg_dynapi_entity_set_value (assocdependency, "ASSOCDEPENDENCY", "unknown_b5", &unknown_b5, 0)
         && unknown_b5 == assocdependency->unknown_b5)
       {
         pass ("ASSOCDEPENDENCY.unknown_b5 [B] set+1 " FORMAT_B "", unknown_b5);
@@ -35465,7 +35465,7 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
         error++;
       }
     num_actions++;
-    if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "num_actions", &num_actions)
+      if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "num_actions", &num_actions, 0)
         && num_actions == assocnetwork->num_actions)
       {
         pass ("ASSOCNETWORK.num_actions [BL] set+1 %u", num_actions);
@@ -35491,7 +35491,7 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
         error++;
       }
     num_deps++;
-    if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "num_deps", &num_deps)
+      if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "num_deps", &num_deps, 0)
         && num_deps == assocnetwork->num_deps)
       {
         pass ("ASSOCNETWORK.num_deps [BL] set+1 %u", num_deps);
@@ -35543,7 +35543,7 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
         error++;
       }
     status++;
-    if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "status", &status)
+      if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "status", &status, 0)
         && status == assocnetwork->status)
       {
         pass ("ASSOCNETWORK.status [BL] set+1 %u", status);
@@ -35569,7 +35569,7 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
         error++;
       }
     unknown_assoc++;
-    if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "unknown_assoc", &unknown_assoc)
+      if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "unknown_assoc", &unknown_assoc, 0)
         && unknown_assoc == assocnetwork->unknown_assoc)
       {
         pass ("ASSOCNETWORK.unknown_assoc [BL] set+1 %u", unknown_assoc);
@@ -35595,7 +35595,7 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
         error++;
       }
     unknown_n1++;
-    if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "unknown_n1", &unknown_n1)
+      if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "unknown_n1", &unknown_n1, 0)
         && unknown_n1 == assocnetwork->unknown_n1)
       {
         pass ("ASSOCNETWORK.unknown_n1 [BL] set+1 %u", unknown_n1);
@@ -35621,7 +35621,7 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
         error++;
       }
     unknown_n2++;
-    if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "unknown_n2", &unknown_n2)
+      if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "unknown_n2", &unknown_n2, 0)
         && unknown_n2 == assocnetwork->unknown_n2)
       {
         pass ("ASSOCNETWORK.unknown_n2 [BL] set+1 %u", unknown_n2);
@@ -35680,7 +35680,7 @@ static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
         error++;
       }
     flags++;
-    if (dwg_dynapi_entity_set_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "flags", &flags)
+      if (dwg_dynapi_entity_set_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "flags", &flags, 0)
         && flags == assocosnappointrefactionparam->flags)
       {
         pass ("ASSOCOSNAPPOINTREFACTIONPARAM.flags [RS] set+1 %hu", flags);
@@ -35719,7 +35719,7 @@ static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
         error++;
       }
     num_params++;
-    if (dwg_dynapi_entity_set_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "num_params", &num_params)
+      if (dwg_dynapi_entity_set_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "num_params", &num_params, 0)
         && num_params == assocosnappointrefactionparam->num_params)
       {
         pass ("ASSOCOSNAPPOINTREFACTIONPARAM.num_params [BS] set+1 %hu", num_params);
@@ -35758,7 +35758,7 @@ static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
         error++;
       }
     status++;
-    if (dwg_dynapi_entity_set_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "status", &status)
+      if (dwg_dynapi_entity_set_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "status", &status, 0)
         && status == assocosnappointrefactionparam->status)
       {
         pass ("ASSOCOSNAPPOINTREFACTIONPARAM.status [BS] set+1 %hu", status);
@@ -35784,7 +35784,7 @@ static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
         error++;
       }
     unknown++;
-    if (dwg_dynapi_entity_set_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "unknown", &unknown)
+      if (dwg_dynapi_entity_set_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "unknown", &unknown, 0)
         && unknown == assocosnappointrefactionparam->unknown)
       {
         pass ("ASSOCOSNAPPOINTREFACTIONPARAM.unknown [RC] set+1 %u", unknown);
@@ -35810,7 +35810,7 @@ static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
         error++;
       }
     unknown1++;
-    if (dwg_dynapi_entity_set_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "unknown1", &unknown1)
+      if (dwg_dynapi_entity_set_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "unknown1", &unknown1, 0)
         && unknown1 == assocosnappointrefactionparam->unknown1)
       {
         pass ("ASSOCOSNAPPOINTREFACTIONPARAM.unknown1 [B] set+1 " FORMAT_B "", unknown1);
@@ -35836,7 +35836,7 @@ static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
         error++;
       }
     unknown3++;
-    if (dwg_dynapi_entity_set_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "unknown3", &unknown3)
+      if (dwg_dynapi_entity_set_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "unknown3", &unknown3, 0)
         && unknown3 == assocosnappointrefactionparam->unknown3)
       {
         pass ("ASSOCOSNAPPOINTREFACTIONPARAM.unknown3 [BD] set+1 %g", unknown3);
@@ -35882,7 +35882,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "class_version", &class_version, 0)
         && class_version == assocperssubentmanager->class_version)
       {
         pass ("ASSOCPERSSUBENTMANAGER.class_version [BL] set+1 %u", class_version);
@@ -35921,7 +35921,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_b37++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_b37", &unknown_b37)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_b37", &unknown_b37, 0)
         && unknown_b37 == assocperssubentmanager->unknown_b37)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_b37 [B] set+1 " FORMAT_B "", unknown_b37);
@@ -35947,7 +35947,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl1++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl1", &unknown_bl1)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl1", &unknown_bl1, 0)
         && unknown_bl1 == assocperssubentmanager->unknown_bl1)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl1 [BL] set+1 %u", unknown_bl1);
@@ -35973,7 +35973,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl10++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl10", &unknown_bl10)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl10", &unknown_bl10, 0)
         && unknown_bl10 == assocperssubentmanager->unknown_bl10)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl10 [BL] set+1 %u", unknown_bl10);
@@ -35999,7 +35999,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl11++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl11", &unknown_bl11)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl11", &unknown_bl11, 0)
         && unknown_bl11 == assocperssubentmanager->unknown_bl11)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl11 [BL] set+1 %u", unknown_bl11);
@@ -36025,7 +36025,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl12++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl12", &unknown_bl12)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl12", &unknown_bl12, 0)
         && unknown_bl12 == assocperssubentmanager->unknown_bl12)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl12 [BL] set+1 %u", unknown_bl12);
@@ -36051,7 +36051,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl13++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl13", &unknown_bl13)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl13", &unknown_bl13, 0)
         && unknown_bl13 == assocperssubentmanager->unknown_bl13)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl13 [BL] set+1 %u", unknown_bl13);
@@ -36077,7 +36077,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl14++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl14", &unknown_bl14)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl14", &unknown_bl14, 0)
         && unknown_bl14 == assocperssubentmanager->unknown_bl14)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl14 [BL] set+1 %u", unknown_bl14);
@@ -36103,7 +36103,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl15++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl15", &unknown_bl15)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl15", &unknown_bl15, 0)
         && unknown_bl15 == assocperssubentmanager->unknown_bl15)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl15 [BL] set+1 %u", unknown_bl15);
@@ -36129,7 +36129,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl16++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl16", &unknown_bl16)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl16", &unknown_bl16, 0)
         && unknown_bl16 == assocperssubentmanager->unknown_bl16)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl16 [BL] set+1 %u", unknown_bl16);
@@ -36155,7 +36155,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl17++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl17", &unknown_bl17)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl17", &unknown_bl17, 0)
         && unknown_bl17 == assocperssubentmanager->unknown_bl17)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl17 [BL] set+1 %u", unknown_bl17);
@@ -36181,7 +36181,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl18++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl18", &unknown_bl18)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl18", &unknown_bl18, 0)
         && unknown_bl18 == assocperssubentmanager->unknown_bl18)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl18 [BL] set+1 %u", unknown_bl18);
@@ -36207,7 +36207,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl19++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl19", &unknown_bl19)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl19", &unknown_bl19, 0)
         && unknown_bl19 == assocperssubentmanager->unknown_bl19)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl19 [BL] set+1 %u", unknown_bl19);
@@ -36233,7 +36233,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl2++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl2", &unknown_bl2)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl2", &unknown_bl2, 0)
         && unknown_bl2 == assocperssubentmanager->unknown_bl2)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl2 [BL] set+1 %u", unknown_bl2);
@@ -36259,7 +36259,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl20++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl20", &unknown_bl20)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl20", &unknown_bl20, 0)
         && unknown_bl20 == assocperssubentmanager->unknown_bl20)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl20 [BL] set+1 %u", unknown_bl20);
@@ -36285,7 +36285,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl21++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl21", &unknown_bl21)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl21", &unknown_bl21, 0)
         && unknown_bl21 == assocperssubentmanager->unknown_bl21)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl21 [BL] set+1 %u", unknown_bl21);
@@ -36311,7 +36311,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl22++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl22", &unknown_bl22)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl22", &unknown_bl22, 0)
         && unknown_bl22 == assocperssubentmanager->unknown_bl22)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl22 [BL] set+1 %u", unknown_bl22);
@@ -36337,7 +36337,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl23++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl23", &unknown_bl23)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl23", &unknown_bl23, 0)
         && unknown_bl23 == assocperssubentmanager->unknown_bl23)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl23 [BL] set+1 %u", unknown_bl23);
@@ -36363,7 +36363,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl24++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl24", &unknown_bl24)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl24", &unknown_bl24, 0)
         && unknown_bl24 == assocperssubentmanager->unknown_bl24)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl24 [BL] set+1 %u", unknown_bl24);
@@ -36389,7 +36389,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl25++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl25", &unknown_bl25)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl25", &unknown_bl25, 0)
         && unknown_bl25 == assocperssubentmanager->unknown_bl25)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl25 [BL] set+1 %u", unknown_bl25);
@@ -36415,7 +36415,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl26++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl26", &unknown_bl26)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl26", &unknown_bl26, 0)
         && unknown_bl26 == assocperssubentmanager->unknown_bl26)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl26 [BL] set+1 %u", unknown_bl26);
@@ -36441,7 +36441,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl27++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl27", &unknown_bl27)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl27", &unknown_bl27, 0)
         && unknown_bl27 == assocperssubentmanager->unknown_bl27)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl27 [BL] set+1 %u", unknown_bl27);
@@ -36467,7 +36467,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl28++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl28", &unknown_bl28)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl28", &unknown_bl28, 0)
         && unknown_bl28 == assocperssubentmanager->unknown_bl28)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl28 [BL] set+1 %u", unknown_bl28);
@@ -36493,7 +36493,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl29++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl29", &unknown_bl29)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl29", &unknown_bl29, 0)
         && unknown_bl29 == assocperssubentmanager->unknown_bl29)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl29 [BL] set+1 %u", unknown_bl29);
@@ -36519,7 +36519,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl3++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl3", &unknown_bl3)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl3", &unknown_bl3, 0)
         && unknown_bl3 == assocperssubentmanager->unknown_bl3)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl3 [BL] set+1 %u", unknown_bl3);
@@ -36545,7 +36545,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl30++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl30", &unknown_bl30)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl30", &unknown_bl30, 0)
         && unknown_bl30 == assocperssubentmanager->unknown_bl30)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl30 [BL] set+1 %u", unknown_bl30);
@@ -36571,7 +36571,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl31++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl31", &unknown_bl31)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl31", &unknown_bl31, 0)
         && unknown_bl31 == assocperssubentmanager->unknown_bl31)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl31 [BL] set+1 %u", unknown_bl31);
@@ -36597,7 +36597,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl32++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl32", &unknown_bl32)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl32", &unknown_bl32, 0)
         && unknown_bl32 == assocperssubentmanager->unknown_bl32)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl32 [BL] set+1 %u", unknown_bl32);
@@ -36623,7 +36623,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl33++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl33", &unknown_bl33)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl33", &unknown_bl33, 0)
         && unknown_bl33 == assocperssubentmanager->unknown_bl33)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl33 [BL] set+1 %u", unknown_bl33);
@@ -36649,7 +36649,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl34++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl34", &unknown_bl34)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl34", &unknown_bl34, 0)
         && unknown_bl34 == assocperssubentmanager->unknown_bl34)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl34 [BL] set+1 %u", unknown_bl34);
@@ -36675,7 +36675,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl35++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl35", &unknown_bl35)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl35", &unknown_bl35, 0)
         && unknown_bl35 == assocperssubentmanager->unknown_bl35)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl35 [BL] set+1 %u", unknown_bl35);
@@ -36701,7 +36701,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl36++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl36", &unknown_bl36)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl36", &unknown_bl36, 0)
         && unknown_bl36 == assocperssubentmanager->unknown_bl36)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl36 [BL] set+1 %u", unknown_bl36);
@@ -36727,7 +36727,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl4++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl4", &unknown_bl4)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl4", &unknown_bl4, 0)
         && unknown_bl4 == assocperssubentmanager->unknown_bl4)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl4 [BL] set+1 %u", unknown_bl4);
@@ -36753,7 +36753,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl5++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl5", &unknown_bl5)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl5", &unknown_bl5, 0)
         && unknown_bl5 == assocperssubentmanager->unknown_bl5)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl5 [BL] set+1 %u", unknown_bl5);
@@ -36779,7 +36779,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl6++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl6", &unknown_bl6)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl6", &unknown_bl6, 0)
         && unknown_bl6 == assocperssubentmanager->unknown_bl6)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl6 [BL] set+1 %u", unknown_bl6);
@@ -36805,7 +36805,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl6a++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl6a", &unknown_bl6a)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl6a", &unknown_bl6a, 0)
         && unknown_bl6a == assocperssubentmanager->unknown_bl6a)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl6a [BL] set+1 %u", unknown_bl6a);
@@ -36831,7 +36831,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl7++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl7", &unknown_bl7)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl7", &unknown_bl7, 0)
         && unknown_bl7 == assocperssubentmanager->unknown_bl7)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl7 [BL] set+1 %u", unknown_bl7);
@@ -36857,7 +36857,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl7a++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl7a", &unknown_bl7a)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl7a", &unknown_bl7a, 0)
         && unknown_bl7a == assocperssubentmanager->unknown_bl7a)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl7a [BL] set+1 %u", unknown_bl7a);
@@ -36883,7 +36883,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl8++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl8", &unknown_bl8)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl8", &unknown_bl8, 0)
         && unknown_bl8 == assocperssubentmanager->unknown_bl8)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl8 [BL] set+1 %u", unknown_bl8);
@@ -36909,7 +36909,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl9++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl9", &unknown_bl9)
+      if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl9", &unknown_bl9, 0)
         && unknown_bl9 == assocperssubentmanager->unknown_bl9)
       {
         pass ("ASSOCPERSSUBENTMANAGER.unknown_bl9 [BL] set+1 %u", unknown_bl9);
@@ -36942,7 +36942,7 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
         error++;
       }
     aab_status++;
-    if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "aab_status", &aab_status)
+      if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "aab_status", &aab_status, 0)
         && aab_status == assocplanesurfaceactionbody->aab_status)
       {
         pass ("ASSOCPLANESURFACEACTIONBODY.aab_status [BL] set+1 %u", aab_status);
@@ -36968,7 +36968,7 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
         error++;
       }
     pab_l2++;
-    if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "pab_l2", &pab_l2)
+      if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "pab_l2", &pab_l2, 0)
         && pab_l2 == assocplanesurfaceactionbody->pab_l2)
       {
         pass ("ASSOCPLANESURFACEACTIONBODY.pab_l2 [BL] set+1 %u", pab_l2);
@@ -36994,7 +36994,7 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
         error++;
       }
     pab_l3++;
-    if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "pab_l3", &pab_l3)
+      if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "pab_l3", &pab_l3, 0)
         && pab_l3 == assocplanesurfaceactionbody->pab_l3)
       {
         pass ("ASSOCPLANESURFACEACTIONBODY.pab_l3 [BL] set+1 %u", pab_l3);
@@ -37020,7 +37020,7 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
         error++;
       }
     pab_l4++;
-    if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "pab_l4", &pab_l4)
+      if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "pab_l4", &pab_l4, 0)
         && pab_l4 == assocplanesurfaceactionbody->pab_l4)
       {
         pass ("ASSOCPLANESURFACEACTIONBODY.pab_l4 [BL] set+1 %u", pab_l4);
@@ -37046,7 +37046,7 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
         error++;
       }
     pab_l5++;
-    if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "pab_l5", &pab_l5)
+      if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "pab_l5", &pab_l5, 0)
         && pab_l5 == assocplanesurfaceactionbody->pab_l5)
       {
         pass ("ASSOCPLANESURFACEACTIONBODY.pab_l5 [BL] set+1 %u", pab_l5);
@@ -37072,7 +37072,7 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
         error++;
       }
     pab_status++;
-    if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "pab_status", &pab_status)
+      if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "pab_status", &pab_status, 0)
         && pab_status == assocplanesurfaceactionbody->pab_status)
       {
         pass ("ASSOCPLANESURFACEACTIONBODY.pab_status [BL] set+1 %u", pab_status);
@@ -37111,7 +37111,7 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
         error++;
       }
     pbsab_status++;
-    if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "pbsab_status", &pbsab_status)
+      if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "pbsab_status", &pbsab_status, 0)
         && pbsab_status == assocplanesurfaceactionbody->pbsab_status)
       {
         pass ("ASSOCPLANESURFACEACTIONBODY.pbsab_status [BL] set+1 %u", pbsab_status);
@@ -37137,7 +37137,7 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
         error++;
       }
     psab_status++;
-    if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "psab_status", &psab_status)
+      if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "psab_status", &psab_status, 0)
         && psab_status == assocplanesurfaceactionbody->psab_status)
       {
         pass ("ASSOCPLANESURFACEACTIONBODY.psab_status [BL] set+1 %u", psab_status);
@@ -37176,7 +37176,7 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
         error++;
       }
     sab_b1++;
-    if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "sab_b1", &sab_b1)
+      if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "sab_b1", &sab_b1, 0)
         && sab_b1 == assocplanesurfaceactionbody->sab_b1)
       {
         pass ("ASSOCPLANESURFACEACTIONBODY.sab_b1 [B] set+1 " FORMAT_B "", sab_b1);
@@ -37202,7 +37202,7 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
         error++;
       }
     sab_b2++;
-    if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "sab_b2", &sab_b2)
+      if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "sab_b2", &sab_b2, 0)
         && sab_b2 == assocplanesurfaceactionbody->sab_b2)
       {
         pass ("ASSOCPLANESURFACEACTIONBODY.sab_b2 [B] set+1 " FORMAT_B "", sab_b2);
@@ -37228,7 +37228,7 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
         error++;
       }
     sab_l2++;
-    if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "sab_l2", &sab_l2)
+      if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "sab_l2", &sab_l2, 0)
         && sab_l2 == assocplanesurfaceactionbody->sab_l2)
       {
         pass ("ASSOCPLANESURFACEACTIONBODY.sab_l2 [BL] set+1 %u", sab_l2);
@@ -37254,7 +37254,7 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
         error++;
       }
     sab_s1++;
-    if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "sab_s1", &sab_s1)
+      if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "sab_s1", &sab_s1, 0)
         && sab_s1 == assocplanesurfaceactionbody->sab_s1)
       {
         pass ("ASSOCPLANESURFACEACTIONBODY.sab_s1 [BS] set+1 %hu", sab_s1);
@@ -37280,7 +37280,7 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
         error++;
       }
     sab_status++;
-    if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "sab_status", &sab_status)
+      if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "sab_status", &sab_status, 0)
         && sab_status == assocplanesurfaceactionbody->sab_status)
       {
         pass ("ASSOCPLANESURFACEACTIONBODY.sab_status [BL] set+1 %u", sab_status);
@@ -37354,7 +37354,7 @@ static int test_BLOCK_CONTROL (const Dwg_Object *obj)
         error++;
       }
     num_entries++;
-    if (dwg_dynapi_entity_set_value (block_control, "BLOCK_CONTROL", "num_entries", &num_entries)
+      if (dwg_dynapi_entity_set_value (block_control, "BLOCK_CONTROL", "num_entries", &num_entries, 0)
         && num_entries == block_control->num_entries)
       {
         pass ("BLOCK_CONTROL.num_entries [BS] set+1 %hu", num_entries);
@@ -37380,7 +37380,7 @@ static int test_BLOCK_CONTROL (const Dwg_Object *obj)
         error++;
       }
     objid++;
-    if (dwg_dynapi_entity_set_value (block_control, "BLOCK_CONTROL", "objid", &objid)
+      if (dwg_dynapi_entity_set_value (block_control, "BLOCK_CONTROL", "objid", &objid, 0)
         && objid == block_control->objid)
       {
         pass ("BLOCK_CONTROL.objid [BL] set+1 %u", objid);
@@ -37439,7 +37439,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         error++;
       }
     __iterator++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "__iterator", &__iterator)
+      if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "__iterator", &__iterator, 0)
         && __iterator == block_header->__iterator)
       {
         pass ("BLOCK_HEADER.__iterator [BL] set+1 %u", __iterator);
@@ -37465,7 +37465,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         error++;
       }
     anonymous++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "anonymous", &anonymous)
+      if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "anonymous", &anonymous, 0)
         && anonymous == block_header->anonymous)
       {
         pass ("BLOCK_HEADER.anonymous [B] set+1 " FORMAT_B "", anonymous);
@@ -37504,7 +37504,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         error++;
       }
     blkisxref++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "blkisxref", &blkisxref)
+      if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "blkisxref", &blkisxref, 0)
         && blkisxref == block_header->blkisxref)
       {
         pass ("BLOCK_HEADER.blkisxref [B] set+1 " FORMAT_B "", blkisxref);
@@ -37543,7 +37543,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         error++;
       }
     block_scaling++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "block_scaling", &block_scaling)
+      if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "block_scaling", &block_scaling, 0)
         && block_scaling == block_header->block_scaling)
       {
         pass ("BLOCK_HEADER.block_scaling [RC] set+1 %u", block_scaling);
@@ -37610,7 +37610,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         error++;
       }
     explodable++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "explodable", &explodable)
+      if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "explodable", &explodable, 0)
         && explodable == block_header->explodable)
       {
         pass ("BLOCK_HEADER.explodable [B] set+1 " FORMAT_B "", explodable);
@@ -37649,7 +37649,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "flag", &flag, 0)
         && flag == block_header->flag)
       {
         pass ("BLOCK_HEADER.flag [RC] set+1 %u", flag);
@@ -37675,7 +37675,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         error++;
       }
     flag2++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "flag2", &flag2)
+      if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "flag2", &flag2, 0)
         && flag2 == block_header->flag2)
       {
         pass ("BLOCK_HEADER.flag2 [RC] set+1 %u", flag2);
@@ -37701,7 +37701,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         error++;
       }
     flag3++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "flag3", &flag3)
+      if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "flag3", &flag3, 0)
         && flag3 == block_header->flag3)
       {
         pass ("BLOCK_HEADER.flag3 [RS] set+1 %hu", flag3);
@@ -37727,7 +37727,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         error++;
       }
     hasattrs++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "hasattrs", &hasattrs)
+      if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "hasattrs", &hasattrs, 0)
         && hasattrs == block_header->hasattrs)
       {
         pass ("BLOCK_HEADER.hasattrs [B] set+1 " FORMAT_B "", hasattrs);
@@ -37768,7 +37768,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         error++;
       }
     insert_units++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "insert_units", &insert_units)
+      if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "insert_units", &insert_units, 0)
         && insert_units == block_header->insert_units)
       {
         pass ("BLOCK_HEADER.insert_units [BS] set+1 %hu", insert_units);
@@ -37820,7 +37820,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         error++;
       }
     loaded_bit++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "loaded_bit", &loaded_bit)
+      if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "loaded_bit", &loaded_bit, 0)
         && loaded_bit == block_header->loaded_bit)
       {
         pass ("BLOCK_HEADER.loaded_bit [B] set+1 " FORMAT_B "", loaded_bit);
@@ -37872,7 +37872,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         error++;
       }
     num_inserts++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "num_inserts", &num_inserts)
+      if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "num_inserts", &num_inserts, 0)
         && num_inserts == block_header->num_inserts)
       {
         pass ("BLOCK_HEADER.num_inserts [RL] set+1 %u", num_inserts);
@@ -37898,7 +37898,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         error++;
       }
     num_owned++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "num_owned", &num_owned)
+      if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "num_owned", &num_owned, 0)
         && num_owned == block_header->num_owned)
       {
         pass ("BLOCK_HEADER.num_owned [BL] set+1 %u", num_owned);
@@ -37950,7 +37950,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         error++;
       }
     preview_data_size++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "preview_data_size", &preview_data_size)
+      if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "preview_data_size", &preview_data_size, 0)
         && preview_data_size == block_header->preview_data_size)
       {
         pass ("BLOCK_HEADER.preview_data_size [BL] set+1 %u", preview_data_size);
@@ -37976,7 +37976,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         error++;
       }
     used++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "used", &used)
+      if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "used", &used, 0)
         && used == block_header->used)
       {
         pass ("BLOCK_HEADER.used [RS] set+1 %hu", used);
@@ -38015,7 +38015,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         error++;
       }
     xrefdep++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "xrefdep", &xrefdep)
+      if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "xrefdep", &xrefdep, 0)
         && xrefdep == block_header->xrefdep)
       {
         pass ("BLOCK_HEADER.xrefdep [B] set+1 " FORMAT_B "", xrefdep);
@@ -38041,7 +38041,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         error++;
       }
     xrefindex_plus1++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "xrefindex_plus1", &xrefindex_plus1)
+      if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "xrefindex_plus1", &xrefindex_plus1, 0)
         && xrefindex_plus1 == block_header->xrefindex_plus1)
       {
         pass ("BLOCK_HEADER.xrefindex_plus1 [BS] set+1 %hu", xrefindex_plus1);
@@ -38067,7 +38067,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         error++;
       }
     xrefoverlaid++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "xrefoverlaid", &xrefoverlaid)
+      if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "xrefoverlaid", &xrefoverlaid, 0)
         && xrefoverlaid == block_header->xrefoverlaid)
       {
         pass ("BLOCK_HEADER.xrefoverlaid [B] set+1 " FORMAT_B "", xrefoverlaid);
@@ -38093,7 +38093,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         error++;
       }
     xrefref++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "xrefref", &xrefref)
+      if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "xrefref", &xrefref, 0)
         && xrefref == block_header->xrefref)
       {
         pass ("BLOCK_HEADER.xrefref [B] set+1 " FORMAT_B "", xrefref);
@@ -38141,7 +38141,7 @@ static int test_CELLSTYLEMAP (const Dwg_Object *obj)
         error++;
       }
     num_cells++;
-    if (dwg_dynapi_entity_set_value (cellstylemap, "CELLSTYLEMAP", "num_cells", &num_cells)
+      if (dwg_dynapi_entity_set_value (cellstylemap, "CELLSTYLEMAP", "num_cells", &num_cells, 0)
         && num_cells == cellstylemap->num_cells)
       {
         pass ("CELLSTYLEMAP.num_cells [BL] set+1 %u", num_cells);
@@ -38220,7 +38220,7 @@ static int test_DBCOLOR (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (dbcolor, "DBCOLOR", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (dbcolor, "DBCOLOR", "class_version", &class_version, 0)
         && class_version == dbcolor->class_version)
       {
         pass ("DBCOLOR.class_version [BL] set+1 %u", class_version);
@@ -38272,7 +38272,7 @@ static int test_DBCOLOR (const Dwg_Object *obj)
         error++;
       }
     rgb++;
-    if (dwg_dynapi_entity_set_value (dbcolor, "DBCOLOR", "rgb", &rgb)
+      if (dwg_dynapi_entity_set_value (dbcolor, "DBCOLOR", "rgb", &rgb, 0)
         && rgb == dbcolor->rgb)
       {
         pass ("DBCOLOR.rgb [RL] set+1 %u", rgb);
@@ -38298,7 +38298,7 @@ static int test_DBCOLOR (const Dwg_Object *obj)
         error++;
       }
     unknown1++;
-    if (dwg_dynapi_entity_set_value (dbcolor, "DBCOLOR", "unknown1", &unknown1)
+      if (dwg_dynapi_entity_set_value (dbcolor, "DBCOLOR", "unknown1", &unknown1, 0)
         && unknown1 == dbcolor->unknown1)
       {
         pass ("DBCOLOR.unknown1 [BB] set+1 " FORMAT_BB "", unknown1);
@@ -38324,7 +38324,7 @@ static int test_DBCOLOR (const Dwg_Object *obj)
         error++;
       }
     unknown2++;
-    if (dwg_dynapi_entity_set_value (dbcolor, "DBCOLOR", "unknown2", &unknown2)
+      if (dwg_dynapi_entity_set_value (dbcolor, "DBCOLOR", "unknown2", &unknown2, 0)
         && unknown2 == dbcolor->unknown2)
       {
         pass ("DBCOLOR.unknown2 [RC] set+1 %u", unknown2);
@@ -38357,7 +38357,7 @@ static int test_DICTIONARY (const Dwg_Object *obj)
         error++;
       }
     cloning++;
-    if (dwg_dynapi_entity_set_value (dictionary, "DICTIONARY", "cloning", &cloning)
+      if (dwg_dynapi_entity_set_value (dictionary, "DICTIONARY", "cloning", &cloning, 0)
         && cloning == dictionary->cloning)
       {
         pass ("DICTIONARY.cloning [BS] set+1 %hu", cloning);
@@ -38383,7 +38383,7 @@ static int test_DICTIONARY (const Dwg_Object *obj)
         error++;
       }
     hard_owner++;
-    if (dwg_dynapi_entity_set_value (dictionary, "DICTIONARY", "hard_owner", &hard_owner)
+      if (dwg_dynapi_entity_set_value (dictionary, "DICTIONARY", "hard_owner", &hard_owner, 0)
         && hard_owner == dictionary->hard_owner)
       {
         pass ("DICTIONARY.hard_owner [RC] set+1 %u", hard_owner);
@@ -38424,7 +38424,7 @@ static int test_DICTIONARY (const Dwg_Object *obj)
         error++;
       }
     numitems++;
-    if (dwg_dynapi_entity_set_value (dictionary, "DICTIONARY", "numitems", &numitems)
+      if (dwg_dynapi_entity_set_value (dictionary, "DICTIONARY", "numitems", &numitems, 0)
         && numitems == dictionary->numitems)
       {
         pass ("DICTIONARY.numitems [BL] set+1 %u", numitems);
@@ -38478,7 +38478,7 @@ static int test_DICTIONARY (const Dwg_Object *obj)
         error++;
       }
     unknown_r14++;
-    if (dwg_dynapi_entity_set_value (dictionary, "DICTIONARY", "unknown_r14", &unknown_r14)
+      if (dwg_dynapi_entity_set_value (dictionary, "DICTIONARY", "unknown_r14", &unknown_r14, 0)
         && unknown_r14 == dictionary->unknown_r14)
       {
         pass ("DICTIONARY.unknown_r14 [RC] set+1 %u", unknown_r14);
@@ -38511,7 +38511,7 @@ static int test_DICTIONARYVAR (const Dwg_Object *obj)
         error++;
       }
     intval++;
-    if (dwg_dynapi_entity_set_value (dictionaryvar, "DICTIONARYVAR", "intval", &intval)
+      if (dwg_dynapi_entity_set_value (dictionaryvar, "DICTIONARYVAR", "intval", &intval, 0)
         && intval == dictionaryvar->intval)
       {
         pass ("DICTIONARYVAR.intval [RC] set+1 %u", intval);
@@ -38570,7 +38570,7 @@ static int test_DICTIONARYWDFLT (const Dwg_Object *obj)
         error++;
       }
     cloning++;
-    if (dwg_dynapi_entity_set_value (dictionarywdflt, "DICTIONARYWDFLT", "cloning", &cloning)
+      if (dwg_dynapi_entity_set_value (dictionarywdflt, "DICTIONARYWDFLT", "cloning", &cloning, 0)
         && cloning == dictionarywdflt->cloning)
       {
         pass ("DICTIONARYWDFLT.cloning [BS] set+1 %hu", cloning);
@@ -38596,7 +38596,7 @@ static int test_DICTIONARYWDFLT (const Dwg_Object *obj)
         error++;
       }
     cloning_rl++;
-    if (dwg_dynapi_entity_set_value (dictionarywdflt, "DICTIONARYWDFLT", "cloning_rl", &cloning_rl)
+      if (dwg_dynapi_entity_set_value (dictionarywdflt, "DICTIONARYWDFLT", "cloning_rl", &cloning_rl, 0)
         && cloning_rl == dictionarywdflt->cloning_rl)
       {
         pass ("DICTIONARYWDFLT.cloning_rl [RL] set+1 %u", cloning_rl);
@@ -38635,7 +38635,7 @@ static int test_DICTIONARYWDFLT (const Dwg_Object *obj)
         error++;
       }
     hard_owner++;
-    if (dwg_dynapi_entity_set_value (dictionarywdflt, "DICTIONARYWDFLT", "hard_owner", &hard_owner)
+      if (dwg_dynapi_entity_set_value (dictionarywdflt, "DICTIONARYWDFLT", "hard_owner", &hard_owner, 0)
         && hard_owner == dictionarywdflt->hard_owner)
       {
         pass ("DICTIONARYWDFLT.hard_owner [RC] set+1 %u", hard_owner);
@@ -38676,7 +38676,7 @@ static int test_DICTIONARYWDFLT (const Dwg_Object *obj)
         error++;
       }
     numitems++;
-    if (dwg_dynapi_entity_set_value (dictionarywdflt, "DICTIONARYWDFLT", "numitems", &numitems)
+      if (dwg_dynapi_entity_set_value (dictionarywdflt, "DICTIONARYWDFLT", "numitems", &numitems, 0)
         && numitems == dictionarywdflt->numitems)
       {
         pass ("DICTIONARYWDFLT.numitems [BL] set+1 %u", numitems);
@@ -38737,7 +38737,7 @@ static int test_DIMASSOC (const Dwg_Object *obj)
         error++;
       }
     associativity++;
-    if (dwg_dynapi_entity_set_value (dimassoc, "DIMASSOC", "associativity", &associativity)
+      if (dwg_dynapi_entity_set_value (dimassoc, "DIMASSOC", "associativity", &associativity, 0)
         && associativity == dimassoc->associativity)
       {
         pass ("DIMASSOC.associativity [BL] set+1 %u", associativity);
@@ -38776,7 +38776,7 @@ static int test_DIMASSOC (const Dwg_Object *obj)
         error++;
       }
     intsect_gsmarker++;
-    if (dwg_dynapi_entity_set_value (dimassoc, "DIMASSOC", "intsect_gsmarker", &intsect_gsmarker)
+      if (dwg_dynapi_entity_set_value (dimassoc, "DIMASSOC", "intsect_gsmarker", &intsect_gsmarker, 0)
         && intsect_gsmarker == dimassoc->intsect_gsmarker)
       {
         pass ("DIMASSOC.intsect_gsmarker [BL] set+1 %u", intsect_gsmarker);
@@ -38867,7 +38867,7 @@ static int test_DIMASSOC (const Dwg_Object *obj)
         error++;
       }
     trans_space_flag++;
-    if (dwg_dynapi_entity_set_value (dimassoc, "DIMASSOC", "trans_space_flag", &trans_space_flag)
+      if (dwg_dynapi_entity_set_value (dimassoc, "DIMASSOC", "trans_space_flag", &trans_space_flag, 0)
         && trans_space_flag == dimassoc->trans_space_flag)
       {
         pass ("DIMASSOC.trans_space_flag [RC] set+1 %u", trans_space_flag);
@@ -38913,7 +38913,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMADEC++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMADEC", &DIMADEC)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMADEC", &DIMADEC, 0)
         && DIMADEC == dimstyle->DIMADEC)
       {
         pass ("DIMSTYLE.DIMADEC [BS] set+1 %hu", DIMADEC);
@@ -38939,7 +38939,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMALT++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMALT", &DIMALT)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMALT", &DIMALT, 0)
         && DIMALT == dimstyle->DIMALT)
       {
         pass ("DIMSTYLE.DIMALT [B] set+1 " FORMAT_B "", DIMALT);
@@ -38965,7 +38965,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMALTD++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMALTD", &DIMALTD)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMALTD", &DIMALTD, 0)
         && DIMALTD == dimstyle->DIMALTD)
       {
         pass ("DIMSTYLE.DIMALTD [BS] set+1 %hu", DIMALTD);
@@ -38991,7 +38991,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMALTF++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMALTF", &DIMALTF)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMALTF", &DIMALTF, 0)
         && DIMALTF == dimstyle->DIMALTF)
       {
         pass ("DIMSTYLE.DIMALTF [BD] set+1 %g", DIMALTF);
@@ -39017,7 +39017,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMALTMZF++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMALTMZF", &DIMALTMZF)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMALTMZF", &DIMALTMZF, 0)
         && DIMALTMZF == dimstyle->DIMALTMZF)
       {
         pass ("DIMSTYLE.DIMALTMZF [BD] set+1 %g", DIMALTMZF);
@@ -39056,7 +39056,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMALTRND++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMALTRND", &DIMALTRND)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMALTRND", &DIMALTRND, 0)
         && DIMALTRND == dimstyle->DIMALTRND)
       {
         pass ("DIMSTYLE.DIMALTRND [BD] set+1 %g", DIMALTRND);
@@ -39082,7 +39082,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMALTTD++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMALTTD", &DIMALTTD)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMALTTD", &DIMALTTD, 0)
         && DIMALTTD == dimstyle->DIMALTTD)
       {
         pass ("DIMSTYLE.DIMALTTD [BS] set+1 %hu", DIMALTTD);
@@ -39108,7 +39108,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMALTTZ++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMALTTZ", &DIMALTTZ)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMALTTZ", &DIMALTTZ, 0)
         && DIMALTTZ == dimstyle->DIMALTTZ)
       {
         pass ("DIMSTYLE.DIMALTTZ [BS] set+1 %hu", DIMALTTZ);
@@ -39134,7 +39134,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMALTU++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMALTU", &DIMALTU)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMALTU", &DIMALTU, 0)
         && DIMALTU == dimstyle->DIMALTU)
       {
         pass ("DIMSTYLE.DIMALTU [BS] set+1 %hu", DIMALTU);
@@ -39160,7 +39160,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMALTZ++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMALTZ", &DIMALTZ)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMALTZ", &DIMALTZ, 0)
         && DIMALTZ == dimstyle->DIMALTZ)
       {
         pass ("DIMSTYLE.DIMALTZ [BS] set+1 %hu", DIMALTZ);
@@ -39199,7 +39199,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMARCSYM++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMARCSYM", &DIMARCSYM)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMARCSYM", &DIMARCSYM, 0)
         && DIMARCSYM == dimstyle->DIMARCSYM)
       {
         pass ("DIMSTYLE.DIMARCSYM [BS] set+1 %hu", DIMARCSYM);
@@ -39225,7 +39225,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMASZ++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMASZ", &DIMASZ)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMASZ", &DIMASZ, 0)
         && DIMASZ == dimstyle->DIMASZ)
       {
         pass ("DIMSTYLE.DIMASZ [BD] set+1 %g", DIMASZ);
@@ -39251,7 +39251,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMATFIT++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMATFIT", &DIMATFIT)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMATFIT", &DIMATFIT, 0)
         && DIMATFIT == dimstyle->DIMATFIT)
       {
         pass ("DIMSTYLE.DIMATFIT [BS] set+1 %hu", DIMATFIT);
@@ -39277,7 +39277,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMAUNIT++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMAUNIT", &DIMAUNIT)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMAUNIT", &DIMAUNIT, 0)
         && DIMAUNIT == dimstyle->DIMAUNIT)
       {
         pass ("DIMSTYLE.DIMAUNIT [BS] set+1 %hu", DIMAUNIT);
@@ -39303,7 +39303,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMAZIN++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMAZIN", &DIMAZIN)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMAZIN", &DIMAZIN, 0)
         && DIMAZIN == dimstyle->DIMAZIN)
       {
         pass ("DIMSTYLE.DIMAZIN [BS] set+1 %hu", DIMAZIN);
@@ -39407,7 +39407,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMCEN++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMCEN", &DIMCEN)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMCEN", &DIMCEN, 0)
         && DIMCEN == dimstyle->DIMCEN)
       {
         pass ("DIMSTYLE.DIMCEN [BD] set+1 %g", DIMCEN);
@@ -39446,7 +39446,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMCLRD_N++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMCLRD_N", &DIMCLRD_N)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMCLRD_N", &DIMCLRD_N, 0)
         && DIMCLRD_N == dimstyle->DIMCLRD_N)
       {
         pass ("DIMSTYLE.DIMCLRD_N [RS] set+1 %hu", DIMCLRD_N);
@@ -39485,7 +39485,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMCLRE_N++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMCLRE_N", &DIMCLRE_N)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMCLRE_N", &DIMCLRE_N, 0)
         && DIMCLRE_N == dimstyle->DIMCLRE_N)
       {
         pass ("DIMSTYLE.DIMCLRE_N [RS] set+1 %hu", DIMCLRE_N);
@@ -39524,7 +39524,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMCLRT_N++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMCLRT_N", &DIMCLRT_N)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMCLRT_N", &DIMCLRT_N, 0)
         && DIMCLRT_N == dimstyle->DIMCLRT_N)
       {
         pass ("DIMSTYLE.DIMCLRT_N [RS] set+1 %hu", DIMCLRT_N);
@@ -39550,7 +39550,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMDEC++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMDEC", &DIMDEC)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMDEC", &DIMDEC, 0)
         && DIMDEC == dimstyle->DIMDEC)
       {
         pass ("DIMSTYLE.DIMDEC [BS] set+1 %hu", DIMDEC);
@@ -39576,7 +39576,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMDLE++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMDLE", &DIMDLE)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMDLE", &DIMDLE, 0)
         && DIMDLE == dimstyle->DIMDLE)
       {
         pass ("DIMSTYLE.DIMDLE [BD] set+1 %g", DIMDLE);
@@ -39602,7 +39602,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMDLI++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMDLI", &DIMDLI)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMDLI", &DIMDLI, 0)
         && DIMDLI == dimstyle->DIMDLI)
       {
         pass ("DIMSTYLE.DIMDLI [BD] set+1 %g", DIMDLI);
@@ -39628,7 +39628,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMDSEP++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMDSEP", &DIMDSEP)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMDSEP", &DIMDSEP, 0)
         && DIMDSEP == dimstyle->DIMDSEP)
       {
         pass ("DIMSTYLE.DIMDSEP [BS] set+1 %hu", DIMDSEP);
@@ -39654,7 +39654,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMEXE++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMEXE", &DIMEXE)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMEXE", &DIMEXE, 0)
         && DIMEXE == dimstyle->DIMEXE)
       {
         pass ("DIMSTYLE.DIMEXE [BD] set+1 %g", DIMEXE);
@@ -39680,7 +39680,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMEXO++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMEXO", &DIMEXO)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMEXO", &DIMEXO, 0)
         && DIMEXO == dimstyle->DIMEXO)
       {
         pass ("DIMSTYLE.DIMEXO [BD] set+1 %g", DIMEXO);
@@ -39706,7 +39706,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMFIT++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMFIT", &DIMFIT)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMFIT", &DIMFIT, 0)
         && DIMFIT == dimstyle->DIMFIT)
       {
         pass ("DIMSTYLE.DIMFIT [BS] set+1 %hu", DIMFIT);
@@ -39732,7 +39732,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMFRAC++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMFRAC", &DIMFRAC)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMFRAC", &DIMFRAC, 0)
         && DIMFRAC == dimstyle->DIMFRAC)
       {
         pass ("DIMSTYLE.DIMFRAC [BS] set+1 %hu", DIMFRAC);
@@ -39758,7 +39758,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMFXL++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMFXL", &DIMFXL)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMFXL", &DIMFXL, 0)
         && DIMFXL == dimstyle->DIMFXL)
       {
         pass ("DIMSTYLE.DIMFXL [BD] set+1 %g", DIMFXL);
@@ -39784,7 +39784,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMFXLON++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMFXLON", &DIMFXLON)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMFXLON", &DIMFXLON, 0)
         && DIMFXLON == dimstyle->DIMFXLON)
       {
         pass ("DIMSTYLE.DIMFXLON [B] set+1 " FORMAT_B "", DIMFXLON);
@@ -39810,7 +39810,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMGAP++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMGAP", &DIMGAP)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMGAP", &DIMGAP, 0)
         && DIMGAP == dimstyle->DIMGAP)
       {
         pass ("DIMSTYLE.DIMGAP [BD] set+1 %g", DIMGAP);
@@ -39836,7 +39836,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMJOGANG++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMJOGANG", &DIMJOGANG)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMJOGANG", &DIMJOGANG, 0)
         && DIMJOGANG == dimstyle->DIMJOGANG)
       {
         pass ("DIMSTYLE.DIMJOGANG [BD] set+1 %g", DIMJOGANG);
@@ -39862,7 +39862,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMJUST++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMJUST", &DIMJUST)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMJUST", &DIMJUST, 0)
         && DIMJUST == dimstyle->DIMJUST)
       {
         pass ("DIMSTYLE.DIMJUST [BS] set+1 %hu", DIMJUST);
@@ -39901,7 +39901,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMLFAC++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMLFAC", &DIMLFAC)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMLFAC", &DIMLFAC, 0)
         && DIMLFAC == dimstyle->DIMLFAC)
       {
         pass ("DIMSTYLE.DIMLFAC [BD] set+1 %g", DIMLFAC);
@@ -39927,7 +39927,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMLIM++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMLIM", &DIMLIM)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMLIM", &DIMLIM, 0)
         && DIMLIM == dimstyle->DIMLIM)
       {
         pass ("DIMSTYLE.DIMLIM [B] set+1 " FORMAT_B "", DIMLIM);
@@ -39992,7 +39992,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMLUNIT++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMLUNIT", &DIMLUNIT)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMLUNIT", &DIMLUNIT, 0)
         && DIMLUNIT == dimstyle->DIMLUNIT)
       {
         pass ("DIMSTYLE.DIMLUNIT [BS] set+1 %hu", DIMLUNIT);
@@ -40018,7 +40018,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMLWD++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMLWD", &DIMLWD)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMLWD", &DIMLWD, 0)
         && DIMLWD == dimstyle->DIMLWD)
       {
         pass ("DIMSTYLE.DIMLWD [BS] set+1 %hu", DIMLWD);
@@ -40044,7 +40044,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMLWE++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMLWE", &DIMLWE)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMLWE", &DIMLWE, 0)
         && DIMLWE == dimstyle->DIMLWE)
       {
         pass ("DIMSTYLE.DIMLWE [BS] set+1 %hu", DIMLWE);
@@ -40070,7 +40070,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMMALTTZ++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMMALTTZ", &DIMMALTTZ)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMMALTTZ", &DIMMALTTZ, 0)
         && DIMMALTTZ == dimstyle->DIMMALTTZ)
       {
         pass ("DIMSTYLE.DIMMALTTZ [BS] set+1 %hu", DIMMALTTZ);
@@ -40096,7 +40096,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMMALTZ++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMMALTZ", &DIMMALTZ)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMMALTZ", &DIMMALTZ, 0)
         && DIMMALTZ == dimstyle->DIMMALTZ)
       {
         pass ("DIMSTYLE.DIMMALTZ [BS] set+1 %hu", DIMMALTZ);
@@ -40122,7 +40122,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMMZF++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMMZF", &DIMMZF)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMMZF", &DIMMZF, 0)
         && DIMMZF == dimstyle->DIMMZF)
       {
         pass ("DIMSTYLE.DIMMZF [BD] set+1 %g", DIMMZF);
@@ -40174,7 +40174,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMRND++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMRND", &DIMRND)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMRND", &DIMRND, 0)
         && DIMRND == dimstyle->DIMRND)
       {
         pass ("DIMSTYLE.DIMRND [BD] set+1 %g", DIMRND);
@@ -40200,7 +40200,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMSAH++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMSAH", &DIMSAH)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMSAH", &DIMSAH, 0)
         && DIMSAH == dimstyle->DIMSAH)
       {
         pass ("DIMSTYLE.DIMSAH [B] set+1 " FORMAT_B "", DIMSAH);
@@ -40226,7 +40226,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMSCALE++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMSCALE", &DIMSCALE)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMSCALE", &DIMSCALE, 0)
         && DIMSCALE == dimstyle->DIMSCALE)
       {
         pass ("DIMSTYLE.DIMSCALE [BD] set+1 %g", DIMSCALE);
@@ -40252,7 +40252,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMSD1++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMSD1", &DIMSD1)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMSD1", &DIMSD1, 0)
         && DIMSD1 == dimstyle->DIMSD1)
       {
         pass ("DIMSTYLE.DIMSD1 [B] set+1 " FORMAT_B "", DIMSD1);
@@ -40278,7 +40278,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMSD2++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMSD2", &DIMSD2)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMSD2", &DIMSD2, 0)
         && DIMSD2 == dimstyle->DIMSD2)
       {
         pass ("DIMSTYLE.DIMSD2 [B] set+1 " FORMAT_B "", DIMSD2);
@@ -40304,7 +40304,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMSE1++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMSE1", &DIMSE1)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMSE1", &DIMSE1, 0)
         && DIMSE1 == dimstyle->DIMSE1)
       {
         pass ("DIMSTYLE.DIMSE1 [B] set+1 " FORMAT_B "", DIMSE1);
@@ -40330,7 +40330,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMSE2++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMSE2", &DIMSE2)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMSE2", &DIMSE2, 0)
         && DIMSE2 == dimstyle->DIMSE2)
       {
         pass ("DIMSTYLE.DIMSE2 [B] set+1 " FORMAT_B "", DIMSE2);
@@ -40356,7 +40356,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMSOXD++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMSOXD", &DIMSOXD)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMSOXD", &DIMSOXD, 0)
         && DIMSOXD == dimstyle->DIMSOXD)
       {
         pass ("DIMSTYLE.DIMSOXD [B] set+1 " FORMAT_B "", DIMSOXD);
@@ -40382,7 +40382,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMTAD++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTAD", &DIMTAD)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTAD", &DIMTAD, 0)
         && DIMTAD == dimstyle->DIMTAD)
       {
         pass ("DIMSTYLE.DIMTAD [BS] set+1 %hu", DIMTAD);
@@ -40408,7 +40408,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMTDEC++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTDEC", &DIMTDEC)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTDEC", &DIMTDEC, 0)
         && DIMTDEC == dimstyle->DIMTDEC)
       {
         pass ("DIMSTYLE.DIMTDEC [BS] set+1 %hu", DIMTDEC);
@@ -40434,7 +40434,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMTFAC++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTFAC", &DIMTFAC)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTFAC", &DIMTFAC, 0)
         && DIMTFAC == dimstyle->DIMTFAC)
       {
         pass ("DIMSTYLE.DIMTFAC [BD] set+1 %g", DIMTFAC);
@@ -40460,7 +40460,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMTFILL++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTFILL", &DIMTFILL)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTFILL", &DIMTFILL, 0)
         && DIMTFILL == dimstyle->DIMTFILL)
       {
         pass ("DIMSTYLE.DIMTFILL [BS] set+1 %hu", DIMTFILL);
@@ -40499,7 +40499,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMTIH++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTIH", &DIMTIH)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTIH", &DIMTIH, 0)
         && DIMTIH == dimstyle->DIMTIH)
       {
         pass ("DIMSTYLE.DIMTIH [B] set+1 " FORMAT_B "", DIMTIH);
@@ -40525,7 +40525,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMTIX++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTIX", &DIMTIX)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTIX", &DIMTIX, 0)
         && DIMTIX == dimstyle->DIMTIX)
       {
         pass ("DIMSTYLE.DIMTIX [B] set+1 " FORMAT_B "", DIMTIX);
@@ -40551,7 +40551,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMTM++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTM", &DIMTM)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTM", &DIMTM, 0)
         && DIMTM == dimstyle->DIMTM)
       {
         pass ("DIMSTYLE.DIMTM [BD] set+1 %g", DIMTM);
@@ -40577,7 +40577,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMTMOVE++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTMOVE", &DIMTMOVE)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTMOVE", &DIMTMOVE, 0)
         && DIMTMOVE == dimstyle->DIMTMOVE)
       {
         pass ("DIMSTYLE.DIMTMOVE [BS] set+1 %hu", DIMTMOVE);
@@ -40603,7 +40603,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMTOFL++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTOFL", &DIMTOFL)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTOFL", &DIMTOFL, 0)
         && DIMTOFL == dimstyle->DIMTOFL)
       {
         pass ("DIMSTYLE.DIMTOFL [B] set+1 " FORMAT_B "", DIMTOFL);
@@ -40629,7 +40629,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMTOH++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTOH", &DIMTOH)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTOH", &DIMTOH, 0)
         && DIMTOH == dimstyle->DIMTOH)
       {
         pass ("DIMSTYLE.DIMTOH [B] set+1 " FORMAT_B "", DIMTOH);
@@ -40655,7 +40655,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMTOL++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTOL", &DIMTOL)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTOL", &DIMTOL, 0)
         && DIMTOL == dimstyle->DIMTOL)
       {
         pass ("DIMSTYLE.DIMTOL [B] set+1 " FORMAT_B "", DIMTOL);
@@ -40681,7 +40681,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMTOLJ++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTOLJ", &DIMTOLJ)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTOLJ", &DIMTOLJ, 0)
         && DIMTOLJ == dimstyle->DIMTOLJ)
       {
         pass ("DIMSTYLE.DIMTOLJ [BS] set+1 %hu", DIMTOLJ);
@@ -40707,7 +40707,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMTP++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTP", &DIMTP)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTP", &DIMTP, 0)
         && DIMTP == dimstyle->DIMTP)
       {
         pass ("DIMSTYLE.DIMTP [BD] set+1 %g", DIMTP);
@@ -40733,7 +40733,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMTSZ++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTSZ", &DIMTSZ)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTSZ", &DIMTSZ, 0)
         && DIMTSZ == dimstyle->DIMTSZ)
       {
         pass ("DIMSTYLE.DIMTSZ [BD] set+1 %g", DIMTSZ);
@@ -40759,7 +40759,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMTVP++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTVP", &DIMTVP)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTVP", &DIMTVP, 0)
         && DIMTVP == dimstyle->DIMTVP)
       {
         pass ("DIMSTYLE.DIMTVP [BD] set+1 %g", DIMTVP);
@@ -40798,7 +40798,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMTXT++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTXT", &DIMTXT)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTXT", &DIMTXT, 0)
         && DIMTXT == dimstyle->DIMTXT)
       {
         pass ("DIMSTYLE.DIMTXT [BD] set+1 %g", DIMTXT);
@@ -40824,7 +40824,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMTXTDIRECTION++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTXTDIRECTION", &DIMTXTDIRECTION)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTXTDIRECTION", &DIMTXTDIRECTION, 0)
         && DIMTXTDIRECTION == dimstyle->DIMTXTDIRECTION)
       {
         pass ("DIMSTYLE.DIMTXTDIRECTION [B] set+1 " FORMAT_B "", DIMTXTDIRECTION);
@@ -40850,7 +40850,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMTZIN++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTZIN", &DIMTZIN)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMTZIN", &DIMTZIN, 0)
         && DIMTZIN == dimstyle->DIMTZIN)
       {
         pass ("DIMSTYLE.DIMTZIN [BS] set+1 %hu", DIMTZIN);
@@ -40876,7 +40876,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMUNIT++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMUNIT", &DIMUNIT)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMUNIT", &DIMUNIT, 0)
         && DIMUNIT == dimstyle->DIMUNIT)
       {
         pass ("DIMSTYLE.DIMUNIT [BS] set+1 %hu", DIMUNIT);
@@ -40902,7 +40902,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMUPT++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMUPT", &DIMUPT)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMUPT", &DIMUPT, 0)
         && DIMUPT == dimstyle->DIMUPT)
       {
         pass ("DIMSTYLE.DIMUPT [B] set+1 " FORMAT_B "", DIMUPT);
@@ -40928,7 +40928,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     DIMZIN++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMZIN", &DIMZIN)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMZIN", &DIMZIN, 0)
         && DIMZIN == dimstyle->DIMZIN)
       {
         pass ("DIMSTYLE.DIMZIN [BS] set+1 %hu", DIMZIN);
@@ -40967,7 +40967,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "flag", &flag, 0)
         && flag == dimstyle->flag)
       {
         pass ("DIMSTYLE.flag [RC] set+1 %u", flag);
@@ -41019,7 +41019,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     used++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "used", &used)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "used", &used, 0)
         && used == dimstyle->used)
       {
         pass ("DIMSTYLE.used [RS] set+1 %hu", used);
@@ -41045,7 +41045,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     xrefdep++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "xrefdep", &xrefdep)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "xrefdep", &xrefdep, 0)
         && xrefdep == dimstyle->xrefdep)
       {
         pass ("DIMSTYLE.xrefdep [B] set+1 " FORMAT_B "", xrefdep);
@@ -41071,7 +41071,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     xrefindex_plus1++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "xrefindex_plus1", &xrefindex_plus1)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "xrefindex_plus1", &xrefindex_plus1, 0)
         && xrefindex_plus1 == dimstyle->xrefindex_plus1)
       {
         pass ("DIMSTYLE.xrefindex_plus1 [BS] set+1 %hu", xrefindex_plus1);
@@ -41097,7 +41097,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         error++;
       }
     xrefref++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "xrefref", &xrefref)
+      if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "xrefref", &xrefref, 0)
         && xrefref == dimstyle->xrefref)
       {
         pass ("DIMSTYLE.xrefref [B] set+1 " FORMAT_B "", xrefref);
@@ -41160,7 +41160,7 @@ static int test_DIMSTYLE_CONTROL (const Dwg_Object *obj)
         error++;
       }
     num_entries++;
-    if (dwg_dynapi_entity_set_value (dimstyle_control, "DIMSTYLE_CONTROL", "num_entries", &num_entries)
+      if (dwg_dynapi_entity_set_value (dimstyle_control, "DIMSTYLE_CONTROL", "num_entries", &num_entries, 0)
         && num_entries == dimstyle_control->num_entries)
       {
         pass ("DIMSTYLE_CONTROL.num_entries [BS] set+1 %hu", num_entries);
@@ -41186,7 +41186,7 @@ static int test_DIMSTYLE_CONTROL (const Dwg_Object *obj)
         error++;
       }
     num_morehandles++;
-    if (dwg_dynapi_entity_set_value (dimstyle_control, "DIMSTYLE_CONTROL", "num_morehandles", &num_morehandles)
+      if (dwg_dynapi_entity_set_value (dimstyle_control, "DIMSTYLE_CONTROL", "num_morehandles", &num_morehandles, 0)
         && num_morehandles == dimstyle_control->num_morehandles)
       {
         pass ("DIMSTYLE_CONTROL.num_morehandles [RC] set+1 %u", num_morehandles);
@@ -41212,7 +41212,7 @@ static int test_DIMSTYLE_CONTROL (const Dwg_Object *obj)
         error++;
       }
     objid++;
-    if (dwg_dynapi_entity_set_value (dimstyle_control, "DIMSTYLE_CONTROL", "objid", &objid)
+      if (dwg_dynapi_entity_set_value (dimstyle_control, "DIMSTYLE_CONTROL", "objid", &objid, 0)
         && objid == dimstyle_control->objid)
       {
         pass ("DIMSTYLE_CONTROL.objid [BL] set+1 %u", objid);
@@ -41278,7 +41278,7 @@ static int test_DYNAMICBLOCKPURGEPREVENTER (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (dynamicblockpurgepreventer, "DYNAMICBLOCKPURGEPREVENTER", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (dynamicblockpurgepreventer, "DYNAMICBLOCKPURGEPREVENTER", "flag", &flag, 0)
         && flag == dynamicblockpurgepreventer->flag)
       {
         pass ("DYNAMICBLOCKPURGEPREVENTER.flag [BS] set+1 %hu", flag);
@@ -41317,7 +41317,7 @@ static int test_DYNAMICBLOCKPURGEPREVENTER (const Dwg_Object *obj)
         error++;
       }
     unknown_rs1++;
-    if (dwg_dynapi_entity_set_value (dynamicblockpurgepreventer, "DYNAMICBLOCKPURGEPREVENTER", "unknown_rs1", &unknown_rs1)
+      if (dwg_dynapi_entity_set_value (dynamicblockpurgepreventer, "DYNAMICBLOCKPURGEPREVENTER", "unknown_rs1", &unknown_rs1, 0)
         && unknown_rs1 == dynamicblockpurgepreventer->unknown_rs1)
       {
         pass ("DYNAMICBLOCKPURGEPREVENTER.unknown_rs1 [RS] set+1 %hu", unknown_rs1);
@@ -41350,7 +41350,7 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
         error++;
       }
     edge_flags++;
-    if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "edge_flags", &edge_flags)
+      if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "edge_flags", &edge_flags, 0)
         && edge_flags == evaluation_graph->edge_flags)
       {
         pass ("EVALUATION_GRAPH.edge_flags [BL] set+1 %u", edge_flags);
@@ -41391,7 +41391,7 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
         error++;
       }
     has_graph++;
-    if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "has_graph", &has_graph)
+      if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "has_graph", &has_graph, 0)
         && has_graph == evaluation_graph->has_graph)
       {
         pass ("EVALUATION_GRAPH.has_graph [BL] set+1 %u", has_graph);
@@ -41417,7 +41417,7 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
         error++;
       }
     node_edge1++;
-    if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "node_edge1", &node_edge1)
+      if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "node_edge1", &node_edge1, 0)
         && node_edge1 == evaluation_graph->node_edge1)
       {
         pass ("EVALUATION_GRAPH.node_edge1 [BL] set+1 %u", node_edge1);
@@ -41443,7 +41443,7 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
         error++;
       }
     node_edge2++;
-    if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "node_edge2", &node_edge2)
+      if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "node_edge2", &node_edge2, 0)
         && node_edge2 == evaluation_graph->node_edge2)
       {
         pass ("EVALUATION_GRAPH.node_edge2 [BL] set+1 %u", node_edge2);
@@ -41469,7 +41469,7 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
         error++;
       }
     node_edge3++;
-    if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "node_edge3", &node_edge3)
+      if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "node_edge3", &node_edge3, 0)
         && node_edge3 == evaluation_graph->node_edge3)
       {
         pass ("EVALUATION_GRAPH.node_edge3 [BL] set+1 %u", node_edge3);
@@ -41495,7 +41495,7 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
         error++;
       }
     node_edge4++;
-    if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "node_edge4", &node_edge4)
+      if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "node_edge4", &node_edge4, 0)
         && node_edge4 == evaluation_graph->node_edge4)
       {
         pass ("EVALUATION_GRAPH.node_edge4 [BL] set+1 %u", node_edge4);
@@ -41521,7 +41521,7 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
         error++;
       }
     nodeid++;
-    if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "nodeid", &nodeid)
+      if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "nodeid", &nodeid, 0)
         && nodeid == evaluation_graph->nodeid)
       {
         pass ("EVALUATION_GRAPH.nodeid [BL] set+1 %u", nodeid);
@@ -41547,7 +41547,7 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
         error++;
       }
     num_evalexpr++;
-    if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "num_evalexpr", &num_evalexpr)
+      if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "num_evalexpr", &num_evalexpr, 0)
         && num_evalexpr == evaluation_graph->num_evalexpr)
       {
         pass ("EVALUATION_GRAPH.num_evalexpr [BL] set+1 %u", num_evalexpr);
@@ -41586,7 +41586,7 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
         error++;
       }
     unknown1++;
-    if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "unknown1", &unknown1)
+      if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "unknown1", &unknown1, 0)
         && unknown1 == evaluation_graph->unknown1)
       {
         pass ("EVALUATION_GRAPH.unknown1 [BL] set+1 %u", unknown1);
@@ -41612,7 +41612,7 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
         error++;
       }
     unknown2++;
-    if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "unknown2", &unknown2)
+      if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "unknown2", &unknown2, 0)
         && unknown2 == evaluation_graph->unknown2)
       {
         pass ("EVALUATION_GRAPH.unknown2 [BL] set+1 %u", unknown2);
@@ -41688,7 +41688,7 @@ static int test_FIELD (const Dwg_Object *obj)
         error++;
       }
     evaluation_error_code++;
-    if (dwg_dynapi_entity_set_value (field, "FIELD", "evaluation_error_code", &evaluation_error_code)
+      if (dwg_dynapi_entity_set_value (field, "FIELD", "evaluation_error_code", &evaluation_error_code, 0)
         && evaluation_error_code == field->evaluation_error_code)
       {
         pass ("FIELD.evaluation_error_code [BL] set+1 %u", evaluation_error_code);
@@ -41727,7 +41727,7 @@ static int test_FIELD (const Dwg_Object *obj)
         error++;
       }
     evaluation_option++;
-    if (dwg_dynapi_entity_set_value (field, "FIELD", "evaluation_option", &evaluation_option)
+      if (dwg_dynapi_entity_set_value (field, "FIELD", "evaluation_option", &evaluation_option, 0)
         && evaluation_option == field->evaluation_option)
       {
         pass ("FIELD.evaluation_option [BL] set+1 %u", evaluation_option);
@@ -41753,7 +41753,7 @@ static int test_FIELD (const Dwg_Object *obj)
         error++;
       }
     evaluation_status++;
-    if (dwg_dynapi_entity_set_value (field, "FIELD", "evaluation_status", &evaluation_status)
+      if (dwg_dynapi_entity_set_value (field, "FIELD", "evaluation_status", &evaluation_status, 0)
         && evaluation_status == field->evaluation_status)
       {
         pass ("FIELD.evaluation_status [BL] set+1 %u", evaluation_status);
@@ -41779,7 +41779,7 @@ static int test_FIELD (const Dwg_Object *obj)
         error++;
       }
     field_state++;
-    if (dwg_dynapi_entity_set_value (field, "FIELD", "field_state", &field_state)
+      if (dwg_dynapi_entity_set_value (field, "FIELD", "field_state", &field_state, 0)
         && field_state == field->field_state)
       {
         pass ("FIELD.field_state [BL] set+1 %u", field_state);
@@ -41805,7 +41805,7 @@ static int test_FIELD (const Dwg_Object *obj)
         error++;
       }
     filing_option++;
-    if (dwg_dynapi_entity_set_value (field, "FIELD", "filing_option", &filing_option)
+      if (dwg_dynapi_entity_set_value (field, "FIELD", "filing_option", &filing_option, 0)
         && filing_option == field->filing_option)
       {
         pass ("FIELD.filing_option [BL] set+1 %u", filing_option);
@@ -41857,7 +41857,7 @@ static int test_FIELD (const Dwg_Object *obj)
         error++;
       }
     num_childs++;
-    if (dwg_dynapi_entity_set_value (field, "FIELD", "num_childs", &num_childs)
+      if (dwg_dynapi_entity_set_value (field, "FIELD", "num_childs", &num_childs, 0)
         && num_childs == field->num_childs)
       {
         pass ("FIELD.num_childs [BL] set+1 %u", num_childs);
@@ -41883,7 +41883,7 @@ static int test_FIELD (const Dwg_Object *obj)
         error++;
       }
     num_childval++;
-    if (dwg_dynapi_entity_set_value (field, "FIELD", "num_childval", &num_childval)
+      if (dwg_dynapi_entity_set_value (field, "FIELD", "num_childval", &num_childval, 0)
         && num_childval == field->num_childval)
       {
         pass ("FIELD.num_childval [BL] set+1 %u", num_childval);
@@ -41909,7 +41909,7 @@ static int test_FIELD (const Dwg_Object *obj)
         error++;
       }
     num_objects++;
-    if (dwg_dynapi_entity_set_value (field, "FIELD", "num_objects", &num_objects)
+      if (dwg_dynapi_entity_set_value (field, "FIELD", "num_objects", &num_objects, 0)
         && num_objects == field->num_objects)
       {
         pass ("FIELD.num_objects [BL] set+1 %u", num_objects);
@@ -41989,7 +41989,7 @@ static int test_FIELD (const Dwg_Object *obj)
         error++;
       }
     value_string_length++;
-    if (dwg_dynapi_entity_set_value (field, "FIELD", "value_string_length", &value_string_length)
+      if (dwg_dynapi_entity_set_value (field, "FIELD", "value_string_length", &value_string_length, 0)
         && value_string_length == field->value_string_length)
       {
         pass ("FIELD.value_string_length [BL] set+1 %u", value_string_length);
@@ -42037,7 +42037,7 @@ static int test_FIELDLIST (const Dwg_Object *obj)
         error++;
       }
     num_fields++;
-    if (dwg_dynapi_entity_set_value (fieldlist, "FIELDLIST", "num_fields", &num_fields)
+      if (dwg_dynapi_entity_set_value (fieldlist, "FIELDLIST", "num_fields", &num_fields, 0)
         && num_fields == fieldlist->num_fields)
       {
         pass ("FIELDLIST.num_fields [BL] set+1 %u", num_fields);
@@ -42076,7 +42076,7 @@ static int test_FIELDLIST (const Dwg_Object *obj)
         error++;
       }
     unknown++;
-    if (dwg_dynapi_entity_set_value (fieldlist, "FIELDLIST", "unknown", &unknown)
+      if (dwg_dynapi_entity_set_value (fieldlist, "FIELDLIST", "unknown", &unknown, 0)
         && unknown == fieldlist->unknown)
       {
         pass ("FIELDLIST.unknown [B] set+1 " FORMAT_B "", unknown);
@@ -42109,7 +42109,7 @@ static int test_GEODATA (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "class_version", &class_version, 0)
         && class_version == geodata->class_version)
       {
         pass ("GEODATA.class_version [BL] set+1 %u", class_version);
@@ -42135,7 +42135,7 @@ static int test_GEODATA (const Dwg_Object *obj)
         error++;
       }
     coord_proj_radius++;
-    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "coord_proj_radius", &coord_proj_radius)
+      if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "coord_proj_radius", &coord_proj_radius, 0)
         && coord_proj_radius == geodata->coord_proj_radius)
       {
         pass ("GEODATA.coord_proj_radius [BD] set+1 %g", coord_proj_radius);
@@ -42200,7 +42200,7 @@ static int test_GEODATA (const Dwg_Object *obj)
         error++;
       }
     coord_type++;
-    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "coord_type", &coord_type)
+      if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "coord_type", &coord_type, 0)
         && coord_type == geodata->coord_type)
       {
         pass ("GEODATA.coord_type [BS] set+1 %hu", coord_type);
@@ -42282,7 +42282,7 @@ static int test_GEODATA (const Dwg_Object *obj)
         error++;
       }
     has_civil_data++;
-    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "has_civil_data", &has_civil_data)
+      if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "has_civil_data", &has_civil_data, 0)
         && has_civil_data == geodata->has_civil_data)
       {
         pass ("GEODATA.has_civil_data [B] set+1 " FORMAT_B "", has_civil_data);
@@ -42334,7 +42334,7 @@ static int test_GEODATA (const Dwg_Object *obj)
         error++;
       }
     north_dir_angle_deg++;
-    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "north_dir_angle_deg", &north_dir_angle_deg)
+      if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "north_dir_angle_deg", &north_dir_angle_deg, 0)
         && north_dir_angle_deg == geodata->north_dir_angle_deg)
       {
         pass ("GEODATA.north_dir_angle_deg [BD] set+1 %g", north_dir_angle_deg);
@@ -42360,7 +42360,7 @@ static int test_GEODATA (const Dwg_Object *obj)
         error++;
       }
     north_dir_angle_rad++;
-    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "north_dir_angle_rad", &north_dir_angle_rad)
+      if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "north_dir_angle_rad", &north_dir_angle_rad, 0)
         && north_dir_angle_rad == geodata->north_dir_angle_rad)
       {
         pass ("GEODATA.north_dir_angle_rad [BD] set+1 %g", north_dir_angle_rad);
@@ -42386,7 +42386,7 @@ static int test_GEODATA (const Dwg_Object *obj)
         error++;
       }
     num_geomesh_faces++;
-    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "num_geomesh_faces", &num_geomesh_faces)
+      if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "num_geomesh_faces", &num_geomesh_faces, 0)
         && num_geomesh_faces == geodata->num_geomesh_faces)
       {
         pass ("GEODATA.num_geomesh_faces [BL] set+1 %u", num_geomesh_faces);
@@ -42412,7 +42412,7 @@ static int test_GEODATA (const Dwg_Object *obj)
         error++;
       }
     num_geomesh_pts++;
-    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "num_geomesh_pts", &num_geomesh_pts)
+      if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "num_geomesh_pts", &num_geomesh_pts, 0)
         && num_geomesh_pts == geodata->num_geomesh_pts)
       {
         pass ("GEODATA.num_geomesh_pts [BL] set+1 %u", num_geomesh_pts);
@@ -42490,7 +42490,7 @@ static int test_GEODATA (const Dwg_Object *obj)
         error++;
       }
     obsolete_false++;
-    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "obsolete_false", &obsolete_false)
+      if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "obsolete_false", &obsolete_false, 0)
         && obsolete_false == geodata->obsolete_false)
       {
         pass ("GEODATA.obsolete_false [B] set+1 " FORMAT_B "", obsolete_false);
@@ -42542,7 +42542,7 @@ static int test_GEODATA (const Dwg_Object *obj)
         error++;
       }
     scale_est++;
-    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "scale_est", &scale_est)
+      if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "scale_est", &scale_est, 0)
         && scale_est == geodata->scale_est)
       {
         pass ("GEODATA.scale_est [BL] set+1 %u", scale_est);
@@ -42568,7 +42568,7 @@ static int test_GEODATA (const Dwg_Object *obj)
         error++;
       }
     sea_level_corr++;
-    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "sea_level_corr", &sea_level_corr)
+      if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "sea_level_corr", &sea_level_corr, 0)
         && sea_level_corr == geodata->sea_level_corr)
       {
         pass ("GEODATA.sea_level_corr [B] set+1 " FORMAT_B "", sea_level_corr);
@@ -42594,7 +42594,7 @@ static int test_GEODATA (const Dwg_Object *obj)
         error++;
       }
     sea_level_elev++;
-    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "sea_level_elev", &sea_level_elev)
+      if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "sea_level_elev", &sea_level_elev, 0)
         && sea_level_elev == geodata->sea_level_elev)
       {
         pass ("GEODATA.sea_level_elev [BD] set+1 %g", sea_level_elev);
@@ -42620,7 +42620,7 @@ static int test_GEODATA (const Dwg_Object *obj)
         error++;
       }
     unit_scale_horiz++;
-    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "unit_scale_horiz", &unit_scale_horiz)
+      if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "unit_scale_horiz", &unit_scale_horiz, 0)
         && unit_scale_horiz == geodata->unit_scale_horiz)
       {
         pass ("GEODATA.unit_scale_horiz [BD] set+1 %g", unit_scale_horiz);
@@ -42646,7 +42646,7 @@ static int test_GEODATA (const Dwg_Object *obj)
         error++;
       }
     unit_scale_vert++;
-    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "unit_scale_vert", &unit_scale_vert)
+      if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "unit_scale_vert", &unit_scale_vert, 0)
         && unit_scale_vert == geodata->unit_scale_vert)
       {
         pass ("GEODATA.unit_scale_vert [BD] set+1 %g", unit_scale_vert);
@@ -42672,7 +42672,7 @@ static int test_GEODATA (const Dwg_Object *obj)
         error++;
       }
     units_value_horiz++;
-    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "units_value_horiz", &units_value_horiz)
+      if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "units_value_horiz", &units_value_horiz, 0)
         && units_value_horiz == geodata->units_value_horiz)
       {
         pass ("GEODATA.units_value_horiz [BL] set+1 %u", units_value_horiz);
@@ -42698,7 +42698,7 @@ static int test_GEODATA (const Dwg_Object *obj)
         error++;
       }
     units_value_vert++;
-    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "units_value_vert", &units_value_vert)
+      if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "units_value_vert", &units_value_vert, 0)
         && units_value_vert == geodata->units_value_vert)
       {
         pass ("GEODATA.units_value_vert [BL] set+1 %u", units_value_vert);
@@ -42737,7 +42737,7 @@ static int test_GEODATA (const Dwg_Object *obj)
         error++;
       }
     user_scale_factor++;
-    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "user_scale_factor", &user_scale_factor)
+      if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "user_scale_factor", &user_scale_factor, 0)
         && user_scale_factor == geodata->user_scale_factor)
       {
         pass ("GEODATA.user_scale_factor [BD] set+1 %g", user_scale_factor);
@@ -42798,7 +42798,7 @@ static int test_GROUP (const Dwg_Object *obj)
         error++;
       }
     num_handles++;
-    if (dwg_dynapi_entity_set_value (group, "GROUP", "num_handles", &num_handles)
+      if (dwg_dynapi_entity_set_value (group, "GROUP", "num_handles", &num_handles, 0)
         && num_handles == group->num_handles)
       {
         pass ("GROUP.num_handles [BL] set+1 %u", num_handles);
@@ -42837,7 +42837,7 @@ static int test_GROUP (const Dwg_Object *obj)
         error++;
       }
     selectable++;
-    if (dwg_dynapi_entity_set_value (group, "GROUP", "selectable", &selectable)
+      if (dwg_dynapi_entity_set_value (group, "GROUP", "selectable", &selectable, 0)
         && selectable == group->selectable)
       {
         pass ("GROUP.selectable [BS] set+1 %hu", selectable);
@@ -42863,7 +42863,7 @@ static int test_GROUP (const Dwg_Object *obj)
         error++;
       }
     unnamed++;
-    if (dwg_dynapi_entity_set_value (group, "GROUP", "unnamed", &unnamed)
+      if (dwg_dynapi_entity_set_value (group, "GROUP", "unnamed", &unnamed, 0)
         && unnamed == group->unnamed)
       {
         pass ("GROUP.unnamed [BS] set+1 %hu", unnamed);
@@ -42896,7 +42896,7 @@ static int test_IDBUFFER (const Dwg_Object *obj)
         error++;
       }
     num_obj_ids++;
-    if (dwg_dynapi_entity_set_value (idbuffer, "IDBUFFER", "num_obj_ids", &num_obj_ids)
+      if (dwg_dynapi_entity_set_value (idbuffer, "IDBUFFER", "num_obj_ids", &num_obj_ids, 0)
         && num_obj_ids == idbuffer->num_obj_ids)
       {
         pass ("IDBUFFER.num_obj_ids [BL] set+1 %u", num_obj_ids);
@@ -42950,7 +42950,7 @@ static int test_IDBUFFER (const Dwg_Object *obj)
         error++;
       }
     unknown++;
-    if (dwg_dynapi_entity_set_value (idbuffer, "IDBUFFER", "unknown", &unknown)
+      if (dwg_dynapi_entity_set_value (idbuffer, "IDBUFFER", "unknown", &unknown, 0)
         && unknown == idbuffer->unknown)
       {
         pass ("IDBUFFER.unknown [RC] set+1 %u", unknown);
@@ -42983,7 +42983,7 @@ static int test_IMAGEDEF (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (imagedef, "IMAGEDEF", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (imagedef, "IMAGEDEF", "class_version", &class_version, 0)
         && class_version == imagedef->class_version)
       {
         pass ("IMAGEDEF.class_version [BL] set+1 %u", class_version);
@@ -43035,7 +43035,7 @@ static int test_IMAGEDEF (const Dwg_Object *obj)
         error++;
       }
     is_loaded++;
-    if (dwg_dynapi_entity_set_value (imagedef, "IMAGEDEF", "is_loaded", &is_loaded)
+      if (dwg_dynapi_entity_set_value (imagedef, "IMAGEDEF", "is_loaded", &is_loaded, 0)
         && is_loaded == imagedef->is_loaded)
       {
         pass ("IMAGEDEF.is_loaded [B] set+1 " FORMAT_B "", is_loaded);
@@ -43087,7 +43087,7 @@ static int test_IMAGEDEF (const Dwg_Object *obj)
         error++;
       }
     resunits++;
-    if (dwg_dynapi_entity_set_value (imagedef, "IMAGEDEF", "resunits", &resunits)
+      if (dwg_dynapi_entity_set_value (imagedef, "IMAGEDEF", "resunits", &resunits, 0)
         && resunits == imagedef->resunits)
       {
         pass ("IMAGEDEF.resunits [RC] set+1 %u", resunits);
@@ -43120,7 +43120,7 @@ static int test_IMAGEDEF_REACTOR (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (imagedef_reactor, "IMAGEDEF_REACTOR", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (imagedef_reactor, "IMAGEDEF_REACTOR", "class_version", &class_version, 0)
         && class_version == imagedef_reactor->class_version)
       {
         pass ("IMAGEDEF_REACTOR.class_version [BL] set+1 %u", class_version);
@@ -43179,7 +43179,7 @@ static int test_LAYER (const Dwg_Object *obj)
         error++;
       }
     color_rs++;
-    if (dwg_dynapi_entity_set_value (layer, "LAYER", "color_rs", &color_rs)
+      if (dwg_dynapi_entity_set_value (layer, "LAYER", "color_rs", &color_rs, 0)
         && color_rs == layer->color_rs)
       {
         pass ("LAYER.color_rs [short] set+1 %hd", color_rs);
@@ -43205,7 +43205,7 @@ static int test_LAYER (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (layer, "LAYER", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (layer, "LAYER", "flag", &flag, 0)
         && flag == layer->flag)
       {
         pass ("LAYER.flag [BS] set+1 %hu", flag);
@@ -43231,7 +43231,7 @@ static int test_LAYER (const Dwg_Object *obj)
         error++;
       }
     frozen++;
-    if (dwg_dynapi_entity_set_value (layer, "LAYER", "frozen", &frozen)
+      if (dwg_dynapi_entity_set_value (layer, "LAYER", "frozen", &frozen, 0)
         && frozen == layer->frozen)
       {
         pass ("LAYER.frozen [B] set+1 " FORMAT_B "", frozen);
@@ -43257,7 +43257,7 @@ static int test_LAYER (const Dwg_Object *obj)
         error++;
       }
     frozen_in_new++;
-    if (dwg_dynapi_entity_set_value (layer, "LAYER", "frozen_in_new", &frozen_in_new)
+      if (dwg_dynapi_entity_set_value (layer, "LAYER", "frozen_in_new", &frozen_in_new, 0)
         && frozen_in_new == layer->frozen_in_new)
       {
         pass ("LAYER.frozen_in_new [B] set+1 " FORMAT_B "", frozen_in_new);
@@ -43296,7 +43296,7 @@ static int test_LAYER (const Dwg_Object *obj)
         error++;
       }
     linetype_rs++;
-    if (dwg_dynapi_entity_set_value (layer, "LAYER", "linetype_rs", &linetype_rs)
+      if (dwg_dynapi_entity_set_value (layer, "LAYER", "linetype_rs", &linetype_rs, 0)
         && linetype_rs == layer->linetype_rs)
       {
         pass ("LAYER.linetype_rs [RS] set+1 %hu", linetype_rs);
@@ -43322,7 +43322,7 @@ static int test_LAYER (const Dwg_Object *obj)
         error++;
       }
     linewt++;
-    if (dwg_dynapi_entity_set_value (layer, "LAYER", "linewt", &linewt)
+      if (dwg_dynapi_entity_set_value (layer, "LAYER", "linewt", &linewt, 0)
         && linewt == layer->linewt)
       {
         pass ("LAYER.linewt [RC] set+1 %u", linewt);
@@ -43348,7 +43348,7 @@ static int test_LAYER (const Dwg_Object *obj)
         error++;
       }
     locked++;
-    if (dwg_dynapi_entity_set_value (layer, "LAYER", "locked", &locked)
+      if (dwg_dynapi_entity_set_value (layer, "LAYER", "locked", &locked, 0)
         && locked == layer->locked)
       {
         pass ("LAYER.locked [B] set+1 " FORMAT_B "", locked);
@@ -43400,7 +43400,7 @@ static int test_LAYER (const Dwg_Object *obj)
         error++;
       }
     on++;
-    if (dwg_dynapi_entity_set_value (layer, "LAYER", "on", &on)
+      if (dwg_dynapi_entity_set_value (layer, "LAYER", "on", &on, 0)
         && on == layer->on)
       {
         pass ("LAYER.on [B] set+1 " FORMAT_B "", on);
@@ -43439,7 +43439,7 @@ static int test_LAYER (const Dwg_Object *obj)
         error++;
       }
     plotflag++;
-    if (dwg_dynapi_entity_set_value (layer, "LAYER", "plotflag", &plotflag)
+      if (dwg_dynapi_entity_set_value (layer, "LAYER", "plotflag", &plotflag, 0)
         && plotflag == layer->plotflag)
       {
         pass ("LAYER.plotflag [B] set+1 " FORMAT_B "", plotflag);
@@ -43478,7 +43478,7 @@ static int test_LAYER (const Dwg_Object *obj)
         error++;
       }
     used++;
-    if (dwg_dynapi_entity_set_value (layer, "LAYER", "used", &used)
+      if (dwg_dynapi_entity_set_value (layer, "LAYER", "used", &used, 0)
         && used == layer->used)
       {
         pass ("LAYER.used [RS] set+1 %hu", used);
@@ -43517,7 +43517,7 @@ static int test_LAYER (const Dwg_Object *obj)
         error++;
       }
     xrefdep++;
-    if (dwg_dynapi_entity_set_value (layer, "LAYER", "xrefdep", &xrefdep)
+      if (dwg_dynapi_entity_set_value (layer, "LAYER", "xrefdep", &xrefdep, 0)
         && xrefdep == layer->xrefdep)
       {
         pass ("LAYER.xrefdep [B] set+1 " FORMAT_B "", xrefdep);
@@ -43543,7 +43543,7 @@ static int test_LAYER (const Dwg_Object *obj)
         error++;
       }
     xrefindex_plus1++;
-    if (dwg_dynapi_entity_set_value (layer, "LAYER", "xrefindex_plus1", &xrefindex_plus1)
+      if (dwg_dynapi_entity_set_value (layer, "LAYER", "xrefindex_plus1", &xrefindex_plus1, 0)
         && xrefindex_plus1 == layer->xrefindex_plus1)
       {
         pass ("LAYER.xrefindex_plus1 [BS] set+1 %hu", xrefindex_plus1);
@@ -43569,7 +43569,7 @@ static int test_LAYER (const Dwg_Object *obj)
         error++;
       }
     xrefref++;
-    if (dwg_dynapi_entity_set_value (layer, "LAYER", "xrefref", &xrefref)
+      if (dwg_dynapi_entity_set_value (layer, "LAYER", "xrefref", &xrefref, 0)
         && xrefref == layer->xrefref)
       {
         pass ("LAYER.xrefref [B] set+1 " FORMAT_B "", xrefref);
@@ -43617,7 +43617,7 @@ static int test_LAYER_CONTROL (const Dwg_Object *obj)
         error++;
       }
     num_entries++;
-    if (dwg_dynapi_entity_set_value (layer_control, "LAYER_CONTROL", "num_entries", &num_entries)
+      if (dwg_dynapi_entity_set_value (layer_control, "LAYER_CONTROL", "num_entries", &num_entries, 0)
         && num_entries == layer_control->num_entries)
       {
         pass ("LAYER_CONTROL.num_entries [BS] set+1 %hu", num_entries);
@@ -43643,7 +43643,7 @@ static int test_LAYER_CONTROL (const Dwg_Object *obj)
         error++;
       }
     objid++;
-    if (dwg_dynapi_entity_set_value (layer_control, "LAYER_CONTROL", "objid", &objid)
+      if (dwg_dynapi_entity_set_value (layer_control, "LAYER_CONTROL", "objid", &objid, 0)
         && objid == layer_control->objid)
       {
         pass ("LAYER_CONTROL.objid [BL] set+1 %u", objid);
@@ -43719,7 +43719,7 @@ static int test_LAYER_INDEX (const Dwg_Object *obj)
         error++;
       }
     num_entries++;
-    if (dwg_dynapi_entity_set_value (layer_index, "LAYER_INDEX", "num_entries", &num_entries)
+      if (dwg_dynapi_entity_set_value (layer_index, "LAYER_INDEX", "num_entries", &num_entries, 0)
         && num_entries == layer_index->num_entries)
       {
         pass ("LAYER_INDEX.num_entries [BL] set+1 %u", num_entries);
@@ -43758,7 +43758,7 @@ static int test_LAYER_INDEX (const Dwg_Object *obj)
         error++;
       }
     timestamp1++;
-    if (dwg_dynapi_entity_set_value (layer_index, "LAYER_INDEX", "timestamp1", &timestamp1)
+      if (dwg_dynapi_entity_set_value (layer_index, "LAYER_INDEX", "timestamp1", &timestamp1, 0)
         && timestamp1 == layer_index->timestamp1)
       {
         pass ("LAYER_INDEX.timestamp1 [BL] set+1 %u", timestamp1);
@@ -43784,7 +43784,7 @@ static int test_LAYER_INDEX (const Dwg_Object *obj)
         error++;
       }
     timestamp2++;
-    if (dwg_dynapi_entity_set_value (layer_index, "LAYER_INDEX", "timestamp2", &timestamp2)
+      if (dwg_dynapi_entity_set_value (layer_index, "LAYER_INDEX", "timestamp2", &timestamp2, 0)
         && timestamp2 == layer_index->timestamp2)
       {
         pass ("LAYER_INDEX.timestamp2 [BL] set+1 %u", timestamp2);
@@ -43830,7 +43830,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
         error++;
       }
     bottom_margin++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "bottom_margin", &bottom_margin)
+      if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "bottom_margin", &bottom_margin, 0)
         && bottom_margin == layout->bottom_margin)
       {
         pass ("LAYOUT.bottom_margin [BD] set+1 %g", bottom_margin);
@@ -43869,7 +43869,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
         error++;
       }
     drawing_units++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "drawing_units", &drawing_units)
+      if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "drawing_units", &drawing_units, 0)
         && drawing_units == layout->drawing_units)
       {
         pass ("LAYOUT.drawing_units [BD] set+1 %g", drawing_units);
@@ -43895,7 +43895,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
         error++;
       }
     elevation++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "elevation", &elevation)
+      if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "elevation", &elevation, 0)
         && elevation == layout->elevation)
       {
         pass ("LAYOUT.elevation [BD] set+1 %g", elevation);
@@ -43947,7 +43947,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "flag", &flag, 0)
         && flag == layout->flag)
       {
         pass ("LAYOUT.flag [BS] set+1 %hu", flag);
@@ -44012,7 +44012,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
         error++;
       }
     left_margin++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "left_margin", &left_margin)
+      if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "left_margin", &left_margin, 0)
         && left_margin == layout->left_margin)
       {
         pass ("LAYOUT.left_margin [BD] set+1 %g", left_margin);
@@ -44077,7 +44077,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
         error++;
       }
     num_viewports++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "num_viewports", &num_viewports)
+      if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "num_viewports", &num_viewports, 0)
         && num_viewports == layout->num_viewports)
       {
         pass ("LAYOUT.num_viewports [RL] set+1 %u", num_viewports);
@@ -44103,7 +44103,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
         error++;
       }
     orthoview_type++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "orthoview_type", &orthoview_type)
+      if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "orthoview_type", &orthoview_type, 0)
         && orthoview_type == layout->orthoview_type)
       {
         pass ("LAYOUT.orthoview_type [BS] set+1 %hu", orthoview_type);
@@ -44142,7 +44142,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
         error++;
       }
     paper_height++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "paper_height", &paper_height)
+      if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "paper_height", &paper_height, 0)
         && paper_height == layout->paper_height)
       {
         pass ("LAYOUT.paper_height [BD] set+1 %g", paper_height);
@@ -44194,7 +44194,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
         error++;
       }
     paper_units++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "paper_units", &paper_units)
+      if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "paper_units", &paper_units, 0)
         && paper_units == layout->paper_units)
       {
         pass ("LAYOUT.paper_units [BS] set+1 %hu", paper_units);
@@ -44220,7 +44220,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
         error++;
       }
     paper_width++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "paper_width", &paper_width)
+      if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "paper_width", &paper_width, 0)
         && paper_width == layout->paper_width)
       {
         pass ("LAYOUT.paper_width [BD] set+1 %g", paper_width);
@@ -44259,7 +44259,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
         error++;
       }
     plot_layout_flags++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "plot_layout_flags", &plot_layout_flags)
+      if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "plot_layout_flags", &plot_layout_flags, 0)
         && plot_layout_flags == layout->plot_layout_flags)
       {
         pass ("LAYOUT.plot_layout_flags [BS] set+1 %hu", plot_layout_flags);
@@ -44298,7 +44298,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
         error++;
       }
     plot_rotation++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "plot_rotation", &plot_rotation)
+      if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "plot_rotation", &plot_rotation, 0)
         && plot_rotation == layout->plot_rotation)
       {
         pass ("LAYOUT.plot_rotation [BS] set+1 %hu", plot_rotation);
@@ -44324,7 +44324,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
         error++;
       }
     plot_type++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "plot_type", &plot_type)
+      if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "plot_type", &plot_type, 0)
         && plot_type == layout->plot_type)
       {
         pass ("LAYOUT.plot_type [BS] set+1 %hu", plot_type);
@@ -44402,7 +44402,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
         error++;
       }
     real_world_units++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "real_world_units", &real_world_units)
+      if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "real_world_units", &real_world_units, 0)
         && real_world_units == layout->real_world_units)
       {
         pass ("LAYOUT.real_world_units [BD] set+1 %g", real_world_units);
@@ -44428,7 +44428,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
         error++;
       }
     right_margin++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "right_margin", &right_margin)
+      if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "right_margin", &right_margin, 0)
         && right_margin == layout->right_margin)
       {
         pass ("LAYOUT.right_margin [BD] set+1 %g", right_margin);
@@ -44454,7 +44454,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
         error++;
       }
     scale_factor++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "scale_factor", &scale_factor)
+      if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "scale_factor", &scale_factor, 0)
         && scale_factor == layout->scale_factor)
       {
         pass ("LAYOUT.scale_factor [BD] set+1 %g", scale_factor);
@@ -44480,7 +44480,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
         error++;
       }
     scale_type++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "scale_type", &scale_type)
+      if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "scale_type", &scale_type, 0)
         && scale_type == layout->scale_type)
       {
         pass ("LAYOUT.scale_type [BS] set+1 %hu", scale_type);
@@ -44506,7 +44506,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
         error++;
       }
     shade_plot_custom_dpi++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "shade_plot_custom_dpi", &shade_plot_custom_dpi)
+      if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "shade_plot_custom_dpi", &shade_plot_custom_dpi, 0)
         && shade_plot_custom_dpi == layout->shade_plot_custom_dpi)
       {
         pass ("LAYOUT.shade_plot_custom_dpi [BS] set+1 %hu", shade_plot_custom_dpi);
@@ -44532,7 +44532,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
         error++;
       }
     shade_plot_mode++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "shade_plot_mode", &shade_plot_mode)
+      if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "shade_plot_mode", &shade_plot_mode, 0)
         && shade_plot_mode == layout->shade_plot_mode)
       {
         pass ("LAYOUT.shade_plot_mode [BS] set+1 %hu", shade_plot_mode);
@@ -44558,7 +44558,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
         error++;
       }
     shade_plot_res_level++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "shade_plot_res_level", &shade_plot_res_level)
+      if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "shade_plot_res_level", &shade_plot_res_level, 0)
         && shade_plot_res_level == layout->shade_plot_res_level)
       {
         pass ("LAYOUT.shade_plot_res_level [BS] set+1 %hu", shade_plot_res_level);
@@ -44584,7 +44584,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
         error++;
       }
     tab_order++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "tab_order", &tab_order)
+      if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "tab_order", &tab_order, 0)
         && tab_order == layout->tab_order)
       {
         pass ("LAYOUT.tab_order [BS] set+1 %hu", tab_order);
@@ -44610,7 +44610,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
         error++;
       }
     top_margin++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "top_margin", &top_margin)
+      if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "top_margin", &top_margin, 0)
         && top_margin == layout->top_margin)
       {
         pass ("LAYOUT.top_margin [BD] set+1 %g", top_margin);
@@ -44736,7 +44736,7 @@ static int test_LIGHTLIST (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (lightlist, "LIGHTLIST", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (lightlist, "LIGHTLIST", "class_version", &class_version, 0)
         && class_version == lightlist->class_version)
       {
         pass ("LIGHTLIST.class_version [BS] set+1 %hu", class_version);
@@ -44803,7 +44803,7 @@ static int test_LIGHTLIST (const Dwg_Object *obj)
         error++;
       }
     num_lights++;
-    if (dwg_dynapi_entity_set_value (lightlist, "LIGHTLIST", "num_lights", &num_lights)
+      if (dwg_dynapi_entity_set_value (lightlist, "LIGHTLIST", "num_lights", &num_lights, 0)
         && num_lights == lightlist->num_lights)
       {
         pass ("LIGHTLIST.num_lights [BS] set+1 %hu", num_lights);
@@ -44869,7 +44869,7 @@ static int test_LTYPE (const Dwg_Object *obj)
         error++;
       }
     alignment++;
-    if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "alignment", &alignment)
+      if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "alignment", &alignment, 0)
         && alignment == ltype->alignment)
       {
         pass ("LTYPE.alignment [RC] set+1 %u", alignment);
@@ -44951,7 +44951,7 @@ static int test_LTYPE (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "flag", &flag, 0)
         && flag == ltype->flag)
       {
         pass ("LTYPE.flag [RC] set+1 %u", flag);
@@ -44990,7 +44990,7 @@ static int test_LTYPE (const Dwg_Object *obj)
         error++;
       }
     num_dashes++;
-    if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "num_dashes", &num_dashes)
+      if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "num_dashes", &num_dashes, 0)
         && num_dashes == ltype->num_dashes)
       {
         pass ("LTYPE.num_dashes [RC] set+1 %u", num_dashes);
@@ -45029,7 +45029,7 @@ static int test_LTYPE (const Dwg_Object *obj)
         error++;
       }
     pattern_len++;
-    if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "pattern_len", &pattern_len)
+      if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "pattern_len", &pattern_len, 0)
         && pattern_len == ltype->pattern_len)
       {
         pass ("LTYPE.pattern_len [BD] set+1 %g", pattern_len);
@@ -45083,7 +45083,7 @@ static int test_LTYPE (const Dwg_Object *obj)
         error++;
       }
     text_area_is_present++;
-    if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "text_area_is_present", &text_area_is_present)
+      if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "text_area_is_present", &text_area_is_present, 0)
         && text_area_is_present == ltype->text_area_is_present)
       {
         pass ("LTYPE.text_area_is_present [B] set+1 " FORMAT_B "", text_area_is_present);
@@ -45109,7 +45109,7 @@ static int test_LTYPE (const Dwg_Object *obj)
         error++;
       }
     used++;
-    if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "used", &used)
+      if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "used", &used, 0)
         && used == ltype->used)
       {
         pass ("LTYPE.used [RS] set+1 %hu", used);
@@ -45135,7 +45135,7 @@ static int test_LTYPE (const Dwg_Object *obj)
         error++;
       }
     xrefdep++;
-    if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "xrefdep", &xrefdep)
+      if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "xrefdep", &xrefdep, 0)
         && xrefdep == ltype->xrefdep)
       {
         pass ("LTYPE.xrefdep [B] set+1 " FORMAT_B "", xrefdep);
@@ -45161,7 +45161,7 @@ static int test_LTYPE (const Dwg_Object *obj)
         error++;
       }
     xrefindex_plus1++;
-    if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "xrefindex_plus1", &xrefindex_plus1)
+      if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "xrefindex_plus1", &xrefindex_plus1, 0)
         && xrefindex_plus1 == ltype->xrefindex_plus1)
       {
         pass ("LTYPE.xrefindex_plus1 [BS] set+1 %hu", xrefindex_plus1);
@@ -45187,7 +45187,7 @@ static int test_LTYPE (const Dwg_Object *obj)
         error++;
       }
     xrefref++;
-    if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "xrefref", &xrefref)
+      if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "xrefref", &xrefref, 0)
         && xrefref == ltype->xrefref)
       {
         pass ("LTYPE.xrefref [B] set+1 " FORMAT_B "", xrefref);
@@ -45261,7 +45261,7 @@ static int test_LTYPE_CONTROL (const Dwg_Object *obj)
         error++;
       }
     num_entries++;
-    if (dwg_dynapi_entity_set_value (ltype_control, "LTYPE_CONTROL", "num_entries", &num_entries)
+      if (dwg_dynapi_entity_set_value (ltype_control, "LTYPE_CONTROL", "num_entries", &num_entries, 0)
         && num_entries == ltype_control->num_entries)
       {
         pass ("LTYPE_CONTROL.num_entries [BS] set+1 %hu", num_entries);
@@ -45287,7 +45287,7 @@ static int test_LTYPE_CONTROL (const Dwg_Object *obj)
         error++;
       }
     objid++;
-    if (dwg_dynapi_entity_set_value (ltype_control, "LTYPE_CONTROL", "objid", &objid)
+      if (dwg_dynapi_entity_set_value (ltype_control, "LTYPE_CONTROL", "objid", &objid, 0)
         && objid == ltype_control->objid)
       {
         pass ("LTYPE_CONTROL.objid [BL] set+1 %u", objid);
@@ -45346,7 +45346,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     ambient_color_factor++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "ambient_color_factor", &ambient_color_factor)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "ambient_color_factor", &ambient_color_factor, 0)
         && ambient_color_factor == material->ambient_color_factor)
       {
         pass ("MATERIAL.ambient_color_factor [BD] set+1 %g", ambient_color_factor);
@@ -45372,7 +45372,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     ambient_color_flag++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "ambient_color_flag", &ambient_color_flag)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "ambient_color_flag", &ambient_color_flag, 0)
         && ambient_color_flag == material->ambient_color_flag)
       {
         pass ("MATERIAL.ambient_color_flag [BS] set+1 %hu", ambient_color_flag);
@@ -45398,7 +45398,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     bumpmap_autotransform++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "bumpmap_autotransform", &bumpmap_autotransform)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "bumpmap_autotransform", &bumpmap_autotransform, 0)
         && bumpmap_autotransform == material->bumpmap_autotransform)
       {
         pass ("MATERIAL.bumpmap_autotransform [BS] set+1 %hu", bumpmap_autotransform);
@@ -45424,7 +45424,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     bumpmap_blendfactor++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "bumpmap_blendfactor", &bumpmap_blendfactor)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "bumpmap_blendfactor", &bumpmap_blendfactor, 0)
         && bumpmap_blendfactor == material->bumpmap_blendfactor)
       {
         pass ("MATERIAL.bumpmap_blendfactor [BD] set+1 %g", bumpmap_blendfactor);
@@ -45463,7 +45463,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     bumpmap_projection++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "bumpmap_projection", &bumpmap_projection)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "bumpmap_projection", &bumpmap_projection, 0)
         && bumpmap_projection == material->bumpmap_projection)
       {
         pass ("MATERIAL.bumpmap_projection [BS] set+1 %hu", bumpmap_projection);
@@ -45489,7 +45489,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     bumpmap_source++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "bumpmap_source", &bumpmap_source)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "bumpmap_source", &bumpmap_source, 0)
         && bumpmap_source == material->bumpmap_source)
       {
         pass ("MATERIAL.bumpmap_source [BS] set+1 %hu", bumpmap_source);
@@ -45515,7 +45515,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     bumpmap_tiling++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "bumpmap_tiling", &bumpmap_tiling)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "bumpmap_tiling", &bumpmap_tiling, 0)
         && bumpmap_tiling == material->bumpmap_tiling)
       {
         pass ("MATERIAL.bumpmap_tiling [BS] set+1 %hu", bumpmap_tiling);
@@ -45554,7 +45554,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     channel_flags++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "channel_flags", &channel_flags)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "channel_flags", &channel_flags, 0)
         && channel_flags == material->channel_flags)
       {
         pass ("MATERIAL.channel_flags [BL] set+1 %u", channel_flags);
@@ -45580,7 +45580,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     color_bleed_scale++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "color_bleed_scale", &color_bleed_scale)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "color_bleed_scale", &color_bleed_scale, 0)
         && color_bleed_scale == material->color_bleed_scale)
       {
         pass ("MATERIAL.color_bleed_scale [BD] set+1 %g", color_bleed_scale);
@@ -45632,7 +45632,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     diffuse_color_factor++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "diffuse_color_factor", &diffuse_color_factor)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "diffuse_color_factor", &diffuse_color_factor, 0)
         && diffuse_color_factor == material->diffuse_color_factor)
       {
         pass ("MATERIAL.diffuse_color_factor [BD] set+1 %g", diffuse_color_factor);
@@ -45658,7 +45658,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     diffuse_color_flag++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "diffuse_color_flag", &diffuse_color_flag)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "diffuse_color_flag", &diffuse_color_flag, 0)
         && diffuse_color_flag == material->diffuse_color_flag)
       {
         pass ("MATERIAL.diffuse_color_flag [BS] set+1 %hu", diffuse_color_flag);
@@ -45684,7 +45684,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     diffusemap_autotransform++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "diffusemap_autotransform", &diffusemap_autotransform)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "diffusemap_autotransform", &diffusemap_autotransform, 0)
         && diffusemap_autotransform == material->diffusemap_autotransform)
       {
         pass ("MATERIAL.diffusemap_autotransform [BS] set+1 %hu", diffusemap_autotransform);
@@ -45710,7 +45710,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     diffusemap_blendfactor++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "diffusemap_blendfactor", &diffusemap_blendfactor)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "diffusemap_blendfactor", &diffusemap_blendfactor, 0)
         && diffusemap_blendfactor == material->diffusemap_blendfactor)
       {
         pass ("MATERIAL.diffusemap_blendfactor [BD] set+1 %g", diffusemap_blendfactor);
@@ -45749,7 +45749,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     diffusemap_projection++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "diffusemap_projection", &diffusemap_projection)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "diffusemap_projection", &diffusemap_projection, 0)
         && diffusemap_projection == material->diffusemap_projection)
       {
         pass ("MATERIAL.diffusemap_projection [BS] set+1 %hu", diffusemap_projection);
@@ -45775,7 +45775,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     diffusemap_source++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "diffusemap_source", &diffusemap_source)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "diffusemap_source", &diffusemap_source, 0)
         && diffusemap_source == material->diffusemap_source)
       {
         pass ("MATERIAL.diffusemap_source [BS] set+1 %hu", diffusemap_source);
@@ -45801,7 +45801,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     diffusemap_tiling++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "diffusemap_tiling", &diffusemap_tiling)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "diffusemap_tiling", &diffusemap_tiling, 0)
         && diffusemap_tiling == material->diffusemap_tiling)
       {
         pass ("MATERIAL.diffusemap_tiling [BS] set+1 %hu", diffusemap_tiling);
@@ -45840,7 +45840,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     final_gather_mode++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "final_gather_mode", &final_gather_mode)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "final_gather_mode", &final_gather_mode, 0)
         && final_gather_mode == material->final_gather_mode)
       {
         pass ("MATERIAL.final_gather_mode [BS] set+1 %hu", final_gather_mode);
@@ -45879,7 +45879,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     genproctableend++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "genproctableend", &genproctableend)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "genproctableend", &genproctableend, 0)
         && genproctableend == material->genproctableend)
       {
         pass ("MATERIAL.genproctableend [B] set+1 " FORMAT_B "", genproctableend);
@@ -45905,7 +45905,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     genprocvalbool++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "genprocvalbool", &genprocvalbool)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "genprocvalbool", &genprocvalbool, 0)
         && genprocvalbool == material->genprocvalbool)
       {
         pass ("MATERIAL.genprocvalbool [B] set+1 " FORMAT_B "", genprocvalbool);
@@ -45957,7 +45957,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     genprocvalcolorrgb++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "genprocvalcolorrgb", &genprocvalcolorrgb)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "genprocvalcolorrgb", &genprocvalcolorrgb, 0)
         && genprocvalcolorrgb == material->genprocvalcolorrgb)
       {
         pass ("MATERIAL.genprocvalcolorrgb [BS] set+1 %hu", genprocvalcolorrgb);
@@ -45983,7 +45983,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     genprocvalint++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "genprocvalint", &genprocvalint)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "genprocvalint", &genprocvalint, 0)
         && genprocvalint == material->genprocvalint)
       {
         pass ("MATERIAL.genprocvalint [BS] set+1 %hu", genprocvalint);
@@ -46009,7 +46009,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     genprocvalreal++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "genprocvalreal", &genprocvalreal)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "genprocvalreal", &genprocvalreal, 0)
         && genprocvalreal == material->genprocvalreal)
       {
         pass ("MATERIAL.genprocvalreal [BD] set+1 %g", genprocvalreal);
@@ -46048,7 +46048,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     global_illumination_mode++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "global_illumination_mode", &global_illumination_mode)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "global_illumination_mode", &global_illumination_mode, 0)
         && global_illumination_mode == material->global_illumination_mode)
       {
         pass ("MATERIAL.global_illumination_mode [BS] set+1 %hu", global_illumination_mode);
@@ -46074,7 +46074,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     illumination_model++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "illumination_model", &illumination_model)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "illumination_model", &illumination_model, 0)
         && illumination_model == material->illumination_model)
       {
         pass ("MATERIAL.illumination_model [BL] set+1 %u", illumination_model);
@@ -46100,7 +46100,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     indirect_dump_scale++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "indirect_dump_scale", &indirect_dump_scale)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "indirect_dump_scale", &indirect_dump_scale, 0)
         && indirect_dump_scale == material->indirect_dump_scale)
       {
         pass ("MATERIAL.indirect_dump_scale [BD] set+1 %g", indirect_dump_scale);
@@ -46126,7 +46126,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     luminance++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "luminance", &luminance)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "luminance", &luminance, 0)
         && luminance == material->luminance)
       {
         pass ("MATERIAL.luminance [BD] set+1 %g", luminance);
@@ -46152,7 +46152,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     luminance_mode++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "luminance_mode", &luminance_mode)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "luminance_mode", &luminance_mode, 0)
         && luminance_mode == material->luminance_mode)
       {
         pass ("MATERIAL.luminance_mode [BS] set+1 %hu", luminance_mode);
@@ -46178,7 +46178,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     map_utile++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "map_utile", &map_utile)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "map_utile", &map_utile, 0)
         && map_utile == material->map_utile)
       {
         pass ("MATERIAL.map_utile [BS] set+1 %hu", map_utile);
@@ -46204,7 +46204,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     materials_anonymous++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "materials_anonymous", &materials_anonymous)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "materials_anonymous", &materials_anonymous, 0)
         && materials_anonymous == material->materials_anonymous)
       {
         pass ("MATERIAL.materials_anonymous [B] set+1 " FORMAT_B "", materials_anonymous);
@@ -46243,7 +46243,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     normalmap_autotransform++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "normalmap_autotransform", &normalmap_autotransform)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "normalmap_autotransform", &normalmap_autotransform, 0)
         && normalmap_autotransform == material->normalmap_autotransform)
       {
         pass ("MATERIAL.normalmap_autotransform [BS] set+1 %hu", normalmap_autotransform);
@@ -46269,7 +46269,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     normalmap_blendfactor++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "normalmap_blendfactor", &normalmap_blendfactor)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "normalmap_blendfactor", &normalmap_blendfactor, 0)
         && normalmap_blendfactor == material->normalmap_blendfactor)
       {
         pass ("MATERIAL.normalmap_blendfactor [BD] set+1 %g", normalmap_blendfactor);
@@ -46308,7 +46308,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     normalmap_method++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "normalmap_method", &normalmap_method)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "normalmap_method", &normalmap_method, 0)
         && normalmap_method == material->normalmap_method)
       {
         pass ("MATERIAL.normalmap_method [BS] set+1 %hu", normalmap_method);
@@ -46334,7 +46334,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     normalmap_projection++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "normalmap_projection", &normalmap_projection)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "normalmap_projection", &normalmap_projection, 0)
         && normalmap_projection == material->normalmap_projection)
       {
         pass ("MATERIAL.normalmap_projection [BS] set+1 %hu", normalmap_projection);
@@ -46360,7 +46360,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     normalmap_source++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "normalmap_source", &normalmap_source)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "normalmap_source", &normalmap_source, 0)
         && normalmap_source == material->normalmap_source)
       {
         pass ("MATERIAL.normalmap_source [BS] set+1 %hu", normalmap_source);
@@ -46386,7 +46386,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     normalmap_strength++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "normalmap_strength", &normalmap_strength)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "normalmap_strength", &normalmap_strength, 0)
         && normalmap_strength == material->normalmap_strength)
       {
         pass ("MATERIAL.normalmap_strength [BD] set+1 %g", normalmap_strength);
@@ -46412,7 +46412,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     normalmap_tiling++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "normalmap_tiling", &normalmap_tiling)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "normalmap_tiling", &normalmap_tiling, 0)
         && normalmap_tiling == material->normalmap_tiling)
       {
         pass ("MATERIAL.normalmap_tiling [BS] set+1 %hu", normalmap_tiling);
@@ -46451,7 +46451,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     opacity_percent++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "opacity_percent", &opacity_percent)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "opacity_percent", &opacity_percent, 0)
         && opacity_percent == material->opacity_percent)
       {
         pass ("MATERIAL.opacity_percent [BD] set+1 %g", opacity_percent);
@@ -46477,7 +46477,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     opacitymap_autotransform++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "opacitymap_autotransform", &opacitymap_autotransform)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "opacitymap_autotransform", &opacitymap_autotransform, 0)
         && opacitymap_autotransform == material->opacitymap_autotransform)
       {
         pass ("MATERIAL.opacitymap_autotransform [BS] set+1 %hu", opacitymap_autotransform);
@@ -46503,7 +46503,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     opacitymap_blendfactor++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "opacitymap_blendfactor", &opacitymap_blendfactor)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "opacitymap_blendfactor", &opacitymap_blendfactor, 0)
         && opacitymap_blendfactor == material->opacitymap_blendfactor)
       {
         pass ("MATERIAL.opacitymap_blendfactor [BD] set+1 %g", opacitymap_blendfactor);
@@ -46542,7 +46542,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     opacitymap_projection++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "opacitymap_projection", &opacitymap_projection)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "opacitymap_projection", &opacitymap_projection, 0)
         && opacitymap_projection == material->opacitymap_projection)
       {
         pass ("MATERIAL.opacitymap_projection [BS] set+1 %hu", opacitymap_projection);
@@ -46568,7 +46568,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     opacitymap_source++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "opacitymap_source", &opacitymap_source)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "opacitymap_source", &opacitymap_source, 0)
         && opacitymap_source == material->opacitymap_source)
       {
         pass ("MATERIAL.opacitymap_source [BS] set+1 %hu", opacitymap_source);
@@ -46594,7 +46594,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     opacitymap_tiling++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "opacitymap_tiling", &opacitymap_tiling)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "opacitymap_tiling", &opacitymap_tiling, 0)
         && opacitymap_tiling == material->opacitymap_tiling)
       {
         pass ("MATERIAL.opacitymap_tiling [BS] set+1 %hu", opacitymap_tiling);
@@ -46646,7 +46646,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     reflectance_scale++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "reflectance_scale", &reflectance_scale)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "reflectance_scale", &reflectance_scale, 0)
         && reflectance_scale == material->reflectance_scale)
       {
         pass ("MATERIAL.reflectance_scale [BD] set+1 %g", reflectance_scale);
@@ -46672,7 +46672,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     reflectionmap_autotransform++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "reflectionmap_autotransform", &reflectionmap_autotransform)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "reflectionmap_autotransform", &reflectionmap_autotransform, 0)
         && reflectionmap_autotransform == material->reflectionmap_autotransform)
       {
         pass ("MATERIAL.reflectionmap_autotransform [BS] set+1 %hu", reflectionmap_autotransform);
@@ -46698,7 +46698,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     reflectionmap_blendfactor++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "reflectionmap_blendfactor", &reflectionmap_blendfactor)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "reflectionmap_blendfactor", &reflectionmap_blendfactor, 0)
         && reflectionmap_blendfactor == material->reflectionmap_blendfactor)
       {
         pass ("MATERIAL.reflectionmap_blendfactor [BD] set+1 %g", reflectionmap_blendfactor);
@@ -46737,7 +46737,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     reflectionmap_projection++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "reflectionmap_projection", &reflectionmap_projection)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "reflectionmap_projection", &reflectionmap_projection, 0)
         && reflectionmap_projection == material->reflectionmap_projection)
       {
         pass ("MATERIAL.reflectionmap_projection [BS] set+1 %hu", reflectionmap_projection);
@@ -46763,7 +46763,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     reflectionmap_source++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "reflectionmap_source", &reflectionmap_source)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "reflectionmap_source", &reflectionmap_source, 0)
         && reflectionmap_source == material->reflectionmap_source)
       {
         pass ("MATERIAL.reflectionmap_source [BS] set+1 %hu", reflectionmap_source);
@@ -46789,7 +46789,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     reflectionmap_tiling++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "reflectionmap_tiling", &reflectionmap_tiling)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "reflectionmap_tiling", &reflectionmap_tiling, 0)
         && reflectionmap_tiling == material->reflectionmap_tiling)
       {
         pass ("MATERIAL.reflectionmap_tiling [BS] set+1 %hu", reflectionmap_tiling);
@@ -46828,7 +46828,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     reflectivity++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "reflectivity", &reflectivity)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "reflectivity", &reflectivity, 0)
         && reflectivity == material->reflectivity)
       {
         pass ("MATERIAL.reflectivity [BD] set+1 %g", reflectivity);
@@ -46854,7 +46854,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     refraction_index++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "refraction_index", &refraction_index)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "refraction_index", &refraction_index, 0)
         && refraction_index == material->refraction_index)
       {
         pass ("MATERIAL.refraction_index [BD] set+1 %g", refraction_index);
@@ -46880,7 +46880,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     refractionmap_autotransform++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "refractionmap_autotransform", &refractionmap_autotransform)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "refractionmap_autotransform", &refractionmap_autotransform, 0)
         && refractionmap_autotransform == material->refractionmap_autotransform)
       {
         pass ("MATERIAL.refractionmap_autotransform [BS] set+1 %hu", refractionmap_autotransform);
@@ -46906,7 +46906,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     refractionmap_blendfactor++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "refractionmap_blendfactor", &refractionmap_blendfactor)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "refractionmap_blendfactor", &refractionmap_blendfactor, 0)
         && refractionmap_blendfactor == material->refractionmap_blendfactor)
       {
         pass ("MATERIAL.refractionmap_blendfactor [BD] set+1 %g", refractionmap_blendfactor);
@@ -46945,7 +46945,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     refractionmap_projection++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "refractionmap_projection", &refractionmap_projection)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "refractionmap_projection", &refractionmap_projection, 0)
         && refractionmap_projection == material->refractionmap_projection)
       {
         pass ("MATERIAL.refractionmap_projection [BS] set+1 %hu", refractionmap_projection);
@@ -46971,7 +46971,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     refractionmap_source++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "refractionmap_source", &refractionmap_source)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "refractionmap_source", &refractionmap_source, 0)
         && refractionmap_source == material->refractionmap_source)
       {
         pass ("MATERIAL.refractionmap_source [BS] set+1 %hu", refractionmap_source);
@@ -46997,7 +46997,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     refractionmap_tiling++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "refractionmap_tiling", &refractionmap_tiling)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "refractionmap_tiling", &refractionmap_tiling, 0)
         && refractionmap_tiling == material->refractionmap_tiling)
       {
         pass ("MATERIAL.refractionmap_tiling [BS] set+1 %hu", refractionmap_tiling);
@@ -47036,7 +47036,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     self_illumination++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "self_illumination", &self_illumination)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "self_illumination", &self_illumination, 0)
         && self_illumination == material->self_illumination)
       {
         pass ("MATERIAL.self_illumination [BL] set+1 %u", self_illumination);
@@ -47075,7 +47075,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     specular_color_factor++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "specular_color_factor", &specular_color_factor)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "specular_color_factor", &specular_color_factor, 0)
         && specular_color_factor == material->specular_color_factor)
       {
         pass ("MATERIAL.specular_color_factor [BD] set+1 %g", specular_color_factor);
@@ -47101,7 +47101,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     specular_color_flag++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "specular_color_flag", &specular_color_flag)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "specular_color_flag", &specular_color_flag, 0)
         && specular_color_flag == material->specular_color_flag)
       {
         pass ("MATERIAL.specular_color_flag [BS] set+1 %hu", specular_color_flag);
@@ -47127,7 +47127,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     specular_gloss_factor++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "specular_gloss_factor", &specular_gloss_factor)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "specular_gloss_factor", &specular_gloss_factor, 0)
         && specular_gloss_factor == material->specular_gloss_factor)
       {
         pass ("MATERIAL.specular_gloss_factor [BD] set+1 %g", specular_gloss_factor);
@@ -47153,7 +47153,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     specularmap_autotransform++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "specularmap_autotransform", &specularmap_autotransform)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "specularmap_autotransform", &specularmap_autotransform, 0)
         && specularmap_autotransform == material->specularmap_autotransform)
       {
         pass ("MATERIAL.specularmap_autotransform [BS] set+1 %hu", specularmap_autotransform);
@@ -47179,7 +47179,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     specularmap_blendfactor++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "specularmap_blendfactor", &specularmap_blendfactor)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "specularmap_blendfactor", &specularmap_blendfactor, 0)
         && specularmap_blendfactor == material->specularmap_blendfactor)
       {
         pass ("MATERIAL.specularmap_blendfactor [BD] set+1 %g", specularmap_blendfactor);
@@ -47218,7 +47218,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     specularmap_projection++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "specularmap_projection", &specularmap_projection)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "specularmap_projection", &specularmap_projection, 0)
         && specularmap_projection == material->specularmap_projection)
       {
         pass ("MATERIAL.specularmap_projection [BS] set+1 %hu", specularmap_projection);
@@ -47244,7 +47244,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     specularmap_source++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "specularmap_source", &specularmap_source)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "specularmap_source", &specularmap_source, 0)
         && specularmap_source == material->specularmap_source)
       {
         pass ("MATERIAL.specularmap_source [BS] set+1 %hu", specularmap_source);
@@ -47270,7 +47270,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     specularmap_tiling++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "specularmap_tiling", &specularmap_tiling)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "specularmap_tiling", &specularmap_tiling, 0)
         && specularmap_tiling == material->specularmap_tiling)
       {
         pass ("MATERIAL.specularmap_tiling [BS] set+1 %hu", specularmap_tiling);
@@ -47309,7 +47309,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     translucence++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "translucence", &translucence)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "translucence", &translucence, 0)
         && translucence == material->translucence)
       {
         pass ("MATERIAL.translucence [BD] set+1 %g", translucence);
@@ -47335,7 +47335,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     transmittance_scale++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "transmittance_scale", &transmittance_scale)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "transmittance_scale", &transmittance_scale, 0)
         && transmittance_scale == material->transmittance_scale)
       {
         pass ("MATERIAL.transmittance_scale [BD] set+1 %g", transmittance_scale);
@@ -47361,7 +47361,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
         error++;
       }
     two_sided_material++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "two_sided_material", &two_sided_material)
+      if (dwg_dynapi_entity_set_value (material, "MATERIAL", "two_sided_material", &two_sided_material, 0)
         && two_sided_material == material->two_sided_material)
       {
         pass ("MATERIAL.two_sided_material [B] set+1 " FORMAT_B "", two_sided_material);
@@ -47394,7 +47394,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     align_space++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "align_space", &align_space)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "align_space", &align_space, 0)
         && align_space == mleaderstyle->align_space)
       {
         pass ("MLEADERSTYLE.align_space [BD] set+1 %g", align_space);
@@ -47433,7 +47433,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     arrow_head_size++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "arrow_head_size", &arrow_head_size)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "arrow_head_size", &arrow_head_size, 0)
         && arrow_head_size == mleaderstyle->arrow_head_size)
       {
         pass ("MLEADERSTYLE.arrow_head_size [BD] set+1 %g", arrow_head_size);
@@ -47459,7 +47459,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     attach_bottom++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "attach_bottom", &attach_bottom)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "attach_bottom", &attach_bottom, 0)
         && attach_bottom == mleaderstyle->attach_bottom)
       {
         pass ("MLEADERSTYLE.attach_bottom [BS] set+1 %hu", attach_bottom);
@@ -47485,7 +47485,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     attach_dir++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "attach_dir", &attach_dir)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "attach_dir", &attach_dir, 0)
         && attach_dir == mleaderstyle->attach_dir)
       {
         pass ("MLEADERSTYLE.attach_dir [BS] set+1 %hu", attach_dir);
@@ -47511,7 +47511,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     attach_left++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "attach_left", &attach_left)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "attach_left", &attach_left, 0)
         && attach_left == mleaderstyle->attach_left)
       {
         pass ("MLEADERSTYLE.attach_left [BS] set+1 %hu", attach_left);
@@ -47537,7 +47537,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     attach_right++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "attach_right", &attach_right)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "attach_right", &attach_right, 0)
         && attach_right == mleaderstyle->attach_right)
       {
         pass ("MLEADERSTYLE.attach_right [BS] set+1 %hu", attach_right);
@@ -47563,7 +47563,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     attach_top++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "attach_top", &attach_top)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "attach_top", &attach_top, 0)
         && attach_top == mleaderstyle->attach_top)
       {
         pass ("MLEADERSTYLE.attach_top [BS] set+1 %hu", attach_top);
@@ -47615,7 +47615,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     block_connection++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "block_connection", &block_connection)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "block_connection", &block_connection, 0)
         && block_connection == mleaderstyle->block_connection)
       {
         pass ("MLEADERSTYLE.block_connection [BS] set+1 %hu", block_connection);
@@ -47641,7 +47641,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     block_rotation++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "block_rotation", &block_rotation)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "block_rotation", &block_rotation, 0)
         && block_rotation == mleaderstyle->block_rotation)
       {
         pass ("MLEADERSTYLE.block_rotation [BD] set+1 %g", block_rotation);
@@ -47680,7 +47680,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     break_size++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "break_size", &break_size)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "break_size", &break_size, 0)
         && break_size == mleaderstyle->break_size)
       {
         pass ("MLEADERSTYLE.break_size [BD] set+1 %g", break_size);
@@ -47706,7 +47706,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     changed++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "changed", &changed)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "changed", &changed, 0)
         && changed == mleaderstyle->changed)
       {
         pass ("MLEADERSTYLE.changed [B] set+1 " FORMAT_B "", changed);
@@ -47732,7 +47732,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "class_version", &class_version, 0)
         && class_version == mleaderstyle->class_version)
       {
         pass ("MLEADERSTYLE.class_version [BS] set+1 %hu", class_version);
@@ -47758,7 +47758,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     content_type++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "content_type", &content_type)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "content_type", &content_type, 0)
         && content_type == mleaderstyle->content_type)
       {
         pass ("MLEADERSTYLE.content_type [BS] set+1 %hu", content_type);
@@ -47797,7 +47797,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     first_seg_angle++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "first_seg_angle", &first_seg_angle)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "first_seg_angle", &first_seg_angle, 0)
         && first_seg_angle == mleaderstyle->first_seg_angle)
       {
         pass ("MLEADERSTYLE.first_seg_angle [BD] set+1 %g", first_seg_angle);
@@ -47823,7 +47823,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     has_dogleg++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "has_dogleg", &has_dogleg)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "has_dogleg", &has_dogleg, 0)
         && has_dogleg == mleaderstyle->has_dogleg)
       {
         pass ("MLEADERSTYLE.has_dogleg [B] set+1 " FORMAT_B "", has_dogleg);
@@ -47849,7 +47849,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     has_landing++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "has_landing", &has_landing)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "has_landing", &has_landing, 0)
         && has_landing == mleaderstyle->has_landing)
       {
         pass ("MLEADERSTYLE.has_landing [B] set+1 " FORMAT_B "", has_landing);
@@ -47875,7 +47875,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     is_annotative++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "is_annotative", &is_annotative)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "is_annotative", &is_annotative, 0)
         && is_annotative == mleaderstyle->is_annotative)
       {
         pass ("MLEADERSTYLE.is_annotative [B] set+1 " FORMAT_B "", is_annotative);
@@ -47901,7 +47901,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     is_new_format++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "is_new_format", &is_new_format)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "is_new_format", &is_new_format, 0)
         && is_new_format == mleaderstyle->is_new_format)
       {
         pass ("MLEADERSTYLE.is_new_format [B] set+1 " FORMAT_B "", is_new_format);
@@ -47927,7 +47927,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     landing_dist++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "landing_dist", &landing_dist)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "landing_dist", &landing_dist, 0)
         && landing_dist == mleaderstyle->landing_dist)
       {
         pass ("MLEADERSTYLE.landing_dist [BD] set+1 %g", landing_dist);
@@ -47953,7 +47953,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     landing_gap++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "landing_gap", &landing_gap)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "landing_gap", &landing_gap, 0)
         && landing_gap == mleaderstyle->landing_gap)
       {
         pass ("MLEADERSTYLE.landing_gap [BD] set+1 %g", landing_gap);
@@ -47979,7 +47979,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     leader_order++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "leader_order", &leader_order)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "leader_order", &leader_order, 0)
         && leader_order == mleaderstyle->leader_order)
       {
         pass ("MLEADERSTYLE.leader_order [BS] set+1 %hu", leader_order);
@@ -48031,7 +48031,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     linewt++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "linewt", &linewt)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "linewt", &linewt, 0)
         && linewt == mleaderstyle->linewt)
       {
         pass ("MLEADERSTYLE.linewt [BL] set+1 %u", linewt);
@@ -48057,7 +48057,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     max_points++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "max_points", &max_points)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "max_points", &max_points, 0)
         && max_points == mleaderstyle->max_points)
       {
         pass ("MLEADERSTYLE.max_points [BL] set+1 %u", max_points);
@@ -48083,7 +48083,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     mleader_order++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "mleader_order", &mleader_order)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "mleader_order", &mleader_order, 0)
         && mleader_order == mleaderstyle->mleader_order)
       {
         pass ("MLEADERSTYLE.mleader_order [BS] set+1 %hu", mleader_order);
@@ -48122,7 +48122,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     scale++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "scale", &scale)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "scale", &scale, 0)
         && scale == mleaderstyle->scale)
       {
         pass ("MLEADERSTYLE.scale [BD] set+1 %g", scale);
@@ -48148,7 +48148,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     second_seg_angle++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "second_seg_angle", &second_seg_angle)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "second_seg_angle", &second_seg_angle, 0)
         && second_seg_angle == mleaderstyle->second_seg_angle)
       {
         pass ("MLEADERSTYLE.second_seg_angle [BD] set+1 %g", second_seg_angle);
@@ -48174,7 +48174,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     text_align_type++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "text_align_type", &text_align_type)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "text_align_type", &text_align_type, 0)
         && text_align_type == mleaderstyle->text_align_type)
       {
         pass ("MLEADERSTYLE.text_align_type [BS] set+1 %hu", text_align_type);
@@ -48200,7 +48200,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     text_always_left++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "text_always_left", &text_always_left)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "text_always_left", &text_always_left, 0)
         && text_always_left == mleaderstyle->text_always_left)
       {
         pass ("MLEADERSTYLE.text_always_left [B] set+1 " FORMAT_B "", text_always_left);
@@ -48226,7 +48226,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     text_angle_type++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "text_angle_type", &text_angle_type)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "text_angle_type", &text_angle_type, 0)
         && text_angle_type == mleaderstyle->text_angle_type)
       {
         pass ("MLEADERSTYLE.text_angle_type [BS] set+1 %hu", text_angle_type);
@@ -48278,7 +48278,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     text_extended++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "text_extended", &text_extended)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "text_extended", &text_extended, 0)
         && text_extended == mleaderstyle->text_extended)
       {
         pass ("MLEADERSTYLE.text_extended [B] set+1 " FORMAT_B "", text_extended);
@@ -48304,7 +48304,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     text_frame++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "text_frame", &text_frame)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "text_frame", &text_frame, 0)
         && text_frame == mleaderstyle->text_frame)
       {
         pass ("MLEADERSTYLE.text_frame [B] set+1 " FORMAT_B "", text_frame);
@@ -48330,7 +48330,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     text_height++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "text_height", &text_height)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "text_height", &text_height, 0)
         && text_height == mleaderstyle->text_height)
       {
         pass ("MLEADERSTYLE.text_height [BD] set+1 %g", text_height);
@@ -48369,7 +48369,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     type++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "type", &type)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "type", &type, 0)
         && type == mleaderstyle->type)
       {
         pass ("MLEADERSTYLE.type [BS] set+1 %hu", type);
@@ -48395,7 +48395,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     use_block_rotation++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "use_block_rotation", &use_block_rotation)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "use_block_rotation", &use_block_rotation, 0)
         && use_block_rotation == mleaderstyle->use_block_rotation)
       {
         pass ("MLEADERSTYLE.use_block_rotation [B] set+1 " FORMAT_B "", use_block_rotation);
@@ -48421,7 +48421,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         error++;
       }
     use_block_scale++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "use_block_scale", &use_block_scale)
+      if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "use_block_scale", &use_block_scale, 0)
         && use_block_scale == mleaderstyle->use_block_scale)
       {
         pass ("MLEADERSTYLE.use_block_scale [B] set+1 " FORMAT_B "", use_block_scale);
@@ -48467,7 +48467,7 @@ static int test_MLINESTYLE (const Dwg_Object *obj)
         error++;
       }
     end_angle++;
-    if (dwg_dynapi_entity_set_value (mlinestyle, "MLINESTYLE", "end_angle", &end_angle)
+      if (dwg_dynapi_entity_set_value (mlinestyle, "MLINESTYLE", "end_angle", &end_angle, 0)
         && end_angle == mlinestyle->end_angle)
       {
         pass ("MLINESTYLE.end_angle [BD] set+1 %g", end_angle);
@@ -48506,7 +48506,7 @@ static int test_MLINESTYLE (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (mlinestyle, "MLINESTYLE", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (mlinestyle, "MLINESTYLE", "flag", &flag, 0)
         && flag == mlinestyle->flag)
       {
         pass ("MLINESTYLE.flag [BS] set+1 %hu", flag);
@@ -48560,7 +48560,7 @@ static int test_MLINESTYLE (const Dwg_Object *obj)
         error++;
       }
     num_lines++;
-    if (dwg_dynapi_entity_set_value (mlinestyle, "MLINESTYLE", "num_lines", &num_lines)
+      if (dwg_dynapi_entity_set_value (mlinestyle, "MLINESTYLE", "num_lines", &num_lines, 0)
         && num_lines == mlinestyle->num_lines)
       {
         pass ("MLINESTYLE.num_lines [RC] set+1 %u", num_lines);
@@ -48599,7 +48599,7 @@ static int test_MLINESTYLE (const Dwg_Object *obj)
         error++;
       }
     start_angle++;
-    if (dwg_dynapi_entity_set_value (mlinestyle, "MLINESTYLE", "start_angle", &start_angle)
+      if (dwg_dynapi_entity_set_value (mlinestyle, "MLINESTYLE", "start_angle", &start_angle, 0)
         && start_angle == mlinestyle->start_angle)
       {
         pass ("MLINESTYLE.start_angle [BD] set+1 %g", start_angle);
@@ -48632,7 +48632,7 @@ static int test_OBJECTCONTEXTDATA (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (objectcontextdata, "OBJECTCONTEXTDATA", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (objectcontextdata, "OBJECTCONTEXTDATA", "class_version", &class_version, 0)
         && class_version == objectcontextdata->class_version)
       {
         pass ("OBJECTCONTEXTDATA.class_version [BS] set+1 %hu", class_version);
@@ -48658,7 +48658,7 @@ static int test_OBJECTCONTEXTDATA (const Dwg_Object *obj)
         error++;
       }
     defaultflag++;
-    if (dwg_dynapi_entity_set_value (objectcontextdata, "OBJECTCONTEXTDATA", "defaultflag", &defaultflag)
+      if (dwg_dynapi_entity_set_value (objectcontextdata, "OBJECTCONTEXTDATA", "defaultflag", &defaultflag, 0)
         && defaultflag == objectcontextdata->defaultflag)
       {
         pass ("OBJECTCONTEXTDATA.defaultflag [B] set+1 " FORMAT_B "", defaultflag);
@@ -48684,7 +48684,7 @@ static int test_OBJECTCONTEXTDATA (const Dwg_Object *obj)
         error++;
       }
     has_file++;
-    if (dwg_dynapi_entity_set_value (objectcontextdata, "OBJECTCONTEXTDATA", "has_file", &has_file)
+      if (dwg_dynapi_entity_set_value (objectcontextdata, "OBJECTCONTEXTDATA", "has_file", &has_file, 0)
         && has_file == objectcontextdata->has_file)
       {
         pass ("OBJECTCONTEXTDATA.has_file [B] set+1 " FORMAT_B "", has_file);
@@ -48750,7 +48750,7 @@ static int test_PERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (perssubentmanager, "PERSSUBENTMANAGER", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (perssubentmanager, "PERSSUBENTMANAGER", "class_version", &class_version, 0)
         && class_version == perssubentmanager->class_version)
       {
         pass ("PERSSUBENTMANAGER.class_version [BL] set+1 %u", class_version);
@@ -48789,7 +48789,7 @@ static int test_PERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl1++;
-    if (dwg_dynapi_entity_set_value (perssubentmanager, "PERSSUBENTMANAGER", "unknown_bl1", &unknown_bl1)
+      if (dwg_dynapi_entity_set_value (perssubentmanager, "PERSSUBENTMANAGER", "unknown_bl1", &unknown_bl1, 0)
         && unknown_bl1 == perssubentmanager->unknown_bl1)
       {
         pass ("PERSSUBENTMANAGER.unknown_bl1 [BL] set+1 %u", unknown_bl1);
@@ -48815,7 +48815,7 @@ static int test_PERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl2++;
-    if (dwg_dynapi_entity_set_value (perssubentmanager, "PERSSUBENTMANAGER", "unknown_bl2", &unknown_bl2)
+      if (dwg_dynapi_entity_set_value (perssubentmanager, "PERSSUBENTMANAGER", "unknown_bl2", &unknown_bl2, 0)
         && unknown_bl2 == perssubentmanager->unknown_bl2)
       {
         pass ("PERSSUBENTMANAGER.unknown_bl2 [BL] set+1 %u", unknown_bl2);
@@ -48841,7 +48841,7 @@ static int test_PERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl3++;
-    if (dwg_dynapi_entity_set_value (perssubentmanager, "PERSSUBENTMANAGER", "unknown_bl3", &unknown_bl3)
+      if (dwg_dynapi_entity_set_value (perssubentmanager, "PERSSUBENTMANAGER", "unknown_bl3", &unknown_bl3, 0)
         && unknown_bl3 == perssubentmanager->unknown_bl3)
       {
         pass ("PERSSUBENTMANAGER.unknown_bl3 [BL] set+1 %u", unknown_bl3);
@@ -48867,7 +48867,7 @@ static int test_PERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl4++;
-    if (dwg_dynapi_entity_set_value (perssubentmanager, "PERSSUBENTMANAGER", "unknown_bl4", &unknown_bl4)
+      if (dwg_dynapi_entity_set_value (perssubentmanager, "PERSSUBENTMANAGER", "unknown_bl4", &unknown_bl4, 0)
         && unknown_bl4 == perssubentmanager->unknown_bl4)
       {
         pass ("PERSSUBENTMANAGER.unknown_bl4 [BL] set+1 %u", unknown_bl4);
@@ -48893,7 +48893,7 @@ static int test_PERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl5++;
-    if (dwg_dynapi_entity_set_value (perssubentmanager, "PERSSUBENTMANAGER", "unknown_bl5", &unknown_bl5)
+      if (dwg_dynapi_entity_set_value (perssubentmanager, "PERSSUBENTMANAGER", "unknown_bl5", &unknown_bl5, 0)
         && unknown_bl5 == perssubentmanager->unknown_bl5)
       {
         pass ("PERSSUBENTMANAGER.unknown_bl5 [BL] set+1 %u", unknown_bl5);
@@ -48919,7 +48919,7 @@ static int test_PERSSUBENTMANAGER (const Dwg_Object *obj)
         error++;
       }
     unknown_bl6++;
-    if (dwg_dynapi_entity_set_value (perssubentmanager, "PERSSUBENTMANAGER", "unknown_bl6", &unknown_bl6)
+      if (dwg_dynapi_entity_set_value (perssubentmanager, "PERSSUBENTMANAGER", "unknown_bl6", &unknown_bl6, 0)
         && unknown_bl6 == perssubentmanager->unknown_bl6)
       {
         pass ("PERSSUBENTMANAGER.unknown_bl6 [BL] set+1 %u", unknown_bl6);
@@ -48972,7 +48972,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
         error++;
       }
     bottom_margin++;
-    if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "bottom_margin", &bottom_margin)
+      if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "bottom_margin", &bottom_margin, 0)
         && bottom_margin == plotsettings->bottom_margin)
       {
         pass ("PLOTSETTINGS.bottom_margin [BD] set+1 %g", bottom_margin);
@@ -48998,7 +48998,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
         error++;
       }
     den_custom_print_scale++;
-    if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "den_custom_print_scale", &den_custom_print_scale)
+      if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "den_custom_print_scale", &den_custom_print_scale, 0)
         && den_custom_print_scale == plotsettings->den_custom_print_scale)
       {
         pass ("PLOTSETTINGS.den_custom_print_scale [BD] set+1 %g", den_custom_print_scale);
@@ -49024,7 +49024,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
         error++;
       }
     left_margin++;
-    if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "left_margin", &left_margin)
+      if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "left_margin", &left_margin, 0)
         && left_margin == plotsettings->left_margin)
       {
         pass ("PLOTSETTINGS.left_margin [BD] set+1 %g", left_margin);
@@ -49050,7 +49050,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
         error++;
       }
     num_custom_print_scale++;
-    if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "num_custom_print_scale", &num_custom_print_scale)
+      if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "num_custom_print_scale", &num_custom_print_scale, 0)
         && num_custom_print_scale == plotsettings->num_custom_print_scale)
       {
         pass ("PLOTSETTINGS.num_custom_print_scale [BD] set+1 %g", num_custom_print_scale);
@@ -49089,7 +49089,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
         error++;
       }
     paper_height++;
-    if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "paper_height", &paper_height)
+      if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "paper_height", &paper_height, 0)
         && paper_height == plotsettings->paper_height)
       {
         pass ("PLOTSETTINGS.paper_height [BD] set+1 %g", paper_height);
@@ -49141,7 +49141,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
         error++;
       }
     paper_width++;
-    if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "paper_width", &paper_width)
+      if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "paper_width", &paper_width, 0)
         && paper_width == plotsettings->paper_width)
       {
         pass ("PLOTSETTINGS.paper_width [BD] set+1 %g", paper_width);
@@ -49180,7 +49180,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
         error++;
       }
     plot_layout++;
-    if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "plot_layout", &plot_layout)
+      if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "plot_layout", &plot_layout, 0)
         && plot_layout == plotsettings->plot_layout)
       {
         pass ("PLOTSETTINGS.plot_layout [BS] set+1 %hu", plot_layout);
@@ -49219,7 +49219,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
         error++;
       }
     plot_paper_units++;
-    if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "plot_paper_units", &plot_paper_units)
+      if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "plot_paper_units", &plot_paper_units, 0)
         && plot_paper_units == plotsettings->plot_paper_units)
       {
         pass ("PLOTSETTINGS.plot_paper_units [BS] set+1 %hu", plot_paper_units);
@@ -49245,7 +49245,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
         error++;
       }
     plot_rotation++;
-    if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "plot_rotation", &plot_rotation)
+      if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "plot_rotation", &plot_rotation, 0)
         && plot_rotation == plotsettings->plot_rotation)
       {
         pass ("PLOTSETTINGS.plot_rotation [BS] set+1 %hu", plot_rotation);
@@ -49271,7 +49271,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
         error++;
       }
     plot_type++;
-    if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "plot_type", &plot_type)
+      if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "plot_type", &plot_type, 0)
         && plot_type == plotsettings->plot_type)
       {
         pass ("PLOTSETTINGS.plot_type [BS] set+1 %hu", plot_type);
@@ -49349,7 +49349,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
         error++;
       }
     right_margin++;
-    if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "right_margin", &right_margin)
+      if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "right_margin", &right_margin, 0)
         && right_margin == plotsettings->right_margin)
       {
         pass ("PLOTSETTINGS.right_margin [BD] set+1 %g", right_margin);
@@ -49375,7 +49375,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
         error++;
       }
     shade_plot_custom_dpi++;
-    if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "shade_plot_custom_dpi", &shade_plot_custom_dpi)
+      if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "shade_plot_custom_dpi", &shade_plot_custom_dpi, 0)
         && shade_plot_custom_dpi == plotsettings->shade_plot_custom_dpi)
       {
         pass ("PLOTSETTINGS.shade_plot_custom_dpi [BS] set+1 %hu", shade_plot_custom_dpi);
@@ -49414,7 +49414,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
         error++;
       }
     shade_plot_mode++;
-    if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "shade_plot_mode", &shade_plot_mode)
+      if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "shade_plot_mode", &shade_plot_mode, 0)
         && shade_plot_mode == plotsettings->shade_plot_mode)
       {
         pass ("PLOTSETTINGS.shade_plot_mode [BS] set+1 %hu", shade_plot_mode);
@@ -49440,7 +49440,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
         error++;
       }
     shade_plot_res_level++;
-    if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "shade_plot_res_level", &shade_plot_res_level)
+      if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "shade_plot_res_level", &shade_plot_res_level, 0)
         && shade_plot_res_level == plotsettings->shade_plot_res_level)
       {
         pass ("PLOTSETTINGS.shade_plot_res_level [BS] set+1 %hu", shade_plot_res_level);
@@ -49466,7 +49466,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
         error++;
       }
     std_scale_factor++;
-    if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "std_scale_factor", &std_scale_factor)
+      if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "std_scale_factor", &std_scale_factor, 0)
         && std_scale_factor == plotsettings->std_scale_factor)
       {
         pass ("PLOTSETTINGS.std_scale_factor [BD] set+1 %g", std_scale_factor);
@@ -49492,7 +49492,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
         error++;
       }
     std_scale_type++;
-    if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "std_scale_type", &std_scale_type)
+      if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "std_scale_type", &std_scale_type, 0)
         && std_scale_type == plotsettings->std_scale_type)
       {
         pass ("PLOTSETTINGS.std_scale_type [BS] set+1 %hu", std_scale_type);
@@ -49531,7 +49531,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
         error++;
       }
     top_margin++;
-    if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "top_margin", &top_margin)
+      if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "top_margin", &top_margin, 0)
         && top_margin == plotsettings->top_margin)
       {
         pass ("PLOTSETTINGS.top_margin [BD] set+1 %g", top_margin);
@@ -49557,7 +49557,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
         error++;
       }
     use_std_scale++;
-    if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "use_std_scale", &use_std_scale)
+      if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "use_std_scale", &use_std_scale, 0)
         && use_std_scale == plotsettings->use_std_scale)
       {
         pass ("PLOTSETTINGS.use_std_scale [B] set+1 " FORMAT_B "", use_std_scale);
@@ -49590,7 +49590,7 @@ static int test_PROXY_OBJECT (const Dwg_Object *obj)
         error++;
       }
     class_id++;
-    if (dwg_dynapi_entity_set_value (proxy_object, "PROXY_OBJECT", "class_id", &class_id)
+      if (dwg_dynapi_entity_set_value (proxy_object, "PROXY_OBJECT", "class_id", &class_id, 0)
         && class_id == proxy_object->class_id)
       {
         pass ("PROXY_OBJECT.class_id [BL] set+1 %u", class_id);
@@ -49629,7 +49629,7 @@ static int test_PROXY_OBJECT (const Dwg_Object *obj)
         error++;
       }
     from_dxf++;
-    if (dwg_dynapi_entity_set_value (proxy_object, "PROXY_OBJECT", "from_dxf", &from_dxf)
+      if (dwg_dynapi_entity_set_value (proxy_object, "PROXY_OBJECT", "from_dxf", &from_dxf, 0)
         && from_dxf == proxy_object->from_dxf)
       {
         pass ("PROXY_OBJECT.from_dxf [B] set+1 " FORMAT_B "", from_dxf);
@@ -49655,7 +49655,7 @@ static int test_PROXY_OBJECT (const Dwg_Object *obj)
         error++;
       }
     maint_version++;
-    if (dwg_dynapi_entity_set_value (proxy_object, "PROXY_OBJECT", "maint_version", &maint_version)
+      if (dwg_dynapi_entity_set_value (proxy_object, "PROXY_OBJECT", "maint_version", &maint_version, 0)
         && maint_version == proxy_object->maint_version)
       {
         pass ("PROXY_OBJECT.maint_version [BL] set+1 %u", maint_version);
@@ -49707,7 +49707,7 @@ static int test_PROXY_OBJECT (const Dwg_Object *obj)
         error++;
       }
     version++;
-    if (dwg_dynapi_entity_set_value (proxy_object, "PROXY_OBJECT", "version", &version)
+      if (dwg_dynapi_entity_set_value (proxy_object, "PROXY_OBJECT", "version", &version, 0)
         && version == proxy_object->version)
       {
         pass ("PROXY_OBJECT.version [BL] set+1 %u", version);
@@ -49740,7 +49740,7 @@ static int test_RASTERVARIABLES (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (rastervariables, "RASTERVARIABLES", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (rastervariables, "RASTERVARIABLES", "class_version", &class_version, 0)
         && class_version == rastervariables->class_version)
       {
         pass ("RASTERVARIABLES.class_version [BL] set+1 %u", class_version);
@@ -49766,7 +49766,7 @@ static int test_RASTERVARIABLES (const Dwg_Object *obj)
         error++;
       }
     display_frame++;
-    if (dwg_dynapi_entity_set_value (rastervariables, "RASTERVARIABLES", "display_frame", &display_frame)
+      if (dwg_dynapi_entity_set_value (rastervariables, "RASTERVARIABLES", "display_frame", &display_frame, 0)
         && display_frame == rastervariables->display_frame)
       {
         pass ("RASTERVARIABLES.display_frame [BS] set+1 %hu", display_frame);
@@ -49792,7 +49792,7 @@ static int test_RASTERVARIABLES (const Dwg_Object *obj)
         error++;
       }
     display_quality++;
-    if (dwg_dynapi_entity_set_value (rastervariables, "RASTERVARIABLES", "display_quality", &display_quality)
+      if (dwg_dynapi_entity_set_value (rastervariables, "RASTERVARIABLES", "display_quality", &display_quality, 0)
         && display_quality == rastervariables->display_quality)
       {
         pass ("RASTERVARIABLES.display_quality [BS] set+1 %hu", display_quality);
@@ -49831,7 +49831,7 @@ static int test_RASTERVARIABLES (const Dwg_Object *obj)
         error++;
       }
     units++;
-    if (dwg_dynapi_entity_set_value (rastervariables, "RASTERVARIABLES", "units", &units)
+      if (dwg_dynapi_entity_set_value (rastervariables, "RASTERVARIABLES", "units", &units, 0)
         && units == rastervariables->units)
       {
         pass ("RASTERVARIABLES.units [BS] set+1 %hu", units);
@@ -49864,7 +49864,7 @@ static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (renderenvironment, "RENDERENVIRONMENT", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (renderenvironment, "RENDERENVIRONMENT", "class_version", &class_version, 0)
         && class_version == renderenvironment->class_version)
       {
         pass ("RENDERENVIRONMENT.class_version [BL] set+1 %u", class_version);
@@ -49890,7 +49890,7 @@ static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
         error++;
       }
     environ_image_enabled++;
-    if (dwg_dynapi_entity_set_value (renderenvironment, "RENDERENVIRONMENT", "environ_image_enabled", &environ_image_enabled)
+      if (dwg_dynapi_entity_set_value (renderenvironment, "RENDERENVIRONMENT", "environ_image_enabled", &environ_image_enabled, 0)
         && environ_image_enabled == renderenvironment->environ_image_enabled)
       {
         pass ("RENDERENVIRONMENT.environ_image_enabled [B] set+1 " FORMAT_B "", environ_image_enabled);
@@ -49929,7 +49929,7 @@ static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
         error++;
       }
     fog_background_enabled++;
-    if (dwg_dynapi_entity_set_value (renderenvironment, "RENDERENVIRONMENT", "fog_background_enabled", &fog_background_enabled)
+      if (dwg_dynapi_entity_set_value (renderenvironment, "RENDERENVIRONMENT", "fog_background_enabled", &fog_background_enabled, 0)
         && fog_background_enabled == renderenvironment->fog_background_enabled)
       {
         pass ("RENDERENVIRONMENT.fog_background_enabled [B] set+1 " FORMAT_B "", fog_background_enabled);
@@ -49968,7 +49968,7 @@ static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
         error++;
       }
     fog_density_far++;
-    if (dwg_dynapi_entity_set_value (renderenvironment, "RENDERENVIRONMENT", "fog_density_far", &fog_density_far)
+      if (dwg_dynapi_entity_set_value (renderenvironment, "RENDERENVIRONMENT", "fog_density_far", &fog_density_far, 0)
         && fog_density_far == renderenvironment->fog_density_far)
       {
         pass ("RENDERENVIRONMENT.fog_density_far [BD] set+1 %g", fog_density_far);
@@ -49994,7 +49994,7 @@ static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
         error++;
       }
     fog_density_near++;
-    if (dwg_dynapi_entity_set_value (renderenvironment, "RENDERENVIRONMENT", "fog_density_near", &fog_density_near)
+      if (dwg_dynapi_entity_set_value (renderenvironment, "RENDERENVIRONMENT", "fog_density_near", &fog_density_near, 0)
         && fog_density_near == renderenvironment->fog_density_near)
       {
         pass ("RENDERENVIRONMENT.fog_density_near [BD] set+1 %g", fog_density_near);
@@ -50020,7 +50020,7 @@ static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
         error++;
       }
     fog_distance_far++;
-    if (dwg_dynapi_entity_set_value (renderenvironment, "RENDERENVIRONMENT", "fog_distance_far", &fog_distance_far)
+      if (dwg_dynapi_entity_set_value (renderenvironment, "RENDERENVIRONMENT", "fog_distance_far", &fog_distance_far, 0)
         && fog_distance_far == renderenvironment->fog_distance_far)
       {
         pass ("RENDERENVIRONMENT.fog_distance_far [BD] set+1 %g", fog_distance_far);
@@ -50046,7 +50046,7 @@ static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
         error++;
       }
     fog_distance_near++;
-    if (dwg_dynapi_entity_set_value (renderenvironment, "RENDERENVIRONMENT", "fog_distance_near", &fog_distance_near)
+      if (dwg_dynapi_entity_set_value (renderenvironment, "RENDERENVIRONMENT", "fog_distance_near", &fog_distance_near, 0)
         && fog_distance_near == renderenvironment->fog_distance_near)
       {
         pass ("RENDERENVIRONMENT.fog_distance_near [BD] set+1 %g", fog_distance_near);
@@ -50072,7 +50072,7 @@ static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
         error++;
       }
     fog_enabled++;
-    if (dwg_dynapi_entity_set_value (renderenvironment, "RENDERENVIRONMENT", "fog_enabled", &fog_enabled)
+      if (dwg_dynapi_entity_set_value (renderenvironment, "RENDERENVIRONMENT", "fog_enabled", &fog_enabled, 0)
         && fog_enabled == renderenvironment->fog_enabled)
       {
         pass ("RENDERENVIRONMENT.fog_enabled [B] set+1 " FORMAT_B "", fog_enabled);
@@ -50118,7 +50118,7 @@ static int test_RENDERGLOBAL (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (renderglobal, "RENDERGLOBAL", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (renderglobal, "RENDERGLOBAL", "class_version", &class_version, 0)
         && class_version == renderglobal->class_version)
       {
         pass ("RENDERGLOBAL.class_version [BL] set+1 %u", class_version);
@@ -50144,7 +50144,7 @@ static int test_RENDERGLOBAL (const Dwg_Object *obj)
         error++;
       }
     destination++;
-    if (dwg_dynapi_entity_set_value (renderglobal, "RENDERGLOBAL", "destination", &destination)
+      if (dwg_dynapi_entity_set_value (renderglobal, "RENDERGLOBAL", "destination", &destination, 0)
         && destination == renderglobal->destination)
       {
         pass ("RENDERGLOBAL.destination [BL] set+1 %u", destination);
@@ -50170,7 +50170,7 @@ static int test_RENDERGLOBAL (const Dwg_Object *obj)
         error++;
       }
     highlevel_info++;
-    if (dwg_dynapi_entity_set_value (renderglobal, "RENDERGLOBAL", "highlevel_info", &highlevel_info)
+      if (dwg_dynapi_entity_set_value (renderglobal, "RENDERGLOBAL", "highlevel_info", &highlevel_info, 0)
         && highlevel_info == renderglobal->highlevel_info)
       {
         pass ("RENDERGLOBAL.highlevel_info [B] set+1 " FORMAT_B "", highlevel_info);
@@ -50196,7 +50196,7 @@ static int test_RENDERGLOBAL (const Dwg_Object *obj)
         error++;
       }
     image_height++;
-    if (dwg_dynapi_entity_set_value (renderglobal, "RENDERGLOBAL", "image_height", &image_height)
+      if (dwg_dynapi_entity_set_value (renderglobal, "RENDERGLOBAL", "image_height", &image_height, 0)
         && image_height == renderglobal->image_height)
       {
         pass ("RENDERGLOBAL.image_height [BL] set+1 %u", image_height);
@@ -50222,7 +50222,7 @@ static int test_RENDERGLOBAL (const Dwg_Object *obj)
         error++;
       }
     image_width++;
-    if (dwg_dynapi_entity_set_value (renderglobal, "RENDERGLOBAL", "image_width", &image_width)
+      if (dwg_dynapi_entity_set_value (renderglobal, "RENDERGLOBAL", "image_width", &image_width, 0)
         && image_width == renderglobal->image_width)
       {
         pass ("RENDERGLOBAL.image_width [BL] set+1 %u", image_width);
@@ -50261,7 +50261,7 @@ static int test_RENDERGLOBAL (const Dwg_Object *obj)
         error++;
       }
     predef_presets_first++;
-    if (dwg_dynapi_entity_set_value (renderglobal, "RENDERGLOBAL", "predef_presets_first", &predef_presets_first)
+      if (dwg_dynapi_entity_set_value (renderglobal, "RENDERGLOBAL", "predef_presets_first", &predef_presets_first, 0)
         && predef_presets_first == renderglobal->predef_presets_first)
       {
         pass ("RENDERGLOBAL.predef_presets_first [B] set+1 " FORMAT_B "", predef_presets_first);
@@ -50287,7 +50287,7 @@ static int test_RENDERGLOBAL (const Dwg_Object *obj)
         error++;
       }
     procedure++;
-    if (dwg_dynapi_entity_set_value (renderglobal, "RENDERGLOBAL", "procedure", &procedure)
+      if (dwg_dynapi_entity_set_value (renderglobal, "RENDERGLOBAL", "procedure", &procedure, 0)
         && procedure == renderglobal->procedure)
       {
         pass ("RENDERGLOBAL.procedure [BL] set+1 %u", procedure);
@@ -50313,7 +50313,7 @@ static int test_RENDERGLOBAL (const Dwg_Object *obj)
         error++;
       }
     save_enabled++;
-    if (dwg_dynapi_entity_set_value (renderglobal, "RENDERGLOBAL", "save_enabled", &save_enabled)
+      if (dwg_dynapi_entity_set_value (renderglobal, "RENDERGLOBAL", "save_enabled", &save_enabled, 0)
         && save_enabled == renderglobal->save_enabled)
       {
         pass ("RENDERGLOBAL.save_enabled [B] set+1 " FORMAT_B "", save_enabled);
@@ -50359,7 +50359,7 @@ static int test_SCALE (const Dwg_Object *obj)
         error++;
       }
     drawing_units++;
-    if (dwg_dynapi_entity_set_value (scale, "SCALE", "drawing_units", &drawing_units)
+      if (dwg_dynapi_entity_set_value (scale, "SCALE", "drawing_units", &drawing_units, 0)
         && drawing_units == scale->drawing_units)
       {
         pass ("SCALE.drawing_units [BD] set+1 %g", drawing_units);
@@ -50385,7 +50385,7 @@ static int test_SCALE (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (scale, "SCALE", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (scale, "SCALE", "flag", &flag, 0)
         && flag == scale->flag)
       {
         pass ("SCALE.flag [BS] set+1 %hu", flag);
@@ -50411,7 +50411,7 @@ static int test_SCALE (const Dwg_Object *obj)
         error++;
       }
     has_unit_scale++;
-    if (dwg_dynapi_entity_set_value (scale, "SCALE", "has_unit_scale", &has_unit_scale)
+      if (dwg_dynapi_entity_set_value (scale, "SCALE", "has_unit_scale", &has_unit_scale, 0)
         && has_unit_scale == scale->has_unit_scale)
       {
         pass ("SCALE.has_unit_scale [B] set+1 " FORMAT_B "", has_unit_scale);
@@ -50450,7 +50450,7 @@ static int test_SCALE (const Dwg_Object *obj)
         error++;
       }
     paper_units++;
-    if (dwg_dynapi_entity_set_value (scale, "SCALE", "paper_units", &paper_units)
+      if (dwg_dynapi_entity_set_value (scale, "SCALE", "paper_units", &paper_units, 0)
         && paper_units == scale->paper_units)
       {
         pass ("SCALE.paper_units [BD] set+1 %g", paper_units);
@@ -50524,7 +50524,7 @@ static int test_SORTENTSTABLE (const Dwg_Object *obj)
         error++;
       }
     num_ents++;
-    if (dwg_dynapi_entity_set_value (sortentstable, "SORTENTSTABLE", "num_ents", &num_ents)
+      if (dwg_dynapi_entity_set_value (sortentstable, "SORTENTSTABLE", "num_ents", &num_ents, 0)
         && num_ents == sortentstable->num_ents)
       {
         pass ("SORTENTSTABLE.num_ents [BL] set+1 %u", num_ents);
@@ -50585,7 +50585,7 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
         error++;
       }
     back_clip_dist++;
-    if (dwg_dynapi_entity_set_value (spatial_filter, "SPATIAL_FILTER", "back_clip_dist", &back_clip_dist)
+      if (dwg_dynapi_entity_set_value (spatial_filter, "SPATIAL_FILTER", "back_clip_dist", &back_clip_dist, 0)
         && back_clip_dist == spatial_filter->back_clip_dist)
       {
         pass ("SPATIAL_FILTER.back_clip_dist [BD] set+1 %g", back_clip_dist);
@@ -50611,7 +50611,7 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
         error++;
       }
     back_clip_on++;
-    if (dwg_dynapi_entity_set_value (spatial_filter, "SPATIAL_FILTER", "back_clip_on", &back_clip_on)
+      if (dwg_dynapi_entity_set_value (spatial_filter, "SPATIAL_FILTER", "back_clip_on", &back_clip_on, 0)
         && back_clip_on == spatial_filter->back_clip_on)
       {
         pass ("SPATIAL_FILTER.back_clip_on [BS] set+1 %hu", back_clip_on);
@@ -50663,7 +50663,7 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
         error++;
       }
     display_boundary++;
-    if (dwg_dynapi_entity_set_value (spatial_filter, "SPATIAL_FILTER", "display_boundary", &display_boundary)
+      if (dwg_dynapi_entity_set_value (spatial_filter, "SPATIAL_FILTER", "display_boundary", &display_boundary, 0)
         && display_boundary == spatial_filter->display_boundary)
       {
         pass ("SPATIAL_FILTER.display_boundary [BS] set+1 %hu", display_boundary);
@@ -50702,7 +50702,7 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
         error++;
       }
     front_clip_dist++;
-    if (dwg_dynapi_entity_set_value (spatial_filter, "SPATIAL_FILTER", "front_clip_dist", &front_clip_dist)
+      if (dwg_dynapi_entity_set_value (spatial_filter, "SPATIAL_FILTER", "front_clip_dist", &front_clip_dist, 0)
         && front_clip_dist == spatial_filter->front_clip_dist)
       {
         pass ("SPATIAL_FILTER.front_clip_dist [BD] set+1 %g", front_clip_dist);
@@ -50728,7 +50728,7 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
         error++;
       }
     front_clip_on++;
-    if (dwg_dynapi_entity_set_value (spatial_filter, "SPATIAL_FILTER", "front_clip_on", &front_clip_on)
+      if (dwg_dynapi_entity_set_value (spatial_filter, "SPATIAL_FILTER", "front_clip_on", &front_clip_on, 0)
         && front_clip_on == spatial_filter->front_clip_on)
       {
         pass ("SPATIAL_FILTER.front_clip_on [BS] set+1 %hu", front_clip_on);
@@ -50767,7 +50767,7 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
         error++;
       }
     num_points++;
-    if (dwg_dynapi_entity_set_value (spatial_filter, "SPATIAL_FILTER", "num_points", &num_points)
+      if (dwg_dynapi_entity_set_value (spatial_filter, "SPATIAL_FILTER", "num_points", &num_points, 0)
         && num_points == spatial_filter->num_points)
       {
         pass ("SPATIAL_FILTER.num_points [BS] set+1 %hu", num_points);
@@ -50841,7 +50841,7 @@ static int test_SPATIAL_INDEX (const Dwg_Object *obj)
         error++;
       }
     timestamp1++;
-    if (dwg_dynapi_entity_set_value (spatial_index, "SPATIAL_INDEX", "timestamp1", &timestamp1)
+      if (dwg_dynapi_entity_set_value (spatial_index, "SPATIAL_INDEX", "timestamp1", &timestamp1, 0)
         && timestamp1 == spatial_index->timestamp1)
       {
         pass ("SPATIAL_INDEX.timestamp1 [BL] set+1 %u", timestamp1);
@@ -50867,7 +50867,7 @@ static int test_SPATIAL_INDEX (const Dwg_Object *obj)
         error++;
       }
     timestamp2++;
-    if (dwg_dynapi_entity_set_value (spatial_index, "SPATIAL_INDEX", "timestamp2", &timestamp2)
+      if (dwg_dynapi_entity_set_value (spatial_index, "SPATIAL_INDEX", "timestamp2", &timestamp2, 0)
         && timestamp2 == spatial_index->timestamp2)
       {
         pass ("SPATIAL_INDEX.timestamp2 [BL] set+1 %u", timestamp2);
@@ -50939,7 +50939,7 @@ static int test_STYLE (const Dwg_Object *obj)
         error++;
       }
     fixed_height++;
-    if (dwg_dynapi_entity_set_value (style, "STYLE", "fixed_height", &fixed_height)
+      if (dwg_dynapi_entity_set_value (style, "STYLE", "fixed_height", &fixed_height, 0)
         && fixed_height == style->fixed_height)
       {
         pass ("STYLE.fixed_height [BD] set+1 %g", fixed_height);
@@ -50965,7 +50965,7 @@ static int test_STYLE (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (style, "STYLE", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (style, "STYLE", "flag", &flag, 0)
         && flag == style->flag)
       {
         pass ("STYLE.flag [RC] set+1 %u", flag);
@@ -51004,7 +51004,7 @@ static int test_STYLE (const Dwg_Object *obj)
         error++;
       }
     generation++;
-    if (dwg_dynapi_entity_set_value (style, "STYLE", "generation", &generation)
+      if (dwg_dynapi_entity_set_value (style, "STYLE", "generation", &generation, 0)
         && generation == style->generation)
       {
         pass ("STYLE.generation [RC] set+1 %u", generation);
@@ -51030,7 +51030,7 @@ static int test_STYLE (const Dwg_Object *obj)
         error++;
       }
     last_height++;
-    if (dwg_dynapi_entity_set_value (style, "STYLE", "last_height", &last_height)
+      if (dwg_dynapi_entity_set_value (style, "STYLE", "last_height", &last_height, 0)
         && last_height == style->last_height)
       {
         pass ("STYLE.last_height [BD] set+1 %g", last_height);
@@ -51069,7 +51069,7 @@ static int test_STYLE (const Dwg_Object *obj)
         error++;
       }
     oblique_ang++;
-    if (dwg_dynapi_entity_set_value (style, "STYLE", "oblique_ang", &oblique_ang)
+      if (dwg_dynapi_entity_set_value (style, "STYLE", "oblique_ang", &oblique_ang, 0)
         && oblique_ang == style->oblique_ang)
       {
         pass ("STYLE.oblique_ang [BD] set+1 %g", oblique_ang);
@@ -51108,7 +51108,7 @@ static int test_STYLE (const Dwg_Object *obj)
         error++;
       }
     shape_file++;
-    if (dwg_dynapi_entity_set_value (style, "STYLE", "shape_file", &shape_file)
+      if (dwg_dynapi_entity_set_value (style, "STYLE", "shape_file", &shape_file, 0)
         && shape_file == style->shape_file)
       {
         pass ("STYLE.shape_file [B] set+1 " FORMAT_B "", shape_file);
@@ -51134,7 +51134,7 @@ static int test_STYLE (const Dwg_Object *obj)
         error++;
       }
     used++;
-    if (dwg_dynapi_entity_set_value (style, "STYLE", "used", &used)
+      if (dwg_dynapi_entity_set_value (style, "STYLE", "used", &used, 0)
         && used == style->used)
       {
         pass ("STYLE.used [RS] set+1 %hu", used);
@@ -51160,7 +51160,7 @@ static int test_STYLE (const Dwg_Object *obj)
         error++;
       }
     vertical++;
-    if (dwg_dynapi_entity_set_value (style, "STYLE", "vertical", &vertical)
+      if (dwg_dynapi_entity_set_value (style, "STYLE", "vertical", &vertical, 0)
         && vertical == style->vertical)
       {
         pass ("STYLE.vertical [B] set+1 " FORMAT_B "", vertical);
@@ -51186,7 +51186,7 @@ static int test_STYLE (const Dwg_Object *obj)
         error++;
       }
     width_factor++;
-    if (dwg_dynapi_entity_set_value (style, "STYLE", "width_factor", &width_factor)
+      if (dwg_dynapi_entity_set_value (style, "STYLE", "width_factor", &width_factor, 0)
         && width_factor == style->width_factor)
       {
         pass ("STYLE.width_factor [BD] set+1 %g", width_factor);
@@ -51212,7 +51212,7 @@ static int test_STYLE (const Dwg_Object *obj)
         error++;
       }
     xrefdep++;
-    if (dwg_dynapi_entity_set_value (style, "STYLE", "xrefdep", &xrefdep)
+      if (dwg_dynapi_entity_set_value (style, "STYLE", "xrefdep", &xrefdep, 0)
         && xrefdep == style->xrefdep)
       {
         pass ("STYLE.xrefdep [B] set+1 " FORMAT_B "", xrefdep);
@@ -51238,7 +51238,7 @@ static int test_STYLE (const Dwg_Object *obj)
         error++;
       }
     xrefindex_plus1++;
-    if (dwg_dynapi_entity_set_value (style, "STYLE", "xrefindex_plus1", &xrefindex_plus1)
+      if (dwg_dynapi_entity_set_value (style, "STYLE", "xrefindex_plus1", &xrefindex_plus1, 0)
         && xrefindex_plus1 == style->xrefindex_plus1)
       {
         pass ("STYLE.xrefindex_plus1 [BS] set+1 %hu", xrefindex_plus1);
@@ -51264,7 +51264,7 @@ static int test_STYLE (const Dwg_Object *obj)
         error++;
       }
     xrefref++;
-    if (dwg_dynapi_entity_set_value (style, "STYLE", "xrefref", &xrefref)
+      if (dwg_dynapi_entity_set_value (style, "STYLE", "xrefref", &xrefref, 0)
         && xrefref == style->xrefref)
       {
         pass ("STYLE.xrefref [B] set+1 " FORMAT_B "", xrefref);
@@ -51297,7 +51297,7 @@ static int test_STYLE_CONTROL (const Dwg_Object *obj)
         error++;
       }
     num_entries++;
-    if (dwg_dynapi_entity_set_value (style_control, "STYLE_CONTROL", "num_entries", &num_entries)
+      if (dwg_dynapi_entity_set_value (style_control, "STYLE_CONTROL", "num_entries", &num_entries, 0)
         && num_entries == style_control->num_entries)
       {
         pass ("STYLE_CONTROL.num_entries [BS] set+1 %hu", num_entries);
@@ -51323,7 +51323,7 @@ static int test_STYLE_CONTROL (const Dwg_Object *obj)
         error++;
       }
     objid++;
-    if (dwg_dynapi_entity_set_value (style_control, "STYLE_CONTROL", "objid", &objid)
+      if (dwg_dynapi_entity_set_value (style_control, "STYLE_CONTROL", "objid", &objid, 0)
         && objid == style_control->objid)
       {
         pass ("STYLE_CONTROL.objid [BL] set+1 %u", objid);
@@ -51384,7 +51384,7 @@ static int test_SUN (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (sun, "SUN", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (sun, "SUN", "class_version", &class_version, 0)
         && class_version == sun->class_version)
       {
         pass ("SUN.class_version [BL] set+1 %u", class_version);
@@ -51423,7 +51423,7 @@ static int test_SUN (const Dwg_Object *obj)
         error++;
       }
     has_shadow++;
-    if (dwg_dynapi_entity_set_value (sun, "SUN", "has_shadow", &has_shadow)
+      if (dwg_dynapi_entity_set_value (sun, "SUN", "has_shadow", &has_shadow, 0)
         && has_shadow == sun->has_shadow)
       {
         pass ("SUN.has_shadow [B] set+1 " FORMAT_B "", has_shadow);
@@ -51449,7 +51449,7 @@ static int test_SUN (const Dwg_Object *obj)
         error++;
       }
     intensity++;
-    if (dwg_dynapi_entity_set_value (sun, "SUN", "intensity", &intensity)
+      if (dwg_dynapi_entity_set_value (sun, "SUN", "intensity", &intensity, 0)
         && intensity == sun->intensity)
       {
         pass ("SUN.intensity [BD] set+1 %g", intensity);
@@ -51475,7 +51475,7 @@ static int test_SUN (const Dwg_Object *obj)
         error++;
       }
     is_dst++;
-    if (dwg_dynapi_entity_set_value (sun, "SUN", "is_dst", &is_dst)
+      if (dwg_dynapi_entity_set_value (sun, "SUN", "is_dst", &is_dst, 0)
         && is_dst == sun->is_dst)
       {
         pass ("SUN.is_dst [B] set+1 " FORMAT_B "", is_dst);
@@ -51501,7 +51501,7 @@ static int test_SUN (const Dwg_Object *obj)
         error++;
       }
     is_on++;
-    if (dwg_dynapi_entity_set_value (sun, "SUN", "is_on", &is_on)
+      if (dwg_dynapi_entity_set_value (sun, "SUN", "is_on", &is_on, 0)
         && is_on == sun->is_on)
       {
         pass ("SUN.is_on [B] set+1 " FORMAT_B "", is_on);
@@ -51527,7 +51527,7 @@ static int test_SUN (const Dwg_Object *obj)
         error++;
       }
     julian_day++;
-    if (dwg_dynapi_entity_set_value (sun, "SUN", "julian_day", &julian_day)
+      if (dwg_dynapi_entity_set_value (sun, "SUN", "julian_day", &julian_day, 0)
         && julian_day == sun->julian_day)
       {
         pass ("SUN.julian_day [BL] set+1 %u", julian_day);
@@ -51566,7 +51566,7 @@ static int test_SUN (const Dwg_Object *obj)
         error++;
       }
     shadow_mapsize++;
-    if (dwg_dynapi_entity_set_value (sun, "SUN", "shadow_mapsize", &shadow_mapsize)
+      if (dwg_dynapi_entity_set_value (sun, "SUN", "shadow_mapsize", &shadow_mapsize, 0)
         && shadow_mapsize == sun->shadow_mapsize)
       {
         pass ("SUN.shadow_mapsize [BS] set+1 %hu", shadow_mapsize);
@@ -51592,7 +51592,7 @@ static int test_SUN (const Dwg_Object *obj)
         error++;
       }
     shadow_softness++;
-    if (dwg_dynapi_entity_set_value (sun, "SUN", "shadow_softness", &shadow_softness)
+      if (dwg_dynapi_entity_set_value (sun, "SUN", "shadow_softness", &shadow_softness, 0)
         && shadow_softness == sun->shadow_softness)
       {
         pass ("SUN.shadow_softness [BS] set+1 %hu", shadow_softness);
@@ -51618,7 +51618,7 @@ static int test_SUN (const Dwg_Object *obj)
         error++;
       }
     shadow_type++;
-    if (dwg_dynapi_entity_set_value (sun, "SUN", "shadow_type", &shadow_type)
+      if (dwg_dynapi_entity_set_value (sun, "SUN", "shadow_type", &shadow_type, 0)
         && shadow_type == sun->shadow_type)
       {
         pass ("SUN.shadow_type [BS] set+1 %hu", shadow_type);
@@ -51657,7 +51657,7 @@ static int test_SUN (const Dwg_Object *obj)
         error++;
       }
     time++;
-    if (dwg_dynapi_entity_set_value (sun, "SUN", "time", &time)
+      if (dwg_dynapi_entity_set_value (sun, "SUN", "time", &time, 0)
         && time == sun->time)
       {
         pass ("SUN.time [BL] set+1 %u", time);
@@ -51683,7 +51683,7 @@ static int test_SUN (const Dwg_Object *obj)
         error++;
       }
     unknown++;
-    if (dwg_dynapi_entity_set_value (sun, "SUN", "unknown", &unknown)
+      if (dwg_dynapi_entity_set_value (sun, "SUN", "unknown", &unknown, 0)
         && unknown == sun->unknown)
       {
         pass ("SUN.unknown [BS] set+1 %hu", unknown);
@@ -51716,7 +51716,7 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "class_version", &class_version, 0)
         && class_version == sunstudy->class_version)
       {
         pass ("SUNSTUDY.class_version [BL] set+1 %u", class_version);
@@ -51770,7 +51770,7 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
         error++;
       }
     end_time++;
-    if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "end_time", &end_time)
+      if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "end_time", &end_time, 0)
         && end_time == sunstudy->end_time)
       {
         pass ("SUNSTUDY.end_time [BL] set+1 %u", end_time);
@@ -51811,7 +51811,7 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
         error++;
       }
     interval++;
-    if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "interval", &interval)
+      if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "interval", &interval, 0)
         && interval == sunstudy->interval)
       {
         pass ("SUNSTUDY.interval [BL] set+1 %u", interval);
@@ -51837,7 +51837,7 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
         error++;
       }
     label_viewports++;
-    if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "label_viewports", &label_viewports)
+      if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "label_viewports", &label_viewports, 0)
         && label_viewports == sunstudy->label_viewports)
       {
         pass ("SUNSTUDY.label_viewports [B] set+1 " FORMAT_B "", label_viewports);
@@ -51863,7 +51863,7 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
         error++;
       }
     lock_viewports++;
-    if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "lock_viewports", &lock_viewports)
+      if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "lock_viewports", &lock_viewports, 0)
         && lock_viewports == sunstudy->lock_viewports)
       {
         pass ("SUNSTUDY.lock_viewports [B] set+1 " FORMAT_B "", lock_viewports);
@@ -51889,7 +51889,7 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
         error++;
       }
     num_dates++;
-    if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "num_dates", &num_dates)
+      if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "num_dates", &num_dates, 0)
         && num_dates == sunstudy->num_dates)
       {
         pass ("SUNSTUDY.num_dates [BL] set+1 %u", num_dates);
@@ -51915,7 +51915,7 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
         error++;
       }
     num_hours++;
-    if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "num_hours", &num_hours)
+      if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "num_hours", &num_hours, 0)
         && num_hours == sunstudy->num_hours)
       {
         pass ("SUNSTUDY.num_hours [BL] set+1 %u", num_hours);
@@ -51941,7 +51941,7 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
         error++;
       }
     numcols++;
-    if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "numcols", &numcols)
+      if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "numcols", &numcols, 0)
         && numcols == sunstudy->numcols)
       {
         pass ("SUNSTUDY.numcols [BL] set+1 %u", numcols);
@@ -51967,7 +51967,7 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
         error++;
       }
     numrows++;
-    if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "numrows", &numrows)
+      if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "numrows", &numrows, 0)
         && numrows == sunstudy->numrows)
       {
         pass ("SUNSTUDY.numrows [BL] set+1 %u", numrows);
@@ -51993,7 +51993,7 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
         error++;
       }
     numvports++;
-    if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "numvports", &numvports)
+      if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "numvports", &numvports, 0)
         && numvports == sunstudy->numvports)
       {
         pass ("SUNSTUDY.numvports [BL] set+1 %u", numvports);
@@ -52019,7 +52019,7 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
         error++;
       }
     output_type++;
-    if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "output_type", &output_type)
+      if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "output_type", &output_type, 0)
         && output_type == sunstudy->output_type)
       {
         pass ("SUNSTUDY.output_type [BL] set+1 %u", output_type);
@@ -52071,7 +52071,7 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
         error++;
       }
     select_dates_from_calendar++;
-    if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "select_dates_from_calendar", &select_dates_from_calendar)
+      if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "select_dates_from_calendar", &select_dates_from_calendar, 0)
         && select_dates_from_calendar == sunstudy->select_dates_from_calendar)
       {
         pass ("SUNSTUDY.select_dates_from_calendar [B] set+1 " FORMAT_B "", select_dates_from_calendar);
@@ -52097,7 +52097,7 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
         error++;
       }
     select_range_of_dates++;
-    if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "select_range_of_dates", &select_range_of_dates)
+      if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "select_range_of_dates", &select_range_of_dates, 0)
         && select_range_of_dates == sunstudy->select_range_of_dates)
       {
         pass ("SUNSTUDY.select_range_of_dates [B] set+1 " FORMAT_B "", select_range_of_dates);
@@ -52136,7 +52136,7 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
         error++;
       }
     shade_plot_type++;
-    if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "shade_plot_type", &shade_plot_type)
+      if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "shade_plot_type", &shade_plot_type, 0)
         && shade_plot_type == sunstudy->shade_plot_type)
       {
         pass ("SUNSTUDY.shade_plot_type [BL] set+1 %u", shade_plot_type);
@@ -52188,7 +52188,7 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
         error++;
       }
     spacing++;
-    if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "spacing", &spacing)
+      if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "spacing", &spacing, 0)
         && spacing == sunstudy->spacing)
       {
         pass ("SUNSTUDY.spacing [BD] set+1 %g", spacing);
@@ -52214,7 +52214,7 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
         error++;
       }
     start_time++;
-    if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "start_time", &start_time)
+      if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "start_time", &start_time, 0)
         && start_time == sunstudy->start_time)
       {
         pass ("SUNSTUDY.start_time [BL] set+1 %u", start_time);
@@ -52253,7 +52253,7 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
         error++;
       }
     use_subset++;
-    if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "use_subset", &use_subset)
+      if (dwg_dynapi_entity_set_value (sunstudy, "SUNSTUDY", "use_subset", &use_subset, 0)
         && use_subset == sunstudy->use_subset)
       {
         pass ("SUNSTUDY.use_subset [B] set+1 " FORMAT_B "", use_subset);
@@ -52399,7 +52399,7 @@ static int test_TABLEGEOMETRY (const Dwg_Object *obj)
         error++;
       }
     num_cells++;
-    if (dwg_dynapi_entity_set_value (tablegeometry, "TABLEGEOMETRY", "num_cells", &num_cells)
+      if (dwg_dynapi_entity_set_value (tablegeometry, "TABLEGEOMETRY", "num_cells", &num_cells, 0)
         && num_cells == tablegeometry->num_cells)
       {
         pass ("TABLEGEOMETRY.num_cells [BL] set+1 %u", num_cells);
@@ -52425,7 +52425,7 @@ static int test_TABLEGEOMETRY (const Dwg_Object *obj)
         error++;
       }
     num_cols++;
-    if (dwg_dynapi_entity_set_value (tablegeometry, "TABLEGEOMETRY", "num_cols", &num_cols)
+      if (dwg_dynapi_entity_set_value (tablegeometry, "TABLEGEOMETRY", "num_cols", &num_cols, 0)
         && num_cols == tablegeometry->num_cols)
       {
         pass ("TABLEGEOMETRY.num_cols [BL] set+1 %u", num_cols);
@@ -52451,7 +52451,7 @@ static int test_TABLEGEOMETRY (const Dwg_Object *obj)
         error++;
       }
     num_rows++;
-    if (dwg_dynapi_entity_set_value (tablegeometry, "TABLEGEOMETRY", "num_rows", &num_rows)
+      if (dwg_dynapi_entity_set_value (tablegeometry, "TABLEGEOMETRY", "num_rows", &num_rows, 0)
         && num_rows == tablegeometry->num_rows)
       {
         pass ("TABLEGEOMETRY.num_rows [BL] set+1 %u", num_rows);
@@ -52512,7 +52512,7 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
         error++;
       }
     class_version++;
-    if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "class_version", &class_version)
+      if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "class_version", &class_version, 0)
         && class_version == tablestyle->class_version)
       {
         pass ("TABLESTYLE.class_version [BS] set+1 %hu", class_version);
@@ -52538,7 +52538,7 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
         error++;
       }
     flags++;
-    if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "flags", &flags)
+      if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "flags", &flags, 0)
         && flags == tablestyle->flags)
       {
         pass ("TABLESTYLE.flags [BL] set+1 %u", flags);
@@ -52564,7 +52564,7 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
         error++;
       }
     flow_direction++;
-    if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "flow_direction", &flow_direction)
+      if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "flow_direction", &flow_direction, 0)
         && flow_direction == tablestyle->flow_direction)
       {
         pass ("TABLESTYLE.flow_direction [BS] set+1 %hu", flow_direction);
@@ -52590,7 +52590,7 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
         error++;
       }
     header_suppressed++;
-    if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "header_suppressed", &header_suppressed)
+      if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "header_suppressed", &header_suppressed, 0)
         && header_suppressed == tablestyle->header_suppressed)
       {
         pass ("TABLESTYLE.header_suppressed [B] set+1 " FORMAT_B "", header_suppressed);
@@ -52616,7 +52616,7 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
         error++;
       }
     horiz_cell_margin++;
-    if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "horiz_cell_margin", &horiz_cell_margin)
+      if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "horiz_cell_margin", &horiz_cell_margin, 0)
         && horiz_cell_margin == tablestyle->horiz_cell_margin)
       {
         pass ("TABLESTYLE.horiz_cell_margin [BD] set+1 %g", horiz_cell_margin);
@@ -52655,7 +52655,7 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
         error++;
       }
     num_cells++;
-    if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "num_cells", &num_cells)
+      if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "num_cells", &num_cells, 0)
         && num_cells == tablestyle->num_cells)
       {
         pass ("TABLESTYLE.num_cells [BL] set+1 %u", num_cells);
@@ -52694,7 +52694,7 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
         error++;
       }
     title_suppressed++;
-    if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "title_suppressed", &title_suppressed)
+      if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "title_suppressed", &title_suppressed, 0)
         && title_suppressed == tablestyle->title_suppressed)
       {
         pass ("TABLESTYLE.title_suppressed [B] set+1 " FORMAT_B "", title_suppressed);
@@ -52720,7 +52720,7 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
         error++;
       }
     vert_cell_margin++;
-    if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "vert_cell_margin", &vert_cell_margin)
+      if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "vert_cell_margin", &vert_cell_margin, 0)
         && vert_cell_margin == tablestyle->vert_cell_margin)
       {
         pass ("TABLESTYLE.vert_cell_margin [BD] set+1 %g", vert_cell_margin);
@@ -52766,7 +52766,7 @@ static int test_UCS (const Dwg_Object *obj)
         error++;
       }
     elevation++;
-    if (dwg_dynapi_entity_set_value (ucs, "UCS", "elevation", &elevation)
+      if (dwg_dynapi_entity_set_value (ucs, "UCS", "elevation", &elevation, 0)
         && elevation == ucs->elevation)
       {
         pass ("UCS.elevation [BD] set+1 %g", elevation);
@@ -52792,7 +52792,7 @@ static int test_UCS (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (ucs, "UCS", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (ucs, "UCS", "flag", &flag, 0)
         && flag == ucs->flag)
       {
         pass ("UCS.flag [RC] set+1 %u", flag);
@@ -52857,7 +52857,7 @@ static int test_UCS (const Dwg_Object *obj)
         error++;
       }
     orthographic_type++;
-    if (dwg_dynapi_entity_set_value (ucs, "UCS", "orthographic_type", &orthographic_type)
+      if (dwg_dynapi_entity_set_value (ucs, "UCS", "orthographic_type", &orthographic_type, 0)
         && orthographic_type == ucs->orthographic_type)
       {
         pass ("UCS.orthographic_type [BS] set+1 %hu", orthographic_type);
@@ -52883,7 +52883,7 @@ static int test_UCS (const Dwg_Object *obj)
         error++;
       }
     orthographic_view_type++;
-    if (dwg_dynapi_entity_set_value (ucs, "UCS", "orthographic_view_type", &orthographic_view_type)
+      if (dwg_dynapi_entity_set_value (ucs, "UCS", "orthographic_view_type", &orthographic_view_type, 0)
         && orthographic_view_type == ucs->orthographic_view_type)
       {
         pass ("UCS.orthographic_view_type [BS] set+1 %hu", orthographic_view_type);
@@ -52935,7 +52935,7 @@ static int test_UCS (const Dwg_Object *obj)
         error++;
       }
     used++;
-    if (dwg_dynapi_entity_set_value (ucs, "UCS", "used", &used)
+      if (dwg_dynapi_entity_set_value (ucs, "UCS", "used", &used, 0)
         && used == ucs->used)
       {
         pass ("UCS.used [RS] set+1 %hu", used);
@@ -52974,7 +52974,7 @@ static int test_UCS (const Dwg_Object *obj)
         error++;
       }
     xrefdep++;
-    if (dwg_dynapi_entity_set_value (ucs, "UCS", "xrefdep", &xrefdep)
+      if (dwg_dynapi_entity_set_value (ucs, "UCS", "xrefdep", &xrefdep, 0)
         && xrefdep == ucs->xrefdep)
       {
         pass ("UCS.xrefdep [B] set+1 " FORMAT_B "", xrefdep);
@@ -53000,7 +53000,7 @@ static int test_UCS (const Dwg_Object *obj)
         error++;
       }
     xrefindex_plus1++;
-    if (dwg_dynapi_entity_set_value (ucs, "UCS", "xrefindex_plus1", &xrefindex_plus1)
+      if (dwg_dynapi_entity_set_value (ucs, "UCS", "xrefindex_plus1", &xrefindex_plus1, 0)
         && xrefindex_plus1 == ucs->xrefindex_plus1)
       {
         pass ("UCS.xrefindex_plus1 [BS] set+1 %hu", xrefindex_plus1);
@@ -53026,7 +53026,7 @@ static int test_UCS (const Dwg_Object *obj)
         error++;
       }
     xrefref++;
-    if (dwg_dynapi_entity_set_value (ucs, "UCS", "xrefref", &xrefref)
+      if (dwg_dynapi_entity_set_value (ucs, "UCS", "xrefref", &xrefref, 0)
         && xrefref == ucs->xrefref)
       {
         pass ("UCS.xrefref [B] set+1 " FORMAT_B "", xrefref);
@@ -53072,7 +53072,7 @@ static int test_UCS_CONTROL (const Dwg_Object *obj)
         error++;
       }
     num_entries++;
-    if (dwg_dynapi_entity_set_value (ucs_control, "UCS_CONTROL", "num_entries", &num_entries)
+      if (dwg_dynapi_entity_set_value (ucs_control, "UCS_CONTROL", "num_entries", &num_entries, 0)
         && num_entries == ucs_control->num_entries)
       {
         pass ("UCS_CONTROL.num_entries [BS] set+1 %hu", num_entries);
@@ -53098,7 +53098,7 @@ static int test_UCS_CONTROL (const Dwg_Object *obj)
         error++;
       }
     objid++;
-    if (dwg_dynapi_entity_set_value (ucs_control, "UCS_CONTROL", "objid", &objid)
+      if (dwg_dynapi_entity_set_value (ucs_control, "UCS_CONTROL", "objid", &objid, 0)
         && objid == ucs_control->objid)
       {
         pass ("UCS_CONTROL.objid [BL] set+1 %u", objid);
@@ -53238,7 +53238,7 @@ static int test_VBA_PROJECT (const Dwg_Object *obj)
         error++;
       }
     num_bytes++;
-    if (dwg_dynapi_entity_set_value (vba_project, "VBA_PROJECT", "num_bytes", &num_bytes)
+      if (dwg_dynapi_entity_set_value (vba_project, "VBA_PROJECT", "num_bytes", &num_bytes, 0)
         && num_bytes == vba_project->num_bytes)
       {
         pass ("VBA_PROJECT.num_bytes [RL] set+1 %u", num_bytes);
@@ -53283,7 +53283,7 @@ static int test_VIEW (const Dwg_Object *obj)
         fail ("VIEW.VIEWMODE [4BITS] " FORMAT_4BITS " != " FORMAT_4BITS "", view->VIEWMODE, VIEWMODE);
         error++;
       }
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "VIEWMODE", &VIEWMODE)
+      if (dwg_dynapi_entity_set_value (view, "VIEW", "VIEWMODE", &VIEWMODE, 0)
         && VIEWMODE == view->VIEWMODE)
       {
         pass ("VIEW.VIEWMODE [4BITS] set+1 " FORMAT_4BITS "", VIEWMODE);
@@ -53322,7 +53322,7 @@ static int test_VIEW (const Dwg_Object *obj)
         error++;
       }
     associated_ucs++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "associated_ucs", &associated_ucs)
+      if (dwg_dynapi_entity_set_value (view, "VIEW", "associated_ucs", &associated_ucs, 0)
         && associated_ucs == view->associated_ucs)
       {
         pass ("VIEW.associated_ucs [B] set+1 " FORMAT_B "", associated_ucs);
@@ -53348,7 +53348,7 @@ static int test_VIEW (const Dwg_Object *obj)
         error++;
       }
     back_clip++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "back_clip", &back_clip)
+      if (dwg_dynapi_entity_set_value (view, "VIEW", "back_clip", &back_clip, 0)
         && back_clip == view->back_clip)
       {
         pass ("VIEW.back_clip [BD] set+1 %g", back_clip);
@@ -53400,7 +53400,7 @@ static int test_VIEW (const Dwg_Object *obj)
         error++;
       }
     brightness++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "brightness", &brightness)
+      if (dwg_dynapi_entity_set_value (view, "VIEW", "brightness", &brightness, 0)
         && brightness == view->brightness)
       {
         pass ("VIEW.brightness [BD] set+1 %g", brightness);
@@ -53426,7 +53426,7 @@ static int test_VIEW (const Dwg_Object *obj)
         error++;
       }
     camera_plottable++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "camera_plottable", &camera_plottable)
+      if (dwg_dynapi_entity_set_value (view, "VIEW", "camera_plottable", &camera_plottable, 0)
         && camera_plottable == view->camera_plottable)
       {
         pass ("VIEW.camera_plottable [B] set+1 " FORMAT_B "", camera_plottable);
@@ -53465,7 +53465,7 @@ static int test_VIEW (const Dwg_Object *obj)
         error++;
       }
     contrast++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "contrast", &contrast)
+      if (dwg_dynapi_entity_set_value (view, "VIEW", "contrast", &contrast, 0)
         && contrast == view->contrast)
       {
         pass ("VIEW.contrast [BD] set+1 %g", contrast);
@@ -53491,7 +53491,7 @@ static int test_VIEW (const Dwg_Object *obj)
         error++;
       }
     default_lightning_type++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "default_lightning_type", &default_lightning_type)
+      if (dwg_dynapi_entity_set_value (view, "VIEW", "default_lightning_type", &default_lightning_type, 0)
         && default_lightning_type == view->default_lightning_type)
       {
         pass ("VIEW.default_lightning_type [RC] set+1 %u", default_lightning_type);
@@ -53530,7 +53530,7 @@ static int test_VIEW (const Dwg_Object *obj)
         error++;
       }
     elevation++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "elevation", &elevation)
+      if (dwg_dynapi_entity_set_value (view, "VIEW", "elevation", &elevation, 0)
         && elevation == view->elevation)
       {
         pass ("VIEW.elevation [BD] set+1 %g", elevation);
@@ -53556,7 +53556,7 @@ static int test_VIEW (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (view, "VIEW", "flag", &flag, 0)
         && flag == view->flag)
       {
         pass ("VIEW.flag [RC] set+1 %u", flag);
@@ -53582,7 +53582,7 @@ static int test_VIEW (const Dwg_Object *obj)
         error++;
       }
     front_clip++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "front_clip", &front_clip)
+      if (dwg_dynapi_entity_set_value (view, "VIEW", "front_clip", &front_clip, 0)
         && front_clip == view->front_clip)
       {
         pass ("VIEW.front_clip [BD] set+1 %g", front_clip);
@@ -53608,7 +53608,7 @@ static int test_VIEW (const Dwg_Object *obj)
         error++;
       }
     height++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "height", &height)
+      if (dwg_dynapi_entity_set_value (view, "VIEW", "height", &height, 0)
         && height == view->height)
       {
         pass ("VIEW.height [BD] set+1 %g", height);
@@ -53634,7 +53634,7 @@ static int test_VIEW (const Dwg_Object *obj)
         error++;
       }
     lens_length++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "lens_length", &lens_length)
+      if (dwg_dynapi_entity_set_value (view, "VIEW", "lens_length", &lens_length, 0)
         && lens_length == view->lens_length)
       {
         pass ("VIEW.lens_length [BD] set+1 %g", lens_length);
@@ -53725,7 +53725,7 @@ static int test_VIEW (const Dwg_Object *obj)
         error++;
       }
     orthographic_view_type++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "orthographic_view_type", &orthographic_view_type)
+      if (dwg_dynapi_entity_set_value (view, "VIEW", "orthographic_view_type", &orthographic_view_type, 0)
         && orthographic_view_type == view->orthographic_view_type)
       {
         pass ("VIEW.orthographic_view_type [BS] set+1 %hu", orthographic_view_type);
@@ -53764,7 +53764,7 @@ static int test_VIEW (const Dwg_Object *obj)
         error++;
       }
     pspace_flag++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "pspace_flag", &pspace_flag)
+      if (dwg_dynapi_entity_set_value (view, "VIEW", "pspace_flag", &pspace_flag, 0)
         && pspace_flag == view->pspace_flag)
       {
         pass ("VIEW.pspace_flag [B] set+1 " FORMAT_B "", pspace_flag);
@@ -53790,7 +53790,7 @@ static int test_VIEW (const Dwg_Object *obj)
         error++;
       }
     render_mode++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "render_mode", &render_mode)
+      if (dwg_dynapi_entity_set_value (view, "VIEW", "render_mode", &render_mode, 0)
         && render_mode == view->render_mode)
       {
         pass ("VIEW.render_mode [RC] set+1 %u", render_mode);
@@ -53842,7 +53842,7 @@ static int test_VIEW (const Dwg_Object *obj)
         error++;
       }
     twist_angle++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "twist_angle", &twist_angle)
+      if (dwg_dynapi_entity_set_value (view, "VIEW", "twist_angle", &twist_angle, 0)
         && twist_angle == view->twist_angle)
       {
         pass ("VIEW.twist_angle [BD] set+1 %g", twist_angle);
@@ -53868,7 +53868,7 @@ static int test_VIEW (const Dwg_Object *obj)
         error++;
       }
     use_default_lights++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "use_default_lights", &use_default_lights)
+      if (dwg_dynapi_entity_set_value (view, "VIEW", "use_default_lights", &use_default_lights, 0)
         && use_default_lights == view->use_default_lights)
       {
         pass ("VIEW.use_default_lights [B] set+1 " FORMAT_B "", use_default_lights);
@@ -53894,7 +53894,7 @@ static int test_VIEW (const Dwg_Object *obj)
         error++;
       }
     used++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "used", &used)
+      if (dwg_dynapi_entity_set_value (view, "VIEW", "used", &used, 0)
         && used == view->used)
       {
         pass ("VIEW.used [RS] set+1 %hu", used);
@@ -53933,7 +53933,7 @@ static int test_VIEW (const Dwg_Object *obj)
         error++;
       }
     width++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "width", &width)
+      if (dwg_dynapi_entity_set_value (view, "VIEW", "width", &width, 0)
         && width == view->width)
       {
         pass ("VIEW.width [BD] set+1 %g", width);
@@ -53972,7 +53972,7 @@ static int test_VIEW (const Dwg_Object *obj)
         error++;
       }
     xrefdep++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "xrefdep", &xrefdep)
+      if (dwg_dynapi_entity_set_value (view, "VIEW", "xrefdep", &xrefdep, 0)
         && xrefdep == view->xrefdep)
       {
         pass ("VIEW.xrefdep [B] set+1 " FORMAT_B "", xrefdep);
@@ -53998,7 +53998,7 @@ static int test_VIEW (const Dwg_Object *obj)
         error++;
       }
     xrefindex_plus1++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "xrefindex_plus1", &xrefindex_plus1)
+      if (dwg_dynapi_entity_set_value (view, "VIEW", "xrefindex_plus1", &xrefindex_plus1, 0)
         && xrefindex_plus1 == view->xrefindex_plus1)
       {
         pass ("VIEW.xrefindex_plus1 [BS] set+1 %hu", xrefindex_plus1);
@@ -54024,7 +54024,7 @@ static int test_VIEW (const Dwg_Object *obj)
         error++;
       }
     xrefref++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "xrefref", &xrefref)
+      if (dwg_dynapi_entity_set_value (view, "VIEW", "xrefref", &xrefref, 0)
         && xrefref == view->xrefref)
       {
         pass ("VIEW.xrefref [B] set+1 " FORMAT_B "", xrefref);
@@ -54070,7 +54070,7 @@ static int test_VIEW_CONTROL (const Dwg_Object *obj)
         error++;
       }
     num_entries++;
-    if (dwg_dynapi_entity_set_value (view_control, "VIEW_CONTROL", "num_entries", &num_entries)
+      if (dwg_dynapi_entity_set_value (view_control, "VIEW_CONTROL", "num_entries", &num_entries, 0)
         && num_entries == view_control->num_entries)
       {
         pass ("VIEW_CONTROL.num_entries [BS] set+1 %hu", num_entries);
@@ -54096,7 +54096,7 @@ static int test_VIEW_CONTROL (const Dwg_Object *obj)
         error++;
       }
     objid++;
-    if (dwg_dynapi_entity_set_value (view_control, "VIEW_CONTROL", "objid", &objid)
+      if (dwg_dynapi_entity_set_value (view_control, "VIEW_CONTROL", "objid", &objid, 0)
         && objid == view_control->objid)
       {
         pass ("VIEW_CONTROL.objid [BL] set+1 %u", objid);
@@ -54183,7 +54183,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     display_brightness++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "display_brightness", &display_brightness)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "display_brightness", &display_brightness, 0)
         && display_brightness == visualstyle->display_brightness)
       {
         pass ("VISUALSTYLE.display_brightness [BD] set+1 %g", display_brightness);
@@ -54209,7 +54209,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     display_shadow_type++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "display_shadow_type", &display_shadow_type)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "display_shadow_type", &display_shadow_type, 0)
         && display_shadow_type == visualstyle->display_shadow_type)
       {
         pass ("VISUALSTYLE.display_shadow_type [BS] set+1 %hu", display_shadow_type);
@@ -54235,7 +54235,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     display_style++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "display_style", &display_style)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "display_style", &display_style, 0)
         && display_style == visualstyle->display_style)
       {
         pass ("VISUALSTYLE.display_style [BS] set+1 %hu", display_style);
@@ -54274,7 +54274,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     edge_crease_angle++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_crease_angle", &edge_crease_angle)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_crease_angle", &edge_crease_angle, 0)
         && edge_crease_angle == visualstyle->edge_crease_angle)
       {
         pass ("VISUALSTYLE.edge_crease_angle [BD] set+1 %g", edge_crease_angle);
@@ -54300,7 +54300,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     edge_halo_gap++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_halo_gap", &edge_halo_gap)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_halo_gap", &edge_halo_gap, 0)
         && edge_halo_gap == visualstyle->edge_halo_gap)
       {
         pass ("VISUALSTYLE.edge_halo_gap [BS] set+1 %hu", edge_halo_gap);
@@ -54326,7 +54326,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     edge_hide_precision_flag++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_hide_precision_flag", &edge_hide_precision_flag)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_hide_precision_flag", &edge_hide_precision_flag, 0)
         && edge_hide_precision_flag == visualstyle->edge_hide_precision_flag)
       {
         pass ("VISUALSTYLE.edge_hide_precision_flag [BS] set+1 %hu", edge_hide_precision_flag);
@@ -54365,7 +54365,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     edge_intersection_line_pattern++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_intersection_line_pattern", &edge_intersection_line_pattern)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_intersection_line_pattern", &edge_intersection_line_pattern, 0)
         && edge_intersection_line_pattern == visualstyle->edge_intersection_line_pattern)
       {
         pass ("VISUALSTYLE.edge_intersection_line_pattern [BS] set+1 %hu", edge_intersection_line_pattern);
@@ -54391,7 +54391,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     edge_jitter++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_jitter", &edge_jitter)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_jitter", &edge_jitter, 0)
         && edge_jitter == visualstyle->edge_jitter)
       {
         pass ("VISUALSTYLE.edge_jitter [BS] set+1 %hu", edge_jitter);
@@ -54417,7 +54417,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     edge_model++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_model", &edge_model)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_model", &edge_model, 0)
         && edge_model == visualstyle->edge_model)
       {
         pass ("VISUALSTYLE.edge_model [BS] set+1 %hu", edge_model);
@@ -54443,7 +54443,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     edge_modifier++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_modifier", &edge_modifier)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_modifier", &edge_modifier, 0)
         && edge_modifier == visualstyle->edge_modifier)
       {
         pass ("VISUALSTYLE.edge_modifier [BS] set+1 %hu", edge_modifier);
@@ -54482,7 +54482,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     edge_obscured_line_pattern++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_obscured_line_pattern", &edge_obscured_line_pattern)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_obscured_line_pattern", &edge_obscured_line_pattern, 0)
         && edge_obscured_line_pattern == visualstyle->edge_obscured_line_pattern)
       {
         pass ("VISUALSTYLE.edge_obscured_line_pattern [BS] set+1 %hu", edge_obscured_line_pattern);
@@ -54508,7 +54508,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     edge_opacity++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_opacity", &edge_opacity)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_opacity", &edge_opacity, 0)
         && edge_opacity == visualstyle->edge_opacity)
       {
         pass ("VISUALSTYLE.edge_opacity [BD] set+1 %g", edge_opacity);
@@ -54534,7 +54534,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     edge_overhang++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_overhang", &edge_overhang)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_overhang", &edge_overhang, 0)
         && edge_overhang == visualstyle->edge_overhang)
       {
         pass ("VISUALSTYLE.edge_overhang [BS] set+1 %hu", edge_overhang);
@@ -54573,7 +54573,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     edge_silhouette_width++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_silhouette_width", &edge_silhouette_width)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_silhouette_width", &edge_silhouette_width, 0)
         && edge_silhouette_width == visualstyle->edge_silhouette_width)
       {
         pass ("VISUALSTYLE.edge_silhouette_width [BS] set+1 %hu", edge_silhouette_width);
@@ -54599,7 +54599,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     edge_style++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_style", &edge_style)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_style", &edge_style, 0)
         && edge_style == visualstyle->edge_style)
       {
         pass ("VISUALSTYLE.edge_style [BL] set+1 %u", edge_style);
@@ -54625,7 +54625,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     edge_style_apply_flag++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_style_apply_flag", &edge_style_apply_flag)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_style_apply_flag", &edge_style_apply_flag, 0)
         && edge_style_apply_flag == visualstyle->edge_style_apply_flag)
       {
         pass ("VISUALSTYLE.edge_style_apply_flag [BS] set+1 %hu", edge_style_apply_flag);
@@ -54651,7 +54651,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     edge_width++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_width", &edge_width)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_width", &edge_width, 0)
         && edge_width == visualstyle->edge_width)
       {
         pass ("VISUALSTYLE.edge_width [BS] set+1 %hu", edge_width);
@@ -54677,7 +54677,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     face_color_mode++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "face_color_mode", &face_color_mode)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "face_color_mode", &face_color_mode, 0)
         && face_color_mode == visualstyle->face_color_mode)
       {
         pass ("VISUALSTYLE.face_color_mode [BS] set+1 %hu", face_color_mode);
@@ -54703,7 +54703,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     face_lighting_model++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "face_lighting_model", &face_lighting_model)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "face_lighting_model", &face_lighting_model, 0)
         && face_lighting_model == visualstyle->face_lighting_model)
       {
         pass ("VISUALSTYLE.face_lighting_model [BS] set+1 %hu", face_lighting_model);
@@ -54729,7 +54729,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     face_lighting_quality++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "face_lighting_quality", &face_lighting_quality)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "face_lighting_quality", &face_lighting_quality, 0)
         && face_lighting_quality == visualstyle->face_lighting_quality)
       {
         pass ("VISUALSTYLE.face_lighting_quality [BS] set+1 %hu", face_lighting_quality);
@@ -54755,7 +54755,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     face_modifier++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "face_modifier", &face_modifier)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "face_modifier", &face_modifier, 0)
         && face_modifier == visualstyle->face_modifier)
       {
         pass ("VISUALSTYLE.face_modifier [BS] set+1 %hu", face_modifier);
@@ -54794,7 +54794,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     face_opacity++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "face_opacity", &face_opacity)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "face_opacity", &face_opacity, 0)
         && face_opacity == visualstyle->face_opacity)
       {
         pass ("VISUALSTYLE.face_opacity [BD] set+1 %g", face_opacity);
@@ -54820,7 +54820,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     face_specular++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "face_specular", &face_specular)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "face_specular", &face_specular, 0)
         && face_specular == visualstyle->face_specular)
       {
         pass ("VISUALSTYLE.face_specular [BD] set+1 %g", face_specular);
@@ -54846,7 +54846,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     is_internal_use_only++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "is_internal_use_only", &is_internal_use_only)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "is_internal_use_only", &is_internal_use_only, 0)
         && is_internal_use_only == visualstyle->is_internal_use_only)
       {
         pass ("VISUALSTYLE.is_internal_use_only [BS] set+1 %hu", is_internal_use_only);
@@ -54872,7 +54872,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     num_edge_isolines++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "num_edge_isolines", &num_edge_isolines)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "num_edge_isolines", &num_edge_isolines, 0)
         && num_edge_isolines == visualstyle->num_edge_isolines)
       {
         pass ("VISUALSTYLE.num_edge_isolines [BS] set+1 %hu", num_edge_isolines);
@@ -54911,7 +54911,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     type++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "type", &type)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "type", &type, 0)
         && type == visualstyle->type)
       {
         pass ("VISUALSTYLE.type [BS] set+1 %hu", type);
@@ -54937,7 +54937,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         error++;
       }
     unknown_float45++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "unknown_float45", &unknown_float45)
+      if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "unknown_float45", &unknown_float45, 0)
         && unknown_float45 == visualstyle->unknown_float45)
       {
         pass ("VISUALSTYLE.unknown_float45 [BS] set+1 %hu", unknown_float45);
@@ -54970,7 +54970,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     FASTZOOM++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "FASTZOOM", &FASTZOOM)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "FASTZOOM", &FASTZOOM, 0)
         && FASTZOOM == vport->FASTZOOM)
       {
         pass ("VPORT.FASTZOOM [B] set+1 " FORMAT_B "", FASTZOOM);
@@ -54996,7 +54996,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     GRIDMODE++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "GRIDMODE", &GRIDMODE)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "GRIDMODE", &GRIDMODE, 0)
         && GRIDMODE == vport->GRIDMODE)
       {
         pass ("VPORT.GRIDMODE [B] set+1 " FORMAT_B "", GRIDMODE);
@@ -55035,7 +55035,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     SNAPANG++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "SNAPANG", &SNAPANG)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "SNAPANG", &SNAPANG, 0)
         && SNAPANG == vport->SNAPANG)
       {
         pass ("VPORT.SNAPANG [BD] set+1 %g", SNAPANG);
@@ -55074,7 +55074,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     SNAPISOPAIR++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "SNAPISOPAIR", &SNAPISOPAIR)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "SNAPISOPAIR", &SNAPISOPAIR, 0)
         && SNAPISOPAIR == vport->SNAPISOPAIR)
       {
         pass ("VPORT.SNAPISOPAIR [BS] set+1 %hu", SNAPISOPAIR);
@@ -55100,7 +55100,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     SNAPMODE++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "SNAPMODE", &SNAPMODE)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "SNAPMODE", &SNAPMODE, 0)
         && SNAPMODE == vport->SNAPMODE)
       {
         pass ("VPORT.SNAPMODE [B] set+1 " FORMAT_B "", SNAPMODE);
@@ -55126,7 +55126,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     SNAPSTYLE++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "SNAPSTYLE", &SNAPSTYLE)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "SNAPSTYLE", &SNAPSTYLE, 0)
         && SNAPSTYLE == vport->SNAPSTYLE)
       {
         pass ("VPORT.SNAPSTYLE [B] set+1 " FORMAT_B "", SNAPSTYLE);
@@ -55165,7 +55165,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     UCSFOLLOW++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "UCSFOLLOW", &UCSFOLLOW)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "UCSFOLLOW", &UCSFOLLOW, 0)
         && UCSFOLLOW == vport->UCSFOLLOW)
       {
         pass ("VPORT.UCSFOLLOW [B] set+1 " FORMAT_B "", UCSFOLLOW);
@@ -55191,7 +55191,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     UCSICON++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "UCSICON", &UCSICON)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "UCSICON", &UCSICON, 0)
         && UCSICON == vport->UCSICON)
       {
         pass ("VPORT.UCSICON [RC] set+1 %u", UCSICON);
@@ -55242,7 +55242,7 @@ static int test_VPORT (const Dwg_Object *obj)
         fail ("VPORT.VIEWMODE [4BITS] " FORMAT_4BITS " != " FORMAT_4BITS "", vport->VIEWMODE, VIEWMODE);
         error++;
       }
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "VIEWMODE", &VIEWMODE)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "VIEWMODE", &VIEWMODE, 0)
         && VIEWMODE == vport->VIEWMODE)
       {
         pass ("VPORT.VIEWMODE [4BITS] set+1 " FORMAT_4BITS "", VIEWMODE);
@@ -55268,7 +55268,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     VIEWSIZE++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "VIEWSIZE", &VIEWSIZE)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "VIEWSIZE", &VIEWSIZE, 0)
         && VIEWSIZE == vport->VIEWSIZE)
       {
         pass ("VPORT.VIEWSIZE [BD] set+1 %g", VIEWSIZE);
@@ -55307,7 +55307,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     aspect_ratio++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "aspect_ratio", &aspect_ratio)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "aspect_ratio", &aspect_ratio, 0)
         && aspect_ratio == vport->aspect_ratio)
       {
         pass ("VPORT.aspect_ratio [BD] set+1 %g", aspect_ratio);
@@ -55333,7 +55333,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     back_clip++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "back_clip", &back_clip)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "back_clip", &back_clip, 0)
         && back_clip == vport->back_clip)
       {
         pass ("VPORT.back_clip [BD] set+1 %g", back_clip);
@@ -55385,7 +55385,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     brightness++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "brightness", &brightness)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "brightness", &brightness, 0)
         && brightness == vport->brightness)
       {
         pass ("VPORT.brightness [BD] set+1 %g", brightness);
@@ -55411,7 +55411,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     circle_zoom++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "circle_zoom", &circle_zoom)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "circle_zoom", &circle_zoom, 0)
         && circle_zoom == vport->circle_zoom)
       {
         pass ("VPORT.circle_zoom [BS] set+1 %hu", circle_zoom);
@@ -55437,7 +55437,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     contrast++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "contrast", &contrast)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "contrast", &contrast, 0)
         && contrast == vport->contrast)
       {
         pass ("VPORT.contrast [BD] set+1 %g", contrast);
@@ -55463,7 +55463,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     default_lightning_type++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "default_lightning_type", &default_lightning_type)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "default_lightning_type", &default_lightning_type, 0)
         && default_lightning_type == vport->default_lightning_type)
       {
         pass ("VPORT.default_lightning_type [RC] set+1 %u", default_lightning_type);
@@ -55489,7 +55489,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "flag", &flag, 0)
         && flag == vport->flag)
       {
         pass ("VPORT.flag [RC] set+1 %u", flag);
@@ -55515,7 +55515,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     front_clip++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "front_clip", &front_clip)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "front_clip", &front_clip, 0)
         && front_clip == vport->front_clip)
       {
         pass ("VPORT.front_clip [BD] set+1 %g", front_clip);
@@ -55541,7 +55541,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     grid_flags++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "grid_flags", &grid_flags)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "grid_flags", &grid_flags, 0)
         && grid_flags == vport->grid_flags)
       {
         pass ("VPORT.grid_flags [BS] set+1 %hu", grid_flags);
@@ -55567,7 +55567,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     grid_major++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "grid_major", &grid_major)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "grid_major", &grid_major, 0)
         && grid_major == vport->grid_major)
       {
         pass ("VPORT.grid_major [BS] set+1 %hu", grid_major);
@@ -55593,7 +55593,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     lens_length++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "lens_length", &lens_length)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "lens_length", &lens_length, 0)
         && lens_length == vport->lens_length)
       {
         pass ("VPORT.lens_length [BD] set+1 %g", lens_length);
@@ -55684,7 +55684,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     render_mode++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "render_mode", &render_mode)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "render_mode", &render_mode, 0)
         && render_mode == vport->render_mode)
       {
         pass ("VPORT.render_mode [RC] set+1 %u", render_mode);
@@ -55723,7 +55723,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     ucs_elevation++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "ucs_elevation", &ucs_elevation)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "ucs_elevation", &ucs_elevation, 0)
         && ucs_elevation == vport->ucs_elevation)
       {
         pass ("VPORT.ucs_elevation [BD] set+1 %g", ucs_elevation);
@@ -55762,7 +55762,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     ucs_orthografic_type++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "ucs_orthografic_type", &ucs_orthografic_type)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "ucs_orthografic_type", &ucs_orthografic_type, 0)
         && ucs_orthografic_type == vport->ucs_orthografic_type)
       {
         pass ("VPORT.ucs_orthografic_type [BS] set+1 %hu", ucs_orthografic_type);
@@ -55788,7 +55788,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     ucs_pre_viewport++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "ucs_pre_viewport", &ucs_pre_viewport)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "ucs_pre_viewport", &ucs_pre_viewport, 0)
         && ucs_pre_viewport == vport->ucs_pre_viewport)
       {
         pass ("VPORT.ucs_pre_viewport [B] set+1 " FORMAT_B "", ucs_pre_viewport);
@@ -55840,7 +55840,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     unknown++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "unknown", &unknown)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "unknown", &unknown, 0)
         && unknown == vport->unknown)
       {
         pass ("VPORT.unknown [B] set+1 " FORMAT_B "", unknown);
@@ -55879,7 +55879,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     use_default_lights++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "use_default_lights", &use_default_lights)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "use_default_lights", &use_default_lights, 0)
         && use_default_lights == vport->use_default_lights)
       {
         pass ("VPORT.use_default_lights [B] set+1 " FORMAT_B "", use_default_lights);
@@ -55905,7 +55905,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     used++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "used", &used)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "used", &used, 0)
         && used == vport->used)
       {
         pass ("VPORT.used [RS] set+1 %hu", used);
@@ -55944,7 +55944,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     view_twist++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "view_twist", &view_twist)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "view_twist", &view_twist, 0)
         && view_twist == vport->view_twist)
       {
         pass ("VPORT.view_twist [BD] set+1 %g", view_twist);
@@ -55983,7 +55983,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     xrefdep++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "xrefdep", &xrefdep)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "xrefdep", &xrefdep, 0)
         && xrefdep == vport->xrefdep)
       {
         pass ("VPORT.xrefdep [B] set+1 " FORMAT_B "", xrefdep);
@@ -56009,7 +56009,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     xrefindex_plus1++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "xrefindex_plus1", &xrefindex_plus1)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "xrefindex_plus1", &xrefindex_plus1, 0)
         && xrefindex_plus1 == vport->xrefindex_plus1)
       {
         pass ("VPORT.xrefindex_plus1 [BS] set+1 %hu", xrefindex_plus1);
@@ -56035,7 +56035,7 @@ static int test_VPORT (const Dwg_Object *obj)
         error++;
       }
     xrefref++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "xrefref", &xrefref)
+      if (dwg_dynapi_entity_set_value (vport, "VPORT", "xrefref", &xrefref, 0)
         && xrefref == vport->xrefref)
       {
         pass ("VPORT.xrefref [B] set+1 " FORMAT_B "", xrefref);
@@ -56068,7 +56068,7 @@ static int test_VPORT_CONTROL (const Dwg_Object *obj)
         error++;
       }
     num_entries++;
-    if (dwg_dynapi_entity_set_value (vport_control, "VPORT_CONTROL", "num_entries", &num_entries)
+      if (dwg_dynapi_entity_set_value (vport_control, "VPORT_CONTROL", "num_entries", &num_entries, 0)
         && num_entries == vport_control->num_entries)
       {
         pass ("VPORT_CONTROL.num_entries [BS] set+1 %hu", num_entries);
@@ -56094,7 +56094,7 @@ static int test_VPORT_CONTROL (const Dwg_Object *obj)
         error++;
       }
     objid++;
-    if (dwg_dynapi_entity_set_value (vport_control, "VPORT_CONTROL", "objid", &objid)
+      if (dwg_dynapi_entity_set_value (vport_control, "VPORT_CONTROL", "objid", &objid, 0)
         && objid == vport_control->objid)
       {
         pass ("VPORT_CONTROL.objid [BL] set+1 %u", objid);
@@ -56155,7 +56155,7 @@ static int test_VPORT_ENTITY_CONTROL (const Dwg_Object *obj)
         error++;
       }
     num_entries++;
-    if (dwg_dynapi_entity_set_value (vport_entity_control, "VPORT_ENTITY_CONTROL", "num_entries", &num_entries)
+      if (dwg_dynapi_entity_set_value (vport_entity_control, "VPORT_ENTITY_CONTROL", "num_entries", &num_entries, 0)
         && num_entries == vport_entity_control->num_entries)
       {
         pass ("VPORT_ENTITY_CONTROL.num_entries [BS] set+1 %hu", num_entries);
@@ -56181,7 +56181,7 @@ static int test_VPORT_ENTITY_CONTROL (const Dwg_Object *obj)
         error++;
       }
     objid++;
-    if (dwg_dynapi_entity_set_value (vport_entity_control, "VPORT_ENTITY_CONTROL", "objid", &objid)
+      if (dwg_dynapi_entity_set_value (vport_entity_control, "VPORT_ENTITY_CONTROL", "objid", &objid, 0)
         && objid == vport_entity_control->objid)
       {
         pass ("VPORT_ENTITY_CONTROL.objid [BL] set+1 %u", objid);
@@ -56242,7 +56242,7 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
         error++;
       }
     flag++;
-    if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "flag", &flag)
+      if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "flag", &flag, 0)
         && flag == vport_entity_header->flag)
       {
         pass ("VPORT_ENTITY_HEADER.flag [RC] set+1 %u", flag);
@@ -56268,7 +56268,7 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
         error++;
       }
     flag1++;
-    if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "flag1", &flag1)
+      if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "flag1", &flag1, 0)
         && flag1 == vport_entity_header->flag1)
       {
         pass ("VPORT_ENTITY_HEADER.flag1 [B] set+1 " FORMAT_B "", flag1);
@@ -56320,7 +56320,7 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
         error++;
       }
     used++;
-    if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "used", &used)
+      if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "used", &used, 0)
         && used == vport_entity_header->used)
       {
         pass ("VPORT_ENTITY_HEADER.used [RS] set+1 %hu", used);
@@ -56372,7 +56372,7 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
         error++;
       }
     xrefdep++;
-    if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "xrefdep", &xrefdep)
+      if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "xrefdep", &xrefdep, 0)
         && xrefdep == vport_entity_header->xrefdep)
       {
         pass ("VPORT_ENTITY_HEADER.xrefdep [B] set+1 " FORMAT_B "", xrefdep);
@@ -56398,7 +56398,7 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
         error++;
       }
     xrefindex_plus1++;
-    if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "xrefindex_plus1", &xrefindex_plus1)
+      if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "xrefindex_plus1", &xrefindex_plus1, 0)
         && xrefindex_plus1 == vport_entity_header->xrefindex_plus1)
       {
         pass ("VPORT_ENTITY_HEADER.xrefindex_plus1 [BS] set+1 %hu", xrefindex_plus1);
@@ -56424,7 +56424,7 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
         error++;
       }
     xrefref++;
-    if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "xrefref", &xrefref)
+      if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "xrefref", &xrefref, 0)
         && xrefref == vport_entity_header->xrefref)
       {
         pass ("VPORT_ENTITY_HEADER.xrefref [B] set+1 " FORMAT_B "", xrefref);
@@ -56457,7 +56457,7 @@ static int test_WIPEOUTVARIABLES (const Dwg_Object *obj)
         error++;
       }
     display_frame++;
-    if (dwg_dynapi_entity_set_value (wipeoutvariables, "WIPEOUTVARIABLES", "display_frame", &display_frame)
+      if (dwg_dynapi_entity_set_value (wipeoutvariables, "WIPEOUTVARIABLES", "display_frame", &display_frame, 0)
         && display_frame == wipeoutvariables->display_frame)
       {
         pass ("WIPEOUTVARIABLES.display_frame [BS] set+1 %hu", display_frame);
@@ -56503,7 +56503,7 @@ static int test_XRECORD (const Dwg_Object *obj)
         error++;
       }
     cloning_flags++;
-    if (dwg_dynapi_entity_set_value (xrecord, "XRECORD", "cloning_flags", &cloning_flags)
+      if (dwg_dynapi_entity_set_value (xrecord, "XRECORD", "cloning_flags", &cloning_flags, 0)
         && cloning_flags == xrecord->cloning_flags)
       {
         pass ("XRECORD.cloning_flags [BS] set+1 %hu", cloning_flags);
@@ -56529,7 +56529,7 @@ static int test_XRECORD (const Dwg_Object *obj)
         error++;
       }
     num_databytes++;
-    if (dwg_dynapi_entity_set_value (xrecord, "XRECORD", "num_databytes", &num_databytes)
+      if (dwg_dynapi_entity_set_value (xrecord, "XRECORD", "num_databytes", &num_databytes, 0)
         && num_databytes == xrecord->num_databytes)
       {
         pass ("XRECORD.num_databytes [BL] set+1 %u", num_databytes);
@@ -56555,7 +56555,7 @@ static int test_XRECORD (const Dwg_Object *obj)
         error++;
       }
     num_objid_handles++;
-    if (dwg_dynapi_entity_set_value (xrecord, "XRECORD", "num_objid_handles", &num_objid_handles)
+      if (dwg_dynapi_entity_set_value (xrecord, "XRECORD", "num_objid_handles", &num_objid_handles, 0)
         && num_objid_handles == xrecord->num_objid_handles)
       {
         pass ("XRECORD.num_objid_handles [BL] set+1 %u", num_objid_handles);
@@ -56581,7 +56581,7 @@ static int test_XRECORD (const Dwg_Object *obj)
         error++;
       }
     num_xdata++;
-    if (dwg_dynapi_entity_set_value (xrecord, "XRECORD", "num_xdata", &num_xdata)
+      if (dwg_dynapi_entity_set_value (xrecord, "XRECORD", "num_xdata", &num_xdata, 0)
         && num_xdata == xrecord->num_xdata)
       {
         pass ("XRECORD.num_xdata [BL] set+1 %u", num_xdata);

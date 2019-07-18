@@ -475,7 +475,7 @@ dwg_set_HEADER (Dwg_Data *restrict dwg, const char *restrict fieldname,
 #ifndef HAVE_NONNULL
   if (dwg && fieldname && value)
 #endif
-    return dwg_dynapi_header_set_value (dwg, fieldname, value);
+    return dwg_dynapi_header_set_value (dwg, fieldname, value, 0);
 #ifndef HAVE_NONNULL
   else
     return false;
@@ -503,7 +503,7 @@ dwg_set_HEADER (Dwg_Data *restrict dwg, const char *restrict fieldname,
     {                                                                         \
       if (name && fieldname && out)                                           \
         return dwg_dynapi_entity_set_value ((void *)name, #OBJECT, fieldname, \
-                                            value);                           \
+                                            value, 0);                        \
       else                                                                    \
         return false;                                                         \
     }
@@ -521,7 +521,7 @@ dwg_set_HEADER (Dwg_Data *restrict dwg, const char *restrict fieldname,
                                   void *restrict value)                       \
     {                                                                         \
       return dwg_dynapi_entity_set_value ((void *)name, #OBJECT, fieldname,   \
-                                          value);                             \
+                                          value, 0);                          \
     }
 #endif
 
@@ -797,7 +797,7 @@ dwg_ent_set_POINT2D (void *restrict _obj, const char *restrict fieldname,
         || !strcmp (field.type, "2DPOINT"))
       {
         return dwg_dynapi_entity_set_value ((void *)_obj, obj->name, fieldname,
-                                            point);
+                                            point, 0);
       }
     else
       {
@@ -864,7 +864,7 @@ dwg_ent_set_POINT3D (void *restrict _obj, const char *restrict fieldname,
         || !strcmp (field.type, "BE") || !strcmp (field.type, "3DPOINT"))
       {
         return dwg_dynapi_entity_set_value ((void *)_obj, obj->name, fieldname,
-                                            point);
+                                            point, 0);
       }
     else
       {
@@ -931,7 +931,7 @@ dwg_ent_set_STRING (void *restrict _obj, const char *restrict fieldname,
         || !strcmp (field.type, "TU") || !strcmp (field.type, "TF"))
       {
         return dwg_dynapi_entity_set_value ((void *)_obj, obj->name, fieldname,
-                                            str);
+                                            str, 1);
       }
     else
       {
@@ -993,7 +993,7 @@ dwg_ent_set_REAL (void *restrict _obj, const char *restrict fieldname,
     if (!strcmp (field.type, "RD") || !strcmp (field.type, "BD"))
       {
         return dwg_dynapi_entity_set_value ((void *)_obj, obj->name, fieldname,
-                                            &num);
+                                            &num, 0);
       }
     else
       {
@@ -1055,7 +1055,7 @@ dwg_ent_set_INT16 (void *restrict _obj, const char *restrict fieldname,
     if (!strcmp (field.type, "RS") || !strcmp (field.type, "BS"))
       {
         return dwg_dynapi_entity_set_value ((void *)_obj, obj->name, fieldname,
-                                            &num);
+                                            &num, 0);
       }
     else
       {
@@ -1119,7 +1119,7 @@ dwg_ent_set_INT32 (void *restrict _obj, const char *restrict fieldname,
         || !strcmp (field.type, "MS"))
       {
         return dwg_dynapi_entity_set_value ((void *)_obj, obj->name, fieldname,
-                                            &num);
+                                            &num, 0);
       }
     else
       {
@@ -1177,7 +1177,7 @@ dwg_ent_circle_set_center (dwg_ent_circle *restrict circle,
 #ifndef HAVE_NONNULL
       && point
 #endif
-      && dwg_dynapi_entity_set_value (circle, "CIRCLE", "center", point))
+      && dwg_dynapi_entity_set_value (circle, "CIRCLE", "center", point, 0))
     *error = 0;
   else
     {
@@ -1227,7 +1227,7 @@ dwg_ent_circle_set_radius (dwg_ent_circle *restrict circle,
 {
   if (circle
       && dwg_dynapi_entity_set_value ((void *)circle, "CIRCLE", "radius",
-                                      &radius))
+                                      &radius, 0))
     {
       *error = 0;
     }
@@ -1279,7 +1279,7 @@ dwg_ent_circle_set_thickness (dwg_ent_circle *restrict circle,
 {
   if (circle
       && dwg_dynapi_entity_set_value ((void *)circle, "CIRCLE", "thickness",
-                                      &thickness))
+                                      &thickness, 0))
     {
       *error = 0;
     }
@@ -1308,7 +1308,7 @@ dwg_ent_circle_set_extrusion (dwg_ent_circle *restrict circle,
       && vector
 #endif
       && dwg_dynapi_entity_set_value ((void *)circle, "CIRCLE", "extrusion",
-                                      vector))
+                                      vector, 0))
     {
       *error = 0;
     }
@@ -1396,7 +1396,7 @@ dwg_ent_line_set_start_point (dwg_ent_line *restrict line,
 #ifndef HAVE_NONNULL
       && point
 #endif
-      && dwg_dynapi_entity_set_value ((void *)line, "LINE", "start", point))
+      && dwg_dynapi_entity_set_value ((void *)line, "LINE", "start", point, 0))
     {
       *error = 0;
     }

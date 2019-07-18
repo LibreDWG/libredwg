@@ -104,9 +104,9 @@ EXPORT bool dwg_dynapi_header_value (const Dwg_Data *restrict dwg,
                                      Dwg_DYNAPI_field *restrict fp);
 
 /** Returns the ENTITY|OBJECT.fieldname value in out.
-    entity is the Dwg_Entity_ENTITY or Dwg_Object_OBJECT struct with the
+   entity is the Dwg_Entity_ENTITY or Dwg_Object_OBJECT struct with the
    specific fields. The optional Dwg_DYNAPI_field *fp is filled with the field
-   types from dynapi.c
+   types from dynapi.c.
  */
 EXPORT bool dwg_dynapi_entity_value (void *restrict entity,
                                      const char *restrict dxfname,
@@ -115,7 +115,7 @@ EXPORT bool dwg_dynapi_entity_value (void *restrict entity,
                                      Dwg_DYNAPI_field *restrict fp);
 
 /** Returns the common ENTITY|OBJECT.fieldname value in out.
-    entity is the Dwg_Entity_ENTITY or Dwg_Object_OBJECT struct with the
+   _obj is the Dwg_Entity_ENTITY or Dwg_Object_OBJECT struct with the
    specific fields. The optional Dwg_DYNAPI_field *fp is filled with the field
    types from dynapi.c
  */
@@ -123,56 +123,69 @@ EXPORT bool dwg_dynapi_common_value (void *restrict _obj,
                                      const char *restrict fieldname,
                                      void *restrict out,
                                      Dwg_DYNAPI_field *restrict fp);
-
-/** Same as above, but r2007+ creates a fresh UTF-8 conversion from the UTF-16 wchar,
-    < r2007 returns the field value.
-    Only valid for string fields.
-*/
-EXPORT bool dwg_dynapi_header_utf8text (void *restrict _obj,
+// Converts TU strings to utf-8
+EXPORT bool dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
                                         const char *restrict name,
                                         const char *restrict fieldname,
-                                        char **restrict out,
+                                        char **restrict textp,
                                         Dwg_DYNAPI_field *restrict fp);
-EXPORT bool dwg_dynapi_entity_utf8text (void *restrict _obj,
+/** Returns the ENTITY|OBJECT.fieldname text value in out.
+   entity is the Dwg_Entity_ENTITY or Dwg_Object_OBJECT struct with the
+   specific fields. The optional Dwg_DYNAPI_field *fp is filled with the field
+   types from dynapi.c
+   With DWG's since r2007+ creates a fresh UTF-8 conversion from the UTF-16
+   wchar value (which needs to be free'd), with older DWG's returns the
+   unconverted text value.
+   Only valid for text fields.
+*/
+EXPORT bool dwg_dynapi_entity_utf8text (void *restrict entity,
                                         const char *restrict name,
                                         const char *restrict fieldname,
-                                        char **restrict out,
+                                        char **restrict textp,
                                         Dwg_DYNAPI_field *restrict fp);
 EXPORT bool dwg_dynapi_common_utf8text (void *restrict _obj,
                                         const char *restrict name,
                                         const char *restrict fieldname,
-                                        char **restrict out,
+                                        char **restrict textp,
                                         Dwg_DYNAPI_field *restrict fp);
 
 /** Sets the HEADER.fieldname to a value.
     A malloc'ed struct or string is passed by ptr, not by the content.
     A non-malloc'ed struct is set by content.
+    If is_utf8 is set, the given value is a UTF-8 string, and will be
+    converted to TV or TU.
  */
 EXPORT bool dwg_dynapi_header_set_value (const Dwg_Data *restrict dwg,
                                          const char *restrict fieldname,
-                                         const void *restrict value);
-
+                                         const void *restrict value,
+                                         const bool is_utf8);
 /** Sets the ENTITY.fieldname to a value.
     A malloc'ed struct is passed by ptr, not by the content.
     A non-malloc'ed struct is set by content.
     Arrays or strings must be malloced before. We just set the new pointer,
     the old value will be freed.
+    If is_utf8 is set, the given value is a UTF-8 string, and will be
+    converted to TV or TU.
  */
 EXPORT bool dwg_dynapi_entity_set_value (void *restrict entity,
                                          const char *restrict dxfname,
                                          const char *restrict fieldname,
-                                         const void *restrict value);
+                                         const void *restrict value,
+                                         const bool is_utf8);
 
 /** Sets the common ENTITY or OBJECT.fieldname to a value.
     A malloc'ed struct is passed by ptr, not by the content.
     A non-malloc'ed struct is set by content.
     Arrays or strings must be malloced before. We just set the new pointer,
     the old value will be freed.
+    If is_utf8 is set, the given value is a UTF-8 string, and will be
+    converted to TV or TU.
  */
-EXPORT bool dwg_dynapi_common_set_value (void *restrict entity,
+EXPORT bool dwg_dynapi_common_set_value (void *restrict _obj,
                                          const char *restrict dxfname,
                                          const char *restrict fieldname,
-                                         const void *restrict value);
+                                         const void *restrict value,
+                                         const bool is_utf8);
 
 /* static api */
 typedef struct dwg_point_3d
