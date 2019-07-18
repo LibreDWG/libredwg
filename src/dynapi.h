@@ -64,6 +64,22 @@ EXPORT bool dwg_dynapi_common_value (void *restrict _obj,
                                      const char *restrict fieldname,
                                      void *restrict out,
                                      Dwg_DYNAPI_field *restrict fp);
+// r_2007+ creates a fresh UTF-8 copy, <r2007 returns the field value
+EXPORT bool dwg_dynapi_header_utf8text (void *restrict _obj,
+                                        const char *restrict name,
+                                        const char *restrict fieldname,
+                                        char **restrict out,
+                                        Dwg_DYNAPI_field *restrict fp);
+EXPORT bool dwg_dynapi_entity_utf8text (void *restrict _obj,
+                                        const char *restrict name,
+                                        const char *restrict fieldname,
+                                        char **restrict out,
+                                        Dwg_DYNAPI_field *restrict fp);
+EXPORT bool dwg_dynapi_common_utf8text (void *restrict _obj,
+                                        const char *restrict name,
+                                        const char *restrict fieldname,
+                                        char **restrict out,
+                                        Dwg_DYNAPI_field *restrict fp);
 
 EXPORT bool dwg_dynapi_header_set_value (const Dwg_Data *restrict dwg,
                                          const char *restrict fieldname,

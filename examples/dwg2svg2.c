@@ -88,6 +88,12 @@ help (void)
       fprintf (stderr, "ERROR: %s.%s", name, field);                          \
       exit (1);                                                               \
     }
+#define dynget_utf8(obj, name, field, var)                                    \
+  if (!dwg_dynapi_entity_utf8text (obj, "" name, "" field, var, NULL))        \
+    {                                                                         \
+      fprintf (stderr, "ERROR: %s.%s", name, field);                          \
+      exit (1);                                                               \
+    }
 
 static double
 transform_X (double x)
@@ -135,10 +141,7 @@ output_TEXT (dwg_object *obj)
   text = dwg_object_to_TEXT (obj);
   if (!text)
     log_error ("dwg_object_to_TEXT");
-  dynget (text, "TEXT", "text_value", &text_value);
-  //TODO public variant of bit_convert_TU() or convert text to utf8 in dynapi?
-  if (dwg_version >= R_2007)
-    text_value = bit_convert_TU ((BITCODE_TU)text_value);
+  dynget_utf8 (text, "TEXT", "text_value", &text_value);
   dynget (text, "TEXT", "insertion_pt", &ins_pt);
   dynget (text, "TEXT", "height", &fontsize);
 

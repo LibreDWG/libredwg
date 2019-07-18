@@ -124,6 +124,26 @@ EXPORT bool dwg_dynapi_common_value (void *restrict _obj,
                                      void *restrict out,
                                      Dwg_DYNAPI_field *restrict fp);
 
+/** Same as above, but r2007+ creates a fresh UTF-8 conversion from the UTF-16 wchar,
+    < r2007 returns the field value.
+    Only valid for string fields.
+*/
+EXPORT bool dwg_dynapi_header_utf8text (void *restrict _obj,
+                                        const char *restrict name,
+                                        const char *restrict fieldname,
+                                        char **restrict out,
+                                        Dwg_DYNAPI_field *restrict fp);
+EXPORT bool dwg_dynapi_entity_utf8text (void *restrict _obj,
+                                        const char *restrict name,
+                                        const char *restrict fieldname,
+                                        char **restrict out,
+                                        Dwg_DYNAPI_field *restrict fp);
+EXPORT bool dwg_dynapi_common_utf8text (void *restrict _obj,
+                                        const char *restrict name,
+                                        const char *restrict fieldname,
+                                        char **restrict out,
+                                        Dwg_DYNAPI_field *restrict fp);
+
 /** Sets the HEADER.fieldname to a value.
     A malloc'ed struct or string is passed by ptr, not by the content.
     A non-malloc'ed struct is set by content.
