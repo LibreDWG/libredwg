@@ -166,8 +166,10 @@ output_LINE (dwg_object *obj)
   line = dwg_object_to_LINE (obj);
   if (!line)
     log_error ("dwg_object_to_LINE");
-  dynget (line, "LINE", "start", &start);
-  dynget (line, "LINE", "end", &end);
+  if (!dwg_get_LINE (line, "start", &start))
+    log_error ("LINE.start");
+  if (!dwg_get_LINE (line, "end", &end))
+    log_error ("LINE.end");
 
   printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f %f,%f\" "
           "style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n",
@@ -188,8 +190,10 @@ output_CIRCLE (dwg_object *obj)
   circle = dwg_object_to_CIRCLE (obj);
   if (!circle)
     log_error ("dwg_object_to_CIRCLE");
-  dynget (circle, "CIRCLE", "center", &center);
-  dynget (circle, "CIRCLE", "radius", &radius);
+  if (!dwg_get_CIRCLE (circle, "center", &center))
+    log_error ("CIRCLE.center");
+  if (!dwg_get_CIRCLE (circle, "radius", &radius))
+    log_error ("CIRCLE.radius");
 
   printf ("\t<circle id=\"dwg-object-%d\" cx=\"%f\" cy=\"%f\" r=\"%f\" "
           "fill=\"none\" stroke=\"blue\" stroke-width=\"0.1px\" />\n",
