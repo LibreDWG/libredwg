@@ -27,6 +27,7 @@
 #include "config.h"
 #include <stdint.h>
 #include <inttypes.h>
+#include "dwg.h"
 
 #if defined(__GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 406
 #  define GCC_DIAG_PRAGMA(x) _Pragma (#  x)
@@ -121,33 +122,6 @@
 #define DEBUG_POS_OBJ
 #define DEBUG_HERE_OBJ
 
-#define DWG_VERSIONS 20
-typedef enum DWG_VERSION_TYPE
-{
-  R_INVALID,
-  R_1_1,
-  R_1_2,
-  R_1_4,
-  R_2_0,
-  R_2_1,
-  R_2_5,
-  R_2_6,
-  R_9,
-  R_10,
-  R_11,
-  /* MC0.0, AC1.2, AC1.4,  AC1.50, AC2.10, AC1002, AC1003, AC1004, AC1006,
-     AC1009 (also R 12) */
-  R_13,
-  R_14,
-  R_2000,
-  R_2004,
-  R_2007,
-  R_2010,
-  R_2013,
-  R_2018,
-  R_AFTER
-  /* AC1012,AC1014,AC1015, AC1018, AC1021, AC1024, AC1027, AC1032, ... */
-} Dwg_Version_Type;
 extern const char version_codes[DWG_VERSIONS][7];
 
 EXPORT Dwg_Version_Type dwg_version_as (const char *);

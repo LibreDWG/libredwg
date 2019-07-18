@@ -77,6 +77,23 @@ help (void)
       fprintf (stderr, "ERROR: %s", msg);                                     \
       exit (1);                                                               \
     }
+#define log_error(msg)                                                        \
+    {                                                                         \
+      fprintf (stderr, "ERROR: %s", msg);                                     \
+      exit (1);                                                               \
+    }
+#define dynget(obj, name, field, var)                                         \
+  if (!dwg_dynapi_entity_value (obj, "" name, "" field, var, NULL))           \
+    {                                                                         \
+      fprintf (stderr, "ERROR: %s.%s", name, field);                          \
+      exit (1);                                                               \
+    }
+#define dynget_utf8(obj, name, field, var)                                    \
+  if (!dwg_dynapi_entity_utf8text (obj, "" name, "" field, var, NULL))        \
+    {                                                                         \
+      fprintf (stderr, "ERROR: %s.%s", name, field);                          \
+      exit (1);                                                               \
+    }
 
 static double
 transform_X (double x)
@@ -117,28 +134,23 @@ output_TEXT (dwg_object *obj)
   Dwg_Entity_TEXT *text;
   char *text_value;
   double fontsize;
+  const Dwg_Version_Type dwg_version = obj->parent->header.version;
 
   index = dwg_object_get_index (obj, &error);
   log_if_error ("object_get_index");
   text = dwg_object_to_TEXT (obj);
   if (!text)
-    {
-      error = 1;
-      log_if_error ("dwg_object_to_TEXT");
-    }
-  text_value = dwg_ent_text_get_text (text, &error);
-  log_if_error ("text_get_text");
-  dwg_ent_text_get_insertion_point (text, &ins_pt, &error);
-  log_if_error ("text_get_insertion_point");
-  fontsize = dwg_ent_text_get_height (text, &error);
-  log_if_error ("text_get_height");
+    log_error ("dwg_object_to_TEXT");
+  dynget_utf8 (text, "TEXT", "text_value", &text_value);
+  dynget (text, "TEXT", "insertion_pt", &ins_pt);
+  dynget (text, "TEXT", "height", &fontsize);
 
   printf ("\t<text id=\"dwg-object-%d\" x=\"%f\" y=\"%f\" "
           "font-family=\"Verdana\" font-size=\"%f\" fill=\"blue\">%s</text>\n",
           index, transform_X (ins_pt.x), transform_Y (ins_pt.y), fontsize,
           text_value);
 
-  if (text_value && obj->parent->header.version >= 15)
+  if (text_value && dwg_version >= R_2007)
     free (text_value);  
 }
 
@@ -153,14 +165,12 @@ output_LINE (dwg_object *obj)
   log_if_error ("object_get_index");
   line = dwg_object_to_LINE (obj);
   if (!line)
-    {
-      error = 1;
-      log_if_error ("dwg_object_to_LINE");
-    }
-  dwg_ent_line_get_start_point (line, &start, &error);
-  log_if_error ("line_get_start_point");
-  dwg_ent_line_get_end_point (line, &end, &error);
-  log_if_error ("line_get_end_point");
+    log_error ("dwg_object_to_LINE");
+  if (!dwg_get_LINE (line, "start", &start))
+    log_error ("LINE.start");
+  if (!dwg_get_LINE (line, "end", &end))
+    log_error ("LINE.end");
+
   printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f %f,%f\" "
           "style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n",
           index, transform_X (start.x), transform_Y (start.y),
@@ -179,14 +189,12 @@ output_CIRCLE (dwg_object *obj)
   log_if_error ("object_get_index");
   circle = dwg_object_to_CIRCLE (obj);
   if (!circle)
-    {
-      error = 1;
-      log_if_error ("dwg_object_to_LINE");
-    }
-  dwg_ent_circle_get_center (circle, &center, &error);
-  log_if_error ("circle_get_center");
-  radius = dwg_ent_circle_get_radius (circle, &error);
-  log_if_error ("circle_get_radius");
+    log_error ("dwg_object_to_CIRCLE");
+  if (!dwg_get_CIRCLE (circle, "center", &center))
+    log_error ("CIRCLE.center");
+  if (!dwg_get_CIRCLE (circle, "radius", &radius))
+    log_error ("CIRCLE.radius");
+
   printf ("\t<circle id=\"dwg-object-%d\" cx=\"%f\" cy=\"%f\" r=\"%f\" "
           "fill=\"none\" stroke=\"blue\" stroke-width=\"0.1px\" />\n",
           index, transform_X (center.x), transform_Y (center.y), radius);
@@ -206,18 +214,11 @@ output_ARC (dwg_object *obj)
   log_if_error ("object_get_index");
   arc = dwg_object_to_ARC (obj);
   if (!arc)
-    {
-      error = 1;
-      log_if_error ("dwg_object_to_ARC");
-    }
-  radius = dwg_ent_arc_get_radius (arc, &error);
-  log_if_error ("arc_get_radius");
-  start_angle = dwg_ent_arc_get_start_angle (arc, &error);
-  log_if_error ("arc_get_start_angle");
-  end_angle = dwg_ent_arc_get_end_angle (arc, &error);
-  log_if_error ("arc_get_end_angle");
-  dwg_ent_arc_get_center (arc, &center, &error);
-  log_if_error ("arc_get_center");
+    log_error ("dwg_object_to_ARC");
+  dynget (arc, "ARC", "radius", &radius);
+  dynget (arc, "ARC", "center", &center);
+  dynget (arc, "ARC", "start_angle", &start_angle);
+  dynget (arc, "ARC", "end_angle", &end_angle);
 
   x_start = center.x + radius * cos (start_angle);
   y_start = center.y + radius * sin (start_angle);
@@ -225,6 +226,7 @@ output_ARC (dwg_object *obj)
   y_end = center.y + radius * sin (end_angle);
   // Assuming clockwise arcs.
   large_arc = (end_angle - start_angle < 3.1415) ? 0 : 1;
+
   printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f A %f,%f 0 %d 0 %f,%f\" "
           "fill=\"none\" stroke=\"blue\" stroke-width=\"%f\" />\n",
           index, transform_X (x_start), transform_Y (y_start), radius, radius,
@@ -243,18 +245,12 @@ output_INSERT (dwg_object *obj)
 
   insert = dwg_object_to_INSERT (obj);
   if (!insert)
-    {
-      error = 1;
-      log_if_error ("dwg_object_to_INSERT");
-    }
+    log_error ("dwg_object_to_INSERT");
   index = dwg_object_get_index (obj, &error);
   log_if_error ("object_get_index");
-  rotation = dwg_ent_insert_get_rotation (insert, &error);
-  log_if_error ("insert_get_rotation");
-  dwg_ent_insert_get_ins_pt (insert, &ins_pt, &error);
-  log_if_error ("insert_get_ins_pt");
-  dwg_ent_insert_get_scale (insert, &_scale, &error);
-  log_if_error ("insert_get_scale");
+  dynget (insert, "INSERT", "rotation", &rotation);
+  dynget (insert, "INSERT", "ins_pt", &ins_pt);
+  dynget (insert, "INSERT", "scale", &_scale);
   obj_handle = dwg_object_get_handle (obj, &error);
   log_if_error ("get_handle");
   ins_handle = &obj->handle;
@@ -341,10 +337,11 @@ output_BLOCK_HEADER (dwg_object_ref *ref)
     }
 
   _hdr = dwg_object_to_BLOCK_HEADER (hdr);
-  name = dwg_obj_block_header_get_name (_hdr, &error);
-  log_if_error ("block_header_get_name");
+  dynget (_hdr, "BLOCK_HEADER", "name", &name);
+  //name = dwg_obj_block_header_get_name (_hdr, &error);
+  //log_if_error ("block_header_get_name");
   printf ("\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", abs_ref, name);
-  if (name != NULL && name != _hdr->name && hdr->parent->header.version >= 15)
+  if (name != NULL && name != _hdr->name && hdr->parent->header.version >= R_2007)
     free (name);
 
   obj = get_first_owned_entity (hdr);
