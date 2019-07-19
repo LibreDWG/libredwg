@@ -29,21 +29,24 @@
 #include <inttypes.h>
 #include "dwg.h"
 
-#if defined(__GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 406
-#  define GCC_DIAG_PRAGMA(x) _Pragma (#  x)
-#  define GCC_DIAG_IGNORE(x)                                                  \
-    _Pragma ("GCC diagnostic push") GCC_DIAG_PRAGMA (GCC diagnostic ignored #x)
-#  define GCC_DIAG_RESTORE _Pragma ("GCC diagnostic pop")
+/* Used warning suppressions:
+   CLANG_DIAG_IGNORE (-Wpragma-pack)
+   CLANG_DIAG_IGNORE (-Wmissing-prototypes) - also in gcc since 2.95, but not needed
+   GCC30_DIAG_IGNORE (-Wformat-nonliteral)
+   GCC31_DIAG_IGNORE (-Wdeprecated-declarations)
+   GCC_DIAG_RESTORE
+   CLANG_DIAG_RESTORE
+*/
+#if defined(__GNUC__)
+#  define CC_DIAG_PRAGMA(x) _Pragma (#  x)
+#  define GCC_DIAG_RESTORE   _Pragma ("GCC diagnostic pop")
 #  define CLANG_DIAG_IGNORE(w)
 #  define CLANG_DIAG_RESTORE
 #elif defined(__clang__) || defined(__clang)
-#  define GCC_DIAG_PRAGMA(x) _Pragma (#  x)
-#  define GCC_DIAG_IGNORE(x)                                                  \
-    _Pragma ("GCC diagnostic push") GCC_DIAG_PRAGMA (GCC diagnostic ignored #x)
-#  define GCC_DIAG_RESTORE _Pragma ("GCC diagnostic pop")
+#  define CC_DIAG_PRAGMA(x) _Pragma (#  x)
 #  define CLANG_DIAG_IGNORE(x)                                                \
-    _Pragma ("clang diagnostic push")                                         \
-        GCC_DIAG_PRAGMA (clang diagnostic ignored #x)
+     _Pragma ("clang diagnostic push")                                        \
+     CC_DIAG_PRAGMA (clang diagnostic ignored #x)
 #  define CLANG_DIAG_RESTORE _Pragma ("clang diagnostic pop")
 #else
 #  define GCC_DIAG_IGNORE(w)
@@ -51,23 +54,21 @@
 #  define CLANG_DIAG_IGNORE(w)
 #  define CLANG_DIAG_RESTORE
 #endif
-/* for GCC31_DIAG_IGNORE(-Wdeprecated-declarations) */
+/* for GCC31_DIAG_IGNORE (-Wdeprecated-declarations) */
 #if (defined(__GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 310) ||      \
     defined(__clang__) || defined(__clang)
-#  define GCC31_DIAG_PRAGMA(x) _Pragma (#  x)
 #  define GCC31_DIAG_IGNORE(x)                                                \
-    _Pragma ("GCC diagnostic push")                                           \
-        GCC31_DIAG_PRAGMA (GCC diagnostic ignored #x)
+     _Pragma ("GCC diagnostic push")                                          \
+     CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
 #else
 #  define GCC31_DIAG_IGNORE(w)
 #endif
-/* for GCC30_DIAG_IGNORE(-Wformat-nonliteral) */
+/* for GCC30_DIAG_IGNORE (-Wformat-nonliteral) */
 #if (defined(__GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 300) ||      \
     defined(__clang__) || defined(__clang)
-#  define GCC30_DIAG_PRAGMA(x) _Pragma (#  x)
 #  define GCC30_DIAG_IGNORE(x)                                                \
     _Pragma ("GCC diagnostic push")                                           \
-        GCC30_DIAG_PRAGMA (GCC diagnostic ignored #x)
+    CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
 #else
 #  define GCC30_DIAG_IGNORE(w)
 #endif
