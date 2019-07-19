@@ -214,7 +214,7 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
       char *_s;                                                               \
       const char *_fmt = dxf_format (dxf);                                    \
       GROUP (dxf);                                                            \
-      GCC_DIAG_IGNORE (-Wformat-nonliteral)                                 \
+      GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                 \
       snprintf (buf, 255, _fmt, value);                                       \
       GCC_DIAG_RESTORE                                                        \
       /* not a string, empty num. must be zero */                             \

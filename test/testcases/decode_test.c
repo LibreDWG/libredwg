@@ -3,7 +3,7 @@ CLANG_DIAG_IGNORE (-Wpragma-pack)
 #include "../../src/decode.c"
 CLANG_DIAG_RESTORE
 
-CLANG_DIAG_IGNORE (-Wformat-nonliteral)
+GCC30_DIAG_IGNORE (-Wformat-nonliteral)
 CLANG_DIAG_IGNORE (-Wmissing-prototypes)
 #include <dejagnu.h>
 CLANG_DIAG_RESTORE

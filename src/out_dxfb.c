@@ -222,11 +222,11 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
     }
 
 /*
-#define VALUE(code, value)                   \
-  {\
-    GCC_DIAG_IGNORE(-Wformat-nonliteral) \
-    snprintf (buf, 4096, "%3i\n%s\n", code, dxfb_format (code));\
-    fprintf(dat->fh, buf, value);\
+#define VALUE(code, value) \
+  { \
+    GCC30_DIAG_IGNORE (-Wformat-nonliteral) \
+    snprintf (buf, 4096, "%3i\n%s\n", code, dxfb_format (code)); \
+    fprintf(dat->fh, buf, value); \
     GCC_DIAG_RESTORE \
   }
  */
