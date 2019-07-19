@@ -214,9 +214,9 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
       char *_s;                                                               \
       const char *_fmt = dxf_format (dxf);                                    \
       GROUP (dxf);                                                            \
-      GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                 \
+      GCC46_DIAG_IGNORE (-Wformat-nonliteral)                                 \
       snprintf (buf, 255, _fmt, value);                                       \
-      GCC_DIAG_RESTORE                                                        \
+      GCC46_DIAG_RESTORE                                                        \
       /* not a string, empty num. must be zero */                             \
       if (strcmp (_fmt, "%s") && !*buf)                                       \
         strcpy (buf, "0");                                                    \
@@ -767,6 +767,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
   return error;                                                               \
   }
 
+GCC30_DIAG_IGNORE (-Wformat-nonliteral)
 static int
 dxf_write_xdata (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                  Dwg_Resbuf *restrict rbuf, BITCODE_BL size)
@@ -1733,6 +1734,7 @@ dxf_codepage (int code, Dwg_Data *dwg)
     return "ANSI_1252";
 }
 
+GCC30_DIAG_IGNORE (-Wformat-nonliteral)
 // see
 // https://www.autodesk.com/techpubs/autocad/acad2000/dxf/header_section_group_codes_dxf_02.htm
 static int
@@ -1754,7 +1756,7 @@ dxf_header_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 dwg->header.codepage);
     }
 
-#include "header_variables_dxf.spec"
+  #include "header_variables_dxf.spec"
 
   return 0;
 }
@@ -2225,6 +2227,7 @@ dxf_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return error;
 }
 
+GCC30_DIAG_IGNORE (-Wformat-nonliteral)
 // TODO: Beware, there's also a new ACDSDATA section, with ACDSSCHEMA elements
 // and the Thumbnail_Data (per block?)
 static int

@@ -268,6 +268,7 @@ decode_preR13_section_chk (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
              id, size, (long)tbl->number, address)
 }
 
+GCC30_DIAG_IGNORE (-Wformat-nonliteral)
 // TABLES really
 static int
 decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
@@ -2297,6 +2298,7 @@ decrypt_R2004_header (Bit_Chain *restrict dat, BITCODE_RC *restrict decrypted,
     }
 }
 
+GCC30_DIAG_IGNORE (-Wformat-nonliteral)
 static int
 decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
 {
