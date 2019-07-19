@@ -1658,14 +1658,14 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
 // index is the Section Number in the section map
 static Dwg_Section *
-find_section (Dwg_Data *dwg, unsigned long int index)
+find_section (Dwg_Data *dwg, unsigned long int idx)
 {
   BITCODE_BL i;
-  if (dwg->header.section == 0 || index == 0)
+  if (dwg->header.section == 0 || idx == 0)
     return 0;
   for (i = 0; i < dwg->header.num_sections; ++i)
     {
-      if ((unsigned long int)dwg->header.section[i].number == index)
+      if ((unsigned long int)dwg->header.section[i].number == idx)
         return &dwg->header.section[i];
     }
   return NULL;

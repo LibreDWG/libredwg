@@ -1660,7 +1660,7 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
   BITCODE_BL i = 0;
   BITCODE_BL total_size = 0;
   BITCODE_BL num_blocks = 0;
-  int index;
+  int idx;
   int error = 0;
 
   FIELD_B (acis_empty, 0);
@@ -1690,24 +1690,24 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
           num_blocks = i-1;
           FIELD_VALUE (num_blocks) = num_blocks;
           LOG_TRACE ("num_blocks: " FORMAT_BL "\n", FIELD_VALUE (num_blocks));
-          index = 0;
+          idx = 0;
           for (i=0; i<num_blocks; i++)
             {
               for (j=0; j < FIELD_VALUE (block_size[i]); j++)
                 {
                   if (FIELD_VALUE (encr_sat_data[i][j] <= 32))
                     {
-                      FIELD_VALUE (acis_data)[index++]
+                      FIELD_VALUE (acis_data)[idx++]
                         = FIELD_VALUE (encr_sat_data[i][j]);
                     }
                   else
                     {
-                      FIELD_VALUE (acis_data)[index++]
+                      FIELD_VALUE (acis_data)[idx++]
                         = 159 - FIELD_VALUE (encr_sat_data[i][j]);
                     }
                 }
             }
-          FIELD_VALUE (acis_data)[index] = '\0';
+          FIELD_VALUE (acis_data)[idx] = '\0';
           // DXF 1 + 3 if >255
           LOG_TRACE("acis_data:\n%s\n", FIELD_VALUE (acis_data));
         }
