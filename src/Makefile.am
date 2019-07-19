@@ -98,15 +98,15 @@ dynapi.c: gen-dynapi.pl $(top_srcdir)/include/dwg.h
 
 .c.i:
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
-	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -E -o $@ $<
+	$(COMPILE) -c -E -o $@ $<
 
 .c.ii: # no linemarkers
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
-	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -E -P -o $@ $<
+	$(COMPILE) -c -E -P -o $@ $<
 
 .c.ic: # replace the original .c with the expanded version. keep a backup!
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
-	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -E -P -o $@ $<
+	$(COMPILE) -c -E -P -o $@ $<
 	$(CLANG_FORMAT) -i $@
 	$(am__mv) $@ $<
 

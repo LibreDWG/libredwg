@@ -204,7 +204,7 @@
   SINCE(R_2000) {
     DXF_OR_PRINT {
       if (FIELD_VALUE(linewt) != 29) {
-        int lw = dxf_cvt_lweight(FIELD_VALUE(linewt));
+        int lw = dxf_cvt_lweight (FIELD_VALUE(linewt));
         KEY(linewt); VALUE_RC((signed char)lw, 370);
       }
     } else {
