@@ -1637,7 +1637,7 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
                               file_header.pages_map_size_uncomp,
                               file_header.pages_map_correction);
   if (!pages_map)
-    return DWG_ERR_PAGENOTFOUND;
+    return DWG_ERR_PAGENOTFOUND; // Error already logged
 
   // Sections Map
   page = get_page (pages_map, file_header.sections_map_id);
@@ -1645,8 +1645,8 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
     {
       LOG_ERROR ("Failed to find sections page map %d",
                  (int)file_header.sections_map_id);
-      pages_destroy (pages_map);
-      return DWG_ERR_SECTIONNOTFOUND;
+      error |= DWG_ERR_SECTIONNOTFOUND;
+      goto error;
     }
   dat->byte = page->offset;
   if ((unsigned long)file_header.sections_map_size_comp
@@ -1656,19 +1656,21 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
                  __FUNCTION__,
                  (unsigned long)file_header.sections_map_size_comp,
                  dat->size - dat->byte)
-      return DWG_ERR_VALUEOUTOFBOUNDS;
+      error |= DWG_ERR_VALUEOUTOFBOUNDS;
+      goto error;
     }
   sections_map = read_sections_map (dat, file_header.sections_map_size_comp,
                                     file_header.sections_map_size_uncomp,
                                     file_header.sections_map_correction);
 
   error = read_2007_section_classes (dat, dwg, sections_map, pages_map);
-  error
-      += read_2007_section_header (dat, hdl_dat, dwg, sections_map, pages_map);
+  error += read_2007_section_header (dat, hdl_dat, dwg, sections_map,
+                                     pages_map);
   error += read_2007_section_handles (dat, hdl_dat, dwg, sections_map,
                                       pages_map);
   // read_2007_blocks(dat, hdl_dat, dwg, sections_map, pages_map);
 
+ error:
   pages_destroy (pages_map);
   if (page)
     sections_destroy (sections_map);
