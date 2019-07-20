@@ -19915,7 +19915,7 @@ dwg_obj_block_control_get_block_headers (
 {
   dwg_object_ref **ptx;
 
-  if (ctrl->num_entries && !ctrl->block_headers)
+  if (!ctrl || (ctrl->num_entries && !ctrl->block_headers))
     {
       *error = 1;
       LOG_ERROR ("%s: null block_headers", __FUNCTION__);
