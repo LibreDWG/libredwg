@@ -4162,7 +4162,8 @@ dwg_dynapi_entity_utf8text (void *restrict _obj, const char *restrict name,
       }
     {
       const Dwg_DYNAPI_field *f = dwg_dynapi_entity_field (name, fieldname);
-      const Dwg_Version_Type dwg_version = obj->parent->header.version;
+      const Dwg_Version_Type dwg_version
+          = obj ? obj->parent->header.version : R_INVALID;
       if (!f || !f->is_string)
         {
           int loglevel;
