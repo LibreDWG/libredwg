@@ -160,3 +160,6 @@ GCC30_DIAG_IGNORE (-Wformat-nonliteral)
 CLANG_DIAG_IGNORE (-Wmissing-prototypes)
 // allow out deprecated API
 GCC31_DIAG_IGNORE (-Wdeprecated-declarations)
+// for newer gcc's
+GCC46_DIAG_IGNORE (-Wformat-nonliteral)
+GCC46_DIAG_IGNORE (-Wdeprecated-declarations)
