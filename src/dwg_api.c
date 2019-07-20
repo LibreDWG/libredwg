@@ -844,7 +844,8 @@ EXPORT dwg_point_2d *dwg_ent_get_POINT2D (const void *restrict _obj,
     const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return NULL;
-    point = calloc (1, sizeof (Dwg_Bitcode_2RD));
+
+    point = calloc (1, sizeof (dwg_point_2d));
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &point,
                                   &field))
       return NULL;
@@ -877,6 +878,7 @@ dwg_ent_set_POINT2D (void *restrict _obj, const char *restrict fieldname,
     const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return NULL;
+
     point = calloc (1, sizeof (dummy));
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &dummy,
                                   &field))
@@ -910,7 +912,8 @@ dwg_ent_get_POINT3D (const void *restrict _obj, const char *restrict fieldname)
     const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return NULL;
-    point = calloc (1, sizeof (point));
+
+    point = calloc (1, sizeof (dwg_point_3d));
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &point,
                                   &field))
       return NULL;
@@ -944,7 +947,7 @@ dwg_ent_set_POINT3D (void *restrict _obj, const char *restrict fieldname,
     const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return NULL;
-    point = calloc (1, sizeof (dummy));
+
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &dummy,
                                   &field))
       return false;
@@ -978,7 +981,7 @@ dwg_ent_get_STRING (const void *restrict _obj, const char *restrict fieldname)
     const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return NULL;
-    str = calloc (1, sizeof (str));
+
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &str,
                                   &field))
       return NULL;
@@ -1010,7 +1013,7 @@ dwg_ent_get_UTF8 (const void *restrict _obj, const char *restrict fieldname)
     const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return NULL;
-    str = calloc (1, sizeof (str));
+
     if (!dwg_dynapi_entity_utf8text ((void *)_obj, obj->name, fieldname, &str,
                                   &field))
       return NULL;
@@ -1042,7 +1045,7 @@ dwg_ent_set_STRING (void *restrict _obj, const char *restrict fieldname,
     const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return false;
-    dummy = calloc (1, sizeof (dummy));
+
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &dummy,
                                   &field))
       return false;
@@ -1075,7 +1078,7 @@ dwg_ent_set_UTF8 (void *restrict _obj, const char *restrict fieldname,
     const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return false;
-    dummy = calloc (1, sizeof (dummy));
+
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &dummy,
                                   &field))
       return false;
@@ -1107,6 +1110,7 @@ dwg_ent_get_REAL (const void *restrict _obj, const char *restrict fieldname)
     const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return 0.0;
+
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &num,
                                   &field))
       return 0.0;
@@ -1169,6 +1173,7 @@ dwg_ent_get_INT16 (const void *restrict _obj, const char *restrict fieldname)
     const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return 0;
+
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &num,
                                   &field))
       return 0;
@@ -1200,6 +1205,7 @@ dwg_ent_set_INT16 (void *restrict _obj, const char *restrict fieldname,
     const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return false;
+
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &dummy,
                                   &field))
       return false;
@@ -1231,6 +1237,7 @@ dwg_ent_get_INT32 (const void *restrict _obj, const char *restrict fieldname)
     const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return 0;
+
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &num,
                                   &field))
       return 0;
@@ -1263,6 +1270,7 @@ dwg_ent_set_INT32 (void *restrict _obj, const char *restrict fieldname,
     const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return false;
+
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &dummy,
                                   &field))
       return false;

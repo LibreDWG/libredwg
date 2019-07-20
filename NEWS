@@ -28,8 +28,7 @@ API breaking changes:
 
 Important bugfixes:
   * Fixed all remaining null pointer dereferences and memory leaks. We added
-    a smoke with asan, ubsan and lsan. The very first clang-analyzer scan
-    revealed not a single complaint!
+    a smoke with asan, ubsan and lsan.
   * Fixed wrong object address (#112). handlestream_size is not part of obj->size.
     This fixes the hdlpos += 8 FIXME's and many handles.
   * Fixed FIELDLIST standard handles (#118)
