@@ -31,6 +31,10 @@
 #include <time.h>
 #include "dwg.h"
 
+#if defined WORDS_BIGENDIAN && !WORDS_BIGENDIAN
+# undef WORDS_BIGENDIAN
+#endif
+
 #ifdef HAVE_ENDIAN_H
 #  include <endian.h>
 #elif defined HAVE_SYS_ENDIAN_H
@@ -53,7 +57,7 @@
 #  define le32toh(x) (x)
 #  define htole64(x) (x)
 #  define le64toh(x) (x)
-# elif BYTE_ORDER == BIG_ENDIAN /*e.g xbox 360 */
+# elif BYTE_ORDER == BIG_ENDIAN /* e.g. xbox 360 */
 #  define htole16(x) __builtin_bswap16(x)
 #  define le16toh(x) __builtin_bswap16(x)
 #  define htole32(x) __builtin_bswap32(x)
