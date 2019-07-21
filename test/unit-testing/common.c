@@ -32,6 +32,9 @@ void low_level_process (dwg_object *obj);
 /// API based processing function declaration
 void api_process (dwg_object *obj);
 
+/// dynapi based processing function declaration
+void dynapi_process (dwg_object *obj);
+
 /// API based printing function declaration
 void print_api (dwg_object *obj);
 
@@ -84,13 +87,12 @@ output_BLOCK_HEADER (dwg_object_ref *ref)
   dwg_object *hdr, *obj;
   int error;
 
-  hdr = dwg_ref_get_object (ref, &error);
   if (!ref)
     {
-      fprintf (stderr, "Found null object reference. Could not output an SVG "
-                       "symbol for this BLOCK\n");
+      fprintf (stderr, "output_BLOCK_HEADER: null argument\n");
       return;
     }
+  hdr = dwg_ref_get_object (ref, &error);
   if (!hdr)
     {
       fprintf (stderr, "Found null reference object\n");
@@ -130,7 +132,7 @@ output_test (dwg_data *dwg)
 void
 output_process (dwg_object *obj)
 {
-  print_low_level (obj);
+  //print_low_level (obj);
   print_api (obj);
 }
 
@@ -156,8 +158,8 @@ void
 print_low_level (dwg_object *obj)
 {
   printf ("\n");
-  printf ("PRINTED VIA LOW LEVEL ACCESS:\n");
-  low_level_process (obj);
+  printf ("Printed via low level access:\n");
+  //low_level_process (obj);
   printf ("\n");
 }
 
@@ -165,10 +167,77 @@ print_low_level (dwg_object *obj)
 void
 print_api (dwg_object *obj)
 {
-  printf ("PRINTED VIA API:\n");
+  printf ("Test dwg_api and dynapi:\n");
   api_process (obj);
   printf ("\n");
 }
 
-// allow out deprecated API
+#define CHK_ENTITY_UTF8TEXT(ent, name, field, value) \
+  if (dwg_dynapi_entity_utf8text (ent, #name, #field, &value, NULL)) \
+    printf ("ok " #name "." #field ":\t\"%s\"\n", value); \
+  else { \
+    printf ("not ok in reading " #name "." #field "\n"); \
+    exit (1); \
+  }
+
+#define CHK_ENTITY_TYPE(ent, name, field, type, value) \
+  if (dwg_dynapi_entity_value (ent, #name, #field, &value, NULL)) { \
+    if (value == ent->field) \
+      printf ("ok " #name "." #field ":\t" FORMAT_##type "\n", value); \
+    else { \
+      printf ("not ok " #name "." #field ":\t" FORMAT_##type "\n", value); \
+      exit (1); \
+    } \
+  } \
+  else { \
+    printf ("not ok in reading " #name "." #field "\n"); \
+    exit (1); \
+  }
+
+#define CHK_ENTITY_H(ent, name, field, hdl) \
+  if (dwg_dynapi_entity_value (ent, #name, #field, &hdl, NULL)) { \
+    if (hdl == ent->field) \
+      printf ("ok " #name "." #field ":\t(%x.%d.%lX)\n", hdl->handleref.code, \
+              hdl->handleref.size, hdl->handleref.value); \
+    else { \
+      printf ("not ok " #name "." #field ":\t(%x.%d.%lX)\n", hdl->handleref.code, \
+              hdl->handleref.size, hdl->handleref.value); \
+      exit (1); \
+    } \
+  } \
+  else { \
+    printf ("not ok in reading " #name "." #field "\n"); \
+    exit (1); \
+  }
+
+#define CHK_ENTITY_2RD(ent, name, field, value) \
+  if (dwg_dynapi_entity_value (ent, #name, #field, &value, NULL)) { \
+    if (value.x == ent->field.x && value.y == ent->field.y) \
+      printf ("ok " #name "." #field ":\t(%f, %f)\n", value.x, value.y); \
+    else { \
+      printf ("not ok " #name "." #field ":\t(%f, %f)\n", value.x, value.y); \
+      exit (1); \
+    } \
+  } \
+  else { \
+    printf ("not ok in reading " #name "." #field "\n"); \
+    exit (1); \
+  }
+
+#define CHK_ENTITY_3RD(ent, name, field, value) \
+  if (dwg_dynapi_entity_value (ent, #name, #field, &value, NULL)) { \
+    if (value.x == ent->field.x && \
+        value.y == ent->field.y &&  \
+        value.z == ent->field.z) \
+      printf ("ok " #name "." #field ":\t(%f, %f, %f)\n", value.x, value.y, \
+              value.z);                                                 \
+    else \
+      printf ("not ok " #name "." #field ":\t(%f, %f, %f)\n", value.x, value.y, \
+              value.z);                                                 \
+  } \
+  else \
+    printf ("not ok in reading " #name "." #field "\n")
+
+// allow old deprecated API
 GCC31_DIAG_IGNORE (-Wdeprecated-declarations)
+GCC46_DIAG_IGNORE (-Wdeprecated-declarations)
