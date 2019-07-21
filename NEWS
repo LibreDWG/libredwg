@@ -8,6 +8,11 @@ new API:
   * Added utf8text conversion functions to the dynapi:
     dwg_dynapi_header_utf8text, dwg_dynapi_entity_utf8text,
     dwg_dynapi_common_utf8text converting unicode strings to UTF-8.
+    And it's higher level variants: dwg_{g,s}et_HEADER_utf8text,
+    dwg_{g,s}et_{ENTITY,OBJECT}_common,
+    dwg_{g,s}et_{ENTITY,OBJECT}_common_utf8text,
+    dwg_ent_{g,s}et_UTF8.
+  * Added the missing dwg_dynapi_common_set_value.
 
 API breaking changes:
   * Added an is_utf8 arg to the dynapi setters:
@@ -37,7 +42,7 @@ Important bugfixes:
   * Fixed MULTILEADER content_block (#113)
   * Added many missing handles 2007+ (#115)
     Due to the fixed handle_stream offset, we can now reliably read many
-    more handles:
+    more handles (#114):
       DIMENSION_ORDINATE
       DIMENSION_LINEAR
       DIMENSION_ALIGNED
@@ -52,7 +57,6 @@ Important bugfixes:
       APPID
       DICTIONARYVAR
       VPORT_ENTITY_HEADER
-    Closes GH #114
   * Fixed EED code 5 as int64 (#110)
 
 Other newsworthy changes:
