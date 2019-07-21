@@ -1,5 +1,5 @@
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 778 "gen-dynapi.pl"
+#line 735 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -4029,7 +4029,7 @@ static const struct _name_type_fields dwg_name_types[] = {
 
 };
 
-#line 845 "gen-dynapi.pl"
+#line 801 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {

@@ -489,30 +489,20 @@ for (<$in>) {
     $type $var;
     if (dwg_dynapi_header_value (dwg, "$name", &$var, NULL)
         && $var == dwg->header_vars.$name)
-      {
-        pass ("HEADER.$name [$stype] $fmt", $var);
-      }
+      pass ();
     else
-      {
-        fail ("HEADER.$name [$stype] $fmt != $fmt", dwg->header_vars.$sname, $var);
-        error++;
-      }
+      fail ("HEADER.$name [$stype] $fmt != $fmt", dwg->header_vars.$sname, $var);
 EOF
         if ($type =~ /(int|long|short|char ||double|_B\b|_B[BSLD]\b|_R[CSLD])/) {
           print $fh "    $var++;\n";
         }
         print $fh <<"EOF";
-        if (dwg_dynapi_header_set_value (dwg, "$name", &$var, 0)
+    if (dwg_dynapi_header_set_value (dwg, "$name", &$var, 0)
         && $var == dwg->header_vars.$name)
-      {
-        pass ("HEADER.$name [$stype] set+1 $fmt", $var);
-      }
+      pass ();
     else
-      {
-        fail ("HEADER.$name [$stype] set+1 $fmt != $fmt",
-              dwg->header_vars.$sname, $var);
-        error++;
-      }
+      fail ("HEADER.$name [$stype] set+1 $fmt != $fmt",
+            dwg->header_vars.$sname, $var);
 EOF
         if ($type =~ /(int|long|short|char ||double|_B\b|_B[BSLD]\b|_R[CSLD])/) {
           print $fh "    $var--;\n";
@@ -532,14 +522,9 @@ EOF
         }
         print $fh <<"EOF";
        )
-      {
-        pass ("HEADER.$name [$stype]");
-      }
+      pass ();
     else
-      {
-        fail ("HEADER.$name [$stype]");
-        error++;
-      }
+      fail ("HEADER.$name [$stype]");
   }
 EOF
       }
@@ -602,29 +587,19 @@ EOF
     $type $var;
     if (dwg_dynapi_entity_value($lname, "$name", "$var", &$svar, NULL)
         && $var == $lname->$svar)
-      {
-        pass ("$name.$var [$stype] $fmt", $svar);
-      }
+      pass ();
     else
-      {
-        fail ("$name.$var [$stype] $fmt != $fmt", $lname->$svar, $svar);
-        error++;
-      }
+      fail ("$name.$var [$stype] $fmt != $fmt", $lname->$svar, $svar);
 EOF
       if ($type =~ /(int|long|short|char|double|_B\b|_B[BSLD]\b|_R[CSLD])/) {
         print $fh "    $svar++;\n";
       }
       print $fh <<"EOF";
-      if (dwg_dynapi_entity_set_value ($lname, "$name", "$var", &$svar, 0)
+    if (dwg_dynapi_entity_set_value ($lname, "$name", "$var", &$svar, 0)
         && $var == $lname->$svar)
-      {
-        pass ("$name.$var [$stype] set+1 $fmt", $svar);
-      }
+      pass ();
     else
-      {
-        fail ("$name.$var [$stype] set+1 $fmt != $fmt", $lname->$svar, $svar);
-        error++;
-      }
+      fail ("$name.$var [$stype] set+1 $fmt != $fmt", $lname->$svar, $svar);
 EOF
       if ($type =~ /(int|long|short|char ||double|_B\b|_B[BSLD]\b|_R[CSLD])/) {
         print $fh "    $lname->$svar--;\n";
@@ -674,14 +649,9 @@ EOF
     BITCODE_BL count = obj_obj->num_reactors;
     if (dwg_dynapi_entity_value ($lname, "$name", "$var", &$svar, NULL)
         && $svar == $lname->$svar)
-      {
-        pass ("$name.$var [$stype] * %u $countfield", count);
-      }
+      pass ();
     else
-      {
-        fail ("$name.$var [$stype] * %u $countfield", count);
-        error++;
-      }
+      fail ("$name.$var [$stype] * %u $countfield", count);
   }
 EOF
       } else {
@@ -697,14 +667,9 @@ EOF
         }
         print $fh ")\n";
         print $fh <<"EOF";
-      {
-        pass ("$name.$var [$stype] * %u $countfield", count);
-      }
+      pass ();
     else
-      {
-        fail ("$name.$var [$stype] * %u $countfield", count);
-        error++;
-      }
+      fail ("$name.$var [$stype] * %u $countfield", count);
   }
 EOF
       }
@@ -727,33 +692,23 @@ EOF
         }
         if ($is_str) {
           print $fh <<"EOF";
-      {
-        pass ("$name.$var [$stype] '$fmt' <> '$fmt'", $svar, $lname->$svar);
-      }
+      pass ();
     else
-      {
-        fail ("$name.$var [$stype] '$fmt' <> '$fmt'", $svar, $lname->$svar);
-        error++;
-      }
+      fail ("$name.$var [$stype] '$fmt' <> '$fmt'", $svar, $lname->$svar);
   }
 EOF
         } else {
           print $fh <<"EOF";
-      {
-        pass ("$name.$var [$stype]");
-      }
+        pass ();
     else
-      {
         fail ("$name.$var [$stype]");
-        error++;
-      }
   }
 EOF
         }
       }
     }
     print $fh <<"EOF";
-  return error;
+  return failed;
 }
 EOF
     }
@@ -777,7 +732,7 @@ close $fh;
 
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 778 "gen-dynapi.pl"
+#line 735 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -843,7 +798,7 @@ static const struct _name_type_fields dwg_name_types[] = {
   @@enum DWG_OBJECT_TYPE@@
 };
 
-#line 845 "gen-dynapi.pl"
+#line 801 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
