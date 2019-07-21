@@ -96,7 +96,7 @@
         LOG_HANDLE(" color.index: %d [ENC 62]\n", ent->color.index);
       }
       DXF {
-        if (FIELD_VALUE(color.index) != 256)
+        if (FIELD_VALUE(color.index) != 256) // not bylayer
           FIELD_BS (color.index, 62);
       }
 
@@ -185,7 +185,7 @@
         if (FIELD_VALUE(material_flags))
           FIELD_HANDLE (material, 0, 347)
       }
-      FIELD_RC (shadow_flags, 284);
+      FIELD_RC (shadow_flags, 284); /* r2007+: 0 both, 1 casts, 2, receives, 3 no */
     }
   SINCE(R_2010)
     {

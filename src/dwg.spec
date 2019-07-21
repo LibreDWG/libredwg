@@ -4274,8 +4274,8 @@ DWG_OBJECT(GEODATA)
   if (FIELD_VALUE(class_version) > 10)
     return DWG_ERR_VALUEOUTOFBOUNDS;
   FIELD_HANDLE (host_block, 4, 330);
-  FIELD_BS (coord_type, 70); // 0 unknown, local grid 1, projected grid 2,
-                             // geographic (defined by latitude/longitude) 3 (default)
+  FIELD_BS (coord_type, 70); // 0 unknown, 1 local grid, 2 projected grid,
+                             // 3 geographic (defined by latitude/longitude) (default)
   SINCE (R_2010)
     {
       FIELD_3BD (design_pt, 10);
@@ -6510,6 +6510,7 @@ DWG_OBJECT_END
 
 // (varies) UNSTABLE
 // in DXF as POSITIONMARKER (rename?, no), command: GEOMARKPOSITION, GEOMARKPOINT
+// r2014+
 DWG_ENTITY(GEOPOSITIONMARKER)
 
   DECODE_UNKNOWN_BITS
@@ -7026,8 +7027,9 @@ DWG_ENTITY_END
 #if 0
 
 /* Missing DXF names:
-  ACDBPOINTCLOUDEX  ARRAY
-  ATTDYNBLOCKREF  GEOMAPIMAGE
+  ACDBPOINTCLOUDEX // r2015+
+  ARRAY
+  ATTDYNBLOCKREF
   ATTBLOCKREF  ATTDYNBLOCKREF  BLOCKREF  CENTERMARK CENTERLINE
   DYNBLOCKREF XREF
   SECTIONOBJECT
@@ -7092,8 +7094,46 @@ DWG_OBJECT(XREFPANELOBJECT)
   DECODE_UNKNOWN_BITS
 DWG_OBJECT_END
 
+// LiveMap raster image underlay r2015+
 DWG_OBJECT(GEOMAPIMAGE)
   DECODE_UNKNOWN_BITS
+
+  //SUBCLASS (AcDbImage)
+  //SUBCLASS (AcDbRasterImage)
+  SUBCLASS (AcDbGeomapImage)
+  FIELD_BL (class_version, 90);
+  if (FIELD_VALUE(class_version) > 10)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
+  FIELD_3DPOINT (pt0, 10);
+  //FIELD_3DPOINT (uvec, 11);
+  //FIELD_3DPOINT (vvec, 12);
+  FIELD_2RD (size, 13);
+  FIELD_BS (display_props, 70);
+  FIELD_B (clipping, 280); // i.e. clipping_enabled
+  FIELD_RC (brightness, 281);
+  FIELD_RC (contrast, 282);
+  FIELD_RC (fade, 283);
+
+/* VBA props:
+origin
+  FIELD_BD (rotation, 0);
+image_width
+image_height
+name
+image_file
+image_visibility
+transparency
+height
+width
+  FIELD_B (show_rotation, 0);
+  FIELD_BD (scale_factor, 0);
+geoimage_brightness
+geoimage_contrast
+geoimage_fade
+geoimage_position
+geoimage_width
+geoimage_height
+*/
 DWG_OBJECT_END
 
 DWG_OBJECT(LEADEROBJECTCONTEXTDATA)

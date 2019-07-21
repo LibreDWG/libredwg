@@ -512,14 +512,14 @@ typedef Dwg_Object_Ref* BITCODE_H;
  */
 typedef struct _dwg_color /* CmColor: R15 and earlier */
 {
-  BITCODE_BSd index;  /* may be negative */
+  BITCODE_BSd index;  /* <0: turned off. 0: BYBLOCK, 256: BYLAYER */
   BITCODE_BS flag;    /* 1: name follows, 2: book name follows, ... */
-  BITCODE_BL rgb;
+  BITCODE_BL rgb;     /* DXF 420 */
   BITCODE_H  handle;
-  BITCODE_TV name;
+  BITCODE_TV name;    /* DXF 430 */
   BITCODE_TV book_name;
   BITCODE_BB alpha_type; /* 0 BYLAYER, 1 BYBLOCK, 3 alpha */
-  BITCODE_RC alpha;      /* 0-255 */
+  BITCODE_RC alpha;      /* DXF 440. 0-255 */
 } Dwg_Color;
 
 typedef Dwg_Color BITCODE_CMC;
@@ -5157,7 +5157,8 @@ typedef struct _dwg_object_entity
   BITCODE_BB linetype_flags;    /*!< r2000+ */
   BITCODE_BB plotstyle_flags;   /*!< r2000+ */
   BITCODE_BB material_flags;    /*!< r2007+ */
-  BITCODE_RC shadow_flags;      /*!< r2007+ */
+  BITCODE_RC shadow_flags;      /*!< r2007+: 0 both, 1 casts, 2, receives, 3 no.
+                                     DXF 284 */
   BITCODE_B has_full_visualstyle; /*!< r2010+ */
   BITCODE_B has_face_visualstyle; /*!< r2010+ */
   BITCODE_B has_edge_visualstyle; /*!< r2010+ */

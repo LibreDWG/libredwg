@@ -1250,8 +1250,8 @@ dxf_cvt_lweight (const BITCODE_RC value)
                            0,
                            0,
                            0,
-                           /*29:*/ -1,
-                           -2,
-                           -3 }; // BYLAYER, BYBLOCK, BYLWDEFAULT
+                           /*29:*/ -1, // BYLAYER
+                           -2,         // BYBLOCK
+                           -3 };       // BYLWDEFAULT
   return lweights[value % 32];
 }

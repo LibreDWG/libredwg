@@ -15,7 +15,7 @@
  * written by Reini Urban
  */
 
-/* Works for most r13-r2000 files, but not for many r2004+
+/* Works for most r13+ files, but not for many r2014+ objects.
 TODO:
 * down-conversions from unsupported entities on older DXF versions.
   Since r13:
