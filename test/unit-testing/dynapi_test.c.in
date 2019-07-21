@@ -15,6 +15,7 @@
 
 #line 16 "dynapi_test.c.in"
 #include <stdio.h>
+#include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -26,11 +27,42 @@
 #include "../../src/common.h"
 #include "dwg.h"
 #include "dwg_api.h"
-GCC30_DIAG_IGNORE (-Wformat-nonliteral)
-CLANG_DIAG_IGNORE (-Wmissing-prototypes)
-#include <dejagnu.h>
-CLANG_DIAG_RESTORE
-CLANG_DIAG_RESTORE
+
+static int num;
+static int failed;
+static int passed;
+static char buffer[512];
+
+static inline void pass (const char* fmt, ...)
+  __attribute__((format (__printf__, 1, 2)));
+
+static inline void fail (const char* fmt, ...)
+  __attribute__((format (__printf__, 1, 2)));
+
+static inline void
+pass (const char* fmt, ...)
+{
+  va_list ap;
+
+  passed++;
+  va_start (ap, fmt);
+  vsnprintf (buffer, sizeof (buffer), fmt, ap);
+  va_end (ap);
+  printf ("ok %d\t# %s\n", ++num, buffer);
+}
+
+static inline void
+fail (const char* fmt, ...)
+{
+  va_list ap;
+
+  failed++;
+  va_start (ap, fmt);
+  vsnprintf (buffer, sizeof (buffer), fmt, ap);
+  va_end (ap);
+  printf ("not ok %d\t# %s\n", ++num, buffer);
+}
+
 
 /* for all objects/entities/header_vars:
    compare direct api vs dynapi values
@@ -45,34 +77,35 @@ test_header (const Dwg_Data *dwg)
   BITCODE_BD bd;
   BITCODE_TV tv;
 
-#line 48 "dynapi_test.c"
+#line 80 "dynapi_test.c"
   /* @@for test_HEADER@@ */
-#line 49 "dynapi_test.c.in"
+#line 82 "dynapi_test.c.in"
   return error;
 }
 
-#line 7261 "dynapi_test.c"
+#line 8357 "dynapi_test.c"
 /* @@for test_OBJECT@@ */
 
-#line 57 "dynapi_test.c.in"
+#line 89 "dynapi_test.c.in"
 static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
   if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
     return 0;
-#line 52912 "dynapi_test.c"
+#line 56840 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
-#line 66 "dynapi_test.c.in"
+#line 98 "dynapi_test.c.in"
   return error;
 }
 
 static int
 test_dynapi (const char *filename)
 {
-  int error;
+  int error = 0;
   Dwg_Data dwg;
   BITCODE_BL i;
+  num = passed = failed = 0;
 
   dwg.opts = 0;
   if (dwg_read_file (filename, &dwg) >= DWG_ERR_CRITICAL)

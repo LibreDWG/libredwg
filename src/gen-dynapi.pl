@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 # Copyright (C) 2019 Free Software Foundation, Inc., GPL3
 #
-# Generate src/dynapi.c and test/testcases/dynapi_test.c
+# Generate src/dynapi.c and test/unit-testing/dynapi_test.c
 # C structs/arrays for all dwg objects and its fields for a dynamic API.
 #   -> name, type, size, offset, dxfgroup, memory-type
 # Within each object linear search is good enough.
@@ -437,9 +437,9 @@ my %FMT = (
     'RC*' => '%s',
     );
 
-my $infile = '../test/testcases/dynapi_test.c.in';
+my $infile = '../test/unit-testing/dynapi_test.c.in';
 open $in, $infile or die "$infile: $!";
-$cfile  = '../test/testcases/dynapi_test.c';
+$cfile  = '../test/unit-testing/dynapi_test.c';
 chmod 0644, $cfile if -e $cfile;
 open $fh, ">", $cfile or die "$cfile: $!";
 print $fh "/* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */\n";
@@ -717,7 +717,9 @@ EOF
 EOF
         if ($stype =~ /^(TV|RC\*|unsigned char\*|char\*)$/) {
           $is_str = 1;
-          print $fh "        && !strcmp ((char *)$svar, (char *)$lname->$svar))\n";
+          print $fh "        && $svar\n";
+          print $fh "           ? !strcmp ((char *)$svar, (char *)$lname->$svar)\n";
+          print $fh "           : !$lname->$svar)\n";
         } elsif ($type !~ /\*\*/) {
           print $fh "        && !memcmp (&$svar, &$lname->$svar, sizeof ($lname->$svar)))\n";
         } else {

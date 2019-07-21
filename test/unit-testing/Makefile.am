@@ -1,6 +1,6 @@
 ## Makefile.am
 ##
-## Copyright (C) 2015, 2018 Free Software Foundation, Inc.
+## Copyright (C) 2015-2019 Free Software Foundation, Inc.
 ##
 ## This file is part of LibreDWG.
 ##
@@ -22,9 +22,22 @@ AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
 LDADD    = $(top_builddir)/src/libredwg.la
 #SOURCES = $(top_builddir)/src/libredwg.la
 
+bits_test_LDADD = $(LDADD) $(top_builddir)/src/bits.lo
+decode_test_LDADD = $(LDADD) \
+	$(top_builddir)/src/bits.lo \
+	$(top_builddir)/src/hash.lo \
+	$(top_builddir)/src/decode_r2007.lo \
+	$(top_builddir)/src/common.lo \
+	$(top_builddir)/src/print.lo
+#dynapi_test_LDADD = $(LDADD) \
+#	$(top_builddir)/src/dynapi.lo
+
+
 # NB: After you modify ‘check_PROGRAMS’, do "make update-ignorance"
 #     and include this directory's .gitignore in the commit.
 check_PROGRAMS = \
+	bits_test \
+	dynapi_test \
 	3dsolid \
 	arc \
 	attdef \
@@ -68,10 +81,18 @@ check_PROGRAMS = \
 	xline \
 	xrecord
 
+dynapi_test.c: dynapi_test.c.in $(top_srcdir)/include/dwg.h \
+	       $(top_srcdir)/src/gen-dynapi.pl
+	-cd $(top_srcdir)/src && $(PERL) gen-dynapi.pl
+
 TESTS = $(check_PROGRAMS)
 TESTS_ENVIRONMENT = \
   INPUT=$(srcdir)/example_2000.dwg
 # todo: more dwg versions, in test/test-data
+
+bits_test.cbmc: bits_test.c ../../src/bits.c
+	cbmc -I. -I../../include -I/opt/local/include bits_test.c ../../src/bits.c \
+	     --unwind 6  --cover decision > bits_test.cbmc
 
 CLEANFILES = *.o
 MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
@@ -79,7 +100,10 @@ MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
 update-ignorance:
 	printf '/%s\n' $(check_PROGRAMS) > .gitignore
 
-EXTRA_DIST = common.c example_2000.dwg
+EXTRA_DIST = \
+	tests_common.h common.c \
+	example_2000.dwg \
+	dynapi_test.c.in
 
 @VALGRIND_CHECK_RULES@
 VALGRIND_SUPPRESSIONS_FILE = @VALGRIND_SUPPRESSIONS_FILE@

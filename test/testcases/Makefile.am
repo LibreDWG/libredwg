@@ -4,16 +4,7 @@ WARN_CFLAGS = @WARN_CFLAGS@
 AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS) @DEJAGNU_CFLAGS@
 LDADD   = $(top_builddir)/src/libredwg.la -lm
 
-bits_test_LDADD = $(LDADD) $(top_builddir)/src/bits.lo
 hash_test_LDADD = $(LDADD) $(top_builddir)/src/bits.lo $(top_builddir)/src/hash.lo
-decode_test_LDADD = $(LDADD) \
-	$(top_builddir)/src/bits.lo \
-	$(top_builddir)/src/hash.lo \
-	$(top_builddir)/src/decode_r2007.lo \
-	$(top_builddir)/src/common.lo \
-	$(top_builddir)/src/print.lo
-#dynapi_test_LDADD = $(LDADD) \
-#	$(top_builddir)/src/dynapi.lo
 
 paired = \
 	3dsolid \
@@ -62,32 +53,21 @@ unpaired = \
 	vertex_2d \
 	vertex_mesh
 
-private = bits_test \
-	  decode_test \
-	  hash_test \
-	  dynapi_test
+private = decode_test \
+	  hash_test
 
 check_PROGRAMS = $(paired) $(unpaired) $(private)
-
-dynapi_test.c: dynapi_test.c.in $(top_srcdir)/include/dwg.h \
-	       $(top_srcdir)/src/gen-dynapi.pl
-	-cd $(top_srcdir)/src && $(PERL) gen-dynapi.pl
 
 # todo: more dwg versions, from test/test-data
 EXTRA_DIST = \
 	example_2000.dwg \
 	vertex.mesh \
 	tests_common.h common.c \
-	dynapi_test.c.in \
 	$(paired:=.exp) \
 	$(private:=.exp)
 
 CLEANFILES = *.log *.sum site.bak 
 MAINTAINERCLEANFILES = *_flymake.[ch] *~ *.i
-
-bits_test.cbmc: bits_test.c ../../src/bits.c
-	cbmc -I. -I../../include -I/opt/local/include bits_test.c ../../src/bits.c \
-	     --unwind 6  --cover decision > bits_test.cbmc
 
 .c.i:
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\

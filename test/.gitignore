@@ -9,18 +9,13 @@
 /site.bak
 
 /testcases/site.bak
-/testcases/bits_test.cbmc
-/testcases/bits_test.cover
-
 /testcases/3dsolid
 /testcases/arc
 /testcases/attdef
 /testcases/attrib
-/testcases/bits_test
 /testcases/block
 /testcases/body
 /testcases/circle
-/testcases/decode_test
 /testcases/dim_aligned
 /testcases/dim_ang2ln
 /testcases/dim_ang3pt
@@ -29,10 +24,8 @@
 /testcases/dim_linear
 /testcases/dim_ordinate
 /testcases/dim_radius
-/testcases/dynapi_test
 /testcases/ellipse
 /testcases/endblk
-/testcases/hash_test
 /testcases/insert
 /testcases/libredwg.log
 /testcases/libredwg.sum
@@ -64,7 +57,6 @@
 
 /xmlsuite/testsuite
 /xmlsuite/result.htm
-
 /xmlsuite/test_output
 
 /test-data/r1*/*.svg
@@ -80,4 +72,11 @@
 /test-data/20*/*.dxflog
 /test-data/20*/*.dxf
 
+/unit-testing/bits_test.cbmc
+/unit-testing/bits_test.cover
 /unit-testing/*.log
+/unit-testing/bits_test
+/unit-testing/decode_test
+/unit-testing/dynapi_test.c
+/unit-testing/dynapi_test
+/unit-testing/hash_test
