@@ -856,7 +856,7 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
       _hdr->__iterator++;
       if (_hdr->__iterator == _hdr->num_owned)
         return NULL;
-      ref = _hdr->entities[_hdr->__iterator];
+      ref = _hdr->entities ? _hdr->entities[_hdr->__iterator] : NULL;
       return ref ? ref->obj : NULL;
     }
 
@@ -877,7 +877,9 @@ get_first_owned_subentity (const Dwg_Object *owner)
       if (version <= R_2000)
         return _obj->first_attrib ? _obj->first_attrib->obj : NULL;
       else
-        return _obj->attrib_handles[0] ? _obj->attrib_handles[0]->obj : NULL;
+        return _obj->attrib_handles && _obj->attrib_handles[0]
+                   ? _obj->attrib_handles[0]->obj
+                   : NULL;
     }
   else if (type == DWG_TYPE_MINSERT)
     {
@@ -885,7 +887,9 @@ get_first_owned_subentity (const Dwg_Object *owner)
       if (version <= R_2000)
         return _obj->first_attrib ? _obj->first_attrib->obj : NULL;
       else
-        return _obj->attrib_handles[0] ? _obj->attrib_handles[0]->obj : NULL;
+        return _obj->attrib_handles && _obj->attrib_handles[0]
+                   ? _obj->attrib_handles[0]->obj
+                   : NULL;
     }
   else if (type == DWG_TYPE_POLYLINE_2D || type == DWG_TYPE_POLYLINE_3D
            || type == DWG_TYPE_POLYLINE_PFACE
@@ -896,7 +900,7 @@ get_first_owned_subentity (const Dwg_Object *owner)
       if (version <= R_2000)
         return _obj->first_vertex ? _obj->first_vertex->obj : NULL;
       else
-        return _obj->vertex[0] ? _obj->vertex[0]->obj : NULL;
+        return _obj->vertex && _obj->vertex[0] ? _obj->vertex[0]->obj : NULL;
     }
   else
     {
@@ -911,8 +915,8 @@ Dwg_Object *
 get_next_owned_subentity (const Dwg_Object *restrict owner,
                           const Dwg_Object *restrict current)
 {
-  unsigned int version = owner->parent->header.version;
-  const unsigned int type = owner->type;
+  Dwg_Version_Type version = owner->parent->header.version;
+  const Dwg_Object_Type type = owner->type;
   Dwg_Object_Entity *ent = owner->tio.entity;
   Dwg_Object *obj = dwg_next_object (current);
 
@@ -920,7 +924,11 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
     {
       Dwg_Entity_INSERT *_obj = owner->tio.entity->tio.INSERT;
       if (version <= R_2000)
-        return (current != _obj->last_attrib->obj) ? obj : NULL;
+        return (_obj->last_attrib
+                && current != _obj->last_attrib->obj
+                && obj->type == DWG_TYPE_ATTRIB)
+          ? obj
+          : NULL;
       else
         {
           ent->__iterator++;
@@ -930,14 +938,20 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
               return NULL;
             }
           else
-            return _obj->attrib_handles[ent->__iterator]->obj;
+            return _obj->attrib_handles
+              ? _obj->attrib_handles[ent->__iterator]->obj
+              : NULL;
         }
     }
   else if (type == DWG_TYPE_MINSERT)
     {
       Dwg_Entity_MINSERT *_obj = owner->tio.entity->tio.MINSERT;
       if (version <= R_2000)
-        return (current != _obj->last_attrib->obj) ? obj : NULL;
+        return (_obj->last_attrib
+                && current != _obj->last_attrib->obj
+                && obj->type == DWG_TYPE_ATTRIB)
+          ? obj
+          : NULL;
       else
         {
           ent->__iterator++;
@@ -947,7 +961,9 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
               return NULL;
             }
           else
-            return _obj->attrib_handles[ent->__iterator]->obj;
+            return _obj->attrib_handles
+              ? _obj->attrib_handles[ent->__iterator]->obj
+              : NULL;
         }
     }
   else if (type == DWG_TYPE_POLYLINE_2D || type == DWG_TYPE_POLYLINE_3D
@@ -957,7 +973,8 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
       // guaranteed structure
       Dwg_Entity_POLYLINE_2D *_obj = owner->tio.entity->tio.POLYLINE_2D;
       if (version <= R_2000)
-        return (current != _obj->last_vertex->obj) ? obj : NULL;
+        return (_obj->last_vertex && current != _obj->last_vertex->obj) ? obj
+                                                                        : NULL;
       else
         {
           ent->__iterator++;
@@ -967,7 +984,9 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
               return NULL;
             }
           else
-            return _obj->vertex[ent->__iterator]->obj;
+            return _obj->vertex
+              ? _obj->vertex[ent->__iterator]->obj
+              : NULL;
         }
     }
   else
@@ -1126,6 +1145,17 @@ dwg_obj_is_subentity (const Dwg_Object *obj)
              || type == DWG_TYPE_VERTEX_3D || type == DWG_TYPE_VERTEX_MESH
              || type == DWG_TYPE_VERTEX_PFACE
              || type == DWG_TYPE_VERTEX_PFACE_FACE);
+}
+
+int
+dwg_obj_has_subentity (const Dwg_Object *obj)
+{
+  const unsigned int type = obj->type;
+  return (obj->supertype == DWG_SUPERTYPE_ENTITY)
+         && (type == DWG_TYPE_INSERT || type == DWG_TYPE_MINSERT
+             || type == DWG_TYPE_POLYLINE_2D || type == DWG_TYPE_POLYLINE_3D
+             || type == DWG_TYPE_POLYLINE_PFACE
+             || type == DWG_TYPE_POLYLINE_MESH);
 }
 
 Dwg_Section_Type

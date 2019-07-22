@@ -103,7 +103,19 @@ output_BLOCK_HEADER (dwg_object_ref *ref)
   while (obj)
     {
       output_object (obj);
-      obj = get_next_owned_entity (hdr, obj);
+      if (dwg_obj_has_subentity (obj))
+        {
+          Dwg_Object *owner = obj;
+          obj = get_first_owned_subentity (owner);
+          while (obj)
+            {
+              output_object (obj);
+              obj = get_next_owned_subentity (owner, obj);
+            }
+          obj = get_next_owned_entity (hdr, owner);
+        }
+      else
+        obj = get_next_owned_entity (hdr, obj);
     }
 }
 
@@ -111,21 +123,42 @@ output_BLOCK_HEADER (dwg_object_ref *ref)
 void
 output_test (dwg_data *dwg)
 {
-  unsigned int i, num_hdr_objs;
   int error;
   dwg_object *obj;
   dwg_obj_block_header *_hdr;
   dwg_obj_block_control *_ctrl;
-  dwg_object_ref **hdr_refs;
+  dwg_object_ref *ref, **hdr_refs;
 
   _hdr = dwg_get_block_header (dwg, &error);
   _ctrl = dwg_block_header_get_block_control (_hdr, &error);
-  /*
-  hdr_refs = dwg_obj_block_control_get_block_headers(ctrl, &error);
-  num_hdr_objs = dwg_obj_block_control_get_num_entries(ctrl, &error);
-  */
-  output_BLOCK_HEADER (dwg_obj_block_control_get_model_space (_ctrl, &error));
-  output_BLOCK_HEADER (dwg_obj_block_control_get_paper_space (_ctrl, &error));
+
+  /* process all owned entities */
+  ref = dwg_obj_block_control_get_model_space (_ctrl, &error);
+  if (!error)
+    output_BLOCK_HEADER (ref);
+  ref = dwg_obj_block_control_get_paper_space (_ctrl, &error);
+  if (!error)
+    output_BLOCK_HEADER (ref);
+
+#ifdef DWG_TYPE
+  if (DWG_TYPE == DWG_TYPE_ATTDEF)
+    {
+      /* and now also all subtypes and entities in blocks */
+      unsigned int i;
+      unsigned int num_hdr_objs = dwg_obj_block_control_get_num_entries(_ctrl, &error);
+      if (error || !num_hdr_objs)
+        return;
+      hdr_refs = dwg_obj_block_control_get_block_headers(_ctrl, &error);
+      if (error)
+        return;
+      for (i = 0; i < num_hdr_objs; i++)
+        {
+          if (hdr_refs[i])
+            output_BLOCK_HEADER (hdr_refs[i]);
+        }
+      free (hdr_refs);
+    }
+#endif
 }
 
 /// Main output function that prints to the terminal
@@ -168,7 +201,7 @@ void
 print_api (dwg_object *obj)
 {
 #ifdef DWG_TYPE
-  printf ("Unit-testing type %d:\n", DWG_TYPE);
+  printf ("Unit-testing type %d %s:\n", DWG_TYPE, obj->name);
 #else
   printf ("Test dwg_api and dynapi:\n");
 #endif
