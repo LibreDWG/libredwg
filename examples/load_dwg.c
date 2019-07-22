@@ -21,7 +21,9 @@
 
 #include "config.h"
 #ifdef __STDC_ALLOC_LIB__ /* for strdup */
-#  define __STDC_WANT_LIB_EXT2__ 1
+# define __STDC_WANT_LIB_EXT2__ 1 /* for strdup */
+#else
+# define _USE_BSD 1
 #endif
 #ifndef _XOPEN_SOURCE /* for strdup, snprintf */
 #  define _XOPEN_SOURCE 700

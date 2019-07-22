@@ -23,13 +23,15 @@
  */
 
 #include "config.h"
+#ifdef __STDC_ALLOC_LIB__
+# define __STDC_WANT_LIB_EXT2__ 1 /* for strdup */
+#else
+# define _USE_BSD 1
+#endif
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#ifdef __STDC_ALLOC_LIB__
-#  define __STDC_WANT_LIB_EXT2__ 1 /* for strdup */
-#endif
 #include <string.h>
 #include <assert.h>
 
