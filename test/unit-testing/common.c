@@ -275,6 +275,41 @@ print_api (dwg_object *obj)
   else \
     printf ("not ok in reading " #name "." #field "\n")
 
+#define _DWGAPI_ENT_NAME(name, field) dwg_ent_ ## name ## _get_ ##field
+#define DWGAPI_ENT_NAME(ent, field) _DWGAPI_ENT_NAME(ent, field)
+
+#define CHK_ENTITY_TYPE_W_OLD(ent, name, field, type, value) \
+  CHK_ENTITY_TYPE(ent, name, field, type, value); \
+  if (DWGAPI_ENT_NAME(ent, field) (ent, &error) != value || error) \
+    { \
+      printf ("Error with old API dwg_ent_" #ent "_get_ " #field "\n"); \
+      exit (1); \
+    }
+
+#define CHK_ENTITY_2RD_W_OLD(ent, name, field, value) \
+  CHK_ENTITY_2RD(ent, name, field, value); \
+  { \
+    dwg_point_2d _pt2d; \
+    DWGAPI_ENT_NAME(ent, field) (ent, &_pt2d, &error);     \
+    if (error || memcmp (&value, &_pt2d, sizeof (value))) \
+      { \
+        printf ("Error with old API dwg_ent_" #ent "_get_ " #field "\n"); \
+        exit (1); \
+      } \
+  }
+
+#define CHK_ENTITY_3RD_W_OLD(ent, name, field, value) \
+  CHK_ENTITY_3RD(ent, name, field, value); \
+  { \
+    dwg_point_3d _pt3d; \
+    DWGAPI_ENT_NAME(ent, field) (ent, &_pt3d, &error);     \
+    if (error || memcmp (&value, &_pt3d, sizeof (value))) \
+      { \
+        printf ("Error with old API dwg_ent_" #ent "_get_ " #field "\n"); \
+        exit (1); \
+      } \
+  }
+
 // allow old deprecated API
 GCC31_DIAG_IGNORE (-Wdeprecated-declarations)
 GCC46_DIAG_IGNORE (-Wdeprecated-declarations)

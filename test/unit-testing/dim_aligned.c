@@ -2,47 +2,6 @@
 #include "common.c"
 
 void
-low_level_process (dwg_object *obj)
-{
-  // returns dwg_object to dim aligned entity
-  dwg_ent_dim_aligned *dim_aligned = dwg_object_to_DIMENSION_ALIGNED (obj);
-
-  printf ("horiz dir of dim_aligned : %f\n", dim_aligned->horiz_dir);
-  printf ("lspace factor of dim_aligned : %f\n", dim_aligned->lspace_factor);
-  printf ("lspace style of dim_aligned : " FORMAT_BS "\n",
-          dim_aligned->lspace_style);
-  printf ("attachment of dim_aligned : " FORMAT_BS "\n",
-          dim_aligned->attachment);
-  printf ("elevation of dim_aligned : %f\n", dim_aligned->elevation);
-  printf ("extrusion of dim_aligned : x = %f, y = %f, z = %f\n",
-          dim_aligned->extrusion.x, dim_aligned->extrusion.y,
-          dim_aligned->extrusion.z);
-  printf ("ins_scale of dim_aligned : x = %f, y = %f, z = %f\n",
-          dim_aligned->ins_scale.x, dim_aligned->ins_scale.y,
-          dim_aligned->ins_scale.z);
-  printf ("def_pt of dim_aligned : x = %f, y = %f, z = %f\n",
-          dim_aligned->def_pt.x, dim_aligned->def_pt.y, dim_aligned->def_pt.z);
-  printf ("pt13 of dim_aligned : x = %f, y = %f, z = %f\n",
-          dim_aligned->_13_pt.x, dim_aligned->_13_pt.y, dim_aligned->_13_pt.z);
-  printf ("pt14 of dim_aligned : x = %f, y = %f, z = %f\n",
-          dim_aligned->_14_pt.x, dim_aligned->_14_pt.y, dim_aligned->_14_pt.z);
-  printf ("clone_ins_pt of dim_aligned : x = %f, y = %f\n",
-          dim_aligned->clone_ins_pt.x, dim_aligned->clone_ins_pt.y);
-  printf ("text_mid_pt of dim_aligned : x = %f, y = %f\n",
-          dim_aligned->text_midpt.x, dim_aligned->text_midpt.y);
-  printf ("user text of dim_aligned : %s\n", dim_aligned->user_text);
-  printf ("text rotation of dim_aligned : %f\n", dim_aligned->text_rotation);
-  printf ("ins rotation of dim_aligned : %f\n", dim_aligned->ins_rotation);
-  printf ("arrow1 of dim_aligned : " FORMAT_B "\n", dim_aligned->flip_arrow1);
-  printf ("arrow2 of dim_aligned : " FORMAT_B "\n", dim_aligned->flip_arrow2);
-  printf ("flag1 of dim_aligned : " FORMAT_RC "\n", dim_aligned->flag1);
-  printf ("act_measurement of dim_aligned : %f\n",
-          dim_aligned->act_measurement);
-  printf ("ext line rotation of dim_aligned : %f\n",
-          dim_aligned->ext_line_rotation);
-}
-
-void
 api_process (dwg_object *obj)
 {
   int error;
@@ -51,17 +10,18 @@ api_process (dwg_object *obj)
   BITCODE_RC flags1, flags2;
   BITCODE_BS lspace_style, attachment;
   char *user_text;
-  dwg_point_2d text_midpt, pt12;
-  dwg_point_3d pt10, pt13, pt14, ext, ins_scale;
+  dwg_point_2d text_midpt, pt12, pt2d;
+  dwg_point_3d pt10, pt13, pt14, ext, ins_scale, pt3d;
 
   dwg_ent_dim_aligned *dim_aligned = dwg_object_to_DIMENSION_ALIGNED (obj);
   dwg_ent_dim *dim = dwg_object_to_DIMENSION (obj);
 
-  horiz_dir = dwg_ent_dim_get_horiz_dir (dim, &error);
-  if (!error)
-    printf ("horiz dir of dim_aligned : %f\n", horiz_dir);
-  else
-    printf ("error in reading horiz dir \n");
+  CHK_ENTITY_TYPE(dim_aligned, DIMENSION_ALIGNED, horiz_dir, BD, horiz_dir);
+  if (dwg_ent_dim_get_horiz_dir (dim, &error) != horiz_dir || error)
+    {
+      printf ("Error with old API dwg_ent_dim_get_horiz_dir\n");
+      exit (1);
+    }
 
   lspace_factor = dwg_ent_dim_get_lspace_factor (dim, &error);
   if (!error)

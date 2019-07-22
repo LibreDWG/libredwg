@@ -2101,7 +2101,7 @@ DWG_ENTITY(MTEXT)
     {
       FIELD_BS (linespace_style, 73);
       FIELD_BD (linespace_factor, 44);
-      FIELD_B (unknown_bit, 0);
+      FIELD_B (unknown_bit, 0); //annotative?
     }
 
   SINCE (R_2004)
@@ -2116,7 +2116,7 @@ DWG_ENTITY(MTEXT)
     }
   SINCE (R_2018)
     {
-      FIELD_B(annotative, 0);
+      FIELD_B (annotative, 0);
       if (!FIELD_VALUE(annotative))
         {
           FIELD_BS (class_version, 0); // def: 0

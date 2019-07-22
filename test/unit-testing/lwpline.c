@@ -2,129 +2,118 @@
 #include "common.c"
 
 void
-low_level_process (dwg_object *obj)
-{
-  BITCODE_BL i;
-
-  dwg_ent_lwpline *lwpline = dwg_object_to_LWPOLYLINE (obj);
-
-  printf ("extrusion of lwpline : x = %f, y = %f, z = %f\n",
-          lwpline->extrusion.x, lwpline->extrusion.y, lwpline->extrusion.z);
-  printf ("const width of lwpline : %f\n", lwpline->const_width);
-  printf ("elevation of lwpline : %f\n", lwpline->elevation);
-  printf ("thickness of lwpline : %f\n", lwpline->thickness);
-  printf ("num width of lwpline : " FORMAT_BL "\n", lwpline->num_widths);
-  printf ("num bulges of lwpline : " FORMAT_BL "\n", lwpline->num_bulges);
-  printf ("num points of lwpline : " FORMAT_BL "\n", lwpline->num_points);
-  printf ("flag of lwpline : %x\n", lwpline->flag);
-  for (i = 0; i < lwpline->num_bulges; i++)
-    printf ("bulge[%d] of lwpline : %f\n", (int)i, lwpline->bulges[i]);
-  for (i = 0; i < lwpline->num_points; i++)
-    printf ("point[%d] of lwpline : x = %f\ty = %f\n", (int)i,
-            lwpline->points[i].x, lwpline->points[i].y);
-  for (i = 0; i < lwpline->num_widths; i++)
-    printf ("widths[%d] of lwpline : x = %f\ty = %f\n", (int)i,
-            lwpline->widths[i].start, lwpline->widths[i].end);
-}
-
-void
 api_process (dwg_object *obj)
 {
   int error;
+  BITCODE_BS flag;
   BITCODE_BL num_points, num_bulges, num_widths;
-  dwg_point_3d extrusion;
+  dwg_point_3d extrusion, pt3d;
   char flags;
   double const_width, elevation, thickness;
   double *bulges;
   dwg_point_2d *points;
   dwg_lwpline_widths *width;
-  BITCODE_BL i;
+  BITCODE_BL *vertexids;
+  BITCODE_BL num_vertexids, i;
   dwg_ent_lwpline *lwpline = dwg_object_to_LWPOLYLINE (obj);
 
-  dwg_ent_lwpline_get_extrusion (lwpline, &extrusion, &error);
-  if (!error)
-    printf ("extrusion of lwpline : x = %f, y = %f, z = %f\n", extrusion.x,
-            extrusion.y, extrusion.z);
-  else
-    printf ("error in reading extrusion");
+  CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, flag, BS, flag);
+  if (dwg_ent_lwpline_get_flag (lwpline, &error) != flag || error)
+    {
+      printf ("Error with old API dwg_ent_lwpline_get_flag\n");
+      exit (1);
+    }
+  CHK_ENTITY_3RD (lwpline, LWPOLYLINE, extrusion, extrusion);
+  dwg_ent_lwpline_get_extrusion (lwpline, &pt3d, &error);
+  if (error || memcmp (&extrusion, &pt3d, sizeof (extrusion)))
+    {
+      printf ("Error with old API dwg_ent_lwpline_get_extrusion\n");
+      exit (1);
+    }
 
-  const_width = dwg_ent_lwpline_get_const_width (lwpline, &error);
-  if (!error)
-    printf ("const width of lwpline : %f\n", const_width);
-  else
-    printf ("error in reading const width");
+  CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, const_width, BD, const_width);
+  if (dwg_ent_lwpline_get_const_width (lwpline, &error) != const_width || error)
+    {
+      printf ("Error with old API dwg_ent_lwpline_get_const_width\n");
+      exit (1);
+    }
+  CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, thickness, BD, thickness);
+  if (dwg_ent_lwpline_get_thickness (lwpline, &error) != thickness || error)
+    {
+      printf ("Error with old API dwg_ent_lwpline_get_thickness\n");
+      exit (1);
+    }
 
-  elevation = dwg_ent_lwpline_get_elevation (lwpline, &error);
-  if (!error)
-    printf ("elevation of lwpline : %f\n", elevation);
-  else
-    printf ("error in reading elevation");
+  CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, elevation, BD, elevation);
+  if (dwg_ent_lwpline_get_elevation (lwpline, &error) != elevation || error)
+    {
+      printf ("Error with old API dwg_ent_lwpline_get_elevation\n");
+      exit (1);
+    }
 
-  thickness = dwg_ent_lwpline_get_thickness (lwpline, &error);
-  if (!error)
-    printf ("thickness of lwpline : %f\n", thickness);
-  else
-    printf ("error in reading thickness");
+  CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, num_widths, BL, num_widths);
+  if (dwg_ent_lwpline_get_numwidths (lwpline, &error) != num_widths || error)
+    {
+      printf ("Error with old API dwg_ent_lwpline_get_numwidths\n");
+      exit (1);
+    }
+  CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, num_bulges, BL, num_bulges);
+  if (dwg_ent_lwpline_get_numbulges (lwpline, &error) != num_bulges || error)
+    {
+      printf ("Error with old API dwg_ent_lwpline_get_numbulges\n");
+      exit (1);
+    }
+  CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, num_points, BL, num_points);
+  if (dwg_ent_lwpline_get_numpoints (lwpline, &error) != num_points || error)
+    {
+      printf ("Error with old API dwg_ent_lwpline_get_numpoints\n");
+      exit (1);
+    }
 
-  num_widths = dwg_ent_lwpline_get_numwidths (lwpline, &error);
-  if (!error)
-    printf ("num width of lwpline : " FORMAT_BL "\n", num_widths);
-  else
-    printf ("error in reading num width");
-
-  num_bulges = dwg_ent_lwpline_get_numbulges (lwpline, &error);
-  if (!error)
-    printf ("num bulges of lwpline : " FORMAT_BL "\n", num_bulges);
-  else
-    printf ("error in reading num bulge");
-
-  num_points = dwg_ent_lwpline_get_numpoints (lwpline, &error);
-  if (!error)
-    printf ("num points of lwpline : " FORMAT_BL "\n", num_points);
-  else
-    printf ("error in reading num points");
-
-  flags = dwg_ent_lwpline_get_flag (lwpline, &error);
-  if (!error)
-    printf ("flag of lwpline : %x\n", flags);
-  else
-    printf ("error in reading flag");
-
+  //CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, bulges, BD*, bulges);
   bulges = dwg_ent_lwpline_get_bulges (lwpline, &error);
   if (!error)
     {
       for (i = 0; i < lwpline->num_bulges; i++)
-        printf ("bulge[%d] of lwpline : %f\n", (int)i, bulges[i]);
+        (void)bulges[i];
+      //printf ("bulge[%d] of lwpline : %f\n", (int)i, bulges[i]);
       free (bulges);
     }
   else
     {
-      printf ("error in reading bulges \n");
+      printf ("Error in reading bulges \n");
+      exit (1);
     }
 
   points = dwg_ent_lwpline_get_points (lwpline, &error);
   if (!error)
     {
       for (i = 0; i < lwpline->num_points; i++)
-        printf ("point[%d] of lwpline : x = %f\ty = %f\n", (int)i, points[i].x,
-                points[i].y);
+        (void)points[i].x;
+        //printf ("point[%d] of lwpline : x = %f\ty = %f\n", (int)i, points[i].x,
+        //        points[i].y);
       free (points);
     }
   else
     {
-      printf ("error in reading points \n");
+      printf ("Error in reading points \n");
+      exit (1);
     }
 
   width = dwg_ent_lwpline_get_widths (lwpline, &error);
   if (!error)
     {
       for (i = 0; i < lwpline->num_widths; i++)
-        printf ("widths[%d] of lwpline : x = %f\ty = %f\n", (int)i,
-                width[i].start, width[i].end);
+        (void)width[i].start;
+        //printf ("widths[%d] of lwpline : x = %f\ty = %f\n", (int)i,
+        //        width[i].start, width[i].end);
       free (width);
     }
   else
     {
-      printf ("error in reading widths \n");
+      printf ("Error in reading widths \n");
+      exit (1);
     }
+
+  CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, num_vertexids, BL, num_vertexids);
 }

@@ -10,7 +10,7 @@ api_process (dwg_object *obj)
   BITCODE_BS generation, vert_align, horiz_align, bsvalue;
   BITCODE_RC dataflags, rcvalue;
   char *text_value;
-  dwg_point_3d ext, pt3d;
+  dwg_point_3d ext;
   dwg_point_2d pt2d, ins_pt, alignment_pt;
   BITCODE_H style;
 
@@ -31,53 +31,17 @@ api_process (dwg_object *obj)
       exit (1);
     }
   CHK_ENTITY_2RD (text, TEXT, alignment_pt, alignment_pt);
-  CHK_ENTITY_3RD (text, TEXT, extrusion, ext);
-  dwg_ent_text_get_extrusion (text, &pt3d, &error);
-  if (error || memcmp (&ext, &pt3d, sizeof (ext)))
-    {
-      printf ("Error with old API dwg_ent_text_get_extrusion\n");
-      exit (1);
-    }
+  CHK_ENTITY_3RD_W_OLD (text, TEXT, extrusion, ext);
   CHK_ENTITY_TYPE (text, TEXT, elevation, BD, elevation);
   CHK_ENTITY_TYPE (text, TEXT, dataflags, RC, dataflags);
-  CHK_ENTITY_TYPE (text, TEXT, height, RD, height);
-  rdvalue = dwg_ent_text_get_height (text, &error);
-  if (error || height != rdvalue)
-    {
-      printf ("Error with old API dwg_ent_text_get_height\n");
-      exit (1);
-    }
-  CHK_ENTITY_TYPE (text, TEXT, thickness, RD, thickness);
-  rdvalue = dwg_ent_text_get_thickness (text, &error);
-  if (error || thickness != rdvalue)
-    {
-      printf ("Error with old API dwg_ent_text_get_thickness\n");
-      exit (1);
-    }
-  CHK_ENTITY_TYPE (text, TEXT, rotation, RD, rotation);
-  rdvalue = dwg_ent_text_get_rotation (text, &error);
-  if (error || rotation != rdvalue)
-    {
-      printf ("Error with old API dwg_ent_text_get_rotation\n");
-      exit (1);
-    }
+  CHK_ENTITY_TYPE_W_OLD (text, TEXT, height, RD, height);
+  CHK_ENTITY_TYPE_W_OLD (text, TEXT, thickness, RD, thickness);
+  CHK_ENTITY_TYPE_W_OLD (text, TEXT, rotation, RD, rotation);
   CHK_ENTITY_TYPE (text, TEXT, oblique_ang, RD, oblique_ang);
   CHK_ENTITY_TYPE (text, TEXT, width_factor, RD, width_factor);
   CHK_ENTITY_TYPE (text, TEXT, generation, BS, generation);
 
-  CHK_ENTITY_TYPE (text, TEXT, vert_alignment, BS, vert_align);
-  bsvalue = dwg_ent_text_get_vert_alignment (text, &error);
-  if (error || vert_align != bsvalue)
-    {
-      printf ("Error with old API dwg_ent_text_get_vert_alignment\n");
-      exit (1);
-    }
-  CHK_ENTITY_TYPE (text, TEXT, horiz_alignment, BS, horiz_align);
-  bsvalue = dwg_ent_text_get_horiz_alignment (text, &error);
-  if (error || horiz_align != bsvalue)
-    {
-      printf ("Error with old API dwg_ent_text_horiz_alignment\n");
-      exit (1);
-    }
+  CHK_ENTITY_TYPE_W_OLD (text, TEXT, vert_alignment, BS, vert_align);
+  CHK_ENTITY_TYPE_W_OLD (text, TEXT, horiz_alignment, BS, horiz_align);
   CHK_ENTITY_H (text, TEXT, style, style);
 }

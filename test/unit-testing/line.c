@@ -2,60 +2,33 @@
 #include "common.c"
 
 void
-low_level_process (dwg_object *obj)
-{
-  dwg_ent_line *line = dwg_object_to_LINE (obj);
-
-  printf ("start points of line : x = %f,y = %f\n", line->start.x,
-          line->start.y);
-  printf ("end of line : x = %f,y = %f\n", line->end.x, line->end.y);
-  printf ("Thickness of line : %f\n", line->thickness);
-  printf ("extrusion of line : x = %f, y = %f, z = %f\n", line->extrusion.x,
-          line->extrusion.y, line->extrusion.z);
-}
-
-void
 api_process (dwg_object *obj)
 {
   int error;
   double thickness;
-  dwg_point_3d ext, start, end;
+  dwg_point_3d pt3d, ext, start, end;
+  BITCODE_B zs_are_zero;
+
   dwg_ent_line *line = dwg_object_to_LINE (obj);
 
-  dwg_ent_line_get_start_point (line, &start, &error);
-  if (!error)
+  CHK_ENTITY_3RD (line, LINE, start, start);
+  dwg_ent_line_get_start_point (line, &pt3d, &error);
+  if (error || memcmp (&start, &pt3d, sizeof (dwg_point_3d)))
     {
-      printf ("start points of line : x = %f, y = %f\n", start.x, start.y);
-    }
-  else
-    {
-      printf ("error in reading start points \n");
+      printf ("Error with old API dwg_ent_line_get_start_point\n");
+      exit (1);
     }
 
-  dwg_ent_line_get_end_point (line, &end, &error);
-  if (!error)
+  CHK_ENTITY_3RD (line, LINE, end, end);
+  dwg_ent_line_get_end_point (line, &pt3d, &error);
+  if (error || memcmp (&end, &pt3d, sizeof (dwg_point_3d)))
     {
-      printf ("end points of line : x = %f, y = %f\n", end.x, end.y);
-    }
-  else
-    {
-      printf ("error in reading end points \n");
+      printf ("Error with old API dwg_ent_line_get_end_point\n");
+      exit (1);
     }
 
-  thickness = dwg_ent_line_get_thickness (line, &error);
-  if (!error)
-    printf ("Thickness of line : %f\n", thickness);
-  else
-    printf ("in reading thickness \n");
+  CHK_ENTITY_TYPE_W_OLD (line, LINE, thickness, RD, thickness);
+  CHK_ENTITY_3RD_W_OLD (line, LINE, extrusion, ext);
 
-  dwg_ent_line_get_extrusion (line, &ext, &error);
-  if (!error)
-    {
-      printf ("extrusion of line : x = %f, y = %f, z = %f\n", ext.x, ext.y,
-              ext.z);
-    }
-  else
-    {
-      printf ("error in reading extrusion \n");
-    }
+  CHK_ENTITY_TYPE (line, LINE, Zs_are_zero, B, zs_are_zero);
 }

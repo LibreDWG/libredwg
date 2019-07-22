@@ -88,6 +88,10 @@ dynapi_test.c: dynapi_test.c.in $(top_srcdir)/include/dwg.h \
 	       $(top_srcdir)/src/gen-dynapi.pl
 	-cd $(top_srcdir)/src && $(PERL) gen-dynapi.pl
 
+.c.i:
+	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+	$(COMPILE) -c -E -o $@ $<
+
 TESTS = $(check_PROGRAMS)
 TESTS_ENVIRONMENT = \
   INPUT=$(srcdir)/example_2000.dwg
@@ -104,7 +108,8 @@ update-ignorance:
 	printf '/%s\n' $(check_PROGRAMS) > .gitignore
 
 EXTRA_DIST = \
-	tests_common.h common.c \
+	tests_common.h \
+	common.c \
 	example_2000.dwg \
 	dynapi_test.c.in
 
