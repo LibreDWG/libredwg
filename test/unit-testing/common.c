@@ -167,7 +167,11 @@ print_low_level (dwg_object *obj)
 void
 print_api (dwg_object *obj)
 {
+#ifdef DWG_TYPE
+  printf ("Unit-testing type %d:\n", DWG_TYPE);
+#else
   printf ("Test dwg_api and dynapi:\n");
+#endif
   api_process (obj);
   printf ("\n");
 }

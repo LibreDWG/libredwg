@@ -1,11 +1,5 @@
 #include "../../src/hash.h"
-
 #include "../../src/common.h"
-GCC30_DIAG_IGNORE (-Wformat-nonliteral)
-CLANG_DIAG_IGNORE (-Wmissing-prototypes)
-#include <dejagnu.h>
-CLANG_DIAG_RESTORE
-CLANG_DIAG_RESTORE
 #include <string.h>
 #include <stdlib.h>
 #include "tests_common.h"
@@ -35,7 +29,8 @@ main (int argc, char const *argv[])
       // i = maxrand(i)+1; for a more realistic workload
       hash_set (hash, rnd, rnd + 1);
     }
-  pass ("hash size(%d) => %u", max, hash->size);
+  //pass ("hash size(%d) => %u", max, hash->size);
+  pass ();
 
   for (i = 1; i < max / PRESSURE_FACTOR; i++)
     {

@@ -104,10 +104,6 @@ AC_CHECK_HEADERS([stdlib.h string.h stddef.h unistd.h malloc.h wchar.h ctype.h \
                   libgen.h getopt.h alloca.h valgrind/valgrind.h])
 AX_INCLUDE_STRCASECMP
 
-AC_CHECK_HEADER([dejagnu.h], [],
-  AC_MSG_WARN([Couldn't find dejagnu.h. skip test/testcases]))
-AM_CONDITIONAL([HAVE_DEJAGNU], [test x$ac_cv_header_dejagnu_h = xyes])
-
 # Don't bother testing for libps headers if libps is not available.
 if test yes = "$libredwg_have_libps" ; then
   AC_CHECK_HEADERS([libps/pslib.h])
@@ -170,13 +166,6 @@ then
 fi
 
 AX_ADD_FORTIFY_SOURCE
-
-if test x$ac_cv_header_dejagnu_h = xyes; then
-  dnl check if dejagnu needs -fgnu89-inline
-  dnl https://gcc.gnu.org/bugzilla//show_bug.cgi?id=63613
-  AX_CHECK_COMPILE_FLAG([-fgnu89-inline],[DEJAGNU_CFLAGS=-fgnu89-inline],[DEJAGNU_CFLAGS=])
-  AC_SUBST([DEJAGNU_CFLAGS])
-fi
 
 dnl until we can make a release, favor no -O2 optims.
 dnl it's fast enough and better for debugging.
@@ -520,7 +509,6 @@ AC_CONFIG_FILES([
 	bindings/Makefile
 	bindings/python/Makefile
 	test/Makefile
-	test/testcases/Makefile
 	test/xmlsuite/Makefile
 	test/unit-testing/Makefile
 	libredwg.pc

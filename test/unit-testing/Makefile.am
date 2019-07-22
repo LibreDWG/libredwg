@@ -19,7 +19,7 @@
 
 WARN_CFLAGS = @WARN_CFLAGS@
 AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
-LDADD    = $(top_builddir)/src/libredwg.la
+LDADD    = $(top_builddir)/src/libredwg.la -lm
 #SOURCES = $(top_builddir)/src/libredwg.la
 
 bits_test_LDADD = $(LDADD) $(top_builddir)/src/bits.lo
@@ -29,6 +29,7 @@ decode_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/decode_r2007.lo \
 	$(top_builddir)/src/common.lo \
 	$(top_builddir)/src/print.lo
+hash_test_LDADD = $(LDADD) $(top_builddir)/src/bits.lo $(top_builddir)/src/hash.lo
 #dynapi_test_LDADD = $(LDADD) \
 #	$(top_builddir)/src/dynapi.lo
 
@@ -37,6 +38,8 @@ decode_test_LDADD = $(LDADD) \
 #     and include this directory's .gitignore in the commit.
 check_PROGRAMS = \
 	bits_test \
+	decode_test \
+	hash_test \
 	dynapi_test \
 	3dsolid \
 	arc \

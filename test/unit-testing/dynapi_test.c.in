@@ -15,7 +15,6 @@
 
 #line 16 "dynapi_test.c.in"
 #include <stdio.h>
-#include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -27,32 +26,7 @@
 #include "../../src/common.h"
 #include "dwg.h"
 #include "dwg_api.h"
-
-static int num;
-static int failed;
-static int passed;
-static char buffer[512];
-
-static inline void pass ();
-static inline void fail (const char* fmt, ...)
-  __attribute__((format (__printf__, 1, 2)));
-
-static inline void pass ()
-{
-  passed++; num++;
-}
-
-static inline void fail (const char* fmt, ...)
-{
-  va_list ap;
-
-  failed++;
-  va_start (ap, fmt);
-  vsnprintf (buffer, sizeof (buffer), fmt, ap);
-  va_end (ap);
-  printf ("not ok %d\t# %s\n", ++num, buffer);
-}
-
+#include "tests_common.h"
 
 /* for all objects/entities/header_vars:
    compare direct api vs dynapi values
@@ -67,25 +41,25 @@ test_header (const Dwg_Data *dwg)
   BITCODE_BD bd;
   BITCODE_TV tv;
 
-#line 80 "dynapi_test.c"
+#line 44 "dynapi_test.c"
   /* @@for test_HEADER@@ */
-#line 82 "dynapi_test.c.in"
+#line 46 "dynapi_test.c.in"
   return error;
 }
 
-#line 5396 "dynapi_test.c"
+#line 5370 "dynapi_test.c"
 /* @@for test_OBJECT@@ */
 
-#line 79 "dynapi_test.c.in"
+#line 53 "dynapi_test.c.in"
 static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
   if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
     return 0;
-#line 35740 "dynapi_test.c"
+#line 35714 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
-#line 88 "dynapi_test.c.in"
+#line 62 "dynapi_test.c.in"
   return error + failed;
 }
 
