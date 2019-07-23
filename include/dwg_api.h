@@ -184,6 +184,11 @@ EXPORT bool dwg_dynapi_common_set_value (void *restrict _obj,
                                          const void *restrict value,
                                          const bool is_utf8);
 
+/** Checks if the handle hdl points an object with a name field,
+    and returns it if so */
+EXPORT char *dwg_dynapi_handle_name (const Dwg_Data *restrict dwg,
+                                     Dwg_Object_Ref *restrict hdl);
+
 /* static api */
 typedef struct dwg_point_3d
 {

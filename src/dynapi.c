@@ -1,5 +1,5 @@
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 735 "gen-dynapi.pl"
+#line 738 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -4029,7 +4029,7 @@ static const struct _name_type_fields dwg_name_types[] = {
 
 };
 
-#line 801 "gen-dynapi.pl"
+#line 804 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
@@ -4572,6 +4572,24 @@ dwg_dynapi_common_set_value (void *restrict _obj,
     dynapi_set_helper (old, f, obj->parent->header.version, value, is_utf8);
     return true;
   }
+}
+
+// check if the handle points to an object with a name
+// see also dwg_obj_table_get_name, which only supports tables
+EXPORT char*
+dwg_dynapi_handle_name (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict hdl)
+{
+  char *name;
+  Dwg_DYNAPI_field f;
+  Dwg_Object *obj = dwg_ref_object (dwg, hdl);
+
+  if (!obj)
+    return NULL;
+  if (dwg_dynapi_entity_value (obj->tio.object->tio.UNKNOWN_OBJ, obj->name,
+                               "name", &name, &f))
+    return name;
+  else
+    return NULL;
 }
 
 /* Local Variables: */

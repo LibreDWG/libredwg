@@ -92,6 +92,9 @@ EXPORT bool dwg_dynapi_common_set_value (void *restrict entity,
                                          const char *restrict fieldname,
                                          const void *restrict value,
                                          const bool is_utf8);
+EXPORT char *dwg_dynapi_handle_name (const Dwg_Data *restrict dwg,
+                                     Dwg_Object_Ref *restrict hdl);
+
 #endif
 
 /* Private API: */

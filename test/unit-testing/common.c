@@ -15,6 +15,10 @@ dwg_data g_dwg;
 /// This function declaration reads the DWG file
 int test_code (char *filename);
 
+/// Return the name of a handle
+char *handle_name (const Dwg_Data *restrict dwg,
+                   Dwg_Object_Ref *restrict hdl);
+
 /// Declaration of function to iterate over objects of a block
 void output_BLOCK_HEADER (dwg_object_ref *ref);
 
@@ -232,19 +236,30 @@ print_api (dwg_object *obj)
   }
 
 #define CHK_ENTITY_H(ent, name, field, hdl) \
-  if (dwg_dynapi_entity_value (ent, #name, #field, &hdl, NULL)) { \
-    if (hdl == ent->field) \
-      printf ("ok " #name "." #field ":\t(%x.%d.%lX)\n", hdl->handleref.code, \
-              hdl->handleref.size, hdl->handleref.value); \
-    else { \
-      printf ("not ok " #name "." #field ":\t(%x.%d.%lX)\n", hdl->handleref.code, \
-              hdl->handleref.size, hdl->handleref.value); \
-      exit (1); \
-    } \
-  } \
-  else { \
-    printf ("not ok in reading " #name "." #field "\n"); \
-    exit (1); \
+  { \
+    if (dwg_dynapi_entity_value (ent, #name, #field, &hdl, NULL)) {     \
+      char *_hdlname = dwg_dynapi_handle_name (obj->parent, hdl);       \
+      if (hdl == ent->field)                                            \
+        {                                                               \
+          printf ("ok " #name "." #field ":\t");                        \
+          if (_hdlname) printf ("%s ", _hdlname);                       \
+          printf ("(%x.%d.%lX)\n", hdl->handleref.code,                 \
+                    hdl->handleref.size, hdl->handleref.value);         \
+        }                                                               \
+      else                                                              \
+        {                                                               \
+          printf ("not ok " #name "." #field ":\t");                    \
+          if (_hdlname) printf ("%s ", _hdlname);                       \
+          printf ("(%x.%d.%lX)\n", hdl->handleref.code,                 \
+                    hdl->handleref.size, hdl->handleref.value);         \
+          exit (1);                                                     \
+        }                                                               \
+    }                                                                   \
+    else                                                                \
+      {                                                                 \
+        printf ("not ok in reading " #name "." #field "\n");            \
+        exit (1);                                                       \
+      }                                                                 \
   }
 
 #define CHK_ENTITY_2RD(ent, name, field, value) \
