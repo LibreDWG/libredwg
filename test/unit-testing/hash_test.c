@@ -1,3 +1,4 @@
+#define HASH_TEST_C
 #include "../../src/hash.h"
 #include "../../src/common.h"
 #include <string.h>

@@ -1,8 +1,10 @@
 #include <string.h>
-#include "../../src/bits.h"
 #include <stdlib.h>
 #include <stdarg.h>
-#include <math.h>
+#if defined(BITS_TEST_C) || defined(DECODE_TEST_C)
+# include <math.h>
+# include "../../src/bits.h"
+#endif
 
 static int num = 0;
 static int failed = 0;
@@ -31,6 +33,8 @@ static void fail (const char* fmt, ...)
   va_end (ap);
   printf ("not ok %d\t# %s\n", ++num, buffer);
 }
+
+#if defined(BITS_TEST_C) || defined(DECODE_TEST_C)
 
 void bitprepare (Bit_Chain *bitchain, size_t size);
 Bit_Chain strtobt (const char *binarystring);
@@ -87,3 +91,5 @@ strtobt (const char *binarystring)
 
   return bitchain;
 }
+
+#endif

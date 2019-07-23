@@ -35,10 +35,16 @@
 #include <stdio.h>
 #include "config.h"
 #ifdef HAVE_WCHAR_H
-#  include <wchar.h>
+# include <wchar.h>
 #endif
 #include "common.h"
 #include "dwg.h"
+
+// avoid double linkage on windows with unit-testing
+#if defined(BITS_TEST_C) || defined(DECODE_TEST_C)
+# undef EXPORT
+# define EXPORT
+#endif
 
 /**
  Structure for DWG-files raw data storage

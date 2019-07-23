@@ -1,6 +1,7 @@
+#define DECODE_TEST_C
 #include "../../src/common.h"
 CLANG_DIAG_IGNORE (-Wpragma-pack)
-#include "../../src/decode.c"
+# include "../../src/decode.c"
 CLANG_DIAG_RESTORE
 #include "tests_common.h"
 

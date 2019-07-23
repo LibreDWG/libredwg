@@ -19,11 +19,11 @@
 
 WARN_CFLAGS = @WARN_CFLAGS@
 AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
-LDADD    = $(top_builddir)/src/libredwg.la -lm
+LDADD    = $(top_builddir)/src/libredwg.la
 
-bits_test_LDADD = $(LDADD) \
+bits_test_LDADD = $(LDADD) -lm \
 	$(top_builddir)/src/bits.lo
-decode_test_LDADD = $(LDADD) \
+decode_test_LDADD = $(LDADD) -lm \
 	$(top_builddir)/src/bits.lo \
 	$(top_builddir)/src/hash.lo \
 	$(top_builddir)/src/decode_r2007.lo \

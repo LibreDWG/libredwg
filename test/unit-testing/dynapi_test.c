@@ -14,7 +14,8 @@
    do not modify */
 /* written by: Reini Urban */
 
-#line 16 "dynapi_test.c.in"
+#line 17 "dynapi_test.c.in"
+#define DYNAPI_TEST_C
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -42,7 +43,7 @@ test_header (const Dwg_Data *dwg)
   BITCODE_BD bd;
   BITCODE_TV tv;
 
-#line 44 "dynapi_test.c"
+#line 46 "dynapi_test.c"
   /* @@for test_HEADER@@ */
   {
     BITCODE_RL size;
@@ -5363,11 +5364,11 @@ test_header (const Dwg_Data *dwg)
     dwg_dynapi_header_set_value (dwg, "crc", &crc, 0);
 
   }
-#line 46 "dynapi_test.c.in"
+#line 48 "dynapi_test.c.in"
   return error;
 }
 
-#line 5370 "dynapi_test.c"
+#line 5371 "dynapi_test.c"
 /* @@for test_OBJECT@@ */
 static int test__3DFACE (const Dwg_Object *obj)
 {
@@ -35704,14 +35705,14 @@ static int test_XRECORD (const Dwg_Object *obj)
   return failed;
 }
 
-#line 53 "dynapi_test.c.in"
+#line 55 "dynapi_test.c.in"
 static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
   if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
     return 0;
-#line 35714 "dynapi_test.c"
+#line 35715 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -36265,7 +36266,7 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_WIPEOUTVARIABLES (obj);
   else  if (obj->fixedtype == DWG_TYPE_XRECORD)
     error += test_XRECORD (obj);
-#line 62 "dynapi_test.c.in"
+#line 64 "dynapi_test.c.in"
   return error + failed;
 }
 

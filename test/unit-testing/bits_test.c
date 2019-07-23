@@ -1,3 +1,4 @@
+#define BITS_TEST_C
 #include "../../src/bits.h"
 #include "../../src/common.h"
 #include <string.h>
