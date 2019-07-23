@@ -11,7 +11,10 @@ static char buffer[512];
 
 static inline void pass (void);
 static void fail (const char* fmt, ...)
-  __attribute__((format (__printf__, 1, 2)));
+#ifdef HAVE_FUNC_ATTRIBUTE_FORMAT
+  __attribute__((format(printf, 1, 2)))
+#endif
+  ;
 
 static inline void pass (void)
 {

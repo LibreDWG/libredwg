@@ -16,6 +16,7 @@
  * modified by Reini Urban
  */
 
+#include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -33,6 +34,12 @@ static unsigned int cur_ver = 0;
 
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
+
+#ifdef HAVE_FUNC_ATTRIBUTE_MALLOC
+# define ATTRIBUTE_MALLOC __attribute__((malloc))
+#else
+# define ATTRIBUTE_MALLOC
+#endif
 
 // only for temp. debugging, to abort on obviously wrong sizes.
 // should be a bit larger then the filesize.
@@ -126,7 +133,8 @@ static void pages_destroy (r2007_page *page);
 static void sections_destroy (r2007_section *section);
 static r2007_section *read_sections_map (Bit_Chain *dat, int64_t size_comp,
                                          int64_t size_uncomp,
-                                         int64_t correction);
+                                         int64_t correction)
+  ATTRIBUTE_MALLOC;
 static int read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
                               r2007_section *restrict sections_map,
                               r2007_page *restrict pages_map,
@@ -144,7 +152,8 @@ static int read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl_dat,
                                       r2007_section *restrict sections_map,
                                       r2007_page *restrict pages_map);
 static r2007_page *read_pages_map (Bit_Chain *dat, int64_t size_comp,
-                                   int64_t size_uncomp, int64_t correction);
+                                   int64_t size_uncomp, int64_t correction)
+  ATTRIBUTE_MALLOC;
 static int read_file_header (Bit_Chain *restrict dat,
                              r2007_file_header *restrict file_header);
 static void read_instructions (BITCODE_RC *restrict *restrict src,
@@ -161,9 +170,11 @@ static uint32_t read_literal_length (BITCODE_RC *restrict *restrict src,
 static void copy_compressed_bytes (BITCODE_RC *restrict dst,
                                    BITCODE_RC *restrict src, int length);
 static DWGCHAR *bfr_read_string (BITCODE_RC *restrict *restrict src,
-                                 int64_t size);
+                                 int64_t size)
+  ATTRIBUTE_MALLOC;
 static BITCODE_RC *decode_rs (const BITCODE_RC *src, int block_count,
-                              int data_size);
+                              int data_size)
+  ATTRIBUTE_MALLOC;
 static int decompress_r2007 (BITCODE_RC *restrict dst, int dst_size,
                              BITCODE_RC *restrict src, int src_size);
 

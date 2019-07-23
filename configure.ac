@@ -164,7 +164,9 @@ then
   AC_DEFINE(HAVE_ATTRIBUTE_VISIBILITY_DEFAULT, 1,
     [Define if __attribute__((visibility("default"))) is supported.])
 fi
-
+dnl AX_GCC_FUNC_ATTRIBUTE(visibility)
+AX_GCC_FUNC_ATTRIBUTE(format)
+AX_GCC_FUNC_ATTRIBUTE(malloc)
 AX_ADD_FORTIFY_SOURCE
 
 dnl until we can make a release, favor no -O2 optims.
