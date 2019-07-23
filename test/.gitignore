@@ -77,6 +77,5 @@
 /unit-testing/*.log
 /unit-testing/bits_test
 /unit-testing/decode_test
-/unit-testing/dynapi_test.c
 /unit-testing/dynapi_test
 /unit-testing/hash_test

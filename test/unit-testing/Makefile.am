@@ -20,18 +20,21 @@
 WARN_CFLAGS = @WARN_CFLAGS@
 AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
 LDADD    = $(top_builddir)/src/libredwg.la -lm
-#SOURCES = $(top_builddir)/src/libredwg.la
 
-bits_test_LDADD = $(LDADD) $(top_builddir)/src/bits.lo
+bits_test_LDADD = $(LDADD) \
+	$(top_builddir)/src/bits.lo
 decode_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/bits.lo \
 	$(top_builddir)/src/hash.lo \
 	$(top_builddir)/src/decode_r2007.lo \
 	$(top_builddir)/src/common.lo \
 	$(top_builddir)/src/print.lo
-hash_test_LDADD = $(LDADD) $(top_builddir)/src/bits.lo $(top_builddir)/src/hash.lo
-#dynapi_test_LDADD = $(LDADD) \
-#	$(top_builddir)/src/dynapi.lo
+hash_test_LDADD = $(LDADD) \
+	$(top_builddir)/src/bits.lo \
+	$(top_builddir)/src/hash.lo
+dynapi_test_LDADD = $(LDADD) \
+	$(top_builddir)/src/bits.lo \
+	$(top_builddir)/src/dynapi.lo
 
 
 # NB: After you modify ‘check_PROGRAMS’, do "make update-ignorance"
@@ -111,7 +114,8 @@ EXTRA_DIST = \
 	tests_common.h \
 	common.c \
 	example_2000.dwg \
-	dynapi_test.c.in
+	dynapi_test.c.in \
+	dynapi_test.c
 
 @VALGRIND_CHECK_RULES@
 VALGRIND_SUPPRESSIONS_FILE = @VALGRIND_SUPPRESSIONS_FILE@
