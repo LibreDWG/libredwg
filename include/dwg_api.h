@@ -123,7 +123,7 @@ EXPORT bool dwg_dynapi_common_value (void *restrict _obj,
                                      const char *restrict fieldname,
                                      void *restrict out,
                                      Dwg_DYNAPI_field *restrict fp);
-// Converts TU strings to utf-8
+// Converts T or TU wide-strings to utf-8. Only for text values
 EXPORT bool dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
                                         const char *restrict fieldname,
                                         char **restrict textp,
@@ -133,8 +133,8 @@ EXPORT bool dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
    specific fields. The optional Dwg_DYNAPI_field *fp is filled with the field
    types from dynapi.c
    With DWG's since r2007+ creates a fresh UTF-8 conversion from the UTF-16
-   wchar value (which needs to be free'd), with older DWG's returns the
-   unconverted text value.
+   wchar value (which needs to be free'd), with older DWG's or with TV, TF or TFF
+   returns the unconverted text value.
    Only valid for text fields.
 */
 EXPORT bool dwg_dynapi_entity_utf8text (void *restrict entity,
@@ -184,8 +184,8 @@ EXPORT bool dwg_dynapi_common_set_value (void *restrict _obj,
                                          const void *restrict value,
                                          const bool is_utf8);
 
-/** Checks if the handle hdl points an object with a name field,
-    and returns it if so */
+/** Checks if the handle hdl points an object or entity with a name field,
+    and returns it if so. Converted to UTF8 for r2007+ wide-strings. */
 EXPORT char *dwg_dynapi_handle_name (const Dwg_Data *restrict dwg,
                                      Dwg_Object_Ref *restrict hdl);
 

@@ -948,7 +948,7 @@ dwg_dynapi_entity_utf8text (void *restrict _obj, const char *restrict name,
       if (fp)
         memcpy (fp, f, sizeof (Dwg_DYNAPI_field));
 
-      if (dwg_version >= R_2007)
+      if (dwg_version >= R_2007 && strcmp (f->type, "TF")) /* not TF */
         {
           BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
           char *utf8 = bit_convert_TU (wstr);
@@ -1017,7 +1017,7 @@ dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
         if (fp)
           memcpy (fp, f, sizeof (Dwg_DYNAPI_field));
 
-        if (dwg_version >= R_2007)
+        if (dwg_version >= R_2007 && strcmp (f->type, "TF")) /* not TF */
           {
             BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
             char *utf8 = bit_convert_TU (wstr);
@@ -1144,7 +1144,7 @@ dwg_dynapi_common_utf8text(void *restrict _obj, const char *restrict fieldname,
         if (fp)
           memcpy (fp, f, sizeof(Dwg_DYNAPI_field));
 
-        if (dwg_version >= R_2007)
+        if (dwg_version >= R_2007 && strcmp (f->type, "TF")) /* not TF */
           {
             BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
             char *utf8 = bit_convert_TU (wstr);
@@ -1356,8 +1356,8 @@ dwg_dynapi_handle_name (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict h
 
   if (!obj)
     return NULL;
-  if (dwg_dynapi_entity_value (obj->tio.object->tio.UNKNOWN_OBJ, obj->name,
-                               "name", &name, &f))
+  if (dwg_dynapi_entity_utf8text (obj->tio.object->tio.UNKNOWN_OBJ, obj->name,
+                                  "name", &name, &f))
     return name;
   else
     return NULL;
