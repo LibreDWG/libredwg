@@ -130,7 +130,7 @@ dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp)
  * everything in dwg is cleared
  * and then either read from dat, or set to a default.
  */
-int
+EXPORT int
 dwg_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
 {
   FILE *fp;
@@ -219,7 +219,7 @@ dwg_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
  * everything in dwg is cleared
  * and then either read from dat, or set to a default.
  */
-int
+EXPORT int
 dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
 {
   int error;
@@ -314,7 +314,7 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   return 0;
 }
 
-int
+EXPORT int
 dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
 {
   FILE *fh;
@@ -379,7 +379,7 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
 #endif /* USE_WRITE */
 
 /* THUMBNAIL IMAGE DATA (R13C3+) */
-unsigned char *
+EXPORT unsigned char *
 dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
 {
   BITCODE_RC i, num_pictures, code;
@@ -453,84 +453,84 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
     return NULL;
 }
 
-double
+EXPORT double
 dwg_model_x_min (const Dwg_Data *dwg)
 {
   assert (dwg);
   return dwg->header_vars.EXTMIN.x;
 }
 
-double
+EXPORT double
 dwg_model_x_max (const Dwg_Data *dwg)
 {
   assert (dwg);
   return dwg->header_vars.EXTMAX.x;
 }
 
-double
+EXPORT double
 dwg_model_y_min (const Dwg_Data *dwg)
 {
   assert (dwg);
   return dwg->header_vars.EXTMIN.y;
 }
 
-double
+EXPORT double
 dwg_model_y_max (const Dwg_Data *dwg)
 {
   assert (dwg);
   return dwg->header_vars.EXTMAX.y;
 }
 
-double
+EXPORT double
 dwg_model_z_min (const Dwg_Data *dwg)
 {
   assert (dwg);
   return dwg->header_vars.EXTMIN.z;
 }
 
-double
+EXPORT double
 dwg_model_z_max (const Dwg_Data *dwg)
 {
   assert (dwg);
   return dwg->header_vars.EXTMAX.z;
 }
 
-double
+EXPORT double
 dwg_page_x_min (const Dwg_Data *dwg)
 {
   assert (dwg);
   return dwg->header_vars.EXTMIN.x;
 }
 
-double
+EXPORT double
 dwg_page_x_max (const Dwg_Data *dwg)
 {
   assert (dwg);
   return dwg->header_vars.PEXTMAX.x;
 }
 
-double
+EXPORT double
 dwg_page_y_min (const Dwg_Data *dwg)
 {
   assert (dwg);
   return dwg->header_vars.PEXTMIN.y;
 }
 
-double
+EXPORT double
 dwg_page_y_max (const Dwg_Data *dwg)
 {
   assert (dwg);
   return dwg->header_vars.PEXTMAX.y;
 }
 
-unsigned int
+EXPORT unsigned int
 dwg_get_layer_count (const Dwg_Data *dwg)
 {
   assert (dwg);
   return dwg->layer_control.num_entries;
 }
 
-Dwg_Object_LAYER **
+EXPORT Dwg_Object_LAYER **
 dwg_get_layers (const Dwg_Data *dwg)
 {
   unsigned int i;
@@ -567,7 +567,7 @@ dwg_get_num_entities (const Dwg_Data *dwg)
 }
 
 /** Returns a copy of all entities */
-Dwg_Object_Entity **
+EXPORT Dwg_Object_Entity **
 dwg_get_entities (const Dwg_Data *dwg)
 {
   BITCODE_BL i, ent_count = 0;
@@ -588,14 +588,14 @@ dwg_get_entities (const Dwg_Data *dwg)
   return entities;
 }
 
-Dwg_Object_LAYER *
+EXPORT Dwg_Object_LAYER *
 dwg_get_entity_layer (const Dwg_Object_Entity *ent)
 {
   // TODO: empty means default layer 0
   return ent->layer ? ent->layer->obj->tio.object->tio.LAYER : NULL;
 }
 
-Dwg_Object *
+EXPORT Dwg_Object *
 dwg_next_object (const Dwg_Object *obj)
 {
   Dwg_Data *dwg;
@@ -610,7 +610,7 @@ dwg_next_object (const Dwg_Object *obj)
 /**
  * Find an object given its handle
  */
-Dwg_Object *
+EXPORT Dwg_Object *
 dwg_ref_object (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
 {
   if (!ref)
@@ -633,7 +633,7 @@ dwg_ref_object (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
  * Find an object given its handle and relative base object.
  * OFFSETOBJHANDLE, handleref.code > 6.
  */
-Dwg_Object *
+EXPORT Dwg_Object *
 dwg_ref_object_relative (const Dwg_Data *restrict dwg,
                          Dwg_Object_Ref *restrict ref,
                          const Dwg_Object *restrict obj)
@@ -653,7 +653,7 @@ dwg_ref_object_relative (const Dwg_Data *restrict dwg,
  * Find a pointer to an object given it's absolute id (handle).
  * TODO: Check and update each handleref obj cache.
  */
-Dwg_Object *
+EXPORT Dwg_Object *
 dwg_resolve_handle (const Dwg_Data *dwg, const BITCODE_BL absref)
 {
   uint32_t i = hash_get (dwg->object_map, (uint32_t)absref);
@@ -675,7 +675,7 @@ dwg_resolve_handle (const Dwg_Data *dwg, const BITCODE_BL absref)
 }
 
 /* set ref->absolute_ref from obj, for a subsequent dwg_resolve_handle() */
-int
+EXPORT int
 dwg_resolve_handleref (Dwg_Object_Ref *restrict ref,
                        const Dwg_Object *restrict obj)
 {
@@ -722,7 +722,7 @@ dwg_resolve_handleref (Dwg_Object_Ref *restrict ref,
 /** Returns the block_control for the DWG,
     containing the list of all blocks headers.
 */
-Dwg_Object_BLOCK_CONTROL *
+EXPORT Dwg_Object_BLOCK_CONTROL *
 dwg_block_control (Dwg_Data *dwg)
 {
   if (!dwg->block_control.parent)
@@ -737,7 +737,7 @@ dwg_block_control (Dwg_Data *dwg)
     On r2010 and r2013 it could be different to the canonical
    dwg->block_control.model_space.
 */
-Dwg_Object_Ref *
+EXPORT Dwg_Object_Ref *
 dwg_model_space_ref (Dwg_Data *dwg)
 {
   if (dwg->header_vars.BLOCK_RECORD_MSPACE
@@ -750,7 +750,7 @@ dwg_model_space_ref (Dwg_Data *dwg)
 
 /** Returns the paper space block object for the DWG.
  */
-Dwg_Object_Ref *
+EXPORT Dwg_Object_Ref *
 dwg_paper_space_ref (Dwg_Data *dwg)
 {
   if (dwg->header_vars.BLOCK_RECORD_PSPACE
@@ -763,7 +763,7 @@ dwg_paper_space_ref (Dwg_Data *dwg)
 
 /** Returns the model space block object for the DWG.
  */
-Dwg_Object *
+EXPORT Dwg_Object *
 dwg_model_space_object (Dwg_Data *dwg)
 {
   Dwg_Object_Ref *msref = dwg_model_space_ref (dwg);
@@ -779,7 +779,7 @@ dwg_model_space_object (Dwg_Data *dwg)
 
 /** Returns the first entity owned by the block hdr, or NULL.
  */
-Dwg_Object *
+EXPORT Dwg_Object *
 get_first_owned_entity (const Dwg_Object *hdr)
 {
   unsigned int version = hdr->parent->header.version;
@@ -811,7 +811,7 @@ get_first_owned_entity (const Dwg_Object *hdr)
 /** Returns the next entity owned by the block hdr, or NULL.
  *  Not subentities: ATTRIB, VERTEX.
  */
-Dwg_Object *
+EXPORT Dwg_Object *
 get_next_owned_entity (const Dwg_Object *restrict hdr,
                        const Dwg_Object *restrict current)
 {
@@ -866,7 +866,7 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
 
 /** Returns the first subentity owned by the insert or polyline.
  */
-Dwg_Object *
+EXPORT Dwg_Object *
 get_first_owned_subentity (const Dwg_Object *owner)
 {
   unsigned int version = owner->parent->header.version;
@@ -911,7 +911,7 @@ get_first_owned_subentity (const Dwg_Object *owner)
 
 /** Returns the next subentity owned by the object.
  */
-Dwg_Object *
+EXPORT Dwg_Object *
 get_next_owned_subentity (const Dwg_Object *restrict owner,
                           const Dwg_Object *restrict current)
 {
@@ -999,7 +999,7 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
 /** Returns the BLOCK entity owned by the block hdr.
  *  Only NULL on illegal hdr argument or dwg version.
  */
-Dwg_Object *
+EXPORT Dwg_Object *
 get_first_owned_block (const Dwg_Object *hdr)
 {
   unsigned int version = hdr->parent->header.version;
@@ -1032,7 +1032,7 @@ get_first_owned_block (const Dwg_Object *hdr)
 /** Returns the next block object after current owned by the block hdr, or
  * NULL.
  */
-Dwg_Object *
+EXPORT Dwg_Object *
 get_next_owned_block (const Dwg_Object *restrict hdr,
                       const Dwg_Object *restrict current)
 {
@@ -1059,7 +1059,7 @@ get_next_owned_block (const Dwg_Object *restrict hdr,
 /** Returns the last ENDBLK entity owned by the block hdr.
  *  Only NULL on illegal hdr argument or dwg version.
  */
-Dwg_Object *
+EXPORT Dwg_Object *
 get_last_owned_block (const Dwg_Object *restrict hdr)
 {
   Dwg_Data *dwg = hdr->parent;
@@ -1103,13 +1103,13 @@ get_last_owned_block (const Dwg_Object *restrict hdr)
   return NULL;
 }
 
-int
+EXPORT int
 dwg_class_is_entity (const Dwg_Class *klass)
 {
   return klass && klass->item_class_id == 0x1f2;
 }
 
-int
+EXPORT int
 dwg_obj_is_control (const Dwg_Object *obj)
 {
   const unsigned int type = obj->type;
@@ -1123,7 +1123,7 @@ dwg_obj_is_control (const Dwg_Object *obj)
              || type == DWG_TYPE_VPORT_ENTITY_CONTROL);
 }
 
-int
+EXPORT int
 dwg_obj_is_table (const Dwg_Object *obj)
 {
   const unsigned int type = obj->type;
@@ -1136,7 +1136,7 @@ dwg_obj_is_table (const Dwg_Object *obj)
              || type == DWG_TYPE_VPORT_ENTITY_HEADER);
 }
 
-int
+EXPORT int
 dwg_obj_is_subentity (const Dwg_Object *obj)
 {
   const unsigned int type = obj->type;
@@ -1147,7 +1147,7 @@ dwg_obj_is_subentity (const Dwg_Object *obj)
              || type == DWG_TYPE_VERTEX_PFACE_FACE);
 }
 
-int
+EXPORT int
 dwg_obj_has_subentity (const Dwg_Object *obj)
 {
   const unsigned int type = obj->type;
@@ -1158,7 +1158,7 @@ dwg_obj_has_subentity (const Dwg_Object *obj)
              || type == DWG_TYPE_POLYLINE_MESH);
 }
 
-Dwg_Section_Type
+EXPORT Dwg_Section_Type
 dwg_section_type (const DWGCHAR *wname)
 {
   DWGCHAR *wp;
