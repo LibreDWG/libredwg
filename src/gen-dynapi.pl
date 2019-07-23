@@ -1345,22 +1345,34 @@ dwg_dynapi_common_set_value (void *restrict _obj,
   }
 }
 
-// check if the handle points to an object with a name
-// see also dwg_obj_table_get_name, which only supports tables
+// check if the handle points to an object with a name.
+// see also dwg_obj_table_get_name, which only supports tables.
 EXPORT char*
 dwg_dynapi_handle_name (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict hdl)
 {
   char *name;
-  Dwg_DYNAPI_field f;
+  const Dwg_Version_Type dwg_version = dwg->header.version;
   Dwg_Object *obj = dwg_ref_object (dwg, hdl);
 
   if (!obj)
     return NULL;
-  if (dwg_dynapi_entity_utf8text (obj->tio.object->tio.UNKNOWN_OBJ, obj->name,
-                                  "name", &name, &f))
-    return name;
-  else
-    return NULL;
+  {
+    const Dwg_DYNAPI_field *f = dwg_dynapi_entity_field (obj->name, "name");
+    // just some random type is enough.
+    Dwg_Object_STYLE *_obj = obj->tio.object->tio.STYLE;
+
+    if (!f || !f->is_string)
+      return NULL;
+    if (dwg_version >= R_2007 && strcmp (f->type, "TF")) /* not TF */
+      {
+        BITCODE_TU wstr = *(BITCODE_TU *)((char *)_obj + f->offset);
+        return bit_convert_TU (wstr);
+      }
+    else
+      {
+        return *(char **)((char *)_obj + f->offset);
+      }
+  }
 }
 
 /* Local Variables: */
