@@ -23,6 +23,7 @@
 //#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 unsigned char *
 dwg_sentinel (Dwg_Sentinel s)
@@ -192,6 +193,7 @@ char *strrplc (const char* s, const char *from, const char *to)
       int len = strlen (s) - (strlen (from) - strlen (to));
       char *dest = (char *)calloc (1, 80);
       int i = p - s;
+      assert (len < 80);
       memcpy (dest, s, i);
       strcat (dest, to);
       strcat (dest, s + i + strlen (from));

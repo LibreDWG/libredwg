@@ -1612,7 +1612,7 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
 {
   r2007_file_header file_header;
   r2007_page *restrict pages_map, *restrict page;
-  r2007_section *restrict sections_map;
+  r2007_section *restrict sections_map = NULL;
   int error;
 #ifdef USE_TRACING
   char *probe;
@@ -1672,7 +1672,7 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
 
  error:
   pages_destroy (pages_map);
-  if (page)
+  if (sections_map)
     sections_destroy (sections_map);
 
   return error;

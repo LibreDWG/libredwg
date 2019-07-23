@@ -1699,7 +1699,10 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   error = decompress_R2004_section (dat, decomp, decomp_data_size + 1024,
                                     comp_data_size);
   if (error > DWG_ERR_CRITICAL)
-    return error;
+    {
+      free (decomp);
+      return error;
+    }
 
   ptr = decomp;
   bfr_read (&dwg->header.section_infohdr, &ptr, 20);

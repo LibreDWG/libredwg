@@ -293,7 +293,7 @@ static int dwg_free_UNKNOWN_OBJ (Bit_Chain *restrict dat,
     _obj = ent = _ent->tio.token;
 
 #define DWG_ENTITY_END                                                        \
-  return 0;                                                                   \
+  return error;                                                               \
   }
 
 #define DWG_OBJECT(token)                                                     \
@@ -343,7 +343,7 @@ static int dwg_free_UNKNOWN_OBJ (Bit_Chain *restrict dat,
 /* obj itself is allocated via dwg->object[], dxfname is klass->dxfname or
  * static */
 #define DWG_OBJECT_END                                                        \
-  return 0;                                                                   \
+  return error;                                                               \
   }
 
 static void
