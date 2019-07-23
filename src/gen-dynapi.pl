@@ -364,6 +364,8 @@ for (<DATA>) {
           my $fields = exists $structs{$k} ? "_dwg_".$k."_fields" : "NULL";
           if ($k =~ /^(BODY|REGION)$/) {
             $fields = "_dwg_3DSOLID_fields";
+          } elsif ($k eq 'XLINE') {
+            $fields = "_dwg_RAY_fields";
           } elsif ($k =~ /^ VERTEX_(MESH|PFACE)$/) {
             $fields = "_dwg_VERTEX_3D_fields";
           }

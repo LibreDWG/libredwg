@@ -4023,7 +4023,7 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "VPORT_ENTITY_HEADER", 71, _dwg_VPORT_ENTITY_HEADER_fields },	/* 156 */
   { "WIPEOUT", 588, _dwg_WIPEOUT_fields },	/* 157 */
   { "WIPEOUTVARIABLES", 589, _dwg_WIPEOUTVARIABLES_fields },	/* 158 */
-  { "XLINE", 41, NULL },	/* 159 */
+  { "XLINE", 41, _dwg_RAY_fields },	/* 159 */
   { "XRECORD", 79, _dwg_XRECORD_fields },	/* 160 */
   { "XREFPANELOBJECT", 590, NULL },	/* 161 */
 
