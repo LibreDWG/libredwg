@@ -102,8 +102,9 @@ TESTS_ENVIRONMENT = \
 # todo: more dwg versions, in test/test-data
 
 bits_test.cbmc: bits_test.c ../../src/bits.c
-	cbmc -I. -I../../include -I/opt/local/include bits_test.c ../../src/bits.c \
-	     --unwind 6  --cover decision > bits_test.cbmc
+	cbmc -I. -I$(top_srcdir)/include -I/opt/local/include \
+	     bits_test.c $(top_srcdir)/src/bits.c \
+	     --unwind 6  --cover decision > $@
 
 CLEANFILES = *.o
 MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
