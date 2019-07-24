@@ -1,8 +1,9 @@
+#define TEST_COMMON_H
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <stdarg.h>
 #if defined(BITS_TEST_C) || defined(DECODE_TEST_C)
-# include <math.h>
 # include "../../src/bits.h"
 #endif
 
@@ -41,7 +42,7 @@ Bit_Chain strtobt (const char *binarystring);
 
 /*
  * This functions initializes bitchain and allocates the given
- * size
+ * size.
  * @param Bit_Chain* bitchain
  * @param size_t size
  */
@@ -66,14 +67,12 @@ strtobt (const char *binarystring)
 {
   Bit_Chain bitchain;
   int i;
-  int length = strlen (binarystring);
+  const int length = strlen (binarystring);
+  int size_needed = length / 8;
+  if (length % 8)
+    size_needed ++;
 
-  // Calculate the space needed
-  double celi = ceil ((double)length / 8);
-  int size_need = celi;
-
-  // Prepare bitchain
-  bitprepare (&bitchain, size_need);
+  bitprepare (&bitchain, size_needed);
 
   for (i = 0; i < length; ++i)
     {
@@ -83,7 +82,7 @@ strtobt (const char *binarystring)
         bit_write_B (&bitchain, 1);
     }
 
-  //bit_print (&bitchain, size_need);
+  //LOG_TRACE(bit_print (&bitchain, size_need));
 
   // Reset the bit position
   bitchain.bit = 0;

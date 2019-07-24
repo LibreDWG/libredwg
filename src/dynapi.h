@@ -32,6 +32,12 @@
 #endif
 #define OFF(st, f) offsetof (st, f)
 
+// avoid double linkage on windows with unit-testing
+#if defined(DYNAPI_TEST_C)
+# undef EXPORT
+# define EXPORT
+#endif
+
 #ifndef _DWG_API_H_
 /* Public API, duplicate of dwg_api.h */
 typedef struct dwg_field_name_type_offset
