@@ -15,10 +15,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_UTF8TEXT (tolerance, TOLERANCE, text_string, text_string);
   if (strcmp (dwg_ent_tolerance_get_text_string (tolerance, &error), text_string))
-    {
-      printf ("Error with old API dwg_ent_tolerance_get_text_string\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_tolerance_get_text_string");
   CHK_ENTITY_3RD_W_OLD (tolerance, TOLERANCE, ins_pt, ins_pt);
   CHK_ENTITY_TYPE_W_OLD (tolerance, TOLERANCE, height, BD, height);
   CHK_ENTITY_3RD_W_OLD (tolerance, TOLERANCE, extrusion, ext);

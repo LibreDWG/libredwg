@@ -21,92 +21,60 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (body, BODY, acis_empty, B, acis_empty);
   if (dwg_ent_body_get_acis_empty (body, &error) != acis_empty || error)
-    {
-      printf ("Error with old API dwg_ent_body_get_acis_empty\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_body_get_acis_empty");
   CHK_ENTITY_TYPE (body, BODY, version, BS, version);
   if (dwg_ent_body_get_version (body, &error) != version || error)
-    {
-      printf ("Error with old API dwg_ent_body_get_version\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_body_get_version");
   CHK_ENTITY_TYPE (body, BODY, acis_data, TV, acis_data);
   if (strcmp ((char *)dwg_ent_body_get_acis_data (body, &error),
               (char *)acis_data)
       || error)
-    {
-      printf ("Error with old API dwg_ent_body_get_acis_data\n");
-      exit (1);
-    }
-
+    fail ("old API dwg_ent_body_get_acis_data");
   CHK_ENTITY_TYPE (body, BODY, wireframe_data_present, B,
                    wireframe_data_present);
   if (dwg_ent_body_get_wireframe_data_present (body, &error)
           != wireframe_data_present
       || error)
-    {
-      printf ("Error with old API dwg_ent_body_get_wireframe_data_present\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_body_get_wireframe_data_present");
   CHK_ENTITY_TYPE (body, BODY, point_present, B, point_present);
   if (dwg_ent_body_get_point_present (body, &error) != point_present || error)
-    {
-      printf ("Error with old API dwg_ent_body_get_point_present\n");
-      exit (1);
-    }
-
+    fail ("old API dwg_ent_body_get_point_present");
   CHK_ENTITY_3RD (body, BODY, point, point);
   dwg_ent_body_get_point (body, &pt3d, &error);
   if (error || memcmp (&point, &pt3d, sizeof (point)))
-    {
-      printf ("Error with old API dwg_ent_body_get_point\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_body_get_point");
 
   CHK_ENTITY_TYPE (body, BODY, isoline_present, B, isoline_present);
   if (dwg_ent_body_get_isoline_present (body, &error) != isoline_present || error)
-    {
-      printf ("Error with old API dwg_ent_body_get_isoline_present\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_body_get_isoline_present");
   CHK_ENTITY_TYPE (body, BODY, num_isolines, BL, num_isolines);
   if (dwg_ent_body_get_num_isolines (body, &error) != num_isolines || error)
-    {
-      printf ("Error with old API dwg_ent_body_get_num_isolines\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_body_get_num_isolines");
   CHK_ENTITY_TYPE (body, BODY, num_wires, BL, num_wires);
   if (dwg_ent_body_get_num_wires (body, &error) != num_wires || error)
-    {
-      printf ("Error with old API dwg_ent_body_get_num_wires\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_body_get_num_wires");
   CHK_ENTITY_TYPE (body, BODY, num_silhouettes, BL, num_sil);
   if (dwg_ent_body_get_num_silhouettes (body, &error) != num_sil || error)
-    {
-      printf ("Error with old API dwg_ent_body_get_num_sil\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_body_get_num_sil");
 
   wire = dwg_ent_body_get_wires (body, &error);
   if (!error)
     {
       for (i = 0; i < num_wires; i++)
-        printf ("wire[%u] of body : " FORMAT_BL "\n", i,
+        printf ("BODY.wire[%u]: " FORMAT_BL "\n", i,
                 wire[i].selection_marker);
     }
   else
-    printf ("error in reading num wires");
+    fail ("num wires");
 
   sil = dwg_ent_body_get_silhouettes (body, &error);
   if (!error)
     {
       for (i = 0; i < num_sil; i++)
-        printf ("silhouette[%u] of body : " FORMAT_BL "\n", i, sil[i].vp_id);
+        printf ("BODY.silhouette[%u]: " FORMAT_BL "\n", i, sil[i].vp_id);
     }
   else
-    printf ("error in reading silhouettes");
+    fail ("silhouettes");
 
   CHK_ENTITY_TYPE (body, BODY, unknown_2007, BL, blvalue);
   if (dwg_version >= R_2007)

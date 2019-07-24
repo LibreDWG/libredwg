@@ -19,16 +19,13 @@ api_process (dwg_object *obj)
 
   printf ("MTEXT.text: \"%s\"\n", mtext->text);
   if (!dwg_dynapi_entity_utf8text (mtext, "MTEXT", "text", &text, NULL)) {
-      printf ("Error with dynapi for MTEXT.text\n");
-      exit (1);
+      fail ("dynapi for MTEXT.text");
+      
   } else {
     printf ("MTEXT.text: \"%s\" (utf8)\n", text);
   }
   if (strcmp (dwg_ent_mtext_get_text (mtext, &error), mtext->text))
-    {
-      printf ("Error with old API dwg_ent_mtext_get_text\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_mtext_get_text");
   CHK_ENTITY_3RD_W_OLD (mtext, MTEXT, insertion_pt, ins_pt);
   CHK_ENTITY_3RD_W_OLD (mtext, MTEXT, extrusion, ext);
   CHK_ENTITY_3RD_W_OLD (mtext, MTEXT, x_axis_dir, x_axis_dir);

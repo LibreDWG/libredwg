@@ -18,10 +18,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE(dim_aligned, DIMENSION_ALIGNED, horiz_dir, BD, horiz_dir);
   if (dwg_ent_dim_get_horiz_dir (dim, &error) != horiz_dir || error)
-    {
-      printf ("Error with old API dwg_ent_dim_get_horiz_dir\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_dim_get_horiz_dir");
 
   lspace_factor = dwg_ent_dim_get_lspace_factor (dim, &error);
   if (!error)

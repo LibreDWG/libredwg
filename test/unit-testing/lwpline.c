@@ -19,56 +19,30 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, flag, BS, flag);
   if (dwg_ent_lwpline_get_flag (lwpline, &error) != flag || error)
-    {
-      printf ("Error with old API dwg_ent_lwpline_get_flag\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_lwpline_get_flag");
   CHK_ENTITY_3RD (lwpline, LWPOLYLINE, extrusion, extrusion);
   dwg_ent_lwpline_get_extrusion (lwpline, &pt3d, &error);
   if (error || memcmp (&extrusion, &pt3d, sizeof (extrusion)))
-    {
-      printf ("Error with old API dwg_ent_lwpline_get_extrusion\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_lwpline_get_extrusion");
 
   CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, const_width, BD, const_width);
   if (dwg_ent_lwpline_get_const_width (lwpline, &error) != const_width || error)
-    {
-      printf ("Error with old API dwg_ent_lwpline_get_const_width\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_lwpline_get_const_width");
   CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, thickness, BD, thickness);
   if (dwg_ent_lwpline_get_thickness (lwpline, &error) != thickness || error)
-    {
-      printf ("Error with old API dwg_ent_lwpline_get_thickness\n");
-      exit (1);
-    }
-
+    fail ("old API dwg_ent_lwpline_get_thickness");
   CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, elevation, BD, elevation);
   if (dwg_ent_lwpline_get_elevation (lwpline, &error) != elevation || error)
-    {
-      printf ("Error with old API dwg_ent_lwpline_get_elevation\n");
-      exit (1);
-    }
-
+    fail ("old API dwg_ent_lwpline_get_elevation");
   CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, num_widths, BL, num_widths);
   if (dwg_ent_lwpline_get_numwidths (lwpline, &error) != num_widths || error)
-    {
-      printf ("Error with old API dwg_ent_lwpline_get_numwidths\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_lwpline_get_numwidths");
   CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, num_bulges, BL, num_bulges);
   if (dwg_ent_lwpline_get_numbulges (lwpline, &error) != num_bulges || error)
-    {
-      printf ("Error with old API dwg_ent_lwpline_get_numbulges\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_lwpline_get_numbulges");
   CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, num_points, BL, num_points);
   if (dwg_ent_lwpline_get_numpoints (lwpline, &error) != num_points || error)
-    {
-      printf ("Error with old API dwg_ent_lwpline_get_numpoints\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_lwpline_get_numpoints");
 
   //CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, bulges, BD*, bulges);
   bulges = dwg_ent_lwpline_get_bulges (lwpline, &error);
@@ -80,10 +54,7 @@ api_process (dwg_object *obj)
       free (bulges);
     }
   else
-    {
-      printf ("Error in reading bulges \n");
-      exit (1);
-    }
+    fail ("bulges");
 
   points = dwg_ent_lwpline_get_points (lwpline, &error);
   if (!error)
@@ -95,10 +66,7 @@ api_process (dwg_object *obj)
       free (points);
     }
   else
-    {
-      printf ("Error in reading points \n");
-      exit (1);
-    }
+    fail ("points");
 
   width = dwg_ent_lwpline_get_widths (lwpline, &error);
   if (!error)
@@ -110,10 +78,7 @@ api_process (dwg_object *obj)
       free (width);
     }
   else
-    {
-      printf ("Error in reading widths \n");
-      exit (1);
-    }
+    fail ("widths");
 
   CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, num_vertexids, BL, num_vertexids);
 }

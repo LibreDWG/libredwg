@@ -34,22 +34,10 @@ api_process (dwg_object *obj)
 
   dwg_obj_xrecord *xrecord = dwg_object_to_XRECORD (obj);
 
-  /*
-  dwg_ent_xrecord_get_point(xrecord, &points,
-                          &error);
-  if ( !error )
-      printf("points of xrecord : x = %f, y = %f, z = %f\n",
-              points.x, points.y, points.z);
-  else
-      printf("error in reading extrusion \n");
-
-
-  dwg_ent_xrecord_get_vector(xrecord, &vector,
-                           &error);
-  if ( !error )
-      printf("vector of xrecord : x = %f, y = %f, z = %f\n",
-              vector.x, vector.y, vector.z);
-  else
-      printf("error in reading vector \n");
-  */
+  CHK_ENTITY_TYPE (xrecord, XRECORD, num_databytes, BL, num_databytes);
+  CHK_ENTITY_TYPE (xrecord, XRECORD, cloning_flags, BS, cloning_flags);
+  CHK_ENTITY_TYPE (xrecord, XRECORD, num_xdata, BL, num_xdata);
+  // xdata
+  CHK_ENTITY_TYPE (xrecord, XRECORD, num_objid_handles, BL, num_objid_handles);
+  // for objid_handles[] H
 }

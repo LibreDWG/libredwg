@@ -18,18 +18,12 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_UTF8TEXT (text, TEXT, text_value, text_value);
   if (strcmp (dwg_ent_text_get_text (text, &error), text_value))
-    {
-      printf ("Error with old API dwg_ent_text_get_text\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_text_get_text");
 
   CHK_ENTITY_2RD (text, TEXT, insertion_pt, ins_pt);
   dwg_ent_text_get_insertion_point (text, &pt2d, &error);
   if (error || memcmp (&ins_pt, &pt2d, sizeof (ins_pt)))
-    {
-      printf ("Error with old API dwg_ent_text_get_insertion_point\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_text_get_insertion_point");
   CHK_ENTITY_2RD (text, TEXT, alignment_pt, alignment_pt);
   CHK_ENTITY_3RD_W_OLD (text, TEXT, extrusion, ext);
   CHK_ENTITY_TYPE (text, TEXT, elevation, BD, elevation);

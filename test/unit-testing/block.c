@@ -10,8 +10,5 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_UTF8TEXT (block, BLOCK, name, name);
   if (strcmp (dwg_ent_block_get_name (block, &error), name))
-    {
-      printf ("Error with old API dwg_ent_block_get_name\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_block_get_name");
 }

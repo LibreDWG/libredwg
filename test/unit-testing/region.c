@@ -21,16 +21,10 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (region, REGION, acis_empty, B, acis_empty);
   if (dwg_ent_region_get_acis_empty (region, &error) != acis_empty || error)
-    {
-      printf ("Error with old API dwg_ent_region_get_acis_empty\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_region_get_acis_empty");
   CHK_ENTITY_TYPE (region, REGION, version, BS, version);
   if (dwg_ent_region_get_version (region, &error) != version || error)
-    {
-      printf ("Error with old API dwg_ent_region_get_version\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_region_get_version");
   CHK_ENTITY_TYPE (region, REGION, num_blocks, BL, num_blocks);
   CHK_ENTITY_TYPE (region, REGION, acis_data, TV, acis_data);
   if ((acis_data
@@ -38,8 +32,7 @@ api_process (dwg_object *obj)
                   (char *)acis_data))
       || error)
     {
-      printf ("Error with old API dwg_ent_region_get_acis_data\n");
-      exit (1);
+      fail ("old API dwg_ent_region_get_acis_data");
     }
 
   CHK_ENTITY_TYPE (region, REGION, wireframe_data_present, B, wireframe_data_present);
@@ -47,49 +40,41 @@ api_process (dwg_object *obj)
           != wireframe_data_present
       || error)
     {
-      printf (
-          "Error with old API dwg_ent_region_get_wireframe_data_present\n");
-      exit (1);
+      fail ("old API dwg_ent_region_get_wireframe_data_present");
     }
   CHK_ENTITY_TYPE (region, REGION, point_present, B, point_present);
   if (dwg_ent_region_get_point_present (region, &error) != point_present
       || error)
     {
-      printf ("Error with old API dwg_ent_region_get_point_present\n");
-      exit (1);
+      fail ("old API dwg_ent_region_get_point_present");
     }
 
   CHK_ENTITY_3RD (region, REGION, point, point);
   dwg_ent_region_get_point (region, &pt3d, &error);
   if (error || memcmp (&point, &pt3d, sizeof (point)))
     {
-      printf ("Error with old API dwg_ent_region_get_point\n");
-      exit (1);
+      fail ("old API dwg_ent_region_get_point");
     }
 
   CHK_ENTITY_TYPE (region, REGION, isoline_present, B, isoline_present);
   if (dwg_ent_region_get_isoline_present (region, &error) != isoline_present || error)
     {
-      printf ("Error with old API dwg_ent_region_get_isoline_present\n");
-      exit (1);
+      fail ("old API dwg_ent_region_get_isoline_present");
     }
   CHK_ENTITY_TYPE (region, REGION, num_isolines, BL, num_isolines);
   if (dwg_ent_region_get_num_isolines (region, &error) != num_isolines || error)
     {
-      printf ("Error with old API dwg_ent_region_get_num_isolines\n");
-      exit (1);
+      fail ("old API dwg_ent_region_get_num_isolines");
     }
   CHK_ENTITY_TYPE (region, REGION, num_wires, BL, num_wires);
   if (dwg_ent_region_get_num_wires (region, &error) != num_wires || error)
     {
-      printf ("Error with old API dwg_ent_region_get_num_wires\n");
-      exit (1);
+      fail ("old API dwg_ent_region_get_num_wires");
     }
   CHK_ENTITY_TYPE (region, REGION, num_silhouettes, BL, num_sil);
   if (dwg_ent_region_get_num_silhouettes (region, &error) != num_sil || error)
     {
-      printf ("Error with old API dwg_ent_region_get_num_sil\n");
-      exit (1);
+      fail ("old API dwg_ent_region_get_num_sil");
     }
 
   wire = dwg_ent_region_get_wires (region, &error);
@@ -100,7 +85,7 @@ api_process (dwg_object *obj)
       free (wire);
     }
   else
-    printf ("error in reading num wires\n");
+    printf ("error in reading num wires");
 
   sil = dwg_ent_region_get_silhouettes (region, &error);
   if (!error)
@@ -110,7 +95,7 @@ api_process (dwg_object *obj)
       free (sil);
     }
   else
-    printf ("error in reading silhouettes\n");
+    printf ("error in reading silhouettes");
 
   CHK_ENTITY_TYPE (region, REGION, unknown_2007, BL, blvalue);
   if (dwg_version >= R_2007)

@@ -23,51 +23,33 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_UTF8TEXT (attdef, ATTDEF, default_value, text_value);
   if (strcmp (dwg_ent_attdef_get_default_value (attdef, &error), text_value) || error)
-    {
-      printf ("Error with old API dwg_ent_attdef_get_default_value\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_attdef_get_default_value");
   CHK_ENTITY_UTF8TEXT (attdef, ATTDEF, tag, text_value);
   CHK_ENTITY_UTF8TEXT (attdef, ATTDEF, prompt, text_value);
 
   CHK_ENTITY_2RD (attdef, ATTDEF, insertion_pt, ins_pt);
   dwg_ent_attdef_get_insertion_point (attdef, &pt2d, &error);
   if (error || memcmp (&ins_pt, &pt2d, sizeof (ins_pt)))
-    {
-      printf ("Error with old API dwg_ent_attdef_get_insertion_point\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_attdef_get_insertion_point");
   CHK_ENTITY_2RD (attdef, ATTDEF, alignment_pt, alignment_pt);
   CHK_ENTITY_3RD (attdef, ATTDEF, extrusion, ext);
   dwg_ent_attdef_get_extrusion (attdef, &pt3d, &error);
   if (error || memcmp (&ext, &pt3d, sizeof (ext)))
-    {
-      printf ("Error with old API dwg_ent_attdef_get_extrusion\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_attdef_get_extrusion");
   CHK_ENTITY_TYPE (attdef, ATTDEF, elevation, BD, elevation);
   CHK_ENTITY_TYPE (attdef, ATTDEF, dataflags, RC, dataflags);
   CHK_ENTITY_TYPE (attdef, ATTDEF, height, RD, height);
   rdvalue = dwg_ent_attdef_get_height (attdef, &error);
   if (error || height != rdvalue)
-    {
-      printf ("Error with old API dwg_ent_attdef_get_height\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_attdef_get_height");
   CHK_ENTITY_TYPE (attdef, ATTDEF, thickness, RD, thickness);
   rdvalue = dwg_ent_attdef_get_thickness (attdef, &error);
   if (error || thickness != rdvalue)
-    {
-      printf ("Error with old API dwg_ent_attdef_get_thickness\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_attdef_get_thickness");
   CHK_ENTITY_TYPE (attdef, ATTDEF, rotation, RD, rotation);
   rdvalue = dwg_ent_attdef_get_rotation (attdef, &error);
   if (error || rotation != rdvalue)
-    {
-      printf ("Error with old API dwg_ent_attdef_get_rotation\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_attdef_get_rotation");
   CHK_ENTITY_TYPE (attdef, ATTDEF, oblique_ang, RD, oblique_ang);
   CHK_ENTITY_TYPE (attdef, ATTDEF, width_factor, RD, width_factor);
   CHK_ENTITY_TYPE (attdef, ATTDEF, generation, BS, generation);
@@ -75,17 +57,11 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (attdef, ATTDEF, vert_alignment, BS, vert_align);
   bsvalue = dwg_ent_attdef_get_vert_alignment (attdef, &error);
   if (error || vert_align != bsvalue)
-    {
-      printf ("Error with old API dwg_ent_attdef_get_vert_alignment\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_attdef_get_vert_alignment");
   CHK_ENTITY_TYPE (attdef, ATTDEF, horiz_alignment, BS, horiz_align);
   bsvalue = dwg_ent_attdef_get_horiz_alignment (attdef, &error);
   if (error || horiz_align != bsvalue)
-    {
-      printf ("Error with old API dwg_ent_attdef_horiz_alignment\n");
-      exit (1);
-    }
+    fail ("old API dwg_ent_attdef_horiz_alignment");
   CHK_ENTITY_TYPE (attdef, ATTDEF, field_length, BS, field_length);
   CHK_ENTITY_TYPE (attdef, ATTDEF, flags, RC, flags);
   CHK_ENTITY_H (attdef, ATTDEF, style, style);
