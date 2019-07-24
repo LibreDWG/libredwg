@@ -15,18 +15,33 @@ void
 api_process (dwg_object *obj)
 {
   int error;
-  BITCODE_BL numpoints, numfaces;
+  BITCODE_BS num_verts, num_faces;
+  BITCODE_BL num_owned;
+  BITCODE_H first_vertex, last_vertex, *vertex, seqend;
+  Dwg_Version_Type version = obj->parent->header.version;
+
   dwg_ent_polyline_pface *polyline_pface = dwg_object_to_POLYLINE_PFACE (obj);
 
-  numpoints = dwg_ent_polyline_pface_get_numpoints (polyline_pface, &error);
-  if (!error)
-    printf ("Num points of polyline_pface : " FORMAT_BL "\n", numpoints);
-  else
-    printf ("error in reading numpoints \n");
+  // TODO: rename fields to num_verts, num_faces
+  CHK_ENTITY_TYPE (polyline_pface, POLYLINE_PFACE, numverts, BS, num_verts);
+  //dwg_ent_polyline_pface_get_numpoints
+  CHK_ENTITY_TYPE_W_OLD (polyline_pface, POLYLINE_PFACE, numfaces, BS, num_faces);
+  CHK_ENTITY_TYPE (polyline_pface, POLYLINE_PFACE, num_owned, BL, num_owned);
+  //dwg_ent_polyline_pface_get_points NI
 
-  numfaces = dwg_ent_polyline_pface_get_numfaces (polyline_pface, &error);
-  if (!error)
-    printf ("Num faces of polyline_pface : %ud\n", numfaces);
+  if (num_verts + num_faces == num_owned)
+    ok ("num_verts + num_faces == num_owned");
   else
-    printf ("error in reading num faces \n");
+    fail ("num_verts + num_faces != num_owned");
+  
+  if (version >= R_13 && version <= R_2000)
+    {
+      CHK_ENTITY_H (polyline_pface, POLYLINE_PFACE, first_vertex, first_vertex);
+      CHK_ENTITY_H (polyline_pface, POLYLINE_PFACE, last_vertex, last_vertex);
+    }
+  if (version >= R_2004)
+    {
+      CHK_ENTITY_HV (polyline_pface, POLYLINE_PFACE, vertex, vertex, num_owned);
+    }
+  CHK_ENTITY_H (polyline_pface, POLYLINE_PFACE, seqend, seqend);
 }

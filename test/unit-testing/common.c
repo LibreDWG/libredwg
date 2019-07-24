@@ -65,6 +65,7 @@ main (int argc, char *argv[])
          "example_2013.dwg",
          "example_2018.dwg",
          "example_r14.dwg",
+         "2000/PolyLine2D.dwg",
          "2007/PolyLine3D.dwg",
          NULL
         };
@@ -270,23 +271,41 @@ print_api (dwg_object *obj)
       char *_hdlname = dwg_dynapi_handle_name (obj->parent, hdl);       \
       if (hdl == ent->field)                                            \
         {                                                               \
-          ok (#name "." #field ":");                                    \
-          printf ("# ");                                                \
-          if (_hdlname) printf ("%s ", _hdlname);                       \
-          printf ("(%x.%d.%lX)\n", hdl->handleref.code,                 \
-                  hdl->handleref.size, hdl->handleref.value);           \
+          ok (#name "." #field ": %s (%x.%d.%lX)", _hdlname ? : "",     \
+              hdl->handleref.code,                                      \
+              hdl->handleref.size, hdl->handleref.value);               \
         }                                                               \
       else                                                              \
         {                                                               \
-          fail (#name "." #field ":");                                  \
-          printf ("# ");                                                \
-          if (_hdlname) printf ("%s ", _hdlname);                       \
-          printf ("(%x.%d.%lX)\n", hdl->handleref.code,                 \
-                  hdl->handleref.size, hdl->handleref.value);           \
+          fail (#name "." #field ": %s (%x.%d.%lX)", _hdlname ? : "",   \
+                hdl->handleref.code,                                    \
+                hdl->handleref.size, hdl->handleref.value);             \
         }                                                               \
     }                                                                   \
     else                                                                \
-      fail (#name "." #field);                                     \
+      fail (#name "." #field);                                          \
+  }
+
+#define CHK_ENTITY_HV(ent, name, field, hdlp, num)                      \
+  if (!dwg_dynapi_entity_value (ent, #name, #field, &hdlp, NULL))       \
+    fail (#name "." #field);                                            \
+  else {                                                                \
+    for (int _i = 0; _i < (int)(num); _i++) {                           \
+      BITCODE_H _hdl = hdlp[_i];                                        \
+      char *_hdlname = dwg_dynapi_handle_name (obj->parent, _hdl);      \
+      if (_hdl == ent->field[_i])                                       \
+        {                                                               \
+          ok (#name "." #field "[%d]: %s (%x.%d.%lX)", _i,              \
+              _hdlname ? : "", _hdl->handleref.code,                    \
+              _hdl->handleref.size, _hdl->handleref.value);             \
+        }                                                               \
+      else                                                              \
+        {                                                               \
+          fail (#name "." #field "[%d]: %s (%x.%d.%lX)", _i,            \
+                _hdlname ? : "", _hdl->handleref.code,                  \
+                _hdl->handleref.size, _hdl->handleref.value);           \
+        }                                                               \
+    }                                                                   \
   }
 
 #define CHK_ENTITY_2RD(ent, name, field, value) \

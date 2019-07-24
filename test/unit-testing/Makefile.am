@@ -83,6 +83,7 @@ check_PROGRAMS = \
 	vertex_3d \
 	vertex_mesh \
 	vertex_pface \
+	vertex_pface_face \
 	xline \
 	xrecord
 

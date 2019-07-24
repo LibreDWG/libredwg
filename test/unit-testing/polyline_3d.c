@@ -2,41 +2,39 @@
 #include "common.c"
 
 void
-low_level_process (dwg_object *obj)
-{
-  dwg_ent_polyline_3d *polyline_3d = dwg_object_to_POLYLINE_3D (obj);
-
-  printf ("flag of polyline_3d : " FORMAT_RC "\n", polyline_3d->flag);
-  printf ("curve_type of polyline_3d : " FORMAT_RC "\n",
-          polyline_3d->curve_type);
-  printf ("numpoints of polyline_3d (r2004+): " FORMAT_BL "\n",
-          polyline_3d->num_owned);
-}
-
-void
 api_process (dwg_object *obj)
 {
   int error;
-  BITCODE_BL numpoints;
+  BITCODE_BL num_owned;
   BITCODE_RC flag, curve_type;
+  dwg_point_3d *points;
+  BITCODE_H first_vertex, last_vertex, *vertex, seqend;
+  Dwg_Version_Type version = obj->parent->header.version;
 
   dwg_ent_polyline_3d *polyline_3d = dwg_object_to_POLYLINE_3D (obj);
 
-  flag = dwg_ent_polyline_3d_get_flag (polyline_3d, &error);
-  if (!error)
-    printf ("flag of polyline : " FORMAT_RC "\n", flag);
-  else
-    printf ("error in reading flag");
+  CHK_ENTITY_TYPE_W_OLD (polyline_3d, POLYLINE_3D, flag, RC, flag);
+  CHK_ENTITY_TYPE_W_OLD (polyline_3d, POLYLINE_3D, curve_type, RC, curve_type);
+  CHK_ENTITY_TYPE (polyline_3d, POLYLINE_3D, num_owned, BL, num_owned);
+  if (dwg_object_polyline_3d_get_numpoints (obj, &error) != num_owned || error)
+    fail ("polyline_3d_get_numpoints");
 
-  curve_type = dwg_ent_polyline_3d_get_curve_type (polyline_3d, &error);
+  points = dwg_object_polyline_3d_get_points (obj, &error);
   if (!error)
-    printf ("curve_type of polyline : " FORMAT_RC "\n", curve_type);
+    for (BITCODE_BL i = 0; i < num_owned; i++)
+      ok ("POLYLINE_3D.points[%d]: (%f, %f)", (int)i,
+          points[i].x, points[i].y);
   else
-    printf ("error in reading curve_type");
+    fail ("POLYLINE_3D.points");
 
-  numpoints = dwg_object_polyline_3d_get_numpoints (obj, &error);
-  if (!error)
-    printf ("numpoints of polyline_3d : " FORMAT_BL "\n", numpoints);
-  else
-    printf ("error in reading numpoints");
+  if (version >= R_13 && version <= R_2000)
+    {
+      CHK_ENTITY_H (polyline_3d, POLYLINE_3D, first_vertex, first_vertex);
+      CHK_ENTITY_H (polyline_3d, POLYLINE_3D, last_vertex, last_vertex);
+    }
+  if (version >= R_2004)
+    {
+      CHK_ENTITY_HV (polyline_3d, POLYLINE_3D, vertex, vertex, num_owned);
+    }
+  CHK_ENTITY_H (polyline_3d, POLYLINE_3D, seqend, seqend);
 }
