@@ -12,12 +12,39 @@ static int failed = 0;
 static int passed = 0;
 static char buffer[512];
 
+int numpassed (void);
+int numfailed (void);
 static inline void pass (void);
 static void fail (const char* fmt, ...)
 #ifdef HAVE_FUNC_ATTRIBUTE_FORMAT
   __attribute__((format(printf, 1, 2)))
 #endif
   ;
+static void ok (const char* fmt, ...)
+#ifdef HAVE_FUNC_ATTRIBUTE_FORMAT
+  __attribute__((format(printf, 1, 2)))
+#endif
+  ;
+
+int numpassed (void)
+{
+  return passed;
+}
+int numfailed (void)
+{
+  return failed;
+}
+
+static void ok (const char* fmt, ...)
+{
+  va_list ap;
+
+  passed++;
+  va_start (ap, fmt);
+  vsnprintf (buffer, sizeof (buffer), fmt, ap);
+  va_end (ap);
+  printf ("ok %d\t# %s\n", ++num, buffer);
+}
 
 static inline void pass (void)
 {

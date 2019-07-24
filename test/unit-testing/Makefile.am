@@ -19,7 +19,7 @@
 
 WARN_CFLAGS = @WARN_CFLAGS@
 AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
-LDADD    = $(top_builddir)/src/libredwg.la
+LDADD     = $(top_builddir)/src/libredwg.la
 
 bits_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/bits.lo
@@ -96,8 +96,8 @@ dynapi_test.c: dynapi_test.c.in $(top_srcdir)/include/dwg.h \
 
 TESTS = $(check_PROGRAMS)
 TESTS_ENVIRONMENT = \
-  ASAN_OPTIONS="detect_leaks=0" \
-  INPUT=$(srcdir)/example_2000.dwg
+  ASAN_OPTIONS="detect_leaks=0"
+#  INPUT=$(srcdir)/example_2000.dwg
 # todo: more dwg versions, in test/test-data
 
 bits_test.cbmc: bits_test.c ../../src/bits.c

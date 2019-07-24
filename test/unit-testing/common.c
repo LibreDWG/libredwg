@@ -9,6 +9,7 @@
 
 #include "dwg.h"
 #include "dwg_api.h"
+#include "tests_common.h"
 
 dwg_data g_dwg;
 
@@ -50,20 +51,48 @@ int
 main (int argc, char *argv[])
 {
   char *input = getenv ("INPUT");
-  struct stat attrib;
+  int error = 0;
 
   if (!input)
     {
-      input = (char *)"example_2000.dwg"; // todo:
-                                          // ../test-data/example_2018.dwg
-      if (stat (input, &attrib))
+      char **ptr;
+      const char *const files[] =
         {
-          fprintf (stderr, "Env var INPUT not defined, %s not found\n", input);
-          return EXIT_FAILURE;
+         "example_2000.dwg",
+         "example_2004.dwg",
+         "example_2007.dwg",
+         "example_2010.dwg",
+         "example_2013.dwg",
+         "example_2018.dwg",
+         "example_r14.dwg",
+         "2007/PolyLine3D.dwg",
+         NULL
+        };
+      for (ptr = (char**)&files[0]; *ptr; ptr++)
+        {
+          struct stat attrib;
+          if (stat (*ptr, &attrib))
+            {
+              char tmp[80];
+              strcpy (tmp, "../test-data/");
+              strcat (tmp, *ptr);
+              if (stat (tmp, &attrib))
+                fprintf (stderr, "Env var INPUT not defined, %s not found\n", tmp);
+              else
+                error += test_code (tmp);
+            }
+          else
+            error += test_code (*ptr);
         }
     }
+  else
+      error = test_code (input);
 
-  return test_code (input);
+#ifdef DWG_TYPE
+  if (!numpassed())
+    fprintf (stderr, "TODO no coverage for this type %d\n", DWG_TYPE);
+#endif
+  return error;
 }
 
 /// read the DWG file
@@ -72,6 +101,9 @@ test_code (char *filename)
 {
   int error;
 
+#ifdef DWG_TYPE
+  printf ("Testing with %s:\n", filename);
+#endif
   error = dwg_read_file (filename, &g_dwg);
   if (error < DWG_ERR_CRITICAL)
     {
@@ -81,7 +113,10 @@ test_code (char *filename)
 
   /* This value is the return value for `main',
      so clamp it to either 0 or 1.  */
-  return error >= DWG_ERR_CRITICAL ? 1 : 0;
+  error = (error >= DWG_ERR_CRITICAL || numfailed () > 0) ? 1 : 0;
+  if (error)
+    printf ("%s failed\n", filename);
+  return error;
 }
 
 /// This function is used to iterate over the objects in a block
@@ -215,25 +250,19 @@ print_api (dwg_object *obj)
 
 #define CHK_ENTITY_UTF8TEXT(ent, name, field, value) \
   if (dwg_dynapi_entity_utf8text (ent, #name, #field, &value, NULL)) \
-    printf ("ok " #name "." #field ":\t\"%s\"\n", value); \
-  else { \
-    printf ("not ok in reading " #name "." #field "\n"); \
-    exit (1); \
-  }
+    ok (#name "." #field ":\t\"%s\"", value); \
+  else \
+    fail (#name "." #field)
 
 #define CHK_ENTITY_TYPE(ent, name, field, type, value) \
   if (dwg_dynapi_entity_value (ent, #name, #field, &value, NULL)) { \
     if (value == ent->field) \
-      printf ("ok " #name "." #field ":\t" FORMAT_##type "\n", value); \
-    else { \
-      printf ("not ok " #name "." #field ":\t" FORMAT_##type "\n", value); \
-      exit (1); \
-    } \
+      ok (#name "." #field ":\t" FORMAT_##type, value); \
+    else \
+      fail (#name "." #field ":\t" FORMAT_##type, value); \
   } \
-  else { \
-    printf ("not ok in reading " #name "." #field "\n"); \
-    exit (1); \
-  }
+  else \
+    fail (#name "." #field)
 
 #define CHK_ENTITY_H(ent, name, field, hdl) \
   { \
@@ -241,54 +270,48 @@ print_api (dwg_object *obj)
       char *_hdlname = dwg_dynapi_handle_name (obj->parent, hdl);       \
       if (hdl == ent->field)                                            \
         {                                                               \
-          printf ("ok " #name "." #field ":\t");                        \
+          ok (#name "." #field ":");                                    \
+          printf ("# ");                                                \
           if (_hdlname) printf ("%s ", _hdlname);                       \
           printf ("(%x.%d.%lX)\n", hdl->handleref.code,                 \
-                    hdl->handleref.size, hdl->handleref.value);         \
+                  hdl->handleref.size, hdl->handleref.value);           \
         }                                                               \
       else                                                              \
         {                                                               \
-          printf ("not ok " #name "." #field ":\t");                    \
+          fail (#name "." #field ":");                                  \
+          printf ("# ");                                                \
           if (_hdlname) printf ("%s ", _hdlname);                       \
           printf ("(%x.%d.%lX)\n", hdl->handleref.code,                 \
-                    hdl->handleref.size, hdl->handleref.value);         \
-          exit (1);                                                     \
+                  hdl->handleref.size, hdl->handleref.value);           \
         }                                                               \
     }                                                                   \
     else                                                                \
-      {                                                                 \
-        printf ("not ok in reading " #name "." #field "\n");            \
-        exit (1);                                                       \
-      }                                                                 \
+      fail (#name "." #field);                                     \
   }
 
 #define CHK_ENTITY_2RD(ent, name, field, value) \
   if (dwg_dynapi_entity_value (ent, #name, #field, &value, NULL)) { \
     if (value.x == ent->field.x && value.y == ent->field.y) \
-      printf ("ok " #name "." #field ":\t(%f, %f)\n", value.x, value.y); \
-    else { \
-      printf ("not ok " #name "." #field ":\t(%f, %f)\n", value.x, value.y); \
-      exit (1); \
-    } \
+      ok (#name "." #field ":\t(%f, %f)", value.x, value.y); \
+    else \
+      fail (#name "." #field ":\t(%f, %f)", value.x, value.y); \
   } \
-  else { \
-    printf ("not ok in reading " #name "." #field "\n"); \
-    exit (1); \
-  }
+  else \
+    fail (#name "." #field)
 
 #define CHK_ENTITY_3RD(ent, name, field, value) \
   if (dwg_dynapi_entity_value (ent, #name, #field, &value, NULL)) { \
     if (value.x == ent->field.x && \
         value.y == ent->field.y &&  \
         value.z == ent->field.z) \
-      printf ("ok " #name "." #field ":\t(%f, %f, %f)\n", value.x, value.y, \
-              value.z);                                                 \
+      ok (#name "." #field ":\t(%f, %f, %f)", value.x, value.y, \
+          value.z);                                               \
     else \
-      printf ("not ok " #name "." #field ":\t(%f, %f, %f)\n", value.x, value.y, \
-              value.z);                                                 \
+      fail (#name "." #field ":\t(%f, %f, %f)", value.x, value.y, \
+            value.z);                                               \
   } \
   else \
-    printf ("not ok in reading " #name "." #field "\n")
+    fail (#name "." #field)
 
 #define _DWGAPI_ENT_NAME(name, field) dwg_ent_ ## name ## _get_ ##field
 #define DWGAPI_ENT_NAME(ent, field) _DWGAPI_ENT_NAME(ent, field)
@@ -296,33 +319,24 @@ print_api (dwg_object *obj)
 #define CHK_ENTITY_TYPE_W_OLD(ent, name, field, type, value) \
   CHK_ENTITY_TYPE(ent, name, field, type, value); \
   if (DWGAPI_ENT_NAME(ent, field) (ent, &error) != value || error) \
-    { \
-      printf ("Error with old API dwg_ent_" #ent "_get_ " #field "\n"); \
-      exit (1); \
-    }
+    fail ("old API dwg_ent_" #ent "_get_ " #field)
 
 #define CHK_ENTITY_2RD_W_OLD(ent, name, field, value) \
   CHK_ENTITY_2RD(ent, name, field, value); \
   { \
     dwg_point_2d _pt2d; \
-    DWGAPI_ENT_NAME(ent, field) (ent, &_pt2d, &error);     \
+    DWGAPI_ENT_NAME(ent, field) (ent, &_pt2d, &error); \
     if (error || memcmp (&value, &_pt2d, sizeof (value))) \
-      { \
-        printf ("Error with old API dwg_ent_" #ent "_get_ " #field "\n"); \
-        exit (1); \
-      } \
+      fail ("old API dwg_ent_" #ent "_get_ " #field); \
   }
 
 #define CHK_ENTITY_3RD_W_OLD(ent, name, field, value) \
   CHK_ENTITY_3RD(ent, name, field, value); \
   { \
     dwg_point_3d _pt3d; \
-    DWGAPI_ENT_NAME(ent, field) (ent, &_pt3d, &error);     \
+    DWGAPI_ENT_NAME(ent, field) (ent, &_pt3d, &error); \
     if (error || memcmp (&value, &_pt3d, sizeof (value))) \
-      { \
-        printf ("Error with old API dwg_ent_" #ent "_get_ " #field "\n"); \
-        exit (1); \
-      } \
+      fail ("old API dwg_ent_" #ent "_get_ " #field); \
   }
 
 // allow old deprecated API

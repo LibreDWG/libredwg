@@ -36307,13 +36307,38 @@ main (int argc, char *argv[])
 
   if (input == NULL)
     {
-      struct stat attrib;
-      input = (char *)"example_2000.dwg";
-      if (stat (input, &attrib))
+      int error = 0;
+      char **ptr;
+      const char *const files[] =
         {
-          fprintf (stderr, "Env var INPUT not defined, %s not found\n", input);
-          return EXIT_FAILURE;
+         "example_2000.dwg",
+         "example_2004.dwg",
+         "example_2007.dwg",
+         "example_2010.dwg",
+         "example_2013.dwg",
+         "example_2018.dwg",
+         "example_r14.dwg",
+         "2007/PolyLine3D.dwg",
+         NULL
+        };
+      for (ptr = (char**)&files[0]; *ptr; ptr++)
+        {
+          struct stat attrib;
+          if (stat (*ptr, &attrib))
+            {
+              char tmp[80];
+              strcpy (tmp, "../test-data/");
+              strcat (tmp, *ptr);
+              if (stat (tmp, &attrib))
+                fprintf (stderr, "Env var INPUT not defined, %s not found\n", tmp);
+              else
+                error += test_dynapi (tmp);
+            }
+          else
+            error += test_dynapi (*ptr);
         }
+      return error;
     }
-  return test_dynapi (input);
+  else
+    return test_dynapi (input);
 }
