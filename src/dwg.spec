@@ -1048,7 +1048,7 @@ DWG_ENTITY_END
           return DWG_ERR_VALUEOUTOFBOUNDS; \
       } \
     DXF { \
-      FIELD_VALUE(blockname) = dwg_dim_blockname(dwg,obj); \
+      FIELD_VALUE(blockname) = dwg_dim_blockname(dwg, obj); \
       FIELD_BE (extrusion, 210); \
       FIELD_T (blockname, 2); \
       FIELD_3BD (def_pt, 10); \
@@ -1157,8 +1157,8 @@ DWG_ENTITY(DIMENSION_ALIGNED)
   SUBCLASS (AcDbDimension)
   DIMENSION_COMMON_DECODE;
   SUBCLASS (AcDbAlignedDimension)
-  FIELD_3BD (_13_pt, 13);
-  FIELD_3BD (_14_pt, 14);
+  FIELD_3BD (_13_pt, 13); // TODO: rename
+  FIELD_3BD (_14_pt, 14); // TODO: rename
   DECODER_OR_ENCODER {
     FIELD_3BD (def_pt, 10);
   }
@@ -1796,13 +1796,17 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
                     "of 3dsolid object parsing (acis_empty_bit==0).\n");
         }
 
-      SINCE (R_2007) {
+      if (FIELD_VALUE (version) > 1) {
+        SINCE (R_2007) {
           FIELD_BL (unknown_2007, 0);
+        }
       }
 
       COMMON_ENTITY_HANDLE_DATA;
-      SINCE (R_2007) {
+      if (FIELD_VALUE (version) > 1) {
+        SINCE (R_2007) {
           FIELD_HANDLE (history_id, ANYCODE, 350);
+        }
       }
     }
   return error;
@@ -1876,10 +1880,18 @@ static int free_3dsolid(Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _
       END_REPEAT (silhouettes);
     }
 
+  FIELD_B (acis_empty_bit, 0);
+  if (FIELD_VALUE (version) > 1) {
+    SINCE (R_2007) {
+      FIELD_BL (unknown_2007, 0);
+    }
+  }
   COMMON_ENTITY_HANDLE_DATA;
 
-  SINCE (R_2007) {
-    FIELD_HANDLE (history_id, ANYCODE, 350);
+  if (FIELD_VALUE (version) > 1) {
+    SINCE (R_2007) {
+      FIELD_HANDLE (history_id, ANYCODE, 350);
+    }
   }
   return error;
 }
@@ -2101,7 +2113,7 @@ DWG_ENTITY(MTEXT)
     {
       FIELD_BS (linespace_style, 73);
       FIELD_BD (linespace_factor, 44);
-      FIELD_B (unknown_bit, 0);
+      FIELD_B (unknown_bit, 0); //annotative?
     }
 
   SINCE (R_2004)
@@ -2116,7 +2128,7 @@ DWG_ENTITY(MTEXT)
     }
   SINCE (R_2018)
     {
-      FIELD_B(annotative, 0);
+      FIELD_B (annotative, 0);
       if (!FIELD_VALUE(annotative))
         {
           FIELD_BS (class_version, 0); // def: 0

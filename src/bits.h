@@ -35,10 +35,16 @@
 #include <stdio.h>
 #include "config.h"
 #ifdef HAVE_WCHAR_H
-#  include <wchar.h>
+# include <wchar.h>
 #endif
 #include "common.h"
 #include "dwg.h"
+
+// avoid double linkage on windows with unit-testing
+#if defined(BITS_TEST_C) || defined(DECODE_TEST_C)
+# undef EXPORT
+# define EXPORT
+#endif
 
 /**
  Structure for DWG-files raw data storage
@@ -215,11 +221,13 @@ bit_read_TU (Bit_Chain *restrict dat);
 void bit_write_TU (Bit_Chain *restrict dat, BITCODE_TU restrict value);
 
 /* Converts UCS-2 to UTF-8, returning a copy. */
-EXPORT char *bit_convert_TU (BITCODE_TU restrict wstr);
+EXPORT char *bit_convert_TU (BITCODE_TU restrict wstr)
+  ATTRIBUTE_MALLOC;
 
 /** Converts UTF-8 to UCS-2. Returns a copy.
     Eventually needed by dwg writers (dxf2dwg) */
-EXPORT BITCODE_TU bit_utf8_to_TU (char *restrict str);
+EXPORT BITCODE_TU bit_utf8_to_TU (char *restrict str)
+  ATTRIBUTE_MALLOC;
 
 /* compare an ASCII/utf-8 string to a r2007+ name */
 int bit_eq_TU (const char *str, BITCODE_TU restrict wstr);

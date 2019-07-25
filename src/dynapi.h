@@ -32,6 +32,12 @@
 #endif
 #define OFF(st, f) offsetof (st, f)
 
+// avoid double linkage on windows with unit-testing
+#if defined(DYNAPI_TEST_C)
+# undef EXPORT
+# define EXPORT
+#endif
+
 #ifndef _DWG_API_H_
 /* Public API, duplicate of dwg_api.h */
 typedef struct dwg_field_name_type_offset
@@ -92,6 +98,9 @@ EXPORT bool dwg_dynapi_common_set_value (void *restrict entity,
                                          const char *restrict fieldname,
                                          const void *restrict value,
                                          const bool is_utf8);
+EXPORT char *dwg_dynapi_handle_name (const Dwg_Data *restrict dwg,
+                                     Dwg_Object_Ref *restrict hdl);
+
 #endif
 
 /* Private API: */

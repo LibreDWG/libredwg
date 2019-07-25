@@ -107,11 +107,8 @@ static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
 #define FIELD_RLL(name, dxf) FIELD (name, RLL)
 #define FIELD_MC(name, dxf) FIELD (name, MC)
 #define FIELD_MS(name, dxf) FIELD (name, MS)
-#define FIELD_TV(name, dxf)                                                   \
-  if (FIELD_VALUE (name))                                                     \
-    {                                                                         \
-      FREE_IF (FIELD_VALUE (name));                                           \
-    }
+#define FIELD_TV(name, dxf)                     \
+  FREE_IF (FIELD_VALUE (name))
 #define VALUE_TV(value, dxf) FREE_IF (value)
 #define VALUE_TF(value, dxf) FREE_IF (value)
 #define VALUE_TFF(value, dxf)
@@ -296,7 +293,7 @@ static int dwg_free_UNKNOWN_OBJ (Bit_Chain *restrict dat,
     _obj = ent = _ent->tio.token;
 
 #define DWG_ENTITY_END                                                        \
-  return 0;                                                                   \
+  return error;                                                               \
   }
 
 #define DWG_OBJECT(token)                                                     \
@@ -346,7 +343,7 @@ static int dwg_free_UNKNOWN_OBJ (Bit_Chain *restrict dat,
 /* obj itself is allocated via dwg->object[], dxfname is klass->dxfname or
  * static */
 #define DWG_OBJECT_END                                                        \
-  return 0;                                                                   \
+  return error;                                                               \
   }
 
 static void

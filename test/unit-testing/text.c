@@ -1,81 +1,44 @@
-#define DWG_TYPE DWG_TYPE_TOLERANCE
+#define DWG_TYPE DWG_TYPE_TEXT
 #include "common.c"
-
-void
-low_level_process (dwg_object *obj)
-{
-  dwg_ent_text *text = dwg_object_to_TEXT (obj);
-
-  printf ("text of text : %s\n", text->text_value);
-  printf ("insertion point of text : x = %f, y = %f\n", text->insertion_pt.x,
-          text->insertion_pt.y);
-  printf ("extrusion of text : x = %f, y = %f, z = %f\n", text->extrusion.x,
-          text->extrusion.y, text->extrusion.z);
-  printf ("height of text : %f\n", text->height);
-  printf ("thickness of text : %f\n", text->thickness);
-  printf ("rotation of text : %f\n", text->rotation);
-  printf ("vertical align of text : %u\n", text->vert_alignment);
-  printf ("horizontal align of text : %u\n", text->horiz_alignment);
-}
 
 void
 api_process (dwg_object *obj)
 {
-  int error;
-  double thickness, rotation, height;
-  BITCODE_BS vert_align, horiz_align;
+  int error = 0;
+  BITCODE_RD elevation, thickness, rotation, height, oblique_ang,
+    width_factor, rdvalue;
+  BITCODE_BS generation, vert_align, horiz_align, bsvalue;
+  BITCODE_RC dataflags, rcvalue;
   char *text_value;
   dwg_point_3d ext;
-  dwg_point_2d ins_pt;
+  dwg_point_2d pt2d, ins_pt, alignment_pt;
+  BITCODE_H style;
 
+  Dwg_Version_Type version = obj->parent->header.version;
   dwg_ent_text *text = dwg_object_to_TEXT (obj);
 
-  text_value = dwg_ent_text_get_text (text, &error);
-  if (!error)
-    printf ("text value : %s\n", text_value);
-  else
-    printf ("error in reading text_value \n");
+  CHK_ENTITY_UTF8TEXT (text, TEXT, text_value, text_value);
+  if (version < R_2007 &&
+      (strcmp (dwg_ent_text_get_text (text, &error), text_value)
+       || error))
+       fail ("old API dwg_ent_text_get_text");
 
-  dwg_ent_text_get_insertion_point (text, &ins_pt, &error);
-  if (!error)
-    printf ("insertion point of text : x = %f, y = %f\n", ins_pt.x, ins_pt.y);
-  else
-    printf ("error in reading insertion \n");
+  CHK_ENTITY_2RD (text, TEXT, insertion_pt, ins_pt);
+  dwg_ent_text_get_insertion_point (text, &pt2d, &error);
+  if (error || memcmp (&ins_pt, &pt2d, sizeof (ins_pt)))
+    fail ("old API dwg_ent_text_get_insertion_point");
+  CHK_ENTITY_2RD (text, TEXT, alignment_pt, alignment_pt);
+  CHK_ENTITY_3RD_W_OLD (text, TEXT, extrusion, ext);
+  CHK_ENTITY_TYPE (text, TEXT, elevation, BD, elevation);
+  CHK_ENTITY_TYPE (text, TEXT, dataflags, RC, dataflags);
+  CHK_ENTITY_TYPE_W_OLD (text, TEXT, height, RD, height);
+  CHK_ENTITY_TYPE_W_OLD (text, TEXT, thickness, RD, thickness);
+  CHK_ENTITY_TYPE_W_OLD (text, TEXT, rotation, RD, rotation);
+  CHK_ENTITY_TYPE (text, TEXT, oblique_ang, RD, oblique_ang);
+  CHK_ENTITY_TYPE (text, TEXT, width_factor, RD, width_factor);
+  CHK_ENTITY_TYPE (text, TEXT, generation, BS, generation);
 
-  dwg_ent_text_get_extrusion (text, &ext, &error);
-  if (!error)
-    printf ("extrusion of text : x = %f, y = %f, z = %f\n", ext.x, ext.y,
-            ext.z);
-  else
-    printf ("error in reading extrusion \n");
-
-  height = dwg_ent_text_get_height (text, &error);
-  if (!error)
-    printf ("height of text : %f\n", height);
-  else
-    printf ("error in reading height \n");
-
-  thickness = dwg_ent_text_get_thickness (text, &error);
-  if (!error)
-    printf ("thickness of text : %f\n", thickness);
-  else
-    printf ("error in reading thickness\n");
-
-  rotation = dwg_ent_text_get_rotation (text, &error);
-  if (!error)
-    printf ("rotation of text : %f\n", rotation);
-  else
-    printf ("error in reading rotation \n");
-
-  vert_align = dwg_ent_text_get_vert_alignment (text, &error);
-  if (!error)
-    printf ("Vertical alignment of text : " FORMAT_BS "\n", vert_align);
-  else
-    printf ("error in reading vertical alignment");
-
-  horiz_align = dwg_ent_text_get_horiz_alignment (text, &error);
-  if (!error)
-    printf ("Horizontal alignment of text : " FORMAT_BS "\n", horiz_align);
-  else
-    printf ("error in reading horizontal alignment");
+  CHK_ENTITY_TYPE_W_OLD (text, TEXT, vert_alignment, BS, vert_align);
+  CHK_ENTITY_TYPE_W_OLD (text, TEXT, horiz_alignment, BS, horiz_align);
+  CHK_ENTITY_H (text, TEXT, style, style);
 }

@@ -2,112 +2,47 @@
 #include "common.c"
 
 void
-low_level_process (dwg_object *obj)
-{
-  dwg_ent_polyline_2d *polyline_2d = dwg_object_to_POLYLINE_2D (obj);
-}
-
-void
 api_process (dwg_object *obj)
 {
   int error;
   double start_width, end_width, elevation, thickness;
-  BITCODE_BL numpoints;
-  unsigned int flags, curve_type;
+  BITCODE_BL num_owned;
+  BITCODE_BS flag, curve_type;
   dwg_point_2d *points;
   dwg_point_3d ext;
+  BITCODE_H first_vertex, last_vertex, *vertex, seqend;
+  Dwg_Version_Type version = obj->parent->header.version;
+
   dwg_ent_polyline_2d *polyline_2d = dwg_object_to_POLYLINE_2D (obj);
 
-  dwg_ent_polyline_2d_get_extrusion (polyline_2d, &ext, &error);
-  if (!error)
-    {
-      printf ("extrusion : x = %f, y = %f, z = %f\n", ext.x, ext.y, ext.z);
-    }
-  else
-    {
-      printf ("error in reading extrusion");
-    }
+  CHK_ENTITY_TYPE_W_OLD (polyline_2d, POLYLINE_2D, flag, BS, flag);
+  CHK_ENTITY_TYPE_W_OLD (polyline_2d, POLYLINE_2D, curve_type, BS, curve_type);
+  CHK_ENTITY_TYPE_W_OLD (polyline_2d, POLYLINE_2D, start_width, BD, start_width);
+  CHK_ENTITY_TYPE_W_OLD (polyline_2d, POLYLINE_2D, end_width, BD, end_width);
+  CHK_ENTITY_TYPE (polyline_2d, POLYLINE_2D, num_owned, BL, num_owned);
+  if (dwg_object_polyline_2d_get_numpoints (obj, &error) != num_owned || error)
+    fail ("polyline_2d_get_numpoints");
 
-  start_width = dwg_ent_polyline_2d_get_start_width (polyline_2d, &error);
-  if (!error)
-    {
-      printf ("start width of polyline : %f\n", start_width);
-    }
-  else
-    {
-      printf ("error in reading start width");
-    }
-
-  end_width = dwg_ent_polyline_2d_get_end_width (polyline_2d, &error);
-  if (!error)
-    {
-      printf ("end width of polyline : %f\n", end_width);
-    }
-  else
-    {
-      printf ("error in reading end width");
-    }
-
-  thickness = dwg_ent_polyline_2d_get_thickness (polyline_2d, &error);
-  if (!error)
-    {
-      printf ("thickness of polyline : %f\n", thickness);
-    }
-  else
-    {
-      printf ("error in reading thickness");
-    }
-
-  elevation = dwg_ent_polyline_2d_get_elevation (polyline_2d, &error);
-  if (!error)
-    {
-      printf ("elevation of polyline : %f\n", elevation);
-    }
-  else
-    {
-      printf ("error in reading elevation");
-    }
-
-  flags = dwg_ent_polyline_2d_get_flag (polyline_2d, &error);
-  if (!error)
-    {
-      printf ("flag of polyline : %ud\n", flags);
-    }
-  else
-    {
-      printf ("error in reading flag");
-    }
-
-  curve_type = dwg_ent_polyline_2d_get_curve_type (polyline_2d, &error);
-  if (!error)
-    {
-      printf ("curve type of polyline : %ud\n", curve_type);
-    }
-  else
-    {
-      printf ("error in reading curve type");
-    }
-
-  numpoints = dwg_object_polyline_2d_get_numpoints (obj, &error);
-  if (!error)
-    {
-      printf ("numpoints of polyline : " FORMAT_BL "\n", numpoints);
-    }
-  else
-    {
-      printf ("error in reading numpoints");
-    }
+  CHK_ENTITY_TYPE_W_OLD (polyline_2d, POLYLINE_2D, thickness, BD, thickness);
+  CHK_ENTITY_TYPE_W_OLD (polyline_2d, POLYLINE_2D, elevation, BD, elevation);
+  CHK_ENTITY_3RD_W_OLD (polyline_2d, POLYLINE_2D, extrusion, ext);
 
   points = dwg_object_polyline_2d_get_points (obj, &error);
   if (!error)
-    {
-      BITCODE_BL i;
-      for (i = 0; i < numpoints; i++)
-        printf ("point[%d] of polyline : x = %f\ty = %f\n", (int)i,
-                points[i].x, points[i].y);
-    }
+    for (BITCODE_BL i = 0; i < num_owned; i++)
+      ok ("POLYLINE_2D.points[%d]: (%f, %f)", (int)i,
+          points[i].x, points[i].y);
   else
+    fail ("POLYLINE_2D.points");
+
+  if (version >= R_2004)
     {
-      printf ("error in reading points \n");
+      CHK_ENTITY_HV (polyline_2d, POLYLINE_2D, vertex, vertex, num_owned);
     }
+  if (version >= R_13 && version <= R_2000)
+    {
+      CHK_ENTITY_H (polyline_2d, POLYLINE_2D, first_vertex, first_vertex);
+      CHK_ENTITY_H (polyline_2d, POLYLINE_2D, last_vertex, last_vertex);
+    }
+  CHK_ENTITY_H (polyline_2d, POLYLINE_2D, seqend, seqend);
 }

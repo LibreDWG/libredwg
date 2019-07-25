@@ -2,21 +2,6 @@
 #include "common.c"
 
 void
-low_level_process (dwg_object *obj)
-{
-  dwg_ent_endblk *endblk = dwg_object_to_ENDBLK (obj);
-  Dwg_Data *dwg = endblk->parent->dwg;
-
-  if (endblk->parent != obj->tio.entity)
-    printf ("ERROR: obj_obj of endblk %p == %p", endblk->parent,
-            obj->tio.entity);
-
-  if (&dwg->object[endblk->parent->objid] != obj)
-    printf ("ERROR: obj of endblk %ld -> obj %p", (long)endblk->parent->objid,
-            obj);
-}
-
-void
 api_process (dwg_object *obj)
 {
   int error1, error2;
@@ -25,7 +10,12 @@ api_process (dwg_object *obj)
   dwg_object *obj2 = dwg_ent_generic_to_object (endblk, &error2);
 
   if (error1 || parent != obj->tio.entity)
-    printf ("ERROR: dwg_ent_generic_parent %p == %p", parent, obj->tio.entity);
+    fail ("dwg_ent_generic_parent %p == %p", parent, obj->tio.entity);
+  else
+    ok ("dwg_ent_generic_parent");
+
   if (error2 || obj2 != obj)
-    printf ("ERROR: dwg_ent_generic_to_object %p == %p", obj2, obj);
+    fail ("dwg_ent_generic_to_object %p == %p", obj2, obj);
+  else
+    pass ();
 }

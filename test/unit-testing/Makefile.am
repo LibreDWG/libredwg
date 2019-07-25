@@ -1,6 +1,6 @@
 ## Makefile.am
 ##
-## Copyright (C) 2015, 2018 Free Software Foundation, Inc.
+## Copyright (C) 2015-2019 Free Software Foundation, Inc.
 ##
 ## This file is part of LibreDWG.
 ##
@@ -19,12 +19,30 @@
 
 WARN_CFLAGS = @WARN_CFLAGS@
 AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
-LDADD    = $(top_builddir)/src/libredwg.la
-#SOURCES = $(top_builddir)/src/libredwg.la
+LDADD     = $(top_builddir)/src/libredwg.la
+
+bits_test_LDADD = $(LDADD) \
+	$(top_builddir)/src/bits.lo
+decode_test_LDADD = $(LDADD) \
+	$(top_builddir)/src/bits.lo \
+	$(top_builddir)/src/hash.lo \
+	$(top_builddir)/src/decode_r2007.lo \
+	$(top_builddir)/src/common.lo \
+	$(top_builddir)/src/print.lo
+hash_test_LDADD = $(LDADD) \
+	$(top_builddir)/src/bits.lo \
+	$(top_builddir)/src/hash.lo
+dynapi_test_LDADD = $(LDADD) \
+	$(top_builddir)/src/bits.lo
+
 
 # NB: After you modify ‘check_PROGRAMS’, do "make update-ignorance"
 #     and include this directory's .gitignore in the commit.
 check_PROGRAMS = \
+	bits_test \
+	decode_test \
+	hash_test \
+	dynapi_test \
 	3dsolid \
 	arc \
 	attdef \
@@ -65,13 +83,26 @@ check_PROGRAMS = \
 	vertex_3d \
 	vertex_mesh \
 	vertex_pface \
+	vertex_pface_face \
 	xline \
 	xrecord
 
+dynapi_test.c: dynapi_test.c.in $(top_srcdir)/include/dwg.h \
+	       $(top_srcdir)/src/gen-dynapi.pl
+	-cd $(top_srcdir)/src && $(PERL) gen-dynapi.pl
+
+.c.i:
+	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+	$(COMPILE) -c -E -o $@ $<
+
 TESTS = $(check_PROGRAMS)
 TESTS_ENVIRONMENT = \
-  INPUT=$(srcdir)/example_2000.dwg
-# todo: more dwg versions, in test/test-data
+  ASAN_OPTIONS="detect_leaks=0"
+
+bits_test.cbmc: bits_test.c ../../src/bits.c
+	cbmc -I. -I$(top_srcdir)/include -I/opt/local/include \
+	     bits_test.c $(top_srcdir)/src/bits.c \
+	     --unwind 6  --cover decision > $@
 
 CLEANFILES = *.o
 MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
@@ -79,7 +110,11 @@ MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
 update-ignorance:
 	printf '/%s\n' $(check_PROGRAMS) > .gitignore
 
-EXTRA_DIST = common.c example_2000.dwg
+EXTRA_DIST = \
+	tests_common.h \
+	common.c \
+	dynapi_test.c.in \
+	dynapi_test.c
 
 @VALGRIND_CHECK_RULES@
 VALGRIND_SUPPRESSIONS_FILE = @VALGRIND_SUPPRESSIONS_FILE@

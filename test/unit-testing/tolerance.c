@@ -2,71 +2,36 @@
 #include "common.c"
 
 void
-low_level_process (dwg_object *obj)
-{
-  dwg_ent_tolerance *tolerance = dwg_object_to_TOLERANCE (obj);
-
-  printf ("Radius of tolerance : %f\n", tolerance->height);
-  printf ("Thickness of tolerance : %f\n", tolerance->dimgap);
-  printf ("text string of tolerance : %s\n", tolerance->text_string);
-  printf ("extrusion of tolerance : x = %f, y = %f, z = %f\n",
-          tolerance->extrusion.x, tolerance->extrusion.y,
-          tolerance->extrusion.z);
-  printf ("ins_pt of tolerance : x = %f, y = %f, z = %f\n",
-          tolerance->ins_pt.x, tolerance->ins_pt.y, tolerance->ins_pt.z);
-  printf ("center of tolerance : x = %f,y = %f,z = %f\n",
-          tolerance->x_direction.x, tolerance->x_direction.y,
-          tolerance->x_direction.z);
-}
-
-void
 api_process (dwg_object *obj)
 {
   int error;
   double height, dimgap;
-  dwg_point_3d ins_pt, x_dir, ext; // 3d_points
+  dwg_point_3d ins_pt, x_dir, ext, pt3d;
   char *text_string;
+  BITCODE_BS unknown_short;
+  BITCODE_H dimstyle; 
 
+  Dwg_Version_Type version = obj->parent->header.version;
   dwg_ent_tolerance *tolerance = dwg_object_to_TOLERANCE (obj);
 
-  height = dwg_ent_tolerance_get_height (tolerance, &error);
-  if (!error)
-    printf ("height of tolerance : %f\n", height);
-  else
-    printf ("in reading height \n");
-
-  dimgap = dwg_ent_tolerance_get_dimgap (tolerance, &error);
-  if (!error)
-    printf ("dimgap of tolerance : %f\n", dimgap);
-  else
-    printf ("in reading dimgao \n");
-
-  text_string = dwg_ent_tolerance_get_text_string (tolerance, &error);
-  if (!error)
-    printf ("text of tolerance : %s\n", text_string);
-  else
-    printf ("in reading text \n");
-
-  dwg_ent_tolerance_get_ins_pt (tolerance, &ins_pt, &error);
-  if (!error)
+  if (tolerance->text_string)
     {
-      printf ("ins pt of tolerance : x = %f, y = %f, z = %f\n", ins_pt.x,
-              ins_pt.y, ins_pt.z);
+      CHK_ENTITY_UTF8TEXT_W_OLD (tolerance, TOLERANCE, text_string, text_string);
+      /*if (version < R_2007 &&
+        (strcmp (dwg_ent_tolerance_get_text_string (tolerance, &error), text_string)
+        || error))
+        fail ("old API dwg_ent_tolerance_get_text_string");*/
     }
   else
+    ok ("empty TOLERANCE.text_string");
+  CHK_ENTITY_3RD_W_OLD (tolerance, TOLERANCE, ins_pt, ins_pt);
+  CHK_ENTITY_3RD_W_OLD (tolerance, TOLERANCE, extrusion, ext);
+  CHK_ENTITY_3RD_W_OLD (tolerance, TOLERANCE, x_direction, x_dir);
+  if (version <= R_14)
     {
-      printf ("error in reading extrusion \n");
+      CHK_ENTITY_TYPE (tolerance, TOLERANCE, unknown_short, BS, unknown_short);
+      CHK_ENTITY_TYPE_W_OLD (tolerance, TOLERANCE, height, BD, height);
+      CHK_ENTITY_TYPE_W_OLD (tolerance, TOLERANCE, dimgap, BD, dimgap);
     }
-
-  // return tolerance center points
-  dwg_ent_tolerance_get_x_direction (tolerance, &x_dir, &error);
-  if (!error)
-    {
-      printf ("x direction of tolerance : x = %f, y = %f, z = %f\n", x_dir.x,
-              x_dir.y, x_dir.z);
-    }
-  else
-    {
-      printf ("error in reading x direction \n");
-    }
+  CHK_ENTITY_H (tolerance, TOLERANCE, dimstyle, dimstyle);
 }

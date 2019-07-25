@@ -1,13 +1,7 @@
+#define DECODE_TEST_C
 #include "../../src/common.h"
 CLANG_DIAG_IGNORE (-Wpragma-pack)
-#include "../../src/decode.c"
-CLANG_DIAG_RESTORE
-
-CLANG_DIAG_IGNORE (-Wmissing-prototypes)
-GCC46_DIAG_IGNORE (-Wformat-nonliteral)
-GCC30_DIAG_IGNORE (-Wformat-nonliteral)
-#include <dejagnu.h>
-GCC46_DIAG_RESTORE
+# include "../../src/decode.c"
 CLANG_DIAG_RESTORE
 #include "tests_common.h"
 
@@ -22,13 +16,9 @@ read_literal_length_tests (void)
   Bit_Chain bitchain = strtobt ("00000101");
   unsigned char opcode = 0x05;
   if (read_literal_length (&bitchain, &opcode) == 0x08)
-    {
-      pass ("read_literal_length");
-    }
+    ok ("read_literal_length");
   else
-    {
-      fail ("read_literal_length");
-    }
+    fail ("read_literal_length");
 }
 
 void
@@ -37,7 +27,7 @@ read_long_compression_offset_tests (void)
   Bit_Chain bitchain = strtobt ("11011101");
   if (read_long_compression_offset (&bitchain) == 0xDD)
     {
-      pass ("read_long_compression_offset");
+      pass ();
     }
   else
     {
@@ -55,7 +45,7 @@ read_two_byte_offset_tests (void)
   int result = read_two_byte_offset (&bitchain, &litlength);
   if (result == 508 && litlength == 0)
     {
-      pass ("read_two_byte_offset");
+      pass ();
     }
   else
     {

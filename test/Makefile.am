@@ -1,10 +1,4 @@
-AUTOMAKE_OPTIONS = dejagnu
-DEJATOOL = testcases
-
 SUBDIRS = unit-testing
-if HAVE_DEJAGNU
-SUBDIRS += testcases
-endif
 if HAVE_PYTHON
 SUBDIRS += xmlsuite
 endif

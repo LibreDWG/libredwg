@@ -1,5 +1,5 @@
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 778 "gen-dynapi.pl"
+#line 738 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -4010,8 +4010,8 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "VBA_PROJECT", 81, _dwg_VBA_PROJECT_fields },	/* 143 */
   { "VERTEX_2D", 10, _dwg_VERTEX_2D_fields },	/* 144 */
   { "VERTEX_3D", 11, _dwg_VERTEX_3D_fields },	/* 145 */
-  { "VERTEX_MESH", 12, NULL },	/* 146 */
-  { "VERTEX_PFACE", 13, NULL },	/* 147 */
+  { "VERTEX_MESH", 12, _dwg_VERTEX_3D_fields },	/* 146 */
+  { "VERTEX_PFACE", 13, _dwg_VERTEX_3D_fields },	/* 147 */
   { "VERTEX_PFACE_FACE", 14, _dwg_VERTEX_PFACE_FACE_fields },	/* 148 */
   { "VIEW", 61, _dwg_VIEW_fields },	/* 149 */
   { "VIEWPORT", 34, _dwg_VIEWPORT_fields },	/* 150 */
@@ -4023,13 +4023,13 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "VPORT_ENTITY_HEADER", 71, _dwg_VPORT_ENTITY_HEADER_fields },	/* 156 */
   { "WIPEOUT", 588, _dwg_WIPEOUT_fields },	/* 157 */
   { "WIPEOUTVARIABLES", 589, _dwg_WIPEOUTVARIABLES_fields },	/* 158 */
-  { "XLINE", 41, NULL },	/* 159 */
+  { "XLINE", 41, _dwg_RAY_fields },	/* 159 */
   { "XRECORD", 79, _dwg_XRECORD_fields },	/* 160 */
   { "XREFPANELOBJECT", 590, NULL },	/* 161 */
 
 };
 
-#line 845 "gen-dynapi.pl"
+#line 804 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
@@ -4177,7 +4177,7 @@ dwg_dynapi_entity_utf8text (void *restrict _obj, const char *restrict name,
       if (fp)
         memcpy (fp, f, sizeof (Dwg_DYNAPI_field));
 
-      if (dwg_version >= R_2007)
+      if (dwg_version >= R_2007 && strcmp (f->type, "TF")) /* not TF */
         {
           BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
           char *utf8 = bit_convert_TU (wstr);
@@ -4246,7 +4246,7 @@ dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
         if (fp)
           memcpy (fp, f, sizeof (Dwg_DYNAPI_field));
 
-        if (dwg_version >= R_2007)
+        if (dwg_version >= R_2007 && strcmp (f->type, "TF")) /* not TF */
           {
             BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
             char *utf8 = bit_convert_TU (wstr);
@@ -4373,7 +4373,7 @@ dwg_dynapi_common_utf8text(void *restrict _obj, const char *restrict fieldname,
         if (fp)
           memcpy (fp, f, sizeof(Dwg_DYNAPI_field));
 
-        if (dwg_version >= R_2007)
+        if (dwg_version >= R_2007 && strcmp (f->type, "TF")) /* not TF */
           {
             BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
             char *utf8 = bit_convert_TU (wstr);
@@ -4571,6 +4571,36 @@ dwg_dynapi_common_set_value (void *restrict _obj,
     old = &((char*)_obj)[f->offset];
     dynapi_set_helper (old, f, obj->parent->header.version, value, is_utf8);
     return true;
+  }
+}
+
+// check if the handle points to an object with a name.
+// see also dwg_obj_table_get_name, which only supports tables.
+EXPORT char*
+dwg_dynapi_handle_name (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict hdl)
+{
+  char *name;
+  const Dwg_Version_Type dwg_version = dwg->header.version;
+  Dwg_Object *obj = dwg_ref_object (dwg, hdl);
+
+  if (!obj)
+    return NULL;
+  {
+    const Dwg_DYNAPI_field *f = dwg_dynapi_entity_field (obj->name, "name");
+    // just some random type is enough.
+    Dwg_Object_STYLE *_obj = obj->tio.object->tio.STYLE;
+
+    if (!f || !f->is_string)
+      return NULL;
+    if (dwg_version >= R_2007 && strcmp (f->type, "TF")) /* not TF */
+      {
+        BITCODE_TU wstr = *(BITCODE_TU *)((char *)_obj + f->offset);
+        return bit_convert_TU (wstr);
+      }
+    else
+      {
+        return *(char **)((char *)_obj + f->offset);
+      }
   }
 }
 

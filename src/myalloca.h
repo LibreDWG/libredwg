@@ -22,10 +22,13 @@
 #if defined HAVE_ALLOCA_H
 #  include <alloca.h>
 #elif defined __GNUC__
+#  undef alloca
 #  define alloca __builtin_alloca
 #elif defined _AIX
+#  undef alloca
 #  define alloca __alloca
 #elif defined _MSC_VER
+#  undef alloca
 #  include <malloc.h>
 #  define alloca _alloca
 #else

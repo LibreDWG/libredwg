@@ -95,6 +95,12 @@
 #  define __nonnull(params)
 #endif
 
+#ifdef HAVE_FUNC_ATTRIBUTE_MALLOC
+# define ATTRIBUTE_MALLOC __attribute__((malloc))
+#else
+# define ATTRIBUTE_MALLOC
+#endif
+
 #ifndef EXPORT
 #  if defined(_WIN32) && defined(ENABLE_SHARED)
 #    ifdef DLL_EXPORT

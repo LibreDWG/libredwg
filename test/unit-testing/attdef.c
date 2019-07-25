@@ -2,82 +2,88 @@
 #include "common.c"
 
 void
-low_level_process (dwg_object *obj)
-{
-  dwg_ent_attdef *attdef = dwg_object_to_ATTDEF (obj);
-
-  printf ("attdef of attdef : %s\n", attdef->default_value);
-  printf ("insertion point of attdef : x = %f, y = %f\n",
-          attdef->insertion_pt.x, attdef->insertion_pt.y);
-  printf ("extrusion of attdef : x = %f, y = %f, z = %f\n",
-          attdef->extrusion.x, attdef->extrusion.y, attdef->extrusion.z);
-  printf ("height of attdef : %f\n", attdef->height);
-  printf ("thickness of attdef : %f\n", attdef->thickness);
-  printf ("rotation of attdef : %f\n", attdef->rotation);
-  printf ("vertical align of attdef : " FORMAT_BS "\n",
-          attdef->vert_alignment);
-  printf ("horizontal align of attdef : " FORMAT_BS "\n",
-          attdef->horiz_alignment);
-}
-
-void
 api_process (dwg_object *obj)
 {
-  int error;
-  double thickness, rotation, height;
-  BITCODE_BS vert_align, horiz_align;
-  char *attdef_value;
-  dwg_point_3d ext;
-  dwg_point_2d ins_pt;
+  int error = 0;
+  double elevation, thickness, rotation, height, oblique_ang,
+    width_factor, rdvalue;
+  BITCODE_BS generation, vert_align, horiz_align, field_length,
+    annotative_data_size, annotative_short, bsvalue;
+  BITCODE_RC dataflags, class_version, type, flags, attdef_class_version,
+    rcvalue;
+  BITCODE_B lock_position_flag;
+  char *text_value, text1;
+  dwg_point_3d ext, pt3d;
+  dwg_point_2d ins_pt, alignment_pt, pt2d;
+  BITCODE_H style, annotative_app;
+  BITCODE_H mtext_handles;
+  Dwg_Version_Type version = obj->parent->header.version;
+
   dwg_ent_attdef *attdef = dwg_object_to_ATTDEF (obj);
 
-  attdef_value = dwg_ent_attdef_get_default_value (attdef, &error);
-  if (!error)
-    printf ("attdef value : \"%s\"\n", attdef_value);
-  else
-    printf ("error in reading attdef_value \n");
+  CHK_ENTITY_UTF8TEXT_W_OLD (attdef, ATTDEF, default_value, text_value);
+  /*if (version < R_2007 &&
+      (strcmp (dwg_ent_attdef_get_default_value (attdef, &error), text_value)
+       || error))
+       fail ("old API dwg_ent_attdef_get_default_value"); */
+  CHK_ENTITY_UTF8TEXT (attdef, ATTDEF, tag, text_value);
+  CHK_ENTITY_UTF8TEXT (attdef, ATTDEF, prompt, text_value);
 
-  dwg_ent_attdef_get_insertion_point (attdef, &ins_pt, &error);
-  if (!error)
-    printf ("insertion point of attdef : x = %f, y = %f\n", ins_pt.x,
-            ins_pt.y);
-  else
-    printf ("error in reading insertion \n");
+  CHK_ENTITY_2RD (attdef, ATTDEF, insertion_pt, ins_pt);
+  dwg_ent_attdef_get_insertion_point (attdef, &pt2d, &error);
+  if (error || memcmp (&ins_pt, &pt2d, sizeof (ins_pt)))
+    fail ("old API dwg_ent_attdef_get_insertion_point");
+  CHK_ENTITY_2RD (attdef, ATTDEF, alignment_pt, alignment_pt);
+  CHK_ENTITY_3RD (attdef, ATTDEF, extrusion, ext);
+  dwg_ent_attdef_get_extrusion (attdef, &pt3d, &error);
+  if (error || memcmp (&ext, &pt3d, sizeof (ext)))
+    fail ("old API dwg_ent_attdef_get_extrusion");
+  CHK_ENTITY_TYPE (attdef, ATTDEF, elevation, BD, elevation);
+  CHK_ENTITY_TYPE (attdef, ATTDEF, dataflags, RC, dataflags);
+  CHK_ENTITY_TYPE (attdef, ATTDEF, height, RD, height);
+  rdvalue = dwg_ent_attdef_get_height (attdef, &error);
+  if (error || height != rdvalue)
+    fail ("old API dwg_ent_attdef_get_height");
+  CHK_ENTITY_TYPE (attdef, ATTDEF, thickness, RD, thickness);
+  rdvalue = dwg_ent_attdef_get_thickness (attdef, &error);
+  if (error || thickness != rdvalue)
+    fail ("old API dwg_ent_attdef_get_thickness");
+  CHK_ENTITY_TYPE (attdef, ATTDEF, rotation, RD, rotation);
+  rdvalue = dwg_ent_attdef_get_rotation (attdef, &error);
+  if (error || rotation != rdvalue)
+    fail ("old API dwg_ent_attdef_get_rotation");
+  CHK_ENTITY_TYPE (attdef, ATTDEF, oblique_ang, RD, oblique_ang);
+  CHK_ENTITY_TYPE (attdef, ATTDEF, width_factor, RD, width_factor);
+  CHK_ENTITY_TYPE (attdef, ATTDEF, generation, BS, generation);
 
-  dwg_ent_attdef_get_extrusion (attdef, &ext, &error);
-  if (!error)
-    printf ("extrusion of attdef : x = %f, y = %f, z = %f\n", ext.x, ext.y,
-            ext.z);
-  else
-    printf ("error in reading extrusion \n");
+  CHK_ENTITY_TYPE (attdef, ATTDEF, vert_alignment, BS, vert_align);
+  bsvalue = dwg_ent_attdef_get_vert_alignment (attdef, &error);
+  if (error || vert_align != bsvalue)
+    fail ("old API dwg_ent_attdef_get_vert_alignment");
+  CHK_ENTITY_TYPE (attdef, ATTDEF, horiz_alignment, BS, horiz_align);
+  bsvalue = dwg_ent_attdef_get_horiz_alignment (attdef, &error);
+  if (error || horiz_align != bsvalue)
+    fail ("old API dwg_ent_attdef_horiz_alignment");
+  CHK_ENTITY_TYPE (attdef, ATTDEF, field_length, BS, field_length);
+  CHK_ENTITY_TYPE (attdef, ATTDEF, flags, RC, flags);
+  CHK_ENTITY_H (attdef, ATTDEF, style, style);
+  if (version >= R_2010)
+    {
+      CHK_ENTITY_TYPE (attdef, ATTDEF, class_version, RC, class_version);
+      CHK_ENTITY_TYPE (attdef, ATTDEF, attdef_class_version, RC, attdef_class_version);
+    }
+  if (version >= R_2018)
+    {
+      CHK_ENTITY_H (attdef, ATTDEF, mtext_handles, mtext_handles);
+      CHK_ENTITY_H (attdef, ATTDEF, annotative_app, annotative_app);
 
-  height = dwg_ent_attdef_get_height (attdef, &error);
-  if (!error)
-    printf ("height of attdef : %f\n", height);
-  else
-    printf ("error in reading height \n");
+      CHK_ENTITY_TYPE (attdef, ATTDEF, annotative_data_size, BS, annotative_data_size);
+      CHK_ENTITY_TYPE (attdef, ATTDEF, annotative_short, BS, annotative_short);
 
-  thickness = dwg_ent_attdef_get_thickness (attdef, &error);
-  if (!error)
-    printf ("thickness of attdef : %f\n", thickness);
-  else
-    printf ("error in reading thickness\n");
-
-  rotation = dwg_ent_attdef_get_rotation (attdef, &error);
-  if (!error)
-    printf ("rotation of attdef : %f\n", rotation);
-  else
-    printf ("error in reading rotation \n");
-
-  vert_align = dwg_ent_attdef_get_vert_alignment (attdef, &error);
-  if (!error)
-    printf ("vertical alignment of attdef : " FORMAT_BS "\n", vert_align);
-  else
-    printf ("error in reading vertical alignment");
-
-  horiz_align = dwg_ent_attdef_get_horiz_alignment (attdef, &error);
-  if (!error)
-    printf ("horizontal alignment of attdef : " FORMAT_BS "\n", horiz_align);
-  else
-    printf ("error in reading horizontal alignment");
+      CHK_ENTITY_TYPE (attdef, ATTDEF, type, RC, type);
+    }
+  if (version >= R_2007)
+    {
+      CHK_ENTITY_TYPE (attdef, ATTDEF, lock_position_flag, B, lock_position_flag);
+    }
 }

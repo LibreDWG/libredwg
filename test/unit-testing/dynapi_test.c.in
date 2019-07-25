@@ -13,7 +13,8 @@
    do not modify */
 /* written by: Reini Urban */
 
-#line 16 "dynapi_test.c.in"
+#line 17 "dynapi_test.c.in"
+#define DYNAPI_TEST_C
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -26,11 +27,7 @@
 #include "../../src/common.h"
 #include "dwg.h"
 #include "dwg_api.h"
-GCC30_DIAG_IGNORE (-Wformat-nonliteral)
-CLANG_DIAG_IGNORE (-Wmissing-prototypes)
-#include <dejagnu.h>
-CLANG_DIAG_RESTORE
-CLANG_DIAG_RESTORE
+#include "tests_common.h"
 
 /* for all objects/entities/header_vars:
    compare direct api vs dynapi values
@@ -45,34 +42,35 @@ test_header (const Dwg_Data *dwg)
   BITCODE_BD bd;
   BITCODE_TV tv;
 
-#line 48 "dynapi_test.c"
+#line 46 "dynapi_test.c"
   /* @@for test_HEADER@@ */
-#line 49 "dynapi_test.c.in"
+#line 48 "dynapi_test.c.in"
   return error;
 }
 
-#line 7261 "dynapi_test.c"
+#line 5371 "dynapi_test.c"
 /* @@for test_OBJECT@@ */
 
-#line 57 "dynapi_test.c.in"
+#line 55 "dynapi_test.c.in"
 static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
   if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
     return 0;
-#line 52912 "dynapi_test.c"
+#line 35703 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
-#line 66 "dynapi_test.c.in"
-  return error;
+#line 64 "dynapi_test.c.in"
+  return error + failed;
 }
 
 static int
 test_dynapi (const char *filename)
 {
-  int error;
+  int error = 0;
   Dwg_Data dwg;
   BITCODE_BL i;
+  num = passed = failed = 0;
 
   dwg.opts = 0;
   if (dwg_read_file (filename, &dwg) >= DWG_ERR_CRITICAL)
@@ -103,13 +101,38 @@ main (int argc, char *argv[])
 
   if (input == NULL)
     {
-      struct stat attrib;
-      input = (char *)"example_2000.dwg";
-      if (stat (input, &attrib))
+      int error = 0;
+      char **ptr;
+      const char *const files[] =
         {
-          fprintf (stderr, "Env var INPUT not defined, %s not found\n", input);
-          return EXIT_FAILURE;
+         "example_2000.dwg",
+         "example_2004.dwg",
+         "example_2007.dwg",
+         "example_2010.dwg",
+         "example_2013.dwg",
+         "example_2018.dwg",
+         "example_r14.dwg",
+         "2007/PolyLine3D.dwg",
+         NULL
+        };
+      for (ptr = (char**)&files[0]; *ptr; ptr++)
+        {
+          struct stat attrib;
+          if (stat (*ptr, &attrib))
+            {
+              char tmp[80];
+              strcpy (tmp, "../test-data/");
+              strcat (tmp, *ptr);
+              if (stat (tmp, &attrib))
+                fprintf (stderr, "Env var INPUT not defined, %s not found\n", tmp);
+              else
+                error += test_dynapi (tmp);
+            }
+          else
+            error += test_dynapi (*ptr);
         }
+      return error;
     }
-  return test_dynapi (input);
+  else
+    return test_dynapi (input);
 }

@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 # Copyright (C) 2019 Free Software Foundation, Inc., GPL3
 #
-# Generate src/dynapi.c and test/testcases/dynapi_test.c
+# Generate src/dynapi.c and test/unit-testing/dynapi_test.c
 # C structs/arrays for all dwg objects and its fields for a dynamic API.
 #   -> name, type, size, offset, dxfgroup, memory-type
 # Within each object linear search is good enough.
@@ -364,7 +364,9 @@ for (<DATA>) {
           my $fields = exists $structs{$k} ? "_dwg_".$k."_fields" : "NULL";
           if ($k =~ /^(BODY|REGION)$/) {
             $fields = "_dwg_3DSOLID_fields";
-          } elsif ($k =~ /^ VERTEX_(MESH|PFACE)$/) {
+          } elsif ($k eq 'XLINE') {
+            $fields = "_dwg_RAY_fields";
+          } elsif ($k =~ /^VERTEX_(MESH|PFACE)$/) {
             $fields = "_dwg_VERTEX_3D_fields";
           }
           printf $fh "  { \"%s\", %d, %s },\t/* %d */\n",
@@ -437,9 +439,9 @@ my %FMT = (
     'RC*' => '%s',
     );
 
-my $infile = '../test/testcases/dynapi_test.c.in';
+my $infile = '../test/unit-testing/dynapi_test.c.in';
 open $in, $infile or die "$infile: $!";
-$cfile  = '../test/testcases/dynapi_test.c';
+$cfile  = '../test/unit-testing/dynapi_test.c';
 chmod 0644, $cfile if -e $cfile;
 open $fh, ">", $cfile or die "$cfile: $!";
 print $fh "/* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */\n";
@@ -489,30 +491,20 @@ for (<$in>) {
     $type $var;
     if (dwg_dynapi_header_value (dwg, "$name", &$var, NULL)
         && $var == dwg->header_vars.$name)
-      {
-        pass ("HEADER.$name [$stype] $fmt", $var);
-      }
+      pass ();
     else
-      {
-        fail ("HEADER.$name [$stype] $fmt != $fmt", dwg->header_vars.$sname, $var);
-        error++;
-      }
+      fail ("HEADER.$name [$stype] $fmt != $fmt", dwg->header_vars.$sname, $var);
 EOF
         if ($type =~ /(int|long|short|char ||double|_B\b|_B[BSLD]\b|_R[CSLD])/) {
           print $fh "    $var++;\n";
         }
         print $fh <<"EOF";
-        if (dwg_dynapi_header_set_value (dwg, "$name", &$var, 0)
+    if (dwg_dynapi_header_set_value (dwg, "$name", &$var, 0)
         && $var == dwg->header_vars.$name)
-      {
-        pass ("HEADER.$name [$stype] set+1 $fmt", $var);
-      }
+      pass ();
     else
-      {
-        fail ("HEADER.$name [$stype] set+1 $fmt != $fmt",
-              dwg->header_vars.$sname, $var);
-        error++;
-      }
+      fail ("HEADER.$name [$stype] set+1 $fmt != $fmt",
+            dwg->header_vars.$sname, $var);
 EOF
         if ($type =~ /(int|long|short|char ||double|_B\b|_B[BSLD]\b|_R[CSLD])/) {
           print $fh "    $var--;\n";
@@ -532,14 +524,9 @@ EOF
         }
         print $fh <<"EOF";
        )
-      {
-        pass ("HEADER.$name [$stype]");
-      }
+      pass ();
     else
-      {
-        fail ("HEADER.$name [$stype]");
-        error++;
-      }
+      fail ("HEADER.$name [$stype]");
   }
 EOF
       }
@@ -602,29 +589,19 @@ EOF
     $type $var;
     if (dwg_dynapi_entity_value($lname, "$name", "$var", &$svar, NULL)
         && $var == $lname->$svar)
-      {
-        pass ("$name.$var [$stype] $fmt", $svar);
-      }
+      pass ();
     else
-      {
-        fail ("$name.$var [$stype] $fmt != $fmt", $lname->$svar, $svar);
-        error++;
-      }
+      fail ("$name.$var [$stype] $fmt != $fmt", $lname->$svar, $svar);
 EOF
       if ($type =~ /(int|long|short|char|double|_B\b|_B[BSLD]\b|_R[CSLD])/) {
         print $fh "    $svar++;\n";
       }
       print $fh <<"EOF";
-      if (dwg_dynapi_entity_set_value ($lname, "$name", "$var", &$svar, 0)
+    if (dwg_dynapi_entity_set_value ($lname, "$name", "$var", &$svar, 0)
         && $var == $lname->$svar)
-      {
-        pass ("$name.$var [$stype] set+1 $fmt", $svar);
-      }
+      pass ();
     else
-      {
-        fail ("$name.$var [$stype] set+1 $fmt != $fmt", $lname->$svar, $svar);
-        error++;
-      }
+      fail ("$name.$var [$stype] set+1 $fmt != $fmt", $lname->$svar, $svar);
 EOF
       if ($type =~ /(int|long|short|char ||double|_B\b|_B[BSLD]\b|_R[CSLD])/) {
         print $fh "    $lname->$svar--;\n";
@@ -663,25 +640,33 @@ EOF
         dimstyles => 'num_entries',
         vport_entity_headers => 'num_entries',
         entry_handles => 'num_entries',
+        encr_sat_data => 'num_blocks',
         );
       my $countfield = exists $countfield{$var} ? $countfield{$var} : "num_$var";
       $countfield = 'num_dashes' if $name eq 'LTYPE' and $var eq 'styles';
       my $count = 1;
-      if ($var eq 'reactors' and $type eq 'BITCODE_H*') {
+      if ($var eq 'encr_sat_data') {
+        print $fh <<"EOF";
+  {
+    $type $var;
+    if (dwg_dynapi_entity_value ($lname, "$name", "$var", &$svar, NULL)
+        && !memcmp (&$svar, &$lname->$svar, sizeof ($lname->$svar)))
+      pass ();
+    else
+      fail ("$name.$var [$stype]");
+  }
+EOF
+      }
+      elsif ($var eq 'reactors' and $type eq 'BITCODE_H*') {
         print $fh <<"EOF";
   {
     $type $var;
     BITCODE_BL count = obj_obj->num_reactors;
     if (dwg_dynapi_entity_value ($lname, "$name", "$var", &$svar, NULL)
         && $svar == $lname->$svar)
-      {
-        pass ("$name.$var [$stype] * %u $countfield", count);
-      }
+      pass ();
     else
-      {
-        fail ("$name.$var [$stype] * %u $countfield", count);
-        error++;
-      }
+      fail ("$name.$var [$stype] * %u $countfield", count);
   }
 EOF
       } else {
@@ -697,14 +682,9 @@ EOF
         }
         print $fh ")\n";
         print $fh <<"EOF";
-      {
-        pass ("$name.$var [$stype] * %u $countfield", count);
-      }
+      pass ();
     else
-      {
-        fail ("$name.$var [$stype] * %u $countfield", count);
-        error++;
-      }
+      fail ("$name.$var [$stype] * %u $countfield", count);
   }
 EOF
       }
@@ -717,7 +697,9 @@ EOF
 EOF
         if ($stype =~ /^(TV|RC\*|unsigned char\*|char\*)$/) {
           $is_str = 1;
-          print $fh "        && !strcmp ((char *)$svar, (char *)$lname->$svar))\n";
+          print $fh "        && $svar\n";
+          print $fh "           ? !strcmp ((char *)$svar, (char *)$lname->$svar)\n";
+          print $fh "           : !$lname->$svar)\n";
         } elsif ($type !~ /\*\*/) {
           print $fh "        && !memcmp (&$svar, &$lname->$svar, sizeof ($lname->$svar)))\n";
         } else {
@@ -725,33 +707,23 @@ EOF
         }
         if ($is_str) {
           print $fh <<"EOF";
-      {
-        pass ("$name.$var [$stype] '$fmt' <> '$fmt'", $svar, $lname->$svar);
-      }
+      pass ();
     else
-      {
-        fail ("$name.$var [$stype] '$fmt' <> '$fmt'", $svar, $lname->$svar);
-        error++;
-      }
+      fail ("$name.$var [$stype] '$fmt' <> '$fmt'", $svar, $lname->$svar);
   }
 EOF
         } else {
           print $fh <<"EOF";
-      {
-        pass ("$name.$var [$stype]");
-      }
+        pass ();
     else
-      {
         fail ("$name.$var [$stype]");
-        error++;
-      }
   }
 EOF
         }
       }
     }
     print $fh <<"EOF";
-  return error;
+  return failed;
 }
 EOF
     }
@@ -775,7 +747,7 @@ close $fh;
 
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 778 "gen-dynapi.pl"
+#line 738 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -841,7 +813,7 @@ static const struct _name_type_fields dwg_name_types[] = {
   @@enum DWG_OBJECT_TYPE@@
 };
 
-#line 845 "gen-dynapi.pl"
+#line 804 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
@@ -989,7 +961,7 @@ dwg_dynapi_entity_utf8text (void *restrict _obj, const char *restrict name,
       if (fp)
         memcpy (fp, f, sizeof (Dwg_DYNAPI_field));
 
-      if (dwg_version >= R_2007)
+      if (dwg_version >= R_2007 && strcmp (f->type, "TF")) /* not TF */
         {
           BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
           char *utf8 = bit_convert_TU (wstr);
@@ -1058,7 +1030,7 @@ dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
         if (fp)
           memcpy (fp, f, sizeof (Dwg_DYNAPI_field));
 
-        if (dwg_version >= R_2007)
+        if (dwg_version >= R_2007 && strcmp (f->type, "TF")) /* not TF */
           {
             BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
             char *utf8 = bit_convert_TU (wstr);
@@ -1185,7 +1157,7 @@ dwg_dynapi_common_utf8text(void *restrict _obj, const char *restrict fieldname,
         if (fp)
           memcpy (fp, f, sizeof(Dwg_DYNAPI_field));
 
-        if (dwg_version >= R_2007)
+        if (dwg_version >= R_2007 && strcmp (f->type, "TF")) /* not TF */
           {
             BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
             char *utf8 = bit_convert_TU (wstr);
@@ -1383,6 +1355,36 @@ dwg_dynapi_common_set_value (void *restrict _obj,
     old = &((char*)_obj)[f->offset];
     dynapi_set_helper (old, f, obj->parent->header.version, value, is_utf8);
     return true;
+  }
+}
+
+// check if the handle points to an object with a name.
+// see also dwg_obj_table_get_name, which only supports tables.
+EXPORT char*
+dwg_dynapi_handle_name (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict hdl)
+{
+  char *name;
+  const Dwg_Version_Type dwg_version = dwg->header.version;
+  Dwg_Object *obj = dwg_ref_object (dwg, hdl);
+
+  if (!obj)
+    return NULL;
+  {
+    const Dwg_DYNAPI_field *f = dwg_dynapi_entity_field (obj->name, "name");
+    // just some random type is enough.
+    Dwg_Object_STYLE *_obj = obj->tio.object->tio.STYLE;
+
+    if (!f || !f->is_string)
+      return NULL;
+    if (dwg_version >= R_2007 && strcmp (f->type, "TF")) /* not TF */
+      {
+        BITCODE_TU wstr = *(BITCODE_TU *)((char *)_obj + f->offset);
+        return bit_convert_TU (wstr);
+      }
+    else
+      {
+        return *(char **)((char *)_obj + f->offset);
+      }
   }
 }
 

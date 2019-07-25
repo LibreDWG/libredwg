@@ -2,135 +2,90 @@
 #include "common.c"
 
 void
-low_level_process (dwg_object *obj)
-{
-  BITCODE_BL i;
-  // casts object to 3d solid entity
-  dwg_ent_3dsolid *_3dsolid = obj->tio.entity->tio._3DSOLID;
-  printf ("acis empty of 3dsolid : " FORMAT_B "\n", _3dsolid->acis_empty);
-  printf ("version of 3dsolid : " FORMAT_BS "\n", _3dsolid->version);
-  printf ("acis data of 3dsolid : %s\n", _3dsolid->acis_data);
-  printf ("wireframe data of 3dsolid : " FORMAT_B "\n",
-          _3dsolid->wireframe_data_present);
-  printf ("point present of 3dsolid : " FORMAT_B "\n",
-          _3dsolid->point_present);
-  printf ("point of 3dsolid : x = %f, y = %f, z = %f\n", _3dsolid->point.x,
-          _3dsolid->point.y, _3dsolid->point.z);
-  printf ("num isolines of 3dsolid : " FORMAT_BL "\n", _3dsolid->num_isolines);
-  printf ("isoline present of 3dsolid : " FORMAT_B "\n",
-          _3dsolid->isoline_present);
-  printf ("num wires of 3dsolid : " FORMAT_BL "\n", _3dsolid->num_wires);
-
-  for (i = 0; i < _3dsolid->num_wires; i++)
-    printf ("wire[%d] of 3dsolid : " FORMAT_BL "\n", (int)i,
-            _3dsolid->wires[i].selection_marker);
-
-  printf ("num silhouettes of 3dsolid : " FORMAT_BL "\n",
-          _3dsolid->num_silhouettes);
-
-  for (i = 0; i < _3dsolid->num_silhouettes; i++)
-    printf ("silhouette[%d] of 3dsolid : " FORMAT_BL "\n", (int)i,
-            _3dsolid->silhouettes[i].vp_id);
-}
-void
 api_process (dwg_object *obj)
 {
-  BITCODE_BL i;
   int error;
+  BITCODE_BL i;
   BITCODE_BS version;
-  BITCODE_BL block_size, num_isolines, num_wires, num_sil;
+  BITCODE_BL num_blocks, num_isolines, num_wires, num_sil, unknown_2007;
   unsigned char *acis_data;
   BITCODE_B wireframe_data_present, point_present, isoline_present;
   BITCODE_B acis_empty, acis2_empty;
-  dwg_point_3d point;
+  dwg_point_3d point, pt3d;
   dwg_3dsolid_wire *wire;
   dwg_3dsolid_silhouette *sil;
+  BITCODE_H history_id;
 
   dwg_ent_3dsolid *_3dsolid = obj->tio.entity->tio._3DSOLID;
+  Dwg_Version_Type dwg_version = obj->parent->header.version;
 
-  acis_empty = dwg_ent_3dsolid_get_acis_empty (_3dsolid, &error);
-  if (!error)
-    printf ("acis empty of 3dsolid : " FORMAT_B "\n", acis_empty);
-  else
-    printf ("error in reading acis empty");
+  CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, acis_empty, B, acis_empty);
+  if (dwg_ent_3dsolid_get_acis_empty (_3dsolid, &error) != acis_empty || error)
+    fail ("old API dwg_ent_3dsolid_get_acis_empty");
+  CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, version, BS, version);
+  if (dwg_ent_3dsolid_get_version (_3dsolid, &error) != version || error)
+    fail ("old API dwg_ent_3dsolid_get_version");
+  CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, num_blocks, BL, num_blocks);
+  CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, acis_data, TV, acis_data);
+  if ((acis_data
+       && strcmp ((char *)dwg_ent_3dsolid_get_acis_data (_3dsolid, &error),
+                  (char *)acis_data))
+      || error)
+    fail ("old API dwg_ent_3dsolid_get_acis_data");
 
-  // Returns version value
-  version = dwg_ent_3dsolid_get_version (_3dsolid, &error);
-  if (!error)
-    printf ("version of 3dsolid : " FORMAT_BS "\n", version);
-  else
-    printf ("error in reading version");
+  CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, wireframe_data_present, B,
+                   wireframe_data_present);
+  if (dwg_ent_3dsolid_get_wireframe_data_present (_3dsolid, &error)
+          != wireframe_data_present
+      || error)
+    fail ("old API dwg_ent_3dsolid_get_wireframe_data_present");
+  CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, point_present, B, point_present);
+  if (dwg_ent_3dsolid_get_point_present (_3dsolid, &error) != point_present
+      || error)
+    fail ("old API dwg_ent_3dsolid_get_point_present");
 
-  acis_data = dwg_ent_3dsolid_get_acis_data (_3dsolid, &error);
-  if (!error)
-    printf ("acis data of 3dsolid : %s", acis_data);
-  else
-    printf ("error in reading acis data");
+  CHK_ENTITY_3RD (_3dsolid, 3DSOLID, point, point);
+  dwg_ent_3dsolid_get_point (_3dsolid, &pt3d, &error);
+  if (error || memcmp (&point, &pt3d, sizeof (point)))
+    fail ("old API dwg_ent_3dsolid_get_point");
 
-  // Returns wireframe_data_present value
-  wireframe_data_present
-      = dwg_ent_3dsolid_get_wireframe_data_present (_3dsolid, &error);
-  if (!error)
-    printf ("wireframe data of 3dsolid : " FORMAT_B "\n",
-            wireframe_data_present);
-  else
-    printf ("error in reading wireframe data present");
-
-  point_present = dwg_ent_3dsolid_get_point_present (_3dsolid, &error);
-  if (!error)
-    printf ("point present of 3dsolid : " FORMAT_B "\n", point_present);
-  else
-    printf ("error in reading point present");
-
-  // Returns point values
-  dwg_ent_3dsolid_get_point (_3dsolid, &point, &error);
-  if (!error)
-    printf ("point of 3dsolid : x = %f, y = %f, z = %f\n", point.x, point.y,
-            point.z);
-  else
-    printf ("error in reading point");
-
-  num_isolines = dwg_ent_3dsolid_get_num_isolines (_3dsolid, &error);
-  if (!error)
-    printf ("num isolines of 3dsolid : " FORMAT_BL "\n", num_isolines);
-  else
-    printf ("error in reading num isolines");
-
-  isoline_present = dwg_ent_3dsolid_get_isoline_present (_3dsolid, &error);
-  if (!error)
-    printf ("isoline present of 3dsolid : " FORMAT_B "\n", isoline_present);
-  else
-    printf ("error in reading isoline present");
-
-  num_wires = dwg_ent_3dsolid_get_num_wires (_3dsolid, &error);
-  if (!error)
-    printf ("num wires of 3dsolid : " FORMAT_BL "\n", num_wires);
-  else
-    printf ("error in reading num wires");
+  CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, isoline_present, B, isoline_present);
+  if (dwg_ent_3dsolid_get_isoline_present (_3dsolid, &error) != isoline_present
+      || error)
+    fail ("old API dwg_ent_3dsolid_get_isoline_present");
+  CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, num_isolines, BL, num_isolines);
+  if (dwg_ent_3dsolid_get_num_isolines (_3dsolid, &error) != num_isolines || error)
+    fail ("old API dwg_ent_3dsolid_get_num_isolines");
+  CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, num_wires, BL, num_wires);
+  if (dwg_ent_3dsolid_get_num_wires (_3dsolid, &error) != num_wires || error)
+    fail ("old API dwg_ent_3dsolid_get_num_wires");
+  CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, num_silhouettes, BL, num_sil);
+  if (dwg_ent_3dsolid_get_num_silhouettes (_3dsolid, &error) != num_sil || error)
+    fail ("old API dwg_ent_3dsolid_get_num_sil");
 
   wire = dwg_ent_3dsolid_get_wires (_3dsolid, &error);
   if (!error)
     {
       for (i = 0; i < num_wires; i++)
-        printf ("wire[%u] of 3dsolid : " FORMAT_BL "\n", i,
-                wire[i].selection_marker);
+        ok ("3DSOLID.wire[%d]:" FORMAT_BL, i, wire[i].selection_marker);
+      free (wire);
     }
   else
-    printf ("error in reading wires");
-
-  num_sil = dwg_ent_3dsolid_get_num_silhouettes (_3dsolid, &error);
-  if (!error)
-    printf ("num sil of 3dsolid : " FORMAT_BL "\n", num_sil);
-  else
-    printf ("error in reading num silhouettes");
+    fail ("wires");
 
   sil = dwg_ent_3dsolid_get_silhouettes (_3dsolid, &error);
   if (!error)
     {
       for (i = 0; i < num_sil; i++)
-        printf ("silhouette[%u] of 3dsolid : " FORMAT_BL "\n", i,
-                sil[i].vp_id);
+        ok ("3DSOLID.silhouettes[%d]:" FORMAT_BL, i, sil[i].vp_id);
+      free (sil);
     }
   else
-    printf ("error in reading silhouettes");
+    fail ("silhouettes");
+
+  if (dwg_version >= R_2007 && _3dsolid->history_id) // if it did not fail before
+    {
+      CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, unknown_2007, BL, unknown_2007);
+      CHK_ENTITY_H (_3dsolid, 3DSOLID, history_id, history_id);
+    }
 }
