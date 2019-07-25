@@ -14,11 +14,16 @@ api_process (dwg_object *obj)
   Dwg_Version_Type version = obj->parent->header.version;
   dwg_ent_tolerance *tolerance = dwg_object_to_TOLERANCE (obj);
 
-  CHK_ENTITY_UTF8TEXT_W_OLD (tolerance, TOLERANCE, text_string, text_string);
-  /*if (version < R_2007 &&
-      (strcmp (dwg_ent_tolerance_get_text_string (tolerance, &error), text_string)
-       || error))
-       fail ("old API dwg_ent_tolerance_get_text_string");*/
+  if (tolerance->text_string)
+    {
+      CHK_ENTITY_UTF8TEXT_W_OLD (tolerance, TOLERANCE, text_string, text_string);
+      /*if (version < R_2007 &&
+        (strcmp (dwg_ent_tolerance_get_text_string (tolerance, &error), text_string)
+        || error))
+        fail ("old API dwg_ent_tolerance_get_text_string");*/
+    }
+  else
+    ok ("empty TOLERANCE.text_string");
   CHK_ENTITY_3RD_W_OLD (tolerance, TOLERANCE, ins_pt, ins_pt);
   CHK_ENTITY_3RD_W_OLD (tolerance, TOLERANCE, extrusion, ext);
   CHK_ENTITY_3RD_W_OLD (tolerance, TOLERANCE, x_direction, x_dir);

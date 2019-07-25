@@ -346,8 +346,9 @@ print_api (dwg_object *obj)
   { \
     Dwg_Version_Type _dwg_version = ent->parent->dwg->header.version; \
     if (_dwg_version < R_2007 && \
-        (strcmp (DWGAPI_ENT_NAME(ent, field) (ent, &error), value) \
-         || error)) \
+        ent->field && \
+        ((strcmp (DWGAPI_ENT_NAME(ent, field) (ent, &error), value)     \
+          || error))) \
       fail ("old API dwg_ent_" #ent "_get_ " #field ": \"%s\"", value); \
   }
 
