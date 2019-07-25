@@ -1,3 +1,7 @@
+/bits_test
+/decode_test
+/hash_test
+/dynapi_test
 /3dsolid
 /arc
 /attdef
@@ -38,5 +42,6 @@
 /vertex_3d
 /vertex_mesh
 /vertex_pface
+/vertex_pface_face
 /xline
 /xrecord

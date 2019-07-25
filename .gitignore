@@ -48,9 +48,6 @@ gcov.log
 /programs/*.gcno
 /programs/*.gcov
 /programs/*.gcda
-/test/testcases/*.gcov
-/test/testcases/*.gcno
-/test/testcases/*.gcda
 /test/xmlsuite/testsuite.gcov
 /test/xmlsuite/testsuite.gcno
 /test/xmlsuite/testsuite.gcda

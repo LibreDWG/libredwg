@@ -98,8 +98,6 @@ dynapi_test.c: dynapi_test.c.in $(top_srcdir)/include/dwg.h \
 TESTS = $(check_PROGRAMS)
 TESTS_ENVIRONMENT = \
   ASAN_OPTIONS="detect_leaks=0"
-#  INPUT=$(srcdir)/example_2000.dwg
-# todo: more dwg versions, in test/test-data
 
 bits_test.cbmc: bits_test.c ../../src/bits.c
 	cbmc -I. -I$(top_srcdir)/include -I/opt/local/include \
@@ -115,7 +113,6 @@ update-ignorance:
 EXTRA_DIST = \
 	tests_common.h \
 	common.c \
-	example_2000.dwg \
 	dynapi_test.c.in \
 	dynapi_test.c
 
