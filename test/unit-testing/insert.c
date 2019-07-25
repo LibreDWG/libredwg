@@ -31,8 +31,8 @@ api_process (dwg_object *obj)
       CHK_ENTITY_H (insert, INSERT, first_attrib, first_attrib);
       CHK_ENTITY_H (insert, INSERT, last_attrib, last_attrib);
     }
-    if (version >= R_2004 && insert->num_owned) {
-      //CHK_ENTITY_H (insert, INSERT, attrib_handles, attrib_handles[0]);
+    if (version >= R_2004) {
+      CHK_ENTITY_HV (insert, INSERT, attrib_handles, attrib_handles, num_owned);
     }
     CHK_ENTITY_H (insert, INSERT, seqend, seqend);
   }

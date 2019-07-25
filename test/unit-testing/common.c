@@ -253,7 +253,13 @@ print_api (dwg_object *obj)
   if (dwg_dynapi_entity_utf8text (ent, #name, #field, &value, NULL)) \
     ok (#name "." #field ":\t\"%s\"", value); \
   else \
-    fail (#name "." #field)
+    { \
+      Dwg_Version_Type _dwg_version = ent->parent->dwg->header.version; \
+      if (_dwg_version < R_2007) \
+        fail (#name "." #field ":\t\"%s\"", value); \
+      else \
+        fail (#name "." #field); \
+    }
 
 #define CHK_ENTITY_TYPE(ent, name, field, type, value) \
   if (dwg_dynapi_entity_value (ent, #name, #field, &value, NULL)) { \
@@ -324,10 +330,10 @@ print_api (dwg_object *obj)
         value.y == ent->field.y &&  \
         value.z == ent->field.z) \
       ok (#name "." #field ":\t(%f, %f, %f)", value.x, value.y, \
-          value.z);                                               \
+          value.z);                                             \
     else \
       fail (#name "." #field ":\t(%f, %f, %f)", value.x, value.y, \
-            value.z);                                               \
+            value.z);                                             \
   } \
   else \
     fail (#name "." #field)
@@ -335,13 +341,23 @@ print_api (dwg_object *obj)
 #define _DWGAPI_ENT_NAME(name, field) dwg_ent_ ## name ## _get_ ##field
 #define DWGAPI_ENT_NAME(ent, field) _DWGAPI_ENT_NAME(ent, field)
 
+#define CHK_ENTITY_UTF8TEXT_W_OLD(ent, name, field, value) \
+  CHK_ENTITY_UTF8TEXT (ent, name, field, value); \
+  { \
+    Dwg_Version_Type _dwg_version = ent->parent->dwg->header.version; \
+    if (_dwg_version < R_2007 && \
+        (strcmp (DWGAPI_ENT_NAME(ent, field) (ent, &error), value) \
+         || error)) \
+      fail ("old API dwg_ent_" #ent "_get_ " #field ": \"%s\"", value); \
+  }
+
 #define CHK_ENTITY_TYPE_W_OLD(ent, name, field, type, value) \
-  CHK_ENTITY_TYPE(ent, name, field, type, value); \
+  CHK_ENTITY_TYPE (ent, name, field, type, value); \
   if (DWGAPI_ENT_NAME(ent, field) (ent, &error) != value || error) \
     fail ("old API dwg_ent_" #ent "_get_ " #field)
 
 #define CHK_ENTITY_2RD_W_OLD(ent, name, field, value) \
-  CHK_ENTITY_2RD(ent, name, field, value); \
+  CHK_ENTITY_2RD (ent, name, field, value); \
   { \
     dwg_point_2d _pt2d; \
     DWGAPI_ENT_NAME(ent, field) (ent, &_pt2d, &error); \
@@ -350,7 +366,7 @@ print_api (dwg_object *obj)
   }
 
 #define CHK_ENTITY_3RD_W_OLD(ent, name, field, value) \
-  CHK_ENTITY_3RD(ent, name, field, value); \
+  CHK_ENTITY_3RD (ent, name, field, value); \
   { \
     dwg_point_3d _pt3d; \
     DWGAPI_ENT_NAME(ent, field) (ent, &_pt3d, &error); \

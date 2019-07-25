@@ -4,7 +4,7 @@
 void
 api_process (dwg_object *obj)
 {
-  int error;
+  int error = 0;
   double elevation, thickness, rotation, height, oblique_ang,
     width_factor, rdvalue;
   BITCODE_BS generation, vert_align, horiz_align, field_length,
@@ -21,9 +21,11 @@ api_process (dwg_object *obj)
 
   dwg_ent_attdef *attdef = dwg_object_to_ATTDEF (obj);
 
-  CHK_ENTITY_UTF8TEXT (attdef, ATTDEF, default_value, text_value);
-  if (strcmp (dwg_ent_attdef_get_default_value (attdef, &error), text_value) || error)
-    fail ("old API dwg_ent_attdef_get_default_value");
+  CHK_ENTITY_UTF8TEXT_W_OLD (attdef, ATTDEF, default_value, text_value);
+  /*if (version < R_2007 &&
+      (strcmp (dwg_ent_attdef_get_default_value (attdef, &error), text_value)
+       || error))
+       fail ("old API dwg_ent_attdef_get_default_value"); */
   CHK_ENTITY_UTF8TEXT (attdef, ATTDEF, tag, text_value);
   CHK_ENTITY_UTF8TEXT (attdef, ATTDEF, prompt, text_value);
 

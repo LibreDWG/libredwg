@@ -1048,7 +1048,7 @@ DWG_ENTITY_END
           return DWG_ERR_VALUEOUTOFBOUNDS; \
       } \
     DXF { \
-      FIELD_VALUE(blockname) = dwg_dim_blockname(dwg,obj); \
+      FIELD_VALUE(blockname) = dwg_dim_blockname(dwg, obj); \
       FIELD_BE (extrusion, 210); \
       FIELD_T (blockname, 2); \
       FIELD_3BD (def_pt, 10); \
@@ -1157,8 +1157,8 @@ DWG_ENTITY(DIMENSION_ALIGNED)
   SUBCLASS (AcDbDimension)
   DIMENSION_COMMON_DECODE;
   SUBCLASS (AcDbAlignedDimension)
-  FIELD_3BD (_13_pt, 13);
-  FIELD_3BD (_14_pt, 14);
+  FIELD_3BD (_13_pt, 13); // TODO: rename
+  FIELD_3BD (_14_pt, 14); // TODO: rename
   DECODER_OR_ENCODER {
     FIELD_3BD (def_pt, 10);
   }
