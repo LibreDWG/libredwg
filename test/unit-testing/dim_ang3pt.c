@@ -43,7 +43,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD_W_OLD (dim_ang3pt, DIMENSION_ANG3PT, def_pt, pt10);
   CHK_ENTITY_3RD_W_OLD (dim_ang3pt, DIMENSION_ANG3PT, first_arc_pt,
                         first_arc_pt);
-  CHK_ENTITY_3RD (dim_ang3pt, DIMENSION_ALIGNED, _13_pt, pt13);
+  CHK_ENTITY_3RD (dim_ang3pt, DIMENSION_ANG3PT, _13_pt, pt13);
   dwg_ent_dim_ang3pt_get_13_pt (dim_ang3pt, &pt3d, &error);
   if (error || memcmp (&pt13, &pt3d, sizeof (pt13)))
     fail ("old API dwg_ent_dim_ang3pt_get_13_pt");
