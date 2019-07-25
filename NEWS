@@ -65,6 +65,8 @@ Other newsworthy changes:
     overflow.
   * Better LOG_TRACE [rcount1], [rcount2] logging, expanded to the actual
     index.
+  * Removed the dejagnu based test/testcases, merged with proper
+    test/unit-testing
 
 LibreDWG version 0.8 - released 2019/6/25 - still alpha:
 
