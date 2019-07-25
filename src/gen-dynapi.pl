@@ -366,7 +366,7 @@ for (<DATA>) {
             $fields = "_dwg_3DSOLID_fields";
           } elsif ($k eq 'XLINE') {
             $fields = "_dwg_RAY_fields";
-          } elsif ($k =~ /^ VERTEX_(MESH|PFACE)$/) {
+          } elsif ($k =~ /^VERTEX_(MESH|PFACE)$/) {
             $fields = "_dwg_VERTEX_3D_fields";
           }
           printf $fh "  { \"%s\", %d, %s },\t/* %d */\n",

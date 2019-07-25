@@ -4010,8 +4010,8 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "VBA_PROJECT", 81, _dwg_VBA_PROJECT_fields },	/* 143 */
   { "VERTEX_2D", 10, _dwg_VERTEX_2D_fields },	/* 144 */
   { "VERTEX_3D", 11, _dwg_VERTEX_3D_fields },	/* 145 */
-  { "VERTEX_MESH", 12, NULL },	/* 146 */
-  { "VERTEX_PFACE", 13, NULL },	/* 147 */
+  { "VERTEX_MESH", 12, _dwg_VERTEX_3D_fields },	/* 146 */
+  { "VERTEX_PFACE", 13, _dwg_VERTEX_3D_fields },	/* 147 */
   { "VERTEX_PFACE_FACE", 14, _dwg_VERTEX_PFACE_FACE_fields },	/* 148 */
   { "VIEW", 61, _dwg_VIEW_fields },	/* 149 */
   { "VIEWPORT", 34, _dwg_VIEWPORT_fields },	/* 150 */

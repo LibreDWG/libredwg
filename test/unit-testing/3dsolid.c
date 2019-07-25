@@ -7,7 +7,7 @@ api_process (dwg_object *obj)
   int error;
   BITCODE_BL i;
   BITCODE_BS version;
-  BITCODE_BL num_blocks, num_isolines, num_wires, num_sil, blvalue;
+  BITCODE_BL num_blocks, num_isolines, num_wires, num_sil, unknown_2007;
   unsigned char *acis_data;
   BITCODE_B wireframe_data_present, point_present, isoline_present;
   BITCODE_B acis_empty, acis2_empty;
@@ -83,9 +83,9 @@ api_process (dwg_object *obj)
   else
     fail ("silhouettes");
 
-  CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, unknown_2007, BL, blvalue);
-  if (dwg_version >= R_2007)
+  if (dwg_version >= R_2007 && _3dsolid->history_id) // if it did not fail before
     {
+      CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, unknown_2007, BL, unknown_2007);
       CHK_ENTITY_H (_3dsolid, 3DSOLID, history_id, history_id);
     }
 }

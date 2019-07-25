@@ -1796,13 +1796,17 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
                     "of 3dsolid object parsing (acis_empty_bit==0).\n");
         }
 
-      SINCE (R_2007) {
+      if (FIELD_VALUE (version) > 1) {
+        SINCE (R_2007) {
           FIELD_BL (unknown_2007, 0);
+        }
       }
 
       COMMON_ENTITY_HANDLE_DATA;
-      SINCE (R_2007) {
+      if (FIELD_VALUE (version) > 1) {
+        SINCE (R_2007) {
           FIELD_HANDLE (history_id, ANYCODE, 350);
+        }
       }
     }
   return error;
@@ -1876,10 +1880,18 @@ static int free_3dsolid(Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _
       END_REPEAT (silhouettes);
     }
 
+  FIELD_B (acis_empty_bit, 0);
+  if (FIELD_VALUE (version) > 1) {
+    SINCE (R_2007) {
+      FIELD_BL (unknown_2007, 0);
+    }
+  }
   COMMON_ENTITY_HANDLE_DATA;
 
-  SINCE (R_2007) {
-    FIELD_HANDLE (history_id, ANYCODE, 350);
+  if (FIELD_VALUE (version) > 1) {
+    SINCE (R_2007) {
+      FIELD_HANDLE (history_id, ANYCODE, 350);
+    }
   }
   return error;
 }
