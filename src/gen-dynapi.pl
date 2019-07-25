@@ -640,11 +640,24 @@ EOF
         dimstyles => 'num_entries',
         vport_entity_headers => 'num_entries',
         entry_handles => 'num_entries',
+        encr_sat_data => 'num_blocks',
         );
       my $countfield = exists $countfield{$var} ? $countfield{$var} : "num_$var";
       $countfield = 'num_dashes' if $name eq 'LTYPE' and $var eq 'styles';
       my $count = 1;
-      if ($var eq 'reactors' and $type eq 'BITCODE_H*') {
+      if ($var eq 'encr_sat_data') {
+        print $fh <<"EOF";
+  {
+    $type $var;
+    if (dwg_dynapi_entity_value ($lname, "$name", "$var", &$svar, NULL)
+        && !memcmp (&$svar, &$lname->$svar, sizeof ($lname->$svar)))
+      pass ();
+    else
+      fail ("$name.$var [$stype]");
+  }
+EOF
+      }
+      elsif ($var eq 'reactors' and $type eq 'BITCODE_H*') {
         print $fh <<"EOF";
   {
     $type $var;

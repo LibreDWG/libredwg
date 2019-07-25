@@ -5538,13 +5538,11 @@ static int test__3DSOLID (const Dwg_Object *obj)
   }
   {
     char ** encr_sat_data;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "num_encr_sat_data", &count, NULL)
-        && dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "encr_sat_data", &encr_sat_data, NULL)
-)
+    if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "encr_sat_data", &encr_sat_data, NULL)
+        && !memcmp (&encr_sat_data, &_3dsolid->encr_sat_data, sizeof (_3dsolid->encr_sat_data)))
       pass ();
     else
-      fail ("3DSOLID.encr_sat_data [char **] * %u num_encr_sat_data", count);
+      fail ("3DSOLID.encr_sat_data [char **]");
   }
   {
     struct _dwg_entity_3DSOLID* extra_acis_data;
@@ -9859,13 +9857,11 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
   }
   {
     char ** encr_sat_data;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "num_encr_sat_data", &count, NULL)
-        && dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "encr_sat_data", &encr_sat_data, NULL)
-)
+    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "encr_sat_data", &encr_sat_data, NULL)
+        && !memcmp (&encr_sat_data, &extrudedsurface->encr_sat_data, sizeof (extrudedsurface->encr_sat_data)))
       pass ();
     else
-      fail ("EXTRUDEDSURFACE.encr_sat_data [char **] * %u num_encr_sat_data", count);
+      fail ("EXTRUDEDSURFACE.encr_sat_data [char **]");
   }
   {
     struct _dwg_entity_3DSOLID* extra_acis_data;
@@ -12565,13 +12561,11 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
   }
   {
     char ** encr_sat_data;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "num_encr_sat_data", &count, NULL)
-        && dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "encr_sat_data", &encr_sat_data, NULL)
-)
+    if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "encr_sat_data", &encr_sat_data, NULL)
+        && !memcmp (&encr_sat_data, &loftedsurface->encr_sat_data, sizeof (loftedsurface->encr_sat_data)))
       pass ();
     else
-      fail ("LOFTEDSURFACE.encr_sat_data [char **] * %u num_encr_sat_data", count);
+      fail ("LOFTEDSURFACE.encr_sat_data [char **]");
   }
   {
     BITCODE_BD end_draft_angle;
@@ -14815,13 +14809,11 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
   }
   {
     char ** encr_sat_data;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "num_encr_sat_data", &count, NULL)
-        && dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "encr_sat_data", &encr_sat_data, NULL)
-)
+    if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "encr_sat_data", &encr_sat_data, NULL)
+        && !memcmp (&encr_sat_data, &planesurface->encr_sat_data, sizeof (planesurface->encr_sat_data)))
       pass ();
     else
-      fail ("PLANESURFACE.encr_sat_data [char **] * %u num_encr_sat_data", count);
+      fail ("PLANESURFACE.encr_sat_data [char **]");
   }
   {
     struct _dwg_entity_3DSOLID* extra_acis_data;
@@ -16022,13 +16014,11 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
   }
   {
     char ** encr_sat_data;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "num_encr_sat_data", &count, NULL)
-        && dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "encr_sat_data", &encr_sat_data, NULL)
-)
+    if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "encr_sat_data", &encr_sat_data, NULL)
+        && !memcmp (&encr_sat_data, &revolvedsurface->encr_sat_data, sizeof (revolvedsurface->encr_sat_data)))
       pass ();
     else
-      fail ("REVOLVEDSURFACE.encr_sat_data [char **] * %u num_encr_sat_data", count);
+      fail ("REVOLVEDSURFACE.encr_sat_data [char **]");
   }
   {
     struct _dwg_entity_3DSOLID* extra_acis_data;
@@ -17118,13 +17108,11 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
   }
   {
     char ** encr_sat_data;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "num_encr_sat_data", &count, NULL)
-        && dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "encr_sat_data", &encr_sat_data, NULL)
-)
+    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "encr_sat_data", &encr_sat_data, NULL)
+        && !memcmp (&encr_sat_data, &sweptsurface->encr_sat_data, sizeof (sweptsurface->encr_sat_data)))
       pass ();
     else
-      fail ("SWEPTSURFACE.encr_sat_data [char **] * %u num_encr_sat_data", count);
+      fail ("SWEPTSURFACE.encr_sat_data [char **]");
   }
   {
     struct _dwg_entity_3DSOLID* extra_acis_data;
@@ -35712,7 +35700,7 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
   int error = 0;
   if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
     return 0;
-#line 35715 "dynapi_test.c"
+#line 35703 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
