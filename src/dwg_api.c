@@ -56,8 +56,8 @@ static unsigned int loglevel = DWG_LOGLEVEL_ERROR;
  * Extracts all entities of this type from a block header (mspace or pspace),
  * and returns a malloced NULL-terminated array.
  */
-DWG_GETALL_ENTITY (
-    TEXT) //< \fn Dwg_Entity_TEXT* dwg_getall_TEXT(Dwg_Object_Ref *hdr)
+//< \fn Dwg_Entity_TEXT* dwg_getall_TEXT(Dwg_Object_Ref *hdr)
+DWG_GETALL_ENTITY (TEXT)
 DWG_GETALL_ENTITY (ATTRIB)
 DWG_GETALL_ENTITY (ATTDEF)
 DWG_GETALL_ENTITY (BLOCK)
@@ -1309,9 +1309,13 @@ dwg_ent_circle_get_center (const dwg_ent_circle *restrict circle,
 #ifndef HAVE_NONNULL
       && point
 #endif
-      && dwg_dynapi_entity_value ((void *)circle, "CIRCLE", "center", point,
-                                  NULL))
-    *error = 0;
+      )
+    {
+      *error = 0;
+      point->x = circle->center.x;
+      point->y = circle->center.y;
+      point->z = circle->center.z;
+    }
   else
     {
       LOG_ERROR ("%s: empty point or circle", __FUNCTION__)
@@ -1356,13 +1360,10 @@ double
 dwg_ent_circle_get_radius (const dwg_ent_circle *restrict circle,
                            int *restrict error)
 {
-  double radius;
-  if (circle
-      && dwg_dynapi_entity_value ((void *)circle, "CIRCLE", "radius", &radius,
-                                  NULL))
+  if (circle)
     {
       *error = 0;
-      return radius;
+      return circle->radius;
     }
   else
     {
@@ -1408,13 +1409,10 @@ double
 dwg_ent_circle_get_thickness (const dwg_ent_circle *restrict circle,
                               int *restrict error)
 {
-  double thickness;
-  if (circle
-      && dwg_dynapi_entity_value ((void *)circle, "CIRCLE", "radius",
-                                  &thickness, NULL))
+  if (circle)
     {
       *error = 0;
-      return thickness;
+      return circle->thickness;
     }
   else
     {
@@ -1436,11 +1434,10 @@ void
 dwg_ent_circle_set_thickness (dwg_ent_circle *restrict circle,
                               const double thickness, int *restrict error)
 {
-  if (circle
-      && dwg_dynapi_entity_set_value ((void *)circle, "CIRCLE", "thickness",
-                                      &thickness, 0))
+  if (circle)
     {
       *error = 0;
+      circle->thickness = thickness;
     }
   else
     {
@@ -21200,6 +21197,13 @@ dwg_obj_generic_to_object (const dwg_obj_generic *restrict obj,
     {
       dwg_data *dwg = obj->parent->dwg;
       dwg_object *retval = &dwg->object[obj->parent->objid];
+      if (obj->parent->objid > dwg->num_objects ||
+          dwg->header.version > R_AFTER)
+        {
+          *error = 1;
+          LOG_ERROR("%s: Invalid obj", __FUNCTION__)
+          return NULL;
+        }
       *error = 0;
       if (dwg_version == R_INVALID)
         dwg_version = (Dwg_Version_Type)retval->parent->header.version;

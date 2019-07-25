@@ -747,7 +747,7 @@ close $fh;
 
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 738 "gen-dynapi.pl"
+#line 750 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -813,7 +813,7 @@ static const struct _name_type_fields dwg_name_types[] = {
   @@enum DWG_OBJECT_TYPE@@
 };
 
-#line 804 "gen-dynapi.pl"
+#line 817 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
@@ -1074,6 +1074,7 @@ dwg_dynapi_common_value(void *restrict _obj, const char *restrict fieldname,
 
     if (obj->supertype == DWG_SUPERTYPE_ENTITY)
       {
+        _obj = obj->tio.entity;
         f = (Dwg_DYNAPI_field *)bsearch (
             fieldname, _dwg_object_entity_fields,
             ARRAY_SIZE (_dwg_object_entity_fields) - 1, /* NULL terminated */
@@ -1081,6 +1082,7 @@ dwg_dynapi_common_value(void *restrict _obj, const char *restrict fieldname,
       }
     else if (obj->supertype == DWG_SUPERTYPE_OBJECT)
       {
+        _obj = obj->tio.object;
         f = (Dwg_DYNAPI_field *)bsearch (
             fieldname, _dwg_object_object_fields,
             ARRAY_SIZE (_dwg_object_object_fields) - 1, /* NULL terminated */
@@ -1130,6 +1132,7 @@ dwg_dynapi_common_utf8text(void *restrict _obj, const char *restrict fieldname,
     if (obj->supertype == DWG_SUPERTYPE_ENTITY)
       {
         dwg = obj ? obj->parent : ((Dwg_Entity_UNKNOWN_ENT *)_obj)->parent->dwg;
+        _obj = obj->tio.entity;
         f = (Dwg_DYNAPI_field *)bsearch (
             fieldname, _dwg_object_entity_fields,
             ARRAY_SIZE (_dwg_object_entity_fields) - 1, /* NULL terminated */
@@ -1138,6 +1141,7 @@ dwg_dynapi_common_utf8text(void *restrict _obj, const char *restrict fieldname,
     else if (obj->supertype == DWG_SUPERTYPE_OBJECT)
       {
         dwg = obj ? obj->parent : ((Dwg_Object_UNKNOWN_OBJ *)_obj)->parent->dwg;
+        _obj = obj->tio.object;
         f = (Dwg_DYNAPI_field *)bsearch (
             fieldname, _dwg_object_object_fields,
             ARRAY_SIZE (_dwg_object_object_fields) - 1, /* NULL terminated */
@@ -1326,6 +1330,7 @@ dwg_dynapi_common_set_value (void *restrict _obj,
       }
     if (obj->supertype == DWG_SUPERTYPE_ENTITY)
       {
+        _obj = obj->tio.entity;
         f = (Dwg_DYNAPI_field *)bsearch (
             fieldname, _dwg_object_entity_fields,
             ARRAY_SIZE (_dwg_object_entity_fields) - 1, /* NULL terminated */
@@ -1333,6 +1338,7 @@ dwg_dynapi_common_set_value (void *restrict _obj,
       }
     else if (obj->supertype == DWG_SUPERTYPE_OBJECT)
       {
+        _obj = obj->tio.object;
         f = (Dwg_DYNAPI_field *)bsearch (
             fieldname, _dwg_object_object_fields,
             ARRAY_SIZE (_dwg_object_object_fields) - 1, /* NULL terminated */

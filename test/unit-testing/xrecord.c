@@ -24,7 +24,7 @@ api_process (dwg_object *obj)
       for (BITCODE_BL i=0; i<num_xdata; i++)
         {
           if (!memcmp(&xdata[i], &xrecord->xdata[i], sizeof (Dwg_Resbuf)))
-            ok ("xrecord->xdata[%d]", i);
+            pass ();
           else
             fail ("xrecord->xdata[%d]", i);
         }

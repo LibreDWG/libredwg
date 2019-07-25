@@ -14,7 +14,7 @@
 dwg_data g_dwg;
 
 /// This function declaration reads the DWG file
-int test_code (char *filename);
+int test_code (const char *filename);
 
 /// Return the name of a handle
 char *handle_name (const Dwg_Data *restrict dwg,
@@ -37,8 +37,9 @@ void low_level_process (dwg_object *obj);
 /// API based processing function declaration
 void api_process (dwg_object *obj);
 
-/// dynapi based processing function declaration
-void dynapi_process (dwg_object *obj);
+void api_common_entity (dwg_object *obj);
+
+void api_common_object (dwg_object *obj);
 
 /// API based printing function declaration
 void print_api (dwg_object *obj);
@@ -65,8 +66,8 @@ main (int argc, char *argv[])
          "example_2013.dwg",
          "example_2018.dwg",
          "example_r14.dwg",
-         "2000/PolyLine2D.dwg",
-         "2007/PolyLine3D.dwg",
+         //"2000/PolyLine2D.dwg",
+         //"2007/PolyLine3D.dwg",
          NULL
         };
       for (ptr = (char**)&files[0]; *ptr; ptr++)
@@ -85,20 +86,39 @@ main (int argc, char *argv[])
           else
             error += test_code (*ptr);
         }
+      if (!numpassed() && !numfailed())
+        {
+          if (
+              DWG_TYPE == DWG_TYPE_POLYLINE_2D ||
+              DWG_TYPE == DWG_TYPE_SEQEND ||
+              DWG_TYPE == DWG_TYPE_VERTEX_2D
+              )
+            error += test_code ("../test-data/2000/PolyLine2D.dwg");
+          if (
+              DWG_TYPE == DWG_TYPE_POLYLINE_MESH ||
+              DWG_TYPE == DWG_TYPE_VERTEX_MESH ||
+              DWG_TYPE == DWG_TYPE_TRACE ||
+              DWG_TYPE == DWG_TYPE_DIMENSION_ANG3PT ||
+              DWG_TYPE == DWG_TYPE_DIMENSION_DIAMETER ||
+              DWG_TYPE == DWG_TYPE_DIMENSION_RADIUS ||
+              DWG_TYPE == DWG_TYPE_OLE2FRAME
+              )
+            error += test_code ("../test-data/TS1.dwg");
+        }
     }
   else
       error = test_code (input);
 
 #ifdef DWG_TYPE
-  if (!numpassed())
-    fprintf (stderr, "TODO no coverage for this type %d\n", DWG_TYPE);
+  if (!numpassed() && !numfailed())
+    printf ("TODO no coverage for this type %d\n", DWG_TYPE);
 #endif
   return error;
 }
 
 /// read the DWG file
 int
-test_code (char *filename)
+test_code (const char *filename)
 {
   int error;
 
@@ -181,7 +201,40 @@ output_test (dwg_data *dwg)
     output_BLOCK_HEADER (ref);
 
 #ifdef DWG_TYPE
-  if (DWG_TYPE == DWG_TYPE_ATTDEF)
+  if (!numpassed() && !numfailed())
+    {
+      obj = &dwg->object[0];
+      while ((obj = dwg_next_object (obj)))
+        {
+          //printf ("%s [%d]\n", obj->name, obj->index);
+          if (obj->type == DWG_TYPE || obj->fixedtype == DWG_TYPE)
+            {
+              output_object (obj);
+            }
+        }
+    }
+  /* also process blocks? we better find DWGs with these */
+#if 0
+  if (DWG_TYPE == DWG_TYPE_ATTDEF ||
+      DWG_TYPE == DWG_TYPE_BLOCK ||
+      DWG_TYPE == DWG_TYPE_BODY ||
+      DWG_TYPE == DWG_TYPE_CIRCLE ||
+      DWG_TYPE == DWG_TYPE_DIMENSION_ANG3PT ||
+      DWG_TYPE == DWG_TYPE_DIMENSION_DIAMETER ||
+      DWG_TYPE == DWG_TYPE_DIMENSION_RADIUS ||
+      DWG_TYPE == DWG_TYPE_ENDBLK ||
+      DWG_TYPE == DWG_TYPE_MINSERT ||
+      DWG_TYPE == DWG_TYPE_OLE2FRAME ||
+      DWG_TYPE == DWG_TYPE_POLYLINE_2D ||
+      DWG_TYPE == DWG_TYPE_POLYLINE_MESH ||
+      DWG_TYPE == DWG_TYPE_SEQEND ||
+      DWG_TYPE == DWG_TYPE_SHAPE ||
+      DWG_TYPE == DWG_TYPE_SOLID ||
+      DWG_TYPE == DWG_TYPE_TRACE ||
+      DWG_TYPE == DWG_TYPE_VERTEX_2D ||
+      DWG_TYPE == DWG_TYPE_VERTEX_MESH ||
+      DWG_TYPE == DWG_TYPE_XRECORD
+      )
     {
       /* and now also all subtypes and entities in blocks */
       unsigned int i;
@@ -198,6 +251,7 @@ output_test (dwg_data *dwg)
         }
       free (hdr_refs);
     }
+#endif
 #endif
 }
 
@@ -218,8 +272,7 @@ output_object (dwg_object *obj)
       printf ("object is NULL\n");
       return;
     }
-
-  if (dwg_object_get_type (obj) == DWG_TYPE)
+  if (obj->type == DWG_TYPE || obj->fixedtype == DWG_TYPE)
     {
       output_process (obj);
     }
@@ -246,7 +299,74 @@ print_api (dwg_object *obj)
   printf ("Test dwg_api and dynapi:\n");
 #endif
   api_process (obj);
+
+  if (obj->supertype == DWG_SUPERTYPE_ENTITY)
+    api_common_entity (obj);
+  else if (obj->supertype == DWG_SUPERTYPE_OBJECT)
+    api_common_object (obj);
   printf ("\n");
+}
+
+#define CHK_COMMON_TYPE(ent, field, type, value)               \
+  {                                                            \
+    if (dwg_dynapi_common_value (ent, #field, &value, NULL)) { \
+      if (value == ent->parent->field)                         \
+        pass ();                                               \
+      else                                                     \
+        fail (#field ":\t" FORMAT_##type, value);              \
+    }                                                          \
+    else                                                       \
+      fail (#field);                                           \
+  }
+
+#define CHK_COMMON_H(ent, field, hdl)                                   \
+  {                                                                     \
+    if (dwg_dynapi_common_value (ent, #field, &hdl, NULL) && hdl) {     \
+      char *_hdlname = dwg_dynapi_handle_name (ent->parent->dwg, hdl);  \
+      if (hdl == ent->parent->field)                                    \
+        ok (#field ": %s (%x.%d.%lX)", _hdlname ? : "",                 \
+            hdl->handleref.code,                                        \
+            hdl->handleref.size, hdl->handleref.value);                 \
+      else                                                              \
+        fail (#field ": %s (%x.%d.%lX)", _hdlname ? : "",               \
+              hdl->handleref.code,                                      \
+              hdl->handleref.size, hdl->handleref.value);               \
+    }                                                                   \
+    else                                                                \
+      fail (#field);                                                    \
+  }
+
+void
+api_common_entity (dwg_object *obj)
+{
+  BITCODE_BB entmode;
+  BITCODE_H handle;
+  Dwg_Object_Entity *_ent =  obj->tio.entity;
+  Dwg_Entity_LINE *ent =  obj->tio.entity->tio.LINE;
+
+  CHK_COMMON_TYPE (ent, entmode, BB, entmode);
+  if (entmode == 3)
+    CHK_COMMON_H (ent, ownerhandle, handle);
+  CHK_COMMON_H (ent, layer, handle);
+  if (_ent->linetype_flags == 3)
+    CHK_COMMON_H (ent, ltype, handle);
+  if (_ent->material_flags == 3)
+    CHK_COMMON_H (ent, material, handle);
+  if (_ent->shadow_flags == 3)
+    CHK_COMMON_H (ent, shadow, handle);
+  if (_ent->plotstyle_flags == 3)
+    CHK_COMMON_H (ent, plotstyle, handle);
+  if (_ent->has_full_visualstyle)
+    CHK_COMMON_H (ent, full_visualstyle, handle);
+  if (_ent->has_face_visualstyle)
+    CHK_COMMON_H (ent, face_visualstyle, handle);
+  if (_ent->has_edge_visualstyle)
+    CHK_COMMON_H (ent, edge_visualstyle, handle);
+}
+
+void
+api_common_object (dwg_object *obj)
+{
 }
 
 #define CHK_ENTITY_UTF8TEXT(ent, name, field, value) \
@@ -349,13 +469,13 @@ print_api (dwg_object *obj)
         ent->field && \
         ((strcmp (DWGAPI_ENT_NAME(ent, field) (ent, &error), value)     \
           || error))) \
-      fail ("old API dwg_ent_" #ent "_get_ " #field ": \"%s\"", value); \
+      fail ("old API dwg_ent_" #ent "_get_" #field ": \"%s\"", value); \
   }
 
 #define CHK_ENTITY_TYPE_W_OLD(ent, name, field, type, value) \
   CHK_ENTITY_TYPE (ent, name, field, type, value); \
   if (DWGAPI_ENT_NAME(ent, field) (ent, &error) != value || error) \
-    fail ("old API dwg_ent_" #ent "_get_ " #field)
+    fail ("old API dwg_ent_" #ent "_get_" #field)
 
 #define CHK_ENTITY_2RD_W_OLD(ent, name, field, value) \
   CHK_ENTITY_2RD (ent, name, field, value); \
@@ -363,7 +483,7 @@ print_api (dwg_object *obj)
     dwg_point_2d _pt2d; \
     DWGAPI_ENT_NAME(ent, field) (ent, &_pt2d, &error); \
     if (error || memcmp (&value, &_pt2d, sizeof (value))) \
-      fail ("old API dwg_ent_" #ent "_get_ " #field); \
+      fail ("old API dwg_ent_" #ent "_get_" #field); \
   }
 
 #define CHK_ENTITY_3RD_W_OLD(ent, name, field, value) \
@@ -372,7 +492,7 @@ print_api (dwg_object *obj)
     dwg_point_3d _pt3d; \
     DWGAPI_ENT_NAME(ent, field) (ent, &_pt3d, &error); \
     if (error || memcmp (&value, &_pt3d, sizeof (value))) \
-      fail ("old API dwg_ent_" #ent "_get_ " #field); \
+      fail ("old API dwg_ent_" #ent "_get_" #field); \
   }
 
 // allow old deprecated API

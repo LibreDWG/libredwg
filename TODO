@@ -78,6 +78,10 @@
   See the work/vapi branch.
 * add some UI to inspect the DWG internal structs (dwgiview), and maybe a viewer (dwgview).
   Started with perl-tk
+* add dwg coverage for the following unit-testing entities:
+  xrecord, vertex_mesh, vertex_2d, trace, shape, seqend, polyline_mesh, polyline_2d,
+  ole2frame, minsert, endblk, dim_radius, dim_diameter, dim_ang3pt, circle, body,
+  block
 
 * fix the remaining leaks: unit-testing
 * finish documentation of the API functions, refman.
