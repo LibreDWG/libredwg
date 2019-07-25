@@ -30,8 +30,7 @@ main (int argc, char const *argv[])
       // i = maxrand(i)+1; for a more realistic workload
       hash_set (hash, rnd, rnd + 1);
     }
-  //pass ("hash size(%d) => %u", max, hash->size);
-  pass ();
+  ok ("hash size(%d) => %u", max, hash->size);
 
   for (i = 1; i < max / PRESSURE_FACTOR; i++)
     {

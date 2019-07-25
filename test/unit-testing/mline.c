@@ -2,92 +2,41 @@
 #include "common.c"
 
 void
-low_level_process (dwg_object *obj)
-{
-  unsigned int i;
-
-  dwg_ent_mline *mline = dwg_object_to_MLINE (obj);
-
-  printf ("scale of mline : %f\n", mline->scale);
-  printf ("just of mline : " FORMAT_RC "\n", mline->justification);
-  printf ("extrusion of mline : x = %f, y = %f, z = %f\n", mline->extrusion.x,
-          mline->extrusion.y, mline->extrusion.z);
-  printf ("base_point of mline : x = %f,y = %f,z = %f\n", mline->base_point.x,
-          mline->base_point.y, mline->base_point.z);
-  printf ("number of lines : " FORMAT_RC "\n", mline->num_lines);
-  printf ("number of verts : %ud\n", mline->num_verts);
-
-  for (i = 0; i < mline->num_verts; i++)
-    {
-      printf ("vertex of mline : x = %f, y = %f, z = %f\n",
-              mline->verts[i].vertex.x, mline->verts[i].vertex.y,
-              mline->verts[i].vertex.z);
-    }
-}
-
-void
 api_process (dwg_object *obj)
 {
   int error;
   double scale;
   BITCODE_RC just;
   BITCODE_RC num_lines;
-  BITCODE_BS i, num_verts;
+  BITCODE_BS i, num_verts, flags;
   dwg_point_3d base_point, ext; // 3d_points
-  dwg_mline_vertex *verts;
+  dwg_mline_vertex *verts, *v1;
+  BITCODE_H mlinestyle;
 
   dwg_ent_mline *mline = dwg_object_to_MLINE (obj);
 
-  scale = dwg_ent_mline_get_scale (mline, &error);
-  if (!error)
-    printf ("scale of mline : %f\n", scale);
-  else
-    printf ("error in reading scale \n");
+  CHK_ENTITY_TYPE_W_OLD (mline, MLINE, scale, BD, scale);
+  CHK_ENTITY_TYPE_W_OLD (mline, MLINE, justification, RC, just);
+  CHK_ENTITY_3RD_W_OLD (mline, MLINE, base_point, base_point);
+  CHK_ENTITY_3RD_W_OLD (mline, MLINE, extrusion, ext);
+  CHK_ENTITY_TYPE_W_OLD (mline, MLINE, flags, BS, flags);
+  CHK_ENTITY_TYPE_W_OLD (mline, MLINE, num_lines, RC, num_lines);
+  CHK_ENTITY_TYPE_W_OLD (mline, MLINE, num_verts, BS, num_verts);
 
-  just = dwg_ent_mline_get_justification (mline, &error);
-  if (!error)
-    printf ("just of mline : " FORMAT_RC "\n", just);
-  else
-    printf ("error in reading just \n");
-
-  dwg_ent_mline_get_extrusion (mline, &ext, &error);
-  if (!error)
-    printf ("extrusion of mline : x = %f, y = %f, z = %f\n", ext.x, ext.y,
-            ext.z);
-  else
-    printf ("error in reading extrusion \n");
-
-  // return mline base_point points
-  dwg_ent_mline_get_base_point (mline, &base_point, &error);
-  if (!error)
-    printf ("base_point of mline : x = %f, y = %f, z = %f\n", base_point.x,
-            base_point.y, base_point.z);
-  else
-    printf ("error in reading base_point \n");
-
-  num_lines = dwg_ent_mline_get_num_lines (mline, &error);
-  if (!error)
-    printf ("num lines of mline : " FORMAT_RC "\n", num_lines);
-  else
-    printf ("error in reading num lines \n");
-
-  num_verts = dwg_ent_mline_get_num_verts (mline, &error);
-  if (!error)
-    printf ("num verts of mline : " FORMAT_BS "\n", num_verts);
-  else
-    printf ("error in reading num verts \n");
-
+  if (!dwg_dynapi_entity_value (mline, "MLINE", "verts", &v1, NULL))
+    fail ("MLINE.verts");
   verts = dwg_ent_mline_get_verts (mline, &error);
-  if (!error)
+  if (error)
+    fail ("MLINE.verts");
+  else
     {
       for (i = 0; i < num_verts; i++)
         {
-          printf ("vertex of mline : x = %f, y = %f, z = %f\n",
-                  verts[i].vertex.x, verts[i].vertex.y, verts[i].vertex.z);
+          ok ("MLINE.vertex[%d]: (%f, %f, %f)", i,
+              verts[i].vertex.x, verts[i].vertex.y, verts[i].vertex.z);
+          if (memcmp (&v1[i].vertex, &verts[i].vertex, sizeof (verts[i].vertex)))
+            fail ("MLINE.verts[%d]", i);
         }
     }
-  else
-    {
-      printf ("error in reading verts of mline");
-    }
+  CHK_ENTITY_H (mline, MLINE, mlinestyle, mlinestyle);
 }

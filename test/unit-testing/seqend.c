@@ -12,7 +12,7 @@ api_process (dwg_object *obj)
   if (error1 || parent != obj->tio.entity)
     fail ("dwg_ent_generic_parent %p == %p", parent, obj->tio.entity);
   else
-    pass ();
+    ok ("dwg_ent_generic_parent");
 
   if (error2 || obj2->address != obj->address)
     fail ("dwg_ent_generic_to_object %lu == %lu", obj2->address,

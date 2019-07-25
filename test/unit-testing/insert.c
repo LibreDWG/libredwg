@@ -12,8 +12,8 @@ api_process (dwg_object *obj)
   BITCODE_BL num_owned;
   BITCODE_H block_header, first_attrib, last_attrib, seqend, *attrib_handles;
 
-  dwg_ent_insert *insert = dwg_object_to_INSERT (obj);
   Dwg_Version_Type version = obj->parent->header.version;
+  dwg_ent_insert *insert = dwg_object_to_INSERT (obj);
  
   CHK_ENTITY_3RD_W_OLD (insert, INSERT, ins_pt, ins_pt);
   CHK_ENTITY_3RD_W_OLD (insert, INSERT, scale, scale);

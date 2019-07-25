@@ -67,7 +67,7 @@ api_process (dwg_object *obj)
   if (!error)
     {
       for (i = 0; i < num_wires; i++)
-        printf ("3DSOLID.wire[%d]:" FORMAT_BL "\n", i, wire[i].selection_marker);
+        ok ("3DSOLID.wire[%d]:" FORMAT_BL, i, wire[i].selection_marker);
       free (wire);
     }
   else
@@ -77,7 +77,7 @@ api_process (dwg_object *obj)
   if (!error)
     {
       for (i = 0; i < num_sil; i++)
-        printf ("3DSOLID.silhouettes[%d]:" FORMAT_BL "\n", i, sil[i].vp_id);
+        ok ("3DSOLID.silhouettes[%d]:" FORMAT_BL, i, sil[i].vp_id);
       free (sil);
     }
   else

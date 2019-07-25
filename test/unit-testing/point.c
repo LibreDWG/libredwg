@@ -2,54 +2,24 @@
 #include "common.c"
 
 void
-low_level_process (dwg_object *obj)
-{
-  dwg_ent_point *point = dwg_object_to_POINT (obj);
-
-  printf ("points of point : x = %f, y = %f, z = %f\n", point->x, point->y,
-          point->z);
-  printf ("extrusion of point : x = %f, y = %f, z = %f\n", point->extrusion.x,
-          point->extrusion.y, point->extrusion.z);
-  printf ("thickness of point : %f\n", point->thickness);
-}
-
-void
 api_process (dwg_object *obj)
 {
   int error;
-  double thickness;
-  dwg_point_3d ext, points;
+  double thickness, x_ang;
+  dwg_point_3d ext, pt, pt1;
+
   dwg_ent_point *point = dwg_object_to_POINT (obj);
 
-  dwg_ent_point_get_point (point, &points, &error);
-  if (!error)
-    {
-      printf ("points of point : x = %f, y = %f, z = %f\n", points.x, points.y,
-              points.z);
-    }
+  CHK_ENTITY_TYPE (point, POINT, x, BD, pt.x);
+  CHK_ENTITY_TYPE (point, POINT, y, BD, pt.y);
+  CHK_ENTITY_TYPE (point, POINT, z, BD, pt.z);
+  dwg_ent_point_get_point (point, &pt1, &error);
+  if (error || memcmp (&pt, &pt1, sizeof (pt)))
+    fail ("old API dwg_ent_point_get_point");
   else
-    {
-      printf ("error in reading point \n");
-    }
+    pass ();
 
-  dwg_ent_point_get_extrusion (point, &ext, &error);
-  if (!error)
-    {
-      printf ("extrusion of point : x = %f, y = %f, z = %f\n", ext.x, ext.y,
-              ext.z);
-    }
-  else
-    {
-      printf ("error in reading extrusion \n");
-    }
-
-  thickness = dwg_ent_point_get_thickness (point, &error);
-  if (!error)
-    {
-      printf ("thickness of point : %f\n", thickness);
-    }
-  else
-    {
-      printf ("error in reading thickness\n");
-    }
+  CHK_ENTITY_TYPE_W_OLD (point, POINT, thickness, BD, thickness);
+  CHK_ENTITY_3RD_W_OLD (point, POINT, extrusion, ext);
+  CHK_ENTITY_TYPE (point, POINT, x_ang, BD, x_ang);
 }

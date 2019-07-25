@@ -31,7 +31,7 @@ bit_advance_position_tests (void)
 {
   Bit_Chain bitchain = strtobt ("10101010");
   if (bitchain.bit == 0 && bitchain.byte == 0)
-    pass ();
+    ok ("bit_advance_position");
   else
     fail ("bit_advance_position");
 }

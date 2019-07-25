@@ -16,13 +16,9 @@ read_literal_length_tests (void)
   Bit_Chain bitchain = strtobt ("00000101");
   unsigned char opcode = 0x05;
   if (read_literal_length (&bitchain, &opcode) == 0x08)
-    {
-      pass ();
-    }
+    ok ("read_literal_length");
   else
-    {
-      fail ("read_literal_length");
-    }
+    fail ("read_literal_length");
 }
 
 void
