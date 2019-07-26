@@ -5157,8 +5157,8 @@ typedef struct _dwg_object_entity
   BITCODE_BB linetype_flags;    /*!< r2000+ */
   BITCODE_BB plotstyle_flags;   /*!< r2000+ */
   BITCODE_BB material_flags;    /*!< r2007+ */
-  BITCODE_RC shadow_flags;      /*!< r2007+: 0 both, 1 casts, 2, receives, 3 no.
-                                     DXF 284 */
+  BITCODE_RC shadow_flags;      /*!< r2007+: 0 both, 1 casts, 2, receives,
+                                  3 has handle. DXF 284 */
   BITCODE_B has_full_visualstyle; /*!< r2010+ */
   BITCODE_B has_face_visualstyle; /*!< r2010+ */
   BITCODE_B has_edge_visualstyle; /*!< r2010+ */

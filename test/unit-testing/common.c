@@ -311,7 +311,7 @@ print_api (dwg_object *obj)
   {                                                            \
     if (dwg_dynapi_common_value (ent, #field, &value, NULL)) { \
       if (value == ent->parent->field)                         \
-        pass ();                                               \
+        pass (); /*(#field ":\t" FORMAT_##type, value);*/      \
       else                                                     \
         fail (#field ":\t" FORMAT_##type, value);              \
     }                                                          \
@@ -373,28 +373,67 @@ api_common_entity (dwg_object *obj)
   BITCODE_H handle;
   BITCODE_BL num_reactors, num_eed;
   BITCODE_H* reactors;
-  BITCODE_B xdic_missing_flag, has_ds_binary_data;
+  BITCODE_B xdic_missing_flag, has_ds_binary_data, picture_exists;
+  BITCODE_RC linewt;
+  BITCODE_RL picture_size_rl;
+  BITCODE_BLL picture_size;
+  BITCODE_BD linetype_scale;
+  BITCODE_BS invisible;
   Dwg_Object_Entity *_ent =  obj->tio.entity;
   Dwg_Entity_LINE *ent =  obj->tio.entity->tio.LINE;
+  Dwg_Version_Type version = obj->parent->header.version;
 
-  CHK_COMMON_TYPE (ent, entmode, BB, entmode);
-  if (entmode == 3)
+  CHK_COMMON_TYPE (ent, entmode, BB, entmode)
+  CHK_COMMON_TYPE (ent, picture_exists, B, picture_exists)
+  if (picture_exists)
+    {
+      if (version > R_2010)
+        CHK_COMMON_TYPE (ent, picture_size, BLL, picture_size)
+      else
+        CHK_COMMON_TYPE (ent, picture_size, RL, picture_size_rl);
+    }
+  if (entmode == 3 || entmode == 0)
     CHK_COMMON_H (ent, ownerhandle, handle);
   CHK_COMMON_H (ent, layer, handle);
-  if (_ent->linetype_flags == 3)
-    CHK_COMMON_H (ent, ltype, handle);
-  if (_ent->material_flags == 3)
-    CHK_COMMON_H (ent, material, handle);
-  if (_ent->shadow_flags == 3)
-    CHK_COMMON_H (ent, shadow, handle);
-  if (_ent->plotstyle_flags == 3)
-    CHK_COMMON_H (ent, plotstyle, handle);
-  if (_ent->has_full_visualstyle)
-    CHK_COMMON_H (ent, full_visualstyle, handle);
-  if (_ent->has_face_visualstyle)
-    CHK_COMMON_H (ent, face_visualstyle, handle);
-  if (_ent->has_edge_visualstyle)
-    CHK_COMMON_H (ent, edge_visualstyle, handle);
+  if (version < R_2000)
+    {
+      if (_ent->isbylayerlt)
+        CHK_COMMON_H (ent, ltype, handle);
+      if (!_ent->nolinks)
+        {
+          CHK_COMMON_H (ent, prev_entity, handle);
+          CHK_COMMON_H (ent, next_entity, handle);
+        }
+    }
+  else
+    {
+      if (_ent->linetype_flags == 3)
+        CHK_COMMON_H (ent, ltype, handle);
+    }
+  CHK_COMMON_TYPE (ent, linewt, RC, linewt);
+  CHK_COMMON_TYPE (ent, linetype_scale, BD, linetype_scale);
+  if (version >= R_2007)
+    {
+      if (_ent->material_flags == 3)
+        CHK_COMMON_H (ent, material, handle);
+      if (_ent->shadow_flags == 3)
+        CHK_COMMON_H (ent, shadow, handle);
+    }
+  if (version >= R_2000)
+    {
+      if (_ent->plotstyle_flags == 3)
+        CHK_COMMON_H (ent, plotstyle, handle);
+    }
+  if (version >= R_2010)
+    {
+      if (_ent->has_full_visualstyle)
+        CHK_COMMON_H (ent, full_visualstyle, handle);
+      if (_ent->has_face_visualstyle)
+        CHK_COMMON_H (ent, face_visualstyle, handle);
+      if (_ent->has_edge_visualstyle)
+        CHK_COMMON_H (ent, edge_visualstyle, handle);
+    }
+  CHK_COMMON_TYPE (ent, invisible, BS, invisible);
 
   CHK_COMMON_TYPE (ent, xdic_missing_flag, B, xdic_missing_flag);
   if (!xdic_missing_flag)
