@@ -13,6 +13,7 @@ new API:
     dwg_{g,s}et_{ENTITY,OBJECT}_common_utf8text,
     dwg_ent_{g,s}et_UTF8.
   * Added the missing dwg_dynapi_common_set_value.
+  * Add dwg_dynapi_handle_name helper.
 
 API breaking changes:
   * Added an is_utf8 arg to the dynapi setters:
@@ -34,6 +35,7 @@ API breaking changes:
 Important bugfixes:
   * Fixed all remaining null pointer dereferences and memory leaks. We added
     a smoke with asan, ubsan and lsan.
+  * Fixed dwg_dynapi_common_*
   * Fixed wrong object address (#112). handlestream_size is not part of obj->size.
     This fixes the hdlpos += 8 FIXME's and many handles.
   * Fixed FIELDLIST standard handles (#118)
