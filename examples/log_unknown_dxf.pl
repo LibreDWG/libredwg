@@ -4,6 +4,9 @@
     perl examples/log_unknown_dxf.pl examples/alldwg.inc
     make -C examples alldxf_0.inc
 
+    Creates the 3 examples/alldxf_*.inc includes from the examples/alldwg.inc
+    parsed from the logs, and mixed with the values from the matching DXF sources.
+
     In C we cannot statically initialize variable-sized arrays of structs,
     so we split it up into 3 parts.
 
@@ -1052,10 +1055,10 @@ while (<>) {
   open my $f, "$dxf" or next LINE;
   my ($foundobj, $foundhdl, @FIELD, $in_entity);
   my ($react, $xdict, $seen100, @avail);
-  if ($obj =~ /^\w\w\wUNDERLAY/) {
+  if ($obj =~ /^(?:PDF|DWF|DGN)UNDERLAY/) {
     @avail = @{$known->{UNDERLAY}};
   }
-  elsif ($obj =~ /^\w\w\wDEFINITION/) {
+  elsif ($obj =~ /^(?:PDF|DWF|DGN)DEFINITION/) {
     @avail = @{$known->{UNDERLAYDEFINITION}};
   }
   @avail = @{$known->{$obj}} if exists $known->{$obj};
