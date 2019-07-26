@@ -2127,42 +2127,42 @@ DWG_ENTITY(MTEXT)
         }
     }
   SINCE (R_2018)
-    {
-      FIELD_B (annotative, 0);
-      if (!FIELD_VALUE(annotative))
-        {
-          FIELD_BS (class_version, 0); // def: 0
-          if (FIELD_VALUE(class_version) > 10)
-            return DWG_ERR_VALUEOUTOFBOUNDS;
-          FIELD_B (default_flag, 0);   // def: 1
-        }
-      FIELD_HANDLE (appid, 5, 0);
-      // redundant fields
-      FIELD_BL (attachment, 71);
-      FIELD_3BD (x_axis_dir, 10);
-      FIELD_3BD (insertion_pt, 11);
-      FIELD_BD (rect_width, 41);
-      FIELD_BD (rect_height, 0);
-      FIELD_BD (extents_width, 42);
-      FIELD_BD (extents_height, 43);
-      // end redundant fields
-      FIELD_BL (column_type, 75);
-      if (FIELD_VALUE(column_type))
-        {
-          FIELD_BL (num_column_heights, 76);
-          FIELD_BD (column_width, 48);
-          FIELD_BD (gutter, 49);
-          FIELD_B (auto_height, 79);
-          FIELD_B (flow_reversed, 74);
-          if (!FIELD_VALUE(auto_height) && FIELD_VALUE(column_type) == 2)
-            {
-              FIELD_VECTOR (column_heights, BD, num_column_heights, 50);
-            }
-        }
-    }
+  {
+    FIELD_B (annotative, 0);
+    FIELD_BS (class_version, 0); // def: 0
+    if (FIELD_VALUE(class_version) > 10)
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+    FIELD_B (default_flag, 0);   // def: 1
+    // redundant fields
+    FIELD_BL (attachment, 71);
+    FIELD_3BD (x_axis_dir, 11);
+    FIELD_3BD (insertion_pt, 10);
+    FIELD_BD (rect_width, 41);
+    FIELD_BD (rect_height, 0);
+    FIELD_BD (extents_width, 42);
+    FIELD_BD (extents_height, 43);
+    // end redundant fields
+
+    DECODE_UNKNOWN_BITS
+    FIELD_BL (column_type, 75);
+    if (FIELD_VALUE(column_type)) //DEBUGGING
+      {
+        FIELD_BL (num_column_heights, 76);
+        FIELD_BD (column_width, 48);
+        FIELD_BD (gutter, 49);
+        FIELD_B (auto_height, 79);
+        FIELD_B (flow_reversed, 74);
+        if (!FIELD_VALUE(auto_height) && FIELD_VALUE(column_type) == 2)
+          {
+            FIELD_VECTOR (column_heights, BD, num_column_heights, 50);
+          }
+      }
+  }
 
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (style, 5, 0);
+  SINCE (R_2018)
+    FIELD_HANDLE (appid, 5, 0);
 
 DWG_ENTITY_END
 
