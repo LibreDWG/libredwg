@@ -1,0 +1,1473 @@
+[ AutoCAD - Mon Nov 07 00:06:43 2011  ]----------------------------------------
+
+<DwgEntity
+#<VLA-OBJECT IAcadOle 00000000220a87e8>
+; IAcadOle: IAcadOle Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   Handle (RO) = "255"
+;   HasExtensionDictionary (RO) = 0
+;   Height = 3.40462
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002f0ef3c8>
+;   InsertionPoint = (30.136 -22.3934 0.0)
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   LockAspectRatio = -1
+;   Material = "ByLayer"
+;   ObjectID (RO) = 44
+;   ObjectID32 (RO) = 44
+;   ObjectName (RO) = "AcDbOle2Frame"
+;   OleItemType = 2
+;   OlePlotQuality = 1
+;   OleSourceApp = "Bitmap Image"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   Rotation = 0.0
+;   ScaleHeight = 0.0
+;   ScaleWidth = 0.0
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002294daf0>
+;   Visible = -1
+;   Width = 5.13586
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadHatch 0000000022951c18>
+; IAcadHatch: AutoCAD Hatch Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Area (RO) = 10.3098
+;   AssociativeHatch = -1
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   Elevation = 0.0
+;   GradientAngle = 0.0
+;   GradientCentered = -1
+;   GradientColor1 = Exception occurred
+;   GradientColor2 = Exception occurred
+;   GradientName = ""
+;   Handle (RO) = "250"
+;   HasExtensionDictionary (RO) = 0
+;   HatchObjectType = 0
+;   HatchStyle = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002294deb8>
+;   ISOPenWidth = 100
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   Extrusion = (0.0 0.0 1.0)
+;   NumberOfLoops (RO) = 1
+;   ObjectID (RO) = 42
+;   ObjectID32 (RO) = 42
+;   ObjectName (RO) = "AcDbHatch"
+;   Origin = (0.0 0.0)
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PatternAngle = 0.0
+;   PatternDouble = 0
+;   PatternName (RO) = "ANSI31"
+;   PatternScale = 1.0
+;   PatternSpace = 1.0
+;   PatternType (RO) = 1
+;   PlotStyleName = "ByLayer"
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002294df70>
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadLWPolyline 00000000030bb048>
+; IAcadLWPolyline: AutoCAD Lightweight Polyline Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Area (RO) = 10.3098
+;   Closed = -1
+;   ConstantWidth = 0.0
+;   Coordinate = ...Indexed contents not shown...
+;   Coordinates = (30.8372 -13.9542 34.6035 -13.9542 34.6035 -16.6916 ... )
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   Elevation = 0.0
+;   Handle (RO) = "24F"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002294e038>
+;   Layer = "0"
+;   Length (RO) = 13.0074
+;   Linetype = "ByLayer"
+;   LinetypeGeneration = 0
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   Extrusion = (0.0 0.0 1.0)
+;   ObjectID (RO) = 45
+;   ObjectID32 (RO) = 45
+;   ObjectName (RO) = "AcDbPolyline"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   Thickness = 0.0
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002f0ef780>
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadHatch 00000000030b99c8>
+; IAcadHatch: AutoCAD Hatch Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Area (RO) = 7.2388
+;   AssociativeHatch = 0
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   Elevation = 0.0
+;   GradientAngle = 0.0
+;   GradientCentered = -1
+;   GradientColor1 = Exception occurred
+;   GradientColor2 = Exception occurred
+;   GradientName = ""
+;   Handle (RO) = "24E"
+;   HasExtensionDictionary (RO) = 0
+;   HatchObjectType = 0
+;   HatchStyle = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002294d258>
+;   ISOPenWidth = 100
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   Extrusion = (0.0 0.0 1.0)
+;   NumberOfLoops (RO) = 1
+;   ObjectID (RO) = 46
+;   ObjectID32 (RO) = 46
+;   ObjectName (RO) = "AcDbHatch"
+;   Origin = (0.0 0.0)
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PatternAngle = 0.0
+;   PatternDouble = 0
+;   PatternName (RO) = "ANSI31"
+;   PatternScale = 1.0
+;   PatternSpace = 1.0
+;   PatternType (RO) = 1
+;   PlotStyleName = "ByLayer"
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002294d6d0>
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadLine 00000000030bb4c8>
+; IAcadLine: AutoCAD Line Interface
+; Property values:
+;   Angle (RO) = 0.0
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Delta (RO) = (2.65167 0.0 0.0)
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   EndPoint = (32.3312 -9.01436 0.0)
+;   Handle (RO) = "24A"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002294e398>
+;   Layer = "0"
+;   Length (RO) = 2.65167
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   Extrusion = (0.0 0.0 1.0)
+;   ObjectID (RO) = 47
+;   ObjectID32 (RO) = 47
+;   ObjectName (RO) = "AcDbLine"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   StartPoint = (29.6796 -9.01436 0.0)
+;   Thickness = 0.0
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002f0ef7e0>
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadLine 00000000030baa48>
+; IAcadLine: AutoCAD Line Interface
+; Property values:
+;   Angle (RO) = 0.0
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Delta (RO) = (2.32979 0.0 0.0)
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   EndPoint = (31.3658 -7.7393 0.0)
+;   Handle (RO) = "249"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002294e2d8>
+;   Layer = "0"
+;   Length (RO) = 2.32979
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   Extrusion = (0.0 0.0 1.0)
+;   ObjectID (RO) = 48
+;   ObjectID32 (RO) = 48
+;   ObjectName (RO) = "AcDbLine"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   StartPoint = (29.036 -7.7393 0.0)
+;   Thickness = 0.0
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 00000000229b0ad0>
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadTable2 0000000022a17a38>
+; IAcadTable2: IAcadTable2 Interface
+; Property values:
+;   AllowManualHeights = 0
+;   AllowManualPositions = 0
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   BreaksEnabled = 0
+;   BreakSpacing = 0.99
+;   Columns = 5
+;   ColumnWidth (RO) = ...Indexed contents not shown...
+;   Direction = (1.0 0.0 0.0)
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   EnableBreak (RO) = ...Indexed contents not shown...
+;   FlowDirection = 0
+;   Handle (RO) = "236"
+;   HasExtensionDictionary (RO) = 0
+;   HasSubSelection (RO) = 0
+;   HeaderSuppressed = 0
+;   Height = 1.17333
+;   HorzCellMargin = 0.06
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 00000000229af8d8>
+;   InsertionPoint = (24.0239 -4.93614 0.0)
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   MinimumTableHeight (RO) = 1.17333
+;   MinimumTableWidth (RO) = 1.85
+;   ObjectID (RO) = 49
+;   ObjectID32 (RO) = 49
+;   ObjectName (RO) = "AcDbTable"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   RegenerateTableSuppressed = 0
+;   RepeatBottomLabels = 0
+;   RepeatTopLabels = 0
+;   RowHeight (RO) = ...Indexed contents not shown...
+;   Rows = 3
+;   StyleName = "Standard"
+;   TableBreakFlowDirection = 1
+;   TableBreakHeight = 0.0
+;   TableStyleOverrides (RO) = nil
+;   TitleSuppressed = 0
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 00000000229afab0>
+;   VertCellMargin = 0.06
+;   Visible = -1
+;   Width = 12.5
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadMLine 000000002227e9e8>
+; IAcadMLine: IAcadMLine Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Coordinates = (29.1122 -2.83199 0.0 32.6222 -2.83199 0.0)
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   Handle (RO) = "22F"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 00000000229aefd8>
+;   Justification = 0
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   MLineScale = 1.0
+;   ObjectID (RO) = 50
+;   ObjectID32 (RO) = 50
+;   ObjectName (RO) = "AcDbMline"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   StyleName (RO) = "STANDARD"
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 00000000229afc30>
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadLeader 000000002227f388>
+; IAcadLeader: AutoCAD Leader Interface
+; Property values:
+;   Annotation = nil
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   ArrowheadBlock = ""
+;   ArrowheadSize = 0.18
+;   ArrowheadType = 0
+;   Coordinate = ...Indexed contents not shown...
+;   Coordinates = (29.2808 -1.00917 0.0 30.9975 -1.00917 0.0 ... )
+;   DimensionLineColor = 0
+;   DimensionLineWeight = -2
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   Handle (RO) = "22E"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002294dc18>
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   Normal (RO) = (0.0 0.0 1.0)
+;   ObjectID (RO) = 51
+;   ObjectID32 (RO) = 51
+;   ObjectName (RO) = "AcDbLeader"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   ScaleFactor = 1.0
+;   StyleName = "Standard"
+;   TextGap = 0.09
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002294eb10>
+;   Type = 2
+;   VerticalTextPosition = 0
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadText 0000000022a17bf8>
+; IAcadText: AutoCAD Text Interface
+; Property values:
+;   Alignment = 0
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Backward = 0
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   Handle (RO) = "22A"
+;   HasExtensionDictionary (RO) = 0
+;   Height = 0.2
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002f0efc08>
+;   InsertionPoint = (24.826 57.7467 0.0)
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   Extrusion = (0.0 0.0 1.0)
+;   ObjectID (RO) = 52
+;   ObjectID32 (RO) = 52
+;   ObjectName (RO) = "AcDbText"
+;   ObliqueAngle = 0.0
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   Rotation = 0.0
+;   ScaleFactor = 1.0
+;   StyleName = "Standard"
+;   TextAlignmentPoint = (0.0 0.0 0.0)
+;   TextGenerationFlag = 0
+;   TextString = "some text"
+;   Thickness = 0.0
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002f0ef960>
+;   UpsideDown = 0
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadMText 0000000022a17a38>
+; IAcadMText: AutoCAD MText Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   AttachmentPoint = 1
+;   BackgroundFill = 0
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   DrawingDirection = 5
+;   Handle (RO) = "229"
+;   HasExtensionDictionary (RO) = 0
+;   Height = 0.2
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 00000000229afa58>
+;   InsertionPoint = (28.6865 0.305266 0.0)
+;   Layer = "0"
+;   LineSpacingDistance = 0.333333
+;   LineSpacingFactor = 1.0
+;   LineSpacingStyle = 1
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   Extrusion = (0.0 0.0 1.0)
+;   ObjectID (RO) = 53
+;   ObjectID32 (RO) = 53
+;   ObjectName (RO) = "AcDbMText"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   Rotation = 0.0
+;   StyleName = "Standard"
+;   TextString = "tsome text"
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 00000000229afe10>
+;   Visible = -1
+;   Width = 7.34694
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadRay 000000002214cc58>
+; IAcadRay: AutoCAD Ray Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   BasePoint = (27.095 3.01065 0.0)
+;   DirectionVector = (0.933996 0.357283 0.0)
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   Handle (RO) = "228"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 00000000229af818>
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   ObjectID (RO) = 54
+;   ObjectID32 (RO) = 54
+;   ObjectName (RO) = "AcDbRay"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   SecondPoint = (28.029 3.36793 0.0)
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002f0ef2a0>
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadRegion 00000000030e9918>
+; IAcadRegion: AutoCAD Region Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Area (RO) = 8.98957
+;   Centroid (RO) = (29.9918 9.33435)
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   Handle (RO) = "227"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002294eab8>
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   MomentOfInertia (RO) = (789.997 8092.92)
+;   Normal (RO) = (0.0 0.0 1.0)
+;   ObjectID (RO) = 55
+;   ObjectID32 (RO) = 55
+;   ObjectName (RO) = "AcDbRegion"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   Perimeter (RO) = 11.993
+;   PlotStyleName = "ByLayer"
+;   PrincipalDirections (RO) = (1.0 0.0 0.0 1.0)
+;   PrincipalMoments (RO) = (6.73436 6.73436)
+;   ProductOfInertia (RO) = 2516.67
+;   RadiiOfGyration (RO) = (9.3744 30.0043)
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002294e030>
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadSpline 000000002227ed58>
+; IAcadSpline: AutoCAD Spline Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Area (RO) = 9.67929
+;   Closed (RO) = 0
+;   ControlPoints = (25.6262 12.3719 0.0 25.3489 14.1268 0.0 ... )
+;   Degree (RO) = 3
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   EndTangent = (0.0 0.0 0.0)
+;   FitPoints = (25.6262 12.3719 0.0 25.6262 15.767 0.0 ... )
+;   FitTolerance = 1.0e-010
+;   Handle (RO) = "225"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002294d198>
+;   IsPeriodic (RO) = 0
+;   IsPlanar (RO) = -1
+;   IsRational (RO) = 0
+;   Knots = (0.0 0.0 0.0 0.0 3.39513 7.3546 ... )
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   NumberOfControlPoints (RO) = 7
+;   NumberOfFitPoints (RO) = 5
+;   ObjectID (RO) = 56
+;   ObjectID32 (RO) = 56
+;   ObjectName (RO) = "AcDbSpline"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   StartTangent = (0.0 0.0 0.0)
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002294e930>
+;   Visible = -1
+;   Weights = AutoCAD.Application: No weights available for polynomial spline
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadEllipse 00000000030e9398>
+; IAcadEllipse: AutoCAD Ellipse Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Area (RO) = 2.79386
+;   Center = (28.0145 18.5696 0.0)
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   EndAngle = 6.28319
+;   EndParameter = 6.28319
+;   EndPoint (RO) = (26.5636 18.5696 0.0)
+;   Handle (RO) = "224"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002f0ef7e8>
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   MajorAxis = (-1.45092 0.0 0.0)
+;   MajorRadius = 1.45092
+;   Material = "ByLayer"
+;   MinorAxis (RO) = (0.0 -0.612929 0.0)
+;   MinorRadius = 0.612929
+;   Extrusion = (0.0 0.0 1.0)
+;   ObjectID (RO) = 57
+;   ObjectID32 (RO) = 57
+;   ObjectName (RO) = "AcDbEllipse"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   RadiusRatio = 0.422441
+;   StartAngle = 0.0
+;   StartParameter = 0.0
+;   StartPoint (RO) = (26.5636 18.5696 0.0)
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002f0ef720>
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadTrace 00000000030bb4c8>
+; IAcadTrace: AutoCAD Trace Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Coordinate = ...Indexed contents not shown...
+;   Coordinates = (28.5811 21.5359 0.0 28.5811 24.3847 0.0 ... )
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   Handle (RO) = "221"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002294d498>
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   Extrusion = (0.0 0.0 1.0)
+;   ObjectID (RO) = 58
+;   ObjectID32 (RO) = 58
+;   ObjectName (RO) = "AcDbTrace"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   Thickness = 0.0
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002294d850>
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcad3DSolid 00000000030bb048>
+; IAcad3DSolid: AutoCAD 3dSolid Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Centroid (RO) = (27.7793 26.5618 0.72045)
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   Handle (RO) = "21D"
+;   HasExtensionDictionary (RO) = 0
+;   History = -1
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002294e218>
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   MomentOfInertia (RO) = (3819.03 4176.63 7988.17)
+;   ObjectID (RO) = 59
+;   ObjectID32 (RO) = 59
+;   ObjectName (RO) = "AcDb3dSolid"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   Position = (27.7793 26.5618 0.0)
+;   PrincipalDirections (RO) = (1.0 0.0 0.0 0.0 1.0 0.0 ... )
+;   PrincipalMoments (RO) = (2.62495 2.62495 3.3795)
+;   ProductOfInertia (RO) = (3988.39 103.438 108.179)
+;   RadiiOfGyration (RO) = (26.5807 27.7973 38.4427)
+;   ShowHistory = 0
+;   SolidType (RO) = "Box"
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002f0ef360>
+;   Visible = -1
+;   Volume (RO) = 5.40529
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadPolygonMesh 00000000030bb648>
+; IAcadPolygonMesh: AutoCAD PolygonMesh Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Coordinate = ...Indexed contents not shown...
+;   Coordinates = (25.1299 32.8528 0.0 27.7133 32.6937 0.0 ... )
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   Handle (RO) = "20F"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 00000000229af6f8>
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   MClose = 0
+;   MDensity = 0
+;   MVertexCount (RO) = 3
+;   NClose = 0
+;   NDensity = 0
+;   NVertexCount (RO) = 4
+;   ObjectID (RO) = 60
+;   ObjectID32 (RO) = 60
+;   ObjectName (RO) = "AcDbPolygonMesh"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002294e1b0>
+;   Type = 0
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcad3DFace 00000000030baa48>
+; IAcad3DFace: AutoCAD 3dFace Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Coordinate = ...Indexed contents not shown...
+;   Coordinates = (25.6082 37.403 0.0 29.7663 37.403 0.0 ... )
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   Handle (RO) = "20E"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 00000000229af0f8>
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   ObjectID (RO) = 61
+;   ObjectID32 (RO) = 61
+;   ObjectName (RO) = "AcDbFace"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 00000000229af990>
+;   VisibilityEdge1 = -1
+;   VisibilityEdge2 = -1
+;   VisibilityEdge3 = -1
+;   VisibilityEdge4 = -1
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadDimRadial 00000000030ee958>
+; IAcadDimRadial: AutoCAD Radial Dimension Interface
+; Property values:
+;   AltRoundDistance = 0.0
+;   AltSuppressLeadingZeros = 0
+;   AltSuppressTrailingZeros = 0
+;   AltSuppressZeroFeet = -1
+;   AltSuppressZeroInches = -1
+;   AltTextPrefix = ""
+;   AltTextSuffix = ""
+;   AltTolerancePrecision = 2
+;   AltToleranceSuppressLeadingZeros = 0
+;   AltToleranceSuppressTrailingZeros = 0
+;   AltToleranceSuppressZeroFeet = -1
+;   AltToleranceSuppressZeroInches = -1
+;   AltUnits = 0
+;   AltUnitsFormat = 2
+;   AltUnitsPrecision = 2
+;   AltUnitsScale = 25.4
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   ArrowheadBlock = ""
+;   ArrowheadSize = 0.18
+;   ArrowheadType = 0
+;   CenterMarkSize = 0.09
+;   CenterType = 0
+;   DecimalSeparator = "."
+;   DimensionLineColor = 0
+;   DimensionLinetype = "ByBlock"
+;   DimensionLineWeight = -2
+;   DimLineSuppress = 0
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   Fit = 3
+;   ForceLineInside = 0
+;   FractionFormat = 0
+;   Handle (RO) = "1FC"
+;   HasExtensionDictionary (RO) = -1
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002294d738>
+;   Layer = "0"
+;   LeaderLength (RO) = ...Indexed contents not shown...
+;   LinearScaleFactor = 1.0
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   Measurement (RO) = 1.1897
+;   Extrusion = (0.0 0.0 1.0)
+;   ObjectID (RO) = 62
+;   ObjectID32 (RO) = 62
+;   ObjectName (RO) = "AcDbRadialDimension"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   PrimaryUnitsPrecision = 4
+;   Rotation = 0.0
+;   RoundDistance = 0.0
+;   ScaleFactor = 1.0
+;   StyleName = "Standard"
+;   SuppressLeadingZeros = 0
+;   SuppressTrailingZeros = 0
+;   SuppressZeroFeet = -1
+;   SuppressZeroInches = -1
+;   TextColor = 0
+;   TextFill = 0
+;   TextFillColor = 0
+;   TextGap = 0.09
+;   TextHeight = 0.18
+;   TextInside = 0
+;   TextInsideAlign = -1
+;   TextMovement = 0
+;   TextOutsideAlign = -1
+;   TextOverride = ""
+;   TextPosition = (28.1812 39.8103 0.0)
+;   TextPrefix = ""
+;   TextRotation = 0.0
+;   TextStyle = "Standard"
+;   TextSuffix = ""
+;   ToleranceDisplay = 0
+;   ToleranceHeightScale = 1.0
+;   ToleranceJustification = 1
+;   ToleranceLowerLimit = 0.0
+;   TolerancePrecision = 4
+;   ToleranceSuppressLeadingZeros = 0
+;   ToleranceSuppressTrailingZeros = 0
+;   ToleranceSuppressZeroFeet = -1
+;   ToleranceSuppressZeroInches = -1
+;   ToleranceUpperLimit = 0.0
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 00000000229af2d0>
+;   UnitsFormat = 2
+;   VerticalTextPosition = 0
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadDimDiametric 00000000030ee108>
+; IAcadDimDiametric: IAcadDimDiametric Interface
+; Property values:
+;   AltRoundDistance = 0.0
+;   AltSuppressLeadingZeros = 0
+;   AltSuppressTrailingZeros = 0
+;   AltSuppressZeroFeet = -1
+;   AltSuppressZeroInches = -1
+;   AltTextPrefix = ""
+;   AltTextSuffix = ""
+;   AltTolerancePrecision = 2
+;   AltToleranceSuppressLeadingZeros = 0
+;   AltToleranceSuppressTrailingZeros = 0
+;   AltToleranceSuppressZeroFeet = -1
+;   AltToleranceSuppressZeroInches = -1
+;   AltUnits = 0
+;   AltUnitsFormat = 2
+;   AltUnitsPrecision = 2
+;   AltUnitsScale = 25.4
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Arrowhead1Block = ""
+;   Arrowhead1Type = 0
+;   Arrowhead2Block = ""
+;   Arrowhead2Type = 0
+;   ArrowheadSize = 0.18
+;   CenterMarkSize = 0.09
+;   CenterType = 0
+;   DecimalSeparator = "."
+;   DimensionLineColor = 0
+;   DimensionLinetype = "ByBlock"
+;   DimensionLineWeight = -2
+;   DimLine1Suppress = 0
+;   DimLine2Suppress = 0
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   Fit = 3
+;   ForceLineInside = 0
+;   FractionFormat = 0
+;   Handle (RO) = "1EA"
+;   HasExtensionDictionary (RO) = -1
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 00000000229af8d8>
+;   Layer = "0"
+;   LeaderLength (RO) = ...Indexed contents not shown...
+;   LinearScaleFactor = 1.0
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   Measurement (RO) = 2.37939
+;   Extrusion = (0.0 0.0 1.0)
+;   ObjectID (RO) = 63
+;   ObjectID32 (RO) = 63
+;   ObjectName (RO) = "AcDbDiametricDimension"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   PrimaryUnitsPrecision = 4
+;   Rotation = 0.0
+;   RoundDistance = 0.0
+;   ScaleFactor = 1.0
+;   StyleName = "Standard"
+;   SuppressLeadingZeros = 0
+;   SuppressTrailingZeros = 0
+;   SuppressZeroFeet = -1
+;   SuppressZeroInches = -1
+;   TextColor = 0
+;   TextFill = 0
+;   TextFillColor = 0
+;   TextGap = 0.09
+;   TextHeight = 0.18
+;   TextInside = 0
+;   TextInsideAlign = -1
+;   TextMovement = 0
+;   TextOutsideAlign = -1
+;   TextOverride = ""
+;   TextPosition = (28.6671 40.6126 0.0)
+;   TextPrefix = ""
+;   TextRotation = 0.0
+;   TextStyle = "Standard"
+;   TextSuffix = ""
+;   ToleranceDisplay = 0
+;   ToleranceHeightScale = 1.0
+;   ToleranceJustification = 1
+;   ToleranceLowerLimit = 0.0
+;   TolerancePrecision = 4
+;   ToleranceSuppressLeadingZeros = 0
+;   ToleranceSuppressTrailingZeros = 0
+;   ToleranceSuppressZeroFeet = -1
+;   ToleranceSuppressZeroInches = -1
+;   ToleranceUpperLimit = 0.0
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002f0ef780>
+;   UnitsFormat = 2
+;   VerticalTextPosition = 0
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadCircle 00000000030b99c8>
+; IAcadCircle: AutoCAD Circle Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Area = 4.44654
+;   Center = (27.91 40.3129 0.0)
+;   Circumference = 7.47508
+;   Diameter = 2.37939
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   Handle (RO) = "1E9"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002294dc18>
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   Extrusion = (0.0 0.0 1.0)
+;   ObjectID (RO) = 64
+;   ObjectID32 (RO) = 64
+;   ObjectName (RO) = "AcDbCircle"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   Radius = 1.1897
+;   Thickness = 0.0
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002294d4f0>
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadDimAngular 000000002297a698>
+; IAcadDimAngular: AutoCAD Angular Dimension Interface
+; Property values:
+;   AngleFormat = 0
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Arrowhead1Block = ""
+;   Arrowhead1Type = 0
+;   Arrowhead2Block = ""
+;   Arrowhead2Type = 0
+;   ArrowheadSize = 0.18
+;   DecimalSeparator = "."
+;   DimensionLineColor = 0
+;   DimensionLinetype = "ByBlock"
+;   DimensionLineWeight = -2
+;   DimLine1Suppress = 0
+;   DimLine2Suppress = 0
+;   DimLineInside = 0
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   ExtensionLineColor = 0
+;   ExtensionLineExtend = 0.18
+;   ExtensionLineOffset = 0.0625
+;   ExtensionLineWeight = -2
+;   ExtLine1EndPoint = (28.7034 44.4633 0.0)
+;   ExtLine1Linetype = "ByBlock"
+;   ExtLine1StartPoint = (24.1315 44.4633 0.0)
+;   ExtLine1Suppress = 0
+;   ExtLine2EndPoint = (28.3894 46.6348 0.0)
+;   ExtLine2Linetype = "ByBlock"
+;   ExtLine2StartPoint = (24.1315 44.4633 0.0)
+;   ExtLine2Suppress = 0
+;   ExtLineFixedLen = 1.0
+;   ExtLineFixedLenSuppress = 0
+;   Fit = 3
+;   ForceLineInside = 0
+;   Handle (RO) = "1AB"
+;   HasExtensionDictionary (RO) = 0
+;   HorizontalTextPosition = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002f0ef428>
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   Measurement (RO) = 0.471616
+;   Extrusion = (0.0 0.0 1.0)
+;   ObjectID (RO) = 65
+;   ObjectID32 (RO) = 65
+;   ObjectName (RO) = "AcDb2LineAngularDimension"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   Rotation = 0.0
+;   ScaleFactor = 1.0
+;   StyleName = "Standard"
+;   SuppressLeadingZeros = 0
+;   SuppressTrailingZeros = 0
+;   TextColor = 0
+;   TextFill = 0
+;   TextFillColor = 0
+;   TextGap = 0.09
+;   TextHeight = 0.18
+;   TextInside = 0
+;   TextInsideAlign = -1
+;   TextMovement = 0
+;   TextOutsideAlign = -1
+;   TextOverride = ""
+;   TextPosition = (27.1474 45.1879 0.0)
+;   TextPrecision = 0
+;   TextPrefix = ""
+;   TextRotation = 0.0
+;   TextStyle = "Standard"
+;   TextSuffix = ""
+;   ToleranceDisplay = 0
+;   ToleranceHeightScale = 1.0
+;   ToleranceJustification = 1
+;   ToleranceLowerLimit = 0.0
+;   TolerancePrecision = 4
+;   ToleranceSuppressLeadingZeros = 0
+;   ToleranceSuppressTrailingZeros = 0
+;   ToleranceUpperLimit = 0.0
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002294d2b0>
+;   VerticalTextPosition = 0
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadDim3PointAngular 000000002297a7b8>
+; IAcadDim3PointAngular: IAcadDim3PointAngular Interface
+; Property values:
+;   AngleFormat = 0
+;   AngleVertex = (24.7972 46.7663 0.0)
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Arrowhead1Block = ""
+;   Arrowhead1Type = 0
+;   Arrowhead2Block = ""
+;   Arrowhead2Type = 0
+;   ArrowheadSize = 0.18
+;   DecimalSeparator = "."
+;   DimensionLineColor = 0
+;   DimensionLinetype = "ByBlock"
+;   DimensionLineWeight = -2
+;   DimLine1Suppress = 0
+;   DimLine2Suppress = 0
+;   DimLineInside = 0
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   ExtensionLineColor = 0
+;   ExtensionLineExtend = 0.18
+;   ExtensionLineOffset = 0.0625
+;   ExtensionLineWeight = -2
+;   ExtLine1EndPoint = (26.7817 46.7663 0.0)
+;   ExtLine1Linetype = "ByBlock"
+;   ExtLine1Suppress = 0
+;   ExtLine2EndPoint = (25.9461 47.9152 0.0)
+;   ExtLine2Linetype = "ByBlock"
+;   ExtLine2Suppress = 0
+;   ExtLineFixedLen = 1.0
+;   ExtLineFixedLenSuppress = 0
+;   Fit = 3
+;   ForceLineInside = 0
+;   Handle (RO) = "19A"
+;   HasExtensionDictionary (RO) = 0
+;   HorizontalTextPosition = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002f0efde8>
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   Measurement (RO) = 0.785398
+;   Extrusion = (0.0 0.0 1.0)
+;   ObjectID (RO) = 66
+;   ObjectID32 (RO) = 66
+;   ObjectName (RO) = "AcDb3PointAngularDimension"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   Rotation = 0.0
+;   ScaleFactor = 1.0
+;   StyleName = "Standard"
+;   SuppressLeadingZeros = 0
+;   SuppressTrailingZeros = 0
+;   TextColor = 0
+;   TextFill = 0
+;   TextFillColor = 0
+;   TextGap = 0.09
+;   TextHeight = 0.18
+;   TextInside = 0
+;   TextInsideAlign = -1
+;   TextMovement = 0
+;   TextOutsideAlign = -1
+;   TextOverride = ""
+;   TextPosition = (26.8009 47.5962 0.0)
+;   TextPrecision = 0
+;   TextPrefix = ""
+;   TextRotation = 0.0
+;   TextStyle = "Standard"
+;   TextSuffix = ""
+;   ToleranceDisplay = 0
+;   ToleranceHeightScale = 1.0
+;   ToleranceJustification = 1
+;   ToleranceLowerLimit = 0.0
+;   TolerancePrecision = 4
+;   ToleranceSuppressLeadingZeros = 0
+;   ToleranceSuppressTrailingZeros = 0
+;   ToleranceUpperLimit = 0.0
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002294d3d0>
+;   VerticalTextPosition = 0
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadDimAligned 000000002297a8d8>
+; IAcadDimAligned: AutoCAD Aligned Dimension Interface
+; Property values:
+;   AltRoundDistance = 0.0
+;   AltSuppressLeadingZeros = 0
+;   AltSuppressTrailingZeros = 0
+;   AltSuppressZeroFeet = -1
+;   AltSuppressZeroInches = -1
+;   AltTextPrefix = ""
+;   AltTextSuffix = ""
+;   AltTolerancePrecision = 2
+;   AltToleranceSuppressLeadingZeros = 0
+;   AltToleranceSuppressTrailingZeros = 0
+;   AltToleranceSuppressZeroFeet = -1
+;   AltToleranceSuppressZeroInches = -1
+;   AltUnits = 0
+;   AltUnitsFormat = 2
+;   AltUnitsPrecision = 2
+;   AltUnitsScale = 25.4
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Arrowhead1Block = ""
+;   Arrowhead1Type = 0
+;   Arrowhead2Block = ""
+;   Arrowhead2Type = 0
+;   ArrowheadSize = 0.18
+;   DecimalSeparator = "."
+;   DimensionLineColor = 0
+;   DimensionLineExtend = 0.0
+;   DimensionLinetype = "ByBlock"
+;   DimensionLineWeight = -2
+;   DimLine1Suppress = 0
+;   DimLine2Suppress = 0
+;   DimLineInside = 0
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   ExtensionLineColor = 0
+;   ExtensionLineExtend = 0.18
+;   ExtensionLineOffset = 0.0625
+;   ExtensionLineWeight = -2
+;   ExtLine1Linetype = "ByBlock"
+;   ExtLine1Point = (24.6214 49.0884 0.0)
+;   ExtLine1Suppress = 0
+;   ExtLine2Linetype = "ByBlock"
+;   ExtLine2Point = (26.3673 49.578 0.0)
+;   ExtLine2Suppress = 0
+;   ExtLineFixedLen = 1.0
+;   ExtLineFixedLenSuppress = 0
+;   Fit = 3
+;   ForceLineInside = 0
+;   FractionFormat = 0
+;   Handle (RO) = "18C"
+;   HasExtensionDictionary (RO) = 0
+;   HorizontalTextPosition = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 00000000229af6f8>
+;   Layer = "0"
+;   LinearScaleFactor = 1.0
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   Measurement (RO) = 1.81319
+;   Extrusion = (0.0 0.0 1.0)
+;   ObjectID (RO) = 67
+;   ObjectID32 (RO) = 67
+;   ObjectName (RO) = "AcDbAlignedDimension"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   PrimaryUnitsPrecision = 4
+;   Rotation = 0.0
+;   RoundDistance = 0.0
+;   ScaleFactor = 1.0
+;   StyleName = "Standard"
+;   SuppressLeadingZeros = 0
+;   SuppressTrailingZeros = 0
+;   SuppressZeroFeet = -1
+;   SuppressZeroInches = -1
+;   TextColor = 0
+;   TextFill = 0
+;   TextFillColor = 0
+;   TextGap = 0.09
+;   TextHeight = 0.18
+;   TextInside = 0
+;   TextInsideAlign = -1
+;   TextMovement = 0
+;   TextOutsideAlign = -1
+;   TextOverride = ""
+;   TextPosition = (25.6136 48.9077 0.0)
+;   TextPrefix = ""
+;   TextRotation = 0.0
+;   TextStyle = "Standard"
+;   TextSuffix = ""
+;   ToleranceDisplay = 0
+;   ToleranceHeightScale = 1.0
+;   ToleranceJustification = 1
+;   ToleranceLowerLimit = 0.0
+;   TolerancePrecision = 4
+;   ToleranceSuppressLeadingZeros = 0
+;   ToleranceSuppressTrailingZeros = 0
+;   ToleranceSuppressZeroFeet = -1
+;   ToleranceSuppressZeroInches = -1
+;   ToleranceUpperLimit = 0.0
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 00000000229af810>
+;   UnitsFormat = 2
+;   VerticalTextPosition = 0
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadDimOrdinate 000000002297a578>
+; IAcadDimOrdinate: AutoCAD Ordinate Dimension Interface
+; Property values:
+;   AltRoundDistance = 0.0
+;   AltSuppressLeadingZeros = 0
+;   AltSuppressTrailingZeros = 0
+;   AltSuppressZeroFeet = -1
+;   AltSuppressZeroInches = -1
+;   AltTextPrefix = ""
+;   AltTextSuffix = ""
+;   AltTolerancePrecision = 2
+;   AltToleranceSuppressLeadingZeros = 0
+;   AltToleranceSuppressTrailingZeros = 0
+;   AltToleranceSuppressZeroFeet = -1
+;   AltToleranceSuppressZeroInches = -1
+;   AltUnits = 0
+;   AltUnitsFormat = 2
+;   AltUnitsPrecision = 2
+;   AltUnitsScale = 25.4
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   ArrowheadSize = 0.18
+;   DecimalSeparator = "."
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   ExtensionLineColor = 0
+;   ExtensionLineOffset = 0.0625
+;   ExtensionLineWeight = -2
+;   ExtLineFixedLen = 1.0
+;   ExtLineFixedLenSuppress = 0
+;   FractionFormat = 0
+;   Handle (RO) = "182"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002f0f0028>
+;   Layer = "0"
+;   LinearScaleFactor = 1.0
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   Measurement (RO) = 50.2198
+;   Extrusion = (0.0 0.0 1.0)
+;   ObjectID (RO) = 68
+;   ObjectID32 (RO) = 68
+;   ObjectName (RO) = "AcDbOrdinateDimension"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   PrimaryUnitsPrecision = 4
+;   Rotation = 0.0
+;   RoundDistance = 0.0
+;   ScaleFactor = 1.0
+;   StyleName = "Standard"
+;   SuppressLeadingZeros = 0
+;   SuppressTrailingZeros = 0
+;   SuppressZeroFeet = -1
+;   SuppressZeroInches = -1
+;   TextColor = 0
+;   TextFill = 0
+;   TextFillColor = 0
+;   TextGap = 0.09
+;   TextHeight = 0.18
+;   TextMovement = 0
+;   TextOverride = ""
+;   TextPosition = (26.0657 50.2198 0.0)
+;   TextPrefix = ""
+;   TextRotation = 0.0
+;   TextStyle = "Standard"
+;   TextSuffix = ""
+;   ToleranceDisplay = 0
+;   ToleranceHeightScale = 1.0
+;   ToleranceJustification = 1
+;   ToleranceLowerLimit = 0.0
+;   TolerancePrecision = 4
+;   ToleranceSuppressLeadingZeros = 0
+;   ToleranceSuppressTrailingZeros = 0
+;   ToleranceSuppressZeroFeet = -1
+;   ToleranceSuppressZeroInches = -1
+;   ToleranceUpperLimit = 0.0
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 00000000229afff0>
+;   UnitsFormat = 2
+;   VerticalTextPosition = 0
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadLine 00000000030b99c8>
+; IAcadLine: AutoCAD Line Interface
+; Property values:
+;   Angle (RO) = 0.0
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Delta (RO) = (3.21866 0.0 0.0)
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   EndPoint = (27.7942 51.2607 0.0)
+;   Handle (RO) = "181"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002f0f04a8>
+;   Layer = "0"
+;   Length (RO) = 3.21866
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   Extrusion = (0.0 0.0 1.0)
+;   ObjectID (RO) = 69
+;   ObjectID32 (RO) = 69
+;   ObjectName (RO) = "AcDbLine"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   StartPoint = (24.5756 51.2607 0.0)
+;   Thickness = 0.0
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002294d730>
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadCircle 00000000030bb348>
+; IAcadCircle: AutoCAD Circle Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Area = 2.4668
+;   Center = (26.2337 52.7937 0.0)
+;   Circumference = 5.56765
+;   Diameter = 1.77224
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   Handle (RO) = "180"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002294e458>
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   Extrusion = (0.0 0.0 1.0)
+;   ObjectID (RO) = 70
+;   ObjectID32 (RO) = 70
+;   ObjectName (RO) = "AcDbCircle"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   Radius = 0.886119
+;   Thickness = 0.0
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002294df70>
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadArc 00000000030bb4c8>
+; IAcadArc: AutoCAD Arc Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   ArcLength (RO) = 2.38823
+;   Area (RO) = 0.553231
+;   Center = (26.1903 52.7875 0.0)
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   EndAngle = 2.21889
+;   EndPoint (RO) = (25.0464 54.2981 0.0)
+;   Handle (RO) = "17F"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002294d078>
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   Extrusion = (0.0 0.0 1.0)
+;   ObjectID (RO) = 71
+;   ObjectID32 (RO) = 71
+;   ObjectName (RO) = "AcDbArc"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   Radius = 1.8949
+;   StartAngle = 0.958545
+;   StartPoint (RO) = (27.2793 54.3382 0.0)
+;   Thickness = 0.0
+;   TotalAngle (RO) = 1.26035
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002f0ef900>
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadLWPolyline 00000000030bb048>
+; IAcadLWPolyline: AutoCAD Lightweight Polyline Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Area (RO) = 0.0
+;   Closed = 0
+;   ConstantWidth = 0.0
+;   Coordinate = ...Indexed contents not shown...
+;   Coordinates = (25.2367 55.4389 26.6385 55.4389)
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   Elevation = 0.0
+;   Handle (RO) = "176"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002f0efd28>
+;   Layer = "0"
+;   Length (RO) = 1.40183
+;   Linetype = "ByLayer"
+;   LinetypeGeneration = 0
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   Extrusion = (0.0 0.0 1.0)
+;   ObjectID (RO) = 72
+;   ObjectID32 (RO) = 72
+;   ObjectName (RO) = "AcDbPolyline"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   Thickness = 0.0
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002294e990>
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadPoint 00000000030bb648>
+; IAcadPoint: AutoCAD Point Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Coordinates = (25.9877 55.7791 0.0)
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   Handle (RO) = "174"
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002294e398>
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   Extrusion = (0.0 0.0 1.0)
+;   ObjectID (RO) = 73
+;   ObjectID32 (RO) = 73
+;   ObjectName (RO) = "AcDbPoint"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   Thickness = 0.0
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 000000002f0efa80>
+;   Visible = -1
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadBlockReference 0000000022a17a38>
+; IAcadBlockReference: AutoCAD Block Reference Interface
+; Property values:
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   EffectiveName (RO) = "some block"
+;   Handle (RO) = "160"
+;   HasAttributes (RO) = -1
+;   HasExtensionDictionary (RO) = 0
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002f0f0928>
+;   InsertionPoint = (25.9113 56.4789 0.0)
+;   InsUnits (RO) = "Inches"
+;   InsUnitsFactor (RO) = 1.0
+;   IsDynamicBlock (RO) = 0
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   Material = "ByLayer"
+;   Name = "some block"
+;   Extrusion = (0.0 0.0 1.0)
+;   ObjectID (RO) = 74
+;   ObjectID32 (RO) = 74
+;   ObjectName (RO) = "AcDbBlockReference"
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   Rotation = 0.0
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 00000000229aefd0>
+;   Visible = -1
+;   XEffectiveScaleFactor = 1.0
+;   XScaleFactor = 1.0
+;   YEffectiveScaleFactor = 1.0
+;   YScaleFactor = 1.0
+;   ZEffectiveScaleFactor = 1.0
+;   ZScaleFactor = 1.0
+ />
+<DwgEntity
+#<VLA-OBJECT IAcadAttribute2 0000000022a17bf8>
+; IAcadAttribute2: AutoCAD Attribute Interface
+; Property values:
+;   Alignment = 0
+;   Application (RO) = #<VLA-OBJECT IAcadApplication 00000000012348d0>
+;   Backward = 0
+;   Constant = 0
+;   Document (RO) = #<VLA-OBJECT IAcadDocument 0000000022b8da20>
+;   FieldLength = 0
+;   Handle (RO) = "14B"
+;   HasExtensionDictionary (RO) = -1
+;   Height = 0.2
+;   Hyperlinks (RO) = #<VLA-OBJECT IAcadHyperlinks 000000002294d798>
+;   InsertionPoint = (24.9106 57.0715 0.0)
+;   Invisible = 0
+;   Layer = "0"
+;   Linetype = "ByLayer"
+;   LinetypeScale = 1.0
+;   Lineweight = -1
+;   LockPosition = -1
+;   Material = "ByLayer"
+;   Mode = 16
+;   MTextAttribute = 0
+;   MTextAttributeContent = ""
+;   MTextBoundaryWidth = 0.0
+;   MTextDrawingDirection = 5
+;   Extrusion = (0.0 0.0 1.0)
+;   ObjectID (RO) = 75
+;   ObjectID32 (RO) = 75
+;   ObjectName (RO) = "AcDbAttributeDefinition"
+;   ObliqueAngle = 0.0
+;   OwnerID (RO) = 43
+;   OwnerID32 (RO) = 43
+;   PlotStyleName = "ByLayer"
+;   Preset = 0
+;   PromptString = "some prompt"
+;   Rotation = 0.0
+;   ScaleFactor = 1.0
+;   StyleName = "Standard"
+;   TagString = "ATTRIBUTE"
+;   TextAlignmentPoint = (0.0 0.0 0.0)
+;   TextGenerationFlag = 0
+;   TextString = "####"
+;   Thickness = 0.0
+;   TrueColor = #<VLA-OBJECT IAcadAcCmColor 00000000229b0a70>
+;   UpsideDown = 0
+;   Verify = 0
+;   Visible = -1

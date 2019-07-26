@@ -1,0 +1,48 @@
+*****************************************************************************/
+*  LibreDWG - free implementation of the DWG file format                    */
+*                                                                           */
+*  Copyright (C) 2011 Free Software Foundation, Inc.                        */
+*  Copyright (C) 2011 Guruprasad Rane                                       */
+*                                                                           */
+*  This library is free software, licensed under the terms of the GNU       */
+*  General Public License as published by the Free Software Foundation,     */
+*  either version 3 of the License, or (at your option) any later version.  */
+*  You should have received a copy of the GNU General Public License        */
+*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
+*****************************************************************************/
+*
+*
+TS1.dwg Version 0.1 Date:6th November 2011 Autocad Version 2000
+created by Guruprasad Rane <raneguruprasad@gmail.com>
+Description: DWG file in Autocad 2000 version
+
+List of Objects in drawing file
+1.  text
+2.  Attribute
+3.  Block
+4.  Point
+5.  Polyline
+6.  Arc
+7.  Circle
+8.  Line
+9.  Ordinate Dimension
+10. Aligned Dimension
+11. 3 point angular dimension
+12. Angular Dimansion
+13. Diametric Dimension
+14. Radial Dimension
+15. 3D face
+16. Polygon Mesh
+17. 3D Solid
+18. Trace
+19. Elipse
+20. Spline
+21. Region
+22. Ray
+23. Mtext
+24. Leader
+25. Multiline
+26. Table
+27. Group
+28. hatch
+29. ole object

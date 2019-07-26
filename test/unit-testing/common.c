@@ -103,7 +103,7 @@ main (int argc, char *argv[])
               DWG_TYPE == DWG_TYPE_DIMENSION_RADIUS ||
               DWG_TYPE == DWG_TYPE_OLE2FRAME
               )
-            error += test_code ("../test-data/TS1.dwg");
+            error += test_code ("../test-data/2000/TS1.dwg");
         }
     }
   else
