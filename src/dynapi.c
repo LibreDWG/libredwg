@@ -133,55 +133,56 @@ static const char dwg_object_names[][MAXLEN_OBJECTS] = {
   "FIELD" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 26 */
   "FIELDLIST" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 27 */
   "GEODATA" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 28 */
-  "GROUP" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 29 */
-  "IDBUFFER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 30 */
-  "IMAGEDEF" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 31 */
-  "IMAGEDEF_REACTOR" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 32 */
-  "LAYER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 33 */
-  "LAYER_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 34 */
-  "LAYER_INDEX" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 35 */
-  "LAYOUT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 36 */
-  "LIGHTLIST" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 37 */
-  "LONG_TRANSACTION" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 38 */
-  "LTYPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 39 */
-  "LTYPE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 40 */
-  "MATERIAL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 41 */
-  "MLEADERSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 42 */
-  "MLINESTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 43 */
-  "OBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 44 */
-  "OBJECT_PTR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 45 */
-  "PERSSUBENTMANAGER" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 46 */
-  "PLACEHOLDER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 47 */
-  "PLOTSETTINGS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 48 */
-  "PROXY_OBJECT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 49 */
-  "RASTERVARIABLES" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 50 */
-  "RENDERENVIRONMENT" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 51 */
-  "RENDERGLOBAL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 52 */
-  "SCALE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 53 */
-  "SORTENTSTABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 54 */
-  "SPATIAL_FILTER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 55 */
-  "SPATIAL_INDEX" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 56 */
-  "STYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 57 */
-  "STYLE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 58 */
-  "SUN" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 59 */
-  "SUNSTUDY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 60 */
-  "TABLECONTENT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 61 */
-  "TABLEGEOMETRY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 62 */
-  "TABLESTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 63 */
-  "UCS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 64 */
-  "UCS_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 65 */
-  "UNDERLAYDEFINITION" "\0\0\0\0\0\0\0\0\0\0\0",	/* 66 */
-  "UNKNOWN_OBJ" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 67 */
-  "VBA_PROJECT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 68 */
-  "VIEW" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 69 */
-  "VIEW_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 70 */
-  "VISUALSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 71 */
-  "VPORT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 72 */
-  "VPORT_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 73 */
-  "VPORT_ENTITY_CONTROL" "\0\0\0\0\0\0\0\0\0",	/* 74 */
-  "VPORT_ENTITY_HEADER" "\0\0\0\0\0\0\0\0\0\0",	/* 75 */
-  "WIPEOUTVARIABLES" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 76 */
-  "XRECORD" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 77 */
+  "GEOMAPIMAGE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 29 */
+  "GROUP" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 30 */
+  "IDBUFFER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 31 */
+  "IMAGEDEF" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 32 */
+  "IMAGEDEF_REACTOR" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 33 */
+  "LAYER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 34 */
+  "LAYER_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 35 */
+  "LAYER_INDEX" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 36 */
+  "LAYOUT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 37 */
+  "LIGHTLIST" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 38 */
+  "LONG_TRANSACTION" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 39 */
+  "LTYPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 40 */
+  "LTYPE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 41 */
+  "MATERIAL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 42 */
+  "MLEADERSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 43 */
+  "MLINESTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 44 */
+  "OBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 45 */
+  "OBJECT_PTR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 46 */
+  "PERSSUBENTMANAGER" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 47 */
+  "PLACEHOLDER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 48 */
+  "PLOTSETTINGS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 49 */
+  "PROXY_OBJECT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 50 */
+  "RASTERVARIABLES" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 51 */
+  "RENDERENVIRONMENT" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 52 */
+  "RENDERGLOBAL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 53 */
+  "SCALE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 54 */
+  "SORTENTSTABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 55 */
+  "SPATIAL_FILTER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 56 */
+  "SPATIAL_INDEX" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 57 */
+  "STYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 58 */
+  "STYLE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 59 */
+  "SUN" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 60 */
+  "SUNSTUDY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 61 */
+  "TABLECONTENT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 62 */
+  "TABLEGEOMETRY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 63 */
+  "TABLESTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 64 */
+  "UCS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 65 */
+  "UCS_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 66 */
+  "UNDERLAYDEFINITION" "\0\0\0\0\0\0\0\0\0\0\0",	/* 67 */
+  "UNKNOWN_OBJ" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 68 */
+  "VBA_PROJECT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 69 */
+  "VIEW" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 70 */
+  "VIEW_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 71 */
+  "VISUALSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 72 */
+  "VPORT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 73 */
+  "VPORT_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 74 */
+  "VPORT_ENTITY_CONTROL" "\0\0\0\0\0\0\0\0\0",	/* 75 */
+  "VPORT_ENTITY_HEADER" "\0\0\0\0\0\0\0\0\0\0",	/* 76 */
+  "WIPEOUTVARIABLES" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 77 */
+  "XRECORD" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 78 */
 
 };
 
@@ -2526,6 +2527,36 @@ static const Dwg_DYNAPI_field _dwg_GEODATA_fields[] = {
   { "north_dir_angle_rad", "BD", sizeof (BITCODE_BD), OFF (struct _dwg_object_GEODATA,north_dir_angle_rad), 0,0,0, 0 },
   {NULL, NULL, 0, 0, 0,0,0, 0},
 };
+/* from typedef struct _dwg_object_GEOMAPIMAGE: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_GEOMAPIMAGE_fields[] = {
+  { "parent", "struct _dwg_object_object*", sizeof (void *), OFF (struct _dwg_object_GEOMAPIMAGE,parent), 1,1,0, 0 },
+  { "class_version", "BL", sizeof (BITCODE_BL), OFF (struct _dwg_object_GEOMAPIMAGE,class_version), 0,0,0, 90 },
+  { "pt0", "3BD", sizeof (BITCODE_3BD), OFF (struct _dwg_object_GEOMAPIMAGE,pt0), 1,0,0, 10 },
+  { "size", "2RD", sizeof (BITCODE_2RD), OFF (struct _dwg_object_GEOMAPIMAGE,size), 1,0,0, 13 },
+  { "display_props", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_object_GEOMAPIMAGE,display_props), 0,0,0, 70 },
+  { "clipping", "B", sizeof (BITCODE_B), OFF (struct _dwg_object_GEOMAPIMAGE,clipping), 0,0,0, 280 },
+  { "brightness", "RC", sizeof (BITCODE_RC), OFF (struct _dwg_object_GEOMAPIMAGE,brightness), 0,0,0, 281 },
+  { "contrast", "RC", sizeof (BITCODE_RC), OFF (struct _dwg_object_GEOMAPIMAGE,contrast), 0,0,0, 282 },
+  { "fade", "RC", sizeof (BITCODE_RC), OFF (struct _dwg_object_GEOMAPIMAGE,fade), 0,0,0, 283 },
+  { "rotation", "BD", sizeof (BITCODE_BD), OFF (struct _dwg_object_GEOMAPIMAGE,rotation), 0,0,0, 0 },
+  { "image_width", "BD", sizeof (BITCODE_BD), OFF (struct _dwg_object_GEOMAPIMAGE,image_width), 0,0,0, 0 },
+  { "image_height", "BD", sizeof (BITCODE_BD), OFF (struct _dwg_object_GEOMAPIMAGE,image_height), 0,0,0, 0 },
+  { "name", "T", sizeof (BITCODE_T), OFF (struct _dwg_object_GEOMAPIMAGE,name), 1,1,1, 0 },
+  { "image_file", "BD", sizeof (BITCODE_BD), OFF (struct _dwg_object_GEOMAPIMAGE,image_file), 0,0,0, 0 },
+  { "image_visibility", "BD", sizeof (BITCODE_BD), OFF (struct _dwg_object_GEOMAPIMAGE,image_visibility), 0,0,0, 0 },
+  { "transparency", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_object_GEOMAPIMAGE,transparency), 0,0,0, 0 },
+  { "height", "BD", sizeof (BITCODE_BD), OFF (struct _dwg_object_GEOMAPIMAGE,height), 0,0,0, 0 },
+  { "width", "BD", sizeof (BITCODE_BD), OFF (struct _dwg_object_GEOMAPIMAGE,width), 0,0,0, 0 },
+  { "show_rotation", "B", sizeof (BITCODE_B), OFF (struct _dwg_object_GEOMAPIMAGE,show_rotation), 0,0,0, 0 },
+  { "scale_factor", "BD", sizeof (BITCODE_BD), OFF (struct _dwg_object_GEOMAPIMAGE,scale_factor), 0,0,0, 0 },
+  { "geoimage_brightness", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_object_GEOMAPIMAGE,geoimage_brightness), 0,0,0, 0 },
+  { "geoimage_contrast", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_object_GEOMAPIMAGE,geoimage_contrast), 0,0,0, 0 },
+  { "geoimage_fade", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_object_GEOMAPIMAGE,geoimage_fade), 0,0,0, 0 },
+  { "geoimage_position", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_object_GEOMAPIMAGE,geoimage_position), 0,0,0, 0 },
+  { "geoimage_width", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_object_GEOMAPIMAGE,geoimage_width), 0,0,0, 0 },
+  { "geoimage_height", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_object_GEOMAPIMAGE,geoimage_height), 0,0,0, 0 },
+  {NULL, NULL, 0, 0, 0,0,0, 0},
+};
 /* from typedef struct _dwg_object_GROUP: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_GROUP_fields[] = {
   { "parent", "struct _dwg_object_object*", sizeof (void *), OFF (struct _dwg_object_GROUP,parent), 1,1,0, 0 },
@@ -3915,117 +3946,118 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "ELLIPSE", 35, _dwg_ELLIPSE_fields },	/* 48 */
   { "ENDBLK", 5, _dwg_ENDBLK_fields },	/* 49 */
   { "EVALUATION_GRAPH", 537, _dwg_EVALUATION_GRAPH_fields },	/* 50 */
-  { "EXTRUDEDSURFACE", 577, _dwg_EXTRUDEDSURFACE_fields },	/* 51 */
+  { "EXTRUDEDSURFACE", 578, _dwg_EXTRUDEDSURFACE_fields },	/* 51 */
   { "FIELD", 538, _dwg_FIELD_fields },	/* 52 */
   { "FIELDLIST", 539, _dwg_FIELDLIST_fields },	/* 53 */
   { "FREED", 65533, NULL },	/* 54 */
   { "GEODATA", 540, _dwg_GEODATA_fields },	/* 55 */
-  { "GEOPOSITIONMARKER", 541, _dwg_GEOPOSITIONMARKER_fields },	/* 56 */
-  { "GROUP", 72, _dwg_GROUP_fields },	/* 57 */
-  { "HATCH", 78, _dwg_HATCH_fields },	/* 58 */
-  { "HELIX", 542, _dwg_HELIX_fields },	/* 59 */
-  { "IDBUFFER", 543, _dwg_IDBUFFER_fields },	/* 60 */
-  { "IMAGE", 544, _dwg_IMAGE_fields },	/* 61 */
-  { "IMAGEDEF", 545, _dwg_IMAGEDEF_fields },	/* 62 */
-  { "IMAGEDEF_REACTOR", 546, _dwg_IMAGEDEF_REACTOR_fields },	/* 63 */
-  { "INSERT", 7, _dwg_INSERT_fields },	/* 64 */
-  { "LAYER", 51, _dwg_LAYER_fields },	/* 65 */
-  { "LAYER_CONTROL", 50, _dwg_LAYER_CONTROL_fields },	/* 66 */
-  { "LAYER_FILTER", 547, NULL },	/* 67 */
-  { "LAYER_INDEX", 548, _dwg_LAYER_INDEX_fields },	/* 68 */
-  { "LAYOUT", 82, _dwg_LAYOUT_fields },	/* 69 */
-  { "LAYOUTPRINTCONFIG", 549, NULL },	/* 70 */
-  { "LEADER", 45, _dwg_LEADER_fields },	/* 71 */
-  { "LEADEROBJECTCONTEXTDATA", 550, NULL },	/* 72 */
-  { "LIGHT", 551, _dwg_LIGHT_fields },	/* 73 */
-  { "LIGHTLIST", 552, _dwg_LIGHTLIST_fields },	/* 74 */
-  { "LINE", 19, _dwg_LINE_fields },	/* 75 */
-  { "LOFTEDSURFACE", 578, _dwg_LOFTEDSURFACE_fields },	/* 76 */
-  { "LONG_TRANSACTION", 76, _dwg_LONG_TRANSACTION_fields },	/* 77 */
-  { "LTYPE", 57, _dwg_LTYPE_fields },	/* 78 */
-  { "LTYPE_CONTROL", 56, _dwg_LTYPE_CONTROL_fields },	/* 79 */
-  { "LWPOLYLINE", 77, _dwg_LWPOLYLINE_fields },	/* 80 */
-  { "MATERIAL", 553, _dwg_MATERIAL_fields },	/* 81 */
-  { "MENTALRAYRENDERSETTINGS", 565, NULL },	/* 82 */
-  { "MINSERT", 8, _dwg_MINSERT_fields },	/* 83 */
-  { "MLEADERSTYLE", 554, _dwg_MLEADERSTYLE_fields },	/* 84 */
-  { "MLINE", 47, _dwg_MLINE_fields },	/* 85 */
-  { "MLINESTYLE", 73, _dwg_MLINESTYLE_fields },	/* 86 */
-  { "MTEXT", 44, _dwg_MTEXT_fields },	/* 87 */
-  { "MULTILEADER", 555, _dwg_MULTILEADER_fields },	/* 88 */
-  { "NPOCOLLECTION", 556, NULL },	/* 89 */
-  { "OBJECTCONTEXTDATA", 557, _dwg_OBJECTCONTEXTDATA_fields },	/* 90 */
-  { "OBJECT_PTR", 558, _dwg_OBJECT_PTR_fields },	/* 91 */
-  { "OLE2FRAME", 74, _dwg_OLE2FRAME_fields },	/* 92 */
-  { "OLEFRAME", 43, _dwg_OLEFRAME_fields },	/* 93 */
-  { "PERSSUBENTMANAGER", 559, _dwg_PERSSUBENTMANAGER_fields },	/* 94 */
-  { "PLACEHOLDER", 80, _dwg_PLACEHOLDER_fields },	/* 95 */
-  { "PLANESURFACE", 576, _dwg_PLANESURFACE_fields },	/* 96 */
-  { "PLOTSETTINGS", 560, _dwg_PLOTSETTINGS_fields },	/* 97 */
-  { "POINT", 27, _dwg_POINT_fields },	/* 98 */
-  { "POINTCLOUD", 561, NULL },	/* 99 */
-  { "POLYLINE_2D", 15, _dwg_POLYLINE_2D_fields },	/* 100 */
-  { "POLYLINE_3D", 16, _dwg_POLYLINE_3D_fields },	/* 101 */
-  { "POLYLINE_MESH", 30, _dwg_POLYLINE_MESH_fields },	/* 102 */
-  { "POLYLINE_PFACE", 29, _dwg_POLYLINE_PFACE_fields },	/* 103 */
-  { "PROXY_ENTITY", 498, _dwg_PROXY_ENTITY_fields },	/* 104 */
-  { "PROXY_OBJECT", 499, _dwg_PROXY_OBJECT_fields },	/* 105 */
-  { "RAPIDRTRENDERENVIRONMENT", 566, NULL },	/* 106 */
-  { "RAPIDRTRENDERSETTINGS", 567, NULL },	/* 107 */
-  { "RASTERVARIABLES", 562, _dwg_RASTERVARIABLES_fields },	/* 108 */
-  { "RAY", 40, _dwg_RAY_fields },	/* 109 */
-  { "REGION", 37, _dwg_3DSOLID_fields },	/* 110 */
-  { "RENDERENVIRONMENT", 563, _dwg_RENDERENVIRONMENT_fields },	/* 111 */
-  { "RENDERGLOBAL", 564, _dwg_RENDERGLOBAL_fields },	/* 112 */
-  { "REVOLVEDSURFACE", 579, _dwg_REVOLVEDSURFACE_fields },	/* 113 */
-  { "RTEXT", 568, NULL },	/* 114 */
-  { "SCALE", 569, _dwg_SCALE_fields },	/* 115 */
-  { "SECTIONVIEWSTYLE", 570, NULL },	/* 116 */
-  { "SEQEND", 6, _dwg_SEQEND_fields },	/* 117 */
-  { "SHAPE", 33, _dwg_SHAPE_fields },	/* 118 */
-  { "SOLID", 31, _dwg_SOLID_fields },	/* 119 */
-  { "SORTENTSTABLE", 571, _dwg_SORTENTSTABLE_fields },	/* 120 */
-  { "SPATIAL_FILTER", 572, _dwg_SPATIAL_FILTER_fields },	/* 121 */
-  { "SPATIAL_INDEX", 573, _dwg_SPATIAL_INDEX_fields },	/* 122 */
-  { "SPLINE", 36, _dwg_SPLINE_fields },	/* 123 */
-  { "STYLE", 53, _dwg_STYLE_fields },	/* 124 */
-  { "STYLE_CONTROL", 52, _dwg_STYLE_CONTROL_fields },	/* 125 */
-  { "SUN", 574, _dwg_SUN_fields },	/* 126 */
-  { "SUNSTUDY", 575, _dwg_SUNSTUDY_fields },	/* 127 */
-  { "SWEPTSURFACE", 580, _dwg_SWEPTSURFACE_fields },	/* 128 */
-  { "TABLE", 581, _dwg_TABLE_fields },	/* 129 */
-  { "TABLECONTENT", 582, _dwg_TABLECONTENT_fields },	/* 130 */
-  { "TABLEGEOMETRY", 583, _dwg_TABLEGEOMETRY_fields },	/* 131 */
-  { "TABLESTYLE", 584, _dwg_TABLESTYLE_fields },	/* 132 */
-  { "TEXT", 1, _dwg_TEXT_fields },	/* 133 */
-  { "TOLERANCE", 46, _dwg_TOLERANCE_fields },	/* 134 */
-  { "TRACE", 32, _dwg_TRACE_fields },	/* 135 */
-  { "UCS", 63, _dwg_UCS_fields },	/* 136 */
-  { "UCS_CONTROL", 62, _dwg_UCS_CONTROL_fields },	/* 137 */
-  { "UNDERLAY", 585, _dwg_UNDERLAY_fields },	/* 138 */
-  { "UNDERLAYDEFINITION", 586, _dwg_UNDERLAYDEFINITION_fields },	/* 139 */
-  { "UNKNOWN_ENT", 65534, _dwg_UNKNOWN_ENT_fields },	/* 140 */
-  { "UNKNOWN_OBJ", 65535, _dwg_UNKNOWN_OBJ_fields },	/* 141 */
-  { "UNUSED", 0, NULL },	/* 142 */
-  { "VBA_PROJECT", 81, _dwg_VBA_PROJECT_fields },	/* 143 */
-  { "VERTEX_2D", 10, _dwg_VERTEX_2D_fields },	/* 144 */
-  { "VERTEX_3D", 11, _dwg_VERTEX_3D_fields },	/* 145 */
-  { "VERTEX_MESH", 12, _dwg_VERTEX_3D_fields },	/* 146 */
-  { "VERTEX_PFACE", 13, _dwg_VERTEX_3D_fields },	/* 147 */
-  { "VERTEX_PFACE_FACE", 14, _dwg_VERTEX_PFACE_FACE_fields },	/* 148 */
-  { "VIEW", 61, _dwg_VIEW_fields },	/* 149 */
-  { "VIEWPORT", 34, _dwg_VIEWPORT_fields },	/* 150 */
-  { "VIEW_CONTROL", 60, _dwg_VIEW_CONTROL_fields },	/* 151 */
-  { "VISUALSTYLE", 587, _dwg_VISUALSTYLE_fields },	/* 152 */
-  { "VPORT", 65, _dwg_VPORT_fields },	/* 153 */
-  { "VPORT_CONTROL", 64, _dwg_VPORT_CONTROL_fields },	/* 154 */
-  { "VPORT_ENTITY_CONTROL", 70, _dwg_VPORT_ENTITY_CONTROL_fields },	/* 155 */
-  { "VPORT_ENTITY_HEADER", 71, _dwg_VPORT_ENTITY_HEADER_fields },	/* 156 */
-  { "WIPEOUT", 588, _dwg_WIPEOUT_fields },	/* 157 */
-  { "WIPEOUTVARIABLES", 589, _dwg_WIPEOUTVARIABLES_fields },	/* 158 */
-  { "XLINE", 41, _dwg_RAY_fields },	/* 159 */
-  { "XRECORD", 79, _dwg_XRECORD_fields },	/* 160 */
-  { "XREFPANELOBJECT", 590, NULL },	/* 161 */
+  { "GEOMAPIMAGE", 541, _dwg_GEOMAPIMAGE_fields },	/* 56 */
+  { "GEOPOSITIONMARKER", 542, _dwg_GEOPOSITIONMARKER_fields },	/* 57 */
+  { "GROUP", 72, _dwg_GROUP_fields },	/* 58 */
+  { "HATCH", 78, _dwg_HATCH_fields },	/* 59 */
+  { "HELIX", 543, _dwg_HELIX_fields },	/* 60 */
+  { "IDBUFFER", 544, _dwg_IDBUFFER_fields },	/* 61 */
+  { "IMAGE", 545, _dwg_IMAGE_fields },	/* 62 */
+  { "IMAGEDEF", 546, _dwg_IMAGEDEF_fields },	/* 63 */
+  { "IMAGEDEF_REACTOR", 547, _dwg_IMAGEDEF_REACTOR_fields },	/* 64 */
+  { "INSERT", 7, _dwg_INSERT_fields },	/* 65 */
+  { "LAYER", 51, _dwg_LAYER_fields },	/* 66 */
+  { "LAYER_CONTROL", 50, _dwg_LAYER_CONTROL_fields },	/* 67 */
+  { "LAYER_FILTER", 548, NULL },	/* 68 */
+  { "LAYER_INDEX", 549, _dwg_LAYER_INDEX_fields },	/* 69 */
+  { "LAYOUT", 82, _dwg_LAYOUT_fields },	/* 70 */
+  { "LAYOUTPRINTCONFIG", 550, NULL },	/* 71 */
+  { "LEADER", 45, _dwg_LEADER_fields },	/* 72 */
+  { "LEADEROBJECTCONTEXTDATA", 551, NULL },	/* 73 */
+  { "LIGHT", 552, _dwg_LIGHT_fields },	/* 74 */
+  { "LIGHTLIST", 553, _dwg_LIGHTLIST_fields },	/* 75 */
+  { "LINE", 19, _dwg_LINE_fields },	/* 76 */
+  { "LOFTEDSURFACE", 579, _dwg_LOFTEDSURFACE_fields },	/* 77 */
+  { "LONG_TRANSACTION", 76, _dwg_LONG_TRANSACTION_fields },	/* 78 */
+  { "LTYPE", 57, _dwg_LTYPE_fields },	/* 79 */
+  { "LTYPE_CONTROL", 56, _dwg_LTYPE_CONTROL_fields },	/* 80 */
+  { "LWPOLYLINE", 77, _dwg_LWPOLYLINE_fields },	/* 81 */
+  { "MATERIAL", 554, _dwg_MATERIAL_fields },	/* 82 */
+  { "MENTALRAYRENDERSETTINGS", 566, NULL },	/* 83 */
+  { "MINSERT", 8, _dwg_MINSERT_fields },	/* 84 */
+  { "MLEADERSTYLE", 555, _dwg_MLEADERSTYLE_fields },	/* 85 */
+  { "MLINE", 47, _dwg_MLINE_fields },	/* 86 */
+  { "MLINESTYLE", 73, _dwg_MLINESTYLE_fields },	/* 87 */
+  { "MTEXT", 44, _dwg_MTEXT_fields },	/* 88 */
+  { "MULTILEADER", 556, _dwg_MULTILEADER_fields },	/* 89 */
+  { "NPOCOLLECTION", 557, NULL },	/* 90 */
+  { "OBJECTCONTEXTDATA", 558, _dwg_OBJECTCONTEXTDATA_fields },	/* 91 */
+  { "OBJECT_PTR", 559, _dwg_OBJECT_PTR_fields },	/* 92 */
+  { "OLE2FRAME", 74, _dwg_OLE2FRAME_fields },	/* 93 */
+  { "OLEFRAME", 43, _dwg_OLEFRAME_fields },	/* 94 */
+  { "PERSSUBENTMANAGER", 560, _dwg_PERSSUBENTMANAGER_fields },	/* 95 */
+  { "PLACEHOLDER", 80, _dwg_PLACEHOLDER_fields },	/* 96 */
+  { "PLANESURFACE", 577, _dwg_PLANESURFACE_fields },	/* 97 */
+  { "PLOTSETTINGS", 561, _dwg_PLOTSETTINGS_fields },	/* 98 */
+  { "POINT", 27, _dwg_POINT_fields },	/* 99 */
+  { "POINTCLOUD", 562, NULL },	/* 100 */
+  { "POLYLINE_2D", 15, _dwg_POLYLINE_2D_fields },	/* 101 */
+  { "POLYLINE_3D", 16, _dwg_POLYLINE_3D_fields },	/* 102 */
+  { "POLYLINE_MESH", 30, _dwg_POLYLINE_MESH_fields },	/* 103 */
+  { "POLYLINE_PFACE", 29, _dwg_POLYLINE_PFACE_fields },	/* 104 */
+  { "PROXY_ENTITY", 498, _dwg_PROXY_ENTITY_fields },	/* 105 */
+  { "PROXY_OBJECT", 499, _dwg_PROXY_OBJECT_fields },	/* 106 */
+  { "RAPIDRTRENDERENVIRONMENT", 567, NULL },	/* 107 */
+  { "RAPIDRTRENDERSETTINGS", 568, NULL },	/* 108 */
+  { "RASTERVARIABLES", 563, _dwg_RASTERVARIABLES_fields },	/* 109 */
+  { "RAY", 40, _dwg_RAY_fields },	/* 110 */
+  { "REGION", 37, _dwg_3DSOLID_fields },	/* 111 */
+  { "RENDERENVIRONMENT", 564, _dwg_RENDERENVIRONMENT_fields },	/* 112 */
+  { "RENDERGLOBAL", 565, _dwg_RENDERGLOBAL_fields },	/* 113 */
+  { "REVOLVEDSURFACE", 580, _dwg_REVOLVEDSURFACE_fields },	/* 114 */
+  { "RTEXT", 569, NULL },	/* 115 */
+  { "SCALE", 570, _dwg_SCALE_fields },	/* 116 */
+  { "SECTIONVIEWSTYLE", 571, NULL },	/* 117 */
+  { "SEQEND", 6, _dwg_SEQEND_fields },	/* 118 */
+  { "SHAPE", 33, _dwg_SHAPE_fields },	/* 119 */
+  { "SOLID", 31, _dwg_SOLID_fields },	/* 120 */
+  { "SORTENTSTABLE", 572, _dwg_SORTENTSTABLE_fields },	/* 121 */
+  { "SPATIAL_FILTER", 573, _dwg_SPATIAL_FILTER_fields },	/* 122 */
+  { "SPATIAL_INDEX", 574, _dwg_SPATIAL_INDEX_fields },	/* 123 */
+  { "SPLINE", 36, _dwg_SPLINE_fields },	/* 124 */
+  { "STYLE", 53, _dwg_STYLE_fields },	/* 125 */
+  { "STYLE_CONTROL", 52, _dwg_STYLE_CONTROL_fields },	/* 126 */
+  { "SUN", 575, _dwg_SUN_fields },	/* 127 */
+  { "SUNSTUDY", 576, _dwg_SUNSTUDY_fields },	/* 128 */
+  { "SWEPTSURFACE", 581, _dwg_SWEPTSURFACE_fields },	/* 129 */
+  { "TABLE", 582, _dwg_TABLE_fields },	/* 130 */
+  { "TABLECONTENT", 583, _dwg_TABLECONTENT_fields },	/* 131 */
+  { "TABLEGEOMETRY", 584, _dwg_TABLEGEOMETRY_fields },	/* 132 */
+  { "TABLESTYLE", 585, _dwg_TABLESTYLE_fields },	/* 133 */
+  { "TEXT", 1, _dwg_TEXT_fields },	/* 134 */
+  { "TOLERANCE", 46, _dwg_TOLERANCE_fields },	/* 135 */
+  { "TRACE", 32, _dwg_TRACE_fields },	/* 136 */
+  { "UCS", 63, _dwg_UCS_fields },	/* 137 */
+  { "UCS_CONTROL", 62, _dwg_UCS_CONTROL_fields },	/* 138 */
+  { "UNDERLAY", 586, _dwg_UNDERLAY_fields },	/* 139 */
+  { "UNDERLAYDEFINITION", 587, _dwg_UNDERLAYDEFINITION_fields },	/* 140 */
+  { "UNKNOWN_ENT", 65534, _dwg_UNKNOWN_ENT_fields },	/* 141 */
+  { "UNKNOWN_OBJ", 65535, _dwg_UNKNOWN_OBJ_fields },	/* 142 */
+  { "UNUSED", 0, NULL },	/* 143 */
+  { "VBA_PROJECT", 81, _dwg_VBA_PROJECT_fields },	/* 144 */
+  { "VERTEX_2D", 10, _dwg_VERTEX_2D_fields },	/* 145 */
+  { "VERTEX_3D", 11, _dwg_VERTEX_3D_fields },	/* 146 */
+  { "VERTEX_MESH", 12, _dwg_VERTEX_3D_fields },	/* 147 */
+  { "VERTEX_PFACE", 13, _dwg_VERTEX_3D_fields },	/* 148 */
+  { "VERTEX_PFACE_FACE", 14, _dwg_VERTEX_PFACE_FACE_fields },	/* 149 */
+  { "VIEW", 61, _dwg_VIEW_fields },	/* 150 */
+  { "VIEWPORT", 34, _dwg_VIEWPORT_fields },	/* 151 */
+  { "VIEW_CONTROL", 60, _dwg_VIEW_CONTROL_fields },	/* 152 */
+  { "VISUALSTYLE", 588, _dwg_VISUALSTYLE_fields },	/* 153 */
+  { "VPORT", 65, _dwg_VPORT_fields },	/* 154 */
+  { "VPORT_CONTROL", 64, _dwg_VPORT_CONTROL_fields },	/* 155 */
+  { "VPORT_ENTITY_CONTROL", 70, _dwg_VPORT_ENTITY_CONTROL_fields },	/* 156 */
+  { "VPORT_ENTITY_HEADER", 71, _dwg_VPORT_ENTITY_HEADER_fields },	/* 157 */
+  { "WIPEOUT", 589, _dwg_WIPEOUT_fields },	/* 158 */
+  { "WIPEOUTVARIABLES", 590, _dwg_WIPEOUTVARIABLES_fields },	/* 159 */
+  { "XLINE", 41, _dwg_RAY_fields },	/* 160 */
+  { "XRECORD", 79, _dwg_XRECORD_fields },	/* 161 */
+  { "XREFPANELOBJECT", 591, NULL },	/* 162 */
 
 };
 

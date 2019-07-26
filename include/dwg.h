@@ -376,6 +376,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_FIELD,
   DWG_TYPE_FIELDLIST,
   DWG_TYPE_GEODATA,
+  DWG_TYPE_GEOMAPIMAGE,
   DWG_TYPE_GEOPOSITIONMARKER,
   DWG_TYPE_HELIX,
   DWG_TYPE_IDBUFFER,
@@ -4316,6 +4317,42 @@ typedef struct _dwg_entity_GEOPOSITIONMARKER
 } Dwg_Entity_GEOPOSITIONMARKER;
 
 /**
+ Object GEOMAPIMAGE (varies), LiveMap image overlay.
+ yet unsorted, and unused.
+*/
+typedef struct _dwg_object_GEOMAPIMAGE
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BL class_version; // 90
+  BITCODE_3BD pt0; // 10
+  BITCODE_2RD size; // 13
+  BITCODE_BS display_props; // 70
+  BITCODE_B clipping; // 280 i.e. clipping_enabled
+  BITCODE_RC brightness; // 281
+  BITCODE_RC contrast; // 282
+  BITCODE_RC fade; // 283
+  BITCODE_BD rotation;
+  //?
+  //BITCODE_3BD origin;
+  BITCODE_BD image_width;
+  BITCODE_BD image_height;
+  BITCODE_T name;
+  BITCODE_BD image_file;
+  BITCODE_BD image_visibility;
+  BITCODE_BS transparency;
+  BITCODE_BD height;
+  BITCODE_BD width;
+  BITCODE_B show_rotation;
+  BITCODE_BD scale_factor;
+  BITCODE_BS geoimage_brightness;
+  BITCODE_BS geoimage_contrast;
+  BITCODE_BS geoimage_fade;
+  BITCODE_BS geoimage_position;
+  BITCODE_BS geoimage_width;
+  BITCODE_BS geoimage_height;
+} Dwg_Object_GEOMAPIMAGE;
+
+/**
  Entity HELIX (varies) UNSTABLE
  subclass of SPLINE
 */
@@ -5252,6 +5289,7 @@ typedef struct _dwg_object_object
     Dwg_Object_FIELD *FIELD;
     Dwg_Object_FIELDLIST *FIELDLIST;
     Dwg_Object_GEODATA *GEODATA;
+    Dwg_Object_GEOMAPIMAGE *GEOMAPIMAGE;
     Dwg_Object_GROUP *GROUP;
     Dwg_Object_IDBUFFER *IDBUFFER;
     Dwg_Object_IMAGEDEF *IMAGEDEF;
@@ -5931,6 +5969,7 @@ EXPORT int dwg_add_ASSOCPERSSUBENTMANAGER (Dwg_Object *obj);
 EXPORT int dwg_add_DATATABLE (Dwg_Object *obj);
 //EXPORT int dwg_add_DETAILVIEWSTYLE (Dwg_Object *obj);
 EXPORT int dwg_add_EVALUATION_GRAPH (Dwg_Object *obj);
+EXPORT int dwg_add_GEOMAPIMAGE (Dwg_Object *obj);
 EXPORT int dwg_add_GEOPOSITIONMARKER (Dwg_Object *obj);
 //EXPORT int dwg_add_LAYER_FILTER (Dwg_Object *obj);
 //EXPORT int dwg_add_LAYOUTPRINTCONFIG (Dwg_Object *obj);

@@ -26935,6 +26935,397 @@ static int test_GEODATA (const Dwg_Object *obj)
   }
   return failed;
 }
+static int test_GEOMAPIMAGE (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_GEOMAPIMAGE *restrict geomapimage = obj->tio.object->tio.GEOMAPIMAGE;
+  {
+    BITCODE_RC brightness;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "brightness", &brightness, NULL)
+        && brightness == geomapimage->brightness)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.brightness [RC] %u != %u", geomapimage->brightness, brightness);
+    brightness++;
+    if (dwg_dynapi_entity_set_value (geomapimage, "GEOMAPIMAGE", "brightness", &brightness, 0)
+        && brightness == geomapimage->brightness)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.brightness [RC] set+1 %u != %u", geomapimage->brightness, brightness);
+    geomapimage->brightness--;
+
+  }
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "class_version", &class_version, NULL)
+        && class_version == geomapimage->class_version)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.class_version [BL] %u != %u", geomapimage->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (geomapimage, "GEOMAPIMAGE", "class_version", &class_version, 0)
+        && class_version == geomapimage->class_version)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.class_version [BL] set+1 %u != %u", geomapimage->class_version, class_version);
+    geomapimage->class_version--;
+
+  }
+  {
+    BITCODE_B clipping;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "clipping", &clipping, NULL)
+        && clipping == geomapimage->clipping)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.clipping [B] " FORMAT_B " != " FORMAT_B "", geomapimage->clipping, clipping);
+    clipping++;
+    if (dwg_dynapi_entity_set_value (geomapimage, "GEOMAPIMAGE", "clipping", &clipping, 0)
+        && clipping == geomapimage->clipping)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.clipping [B] set+1 " FORMAT_B " != " FORMAT_B "", geomapimage->clipping, clipping);
+    geomapimage->clipping--;
+
+  }
+  {
+    BITCODE_RC contrast;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "contrast", &contrast, NULL)
+        && contrast == geomapimage->contrast)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.contrast [RC] %u != %u", geomapimage->contrast, contrast);
+    contrast++;
+    if (dwg_dynapi_entity_set_value (geomapimage, "GEOMAPIMAGE", "contrast", &contrast, 0)
+        && contrast == geomapimage->contrast)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.contrast [RC] set+1 %u != %u", geomapimage->contrast, contrast);
+    geomapimage->contrast--;
+
+  }
+  {
+    BITCODE_BS display_props;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "display_props", &display_props, NULL)
+        && display_props == geomapimage->display_props)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.display_props [BS] %hu != %hu", geomapimage->display_props, display_props);
+    display_props++;
+    if (dwg_dynapi_entity_set_value (geomapimage, "GEOMAPIMAGE", "display_props", &display_props, 0)
+        && display_props == geomapimage->display_props)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.display_props [BS] set+1 %hu != %hu", geomapimage->display_props, display_props);
+    geomapimage->display_props--;
+
+  }
+  {
+    BITCODE_RC fade;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "fade", &fade, NULL)
+        && fade == geomapimage->fade)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.fade [RC] %u != %u", geomapimage->fade, fade);
+    fade++;
+    if (dwg_dynapi_entity_set_value (geomapimage, "GEOMAPIMAGE", "fade", &fade, 0)
+        && fade == geomapimage->fade)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.fade [RC] set+1 %u != %u", geomapimage->fade, fade);
+    geomapimage->fade--;
+
+  }
+  {
+    BITCODE_BS geoimage_brightness;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "geoimage_brightness", &geoimage_brightness, NULL)
+        && geoimage_brightness == geomapimage->geoimage_brightness)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.geoimage_brightness [BS] %hu != %hu", geomapimage->geoimage_brightness, geoimage_brightness);
+    geoimage_brightness++;
+    if (dwg_dynapi_entity_set_value (geomapimage, "GEOMAPIMAGE", "geoimage_brightness", &geoimage_brightness, 0)
+        && geoimage_brightness == geomapimage->geoimage_brightness)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.geoimage_brightness [BS] set+1 %hu != %hu", geomapimage->geoimage_brightness, geoimage_brightness);
+    geomapimage->geoimage_brightness--;
+
+  }
+  {
+    BITCODE_BS geoimage_contrast;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "geoimage_contrast", &geoimage_contrast, NULL)
+        && geoimage_contrast == geomapimage->geoimage_contrast)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.geoimage_contrast [BS] %hu != %hu", geomapimage->geoimage_contrast, geoimage_contrast);
+    geoimage_contrast++;
+    if (dwg_dynapi_entity_set_value (geomapimage, "GEOMAPIMAGE", "geoimage_contrast", &geoimage_contrast, 0)
+        && geoimage_contrast == geomapimage->geoimage_contrast)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.geoimage_contrast [BS] set+1 %hu != %hu", geomapimage->geoimage_contrast, geoimage_contrast);
+    geomapimage->geoimage_contrast--;
+
+  }
+  {
+    BITCODE_BS geoimage_fade;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "geoimage_fade", &geoimage_fade, NULL)
+        && geoimage_fade == geomapimage->geoimage_fade)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.geoimage_fade [BS] %hu != %hu", geomapimage->geoimage_fade, geoimage_fade);
+    geoimage_fade++;
+    if (dwg_dynapi_entity_set_value (geomapimage, "GEOMAPIMAGE", "geoimage_fade", &geoimage_fade, 0)
+        && geoimage_fade == geomapimage->geoimage_fade)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.geoimage_fade [BS] set+1 %hu != %hu", geomapimage->geoimage_fade, geoimage_fade);
+    geomapimage->geoimage_fade--;
+
+  }
+  {
+    BITCODE_BS geoimage_height;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "geoimage_height", &geoimage_height, NULL)
+        && geoimage_height == geomapimage->geoimage_height)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.geoimage_height [BS] %hu != %hu", geomapimage->geoimage_height, geoimage_height);
+    geoimage_height++;
+    if (dwg_dynapi_entity_set_value (geomapimage, "GEOMAPIMAGE", "geoimage_height", &geoimage_height, 0)
+        && geoimage_height == geomapimage->geoimage_height)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.geoimage_height [BS] set+1 %hu != %hu", geomapimage->geoimage_height, geoimage_height);
+    geomapimage->geoimage_height--;
+
+  }
+  {
+    BITCODE_BS geoimage_position;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "geoimage_position", &geoimage_position, NULL)
+        && geoimage_position == geomapimage->geoimage_position)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.geoimage_position [BS] %hu != %hu", geomapimage->geoimage_position, geoimage_position);
+    geoimage_position++;
+    if (dwg_dynapi_entity_set_value (geomapimage, "GEOMAPIMAGE", "geoimage_position", &geoimage_position, 0)
+        && geoimage_position == geomapimage->geoimage_position)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.geoimage_position [BS] set+1 %hu != %hu", geomapimage->geoimage_position, geoimage_position);
+    geomapimage->geoimage_position--;
+
+  }
+  {
+    BITCODE_BS geoimage_width;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "geoimage_width", &geoimage_width, NULL)
+        && geoimage_width == geomapimage->geoimage_width)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.geoimage_width [BS] %hu != %hu", geomapimage->geoimage_width, geoimage_width);
+    geoimage_width++;
+    if (dwg_dynapi_entity_set_value (geomapimage, "GEOMAPIMAGE", "geoimage_width", &geoimage_width, 0)
+        && geoimage_width == geomapimage->geoimage_width)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.geoimage_width [BS] set+1 %hu != %hu", geomapimage->geoimage_width, geoimage_width);
+    geomapimage->geoimage_width--;
+
+  }
+  {
+    BITCODE_BD height;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "height", &height, NULL)
+        && height == geomapimage->height)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.height [BD] %g != %g", geomapimage->height, height);
+    height++;
+    if (dwg_dynapi_entity_set_value (geomapimage, "GEOMAPIMAGE", "height", &height, 0)
+        && height == geomapimage->height)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.height [BD] set+1 %g != %g", geomapimage->height, height);
+    geomapimage->height--;
+
+  }
+  {
+    BITCODE_BD image_file;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "image_file", &image_file, NULL)
+        && image_file == geomapimage->image_file)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.image_file [BD] %g != %g", geomapimage->image_file, image_file);
+    image_file++;
+    if (dwg_dynapi_entity_set_value (geomapimage, "GEOMAPIMAGE", "image_file", &image_file, 0)
+        && image_file == geomapimage->image_file)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.image_file [BD] set+1 %g != %g", geomapimage->image_file, image_file);
+    geomapimage->image_file--;
+
+  }
+  {
+    BITCODE_BD image_height;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "image_height", &image_height, NULL)
+        && image_height == geomapimage->image_height)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.image_height [BD] %g != %g", geomapimage->image_height, image_height);
+    image_height++;
+    if (dwg_dynapi_entity_set_value (geomapimage, "GEOMAPIMAGE", "image_height", &image_height, 0)
+        && image_height == geomapimage->image_height)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.image_height [BD] set+1 %g != %g", geomapimage->image_height, image_height);
+    geomapimage->image_height--;
+
+  }
+  {
+    BITCODE_BD image_visibility;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "image_visibility", &image_visibility, NULL)
+        && image_visibility == geomapimage->image_visibility)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.image_visibility [BD] %g != %g", geomapimage->image_visibility, image_visibility);
+    image_visibility++;
+    if (dwg_dynapi_entity_set_value (geomapimage, "GEOMAPIMAGE", "image_visibility", &image_visibility, 0)
+        && image_visibility == geomapimage->image_visibility)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.image_visibility [BD] set+1 %g != %g", geomapimage->image_visibility, image_visibility);
+    geomapimage->image_visibility--;
+
+  }
+  {
+    BITCODE_BD image_width;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "image_width", &image_width, NULL)
+        && image_width == geomapimage->image_width)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.image_width [BD] %g != %g", geomapimage->image_width, image_width);
+    image_width++;
+    if (dwg_dynapi_entity_set_value (geomapimage, "GEOMAPIMAGE", "image_width", &image_width, 0)
+        && image_width == geomapimage->image_width)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.image_width [BD] set+1 %g != %g", geomapimage->image_width, image_width);
+    geomapimage->image_width--;
+
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "name", &name, NULL)
+        && !memcmp (&name, &geomapimage->name, sizeof (geomapimage->name)))
+        pass ();
+    else
+        fail ("GEOMAPIMAGE.name [T]");
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "parent", &parent, NULL)
+        && !memcmp (&parent, &geomapimage->parent, sizeof (geomapimage->parent)))
+        pass ();
+    else
+        fail ("GEOMAPIMAGE.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_3BD pt0;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "pt0", &pt0, NULL)
+        && !memcmp (&pt0, &geomapimage->pt0, sizeof (geomapimage->pt0)))
+        pass ();
+    else
+        fail ("GEOMAPIMAGE.pt0 [3BD]");
+  }
+  {
+    BITCODE_BD rotation;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "rotation", &rotation, NULL)
+        && rotation == geomapimage->rotation)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.rotation [BD] %g != %g", geomapimage->rotation, rotation);
+    rotation++;
+    if (dwg_dynapi_entity_set_value (geomapimage, "GEOMAPIMAGE", "rotation", &rotation, 0)
+        && rotation == geomapimage->rotation)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.rotation [BD] set+1 %g != %g", geomapimage->rotation, rotation);
+    geomapimage->rotation--;
+
+  }
+  {
+    BITCODE_BD scale_factor;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "scale_factor", &scale_factor, NULL)
+        && scale_factor == geomapimage->scale_factor)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.scale_factor [BD] %g != %g", geomapimage->scale_factor, scale_factor);
+    scale_factor++;
+    if (dwg_dynapi_entity_set_value (geomapimage, "GEOMAPIMAGE", "scale_factor", &scale_factor, 0)
+        && scale_factor == geomapimage->scale_factor)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.scale_factor [BD] set+1 %g != %g", geomapimage->scale_factor, scale_factor);
+    geomapimage->scale_factor--;
+
+  }
+  {
+    BITCODE_B show_rotation;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "show_rotation", &show_rotation, NULL)
+        && show_rotation == geomapimage->show_rotation)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.show_rotation [B] " FORMAT_B " != " FORMAT_B "", geomapimage->show_rotation, show_rotation);
+    show_rotation++;
+    if (dwg_dynapi_entity_set_value (geomapimage, "GEOMAPIMAGE", "show_rotation", &show_rotation, 0)
+        && show_rotation == geomapimage->show_rotation)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.show_rotation [B] set+1 " FORMAT_B " != " FORMAT_B "", geomapimage->show_rotation, show_rotation);
+    geomapimage->show_rotation--;
+
+  }
+  {
+    BITCODE_2RD size;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "size", &size, NULL)
+        && !memcmp (&size, &geomapimage->size, sizeof (geomapimage->size)))
+        pass ();
+    else
+        fail ("GEOMAPIMAGE.size [2RD]");
+  }
+  {
+    BITCODE_BS transparency;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "transparency", &transparency, NULL)
+        && transparency == geomapimage->transparency)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.transparency [BS] %hu != %hu", geomapimage->transparency, transparency);
+    transparency++;
+    if (dwg_dynapi_entity_set_value (geomapimage, "GEOMAPIMAGE", "transparency", &transparency, 0)
+        && transparency == geomapimage->transparency)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.transparency [BS] set+1 %hu != %hu", geomapimage->transparency, transparency);
+    geomapimage->transparency--;
+
+  }
+  {
+    BITCODE_BD width;
+    if (dwg_dynapi_entity_value(geomapimage, "GEOMAPIMAGE", "width", &width, NULL)
+        && width == geomapimage->width)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.width [BD] %g != %g", geomapimage->width, width);
+    width++;
+    if (dwg_dynapi_entity_set_value (geomapimage, "GEOMAPIMAGE", "width", &width, 0)
+        && width == geomapimage->width)
+      pass ();
+    else
+      fail ("GEOMAPIMAGE.width [BD] set+1 %g != %g", geomapimage->width, width);
+    geomapimage->width--;
+
+  }
+  return failed;
+}
 static int test_GROUP (const Dwg_Object *obj)
 {
   int error = 0;
@@ -35880,6 +36271,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_FIELDLIST(obj);
   else  if (obj->fixedtype == DWG_TYPE_GEODATA)
     error += test_GEODATA(obj);
+  else  if (obj->fixedtype == DWG_TYPE_GEOMAPIMAGE)
+    error += test_GEOMAPIMAGE(obj);
   else  if (obj->fixedtype == DWG_TYPE_GROUP)
     error += test_GROUP(obj);
   else  if (obj->fixedtype == DWG_TYPE_IDBUFFER)
@@ -36156,6 +36549,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_FIELDLIST (obj);
   else  if (obj->fixedtype == DWG_TYPE_GEODATA)
     error += test_GEODATA (obj);
+  else  if (obj->fixedtype == DWG_TYPE_GEOMAPIMAGE)
+    error += test_GEOMAPIMAGE (obj);
   else  if (obj->fixedtype == DWG_TYPE_GROUP)
     error += test_GROUP (obj);
   else  if (obj->fixedtype == DWG_TYPE_IDBUFFER)
