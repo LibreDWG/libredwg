@@ -32,6 +32,8 @@ TESTDATA = \
     test-data/2000/Point.dwg \
     test-data/2000/Point.jpg \
     test-data/2000/Point.txt \
+    test-data/2000/PolyLine2D.dwg \
+    test-data/2000/PolyLine2D.dxf \
     test-data/2000/PolyLine3D.dwg \
     test-data/2000/PolyLine3D.jpg \
     test-data/2000/PolyLine3D.txt \

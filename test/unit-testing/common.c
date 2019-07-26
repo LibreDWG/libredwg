@@ -57,6 +57,7 @@ main (int argc, char *argv[])
   if (!input)
     {
       char **ptr;
+      struct stat attrib;
       const char *const files[] =
         {
          "example_2000.dwg",
@@ -70,13 +71,20 @@ main (int argc, char *argv[])
          //"2007/PolyLine3D.dwg",
          NULL
         };
+      const char *prefix = "../test-data/";
+
+      /* ../configure out-of-tree. find srcdir */
+      if (stat (prefix, &attrib))
+        prefix = "../../../test/test-data/";
+      if (stat (prefix, &attrib)) /* dir not found. one more level up */
+        prefix = "../../../../test/test-data/";
+
       for (ptr = (char**)&files[0]; *ptr; ptr++)
         {
-          struct stat attrib;
           if (stat (*ptr, &attrib))
             {
               char tmp[80];
-              strcpy (tmp, "../test-data/");
+              strcpy (tmp, prefix);
               strcat (tmp, *ptr);
               if (stat (tmp, &attrib))
                 fprintf (stderr, "Env var INPUT not defined, %s not found\n", tmp);
@@ -88,12 +96,17 @@ main (int argc, char *argv[])
         }
       if (!numpassed() && !numfailed())
         {
+          char tmp[80];
           if (
               DWG_TYPE == DWG_TYPE_POLYLINE_2D ||
               DWG_TYPE == DWG_TYPE_SEQEND ||
               DWG_TYPE == DWG_TYPE_VERTEX_2D
               )
-            error += test_code ("../test-data/2000/PolyLine2D.dwg");
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2000/PolyLine2D.dwg");
+              error += test_code (tmp);
+            }
           if (
               DWG_TYPE == DWG_TYPE_POLYLINE_MESH ||
               DWG_TYPE == DWG_TYPE_VERTEX_MESH ||
@@ -103,7 +116,11 @@ main (int argc, char *argv[])
               DWG_TYPE == DWG_TYPE_DIMENSION_RADIUS ||
               DWG_TYPE == DWG_TYPE_OLE2FRAME
               )
-            error += test_code ("../test-data/2000/TS1.dwg");
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2000/TS1.dwg");
+              error += test_code (tmp);
+            }
         }
     }
   else
