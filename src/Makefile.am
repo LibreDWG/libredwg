@@ -93,8 +93,8 @@ EXTRA_DIST = \
 	$(EXTRA_HEADERS) \
 	gen-dynapi.pl
 
-dynapi.c: gen-dynapi.pl $(top_srcdir)/include/dwg.h
-	-$(PERL) gen-dynapi.pl
+$(srcdir)/dynapi.c: $(srcdir)/gen-dynapi.pl $(top_srcdir)/include/dwg.h
+	-cd $(srcdir) && $(PERL) gen-dynapi.pl
 
 .c.i:
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
