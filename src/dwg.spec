@@ -3915,13 +3915,13 @@ DWG_OBJECT_END
 DWG_ENTITY(LWPOLYLINE)
 
   SUBCLASS (AcDbPolyline)
-  #ifdef IS_DXF
-    FIELD_BL (num_points, 90);
-    VALUE_BS ((FIELD_VALUE(flag) & 128) + (FIELD_VALUE(flag) & 512 ? 1 : 0),
-              70); //1 closed, 128 plinegen
-  #else
-    FIELD_BS (flag, 70); //512 closed, 128 plinegen
-  #endif
+#ifdef IS_DXF
+  FIELD_BL (num_points, 90);
+  VALUE_BS ((FIELD_VALUE(flag) & 128) + (FIELD_VALUE(flag) & 512 ? 1 : 0),
+            70); //1 closed, 128 plinegen
+#else
+  FIELD_BS (flag, 70); //512 closed, 128 plinegen
+#endif
 
   if (FIELD_VALUE(flag) & 4)
     FIELD_BD (const_width, 43);

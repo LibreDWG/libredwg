@@ -15,6 +15,7 @@ api_process (dwg_object *obj)
   dwg_lwpline_widths *width;
   BITCODE_BL *vertexids;
   BITCODE_BL num_vertexids, i;
+
   dwg_ent_lwpline *lwpline = dwg_object_to_LWPOLYLINE (obj);
 
   CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, flag, BS, flag);

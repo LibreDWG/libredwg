@@ -298,18 +298,21 @@ Dwg_Entity_##token *dwg_object_to_##token (Dwg_Object *obj);
 #define CAST_DWG_OBJECT_TO_ENTITY(token) \
 EXPORT \
 Dwg_Entity_##token *dwg_object_to_##token (Dwg_Object *obj) \
-{ \
-    Dwg_Entity_##token *ret_obj = NULL; \
-    if (obj && obj->tio.entity && obj->type == DWG_TYPE_##token) \
-      { \
-        ret_obj = obj->tio.entity->tio.token; \
-      } \
-    else \
-      { \
-        loglevel = obj && obj->parent ? obj->parent->opts & 0xf : 0; \
-        LOG_ERROR("Invalid %s type: got 0x%x", #token, obj ? obj->type : 0); \
-      } \
-  return ret_obj; \
+{                                                      \
+  Dwg_Entity_##token *ret_obj = NULL;                  \
+  if (obj &&                                           \
+      obj->tio.entity &&                               \
+      (obj->type == DWG_TYPE_##token ||                \
+       obj->fixedtype == DWG_TYPE_##token))            \
+    {                                                  \
+      ret_obj = obj->tio.entity->tio.token;            \
+    }                                                  \
+  else                                                 \
+    {                                                  \
+      loglevel = obj && obj->parent ? obj->parent->opts & 0xf : 0; \
+      LOG_ERROR("Invalid %s type: got 0x%x", #token, obj ? obj->type : 0); \
+    }                                                  \
+  return ret_obj;                                      \
 }
 
 /// for all classes, types > 500. IMAGE, OLE2FRAME, WIPEOUT
@@ -787,11 +790,11 @@ CAST_DWG_OBJECT_TO_ENTITY_DECL(LEADER)
 CAST_DWG_OBJECT_TO_ENTITY_DECL(TOLERANCE)
 CAST_DWG_OBJECT_TO_ENTITY_DECL(MLINE)
 CAST_DWG_OBJECT_TO_ENTITY_DECL(OLE2FRAME)
-CAST_DWG_OBJECT_TO_ENTITY_DECL(LWPOLYLINE)
 //CAST_DWG_OBJECT_TO_ENTITY_DECL(PROXY_ENTITY)
 CAST_DWG_OBJECT_TO_ENTITY_DECL(HATCH)
 
 /// dwg object to variable types
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL(LWPOLYLINE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL(IMAGE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL(CAMERA)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL(HELIX)
