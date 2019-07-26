@@ -329,7 +329,7 @@ print_api (dwg_object *obj)
       {                                                                 \
         char *_hdlname = dwg_dynapi_handle_name (ent->parent->dwg,      \
                                                  hdl);                  \
-        if (hdl == ent->parent->field)                                  \
+        if (hdl == (BITCODE_H)ent->parent->field)                       \
           ok (#field ": %s (%x.%d.%lX)", _hdlname ? : "",               \
               hdl->handleref.code,                                      \
               hdl->handleref.size, hdl->handleref.value);               \
@@ -340,11 +340,40 @@ print_api (dwg_object *obj)
       }                                                                 \
   }
 
+#define CHK_COMMON_HV(ent, field, hdlp, num)                            \
+  if (!dwg_dynapi_common_value (ent, #field, &hdlp, NULL))              \
+    fail (#field);                                                      \
+  else if (!hdlp)                                                       \
+    pass ();                                                            \
+  else                                                                  \
+    {                                                                   \
+      for (int _i = 0; _i < (int)(num); _i++)                           \
+        {                                                               \
+          BITCODE_H _hdl = hdlp[_i];                                    \
+          char *_hdlname = dwg_dynapi_handle_name (ent->parent->dwg, _hdl); \
+          if (_hdl == ent->parent->field[_i])                           \
+            {                                                           \
+              ok (#field "[%d]: %s (%x.%d.%lX)", _i,                    \
+                  _hdlname ? : "", _hdl->handleref.code,                \
+                  _hdl->handleref.size, _hdl->handleref.value);         \
+            }                                                           \
+          else                                                          \
+            {                                                           \
+              fail (#field "[%d]: %s (%x.%d.%lX)", _i,                  \
+                    _hdlname ? : "", _hdl->handleref.code,              \
+                    _hdl->handleref.size, _hdl->handleref.value);       \
+            }                                                           \
+        }                                                               \
+    }
+
 void
 api_common_entity (dwg_object *obj)
 {
   BITCODE_BB entmode;
   BITCODE_H handle;
+  BITCODE_BL num_reactors, num_eed;
+  BITCODE_H* reactors;
+  BITCODE_B xdic_missing_flag, has_ds_binary_data;
   Dwg_Object_Entity *_ent =  obj->tio.entity;
   Dwg_Entity_LINE *ent =  obj->tio.entity->tio.LINE;
 
@@ -366,11 +395,14 @@ api_common_entity (dwg_object *obj)
     CHK_COMMON_H (ent, face_visualstyle, handle);
   if (_ent->has_edge_visualstyle)
     CHK_COMMON_H (ent, edge_visualstyle, handle);
-}
 
-void
-api_common_object (dwg_object *obj)
-{
+  CHK_COMMON_TYPE (ent, xdic_missing_flag, B, xdic_missing_flag);
+  if (!xdic_missing_flag)
+    CHK_COMMON_H (ent, xdicobjhandle, handle);
+  CHK_COMMON_TYPE (ent, num_reactors, BL, num_reactors);
+  CHK_COMMON_HV (ent, reactors, reactors, num_reactors);
+  CHK_COMMON_TYPE (ent, has_ds_binary_data, B, has_ds_binary_data);
+  CHK_COMMON_TYPE (ent, num_eed, BL, num_eed);
 }
 
 #define CHK_ENTITY_UTF8TEXT(ent, name, field, value)                    \
@@ -508,6 +540,52 @@ api_common_object (dwg_object *obj)
     if (error || memcmp (&value, &_pt3d, sizeof (value)))       \
       fail ("old API dwg_ent_" #ent "_get_" #field);            \
   }
+
+void
+api_common_object (dwg_object *obj)
+{
+  BITCODE_H handle;
+  BITCODE_BL num_reactors, num_eed;
+  BITCODE_H* reactors;
+  BITCODE_B xdic_missing_flag, has_ds_binary_data;
+  Dwg_Object_Object *obj_obj =  obj->tio.object;
+  Dwg_Object_LAYER *_obj =  obj->tio.object->tio.LAYER;
+
+  CHK_COMMON_H (_obj, ownerhandle, handle);
+  CHK_COMMON_TYPE (_obj, xdic_missing_flag, B, xdic_missing_flag);
+  if (!xdic_missing_flag)
+    CHK_COMMON_H (_obj, xdicobjhandle, handle);
+  CHK_COMMON_TYPE (_obj, num_reactors, BL, num_reactors);
+  CHK_COMMON_HV (_obj, reactors, reactors, num_reactors);
+  CHK_COMMON_H (_obj, handleref, handle);
+  CHK_COMMON_TYPE (_obj, has_ds_binary_data, B, has_ds_binary_data);
+  CHK_COMMON_TYPE (_obj, num_eed, BL, num_eed);
+
+#if 0
+  //TODO handle is not available via dwg_dynapi_common_value()
+  if (!dwg_dynapi_common_value (_obj, "handleref", &handle, NULL)
+      || !handle)
+    fail ("%s.handleref: %lX", obj->name, obj->handle.value);
+  else
+    {
+      char *_hdlname = dwg_dynapi_handle_name (obj->parent, handle);
+      if (!memcmp (&handle->handleref, &obj->handle, sizeof (handle->handleref)))
+        {
+          ok ("%s.handleref: %s (%x.%d.%lX)", obj->name,
+              _hdlname ? : "",
+              handle->handleref.code,
+              handle->handleref.size, handle->handleref.value);
+          }
+        else
+          {
+            fail ("%s.handleref: %s (%x.%d.%lX)", obj->name,
+                  _hdlname ? : "",
+                  handle->handleref.code,
+                  handle->handleref.size, handle->handleref.value);
+          }
+    }
+#endif
+}
 
 // allow old deprecated API
 GCC31_DIAG_IGNORE (-Wdeprecated-declarations)
