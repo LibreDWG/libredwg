@@ -20,14 +20,23 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (xrecord, XRECORD, num_xdata, BL, num_xdata);
   if (!dwg_dynapi_entity_value (xrecord, "XRECORD", "xdata", &xdata, NULL))
     fail ("dwg_dynapi_entity_value");
+#if 0
   else
+      // TODO: is xdata is still a linked list, not an array
       for (BITCODE_BL i=0; i<num_xdata; i++)
         {
-          if (!memcmp(&xdata[i], &xrecord->xdata[i], sizeof (Dwg_Resbuf)))
+          if (xdata[i] && xrecord->xdata[i] &&
+              !memcmp(&xdata[i], &xrecord->xdata[i], sizeof (Dwg_Resbuf)))
             pass ();
           else
             fail ("xrecord->xdata[%d]", i);
         }
+#else
+  if (xdata == xrecord->xdata)
+    pass ();
+  else
+    fail ("xrecord->xdata[0]");
+#endif
   CHK_ENTITY_TYPE (xrecord, XRECORD, num_objid_handles, BL, num_objid_handles);
   CHK_ENTITY_HV (xrecord, XRECORD, objid_handles, objid_handles, num_objid_handles);
 }
