@@ -23,6 +23,7 @@
 #include <sys/types.h>
 #include <stdbool.h>
 #include <assert.h>
+#include "common.h"
 #include "bits.h"
 #include "dec_macros.h"
 #include "decode.h"
@@ -34,12 +35,6 @@ static unsigned int cur_ver = 0;
 
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
-
-#ifdef HAVE_FUNC_ATTRIBUTE_MALLOC
-# define ATTRIBUTE_MALLOC __attribute__((malloc))
-#else
-# define ATTRIBUTE_MALLOC
-#endif
 
 // only for temp. debugging, to abort on obviously wrong sizes.
 // should be a bit larger then the filesize.

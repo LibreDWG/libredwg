@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2019 Free Software Foundation, Inc.                        */
+/*  Copyright (C) 2018-2019 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -49,6 +49,7 @@
 #include "out_dxf.h"
 #include "decode.h"
 #include "encode.h"
+#include "dynapi.h"
 
 static unsigned int loglevel;
 #define DWG_LOGLEVEL loglevel
@@ -151,6 +152,7 @@ dxf_free_pair (Dxf_Pair *pair)
 }
 
 static Dxf_Pair *
+ATTRIBUTE_MALLOC
 dxf_read_pair (Bit_Chain *dat)
 {
   Dxf_Pair *pair = calloc (1, sizeof (Dxf_Pair));
@@ -1106,26 +1108,65 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_Header_Variables *_obj = &dwg->header_vars;
   Dwg_Object *obj = NULL;
   const int minimal = dwg->opts & 0x10;
-  double ms;
+  int is_utf = 0;
+  unsigned long pos = bit_position (dat);
   char *codepage;
+
+  // here SECTION(HEADER) was already consumed
+  // read the first group 9, $field pair
   Dxf_Pair *pair = dxf_read_pair (dat);
 
-// define fields (unordered)
-#include "header_variables_dxf.spec"
+  // Unneeded. field names and types are already defined statically in dynapi
+  // #include "header_variables_dxf.spec"
 
-  while (pair->code != 0)
+  while (pair->code == 9)
     {
+      char field[80];
+      strcpy (field, pair->value.s);
+      dxf_free_pair (pair);
+
+    next_hdrvalue:
+      // now read the code, value pair
+      pair = dxf_read_pair (dat);
+      if (pair->code == 1 && strEQc (field, "$ACADVER"))
+        {
+          const char* version = pair->value.s;
+          for (Dwg_Version_Type v = 0; v <= R_AFTER; v++)
+            {
+              if (strEQ (version, version_codes[v]))
+                {
+                  dwg->header.version = v;
+                  dat->version = dat->from_version = dwg->header.version;
+                  is_utf = dat->version >= R_2007;
+                  dxf_free_pair (pair);
+                  break;
+                }
+              if (v == R_AFTER)
+                LOG_ERROR ("Invalid HEADER: 9 %s, 1 %s", field, version)
+            }
+        }
+      else if (field[0] == '$')
+        {
+          //TODO some type checking on the field
+          dwg_dynapi_header_set_value (dwg, &field[1], &pair->value, is_utf);
+          free (pair); // but keep the string! primitives (like RC, BD) are copied
+        }
+      else
+        {
+          LOG_ERROR ("skipping HEADER: 9 %s, missing the $", field);
+          dxf_free_pair (pair);
+        }
+
+      pos = bit_position (dat);
       pair = dxf_read_pair (dat);
       DXF_BREAK_ENDSEC;
-
-      // TODO find name in header struct and set value
-
-      dxf_free_pair (pair);
+      if (pair->code != 9 && pair->code != 0)
+        goto next_hdrvalue; // for mult. 10,20,30 values
     }
   dxf_free_pair (pair);
+  bit_set_position (dat, pos); // back before the next section 0
 
-  // TODO: convert DWGCODEPAGE string to header.codepage number
-  if (strEQc (_obj->DWGCODEPAGE, "ANSI_1252"))
+  if (_obj->DWGCODEPAGE && strEQc (_obj->DWGCODEPAGE, "ANSI_1252"))
     dwg->header.codepage = 30;
 
   return 0;
