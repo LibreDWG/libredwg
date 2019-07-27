@@ -216,9 +216,9 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
       GROUP (dxf);                                                            \
       GCC46_DIAG_IGNORE (-Wformat-nonliteral)                                 \
       snprintf (buf, 255, _fmt, value);                                       \
-      GCC46_DIAG_RESTORE                                                        \
+      GCC46_DIAG_RESTORE                                                      \
       /* not a string, empty num. must be zero */                             \
-      if (strcmp (_fmt, "%s") && !*buf)                                       \
+      if (strEQc (_fmt, "%s") && !*buf)                                       \
         strcpy (buf, "0");                                                    \
       else if (90 <= dxf && dxf < 100)                                        \
         {                                                                     \
@@ -226,9 +226,9 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
           const int32_t _si = (int32_t) (intptr_t) (value);                   \
           snprintf (buf, 255, "%6i", _si);                                    \
         }                                                                     \
-      else if (!strcmp (_fmt, "%-16.14f"))                                    \
+      else if (strEQc (_fmt, "%-16.14f"))                                     \
         {                                                                     \
-          if (!strcmp (buf, "0.00000000000000"))                              \
+          if (strEQc (buf, "0.00000000000000"))                               \
             strcpy (buf, "0.0");                                              \
           else if ((_s = strstr (buf, ".00000000000000")))                    \
             strcpy (_s, ".0");                                                \
@@ -272,7 +272,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
   {                                                                           \
     Dwg_Object_Ref *ref = _obj->nam;                                          \
     Dwg_Object *o = ref ? ref->obj : NULL;                                    \
-    if (o && !strcmp (o->dxfname, #table))                                    \
+    if (o && strEQc (o->dxfname, #table))                                    \
       dxf_cvt_tablerecord (                                                   \
           dat, o, o ? o->tio.object->tio.table->name : (char *)"0", dxf);     \
     else                                                                      \
@@ -284,7 +284,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
   {                                                                           \
     Dwg_Object_Ref *ref = _obj->ob.nam;                                       \
     Dwg_Object *o = ref ? ref->obj : NULL;                                    \
-    if (o && !strcmp (o->dxfname, #table))                                    \
+    if (o && strEQc (o->dxfname, #table))                                    \
       dxf_cvt_tablerecord (                                                   \
           dat, o, o ? o->tio.object->tio.table->name : (char *)"0", dxf);     \
     else                                                                      \
@@ -682,10 +682,10 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
                    DWG_TYPE_##token, #token);                                 \
         return DWG_ERR_INVALIDTYPE;                                           \
       }                                                                       \
-    if (!strcmp (#token, "GEOPOSITIONMARKER"))                                \
+    if (strEQc (#token, "GEOPOSITIONMARKER"))                                 \
       RECORD (POSITIONMARKER);                                                \
     else if (dat->version < R_13 && strlen (#token) == 10                     \
-             && !strcmp (#token, "LWPOLYLINE"))                               \
+             && strEQc (#token, "LWPOLYLINE"))                                \
       RECORD (POLYLINE);                                                      \
     else if (strlen (#token) > 10 && !memcmp (#token, "DIMENSION_", 10))      \
       RECORD (DIMENSION);                                                     \
@@ -693,7 +693,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
       RECORD (POLYLINE);                                                      \
     else if (strlen (#token) > 7 && !memcmp (#token, "VERTEX_", 7))           \
       RECORD (VERTEX);                                                        \
-    else if (dat->version >= R_2010 && !strcmp (#token, "TABLE"))             \
+    else if (dat->version >= R_2010 && strEQc (#token, "TABLE"))             \
       {                                                                       \
         RECORD (ACAD_TABLE);                                                  \
         return dwg_dxf_TABLECONTENT (dat, obj);                               \
@@ -792,7 +792,7 @@ dxf_write_xdata (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           type = VT_INVALID;
         }
 
-      if (!strcmp (fmt, "(unknown code)"))
+      if (strEQc (fmt, "(unknown code)"))
         {
           if (type == VT_INVALID)
             {
@@ -909,26 +909,26 @@ dxf_cvt_tablerecord (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         }
       if (dat->from_version >= R_13 && dat->version < R_13)
         { // convert the other way round, from newer to older
-          if (!strcmp (name, "Standard"))
+          if (strEQc (name, "Standard"))
             fprintf (dat->fh, "%3i\r\nSTANDARD\r\n", dxf);
-          else if (!strcmp (name, "ByLayer"))
+          else if (strEQc (name, "ByLayer"))
             fprintf (dat->fh, "%3i\r\nBYLAYER\r\n", dxf);
-          else if (!strcmp (name, "ByBlock"))
+          else if (strEQc (name, "ByBlock"))
             fprintf (dat->fh, "%3i\r\nBYBLOCK\r\n", dxf);
-          else if (!strcmp (name, "*Active"))
+          else if (strEQc (name, "*Active"))
             fprintf (dat->fh, "%3i\r\n*ACTIVE\r\n", dxf);
           else
             fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);
         }
       else
         { // convert some standard names
-          if (dat->version >= R_13 && !strcmp (name, "STANDARD"))
+          if (dat->version >= R_13 && strEQc (name, "STANDARD"))
             fprintf (dat->fh, "%3i\r\nStandard\r\n", dxf);
-          else if (dat->version >= R_13 && !strcmp (name, "BYLAYER"))
+          else if (dat->version >= R_13 && strEQc (name, "BYLAYER"))
             fprintf (dat->fh, "%3i\r\nByLayer\r\n", dxf);
-          else if (dat->version >= R_13 && !strcmp (name, "BYBLOCK"))
+          else if (dat->version >= R_13 && strEQc (name, "BYBLOCK"))
             fprintf (dat->fh, "%3i\r\nByBlock\r\n", dxf);
-          else if (dat->version >= R_13 && !strcmp (name, "*ACTIVE"))
+          else if (dat->version >= R_13 && strEQc (name, "*ACTIVE"))
             fprintf (dat->fh, "%3i\r\n*Active\r\n", dxf);
           else
             fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);
@@ -966,9 +966,9 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
     {
       if (strlen (name) < 10)
         fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);
-      else if (!strcmp (name, "*Model_Space"))
+      else if (strEQc (name, "*Model_Space"))
         fprintf (dat->fh, "%3i\r\n$MODEL_SPACE\r\n", dxf);
-      else if (!strcmp (name, "*Paper_Space"))
+      else if (strEQc (name, "*Paper_Space"))
         fprintf (dat->fh, "%3i\r\n$PAPER_SPACE\r\n", dxf);
       else if (!memcmp (name, "*Paper_Space", sizeof ("*Paper_Space") - 1))
         fprintf (dat->fh, "%3i\r\n$PAPER_SPACE%s\r\n", dxf, &name[12]);
@@ -979,9 +979,9 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
     {
       if (strlen (name) < 10)
         fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);
-      else if (!strcmp (name, "$MODEL_SPACE"))
+      else if (strEQc (name, "$MODEL_SPACE"))
         fprintf (dat->fh, "%3i\r\n*Model_Space\r\n", dxf);
-      else if (!strcmp (name, "$PAPER_SPACE"))
+      else if (strEQc (name, "$PAPER_SPACE"))
         fprintf (dat->fh, "%3i\r\n*Paper_Space\r\n", dxf);
       else if (!memcmp (name, "$PAPER_SPACE", sizeof ("$PAPER_SPACE") - 1))
         fprintf (dat->fh, "%3i\r\n*Paper_Space%s\r\n", dxf, &name[12]);
@@ -1021,7 +1021,7 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
     VALUE_TV ("AcDbSymbolTableRecord", 100);                                  \
     VALUE_TV ("AcDb" #acdbname "TableRecord", 100);                           \
   }                                                                           \
-  if (!strcmp (#acdbname, "Block") && dat->version >= R_13)                   \
+  if (strEQc (#acdbname, "Block") && dat->version >= R_13)                    \
     {                                                                         \
       Dwg_Object *blk = dwg_ref_object (                                      \
           dwg, ((Dwg_Object_BLOCK_HEADER *)_obj)->block_entity);              \
@@ -1236,7 +1236,7 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
           o = dwg_next_object (o);                                            \
           if (!o)                                                             \
             return DWG_ERR_INVALIDHANDLE;                                     \
-          if (!strcmp (#token, "PFACE")                                       \
+          if (strEQc (#token, "PFACE")                                       \
               && o->fixedtype == DWG_TYPE_VERTEX_PFACE_FACE)                  \
             {                                                                 \
               error |= dwg_dxf_VERTEX_PFACE_FACE (dat, o);                    \
@@ -1259,7 +1259,7 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       for (BITCODE_BL j = 0; j < _obj->num_owned; j++)                        \
         {                                                                     \
           o = _obj->vertex[j] ? _obj->vertex[j]->obj : NULL;                  \
-          if (!strcmp (#token, "PFACE") && o                                  \
+          if (strEQc (#token, "PFACE") && o                                   \
               && o->fixedtype == DWG_TYPE_VERTEX_PFACE_FACE)                  \
             {                                                                 \
               error |= dwg_dxf_VERTEX_PFACE_FACE (dat, o);                    \
@@ -1296,7 +1296,7 @@ decl_dxf_process_VERTEX (PFACE)
       Dwg_Object *last_attrib = _obj->last_attrib                             \
        ? _obj->last_attrib->obj : NULL;                                       \
       Dwg_Object *o = _obj->first_attrib ? _obj->first_attrib->obj : NULL;    \
-      if (!o || !last_attrib)                                                                 \
+      if (!o || !last_attrib)                                                 \
         return DWG_ERR_INVALIDHANDLE;                                         \
       if (o->fixedtype == DWG_TYPE_ATTRIB)                                    \
         error |= dwg_dxf_ATTRIB (dat, o);                                     \
@@ -1774,8 +1774,8 @@ dxf_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       const char *dxfname = dwg->dwg_class[j].dxfname;
       // some classes are now builtin
       if (dat->version >= R_2004
-          && (!strcmp (dxfname, "ACDBPLACEHOLDER")
-              || !strcmp (dxfname, "LAYOUT")))
+          && (strEQc (dxfname, "ACDBPLACEHOLDER")
+              || strEQc (dxfname, "LAYOUT")))
         continue;
       RECORD (CLASS);
       VALUE_TV (dxfname, 1);

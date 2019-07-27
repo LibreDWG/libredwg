@@ -849,8 +849,8 @@ EXPORT dwg_point_2d *dwg_ent_get_POINT2D (const void *restrict _obj,
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &point,
                                   &field))
       return NULL;
-    if (!strcmp (field.type, "2RD") || !strcmp (field.type, "2BD")
-        || !strcmp (field.type, "2DPOINT"))
+    if (strEQc (field.type, "2RD") || strEQc (field.type, "2BD")
+        || strEQc (field.type, "2DPOINT"))
       {
         return point;
       }
@@ -883,8 +883,8 @@ dwg_ent_set_POINT2D (void *restrict _obj, const char *restrict fieldname,
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &dummy,
                                   &field))
       return false;
-    if (!strcmp (field.type, "2RD") || !strcmp (field.type, "2BD")
-        || !strcmp (field.type, "2DPOINT"))
+    if (strEQc (field.type, "2RD") || strEQc (field.type, "2BD")
+        || strEQc (field.type, "2DPOINT"))
       {
         return dwg_dynapi_entity_set_value ((void *)_obj, obj->name, fieldname,
                                             point, 0);
@@ -917,8 +917,8 @@ dwg_ent_get_POINT3D (const void *restrict _obj, const char *restrict fieldname)
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &point,
                                   &field))
       return NULL;
-    if (!strcmp (field.type, "3RD") || !strcmp (field.type, "3BD")
-        || !strcmp (field.type, "BE") || !strcmp (field.type, "3DPOINT"))
+    if (strEQc (field.type, "3RD") || strEQc (field.type, "3BD")
+        || strEQc (field.type, "BE") || strEQc (field.type, "3DPOINT"))
       {
         return point;
       }
@@ -951,8 +951,8 @@ dwg_ent_set_POINT3D (void *restrict _obj, const char *restrict fieldname,
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &dummy,
                                   &field))
       return false;
-    if (!strcmp (field.type, "3RD") || !strcmp (field.type, "3BD")
-        || !strcmp (field.type, "BE") || !strcmp (field.type, "3DPOINT"))
+    if (strEQc (field.type, "3RD") || strEQc (field.type, "3BD")
+        || strEQc (field.type, "BE") || strEQc (field.type, "3DPOINT"))
       {
         return dwg_dynapi_entity_set_value ((void *)_obj, obj->name, fieldname,
                                             point, 0);
@@ -985,7 +985,7 @@ dwg_ent_get_STRING (const void *restrict _obj, const char *restrict fieldname)
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &str,
                                   &field))
       return NULL;
-    if (field.is_string || !strcmp (field.type, "TF"))
+    if (field.is_string || strEQc (field.type, "TF"))
       {
         return str;
       }
@@ -1017,7 +1017,7 @@ dwg_ent_get_UTF8 (const void *restrict _obj, const char *restrict fieldname)
     if (!dwg_dynapi_entity_utf8text ((void *)_obj, obj->name, fieldname, &str,
                                   &field))
       return NULL;
-    if (field.is_string || !strcmp (field.type, "TF"))
+    if (field.is_string || strEQc (field.type, "TF"))
       {
         return str;
       }
@@ -1049,7 +1049,7 @@ dwg_ent_set_STRING (void *restrict _obj, const char *restrict fieldname,
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &dummy,
                                   &field))
       return false;
-    if (field.is_string || !strcmp (field.type, "TF"))
+    if (field.is_string || strEQc (field.type, "TF"))
       {
         return dwg_dynapi_entity_set_value ((void *)_obj, obj->name, fieldname,
                                             str, 0);
@@ -1082,7 +1082,7 @@ dwg_ent_set_UTF8 (void *restrict _obj, const char *restrict fieldname,
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &dummy,
                                   &field))
       return false;
-    if (field.is_string || !strcmp (field.type, "TF"))
+    if (field.is_string || strEQc (field.type, "TF"))
       {
         return dwg_dynapi_entity_set_value ((void *)_obj, obj->name, fieldname,
                                             utf8text, 1);
@@ -1114,7 +1114,7 @@ dwg_ent_get_REAL (const void *restrict _obj, const char *restrict fieldname)
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &num,
                                   &field))
       return 0.0;
-    if (!strcmp (field.type, "RD") || !strcmp (field.type, "BD"))
+    if (strEQc (field.type, "RD") || strEQc (field.type, "BD"))
       {
         return num;
       }
@@ -1145,7 +1145,7 @@ dwg_ent_set_REAL (void *restrict _obj, const char *restrict fieldname,
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &dummy,
                                   &field))
       return false;
-    if (!strcmp (field.type, "RD") || !strcmp (field.type, "BD"))
+    if (strEQc (field.type, "RD") || strEQc (field.type, "BD"))
       {
         return dwg_dynapi_entity_set_value ((void *)_obj, obj->name, fieldname,
                                             &num, 0);
@@ -1177,7 +1177,7 @@ dwg_ent_get_INT16 (const void *restrict _obj, const char *restrict fieldname)
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &num,
                                   &field))
       return 0;
-    if (!strcmp (field.type, "RS") || !strcmp (field.type, "BS"))
+    if (strEQc (field.type, "RS") || strEQc (field.type, "BS"))
       {
         return num;
       }
@@ -1209,7 +1209,7 @@ dwg_ent_set_INT16 (void *restrict _obj, const char *restrict fieldname,
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &dummy,
                                   &field))
       return false;
-    if (!strcmp (field.type, "RS") || !strcmp (field.type, "BS"))
+    if (strEQc (field.type, "RS") || strEQc (field.type, "BS"))
       {
         return dwg_dynapi_entity_set_value ((void *)_obj, obj->name, fieldname,
                                             &num, 0);
@@ -1241,8 +1241,8 @@ dwg_ent_get_INT32 (const void *restrict _obj, const char *restrict fieldname)
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &num,
                                   &field))
       return 0;
-    if (!strcmp (field.type, "RL") || !strcmp (field.type, "BL")
-        || !strcmp (field.type, "MS"))
+    if (strEQc (field.type, "RL") || strEQc (field.type, "BL")
+        || strEQc (field.type, "MS"))
       {
         return num;
       }
@@ -1274,8 +1274,8 @@ dwg_ent_set_INT32 (void *restrict _obj, const char *restrict fieldname,
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &dummy,
                                   &field))
       return false;
-    if (!strcmp (field.type, "RL") || !strcmp (field.type, "BL")
-        || !strcmp (field.type, "MS"))
+    if (strEQc (field.type, "RL") || strEQc (field.type, "BL")
+        || strEQc (field.type, "MS"))
       {
         return dwg_dynapi_entity_set_value ((void *)_obj, obj->name, fieldname,
                                             &num, 0);
@@ -20080,9 +20080,9 @@ dwg_get_block_header (dwg_data *restrict dwg, int *restrict error)
           return NULL;
         }
       blk = obj->tio.object->tio.BLOCK_HEADER;
-      if (!strcmp (blk->name, "*Paper_Space"))
+      if (strEQc (blk->name, "*Paper_Space"))
         dwg->pspace_block = obj;
-      else if (!strcmp (blk->name, "*Model_Space"))
+      else if (strEQc (blk->name, "*Model_Space"))
         dwg->mspace_block = obj;
       return blk;
     }

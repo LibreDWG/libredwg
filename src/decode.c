@@ -182,7 +182,7 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dwg->header.version = 0;
   for (i = 0; i < R_AFTER; i++)
     {
-      if (!strcmp (version, version_codes[(Dwg_Version_Type)i]))
+      if (strEQ (version, version_codes[(Dwg_Version_Type)i]))
         {
           dwg->header.version = (Dwg_Version_Type)i;
           break;
@@ -996,7 +996,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             klass->unknown_1, klass->unknown_2);
       }
 
-      if (strcmp ((const char *)klass->dxfname, "LAYOUT") == 0)
+      if (strEQc ((const char *)klass->dxfname, "LAYOUT"))
         dwg->layout_number = klass->number;
 
       dwg->num_classes++;
@@ -2099,7 +2099,7 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           LOG_HANDLE ("unknown:          %u %u\n", dwg->dwg_class[i].unknown_1,
                       dwg->dwg_class[i].unknown_2)
 
-          if (strcmp (dwg->dwg_class[i].dxfname, "LAYOUT") == 0)
+          if (strEQ (dwg->dwg_class[i].dxfname, "LAYOUT"))
             dwg->layout_number = dwg->dwg_class[i].number;
         }
     }
@@ -2695,7 +2695,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
                      obj->eed[idx].handle.code, obj->eed[idx].handle.size,
                      obj->eed[idx].handle.value);
           if (_obj->supertype == DWG_SUPERTYPE_OBJECT && _obj->dxfname
-              && !strcmp (_obj->dxfname, "MLEADERSTYLE"))
+              && strEQc (_obj->dxfname, "MLEADERSTYLE"))
             { // check for is_new_format: has extended data for APPID
               // “ACAD_MLEADERVER”
               Dwg_Object_Ref ref;
@@ -4360,7 +4360,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
             {
               int err;
 #if 0 && !defined(IS_RELEASE)
-              if (!strcmp(klass->dxfname, "MULTILEADER")) { //debug CED
+              if (strEQc(klass->dxfname, "MULTILEADER")) { //debug CED
                 char *mleader = bit_read_TF(dat, obj->size);
                 LOG_INSANE_TF(mleader, (int)obj->size)
                 bit_set_position(dat, restartpos);

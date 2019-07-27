@@ -143,7 +143,7 @@ dwg_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   memset (dwg, 0, sizeof (Dwg_Data));
   dwg->opts = loglevel;
 
-  if (!strcmp (filename, "-"))
+  if (strEQc (filename, "-"))
     {
       fp = stdin;
     }
@@ -1176,71 +1176,71 @@ dwg_section_type (const DWGCHAR *wname)
     }
   name[i] = '\0';
 
-  if (!strcmp (name, "AcDb:Header"))
+  if (strEQc (name, "AcDb:Header"))
     {
       return SECTION_HEADER;
     }
-  else if (!strcmp (name, "AcDb:Classes"))
+  else if (strEQc (name, "AcDb:Classes"))
     {
       return SECTION_CLASSES;
     }
-  else if (!strcmp (name, "AcDb:SummaryInfo"))
+  else if (strEQc (name, "AcDb:SummaryInfo"))
     {
       return SECTION_SUMMARYINFO;
     }
-  else if (!strcmp (name, "AcDb:Preview"))
+  else if (strEQc (name, "AcDb:Preview"))
     {
       return SECTION_PREVIEW;
     }
-  else if (!strcmp (name, "AcDb:VBAProject"))
+  else if (strEQc (name, "AcDb:VBAProject"))
     {
       return SECTION_VBAPROJECT;
     }
-  else if (!strcmp (name, "AcDb:AppInfo"))
+  else if (strEQc (name, "AcDb:AppInfo"))
     {
       return SECTION_APPINFO;
     }
-  else if (!strcmp (name, "AcDb:FileDepList"))
+  else if (strEQc (name, "AcDb:FileDepList"))
     {
       return SECTION_FILEDEPLIST;
     }
-  else if (!strcmp (name, "AcDb:RevHistory"))
+  else if (strEQc (name, "AcDb:RevHistory"))
     {
       return SECTION_REVHISTORY;
     }
-  else if (!strcmp (name, "AcDb:Security"))
+  else if (strEQc (name, "AcDb:Security"))
     {
       return SECTION_SECURITY;
     }
-  else if (!strcmp (name, "AcDb:AcDbObjects"))
+  else if (strEQc (name, "AcDb:AcDbObjects"))
     {
       return SECTION_OBJECTS;
     }
-  else if (!strcmp (name, "AcDb:ObjFreeSpace"))
+  else if (strEQc (name, "AcDb:ObjFreeSpace"))
     {
       return SECTION_OBJFREESPACE;
     }
-  else if (!strcmp (name, "AcDb:Template"))
+  else if (strEQc (name, "AcDb:Template"))
     {
       return SECTION_TEMPLATE;
     }
-  else if (!strcmp (name, "AcDb:Handles"))
+  else if (strEQc (name, "AcDb:Handles"))
     {
       return SECTION_HANDLES;
     }
-  else if (!strcmp (name, "AcDb:AcDsPrototype_1b"))
+  else if (strEQc (name, "AcDb:AcDsPrototype_1b"))
     {
       return SECTION_PROTOTYPE;
     }
-  else if (!strcmp (name, "AcDb:AuxHeader"))
+  else if (strEQc (name, "AcDb:AuxHeader"))
     {
       return SECTION_AUXHEADER;
     }
-  else if (!strcmp (name, "AcDb:Signature"))
+  else if (strEQc (name, "AcDb:Signature"))
     {
       return SECTION_SIGNATURE;
     }
-  else if (!strcmp (name, "AcDb:AppInfoHistory"))
+  else if (strEQc (name, "AcDb:AppInfoHistory"))
     { // AC1021
       return SECTION_APPINFOHISTORY;
     }

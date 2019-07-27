@@ -607,7 +607,7 @@ _prefix (Bit_Chain *dat)
     _ent = obj->tio.entity;                                                   \
     _obj = ent = _ent->tio.token;                                             \
     FIELD_TEXT (entity, #token);                                              \
-    if (strcmp (obj->dxfname, #token))                                        \
+    if (strNE (obj->dxfname, #token))                                         \
       FIELD_TEXT (dxfname, obj->dxfname);                                     \
     _FIELD (type, RL, 0);                                                     \
     KEY (handle);                                                             \
@@ -642,7 +642,7 @@ _prefix (Bit_Chain *dat)
     LOG_INFO ("Object " #token ":\n")                                         \
     _obj = obj->tio.object->tio.token;                                        \
     FIELD_TEXT (object, #token);                                              \
-    if (strcmp (obj->dxfname, #token))                                        \
+    if (strNE (obj->dxfname, #token))                                         \
       FIELD_TEXT (dxfname, obj->dxfname);                                     \
     _FIELD (type, RL, 0);                                                     \
     KEY (handle);                                                             \

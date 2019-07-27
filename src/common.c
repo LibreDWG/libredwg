@@ -142,41 +142,41 @@ const unsigned char dwg_bits_size[] = {
 EXPORT Dwg_Version_Type
 dwg_version_as (const char *version)
 {
-  if (!strcmp (version, "r2000"))
+  if (strEQc (version, "r2000"))
     return R_2000;
-  else if (!strcmp (version, "r2004"))
+  else if (strEQc (version, "r2004"))
     return R_2004;
-  else if (!strcmp (version, "r2007"))
+  else if (strEQc (version, "r2007"))
     return R_2007;
-  else if (!strcmp (version, "r2010"))
+  else if (strEQc (version, "r2010"))
     return R_2010;
-  else if (!strcmp (version, "r2013"))
+  else if (strEQc (version, "r2013"))
     return R_2013;
-  else if (!strcmp (version, "r2018"))
+  else if (strEQc (version, "r2018"))
     return R_2018;
-  else if (!strcmp (version, "r14"))
+  else if (strEQc (version, "r14"))
     return R_14;
-  else if (!strcmp (version, "r13"))
+  else if (strEQc (version, "r13"))
     return R_13;
-  else if (!strcmp (version, "r11") || !strcmp (version, "r12"))
+  else if (strEQc (version, "r11") || strEQc (version, "r12"))
     return R_11;
-  else if (!strcmp (version, "r10"))
+  else if (strEQc (version, "r10"))
     return R_10;
-  else if (!strcmp (version, "r9"))
+  else if (strEQc (version, "r9"))
     return R_9;
-  else if (!strcmp (version, "r2.6"))
+  else if (strEQc (version, "r2.6"))
     return R_2_6;
-  else if (!strcmp (version, "r2.5"))
+  else if (strEQc (version, "r2.5"))
     return R_2_5;
-  else if (!strcmp (version, "r2.1"))
+  else if (strEQc (version, "r2.1"))
     return R_2_1;
-  else if (!strcmp (version, "r2.0"))
+  else if (strEQc (version, "r2.0"))
     return R_2_0;
-  else if (!strcmp (version, "r1.4"))
+  else if (strEQc (version, "r1.4"))
     return R_1_4;
-  else if (!strcmp (version, "r1.2"))
+  else if (strEQc (version, "r1.2"))
     return R_1_2;
-  else if (!strcmp (version, "r1.1"))
+  else if (strEQc (version, "r1.1"))
     return R_1_1;
   else
     return R_INVALID;

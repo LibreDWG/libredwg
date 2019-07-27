@@ -1420,7 +1420,7 @@ read_2007_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
           dwg->dwg_class[i].dxfname
               = bit_convert_TU (dwg->dwg_class[i].dxfname_u);
-          if (strcmp (dwg->dwg_class[i].dxfname, "LAYOUT") == 0)
+          if (strEQc (dwg->dwg_class[i].dxfname, "LAYOUT"))
             dwg->layout_number = dwg->dwg_class[i].number;
         }
     }

@@ -366,7 +366,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         }
 
       name = dwg_ent_get_ltype_name (obj->tio.entity, &error);
-      if (!error && strcmp (name, "ByLayer")) // skip the default
+      if (!error && strNE (name, "ByLayer")) // skip the default
         {
           PAIR_S (Linetype, name);
           if (dat->version >= R_2007)
@@ -486,11 +486,11 @@ dwg_geojson_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   // almost always false
   is_entity = dwg_class_is_entity (klass);
 
-  if (!strcmp (dxfname, "LWPOLYLINE"))
+  if (strEQc (dxfname, "LWPOLYLINE"))
     {
       return dwg_geojson_LWPOLYLINE (dat, obj);
     }
-  if (!strcmp (dxfname, "GEODATA"))
+  if (strEQc (dxfname, "GEODATA"))
     {
       Dwg_Object_GEODATA *_obj = obj->tio.object->tio.GEODATA;
       WARN_UNSTABLE_CLASS;
@@ -499,7 +499,7 @@ dwg_geojson_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       ENDFEATURE;
       return 0;
     }
-  if (!strcmp (dxfname, "GEOPOSITIONMARKER"))
+  if (strEQc (dxfname, "GEOPOSITIONMARKER"))
     {
       Dwg_Entity_GEOPOSITIONMARKER *_obj
           = obj->tio.entity->tio.GEOPOSITIONMARKER;
