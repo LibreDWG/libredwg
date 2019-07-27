@@ -201,9 +201,9 @@ dxf_read_pair (Bit_Chain *dat)
   return pair;
 }
 
-#define DXF_CHECK_EOF                                                         \
-  if (dat->byte >= dat->size                                                  \
-      || (pair->code == 0 && !strcmp (pair->value.s, "EOF")))                 \
+#define DXF_CHECK_EOF                                         \
+  if (dat->byte >= dat->size                                  \
+      || (pair->code == 0 && !strcmp (pair->value.s, "EOF"))) \
   return 1
 
 static int
@@ -810,7 +810,7 @@ dxf_search_field (Dwg_Object *restrict obj, const char *restrict name,
   // then search field
   for (i = 0; i < found->num_fields; i++)
     {
-      if (!strcmp (found->fields[i].name, name))
+      if (strEQ (found->fields[i].name, name))
         return &found->fields[i];
     }
   return NULL;
@@ -1069,13 +1069,13 @@ dwg_indxf_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 #define DXF_BREAK_ENDSEC                                                      \
   if (pair != NULL                                                            \
       && (dat->byte >= dat->size                                              \
-          || (pair->code == 0 && !strcmp (pair->value.s, "ENDSEC"))))         \
+          || (pair->code == 0 && strEQc (pair->value.s, "ENDSEC"))))         \
   break
 #define DXF_RETURN_ENDSEC(what)                                               \
   if (pair != NULL)                                                           \
     {                                                                         \
       if (dat->byte >= dat->size                                              \
-          || (pair->code == 0 && !strcmp (pair->value.s, "ENDSEC")))          \
+          || (pair->code == 0 && strEQc (pair->value.s, "ENDSEC")))          \
         {                                                                     \
           dxf_free_pair (pair);                                               \
           return what;                                                        \
@@ -1125,7 +1125,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dxf_free_pair (pair);
 
   // TODO: convert DWGCODEPAGE string to header.codepage number
-  if (!strcmp (_obj->DWGCODEPAGE, "ANSI_1252"))
+  if (strEQc (_obj->DWGCODEPAGE, "ANSI_1252"))
     dwg->header.codepage = 30;
 
   return 0;
@@ -1290,43 +1290,43 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       pair = dxf_read_pair (dat);
       dxf_expect_code (dat, pair, 0);
       DXF_CHECK_EOF;
-      if (!strcmp (pair->value.s, "SECTION"))
+      if (strEQc (pair->value.s, "SECTION"))
         {
           dxf_free_pair (pair);
           pair = dxf_read_pair (dat);
           dxf_expect_code (dat, pair, 2);
           DXF_CHECK_EOF;
-          if (!strcmp (pair->value.s, "HEADER"))
+          if (strEQc (pair->value.s, "HEADER"))
             {
               dxf_free_pair (pair);
               dxf_header_read (dat, dwg);
             }
-          else if (!strcmp (pair->value.s, "CLASSES"))
+          else if (strEQc (pair->value.s, "CLASSES"))
             {
               dxf_free_pair (pair);
               dxf_classes_read (dat, dwg);
             }
-          else if (!strcmp (pair->value.s, "TABLES"))
+          else if (strEQc (pair->value.s, "TABLES"))
             {
               dxf_free_pair (pair);
               dxf_tables_read (dat, dwg);
             }
-          else if (!strcmp (pair->value.s, "BLOCKS"))
+          else if (strEQc (pair->value.s, "BLOCKS"))
             {
               dxf_free_pair (pair);
               dxf_blocks_read (dat, dwg);
             }
-          else if (!strcmp (pair->value.s, "ENTITIES"))
+          else if (strEQc (pair->value.s, "ENTITIES"))
             {
               dxf_free_pair (pair);
               dxf_entities_read (dat, dwg);
             }
-          else if (!strcmp (pair->value.s, "OBJECTS"))
+          else if (strEQc (pair->value.s, "OBJECTS"))
             {
               dxf_free_pair (pair);
               dxf_objects_read (dat, dwg);
             }
-          if (!strcmp (pair->value.s, "THUMBNAIL"))
+          if (strEQc (pair->value.s, "THUMBNAIL"))
             {
               dxf_free_pair (pair);
               dxf_preview_read (dat, dwg);
