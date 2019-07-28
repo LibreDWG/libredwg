@@ -35,6 +35,11 @@
  */
 
 #include "config.h"
+#ifdef __STDC_ALLOC_LIB__
+# define __STDC_WANT_LIB_EXT2__ 1 /* for strdup */
+#else
+# define _USE_BSD 1
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -55,10 +60,28 @@ static unsigned int loglevel;
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
 
+/* We need to postpone the HEADER handles from names,
+   when we didn't read the TABLES yet, which sets the handle values.
+   Store all handle fieldnames and string values into this array,
+   which is prefixed with the number of stored items.
+ */
+struct array_hdl {
+  char *field;
+  char *name;
+};
+typedef struct _array_hdls {
+  int nitems;
+  struct array_hdl items[]; // grows
+} array_hdls;
+
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
 static char buf[4096];
 static long start, end; // stream offsets
+static array_hdls *header_hdls = NULL;
+
+void
+array_push (array_hdls* hdls, char *field, char *name);
 
 #define ARRAY_SIZE(arr) (sizeof (arr) / sizeof (arr[0]))
 
@@ -119,11 +142,14 @@ dxf_read_string (Bit_Chain *dat, char **string)
 {
   int i;
   dxf_skip_ws (dat);
-  for (i = 0; !isspace (dat->chain[dat->byte]); dat->byte++)
+  for (i = 0; dat->chain[dat->byte] != '\n'; dat->byte++)
     {
       buf[i++] = dat->chain[dat->byte];
     }
-  buf[i] = '\0';
+  if (i && buf[i-1] == '\r')
+    buf[i-1] = '\0';
+  else
+    buf[i] = '\0';
   // int i = sscanf(&dat->chain[dat->byte], "%s", buf);
   if (i)
     {
@@ -1118,6 +1144,7 @@ matches_type (Dxf_Pair *pair, const Dwg_DYNAPI_field *f)
     {
     case VT_STRING:
       if (f->is_string) return 1;
+      if (f->type[0] == 'H') return 1; // handles can be just names
       break;
     case VT_INT32:
       // BL or RL
@@ -1147,15 +1174,26 @@ matches_type (Dxf_Pair *pair, const Dwg_DYNAPI_field *f)
       if (f->is_string) return 1;
       break;
     case VT_HANDLE:
+    case VT_OBJECTID:
       if (f->type[0] == 'H') return 1;
       break;
-    case VT_OBJECTID:
-      // nyi
     case VT_INVALID:
     default:
       LOG_ERROR ("Invalid DXF group code: %d", pair->code);
     }
   return 0;
+}
+
+void
+array_push (array_hdls* hdls, char *field, char *name)
+{
+  int i = hdls->nitems;
+
+  hdls->nitems++;
+  hdls = realloc (hdls,
+                  sizeof (int) + (hdls->nitems * sizeof (struct array_hdl)));
+  hdls->items[i].field = strdup (field);
+  hdls->items[i].name = strdup (name);
 }
 
 static int
@@ -1229,15 +1267,24 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               else
                 {
                   // yes, set it 2-3 times
-                  LOG_TRACE ("HEADER.%s %s [%d]\n", &field[1], f->type, i);
+                  LOG_TRACE ("HEADER.%s [%s][%d]\n", &field[1], f->type, i);
                   dwg_dynapi_header_set_value (dwg, &field[1], &pt, is_utf);
                   i++;
                 }
               dxf_free_pair (pair);
             }
+          else if (pair->type == VT_STRING && strEQc (f->type, "H"))
+            {
+              char *key, *str;
+              LOG_TRACE ("HEADER.%s %s [%s] later\n", &field[1],
+                         pair->value.s, f->type);
+              // TODO name (which table?) => handle
+              // needs to be postponed, because we don't have the tables yet.
+              array_push (header_hdls, &field[1], pair->value.s);
+            }
           else
             {
-              LOG_TRACE ("HEADER.%s %s\n", &field[1], f->type);
+              LOG_TRACE ("HEADER.%s [%s]\n", &field[1], f->type);
               dwg_dynapi_header_set_value (dwg, &field[1], &pair->value, is_utf);
               free (pair); // but keep the string! primitives (like RC, BD) are copied
             }
@@ -1416,6 +1463,8 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   num_dxf_objs = 0;
   size_dxf_objs = 1000;
   dxf_objs = malloc (1000 * sizeof (Dxf_Objs));
+
+  header_hdls = calloc (1, sizeof (int)); // leave items uninitialized
 
   while (dat->byte < dat->size)
     {
