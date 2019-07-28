@@ -43,6 +43,8 @@
 static Dwg_Version_Type dwg_version = R_INVALID;
 static unsigned int loglevel = DWG_LOGLEVEL_ERROR;
 
+#ifndef __AFL_COMPILER
+
 /********************************************************************
  * Functions to return NULL-terminated array of all owned entities  *
  ********************************************************************/
@@ -21119,6 +21121,8 @@ dwg_obj_get_handleref (const dwg_obj_obj *restrict obj, int *restrict error)
 {
   _BODY_FIELD (obj, handleref);
 }
+
+#endif   /* __AFL_COMPILER */
 
 /** Returns dwg_obj_obj* from dwg_object*
 \code Usage: dwg_obj_obj ent = dwg_object_to_object(obj, &error);
