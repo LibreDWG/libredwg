@@ -511,7 +511,7 @@ DWG_ENTITY(INSERT)
     {
       if (FIELD_VALUE(has_attribs))
         {
-          HANDLE_VECTOR(attrib_handles, num_owned, 4, 0);
+          HANDLE_VECTOR (attrib_handles, num_owned, 4, 0);
         }
     }
 
@@ -634,7 +634,7 @@ DWG_ENTITY(MINSERT)
     {
     if (FIELD_VALUE(has_attribs))
       {
-        HANDLE_VECTOR(attrib_handles, num_owned, 4, 0);
+        HANDLE_VECTOR (attrib_handles, num_owned, 4, 0);
       }
     }
 
@@ -866,7 +866,7 @@ DWG_ENTITY(POLYLINE_2D)
 
   SINCE (R_2004)
     {
-      HANDLE_VECTOR(vertex, num_owned, 3, 0);
+      HANDLE_VECTOR (vertex, num_owned, 3, 0);
     }
 
   SINCE (R_13)
@@ -895,7 +895,7 @@ DWG_ENTITY(POLYLINE_3D)
     }
   SINCE (R_2004)
     {
-      HANDLE_VECTOR(vertex, num_owned, 3, 0);
+      HANDLE_VECTOR (vertex, num_owned, 3, 0);
     }
   FIELD_HANDLE (seqend, 3, 0);
 
@@ -1332,7 +1332,7 @@ DWG_ENTITY(POLYLINE_PFACE)
     }
   SINCE (R_2004)
     {
-      HANDLE_VECTOR(vertex, num_owned, 4, 0);
+      HANDLE_VECTOR (vertex, num_owned, 4, 0);
     }
   FIELD_HANDLE (seqend, 3, 0);
 
@@ -1361,7 +1361,7 @@ DWG_ENTITY(POLYLINE_MESH)
     }
   SINCE (R_2004)
     {
-      HANDLE_VECTOR(vertex, num_owned, 4, 0);
+      HANDLE_VECTOR (vertex, num_owned, 4, 0);
     }
   FIELD_HANDLE (seqend, 3, 0);
 
@@ -2002,7 +2002,7 @@ DWG_OBJECT(DICTIONARY)
   START_OBJECT_HANDLE_STREAM;
   SINCE (R_2000)
     {
-      HANDLE_VECTOR(itemhandles, numitems, 2, 0);
+      HANDLE_VECTOR (itemhandles, numitems, 2, 0);
     }
 
 DWG_OBJECT_END
@@ -2055,7 +2055,7 @@ DWG_OBJECT(DICTIONARYWDFLT)
   START_OBJECT_HANDLE_STREAM;
   SINCE (R_2000)
     {
-      HANDLE_VECTOR(itemhandles, numitems, 2, 0);
+      HANDLE_VECTOR (itemhandles, numitems, 2, 0);
     }
   SUBCLASS (AcDbDictionaryWithDefault)
   FIELD_HANDLE (defaultid, 5, 340);
@@ -2307,7 +2307,7 @@ DWG_OBJECT(BLOCK_CONTROL)
   }
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR(block_headers, num_entries, 2, 0);
+  HANDLE_VECTOR (block_headers, num_entries, 2, 0);
   FIELD_HANDLE (model_space, 3, 0);
   FIELD_HANDLE (paper_space, 3, 0);
 
@@ -2416,7 +2416,7 @@ DWG_OBJECT(BLOCK_HEADER)
     {
       if (FIELD_VALUE(num_owned) < 0xf00000)
         {
-          HANDLE_VECTOR(entities, num_owned, 4, 0);
+          HANDLE_VECTOR (entities, num_owned, 4, 0);
         }
     }
 
@@ -2426,7 +2426,7 @@ DWG_OBJECT(BLOCK_HEADER)
   SINCE (R_2000)
     {
       if (FIELD_VALUE(num_inserts) && FIELD_VALUE(num_inserts) < 0xf00000) {
-        HANDLE_VECTOR(insert_handles, num_inserts, ANYCODE, 0);
+        HANDLE_VECTOR (insert_handles, num_inserts, ANYCODE, 0);
       }
       FIELD_HANDLE (layout_handle, 5, 340);
     }
@@ -2443,7 +2443,7 @@ DWG_OBJECT(LAYER_CONTROL)
   }
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR(layers, num_entries, 2, 0);
+  HANDLE_VECTOR (layers, num_entries, 2, 0);
 
 DWG_OBJECT_END
 
@@ -2526,7 +2526,7 @@ DWG_OBJECT(STYLE_CONTROL)
   }
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR(styles, num_entries, 2, 0);
+  HANDLE_VECTOR (styles, num_entries, 2, 0);
 
 DWG_OBJECT_END
 
@@ -2604,7 +2604,7 @@ DWG_OBJECT(LTYPE_CONTROL)
   FIELD_BS (num_entries, 70);
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR(linetypes, num_entries, 2, 0);
+  HANDLE_VECTOR (linetypes, num_entries, 2, 0);
   FIELD_HANDLE (bylayer, 3, 0);
   FIELD_HANDLE (byblock, 3, 0);
 
@@ -2670,7 +2670,7 @@ DWG_OBJECT(LTYPE)
 
   START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (extref_handle, 5, 0);
-  HANDLE_VECTOR(styles, num_dashes, 5, 340);
+  HANDLE_VECTOR (styles, num_dashes, 5, 340);
 
 DWG_OBJECT_END
 
@@ -2687,7 +2687,7 @@ DWG_OBJECT(VIEW_CONTROL)
   }
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR(views, num_entries, 2, 0);
+  HANDLE_VECTOR (views, num_entries, 2, 0);
 
 DWG_OBJECT_END
 
@@ -2793,7 +2793,7 @@ DWG_OBJECT(UCS_CONTROL)
   FIELD_BS (num_entries, 70); //BS or BL?
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR(ucs, num_entries, 2, 0);
+  HANDLE_VECTOR (ucs, num_entries, 2, 0);
 
 DWG_OBJECT_END
 
@@ -2845,7 +2845,7 @@ DWG_OBJECT(VPORT_CONTROL)
   }
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR(vports, num_entries, 2, 0);
+  HANDLE_VECTOR (vports, num_entries, 2, 0);
 
 DWG_OBJECT_END
 
@@ -3055,7 +3055,7 @@ DWG_OBJECT(APPID_CONTROL)
   FIELD_BS (num_entries, 70);
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR(apps, num_entries, 2, 0);
+  HANDLE_VECTOR (apps, num_entries, 2, 0);
 
 DWG_OBJECT_END
 
@@ -3387,7 +3387,7 @@ DWG_OBJECT(GROUP)
   FIELD_BL (num_handles, 0);
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR(group_entries, num_handles, 5, 340);
+  HANDLE_VECTOR (group_entries, num_handles, 5, 340);
 
 DWG_OBJECT_END
 
@@ -3740,7 +3740,7 @@ DWG_OBJECT(IDBUFFER)
   FIELD_BL (num_obj_ids, 0);
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR(obj_ids, num_obj_ids, 4, 330);
+  HANDLE_VECTOR (obj_ids, num_obj_ids, 4, 330);
 
 DWG_OBJECT_END
 
@@ -3834,7 +3834,7 @@ DWG_OBJECT(LAYER_INDEX)
   END_REPEAT(entries)
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR(entry_handles, num_entries, ANYCODE, 0);
+  HANDLE_VECTOR (entry_handles, num_entries, ANYCODE, 0);
 
 DWG_OBJECT_END
 
@@ -3909,7 +3909,7 @@ DWG_OBJECT(LAYOUT)
   FIELD_HANDLE (named_ucs, 5, 345);
 
   SINCE (R_2004) {
-    HANDLE_VECTOR(viewports, num_viewports, 4, 0);
+    HANDLE_VECTOR (viewports, num_viewports, 4, 0);
   }
 
 DWG_OBJECT_END
@@ -5209,7 +5209,7 @@ DWG_OBJECT(XRECORD)
       FIELD_TRACE(num_objid_handles, BL);
     }
     #ifndef IS_DECODER
-      HANDLE_VECTOR(objid_handles, num_objid_handles, 4, 0);
+      HANDLE_VECTOR (objid_handles, num_objid_handles, 4, 0);
     #endif
     #ifdef IS_DXF
     if (FIELD_VALUE(objid_handles)) {
@@ -6120,7 +6120,7 @@ DWG_OBJECT(EVALUATION_GRAPH)
     }
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR(evalexpr, num_evalexpr, 5, 360);
+  HANDLE_VECTOR (evalexpr, num_evalexpr, 5, 360);
 DWG_OBJECT_END
 
 // DEBUGGING
@@ -6175,7 +6175,7 @@ DWG_OBJECT(ASSOCNETWORK)
   FIELD_BL (num_actions, 90);
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR(actions, num_actions, 5, 330);
+  HANDLE_VECTOR (actions, num_actions, 5, 330);
 DWG_OBJECT_END
 
 // (varies) working on DEBUGGING
@@ -6631,8 +6631,8 @@ DWG_ENTITY(LOFTEDSURFACE)
   FIELD_BS (num_guide_curves, 0);
 
   COMMON_ENTITY_HANDLE_DATA;
-  HANDLE_VECTOR(cross_sections, num_cross_sections, 5, 310);
-  HANDLE_VECTOR(guide_curves, num_guide_curves, 5, 310);
+  HANDLE_VECTOR (cross_sections, num_cross_sections, 5, 310);
+  HANDLE_VECTOR (guide_curves, num_guide_curves, 5, 310);
   FIELD_HANDLE (path_curve, 5, 0);
 
 DWG_ENTITY_END
@@ -6765,8 +6765,8 @@ DWG_OBJECT(ASSOCACTION)
     LOG_ERROR("Invalid ASSOCACTION.num_deps " FORMAT_BL, FIELD_VALUE(num_deps));
     return DWG_ERR_VALUEOUTOFBOUNDS;
   }
-  HANDLE_VECTOR(readdeps, num_deps, 5, 330);
-  HANDLE_VECTOR(writedeps, num_deps, 0, 360);
+  HANDLE_VECTOR (readdeps, num_deps, 5, 330);
+  HANDLE_VECTOR (writedeps, num_deps, 0, 360);
   FIELD_BL (unknown_assoc, 90);
 
   START_OBJECT_HANDLE_STREAM;
