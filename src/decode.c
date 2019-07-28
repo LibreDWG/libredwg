@@ -789,7 +789,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   /* Section Locator Records 0x15 */
   assert (dat->byte == 0x15);
   dwg->header.num_sections = bit_read_RL (dat);
-  LOG_TRACE ("\nNum sections: " FORMAT_RL "\n", dwg->header.num_sections)
+  LOG_TRACE ("\nnum_sections: " FORMAT_RL " [RL]\n", dwg->header.num_sections)
   if (!dwg->header.num_sections) // ODA writes zeros.
     dwg->header.num_sections = 6;
   if (dwg->header.num_sections < 3)
@@ -823,9 +823,11 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       dwg->header.section[j].number = bit_read_RC (dat);
       dwg->header.section[j].address = bit_read_RL (dat);
       dwg->header.section[j].size = bit_read_RL (dat);
-      LOG_TRACE ("section[%u]: number=%2d offset=0x%8x size=%4d\n", j,
-                 (int)dwg->header.section[j].number,
-                 (unsigned)dwg->header.section[j].address,
+      LOG_TRACE ("section[%u].number: %2d [RC]\n", j,
+                 (int)dwg->header.section[j].number)
+      LOG_TRACE ("section[%u].offset: 0x%8x [RL]\n", j,
+                 (unsigned)dwg->header.section[j].address)
+      LOG_TRACE ("section[%u].size: %4d [RL]\n", j,
                  (int)dwg->header.section[j].size)
     }
 
