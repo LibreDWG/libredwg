@@ -1312,7 +1312,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
    * Section 4: MEASUREMENT
    */
 
-  if (dwg->header.num_sections >= 4)
+  if (dwg->header.num_sections > 4)
     {
       LOG_INFO ("\n"
                 "=======> MEASUREMENT 4 (start)  : %8X\n",
