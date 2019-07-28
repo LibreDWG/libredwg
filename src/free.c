@@ -813,7 +813,7 @@ dwg_free (Dwg_Data *dwg)
           if (dwg_obj_is_control (&dwg->object[i]))
             dwg_free_object (&dwg->object[i]);
         }
-      if (dwg->num_classes)
+      if (dwg->num_classes && dwg->dwg_class)
         {
           for (i = 0; i < dwg->num_classes; ++i)
             {
@@ -825,9 +825,12 @@ dwg_free (Dwg_Data *dwg)
             }
           FREE_IF (dwg->dwg_class);
         }
-      for (i = 0; i < dwg->num_object_refs; ++i)
+      if (dwg->object_ref)
         {
-          FREE_IF (dwg->object_ref[i]);
+          for (i = 0; i < dwg->num_object_refs; ++i)
+            {
+              FREE_IF (dwg->object_ref[i]);
+            }
         }
       FREE_IF (dwg->object_ref);
       FREE_IF (dwg->object);
