@@ -20,28 +20,28 @@
 
   // char version[6] handled separately. older releases just had a version[12]
 #ifdef IS_JSON
-  KEY(zero_5);
-  fprintf(dat->fh, "[ %d, %d, %d, %d, %d ],\n",
+  KEY (zero_5);
+  fprintf (dat->fh, "[ %d, %d, %d, %d, %d ],\n",
           _obj->zero_5[0], _obj->zero_5[1], _obj->zero_5[2], _obj->zero_5[3], _obj->zero_5[4]);
 #else
   for (i=0; i<5; i++) {
-    FIELD_RC(zero_5[i], 0);
+    FIELD_RC (zero_5[i], 0);
   }
 #endif
-  FIELD_RC(is_maint, 0);
+  FIELD_RC (is_maint, 0);
 
   PRE(R_13) {
-    FIELD_RC(zero_one_or_three, 0); // 1
+    FIELD_RC (zero_one_or_three, 0); // 1
     for (i=0; i<3; i++) { // 3, 5, 205
-      FIELD_RS(unknown_s[i], 0);
+      FIELD_RS (unknown_s[i], 0);
     }
-    FIELD_RC(maint_version, 0); // 0
+    FIELD_RC (maint_version, 0); // 0
   } LATER_VERSIONS {
-    FIELD_RC(zero_one_or_three, 0);
-    FIELD_RL(preview_addr, 0); //@0x0d
-    FIELD_RC(dwg_version, 0);
-    FIELD_RC(maint_version, 0);
-    FIELD_RS(codepage, 0); //@0x13: 29/30 for ANSI_1252, since r2007 UTF-16
+    FIELD_RC (zero_one_or_three, 0);
+    FIELD_RL (preview_addr, 0); //@0x0d
+    FIELD_RC (dwg_version, 0);
+    FIELD_RC (maint_version, 0);
+    FIELD_RS (codepage, 0); //@0x13: 29/30 for ANSI_1252, since r2007 UTF-16
   }
 
   /* Until R_2004 here follows the sections */
@@ -52,17 +52,17 @@
       FIELD_VALUE(app_maint_version) = FIELD_VALUE(maint_version);
       dwg->header.rl_28_80 = 0x80;
     }
-    FIELD_RC(unknown_0, 0);
-    FIELD_RC(app_dwg_version, 0);
-    FIELD_RC(app_maint_version, 0);
-    FIELD_RL(security_type, 0);
-    FIELD_RL(rl_1c_address, 0);
-    FIELD_RL(summary_info_address, 0);
-    FIELD_RL(vba_proj_address, 0);
-    FIELD_RL(rl_28_80, 0);
+    FIELD_RC (unknown_0, 0);
+    FIELD_RC (app_dwg_version, 0);
+    FIELD_RC (app_maint_version, 0);
+    FIELD_RL (security_type, 0);
+    FIELD_RL (rl_1c_address, 0);
+    FIELD_RL (summary_info_address, 0);
+    FIELD_RL (vba_proj_address, 0);
+    FIELD_RL (rl_28_80, 0);
     ENCODER {
       for (i = 0; i < 54; i++)
-        bit_write_RC(dat, 0);
+        bit_write_RC (dat, 0);
     }
     else {
       dat->byte += 54;
