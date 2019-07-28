@@ -1210,6 +1210,14 @@ bit_check_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
       dat->bit = 0;
     }
 
+  if (dat->byte + start_address > dat->size)
+    {
+      loglevel = dat->opts & 0xf;
+      LOG_ERROR ("buffer overflow at pos %lu, size %lu",
+                 dat->byte, dat->size)
+      return 0;
+    }
+
   calculated = bit_calc_CRC (seed, &(dat->chain[start_address]),
                              dat->byte - start_address);
   read = bit_read_RS (dat);
