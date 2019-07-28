@@ -478,6 +478,7 @@ decompress_r2007 (BITCODE_RC *restrict dst, int dst_size,
   uint32_t length = 0;
   uint32_t offset = 0;
 
+  BITCODE_RC *dst_start = dst;
   BITCODE_RC *dst_end = dst + dst_size;
   BITCODE_RC *src_end = src + src_size;
   unsigned char opcode;
@@ -535,7 +536,12 @@ decompress_r2007 (BITCODE_RC *restrict dst, int dst_size,
               LOG_ERROR ("Decompression error: length overflow");
               return DWG_ERR_INTERNALERROR;
             }
-          // LOG_INSANE("copy_bytes(%p %u %u)\n", dst, length, offset);
+          if (offset > (uint32_t)(dst - dst_start))
+            {
+              LOG_ERROR ("Decompression error: offset underflow");
+              return DWG_ERR_INTERNALERROR;
+            }
+          LOG_INSANE("copy_bytes(%p %u %u)\n", dst, length, offset);
           copy_bytes (dst, length, offset);
 
           dst += length;
@@ -639,11 +645,16 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
     return NULL;
 
   if (size_comp < size_uncomp)
-    (void)decompress_r2007 (data, size_uncomp, pedata, size_comp);
+    error = decompress_r2007 (data, size_uncomp, pedata, size_comp);
   else
     memcpy (data, pedata, size_uncomp);
   free (pedata);
 
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      free (data);
+      return NULL;
+    }
   return data;
 }
 
