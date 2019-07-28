@@ -2218,7 +2218,7 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_TRACE ("\nSection size: %u\n", section_size);
       /* ***********************************************
        * ODA p. 251 "Note that each section is cut off at a maximum length of
-       * 2032." BUT in fact exist files with 2035 section size */
+       * 2032." BUT in fact files exist with 2036 section size */
       if (section_size > 2040)
         {
           LOG_ERROR ("Object-map/handles section size greater than 2040!");
@@ -4342,6 +4342,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
                 }
               obj->supertype = DWG_SUPERTYPE_UNKNOWN;
               obj->type = 0;
+              *dat = abs_dat;
               return error | DWG_ERR_VALUEOUTOFBOUNDS;
             }
           // properly dwg_decode_object/_entity for eed, reactors, xdic
@@ -4352,9 +4353,8 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
               obj->supertype = DWG_SUPERTYPE_UNKNOWN;
               if (!dat)
                 return error;
-              if (err >= DWG_ERR_CRITICAL) {
+              if (err >= DWG_ERR_CRITICAL)
                 *dat = abs_dat;
-              }
             }
           else if (klass)
             {
@@ -4372,9 +4372,8 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
               obj->supertype = DWG_SUPERTYPE_UNKNOWN;
               if (!dat)
                 return error;
-              if (err >= DWG_ERR_CRITICAL) {
+              if (err >= DWG_ERR_CRITICAL)
                 *dat = abs_dat;
-              }
             }
           else // not a class
             {
@@ -4409,6 +4408,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
     {
       LOG_ERROR ("Invalid object address (overflow): %lu > %lu", dat->byte,
                  8 * dat->size);
+      *dat = abs_dat;
       return error | DWG_ERR_INVALIDDWG;
     }
 
