@@ -792,6 +792,16 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_TRACE ("\nNum sections: " FORMAT_RL "\n", dwg->header.num_sections)
   if (!dwg->header.num_sections) // ODA writes zeros.
     dwg->header.num_sections = 6;
+  if (dwg->header.num_sections < 3)
+    {
+      LOG_ERROR ("Not enough sections: " FORMAT_RL, dwg->header.num_sections);
+      return DWG_ERR_INVALIDDWG;
+    }
+  if (dwg->header.num_sections > 10)
+    {
+      LOG_ERROR ("Too many sections: " FORMAT_RL, dwg->header.num_sections);
+      return DWG_ERR_INVALIDDWG;
+    }
 
   // So far seen 3-6 sections. Most emit only 3-5 sections.
   dwg->header.section = (Dwg_Section *)calloc (
@@ -1568,7 +1578,8 @@ decompress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
       LOG_INSANE ("<L %d\n", lit_length)
       if (lit_length)
         {
-          if ((uint32_t)lit_length > bytes_left) // bytes left to write
+          if (((uint32_t)lit_length > bytes_left) // bytes left to write
+              || (int)(dst - decomp) > (int)decomp_data_size)  // dst overflow
             {
               LOG_ERROR ("Invalid lit_length %lu > %lu bytes left",
                          (unsigned long)lit_length, (unsigned long)bytes_left)
@@ -1956,12 +1967,21 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       LOG_INFO ("Section Type:     0x%x\n", (unsigned)es.fields.section_type)
       // this is the number of bytes that is read in decompress_R2004_section
       // (+ 2bytes)
-      LOG_INFO ("Data size:        0x%x\n", (unsigned)es.fields.data_size)
+      LOG_INFO ("Data size:        0x%x/%u\n", (unsigned)es.fields.data_size,
+                (unsigned)es.fields.data_size)
       LOG_INFO ("Comp data size:   0x%x\n", (unsigned)es.fields.section_size)
       LOG_TRACE ("StartOffset:      0x%x\n", (unsigned)es.fields.address)
       LOG_HANDLE ("Unknown:          0x%x\n", (unsigned)es.fields.unknown);
       LOG_HANDLE ("Checksum1:        0x%x\n", (unsigned)es.fields.checksum_1)
       LOG_HANDLE ("Checksum2:        0x%x\n\n", (unsigned)es.fields.checksum_2)
+
+      //GH #126 part 4
+      //LOG_INSANE ("i:                     %u\n", i)
+      //LOG_INSANE ("decomp:                %p\n", decomp)
+      //LOG_INSANE ("info->max_decomp_size: %u\n", info->max_decomp_size)
+      //LOG_INSANE ("max_decomp_size:       %u\n", max_decomp_size)
+      //LOG_INSANE ("bytes_left:            %d\n",
+      //            max_decomp_size - (i * info->max_decomp_size))
 
       error = decompress_R2004_section (
           dat, &decomp[i * info->max_decomp_size],       // offset
