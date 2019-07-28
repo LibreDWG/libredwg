@@ -182,7 +182,14 @@ dxf_read_pair (Bit_Chain *dat)
     case VT_REAL:
     case VT_POINT3D:
       dxf_skip_ws (dat);
-      sscanf ((char *)&dat->chain[dat->byte], "%lf", &pair->value.d);
+      {
+        const char *str = (const char *)&dat->chain[dat->byte];
+        char *endp;
+        pair->value.d = strtod (str, &endp);
+        if (endp)
+          dat->byte += endp - str;
+        //sscanf ((char *)&dat->chain[dat->byte], "%lf", &pair->value.d);
+      }
       LOG_TRACE ("dxf{%d, %f}\n", pair->code, pair->value.d);
       break;
     case VT_BINARY:
@@ -1133,6 +1140,8 @@ matches_type (Dxf_Pair *pair, const Dwg_DYNAPI_field *f)
     case VT_POINT3D:
       // 3BD or 3RD or 3DPOINT
       if (f->size == 24 && f->type[0] == '3') return 1;
+      // accept 2BD or 2RD or 2DPOINT also
+      if (f->size == 16 && f->type[0] == '2') return 1;
       break;
     case VT_BINARY:
       if (f->is_string) return 1;
@@ -1188,6 +1197,8 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   dwg->header.version = v;
                   dat->version = dat->from_version = dwg->header.version;
                   is_utf = dat->version >= R_2007;
+                  LOG_TRACE ("HEADER.version = dat->version = %s\n",
+                             version);
                   dxf_free_pair (pair);
                   break;
                 }
@@ -1226,6 +1237,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             }
           else
             {
+              LOG_TRACE ("HEADER.%s %s\n", &field[1], f->type);
               dwg_dynapi_header_set_value (dwg, &field[1], &pair->value, is_utf);
               free (pair); // but keep the string! primitives (like RC, BD) are copied
             }
