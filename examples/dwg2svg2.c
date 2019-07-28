@@ -255,8 +255,9 @@ output_INSERT (dwg_object *obj)
   log_if_error ("get_handle");
   ins_handle = &obj->handle;
   log_if_error ("insert_get_ref_handle");
+  if (!insert->block_header)
+    log_error ("insert->block_header");
   abs_ref = insert->block_header->absolute_ref;
-  log_if_error ("block_absref");
 
   if (insert->block_header->handleref.code == 5)
     {
