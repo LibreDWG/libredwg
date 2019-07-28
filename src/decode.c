@@ -862,6 +862,9 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       int i;
       struct Dwg_AuxHeader *_obj = &dwg->auxheader;
       Bit_Chain *hdl_dat = dat;
+      BITCODE_BL old_size,
+          end_address = dwg->header.section[SECTION_AUXHEADER_R2000].address
+                        + dwg->header.section[SECTION_AUXHEADER_R2000].size;
 
       obj = NULL;
       LOG_TRACE (
@@ -869,11 +872,21 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           (unsigned int)dwg->header.section[SECTION_AUXHEADER_R2000].address)
       LOG_TRACE (
           "         AuxHeader (end): %8X\n",
-          (unsigned int)(dwg->header.section[SECTION_AUXHEADER_R2000].address
-                         + dwg->header.section[SECTION_AUXHEADER_R2000].size))
+          (unsigned int)end_address)
       dat->byte = dwg->header.section[SECTION_AUXHEADER_R2000].address;
+      old_size = dat->size;
+      if (dat->size < end_address)
+        {
+          LOG_ERROR ("Invalid AuxHeader: buffer overflow")
+        }
+      else
+        {
+          dat->size = end_address;
 
-      #include "auxheader.spec"
+          #include "auxheader.spec"
+
+          dat->size = old_size;
+        }
     }
 
   /*-------------------------------------------------------------------------
