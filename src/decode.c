@@ -3971,6 +3971,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
       obj->handlestream_size = bit_read_UMC (dat);
       LOG_INFO (", Hdlsize: " FORMAT_UMC, obj->handlestream_size);
       obj->bitsize = obj->size * 8 - obj->handlestream_size;
+      // TODO boundscheck
     }
 
   objpos = bit_position (dat); // absolute
@@ -3978,6 +3979,12 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
 
   /* Until here dat is absolute. now restrict it */
   bit_reset_chain (dat);
+  if (obj->size > dat->size)
+    {
+      LOG_ERROR ("Invalid object size. Would overflow");
+      *dat = abs_dat;
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
   dat->size = obj->size;
 
   SINCE (R_2010) { obj->type = bit_read_BOT (dat); }
