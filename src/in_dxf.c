@@ -1105,12 +1105,58 @@ dxf_expect_code (Bit_Chain *restrict dat, Dxf_Pair *restrict pair, int code)
 }
 
 static int
+matches_type (Dxf_Pair *pair, const Dwg_DYNAPI_field *f)
+{
+  switch (pair->type)
+    {
+    case VT_STRING:
+      if (f->is_string) return 1;
+      break;
+    case VT_INT32:
+      // BL or RL
+      if (f->size == 4 && f->type[1] == 'L') return 1;
+      // fall through
+    case VT_INT16:
+      // BS or RS
+      if (f->size == 2 && f->type[1] == 'S') return 1;
+      // fall through
+    case VT_INT8:
+      if (strEQc (f->type, "RC")) return 1;
+      // fall through
+    case VT_BOOL:
+      if (strEQc (f->type, "B")) return 1;
+      break;
+    case VT_REAL:
+      // BD or RD
+      if (f->size == 8 && f->type[1] == 'D') return 1;
+      break;
+    case VT_POINT3D:
+      // 3BD or 3RD or 3DPOINT
+      if (f->size == 24 && f->type[0] == '3') return 1;
+      break;
+    case VT_BINARY:
+      if (f->is_string) return 1;
+      break;
+    case VT_HANDLE:
+      if (f->type[0] == 'H') return 1;
+      break;
+    case VT_OBJECTID:
+      // nyi
+    case VT_INVALID:
+    default:
+      LOG_ERROR ("Invalid DXF group code: %d", pair->code);
+    }
+  return 0;
+}
+
+static int
 dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables *_obj = &dwg->header_vars;
   Dwg_Object *obj = NULL;
   const int minimal = dwg->opts & 0x10;
   int is_utf = 0;
+  int i = 0;
   unsigned long pos = bit_position (dat);
   char *codepage;
 
@@ -1126,10 +1172,12 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       char field[80];
       strcpy (field, pair->value.s);
       dxf_free_pair (pair);
+      i = 0;
 
-    next_hdrvalue:
       // now read the code, value pair
       pair = dxf_read_pair (dat);
+      DXF_BREAK_ENDSEC;
+    next_hdrvalue:
       if (pair->code == 1 && strEQc (field, "$ACADVER"))
         {
           const char* version = pair->value.s;
@@ -1150,10 +1198,37 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       else if (field[0] == '$')
         {
           const Dwg_DYNAPI_field *f = dwg_dynapi_header_field (&field[1]);
-          //TODO some type checking on the field ...
-          
-          dwg_dynapi_header_set_value (dwg, &field[1], &pair->value, is_utf);
-          free (pair); // but keep the string! primitives (like RC, BD) are copied
+          if (!matches_type (pair, f))
+            {
+              LOG_ERROR ("skipping HEADER: 9 %s, wrong type code %d <=> field %s",
+                         field, pair->code, f->type);
+              dxf_free_pair (pair);
+            }
+          else if (pair->type == VT_POINT3D)
+            {
+              BITCODE_3BD pt = {0.0, 0.0, 0.0};
+              if      (i == 0) pt.x = pair->value.d;
+              else if (i == 1) pt.y = pair->value.d;
+              else if (i == 2) pt.z = pair->value.d;
+              if (i > 2)
+                {
+                  LOG_ERROR ("skipping HEADER: 9 %s, too many point elements",
+                             field);
+                }
+              else
+                {
+                  // yes, set it 2-3 times
+                  LOG_TRACE ("HEADER.%s %s [%d]\n", &field[1], f->type, i);
+                  dwg_dynapi_header_set_value (dwg, &field[1], &pt, is_utf);
+                  i++;
+                }
+              dxf_free_pair (pair);
+            }
+          else
+            {
+              dwg_dynapi_header_set_value (dwg, &field[1], &pair->value, is_utf);
+              free (pair); // but keep the string! primitives (like RC, BD) are copied
+            }
         }
       else
         {
