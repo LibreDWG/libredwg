@@ -4639,7 +4639,7 @@ dwg_validate_POLYLINE (Dwg_Object *obj)
               _obj->seqend = seqend;
               LOG_WARN ("fixed empty POLYLINE.seqend with +1 obj")
             }
-          else
+          else if (_obj->vertex)
             {
               next = dwg_next_object (_obj->vertex[_obj->num_owned - 1]->obj);
               if (next && next->fixedtype == DWG_TYPE_SEQEND)
@@ -4672,7 +4672,7 @@ dwg_validate_POLYLINE (Dwg_Object *obj)
           return 0;
         }
     }
-  else if (dwg->header.version >= R_2004)
+  else if (dwg->header.version >= R_2004 && _obj->vertex)
     {
       BITCODE_BL i = 1;
       Dwg_Object_Ref *first_vertex = _obj->vertex[0];
