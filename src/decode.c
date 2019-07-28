@@ -92,7 +92,7 @@ static int decode_R2007 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 
 static Dwg_Resbuf *dwg_decode_xdata (Bit_Chain *restrict dat,
                                      Dwg_Object_XRECORD *restrict obj,
-                                     int size);
+                                     BITCODE_BL size);
 
 static int dwg_decode_eed (Bit_Chain *restrict dat,
                            Dwg_Object_Object *restrict obj);
@@ -3498,20 +3498,31 @@ dwg_free_xdata_resbuf (Dwg_Resbuf *rbuf)
 // TODO: unify with eed[], use an array not linked list.
 static Dwg_Resbuf *
 dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
-                  int size)
+                  BITCODE_BL size)
 {
   Dwg_Resbuf *rbuf, *root = NULL, *curr = NULL;
   unsigned char codepage;
   long unsigned int end_address;
   BITCODE_BL i, num_xdata = 0;
   BITCODE_RS length;
+  int error;
 
   static int cnt = 0;
   cnt++;
 
   end_address = dat->byte + (unsigned long int)size;
+  if (obj->parent && obj->parent->objid)
+    {
+      Dwg_Data *dwg = obj->parent->dwg;
+      Dwg_Object *o = &dwg->object[obj->parent->objid];
+      if (size > o->size)
+        {
+          LOG_ERROR ("Invalid XRECORD.num_databytes " FORMAT_BL, size);
+          return NULL;
+        }
+    }
   LOG_INSANE ("xdata:\n");
-  LOG_INSANE_TF (&dat->chain[dat->byte], size);
+  LOG_INSANE_TF (&dat->chain[dat->byte], (int)size);
 
   while (dat->byte < end_address)
     {
