@@ -862,9 +862,9 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       int i;
       struct Dwg_AuxHeader *_obj = &dwg->auxheader;
       Bit_Chain *hdl_dat = dat;
-      BITCODE_BL old_size,
-          end_address = dwg->header.section[SECTION_AUXHEADER_R2000].address
-                        + dwg->header.section[SECTION_AUXHEADER_R2000].size;
+      BITCODE_BL end_address
+          = dwg->header.section[SECTION_AUXHEADER_R2000].address
+            + dwg->header.section[SECTION_AUXHEADER_R2000].size;
 
       obj = NULL;
       LOG_TRACE (
@@ -874,13 +874,14 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           "         AuxHeader (end): %8X\n",
           (unsigned int)end_address)
       dat->byte = dwg->header.section[SECTION_AUXHEADER_R2000].address;
-      old_size = dat->size;
       if (dat->size < end_address)
         {
           LOG_ERROR ("Invalid AuxHeader: buffer overflow")
+          error |= DWG_ERR_SECTIONNOTFOUND;
         }
       else
         {
+          BITCODE_BL old_size = dat->size;
           dat->size = end_address;
 
           #include "auxheader.spec"
@@ -925,9 +926,18 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_INFO ("         Header Variables (end): %8X\n",
             (unsigned int)(dwg->header.section[SECTION_HEADER_R13].address
                            + dwg->header.section[SECTION_HEADER_R13].size))
+  if (dwg->header.section[SECTION_HEADER_R13].address < 58 ||
+      dwg->header.section[SECTION_HEADER_R13].address
+      + dwg->header.section[SECTION_HEADER_R13].size > dat->size
+      )
+    {
+      LOG_ERROR ("Invalid Header section, skipped")
+      error |= DWG_ERR_SECTIONNOTFOUND;
+      goto classes_section;
+    }
   dat->byte = dwg->header.section[SECTION_HEADER_R13].address + 16;
   dwg->header_vars.size = bit_read_RL (dat);
-  LOG_TRACE ("         Length: " FORMAT_RL "\n", dwg->header_vars.size)
+  LOG_TRACE ("         Length: " FORMAT_RL " [RL]\n", dwg->header_vars.size)
   dat->bit = 0;
 
   dwg_decode_header_variables (dat, dat, dat, dwg);
@@ -944,7 +954,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       && pvz + dwg->header.section[SECTION_HEADER_R13].size < dat->size)
     {
       // TODO: r14-2000: xor with num_sections
-      crc2 = bit_calc_CRC (0xC0C1, &(dat->chain[pvz]),
+      crc2 = bit_calc_CRC (0xC0C1, &dat->chain[pvz],
                            dwg->header.section[SECTION_HEADER_R13].size - 34);
     }
   if (crc != crc2)
@@ -959,6 +969,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   /*-------------------------------------------------------------------------
    * Classes, section 1
    */
+ classes_section:
   LOG_INFO ("\n"
             "=======> CLASS 1 (start): %8lX\n",
             (long)dwg->header.section[SECTION_CLASSES_R13].address)
