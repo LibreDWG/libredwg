@@ -60,6 +60,8 @@ static unsigned int cur_ver = 0;
 static char buf[4096];
 static long start, end; // stream offsets
 
+#define ARRAY_SIZE(arr) (sizeof (arr) / sizeof (arr[0]))
+
 typedef struct _dxf_pair
 {
   short code;
@@ -1147,7 +1149,9 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
       else if (field[0] == '$')
         {
-          //TODO some type checking on the field
+          const Dwg_DYNAPI_field *f = dwg_dynapi_header_field (&field[1]);
+          //TODO some type checking on the field ...
+          
           dwg_dynapi_header_set_value (dwg, &field[1], &pair->value, is_utf);
           free (pair); // but keep the string! primitives (like RC, BD) are copied
         }

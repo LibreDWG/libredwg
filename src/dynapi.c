@@ -4141,6 +4141,33 @@ dwg_dynapi_entity_field (const char *restrict name, const char *restrict field)
   return NULL;
 }
 
+const Dwg_DYNAPI_field*
+dwg_dynapi_header_field (const char *restrict fieldname)
+{
+  return (Dwg_DYNAPI_field *)bsearch (
+              fieldname, _dwg_header_variables_fields,
+              ARRAY_SIZE (_dwg_header_variables_fields) - 1, /* NULL terminated */
+              sizeof (_dwg_header_variables_fields[0]), _name_struct_cmp);
+}
+
+const Dwg_DYNAPI_field*
+dwg_dynapi_common_entity_field (const char *restrict fieldname)
+{
+  return (Dwg_DYNAPI_field *)bsearch (
+              fieldname, _dwg_object_entity_fields,
+              ARRAY_SIZE (_dwg_object_entity_fields) - 1, /* NULL terminated */
+              sizeof (_dwg_object_entity_fields[0]), _name_struct_cmp);
+}
+
+const Dwg_DYNAPI_field*
+dwg_dynapi_common_object_field (const char *restrict fieldname)
+{
+  return (Dwg_DYNAPI_field *)bsearch (
+              fieldname, _dwg_object_object_fields,
+              ARRAY_SIZE (_dwg_object_object_fields) - 1, /* NULL terminated */
+              sizeof (_dwg_object_object_fields[0]), _name_struct_cmp);
+}
+
 /* generic field getters */
 EXPORT bool
 dwg_dynapi_entity_value (void *restrict _obj, const char *restrict name,
@@ -4240,10 +4267,7 @@ dwg_dynapi_header_value (const Dwg_Data *restrict dwg,
   if (!dwg || !fieldname || !out)
     return false;
   {
-    Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)bsearch (
-        fieldname, _dwg_header_variables_fields,
-        ARRAY_SIZE (_dwg_header_variables_fields) - 1, /* NULL terminated */
-        sizeof (_dwg_header_variables_fields[0]), _name_struct_cmp);
+    const Dwg_DYNAPI_field *f = dwg_dynapi_header_field (fieldname);
     if (f)
       {
         const Dwg_Header_Variables *const _obj = &dwg->header_vars;
@@ -4270,10 +4294,7 @@ dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
   if (!dwg || !fieldname || !out)
     return false;
   {
-    Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)bsearch (
-        fieldname, _dwg_header_variables_fields,
-        ARRAY_SIZE (_dwg_header_variables_fields) - 1, /* NULL terminated */
-        sizeof (_dwg_header_variables_fields[0]), _name_struct_cmp);
+    const Dwg_DYNAPI_field *f = dwg_dynapi_header_field (fieldname);
     if (f && f->is_string)
       {
         const Dwg_Header_Variables *const _obj = &dwg->header_vars;
@@ -4314,7 +4335,7 @@ dwg_dynapi_common_value(void *restrict _obj, const char *restrict fieldname,
   if (!_obj || !fieldname || !out)
     return false;
   {
-    Dwg_DYNAPI_field *f;
+    const Dwg_DYNAPI_field *f;
     int error;
     const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
     if (!obj)
@@ -4326,19 +4347,13 @@ dwg_dynapi_common_value(void *restrict _obj, const char *restrict fieldname,
 
     if (obj->supertype == DWG_SUPERTYPE_ENTITY)
       {
+        f = dwg_dynapi_common_entity_field (fieldname);
         _obj = obj->tio.entity;
-        f = (Dwg_DYNAPI_field *)bsearch (
-            fieldname, _dwg_object_entity_fields,
-            ARRAY_SIZE (_dwg_object_entity_fields) - 1, /* NULL terminated */
-            sizeof (_dwg_object_entity_fields[0]), _name_struct_cmp);
       }
     else if (obj->supertype == DWG_SUPERTYPE_OBJECT)
       {
+        f = dwg_dynapi_common_object_field (fieldname);
         _obj = obj->tio.object;
-        f = (Dwg_DYNAPI_field *)bsearch (
-            fieldname, _dwg_object_object_fields,
-            ARRAY_SIZE (_dwg_object_object_fields) - 1, /* NULL terminated */
-            sizeof (_dwg_object_object_fields[0]), _name_struct_cmp);
       }
     else
       {

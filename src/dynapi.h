@@ -112,4 +112,11 @@ const Dwg_DYNAPI_field *dwg_dynapi_entity_fields (const char *restrict name)
 const Dwg_DYNAPI_field *
 dwg_dynapi_entity_field (const char *restrict name,
                          const char *restrict fieldname) __nonnull ((1, 2));
+const Dwg_DYNAPI_field*
+dwg_dynapi_header_field (const char *restrict fieldname) __nonnull ((1));
+const Dwg_DYNAPI_field*
+dwg_dynapi_common_entity_field (const char *restrict fieldname) __nonnull ((1));
+const Dwg_DYNAPI_field*
+dwg_dynapi_common_object_field (const char *restrict fieldname) __nonnull ((1));
+
 #endif
