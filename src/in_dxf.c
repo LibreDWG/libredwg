@@ -164,7 +164,7 @@ dxf_read_pair (Bit_Chain *dat)
     {
     case VT_STRING:
       dxf_read_string (dat, &pair->value.s);
-      LOG_TRACE ("dxf{%d, %s}\n", (int)pair->code, pair->value.s);
+      LOG_TRACE ("  dxf (%d, %s)\n", (int)pair->code, pair->value.s);
       SINCE (R_2007)
       {
         BITCODE_TU wstr = bit_utf8_to_TU (pair->value.s);
@@ -177,7 +177,7 @@ dxf_read_pair (Bit_Chain *dat)
     case VT_INT16:
     case VT_INT32:
       pair->value.i = dxf_read_code (dat);
-      LOG_TRACE ("dxf{%d, %d}\n", (int)pair->code, pair->value.i);
+      LOG_TRACE ("  dxf (%d, %d)\n", (int)pair->code, pair->value.i);
       break;
     case VT_REAL:
     case VT_POINT3D:
@@ -190,19 +190,19 @@ dxf_read_pair (Bit_Chain *dat)
           dat->byte += endp - str;
         //sscanf ((char *)&dat->chain[dat->byte], "%lf", &pair->value.d);
       }
-      LOG_TRACE ("dxf{%d, %f}\n", pair->code, pair->value.d);
+      LOG_TRACE ("  dxf (%d, %f)\n", pair->code, pair->value.d);
       break;
     case VT_BINARY:
       // read into buf only?
       dxf_read_string (dat, &pair->value.s);
       // TODO convert %02X to string
-      LOG_TRACE ("dxf{%d, %s}\n", (int)pair->code, pair->value.s);
+      LOG_TRACE ("  dxf (%d, %s)\n", (int)pair->code, pair->value.s);
       break;
     case VT_HANDLE:
     case VT_OBJECTID:
       dxf_read_string (dat, NULL);
       sscanf (buf, "%X", &pair->value.i);
-      LOG_TRACE ("dxf{%d,%X}\n", (int)pair->code, pair->value.i);
+      LOG_TRACE ("  dxf (%d, %X)\n", (int)pair->code, pair->value.i);
       break;
     case VT_INVALID:
     default:
