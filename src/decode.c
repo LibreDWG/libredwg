@@ -2098,13 +2098,14 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
       dwg->layout_number = 0;
       dwg->num_classes = max_num - 499;
-      if (max_num < 500 || max_num > 5000)
+      if (max_num < 500 || dwg->num_classes > 100 + (size / sizeof (Dwg_Class)))
         {
           LOG_ERROR ("Invalid max class number %d", max_num)
+          dwg->num_classes = 0;  
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
       assert (max_num >= 500);
-      assert (max_num < 5000);
+      //assert (max_num < 5000);
 
       if (dat->version >= R_2007)
         section_string_stream (&sec_dat, bitsize, &str_dat);
