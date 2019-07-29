@@ -27,11 +27,11 @@ EXTRA_PROGRAMS = unknown bd bits
 load_dwg_SOURCES = load_dwg.c
 dwg2svg2_SOURCES = dwg2svg2.c
 unknown_SOURCES  = unknown.c
-unknown_LDADD  = ../src/bits.lo ../src/common.lo
+unknown_LDADD  = $(top_builddir)/src/bits.lo $(top_builddir)/src/common.lo
 bd_SOURCE  = bd.c
-bd_LDADD  = ../src/bits.lo
+bd_LDADD  = $(top_builddir)/src/bits.lo
 bits_SOURCE  = bits.c
-bits_LDADD  = ../src/bits.lo
+bits_LDADD  = $(top_builddir)/src/bits.lo
 all: $(check_PROGRAMS)
 
 .PHONY: check-syntax regen-unknown dsymutil gcov
@@ -82,7 +82,7 @@ TESTS_ENVIRONMENT = \
  TESTPROG=''
 endif
 
-TESTS = $(top_srcdir)/programs/alive.test
+TESTS = $(top_builddir)/programs/alive.test
 
 EXTRA_DIST = alldxf_0.inc alldxf_1.inc alldxf_2.inc alldwg.inc
 EXTRA_DIST += load_dwg.py
