@@ -1776,8 +1776,7 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
       LOG_TRACE ("\nsection_info[%d] fields:\n", i)
       LOG_TRACE ("size:            %ld\n", (long)info->size)
-      LOG_TRACE ("pagecount:       %u\n", info->pagecount)
-      // LOG_TRACE("Num sections:    %u\n", info->num_sections)
+      LOG_TRACE ("num_sections:       %u\n", info->num_sections)
       LOG_TRACE ("max_decomp_size: %u / 0x%x\n", // normally 0x7400
                  info->max_decomp_size, info->max_decomp_size)
       LOG_TRACE ("unknown:         %u\n", info->unknown)
@@ -1787,28 +1786,28 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                  info->encrypted)
       LOG_TRACE ("name:            %s\n\n", info->name)
 
-      if (ptr + (16 * info->pagecount) >= decomp_end)
+      if (ptr + (16 * info->num_sections) >= decomp_end)
         {
-          info->pagecount = 0;
+          info->num_sections = 0;
           free (decomp);
           LOG_ERROR ("read_R2004_section_info out of range");
           return DWG_ERR_INVALIDDWG;
         }
 
-      if (info->pagecount < 1000000)
+      if (info->num_sections < 1000000)
         {
           int32_t old_section_number = 0;
-          LOG_INFO ("Page count %u in area %d\n", info->pagecount, i);
-          info->sections = calloc (info->pagecount, sizeof (Dwg_Section *));
+          LOG_INFO ("Page count %u in area %d\n", info->num_sections, i);
+          info->sections = calloc (info->num_sections, sizeof (Dwg_Section *));
           if (!info->sections)
             {
               free (decomp);
-              LOG_ERROR ("Out of memory with %u sections", info->pagecount);
+              LOG_ERROR ("Out of memory with %u sections", info->num_sections);
               return error | DWG_ERR_OUTOFMEM;
             }
           prev_address = 0;
 
-          for (j = 0; j < info->pagecount; j++)
+          for (j = 0; j < info->num_sections; j++)
             {
               struct _section_page
               { /* unused */
@@ -1842,10 +1841,10 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               if (page.number < 0)
                 { // gap/unused data
                   LOG_TRACE ("Page: %4" PRId32 " (-)", page.number)
-                  info->pagecount++;
+                  info->num_sections++;
                   info->sections
                       = realloc (info->sections,
-                                 info->pagecount * sizeof (Dwg_Section *));
+                                 info->num_sections * sizeof (Dwg_Section *));
                 }
               else if (page.address < prev_address)
                 {
@@ -1853,7 +1852,7 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 }
               else if (info->sections[0]
                        && page.number
-                              > (int32_t) (info->pagecount
+                              > (int32_t) (info->num_sections
                                            + info->sections[0]->number))
                 {
                   // for [7] ptr+160 seems to be AcDb:ObjFreeSpace
@@ -1887,8 +1886,8 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       else
         {
           LOG_ERROR ("Section count %u in area %d too high! Skipping",
-                     info->pagecount, i);
-          info->pagecount = 0;
+                     info->num_sections, i);
+          info->num_sections = 0;
           free (decomp);
           return error | DWG_ERR_VALUEOUTOFBOUNDS;
         }
@@ -1946,26 +1945,26 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
     {
       LOG_TRACE ("\nFound section_info[" FORMAT_BL
                  "] %s type 0x%x with %d sections:\n",
-                 i, info->name, section_type, info->pagecount);
+                 i, info->name, section_type, info->num_sections);
     }
 
-  max_decomp_size = info->pagecount * info->max_decomp_size;
+  max_decomp_size = info->num_sections * info->max_decomp_size;
   if (max_decomp_size == 0)
     {
       LOG_ERROR ("Section %s count or max decompression size is zero. "
                  "Sections: %u, Max size: %u",
-                 info->name, info->pagecount, info->max_decomp_size);
+                 info->name, info->num_sections, info->max_decomp_size);
       return DWG_ERR_INVALIDDWG;
     }
 
   decomp = (BITCODE_RC *)calloc (max_decomp_size, sizeof (BITCODE_RC));
   if (!decomp)
     {
-      LOG_ERROR ("Out of memory with %u sections", info->pagecount);
+      LOG_ERROR ("Out of memory with %u sections", info->num_sections);
       return DWG_ERR_OUTOFMEM;
     }
 
-  for (i = 0; i < info->pagecount; ++i)
+  for (i = 0; i < info->num_sections; ++i)
     {
       if (!info->sections[i])
         {
