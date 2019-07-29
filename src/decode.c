@@ -1853,6 +1853,7 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   info->sections
                       = realloc (info->sections,
                                  info->num_sections * sizeof (Dwg_Section *));
+                  info->sections[info->num_sections-1] = NULL;
                 }
               else if (page.address < prev_address)
                 {
