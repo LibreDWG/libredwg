@@ -1495,6 +1495,7 @@ decompress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
   unsigned char opcode1 = 0, opcode2;
   long unsigned int start_byte = dat->byte;
   BITCODE_RC *src, *dst = decomp;
+  BITCODE_RC *maxdst = decomp + decomp_data_size;
 
   bytes_left = decomp_data_size;               // to write to
   if (comp_data_size > dat->size - start_byte) // bytes left to read from
@@ -1590,7 +1591,8 @@ decompress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
         {
           LOG_INSANE ("<C %d ", comp_bytes)
           // copy "compressed data"
-          if ((uint32_t)comp_bytes > bytes_left) // bytes left to write
+          if ((uint32_t)comp_bytes > bytes_left || // bytes left to write
+              dst + comp_bytes > maxdst)
             {
               LOG_ERROR ("Invalid comp_bytes %lu > %lu bytes left",
                          (unsigned long)comp_bytes, (unsigned long)bytes_left)
