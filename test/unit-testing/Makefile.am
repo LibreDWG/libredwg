@@ -87,8 +87,9 @@ check_PROGRAMS = \
 	xline \
 	xrecord
 
-dynapi_test.c: dynapi_test.c.in $(top_srcdir)/include/dwg.h \
-	       $(top_srcdir)/src/gen-dynapi.pl
+dynapi_test.c: dynapi_test.c.in \
+		$(top_srcdir)/include/dwg.h \
+	        $(top_srcdir)/src/gen-dynapi.pl
 	-cd $(top_srcdir)/src && $(PERL) gen-dynapi.pl
 
 .c.i:
@@ -99,7 +100,7 @@ TESTS = $(check_PROGRAMS)
 TESTS_ENVIRONMENT = \
   ASAN_OPTIONS="detect_leaks=0"
 
-bits_test.cbmc: bits_test.c ../../src/bits.c
+bits_test.cbmc: bits_test.c $(top_srcdir)/src/bits.c
 	cbmc -I. -I$(top_srcdir)/include -I/opt/local/include \
 	     bits_test.c $(top_srcdir)/src/bits.c \
 	     --unwind 6  --cover decision > $@
