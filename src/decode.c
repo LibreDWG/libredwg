@@ -1586,7 +1586,11 @@ decompress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
         }
 
       src = dst - comp_offset - 1;
-      assert (src >= decomp);
+      if (src < decomp) // was assert (src >= decomp);
+        {
+          LOG_ERROR ("decompress_R2004_section: src offset underflow");
+          return DWG_ERR_INTERNALERROR;
+        }
       if (comp_bytes)
         {
           LOG_INSANE ("<C %d ", comp_bytes)
