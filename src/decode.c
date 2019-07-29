@@ -1661,9 +1661,13 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       if (dwg->header.num_sections == 0)
         dwg->header.section = calloc (1, sizeof (Dwg_Section));
       else
-        dwg->header.section
+        {
+          dwg->header.section
             = realloc (dwg->header.section,
                        sizeof (Dwg_Section) * (dwg->header.num_sections + 1));
+          memset (&dwg->header.section[dwg->header.num_sections], 0,
+                  sizeof (Dwg_Section));
+        }
       if (!dwg->header.section)
         {
           LOG_ERROR ("Out of memory");
@@ -1767,6 +1771,7 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       if (ptr + 64 >= decomp_end)
         {
           free (decomp);
+          dwg->header.section_infohdr.num_desc = i;
           LOG_ERROR ("read_R2004_section_info out of range");
           return DWG_ERR_INVALIDDWG;
         }
@@ -1788,7 +1793,10 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
       if (ptr + (16 * info->num_sections) >= decomp_end)
         {
+          info->name[0] = '\0';
           info->num_sections = 0;
+          info->sections = NULL;
+          dwg->header.section_infohdr.num_desc = i;
           free (decomp);
           LOG_ERROR ("read_R2004_section_info out of range");
           return DWG_ERR_INVALIDDWG;
