@@ -192,7 +192,10 @@ AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_FUNC_STAT
 AC_FUNC_ALLOCA
-AC_FUNC_STRTOD
+dnl broken for cross-compiling
+dnl AC_FUNC_STRTOD
+AC_CHECK_FUNC([strtod],[],
+  AC_MSG_ERROR([C89 strtod not found. Ignore for now]))
 AC_CHECK_FUNC([strdup],[],
   AC_MSG_ERROR([strdup not found. Check your _POSIX_C_SOURCE vs ANSI settings.]))
 AC_CHECK_FUNCS([getopt_long],[],
