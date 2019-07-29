@@ -1612,7 +1612,7 @@ decompress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
               return DWG_ERR_VALUEOUTOFBOUNDS;
             }
           for (i = 0; i < lit_length; ++i)
-            *dst++ = bit_read_RC (dat);
+            *dst++ = bit_read_RC (dat); //TODO still overflows
         }
     }
 
@@ -4649,21 +4649,26 @@ dwg_validate_POLYLINE (Dwg_Object *obj)
             }
           else if (_obj->vertex)
             {
-              next = dwg_next_object (_obj->vertex[_obj->num_owned - 1]->obj);
-              if (next && next->fixedtype == DWG_TYPE_SEQEND)
+              Dwg_Object_Ref *ref = _obj->vertex[_obj->num_owned - 1];
+              if (ref && ref->obj)
                 {
-                  seqend = dwg_find_objectref (dwg, next);
-                  if (seqend == NULL)
+                  next = dwg_next_object (ref->obj);
+                  if (next && next->fixedtype == DWG_TYPE_SEQEND)
                     {
-                      seqend = (Dwg_Object_Ref *)calloc (
-                          1, sizeof (Dwg_Object_Ref));
-                      seqend->obj = next;
-                      seqend->handleref = next->handle;
-                      seqend->absolute_ref = next->handle.value;
-                      dwg_decode_add_object_ref (dwg, seqend);
+                      seqend = dwg_find_objectref (dwg, next);
+                      if (seqend == NULL)
+                        {
+                          seqend = (Dwg_Object_Ref *)calloc (
+                              1, sizeof (Dwg_Object_Ref));
+                          seqend->obj = next;
+                          seqend->handleref = next->handle;
+                          seqend->absolute_ref = next->handle.value;
+                          dwg_decode_add_object_ref (dwg, seqend);
+                        }
+                      _obj->seqend = seqend;
+                      LOG_WARN (
+                          "fixed empty POLYLINE.seqend with last vertex +1")
                     }
-                  _obj->seqend = seqend;
-                  LOG_WARN ("fixed empty POLYLINE.seqend with last vertex +1")
                 }
             }
         }
