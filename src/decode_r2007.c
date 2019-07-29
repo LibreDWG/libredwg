@@ -853,13 +853,17 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       LOG_TRACE ("  num pages:     %" PRIu64 "\n", section->num_pages);
 
       // debugging sanity
-#if 0
+#if 1
       /* compressed */
-      if (section->data_size > 2 * dat->size)
-        return DWG_ERR_VALUEOUTOFBOUNDS;
-      assert(section->data_size < dat->size + 0x100000);
-      assert(section->max_size  < dat->size + 0x100000);
-      assert(section->name_length < dat->size);
+      if (section->data_size > 10 * dat->size)
+        {
+          LOG_ERROR ("Invalid System Section data_size");
+          sections_destroy (sections); // the root
+          return NULL;
+        }
+      //assert(section->data_size < dat->size + 0x100000);
+      //assert(section->max_size  < dat->size + 0x100000);
+      assert(section->name_length < (int64_t)dat->size);
       assert(section->num_pages < DBG_MAX_COUNT);
 #endif
       section->next = NULL;
