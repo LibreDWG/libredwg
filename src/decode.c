@@ -1616,14 +1616,14 @@ decompress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
       if (lit_length)
         {
           if (((uint32_t)lit_length > bytes_left) // bytes left to write
-              || (int)(dst - decomp) > (int)decomp_data_size)  // dst overflow
+              || dst + lit_length > maxdst)       // dst overflow 
             {
               LOG_ERROR ("Invalid lit_length %lu > %lu bytes left",
                          (unsigned long)lit_length, (unsigned long)bytes_left)
               return DWG_ERR_VALUEOUTOFBOUNDS;
             }
           for (i = 0; i < lit_length; ++i)
-            *dst++ = bit_read_RC (dat); //TODO still overflows
+            *dst++ = bit_read_RC (dat);
         }
     }
 
