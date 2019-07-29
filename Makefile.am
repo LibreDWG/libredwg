@@ -100,27 +100,27 @@ regen-swig-patch:
 
 check-dwg: all
 	-mv check-dwg.log check-dwg.log~ 2>/dev/null
-	for d in `find test/test-data -iname \*.dwg -size -40M`; do \
+	for d in `find $(srcdir)/test/test-data -iname \*.dwg -size -40M`; do \
 	  echo programs/dwgread -v3 $$d | tee -a check-dwg.log; \
 	  programs/dwgread -v3 $$d >> check-dwg.log 2>&1; \
 	done
 check-dwg-valgrind: all
 	-mv check-dwg-valgrind.log check-dwg-valgrind.log~ 2>/dev/null
-	for d in `find test/test-data -iname \*.dwg -size -10M`; do \
+	for d in `find $(srcdir)/test/test-data -iname \*.dwg -size -10M`; do \
 	  echo $(VALGRIND) --leak-check=full --show-reachable=no --num-callers=30 $(VALGRIND_SUPPRESSIONS) programs/dwgread $$d | tee -a check-dwg-valgrind.log; \
 	  $(VALGRIND) --leak-check=full --show-reachable=no --num-callers=30 $(VALGRIND_SUPPRESSIONS) programs/dwgread $$d >> check-dwg-valgrind.log 2>&1; \
 	done
 check-dxf: all
 	-mv check-dxf.log check-dxf.log~ 2>/dev/null
-	-for f in test/test-data/Drawing_2*.dwg \
-                 test/test-data/sample_2*.dwg \
-                 test/test-data/example_2000.dwg; \
+	-for f in $(srcdir)/test/test-data/Drawing_2*.dwg \
+                  $(srcdir)/test/test-data/sample_2*.dwg \
+                  $(srcdir)/test/test-data/example_2000.dwg; \
           do \
             echo programs/dwg2dxf -v3 $$f | tee -a check-dxf.log; \
             programs/dwg2dxf -v3 $$f >>check-dxf.log 2>&1; \
           done
 	-for d in r14 2000 2004 2007 2010 2013 2018; do \
-          for f in test/test-data/$$d/*.dwg; do \
+          for f in $(srcdir)/test/test-data/$$d/*.dwg; do \
             b=`basename $$f .dwg`; dxf="$${b}_$${d}.dxf"; \
             echo programs/dwg2dxf -v3 -o $${dxf} $$f | tee -a check-dxf.log; \
             programs/dwg2dxf -v3 -o $${dxf} $$f >>check-dxf.log 2>&1; \
