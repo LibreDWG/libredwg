@@ -642,7 +642,10 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
   bit_read_fixed (dat, rsdata, page_size);
   pedata = decode_rs (rsdata, block_count, 239);
   if (!pedata)
-    return NULL;
+    {
+      free (data);
+      return NULL;
+    }
 
   if (size_comp < size_uncomp)
     error = decompress_r2007 (data, size_uncomp, pedata, size_comp);
@@ -858,6 +861,8 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       if (section->data_size > 10 * dat->size)
         {
           LOG_ERROR ("Invalid System Section data_size");
+          free (section);
+          free (data);
           sections_destroy (sections); // the root
           return NULL;
         }
@@ -1688,13 +1693,15 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   sections_map = read_sections_map (dat, file_header.sections_map_size_comp,
                                     file_header.sections_map_size_uncomp,
                                     file_header.sections_map_correction);
+  if (!sections_map)
+    goto error;
 
   error = read_2007_section_classes (dat, dwg, sections_map, pages_map);
   error += read_2007_section_header (dat, hdl_dat, dwg, sections_map,
                                      pages_map);
   error += read_2007_section_handles (dat, hdl_dat, dwg, sections_map,
                                       pages_map);
-  // read_2007_blocks(dat, hdl_dat, dwg, sections_map, pages_map);
+  // read_2007_blocks (dat, hdl_dat, dwg, sections_map, pages_map);
 
  error:
   pages_destroy (pages_map);
