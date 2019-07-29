@@ -233,6 +233,8 @@ DWG_GETALL_OBJECT (EVALUATION_GRAPH)
 // DWG_GETALL_OBJECT(XREFPANELOBJECT)
 #endif
 
+#endif /* __AFL_COMPILER */
+
 /*******************************************************************
  *     Functions created from macro to cast dwg_object to entity     *
  *                 Usage :- dwg_object_to_ENTITY(),                  *
@@ -261,6 +263,7 @@ CAST_DWG_OBJECT_TO_ENTITY (POLYLINE_3D)
 CAST_DWG_OBJECT_TO_ENTITY (ARC)
 CAST_DWG_OBJECT_TO_ENTITY (CIRCLE)
 CAST_DWG_OBJECT_TO_ENTITY (LINE)
+#ifndef __AFL_COMPILER
 CAST_DWG_OBJECT_TO_ENTITY (DIMENSION_ORDINATE)
 CAST_DWG_OBJECT_TO_ENTITY (DIMENSION_LINEAR)
 CAST_DWG_OBJECT_TO_ENTITY (DIMENSION_ALIGNED)
@@ -308,6 +311,8 @@ CAST_DWG_OBJECT_TO_ENTITY_BYNAME (REVOLVEDSURFACE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (SWEPTSURFACE)
 #endif
 
+#endif /* __AFL_COMPILER */
+
 /*******************************************************************
  *     Functions created from macro to cast dwg object to object     *
  *                 Usage :- dwg_object_to_OBJECT(),                  *
@@ -319,6 +324,7 @@ CAST_DWG_OBJECT_TO_ENTITY_BYNAME (SWEPTSURFACE)
  */
 CAST_DWG_OBJECT_TO_OBJECT (BLOCK_CONTROL)
 CAST_DWG_OBJECT_TO_OBJECT (BLOCK_HEADER)
+#ifndef __AFL_COMPILER
 CAST_DWG_OBJECT_TO_OBJECT (LAYER_CONTROL)
 CAST_DWG_OBJECT_TO_OBJECT (LAYER)
 CAST_DWG_OBJECT_TO_OBJECT (STYLE_CONTROL)
@@ -451,6 +457,8 @@ dwg_object_to_DIMENSION (dwg_object *obj)
     }
   return (dwg_ent_dim *)ret_obj;
 }
+
+#endif /* __AFL_COMPILER */
 
 /********************************************************************
  *                    DYNAPI FUNCTIONS                              *
@@ -667,6 +675,7 @@ dwg_set_OBJECT_common_utf8text (Dwg_Object_Object *restrict obj, const char *res
     }
 #endif
 
+#ifndef __AFL_COMPILER
 dwg_get_OBJECT(ent_text, TEXT)
 dwg_get_OBJECT(ent_attrib, ATTRIB)
 dwg_get_OBJECT(ent_attdef, ATTDEF)
@@ -683,8 +692,10 @@ dwg_get_OBJECT(ent_vertex_pface_face, VERTEX_PFACE_FACE)
 dwg_get_OBJECT(ent_polyline_2d, POLYLINE_2D)
 dwg_get_OBJECT(ent_polyline_3d, POLYLINE_3D)
 dwg_get_OBJECT(ent_arc, ARC)
+#endif
 dwg_get_OBJECT(ent_circle, CIRCLE)
 dwg_get_OBJECT(ent_line, LINE)
+#ifndef __AFL_COMPILER
 dwg_get_OBJECT(ent_dim_ordinate, DIMENSION_ORDINATE)
 dwg_get_OBJECT(ent_dim_linear, DIMENSION_LINEAR)
 dwg_get_OBJECT(ent_dim_aligned, DIMENSION_ALIGNED)
@@ -14193,6 +14204,8 @@ dwg_ent_polyline_2d_set_curve_type (dwg_ent_polyline_2d *restrict pline2d,
     }
 }
 
+#endif /* __AFL_COMPILER */
+
 /** Returns number of vertices
  */
 BITCODE_BL
@@ -14359,6 +14372,8 @@ dwg_object_polyline_2d_get_points (const dwg_object *restrict obj,
     }
 }
 
+#ifndef __AFL_COMPILER
+
 /*******************************************************************
  *                 FUNCTIONS FOR POLYLINE_3D ENTITY                  *
  ********************************************************************/
@@ -14444,6 +14459,8 @@ dwg_ent_polyline_3d_set_curve_type (dwg_ent_polyline_3d *restrict pline3d,
       *error = 1;
     }
 }
+
+#endif /* __AFL_COMPILER */
 
 /** Returns the number of _dwg_object:: POLYLINE_3D vertices,
     the list of associated _dwg_object_VERTEX_3D:: points.
@@ -14616,6 +14633,8 @@ dwg_object_polyline_3d_get_points (const dwg_object *restrict obj,
       return NULL;
     }
 }
+
+#ifndef __AFL_COMPILER
 
 /*******************************************************************
  *                   FUNCTIONS FOR 3DFACE ENTITY                     *
@@ -19882,6 +19901,8 @@ dwg_ent_table_get_data_vert_right_visibility (
  *        First the special tables: BLOCKS and LAYER                *
  ********************************************************************/
 
+#endif /* __AFL_COMPILER */
+
 /*******************************************************************
  *               FUNCTIONS FOR BLOCK_CONTROL OBJECT                  *
  ********************************************************************/
@@ -20391,6 +20412,8 @@ dwg_ent_get_ltype_name (const dwg_obj_ent *restrict ent, int *restrict error)
   return name;
 }
 
+#ifndef __AFL_COMPILER
+
 /** Returns the entity bitsize
 \code Usage: bitsize = dwg_ent_get_bitsize(ent, &error);
 \endcode
@@ -20487,6 +20510,8 @@ dwg_ent_get_eed_data (const dwg_obj_ent *restrict ent, const BITCODE_BL idx,
     }
 }
 
+#endif /* __AFL_COMPILER */
+
 #define _BODY_FIELD(ent, field)                                               \
   if (!ent)                                                                   \
     {                                                                         \
@@ -20495,6 +20520,8 @@ dwg_ent_get_eed_data (const dwg_obj_ent *restrict ent, const BITCODE_BL idx,
     }                                                                         \
   *error = 0;                                                                 \
   return ent->field
+
+#ifndef __AFL_COMPILER
 
 EXPORT const Dwg_Color *
 dwg_ent_get_color (const dwg_obj_ent *restrict ent, int *restrict error)
@@ -20698,6 +20725,8 @@ dwg_ent_get_edge_visualstyle (const dwg_obj_ent *restrict ent,
 {
   _BODY_FIELD (ent, edge_visualstyle);
 }
+
+#endif /* __AFL_COMPILER */
 
 /** Returns dwg_object* from dwg_obj_ent*
 \code Usage: dwg_object* obj = dwg_obj_ent_to_object(ent, &error);
@@ -21121,8 +21150,6 @@ dwg_obj_get_handleref (const dwg_obj_obj *restrict obj, int *restrict error)
 {
   _BODY_FIELD (obj, handleref);
 }
-
-#endif   /* __AFL_COMPILER */
 
 /** Returns dwg_obj_obj* from dwg_object*
 \code Usage: dwg_obj_obj ent = dwg_object_to_object(obj, &error);
