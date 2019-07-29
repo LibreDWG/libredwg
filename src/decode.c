@@ -176,6 +176,11 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   /* Version */
   dat->byte = 0;
   dat->bit = 0;
+  if (!dat->chain || dat->size < 58)
+    {
+      LOG_ERROR ("dwg too small: %lu bytes", dat->size);
+      return DWG_ERR_INVALIDDWG;
+    }
   strncpy (version, (const char *)dat->chain, 6);
   version[6] = '\0';
 
