@@ -94,7 +94,7 @@ EXTRA_DIST = \
 	gen-dynapi.pl
 
 $(srcdir)/dynapi.c: $(srcdir)/gen-dynapi.pl $(top_srcdir)/include/dwg.h
-	-cd $(srcdir) && $(PERL) gen-dynapi.pl
+	-$(PERL) $(srcdir)/gen-dynapi.pl
 
 .c.i:
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\

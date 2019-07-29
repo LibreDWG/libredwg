@@ -18,17 +18,32 @@
 
 use strict;
 use warnings;
-use vars qw(@entity_names @object_names @subtypes $max_entity_names $max_object_names);
+use vars qw(@entity_names @object_names @subtypes
+            $max_entity_names $max_object_names);
 use Convert::Binary::C;
 #use Data::Dumper;
-BEGIN { chdir 'src' if $0 =~ /src/; }
+#BEGIN { chdir 'src' if $0 =~ /src/; }
 
 # add gcc/clang -print-search-dirs paths
-my @ccincdir;
+my (@ccincdir, $srcdir, $incdir);
+if ($0 =~ m{(^\.\./.*src)/gen}) {
+  $srcdir = $1;
+  $incdir = "$srcdir/../include";
+} elsif ($0 =~ m{^src/gen}) {
+  $srcdir = "src";
+  $incdir = "include";
+} else {
+  $srcdir = ".";
+  $incdir = "../include";
+}
 my $CC = `grep '^CC =' Makefile`;
 if ($CC) {
   $CC =~ s/^CC =//;
   chomp $CC;
+  $CC =~ s/^\s+//;
+  if ($CC =~ /^afl-(gcc|clang)/) {
+    $ENV{AFL_QUIET} = 1;
+  }
   my $out = `$CC -print-search-dirs`;
   if ($out) {
     if ($out =~ /^install: (.+?)$/m) {
@@ -61,7 +76,7 @@ warn "using $CC with @ccincdir\n" if @ccincdir;
 my $c = Convert::Binary::C->new
   ->Include('.', @ccincdir, '/usr/include')
   ->Define(@defines);
-my $hdr = "../include/dwg.h";
+my $hdr = "$incdir/dwg.h";
 $c->parse_file($hdr);
 
 #print Data::Dumper->Dump([$c->struct('_dwg_entity_TEXT')], ['_dwg_entity_TEXT']);
@@ -191,7 +206,7 @@ sub dxfin_spec {
   dxf_in($in);
   close $in;
 }
-dxfin_spec 'dwg.spec';
+dxfin_spec "$srcdir/dwg.spec";
 $DXF{'3DSOLID'}->{'version'} = 70;
 $DXF{'REGION'}->{'version'} = 70;
 $DXF{'BODY'}->{'version'} = 70;
@@ -202,12 +217,12 @@ $DXF{'BLOCK'}->{'name'} = 2; # and 3
 $DXF{'VISUALSTYLE'}->{'edge_hide_precision_flag'} = 290;
 $DXF{'VISUALSTYLE'}->{'is_internal_use_only'} = 291;
 
-dxfin_spec 'header_variables_dxf.spec';
+dxfin_spec "$srcdir/header_variables_dxf.spec";
 $DXF{header_variables}->{'_3DDWFPREC'} = 40;
 
 $n = 'object_entity';
-dxfin_spec 'common_entity_data.spec';
-dxfin_spec 'common_entity_handle_data.spec';
+dxfin_spec "$srcdir/common_entity_data.spec";
+dxfin_spec "$srcdir/common_entity_handle_data.spec";
 $DXF{$n}->{'color'} = $DXF{$n}->{'color_r11'} = 62;
 $DXF{$n}->{'color.handle'} = 420;
 $DXF{$n}->{'paper_r11'} = 67;
@@ -439,9 +454,9 @@ my %FMT = (
     'RC*' => '%s',
     );
 
-my $infile = '../test/unit-testing/dynapi_test.c.in';
+my $infile = "$srcdir/../test/unit-testing/dynapi_test.c.in";
 open $in, $infile or die "$infile: $!";
-$cfile  = '../test/unit-testing/dynapi_test.c';
+$cfile  = "$srcdir/../test/unit-testing/dynapi_test.c";
 chmod 0644, $cfile if -e $cfile;
 open $fh, ">", $cfile or die "$cfile: $!";
 print $fh "/* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */\n";
