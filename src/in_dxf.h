@@ -20,6 +20,8 @@
 
 #include "dwg.h"
 #include "bits.h"
+#include "decode.h"
+#include "dynapi.h"
 
 // global array of [obj -> [fields], ...]
 typedef struct _dxf_field
@@ -37,6 +39,36 @@ typedef struct _dxf_objs
   int size_fields;
   Dxf_Field *fields;
 } Dxf_Objs;
+
+typedef struct _dxf_pair
+{
+  short code;
+  enum RES_BUF_VALUE_TYPE type;
+  union
+  {
+    int i;
+    char *s;
+    long l;
+    double d;
+  } value;
+} Dxf_Pair;
+
+/* We need to postpone the HEADER handles from names,
+   when we didn't read the TABLES yet, which sets the handle values.
+   Store all handle fieldnames and string values into this array,
+   which is prefixed with the number of stored items.
+ */
+struct array_hdl {
+  char *field;
+  char *name;
+};
+typedef struct _array_hdls {
+  int nitems;
+  struct array_hdl items[]; // grows
+} array_hdls;
+
+void array_push (array_hdls* hdls, char *field, char *name);
+int matches_type (Dxf_Pair *pair, const Dwg_DYNAPI_field *f);
 
 void dxf_add_field (Dwg_Object *restrict obj, const char *restrict name,
                     const char *restrict type, int dxf);

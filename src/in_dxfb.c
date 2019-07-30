@@ -41,19 +41,6 @@ static unsigned int cur_ver = 0;
 static char buf[4096];
 static long start, end; // stream offsets
 
-typedef struct _dxf_pair
-{
-  short code;
-  enum RES_BUF_VALUE_TYPE type;
-  union
-  {
-    int i;
-    char *s;
-    long l;
-    double d;
-  } value;
-} Dxf_Pair;
-
 static long num_dxf_objs;  // how many elements are added
 static long size_dxf_objs; // how many elements are allocated
 static Dxf_Objs *dxf_objs;

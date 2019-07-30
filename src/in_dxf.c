@@ -60,43 +60,13 @@ static unsigned int loglevel;
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
 
-/* We need to postpone the HEADER handles from names,
-   when we didn't read the TABLES yet, which sets the handle values.
-   Store all handle fieldnames and string values into this array,
-   which is prefixed with the number of stored items.
- */
-struct array_hdl {
-  char *field;
-  char *name;
-};
-typedef struct _array_hdls {
-  int nitems;
-  struct array_hdl items[]; // grows
-} array_hdls;
-
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
 static char buf[4096];
 static long start, end; // stream offsets
 static array_hdls *header_hdls = NULL;
 
-void
-array_push (array_hdls* hdls, char *field, char *name);
-
 #define ARRAY_SIZE(arr) (sizeof (arr) / sizeof (arr[0]))
-
-typedef struct _dxf_pair
-{
-  short code;
-  enum RES_BUF_VALUE_TYPE type;
-  union
-  {
-    int i;
-    char *s;
-    long l;
-    double d;
-  } value;
-} Dxf_Pair;
 
 static long num_dxf_objs;  // how many elements are added
 static long size_dxf_objs; // how many elements are allocated
@@ -763,6 +733,22 @@ dxf_check_code (Bit_Chain *dat, Dxf_Pair *pair, int code)
   return error;                                                               \
   }
 
+/* Store all handle fieldnames and string values into this array of 2 strings,
+   which is prefixed with the number of stored items.
+   We need strdup'd copies, the dxf input will be freed.
+ */
+void
+array_push (array_hdls* hdls, char *field, char *name)
+{
+  int i = hdls->nitems;
+
+  hdls->nitems++;
+  hdls = realloc (hdls,
+                  sizeof (int) + (hdls->nitems * sizeof (struct array_hdl)));
+  hdls->items[i].field = strdup (field);
+  hdls->items[i].name = strdup (name);
+}
+
 // TODO: we have only one obj per DXF context/section. simplify
 void
 dxf_add_field (Dwg_Object *restrict obj, const char *restrict name,
@@ -1137,7 +1123,7 @@ dxf_expect_code (Bit_Chain *restrict dat, Dxf_Pair *restrict pair, int code)
   return 0;
 }
 
-static int
+int
 matches_type (Dxf_Pair *pair, const Dwg_DYNAPI_field *f)
 {
   switch (pair->type)
@@ -1182,18 +1168,6 @@ matches_type (Dxf_Pair *pair, const Dwg_DYNAPI_field *f)
       LOG_ERROR ("Invalid DXF group code: %d", pair->code);
     }
   return 0;
-}
-
-void
-array_push (array_hdls* hdls, char *field, char *name)
-{
-  int i = hdls->nitems;
-
-  hdls->nitems++;
-  hdls = realloc (hdls,
-                  sizeof (int) + (hdls->nitems * sizeof (struct array_hdl)));
-  hdls->items[i].field = strdup (field);
-  hdls->items[i].name = strdup (name);
 }
 
 static int
@@ -1464,7 +1438,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   size_dxf_objs = 1000;
   dxf_objs = malloc (1000 * sizeof (Dxf_Objs));
 
-  header_hdls = calloc (1, sizeof (int)); // leave items uninitialized
+  header_hdls = calloc (1, sizeof (int) + 20 * sizeof (struct array_hdl));
 
   while (dat->byte < dat->size)
     {
