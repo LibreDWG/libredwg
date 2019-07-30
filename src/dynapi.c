@@ -1,5 +1,5 @@
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 750 "gen-dynapi.pl"
+#line 765 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -4065,7 +4065,7 @@ static const struct _name_type_fields dwg_name_types[] = {
 
 };
 
-#line 817 "gen-dynapi.pl"
+#line 831 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
@@ -4109,7 +4109,7 @@ is_dwg_object (const char *name)
              : false;
 }
 
-const Dwg_DYNAPI_field *
+EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_entity_fields (const char *name)
 {
   const char *p = bsearch (name, dwg_name_types, NUM_NAME_TYPES - 1,
@@ -4125,7 +4125,7 @@ dwg_dynapi_entity_fields (const char *name)
     return NULL;
 }
 
-const Dwg_DYNAPI_field*
+EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_entity_field (const char *restrict name, const char *restrict field)
 {
   const Dwg_DYNAPI_field *fields = dwg_dynapi_entity_fields (name);
@@ -4141,7 +4141,7 @@ dwg_dynapi_entity_field (const char *restrict name, const char *restrict field)
   return NULL;
 }
 
-const Dwg_DYNAPI_field*
+EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_header_field (const char *restrict fieldname)
 {
   return (Dwg_DYNAPI_field *)bsearch (
@@ -4150,7 +4150,7 @@ dwg_dynapi_header_field (const char *restrict fieldname)
               sizeof (_dwg_header_variables_fields[0]), _name_struct_cmp);
 }
 
-const Dwg_DYNAPI_field*
+EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_common_entity_field (const char *restrict fieldname)
 {
   return (Dwg_DYNAPI_field *)bsearch (
@@ -4159,7 +4159,7 @@ dwg_dynapi_common_entity_field (const char *restrict fieldname)
               sizeof (_dwg_object_entity_fields[0]), _name_struct_cmp);
 }
 
-const Dwg_DYNAPI_field*
+EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_common_object_field (const char *restrict fieldname)
 {
   return (Dwg_DYNAPI_field *)bsearch (
@@ -4174,8 +4174,10 @@ dwg_dynapi_entity_value (void *restrict _obj, const char *restrict name,
                          const char *restrict fieldname,
                          void *restrict out, Dwg_DYNAPI_field *restrict fp)
 {
+#ifndef HAVE_NONNULL
   if (!_obj || !name || !fieldname || !out)
     return false;
+#endif
   {
     int error;
     const Dwg_Object* obj = dwg_obj_generic_to_object (_obj, &error);
@@ -4211,8 +4213,10 @@ dwg_dynapi_entity_utf8text (void *restrict _obj, const char *restrict name,
                             const char *restrict fieldname,
                             char **restrict out, Dwg_DYNAPI_field *restrict fp)
 {
+#ifndef HAVE_NONNULL
   if (!_obj || !name || !fieldname || !out)
     return false;
+#endif
   {
     int error;
     const Dwg_Object* obj = dwg_obj_generic_to_object (_obj, &error);
@@ -4264,8 +4268,10 @@ dwg_dynapi_header_value (const Dwg_Data *restrict dwg,
                          const char *restrict fieldname, void *restrict out,
                          Dwg_DYNAPI_field *restrict fp)
 {
+#ifndef HAVE_NONNULL
   if (!dwg || !fieldname || !out)
     return false;
+#endif
   {
     const Dwg_DYNAPI_field *f = dwg_dynapi_header_field (fieldname);
     if (f)
@@ -4291,8 +4297,10 @@ dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
                             char **restrict out,
                             Dwg_DYNAPI_field *restrict fp)
 {
+#ifndef HAVE_NONNULL
   if (!dwg || !fieldname || !out)
     return false;
+#endif
   {
     const Dwg_DYNAPI_field *f = dwg_dynapi_header_field (fieldname);
     if (f && f->is_string)
@@ -4332,8 +4340,10 @@ EXPORT bool
 dwg_dynapi_common_value(void *restrict _obj, const char *restrict fieldname,
                         void *restrict out, Dwg_DYNAPI_field *restrict fp)
 {
+#ifndef HAVE_NONNULL
   if (!_obj || !fieldname || !out)
     return false;
+#endif
   {
     const Dwg_DYNAPI_field *f;
     int error;
@@ -4382,8 +4392,10 @@ EXPORT bool
 dwg_dynapi_common_utf8text(void *restrict _obj, const char *restrict fieldname,
                            char **restrict out, Dwg_DYNAPI_field *restrict fp)
 {
+#ifndef HAVE_NONNULL
   if (!_obj || !fieldname || !out)
     return false;
+#endif
   {
     Dwg_DYNAPI_field *f;
     int error;
@@ -4502,8 +4514,10 @@ dwg_dynapi_entity_set_value (void *restrict _obj, const char *restrict name,
                              const char *restrict fieldname,
                              const void *restrict value, const bool is_utf8)
 {
+#ifndef HAVE_NONNULL
   if (!_obj || !fieldname || !value) // cannot set NULL value
     return false;
+#endif
   {
     int error;
     const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
@@ -4541,8 +4555,10 @@ dwg_dynapi_header_set_value (const Dwg_Data *restrict dwg,
                              const char *restrict fieldname,
                              const void *restrict value, const bool is_utf8)
 {
+#ifndef HAVE_NONNULL
   if (!dwg || !fieldname || !value) // cannot set NULL value
     return false;
+#endif
   {
     Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)bsearch (
         fieldname, _dwg_header_variables_fields,
@@ -4582,8 +4598,10 @@ dwg_dynapi_common_set_value (void *restrict _obj,
                              const char *restrict fieldname,
                              const void *restrict value, const bool is_utf8)
 {
+#ifndef HAVE_NONNULL
   if (!_obj || !fieldname || !value)
     return false;
+#endif
   {
     Dwg_DYNAPI_field *f;
     int error;
@@ -4636,10 +4654,15 @@ dwg_dynapi_common_set_value (void *restrict _obj,
 EXPORT char*
 dwg_dynapi_handle_name (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict hdl)
 {
-  char *name;
   const Dwg_Version_Type dwg_version = dwg->header.version;
-  Dwg_Object *obj = dwg_ref_object (dwg, hdl);
+  Dwg_Object *obj;
 
+#ifndef HAVE_NONNULL
+  if (!dwg || !hdl)
+    return NULL;
+#endif
+
+  obj = dwg_ref_object (dwg, hdl);
   if (!obj)
     return NULL;
   {
