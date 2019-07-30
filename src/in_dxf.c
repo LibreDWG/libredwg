@@ -733,20 +733,22 @@ dxf_check_code (Bit_Chain *dat, Dxf_Pair *pair, int code)
   return error;                                                               \
   }
 
-/* Store all handle fieldnames and string values into this array of 2 strings,
-   which is prefixed with the number of stored items.
+/* Store all handle fieldnames and string values into this flexarray.
    We need strdup'd copies, the dxf input will be freed.
  */
-void
-array_push (array_hdls* hdls, char *field, char *name)
+array_hdls *
+array_push (array_hdls *restrict hdls, char *restrict field, char *restrict name)
 {
-  int i = hdls->nitems;
-
-  hdls->nitems++;
-  hdls = realloc (hdls,
-                  sizeof (int) + (hdls->nitems * sizeof (struct array_hdl)));
+  uint32_t i = hdls->nitems;
+  if (i >= hdls->size)
+    {
+      hdls->size += 16;
+      hdls = realloc (hdls, 8 + (hdls->size * sizeof (struct array_hdl)));
+    }
+  hdls->nitems = i+1;
   hdls->items[i].field = strdup (field);
   hdls->items[i].name = strdup (name);
+  return hdls;
 }
 
 // TODO: we have only one obj per DXF context/section. simplify
@@ -1124,7 +1126,7 @@ dxf_expect_code (Bit_Chain *restrict dat, Dxf_Pair *restrict pair, int code)
 }
 
 int
-matches_type (Dxf_Pair *pair, const Dwg_DYNAPI_field *f)
+matches_type (Dxf_Pair *restrict pair, const Dwg_DYNAPI_field *restrict f)
 {
   switch (pair->type)
     {
@@ -1137,8 +1139,9 @@ matches_type (Dxf_Pair *pair, const Dwg_DYNAPI_field *f)
       if (f->size == 4 && f->type[1] == 'L') return 1;
       // fall through
     case VT_INT16:
-      // BS or RS
+      // BS or RS or CMC
       if (f->size == 2 && f->type[1] == 'S') return 1;
+      if (strEQc (f->type, "CMC")) return 1;
       // fall through
     case VT_INT8:
       if (strEQc (f->type, "RC")) return 1;
@@ -1149,6 +1152,7 @@ matches_type (Dxf_Pair *pair, const Dwg_DYNAPI_field *f)
     case VT_REAL:
       // BD or RD
       if (f->size == 8 && f->type[1] == 'D') return 1;
+      if (strEQc (f->type, "TIMEBLL")) return 1;
       break;
     case VT_POINT3D:
       // 3BD or 3RD or 3DPOINT
@@ -1252,9 +1256,9 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               char *key, *str;
               LOG_TRACE ("HEADER.%s %s [%s] later\n", &field[1],
                          pair->value.s, f->type);
-              // TODO name (which table?) => handle
+              // name (which table?) => handle
               // needs to be postponed, because we don't have the tables yet.
-              array_push (header_hdls, &field[1], pair->value.s);
+              header_hdls = array_push (header_hdls, &field[1], pair->value.s);
             }
           else
             {
@@ -1272,7 +1276,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       pos = bit_position (dat);
       pair = dxf_read_pair (dat);
       DXF_BREAK_ENDSEC;
-      if (pair->code != 9 && pair->code != 0)
+      if (pair->code != 9 /* && pair->code != 0 */)
         goto next_hdrvalue; // for mult. 10,20,30 values
     }
   dxf_free_pair (pair);
@@ -1438,14 +1442,15 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   size_dxf_objs = 1000;
   dxf_objs = malloc (1000 * sizeof (Dxf_Objs));
 
-  header_hdls = calloc (1, sizeof (int) + 20 * sizeof (struct array_hdl));
+  header_hdls = calloc (1, 8 + 16 * sizeof (struct array_hdl));
+  header_hdls->size = 16;
 
   while (dat->byte < dat->size)
     {
       pair = dxf_read_pair (dat);
       dxf_expect_code (dat, pair, 0);
       DXF_CHECK_EOF;
-      if (strEQc (pair->value.s, "SECTION"))
+      if (pair->type == VT_STRING && strEQc (pair->value.s, "SECTION"))
         {
           dxf_free_pair (pair);
           pair = dxf_read_pair (dat);

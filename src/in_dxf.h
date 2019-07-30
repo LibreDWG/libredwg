@@ -63,12 +63,14 @@ struct array_hdl {
   char *name;
 };
 typedef struct _array_hdls {
-  int nitems;
-  struct array_hdl items[]; // grows
+  uint32_t nitems;
+  uint32_t size;            // in chunks of 16
+  struct array_hdl items[]; // Flexible array grows
 } array_hdls;
 
-void array_push (array_hdls* hdls, char *field, char *name);
-int matches_type (Dxf_Pair *pair, const Dwg_DYNAPI_field *f);
+array_hdls *array_push (array_hdls *restrict hdls, char *restrict field,
+                        char *restrict name);
+int matches_type (Dxf_Pair *restrict pair, const Dwg_DYNAPI_field *restrict f);
 
 void dxf_add_field (Dwg_Object *restrict obj, const char *restrict name,
                     const char *restrict type, int dxf);
