@@ -25,16 +25,16 @@ use Convert::Binary::C;
 #BEGIN { chdir 'src' if $0 =~ /src/; }
 
 # add gcc/clang -print-search-dirs paths
-my (@ccincdir, $srcdir, $incdir);
+my (@ccincdir, $srcdir, $topdir);
 if ($0 =~ m{(^\.\./.*src)/gen}) {
   $srcdir = $1;
-  $incdir = "$srcdir/../include";
+  $topdir = "$srcdir/..";
 } elsif ($0 =~ m{^src/gen}) {
   $srcdir = "src";
-  $incdir = "include";
+  $topdir = ".";
 } else {
   $srcdir = ".";
-  $incdir = "../include";
+  $topdir = "..";
 }
 my $CC = `grep '^CC =' Makefile`;
 if ($CC) {
@@ -76,7 +76,7 @@ warn "using $CC with @ccincdir\n" if @ccincdir;
 my $c = Convert::Binary::C->new
   ->Include('.', @ccincdir, '/usr/include')
   ->Define(@defines);
-my $hdr = "$incdir/dwg.h";
+my $hdr = "$topdir/include/dwg.h";
 $c->parse_file($hdr);
 
 #print Data::Dumper->Dump([$c->struct('_dwg_entity_TEXT')], ['_dwg_entity_TEXT']);
@@ -236,7 +236,7 @@ $DXF{$n}->{'ownerhandle'} = 330;
 $DXF{$n}->{'xdicobjhandle'} = 360;
 $DXF{$n}->{'reactors'} = 330;
 
-my $cfile = "dynapi.c";
+my $cfile = "$srcdir/dynapi.c";
 chmod 0644, $cfile if -e $cfile;
 open my $fh, ">", $cfile or die "$cfile: $!";
 
@@ -454,9 +454,9 @@ my %FMT = (
     'RC*' => '%s',
     );
 
-my $infile = "$srcdir/../test/unit-testing/dynapi_test.c.in";
+my $infile = "$topdir/test/unit-testing/dynapi_test.c.in";
 open $in, $infile or die "$infile: $!";
-$cfile  = "$srcdir/../test/unit-testing/dynapi_test.c";
+$cfile  = "$topdir/test/unit-testing/dynapi_test.c";
 chmod 0644, $cfile if -e $cfile;
 open $fh, ">", $cfile or die "$cfile: $!";
 print $fh "/* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */\n";
