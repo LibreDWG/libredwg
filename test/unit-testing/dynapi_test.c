@@ -1864,6 +1864,24 @@ test_header (const Dwg_Data *dwg)
       fail ("HEADER.TDUPDATE [TIMEBLL]");
   }
   {
+    BITCODE_TIMEBLL tducreate;
+    if (dwg_dynapi_header_value (dwg, "TDUCREATE", &tducreate, NULL)
+        && !memcmp (&tducreate, &dwg->header_vars.TDUCREATE, sizeof (dwg->header_vars.TDUCREATE))
+       )
+      pass ();
+    else
+      fail ("HEADER.TDUCREATE [TIMEBLL]");
+  }
+  {
+    BITCODE_TIMEBLL tduupdate;
+    if (dwg_dynapi_header_value (dwg, "TDUUPDATE", &tduupdate, NULL)
+        && !memcmp (&tduupdate, &dwg->header_vars.TDUUPDATE, sizeof (dwg->header_vars.TDUUPDATE))
+       )
+      pass ();
+    else
+      fail ("HEADER.TDUUPDATE [TIMEBLL]");
+  }
+  {
     BITCODE_BL unknown_15;
     if (dwg_dynapi_header_value (dwg, "unknown_15", &unknown_15, NULL)
         && unknown_15 == dwg->header_vars.unknown_15)

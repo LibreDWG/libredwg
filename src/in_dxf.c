@@ -1225,7 +1225,13 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       else if (field[0] == '$')
         {
           const Dwg_DYNAPI_field *f = dwg_dynapi_header_field (&field[1]);
-          if (!matches_type (pair, f))
+          if (!f)
+            {
+              LOG_ERROR ("skipping HEADER: 9 %s, unknown field with code %d",
+                         field, pair->code);
+              dxf_free_pair (pair);
+            }
+          else if (!matches_type (pair, f))
             {
               LOG_ERROR ("skipping HEADER: 9 %s, wrong type code %d <=> field %s",
                          field, pair->code, f->type);
