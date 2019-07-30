@@ -835,7 +835,7 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
 
   while (ptr < ptr_end)
     {
-      section = (r2007_section *)malloc (sizeof (r2007_section));
+      section = (r2007_section *)calloc (1, sizeof (r2007_section));
       if (!section)
         {
           LOG_ERROR ("Out of memory");
@@ -858,9 +858,10 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       // debugging sanity
 #if 1
       /* compressed */
-      if (section->data_size > 10 * dat->size)
+      if (section->data_size > 10 * dat->size ||
+          section->name_length >= (int64_t)dat->size)
         {
-          LOG_ERROR ("Invalid System Section data_size");
+          LOG_ERROR ("Invalid System Section");
           free (section);
           free (data);
           sections_destroy (sections); // the root
@@ -868,12 +869,11 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
         }
       //assert(section->data_size < dat->size + 0x100000);
       //assert(section->max_size  < dat->size + 0x100000);
-      assert(section->name_length < (int64_t)dat->size);
-      assert(section->num_pages < DBG_MAX_COUNT);
+      //assert(section->num_pages < DBG_MAX_COUNT);
 #endif
-      section->next = NULL;
-      section->pages = NULL;
-      section->name = NULL;
+      //section->next = NULL;
+      //section->pages = NULL;
+      //section->name = NULL;
 
       if (!sections)
         {
@@ -904,8 +904,8 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       if (section->num_pages <= 0)
         continue;
 
-      section->pages = (r2007_section_page **)malloc (
-          (size_t)section->num_pages * sizeof (r2007_section_page *));
+      section->pages = (r2007_section_page **)calloc (
+          (size_t)section->num_pages, sizeof (r2007_section_page *));
       if (!section->pages)
         {
           LOG_ERROR ("Out of memory");
@@ -919,7 +919,7 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       for (i = 0; i < section->num_pages; i++)
         {
           section->pages[i]
-              = (r2007_section_page *)malloc (sizeof (r2007_section_page));
+              = (r2007_section_page *)calloc (1, sizeof (r2007_section_page));
           if (!section->pages[i])
             {
               LOG_ERROR ("Out of memory");
