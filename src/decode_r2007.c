@@ -68,7 +68,7 @@ typedef struct r2007_file_header
   int64_t unknown3; // 0xf800
   int64_t unknown4; // 4
   int64_t unknown5; // 1
-  int64_t sections_amount;
+  int64_t num_sections;
   int64_t sections_map_crc_uncomp;
   int64_t sections_map_size_comp;
   int64_t sections_map2_id;
@@ -1155,7 +1155,7 @@ read_file_header (Bit_Chain *restrict dat,
       VALID_SIZE (file_header->pages_map_size_uncomp);
       VALID_COUNT (file_header->pages_maxid);
       VALID_COUNT (file_header->pages_amount);
-      VALID_COUNT (file_header->sections_amount);
+      VALID_COUNT (file_header->num_sections);
     }
 
   free (pedata);
