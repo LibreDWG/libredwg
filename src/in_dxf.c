@@ -1204,8 +1204,6 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   const int minimal = dwg->opts & 0x10;
   int is_utf = 0;
   int i = 0;
-  unsigned long pos = bit_position (dat);
-  char *codepage;
 
   // here SECTION(HEADER) was already consumed
   // read the first group 9, $field pair
@@ -1334,18 +1332,14 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           dxf_free_pair (pair);
         }
 
-      pos = bit_position (dat);
       pair = dxf_read_pair (dat);
       DXF_BREAK_ENDSEC;
       if (pair->code != 9 /* && pair->code != 0 */)
         goto next_hdrvalue; // for mult. 10,20,30 values
     }
-  //dxf_free_pair (pair);
-  bit_set_position (dat, pos); // back before the next section 0
-
+  dxf_free_pair (pair);
   if (_obj->DWGCODEPAGE && strEQc (_obj->DWGCODEPAGE, "ANSI_1252"))
     dwg->header.codepage = 30;
-
   return 0;
 }
 
@@ -1353,7 +1347,6 @@ static int
 dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   BITCODE_BL i;
-  unsigned long pos = bit_position (dat);
   Dxf_Pair *pair = dxf_read_pair (dat);
   Dwg_Class *klass;
 
@@ -1374,10 +1367,13 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
       klass = &dwg->dwg_class[i];
       memset (klass, 0, sizeof (Dwg_Class));
-
+      if (pair->code == 0 && strEQc (pair->value.s, "CLASS"))
+        {
+          dxf_free_pair (pair);
+          pair = dxf_read_pair (dat);
+        }
       while (pair->code != 0)
         { // read until next 0 CLASS
-          pair = dxf_read_pair (dat);
           switch (pair->code)
             {
             case 1:
@@ -1406,15 +1402,12 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               break;
             }
           dxf_free_pair (pair);
+          pair = dxf_read_pair (dat);
         }
       DXF_RETURN_ENDSEC (0); // next class or ENDSEC
-      if (strcmp (pair->value.s, "CLASS"))
-        { // or something else
-          LOG_ERROR ("Unexpexted DXF 0 %s at class[%d]", pair->value.s, i);
-          return DWG_ERR_CLASSESNOTFOUND;
-        }
       dwg->num_classes++;
     }
+  dxf_free_pair (pair);
   return 0;
 }
 
@@ -1548,7 +1541,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               dxf_free_pair (pair);
               dxf_objects_read (dat, dwg);
             }
-          if (strEQc (pair->value.s, "THUMBNAIL"))
+          else if (strEQc (pair->value.s, "THUMBNAIL"))
             {
               dxf_free_pair (pair);
               dxf_preview_read (dat, dwg);
