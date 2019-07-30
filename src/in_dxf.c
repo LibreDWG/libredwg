@@ -45,7 +45,8 @@
 #include <string.h>
 #include <assert.h>
 #include <limits.h>
-#include <ctype.h>
+//#include <ctype.h>
+#include <math.h>
 
 #include "common.h"
 #include "bits.h"
@@ -75,7 +76,24 @@ static Dxf_Objs *dxf_objs;
 static inline void
 dxf_skip_ws (Bit_Chain *dat)
 {
-  for (; !dat->chain[dat->byte] || isspace (dat->chain[dat->byte]);
+  for (;
+       (!dat->chain[dat->byte] ||
+        dat->chain[dat->byte] == ' ' ||
+        dat->chain[dat->byte] == '\t' ||
+        dat->chain[dat->byte] == '\r');
+       dat->byte++)
+    ;
+}
+
+static inline void
+dxf_skip_ws_nl (Bit_Chain *dat)
+{
+  for (;
+       (!dat->chain[dat->byte] ||
+        dat->chain[dat->byte] == ' ' ||
+        dat->chain[dat->byte] == '\n' ||
+        dat->chain[dat->byte] == '\t' ||
+        dat->chain[dat->byte] == '\r');
        dat->byte++)
     ;
 }
@@ -86,7 +104,10 @@ dxf_read_code (Bit_Chain *dat)
   char *endptr;
   long num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
   dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
-  dxf_skip_ws (dat);
+  if (dat->chain[dat->byte] == '\r')
+    dat->byte++;
+  if (dat->chain[dat->byte] == '\n')
+    dat->byte++;
   if (num > INT_MAX)
     LOG_ERROR ("%s: int overflow %ld (at %lu)", __FUNCTION__, num, dat->byte)
   return (int)num;
@@ -101,7 +122,7 @@ dxf_read_group (Bit_Chain *dat, int dxf)
     {
       LOG_HANDLE ("group %d\n", dxf);
       dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
-      dxf_skip_ws (dat);
+      dxf_skip_ws_nl (dat);
       return 1;
     }
   return 0;
@@ -120,16 +141,16 @@ dxf_read_string (Bit_Chain *dat, char **string)
     buf[i-1] = '\0';
   else
     buf[i] = '\0';
-  // int i = sscanf(&dat->chain[dat->byte], "%s", buf);
-  if (i)
-    {
-      dxf_skip_ws (dat);
-      if (!string)
-        return; // ignore
-      if (!*string)
-        *string = malloc (strlen (buf) + 1);
-      strcpy (*string, buf);
-    }
+  dat->byte++;
+  //dxf_skip_ws (dat);
+  if (!string)
+    return; // ignore, just advanced dat
+
+  if (!*string)
+    *string = malloc (strlen (buf) + 1);
+  else
+    *string = realloc (*string, strlen (buf) + 1);
+  strcpy (*string, buf);
 }
 
 #define STRADD(field, string)                                                 \
@@ -144,6 +165,7 @@ dxf_free_pair (Dxf_Pair *pair)
   if (pair->type == VT_STRING || pair->type == VT_BINARY)
     {
       free (pair->value.s);
+      pair->value.s = NULL;
     }
   free (pair);
   pair = NULL;
@@ -160,7 +182,7 @@ dxf_read_pair (Bit_Chain *dat)
     {
     case VT_STRING:
       dxf_read_string (dat, &pair->value.s);
-      LOG_TRACE ("  dxf (%d, %s)\n", (int)pair->code, pair->value.s);
+      LOG_TRACE ("  dxf (%d, \"%s\")\n", (int)pair->code, pair->value.s);
       SINCE (R_2007)
       {
         BITCODE_TU wstr = bit_utf8_to_TU (pair->value.s);
@@ -1265,12 +1287,45 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               // name (which table?) => handle
               // needs to be postponed, because we don't have the tables yet.
               header_hdls = array_push (header_hdls, &field[1], pair->value.s);
+              dxf_free_pair (pair);
+            }
+          else if (strEQc (f->type, "CMC"))
+            {
+              static BITCODE_CMC color = {0};
+              if (pair->code <= 70)
+                {
+                  LOG_TRACE ("HEADER.%s.index %d [CMC]\n", &field[1], pair->value.i);
+                  color.index = pair->value.i;
+                  dwg_dynapi_header_set_value (dwg, &field[1], &color, 0);
+                }
+              dxf_free_pair (pair);
+            }
+          else if (pair->type == VT_REAL && strEQc (f->type, "TIMEBLL"))
+            {
+              static BITCODE_TIMEBLL date = {0,0,0};
+              unsigned long j = 1;
+              double ms;
+              date.value = pair->value.d;
+              date.days = (BITCODE_BL)trunc (pair->value.d);
+              ms = date.value;
+              while (ms > 1.0)
+                {
+                  j *= 10;
+                  ms /= 10.0;
+                }
+              //date.ms = (BITCODE_BL)(1000000 * (date.value - date.days));
+              date.ms = (BITCODE_BL)(j/10 * (date.value - date.days));
+              LOG_TRACE ("HEADER.%s %f (%u, %u) [TIMEBLL]\n", &field[1],
+                         date.value, date.days, date.ms);
+              dwg_dynapi_header_set_value (dwg, &field[1], &date, 0);
+              dxf_free_pair (pair);
             }
           else
             {
               LOG_TRACE ("HEADER.%s [%s]\n", &field[1], f->type);
               dwg_dynapi_header_set_value (dwg, &field[1], &pair->value, is_utf);
-              free (pair); // but keep the string! primitives (like RC, BD) are copied
+              free (pair); // but keep the string!
+              // primitives (like RC, BD) are copied
             }
         }
       else
@@ -1285,7 +1340,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       if (pair->code != 9 /* && pair->code != 0 */)
         goto next_hdrvalue; // for mult. 10,20,30 values
     }
-  dxf_free_pair (pair);
+  //dxf_free_pair (pair);
   bit_set_position (dat, pos); // back before the next section 0
 
   if (_obj->DWGCODEPAGE && strEQc (_obj->DWGCODEPAGE, "ANSI_1252"))
@@ -1298,6 +1353,7 @@ static int
 dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   BITCODE_BL i;
+  unsigned long pos = bit_position (dat);
   Dxf_Pair *pair = dxf_read_pair (dat);
   Dwg_Class *klass;
 
