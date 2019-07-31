@@ -1,5 +1,7 @@
 #!/bin/sh
 # create -v4 logs for DWGs, you can override -v?
+srcdir="@srcdir@"
+
 make -s -j4
 @DSYMUTIL@ programs/dwgread
 v=-v4
@@ -10,9 +12,9 @@ for d in "$@"; do
              ;;
         *)
         if [ ! -f $d ]; then
-            if [ -f test/test-data/$d ]; then d=test/test-data/$d;
+            if [ -f $srcdir/test/test-data/$d ]; then d=$srcdir/test/test-data/$d;
             else
-                if [ -f test/test-data/$d.dwg ]; then d=test/test-data/$d.dwg; fi
+                if [ -f $srcdir/test/test-data/$d.dwg ]; then d=$srcdir/test/test-data/$d.dwg; fi
             fi
         fi
         dir=_$(basename `dirname "$d"`)
