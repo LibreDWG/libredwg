@@ -1,20 +1,23 @@
 #!/bin/sh
 # create logs for all DWGs - serial (slow)
+srcdir="@srcdir@"
+
 make -s -j4
-for d in test/test-data/2*/*.dwg test/test-data/r*/*.dwg; do
+
+for d in $srcdir/test/test-data/2*/*.dwg $srcdir/test/test-data/r*/*.dwg; do
     dir=$(basename `dirname "$d"`)
     log=`basename "$d" .dwg`_$dir.log
     echo $d
     @TIMEOUT_10@ ./libtool --mode=execute programs/dwgread -v4 "$d" 2>$log
     #(sleep 10s; kill %1 2>/dev/null) &
 done
-for d in test/test-data/*.dwg; do
+for d in $srcdir/test/test-data/*.dwg; do
     log=`basename "$d" .dwg`.log
     echo $d
     @TIMEOUT_10@ ./libtool --mode=execute programs/dwgread -v4 "$d" 2>$log
     #(sleep 10s; kill %1 2>/dev/null) &
 done
-for d in test/test-big/2*/*.dwg; do
+for d in $srcdir/test/test-big/2*/*.dwg; do
     dir=$(basename `dirname "$d"`)
     log=`basename "$d" .dwg`_$dir.log
     echo $d
