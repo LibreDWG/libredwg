@@ -1490,21 +1490,33 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
         {
         case 5:
           {
+            char ctrlobj[80];
             obj->handle.code = 0;
             obj->handle.value = pair->value.i;
             obj->handle.size = 1;
             if (obj->handle.value > 255) //TODO see bits_write_H
               obj->handle.size = 2;
+            strcpy (ctrlobj, ctrlname);
+            strcat (ctrlobj, "_OBJECT");
+            //set HEADER.*_CONTROL_OBJECT
+            dwg_dynapi_header_set_value (dwg, ctrlobj, &obj->handle, 0);
           }
           break;
         case 330: // ownerhandle mostly 0
-          //if (pair->value.i)
-          //  obj->tio.object->ownerhandle = ??
+          if (pair->value.i)
+            {
+              LOG_WARN ("Unhandled %s.ownerhandle %d",  ctrlname,
+                        pair->value.i);
+              //  obj->tio.object->ownerhandle = ??
+            }
           break;
-        case 100: // Always AcDbSymbolTable
+        case 100: // Always AcDbSymbolTable. ignore
           break;
-        case 102: // {ACAD_XDICTIONARY
-        case 360: // {ACAD_XDICTIONARY
+        case 360: // {ACAD_XDICTIONARY TODO
+          LOG_WARN ("Unhandled %s.xdicobjhandle %x",  ctrlname,
+                    (unsigned)pair->value.i);
+          // fall through */
+        case 102: // {ACAD_XDICTIONARY TODO
           break;
         case 70:
           dwg_dynapi_entity_set_value (_obj, obj->name, "num_entries",
@@ -1522,7 +1534,6 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
         }
       pair = dxf_read_pair (dat);
     }
-  dxf_free_pair (pair);
 }
 
 static void

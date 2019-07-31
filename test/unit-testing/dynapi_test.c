@@ -4042,13 +4042,13 @@ test_header (const Dwg_Data *dwg)
       fail ("HEADER.STYLE_CONTROL_OBJECT [H]");
   }
   {
-    BITCODE_H linetype_control_object;
-    if (dwg_dynapi_header_value (dwg, "LINETYPE_CONTROL_OBJECT", &linetype_control_object, NULL)
-        && !memcmp (&linetype_control_object, &dwg->header_vars.LINETYPE_CONTROL_OBJECT, sizeof (dwg->header_vars.LINETYPE_CONTROL_OBJECT))
+    BITCODE_H ltype_control_object;
+    if (dwg_dynapi_header_value (dwg, "LTYPE_CONTROL_OBJECT", &ltype_control_object, NULL)
+        && !memcmp (&ltype_control_object, &dwg->header_vars.LTYPE_CONTROL_OBJECT, sizeof (dwg->header_vars.LTYPE_CONTROL_OBJECT))
        )
       pass ();
     else
-      fail ("HEADER.LINETYPE_CONTROL_OBJECT [H]");
+      fail ("HEADER.LTYPE_CONTROL_OBJECT [H]");
   }
   {
     BITCODE_H view_control_object;
@@ -4123,13 +4123,13 @@ test_header (const Dwg_Data *dwg)
       fail ("HEADER.DICTIONARY_ACAD_MLINESTYLE [H]");
   }
   {
-    BITCODE_H dictionary_named_objects;
-    if (dwg_dynapi_header_value (dwg, "DICTIONARY_NAMED_OBJECTS", &dictionary_named_objects, NULL)
-        && !memcmp (&dictionary_named_objects, &dwg->header_vars.DICTIONARY_NAMED_OBJECTS, sizeof (dwg->header_vars.DICTIONARY_NAMED_OBJECTS))
+    BITCODE_H dictionary_named_object;
+    if (dwg_dynapi_header_value (dwg, "DICTIONARY_NAMED_OBJECT", &dictionary_named_object, NULL)
+        && !memcmp (&dictionary_named_object, &dwg->header_vars.DICTIONARY_NAMED_OBJECT, sizeof (dwg->header_vars.DICTIONARY_NAMED_OBJECT))
        )
       pass ();
     else
-      fail ("HEADER.DICTIONARY_NAMED_OBJECTS [H]");
+      fail ("HEADER.DICTIONARY_NAMED_OBJECT [H]");
   }
   {
     BITCODE_BS tstackalign;
