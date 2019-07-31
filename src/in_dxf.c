@@ -1411,16 +1411,170 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
-static int
-dxf_tables_read (Bit_Chain *dat, Dwg_Data *dwg)
-{
-  (void)dwg;
+//Dwg_Object *
+//new_object (Dwg_Data *restrict dwg)
+//{
+//  BITCODE_BL index = dwg->num_objects;
+//  Dwg_Object *obj;
+//  int realloced = dwg_add_object (dwg);
+//  obj = &dwg->object[index];
+//  return obj;
+//}
 
-  SECTION (TABLES);
-  TABLE (VPORT);
-  //...
-  ENDTAB ();
-  ENDSEC ();
+#define PREP_CONTROL(nam, namctrl)                                   \
+  if (strEQc (name, #nam))                                           \
+    {                                                                \
+      obj->type = obj->fixedtype = DWG_TYPE_##namctrl;               \
+      obj->name = obj->dxfname = (char*)#namctrl;                    \
+      _obj = calloc (1, sizeof (Dwg_Object_##namctrl));              \
+      obj->tio.object->tio.namctrl = (Dwg_Object_##namctrl *)_obj;   \
+      obj->tio.object->tio.namctrl->objid = obj->index;              \
+      obj->tio.object->tio.namctrl->parent = obj->tio.object;        \
+      obj->tio.object->objid = obj->index;                           \
+    }
+
+static void
+new_table_control (const char *restrict name, Bit_Chain *restrict dat,
+                   Dwg_Data *restrict dwg)
+{
+  // VPORT_CONTROL.num_entries
+  // VPORT_CONTROL.entries[num_entries] handles
+  BITCODE_BL index = dwg->num_objects;
+  Dwg_Object *obj;
+  Dxf_Pair *pair = dxf_read_pair (dat);
+  Dwg_Object_LTYPE_CONTROL *_obj = NULL;
+  char *fieldname;
+  char ctrlname[80];
+  int is_utf = dwg->header.version >= R_2007 ? 1 : 0;
+
+  (void)dwg_add_object (dwg);
+  obj = &dwg->object[index];
+  obj->supertype = DWG_SUPERTYPE_OBJECT;
+  obj->tio.object = calloc (1, sizeof (Dwg_Object_Object));
+  obj->tio.object->objid = obj->index;
+  obj->tio.object->dwg = dwg;
+
+  strcpy (ctrlname, name);
+  strcat (ctrlname, "_CONTROL");
+
+  PREP_CONTROL (LTYPE, LTYPE_CONTROL)
+  else
+  PREP_CONTROL (VPORT, VPORT_CONTROL)
+  else
+  PREP_CONTROL (APPID, APPID_CONTROL)
+  else
+  PREP_CONTROL (BLOCK, BLOCK_CONTROL)
+  else
+  PREP_CONTROL (DIMSTYLE, DIMSTYLE_CONTROL)
+  else
+  PREP_CONTROL (LAYER, LAYER_CONTROL)
+  else
+  PREP_CONTROL (STYLE, STYLE_CONTROL)
+  else
+  PREP_CONTROL (UCS, UCS_CONTROL)
+  else
+  PREP_CONTROL (VIEW, VIEW_CONTROL)
+  else
+  PREP_CONTROL (VPORT_ENTITY, VPORT_ENTITY_CONTROL)
+  else
+    LOG_ERROR ("Unknown DXF TABLE %s nor %s_CONTROL", name, name);
+  if (!_obj)
+    LOG_ERROR ("Empty _obj at DXF TABLE %s nor %s_CONTROL", name, name);
+
+  // read common table until next 0 table
+  while (pair->code != 0 || strNE (pair->value.s, name))
+    {
+      //Dwg_DYNAPI_field *fields = dwg_dynapi_entity_fields (ctrlname);
+      // TODO find matching fieldname?
+      switch (pair->code)
+        {
+        case 5:
+          {
+            obj->handle.code = 0;
+            obj->handle.value = pair->value.i;
+            obj->handle.size = 1;
+            if (obj->handle.value > 255) //TODO see bits_write_H
+              obj->handle.size = 2;
+          }
+          break;
+        case 330: // ownerhandle mostly 0
+          //if (pair->value.i)
+          //  obj->tio.object->ownerhandle = ??
+          break;
+        case 100: // Always AcDbSymbolTable
+          break;
+        case 102: // {ACAD_XDICTIONARY
+        case 360: // {ACAD_XDICTIONARY
+          break;
+        case 70:
+          dwg_dynapi_entity_set_value (_obj, obj->name, "num_entries",
+                                       &pair->value, is_utf);
+          break;
+        case 71:
+          if (strEQc (name, "DIMSTYLE"))
+            {
+              dwg_dynapi_entity_set_value (_obj, obj->name, "num_more_handles",
+                                           &pair->value, is_utf);
+              break;
+            }
+        default:
+          LOG_ERROR ("Unknown DXF code %d for %s", pair->code, ctrlname);
+        }
+      pair = dxf_read_pair (dat);
+    }
+  dxf_free_pair (pair);
+}
+
+static void
+new_table (const char *restrict name, Bit_Chain *restrict dat,
+           Dwg_Data *restrict dwg)
+{
+  // TABLE common flags: name, xrefref, xrefdep, ...
+  Dxf_Pair *pair = dxf_read_pair (dat);
+  // read table fields until next 0 table or 0 ENDTAB
+  while (pair->code != 0)
+    {
+      switch (pair->code)
+        {
+          // add field values
+        }
+      pair = dxf_read_pair (dat);
+    }
+  dxf_free_pair (pair);
+}
+ 
+static int
+dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  //BITCODE_BL i;
+  char table[80];
+  Dxf_Pair *pair = dxf_read_pair (dat);
+  (void)dwg_add_object (dwg); // start with the BLOCK_HEADER at objid 0
+
+  table[0] = '\0'; // init
+  while (1) // read next 0 TABLE
+    {
+      if (pair->code == 0) // TABLE or ENDTAB
+        {
+          if (strEQc (pair->value.s, "TABLE"))
+            table[0] = '\0'; // new table coming up
+          else if (strEQc (pair->value.s, "ENDTAB"))
+            table[0] = '\0'; // close table
+          else
+            LOG_WARN ("Unknown 0 %s", pair->value.s);
+        }
+      if (pair->code == 2 && strlen (pair->value.s) < 80) // new table NAME
+        {
+          strcpy (table, pair->value.s);
+          new_table_control (table, dat, dwg); // until 0 table
+          if (pair->code == 0 && strEQ (pair->value.s, table))
+            new_table (table, dat, dwg);     // until 0 table or 0 ENDTAB
+        }
+      DXF_RETURN_ENDSEC (0); // next TABLE or ENDSEC
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+    }
+  dxf_free_pair (pair);
   return 0;
 }
 
