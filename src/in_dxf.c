@@ -1378,24 +1378,32 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
             case 1:
               STRADD (klass->dxfname, pair->value.s);
+              LOG_TRACE ("CLASS[%d].dxfname = %s [1]\n", i, pair->value.s);
               break;
             case 2:
               STRADD (klass->cppname, pair->value.s);
+              LOG_TRACE ("CLASS[%d].cppname = %s [2]\n", i, pair->value.s);
               break;
             case 3:
               STRADD (klass->appname, pair->value.s);
+              LOG_TRACE ("CLASS[%d].appname = %s [3]\n", i, pair->value.s);
               break;
             case 90:
               klass->proxyflag = pair->value.l;
+              LOG_TRACE ("CLASS[%d].proxyflag = %ld [90]\n", i, pair->value.l);
               break;
             case 91:
               klass->num_instances = pair->value.l;
+              LOG_TRACE ("CLASS[%d].num_instances = %ld [91]\n", i, pair->value.l);
               break;
             case 280:
               klass->wasazombie = (BITCODE_B)pair->value.i;
+              LOG_TRACE ("CLASS[%d].num_instances = %d [280]\n", i, pair->value.i);
               break;
             case 281:
               klass->item_class_id = pair->value.i ? 0x1f3 : 0x1f2;
+              LOG_TRACE ("CLASS[%d].num_instances = %x [281]\n", i,
+                         klass->item_class_id);
               break;
             default:
               LOG_WARN ("Unknown DXF code for class[%d].%d", i, pair->code);
@@ -1441,7 +1449,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   // VPORT_CONTROL.entries[num_entries] handles
   BITCODE_BL index = dwg->num_objects;
   Dwg_Object *obj;
-  Dxf_Pair *pair = dxf_read_pair (dat);
+  Dxf_Pair *pair;
   Dwg_Object_LTYPE_CONTROL *_obj = NULL;
   char *fieldname;
   char ctrlname[80];
@@ -1456,6 +1464,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
 
   strcpy (ctrlname, name);
   strcat (ctrlname, "_CONTROL");
+  LOG_TRACE ("add %s?\n", ctrlname);
 
   PREP_CONTROL (LTYPE, LTYPE_CONTROL)
   else
@@ -1477,15 +1486,20 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   else
   PREP_CONTROL (VPORT_ENTITY, VPORT_ENTITY_CONTROL)
   else
-    LOG_ERROR ("Unknown DXF TABLE %s nor %s_CONTROL", name, name);
+    {
+      LOG_ERROR ("Unknown DXF TABLE %s nor %s_CONTROL", name, name);
+      return;
+    }
   if (!_obj)
-    LOG_ERROR ("Empty _obj at DXF TABLE %s nor %s_CONTROL", name, name);
+    {
+      LOG_ERROR ("Empty _obj at DXF TABLE %s nor %s_CONTROL", name, name);
+      return;
+    }
 
+  pair = dxf_read_pair (dat);
   // read common table until next 0 table
   while (pair->code != 0 || strNE (pair->value.s, name))
     {
-      //Dwg_DYNAPI_field *fields = dwg_dynapi_entity_fields (ctrlname);
-      // TODO find matching fieldname?
       switch (pair->code)
         {
         case 5:
@@ -1500,20 +1514,25 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
             strcat (ctrlobj, "_OBJECT");
             //set HEADER.*_CONTROL_OBJECT
             dwg_dynapi_header_set_value (dwg, ctrlobj, &obj->handle, 0);
+            LOG_TRACE ("%s.handle = (%d,%d,%lX) [5]\n", ctrlname,
+                       obj->handle.code, obj->handle.size, obj->handle.value);
           }
           break;
         case 330: // ownerhandle mostly 0
           if (pair->value.i)
             {
-              LOG_WARN ("Unhandled %s.ownerhandle %d",  ctrlname,
-                        pair->value.i);
+              LOG_WARN ("Unhandled %s.ownerhandle %X [330]",  ctrlname,
+                        (unsigned)pair->value.i);
+              //LOG_TRACE ("%s.ownerhandle = (%d,%d,%lX) [330]\n", ctrlname,
+              //           obj->handle.code, obj->handle.size, obj->handle.value);
               //  obj->tio.object->ownerhandle = ??
             }
           break;
         case 100: // Always AcDbSymbolTable. ignore
           break;
         case 360: // {ACAD_XDICTIONARY TODO
-          LOG_WARN ("Unhandled %s.xdicobjhandle %x",  ctrlname,
+          LOG_WARN ("Unhandled %s.xdicobjhandle = %X [360]\n", ctrlname,
+                    /*obj->handle.code, obj->handle.size, obj->handle.value, */
                     (unsigned)pair->value.i);
           // fall through */
         case 102: // {ACAD_XDICTIONARY TODO
@@ -1521,17 +1540,22 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
         case 70:
           dwg_dynapi_entity_set_value (_obj, obj->name, "num_entries",
                                        &pair->value, is_utf);
+          LOG_TRACE ("%s.num_entries = %d [70]\n", ctrlname,
+                     pair->value.i)
           break;
         case 71:
           if (strEQc (name, "DIMSTYLE"))
             {
               dwg_dynapi_entity_set_value (_obj, obj->name, "num_more_handles",
                                            &pair->value, is_utf);
+              LOG_TRACE ("%s.more_handles = %d [71]\n", ctrlname,
+                         pair->value.i)
               break;
             }
         default:
           LOG_ERROR ("Unknown DXF code %d for %s", pair->code, ctrlname);
         }
+      dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
     }
 }
@@ -1547,11 +1571,15 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
     {
       switch (pair->code)
         {
+          Dwg_DYNAPI_field *fields = dwg_dynapi_entity_fields (name);
+          // TODO find matching fieldname?
           // add field values
+          LOG_TRACE ("Unhandled %s.?? = %d [%d]\n", name,
+                     pair->value.i, pair->code)
         }
+      dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
     }
-  dxf_free_pair (pair);
 }
  
 static int
