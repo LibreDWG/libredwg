@@ -1661,7 +1661,7 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
         case 2:
           {
             char *s = strdup (pair->value.s);
-            dwg_dynapi_entity_set_value (_obj, name, "name", &s, is_utf);
+            dwg_dynapi_entity_set_value (_obj, name, "name", s, is_utf);
             LOG_TRACE ("%s.name = %s [2]\n", name, s);
             break;
           }

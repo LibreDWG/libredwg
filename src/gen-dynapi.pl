@@ -602,7 +602,7 @@ EOF
       print $fh <<"EOF";
   {
     $type $var;
-    if (dwg_dynapi_entity_value($lname, "$name", "$var", &$svar, NULL)
+    if (dwg_dynapi_entity_value ($lname, "$name", "$var", &$svar, NULL)
         && $var == $lname->$svar)
       pass ();
     else
@@ -708,7 +708,7 @@ EOF
       print $fh <<"EOF";
   {
     $type $var;
-    if (dwg_dynapi_entity_value($lname, "$name", "$var", &$svar, NULL)
+    if (dwg_dynapi_entity_value ($lname, "$name", "$var", &$svar, NULL)
 EOF
         if ($stype =~ /^(TV|RC\*|unsigned char\*|char\*)$/) {
           $is_str = 1;
