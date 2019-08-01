@@ -2426,11 +2426,15 @@ typedef struct _dwg_entity_OLE2FRAME
 {
   struct _dwg_object_entity *parent;
 
-  BITCODE_BS flag;        /*!< DXF 70 */
-  BITCODE_BS mode;
-  BITCODE_BL data_length;
-  char     * data;
-  BITCODE_RC unknown;
+  BITCODE_BS type;         /*!< DXF 71, 1: Link, 2: Embedded, 3: Static */
+  BITCODE_BS mode;         /*!< r2000+ DXF 72, tile_mode, 0: mspace, 1: pspace */
+  BITCODE_RC lock_aspect;  /*!< r2000+ DXF 73, 0 or 1 (locked) */
+  BITCODE_BL data_length;  /*!< DXF 90 */
+  char     * data;         /*!< DXF 310, the binary object data */
+  // embedded into data, not yet decoded:
+  char     * oleclient;    /*!< DXF 3: OLE or Paintbrush Picture */
+  BITCODE_3BD pt1;         /*!< DXF 10, upper left corner */
+  BITCODE_3BD pt2;         /*!< DXF 11, lower right corner */
 } Dwg_Entity_OLE2FRAME;
 
 /**

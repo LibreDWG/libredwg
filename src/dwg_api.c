@@ -11260,16 +11260,16 @@ dwg_ent_lwpline_get_widths (const dwg_ent_lwpline *restrict lwpline,
  *                  FUNCTIONS FOR OLE2FRAME ENTITY                   *
  ********************************************************************/
 
-/** Returns ole2frame flags
+/** Returns ole2frame type: 1: Link, 2: Embedded, 3: Static
  */
 BITCODE_BS
-dwg_ent_ole2frame_get_flag (const dwg_ent_ole2frame *restrict frame,
+dwg_ent_ole2frame_get_type (const dwg_ent_ole2frame *restrict frame,
                             int *restrict error)
 {
   if (frame)
     {
       *error = 0;
-      return frame->flag;
+      return frame->type;
     }
   else
     {
@@ -11279,25 +11279,26 @@ dwg_ent_ole2frame_get_flag (const dwg_ent_ole2frame *restrict frame,
     }
 }
 
-/** Sets ole2frame flags
+/** Sets ole2frame type. 1, 2 or 3
  */
 void
-dwg_ent_ole2frame_set_flag (dwg_ent_ole2frame *restrict frame,
-                            const BITCODE_BS flags, int *restrict error)
+dwg_ent_ole2frame_set_type (dwg_ent_ole2frame *restrict frame,
+                            const BITCODE_BS type,
+                            int *restrict error)
 {
-  if (frame)
+  if (frame && type >= 1 && type <= 3)
     {
       *error = 0;
-      frame->flag = flags;
+      frame->type = type;
     }
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", __FUNCTION__)
+      LOG_ERROR ("%s: empty or wrong arg", __FUNCTION__)
     }
 }
 
-/** Returns ole2frame mode
+/** Returns ole2frame mode, 0 or 1
  */
 BITCODE_BS
 dwg_ent_ole2frame_get_mode (const dwg_ent_ole2frame *restrict frame,
@@ -11321,7 +11322,7 @@ void
 dwg_ent_ole2frame_set_mode (dwg_ent_ole2frame *restrict frame,
                             const BITCODE_BS mode, int *restrict error)
 {
-  if (frame)
+  if (frame && mode >= 0 && mode <= 1)
     {
       *error = 0;
       frame->mode = mode;
@@ -11329,7 +11330,7 @@ dwg_ent_ole2frame_set_mode (dwg_ent_ole2frame *restrict frame,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", __FUNCTION__)
+      LOG_ERROR ("%s: empty or wrong arg", __FUNCTION__)
     }
 }
 
@@ -11349,25 +11350,6 @@ dwg_ent_ole2frame_get_data_length (const dwg_ent_ole2frame *restrict frame,
       *error = 1;
       LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
-    }
-}
-
-/** Sets ole2frame data length
- */
-void
-dwg_ent_ole2frame_set_data_length (dwg_ent_ole2frame *restrict frame,
-                                   const BITCODE_BL data_length,
-                                   int *restrict error)
-{
-  if (frame)
-    {
-      *error = 0;
-      frame->data_length = data_length;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11394,12 +11376,15 @@ dwg_ent_ole2frame_get_data (const dwg_ent_ole2frame *restrict frame,
  */
 void
 dwg_ent_ole2frame_set_data (dwg_ent_ole2frame *restrict frame,
-                            const char *restrict data, int *restrict error)
+                            const char *restrict data,
+                            const BITCODE_BL data_length,
+                            int *restrict error)
 {
   if (frame)
     {
       *error = 0;
       frame->data = (char *)data;
+      frame->data_length = data_length;
     }
   else
     {

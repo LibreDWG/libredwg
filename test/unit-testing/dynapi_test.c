@@ -14590,19 +14590,19 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_BS flag;
-    if (dwg_dynapi_entity_value(ole2frame, "OLE2FRAME", "flag", &flag, NULL)
-        && flag == ole2frame->flag)
+    BITCODE_RC lock_aspect;
+    if (dwg_dynapi_entity_value(ole2frame, "OLE2FRAME", "lock_aspect", &lock_aspect, NULL)
+        && lock_aspect == ole2frame->lock_aspect)
       pass ();
     else
-      fail ("OLE2FRAME.flag [BS] %hu != %hu", ole2frame->flag, flag);
-    flag++;
-    if (dwg_dynapi_entity_set_value (ole2frame, "OLE2FRAME", "flag", &flag, 0)
-        && flag == ole2frame->flag)
+      fail ("OLE2FRAME.lock_aspect [RC] %u != %u", ole2frame->lock_aspect, lock_aspect);
+    lock_aspect++;
+    if (dwg_dynapi_entity_set_value (ole2frame, "OLE2FRAME", "lock_aspect", &lock_aspect, 0)
+        && lock_aspect == ole2frame->lock_aspect)
       pass ();
     else
-      fail ("OLE2FRAME.flag [BS] set+1 %hu != %hu", ole2frame->flag, flag);
-    ole2frame->flag--;
+      fail ("OLE2FRAME.lock_aspect [RC] set+1 %u != %u", ole2frame->lock_aspect, lock_aspect);
+    ole2frame->lock_aspect--;
 
   }
   {
@@ -14622,6 +14622,16 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_TV oleclient;
+    if (dwg_dynapi_entity_value(ole2frame, "OLE2FRAME", "oleclient", &oleclient, NULL)
+        && oleclient
+           ? !strcmp ((char *)oleclient, (char *)ole2frame->oleclient)
+           : !ole2frame->oleclient)
+      pass ();
+    else
+      fail ("OLE2FRAME.oleclient [TV] '%s' <> '%s'", oleclient, ole2frame->oleclient);
+  }
+  {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value(ole2frame, "OLE2FRAME", "parent", &parent, NULL)
         && !memcmp (&parent, &ole2frame->parent, sizeof (ole2frame->parent)))
@@ -14630,19 +14640,35 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
         fail ("OLE2FRAME.parent [struct _dwg_object_entity*]");
   }
   {
-    BITCODE_RC unknown;
-    if (dwg_dynapi_entity_value(ole2frame, "OLE2FRAME", "unknown", &unknown, NULL)
-        && unknown == ole2frame->unknown)
+    BITCODE_3BD pt1;
+    if (dwg_dynapi_entity_value(ole2frame, "OLE2FRAME", "pt1", &pt1, NULL)
+        && !memcmp (&pt1, &ole2frame->pt1, sizeof (ole2frame->pt1)))
+        pass ();
+    else
+        fail ("OLE2FRAME.pt1 [3BD]");
+  }
+  {
+    BITCODE_3BD pt2;
+    if (dwg_dynapi_entity_value(ole2frame, "OLE2FRAME", "pt2", &pt2, NULL)
+        && !memcmp (&pt2, &ole2frame->pt2, sizeof (ole2frame->pt2)))
+        pass ();
+    else
+        fail ("OLE2FRAME.pt2 [3BD]");
+  }
+  {
+    BITCODE_BS type;
+    if (dwg_dynapi_entity_value(ole2frame, "OLE2FRAME", "type", &type, NULL)
+        && type == ole2frame->type)
       pass ();
     else
-      fail ("OLE2FRAME.unknown [RC] %u != %u", ole2frame->unknown, unknown);
-    unknown++;
-    if (dwg_dynapi_entity_set_value (ole2frame, "OLE2FRAME", "unknown", &unknown, 0)
-        && unknown == ole2frame->unknown)
+      fail ("OLE2FRAME.type [BS] %hu != %hu", ole2frame->type, type);
+    type++;
+    if (dwg_dynapi_entity_set_value (ole2frame, "OLE2FRAME", "type", &type, 0)
+        && type == ole2frame->type)
       pass ();
     else
-      fail ("OLE2FRAME.unknown [RC] set+1 %u != %u", ole2frame->unknown, unknown);
-    ole2frame->unknown--;
+      fail ("OLE2FRAME.type [BS] set+1 %hu != %hu", ole2frame->type, type);
+    ole2frame->type--;
 
   }
   return failed;

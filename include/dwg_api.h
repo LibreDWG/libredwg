@@ -3218,13 +3218,13 @@ dwg_ent_lwpline_get_widths (const dwg_ent_lwpline *restrict lwpline,
  *                  FUNCTIONS FOR OLE2FRAME ENTITY                   *
  ********************************************************************/
 
-EXPORT BITCODE_BS dwg_ent_ole2frame_get_flag (
+EXPORT BITCODE_BS dwg_ent_ole2frame_get_type (
     const dwg_ent_ole2frame *restrict frame, int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
 
-EXPORT void dwg_ent_ole2frame_set_flag (dwg_ent_ole2frame *restrict frame,
-                                        const BITCODE_BS flags,
-                                        int *restrict error)
+EXPORT void
+dwg_ent_ole2frame_set_type (dwg_ent_ole2frame *restrict frame,
+                            const BITCODE_BS type, int *restrict error)
     __nonnull ((3)) _deprecated_dynapi_setter;
 
 EXPORT BITCODE_BS dwg_ent_ole2frame_get_mode (
@@ -3240,10 +3240,6 @@ EXPORT BITCODE_BL dwg_ent_ole2frame_get_data_length (
     const dwg_ent_ole2frame *restrict frame, int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
 
-EXPORT void dwg_ent_ole2frame_set_data_length (
-    dwg_ent_ole2frame *restrict frame, const BITCODE_BL data_length,
-    int *restrict error) __nonnull ((3)) _deprecated_dynapi_setter;
-
 EXPORT char *
 dwg_ent_ole2frame_get_data (const dwg_ent_ole2frame *restrict frame,
                             int *restrict error)
@@ -3251,8 +3247,9 @@ dwg_ent_ole2frame_get_data (const dwg_ent_ole2frame *restrict frame,
 
 EXPORT void dwg_ent_ole2frame_set_data (dwg_ent_ole2frame *restrict frame,
                                         const char *restrict data,
+                                        const BITCODE_BL data_length,
                                         int *restrict error)
-    __nonnull ((3)) _deprecated_dynapi_setter;
+    __nonnull ((4)) _deprecated_dynapi_setter;
 
 /********************************************************************
  *                  FUNCTIONS FOR PROXY OBJECT                       *

@@ -3768,7 +3768,7 @@ DWG_ENTITY(IMAGE)
   if (FIELD_VALUE(clip_boundary_type) == 1)
     {
       FIELD_2RD (boundary_pt0, 14);
-      FIELD_2RD (boundary_pt1, 14);
+      FIELD_2RD (boundary_pt1, 14); // yes, the same DXF. see the vector below
     }
   else
     {
@@ -4004,19 +4004,25 @@ DWG_ENTITY_END
 //(74+varies) pg.149
 DWG_ENTITY(OLE2FRAME)
 
-  //SUBCLASS (AcDbFrame)
-  //SUBCLASS (AcDbOleFrame)
   SUBCLASS (AcDbOle2Frame)
-  FIELD_BS (flag, 70);
+#ifdef IS_DXF
+    VALUE_BS (2, 70);     // ole_version 70: always 2
+    VALUE_TFF ("OLE", 3); // ole_client 3: OLE or Paintbrush Picture
+    // 3BD: pt1 10 (upper left), 3BD pt2 11 (lower right)
+#endif
+  FIELD_BS (type, 71); // 1: Link, 2: Embedded, 3: Static
   SINCE (R_2000) {
-    FIELD_BS (mode, 0);
+    FIELD_BS (mode, 72); // tile_mode, 0: mspace, 1: pspace
+    DXF { FIELD_RC (lock_aspect, 73); }
   }
-
-  FIELD_BL (data_length, 0);
-  FIELD_TF (data, FIELD_VALUE(data_length), 0);
+  FIELD_BL (data_length, 90);
+  FIELD_BINARY (data, FIELD_VALUE(data_length), 310);
+#ifdef IS_DXF
+  VALUE_TFF ("OLE", 1);
+#endif
 
   SINCE (R_2000) {
-    FIELD_RC (unknown, 0);
+    FIELD_RC (lock_aspect, 0);
   }
 
   COMMON_ENTITY_HANDLE_DATA;
