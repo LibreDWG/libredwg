@@ -23,6 +23,7 @@
 
 #include "dwg.h"
 #include "../src/bits.h"
+static int maxoff = 0;
 
 static int
 decode (Bit_Chain *dat, int off, const int size)
@@ -31,6 +32,8 @@ decode (Bit_Chain *dat, int off, const int size)
   int bs = 0;
   printf ("decode offset:%d, size:%d\n", off, size);
   if (off >= size)
+    return 0;
+  if (off < maxoff)
     return 0;
 
   bit_set_position (dat, off);
@@ -136,8 +139,10 @@ decode (Bit_Chain *dat, int off, const int size)
         printf ("%s TV @%d (%d)\n", s, pos, size);
     }
 
-  while (size > off)
+  while (off < size)
     {
+      if (maxoff < off)
+        maxoff = off;
       // printf ("offset %d\n", pos);
       return decode (dat, pos, size);
     }
@@ -147,27 +152,53 @@ decode (Bit_Chain *dat, int off, const int size)
 int
 main (int argc, char *argv[])
 {
-  int size, bits;
+  int hex = 0;
+  int i;
   int pos;
-  Bit_Chain dat = { NULL, 16, 0, 0, NULL, 0, 0 };
+  Bit_Chain dat = { NULL, 0, 0, 0, NULL, 0, 0 };
 
   if (argc < 2)
     {
       printf ("usage: examples/bits "
               "001100000000000000000000000000011000000000000000100000001010010"
               "00\n");
+      printf ("or examples/bits -x '8055 40f9 3284 d222 3e40 7436 e0d9 23fd'\n");
       return 1;
     }
+  if (argc > 2 && !strcmp (argv[1], "-x"))
+    {
+      hex = 1;
+      i = 2;
+    }
+  else
+    {
+      i = 1;
+    }
 
-  bits = strlen (argv[1]);
-  size = 1 + (bits / 8);
-  dat.chain = malloc (size);
-  dat.size = size;
+  //dat.chain = malloc (size + 1);
+  //dat.size = size;
   dat.version = R_2004;
+  do 
+    {
+      char *input = argv[i];
+      int bits = strlen (input);
+      if (hex)
+        dat.size += bits;
+      else
+        dat.size += bits / 8;
+      dat.chain = realloc (dat.chain, dat.size + 1);
+      if (hex)
+        {
+          int size = bit_write_hexbits (&dat, input);
+          dat.size -= dat.size - size;
+        }
+      else
+        bit_write_bits (&dat, input);
+      i++;
+    }
+  while (i < argc);
 
-  bit_write_bits (&dat, argv[1]);
   pos = (int)bit_position (&dat);
-
   // accept all types, like CMC, BS, BL, HANDLE and print all possible variants
   pos = decode (&dat, 0, (int)pos);
 

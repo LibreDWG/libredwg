@@ -1726,8 +1726,57 @@ bit_write_bits (Bit_Chain *restrict dat, const char *restrict bits)
   char *p = (char *)bits;
   for (; *p; p++)
     {
-      bit_write_B (dat, *p != '0');
+      if (*p == '0' || *p == '1')
+        bit_write_B (dat, *p != '0');
+      else
+        {
+          fprintf (stderr, "Invalid binary input %s\n", p);
+          return;
+        }
     }
+}
+
+// accept a string of hex bytes with optional whitespace
+long
+bit_write_hexbits (Bit_Chain *restrict dat, const char *restrict bytes)
+{
+  char *p = (char *)bytes;
+  long len = 0;
+  unsigned char b;
+
+  for (; *p; p++)
+    {
+      if (*p != ' ' && *p != '\n')
+        {
+          len++;
+          if (*p >= 'a' && *p <= 'f')
+            {
+              if (len % 2)
+                b = (*p + 10 - 'a') << 4;
+              else
+                bit_write_RC (dat, b + *p + 10 - 'a');
+            }
+          else if (*p >= 'A' && *p <= 'F')
+            {
+              if (len % 2)
+                b = (*p + 10 - 'A') << 4;
+              else
+                bit_write_RC (dat, b + *p + 10 - 'A');
+            }
+          else if (*p >= '0' && *p <= '9')
+            {
+              if (len % 2)
+                b = (*p - '0') << 4;
+              else
+                bit_write_RC (dat, b + *p - '0');
+            }
+          else {
+            fprintf (stderr, "Invalid hex input %s\n", p);
+            return 0;
+          }
+        }
+    }
+  return len;
 }
 
 void

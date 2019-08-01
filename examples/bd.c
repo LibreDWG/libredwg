@@ -27,6 +27,8 @@
 int
 main (int argc, char *argv[])
 {
+  char *input;
+  int hex = 0;
   int size, bits;
   unsigned long pos;
   Bit_Chain dat = { NULL, 16, 0, 0, NULL, 0, 0 };
@@ -36,15 +38,32 @@ main (int argc, char *argv[])
       printf ("usage: examples/bd "
               "001100000000000000000000000000011000000000000000100000001010010"
               "00\n");
+      printf ("or examples/bd -x '8055 40f9 3284 d222 3e40 7436 e0d9 23fd'\n");
       return 1;
     }
+  if (argc > 2 && !strcmp (argv[1], "-x"))
+    {
+      hex = 1;
+      input = argv[2];
+      size = strlen (input);
+    }
+  else
+    {
+      input = argv[1];
+      bits = strlen (input);
+      size = (bits / 8);
+    }
 
-  bits = strlen (argv[1]);
-  size = 1 + (bits / 8);
-  dat.chain = malloc (size);
+  dat.chain = malloc (size + 1);
   dat.size = size;
   dat.version = R_2004;
-  bit_write_bits (&dat, argv[1]);
+  if (hex)
+    {
+      dat.size = bit_write_hexbits (&dat, input);
+      bits = dat.size / 8;
+    }
+  else
+    bit_write_bits (&dat, input);
   pos = bit_position (&dat);
   bit_set_position (&dat, 0);
   // accept more types, like CMC, BS, BL, HANDLE and print all possible
