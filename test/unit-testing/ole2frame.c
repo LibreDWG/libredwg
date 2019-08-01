@@ -14,7 +14,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE_W_OLD (ole2frame, OLE2FRAME, flag, BS, flag);
   CHK_ENTITY_TYPE_W_OLD (ole2frame, OLE2FRAME, mode, BS, mode);
-  CHK_ENTITY_TYPE_W_OLD (ole2frame, OLE2FRAME, data_length, BS, data_length);
+  CHK_ENTITY_TYPE_W_OLD (ole2frame, OLE2FRAME, data_length, BL, data_length);
 
   //CHK_ENTITY_TYPE_W_OLD (ole2frame, OLE2FRAME, data, RC*, data);
   if (data_length != dwg_ent_ole2frame_get_data_length (ole2frame, &error)

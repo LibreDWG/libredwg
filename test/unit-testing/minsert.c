@@ -10,7 +10,8 @@ api_process (dwg_object *obj)
   BITCODE_BB scale_flag;
   BITCODE_B has_attribs;
   double col_spacing, row_spacing;
-  BITCODE_BL num_owned, num_rows, num_cols;
+  BITCODE_BL num_owned;
+  BITCODE_BS num_rows, num_cols;
   BITCODE_H block_header, first_attrib, last_attrib, seqend, *attrib_handles;
 
   Dwg_Version_Type version = obj->parent->header.version;
