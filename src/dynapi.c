@@ -1379,10 +1379,10 @@ static const Dwg_DYNAPI_field _dwg_OLE2FRAME_fields[] = {
   { "lock_aspect", "RC", sizeof (BITCODE_RC), OFF (struct _dwg_entity_OLE2FRAME,lock_aspect), 0,0,0, 73 },
   { "data_length", "BL", sizeof (BITCODE_BL), OFF (struct _dwg_entity_OLE2FRAME,data_length), 0,0,0, 90 },
   { "data", "TV", sizeof (char*), OFF (struct _dwg_entity_OLE2FRAME,data), 1,1,1, 310 },
-  { "oleversion", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_entity_OLE2FRAME,oleversion), 0,0,0, 0 },
-  { "oleclient", "TV", sizeof (char*), OFF (struct _dwg_entity_OLE2FRAME,oleclient), 1,1,1, 0 },
-  { "pt1", "3BD", sizeof (BITCODE_3BD), OFF (struct _dwg_entity_OLE2FRAME,pt1), 1,0,0, 0 },
-  { "pt2", "3BD", sizeof (BITCODE_3BD), OFF (struct _dwg_entity_OLE2FRAME,pt2), 1,0,0, 0 },
+  { "oleversion", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_entity_OLE2FRAME,oleversion), 0,0,0, 70 },
+  { "oleclient", "TV", sizeof (char*), OFF (struct _dwg_entity_OLE2FRAME,oleclient), 1,1,1, 3 },
+  { "pt1", "3BD", sizeof (BITCODE_3BD), OFF (struct _dwg_entity_OLE2FRAME,pt1), 1,0,0, 10 },
+  { "pt2", "3BD", sizeof (BITCODE_3BD), OFF (struct _dwg_entity_OLE2FRAME,pt2), 1,0,0, 11 },
   {NULL, NULL, 0, 0, 0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_OLEFRAME: (sorted by offset) */
