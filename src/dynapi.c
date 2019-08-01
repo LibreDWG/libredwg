@@ -4067,7 +4067,7 @@ static const struct _name_type_fields dwg_name_types[] = {
 
 };
 
-#line 831 "gen-dynapi.pl"
+#line 832 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
@@ -4467,47 +4467,48 @@ dwg_dynapi_common_utf8text(void *restrict _obj, const char *restrict fieldname,
   }
 }
 
+// create a fresh string
 static void
 dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
                    const Dwg_Version_Type dwg_version,
                    const void *restrict value, const bool is_utf8)
 {
   // TODO: sanity checks
-  // if text strcpy or wcscpy, or do utf8 conversion
+  // if text strcpy or wcscpy, or do utf8 conversion.
+  //if ((char*)old && f->is_malloc)
+  //  free (old);
   if (f->is_string)
     {
-      char *str;
       //ascii or wide?
-      if (!strcmp (f->type, "TF")
-          || ((!strcmp (f->type, "T") || !strcmp (f->type, "TV"))
+      if (strEQc (f->type, "TF")
+          || ((strEQc (f->type, "T") || strEQc (f->type, "TV"))
               && dwg_version < R_2007))
         {
-          str = malloc (strlen ((char*)value)+1);
-          strcpy (str, value);
-          memcpy (old, str, f->size); // size of ptr
+          char *str = malloc (strlen (*(char**)value)+1);
+          strcpy (str, *(char**)value);
+          memcpy (old, &str, f->size); // size of ptr
         }
-      else if (!strcmp(f->type, "TU")
-               || ((!strcmp(f->type, "T") || !strcmp(f->type, "TV"))
+      else if (strEQc (f->type, "TU")
+               || ((strEQc (f->type, "T") || strEQc (f->type, "TV"))
                    && dwg_version >= R_2007))
         {
+          char *str;
 #if defined(HAVE_WCHAR_H) && defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
-          str = malloc (2 * (wcslen ((wchar_t *)value) + 1));
-          wcscpy ((wchar_t *)str, value);
+          str = malloc (2 * (wcslen (*(wchar_t **)value) + 1));
+          wcscpy ((wchar_t *)str, *(wchar_t **)value);
 #else
           int length = 0;
-          for (; ((BITCODE_TU)value)[length]; length++)
+          for (; (*(BITCODE_TU*)value)[length]; length++)
             ;
           length++;
           str = malloc (2 * length);
           memcpy (str, value, length * 2);
 #endif
-          memcpy (old, str, f->size); // size of ptr
+          memcpy (old, &str, f->size); // size of ptr
         }
     }
   else
     memcpy (old, value, f->size);
-  if (f->is_malloc)
-    free (old);
 }
 
 /* generic field setters */
@@ -4566,24 +4567,14 @@ dwg_dynapi_header_set_value (const Dwg_Data *restrict dwg,
         fieldname, _dwg_header_variables_fields,
         ARRAY_SIZE (_dwg_header_variables_fields) - 1, /* NULL terminated */
         sizeof (_dwg_header_variables_fields[0]), _name_struct_cmp);
-    if (f && is_utf8)
-      {
-        if (f->is_string)
-          {
-            const Dwg_Header_Variables *const _obj = &dwg->header_vars;
-          }
-        else
-          {
-            const int loglevel = dwg->opts & 0xf;
-            LOG_ERROR ("%s: Invalid header text field %s", __FUNCTION__, fieldname);
-            return false;
-          }
-      }
     if (f)
       {
+        void *old;
         // there are no malloc'd fields in the HEADER, so no need to free().
         const Dwg_Header_Variables *const _obj = &dwg->header_vars;
-        memcpy (&((char *)_obj)[f->offset], value, f->size);
+
+        old = &((char*)_obj)[f->offset];
+        dynapi_set_helper (old, f, dwg->header.version, value, is_utf8);
         return true;
       }
     else

@@ -1216,10 +1216,10 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       char field[80];
       strcpy (field, pair->value.s);
-      dxf_free_pair (pair);
       i = 0;
 
       // now read the code, value pair
+      dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
       DXF_BREAK_ENDSEC;
     next_hdrvalue:
@@ -1235,7 +1235,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   is_utf = dat->version >= R_2007;
                   LOG_TRACE ("HEADER.version = dat->version = %s\n",
                              version);
-                  dxf_free_pair (pair);
+                  //dxf_free_pair (pair);
                   break;
                 }
               if (v == R_AFTER)
@@ -1249,13 +1249,13 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               LOG_ERROR ("skipping HEADER: 9 %s, unknown field with code %d",
                          field, pair->code);
-              dxf_free_pair (pair);
+              //dxf_free_pair (pair);
             }
           else if (!matches_type (pair, f))
             {
               LOG_ERROR ("skipping HEADER: 9 %s, wrong type code %d <=> field %s",
                          field, pair->code, f->type);
-              dxf_free_pair (pair);
+              //dxf_free_pair (pair);
             }
           else if (pair->type == VT_POINT3D)
             {
@@ -1275,7 +1275,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   dwg_dynapi_header_set_value (dwg, &field[1], &pt, is_utf);
                   i++;
                 }
-              dxf_free_pair (pair);
+              // dxf_free_pair (pair);
             }
           else if (pair->type == VT_STRING && strEQc (f->type, "H"))
             {
@@ -1285,7 +1285,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               // name (which table?) => handle
               // needs to be postponed, because we don't have the tables yet.
               header_hdls = array_push (header_hdls, &field[1], pair->value.s);
-              dxf_free_pair (pair);
+              //dxf_free_pair (pair);
             }
           else if (strEQc (f->type, "CMC"))
             {
@@ -1296,7 +1296,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   color.index = pair->value.i;
                   dwg_dynapi_header_set_value (dwg, &field[1], &color, 0);
                 }
-              dxf_free_pair (pair);
+              //dxf_free_pair (pair);
             }
           else if (pair->type == VT_REAL && strEQc (f->type, "TIMEBLL"))
             {
@@ -1316,27 +1316,28 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               LOG_TRACE ("HEADER.%s %f (%u, %u) [TIMEBLL]\n", &field[1],
                          date.value, date.days, date.ms);
               dwg_dynapi_header_set_value (dwg, &field[1], &date, 0);
-              dxf_free_pair (pair);
+              //dxf_free_pair (pair);
             }
           else
             {
               LOG_TRACE ("HEADER.%s [%s]\n", &field[1], f->type);
               dwg_dynapi_header_set_value (dwg, &field[1], &pair->value, is_utf);
-              free (pair); // but keep the string!
+              //free (pair); // but keep the string
               // primitives (like RC, BD) are copied
             }
         }
       else
         {
           LOG_ERROR ("skipping HEADER: 9 %s, missing the $", field);
-          dxf_free_pair (pair);
         }
 
+      dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
       DXF_BREAK_ENDSEC;
       if (pair->code != 9 /* && pair->code != 0 */)
         goto next_hdrvalue; // for mult. 10,20,30 values
     }
+
   dxf_free_pair (pair);
   if (_obj->DWGCODEPAGE && strEQc (_obj->DWGCODEPAGE, "ANSI_1252"))
     dwg->header.codepage = 30;
@@ -1659,12 +1660,9 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
         case 102: // {ACAD_XDICTIONARY TODO
           break;
         case 2:
-          {
-            char *s = strdup (pair->value.s);
-            dwg_dynapi_entity_set_value (_obj, name, "name", s, is_utf);
-            LOG_TRACE ("%s.name = %s [2]\n", name, s);
-            break;
-          }
+          dwg_dynapi_entity_set_value (_obj, name, "name", &pair->value, is_utf);
+          LOG_TRACE ("%s.name = %s [2]\n", name, pair->value.s);
+          break;
         case 70:
           dwg_dynapi_entity_set_value (_obj, name, "flag",
                                        &pair->value, is_utf);
