@@ -2432,7 +2432,10 @@ typedef struct _dwg_entity_OLE2FRAME
   BITCODE_BL data_length;  /*!< DXF 90 */
   char     * data;         /*!< DXF 310, the binary object data */
   // embedded into data, not yet decoded:
-  char     * oleclient;    /*!< DXF 3: OLE or Paintbrush Picture */
+  // the MS-CFB (ole2 stream) starts at 0x80 in data
+  // before is probably:
+  BITCODE_BS oleversion;   /*!< DXF 70, always 2 */
+  char     * oleclient;    /*!< DXF 3, e.g. OLE or Paintbrush Picture */
   BITCODE_3BD pt1;         /*!< DXF 10, upper left corner */
   BITCODE_3BD pt2;         /*!< DXF 11, lower right corner */
 } Dwg_Entity_OLE2FRAME;

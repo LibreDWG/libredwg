@@ -4006,9 +4006,11 @@ DWG_ENTITY(OLE2FRAME)
 
   SUBCLASS (AcDbOle2Frame)
 #ifdef IS_DXF
-    VALUE_BS (2, 70);     // ole_version 70: always 2
-    VALUE_TFF ("OLE", 3); // ole_client 3: OLE or Paintbrush Picture
-    // 3BD: pt1 10 (upper left), 3BD pt2 11 (lower right)
+  // via dwg_decode_ole2() from the first 0x80 bytes in data
+  FIELD_BS (oleversion, 70); //  always 2
+  FIELD_TFF (oleclient, strlen(_obj->oleclient), 3);
+  FIELD_3BD (pt1, 10);  // upper left
+  FIELD_3BD (pt2, 11);  // lower right
 #endif
   FIELD_BS (type, 71); // 1: Link, 2: Embedded, 3: Static
   SINCE (R_2000) {
@@ -4017,6 +4019,9 @@ DWG_ENTITY(OLE2FRAME)
   }
   FIELD_BL (data_length, 90);
   FIELD_BINARY (data, FIELD_VALUE(data_length), 310);
+#ifdef IS_DECODER
+  dwg_decode_ole2 (_obj);
+#endif
 #ifdef IS_DXF
   VALUE_TFF ("OLE", 1);
 #endif

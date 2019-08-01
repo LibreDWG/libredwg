@@ -11322,7 +11322,8 @@ void
 dwg_ent_ole2frame_set_mode (dwg_ent_ole2frame *restrict frame,
                             const BITCODE_BS mode, int *restrict error)
 {
-  if (frame && mode >= 0 && mode <= 1)
+  // assert: mode is unsigned
+  if (frame && mode <= 1)
     {
       *error = 0;
       frame->mode = mode;

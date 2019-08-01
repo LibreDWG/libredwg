@@ -14632,6 +14632,22 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
       fail ("OLE2FRAME.oleclient [TV] '%s' <> '%s'", oleclient, ole2frame->oleclient);
   }
   {
+    BITCODE_BS oleversion;
+    if (dwg_dynapi_entity_value(ole2frame, "OLE2FRAME", "oleversion", &oleversion, NULL)
+        && oleversion == ole2frame->oleversion)
+      pass ();
+    else
+      fail ("OLE2FRAME.oleversion [BS] %hu != %hu", ole2frame->oleversion, oleversion);
+    oleversion++;
+    if (dwg_dynapi_entity_set_value (ole2frame, "OLE2FRAME", "oleversion", &oleversion, 0)
+        && oleversion == ole2frame->oleversion)
+      pass ();
+    else
+      fail ("OLE2FRAME.oleversion [BS] set+1 %hu != %hu", ole2frame->oleversion, oleversion);
+    ole2frame->oleversion--;
+
+  }
+  {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value(ole2frame, "OLE2FRAME", "parent", &parent, NULL)
         && !memcmp (&parent, &ole2frame->parent, sizeof (ole2frame->parent)))
