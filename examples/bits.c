@@ -29,58 +29,69 @@ static int
 decode (Bit_Chain *dat, int off, const int size)
 {
   int pos = 0;
-  int bs = 0;
+  BITCODE_BS bs = 0;
   printf ("decode offset:%d, size:%d\n", off, size);
   if (off >= size)
-    return 0;
-  if (off < maxoff)
     return 0;
 
   bit_set_position (dat, off);
   if (size - off >= 66)
     {
       double d = bit_read_BD (dat);
-      pos = (int)bit_position (dat);
+      int p = (int)bit_position (dat);
       if (d != bit_nan ())
-        printf ("%.15f BD @%d (%d)\n", d, pos, size);
+        {
+          printf ("%.15f BD @%d (%d)\n", d, p, size);
+          pos = p;
+        }
       bit_set_position (dat, off);
     }
   if (size - off >= 64)
     {
       double d = bit_read_RD (dat);
-      pos = (int)bit_position (dat);
+      int p = (int)bit_position (dat);
       if (d != bit_nan ())
-        printf ("%.15f RD @%d (%d)\n", d, pos, size);
+        {
+          printf ("%.15f RD @%d (%d)\n", d, p, size);
+          pos = p;
+        }
       bit_set_position (dat, off);
     }
   if (size - off >= 34)
     {
-      long l = (long)bit_read_BL (dat);
-      pos = (int)bit_position (dat);
-      if (pos <= size - off)
-        printf ("%ld BL @%d (%d)\n", l, pos, size);
+      BITCODE_BL l = (long)bit_read_BL (dat);
+      int p = (int)bit_position (dat);
+      if (p <= size - off)
+        {
+          printf ("%u BL @%d (%d)\n", l, p, size);
+          pos = p;
+        }
       bit_set_position (dat, off);
     }
   if (size - off >= 32)
     {
-      long l = (long)bit_read_RL (dat);
+      BITCODE_BL l = (long)bit_read_RL (dat);
       pos = (int)bit_position (dat);
-      printf ("%ld RL @%d (%d)\n", l, pos, size);
+      printf ("%u RL @%d (%d)\n", l, pos, size);
       bit_set_position (dat, off);
     }
   if (size - off >= 16)
     {
-      int l = (int)bit_read_RS (dat);
+      BITCODE_RS l = (int)bit_read_RS (dat);
       pos = (int)bit_position (dat);
       printf ("%d RS @%d (%d)\n", l, pos, size);
       bit_set_position (dat, off);
     }
   if (size - off >= 10)
     {
+      int p;
       bs = bit_read_BS (dat);
-      pos = (int)bit_position (dat);
-      if (pos <= size - off)
-        printf ("%d BS @%d (%d)\n", bs, pos, size);
+      p = (int)bit_position (dat);
+      if (p <= size - off)
+        {
+          printf ("%d BS @%d (%d)\n", bs, p, size);
+          pos = p;
+        }
       bit_set_position (dat, off);
     }
   if (size - off >= 8)
@@ -93,26 +104,31 @@ decode (Bit_Chain *dat, int off, const int size)
   if (size - off >= 8)
     {
       Dwg_Handle h;
-      int err;
+      int err, p;
       err = bit_read_H (dat, &h);
-      pos = (int)bit_position (dat);
-      if (!err && h.size == 1 && pos <= size - off)
+      p = (int)bit_position (dat);
+      if (!err && h.size == 1 && p <= size - off)
         {
-          printf ("%x.%d.%lX H @%d (%d)\n", h.code, h.size, h.value, pos,
+          printf ("%x.%d.%lX H @%d (%d)\n", h.code, h.size, h.value, p,
                   size);
+          pos = p;
         }
       bit_set_position (dat, off);
     }
   if (size - off >= 4)
     {
       Dwg_Color c;
+      int p;
       bit_read_CMC (dat, &c);
-      pos = (int)bit_position (dat);
-      if (c.index < 257 && pos <= size - off)
+      p = (int)bit_position (dat);
+      if (c.index < 257 && p <= size - off)
         {
-          printf ("%d 0x%06X 0x%x CMC @%d (%d)\n", c.index, c.rgb, c.flag, pos,
+          printf ("%d 0x%06X 0x%x CMC @%d (%d)\n", c.index, c.rgb, c.flag, p,
                   size);
+          pos = p;
         }
+      free (c.name);
+      free (c.book_name);
       bit_set_position (dat, off);
     }
   if (size - off >= 2)
@@ -131,20 +147,26 @@ decode (Bit_Chain *dat, int off, const int size)
     {
       int i;
       char *s = bit_read_TV (dat);
-      pos = (int)bit_position (dat);
+      int p = (int)bit_position (dat);
       for (i = 0; i < bs; i++)
         if (!isprint (s[i]))
           break;
       if (i == bs)
-        printf ("%s TV @%d (%d)\n", s, pos, size);
+        {
+          printf ("%s TV @%d (%d)\n", s, pos, size);
+          pos = p;
+        }
+      free (s);
     }
 
-  while (off < size)
+  while (pos < size)
     {
-      if (maxoff < off)
-        maxoff = off;
+      if (pos <= off)
+        pos++;
+      if (maxoff < pos)
+        maxoff = pos;
       // printf ("offset %d\n", pos);
-      return decode (dat, pos, size);
+      return decode (dat, off+1, size);
     }
   return 0;
 }
