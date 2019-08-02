@@ -2250,8 +2250,8 @@ typedef struct _dwg_object_APPID
 typedef struct _dwg_object_DIMSTYLE_CONTROL
 {
   COMMON_TABLE_CONTROL_FIELDS(dimstyles);
-  BITCODE_RC num_morehandles; /* undocumented */
-  BITCODE_H* morehandles;
+  BITCODE_RC num_morehandles; /* DXF 71 undocumented */
+  BITCODE_H* morehandles;     /* DXF 340 */
 } Dwg_Object_DIMSTYLE_CONTROL;
 
 /**

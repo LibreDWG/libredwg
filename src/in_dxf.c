@@ -14,25 +14,6 @@
  * in_dxf.c: read ascii DXF
  * written by Reini Urban
  */
-/* TODO:
- * read whole spec and add fieldnames/group to some hash/array to search in.
- *   i.e. HEADER [ {HANDSEED, RS, 5}, ... ]
- * while looping over the DXF:
- *   read next object: border groups 0, 2
- *   map object to our struct type
- *     i.e. 0 SECTION 2 HEADER -> dwg->header_vars,
- *          0 TABLE 2 APPID => APPID_CONTROL, nth 0 APPID => nth APPID.
- *   find and fill fieldname/group in our struct. skip unknowns and missing
- * names
- *
- * Alternate idea: already when reading the spec, mem-search the dxf (dat in
- * memory) to the known border for the field within the current object range,
- * border 0/2 => start - end. less memory, whole spec not needed in memory.
- * Problems: we might miss some DXF groups, as we random search within it,
- * and don't keep track what we used, and what not.
- *
- * But first check the EOL: CRLF or just LF. This speeds up the search.
- */
 
 #include "config.h"
 #ifdef __STDC_ALLOC_LIB__
@@ -1433,22 +1414,26 @@ int add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code,
                 BITCODE_RL value, Dwg_Object *restrict obj)
 {
   int offset = obj ? (value - (int)obj->handle.value) : 0;
+  int i;
+  unsigned char *val = (unsigned char *)&hdl->value;
   hdl->code = code;
   hdl->value = value;
-  hdl->size = 1;
-  if (hdl->value > 255) //TODO see bits_write_H
-    hdl->size = 2;
+  // FIXME: little endian only
+  for (i = 3; i >= 0; i--)
+    if (val[i])
+      break;
+  hdl->size = i + 1;
   if (code != 5 &&
       obj && abs(offset) == 1)
     {
       // change code to 6.0.0 or 8.0.0
       if (offset == 1)
         {
-          hdl->code = 6; hdl->value = 0L; hdl->size = 0;
+          hdl->code = 6; hdl->value = 0; hdl->size = 0;
         }
       else if (offset == -1)
         {
-          hdl->code = 8; hdl->value = 0L; hdl->size = 0;
+          hdl->code = 8; hdl->value = 0; hdl->size = 0;
         }
     }
   return 0;
@@ -1503,10 +1488,28 @@ add_handleref (BITCODE_RC code, BITCODE_RL value, Dwg_Object *obj)
   obj->tio.entity->tio.token->parent = obj->tio.entity;        \
   obj->tio.entity->objid = obj->index
 
-#define ADD_OBJECT_IF(nam, token)                              \
-  if (strEQc (name, nam))                                      \
-    {                                                          \
-      ADD_OBJECT(token);                                       \
+#define ADD_TABLE_IF(nam, token)                       \
+  if (strEQc (name, #nam))                             \
+    {                                                  \
+      ADD_OBJECT(token);                               \
+      if (strEQc (#nam, "VPORT"))                      \
+        strcpy (ctrl_hdlv, "vports");                  \
+      else if (strEQc (#nam, "UCS"))                   \
+        strcpy (ctrl_hdlv, "ucs");                     \
+      else if (strEQc (#nam, "VIEW"))                  \
+        strcpy (ctrl_hdlv, "views");                   \
+      else if (strEQc (#nam, "LTYPE"))                 \
+        strcpy (ctrl_hdlv, "linetypes");               \
+      else if (strEQc (#nam, "STYLE"))                 \
+        strcpy (ctrl_hdlv, "styles");                  \
+      else if (strEQc (#nam, "LAYER"))                 \
+        strcpy (ctrl_hdlv, "layers");                  \
+      else if (strEQc (#nam, "DIMSTYLE"))              \
+        strcpy (ctrl_hdlv, "dimstyles");               \
+      else if (strEQc (#nam, "APPID"))                 \
+        strcpy (ctrl_hdlv, "apps");                    \
+      else if (strEQc (#nam, "VPORT_ENTITY"))          \
+        strcpy (ctrl_hdlv, "vport_entity_headers");    \
     }
 
 static int
@@ -1529,9 +1532,12 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   Dwg_Object *obj;
   Dxf_Pair *pair = NULL;
   Dwg_Object_LTYPE_CONTROL *_obj = NULL;
+  int j = 0;
+  int is_utf = dwg->header.version >= R_2007 ? 1 : 0;
   char *fieldname;
   char ctrlname[80];
-  int is_utf = dwg->header.version >= R_2007 ? 1 : 0;
+  char ctrl_hdlv[80];
+  ctrl_hdlv[0] = '\0';
 
   NEW_OBJECT(dwg, obj);
 
@@ -1539,25 +1545,25 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   strcat (ctrlname, "_CONTROL");
   LOG_TRACE ("add %s\n", ctrlname);
 
-  ADD_OBJECT_IF ("LTYPE", LTYPE_CONTROL)
+  ADD_TABLE_IF (LTYPE, LTYPE_CONTROL)
   else
-  ADD_OBJECT_IF ("VPORT", VPORT_CONTROL)
+  ADD_TABLE_IF (VPORT, VPORT_CONTROL)
   else
-  ADD_OBJECT_IF ("APPID", APPID_CONTROL)
+  ADD_TABLE_IF (APPID, APPID_CONTROL)
   else
-  ADD_OBJECT_IF ("BLOCK", BLOCK_CONTROL)
+  ADD_TABLE_IF (BLOCK, BLOCK_CONTROL)
   else
-  ADD_OBJECT_IF ("DIMSTYLE", DIMSTYLE_CONTROL)
+  ADD_TABLE_IF (DIMSTYLE, DIMSTYLE_CONTROL)
   else
-  ADD_OBJECT_IF ("LAYER", LAYER_CONTROL)
+  ADD_TABLE_IF (LAYER, LAYER_CONTROL)
   else
-  ADD_OBJECT_IF ("STYLE", STYLE_CONTROL)
+  ADD_TABLE_IF (STYLE, STYLE_CONTROL)
   else
-  ADD_OBJECT_IF ("UCS", UCS_CONTROL)
+  ADD_TABLE_IF (UCS, UCS_CONTROL)
   else
-  ADD_OBJECT_IF ("VIEW", VIEW_CONTROL)
+  ADD_TABLE_IF (VIEW, VIEW_CONTROL)
   else
-  ADD_OBJECT_IF ("VPORT_ENTITY", VPORT_ENTITY_CONTROL)
+  ADD_TABLE_IF (VPORT_ENTITY, VPORT_ENTITY_CONTROL)
   else
     {
       LOG_ERROR ("Unknown DXF TABLE %s nor %s_CONTROL", name, name);
@@ -1601,6 +1607,22 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
                          ARGS_REF(obj->tio.object->ownerhandle));
             }
           break;
+        case 340:
+          if (pair->value.u && strEQc (ctrlname, "DIMSTYLE_CONTROL"))
+            {
+              Dwg_Object_DIMSTYLE_CONTROL *_o = (Dwg_Object_DIMSTYLE_CONTROL *)_obj;
+              if (!_o->num_morehandles)
+                {
+                  LOG_ERROR ("Empty DIMSTYLE_CONTROL.num_morehandles")
+                 break;
+                }
+              assert (_o->morehandles);
+              _o->morehandles[j]  = add_handleref (4, pair->value.u, obj);
+              LOG_TRACE ("%s.morehandles[%d] = " FORMAT_REF " [330]\n", ctrlname,
+                         j, ARGS_REF(_o->morehandles[j]));
+              j++;
+            }
+          break;
         case 100: // Always AcDbSymbolTable. ignore
           break;
         case 360: // {ACAD_XDICTIONARY TODO
@@ -1611,18 +1633,32 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
         case 102: // {ACAD_XDICTIONARY TODO
           break;
         case 70:
-          dwg_dynapi_entity_set_value (_obj, obj->name, "num_entries",
-                                       &pair->value, is_utf);
-          LOG_TRACE ("%s.num_entries = %u [70]\n", ctrlname,
-                     pair->value.u)
+          if (pair->value.u)
+            {
+              BITCODE_H *hdls;
+              BITCODE_BL num_entries = (BITCODE_BL)pair->value.u;
+              dwg_dynapi_entity_set_value (_obj, obj->name, "num_entries",
+                                           &num_entries, is_utf);
+              LOG_TRACE ("%s.num_entries = %u [70]\n", ctrlname,
+                         num_entries);
+              hdls = calloc (num_entries, sizeof (Dwg_Object_Ref*));
+              dwg_dynapi_entity_set_value (_obj, obj->name, ctrl_hdlv,
+                                           &hdls, 0);
+              LOG_TRACE ("Add %s.%s[%d]\n", ctrlname, ctrl_hdlv, num_entries);
+            }
           break;
         case 71:
-          if (strEQc (name, "DIMSTYLE"))
+          if (strEQc (name, "DIMSTYLE") && pair->value.u)
             {
-              dwg_dynapi_entity_set_value (_obj, obj->name, "num_more_handles",
+              BITCODE_H *hdls;
+              dwg_dynapi_entity_set_value (_obj, obj->name, "num_morehandles",
                                            &pair->value, is_utf);
-              LOG_TRACE ("%s.more_handles = %u [71]\n", ctrlname,
+              LOG_TRACE ("%s.num_morehandles = %u [71]\n", ctrlname,
                          pair->value.u)
+              hdls = calloc (pair->value.u, sizeof (Dwg_Object_Ref*));
+              dwg_dynapi_entity_set_value (_obj, obj->name, "morehandles",
+                                           &hdls, 0);
+              LOG_TRACE ("Add %s.morehandles[%d]\n", ctrlname, pair->value.u);
               break;
             }
           // fall through
@@ -1637,34 +1673,39 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
 
 static Dxf_Pair *
 new_table (const char *restrict name, Bit_Chain *restrict dat,
-           Dwg_Data *restrict dwg)
+           Dwg_Data *restrict dwg, Dwg_Object *restrict ctrl, BITCODE_BL i)
 {
   int is_utf = dwg->header.version >= R_2007 ? 1 : 0;
   Dwg_Object *obj;
   Dxf_Pair *pair = dxf_read_pair (dat);
   Dwg_Object_LTYPE *_obj = NULL;
+  char ctrl_hdlv[80];
+  char ctrlname[80];
+  ctrl_hdlv[0] = '\0';
 
   NEW_OBJECT (dwg, obj);
+  strcpy (ctrlname, name);
+  strcat (ctrlname, "_CONTROL");
 
-  LOG_TRACE ("add %s\n", name);
+  LOG_TRACE ("add %s [%d]\n", name, i);
 
-  ADD_OBJECT_IF ("LTYPE", LTYPE)
+  ADD_TABLE_IF (LTYPE, LTYPE)
   else
-  ADD_OBJECT_IF ("VPORT", VPORT)
+  ADD_TABLE_IF (VPORT, VPORT)
   else
-  ADD_OBJECT_IF ("APPID", APPID)
+  ADD_TABLE_IF (APPID, APPID)
   else
-  ADD_OBJECT_IF ("DIMSTYLE", DIMSTYLE)
+  ADD_TABLE_IF (DIMSTYLE, DIMSTYLE)
   else
-  ADD_OBJECT_IF ("LAYER", LAYER)
+  ADD_TABLE_IF (LAYER, LAYER)
   else
-  ADD_OBJECT_IF ("STYLE", STYLE)
+  ADD_TABLE_IF (STYLE, STYLE)
   else
-  ADD_OBJECT_IF ("UCS", UCS)
+  ADD_TABLE_IF (UCS, UCS)
   else
-  ADD_OBJECT_IF ("VIEW", VIEW)
+  ADD_TABLE_IF (VIEW, VIEW)
   //else
-  //ADD_OBJECT_IF ("VPORT_ENTITY", VPORT_ENTITY)
+  //ADD_TABLE_IF (VPORT_ENTITY, VPORT_ENTITY)
   else
     {
       LOG_ERROR ("Unknown DXF AcDbSymbolTableRecord %s", name);
@@ -1686,6 +1727,30 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
             add_handle (&obj->handle, 0, pair->value.u, NULL);
             LOG_TRACE ("%s.handle = " FORMAT_H " [5]\n", name,
                        ARGS_H(obj->handle));
+            if (*ctrl_hdlv)
+              {
+                // add to ctrl HANDLE_VECTOR "ctrl_hdlv"
+                Dwg_Object_VPORT_CONTROL *_ctrl = ctrl->tio.object->tio.VPORT_CONTROL;
+                BITCODE_H *hdls = NULL;
+                dwg_dynapi_entity_value (_ctrl, ctrlname, ctrl_hdlv, &hdls, NULL);
+                if (!hdls)
+                  {
+                    BITCODE_BL num_entries;
+                    dwg_dynapi_entity_value (_ctrl, ctrlname, "num_entries",
+                                             &num_entries, NULL);
+                    if (!num_entries)
+                      {
+                        num_entries = i + 1;
+                        dwg_dynapi_entity_set_value (
+                            _ctrl, ctrlname, "num_entries", &num_entries, 0);
+                      }
+                    hdls = calloc (num_entries, sizeof (Dwg_Object_Ref*));
+                    dwg_dynapi_entity_set_value (_ctrl, ctrlname, ctrl_hdlv,
+                                                 &hdls, 0);
+                  }
+                hdls[i] = add_handleref (2, pair->value.u, obj);
+                //dwg_dynapi_entity_set_value (_ctrl, ctrlname, ctrl_hdlv, &hdls);
+              }
           }
           break;
         case 330:
@@ -1730,7 +1795,6 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
 static int
 dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  //BITCODE_BL i;
   char table[80];
   Dxf_Pair *pair = dxf_read_pair (dat);
 
@@ -1750,10 +1814,16 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           strlen (pair->value.s) < 80 &&
           is_table_name (pair->value.s)) // new table NAME
         {
+          Dwg_Object *ctrl;
+          BITCODE_BL i = 0;
           strcpy (table, pair->value.s);
           pair = new_table_control (table, dat, dwg); // until 0 table
-          if (pair->code == 0 && strEQ (pair->value.s, table))
-            pair = new_table (table, dat, dwg);      // until 0 table or 0 ENDTAB
+          ctrl = &dwg->object[dwg->num_objects - 1];
+          while (pair->code == 0 && strEQ (pair->value.s, table))
+            {
+              // until 0 table or 0 ENDTAB
+              pair = new_table (table, dat, dwg, ctrl, i++);
+            }
         }
       DXF_RETURN_ENDSEC (0); // next TABLE or ENDSEC
       dxf_free_pair (pair);

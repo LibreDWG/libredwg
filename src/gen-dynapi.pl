@@ -216,6 +216,7 @@ $DXF{'BODY'}->{'encr_sat_data'} = 1;
 $DXF{'BLOCK'}->{'name'} = 2; # and 3
 $DXF{'VISUALSTYLE'}->{'edge_hide_precision_flag'} = 290;
 $DXF{'VISUALSTYLE'}->{'is_internal_use_only'} = 291;
+$DXF{'DIMSTYLE_CONTROL'}->{'morehandles'} = 340;
 
 dxfin_spec "$srcdir/header_variables_dxf.spec";
 $DXF{header_variables}->{'_3DDWFPREC'} = 40;

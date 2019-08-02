@@ -2434,7 +2434,7 @@ static const Dwg_DYNAPI_field _dwg_DIMSTYLE_CONTROL_fields[] = {
   { "dimstyles", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_DIMSTYLE_CONTROL,dimstyles), 1,1,0, 0 },
   { "objid", "BL", sizeof (BITCODE_BL), OFF (struct _dwg_object_DIMSTYLE_CONTROL,objid), 0,0,0, 0 },
   { "num_morehandles", "RC", sizeof (BITCODE_RC), OFF (struct _dwg_object_DIMSTYLE_CONTROL,num_morehandles), 0,0,0, 71 },
-  { "morehandles", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_DIMSTYLE_CONTROL,morehandles), 1,1,0, 0 },
+  { "morehandles", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_DIMSTYLE_CONTROL,morehandles), 1,1,0, 340 },
   {NULL, NULL, 0, 0, 0,0,0, 0},
 };
 /* from typedef struct _dwg_object_DUMMY: (sorted by offset) */

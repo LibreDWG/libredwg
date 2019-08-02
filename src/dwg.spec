@@ -3090,7 +3090,7 @@ DWG_OBJECT(DIMSTYLE_CONTROL)
 
   START_OBJECT_HANDLE_STREAM;
   HANDLE_VECTOR (dimstyles, num_entries, 2, 0);
-  HANDLE_VECTOR (morehandles, num_morehandles, 5, 0);
+  HANDLE_VECTOR (morehandles, num_morehandles, 5, 340);
 
 DWG_OBJECT_END
 
