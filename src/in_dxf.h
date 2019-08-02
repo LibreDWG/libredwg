@@ -46,6 +46,7 @@ typedef struct _dxf_pair
   enum RES_BUF_VALUE_TYPE type;
   union
   {
+    unsigned int u;
     int i;
     char *s;
     long l;
@@ -77,6 +78,13 @@ void dxf_add_field (Dwg_Object *restrict obj, const char *restrict name,
 Dxf_Field *dxf_search_field (Dwg_Object *restrict obj,
                              const char *restrict name,
                              const char *restrict type, int dxf);
+
+int add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code,
+                BITCODE_RL value, Dwg_Object *restrict obj)
+  __nonnull ((1));
+
+Dwg_Object_Ref * ATTRIBUTE_MALLOC
+add_handleref (BITCODE_RC code, BITCODE_RL value, Dwg_Object *obj);
 
 EXPORT int dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 EXPORT int dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);

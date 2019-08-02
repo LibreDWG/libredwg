@@ -149,20 +149,17 @@ output_INSERT (Dwg_Object *obj)
   if (insert->block_header && insert->block_header->handleref.value)
     {
       printf ("\t<use id=\"dwg-object-%d\" transform=\"translate(%f %f) "
-              "rotate(%f) scale(%f %f)\" xlink:href=\"#symbol-%lu\" />"
-              "<!-- block_header->handleref: %d.%d.%lu -->\n",
+              "rotate(%f) scale(%f %f)\" xlink:href=\"#symbol-%X\" />"
+              "<!-- block_header->handleref: " FORMAT_H " -->\n",
               obj->index, transform_X (insert->ins_pt.x),
               transform_Y (insert->ins_pt.y),
               (180.0 / M_PI) * insert->rotation, insert->scale.x,
               insert->scale.y, insert->block_header->absolute_ref,
-              insert->block_header->handleref.code,
-              insert->block_header->handleref.size,
-              insert->block_header->handleref.value);
+              ARGS_H(insert->block_header->handleref));
     }
   else
     {
-      printf ("\n\n<!-- WRONG INSERT(%d.%d.%lu) -->\n", obj->handle.code,
-              obj->handle.size, obj->handle.value);
+      printf ("\n\n<!-- WRONG INSERT(" FORMAT_H ") -->\n", ARGS_H(obj->handle));
     }
 }
 
@@ -219,7 +216,7 @@ output_BLOCK_HEADER (Dwg_Object_Ref *ref)
     }
 
   hdr = ref->obj->tio.object->tio.BLOCK_HEADER;
-  printf ("\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", ref->absolute_ref,
+  printf ("\t<g id=\"symbol-%X\" >\n\t\t<!-- %s -->\n", ref->absolute_ref,
           hdr->name);
 
   obj = get_first_owned_entity (ref->obj);

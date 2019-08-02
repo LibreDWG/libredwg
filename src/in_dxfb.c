@@ -230,7 +230,7 @@ dxf_check_code (Bit_Chain *dat, Dxf_Pair *pair, int code)
     {                                                                         \
       if (GROUP (dxf))                                                        \
         {                                                                     \
-          int i = sscanf ((char *)&dat->chain[dat->byte], "%lX",              \
+          int i = sscanf ((char *)&dat->chain[dat->byte], "%X",               \
                           &hdlptr->absolute_ref);                             \
           dat->byte += i;                                                     \
         }                                                                     \
@@ -660,8 +660,7 @@ dxf_check_code (Bit_Chain *dat, Dxf_Pair *pair, int code)
     _ent = obj->tio.entity;                                                   \
     _obj = ent = _ent->tio.token;                                             \
     obj->fixedtype = DWG_TYPE_##token;                                        \
-    LOG_TRACE ("Entity handle: %d.%d.%lX\n", obj->handle.code,                \
-               obj->handle.size, obj->handle.value)
+    LOG_TRACE ("Entity handle: " FORMAT_H "\n", ARGS_H(obj->handle))
 
 #define DWG_ENTITY_END                                                        \
   return error;                                                               \
@@ -680,8 +679,7 @@ dxf_check_code (Bit_Chain *dat, Dxf_Pair *pair, int code)
     obj->fixedtype = DWG_TYPE_##token;                                        \
     LOG_INFO ("Object " #token ":\n")                                         \
     _obj = obj->tio.object->tio.token;                                        \
-    LOG_TRACE ("Object handle: %d.%d.%lX\n", obj->handle.code,                \
-               obj->handle.size, obj->handle.value)
+    LOG_TRACE ("Object handle: " FORMAT_H "\n", ARGS_H(obj->handle))
 
 #define DWG_OBJECT_END                                                        \
   return error;                                                               \
@@ -925,8 +923,8 @@ dwg_indxfb_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
               LOG_WARN ("Unknown object, skipping eed/reactors/xdic");
               SINCE (R_2000){
                 LOG_INFO ("Object bitsize: %u\n", obj->bitsize)
-              } LOG_INFO ("Object handle: %d.%d.%lX\n", obj->handle.code,
-                          obj->handle.size, obj->handle.value);
+              }
+              LOG_INFO ("Object handle: " FORMAT_H "\n", ARGS_H(obj->handle));
             }
         }
     }

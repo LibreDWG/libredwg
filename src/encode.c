@@ -369,9 +369,8 @@ static bool env_var_checked_p;
                       hdlptr->handleref.code);                                \
           }                                                                   \
         bit_write_H (hdl_dat, &hdlptr->handleref);                            \
-        LOG_TRACE (#nam ": HANDLE(%x.%d.%lX) absolute:%lu [%d]\n",            \
-                   hdlptr->handleref.code, hdlptr->handleref.size,            \
-                   hdlptr->handleref.value, hdlptr->absolute_ref, dxf)        \
+        LOG_TRACE (#nam ": HANDLE" FORMAT_REF " [%d]\n",                      \
+                   ARGS_REF(hdlptr), dxf)                                     \
       }                                                                       \
   }
 
@@ -399,10 +398,8 @@ static bool env_var_checked_p;
                       _obj->nam->handleref.code);                             \
           }                                                                   \
         bit_write_H (hdl_dat, &_obj->nam->handleref);                         \
-        LOG_TRACE (#nam "[%d]: HANDLE(%x.%d.%lX) absolute:%lu [%d]\n",        \
-                   (int)vcount, _obj->nam->handleref.code,                    \
-                   _obj->nam->handleref.size, _obj->nam->handleref.value,     \
-                   _obj->nam->absolute_ref, dxf)                              \
+        LOG_TRACE (#nam "[%d]: HANDLE" FORMAT_REF " [%d]\n",                  \
+                   (int)vcount, ARGS_REF(_obj->nam), dxf)                     \
       }                                                                       \
   }
 
@@ -571,8 +568,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
     error = dwg_encode_object (obj, dat, hdl_dat, str_dat);                   \
     if (error)                                                                \
       return error;                                                           \
-    LOG_INFO ("Object " #token " handle: %x.%d.%lX\n", obj->handle.code,      \
-              obj->handle.size, obj->handle.value)
+    LOG_INFO ("Object " #token " handle: " FORMAT_H "\n", ARGS_H(obj->handle))
 
 #define DWG_OBJECT_END                                                        \
   if (obj->bitsize == 0 && dat->version >= R_13 && dat->version <= R_2007)    \
@@ -613,7 +609,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
 /*--------------------------------------------------------------------------------*/
 typedef struct
 {
-  long int handle;
+  BITCODE_BL handle;
   long int address;
   BITCODE_BL index;
 } Object_Map;
@@ -673,7 +669,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   unsigned int ckr;
   unsigned int sekcisize = 0;
   long unsigned int last_address;
-  long unsigned int last_handle;
+  BITCODE_BL last_handle;
   Object_Map *omap;
   Object_Map pvzmap;
   Bit_Chain *hdl_dat;
@@ -1002,7 +998,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {
       Dwg_Object *obj;
       BITCODE_BL index = omap[j].index;
-      LOG_TRACE ("\n> Next object: " FORMAT_BL " \tHandle: %lX\tOffset: %lu\n"
+      LOG_TRACE ("\n> Next object: " FORMAT_BL " \tHandle: %X\tOffset: %lu\n"
                  "==========================================\n",
                  j, omap[j].handle, dat->byte);
       omap[j].address = dat->byte;
@@ -1614,8 +1610,7 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
                           obj->bitsize, dat->byte, dat->bit);
               }
               bit_write_H (dat, &(obj->handle));
-              LOG_INFO ("Object handle: %x.%d.%lX\n", obj->handle.code,
-                        obj->handle.size, obj->handle.value);
+              LOG_INFO ("Object handle: " FORMAT_H "\n", ARGS_H(obj->handle));
               // write obj->size bytes, excl. bitsize and handle.
               // overshoot the bitsize and handle size.
               bit_write_TF (dat, obj->tio.unknown, obj->size);
@@ -1673,8 +1668,8 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict ent)
         {
           bit_write_BS (dat, size);
           bit_write_H (dat, &(ent->eed[i].handle));
-          LOG_TRACE ("EED[%u] handle: %x.%d.%lX\n", i, ent->eed[i].handle.code,
-                     ent->eed[i].handle.size, ent->eed[i].handle.value);
+          LOG_TRACE ("EED[%u] handle: " FORMAT_H "\n", i,
+                     ARGS_H(ent->eed[i].handle));
           bit_write_TF (dat, ent->eed[i].raw, size);
         }
     }
@@ -1743,8 +1738,7 @@ dwg_encode_entity (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   }
 
   bit_write_H (dat, &(obj->handle));
-  LOG_TRACE ("handle: %x.%d.%lX [5]\n", obj->handle.code, obj->handle.size,
-             obj->handle.value)
+  LOG_TRACE ("handle: " FORMAT_H " [5]\n", ARGS_H(obj->handle))
   PRE (R_13) { return DWG_ERR_NOTYETSUPPORTED; }
 
   error |= dwg_encode_eed (dat, (Dwg_Object_Object *)ent);

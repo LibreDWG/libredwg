@@ -483,10 +483,16 @@ typedef enum DWG_ERROR
  */
 typedef struct _dwg_handle
 {
-  unsigned int code; /*!< OFFSETOBJHANDLE if > 6 */
-  unsigned int size;
-  long unsigned int value;
+  BITCODE_RC code; /*!< OFFSETOBJHANDLE if > 6 */
+  BITCODE_RC size;
+  BITCODE_RL value;
 } Dwg_Handle;
+
+#define FORMAT_H "%u.%u.%X"
+#define ARGS_H(hdl) (hdl).code, (hdl).size, (hdl).value
+#define FORMAT_REF "(%u.%u.%X) abs:%X"
+#define ARGS_REF(ref) (ref)->handleref.code, (ref)->handleref.size, \
+    (ref)->handleref.value, (ref)->absolute_ref
 
 /**
 object references: obj is resolved by handleref (e.g. via
@@ -501,7 +507,7 @@ typedef struct _dwg_object_ref
 {
   struct _dwg_object* obj;
   Dwg_Handle handleref;
-  long unsigned int absolute_ref;
+  BITCODE_RL absolute_ref;
 } Dwg_Object_Ref;
 
 typedef Dwg_Object_Ref* BITCODE_H;

@@ -1120,7 +1120,8 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           // last_handle += handle;
           last_offset += offset;
           LOG_TRACE ("\nNext object: %lu\t", (unsigned long)dwg->num_objects)
-          LOG_TRACE ("Handle: %lX\tOffset: " FORMAT_MC " @%lu\n", handle,
+          LOG_TRACE ("Handle: " FORMAT_UMC
+                     "\tOffset: " FORMAT_MC " @%lu\n", handle,
                      offset, last_offset)
 
           if (dat->byte == oldpos)
@@ -1350,17 +1351,15 @@ resolve_objectref_vector (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       Dwg_Object_Ref *ref = dwg->object_ref[i];
       LOG_INSANE ("==========\n")
-      LOG_TRACE ("-objref[%3ld]: HANDLE(%d.%d.%lX) Absolute:%lX\n", (long)i,
-                 ref->handleref.code, ref->handleref.size,
-                 ref->handleref.value, ref->absolute_ref)
+      LOG_TRACE ("-objref[%3ld]: HANDLE" FORMAT_REF "\n", (long)i,
+                 ARGS_REF(ref))
 
       // search the handle in all objects
       obj = dwg_resolve_handle (dwg, ref->absolute_ref);
       if (obj)
         {
-          LOG_TRACE ("-found:     HANDLE(%d.%d.%lX) => [%u]\n",
-                     obj->handle.code, obj->handle.size, obj->handle.value,
-                     obj->index)
+          LOG_TRACE ("-found:     HANDLE(" FORMAT_H ") => [%u]\n",
+                     ARGS_H(obj->handle), obj->index)
         }
       // assign found pointer to objectref vector
       ref->obj = obj;
@@ -2308,7 +2307,8 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           // last_handle += handle;
           last_offset += offset;
           LOG_TRACE ("\n< Next object: %lu\t", (unsigned long)dwg->num_objects)
-          LOG_HANDLE ("Handle: %lX\tOffset: " FORMAT_MC " @%lu\n", handle,
+          LOG_HANDLE ("Handle: " FORMAT_UMC
+                      "\tOffset: " FORMAT_MC " @%lu\n", handle,
                       offset, last_offset)
 
           if (hdl_dat.byte == oldpos)
@@ -2758,9 +2758,8 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
         }
       else
         {
-          LOG_TRACE ("EED[%u] handle: %d.%d.%lX\n", idx,
-                     obj->eed[idx].handle.code, obj->eed[idx].handle.size,
-                     obj->eed[idx].handle.value);
+          LOG_TRACE ("EED[%u] handle: " FORMAT_H "\n", idx,
+                     ARGS_H(obj->eed[idx].handle));
           if (_obj->supertype == DWG_SUPERTYPE_OBJECT && _obj->dxfname
               && strEQc (_obj->dxfname, "MLEADERSTYLE"))
             { // check for is_new_format: has extended data for APPID
@@ -2782,7 +2781,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
                               = obj->tio.MLEADERSTYLE;
                           this->is_new_format = 1;
                           LOG_TRACE (
-                              "EED found ACAD_MLEADERVER %lu: new format\n",
+                              "EED found ACAD_MLEADERVER %X: new format\n",
                               ref.absolute_ref);
                         }
                     }
@@ -3081,8 +3080,7 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
       ent->picture_exists = 0;
       return error;
     }
-  LOG_TRACE ("handle: %d.%d.%lX [5]\n", obj->handle.code, obj->handle.size,
-             obj->handle.value)
+  LOG_TRACE ("handle: " FORMAT_H " [5]\n", ARGS_H(obj->handle))
 
   PRE (R_13) { return DWG_ERR_NOTYETSUPPORTED; }
 
@@ -3148,8 +3146,7 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
       LOG_ERROR ("Wrong object handle at pos 0x%0lx", dat->byte)
       return error;
     }
-  LOG_TRACE ("handle: %x.%d.%lX [5]\n", obj->handle.code, obj->handle.size,
-             obj->handle.value)
+  LOG_TRACE ("handle: " FORMAT_H " [5]\n", ARGS_H(obj->handle))
 
   error |= dwg_decode_eed (dat, _obj);
   if (error & (DWG_ERR_INVALIDEED | DWG_ERR_VALUEOUTOFBOUNDS))
@@ -3233,8 +3230,7 @@ dwg_decode_handleref (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 
   if (bit_read_H (dat, &ref->handleref))
     {
-      LOG_WARN ("Invalid handleref: (%d.%d.%lX)", ref->handleref.code,
-                ref->handleref.size, ref->handleref.value)
+      LOG_WARN ("Invalid handleref: " FORMAT_REF, ARGS_REF(ref))
       free (ref);
       return NULL;
     }
@@ -3353,9 +3349,8 @@ dwg_decode_handleref_with_code (Bit_Chain *restrict dat,
   if (err)
     {
       /*
-      LOG_WARN ("Invalid handleref error: 0x%x. Wanted code %d, got (%d.%d.%lX)",
-                err, code, ref->handleref.code, ref->handleref.size,
-                ref->handleref.value)
+      LOG_WARN ("Invalid handleref error: 0x%x. Wanted code %d, got (" FORMAT_H ")",
+                err, code, ARGS_H(ref->handleref))
       */
       free (ref);
       return NULL;
@@ -3727,8 +3722,8 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
         case VT_HANDLE:
         case VT_OBJECTID:
           bit_read_fixed (dat, rbuf->value.hdl, 8);
-          LOG_TRACE ("xdata[%d]: %lX [HDL %d]\n", num_xdata,
-                     (unsigned long)*(uint64_t *)rbuf->value.hdl, rbuf->type);
+          LOG_TRACE ("xdata[%d]: %X [HDL %d]\n", num_xdata,
+                     (unsigned)*(uint64_t *)rbuf->value.hdl, rbuf->type);
           break;
         case VT_INVALID:
         default:
@@ -3783,8 +3778,8 @@ check_POLYLINE_handles (Dwg_Object *obj)
         layer->obj = dwg_ref_object_relative (dwg, layer, obj);
       if (!layer || !layer->obj)
         { // maybe a reactor pointing forwards or vertex
-          LOG_WARN ("Wrong POLYLINE.layer %lX",
-                    layer ? layer->handleref.value : 0UL);
+          LOG_WARN ("Wrong POLYLINE.layer %X",
+                    layer ? layer->handleref.value : 0);
           if (_obj->num_owned > 0)
             {
               Dwg_Object_Ref *vertex = _obj->vertex[0];
@@ -3796,7 +3791,7 @@ check_POLYLINE_handles (Dwg_Object *obj)
                   Dwg_Object *seq;
                   obj->tio.entity->layer = layer = vertex;
                   LOG_WARN (
-                      "POLYLINE.layer is vertex[0] %lX, shift em, NULL seqend",
+                      "POLYLINE.layer is vertex[0] %X, shift em, NULL seqend",
                       layer->handleref.value);
                   /* shift vertices one back */
                   for (i = 0; i < _obj->num_owned - 1; i++)
@@ -3811,7 +3806,7 @@ check_POLYLINE_handles (Dwg_Object *obj)
                   seq = dwg_next_object (obj);
                   if (seq && seq->type == DWG_TYPE_SEQEND)
                     {
-                      LOG_WARN ("POLYLINE.seqend = POLYLINE+1 %lX",
+                      LOG_WARN ("POLYLINE.seqend = POLYLINE+1 %X",
                                 seq->handle.value);
                       seqend = _obj->seqend = dwg_find_objectref (dwg, seq);
                     }
@@ -3820,7 +3815,7 @@ check_POLYLINE_handles (Dwg_Object *obj)
                       seq = dwg_next_object (seqend->obj);
                       if (seq && seq->type == DWG_TYPE_SEQEND)
                         {
-                          LOG_WARN ("POLYLINE.seqend = VERTEX+1 %lX",
+                          LOG_WARN ("POLYLINE.seqend = VERTEX+1 %X",
                                     seq->handle.value);
                           seqend = _obj->seqend
                               = dwg_find_objectref (dwg, seq);
@@ -3856,7 +3851,7 @@ check_POLYLINE_handles (Dwg_Object *obj)
                    && v->obj->fixedtype != DWG_TYPE_VERTEX_PFACE
                    && v->obj->fixedtype != DWG_TYPE_VERTEX_PFACE_FACE)
             {
-              LOG_WARN ("Wrong POLYLINE.vertex[%d] %lX %s", i,
+              LOG_WARN ("Wrong POLYLINE.vertex[%d] %X %s", i,
                         v->handleref.value, v->obj->dxfname)
             }
         }
@@ -4539,8 +4534,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
               }
               if (!bit_read_H (dat, &obj->handle))
                 {
-                  LOG_TRACE ("handle: %d.%d.%lX [5]\n", obj->handle.code,
-                             obj->handle.size, obj->handle.value);
+                  LOG_TRACE ("handle: " FORMAT_H " [5]\n", ARGS_H(obj->handle));
                 }
               restartpos = dat->byte;
               obj->supertype = DWG_SUPERTYPE_UNKNOWN;
@@ -4552,7 +4546,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
 
   if (obj->handle.value)
     { // empty only with UNKNOWN
-      LOG_HANDLE (" object_map{%lX} = %lu\n", obj->handle.value,
+      LOG_HANDLE (" object_map{%X} = %lu\n", obj->handle.value,
                   (unsigned long)num);
       hash_set (dwg->object_map, obj->handle.value, (uint32_t)num);
     }
@@ -4675,7 +4669,7 @@ dwg_validate_INSERT (Dwg_Object *obj)
         return 1;
       if (!seqend || next == seqend->obj)
         {
-          LOG_TRACE ("unsorted INSERT %lX SEQEND %lX ATTRIB\n",
+          LOG_TRACE ("unsorted INSERT %X SEQEND %X ATTRIB\n",
                      obj->handle.value,
                      seqend && seqend->obj ? seqend->obj->handle.value : 0)
           return 0;
@@ -4689,7 +4683,7 @@ dwg_validate_INSERT (Dwg_Object *obj)
         return 1;
       if (!seqend || next == seqend->obj)
         {
-          LOG_TRACE ("unsorted INSERT %lX SEQEND %lX ATTRIB\n",
+          LOG_TRACE ("unsorted INSERT %X SEQEND %X ATTRIB\n",
                      obj->handle.value,
                      seqend && seqend->obj ? seqend->obj->handle.value : 0)
           return 0;
@@ -4777,7 +4771,7 @@ dwg_validate_POLYLINE (Dwg_Object *obj)
              layer,vertex*,seqend. check the types then also */
           if (first_vertex->obj->index < obj->index)
             {
-              LOG_WARN ("skip wrong POLYLINE.vertex[0] handle %lX < %lX\n",
+              LOG_WARN ("skip wrong POLYLINE.vertex[0] handle %X < %X\n",
                         first_vertex->obj->handle.value, obj->handle.value);
               if (_obj->num_owned > 1)
                 first_vertex = _obj->vertex[1];

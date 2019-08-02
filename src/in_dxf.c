@@ -219,8 +219,8 @@ dxf_read_pair (Bit_Chain *dat)
     case VT_HANDLE:
     case VT_OBJECTID:
       dxf_read_string (dat, NULL);
-      sscanf (buf, "%X", &pair->value.i);
-      LOG_TRACE ("  dxf (%d, %X)\n", (int)pair->code, pair->value.i);
+      sscanf (buf, "%X", &pair->value.u);
+      LOG_TRACE ("  dxf (%d, %X)\n", (int)pair->code, pair->value.u);
       break;
     case VT_INVALID:
     default:
@@ -298,7 +298,7 @@ dxf_check_code (Bit_Chain *dat, Dxf_Pair *pair, int code)
     {                                                                         \
       if (GROUP (dxf))                                                        \
         {                                                                     \
-          int i = sscanf ((char *)&dat->chain[dat->byte], "%lX",              \
+          int i = sscanf ((char *)&dat->chain[dat->byte], "%X",               \
                           &hdlptr->absolute_ref);                             \
           dat->byte += i;                                                     \
         }                                                                     \
@@ -728,8 +728,7 @@ dxf_check_code (Bit_Chain *dat, Dxf_Pair *pair, int code)
     _ent = obj->tio.entity;                                                   \
     _obj = ent = _ent->tio.token;                                             \
     obj->fixedtype = DWG_TYPE_##token;                                        \
-    LOG_TRACE ("Entity handle: %d.%d.%lX\n", obj->handle.code,                \
-               obj->handle.size, obj->handle.value)
+    LOG_TRACE ("Entity handle: " FORMAT_H "\n", ARGS_H(obj->handle))
 
 #define DWG_ENTITY_END                                                        \
   return error;                                                               \
@@ -748,8 +747,7 @@ dxf_check_code (Bit_Chain *dat, Dxf_Pair *pair, int code)
     obj->fixedtype = DWG_TYPE_##token;                                        \
     LOG_INFO ("Object " #token ":\n")                                         \
     _obj = obj->tio.object->tio.token;                                        \
-    LOG_TRACE ("Object handle: %d.%d.%lX\n", obj->handle.code,                \
-               obj->handle.size, obj->handle.value)
+    LOG_TRACE ("Object handle: " FORMAT_H "\n", ARGS_H(obj->handle))
 
 #define DWG_OBJECT_END                                                        \
   return error;                                                               \
@@ -1102,8 +1100,8 @@ dwg_indxf_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
               LOG_WARN ("Unknown object, skipping eed/reactors/xdic");
               SINCE (R_2000){
                 LOG_INFO ("Object bitsize: %u\n", obj->bitsize)
-              } LOG_INFO ("Object handle: %d.%d.%lX\n", obj->handle.code,
-                          obj->handle.size, obj->handle.value);
+              }
+              LOG_INFO ("Object handle: " FORMAT_H "\n", ARGS_H(obj->handle));
             }
         }
     }
@@ -1430,7 +1428,45 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 //  return obj;
 //}
 
-#define ADD_TYPE(nam, typenam)                                       \
+// May need obj to shorten the code to relative offset, but not in header_vars.
+int add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code,
+                BITCODE_RL value, Dwg_Object *restrict obj)
+{
+  int offset = obj ? (value - (int)obj->handle.value) : 0;
+  hdl->code = code;
+  hdl->value = value;
+  hdl->size = 1;
+  if (hdl->value > 255) //TODO see bits_write_H
+    hdl->size = 2;
+  if (code != 5 &&
+      obj && abs(offset) == 1)
+    {
+      // change code to 6.0.0 or 8.0.0
+      if (offset == 1)
+        {
+          hdl->code = 6; hdl->value = 0L; hdl->size = 0;
+        }
+      else if (offset == -1)
+        {
+          hdl->code = 8; hdl->value = 0L; hdl->size = 0;
+        }
+    }
+  return 0;
+}
+
+Dwg_Object_Ref *
+add_handleref (BITCODE_RC code, BITCODE_RL value, Dwg_Object *obj)
+{
+  Dwg_Object_Ref *ref = calloc (1, sizeof (Dwg_Object_Ref));
+
+  add_handle (&ref->handleref, code, value, obj);
+  ref->absolute_ref = value;
+  // fill ->obj later
+  return ref;
+}
+
+
+#define ADD_OBJECT(nam, typenam)                                     \
   if (strEQc (name, nam))                                            \
     {                                                                \
       obj->type = obj->fixedtype = DWG_TYPE_##typenam;               \
@@ -1477,25 +1513,25 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   strcat (ctrlname, "_CONTROL");
   LOG_TRACE ("add %s\n", ctrlname);
 
-  ADD_TYPE ("LTYPE", LTYPE_CONTROL)
+  ADD_OBJECT ("LTYPE", LTYPE_CONTROL)
   else
-  ADD_TYPE ("VPORT", VPORT_CONTROL)
+  ADD_OBJECT ("VPORT", VPORT_CONTROL)
   else
-  ADD_TYPE ("APPID", APPID_CONTROL)
+  ADD_OBJECT ("APPID", APPID_CONTROL)
   else
-  ADD_TYPE ("BLOCK", BLOCK_CONTROL)
+  ADD_OBJECT ("BLOCK", BLOCK_CONTROL)
   else
-  ADD_TYPE ("DIMSTYLE", DIMSTYLE_CONTROL)
+  ADD_OBJECT ("DIMSTYLE", DIMSTYLE_CONTROL)
   else
-  ADD_TYPE ("LAYER", LAYER_CONTROL)
+  ADD_OBJECT ("LAYER", LAYER_CONTROL)
   else
-  ADD_TYPE ("STYLE", STYLE_CONTROL)
+  ADD_OBJECT ("STYLE", STYLE_CONTROL)
   else
-  ADD_TYPE ("UCS", UCS_CONTROL)
+  ADD_OBJECT ("UCS", UCS_CONTROL)
   else
-  ADD_TYPE ("VIEW", VIEW_CONTROL)
+  ADD_OBJECT ("VIEW", VIEW_CONTROL)
   else
-  ADD_TYPE ("VPORT_ENTITY", VPORT_ENTITY_CONTROL)
+  ADD_OBJECT ("VPORT_ENTITY", VPORT_ENTITY_CONTROL)
   else
     {
       LOG_ERROR ("Unknown DXF TABLE %s nor %s_CONTROL", name, name);
@@ -1516,52 +1552,51 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
         {
         case 5:
           {
+            Dwg_Object_Ref *ref;
             char ctrlobj[80];
-            obj->handle.code = 0;
-            obj->handle.value = pair->value.i;
-            obj->handle.size = 1;
-            if (obj->handle.value > 255) //TODO see bits_write_H
-              obj->handle.size = 2;
+            add_handle (&obj->handle, 0, pair->value.u, NULL);
+            LOG_TRACE ("%s.handle = " FORMAT_H " [5]\n", ctrlname,
+                       ARGS_H(obj->handle));
+
+            // also set the matching HEADER.*_CONTROL_OBJECT
+            ref = add_handleref (3, pair->value.u, obj);
             strcpy (ctrlobj, ctrlname);
             strcat (ctrlobj, "_OBJECT");
-            //set HEADER.*_CONTROL_OBJECT
-            dwg_dynapi_header_set_value (dwg, ctrlobj, &obj->handle, 0);
-            LOG_TRACE ("%s.handle = (%d,%d,%lX) [5]\n", ctrlname,
-                       obj->handle.code, obj->handle.size, obj->handle.value);
+            dwg_dynapi_header_set_value (dwg, ctrlobj, &ref, 0);
+            LOG_TRACE ("HEADER.%s = " FORMAT_REF " [0]\n", ctrlobj,
+                       ARGS_REF(ref));
           }
           break;
         case 330: // ownerhandle mostly 0
-          if (pair->value.i)
+          if (pair->value.u)
             {
-              LOG_WARN ("Unhandled %s.ownerhandle %X [330]",  ctrlname,
-                        (unsigned)pair->value.i);
-              //LOG_TRACE ("%s.ownerhandle = (%d,%d,%lX) [330]\n", ctrlname,
-              //           obj->handle.code, obj->handle.size, obj->handle.value);
-              //  obj->tio.object->ownerhandle = ??
+              obj->tio.object->ownerhandle = add_handleref (4, pair->value.u, obj);
+              LOG_TRACE ("%s.ownerhandle = " FORMAT_REF " [330]\n", ctrlname,
+                         ARGS_REF(obj->tio.object->ownerhandle));
             }
           break;
         case 100: // Always AcDbSymbolTable. ignore
           break;
         case 360: // {ACAD_XDICTIONARY TODO
-          LOG_WARN ("Unhandled %s.xdicobjhandle = %X [360]\n", ctrlname,
-                    /*obj->handle.code, obj->handle.size, obj->handle.value, */
-                    (unsigned)pair->value.i);
-          // fall through
+          obj->tio.object->xdicobjhandle = add_handleref (0, pair->value.u, obj);
+          LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [330]\n", ctrlname,
+                     ARGS_REF(obj->tio.object->xdicobjhandle));
+          break;
         case 102: // {ACAD_XDICTIONARY TODO
           break;
         case 70:
           dwg_dynapi_entity_set_value (_obj, obj->name, "num_entries",
                                        &pair->value, is_utf);
-          LOG_TRACE ("%s.num_entries = %d [70]\n", ctrlname,
-                     pair->value.i)
+          LOG_TRACE ("%s.num_entries = %u [70]\n", ctrlname,
+                     pair->value.u)
           break;
         case 71:
           if (strEQc (name, "DIMSTYLE"))
             {
               dwg_dynapi_entity_set_value (_obj, obj->name, "num_more_handles",
                                            &pair->value, is_utf);
-              LOG_TRACE ("%s.more_handles = %d [71]\n", ctrlname,
-                         pair->value.i)
+              LOG_TRACE ("%s.more_handles = %u [71]\n", ctrlname,
+                         pair->value.u)
               break;
             }
           // fall through
@@ -1593,23 +1628,23 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
 
   LOG_TRACE ("add %s\n", name);
 
-  ADD_TYPE ("LTYPE", LTYPE)
+  ADD_OBJECT ("LTYPE", LTYPE)
   else
-  ADD_TYPE ("VPORT", VPORT)
+  ADD_OBJECT ("VPORT", VPORT)
   else
-  ADD_TYPE ("APPID", APPID)
+  ADD_OBJECT ("APPID", APPID)
   else
-  ADD_TYPE ("DIMSTYLE", DIMSTYLE)
+  ADD_OBJECT ("DIMSTYLE", DIMSTYLE)
   else
-  ADD_TYPE ("LAYER", LAYER)
+  ADD_OBJECT ("LAYER", LAYER)
   else
-  ADD_TYPE ("STYLE", STYLE)
+  ADD_OBJECT ("STYLE", STYLE)
   else
-  ADD_TYPE ("UCS", UCS)
+  ADD_OBJECT ("UCS", UCS)
   else
-  ADD_TYPE ("VIEW", VIEW)
+  ADD_OBJECT ("VIEW", VIEW)
   //else
-  //ADD_TYPE ("VPORT_ENTITY", VPORT_ENTITY)
+  //ADD_OBJECT ("VPORT_ENTITY", VPORT_ENTITY)
   else
     {
       LOG_ERROR ("Unknown DXF AcDbSymbolTableRecord %s", name);
@@ -1628,26 +1663,17 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
         { // TABLE common flags: name, xrefref, xrefdep, ...
         case 5:
           {
-            obj->handle.code = 0;
-            obj->handle.value = pair->value.i;
-            obj->handle.size = 1;
-            if (obj->handle.value > 255) //TODO see bits_write_H
-              obj->handle.size = 2;
-            LOG_TRACE ("%s.handle = (%d,%d,%lX) [5]\n", name,
-                       obj->handle.code, obj->handle.size, obj->handle.value);
+            add_handle (&obj->handle, 0, pair->value.u, NULL);
+            LOG_TRACE ("%s.handle = " FORMAT_H " [5]\n", name,
+                       ARGS_H(obj->handle));
           }
           break;
         case 330:
-          if (pair->value.i)
+          if (pair->value.u)
             {
-              Dwg_Object_Ref *ref = calloc (1, sizeof (Dwg_Object_Ref));
-              Dwg_Handle *ohdl;
-              ref->handleref.code = 4;
-              ref->handleref.value = ref->absolute_ref = pair->value.i;
-              ref->handleref.size = 1;
-              obj->tio.object->ownerhandle = ref;
-              LOG_TRACE ("%s.ownerhandle = (%d,%d,%lX) [330]\n", name,
-                       ref->handleref.code, ref->handleref.size, ref->handleref.value);
+              obj->tio.object->ownerhandle = add_handleref (4, pair->value.u, obj);
+              LOG_TRACE ("%s.ownerhandle = " FORMAT_REF " [330]\n", name,
+                         ARGS_REF(obj->tio.object->ownerhandle));
             }
           break;
         case 100: // Always AcDbSymbolTableRecord and then AcDb*TableRecord. ignore
@@ -1655,7 +1681,7 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
         case 360: // {ACAD_XDICTIONARY TODO
           LOG_WARN ("Unhandled %s.xdicobjhandle = %X [360]\n", name,
                     /*obj->handle.code, obj->handle.size, obj->handle.value, */
-                    (unsigned)pair->value.i);
+                    pair->value.u);
           // fall through
         case 102: // {ACAD_XDICTIONARY TODO
           break;

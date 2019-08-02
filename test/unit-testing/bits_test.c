@@ -304,8 +304,9 @@ main (int argc, char const *argv[])
   bit_write_RL_tests ();
   bit_read_RD_tests ();
   bit_write_RD_tests ();
-  // bit_read_H_tests();
-  // bit_write_H_tests();
+  //TODO
+  //bit_read_H_tests();
+  //bit_write_H_tests();
 
   // Prepare the testcase
   bitchain.size = 100;
@@ -498,9 +499,8 @@ main (int argc, char const *argv[])
         if (bitchain.byte == byte && bitchain.bit == 4)
           pass ();
         else
-          fail ("bit_write_H (%d.%d.%ld) @%lu.%d", handles[i].code,
-                handles[i].size, handles[i].value, bitchain.byte,
-                bitchain.bit);
+          fail ("bit_write_H (" FORMAT_H ") @%lu.%d", ARGS_H(handles[i]),
+                bitchain.byte, bitchain.bit);
 
         bit_set_position (&bitchain, pos);
         bit_read_H (&bitchain, &handle);
@@ -508,8 +508,7 @@ main (int argc, char const *argv[])
             && handle.value == handles[i].value)
           pass ();
         else
-          fail ("bit_read_H (%d.%d.%lu)", handle.code, handle.size,
-                handle.value);
+          fail ("bit_read_H (" FORMAT_H ")", ARGS_H(handle));
 
         bit_set_position (&bitchain, pos);
       }

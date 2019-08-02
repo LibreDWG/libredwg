@@ -1978,7 +1978,7 @@ DWG_OBJECT(DICTIONARY)
     }
   if (FIELD_VALUE(numitems) > 10000)
     {
-      LOG_ERROR("Invalid dictionary with more than 10.000 entries. Handle: %lu\n",
+      LOG_ERROR("Invalid dictionary with more than 10.000 entries. Handle: %X\n",
               obj->handle.value);
       DEBUG_HERE_OBJ
       return DWG_ERR_VALUEOUTOFBOUNDS;
@@ -2033,7 +2033,7 @@ DWG_OBJECT(DICTIONARYWDFLT)
 #endif
   if (FIELD_VALUE(numitems) > 10000)
     {
-      LOG_ERROR("Invalid dictionary with more than 10.000 entries. Handle: %lu\n",
+      LOG_ERROR("Invalid dictionary with more than 10.000 entries. Handle: %X\n",
               obj->handle.value);
       DEBUG_HERE_OBJ
       return DWG_ERR_VALUEOUTOFBOUNDS;
