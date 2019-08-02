@@ -44,7 +44,7 @@ typedef struct _dxf_pair
 {
   short code;
   enum RES_BUF_VALUE_TYPE type;
-  union
+  union // must be big enough for setting BD
   {
     unsigned int u;
     int i;

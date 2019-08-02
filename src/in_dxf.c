@@ -1898,19 +1898,27 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
             const Dwg_DYNAPI_field *fields = dwg_dynapi_entity_fields (name);
             for (f = &fields[0]; f->name; f++)
               {
-                if (f->dxf == pair->code ||
-                    (*f->type == '3' &&
-                     (f->dxf + 10 == pair->code ||
-                      f->dxf + 20 == pair->code)) ||
-                    (*f->type == '2' &&
-                     f->dxf + 10 == pair->code))
+                if (f->dxf == pair->code)
                   {
-                    dwg_dynapi_entity_set_value (_obj, name, f->name,
-                                                 &pair->value, is_utf);
+                    if (f->size > 8) // only 2D or 3D points
+                      {
+                        BITCODE_3BD pt;
+                        pt.x = pair->value.d;
+                        dwg_dynapi_entity_set_value (_obj, name, f->name,
+                                                     &pt, is_utf);
+                      }
+                    else
+                      dwg_dynapi_entity_set_value (_obj, name, f->name,
+                                                   &pair->value, is_utf);
                     if (f->is_string)
                       {
                         LOG_TRACE ("%s.%s = %s [%d %s]\n", name, f->name,
                                    pair->value.s, pair->code, f->type);
+                      }
+                    else if (strchr (&f->type[1], 'D'))
+                      {
+                        LOG_TRACE ("%s.%s = %f [%d %s]\n", name, f->name,
+                                   pair->value.d, pair->code, f->type);
                       }
                     else
                       {
@@ -1919,12 +1927,45 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
                       }
                     goto next_pair; // found, early exit
                   }
+                else
+                if ((*f->type == '3' || *f->type == '2') &&
+                    f->dxf + 10 == pair->code)
+                  {
+                    BITCODE_3DPOINT pt;
+                    if (pair->value.d == 0.0)
+                      goto next_pair;
+                    dwg_dynapi_entity_value (_obj, name, f->name,
+                                             &pt, NULL);
+                    pt.y = pair->value.d;
+                    dwg_dynapi_entity_set_value (_obj, name, f->name,
+                                                 &pt, is_utf);
+                    LOG_TRACE ("%s.%s.y = %f [%d %s]\n", name, f->name,
+                               pair->value.d, pair->code, f->type);
+                    goto next_pair; // found, early exit
+                  }
+                else
+                if (*f->type == '3' &&
+                    f->dxf + 20 == pair->code)
+                  {
+                    BITCODE_3DPOINT pt;
+                    if (pair->value.d == 0.0)
+                      goto next_pair;
+                    dwg_dynapi_entity_value (_obj, name, f->name,
+                                             &pt, NULL);
+                    pt.z = pair->value.d;
+                    dwg_dynapi_entity_set_value (_obj, name, f->name,
+                                                 &pt, is_utf);
+                    LOG_TRACE ("%s.%s.z = %f [%d %s]\n", name, f->name,
+                               pair->value.d, pair->code, f->type);
+                    goto next_pair; // found, early exit
+                  }
               }
+
             fields = dwg_dynapi_common_object_fields ();
             for (f = &fields[0]; f->name; f++)
               {
-                if (f->dxf == pair->code)
-                  {
+                if (f->dxf == pair->code) // TODO alt. color fields
+                  { // TODO resolve handle names
                     dwg_dynapi_common_set_value (_obj, f->name,
                                                  &pair->value, is_utf);
                     if (f->is_string)
