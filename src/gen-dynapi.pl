@@ -890,6 +890,18 @@ dwg_dynapi_entity_fields (const char *name)
 }
 
 EXPORT const Dwg_DYNAPI_field *
+dwg_dynapi_common_entity_fields (void)
+{
+  return _dwg_object_entity_fields;
+}
+
+EXPORT const Dwg_DYNAPI_field *
+dwg_dynapi_common_object_fields (void)
+{
+  return _dwg_object_object_fields;
+}
+
+EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_entity_field (const char *restrict name, const char *restrict field)
 {
   const Dwg_DYNAPI_field *fields = dwg_dynapi_entity_fields (name);

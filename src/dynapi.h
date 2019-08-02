@@ -127,6 +127,12 @@ dwg_dynapi_common_object_field (const char *restrict fieldname)
 EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_entity_fields (const char *restrict name) __nonnull ((1));
 
+EXPORT const Dwg_DYNAPI_field *
+dwg_dynapi_common_entity_fields (void);
+
+EXPORT const Dwg_DYNAPI_field *
+dwg_dynapi_common_object_fields (void);
+
 #endif
 
 #endif

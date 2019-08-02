@@ -1892,13 +1892,18 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
                                        &pair->value, is_utf);
           LOG_TRACE ("%s.flag = %d [70]\n", name, pair->value.i)
           break;
-        default: // TODO specific fields, search
-          {
+        default:
+          { // search all specific fields and common fields for the DXF
             const Dwg_DYNAPI_field *f;
             const Dwg_DYNAPI_field *fields = dwg_dynapi_entity_fields (name);
             for (f = &fields[0]; f->name; f++)
               {
-                if (f->dxf == pair->code)
+                if (f->dxf == pair->code ||
+                    (*f->type == '3' &&
+                     (f->dxf + 10 == pair->code ||
+                      f->dxf + 20 == pair->code)) ||
+                    (*f->type == '2' &&
+                     f->dxf + 10 == pair->code))
                   {
                     dwg_dynapi_entity_set_value (_obj, name, f->name,
                                                  &pair->value, is_utf);
@@ -1912,12 +1917,34 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
                         LOG_TRACE ("%s.%s = %ld [%d %s]\n", name, f->name,
                                    pair->value.l, pair->code, f->type);
                       }
-                    break;
+                    goto next_pair; // found, early exit
                   }
               }
+            fields = dwg_dynapi_common_object_fields ();
+            for (f = &fields[0]; f->name; f++)
+              {
+                if (f->dxf == pair->code)
+                  {
+                    dwg_dynapi_common_set_value (_obj, f->name,
+                                                 &pair->value, is_utf);
+                    if (f->is_string)
+                      {
+                        LOG_TRACE ("%s = %s [%d %s]\n", f->name,
+                                   pair->value.s, pair->code, f->type);
+                      }
+                    else
+                      {
+                        LOG_TRACE ("%s = %ld [%d %s]\n", f->name,
+                                   pair->value.l, pair->code, f->type);
+                      }
+                    goto next_pair; // found, early exit
+                  }
+              }
+
             LOG_WARN ("Unknown DXF code %d for %s", pair->code, name);
           }
         }
+    next_pair:
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
     }
