@@ -38,6 +38,11 @@
 #include "encode.h"
 #include "dynapi.h"
 
+#ifndef _DWG_API_H_
+Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
+                                       int *restrict error);
+#endif
+
 static unsigned int loglevel;
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
@@ -1450,6 +1455,92 @@ add_handleref (BITCODE_RC code, BITCODE_RL value, Dwg_Object *obj)
   return ref;
 }
 
+static void
+add_eed (Dwg_Object *restrict obj, const char *restrict name,
+         Dxf_Pair *restrict pair)
+{
+  int i = obj->tio.object->num_eed; // same layout for Object and Entity
+  int code, size, j = 0;
+  Dwg_Eed *eed = obj->tio.object->eed;
+
+  eed = (Dwg_Eed *)realloc (eed, (i + 1) * sizeof (Dwg_Eed));
+  memset (&eed[i], 0, sizeof (Dwg_Eed));
+  obj->tio.object->num_eed++;
+  // handle: usually APPID "ACAD"
+  code = pair->code - 1000; // 1000
+  switch (code)
+    {
+    case 0:
+      /* code [RC] + len+0 + length [RC] + codepage [RS] */
+      size = 1 + strlen (pair->value.s) + 1 + 1 + 2;
+      eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
+      eed[i].data->code = code; // 1000
+      eed[i].data->u.eed_0.length = strlen (pair->value.s);
+      eed[i].data->u.eed_0.codepage = 30;
+      strcpy (eed[i].data->u.eed_0.string, pair->value.s);
+      eed[i].size += size;
+      break;
+    case 2:
+      /* code [RC] + byte [RC] */
+      size = 1 + 1;
+      eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
+      eed[i].data->code = code; // 1002
+      eed[i].data->u.eed_2.byte = (BITCODE_RC)pair->value.i;
+      eed[i].size += size;
+      break;
+    case 4:
+      /* code [RC] + len+0 + length [RC] */
+      size = 1 + strlen (pair->value.s) + 1 + 1;
+      eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
+      eed[i].data->code = code; // 1004
+      eed[i].data->u.eed_4.length = strlen (pair->value.s);
+      strcpy (eed[i].data->u.eed_4.data, pair->value.s);
+      eed[i].size += size;
+      break;
+    case 40:
+      /* code [RC] + RD */
+      size = 1 + 8;
+      eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
+      eed[i].data->code = code; // 1071
+      eed[i].data->u.eed_40.real = pair->value.d;
+      eed[i].size += size;
+      break;
+    case 70:
+      /* code [RC] + RS */
+      size = 1 + 2;
+      eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
+      eed[i].data->code = code; // 1071
+      eed[i].data->u.eed_70.rs = pair->value.i;
+      eed[i].size += size;
+      break;
+    case 71:
+      /* code [RC] + RL */
+      size = 1 + 4;
+      eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
+      eed[i].data->code = code; // 1071
+      eed[i].data->u.eed_71.rl = pair->value.l;
+      eed[i].size += size;
+      break;
+    case 1:
+      {
+        if (strEQc (pair->value.s, "ACAD"))
+          {
+            // search in APPID table
+            Dwg_Handle hdl = { 5, 1, 0x12 };
+            size = sizeof (Dwg_Handle);
+            add_handle (&hdl, 5, 12, NULL);
+            memcpy (&eed[i].handle, &hdl, sizeof (hdl));
+            eed[i].size += size;
+            break;
+          }
+      }
+      // fall through
+    default:
+      LOG_ERROR ("Not yet implemented EED.code %d", pair->code);
+    }
+  return;
+}
+
 #define NEW_OBJECT(dwg, obj)                    \
   {                                             \
     BITCODE_BL idx = dwg->num_objects;          \
@@ -1663,7 +1754,13 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
             }
           // fall through
         default:
-          LOG_ERROR ("Unknown DXF code %d for %s", pair->code, ctrlname);
+          if (pair->code >= 1000 && pair->code < 1999)
+            {
+              //LOG_WARN ("TODO %s.eed.%d", ctrlname, pair->code);
+              add_eed (obj, ctrlname, pair);
+            }
+          else
+            LOG_ERROR ("Unknown DXF code %d for %s", pair->code, ctrlname);
         }
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);

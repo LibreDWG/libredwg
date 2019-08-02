@@ -4136,7 +4136,7 @@ dwg_dynapi_entity_field (const char *restrict name, const char *restrict field)
       Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)fields;
       for (; f->name; f++)
         {
-          if (strcmp (f->name, field) == 0)
+          if (strEQ (f->name, field))
             return f;
         }
     }
@@ -4183,7 +4183,7 @@ dwg_dynapi_entity_value (void *restrict _obj, const char *restrict name,
   {
     int error;
     const Dwg_Object* obj = dwg_obj_generic_to_object (_obj, &error);
-    if (obj && strcmp (obj->name, name)) // objid may be 0
+    if (obj && strNE (obj->name, name)) // objid may be 0
       {
         const int loglevel = obj->parent->opts & 0xf;
         LOG_ERROR ("%s: Invalid entity type %s, wanted %s", __FUNCTION__,
@@ -4222,7 +4222,7 @@ dwg_dynapi_entity_utf8text (void *restrict _obj, const char *restrict name,
   {
     int error;
     const Dwg_Object* obj = dwg_obj_generic_to_object (_obj, &error);
-    if (obj && strcmp (obj->name, name)) // objid may be 0
+    if (obj && strNE (obj->name, name)) // objid may be 0
       {
         const int loglevel = obj->parent->opts & 0xf;
         LOG_ERROR ("%s: Invalid entity type %s, wanted %s", __FUNCTION__,
@@ -4246,7 +4246,7 @@ dwg_dynapi_entity_utf8text (void *restrict _obj, const char *restrict name,
       if (fp)
         memcpy (fp, f, sizeof (Dwg_DYNAPI_field));
 
-      if (dwg_version >= R_2007 && strcmp (f->type, "TF")) /* not TF */
+      if (dwg_version >= R_2007 && strNE (f->type, "TF")) /* not TF */
         {
           BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
           char *utf8 = bit_convert_TU (wstr);
@@ -4313,7 +4313,7 @@ dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
         if (fp)
           memcpy (fp, f, sizeof (Dwg_DYNAPI_field));
 
-        if (dwg_version >= R_2007 && strcmp (f->type, "TF")) /* not TF */
+        if (dwg_version >= R_2007 && strNE (f->type, "TF")) /* not TF */
           {
             BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
             char *utf8 = bit_convert_TU (wstr);
@@ -4442,7 +4442,7 @@ dwg_dynapi_common_utf8text(void *restrict _obj, const char *restrict fieldname,
         if (fp)
           memcpy (fp, f, sizeof(Dwg_DYNAPI_field));
 
-        if (dwg_version >= R_2007 && strcmp (f->type, "TF")) /* not TF */
+        if (dwg_version >= R_2007 && strNE (f->type, "TF")) /* not TF */
           {
             BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
             char *utf8 = bit_convert_TU (wstr);
@@ -4524,7 +4524,7 @@ dwg_dynapi_entity_set_value (void *restrict _obj, const char *restrict name,
   {
     int error;
     const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
-    if (obj && strcmp (obj->name, name))
+    if (obj && strNE (obj->name, name))
       {
         const int loglevel = obj->parent->opts & 0xf;
         LOG_ERROR ("%s: Invalid entity type %s, wanted %s", __FUNCTION__,
@@ -4665,7 +4665,7 @@ dwg_dynapi_handle_name (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict h
 
     if (!f || !f->is_string)
       return NULL;
-    if (dwg_version >= R_2007 && strcmp (f->type, "TF")) /* not TF */
+    if (dwg_version >= R_2007 && strNE (f->type, "TF")) /* not TF */
       {
         BITCODE_TU wstr = *(BITCODE_TU *)((char *)_obj + f->offset);
         return bit_convert_TU (wstr);

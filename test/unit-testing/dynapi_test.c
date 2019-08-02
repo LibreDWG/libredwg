@@ -5492,7 +5492,7 @@ static int test__3DSOLID (const Dwg_Object *obj)
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "acis_data", &acis_data, NULL)
         && acis_data
-           ? !strcmp ((char *)acis_data, (char *)_3dsolid->acis_data)
+           ? strEQ ((char *)acis_data, (char *)_3dsolid->acis_data)
            : !_3dsolid->acis_data)
       pass ();
     else
@@ -5959,7 +5959,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     BITCODE_TV blockname;
     if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "blockname", &blockname, NULL)
         && blockname
-           ? !strcmp ((char *)blockname, (char *)arc_dimension->blockname)
+           ? strEQ ((char *)blockname, (char *)arc_dimension->blockname)
            : !arc_dimension->blockname)
       pass ();
     else
@@ -6257,7 +6257,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     BITCODE_TV user_text;
     if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "user_text", &user_text, NULL)
         && user_text
-           ? !strcmp ((char *)user_text, (char *)arc_dimension->user_text)
+           ? strEQ ((char *)user_text, (char *)arc_dimension->user_text)
            : !arc_dimension->user_text)
       pass ();
     else
@@ -6386,7 +6386,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
     BITCODE_TV default_value;
     if (dwg_dynapi_entity_value (attdef, "ATTDEF", "default_value", &default_value, NULL)
         && default_value
-           ? !strcmp ((char *)default_value, (char *)attdef->default_value)
+           ? strEQ ((char *)default_value, (char *)attdef->default_value)
            : !attdef->default_value)
       pass ();
     else
@@ -6556,7 +6556,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
     BITCODE_TV prompt;
     if (dwg_dynapi_entity_value (attdef, "ATTDEF", "prompt", &prompt, NULL)
         && prompt
-           ? !strcmp ((char *)prompt, (char *)attdef->prompt)
+           ? strEQ ((char *)prompt, (char *)attdef->prompt)
            : !attdef->prompt)
       pass ();
     else
@@ -6590,7 +6590,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
     BITCODE_TV tag;
     if (dwg_dynapi_entity_value (attdef, "ATTDEF", "tag", &tag, NULL)
         && tag
-           ? !strcmp ((char *)tag, (char *)attdef->tag)
+           ? strEQ ((char *)tag, (char *)attdef->tag)
            : !attdef->tag)
       pass ();
     else
@@ -6951,7 +6951,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
     BITCODE_TV tag;
     if (dwg_dynapi_entity_value (attrib, "ATTRIB", "tag", &tag, NULL)
         && tag
-           ? !strcmp ((char *)tag, (char *)attrib->tag)
+           ? strEQ ((char *)tag, (char *)attrib->tag)
            : !attrib->tag)
       pass ();
     else
@@ -6961,7 +6961,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
     BITCODE_TV text_value;
     if (dwg_dynapi_entity_value (attrib, "ATTRIB", "text_value", &text_value, NULL)
         && text_value
-           ? !strcmp ((char *)text_value, (char *)attrib->text_value)
+           ? strEQ ((char *)text_value, (char *)attrib->text_value)
            : !attrib->text_value)
       pass ();
     else
@@ -7042,7 +7042,7 @@ static int test_BLOCK (const Dwg_Object *obj)
     BITCODE_TV name;
     if (dwg_dynapi_entity_value (block, "BLOCK", "name", &name, NULL)
         && name
-           ? !strcmp ((char *)name, (char *)block->name)
+           ? strEQ ((char *)name, (char *)block->name)
            : !block->name)
       pass ();
     else
@@ -7208,7 +7208,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
     BITCODE_TV blockname;
     if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "blockname", &blockname, NULL)
         && blockname
-           ? !strcmp ((char *)blockname, (char *)dimension_aligned->blockname)
+           ? strEQ ((char *)blockname, (char *)dimension_aligned->blockname)
            : !dimension_aligned->blockname)
       pass ();
     else
@@ -7482,7 +7482,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
     BITCODE_TV user_text;
     if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "user_text", &user_text, NULL)
         && user_text
-           ? !strcmp ((char *)user_text, (char *)dimension_aligned->user_text)
+           ? strEQ ((char *)user_text, (char *)dimension_aligned->user_text)
            : !dimension_aligned->user_text)
       pass ();
     else
@@ -7563,7 +7563,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
     BITCODE_TV blockname;
     if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "blockname", &blockname, NULL)
         && blockname
-           ? !strcmp ((char *)blockname, (char *)dimension_ang2ln->blockname)
+           ? strEQ ((char *)blockname, (char *)dimension_ang2ln->blockname)
            : !dimension_ang2ln->blockname)
       pass ();
     else
@@ -7829,7 +7829,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
     BITCODE_TV user_text;
     if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "user_text", &user_text, NULL)
         && user_text
-           ? !strcmp ((char *)user_text, (char *)dimension_ang2ln->user_text)
+           ? strEQ ((char *)user_text, (char *)dimension_ang2ln->user_text)
            : !dimension_ang2ln->user_text)
       pass ();
     else
@@ -7902,7 +7902,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
     BITCODE_TV blockname;
     if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "blockname", &blockname, NULL)
         && blockname
-           ? !strcmp ((char *)blockname, (char *)dimension_ang3pt->blockname)
+           ? strEQ ((char *)blockname, (char *)dimension_ang3pt->blockname)
            : !dimension_ang3pt->blockname)
       pass ();
     else
@@ -8168,7 +8168,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
     BITCODE_TV user_text;
     if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "user_text", &user_text, NULL)
         && user_text
-           ? !strcmp ((char *)user_text, (char *)dimension_ang3pt->user_text)
+           ? strEQ ((char *)user_text, (char *)dimension_ang3pt->user_text)
            : !dimension_ang3pt->user_text)
       pass ();
     else
@@ -8225,7 +8225,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
     BITCODE_TV blockname;
     if (dwg_dynapi_entity_value (dimension_diameter, "DIMENSION_DIAMETER", "blockname", &blockname, NULL)
         && blockname
-           ? !strcmp ((char *)blockname, (char *)dimension_diameter->blockname)
+           ? strEQ ((char *)blockname, (char *)dimension_diameter->blockname)
            : !dimension_diameter->blockname)
       pass ();
     else
@@ -8507,7 +8507,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
     BITCODE_TV user_text;
     if (dwg_dynapi_entity_value (dimension_diameter, "DIMENSION_DIAMETER", "user_text", &user_text, NULL)
         && user_text
-           ? !strcmp ((char *)user_text, (char *)dimension_diameter->user_text)
+           ? strEQ ((char *)user_text, (char *)dimension_diameter->user_text)
            : !dimension_diameter->user_text)
       pass ();
     else
@@ -8580,7 +8580,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
     BITCODE_TV blockname;
     if (dwg_dynapi_entity_value (dimension_linear, "DIMENSION_LINEAR", "blockname", &blockname, NULL)
         && blockname
-           ? !strcmp ((char *)blockname, (char *)dimension_linear->blockname)
+           ? strEQ ((char *)blockname, (char *)dimension_linear->blockname)
            : !dimension_linear->blockname)
       pass ();
     else
@@ -8870,7 +8870,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
     BITCODE_TV user_text;
     if (dwg_dynapi_entity_value (dimension_linear, "DIMENSION_LINEAR", "user_text", &user_text, NULL)
         && user_text
-           ? !strcmp ((char *)user_text, (char *)dimension_linear->user_text)
+           ? strEQ ((char *)user_text, (char *)dimension_linear->user_text)
            : !dimension_linear->user_text)
       pass ();
     else
@@ -8927,7 +8927,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
     BITCODE_TV blockname;
     if (dwg_dynapi_entity_value (dimension_ordinate, "DIMENSION_ORDINATE", "blockname", &blockname, NULL)
         && blockname
-           ? !strcmp ((char *)blockname, (char *)dimension_ordinate->blockname)
+           ? strEQ ((char *)blockname, (char *)dimension_ordinate->blockname)
            : !dimension_ordinate->blockname)
       pass ();
     else
@@ -9217,7 +9217,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
     BITCODE_TV user_text;
     if (dwg_dynapi_entity_value (dimension_ordinate, "DIMENSION_ORDINATE", "user_text", &user_text, NULL)
         && user_text
-           ? !strcmp ((char *)user_text, (char *)dimension_ordinate->user_text)
+           ? strEQ ((char *)user_text, (char *)dimension_ordinate->user_text)
            : !dimension_ordinate->user_text)
       pass ();
     else
@@ -9274,7 +9274,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
     BITCODE_TV blockname;
     if (dwg_dynapi_entity_value (dimension_radius, "DIMENSION_RADIUS", "blockname", &blockname, NULL)
         && blockname
-           ? !strcmp ((char *)blockname, (char *)dimension_radius->blockname)
+           ? strEQ ((char *)blockname, (char *)dimension_radius->blockname)
            : !dimension_radius->blockname)
       pass ();
     else
@@ -9556,7 +9556,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
     BITCODE_TV user_text;
     if (dwg_dynapi_entity_value (dimension_radius, "DIMENSION_RADIUS", "user_text", &user_text, NULL)
         && user_text
-           ? !strcmp ((char *)user_text, (char *)dimension_radius->user_text)
+           ? strEQ ((char *)user_text, (char *)dimension_radius->user_text)
            : !dimension_radius->user_text)
       pass ();
     else
@@ -9675,7 +9675,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "acis_data", &acis_data, NULL)
         && acis_data
-           ? !strcmp ((char *)acis_data, (char *)extrudedsurface->acis_data)
+           ? strEQ ((char *)acis_data, (char *)extrudedsurface->acis_data)
            : !extrudedsurface->acis_data)
       pass ();
     else
@@ -10613,7 +10613,7 @@ static int test_HATCH (const Dwg_Object *obj)
     BITCODE_TV gradient_name;
     if (dwg_dynapi_entity_value (hatch, "HATCH", "gradient_name", &gradient_name, NULL)
         && gradient_name
-           ? !strcmp ((char *)gradient_name, (char *)hatch->gradient_name)
+           ? strEQ ((char *)gradient_name, (char *)hatch->gradient_name)
            : !hatch->gradient_name)
       pass ();
     else
@@ -10687,7 +10687,7 @@ static int test_HATCH (const Dwg_Object *obj)
     BITCODE_TV name;
     if (dwg_dynapi_entity_value (hatch, "HATCH", "name", &name, NULL)
         && name
-           ? !strcmp ((char *)name, (char *)hatch->name)
+           ? strEQ ((char *)name, (char *)hatch->name)
            : !hatch->name)
       pass ();
     else
@@ -12457,7 +12457,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "acis_data", &acis_data, NULL)
         && acis_data
-           ? !strcmp ((char *)acis_data, (char *)loftedsurface->acis_data)
+           ? strEQ ((char *)acis_data, (char *)loftedsurface->acis_data)
            : !loftedsurface->acis_data)
       pass ();
     else
@@ -13981,7 +13981,7 @@ static int test_MTEXT (const Dwg_Object *obj)
     BITCODE_TV text;
     if (dwg_dynapi_entity_value (mtext, "MTEXT", "text", &text, NULL)
         && text
-           ? !strcmp ((char *)text, (char *)mtext->text)
+           ? strEQ ((char *)text, (char *)mtext->text)
            : !mtext->text)
       pass ();
     else
@@ -14585,7 +14585,7 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
     BITCODE_TV data;
     if (dwg_dynapi_entity_value (ole2frame, "OLE2FRAME", "data", &data, NULL)
         && data
-           ? !strcmp ((char *)data, (char *)ole2frame->data)
+           ? strEQ ((char *)data, (char *)ole2frame->data)
            : !ole2frame->data)
       pass ();
     else
@@ -14643,7 +14643,7 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
     BITCODE_TV oleclient;
     if (dwg_dynapi_entity_value (ole2frame, "OLE2FRAME", "oleclient", &oleclient, NULL)
         && oleclient
-           ? !strcmp ((char *)oleclient, (char *)ole2frame->oleclient)
+           ? strEQ ((char *)oleclient, (char *)ole2frame->oleclient)
            : !ole2frame->oleclient)
       pass ();
     else
@@ -14716,7 +14716,7 @@ static int test_OLEFRAME (const Dwg_Object *obj)
     BITCODE_TV data;
     if (dwg_dynapi_entity_value (oleframe, "OLEFRAME", "data", &data, NULL)
         && data
-           ? !strcmp ((char *)data, (char *)oleframe->data)
+           ? strEQ ((char *)data, (char *)oleframe->data)
            : !oleframe->data)
       pass ();
     else
@@ -14789,7 +14789,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "acis_data", &acis_data, NULL)
         && acis_data
-           ? !strcmp ((char *)acis_data, (char *)planesurface->acis_data)
+           ? strEQ ((char *)acis_data, (char *)planesurface->acis_data)
            : !planesurface->acis_data)
       pass ();
     else
@@ -15787,7 +15787,7 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
     BITCODE_TV data;
     if (dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "data", &data, NULL)
         && data
-           ? !strcmp ((char *)data, (char *)proxy_entity->data)
+           ? strEQ ((char *)data, (char *)proxy_entity->data)
            : !proxy_entity->data)
       pass ();
     else
@@ -15914,7 +15914,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "acis_data", &acis_data, NULL)
         && acis_data
-           ? !strcmp ((char *)acis_data, (char *)revolvedsurface->acis_data)
+           ? strEQ ((char *)acis_data, (char *)revolvedsurface->acis_data)
            : !revolvedsurface->acis_data)
       pass ();
     else
@@ -16976,7 +16976,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "acis_data", &acis_data, NULL)
         && acis_data
-           ? !strcmp ((char *)acis_data, (char *)sweptsurface->acis_data)
+           ? strEQ ((char *)acis_data, (char *)sweptsurface->acis_data)
            : !sweptsurface->acis_data)
       pass ();
     else
@@ -19480,7 +19480,7 @@ static int test_TEXT (const Dwg_Object *obj)
     BITCODE_TV text_value;
     if (dwg_dynapi_entity_value (text, "TEXT", "text_value", &text_value, NULL)
         && text_value
-           ? !strcmp ((char *)text_value, (char *)text->text_value)
+           ? strEQ ((char *)text_value, (char *)text->text_value)
            : !text->text_value)
       pass ();
     else
@@ -19609,7 +19609,7 @@ static int test_TOLERANCE (const Dwg_Object *obj)
     BITCODE_TV text_string;
     if (dwg_dynapi_entity_value (tolerance, "TOLERANCE", "text_string", &text_string, NULL)
         && text_string
-           ? !strcmp ((char *)text_string, (char *)tolerance->text_string)
+           ? strEQ ((char *)text_string, (char *)tolerance->text_string)
            : !tolerance->text_string)
       pass ();
     else
@@ -20381,7 +20381,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     BITCODE_TV style_sheet;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "style_sheet", &style_sheet, NULL)
         && style_sheet
-           ? !strcmp ((char *)style_sheet, (char *)viewport->style_sheet)
+           ? strEQ ((char *)style_sheet, (char *)viewport->style_sheet)
            : !viewport->style_sheet)
       pass ();
     else
@@ -21405,7 +21405,7 @@ static int test_APPID (const Dwg_Object *obj)
     BITCODE_TV name;
     if (dwg_dynapi_entity_value (appid, "APPID", "name", &name, NULL)
         && name
-           ? !strcmp ((char *)name, (char *)appid->name)
+           ? strEQ ((char *)name, (char *)appid->name)
            : !appid->name)
       pass ();
     else
@@ -23726,7 +23726,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     BITCODE_TV description;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "description", &description, NULL)
         && description
-           ? !strcmp ((char *)description, (char *)block_header->description)
+           ? strEQ ((char *)description, (char *)block_header->description)
            : !block_header->description)
       pass ();
     else
@@ -23900,7 +23900,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     BITCODE_TV name;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "name", &name, NULL)
         && name
-           ? !strcmp ((char *)name, (char *)block_header->name)
+           ? strEQ ((char *)name, (char *)block_header->name)
            : !block_header->name)
       pass ();
     else
@@ -23958,7 +23958,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     BITCODE_TV preview_data;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "preview_data", &preview_data, NULL)
         && preview_data
-           ? !strcmp ((char *)preview_data, (char *)block_header->preview_data)
+           ? strEQ ((char *)preview_data, (char *)block_header->preview_data)
            : !block_header->preview_data)
       pass ();
     else
@@ -24000,7 +24000,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     BITCODE_TV xref_pname;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "xref_pname", &xref_pname, NULL)
         && xref_pname
-           ? !strcmp ((char *)xref_pname, (char *)block_header->xref_pname)
+           ? strEQ ((char *)xref_pname, (char *)block_header->xref_pname)
            : !block_header->xref_pname)
       pass ();
     else
@@ -24355,7 +24355,7 @@ static int test_DICTIONARYVAR (const Dwg_Object *obj)
     BITCODE_TV str;
     if (dwg_dynapi_entity_value (dictionaryvar, "DICTIONARYVAR", "str", &str, NULL)
         && str
-           ? !strcmp ((char *)str, (char *)dictionaryvar->str)
+           ? strEQ ((char *)str, (char *)dictionaryvar->str)
            : !dictionaryvar->str)
       pass ();
     else
@@ -25870,7 +25870,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     BITCODE_TV name;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "name", &name, NULL)
         && name
-           ? !strcmp ((char *)name, (char *)dimstyle->name)
+           ? strEQ ((char *)name, (char *)dimstyle->name)
            : !dimstyle->name)
       pass ();
     else
@@ -26309,7 +26309,7 @@ static int test_FIELD (const Dwg_Object *obj)
     BITCODE_TV code;
     if (dwg_dynapi_entity_value (field, "FIELD", "code", &code, NULL)
         && code
-           ? !strcmp ((char *)code, (char *)field->code)
+           ? strEQ ((char *)code, (char *)field->code)
            : !field->code)
       pass ();
     else
@@ -26335,7 +26335,7 @@ static int test_FIELD (const Dwg_Object *obj)
     BITCODE_TV evaluation_error_msg;
     if (dwg_dynapi_entity_value (field, "FIELD", "evaluation_error_msg", &evaluation_error_msg, NULL)
         && evaluation_error_msg
-           ? !strcmp ((char *)evaluation_error_msg, (char *)field->evaluation_error_msg)
+           ? strEQ ((char *)evaluation_error_msg, (char *)field->evaluation_error_msg)
            : !field->evaluation_error_msg)
       pass ();
     else
@@ -26409,7 +26409,7 @@ static int test_FIELD (const Dwg_Object *obj)
     BITCODE_TV format;
     if (dwg_dynapi_entity_value (field, "FIELD", "format", &format, NULL)
         && format
-           ? !strcmp ((char *)format, (char *)field->format)
+           ? strEQ ((char *)format, (char *)field->format)
            : !field->format)
       pass ();
     else
@@ -26419,7 +26419,7 @@ static int test_FIELD (const Dwg_Object *obj)
     BITCODE_TV id;
     if (dwg_dynapi_entity_value (field, "FIELD", "id", &id, NULL)
         && id
-           ? !strcmp ((char *)id, (char *)field->id)
+           ? strEQ ((char *)id, (char *)field->id)
            : !field->id)
       pass ();
     else
@@ -26503,7 +26503,7 @@ static int test_FIELD (const Dwg_Object *obj)
     BITCODE_TV value_string;
     if (dwg_dynapi_entity_value (field, "FIELD", "value_string", &value_string, NULL)
         && value_string
-           ? !strcmp ((char *)value_string, (char *)field->value_string)
+           ? strEQ ((char *)value_string, (char *)field->value_string)
            : !field->value_string)
       pass ();
     else
@@ -27405,7 +27405,7 @@ static int test_GROUP (const Dwg_Object *obj)
     BITCODE_TV name;
     if (dwg_dynapi_entity_value (group, "GROUP", "name", &name, NULL)
         && name
-           ? !strcmp ((char *)name, (char *)group->name)
+           ? strEQ ((char *)name, (char *)group->name)
            : !group->name)
       pass ();
     else
@@ -27551,7 +27551,7 @@ static int test_IMAGEDEF (const Dwg_Object *obj)
     BITCODE_TV file_path;
     if (dwg_dynapi_entity_value (imagedef, "IMAGEDEF", "file_path", &file_path, NULL)
         && file_path
-           ? !strcmp ((char *)file_path, (char *)imagedef->file_path)
+           ? strEQ ((char *)file_path, (char *)imagedef->file_path)
            : !imagedef->file_path)
       pass ();
     else
@@ -27791,7 +27791,7 @@ static int test_LAYER (const Dwg_Object *obj)
     BITCODE_TV name;
     if (dwg_dynapi_entity_value (layer, "LAYER", "name", &name, NULL)
         && name
-           ? !strcmp ((char *)name, (char *)layer->name)
+           ? strEQ ((char *)name, (char *)layer->name)
            : !layer->name)
       pass ();
     else
@@ -28092,7 +28092,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
     BITCODE_TV current_style_sheet;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "current_style_sheet", &current_style_sheet, NULL)
         && current_style_sheet
-           ? !strcmp ((char *)current_style_sheet, (char *)layout->current_style_sheet)
+           ? strEQ ((char *)current_style_sheet, (char *)layout->current_style_sheet)
            : !layout->current_style_sheet)
       pass ();
     else
@@ -28182,7 +28182,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
     BITCODE_TV layout_name;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "layout_name", &layout_name, NULL)
         && layout_name
-           ? !strcmp ((char *)layout_name, (char *)layout->layout_name)
+           ? strEQ ((char *)layout_name, (char *)layout->layout_name)
            : !layout->layout_name)
       pass ();
     else
@@ -28264,7 +28264,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
     BITCODE_TV page_setup_name;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "page_setup_name", &page_setup_name, NULL)
         && page_setup_name
-           ? !strcmp ((char *)page_setup_name, (char *)layout->page_setup_name)
+           ? strEQ ((char *)page_setup_name, (char *)layout->page_setup_name)
            : !layout->page_setup_name)
       pass ();
     else
@@ -28298,7 +28298,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
     BITCODE_TV paper_size;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "paper_size", &paper_size, NULL)
         && paper_size
-           ? !strcmp ((char *)paper_size, (char *)layout->paper_size)
+           ? strEQ ((char *)paper_size, (char *)layout->paper_size)
            : !layout->paper_size)
       pass ();
     else
@@ -28412,7 +28412,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
     BITCODE_TV plot_view_name;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "plot_view_name", &plot_view_name, NULL)
         && plot_view_name
-           ? !strcmp ((char *)plot_view_name, (char *)layout->plot_view_name)
+           ? strEQ ((char *)plot_view_name, (char *)layout->plot_view_name)
            : !layout->plot_view_name)
       pass ();
     else
@@ -28422,7 +28422,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
     BITCODE_TV printer_or_config;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "printer_or_config", &printer_or_config, NULL)
         && printer_or_config
-           ? !strcmp ((char *)printer_or_config, (char *)layout->printer_or_config)
+           ? strEQ ((char *)printer_or_config, (char *)layout->printer_or_config)
            : !layout->printer_or_config)
       pass ();
     else
@@ -28683,7 +28683,7 @@ static int test_LIGHTLIST (const Dwg_Object *obj)
     BITCODE_TV light_name;
     if (dwg_dynapi_entity_value (lightlist, "LIGHTLIST", "light_name", &light_name, NULL)
         && light_name
-           ? !strcmp ((char *)light_name, (char *)lightlist->light_name)
+           ? strEQ ((char *)light_name, (char *)lightlist->light_name)
            : !lightlist->light_name)
       pass ();
     else
@@ -28775,7 +28775,7 @@ static int test_LTYPE (const Dwg_Object *obj)
     BITCODE_TV description;
     if (dwg_dynapi_entity_value (ltype, "LTYPE", "description", &description, NULL)
         && description
-           ? !strcmp ((char *)description, (char *)ltype->description)
+           ? strEQ ((char *)description, (char *)ltype->description)
            : !ltype->description)
       pass ();
     else
@@ -28809,7 +28809,7 @@ static int test_LTYPE (const Dwg_Object *obj)
     BITCODE_TV name;
     if (dwg_dynapi_entity_value (ltype, "LTYPE", "name", &name, NULL)
         && name
-           ? !strcmp ((char *)name, (char *)ltype->name)
+           ? strEQ ((char *)name, (char *)ltype->name)
            : !ltype->name)
       pass ();
     else
@@ -28859,7 +28859,7 @@ static int test_LTYPE (const Dwg_Object *obj)
     BITCODE_TV strings_area;
     if (dwg_dynapi_entity_value (ltype, "LTYPE", "strings_area", &strings_area, NULL)
         && strings_area
-           ? !strcmp ((char *)strings_area, (char *)ltype->strings_area)
+           ? strEQ ((char *)strings_area, (char *)ltype->strings_area)
            : !ltype->strings_area)
       pass ();
     else
@@ -30550,7 +30550,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     BITCODE_TV description;
     if (dwg_dynapi_entity_value (mleaderstyle, "MLEADERSTYLE", "description", &description, NULL)
         && description
-           ? !strcmp ((char *)description, (char *)mleaderstyle->description)
+           ? strEQ ((char *)description, (char *)mleaderstyle->description)
            : !mleaderstyle->description)
       pass ();
     else
@@ -30848,7 +30848,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     BITCODE_TV text_default;
     if (dwg_dynapi_entity_value (mleaderstyle, "MLEADERSTYLE", "text_default", &text_default, NULL)
         && text_default
-           ? !strcmp ((char *)text_default, (char *)mleaderstyle->text_default)
+           ? strEQ ((char *)text_default, (char *)mleaderstyle->text_default)
            : !mleaderstyle->text_default)
       pass ();
     else
@@ -30969,7 +30969,7 @@ static int test_MLINESTYLE (const Dwg_Object *obj)
     BITCODE_TV desc;
     if (dwg_dynapi_entity_value (mlinestyle, "MLINESTYLE", "desc", &desc, NULL)
         && desc
-           ? !strcmp ((char *)desc, (char *)mlinestyle->desc)
+           ? strEQ ((char *)desc, (char *)mlinestyle->desc)
            : !mlinestyle->desc)
       pass ();
     else
@@ -31029,7 +31029,7 @@ static int test_MLINESTYLE (const Dwg_Object *obj)
     BITCODE_TV name;
     if (dwg_dynapi_entity_value (mlinestyle, "MLINESTYLE", "name", &name, NULL)
         && name
-           ? !strcmp ((char *)name, (char *)mlinestyle->name)
+           ? strEQ ((char *)name, (char *)mlinestyle->name)
            : !mlinestyle->name)
       pass ();
     else
@@ -31705,7 +31705,7 @@ static int test_PROXY_OBJECT (const Dwg_Object *obj)
     BITCODE_TV data;
     if (dwg_dynapi_entity_value (proxy_object, "PROXY_OBJECT", "data", &data, NULL)
         && data
-           ? !strcmp ((char *)data, (char *)proxy_object->data)
+           ? strEQ ((char *)data, (char *)proxy_object->data)
            : !proxy_object->data)
       pass ();
     else
@@ -32223,7 +32223,7 @@ static int test_SCALE (const Dwg_Object *obj)
     BITCODE_TV name;
     if (dwg_dynapi_entity_value (scale, "SCALE", "name", &name, NULL)
         && name
-           ? !strcmp ((char *)name, (char *)scale->name)
+           ? strEQ ((char *)name, (char *)scale->name)
            : !scale->name)
       pass ();
     else
@@ -32516,7 +32516,7 @@ static int test_SPATIAL_INDEX (const Dwg_Object *obj)
     BITCODE_TV unknown;
     if (dwg_dynapi_entity_value (spatial_index, "SPATIAL_INDEX", "unknown", &unknown, NULL)
         && unknown
-           ? !strcmp ((char *)unknown, (char *)spatial_index->unknown)
+           ? strEQ ((char *)unknown, (char *)spatial_index->unknown)
            : !spatial_index->unknown)
       pass ();
     else
@@ -32533,7 +32533,7 @@ static int test_STYLE (const Dwg_Object *obj)
     BITCODE_TV bigfont_name;
     if (dwg_dynapi_entity_value (style, "STYLE", "bigfont_name", &bigfont_name, NULL)
         && bigfont_name
-           ? !strcmp ((char *)bigfont_name, (char *)style->bigfont_name)
+           ? strEQ ((char *)bigfont_name, (char *)style->bigfont_name)
            : !style->bigfont_name)
       pass ();
     else
@@ -32583,7 +32583,7 @@ static int test_STYLE (const Dwg_Object *obj)
     BITCODE_TV font_name;
     if (dwg_dynapi_entity_value (style, "STYLE", "font_name", &font_name, NULL)
         && font_name
-           ? !strcmp ((char *)font_name, (char *)style->font_name)
+           ? strEQ ((char *)font_name, (char *)style->font_name)
            : !style->font_name)
       pass ();
     else
@@ -32625,7 +32625,7 @@ static int test_STYLE (const Dwg_Object *obj)
     BITCODE_TV name;
     if (dwg_dynapi_entity_value (style, "STYLE", "name", &name, NULL)
         && name
-           ? !strcmp ((char *)name, (char *)style->name)
+           ? strEQ ((char *)name, (char *)style->name)
            : !style->name)
       pass ();
     else
@@ -33623,7 +33623,7 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
     BITCODE_TV name;
     if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "name", &name, NULL)
         && name
-           ? !strcmp ((char *)name, (char *)tablestyle->name)
+           ? strEQ ((char *)name, (char *)tablestyle->name)
            : !tablestyle->name)
       pass ();
     else
@@ -33736,7 +33736,7 @@ static int test_UCS (const Dwg_Object *obj)
     BITCODE_TV name;
     if (dwg_dynapi_entity_value (ucs, "UCS", "name", &name, NULL)
         && name
-           ? !strcmp ((char *)name, (char *)ucs->name)
+           ? strEQ ((char *)name, (char *)ucs->name)
            : !ucs->name)
       pass ();
     else
@@ -33954,7 +33954,7 @@ static int test_UNDERLAYDEFINITION (const Dwg_Object *obj)
     BITCODE_TV filename;
     if (dwg_dynapi_entity_value (underlaydefinition, "UNDERLAYDEFINITION", "filename", &filename, NULL)
         && filename
-           ? !strcmp ((char *)filename, (char *)underlaydefinition->filename)
+           ? strEQ ((char *)filename, (char *)underlaydefinition->filename)
            : !underlaydefinition->filename)
       pass ();
     else
@@ -33964,7 +33964,7 @@ static int test_UNDERLAYDEFINITION (const Dwg_Object *obj)
     BITCODE_TV name;
     if (dwg_dynapi_entity_value (underlaydefinition, "UNDERLAYDEFINITION", "name", &name, NULL)
         && name
-           ? !strcmp ((char *)name, (char *)underlaydefinition->name)
+           ? strEQ ((char *)name, (char *)underlaydefinition->name)
            : !underlaydefinition->name)
       pass ();
     else
@@ -34282,7 +34282,7 @@ static int test_VIEW (const Dwg_Object *obj)
     BITCODE_TV name;
     if (dwg_dynapi_entity_value (view, "VIEW", "name", &name, NULL)
         && name
-           ? !strcmp ((char *)name, (char *)view->name)
+           ? strEQ ((char *)name, (char *)view->name)
            : !view->name)
       pass ();
     else
@@ -35498,7 +35498,7 @@ static int test_VPORT (const Dwg_Object *obj)
     BITCODE_TV name;
     if (dwg_dynapi_entity_value (vport, "VPORT", "name", &name, NULL)
         && name
-           ? !strcmp ((char *)name, (char *)vport->name)
+           ? strEQ ((char *)name, (char *)vport->name)
            : !vport->name)
       pass ();
     else
@@ -35917,7 +35917,7 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
     BITCODE_TV name;
     if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "name", &name, NULL)
         && name
-           ? !strcmp ((char *)name, (char *)vport_entity_header->name)
+           ? strEQ ((char *)name, (char *)vport_entity_header->name)
            : !vport_entity_header->name)
       pass ();
     else
