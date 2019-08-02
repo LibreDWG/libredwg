@@ -879,7 +879,7 @@ dwg_indxf_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   // almost always false
   is_entity = dwg_class_is_entity (klass);
 
-#include "classes.inc"
+  #include "classes.inc"
 
   return DWG_ERR_UNHANDLEDCLASS;
 }
@@ -1601,6 +1601,8 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         strcpy (ctrl_hdlv, "apps");                    \
       else if (strEQc (#nam, "VPORT_ENTITY"))          \
         strcpy (ctrl_hdlv, "vport_entity_headers");    \
+      else if (strEQc (#nam, "BLOCK_RECORD"))          \
+        strcpy (ctrl_hdlv, "entries");                 \
     }
 
 static int
@@ -1611,7 +1613,7 @@ is_table_name (const char *name)
          || strEQc (name, "BLOCK") || strEQc (name, "LAYER")
          || strEQc (name, "DIMSTYLE") || strEQc (name, "STYLE")
          || strEQc (name, "VIEW") || strEQc (name, "VPORT_ENTITY")
-         || strEQc (name, "UCS");
+         || strEQc (name, "UCS") || strEQc (name, "BLOCK_RECORD");
 }
 
 static Dxf_Pair *
@@ -1632,8 +1634,13 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
 
   NEW_OBJECT(dwg, obj);
 
-  strcpy (ctrlname, name);
-  strcat (ctrlname, "_CONTROL");
+  if (strEQc (name, "BLOCK_RECORD"))
+    strcpy (ctrlname, "BLOCK_CONTROL");
+  else
+    {
+      strcpy (ctrlname, name);
+      strcat (ctrlname, "_CONTROL");
+    }
   LOG_TRACE ("add %s\n", ctrlname);
 
   ADD_TABLE_IF (LTYPE, LTYPE_CONTROL)
@@ -1656,6 +1663,8 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   else
   ADD_TABLE_IF (VPORT_ENTITY, VPORT_ENTITY_CONTROL)
   else
+  ADD_TABLE_IF (BLOCK_RECORD, BLOCK_CONTROL)
+  else
     {
       LOG_ERROR ("Unknown DXF TABLE %s nor %s_CONTROL", name, name);
       return pair;
@@ -1668,12 +1677,15 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   dwg_dynapi_entity_set_value (_obj, obj->name, "objid", &obj->index, is_utf);
 
   pair = dxf_read_pair (dat);
-  // read common table until next 0 table
-  while (pair->code != 0 || strNE (pair->value.s, name))
+  // read common table until next 0 table or endtab
+  while (pair->code != 0)
     {
       switch (pair->code)
         {
+        case 0:
+          return pair;
         case 5:
+        case 105: // for DIMSTYLE
           {
             Dwg_Object_Ref *ref;
             char ctrlobj[80];
@@ -1801,6 +1813,8 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
   ADD_TABLE_IF (UCS, UCS)
   else
   ADD_TABLE_IF (VIEW, VIEW)
+  else
+  ADD_TABLE_IF (BLOCK_RECORD, BLOCK_HEADER)
   //else
   //ADD_TABLE_IF (VPORT_ENTITY, VPORT_ENTITY)
   else
@@ -1819,6 +1833,8 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
     {
       switch (pair->code)
         { // TABLE common flags: name, xrefref, xrefdep, ...
+        case 0:
+          return pair;
         case 5:
           {
             add_handle (&obj->handle, 0, pair->value.u, NULL);
@@ -1878,9 +1894,28 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
           break;
         default: // TODO specific fields, search
           {
+            const Dwg_DYNAPI_field *f;
             const Dwg_DYNAPI_field *fields = dwg_dynapi_entity_fields (name);
-            //..
-            LOG_TRACE ("Unknown DXF code %d for %s", pair->code, name);
+            for (f = &fields[0]; f->name; f++)
+              {
+                if (f->dxf == pair->code)
+                  {
+                    dwg_dynapi_entity_set_value (_obj, name, f->name,
+                                                 &pair->value, is_utf);
+                    if (f->is_string)
+                      {
+                        LOG_TRACE ("%s.%s = %s [%d %s]\n", name, f->name,
+                                   pair->value.s, pair->code, f->type);
+                      }
+                    else
+                      {
+                        LOG_TRACE ("%s.%s = %ld [%d %s]\n", name, f->name,
+                                   pair->value.l, pair->code, f->type);
+                      }
+                    break;
+                  }
+              }
+            LOG_WARN ("Unknown DXF code %d for %s", pair->code, name);
           }
         }
       dxf_free_pair (pair);
