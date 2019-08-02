@@ -1465,16 +1465,48 @@ add_handleref (BITCODE_RC code, BITCODE_RL value, Dwg_Object *obj)
   return ref;
 }
 
+#define NEW_OBJECT(dwg, obj)                    \
+  {                                             \
+    BITCODE_BL idx = dwg->num_objects;          \
+    (void)dwg_add_object (dwg);                 \
+    obj = &dwg->object[idx];                    \
+    obj->supertype = DWG_SUPERTYPE_OBJECT;      \
+    obj->tio.object = calloc (1, sizeof (Dwg_Object_Object)); \
+    obj->tio.object->objid = obj->index;        \
+    obj->tio.object->dwg = dwg;                 \
+  }
 
-#define ADD_OBJECT(nam, typenam)                                     \
-  if (strEQc (name, nam))                                            \
-    {                                                                \
-      obj->type = obj->fixedtype = DWG_TYPE_##typenam;               \
-      obj->name = obj->dxfname = (char*)#typenam;                    \
-      _obj = calloc (1, sizeof (Dwg_Object_##typenam));              \
-      obj->tio.object->tio.typenam = (Dwg_Object_##typenam *)_obj;   \
-      obj->tio.object->tio.typenam->parent = obj->tio.object;        \
-      obj->tio.object->objid = obj->index;                           \
+#define NEW_ENTITY(dwg, obj)                    \
+  {                                             \
+    BITCODE_BL idx = dwg->num_objects;          \
+    (void)dwg_add_object (dwg);                 \
+    obj = &dwg->object[idx];                    \
+    obj->supertype = DWG_SUPERTYPE_ENTITY;      \
+    obj->tio.entity = calloc (1, sizeof (Dwg_Object_Entity)); \
+    obj->tio.entity->objid = obj->index;        \
+    obj->tio.entity->dwg = dwg;                 \
+  }
+
+#define ADD_OBJECT(token)                                      \
+  obj->type = obj->fixedtype = DWG_TYPE_##token;               \
+  obj->name = obj->dxfname = (char*)#token;                    \
+  _obj = calloc (1, sizeof (Dwg_Object_##token));              \
+  obj->tio.object->tio.token = (Dwg_Object_##token *)_obj;     \
+  obj->tio.object->tio.token->parent = obj->tio.object;        \
+  obj->tio.object->objid = obj->index
+
+#define ADD_ENTITY(token)                                      \
+  obj->type = obj->fixedtype = DWG_TYPE_##token;               \
+  obj->name = obj->dxfname = (char*)#token;                    \
+  _obj = calloc (1, sizeof (Dwg_Entity_##token));              \
+  obj->tio.entity->tio.token = (Dwg_Entity_##token *)_obj;     \
+  obj->tio.entity->tio.token->parent = obj->tio.entity;        \
+  obj->tio.entity->objid = obj->index
+
+#define ADD_OBJECT_IF(nam, token)                              \
+  if (strEQc (name, nam))                                      \
+    {                                                          \
+      ADD_OBJECT(token);                                       \
     }
 
 static int
@@ -1494,7 +1526,6 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
 {
   // VPORT_CONTROL.num_entries
   // VPORT_CONTROL.entries[num_entries] handles
-  BITCODE_BL index = dwg->num_objects;
   Dwg_Object *obj;
   Dxf_Pair *pair = NULL;
   Dwg_Object_LTYPE_CONTROL *_obj = NULL;
@@ -1502,36 +1533,31 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   char ctrlname[80];
   int is_utf = dwg->header.version >= R_2007 ? 1 : 0;
 
-  (void)dwg_add_object (dwg);
-  obj = &dwg->object[index];
-  obj->supertype = DWG_SUPERTYPE_OBJECT;
-  obj->tio.object = calloc (1, sizeof (Dwg_Object_Object));
-  obj->tio.object->objid = obj->index;
-  obj->tio.object->dwg = dwg;
+  NEW_OBJECT(dwg, obj);
 
   strcpy (ctrlname, name);
   strcat (ctrlname, "_CONTROL");
   LOG_TRACE ("add %s\n", ctrlname);
 
-  ADD_OBJECT ("LTYPE", LTYPE_CONTROL)
+  ADD_OBJECT_IF ("LTYPE", LTYPE_CONTROL)
   else
-  ADD_OBJECT ("VPORT", VPORT_CONTROL)
+  ADD_OBJECT_IF ("VPORT", VPORT_CONTROL)
   else
-  ADD_OBJECT ("APPID", APPID_CONTROL)
+  ADD_OBJECT_IF ("APPID", APPID_CONTROL)
   else
-  ADD_OBJECT ("BLOCK", BLOCK_CONTROL)
+  ADD_OBJECT_IF ("BLOCK", BLOCK_CONTROL)
   else
-  ADD_OBJECT ("DIMSTYLE", DIMSTYLE_CONTROL)
+  ADD_OBJECT_IF ("DIMSTYLE", DIMSTYLE_CONTROL)
   else
-  ADD_OBJECT ("LAYER", LAYER_CONTROL)
+  ADD_OBJECT_IF ("LAYER", LAYER_CONTROL)
   else
-  ADD_OBJECT ("STYLE", STYLE_CONTROL)
+  ADD_OBJECT_IF ("STYLE", STYLE_CONTROL)
   else
-  ADD_OBJECT ("UCS", UCS_CONTROL)
+  ADD_OBJECT_IF ("UCS", UCS_CONTROL)
   else
-  ADD_OBJECT ("VIEW", VIEW_CONTROL)
+  ADD_OBJECT_IF ("VIEW", VIEW_CONTROL)
   else
-  ADD_OBJECT ("VPORT_ENTITY", VPORT_ENTITY_CONTROL)
+  ADD_OBJECT_IF ("VPORT_ENTITY", VPORT_ENTITY_CONTROL)
   else
     {
       LOG_ERROR ("Unknown DXF TABLE %s nor %s_CONTROL", name, name);
@@ -1614,37 +1640,31 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
            Dwg_Data *restrict dwg)
 {
   int is_utf = dwg->header.version >= R_2007 ? 1 : 0;
-  BITCODE_BL index = dwg->num_objects;
   Dwg_Object *obj;
   Dxf_Pair *pair = dxf_read_pair (dat);
   Dwg_Object_LTYPE *_obj = NULL;
 
-  (void)dwg_add_object (dwg);
-  obj = &dwg->object[index];
-  obj->supertype = DWG_SUPERTYPE_OBJECT;
-  obj->tio.object = calloc (1, sizeof (Dwg_Object_Object));
-  obj->tio.object->objid = obj->index;
-  obj->tio.object->dwg = dwg;
+  NEW_OBJECT (dwg, obj);
 
   LOG_TRACE ("add %s\n", name);
 
-  ADD_OBJECT ("LTYPE", LTYPE)
+  ADD_OBJECT_IF ("LTYPE", LTYPE)
   else
-  ADD_OBJECT ("VPORT", VPORT)
+  ADD_OBJECT_IF ("VPORT", VPORT)
   else
-  ADD_OBJECT ("APPID", APPID)
+  ADD_OBJECT_IF ("APPID", APPID)
   else
-  ADD_OBJECT ("DIMSTYLE", DIMSTYLE)
+  ADD_OBJECT_IF ("DIMSTYLE", DIMSTYLE)
   else
-  ADD_OBJECT ("LAYER", LAYER)
+  ADD_OBJECT_IF ("LAYER", LAYER)
   else
-  ADD_OBJECT ("STYLE", STYLE)
+  ADD_OBJECT_IF ("STYLE", STYLE)
   else
-  ADD_OBJECT ("UCS", UCS)
+  ADD_OBJECT_IF ("UCS", UCS)
   else
-  ADD_OBJECT ("VIEW", VIEW)
+  ADD_OBJECT_IF ("VIEW", VIEW)
   //else
-  //ADD_OBJECT ("VPORT_ENTITY", VPORT_ENTITY)
+  //ADD_OBJECT_IF ("VPORT_ENTITY", VPORT_ENTITY)
   else
     {
       LOG_ERROR ("Unknown DXF AcDbSymbolTableRecord %s", name);
@@ -1713,7 +1733,6 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   //BITCODE_BL i;
   char table[80];
   Dxf_Pair *pair = dxf_read_pair (dat);
-  (void)dwg_add_object (dwg); // start with the BLOCK_HEADER at objid 0
 
   table[0] = '\0'; // init
   while (1) // read next 0 TABLE
@@ -1734,7 +1753,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           strcpy (table, pair->value.s);
           pair = new_table_control (table, dat, dwg); // until 0 table
           if (pair->code == 0 && strEQ (pair->value.s, table))
-            pair = new_table (table, dat, dwg);     // until 0 table or 0 ENDTAB
+            pair = new_table (table, dat, dwg);      // until 0 table or 0 ENDTAB
         }
       DXF_RETURN_ENDSEC (0); // next TABLE or ENDSEC
       dxf_free_pair (pair);
@@ -1819,6 +1838,15 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   header_hdls = calloc (1, 8 + 16 * sizeof (struct array_hdl));
   header_hdls->size = 16;
+
+  // start with the BLOCK_HEADER at objid 0
+  if (!dwg->num_objects)
+    {
+      Dwg_Object *obj;
+      Dwg_Object_BLOCK_HEADER *_obj;
+      NEW_OBJECT (dwg, obj);
+      ADD_OBJECT (BLOCK_HEADER);
+    }
 
   while (dat->byte < dat->size)
     {
