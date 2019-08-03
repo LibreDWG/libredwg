@@ -3459,7 +3459,7 @@ dwg_decode_common_entity_handle_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   if (dat->version >= R_2007 && _ent->color.flag & 0x40)
     FIELD_HANDLE (color.handle, 0, 430);
 
-#include "common_entity_handle_data.spec"
+  #include "common_entity_handle_data.spec"
 
   return error;
 }
@@ -3551,8 +3551,8 @@ get_base_value_type (short gc)
             return VT_INVALID;
           if (gc <= 149)
             return VT_REAL;
-          if (gc <= 169)
-            return VT_INVALID;
+          if (gc <= 169) // e.g. REQUIREDVERSIONS 160 r2013+
+            return VT_INT64;
           if (gc <= 179)
             return VT_INT16;
           if (gc <= 209)
@@ -3703,6 +3703,11 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
         case VT_INT32:
           rbuf->value.i32 = bit_read_RL (dat);
           LOG_TRACE ("xdata[%d]: %d [%d]\n", num_xdata, (int)rbuf->value.i32,
+                     rbuf->type);
+          break;
+        case VT_INT64:
+          rbuf->value.i64 = bit_read_BLL (dat);
+          LOG_TRACE ("xdata[%d]: " FORMAT_BLL " [%d]\n", num_xdata, rbuf->value.i64,
                      rbuf->type);
           break;
         case VT_POINT3D:

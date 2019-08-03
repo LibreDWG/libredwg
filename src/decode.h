@@ -36,7 +36,8 @@ enum RES_BUF_VALUE_TYPE
   VT_BINARY = 7,
   VT_HANDLE = 8,
   VT_OBJECTID = 9,
-  VT_BOOL = 10
+  VT_BOOL = 10,
+  VT_INT64 = 11, // BLL
 };
 
 enum RES_BUF_VALUE_TYPE get_base_value_type (short gc);

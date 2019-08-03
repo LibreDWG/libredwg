@@ -558,6 +558,7 @@ typedef struct _dwg_resbuf
     char    i8;
     short   i16;
     int     i32;
+    BITCODE_BLL i64;
     double  dbl;
     unsigned char hdl[8];
     struct _dwg_binary_chunk str;

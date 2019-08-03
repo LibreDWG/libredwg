@@ -170,24 +170,17 @@ dxf_read_pair (Bit_Chain *dat)
       LOG_TRACE ("  dxf (%d, \"%s\")\n", (int)pair->code, pair->value.s);
       // dynapi_set_helper converts from utf-8 to unicode, not here.
       // we need to know the type of the target field, if TV or T
-#if 0
-      if (dat->version >= R_2007 &&
-          pair->code != 0 && // names never unicode
-          pair->code != 2 &&
-          pair->code != 9)
-      {
-        BITCODE_TU wstr = bit_utf8_to_TU (pair->value.s);
-        free (pair->value.s);
-        pair->value.s = (char *)wstr;
-      }
-#endif
       break;
     case VT_BOOL:
     case VT_INT8:
     case VT_INT16:
-    case VT_INT32:
       pair->value.i = dxf_read_code (dat);
       LOG_TRACE ("  dxf (%d, %d)\n", (int)pair->code, pair->value.i);
+      break;
+    case VT_INT32:
+    case VT_INT64:
+      pair->value.l = dxf_read_code (dat);
+      LOG_TRACE ("  dxf (%d, %ld)\n", (int)pair->code, pair->value.l);
       break;
     case VT_REAL:
     case VT_POINT3D:
@@ -1146,6 +1139,10 @@ matches_type (Dxf_Pair *restrict pair, const Dwg_DYNAPI_field *restrict f)
       if (f->is_string) return 1;
       if (f->type[0] == 'H') return 1; // handles can be just names
       break;
+    case VT_INT64:
+      // BLL or RLL
+      if (f->size == 8 && f->type[1] == 'L' && f->type[2] == 'L') return 1;
+      // fall through
     case VT_INT32:
       // BL or RL
       if (f->size == 4 && f->type[1] == 'L') return 1;
