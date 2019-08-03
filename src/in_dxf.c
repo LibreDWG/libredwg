@@ -1915,12 +1915,36 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
               {
                 if (f->dxf == pair->code)
                   {
-                    if (f->size > 8) // only 2D or 3D points
+                    // only 2D or 3D points
+                    if (f->size > 8 &&
+                        (strchr (f->type, '2') || strchr (f->type, '3')))
                       {
                         BITCODE_3BD pt;
                         pt.x = pair->value.d;
                         dwg_dynapi_entity_set_value (_obj, name, f->name,
                                                      &pt, is_utf);
+                      }
+                    else if (f->size > 8 && strEQc (f->type, "CMC"))
+                      {
+                        BITCODE_CMC color;
+                        dwg_dynapi_entity_value (_obj, name, f->name,
+                                                 &color, NULL);
+                        if (pair->code < 100)
+                          color.index = pair->value.d;
+                        else if (pair->code < 430)
+                          color.rgb = pair->value.l;
+                        else if (pair->code < 440)
+                          {
+                            color.flag |= 1;
+                            strcpy (color.name, pair->value.s);
+                          }
+                        else
+                          {
+                            color.alpha_type = 3;
+                            color.alpha = pair->value.i;
+                          }
+                        dwg_dynapi_entity_set_value (_obj, name, f->name,
+                                                     &color, is_utf);
                       }
                     else
                       dwg_dynapi_entity_set_value (_obj, name, f->name,

@@ -173,6 +173,15 @@ sub dxf_in {
     } elsif (/^\s+FIELD_.+\s*\((\w+),\s*(\d+)\)/) {
       $f = $1;
       $DXF{$n}->{$f} = $2 if $2;
+    } elsif (/^\s+FIELD_(?:CMC|ENC)\s*\((\w+),\s*(\d+),\s*(\d+)\)/) {
+      $f = $1;
+      $DXF{$n}->{$f} = $2 if $2;
+      if ($3) {
+        $DXF{$n}->{"$f.index"} = $2;
+        $DXF{$n}->{"$f.rbg"} = $3;
+        $DXF{$n}->{"$f.book"} = $3 + 10;
+        $DXF{$n}->{"$f.alpha"} = $3 + 20;
+      }
     } elsif (/^\s+FIELD_.+\s*\((\w+),.*,\s*(\d+)\)/) {
       $f = $1;
       $DXF{$n}->{$f} = $2 if $2;
@@ -225,7 +234,9 @@ $n = 'object_entity';
 dxfin_spec "$srcdir/common_entity_data.spec";
 dxfin_spec "$srcdir/common_entity_handle_data.spec";
 $DXF{$n}->{'color'} = $DXF{$n}->{'color_r11'} = 62;
-$DXF{$n}->{'color.handle'} = 420;
+$DXF{$n}->{'color.rgb'} = 420; # handle 420?
+$DXF{$n}->{'color.book'} = 430;
+$DXF{$n}->{'color.alpha'} = 440;
 $DXF{$n}->{'paper_r11'} = 67;
 $DXF{$n}->{'plotstyle'} = 390;
 $DXF{$n}->{'ownerhandle'} = 330;
