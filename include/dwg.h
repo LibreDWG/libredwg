@@ -2200,7 +2200,7 @@ typedef struct _dwg_object_VPORT
   BITCODE_2RD SNAPBASE;
   BITCODE_2RD SNAPUNIT;
   BITCODE_B unknown;
-  BITCODE_B ucs_pre_viewport;
+  BITCODE_B UCSVP;          /*!< DXF 65 */
   BITCODE_3BD ucs_origin;
   BITCODE_3BD ucs_x_axis;
   BITCODE_3BD ucs_y_axis;

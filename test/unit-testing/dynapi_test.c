@@ -35240,6 +35240,22 @@ static int test_VPORT (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_B UCSVP;
+    if (dwg_dynapi_entity_value (vport, "VPORT", "UCSVP", &UCSVP, NULL)
+        && UCSVP == vport->UCSVP)
+      pass ();
+    else
+      fail ("VPORT.UCSVP [B] " FORMAT_B " != " FORMAT_B "", vport->UCSVP, UCSVP);
+    UCSVP++;
+    if (dwg_dynapi_entity_set_value (vport, "VPORT", "UCSVP", &UCSVP, 0)
+        && UCSVP == vport->UCSVP)
+      pass ();
+    else
+      fail ("VPORT.UCSVP [B] set+1 " FORMAT_B " != " FORMAT_B "", vport->UCSVP, UCSVP);
+    vport->UCSVP--;
+
+  }
+  {
     BITCODE_2RD VIEWCTR;
     if (dwg_dynapi_entity_value (vport, "VPORT", "VIEWCTR", &VIEWCTR, NULL)
         && !memcmp (&VIEWCTR, &vport->VIEWCTR, sizeof (vport->VIEWCTR)))
@@ -35590,22 +35606,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.ucs_orthografic_type [BS] set+1 %hu != %hu", vport->ucs_orthografic_type, ucs_orthografic_type);
     vport->ucs_orthografic_type--;
-
-  }
-  {
-    BITCODE_B ucs_pre_viewport;
-    if (dwg_dynapi_entity_value (vport, "VPORT", "ucs_pre_viewport", &ucs_pre_viewport, NULL)
-        && ucs_pre_viewport == vport->ucs_pre_viewport)
-      pass ();
-    else
-      fail ("VPORT.ucs_pre_viewport [B] " FORMAT_B " != " FORMAT_B "", vport->ucs_pre_viewport, ucs_pre_viewport);
-    ucs_pre_viewport++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "ucs_pre_viewport", &ucs_pre_viewport, 0)
-        && ucs_pre_viewport == vport->ucs_pre_viewport)
-      pass ();
-    else
-      fail ("VPORT.ucs_pre_viewport [B] set+1 " FORMAT_B " != " FORMAT_B "", vport->ucs_pre_viewport, ucs_pre_viewport);
-    vport->ucs_pre_viewport--;
 
   }
   {

@@ -3339,7 +3339,7 @@ static const Dwg_DYNAPI_field _dwg_VPORT_fields[] = {
   { "SNAPBASE", "2RD", sizeof (BITCODE_2RD), OFF (struct _dwg_object_VPORT,SNAPBASE), 1,0,0, 13 },
   { "SNAPUNIT", "2RD", sizeof (BITCODE_2RD), OFF (struct _dwg_object_VPORT,SNAPUNIT), 1,0,0, 14 },
   { "unknown", "B", sizeof (BITCODE_B), OFF (struct _dwg_object_VPORT,unknown), 0,0,0, 0 },
-  { "ucs_pre_viewport", "B", sizeof (BITCODE_B), OFF (struct _dwg_object_VPORT,ucs_pre_viewport), 0,0,0, 71 },
+  { "UCSVP", "B", sizeof (BITCODE_B), OFF (struct _dwg_object_VPORT,UCSVP), 0,0,0, 65 },
   { "ucs_origin", "3BD", sizeof (BITCODE_3BD), OFF (struct _dwg_object_VPORT,ucs_origin), 1,0,0, 110 },
   { "ucs_x_axis", "3BD", sizeof (BITCODE_3BD), OFF (struct _dwg_object_VPORT,ucs_x_axis), 1,0,0, 111 },
   { "ucs_y_axis", "3BD", sizeof (BITCODE_3BD), OFF (struct _dwg_object_VPORT,ucs_y_axis), 1,0,0, 112 },
