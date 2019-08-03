@@ -3583,7 +3583,7 @@ get_base_value_type (short gc)
           if (gc == 5)
             return VT_HANDLE;
           if (gc <= 9)
-            return VT_STRING;
+            return VT_STRING;  // but 9 never TU
           if (gc <= 37)
             return VT_POINT3D; // lgtm [cpp/constant-comparison]
         }

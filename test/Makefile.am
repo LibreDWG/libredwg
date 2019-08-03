@@ -54,6 +54,7 @@ TESTDATA = \
     test-data/2000/Text.txt \
     test-data/2000/TS1.dwg \
     test-data/2000/TS1.dwg.info \
+    test-data/2000/TS1.dxf \
     test-data/2000/TS1.txt \
     test-data/2000/circle.dwg \
     test-data/2000/circle.jpg \
@@ -288,6 +289,7 @@ TESTDATA = \
     test-data/2018/Spline.txt \
     test-data/2018/Text.dwg \
     test-data/2018/Text.txt \
+    test-data/2018/TS1.dxf \
     test-data/2018/circle.dwg \
     test-data/2018/circle.txt \
     test-data/example_2000.dwg \

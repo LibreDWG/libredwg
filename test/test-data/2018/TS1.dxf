@@ -5,15 +5,23 @@ HEADER
   9
 $ACADVER
   1
-AC1015
+AC1032
   9
 $ACADMAINTVER
- 70
-    20
+ 90
+       29
   9
 $DWGCODEPAGE
   3
 ANSI_1252
+  9
+$LASTSAVEDBY
+  1
+rurban
+  9
+$REQUIREDVERSIONS
+160
+                 0
   9
 $INSBASE
  10
@@ -376,6 +384,46 @@ $DIMLWE
     -2
   9
 $DIMTMOVE
+ 70
+     0
+  9
+$DIMFXL
+ 40
+1.0
+  9
+$DIMFXLON
+ 70
+     0
+  9
+$DIMJOGANG
+ 40
+0.7853981633974483
+  9
+$DIMTFILL
+ 70
+     0
+  9
+$DIMTFILLCLR
+ 70
+     0
+  9
+$DIMARCSYM
+ 70
+     0
+  9
+$DIMLTYPE
+  6
+
+  9
+$DIMLTEX1
+  6
+
+  9
+$DIMLTEX2
+  6
+
+  9
+$DIMTXTDIRECTION
  70
      0
   9

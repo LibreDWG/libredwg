@@ -154,7 +154,6 @@ dxf_free_pair (Dxf_Pair *pair)
       pair->value.s = NULL;
     }
   free (pair);
-  pair = NULL;
 }
 
 static Dxf_Pair *
@@ -169,7 +168,10 @@ dxf_read_pair (Bit_Chain *dat)
     case VT_STRING:
       dxf_read_string (dat, &pair->value.s);
       LOG_TRACE ("  dxf (%d, \"%s\")\n", (int)pair->code, pair->value.s);
-      SINCE (R_2007)
+      if (dat->version >= R_2007 &&
+          pair->code != 0 && // names never unicode
+          pair->code != 2 &&
+          pair->code != 9)
       {
         BITCODE_TU wstr = bit_utf8_to_TU (pair->value.s);
         free (pair->value.s);
@@ -1209,6 +1211,8 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     next_hdrvalue:
       if (pair->code == 1 && strEQc (field, "$ACADVER"))
         {
+          // Note: Here version is still R_INVALID, thus pair->value.s
+          // is never TU.
           const char* version = pair->value.s;
           for (Dwg_Version_Type v = 0; v <= R_AFTER; v++)
             {
@@ -1690,8 +1694,8 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
             Dwg_Object_Ref *ref;
             char ctrlobj[80];
             add_handle (&obj->handle, 0, pair->value.u, NULL);
-            LOG_TRACE ("%s.handle = " FORMAT_H " [5]\n", ctrlname,
-                       ARGS_H(obj->handle));
+            LOG_TRACE ("%s.handle = " FORMAT_H " [%d]\n", ctrlname,
+                       ARGS_H(obj->handle), pair->code);
 
             // also set the matching HEADER.*_CONTROL_OBJECT
             ref = add_handleref (3, pair->value.u, obj);
@@ -1702,7 +1706,11 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
                        ARGS_REF(ref));
           }
           break;
-        case 330: // ownerhandle mostly 0
+        case 100: // AcDbSymbolTableRecord, ... ignore
+          break;
+        case 102: // TODO {ACAD_XDICTIONARY {ACAD_REACTORS
+          break;
+        case 330: // TODO: most likely {ACAD_REACTORS
           if (pair->value.u)
             {
               obj->tio.object->ownerhandle = add_handleref (4, pair->value.u, obj);
@@ -1726,14 +1734,10 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
               j++;
             }
           break;
-        case 100: // Always AcDbSymbolTable. ignore
-          break;
         case 360: // {ACAD_XDICTIONARY TODO
           obj->tio.object->xdicobjhandle = add_handleref (0, pair->value.u, obj);
           LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [330]\n", ctrlname,
                      ARGS_REF(obj->tio.object->xdicobjhandle));
-          break;
-        case 102: // {ACAD_XDICTIONARY TODO
           break;
         case 70:
           if (pair->value.u)
@@ -1768,7 +1772,6 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
         default:
           if (pair->code >= 1000 && pair->code < 1999)
             {
-              //LOG_WARN ("TODO %s.eed.%d", ctrlname, pair->code);
               add_eed (obj, ctrlname, pair);
             }
           else
@@ -1835,6 +1838,10 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
         { // TABLE common flags: name, xrefref, xrefdep, ...
         case 0:
           return pair;
+        case 105: /* DIMSTYLE */
+          if (strNE (name, "DIMSTYLE"))
+            goto table_default;
+          // fall through
         case 5:
           {
             add_handle (&obj->handle, 0, pair->value.u, NULL);
@@ -1893,9 +1900,17 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
           LOG_TRACE ("%s.flag = %d [70]\n", name, pair->value.i)
           break;
         default:
+        table_default:
+          if (pair->code >= 1000 && pair->code < 1999)
+            {
+              add_eed (obj, name, pair);
+            }
+          else
           { // search all specific fields and common fields for the DXF
             const Dwg_DYNAPI_field *f;
             const Dwg_DYNAPI_field *fields = dwg_dynapi_entity_fields (name);
+            if (!fields)
+              break;
             for (f = &fields[0]; f->name; f++)
               {
                 if (f->dxf == pair->code)
