@@ -1793,6 +1793,8 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
   Dwg_Object_LTYPE *_obj = NULL;
   char ctrl_hdlv[80];
   char ctrlname[80];
+  int in_xdict = 0;
+  int in_reactors = 0;
   ctrl_hdlv[0] = '\0';
 
   NEW_OBJECT (dwg, obj);
@@ -1852,43 +1854,73 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
                 // add to ctrl HANDLE_VECTOR "ctrl_hdlv"
                 Dwg_Object_VPORT_CONTROL *_ctrl = ctrl->tio.object->tio.VPORT_CONTROL;
                 BITCODE_H *hdls = NULL;
+                BITCODE_BL num_entries;
+                dwg_dynapi_entity_value (_ctrl, ctrlname, "num_entries",
+                                         &num_entries, NULL);
+                if (num_entries <= i)
+                  {
+                    // DXF often lies about num_entries, skipping defaults
+                    LOG_WARN ("Misleading %s.num_entries %d for %dth entry", ctrlname,
+                              num_entries, i+1);
+                    num_entries = i + 1;
+                    dwg_dynapi_entity_set_value (_ctrl, ctrlname, "num_entries", &num_entries, 0);
+                    LOG_TRACE ("%s.num_entries = %d [70]\n", ctrlname, num_entries);
+                  }
+
                 dwg_dynapi_entity_value (_ctrl, ctrlname, ctrl_hdlv, &hdls, NULL);
                 if (!hdls)
                   {
-                    BITCODE_BL num_entries;
-                    dwg_dynapi_entity_value (_ctrl, ctrlname, "num_entries",
-                                             &num_entries, NULL);
-                    if (!num_entries)
-                      {
-                        num_entries = i + 1;
-                        dwg_dynapi_entity_set_value (
-                            _ctrl, ctrlname, "num_entries", &num_entries, 0);
-                      }
                     hdls = calloc (num_entries, sizeof (Dwg_Object_Ref*));
-                    dwg_dynapi_entity_set_value (_ctrl, ctrlname, ctrl_hdlv,
-                                                 &hdls, 0);
+                  }
+                else
+                  {
+                    hdls = realloc (hdls, num_entries * sizeof (Dwg_Object_Ref*));
                   }
                 hdls[i] = add_handleref (2, pair->value.u, obj);
-                //dwg_dynapi_entity_set_value (_ctrl, ctrlname, ctrl_hdlv, &hdls);
+                dwg_dynapi_entity_set_value (_ctrl, ctrlname, ctrl_hdlv, &hdls, 0);
+                LOG_TRACE ("%s.%s[%d] = " FORMAT_REF " [0]\n", ctrlname, ctrl_hdlv, i,
+                           ARGS_REF(hdls[i]));
               }
           }
           break;
+        case 100: // Always AcDbSymbolTableRecord and then AcDb*TableRecord. ignore
+          break;
+        case 102: // {ACAD_XDICTIONARY TODO
+          if (strEQc (pair->value.s, "{ACAD_XDICTIONARY"))
+            in_xdict = 1;
+          else if (strEQc (pair->value.s, "{ACAD_REACTORS"))
+            in_reactors = 1;
+          else if (strEQc (pair->value.s, "}"))
+            in_reactors = in_xdict = 0;
+          else
+            LOG_WARN ("Unknown DXF 102 %s in %s", pair->value.s, name)
+          break;
         case 330:
-          if (pair->value.u)
+          if (in_reactors)
+            {
+              BITCODE_BL num = obj->tio.object->num_reactors;
+              BITCODE_H reactor = add_handleref (4, pair->value.u, obj);
+              LOG_TRACE ("%s.reactors[%d] = " FORMAT_REF " [330]\n", name,
+                         num, ARGS_REF(reactor));
+              obj->tio.object->reactors = realloc (obj->tio.object->reactors,
+                                                   (num + 1) * sizeof (BITCODE_H));
+              obj->tio.object->reactors[num] = reactor;
+              obj->tio.object->num_reactors++;
+            }
+          else if (pair->value.u) // valid ownerhandle
             {
               obj->tio.object->ownerhandle = add_handleref (4, pair->value.u, obj);
               LOG_TRACE ("%s.ownerhandle = " FORMAT_REF " [330]\n", name,
                          ARGS_REF(obj->tio.object->ownerhandle));
             }
           break;
-        case 100: // Always AcDbSymbolTableRecord and then AcDb*TableRecord. ignore
-          break;
-        case 360: // {ACAD_XDICTIONARY TODO
-          LOG_WARN ("Unhandled %s.xdicobjhandle = %X [360]\n", name,
-                    /*obj->handle.code, obj->handle.size, obj->handle.value, */
-                    pair->value.u);
-          // fall through
-        case 102: // {ACAD_XDICTIONARY TODO
+        case 360: // {ACAD_XDICTIONARY
+          if (!in_xdict)
+            LOG_WARN ("Missing 102.{ACAD_XDICTIONARY group");
+          obj->tio.object->xdicobjhandle = add_handleref (3, pair->value.u, obj);
+          obj->tio.object->xdic_missing_flag = 0;
+          LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [360]\n", name,
+                     ARGS_REF(obj->tio.object->xdicobjhandle));
           break;
         case 2:
           dwg_dynapi_entity_set_value (_obj, name, "name", &pair->value, is_utf);
