@@ -168,6 +168,9 @@ dxf_read_pair (Bit_Chain *dat)
     case VT_STRING:
       dxf_read_string (dat, &pair->value.s);
       LOG_TRACE ("  dxf (%d, \"%s\")\n", (int)pair->code, pair->value.s);
+      // dynapi_set_helper converts from utf-8 to unicode, not here.
+      // we need to know the type of the target field, if TV or T
+#if 0
       if (dat->version >= R_2007 &&
           pair->code != 0 && // names never unicode
           pair->code != 2 &&
@@ -177,6 +180,7 @@ dxf_read_pair (Bit_Chain *dat)
         free (pair->value.s);
         pair->value.s = (char *)wstr;
       }
+#endif
       break;
     case VT_BOOL:
     case VT_INT8:

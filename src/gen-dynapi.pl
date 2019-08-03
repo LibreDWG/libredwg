@@ -774,7 +774,7 @@ close $fh;
 
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 765 "gen-dynapi.pl"
+#line 778 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -840,7 +840,7 @@ static const struct _name_type_fields dwg_name_types[] = {
   @@enum DWG_OBJECT_TYPE@@
 };
 
-#line 832 "gen-dynapi.pl"
+#line 844 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
@@ -1274,22 +1274,26 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
           memcpy (old, &str, f->size); // size of ptr
         }
       else if (strEQc (f->type, "TU")
-               || ((strEQc (f->type, "T") || strEQc (f->type, "TV"))
-                   && dwg_version >= R_2007))
+               || (strEQc (f->type, "T") && dwg_version >= R_2007))
         {
-          char *str;
+          BITCODE_TU wstr;
+          if (is_utf8)
+            wstr = bit_utf8_to_TU (*(char **)value);
+          else // source is already TU
+            {
 #if defined(HAVE_WCHAR_H) && defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
-          str = malloc (2 * (wcslen (*(wchar_t **)value) + 1));
-          wcscpy ((wchar_t *)str, *(wchar_t **)value);
+              wstr = malloc (2 * (wcslen (*(wchar_t **)value) + 1));
+              wcscpy ((wchar_t *)wstr, *(wchar_t **)value);
 #else
-          int length = 0;
-          for (; (*(BITCODE_TU*)value)[length]; length++)
-            ;
-          length++;
-          str = malloc (2 * length);
-          memcpy (str, value, length * 2);
+              int length = 0;
+              for (; (*(BITCODE_TU*)value)[length]; length++)
+                ;
+              length++;
+              wstr = malloc (2 * length);
+              memcpy (wstr, value, length * 2);
 #endif
-          memcpy (old, &str, f->size); // size of ptr
+            }
+          memcpy (old, &wstr, f->size); // size of ptr
         }
     }
   else
