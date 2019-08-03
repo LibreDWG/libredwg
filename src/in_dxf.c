@@ -1864,7 +1864,7 @@ new_table (char *restrict name, Bit_Chain *restrict dat,
         case 5:
           {
             add_handle (&obj->handle, 0, pair->value.u, NULL);
-            LOG_TRACE ("%s.handle = " FORMAT_H " [5]\n", name,
+            LOG_TRACE ("%s.handle = " FORMAT_H " [5 H]\n", name,
                        ARGS_H(obj->handle));
             if (*ctrl_hdlv)
               {
@@ -1881,7 +1881,7 @@ new_table (char *restrict name, Bit_Chain *restrict dat,
                               num_entries, i+1);
                     num_entries = i + 1;
                     dwg_dynapi_entity_set_value (_ctrl, ctrlname, "num_entries", &num_entries, 0);
-                    LOG_TRACE ("%s.num_entries = %d [70]\n", ctrlname, num_entries);
+                    LOG_TRACE ("%s.num_entries = %d [70 BL]\n", ctrlname, num_entries);
                   }
 
                 dwg_dynapi_entity_value (_ctrl, ctrlname, ctrl_hdlv, &hdls, NULL);
@@ -1917,7 +1917,7 @@ new_table (char *restrict name, Bit_Chain *restrict dat,
             {
               BITCODE_BL num = obj->tio.object->num_reactors;
               BITCODE_H reactor = add_handleref (4, pair->value.u, obj);
-              LOG_TRACE ("%s.reactors[%d] = " FORMAT_REF " [330]\n", name,
+              LOG_TRACE ("%s.reactors[%d] = " FORMAT_REF " [330 H]\n", name,
                          num, ARGS_REF(reactor));
               obj->tio.object->reactors = realloc (obj->tio.object->reactors,
                                                    (num + 1) * sizeof (BITCODE_H));
@@ -1927,7 +1927,7 @@ new_table (char *restrict name, Bit_Chain *restrict dat,
           else if (pair->value.u) // valid ownerhandle
             {
               obj->tio.object->ownerhandle = add_handleref (4, pair->value.u, obj);
-              LOG_TRACE ("%s.ownerhandle = " FORMAT_REF " [330]\n", name,
+              LOG_TRACE ("%s.ownerhandle = " FORMAT_REF " [330 H]\n", name,
                          ARGS_REF(obj->tio.object->ownerhandle));
             }
           break;
@@ -1936,17 +1936,18 @@ new_table (char *restrict name, Bit_Chain *restrict dat,
             LOG_WARN ("Missing 102.{ACAD_XDICTIONARY group");
           obj->tio.object->xdicobjhandle = add_handleref (3, pair->value.u, obj);
           obj->tio.object->xdic_missing_flag = 0;
-          LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [360]\n", name,
+          LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [360 H]\n", name,
                      ARGS_REF(obj->tio.object->xdicobjhandle));
           break;
         case 2:
-          dwg_dynapi_entity_set_value (_obj, obj->name, "name", &pair->value, is_utf);
-          LOG_TRACE ("%s.name = %s [2]\n", name, pair->value.s);
+          dwg_dynapi_entity_set_value (_obj, obj->name, "name", &pair->value,
+                                       is_utf);
+          LOG_TRACE ("%s.name = %s [2 T]\n", name, pair->value.s);
           break;
         case 70:
           dwg_dynapi_entity_set_value (_obj, obj->name, "flag",
                                        &pair->value, is_utf);
-          LOG_TRACE ("%s.flag = %d [70]\n", name, pair->value.i)
+          LOG_TRACE ("%s.flag = %d [70 RC]\n", name, pair->value.i)
           break;
         default:
         table_default:
@@ -1957,9 +1958,12 @@ new_table (char *restrict name, Bit_Chain *restrict dat,
           else
           { // search all specific fields and common fields for the DXF
             const Dwg_DYNAPI_field *f;
-            const Dwg_DYNAPI_field *fields = dwg_dynapi_entity_fields (name);
+            const Dwg_DYNAPI_field *fields = dwg_dynapi_entity_fields (obj->name);
             if (!fields)
-              break;
+              {
+                LOG_ERROR ("Illegal object name %s, no dynapi fields", obj->name);
+                break;
+              }
             for (f = &fields[0]; f->name; f++)
               {
                 if (f->dxf == pair->code)
@@ -1972,6 +1976,8 @@ new_table (char *restrict name, Bit_Chain *restrict dat,
                         pt.x = pair->value.d;
                         dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
                                                      &pt, is_utf);
+                        LOG_TRACE ("%s.%s.x = %f [%d %s]\n", name, f->name,
+                                   pair->value.d, pair->code, f->type);
                       }
                     else if (f->size > 8 && strEQc (f->type, "CMC"))
                       {
@@ -1979,7 +1985,7 @@ new_table (char *restrict name, Bit_Chain *restrict dat,
                         dwg_dynapi_entity_value (_obj, obj->name, f->name,
                                                  &color, NULL);
                         if (pair->code < 100)
-                          color.index = pair->value.d;
+                          color.index = pair->value.i;
                         else if (pair->code < 430)
                           color.rgb = pair->value.l;
                         else if (pair->code < 440)
@@ -1994,6 +2000,8 @@ new_table (char *restrict name, Bit_Chain *restrict dat,
                           }
                         dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
                                                      &color, is_utf);
+                        LOG_TRACE ("%s.%s = %d [%d %s]\n", name, f->name,
+                                   pair->value.i, pair->code, "CMC");
                       }
                     else
                       dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
