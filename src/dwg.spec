@@ -1040,6 +1040,7 @@ DWG_ENTITY_END
 /**
  * Macro for common DIMENSION declaration
  */
+#ifndef DIMENSION_COMMON_DECODE
 #define DIMENSION_COMMON_DECODE \
     SINCE (R_2010) \
       { \
@@ -1105,6 +1106,7 @@ DWG_ENTITY_END
     DXF { \
       FIELD_HANDLE (dimstyle, 5, 3); \
     }
+#endif
 
 /*(20)*/
 DWG_ENTITY(DIMENSION_ORDINATE)
@@ -3469,6 +3471,7 @@ DWG_OBJECT(DICTIONARYVAR)
 
 DWG_OBJECT_END
 
+#ifndef IS_INDXF
 int DWG_FUNC_N(ACTION,_HATCH_gradientfill)(
                         Bit_Chain *restrict dat,
                         Bit_Chain *restrict str_dat,
@@ -3511,12 +3514,13 @@ int DWG_FUNC_N(ACTION,_HATCH_gradientfill)(
   FIELD_T (gradient_name, 470);
   return error;
 }
+#endif
 
 //(78 + varies) pg.136
 DWG_ENTITY(HATCH)
 
   SUBCLASS (AcDbHatch)
-#ifndef IS_DXF
+#if !defined(IS_DXF) && !defined(IS_INDXF)
   SINCE (R_2004)
     {
       error |= DWG_FUNC_N(ACTION,_HATCH_gradientfill)(dat,str_dat,obj,_obj);

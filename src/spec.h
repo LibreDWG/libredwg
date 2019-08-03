@@ -225,8 +225,10 @@
 #  endif
 #endif
 
-#define R11OPTS(b) _ent->opts_r11 &b
-#define R11FLAG(b) _ent->flag_r11 &b
+#ifndef R11OPTS
+#  define R11OPTS(b) _ent->opts_r11 &b
+#  define R11FLAG(b) _ent->flag_r11 &b
+#endif
 
 #define DECODE_UNKNOWN_BITS                                                   \
   DECODER { dwg_decode_unknown (dat, (Dwg_Object * restrict) obj); }          \
