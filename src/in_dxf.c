@@ -1108,7 +1108,7 @@ dwg_indxf_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   if (pair != NULL)                                                           \
     {                                                                         \
       if (dat->byte >= dat->size                                              \
-          || (pair->code == 0 && strEQc (pair->value.s, "ENDSEC")))          \
+          || (pair->code == 0 && strEQc (pair->value.s, "ENDSEC")))           \
         {                                                                     \
           dxf_free_pair (pair);                                               \
           return what;                                                        \
@@ -1606,7 +1606,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       else if (strEQc (#nam, "VPORT_ENTITY"))          \
         strcpy (ctrl_hdlv, "vport_entity_headers");    \
       else if (strEQc (#nam, "BLOCK_RECORD"))          \
-        strcpy (ctrl_hdlv, "entries");                 \
+        strcpy (ctrl_hdlv, "block_headers");           \
     }
 
 static int
@@ -1617,7 +1617,8 @@ is_table_name (const char *name)
          || strEQc (name, "BLOCK") || strEQc (name, "LAYER")
          || strEQc (name, "DIMSTYLE") || strEQc (name, "STYLE")
          || strEQc (name, "VIEW") || strEQc (name, "VPORT_ENTITY")
-         || strEQc (name, "UCS") || strEQc (name, "BLOCK_RECORD");
+         || strEQc (name, "UCS") || strEQc (name, "BLOCK_RECORD")
+         || strEQc (name, "BLOCK_HEADER");
 }
 
 static Dxf_Pair *
@@ -1628,7 +1629,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   // VPORT_CONTROL.entries[num_entries] handles
   Dwg_Object *obj;
   Dxf_Pair *pair = NULL;
-  Dwg_Object_LTYPE_CONTROL *_obj = NULL;
+  Dwg_Object_APPID_CONTROL *_obj = NULL;
   int j = 0;
   int is_utf = dwg->header.version >= R_2007 ? 1 : 0;
   char *fieldname;
@@ -1653,7 +1654,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   else
   ADD_TABLE_IF (APPID, APPID_CONTROL)
   else
-  ADD_TABLE_IF (BLOCK, BLOCK_CONTROL)
+  ADD_TABLE_IF (BLOCK_RECORD, BLOCK_CONTROL)
   else
   ADD_TABLE_IF (DIMSTYLE, DIMSTYLE_CONTROL)
   else
@@ -1783,14 +1784,19 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   return pair;
 }
 
+/* Most of that code is object specific, not just for tables.
+   TODO: rename to new_object, and special-case the table code.
+   How to initialize _obj? To generic only?
+ */
 static Dxf_Pair *
-new_table (const char *restrict name, Bit_Chain *restrict dat,
+new_table (char *restrict name, Bit_Chain *restrict dat,
            Dwg_Data *restrict dwg, Dwg_Object *restrict ctrl, BITCODE_BL i)
 {
   int is_utf = dwg->header.version >= R_2007 ? 1 : 0;
   Dwg_Object *obj;
   Dxf_Pair *pair = dxf_read_pair (dat);
-  Dwg_Object_LTYPE *_obj = NULL;
+  Dwg_Object_APPID *_obj = NULL; // the smallest
+  // we'd really need a Dwg_Object_TABLE or Dwg_Object_Generic type
   char ctrl_hdlv[80];
   char ctrlname[80];
   int in_xdict = 0;
@@ -1798,9 +1804,17 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
   ctrl_hdlv[0] = '\0';
 
   NEW_OBJECT (dwg, obj);
-  strcpy (ctrlname, name);
-  strcat (ctrlname, "_CONTROL");
 
+  if (strEQc (name, "BLOCK_RECORD"))
+    {
+      //strcpy (name, "BLOCK_HEADER");
+      strcpy (ctrlname, "BLOCK_CONTROL");
+    }
+  else
+    {
+      strcpy (ctrlname, name);
+      strcat (ctrlname, "_CONTROL");
+    }
   LOG_TRACE ("add %s [%d]\n", name, i);
 
   ADD_TABLE_IF (LTYPE, LTYPE)
@@ -1820,6 +1834,8 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
   ADD_TABLE_IF (VIEW, VIEW)
   else
   ADD_TABLE_IF (BLOCK_RECORD, BLOCK_HEADER)
+  //else
+  //ADD_TABLE_IF (BLOCK_HEADER, BLOCK_HEADER)
   //else
   //ADD_TABLE_IF (VPORT_ENTITY, VPORT_ENTITY)
   else
@@ -1852,7 +1868,7 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
             if (*ctrl_hdlv)
               {
                 // add to ctrl HANDLE_VECTOR "ctrl_hdlv"
-                Dwg_Object_VPORT_CONTROL *_ctrl = ctrl->tio.object->tio.VPORT_CONTROL;
+                Dwg_Object_APPID_CONTROL *_ctrl = ctrl->tio.object->tio.APPID_CONTROL;
                 BITCODE_H *hdls = NULL;
                 BITCODE_BL num_entries;
                 dwg_dynapi_entity_value (_ctrl, ctrlname, "num_entries",
@@ -1923,11 +1939,11 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
                      ARGS_REF(obj->tio.object->xdicobjhandle));
           break;
         case 2:
-          dwg_dynapi_entity_set_value (_obj, name, "name", &pair->value, is_utf);
+          dwg_dynapi_entity_set_value (_obj, obj->name, "name", &pair->value, is_utf);
           LOG_TRACE ("%s.name = %s [2]\n", name, pair->value.s);
           break;
         case 70:
-          dwg_dynapi_entity_set_value (_obj, name, "flag",
+          dwg_dynapi_entity_set_value (_obj, obj->name, "flag",
                                        &pair->value, is_utf);
           LOG_TRACE ("%s.flag = %d [70]\n", name, pair->value.i)
           break;
@@ -1953,13 +1969,13 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
                       {
                         BITCODE_3BD pt;
                         pt.x = pair->value.d;
-                        dwg_dynapi_entity_set_value (_obj, name, f->name,
+                        dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
                                                      &pt, is_utf);
                       }
                     else if (f->size > 8 && strEQc (f->type, "CMC"))
                       {
                         BITCODE_CMC color;
-                        dwg_dynapi_entity_value (_obj, name, f->name,
+                        dwg_dynapi_entity_value (_obj, obj->name, f->name,
                                                  &color, NULL);
                         if (pair->code < 100)
                           color.index = pair->value.d;
@@ -1975,11 +1991,11 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
                             color.alpha_type = 3;
                             color.alpha = pair->value.i;
                           }
-                        dwg_dynapi_entity_set_value (_obj, name, f->name,
+                        dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
                                                      &color, is_utf);
                       }
                     else
-                      dwg_dynapi_entity_set_value (_obj, name, f->name,
+                      dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
                                                    &pair->value, is_utf);
                     if (f->is_string)
                       {
@@ -2005,10 +2021,10 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
                     BITCODE_3DPOINT pt;
                     if (pair->value.d == 0.0)
                       goto next_pair;
-                    dwg_dynapi_entity_value (_obj, name, f->name,
+                    dwg_dynapi_entity_value (_obj, obj->name, f->name,
                                              &pt, NULL);
                     pt.y = pair->value.d;
-                    dwg_dynapi_entity_set_value (_obj, name, f->name,
+                    dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
                                                  &pt, is_utf);
                     LOG_TRACE ("%s.%s.y = %f [%d %s]\n", name, f->name,
                                pair->value.d, pair->code, f->type);
@@ -2021,10 +2037,10 @@ new_table (const char *restrict name, Bit_Chain *restrict dat,
                     BITCODE_3DPOINT pt;
                     if (pair->value.d == 0.0)
                       goto next_pair;
-                    dwg_dynapi_entity_value (_obj, name, f->name,
+                    dwg_dynapi_entity_value (_obj, obj->name, f->name,
                                              &pt, NULL);
                     pt.z = pair->value.d;
-                    dwg_dynapi_entity_set_value (_obj, name, f->name,
+                    dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
                                                  &pt, is_utf);
                     LOG_TRACE ("%s.%s.z = %f [%d %s]\n", name, f->name,
                                pair->value.d, pair->code, f->type);
@@ -2076,8 +2092,15 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         {
           if (strEQc (pair->value.s, "TABLE"))
             table[0] = '\0'; // new table coming up
+          else if (strEQc (pair->value.s, "BLOCK_RECORD"))
+            strcpy (table, pair->value.s);
           else if (strEQc (pair->value.s, "ENDTAB"))
             table[0] = '\0'; // close table
+          else if (strEQc (pair->value.s, "ENDSEC"))
+            {
+              dxf_free_pair (pair);
+              return 0;
+            }
           else
             LOG_WARN ("Unknown 0 %s", pair->value.s);
         }
