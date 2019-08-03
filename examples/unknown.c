@@ -387,7 +387,7 @@ handle_string (char *restrict dest, const int code, const char *restrict hdl,
 {
   Dwg_Handle handle;
   // parse hex -> owner handle;
-  sscanf (hdl, "%lX", &handle.value);
+  sscanf (hdl, "%X", &handle.value);
   handle.code = code;
   if (code > 5)
     { // relative offset to objhandle
@@ -419,7 +419,7 @@ handle_string (char *restrict dest, const int code, const char *restrict hdl,
     handle.size = 3;
   else
     handle.size = 4;
-  sprintf (dest, "%x.%d.%lX", code, handle.size, handle.value);
+  sprintf (dest, FORMAT_H, ARGS_H (handle));
 }
 
 static void
@@ -428,7 +428,7 @@ bits_handle (Bit_Chain *restrict dat, struct _unknown_field *restrict g,
 {
   Dwg_Handle handle;
   // parse hex -> owner handle;
-  sscanf (g->value, "%lX", &handle.value);
+  sscanf (g->value, "%X", &handle.value);
   handle.code = code;
   cur_hdl = code;
   if (code > 5)
@@ -461,7 +461,7 @@ bits_handle (Bit_Chain *restrict dat, struct _unknown_field *restrict g,
     handle.size = 3;
   else
     handle.size = 4;
-  printf ("  handle %x.%d.%lX (%X)\n", code, handle.size, handle.value,
+  printf ("  handle " FORMAT_H " (%X)\n", ARGS_H(handle),
           objhandle);
   bit_write_H (dat, &handle);
   g->type = BITS_HANDLE;
