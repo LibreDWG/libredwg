@@ -198,7 +198,7 @@ dxf_expect_code (Bit_Chain *dat, Dxf_Pair *pair, int code)
 static int
 dxfb_header_read (Bit_Chain *dat, Dwg_Data *dwg)
 {
-  Dwg_Header_Variables *_gobj = &dwg->header_vars;
+  Dwg_Header_Variables *_obj = &dwg->header_vars;
   Dwg_Object *obj = NULL;
   const int minimal = dwg->opts & 0x10;
   int is_utf = 1;
@@ -342,7 +342,7 @@ dxfb_header_read (Bit_Chain *dat, Dwg_Data *dwg)
     }
 
   dxf_free_pair (pair);
-  if (_gobj->DWGCODEPAGE && strEQc (_gobj->DWGCODEPAGE, "ANSI_1252"))
+  if (_obj->DWGCODEPAGE && strEQc (_obj->DWGCODEPAGE, "ANSI_1252"))
     dwg->header.codepage = 30;
   return 0;
 }
@@ -428,7 +428,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   // VPORT_CONTROL.entries[num_entries] handles
   Dwg_Object *obj;
   Dxf_Pair *pair = NULL;
-  Dwg_Object_APPID_CONTROL *_gobj = NULL;
+  Dwg_Object_APPID_CONTROL *_obj = NULL;
   int j = 0;
   int is_utf = dwg->header.version >= R_2007 ? 1 : 0;
   char *fieldname;
@@ -475,12 +475,12 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
     LOG_ERROR ("Unknown DXF TABLE %s nor %s_CONTROL", name, name);
     return pair;
   }
-  if (!_gobj)
+  if (!_obj)
     {
-      LOG_ERROR ("Empty _gobj at DXF TABLE %s nor %s_CONTROL", name, name);
+      LOG_ERROR ("Empty _obj at DXF TABLE %s nor %s_CONTROL", name, name);
       return pair;
     }
-  dwg_dynapi_entity_set_value (_gobj, obj->name, "objid", &obj->index, is_utf);
+  dwg_dynapi_entity_set_value (_obj, obj->name, "objid", &obj->index, is_utf);
 
   pair = dxf_read_pair (dat);
   // read common table until next 0 table or endtab
@@ -525,7 +525,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
           if (pair->value.u && strEQc (ctrlname, "DIMSTYLE_CONTROL"))
             {
               Dwg_Object_DIMSTYLE_CONTROL *_o
-                  = (Dwg_Object_DIMSTYLE_CONTROL *)_gobj;
+                  = (Dwg_Object_DIMSTYLE_CONTROL *)_obj;
               if (!_o->num_morehandles)
                 {
                   LOG_ERROR ("Empty DIMSTYLE_CONTROL.num_morehandles")
@@ -549,11 +549,11 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
             {
               BITCODE_H *hdls;
               BITCODE_BL num_entries = (BITCODE_BL)pair->value.u;
-              dwg_dynapi_entity_set_value (_gobj, obj->name, "num_entries",
+              dwg_dynapi_entity_set_value (_obj, obj->name, "num_entries",
                                            &num_entries, is_utf);
               LOG_TRACE ("%s.num_entries = %u [70]\n", ctrlname, num_entries);
               hdls = calloc (num_entries, sizeof (Dwg_Object_Ref *));
-              dwg_dynapi_entity_set_value (_gobj, obj->name, ctrl_hdlv, &hdls,
+              dwg_dynapi_entity_set_value (_obj, obj->name, ctrl_hdlv, &hdls,
                                            0);
               LOG_TRACE ("Add %s.%s[%d]\n", ctrlname, ctrl_hdlv, num_entries);
             }
@@ -562,12 +562,12 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
           if (strEQc (name, "DIMSTYLE") && pair->value.u)
             {
               BITCODE_H *hdls;
-              dwg_dynapi_entity_set_value (_gobj, obj->name, "num_morehandles",
+              dwg_dynapi_entity_set_value (_obj, obj->name, "num_morehandles",
                                            &pair->value, is_utf);
               LOG_TRACE ("%s.num_morehandles = %u [71]\n", ctrlname,
                          pair->value.u)
               hdls = calloc (pair->value.u, sizeof (Dwg_Object_Ref *));
-              dwg_dynapi_entity_set_value (_gobj, obj->name, "morehandles",
+              dwg_dynapi_entity_set_value (_obj, obj->name, "morehandles",
                                            &hdls, 0);
               LOG_TRACE ("Add %s.morehandles[%d]\n", ctrlname, pair->value.u);
               break;
@@ -599,7 +599,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
   int is_utf = dwg->header.version >= R_2007 ? 1 : 0;
   Dwg_Object *obj;
   Dxf_Pair *pair = dxf_read_pair (dat);
-  Dwg_Object_APPID *_gobj = NULL; // the smallest
+  Dwg_Object_APPID *_obj = NULL; // the smallest
   // we'd really need a Dwg_Object_TABLE or Dwg_Object_Generic type
   char ctrl_hdlv[80];
   char ctrlname[80];
@@ -615,30 +615,23 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
   if (is_entity)
     {
       // clang-format off
-      CLANG_DIAG_IGNORE (-Wshadow)
-      CLANG_DIAG_IGNORE (-Wint-conversion)
-      // clang-format on
-
       NEW_ENTITY (dwg, obj);
 
-// ADD_ENTITY by name
-// check all objects
-#undef DWG_ENTITY
-#define DWG_ENTITY(token)                                                     \
-  if (strEQc (name, #token))                                                  \
-    {                                                                         \
-      ADD_ENTITY (token);                                                     \
-    }                                                                         \
-  MY_DWG_ENTITY (token)
+      // ADD_ENTITY by name
+      // check all objects
+      #undef DWG_ENTITY
+      #define DWG_ENTITY(token)       \
+        if (strEQc (name, #token))    \
+          {                           \
+            ADD_ENTITY (token);       \
+          }
 
-#include "dwg.spec"
+      #include "objects.inc"
 
-#undef DWG_ENTITY
-#define DWG_ENTITY(token) MY_DWG_ENTITY (token)
+      #undef DWG_ENTITY
+      #define DWG_ENTITY(token)
 
-      CLANG_DIAG_RESTORE
-      CLANG_DIAG_RESTORE
-
+      // clang-format on
     }
   else
     {
@@ -646,28 +639,21 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
       if (!ctrl) // no table
         {
           // clang-format off
-          CLANG_DIAG_IGNORE (-Wshadow)
-          CLANG_DIAG_IGNORE (-Wint-conversion)
+          // ADD_OBJECT by name
+          // check all objects
+          #undef DWG_OBJECT
+          #define DWG_OBJECT(token)         \
+            if (strEQc (name, #token))      \
+              {                             \
+                ADD_OBJECT (token);         \
+              }
+
+          #include "objects.inc"
+
+          #undef DWG_OBJECT
+          #define DWG_OBJECT(token)
+
           // clang-format on
-
-// ADD_OBJECT by name
-// check all objects
-#undef DWG_OBJECT
-#define DWG_OBJECT(token)                                                     \
-  if (strEQc (name, #token))                                                  \
-    {                                                                         \
-      ADD_OBJECT (token);                                                     \
-    }                                                                         \
-  MY_DWG_OBJECT (token)
-
-#include "dwg.spec"
-
-#undef DWG_OBJECT
-#define DWG_OBJECT(token) MY_DWG_OBJECT (token)
-
-          CLANG_DIAG_RESTORE
-          CLANG_DIAG_RESTORE
-
         }
       else
         {
@@ -713,9 +699,9 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
         }
     }
 
-  if (!_gobj)
+  if (!_obj)
     {
-      LOG_ERROR ("Empty _gobj at DXF AcDbSymbolTableRecord %s", name);
+      LOG_ERROR ("Empty _obj at DXF AcDbSymbolTableRecord %s", name);
       return pair;
     }
 
@@ -818,12 +804,12 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                      ARGS_REF (obj->tio.object->xdicobjhandle));
           break;
         case 2:
-          dwg_dynapi_entity_set_value (_gobj, obj->name, "name", &pair->value,
+          dwg_dynapi_entity_set_value (_obj, obj->name, "name", &pair->value,
                                        is_utf);
           LOG_TRACE ("%s.name = %s [2 T]\n", name, pair->value.s);
           break;
         case 70:
-          dwg_dynapi_entity_set_value (_gobj, obj->name, "flag", &pair->value,
+          dwg_dynapi_entity_set_value (_obj, obj->name, "flag", &pair->value,
                                        is_utf);
           LOG_TRACE ("%s.flag = %d [70 RC]\n", name, pair->value.i)
           break;
@@ -854,7 +840,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                         {
                           BITCODE_3BD pt;
                           pt.x = pair->value.d;
-                          dwg_dynapi_entity_set_value (_gobj, obj->name,
+                          dwg_dynapi_entity_set_value (_obj, obj->name,
                                                        f->name, &pt, is_utf);
                           LOG_TRACE ("%s.%s.x = %f [%d %s]\n", name, f->name,
                                      pair->value.d, pair->code, f->type);
@@ -862,7 +848,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                       else if (f->size > 8 && strEQc (f->type, "CMC"))
                         {
                           BITCODE_CMC color;
-                          dwg_dynapi_entity_value (_gobj, obj->name, f->name,
+                          dwg_dynapi_entity_value (_obj, obj->name, f->name,
                                                    &color, NULL);
                           if (pair->code < 100)
                             color.index = pair->value.i;
@@ -879,12 +865,12 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                               color.alpha = pair->value.i;
                             }
                           dwg_dynapi_entity_set_value (
-                              _gobj, obj->name, f->name, &color, is_utf);
+                              _obj, obj->name, f->name, &color, is_utf);
                           LOG_TRACE ("%s.%s = %d [%d %s]\n", name, f->name,
                                      pair->value.i, pair->code, "CMC");
                         }
                       else
-                        dwg_dynapi_entity_set_value (_gobj, obj->name, f->name,
+                        dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
                                                      &pair->value, is_utf);
                       if (f->is_string)
                         {
@@ -909,10 +895,10 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                       BITCODE_3DPOINT pt;
                       if (pair->value.d == 0.0)
                         goto next_pair;
-                      dwg_dynapi_entity_value (_gobj, obj->name, f->name, &pt,
+                      dwg_dynapi_entity_value (_obj, obj->name, f->name, &pt,
                                                NULL);
                       pt.y = pair->value.d;
-                      dwg_dynapi_entity_set_value (_gobj, obj->name, f->name,
+                      dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
                                                    &pt, is_utf);
                       LOG_TRACE ("%s.%s.y = %f [%d %s]\n", name, f->name,
                                  pair->value.d, pair->code, f->type);
@@ -923,10 +909,10 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                       BITCODE_3DPOINT pt;
                       if (pair->value.d == 0.0)
                         goto next_pair;
-                      dwg_dynapi_entity_value (_gobj, obj->name, f->name, &pt,
+                      dwg_dynapi_entity_value (_obj, obj->name, f->name, &pt,
                                                NULL);
                       pt.z = pair->value.d;
-                      dwg_dynapi_entity_set_value (_gobj, obj->name, f->name,
+                      dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
                                                    &pt, is_utf);
                       LOG_TRACE ("%s.%s.z = %f [%d %s]\n", name, f->name,
                                  pair->value.d, pair->code, f->type);
@@ -939,7 +925,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                 {
                   if (f->dxf == pair->code) // TODO alt. color fields
                     {                       // TODO resolve handle names
-                      dwg_dynapi_common_set_value (_gobj, f->name, &pair->value,
+                      dwg_dynapi_common_set_value (_obj, f->name, &pair->value,
                                                    is_utf);
                       if (f->is_string)
                         {
@@ -1116,7 +1102,7 @@ dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (!dwg->num_objects)
     {
       Dwg_Object *obj;
-      Dwg_Object_BLOCK_HEADER *_gobj;
+      Dwg_Object_BLOCK_HEADER *_obj;
       NEW_OBJECT (dwg, obj);
       ADD_OBJECT (BLOCK_HEADER);
     }
