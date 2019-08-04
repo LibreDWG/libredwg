@@ -54,10 +54,11 @@ Texts.  A copy of the license is included in the section entitled
 @menu
 * Overview::            General purpose and information.
 * Usage::               How to use LibreDWG.
-* Types::               Enums, structs.
+* Types::               Common types, enums, structs.
+* Objects::             All supported objects and entities.
 * Functions::           Call them.
 * Errors::              Error levels.
-* Programs::            Useful binaries.
+* Programs::            Included binaries.
 * Bindings::            Bindings to other languages.
 * Reference API::
 
@@ -282,13 +283,13 @@ This chapter describes the enums and structs used to define the single
 DWG structure, which is passed around the functions x(@pxref{Functions}).
 
 @deftypevr {define} BITCODE_RC char
-1 raw signed char
+1 raw unsigned char, uint8_t
 @end deftypevr
 @deftypevr {define} BITCODE_RS short
-1 raw unsigned short int
+1 raw unsigned short int, uint16_t
 @end deftypevr
 @deftypevr {define} BITCODE_RL long
-1 raw unsigned long int
+1 raw unsigned long int, uint32_t
 @end deftypevr
 @deftypevr {define} BITCODE_RD double
 1 raw IEEE-754 double
@@ -309,7 +310,7 @@ DWG structure, which is passed around the functions x(@pxref{Functions}).
 1 bit-encoded unsigned short
 @end deftypevr
 @deftypevr {define} BITCODE_BL long
-1 bit-encoded unsigned long
+1 bit-encoded unsigned long (max 32bit)
 @end deftypevr
 @deftypevr {define} BITCODE_BLL uint64_t
 1 bit-encoded unsigned 64bit long
@@ -347,7 +348,7 @@ The default text type since r2007.
 handle-references
 @end deftypevr
 @deftypevr {define} BITCODE_CMC struct Dwg_Color
-Dwg_Color struct with index or rgb, alpha and optional name and book_name.
+Dwg_Color struct with index or rgb, alpha and optional DBCOLOR handle, name, book_name.
 @end deftypevr
 [and some more]
 
@@ -362,6 +363,18 @@ are the enums for return codes and error codes.
 On non-C99 systems ensure that stdint.h and inttypes.h are available
 to use the proper C99 @code{int32_t},... types, and not just the
 native fallback types int/long, which are different across platforms.
+
+@node Objects
+@chapter Objects
+
+@c TODO CLASSES, TABLES? Or maybe add a ``is a table'' note to the object.
+@menu
+* HEADER::            All Header variables
+* ENTITIES::          All Entities and its special and common fields
+* OBJECTS::           All Objects and its special and common fields
+@end menu
+
+@include dynapi.texi
 
 @node Functions
 @chapter Functions

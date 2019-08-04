@@ -138,6 +138,8 @@ someone should probably think about and resolve them!
 
 * make release
 
+  This needs to be done with an in-tree ./configure, not in an extra build directory.
+
   Before a release:
   - update NEWS manually
   - generate the missing ChangeLog entries
