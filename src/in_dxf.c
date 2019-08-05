@@ -996,9 +996,9 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
         { // TABLE common flags: name, xrefref, xrefdep, ...
         case 0:
           return pair;
-        case 105: /* DIMSTYLE */
+        case 105: /* DIMSTYLE only for 5 */
           if (strNE (name, "DIMSTYLE"))
-            goto table_default;
+            goto object_default;
           // fall through
         case 5:
           {
@@ -1088,17 +1088,25 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                      ARGS_REF (obj->tio.object->xdicobjhandle));
           break;
         case 2:
-          dwg_dynapi_entity_set_value (_obj, obj->name, "name", &pair->value,
+          if (ctrl)
+            {
+              dwg_dynapi_entity_set_value (_obj, obj->name, "name", &pair->value,
                                        is_utf);
-          LOG_TRACE ("%s.name = %s [2 T]\n", name, pair->value.s);
-          break;
+              LOG_TRACE ("%s.name = %s [2 T]\n", name, pair->value.s);
+              break;
+            }
+          // fall through
         case 70:
-          dwg_dynapi_entity_set_value (_obj, obj->name, "flag", &pair->value,
+          if (ctrl)
+            {
+              dwg_dynapi_entity_set_value (_obj, obj->name, "flag", &pair->value,
                                        is_utf);
-          LOG_TRACE ("%s.flag = %d [70 RC]\n", name, pair->value.i)
-          break;
+              LOG_TRACE ("%s.flag = %d [70 RC]\n", name, pair->value.i);
+              break;
+            }
+          // fall through
         default:
-        table_default:
+        object_default:
           if (pair->code >= 1000 && pair->code < 1999)
             {
               add_eed (obj, name, pair);
@@ -1204,7 +1212,8 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                     }
                 }
 
-              fields = dwg_dynapi_common_object_fields ();
+              fields = is_entity ? dwg_dynapi_common_entity_fields ()
+                                 : dwg_dynapi_common_object_fields ();
               for (f = &fields[0]; f->name; f++)
                 {
                   if (f->dxf == pair->code) // TODO alt. color fields
