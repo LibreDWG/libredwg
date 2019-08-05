@@ -98,7 +98,7 @@ main (int argc, char *argv[])
   char *filename_in;
   const char *version = NULL;
   char *filename_out = NULL;
-  Dwg_Version_Type dwg_version = R_INVALID;
+  Dwg_Version_Type dwg_version = R_2000;
 
   int c;
 #ifdef HAVE_GETOPT_LONG
@@ -232,6 +232,8 @@ main (int argc, char *argv[])
       exit (error);
     }
 
+  // TODO fixup the missing bits
+
   printf ("Writing DWG file %s", filename_out);
   if (version)
     {
@@ -243,6 +245,8 @@ main (int argc, char *argv[])
     }
   else
     {
+      // FIXME: for now only R_2000
+      dwg.header.version = dwg_version;
       printf ("\n");
     }
 #ifdef USE_WRITE

@@ -1400,6 +1400,38 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 static int
+dxf_unknownsection_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Dxf_Pair *pair = dxf_read_pair (dat);
+
+  while (1)
+    {
+      if (pair->code == 0)
+        {
+          char name[80];
+          // until 0 ENDSEC
+          while (pair->code == 0 && is_dwg_object (pair->value.s))
+            {
+              strcpy (name, pair->value.s);
+              pair = new_object (name, dat, dwg, NULL, 0);
+            }
+          if (strEQc (pair->value.s, "ENDSEC"))
+            {
+              dxf_free_pair (pair);
+              return 0;
+            }
+          else
+            LOG_WARN ("Unknown 0 %s", pair->value.s);
+        }
+      DXF_RETURN_ENDSEC (0);
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+    }
+  dxf_free_pair (pair);
+  return 0;
+}
+
+static int
 dxf_preview_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   (void)dwg;
@@ -1476,10 +1508,18 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               dxf_free_pair (pair);
               dxf_objects_read (dat, dwg);
             }
+          /*
           else if (strEQc (pair->value.s, "THUMBNAIL"))
             {
               dxf_free_pair (pair);
               dxf_preview_read (dat, dwg);
+            }
+          */
+          else // if (strEQc (pair->value.s, "ACDSDATA"))
+            {
+              LOG_WARN ("SECTION %s ignored for now", pair->value.s);
+              dxf_free_pair (pair);
+              dxf_unknownsection_read (dat, dwg);
             }
         }
     }
