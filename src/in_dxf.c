@@ -874,7 +874,6 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
    TODO: rename to new_object, and special-case the table code.
    How to initialize _obj? To generic only?
  */
-GCC30_DIAG_IGNORE (-Wshadow)
 static Dxf_Pair *
 new_object (char *restrict name, Bit_Chain *restrict dat,
             Dwg_Data *restrict dwg, Dwg_Object *restrict ctrl, BITCODE_BL i)
@@ -895,11 +894,18 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
 
   ctrl_hdlv[0] = '\0';
   LOG_TRACE ("add %s [%d]\n", name, i);
+  NEW_OBJECT (dwg, obj);
+
   if (is_entity)
     {
-      // clang-format off
-      NEW_ENTITY (dwg, obj);
+      if (*name == '3')
+        {
+          // Looks dangerous but name[80] is big enough
+          memmove (&name[1], &name[0], strlen (name) + 1);
+          *name = '_';
+        }
 
+      // clang-format off
       // ADD_ENTITY by name
       // check all objects
       #undef DWG_ENTITY
@@ -918,7 +924,6 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
     }
   else
     {
-      NEW_OBJECT (dwg, obj);
       if (!ctrl) // no table
         {
           // clang-format off
