@@ -4,10 +4,11 @@
 @include version.texi
 @settitle LibreDWG @value{VERSION}
 
-@c Combine everything into one index (arbitrarily chosen to be the
-@c concept index).
-@syncodeindex vr cp
-@syncodeindex fn cp
+@c Use 2 indices, cp (with fn and pg), and vr for the rest (mostly included).
+@c @syncodeindex vr cp
+@synindex fn cp
+@synindex tp cp
+@synindex pg cp
 @c %**end of header
 
 @copying
@@ -33,7 +34,7 @@ Texts.  A copy of the license is included in the section entitled
 @titlepage
 @title GNU LibreDWG
 @subtitle for version @value{VERSION}, @value{UPDATED}
-@c Hey, if you can change this, you can comment in the next line!
+@c Hey, if you change this, you can comment in the next lines
 @author GNU LibreDWG Developers
 @author and Thien-Thi Nguyen
 @page
@@ -126,7 +127,7 @@ Here is a list of features that are still missing.
 @table @asis
 
 @item Reading pre-R13 DWG
-Reading DWG formats for pre-R13 and some R2010+ non-graphical objects is an ongoing effort, some minor parts are missing. Simple DWG's can be read already, some undocumented classes are skipped.
+Reading DWG formats for pre-R13 and some R2010+ non-graphical objects is an ongoing effort, some minor parts are missing. Most DWG's can be read, some undocumented classes are skipped.
 
 * ACIS: version 1 is converted to a raw string. ACIS version 2, i.e. the forked variant ACIS 7.0 under the name ShapeManager, is dumped to a string containing the binary SAB format.
 
@@ -136,11 +137,11 @@ ongoing effort and not yet implemented. We write as default in the R2000 format.
 
 @item Reading and writing ASCII and binary DXF
 DXF support is an ongoing effort, and about halfway implemented.
-Ascii DXF's are generated fully, with much more elements and fields and other free libraries,
+ASCII DXF's are generated fully, with much more elements and fields and other free libraries,
 but AutoCAD fails to import some of them. See the @file{TODO} file for a detailed coverage report.
 
 Writing binary DXF is still under construction, done about 80%.
-Reading DXF is not yet fully implemented, this is under construction.
+Reading DXF is not yet fully implemented, this is under construction and planned for the 0.9 release.
 
 @item Enabled entities and objects, but unstable, undertested. Field names may change:
 
@@ -473,8 +474,8 @@ Paper Space or an individual block.
 Return a malloc'ed NULL-terminated array of all such DWG objects.
 @end deftypefn
 
-The decoder is driven by the fields definition in the @file{dwg.spec}, which adds each
-field to the object. This is done in the @file{decode.c} or @file{decode_r2007.c}.
+The decoder is driven by the fields definition in the @file{src/dwg.spec}, which adds each
+field to the object. This is done in the @file{src/decode.c} or @file{src/decode_r2007.c}.
 @deftypefn {Function} int dwg_decode_OBJECT (Bit_Chain *@var{dat}, Dwg_Object *@var{obj})
 Sets the fields for the object from the DWG bitstream.
 @end deftypefn
@@ -508,9 +509,9 @@ Initializes an object for the given OBJECT or ENTITY type, with all fields being
 This does not initialize the @var{obj} size, type, address, handlestream_size, bitsize fields.
 @end deftypefn
 
-The encoder is driven by the fields definition in the @file{dwg.spec} and
-the generated @file{dynapi.c}, which adds each field to the object.
-This is done by @file{encode} or any @file{in_*} import module.
+The encoder is driven by the fields definition in the @file{src/dwg.spec} and
+the generated @file{src/dynapi.c}, which adds each field to the object.
+This is done by @file{src/encode.c} or any @file{src/in_*.c} import module.
 @deftypefn {Function} int dwg_encode_OBJECT (Bit_Chain *@var{dat}, Dwg_Object *@var{obj})
 Encodes the DWG bitstream from the fields of the object.
 @end deftypefn
@@ -839,8 +840,21 @@ See @file{CONTRIBUTING} in the source distribution.
 @include version.texi
 
 @node Index
-@unnumbered Index
+@chapter Index
+
+@menu
+* General Index::            Concepts, functions and types.
+* Object and Field Index::   Objects, Entities and its fields.
+@end menu
+
+@node General Index
+@section General Index
 
 @printindex cp
+
+@node Object and Field Index
+@section Object and Field Index
+
+@printindex vr
 
 @bye

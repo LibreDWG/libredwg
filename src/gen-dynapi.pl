@@ -459,20 +459,21 @@ for (<DATA>) {
       print $doc "\n\@node ENTITIES\n\@section ENTITIES\n\@cindex ENTITIES\n\n";
       print $doc "All non-graphical objects with its fields. \@xref{Common Entity fields}\n\n";
       for (@entity_names) {
-        print $doc "\@strong{$_} \@anchor{$_}\n\@cindex $_\n\n" unless $_ eq 'DIMENSION_';
+        print $doc "\@strong{$_} \@anchor{$_}\n\@cindex entity, $_\n",
+          "\@vindex $_\n\n" unless $_ eq 'DIMENSION_';
         out_struct("struct _dwg_entity_$_", $_);
       }
     } elsif ($tmpl =~ /^for dwg_object_OBJECT/) {
       print $doc "\n\@node OBJECTS\n\@section OBJECTS\n\@cindex OBJECTS\n\n";
       print $doc "All non-graphical objects with its fields. \@xref{Common Object fields}\n\n";
       for (@object_names) {
-        print $doc "\@strong{$_} \@anchor{$_}\n\@cindex $_\n\n";
+        print $doc "\@strong{$_} \@anchor{$_}\n\@cindex object, $_\n\@vindex $_\n\n";
         out_struct("struct _dwg_object_$_", $_);
       }
     } elsif ($tmpl =~ /^for dwg_subtypes/) {
       for (@subtypes) {
         my ($name) = $_ =~ /^_dwg_(.*)/;
-        print $doc "\@strong{Dwg_$name} \@anchor{Dwg_$name}\n\@cindex Dwg_$name\n\n";
+        print $doc "\@strong{Dwg_$name} \@anchor{Dwg_$name}\n\@vindex Dwg_$name\n\n";
         out_struct("struct $_", $_);
       }
     } elsif ($tmpl =~ /^struct _dwg_(\w+)/) {
@@ -486,7 +487,8 @@ for (<DATA>) {
         print $doc "\@strong{Common Entity fields} \@anchor{Common Entity fields}\n";
         print $doc "\@cindex Common Entity fields\n\n";
       } else {
-        print $doc "\@strong{$1}\n\n";
+        print $doc "\@strong{$1}\n";
+        print $doc "\@vindex $1\n\n";
       }
       out_struct($tmpl, $1);
     }
