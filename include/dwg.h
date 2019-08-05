@@ -5675,6 +5675,12 @@ dwg_bmp (const Dwg_Data *restrict, BITCODE_RL *restrict);
  */
 EXPORT int dxf_cvt_lweight (const BITCODE_RC value);
 
+/* search for the name in the associated tables, and return its handle. */
+EXPORT BITCODE_H
+dxf_find_tablehandle (const Dwg_Data *restrict dwg,
+                      char *restrict name,
+                      const char *restrict table);
+
 EXPORT double dwg_model_x_min (const Dwg_Data *);
 EXPORT double dwg_model_x_max (const Dwg_Data *);
 EXPORT double dwg_model_y_min (const Dwg_Data *);

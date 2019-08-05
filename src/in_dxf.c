@@ -1217,29 +1217,68 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               for (f = &fields[0]; f->name; f++)
                 {
                   if (f->dxf == pair->code) // TODO alt. color fields
-                    {                       // TODO resolve handle names
+                    {
+                      /// handle (table entry) given by name
                       if (strEQc (f->type, "H") && pair->type == VT_STRING)
                         {
-                          // search for name in associated table, and store its
-                          // handle
-                          LOG_WARN ("TODO resolve handle name %s %s", f->name,
-                                    pair->value.s)
+                          BITCODE_H handle = NULL;
+                          if (pair->code == 8)
+                            handle = dxf_find_tablehandle (dwg, pair->value.s, "LAYER");
+                          else if (pair->code == 2)
+                            handle = dxf_find_tablehandle (dwg, pair->value.s, "BLOCK");
+                          else if (pair->code == 3)
+                            handle = dxf_find_tablehandle (dwg, pair->value.s, "DIMSTYLE");
+                          // what is/was 4 and 5? VIEW? VPORT_ENTITY?
+                          else if (pair->code == 6)
+                            handle = dxf_find_tablehandle (dwg, pair->value.s, "LTYPE");
+                          else if (pair->code == 7)
+                            handle = dxf_find_tablehandle (dwg, pair->value.s, "STYLE");
+                          /* I think all these >300 are given by hex value, not by name */
+                          else if (pair->code == 331)
+                            handle = dxf_find_tablehandle (dwg, pair->value.s, "VPORT");
+                          else if (pair->code == 390)
+                            handle = dxf_find_tablehandle (dwg, pair->value.s, "PLOTSTYLE");
+                          else if (pair->code == 347)
+                            handle = dxf_find_tablehandle (dwg, pair->value.s, "MATERIAL");
+                          else if (pair->code == 345 || pair->code == 346)
+                            handle = dxf_find_tablehandle (dwg, pair->value.s, "UCS");
+                          else if (pair->code == 361) // SUN
+                            handle = dxf_find_tablehandle (dwg, pair->value.s, "SHADOW");
+                          else if (pair->code == 340) // or TABLESTYLE or LAYOUT ...
+                            handle = dxf_find_tablehandle (dwg, pair->value.s, "STYLE");
+                          else if (pair->code == 342 || pair->code == 343)
+                            handle = dxf_find_tablehandle (dwg, pair->value.s, "STYLE");
+                          else if (pair->code == 348)
+                            handle = dxf_find_tablehandle (dwg, pair->value.s, "VISUALSTYLE");
+                          else if (pair->code == 332)
+                            handle = dxf_find_tablehandle (dwg, pair->value.s, "BACKGROUND");
+                          if (!handle)
+                            {
+                              LOG_WARN ("TODO resolve handle name %s %s", f->name,
+                                        pair->value.s)
+                            }
+                          else
+                            {
+                              dwg_dynapi_common_set_value (_obj, f->name,
+                                                           &handle, is_utf);
+                            }
                         }
-                      else {
-                        dwg_dynapi_common_set_value (_obj, f->name,
-                                                     &pair->value, is_utf);
-                        if (f->is_string)
-                          {
-                            LOG_TRACE ("COMMON.%s = %s [%d %s]\n", f->name,
-                                       pair->value.s, pair->code, f->type);
-                          }
-                        else
-                          {
-                            LOG_TRACE ("COMMON.%s = %ld [%d %s]\n", f->name,
-                                       pair->value.l, pair->code, f->type);
-                          }
-                        goto next_pair; // found, early exit
-                      }
+                      else
+                        {
+                          dwg_dynapi_common_set_value (_obj, f->name,
+                                                       &pair->value, is_utf);
+                          if (f->is_string)
+                            {
+                              LOG_TRACE ("COMMON.%s = %s [%d %s]\n", f->name,
+                                         pair->value.s, pair->code, f->type);
+                            }
+                          else
+                            {
+                              LOG_TRACE ("COMMON.%s = %ld [%d %s]\n", f->name,
+                                         pair->value.l, pair->code, f->type);
+                            }
+                          goto next_pair; // found, early exit
+                        }
                     }
                 }
 
