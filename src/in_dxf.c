@@ -1218,19 +1218,28 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                 {
                   if (f->dxf == pair->code) // TODO alt. color fields
                     {                       // TODO resolve handle names
-                      dwg_dynapi_common_set_value (_obj, f->name,
-                                                   &pair->value, is_utf);
-                      if (f->is_string)
+                      if (strEQc (f->type, "H") && pair->type == VT_STRING)
                         {
-                          LOG_TRACE ("%s = %s [%d %s]\n", f->name,
-                                     pair->value.s, pair->code, f->type);
+                          // search for name in associated table, and store its
+                          // handle
+                          LOG_WARN ("TODO resolve handle name %s %s", f->name,
+                                    pair->value.s)
                         }
-                      else
-                        {
-                          LOG_TRACE ("%s = %ld [%d %s]\n", f->name,
-                                     pair->value.l, pair->code, f->type);
-                        }
-                      goto next_pair; // found, early exit
+                      else {
+                        dwg_dynapi_common_set_value (_obj, f->name,
+                                                     &pair->value, is_utf);
+                        if (f->is_string)
+                          {
+                            LOG_TRACE ("COMMON.%s = %s [%d %s]\n", f->name,
+                                       pair->value.s, pair->code, f->type);
+                          }
+                        else
+                          {
+                            LOG_TRACE ("COMMON.%s = %ld [%d %s]\n", f->name,
+                                       pair->value.l, pair->code, f->type);
+                          }
+                        goto next_pair; // found, early exit
+                      }
                     }
                 }
 
@@ -1329,38 +1338,64 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static int
 dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  Dxf_Pair *pair;
-  Dwg_Object *obj = NULL;
-  (void)dwg;
+  Dxf_Pair *pair = dxf_read_pair (dat);
 
-  // SECTION (ENTITIES);
-  while (dat->byte < dat->size)
+  while (1)
     {
+      if (pair->code == 0)
+        {
+          char name[80];
+          // until 0 ENDSEC
+          while (pair->code == 0 && is_dwg_entity (pair->value.s))
+            {
+              strcpy (name, pair->value.s);
+              pair = new_object (name, dat, dwg, NULL, 0);
+            }
+          if (strEQc (pair->value.s, "ENDSEC"))
+            {
+              dxf_free_pair (pair);
+              return 0;
+            }
+          else
+            LOG_WARN ("Unknown 0 %s", pair->value.s);
+        }
+      DXF_RETURN_ENDSEC (0);
+      dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
-      dxf_expect_code (dat, pair, 0);
-      DXF_CHECK_EOF;
-      // dwg_indxf_object (dat, obj); // TODO obj must be already created here
     }
-  // ENDSEC ();
+  dxf_free_pair (pair);
   return 0;
 }
 
 static int
 dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  Dxf_Pair *pair;
-  Dwg_Object *obj = NULL;
-  (void)dwg;
+  Dxf_Pair *pair = dxf_read_pair (dat);
 
-  // SECTION (OBJECTS);
-  while (dat->byte < dat->size)
+  while (1)
     {
+      if (pair->code == 0)
+        {
+          char name[80];
+          // until 0 ENDSEC
+          while (pair->code == 0 && is_dwg_object (pair->value.s))
+            {
+              strcpy (name, pair->value.s);
+              pair = new_object (name, dat, dwg, NULL, 0);
+            }
+          if (strEQc (pair->value.s, "ENDSEC"))
+            {
+              dxf_free_pair (pair);
+              return 0;
+            }
+          else
+            LOG_WARN ("Unknown 0 %s", pair->value.s);
+        }
+      DXF_RETURN_ENDSEC (0);
+      dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
-      dxf_expect_code (dat, pair, 0);
-      DXF_CHECK_EOF;
-      // dwg_indxf_object (dat, obj); // TODO obj must be already created here
     }
-  // ENDSEC ();
+  dxf_free_pair (pair);
   return 0;
 }
 
