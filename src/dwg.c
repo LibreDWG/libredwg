@@ -1289,7 +1289,7 @@ dxf_cvt_lweight (const BITCODE_RC value)
 // search for name in associated table, and store its handle.
 // note that newer tables, like MATERIAL are stored in a DICTIONARY instead.
 EXPORT BITCODE_H
-dxf_find_tablehandle (const Dwg_Data *restrict dwg,
+dwg_find_tablehandle (const Dwg_Data *restrict dwg,
                       char *restrict name,
                       const char *restrict table)
 {
@@ -1387,12 +1387,19 @@ dxf_find_tablehandle (const Dwg_Data *restrict dwg,
     ctrl = dwg->header_vars.DICTIONARY_LIGHTLIST;
   else
     {
-      LOG_ERROR ("dxf_find_tablehandle: Unsupported table %s", table);
+      LOG_ERROR ("dwg_find_tablehandle: Unsupported table %s", table);
       return 0;
     }
-  if (!ctrl || !ctrl->obj)
+  if (!ctrl)
     {
-      LOG_ERROR ("dxf_find_tablehandle: Empty header_vars table %s", table);
+      LOG_ERROR ("dwg_find_tablehandle: Empty header_vars table %s", table);
+      return 0;
+    }
+  if (!ctrl->obj && ctrl->handleref.value)
+    ctrl->obj = dwg_resolve_handle (dwg, ctrl->handleref.value);
+  if (!ctrl->obj)
+    {
+      LOG_ERROR ("dwg_find_tablehandle: Could not find table %s", table);
       return 0;
     }
   _obj = ctrl->obj->tio.object->tio.APPID_CONTROL; // just random type
