@@ -461,15 +461,15 @@ where @code{process_object} checks the type of each entity under the
 @var{Dwg_Object* obj}.
 
 For each entity or object type (i.e. a non-graphical dwg object, also tables)
-there also exist the simple and expensive @code{dwg_get_ENTITY} and @code{dwg_get_OBJECT}
+there also exist the simple and expensive @code{dwg_getall_ENTITY} and @code{dwg_getall_OBJECT}
 functions:
 
-@deftypefn {Function} int dwg_get_ENTITY (Dwg_Object_Ref *@var{block_header_ref})
+@deftypefn {Function} int dwg_getall_ENTITY (Dwg_Object_Ref *@var{block_header_ref})
 Return a malloc'ed NULL-terminated array of all such entities for Model Space,
 Paper Space or an individual block.
 @end deftypefn
 
-@deftypefn {Function} int dwg_get_OBJECT (Dwg_Data *@var{dwg})
+@deftypefn {Function} int dwg_getall_OBJECT (Dwg_Data *@var{dwg})
 Return a malloc'ed NULL-terminated array of all such DWG objects.
 @end deftypefn
 
@@ -508,8 +508,9 @@ Initializes an object for the given OBJECT or ENTITY type, with all fields being
 This does not initialize the @var{obj} size, type, address, handlestream_size, bitsize fields.
 @end deftypefn
 
-The encoder is driven by the fields definition in the @file{dwg.spec}, which adds each field to
-the object. This is done by @file{encode} or any @file{in_*} import module.
+The encoder is driven by the fields definition in the @file{dwg.spec} and
+the generated @file{dynapi.c}, which adds each field to the object.
+This is done by @file{encode} or any @file{in_*} import module.
 @deftypefn {Function} int dwg_encode_OBJECT (Bit_Chain *@var{dat}, Dwg_Object *@var{obj})
 Encodes the DWG bitstream from the fields of the object.
 @end deftypefn
@@ -538,15 +539,16 @@ or from an earlier or later DWG version.
 
 @cindex DXF, ASCII DXF
 
-We can write Ascii DXF files in various versions, with much more data than other free
-DWG libraries, but not as stable as the unfree Teigha library yet.
-AutoCAD fails to import some of our files still (~20% failure rate).
+We can write ASCII DXF files in various versions, with much more data
+than other free DWG libraries, but not as stable as the unfree Teigha
+library yet.  AutoCAD fails to import some of our files still (~20%
+failure rate).
 
 Options: @code{--minimal} (see @code{dwg2dxf} or @code{dwgread}) creates
 only a short header with a ACADVER and HANDSEED element, and the
 entities, without any subclass markers, reactors or handles.
 
-Reading DXF is under construction.
+Reading DXF is under construction and is planned for the 0.9 release.
 
 @node DXFB
 @subsection DXFB
@@ -555,26 +557,34 @@ Reading DXF is under construction.
 
 We can almost write Binary DXF files in various versions. Under construction.
 
-Reading DXFB is under construction.
+Reading DXFB is under construction and is planned for the 0.9 release.
 
 @node JSON
 @subsection JSON
 
 @cindex JSON
 
-We write and read @i{(not yet)} to our own JSON format, which is a readable 1:1 mapping of the DWG structures, and carries much more information than the DXF format. The idea is to dump a DWG to JSON and filter/query or postprocess it with more powerful JSON query tools such as @b{jq} (@url{https://stedolan.github.io/jq/}), and optionally import it back in. JSON is much better structured than DXF.
+We write and read @i{(not yet)} to our own JSON format, which is a
+readable 1:1 mapping of the DWG structures, and carries much more
+information than the DXF format. The idea is to dump a DWG to JSON and
+filter/query or postprocess it with more powerful JSON query tools
+such as @b{jq} (@url{https://stedolan.github.io/jq/}), and optionally
+import it back in. JSON is much better structured than DXF.
 
-Writing a JSON to stdout via a pipe is not yet recommended, as then ending commas are still there, which is strictly not valid JSON.
+Writing a JSON to stdout via a pipe is not yet recommended, as then
+ending commas are still there, which is strictly not valid JSON.
 
-The current first level objects are ``HEADER'', ``CLASSES'' and ``OBJECTS'', for more see the specs.
+The current first level objects are ``HEADER'', ``CLASSES'' and
+``OBJECTS'', for more see the specs.
 
 @node GeoJSON
 @subsection GeoJSON
 
 @cindex GeoJSON
 
-Work is ongoing to write to the GeoJSON format as specified at @uref{http://geojson.org/geojson-spec.html}.
-See @code{dwgread} with the @code{--fmt GeoJSON} option.
+Work is ongoing to write to the GeoJSON format as specified at
+@uref{http://geojson.org/geojson-spec.html}.  See @code{dwgread} with
+the @code{--fmt GeoJSON} option.
 
 This is about 70% finished.
 
