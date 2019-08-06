@@ -62,6 +62,7 @@ typedef struct _dxf_pair
 struct array_hdl {
   char *field;
   char *name;
+  short code;
 };
 typedef struct _array_hdls {
   uint32_t nitems;
@@ -72,7 +73,7 @@ typedef struct _array_hdls {
 #define ARRAY_SIZE(arr) (sizeof (arr) / sizeof (arr[0]))
 
 array_hdls *array_push (array_hdls *restrict hdls, char *restrict field,
-                        char *restrict name);
+                        char *restrict name, short code);
 int matches_type (Dxf_Pair *restrict pair, const Dwg_DYNAPI_field *restrict f);
 
 void dxf_add_field (Dwg_Object *restrict obj, const char *restrict name,

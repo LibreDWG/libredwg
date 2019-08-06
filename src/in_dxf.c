@@ -213,7 +213,7 @@ dxf_skip_comment (Bit_Chain *dat, Dxf_Pair *pair)
  */
 array_hdls *
 array_push (array_hdls *restrict hdls, char *restrict field,
-            char *restrict name)
+            char *restrict name, short code)
 {
   uint32_t i = hdls->nitems;
   if (i >= hdls->size)
@@ -224,6 +224,7 @@ array_push (array_hdls *restrict hdls, char *restrict field,
   hdls->nitems = i + 1;
   hdls->items[i].field = strdup (field);
   hdls->items[i].name = strdup (name);
+  hdls->items[i].code = code;
   return hdls;
 }
 
@@ -413,11 +414,12 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           else if (pair->type == VT_STRING && strEQc (f->type, "H"))
             {
               char *key, *str;
-              LOG_TRACE ("HEADER.%s %s [%s] later\n", &field[1], pair->value.s,
-                         f->type);
+              LOG_TRACE ("HEADER.%s %s [%s] %d later\n", &field[1], pair->value.s,
+                         f->type, (int)pair->code);
               // name (which table?) => handle
               // needs to be postponed, because we don't have the tables yet.
-              header_hdls = array_push (header_hdls, &field[1], pair->value.s);
+              header_hdls = array_push (header_hdls, &field[1], pair->value.s,
+                                        pair->code);
             }
           else if (strEQc (f->type, "H"))
             {
@@ -569,8 +571,11 @@ add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, BITCODE_RL value,
   unsigned char *val = (unsigned char *)&hdl->value;
   hdl->code = code;
   hdl->value = value;
-  if (obj)
-    hash_set (obj->parent->object_map, value, (uint32_t)obj->index);
+  if (obj && !offset) // same obj
+    {
+      LOG_HANDLE ("object_map{%X} = %u\n", (unsigned)value, obj->index);
+      hash_set (obj->parent->object_map, value, (uint32_t)obj->index);
+    }
 
   // FIXME: little endian only
   for (i = 3; i >= 0; i--)
@@ -597,7 +602,8 @@ add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, BITCODE_RL value,
 }
 
 Dwg_Object_Ref *
-add_handleref (Dwg_Data *restrict dwg, BITCODE_RC code, BITCODE_RL value, Dwg_Object *restrict obj)
+add_handleref (Dwg_Data *restrict dwg, BITCODE_RC code, BITCODE_RL value,
+               Dwg_Object *restrict obj)
 {
   Dwg_Object_Ref *ref = dwg_new_ref (dwg);
   add_handle (&ref->handleref, code, value, obj);
@@ -779,12 +785,11 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
           {
             Dwg_Object_Ref *ref;
             char ctrlobj[80];
-            add_handle (&obj->handle, 0, pair->value.u, NULL);
+            add_handle (&obj->handle, 0, pair->value.u, obj);
+            ref = add_handleref (dwg, 3, pair->value.u, obj);
             LOG_TRACE ("%s.handle = " FORMAT_H " [%d]\n", ctrlname,
                        ARGS_H (obj->handle), pair->code);
-
             // also set the matching HEADER.*_CONTROL_OBJECT
-            ref = add_handleref (dwg, 3, pair->value.u, obj);
             strcpy (ctrlobj, ctrlname);
             strcat (ctrlobj, "_OBJECT");
             dwg_dynapi_header_set_value (dwg, ctrlobj, &ref, 0);
@@ -877,8 +882,10 @@ find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair)
   BITCODE_H handle = NULL;
   if (pair->code == 8)
     handle = dwg_find_tablehandle (dwg, pair->value.s, "LAYER");
-  else if (pair->code == 2)
+  else if (pair->code == 1) // $DIMBLK
     handle = dwg_find_tablehandle (dwg, pair->value.s, "BLOCK");
+  else if (pair->code == 2) // some name: $DIMSTYLE, $UCSBASE, $UCSORTHOREF, $CMLSTYLE
+    ; // not enough info, decide later
   else if (pair->code == 3)
     handle = dwg_find_tablehandle (dwg, pair->value.s, "DIMSTYLE");
   // what is/was 4 and 5? VIEW? VPORT_ENTITY?
@@ -1045,7 +1052,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
           // fall through
         case 5:
           {
-            add_handle (&obj->handle, 0, pair->value.u, NULL);
+            add_handle (&obj->handle, 0, pair->value.u, obj);
             LOG_TRACE ("%s.handle = " FORMAT_H " [5 H]\n", name,
                        ARGS_H (obj->handle));
             if (*ctrl_hdlv)
@@ -1492,6 +1499,40 @@ dxf_preview_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
+static void resolve_postponed_header_refs (Dwg_Data *restrict dwg)
+{
+  uint32_t i;
+  for (i = 0; i < header_hdls->nitems; i++)
+    {
+      char *field = header_hdls->items[i].field;
+      Dxf_Pair p = { 0, VT_STRING };
+      BITCODE_H hdl = NULL;
+      p.value.s = header_hdls->items[i].name;
+      p.code = header_hdls->items[i].code;
+      if (strEQc (p.value.s, "DIMSTYLE"))
+        p.code = 3;
+      else if (strstr (p.value.s, "UCS"))
+        p.code = 345;
+      hdl = find_tablehandle (dwg, &p);
+      if (hdl)
+        {
+          dwg_dynapi_header_set_value (dwg, field, &hdl, 1);
+          LOG_TRACE ("HEADER.%s %s => " FORMAT_REF " [H] %d\n", field,
+                     p.value.s, ARGS_REF (hdl), (int)p.code);
+        }
+      else if (strstr (p.value.s, "CMLSTYLE"))
+        {
+          hdl = dwg_find_tablehandle (dwg, p.value.s, "MLSTYLE");
+          if (hdl)
+            {
+              dwg_dynapi_header_set_value (dwg, field, &hdl, 1);
+              LOG_TRACE ("HEADER.%s %s => " FORMAT_REF " [H] %d\n", field,
+                         p.value.s, ARGS_REF (hdl), (int)p.code);
+            }
+        }
+    }
+}
+
 int
 dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
@@ -1542,20 +1583,15 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             }
           else if (strEQc (pair->value.s, "TABLES"))
             {
-              uint32_t i;
               dxf_free_pair (pair);
               dxf_tables_read (dat, dwg);
-              //TODO: fill object_map handles and the HEADER refs
-              for (i = 0; i < header_hdls->nitems; i++)
-                {
-                  char *field = header_hdls->items[i].field;
-                  char *name = header_hdls->items[i].name;
-                }
+              resolve_postponed_header_refs (dwg);
             }
           else if (strEQc (pair->value.s, "BLOCKS"))
             {
               dxf_free_pair (pair);
               dxf_blocks_read (dat, dwg);
+              resolve_postponed_header_refs (dwg);
             }
           else if (strEQc (pair->value.s, "ENTITIES"))
             {

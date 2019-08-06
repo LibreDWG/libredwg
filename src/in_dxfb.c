@@ -285,7 +285,8 @@ dxfb_header_read (Bit_Chain *dat, Dwg_Data *dwg)
                          f->type);
               // name (which table?) => handle
               // needs to be postponed, because we don't have the tables yet.
-              header_hdls = array_push (header_hdls, &field[1], pair->value.s);
+              header_hdls = array_push (header_hdls, &field[1], pair->value.s,
+                                        pair->code);
               // dxf_free_pair (pair);
             }
           else if (strEQc (f->type, "CMC"))
