@@ -218,7 +218,6 @@ main (int argc, char *argv[])
     }
 
   printf ("Reading DXF file %s\n", filename_in);
-  printf ("TODO: reading DXF not yet done\n");
   memset (&dwg, 0, sizeof (Dwg_Data));
   dwg.opts = opts;
 
@@ -231,8 +230,8 @@ main (int argc, char *argv[])
       dwg_free (&dwg);
       exit (error);
     }
-
-  // TODO fixup the missing bits
+  printf ("TODO: fixing up post-DXF not yet done\n");
+  // sections, ...
 
   printf ("Writing DWG file %s", filename_out);
   if (version)

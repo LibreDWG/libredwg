@@ -1543,6 +1543,8 @@ static void resolve_postponed_header_refs (Dwg_Data *restrict dwg)
       Dxf_Pair p = { 0, VT_STRING };
       BITCODE_H hdl = NULL;
       p.value.s = header_hdls->items[i].name;
+      if (!p.value.s || !*p.value.s)
+        return;
       p.code = header_hdls->items[i].code;
       if (strEQc (p.value.s, "DIMSTYLE"))
         p.code = 3;

@@ -1418,7 +1418,7 @@ dwg_find_tablehandle (const Dwg_Data *restrict dwg,
       _obj = hdlv[i]->obj->tio.object->tio.APPID_CONTROL; // just random type
       dwg_dynapi_entity_value (_obj, hdlv[i]->obj->name, "name",
                                &hdlname, NULL);
-      if (strEQ (name, hdlname))
+      if (hdlname && strEQ (name, hdlname))
         {
           return hdlv[i];
         }
