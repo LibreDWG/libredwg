@@ -422,7 +422,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           else if (strEQc (f->type, "H"))
             {
               BITCODE_H hdl;
-              hdl = add_handleref (0, pair->value.u, NULL);
+              hdl = add_handleref (dwg, 0, pair->value.u, NULL);
               LOG_TRACE ("HEADER.%s %X [H]\n", &field[1], pair->value.u);
               dwg_dynapi_header_set_value (dwg, &field[1], &hdl, is_utf);
             }
@@ -597,10 +597,9 @@ add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, BITCODE_RL value,
 }
 
 Dwg_Object_Ref *
-add_handleref (BITCODE_RC code, BITCODE_RL value, Dwg_Object *obj)
+add_handleref (Dwg_Data *restrict dwg, BITCODE_RC code, BITCODE_RL value, Dwg_Object *restrict obj)
 {
-  Dwg_Object_Ref *ref = calloc (1, sizeof (Dwg_Object_Ref));
-
+  Dwg_Object_Ref *ref = dwg_new_ref (dwg);
   add_handle (&ref->handleref, code, value, obj);
   ref->absolute_ref = value;
   // fill ->obj later
@@ -785,7 +784,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
                        ARGS_H (obj->handle), pair->code);
 
             // also set the matching HEADER.*_CONTROL_OBJECT
-            ref = add_handleref (3, pair->value.u, obj);
+            ref = add_handleref (dwg, 3, pair->value.u, obj);
             strcpy (ctrlobj, ctrlname);
             strcat (ctrlobj, "_OBJECT");
             dwg_dynapi_header_set_value (dwg, ctrlobj, &ref, 0);
@@ -801,7 +800,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
           if (pair->value.u)
             {
               obj->tio.object->ownerhandle
-                  = add_handleref (4, pair->value.u, obj);
+                  = add_handleref (dwg, 4, pair->value.u, obj);
               LOG_TRACE ("%s.ownerhandle = " FORMAT_REF " [330]\n", ctrlname,
                          ARGS_REF (obj->tio.object->ownerhandle));
             }
@@ -817,7 +816,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
                   break;
                 }
               assert (_o->morehandles);
-              _o->morehandles[j] = add_handleref (4, pair->value.u, obj);
+              _o->morehandles[j] = add_handleref (dwg, 4, pair->value.u, obj);
               LOG_TRACE ("%s.morehandles[%d] = " FORMAT_REF " [330]\n",
                          ctrlname, j, ARGS_REF (_o->morehandles[j]));
               j++;
@@ -825,7 +824,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
           break;
         case 360: // {ACAD_XDICTIONARY TODO
           obj->tio.object->xdicobjhandle
-              = add_handleref (0, pair->value.u, obj);
+              = add_handleref (dwg, 0, pair->value.u, obj);
           LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [330]\n", ctrlname,
                      ARGS_REF (obj->tio.object->xdicobjhandle));
           break;
@@ -870,6 +869,43 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
       pair = dxf_read_pair (dat);
     }
   return pair;
+}
+
+static BITCODE_H
+find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair)
+{
+  BITCODE_H handle = NULL;
+  if (pair->code == 8)
+    handle = dwg_find_tablehandle (dwg, pair->value.s, "LAYER");
+  else if (pair->code == 2)
+    handle = dwg_find_tablehandle (dwg, pair->value.s, "BLOCK");
+  else if (pair->code == 3)
+    handle = dwg_find_tablehandle (dwg, pair->value.s, "DIMSTYLE");
+  // what is/was 4 and 5? VIEW? VPORT_ENTITY?
+  else if (pair->code == 6)
+    handle = dwg_find_tablehandle (dwg, pair->value.s, "LTYPE");
+  else if (pair->code == 7)
+    handle = dwg_find_tablehandle (dwg, pair->value.s, "STYLE");
+  /* I think all these >300 are given by hex value, not by name */
+  else if (pair->code == 331)
+    handle = dwg_find_tablehandle (dwg, pair->value.s, "VPORT");
+  else if (pair->code == 390)
+    handle = dwg_find_tablehandle (dwg, pair->value.s, "PLOTSTYLE");
+  else if (pair->code == 347)
+    handle = dwg_find_tablehandle (dwg, pair->value.s, "MATERIAL");
+  else if (pair->code == 345 || pair->code == 346)
+    handle = dwg_find_tablehandle (dwg, pair->value.s, "UCS");
+  else if (pair->code == 361) // SUN
+    handle = dwg_find_tablehandle (dwg, pair->value.s, "SHADOW");
+  else if (pair->code == 340) // or TABLESTYLE or LAYOUT ...
+    handle = dwg_find_tablehandle (dwg, pair->value.s, "STYLE");
+  else if (pair->code == 342 || pair->code == 343)
+    handle = dwg_find_tablehandle (dwg, pair->value.s, "STYLE");
+  else if (pair->code == 348)
+    handle = dwg_find_tablehandle (dwg, pair->value.s, "VISUALSTYLE");
+  else if (pair->code == 332)
+    handle = dwg_find_tablehandle (dwg, pair->value.s, "BACKGROUND");
+  return handle;
 }
 
 /* Most of that code is object specific, not just for tables.
@@ -1000,7 +1036,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
   while (pair->code != 0)
     {
       switch (pair->code)
-        { // TABLE common flags: name, xrefref, xrefdep, ...
+        { // common flags: name, xrefref, xrefdep, ...
         case 0:
           return pair;
         case 105: /* DIMSTYLE only for 5 */
@@ -1044,7 +1080,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                     hdls = realloc (hdls,
                                     num_entries * sizeof (Dwg_Object_Ref *));
                   }
-                hdls[i] = add_handleref (2, pair->value.u, obj);
+                hdls[i] = add_handleref (dwg, 2, pair->value.u, obj);
                 dwg_dynapi_entity_set_value (_ctrl, ctrlname, ctrl_hdlv, &hdls,
                                              0);
                 LOG_TRACE ("%s.%s[%d] = " FORMAT_REF " [0]\n", ctrlname,
@@ -1069,7 +1105,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
           if (in_reactors)
             {
               BITCODE_BL num = obj->tio.object->num_reactors;
-              BITCODE_H reactor = add_handleref (4, pair->value.u, obj);
+              BITCODE_H reactor = add_handleref (dwg, 4, pair->value.u, obj);
               LOG_TRACE ("%s.reactors[%d] = " FORMAT_REF " [330 H]\n", name,
                          num, ARGS_REF (reactor));
               obj->tio.object->reactors = realloc (
@@ -1080,7 +1116,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
           else if (pair->value.u) // valid ownerhandle
             {
               obj->tio.object->ownerhandle
-                  = add_handleref (4, pair->value.u, obj);
+                  = add_handleref (dwg, 4, pair->value.u, obj);
               LOG_TRACE ("%s.ownerhandle = " FORMAT_REF " [330 H]\n", name,
                          ARGS_REF (obj->tio.object->ownerhandle));
             }
@@ -1089,7 +1125,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
           if (!in_xdict)
             LOG_WARN ("Missing 102.{ACAD_XDICTIONARY group");
           obj->tio.object->xdicobjhandle
-              = add_handleref (3, pair->value.u, obj);
+              = add_handleref (dwg, 3, pair->value.u, obj);
           obj->tio.object->xdic_missing_flag = 0;
           LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [360 H]\n", name,
                      ARGS_REF (obj->tio.object->xdicobjhandle));
@@ -1225,50 +1261,18 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                 {
                   if (f->dxf == pair->code) // TODO alt. color fields
                     {
-                      /// handle (table entry) given by name
+                      /// resolve handle (table entry) given by name
                       if (strEQc (f->type, "H") && pair->type == VT_STRING)
                         {
-                          BITCODE_H handle = NULL;
-                          if (pair->code == 8)
-                            handle = dwg_find_tablehandle (dwg, pair->value.s, "LAYER");
-                          else if (pair->code == 2)
-                            handle = dwg_find_tablehandle (dwg, pair->value.s, "BLOCK");
-                          else if (pair->code == 3)
-                            handle = dwg_find_tablehandle (dwg, pair->value.s, "DIMSTYLE");
-                          // what is/was 4 and 5? VIEW? VPORT_ENTITY?
-                          else if (pair->code == 6)
-                            handle = dwg_find_tablehandle (dwg, pair->value.s, "LTYPE");
-                          else if (pair->code == 7)
-                            handle = dwg_find_tablehandle (dwg, pair->value.s, "STYLE");
-                          /* I think all these >300 are given by hex value, not by name */
-                          else if (pair->code == 331)
-                            handle = dwg_find_tablehandle (dwg, pair->value.s, "VPORT");
-                          else if (pair->code == 390)
-                            handle = dwg_find_tablehandle (dwg, pair->value.s, "PLOTSTYLE");
-                          else if (pair->code == 347)
-                            handle = dwg_find_tablehandle (dwg, pair->value.s, "MATERIAL");
-                          else if (pair->code == 345 || pair->code == 346)
-                            handle = dwg_find_tablehandle (dwg, pair->value.s, "UCS");
-                          else if (pair->code == 361) // SUN
-                            handle = dwg_find_tablehandle (dwg, pair->value.s, "SHADOW");
-                          else if (pair->code == 340) // or TABLESTYLE or LAYOUT ...
-                            handle = dwg_find_tablehandle (dwg, pair->value.s, "STYLE");
-                          else if (pair->code == 342 || pair->code == 343)
-                            handle = dwg_find_tablehandle (dwg, pair->value.s, "STYLE");
-                          else if (pair->code == 348)
-                            handle = dwg_find_tablehandle (dwg, pair->value.s, "VISUALSTYLE");
-                          else if (pair->code == 332)
-                            handle = dwg_find_tablehandle (dwg, pair->value.s, "BACKGROUND");
+                          BITCODE_H handle = find_tablehandle (dwg, pair);
                           if (!handle)
                             {
-                              LOG_WARN ("TODO resolve handle name %s %s", f->name,
-                                        pair->value.s)
+                              LOG_WARN ("TODO resolve handle name %s %s",
+                                        f->name, pair->value.s)
                             }
                           else
-                            {
-                              dwg_dynapi_common_set_value (_obj, f->name,
-                                                           &handle, is_utf);
-                            }
+                            dwg_dynapi_common_set_value (_obj, f->name,
+                                                         &handle, is_utf);
                         }
                       else
                         {
@@ -1538,9 +1542,15 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             }
           else if (strEQc (pair->value.s, "TABLES"))
             {
+              uint32_t i;
               dxf_free_pair (pair);
               dxf_tables_read (dat, dwg);
-              //TODO: fill object_map handle and the HEADER refs
+              //TODO: fill object_map handles and the HEADER refs
+              for (i = 0; i < header_hdls->nitems; i++)
+                {
+                  char *field = header_hdls->items[i].field;
+                  char *name = header_hdls->items[i].name;
+                }
             }
           else if (strEQc (pair->value.s, "BLOCKS"))
             {

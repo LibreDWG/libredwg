@@ -86,7 +86,7 @@ int add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code,
   __nonnull ((1));
 
 Dwg_Object_Ref * ATTRIBUTE_MALLOC
-add_handleref (BITCODE_RC code, BITCODE_RL value, Dwg_Object *obj);
+add_handleref (Dwg_Data *restrict dwg, BITCODE_RC code, BITCODE_RL value, Dwg_Object *obj);
 
 void add_eed (Dwg_Object *restrict obj, const char *restrict name,
               Dxf_Pair *restrict pair);
