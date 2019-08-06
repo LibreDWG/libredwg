@@ -91,7 +91,7 @@ EXTRA_DIST  = suffix.inc common.inc $(TESTS) cmp_dxf.pl
 CLEANFILES  = {example_,sample_}*.{bmp,ps,svg,dxf,log}
 if USE_WRITE
 CLEANFILES += {example_,sample_}*rewrite.{dwg,log}
-CLEANFILES += {example_,sample_}*.dxf.dwg
+CLEANFILES += {example_,sample_}*.dwg
 endif
 MAINTAINERCLEANFILES = *_flymake.[ch] *~ *.i
 
