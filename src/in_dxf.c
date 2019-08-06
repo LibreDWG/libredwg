@@ -915,7 +915,7 @@ find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair)
   return handle;
 }
 
-int
+Dxf_Pair *
 add_xdata (Bit_Chain *restrict dat,
            Dwg_Object *restrict obj, Dxf_Pair *restrict pair)
 {
@@ -1033,7 +1033,7 @@ add_xdata (Bit_Chain *restrict dat,
   dwg_dynapi_entity_set_value (_obj, obj->name, "num_xdata",
                                &num_xdata, 0);
   //TODO fixup num_databytes
-  return 0;
+  return pair;
 }
 
 void add_dictionary_handle (Dwg_Object *restrict obj, Dxf_Pair *restrict pair)
@@ -1254,7 +1254,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
           else if (strEQc (pair->value.s, "}"))
             in_reactors = in_xdict = in_blkrefs = 0;
           else if (strEQc (obj->name, "XRECORD"))
-            add_xdata (dat, obj, pair);
+            pair = add_xdata (dat, obj, pair);
           else
             LOG_WARN ("Unknown DXF 102 %s in %s", pair->value.s, name)
           break;
@@ -1351,7 +1351,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
           if (pair->code >= 1000 && pair->code < 1999)
             add_eed (obj, name, pair);
           else if (pair->code != 280 && strEQc (obj->name, "XRECORD"))
-            add_xdata (dat, obj, pair);
+            pair = add_xdata (dat, obj, pair);
           else
             { // search all specific fields and common fields for the DXF
               const Dwg_DYNAPI_field *f;
