@@ -437,6 +437,28 @@ fi
 AM_CONDITIONAL([HAVE_TIMEOUT], [test -n "$TIMEOUT"])
 AC_SUBST([TIMEOUT_10])
 
+dnl build-aux/missing catches an outdated /usr/bin/makeinfo 4.8 on darwin 10.11
+dnl the texi2any version >6 is needed for @indentedblock
+case $host_os in
+  darwin*)
+    if test -f /opt/local/bin/makeinfo ; then
+      MAKEINFO=/opt/local/bin/makeinfo
+    else
+      AC_CHECK_PROGS([MAKEINFO], [makeinfo])
+    fi
+    ;;
+  *) AC_CHECK_PROGS([MAKEINFO], [makeinfo])
+    ;;
+esac
+if test -n "$MAKEINFO"; then
+  AC_MSG_CHECKING([MAKEINFO version])
+  dnl either old makeinfo or new texi2any (preferred)
+  [makeinfo_version=`"$MAKEINFO" --version 2>&1 | $GREP 'texinfo' | cut -d' ' -f4`]
+  AC_SUBST([makeinfo_version])
+  AC_MSG_RESULT([$makeinfo_version])
+fi
+AM_CONDITIONAL([HAVE_MAKEINFO], [test -n "$MAKEINFO"])
+
 if test x$enable_debug = xyes; then
    JSON_SED_NAN="\$SED -i -e's/ nan/ \"nan\"/g;'"
 else
