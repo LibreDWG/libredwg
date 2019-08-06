@@ -234,10 +234,16 @@ main (int argc, char *argv[])
           need_free = 1;
           filename_out = suffix (filename_in, "dxf");
         }
+      if (strEQ (filename_in, filename_out))
+        {
+          if (filename_out != argv[i-1])
+            free (filename_out);
+          return usage ();
+        }
 
       memset (&dwg, 0, sizeof (Dwg_Data));
       dwg.opts = opts;
-      fprintf (stderr, "Reading DWG file %s\n", filename_in);
+      printf ("Reading DWG file %s\n", filename_in);
       error = dwg_read_file (filename_in, &dwg);
       if (error >= DWG_ERR_CRITICAL)
         {

@@ -23,6 +23,9 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <getopt.h>
+#ifdef HAVE_VALGRIND_VALGRIND_H
+#  include <valgrind/valgrind.h>
+#endif
 
 #include <dwg.h>
 #include "common.h"
@@ -55,15 +58,17 @@ opt_version (void)
 static int
 help (void)
 {
-  printf ("\nUsage: dxf2dwg [OPTION]... DXFFILE [DWGFILE]\n");
+  printf ("\nUsage: dxf2dwg [OPTION]... DXFFILES ...\n");
   printf ("Converts the DXF to a DWG. Accepts ascii and binary DXF.\n");
-  printf ("Default DWGFILE: DXFFILE with .dwg extension.\n"
+  printf ("Default DWGFILE: DXFFILE with .dwg extension in the current "
+          "directory.\n"
+          "Existing files are silently overwritten.\n"
           "\n");
 #ifdef HAVE_GETOPT_LONG
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
   printf ("  --as rNNNN                save as version\n");
   printf ("           Valid versions:\n");
-  printf ("             r12, r14, r2000\n");
+  printf ("             r12, r14, r2000 (default)\n");
   printf ("           Planned versions:\n");
   printf ("             r9, r10, r11, r2004, r2007, r2010, r2013, r2018\n");
   printf ("  -o outfile, --file        only valid with one single DXFFILE\n");
@@ -77,7 +82,7 @@ help (void)
   printf ("                r12, r14, r2000 (default)\n");
   printf ("              Planned versions:\n");
   printf ("                r9, r10, r11, r2004, r2007, r2010, r2013, r2018\n");
-  printf ("  -o dwgfile\n");
+  printf ("  -o dwgfile  only valid with one single DXFFILE\n");
   printf ("  -h          display this help and exit\n");
   printf ("  -i          output version information and exit\n"
           "\n");
@@ -87,19 +92,18 @@ help (void)
   return 0;
 }
 
-// TODO read code/name pair from file until found, and store in obj
-
 int
 main (int argc, char *argv[])
 {
   int i = 1;
-  int error;
+  int error = 0;
   Dwg_Data dwg;
   char *filename_in;
   const char *version = NULL;
   char *filename_out = NULL;
   Dwg_Version_Type dwg_version = R_2000;
-
+  int do_free;
+  int need_free = 0;
   int c;
 #ifdef HAVE_GETOPT_LONG
   int option_index = 0;
@@ -202,63 +206,84 @@ main (int argc, char *argv[])
     }
   i = optind;
 
-  if (i + 1 < argc)
-    return usage ();
-  filename_in = argv[i];
-  if (i + 2 < argc)
-    filename_out = argv[i + 1];
-  else
-    filename_out = suffix (filename_in, "dwg");
-
-  if (strcmp (filename_in, filename_out) == 0)
+  if (filename_out && i + 1 < argc)
     {
-      if (filename_out != argv[2])
-        free (filename_out);
+      fprintf (stderr, "%s: no -o with multiple input files\n", argv[0]);
       return usage ();
     }
+  do_free = i + 1 < argc;
 
-  printf ("Reading DXF file %s\n", filename_in);
-  memset (&dwg, 0, sizeof (Dwg_Data));
-  dwg.opts = opts;
+  while (i < argc)
+    {
+      filename_in = argv[i];
+      i++;
+      if (!filename_out)
+        {
+          need_free = 1;
+          filename_out = suffix (filename_in, "dwg");
+        }
 
-  error = dxf_read_file (filename_in, &dwg);
-  if (error)
-    {
-      printf ("READ ERROR\n");
-      if (filename_out != argv[2])
-        free (filename_out);
-      dwg_free (&dwg);
-      exit (error);
-    }
-  printf ("TODO: fixing up post-DXF not yet done\n");
-  // sections, ...
+      if (strEQ (filename_in, filename_out))
+        {
+          if (filename_out != argv[i-1])
+            free (filename_out);
+          return usage ();
+        }
 
-  printf ("Writing DWG file %s", filename_out);
-  if (version)
-    {
-      printf (" as %s\n", version);
-      if (dwg.header.from_version != dwg.header.version)
-        dwg.header.from_version = dwg.header.version;
-      // else keep from_version = 0
-      dwg.header.version = dwg_version;
-    }
-  else
-    {
-      // FIXME: for now only R_2000
-      dwg.header.version = dwg_version;
-      printf ("\n");
-    }
+      memset (&dwg, 0, sizeof (Dwg_Data));
+      dwg.opts = opts;
+      printf ("Reading DXF file %s\n", filename_in);
+
+      error = dxf_read_file (filename_in, &dwg);
+      if (error >= DWG_ERR_CRITICAL)
+        {
+          fprintf (stderr, "READ ERROR 0x%x %s\n", error, filename_in);
+          continue;
+        }
+      printf ("TODO: fixing up post-DXF not yet done\n");
+      // sections, ...
+
+      printf ("Writing DWG file %s", filename_out);
+      if (version)
+        {
+          printf (" as %s\n", version);
+          if (dwg.header.from_version != dwg.header.version)
+            dwg.header.from_version = dwg.header.version;
+          // else keep from_version = 0
+          dwg.header.version = dwg_version;
+        }
+      else
+        {
+          // FIXME: for now only R_2000
+          dwg.header.version = dwg_version;
+          printf ("\n");
+        }
 #ifdef USE_WRITE
-  error = dwg_write_file (filename_out, &dwg);
+      error = dwg_write_file (filename_out, &dwg);
 #else
-  error = 1;
-#  error no write support
+      error = DWG_ERR_IOERROR;
+#  error no DWG write support
 #endif
-  if (error)
-    printf ("WRITE ERROR\n");
+      if (error)
+        fprintf (stderr, "WRITE ERROR 0x%x %s\n", error, filename_out);
 
-  if (filename_out != argv[2])
-    free (filename_out);
-  dwg_free (&dwg);
-  return error;
+      // forget about valgrind. really huge DWG's need endlessly here.
+      if (do_free
+#if defined __SANITIZE_ADDRESS__ || __has_feature (address_sanitizer)
+          || 1
+#endif
+#ifdef HAVE_VALGRIND_VALGRIND_H
+          || (RUNNING_ON_VALGRIND)
+#endif
+      )
+        {
+          dwg_free (&dwg);
+          if (need_free)
+            free (filename_out);
+        }
+      filename_out = NULL;
+    }
+
+  // but only the result of the last conversion
+  return error >= DWG_ERR_CRITICAL ? 1 : 0;
 }
