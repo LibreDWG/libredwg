@@ -561,6 +561,7 @@ typedef struct _dwg_resbuf
     BITCODE_BLL i64;
     double  dbl;
     unsigned char hdl[8];
+    Dwg_Handle h;
     struct _dwg_binary_chunk str;
   } value;
   struct _dwg_resbuf *next; /* FIXME: this is a perl keyword */
