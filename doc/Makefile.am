@@ -22,8 +22,11 @@ TEXINPUTS="$(TEXINPUTS)$(PATH_SEPARATOR)$(TEXINFO_TEX_DIR)"
 info_TEXINFOS = LibreDWG.texi
 LibreDWG_TEXINFOS = fdl.texi dynapi.texi
 
+if HAVE_MAKEINFO
 manual:
 	../build-aux/gendocs.sh LibreDWG "GNU LibreDWG - Manual"
+
+endif
 
 dynapi.texi: $(top_srcdir)/src/gen-dynapi.pl
 	-$(PERL) $(top_srcdir)/src/gen-dynapi.pl
