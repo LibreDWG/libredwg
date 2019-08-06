@@ -1036,6 +1036,30 @@ add_xdata (Bit_Chain *restrict dat,
   return 0;
 }
 
+void add_dictionary_handle (Dwg_Object *restrict obj, Dxf_Pair *restrict pair)
+{
+  // but not DICTIONARYVAR
+  Dwg_Object_DICTIONARY *_obj = obj->tio.object->tio.DICTIONARY;
+  Dwg_Data *dwg = obj->parent;
+  BITCODE_BL num;
+  BITCODE_H hdl, *itemhandles;
+
+  if (pair->code == 360)
+    {
+      BITCODE_RC hardowner = 1;
+      dwg_dynapi_entity_set_value (_obj, obj->name, "hardowner", &hardowner, 0);
+    }
+  dwg_dynapi_entity_value (_obj, obj->name, "numitems", &num, NULL);
+  dwg_dynapi_entity_value (_obj, obj->name, "itemhandles", &itemhandles, NULL);
+  hdl = add_handleref (dwg, 2, pair->value.u, obj);
+  LOG_TRACE ("%s.itemhandles[%d] = " FORMAT_REF " [330 H]\n", obj->name,
+             num, ARGS_REF (hdl));
+  itemhandles = realloc (itemhandles, (num + 1) * sizeof (BITCODE_H));
+  itemhandles[num++] = hdl;
+  dwg_dynapi_entity_set_value (_obj, obj->name, "numitems", &num, 0);
+  dwg_dynapi_entity_set_value (_obj, obj->name, "itemhandles", &itemhandles, 0);
+}
+
 /* Most of that code is object specific, not just for tables.
    TODO: rename to new_object, and special-case the table code.
    How to initialize _obj? To generic only?
@@ -1285,17 +1309,27 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                          ARGS_REF (obj->tio.object->ownerhandle));
             }
           break;
-        case 360: // {ACAD_XDICTIONARY
-          if (!in_xdict)
-            LOG_WARN ("Missing 102.{ACAD_XDICTIONARY group");
-          obj->tio.object->xdicobjhandle
-              = add_handleref (dwg, 3, pair->value.u, obj);
-          obj->tio.object->xdic_missing_flag = 0;
-          LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [360 H]\n", name,
-                     ARGS_REF (obj->tio.object->xdicobjhandle));
-          break;
+        case 350: // DICTIONARY softhandle
+        case 360: // {ACAD_XDICTIONARY or some hardowner
+          if (pair->code == 360 && in_xdict)
+            {
+              obj->tio.object->xdicobjhandle
+                = add_handleref (dwg, 3, pair->value.u, obj);
+              obj->tio.object->xdic_missing_flag = 0;
+              LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [360 H]\n", name,
+                         ARGS_REF (obj->tio.object->xdicobjhandle));
+              break;
+            }
+          // // DICTIONARY or DICTIONARYWDFLT, but not DICTIONARYVAR
+          else if (strlen (obj->name) >= sizeof ("DICTIONARY") - 1 &&
+                   !memcmp (obj->name, "DICTIONARY", sizeof ("DICTIONARY") - 1))
+            {
+              add_dictionary_handle (obj, pair);
+              break;
+            }
+          // fall through
         case 2:
-          if (ctrl)
+          if (ctrl && pair->code == 2)
             {
               dwg_dynapi_entity_set_value (_obj, obj->name, "name", &pair->value,
                                        is_utf);
@@ -1304,7 +1338,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
             }
           // fall through
         case 70:
-          if (ctrl)
+          if (ctrl && pair->code == 70)
             {
               dwg_dynapi_entity_set_value (_obj, obj->name, "flag", &pair->value,
                                        is_utf);

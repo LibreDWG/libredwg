@@ -93,6 +93,7 @@ void add_eed (Dwg_Object *restrict obj, const char *restrict name,
               Dxf_Pair *restrict pair);
 int add_xdata (Bit_Chain *restrict dat,
                Dwg_Object *restrict obj, Dxf_Pair *restrict pair);
+void add_dictionary_handle (Dwg_Object *restrict obj, Dxf_Pair *restrict pair);
 
 int is_table_name (const char *name);
 

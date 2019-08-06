@@ -1976,7 +1976,7 @@ DWG_OBJECT(DICTIONARY)
         FIELD_VALUE(cloning) = FIELD_VALUE(hard_owner) & 0xffff;
       }
       FIELD_BS (cloning, 281);
-      FIELD_RC (hard_owner, 0);
+      FIELD_RC (hard_owner, 280);
     }
   if (FIELD_VALUE(numitems) > 10000)
     {
@@ -2004,7 +2004,7 @@ DWG_OBJECT(DICTIONARY)
   START_OBJECT_HANDLE_STREAM;
   SINCE (R_2000)
     {
-      HANDLE_VECTOR (itemhandles, numitems, 2, 0);
+      HANDLE_VECTOR (itemhandles, numitems, 2, 350); // or 360 if hard_owner
     }
 
 DWG_OBJECT_END
@@ -2057,7 +2057,7 @@ DWG_OBJECT(DICTIONARYWDFLT)
   START_OBJECT_HANDLE_STREAM;
   SINCE (R_2000)
     {
-      HANDLE_VECTOR (itemhandles, numitems, 2, 0);
+      HANDLE_VECTOR (itemhandles, numitems, 2, 350); // or 360 if hard_owner
     }
   SUBCLASS (AcDbDictionaryWithDefault)
   FIELD_HANDLE (defaultid, 5, 340);
