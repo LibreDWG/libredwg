@@ -230,10 +230,8 @@ main (int argc, char *argv[])
           return usage ();
         }
 
-      memset (&dwg, 0, sizeof (Dwg_Data));
       dwg.opts = opts;
       printf ("Reading DXF file %s\n", filename_in);
-
       error = dxf_read_file (filename_in, &dwg);
       if (error >= DWG_ERR_CRITICAL)
         {

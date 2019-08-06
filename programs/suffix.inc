@@ -61,7 +61,10 @@ suffix (const char *filename, const char *ext)
     {
       if ((dot = strrchr (base, '.'))
           && dot + 4 < base + len
-          && !strncmp (1 + dot, "dwg", 3))
+          //valid input extensions:
+          && (!strncmp (1 + dot, "dwg", 3) || // strip known extensions
+              !strncmp (1 + dot, "dxf", 3) || // TODO xml
+              !strncmp (1 + dot, "json", 4)))
         *dot = '\0';
     }
   if (strchr(ext, '.'))
