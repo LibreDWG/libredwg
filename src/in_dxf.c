@@ -799,7 +799,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
           break;
         case 100: // AcDbSymbolTableRecord, ... ignore
           break;
-        case 102: // TODO {ACAD_XDICTIONARY {ACAD_REACTORS
+        case 102: // TODO {ACAD_XDICTIONARY {ACAD_REACTORS {BLKREFS
           break;
         case 330: // TODO: most likely {ACAD_REACTORS
           if (pair->value.u)
@@ -932,10 +932,12 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
   char ctrlname[80];
   int in_xdict = 0;
   int in_reactors = 0;
+  int in_blkrefs = 0;
   int is_entity = is_dwg_entity (name);
   BITCODE_BL rcount1, rcount2, rcount3, vcount;
   Bit_Chain *hdl_dat, *str_dat;
   int error = 0;
+  BITCODE_RL curr_inserts = 0;
 
   ctrl_hdlv[0] = '\0';
   LOG_TRACE ("add %s [%d]\n", name, i);
@@ -1103,11 +1105,44 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
             in_xdict = 1;
           else if (strEQc (pair->value.s, "{ACAD_REACTORS"))
             in_reactors = 1;
+          else if (ctrl && strEQc (pair->value.s, "{BLKREFS"))
+            in_blkrefs = 1; // unique handle 331
           else if (strEQc (pair->value.s, "}"))
-            in_reactors = in_xdict = 0;
+            in_reactors = in_xdict = in_blkrefs = 0;
           else
             LOG_WARN ("Unknown DXF 102 %s in %s", pair->value.s, name)
           break;
+        case 331:
+          if (ctrl && in_blkrefs) // BLKREFS
+            {
+              BITCODE_H *insert_handles = NULL;
+              BITCODE_RL num_inserts;
+              dwg_dynapi_entity_value (_obj, obj->name, "num_inserts",
+                                       &num_inserts, 0);
+              if (curr_inserts)
+                dwg_dynapi_entity_value (_obj, obj->name, "insert_handles",
+                                         &insert_handles, 0);
+              if (curr_inserts + 1 > num_inserts)
+                {
+                  LOG_WARN ("Misleading %s.num_inserts %d < %d", ctrlname,
+                            num_inserts, curr_inserts + 1);
+                  num_inserts = curr_inserts + 1;
+                  dwg_dynapi_entity_set_value (_obj, obj->name, "num_inserts",
+                                               &num_inserts, 0);
+                }
+              if (insert_handles)
+                insert_handles
+                  = realloc (insert_handles, num_inserts * sizeof (BITCODE_H));
+              else
+                insert_handles
+                  = calloc (num_inserts, sizeof (BITCODE_H));
+              dwg_dynapi_entity_set_value (_obj, obj->name, "insert_handles",
+                                           &insert_handles, 0);
+              insert_handles[curr_inserts++]
+                  = add_handleref (dwg, 4, pair->value.u, obj);
+              break;
+            }
+          // fall through
         case 330:
           if (in_reactors)
             {
