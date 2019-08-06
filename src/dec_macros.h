@@ -200,14 +200,12 @@
         handleptr = dwg_decode_handleref (hdl_dat, obj, dwg);                 \
     if (handleptr)                                                            \
       {                                                                       \
-        LOG_TRACE (#nam ": HANDLE(%x.%d.%lX)/%x absolute:%lX [H %d]",         \
-                   handleptr->handleref.code, handleptr->handleref.size,      \
-                   handleptr->handleref.value, handle_code,                   \
-                   handleptr->absolute_ref, dxf)                              \
+        LOG_TRACE (#nam ": HANDLE %x: " FORMAT_REF " [H %d]",                 \
+                   handle_code, ARGS_REF(handleptr), dxf)                     \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        LOG_TRACE (#nam ": NULL HANDLE/%x [H %d]", handle_code, dxf);         \
+        LOG_TRACE (#nam ": %x: NULL HANDLE [H %d]", handle_code, dxf);        \
       }                                                                       \
     LOG_INSANE (" @%lu.%u", pos / 8, (unsigned)(pos % 8));                    \
     LOG_TRACE ("\n");                                                         \
@@ -227,14 +225,12 @@
         handleptr = dwg_decode_handleref (hdl_dat, obj, dwg);                 \
     if (handleptr)                                                            \
       {                                                                       \
-        LOG_TRACE (#nam "[%d]: HANDLE(%x.%d.%lX)/%x absolute:%lX [H %d]",     \
-                   (int)vcount, handleptr->handleref.code,                    \
-                   handleptr->handleref.size, handleptr->handleref.value,     \
-                   handle_code, handleptr->absolute_ref, dxf)                 \
+        LOG_TRACE (#nam "[%d]: HANDLE %x: " FORMAT_REF " [H %d]",             \
+                   (int)vcount, handle_code, ARGS_REF(handleptr), dxf)        \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        LOG_TRACE (#nam "[%d]: NULL HANDLE/%x [H %d]", (int)vcount,           \
+        LOG_TRACE (#nam "[%d]: %x: NULL HANDLE [H %d]", (int)vcount,          \
                    handle_code, dxf);                                         \
       }                                                                       \
     LOG_INSANE (" @%lu.%u", pos / 8, (unsigned)(pos % 8));                    \
@@ -248,9 +244,8 @@
     _obj->nam = dwg_decode_handleref (dat, obj, dwg);                         \
     if (_obj->nam)                                                            \
       {                                                                       \
-        LOG_TRACE (#nam ": HANDLE(%x.%d.%lX) absolute:%lX [H %d]\n",          \
-                   _obj->nam->handleref.code, _obj->nam->handleref.size,      \
-                   _obj->nam->handleref.value, _obj->nam->absolute_ref, dxf); \
+        LOG_TRACE (#nam ": HANDLE" FORMAT_H " [H %d]\n",                      \
+                   ARGS_H(_obj->nam->handleref), dxf);                        \
       }                                                                       \
   }
 
@@ -638,8 +633,7 @@
           loglevel = 0;                                                       \
           if (!bit_read_H (dat, &hdl))                                        \
             {                                                                 \
-              LOG_TRACE ("  H :(%d.%d.%lX) (%ld)\n", hdl.code, hdl.size,      \
-                         hdl.value,                                           \
+              LOG_TRACE ("  H : " FORMAT_H " (%ld)\n", ARGS_H(hdl),           \
                          bit_position (dat) - bit_position (&here));          \
             }                                                                 \
           loglevel = oldloglevel;                                             \

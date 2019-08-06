@@ -1285,3 +1285,144 @@ dxf_cvt_lweight (const BITCODE_RC value)
                            -3 };       // BYLWDEFAULT
   return lweights[value % 32];
 }
+
+// search for name in associated table, and store its handle.
+// note that newer tables, like MATERIAL are stored in a DICTIONARY instead.
+EXPORT BITCODE_H
+dwg_find_tablehandle (const Dwg_Data *restrict dwg,
+                      char *restrict name,
+                      const char *restrict table)
+{
+  BITCODE_BL i, num_entries;
+  BITCODE_H ctrl = NULL, *hdlv;
+  Dwg_Object_APPID_CONTROL *_obj; // just some random generic type
+  char ctrl_hdlv[80];
+  ctrl_hdlv[0] = '\0';
+
+  // look for the _CONTROL table, and search for name in all entries
+  if (strEQc (table, "BLOCK"))
+    {
+      ctrl = dwg->header_vars.BLOCK_CONTROL_OBJECT;
+      strcpy (ctrl_hdlv, "block_headers");
+    }
+  else if (strEQc (table, "LAYER"))
+    {
+      ctrl = dwg->header_vars.LAYER_CONTROL_OBJECT;
+      strcpy (ctrl_hdlv, "layers");
+    }
+  else if (strEQc (table, "STYLE"))
+    {
+      ctrl = dwg->header_vars.STYLE_CONTROL_OBJECT;
+      strcpy (ctrl_hdlv, "styles");
+    }
+  else if (strEQc (table, "LTYPE"))
+    {
+      ctrl = dwg->header_vars.LTYPE_CONTROL_OBJECT;
+      strcpy (ctrl_hdlv, "linetypes");
+      if (strEQc (name, "BYLAYER") || strEQc (name, "ByLayer"))
+        {
+          if (dwg->header_vars.LTYPE_BYLAYER)
+            return dwg->header_vars.LTYPE_BYLAYER;
+        }
+      else if (strEQc (name, "BYBLOCK") || strEQc (name, "ByBlock"))
+        {
+          if (dwg->header_vars.LTYPE_BYBLOCK)
+            return dwg->header_vars.LTYPE_BYBLOCK;
+        }
+      else if (strEQc (name, "CONTINUOUS") || strEQc (name, "Continuous"))
+        {
+          if (dwg->header_vars.LTYPE_CONTINUOUS)
+            return dwg->header_vars.LTYPE_CONTINUOUS;
+        }
+    }
+  else if (strEQc (table, "VIEW"))
+    {
+      ctrl = dwg->header_vars.VIEW_CONTROL_OBJECT;
+      strcpy (ctrl_hdlv, "views");
+    }
+  else if (strEQc (table, "UCS"))
+    {
+      ctrl = dwg->header_vars.UCS_CONTROL_OBJECT;
+      strcpy (ctrl_hdlv, "ucs");
+    }
+  else if (strEQc (table, "VPORT"))
+    {
+      ctrl = dwg->header_vars.VPORT_CONTROL_OBJECT;
+      strcpy (ctrl_hdlv, "vports");
+    }
+  else if (strEQc (table, "APPID"))
+    {
+      ctrl = dwg->header_vars.APPID_CONTROL_OBJECT;
+      strcpy (ctrl_hdlv, "apps");
+    }
+  else if (strEQc (table, "DIMSTYLE"))
+    {
+      ctrl = dwg->header_vars.DIMSTYLE_CONTROL_OBJECT;
+      strcpy (ctrl_hdlv, "dimstyles");
+    }
+  else if (strEQc (table, "VPORT_ENTITY"))
+    {
+      ctrl = dwg->header_vars.VPORT_ENTITY_CONTROL_OBJECT;
+      strcpy (ctrl_hdlv, "vport_entity_headers");
+    }
+  else if (strEQc (table, "GROUP"))
+    ctrl = dwg->header_vars.DICTIONARY_ACAD_GROUP;
+  else if (strEQc (table, "MLSTYLE"))
+    ctrl = dwg->header_vars.DICTIONARY_ACAD_MLINESTYLE;
+  else if (strEQc (table, "NAMED_OBJECT"))
+    ctrl = dwg->header_vars.DICTIONARY_NAMED_OBJECT;
+  else if (strEQc (table, "LAYOUT"))
+    ctrl = dwg->header_vars.DICTIONARY_LAYOUTS;
+  else if (strEQc (table, "PLOTSETTING"))
+    ctrl = dwg->header_vars.DICTIONARY_PLOTSETTINGS;
+  else if (strEQc (table, "PLOTSTYLE"))
+    ctrl = dwg->header_vars.DICTIONARY_PLOTSTYLES;
+  else if (strEQc (table, "MATERIAL"))
+    ctrl = dwg->header_vars.DICTIONARY_MATERIALS;
+  else if (strEQc (table, "COLOR"))
+    ctrl = dwg->header_vars.DICTIONARY_COLORS;
+  else if (strEQc (table, "VISUALSTYLE"))
+    ctrl = dwg->header_vars.DICTIONARY_VISUALSTYLE;
+  else if (strEQc (table, "LIGHTLIST"))
+    ctrl = dwg->header_vars.DICTIONARY_LIGHTLIST;
+  else
+    {
+      LOG_ERROR ("dwg_find_tablehandle: Unsupported table %s", table);
+      return 0;
+    }
+  if (!ctrl)
+    {
+      LOG_ERROR ("dwg_find_tablehandle: Empty header_vars table %s", table);
+      return 0;
+    }
+  if (!ctrl->obj && ctrl->handleref.value)
+    ctrl->obj = dwg_resolve_handle (dwg, ctrl->handleref.value);
+  if (!ctrl->obj)
+    {
+      LOG_ERROR ("dwg_find_tablehandle: Could not find table %s", table);
+      return 0;
+    }
+  _obj = ctrl->obj->tio.object->tio.APPID_CONTROL; // just random type
+  dwg_dynapi_entity_value (_obj, ctrl->obj->name, "num_entries",
+                           &num_entries, NULL);
+  if (!num_entries)
+    return 0;
+  dwg_dynapi_entity_value (_obj, ctrl->obj->name, ctrl_hdlv, &hdlv, NULL);
+  for (i = 0; i < num_entries; i++)
+    {
+      char *hdlname;
+      if (!hdlv[i]->obj && hdlv[i]->handleref.value)
+        hdlv[i]->obj = dwg_resolve_handle (dwg, hdlv[i]->handleref.value);
+      if (!hdlv[i]->obj)
+        continue;
+      _obj = hdlv[i]->obj->tio.object->tio.APPID_CONTROL; // just random type
+      dwg_dynapi_entity_value (_obj, hdlv[i]->obj->name, "name",
+                               &hdlname, NULL);
+      if (hdlname && strEQ (name, hdlname))
+        {
+          return hdlv[i];
+        }
+    }
+
+  return 0;
+}

@@ -111,7 +111,7 @@ main (int argc, char *argv[])
       printf ("%ld BS @%lu\n", l, bit_position (&dat));
       bit_set_position (&dat, 0);
       if (!bit_read_H (&dat, &h) && h.size == 1)
-        printf ("%x.%d.%lX H @%lu (%ld)\n", h.code, h.size, h.value,
+        printf (FORMAT_H " H @%lu (%ld)\n", ARGS_H (h),
                 bit_position (&dat), pos);
     }
   else if (pos == 8)
@@ -121,7 +121,7 @@ main (int argc, char *argv[])
       printf ("%d RC @%lu\n", l, bit_position (&dat));
       bit_set_position (&dat, 0);
       if (!bit_read_H (&dat, &h) && h.size == 1)
-        printf ("%x.%d.%lX H @%lu (%ld)\n", h.code, h.size, h.value,
+        printf (FORMAT_H " H @%lu (%ld)\n", ARGS_H (h),
                 bit_position (&dat), pos);
     }
   else
@@ -139,7 +139,7 @@ main (int argc, char *argv[])
         }
       bit_set_position (&dat, 0);
       if (!bit_read_H (&dat, &h))
-        printf ("%x.%d.%lX H? @%lu (%ld)\n", h.code, h.size, h.value,
+        printf (FORMAT_H " H? @%lu (%ld)\n", ARGS_H (h),
                 bit_position (&dat), pos);
       bit_set_position (&dat, 0);
       bit_read_CMC (&dat, &c);

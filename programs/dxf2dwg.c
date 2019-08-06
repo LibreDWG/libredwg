@@ -98,7 +98,7 @@ main (int argc, char *argv[])
   char *filename_in;
   const char *version = NULL;
   char *filename_out = NULL;
-  Dwg_Version_Type dwg_version = R_INVALID;
+  Dwg_Version_Type dwg_version = R_2000;
 
   int c;
 #ifdef HAVE_GETOPT_LONG
@@ -218,7 +218,6 @@ main (int argc, char *argv[])
     }
 
   printf ("Reading DXF file %s\n", filename_in);
-  printf ("TODO: reading DXF not yet done\n");
   memset (&dwg, 0, sizeof (Dwg_Data));
   dwg.opts = opts;
 
@@ -231,6 +230,8 @@ main (int argc, char *argv[])
       dwg_free (&dwg);
       exit (error);
     }
+  printf ("TODO: fixing up post-DXF not yet done\n");
+  // sections, ...
 
   printf ("Writing DWG file %s", filename_out);
   if (version)
@@ -243,6 +244,8 @@ main (int argc, char *argv[])
     }
   else
     {
+      // FIXME: for now only R_2000
+      dwg.header.version = dwg_version;
       printf ("\n");
     }
 #ifdef USE_WRITE

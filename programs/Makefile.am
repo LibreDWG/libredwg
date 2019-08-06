@@ -50,9 +50,9 @@ dwggrep_LDADD     = $(LDADD) $(PCRE2_LIBS)
 
 if !DISABLE_DXF
 if USE_WRITE
-bin_PROGRAMS    += dwgrewrite
+bin_PROGRAMS    += dwgrewrite dxf2dwg
 # not yet ready
-noinst_PROGRAMS += dxf2dwg dwgwrite
+noinst_PROGRAMS += dwgwrite
 dist_man1_MANS  += $(srcdir)/dwgrewrite.1 $(srcdir)/dwgwrite.1 $(srcdir)/dxf2dwg.1
 dwgrewrite_SOURCES = dwgrewrite.c
 dwgwrite_SOURCES   = dwgwrite.c
@@ -89,7 +89,10 @@ endif
 
 EXTRA_DIST  = suffix.inc common.inc $(TESTS) cmp_dxf.pl
 CLEANFILES  = {example_,sample_}*.{bmp,ps,svg,dxf,log}
+if USE_WRITE
 CLEANFILES += {example_,sample_}*rewrite.{dwg,log}
+CLEANFILES += {example_,sample_}*.dxf.dwg
+endif
 MAINTAINERCLEANFILES = *_flymake.[ch] *~ *.i
 
 .PHONY: man dsymutil clean-dsymutil check-syntax

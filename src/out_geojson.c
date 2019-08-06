@@ -374,7 +374,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         }
     }
 
-  sprintf (tmp, "%lX", obj->handle.value);
+  sprintf (tmp, "%X", obj->handle.value);
   // if has name or text
   if (obj->type == DWG_TYPE_GEOPOSITIONMARKER)
     {

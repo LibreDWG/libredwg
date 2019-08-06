@@ -1040,6 +1040,7 @@ DWG_ENTITY_END
 /**
  * Macro for common DIMENSION declaration
  */
+#ifndef DIMENSION_COMMON_DECODE
 #define DIMENSION_COMMON_DECODE \
     SINCE (R_2010) \
       { \
@@ -1105,6 +1106,7 @@ DWG_ENTITY_END
     DXF { \
       FIELD_HANDLE (dimstyle, 5, 3); \
     }
+#endif
 
 /*(20)*/
 DWG_ENTITY(DIMENSION_ORDINATE)
@@ -1978,7 +1980,7 @@ DWG_OBJECT(DICTIONARY)
     }
   if (FIELD_VALUE(numitems) > 10000)
     {
-      LOG_ERROR("Invalid dictionary with more than 10.000 entries. Handle: %lu\n",
+      LOG_ERROR("Invalid dictionary with more than 10.000 entries. Handle: %X\n",
               obj->handle.value);
       DEBUG_HERE_OBJ
       return DWG_ERR_VALUEOUTOFBOUNDS;
@@ -2033,7 +2035,7 @@ DWG_OBJECT(DICTIONARYWDFLT)
 #endif
   if (FIELD_VALUE(numitems) > 10000)
     {
-      LOG_ERROR("Invalid dictionary with more than 10.000 entries. Handle: %lu\n",
+      LOG_ERROR("Invalid dictionary with more than 10.000 entries. Handle: %X\n",
               obj->handle.value);
       DEBUG_HERE_OBJ
       return DWG_ERR_VALUEOUTOFBOUNDS;
@@ -2880,8 +2882,8 @@ DWG_OBJECT(VPORT)
     FIELD_RC (UCSFOLLOW, 71);
   }
   else {
-    FIELD_VALUE(VIEWMODE) += (FIELD_VALUE(UCSFOLLOW) << 2);
-    FIELD_4BITS (VIEWMODE, 71); // UCSFOLLOW is bit 3 of 71
+    FIELD_VALUE(VIEWMODE) += (FIELD_VALUE(UCSFOLLOW) << 2) + FIELD_VALUE(UCSVP);
+    FIELD_4BITS (VIEWMODE, 71); // UCSFOLLOW is bit 3 of 71, UCSVP bit 0
   }
   FIELD_RS (circle_zoom, 72);
   FIELD_RC (FASTZOOM, 73);
@@ -2893,7 +2895,6 @@ DWG_OBJECT(VPORT)
   SINCE (R_2000) {
     FIELD_RC (render_mode, 281);
   }
-  //TODO 65 (undocumented color index, def: 1)
 
   SINCE (R_2000)
   {
@@ -3015,7 +3016,7 @@ DWG_OBJECT(VPORT)
     SINCE (R_2000)
     {
       FIELD_B (unknown, 0);
-      FIELD_B (ucs_pre_viewport, 71); // bit 0 of 71
+      FIELD_B (UCSVP, 65); // bit 0 of 71
       FIELD_3BD (ucs_origin, 110);
       FIELD_3BD (ucs_x_axis, 111);
       FIELD_3BD (ucs_y_axis, 112);
@@ -3090,7 +3091,7 @@ DWG_OBJECT(DIMSTYLE_CONTROL)
 
   START_OBJECT_HANDLE_STREAM;
   HANDLE_VECTOR (dimstyles, num_entries, 2, 0);
-  HANDLE_VECTOR (morehandles, num_morehandles, 5, 0);
+  HANDLE_VECTOR (morehandles, num_morehandles, 5, 340);
 
 DWG_OBJECT_END
 
@@ -3470,6 +3471,7 @@ DWG_OBJECT(DICTIONARYVAR)
 
 DWG_OBJECT_END
 
+#ifndef IS_INDXF
 int DWG_FUNC_N(ACTION,_HATCH_gradientfill)(
                         Bit_Chain *restrict dat,
                         Bit_Chain *restrict str_dat,
@@ -3512,12 +3514,13 @@ int DWG_FUNC_N(ACTION,_HATCH_gradientfill)(
   FIELD_T (gradient_name, 470);
   return error;
 }
+#endif
 
 //(78 + varies) pg.136
 DWG_ENTITY(HATCH)
 
   SUBCLASS (AcDbHatch)
-#ifndef IS_DXF
+#if !defined(IS_DXF) && !defined(IS_INDXF)
   SINCE (R_2004)
     {
       error |= DWG_FUNC_N(ACTION,_HATCH_gradientfill)(dat,str_dat,obj,_obj);

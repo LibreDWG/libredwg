@@ -410,7 +410,7 @@ dwg_free_eed (Dwg_Object *obj)
   else
     {
       Dwg_Object_Object *_obj = obj->tio.object;
-      if (!_obj)
+      if (!_obj || !_obj->eed)
         return;
       for (i = 0; i < _obj->num_eed; i++)
         {

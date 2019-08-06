@@ -134,8 +134,8 @@
   FIELD_RS (CECOLOR.index, 62);
   DECODER {
     _obj->CELTYPE = calloc(1, sizeof(Dwg_Object_Ref));
-    _obj->CELTYPE->absolute_ref = bit_read_RS(dat); // 6, ff for BYLAYER, fe for BYBLOCK
-    LOG_TRACE("CELTYPE: %lu [long 6]\n", _obj->CELTYPE->absolute_ref)
+    _obj->CELTYPE->absolute_ref = (BITCODE_RL)bit_read_RS(dat); // 6, ff for BYLAYER, fe for BYBLOCK
+    LOG_TRACE("CELTYPE: %u [long 6]\n", _obj->CELTYPE->absolute_ref)
   }
   FIELD_TIMEBLL (TDCREATE, 40);
   FIELD_TIMEBLL (TDUPDATE, 40);
@@ -204,8 +204,8 @@
   dat->byte = 0x4ee;
   DECODER {
     _obj->HANDSEED = calloc(1, sizeof(Dwg_Object_Ref));
-    _obj->HANDSEED->absolute_ref = bit_read_RS(dat);
-    LOG_TRACE("HANDSEED: %lu [long 5]\n", _obj->HANDSEED->absolute_ref)
+    _obj->HANDSEED->absolute_ref = (BITCODE_RL)bit_read_RS(dat);
+    LOG_TRACE("HANDSEED: %u [long 5]\n", _obj->HANDSEED->absolute_ref)
   }
   DEBUG_HERE //4f0
 
@@ -253,3 +253,4 @@
   FIELD_RD (PELEVATION, 40); //ok
   FIELD_CAST (VISRETAIN, RS, B, 70); //ok
   FIELD_RSx (crc, 0); // 0x6bd
+

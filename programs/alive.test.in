@@ -50,6 +50,7 @@ run ()
     case $bprog in
     dwglayers)  ;;
     dwggrep)    arg="-i tekst $arg" ;;
+    dxf2dwg)    arg="-v2 ${datadir}/$dwg.dxf" ;;
     #dwgrewrite) arg="-v2 $arg" ;;
     *)          arg="-v2 $arg" ;;
     esac

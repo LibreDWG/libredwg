@@ -126,7 +126,7 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
 #define VALUE_HANDLE(value, nam, handle_code, dxf)                            \
   if (dxf)                                                                    \
     {                                                                         \
-      fprintf (dat->fh, "%3i\r\n%lX\r\n", dxf,                                \
+      fprintf (dat->fh, "%3i\r\n%X\r\n", dxf,                                 \
                value != NULL ? ((BITCODE_H)value)->absolute_ref : 0);         \
     }
 // the name in the table, referenced by the handle
@@ -144,7 +144,7 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
       else if (dxf == 8)                                                      \
         FIELD_HANDLE_NAME (nam, dxf, LAYER)                                   \
       else if (dat->version >= R_13)                                          \
-        fprintf (dat->fh, "%3i\r\n%lX\r\n", dxf,                              \
+        fprintf (dat->fh, "%3i\r\n%X\r\n", dxf,                              \
                  _obj->nam->obj ? _obj->nam->absolute_ref : 0);               \
     }
 #define SUB_FIELD_HANDLE(o, nam, handle_code, dxf)                            \
@@ -159,7 +159,7 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
       else if (dxf == 8)                                                      \
         SUB_FIELD_HANDLE_NAME (o, nam, dxf, LAYER)                            \
       else if (dat->version >= R_13)                                          \
-        fprintf (dat->fh, "%3i\r\n%lX\r\n", dxf,                              \
+        fprintf (dat->fh, "%3i\r\n%X\r\n", dxf,                               \
                  _obj->o.nam->obj ? _obj->o.nam->absolute_ref : 0);           \
     }
 #define HEADER_9(nam)                                                         \
@@ -167,7 +167,7 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
   fprintf (dat->fh, "$%s\r\n", #nam)
 #define VALUE_H(value, dxf)                                                   \
   if (dxf)                                                                    \
-  fprintf (dat->fh, "%3i\r\n%lX\r\n", dxf, value ? value->absolute_ref : 0)
+  fprintf (dat->fh, "%3i\r\n%X\r\n", dxf, value ? value->absolute_ref : 0)
 #define HEADER_H(nam, dxf)                                                    \
   HEADER_9 (nam);                                                             \
   VALUE_H (dwg->header_vars.nam, dxf)
@@ -709,9 +709,8 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
     LOG_INFO ("Entity " #token ":\n")                                         \
     SINCE (R_11)                                                              \
     {                                                                         \
-      LOG_TRACE ("Entity handle: %d.%d.%lX\n", obj->handle.code,              \
-                 obj->handle.size, obj->handle.value);                        \
-      fprintf (dat->fh, "%3i\r\n%lX\r\n", 5, obj->handle.value);              \
+      LOG_TRACE ("Entity handle: " FORMAT_H "\n", ARGS_H(obj->handle));       \
+      fprintf (dat->fh, "%3i\r\n%X\r\n", 5, obj->handle.value);               \
     }                                                                         \
     SINCE (R_13) { error |= dxf_common_entity_handle_data (dat, obj); }
 
@@ -749,7 +748,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
         SINCE (R_13)                                                          \
         {                                                                     \
           const int dxf = obj->type == DWG_TYPE_DIMSTYLE ? 105 : 5;           \
-          fprintf (dat->fh, "%3i\r\n%lX\r\n", dxf, obj->handle.value);        \
+          fprintf (dat->fh, "%3i\r\n%X\r\n", dxf, obj->handle.value);         \
           _XDICOBJHANDLE (3);                                                 \
           _REACTORS (4);                                                      \
         }                                                                     \
@@ -758,8 +757,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
           VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 3, 330);   \
         }                                                                     \
       }                                                                       \
-    LOG_TRACE ("Object handle: %d.%d.%lX\n", obj->handle.code,                \
-               obj->handle.size, obj->handle.value)
+    LOG_TRACE ("Object handle: " FORMAT_H "\n", ARGS_H(obj->handle))
 
 // then 330, SUBCLASS
 
@@ -835,8 +833,8 @@ dxf_write_xdata (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           break;
         case VT_HANDLE:
         case VT_OBJECTID:
-          fprintf (dat->fh, "%3i\r\n%lX\r\n", dxftype,
-                   (unsigned long)*(uint64_t *)rbuf->value.hdl);
+          fprintf (dat->fh, "%3i\r\n%X\r\n", dxftype,
+                   (unsigned)*(uint64_t *)rbuf->value.hdl);
           break;
         case VT_INVALID:
           break; // skip
@@ -1000,7 +998,7 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
     {                                                                         \
       SINCE (R_13)                                                            \
       {                                                                       \
-        fprintf (dat->fh, "%3i\r\n%lX\r\n", 5, ctrl->handle.value);           \
+        fprintf (dat->fh, "%3i\r\n%X\r\n", 5, ctrl->handle.value);            \
       }                                                                       \
       SINCE (R_14)                                                            \
       {                                                                       \
@@ -1473,7 +1471,7 @@ static int dwg_dxf_object (Bit_Chain *restrict dat,
       // TODO: looks good, but acad import crashes
       return dwg_dxf_MLINE (dat, obj);
 #else
-      LOG_WARN ("Unhandled Entity MLINE in out_dxf %u/%lX", obj->index,
+      LOG_WARN ("Unhandled Entity MLINE in out_dxf %u/%X", obj->index,
                 obj->handle.value)
       if (0)
         dwg_dxf_MLINE (dat, obj);
@@ -2127,7 +2125,7 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict mspace,
     error |= dwg_dxf_ENDBLK (dat, endblk);
   else
     {
-      LOG_WARN ("Empty ENDBLK for \"%s\" %lX", _hdr->name,
+      LOG_WARN ("Empty ENDBLK for \"%s\" %X", _hdr->name,
                 hdr ? hdr->handle.value : 0);
       dxf_ENDBLK_empty (dat, hdr);
     }

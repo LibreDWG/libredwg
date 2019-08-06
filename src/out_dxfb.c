@@ -610,8 +610,7 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
     SINCE (R_11)                                                              \
     {                                                                         \
       uint32_t i = (uint32_t)obj->handle.value;                               \
-      LOG_TRACE ("Entity handle: %d.%d.%lX\n", obj->handle.code,              \
-                 obj->handle.size, obj->handle.value)                         \
+      LOG_TRACE ("Entity handle: " FORMAT_H "\n", ARGS_H(obj->handle))        \
       GROUP (330);                                                            \
       fwrite (&i, sizeof (uint32_t), 1, dat->fh);                             \
     }                                                                         \
@@ -1306,7 +1305,7 @@ decl_dxfb_process_VERTEX (2D) decl_dxfb_process_VERTEX (3D)
       // TODO: looks good, but acad import crashes
       return dwg_dxfb_MLINE (dat, obj);
 #else
-      LOG_WARN ("Unhandled Entity MLINE in out_dxfb %u/%lX", obj->index,
+      LOG_WARN ("Unhandled Entity MLINE in out_dxfb %u/%X", obj->index,
                 obj->handle.value)
       if (0)
         dwg_dxfb_MLINE (dat, obj);

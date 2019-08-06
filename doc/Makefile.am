@@ -20,10 +20,13 @@
 TEXINFO_TEX_DIR = $(abs_builddir)/latex
 TEXINPUTS="$(TEXINPUTS)$(PATH_SEPARATOR)$(TEXINFO_TEX_DIR)"
 info_TEXINFOS = LibreDWG.texi
-LibreDWG_TEXINFOS = fdl.texi
+LibreDWG_TEXINFOS = fdl.texi dynapi.texi
 
 manual:
 	../build-aux/gendocs.sh LibreDWG "GNU LibreDWG - Manual"
+
+dynapi.texi: $(top_srcdir)/src/gen-dynapi.pl
+	-$(PERL) $(top_srcdir)/src/gen-dynapi.pl
 
 if HAVE_DOXYGEN
 refman doxygen html/index.html: Doxyfile ../include/dwg_api.h ../include/dwg.h ../src/dynapi.c

@@ -483,10 +483,16 @@ typedef enum DWG_ERROR
  */
 typedef struct _dwg_handle
 {
-  unsigned int code; /*!< OFFSETOBJHANDLE if > 6 */
-  unsigned int size;
-  long unsigned int value;
+  BITCODE_RC code; /*!< OFFSETOBJHANDLE if > 6 */
+  BITCODE_RC size;
+  BITCODE_RL value;
 } Dwg_Handle;
+
+#define FORMAT_H "%u.%u.%X"
+#define ARGS_H(hdl) (hdl).code, (hdl).size, (hdl).value
+#define FORMAT_REF "(%u.%u.%X) abs:%X"
+#define ARGS_REF(ref) (ref)->handleref.code, (ref)->handleref.size, \
+    (ref)->handleref.value, (ref)->absolute_ref
 
 /**
 object references: obj is resolved by handleref (e.g. via
@@ -501,7 +507,7 @@ typedef struct _dwg_object_ref
 {
   struct _dwg_object* obj;
   Dwg_Handle handleref;
-  long unsigned int absolute_ref;
+  BITCODE_RL absolute_ref;
 } Dwg_Object_Ref;
 
 typedef Dwg_Object_Ref* BITCODE_H;
@@ -552,6 +558,7 @@ typedef struct _dwg_resbuf
     char    i8;
     short   i16;
     int     i32;
+    BITCODE_BLL i64;
     double  dbl;
     unsigned char hdl[8];
     struct _dwg_binary_chunk str;
@@ -673,6 +680,8 @@ typedef struct _dwg_header_variables {
   BITCODE_TV MENU;
   BITCODE_TIMEBLL TDCREATE;
   BITCODE_TIMEBLL TDUPDATE;
+  BITCODE_TIMEBLL TDUCREATE;
+  BITCODE_TIMEBLL TDUUPDATE;
   BITCODE_BL unknown_15;
   BITCODE_BL unknown_16;
   BITCODE_BL unknown_17;
@@ -832,7 +841,7 @@ typedef struct _dwg_header_variables {
   BITCODE_H BLOCK_CONTROL_OBJECT;
   BITCODE_H LAYER_CONTROL_OBJECT;
   BITCODE_H STYLE_CONTROL_OBJECT;
-  BITCODE_H LINETYPE_CONTROL_OBJECT;
+  BITCODE_H LTYPE_CONTROL_OBJECT;
   BITCODE_H VIEW_CONTROL_OBJECT;
   BITCODE_H UCS_CONTROL_OBJECT;
   BITCODE_H VPORT_CONTROL_OBJECT;
@@ -841,7 +850,7 @@ typedef struct _dwg_header_variables {
   BITCODE_H VPORT_ENTITY_CONTROL_OBJECT; /*!< r11-r2000 */
   BITCODE_H DICTIONARY_ACAD_GROUP;
   BITCODE_H DICTIONARY_ACAD_MLINESTYLE;
-  BITCODE_H DICTIONARY_NAMED_OBJECTS;
+  BITCODE_H DICTIONARY_NAMED_OBJECT;
   BITCODE_BS TSTACKALIGN;           /*!< r2000+ */
   BITCODE_BS TSTACKSIZE;            /*!< r2000+ */
   BITCODE_TV HYPERLINKBASE;         /*!< r2000+ */
@@ -1881,6 +1890,16 @@ typedef struct _dwg_entity_MLINE
   BITCODE_H* entries; \
   BITCODE_BL objid
 
+// not for LAYER!
+#define COMMON_TABLE_FIELDS() \
+  struct _dwg_object_object *parent; \
+  BITCODE_RC flag; \
+  BITCODE_TV name; \
+  BITCODE_RS used; \
+  BITCODE_B xrefref; \
+  BITCODE_BS xrefindex_plus1; \
+  BITCODE_B xrefdep
+
 /**
  BLOCK_CONTROL (48) object, table header
  */
@@ -1896,14 +1915,7 @@ typedef struct _dwg_object_BLOCK_CONTROL
  */
 typedef struct _dwg_object_BLOCK_HEADER
 {
-  struct _dwg_object_object *parent;
-  BITCODE_RC flag;  /* preR13 */
-  BITCODE_TV name;
-  BITCODE_RS used;  /* preR13 */
-  BITCODE_B xrefref;
-  BITCODE_BS xrefindex_plus1;
-  BITCODE_B xrefdep;
-
+  COMMON_TABLE_FIELDS();
   BITCODE_BL __iterator;
   BITCODE_RC flag2; /* preR13 */
   BITCODE_RS flag3; /* preR13 */
@@ -1983,14 +1995,7 @@ typedef struct _dwg_object_STYLE_CONTROL
  */
 typedef struct _dwg_object_STYLE
 {
-  struct _dwg_object_object *parent;
-  BITCODE_RC flag; /* preR13 */
-  BITCODE_TV name;
-  BITCODE_RS used; /* preR13 */
-  BITCODE_B xrefref;
-  BITCODE_BS xrefindex_plus1;
-  BITCODE_B xrefdep;
-
+  COMMON_TABLE_FIELDS();
   BITCODE_B vertical;
   BITCODE_B shape_file;
   BITCODE_BD fixed_height;
@@ -2032,14 +2037,7 @@ typedef struct _dwg_LTYPE_dash {
 
 typedef struct _dwg_object_LTYPE
 {
-  struct _dwg_object_object *parent;
-  BITCODE_RC flag; /* preR13 */
-  BITCODE_TV name;
-  BITCODE_RS used; /* preR13 */
-  BITCODE_B xrefref;
-  BITCODE_BS xrefindex_plus1;
-  BITCODE_B xrefdep;
-
+  COMMON_TABLE_FIELDS();
   BITCODE_TV description;
   BITCODE_BD pattern_len;
   BITCODE_RC alignment;
@@ -2067,14 +2065,7 @@ typedef struct _dwg_object_VIEW_CONTROL
  */
 typedef struct _dwg_object_VIEW
 {
-  struct _dwg_object_object *parent;
-  BITCODE_RC flag; /* preR13 */
-  BITCODE_TV name;
-  BITCODE_RS used; /* preR13 */
-  BITCODE_B xrefref;
-  BITCODE_BS xrefindex_plus1;
-  BITCODE_B xrefdep;
-
+  COMMON_TABLE_FIELDS();
   BITCODE_BD height;
   BITCODE_BD width;
   BITCODE_2RD center;
@@ -2121,14 +2112,7 @@ typedef struct _dwg_object_UCS_CONTROL
  */
 typedef struct _dwg_object_UCS
 {
-  struct _dwg_object_object *parent;
-  BITCODE_RC flag; /* preR13 */
-  BITCODE_TV name;
-  BITCODE_RS used; /* preR13 */
-  BITCODE_B xrefref;
-  BITCODE_BS xrefindex_plus1;
-  BITCODE_B xrefdep;
-
+  COMMON_TABLE_FIELDS();
   BITCODE_3BD origin;
   BITCODE_3BD x_direction;
   BITCODE_3BD y_direction;
@@ -2153,14 +2137,7 @@ typedef struct _dwg_object_VPORT_CONTROL
  */
 typedef struct _dwg_object_VPORT
 {
-  struct _dwg_object_object *parent;
-  BITCODE_RC flag;
-  BITCODE_TV name;
-  BITCODE_RS used; /* preR13 */
-  BITCODE_B xrefref;
-  BITCODE_BS xrefindex_plus1;
-  BITCODE_B xrefdep;
-
+  COMMON_TABLE_FIELDS();
   BITCODE_BD VIEWSIZE;
   BITCODE_BD aspect_ratio;
   BITCODE_2RD VIEWCTR;
@@ -2192,7 +2169,7 @@ typedef struct _dwg_object_VPORT
   BITCODE_2RD SNAPBASE;
   BITCODE_2RD SNAPUNIT;
   BITCODE_B unknown;
-  BITCODE_B ucs_pre_viewport;
+  BITCODE_B UCSVP;          /*!< DXF 65 */
   BITCODE_3BD ucs_origin;
   BITCODE_3BD ucs_x_axis;
   BITCODE_3BD ucs_y_axis;
@@ -2223,15 +2200,8 @@ typedef struct _dwg_object_APPID_CONTROL
  */
 typedef struct _dwg_object_APPID
 {
-  struct _dwg_object_object *parent;
-  BITCODE_RC flag; /* preR13 */
-  BITCODE_TV name;
-  BITCODE_RS used; /* preR13 */
-  BITCODE_B xrefref;
-  BITCODE_BS xrefindex_plus1;
-  BITCODE_B xrefdep;
+  COMMON_TABLE_FIELDS();
   BITCODE_RC unknown;
-
   BITCODE_H null_handle;
 } Dwg_Object_APPID;
 
@@ -2242,8 +2212,8 @@ typedef struct _dwg_object_APPID
 typedef struct _dwg_object_DIMSTYLE_CONTROL
 {
   COMMON_TABLE_CONTROL_FIELDS(dimstyles);
-  BITCODE_RC num_morehandles; /* undocumented */
-  BITCODE_H* morehandles;
+  BITCODE_RC num_morehandles; /* DXF 71 undocumented */
+  BITCODE_H* morehandles;     /* DXF 340 */
 } Dwg_Object_DIMSTYLE_CONTROL;
 
 /**
@@ -2251,14 +2221,7 @@ typedef struct _dwg_object_DIMSTYLE_CONTROL
  */
 typedef struct _dwg_object_DIMSTYLE
 {
-  struct _dwg_object_object *parent;
-  BITCODE_RC flag; /* preR13 */
-  BITCODE_TV name;
-  BITCODE_RS used; /* preR13 */
-  BITCODE_B xrefref;
-  BITCODE_BS xrefindex_plus1;
-  BITCODE_B xrefdep;
-
+  COMMON_TABLE_FIELDS();
   BITCODE_B DIMTOL;
   BITCODE_B DIMLIM;
   BITCODE_B DIMTIH;
@@ -2368,14 +2331,7 @@ typedef struct _dwg_object_VPORT_ENTITY_CONTROL
  */
 typedef struct _dwg_object_VPORT_ENTITY_HEADER
 {
-  struct _dwg_object_object *parent;
-  BITCODE_RC flag; /* preR13 */
-  BITCODE_TV name;
-  BITCODE_RS used; /* preR13 */
-  BITCODE_B xrefref;
-  BITCODE_BS xrefindex_plus1;
-  BITCODE_B xrefdep;
-
+  COMMON_TABLE_FIELDS();
   BITCODE_B flag1;
   BITCODE_H xref_handle;
   BITCODE_H vport_entity;
@@ -5058,7 +5014,7 @@ typedef struct _dwg_entity_eed_data
       DWGCHAR string[1]; /* inlined */
     } eed_0_r2007;
     struct { /* 1 (1001) invalid */
-      char invalid[1];
+      char invalid[1]; // set the eed[0].handle to the used APPID instead
     } eed_1;
     struct { /* 2 (1002) { or } */
       BITCODE_RC byte;
@@ -5718,6 +5674,12 @@ dwg_bmp (const Dwg_Data *restrict, BITCODE_RL *restrict);
  *  -1 BYLAYER, -2 BYBLOCK, -3 BYLWDEFAULT.
  */
 EXPORT int dxf_cvt_lweight (const BITCODE_RC value);
+
+/* search for the name in the associated table, and return its handle. */
+EXPORT BITCODE_H
+dwg_find_tablehandle (const Dwg_Data *restrict dwg,
+                      char *restrict name,
+                      const char *restrict table);
 
 EXPORT double dwg_model_x_min (const Dwg_Data *);
 EXPORT double dwg_model_x_max (const Dwg_Data *);

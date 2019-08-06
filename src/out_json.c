@@ -198,37 +198,33 @@ static void _prefix (Bit_Chain *dat);
 #define VALUE_HANDLE(hdlptr, nam, handle_code, dxf)                           \
   if (hdlptr)                                                                 \
     {                                                                         \
-      fprintf (dat->fh, "\"%d.%d.%lu\",\n", hdlptr->handleref.code,           \
-               hdlptr->handleref.size, hdlptr->handleref.value);              \
+      fprintf (dat->fh, "\"" FORMAT_H "\",\n", ARGS_H(hdlptr->handleref));    \
     }                                                                         \
   else                                                                        \
     {                                                                         \
-      fprintf (dat->fh, "\"0.0.0\",\n");                                      \
+      fprintf (dat->fh, "\"(0.0.0)\",\n");                                    \
     }
 #define VALUE_H(hdl, dxf)                                                     \
-  fprintf (dat->fh, "\"%d.%d.%lu\",\n", (hdl).code, (hdl).size, (hdl).value)
+  fprintf (dat->fh, "\"" FORMAT_H "\",\n", ARGS_H(hdl))
 #define FIELD_HANDLE(nam, handle_code, dxf)                                   \
   PREFIX if (_obj->nam)                                                       \
   {                                                                           \
-    fprintf (dat->fh, "\"" #nam "\": \"%d.%d.%lu\",\n",                       \
-             _obj->nam->handleref.code, _obj->nam->handleref.size,            \
-             _obj->nam->handleref.value);                                     \
+    fprintf (dat->fh, "\"" #nam "\": \"" FORMAT_H "\",\n",                    \
+             ARGS_H(_obj->nam->handleref));                                   \
   }                                                                           \
   else { fprintf (dat->fh, "\"" #nam "\": \"0.0.0\",\n"); }
 #define SUB_FIELD_HANDLE(o, nam, handle_code, dxf)                            \
   PREFIX if (_obj->o.nam)                                                     \
   {                                                                           \
-    fprintf (dat->fh, "\"" #nam "\": \"%d.%d.%lu\",\n",                       \
-             _obj->o.nam->handleref.code, _obj->o.nam->handleref.size,        \
-             _obj->o.nam->handleref.value);                                   \
+    fprintf (dat->fh, "\"" #nam "\": \"" FORMAT_H "\",\n",                    \
+             ARGS_H(_obj->o.nam->handleref));                                 \
   }                                                                           \
   else { fprintf (dat->fh, "\"" #nam "\": \"0.0.0\",\n"); }
 #define FIELD_DATAHANDLE(nam, code, dxf) FIELD_HANDLE (nam, code, dxf)
 #define FIELD_HANDLE_N(nam, vcount, handle_code, dxf)                         \
   PREFIX if (_obj->nam)                                                       \
   {                                                                           \
-    fprintf (dat->fh, "\"%d.%d.%lu\",\n", _obj->nam->handleref.code,          \
-             _obj->nam->handleref.size, _obj->nam->handleref.value);          \
+    fprintf (dat->fh, "\"" FORMAT_H "\",\n", ARGS_H(_obj->nam->handleref));   \
   }                                                                           \
   else { fprintf (dat->fh, "\"0.0.0\",\n"); }
 #define FIELD_BINARY(nam, size, dxf)                                          \
@@ -1025,8 +1021,7 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
               LOG_WARN ("Unknown object, skipping eed/reactors/xdic");
               SINCE (R_2000){
                 LOG_INFO ("Object bitsize: %u\n", obj->bitsize)
-              } LOG_INFO ("Object handle: %d.%d.%lX\n", obj->handle.code,
-                          obj->handle.size, obj->handle.value);
+                  } LOG_INFO ("Object handle: " FORMAT_H "\n", ARGS_H(obj->handle));
             }
         }
     }
@@ -1125,7 +1120,7 @@ json_handles_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       Dwg_Object *obj = &dwg->object[j];
       // handle => abs. offset
       PREFIX;
-      fprintf (dat->fh, "[ %lu, %lu ],\n", obj->handle.value, obj->address);
+      fprintf (dat->fh, "[ %u, %lu ],\n", obj->handle.value, obj->address);
     }
   NOCOMMA;
   ENDSEC ();

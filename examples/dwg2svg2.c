@@ -237,7 +237,7 @@ static void
 output_INSERT (dwg_object *obj)
 {
   int index, error;
-  unsigned long abs_ref;
+  BITCODE_RL abs_ref;
   double rotation;
   dwg_ent_insert *insert;
   dwg_point_3d ins_pt, _scale;
@@ -253,8 +253,6 @@ output_INSERT (dwg_object *obj)
   dynget (insert, "INSERT", "scale", &_scale);
   obj_handle = dwg_object_get_handle (obj, &error);
   log_if_error ("get_handle");
-  ins_handle = &obj->handle;
-  log_if_error ("insert_get_ref_handle");
   if (!insert->block_header)
     log_error ("insert->block_header");
   abs_ref = insert->block_header->absolute_ref;
@@ -262,17 +260,16 @@ output_INSERT (dwg_object *obj)
   if (insert->block_header->handleref.code == 5)
     {
       printf ("\t<use id=\"dwg-object-%d\" transform=\"translate(%f %f) "
-              "rotate(%f) scale(%f %f)\" xlink:href=\"#symbol-%lu\" /><!-- "
-              "block_header->handleref: %d.%d.%lu -->\n",
+              "rotate(%f) scale(%f %f)\" xlink:href=\"#symbol-%X\" /><!-- "
+              "block_header->handleref: " FORMAT_H " -->\n",
               index, transform_X (ins_pt.x), transform_Y (ins_pt.y),
               (180.0 / M_PI) * rotation, _scale.x, _scale.y, abs_ref,
-              ins_handle->code, ins_handle->size, ins_handle->value);
+              ARGS_H(*obj_handle));
     }
   else
     {
-      printf ("\n\n<!-- WRONG INSERT(%d.%d.%lu): handleref = %d.%d.%lu -->\n",
-              obj_handle->code, obj_handle->size, obj_handle->value,
-              ins_handle->code, ins_handle->size, ins_handle->value);
+      printf ("\n\n<!-- WRONG INSERT(" FORMAT_H ") -->\n",
+              ARGS_H(*obj_handle));
     }
 }
 
@@ -317,7 +314,7 @@ output_BLOCK_HEADER (dwg_object_ref *ref)
   dwg_object *hdr, *obj;
   dwg_obj_block_header *_hdr;
   int error;
-  unsigned long abs_ref;
+  BITCODE_RL abs_ref;
   char *name;
 
   if (!ref)
@@ -341,7 +338,7 @@ output_BLOCK_HEADER (dwg_object_ref *ref)
   dynget (_hdr, "BLOCK_HEADER", "name", &name);
   //name = dwg_obj_block_header_get_name (_hdr, &error);
   //log_if_error ("block_header_get_name");
-  printf ("\t<g id=\"symbol-%lu\" >\n\t\t<!-- %s -->\n", abs_ref, name);
+  printf ("\t<g id=\"symbol-%X\" >\n\t\t<!-- %s -->\n", abs_ref, name);
   if (name != NULL && name != _hdr->name && hdr->parent->header.version >= R_2007)
     free (name);
 

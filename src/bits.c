@@ -1125,8 +1125,8 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   if (handle->size > 4 || handle->code > 14)
     {
       loglevel = dat->opts & 0xf;
-      LOG_WARN ("Invalid handle-reference, longer than 4 bytes: (%x.%d.%lX)",
-                handle->code, handle->size, handle->value)
+      LOG_WARN ("Invalid handle-reference, longer than 4 bytes: " FORMAT_H,
+                ARGS_H(*handle))
       return DWG_ERR_INVALIDHANDLE;
     }
 

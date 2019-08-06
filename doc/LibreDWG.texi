@@ -4,10 +4,11 @@
 @include version.texi
 @settitle LibreDWG @value{VERSION}
 
-@c Combine everything into one index (arbitrarily chosen to be the
-@c concept index).
-@syncodeindex vr cp
-@syncodeindex fn cp
+@c Use 2 indices, cp (with fn and pg), and vr for the rest (mostly included).
+@c @syncodeindex vr cp
+@synindex fn cp
+@synindex tp cp
+@synindex pg cp
 @c %**end of header
 
 @copying
@@ -33,7 +34,7 @@ Texts.  A copy of the license is included in the section entitled
 @titlepage
 @title GNU LibreDWG
 @subtitle for version @value{VERSION}, @value{UPDATED}
-@c Hey, if you can change this, you can comment in the next line!
+@c Hey, if you change this, you can comment in the next lines
 @author GNU LibreDWG Developers
 @author and Thien-Thi Nguyen
 @page
@@ -54,10 +55,11 @@ Texts.  A copy of the license is included in the section entitled
 @menu
 * Overview::            General purpose and information.
 * Usage::               How to use LibreDWG.
-* Types::               Enums, structs.
+* Types::               Common types, enums, structs.
+* Objects::             All supported objects and entities.
 * Functions::           Call them.
 * Errors::              Error levels.
-* Programs::            Useful binaries.
+* Programs::            Included binaries.
 * Bindings::            Bindings to other languages.
 * Reference API::
 
@@ -125,7 +127,7 @@ Here is a list of features that are still missing.
 @table @asis
 
 @item Reading pre-R13 DWG
-Reading DWG formats for pre-R13 and some R2010+ non-graphical objects is an ongoing effort, some minor parts are missing. Simple DWG's can be read already, some undocumented classes are skipped.
+Reading DWG formats for pre-R13 and some R2010+ non-graphical objects is an ongoing effort, some minor parts are missing. Most DWG's can be read, some undocumented classes are skipped.
 
 * ACIS: version 1 is converted to a raw string. ACIS version 2, i.e. the forked variant ACIS 7.0 under the name ShapeManager, is dumped to a string containing the binary SAB format.
 
@@ -135,11 +137,11 @@ ongoing effort and not yet implemented. We write as default in the R2000 format.
 
 @item Reading and writing ASCII and binary DXF
 DXF support is an ongoing effort, and about halfway implemented.
-Ascii DXF's are generated fully, with much more elements and fields and other free libraries,
+ASCII DXF's are generated fully, with much more elements and fields and other free libraries,
 but AutoCAD fails to import some of them. See the @file{TODO} file for a detailed coverage report.
 
 Writing binary DXF is still under construction, done about 80%.
-Reading DXF is not yet fully implemented, this is under construction.
+Reading DXF is not yet fully implemented, this is under construction and planned for the 0.9 release.
 
 @item Enabled entities and objects, but unstable, undertested. Field names may change:
 
@@ -282,13 +284,13 @@ This chapter describes the enums and structs used to define the single
 DWG structure, which is passed around the functions x(@pxref{Functions}).
 
 @deftypevr {define} BITCODE_RC char
-1 raw signed char
+1 raw unsigned char, uint8_t
 @end deftypevr
 @deftypevr {define} BITCODE_RS short
-1 raw unsigned short int
+1 raw unsigned short int, uint16_t
 @end deftypevr
 @deftypevr {define} BITCODE_RL long
-1 raw unsigned long int
+1 raw unsigned long int, uint32_t
 @end deftypevr
 @deftypevr {define} BITCODE_RD double
 1 raw IEEE-754 double
@@ -309,7 +311,7 @@ DWG structure, which is passed around the functions x(@pxref{Functions}).
 1 bit-encoded unsigned short
 @end deftypevr
 @deftypevr {define} BITCODE_BL long
-1 bit-encoded unsigned long
+1 bit-encoded unsigned long (max 32bit)
 @end deftypevr
 @deftypevr {define} BITCODE_BLL uint64_t
 1 bit-encoded unsigned 64bit long
@@ -347,7 +349,7 @@ The default text type since r2007.
 handle-references
 @end deftypevr
 @deftypevr {define} BITCODE_CMC struct Dwg_Color
-Dwg_Color struct with index or rgb, alpha and optional name and book_name.
+Dwg_Color struct with index or rgb, alpha and optional DBCOLOR handle, name, book_name.
 @end deftypevr
 [and some more]
 
@@ -362,6 +364,18 @@ are the enums for return codes and error codes.
 On non-C99 systems ensure that stdint.h and inttypes.h are available
 to use the proper C99 @code{int32_t},... types, and not just the
 native fallback types int/long, which are different across platforms.
+
+@node Objects
+@chapter Objects
+
+@c TODO CLASSES, TABLES? Or maybe add a ``is a table'' note to the object.
+@menu
+* HEADER::            All Header variables
+* ENTITIES::          All Entities and its special and common fields
+* OBJECTS::           All Objects and its special and common fields
+@end menu
+
+@include dynapi.texi
 
 @node Functions
 @chapter Functions
@@ -448,20 +462,20 @@ where @code{process_object} checks the type of each entity under the
 @var{Dwg_Object* obj}.
 
 For each entity or object type (i.e. a non-graphical dwg object, also tables)
-there also exist the simple and expensive @code{dwg_get_ENTITY} and @code{dwg_get_OBJECT}
+there also exist the simple and expensive @code{dwg_getall_ENTITY} and @code{dwg_getall_OBJECT}
 functions:
 
-@deftypefn {Function} int dwg_get_ENTITY (Dwg_Object_Ref *@var{block_header_ref})
+@deftypefn {Function} int dwg_getall_ENTITY (Dwg_Object_Ref *@var{block_header_ref})
 Return a malloc'ed NULL-terminated array of all such entities for Model Space,
 Paper Space or an individual block.
 @end deftypefn
 
-@deftypefn {Function} int dwg_get_OBJECT (Dwg_Data *@var{dwg})
+@deftypefn {Function} int dwg_getall_OBJECT (Dwg_Data *@var{dwg})
 Return a malloc'ed NULL-terminated array of all such DWG objects.
 @end deftypefn
 
-The decoder is driven by the fields definition in the @file{dwg.spec}, which adds each
-field to the object. This is done in the @file{decode.c} or @file{decode_r2007.c}.
+The decoder is driven by the fields definition in the @file{src/dwg.spec}, which adds each
+field to the object. This is done in the @file{src/decode.c} or @file{src/decode_r2007.c}.
 @deftypefn {Function} int dwg_decode_OBJECT (Bit_Chain *@var{dat}, Dwg_Object *@var{obj})
 Sets the fields for the object from the DWG bitstream.
 @end deftypefn
@@ -495,8 +509,9 @@ Initializes an object for the given OBJECT or ENTITY type, with all fields being
 This does not initialize the @var{obj} size, type, address, handlestream_size, bitsize fields.
 @end deftypefn
 
-The encoder is driven by the fields definition in the @file{dwg.spec}, which adds each field to
-the object. This is done by @file{encode} or any @file{in_*} import module.
+The encoder is driven by the fields definition in the @file{src/dwg.spec} and
+the generated @file{src/dynapi.c}, which adds each field to the object.
+This is done by @file{src/encode.c} or any @file{src/in_*.c} import module.
 @deftypefn {Function} int dwg_encode_OBJECT (Bit_Chain *@var{dat}, Dwg_Object *@var{obj})
 Encodes the DWG bitstream from the fields of the object.
 @end deftypefn
@@ -525,15 +540,16 @@ or from an earlier or later DWG version.
 
 @cindex DXF, ASCII DXF
 
-We can write Ascii DXF files in various versions, with much more data than other free
-DWG libraries, but not as stable as the unfree Teigha library yet.
-AutoCAD fails to import some of our files still (~20% failure rate).
+We can write ASCII DXF files in various versions, with much more data
+than other free DWG libraries, but not as stable as the unfree Teigha
+library yet.  AutoCAD fails to import some of our files still (~20%
+failure rate).
 
 Options: @code{--minimal} (see @code{dwg2dxf} or @code{dwgread}) creates
 only a short header with a ACADVER and HANDSEED element, and the
 entities, without any subclass markers, reactors or handles.
 
-Reading DXF is under construction.
+Reading DXF is under construction and is planned for the 0.9 release.
 
 @node DXFB
 @subsection DXFB
@@ -542,26 +558,34 @@ Reading DXF is under construction.
 
 We can almost write Binary DXF files in various versions. Under construction.
 
-Reading DXFB is under construction.
+Reading DXFB is under construction and is planned for the 0.9 release.
 
 @node JSON
 @subsection JSON
 
 @cindex JSON
 
-We write and read @i{(not yet)} to our own JSON format, which is a readable 1:1 mapping of the DWG structures, and carries much more information than the DXF format. The idea is to dump a DWG to JSON and filter/query or postprocess it with more powerful JSON query tools such as @b{jq} (@url{https://stedolan.github.io/jq/}), and optionally import it back in. JSON is much better structured than DXF.
+We write and read @i{(not yet)} to our own JSON format, which is a
+readable 1:1 mapping of the DWG structures, and carries much more
+information than the DXF format. The idea is to dump a DWG to JSON and
+filter/query or postprocess it with more powerful JSON query tools
+such as @b{jq} (@url{https://stedolan.github.io/jq/}), and optionally
+import it back in. JSON is much better structured than DXF.
 
-Writing a JSON to stdout via a pipe is not yet recommended, as then ending commas are still there, which is strictly not valid JSON.
+Writing a JSON to stdout via a pipe is not yet recommended, as then
+ending commas are still there, which is strictly not valid JSON.
 
-The current first level objects are ``HEADER'', ``CLASSES'' and ``OBJECTS'', for more see the specs.
+The current first level objects are ``HEADER'', ``CLASSES'' and
+``OBJECTS'', for more see the specs.
 
 @node GeoJSON
 @subsection GeoJSON
 
 @cindex GeoJSON
 
-Work is ongoing to write to the GeoJSON format as specified at @uref{http://geojson.org/geojson-spec.html}.
-See @code{dwgread} with the @code{--fmt GeoJSON} option.
+Work is ongoing to write to the GeoJSON format as specified at
+@uref{http://geojson.org/geojson-spec.html}.  See @code{dwgread} with
+the @code{--fmt GeoJSON} option.
 
 This is about 70% finished.
 
@@ -816,8 +840,21 @@ See @file{CONTRIBUTING} in the source distribution.
 @include version.texi
 
 @node Index
-@unnumbered Index
+@chapter Index
+
+@menu
+* General Index::            Concepts, functions and types.
+* Object and Field Index::   Objects, Entities and its fields.
+@end menu
+
+@node General Index
+@section General Index
 
 @printindex cp
+
+@node Object and Field Index
+@section Object and Field Index
+
+@printindex vr
 
 @bye

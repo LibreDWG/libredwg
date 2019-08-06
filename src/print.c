@@ -68,10 +68,8 @@ static unsigned int cur_ver = 0;
 #define VALUE_HANDLE(handleptr, name, handle_code, dxf)                       \
   if (handleptr)                                                              \
     {                                                                         \
-      LOG_TRACE (#name ": HANDLE(%x.%d.%lX) absolute:%lX/%lu [%d]\n",         \
-                 handleptr->handleref.code, handleptr->handleref.size,        \
-                 handleptr->handleref.value, handleptr->absolute_ref,         \
-                 handleptr->absolute_ref, dxf);                               \
+      LOG_TRACE (#name ": HANDLE" FORMAT_REF "/%u [%d]\n",                    \
+                 ARGS_REF(handleptr), handleptr->absolute_ref, dxf);          \
     }
 #define FIELD_HANDLE(nam, handle_code, dxf)                                   \
   VALUE_HANDLE (_obj->nam, nam, handle_code, dxf)
@@ -81,10 +79,9 @@ static unsigned int cur_ver = 0;
 #define VALUE_HANDLE_N(handleptr, name, vcount, handle_code, dxf)             \
   if (handleptr)                                                              \
     {                                                                         \
-      LOG_TRACE (#name "[%d]: HANDLE(%d.%d.%lX) absolute:%lX/%lu [%d]\n",     \
-                 (int)vcount, handleptr->handleref.code,                      \
-                 handleptr->handleref.size, handleptr->handleref.value,       \
-                 handleptr->absolute_ref, handleptr->absolute_ref, dxf);      \
+      LOG_TRACE (#name "[%d]: HANDLE" FORMAT_REF "/%u [%d]\n",                \
+                 (int)vcount, ARGS_REF(handleptr), handleptr->absolute_ref,   \
+                 dxf);                                                        \
     }
 #define FIELD_HANDLE_N(name, vcount, handle_code, dxf)                        \
   VALUE_HANDLE_N (_obj->name, name, vcount, handle_code, dxf)
@@ -191,8 +188,8 @@ static unsigned int cur_ver = 0;
           LOG_TRACE (#color ".alpha: 0%d [ENC.BL %d]\n",                      \
                      (int)_obj->color.alpha, dxf2 + 20);                      \
         if (_obj->color.flag & 0x40)                                          \
-          LOG_TRACE (#color ".handle: %lX [ENC.H %d]\n",                      \
-                     _obj->color.handle->handleref.value, dxf2 + 10);         \
+          LOG_TRACE (#color ".handle: " FORMAT_REF " [ENC.H %d]\n",           \
+                     ARGS_REF(_obj->color.handle), dxf2 + 10);                \
         if (_obj->color.flag & 0x80)                                          \
           LOG_TRACE (#color ".rgb: 0x%06x [ENC.BL %d]\n",                     \
                      (unsigned)_obj->color.rgb, dxf2);                        \
@@ -344,8 +341,7 @@ static unsigned int cur_ver = 0;
     LOG_INFO ("Entity " #token ":\n")                                         \
     _ent = obj->tio.entity;                                                   \
     _obj = ent = _ent->tio.token;                                             \
-    LOG_TRACE ("Entity handle: %d.%d.%lX\n", obj->handle.code,                \
-               obj->handle.size, obj->handle.value)
+    LOG_TRACE ("Entity handle: " FORMAT_H "\n", ARGS_H(obj->handle))
 
 #define DWG_ENTITY_END                                                        \
   return 0;                                                                   \
@@ -363,8 +359,7 @@ static unsigned int cur_ver = 0;
     int error = 0;                                                            \
     LOG_INFO ("Object " #token ":\n")                                         \
     _obj = obj->tio.object->tio.token;                                        \
-    LOG_TRACE ("Object handle: %d.%d.%lX\n", obj->handle.code,                \
-               obj->handle.size, obj->handle.value)
+    LOG_TRACE ("Object handle: " FORMAT_H "\n", ARGS_H(obj->handle))
 
 #define DWG_OBJECT_END                                                        \
   return 0;                                                                   \
@@ -603,8 +598,8 @@ dwg_print_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
               LOG_WARN ("Unknown object, skipping eed/reactors/xdic");
               SINCE (R_2000){
                 LOG_INFO ("Object bitsize: %u\n", obj->bitsize)
-              } LOG_INFO ("Object handle: %x.%d.%lX\n", obj->handle.code,
-                          obj->handle.size, obj->handle.value);
+              }
+              LOG_INFO ("Object handle: " FORMAT_H "\n", ARGS_H(obj->handle));
               return error | DWG_ERR_INVALIDTYPE;
             }
         }

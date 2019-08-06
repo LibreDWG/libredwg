@@ -347,13 +347,9 @@ print_api (dwg_object *obj)
         char *_hdlname = dwg_dynapi_handle_name (ent->parent->dwg,      \
                                                  hdl);                  \
         if (hdl == (BITCODE_H)ent->parent->field)                       \
-          ok (#field ": %s (%x.%d.%lX)", _hdlname ? : "",               \
-              hdl->handleref.code,                                      \
-              hdl->handleref.size, hdl->handleref.value);               \
+          ok (#field ": %s " FORMAT_REF, _hdlname ? : "", ARGS_REF(hdl)); \
         else                                                            \
-          fail (#field ": %s (%x.%d.%lX)", _hdlname ? : "",             \
-                hdl->handleref.code,                                    \
-                hdl->handleref.size, hdl->handleref.value);             \
+          fail (#field ": %s " FORMAT_REF, _hdlname ? : "", ARGS_REF(hdl)); \
       }                                                                 \
   }
 
@@ -370,15 +366,13 @@ print_api (dwg_object *obj)
           char *_hdlname = dwg_dynapi_handle_name (ent->parent->dwg, _hdl); \
           if (_hdl == ent->parent->field[_i])                           \
             {                                                           \
-              ok (#field "[%d]: %s (%x.%d.%lX)", _i,                    \
-                  _hdlname ? : "", _hdl->handleref.code,                \
-                  _hdl->handleref.size, _hdl->handleref.value);         \
+              ok (#field "[%d]: %s " FORMAT_REF, _i,                    \
+                  _hdlname ? : "", ARGS_REF(_hdl));                     \
             }                                                           \
           else                                                          \
             {                                                           \
-              fail (#field "[%d]: %s (%x.%d.%lX)", _i,                  \
-                    _hdlname ? : "", _hdl->handleref.code,              \
-                    _hdl->handleref.size, _hdl->handleref.value);       \
+              fail (#field "[%d]: %s " FORMAT_REF, _i,                  \
+                    _hdlname ? : "", ARGS_REF(_hdl));                   \
             }                                                           \
         }                                                               \
     }
@@ -495,15 +489,13 @@ api_common_entity (dwg_object *obj)
         char *_hdlname = dwg_dynapi_handle_name (obj->parent, hdl);     \
         if (hdl == ent->field)                                          \
           {                                                             \
-            ok (#name "." #field ": %s (%x.%d.%lX)", _hdlname ? : "",   \
-                hdl->handleref.code,                                    \
-                hdl->handleref.size, hdl->handleref.value);             \
+            ok (#name "." #field ": %s " FORMAT_REF, _hdlname ? : "",   \
+                ARGS_REF(hdl));                                         \
           }                                                             \
         else                                                            \
           {                                                             \
-            fail (#name "." #field ": %s (%x.%d.%lX)", _hdlname ? : "", \
-                  hdl->handleref.code,                                  \
-                  hdl->handleref.size, hdl->handleref.value);           \
+            fail (#name "." #field ": %s " FORMAT_REF, _hdlname ? : "", \
+                  ARGS_REF(hdl));                                       \
           }                                                             \
       }                                                                 \
   }
@@ -521,15 +513,13 @@ api_common_entity (dwg_object *obj)
           char *_hdlname = dwg_dynapi_handle_name (obj->parent, _hdl);  \
           if (_hdl == ent->field[_i])                                   \
             {                                                           \
-              ok (#name "." #field "[%d]: %s (%x.%d.%lX)", _i,          \
-                  _hdlname ? : "", _hdl->handleref.code,                \
-                  _hdl->handleref.size, _hdl->handleref.value);         \
+              ok (#name "." #field "[%d]: %s " FORMAT_REF, _i,          \
+                  _hdlname ? : "", ARGS_REF(_hdl));                     \
             }                                                           \
           else                                                          \
             {                                                           \
-              fail (#name "." #field "[%d]: %s (%x.%d.%lX)", _i,        \
-                    _hdlname ? : "", _hdl->handleref.code,              \
-                    _hdl->handleref.size, _hdl->handleref.value);       \
+              fail (#name "." #field "[%d]: %s " FORMAT_REF, _i,        \
+                    _hdlname ? : "", ARGS_REF(_hdl));                   \
             }                                                           \
         }                                                               \
     }
