@@ -91,6 +91,8 @@ add_handleref (Dwg_Data *restrict dwg, BITCODE_RC code, BITCODE_RL value, Dwg_Ob
 
 void add_eed (Dwg_Object *restrict obj, const char *restrict name,
               Dxf_Pair *restrict pair);
+int add_xdata (Bit_Chain *restrict dat,
+               Dwg_Object *restrict obj, Dxf_Pair *restrict pair);
 
 int is_table_name (const char *name);
 

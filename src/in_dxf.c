@@ -633,7 +633,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
       eed[i].data->code = code; // 1000
       eed[i].data->u.eed_0.length = strlen (pair->value.s);
-      eed[i].data->u.eed_0.codepage = 30;
+      eed[i].data->u.eed_0.codepage = obj->parent->header.codepage;
       strcpy (eed[i].data->u.eed_0.string, pair->value.s);
       eed[i].size += size;
       break;
@@ -915,6 +915,127 @@ find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair)
   return handle;
 }
 
+int
+add_xdata (Bit_Chain *restrict dat,
+           Dwg_Object *restrict obj, Dxf_Pair *restrict pair)
+{
+  BITCODE_BL num_xdata;
+  // add pairs to xdata linked list
+  Dwg_Resbuf *xdata, *rbuf;
+  Dwg_Object_XRECORD *_obj = obj->tio.object->tio.XRECORD;
+
+  dwg_dynapi_entity_value (_obj, obj->name, "num_xdata",
+                           &num_xdata, 0);
+  rbuf = calloc (1, sizeof (Dwg_Resbuf));
+  if (num_xdata)
+    {
+      dwg_dynapi_entity_value (_obj, obj->name, "xdata",
+                               &xdata, 0);
+      rbuf->next = xdata;
+    }
+  else
+    xdata = rbuf;
+
+  rbuf->type = pair->code;
+  switch (get_base_value_type (rbuf->type))
+    {
+    case VT_STRING:
+      PRE (R_2007)
+        {
+          Dwg_Data *dwg = obj->parent;
+          rbuf->value.str.size = strlen (pair->value.s);
+          rbuf->value.str.codepage = dwg->header.codepage;
+          rbuf->value.str.u.data = strdup (pair->value.s);
+          LOG_TRACE ("rbuf[%d]: \"%s\" [%d]\n", num_xdata,
+                     rbuf->value.str.u.data, rbuf->type);
+        }
+      LATER_VERSIONS
+        {
+          int length = rbuf->value.str.size = strlen (pair->value.s);
+          if (length > 0)
+            {
+              rbuf->value.str.u.wdata = bit_utf8_to_TU (pair->value.s);
+            }
+        }
+      break;
+    case VT_REAL:
+      rbuf->value.dbl = pair->value.d;
+      LOG_TRACE ("rbuf[%d]: %f [%d]\n", num_xdata, rbuf->value.dbl,
+                 rbuf->type);
+      break;
+    case VT_BOOL:
+    case VT_INT8:
+      rbuf->value.i8 = pair->value.i;
+      LOG_TRACE ("rbuf[%d]: %d [%d]\n", num_xdata, (int)rbuf->value.i8,
+                 rbuf->type);
+      break;
+    case VT_INT16:
+      rbuf->value.i16 = pair->value.i;
+      LOG_TRACE ("rbuf[%d]: %d [%d]\n", num_xdata, (int)rbuf->value.i16,
+                 rbuf->type);
+      break;
+    case VT_INT32:
+      rbuf->value.i32 = pair->value.l;
+      LOG_TRACE ("rbuf[%d]: %ld [%d]\n", num_xdata, (long)rbuf->value.i32,
+                 rbuf->type);
+      break;
+    case VT_INT64:
+      rbuf->value.i64 = (BITCODE_BLL)pair->value.l;
+      LOG_TRACE ("rbuf[%d]: " FORMAT_BLL " [%d]\n", num_xdata, rbuf->value.i64,
+                 rbuf->type);
+      break;
+    case VT_POINT3D:
+      rbuf->value.pt[0] = pair->value.d;
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+      rbuf->value.pt[1] = pair->value.d;
+      dxf_free_pair (pair);
+      { // if 30
+        long pos = bit_position (dat);
+        pair = dxf_read_pair (dat);
+        if (get_base_value_type (pair->code) == VT_POINT3D)
+          {
+            rbuf->value.pt[2] = pair->value.d;
+            LOG_TRACE ("rbuf[%d]: (%f,%f,%f) [%d]\n", num_xdata,
+                       rbuf->value.pt[0], rbuf->value.pt[1], rbuf->value.pt[2],
+                       rbuf->type);
+          }
+        else
+          {
+            bit_set_position (dat, pos); // reset stream
+            rbuf->value.pt[2] = 0;
+            LOG_TRACE ("rbuf[%d]: (%f,%f) [%d]\n", num_xdata,
+                       rbuf->value.pt[0], rbuf->value.pt[1], rbuf->type);
+          }
+      }
+      break;
+    case VT_BINARY:
+      // TODO convert from hex
+      rbuf->value.str.size = strlen (pair->value.s);
+      rbuf->value.str.u.data = pair->value.s;
+      LOG_TRACE ("rbuf[%d]: ", num_xdata);
+      //LOG_TRACE_TF (rbuf->value.str.u.data, rbuf->value.str.size);
+      break;
+    case VT_HANDLE:
+    case VT_OBJECTID:
+      add_handle (&rbuf->value.h, 0, pair->value.u, obj);
+      LOG_TRACE ("rbuf[%d]: " FORMAT_H " [H %d]\n", num_xdata,
+                 ARGS_H (rbuf->value.h), rbuf->type);
+      break;
+    case VT_INVALID:
+    default:
+      LOG_ERROR ("Invalid group code in rbuf: %d", rbuf->type)
+    }
+
+  dwg_dynapi_entity_set_value (_obj, obj->name, "xdata",
+                               &rbuf, 0);
+  num_xdata++;
+  dwg_dynapi_entity_set_value (_obj, obj->name, "num_xdata",
+                               &num_xdata, 0);
+  //TODO fixup num_databytes
+  return 0;
+}
+
 /* Most of that code is object specific, not just for tables.
    TODO: rename to new_object, and special-case the table code.
    How to initialize _obj? To generic only?
@@ -1097,10 +1218,9 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               }
           }
           break;
-        case 100: // Always AcDbSymbolTableRecord and then AcDb*TableRecord.
-                  // ignore
+        case 100: // TODO for nested structs
           break;
-        case 102: // {ACAD_XDICTIONARY TODO
+        case 102:
           if (strEQc (pair->value.s, "{ACAD_XDICTIONARY"))
             in_xdict = 1;
           else if (strEQc (pair->value.s, "{ACAD_REACTORS"))
@@ -1109,6 +1229,8 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
             in_blkrefs = 1; // unique handle 331
           else if (strEQc (pair->value.s, "}"))
             in_reactors = in_xdict = in_blkrefs = 0;
+          else if (strEQc (obj->name, "XRECORD"))
+            add_xdata (dat, obj, pair);
           else
             LOG_WARN ("Unknown DXF 102 %s in %s", pair->value.s, name)
           break;
@@ -1193,9 +1315,9 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
         default:
         object_default:
           if (pair->code >= 1000 && pair->code < 1999)
-            {
-              add_eed (obj, name, pair);
-            }
+            add_eed (obj, name, pair);
+          else if (pair->code != 280 && strEQc (obj->name, "XRECORD"))
+            add_xdata (dat, obj, pair);
           else
             { // search all specific fields and common fields for the DXF
               const Dwg_DYNAPI_field *f;
