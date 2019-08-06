@@ -2291,7 +2291,7 @@ static const Dwg_DYNAPI_field _dwg_DICTIONARY_fields[] = {
   { "cloning", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_object_DICTIONARY,cloning), 0,0,0, 281 },
   { "unknown_r14", "RC", sizeof (BITCODE_RC), OFF (struct _dwg_object_DICTIONARY,unknown_r14), 0,0,0, 0 },
   { "hard_owner", "RC", sizeof (BITCODE_RC), OFF (struct _dwg_object_DICTIONARY,hard_owner), 0,0,0, 280 },
-  { "itemhandles", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_DICTIONARY,itemhandles), 1,1,0, 0 },
+  { "itemhandles", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_DICTIONARY,itemhandles), 1,1,0, 350 },
   {NULL, NULL, 0, 0, 0,0,0, 0},
 };
 /* from typedef struct _dwg_object_DICTIONARYVAR: (sorted by offset) */
