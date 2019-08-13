@@ -1,0 +1,50 @@
+name: Github CI
+on:
+  push:
+    branches:
+      - master
+      - work/*
+      - smoke/*
+
+#strategy:
+#  matrix:
+#    os: [ubuntu-14.04, ubuntu-18.04]
+
+jobs:
+  linux:
+    name: linux
+    runs-on: ubuntu-18.04
+    steps:
+    - name: checkout
+      uses: action/checkout@master
+    - run: apt-get install texinfo texlive libxml2 python-libxml2 swig help2man dejagnu libpcre2-dev libpcre2-32-0 libconvert-binary-c-perl
+    - run: sh autogen.sh
+    # TODO: configure args matrix
+    - run: ./configure
+    - run: make
+    - run: make check
+    - run: make distcheck
+  macOS:
+    name: macOS
+    runs-on: macOS-latest
+    steps:
+    - name: checkout
+      uses: action/checkout@master
+    - run: sh autogen.sh
+    - run: ./configure
+    - run: make
+    - run: make check
+    - run: make distcheck
+  mingw:
+    name: mingw
+    runs-on: windows-latest
+    steps:
+    - name: checkout
+      uses: action/checkout@master
+    - run: reg add "HKLM\Software\Microsoft\Windows\Windows Error Reporting" /f /v DontShowUI /d 1
+    - run: call build-aux\msys2.bat
+    - run: bash -c "sh ./autogen.sh"
+    - run: bash -c "./configure"
+    - run: bash -c "make"
+    - run: bash -c "make check"
+    #- run: call build-aux\appveyor-deploy.bat
