@@ -31,30 +31,36 @@ if HAVE_SWIG_PERL
 
 dist_perl_PERL = perl/swig_perl.c perl/LibreDWG.pm perl/LibreDWG.xs \
                  perl/Makefile.PL perl/MANIFEST
-EXTRA_DIST = $(dist_perl_PERL)
+EXTRA_DIST     = perl/swig_perl.c perl/LibreDWG.pm perl/LibreDWG.xs \
+                 perl/Makefile.PL perl/MANIFEST
 
 all-am: $(dist_perl_PERL)
 	@echo Making all for perl
+
+#$(builddir)/perl/LibreDWG.xs: $(srcdir)/perl/LibreDWG.xs
+#	cp -f $(srcdir)/perl/LibreDWG.xs $@
+#
+#$(builddir)/perl/MANIFEST: $(srcdir)/perl/MANIFEST
+#	cp -f $(srcdir)/perl/MANIFEST $@
 
 # building perl bindings is optional. Most setup's don't have all the deps, like
 # crypt.h, sys/wait.h on windows.
 # grep rem: with a command.com compat Makefile we cannot continue from bash
 perl/LibreDWG.$(OBJEXT): perl/LibreDWG.pm perl/Makefile perl/LibreDWG.xs
 	@echo Note swig_perl.c is huge. This will need some time...
-	-if grep "NOOP = rem" perl/Makefile; then false; else cd perl &&  $(MAKE) OPTIMIZE=""; fi
+	-if grep "NOOP = rem" perl/Makefile; then false; else \
+	    cd perl && $(MAKE) OPTIMIZE=""; fi
 
 perl/Makefile: perl/Makefile.PL
 	-cd perl && \
 	  $(PERL) Makefile.PL
 
-CLEANFILES = perl/LibreDWG.bs perl/LibreDWG.c perl/pm_to_blib perl/Makefile \
-	     perl/LibreDWG.$(OBJEXT)
-
 # Maybe disable if LibreDWG.so was not installed yet.
 # rpath/LD_LIBRARY_PATH overrides are too troublesome
 check-am: $(dist_perl_PERL) perl/Makefile perl/LibreDWG.$(OBJEXT)
 	@echo Making check for perl
-	-if grep "NOOP = rem" perl/Makefile; then false; else $(MAKE) -C perl test OPTIMIZE="" LD_LIBRARY_PATH="$(abs_top_builddir)/src/.libs"; fi
+	-if grep "NOOP = rem" perl/Makefile; then false; else \
+	    $(MAKE) -C perl test OPTIMIZE="" LD_LIBRARY_PATH="$(abs_top_builddir)/src/.libs"; fi
 
 install-am: $(dist_perl_PERL) perl/Makefile perl/LibreDWG.$(OBJEXT)
 	@echo Making install for perl
@@ -78,5 +84,9 @@ perl/swig_perl.c: $(PERL_sources) Makefile.am
 
 distclean-local: distclean-am
 	rm -rf perl/blib
+
+MOSTLYCLEANFILES = perl/LibreDWG.bs perl/LibreDWG.$(OBJEXT)
+CLEANFILES       = perl/LibreDWG.c perl/pm_to_blib perl/Makefile
+DISTCLEANFILES   = perl/Makefile.PL
 
 endif
