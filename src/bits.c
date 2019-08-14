@@ -1742,7 +1742,7 @@ bit_write_hexbits (Bit_Chain *restrict dat, const char *restrict bytes)
 {
   char *p = (char *)bytes;
   long len = 0;
-  unsigned char b;
+  unsigned char b = '\0';
 
   for (; *p; p++)
     {
