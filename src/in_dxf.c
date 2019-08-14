@@ -184,7 +184,7 @@ dxf_read_pair (Bit_Chain *dat)
 
 #define DXF_CHECK_EOF                                                         \
   if (dat->byte >= dat->size                                                  \
-      || (pair->code == 0 && !strcmp (pair->value.s, "EOF")))                 \
+      || (pair->code == 0 && strEQc (pair->value.s, "EOF")))                  \
   return 1
 
 static int
@@ -876,7 +876,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   return pair;
 }
 
-static BITCODE_H
+BITCODE_H
 find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair)
 {
   BITCODE_H handle = NULL;
@@ -1534,7 +1534,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           strcpy (table, pair->value.s);
           pair = new_table_control (table, dat, dwg); // until 0 table
           ctrl = &dwg->object[dwg->num_objects - 1];
-          while (pair->code == 0 && strEQ (pair->value.s, table))
+          while (pair && pair->code == 0 && strEQ (pair->value.s, table))
             {
               // until 0 table or 0 ENDTAB
               pair = new_object (table, dat, dwg, ctrl, i++);
@@ -1690,7 +1690,7 @@ dxf_preview_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
-static void resolve_postponed_header_refs (Dwg_Data *restrict dwg)
+void resolve_postponed_header_refs (Dwg_Data *restrict dwg)
 {
   uint32_t i;
   for (i = 0; i < header_hdls->nitems; i++)

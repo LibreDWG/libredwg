@@ -32,6 +32,13 @@
 #include "out_dxf.h"
 #include "decode.h"
 #include "encode.h"
+#include "dynapi.h"
+#include "hash.h"
+
+#ifndef _DWG_API_H_
+Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
+                                       int *restrict error);
+#endif
 
 static unsigned int loglevel;
 #define DWG_LOGLEVEL loglevel
@@ -78,14 +85,17 @@ dxfb_read_string (Bit_Chain *dat, char **string, int len)
 static void
 dxf_free_pair (Dxf_Pair *pair)
 {
+  if (!pair)
+    return;
   if (pair->type == VT_STRING || pair->type == VT_BINARY)
     {
       free (pair->value.s);
+      pair->value.s = NULL;
     }
   free (pair);
 }
 
-static Dxf_Pair *
+static Dxf_Pair *ATTRIBUTE_MALLOC
 dxf_read_pair (Bit_Chain *dat)
 {
   Dxf_Pair *pair = calloc (1, sizeof (Dxf_Pair));
@@ -96,6 +106,8 @@ dxf_read_pair (Bit_Chain *dat)
     case VT_STRING:
       dxfb_read_string (dat, &pair->value.s, 0);
       LOG_TRACE ("  dxf (%d, \"%s\")\n", (int)pair->code, pair->value.s);
+      // dynapi_set_helper converts from utf-8 to unicode, not here.
+      // we need to know the type of the target field, if TV or T
       break;
     case VT_BOOL:
     case VT_INT8:
@@ -164,19 +176,23 @@ dxf_skip_comment (Bit_Chain *dat, Dxf_Pair *pair)
   if (dat->byte >= dat->size || pair->code == 0)                              \
   return 0
 #define DXF_BREAK_ENDSEC                                                      \
-  if (dat->byte >= dat->size                                                  \
-      || (pair->code == 0 && strEQc (pair->value.s, "ENDSEC")))               \
+  if (pair != NULL                                                            \
+      && (dat->byte >= dat->size                                              \
+          || (pair->code == 0 && strEQc (pair->value.s, "ENDSEC"))))          \
   break
 #define DXF_RETURN_ENDSEC(what)                                               \
-  if (dat->byte >= dat->size                                                  \
-      || (pair->code == 0 && strEQc (pair->value.s, "ENDSEC")))               \
+  if (pair != NULL)                                                           \
     {                                                                         \
-      dxf_free_pair (pair);                                                   \
-      return what;                                                            \
+      if (dat->byte >= dat->size                                              \
+          || (pair->code == 0 && strEQc (pair->value.s, "ENDSEC")))           \
+        {                                                                     \
+          dxf_free_pair (pair);                                               \
+          return what;                                                        \
+        }                                                                     \
     }
 
 static int
-dxf_expect_code (Bit_Chain *dat, Dxf_Pair *pair, int code)
+dxf_expect_code (Bit_Chain *restrict dat, Dxf_Pair *restrict pair, int code)
 {
   while (pair->code != code)
     {
@@ -196,7 +212,7 @@ dxf_expect_code (Bit_Chain *dat, Dxf_Pair *pair, int code)
 // see
 // https://www.autodesk.com/techpubs/autocad/acad2000/dxf/header_section_group_codes_dxf_02.htm
 static int
-dxfb_header_read (Bit_Chain *dat, Dwg_Data *dwg)
+dxfb_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables *_obj = &dwg->header_vars;
   Dwg_Object *obj = NULL;
@@ -232,7 +248,6 @@ dxfb_header_read (Bit_Chain *dat, Dwg_Data *dwg)
                   dat->version = dat->from_version = dwg->header.version;
                   is_utf = dat->version >= R_2007;
                   LOG_TRACE ("HEADER.version = dat->version = %s\n", version);
-                  // dxf_free_pair (pair);
                   break;
                 }
               if (v == R_AFTER)
@@ -246,14 +261,12 @@ dxfb_header_read (Bit_Chain *dat, Dwg_Data *dwg)
             {
               LOG_ERROR ("skipping HEADER: 9 %s, unknown field with code %d",
                          field, pair->code);
-              // dxf_free_pair (pair);
             }
           else if (!matches_type (pair, f))
             {
               LOG_ERROR (
                   "skipping HEADER: 9 %s, wrong type code %d <=> field %s",
                   field, pair->code, f->type);
-              // dxf_free_pair (pair);
             }
           else if (pair->type == VT_POINT3D)
             {
@@ -276,18 +289,23 @@ dxfb_header_read (Bit_Chain *dat, Dwg_Data *dwg)
                   dwg_dynapi_header_set_value (dwg, &field[1], &pt, is_utf);
                   i++;
                 }
-              // dxf_free_pair (pair);
             }
           else if (pair->type == VT_STRING && strEQc (f->type, "H"))
             {
               char *key, *str;
-              LOG_TRACE ("HEADER.%s %s [%s] later\n", &field[1], pair->value.s,
-                         f->type);
+              LOG_TRACE ("HEADER.%s %s [%s] %d later\n", &field[1], pair->value.s,
+                         f->type, (int)pair->code);
               // name (which table?) => handle
               // needs to be postponed, because we don't have the tables yet.
               header_hdls = array_push (header_hdls, &field[1], pair->value.s,
                                         pair->code);
-              // dxf_free_pair (pair);
+            }
+          else if (strEQc (f->type, "H"))
+            {
+              BITCODE_H hdl;
+              hdl = add_handleref (dwg, 0, pair->value.u, NULL);
+              LOG_TRACE ("HEADER.%s %X [H]\n", &field[1], pair->value.u);
+              dwg_dynapi_header_set_value (dwg, &field[1], &hdl, is_utf);
             }
           else if (strEQc (f->type, "CMC"))
             {
@@ -299,7 +317,6 @@ dxfb_header_read (Bit_Chain *dat, Dwg_Data *dwg)
                   color.index = pair->value.i;
                   dwg_dynapi_header_set_value (dwg, &field[1], &color, 0);
                 }
-              // dxf_free_pair (pair);
             }
           else if (pair->type == VT_REAL && strEQc (f->type, "TIMEBLL"))
             {
@@ -319,15 +336,12 @@ dxfb_header_read (Bit_Chain *dat, Dwg_Data *dwg)
               LOG_TRACE ("HEADER.%s %f (%u, %u) [TIMEBLL]\n", &field[1],
                          date.value, date.days, date.ms);
               dwg_dynapi_header_set_value (dwg, &field[1], &date, 0);
-              // dxf_free_pair (pair);
             }
           else
             {
               LOG_TRACE ("HEADER.%s [%s]\n", &field[1], f->type);
               dwg_dynapi_header_set_value (dwg, &field[1], &pair->value,
                                            is_utf);
-              // free (pair); // but keep the string
-              // primitives (like RC, BD) are copied
             }
         }
       else
@@ -349,7 +363,7 @@ dxfb_header_read (Bit_Chain *dat, Dwg_Data *dwg)
 }
 
 static int
-dxfb_classes_read (Bit_Chain *dat, Dwg_Data *dwg)
+dxfb_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   BITCODE_BL i;
   Dxf_Pair *pair = dxf_read_pair (dat);
@@ -377,10 +391,8 @@ dxfb_classes_read (Bit_Chain *dat, Dwg_Data *dwg)
           dxf_free_pair (pair);
           pair = dxf_read_pair (dat);
         }
-
       while (pair->code != 0)
         { // read until next 0 CLASS
-          pair = dxf_read_pair (dat);
           switch (pair->code)
             {
             case 1:
@@ -397,15 +409,22 @@ dxfb_classes_read (Bit_Chain *dat, Dwg_Data *dwg)
               break;
             case 90:
               klass->proxyflag = pair->value.l;
+              LOG_TRACE ("CLASS[%d].proxyflag = %ld [90]\n", i, pair->value.l);
               break;
             case 91:
               klass->num_instances = pair->value.l;
+              LOG_TRACE ("CLASS[%d].num_instances = %ld [91]\n", i,
+                         pair->value.l);
               break;
             case 280:
               klass->wasazombie = (BITCODE_B)pair->value.i;
+              LOG_TRACE ("CLASS[%d].num_instances = %d [280]\n", i,
+                         pair->value.i);
               break;
             case 281:
               klass->item_class_id = pair->value.i ? 0x1f3 : 0x1f2;
+              LOG_TRACE ("CLASS[%d].num_instances = %x [281]\n", i,
+                         klass->item_class_id);
               break;
             default:
               LOG_WARN ("Unknown DXF code for class[%d].%d", i, pair->code);
@@ -496,12 +515,11 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
           {
             Dwg_Object_Ref *ref;
             char ctrlobj[80];
-            add_handle (&obj->handle, 0, pair->value.u, NULL);
+            add_handle (&obj->handle, 0, pair->value.u, obj);
+            ref = add_handleref (dwg, 3, pair->value.u, obj);
             LOG_TRACE ("%s.handle = " FORMAT_H " [%d]\n", ctrlname,
                        ARGS_H (obj->handle), pair->code);
-
             // also set the matching HEADER.*_CONTROL_OBJECT
-            ref = add_handleref (dwg, 3, pair->value.u, obj);
             strcpy (ctrlobj, ctrlname);
             strcat (ctrlobj, "_OBJECT");
             dwg_dynapi_header_set_value (dwg, ctrlobj, &ref, 0);
@@ -511,7 +529,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
           break;
         case 100: // AcDbSymbolTableRecord, ... ignore
           break;
-        case 102: // TODO {ACAD_XDICTIONARY {ACAD_REACTORS
+        case 102: // TODO {ACAD_XDICTIONARY {ACAD_REACTORS {BLKREFS
           break;
         case 330: // TODO: most likely {ACAD_REACTORS
           if (pair->value.u)
@@ -592,7 +610,6 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
    TODO: rename to new_object, and special-case the table code.
    How to initialize _obj? To generic only?
  */
-GCC30_DIAG_IGNORE (-Wshadow)
 static Dxf_Pair *
 new_object (char *restrict name, Bit_Chain *restrict dat,
             Dwg_Data *restrict dwg, Dwg_Object *restrict ctrl, BITCODE_BL i)
@@ -606,18 +623,27 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
   char ctrlname[80];
   int in_xdict = 0;
   int in_reactors = 0;
+  int in_blkrefs = 0;
   int is_entity = is_dwg_entity (name);
   BITCODE_BL rcount1, rcount2, rcount3, vcount;
   Bit_Chain *hdl_dat, *str_dat;
   int error = 0;
+  BITCODE_RL curr_inserts = 0;
 
   ctrl_hdlv[0] = '\0';
   LOG_TRACE ("add %s [%d]\n", name, i);
+  NEW_OBJECT (dwg, obj);
+
   if (is_entity)
     {
-      // clang-format off
-      NEW_ENTITY (dwg, obj);
+      if (*name == '3')
+        {
+          // Looks dangerous but name[80] is big enough
+          memmove (&name[1], &name[0], strlen (name) + 1);
+          *name = '_';
+        }
 
+      // clang-format off
       // ADD_ENTITY by name
       // check all objects
       #undef DWG_ENTITY
@@ -636,10 +662,10 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
     }
   else
     {
-      NEW_OBJECT (dwg, obj);
       if (!ctrl) // no table
         {
           // clang-format off
+
           // ADD_OBJECT by name
           // check all objects
           #undef DWG_OBJECT
@@ -656,7 +682,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
 
           // clang-format on
         }
-      else
+      else // a table
         {
           if (strEQc (name, "BLOCK_RECORD"))
             {
@@ -710,16 +736,16 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
   while (pair->code != 0)
     {
       switch (pair->code)
-        { // TABLE common flags: name, xrefref, xrefdep, ...
+        { // common flags: name, xrefref, xrefdep, ...
         case 0:
           return pair;
-        case 105: /* DIMSTYLE */
+        case 105: /* DIMSTYLE only for 5 */
           if (strNE (name, "DIMSTYLE"))
-            goto table_default;
+            goto object_default;
           // fall through
         case 5:
           {
-            add_handle (&obj->handle, 0, pair->value.u, NULL);
+            add_handle (&obj->handle, 0, pair->value.u, obj);
             LOG_TRACE ("%s.handle = " FORMAT_H " [5 H]\n", name,
                        ARGS_H (obj->handle));
             if (*ctrl_hdlv)
@@ -762,19 +788,53 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               }
           }
           break;
-        case 100: // Always AcDbSymbolTableRecord and then AcDb*TableRecord.
-                  // ignore
+        case 100: // TODO for nested structs
           break;
-        case 102: // {ACAD_XDICTIONARY TODO
+        case 102:
           if (strEQc (pair->value.s, "{ACAD_XDICTIONARY"))
             in_xdict = 1;
           else if (strEQc (pair->value.s, "{ACAD_REACTORS"))
             in_reactors = 1;
+          else if (ctrl && strEQc (pair->value.s, "{BLKREFS"))
+            in_blkrefs = 1; // unique handle 331
           else if (strEQc (pair->value.s, "}"))
-            in_reactors = in_xdict = 0;
+            in_reactors = in_xdict = in_blkrefs = 0;
+          else if (strEQc (obj->name, "XRECORD"))
+            pair = add_xdata (dat, obj, pair);
           else
             LOG_WARN ("Unknown DXF 102 %s in %s", pair->value.s, name)
           break;
+        case 331:
+          if (ctrl && in_blkrefs) // BLKREFS
+            {
+              BITCODE_H *insert_handles = NULL;
+              BITCODE_RL num_inserts;
+              dwg_dynapi_entity_value (_obj, obj->name, "num_inserts",
+                                       &num_inserts, 0);
+              if (curr_inserts)
+                dwg_dynapi_entity_value (_obj, obj->name, "insert_handles",
+                                         &insert_handles, 0);
+              if (curr_inserts + 1 > num_inserts)
+                {
+                  LOG_WARN ("Misleading %s.num_inserts %d < %d", ctrlname,
+                            num_inserts, curr_inserts + 1);
+                  num_inserts = curr_inserts + 1;
+                  dwg_dynapi_entity_set_value (_obj, obj->name, "num_inserts",
+                                               &num_inserts, 0);
+                }
+              if (insert_handles)
+                insert_handles
+                  = realloc (insert_handles, num_inserts * sizeof (BITCODE_H));
+              else
+                insert_handles
+                  = calloc (num_inserts, sizeof (BITCODE_H));
+              dwg_dynapi_entity_set_value (_obj, obj->name, "insert_handles",
+                                           &insert_handles, 0);
+              insert_handles[curr_inserts++]
+                  = add_handleref (dwg, 4, pair->value.u, obj);
+              break;
+            }
+          // fall through
         case 330:
           if (in_reactors)
             {
@@ -795,31 +855,49 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                          ARGS_REF (obj->tio.object->ownerhandle));
             }
           break;
-        case 360: // {ACAD_XDICTIONARY
-          if (!in_xdict)
-            LOG_WARN ("Missing 102.{ACAD_XDICTIONARY group");
-          obj->tio.object->xdicobjhandle
-              = add_handleref (dwg, 3, pair->value.u, obj);
-          obj->tio.object->xdic_missing_flag = 0;
-          LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [360 H]\n", name,
-                     ARGS_REF (obj->tio.object->xdicobjhandle));
-          break;
-        case 2:
-          dwg_dynapi_entity_set_value (_obj, obj->name, "name", &pair->value,
-                                       is_utf);
-          LOG_TRACE ("%s.name = %s [2 T]\n", name, pair->value.s);
-          break;
-        case 70:
-          dwg_dynapi_entity_set_value (_obj, obj->name, "flag", &pair->value,
-                                       is_utf);
-          LOG_TRACE ("%s.flag = %d [70 RC]\n", name, pair->value.i)
-          break;
-        default:
-        table_default:
-          if (pair->code >= 1000 && pair->code < 1999)
+        case 350: // DICTIONARY softhandle
+        case 360: // {ACAD_XDICTIONARY or some hardowner
+          if (pair->code == 360 && in_xdict)
             {
-              add_eed (obj, name, pair);
+              obj->tio.object->xdicobjhandle
+                = add_handleref (dwg, 3, pair->value.u, obj);
+              obj->tio.object->xdic_missing_flag = 0;
+              LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [360 H]\n", name,
+                         ARGS_REF (obj->tio.object->xdicobjhandle));
+              break;
             }
+          // // DICTIONARY or DICTIONARYWDFLT, but not DICTIONARYVAR
+          else if (strlen (obj->name) >= sizeof ("DICTIONARY") - 1 &&
+                   !memcmp (obj->name, "DICTIONARY", sizeof ("DICTIONARY") - 1))
+            {
+              add_dictionary_handle (obj, pair);
+              break;
+            }
+          // fall through
+        case 2:
+          if (ctrl && pair->code == 2)
+            {
+              dwg_dynapi_entity_set_value (_obj, obj->name, "name", &pair->value,
+                                       is_utf);
+              LOG_TRACE ("%s.name = %s [2 T]\n", name, pair->value.s);
+              break;
+            }
+          // fall through
+        case 70:
+          if (ctrl && pair->code == 70)
+            {
+              dwg_dynapi_entity_set_value (_obj, obj->name, "flag", &pair->value,
+                                       is_utf);
+              LOG_TRACE ("%s.flag = %d [70 RC]\n", name, pair->value.i);
+              break;
+            }
+          // fall through
+        default:
+        object_default:
+          if (pair->code >= 1000 && pair->code < 1999)
+            add_eed (obj, name, pair);
+          else if (pair->code != 280 && strEQc (obj->name, "XRECORD"))
+            pair = add_xdata (dat, obj, pair);
           else
             { // search all specific fields and common fields for the DXF
               const Dwg_DYNAPI_field *f;
@@ -921,24 +999,41 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                     }
                 }
 
-              fields = dwg_dynapi_common_object_fields ();
+              fields = is_entity ? dwg_dynapi_common_entity_fields ()
+                                 : dwg_dynapi_common_object_fields ();
               for (f = &fields[0]; f->name; f++)
                 {
                   if (f->dxf == pair->code) // TODO alt. color fields
-                    {                       // TODO resolve handle names
-                      dwg_dynapi_common_set_value (_obj, f->name, &pair->value,
-                                                   is_utf);
-                      if (f->is_string)
+                    {
+                      /// resolve handle (table entry) given by name
+                      if (strEQc (f->type, "H") && pair->type == VT_STRING)
                         {
-                          LOG_TRACE ("%s = %s [%d %s]\n", f->name,
-                                     pair->value.s, pair->code, f->type);
+                          BITCODE_H handle = find_tablehandle (dwg, pair);
+                          if (!handle)
+                            {
+                              LOG_WARN ("TODO resolve handle name %s %s",
+                                        f->name, pair->value.s)
+                            }
+                          else
+                            dwg_dynapi_common_set_value (_obj, f->name,
+                                                         &handle, is_utf);
                         }
                       else
                         {
-                          LOG_TRACE ("%s = %ld [%d %s]\n", f->name,
-                                     pair->value.l, pair->code, f->type);
+                          dwg_dynapi_common_set_value (_obj, f->name,
+                                                       &pair->value, is_utf);
+                          if (f->is_string)
+                            {
+                              LOG_TRACE ("COMMON.%s = %s [%d %s]\n", f->name,
+                                         pair->value.s, pair->code, f->type);
+                            }
+                          else
+                            {
+                              LOG_TRACE ("COMMON.%s = %ld [%d %s]\n", f->name,
+                                         pair->value.l, pair->code, f->type);
+                            }
+                          goto next_pair; // found, early exit
                         }
-                      goto next_pair; // found, early exit
                     }
                 }
 
@@ -985,7 +1080,7 @@ dxfb_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           strcpy (table, pair->value.s);
           pair = new_table_control (table, dat, dwg); // until 0 table
           ctrl = &dwg->object[dwg->num_objects - 1];
-          while (pair->code == 0 && strEQ (pair->value.s, table))
+          while (pair && pair->code == 0 && strEQ (pair->value.s, table))
             {
               // until 0 table or 0 ENDTAB
               pair = new_object (table, dat, dwg, ctrl, i++);
@@ -1037,38 +1132,96 @@ dxfb_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static int
 dxfb_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  Dxf_Pair *pair;
-  Dwg_Object *obj = NULL;
-  (void)dwg;
+  Dxf_Pair *pair = dxf_read_pair (dat);
 
-  // SECTION (ENTITIES);
-  while (dat->byte < dat->size)
+  while (1)
     {
+      if (pair->code == 0)
+        {
+          char name[80];
+          // until 0 ENDSEC
+          while (pair->code == 0 && is_dwg_entity (pair->value.s))
+            {
+              strcpy (name, pair->value.s);
+              pair = new_object (name, dat, dwg, NULL, 0);
+            }
+          if (strEQc (pair->value.s, "ENDSEC"))
+            {
+              dxf_free_pair (pair);
+              return 0;
+            }
+          else
+            LOG_WARN ("Unknown 0 %s", pair->value.s);
+        }
+      DXF_RETURN_ENDSEC (0);
+      dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
-      dxf_expect_code (dat, pair, 0);
-      DXF_CHECK_EOF;
-      // dwg_indxf_object (dat, obj); // TODO obj must be already created here
     }
-  // ENDSEC ();
+  dxf_free_pair (pair);
   return 0;
 }
 
 static int
 dxfb_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  Dxf_Pair *pair;
-  Dwg_Object *obj = NULL;
-  (void)dwg;
+  Dxf_Pair *pair = dxf_read_pair (dat);
 
-  // SECTION (OBJECTS);
-  while (dat->byte < dat->size)
+  while (1)
     {
+      if (pair->code == 0)
+        {
+          char name[80];
+          // until 0 ENDSEC
+          while (pair->code == 0 && is_dwg_object (pair->value.s))
+            {
+              strcpy (name, pair->value.s);
+              pair = new_object (name, dat, dwg, NULL, 0);
+            }
+          if (strEQc (pair->value.s, "ENDSEC"))
+            {
+              dxf_free_pair (pair);
+              return 0;
+            }
+          else
+            LOG_WARN ("Unknown 0 %s", pair->value.s);
+        }
+      DXF_RETURN_ENDSEC (0);
+      dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
-      dxf_expect_code (dat, pair, 0);
-      DXF_CHECK_EOF;
-      // dwg_indxf_object (dat, obj); // TODO obj must be already created here
     }
-  // ENDSEC ();
+  dxf_free_pair (pair);
+  return 0;
+}
+
+static int
+dxfb_unknownsection_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Dxf_Pair *pair = dxf_read_pair (dat);
+
+  while (1)
+    {
+      if (pair->code == 0)
+        {
+          char name[80];
+          // until 0 ENDSEC
+          while (pair->code == 0 && is_dwg_object (pair->value.s))
+            {
+              strcpy (name, pair->value.s);
+              pair = new_object (name, dat, dwg, NULL, 0);
+            }
+          if (strEQc (pair->value.s, "ENDSEC"))
+            {
+              dxf_free_pair (pair);
+              return 0;
+            }
+          else
+            LOG_WARN ("Unknown 0 %s", pair->value.s);
+        }
+      DXF_RETURN_ENDSEC (0);
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+    }
+  dxf_free_pair (pair);
   return 0;
 }
 
@@ -1095,6 +1248,8 @@ dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   num_dxf_objs = 0;
   size_dxf_objs = 1000;
   dxf_objs = malloc (1000 * sizeof (Dxf_Objs));
+  if (!dwg->object_map)
+    dwg->object_map = hash_new (dat->size / 1000);
 
   header_hdls = calloc (1, 8 + 16 * sizeof (struct array_hdl));
   header_hdls->size = 16;
@@ -1133,11 +1288,13 @@ dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               dxf_free_pair (pair);
               dxfb_tables_read (dat, dwg);
+              resolve_postponed_header_refs (dwg);
             }
           else if (strEQc (pair->value.s, "BLOCKS"))
             {
               dxf_free_pair (pair);
               dxfb_blocks_read (dat, dwg);
+              resolve_postponed_header_refs (dwg);
             }
           else if (strEQc (pair->value.s, "ENTITIES"))
             {
@@ -1149,10 +1306,18 @@ dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               dxf_free_pair (pair);
               dxfb_objects_read (dat, dwg);
             }
-          if (strEQc (pair->value.s, "THUMBNAIL"))
+          /*
+          else if (strEQc (pair->value.s, "THUMBNAIL"))
             {
               dxf_free_pair (pair);
               dxfb_preview_read (dat, dwg);
+            }
+          */
+          else // if (strEQc (pair->value.s, "ACDSDATA"))
+            {
+              LOG_WARN ("SECTION %s ignored for now", pair->value.s);
+              dxf_free_pair (pair);
+              dxfb_unknownsection_read (dat, dwg);
             }
         }
     }

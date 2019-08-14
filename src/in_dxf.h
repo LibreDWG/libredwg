@@ -96,7 +96,8 @@ void add_eed (Dwg_Object *restrict obj, const char *restrict name,
 Dxf_Pair *add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
                      Dxf_Pair *restrict pair);
 void add_dictionary_handle (Dwg_Object *restrict obj, Dxf_Pair *restrict pair);
-
+void resolve_postponed_header_refs (Dwg_Data *restrict dwg);
+BITCODE_H find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair);
 int is_table_name (const char *name);
 
 EXPORT int dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
