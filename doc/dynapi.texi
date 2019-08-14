@@ -4472,16 +4472,16 @@ T
 struct _dwg_object_object*
 @item numitems
 BL
-@item text
-TV*,	DXF 3
 @item cloning
 BS,	DXF 281
-@item unknown_r14
-RC
 @item hard_owner
 RC,	DXF 280
+@item texts
+TV*,	DXF 3
 @item itemhandles
 H*,	DXF 350
+@item cloning_r14
+RC
 
 @end vtable
 @end indentedblock
@@ -4514,16 +4514,16 @@ TV,	DXF 1
 struct _dwg_object_object*
 @item numitems
 BL
-@item cloning_rl
-RL
 @item cloning
 BS,	DXF 281
 @item hard_owner
 RC,	DXF 280
-@item text
+@item texts
 TV*,	DXF 3
 @item itemhandles
 H*,	DXF 350
+@item cloning_r14
+RL
 @item defaultid
 H,	DXF 340
 

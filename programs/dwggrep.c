@@ -446,7 +446,7 @@ match_DICTIONARY (const char *restrict filename,
 
   for (i = 0; i < _obj->numitems; i++)
     {
-      MATCH_OBJECT (DICTIONARY, text[i], 3);
+      MATCH_OBJECT (DICTIONARY, texts[i], 3);
     }
   return found;
 }
@@ -999,7 +999,8 @@ match_BLOCK_HEADER (const char *restrict filename,
                 found += match_LTYPE (filename, obj);
               else if (obj->type == DWG_TYPE_DIMSTYLE)
                 found += match_DIMSTYLE (filename, obj);
-              else if (obj->fixedtype == DWG_TYPE_DICTIONARY)
+              else if (obj->fixedtype == DWG_TYPE_DICTIONARY ||
+                       obj->fixedtype == DWG_TYPE_DICTIONARYWDFLT)
                 found += match_DICTIONARY (filename, obj);
 
               else if (obj->fixedtype == DWG_TYPE_GROUP)

@@ -24245,6 +24245,22 @@ static int test_DICTIONARY (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_RC cloning_r14;
+    if (dwg_dynapi_entity_value (dictionary, "DICTIONARY", "cloning_r14", &cloning_r14, NULL)
+        && cloning_r14 == dictionary->cloning_r14)
+      pass ();
+    else
+      fail ("DICTIONARY.cloning_r14 [RC] %u != %u", dictionary->cloning_r14, cloning_r14);
+    cloning_r14++;
+    if (dwg_dynapi_entity_set_value (dictionary, "DICTIONARY", "cloning_r14", &cloning_r14, 0)
+        && cloning_r14 == dictionary->cloning_r14)
+      pass ();
+    else
+      fail ("DICTIONARY.cloning_r14 [RC] set+1 %u != %u", dictionary->cloning_r14, cloning_r14);
+    dictionary->cloning_r14--;
+
+  }
+  {
     BITCODE_RC hard_owner;
     if (dwg_dynapi_entity_value (dictionary, "DICTIONARY", "hard_owner", &hard_owner, NULL)
         && hard_owner == dictionary->hard_owner)
@@ -24295,30 +24311,14 @@ static int test_DICTIONARY (const Dwg_Object *obj)
         fail ("DICTIONARY.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_TV* text;
+    BITCODE_TV* texts;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (dictionary, "DICTIONARY", "numitems", &count, NULL)
-        && dwg_dynapi_entity_value (dictionary, "DICTIONARY", "text", &text, NULL)
-        && text == dictionary->text)
+        && dwg_dynapi_entity_value (dictionary, "DICTIONARY", "texts", &texts, NULL)
+        && texts == dictionary->texts)
       pass ();
     else
-      fail ("DICTIONARY.text [TV*] * %u numitems", count);
-  }
-  {
-    BITCODE_RC unknown_r14;
-    if (dwg_dynapi_entity_value (dictionary, "DICTIONARY", "unknown_r14", &unknown_r14, NULL)
-        && unknown_r14 == dictionary->unknown_r14)
-      pass ();
-    else
-      fail ("DICTIONARY.unknown_r14 [RC] %u != %u", dictionary->unknown_r14, unknown_r14);
-    unknown_r14++;
-    if (dwg_dynapi_entity_set_value (dictionary, "DICTIONARY", "unknown_r14", &unknown_r14, 0)
-        && unknown_r14 == dictionary->unknown_r14)
-      pass ();
-    else
-      fail ("DICTIONARY.unknown_r14 [RC] set+1 %u != %u", dictionary->unknown_r14, unknown_r14);
-    dictionary->unknown_r14--;
-
+      fail ("DICTIONARY.texts [TV*] * %u numitems", count);
   }
   return failed;
 }
@@ -24385,19 +24385,19 @@ static int test_DICTIONARYWDFLT (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_RL cloning_rl;
-    if (dwg_dynapi_entity_value (dictionarywdflt, "DICTIONARYWDFLT", "cloning_rl", &cloning_rl, NULL)
-        && cloning_rl == dictionarywdflt->cloning_rl)
+    BITCODE_RL cloning_r14;
+    if (dwg_dynapi_entity_value (dictionarywdflt, "DICTIONARYWDFLT", "cloning_r14", &cloning_r14, NULL)
+        && cloning_r14 == dictionarywdflt->cloning_r14)
       pass ();
     else
-      fail ("DICTIONARYWDFLT.cloning_rl [RL] %u != %u", dictionarywdflt->cloning_rl, cloning_rl);
-    cloning_rl++;
-    if (dwg_dynapi_entity_set_value (dictionarywdflt, "DICTIONARYWDFLT", "cloning_rl", &cloning_rl, 0)
-        && cloning_rl == dictionarywdflt->cloning_rl)
+      fail ("DICTIONARYWDFLT.cloning_r14 [RL] %u != %u", dictionarywdflt->cloning_r14, cloning_r14);
+    cloning_r14++;
+    if (dwg_dynapi_entity_set_value (dictionarywdflt, "DICTIONARYWDFLT", "cloning_r14", &cloning_r14, 0)
+        && cloning_r14 == dictionarywdflt->cloning_r14)
       pass ();
     else
-      fail ("DICTIONARYWDFLT.cloning_rl [RL] set+1 %u != %u", dictionarywdflt->cloning_rl, cloning_rl);
-    dictionarywdflt->cloning_rl--;
+      fail ("DICTIONARYWDFLT.cloning_r14 [RL] set+1 %u != %u", dictionarywdflt->cloning_r14, cloning_r14);
+    dictionarywdflt->cloning_r14--;
 
   }
   {
@@ -24459,14 +24459,14 @@ static int test_DICTIONARYWDFLT (const Dwg_Object *obj)
         fail ("DICTIONARYWDFLT.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_TV* text;
+    BITCODE_TV* texts;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (dictionarywdflt, "DICTIONARYWDFLT", "numitems", &count, NULL)
-        && dwg_dynapi_entity_value (dictionarywdflt, "DICTIONARYWDFLT", "text", &text, NULL)
-        && text == dictionarywdflt->text)
+        && dwg_dynapi_entity_value (dictionarywdflt, "DICTIONARYWDFLT", "texts", &texts, NULL)
+        && texts == dictionarywdflt->texts)
       pass ();
     else
-      fail ("DICTIONARYWDFLT.text [TV*] * %u numitems", count);
+      fail ("DICTIONARYWDFLT.texts [TV*] * %u numitems", count);
   }
   return failed;
 }

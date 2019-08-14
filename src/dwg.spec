@@ -1988,17 +1988,17 @@ DWG_OBJECT(DICTIONARY)
 #endif
 
 #ifdef IS_DXF
-    if (FIELD_VALUE(itemhandles) && FIELD_VALUE(text)) {
-      REPEAT(numitems, text, T)
+    if (FIELD_VALUE(itemhandles) && FIELD_VALUE(texts)) {
+      REPEAT(numitems, texts, T)
       {
         int dxf = FIELD_VALUE(hard_owner) & 1 ? 360 : 350;
-        FIELD_T (text[rcount1], 3);
+        FIELD_T (texts[rcount1], 3);
         VALUE_HANDLE (_obj->itemhandles[rcount1], itemhandles, 2, dxf);
       }
-      END_REPEAT(text)
+      END_REPEAT(texts)
     }
 #else
-  FIELD_VECTOR_T (text, numitems, 3);
+  FIELD_VECTOR_T (texts, numitems, 3);
 #endif
 
   START_OBJECT_HANDLE_STREAM;
@@ -2023,11 +2023,11 @@ DWG_OBJECT(DICTIONARYWDFLT)
 #else
   FIELD_BL (numitems, 0);
   VERSION(R_14)
-    FIELD_RL (cloning_rl, 0); // always 0
+    FIELD_RL (cloning_r14, 0); // always 0
   SINCE (R_2000)
     {
       IF_ENCODE_FROM_EARLIER {
-        FIELD_VALUE(cloning) = FIELD_VALUE(cloning_rl) & 0xffff;
+        FIELD_VALUE(cloning) = FIELD_VALUE(cloning_r14) & 0xffff;
       }
       FIELD_BS (cloning, 281);
       FIELD_RC (hard_owner, 0);
@@ -2041,17 +2041,17 @@ DWG_OBJECT(DICTIONARYWDFLT)
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
 #ifdef IS_DXF
-    if (FIELD_VALUE(itemhandles) && FIELD_VALUE(text)) {
-      REPEAT(numitems, text, T)
+    if (FIELD_VALUE(itemhandles) && FIELD_VALUE(texts)) {
+      REPEAT(numitems, texts, T)
       {
         int dxf = FIELD_VALUE(hard_owner) & 1 ? 360 : 350;
-        FIELD_T (text[rcount1], 3);
+        FIELD_T (texts[rcount1], 3);
         VALUE_HANDLE (_obj->itemhandles[rcount1], itemhandles, 2, dxf);
       }
-      END_REPEAT(text)
+      END_REPEAT(texts)
     }
 #else
-  FIELD_VECTOR_T (text, numitems, 3);
+  FIELD_VECTOR_T (texts, numitems, 3);
 #endif
 
   START_OBJECT_HANDLE_STREAM;
@@ -7204,3 +7204,4 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+

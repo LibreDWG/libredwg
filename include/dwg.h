@@ -1717,17 +1717,19 @@ typedef Dwg_Entity_RAY Dwg_Entity_XLINE;
 /**
  DICTIONARY (42)
  This structure is used for all the new tables.
+ Beware: Keep same offsets as DICTIONARYWDFLT
  */
 typedef struct _dwg_object_DICTIONARY
 {
   struct _dwg_object_object *parent;
 
-  BITCODE_BL numitems; /*!< no DXF */
-  BITCODE_TV* text;    /*!< DXF 3 */
-  BITCODE_BS cloning;  /*!< DXF 281 */
-  BITCODE_RC unknown_r14;
-  BITCODE_RC hard_owner; /*!< DXF 330 */
-  BITCODE_H* itemhandles; /*!< DXF 350, pairwise with text */
+  BITCODE_BL numitems;    /*!< no DXF */
+  BITCODE_BS cloning;     /*!< DXF 281 */
+  BITCODE_RC hard_owner;  /*!< DXF 330 */
+  BITCODE_TV* texts;      /*!< DXF 3 */
+  BITCODE_H* itemhandles; /*!< DXF 350/360, pairwise with texts */
+
+  BITCODE_RC cloning_r14; /*!< r14 only */
 } Dwg_Object_DICTIONARY;
 
 /**
@@ -3011,12 +3013,13 @@ typedef struct _dwg_object_DICTIONARYWDFLT
 {
   struct _dwg_object_object *parent;
 
-  BITCODE_BL numitems;
-  BITCODE_RL cloning_rl; /*!< r14 only */
-  BITCODE_BS cloning;    /*!< r2000+ */
-  BITCODE_RC hard_owner;
-  BITCODE_TV* text;
-  BITCODE_H* itemhandles;
+  BITCODE_BL numitems;    /*!< no DXF */
+  BITCODE_BS cloning;     /*!< DXF 281 */
+  BITCODE_RC hard_owner;  /*!< DXF 330 */
+  BITCODE_TV* texts;      /*!< DXF 3 */
+  BITCODE_H* itemhandles; /*!< DXF 350/360, pairwise with texts */
+
+  BITCODE_RL cloning_r14; /*!< r14 only */
   BITCODE_H defaultid;
 } Dwg_Object_DICTIONARYWDFLT;
 

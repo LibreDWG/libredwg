@@ -2287,11 +2287,11 @@ static const Dwg_DYNAPI_field _dwg_DBCOLOR_fields[] = {
 static const Dwg_DYNAPI_field _dwg_DICTIONARY_fields[] = {
   { "parent", "struct _dwg_object_object*", sizeof (void *), OFF (struct _dwg_object_DICTIONARY,parent), 1,1,0, 0 },
   { "numitems", "BL", sizeof (BITCODE_BL), OFF (struct _dwg_object_DICTIONARY,numitems), 0,0,0, 0 },
-  { "text", "TV*", sizeof (BITCODE_TV*), OFF (struct _dwg_object_DICTIONARY,text), 1,1,0, 3 },
   { "cloning", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_object_DICTIONARY,cloning), 0,0,0, 281 },
-  { "unknown_r14", "RC", sizeof (BITCODE_RC), OFF (struct _dwg_object_DICTIONARY,unknown_r14), 0,0,0, 0 },
   { "hard_owner", "RC", sizeof (BITCODE_RC), OFF (struct _dwg_object_DICTIONARY,hard_owner), 0,0,0, 280 },
+  { "texts", "TV*", sizeof (BITCODE_TV*), OFF (struct _dwg_object_DICTIONARY,texts), 1,1,0, 3 },
   { "itemhandles", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_DICTIONARY,itemhandles), 1,1,0, 350 },
+  { "cloning_r14", "RC", sizeof (BITCODE_RC), OFF (struct _dwg_object_DICTIONARY,cloning_r14), 0,0,0, 0 },
   {NULL, NULL, 0, 0, 0,0,0, 0},
 };
 /* from typedef struct _dwg_object_DICTIONARYVAR: (sorted by offset) */
@@ -2305,11 +2305,11 @@ static const Dwg_DYNAPI_field _dwg_DICTIONARYVAR_fields[] = {
 static const Dwg_DYNAPI_field _dwg_DICTIONARYWDFLT_fields[] = {
   { "parent", "struct _dwg_object_object*", sizeof (void *), OFF (struct _dwg_object_DICTIONARYWDFLT,parent), 1,1,0, 0 },
   { "numitems", "BL", sizeof (BITCODE_BL), OFF (struct _dwg_object_DICTIONARYWDFLT,numitems), 0,0,0, 0 },
-  { "cloning_rl", "RL", sizeof (BITCODE_RL), OFF (struct _dwg_object_DICTIONARYWDFLT,cloning_rl), 0,0,0, 0 },
   { "cloning", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_object_DICTIONARYWDFLT,cloning), 0,0,0, 281 },
   { "hard_owner", "RC", sizeof (BITCODE_RC), OFF (struct _dwg_object_DICTIONARYWDFLT,hard_owner), 0,0,0, 280 },
-  { "text", "TV*", sizeof (BITCODE_TV*), OFF (struct _dwg_object_DICTIONARYWDFLT,text), 1,1,0, 3 },
+  { "texts", "TV*", sizeof (BITCODE_TV*), OFF (struct _dwg_object_DICTIONARYWDFLT,texts), 1,1,0, 3 },
   { "itemhandles", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_DICTIONARYWDFLT,itemhandles), 1,1,0, 350 },
+  { "cloning_r14", "RL", sizeof (BITCODE_RL), OFF (struct _dwg_object_DICTIONARYWDFLT,cloning_r14), 0,0,0, 0 },
   { "defaultid", "H", sizeof (BITCODE_H), OFF (struct _dwg_object_DICTIONARYWDFLT,defaultid), 1,0,0, 340 },
   {NULL, NULL, 0, 0, 0,0,0, 0},
 };

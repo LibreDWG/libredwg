@@ -756,7 +756,7 @@ EOF
         writedeps => 'num_deps',
         dashes_r11 => 'num_dashes',
 
-        text => 'numitems',
+        texts => 'numitems',
 
         block_headers => 'num_entries',
         layers => 'num_entries',
