@@ -185,6 +185,9 @@ sub dxf_in {
     } elsif (/^\s+FIELD_.+\s*\((\w+),.*,\s*(\d+)\)/) {
       $f = $1;
       $DXF{$n}->{$f} = $2 if $2;
+    } elsif (/^\s+HANDLE_VECTOR\s*\((\w+),.*?,\s*(\d+)\)/) {
+      $f = $1;
+      $DXF{$n}->{$f} = $2 if $2;
     } elsif (/^\s+HEADER_.+\s*\((\w+),\s*(\d+)\)/) { # HEADER_RC
       $f = $1;
       $DXF{$n}->{$f} = $2 if $2;

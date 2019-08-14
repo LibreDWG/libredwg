@@ -2197,9 +2197,9 @@ BS
 @item num_guide_curves
 BS
 @item cross_sections
-H*
+H*,	DXF 310
 @item guide_curves
-H*
+H*,	DXF 310
 @item path_curve
 H
 
@@ -4015,9 +4015,9 @@ H
 @item num_deps
 BL,	DXF 90
 @item readdeps
-H*
+H*,	DXF 330
 @item writedeps
-H*
+H*,	DXF 360
 @item unknown_assoc
 BL,	DXF 90
 
@@ -4126,7 +4126,7 @@ BL,	DXF 90
 @item num_actions
 BL,	DXF 90
 @item actions
-H*
+H*,	DXF 330
 
 @end vtable
 @end indentedblock
@@ -4481,7 +4481,7 @@ RC
 @item hard_owner
 RC,	DXF 280
 @item itemhandles
-H*
+H*,	DXF 350
 
 @end vtable
 @end indentedblock
@@ -4523,7 +4523,7 @@ RC,	DXF 280
 @item text
 TV*,	DXF 3
 @item itemhandles
-H*
+H*,	DXF 350
 @item defaultid
 H,	DXF 340
 
@@ -4855,7 +4855,7 @@ BL,	DXF 92
 @item node_edge4
 BL,	DXF 92
 @item evalexpr
-H*
+H*,	DXF 360
 
 @end vtable
 @end indentedblock
@@ -4876,11 +4876,11 @@ TV,	DXF 2
 @item num_childs
 BL,	DXF 90
 @item childs
-H*
+H*,	DXF 360
 @item num_objects
 BL,	DXF 97
 @item objects
-H*
+H*,	DXF 331
 @item format
 TV,	DXF 4
 @item evaluation_option
@@ -4923,7 +4923,7 @@ BL
 @item unknown
 B
 @item field_handles
-H*
+H*,	DXF 330
 
 @end vtable
 @end indentedblock
@@ -5086,7 +5086,7 @@ BS,	DXF 71
 @item num_handles
 BL
 @item group_entries
-H*
+H*,	DXF 340
 
 @end vtable
 @end indentedblock
@@ -5105,7 +5105,7 @@ RC
 @item num_obj_ids
 BL
 @item obj_ids
-H*
+H*,	DXF 330
 
 @end vtable
 @end indentedblock
@@ -5438,7 +5438,7 @@ TV,	DXF 3
 @item extref_handle
 H
 @item styles
-H*
+H*,	DXF 340
 
 @end vtable
 @end indentedblock
@@ -6081,11 +6081,11 @@ struct _dwg_object_object*
 @item num_ents
 BL
 @item sort_handles
-H*
+H*,	DXF 5
 @item dict_handle
 H
 @item ents
-H*
+H*,	DXF 331
 
 @end vtable
 @end indentedblock
