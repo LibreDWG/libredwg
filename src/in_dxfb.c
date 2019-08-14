@@ -629,6 +629,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
   Bit_Chain *hdl_dat, *str_dat;
   int error = 0;
   BITCODE_RL curr_inserts = 0;
+  char text[256];
 
   ctrl_hdlv[0] = '\0';
   LOG_TRACE ("add %s [%d]\n", name, i);
@@ -870,7 +871,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
           else if (strlen (obj->name) >= sizeof ("DICTIONARY") - 1 &&
                    !memcmp (obj->name, "DICTIONARY", sizeof ("DICTIONARY") - 1))
             {
-              add_dictionary_handle (obj, pair);
+              add_dictionary_handle (obj, pair, text);
               break;
             }
           // fall through
@@ -913,6 +914,11 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                 {
                   if (f->dxf == pair->code)
                     {
+                      if (pair->code == 3)
+                        {
+                          strncpy (text, pair->value.s, 255);
+                          text[255] = '\0';
+                        }
                       // only 2D or 3D points
                       if (f->size > 8
                           && (strchr (f->type, '2') || strchr (f->type, '3')))
