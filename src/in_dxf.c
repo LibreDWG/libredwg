@@ -1040,35 +1040,26 @@ void add_dictionary_handle (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
                             char *restrict text)
 {
   // but not DICTIONARYVAR
-  Dwg_Object_DICTIONARY *_obj = obj->tio.object->tio.DICTIONARY;
+  Dwg_Object_DICTIONARY *_obj = obj->tio.object->tio.DICTIONARY; // also DICTIONARYWDFLT
   Dwg_Data *dwg = obj->parent;
   BITCODE_BL num;
-  BITCODE_H hdl, *itemhandles;
-  char **textv;
+  BITCODE_H hdl;
 
   if (pair->code == 360)
-    {
-      BITCODE_RC hard_owner = 1;
-      dwg_dynapi_entity_set_value (_obj, obj->name, "hard_owner", &hard_owner, 0);
-    }
-  dwg_dynapi_entity_value (_obj, obj->name, "numitems", &num, NULL);
-  dwg_dynapi_entity_value (_obj, obj->name, "itemhandles", &itemhandles, NULL);
-  dwg_dynapi_entity_value (_obj, obj->name, "text", &textv, NULL);
+    _obj->hard_owner = 1;
+  num = _obj->numitems;
   hdl = add_handleref (dwg, 2, pair->value.u, obj);
   LOG_TRACE ("%s.itemhandles[%d] = " FORMAT_REF " [330 H]\n", obj->name,
              num, ARGS_REF (hdl));
-  itemhandles = realloc (itemhandles, (num + 1) * sizeof (BITCODE_H));
-  itemhandles[num] = hdl;
-  textv = realloc (textv, (num + 1) * sizeof (BITCODE_TV));
+  _obj->itemhandles = realloc (_obj->itemhandles, (num + 1) * sizeof (BITCODE_H));
+  _obj->itemhandles[num] = hdl;
+  _obj->texts = realloc (_obj->texts, (num + 1) * sizeof (BITCODE_TV));
   if (dwg->header.version >= R_2007)
-    textv[num] = (char *)bit_utf8_to_TU (text);
+    _obj->texts[num] = (char *)bit_utf8_to_TU (text);
   else
-    textv[num] = strdup (text);
+    _obj->texts[num] = strdup (text);
   LOG_TRACE ("%s.text[%d] = %s [3 T]\n", obj->name, num, text);
-  num++;
-  dwg_dynapi_entity_set_value (_obj, obj->name, "numitems", &num, 0);
-  dwg_dynapi_entity_set_value (_obj, obj->name, "itemhandles", &itemhandles, 0);
-  dwg_dynapi_entity_set_value (_obj, obj->name, "text", &textv, 0);
+  _obj->numitems = num + 1;
 }
 
 /* Most of that code is object specific, not just for tables.
@@ -1333,8 +1324,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               break;
             }
           // // DICTIONARY or DICTIONARYWDFLT, but not DICTIONARYVAR
-          else if (strlen (obj->name) >= sizeof ("DICTIONARY") - 1 &&
-                   !memcmp (obj->name, "DICTIONARY", sizeof ("DICTIONARY") - 1))
+          else if (memBEGINc (obj->name, "DICTIONARY"))
             {
               add_dictionary_handle (obj, pair, text);
               break;
@@ -1379,10 +1369,12 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                 {
                   if (f->dxf == pair->code)
                     {
-                      if (pair->code == 3)
+                      if (pair->code == 3 &&
+                          memBEGINc (obj->name, "DICTIONARY"))
                         {
                           strncpy (text, pair->value.s, 255);
                           text[255] = '\0';
+                          goto next_pair; // skip setting texts TV*
                         }
                       // only 2D or 3D points
                       if (f->size > 8
