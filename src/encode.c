@@ -1259,17 +1259,11 @@ dwg_section_page_checksum (const uint32_t seed, Bit_Chain *dat, uint32_t size)
 
 #include "dwg.spec"
 
-/** dwg_encode_variable_type
- * Encode object by class name, not type. if type > 500.
- * Returns 0 on success, else some Dwg_Error.
- */
-static int
-dwg_encode_variable_type (Dwg_Data *dwg, Bit_Chain *dat, Dwg_Object *obj)
+static Dwg_Class*
+dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj)
 {
-  int i, error = 0;
-  int is_entity;
-  Dwg_Class *klass = NULL;
-
+  int i;
+  Dwg_Class* klass = NULL;
   // indxf has a different class order
   if (obj->dxfname) // search class by name, not offset
     {
@@ -1284,8 +1278,6 @@ dwg_encode_variable_type (Dwg_Data *dwg, Bit_Chain *dat, Dwg_Object *obj)
           else
             klass = NULL; // inefficient
         }
-      if (!klass)
-        return DWG_ERR_INTERNALERROR;
     }
   else // search by index
     {
@@ -1294,18 +1286,33 @@ dwg_encode_variable_type (Dwg_Data *dwg, Bit_Chain *dat, Dwg_Object *obj)
         {
           LOG_WARN ("Invalid object type %d, only %u classes", obj->type,
                     dwg->num_classes);
-          return DWG_ERR_INVALIDTYPE;
+          return NULL;
         }
 
       klass = &dwg->dwg_class[i];
       if (!klass || !klass->dxfname)
-        return DWG_ERR_INTERNALERROR;
+        return NULL;
       obj->dxfname = klass->dxfname;
     }
+  return klass;
+}
 
+/** dwg_encode_variable_type
+ * Encode object by class name, not type. if type > 500.
+ * Returns 0 on success, else some Dwg_Error.
+ */
+static int
+dwg_encode_variable_type (Dwg_Data *dwg, Bit_Chain *dat, Dwg_Object *obj)
+{
+  int error = 0;
+  int is_entity;
+  Dwg_Class *klass = dwg_encode_get_class (dwg, obj);
+
+  if (!klass)
+    return DWG_ERR_INTERNALERROR;
   is_entity = dwg_class_is_entity (klass);
 
-#include "classes.inc"
+  #include "classes.inc"
 
   LOG_WARN ("Unknown Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object",
             klass->number, klass->dxfname, klass->proxyflag,
@@ -1598,27 +1605,22 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
           Dwg_Data *dwg = obj->parent;
           int is_entity;
           int i = obj->type - 500;
-          Dwg_Class *klass = NULL;
+          Dwg_Class *klass = dwg_encode_get_class (dwg, obj);
 
           dat->byte = address; // restart and write into the UNKNOWN_OBJ object
           dat->bit = 0;
           bit_write_MS (dat, obj->size); // unknown blobs have a known size
           bit_write_BS (dat, obj->type); // type
 
-          if (i <= (int)dwg->num_classes)
-            {
-              klass = &dwg->dwg_class[i];
-              is_entity = dwg_class_is_entity (klass);
-            }
+          if (klass && obj->supertype == DWG_SUPERTYPE_UNKNOWN)
+            is_entity = dwg_class_is_entity (klass);
+          else
+            is_entity = obj->supertype == DWG_SUPERTYPE_ENTITY;
           // properly dwg_decode_object/_entity for eed, reactors, xdic
           if (klass && !is_entity)
-            {
-              error = dwg_encode_UNKNOWN_OBJ (dat, obj);
-            }
+            error = dwg_encode_UNKNOWN_OBJ (dat, obj);
           else if (klass)
-            {
-              error = dwg_encode_UNKNOWN_ENT (dat, obj);
-            }
+            error = dwg_encode_UNKNOWN_ENT (dat, obj);
           else // not a class
             {
               LOG_WARN ("Unknown object, skipping eed/reactors/xdic");
