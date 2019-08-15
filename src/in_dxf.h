@@ -187,6 +187,6 @@ EXPORT int dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 #  define M_PI_2 1.57079632679489661923132169163975144
 #endif
 #define rad2deg(ang) (ang) * 90.0 / M_PI_2
-#define deg2rad(ang) (ang) ? M_PI_2 / ((ang)*90.0) : 0.0
+#define deg2rad(ang) (ang) * M_PI_2 / 90.0
 
 #endif
