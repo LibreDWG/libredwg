@@ -1088,11 +1088,19 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
   char text[256];
 
   ctrl_hdlv[0] = '\0';
-  LOG_TRACE ("add %s [%d]\n", name, i);
-  NEW_OBJECT (dwg, obj);
+  if (ctrl || i)
+    {
+      LOG_TRACE ("add %s [%d]\n", name, i)
+    }
+  else
+    {
+      LOG_TRACE ("add %s\n", name)
+    }
 
   if (is_entity)
     {
+      NEW_ENTITY (dwg, obj);
+
       if (*name == '3')
         {
           // Looks dangerous but name[80] is big enough
@@ -1119,6 +1127,8 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
     }
   else
     {
+      NEW_OBJECT (dwg, obj);
+
       if (!ctrl) // no table
         {
           // clang-format off
@@ -1245,6 +1255,24 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               }
           }
           break;
+        case 8:
+          if (is_entity)
+            {
+              BITCODE_H handle = find_tablehandle (dwg, pair);
+              if (!handle)
+                {
+                  LOG_WARN ("TODO resolve handle name %s %s",
+                            "layer", pair->value.s)
+                }
+              else
+                {
+                  dwg_dynapi_common_set_value (_obj, "layer", &handle, is_utf);
+                  LOG_TRACE ("%s.layer = %s " FORMAT_REF " [8 H]\n", obj->name,
+                             pair->value.s, ARGS_REF (handle));
+                }
+              break;
+            }
+          // fall through
         case 100: // TODO for nested structs
           break;
         case 102:
@@ -1324,7 +1352,8 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               break;
             }
           // // DICTIONARY or DICTIONARYWDFLT, but not DICTIONARYVAR
-          else if (memBEGINc (obj->name, "DICTIONARY"))
+          else if (memBEGINc (obj->name, "DICTIONARY") &&
+                   strNE (obj->name, "DICTIONARYVAR"))
             {
               add_dictionary_handle (obj, pair, text);
               break;
@@ -1370,7 +1399,8 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                   if (f->dxf == pair->code)
                     {
                       if (pair->code == 3 &&
-                          memBEGINc (obj->name, "DICTIONARY"))
+                          memBEGINc (obj->name, "DICTIONARY") &&
+                          strNE (obj->name, "DICTIONARYVAR"))
                         {
                           strncpy (text, pair->value.s, 255);
                           text[255] = '\0';

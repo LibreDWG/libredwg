@@ -136,6 +136,7 @@ EXPORT int dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 #define ADD_OBJECT(token)                                      \
   obj->type = obj->fixedtype = DWG_TYPE_##token;               \
   obj->name = obj->dxfname = (char *)#token;                   \
+  LOG_TRACE ("  ADD_OBJECT %s\n", obj->name);                  \
   _obj = calloc (1, sizeof (Dwg_Object_##token));              \
   obj->tio.object->tio.token = (Dwg_Object_##token *)_obj;     \
   obj->tio.object->tio.token->parent = obj->tio.object;        \
@@ -147,6 +148,7 @@ EXPORT int dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
     obj->name = obj->dxfname = (char *)&#token[1];             \
   else                                                         \
     obj->name = obj->dxfname = (char *)#token;                 \
+  LOG_TRACE ("  ADD_ENTITY %s\n", obj->name);                  \
   _obj = calloc (1, sizeof (Dwg_Entity_##token));              \
   obj->tio.entity->tio.token = (Dwg_Entity_##token *)_obj;     \
   obj->tio.entity->tio.token->parent = obj->tio.entity;        \
