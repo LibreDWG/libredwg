@@ -711,6 +711,52 @@ is_table_name (const char *name)
 }
 
 static Dxf_Pair *
+new_MLINESTYLE_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                     Dxf_Pair *restrict pair)
+{
+  BITCODE_RC num_lines = pair->value.i;
+  Dwg_Object_MLINESTYLE *_o = obj->tio.object->tio.MLINESTYLE;
+  _o->lines = calloc (num_lines, sizeof (Dwg_MLINESTYLE_line));
+  for (int j = -1; j < (int)num_lines; )
+    {
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+      if (pair->code == 0)
+        return pair;
+      else if (pair->code == 49)
+        {
+          j++;
+          _o->lines[j].offset = pair->value.d;
+          LOG_TRACE ("MLINESTYLE.lines[%d].offset = %f [49 BD]\n",
+                     j, pair->value.d);
+        }
+      else if (pair->code == 62)
+        {
+          if (j<0) j++;
+          _o->lines[j].color.index = pair->value.i;
+          LOG_TRACE ("MLINESTYLE.lines[%d].color.index = %d [62 CMC]\n",
+                     j, pair->value.i);
+        }
+      else if (pair->code == 6)
+        {
+          if (j<0) j++;
+          if (strEQc (pair->value.s, "BYLAYER"))
+            _o->lines[j].ltindex = 32767;
+          else if (strEQc (pair->value.s, "BYBLOCK"))
+            _o->lines[j].ltindex = 32766;
+          else if (strEQc (pair->value.s, "CONTINUOUS"))
+            _o->lines[j].ltindex = 0;
+          //else lookup on LTYPE_CONTROL list
+          LOG_TRACE ("MLINESTYLE.lines[%d].color.ltindex = %d [6]\n",
+                     j, _o->lines[j].ltindex);
+        }
+      else
+        break; // not a Dwg_MLINESTYLE_line
+    }
+  return pair;
+}
+
+static Dxf_Pair *
 new_table_control (const char *restrict name, Bit_Chain *restrict dat,
                    Dwg_Data *restrict dwg)
 {
@@ -1472,45 +1518,9 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                    strEQc (obj->name, "MLINESTYLE") &&
                    pair->value.i != 0)
             {
-              BITCODE_RC num_lines = pair->value.i;
-              Dwg_Object_MLINESTYLE *_o = obj->tio.object->tio.MLINESTYLE;
-              _o->lines = calloc (num_lines, sizeof (Dwg_MLINESTYLE_line));
-              for (int j = -1; j < (int)num_lines; )
-                {
-                  dxf_free_pair (pair);
-                  pair = dxf_read_pair (dat);
-                  if (pair->code == 0)
-                    return pair;
-                  else if (pair->code == 49)
-                    {
-                      j++;
-                      _o->lines[j].offset = pair->value.d;
-                      LOG_TRACE ("MLINESTYLE.lines[%d].offset = %f [49 BD]\n",
-                                 j, pair->value.d);
-                    }
-                  else if (pair->code == 62)
-                    {
-                      if (j<0) j++;
-                      _o->lines[j].color.index = pair->value.i;
-                      LOG_TRACE ("MLINESTYLE.lines[%d].color.index = %d [62 CMC]\n",
-                                 j, pair->value.i);
-                    }
-                  else if (pair->code == 6)
-                    {
-                      if (j<0) j++;
-                      if (strEQc (pair->value.s, "BYLAYER"))
-                        _o->lines[j].ltindex = 32767;
-                      else if (strEQc (pair->value.s, "BYBLOCK"))
-                        _o->lines[j].ltindex = 32766;
-                      else if (strEQc (pair->value.s, "CONTINUOUS"))
-                        _o->lines[j].ltindex = 0;
-                      //else lookup on LTYPE_CONTROL list
-                      LOG_TRACE ("MLINESTYLE.lines[%d].color.ltindex = %d [6]\n",
-                                 j, _o->lines[j].ltindex);
-                    }
-                  else
-                    break; // not a Dwg_MLINESTYLE_line
-                }
+              pair = new_MLINESTYLE_lines (obj, dat, pair);
+              if (pair->code == 0)
+                return pair;
               break;
             }
           else
@@ -1899,11 +1909,54 @@ dxf_unknownsection_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static int
 dxf_preview_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  (void)dwg;
-  // SECTION (THUMBNAILIMAGE);
-  // VALUE_RL(pic->size, 90);
-  // VALUE_BINARY(pic->chain, pic->size, 310);
-  // ENDSEC ();
+  Dxf_Pair *pair = dxf_read_pair (dat);
+  unsigned written = 0;
+
+  while (1)
+    {
+      switch (pair->code)
+        {
+        case 90:
+          dwg->picture.size = pair->value.l;
+          dwg->picture.chain = calloc (dwg->picture.size, 1);
+          if (!dwg->picture.chain)
+            {
+              LOG_ERROR ("Out of memory");
+              return DWG_ERR_OUTOFMEM;
+            }
+          LOG_TRACE ("PICTURE.size = %ld\n", pair->value.l);
+          break;
+        case 310:
+          {
+            unsigned len = strlen (pair->value.s);
+            unsigned blen = len / 2;
+            const char *pos = pair->value.s;
+            unsigned char *s = &dwg->picture.chain[written];
+            if (blen + written > dwg->picture.size)
+              {
+                dxf_free_pair (pair);
+                LOG_ERROR (
+                    "PICTURE.size overflow: %u + written %u > size: %lu", blen,
+                    written, dwg->picture.size);
+                return 1;
+              }
+            for (unsigned i = 0; i < blen; i++)
+              {
+                sscanf (pos, "%2hhX", &s[i]);
+                pos += 2;
+              }
+            written += blen;
+            LOG_TRACE ("PICTURE.chain += %u (%u/%lu)\n", blen, written,
+                       dwg->picture.size);
+          }
+          break;
+        case 0:
+          return 0;
+        }
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+    }
+  dxf_free_pair (pair);
   return 0;
 }
 
@@ -2013,13 +2066,11 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               dxf_free_pair (pair);
               dxf_objects_read (dat, dwg);
             }
-          /*
-          else if (strEQc (pair->value.s, "THUMBNAIL"))
+          else if (strEQc (pair->value.s, "THUMBNAILIMAGE"))
             {
               dxf_free_pair (pair);
               dxf_preview_read (dat, dwg);
             }
-          */
           else // if (strEQc (pair->value.s, "ACDSDATA"))
             {
               LOG_WARN ("SECTION %s ignored for now", pair->value.s);
