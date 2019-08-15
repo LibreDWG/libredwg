@@ -915,6 +915,7 @@ find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair)
   return handle;
 }
 
+// with XRECORD only
 Dxf_Pair *
 add_xdata (Bit_Chain *restrict dat,
            Dwg_Object *restrict obj, Dxf_Pair *restrict pair)
@@ -1010,11 +1011,23 @@ add_xdata (Bit_Chain *restrict dat,
       }
       break;
     case VT_BINARY:
-      // TODO convert from hex
-      rbuf->value.str.size = strlen (pair->value.s);
-      rbuf->value.str.u.data = pair->value.s;
-      LOG_TRACE ("rbuf[%d]: ", num_xdata);
-      //LOG_TRACE_TF (rbuf->value.str.u.data, rbuf->value.str.size);
+      // convert from hex
+      {
+        int i;
+        int len = strlen (pair->value.s);
+        int blen = len/2;
+        char *s = malloc (blen);
+        const char* pos = pair->value.s;
+        rbuf->value.str.u.data = s;
+        rbuf->value.str.size = blen;
+        for (i = 0; i < blen; i++)
+          {
+            sscanf(pos, "%2hhX", &s[i]);
+            pos += 2;
+          }
+        LOG_TRACE ("rbuf[%d]: ", num_xdata);
+        //LOG_TRACE_TF (rbuf->value.str.u.data, rbuf->value.str.size);
+      }
       break;
     case VT_HANDLE:
     case VT_OBJECTID:
