@@ -1376,8 +1376,21 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                           text[255] = '\0';
                           goto next_pair; // skip setting texts TV*
                         }
+                      // convert angle to radians
+                      else if (pair->code >= 50 && pair->code <= 55)
+                        {
+                          BITCODE_BD ang;
+                          if (pair->value.d == 0.0)
+                            goto next_pair;
+                          ang = deg2rad (pair->value.d);
+                          dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
+                                                       &ang, 0);
+                          LOG_TRACE ("%s.%s = %f (from DEG %f°) [%d %s]\n", name,
+                                     f->name, ang, pair->value.d, pair->code, f->type);
+                          goto next_pair; // found
+                        }
                       // only 2D or 3D points
-                      if (f->size > 8
+                      else if (f->size > 8
                           && (strchr (f->type, '2') || strchr (f->type, '3')))
                         {
                           BITCODE_3BD pt;
