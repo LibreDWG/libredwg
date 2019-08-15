@@ -365,7 +365,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               if (strEQ (version, version_codes[v]))
                 {
-                  dwg->header.version = v;
+                  dwg->header.version = dwg->header.from_version = v;
                   dat->version = dat->from_version = dwg->header.version;
                   is_utf = dat->version >= R_2007;
                   LOG_TRACE ("HEADER.version = dat->version = %s\n", version);
