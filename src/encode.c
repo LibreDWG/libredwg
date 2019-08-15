@@ -1011,8 +1011,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           continue;
         }
       obj = &dwg->object[index];
-      obj->address
-          = dat->byte; // change the address to the linearly sorted one
+      // change the address to the linearly sorted one
+      obj->address = dat->byte;
       error |= dwg_encode_add_object (obj, dat, dat->byte);
       bit_write_CRC (dat, omap[j].address, 0xC0C1);
     }
@@ -1268,21 +1268,41 @@ dwg_encode_variable_type (Dwg_Data *dwg, Bit_Chain *dat, Dwg_Object *obj)
 {
   int i, error = 0;
   int is_entity;
-  Dwg_Class *klass;
+  Dwg_Class *klass = NULL;
 
-  i = obj->type - 500;
-  if (i < 0 || i >= (int)dwg->num_classes)
+  // indxf has a different class order
+  if (obj->dxfname) // search class by name, not offset
     {
-      LOG_WARN ("Invalid object type %d, only %u classes", obj->type,
-                dwg->num_classes);
-      return DWG_ERR_INVALIDTYPE;
+      for (i = 0; i < dwg->num_classes; i++)
+        {
+          klass = &dwg->dwg_class[i];
+          if (strEQ (obj->dxfname, klass->dxfname))
+            {
+              obj->type = 500 + i;
+              break;
+            }
+          else
+            klass = NULL; // inefficient
+        }
+      if (!klass)
+        return DWG_ERR_INTERNALERROR;
+    }
+  else // search by index
+    {
+      i = obj->type - 500;
+      if (i < 0 || i >= (int)dwg->num_classes)
+        {
+          LOG_WARN ("Invalid object type %d, only %u classes", obj->type,
+                    dwg->num_classes);
+          return DWG_ERR_INVALIDTYPE;
+        }
+
+      klass = &dwg->dwg_class[i];
+      if (!klass || !klass->dxfname)
+        return DWG_ERR_INTERNALERROR;
+      obj->dxfname = klass->dxfname;
     }
 
-  klass = &dwg->dwg_class[i];
-  if (!klass || !klass->dxfname)
-    return DWG_ERR_INTERNALERROR;
-  obj->dxfname = klass->dxfname;
-  // almost always false
   is_entity = dwg_class_is_entity (klass);
 
 #include "classes.inc"
