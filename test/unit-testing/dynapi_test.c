@@ -20798,77 +20798,6 @@ static int test_WIPEOUT (const Dwg_Object *obj)
   }
   return failed;
 }
-static int test_ACDBNAVISWORKSMODELDEF (const Dwg_Object *obj)
-{
-  int error = 0;
-  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
-  Dwg_Object_ACDBNAVISWORKSMODELDEF *restrict acdbnavisworksmodeldef = obj->tio.object->tio.ACDBNAVISWORKSMODELDEF;
-  {
-    BITCODE_B host_drawing_visibility;
-    if (dwg_dynapi_entity_value (acdbnavisworksmodeldef, "ACDBNAVISWORKSMODELDEF", "host_drawing_visibility", &host_drawing_visibility, NULL)
-        && host_drawing_visibility == acdbnavisworksmodeldef->host_drawing_visibility)
-      pass ();
-    else
-      fail ("ACDBNAVISWORKSMODELDEF.host_drawing_visibility [B] " FORMAT_B " != " FORMAT_B "", acdbnavisworksmodeldef->host_drawing_visibility, host_drawing_visibility);
-    host_drawing_visibility++;
-    if (dwg_dynapi_entity_set_value (acdbnavisworksmodeldef, "ACDBNAVISWORKSMODELDEF", "host_drawing_visibility", &host_drawing_visibility, 0)
-        && host_drawing_visibility == acdbnavisworksmodeldef->host_drawing_visibility)
-      pass ();
-    else
-      fail ("ACDBNAVISWORKSMODELDEF.host_drawing_visibility [B] set+1 " FORMAT_B " != " FORMAT_B "", acdbnavisworksmodeldef->host_drawing_visibility, host_drawing_visibility);
-    acdbnavisworksmodeldef->host_drawing_visibility--;
-
-  }
-  {
-    BITCODE_3BD max_extent;
-    if (dwg_dynapi_entity_value (acdbnavisworksmodeldef, "ACDBNAVISWORKSMODELDEF", "max_extent", &max_extent, NULL)
-        && !memcmp (&max_extent, &acdbnavisworksmodeldef->max_extent, sizeof (acdbnavisworksmodeldef->max_extent)))
-        pass ();
-    else
-        fail ("ACDBNAVISWORKSMODELDEF.max_extent [3BD]");
-  }
-  {
-    BITCODE_3BD min_extent;
-    if (dwg_dynapi_entity_value (acdbnavisworksmodeldef, "ACDBNAVISWORKSMODELDEF", "min_extent", &min_extent, NULL)
-        && !memcmp (&min_extent, &acdbnavisworksmodeldef->min_extent, sizeof (acdbnavisworksmodeldef->min_extent)))
-        pass ();
-    else
-        fail ("ACDBNAVISWORKSMODELDEF.min_extent [3BD]");
-  }
-  {
-    struct _dwg_object_object* parent;
-    if (dwg_dynapi_entity_value (acdbnavisworksmodeldef, "ACDBNAVISWORKSMODELDEF", "parent", &parent, NULL)
-        && !memcmp (&parent, &acdbnavisworksmodeldef->parent, sizeof (acdbnavisworksmodeldef->parent)))
-        pass ();
-    else
-        fail ("ACDBNAVISWORKSMODELDEF.parent [struct _dwg_object_object*]");
-  }
-  {
-    BITCODE_T path;
-    if (dwg_dynapi_entity_value (acdbnavisworksmodeldef, "ACDBNAVISWORKSMODELDEF", "path", &path, NULL)
-        && !memcmp (&path, &acdbnavisworksmodeldef->path, sizeof (acdbnavisworksmodeldef->path)))
-        pass ();
-    else
-        fail ("ACDBNAVISWORKSMODELDEF.path [T]");
-  }
-  {
-    BITCODE_B status;
-    if (dwg_dynapi_entity_value (acdbnavisworksmodeldef, "ACDBNAVISWORKSMODELDEF", "status", &status, NULL)
-        && status == acdbnavisworksmodeldef->status)
-      pass ();
-    else
-      fail ("ACDBNAVISWORKSMODELDEF.status [B] " FORMAT_B " != " FORMAT_B "", acdbnavisworksmodeldef->status, status);
-    status++;
-    if (dwg_dynapi_entity_set_value (acdbnavisworksmodeldef, "ACDBNAVISWORKSMODELDEF", "status", &status, 0)
-        && status == acdbnavisworksmodeldef->status)
-      pass ();
-    else
-      fail ("ACDBNAVISWORKSMODELDEF.status [B] set+1 " FORMAT_B " != " FORMAT_B "", acdbnavisworksmodeldef->status, status);
-    acdbnavisworksmodeldef->status--;
-
-  }
-  return failed;
-}
 static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
 {
   int error = 0;
@@ -31077,6 +31006,77 @@ static int test_MLINESTYLE (const Dwg_Object *obj)
   }
   return failed;
 }
+static int test_NAVISWORKSMODELDEF (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_NAVISWORKSMODELDEF *restrict navisworksmodeldef = obj->tio.object->tio.NAVISWORKSMODELDEF;
+  {
+    BITCODE_B host_drawing_visibility;
+    if (dwg_dynapi_entity_value (navisworksmodeldef, "NAVISWORKSMODELDEF", "host_drawing_visibility", &host_drawing_visibility, NULL)
+        && host_drawing_visibility == navisworksmodeldef->host_drawing_visibility)
+      pass ();
+    else
+      fail ("NAVISWORKSMODELDEF.host_drawing_visibility [B] " FORMAT_B " != " FORMAT_B "", navisworksmodeldef->host_drawing_visibility, host_drawing_visibility);
+    host_drawing_visibility++;
+    if (dwg_dynapi_entity_set_value (navisworksmodeldef, "NAVISWORKSMODELDEF", "host_drawing_visibility", &host_drawing_visibility, 0)
+        && host_drawing_visibility == navisworksmodeldef->host_drawing_visibility)
+      pass ();
+    else
+      fail ("NAVISWORKSMODELDEF.host_drawing_visibility [B] set+1 " FORMAT_B " != " FORMAT_B "", navisworksmodeldef->host_drawing_visibility, host_drawing_visibility);
+    navisworksmodeldef->host_drawing_visibility--;
+
+  }
+  {
+    BITCODE_3BD max_extent;
+    if (dwg_dynapi_entity_value (navisworksmodeldef, "NAVISWORKSMODELDEF", "max_extent", &max_extent, NULL)
+        && !memcmp (&max_extent, &navisworksmodeldef->max_extent, sizeof (navisworksmodeldef->max_extent)))
+        pass ();
+    else
+        fail ("NAVISWORKSMODELDEF.max_extent [3BD]");
+  }
+  {
+    BITCODE_3BD min_extent;
+    if (dwg_dynapi_entity_value (navisworksmodeldef, "NAVISWORKSMODELDEF", "min_extent", &min_extent, NULL)
+        && !memcmp (&min_extent, &navisworksmodeldef->min_extent, sizeof (navisworksmodeldef->min_extent)))
+        pass ();
+    else
+        fail ("NAVISWORKSMODELDEF.min_extent [3BD]");
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (navisworksmodeldef, "NAVISWORKSMODELDEF", "parent", &parent, NULL)
+        && !memcmp (&parent, &navisworksmodeldef->parent, sizeof (navisworksmodeldef->parent)))
+        pass ();
+    else
+        fail ("NAVISWORKSMODELDEF.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_T path;
+    if (dwg_dynapi_entity_value (navisworksmodeldef, "NAVISWORKSMODELDEF", "path", &path, NULL)
+        && !memcmp (&path, &navisworksmodeldef->path, sizeof (navisworksmodeldef->path)))
+        pass ();
+    else
+        fail ("NAVISWORKSMODELDEF.path [T]");
+  }
+  {
+    BITCODE_B status;
+    if (dwg_dynapi_entity_value (navisworksmodeldef, "NAVISWORKSMODELDEF", "status", &status, NULL)
+        && status == navisworksmodeldef->status)
+      pass ();
+    else
+      fail ("NAVISWORKSMODELDEF.status [B] " FORMAT_B " != " FORMAT_B "", navisworksmodeldef->status, status);
+    status++;
+    if (dwg_dynapi_entity_set_value (navisworksmodeldef, "NAVISWORKSMODELDEF", "status", &status, 0)
+        && status == navisworksmodeldef->status)
+      pass ();
+    else
+      fail ("NAVISWORKSMODELDEF.status [B] set+1 " FORMAT_B " != " FORMAT_B "", navisworksmodeldef->status, status);
+    navisworksmodeldef->status--;
+
+  }
+  return failed;
+}
 static int test_OBJECTCONTEXTDATA (const Dwg_Object *obj)
 {
   int error = 0;
@@ -36273,8 +36273,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_VIEWPORT(obj);
   else  if (obj->fixedtype == DWG_TYPE_WIPEOUT)
     error += test_WIPEOUT(obj);
-  else  if (obj->fixedtype == DWG_TYPE_ACDBNAVISWORKSMODELDEF)
-    error += test_ACDBNAVISWORKSMODELDEF(obj);
   else  if (obj->fixedtype == DWG_TYPE_ACSH_SWEEP_CLASS)
     error += test_ACSH_SWEEP_CLASS(obj);
   else  if (obj->fixedtype == DWG_TYPE_APPID)
@@ -36363,6 +36361,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_MLEADERSTYLE(obj);
   else  if (obj->fixedtype == DWG_TYPE_MLINESTYLE)
     error += test_MLINESTYLE(obj);
+  else  if (obj->fixedtype == DWG_TYPE_NAVISWORKSMODELDEF)
+    error += test_NAVISWORKSMODELDEF(obj);
   else  if (obj->fixedtype == DWG_TYPE_OBJECTCONTEXTDATA)
     error += test_OBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_OBJECT_PTR)
@@ -36551,8 +36551,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_VIEWPORT (obj);
   else  if (obj->fixedtype == DWG_TYPE_WIPEOUT)
     error += test_WIPEOUT (obj);
-  else  if (obj->fixedtype == DWG_TYPE_ACDBNAVISWORKSMODELDEF)
-    error += test_ACDBNAVISWORKSMODELDEF (obj);
   else  if (obj->fixedtype == DWG_TYPE_ACSH_SWEEP_CLASS)
     error += test_ACSH_SWEEP_CLASS (obj);
   else  if (obj->fixedtype == DWG_TYPE_APPID)
@@ -36641,6 +36639,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_MLEADERSTYLE (obj);
   else  if (obj->fixedtype == DWG_TYPE_MLINESTYLE)
     error += test_MLINESTYLE (obj);
+  else  if (obj->fixedtype == DWG_TYPE_NAVISWORKSMODELDEF)
+    error += test_NAVISWORKSMODELDEF (obj);
   else  if (obj->fixedtype == DWG_TYPE_OBJECTCONTEXTDATA)
     error += test_OBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_OBJECT_PTR)

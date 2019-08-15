@@ -834,6 +834,7 @@ match_ASSOCACTION (const char *restrict filename,
   MATCH_OBJECT (ASSOCACTION, body.expression, 0);
   return found;
 }
+
 static int
 match_ASSOCOSNAPPOINTREFACTIONPARAM (const char *restrict filename,
                                      const Dwg_Object *restrict obj)
@@ -845,15 +846,16 @@ match_ASSOCOSNAPPOINTREFACTIONPARAM (const char *restrict filename,
   MATCH_OBJECT (ASSOCOSNAPPOINTREFACTIONPARAM, name, 1);
   return found;
 }
+
 static int
-match_ACDBNAVISWORKSMODELDEF (const char *restrict filename,
-                              const Dwg_Object *restrict obj)
+match_NAVISWORKSMODELDEF (const char *restrict filename,
+                          const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  const Dwg_Object_ACDBNAVISWORKSMODELDEF *_obj
-      = obj->tio.object->tio.ACDBNAVISWORKSMODELDEF;
-  MATCH_OBJECT (ACDBNAVISWORKSMODELDEF, path, 1);
+  const Dwg_Object_NAVISWORKSMODELDEF *_obj
+      = obj->tio.object->tio.NAVISWORKSMODELDEF;
+  MATCH_OBJECT (NAVISWORKSMODELDEF, path, 1);
   return found;
 }
 
@@ -1050,8 +1052,8 @@ match_BLOCK_HEADER (const char *restrict filename,
               else if (obj->fixedtype
                        == DWG_TYPE_ASSOCOSNAPPOINTREFACTIONPARAM)
                 found += match_ASSOCOSNAPPOINTREFACTIONPARAM (filename, obj);
-              else if (obj->fixedtype == DWG_TYPE_ACDBNAVISWORKSMODELDEF)
-                found += match_ACDBNAVISWORKSMODELDEF (filename, obj);
+              else if (obj->fixedtype == DWG_TYPE_NAVISWORKSMODELDEF)
+                found += match_NAVISWORKSMODELDEF (filename, obj);
             }
         }
       if (!opt_text)

@@ -3772,29 +3772,6 @@ H,	DXF 360
 
 All non-graphical objects with its fields. @xref{Common Object fields}
 
-@strong{ACDBNAVISWORKSMODELDEF} @anchor{ACDBNAVISWORKSMODELDEF}
-@cindex object, ACDBNAVISWORKSMODELDEF
-@vindex ACDBNAVISWORKSMODELDEF
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_object*
-@item path
-T,	DXF 1
-@item status
-B,	DXF 290
-@item min_extent
-3BD,	DXF 10
-@item max_extent
-3BD,	DXF 11
-@item host_drawing_visibility
-B,	DXF 290
-
-@end vtable
-@end indentedblock
-
 @strong{ACSH_SWEEP_CLASS} @anchor{ACSH_SWEEP_CLASS}
 @cindex object, ACSH_SWEEP_CLASS
 @vindex ACSH_SWEEP_CLASS
@@ -5791,6 +5768,29 @@ BD,	DXF 52
 RC,	DXF 71
 @item lines
 Dwg_MLINESTYLE_line*
+
+@end vtable
+@end indentedblock
+
+@strong{NAVISWORKSMODELDEF} @anchor{NAVISWORKSMODELDEF}
+@cindex object, NAVISWORKSMODELDEF
+@vindex NAVISWORKSMODELDEF
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item path
+T
+@item status
+B
+@item min_extent
+3BD
+@item max_extent
+3BD
+@item host_drawing_visibility
+B
 
 @end vtable
 @end indentedblock

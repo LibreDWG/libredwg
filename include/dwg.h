@@ -347,8 +347,7 @@ typedef enum DWG_OBJECT_TYPE
 
   /* non-fixed types > 500. not stored as type, but as fixedtype */
 
-  DWG_TYPE_ACDBNAVISWORKSMODELDEF = 0x1ff + 1,
-  DWG_TYPE_ACSH_HISTORY_CLASS,
+  DWG_TYPE_ACSH_HISTORY_CLASS = 0x1ff + 1,
   DWG_TYPE_ACSH_SWEEP_CLASS,
   DWG_TYPE_ARCALIGNEDTEXT,
   DWG_TYPE_ARC_DIMENSION,
@@ -392,6 +391,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_MATERIAL,
   DWG_TYPE_MLEADERSTYLE,
   DWG_TYPE_MULTILEADER,
+  DWG_TYPE_NAVISWORKSMODELDEF,
   DWG_TYPE_NPOCOLLECTION,
   DWG_TYPE_OBJECTCONTEXTDATA,
   DWG_TYPE_OBJECT_PTR,
@@ -4928,7 +4928,7 @@ typedef struct _dwg_object_ACSH_SWEEP_CLASS
 
 } Dwg_Object_ACSH_SWEEP_CLASS;
 
-typedef struct _dwg_object_ACDBNAVISWORKSMODELDEF
+typedef struct _dwg_object_NAVISWORKSMODELDEF
 {
   struct _dwg_object_object *parent;
 
@@ -4939,7 +4939,7 @@ typedef struct _dwg_object_ACDBNAVISWORKSMODELDEF
   BITCODE_3BD max_extent; /*!< DXF 11 */
   BITCODE_B host_drawing_visibility; /*!< DXF 290 */
 
-} Dwg_Object_ACDBNAVISWORKSMODELDEF;
+} Dwg_Object_NAVISWORKSMODELDEF;
 
 /**
  Class RENDERENVIRONMENT (varies)
@@ -5230,7 +5230,6 @@ typedef struct _dwg_object_object
 
     //TODO Dwg_Object_ACSH_HISTORY_CLASS *ACSH_HISTORY_CLASS;
     Dwg_Object_ACSH_SWEEP_CLASS *ACSH_SWEEP_CLASS;
-    Dwg_Object_ACDBNAVISWORKSMODELDEF *ACDBNAVISWORKSMODELDEF;
     //TODO Dwg_Object_ARCALIGNEDTEXT *ARCALIGNEDTEXT;
     Dwg_Object_ASSOC2DCONSTRAINTGROUP *ASSOC2DCONSTRAINTGROUP;
     Dwg_Object_ASSOCACTION *ASSOCACTION;
@@ -5269,6 +5268,7 @@ typedef struct _dwg_object_object
     Dwg_Object_MATERIAL *MATERIAL;
     Dwg_Object_MLEADERSTYLE *MLEADERSTYLE;
     Dwg_Object_MLINESTYLE *MLINESTYLE;
+    Dwg_Object_NAVISWORKSMODELDEF *NAVISWORKSMODELDEF;
     //TODO Dwg_Object_NPOCOLLECTION *NPOCOLLECTION;
     Dwg_Object_OBJECT_PTR *OBJECT_PTR;
     Dwg_Object_OBJECTCONTEXTDATA *OBJECTCONTEXTDATA;
@@ -5929,7 +5929,7 @@ EXPORT int dwg_add_ASSOC2DCONSTRAINTGROUP (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCACTION (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCALIGNEDDIMACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCNETWORK (Dwg_Object *obj);
-EXPORT int dwg_add_ACDBNAVISWORKSMODELDEF (Dwg_Object *obj);
+EXPORT int dwg_add_NAVISWORKSMODELDEF (Dwg_Object *obj);
 //EXPORT int dwg_add_ACSH_HISTORY_CLASS (Dwg_Object *obj);
 EXPORT int dwg_add_ACSH_SWEEP_CLASS (Dwg_Object *obj);
 //EXPORT int dwg_add_ARCALIGNEDTEXT (Dwg_Object *obj);
