@@ -1468,6 +1468,51 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               layer->flag |= layer->linewt << 5;
               LOG_TRACE ("LAYER.flag = 0x%x [70 BS]\n", layer->flag);
             }
+          else if (pair->code == 71 &&
+                   strEQc (obj->name, "MLINESTYLE") &&
+                   pair->value.i != 0)
+            {
+              BITCODE_RC num_lines = pair->value.i;
+              Dwg_Object_MLINESTYLE *_o = obj->tio.object->tio.MLINESTYLE;
+              _o->lines = calloc (num_lines, sizeof (Dwg_MLINESTYLE_line));
+              for (int j = -1; j < (int)num_lines; )
+                {
+                  dxf_free_pair (pair);
+                  pair = dxf_read_pair (dat);
+                  if (pair->code == 0)
+                    return pair;
+                  else if (pair->code == 49)
+                    {
+                      j++;
+                      _o->lines[j].offset = pair->value.d;
+                      LOG_TRACE ("MLINESTYLE.lines[%d].offset = %f [49 BD]\n",
+                                 j, pair->value.d);
+                    }
+                  else if (pair->code == 62)
+                    {
+                      if (j<0) j++;
+                      _o->lines[j].color.index = pair->value.i;
+                      LOG_TRACE ("MLINESTYLE.lines[%d].color.index = %d [62 CMC]\n",
+                                 j, pair->value.i);
+                    }
+                  else if (pair->code == 6)
+                    {
+                      if (j<0) j++;
+                      if (strEQc (pair->value.s, "BYLAYER"))
+                        _o->lines[j].ltindex = 32767;
+                      else if (strEQc (pair->value.s, "BYBLOCK"))
+                        _o->lines[j].ltindex = 32766;
+                      else if (strEQc (pair->value.s, "CONTINUOUS"))
+                        _o->lines[j].ltindex = 0;
+                      //else lookup on LTYPE_CONTROL list
+                      LOG_TRACE ("MLINESTYLE.lines[%d].color.ltindex = %d [6]\n",
+                                 j, _o->lines[j].ltindex);
+                    }
+                  else
+                    break; // not a Dwg_MLINESTYLE_line
+                }
+              break;
+            }
           else
             { // search all specific fields and common fields for the DXF
               const Dwg_DYNAPI_field *f;
