@@ -876,6 +876,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   return pair;
 }
 
+/* by name or by ref */
 BITCODE_H
 find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair)
 {
@@ -894,6 +895,25 @@ find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair)
   else if (pair->code == 7)
     handle = dwg_find_tablehandle (dwg, pair->value.s, "STYLE");
   /* I think all these >300 are given by hex value, not by name */
+  else if (pair->code > 300)
+    {
+      BITCODE_BL i;
+      for (i = 0; i < dwg->num_object_refs; i++)
+        {
+          Dwg_Object_Ref *ref = dwg->object_ref[i];
+          if (ref->absolute_ref == (BITCODE_BL)pair->value.u)
+            {
+              handle = ref;
+              break;
+            }
+        }
+      if (!handle)
+        {
+          Dwg_Object *obj = dwg_resolve_handle (dwg, (BITCODE_BL)pair->value.u);
+          handle = add_handleref (dwg, 0, pair->value.u, obj);
+        }
+    }
+#if 0
   else if (pair->code == 331)
     handle = dwg_find_tablehandle (dwg, pair->value.s, "VPORT");
   else if (pair->code == 390)
@@ -912,6 +932,7 @@ find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair)
     handle = dwg_find_tablehandle (dwg, pair->value.s, "VISUALSTYLE");
   else if (pair->code == 332)
     handle = dwg_find_tablehandle (dwg, pair->value.s, "BACKGROUND");
+#endif
   return handle;
 }
 
@@ -1432,6 +1453,33 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                                      f->name, ang, pair->value.d, pair->code, f->type);
                           goto next_pair; // found
                         }
+                      // resolve handle, by name or ref
+                      else if (strEQc (f->type, "H"))
+                        {
+                          BITCODE_H handle = find_tablehandle (dwg, pair);
+                          if (!handle)
+                            {
+                              if (pair->code > 300)
+                                {
+                                  LOG_WARN ("TODO resolve handle name %s.%s %X",
+                                            obj->name, f->name, pair->value.u)
+                                }
+                              else
+                                {
+                                  LOG_WARN ("TODO resolve handle name %s.%s %s",
+                                            obj->name, f->name, pair->value.s)
+                                }
+                            }
+                          else
+                            {
+                              dwg_dynapi_entity_set_value (
+                                  _obj, obj->name, f->name, &handle, is_utf);
+                              LOG_TRACE ("%s.%s = " FORMAT_REF " [%d H]\n",
+                                         name, f->name, ARGS_REF (handle),
+                                         pair->code);
+                            }
+                          goto next_pair; // found
+                        }
                       // only 2D or 3D points
                       else if (f->size > 8
                           && (strchr (f->type, '2') || strchr (f->type, '3')))
@@ -1524,14 +1572,22 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                 {
                   if (f->dxf == pair->code) // TODO alt. color fields
                     {
-                      /// resolve handle (table entry) given by name
-                      if (strEQc (f->type, "H") && pair->type == VT_STRING)
+                      /// resolve handle (table entry) given by name or ref
+                      if (strEQc (f->type, "H"))
                         {
                           BITCODE_H handle = find_tablehandle (dwg, pair);
                           if (!handle)
                             {
-                              LOG_WARN ("TODO resolve handle name %s %s",
-                                        f->name, pair->value.s)
+                              if (pair->code > 300)
+                                {
+                                  LOG_WARN ("TODO resolve common handle name %s %X",
+                                            f->name, pair->value.u)
+                                }
+                              else
+                                {
+                                  LOG_WARN ("TODO resolve common handle name %s %s",
+                                            f->name, pair->value.s)
+                                }
                             }
                           else
                             dwg_dynapi_common_set_value (_obj, f->name,

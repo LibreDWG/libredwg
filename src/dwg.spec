@@ -2488,7 +2488,7 @@ DWG_OBJECT(LAYER)
     FIELD_VALUE(linewt) = (flag & 0x03E0) >> 5;
     DXF_OR_PRINT {
       int lw = dxf_cvt_lweight(FIELD_VALUE(linewt));
-      FIELD_B(plotflag, 290);
+      FIELD_B (plotflag, 290);
       KEY(linewt); VALUE_RC((signed char)lw, 370);
     }
   }
