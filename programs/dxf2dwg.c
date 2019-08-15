@@ -268,7 +268,7 @@ main (int argc, char *argv[])
       // forget about valgrind. really huge DWG's need endlessly here.
       if (do_free
 #if defined __SANITIZE_ADDRESS__ || __has_feature (address_sanitizer)
-          || 1
+          || 0 /* disabled for now */
 #endif
 #ifdef HAVE_VALGRIND_VALGRIND_H
           || (RUNNING_ON_VALGRIND)
