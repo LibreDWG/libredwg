@@ -539,12 +539,12 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               break;
             case 280:
               klass->wasazombie = (BITCODE_B)pair->value.i;
-              LOG_TRACE ("CLASS[%d].num_instances = %d [280]\n", i,
+              LOG_TRACE ("CLASS[%d].wasazombie = %d [280]\n", i,
                          pair->value.i);
               break;
             case 281:
               klass->item_class_id = pair->value.i ? 0x1f3 : 0x1f2;
-              LOG_TRACE ("CLASS[%d].num_instances = %x [281]\n", i,
+              LOG_TRACE ("CLASS[%d].item_class_id = %x [281]\n", i,
                          klass->item_class_id);
               break;
             default:
