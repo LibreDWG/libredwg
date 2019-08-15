@@ -1096,9 +1096,52 @@ void add_dictionary_handle (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
   _obj->numitems = num + 1;
 }
 
-/* Most of that code is object specific, not just for tables.
-   TODO: rename to new_object, and special-case the table code.
-   How to initialize _obj? To generic only?
+/* convert to flag */
+static BITCODE_RC
+dxf_find_lweight (const int lw)
+{
+  // See acdb.h: 100th of a mm, enum of
+  const int lweights[] = { 0,
+                           5,
+                           9,
+                           13,
+                           15,
+                           18,
+                           20,
+                           25,
+                           30,
+                           35,
+                           40,
+                           50,
+                           53,
+                           60,
+                           70,
+                           80,
+                           90,
+                           100,
+                           106,
+                           120,
+                           140,
+                           158,
+                           200,
+                           211,
+                           /*illegal/reserved:*/ 0,
+                           0,
+                           0,
+                           0,
+                           0,
+                           /*29:*/ -1, // BYLAYER
+                           -2,         // BYBLOCK
+                           -3 };       // BYLWDEFAULT
+  for (int i = 0; i < 32; i++)
+    {
+      if (lweights[i] == lw)
+        return i;
+    }
+  return 0;
+}
+
+/* For tables, entities and objects.
  */
 static Dxf_Pair *
 new_object (char *restrict name, Bit_Chain *restrict dat,
@@ -1417,6 +1460,14 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
             add_eed (obj, name, pair);
           else if (pair->code != 280 && strEQc (obj->name, "XRECORD"))
             pair = add_xdata (dat, obj, pair);
+          else if (pair->code == 370 && strEQc (obj->name, "LAYER"))
+            {
+              Dwg_Object_LAYER *layer = obj->tio.object->tio.LAYER;
+              layer->linewt = dxf_find_lweight(pair->value.i);
+              LOG_TRACE ("LAYER.linewt = %d\n", layer->linewt);
+              layer->flag |= layer->linewt << 5;
+              LOG_TRACE ("LAYER.flag = 0x%x [70 BS]\n", layer->flag);
+            }
           else
             { // search all specific fields and common fields for the DXF
               const Dwg_DYNAPI_field *f;
