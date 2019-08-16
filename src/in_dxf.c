@@ -836,6 +836,94 @@ new_MLINESTYLE_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 }
 
 static Dxf_Pair *
+new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                Dxf_Pair *restrict pair)
+{
+  BITCODE_BL num_points = pair->value.u;
+  Dwg_Entity_LWPOLYLINE *_o = obj->tio.entity->tio.LWPOLYLINE;
+  int j = -1;
+
+  _o->num_points = num_points;
+  _o->points = calloc (num_points, sizeof (BITCODE_2RD));
+  LOG_TRACE ("LWPOLYLINE.num_points = %u [90 BS]\n", num_points);
+
+  while (pair->code != 0)
+    {
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+      if (pair->code == 0)
+        return pair;
+      else if (pair->code == 43)
+        {
+          _o->const_width = pair->value.d;
+          LOG_TRACE ("LWPOLYLINE.const_width = %f [43 BD]\n", pair->value.d);
+        }
+      else if (pair->code == 70)
+        {
+          _o->flag = pair->value.i;
+          LOG_TRACE ("LWPOLYLINE.flag = %d [70 BS]\n", pair->value.i);
+        }
+      else if (pair->code == 10)
+        {
+          j++; // we always start with 10 (I hope)
+          _o->points[j].x = pair->value.d;
+        }
+      else if (pair->code == 20)
+        {
+          _o->points[j].y = pair->value.d;
+          LOG_TRACE ("LWPOLYLINE.points[%d] = (%f, %f) [10 2RD]\n",
+                     j, _o->points[j].x, _o->points[j].y);
+        }
+      else if (pair->code == 42)
+        {
+          if (!j)
+            {
+              _o->bulges = calloc (num_points, sizeof (BITCODE_2RD));
+              _o->num_bulges = num_points;
+            }
+          _o->bulges[j] = pair->value.d;
+          LOG_TRACE ("LWPOLYLINE.bulges[%d] = %f [42 BD]\n",
+                     j, pair->value.d);
+        }
+      else if (pair->code == 91)
+        {
+          if (!j)
+            {
+              _o->vertexids = calloc (num_points, sizeof (BITCODE_2RD));
+              _o->num_vertexids = num_points;
+            }
+          _o->vertexids[j] = pair->value.d;
+          LOG_TRACE ("LWPOLYLINE.vertexids[%d] = %f [91 BD]\n",
+                     j, pair->value.d);
+        }
+      else if (pair->code == 40 && (_o->flag & 4)) // not const_width
+        {
+          if (!j)
+            {
+              _o->widths = calloc (num_points, sizeof (Dwg_LWPOLYLINE_width));
+              _o->num_widths = num_points;
+            }
+          _o->widths[j].start = pair->value.d;
+          LOG_TRACE ("LWPOLYLINE.widths[%d].start = %f [40 BD]\n",
+                     j, pair->value.d);
+        }
+      else if (pair->code == 41 && (_o->flag & 4)) // not const_width
+        {
+          _o->widths[j].end = pair->value.d;
+          LOG_TRACE ("LWPOLYLINE.widths[%d].end = %f [41 BD]\n",
+                     j, pair->value.d);
+        }
+      else if (pair->code >= 1000 && pair->code < 1999)
+        {
+          add_eed (obj, "LWPOLYLINE", pair);
+        }
+      else
+        LOG_ERROR ("Unknown DXF code %d for LWPOLYLINE", pair->code);
+    }
+  return pair;
+}
+
+static Dxf_Pair *
 new_table_control (const char *restrict name, Bit_Chain *restrict dat,
                    Dwg_Data *restrict dwg)
 {
@@ -1628,6 +1716,15 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                    pair->value.i != 0)
             {
               pair = new_MLINESTYLE_lines (obj, dat, pair);
+              if (pair->code == 0)
+                return pair;
+              break;
+            }
+          else if (pair->code == 90 &&
+                   strEQc (obj->name, "LWPOLYLINE") &&
+                   pair->value.i != 0)
+            {
+              pair = new_LWPOLYLINE (obj, dat, pair);
               if (pair->code == 0)
                 return pair;
               break;

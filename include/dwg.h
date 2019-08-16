@@ -2425,8 +2425,8 @@ typedef struct _dwg_object_LONG_TRANSACTION
  */
 typedef struct _dwg_LWPOLYLINE_width
 {
-  BITCODE_BD start;
-  BITCODE_BD end;
+  BITCODE_BD start; /* 40 */
+  BITCODE_BD end;   /* 41 */
 } Dwg_LWPOLYLINE_width;
 
 typedef struct _dwg_entity_PROXY_LWPOLYLINE
@@ -3810,7 +3810,7 @@ typedef struct _dwg_entity_LWPOLYLINE
   BITCODE_BL num_vertexids;     /*!< r2010+, same as num_points */
   BITCODE_BL* vertexids;        /*!< r2010+ DXF 91 */
   BITCODE_BL num_widths;
-  Dwg_LWPOLYLINE_width* widths; /*!< DXF 41,42 */
+  Dwg_LWPOLYLINE_width* widths; /*!< DXF 40,41 */
 } Dwg_Entity_LWPOLYLINE;
 
 /**
