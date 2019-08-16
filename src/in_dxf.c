@@ -1283,11 +1283,11 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
   int in_reactors = 0;
   int in_blkrefs = 0;
   int is_entity = is_dwg_entity (name);
-  BITCODE_BL rcount1, rcount2, rcount3, vcount;
-  Bit_Chain *hdl_dat, *str_dat;
-  int j, error = 0;
+  //BITCODE_BL rcount1, rcount2, rcount3, vcount;
+  //Bit_Chain *hdl_dat, *str_dat;
+  int j = 0, k = 0, l = 0, error = 0;
   BITCODE_RL curr_inserts = 0;
-  BITCODE_RS flag;
+  BITCODE_RS flag = 0;
   char text[256];
 
   ctrl_hdlv[0] = '\0';
@@ -1583,6 +1583,11 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                 }
               break;
             }
+          if (pair->code == 2 && strEQc (name, "MLINE"))
+            {
+              // ignore name of mlinestyle, already set by ->mlinestyle
+              break;
+            }
           // fall through
         case 70:
           if (ctrl && pair->code == 70)
@@ -1615,6 +1620,130 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               if (pair->code == 0)
                 return pair;
               break;
+            }
+          else if (strEQc (obj->name, "MLINE"))
+            {
+              Dwg_Entity_MLINE *_o = obj->tio.entity->tio.MLINE;
+              if (pair->code == 72)
+                {
+                  _o->num_verts = pair->value.i;
+                  _o->parent = obj->tio.entity;
+                  _o->verts
+                      = calloc (_o->num_verts, sizeof (Dwg_MLINE_vertex));
+                  LOG_TRACE ("MLINE.num_verts = %d [72 BS]\n", _o->num_verts);
+                  j = 0;
+                }
+              else if (pair->code == 73)
+                {
+                  _o->num_lines = pair->value.i;
+                  for (int _j = 0; _j < _o->num_verts; _j++)
+                    {
+                      _o->verts[_j].lines
+                          = calloc (_o->num_lines, sizeof (Dwg_MLINE_line));
+                    }
+                  LOG_TRACE ("MLINE.num_lines = %d [73 BS]\n", _o->num_lines);
+                  k = 0;
+                }
+              else if (pair->code == 11 && _o->num_verts)
+                {
+                  _o->verts[j].parent = _o;
+                  _o->verts[j].vertex.x = pair->value.d;
+                }
+              else if (pair->code == 21 && _o->num_verts)
+                _o->verts[j].vertex.y = pair->value.d;
+              else if (pair->code == 31 && _o->num_verts)
+                {
+                  _o->verts[j].vertex.z = pair->value.d;
+                  LOG_TRACE ("MLINE.verts[%d] = (%f, %f, %f) [11 3BD*]\n", j,
+                             _o->verts[j].vertex.x, _o->verts[j].vertex.y,
+                             _o->verts[j].vertex.z);
+                }
+              else if (pair->code == 12 && _o->num_verts)
+                _o->verts[j].vertex_direction.x = pair->value.d;
+              else if (pair->code == 22 && _o->num_verts)
+                _o->verts[j].vertex_direction.y = pair->value.d;
+              else if (pair->code == 32 && _o->num_verts)
+                {
+                  _o->verts[j].vertex_direction.z = pair->value.d;
+                  LOG_TRACE (
+                      "MLINE.vertex_direction[%d] = (%f, %f, %f) [12 3BD*]\n",
+                      j, _o->verts[j].vertex_direction.x,
+                      _o->verts[j].vertex_direction.y,
+                      _o->verts[j].vertex_direction.z);
+                }
+              else if (pair->code == 13 && _o->num_verts)
+                _o->verts[j].miter_direction.x = pair->value.d;
+              else if (pair->code == 23 && _o->num_verts)
+                _o->verts[j].miter_direction.y = pair->value.d;
+              else if (pair->code == 33 && _o->num_verts)
+                {
+                  _o->verts[j].miter_direction.z = pair->value.d;
+                  LOG_TRACE (
+                      "MLINE.miter_direction[%d] = (%f, %f, %f) [12 3BD*]\n",
+                      j, _o->verts[j].miter_direction.x,
+                      _o->verts[j].miter_direction.y,
+                      _o->verts[j].miter_direction.z);
+                  //if (j != _o->num_verts - 1)
+                  //  j++; // not the last
+                  k = 0;
+                }
+              else if (pair->code == 74 && _o->num_lines)
+                {
+                  if (j >= _o->num_verts || k >= _o->num_lines)
+                    {
+                      LOG_ERROR ("MLINE overflow %d, %d", j, k);
+                      break;
+                    }
+                  _o->verts[j].lines[k].parent = &_o->verts[j];
+                  _o->verts[j].lines[k].num_segparms = pair->value.i;
+                  _o->verts[j].lines[k].segparms
+                      = calloc (pair->value.i, sizeof (BITCODE_BD));
+                  LOG_TRACE ("MLINE.v[%d].l[%d].num_segparms = %d [74 BS]\n",
+                             j, k, pair->value.i);
+                  l = 0;
+                }
+              else if (pair->code == 41 && _o->num_lines)
+                {
+                  _o->verts[j].lines[k].segparms[l] = pair->value.d;
+                  LOG_TRACE ("MLINE.v[%d].l[%d].segparms[%d] = %f [41 BD]\n",
+                             j, k, l, pair->value.d);
+                  l++;
+                }
+              else if (pair->code == 75 && _o->num_lines)
+                {
+                  _o->verts[j].lines[k].num_areafillparms = pair->value.i;
+                  LOG_TRACE ("MLINE.v[%d].l[%d].num_areafillparms = %d [75 BS]\n",
+                             j, k, pair->value.i);
+                  if (!pair->value.i)
+                    {
+                      k++; // next line
+                      if (k == _o->num_lines)
+                        {
+                          j++; // next vertex
+                          k = 0;
+                        }
+                    }
+                  l = 0;
+                }
+              else if (pair->code == 42 && _o->num_lines)
+                {
+                  _o->verts[j].lines[k].areafillparms[l] = pair->value.d;
+                  LOG_TRACE ("MLINE.v[%d].l[%d].areafillparms[%d] = %f [42 BD]\n",
+                             j, k, l, pair->value.d);
+                  l++;
+                  if (l == _o->verts[j].lines[k].num_areafillparms)
+                    {
+                      l = 0;
+                      k++; // next line
+                      if (k == _o->num_lines)
+                        {
+                          j++; // next vertex
+                          k = 0;
+                        }
+                    }
+                }
+              else
+                goto search_field;
             }
           else if (strEQc (obj->name, "SPLINE"))
             {

@@ -2260,9 +2260,9 @@ DWG_ENTITY(MLINE)
 
   REPEAT(num_verts, verts, Dwg_MLINE_vertex)
   REPEAT_BLOCK
-      SUB_FIELD_3DPOINT (verts[rcount1], vertex, 10);
-      SUB_FIELD_3DPOINT (verts[rcount1], vertex_direction, 210);
-      SUB_FIELD_3DPOINT (verts[rcount1], miter_direction, 11);
+      SUB_FIELD_3DPOINT (verts[rcount1], vertex, 11);
+      SUB_FIELD_3DPOINT (verts[rcount1], vertex_direction, 12);
+      SUB_FIELD_3DPOINT (verts[rcount1], miter_direction, 13);
       FIELD_VALUE (verts[rcount1].num_lines) = FIELD_VALUE (num_lines);
 
       REPEAT2_C(num_lines, verts[rcount1].lines, Dwg_MLINE_line)
