@@ -1648,6 +1648,31 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
         }
     }
 
+  /* DXF: patchup size and bitsize */
+  if (!obj->size)
+    {
+      BITCODE_BL pos = bit_position (dat);
+      obj->size = dat->byte - previous_address;
+      obj->bitsize = pos - (previous_address * 8);
+
+      bit_set_position (dat, previous_address * 8);
+      bit_write_MS (dat, obj->size);
+      //TODO: with overlarge sizes >0x7fff memmove dat
+      LOG_TRACE ("size: %u [MS] @%lu\n", obj->size, previous_address);
+      SINCE (R_2013)
+        {
+          if (!obj->handlestream_size && obj->bitsize)
+            obj->handlestream_size = obj->size * 8 - obj->bitsize;
+          bit_write_UMC (dat, obj->handlestream_size);
+          LOG_TRACE ("handlestream_size: %lu\n", obj->handlestream_size);
+        }
+      bit_set_position (dat, obj->bitsize_pos);
+      bit_write_RL (dat, obj->bitsize);
+      LOG_TRACE ("bitsize: %u [RL] @%u.%u\n", obj->bitsize,
+                 pos / 8, pos %8);
+      bit_set_position (dat, pos);
+    }
+
   /*
    if (obj->supertype != DWG_SUPERTYPE_UNKNOWN)
    {
