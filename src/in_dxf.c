@@ -1661,6 +1661,21 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               break;
             }
           // fall through
+        case 340:
+          if (pair->code == 340 && strEQc (name, "GROUP"))
+            {
+              Dwg_Object_GROUP *_o = obj->tio.object->tio.GROUP;
+              BITCODE_H hdl = add_handleref (dwg, 5, pair->value.u, obj);
+              LOG_TRACE ("GROUP.group_entries[%d] = " FORMAT_REF " [340 H]\n",
+                         _o->num_handles, ARGS_REF (hdl));
+              _o->group_entries
+                  = realloc (_o->group_entries,
+                             (_o->num_handles + 1) * sizeof (BITCODE_H));
+              _o->group_entries[_o->num_handles] = hdl;
+              _o->num_handles++;
+              break;
+            }
+          // fall through
         case 2:
           if (ctrl && pair->code == 2)
             {
