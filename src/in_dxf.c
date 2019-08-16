@@ -1565,7 +1565,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
           if (ctrl && pair->code == 2)
             {
               dwg_dynapi_entity_set_value (_obj, obj->name, "name", &pair->value,
-                                       is_utf);
+                                           is_utf);
               LOG_TRACE ("%s.name = %s [2 T]\n", name, pair->value.s);
               if (strEQc (name, "BLOCK_RECORD"))
                 {

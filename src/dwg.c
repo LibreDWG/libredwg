@@ -1419,8 +1419,10 @@ dwg_find_tablehandle (const Dwg_Data *restrict dwg,
       if (!hdlv[i]->obj)
         continue;
       _o = hdlv[i]->obj->tio.object->tio.APPID;
-      dwg_dynapi_entity_value (_o, hdlv[i]->obj->name, "name",
-                               &hdlname, NULL);
+      dwg_dynapi_entity_utf8text (_o, hdlv[i]->obj->name, "name",
+                                  &hdlname, NULL);
+      LOG_HANDLE (" %s.%s[%d] => %s.name: %s\n", ctrl->obj->name, ctrl_hdlv, i,
+                  hdlv[i]->obj->name, hdlname ? hdlname : "NULL");
       if (hdlname && strEQ (name, hdlname))
         {
           return hdlv[i];

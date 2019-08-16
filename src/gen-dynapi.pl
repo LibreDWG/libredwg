@@ -876,7 +876,7 @@ close $fh;
 
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 778 "gen-dynapi.pl"
+#line 880 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -942,7 +942,7 @@ static const struct _name_type_fields dwg_name_types[] = {
   @@enum DWG_OBJECT_TYPE@@
 };
 
-#line 844 "gen-dynapi.pl"
+#line 946 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
@@ -1367,16 +1367,13 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
   if (f->is_string)
     {
       //ascii or wide?
-      if (strEQc (f->type, "TF")
-          || ((strEQc (f->type, "T") || strEQc (f->type, "TV"))
-              && dwg_version < R_2007))
+      if (strEQc (f->type, "TF") || dwg_version < R_2007)
         {
           char *str = malloc (strlen (*(char**)value)+1);
           strcpy (str, *(char**)value);
           memcpy (old, &str, f->size); // size of ptr
         }
-      else if (strEQc (f->type, "TU")
-               || (strEQc (f->type, "T") && dwg_version >= R_2007))
+      else if (strNE (f->type, "TF") && dwg_version >= R_2007)
         {
           BITCODE_TU wstr;
           if (is_utf8)
