@@ -10934,7 +10934,7 @@ static int test_HELIX (const Dwg_Object *obj)
         && !memcmp (&axis_vector, &helix->axis_vector, sizeof (helix->axis_vector)))
         pass ();
     else
-        fail ("HELIX.axis_vector [3BD]");
+        fail ("HELIX.axis_vector [3BD_1]");
   }
   {
     BITCODE_3BD beg_tan_vec;
@@ -11316,7 +11316,7 @@ static int test_HELIX (const Dwg_Object *obj)
         && !memcmp (&start_pt, &helix->start_pt, sizeof (helix->start_pt)))
         pass ();
     else
-        fail ("HELIX.start_pt [3BD]");
+        fail ("HELIX.start_pt [3BD_1]");
   }
   {
     BITCODE_BD turn_height;
@@ -11697,12 +11697,12 @@ static int test_INSERT (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_3DPOINT scale;
+    BITCODE_3BD scale;
     if (dwg_dynapi_entity_value (insert, "INSERT", "scale", &scale, NULL)
         && !memcmp (&scale, &insert->scale, sizeof (insert->scale)))
         pass ();
     else
-        fail ("INSERT.scale [3DPOINT]");
+        fail ("INSERT.scale [3BD_1]");
   }
   {
     BITCODE_BB scale_flag;
@@ -13432,12 +13432,12 @@ static int test_MINSERT (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_3DPOINT scale;
+    BITCODE_3BD scale;
     if (dwg_dynapi_entity_value (minsert, "MINSERT", "scale", &scale, NULL)
         && !memcmp (&scale, &minsert->scale, sizeof (minsert->scale)))
         pass ();
     else
-        fail ("MINSERT.scale [3DPOINT]");
+        fail ("MINSERT.scale [3BD_1]");
   }
   {
     BITCODE_BB scale_flag;
@@ -18843,7 +18843,7 @@ static int test_TABLE (const Dwg_Object *obj)
         && !memcmp (&scale, &table->scale, sizeof (table->scale)))
         pass ();
     else
-        fail ("TABLE.scale [3BD]");
+        fail ("TABLE.scale [3BD_1]");
   }
   {
     BITCODE_H seqend;
@@ -19860,7 +19860,7 @@ static int test_UNDERLAY (const Dwg_Object *obj)
         && !memcmp (&scale, &underlay->scale, sizeof (underlay->scale)))
         pass ();
     else
-        fail ("UNDERLAY.scale [3BD]");
+        fail ("UNDERLAY.scale [3BD_1]");
   }
   {
     BITCODE_H underlay_layer;
@@ -28158,18 +28158,18 @@ static int test_LAYOUT (const Dwg_Object *obj)
         fail ("LAYOUT.named_ucs [H]");
   }
   {
-    BITCODE_RL num_viewports;
+    BITCODE_BL num_viewports;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "num_viewports", &num_viewports, NULL)
         && num_viewports == layout->num_viewports)
       pass ();
     else
-      fail ("LAYOUT.num_viewports [RL] %u != %u", layout->num_viewports, num_viewports);
+      fail ("LAYOUT.num_viewports [BL] %u != %u", layout->num_viewports, num_viewports);
     num_viewports++;
     if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "num_viewports", &num_viewports, 0)
         && num_viewports == layout->num_viewports)
       pass ();
     else
-      fail ("LAYOUT.num_viewports [RL] set+1 %u != %u", layout->num_viewports, num_viewports);
+      fail ("LAYOUT.num_viewports [BL] set+1 %u != %u", layout->num_viewports, num_viewports);
     layout->num_viewports--;
 
   }
@@ -28216,12 +28216,12 @@ static int test_LAYOUT (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_2DPOINT paper_image_origin;
+    BITCODE_2BD paper_image_origin;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "paper_image_origin", &paper_image_origin, NULL)
         && !memcmp (&paper_image_origin, &layout->paper_image_origin, sizeof (layout->paper_image_origin)))
         pass ();
     else
-        fail ("LAYOUT.paper_image_origin [2DPOINT]");
+        fail ("LAYOUT.paper_image_origin [2BD_1]");
   }
   {
     BITCODE_TV paper_size;
@@ -28290,12 +28290,12 @@ static int test_LAYOUT (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_2DPOINT plot_origin;
+    BITCODE_2BD plot_origin;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "plot_origin", &plot_origin, NULL)
         && !memcmp (&plot_origin, &layout->plot_origin, sizeof (layout->plot_origin)))
         pass ();
     else
-        fail ("LAYOUT.plot_origin [2DPOINT]");
+        fail ("LAYOUT.plot_origin [2BD_1]");
   }
   {
     BITCODE_BS plot_rotation;
@@ -28552,20 +28552,20 @@ static int test_LAYOUT (const Dwg_Object *obj)
         fail ("LAYOUT.visual_style [H]");
   }
   {
-    BITCODE_2DPOINT window_max;
+    BITCODE_2BD window_max;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "window_max", &window_max, NULL)
         && !memcmp (&window_max, &layout->window_max, sizeof (layout->window_max)))
         pass ();
     else
-        fail ("LAYOUT.window_max [2DPOINT]");
+        fail ("LAYOUT.window_max [2BD_1]");
   }
   {
-    BITCODE_2DPOINT window_min;
+    BITCODE_2BD window_min;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "window_min", &window_min, NULL)
         && !memcmp (&window_min, &layout->window_min, sizeof (layout->window_min)))
         pass ();
     else
-        fail ("LAYOUT.window_min [2DPOINT]");
+        fail ("LAYOUT.window_min [2BD_1]");
   }
   return failed;
 }
@@ -31396,7 +31396,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
         && !memcmp (&paper_image_origin, &plotsettings->paper_image_origin, sizeof (plotsettings->paper_image_origin)))
         pass ();
     else
-        fail ("PLOTSETTINGS.paper_image_origin [2BD]");
+        fail ("PLOTSETTINGS.paper_image_origin [2BD_1]");
   }
   {
     BITCODE_T paper_size;
@@ -31452,7 +31452,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
         && !memcmp (&plot_origin, &plotsettings->plot_origin, sizeof (plotsettings->plot_origin)))
         pass ();
     else
-        fail ("PLOTSETTINGS.plot_origin [2BD]");
+        fail ("PLOTSETTINGS.plot_origin [2BD_1]");
   }
   {
     BITCODE_BS plot_paper_units;
@@ -31508,7 +31508,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
         && !memcmp (&plot_window_ll, &plotsettings->plot_window_ll, sizeof (plotsettings->plot_window_ll)))
         pass ();
     else
-        fail ("PLOTSETTINGS.plot_window_ll [2BD]");
+        fail ("PLOTSETTINGS.plot_window_ll [2BD_1]");
   }
   {
     BITCODE_2BD plot_window_ur;
@@ -31516,7 +31516,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
         && !memcmp (&plot_window_ur, &plotsettings->plot_window_ur, sizeof (plotsettings->plot_window_ur)))
         pass ();
     else
-        fail ("PLOTSETTINGS.plot_window_ur [2BD]");
+        fail ("PLOTSETTINGS.plot_window_ur [2BD_1]");
   }
   {
     BITCODE_H plotview;

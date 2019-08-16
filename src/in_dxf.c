@@ -1405,6 +1405,17 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
   // read table fields until next 0 table or 0 ENDTAB
   while (pair->code != 0)
     {
+#if 0
+      // don't set defaults. TODO but needed to reset counters j, k, l
+      if ((pair->type == VT_INT8 || pair->type == VT_INT16 || pair->type == VT_BOOL) &&
+          pair->value.i == 0)
+        goto next_pair;
+      else if (pair->type == VT_REAL && pair->value.d == 0.0)
+        goto next_pair;
+      else if ((pair->type == VT_INT32 || pair->type == VT_INT64) &&
+               pair->value.l == 0L)
+        goto next_pair;
+#endif
       switch (pair->code)
         { // common flags: name, xrefref, xrefdep, ...
         case 0:
@@ -1901,7 +1912,13 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                 }
               for (f = &fields[0]; f->name; f++)
                 {
-                  if (f->dxf == pair->code)
+                  // VECTOR, needs to be malloced
+                  if (*f->type != 'T' && f->is_malloc && !f->is_string)
+                    {
+                      LOG_HANDLE ("Warning: Ignore %s.%s VECTOR [%s]\n", obj->name,
+                                  f->name, f->type);
+                    }
+                  else if (f->dxf == pair->code) // matching DXF code
                     {
                       if (pair->code == 3 &&
                           memBEGINc (obj->name, "DICTIONARY") &&
@@ -1951,11 +1968,13 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                             }
                           goto next_pair; // found
                         }
-                      // only 2D or 3D points
+                      // only 2D or 3D points .x
                       else if (f->size > 8
                           && (strchr (f->type, '2') || strchr (f->type, '3')))
                         {
                           BITCODE_3BD pt;
+                          if (pair->value.d == 0.0) // ignore defaults
+                            goto next_pair;
                           pt.x = pair->value.d;
                           dwg_dynapi_entity_set_value (_obj, obj->name,
                                                        f->name, &pt, is_utf);
@@ -2007,11 +2026,14 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                         }
                       goto next_pair; // found, early exit
                     }
-                  else if ((*f->type == '3' || *f->type == '2')
-                           && f->dxf + 10 == pair->code)
+                  // wrong code, maybe a point .y or .z
+                  else if ((*f->type == '3' || *f->type == '2') &&
+                           (strstr(f->type, "_1")
+                            ? f->dxf + 1 == pair->code // 2BD_1
+                            : f->dxf + 10 == pair->code))
                     {
                       BITCODE_3DPOINT pt;
-                      if (pair->value.d == 0.0)
+                      if (pair->value.d == 0.0) // ignore defaults
                         goto next_pair;
                       dwg_dynapi_entity_value (_obj, obj->name, f->name, &pt,
                                                NULL);
@@ -2023,10 +2045,12 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                       goto next_pair; // found, early exit
                     }
                   else if ((*f->type == '3' || *f->type == '2') &&
-                           f->dxf + 20 == pair->code)
-                    {
+                           (strstr(f->type, "_1")
+                            ? f->dxf + 2 == pair->code // 2BD_1
+                            : f->dxf + 20 == pair->code))
+                  {
                       BITCODE_3DPOINT pt;
-                      if (pair->value.d == 0.0 || *f->type == '2') // ignore z
+                      if (pair->value.d == 0.0 || *f->type == '2') // ignore z or 0.0
                         goto next_pair;
                       dwg_dynapi_entity_value (_obj, obj->name, f->name, &pt,
                                                NULL);
@@ -2283,6 +2307,8 @@ dxf_preview_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       switch (pair->code)
         {
+        case 0: // ENDSEC
+          return 0;
         case 90:
           dwg->picture.size = pair->value.l;
           dwg->picture.chain = calloc (dwg->picture.size, 1);
@@ -2317,8 +2343,9 @@ dxf_preview_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                        dwg->picture.size);
           }
           break;
-        case 0:
-          return 0;
+        default:
+          LOG_ERROR ("Unknown DXF code %d for PICTURE", pair->code);
+          break;
         }
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);

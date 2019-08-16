@@ -213,6 +213,7 @@ typedef Dwg_Bitcode_TimeBLL BITCODE_TIMEBLL;
 typedef Dwg_Bitcode_2RD  BITCODE_2RD;
 typedef Dwg_Bitcode_2BD  BITCODE_2BD;
 typedef Dwg_Bitcode_2BD  BITCODE_2DPOINT;
+typedef Dwg_Bitcode_2BD  BITCODE_2BD_1;
 typedef Dwg_Bitcode_3RD  BITCODE_3RD;
 typedef Dwg_Bitcode_3BD  BITCODE_3BD;
 typedef Dwg_Bitcode_3BD  BITCODE_3DPOINT;
@@ -2952,19 +2953,19 @@ typedef struct _dwg_object_LAYOUT
   BITCODE_BD paper_width;
   BITCODE_BD paper_height;
   BITCODE_TV paper_size;
-  BITCODE_2DPOINT plot_origin;
+  BITCODE_2BD_1 plot_origin;
   BITCODE_BS paper_units;
   BITCODE_BS plot_rotation;
   BITCODE_BS plot_type;
-  BITCODE_2DPOINT window_min;
-  BITCODE_2DPOINT window_max;
+  BITCODE_2BD_1 window_min;
+  BITCODE_2BD_1 window_max;
   BITCODE_TV plot_view_name;
   BITCODE_BD real_world_units;
   BITCODE_BD drawing_units;
   BITCODE_TV current_style_sheet;
   BITCODE_BS scale_type;
   BITCODE_BD scale_factor;
-  BITCODE_2DPOINT paper_image_origin;
+  BITCODE_2BD_1 paper_image_origin;
   BITCODE_BS shade_plot_mode;
   BITCODE_BS shade_plot_res_level;
   BITCODE_BS shade_plot_custom_dpi;
@@ -2981,7 +2982,7 @@ typedef struct _dwg_object_LAYOUT
   BITCODE_BS orthoview_type;
   BITCODE_3DPOINT extent_min;
   BITCODE_3DPOINT extent_max;
-  BITCODE_RL num_viewports;
+  BITCODE_BL num_viewports;
   BITCODE_H plot_view;
   BITCODE_H visual_style;
   BITCODE_H pspace_block_record;
@@ -4152,9 +4153,9 @@ typedef struct _dwg_object_PLOTSETTINGS
   BITCODE_BD top_margin;      /*!< DXF 44 */
   BITCODE_BD paper_width;     /*!< DXF 44, in mm */
   BITCODE_BD paper_height;    /*!< DXF 45, in mm */
-  BITCODE_2BD plot_origin;           /*!< DXF 46 */ // + 47
-  BITCODE_2BD plot_window_ll;      /*!< DXF 48 */ // + 49
-  BITCODE_2BD plot_window_ur;      /*!< DXF 140 */ // + 141
+  BITCODE_2BD_1 plot_origin;         /*!< DXF 46 */ // + 47
+  BITCODE_2BD_1 plot_window_ll;      /*!< DXF 48 */ // + 49
+  BITCODE_2BD_1 plot_window_ur;      /*!< DXF 140 */ // + 141
   BITCODE_BD num_custom_print_scale; /*!< DXF 142 */ // in paper units
   BITCODE_BD den_custom_print_scale; /*!< DXF 143 */ // in drawing units
   BITCODE_BS plot_layout;    /*!< DXF 70
@@ -4194,7 +4195,7 @@ typedef struct _dwg_object_PLOTSETTINGS
   BITCODE_BS shade_plot_res_level; /*!< DXF 77, 0 draft, 1 preview, 2 nomal,
                                                 3 presentation, 4 maximum, 5 custom */
   BITCODE_BS  shade_plot_custom_dpi; /*!< DXF 78, 100-32767 */
-  BITCODE_2BD paper_image_origin;    /*!< DXF 148 + 149 */
+  BITCODE_2BD_1 paper_image_origin;  /*!< DXF 148 + 149 */
   BITCODE_H   shade_plot_id;         /*!< DXF 333  optional */
 } Dwg_Object_PLOTSETTINGS;
 

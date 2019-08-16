@@ -170,9 +170,13 @@ sub dxf_in {
     } elsif (/^\s+VALUE_HANDLE\s*\(.+,\s*(\w+),\s*\d,\s*(\d+)\)/) {
       $f = $1;
       $DXF{$n}->{$f} = $2 if $2;
-    } elsif (/^\s+FIELD_.+\s*\((\w+),\s*(\d+)\)/) {
-      $f = $1;
-      $DXF{$n}->{$f} = $2 if $2;
+    } elsif (/^\s+FIELD_(.+?)\s*\((\w+),\s*(\d+)\)/) {
+      my $type = $1;
+      $f = $2;
+      $DXF{$n}->{$f} = $3 if $3;
+      if ($type =~ /^[23][RB]D_1/) {
+        $ENT{$n}->{$f} = $type;
+      }
     } elsif (/^\s+FIELD_(?:CMC|ENC)\s*\((\w+),\s*(\d+),\s*(\d+)\)/) {
       $f = $1;
       $DXF{$n}->{$f} = $2 if $2;
@@ -182,9 +186,13 @@ sub dxf_in {
         $DXF{$n}->{"$f.book"} = $3 + 10;
         $DXF{$n}->{"$f.alpha"} = $3 + 20;
       }
-    } elsif (/^\s+FIELD_.+\s*\((\w+),.*,\s*(\d+)\)/) {
-      $f = $1;
-      $DXF{$n}->{$f} = $2 if $2;
+    } elsif (/^\s+FIELD_(.+?)\s*\((\w+),.*,\s*(\d+)\)/) {
+      my $type = $1;
+      $f = $2;
+      $DXF{$n}->{$f} = $3 if $3;
+      if ($type =~ /^[23][RB]D_1/) {
+        $ENT{$n}->{$f} = $type;
+      }
     } elsif (/^\s+HANDLE_VECTOR\s*\((\w+),.*?,\s*(\d+)\)/) {
       $f = $1;
       $DXF{$n}->{$f} = $2 if $2;
@@ -378,7 +386,11 @@ sub out_struct {
       $size = "$1 * $size";
       $sname =~ s/\[(\d+)\]$//;
     }
-    $ENT{$key}->{$name} = $type;
+    if ($ENT{$key}->{$name}) {
+      $type = $ENT{$key}->{$name};
+    } else {
+      $ENT{$key}->{$name} = $type;
+    }
     my $dxf = $DXF{$key}->{$name};
     $dxf = 0 unless $dxf;
     warn "no dxf for $key: $name 0\n" unless $dxf or
@@ -594,6 +606,7 @@ for (<$in>) {
       if (exists $ENT{header_variables}->{$name}) {
         $type = $ENT{header_variables}->{$name};
       }
+      $type =~ s/D_1$/D/;
       my $fmt = exists $FMT{$type} ? $FMT{$type} : undef;
       if (!$fmt) {
         if ($type =~ /[ \*]/ or $type eq 'H') {
@@ -711,6 +724,7 @@ EOF
       $svar =~ s/\[\d+\]$//g;
     }
     my $stype = $type;
+    $type =~ s/D_1$/D/;
     $type = 'BITCODE_'.$type unless ($type =~ /^(struct|Dwg_)/ or $type =~ /^[a-z]/);
     if (!$is_ptr) {
       print $fh <<"EOF";

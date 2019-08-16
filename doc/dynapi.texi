@@ -1865,9 +1865,9 @@ BS,	DXF 91
 @item axis_base_pt
 3BD,	DXF 10
 @item start_pt
-3BD,	DXF 11
+3BD_1,	DXF 11
 @item axis_vector
-3BD,	DXF 12
+3BD_1,	DXF 12
 @item radius
 BD,	DXF 40
 @item num_turns
@@ -1945,7 +1945,7 @@ struct _dwg_object_entity*
 @item scale_flag
 BB
 @item scale
-3DPOINT,	DXF 41
+3BD_1,	DXF 41
 @item rotation
 BD,	DXF 50
 @item extrusion
@@ -2259,7 +2259,7 @@ struct _dwg_object_entity*
 @item scale_flag
 BB
 @item scale
-3DPOINT,	DXF 41
+3BD_1,	DXF 41
 @item rotation
 BD,	DXF 50
 @item extrusion
@@ -3182,7 +3182,7 @@ BL
 @item insertion_point
 3BD,	DXF 10
 @item scale
-3BD,	DXF 41
+3BD_1,	DXF 41
 @item data_flags
 BB
 @item rotation
@@ -3538,7 +3538,7 @@ struct _dwg_object_entity*
 @item insertion_pt
 3BD,	DXF 10
 @item scale
-3BD,	DXF 41
+3BD_1,	DXF 41
 @item angle
 BD,	DXF 50
 @item flag
@@ -5258,7 +5258,7 @@ BD,	DXF 45
 @item paper_size
 TV,	DXF 4
 @item plot_origin
-2DPOINT,	DXF 46
+2BD_1,	DXF 46
 @item paper_units
 BS,	DXF 72
 @item plot_rotation
@@ -5266,9 +5266,9 @@ BS,	DXF 73
 @item plot_type
 BS,	DXF 74
 @item window_min
-2DPOINT,	DXF 48
+2BD_1,	DXF 48
 @item window_max
-2DPOINT,	DXF 140
+2BD_1,	DXF 140
 @item plot_view_name
 TV,	DXF 6
 @item real_world_units
@@ -5282,7 +5282,7 @@ BS,	DXF 75
 @item scale_factor
 BD,	DXF 147
 @item paper_image_origin
-2DPOINT,	DXF 148
+2BD_1,	DXF 148
 @item shade_plot_mode
 BS,	DXF 76
 @item shade_plot_res_level
@@ -5316,7 +5316,7 @@ BS,	DXF 76
 @item extent_max
 3DPOINT,	DXF 15
 @item num_viewports
-RL
+BL
 @item plot_view
 H,	DXF 6
 @item visual_style
@@ -5897,11 +5897,11 @@ BD,	DXF 44
 @item paper_height
 BD,	DXF 45
 @item plot_origin
-2BD,	DXF 46
+2BD_1,	DXF 46
 @item plot_window_ll
-2BD,	DXF 48
+2BD_1,	DXF 48
 @item plot_window_ur
-2BD,	DXF 140
+2BD_1,	DXF 140
 @item num_custom_print_scale
 BD,	DXF 142
 @item den_custom_print_scale
@@ -5929,7 +5929,7 @@ BS,	DXF 77
 @item shade_plot_custom_dpi
 BS,	DXF 78
 @item paper_image_origin
-2BD,	DXF 148
+2BD_1,	DXF 148
 @item shade_plot_id
 H,	DXF 333
 
