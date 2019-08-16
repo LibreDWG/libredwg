@@ -1411,6 +1411,8 @@ dwg_find_tablehandle (const Dwg_Data *restrict dwg,
   for (i = 0; i < num_entries; i++)
     {
       char *hdlname;
+      if (!hdlv[i])
+        continue;
       if (!hdlv[i]->obj && hdlv[i]->handleref.value)
         hdlv[i]->obj = dwg_resolve_handle (dwg, hdlv[i]->handleref.value);
       if (!hdlv[i]->obj)
