@@ -64,6 +64,7 @@ help (void)
   printf ("Default DWGFILE: DXFFILE with .dwg extension in the current "
           "directory.\n"
           "Existing files are not overwritten, unless -y is given.\n"
+          "Encoding currently only works for R13-R2000, dxf2dwg is highly experimental.\n"
           "\n");
 #ifdef HAVE_GETOPT_LONG
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
@@ -235,6 +236,7 @@ main (int argc, char *argv[])
         }
 
       dwg.opts = opts;
+      printf ("Warning: dxf2dwg is still highly experimental.\n");
       printf ("Reading DXF file %s\n", filename_in);
       error = dxf_read_file (filename_in, &dwg);
       if (error >= DWG_ERR_CRITICAL)
@@ -242,20 +244,20 @@ main (int argc, char *argv[])
           fprintf (stderr, "READ ERROR 0x%x %s\n", error, filename_in);
           continue;
         }
-      printf ("TODO: fixing up post-DXF not yet done\n");
-      // sections, second header, ...
 
       printf ("Writing DWG file %s", filename_out);
       if (version)
         {
           printf (" as %s\n", version);
           dwg.header.version = dwg_version;
+          if (dwg_version > R_2000)
+            printf ("Warning: encode currently only works for R13-R2000.\n");
           if (dwg.header.from_version == R_INVALID)
             dwg.header.from_version = dwg.header.version;
         }
       else
         {
-          // FIXME: for now only R_2000
+          // FIXME: for now only R_2000. later remove this line.
           dwg.header.version = dwg_version;
           printf ("\n");
         }
