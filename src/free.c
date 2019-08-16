@@ -362,7 +362,7 @@ dwg_free_common_entity_handle_data (Dwg_Object *obj)
     return;
   _obj = ent;
 
-#include "common_entity_handle_data.spec"
+  #include "common_entity_handle_data.spec"
 }
 
 static void
@@ -382,7 +382,7 @@ dwg_free_common_entity_data (Dwg_Object *obj)
     return;
   _obj = ent;
 
-#include "common_entity_data.spec"
+  #include "common_entity_data.spec"
 }
 
 static void
