@@ -1300,7 +1300,7 @@ static const Dwg_DYNAPI_field _dwg_MTEXT_fields[] = {
   { "insertion_pt", "3BD", sizeof (BITCODE_3BD), OFF (struct _dwg_entity_MTEXT,insertion_pt), 1,0,0, 10 },
   { "extrusion", "3BD", sizeof (BITCODE_3BD), OFF (struct _dwg_entity_MTEXT,extrusion), 1,0,0, 210 },
   { "x_axis_dir", "3BD", sizeof (BITCODE_3BD), OFF (struct _dwg_entity_MTEXT,x_axis_dir), 1,0,0, 11 },
-  { "rect_height", "BD", sizeof (BITCODE_BD), OFF (struct _dwg_entity_MTEXT,rect_height), 0,0,0, 0 },
+  { "rect_height", "BD", sizeof (BITCODE_BD), OFF (struct _dwg_entity_MTEXT,rect_height), 0,0,0, 46 },
   { "rect_width", "BD", sizeof (BITCODE_BD), OFF (struct _dwg_entity_MTEXT,rect_width), 0,0,0, 41 },
   { "text_height", "BD", sizeof (BITCODE_BD), OFF (struct _dwg_entity_MTEXT,text_height), 0,0,0, 40 },
   { "attachment", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_entity_MTEXT,attachment), 0,0,0, 71 },

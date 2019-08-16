@@ -2337,7 +2337,7 @@ struct _dwg_object_entity*
 @item x_axis_dir
 3BD,	DXF 11
 @item rect_height
-BD
+BD,	DXF 46
 @item rect_width
 BD,	DXF 41
 @item text_height

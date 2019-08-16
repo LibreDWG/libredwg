@@ -2096,7 +2096,7 @@ DWG_ENTITY(MTEXT)
 
   FIELD_BD (rect_width, 41);
   SINCE (R_2007) {
-    FIELD_BD (rect_height, 0);
+    FIELD_BD (rect_height, 46);
   }
 
   FIELD_BD (text_height, 40);
