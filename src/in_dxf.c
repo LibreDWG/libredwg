@@ -1961,6 +1961,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                                                        f->name, &pt, is_utf);
                           LOG_TRACE ("%s.%s.x = %f [%d %s]\n", name, f->name,
                                      pair->value.d, pair->code, f->type);
+                          goto next_pair; // found
                         }
                       else if (f->size > 8 && strEQc (f->type, "CMC"))
                         {
@@ -2021,10 +2022,11 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                                  pair->value.d, pair->code, f->type);
                       goto next_pair; // found, early exit
                     }
-                  else if (*f->type == '3' && f->dxf + 20 == pair->code)
+                  else if ((*f->type == '3' || *f->type == '2') &&
+                           f->dxf + 20 == pair->code)
                     {
                       BITCODE_3DPOINT pt;
-                      if (pair->value.d == 0.0)
+                      if (pair->value.d == 0.0 || *f->type == '2') // ignore z
                         goto next_pair;
                       dwg_dynapi_entity_value (_obj, obj->name, f->name, &pt,
                                                NULL);
