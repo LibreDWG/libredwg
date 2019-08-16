@@ -1733,7 +1733,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               pair = new_MLINESTYLE_lines (obj, dat, pair);
               if (pair->code == 0)
                 return pair;
-              break;
+              goto next_pair;
             }
           else if (pair->code == 90 &&
                    strEQc (obj->name, "LWPOLYLINE") &&
@@ -1742,7 +1742,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               pair = new_LWPOLYLINE (obj, dat, pair);
               if (pair->code == 0)
                 return pair;
-              break;
+              goto next_pair;
             }
           else if (strEQc (obj->name, "MLINE"))
             {
@@ -2024,11 +2024,12 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                 }
               for (f = &fields[0]; f->name; f++)
                 {
-                  // VECTOR, needs to be malloced
-                  if (*f->type != 'T' && f->is_malloc && !f->is_string)
+                  // VECTOR, needs to be malloced, and treated specially
+                  if (pair->code != 3 && f->is_malloc && !f->is_string)
                     {
-                      LOG_HANDLE ("Warning: Ignore %s.%s VECTOR [%s]\n", obj->name,
-                                  f->name, f->type);
+                      if (f->dxf == pair->code)
+                        LOG_TRACE ("Warning: Ignore %s.%s VECTOR [%s %d]\n", obj->name,
+                                   f->name, f->type, pair->code);
                     }
                   else if (f->dxf == pair->code) // matching DXF code
                     {
