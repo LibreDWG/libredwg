@@ -37,6 +37,7 @@
 static int opts = 1;
 int minimal = 0;
 int binary = 0;
+int overwrite = 0;
 char buf[4096];
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
@@ -61,7 +62,7 @@ help (void)
   printf ("Converts DWG files to DXF.\n");
   printf ("Default DXFFILE: DWGFILE with .dxf extension in the current "
           "directory.\n"
-          "Existing files are silently overwritten.\n"
+          "Existing files are not overwritten, unless -y is given.\n"
           "\n");
 #ifdef HAVE_GETOPT_LONG
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
@@ -70,10 +71,11 @@ help (void)
   printf ("             r12, r14, r2000, r2004, r2007, r2010, r2013\n");
   printf ("           Planned versions:\n");
   printf ("             r9, r10, r11, r2018\n");
-  printf (
-      "  -m, --minimal             only $ACADVER, HANDSEED and ENTITIES\n");
+  printf ("  -m, --minimal             only $ACADVER, HANDSEED and "
+          "ENTITIES\n");
   printf ("  -b, --binary              save as binary DXF\n");
-  printf ("  -o outfile, --file        only valid with one single DWGFILE\n");
+  printf ("  -y, --overwrite           overwrite existing files\n");
+  printf ("  -o outfile, --file        optional, only valid with one single DWGFILE\n");
   printf ("      --help                display this help and exit\n");
   printf ("      --version             output version information and exit\n"
           "\n");
@@ -86,7 +88,8 @@ help (void)
   printf ("                r9, r10, r11, r2004, r2007, r2010, r2013, r2018\n");
   printf ("  -m          minimal, only $ACADVER, HANDSEED and ENTITIES\n");
   printf ("  -b          save as binary DXF\n");
-  printf ("  -o dwgfile\n");
+  printf ("  -y          overwrite existing files\n");
+  printf ("  -o dwgfile  optional, only valid with one single DWGFILE\n");
   printf ("  -h          display this help and exit\n");
   printf ("  -i          output version information and exit\n"
           "\n");
@@ -116,6 +119,7 @@ main (int argc, char *argv[])
       = { { "verbose", 1, &opts, 1 }, // optional
           { "file", 1, 0, 'o' },      { "as", 1, 0, 'a' },
           { "minimal", 0, 0, 'm' },   { "binary", 0, 0, 'b' },
+          { "overwrite", 0, 0, 'y' },
           { "help", 0, 0, 0 },        { "version", 0, 0, 0 },
           { NULL, 0, NULL, 0 } };
 #endif
@@ -126,7 +130,7 @@ main (int argc, char *argv[])
   while
 #ifdef HAVE_GETOPT_LONG
       ((c
-        = getopt_long (argc, argv, ":mba:v::o:h", long_options, &option_index))
+        = getopt_long (argc, argv, "mbya:v::o:h", long_options, &option_index))
        != -1)
 #else
       ((c = getopt (argc, argv, ":mba:v::o:hi")) != -1)
@@ -176,6 +180,9 @@ main (int argc, char *argv[])
           break;
         case 'b':
           binary = 1;
+          break;
+        case 'y':
+          overwrite = 1;
           break;
         case 'o':
           filename_out = optarg;
@@ -269,7 +276,16 @@ main (int argc, char *argv[])
 
       if (minimal)
         dwg.opts |= 0x10;
-      dat.fh = fopen (filename_out, "wb");
+      {
+        struct stat attrib;
+        if (stat (filename_out, &attrib) && !overwrite)
+          {
+            LOG_ERROR ("File not overwritten: %s, use -y\n", filename_out);
+            error |= DWG_ERR_IOERROR;
+          }
+        else
+          dat.fh = fopen (filename_out, "wb");
+      }
       if (!dat.fh)
         {
           fprintf (stderr, "WRITE ERROR %s\n", filename_out);

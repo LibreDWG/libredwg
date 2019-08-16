@@ -20,7 +20,7 @@ enable_debug="$(grep '^CFLAGS =' Makefile | grep 'DDEBUG_CLASSES')"
 
 check_subentity() {
     if [ -f "$dwg" ] && [ -f "$dxf" ]; then
-        ../libtool --mode=execute ./dwg2dxf -v4 -o "$tgt" "$dwg" 2>/dev/null
+        ../libtool --mode=execute ./dwg2dxf -y -v4 -o "$tgt" "$dwg" 2>/dev/null
         grep -A8 ^VERTEX "$dxf" >tmp1
         grep -A8 ^VERTEX "$tgt" >tmp2
         d="$(diff -b tmp1 tmp2)"
@@ -63,7 +63,7 @@ done
 
 check_acdb_dxfname() {
     if [ -f "$dwg" ] && [ -f $dxf ]; then
-        ../libtool --mode=execute ./dwg2dxf -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
+        ../libtool --mode=execute ./dwg2dxf -y -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
         expect=$(grep -c ^$dxfname "$dxf")
         if [ -n "$1" ]; then expect=$1; fi
         got=$(grep -c ^$dxfname "$tgt")
@@ -119,7 +119,7 @@ done
 # check vertex - seqend order
 check_pline_order() {
     if [ -f "$dwg" ] && [ -f $dxf ]; then
-        ../libtool --mode=execute ./dwg2dxf -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
+        ../libtool --mode=execute ./dwg2dxf -y -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
         got=$(egrep '^(POLYLINE|VERTEX|SEQEND)' "$tgt")
         expect=$(egrep '^(POLYLINE|VERTEX|SEQEND)' "$dxf")
         if [ "$got" = "$expect" ]
@@ -136,7 +136,7 @@ check_pline_order() {
 # check insert - attrib - seqend order
 check_insert_order() {
     if [ -f "$dwg" ] && [ -f $dxf ]; then
-        ../libtool --mode=execute ./dwg2dxf -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
+        ../libtool --mode=execute ./dwg2dxf -y -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
         got=$(egrep '^(INSERT|ATTRIB|SEQEND)' "$tgt")
         expect=$(egrep '^(INSERT|ATTRIB|SEQEND)' "$dxf")
         if [ "$got" = "$expect" ]

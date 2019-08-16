@@ -11,8 +11,8 @@
 /*****************************************************************************/
 
 /*
- * dxf2dwg.c: save a DXF as DWG. Detect ascii/binary, minimal/full.
- * Optionally as a different version. WIP
+ * dxf2dwg.c: save a DXF as DWG. Detect ascii/binary. No minimal, only full.
+ * Optionally as a different version. Only r2000 encode-support so far.
  *
  * written by Reini Urban
  */
@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <unistd.h>
 #include <getopt.h>
 #ifdef HAVE_VALGRIND_VALGRIND_H
 #  include <valgrind/valgrind.h>
@@ -38,6 +39,7 @@ static int help (void);
 static int opts = 1;
 int minimal = 0;
 int binary = 0;
+int overwrite = 0;
 char buf[4096];
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
@@ -45,8 +47,7 @@ static unsigned int cur_ver = 0;
 static int
 usage (void)
 {
-  printf ("\nUsage: dxf2dwg [-v[N]] [--as rNNNN] <input_file.dxf> "
-          "[<output_file.dwg>]\n");
+  printf ("\nUsage: dxf2dwg [-v[N]] [-y] [--as rNNNN] [-o DWG] DXFFILES...\n");
   return 1;
 }
 static int
@@ -62,7 +63,7 @@ help (void)
   printf ("Converts the DXF to a DWG. Accepts ascii and binary DXF.\n");
   printf ("Default DWGFILE: DXFFILE with .dwg extension in the current "
           "directory.\n"
-          "Existing files are silently overwritten.\n"
+          "Existing files are not overwritten, unless -y is given.\n"
           "\n");
 #ifdef HAVE_GETOPT_LONG
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
@@ -71,7 +72,7 @@ help (void)
   printf ("             r12, r14, r2000 (default)\n");
   printf ("           Planned versions:\n");
   printf ("             r9, r10, r11, r2004, r2007, r2010, r2013, r2018\n");
-  printf ("  -o outfile, --file        only valid with one single DXFFILE\n");
+  printf ("  -o outfile, --file        optional, only valid with one single DXFFILE\n");
   printf ("       --help               display this help and exit\n");
   printf ("       --version            output version information and exit\n"
           "\n");
@@ -82,7 +83,7 @@ help (void)
   printf ("                r12, r14, r2000 (default)\n");
   printf ("              Planned versions:\n");
   printf ("                r9, r10, r11, r2004, r2007, r2010, r2013, r2018\n");
-  printf ("  -o dwgfile  only valid with one single DXFFILE\n");
+  printf ("  -o dwgfile  optional, only valid with one single DXFFILE\n");
   printf ("  -h          display this help and exit\n");
   printf ("  -i          output version information and exit\n"
           "\n");
@@ -110,7 +111,7 @@ main (int argc, char *argv[])
   static struct option long_options[]
       = { { "verbose", 1, &opts, 1 }, // optional
           { "file", 1, 0, 'o' },      { "as", 1, 0, 'a' },
-          { "minimal", 0, 0, 'm' },   { "binary", 0, 0, 'b' },
+          { "overwrite", 0, 0, 'y' },
           { "help", 0, 0, 0 },        { "version", 0, 0, 0 },
           { NULL, 0, NULL, 0 } };
 #endif
@@ -120,7 +121,7 @@ main (int argc, char *argv[])
 
   while
 #ifdef HAVE_GETOPT_LONG
-      ((c = getopt_long (argc, argv, ":a:v::o:h", long_options, &option_index))
+      ((c = getopt_long (argc, argv, "ya:v::o:h", long_options, &option_index))
        != -1)
 #else
       ((c = getopt (argc, argv, ":a:v::o:hi")) != -1)
@@ -194,6 +195,9 @@ main (int argc, char *argv[])
           }
 #endif
           break;
+        case 'y':
+          overwrite = 1;
+          break;
         case 'h':
           return help ();
         case '?':
@@ -256,7 +260,33 @@ main (int argc, char *argv[])
           printf ("\n");
         }
 #ifdef USE_WRITE
-      error = dwg_write_file (filename_out, &dwg);
+      {
+        struct stat attrib;
+        if (!stat (filename_out, &attrib)) // exists
+          {
+            if (!overwrite)
+              {
+                LOG_ERROR ("File not overwritten: %s, use -y.\n", filename_out);
+                error |= DWG_ERR_IOERROR;
+              }
+            else
+              {
+                if (!(S_ISREG (attrib.st_mode)
+#ifndef _WIN32
+                   || S_ISLNK (attrib.st_mode)
+#endif
+                      ))
+                  {
+                    LOG_ERROR ("Not writable file: %s\n", filename_out);
+                    error |= DWG_ERR_IOERROR;
+                  }
+                else
+                  unlink (filename_out);
+              }
+          }
+        else
+          error = dwg_write_file (filename_out, &dwg);
+      }
 #else
       error = DWG_ERR_IOERROR;
 #  error no DWG write support

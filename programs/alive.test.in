@@ -49,8 +49,9 @@ run ()
     rm $log 2>/dev/null
     case $bprog in
     dwglayers)  ;;
+    dwg2dxf)    arg="-y $arg" ;;
     dwggrep)    arg="-i tekst $arg" ;;
-    dxf2dwg)    arg="-v2 ${datadir}/$dwg.dxf" ;;
+    dxf2dwg)    arg="-y -v2 ${datadir}/$dwg.dxf" ;;
     #dwgrewrite) arg="-v2 $arg" ;;
     *)          arg="-v2 $arg" ;;
     esac

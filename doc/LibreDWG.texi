@@ -653,7 +653,8 @@ LibreDWG installs some binary programs to read or write DWG files.
 @item @file{dwgread}
 @cindex dwgread
 
-This reads a DWG file, and optionally converts its content to some output formats: JSON, GeoJSON, DXF, DXFB (i.e. Binary DXF).
+This reads a DWG file, and optionally converts its content to some
+output formats: JSON, GeoJSON, DXF, DXFB (i.e. Binary DXF).
 
 @code{dwgread [OPTION]... DWGFILE}
 
@@ -683,6 +684,28 @@ Currently the options need to be specified in this exact same order.
 Create a DWG from a given input file (@pxref{DXF}, @pxref{DXFB, Binary DXF}),
 optionally via @code{--as-rNNNN} as another version. Experimental.
 For now can only create r2000 DWG files.
+
+@item @file{dwg2dxf}
+@cindex dwg2dxf
+Converts DWG files to DXF, optionally via @code{--as-rNNNN} as another
+version, an earlier or later version, or via @code{-m} or
+@code{--minimal} as a minimal DXF version, skipping most headers vars,
+classes, tables and objects.
+
+@code{--binary} as a binary DXF file, with full precision, under construction.
+
+The DXF files are created in the current directory and not overwritten, unless
+the option @code{--overwrite} or @code{-y} is given.
+
+@item @file{dxf2dwg}
+@cindex dxf2dwg
+Convert a DXF (or Binary DXF) to DWG, optionally via @code{--as-rVER} as another
+version, an earlier or later version.
+
+The DWG files are created in the current directory and not overwritten, unless
+the option @code{--overwrite} or @code{-y} is given.
+
+This program is very experimental and may fail. Only R2000 DWG's can be written yet.
 
 @item @file{dwgrewrite}
 @cindex dwgrewrite
@@ -727,23 +750,6 @@ Convert a DWG to a very limited Postscript file. All paperspace and modelspace e
 This requires installation of pslib @uref{http://pslib.sourceforge.net/doc/pslib.html}.
 
 Note that the graphical representation for PS and SVG output is severely lacking, block references (insert entities) are not yet exploded, UCS and paper space transformations per entity are not yet done.
-
-@item @file{dwg2dxf}
-@cindex dwg2dxf
-Converts DWG files to DXF, optionally via @code{--as-rNNNN} as another
-version, an earlier or later version, or via @code{-m} or
-@code{--minimal} as a minimal DXF version, skipping most headers vars,
-classes, tables and objects.
-
-@code{--binary} as a binary DXF file, with full precision, under construction.
-
-The DXF files are created in the current directory and silently overwritten.
-
-@item @file{dxf2dwg}
-@cindex dxf2dwg
-Convert a DXF (or Binary DXF) to DWG, optionally via @code{--as-rVER} as another
-version, an earlier or later version.
-The DXF reader is not yet implemented.
 
 @end table
 
