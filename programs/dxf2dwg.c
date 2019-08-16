@@ -239,7 +239,7 @@ main (int argc, char *argv[])
           continue;
         }
       printf ("TODO: fixing up post-DXF not yet done\n");
-      // sections, ...
+      // sections, second header, ...
 
       printf ("Writing DWG file %s", filename_out);
       if (version)

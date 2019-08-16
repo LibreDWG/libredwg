@@ -49,25 +49,30 @@
 #define OUTPUT stderr
 
 #define LOG(level, args...)                                                   \
-  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level)                                   \
-    {                                                                         \
-      HANDLER (OUTPUT, args);                                                 \
-    }
-
+  {                                                                           \
+    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level)                                 \
+      {                                                                       \
+        HANDLER (OUTPUT, args);                                               \
+      }                                                                       \
+  }
 #define LOG_ERROR(args...)                                                    \
-  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_ERROR)                                     \
-    {                                                                         \
-      HANDLER (OUTPUT, "ERROR: ");                                            \
-      LOG (ERROR, args)                                                       \
-      HANDLER (OUTPUT, "\n");                                                 \
-    }
+  {                                                                           \
+    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_ERROR)                                   \
+      {                                                                       \
+        HANDLER (OUTPUT, "ERROR: ");                                          \
+        LOG (ERROR, args)                                                     \
+        HANDLER (OUTPUT, "\n");                                               \
+      }                                                                       \
+  }
 #define LOG_WARN(args...)                                                     \
-  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_ERROR)                                     \
-    {                                                                         \
-      HANDLER (OUTPUT, "Warning: ");                                          \
-      LOG (ERROR, args)                                                       \
-      HANDLER (OUTPUT, "\n");                                                 \
-    }
+  {                                                                           \
+    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_ERROR)                                   \
+      {                                                                       \
+        HANDLER (OUTPUT, "Warning: ");                                        \
+        LOG (ERROR, args)                                                     \
+        HANDLER (OUTPUT, "\n");                                               \
+      }                                                                       \
+  }
 
 #define LOG_INFO(args...) LOG (INFO, args)
 #define LOG_TRACE(args...) LOG (TRACE, args)
@@ -91,15 +96,17 @@
     LOG_TEXT_UNICODE (TRACE, (BITCODE_TU)wstr)                                \
     LOG_TRACE ("\" [TU %d]\n", dxf)
 #  define LOG_TEXT_UNICODE(level, wstr)                                       \
-    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level && wstr)                         \
-      {                                                                       \
-        BITCODE_TU ws = wstr;                                                 \
-        uint16_t _c;                                                          \
-        while ((_c = *ws++))                                                  \
-          {                                                                   \
-            HANDLER (OUTPUT, "%c", (char)(_c & 0xff));                        \
-          }                                                                   \
-      }
+    {                                                                         \
+      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level && wstr)                       \
+        {                                                                     \
+          BITCODE_TU ws = wstr;                                               \
+          uint16_t _c;                                                        \
+          while ((_c = *ws++))                                                \
+            {                                                                 \
+              HANDLER (OUTPUT, "%c", (char)(_c & 0xff));                      \
+            }                                                                 \
+        }                                                                     \
+    }
 #endif
 
 #endif

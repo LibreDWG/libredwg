@@ -1399,7 +1399,7 @@ dwg_find_tablehandle (const Dwg_Data *restrict dwg,
     ctrl->obj = dwg_resolve_handle (dwg, ctrl->handleref.value);
   if (!ctrl->obj)
     {
-      LOG_ERROR ("dwg_find_tablehandle: Could not find table %s", table);
+      LOG_ERROR ("dwg_find_tablehandle: Could not resolve table %s", table);
       return 0;
     }
   _obj = ctrl->obj->tio.object->tio.APPID_CONTROL; // just random type

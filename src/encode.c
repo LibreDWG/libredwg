@@ -695,13 +695,19 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
    */
   strcpy ((char *)dat->chain,
           version_codes[dwg->header.version]); // Chain version
+  if (dwg->header.version != dwg->header.from_version)
+    LOG_TRACE ("Encode version %s from version %s\n",
+               version_codes[dwg->header.version],
+               version_codes[dwg->header.from_version])
+  else
+    LOG_TRACE ("Encode version %s\n", version_codes[dwg->header.version])
   dat->byte += 6;
 
   {
     struct Dwg_Header *_obj = &dwg->header;
     Dwg_Object *obj = NULL;
 
-#include "header.spec"
+    #include "header.spec"
   }
   section_address = dat->byte;
 
@@ -736,15 +742,15 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
      * AuxHeader section 5
      * R2000+, mostly redundant file header information
      */
-    dwg->header.section[5].number = 5;
-    dwg->header.section[5].address = dat->byte;
-    // dwg->header.section[5].size = 0;
-    if (dwg->header.num_sections == 6)
+    if (dwg->header.num_sections > 5)
       {
         struct Dwg_AuxHeader *_obj = &dwg->auxheader;
         Dwg_Object *obj = NULL;
 
-#include "auxheader.spec"
+        dwg->header.section[5].number = 5;
+        dwg->header.section[5].address = dat->byte;
+
+        #include "auxheader.spec"
       }
   }
 

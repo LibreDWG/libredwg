@@ -337,7 +337,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables *_obj = &dwg->header_vars;
   Dwg_Object *obj = NULL;
-  const int minimal = dwg->opts & 0x10;
+  //const int minimal = dwg->opts & 0x10;
   int is_utf = 1;
   int i = 0;
 
@@ -478,9 +478,88 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
 
   dxf_free_pair (pair);
-  if (_obj->DWGCODEPAGE && strEQc (_obj->DWGCODEPAGE, "ANSI_1252"))
-    dwg->header.codepage = 30;
   return 0;
+}
+
+static void dxf_fixup_header (Dwg_Data *dwg)
+{
+  Dwg_Header_Variables *vars = &dwg->header_vars;
+  struct Dwg_Header *hdr = &dwg->header;
+  struct Dwg_AuxHeader *aux = &dwg->auxheader; // skip it for now
+  LOG_TRACE ("dxf_fixup_header\n");
+
+  if (vars->DWGCODEPAGE)
+    {
+      if (strEQc (vars->DWGCODEPAGE, "ANSI_1252"))
+        hdr->codepage = 30;
+      else if (strEQc (vars->DWGCODEPAGE, "ANSI_1251"))
+        hdr->codepage = 29;
+      else if (strEQc (vars->DWGCODEPAGE, "ANSI_1253")) // ?
+        hdr->codepage = 32;
+      else if (strEQc (vars->DWGCODEPAGE, "ANSI_1254"))
+        hdr->codepage = 23;
+      else if (strEQc (vars->DWGCODEPAGE, "ANSI_936"))
+        hdr->codepage = 39;
+      else if (strEQc (vars->DWGCODEPAGE, "ANSI_949"))
+        hdr->codepage = 40;
+      else
+        hdr->codepage = 30;
+    }
+  LOG_TRACE ("HEADER.codepage = %d [%s]\n", hdr->codepage, vars->DWGCODEPAGE);
+
+  // R_2007:
+  //is_maint: 0x32 [RC 0]
+  //zero_one_or_three: 0x3 [RC 0]
+  //preview_addr: 3360 [RL 0]
+  //dwg_version: 0x1f [RC 0]
+  //maint_version: 0x8 [RC 0]
+  //codepage: 30 [RS 0]
+  // R_2004+:
+  //unknown_0: 0x0 [RC 0]
+  //app_dwg_version: 0x1f [RC 0]
+  //app_maint_version: 0x8 [RC 0]
+  //security_type: 0 [RL 0]
+  //rl_1c_address: 0 [RL 0]
+  //summary_info_address: 3200 [RL 0]
+  //vba_proj_address: 0 [RL 0]
+  //rl_28_80: 128 [RL 0]
+
+  // R_2000:
+  //is_maint: 0xf [RC 0]
+  //zero_one_or_three: 0x1 [RC 0]
+  //preview_addr: 220 [RL 0]
+  //dwg_version: 0x1f [RC 0]
+  //maint_version: 0x8 [RC 0]
+  //codepage: 30 [RS 0]
+
+  if (hdr->version <= R_14)
+    hdr->is_maint = 0x0;
+  else if (hdr->version <= R_2000)
+    {
+      hdr->is_maint = 0xf; // 0x6 - 0xf
+      hdr->zero_one_or_three = 1;
+      hdr->preview_addr = 220;
+      hdr->dwg_version = 0x1f;
+      hdr->maint_version = 0x8;
+
+      hdr->num_sections = 5; // no auxheader for now
+    }
+  else if (hdr->version <= R_2004)
+    hdr->is_maint = 0x68;
+  else if (hdr->version <= R_2007)
+    hdr->is_maint = 0x32;
+  else if (hdr->version <= R_2010)
+    hdr->is_maint = 0x6d;
+  else if (hdr->version <= R_2013)
+    hdr->is_maint = 0x7d;
+  else if (hdr->version <= R_2018)
+    hdr->is_maint = 0x4;
+
+  if (!vars->FINGERPRINTGUID)
+    vars->FINGERPRINTGUID = strdup ("{00000000-0000-0000-0000-000000000000}");
+  if (!vars->VERSIONGUID)
+    vars->VERSIONGUID = strdup ("{DE6A95C3-2D01-4A77-AC28-3C42FCFFF657}"); // R_2000
+
 }
 
 static int
@@ -1488,6 +1567,19 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               dwg_dynapi_entity_set_value (_obj, obj->name, "name", &pair->value,
                                        is_utf);
               LOG_TRACE ("%s.name = %s [2 T]\n", name, pair->value.s);
+              if (strEQc (name, "BLOCK_RECORD"))
+                {
+                  if (strEQc (pair->value.s, "*Paper_Space"))
+                    {
+                      dwg->header_vars.BLOCK_RECORD_PSPACE =
+                        add_handleref (dwg, 5, obj->handle.value, obj);
+                    }
+                  if (strEQc (pair->value.s, "*Model_Space"))
+                    {
+                      dwg->header_vars.BLOCK_RECORD_MSPACE =
+                        add_handleref (dwg, 5, obj->handle.value, obj);
+                    }
+                }
               break;
             }
           // fall through
@@ -1962,6 +2054,7 @@ dxf_preview_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
 void resolve_postponed_header_refs (Dwg_Data *restrict dwg)
 {
+  Dwg_Header_Variables *vars = &dwg->header_vars;
   uint32_t i;
   for (i = 0; i < header_hdls->nitems; i++)
     {
@@ -1979,6 +2072,7 @@ void resolve_postponed_header_refs (Dwg_Data *restrict dwg)
       hdl = find_tablehandle (dwg, &p);
       if (hdl)
         {
+          hdl->handleref.code = 5;
           dwg_dynapi_header_set_value (dwg, field, &hdl, 1);
           LOG_TRACE ("HEADER.%s %s => " FORMAT_REF " [H] %d\n", field,
                      p.value.s, ARGS_REF (hdl), (int)p.code);
@@ -1988,23 +2082,23 @@ void resolve_postponed_header_refs (Dwg_Data *restrict dwg)
           hdl = dwg_find_tablehandle (dwg, p.value.s, "MLSTYLE");
           if (hdl)
             {
+              hdl->handleref.code = 5;
               dwg_dynapi_header_set_value (dwg, field, &hdl, 1);
               LOG_TRACE ("HEADER.%s %s => " FORMAT_REF " [H] %d\n", field,
                          p.value.s, ARGS_REF (hdl), (int)p.code);
             }
         }
     }
+
 }
 
 int
 dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  const int minimal = dwg->opts & 0x10;
+  //const int minimal = dwg->opts & 0x10;
   Dxf_Pair *pair;
-  // warn if minimal != 0
-  // struct Dwg_Header *obj = &dwg->header;
-  loglevel = dwg->opts & 0xf;
 
+  loglevel = dwg->opts & 0xf;
   num_dxf_objs = 0;
   size_dxf_objs = 1000;
   dxf_objs = malloc (1000 * sizeof (Dxf_Objs));
@@ -2038,6 +2132,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               dxf_free_pair (pair);
               dxf_header_read (dat, dwg);
+              dxf_fixup_header (dwg);
             }
           else if (strEQc (pair->value.s, "CLASSES"))
             {
@@ -2049,12 +2144,44 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               dxf_free_pair (pair);
               dxf_tables_read (dat, dwg);
               resolve_postponed_header_refs (dwg);
+              if (!dwg->header_vars.LTYPE_BYLAYER)
+                {
+                  dwg->header_vars.LTYPE_BYLAYER =
+                    dwg_find_tablehandle (dwg, (char*)"ByLayer", "LTYPE");
+                  dwg->header_vars.LTYPE_BYLAYER->handleref.code = 5;
+                }
+              if (!dwg->header_vars.LTYPE_BYBLOCK)
+                {
+                  dwg->header_vars.LTYPE_BYBLOCK =
+                    dwg_find_tablehandle (dwg, (char*)"ByBlock", "LTYPE");
+                  dwg->header_vars.LTYPE_BYBLOCK->handleref.code = 5;
+                }
+              if (!dwg->header_vars.LTYPE_CONTINUOUS)
+                {
+                  dwg->header_vars.LTYPE_CONTINUOUS =
+                    dwg_find_tablehandle (dwg, (char*)"Continuous", "LTYPE");
+                  dwg->header_vars.LTYPE_CONTINUOUS->handleref.code = 5;
+                }
             }
           else if (strEQc (pair->value.s, "BLOCKS"))
             {
               dxf_free_pair (pair);
               dxf_blocks_read (dat, dwg);
               resolve_postponed_header_refs (dwg);
+              if (!dwg->header_vars.BLOCK_RECORD_PSPACE)
+                {
+                  dwg->header_vars.BLOCK_RECORD_PSPACE =
+                    dwg_find_tablehandle (dwg, (char*)"*Paper_Space", "BLOCK");
+                  if (dwg->header_vars.BLOCK_RECORD_PSPACE)
+                    dwg->header_vars.BLOCK_RECORD_PSPACE->handleref.code = 5;
+                }
+              if (!dwg->header_vars.BLOCK_RECORD_MSPACE)
+                {
+                  dwg->header_vars.BLOCK_RECORD_MSPACE =
+                    dwg_find_tablehandle (dwg, (char*)"*Model_Space", "BLOCK");
+                  if (dwg->header_vars.BLOCK_RECORD_MSPACE)
+                    dwg->header_vars.BLOCK_RECORD_MSPACE->handleref.code = 5;
+                }
             }
           else if (strEQc (pair->value.s, "ENTITIES"))
             {
