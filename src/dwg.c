@@ -1411,14 +1411,15 @@ dwg_find_tablehandle (const Dwg_Data *restrict dwg,
   for (i = 0; i < num_entries; i++)
     {
       char *hdlname;
+      Dwg_Object_APPID *_o;
       if (!hdlv[i])
         continue;
       if (!hdlv[i]->obj && hdlv[i]->handleref.value)
         hdlv[i]->obj = dwg_resolve_handle (dwg, hdlv[i]->handleref.value);
       if (!hdlv[i]->obj)
         continue;
-      _obj = hdlv[i]->obj->tio.object->tio.APPID_CONTROL; // just random type
-      dwg_dynapi_entity_value (_obj, hdlv[i]->obj->name, "name",
+      _o = hdlv[i]->obj->tio.object->tio.APPID;
+      dwg_dynapi_entity_value (_o, hdlv[i]->obj->name, "name",
                                &hdlname, NULL);
       if (hdlname && strEQ (name, hdlname))
         {
