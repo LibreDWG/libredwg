@@ -1586,9 +1586,9 @@ typedef struct _dwg_entity_SPLINE
   BITCODE_BD fit_tol;
   BITCODE_3BD beg_tan_vec;
   BITCODE_3BD end_tan_vec;
-  BITCODE_B rational;
-  BITCODE_B closed_b;
-  BITCODE_B periodic;
+  BITCODE_B closed_b; /* bit 1 of 70 */
+  BITCODE_B periodic; /* bit 2 of 70 */
+  BITCODE_B rational; /* bit 3 of 70 */
   BITCODE_B weighted; /* bit 4 of 70 */
   BITCODE_BD knot_tol;
   BITCODE_BD ctrl_tol;

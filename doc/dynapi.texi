@@ -3021,11 +3021,11 @@ BD,	DXF 44
 3BD,	DXF 12
 @item end_tan_vec
 3BD,	DXF 13
-@item rational
-B
 @item closed_b
 B
 @item periodic
+B
+@item rational
 B
 @item weighted
 B
