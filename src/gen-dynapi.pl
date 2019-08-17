@@ -890,7 +890,7 @@ close $fh;
 
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 880 "gen-dynapi.pl"
+#line 894 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -956,7 +956,7 @@ static const struct _name_type_fields dwg_name_types[] = {
   @@enum DWG_OBJECT_TYPE@@
 };
 
-#line 946 "gen-dynapi.pl"
+#line 960 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
