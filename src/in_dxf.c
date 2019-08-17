@@ -82,8 +82,23 @@ dxf_read_code (Bit_Chain *dat)
   if (dat->chain[dat->byte] == '\n')
     dat->byte++;
   if (num > INT_MAX)
-    LOG_ERROR ("%s: int overflow %ld (at %lu)", __FUNCTION__, num, dat->byte)
+    LOG_ERROR ("%s: int overflow %ld (at %lu)", __FUNCTION__, num, dat->byte);
   return (int)num;
+}
+
+static long
+dxf_read_long (Bit_Chain *dat)
+{
+  char *endptr;
+  long num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
+  dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
+  if (dat->chain[dat->byte] == '\r')
+    dat->byte++;
+  if (dat->chain[dat->byte] == '\n')
+    dat->byte++;
+  if ((unsigned long)num > LONG_MAX) // or wrap to negative
+    LOG_ERROR ("%s: long overflow %ld (at %lu)", __FUNCTION__, num, dat->byte);
+  return num;
 }
 
 static void
@@ -145,9 +160,13 @@ dxf_read_pair (Bit_Chain *dat)
       LOG_TRACE ("  dxf (%d, %d)\n", (int)pair->code, pair->value.i);
       break;
     case VT_INT32:
-    case VT_INT64:
       pair->value.l = dxf_read_code (dat);
       LOG_TRACE ("  dxf (%d, %ld)\n", (int)pair->code, pair->value.l);
+      break;
+    case VT_INT64:
+      pair->value.bll = dxf_read_long (dat);
+      LOG_TRACE ("  dxf (%d, " FORMAT_BLL ")\n", (int)pair->code,
+                 pair->value.bll);
       break;
     case VT_REAL:
     case VT_POINT3D:
@@ -1215,7 +1234,7 @@ add_xdata (Bit_Chain *restrict dat,
                  rbuf->type);
       break;
     case VT_INT64:
-      rbuf->value.i64 = (BITCODE_BLL)pair->value.l;
+      rbuf->value.i64 = (BITCODE_BLL)pair->value.bll;
       LOG_TRACE ("rbuf[%d]: " FORMAT_BLL " [%d]\n", num_xdata, rbuf->value.i64,
                  rbuf->type);
       break;
@@ -1373,7 +1392,7 @@ add_ent_picture (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                  pair->code);
       return pair;
     }
-  ent->picture_size = pair->value.l;
+  ent->picture_size = pair->value.bll;
   if (!ent->picture_size)
     {
       dxf_free_pair (pair);
@@ -1385,7 +1404,7 @@ add_ent_picture (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       LOG_ERROR ("Out of memory");
       return NULL;
     }
-  LOG_TRACE ("%s.picture_size = %ld [160 BLL]\n", obj->name,
+  LOG_TRACE ("%s.picture_size = " FORMAT_BLL " [160 BLL]\n", obj->name,
              ent->picture_size);
   ent->picture_exists = 1;
 
@@ -1399,7 +1418,7 @@ add_ent_picture (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       char *s = &ent->picture[written];
       if (blen + written > ent->picture_size)
         {
-          LOG_ERROR ("%s.picture overflow: %u + written %u > size: %lu",
+          LOG_ERROR ("%s.picture overflow: %u + written %u > size: " FORMAT_BLL,
                      obj->name, blen, written, ent->picture_size);
           return pair;
         }
@@ -1409,7 +1428,7 @@ add_ent_picture (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           pos += 2;
         }
       written += blen;
-      LOG_TRACE ("%s.picture += %u (%u/%lu)\n", obj->name, blen, written,
+      LOG_TRACE ("%s.picture += %u (%u/" FORMAT_BLL ")\n", obj->name, blen, written,
                  ent->picture_size);
 
       dxf_free_pair (pair);
@@ -2582,14 +2601,14 @@ dxf_preview_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         case 0: // ENDSEC
           return 0;
         case 90:
-          dwg->picture.size = pair->value.l;
+          dwg->picture.size = pair->value.bll;
           dwg->picture.chain = calloc (dwg->picture.size, 1);
           if (!dwg->picture.chain)
             {
               LOG_ERROR ("Out of memory");
               return DWG_ERR_OUTOFMEM;
             }
-          LOG_TRACE ("PICTURE.size = %ld\n", pair->value.l);
+          LOG_TRACE ("PICTURE.size = " FORMAT_BLL "\n", pair->value.bll);
           break;
         case 310:
           {
@@ -2600,9 +2619,9 @@ dxf_preview_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             if (blen + written > dwg->picture.size)
               {
                 dxf_free_pair (pair);
-                LOG_ERROR (
-                    "PICTURE.size overflow: %u + written %u > size: %lu", blen,
-                    written, dwg->picture.size);
+                LOG_ERROR ("PICTURE.size overflow: %u + written %u > "
+                           "size: %lu",
+                           blen, written, dwg->picture.size);
                 return 1;
               }
             for (unsigned i = 0; i < blen; i++)
@@ -2611,8 +2630,8 @@ dxf_preview_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 pos += 2;
               }
             written += blen;
-            LOG_TRACE ("PICTURE.chain += %u (%u/%lu)\n", blen, written,
-                       dwg->picture.size);
+            LOG_TRACE ("PICTURE.chain += %u (%u/%lu)\n", blen,
+                       written, dwg->picture.size);
           }
           break;
         default:

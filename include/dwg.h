@@ -1934,7 +1934,7 @@ typedef struct _dwg_object_BLOCK_HEADER
   BITCODE_TV xref_pname;
   BITCODE_RL num_inserts;
   BITCODE_TV description;
-  BITCODE_BL preview_data_size; /* no DXF */
+  BITCODE_BL preview_data_size; /* no DXF, BLL? */
   char     * preview_data;      /* DXF 310 */
   BITCODE_BS insert_units;
   BITCODE_B explodable;
