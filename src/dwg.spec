@@ -1847,10 +1847,13 @@ static int free_3dsolid(Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _
 
   if (!FIELD_VALUE (acis_empty))
     {
-      for (i=0; i <= FIELD_VALUE (num_blocks); i++)
+      if (FIELD_VALUE (encr_sat_data))
         {
-          if (FIELD_VALUE (encr_sat_data[i]) != NULL)
-            FIELD_TF (encr_sat_data[i], block_size[i], 0);
+          for (i=0; i <= FIELD_VALUE (num_blocks); i++)
+            {
+              if (FIELD_VALUE (encr_sat_data[i]) != NULL)
+                FIELD_TF (encr_sat_data[i], block_size[i], 0);
+            }
         }
       FREE_IF (FIELD_VALUE (encr_sat_data));
       FREE_IF (FIELD_VALUE (block_size));
