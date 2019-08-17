@@ -349,12 +349,12 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
       return error | DWG_ERR_IOERROR;
     }
   fh = fopen (filename, "wb");
-  if (!fh)
+  if (!fh || !dat.chain)
     {
       LOG_ERROR ("Failed to create the file: %s\n", filename)
       return error | DWG_ERR_IOERROR;
     }
-
+  
   // Write the data into the file
   if (fwrite (dat.chain, sizeof (char), dat.size, fh) != dat.size)
     {

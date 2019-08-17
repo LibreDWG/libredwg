@@ -1133,14 +1133,15 @@ find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair)
           Dwg_Object_Ref *ref = dwg->object_ref[i];
           if (ref->absolute_ref == (BITCODE_BL)pair->value.u)
             {
-              handle = ref;
+              // no relative offset
+              handle = add_handleref (dwg, 5, pair->value.u, NULL);
               break;
             }
         }
       if (!handle)
         {
-          Dwg_Object *obj = dwg_resolve_handle (dwg, (BITCODE_BL)pair->value.u);
-          handle = add_handleref (dwg, 0, pair->value.u, obj);
+          // no relative offset
+          handle = add_handleref (dwg, 5, pair->value.u, NULL);
         }
     }
 #if 0
