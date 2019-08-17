@@ -261,6 +261,7 @@ main (int argc, char *argv[])
           dwg.header.version = dwg_version;
           printf ("\n");
         }
+
 #ifdef USE_WRITE
       {
         struct stat attrib;
@@ -273,17 +274,19 @@ main (int argc, char *argv[])
               }
             else
               {
-                if (!(S_ISREG (attrib.st_mode)
+                if (S_ISREG (attrib.st_mode) && // refuse to remove a directory
+                    (access (filename_out, W_OK) == 0) // writable
 #ifndef _WIN32
-                   || S_ISLNK (attrib.st_mode)
+                    // refuse to remove a symlink. even with overwrite. security
+                    && !S_ISLNK (attrib.st_mode)
 #endif
-                      ))
+                    )
+                  unlink (filename_out);
+                else
                   {
-                    LOG_ERROR ("Not writable file: %s\n", filename_out);
+                    LOG_ERROR ("Not writable file or symlink: %s\n", filename_out);
                     error |= DWG_ERR_IOERROR;
                   }
-                else
-                  unlink (filename_out);
               }
           }
         else

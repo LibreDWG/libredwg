@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <sys/stat.h>
 #include <getopt.h>
 #ifdef HAVE_VALGRIND_VALGRIND_H
@@ -278,10 +279,32 @@ main (int argc, char *argv[])
         dwg.opts |= 0x10;
       {
         struct stat attrib;
-        if (stat (filename_out, &attrib) && !overwrite)
+        if (!stat (filename_out, &attrib)) // exists
           {
-            LOG_ERROR ("File not overwritten: %s, use -y\n", filename_out);
-            error |= DWG_ERR_IOERROR;
+            if (!overwrite)
+              {
+                LOG_ERROR ("File not overwritten: %s, use -y.\n", filename_out);
+                error |= DWG_ERR_IOERROR;
+              }
+            else
+              {
+                if (S_ISREG (attrib.st_mode) && // refuse to remove a directory
+                    (access (filename_out, W_OK) == 0) // writable
+#ifndef _WIN32
+                    // refuse to remove a symlink. even with overwrite. security
+                    && !S_ISLNK (attrib.st_mode)
+#endif
+                    )
+                  {
+                    unlink (filename_out);
+                    dat.fh = fopen (filename_out, "wb");
+                  }
+                else
+                  {
+                    LOG_ERROR ("Not writable file or symlink: %s\n", filename_out);
+                    error |= DWG_ERR_IOERROR;
+                  }
+              }
           }
         else
           dat.fh = fopen (filename_out, "wb");
