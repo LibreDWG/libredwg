@@ -1889,7 +1889,7 @@ typedef struct _dwg_entity_MLINE
   BITCODE_H mlinestyle;
 } Dwg_Entity_MLINE;
 
-#define COMMON_TABLE_CONTROL_FIELDS(entries) \
+#define COMMON_TABLE_CONTROL_FIELDS \
   struct _dwg_object_object *parent; \
   BITCODE_BS num_entries; \
   BITCODE_H* entries; \
@@ -1910,7 +1910,7 @@ typedef struct _dwg_entity_MLINE
  */
 typedef struct _dwg_object_BLOCK_CONTROL
 {
-  COMMON_TABLE_CONTROL_FIELDS(block_headers);
+  COMMON_TABLE_CONTROL_FIELDS;
   BITCODE_H model_space;
   BITCODE_H paper_space;
 } Dwg_Object_BLOCK_CONTROL;
@@ -1954,7 +1954,7 @@ typedef struct _dwg_object_BLOCK_HEADER
  */
 typedef struct _dwg_object_LAYER_CONTROL
 {
-  COMMON_TABLE_CONTROL_FIELDS(layers);
+  COMMON_TABLE_CONTROL_FIELDS;
 } Dwg_Object_LAYER_CONTROL;
 
 /**
@@ -1991,7 +1991,7 @@ typedef struct _dwg_object_LAYER
  */
 typedef struct _dwg_object_STYLE_CONTROL
 {
-  COMMON_TABLE_CONTROL_FIELDS(styles);
+  COMMON_TABLE_CONTROL_FIELDS;
 } Dwg_Object_STYLE_CONTROL;
 
 /**
@@ -2020,7 +2020,7 @@ typedef struct _dwg_object_STYLE
  */
 typedef struct _dwg_object_LTYPE_CONTROL
 {
-  COMMON_TABLE_CONTROL_FIELDS(linetypes);
+  COMMON_TABLE_CONTROL_FIELDS;
   BITCODE_H bylayer;
   BITCODE_H byblock;
 } Dwg_Object_LTYPE_CONTROL;
@@ -2062,7 +2062,7 @@ typedef struct _dwg_object_LTYPE
  */
 typedef struct _dwg_object_VIEW_CONTROL
 {
-  COMMON_TABLE_CONTROL_FIELDS(views);
+  COMMON_TABLE_CONTROL_FIELDS;
 } Dwg_Object_VIEW_CONTROL;
 
 /**
@@ -2109,7 +2109,7 @@ typedef struct _dwg_object_VIEW
  */
 typedef struct _dwg_object_UCS_CONTROL
 {
-  COMMON_TABLE_CONTROL_FIELDS(ucs);
+  COMMON_TABLE_CONTROL_FIELDS;
 } Dwg_Object_UCS_CONTROL;
 
 /**
@@ -2134,7 +2134,7 @@ typedef struct _dwg_object_UCS
  */
 typedef struct _dwg_object_VPORT_CONTROL
 {
-  COMMON_TABLE_CONTROL_FIELDS(vports);
+  COMMON_TABLE_CONTROL_FIELDS;
 } Dwg_Object_VPORT_CONTROL;
 
 /**
@@ -2196,7 +2196,7 @@ typedef struct _dwg_object_VPORT
  */
 typedef struct _dwg_object_APPID_CONTROL
 {
-  COMMON_TABLE_CONTROL_FIELDS(apps);
+  COMMON_TABLE_CONTROL_FIELDS;
 } Dwg_Object_APPID_CONTROL;
 
 /**
@@ -2216,7 +2216,7 @@ typedef struct _dwg_object_APPID
  */
 typedef struct _dwg_object_DIMSTYLE_CONTROL
 {
-  COMMON_TABLE_CONTROL_FIELDS(dimstyles);
+  COMMON_TABLE_CONTROL_FIELDS;
   BITCODE_RC num_morehandles; /* DXF 71 undocumented */
   BITCODE_H* morehandles;     /* DXF 340 */
 } Dwg_Object_DIMSTYLE_CONTROL;
@@ -2328,7 +2328,7 @@ typedef struct _dwg_object_DIMSTYLE
  */
 typedef struct _dwg_object_VPORT_ENTITY_CONTROL
 {
-  COMMON_TABLE_CONTROL_FIELDS(vport_entity_headers);
+  COMMON_TABLE_CONTROL_FIELDS;
 } Dwg_Object_VPORT_ENTITY_CONTROL;
 
 /**
@@ -3788,8 +3788,9 @@ typedef struct _dwg_object_LAYER_INDEX
   BITCODE_BL timestamp1;
   BITCODE_BL timestamp2;
   BITCODE_BL num_entries;
+  // TODO: merge
   Dwg_LAYER_entry* entries;
-  BITCODE_H* layers;
+  BITCODE_H* layer_entries;
 } Dwg_Object_LAYER_INDEX;
 
 /**

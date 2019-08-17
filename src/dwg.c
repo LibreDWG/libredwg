@@ -541,7 +541,7 @@ dwg_get_layers (const Dwg_Data *dwg)
   layers
       = (Dwg_Object_LAYER **)calloc (num_layers, sizeof (Dwg_Object_LAYER *));
   for (i = 0; i < num_layers; i++)
-    layers[i] = dwg->layer_control.layers[i]->obj->tio.object->tio.LAYER;
+    layers[i] = dwg->layer_control.entries[i]->obj->tio.object->tio.LAYER;
   return layers;
 }
 
@@ -1296,29 +1296,17 @@ dwg_find_tablehandle (const Dwg_Data *restrict dwg,
   BITCODE_BL i, num_entries;
   BITCODE_H ctrl = NULL, *hdlv;
   Dwg_Object_APPID_CONTROL *_obj; // just some random generic type
-  char ctrl_hdlv[80];
-  ctrl_hdlv[0] = '\0';
 
   // look for the _CONTROL table, and search for name in all entries
   if (strEQc (table, "BLOCK"))
-    {
-      ctrl = dwg->header_vars.BLOCK_CONTROL_OBJECT;
-      strcpy (ctrl_hdlv, "block_headers");
-    }
+    ctrl = dwg->header_vars.BLOCK_CONTROL_OBJECT;
   else if (strEQc (table, "LAYER"))
-    {
-      ctrl = dwg->header_vars.LAYER_CONTROL_OBJECT;
-      strcpy (ctrl_hdlv, "layers");
-    }
+    ctrl = dwg->header_vars.LAYER_CONTROL_OBJECT;
   else if (strEQc (table, "STYLE"))
-    {
-      ctrl = dwg->header_vars.STYLE_CONTROL_OBJECT;
-      strcpy (ctrl_hdlv, "styles");
-    }
+    ctrl = dwg->header_vars.STYLE_CONTROL_OBJECT;
   else if (strEQc (table, "LTYPE"))
     {
       ctrl = dwg->header_vars.LTYPE_CONTROL_OBJECT;
-      strcpy (ctrl_hdlv, "linetypes");
       if (strEQc (name, "BYLAYER") || strEQc (name, "ByLayer"))
         {
           if (dwg->header_vars.LTYPE_BYLAYER)
@@ -1336,35 +1324,17 @@ dwg_find_tablehandle (const Dwg_Data *restrict dwg,
         }
     }
   else if (strEQc (table, "VIEW"))
-    {
-      ctrl = dwg->header_vars.VIEW_CONTROL_OBJECT;
-      strcpy (ctrl_hdlv, "views");
-    }
+    ctrl = dwg->header_vars.VIEW_CONTROL_OBJECT;
   else if (strEQc (table, "UCS"))
-    {
-      ctrl = dwg->header_vars.UCS_CONTROL_OBJECT;
-      strcpy (ctrl_hdlv, "ucs");
-    }
+    ctrl = dwg->header_vars.UCS_CONTROL_OBJECT;
   else if (strEQc (table, "VPORT"))
-    {
-      ctrl = dwg->header_vars.VPORT_CONTROL_OBJECT;
-      strcpy (ctrl_hdlv, "vports");
-    }
+    ctrl = dwg->header_vars.VPORT_CONTROL_OBJECT;
   else if (strEQc (table, "APPID"))
-    {
-      ctrl = dwg->header_vars.APPID_CONTROL_OBJECT;
-      strcpy (ctrl_hdlv, "apps");
-    }
+    ctrl = dwg->header_vars.APPID_CONTROL_OBJECT;
   else if (strEQc (table, "DIMSTYLE"))
-    {
-      ctrl = dwg->header_vars.DIMSTYLE_CONTROL_OBJECT;
-      strcpy (ctrl_hdlv, "dimstyles");
-    }
+    ctrl = dwg->header_vars.DIMSTYLE_CONTROL_OBJECT;
   else if (strEQc (table, "VPORT_ENTITY"))
-    {
-      ctrl = dwg->header_vars.VPORT_ENTITY_CONTROL_OBJECT;
-      strcpy (ctrl_hdlv, "vport_entity_headers");
-    }
+    ctrl = dwg->header_vars.VPORT_ENTITY_CONTROL_OBJECT;
   else if (strEQc (table, "GROUP"))
     ctrl = dwg->header_vars.DICTIONARY_ACAD_GROUP;
   else if (strEQc (table, "MLSTYLE"))
@@ -1413,7 +1383,7 @@ dwg_find_tablehandle (const Dwg_Data *restrict dwg,
                            &num_entries, NULL);
   if (!num_entries)
     return 0;
-  dwg_dynapi_entity_value (_obj, ctrl->obj->name, ctrl_hdlv, &hdlv, NULL);
+  dwg_dynapi_entity_value (_obj, ctrl->obj->name, "entries", &hdlv, NULL);
   for (i = 0; i < num_entries; i++)
     {
       char *hdlname;
@@ -1427,7 +1397,7 @@ dwg_find_tablehandle (const Dwg_Data *restrict dwg,
       _o = hdlv[i]->obj->tio.object->tio.APPID;
       dwg_dynapi_entity_utf8text (_o, hdlv[i]->obj->name, "name",
                                   &hdlname, NULL);
-      LOG_HANDLE (" %s.%s[%d] => %s.name: %s\n", ctrl->obj->name, ctrl_hdlv, i,
+      LOG_HANDLE (" %s.%s[%d] => %s.name: %s\n", ctrl->obj->name, "entries", i,
                   hdlv[i]->obj->name, hdlname ? hdlname : "NULL");
       if (hdlname && strEQ (name, hdlname))
         {

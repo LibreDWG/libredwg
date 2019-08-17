@@ -2309,7 +2309,7 @@ DWG_OBJECT(BLOCK_CONTROL)
   }
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (block_headers, num_entries, 2, 0);
+  HANDLE_VECTOR (entries, num_entries, 2, 0);
   FIELD_HANDLE (model_space, 3, 0);
   FIELD_HANDLE (paper_space, 3, 0);
 
@@ -2445,7 +2445,7 @@ DWG_OBJECT(LAYER_CONTROL)
   }
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (layers, num_entries, 2, 0);
+  HANDLE_VECTOR (entries, num_entries, 2, 0);
 
 DWG_OBJECT_END
 
@@ -2528,7 +2528,7 @@ DWG_OBJECT(STYLE_CONTROL)
   }
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (styles, num_entries, 2, 0);
+  HANDLE_VECTOR (entries, num_entries, 2, 0);
 
 DWG_OBJECT_END
 
@@ -2606,7 +2606,7 @@ DWG_OBJECT(LTYPE_CONTROL)
   FIELD_BS (num_entries, 70);
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (linetypes, num_entries, 2, 0);
+  HANDLE_VECTOR (entries, num_entries, 2, 0);
   FIELD_HANDLE (bylayer, 3, 0);
   FIELD_HANDLE (byblock, 3, 0);
 
@@ -2689,7 +2689,7 @@ DWG_OBJECT(VIEW_CONTROL)
   }
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (views, num_entries, 2, 0);
+  HANDLE_VECTOR (entries, num_entries, 2, 0);
 
 DWG_OBJECT_END
 
@@ -2795,7 +2795,7 @@ DWG_OBJECT(UCS_CONTROL)
   FIELD_BS (num_entries, 70); //BS or BL?
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (ucs, num_entries, 2, 0);
+  HANDLE_VECTOR (entries, num_entries, 2, 0);
 
 DWG_OBJECT_END
 
@@ -2847,7 +2847,7 @@ DWG_OBJECT(VPORT_CONTROL)
   }
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (vports, num_entries, 2, 0);
+  HANDLE_VECTOR (entries, num_entries, 2, 0);
 
 DWG_OBJECT_END
 
@@ -3056,7 +3056,7 @@ DWG_OBJECT(APPID_CONTROL)
   FIELD_BS (num_entries, 70);
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (apps, num_entries, 2, 0);
+  HANDLE_VECTOR (entries, num_entries, 2, 0);
 
 DWG_OBJECT_END
 
@@ -3090,7 +3090,7 @@ DWG_OBJECT(DIMSTYLE_CONTROL)
     }
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (dimstyles, num_entries, 2, 0);
+  HANDLE_VECTOR (entries, num_entries, 2, 0);
   HANDLE_VECTOR (morehandles, num_morehandles, 5, 340);
 
 DWG_OBJECT_END
@@ -3352,7 +3352,7 @@ DWG_OBJECT(VPORT_ENTITY_CONTROL)
   FIELD_BS (num_entries, 70);
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (vport_entity_headers, num_entries, 4, 0);
+  HANDLE_VECTOR (entries, num_entries, 4, 0);
 
 DWG_OBJECT_END
 
@@ -3828,6 +3828,7 @@ DWG_OBJECT(LAYER_INDEX)
     FIELD_BL (timestamp2, 40);
   }
   FIELD_BL (num_entries, 0);
+  // TODO: merge entries with H*
   REPEAT (num_entries, entries, Dwg_LAYER_entry)
   REPEAT_BLOCK
       SUB_FIELD_BL (entries[rcount1], idxlong, 0);
@@ -3837,7 +3838,7 @@ DWG_OBJECT(LAYER_INDEX)
   END_REPEAT(entries)
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (layers, num_entries, 5, 0);
+  HANDLE_VECTOR (layer_entries, num_entries, 5, 0);
 
 DWG_OBJECT_END
 

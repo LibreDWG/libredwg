@@ -3903,7 +3903,7 @@ APPID_CONTROL is a table_control object.
 struct _dwg_object_object*
 @item num_entries
 BS,	DXF 70
-@item apps
+@item entries
 H*
 @item objid
 BL
@@ -4290,7 +4290,7 @@ BLOCK_CONTROL is a table_control object.
 struct _dwg_object_object*
 @item num_entries
 BS,	DXF 70
-@item block_headers
+@item entries
 H*
 @item objid
 BL
@@ -4760,7 +4760,7 @@ DIMSTYLE_CONTROL is a table_control object.
 struct _dwg_object_object*
 @item num_entries
 BS,	DXF 70
-@item dimstyles
+@item entries
 H*
 @item objid
 BL
@@ -5197,7 +5197,7 @@ LAYER_CONTROL is a table_control object.
 struct _dwg_object_object*
 @item num_entries
 BS,	DXF 70
-@item layers
+@item entries
 H*
 @item objid
 BL
@@ -5222,7 +5222,7 @@ BL,	DXF 40
 BL
 @item entries
 Dwg_LAYER_entry*
-@item layers
+@item layer_entries
 H*
 
 @end vtable
@@ -5435,7 +5435,7 @@ LTYPE_CONTROL is a table_control object.
 struct _dwg_object_object*
 @item num_entries
 BS,	DXF 70
-@item linetypes
+@item entries
 H*
 @item objid
 BL
@@ -6208,7 +6208,7 @@ STYLE_CONTROL is a table_control object.
 struct _dwg_object_object*
 @item num_entries
 BS,	DXF 70
-@item styles
+@item entries
 H*
 @item objid
 BL
@@ -6459,7 +6459,7 @@ UCS_CONTROL is a table_control object.
 struct _dwg_object_object*
 @item num_entries
 BS,	DXF 70
-@item ucs
+@item entries
 H*
 @item objid
 BL
@@ -6620,7 +6620,7 @@ VIEW_CONTROL is a table_control object.
 struct _dwg_object_object*
 @item num_entries
 BS,	DXF 70
-@item views
+@item entries
 H*
 @item objid
 BL
@@ -6843,7 +6843,7 @@ VPORT_CONTROL is a table_control object.
 struct _dwg_object_object*
 @item num_entries
 BS,	DXF 70
-@item vports
+@item entries
 H*
 @item objid
 BL
@@ -6866,7 +6866,7 @@ VPORT_ENTITY_CONTROL is a table_control object.
 struct _dwg_object_object*
 @item num_entries
 BS,	DXF 70
-@item vport_entity_headers
+@item entries
 H*
 @item objid
 BL

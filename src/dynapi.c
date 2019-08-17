@@ -2029,7 +2029,7 @@ static const Dwg_DYNAPI_field _dwg_APPID_fields[] = {
 static const Dwg_DYNAPI_field _dwg_APPID_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object*", sizeof (void *), OFF (struct _dwg_object_APPID_CONTROL,parent), 1,1,0, 0 },
   { "num_entries", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_object_APPID_CONTROL,num_entries), 0,0,0, 70 },
-  { "apps", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_APPID_CONTROL,apps), 1,1,0, 0 },
+  { "entries", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_APPID_CONTROL,entries), 1,1,0, 0 },
   { "objid", "BL", sizeof (BITCODE_BL), OFF (struct _dwg_object_APPID_CONTROL,objid), 0,0,0, 0 },
   {NULL, NULL, 0, 0, 0,0,0, 0},
 };
@@ -2207,7 +2207,7 @@ static const Dwg_DYNAPI_field _dwg_ASSOCPLANESURFACEACTIONBODY_fields[] = {
 static const Dwg_DYNAPI_field _dwg_BLOCK_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object*", sizeof (void *), OFF (struct _dwg_object_BLOCK_CONTROL,parent), 1,1,0, 0 },
   { "num_entries", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_object_BLOCK_CONTROL,num_entries), 0,0,0, 70 },
-  { "block_headers", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_BLOCK_CONTROL,block_headers), 1,1,0, 0 },
+  { "entries", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_BLOCK_CONTROL,entries), 1,1,0, 0 },
   { "objid", "BL", sizeof (BITCODE_BL), OFF (struct _dwg_object_BLOCK_CONTROL,objid), 0,0,0, 0 },
   { "model_space", "H", sizeof (BITCODE_H), OFF (struct _dwg_object_BLOCK_CONTROL,model_space), 1,0,0, 0 },
   { "paper_space", "H", sizeof (BITCODE_H), OFF (struct _dwg_object_BLOCK_CONTROL,paper_space), 1,0,0, 0 },
@@ -2421,7 +2421,7 @@ static const Dwg_DYNAPI_field _dwg_DIMSTYLE_fields[] = {
 static const Dwg_DYNAPI_field _dwg_DIMSTYLE_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object*", sizeof (void *), OFF (struct _dwg_object_DIMSTYLE_CONTROL,parent), 1,1,0, 0 },
   { "num_entries", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_object_DIMSTYLE_CONTROL,num_entries), 0,0,0, 70 },
-  { "dimstyles", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_DIMSTYLE_CONTROL,dimstyles), 1,1,0, 0 },
+  { "entries", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_DIMSTYLE_CONTROL,entries), 1,1,0, 0 },
   { "objid", "BL", sizeof (BITCODE_BL), OFF (struct _dwg_object_DIMSTYLE_CONTROL,objid), 0,0,0, 0 },
   { "num_morehandles", "RC", sizeof (BITCODE_RC), OFF (struct _dwg_object_DIMSTYLE_CONTROL,num_morehandles), 0,0,0, 71 },
   { "morehandles", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_DIMSTYLE_CONTROL,morehandles), 1,1,0, 340 },
@@ -2616,7 +2616,7 @@ static const Dwg_DYNAPI_field _dwg_LAYER_fields[] = {
 static const Dwg_DYNAPI_field _dwg_LAYER_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object*", sizeof (void *), OFF (struct _dwg_object_LAYER_CONTROL,parent), 1,1,0, 0 },
   { "num_entries", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_object_LAYER_CONTROL,num_entries), 0,0,0, 70 },
-  { "layers", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_LAYER_CONTROL,layers), 1,1,0, 0 },
+  { "entries", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_LAYER_CONTROL,entries), 1,1,0, 0 },
   { "objid", "BL", sizeof (BITCODE_BL), OFF (struct _dwg_object_LAYER_CONTROL,objid), 0,0,0, 0 },
   {NULL, NULL, 0, 0, 0,0,0, 0},
 };
@@ -2627,7 +2627,7 @@ static const Dwg_DYNAPI_field _dwg_LAYER_INDEX_fields[] = {
   { "timestamp2", "BL", sizeof (BITCODE_BL), OFF (struct _dwg_object_LAYER_INDEX,timestamp2), 0,0,0, 40 },
   { "num_entries", "BL", sizeof (BITCODE_BL), OFF (struct _dwg_object_LAYER_INDEX,num_entries), 0,0,0, 0 },
   { "entries", "Dwg_LAYER_entry*", sizeof (Dwg_LAYER_entry*), OFF (struct _dwg_object_LAYER_INDEX,entries), 1,1,0, 0 },
-  { "layers", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_LAYER_INDEX,layers), 1,1,0, 0 },
+  { "layer_entries", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_LAYER_INDEX,layer_entries), 1,1,0, 0 },
   {NULL, NULL, 0, 0, 0,0,0, 0},
 };
 /* from typedef struct _dwg_object_LAYOUT: (sorted by offset) */
@@ -2722,7 +2722,7 @@ static const Dwg_DYNAPI_field _dwg_LTYPE_fields[] = {
 static const Dwg_DYNAPI_field _dwg_LTYPE_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object*", sizeof (void *), OFF (struct _dwg_object_LTYPE_CONTROL,parent), 1,1,0, 0 },
   { "num_entries", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_object_LTYPE_CONTROL,num_entries), 0,0,0, 70 },
-  { "linetypes", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_LTYPE_CONTROL,linetypes), 1,1,0, 0 },
+  { "entries", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_LTYPE_CONTROL,entries), 1,1,0, 0 },
   { "objid", "BL", sizeof (BITCODE_BL), OFF (struct _dwg_object_LTYPE_CONTROL,objid), 0,0,0, 0 },
   { "bylayer", "H", sizeof (BITCODE_H), OFF (struct _dwg_object_LTYPE_CONTROL,bylayer), 1,0,0, 0 },
   { "byblock", "H", sizeof (BITCODE_H), OFF (struct _dwg_object_LTYPE_CONTROL,byblock), 1,0,0, 0 },
@@ -3076,7 +3076,7 @@ static const Dwg_DYNAPI_field _dwg_STYLE_fields[] = {
 static const Dwg_DYNAPI_field _dwg_STYLE_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object*", sizeof (void *), OFF (struct _dwg_object_STYLE_CONTROL,parent), 1,1,0, 0 },
   { "num_entries", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_object_STYLE_CONTROL,num_entries), 0,0,0, 70 },
-  { "styles", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_STYLE_CONTROL,styles), 1,1,0, 0 },
+  { "entries", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_STYLE_CONTROL,entries), 1,1,0, 0 },
   { "objid", "BL", sizeof (BITCODE_BL), OFF (struct _dwg_object_STYLE_CONTROL,objid), 0,0,0, 0 },
   {NULL, NULL, 0, 0, 0,0,0, 0},
 };
@@ -3187,7 +3187,7 @@ static const Dwg_DYNAPI_field _dwg_UCS_fields[] = {
 static const Dwg_DYNAPI_field _dwg_UCS_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object*", sizeof (void *), OFF (struct _dwg_object_UCS_CONTROL,parent), 1,1,0, 0 },
   { "num_entries", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_object_UCS_CONTROL,num_entries), 0,0,0, 70 },
-  { "ucs", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_UCS_CONTROL,ucs), 1,1,0, 0 },
+  { "entries", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_UCS_CONTROL,entries), 1,1,0, 0 },
   { "objid", "BL", sizeof (BITCODE_BL), OFF (struct _dwg_object_UCS_CONTROL,objid), 0,0,0, 0 },
   {NULL, NULL, 0, 0, 0,0,0, 0},
 };
@@ -3256,7 +3256,7 @@ static const Dwg_DYNAPI_field _dwg_VIEW_fields[] = {
 static const Dwg_DYNAPI_field _dwg_VIEW_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object*", sizeof (void *), OFF (struct _dwg_object_VIEW_CONTROL,parent), 1,1,0, 0 },
   { "num_entries", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_object_VIEW_CONTROL,num_entries), 0,0,0, 70 },
-  { "views", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_VIEW_CONTROL,views), 1,1,0, 0 },
+  { "entries", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_VIEW_CONTROL,entries), 1,1,0, 0 },
   { "objid", "BL", sizeof (BITCODE_BL), OFF (struct _dwg_object_VIEW_CONTROL,objid), 0,0,0, 0 },
   {NULL, NULL, 0, 0, 0,0,0, 0},
 };
@@ -3359,7 +3359,7 @@ static const Dwg_DYNAPI_field _dwg_VPORT_fields[] = {
 static const Dwg_DYNAPI_field _dwg_VPORT_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object*", sizeof (void *), OFF (struct _dwg_object_VPORT_CONTROL,parent), 1,1,0, 0 },
   { "num_entries", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_object_VPORT_CONTROL,num_entries), 0,0,0, 70 },
-  { "vports", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_VPORT_CONTROL,vports), 1,1,0, 0 },
+  { "entries", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_VPORT_CONTROL,entries), 1,1,0, 0 },
   { "objid", "BL", sizeof (BITCODE_BL), OFF (struct _dwg_object_VPORT_CONTROL,objid), 0,0,0, 0 },
   {NULL, NULL, 0, 0, 0,0,0, 0},
 };
@@ -3367,7 +3367,7 @@ static const Dwg_DYNAPI_field _dwg_VPORT_CONTROL_fields[] = {
 static const Dwg_DYNAPI_field _dwg_VPORT_ENTITY_CONTROL_fields[] = {
   { "parent", "struct _dwg_object_object*", sizeof (void *), OFF (struct _dwg_object_VPORT_ENTITY_CONTROL,parent), 1,1,0, 0 },
   { "num_entries", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_object_VPORT_ENTITY_CONTROL,num_entries), 0,0,0, 70 },
-  { "vport_entity_headers", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_VPORT_ENTITY_CONTROL,vport_entity_headers), 1,1,0, 0 },
+  { "entries", "H*", sizeof (BITCODE_H*), OFF (struct _dwg_object_VPORT_ENTITY_CONTROL,entries), 1,1,0, 0 },
   { "objid", "BL", sizeof (BITCODE_BL), OFF (struct _dwg_object_VPORT_ENTITY_CONTROL,objid), 0,0,0, 0 },
   {NULL, NULL, 0, 0, 0,0,0, 0},
 };

@@ -159,26 +159,6 @@ EXPORT int dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
   if (strEQc (name, #nam))                             \
     {                                                  \
       ADD_OBJECT(token);                               \
-      if (strEQc (#nam, "VPORT"))                      \
-        strcpy (ctrl_hdlv, "vports");                  \
-      else if (strEQc (#nam, "UCS"))                   \
-        strcpy (ctrl_hdlv, "ucs");                     \
-      else if (strEQc (#nam, "VIEW"))                  \
-        strcpy (ctrl_hdlv, "views");                   \
-      else if (strEQc (#nam, "LTYPE"))                 \
-        strcpy (ctrl_hdlv, "linetypes");               \
-      else if (strEQc (#nam, "STYLE"))                 \
-        strcpy (ctrl_hdlv, "styles");                  \
-      else if (strEQc (#nam, "LAYER"))                 \
-        strcpy (ctrl_hdlv, "layers");                  \
-      else if (strEQc (#nam, "DIMSTYLE"))              \
-        strcpy (ctrl_hdlv, "dimstyles");               \
-      else if (strEQc (#nam, "APPID"))                 \
-        strcpy (ctrl_hdlv, "apps");                    \
-      else if (strEQc (#nam, "VPORT_ENTITY"))          \
-        strcpy (ctrl_hdlv, "vport_entity_headers");    \
-      else if (strEQc (#nam, "BLOCK_RECORD"))          \
-        strcpy (ctrl_hdlv, "block_headers");           \
     }
 
 #define STRADD(field, string)                          \

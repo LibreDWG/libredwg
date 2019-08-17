@@ -6700,7 +6700,7 @@ dwg_obj_appid_control_get_appid (const dwg_obj_appid_control *restrict appid,
   if (appid != NULL && idx < appid->num_entries)
     {
       *error = 0;
-      return appid->apps[idx];
+      return appid->entries[idx];
     }
   else
     {
@@ -19929,7 +19929,7 @@ dwg_obj_block_control_get_block_headers (
 {
   dwg_object_ref **ptx;
 
-  if (!ctrl || (ctrl->num_entries && !ctrl->block_headers))
+  if (!ctrl || (ctrl->num_entries && !ctrl->entries))
     {
       *error = 1;
       LOG_ERROR ("%s: null block_headers", __FUNCTION__);
@@ -19944,7 +19944,7 @@ dwg_obj_block_control_get_block_headers (
       *error = 0;
       for (i = 0; i < ctrl->num_entries; i++)
         {
-          ptx[i] = ctrl->block_headers[i];
+          ptx[i] = ctrl->entries[i];
         }
       return ptx;
     }
@@ -20178,7 +20178,7 @@ dwg_object_tablectrl_get_entries (const dwg_object *restrict obj,
     {
       // HACK: we can guarantee a common layout of the common fields
       Dwg_Object_STYLE_CONTROL *ctrl = obj->tio.object->tio.STYLE_CONTROL;
-      return ctrl->styles;
+      return ctrl->entries;
     }
   else
     {
@@ -20207,7 +20207,7 @@ dwg_object_tablectrl_get_entry (const dwg_object *restrict obj,
       if (idx < count)
         {
           *error = 0;
-          return ctrl->styles[idx];
+          return ctrl->entries[idx];
         }
       else
         {

@@ -21444,14 +21444,14 @@ static int test_APPID_CONTROL (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_APPID_CONTROL *restrict appid_control = obj->tio.object->tio.APPID_CONTROL;
   {
-    BITCODE_H* apps;
+    BITCODE_H* entries;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (appid_control, "APPID_CONTROL", "num_entries", &count, NULL)
-        && dwg_dynapi_entity_value (appid_control, "APPID_CONTROL", "apps", &apps, NULL)
-        && apps == appid_control->apps)
+        && dwg_dynapi_entity_value (appid_control, "APPID_CONTROL", "entries", &entries, NULL)
+        && entries == appid_control->entries)
       pass ();
     else
-      fail ("APPID_CONTROL.apps [H*] * %u num_entries", count);
+      fail ("APPID_CONTROL.entries [H*] * %u num_entries", count);
   }
   {
     BITCODE_BS num_entries;
@@ -23499,14 +23499,14 @@ static int test_BLOCK_CONTROL (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_BLOCK_CONTROL *restrict block_control = obj->tio.object->tio.BLOCK_CONTROL;
   {
-    BITCODE_H* block_headers;
+    BITCODE_H* entries;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (block_control, "BLOCK_CONTROL", "num_entries", &count, NULL)
-        && dwg_dynapi_entity_value (block_control, "BLOCK_CONTROL", "block_headers", &block_headers, NULL)
-        && block_headers == block_control->block_headers)
+        && dwg_dynapi_entity_value (block_control, "BLOCK_CONTROL", "entries", &entries, NULL)
+        && entries == block_control->entries)
       pass ();
     else
-      fail ("BLOCK_CONTROL.block_headers [H*] * %u num_entries", count);
+      fail ("BLOCK_CONTROL.entries [H*] * %u num_entries", count);
   }
   {
     BITCODE_H model_space;
@@ -25883,14 +25883,14 @@ static int test_DIMSTYLE_CONTROL (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_DIMSTYLE_CONTROL *restrict dimstyle_control = obj->tio.object->tio.DIMSTYLE_CONTROL;
   {
-    BITCODE_H* dimstyles;
+    BITCODE_H* entries;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (dimstyle_control, "DIMSTYLE_CONTROL", "num_entries", &count, NULL)
-        && dwg_dynapi_entity_value (dimstyle_control, "DIMSTYLE_CONTROL", "dimstyles", &dimstyles, NULL)
-        && dimstyles == dimstyle_control->dimstyles)
+        && dwg_dynapi_entity_value (dimstyle_control, "DIMSTYLE_CONTROL", "entries", &entries, NULL)
+        && entries == dimstyle_control->entries)
       pass ();
     else
-      fail ("DIMSTYLE_CONTROL.dimstyles [H*] * %u num_entries", count);
+      fail ("DIMSTYLE_CONTROL.entries [H*] * %u num_entries", count);
   }
   {
     BITCODE_H* morehandles;
@@ -27852,14 +27852,14 @@ static int test_LAYER_CONTROL (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_LAYER_CONTROL *restrict layer_control = obj->tio.object->tio.LAYER_CONTROL;
   {
-    BITCODE_H* layers;
+    BITCODE_H* entries;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (layer_control, "LAYER_CONTROL", "num_entries", &count, NULL)
-        && dwg_dynapi_entity_value (layer_control, "LAYER_CONTROL", "layers", &layers, NULL)
-        && layers == layer_control->layers)
+        && dwg_dynapi_entity_value (layer_control, "LAYER_CONTROL", "entries", &entries, NULL)
+        && entries == layer_control->entries)
       pass ();
     else
-      fail ("LAYER_CONTROL.layers [H*] * %u num_entries", count);
+      fail ("LAYER_CONTROL.entries [H*] * %u num_entries", count);
   }
   {
     BITCODE_BS num_entries;
@@ -27919,14 +27919,14 @@ static int test_LAYER_INDEX (const Dwg_Object *obj)
       fail ("LAYER_INDEX.entries [Dwg_LAYER_entry*] * %u num_entries", count);
   }
   {
-    BITCODE_H* layers;
+    BITCODE_H* layer_entries;
     BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (layer_index, "LAYER_INDEX", "num_entries", &count, NULL)
-        && dwg_dynapi_entity_value (layer_index, "LAYER_INDEX", "layers", &layers, NULL)
-        && layers == layer_index->layers)
+    if (dwg_dynapi_entity_value (layer_index, "LAYER_INDEX", "num_layer_entries", &count, NULL)
+        && dwg_dynapi_entity_value (layer_index, "LAYER_INDEX", "layer_entries", &layer_entries, NULL)
+        && layer_entries == layer_index->layer_entries)
       pass ();
     else
-      fail ("LAYER_INDEX.layers [H*] * %u num_entries", count);
+      fail ("LAYER_INDEX.layer_entries [H*] * %u num_layer_entries", count);
   }
   {
     BITCODE_BL num_entries;
@@ -28906,14 +28906,14 @@ static int test_LTYPE_CONTROL (const Dwg_Object *obj)
         fail ("LTYPE_CONTROL.bylayer [H]");
   }
   {
-    BITCODE_H* linetypes;
+    BITCODE_H* entries;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (ltype_control, "LTYPE_CONTROL", "num_entries", &count, NULL)
-        && dwg_dynapi_entity_value (ltype_control, "LTYPE_CONTROL", "linetypes", &linetypes, NULL)
-        && linetypes == ltype_control->linetypes)
+        && dwg_dynapi_entity_value (ltype_control, "LTYPE_CONTROL", "entries", &entries, NULL)
+        && entries == ltype_control->entries)
       pass ();
     else
-      fail ("LTYPE_CONTROL.linetypes [H*] * %u num_entries", count);
+      fail ("LTYPE_CONTROL.entries [H*] * %u num_entries", count);
   }
   {
     BITCODE_BS num_entries;
@@ -32773,6 +32773,16 @@ static int test_STYLE_CONTROL (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_STYLE_CONTROL *restrict style_control = obj->tio.object->tio.STYLE_CONTROL;
   {
+    BITCODE_H* entries;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (style_control, "STYLE_CONTROL", "num_entries", &count, NULL)
+        && dwg_dynapi_entity_value (style_control, "STYLE_CONTROL", "entries", &entries, NULL)
+        && entries == style_control->entries)
+      pass ();
+    else
+      fail ("STYLE_CONTROL.entries [H*] * %u num_entries", count);
+  }
+  {
     BITCODE_BS num_entries;
     if (dwg_dynapi_entity_value (style_control, "STYLE_CONTROL", "num_entries", &num_entries, NULL)
         && num_entries == style_control->num_entries)
@@ -32811,16 +32821,6 @@ static int test_STYLE_CONTROL (const Dwg_Object *obj)
         pass ();
     else
         fail ("STYLE_CONTROL.parent [struct _dwg_object_object*]");
-  }
-  {
-    BITCODE_H* styles;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (style_control, "STYLE_CONTROL", "num_entries", &count, NULL)
-        && dwg_dynapi_entity_value (style_control, "STYLE_CONTROL", "styles", &styles, NULL)
-        && styles == style_control->styles)
-      pass ();
-    else
-      fail ("STYLE_CONTROL.styles [H*] * %u num_entries", count);
   }
   return failed;
 }
@@ -33892,6 +33892,16 @@ static int test_UCS_CONTROL (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_UCS_CONTROL *restrict ucs_control = obj->tio.object->tio.UCS_CONTROL;
   {
+    BITCODE_H* entries;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (ucs_control, "UCS_CONTROL", "num_entries", &count, NULL)
+        && dwg_dynapi_entity_value (ucs_control, "UCS_CONTROL", "entries", &entries, NULL)
+        && entries == ucs_control->entries)
+      pass ();
+    else
+      fail ("UCS_CONTROL.entries [H*] * %u num_entries", count);
+  }
+  {
     BITCODE_BS num_entries;
     if (dwg_dynapi_entity_value (ucs_control, "UCS_CONTROL", "num_entries", &num_entries, NULL)
         && num_entries == ucs_control->num_entries)
@@ -33930,16 +33940,6 @@ static int test_UCS_CONTROL (const Dwg_Object *obj)
         pass ();
     else
         fail ("UCS_CONTROL.parent [struct _dwg_object_object*]");
-  }
-  {
-    BITCODE_H* ucs;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (ucs_control, "UCS_CONTROL", "num_entries", &count, NULL)
-        && dwg_dynapi_entity_value (ucs_control, "UCS_CONTROL", "ucs", &ucs, NULL)
-        && ucs == ucs_control->ucs)
-      pass ();
-    else
-      fail ("UCS_CONTROL.ucs [H*] * %u num_entries", count);
   }
   return failed;
 }
@@ -34526,6 +34526,16 @@ static int test_VIEW_CONTROL (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_VIEW_CONTROL *restrict view_control = obj->tio.object->tio.VIEW_CONTROL;
   {
+    BITCODE_H* entries;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (view_control, "VIEW_CONTROL", "num_entries", &count, NULL)
+        && dwg_dynapi_entity_value (view_control, "VIEW_CONTROL", "entries", &entries, NULL)
+        && entries == view_control->entries)
+      pass ();
+    else
+      fail ("VIEW_CONTROL.entries [H*] * %u num_entries", count);
+  }
+  {
     BITCODE_BS num_entries;
     if (dwg_dynapi_entity_value (view_control, "VIEW_CONTROL", "num_entries", &num_entries, NULL)
         && num_entries == view_control->num_entries)
@@ -34564,16 +34574,6 @@ static int test_VIEW_CONTROL (const Dwg_Object *obj)
         pass ();
     else
         fail ("VIEW_CONTROL.parent [struct _dwg_object_object*]");
-  }
-  {
-    BITCODE_H* views;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (view_control, "VIEW_CONTROL", "num_entries", &count, NULL)
-        && dwg_dynapi_entity_value (view_control, "VIEW_CONTROL", "views", &views, NULL)
-        && views == view_control->views)
-      pass ();
-    else
-      fail ("VIEW_CONTROL.views [H*] * %u num_entries", count);
   }
   return failed;
 }
@@ -35766,6 +35766,16 @@ static int test_VPORT_CONTROL (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_VPORT_CONTROL *restrict vport_control = obj->tio.object->tio.VPORT_CONTROL;
   {
+    BITCODE_H* entries;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (vport_control, "VPORT_CONTROL", "num_entries", &count, NULL)
+        && dwg_dynapi_entity_value (vport_control, "VPORT_CONTROL", "entries", &entries, NULL)
+        && entries == vport_control->entries)
+      pass ();
+    else
+      fail ("VPORT_CONTROL.entries [H*] * %u num_entries", count);
+  }
+  {
     BITCODE_BS num_entries;
     if (dwg_dynapi_entity_value (vport_control, "VPORT_CONTROL", "num_entries", &num_entries, NULL)
         && num_entries == vport_control->num_entries)
@@ -35805,16 +35815,6 @@ static int test_VPORT_CONTROL (const Dwg_Object *obj)
     else
         fail ("VPORT_CONTROL.parent [struct _dwg_object_object*]");
   }
-  {
-    BITCODE_H* vports;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (vport_control, "VPORT_CONTROL", "num_entries", &count, NULL)
-        && dwg_dynapi_entity_value (vport_control, "VPORT_CONTROL", "vports", &vports, NULL)
-        && vports == vport_control->vports)
-      pass ();
-    else
-      fail ("VPORT_CONTROL.vports [H*] * %u num_entries", count);
-  }
   return failed;
 }
 static int test_VPORT_ENTITY_CONTROL (const Dwg_Object *obj)
@@ -35822,6 +35822,16 @@ static int test_VPORT_ENTITY_CONTROL (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_VPORT_ENTITY_CONTROL *restrict vport_entity_control = obj->tio.object->tio.VPORT_ENTITY_CONTROL;
+  {
+    BITCODE_H* entries;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (vport_entity_control, "VPORT_ENTITY_CONTROL", "num_entries", &count, NULL)
+        && dwg_dynapi_entity_value (vport_entity_control, "VPORT_ENTITY_CONTROL", "entries", &entries, NULL)
+        && entries == vport_entity_control->entries)
+      pass ();
+    else
+      fail ("VPORT_ENTITY_CONTROL.entries [H*] * %u num_entries", count);
+  }
   {
     BITCODE_BS num_entries;
     if (dwg_dynapi_entity_value (vport_entity_control, "VPORT_ENTITY_CONTROL", "num_entries", &num_entries, NULL)
@@ -35861,16 +35871,6 @@ static int test_VPORT_ENTITY_CONTROL (const Dwg_Object *obj)
         pass ();
     else
         fail ("VPORT_ENTITY_CONTROL.parent [struct _dwg_object_object*]");
-  }
-  {
-    BITCODE_H* vport_entity_headers;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (vport_entity_control, "VPORT_ENTITY_CONTROL", "num_entries", &count, NULL)
-        && dwg_dynapi_entity_value (vport_entity_control, "VPORT_ENTITY_CONTROL", "vport_entity_headers", &vport_entity_headers, NULL)
-        && vport_entity_headers == vport_entity_control->vport_entity_headers)
-      pass ();
-    else
-      fail ("VPORT_ENTITY_CONTROL.vport_entity_headers [H*] * %u num_entries", count);
   }
   return failed;
 }

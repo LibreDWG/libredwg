@@ -1266,7 +1266,7 @@ main (int argc, char *argv[])
       for (k = 0; k < dwg.block_control.num_entries; k++)
         {
           count += match_BLOCK_HEADER (filename,
-                                       dwg.block_control.block_headers[k]);
+                                       dwg.block_control.entries[k]);
         }
       count += match_BLOCK_HEADER (filename, dwg_paper_space_ref (&dwg));
 

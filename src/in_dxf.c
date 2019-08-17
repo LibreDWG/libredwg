@@ -955,8 +955,6 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   int is_utf = dwg->header.version >= R_2007 ? 1 : 0;
   char *fieldname;
   char ctrlname[80];
-  char ctrl_hdlv[80];
-  ctrl_hdlv[0] = '\0';
 
   NEW_OBJECT (dwg, obj);
 
@@ -1074,9 +1072,9 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
                                            &num_entries, is_utf);
               LOG_TRACE ("%s.num_entries = %u [70]\n", ctrlname, num_entries);
               hdls = calloc (num_entries, sizeof (Dwg_Object_Ref *));
-              dwg_dynapi_entity_set_value (_obj, obj->name, ctrl_hdlv, &hdls,
+              dwg_dynapi_entity_set_value (_obj, obj->name, "entries", &hdls,
                                            0);
-              LOG_TRACE ("Add %s.%s[%d]\n", ctrlname, ctrl_hdlv, num_entries);
+              LOG_TRACE ("Add %s.%s[%d]\n", ctrlname, "entries", num_entries);
             }
           break;
         case 71:
@@ -1492,7 +1490,6 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
   Dxf_Pair *pair = dxf_read_pair (dat);
   Dwg_Object_APPID *_obj = NULL; // the smallest
   // we'd really need a Dwg_Object_TABLE or Dwg_Object_Generic type
-  char ctrl_hdlv[80];
   char ctrlname[80];
   char curr_subclass[80];
   char text[256]; // FIXME
@@ -1506,7 +1503,6 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
   BITCODE_RL curr_inserts = 0;
   BITCODE_RS flag = 0;
 
-  ctrl_hdlv[0] = '\0';
   if (ctrl || i)
     {
       LOG_TRACE ("add %s [%d]\n", name, i)
@@ -1646,9 +1642,9 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
             add_handle (&obj->handle, 0, pair->value.u, obj);
             LOG_TRACE ("%s.handle = " FORMAT_H " [5 H]\n", name,
                        ARGS_H (obj->handle));
-            if (*ctrl_hdlv)
+            if (ctrl)
               {
-                // add to ctrl HANDLE_VECTOR "ctrl_hdlv"
+                // add to ctrl "entries" HANDLE_VECTOR
                 Dwg_Object_APPID_CONTROL *_ctrl
                     = ctrl->tio.object->tio.APPID_CONTROL;
                 BITCODE_H *hdls = NULL;
@@ -1667,7 +1663,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                                num_entries);
                   }
 
-                dwg_dynapi_entity_value (_ctrl, ctrlname, ctrl_hdlv, &hdls,
+                dwg_dynapi_entity_value (_ctrl, ctrlname, "entries", &hdls,
                                          NULL);
                 if (!hdls)
                   {
@@ -1679,10 +1675,10 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                                     num_entries * sizeof (Dwg_Object_Ref *));
                   }
                 hdls[i] = add_handleref (dwg, 2, pair->value.u, obj);
-                dwg_dynapi_entity_set_value (_ctrl, ctrlname, ctrl_hdlv, &hdls,
+                dwg_dynapi_entity_set_value (_ctrl, ctrlname, "entries", &hdls,
                                              0);
                 LOG_TRACE ("%s.%s[%d] = " FORMAT_REF " [0]\n", ctrlname,
-                           ctrl_hdlv, i, ARGS_REF (hdls[i]));
+                           "entries", i, ARGS_REF (hdls[i]));
               }
           }
           break;
