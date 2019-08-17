@@ -328,7 +328,7 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
   dat.version = (Dwg_Version_Type)dwg->header.version;
   dat.from_version = (Dwg_Version_Type)dwg->header.from_version;
 
-  // Encode the DWG struct
+  // Encode the DWG struct into dat (in memory). Needs 2x DWG heap, dwg + dat.
   dat.size = 0;
   error = dwg_encode ((Dwg_Data *)dwg, &dat);
   if (error >= DWG_ERR_CRITICAL)

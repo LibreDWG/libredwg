@@ -1020,6 +1020,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {
       Dwg_Object *obj;
       BITCODE_BL index = omap[j].index;
+      unsigned long end_address;
       LOG_TRACE ("\n> Next object: " FORMAT_BL " \tHandle: %X\tOffset: %lu\n"
                  "==========================================\n",
                  j, omap[j].handle, dat->byte);
@@ -1036,7 +1037,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       // change the address to the linearly sorted one
       obj->address = dat->byte;
       error |= dwg_encode_add_object (obj, dat, dat->byte);
-      bit_write_CRC (dat, omap[j].address, 0xC0C1);
+
+      end_address = obj->address + (unsigned long)obj->size; // from RL
+      if (end_address > dat->size)
+        {
+          dat->size = end_address;
+          bit_chain_alloc (dat);
+        }
+      bit_write_CRC (dat, obj->address, 0xC0C1);
     }
 
   /*for (j = 0; j < dwg->num_objects; j++)
