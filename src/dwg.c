@@ -324,6 +324,7 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
 
   assert (filename);
   assert (dwg);
+  dat.opts = dwg->opts;
   dat.version = (Dwg_Version_Type)dwg->header.version;
   dat.from_version = (Dwg_Version_Type)dwg->header.from_version;
 
