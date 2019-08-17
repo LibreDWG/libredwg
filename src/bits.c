@@ -1318,7 +1318,7 @@ bit_read_TV (Bit_Chain *restrict dat)
 /** Write simple text.
  */
 void
-bit_write_TV (Bit_Chain *restrict dat, char *restrict chain)
+bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
 {
   int i;
   int length;
@@ -1377,6 +1377,24 @@ bit_write_TU (Bit_Chain *restrict dat, BITCODE_TU restrict chain)
       bit_write_RS (dat, chain[i]); // probably without byte swapping
     }
   bit_write_RS (dat, 0); //?? unsure about that
+}
+
+BITCODE_T
+bit_read_T (Bit_Chain *restrict dat)
+{
+  if (dat->version >= R_2007)
+    return (BITCODE_T)bit_read_TU (dat);
+  else
+    return (BITCODE_T)bit_read_TV (dat);
+}
+
+void
+bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict chain)
+{
+  if (dat->version >= R_2007)
+    return bit_write_TU (dat, (BITCODE_TU)chain);
+  else
+    return bit_write_TV (dat, chain);
 }
 
 /* converts UCS-2 to UTF-8 */
@@ -1558,6 +1576,7 @@ bit_read_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color)
     {
       color->rgb = bit_read_BL (dat);
       color->flag = bit_read_RC (dat);
+      // wide?
       color->name = (color->flag & 1) ? (char *)bit_read_TV (dat) : NULL;
       color->book_name = (color->flag & 2) ? (char *)bit_read_TV (dat) : NULL;
     }
@@ -1573,6 +1592,7 @@ bit_write_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color)
     {
       bit_write_BL (dat, color->rgb);
       bit_write_RC (dat, color->flag);
+      // wide?
       if (color->flag & 1)
         bit_write_TV (dat, color->name);
       if (color->flag & 2)
@@ -1624,11 +1644,11 @@ bit_write_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat,
         bit_write_BL (dat, color->alpha);
       if (!(flag & 0x40) && (flag & 0x80))
         bit_write_BL (dat, color->rgb);
-      // ??
+      // ?? wide?
       if ((flag & 0x41) == 0x41)
-        bit_write_TV (str_dat, color->name);
+        bit_write_T (str_dat, color->name);
       if ((flag & 0x42) == 0x42)
-        bit_write_TV (str_dat, color->book_name);
+        bit_write_T (str_dat, color->book_name);
       if (flag & 0x40)
         bit_write_H (hdl_dat, &(color->handle->handleref)); // => DBCOLOR
     }

@@ -557,7 +557,7 @@ match_LAYER_INDEX (const char *restrict filename,
 
   for (i = 0; i < _obj->num_entries; i++)
     {
-      MATCH_OBJECT (LAYER_INDEX, entries[i].layer, 8);
+      MATCH_OBJECT (LAYER_INDEX, entries[i].layername, 8);
     }
   return found;
 }

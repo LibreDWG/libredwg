@@ -525,8 +525,8 @@ typedef struct _dwg_color /* CmColor: R15 and earlier */
   BITCODE_BS flag;    /* 1: name follows, 2: book name follows, ... */
   BITCODE_BL rgb;     /* DXF 420 */
   BITCODE_H  handle;
-  BITCODE_TV name;    /* DXF 430 */
-  BITCODE_TV book_name;
+  BITCODE_T  name;    /* DXF 430 */
+  BITCODE_T  book_name;
   BITCODE_BB alpha_type; /* 0 BYLAYER, 1 BYBLOCK, 3 alpha */
   BITCODE_RC alpha;      /* DXF 440. 0-255 */
 } Dwg_Color;
@@ -3776,7 +3776,7 @@ typedef struct _dwg_object_IMAGEDEF_REACTOR
 typedef struct _dwg_layer_entry
 {
   BITCODE_BL idxlong;
-  BITCODE_TV layer;
+  BITCODE_T layername;
 
   struct _dwg_object_LAYER_INDEX *parent;
 } Dwg_LAYER_entry;
