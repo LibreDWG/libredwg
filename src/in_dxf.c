@@ -1354,6 +1354,70 @@ dxf_find_lweight (const int lw)
   return 0;
 }
 
+// read to ent->picture, starting with size 160
+static Dxf_Pair *
+add_ent_picture (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                 Dxf_Pair *restrict pair)
+{
+  Dwg_Object_Entity *ent = obj->tio.entity;
+  unsigned written = 0;
+
+  if (obj->supertype != DWG_SUPERTYPE_ENTITY)
+    {
+      LOG_ERROR ("%s is no entity for a picture", obj->name);
+      return pair;
+    }
+  if (pair->code != 160)
+    {
+      LOG_ERROR ("Invalid %s.picture_size code %d, need 160", obj->name,
+                 pair->code);
+      return pair;
+    }
+  ent->picture_size = pair->value.l;
+  if (!ent->picture_size)
+    {
+      dxf_free_pair (pair);
+      return dxf_read_pair (dat);
+    }
+  ent->picture = calloc (ent->picture_size, 1);
+  if (!ent->picture)
+    {
+      LOG_ERROR ("Out of memory");
+      return NULL;
+    }
+  LOG_TRACE ("%s.picture_size = %ld [160 BLL]\n", obj->name,
+             ent->picture_size);
+  ent->picture_exists = 1;
+
+  dxf_free_pair (pair);
+  pair = dxf_read_pair (dat);
+  while (pair->code == 310)
+    {
+      unsigned len = strlen (pair->value.s);
+      unsigned blen = len / 2;
+      const char *pos = pair->value.s;
+      char *s = &ent->picture[written];
+      if (blen + written > ent->picture_size)
+        {
+          LOG_ERROR ("%s.picture overflow: %u + written %u > size: %lu",
+                     obj->name, blen, written, ent->picture_size);
+          return pair;
+        }
+      for (unsigned i = 0; i < blen; i++)
+        {
+          sscanf (pos, "%2hhX", &s[i]);
+          pos += 2;
+        }
+      written += blen;
+      LOG_TRACE ("%s.picture += %u (%u/%lu)\n", obj->name, blen, written,
+                 ent->picture_size);
+
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+    }
+  return pair;
+}
+
 /* For tables, entities and objects.
  */
 static Dxf_Pair *
@@ -1367,6 +1431,8 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
   // we'd really need a Dwg_Object_TABLE or Dwg_Object_Generic type
   char ctrl_hdlv[80];
   char ctrlname[80];
+  char curr_subclass[80];
+  char text[256]; // FIXME
   int in_xdict = 0;
   int in_reactors = 0;
   int in_blkrefs = 0;
@@ -1376,7 +1442,6 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
   int j = 0, k = 0, l = 0, error = 0;
   BITCODE_RL curr_inserts = 0;
   BITCODE_RS flag = 0;
-  char text[256];
 
   ctrl_hdlv[0] = '\0';
   if (ctrl || i)
@@ -1493,6 +1558,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
   // read table fields until next 0 table or 0 ENDTAB
   while (pair->code != 0)
     {
+    start_loop:
 #if 0
       // don't set defaults. TODO but needed to reset counters j, k, l
       if ((pair->type == VT_INT8 || pair->type == VT_INT16 || pair->type == VT_BOOL) &&
@@ -1575,7 +1641,8 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               break;
             }
           // fall through
-        case 100: // TODO for nested structs
+        case 100: // for nested structs
+          strcpy (curr_subclass, pair->value.s);
           break;
         case 102:
           if (strEQc (pair->value.s, "{ACAD_XDICTIONARY"))
@@ -2214,6 +2281,11 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                             }
                           else
                             {
+                              if (is_entity && pair->code == 160)
+                                {
+                                  pair = add_ent_picture (obj, dat, pair);
+                                  goto start_loop; // already fresh pair
+                                }
                               LOG_TRACE ("COMMON.%s = %ld [%d %s]\n", f->name,
                                          pair->value.l, pair->code, f->type);
                             }
@@ -2410,6 +2482,7 @@ dxf_unknownsection_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
+// read to dwg->picture, size 90, not entity->picture size 160
 static int
 dxf_preview_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
