@@ -1374,7 +1374,7 @@ dxf_find_lweight (const int lw)
   return 0;
 }
 
-// read to ent->picture, starting with size 160
+// read to ent->picture, starting with code 160. Or 92 with WIPEOUT, LIGHT, ...
 static Dxf_Pair *
 add_ent_picture (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                  Dxf_Pair *restrict pair)
@@ -1387,13 +1387,7 @@ add_ent_picture (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       LOG_ERROR ("%s is no entity for a picture", obj->name);
       return pair;
     }
-  if (pair->code != 160)
-    {
-      LOG_ERROR ("Invalid %s.picture_size code %d, need 160", obj->name,
-                 pair->code);
-      return pair;
-    }
-  ent->picture_size = pair->value.bll;
+  ent->picture_size = pair->code == 160 ? pair->value.bll : pair->value.u;
   if (!ent->picture_size)
     {
       dxf_free_pair (pair);
@@ -1405,8 +1399,8 @@ add_ent_picture (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       LOG_ERROR ("Out of memory");
       return NULL;
     }
-  LOG_TRACE ("%s.picture_size = " FORMAT_BLL " [160 BLL]\n", obj->name,
-             ent->picture_size);
+  LOG_TRACE ("%s.picture_size = " FORMAT_BLL " [%d BLL]\n", obj->name,
+             ent->picture_size, pair->code);
   ent->picture_exists = 1;
 
   dxf_free_pair (pair);
@@ -2169,7 +2163,14 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                     }
                   else if (f->dxf == pair->code) // matching DXF code
                     {
-                      if (pair->code == 3 &&
+                      if (pair->code == 92 &&
+                          // not MULTILEADER.text_color
+                          obj->fixedtype == DWG_TYPE_MULTILEADER)
+                        {
+                          pair = add_ent_picture (obj, dat, pair);
+                          goto start_loop;
+                        }
+                      else if (pair->code == 3 &&
                           memBEGINc (obj->name, "DICTIONARY") &&
                           strNE (obj->name, "DICTIONARYVAR"))
                         {
@@ -2374,7 +2375,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                             }
                           else
                             {
-                              if (is_entity && pair->code == 160)
+                              if (is_entity && pair->code == 160) //
                                 {
                                   pair = add_ent_picture (obj, dat, pair);
                                   goto start_loop; // already fresh pair
@@ -2386,13 +2387,23 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                         }
                     }
                 }
-              if (strEQc (name, "BLOCK") &&
-                  (pair->code == 70 ||
-                   pair->code == 10 ||
-                   pair->code == 20 ||
-                   pair->code == 30 ||
-                   pair->code == 3 ||
-                   pair->code == 1))
+              // not in dynapi: 92 as 310 size prefix
+              if ((pair->code == 92) &&
+                  (obj->fixedtype == DWG_TYPE_WIPEOUT ||
+                   obj->fixedtype == DWG_TYPE_MULTILEADER || /* also above */
+                   obj->fixedtype == DWG_TYPE_LIGHT ||
+                   obj->fixedtype == DWG_TYPE_ARC_DIMENSION))
+                {
+                  pair = add_ent_picture (obj, dat, pair);
+                  goto start_loop;
+                }
+              else if (strEQc (name, "BLOCK") &&
+                       (pair->code == 70 ||
+                        pair->code == 10 ||
+                        pair->code == 20 ||
+                        pair->code == 30 ||
+                        pair->code == 3 ||
+                        pair->code == 1))
                 ; // ignore those BLOCK fields. DXF artifacts
               else
                 LOG_WARN ("Unknown DXF code %d for %s", pair->code, name);
