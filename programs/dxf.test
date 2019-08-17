@@ -96,14 +96,16 @@ for dwg in $datadir/example_*.dwg; do
     tgt=../$(basename "$dxf")
     log=$(basename "$tgt").log
     rm "$log" 2>/dev/null
-    for dxfname in ACDBPERSSUBENTMANAGER ACDBASSOCDEPENDENCY
-    do
-        if [ -z "$enable_debug" ]; then
-            check_acdb_dxfname 1
-        else
-            check_acdb_dxfname
-        fi
-    done
+    if [ "$tgt" != "../example_r14.dxf" ]; then
+        for dxfname in ACDBPERSSUBENTMANAGER ACDBASSOCDEPENDENCY
+        do
+            if [ -z "$enable_debug" ]; then
+                check_acdb_dxfname 1
+            else
+                check_acdb_dxfname
+            fi
+        done
+    fi
 done
 for dwg in $datadir/2004/Underlay.dwg; do
     dxf=$(echo "$dwg" | sed 's,.dwg,.dxf,')
