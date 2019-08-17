@@ -831,7 +831,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       dwg->header.section[j].size = bit_read_RL (dat);
       LOG_TRACE ("section[%u].number: %2d [RC]\n", j,
                  (int)dwg->header.section[j].number)
-      LOG_TRACE ("section[%u].offset: 0x%8x [RL]\n", j,
+      LOG_TRACE ("section[%u].offset: 0x%x [RLx]\n", j,
                  (unsigned)dwg->header.section[j].address)
       LOG_TRACE ("section[%u].size: %4d [RL]\n", j,
                  (int)dwg->header.section[j].size)
@@ -1235,7 +1235,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_TRACE ("pvzadr: %lx\n", pvzadr)
 
       FIELD_RL (size, 0);
-      FIELD_BL (address, 0);
+      FIELD_BLx (address, 0);
       if (!dwg->header.section[SECTION_2NDHEADER_R13].address)
         {
           dwg->header.section[SECTION_2NDHEADER_R13].address
@@ -1268,7 +1268,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           {
             // address+sizes of sections 0-2 is correct, 3+4 is empty
             FIELD_RC (section[i].nr, 0);
-            FIELD_BL (section[i].address, 0);
+            FIELD_BLx (section[i].address, 0);
             FIELD_BL (section[i].size, 0);
           }
         if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
