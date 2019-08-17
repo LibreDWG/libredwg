@@ -1240,6 +1240,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dwg->header.section[SECTION_MEASUREMENT_R13].number = 4;
       dwg->header.section[SECTION_MEASUREMENT_R13].address = dat->byte;
       dwg->header.section[SECTION_MEASUREMENT_R13].size = 4;
+      // 0 - English, 1- Metric
       bit_write_RL (dat, dwg->measurement);
     }
 

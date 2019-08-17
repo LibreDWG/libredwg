@@ -136,7 +136,7 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dwg->picture.chain = NULL;
   dwg->header.num_sections = 0;
   dwg->header.section_infohdr.num_desc = 0;
-  dwg->measurement = 0;
+  dwg->measurement = 0; // 0 - English, 1- Metric
   dwg->dwg_class = NULL;
   dwg->object_ref = NULL;
   dwg->object = NULL;
@@ -1330,6 +1330,8 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       dat->byte = dwg->header.section[4].address;
       dat->bit = 0;
       dwg->measurement = bit_read_RL (dat); // TODO => header_vars.MEASUREMENT
+      LOG_TRACE ("measurement: " FORMAT_RL " (0 English/1 Metric)\n",
+                 dwg->measurement)
 
       LOG_TRACE ("         Size bytes :\t%lu\n", dat->size)
     }

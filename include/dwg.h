@@ -5654,7 +5654,7 @@ typedef struct _dwg_struct
     BITCODE_RL junk_r14_2; /*!< r14 only */
   } second_header;
 
-  long unsigned int measurement;
+  BITCODE_RL measurement; // 0 English/1 Metric. section 4
   unsigned int layout_number;
   unsigned int opts; /* 0xf: loglevel, ... */
 } Dwg_Data;
