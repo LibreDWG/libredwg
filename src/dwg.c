@@ -1402,6 +1402,12 @@ dwg_find_tablehandle (const Dwg_Data *restrict dwg,
       LOG_ERROR ("dwg_find_tablehandle: Could not resolve table %s", table);
       return 0;
     }
+  if (!strstr (ctrl->obj->name, "_CONTROL"))
+    {
+      LOG_ERROR ("dwg_find_tablehandle: Could not resolve CONTROL object %s for table %s",
+                 ctrl->obj->name, table);
+      return 0;
+    }
   _obj = ctrl->obj->tio.object->tio.APPID_CONTROL; // just random type
   dwg_dynapi_entity_value (_obj, ctrl->obj->name, "num_entries",
                            &num_entries, NULL);

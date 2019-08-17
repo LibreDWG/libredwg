@@ -2324,6 +2324,30 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                             dwg_dynapi_common_set_value (_obj, f->name,
                                                          &handle, is_utf);
                         }
+                      else if (f->size > 8 && strEQc (f->type, "CMC"))
+                        {
+                          BITCODE_CMC color;
+                          dwg_dynapi_common_value (_obj, f->name, &color,
+                                                   NULL);
+                          if (pair->code < 100)
+                            color.index = pair->value.i;
+                          else if (pair->code < 430)
+                            color.rgb = pair->value.l;
+                          else if (pair->code < 440)
+                            {
+                              color.flag |= 1;
+                              strcpy (color.name, pair->value.s);
+                            }
+                          else
+                            {
+                              color.alpha_type = 3;
+                              color.alpha = pair->value.i;
+                            }
+                          dwg_dynapi_common_set_value (_obj, f->name, &color,
+                                                       is_utf);
+                          LOG_TRACE ("COMMON.%s = %d [%d %s]\n", f->name,
+                                     pair->value.i, pair->code, "CMC");
+                        }
                       else
                         {
                           dwg_dynapi_common_set_value (_obj, f->name,
