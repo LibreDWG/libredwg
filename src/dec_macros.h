@@ -277,17 +277,22 @@
 #define FIELD_BLx(nam, dxf)                                                   \
   {                                                                           \
     _obj->nam = bit_read_BL (dat);                                            \
-    LOG_TRACE (#nam ": 0x%x [BL %d]\n", (uint32_t)_obj->nam, dxf);            \
+    LOG_TRACE (#nam ": 0x%x [BLx %d]\n", (uint32_t)_obj->nam, dxf);           \
   }
 #define FIELD_RLx(nam, dxf)                                                   \
   {                                                                           \
     _obj->nam = bit_read_RL (dat);                                            \
-    LOG_TRACE (#nam ": 0x%x [RL %d]\n", (uint32_t)_obj->nam, dxf);            \
+    LOG_TRACE (#nam ": 0x%x [RLx %d]\n", (uint32_t)_obj->nam, dxf);           \
   }
 #define FIELD_BSx(nam, dxf)                                                   \
   {                                                                           \
     _obj->nam = bit_read_BS (dat);                                            \
-    LOG_TRACE (#nam ": 0x%x [BS %d]\n", _obj->nam, dxf);                      \
+    LOG_TRACE (#nam ": 0x%x [BSx %d]\n", _obj->nam, dxf);                     \
+  }
+#define FIELD_BSd(nam, dxf)                                                   \
+  {                                                                           \
+    _obj->nam = bit_read_BS (dat);                                            \
+    LOG_TRACE (#nam ": " FORMAT_BSd " [BSd %d]\n", _obj->nam, dxf);           \
   }
 #define FIELD_RC(nam, dxf) FIELDG (nam, RC, dxf)
 #define FIELD_RCu(nam, dxf)                                                   \

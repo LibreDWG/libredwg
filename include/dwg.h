@@ -88,8 +88,8 @@ typedef unsigned char BITCODE_3B;
 //#define BITCODE_RL uint32_t
 //#define BITCODE_BLd int32_t
 //#define BITCODE_RLd int32_t
-typedef int16_t BITCODE_BSd;
 typedef uint16_t BITCODE_BS;
+typedef int16_t BITCODE_BSd;
 typedef uint16_t BITCODE_RS;
 typedef uint32_t BITCODE_BL;
 typedef uint32_t BITCODE_RL;
@@ -116,6 +116,7 @@ typedef int32_t BITCODE_RLd;
 */
 //#ifdef HAVE_INTTYPES_H
 # define FORMAT_BS "%" PRIu16
+# define FORMAT_BSd "%" PRId16
 # define FORMAT_RS "%" PRIu16
 # define FORMAT_BL "%" PRIu32
 # define FORMAT_RL "%" PRIu32
@@ -838,8 +839,8 @@ typedef struct _dwg_header_variables {
   BITCODE_H DIMLTYPE; /*!< r2007+ */
   BITCODE_H DIMLTEX1; /*!< r2007+ */
   BITCODE_H DIMLTEX2; /*!< r2007+ */
-  BITCODE_BS DIMLWD;  /*!< r2000+ */
-  BITCODE_BS DIMLWE;  /*!< r2000+ */
+  BITCODE_BSd DIMLWD;  /*!< r2000+ */
+  BITCODE_BSd DIMLWE;  /*!< r2000+ */
   BITCODE_H BLOCK_CONTROL_OBJECT;
   BITCODE_H LAYER_CONTROL_OBJECT;
   BITCODE_H STYLE_CONTROL_OBJECT;
@@ -2305,8 +2306,8 @@ typedef struct _dwg_object_DIMSTYLE
   BITCODE_T  DIMALTMZS; /*!< r2010+ */
   BITCODE_BD DIMMZF;    /*!< r2010+ */
   BITCODE_T  DIMMZS;    /*!< r2010+ */
-  BITCODE_BS DIMLWD;
-  BITCODE_BS DIMLWE;
+  BITCODE_BSd DIMLWD;
+  BITCODE_BSd DIMLWE;
 
   BITCODE_H extref_handle;
   BITCODE_H DIMTXSTY;

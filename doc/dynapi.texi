@@ -206,9 +206,9 @@ H,	DXF 6
 @item DIMLUNIT
 BS,	DXF 70
 @item DIMLWD
-BS,	DXF 70
+BSd,	DXF 70
 @item DIMLWE
-BS,	DXF 70
+BSd,	DXF 70
 @item DIMMALTTZ
 BS
 @item DIMMALTZ
@@ -4720,9 +4720,9 @@ BD
 @item DIMMZS
 T
 @item DIMLWD
-BS,	DXF 371
+BSd,	DXF 371
 @item DIMLWE
-BS,	DXF 372
+BSd,	DXF 372
 @item extref_handle
 H
 @item DIMTXSTY

@@ -257,6 +257,13 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
         fprintf (dat->fh, "%-16.14f\r\n", value);
     }
 }
+#define VALUE_TYPE(value, type, dxf)                                          \
+  if (dxf)                                                                    \
+    {                                                                         \
+      GROUP (dxf);                                                            \
+      fprintf (dat->fh, FORMAT_##type "\r\n", value);                         \
+    }
+#define VALUE_BSd(value, dxf) VALUE_TYPE (value, BSd, dxf)
 #define VALUE_RD(value, dxf)  dxf_print_rd (dat, value, dxf)
 #define VALUE_B(value, dxf)                                                   \
   if (dxf)                                                                    \
@@ -328,6 +335,9 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 #define HEADER_BS(nam, dxf)                                                   \
   HEADER_9 (nam);                                                             \
   FIELDG (nam, BS, dxf)
+#define HEADER_BSd(nam, dxf)                                                  \
+  HEADER_9 (nam);                                                             \
+  VALUE_BSd (_obj->nam, dxf)
 #define HEADER_BD(nam, dxf)                                                   \
   HEADER_9 (nam);                                                             \
   FIELD_BD (nam, dxf)
@@ -370,6 +380,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 #define FIELD_BB(nam, dxf) FIELDG (nam, BB, dxf)
 #define FIELD_3B(nam, dxf) FIELDG (nam, 3B, dxf)
 #define FIELD_BS(nam, dxf) FIELDG (nam, BS, dxf)
+#define FIELD_BSd(nam, dxf) FIELDG (nam, BSd, dxf)
 #define FIELD_BL(nam, dxf) FIELDG (nam, BL, dxf)
 #define FIELD_BLL(nam, dxf) FIELDG (nam, BLL, dxf)
 #define FIELD_BD(nam, dxf) VALUE_BD (_obj->nam, dxf)

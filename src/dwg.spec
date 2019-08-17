@@ -3313,8 +3313,8 @@ DWG_OBJECT(DIMSTYLE)
 
   SINCE (R_2000)
     {
-      FIELD_BS (DIMLWD, 371);
-      FIELD_BS (DIMLWE, 372);
+      FIELD_BSd (DIMLWD, 371);
+      FIELD_BSd (DIMLWE, 372);
     }
 
   SINCE (R_13)

@@ -153,8 +153,8 @@
     HEADER_RC (DIMLUNIT, 70);
     //HEADER_RC (DIMLWD, 70); convert from unsigned to signed
     //HEADER_RC (DIMLWE, 70);
-    HEADER_VALUE (DIMLWD, RS, 70, (int16_t)_obj->DIMLWD);
-    HEADER_VALUE (DIMLWE, RS, 70, (int16_t)_obj->DIMLWE);
+    HEADER_BSd (DIMLWD, 70);
+    HEADER_BSd (DIMLWE, 70);
     HEADER_RC (DIMTMOVE, 70);
   }
   SINCE(R_2007)

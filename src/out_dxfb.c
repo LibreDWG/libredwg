@@ -301,6 +301,7 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
 
 #define HEADER_B(nam, dxf) HEADER_RC (nam, dxf)
 #define HEADER_BS(nam, dxf) HEADER_RS (nam, dxf)
+#define HEADER_BSd(nam, dxf) HEADER_RS (nam, dxf)
 #define HEADER_BD(nam, dxf) HEADER_RD (nam, dxf)
 #define HEADER_BL(nam, dxf) HEADER_RL (nam, dxf)
 

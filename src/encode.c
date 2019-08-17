@@ -102,6 +102,11 @@ static bool env_var_checked_p;
 #define FIELD_BB(nam, dxf) FIELDG (nam, BB, dxf)
 #define FIELD_3B(nam, dxf) FIELDG (nam, 3B, dxf)
 #define FIELD_BS(nam, dxf) FIELDG (nam, BS, dxf)
+#define FIELD_BSd(nam, dxf)                                             \
+  {                                                                     \
+    bit_write_BS (dat, (BITCODE_BS)_obj->nam);                          \
+    FIELD_G_TRACE (nam, BSd, dxf);                                      \
+  }
 #define FIELD_BL(nam, dxf) FIELDG (nam, BL, dxf)
 #define FIELD_BLL(nam, dxf) FIELDG (nam, BLL, dxf)
 #define FIELD_BD(nam, dxf) FIELDG (nam, BD, dxf)

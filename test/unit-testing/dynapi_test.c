@@ -3979,36 +3979,36 @@ test_header (const Dwg_Data *dwg)
       fail ("HEADER.DIMLTEX2 [H]");
   }
   {
-    BITCODE_BS dimlwd;
+    BITCODE_BSd dimlwd;
     if (dwg_dynapi_header_value (dwg, "DIMLWD", &dimlwd, NULL)
         && dimlwd == dwg->header_vars.DIMLWD)
       pass ();
     else
-      fail ("HEADER.DIMLWD [BS] %hu != %hu", dwg->header_vars.DIMLWD, dimlwd);
+      fail ("HEADER.DIMLWD [BSd] " FORMAT_BSd " != " FORMAT_BSd "", dwg->header_vars.DIMLWD, dimlwd);
     dimlwd++;
     if (dwg_dynapi_header_set_value (dwg, "DIMLWD", &dimlwd, 0)
         && dimlwd == dwg->header_vars.DIMLWD)
       pass ();
     else
-      fail ("HEADER.DIMLWD [BS] set+1 %hu != %hu",
+      fail ("HEADER.DIMLWD [BSd] set+1 " FORMAT_BSd " != " FORMAT_BSd "",
             dwg->header_vars.DIMLWD, dimlwd);
     dimlwd--;
     dwg_dynapi_header_set_value (dwg, "DIMLWD", &dimlwd, 0);
 
   }
   {
-    BITCODE_BS dimlwe;
+    BITCODE_BSd dimlwe;
     if (dwg_dynapi_header_value (dwg, "DIMLWE", &dimlwe, NULL)
         && dimlwe == dwg->header_vars.DIMLWE)
       pass ();
     else
-      fail ("HEADER.DIMLWE [BS] %hu != %hu", dwg->header_vars.DIMLWE, dimlwe);
+      fail ("HEADER.DIMLWE [BSd] " FORMAT_BSd " != " FORMAT_BSd "", dwg->header_vars.DIMLWE, dimlwe);
     dimlwe++;
     if (dwg_dynapi_header_set_value (dwg, "DIMLWE", &dimlwe, 0)
         && dimlwe == dwg->header_vars.DIMLWE)
       pass ();
     else
-      fail ("HEADER.DIMLWE [BS] set+1 %hu != %hu",
+      fail ("HEADER.DIMLWE [BSd] set+1 " FORMAT_BSd " != " FORMAT_BSd "",
             dwg->header_vars.DIMLWE, dimlwe);
     dimlwe--;
     dwg_dynapi_header_set_value (dwg, "DIMLWE", &dimlwe, 0);
@@ -25196,34 +25196,32 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_BS DIMLWD;
+    BITCODE_BSd DIMLWD;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMLWD", &DIMLWD, NULL)
         && DIMLWD == dimstyle->DIMLWD)
       pass ();
     else
-      fail ("DIMSTYLE.DIMLWD [BS] %hu != %hu", dimstyle->DIMLWD, DIMLWD);
-    DIMLWD++;
+      fail ("DIMSTYLE.DIMLWD [BSd] " FORMAT_BSd " != " FORMAT_BSd "", dimstyle->DIMLWD, DIMLWD);
     if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMLWD", &DIMLWD, 0)
         && DIMLWD == dimstyle->DIMLWD)
       pass ();
     else
-      fail ("DIMSTYLE.DIMLWD [BS] set+1 %hu != %hu", dimstyle->DIMLWD, DIMLWD);
+      fail ("DIMSTYLE.DIMLWD [BSd] set+1 " FORMAT_BSd " != " FORMAT_BSd "", dimstyle->DIMLWD, DIMLWD);
     dimstyle->DIMLWD--;
 
   }
   {
-    BITCODE_BS DIMLWE;
+    BITCODE_BSd DIMLWE;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMLWE", &DIMLWE, NULL)
         && DIMLWE == dimstyle->DIMLWE)
       pass ();
     else
-      fail ("DIMSTYLE.DIMLWE [BS] %hu != %hu", dimstyle->DIMLWE, DIMLWE);
-    DIMLWE++;
+      fail ("DIMSTYLE.DIMLWE [BSd] " FORMAT_BSd " != " FORMAT_BSd "", dimstyle->DIMLWE, DIMLWE);
     if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMLWE", &DIMLWE, 0)
         && DIMLWE == dimstyle->DIMLWE)
       pass ();
     else
-      fail ("DIMSTYLE.DIMLWE [BS] set+1 %hu != %hu", dimstyle->DIMLWE, DIMLWE);
+      fail ("DIMSTYLE.DIMLWE [BSd] set+1 " FORMAT_BSd " != " FORMAT_BSd "", dimstyle->DIMLWE, DIMLWE);
     dimstyle->DIMLWE--;
 
   }

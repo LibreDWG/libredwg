@@ -456,8 +456,8 @@
 
   SINCE(R_2000)
     {
-      FIELD_BS (DIMLWD, 70);
-      FIELD_BS (DIMLWE, 70);
+      FIELD_BSd (DIMLWD, 70);
+      FIELD_BSd (DIMLWE, 70);
     }
 
   FIELD_HANDLE (BLOCK_CONTROL_OBJECT, 3, 0);
