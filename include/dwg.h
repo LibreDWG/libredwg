@@ -1945,8 +1945,8 @@ typedef struct _dwg_object_BLOCK_HEADER
   BITCODE_H last_entity;
   BITCODE_H* entities;
   BITCODE_H endblk_entity;
-  BITCODE_H* insert_handles;
-  BITCODE_H layout_handle;
+  BITCODE_H* inserts;
+  BITCODE_H layout;
 } Dwg_Object_BLOCK_HEADER;
 
 /**
@@ -2010,7 +2010,7 @@ typedef struct _dwg_object_STYLE
   BITCODE_BD last_height;
   BITCODE_TV font_name;
   BITCODE_TV bigfont_name;
-  BITCODE_H extref_handle;
+  BITCODE_H extref;
 } Dwg_Object_STYLE;
 
 /* 54 and 55 are UNKNOWN OBJECTS */
@@ -2096,12 +2096,12 @@ typedef struct _dwg_object_VIEW
   BITCODE_BS orthographic_view_type;
   BITCODE_B camera_plottable;
   BITCODE_H null_handle;
-  BITCODE_H background_handle;
-  BITCODE_H visual_style_handle;
-  BITCODE_H sun_handle;
-  BITCODE_H base_ucs_handle;
-  BITCODE_H named_ucs_handle;
-  BITCODE_H live_section_handle;
+  BITCODE_H background;
+  BITCODE_H visualstyle;
+  BITCODE_H sun;
+  BITCODE_H base_ucs;
+  BITCODE_H named_ucs;
+  BITCODE_H livesection;
 } Dwg_Object_VIEW;
 
 /**
@@ -2125,8 +2125,8 @@ typedef struct _dwg_object_UCS
   BITCODE_BS orthographic_view_type;
   BITCODE_BS orthographic_type;
   BITCODE_H null_handle;
-  BITCODE_H base_ucs_handle; /*! DXF 346 */
-  BITCODE_H unknown;
+  BITCODE_H base_ucs;  /*! DXF 346 */
+  BITCODE_H named_ucs; /*! DXF 345 */
 } Dwg_Object_UCS;
 
 /**
@@ -2183,11 +2183,11 @@ typedef struct _dwg_object_VPORT
   BITCODE_BS grid_flags;
   BITCODE_BS grid_major;
   BITCODE_H null_handle;
-  BITCODE_H background_handle;
-  BITCODE_H visual_style_handle;
-  BITCODE_H sun_handle;
-  BITCODE_H named_ucs_handle;
-  BITCODE_H base_ucs_handle;
+  BITCODE_H background;
+  BITCODE_H visualstyle;
+  BITCODE_H sun;
+  BITCODE_H named_ucs;
+  BITCODE_H base_ucs;
 } Dwg_Object_VPORT;
 
 /**
@@ -2351,8 +2351,8 @@ typedef struct _dwg_object_GROUP
   BITCODE_TV name;
   BITCODE_BS unnamed;
   BITCODE_BS selectable;
-  BITCODE_BL num_handles;
-  BITCODE_H* group_entries;
+  BITCODE_BL num_groups;
+  BITCODE_H* groups;
 } Dwg_Object_GROUP;
 
 /**
@@ -2985,7 +2985,7 @@ typedef struct _dwg_object_LAYOUT
   BITCODE_3DPOINT extent_max;
   BITCODE_BL num_viewports;
   BITCODE_H plot_view;
-  BITCODE_H visual_style;
+  BITCODE_H visualstyle;
   BITCODE_H pspace_block_record;
   BITCODE_H last_viewport;
   BITCODE_H base_ucs;
@@ -3394,7 +3394,7 @@ typedef struct _dwg_TableRow
   BITCODE_BL custom_data;
   BITCODE_BL num_customdata_items;
   Dwg_TABLE_CustomDataItem *customdata_items;
-  Dwg_CellStyle cell_style;
+  Dwg_CellStyle cellstyle;
   BITCODE_BL style_id;
   BITCODE_BL height;
 
@@ -3406,8 +3406,8 @@ typedef struct _dwg_TableDataColumn
   BITCODE_TV name;
   BITCODE_BL custom_data;
   //BITCODE_TV data;
-  Dwg_CellStyle cell_style;
-  BITCODE_BL cell_style_id;
+  Dwg_CellStyle cellstyle;
+  BITCODE_BL cellstyle_id;
   BITCODE_BL width;
 
   struct _dwg_LinkedTableData *parent;
@@ -3435,7 +3435,7 @@ typedef struct _dwg_FormattedTableMerged
 
 typedef struct _dwg_FormattedTableData
 {
-  Dwg_CellStyle cell_style;
+  Dwg_CellStyle cellstyle;
   BITCODE_BL num_merged_cells;
   Dwg_FormattedTableMerged *merged_cells;
 
@@ -3641,7 +3641,7 @@ typedef struct _dwg_object_FIELDLIST
 
   BITCODE_BL num_fields;
   BITCODE_B unknown;
-  BITCODE_H * field_handles;
+  BITCODE_H *fields;
 } Dwg_Object_FIELDLIST;
 
 /**
@@ -3789,7 +3789,7 @@ typedef struct _dwg_object_LAYER_INDEX
   BITCODE_BL timestamp2;
   BITCODE_BL num_entries;
   Dwg_LAYER_entry* entries;
-  BITCODE_H* entry_handles;
+  BITCODE_H* layers;
 } Dwg_Object_LAYER_INDEX;
 
 /**
@@ -3863,8 +3863,8 @@ typedef struct _dwg_object_SORTENTSTABLE
   struct _dwg_object_object *parent;
 
   BITCODE_BL num_ents;
-  BITCODE_H* sort_handles;
-  BITCODE_H dict_handle;
+  BITCODE_H* sort_ents;
+  BITCODE_H dictionary;
   BITCODE_H* ents;
 } Dwg_Object_SORTENTSTABLE;
 
@@ -3998,12 +3998,12 @@ typedef struct _dwg_object_LIGHTLIST
 {
   struct _dwg_object_object *parent;
 
-  BITCODE_H* dictionary; /* (hard-pointer to ACAD_LIGHT dictionary entry) */
+  BITCODE_H dictionary; /* (hard-pointer to ACAD_LIGHT dictionary entry) */
   /* TODO */
   BITCODE_BS class_version;
   BITCODE_BS num_lights;
-  BITCODE_H  light_handle; /* one for each light */
-  BITCODE_TV light_name;   /* one for each light */
+  BITCODE_H*  lights_handles; /* one for each light */
+  BITCODE_TV* lights_names;   /* one for each light */
 } Dwg_Object_LIGHTLIST;
 
 /**
@@ -4585,7 +4585,7 @@ typedef struct _dwg_object_SUNSTUDY
 
   BITCODE_H  page_setup_wizard; //5. 340
   BITCODE_H  view;         //341
-  BITCODE_H  visual_style; //342
+  BITCODE_H  visualstyle;  //342
   BITCODE_H  text_style;   //343
 } Dwg_Object_SUNSTUDY;
 

@@ -761,9 +761,9 @@ EOF
         vertex => 'num_owned',
         itemhandles => 'numitems',
         entities => 'num_owned',
-        insert_handles => 'num_inserts',
-        group_entries => 'num_handles',
-        field_handles => 'num_fields',
+        #inserts => 'num_inserts',
+        #groups => 'num_groups',
+        #field_handles => 'num_fields',
         sort_handles => 'num_ents',
         attr_def_id => 'num_attr_defs',
         readdeps  => 'num_deps',
@@ -782,7 +782,7 @@ EOF
         apps => 'num_entries',
         dimstyles => 'num_entries',
         vport_entity_headers => 'num_entries',
-        entry_handles => 'num_entries',
+        #entries => 'num_entries',
         encr_sat_data => 'num_blocks',
         );
       my $countfield = exists $countfield{$var} ? $countfield{$var} : "num_$var";

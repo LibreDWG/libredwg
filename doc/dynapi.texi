@@ -4375,9 +4375,9 @@ H
 H*
 @item endblk_entity
 H
-@item insert_handles
+@item inserts
 H*
-@item layout_handle
+@item layout
 H,	DXF 340
 
 @end vtable
@@ -4899,7 +4899,7 @@ struct _dwg_object_object*
 BL
 @item unknown
 B
-@item field_handles
+@item fields
 H*,	DXF 330
 
 @end vtable
@@ -5060,9 +5060,9 @@ TV,	DXF 300
 BS,	DXF 70
 @item selectable
 BS,	DXF 71
-@item num_handles
+@item num_groups
 BL
-@item group_entries
+@item groups
 H*,	DXF 340
 
 @end vtable
@@ -5222,7 +5222,7 @@ BL,	DXF 40
 BL
 @item entries
 Dwg_LAYER_entry*
-@item entry_handles
+@item layers
 H*
 
 @end vtable
@@ -5319,7 +5319,7 @@ BS,	DXF 76
 BL
 @item plot_view
 H,	DXF 6
-@item visual_style
+@item visualstyle
 H
 @item pspace_block_record
 H,	DXF 330
@@ -5345,15 +5345,15 @@ H*
 @item parent
 struct _dwg_object_object*
 @item dictionary
-H*
+H
 @item class_version
 BS
 @item num_lights
 BS
-@item light_handle
-H
-@item light_name
-TV
+@item lights_handles
+H*
+@item lights_names
+TV*
 
 @end vtable
 @end indentedblock
@@ -6080,9 +6080,9 @@ B,	DXF 290
 struct _dwg_object_object*
 @item num_ents
 BL
-@item sort_handles
+@item sort_ents
 H*,	DXF 5
-@item dict_handle
+@item dictionary
 H
 @item ents
 H*,	DXF 331
@@ -6187,7 +6187,7 @@ BD,	DXF 42
 TV,	DXF 3
 @item bigfont_name
 TV,	DXF 4
-@item extref_handle
+@item extref
 H
 
 @end vtable
@@ -6314,7 +6314,7 @@ B,	DXF 294
 H,	DXF 340
 @item view
 H,	DXF 341
-@item visual_style
+@item visualstyle
 H,	DXF 342
 @item text_style
 H,	DXF 343
@@ -6436,10 +6436,10 @@ BS,	DXF 71
 BS,	DXF 71
 @item null_handle
 H
-@item base_ucs_handle
+@item base_ucs
 H,	DXF 346
-@item unknown
-H
+@item named_ucs
+H,	DXF 345
 
 @end vtable
 @end indentedblock
@@ -6589,17 +6589,17 @@ BS,	DXF 79
 B,	DXF 73
 @item null_handle
 H
-@item background_handle
+@item background
 H,	DXF 332
-@item visual_style_handle
+@item visualstyle
 H,	DXF 348
-@item sun_handle
+@item sun
 H,	DXF 361
-@item base_ucs_handle
+@item base_ucs
 H,	DXF 346
-@item named_ucs_handle
+@item named_ucs
 H,	DXF 345
-@item live_section_handle
+@item livesection
 H,	DXF 334
 
 @end vtable
@@ -6814,15 +6814,15 @@ BS,	DXF 60
 BS,	DXF 61
 @item null_handle
 H
-@item background_handle
+@item background
 H,	DXF 332
-@item visual_style_handle
+@item visualstyle
 H,	DXF 348
-@item sun_handle
+@item sun
 H,	DXF 361
-@item named_ucs_handle
+@item named_ucs
 H,	DXF 345
-@item base_ucs_handle
+@item base_ucs
 H,	DXF 346
 
 @end vtable

@@ -2322,7 +2322,7 @@ DWG_OBJECT(BLOCK_HEADER)
   COMMON_TABLE_FLAGS(Block)
   DXF {
     // not allowed to be skipped, can be 0
-    VALUE_HANDLE (_obj->layout_handle, layout_handle, 5, 340);
+    VALUE_HANDLE (_obj->layout, layout, 5, 340);
     // The DXF TABLE.BLOCK_RECORD only has this. More later in the BLOCKS section.
     return 0;
   }
@@ -2428,9 +2428,9 @@ DWG_OBJECT(BLOCK_HEADER)
   SINCE (R_2000)
     {
       if (FIELD_VALUE(num_inserts) && FIELD_VALUE(num_inserts) < 0xf00000) {
-        HANDLE_VECTOR (insert_handles, num_inserts, ANYCODE, 0);
+        HANDLE_VECTOR (inserts, num_inserts, ANYCODE, 0);
       }
-      FIELD_HANDLE (layout_handle, 5, 340);
+      FIELD_HANDLE (layout, 5, 340);
     }
 
 DWG_OBJECT_END
@@ -2592,7 +2592,7 @@ DWG_OBJECT(STYLE)
     }
 
     START_OBJECT_HANDLE_STREAM;
-    FIELD_HANDLE (extref_handle, 5, 0);
+    FIELD_HANDLE (extref, 5, 0);
   }
 
 DWG_OBJECT_END
@@ -2771,20 +2771,20 @@ DWG_OBJECT(VIEW)
     FIELD_HANDLE (null_handle, 5, 0);
   }
   SINCE (R_2007) {
-    FIELD_HANDLE (background_handle, 4, 332);
-    FIELD_HANDLE (visual_style_handle, 5, 348);
-    FIELD_HANDLE (sun_handle, 3, 361);
+    FIELD_HANDLE (background, 4, 332);
+    FIELD_HANDLE (visualstyle, 5, 348);
+    FIELD_HANDLE (sun, 3, 361);
   }
   SINCE (R_2000)
     {
       if (FIELD_VALUE(associated_ucs) & 1)
         {
-          FIELD_HANDLE (base_ucs_handle, 5, 346);
-          FIELD_HANDLE (named_ucs_handle, 5, 345);
+          FIELD_HANDLE (base_ucs, 5, 346);
+          FIELD_HANDLE (named_ucs, 5, 345);
         }
     }
   SINCE (R_2007) {
-    FIELD_HANDLE (live_section_handle, 4, 334);
+    FIELD_HANDLE (livesection, 4, 334);
   }
 
 DWG_OBJECT_END
@@ -2831,8 +2831,8 @@ DWG_OBJECT(UCS)
   }
   SINCE (R_2000)
   {
-    FIELD_HANDLE (base_ucs_handle, ANYCODE, 346);
-    FIELD_HANDLE (unknown, ANYCODE, 0);
+    FIELD_HANDLE (base_ucs, ANYCODE, 346);
+    FIELD_HANDLE (named_ucs, 5, 345);
   }
 
 DWG_OBJECT_END
@@ -2902,19 +2902,19 @@ DWG_OBJECT(VPORT)
     FIELD_3BD (ucs_x_axis, 111);
     FIELD_3BD (ucs_y_axis, 112);
     // TODO: skip if empty
-    FIELD_HANDLE (named_ucs_handle, 5, 345);
+    FIELD_HANDLE (named_ucs, 5, 345);
     if (FIELD_VALUE(ucs_orthografic_type))
-      FIELD_HANDLE (base_ucs_handle, 5, 346);
+      FIELD_HANDLE (base_ucs, 5, 346);
     FIELD_BS (ucs_orthografic_type, 79);
     FIELD_BD (ucs_elevation, 146);
   }
   SINCE (R_2007)
   {
-    FIELD_HANDLE (visual_style_handle, 5, 348);
+    FIELD_HANDLE (visualstyle, 5, 348);
     FIELD_BS (grid_flags, 60);
     FIELD_BS (grid_major, 61);
-    FIELD_HANDLE (background_handle, 4, 332);
-    FIELD_HANDLE (sun_handle, 5, 361); //was shade_plot_handle
+    FIELD_HANDLE (background, 4, 332);
+    FIELD_HANDLE (sun, 5, 361); //was shade_plot_handle
 
     IF_ENCODE_FROM_EARLIER {
       FIELD_VALUE(use_default_lights) = 1;
@@ -3036,15 +3036,15 @@ DWG_OBJECT(VPORT)
 
   SINCE (R_2007)
     {
-      FIELD_HANDLE (background_handle, 4, 332); //soft ptr
-      FIELD_HANDLE (visual_style_handle, 5, 348); //hard ptr
-      FIELD_HANDLE (sun_handle, 3, 361); //hard owner
+      FIELD_HANDLE (background, 4, 332); //soft ptr
+      FIELD_HANDLE (visualstyle, 5, 348); //hard ptr
+      FIELD_HANDLE (sun, 3, 361); //hard owner
     }
 
   SINCE (R_2000)
     {
-      FIELD_HANDLE (named_ucs_handle, 5, 345);
-      FIELD_HANDLE (base_ucs_handle, 5, 346);
+      FIELD_HANDLE (named_ucs, 5, 345);
+      FIELD_HANDLE (base_ucs, 5, 346);
     }
  }
 
@@ -3385,10 +3385,10 @@ DWG_OBJECT(GROUP)
   FIELD_T (name, 300);
   FIELD_BS (unnamed, 70);
   FIELD_BS (selectable, 71);
-  FIELD_BL (num_handles, 0);
+  FIELD_BL (num_groups, 0);
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (group_entries, num_handles, 5, 340);
+  HANDLE_VECTOR (groups, num_groups, 5, 340);
 
 DWG_OBJECT_END
 
@@ -3831,13 +3831,13 @@ DWG_OBJECT(LAYER_INDEX)
   REPEAT (num_entries, entries, Dwg_LAYER_entry)
   REPEAT_BLOCK
       SUB_FIELD_BL (entries[rcount1], idxlong, 0);
-      SUB_FIELD_T (entries[rcount1], layer, 8);
+      SUB_FIELD_T (entries[rcount1], layername, 8);
   END_REPEAT_BLOCK
   SET_PARENT_OBJ(entries)
   END_REPEAT(entries)
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (entry_handles, num_entries, ANYCODE, 0);
+  HANDLE_VECTOR (layers, num_entries, 5, 0);
 
 DWG_OBJECT_END
 
@@ -3904,7 +3904,7 @@ DWG_OBJECT(LAYOUT)
     FIELD_HANDLE (plot_view, 5, 6);
   }
   SINCE (R_2007) {
-    FIELD_HANDLE (visual_style, 4, 0);
+    FIELD_HANDLE (visualstyle, 4, 0);
   }
   FIELD_HANDLE (pspace_block_record, 4, 330);
   FIELD_HANDLE (last_viewport, 4, 331);
@@ -4292,7 +4292,7 @@ DWG_OBJECT(FIELDLIST)
   FIELD_B (unknown, 0); // has handles?
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (field_handles, num_fields, 0, 330); // 2 or 4, or 3.0.0
+  HANDLE_VECTOR (fields, num_fields, 0, 330); // 2 or 4, or 3.0.0
 
 DWG_OBJECT_END
 
@@ -4391,10 +4391,10 @@ DWG_OBJECT(SORTENTSTABLE)
 
   SUBCLASS (AcDbSortentsTable)
   FIELD_BL (num_ents, 0);
-  HANDLE_VECTOR (sort_handles, num_ents, 0, 5);
+  HANDLE_VECTOR (sort_ents, num_ents, 0, 5);
 
   START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (dict_handle, 4, 0);
+  FIELD_HANDLE (dictionary, 4, 0);
   HANDLE_VECTOR (ents, num_ents, 4, 331);
 
 DWG_OBJECT_END
@@ -6532,7 +6532,7 @@ DWG_OBJECT(SUNSTUDY)
   START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (page_setup_wizard, 5, 340);
   FIELD_HANDLE (view, 5, 341);
-  FIELD_HANDLE (visual_style, 2, 342);
+  FIELD_HANDLE (visualstyle, 2, 342);
   FIELD_HANDLE (text_style, 2, 343);
 
 DWG_OBJECT_END
@@ -7204,4 +7204,3 @@ DWG_OBJECT(CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
-

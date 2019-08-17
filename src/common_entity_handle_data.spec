@@ -79,9 +79,9 @@
   SINCE(R_2007)
     {
       if (FIELD_VALUE(material_flags) == 3)
-        FIELD_HANDLE(material, ANYCODE, 0); // 5 hard pointer?
+        FIELD_HANDLE(material, 5, 347);
       if (FIELD_VALUE(shadow_flags) == 3)
-        FIELD_HANDLE(shadow, ANYCODE, 0); // 5 hard pointer?
+        FIELD_HANDLE(shadow, 5, 0);
     }
 
   SINCE(R_2000)
@@ -92,6 +92,7 @@
 
   SINCE(R_2010)
     {
+      // DXF 348 but which?
       if (FIELD_VALUE(has_full_visualstyle))
         FIELD_HANDLE(full_visualstyle, 5, 0);
       if (FIELD_VALUE(has_face_visualstyle))

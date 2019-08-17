@@ -1724,14 +1724,14 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
         case 331:
           if (ctrl && in_blkrefs) // BLKREFS
             {
-              BITCODE_H *insert_handles = NULL;
+              BITCODE_H *inserts = NULL;
               BITCODE_H hdl;
               BITCODE_RL num_inserts;
               dwg_dynapi_entity_value (_obj, obj->name, "num_inserts",
                                        &num_inserts, 0);
               if (curr_inserts)
-                dwg_dynapi_entity_value (_obj, obj->name, "insert_handles",
-                                         &insert_handles, 0);
+                dwg_dynapi_entity_value (_obj, obj->name, "inserts",
+                                         &inserts, 0);
               if (curr_inserts + 1 > num_inserts)
                 {
                   LOG_HANDLE ("  extending %s.num_inserts %d < %d\n", obj->name,
@@ -1740,18 +1740,16 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                   dwg_dynapi_entity_set_value (_obj, obj->name, "num_inserts",
                                                &num_inserts, 0);
                 }
-              if (insert_handles)
-                insert_handles
-                  = realloc (insert_handles, num_inserts * sizeof (BITCODE_H));
+              if (inserts)
+                inserts = realloc (inserts, num_inserts * sizeof (BITCODE_H));
               else
-                insert_handles
-                  = calloc (num_inserts, sizeof (BITCODE_H));
-              dwg_dynapi_entity_set_value (_obj, obj->name, "insert_handles",
-                                           &insert_handles, 0);
+                inserts = calloc (num_inserts, sizeof (BITCODE_H));
+              dwg_dynapi_entity_set_value (_obj, obj->name, "inserts",
+                                           &inserts, 0);
               hdl = add_handleref (dwg, 4, pair->value.u, obj);
-              LOG_TRACE ("%s.insert_handles[%d] = " FORMAT_REF " [331 H*]\n",
+              LOG_TRACE ("%s.inserts[%d] = " FORMAT_REF " [331 H*]\n",
                          obj->name, curr_inserts, ARGS_REF (hdl));
-              insert_handles[curr_inserts++] = hdl;
+              inserts[curr_inserts++] = hdl;
               break;
             }
           // fall through
@@ -1799,13 +1797,12 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
             {
               Dwg_Object_GROUP *_o = obj->tio.object->tio.GROUP;
               BITCODE_H hdl = add_handleref (dwg, 5, pair->value.u, obj);
-              LOG_TRACE ("GROUP.group_entries[%d] = " FORMAT_REF " [340 H]\n",
-                         _o->num_handles, ARGS_REF (hdl));
-              _o->group_entries
-                  = realloc (_o->group_entries,
-                             (_o->num_handles + 1) * sizeof (BITCODE_H));
-              _o->group_entries[_o->num_handles] = hdl;
-              _o->num_handles++;
+              LOG_TRACE ("GROUP.groups[%d] = " FORMAT_REF " [340 H]\n",
+                         _o->num_groups, ARGS_REF (hdl));
+              _o->groups = realloc (_o->groups,
+                                    (_o->num_groups + 1) * sizeof (BITCODE_H));
+              _o->groups[_o->num_groups] = hdl;
+              _o->num_groups++;
               break;
             }
           // fall through

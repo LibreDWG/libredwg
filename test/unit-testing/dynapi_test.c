@@ -23768,16 +23768,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_H* insert_handles;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "num_inserts", &count, NULL)
-        && dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "insert_handles", &insert_handles, NULL)
-        && insert_handles == block_header->insert_handles)
-      pass ();
-    else
-      fail ("BLOCK_HEADER.insert_handles [H*] * %u num_inserts", count);
-  }
-  {
     BITCODE_BS insert_units;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "insert_units", &insert_units, NULL)
         && insert_units == block_header->insert_units)
@@ -23794,6 +23784,16 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_H* inserts;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "num_inserts", &count, NULL)
+        && dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "inserts", &inserts, NULL)
+        && inserts == block_header->inserts)
+      pass ();
+    else
+      fail ("BLOCK_HEADER.inserts [H*] * %u num_inserts", count);
+  }
+  {
     BITCODE_H last_entity;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "last_entity", &last_entity, NULL)
         && !memcmp (&last_entity, &block_header->last_entity, sizeof (block_header->last_entity)))
@@ -23802,12 +23802,12 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         fail ("BLOCK_HEADER.last_entity [H]");
   }
   {
-    BITCODE_H layout_handle;
-    if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "layout_handle", &layout_handle, NULL)
-        && !memcmp (&layout_handle, &block_header->layout_handle, sizeof (block_header->layout_handle)))
+    BITCODE_H layout;
+    if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "layout", &layout, NULL)
+        && !memcmp (&layout, &block_header->layout, sizeof (block_header->layout)))
         pass ();
     else
-        fail ("BLOCK_HEADER.layout_handle [H]");
+        fail ("BLOCK_HEADER.layout [H]");
   }
   {
     BITCODE_B loaded_bit;
@@ -26460,14 +26460,14 @@ static int test_FIELDLIST (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_FIELDLIST *restrict fieldlist = obj->tio.object->tio.FIELDLIST;
   {
-    BITCODE_H* field_handles;
+    BITCODE_H* fields;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (fieldlist, "FIELDLIST", "num_fields", &count, NULL)
-        && dwg_dynapi_entity_value (fieldlist, "FIELDLIST", "field_handles", &field_handles, NULL)
-        && field_handles == fieldlist->field_handles)
+        && dwg_dynapi_entity_value (fieldlist, "FIELDLIST", "fields", &fields, NULL)
+        && fields == fieldlist->fields)
       pass ();
     else
-      fail ("FIELDLIST.field_handles [H*] * %u num_fields", count);
+      fail ("FIELDLIST.fields [H*] * %u num_fields", count);
   }
   {
     BITCODE_BL num_fields;
@@ -27319,14 +27319,14 @@ static int test_GROUP (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_GROUP *restrict group = obj->tio.object->tio.GROUP;
   {
-    BITCODE_H* group_entries;
+    BITCODE_H* groups;
     BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (group, "GROUP", "num_handles", &count, NULL)
-        && dwg_dynapi_entity_value (group, "GROUP", "group_entries", &group_entries, NULL)
-        && group_entries == group->group_entries)
+    if (dwg_dynapi_entity_value (group, "GROUP", "num_groups", &count, NULL)
+        && dwg_dynapi_entity_value (group, "GROUP", "groups", &groups, NULL)
+        && groups == group->groups)
       pass ();
     else
-      fail ("GROUP.group_entries [H*] * %u num_handles", count);
+      fail ("GROUP.groups [H*] * %u num_groups", count);
   }
   {
     BITCODE_TV name;
@@ -27339,19 +27339,19 @@ static int test_GROUP (const Dwg_Object *obj)
       fail ("GROUP.name [TV] '%s' <> '%s'", name, group->name);
   }
   {
-    BITCODE_BL num_handles;
-    if (dwg_dynapi_entity_value (group, "GROUP", "num_handles", &num_handles, NULL)
-        && num_handles == group->num_handles)
+    BITCODE_BL num_groups;
+    if (dwg_dynapi_entity_value (group, "GROUP", "num_groups", &num_groups, NULL)
+        && num_groups == group->num_groups)
       pass ();
     else
-      fail ("GROUP.num_handles [BL] %u != %u", group->num_handles, num_handles);
-    num_handles++;
-    if (dwg_dynapi_entity_set_value (group, "GROUP", "num_handles", &num_handles, 0)
-        && num_handles == group->num_handles)
+      fail ("GROUP.num_groups [BL] %u != %u", group->num_groups, num_groups);
+    num_groups++;
+    if (dwg_dynapi_entity_set_value (group, "GROUP", "num_groups", &num_groups, 0)
+        && num_groups == group->num_groups)
       pass ();
     else
-      fail ("GROUP.num_handles [BL] set+1 %u != %u", group->num_handles, num_handles);
-    group->num_handles--;
+      fail ("GROUP.num_groups [BL] set+1 %u != %u", group->num_groups, num_groups);
+    group->num_groups--;
 
   }
   {
@@ -27919,14 +27919,14 @@ static int test_LAYER_INDEX (const Dwg_Object *obj)
       fail ("LAYER_INDEX.entries [Dwg_LAYER_entry*] * %u num_entries", count);
   }
   {
-    BITCODE_H* entry_handles;
+    BITCODE_H* layers;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (layer_index, "LAYER_INDEX", "num_entries", &count, NULL)
-        && dwg_dynapi_entity_value (layer_index, "LAYER_INDEX", "entry_handles", &entry_handles, NULL)
-        && entry_handles == layer_index->entry_handles)
+        && dwg_dynapi_entity_value (layer_index, "LAYER_INDEX", "layers", &layers, NULL)
+        && layers == layer_index->layers)
       pass ();
     else
-      fail ("LAYER_INDEX.entry_handles [H*] * %u num_entries", count);
+      fail ("LAYER_INDEX.layers [H*] * %u num_entries", count);
   }
   {
     BITCODE_BL num_entries;
@@ -28542,12 +28542,12 @@ static int test_LAYOUT (const Dwg_Object *obj)
       fail ("LAYOUT.viewports [H*] * %u num_viewports", count);
   }
   {
-    BITCODE_H visual_style;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "visual_style", &visual_style, NULL)
-        && !memcmp (&visual_style, &layout->visual_style, sizeof (layout->visual_style)))
+    BITCODE_H visualstyle;
+    if (dwg_dynapi_entity_value (layout, "LAYOUT", "visualstyle", &visualstyle, NULL)
+        && !memcmp (&visualstyle, &layout->visualstyle, sizeof (layout->visualstyle)))
         pass ();
     else
-        fail ("LAYOUT.visual_style [H]");
+        fail ("LAYOUT.visualstyle [H]");
   }
   {
     BITCODE_2BD window_max;
@@ -28589,32 +28589,32 @@ static int test_LIGHTLIST (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_H* dictionary;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (lightlist, "LIGHTLIST", "num_dictionary", &count, NULL)
-        && dwg_dynapi_entity_value (lightlist, "LIGHTLIST", "dictionary", &dictionary, NULL)
-        && dictionary == lightlist->dictionary)
-      pass ();
-    else
-      fail ("LIGHTLIST.dictionary [H*] * %u num_dictionary", count);
-  }
-  {
-    BITCODE_H light_handle;
-    if (dwg_dynapi_entity_value (lightlist, "LIGHTLIST", "light_handle", &light_handle, NULL)
-        && !memcmp (&light_handle, &lightlist->light_handle, sizeof (lightlist->light_handle)))
+    BITCODE_H dictionary;
+    if (dwg_dynapi_entity_value (lightlist, "LIGHTLIST", "dictionary", &dictionary, NULL)
+        && !memcmp (&dictionary, &lightlist->dictionary, sizeof (lightlist->dictionary)))
         pass ();
     else
-        fail ("LIGHTLIST.light_handle [H]");
+        fail ("LIGHTLIST.dictionary [H]");
   }
   {
-    BITCODE_TV light_name;
-    if (dwg_dynapi_entity_value (lightlist, "LIGHTLIST", "light_name", &light_name, NULL)
-        && light_name
-           ? strEQ ((char *)light_name, (char *)lightlist->light_name)
-           : !lightlist->light_name)
+    BITCODE_H* lights_handles;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (lightlist, "LIGHTLIST", "num_lights_handles", &count, NULL)
+        && dwg_dynapi_entity_value (lightlist, "LIGHTLIST", "lights_handles", &lights_handles, NULL)
+        && lights_handles == lightlist->lights_handles)
       pass ();
     else
-      fail ("LIGHTLIST.light_name [TV] '%s' <> '%s'", light_name, lightlist->light_name);
+      fail ("LIGHTLIST.lights_handles [H*] * %u num_lights_handles", count);
+  }
+  {
+    BITCODE_TV* lights_names;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (lightlist, "LIGHTLIST", "num_lights_names", &count, NULL)
+        && dwg_dynapi_entity_value (lightlist, "LIGHTLIST", "lights_names", &lights_names, NULL)
+        && lights_names == lightlist->lights_names)
+      pass ();
+    else
+      fail ("LIGHTLIST.lights_names [TV*] * %u num_lights_names", count);
   }
   {
     BITCODE_BS num_lights;
@@ -32259,12 +32259,12 @@ static int test_SORTENTSTABLE (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_SORTENTSTABLE *restrict sortentstable = obj->tio.object->tio.SORTENTSTABLE;
   {
-    BITCODE_H dict_handle;
-    if (dwg_dynapi_entity_value (sortentstable, "SORTENTSTABLE", "dict_handle", &dict_handle, NULL)
-        && !memcmp (&dict_handle, &sortentstable->dict_handle, sizeof (sortentstable->dict_handle)))
+    BITCODE_H dictionary;
+    if (dwg_dynapi_entity_value (sortentstable, "SORTENTSTABLE", "dictionary", &dictionary, NULL)
+        && !memcmp (&dictionary, &sortentstable->dictionary, sizeof (sortentstable->dictionary)))
         pass ();
     else
-        fail ("SORTENTSTABLE.dict_handle [H]");
+        fail ("SORTENTSTABLE.dictionary [H]");
   }
   {
     BITCODE_H* ents;
@@ -32301,14 +32301,14 @@ static int test_SORTENTSTABLE (const Dwg_Object *obj)
         fail ("SORTENTSTABLE.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_H* sort_handles;
+    BITCODE_H* sort_ents;
     BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (sortentstable, "SORTENTSTABLE", "num_ents", &count, NULL)
-        && dwg_dynapi_entity_value (sortentstable, "SORTENTSTABLE", "sort_handles", &sort_handles, NULL)
-        && sort_handles == sortentstable->sort_handles)
+    if (dwg_dynapi_entity_value (sortentstable, "SORTENTSTABLE", "num_sort_ents", &count, NULL)
+        && dwg_dynapi_entity_value (sortentstable, "SORTENTSTABLE", "sort_ents", &sort_ents, NULL)
+        && sort_ents == sortentstable->sort_ents)
       pass ();
     else
-      fail ("SORTENTSTABLE.sort_handles [H*] * %u num_ents", count);
+      fail ("SORTENTSTABLE.sort_ents [H*] * %u num_sort_ents", count);
   }
   return failed;
 }
@@ -32538,12 +32538,12 @@ static int test_STYLE (const Dwg_Object *obj)
       fail ("STYLE.bigfont_name [TV] '%s' <> '%s'", bigfont_name, style->bigfont_name);
   }
   {
-    BITCODE_H extref_handle;
-    if (dwg_dynapi_entity_value (style, "STYLE", "extref_handle", &extref_handle, NULL)
-        && !memcmp (&extref_handle, &style->extref_handle, sizeof (style->extref_handle)))
+    BITCODE_H extref;
+    if (dwg_dynapi_entity_value (style, "STYLE", "extref", &extref, NULL)
+        && !memcmp (&extref, &style->extref, sizeof (style->extref)))
         pass ();
     else
-        fail ("STYLE.extref_handle [H]");
+        fail ("STYLE.extref [H]");
   }
   {
     BITCODE_BD fixed_height;
@@ -33393,12 +33393,12 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
         fail ("SUNSTUDY.view [H]");
   }
   {
-    BITCODE_H visual_style;
-    if (dwg_dynapi_entity_value (sunstudy, "SUNSTUDY", "visual_style", &visual_style, NULL)
-        && !memcmp (&visual_style, &sunstudy->visual_style, sizeof (sunstudy->visual_style)))
+    BITCODE_H visualstyle;
+    if (dwg_dynapi_entity_value (sunstudy, "SUNSTUDY", "visualstyle", &visualstyle, NULL)
+        && !memcmp (&visualstyle, &sunstudy->visualstyle, sizeof (sunstudy->visualstyle)))
         pass ();
     else
-        fail ("SUNSTUDY.visual_style [H]");
+        fail ("SUNSTUDY.visualstyle [H]");
   }
   return failed;
 }
@@ -33691,12 +33691,12 @@ static int test_UCS (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_UCS *restrict ucs = obj->tio.object->tio.UCS;
   {
-    BITCODE_H base_ucs_handle;
-    if (dwg_dynapi_entity_value (ucs, "UCS", "base_ucs_handle", &base_ucs_handle, NULL)
-        && !memcmp (&base_ucs_handle, &ucs->base_ucs_handle, sizeof (ucs->base_ucs_handle)))
+    BITCODE_H base_ucs;
+    if (dwg_dynapi_entity_value (ucs, "UCS", "base_ucs", &base_ucs, NULL)
+        && !memcmp (&base_ucs, &ucs->base_ucs, sizeof (ucs->base_ucs)))
         pass ();
     else
-        fail ("UCS.base_ucs_handle [H]");
+        fail ("UCS.base_ucs [H]");
   }
   {
     BITCODE_BD elevation;
@@ -33739,6 +33739,14 @@ static int test_UCS (const Dwg_Object *obj)
       pass ();
     else
       fail ("UCS.name [TV] '%s' <> '%s'", name, ucs->name);
+  }
+  {
+    BITCODE_H named_ucs;
+    if (dwg_dynapi_entity_value (ucs, "UCS", "named_ucs", &named_ucs, NULL)
+        && !memcmp (&named_ucs, &ucs->named_ucs, sizeof (ucs->named_ucs)))
+        pass ();
+    else
+        fail ("UCS.named_ucs [H]");
   }
   {
     BITCODE_H null_handle;
@@ -33795,14 +33803,6 @@ static int test_UCS (const Dwg_Object *obj)
         pass ();
     else
         fail ("UCS.parent [struct _dwg_object_object*]");
-  }
-  {
-    BITCODE_H unknown;
-    if (dwg_dynapi_entity_value (ucs, "UCS", "unknown", &unknown, NULL)
-        && !memcmp (&unknown, &ucs->unknown, sizeof (ucs->unknown)))
-        pass ();
-    else
-        fail ("UCS.unknown [H]");
   }
   {
     BITCODE_RS used;
@@ -34093,20 +34093,20 @@ static int test_VIEW (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_H background_handle;
-    if (dwg_dynapi_entity_value (view, "VIEW", "background_handle", &background_handle, NULL)
-        && !memcmp (&background_handle, &view->background_handle, sizeof (view->background_handle)))
+    BITCODE_H background;
+    if (dwg_dynapi_entity_value (view, "VIEW", "background", &background, NULL)
+        && !memcmp (&background, &view->background, sizeof (view->background)))
         pass ();
     else
-        fail ("VIEW.background_handle [H]");
+        fail ("VIEW.background [H]");
   }
   {
-    BITCODE_H base_ucs_handle;
-    if (dwg_dynapi_entity_value (view, "VIEW", "base_ucs_handle", &base_ucs_handle, NULL)
-        && !memcmp (&base_ucs_handle, &view->base_ucs_handle, sizeof (view->base_ucs_handle)))
+    BITCODE_H base_ucs;
+    if (dwg_dynapi_entity_value (view, "VIEW", "base_ucs", &base_ucs, NULL)
+        && !memcmp (&base_ucs, &view->base_ucs, sizeof (view->base_ucs)))
         pass ();
     else
-        fail ("VIEW.base_ucs_handle [H]");
+        fail ("VIEW.base_ucs [H]");
   }
   {
     BITCODE_BD brightness;
@@ -34269,12 +34269,12 @@ static int test_VIEW (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_H live_section_handle;
-    if (dwg_dynapi_entity_value (view, "VIEW", "live_section_handle", &live_section_handle, NULL)
-        && !memcmp (&live_section_handle, &view->live_section_handle, sizeof (view->live_section_handle)))
+    BITCODE_H livesection;
+    if (dwg_dynapi_entity_value (view, "VIEW", "livesection", &livesection, NULL)
+        && !memcmp (&livesection, &view->livesection, sizeof (view->livesection)))
         pass ();
     else
-        fail ("VIEW.live_section_handle [H]");
+        fail ("VIEW.livesection [H]");
   }
   {
     BITCODE_TV name;
@@ -34287,12 +34287,12 @@ static int test_VIEW (const Dwg_Object *obj)
       fail ("VIEW.name [TV] '%s' <> '%s'", name, view->name);
   }
   {
-    BITCODE_H named_ucs_handle;
-    if (dwg_dynapi_entity_value (view, "VIEW", "named_ucs_handle", &named_ucs_handle, NULL)
-        && !memcmp (&named_ucs_handle, &view->named_ucs_handle, sizeof (view->named_ucs_handle)))
+    BITCODE_H named_ucs;
+    if (dwg_dynapi_entity_value (view, "VIEW", "named_ucs", &named_ucs, NULL)
+        && !memcmp (&named_ucs, &view->named_ucs, sizeof (view->named_ucs)))
         pass ();
     else
-        fail ("VIEW.named_ucs_handle [H]");
+        fail ("VIEW.named_ucs [H]");
   }
   {
     BITCODE_H null_handle;
@@ -34367,12 +34367,12 @@ static int test_VIEW (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_H sun_handle;
-    if (dwg_dynapi_entity_value (view, "VIEW", "sun_handle", &sun_handle, NULL)
-        && !memcmp (&sun_handle, &view->sun_handle, sizeof (view->sun_handle)))
+    BITCODE_H sun;
+    if (dwg_dynapi_entity_value (view, "VIEW", "sun", &sun, NULL)
+        && !memcmp (&sun, &view->sun, sizeof (view->sun)))
         pass ();
     else
-        fail ("VIEW.sun_handle [H]");
+        fail ("VIEW.sun [H]");
   }
   {
     BITCODE_3BD target;
@@ -34431,12 +34431,12 @@ static int test_VIEW (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_H visual_style_handle;
-    if (dwg_dynapi_entity_value (view, "VIEW", "visual_style_handle", &visual_style_handle, NULL)
-        && !memcmp (&visual_style_handle, &view->visual_style_handle, sizeof (view->visual_style_handle)))
+    BITCODE_H visualstyle;
+    if (dwg_dynapi_entity_value (view, "VIEW", "visualstyle", &visualstyle, NULL)
+        && !memcmp (&visualstyle, &view->visualstyle, sizeof (view->visualstyle)))
         pass ();
     else
-        fail ("VIEW.visual_style_handle [H]");
+        fail ("VIEW.visualstyle [H]");
   }
   {
     BITCODE_BD width;
@@ -35341,20 +35341,20 @@ static int test_VPORT (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_H background_handle;
-    if (dwg_dynapi_entity_value (vport, "VPORT", "background_handle", &background_handle, NULL)
-        && !memcmp (&background_handle, &vport->background_handle, sizeof (vport->background_handle)))
+    BITCODE_H background;
+    if (dwg_dynapi_entity_value (vport, "VPORT", "background", &background, NULL)
+        && !memcmp (&background, &vport->background, sizeof (vport->background)))
         pass ();
     else
-        fail ("VPORT.background_handle [H]");
+        fail ("VPORT.background [H]");
   }
   {
-    BITCODE_H base_ucs_handle;
-    if (dwg_dynapi_entity_value (vport, "VPORT", "base_ucs_handle", &base_ucs_handle, NULL)
-        && !memcmp (&base_ucs_handle, &vport->base_ucs_handle, sizeof (vport->base_ucs_handle)))
+    BITCODE_H base_ucs;
+    if (dwg_dynapi_entity_value (vport, "VPORT", "base_ucs", &base_ucs, NULL)
+        && !memcmp (&base_ucs, &vport->base_ucs, sizeof (vport->base_ucs)))
         pass ();
     else
-        fail ("VPORT.base_ucs_handle [H]");
+        fail ("VPORT.base_ucs [H]");
   }
   {
     BITCODE_BD brightness;
@@ -35519,12 +35519,12 @@ static int test_VPORT (const Dwg_Object *obj)
       fail ("VPORT.name [TV] '%s' <> '%s'", name, vport->name);
   }
   {
-    BITCODE_H named_ucs_handle;
-    if (dwg_dynapi_entity_value (vport, "VPORT", "named_ucs_handle", &named_ucs_handle, NULL)
-        && !memcmp (&named_ucs_handle, &vport->named_ucs_handle, sizeof (vport->named_ucs_handle)))
+    BITCODE_H named_ucs;
+    if (dwg_dynapi_entity_value (vport, "VPORT", "named_ucs", &named_ucs, NULL)
+        && !memcmp (&named_ucs, &vport->named_ucs, sizeof (vport->named_ucs)))
         pass ();
     else
-        fail ("VPORT.named_ucs_handle [H]");
+        fail ("VPORT.named_ucs [H]");
   }
   {
     BITCODE_H null_handle;
@@ -35559,12 +35559,12 @@ static int test_VPORT (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_H sun_handle;
-    if (dwg_dynapi_entity_value (vport, "VPORT", "sun_handle", &sun_handle, NULL)
-        && !memcmp (&sun_handle, &vport->sun_handle, sizeof (vport->sun_handle)))
+    BITCODE_H sun;
+    if (dwg_dynapi_entity_value (vport, "VPORT", "sun", &sun, NULL)
+        && !memcmp (&sun, &vport->sun, sizeof (vport->sun)))
         pass ();
     else
-        fail ("VPORT.sun_handle [H]");
+        fail ("VPORT.sun [H]");
   }
   {
     BITCODE_BD ucs_elevation;
@@ -35703,12 +35703,12 @@ static int test_VPORT (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_H visual_style_handle;
-    if (dwg_dynapi_entity_value (vport, "VPORT", "visual_style_handle", &visual_style_handle, NULL)
-        && !memcmp (&visual_style_handle, &vport->visual_style_handle, sizeof (vport->visual_style_handle)))
+    BITCODE_H visualstyle;
+    if (dwg_dynapi_entity_value (vport, "VPORT", "visualstyle", &visualstyle, NULL)
+        && !memcmp (&visualstyle, &vport->visualstyle, sizeof (vport->visualstyle)))
         pass ();
     else
-        fail ("VPORT.visual_style_handle [H]");
+        fail ("VPORT.visualstyle [H]");
   }
   {
     BITCODE_B xrefdep;
