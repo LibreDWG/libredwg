@@ -80,7 +80,7 @@ run ()
     else
         case $bprog in
         dwggrep) ;;
-        dwgrewrite|dwgwrite|dxf2dwg) test -f core && rm core
+        dwgrewrite|dwgwrite) test -f core && rm core
                 tmpnum=$(expr 1 + $problems)
                 echo $(basename $0): TODO $prog $tmpnum failures
                 ls -l $log ;;
