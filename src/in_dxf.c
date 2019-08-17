@@ -720,8 +720,10 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
 
   eed = (Dwg_Eed *)realloc (eed, (i + 1) * sizeof (Dwg_Eed));
   memset (&eed[i], 0, sizeof (Dwg_Eed));
+  obj->tio.object->eed = eed;
+  eed[i].raw = NULL;
   obj->tio.object->num_eed++;
-  // handle: usually APPID "ACAD"
+  // TODO: handle: usually APPID "ACAD"
   code = pair->code - 1000; // 1000
   switch (code)
     {
@@ -1649,7 +1651,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                 Dwg_Object_APPID_CONTROL *_ctrl
                     = ctrl->tio.object->tio.APPID_CONTROL;
                 BITCODE_H *hdls = NULL;
-                BITCODE_BL num_entries;
+                BITCODE_BL num_entries = 0;
                 dwg_dynapi_entity_value (_ctrl, ctrlname, "num_entries",
                                          &num_entries, NULL);
                 if (num_entries <= i)
@@ -2731,7 +2733,9 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               BITCODE_H hdl;
               dxf_free_pair (pair);
               dxf_tables_read (dat, dwg);
+
               resolve_postponed_header_refs (dwg);
+
               if (!dwg->header_vars.LTYPE_BYLAYER)
                 {
                   if ((hdl = dwg_find_tablehandle (dwg, (char *)"ByLayer",
@@ -2759,7 +2763,9 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               BITCODE_H hdl;
               dxf_free_pair (pair);
               dxf_blocks_read (dat, dwg);
+
               resolve_postponed_header_refs (dwg);
+
               if (!dwg->header_vars.BLOCK_RECORD_PSPACE)
                 {
                   if ((hdl = dwg_find_tablehandle (dwg, (char *)"*Paper_Space",

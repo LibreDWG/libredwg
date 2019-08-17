@@ -1293,7 +1293,7 @@ dwg_find_tablehandle (const Dwg_Data *restrict dwg,
                       char *restrict name,
                       const char *restrict table)
 {
-  BITCODE_BL i, num_entries;
+  BITCODE_BL i, num_entries = 0;
   BITCODE_H ctrl = NULL, *hdlv;
   Dwg_Object_APPID_CONTROL *_obj; // just some random generic type
 
