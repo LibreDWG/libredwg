@@ -1418,6 +1418,50 @@ add_ent_picture (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return pair;
 }
 
+// read to BLOCK_HEADER.preview_data (310), filling in the size
+static Dxf_Pair *
+add_block_picture (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                   Dxf_Pair *restrict pair)
+{
+  Dwg_Object_BLOCK_HEADER *_obj = obj->tio.object->tio.BLOCK_HEADER;
+  unsigned written = 0;
+
+  if (obj->type != DWG_TYPE_BLOCK_HEADER)
+    {
+      LOG_ERROR ("%s is no BLOCK_HEADER for a picture", obj->name);
+      return pair;
+    }
+  if (pair->code != 310)
+    {
+      LOG_ERROR ("Invalid %s.preview_data code %d, need 310", obj->name,
+                 pair->code);
+      return pair;
+    }
+  while (pair->code == 310)
+    {
+      unsigned len = strlen (pair->value.s);
+      unsigned blen = len / 2;
+      const char *pos = pair->value.s;
+      char *s;
+
+      _obj->preview_data = realloc (_obj->preview_data, written + blen);
+      s = &_obj->preview_data[written];
+      for (unsigned i = 0; i < blen; i++)
+        {
+          sscanf (pos, "%2hhX", &s[i]);
+          pos += 2;
+        }
+      written += blen;
+      LOG_TRACE ("BLOCK_HEADER.preview_data += %u (%u)\n", blen, written);
+
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+    }
+  _obj->preview_data_size = written;
+  LOG_TRACE ("BLOCK_HEADER.preview_data_size = %u [BL]\n", written);
+  return pair;
+}
+
 /* For tables, entities and objects.
  */
 static Dxf_Pair *
@@ -1662,6 +1706,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
           if (ctrl && in_blkrefs) // BLKREFS
             {
               BITCODE_H *insert_handles = NULL;
+              BITCODE_H hdl;
               BITCODE_RL num_inserts;
               dwg_dynapi_entity_value (_obj, obj->name, "num_inserts",
                                        &num_inserts, 0);
@@ -1670,8 +1715,8 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                                          &insert_handles, 0);
               if (curr_inserts + 1 > num_inserts)
                 {
-                  LOG_WARN ("Misleading %s.num_inserts %d < %d", ctrlname,
-                            num_inserts, curr_inserts + 1);
+                  LOG_HANDLE ("  extending %s.num_inserts %d < %d\n", obj->name,
+                              num_inserts, curr_inserts + 1);
                   num_inserts = curr_inserts + 1;
                   dwg_dynapi_entity_set_value (_obj, obj->name, "num_inserts",
                                                &num_inserts, 0);
@@ -1684,8 +1729,10 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                   = calloc (num_inserts, sizeof (BITCODE_H));
               dwg_dynapi_entity_set_value (_obj, obj->name, "insert_handles",
                                            &insert_handles, 0);
-              insert_handles[curr_inserts++]
-                  = add_handleref (dwg, 4, pair->value.u, obj);
+              hdl = add_handleref (dwg, 4, pair->value.u, obj);
+              LOG_TRACE ("%s.insert_handles[%d] = " FORMAT_REF " [331 H*]\n",
+                         obj->name, curr_inserts, ARGS_REF (hdl));
+              insert_handles[curr_inserts++] = hdl;
               break;
             }
           // fall through
@@ -1785,6 +1832,11 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
             add_eed (obj, name, pair);
           else if (pair->code != 280 && strEQc (obj->name, "XRECORD"))
             pair = add_xdata (dat, obj, pair);
+          else if (pair->code == 310 && strEQc (obj->name, "BLOCK_HEADER"))
+            {
+              pair = add_block_picture (obj, dat, pair);
+              goto start_loop;
+            }
           else if (pair->code == 370 && strEQc (obj->name, "LAYER"))
             {
               Dwg_Object_LAYER *layer = obj->tio.object->tio.LAYER;
@@ -1813,6 +1865,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
             }
           else if (strEQc (obj->name, "MLINE"))
             {
+              // TODO can extract to add_MLINE (obj, dat, pair, &j)?
               Dwg_Entity_MLINE *_o = obj->tio.entity->tio.MLINE;
               if (pair->code == 72)
                 {
@@ -1937,6 +1990,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
             }
           else if (strEQc (obj->name, "SPLINE"))
             {
+              // TODO can extract to add_SPLINE (obj, dat, pair, &j)?
               Dwg_Entity_SPLINE *_o = obj->tio.entity->tio.SPLINE;
               if (pair->code == 210 || pair->code == 220 || pair->code == 230)
                 break; // ignore extrusion in the dwg (planar only)
