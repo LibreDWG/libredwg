@@ -94,8 +94,10 @@ help (void)
   return 0;
 }
 
+// lsan/valgrind leaks still TODO
 #if defined __SANITIZE_ADDRESS__ || __has_feature (address_sanitizer)
-const char *__asan_default_options() {
+const char *__asan_default_options (void);
+const char *__asan_default_options (void) {
   return "detect_leaks=0";
 }
 #endif
@@ -308,7 +310,7 @@ main (int argc, char *argv[])
       // forget about valgrind. really huge DWG's need endlessly here.
       if (do_free
 #if defined __SANITIZE_ADDRESS__ || __has_feature (address_sanitizer)
-          || 1 /* or skip detect_leaks via __asan_default_options() */
+          || 0 /* and skip detect_leaks via __asan_default_options() */
 #endif
 #ifdef HAVE_VALGRIND_VALGRIND_H
           || (RUNNING_ON_VALGRIND)
