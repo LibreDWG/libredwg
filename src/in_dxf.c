@@ -774,14 +774,22 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       eed[i].size += size;
       break;
     case 4:
-      /* code [RC] + len+0 + length [RC] */
-      size = 1 + strlen (pair->value.s) + 1 + 1;
-      eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
-      eed[i].data->code = code; // 1004
-      eed[i].data->u.eed_4.length = strlen (pair->value.s);
-      if (pair->value.s)
-        strcpy (eed[i].data->u.eed_4.data, pair->value.s);
-      eed[i].size += size;
+      {
+        // BINARY
+        const char *pos = pair->value.s;
+        int len = strlen (pos);
+        /* code [RC] + len+0 + length [RC] */
+        size = 1 + len/2 + 1 + 1;
+        eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
+        eed[i].data->code = code; // 1004
+        eed[i].data->u.eed_4.length = len/2;
+        for (j = 0; j < len/2; j++)
+          {
+            sscanf (pos, "%2hhX", &eed[i].data->u.eed_4.data[j]);
+            pos += 2;
+          }
+        eed[i].size += size;
+      }
       break;
     case 40:
       /* code [RC] + RD */
