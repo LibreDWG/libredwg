@@ -12,7 +12,8 @@
 /*****************************************************************************/
 
 /*
- * dwgbmp.c: get the bmp thumbnail in a dwg file
+ * dwgbmp.c: get the bmp thumbnail in a dwg file.
+ * not the WMF.
  * written by Felipe Castro
  * modified by Felipe Corrêa da Silva Sances
  * modified by Rodrigo Rodrigues da Silva
@@ -51,7 +52,7 @@ static int
 help (void)
 {
   printf ("\nUsage: dwgbmp [OPTION]... DWGFILE [BMPFILE]\n");
-  printf ("Extract the DWG preview image as BMP.\n");
+  printf ("Extract the DWG thumbnail image as BMP.\n");
   printf ("Default BMPFILE: DWGFILE with .bmp extension.\n"
           "\n");
 #ifdef HAVE_GETOPT_LONG
@@ -118,14 +119,14 @@ get_bmp (char *dwgfile, char *bmpfile)
   data = dwg_bmp (&dwg, &size);
   if (!data)
     {
-      fprintf (stderr, "No thumb in dwg file\n");
+      fprintf (stderr, "No thumbnail bmp image in dwg file\n");
       free (bmpfile);
       bmp_free_dwg (&dwg);
       return 0;
     }
   if (size < 1)
     {
-      fprintf (stderr, "Empty thumb data in dwg file\n");
+      fprintf (stderr, "Empty thumbnail data in dwg file\n");
       free (bmpfile);
       bmp_free_dwg (&dwg);
       return -3;
@@ -174,7 +175,7 @@ get_bmp (char *dwgfile, char *bmpfile)
     }
   fclose (fh);
 
-  printf ("Success. Written preview image to '%s'\n", bmpfile);
+  printf ("Success. Written thumbnail image to '%s'\n", bmpfile);
   free (bmpfile);
   bmp_free_dwg (&dwg);
 

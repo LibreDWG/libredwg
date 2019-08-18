@@ -39,7 +39,7 @@
     FIELD_RC (maint_version, 0); // 0
   } LATER_VERSIONS {
     FIELD_RC (zero_one_or_three, 0);
-    FIELD_RL (preview_addr, 0); //@0x0d
+    FIELD_RL (thumbnail_addr, 0); //@0x0d
     FIELD_RC (dwg_version, 0);
     FIELD_RC (maint_version, 0);
     FIELD_RS (codepage, 0); //@0x13: 29/30 for ANSI_1252, since r2007 UTF-16
@@ -70,4 +70,5 @@
     }
     /* now at 0x80 follows the encrypted header data */
   }
+
 

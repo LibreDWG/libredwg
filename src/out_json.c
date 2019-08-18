@@ -1128,9 +1128,9 @@ json_handles_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 static int
-json_preview_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+json_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  Bit_Chain *_obj = (Bit_Chain *)&dwg->preview;
+  Bit_Chain *_obj = (Bit_Chain *)&dwg->thumbnail;
   if (_obj->chain && _obj->size && _obj->size > 10)
     {
       KEY (THUMBNAILIMAGE);
@@ -1177,7 +1177,7 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   if (!minimal && dat->version >= R_2000)
     {
-      if (json_preview_write (dat, dwg) >= DWG_ERR_CRITICAL)
+      if (json_thumbnail_write (dat, dwg) >= DWG_ERR_CRITICAL)
         goto fail;
     }
 

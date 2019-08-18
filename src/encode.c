@@ -825,7 +825,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     memcpy (&dat->chain[0x80], encrypted_data, size);
     LOG_INFO ("@0x%lx\n", dat->byte);
 
-#include "r2004_file_header.spec"
+    #include "r2004_file_header.spec"
 
     dwg->r2004_header.checksum = 0;
     dwg->r2004_header.checksum = dwg_section_page_checksum (0, dat, size);
@@ -855,22 +855,23 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   }
 
   /*------------------------------------------------------------
-   * Picture (Pre-R13C3?)
+   * THUMBNAIL preview pictures (Pre-R13C3?)
    */
-  if (dwg->header.preview_addr)
+  // FIXME if !thumbnail_addr but thumbnail exists
+  if (dwg->header.thumbnail_addr)
     {
-      dat->byte = dwg->header.preview_addr;
-      // dwg->preview.size = 0; // If one desires not to copy preview previews,
+      dat->byte = dwg->header.thumbnail_addr;
+      // dwg->thumbnail.size = 0; // If one desires not to copy thumbnail previews,
       // should un-comment this line
-      bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_PICTURE_BEGIN));
-      if (dwg->preview.size == 0)
+      bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_THUMBNAIL_BEGIN));
+      if (dwg->thumbnail.size == 0)
         {
           bit_write_RL (dat, 5); // overall size
           bit_write_RC (dat, 0); // num_pictures
         }
       else
-        bit_write_TF (dat, (char *)dwg->preview.chain, dwg->preview.size);
-      bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_PICTURE_END));
+        bit_write_TF (dat, (char *)dwg->thumbnail.chain, dwg->thumbnail.size);
+      bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_THUMBNAIL_END));
     }
 
   /*------------------------------------------------------------

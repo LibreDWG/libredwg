@@ -1897,9 +1897,9 @@ dxfb_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 static int
-dxfb_preview_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+dxfb_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  Bit_Chain *pic = (Bit_Chain *)&dwg->preview;
+  Bit_Chain *pic = (Bit_Chain *)&dwg->thumbnail;
   if (pic->chain && pic->size && pic->size > 10)
     {
       SECTION (THUMBNAILIMAGE);
@@ -1955,7 +1955,7 @@ dwg_write_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       }
       SINCE (R_2000)
       {
-        if (dxfb_preview_write (dat, dwg) >= DWG_ERR_CRITICAL)
+        if (dxfb_thumbnail_write (dat, dwg) >= DWG_ERR_CRITICAL)
           goto fail;
       }
     }

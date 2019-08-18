@@ -132,8 +132,8 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dwg->num_entities = 0;
   dwg->num_objects = 0;
   dwg->num_classes = 0;
-  dwg->preview.size = 0;
-  dwg->preview.chain = NULL;
+  dwg->thumbnail.size = 0;
+  dwg->thumbnail.chain = NULL;
   dwg->header.num_sections = 0;
   dwg->header.section_infohdr.num_desc = 0;
   dwg->measurement = 0; // 0 - English, 1- Metric
@@ -900,26 +900,26 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
    * Picture (Pre-R13C3?)
    */
 
-  if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_PICTURE_BEGIN)))
+  if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_THUMBNAIL_BEGIN)))
     {
       unsigned long int start_address;
 
       dat->bit = 0;
       start_address = dat->byte;
-      LOG_TRACE ("\n=======> PICTURE: %8X\n", (unsigned int)start_address - 16)
-      if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_PICTURE_END)))
+      LOG_TRACE ("\n=======> THUMBNAIL: %8X\n", (unsigned int)start_address - 16)
+      if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_THUMBNAIL_END)))
         {
-          LOG_TRACE ("         PICTURE (end): %8X\n", (unsigned int)dat->byte)
-          dwg->preview.size = (dat->byte - 16) - start_address;
-          dwg->preview.chain = (unsigned char *)calloc (dwg->preview.size, 1);
-          if (!dwg->preview.chain)
+          LOG_TRACE ("         THUMBNAIL (end): %8X\n", (unsigned int)dat->byte)
+          dwg->thumbnail.size = (dat->byte - 16) - start_address;
+          dwg->thumbnail.chain = (unsigned char *)calloc (dwg->thumbnail.size, 1);
+          if (!dwg->thumbnail.chain)
             {
               LOG_ERROR ("Out of memory");
               return DWG_ERR_OUTOFMEM;
             }
-          memcpy (dwg->preview.chain, &dat->chain[start_address],
-                  dwg->preview.size);
-          dat->byte += dwg->preview.size;
+          memcpy (dwg->thumbnail.chain, &dat->chain[start_address],
+                  dwg->thumbnail.size);
+          dat->byte += dwg->thumbnail.size;
         }
     }
 

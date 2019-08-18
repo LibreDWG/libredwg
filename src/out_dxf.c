@@ -2240,9 +2240,9 @@ GCC30_DIAG_IGNORE (-Wformat-nonliteral)
 // TODO: Beware, there's also a new ACDSDATA section, with ACDSSCHEMA elements
 // and the Thumbnail_Data (per block?)
 static int
-dxf_preview_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+dxf_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  Bit_Chain *pic = (Bit_Chain *)&dwg->preview;
+  Bit_Chain *pic = (Bit_Chain *)&dwg->thumbnail;
   if (pic->chain && pic->size && pic->size > 10)
     {
       SECTION (THUMBNAILIMAGE);
@@ -2299,7 +2299,7 @@ dwg_write_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       }
       SINCE (R_2000)
       {
-        if (dxf_preview_write (dat, dwg) >= DWG_ERR_CRITICAL)
+        if (dxf_thumbnail_write (dat, dwg) >= DWG_ERR_CRITICAL)
           goto fail;
       }
     }

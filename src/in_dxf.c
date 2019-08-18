@@ -529,7 +529,7 @@ static void dxf_fixup_header (Dwg_Data *dwg)
   // R_2007:
   //is_maint: 0x32 [RC 0]
   //zero_one_or_three: 0x3 [RC 0]
-  //preview_addr: 3360 [RL 0]
+  //thumbnail_addr: 3360 [RL 0]
   //dwg_version: 0x1f [RC 0]
   //maint_version: 0x8 [RC 0]
   //codepage: 30 [RS 0]
@@ -546,7 +546,7 @@ static void dxf_fixup_header (Dwg_Data *dwg)
   // R_2000:
   //is_maint: 0xf [RC 0]
   //zero_one_or_three: 0x1 [RC 0]
-  //preview_addr: 220 [RL 0]
+  //thumbnail_addr: 220 [RL 0]
   //dwg_version: 0x1f [RC 0]
   //maint_version: 0x8 [RC 0]
   //codepage: 30 [RS 0]
@@ -557,7 +557,7 @@ static void dxf_fixup_header (Dwg_Data *dwg)
     {
       hdr->is_maint = 0xf; // 0x6 - 0xf
       hdr->zero_one_or_three = 1;
-      hdr->preview_addr = 220;
+      hdr->thumbnail_addr = 220;
       hdr->dwg_version = 0x1f;
       hdr->maint_version = 0x8;
 
@@ -2601,9 +2601,9 @@ dxf_unknownsection_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
-// read to dwg->preview, size 90, not entity->preview size 160
+// read to THUMBNAIL dwg->thumbnail, size 90. not entity->preview
 static int
-dxf_preview_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+dxf_thumbnail_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dxf_Pair *pair = dxf_read_pair (dat);
   unsigned written = 0;
@@ -2615,27 +2615,27 @@ dxf_preview_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         case 0: // ENDSEC
           return 0;
         case 90:
-          dwg->preview.size = pair->value.bll;
-          dwg->preview.chain = calloc (dwg->preview.size, 1);
-          if (!dwg->preview.chain)
+          dwg->thumbnail.size = pair->value.bll;
+          dwg->thumbnail.chain = calloc (dwg->thumbnail.size, 1);
+          if (!dwg->thumbnail.chain)
             {
               LOG_ERROR ("Out of memory");
               return DWG_ERR_OUTOFMEM;
             }
-          LOG_TRACE ("PICTURE.size = " FORMAT_BLL "\n", pair->value.bll);
+          LOG_TRACE ("PREVIEW.size = " FORMAT_BLL "\n", pair->value.bll);
           break;
         case 310:
           {
             unsigned len = strlen (pair->value.s);
             unsigned blen = len / 2;
             const char *pos = pair->value.s;
-            unsigned char *s = &dwg->preview.chain[written];
-            if (blen + written > dwg->preview.size)
+            unsigned char *s = &dwg->thumbnail.chain[written];
+            if (blen + written > dwg->thumbnail.size)
               {
                 dxf_free_pair (pair);
-                LOG_ERROR ("PICTURE.size overflow: %u + written %u > "
+                LOG_ERROR ("PREVIEW.size overflow: %u + written %u > "
                            "size: %lu",
-                           blen, written, dwg->preview.size);
+                           blen, written, dwg->thumbnail.size);
                 return 1;
               }
             for (unsigned i = 0; i < blen; i++)
@@ -2644,12 +2644,12 @@ dxf_preview_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 pos += 2;
               }
             written += blen;
-            LOG_TRACE ("PICTURE.chain += %u (%u/%lu)\n", blen,
-                       written, dwg->preview.size);
+            LOG_TRACE ("PREVIEW.chain += %u (%u/%lu)\n", blen,
+                       written, dwg->thumbnail.size);
           }
           break;
         default:
-          LOG_ERROR ("Unknown DXF code %d for PICTURE", pair->code);
+          LOG_ERROR ("Unknown DXF code %d for THUMBNAILIMAGE", pair->code);
           break;
         }
       dxf_free_pair (pair);
@@ -2812,7 +2812,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           else if (strEQc (pair->value.s, "THUMBNAILIMAGE"))
             {
               dxf_free_pair (pair);
-              dxf_preview_read (dat, dwg);
+              dxf_thumbnail_read (dat, dwg);
             }
           else // if (strEQc (pair->value.s, "ACDSDATA"))
             {

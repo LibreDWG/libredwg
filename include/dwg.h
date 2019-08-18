@@ -5389,7 +5389,7 @@ typedef struct _dwg_class
 } Dwg_Class;
 
 /**
- Dwg_Chain similar to Bit_Chain in "bits.h". Used only for the Thumbnail preview
+ Dwg_Chain similar to Bit_Chain in "bits.h". Used only for the Thumbnail thumbnail
  */
 typedef struct _dwg_chain
 {
@@ -5516,7 +5516,7 @@ typedef struct _dwg_struct
     BITCODE_RC   is_maint;
     BITCODE_RC   zero_one_or_three;
     BITCODE_RS   unknown_s[3];         /* <R13 */
-    BITCODE_RL   preview_addr;
+    BITCODE_RL   thumbnail_addr;
     BITCODE_RC   dwg_version;
     BITCODE_RC   maint_version;
     BITCODE_RS   codepage;
@@ -5601,7 +5601,7 @@ typedef struct _dwg_struct
     BITCODE_RS   zero_18[3]; /* R2018+ */
   } auxheader;
 
-  Dwg_Chain preview;
+  Dwg_Chain thumbnail;
 
   Dwg_Header_Variables header_vars;
 

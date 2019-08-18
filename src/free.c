@@ -798,8 +798,8 @@ dwg_free (Dwg_Data *dwg)
         }
       FREE_IF (dwg->header.section);
       dwg_free_header_vars (dwg);
-      if (dwg->preview.size && dwg->preview.chain)
-        FREE_IF (dwg->preview.chain);
+      if (dwg->thumbnail.size && dwg->thumbnail.chain)
+        FREE_IF (dwg->thumbnail.chain);
       if (dwg->header.section_infohdr.num_desc)
         {
           for (i = 0; i < dwg->header.section_infohdr.num_desc; ++i)
