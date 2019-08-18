@@ -1244,6 +1244,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   /*------------------------------------------------------------
    * MEASUREMENT Section 4
+   * In a DXF under header_vars
    */
   if (dwg->header.num_sections > SECTION_MEASUREMENT_R13)
     {
@@ -1251,7 +1252,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dwg->header.section[SECTION_MEASUREMENT_R13].address = dat->byte;
       dwg->header.section[SECTION_MEASUREMENT_R13].size = 4;
       // 0 - English, 1- Metric
-      bit_write_RL (dat, dwg->measurement);
+      bit_write_RL (dat, (BITCODE_RL)dwg->header_vars.MEASUREMENT);
     }
 
   /* End of the file

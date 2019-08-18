@@ -384,6 +384,7 @@ static const Dwg_DYNAPI_field _dwg_header_variables_fields[] = {
   { "LUPREC", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_header_variables,LUPREC), 0,0,0, 70 },
   { "LWDISPLAY", "B", sizeof (BITCODE_B), OFF (struct _dwg_header_variables,LWDISPLAY), 0,0,0, 290 },
   { "MAXACTVP", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_header_variables,MAXACTVP), 0,0,0, 70 },
+  { "MEASUREMENT", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_header_variables,MEASUREMENT), 0,0,0, 70 },
   { "MENU", "TV", sizeof (BITCODE_TV), OFF (struct _dwg_header_variables,MENU), 1,1,1, 1 },
   { "MIRRTEXT", "B", sizeof (BITCODE_B), OFF (struct _dwg_header_variables,MIRRTEXT), 0,0,0, 70 },
   { "NORTHDIRECTION", "BD", sizeof (BITCODE_BD), OFF (struct _dwg_header_variables,NORTHDIRECTION), 0,0,0, 40 },

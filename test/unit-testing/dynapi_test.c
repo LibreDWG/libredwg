@@ -847,6 +847,24 @@ test_header (const Dwg_Data *dwg)
 
   }
   {
+    BITCODE_BS measurement;
+    if (dwg_dynapi_header_value (dwg, "MEASUREMENT", &measurement, NULL)
+        && measurement == dwg->header_vars.MEASUREMENT)
+      pass ();
+    else
+      fail ("HEADER.MEASUREMENT [BS] %hu != %hu", dwg->header_vars.MEASUREMENT, measurement);
+    measurement++;
+    if (dwg_dynapi_header_set_value (dwg, "MEASUREMENT", &measurement, 0)
+        && measurement == dwg->header_vars.MEASUREMENT)
+      pass ();
+    else
+      fail ("HEADER.MEASUREMENT [BS] set+1 %hu != %hu",
+            dwg->header_vars.MEASUREMENT, measurement);
+    measurement--;
+    dwg_dynapi_header_set_value (dwg, "MEASUREMENT", &measurement, 0);
+
+  }
+  {
     BITCODE_BS dragmode;
     if (dwg_dynapi_header_value (dwg, "DRAGMODE", &dragmode, NULL)
         && dragmode == dwg->header_vars.DRAGMODE)

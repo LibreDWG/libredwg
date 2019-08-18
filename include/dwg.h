@@ -625,6 +625,7 @@ typedef struct _dwg_header_variables {
   BITCODE_B PELLIPSE;
   BITCODE_BS SAVEIMAGES;
   BITCODE_BS PROXYGRAPHICS;
+  BITCODE_BS MEASUREMENT; /* 0 English, 1 Metric. Stored as Section 4 */
   BITCODE_BS DRAGMODE;
   BITCODE_BS TREEDEPTH;
   BITCODE_BS LUNITS;
@@ -5656,7 +5657,6 @@ typedef struct _dwg_struct
     BITCODE_RL junk_r14_2; /*!< r14 only */
   } second_header;
 
-  BITCODE_RL measurement; // 0 English/1 Metric. section 4
   unsigned int layout_number;
   unsigned int opts; /* 0xf: loglevel, ... */
 } Dwg_Data;

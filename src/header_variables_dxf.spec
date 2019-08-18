@@ -315,11 +315,10 @@
   SINCE(R_14) {
     HEADER_RC (PROXYGRAPHICS, 70);
   }
-  HEADER_VALUE (MEASUREMENT, RC, 70,
-                dwg->header.num_sections > SECTION_MEASUREMENT_R13 ? 1 : 0);
+  HEADER_RL (MEASUREMENT, 70);
   SINCE(R_2000) {
     PRINT {
-      HEADER_9(CELWEIGHT);
+      HEADER_9 (CELWEIGHT);
       VALUE(dxf_cvt_lweight(_obj->CELWEIGHT), RCs, 370);
     }
     ENCODER {
@@ -415,3 +414,4 @@
     }
 
   ENDSEC();
+
