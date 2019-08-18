@@ -1899,7 +1899,7 @@ dxfb_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static int
 dxfb_preview_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  Bit_Chain *pic = (Bit_Chain *)&dwg->picture;
+  Bit_Chain *pic = (Bit_Chain *)&dwg->preview;
   if (pic->chain && pic->size && pic->size > 10)
     {
       SECTION (THUMBNAILIMAGE);

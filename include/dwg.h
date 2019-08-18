@@ -5148,9 +5148,10 @@ typedef struct _dwg_object_entity
   Dwg_Eed *eed; /* see also Dwg_Resbuf* xdata */
 
   /* Common Entity Data */
-  BITCODE_B   picture_exists;
-  BITCODE_BLL picture_size;     /*!< DXF 160, e.g. INSERT, MULTILEADER */
-  char       *picture;          /*!< DXF 310 */
+  BITCODE_B   preview_exists;
+  BITCODE_BLL preview_size;     /*!< DXF 160 for bitmaps, DXF 92 for PROXY vector data.
+                                  e.g. INSERT, MULTILEADER */
+  char       *preview;          /*!< DXF 310 */
   BITCODE_BB entmode;           /*!< has no owner handle:
                                   0 has no ownerhandle, 1 is PSPACE, 2 is MSPACE
                                   3 has ownerhandle. */
@@ -5388,7 +5389,7 @@ typedef struct _dwg_class
 } Dwg_Class;
 
 /**
- Dwg_Chain similar to Bit_Chain in "bits.h". Used only for the Thumbnail picture
+ Dwg_Chain similar to Bit_Chain in "bits.h". Used only for the Thumbnail preview
  */
 typedef struct _dwg_chain
 {
@@ -5600,7 +5601,7 @@ typedef struct _dwg_struct
     BITCODE_RS   zero_18[3]; /* R2018+ */
   } auxheader;
 
-  Dwg_Chain picture;
+  Dwg_Chain preview;
 
   Dwg_Header_Variables header_vars;
 

@@ -1374,9 +1374,12 @@ dxf_find_lweight (const int lw)
   return 0;
 }
 
-// read to ent->picture, starting with code 160. Or 92 with WIPEOUT, LIGHT, ...
+/* read to ent->preview, starting with code 160 for bitmap previews,
+   Or with code 92 for PROXY GRAPHICS vector data for newer variable
+   entities, like WIPEOUT, LIGHT, MULTILEADER, ARC_DIMENSION, ...
+*/
 static Dxf_Pair *
-add_ent_picture (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                  Dxf_Pair *restrict pair)
 {
   Dwg_Object_Entity *ent = obj->tio.entity;
@@ -1384,24 +1387,24 @@ add_ent_picture (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
   if (obj->supertype != DWG_SUPERTYPE_ENTITY)
     {
-      LOG_ERROR ("%s is no entity for a picture", obj->name);
+      LOG_ERROR ("%s is no entity for a preview", obj->name);
       return pair;
     }
-  ent->picture_size = pair->code == 160 ? pair->value.bll : pair->value.u;
-  if (!ent->picture_size)
+  ent->preview_size = pair->code == 160 ? pair->value.bll : pair->value.u;
+  if (!ent->preview_size)
     {
       dxf_free_pair (pair);
       return dxf_read_pair (dat);
     }
-  ent->picture = calloc (ent->picture_size, 1);
-  if (!ent->picture)
+  ent->preview = calloc (ent->preview_size, 1);
+  if (!ent->preview)
     {
       LOG_ERROR ("Out of memory");
       return NULL;
     }
-  LOG_TRACE ("%s.picture_size = " FORMAT_BLL " [%d BLL]\n", obj->name,
-             ent->picture_size, pair->code);
-  ent->picture_exists = 1;
+  LOG_TRACE ("%s.preview_size = " FORMAT_BLL " [%d BLL]\n", obj->name,
+             ent->preview_size, pair->code);
+  ent->preview_exists = 1;
 
   dxf_free_pair (pair);
   pair = dxf_read_pair (dat);
@@ -1410,11 +1413,11 @@ add_ent_picture (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       unsigned len = strlen (pair->value.s);
       unsigned blen = len / 2;
       const char *pos = pair->value.s;
-      char *s = &ent->picture[written];
-      if (blen + written > ent->picture_size)
+      char *s = &ent->preview[written];
+      if (blen + written > ent->preview_size)
         {
-          LOG_ERROR ("%s.picture overflow: %u + written %u > size: " FORMAT_BLL,
-                     obj->name, blen, written, ent->picture_size);
+          LOG_ERROR ("%s.preview overflow: %u + written %u > size: " FORMAT_BLL,
+                     obj->name, blen, written, ent->preview_size);
           return pair;
         }
       for (unsigned i = 0; i < blen; i++)
@@ -1423,8 +1426,8 @@ add_ent_picture (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           pos += 2;
         }
       written += blen;
-      LOG_TRACE ("%s.picture += %u (%u/" FORMAT_BLL ")\n", obj->name, blen, written,
-                 ent->picture_size);
+      LOG_TRACE ("%s.preview += %u (%u/" FORMAT_BLL ")\n", obj->name, blen, written,
+                 ent->preview_size);
 
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
@@ -1434,7 +1437,7 @@ add_ent_picture (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
 // read to BLOCK_HEADER.preview_data (310), filling in the size
 static Dxf_Pair *
-add_block_picture (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+add_block_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                    Dxf_Pair *restrict pair)
 {
   Dwg_Object_BLOCK_HEADER *_obj = obj->tio.object->tio.BLOCK_HEADER;
@@ -1442,7 +1445,7 @@ add_block_picture (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
   if (obj->type != DWG_TYPE_BLOCK_HEADER)
     {
-      LOG_ERROR ("%s is no BLOCK_HEADER for a picture", obj->name);
+      LOG_ERROR ("%s is no BLOCK_HEADER for a preview", obj->name);
       return pair;
     }
   if (pair->code != 310)
@@ -1843,7 +1846,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
             pair = add_xdata (dat, obj, pair);
           else if (pair->code == 310 && strEQc (obj->name, "BLOCK_HEADER"))
             {
-              pair = add_block_picture (obj, dat, pair);
+              pair = add_block_preview (obj, dat, pair);
               goto start_loop;
             }
           else if (pair->code == 370 && strEQc (obj->name, "LAYER"))
@@ -2167,7 +2170,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                           // not MULTILEADER.text_color
                           obj->fixedtype == DWG_TYPE_MULTILEADER)
                         {
-                          pair = add_ent_picture (obj, dat, pair);
+                          pair = add_ent_preview (obj, dat, pair);
                           goto start_loop;
                         }
                       else if (pair->code == 3 &&
@@ -2377,7 +2380,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                             {
                               if (is_entity && pair->code == 160) //
                                 {
-                                  pair = add_ent_picture (obj, dat, pair);
+                                  pair = add_ent_preview (obj, dat, pair);
                                   goto start_loop; // already fresh pair
                                 }
                               LOG_TRACE ("COMMON.%s = %ld [%d %s]\n", f->name,
@@ -2387,14 +2390,18 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                         }
                     }
                 }
-              // not in dynapi: 92 as 310 size prefix
-              if ((pair->code == 92) &&
+              // not in dynapi: 92 as 310 size prefix for PROXY vector preview data
+              if ((pair->code == 92) && is_entity &&
+                  obj->fixedtype > DWG_TYPE_LAYOUT)
+                /*
                   (obj->fixedtype == DWG_TYPE_WIPEOUT ||
-                   obj->fixedtype == DWG_TYPE_MULTILEADER || /* also above */
+                   obj->fixedtype == DWG_TYPE_MULTILEADER ||
+                   obj->fixedtype == DWG_TYPE_UNDERLAY ||
+                   obj->fixedtype == DWG_TYPE_HELIX ||
                    obj->fixedtype == DWG_TYPE_LIGHT ||
-                   obj->fixedtype == DWG_TYPE_ARC_DIMENSION))
+                   obj->fixedtype == DWG_TYPE_ARC_DIMENSION)) */
                 {
-                  pair = add_ent_picture (obj, dat, pair);
+                  pair = add_ent_preview (obj, dat, pair);
                   goto start_loop;
                 }
               else if (strEQc (name, "BLOCK") &&
@@ -2594,7 +2601,7 @@ dxf_unknownsection_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
-// read to dwg->picture, size 90, not entity->picture size 160
+// read to dwg->preview, size 90, not entity->preview size 160
 static int
 dxf_preview_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
@@ -2608,9 +2615,9 @@ dxf_preview_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         case 0: // ENDSEC
           return 0;
         case 90:
-          dwg->picture.size = pair->value.bll;
-          dwg->picture.chain = calloc (dwg->picture.size, 1);
-          if (!dwg->picture.chain)
+          dwg->preview.size = pair->value.bll;
+          dwg->preview.chain = calloc (dwg->preview.size, 1);
+          if (!dwg->preview.chain)
             {
               LOG_ERROR ("Out of memory");
               return DWG_ERR_OUTOFMEM;
@@ -2622,13 +2629,13 @@ dxf_preview_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             unsigned len = strlen (pair->value.s);
             unsigned blen = len / 2;
             const char *pos = pair->value.s;
-            unsigned char *s = &dwg->picture.chain[written];
-            if (blen + written > dwg->picture.size)
+            unsigned char *s = &dwg->preview.chain[written];
+            if (blen + written > dwg->preview.size)
               {
                 dxf_free_pair (pair);
                 LOG_ERROR ("PICTURE.size overflow: %u + written %u > "
                            "size: %lu",
-                           blen, written, dwg->picture.size);
+                           blen, written, dwg->preview.size);
                 return 1;
               }
             for (unsigned i = 0; i < blen; i++)
@@ -2638,7 +2645,7 @@ dxf_preview_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               }
             written += blen;
             LOG_TRACE ("PICTURE.chain += %u (%u/%lu)\n", blen,
-                       written, dwg->picture.size);
+                       written, dwg->preview.size);
           }
           break;
         default:

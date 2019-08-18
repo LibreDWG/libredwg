@@ -860,15 +860,16 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   if (dwg->header.preview_addr)
     {
       dat->byte = dwg->header.preview_addr;
-      // dwg->picture.size = 0; // If one desires not to copy preview pictures,
+      // dwg->preview.size = 0; // If one desires not to copy preview previews,
       // should un-comment this line
       bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_PICTURE_BEGIN));
-      bit_write_TF (dat, (char *)dwg->picture.chain, dwg->picture.size);
-      if (dwg->picture.size == 0)
+      if (dwg->preview.size == 0)
         {
-          bit_write_RL (dat, 5);
-          bit_write_RC (dat, 0);
+          bit_write_RL (dat, 5); // overall size
+          bit_write_RC (dat, 0); // num_pictures
         }
+      else
+        bit_write_TF (dat, (char *)dwg->preview.chain, dwg->preview.size);
       bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_PICTURE_END));
     }
 

@@ -612,8 +612,8 @@ _prefix (Bit_Chain *dat)
     VALUE_HANDLE (_ent->ownerhandle, ownerhandle, 3, 330);                    \
     _FIELD (size, RL, 0);                                                     \
     _FIELD (bitsize, BL, 0);                                                  \
-    if (_ent->picture_exists)                                                 \
-      ENT_FIELD (picture_exists, B, 0);                                       \
+    if (_ent->preview_exists)                                                 \
+      ENT_FIELD (preview_exists, B, 0);                                       \
     SINCE (R_13)                                                              \
     {                                                                         \
       KEY (owner);                                                            \
@@ -1130,7 +1130,7 @@ json_handles_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static int
 json_preview_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  Bit_Chain *_obj = (Bit_Chain *)&dwg->picture;
+  Bit_Chain *_obj = (Bit_Chain *)&dwg->preview;
   if (_obj->chain && _obj->size && _obj->size > 10)
     {
       KEY (THUMBNAILIMAGE);

@@ -384,10 +384,10 @@ api_common_entity (dwg_object *obj)
   BITCODE_H handle;
   BITCODE_BL num_reactors, num_eed;
   BITCODE_H* reactors;
-  BITCODE_B xdic_missing_flag, has_ds_binary_data, picture_exists;
+  BITCODE_B xdic_missing_flag, has_ds_binary_data, preview_exists;
   BITCODE_RC linewt;
-  BITCODE_RL picture_size_rl;
-  BITCODE_BLL picture_size;
+  BITCODE_RL preview_size_rl;
+  BITCODE_BLL preview_size;
   BITCODE_BD linetype_scale;
   BITCODE_BS invisible;
   Dwg_Object_Entity *_ent =  obj->tio.entity;
@@ -395,13 +395,13 @@ api_common_entity (dwg_object *obj)
   Dwg_Version_Type version = obj->parent->header.version;
 
   CHK_COMMON_TYPE (ent, entmode, BB, entmode)
-  CHK_COMMON_TYPE (ent, picture_exists, B, picture_exists)
-  if (picture_exists)
+  CHK_COMMON_TYPE (ent, preview_exists, B, preview_exists)
+  if (preview_exists)
     {
       if (version > R_2010)
-        CHK_COMMON_TYPE (ent, picture_size, BLL, picture_size)
+        CHK_COMMON_TYPE (ent, preview_size, BLL, preview_size)
       else
-        CHK_COMMON_TYPE (ent, picture_size, RL, picture_size_rl);
+        CHK_COMMON_TYPE (ent, preview_size, RL, preview_size_rl);
     }
   if (entmode == 3 || entmode == 0)
     CHK_COMMON_H (ent, ownerhandle, handle);

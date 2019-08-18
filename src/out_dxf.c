@@ -1590,11 +1590,11 @@ dxf_common_entity_handle_data (Bit_Chain *restrict dat,
 #if 1
 #  include "common_entity_data.spec"
 #else
-  if (ent->picture_exists && ent->picture_size >= 0
-      && ent->picture_size < 210210)
+  if (ent->preview_exists && ent->preview_size >= 0
+      && ent->preview_size < 210210)
     {
-      FIELD_RL (picture_size, 160);
-      FIELD_BINARY (picture, ent->picture_size, 310); // chunked hex encoding
+      FIELD_RL (preview_size, 160);
+      FIELD_BINARY (preview, ent->preview_size, 310); // chunked hex encoding
     }
   SINCE (R_2004)
   {
@@ -2242,7 +2242,7 @@ GCC30_DIAG_IGNORE (-Wformat-nonliteral)
 static int
 dxf_preview_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  Bit_Chain *pic = (Bit_Chain *)&dwg->picture;
+  Bit_Chain *pic = (Bit_Chain *)&dwg->preview;
   if (pic->chain && pic->size && pic->size > 10)
     {
       SECTION (THUMBNAILIMAGE);

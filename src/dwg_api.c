@@ -20525,20 +20525,20 @@ EXPORT BITCODE_B
 dwg_ent_get_picture_exists (const dwg_obj_ent *restrict ent,
                             int *restrict error)
 {
-  _BODY_FIELD (ent, picture_exists);
+  _BODY_FIELD (ent, preview_exists);
 }
 
 EXPORT BITCODE_BLL
 dwg_ent_get_picture_size (const dwg_obj_ent *restrict ent,
                           int *restrict error) // before r2007 only RL
 {
-  _BODY_FIELD (ent, picture_size);
+  _BODY_FIELD (ent, preview_size);
 }
 
 EXPORT char *
 dwg_ent_get_picture (const dwg_obj_ent *restrict ent, int *restrict error)
 {
-  _BODY_FIELD (ent, picture);
+  _BODY_FIELD (ent, preview);
 }
 
 EXPORT BITCODE_BB

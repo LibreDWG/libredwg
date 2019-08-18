@@ -7933,18 +7933,18 @@ RS
 H,	DXF 330
 @item paper_r11
 RS,	DXF 67
-@item picture
-TV
-@item picture_exists
-B
-@item picture_size
-BLL,	DXF 160
 @item plotstyle
 H,	DXF 390
 @item plotstyle_flags
 BB
 @item prev_entity
 H
+@item preview
+TV
+@item preview_exists
+B
+@item preview_size
+BLL,	DXF 160
 @item reactors
 H*,	DXF 330
 @item shadow

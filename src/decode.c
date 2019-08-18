@@ -132,8 +132,8 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dwg->num_entities = 0;
   dwg->num_objects = 0;
   dwg->num_classes = 0;
-  dwg->picture.size = 0;
-  dwg->picture.chain = NULL;
+  dwg->preview.size = 0;
+  dwg->preview.chain = NULL;
   dwg->header.num_sections = 0;
   dwg->header.section_infohdr.num_desc = 0;
   dwg->measurement = 0; // 0 - English, 1- Metric
@@ -910,16 +910,16 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_PICTURE_END)))
         {
           LOG_TRACE ("         PICTURE (end): %8X\n", (unsigned int)dat->byte)
-          dwg->picture.size = (dat->byte - 16) - start_address;
-          dwg->picture.chain = (unsigned char *)calloc (dwg->picture.size, 1);
-          if (!dwg->picture.chain)
+          dwg->preview.size = (dat->byte - 16) - start_address;
+          dwg->preview.chain = (unsigned char *)calloc (dwg->preview.size, 1);
+          if (!dwg->preview.chain)
             {
               LOG_ERROR ("Out of memory");
               return DWG_ERR_OUTOFMEM;
             }
-          memcpy (dwg->picture.chain, &dat->chain[start_address],
-                  dwg->picture.size);
-          dat->byte += dwg->picture.size;
+          memcpy (dwg->preview.chain, &dat->chain[start_address],
+                  dwg->preview.size);
+          dat->byte += dwg->preview.size;
         }
     }
 
@@ -3079,7 +3079,7 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
       LOG_WARN ("dwg_decode_entity handle @%lu.%u", dat->byte, dat->bit);
       obj->bitsize = 0;
       ent->num_eed = 0;
-      ent->picture_exists = 0;
+      ent->preview_exists = 0;
       return error;
     }
   LOG_TRACE ("handle: " FORMAT_H " [5]\n", ARGS_H(obj->handle))

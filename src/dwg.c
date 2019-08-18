@@ -379,7 +379,10 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
 }
 #endif /* USE_WRITE */
 
-/* THUMBNAIL IMAGE DATA (R13C3+) */
+/* THUMBNAIL IMAGE DATA (R13C3+).
+   Supportes multiple preview pictures.
+   Currently 2 types: BMP and WMF.
+ */
 EXPORT unsigned char *
 dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
 {
@@ -390,7 +393,7 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
 
   *size = 0;
   assert (dwg);
-  dat = (Bit_Chain *)&dwg->picture;
+  dat = (Bit_Chain *)&dwg->preview;
   if (!dat || !dat->size)
     {
       LOG_INFO ("no THUMBNAIL Image Data\n")
