@@ -744,19 +744,26 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       obj->tio.entity->num_eed++;
     }
   eed[i].raw = NULL;
-  // TODO: handle: usually APPID "ACAD"
+  // TODO: handle. usually APPID "ACAD"
   code = pair->code - 1000; // 1000
   switch (code)
     {
     case 0:
-      /* code [RC] + len+0 + length [RC] + codepage [RS] */
-      size = 1 + strlen (pair->value.s) + 1 + 1 + 2;
-      eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
-      eed[i].data->code = code; // 1000
-      eed[i].data->u.eed_0.length = strlen (pair->value.s);
-      eed[i].data->u.eed_0.codepage = obj->parent->header.codepage;
-      strcpy (eed[i].data->u.eed_0.string, pair->value.s);
-      eed[i].size += size;
+      {
+        int len = strlen (pair->value.s);
+        /* code [RC] + len+0 + length [RC] + codepage [RS] */
+        size = 1 + len + 1 + 1 + 2;
+        eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
+        eed[i].data->code = code; // 1000
+        eed[i].data->u.eed_0.length = len;
+        eed[i].data->u.eed_0.codepage = obj->parent->header.codepage;
+        if (len && len < 256)
+          {
+            LOG_HANDLE ("eed[%d] string %d %d\n", i, len, size);
+            memcpy (eed[i].data->u.eed_0.string, pair->value.s, len+1);
+          }
+        eed[i].size += size;
+      }
       break;
     case 2:
       /* code [RC] + byte [RC] */
@@ -772,7 +779,8 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
       eed[i].data->code = code; // 1004
       eed[i].data->u.eed_4.length = strlen (pair->value.s);
-      strcpy (eed[i].data->u.eed_4.data, pair->value.s);
+      if (pair->value.s)
+        strcpy (eed[i].data->u.eed_4.data, pair->value.s);
       eed[i].size += size;
       break;
     case 40:
@@ -2376,7 +2384,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                           else if (pair->code < 440)
                             {
                               color.flag |= 1;
-                              strcpy (color.name, pair->value.s);
+                              color.name = strdup (pair->value.s);
                             }
                           else
                             {

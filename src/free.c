@@ -114,57 +114,31 @@ static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
 #define VALUE_TFF(value, dxf)
 #define FIELD_TU(name, dxf) FIELD_TV (name, dxf)
 #define FIELD_TF(name, len, dxf) FIELD_TV (name, dxf)
-#define FIELD_TFF(name, len, dxf)                                             \
-  {                                                                           \
-  }
+#define FIELD_TFF(name, len, dxf) {}
 #define FIELD_T(name, dxf) FIELD_TV (name, dxf)
 #define FIELD_BT(name, dxf) FIELD (name, BT);
-#define FIELD_4BITS(name, dxf)                                                \
-  {                                                                           \
-  }
-#define FIELD_BE(name, dxf)                                                   \
-  {                                                                           \
-  }
-#define FIELD_DD(name, _default, dxf)                                         \
-  {                                                                           \
-  }
-#define FIELD_2DD(name, d1, d2, dxf)                                          \
-  {                                                                           \
-  }
-#define FIELD_3DD(name, def, dxf)                                             \
-  {                                                                           \
-  }
-#define FIELD_2RD(name, dxf)                                                  \
-  {                                                                           \
-  }
-#define FIELD_2BD(name, dxf)                                                  \
-  {                                                                           \
-  }
-#define FIELD_2BD_1(name, dxf)                                                \
-  {                                                                           \
-  }
-#define FIELD_3RD(name, dxf)                                                  \
-  {                                                                           \
-  }
-#define FIELD_3BD(name, dxf)                                                  \
-  {                                                                           \
-  }
-#define FIELD_3BD_1(name, dxf)                                                \
-  {                                                                           \
-  }
-#define FIELD_3DPOINT(name, dxf)                                              \
-  {                                                                           \
-  }
+#define FIELD_4BITS(name, dxf) {}
+#define FIELD_BE(name, dxf) {}
+#define FIELD_DD(name, _default, dxf) {}
+#define FIELD_2DD(name, d1, d2, dxf) {}
+#define FIELD_3DD(name, def, dxf) {}
+#define FIELD_2RD(name, dxf)  {}
+#define FIELD_2BD(name, dxf)  {}
+#define FIELD_2BD_1(name, dxf) {}
+#define FIELD_3RD(name, dxf) {}
+#define FIELD_3BD(name, dxf) {}
+#define FIELD_3BD_1(name, dxf) {}
+#define FIELD_3DPOINT(name, dxf) {}
 #define FIELD_TIMEBLL(name, dxf)
-#define FIELD_CMC(color, dxf1, dxf2)                                          \
-  {                                                                           \
-    FIELD_TV (color.name, 0);                                                 \
-    FIELD_TV (color.book_name, 0);                                            \
+#define FIELD_CMC(color, dxf1, dxf2)                                    \
+  {                                                                     \
+    FIELD_T (color.name, 0);                                            \
+    FIELD_T (color.book_name, 0);                                       \
   }
-#define SUB_FIELD_CMC(o, color, dxf1, dxf2)                                   \
-  {                                                                           \
-    VALUE_TV (_obj->o.color.name, 0);                                         \
-    VALUE_TV (_obj->o.color.book_name, 0);                                    \
+#define SUB_FIELD_CMC(o, color, dxf1, dxf2)                             \
+  {                                                                     \
+    VALUE_TV (_obj->o.color.name, 0);                                   \
+    VALUE_TV (_obj->o.color.book_name, 0);                              \
   }
 
 // FIELD_VECTOR_N(name, type, size):
