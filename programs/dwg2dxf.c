@@ -109,7 +109,7 @@ main (int argc, char *argv[])
   char *filename_in;
   const char *version = NULL;
   char *filename_out = NULL;
-  Dwg_Version_Type dwg_version;
+  Dwg_Version_Type dwg_version = R_2000;
   Bit_Chain dat = { 0 };
   int do_free;
   int need_free = 0;

@@ -714,15 +714,36 @@ void
 add_eed (Dwg_Object *restrict obj, const char *restrict name,
          Dxf_Pair *restrict pair)
 {
-  int i = obj->tio.object->num_eed; // same layout for Object and Entity
   int code, size, j = 0;
-  Dwg_Eed *eed = obj->tio.object->eed;
+  int i;
+  Dwg_Eed *eed;
+
+  if (obj->supertype == DWG_SUPERTYPE_OBJECT)
+    {
+      i = obj->tio.object->num_eed; // same layout for Object and Entity?
+      eed = obj->tio.object->eed;
+    }
+  else if (obj->supertype == DWG_SUPERTYPE_ENTITY)
+    {
+      i = obj->tio.entity->num_eed;
+      eed = obj->tio.entity->eed;
+    }
+  else
+    return;
 
   eed = (Dwg_Eed *)realloc (eed, (i + 1) * sizeof (Dwg_Eed));
   memset (&eed[i], 0, sizeof (Dwg_Eed));
-  obj->tio.object->eed = eed;
+  if (obj->supertype == DWG_SUPERTYPE_OBJECT)
+    {
+      obj->tio.object->eed = eed;
+      obj->tio.object->num_eed++;
+    }
+  else
+    {
+      obj->tio.entity->eed = eed;
+      obj->tio.entity->num_eed++;
+    }
   eed[i].raw = NULL;
-  obj->tio.object->num_eed++;
   // TODO: handle: usually APPID "ACAD"
   code = pair->code - 1000; // 1000
   switch (code)
