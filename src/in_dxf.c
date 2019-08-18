@@ -744,7 +744,6 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       obj->tio.entity->num_eed++;
     }
   eed[i].raw = NULL;
-  // TODO: handle. usually APPID "ACAD"
   code = pair->code - 1000; // 1000
   switch (code)
     {
@@ -816,19 +815,26 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       eed[i].size += size;
       break;
     case 1:
-      {
-        if (strEQc (pair->value.s, "ACAD"))
-          {
-            // search in APPID table
-            Dwg_Handle hdl = { 5, 1, 0x12 };
-            size = sizeof (Dwg_Handle);
-            add_handle (&hdl, 5, 12, NULL);
-            memcpy (&eed[i].handle, &hdl, sizeof (hdl));
-            eed[i].size += size;
-            break;
-          }
-      }
-      // fall through
+      if (strEQc (pair->value.s, "ACAD"))
+        {
+          Dwg_Handle hdl = { 5, 1, 0x12 };
+          add_handle (&hdl, 5, 12, NULL);
+          memcpy (&eed[i].handle, &hdl, sizeof (hdl));
+          eed[i].size += sizeof (Dwg_Handle);
+        }
+      else
+        {
+          // search name in APPID table (if already added)
+          BITCODE_H hdl;
+          hdl = dwg_find_tablehandle (obj->parent, pair->value.s, "APPID");
+          if (hdl)
+            {
+              memcpy (&eed[i].handle, &hdl->handleref, sizeof (hdl));
+              eed[i].size += sizeof (Dwg_Handle);
+            }
+          // else needs to be postponed, because we don't have the tables yet
+        }
+      break;
     default:
       LOG_ERROR ("Not yet implemented EED.code %d", pair->code);
     }
