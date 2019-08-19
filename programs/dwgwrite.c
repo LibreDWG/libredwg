@@ -242,7 +242,7 @@ main (int argc, char *argv[])
       || (infile && !strcasecmp (infile, ".json")))
     {
       if (opts > 1)
-        printf ("Reading JSON file %s\n", infile);
+        printf ("Reading JSON file %s\n", infile ? infile : "from stdin");
       error = dwg_read_json (&dat, &dwg);
     }
   else */
@@ -250,15 +250,18 @@ main (int argc, char *argv[])
            || (infile && !strcasecmp (infile, ".dxfb")))
     {
       if (opts > 1)
-        fprintf (stderr, "Reading Binary DXF file %s\n", infile);
+        fprintf (stderr, "Reading Binary DXF file %s\n", infile ? infile : "from stdin");
       error = dwg_read_dxfb (&dat, &dwg);
     }
   else if ((fmt && !strcasecmp (fmt, "dxf"))
            || (infile && !strcasecmp (infile, ".dxf")))
     {
       if (opts > 1)
-        fprintf (stderr, "Reading DXF file %s\n", infile);
-      error = dxf_read_file (infile, &dwg); // ascii or binary
+        fprintf (stderr, "Reading DXF file %s\n", infile ? infile : "from stdin");
+      if (infile)
+        error = dxf_read_file (infile, &dwg); // ascii or binary
+      else
+        error = dwg_read_dxf (&dat, &dwg);
     }
   else
 #endif

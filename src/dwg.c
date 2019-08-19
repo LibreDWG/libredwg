@@ -229,9 +229,10 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   Bit_Chain dat = { 0 };
 
   loglevel = dwg->opts;
-  if (stat (filename, &attrib))
+
+  if (!filename || stat (filename, &attrib))
     {
-      LOG_ERROR ("File not found: %s\n", filename)
+      LOG_ERROR ("File not found: %s\n", filename ? filename : "(null)")
       return DWG_ERR_IOERROR;
     }
   if (!(S_ISREG (attrib.st_mode)
