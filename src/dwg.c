@@ -1292,6 +1292,7 @@ dxf_cvt_lweight (const BITCODE_RC value)
 
 // search for name in associated table, and store its handle.
 // note that newer tables, like MATERIAL are stored in a DICTIONARY instead.
+// Note that we cannot set the ref->obj here, as it may still move by realloc dwg->object[]
 EXPORT BITCODE_H
 dwg_find_tablehandle (const Dwg_Data *restrict dwg,
                       char *restrict name,
@@ -1299,6 +1300,7 @@ dwg_find_tablehandle (const Dwg_Data *restrict dwg,
 {
   BITCODE_BL i, num_entries = 0;
   BITCODE_H ctrl = NULL, *hdlv;
+  Dwg_Object *obj;
   Dwg_Object_APPID_CONTROL *_obj; // just some random generic type
 
   // look for the _CONTROL table, and search for name in all entries
@@ -1335,13 +1337,14 @@ dwg_find_tablehandle (const Dwg_Data *restrict dwg,
     ctrl = dwg->header_vars.VPORT_CONTROL_OBJECT;
   else if (strEQc (table, "APPID"))
     ctrl = dwg->header_vars.APPID_CONTROL_OBJECT;
-  else if (strEQc (table, "DIMSTYLE"))
+  // TODO ACAD_DSTYLE_DIM* are probably different handles
+  else if (strEQc (table, "DIMSTYLE") || memBEGINc (table, "ACAD_DSTYLE_DIM"))
     ctrl = dwg->header_vars.DIMSTYLE_CONTROL_OBJECT;
   else if (strEQc (table, "VPORT_ENTITY"))
     ctrl = dwg->header_vars.VPORT_ENTITY_CONTROL_OBJECT;
   else if (strEQc (table, "GROUP"))
     ctrl = dwg->header_vars.DICTIONARY_ACAD_GROUP;
-  else if (strEQc (table, "MLSTYLE"))
+  else if (strEQc (table, "MLSTYLE") || strEQc (table, "ACAD_MLEADERVER"))
     ctrl = dwg->header_vars.DICTIONARY_ACAD_MLINESTYLE;
   else if (strEQc (table, "NAMED_OBJECT"))
     ctrl = dwg->header_vars.DICTIONARY_NAMED_OBJECT;
@@ -1351,7 +1354,8 @@ dwg_find_tablehandle (const Dwg_Data *restrict dwg,
     ctrl = dwg->header_vars.DICTIONARY_PLOTSETTINGS;
   else if (strEQc (table, "PLOTSTYLE"))
     ctrl = dwg->header_vars.DICTIONARY_PLOTSTYLES;
-  else if (strEQc (table, "MATERIAL"))
+  // TODO but maybe the mappers are different
+  else if (strEQc (table, "MATERIAL") || memBEGINc (table, "ACAD_MATERIAL_MAPPER"))
     ctrl = dwg->header_vars.DICTIONARY_MATERIALS;
   else if (strEQc (table, "COLOR"))
     ctrl = dwg->header_vars.DICTIONARY_COLORS;
@@ -1369,40 +1373,45 @@ dwg_find_tablehandle (const Dwg_Data *restrict dwg,
       LOG_ERROR ("dwg_find_tablehandle: Empty header_vars table %s", table);
       return 0;
     }
-  if (!ctrl->obj && ctrl->handleref.value)
-    ctrl->obj = dwg_resolve_handle (dwg, ctrl->handleref.value);
-  if (!ctrl->obj)
+  if (ctrl->handleref.value) // obj may be realloc'ed
+    obj = dwg_resolve_handle (dwg, ctrl->handleref.value);
+  else
+    obj = NULL;
+  if (!obj)
     {
       LOG_ERROR ("dwg_find_tablehandle: Could not resolve table %s", table);
       return 0;
     }
-  if (!strstr (ctrl->obj->name, "_CONTROL"))
+  if (!dwg_obj_is_control (obj))
     {
       LOG_ERROR ("dwg_find_tablehandle: Could not resolve CONTROL object %s for table %s",
-                 ctrl->obj->name, table);
+                 obj->name, table);
       return 0;
     }
-  _obj = ctrl->obj->tio.object->tio.APPID_CONTROL; // just random type
-  dwg_dynapi_entity_value (_obj, ctrl->obj->name, "num_entries",
+  _obj = obj->tio.object->tio.APPID_CONTROL; // just random type
+  dwg_dynapi_entity_value (_obj, obj->name, "num_entries",
                            &num_entries, NULL);
   if (!num_entries)
     return 0;
-  dwg_dynapi_entity_value (_obj, ctrl->obj->name, "entries", &hdlv, NULL);
+  dwg_dynapi_entity_value (_obj, obj->name, "entries", &hdlv, NULL);
   for (i = 0; i < num_entries; i++)
     {
       char *hdlname;
+      Dwg_Object *hobj;
       Dwg_Object_APPID *_o;
       if (!hdlv[i])
         continue;
-      if (!hdlv[i]->obj && hdlv[i]->handleref.value)
-        hdlv[i]->obj = dwg_resolve_handle (dwg, hdlv[i]->handleref.value);
-      if (!hdlv[i]->obj)
+      if (hdlv[i]->handleref.value)
+        hobj = dwg_resolve_handle (dwg, hdlv[i]->handleref.value);
+      else
         continue;
-      _o = hdlv[i]->obj->tio.object->tio.APPID;
-      dwg_dynapi_entity_utf8text (_o, hdlv[i]->obj->name, "name",
+      if (!hobj)
+        continue;
+      _o = hobj->tio.object->tio.APPID;
+      dwg_dynapi_entity_utf8text (_o, hobj->name, "name",
                                   &hdlname, NULL);
-      LOG_HANDLE (" %s.%s[%d] => %s.name: %s\n", ctrl->obj->name, "entries", i,
-                  hdlv[i]->obj->name, hdlname ? hdlname : "NULL");
+      LOG_HANDLE (" %s.%s[%d] => %s.name: %s\n", obj->name, "entries", i,
+                  hobj->name, hdlname ? hdlname : "NULL");
       if (hdlname && strEQ (name, hdlname))
         {
           return hdlv[i];

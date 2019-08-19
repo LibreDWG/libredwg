@@ -1196,65 +1196,68 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   return pair;
 }
 
-/* by name or by ref */
+/* by name or by ref.
+   Note that we don't get the ref->obj here, as it may still move
+   by realloc dwg->object[].
+*/
 BITCODE_H
 find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair)
 {
-  BITCODE_H handle = NULL;
+  BITCODE_H ref = NULL;
   if (pair->code == 8)
-    handle = dwg_find_tablehandle (dwg, pair->value.s, "LAYER");
+    ref = dwg_find_tablehandle (dwg, pair->value.s, "LAYER");
   else if (pair->code == 1) // $DIMBLK
-    handle = dwg_find_tablehandle (dwg, pair->value.s, "BLOCK");
+    ref = dwg_find_tablehandle (dwg, pair->value.s, "BLOCK");
   else if (pair->code == 2) // some name: $DIMSTYLE, $UCSBASE, $UCSORTHOREF, $CMLSTYLE
     ; // not enough info, decide later
   else if (pair->code == 3)
-    handle = dwg_find_tablehandle (dwg, pair->value.s, "DIMSTYLE");
+    ref = dwg_find_tablehandle (dwg, pair->value.s, "DIMSTYLE");
   // what is/was 4 and 5? VIEW? VPORT_ENTITY?
   else if (pair->code == 6)
-    handle = dwg_find_tablehandle (dwg, pair->value.s, "LTYPE");
+    ref = dwg_find_tablehandle (dwg, pair->value.s, "LTYPE");
   else if (pair->code == 7)
-    handle = dwg_find_tablehandle (dwg, pair->value.s, "STYLE");
+    ref = dwg_find_tablehandle (dwg, pair->value.s, "STYLE");
   /* I think all these >300 are given by hex value, not by name */
   else if (pair->code > 300)
     {
       BITCODE_BL i;
       for (i = 0; i < dwg->num_object_refs; i++)
         {
-          Dwg_Object_Ref *ref = dwg->object_ref[i];
-          if (ref->absolute_ref == (BITCODE_BL)pair->value.u)
+          Dwg_Object_Ref *refi = dwg->object_ref[i];
+          if (refi->absolute_ref == (BITCODE_BL)pair->value.u)
             {
               // no relative offset
-              handle = add_handleref (dwg, 5, pair->value.u, NULL);
+              ref = add_handleref (dwg, 5, pair->value.u, NULL);
               break;
             }
         }
-      if (!handle)
+      if (!ref)
         {
           // no relative offset
-          handle = add_handleref (dwg, 5, pair->value.u, NULL);
+          ref = add_handleref (dwg, 5, pair->value.u, NULL);
         }
     }
 #if 0
   else if (pair->code == 331)
-    handle = dwg_find_tablehandle (dwg, pair->value.s, "VPORT");
+    ref = dwg_find_tablehandle (dwg, pair->value.s, "VPORT");
   else if (pair->code == 390)
-    handle = dwg_find_tablehandle (dwg, pair->value.s, "PLOTSTYLE");
+    ref = dwg_find_tablehandle (dwg, pair->value.s, "PLOTSTYLE");
   else if (pair->code == 347)
-    handle = dwg_find_tablehandle (dwg, pair->value.s, "MATERIAL");
+    ref = dwg_find_tablehandle (dwg, pair->value.s, "MATERIAL");
   else if (pair->code == 345 || pair->code == 346)
-    handle = dwg_find_tablehandle (dwg, pair->value.s, "UCS");
+    ref = dwg_find_tablehandle (dwg, pair->value.s, "UCS");
   else if (pair->code == 361) // SUN
-    handle = dwg_find_tablehandle (dwg, pair->value.s, "SHADOW");
+    ref = dwg_find_tablehandle (dwg, pair->value.s, "SHADOW");
   else if (pair->code == 340) // or TABLESTYLE or LAYOUT ...
-    handle = dwg_find_tablehandle (dwg, pair->value.s, "STYLE");
+    ref = dwg_find_tablehandle (dwg, pair->value.s, "STYLE");
   else if (pair->code == 342 || pair->code == 343)
-    handle = dwg_find_tablehandle (dwg, pair->value.s, "STYLE");
+    ref = dwg_find_tablehandle (dwg, pair->value.s, "STYLE");
   else if (pair->code == 348)
-    handle = dwg_find_tablehandle (dwg, pair->value.s, "VISUALSTYLE");
+    ref = dwg_find_tablehandle (dwg, pair->value.s, "VISUALSTYLE");
   else if (pair->code == 332)
-    handle = dwg_find_tablehandle (dwg, pair->value.s, "BACKGROUND");
+    ref = dwg_find_tablehandle (dwg, pair->value.s, "BACKGROUND");
 #endif
-  return handle;
+  return ref;
 }
 
 // with XRECORD only
@@ -2285,8 +2288,8 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                       // resolve handle, by name or ref
                       else if (strEQc (f->type, "H"))
                         {
-                          BITCODE_H handle = find_tablehandle (dwg, pair);
-                          if (!handle)
+                          BITCODE_H ref = find_tablehandle (dwg, pair);
+                          if (!ref)
                             {
                               if (pair->code > 300)
                                 {
@@ -2302,9 +2305,9 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                           else
                             {
                               dwg_dynapi_entity_set_value (
-                                  _obj, obj->name, f->name, &handle, is_utf);
+                                  _obj, obj->name, f->name, &ref, is_utf);
                               LOG_TRACE ("%s.%s = " FORMAT_REF " [%d H]\n",
-                                         name, f->name, ARGS_REF (handle),
+                                         name, f->name, ARGS_REF (ref),
                                          pair->code);
                             }
                           goto next_pair; // found
