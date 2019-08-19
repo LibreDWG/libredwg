@@ -1789,7 +1789,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data)
           }
         LATER_VERSIONS
           {
-            BITCODE_RS *s = &data->u.eed_0_r2007.string;
+            BITCODE_RS *s = (BITCODE_RS *)&data->u.eed_0_r2007.string;
             bit_write_RS (dat, data->u.eed_0_r2007.length);
             bit_write_RS_LE (dat, data->u.eed_0.codepage);
             for (int i = 0; i < data->u.eed_0_r2007.length; i++)
@@ -1849,19 +1849,20 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict ent)
   int i, num_eed = ent->num_eed;
   for (i = 0; i < num_eed; i++)
     {
-      BITCODE_BS size = ent->eed[i].size;
-      if (size && ent->eed[i].data)
+      Dwg_Eed *eed = &ent->eed[i];
+      BITCODE_BS size = eed->size;
+      if (size && eed->data)
         {
-          int code = (int)ent->eed[i].data->code;
+          int code = (int)eed->data->code;
           LOG_TRACE ("EED[%u] size: %d, code: %d\n", i, (int)size, code);
           bit_write_BS (dat, size);
-          bit_write_H (dat, &(ent->eed[i].handle));
+          bit_write_H (dat, &eed->handle);
           LOG_TRACE ("EED[%u] handle: " FORMAT_H "\n", i,
-                     ARGS_H(ent->eed[i].handle));
-          if (ent->eed[i].raw)
-            bit_write_TF (dat, ent->eed[i].raw, size);
+                     ARGS_H(eed->handle));
+          if (eed->raw)
+            bit_write_TF (dat, eed->raw, size);
           else // indxf
-            dwg_encode_eed_data (dat, &ent->eed[i].data);
+            dwg_encode_eed_data (dat, eed->data);
         }
     }
   bit_write_BS (dat, 0);
