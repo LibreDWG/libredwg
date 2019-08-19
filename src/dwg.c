@@ -656,11 +656,15 @@ dwg_ref_object_relative (const Dwg_Data *restrict dwg,
 /**
  * Find a pointer to an object given it's absolute id (handle).
  * TODO: Check and update each handleref obj cache.
+ * Note that absref 0 is illegal here, I think.
  */
 EXPORT Dwg_Object *
 dwg_resolve_handle (const Dwg_Data *dwg, const BITCODE_BL absref)
 {
-  uint32_t i = hash_get (dwg->object_map, (uint32_t)absref);
+  uint32_t i;
+  if (!absref) // illegal usage
+    return NULL;
+  i = hash_get (dwg->object_map, (uint32_t)absref);
   LOG_HANDLE ("object_map{%lX} => %u\n", (unsigned long)absref, i);
   if (i == HASH_NOT_FOUND
       || (BITCODE_BL)i >= dwg->num_objects) // the latter being an invalid

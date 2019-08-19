@@ -1382,7 +1382,10 @@ resolve_objectref_vector (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static Dwg_Object *
 dwg_resolve_handle_silent (const Dwg_Data *dwg, const BITCODE_BL absref)
 {
-  uint32_t i = hash_get (dwg->object_map, (uint32_t)absref);
+  uint32_t i;
+  if (!absref) // illegal usage
+    return NULL;
+  i = hash_get (dwg->object_map, (uint32_t)absref);
   if (i == HASH_NOT_FOUND
       || (BITCODE_BL)i >= dwg->num_objects) // the latter being an invalid
                                             // handle (read from DWG)

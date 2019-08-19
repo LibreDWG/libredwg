@@ -13,7 +13,7 @@
 /*
  * hash.c: int hashmap for the object_ref map.
  *         uses linear probing for best cache usage.
- *         values are inlined into the array.
+ *         values are inlined into the array. The 0 key is disallowed.
  * written by Reini Urban
  */
 
