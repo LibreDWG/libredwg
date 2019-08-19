@@ -1377,10 +1377,7 @@ dwg_find_tablehandle (const Dwg_Data *restrict dwg,
       LOG_ERROR ("dwg_find_tablehandle: Empty header_vars table %s", table);
       return 0;
     }
-  if (ctrl->handleref.value) // obj may be realloc'ed
-    obj = dwg_resolve_handle (dwg, ctrl->handleref.value);
-  else
-    obj = NULL;
+  obj = dwg_resolve_handle (dwg, ctrl->handleref.value);
   if (!obj)
     {
       LOG_ERROR ("dwg_find_tablehandle: Could not resolve table %s", table);
@@ -1403,12 +1400,10 @@ dwg_find_tablehandle (const Dwg_Data *restrict dwg,
       char *hdlname;
       Dwg_Object *hobj;
       Dwg_Object_APPID *_o;
+
       if (!hdlv[i])
         continue;
-      if (hdlv[i]->handleref.value)
-        hobj = dwg_resolve_handle (dwg, hdlv[i]->handleref.value);
-      else
-        continue;
+      hobj = dwg_resolve_handle (dwg, hdlv[i]->handleref.value);
       if (!hobj)
         continue;
       _o = hobj->tio.object->tio.APPID;
