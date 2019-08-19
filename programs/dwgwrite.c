@@ -17,11 +17,14 @@
 
 #include "../src/config.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 // strings.h or string.h
 #ifdef AX_STRCASECMP_HEADER
 #  include AX_STRCASECMP_HEADER
 #endif
+#include <sys/stat.h>
+#include <unistd.h>
 #include <getopt.h>
 #ifdef HAVE_VALGRIND_VALGRIND_H
 #  include <valgrind/valgrind.h>
@@ -35,6 +38,7 @@
 #include "in_dxf.h"
 
 static int opts = 1;
+int overwrite = 0;
 
 static int help (void);
 
@@ -55,7 +59,7 @@ static int
 help (void)
 {
   printf ("\nUsage: dwgwrite [OPTION]... [-o DWGFILE] INFILE\n");
-  printf ("Writes a DWG file from various input formats. Only r2000 for now\n"
+  printf ("Writes a DWG file from various input formats. Only r2000 for now.\n"
           "\n");
 #ifdef HAVE_GETOPT_LONG
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
@@ -68,6 +72,7 @@ help (void)
   printf (
       "           Planned input formats: JSON, GeoJSON, YAML, XML/OGR, GPX\n");
   printf ("  -o dwgfile, --file        \n");
+  printf ("  -y, --overwrite           overwrite existing files\n");
   printf ("           --help           display this help and exit\n");
   printf ("           --version        output version information and exit\n"
           "\n");
@@ -82,6 +87,7 @@ help (void)
   printf ("              Planned input formats: JSON, GeoJSON, YAML, XML/OGR, "
           "GPX\n");
   printf ("  -o dwgfile\n");
+  printf ("  -y          overwrite existing files\n");
   printf ("  -h          display this help and exit\n");
   printf ("  -i          output version information and exit\n"
           "\n");
@@ -110,6 +116,7 @@ main (int argc, char *argv[])
       = { { "verbose", 1, &opts, 1 }, // optional
           { "format", 1, 0, 'I' },    { "file", 1, 0, 'o' },
           { "as", 1, 0, 'a' },        { "help", 0, 0, 0 },
+          { "overwrite", 0, 0, 'y' },
           { "version", 0, 0, 0 },     { NULL, 0, NULL, 0 } };
 #endif
 
@@ -119,10 +126,10 @@ main (int argc, char *argv[])
   while
 #ifdef HAVE_GETOPT_LONG
       ((c
-        = getopt_long (argc, argv, ":a:v::I:o:h", long_options, &option_index))
+        = getopt_long (argc, argv, "ya:v::I:o:h", long_options, &option_index))
        != -1)
 #else
-      ((c = getopt (argc, argv, ":a:v::I:o:hi")) != -1)
+      ((c = getopt (argc, argv, "ya:v::I:o:hi")) != -1)
 #endif
     {
       if (c == -1)
@@ -166,6 +173,9 @@ main (int argc, char *argv[])
 #endif
         case 'I':
           fmt = optarg;
+          break;
+        case 'y':
+          overwrite = 1;
           break;
         case 'o':
           outfile = optarg;
@@ -300,8 +310,37 @@ main (int argc, char *argv[])
     outfile = suffix (infile, "dwg");
 
   if (opts > 1)
-    fprintf (stderr, "Writing DWG file %s\n", infile);
-  error |= dwg_write_file (outfile, &dwg);
+    fprintf (stderr, "Writing DWG file %s\n", outfile);
+
+  {
+    struct stat attrib;
+    if (!stat (outfile, &attrib)) // exists
+      {
+        if (!overwrite)
+          {
+            fprintf (stderr, "File not overwritten: %s, use -y.\n", outfile);
+            error |= DWG_ERR_IOERROR;
+          }
+        else
+          {
+            if (S_ISREG (attrib.st_mode) && // refuse to remove a directory
+                (access (outfile, W_OK) == 0) // writable
+#ifndef _WIN32
+                // refuse to remove a symlink. even with overwrite. security
+                && !S_ISLNK (attrib.st_mode)
+#endif
+                )
+              unlink (outfile);
+            else
+              {
+                fprintf (stderr, "Not writable file or symlink: %s\n", outfile);
+                error |= DWG_ERR_IOERROR;
+              }
+          }
+      }
+    else
+      error = dwg_write_file (outfile, &dwg);
+  }
 
   // forget about valgrind. really huge DWG's need endlessly here.
   if ((dwg.header.version && dwg.num_objects < 1000)
