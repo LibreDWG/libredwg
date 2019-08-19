@@ -184,7 +184,8 @@ dxf_read_pair (Bit_Chain *dat)
     case VT_BINARY:
       // read into buf only?
       dxf_read_string (dat, &pair->value.s);
-      // TODO convert %02X to string
+      // cannot convert %02X to string here, because we don't store the length
+      // in the pair, and binary contains \0
       LOG_TRACE ("  dxf (%d, %s)\n", (int)pair->code, pair->value.s);
       break;
     case VT_HANDLE:
