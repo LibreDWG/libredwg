@@ -836,6 +836,8 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       eed[i-1].data->u.eed_10.point.z = pair->value.d;
       break;
     case 40:
+    case 41:
+    case 42:
       /* code [RC] + 3*RD */
       size = 1 + 8;
       eed[i].data = (Dwg_Eed_Data *)calloc (1, size);

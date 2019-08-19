@@ -1771,20 +1771,88 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
   return error;
 }
 
-/** Only writes the raw part.
+/** writes the data part, if there's no raw.
+ */
+static int
+dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data)
+{
+  bit_write_RC (dat, data->code);
+  switch (data->code)
+    {
+    case 0:
+      {
+        PRE (R_2007)
+          {
+            bit_write_RC (dat, data->u.eed_0.length);
+            bit_write_RS_LE (dat, data->u.eed_0.codepage);
+            bit_write_TF (dat, data->u.eed_0.string, data->u.eed_0.length);
+          }
+        LATER_VERSIONS
+          {
+            BITCODE_RS *s = &data->u.eed_0_r2007.string;
+            bit_write_RS (dat, data->u.eed_0_r2007.length);
+            bit_write_RS_LE (dat, data->u.eed_0.codepage);
+            for (int i = 0; i < data->u.eed_0_r2007.length; i++)
+              {
+                bit_write_RS (dat, *s++);
+              }
+          }
+      }
+      break;
+    case 2:
+      bit_write_RC (dat, data->u.eed_2.byte);
+      break;
+    case 3:
+      bit_write_RL (dat, data->u.eed_3.layer);
+      break;
+    case 4:
+      bit_write_RC (dat, data->u.eed_4.length);
+      bit_write_TF (dat, data->u.eed_4.data, data->u.eed_4.length);
+      break;
+    case 5:
+      bit_write_RLL (dat, data->u.eed_5.entity);
+      break;
+    case 10:
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+      bit_write_RD (dat, data->u.eed_10.point.x);
+      bit_write_RD (dat, data->u.eed_10.point.y);
+      bit_write_RD (dat, data->u.eed_10.point.z);
+      break;
+    case 40:
+    case 41:
+    case 42:
+      bit_write_RD (dat, data->u.eed_40.real);
+      break;
+    case 70:
+      bit_write_RS (dat, data->u.eed_70.rs);
+      break;
+    case 71:
+      bit_write_RL (dat, data->u.eed_71.rl);
+      break;
+    default:
+      LOG_ERROR ("unknown EED code %d", data->code);
+    }
+  return 0;
+}
+
+/** Either writes the raw part.
     Only members with size have raw and a handle.
+    Otherwise (indxf) defer to dwg_encode_eed_data.
  */
 static int
 dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict ent)
 {
   int i, num_eed = ent->num_eed;
-  int code;
   for (i = 0; i < num_eed; i++)
     {
       BITCODE_BS size = ent->eed[i].size;
       if (size && ent->eed[i].data)
         {
-          code = (int)ent->eed[i].data->code;
+          int code = (int)ent->eed[i].data->code;
           LOG_TRACE ("EED[%u] size: %d, code: %d\n", i, (int)size, code);
           bit_write_BS (dat, size);
           bit_write_H (dat, &(ent->eed[i].handle));
@@ -1793,9 +1861,7 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict ent)
           if (ent->eed[i].raw)
             bit_write_TF (dat, ent->eed[i].raw, size);
           else // indxf
-            {
-              LOG_WARN ("EED[%u] from DXF not yet implemented");
-            }
+            dwg_encode_eed_data (dat, &ent->eed[i].data);
         }
     }
   bit_write_BS (dat, 0);
