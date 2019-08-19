@@ -228,6 +228,7 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   size_t size;
   Bit_Chain dat = { 0 };
 
+  loglevel = dwg->opts;
   if (stat (filename, &attrib))
     {
       LOG_ERROR ("File not found: %s\n", filename)
@@ -251,7 +252,6 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
 
   /* Load whole file into memory
    */
-  loglevel = dwg->opts;
   memset (dwg, 0, sizeof (Dwg_Data));
   dwg->opts = loglevel;
   memset (&dat, 0, sizeof (Bit_Chain));
@@ -322,6 +322,7 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
   Bit_Chain dat = { 0 };
   int error;
 
+  loglevel = dwg->opts;
   assert (filename);
   assert (dwg);
   dat.opts = dwg->opts;
@@ -391,6 +392,7 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
   BITCODE_RL header_size, address, osize;
   Bit_Chain *dat;
 
+  loglevel = dwg->opts;
   *size = 0;
   assert (dwg);
   dat = (Bit_Chain *)&dwg->thumbnail;

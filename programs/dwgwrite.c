@@ -10,9 +10,9 @@
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
 
-/* TODO: format readers, outfile logic
- * dwgwrite.c: write a DWG file from various input formats.
+/* dwgwrite.c: write a DWG file from various input formats.
  * written by Reini Urban
+ * TODO: format readers, loglevel
  */
 
 #include "../src/config.h"
@@ -28,7 +28,8 @@
 #endif
 
 #include "dwg.h"
-#include "bits.h"
+#include "common.h"
+//#include "bits.h"
 #include "suffix.inc"
 #include "in_json.h"
 #include "in_dxf.h"
@@ -215,6 +216,7 @@ main (int argc, char *argv[])
       infile = argv[i];
       if (!fmt)
         {
+#ifndef DISABLE_DXF
           if (strstr (infile, ".json") || strstr (infile, ".JSON"))
             fmt = (char *)"json";
           else if (strstr (infile, ".dxfb") || strstr (infile, ".DXFB"))
@@ -222,6 +224,7 @@ main (int argc, char *argv[])
           else if (strstr (infile, ".dxf") || strstr (infile, ".DXF"))
             fmt = (char *)"dxf";
           else
+#endif
             fprintf (stderr, "Unknown input format for '%s'\n", infile);
         }
     }
@@ -234,20 +237,34 @@ main (int argc, char *argv[])
   else
     dat.fh = stdin;
 
-  /*if ((fmt && !strcasecmp(fmt, "json")) ||
-        (infline && !strcasecmp(infile, ".json")))
-    error = dwg_read_json(&dat, &dwg);
+#ifndef DISABLE_DXF
+  /* if ((fmt && !strcasecmp (fmt, "json"))
+      || (infile && !strcasecmp (infile, ".json")))
+    {
+      if (opts > 1)
+        printf ("Reading JSON file %s\n", infile);
+      error = dwg_read_json (&dat, &dwg);
+    }
   else */
   if ((fmt && !strcasecmp (fmt, "dxfb"))
-      || (infile && !strcasecmp (infile, ".dxfb")))
-    error = dwg_read_dxfb (&dat, &dwg);
+           || (infile && !strcasecmp (infile, ".dxfb")))
+    {
+      if (opts > 1)
+        fprintf (stderr, "Reading Binary DXF file %s\n", infile);
+      error = dwg_read_dxfb (&dat, &dwg);
+    }
   else if ((fmt && !strcasecmp (fmt, "dxf"))
            || (infile && !strcasecmp (infile, ".dxf")))
-    error = dxf_read_file (infile, &dwg); // ascii or binary
+    {
+      if (opts > 1)
+        fprintf (stderr, "Reading DXF file %s\n", infile);
+      error = dxf_read_file (infile, &dwg); // ascii or binary
+    }
   else
+#endif
     {
       if (fmt)
-        fprintf (stderr, "Invalid input format '%s'\n", fmt);
+        fprintf (stderr, "Invalid or unsupported input format '%s'\n", fmt);
       else if (infile)
         fprintf (stderr, "Missing input format for '%s'\n", infile);
       else
@@ -256,8 +273,15 @@ main (int argc, char *argv[])
         fclose (dat.fh);
       exit (1);
     }
-  if (infile)
+  if (infile && dat.fh)
     fclose (dat.fh);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fprintf (stderr, "ERROR 0x%x\n", error);
+      if (error && opts > 2)
+        dwg_errstrings (error);
+      exit (1);
+    }
 
   if (dwg.header.from_version != dwg.header.version)
     dwg.header.from_version = dwg.header.version;
@@ -271,7 +295,11 @@ main (int argc, char *argv[])
     }
   if (!outfile)
     outfile = suffix (infile, "dwg");
+
+  if (opts > 1)
+    fprintf (stderr, "Writing DWG file %s\n", infile);
   error |= dwg_write_file (outfile, &dwg);
+
   // forget about valgrind. really huge DWG's need endlessly here.
   if ((dwg.header.version && dwg.num_objects < 1000)
 #if defined __SANITIZE_ADDRESS__ || __has_feature (address_sanitizer)
@@ -282,6 +310,24 @@ main (int argc, char *argv[])
 #endif
   )
     dwg_free (&dwg);
+
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fprintf (stderr, "ERROR 0x%x\n", error);
+      if (error && opts > 2)
+        dwg_errstrings (error);
+    }
+  else
+    {
+      if (opts > 1)
+        {
+          fprintf (stderr, "SUCCESS 0x%x\n", error);
+          if (error && opts > 2)
+            dwg_errstrings (error);
+        }
+      else
+        fprintf (stderr, "SUCCESS\n");
+    }
 
   return error >= DWG_ERR_CRITICAL ? 1 : 0;
 }

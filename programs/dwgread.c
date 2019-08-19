@@ -35,7 +35,7 @@
 #endif
 
 #include "dwg.h"
-#include "bits.h"
+#include "common.h"
 #include "out_json.h"
 #include "out_dxf.h"
 
@@ -210,7 +210,7 @@ main (int argc, char *argv[])
 
   if (optind == argc)
     {
-      puts ("No input file specified");
+      fprintf (stderr, "No input file specified");
       return 1;
     }
   // REQUIRE_INPUT_FILE_ARG (optind);
@@ -222,13 +222,29 @@ main (int argc, char *argv[])
     setenv ("LIBREDWG_TRACE", "1", 0);
 #endif
 
+  if (opts > 1)
+    fprintf (stderr, "Reading DWG file %s\n", argv[i]);
+  // TODO support stdin as in dwgwrite
   error = dwg_read_file (argv[i], &dwg);
   if (!fmt)
     {
       if (error >= DWG_ERR_CRITICAL)
-        printf ("ERROR 0x%x\n", error);
+        {
+          fprintf (stderr, "ERROR 0x%x\n", error);
+          if (error && opts > 2)
+            dwg_errstrings (error);
+        }
       else
-        printf ("SUCCESS 0x%x\n", error);
+        {
+          if (opts > 1)
+            {
+              fprintf (stderr, "SUCCESS 0x%x\n", error);
+              if (error && opts > 2)
+                dwg_errstrings (error);
+            }
+          else
+            fprintf (stderr, "SUCCESS\n");
+        }
     }
   else
     {
@@ -242,13 +258,29 @@ main (int argc, char *argv[])
       // we want the native dump, converters are separate.
 #ifndef DISABLE_DXF
       if (!strcasecmp (fmt, "json"))
-        error = dwg_write_json (&dat, &dwg);
+        {
+          if (opts > 1 && outfile)
+            fprintf (stderr, "Writing JSON file %s\n", outfile);
+          error = dwg_write_json (&dat, &dwg);
+        }
       else if (!strcasecmp (fmt, "dxfb"))
-        error = dwg_write_dxfb (&dat, &dwg);
+        {
+          if (opts > 1 && outfile)
+            fprintf (stderr, "Writing Binary DXF file %s\n", outfile);
+          error = dwg_write_dxfb (&dat, &dwg);
+        }
       else if (!strcasecmp (fmt, "dxf"))
-        error = dwg_write_dxf (&dat, &dwg);
+        {
+          if (opts > 1 && outfile)
+            fprintf (stderr, "Writing Binary DXF file %s\n", outfile);
+          error = dwg_write_dxf (&dat, &dwg);
+        }
       else if (!strcasecmp (fmt, "geojson"))
-        error = dwg_write_geojson (&dat, &dwg);
+        {
+          if (opts > 1 && outfile)
+            fprintf (stderr, "Writing GeoJSON file %s\n", outfile);
+          error = dwg_write_geojson (&dat, &dwg);
+        }
       else
 #endif
         fprintf (stderr, "Invalid output format '%s'\n", fmt);
@@ -257,9 +289,22 @@ main (int argc, char *argv[])
         {
           fclose (dat.fh);
           if (error >= DWG_ERR_CRITICAL)
-            printf ("ERROR 0x%x\n", error);
+            {
+              fprintf (stderr, "ERROR 0x%x\n", error);
+              if (error && opts > 2)
+                dwg_errstrings (error);
+            }
           else
-            printf ("SUCCESS 0x%x\n", error);
+            {
+              if (opts > 1)
+                {
+                  fprintf (stderr, "SUCCESS 0x%x\n", error);
+                  if (error && opts > 2)
+                    dwg_errstrings (error);
+                }
+              else
+                fprintf (stderr, "SUCCESS\n");
+            }
         }
     }
   // forget about valgrind. really huge DWG's need endlessly here.

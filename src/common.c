@@ -20,7 +20,7 @@
 
 #include "config.h"
 #include "common.h"
-//#include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
@@ -202,3 +202,41 @@ char *strrplc (const char* s, const char *from, const char *to)
   else
     return NULL;
 }
+
+// print errors as string to stderr
+EXPORT void dwg_errstrings (int error)
+{
+  if (error & 1)
+    fprintf (stderr, "WRONGCRC ");
+  if (error & 2)
+    fprintf (stderr, "NOTYETSUPPORTED ");
+  if (error & 4)
+    fprintf (stderr, "UNHANDLEDCLASS ");
+  if (error & 8)
+    fprintf (stderr, "INVALIDTYPE ");
+  if (error & 16)
+    fprintf (stderr, "INVALIDHANDLE ");
+  if (error & 32)
+    fprintf (stderr, "INVALIDEED ");
+  if (error & 64)
+    fprintf (stderr, "VALUEOUTOFBOUNDS ");
+  // -- critical --
+  if (error > 127)
+    fprintf (stderr, "\nCritical: ");
+  if (error & 128)
+    fprintf (stderr, "CLASSESNOTFOUND ");
+  if (error & 256)
+    fprintf (stderr, "SECTIONNOTFOUND ");
+  if (error & 512)
+    fprintf (stderr, "PAGENOTFOUND ");
+  if (error & 1024)
+    fprintf (stderr, "INTERNALERROR ");
+  if (error & 2048)
+    fprintf (stderr, "INVALIDDWG ");
+  if (error & 4096)
+    fprintf (stderr, "IOERROR ");
+  if (error & 8192)
+    fprintf (stderr, "OUTOFMEM ");
+  fprintf (stderr, "\n");
+}
+
