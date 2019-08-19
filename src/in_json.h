@@ -11,17 +11,18 @@
 /*****************************************************************************/
 
 /*
- * in_json.h: read json to dwg
+ * in_json.h: read json to dwg (draft, WIP)
  * written by Reini Urban
  */
 
 #ifndef IN_JSON_H
 #define IN_JSON_H
 
-//#include "dwg.h"
-//#include "bits.h"
+#include "dwg.h"
+#include "bits.h"
 
-int dwg_read_json (Bit_Chain *dat, Dwg_Data *dwg);
-void dwg_injson_object (Bit_Chain *dat, Dwg_Object *obj);
+EXPORT int dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
+//TODO needed? See [GH #136]
+void dwg_injson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 
 #endif

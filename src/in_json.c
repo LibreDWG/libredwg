@@ -29,9 +29,12 @@
 //#include "in_json.h"
 // our files are bigger than 8000
 #define JSMN_PARENT_LINKS
+#define JSMN_STATIC
+// In strict mode primitive must be followed by "," or "}" or "]"; comma/object/array
+// In strict mode an object or array can't become a key
+// In strict mode primitives are: numbers and booleans
 #undef JSMN_STRICT
 #include "../jsmn/jsmn.h"
-#include "../jsmn/jsmn.c"
 
 static unsigned int loglevel;
 #define DWG_LOGLEVEL loglevel
@@ -49,7 +52,7 @@ static Bit_Chain *g_dat;
 #define IS_ENCODE
 #define IS_JSON
 
-// TODO: read, not write
+// TODO: read, not write. see in_dxf.c
 #define PREFIX
 #define ARRAY                                                                 \
   PREFIX fprintf (g_dat->fh, "[\n");                                          \
@@ -910,12 +913,13 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       error = dat_read_stream (dat, dat->fh);
       if (error > DWG_ERR_CRITICAL)
         return error;
-      LOG_TRACE ("json file size: %lu\n", dat->size);
+      LOG_TRACE ("  json file size: %lu\n", dat->size);
     }
   g_dat = dat;
 
   jsmn_init (&parser);
-  // How big will it be? This is the max memory variant.
+  // How big will it be? This is the max. memory variant.
+  // we could also use less, see jsmn/examples/jsondump.c for small devices.
   num_tokens = jsmn_parse (&parser, (char *)dat->chain, dat->size, NULL, 0);
   if (num_tokens <= 0)
     {
@@ -926,7 +930,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                  err);
       return DWG_ERR_INVALIDDWG;
     }
-  LOG_TRACE ("num_tokens: %d\n", num_tokens);
+  LOG_TRACE ("  num_tokens: %d\n", num_tokens);
   tokens = calloc (num_tokens + 1024, sizeof (jsmntok_t));
   if (!tokens)
     return DWG_ERR_OUTOFMEM;
@@ -945,7 +949,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       return DWG_ERR_INVALIDDWG;
     }
 
-  for (i = 0; i < parser.toknext; i++)
+  for (i = 0; i < num_tokens; i++)
     {
       const jsmntok_t *t = &tokens[i];
       switch (t->type)

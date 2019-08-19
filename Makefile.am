@@ -38,7 +38,7 @@ LTEXEC = @LTEXEC@
 VALGRIND_SUPPRESSIONS = @VALGRIND_SUPPRESSIONS@
 VALGRIND_SUPPRESSIONS_FILE = @VALGRIND_SUPPRESSIONS_FILE@
 VALGRIND_OPTS = --leak-check=full --show-reachable=no --num-callers=30
-JSON_DIST = jsmn/jsmn.c jsmn/jsmn.h jsmn/LICENSE jsmn/README.md
+JSON_DIST = jsmn/jsmn.h jsmn/LICENSE jsmn/README.md
 EXTRA_DIST = $(top_srcdir)/.version \
              README \
 	     dwg.in dxf.in dxf-allcvt.lsp dxf-allcvt.sh test-dxf.sh \
