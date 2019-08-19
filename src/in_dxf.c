@@ -717,49 +717,61 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
   int code, size, j = 0;
   int i;
   Dwg_Eed *eed;
+  Dwg_Data *dwg = obj->parent;
 
-  if (obj->supertype == DWG_SUPERTYPE_OBJECT)
-    {
-      i = obj->tio.object->num_eed; // same layout for Object and Entity?
-      eed = obj->tio.object->eed;
-    }
-  else if (obj->supertype == DWG_SUPERTYPE_ENTITY)
-    {
-      i = obj->tio.entity->num_eed;
-      eed = obj->tio.entity->eed;
-    }
-  else
-    return;
+  i = obj->tio.object->num_eed; // same layout for Object and Entity
+  eed = obj->tio.object->eed;
 
-  eed = (Dwg_Eed *)realloc (eed, (i + 1) * sizeof (Dwg_Eed));
-  memset (&eed[i], 0, sizeof (Dwg_Eed));
-  if (obj->supertype == DWG_SUPERTYPE_OBJECT)
+  if (pair->code < 1020 || pair->code > 1035) // followup y and z pairs
     {
+      if (i)
+        {
+          eed = (Dwg_Eed *)realloc (eed, (i + 1) * sizeof (Dwg_Eed));
+          memset (&eed[i], 0, sizeof (Dwg_Eed));
+        }
+      else
+        {
+          eed = (Dwg_Eed *)calloc (1, sizeof (Dwg_Eed));
+        }
       obj->tio.object->eed = eed;
       obj->tio.object->num_eed++;
     }
-  else
-    {
-      obj->tio.entity->eed = eed;
-      obj->tio.entity->num_eed++;
-    }
-  eed[i].raw = NULL;
   code = pair->code - 1000; // 1000
+  LOG_TRACE ("eed[%d] code:%d\n", i, code);
   switch (code)
     {
     case 0:
       {
         int len = strlen (pair->value.s);
-        /* code [RC] + len+0 + length [RC] + codepage [RS] */
-        size = 1 + len + 1 + 1 + 2;
-        eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
-        eed[i].data->code = code; // 1000
-        eed[i].data->u.eed_0.length = len;
-        eed[i].data->u.eed_0.codepage = obj->parent->header.codepage;
-        if (len && len < 256)
+        if (dwg->header.version < R_2007)
           {
-            LOG_HANDLE ("eed[%d] string %d %d\n", i, len, size);
-            memcpy (eed[i].data->u.eed_0.string, pair->value.s, len+1);
+            /* code [RC] + len+0 + length [RC] + codepage [RS] */
+            size = 1 + len + 1 + 1 + 2;
+            eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
+            eed[i].data->code = code; // 1000
+            eed[i].data->u.eed_0.length = len;
+            eed[i].data->u.eed_0.codepage = obj->parent->header.codepage;
+            if (len && len < 256)
+              {
+                LOG_HANDLE ("eed[%d] string %d %d\n", i, len, size);
+                memcpy (eed[i].data->u.eed_0.string, pair->value.s, len+1);
+              }
+          }
+        else
+          {
+            /* code [RC] + 2*len+00 + length [TU] + codepage [RS] */
+            size = 1 + len*2 + 2 + 2 + 2;
+            eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
+            eed[i].data->code = code;
+            eed[i].data->u.eed_0_r2007.length = len;
+            eed[i].data->u.eed_0.codepage = obj->parent->header.codepage;
+            if (len && len < 32767)
+              {
+                BITCODE_TU tu = bit_utf8_to_TU (pair->value.s);
+                LOG_HANDLE ("eed[%d] wstring %d %d\n", i, len, size);
+                memcpy (eed[i].data->u.eed_0_r2007.string, tu, 2*(len+1));
+                free (tu);
+              }
           }
         eed[i].size += size;
       }
@@ -790,8 +802,41 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         eed[i].size += size;
       }
       break;
+    case 10: // VT_POINT3D
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+      /* code [RC] + 3*RD */
+      size = 1 + 3*8;
+      eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
+      eed[i].data->code = code;
+      eed[i].data->u.eed_10.point.x = pair->value.d;
+      eed[i].size += size;
+      break;
+    case 20:
+    case 21:
+    case 22:
+    case 23:
+    case 24:
+    case 25:
+      if (!i)
+        return;
+      eed[i-1].data->u.eed_10.point.y = pair->value.d;
+      break;
+    case 30:
+    case 31:
+    case 32:
+    case 33:
+    case 34:
+    case 35:
+      if (!i)
+        return;
+      eed[i-1].data->u.eed_10.point.z = pair->value.d;
+      break;
     case 40:
-      /* code [RC] + RD */
+      /* code [RC] + 3*RD */
       size = 1 + 8;
       eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
       eed[i].data->code = code; // 1071
@@ -826,7 +871,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         {
           // search name in APPID table (if already added)
           BITCODE_H hdl;
-          hdl = dwg_find_tablehandle (obj->parent, pair->value.s, "APPID");
+          hdl = dwg_find_tablehandle (dwg, pair->value.s, "APPID");
           if (hdl)
             {
               memcpy (&eed[i].handle, &hdl->handleref, sizeof (hdl));
