@@ -202,7 +202,7 @@ static void _prefix (Bit_Chain *dat);
     }                                                                         \
   else                                                                        \
     {                                                                         \
-      fprintf (dat->fh, "\"(0.0.0)\",\n");                                    \
+      fprintf (dat->fh, "\"0.0.0\",\n");                                    \
     }
 #define VALUE_H(hdl, dxf)                                                     \
   fprintf (dat->fh, "\"" FORMAT_H "\",\n", ARGS_H(hdl))
