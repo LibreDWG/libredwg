@@ -1585,7 +1585,7 @@ dxf_common_entity_handle_data (Bit_Chain *restrict dat,
   ent = obj->tio.entity;
   _obj = ent;
 
-#include "common_entity_handle_data.spec"
+  #include "common_entity_handle_data.spec"
 
 #if 1
 #  include "common_entity_data.spec"

@@ -94,9 +94,9 @@
     {
       // DXF 348 but which?
       if (FIELD_VALUE(has_full_visualstyle))
-        FIELD_HANDLE(full_visualstyle, 5, 0);
+        FIELD_HANDLE(full_visualstyle, 5, 348);
       if (FIELD_VALUE(has_face_visualstyle))
-        FIELD_HANDLE(face_visualstyle, 5, 0);
+        FIELD_HANDLE(face_visualstyle, 5, 348);
       if (FIELD_VALUE(has_edge_visualstyle))
-        FIELD_HANDLE(edge_visualstyle, 5, 0);
+        FIELD_HANDLE(edge_visualstyle, 5, 348);
     }
