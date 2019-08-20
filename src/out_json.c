@@ -244,7 +244,7 @@ static void _prefix (Bit_Chain *dat);
     }
 #define FIELD_BINARY(nam, size, dxf)                                          \
   {                                                                           \
-    long len = size;                                                          \
+    long len = (long)size;                                                    \
     KEY (nam);                                                                \
     fprintf (dat->fh, "\"");                                                  \
     if (_obj->nam)                                                            \

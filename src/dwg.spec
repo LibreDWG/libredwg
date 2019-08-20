@@ -2381,17 +2381,15 @@ DWG_OBJECT(BLOCK_HEADER)
       FIELD_T (description, 4);
 
       FIELD_BL (preview_data_size, 0);
-      if (FIELD_VALUE(preview_data_size) > 0xf00000)
+      if (FIELD_VALUE(preview_data_size) > 0xa00000)
         {
-          LOG_WARN("Unreasonable high preview_data_size value")
+          LOG_ERROR("Invalid preview_data_size: " FORMAT_BL,
+                    FIELD_VALUE(preview_data_size));
+          error |= DWG_ERR_VALUEOUTOFBOUNDS;
         }
       else
         {
-#ifndef IS_JSON
-          FIELD_TF (preview_data, FIELD_VALUE(preview_data_size), 310);
-#else
           FIELD_BINARY (preview_data, FIELD_VALUE(preview_data_size), 310);
-#endif
         }
     }
 
@@ -6673,7 +6671,7 @@ DWG_ENTITY(REVOLVEDSURFACE)
 
   FIELD_BL (id, 90);
   //FIELD_BL (size_bindata, 90);
-  //FIELD_TF (bindata, _obj->size_bindata, 310);
+  //FIELD_BINARY (bindata, _obj->size_bindata, 310);
   FIELD_3BD (axis_point, 10);
   FIELD_3BD (axis_vector, 11);
   FIELD_BD (revolve_angle, 40);
@@ -6707,10 +6705,10 @@ DWG_ENTITY(SWEPTSURFACE)
 
   FIELD_BL (sweep_entity_id, 90);
   FIELD_BL (size_sweepdata, 90);
-  FIELD_TF (sweepdata, _obj->size_sweepdata, 310);
+  FIELD_BINARY (sweepdata, _obj->size_sweepdata, 310);
   FIELD_BL (path_entity_id, 90);
   FIELD_BL (size_pathdata, 90);
-  FIELD_TF (pathdata, _obj->size_pathdata, 310);
+  FIELD_BINARY (pathdata, _obj->size_pathdata, 310);
   FIELD_VECTOR_N (sweep_entity_transmatrix, BD, 16, 40);
   FIELD_VECTOR_N (path_entity_transmatrix, BD, 16, 41);
   FIELD_BD (draft_angle, 42);
@@ -6944,10 +6942,10 @@ DWG_OBJECT(ACSH_SWEEP_CLASS)
   FIELD_3BD (basept, 10); //0,0,0
   FIELD_BL (shsw_bl92, 92); //77
   FIELD_BL (shsw_size_text, 90); //744
-  FIELD_TF (shsw_text, _obj->shsw_size_text, 310);
+  FIELD_BINARY (shsw_text, _obj->shsw_size_text, 310);
   FIELD_BL (shsw_bl93, 93); //77
   FIELD_BL (shsw_size_text2, 90); //480
-  FIELD_TF (shsw_text2, _obj->shsw_size_text2, 310);
+  FIELD_BINARY (shsw_text2, _obj->shsw_size_text2, 310);
   FIELD_BD (draft_angle, 42); //0.0
   FIELD_BD (start_draft_dist, 43); //0.0
   FIELD_BD (end_draft_dist, 44); //0.0

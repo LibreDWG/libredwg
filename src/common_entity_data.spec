@@ -5,33 +5,24 @@
 
   {
     // unsigned long pos = bit_position(dat);
-    // no preview for TABLE, ...??
     FIELD_B (preview_exists, 0);
     if (ent->preview_exists)
       {
         VERSIONS(R_13, R_2007)
           {
             FIELD_CAST (preview_size, RL, BLL, 160);
-            //ent->preview_size = (BITCODE_BLL)bit_read_RL(dat);
-            //LOG_TRACE("preview_size: " FORMAT_BLL " [RL 160]\n", ent->preview_size);
           }
         SINCE(R_2010)
           {
             FIELD_BLL (preview_size, 160);
-            //ent->preview_size = bit_read_BLL(dat);
-            //LOG_TRACE("preview_size: " FORMAT_BLL " [BLL 160]\n", ent->preview_size);
           }
-        if (ent->preview_size < 210210)
+        if (ent->preview_size >= 0 && ent->preview_size < 210210)
           {
-            if (ent->preview_size >= 0) { // negative values for what reason?
-              DXF  { FIELD_BINARY (preview, (int)ent->preview_size, 310); }
-              else { FIELD_TF (preview, (int)ent->preview_size, 310); }
-              //ent->preview = bit_read_TF(dat, ent->preview_size); // DXF 310 BINARY
-            }
+            FIELD_BINARY (preview, ent->preview_size, 310);
           }
         else
           {
-            LOG_ERROR("Invalid preview-size: %lu kB",
+            LOG_ERROR("Invalid preview_size: %lu kB",
                       (unsigned long)(ent->preview_size / 1000));
             //bit_set_position(dat, pos+1);
             error |= DWG_ERR_VALUEOUTOFBOUNDS;

@@ -328,16 +328,16 @@
 /* preR13 we have no obj->address and obj->size yet, skip VECTOR_CHKCOUNT */
 #define FIELD_TF(nam, len, dxf)                                               \
   {                                                                           \
-    SINCE (R_13){ VECTOR_CHKCOUNT (nam, TF, len) } _obj->nam                  \
-        = bit_read_TF (dat, (int)len);                                        \
-    LOG_TRACE (#nam ": [%d TF " #dxf "]\n", len);                             \
+    SINCE (R_13){ VECTOR_CHKCOUNT (nam, TF, len) }                            \
+    _obj->nam = bit_read_TF (dat, (int)len);                                  \
+    LOG_TRACE (#nam ": %lu [TF " #dxf "]\n", (unsigned long)len);             \
     LOG_INSANE_TF (FIELD_VALUE (nam), (int)len);                              \
   }
 #define FIELD_TFF(nam, len, dxf)                                              \
   {                                                                           \
-    SINCE (R_13){ VECTOR_CHKCOUNT (nam, TF, len) } bit_read_fixed (           \
-        dat, _obj->nam, (int)len);                                            \
-    LOG_TRACE (#nam ": [%d TFF " #dxf "]\n", len);                            \
+    SINCE (R_13){ VECTOR_CHKCOUNT (nam, TF, len) }                            \
+    bit_read_fixed (dat, _obj->nam, (int)len);                                \
+    LOG_TRACE (#nam ": %d [TFF " #dxf "]\n", (int)len);                       \
     LOG_INSANE_TF (FIELD_VALUE (nam), (int)len);                              \
   }
 #define FIELD_TV(nam, dxf) FIELDG (nam, TV, dxf)

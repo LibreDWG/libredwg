@@ -102,7 +102,7 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
   }
 #define VALUE_BINARY(value, size, dxf)                                        \
   {                                                                           \
-    long len = size;                                                          \
+    long len = (long)size;                                                    \
     do                                                                        \
       {                                                                       \
         short j;                                                              \

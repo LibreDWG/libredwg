@@ -104,7 +104,7 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
 #define VALUE_TFF(str, dxf) VALUE_TV (str, dxf)
 #define VALUE_BINARY(value, size, dxf)                                        \
   {                                                                           \
-    long len = size;                                                          \
+    long len = (long)size;                                                    \
     do                                                                        \
       {                                                                       \
         short j;                                                              \
