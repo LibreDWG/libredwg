@@ -32,7 +32,7 @@
 
 #include "dwg.h"
 #include "common.h"
-//#include "bits.h"
+#include "bits.h"
 #include "suffix.inc"
 #include "in_json.h"
 #include "in_dxf.h"
@@ -243,7 +243,21 @@ main (int argc, char *argv[])
   memset (&dwg, 0, sizeof (Dwg_Data));
   dwg.opts = opts;
   if (infile)
-    dat.fh = fopen (infile, "r");
+    {
+      struct stat attrib;
+      if (stat (infile, &attrib)) // not exists
+        {
+          fprintf (stderr, "Missing input file '%s'\n", infile);
+          exit (1);
+        }
+      dat.fh = fopen (infile, "r");
+      if (!dat.fh)
+        {
+          fprintf (stderr, "Could not read file '%s'\n", infile);
+          exit (1);
+        }
+      dat.size = attrib.st_size;
+    }
   else
     dat.fh = stdin;
 
@@ -260,14 +274,16 @@ main (int argc, char *argv[])
            || (infile && !strcasecmp (infile, ".dxfb")))
     {
       if (opts > 1)
-        fprintf (stderr, "Reading Binary DXF file %s\n", infile ? infile : "from stdin");
+        fprintf (stderr, "Reading Binary DXF file %s\n",
+                 infile ? infile : "from stdin");
       error = dwg_read_dxfb (&dat, &dwg);
     }
   else if ((fmt && !strcasecmp (fmt, "dxf"))
            || (infile && !strcasecmp (infile, ".dxf")))
     {
       if (opts > 1)
-        fprintf (stderr, "Reading DXF file %s\n", infile ? infile : "from stdin");
+        fprintf (stderr, "Reading DXF file %s\n",
+                 infile ? infile : "from stdin");
       if (infile)
         error = dxf_read_file (infile, &dwg); // ascii or binary
       else
