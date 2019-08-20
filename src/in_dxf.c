@@ -368,7 +368,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   while (pair->code == 9)
     {
       char field[80];
-      strcpy (field, pair->value.s);
+      strncpy (field, pair->value.s, 79);
       i = 0;
 
       // now read the code, value pair
@@ -1055,7 +1055,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
     strcpy (ctrlname, "BLOCK_CONTROL");
   else
     {
-      strcpy (ctrlname, name);
+      strncpy (ctrlname, name, 70);
       strcat (ctrlname, "_CONTROL");
     }
   LOG_TRACE ("add %s\n", ctrlname);
@@ -1113,7 +1113,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
             LOG_TRACE ("%s.handle = " FORMAT_H " [%d]\n", ctrlname,
                        ARGS_H (obj->handle), pair->code);
             // also set the matching HEADER.*_CONTROL_OBJECT
-            strcpy (ctrlobj, ctrlname);
+            strncpy (ctrlobj, ctrlname, 70);
             strcat (ctrlobj, "_OBJECT");
             dwg_dynapi_header_set_value (dwg, ctrlobj, &ref, 0);
             LOG_TRACE ("HEADER.%s = " FORMAT_REF " [0]\n", ctrlobj,
@@ -1585,7 +1585,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
   Dwg_Object_APPID *_obj = NULL; // the smallest
   // we'd really need a Dwg_Object_TABLE or Dwg_Object_Generic type
   char ctrlname[80];
-  char curr_subclass[80];
+  char subclass[80];
   char text[256]; // FIXME
   int in_xdict = 0;
   int in_reactors = 0;
@@ -1667,7 +1667,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
             }
           else
             {
-              strcpy (ctrlname, name);
+              strncpy (ctrlname, name, 70);
               strcat (ctrlname, "_CONTROL");
             }
 
@@ -1795,7 +1795,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
             }
           // fall through
         case 100: // for nested structs
-          strcpy (curr_subclass, pair->value.s);
+          strncpy (subclass, pair->value.s, 79);
           break;
         case 102:
           if (strEQc (pair->value.s, "{ACAD_XDICTIONARY"))
@@ -2261,8 +2261,9 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                   else if (f->dxf == pair->code) // matching DXF code
                     {
                       if (pair->code == 92 &&
+                          obj->fixedtype == DWG_TYPE_MULTILEADER &&
                           // not MULTILEADER.text_color
-                          obj->fixedtype == DWG_TYPE_MULTILEADER)
+                          strEQc (subclass, "AcDbEntity"))
                         {
                           pair = add_ent_preview (obj, dat, pair);
                           goto start_loop;
@@ -2271,7 +2272,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                           memBEGINc (obj->name, "DICTIONARY") &&
                           strNE (obj->name, "DICTIONARYVAR"))
                         {
-                          strncpy (text, pair->value.s, 255);
+                          strncpy (text, pair->value.s, 254);
                           text[255] = '\0';
                           goto next_pair; // skip setting texts TV*
                         }
@@ -2341,7 +2342,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                           else if (pair->code < 440)
                             {
                               color.flag |= 1;
-                              strcpy (color.name, pair->value.s);
+                              color.name = strdup (pair->value.s);
                             }
                           else
                             {
@@ -2486,7 +2487,8 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                 }
               // not in dynapi: 92 as 310 size prefix for PROXY vector preview data
               if ((pair->code == 92) && is_entity &&
-                  obj->fixedtype > DWG_TYPE_LAYOUT)
+                  obj->fixedtype > DWG_TYPE_LAYOUT &&
+                  strEQc (subclass, "AcDbEntity"))
                 /*
                   (obj->fixedtype == DWG_TYPE_WIPEOUT ||
                    obj->fixedtype == DWG_TYPE_MULTILEADER ||
@@ -2531,7 +2533,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           if (strEQc (pair->value.s, "TABLE"))
             table[0] = '\0'; // new table coming up
           else if (strEQc (pair->value.s, "BLOCK_RECORD"))
-            strcpy (table, pair->value.s);
+            strncpy (table, pair->value.s, 79);
           else if (strEQc (pair->value.s, "ENDTAB"))
             table[0] = '\0'; // close table
           else if (strEQc (pair->value.s, "ENDSEC"))
@@ -2547,7 +2549,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         {
           Dwg_Object *ctrl;
           BITCODE_BL i = 0;
-          strcpy (table, pair->value.s);
+          strncpy (table, pair->value.s, 79);
           pair = new_table_control (table, dat, dwg); // until 0 table
           ctrl = &dwg->object[dwg->num_objects - 1];
           while (pair && pair->code == 0 && strEQ (pair->value.s, table))
@@ -2612,7 +2614,7 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           // until 0 ENDSEC
           while (pair->code == 0 && is_dwg_entity (pair->value.s))
             {
-              strcpy (name, pair->value.s);
+              strncpy (name, pair->value.s, 79);
               pair = new_object (name, dat, dwg, NULL, 0);
             }
           if (strEQc (pair->value.s, "ENDSEC"))
@@ -2644,7 +2646,7 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           // until 0 ENDSEC
           while (pair->code == 0 && is_dwg_object (pair->value.s))
             {
-              strcpy (name, pair->value.s);
+              strncpy (name, pair->value.s, 79);
               pair = new_object (name, dat, dwg, NULL, 0);
             }
           if (strEQc (pair->value.s, "ENDSEC"))
@@ -2676,7 +2678,7 @@ dxf_unknownsection_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           // until 0 ENDSEC
           while (pair->code == 0 && is_dwg_object (pair->value.s))
             {
-              strcpy (name, pair->value.s);
+              strncpy (name, pair->value.s, 79);
               pair = new_object (name, dat, dwg, NULL, 0);
             }
           if (strEQc (pair->value.s, "ENDSEC"))
@@ -2709,14 +2711,14 @@ dxf_thumbnail_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         case 0: // ENDSEC
           return 0;
         case 90:
-          dwg->thumbnail.size = pair->value.bll;
+          dwg->thumbnail.size = pair->value.l; // INT32 => long
           dwg->thumbnail.chain = calloc (dwg->thumbnail.size, 1);
           if (!dwg->thumbnail.chain)
             {
               LOG_ERROR ("Out of memory");
               return DWG_ERR_OUTOFMEM;
             }
-          LOG_TRACE ("PREVIEW.size = " FORMAT_BLL "\n", pair->value.bll);
+          LOG_TRACE ("PREVIEW.size = %ld\n", dwg->thumbnail.size);
           break;
         case 310:
           {
