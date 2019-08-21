@@ -7872,7 +7872,7 @@ RC,	DXF 62
 @item dwg
 struct _dwg_struct*
 @item edge_visualstyle
-H
+H,	DXF 348
 @item eed
 Dwg_Eed*
 @item elevation_r11
@@ -7882,11 +7882,11 @@ BB
 @item extra_r11
 RC
 @item face_visualstyle
-H
+H,	DXF 348
 @item flag_r11
 RC
 @item full_visualstyle
-H
+H,	DXF 348
 @item has_ds_binary_data
 B
 @item has_edge_visualstyle
@@ -7942,7 +7942,7 @@ BB
 @item prev_entity
 H
 @item preview
-TV
+TV,	DXF 310
 @item preview_exists
 B
 @item preview_size
