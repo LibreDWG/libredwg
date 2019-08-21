@@ -7076,6 +7076,13 @@ static int test_BLOCK (const Dwg_Object *obj)
   }
   return failed;
 }
+static int test_BODY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_BODY *restrict body = obj->tio.entity->tio.BODY;
+  return failed;
+}
 static int test_CAMERA (const Dwg_Object *obj)
 {
   int error = 0;
@@ -15923,6 +15930,13 @@ static int test_RAY (const Dwg_Object *obj)
   }
   return failed;
 }
+static int test_REGION (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_REGION *restrict region = obj->tio.entity->tio.REGION;
+  return failed;
+}
 static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
 {
   int error = 0;
@@ -20814,6 +20828,13 @@ static int test_WIPEOUT (const Dwg_Object *obj)
     else
         fail ("WIPEOUT.vvec [3BD]");
   }
+  return failed;
+}
+static int test_XLINE (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_XLINE *restrict xline = obj->tio.entity->tio.XLINE;
   return failed;
 }
 static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
@@ -36183,6 +36204,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ATTRIB(obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCK)
     error += test_BLOCK(obj);
+  else  if (obj->fixedtype == DWG_TYPE_BODY)
+    error += test_BODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_CAMERA)
     error += test_CAMERA(obj);
   else  if (obj->fixedtype == DWG_TYPE_CIRCLE)
@@ -36255,6 +36278,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_PROXY_ENTITY(obj);
   else  if (obj->fixedtype == DWG_TYPE_RAY)
     error += test_RAY(obj);
+  else  if (obj->fixedtype == DWG_TYPE_REGION)
+    error += test_REGION(obj);
   else  if (obj->fixedtype == DWG_TYPE_REVOLVEDSURFACE)
     error += test_REVOLVEDSURFACE(obj);
   else  if (obj->fixedtype == DWG_TYPE_SEQEND)
@@ -36289,6 +36314,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_VIEWPORT(obj);
   else  if (obj->fixedtype == DWG_TYPE_WIPEOUT)
     error += test_WIPEOUT(obj);
+  else  if (obj->fixedtype == DWG_TYPE_XLINE)
+    error += test_XLINE(obj);
   else  if (obj->fixedtype == DWG_TYPE_ACSH_SWEEP_CLASS)
     error += test_ACSH_SWEEP_CLASS(obj);
   else  if (obj->fixedtype == DWG_TYPE_APPID)
@@ -36461,6 +36488,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ATTRIB (obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCK)
     error += test_BLOCK (obj);
+  else  if (obj->fixedtype == DWG_TYPE_BODY)
+    error += test_BODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_CAMERA)
     error += test_CAMERA (obj);
   else  if (obj->fixedtype == DWG_TYPE_CIRCLE)
@@ -36533,6 +36562,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_PROXY_ENTITY (obj);
   else  if (obj->fixedtype == DWG_TYPE_RAY)
     error += test_RAY (obj);
+  else  if (obj->fixedtype == DWG_TYPE_REGION)
+    error += test_REGION (obj);
   else  if (obj->fixedtype == DWG_TYPE_REVOLVEDSURFACE)
     error += test_REVOLVEDSURFACE (obj);
   else  if (obj->fixedtype == DWG_TYPE_SEQEND)
@@ -36567,6 +36598,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_VIEWPORT (obj);
   else  if (obj->fixedtype == DWG_TYPE_WIPEOUT)
     error += test_WIPEOUT (obj);
+  else  if (obj->fixedtype == DWG_TYPE_XLINE)
+    error += test_XLINE (obj);
   else  if (obj->fixedtype == DWG_TYPE_ACSH_SWEEP_CLASS)
     error += test_ACSH_SWEEP_CLASS (obj);
   else  if (obj->fixedtype == DWG_TYPE_APPID)

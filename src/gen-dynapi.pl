@@ -87,8 +87,10 @@ local (@entity_names, @object_names, @subtypes, $max_entity_names, $max_object_n
 # todo: harmonize more subtypes
 for (sort $c->struct_names) {
   if (/_dwg_entity_([A-Z0-9_]+)/) {
-    $structs{$1}++;
-    push @entity_names, $1;
+    my $n = $1;
+    next if /_dwg_entity_DIMENSION_common/;
+    $structs{$n}++;
+    push @entity_names, $n;
   } elsif (/_dwg_object_([A-Z0-9_]+)/) {
     $structs{$1}++;
     push @object_names, $1;
@@ -101,6 +103,8 @@ for (sort $c->struct_names) {
     #print " (?)";
   }
 }
+push @entity_names, qw(XLINE REGION BODY);
+@entity_names = sort @entity_names;
 # get BITCODE_ macro types for each struct field
 open my $in, "<", $hdr or die "hdr: $!";
 my $f;

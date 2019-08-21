@@ -1590,7 +1590,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
   int in_xdict = 0;
   int in_reactors = 0;
   int in_blkrefs = 0;
-  int is_entity = is_dwg_entity (name);
+  int is_entity = is_dwg_entity (name) || strEQc (name, "DIMENSION");
   //BITCODE_BL rcount1, rcount2, rcount3, vcount;
   //Bit_Chain *hdl_dat, *str_dat;
   int j = 0, k = 0, l = 0, error = 0;
@@ -2542,7 +2542,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               return 0;
             }
           else
-            LOG_WARN ("Unknown 0 %s", pair->value.s);
+            LOG_WARN ("Unknown 0 %s (%s)", pair->value.s, "tables");
         }
       if (pair->code == 2 && strlen (pair->value.s) < 80
           && is_table_name (pair->value.s)) // new table NAME
@@ -2591,7 +2591,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               return 0;
             }
           else
-            LOG_WARN ("Unknown 0 %s", pair->value.s);
+            LOG_WARN ("Unknown 0 %s (%s)", pair->value.s, "blocks");
         }
       DXF_RETURN_ENDSEC (0); // next BLOCK or ENDSEC
       dxf_free_pair (pair);
@@ -2611,19 +2611,32 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       if (pair->code == 0)
         {
           char name[80];
+          strncpy (name, pair->value.s, 79);
+          // check aliases (dxfname => name)
+          if (strEQc (name, "ACAD_TABLE"))
+            strcpy (name, "TABLE");
+          else if (strEQc (name, "ACAD_PROXY_ENTITY"))
+            strcpy (name, "PROXY_ENTITY");
+          else if (strEQc (name, "POLYLINE"))
+            strcpy (name, "POLYLINE_2D"); // other POLYLINE_* by flag?
+          else if (strEQc (name, "VERTEX"))
+            strcpy (name, "VERTEX_2D");   // other VERTEX_* by flag?
+          else if (strEQc (name, "VERTEX_MESH") || strEQc (name, "VERTEX_PFACE"))
+            strcpy (name, "VERTEX_3D");
           // until 0 ENDSEC
-          while (pair->code == 0 && is_dwg_entity (pair->value.s))
+          while (pair->code == 0 &&
+                 (is_dwg_entity (name) || strEQc (name, "DIMENSION")))
             {
-              strncpy (name, pair->value.s, 79);
               pair = new_object (name, dat, dwg, NULL, 0);
+              strncpy (name, pair->value.s, 79);
             }
-          if (strEQc (pair->value.s, "ENDSEC"))
+          if (strEQc (name, "ENDSEC"))
             {
               dxf_free_pair (pair);
               return 0;
             }
           else
-            LOG_WARN ("Unknown 0 %s", pair->value.s);
+            LOG_WARN ("Unknown 0 %s (%s)", name, "entities");
         }
       DXF_RETURN_ENDSEC (0);
       dxf_free_pair (pair);
@@ -2655,7 +2668,7 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               return 0;
             }
           else
-            LOG_WARN ("Unknown 0 %s", pair->value.s);
+            LOG_WARN ("Unknown 0 %s (%s)", pair->value.s, "objects");
         }
       DXF_RETURN_ENDSEC (0);
       dxf_free_pair (pair);
@@ -2687,7 +2700,7 @@ dxf_unknownsection_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               return 0;
             }
           else
-            LOG_WARN ("Unknown 0 %s", pair->value.s);
+            LOG_WARN ("Unknown 0 %s (%s)", pair->value.s, "unknownsection");
         }
       DXF_RETURN_ENDSEC (0);
       dxf_free_pair (pair);

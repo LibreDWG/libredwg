@@ -1065,6 +1065,10 @@ TV,	DXF 2
 @end vtable
 @end indentedblock
 
+@strong{BODY} @anchor{BODY}
+@cindex entity, BODY
+@vindex BODY
+
 @strong{CAMERA} @anchor{CAMERA}
 @cindex entity, CAMERA
 @vindex CAMERA
@@ -2840,6 +2844,10 @@ struct _dwg_object_entity*
 @end vtable
 @end indentedblock
 
+@strong{REGION} @anchor{REGION}
+@cindex entity, REGION
+@vindex REGION
+
 @strong{REVOLVEDSURFACE} @anchor{REVOLVEDSURFACE}
 @cindex entity, REVOLVEDSURFACE
 @vindex REVOLVEDSURFACE
@@ -3766,6 +3774,10 @@ H,	DXF 360
 
 @end vtable
 @end indentedblock
+
+@strong{XLINE} @anchor{XLINE}
+@cindex entity, XLINE
+@vindex XLINE
 
 
 @node OBJECTS
