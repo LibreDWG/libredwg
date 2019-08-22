@@ -1,5 +1,5 @@
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 894 "gen-dynapi.pl"
+#line 908 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -3469,6 +3469,32 @@ static const Dwg_DYNAPI_field _dwg_DIMASSOC_ref_fields[] = {
   { "has_lastpt_ref", "B", sizeof (BITCODE_B), OFF (struct _dwg_DIMASSOC_ref,has_lastpt_ref), 0,0,0, 0 },
   {NULL, NULL, 0, 0, 0,0,0, 0},
 };
+/* from typedef struct _dwg_DIMENSION_common: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_DIMENSION_common_fields[] = {
+  { "parent", "struct _dwg_object_entity*", sizeof (void *), OFF (struct _dwg_DIMENSION_common,parent), 1,1,0, 0 },
+  { "class_version", "RC", sizeof (BITCODE_RC), OFF (struct _dwg_DIMENSION_common,class_version), 0,0,0, 0 },
+  { "blockname", "TV", sizeof (BITCODE_TV), OFF (struct _dwg_DIMENSION_common,blockname), 1,1,1, 0 },
+  { "extrusion", "3BD", sizeof (BITCODE_3BD), OFF (struct _dwg_DIMENSION_common,extrusion), 1,0,0, 0 },
+  { "def_pt", "3BD", sizeof (BITCODE_3BD), OFF (struct _dwg_DIMENSION_common,def_pt), 1,0,0, 0 },
+  { "text_midpt", "2RD", sizeof (BITCODE_2RD), OFF (struct _dwg_DIMENSION_common,text_midpt), 1,0,0, 0 },
+  { "elevation", "BD", sizeof (BITCODE_BD), OFF (struct _dwg_DIMENSION_common,elevation), 0,0,0, 0 },
+  { "flag", "RC", sizeof (BITCODE_RC), OFF (struct _dwg_DIMENSION_common,flag), 0,0,0, 0 },
+  { "flag1", "RC", sizeof (BITCODE_RC), OFF (struct _dwg_DIMENSION_common,flag1), 0,0,0, 0 },
+  { "user_text", "TV", sizeof (BITCODE_TV), OFF (struct _dwg_DIMENSION_common,user_text), 1,1,1, 0 },
+  { "text_rotation", "BD", sizeof (BITCODE_BD), OFF (struct _dwg_DIMENSION_common,text_rotation), 0,0,0, 0 },
+  { "horiz_dir", "BD", sizeof (BITCODE_BD), OFF (struct _dwg_DIMENSION_common,horiz_dir), 0,0,0, 0 },
+  { "ins_scale", "3BD", sizeof (BITCODE_3BD), OFF (struct _dwg_DIMENSION_common,ins_scale), 1,0,0, 0 },
+  { "ins_rotation", "BD", sizeof (BITCODE_BD), OFF (struct _dwg_DIMENSION_common,ins_rotation), 0,0,0, 0 },
+  { "attachment", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_DIMENSION_common,attachment), 0,0,0, 0 },
+  { "lspace_style", "BS", sizeof (BITCODE_BS), OFF (struct _dwg_DIMENSION_common,lspace_style), 0,0,0, 0 },
+  { "lspace_factor", "BD", sizeof (BITCODE_BD), OFF (struct _dwg_DIMENSION_common,lspace_factor), 0,0,0, 0 },
+  { "act_measurement", "BD", sizeof (BITCODE_BD), OFF (struct _dwg_DIMENSION_common,act_measurement), 0,0,0, 0 },
+  { "unknown", "B", sizeof (BITCODE_B), OFF (struct _dwg_DIMENSION_common,unknown), 0,0,0, 0 },
+  { "flip_arrow1", "B", sizeof (BITCODE_B), OFF (struct _dwg_DIMENSION_common,flip_arrow1), 0,0,0, 0 },
+  { "flip_arrow2", "B", sizeof (BITCODE_B), OFF (struct _dwg_DIMENSION_common,flip_arrow2), 0,0,0, 0 },
+  { "clone_ins_pt", "2RD", sizeof (BITCODE_2RD), OFF (struct _dwg_DIMENSION_common,clone_ins_pt), 1,0,0, 0 },
+  {NULL, NULL, 0, 0, 0,0,0, 0},
+};
 /* from typedef struct _dwg_EVAL_Node: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_EVAL_Node_fields[] = {
   { "parent", "struct _dwg_object_EVALUATION_GRAPH*", sizeof (void *), OFF (struct _dwg_EVAL_Node,parent), 1,1,0, 0 },
@@ -3902,9 +3928,9 @@ struct _name_type_fields {
   const Dwg_DYNAPI_field *const fields;
 };
 
-/* sorted for bsearch. from enum DWG_OBJECT_TYPE: */
+/* Fields for all the objects, sorted for bsearch. from enum DWG_OBJECT_TYPE: */
 static const struct _name_type_fields dwg_name_types[] = {
-    { "3DFACE", 28, _dwg_3DFACE_fields },	/* 0 */
+  { "3DFACE", 28, _dwg_3DFACE_fields },	/* 0 */
   { "3DSOLID", 38, _dwg_3DSOLID_fields },	/* 1 */
   { "ACSH_HISTORY_CLASS", 512, NULL },	/* 2 */
   { "ACSH_SWEEP_CLASS", 513, _dwg_ACSH_SWEEP_CLASS_fields },	/* 3 */
@@ -4070,7 +4096,49 @@ static const struct _name_type_fields dwg_name_types[] = {
 
 };
 
-#line 960 "gen-dynapi.pl"
+/* Fields for all the subclasses, sorted for bsearch */
+static const struct _name_type_fields dwg_list_subclasses[] = {
+  { "3DSOLID_silhouette", 0, _dwg_3DSOLID_silhouette_fields },	/* 0 */
+  { "3DSOLID_wire", 0, _dwg_3DSOLID_wire_fields },	/* 1 */
+  { "ACTIONBODY", 0, _dwg_ACTIONBODY_fields },	/* 2 */
+  { "CELLSTYLEMAP_Cell", 0, _dwg_CELLSTYLEMAP_Cell_fields },	/* 3 */
+  { "DIMASSOC_ref", 0, _dwg_DIMASSOC_ref_fields },	/* 4 */
+  { "DIMENSION_common", 0, _dwg_DIMENSION_common_fields },	/* 5 */
+  { "EVAL_Node", 0, _dwg_EVAL_Node_fields },	/* 6 */
+  { "FIELD_ChildValue", 0, _dwg_FIELD_ChildValue_fields },	/* 7 */
+  { "GEODATA_meshface", 0, _dwg_GEODATA_meshface_fields },	/* 8 */
+  { "GEODATA_meshpt", 0, _dwg_GEODATA_meshpt_fields },	/* 9 */
+  { "HATCH_DefLine", 0, _dwg_HATCH_DefLine_fields },	/* 10 */
+  { "HATCH_color", 0, _dwg_HATCH_color_fields },	/* 11 */
+  { "HATCH_control_point", 0, _dwg_HATCH_control_point_fields },	/* 12 */
+  { "HATCH_path", 0, _dwg_HATCH_path_fields },	/* 13 */
+  { "HATCH_pathseg", 0, _dwg_HATCH_pathseg_fields },	/* 14 */
+  { "HATCH_polylinepath", 0, _dwg_HATCH_polylinepath_fields },	/* 15 */
+  { "LEADER_ArrowHead", 0, _dwg_LEADER_ArrowHead_fields },	/* 16 */
+  { "LEADER_BlockLabel", 0, _dwg_LEADER_BlockLabel_fields },	/* 17 */
+  { "LEADER_Break", 0, _dwg_LEADER_Break_fields },	/* 18 */
+  { "LEADER_Line", 0, _dwg_LEADER_Line_fields },	/* 19 */
+  { "LEADER_Node", 0, _dwg_LEADER_Node_fields },	/* 20 */
+  { "LTYPE_dash", 0, _dwg_LTYPE_dash_fields },	/* 21 */
+  { "LWPOLYLINE_width", 0, _dwg_LWPOLYLINE_width_fields },	/* 22 */
+  { "MLEADER_AnnotContext", 0, _dwg_MLEADER_AnnotContext_fields },	/* 23 */
+  { "MLINESTYLE_line", 0, _dwg_MLINESTYLE_line_fields },	/* 24 */
+  { "MLINE_line", 0, _dwg_MLINE_line_fields },	/* 25 */
+  { "MLINE_vertex", 0, _dwg_MLINE_vertex_fields },	/* 26 */
+  { "SPLINE_control_point", 0, _dwg_SPLINE_control_point_fields },	/* 27 */
+  { "SPLINE_point", 0, _dwg_SPLINE_point_fields },	/* 28 */
+  { "SUNSTUDY_Dates", 0, _dwg_SUNSTUDY_Dates_fields },	/* 29 */
+  { "TABLEGEOMETRY_Cell", 0, _dwg_TABLEGEOMETRY_Cell_fields },	/* 30 */
+  { "TABLESTYLE_Cell", 0, _dwg_TABLESTYLE_Cell_fields },	/* 31 */
+  { "TABLE_BreakHeight", 0, _dwg_TABLE_BreakHeight_fields },	/* 32 */
+  { "TABLE_BreakRow", 0, _dwg_TABLE_BreakRow_fields },	/* 33 */
+  { "TABLE_CustomDataItem", 0, _dwg_TABLE_CustomDataItem_fields },	/* 34 */
+  { "TABLE_cell", 0, _dwg_TABLE_cell_fields },	/* 35 */
+  { "TABLE_value", 0, _dwg_TABLE_value_fields },	/* 36 */
+
+};
+
+#line 979 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
@@ -4095,6 +4163,7 @@ _name_struct_cmp (const void *restrict key, const void *restrict elem)
 #define NUM_ENTITIES    ARRAY_SIZE(dwg_entity_names)
 #define NUM_OBJECTS     ARRAY_SIZE(dwg_object_names)
 #define NUM_NAME_TYPES  ARRAY_SIZE(dwg_name_types)
+#define NUM_SUBCLASSES  ARRAY_SIZE(dwg_list_subclasses)
 
 EXPORT bool
 is_dwg_entity (const char *name)
@@ -4117,13 +4186,29 @@ is_dwg_object (const char *name)
 EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_entity_fields (const char *name)
 {
-  const char *p = bsearch (name, dwg_name_types, NUM_NAME_TYPES - 1,
-                           sizeof (dwg_name_types[0]), /* NULL terminated */
+  const char *p = bsearch (name, dwg_name_types, NUM_NAME_TYPES,
+                           sizeof (dwg_name_types[0]),
                            _name_struct_cmp);
   if (p)
     {
       const int i = (p - (char *)dwg_name_types) / sizeof (dwg_name_types[0]);
       const struct _name_type_fields *f = &dwg_name_types[i];
+      return f->fields;
+    }
+  else
+    return NULL;
+}
+
+EXPORT const Dwg_DYNAPI_field *
+dwg_dynapi_subclass_fields (const char *restrict name)
+{
+  const char *p = bsearch (name, dwg_list_subclasses, NUM_SUBCLASSES,
+                           sizeof (dwg_list_subclasses[0]),
+                           _name_struct_cmp);
+  if (p)
+    {
+      const int i = (p - (char *)dwg_list_subclasses) / sizeof (dwg_list_subclasses[0]);
+      const struct _name_type_fields *f = &dwg_list_subclasses[i];
       return f->fields;
     }
   else

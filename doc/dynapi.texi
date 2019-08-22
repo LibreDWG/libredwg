@@ -7099,6 +7099,60 @@ B
 @end vtable
 @end indentedblock
 
+@strong{Dwg_DIMENSION_common} @anchor{Dwg_DIMENSION_common}
+@vindex Dwg_DIMENSION_common
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+@item class_version
+RC
+@item blockname
+TV
+@item extrusion
+3BD
+@item def_pt
+3BD
+@item text_midpt
+2RD
+@item elevation
+BD
+@item flag
+RC
+@item flag1
+RC
+@item user_text
+TV
+@item text_rotation
+BD
+@item horiz_dir
+BD
+@item ins_scale
+3BD
+@item ins_rotation
+BD
+@item attachment
+BS
+@item lspace_style
+BS
+@item lspace_factor
+BD
+@item act_measurement
+BD
+@item unknown
+B
+@item flip_arrow1
+B
+@item flip_arrow2
+B
+@item clone_ins_pt
+2RD
+
+@end vtable
+@end indentedblock
+
 @strong{Dwg_EVAL_Node} @anchor{Dwg_EVAL_Node}
 @vindex Dwg_EVAL_Node
 

@@ -133,6 +133,10 @@ dwg_dynapi_common_entity_fields (void);
 EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_common_object_fields (void);
 
+/* Find the fields for this subclass. See dwg.h */
+EXPORT const Dwg_DYNAPI_field *
+dwg_dynapi_subclass_fields (const char *restrict name) __nonnull ((1));
+
 #endif
 
 #endif

@@ -13,12 +13,12 @@
 # typedef struct _dwg_header_variables
 # typedef struct _dwg_entity_(.*)
 # typedef struct _dwg_object_(.*)
-#subtypes:
-# typedef struct _dwg_TYPE_subtype
+#subclasses, typically like
+# typedef struct _dwg_TYPE_subclass
 
 use strict;
 use warnings;
-use vars qw(@entity_names @object_names @subtypes
+use vars qw(@entity_names @object_names @subclasses
             $max_entity_names $max_object_names);
 use Convert::Binary::C;
 #use Data::Dumper;
@@ -83,12 +83,11 @@ $c->parse_file($hdr);
 #print Data::Dumper->Dump([$c->struct('struct _dwg_header_variables')], ['Dwg_Header_Variables']);
 
 my (%h, $n, %structs, %ENT, %DXF);
-local (@entity_names, @object_names, @subtypes, $max_entity_names, $max_object_names);
-# todo: harmonize more subtypes
+local (@entity_names, @object_names, @subclasses, $max_entity_names, $max_object_names);
+# todo: harmonize more subclasses
 for (sort $c->struct_names) {
   if (/_dwg_entity_([A-Z0-9_]+)/) {
     my $n = $1;
-    next if /_dwg_entity_DIMENSION_common/;
     $structs{$n}++;
     push @entity_names, $n;
   } elsif (/_dwg_object_([A-Z0-9_]+)/) {
@@ -98,7 +97,7 @@ for (sort $c->struct_names) {
     ;
   } elsif (/_dwg_([A-Z0-9]+)(_|$)/) {
     $structs{$_}++;
-    push @subtypes, $_;
+    push @subclasses, $_;
   } else {
     #print " (?)";
   }
@@ -466,9 +465,20 @@ for (<DATA>) {
       for (@{$n}) {
         $maxlen = length($_) if $maxlen < length($_);
       }
-      for (@{$n}) {
-        my $len = length($_);
-        printf $fh "  \"%s\" \"%s\",\t/* %d */\n", $_, "\\0" x ($maxlen-$len), $i++;
+      if ($n eq 'subclasses') {
+        for (sort @{$n}) {
+          if (/^_dwg_(.*)/) {
+            my $n = $1;
+            # TODO: find class type for this subclass
+            printf $fh "  { \"%s\", %d, %s },\t/* %d */\n",
+              $n, 0, $_ . "_fields", $i++;
+          }
+        }
+      } else {
+        for (@{$n}) {
+          my $len = length($_);
+          printf $fh "  \"%s\" \"%s\",\t/* %d */\n", $_, "\\0" x ($maxlen-$len), $i++;
+        }
       }
     } elsif ($tmpl =~ /^scalar (\w+)/) {
       no strict 'refs';
@@ -489,8 +499,8 @@ for (<DATA>) {
         print $doc "\@strong{$_} \@anchor{$_}\n\@cindex object, $_\n\@vindex $_\n\n";
         out_struct("struct _dwg_object_$_", $_);
       }
-    } elsif ($tmpl =~ /^for dwg_subtypes/) {
-      for (@subtypes) {
+    } elsif ($tmpl =~ /^for dwg_subclasses/) {
+      for (@subclasses) {
         my ($name) = $_ =~ /^_dwg_(.*)/;
         print $doc "\@strong{Dwg_$name} \@anchor{Dwg_$name}\n\@vindex Dwg_$name\n\n";
         out_struct("struct $_", $_);
@@ -894,7 +904,7 @@ close $fh;
 
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 894 "gen-dynapi.pl"
+#line 908 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -943,7 +953,7 @@ static const char dwg_object_names[][MAXLEN_OBJECTS] = {
 @@struct _dwg_header_variables@@
 @@for dwg_entity_ENTITY@@
 @@for dwg_object_OBJECT@@
-@@for dwg_subtypes@@
+@@for dwg_subclasses@@
 
 /* common fields: */
 @@struct _dwg_object_entity@@
@@ -955,12 +965,17 @@ struct _name_type_fields {
   const Dwg_DYNAPI_field *const fields;
 };
 
-/* sorted for bsearch. from enum DWG_OBJECT_TYPE: */
+/* Fields for all the objects, sorted for bsearch. from enum DWG_OBJECT_TYPE: */
 static const struct _name_type_fields dwg_name_types[] = {
-  @@enum DWG_OBJECT_TYPE@@
+@@enum DWG_OBJECT_TYPE@@
 };
 
-#line 960 "gen-dynapi.pl"
+/* Fields for all the subclasses, sorted for bsearch */
+static const struct _name_type_fields dwg_list_subclasses[] = {
+@@list subclasses@@
+};
+
+#line 979 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
@@ -985,6 +1000,7 @@ _name_struct_cmp (const void *restrict key, const void *restrict elem)
 #define NUM_ENTITIES    ARRAY_SIZE(dwg_entity_names)
 #define NUM_OBJECTS     ARRAY_SIZE(dwg_object_names)
 #define NUM_NAME_TYPES  ARRAY_SIZE(dwg_name_types)
+#define NUM_SUBCLASSES  ARRAY_SIZE(dwg_list_subclasses)
 
 EXPORT bool
 is_dwg_entity (const char *name)
@@ -1007,13 +1023,29 @@ is_dwg_object (const char *name)
 EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_entity_fields (const char *name)
 {
-  const char *p = bsearch (name, dwg_name_types, NUM_NAME_TYPES - 1,
-                           sizeof (dwg_name_types[0]), /* NULL terminated */
+  const char *p = bsearch (name, dwg_name_types, NUM_NAME_TYPES,
+                           sizeof (dwg_name_types[0]),
                            _name_struct_cmp);
   if (p)
     {
       const int i = (p - (char *)dwg_name_types) / sizeof (dwg_name_types[0]);
       const struct _name_type_fields *f = &dwg_name_types[i];
+      return f->fields;
+    }
+  else
+    return NULL;
+}
+
+EXPORT const Dwg_DYNAPI_field *
+dwg_dynapi_subclass_fields (const char *restrict name)
+{
+  const char *p = bsearch (name, dwg_list_subclasses, NUM_SUBCLASSES,
+                           sizeof (dwg_list_subclasses[0]),
+                           _name_struct_cmp);
+  if (p)
+    {
+      const int i = (p - (char *)dwg_list_subclasses) / sizeof (dwg_list_subclasses[0]);
+      const struct _name_type_fields *f = &dwg_list_subclasses[i];
       return f->fields;
     }
   else

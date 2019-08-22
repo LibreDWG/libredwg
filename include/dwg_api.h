@@ -215,7 +215,7 @@ EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_common_object_field (const char *restrict fieldname)
     __nonnull ((1));
 
-/* Return the array of all fields, NULL terminated. Also for all objects. */
+/* Find the fields for this entity or object. */
 EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_entity_fields (const char *restrict name) __nonnull ((1));
 
@@ -224,6 +224,10 @@ dwg_dynapi_common_entity_fields (void);
 
 EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_common_object_fields (void);
+
+/* Find the fields for this subclass. See dwg.h */
+EXPORT const Dwg_DYNAPI_field *
+dwg_dynapi_subclass_fields (const char *restrict name) __nonnull ((1));
 
 /* static api */
 typedef struct dwg_point_3d
@@ -445,7 +449,7 @@ typedef struct _dwg_entity_VERTEX_3D              dwg_ent_vertex_3d,
                                                   dwg_ent_vertex_pface;
 typedef struct _dwg_entity_VERTEX_PFACE_FACE      dwg_ent_vertex_pface_face;
 typedef struct _dwg_entity_VERTEX_2D              dwg_ent_vertex_2d;
-typedef struct _dwg_entity_DIMENSION_common       dwg_ent_dim;
+typedef struct _dwg_DIMENSION_common              dwg_ent_dim;
 typedef struct _dwg_entity_DIMENSION_ORDINATE     dwg_ent_dim_ordinate;
 typedef struct _dwg_entity_DIMENSION_LINEAR       dwg_ent_dim_linear;
 typedef struct _dwg_entity_DIMENSION_ALIGNED      dwg_ent_dim_aligned;

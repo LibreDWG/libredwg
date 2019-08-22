@@ -1270,10 +1270,10 @@ typedef struct _dwg_entity_LINE
     BITCODE_B flip_arrow2; \
     BITCODE_2RD clone_ins_pt;
 
-struct _dwg_entity_DIMENSION_common
+typedef struct _dwg_DIMENSION_common
 {
   DIMENSION_COMMON
-};
+} Dwg_DIMENSION_common;
 
 /**
  ordinate dimension - DIMENSION_ORDINATE (20) entity
@@ -5091,7 +5091,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_ARC *ARC;
     Dwg_Entity_CIRCLE *CIRCLE;
     Dwg_Entity_LINE *LINE;
-    struct _dwg_entity_DIMENSION_common *DIMENSION_common;
+    Dwg_DIMENSION_common *DIMENSION_common;
     Dwg_Entity_DIMENSION_ORDINATE *DIMENSION_ORDINATE;
     Dwg_Entity_DIMENSION_LINEAR *DIMENSION_LINEAR;
     Dwg_Entity_DIMENSION_ALIGNED *DIMENSION_ALIGNED;
