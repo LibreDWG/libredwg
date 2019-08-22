@@ -121,7 +121,7 @@ while (<$in>) {
       $h{$n}{reactors} = 'H*'; # has no ;
     } elsif (/^#define (COMMON_\w+)/) { # COMMON_ENTITY_POLYLINE
       $n = $1;
-      $h{$n}{seqend}   = 'H'; # has no ;
+      $h{$n}{seqend}   = 'H' if $n eq 'COMMON_ENTITY_POLYLINE'; # has no ;
     }
   } elsif (/^\}/) { # close the struct
     $n = '';
@@ -154,12 +154,16 @@ sub dxf_in {
         $n = $2;
         $n =~ s/^_3/3/;
         warn $n;
-      }
-      elsif (/^\s*SECTION\(HEADER\)/) {
+      } elsif (/^\s*SECTION\(HEADER\)/) {
         $n = 'header_variables';
         warn $n;
-      }
-      elsif (/^int DWG_FUNC_N\(ACTION,(\w+)\)/) {
+      } elsif (/^int DWG_FUNC_N\(ACTION,(\w+)\)/) {
+        $n = $1;
+        warn $n;
+      } elsif (/^\#define (COMMON_ENTITY_DIMENSION)/) {
+        $n = $1;
+        warn $n;
+      } elsif (/^\#define (COMMON_ENTITY_POLYLINE)/) {
         $n = $1;
         warn $n;
       }
@@ -226,7 +230,7 @@ sub dxf_in {
 sub dxfin_spec {
   my $fn = shift;
   open my $in, "<", $fn  or die "$fn: $!";
-  dxf_in($in);
+  dxf_in ($in);
   close $in;
 }
 dxfin_spec "$srcdir/dwg.spec";
@@ -240,6 +244,12 @@ $DXF{'BLOCK'}->{'name'} = 2; # and 3
 $DXF{'VISUALSTYLE'}->{'edge_hide_precision_flag'} = 290;
 $DXF{'VISUALSTYLE'}->{'is_internal_use_only'} = 291;
 $DXF{'DIMSTYLE_CONTROL'}->{'morehandles'} = 340;
+$DXF{'DIMENSION_ORDINATE'}->{'def_pt'} = 10;
+$DXF{'DIMENSION_ORDINATE'}->{'feature_location_pt'} = 13;
+$DXF{'DIMENSION_ORDINATE'}->{'leader_endpt'} = 14;
+$DXF{'DIMENSION_ORDINATE'}->{'flag2'} = 70;
+$DXF{'DIMENSION_ORDINATE'}->{'dimstyle'} = 3;
+$DXF{'DIMENSION_ORDINATE'}->{'block'} = 2;
 
 dxfin_spec "$srcdir/header_variables_dxf.spec";
 $DXF{header_variables}->{'_3DDWFPREC'} = 40;
@@ -395,6 +405,9 @@ sub out_struct {
       $ENT{$key}->{$name} = $type;
     }
     my $dxf = $DXF{$key}->{$name};
+    if (!$dxf && $key eq '_dwg_DIMENSION_common') {
+      $dxf = $DXF{COMMON_ENTITY_DIMENSION}->{$name};
+    }
     $dxf = 0 unless $dxf;
     warn "no dxf for $key: $name 0\n" unless $dxf or
       ($name eq 'parent') or

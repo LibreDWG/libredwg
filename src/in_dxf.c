@@ -1796,7 +1796,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               else
                 {
                   dwg_dynapi_common_set_value (_obj, "layer", &handle, is_utf);
-                  LOG_TRACE ("%s.layer = %s " FORMAT_REF " [8 H]\n", obj->name,
+                  LOG_TRACE ("%s.layer = %s " FORMAT_REF " [8 H]\n", name,
                              pair->value.s, ARGS_REF (handle));
                 }
               break;
@@ -1814,37 +1814,43 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                     {
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_LINEAR;
                       obj->name = obj->dxfname = (char*)"DIMENSION_LINEAR";
-                      LOG_TRACE ("change type to %s\n", obj->name);
+                      strcpy (name, obj->name);
+                      LOG_TRACE ("change type to %s\n", name);
                     }
                   else if (strEQc (subclass, "AcDbAlignedDimension"))
                     {
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_ALIGNED;
                       obj->name = obj->dxfname = (char*)"DIMENSION_ALIGNED";
-                      LOG_TRACE ("change type to %s\n", obj->name);
+                      strcpy (name, obj->name);
+                      LOG_TRACE ("change type to %s\n", name);
                     }
                   else if (strEQc (subclass, "AcDbOrdinateDimension"))
                     {
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_ORDINATE;
                       obj->name = obj->dxfname = (char*)"DIMENSION_ORDINATE";
-                      LOG_TRACE ("change type to %s\n", obj->name);
+                      strcpy (name, obj->name);
+                      LOG_TRACE ("change type to %s\n", name);
                     }
                   else if (strEQc (subclass, "AcDbDiametricDimension"))
                     {
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_DIAMETER;
                       obj->name = obj->dxfname = (char*)"DIMENSION_DIAMETER";
-                      LOG_TRACE ("change type to %s\n", obj->name);
+                      strcpy (name, obj->name);
+                      LOG_TRACE ("change type to %s\n", name);
                     }
                   else if (strEQc (subclass, "AcDbRadialDimension"))
                     {
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_RADIUS;
                       obj->name = obj->dxfname = (char*)"DIMENSION_RADIUS";
-                      LOG_TRACE ("change type to %s\n", obj->name);
+                      strcpy (name, obj->name);
+                      LOG_TRACE ("change type to %s\n", name);
                     }
                   else if (strEQc (subclass, "AcDb3PointAngularDimension"))
                     {
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_ANG3PT;
                       obj->name = obj->dxfname = (char*)"DIMENSION_ANG3PT";
-                      LOG_TRACE ("change type to %s\n", obj->name);
+                      strcpy (name, obj->name);
+                      LOG_TRACE ("change type to %s\n", name);
                     }
                 }
             }
@@ -1858,7 +1864,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
             in_blkrefs = 1; // unique handle 331
           else if (strEQc (pair->value.s, "}"))
             in_reactors = in_xdict = in_blkrefs = 0;
-          else if (strEQc (obj->name, "XRECORD"))
+          else if (strEQc (name, "XRECORD"))
             pair = add_xdata (dat, obj, pair);
           else
             LOG_WARN ("Unknown DXF 102 %s in %s", pair->value.s, name)
@@ -1876,7 +1882,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                                          &inserts, 0);
               if (curr_inserts + 1 > num_inserts)
                 {
-                  LOG_HANDLE ("  extending %s.num_inserts %d < %d\n", obj->name,
+                  LOG_HANDLE ("  extending %s.num_inserts %d < %d\n", name,
                               num_inserts, curr_inserts + 1);
                   num_inserts = curr_inserts + 1;
                   dwg_dynapi_entity_set_value (_obj, obj->name, "num_inserts",
@@ -1886,11 +1892,11 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                 inserts = realloc (inserts, num_inserts * sizeof (BITCODE_H));
               else
                 inserts = calloc (num_inserts, sizeof (BITCODE_H));
-              dwg_dynapi_entity_set_value (_obj, obj->name, "inserts",
+              dwg_dynapi_entity_set_value (_obj, name, "inserts",
                                            &inserts, 0);
               hdl = add_handleref (dwg, 4, pair->value.u, obj);
               LOG_TRACE ("%s.inserts[%d] = " FORMAT_REF " [331 H*]\n",
-                         obj->name, curr_inserts, ARGS_REF (hdl));
+                         name, curr_inserts, ARGS_REF (hdl));
               inserts[curr_inserts++] = hdl;
               break;
             }
@@ -1927,8 +1933,8 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               break;
             }
           // // DICTIONARY or DICTIONARYWDFLT, but not DICTIONARYVAR
-          else if (memBEGINc (obj->name, "DICTIONARY") &&
-                   strNE (obj->name, "DICTIONARYVAR"))
+          else if (memBEGINc (name, "DICTIONARY") &&
+                   strNE (name, "DICTIONARYVAR"))
             {
               add_dictionary_handle (obj, pair, text);
               break;
@@ -1988,14 +1994,14 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
         object_default:
           if (pair->code >= 1000 && pair->code < 1999)
             add_eed (obj, name, pair);
-          else if (pair->code != 280 && strEQc (obj->name, "XRECORD"))
+          else if (pair->code != 280 && strEQc (name, "XRECORD"))
             pair = add_xdata (dat, obj, pair);
           else if (pair->code == 310 && strEQc (obj->name, "BLOCK_HEADER"))
             {
               pair = add_block_preview (obj, dat, pair);
               goto start_loop;
             }
-          else if (pair->code == 370 && strEQc (obj->name, "LAYER"))
+          else if (pair->code == 370 && strEQc (name, "LAYER"))
             {
               Dwg_Object_LAYER *layer = obj->tio.object->tio.LAYER;
               layer->linewt = dxf_find_lweight(pair->value.i);
@@ -2004,7 +2010,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               LOG_TRACE ("LAYER.flag = 0x%x [70 BS]\n", layer->flag);
             }
           else if (pair->code == 71 &&
-                   strEQc (obj->name, "MLINESTYLE") &&
+                   strEQc (name, "MLINESTYLE") &&
                    pair->value.i != 0)
             {
               pair = new_MLINESTYLE_lines (obj, dat, pair);
@@ -2013,7 +2019,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               goto next_pair;
             }
           else if (pair->code == 90 &&
-                   strEQc (obj->name, "LWPOLYLINE") &&
+                   strEQc (name, "LWPOLYLINE") &&
                    pair->value.i != 0)
             {
               pair = new_LWPOLYLINE (obj, dat, pair);
@@ -2021,7 +2027,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                 return pair;
               goto next_pair;
             }
-          else if (strEQc (obj->name, "MLINE"))
+          else if (strEQc (name, "MLINE"))
             {
               // TODO can extract to add_MLINE (obj, dat, pair, &j)?
               Dwg_Entity_MLINE *_o = obj->tio.entity->tio.MLINE;
@@ -2146,7 +2152,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               else
                 goto search_field;
             }
-          else if (strEQc (obj->name, "SPLINE"))
+          else if (strEQc (name, "SPLINE"))
             {
               // TODO can extract to add_SPLINE (obj, dat, pair, &j)?
               Dwg_Entity_SPLINE *_o = obj->tio.entity->tio.SPLINE;
@@ -2307,7 +2313,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                   if (pair->code != 3 && f->is_malloc && !f->is_string)
                     {
                       if (f->dxf == pair->code)
-                        LOG_TRACE ("Warning: Ignore %s.%s VECTOR [%s %d]\n", obj->name,
+                        LOG_TRACE ("Warning: Ignore %s.%s VECTOR [%s %d]\n", name,
                                    f->name, f->type, pair->code);
                     }
                   else if (f->dxf == pair->code) // matching DXF code
@@ -2350,12 +2356,12 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                               if (pair->code > 300)
                                 {
                                   LOG_WARN ("TODO resolve handle name %s.%s %X",
-                                            obj->name, f->name, pair->value.u)
+                                            name, f->name, pair->value.u)
                                 }
                               else
                                 {
                                   LOG_WARN ("TODO resolve handle name %s.%s %s",
-                                            obj->name, f->name, pair->value.s)
+                                            name, f->name, pair->value.s)
                                 }
                             }
                           else
@@ -2457,7 +2463,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                       pt.z = pair->value.d;
                       dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
                                                    &pt, is_utf);
-                      LOG_TRACE ("%s.%s.z = %f [%d %s]\n", obj->name, f->name,
+                      LOG_TRACE ("%s.%s.z = %f [%d %s]\n", name, f->name,
                                  pair->value.d, pair->code, f->type);
                       goto next_pair; // found, early exit
                     }
@@ -2560,6 +2566,12 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                         pair->code == 3 ||
                         pair->code == 1))
                 ; // ignore those BLOCK fields. DXF artifacts
+              else if (strEQc (name, "DIMENSION") &&
+                       (pair->code == 2 ||
+                        pair->code == 210 ||
+                        pair->code == 220 ||
+                        pair->code == 230))
+                ; // ignore those DIMENSION fields. DXF artifacts
               else
                 LOG_WARN ("Unknown DXF code %d for %s", pair->code, name);
             }
@@ -2667,8 +2679,8 @@ entity_alias (char *name)
     strcpy (name, "VERTEX_2D");   // other VERTEX_* by flag?
   else if (strEQc (name, "VERTEX_MESH") || strEQc (name, "VERTEX_PFACE"))
     strcpy (name, "VERTEX_3D");
-  else if (strEQc (name, "DIMENSION"))
-    strcpy (name, "DIMENSION_ANG2LN");   // allocate room for the largest
+  //else if (strEQc (name, "DIMENSION"))
+  //  strcpy (name, "DIMENSION_ANG2LN");   // allocate room for the largest
 }
 
 static int
@@ -2682,7 +2694,8 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       strncpy (name, pair->value.s, 79);
       entity_alias (name);
       // until 0 ENDSEC
-      while (pair->code == 0 && is_dwg_entity (name))
+      while (pair->code == 0 &&
+             (is_dwg_entity (name) || strEQc (name, "DIMENSION")))
         {
           pair = new_object (name, dat, dwg, NULL, 0);
           if (pair->code == 0)
