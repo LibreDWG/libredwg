@@ -1616,23 +1616,31 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
           memmove (&name[1], &name[0], strlen (name) + 1);
           *name = '_';
         }
+      if (strEQc (name, "DIMENSION"))
+        {
+          ADD_ENTITY (DIMENSION_ANG2LN);
+        }
+      else
+        {
+          // clang-format off
+          // ADD_ENTITY by name
+          // check all objects
+          #undef DWG_ENTITY
+          #define DWG_ENTITY(token)             \
+          if (strEQc (name, #token))            \
+            {                                   \
+              ADD_ENTITY (token);               \
+            }                                   \
+          else
 
-      // clang-format off
-      // ADD_ENTITY by name
-      // check all objects
-      #undef DWG_ENTITY
-      #define DWG_ENTITY(token)       \
-        if (strEQc (name, #token))    \
-          {                           \
-            ADD_ENTITY (token);       \
-          }
+          #include "objects.inc"
+          //final else
+          LOG_WARN ("Unknown object %s", name);
 
-      #include "objects.inc"
-
-      #undef DWG_ENTITY
-      #define DWG_ENTITY(token)
-
-      // clang-format on
+          #undef DWG_ENTITY
+          #define DWG_ENTITY(token)
+          // clang-format on
+        }
     }
   else
     {
@@ -1795,7 +1803,51 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
             }
           // fall through
         case 100: // for nested structs
-          strncpy (subclass, pair->value.s, 79);
+          if (pair->code == 100)
+            {
+              strncpy (subclass, pair->value.s, 79);
+              // set the real objname
+              if (strEQc (obj->name, "DIMENSION_ANG2LN") ||
+                  strEQc (obj->name, "DIMENSION"))
+                {
+                  if (strEQc (subclass, "AcDbRotatedDimension"))
+                    {
+                      obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_LINEAR;
+                      obj->name = obj->dxfname = (char*)"DIMENSION_LINEAR";
+                      LOG_TRACE ("change type to %s\n", obj->name);
+                    }
+                  else if (strEQc (subclass, "AcDbAlignedDimension"))
+                    {
+                      obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_ALIGNED;
+                      obj->name = obj->dxfname = (char*)"DIMENSION_ALIGNED";
+                      LOG_TRACE ("change type to %s\n", obj->name);
+                    }
+                  else if (strEQc (subclass, "AcDbOrdinateDimension"))
+                    {
+                      obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_ORDINATE;
+                      obj->name = obj->dxfname = (char*)"DIMENSION_ORDINATE";
+                      LOG_TRACE ("change type to %s\n", obj->name);
+                    }
+                  else if (strEQc (subclass, "AcDbDiametricDimension"))
+                    {
+                      obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_DIAMETER;
+                      obj->name = obj->dxfname = (char*)"DIMENSION_DIAMETER";
+                      LOG_TRACE ("change type to %s\n", obj->name);
+                    }
+                  else if (strEQc (subclass, "AcDbRadialDimension"))
+                    {
+                      obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_RADIUS;
+                      obj->name = obj->dxfname = (char*)"DIMENSION_RADIUS";
+                      LOG_TRACE ("change type to %s\n", obj->name);
+                    }
+                  else if (strEQc (subclass, "AcDb3PointAngularDimension"))
+                    {
+                      obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_ANG3PT;
+                      obj->name = obj->dxfname = (char*)"DIMENSION_ANG3PT";
+                      LOG_TRACE ("change type to %s\n", obj->name);
+                    }
+                }
+            }
           break;
         case 102:
           if (strEQc (pair->value.s, "{ACAD_XDICTIONARY"))
@@ -2405,7 +2457,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                       pt.z = pair->value.d;
                       dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
                                                    &pt, is_utf);
-                      LOG_TRACE ("%s.%s.z = %f [%d %s]\n", name, f->name,
+                      LOG_TRACE ("%s.%s.z = %f [%d %s]\n", obj->name, f->name,
                                  pair->value.d, pair->code, f->type);
                       goto next_pair; // found, early exit
                     }
@@ -2601,43 +2653,51 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
+static void
+entity_alias (char *name)
+{
+  // check aliases (dxfname => name)
+  if (strEQc (name, "ACAD_TABLE"))
+    strcpy (name, "TABLE");
+  else if (strEQc (name, "ACAD_PROXY_ENTITY"))
+    strcpy (name, "PROXY_ENTITY");
+  else if (strEQc (name, "POLYLINE"))
+    strcpy (name, "POLYLINE_2D"); // other POLYLINE_* by flag or subclass?
+  else if (strEQc (name, "VERTEX"))
+    strcpy (name, "VERTEX_2D");   // other VERTEX_* by flag?
+  else if (strEQc (name, "VERTEX_MESH") || strEQc (name, "VERTEX_PFACE"))
+    strcpy (name, "VERTEX_3D");
+  else if (strEQc (name, "DIMENSION"))
+    strcpy (name, "DIMENSION_ANG2LN");   // allocate room for the largest
+}
+
 static int
 dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dxf_Pair *pair = dxf_read_pair (dat);
+  char name[80];
 
-  while (1)
+  while (pair->code == 0)
     {
-      if (pair->code == 0)
+      strncpy (name, pair->value.s, 79);
+      entity_alias (name);
+      // until 0 ENDSEC
+      while (pair->code == 0 && is_dwg_entity (name))
         {
-          char name[80];
-          strncpy (name, pair->value.s, 79);
-          // check aliases (dxfname => name)
-          if (strEQc (name, "ACAD_TABLE"))
-            strcpy (name, "TABLE");
-          else if (strEQc (name, "ACAD_PROXY_ENTITY"))
-            strcpy (name, "PROXY_ENTITY");
-          else if (strEQc (name, "POLYLINE"))
-            strcpy (name, "POLYLINE_2D"); // other POLYLINE_* by flag?
-          else if (strEQc (name, "VERTEX"))
-            strcpy (name, "VERTEX_2D");   // other VERTEX_* by flag?
-          else if (strEQc (name, "VERTEX_MESH") || strEQc (name, "VERTEX_PFACE"))
-            strcpy (name, "VERTEX_3D");
-          // until 0 ENDSEC
-          while (pair->code == 0 &&
-                 (is_dwg_entity (name) || strEQc (name, "DIMENSION")))
+          pair = new_object (name, dat, dwg, NULL, 0);
+          if (pair->code == 0)
             {
-              pair = new_object (name, dat, dwg, NULL, 0);
               strncpy (name, pair->value.s, 79);
+              entity_alias (name);
             }
-          if (strEQc (name, "ENDSEC"))
-            {
-              dxf_free_pair (pair);
-              return 0;
-            }
-          else
-            LOG_WARN ("Unknown 0 %s (%s)", name, "entities");
         }
+      if (strEQc (name, "ENDSEC"))
+        {
+          dxf_free_pair (pair);
+          return 0;
+        }
+      else
+        LOG_WARN ("Unknown 0 %s (%s)", name, "entities");
       DXF_RETURN_ENDSEC (0);
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
