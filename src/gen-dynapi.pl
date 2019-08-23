@@ -244,12 +244,12 @@ $DXF{'BLOCK'}->{'name'} = 2; # and 3
 $DXF{'VISUALSTYLE'}->{'edge_hide_precision_flag'} = 290;
 $DXF{'VISUALSTYLE'}->{'is_internal_use_only'} = 291;
 $DXF{'DIMSTYLE_CONTROL'}->{'morehandles'} = 340;
-$DXF{'DIMENSION_ORDINATE'}->{'def_pt'} = 10;
-$DXF{'DIMENSION_ORDINATE'}->{'feature_location_pt'} = 13;
-$DXF{'DIMENSION_ORDINATE'}->{'leader_endpt'} = 14;
-$DXF{'DIMENSION_ORDINATE'}->{'flag2'} = 70;
-$DXF{'DIMENSION_ORDINATE'}->{'dimstyle'} = 3;
-$DXF{'DIMENSION_ORDINATE'}->{'block'} = 2;
+# $DXF{'DIMENSION_ORDINATE'}->{'def_pt'} = 10;
+# $DXF{'DIMENSION_ORDINATE'}->{'feature_location_pt'} = 13;
+# $DXF{'DIMENSION_ORDINATE'}->{'leader_endpt'} = 14;
+# $DXF{'DIMENSION_ORDINATE'}->{'flag2'} = 70;
+# $DXF{'DIMENSION_ORDINATE'}->{'dimstyle'} = 3;
+# $DXF{'DIMENSION_ORDINATE'}->{'block'} = 2;
 
 dxfin_spec "$srcdir/header_variables_dxf.spec";
 $DXF{header_variables}->{'_3DDWFPREC'} = 40;
@@ -506,7 +506,7 @@ sub out_struct {
       $ENT{$key}->{$name} = $type;
     }
     my $dxf = $DXF{$key}->{$name};
-    if (!$dxf && $key eq '_dwg_DIMENSION_common') {
+    if (!$dxf && $key =~ /DIMENSION/) {
       $dxf = $DXF{COMMON_ENTITY_DIMENSION}->{$name};
     }
     $dxf = 0 unless $dxf;
@@ -514,12 +514,12 @@ sub out_struct {
       ($name eq 'parent') or
       ($key eq 'header_variables' and $name eq lc($name));
 
-    printf $fh "  { \"%s\", \"%s\", %s, OFF (%s,%s), %d,%d,%d, %d },\n",
+    printf $fh "  { \"%s\",\t\"%s\", %s,  OFF (%s, %s),\n    %d,%d,%d, %d },\n",
       $name, $type, $size, $tmpl, $sname, $is_indirect, $is_malloc, $is_string, $dxf;
 
     print $doc "\@item $name\n$type", $dxf ? ",\tDXF $dxf" : "", "\n";
   }
-  print $fh "  {NULL, NULL, 0, 0, 0,0,0, 0},\n";
+  print $fh "  {NULL,\tNULL,\t0,\t0,\t0,0,0, 0},\n";
   print $fh "};\n";
   print $doc "\n\@end vtable\n";
   print $doc "\@end indentedblock\n\n";
@@ -568,10 +568,10 @@ for (<DATA>) {
             $fields = "_dwg_VERTEX_3D_fields";
           }
           $DWG_TYPE{$k} = $vs;
-          printf $fh "  { \"%s\", %s /*(%d)*/, %s },\t/* %d */\n",
+          printf $fh "  { \"%s\",\t%s /*(%d)*/,\t%s },\t/* %d */\n",
               $k, $vs, $v, $fields, $i++;
         } else {
-          printf $fh "  { \"%s\", %d },\t/* %d */\n",
+          printf $fh "  { \"%s\",\t%d },\t/* %d */\n",
             $k, $v, $i++;
         }
       }
@@ -605,7 +605,7 @@ for (<DATA>) {
             } else {
               $subclass = "NULL";
             }
-            printf $fh "  { \"%s\", %s, %s, %s },\t/* %d */\n",
+            printf $fh "  { \"%s\",\t%s,\t%s,\t%s },\t/* %d */\n",
               $n, $type, $subclass, $_ . "_fields", $i++;
           }
         }
@@ -826,7 +826,7 @@ EOF
   if (m{/\* \@\@for if_test_OBJECT\@\@ \*/}) {
     for my $name (@entity_names, @object_names) {
       my $xname = $name =~ /^3/ ? "_$name" : $name; # 3DFACE, 3DSOLID
-      next if $name eq 'DIMENSION_';
+      #next if $name eq 'DIMENSION_';
       next if $name eq 'PROXY_LWPOLYLINE';
       print $fh "  else" if $name ne '3DFACE'; # the first
       print $fh <<"EOF";
@@ -837,7 +837,7 @@ EOF
   }
   if (m{/\* \@\@for test_OBJECT\@\@ \*/}) {
     for my $name (@entity_names, @object_names) {
-      next if $name eq 'DIMENSION_';
+      #next if $name eq 'DIMENSION_';
       next if $name eq 'PROXY_LWPOLYLINE';
       my $is_ent = grep { $name eq $_ } @entity_names;
       my ($Entity, $lentity) = $is_ent ? ('Entity', 'entity') : ('Object', 'object');
