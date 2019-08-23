@@ -1573,6 +1573,18 @@ add_block_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return pair;
 }
 
+#define UPGRADE_ENTITY(FROM, TO)                 \
+  obj->type = obj->fixedtype = DWG_TYPE_##TO;    \
+  obj->name = obj->dxfname = (char*)#TO;         \
+  strcpy (name, obj->name);                      \
+  LOG_TRACE ("change type to %s\n", name);       \
+  if (sizeof (Dwg_Entity_##TO) > sizeof (Dwg_Entity_##FROM)) \
+    {                                                        \
+      LOG_TRACE ("realloc to %s\n", name);                   \
+      _obj = realloc (_obj, sizeof (Dwg_Entity_##TO));       \
+      obj->tio.entity->tio.TO = (Dwg_Entity_##TO *)_obj;     \
+    }
+
 /* For tables, entities and objects.
  */
 static Dxf_Pair *
@@ -1840,17 +1852,51 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                     }
                   else if (strEQc (subclass, "AcDbRadialDimension"))
                     {
-                      obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_RADIUS;
-                      obj->name = obj->dxfname = (char*)"DIMENSION_RADIUS";
-                      strcpy (name, obj->name);
-                      LOG_TRACE ("change type to %s\n", name);
+                      UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_RADIUS)
                     }
                   else if (strEQc (subclass, "AcDb3PointAngularDimension"))
                     {
-                      obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_ANG3PT;
-                      obj->name = obj->dxfname = (char*)"DIMENSION_ANG3PT";
-                      strcpy (name, obj->name);
-                      LOG_TRACE ("change type to %s\n", name);
+                      UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_ANG3PT)
+                    }
+                }
+              // set the real objname
+              if (strEQc (obj->name, "POLYLINE_2D"))
+                {
+                  if (strEQc (subclass, "AcDb3dPolyline"))
+                    {
+                      UPGRADE_ENTITY (POLYLINE_2D, POLYLINE_3D)
+                    }
+                  else if (strEQc (subclass, "AcDbPolyFaceMesh"))
+                    {
+                      UPGRADE_ENTITY (POLYLINE_2D, POLYLINE_PFACE)
+                    }
+                  else if (strEQc (subclass, "AcDbPolygonMesh"))
+                    {
+                      UPGRADE_ENTITY (POLYLINE_2D, POLYLINE_MESH)
+                    }
+                }
+              else if (strEQc (obj->name, "VERTEX_2D"))
+                {
+                  if (strEQc (subclass, "AcDb3dPolylineVertex"))
+                    {
+                      UPGRADE_ENTITY (VERTEX_2D, VERTEX_3D)
+                    }
+                  else if (strEQc (subclass, "AcDbPolyFaceMeshVertex"))
+                    { // _MESH or _PFACE:
+                      Dwg_Object_Ref *owner = obj->tio.entity->ownerhandle;
+                      Dwg_Object *parent = dwg_ref_object (dwg, owner);
+                      if (parent && parent->fixedtype == DWG_TYPE_POLYLINE_PFACE)
+                        {
+                          UPGRADE_ENTITY (VERTEX_2D, VERTEX_PFACE)
+                        }
+                      else
+                        { // AcDbPolygonMesh
+                          UPGRADE_ENTITY (VERTEX_2D, VERTEX_MESH)
+                        }
+                    }
+                  else if (strEQc (subclass, "AcDbFaceRecord"))
+                    {
+                      UPGRADE_ENTITY (VERTEX_2D, VERTEX_PFACE_FACE)
                     }
                 }
             }
@@ -2151,6 +2197,15 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                 }
               else
                 goto search_field;
+            }
+          else if (strEQc (name, "VERTEX_PFACE_FACE") &&
+                   pair->code >= 71 && pair->code <= 74)
+            {
+              Dwg_Entity_VERTEX_PFACE_FACE *_o = (Dwg_Entity_VERTEX_PFACE_FACE *)_obj;
+              j = pair->code - 71;
+              _o->vertind[j] = pair->value.i;
+              LOG_TRACE ("VERTEX_PFACE_FACE.vertind[%d] = %d [%d BS]\n", j,
+                         pair->value.i, pair->code);
             }
           else if (strEQc (name, "SPLINE"))
             {
@@ -2677,8 +2732,8 @@ entity_alias (char *name)
     strcpy (name, "POLYLINE_2D"); // other POLYLINE_* by flag or subclass?
   else if (strEQc (name, "VERTEX"))
     strcpy (name, "VERTEX_2D");   // other VERTEX_* by flag?
-  else if (strEQc (name, "VERTEX_MESH") || strEQc (name, "VERTEX_PFACE"))
-    strcpy (name, "VERTEX_3D");
+  //else if (strEQc (name, "VERTEX_MESH") || strEQc (name, "VERTEX_PFACE"))
+  //  strcpy (name, "VERTEX_3D");
   //else if (strEQc (name, "DIMENSION"))
   //  strcpy (name, "DIMENSION_ANG2LN");   // allocate room for the largest
 }
@@ -2893,6 +2948,8 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dxf_objs = malloc (1000 * sizeof (Dxf_Objs));
   if (!dwg->object_map)
     dwg->object_map = hash_new (dat->size / 1000);
+  // cannot rely on ref->obj during realloc's
+  dwg->dirty_refs = 1;
 
   header_hdls = calloc (1, 8 + 16 * sizeof (struct array_hdl));
   header_hdls->size = 16;
