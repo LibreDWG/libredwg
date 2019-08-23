@@ -82,7 +82,7 @@ $c->parse_file($hdr);
 #print Data::Dumper->Dump([$c->struct('_dwg_entity_TEXT')], ['_dwg_entity_TEXT']);
 #print Data::Dumper->Dump([$c->struct('struct _dwg_header_variables')], ['Dwg_Header_Variables']);
 
-my (%h, $n, %structs, %ENT, %DXF);
+my (%h, $n, %structs, %ENT, %DXF, %SUBCLASS, %DWG_TYPE);
 local (@entity_names, @object_names, @subclasses, $max_entity_names, $max_object_names);
 # todo: harmonize more subclasses
 for (sort $c->struct_names) {
@@ -272,6 +272,107 @@ $DXF{$n}->{'ownerhandle'} = 330;
 $DXF{$n}->{'xdicobjhandle'} = 360;
 $DXF{$n}->{'reactors'} = 330;
 
+# dxfclassname for each of our classes and subclasses (not complete)
+# Our NAME => 100
+%SUBCLASS = (
+  '3DSOLID' => "AcDbModelerGeometry",
+  DIMENSION_ALIGNED => "AcDbAlignedDimension",
+  DIMENSION_ORDINATE => "AcDbOrdinateDimension",
+  DIMENSION_ORDINATE => "AcDb2LineAngularDimension",
+  ARC_DIMENSION => "AcDbArcDimension",
+  LWPOLYLINE => "AcDbPolyline",
+  POLYLINE_3D => "AcDb3dPolyline",
+  #VERTEX => "AcDbVertex",
+  VERTEX_3D => "AcDb3dPolylineVertex",
+  HATCH => "AcDbHatch",
+  '3DFACE' => "AcDbFace",
+  DICTIONARYVAR => "DictionaryVariables",
+
+  "3DSOLID_silhouette" => "",
+  "3DSOLID_wire" => "",
+  "ACTIONBODY" => "AcDbAssocActionBody",
+  # AcDbAssocParamBasedActionBody?
+  # ASSOCDEPENDENCY AcDbAssocDependency
+  # ASSOCGEOMDEPENDENCY AcDbAssocDependency
+  # ASSOCGEOMDEPENDENCY AcDbAssocGeomDependency
+  # ASSOCOSNAPPOINTREFACTIONPARAM => AcDbAssocActionParam,
+  # ASSOCOSNAPPOINTREFACTIONPARAM => AcDbAssocCompoundActionParam,
+  # ASSOCVERTEXACTIONPARAM => AcDbAssocActionParam,
+  # ASSOCVERTEXACTIONPARAM => AcDbAssocSingleDependencyActionParam,
+  # ASSOCVERTEXACTIONPARAM => AcDbAssocVertexActionParam,
+  "CELLSTYLEMAP_Cell" => "",
+  "DIMASSOC_ref" => "",
+  "DIMENSION_common" => "AcDbDimension",
+  "EVAL_Node" => "",
+  "FIELD_ChildValue" => "",
+  "GEODATA_meshface" => "",
+  "GEODATA_meshpt" => "",
+  "HATCH_DefLine" => "",
+  "HATCH_color" => "",
+  "HATCH_control_point" => "",
+  "HATCH_path" => "",
+  "HATCH_pathseg" => "",
+  "HATCH_polylinepath" => "",
+  "LEADER_ArrowHead" => "",
+  "LEADER_BlockLabel" => "",
+  "LEADER_Break" => "",
+  "LEADER_Line" => "",
+  "LEADER_Node" => "",
+  "LTYPE_dash" => "",
+  "LWPOLYLINE_width" => "",
+  "MLEADER_AnnotContext" => "",
+  "MLINESTYLE_line" => "",
+  "MLINE_line" => "",
+  "MLINE_vertex" => "",
+  "SPLINE_control_point" => "",
+  "SPLINE_point" => "",
+  "SUNSTUDY_Dates" => "",
+  "TABLEGEOMETRY_Cell" => "",
+  "TABLESTYLE_Cell" => "",
+  "TABLE_BreakHeight" => "",
+  "TABLE_BreakRow" => "",
+  "TABLE_CustomDataItem" => "",
+  "TABLE_cell" => "",
+  "TABLE_value" => "",
+
+  # TABLECONTENT => AcDbLinkedData
+  # TABLECONTENT => AcDbLinkedTableData
+  # TABLECONTENT => AcDbFormattedTableData
+  "TABLECONTENT" => "AcDbTableContent",
+  "TABLEGEOMETRY" => "AcDbTableGeometry",
+  "DATATABLE" => "ACDBDATATABLE",
+  # VIEWSTYLE_ModelDoc => "AcDbModelDocViewStyle",
+  DETAILVIEWSTYLE => "AcDbDetailViewStyle",
+  SECTIONVIEWSTYLE => "AcDbSectionViewStyle",
+  ASSOCGEOMDEPENDENCY => "AcDbAssocDependency",
+  ASSOCOSNAPPOINTREFACTIONPARAM => "ACDBASSOCOSNAPPOINTREFACTIONPARAM",
+  ASSOCALIGNEDDIMACTIONBODY => "ACDBASSOCALIGNEDDIMACTIONBODY",
+  ASSOCOSNAPPOINTREFACTIONPARAM => "ACDBASSOCOSNAPPOINTREFACTIONPARAM",
+  # ACSH_HISTORY_CLASS => AcDbShHistory
+  # ACSH_HISTORY_CLASS_Node => AcDbShHistoryNode
+  );
+
+# 300 CONTEXT_DATA{
+my %SUBGROUP = (
+  AcDbObjectContextData => "CONTEXT_DATA{",
+  Dwg_LEADER  => "LEADER{",
+  Dwg_LEADER_Line => "LEADER_LINE{",
+  );
+
+# DXFNAME 0 => our name
+my %DXFALIAS = # see also CLASS.dxfname
+  (
+  ACDBDETAILVIEWSTYLE => "DETAILVIEWSTYLE",
+  ACDBSECTIONVIEWSTYLE => "SECTIONVIEWSTYLE",
+  ACDBPLACEHOLDER => "PLACEHOLDER",
+  ACDBASSOCACTION => "ASSOCACTION",
+  ACDBASSOCALIGNEDDIMACTIONBODY => "ASSOCALIGNEDDIMACTIONBODY",
+  ACDBASSOCGEOMDEPENDENCY => "ASSOCGEOMDEPENDENCY",
+  ACDBASSOCOSNAPPOINTREFACTIONPARAM => "ASSOCOSNAPPOINTREFACTIONPARAM",
+  ACDBASSOCALIGNEDDIMACTIONBODY => "ASSOCALIGNEDDIMACTIONBODY",
+  ACDBDATATABLE => "DATATABLE",
+  );
+
 my $cfile = "$srcdir/dynapi.c";
 chmod 0644, $cfile if -e $cfile;
 open my $fh, ">", $cfile or die "$cfile: $!";
@@ -451,8 +552,11 @@ for (<DATA>) {
         my ($k,$v) = ($_, $s->{enumerators}->{$_});
         if ($tmpl eq 'enum DWG_OBJECT_TYPE') {
           $k =~ s/^DWG_TYPE_//;
+          # Let the type rather be symbolic: DWG_TYPE_SOLID, not int
+          my $vs = $_;
           if (!$v && $k =~ /^3D/) {
             $v = $s->{enumerators}->{'DWG_TYPE__'.$k};
+            $vs = 'DWG_TYPE__'.$k;
           }
           # see if the fields do exist:
           my $fields = exists $structs{$k} ? "_dwg_".$k."_fields" : "NULL";
@@ -463,8 +567,9 @@ for (<DATA>) {
           } elsif ($k =~ /^VERTEX_(MESH|PFACE)$/) {
             $fields = "_dwg_VERTEX_3D_fields";
           }
-          printf $fh "  { \"%s\", %d, %s },\t/* %d */\n",
-              $k, $v, $fields, $i++;
+          $DWG_TYPE{$k} = $vs;
+          printf $fh "  { \"%s\", %s /*(%d)*/, %s },\t/* %d */\n",
+              $k, $vs, $v, $fields, $i++;
         } else {
           printf $fh "  { \"%s\", %d },\t/* %d */\n",
             $k, $v, $i++;
@@ -482,9 +587,26 @@ for (<DATA>) {
         for (sort @{$n}) {
           if (/^_dwg_(.*)/) {
             my $n = $1;
-            # TODO: find class type for this subclass
-            printf $fh "  { \"%s\", %d, %s },\t/* %d */\n",
-              $n, 0, $_ . "_fields", $i++;
+            # find class type for this subclass. DWG_TYPE_parent if unique, or -1
+            my $type = 0;
+            for my $o (keys %DWG_TYPE) {
+              my $match = qr '^' . $o . '_\w+';
+              if ($n =~ $match) {
+                if ($type) {
+                  $type = '-1'; # multiple
+                } else {
+                  $type = '(int)'.$DWG_TYPE{$o};
+                }
+              }
+            }
+            my $subclass = $SUBCLASS{$n};
+            if ($subclass) {
+              $subclass = '"' . $subclass . '"';
+            } else {
+              $subclass = "NULL";
+            }
+            printf $fh "  { \"%s\", %s, %s, %s },\t/* %d */\n",
+              $n, $type, $subclass, $_ . "_fields", $i++;
           }
         }
       } else {
@@ -974,7 +1096,14 @@ static const char dwg_object_names[][MAXLEN_OBJECTS] = {
 
 struct _name_type_fields {
   const char *const name;
+  const enum DWG_OBJECT_TYPE type;
+  const Dwg_DYNAPI_field *const fields;
+};
+
+struct _name_subclass_fields {
+  const char *const name;
   const int type;
+  const char *const subclass;
   const Dwg_DYNAPI_field *const fields;
 };
 
@@ -984,7 +1113,7 @@ static const struct _name_type_fields dwg_name_types[] = {
 };
 
 /* Fields for all the subclasses, sorted for bsearch */
-static const struct _name_type_fields dwg_list_subclasses[] = {
+static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
@@ -1058,7 +1187,7 @@ dwg_dynapi_subclass_fields (const char *restrict name)
   if (p)
     {
       const int i = (p - (char *)dwg_list_subclasses) / sizeof (dwg_list_subclasses[0]);
-      const struct _name_type_fields *f = &dwg_list_subclasses[i];
+      const struct _name_subclass_fields *f = &dwg_list_subclasses[i];
       return f->fields;
     }
   else

@@ -3924,217 +3924,224 @@ static const Dwg_DYNAPI_field _dwg_object_object_fields[] = {
 
 struct _name_type_fields {
   const char *const name;
+  const enum DWG_OBJECT_TYPE type;
+  const Dwg_DYNAPI_field *const fields;
+};
+
+struct _name_subclass_fields {
+  const char *const name;
   const int type;
+  const char *const subclass;
   const Dwg_DYNAPI_field *const fields;
 };
 
 /* Fields for all the objects, sorted for bsearch. from enum DWG_OBJECT_TYPE: */
 static const struct _name_type_fields dwg_name_types[] = {
-  { "3DFACE", 28, _dwg_3DFACE_fields },	/* 0 */
-  { "3DSOLID", 38, _dwg_3DSOLID_fields },	/* 1 */
-  { "ACSH_HISTORY_CLASS", 512, NULL },	/* 2 */
-  { "ACSH_SWEEP_CLASS", 513, _dwg_ACSH_SWEEP_CLASS_fields },	/* 3 */
-  { "APPID", 67, _dwg_APPID_fields },	/* 4 */
-  { "APPID_CONTROL", 66, _dwg_APPID_CONTROL_fields },	/* 5 */
-  { "ARC", 17, _dwg_ARC_fields },	/* 6 */
-  { "ARCALIGNEDTEXT", 514, NULL },	/* 7 */
-  { "ARC_DIMENSION", 515, _dwg_ARC_DIMENSION_fields },	/* 8 */
-  { "ASSOC2DCONSTRAINTGROUP", 516, _dwg_ASSOC2DCONSTRAINTGROUP_fields },	/* 9 */
-  { "ASSOCACTION", 517, _dwg_ASSOCACTION_fields },	/* 10 */
-  { "ASSOCALIGNEDDIMACTIONBODY", 518, _dwg_ASSOCALIGNEDDIMACTIONBODY_fields },	/* 11 */
-  { "ASSOCDEPENDENCY", 519, _dwg_ASSOCDEPENDENCY_fields },	/* 12 */
-  { "ASSOCGEOMDEPENDENCY", 520, NULL },	/* 13 */
-  { "ASSOCNETWORK", 521, _dwg_ASSOCNETWORK_fields },	/* 14 */
-  { "ASSOCOSNAPPOINTREFACTIONPARAM", 522, _dwg_ASSOCOSNAPPOINTREFACTIONPARAM_fields },	/* 15 */
-  { "ASSOCPERSSUBENTMANAGER", 523, _dwg_ASSOCPERSSUBENTMANAGER_fields },	/* 16 */
-  { "ASSOCPLANESURFACEACTIONBODY", 524, _dwg_ASSOCPLANESURFACEACTIONBODY_fields },	/* 17 */
-  { "ASSOCVERTEXACTIONPARAM", 525, NULL },	/* 18 */
-  { "ATTDEF", 3, _dwg_ATTDEF_fields },	/* 19 */
-  { "ATTRIB", 2, _dwg_ATTRIB_fields },	/* 20 */
-  { "BLOCK", 4, _dwg_BLOCK_fields },	/* 21 */
-  { "BLOCK_CONTROL", 48, _dwg_BLOCK_CONTROL_fields },	/* 22 */
-  { "BLOCK_HEADER", 49, _dwg_BLOCK_HEADER_fields },	/* 23 */
-  { "BODY", 39, _dwg_3DSOLID_fields },	/* 24 */
-  { "CAMERA", 526, _dwg_CAMERA_fields },	/* 25 */
-  { "CELLSTYLEMAP", 527, _dwg_CELLSTYLEMAP_fields },	/* 26 */
-  { "CIRCLE", 18, _dwg_CIRCLE_fields },	/* 27 */
-  { "DATATABLE", 528, _dwg_DATATABLE_fields },	/* 28 */
-  { "DBCOLOR", 529, _dwg_DBCOLOR_fields },	/* 29 */
-  { "DETAILVIEWSTYLE", 530, NULL },	/* 30 */
-  { "DICTIONARY", 42, _dwg_DICTIONARY_fields },	/* 31 */
-  { "DICTIONARYVAR", 531, _dwg_DICTIONARYVAR_fields },	/* 32 */
-  { "DICTIONARYWDFLT", 532, _dwg_DICTIONARYWDFLT_fields },	/* 33 */
-  { "DIMASSOC", 533, _dwg_DIMASSOC_fields },	/* 34 */
-  { "DIMENSION_ALIGNED", 22, _dwg_DIMENSION_ALIGNED_fields },	/* 35 */
-  { "DIMENSION_ANG2LN", 24, _dwg_DIMENSION_ANG2LN_fields },	/* 36 */
-  { "DIMENSION_ANG3PT", 23, _dwg_DIMENSION_ANG3PT_fields },	/* 37 */
-  { "DIMENSION_DIAMETER", 26, _dwg_DIMENSION_DIAMETER_fields },	/* 38 */
-  { "DIMENSION_LINEAR", 21, _dwg_DIMENSION_LINEAR_fields },	/* 39 */
-  { "DIMENSION_ORDINATE", 20, _dwg_DIMENSION_ORDINATE_fields },	/* 40 */
-  { "DIMENSION_RADIUS", 25, _dwg_DIMENSION_RADIUS_fields },	/* 41 */
-  { "DIMSTYLE", 69, _dwg_DIMSTYLE_fields },	/* 42 */
-  { "DIMSTYLE_CONTROL", 68, _dwg_DIMSTYLE_CONTROL_fields },	/* 43 */
-  { "DOCUMENTOPTIONS", 534, NULL },	/* 44 */
-  { "DUMMY", 75, _dwg_DUMMY_fields },	/* 45 */
-  { "DYNAMICBLOCKPURGEPREVENTER", 535, _dwg_DYNAMICBLOCKPURGEPREVENTER_fields },	/* 46 */
-  { "ELLIPSE", 35, _dwg_ELLIPSE_fields },	/* 47 */
-  { "ENDBLK", 5, _dwg_ENDBLK_fields },	/* 48 */
-  { "EVALUATION_GRAPH", 536, _dwg_EVALUATION_GRAPH_fields },	/* 49 */
-  { "EXTRUDEDSURFACE", 578, _dwg_EXTRUDEDSURFACE_fields },	/* 50 */
-  { "FIELD", 537, _dwg_FIELD_fields },	/* 51 */
-  { "FIELDLIST", 538, _dwg_FIELDLIST_fields },	/* 52 */
-  { "FREED", 65533, NULL },	/* 53 */
-  { "GEODATA", 539, _dwg_GEODATA_fields },	/* 54 */
-  { "GEOMAPIMAGE", 540, _dwg_GEOMAPIMAGE_fields },	/* 55 */
-  { "GEOPOSITIONMARKER", 541, _dwg_GEOPOSITIONMARKER_fields },	/* 56 */
-  { "GROUP", 72, _dwg_GROUP_fields },	/* 57 */
-  { "HATCH", 78, _dwg_HATCH_fields },	/* 58 */
-  { "HELIX", 542, _dwg_HELIX_fields },	/* 59 */
-  { "IDBUFFER", 543, _dwg_IDBUFFER_fields },	/* 60 */
-  { "IMAGE", 544, _dwg_IMAGE_fields },	/* 61 */
-  { "IMAGEDEF", 545, _dwg_IMAGEDEF_fields },	/* 62 */
-  { "IMAGEDEF_REACTOR", 546, _dwg_IMAGEDEF_REACTOR_fields },	/* 63 */
-  { "INSERT", 7, _dwg_INSERT_fields },	/* 64 */
-  { "LAYER", 51, _dwg_LAYER_fields },	/* 65 */
-  { "LAYER_CONTROL", 50, _dwg_LAYER_CONTROL_fields },	/* 66 */
-  { "LAYER_FILTER", 547, NULL },	/* 67 */
-  { "LAYER_INDEX", 548, _dwg_LAYER_INDEX_fields },	/* 68 */
-  { "LAYOUT", 82, _dwg_LAYOUT_fields },	/* 69 */
-  { "LAYOUTPRINTCONFIG", 549, NULL },	/* 70 */
-  { "LEADER", 45, _dwg_LEADER_fields },	/* 71 */
-  { "LEADEROBJECTCONTEXTDATA", 550, NULL },	/* 72 */
-  { "LIGHT", 551, _dwg_LIGHT_fields },	/* 73 */
-  { "LIGHTLIST", 552, _dwg_LIGHTLIST_fields },	/* 74 */
-  { "LINE", 19, _dwg_LINE_fields },	/* 75 */
-  { "LOFTEDSURFACE", 579, _dwg_LOFTEDSURFACE_fields },	/* 76 */
-  { "LONG_TRANSACTION", 76, _dwg_LONG_TRANSACTION_fields },	/* 77 */
-  { "LTYPE", 57, _dwg_LTYPE_fields },	/* 78 */
-  { "LTYPE_CONTROL", 56, _dwg_LTYPE_CONTROL_fields },	/* 79 */
-  { "LWPOLYLINE", 77, _dwg_LWPOLYLINE_fields },	/* 80 */
-  { "MATERIAL", 553, _dwg_MATERIAL_fields },	/* 81 */
-  { "MENTALRAYRENDERSETTINGS", 566, NULL },	/* 82 */
-  { "MINSERT", 8, _dwg_MINSERT_fields },	/* 83 */
-  { "MLEADERSTYLE", 554, _dwg_MLEADERSTYLE_fields },	/* 84 */
-  { "MLINE", 47, _dwg_MLINE_fields },	/* 85 */
-  { "MLINESTYLE", 73, _dwg_MLINESTYLE_fields },	/* 86 */
-  { "MTEXT", 44, _dwg_MTEXT_fields },	/* 87 */
-  { "MULTILEADER", 555, _dwg_MULTILEADER_fields },	/* 88 */
-  { "NAVISWORKSMODELDEF", 556, _dwg_NAVISWORKSMODELDEF_fields },	/* 89 */
-  { "NPOCOLLECTION", 557, NULL },	/* 90 */
-  { "OBJECTCONTEXTDATA", 558, _dwg_OBJECTCONTEXTDATA_fields },	/* 91 */
-  { "OBJECT_PTR", 559, _dwg_OBJECT_PTR_fields },	/* 92 */
-  { "OLE2FRAME", 74, _dwg_OLE2FRAME_fields },	/* 93 */
-  { "OLEFRAME", 43, _dwg_OLEFRAME_fields },	/* 94 */
-  { "PERSSUBENTMANAGER", 560, _dwg_PERSSUBENTMANAGER_fields },	/* 95 */
-  { "PLACEHOLDER", 80, _dwg_PLACEHOLDER_fields },	/* 96 */
-  { "PLANESURFACE", 577, _dwg_PLANESURFACE_fields },	/* 97 */
-  { "PLOTSETTINGS", 561, _dwg_PLOTSETTINGS_fields },	/* 98 */
-  { "POINT", 27, _dwg_POINT_fields },	/* 99 */
-  { "POINTCLOUD", 562, NULL },	/* 100 */
-  { "POLYLINE_2D", 15, _dwg_POLYLINE_2D_fields },	/* 101 */
-  { "POLYLINE_3D", 16, _dwg_POLYLINE_3D_fields },	/* 102 */
-  { "POLYLINE_MESH", 30, _dwg_POLYLINE_MESH_fields },	/* 103 */
-  { "POLYLINE_PFACE", 29, _dwg_POLYLINE_PFACE_fields },	/* 104 */
-  { "PROXY_ENTITY", 498, _dwg_PROXY_ENTITY_fields },	/* 105 */
-  { "PROXY_OBJECT", 499, _dwg_PROXY_OBJECT_fields },	/* 106 */
-  { "RAPIDRTRENDERENVIRONMENT", 567, NULL },	/* 107 */
-  { "RAPIDRTRENDERSETTINGS", 568, NULL },	/* 108 */
-  { "RASTERVARIABLES", 563, _dwg_RASTERVARIABLES_fields },	/* 109 */
-  { "RAY", 40, _dwg_RAY_fields },	/* 110 */
-  { "REGION", 37, _dwg_3DSOLID_fields },	/* 111 */
-  { "RENDERENVIRONMENT", 564, _dwg_RENDERENVIRONMENT_fields },	/* 112 */
-  { "RENDERGLOBAL", 565, _dwg_RENDERGLOBAL_fields },	/* 113 */
-  { "REVOLVEDSURFACE", 580, _dwg_REVOLVEDSURFACE_fields },	/* 114 */
-  { "RTEXT", 569, NULL },	/* 115 */
-  { "SCALE", 570, _dwg_SCALE_fields },	/* 116 */
-  { "SECTIONVIEWSTYLE", 571, NULL },	/* 117 */
-  { "SEQEND", 6, _dwg_SEQEND_fields },	/* 118 */
-  { "SHAPE", 33, _dwg_SHAPE_fields },	/* 119 */
-  { "SOLID", 31, _dwg_SOLID_fields },	/* 120 */
-  { "SORTENTSTABLE", 572, _dwg_SORTENTSTABLE_fields },	/* 121 */
-  { "SPATIAL_FILTER", 573, _dwg_SPATIAL_FILTER_fields },	/* 122 */
-  { "SPATIAL_INDEX", 574, _dwg_SPATIAL_INDEX_fields },	/* 123 */
-  { "SPLINE", 36, _dwg_SPLINE_fields },	/* 124 */
-  { "STYLE", 53, _dwg_STYLE_fields },	/* 125 */
-  { "STYLE_CONTROL", 52, _dwg_STYLE_CONTROL_fields },	/* 126 */
-  { "SUN", 575, _dwg_SUN_fields },	/* 127 */
-  { "SUNSTUDY", 576, _dwg_SUNSTUDY_fields },	/* 128 */
-  { "SWEPTSURFACE", 581, _dwg_SWEPTSURFACE_fields },	/* 129 */
-  { "TABLE", 582, _dwg_TABLE_fields },	/* 130 */
-  { "TABLECONTENT", 583, _dwg_TABLECONTENT_fields },	/* 131 */
-  { "TABLEGEOMETRY", 584, _dwg_TABLEGEOMETRY_fields },	/* 132 */
-  { "TABLESTYLE", 585, _dwg_TABLESTYLE_fields },	/* 133 */
-  { "TEXT", 1, _dwg_TEXT_fields },	/* 134 */
-  { "TOLERANCE", 46, _dwg_TOLERANCE_fields },	/* 135 */
-  { "TRACE", 32, _dwg_TRACE_fields },	/* 136 */
-  { "UCS", 63, _dwg_UCS_fields },	/* 137 */
-  { "UCS_CONTROL", 62, _dwg_UCS_CONTROL_fields },	/* 138 */
-  { "UNDERLAY", 586, _dwg_UNDERLAY_fields },	/* 139 */
-  { "UNDERLAYDEFINITION", 587, _dwg_UNDERLAYDEFINITION_fields },	/* 140 */
-  { "UNKNOWN_ENT", 65534, _dwg_UNKNOWN_ENT_fields },	/* 141 */
-  { "UNKNOWN_OBJ", 65535, _dwg_UNKNOWN_OBJ_fields },	/* 142 */
-  { "UNUSED", 0, NULL },	/* 143 */
-  { "VBA_PROJECT", 81, _dwg_VBA_PROJECT_fields },	/* 144 */
-  { "VERTEX_2D", 10, _dwg_VERTEX_2D_fields },	/* 145 */
-  { "VERTEX_3D", 11, _dwg_VERTEX_3D_fields },	/* 146 */
-  { "VERTEX_MESH", 12, _dwg_VERTEX_3D_fields },	/* 147 */
-  { "VERTEX_PFACE", 13, _dwg_VERTEX_3D_fields },	/* 148 */
-  { "VERTEX_PFACE_FACE", 14, _dwg_VERTEX_PFACE_FACE_fields },	/* 149 */
-  { "VIEW", 61, _dwg_VIEW_fields },	/* 150 */
-  { "VIEWPORT", 34, _dwg_VIEWPORT_fields },	/* 151 */
-  { "VIEW_CONTROL", 60, _dwg_VIEW_CONTROL_fields },	/* 152 */
-  { "VISUALSTYLE", 588, _dwg_VISUALSTYLE_fields },	/* 153 */
-  { "VPORT", 65, _dwg_VPORT_fields },	/* 154 */
-  { "VPORT_CONTROL", 64, _dwg_VPORT_CONTROL_fields },	/* 155 */
-  { "VPORT_ENTITY_CONTROL", 70, _dwg_VPORT_ENTITY_CONTROL_fields },	/* 156 */
-  { "VPORT_ENTITY_HEADER", 71, _dwg_VPORT_ENTITY_HEADER_fields },	/* 157 */
-  { "WIPEOUT", 589, _dwg_WIPEOUT_fields },	/* 158 */
-  { "WIPEOUTVARIABLES", 590, _dwg_WIPEOUTVARIABLES_fields },	/* 159 */
-  { "XLINE", 41, _dwg_RAY_fields },	/* 160 */
-  { "XRECORD", 79, _dwg_XRECORD_fields },	/* 161 */
-  { "XREFPANELOBJECT", 591, NULL },	/* 162 */
+  { "3DFACE", DWG_TYPE__3DFACE /*(28)*/, _dwg_3DFACE_fields },	/* 0 */
+  { "3DSOLID", DWG_TYPE__3DSOLID /*(38)*/, _dwg_3DSOLID_fields },	/* 1 */
+  { "ACSH_HISTORY_CLASS", DWG_TYPE_ACSH_HISTORY_CLASS /*(512)*/, NULL },	/* 2 */
+  { "ACSH_SWEEP_CLASS", DWG_TYPE_ACSH_SWEEP_CLASS /*(513)*/, _dwg_ACSH_SWEEP_CLASS_fields },	/* 3 */
+  { "APPID", DWG_TYPE_APPID /*(67)*/, _dwg_APPID_fields },	/* 4 */
+  { "APPID_CONTROL", DWG_TYPE_APPID_CONTROL /*(66)*/, _dwg_APPID_CONTROL_fields },	/* 5 */
+  { "ARC", DWG_TYPE_ARC /*(17)*/, _dwg_ARC_fields },	/* 6 */
+  { "ARCALIGNEDTEXT", DWG_TYPE_ARCALIGNEDTEXT /*(514)*/, NULL },	/* 7 */
+  { "ARC_DIMENSION", DWG_TYPE_ARC_DIMENSION /*(515)*/, _dwg_ARC_DIMENSION_fields },	/* 8 */
+  { "ASSOC2DCONSTRAINTGROUP", DWG_TYPE_ASSOC2DCONSTRAINTGROUP /*(516)*/, _dwg_ASSOC2DCONSTRAINTGROUP_fields },	/* 9 */
+  { "ASSOCACTION", DWG_TYPE_ASSOCACTION /*(517)*/, _dwg_ASSOCACTION_fields },	/* 10 */
+  { "ASSOCALIGNEDDIMACTIONBODY", DWG_TYPE_ASSOCALIGNEDDIMACTIONBODY /*(518)*/, _dwg_ASSOCALIGNEDDIMACTIONBODY_fields },	/* 11 */
+  { "ASSOCDEPENDENCY", DWG_TYPE_ASSOCDEPENDENCY /*(519)*/, _dwg_ASSOCDEPENDENCY_fields },	/* 12 */
+  { "ASSOCGEOMDEPENDENCY", DWG_TYPE_ASSOCGEOMDEPENDENCY /*(520)*/, NULL },	/* 13 */
+  { "ASSOCNETWORK", DWG_TYPE_ASSOCNETWORK /*(521)*/, _dwg_ASSOCNETWORK_fields },	/* 14 */
+  { "ASSOCOSNAPPOINTREFACTIONPARAM", DWG_TYPE_ASSOCOSNAPPOINTREFACTIONPARAM /*(522)*/, _dwg_ASSOCOSNAPPOINTREFACTIONPARAM_fields },	/* 15 */
+  { "ASSOCPERSSUBENTMANAGER", DWG_TYPE_ASSOCPERSSUBENTMANAGER /*(523)*/, _dwg_ASSOCPERSSUBENTMANAGER_fields },	/* 16 */
+  { "ASSOCPLANESURFACEACTIONBODY", DWG_TYPE_ASSOCPLANESURFACEACTIONBODY /*(524)*/, _dwg_ASSOCPLANESURFACEACTIONBODY_fields },	/* 17 */
+  { "ASSOCVERTEXACTIONPARAM", DWG_TYPE_ASSOCVERTEXACTIONPARAM /*(525)*/, NULL },	/* 18 */
+  { "ATTDEF", DWG_TYPE_ATTDEF /*(3)*/, _dwg_ATTDEF_fields },	/* 19 */
+  { "ATTRIB", DWG_TYPE_ATTRIB /*(2)*/, _dwg_ATTRIB_fields },	/* 20 */
+  { "BLOCK", DWG_TYPE_BLOCK /*(4)*/, _dwg_BLOCK_fields },	/* 21 */
+  { "BLOCK_CONTROL", DWG_TYPE_BLOCK_CONTROL /*(48)*/, _dwg_BLOCK_CONTROL_fields },	/* 22 */
+  { "BLOCK_HEADER", DWG_TYPE_BLOCK_HEADER /*(49)*/, _dwg_BLOCK_HEADER_fields },	/* 23 */
+  { "BODY", DWG_TYPE_BODY /*(39)*/, _dwg_3DSOLID_fields },	/* 24 */
+  { "CAMERA", DWG_TYPE_CAMERA /*(526)*/, _dwg_CAMERA_fields },	/* 25 */
+  { "CELLSTYLEMAP", DWG_TYPE_CELLSTYLEMAP /*(527)*/, _dwg_CELLSTYLEMAP_fields },	/* 26 */
+  { "CIRCLE", DWG_TYPE_CIRCLE /*(18)*/, _dwg_CIRCLE_fields },	/* 27 */
+  { "DATATABLE", DWG_TYPE_DATATABLE /*(528)*/, _dwg_DATATABLE_fields },	/* 28 */
+  { "DBCOLOR", DWG_TYPE_DBCOLOR /*(529)*/, _dwg_DBCOLOR_fields },	/* 29 */
+  { "DETAILVIEWSTYLE", DWG_TYPE_DETAILVIEWSTYLE /*(530)*/, NULL },	/* 30 */
+  { "DICTIONARY", DWG_TYPE_DICTIONARY /*(42)*/, _dwg_DICTIONARY_fields },	/* 31 */
+  { "DICTIONARYVAR", DWG_TYPE_DICTIONARYVAR /*(531)*/, _dwg_DICTIONARYVAR_fields },	/* 32 */
+  { "DICTIONARYWDFLT", DWG_TYPE_DICTIONARYWDFLT /*(532)*/, _dwg_DICTIONARYWDFLT_fields },	/* 33 */
+  { "DIMASSOC", DWG_TYPE_DIMASSOC /*(533)*/, _dwg_DIMASSOC_fields },	/* 34 */
+  { "DIMENSION_ALIGNED", DWG_TYPE_DIMENSION_ALIGNED /*(22)*/, _dwg_DIMENSION_ALIGNED_fields },	/* 35 */
+  { "DIMENSION_ANG2LN", DWG_TYPE_DIMENSION_ANG2LN /*(24)*/, _dwg_DIMENSION_ANG2LN_fields },	/* 36 */
+  { "DIMENSION_ANG3PT", DWG_TYPE_DIMENSION_ANG3PT /*(23)*/, _dwg_DIMENSION_ANG3PT_fields },	/* 37 */
+  { "DIMENSION_DIAMETER", DWG_TYPE_DIMENSION_DIAMETER /*(26)*/, _dwg_DIMENSION_DIAMETER_fields },	/* 38 */
+  { "DIMENSION_LINEAR", DWG_TYPE_DIMENSION_LINEAR /*(21)*/, _dwg_DIMENSION_LINEAR_fields },	/* 39 */
+  { "DIMENSION_ORDINATE", DWG_TYPE_DIMENSION_ORDINATE /*(20)*/, _dwg_DIMENSION_ORDINATE_fields },	/* 40 */
+  { "DIMENSION_RADIUS", DWG_TYPE_DIMENSION_RADIUS /*(25)*/, _dwg_DIMENSION_RADIUS_fields },	/* 41 */
+  { "DIMSTYLE", DWG_TYPE_DIMSTYLE /*(69)*/, _dwg_DIMSTYLE_fields },	/* 42 */
+  { "DIMSTYLE_CONTROL", DWG_TYPE_DIMSTYLE_CONTROL /*(68)*/, _dwg_DIMSTYLE_CONTROL_fields },	/* 43 */
+  { "DOCUMENTOPTIONS", DWG_TYPE_DOCUMENTOPTIONS /*(534)*/, NULL },	/* 44 */
+  { "DUMMY", DWG_TYPE_DUMMY /*(75)*/, _dwg_DUMMY_fields },	/* 45 */
+  { "DYNAMICBLOCKPURGEPREVENTER", DWG_TYPE_DYNAMICBLOCKPURGEPREVENTER /*(535)*/, _dwg_DYNAMICBLOCKPURGEPREVENTER_fields },	/* 46 */
+  { "ELLIPSE", DWG_TYPE_ELLIPSE /*(35)*/, _dwg_ELLIPSE_fields },	/* 47 */
+  { "ENDBLK", DWG_TYPE_ENDBLK /*(5)*/, _dwg_ENDBLK_fields },	/* 48 */
+  { "EVALUATION_GRAPH", DWG_TYPE_EVALUATION_GRAPH /*(536)*/, _dwg_EVALUATION_GRAPH_fields },	/* 49 */
+  { "EXTRUDEDSURFACE", DWG_TYPE_EXTRUDEDSURFACE /*(578)*/, _dwg_EXTRUDEDSURFACE_fields },	/* 50 */
+  { "FIELD", DWG_TYPE_FIELD /*(537)*/, _dwg_FIELD_fields },	/* 51 */
+  { "FIELDLIST", DWG_TYPE_FIELDLIST /*(538)*/, _dwg_FIELDLIST_fields },	/* 52 */
+  { "FREED", DWG_TYPE_FREED /*(65533)*/, NULL },	/* 53 */
+  { "GEODATA", DWG_TYPE_GEODATA /*(539)*/, _dwg_GEODATA_fields },	/* 54 */
+  { "GEOMAPIMAGE", DWG_TYPE_GEOMAPIMAGE /*(540)*/, _dwg_GEOMAPIMAGE_fields },	/* 55 */
+  { "GEOPOSITIONMARKER", DWG_TYPE_GEOPOSITIONMARKER /*(541)*/, _dwg_GEOPOSITIONMARKER_fields },	/* 56 */
+  { "GROUP", DWG_TYPE_GROUP /*(72)*/, _dwg_GROUP_fields },	/* 57 */
+  { "HATCH", DWG_TYPE_HATCH /*(78)*/, _dwg_HATCH_fields },	/* 58 */
+  { "HELIX", DWG_TYPE_HELIX /*(542)*/, _dwg_HELIX_fields },	/* 59 */
+  { "IDBUFFER", DWG_TYPE_IDBUFFER /*(543)*/, _dwg_IDBUFFER_fields },	/* 60 */
+  { "IMAGE", DWG_TYPE_IMAGE /*(544)*/, _dwg_IMAGE_fields },	/* 61 */
+  { "IMAGEDEF", DWG_TYPE_IMAGEDEF /*(545)*/, _dwg_IMAGEDEF_fields },	/* 62 */
+  { "IMAGEDEF_REACTOR", DWG_TYPE_IMAGEDEF_REACTOR /*(546)*/, _dwg_IMAGEDEF_REACTOR_fields },	/* 63 */
+  { "INSERT", DWG_TYPE_INSERT /*(7)*/, _dwg_INSERT_fields },	/* 64 */
+  { "LAYER", DWG_TYPE_LAYER /*(51)*/, _dwg_LAYER_fields },	/* 65 */
+  { "LAYER_CONTROL", DWG_TYPE_LAYER_CONTROL /*(50)*/, _dwg_LAYER_CONTROL_fields },	/* 66 */
+  { "LAYER_FILTER", DWG_TYPE_LAYER_FILTER /*(547)*/, NULL },	/* 67 */
+  { "LAYER_INDEX", DWG_TYPE_LAYER_INDEX /*(548)*/, _dwg_LAYER_INDEX_fields },	/* 68 */
+  { "LAYOUT", DWG_TYPE_LAYOUT /*(82)*/, _dwg_LAYOUT_fields },	/* 69 */
+  { "LAYOUTPRINTCONFIG", DWG_TYPE_LAYOUTPRINTCONFIG /*(549)*/, NULL },	/* 70 */
+  { "LEADER", DWG_TYPE_LEADER /*(45)*/, _dwg_LEADER_fields },	/* 71 */
+  { "LEADEROBJECTCONTEXTDATA", DWG_TYPE_LEADEROBJECTCONTEXTDATA /*(550)*/, NULL },	/* 72 */
+  { "LIGHT", DWG_TYPE_LIGHT /*(551)*/, _dwg_LIGHT_fields },	/* 73 */
+  { "LIGHTLIST", DWG_TYPE_LIGHTLIST /*(552)*/, _dwg_LIGHTLIST_fields },	/* 74 */
+  { "LINE", DWG_TYPE_LINE /*(19)*/, _dwg_LINE_fields },	/* 75 */
+  { "LOFTEDSURFACE", DWG_TYPE_LOFTEDSURFACE /*(579)*/, _dwg_LOFTEDSURFACE_fields },	/* 76 */
+  { "LONG_TRANSACTION", DWG_TYPE_LONG_TRANSACTION /*(76)*/, _dwg_LONG_TRANSACTION_fields },	/* 77 */
+  { "LTYPE", DWG_TYPE_LTYPE /*(57)*/, _dwg_LTYPE_fields },	/* 78 */
+  { "LTYPE_CONTROL", DWG_TYPE_LTYPE_CONTROL /*(56)*/, _dwg_LTYPE_CONTROL_fields },	/* 79 */
+  { "LWPOLYLINE", DWG_TYPE_LWPOLYLINE /*(77)*/, _dwg_LWPOLYLINE_fields },	/* 80 */
+  { "MATERIAL", DWG_TYPE_MATERIAL /*(553)*/, _dwg_MATERIAL_fields },	/* 81 */
+  { "MENTALRAYRENDERSETTINGS", DWG_TYPE_MENTALRAYRENDERSETTINGS /*(566)*/, NULL },	/* 82 */
+  { "MINSERT", DWG_TYPE_MINSERT /*(8)*/, _dwg_MINSERT_fields },	/* 83 */
+  { "MLEADERSTYLE", DWG_TYPE_MLEADERSTYLE /*(554)*/, _dwg_MLEADERSTYLE_fields },	/* 84 */
+  { "MLINE", DWG_TYPE_MLINE /*(47)*/, _dwg_MLINE_fields },	/* 85 */
+  { "MLINESTYLE", DWG_TYPE_MLINESTYLE /*(73)*/, _dwg_MLINESTYLE_fields },	/* 86 */
+  { "MTEXT", DWG_TYPE_MTEXT /*(44)*/, _dwg_MTEXT_fields },	/* 87 */
+  { "MULTILEADER", DWG_TYPE_MULTILEADER /*(555)*/, _dwg_MULTILEADER_fields },	/* 88 */
+  { "NAVISWORKSMODELDEF", DWG_TYPE_NAVISWORKSMODELDEF /*(556)*/, _dwg_NAVISWORKSMODELDEF_fields },	/* 89 */
+  { "NPOCOLLECTION", DWG_TYPE_NPOCOLLECTION /*(557)*/, NULL },	/* 90 */
+  { "OBJECTCONTEXTDATA", DWG_TYPE_OBJECTCONTEXTDATA /*(558)*/, _dwg_OBJECTCONTEXTDATA_fields },	/* 91 */
+  { "OBJECT_PTR", DWG_TYPE_OBJECT_PTR /*(559)*/, _dwg_OBJECT_PTR_fields },	/* 92 */
+  { "OLE2FRAME", DWG_TYPE_OLE2FRAME /*(74)*/, _dwg_OLE2FRAME_fields },	/* 93 */
+  { "OLEFRAME", DWG_TYPE_OLEFRAME /*(43)*/, _dwg_OLEFRAME_fields },	/* 94 */
+  { "PERSSUBENTMANAGER", DWG_TYPE_PERSSUBENTMANAGER /*(560)*/, _dwg_PERSSUBENTMANAGER_fields },	/* 95 */
+  { "PLACEHOLDER", DWG_TYPE_PLACEHOLDER /*(80)*/, _dwg_PLACEHOLDER_fields },	/* 96 */
+  { "PLANESURFACE", DWG_TYPE_PLANESURFACE /*(577)*/, _dwg_PLANESURFACE_fields },	/* 97 */
+  { "PLOTSETTINGS", DWG_TYPE_PLOTSETTINGS /*(561)*/, _dwg_PLOTSETTINGS_fields },	/* 98 */
+  { "POINT", DWG_TYPE_POINT /*(27)*/, _dwg_POINT_fields },	/* 99 */
+  { "POINTCLOUD", DWG_TYPE_POINTCLOUD /*(562)*/, NULL },	/* 100 */
+  { "POLYLINE_2D", DWG_TYPE_POLYLINE_2D /*(15)*/, _dwg_POLYLINE_2D_fields },	/* 101 */
+  { "POLYLINE_3D", DWG_TYPE_POLYLINE_3D /*(16)*/, _dwg_POLYLINE_3D_fields },	/* 102 */
+  { "POLYLINE_MESH", DWG_TYPE_POLYLINE_MESH /*(30)*/, _dwg_POLYLINE_MESH_fields },	/* 103 */
+  { "POLYLINE_PFACE", DWG_TYPE_POLYLINE_PFACE /*(29)*/, _dwg_POLYLINE_PFACE_fields },	/* 104 */
+  { "PROXY_ENTITY", DWG_TYPE_PROXY_ENTITY /*(498)*/, _dwg_PROXY_ENTITY_fields },	/* 105 */
+  { "PROXY_OBJECT", DWG_TYPE_PROXY_OBJECT /*(499)*/, _dwg_PROXY_OBJECT_fields },	/* 106 */
+  { "RAPIDRTRENDERENVIRONMENT", DWG_TYPE_RAPIDRTRENDERENVIRONMENT /*(567)*/, NULL },	/* 107 */
+  { "RAPIDRTRENDERSETTINGS", DWG_TYPE_RAPIDRTRENDERSETTINGS /*(568)*/, NULL },	/* 108 */
+  { "RASTERVARIABLES", DWG_TYPE_RASTERVARIABLES /*(563)*/, _dwg_RASTERVARIABLES_fields },	/* 109 */
+  { "RAY", DWG_TYPE_RAY /*(40)*/, _dwg_RAY_fields },	/* 110 */
+  { "REGION", DWG_TYPE_REGION /*(37)*/, _dwg_3DSOLID_fields },	/* 111 */
+  { "RENDERENVIRONMENT", DWG_TYPE_RENDERENVIRONMENT /*(564)*/, _dwg_RENDERENVIRONMENT_fields },	/* 112 */
+  { "RENDERGLOBAL", DWG_TYPE_RENDERGLOBAL /*(565)*/, _dwg_RENDERGLOBAL_fields },	/* 113 */
+  { "REVOLVEDSURFACE", DWG_TYPE_REVOLVEDSURFACE /*(580)*/, _dwg_REVOLVEDSURFACE_fields },	/* 114 */
+  { "RTEXT", DWG_TYPE_RTEXT /*(569)*/, NULL },	/* 115 */
+  { "SCALE", DWG_TYPE_SCALE /*(570)*/, _dwg_SCALE_fields },	/* 116 */
+  { "SECTIONVIEWSTYLE", DWG_TYPE_SECTIONVIEWSTYLE /*(571)*/, NULL },	/* 117 */
+  { "SEQEND", DWG_TYPE_SEQEND /*(6)*/, _dwg_SEQEND_fields },	/* 118 */
+  { "SHAPE", DWG_TYPE_SHAPE /*(33)*/, _dwg_SHAPE_fields },	/* 119 */
+  { "SOLID", DWG_TYPE_SOLID /*(31)*/, _dwg_SOLID_fields },	/* 120 */
+  { "SORTENTSTABLE", DWG_TYPE_SORTENTSTABLE /*(572)*/, _dwg_SORTENTSTABLE_fields },	/* 121 */
+  { "SPATIAL_FILTER", DWG_TYPE_SPATIAL_FILTER /*(573)*/, _dwg_SPATIAL_FILTER_fields },	/* 122 */
+  { "SPATIAL_INDEX", DWG_TYPE_SPATIAL_INDEX /*(574)*/, _dwg_SPATIAL_INDEX_fields },	/* 123 */
+  { "SPLINE", DWG_TYPE_SPLINE /*(36)*/, _dwg_SPLINE_fields },	/* 124 */
+  { "STYLE", DWG_TYPE_STYLE /*(53)*/, _dwg_STYLE_fields },	/* 125 */
+  { "STYLE_CONTROL", DWG_TYPE_STYLE_CONTROL /*(52)*/, _dwg_STYLE_CONTROL_fields },	/* 126 */
+  { "SUN", DWG_TYPE_SUN /*(575)*/, _dwg_SUN_fields },	/* 127 */
+  { "SUNSTUDY", DWG_TYPE_SUNSTUDY /*(576)*/, _dwg_SUNSTUDY_fields },	/* 128 */
+  { "SWEPTSURFACE", DWG_TYPE_SWEPTSURFACE /*(581)*/, _dwg_SWEPTSURFACE_fields },	/* 129 */
+  { "TABLE", DWG_TYPE_TABLE /*(582)*/, _dwg_TABLE_fields },	/* 130 */
+  { "TABLECONTENT", DWG_TYPE_TABLECONTENT /*(583)*/, _dwg_TABLECONTENT_fields },	/* 131 */
+  { "TABLEGEOMETRY", DWG_TYPE_TABLEGEOMETRY /*(584)*/, _dwg_TABLEGEOMETRY_fields },	/* 132 */
+  { "TABLESTYLE", DWG_TYPE_TABLESTYLE /*(585)*/, _dwg_TABLESTYLE_fields },	/* 133 */
+  { "TEXT", DWG_TYPE_TEXT /*(1)*/, _dwg_TEXT_fields },	/* 134 */
+  { "TOLERANCE", DWG_TYPE_TOLERANCE /*(46)*/, _dwg_TOLERANCE_fields },	/* 135 */
+  { "TRACE", DWG_TYPE_TRACE /*(32)*/, _dwg_TRACE_fields },	/* 136 */
+  { "UCS", DWG_TYPE_UCS /*(63)*/, _dwg_UCS_fields },	/* 137 */
+  { "UCS_CONTROL", DWG_TYPE_UCS_CONTROL /*(62)*/, _dwg_UCS_CONTROL_fields },	/* 138 */
+  { "UNDERLAY", DWG_TYPE_UNDERLAY /*(586)*/, _dwg_UNDERLAY_fields },	/* 139 */
+  { "UNDERLAYDEFINITION", DWG_TYPE_UNDERLAYDEFINITION /*(587)*/, _dwg_UNDERLAYDEFINITION_fields },	/* 140 */
+  { "UNKNOWN_ENT", DWG_TYPE_UNKNOWN_ENT /*(65534)*/, _dwg_UNKNOWN_ENT_fields },	/* 141 */
+  { "UNKNOWN_OBJ", DWG_TYPE_UNKNOWN_OBJ /*(65535)*/, _dwg_UNKNOWN_OBJ_fields },	/* 142 */
+  { "UNUSED", DWG_TYPE_UNUSED /*(0)*/, NULL },	/* 143 */
+  { "VBA_PROJECT", DWG_TYPE_VBA_PROJECT /*(81)*/, _dwg_VBA_PROJECT_fields },	/* 144 */
+  { "VERTEX_2D", DWG_TYPE_VERTEX_2D /*(10)*/, _dwg_VERTEX_2D_fields },	/* 145 */
+  { "VERTEX_3D", DWG_TYPE_VERTEX_3D /*(11)*/, _dwg_VERTEX_3D_fields },	/* 146 */
+  { "VERTEX_MESH", DWG_TYPE_VERTEX_MESH /*(12)*/, _dwg_VERTEX_3D_fields },	/* 147 */
+  { "VERTEX_PFACE", DWG_TYPE_VERTEX_PFACE /*(13)*/, _dwg_VERTEX_3D_fields },	/* 148 */
+  { "VERTEX_PFACE_FACE", DWG_TYPE_VERTEX_PFACE_FACE /*(14)*/, _dwg_VERTEX_PFACE_FACE_fields },	/* 149 */
+  { "VIEW", DWG_TYPE_VIEW /*(61)*/, _dwg_VIEW_fields },	/* 150 */
+  { "VIEWPORT", DWG_TYPE_VIEWPORT /*(34)*/, _dwg_VIEWPORT_fields },	/* 151 */
+  { "VIEW_CONTROL", DWG_TYPE_VIEW_CONTROL /*(60)*/, _dwg_VIEW_CONTROL_fields },	/* 152 */
+  { "VISUALSTYLE", DWG_TYPE_VISUALSTYLE /*(588)*/, _dwg_VISUALSTYLE_fields },	/* 153 */
+  { "VPORT", DWG_TYPE_VPORT /*(65)*/, _dwg_VPORT_fields },	/* 154 */
+  { "VPORT_CONTROL", DWG_TYPE_VPORT_CONTROL /*(64)*/, _dwg_VPORT_CONTROL_fields },	/* 155 */
+  { "VPORT_ENTITY_CONTROL", DWG_TYPE_VPORT_ENTITY_CONTROL /*(70)*/, _dwg_VPORT_ENTITY_CONTROL_fields },	/* 156 */
+  { "VPORT_ENTITY_HEADER", DWG_TYPE_VPORT_ENTITY_HEADER /*(71)*/, _dwg_VPORT_ENTITY_HEADER_fields },	/* 157 */
+  { "WIPEOUT", DWG_TYPE_WIPEOUT /*(589)*/, _dwg_WIPEOUT_fields },	/* 158 */
+  { "WIPEOUTVARIABLES", DWG_TYPE_WIPEOUTVARIABLES /*(590)*/, _dwg_WIPEOUTVARIABLES_fields },	/* 159 */
+  { "XLINE", DWG_TYPE_XLINE /*(41)*/, _dwg_RAY_fields },	/* 160 */
+  { "XRECORD", DWG_TYPE_XRECORD /*(79)*/, _dwg_XRECORD_fields },	/* 161 */
+  { "XREFPANELOBJECT", DWG_TYPE_XREFPANELOBJECT /*(591)*/, NULL },	/* 162 */
 
 };
 
 /* Fields for all the subclasses, sorted for bsearch */
-static const struct _name_type_fields dwg_list_subclasses[] = {
-  { "3DSOLID_silhouette", 0, _dwg_3DSOLID_silhouette_fields },	/* 0 */
-  { "3DSOLID_wire", 0, _dwg_3DSOLID_wire_fields },	/* 1 */
-  { "ACTIONBODY", 0, _dwg_ACTIONBODY_fields },	/* 2 */
-  { "CELLSTYLEMAP_Cell", 0, _dwg_CELLSTYLEMAP_Cell_fields },	/* 3 */
-  { "DIMASSOC_ref", 0, _dwg_DIMASSOC_ref_fields },	/* 4 */
-  { "DIMENSION_common", 0, _dwg_DIMENSION_common_fields },	/* 5 */
-  { "EVAL_Node", 0, _dwg_EVAL_Node_fields },	/* 6 */
-  { "FIELD_ChildValue", 0, _dwg_FIELD_ChildValue_fields },	/* 7 */
-  { "GEODATA_meshface", 0, _dwg_GEODATA_meshface_fields },	/* 8 */
-  { "GEODATA_meshpt", 0, _dwg_GEODATA_meshpt_fields },	/* 9 */
-  { "HATCH_DefLine", 0, _dwg_HATCH_DefLine_fields },	/* 10 */
-  { "HATCH_color", 0, _dwg_HATCH_color_fields },	/* 11 */
-  { "HATCH_control_point", 0, _dwg_HATCH_control_point_fields },	/* 12 */
-  { "HATCH_path", 0, _dwg_HATCH_path_fields },	/* 13 */
-  { "HATCH_pathseg", 0, _dwg_HATCH_pathseg_fields },	/* 14 */
-  { "HATCH_polylinepath", 0, _dwg_HATCH_polylinepath_fields },	/* 15 */
-  { "LEADER_ArrowHead", 0, _dwg_LEADER_ArrowHead_fields },	/* 16 */
-  { "LEADER_BlockLabel", 0, _dwg_LEADER_BlockLabel_fields },	/* 17 */
-  { "LEADER_Break", 0, _dwg_LEADER_Break_fields },	/* 18 */
-  { "LEADER_Line", 0, _dwg_LEADER_Line_fields },	/* 19 */
-  { "LEADER_Node", 0, _dwg_LEADER_Node_fields },	/* 20 */
-  { "LTYPE_dash", 0, _dwg_LTYPE_dash_fields },	/* 21 */
-  { "LWPOLYLINE_width", 0, _dwg_LWPOLYLINE_width_fields },	/* 22 */
-  { "MLEADER_AnnotContext", 0, _dwg_MLEADER_AnnotContext_fields },	/* 23 */
-  { "MLINESTYLE_line", 0, _dwg_MLINESTYLE_line_fields },	/* 24 */
-  { "MLINE_line", 0, _dwg_MLINE_line_fields },	/* 25 */
-  { "MLINE_vertex", 0, _dwg_MLINE_vertex_fields },	/* 26 */
-  { "SPLINE_control_point", 0, _dwg_SPLINE_control_point_fields },	/* 27 */
-  { "SPLINE_point", 0, _dwg_SPLINE_point_fields },	/* 28 */
-  { "SUNSTUDY_Dates", 0, _dwg_SUNSTUDY_Dates_fields },	/* 29 */
-  { "TABLEGEOMETRY_Cell", 0, _dwg_TABLEGEOMETRY_Cell_fields },	/* 30 */
-  { "TABLESTYLE_Cell", 0, _dwg_TABLESTYLE_Cell_fields },	/* 31 */
-  { "TABLE_BreakHeight", 0, _dwg_TABLE_BreakHeight_fields },	/* 32 */
-  { "TABLE_BreakRow", 0, _dwg_TABLE_BreakRow_fields },	/* 33 */
-  { "TABLE_CustomDataItem", 0, _dwg_TABLE_CustomDataItem_fields },	/* 34 */
-  { "TABLE_cell", 0, _dwg_TABLE_cell_fields },	/* 35 */
-  { "TABLE_value", 0, _dwg_TABLE_value_fields },	/* 36 */
+static const struct _name_subclass_fields dwg_list_subclasses[] = {
+  { "3DSOLID_silhouette", (int)DWG_TYPE__3DSOLID, NULL, _dwg_3DSOLID_silhouette_fields },	/* 0 */
+  { "3DSOLID_wire", (int)DWG_TYPE__3DSOLID, NULL, _dwg_3DSOLID_wire_fields },	/* 1 */
+  { "ACTIONBODY", 0, "AcDbAssocActionBody", _dwg_ACTIONBODY_fields },	/* 2 */
+  { "CELLSTYLEMAP_Cell", (int)DWG_TYPE_CELLSTYLEMAP, NULL, _dwg_CELLSTYLEMAP_Cell_fields },	/* 3 */
+  { "DIMASSOC_ref", (int)DWG_TYPE_DIMASSOC, NULL, _dwg_DIMASSOC_ref_fields },	/* 4 */
+  { "DIMENSION_common", 0, "AcDbDimension", _dwg_DIMENSION_common_fields },	/* 5 */
+  { "EVAL_Node", 0, NULL, _dwg_EVAL_Node_fields },	/* 6 */
+  { "FIELD_ChildValue", (int)DWG_TYPE_FIELD, NULL, _dwg_FIELD_ChildValue_fields },	/* 7 */
+  { "GEODATA_meshface", (int)DWG_TYPE_GEODATA, NULL, _dwg_GEODATA_meshface_fields },	/* 8 */
+  { "GEODATA_meshpt", (int)DWG_TYPE_GEODATA, NULL, _dwg_GEODATA_meshpt_fields },	/* 9 */
+  { "HATCH_DefLine", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_DefLine_fields },	/* 10 */
+  { "HATCH_color", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_color_fields },	/* 11 */
+  { "HATCH_control_point", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_control_point_fields },	/* 12 */
+  { "HATCH_path", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_path_fields },	/* 13 */
+  { "HATCH_pathseg", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_pathseg_fields },	/* 14 */
+  { "HATCH_polylinepath", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_polylinepath_fields },	/* 15 */
+  { "LEADER_ArrowHead", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_ArrowHead_fields },	/* 16 */
+  { "LEADER_BlockLabel", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_BlockLabel_fields },	/* 17 */
+  { "LEADER_Break", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Break_fields },	/* 18 */
+  { "LEADER_Line", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Line_fields },	/* 19 */
+  { "LEADER_Node", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Node_fields },	/* 20 */
+  { "LTYPE_dash", (int)DWG_TYPE_LTYPE, NULL, _dwg_LTYPE_dash_fields },	/* 21 */
+  { "LWPOLYLINE_width", (int)DWG_TYPE_LWPOLYLINE, NULL, _dwg_LWPOLYLINE_width_fields },	/* 22 */
+  { "MLEADER_AnnotContext", 0, NULL, _dwg_MLEADER_AnnotContext_fields },	/* 23 */
+  { "MLINESTYLE_line", (int)DWG_TYPE_MLINESTYLE, NULL, _dwg_MLINESTYLE_line_fields },	/* 24 */
+  { "MLINE_line", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_line_fields },	/* 25 */
+  { "MLINE_vertex", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_vertex_fields },	/* 26 */
+  { "SPLINE_control_point", (int)DWG_TYPE_SPLINE, NULL, _dwg_SPLINE_control_point_fields },	/* 27 */
+  { "SPLINE_point", (int)DWG_TYPE_SPLINE, NULL, _dwg_SPLINE_point_fields },	/* 28 */
+  { "SUNSTUDY_Dates", (int)DWG_TYPE_SUNSTUDY, NULL, _dwg_SUNSTUDY_Dates_fields },	/* 29 */
+  { "TABLEGEOMETRY_Cell", (int)DWG_TYPE_TABLEGEOMETRY, NULL, _dwg_TABLEGEOMETRY_Cell_fields },	/* 30 */
+  { "TABLESTYLE_Cell", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_Cell_fields },	/* 31 */
+  { "TABLE_BreakHeight", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakHeight_fields },	/* 32 */
+  { "TABLE_BreakRow", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakRow_fields },	/* 33 */
+  { "TABLE_CustomDataItem", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_CustomDataItem_fields },	/* 34 */
+  { "TABLE_cell", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_cell_fields },	/* 35 */
+  { "TABLE_value", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_value_fields },	/* 36 */
 
 };
 
@@ -4208,7 +4215,7 @@ dwg_dynapi_subclass_fields (const char *restrict name)
   if (p)
     {
       const int i = (p - (char *)dwg_list_subclasses) / sizeof (dwg_list_subclasses[0]);
-      const struct _name_type_fields *f = &dwg_list_subclasses[i];
+      const struct _name_subclass_fields *f = &dwg_list_subclasses[i];
       return f->fields;
     }
   else
