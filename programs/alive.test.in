@@ -116,7 +116,7 @@ case $PROGS in
   *dwggrep*)
     top_builddir=..
     echo @LTEXEC@ ./dwggrep -i -c tekst ${datadir}/example_*.dwg
-    if test x"`@LTEXEC@ ./dwggrep -i -c tekst ${datadir}/example_*.dwg`" != x"21"; then
+    if test x"`@LTEXEC@ ./dwggrep -i -c tekst ${datadir}/example_*.dwg`" != x"24"; then
       problems=$(expr 1 + $problems)
       echo dwggrep failure $?
     fi

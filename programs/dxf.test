@@ -96,7 +96,7 @@ for dwg in $datadir/example_*.dwg; do
     tgt=../$(basename "$dxf")
     log=$(basename "$tgt").log
     rm "$log" 2>/dev/null
-    if [ "$tgt" != "../example_r14.dxf" ]; then
+    if [ "$tgt" != "../example_r14.dxf" -a "$tgt" != "../example_r13.dxf" ]; then
         for dxfname in ACDBPERSSUBENTMANAGER ACDBASSOCDEPENDENCY
         do
             if [ -z "$enable_debug" ]; then
