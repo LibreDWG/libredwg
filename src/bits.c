@@ -52,8 +52,8 @@ bit_advance_position (Bit_Chain *dat, long advance)
       if (dat->byte != dat->size - 1 || dat->bit != 0)
         {
           loglevel = dat->opts & 0xf;
-          LOG_ERROR ("buffer overflow at pos %lu, size %lu, advance by %ld",
-                     dat->byte, dat->size, advance)
+          LOG_ERROR ("%s buffer overflow at pos %lu, size %lu, advance by %ld",
+                     __FUNCTION__, dat->byte, dat->size, advance)
         }
       dat->byte = dat->size - 1;
       dat->bit = 0;
@@ -90,7 +90,8 @@ bit_set_position (Bit_Chain *dat, unsigned long bitpos)
   if (dat->byte > dat->size || (dat->byte == dat->size && dat->bit))
     {
       loglevel = dat->opts & 0xf;
-      LOG_ERROR ("buffer overflow at %lu, have %lu", dat->byte, dat->size)
+      LOG_ERROR ("%s buffer overflow at %lu, have %lu", __FUNCTION__,
+                 dat->byte, dat->size)
     }
 }
 /* Set the chain so that dat->byte starts at 0 */
@@ -115,7 +116,7 @@ bit_read_B (Bit_Chain *dat)
   if (dat->byte >= dat->size)
     {
       loglevel = dat->opts & 0xf;
-      LOG_ERROR ("buffer overflow at %lu", dat->byte)
+      LOG_ERROR ("%s buffer overflow at %lu", __FUNCTION__, dat->byte)
       return 0;
     }
   byte = dat->chain[dat->byte];
@@ -152,7 +153,7 @@ bit_read_BB (Bit_Chain *dat)
   if (dat->byte >= dat->size)
     {
       loglevel = dat->opts & 0xf;
-      LOG_ERROR ("buffer overflow at %lu", dat->byte)
+      LOG_ERROR ("%s buffer overflow at %lu", __FUNCTION__, dat->byte)
       return 0;
     }
   byte = dat->chain[dat->byte];
@@ -288,7 +289,7 @@ bit_read_RC (Bit_Chain *dat)
   if (dat->byte >= dat->size)
     {
       loglevel = dat->opts & 0xf;
-      LOG_ERROR ("buffer overflow at %lu", dat->byte)
+      LOG_ERROR ("%s buffer overflow at %lu", __FUNCTION__, dat->byte)
       return 0;
     }
   byte = dat->chain[dat->byte];
@@ -1213,8 +1214,8 @@ bit_check_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
   if (dat->byte + start_address > dat->size)
     {
       loglevel = dat->opts & 0xf;
-      LOG_ERROR ("buffer overflow at pos %lu, size %lu",
-                 dat->byte, dat->size)
+      LOG_ERROR ("%s buffer overflow at pos %lu, size %lu",
+                 __FUNCTION__, dat->byte, dat->size)
       return 0;
     }
 
