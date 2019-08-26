@@ -63,7 +63,7 @@
     }
   VERSIONS(R_13, R_2000)
     {
-      FIELD_HANDLE (vport_entity_header, 5, 0); //current view
+      FIELD_HANDLE (VPORT_ENTITY_HEADER, 5, 0); //current view
     }
   SINCE(R_13)
     {
@@ -126,9 +126,9 @@
   FIELD_B (DISPSILH, 70);
   FIELD_B (PELLIPSE, 70);
 
-  VERSION(R_13) {
-    FIELD_BS (SAVEIMAGES, 70); // ??
-  }
+  //VERSION(R_13) {
+  //  FIELD_BS (SAVEIMAGES, 70); // not in R13. maybe R13C3 only? also not in ODA
+  //}
   FIELD_BS (PROXYGRAPHICS, 70);
   UNTIL(R_14) {
     IF_ENCODE_FROM_EARLIER {

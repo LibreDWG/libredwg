@@ -595,7 +595,7 @@ typedef struct _dwg_header_variables {
   BITCODE_BL unknown_8; /* 24L */
   BITCODE_BL unknown_9; /* 0L */
   BITCODE_BS unknown_10; /* 0 r13-r14 */
-  BITCODE_H vport_entity_header; /*!< r11-r2000 */
+  BITCODE_H VPORT_ENTITY_HEADER; /*!< r11-r2000 */
   BITCODE_B DIMASO;
   BITCODE_B DIMSHO;
   BITCODE_B DIMSAV; /* undocumented */
@@ -623,7 +623,6 @@ typedef struct _dwg_header_variables {
   BITCODE_B DELOBJ;
   BITCODE_B DISPSILH;
   BITCODE_B PELLIPSE;
-  BITCODE_BS SAVEIMAGES;
   BITCODE_BS PROXYGRAPHICS;
   BITCODE_BS MEASUREMENT; /* 0 English, 1 Metric. Stored as Section 4 */
   BITCODE_BS DRAGMODE;

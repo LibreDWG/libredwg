@@ -674,8 +674,6 @@ static const Dwg_DYNAPI_field _dwg_header_variables_fields[] = {
     0,0,0, 70 },
   { "REQUIREDVERSIONS",	"BLL", sizeof (BITCODE_BLL),  OFF (struct _dwg_header_variables, REQUIREDVERSIONS),
     0,0,0, 160 },
-  { "SAVEIMAGES",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_header_variables, SAVEIMAGES),
-    0,0,0, 70 },
   { "SHADEDGE",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_header_variables, SHADEDGE),
     0,0,0, 70 },
   { "SHADEDIF",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_header_variables, SHADEDIF),
@@ -828,6 +826,8 @@ static const Dwg_DYNAPI_field _dwg_header_variables_fields[] = {
     1,0,0, 0 },
   { "VPORT_ENTITY_CONTROL_OBJECT",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_header_variables, VPORT_ENTITY_CONTROL_OBJECT),
     1,0,0, 0 },
+  { "VPORT_ENTITY_HEADER",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_header_variables, VPORT_ENTITY_HEADER),
+    1,0,0, 0 },
   { "WIREFRAME",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_header_variables, WIREFRAME),
     0,0,0, 0 },
   { "WORLDVIEW",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_header_variables, WORLDVIEW),
@@ -900,8 +900,6 @@ static const Dwg_DYNAPI_field _dwg_header_variables_fields[] = {
     1,1,1, 0 },
   { "unknown_text4",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_header_variables, unknown_text4),
     1,1,1, 0 },
-  { "vport_entity_header",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_header_variables, vport_entity_header),
-    1,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 

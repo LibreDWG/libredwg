@@ -317,12 +317,12 @@ test_header (const Dwg_Data *dwg)
   }
   {
     BITCODE_H vport_entity_header;
-    if (dwg_dynapi_header_value (dwg, "vport_entity_header", &vport_entity_header, NULL)
-        && !memcmp (&vport_entity_header, &dwg->header_vars.vport_entity_header, sizeof (dwg->header_vars.vport_entity_header))
+    if (dwg_dynapi_header_value (dwg, "VPORT_ENTITY_HEADER", &vport_entity_header, NULL)
+        && !memcmp (&vport_entity_header, &dwg->header_vars.VPORT_ENTITY_HEADER, sizeof (dwg->header_vars.VPORT_ENTITY_HEADER))
        )
       pass ();
     else
-      fail ("HEADER.vport_entity_header [H]");
+      fail ("HEADER.VPORT_ENTITY_HEADER [H]");
   }
   {
     BITCODE_B dimaso;
@@ -808,24 +808,6 @@ test_header (const Dwg_Data *dwg)
             dwg->header_vars.PELLIPSE, pellipse);
     pellipse--;
     dwg_dynapi_header_set_value (dwg, "PELLIPSE", &pellipse, 0);
-
-  }
-  {
-    BITCODE_BS saveimages;
-    if (dwg_dynapi_header_value (dwg, "SAVEIMAGES", &saveimages, NULL)
-        && saveimages == dwg->header_vars.SAVEIMAGES)
-      pass ();
-    else
-      fail ("HEADER.SAVEIMAGES [BS] %hu != %hu", dwg->header_vars.SAVEIMAGES, saveimages);
-    saveimages++;
-    if (dwg_dynapi_header_set_value (dwg, "SAVEIMAGES", &saveimages, 0)
-        && saveimages == dwg->header_vars.SAVEIMAGES)
-      pass ();
-    else
-      fail ("HEADER.SAVEIMAGES [BS] set+1 %hu != %hu",
-            dwg->header_vars.SAVEIMAGES, saveimages);
-    saveimages--;
-    dwg_dynapi_header_set_value (dwg, "SAVEIMAGES", &saveimages, 0);
 
   }
   {

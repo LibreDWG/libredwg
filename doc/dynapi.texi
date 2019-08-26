@@ -495,8 +495,6 @@ B,	DXF 290
 B,	DXF 70
 @item REQUIREDVERSIONS
 BLL,	DXF 160
-@item SAVEIMAGES
-BS,	DXF 70
 @item SHADEDGE
 BS,	DXF 70
 @item SHADEDIF
@@ -649,6 +647,8 @@ B,	DXF 70
 H
 @item VPORT_ENTITY_CONTROL_OBJECT
 H
+@item VPORT_ENTITY_HEADER
+H
 @item WIREFRAME
 B
 @item WORLDVIEW
@@ -721,8 +721,6 @@ TV
 TV
 @item unknown_text4
 TV
-@item vport_entity_header
-H
 
 @end vtable
 @end indentedblock
