@@ -1211,11 +1211,11 @@ bit_check_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
       dat->bit = 0;
     }
 
-  if (dat->byte + start_address > dat->size)
+  if (start_address > dat->byte || dat->byte >= dat->size)
     {
       loglevel = dat->opts & 0xf;
-      LOG_ERROR ("%s buffer overflow at pos %lu, size %lu",
-                 __FUNCTION__, dat->byte, dat->size)
+      LOG_ERROR ("%s buffer overflow at pos %lu-%lu, size %lu",
+                 __FUNCTION__, start_address, dat->byte, dat->size)
       return 0;
     }
 
