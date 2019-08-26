@@ -1606,7 +1606,7 @@ read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl,
       else
         {
           LOG_WARN (
-              "Handles section page CRC: %04X vs calc. %04X from %lx-%lx\n",
+              "Handles section page CRC mismatch: %04X vs calc. %04X from %lx-%lx\n",
               crc2, crc1, startpos, hdl_dat.byte - 2);
           error |= DWG_ERR_WRONGCRC;
         }

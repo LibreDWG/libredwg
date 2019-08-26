@@ -1221,7 +1221,7 @@ bit_check_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
   calculated = bit_calc_CRC (seed, &(dat->chain[start_address]),
                              dat->byte - start_address);
   read = bit_read_RS (dat);
-  LOG_HANDLE ("crc: %04X [RSx]\n", read);
+  LOG_TRACE ("crc: %04X [RSx]\n", read);
   if (calculated == read)
     {
       LOG_HANDLE (" check_CRC %lu-%lu: %04X == %04X\n", start_address,
