@@ -1573,6 +1573,156 @@ add_block_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return pair;
 }
 
+static int
+add_SPLINE (Dwg_Entity_SPLINE *_o, Bit_Chain *restrict dat,
+            Dxf_Pair *restrict pair, int *jp, BITCODE_RS *flagp)
+{
+  int j = *jp;
+  if (pair->code == 210 || pair->code == 220 || pair->code == 230)
+    return 0; // ignore extrusion in the dwg (planar only)
+  else if (pair->code == 70)
+    {
+      BITCODE_RS flag = *flagp;
+      *flagp = flag = pair->value.i;
+      _o->flag = flag;
+      LOG_TRACE ("SPLINE.flag = %d [70 RS]\n", flag);
+      if (flag & 1)
+        {
+          _o->closed_b = 1;
+          LOG_TRACE ("SPLINE.closed_b = 1 [B] (1st bit)\n");
+        }
+      if (flag & 2)
+        {
+          _o->periodic = 1;
+          LOG_TRACE ("SPLINE.periodic = 1 [B] (2nd bit)\n");
+        }
+      if (flag & 4)
+        {
+          _o->rational = 1;
+          LOG_TRACE ("SPLINE.rational = 1 [B] (3rd bit)\n");
+        }
+      if (flag & 8)
+        {
+          _o->weighted = 1;
+          LOG_TRACE ("SPLINE.weighted = 1 [B] (4th bit)\n");
+        }
+      if (flag & 1024)
+        {
+          _o->scenario = 2; // bezier: planar, not rational (8+32)
+          LOG_TRACE ("SPLINE.scenario = 2 [B] (bezier)\n");
+        }
+      return 1; // found
+    }
+  else if (pair->code == 72)
+    {
+      _o->num_knots = pair->value.i;
+      *jp = 0;
+      _o->knots = calloc (_o->num_knots, sizeof (BITCODE_BD));
+      LOG_TRACE ("SPLINE.num_knots = %d [72 BS]\n", _o->num_knots);
+      return 1; // found
+    }
+  else if (pair->code == 73)
+    {
+      _o->num_ctrl_pts = pair->value.i;
+      *jp = 0;
+      _o->ctrl_pts = calloc (_o->num_ctrl_pts,
+                             sizeof (Dwg_SPLINE_control_point));
+      LOG_TRACE ("SPLINE.ctrl_pts = %d [73 BS]\n", _o->num_ctrl_pts);
+      return 1; // found
+    }
+  else if (pair->code == 74)
+    {
+      _o->num_fit_pts = pair->value.i;
+      *jp = 0;
+      _o->fit_pts = calloc (_o->num_fit_pts, sizeof (Dwg_SPLINE_point));
+      _o->scenario = 2;
+      LOG_TRACE ("SPLINE.num_fit_pts = %d [74 BS]\n", _o->num_fit_pts);
+      return 1; // found
+    }
+  else if (pair->code == 40) // knots[] BD*
+    {
+      if (*jp >= (int)_o->num_knots)
+        {
+          LOG_ERROR ("SPLINE.knots[%d] overflow, max %d", *jp, _o->num_knots);
+          return 1; // found
+        }
+      _o->knots[j] = pair->value.d;
+      LOG_TRACE ("SPLINE.knots[%d] = %f [40 BD*]\n", *jp, pair->value.d);
+      j++;
+      *jp = j;
+      if (j == (int)_o->num_knots)
+        *jp = 0;
+      return 1; // found
+    }
+  else if (pair->code == 10) // ctrl_pts[].x 3BD
+    {
+      if (*jp >= (int)_o->num_ctrl_pts)
+        {
+          LOG_ERROR ("SPLINE.ctrl_pts[%d] overflow, max %d", *jp,
+                     _o->num_ctrl_pts);
+          return 1; // found
+        }
+      _o->ctrl_pts[j].parent = _o;
+      _o->ctrl_pts[j].x = pair->value.d;
+      return 1; // found
+    }
+  else if (pair->code == 20) // ctrl_pts[].y 3BD
+    {
+      _o->ctrl_pts[j].y = pair->value.d;
+      return 1; // found
+    }
+  else if (pair->code == 30) // ctrl_pts[].z 3BD
+    {
+      _o->ctrl_pts[j].z = pair->value.d;
+      LOG_TRACE ("SPLINE.ctrl_pts[%d] = (%f, %f, %f) [10 BD*]\n", *jp,
+                 _o->ctrl_pts[j].x, _o->ctrl_pts[j].y, _o->ctrl_pts[j].z);
+      j++;
+      *jp = j;
+      if (j == (int)_o->num_ctrl_pts)
+        *jp = 0;
+      return 1; // found
+    }
+  else if (pair->code == 41) // ctrl_pts[].z 3BD
+    {
+      _o->ctrl_pts[j].w = pair->value.d;
+      LOG_TRACE ("SPLINE.ctrl_pts[%d].w = %f [41 BD*]\n", *jp,
+                 _o->ctrl_pts[j].w);
+      j++;
+      *jp = j;
+      return 1; // found
+    }
+  else if (pair->code == 11) // fit_pts[].x 3BD
+    {
+      if (*jp >= _o->num_fit_pts)
+        {
+          LOG_ERROR ("SPLINE.fit_pts[%d] overflow, max %d", *jp,
+                     _o->num_fit_pts);
+          return 1; // found
+        }
+      _o->fit_pts[j].parent = _o;
+      _o->fit_pts[j].x = pair->value.d;
+      return 1; // found
+    }
+  else if (pair->code == 21) // fit_pts[].y 3BD
+    {
+      _o->fit_pts[j].y = pair->value.d;
+      return 1; // found
+    }
+  else if (pair->code == 31) // fit_pts[].z 3BD
+    {
+      _o->fit_pts[j].z = pair->value.d;
+      LOG_TRACE ("SPLINE.fit_pts[%d] = (%f, %f, %f) [10 BD*]\n", *jp,
+                 _o->fit_pts[j].x, _o->fit_pts[j].y, _o->fit_pts[j].z);
+      j++;
+      *jp = j;
+      if (j == (int)_o->num_fit_pts)
+        *jp = 0;
+      return 1; // found
+    }
+  return 0;
+}
+#endif
+
 #define UPGRADE_ENTITY(FROM, TO)                 \
   obj->type = obj->fixedtype = DWG_TYPE_##TO;    \
   obj->name = obj->dxfname = (char*)#TO;         \
@@ -2209,144 +2359,10 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
             }
           else if (strEQc (name, "SPLINE"))
             {
-              // TODO can extract to add_SPLINE (obj, dat, pair, &j)?
-              Dwg_Entity_SPLINE *_o = obj->tio.entity->tio.SPLINE;
               if (pair->code == 210 || pair->code == 220 || pair->code == 230)
                 break; // ignore extrusion in the dwg (planar only)
-              else if (pair->code == 70)
-                {
-                  flag = pair->value.i;
-                  _o->flag = flag;
-                  LOG_TRACE ("SPLINE.flag = %d [70 RS]\n", flag);
-                  if (flag & 1)
-                    {
-                      _o->closed_b = 1;
-                      LOG_TRACE ("SPLINE.closed_b = 1 [B] (1st bit)\n");
-                    }
-                  if (flag & 2)
-                    {
-                      _o->periodic = 1;
-                      LOG_TRACE ("SPLINE.periodic = 1 [B] (2nd bit)\n");
-                    }
-                  if (flag & 4)
-                    {
-                      _o->rational = 1;
-                      LOG_TRACE ("SPLINE.rational = 1 [B] (3rd bit)\n");
-                    }
-                  if (flag & 8)
-                    {
-                      _o->weighted = 1;
-                      LOG_TRACE ("SPLINE.weighted = 1 [B] (4th bit)\n");
-                    }
-                  if (flag & 1024)
-                    {
-                      _o->scenario = 2; // bezier: planar, not rational (8+32)
-                      LOG_TRACE ("SPLINE.scenario = 2 [B] (bezier)\n");
-                    }
-                  goto next_pair; // found
-                }
-              else if (pair->code == 72)
-                {
-                  _o->num_knots = pair->value.i;
-                  j = 0;
-                  _o->knots = calloc (_o->num_knots, sizeof (BITCODE_BD));
-                  LOG_TRACE ("SPLINE.num_knots = %d [72 BS]\n", _o->num_knots);
-                  goto next_pair; // found
-                }
-              else if (pair->code == 73)
-                {
-                  _o->num_ctrl_pts = pair->value.i;
-                  j = 0;
-                  _o->ctrl_pts = calloc (_o->num_ctrl_pts,
-                                         sizeof (Dwg_SPLINE_control_point));
-                  LOG_TRACE ("SPLINE.ctrl_pts = %d [73 BS]\n", _o->num_ctrl_pts);
-                  goto next_pair; // found
-                }
-              else if (pair->code == 74)
-                {
-                  _o->num_fit_pts = pair->value.i;
-                  j = 0;
-                  _o->fit_pts = calloc (_o->num_fit_pts, sizeof (Dwg_SPLINE_point));
-                  _o->scenario = 2;
-                  LOG_TRACE ("SPLINE.num_fit_pts = %d [74 BS]\n", _o->num_fit_pts);
-                  goto next_pair; // found
-                }
-              else if (pair->code == 40) // knots[] BD*
-                {
-                  if (j >= (int)_o->num_knots)
-                    {
-                      LOG_ERROR ("SPLINE.knots[%d] overflow, max %d", j, _o->num_knots);
-                      goto next_pair; // found
-                    }
-                  _o->knots[j] = pair->value.d;
-                  LOG_TRACE ("SPLINE.knots[%d] = %f [40 BD*]\n", j, pair->value.d);
-                  j++;
-                  if (j == (int)_o->num_knots)
-                    j = 0;
-                  goto next_pair; // found
-                }
-              else if (pair->code == 10) // ctrl_pts[].x 3BD
-                {
-                  if (j >= (int)_o->num_ctrl_pts)
-                    {
-                      LOG_ERROR ("SPLINE.ctrl_pts[%d] overflow, max %d", j,
-                                 _o->num_ctrl_pts);
-                      goto next_pair; // found
-                    }
-                  _o->ctrl_pts[j].parent = _o;
-                  _o->ctrl_pts[j].x = pair->value.d;
-                  goto next_pair; // found
-                }
-              else if (pair->code == 20) // ctrl_pts[].y 3BD
-                {
-                  _o->ctrl_pts[j].y = pair->value.d;
-                  goto next_pair; // found
-                }
-              else if (pair->code == 30) // ctrl_pts[].z 3BD
-                {
-                  _o->ctrl_pts[j].z = pair->value.d;
-                  LOG_TRACE ("SPLINE.ctrl_pts[%d] = (%f, %f, %f) [10 BD*]\n", j,
-                             _o->ctrl_pts[j].x, _o->ctrl_pts[j].y, _o->ctrl_pts[j].z);
-                  j++;
-                  if (j == (int)_o->num_ctrl_pts)
-                    j = 0;
-                  goto next_pair; // found
-                }
-              else if (pair->code == 41) // ctrl_pts[].z 3BD
-                {
-                  _o->ctrl_pts[j].w = pair->value.d;
-                  LOG_TRACE ("SPLINE.ctrl_pts[%d].w = %f [41 BD*]\n", j,
-                             _o->ctrl_pts[j].w);
-                  j++;
-                  goto next_pair; // found
-                }
-              else if (pair->code == 11) // fit_pts[].x 3BD
-                {
-                  if (j >= _o->num_fit_pts)
-                    {
-                      LOG_ERROR ("SPLINE.fit_pts[%d] overflow, max %d", j,
-                                 _o->num_fit_pts);
-                      goto next_pair; // found
-                    }
-                  _o->fit_pts[j].parent = _o;
-                  _o->fit_pts[j].x = pair->value.d;
-                  goto next_pair; // found
-                }
-              else if (pair->code == 21) // fit_pts[].y 3BD
-                {
-                  _o->fit_pts[j].y = pair->value.d;
-                  goto next_pair; // found
-                }
-              else if (pair->code == 31) // fit_pts[].z 3BD
-                {
-                  _o->fit_pts[j].z = pair->value.d;
-                  LOG_TRACE ("SPLINE.fit_pts[%d] = (%f, %f, %f) [10 BD*]\n", j,
-                             _o->fit_pts[j].x, _o->fit_pts[j].y, _o->fit_pts[j].z);
-                  j++;
-                  if (j == (int)_o->num_fit_pts)
-                    j = 0;
-                  goto next_pair; // found
-                }
+              if (add_SPLINE (obj->tio.entity->tio.SPLINE, dat, pair, &j, &flag))
+                goto next_pair;
               else
                 goto search_field;
             }
