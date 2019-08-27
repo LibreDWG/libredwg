@@ -1036,6 +1036,482 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 }
 
 static Dxf_Pair *
+add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+           Dxf_Pair *restrict pair)
+{
+  BITCODE_BL num_paths; // 91
+  Dwg_Entity_HATCH *o = obj->tio.entity->tio.HATCH;
+  int is_plpath = 0;
+  int j = -1;
+  int k = -1;
+  int l = -1;
+
+  // valid entry codes
+  if (pair->code == 91)
+    {
+      o->num_paths = pair->value.u;
+      o->paths = calloc (o->num_paths, sizeof (Dwg_HATCH_Path));
+      LOG_TRACE ("HATCH.num_paths = %u [91 BS]\n", o->num_paths);
+    }
+  else
+  if (pair->code == 78)
+    {
+      o->num_deflines = pair->value.l;
+      LOG_TRACE ("HATCH.num_deflines = %ld [78 BS]\n", pair->value.l);
+      o->deflines = calloc (pair->value.l, sizeof (Dwg_HATCH_DefLine));
+    }
+
+  while (pair->code != 0)
+    {
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+
+      if (pair->code == 0 || pair->code == 75)
+        return pair;
+      else if (pair->code == 92)
+        {
+          j++;
+          o->paths[j].flag = pair->value.u;
+          LOG_TRACE ("HATCH.paths[%d].flag = %u [92 BL]\n", j, pair->value.u);
+          is_plpath = pair->value.u & 2;
+          o->has_derived = pair->value.u & 4;
+          LOG_TRACE ("HATCH.has_derived = %d [0 B]\n", o->has_derived);
+        }
+      else if (pair->code == 93)
+        {
+          o->paths[j].num_segs_or_paths = pair->value.u;
+          LOG_TRACE ("HATCH.paths[%d].num_segs_or_paths = %u [93 BL]\n", j, pair->value.u);
+          if (!is_plpath)
+            { /* segs */
+              o->paths[j].segs = calloc (pair->value.u, sizeof (Dwg_HATCH_PathSeg));
+            }
+          else
+            { /* polyline path */
+              o->paths[j].polyline_paths = calloc (pair->value.u,
+                                                    sizeof (Dwg_HATCH_PolylinePath));
+            }
+        }
+      else if (pair->code == 72)
+        {
+          if (!is_plpath)
+            {
+              k++;
+              if (j < (int)o->num_paths && k < (int)o->paths[j].num_segs_or_paths)
+                {
+                  o->paths[j].segs[k].type_status = pair->value.i;
+                  LOG_TRACE ("HATCH.paths[%d].segs[%d].type_status = %d [72 RC]\n",
+                             j, k, pair->value.i);
+                }
+            }
+          else
+            {
+              o->paths[j].bulges_present = pair->value.i;
+              LOG_TRACE ("HATCH.paths[%d].bulges_present = %d [72 RC]\n",
+                         j, pair->value.i);
+            }
+        }
+      else if (pair->code == 73 && is_plpath && pair->value.i)
+        {
+          o->paths[j].closed = pair->value.i;
+          LOG_TRACE ("HATCH.paths[%d].closed = %d [73 RC]\n",
+                     j, pair->value.i);
+        }
+      else if (pair->code == 94 && !is_plpath && pair->value.l)
+        {
+          o->paths[j].segs[k].degree = pair->value.l;
+          LOG_TRACE ("HATCH.paths[%d].segs[%d].degree = %ld [94 BL]\n",
+                     j, k, pair->value.l);
+        }
+      else if (pair->code == 74 && !is_plpath && pair->value.i)
+        {
+          o->paths[j].segs[k].is_periodic = pair->value.i;
+          LOG_TRACE ("HATCH.paths[%d].segs[%d].is_periodic = %d [74 B]\n",
+                     j, k, pair->value.i);
+        }
+      else if (pair->code == 95 && !is_plpath)
+        {
+          o->paths[j].segs[k].num_knots = pair->value.l;
+          LOG_TRACE ("HATCH.paths[%d].segs[%d].num_knots = %ld [95 BL]\n",
+                     j, k, pair->value.l);
+          o->paths[j].segs[k].knots = calloc (pair->value.l, sizeof(double));
+          l = -1;
+        }
+      else if (pair->code == 96 && !is_plpath)
+        {
+          o->paths[j].segs[k].num_control_points = pair->value.l;
+          LOG_TRACE ("HATCH.paths[%d].segs[%d].num_control_points = %ld [95 BL]\n",
+                     j, k, pair->value.l);
+          o->paths[j].segs[k].control_points = calloc (pair->value.l,
+                                                       sizeof(Dwg_HATCH_ControlPoint));
+          l = -1;
+        }
+      else if (pair->code == 10 && !is_plpath && !o->num_seeds)
+        {
+          switch (o->paths[j].segs[k].type_status)
+            {
+            case 1: /* LINE */
+              o->paths[j].segs[k].first_endpoint.x = pair->value.d;
+              LOG_TRACE ("HATCH.paths[%d].segs[%d].first_endpoint.x = %f [10 BD]\n",
+                         j, k, pair->value.d);
+              break;
+            case 2: /* CIRCULAR ARC */
+            case 3: /* ELLIPTICAL ARC */
+              o->paths[j].segs[k].center.x = pair->value.d;
+              LOG_TRACE ("HATCH.paths[%d].segs[%d].center.x = %f [10 BD]\n",
+                         j, k, pair->value.d);
+              break;
+            case 4: /* SPLINE */
+              l++;
+              o->paths[j].segs[k].control_points[l].point.x = pair->value.d;
+              LOG_TRACE ("HATCH.paths[%d].segs[%d].control_points[%d].point.x = %f [10 BD]\n",
+                         j, k, l, pair->value.d);
+              break;
+            default:
+              LOG_WARN ("Unhandled HATCH.paths[%d].segs[%d].type_status %d for DXF %d",
+                         j, k, o->paths[j].segs[k].type_status, pair->code);
+            }
+        }
+      else if (pair->code == 11 && !is_plpath && !o->num_seeds)
+        {
+          switch (o->paths[j].segs[k].type_status)
+            {
+            case 1: /* LINE */
+              o->paths[j].segs[k].second_endpoint.x = pair->value.d;
+              LOG_TRACE ("HATCH.paths[%d].segs[%d].second_endpoint.x = %f [10 BD]\n",
+                         j, k, pair->value.d);
+              break;
+            case 3: /* ELLIPTICAL ARC */
+              o->paths[j].segs[k].endpoint.x = pair->value.d;
+              LOG_TRACE ("HATCH.paths[%d].segs[%d].endpoint.x = %f [10 BD]\n",
+                         j, k, pair->value.d);
+              break;
+            case 4: /* SPLINE */
+              l++;
+              o->paths[j].segs[k].fitpts[l].x = pair->value.d;
+              LOG_TRACE ("HATCH.paths[%d].segs[%d].fitpts[%d].x = %f [11 2RD]\n",
+                         j, k, l, pair->value.d);
+              break;
+            default:
+              LOG_WARN ("Unhandled HATCH.paths[%d].segs[%d].type_status %d for DXF %d",
+                         j, k, o->paths[j].segs[k].type_status, pair->code);
+            }
+        }
+      else if (pair->code == 20 && !is_plpath && !o->num_seeds && pair->value.d != 0.0)
+        {
+          switch (o->paths[j].segs[k].type_status)
+            {
+            case 1: /* LINE */
+              o->paths[j].segs[k].first_endpoint.y = pair->value.d;
+              LOG_TRACE ("HATCH.paths[%d].segs[%d].first_endpoint.y = %f [20 BD]\n",
+                         j, k, pair->value.d);
+              break;
+            case 2: /* CIRCULAR ARC */
+            case 3: /* ELLIPTICAL ARC */
+              o->paths[j].segs[k].center.y = pair->value.d;
+              LOG_TRACE ("HATCH.paths[%d].segs[%d].center.y = %f [20 BD]\n",
+                         j, k, pair->value.d);
+              break;
+            case 4: /* SPLINE */
+              o->paths[j].segs[k].control_points[l].point.y = pair->value.d;
+              LOG_TRACE ("HATCH.paths[%d].segs[%d].control_points[%d].point.y = %f [20 BD]\n",
+                         j, k, l, pair->value.d);
+              break;
+            default:
+              LOG_WARN ("Unhandled HATCH.paths[%d].segs[%d].type_status %d for DXF %d",
+                         j, k, o->paths[j].segs[k].type_status, pair->code);
+            }
+        }
+      else if (pair->code == 21 && !is_plpath && !o->num_seeds && pair->value.d != 0.0)
+        {
+          switch (o->paths[j].segs[k].type_status)
+            {
+            case 1: /* LINE */
+              o->paths[j].segs[k].second_endpoint.y = pair->value.d;
+              LOG_TRACE ("HATCH.paths[%d].segs[%d].second_endpoint.y = %f [21 BD]\n",
+                         j, k, pair->value.d);
+              break;
+            case 3: /* ELLIPTICAL ARC */
+              o->paths[j].segs[k].endpoint.y = pair->value.d;
+              LOG_TRACE ("HATCH.paths[%d].segs[%d].endpoint.y = %f [21 BD]\n",
+                         j, k, pair->value.d);
+              break;
+            case 4: /* SPLINE */
+              o->paths[j].segs[k].fitpts[l].y = pair->value.d;
+              LOG_TRACE ("HATCH.paths[%d].segs[%d].fitpts[%d].y = %f [21 2RD]\n",
+                         j, k, l, pair->value.d);
+              break;
+            default:
+              LOG_WARN ("Unhandled HATCH.paths[%d].segs[%d].type_status %d for DXF %d",
+                         j, k, o->paths[j].segs[k].type_status, pair->code);
+            }
+        }
+      else if (pair->code == 40 && !is_plpath)
+        {
+          switch (o->paths[j].segs[k].type_status)
+            {
+            case 2: /* CIRCULAR ARC */
+              o->paths[j].segs[k].radius = pair->value.d;
+              LOG_TRACE ("HATCH.paths[%d].segs[%d].radius = %f [40 BD]\n", j,
+                         k, pair->value.d);
+              break;
+            case 3: /* ELLIPTICAL ARC */
+              o->paths[j].segs[k].minor_major_ratio = pair->value.d;
+              LOG_TRACE (
+                  "HATCH.paths[%d].segs[%d].minor_major_ratio = %f [40 BD]\n",
+                  j, k, pair->value.d);
+              break;
+            case 4: /* SPLINE */
+              if (l >= 0 && o->paths[j].segs[k].is_rational)
+                {
+                  o->paths[j].segs[k].control_points[l].weight = pair->value.d;
+                  LOG_TRACE ("HATCH.paths[%d].segs[%d].control_points[%d]."
+                             "weight = %f [40 BD]\n",
+                             j, k, l, pair->value.d);
+                }
+              else
+                {
+                  l++;
+                  o->paths[j].segs[k].knots[l] = pair->value.d;
+                  LOG_TRACE (
+                      "HATCH.paths[%d].segs[%d].knots[%d] = %f [40 BD]\n", j,
+                      k, l, pair->value.d);
+                }
+              break;
+            default:
+              LOG_WARN ("Unhandled HATCH.paths[%d].segs[%d].type_status %d for DXF %d",
+                         j, k, o->paths[j].segs[k].type_status, pair->code);
+            }
+        }
+      else if (pair->code == 50 && !is_plpath)
+        {
+          switch (o->paths[j].segs[k].type_status)
+            {
+            case 2: /* CIRCULAR ARC */
+            case 3: /* ELLIPTICAL ARC */
+              o->paths[j].segs[k].start_angle = deg2rad (pair->value.d);
+              LOG_TRACE ("HATCH.paths[%d].segs[%d].start_angle = %f [50 BD]\n", j,
+                         k, pair->value.d);
+              break;
+            default:
+              LOG_WARN ("Unhandled HATCH.paths[%d].segs[%d].type_status %d for DXF %d",
+                         j, k, o->paths[j].segs[k].type_status, pair->code);
+            }
+        }
+      else if (pair->code == 51 && !is_plpath)
+        {
+          switch (o->paths[j].segs[k].type_status)
+            {
+            case 2: /* CIRCULAR ARC */
+            case 3: /* ELLIPTICAL ARC */
+              o->paths[j].segs[k].end_angle = deg2rad (pair->value.d);
+              LOG_TRACE ("HATCH.paths[%d].segs[%d].end_angle = %f [51 BD]\n", j,
+                         k, pair->value.d);
+              break;
+            default:
+              LOG_WARN ("Unhandled HATCH.paths[%d].segs[%d].type_status %d for DXF %d",
+                         j, k, o->paths[j].segs[k].type_status, pair->code);
+            }
+        }
+      else if (pair->code == 73 && !is_plpath)
+        {
+          switch (o->paths[j].segs[k].type_status)
+            {
+            case 2: /* CIRCULAR ARC */
+            case 3: /* ELLIPTICAL ARC */
+              o->paths[j].segs[k].is_ccw = pair->value.i;
+              LOG_TRACE ("HATCH.paths[%d].segs[%d].is_ccw = %d [73 B]\n", j,
+                         k, pair->value.i);
+              break;
+            default:
+              o->paths[j].segs[k].is_rational = pair->value.i;
+              LOG_TRACE ("HATCH.paths[%d].segs[%d].is_rational = %d [73 B]\n",
+                         j, k, pair->value.i);
+            }
+        }
+      else if (pair->code == 10 && is_plpath && !o->num_seeds)
+        {
+          k++;
+          o->paths[j].polyline_paths[k].point.x = pair->value.d;
+          LOG_TRACE ("HATCH.paths[%d].polyline_paths[%d].point.x = %f [10 BD]\n",
+                     j, k, pair->value.d);
+        }
+      else if (pair->code == 20 && is_plpath && !o->num_seeds)
+        {
+          o->paths[j].polyline_paths[k].point.y = pair->value.d;
+          LOG_TRACE ("HATCH.paths[%d].polyline_paths[%d].point.y = %f [10 BD]\n",
+                     j, k, pair->value.d);
+        }
+      else if (pair->code == 42 && is_plpath)
+        {
+          o->paths[j].polyline_paths[k].bulge = pair->value.d;
+          LOG_TRACE ("HATCH.paths[%d].polyline_paths[%d].bulge = %f [42 BD]\n",
+                     j, k, pair->value.d);
+        }
+      else if (pair->code == 97 && !is_plpath)
+        {
+          if (k < 0 || o->paths[j].segs[k].type_status != 4)
+            {
+              o->paths[j].num_boundary_handles = pair->value.l;
+              o->num_boundary_handles += pair->value.l;
+              LOG_TRACE (
+                  "HATCH.paths[%d].num_boundary_handles = %ld [93 BL]\n", j,
+                  pair->value.l);
+              k = 0;
+            }
+          else
+            {
+              o->paths[j].segs[k].num_fitpts = pair->value.l;
+              LOG_TRACE (
+                  "HATCH.paths[%d].segs[%d].num_fitpts  = %ld [93 BL]\n", j, k,
+                  pair->value.l);
+            }
+        }
+      else if (pair->code == 78)
+        {
+          o->num_deflines = pair->value.l;
+          LOG_TRACE ("HATCH.num_deflines = %ld [78 BS]\n", pair->value.l);
+          o->deflines = calloc (pair->value.l, sizeof (Dwg_HATCH_DefLine));
+          j = -1;
+        }
+      else if (pair->code == 53 && o->num_deflines)
+        {
+          j++;
+          o->deflines[j].angle = deg2rad (pair->value.d);
+          LOG_TRACE ("HATCH.deflines[%d].angle = %f [53 BD]\n",
+                     j, o->deflines[j].angle);
+        }
+      else if (pair->code == 43 && o->num_deflines)
+        {
+          o->deflines[j].pt0.x = pair->value.d;
+          LOG_TRACE ("HATCH.deflines[%d].pt0.x = %f [43 BD]\n",
+                     j, pair->value.d);
+        }
+      else if (pair->code == 44 && o->num_deflines)
+        {
+          o->deflines[j].pt0.y = pair->value.d;
+          LOG_TRACE ("HATCH.deflines[%d].pt0.y = %f [43 BD]\n",
+                     j, pair->value.d);
+        }
+      else if (pair->code == 45 && o->num_deflines)
+        {
+          o->deflines[j].offset.x = pair->value.d;
+          LOG_TRACE ("HATCH.deflines[%d].offset.x = %f [43 BD]\n",
+                     j, pair->value.d);
+        }
+      else if (pair->code == 46 && o->num_deflines)
+        {
+          o->deflines[j].offset.y = pair->value.d;
+          LOG_TRACE ("HATCH.deflines[%d].offset.y = %f [43 BD]\n",
+                     j, pair->value.d);
+        }
+      else if (pair->code == 79 && o->num_deflines)
+        {
+          o->deflines[j].num_dashes = pair->value.u;
+          LOG_TRACE ("HATCH.deflines[%d].num_dashes = %u [79 BS]\n",
+                     j, pair->value.u);
+          if (pair->value.u)
+            o->deflines[j].dashes = calloc (pair->value.u, sizeof (BITCODE_BD));
+          k = -1;
+        }
+      else if (pair->code == 49 && o->num_deflines && o->deflines[j].dashes)
+        {
+          k++;
+          o->deflines[j].dashes[k] = pair->value.d;
+          LOG_TRACE ("HATCH.deflines[%d].dashes[%d] = %f [49 BD]\n",
+                     j, k, pair->value.d);
+        }
+      else if (pair->code == 47)
+        {
+          o->pixel_size = pair->value.d;
+          LOG_TRACE ("HATCH.pixel_size = %f [47 BD]\n",
+                     pair->value.d);
+        }
+      else if (pair->code == 98)
+        {
+          o->num_seeds = pair->value.u;
+          LOG_TRACE ("HATCH.num_seeds = %u [98 BL]\n",
+                     pair->value.u);
+          if (pair->value.u)
+            o->seeds = calloc (pair->value.u, sizeof (BITCODE_2RD));
+          k = -1;
+        }
+      else if (pair->code == 10 && o->num_seeds)
+        {
+          k++;
+          o->seeds[k].x = pair->value.d;
+          LOG_TRACE ("HATCH.seeds[%d].x = %f [10 BD]\n",
+                     k, pair->value.d);
+        }
+      else if (pair->code == 20 && o->num_seeds)
+        {
+          o->seeds[k].y = pair->value.d;
+          LOG_TRACE ("HATCH.seeds[%d].y = %f [20 BD]\n",
+                     k, pair->value.d);
+        }
+      else if (pair->code == 330 && o->num_boundary_handles)
+        {
+          BITCODE_H ref = add_handleref (obj->parent, 3, pair->value.u, obj);
+          //o->boundary_handles[k++] = ref;
+          LOG_TRACE ("HATCH.boundary_handles[%d] = " FORMAT_REF " [330 H]\n",
+                     k, ARGS_REF (ref));
+        }
+      else if (pair->code == 453)
+        {
+          o->num_colors = pair->value.u;
+          LOG_TRACE ("HATCH.num_colors = %u [453 BL]\n",
+                     pair->value.u);
+          if (pair->value.u)
+            o->colors = calloc (pair->value.u, sizeof (Dwg_HATCH_Color));
+          j = -1;
+        }
+      else if (pair->code == 463 && o->num_colors)
+        {
+          j++;
+          o->colors[j].shift_value = pair->value.d;
+          LOG_TRACE ("HATCH.colors[%d].shift_value = %f [463 BD]\n",
+                     j, pair->value.d);
+        }
+      else if (pair->code == 63 && o->num_colors)
+        {
+          o->colors[j].color.index = pair->value.i;
+          LOG_TRACE ("HATCH.colors[%d].color.index = %u [63 CMC]\n",
+                     j, pair->value.i);
+        }
+      else if (pair->code == 421 && o->num_colors)
+        {
+          o->colors[j].color.alpha = pair->value.u;
+          LOG_TRACE ("HATCH.colors[%d].color.alpha = %06X [421 CMC]\n",
+                     j, pair->value.u);
+        }
+      else if (pair->code == 470)
+        {
+          dwg_dynapi_entity_set_value (o, "HATCH", "gradient_name", &pair->value, 1);
+          //o->gradient_name = strdup (pair->value.s);
+          LOG_TRACE ("HATCH.gradient_name = %s [470 T]\n", pair->value.s);
+        }
+      else if (pair->code == 462)
+        {
+          o->gradient_tint = pair->value.d;
+          LOG_TRACE ("HATCH.gradient_tint = %f [462 BD]\n",
+                     pair->value.d);
+        }
+      else if (pair->code == 452)
+        {
+          o->single_color_gradient = pair->value.u;
+          LOG_TRACE ("HATCH.single_color_gradient = %u [452 BL]\n",
+                     pair->value.u);
+        }
+      else if (pair->code >= 1000 && pair->code < 1999)
+        {
+          add_eed (obj, "HATCH", pair);
+        }
+      else
+        LOG_ERROR ("Unknown DXF code %d for HATCH", pair->code);
+    }
+  return pair;
+}
+
+static Dxf_Pair *
 new_table_control (const char *restrict name, Bit_Chain *restrict dat,
                    Dwg_Data *restrict dwg)
 {
@@ -2385,6 +2861,20 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                 break; // ignore extrusion in the dwg (planar only)
               if (add_SPLINE (obj->tio.entity->tio.SPLINE, dat, pair, &j, &flag))
                 goto next_pair;
+              else
+                goto search_field;
+            }
+          else if (strEQc (name, "HATCH"))
+            {
+              if (pair->code == 10 || pair->code == 20)
+                break; // elevation
+              else if (pair->code == 91 || pair->code == 78)
+                {
+                  pair = add_HATCH (obj, dat, pair);
+                  if (pair->code == 0) // end or unknown
+                    return pair;
+                  goto search_field;
+                }
               else
                 goto search_field;
             }

@@ -3721,7 +3721,7 @@ DWG_ENTITY(HATCH)
     }
 
   if (FIELD_VALUE (has_derived))
-      FIELD_BD (pixel_size, 47);
+    FIELD_BD (pixel_size, 47);
   FIELD_BL (num_seeds, 98);
   if (FIELD_VALUE(num_seeds > 10000))
     {

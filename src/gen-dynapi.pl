@@ -157,8 +157,8 @@ sub dxf_in {
       } elsif (/^\s*SECTION\(HEADER\)/) {
         $n = 'header_variables';
         warn $n;
-      } elsif (/^int DWG_FUNC_N\(ACTION,(\w+)\)/) {
-        $n = $1;
+      } elsif (/^int DWG_FUNC_N\(ACTION,_HATCH(\w+)\)/) {
+        $n = 'HATCH';
         warn $n;
       } elsif (/^\#define (COMMON_ENTITY_DIMENSION)/) {
         $n = $1;

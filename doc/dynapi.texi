@@ -1750,63 +1750,63 @@ H,	DXF 7
 @item parent
 struct _dwg_object_entity*
 @item is_gradient_fill
-BL
+BL,	DXF 450
 @item reserved
-BL
+BL,	DXF 451
 @item gradient_angle
-BD
+BD,	DXF 460
 @item gradient_shift
-BD
+BD,	DXF 461
 @item single_color_gradient
-BL
+BL,	DXF 452
 @item gradient_tint
-BD
+BD,	DXF 462
 @item num_colors
-BL
+BL,	DXF 453
 @item colors
 Dwg_HATCH_Color*
 @item gradient_name
-TV
+TV,	DXF 470
 @item elevation
-BD
+BD,	DXF 30
 @item extrusion
-3BD
+3BD,	DXF 210
 @item name
-TV
+TV,	DXF 2
 @item solid_fill
-B
+B,	DXF 70
 @item associative
-B
+B,	DXF 71
 @item num_paths
-BL
+BL,	DXF 91
 @item paths
 Dwg_HATCH_Path*
 @item style
-BS
+BS,	DXF 75
 @item pattern_type
-BS
+BS,	DXF 76
 @item angle
-BD
+BD,	DXF 52
 @item scale_spacing
-BD
+BD,	DXF 41
 @item double_flag
-B
+B,	DXF 77
 @item num_deflines
-BS
+BS,	DXF 78
 @item deflines
 Dwg_HATCH_DefLine*
 @item has_derived
 B
 @item pixel_size
-BD
+BD,	DXF 47
 @item num_seeds
-BL
+BL,	DXF 98
 @item seeds
-2RD*
+2RD*,	DXF 10
 @item num_boundary_handles
 BL
 @item boundary_handles
-H*
+H*,	DXF 330
 
 @end vtable
 @end indentedblock
