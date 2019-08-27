@@ -934,7 +934,6 @@ typedef struct _dwg_header_variables {
   BITCODE_BS unknown_55;
   BITCODE_BS unknown_56;
   BITCODE_BS unknown_57;
-  BITCODE_RS crc;
 } Dwg_Header_Variables;
 
 /* OBJECTS *******************************************************************/

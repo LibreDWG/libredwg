@@ -5364,24 +5364,6 @@ test_header (const Dwg_Data *dwg)
     dwg_dynapi_header_set_value (dwg, "unknown_57", &unknown_57, 0);
 
   }
-  {
-    BITCODE_RS crc;
-    if (dwg_dynapi_header_value (dwg, "crc", &crc, NULL)
-        && crc == dwg->header_vars.crc)
-      pass ();
-    else
-      fail ("HEADER.crc [RS] %hu != %hu", dwg->header_vars.crc, crc);
-    crc++;
-    if (dwg_dynapi_header_set_value (dwg, "crc", &crc, 0)
-        && crc == dwg->header_vars.crc)
-      pass ();
-    else
-      fail ("HEADER.crc [RS] set+1 %hu != %hu",
-            dwg->header_vars.crc, crc);
-    crc--;
-    dwg_dynapi_header_set_value (dwg, "crc", &crc, 0);
-
-  }
 #line 48 "dynapi_test.c.in"
   return error;
 }

@@ -663,8 +663,6 @@ BD,	DXF 40
 RL
 @item bitsize_hi
 RL
-@item crc
-RS
 @item size
 RL
 @item unknown_0

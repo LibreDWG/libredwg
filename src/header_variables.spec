@@ -624,16 +624,13 @@
       FIELD_BD (SHADOWPLANELOCATION, 40);
     }
 
-  SINCE(R_14)
+  SINCE(R_13)
     {
       FIELD_BS (unknown_54, 0); /* (type 5/6 only) these do not seem to be required */
       FIELD_BS (unknown_55, 0);
       FIELD_BS (unknown_56, 0);
       FIELD_BS (unknown_57, 0);
     }
-
-  /* TODO: This really is the section[0] crc not related to the header */
-  FIELD_RSx (crc, 0);
 
   SINCE(R_2007) {
     SECTION_STRING_STREAM
@@ -655,4 +652,3 @@
     FIELD_TU (PROJECTNAME, 1);
     END_STRING_STREAM
   }
-

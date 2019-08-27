@@ -960,21 +960,32 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       error |= DWG_ERR_SECTIONNOTFOUND;
       goto classes_section;
     }
-  dat->byte = dwg->header.section[SECTION_HEADER_R13].address + 16;
+  //after sentinel
+  dat->byte = pvz = dwg->header.section[SECTION_HEADER_R13].address + 16;
+  //LOG_HANDLE ("@ 0x%lx.%lu\n", bit_position (dat)/8, bit_position (dat)%8);
   dwg->header_vars.size = bit_read_RL (dat);
   LOG_TRACE ("         Length: " FORMAT_RL " [RL]\n", dwg->header_vars.size)
   dat->bit = 0;
 
   dwg_decode_header_variables (dat, dat, dat, dwg);
 
-  // Check CRC
-  dat->bit = 0;
-  crc = dwg->header_vars.crc;
+  //LOG_HANDLE ("@ 0x%lx.%lu\n", bit_position (dat)/8, bit_position (dat)%8);
+  // check slack
+  if (dat->bit || dat->byte != pvz + dwg->header_vars.size + 4)
+    {
+      unsigned char r = 8 - dat->bit;
+      LOG_HANDLE (" padding: %ld byte, %d bits\n",
+                  pvz + dwg->header_vars.size + 4 - dat->byte, r);
+    }
+  // Check CRC, hardcoded to 2 before end sentinel
+  LOG_HANDLE ("crc pos: 0x%lx\n", pvz + dwg->header_vars.size + 4);
+  bit_set_position (dat, (pvz + dwg->header_vars.size + 4) * 8);
+  crc = bit_read_RS (dat);
+  LOG_TRACE ("crc: %04X [RSx]\n", crc);
   crc2 = 0;
-  pvz = dwg->header.section[SECTION_HEADER_R13].address + 16; //after sentinel
-  LOG_HANDLE ("HEADER_R13.address of size 0x%lx\n", pvz);
-  LOG_HANDLE ("HEADER_R13.size %d\n",
-              dwg->header.section[SECTION_HEADER_R13].size);
+  //LOG_HANDLE ("@ 0x%lx\n", bit_position (dat)/8);
+  //LOG_HANDLE ("HEADER_R13.address of size 0x%lx\n", pvz);
+  //LOG_HANDLE ("HEADER_R13.size %d\n", dwg->header.section[SECTION_HEADER_R13].size);
   // typical sizes: 400-599
   if (dwg->header.section[SECTION_HEADER_R13].size < 0xfff
       && pvz < dat->byte
@@ -984,7 +995,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       // section_size + data, i.e. minus the 2x sentinel (32) + crc itself (2)
       // if we would include the crc we would always get 0000
       BITCODE_RL crc_size = dwg->header.section[SECTION_HEADER_R13].size - 34;
-      LOG_HANDLE ("calc crc Header size: " FORMAT_RL "\n", crc_size);
+      LOG_HANDLE ("calc Header crc size: " FORMAT_RL "\n", crc_size);
       crc2 = bit_calc_CRC (0xC0C1, &dat->chain[pvz], crc_size);
     }
   if (crc != crc2)
@@ -992,8 +1003,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_WARN ("Header Section[%ld] CRC mismatch %04X <=> %04X",
                 (long)dwg->header.section[SECTION_HEADER_R13].number, crc,
                 crc2);
-      if (dwg->header.version == R_2000)
-        error |= DWG_ERR_WRONGCRC;
+      error |= DWG_ERR_WRONGCRC;
     }
 
   /*-------------------------------------------------------------------------
