@@ -2734,9 +2734,9 @@ typedef struct _dwg_LEADER_Node
 
 typedef union _dwg_MLEADER_Content
 {
-  struct _text_content
+  struct _content_mtext
     {
-      BITCODE_TV default_text;
+      BITCODE_T default_text;
       BITCODE_3BD normal; // 11
       BITCODE_H style;
       BITCODE_3BD location;
@@ -2802,9 +2802,9 @@ typedef struct _dwg_MLEADER_AnnotContext
   BITCODE_BS text_alignment;
   BITCODE_BS attach_type;
 
-  BITCODE_B has_content; // DXF doc bug: has_mtext
-  BITCODE_B has_content_block;
-  Dwg_MLEADER_Content content;
+  BITCODE_B has_content_txt;
+  BITCODE_B has_content_blk;
+  Dwg_MLEADER_Content content; // union txt/blk
 
   BITCODE_3BD base;
   BITCODE_3BD base_dir;

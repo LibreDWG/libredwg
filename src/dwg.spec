@@ -5382,8 +5382,8 @@ DWG_ENTITY(MULTILEADER)
   FIELD_BS (ctx.text_alignment, 176);
   FIELD_BS (ctx.attach_type, 177);
 
-  FIELD_B (ctx.has_content, 290);
-  if (FIELD_VALUE (ctx.has_content))
+  FIELD_B (ctx.has_content_txt, 290);
+  if (FIELD_VALUE (ctx.has_content_txt))
     {
       FIELD_T (ctx.content.txt.default_text, 304);
       FIELD_3BD (ctx.content.txt.normal, 11);
@@ -5413,10 +5413,10 @@ DWG_ENTITY(MULTILEADER)
       FIELD_B (ctx.content.txt.word_break, 295);
       FIELD_B (ctx.content.txt.unknown, 0);
     }
-  else
+  else // a union. either txt or blk
     {
-      FIELD_B (ctx.has_content_block, 296);
-      if (FIELD_VALUE (ctx.has_content_block))
+      FIELD_B (ctx.has_content_blk, 296);
+      if (FIELD_VALUE (ctx.has_content_blk))
         {
           //FIELD_HANDLE (ctx.content.blk.block_table, 4, 341);
           FIELD_3BD (ctx.content.blk.normal, 14);
@@ -5515,9 +5515,9 @@ DWG_ENTITY(MULTILEADER)
   END_REPEAT_BLOCK
   SET_PARENT_OBJ(ctx.leaders)
   END_REPEAT(ctx.leaders)
-  if (FIELD_VALUE (ctx.has_content)) {
+  if (FIELD_VALUE (ctx.has_content_txt)) {
     FIELD_HANDLE (ctx.content.txt.style, 5, 340);
-  } else if (FIELD_VALUE (ctx.has_content_block)) {
+  } else if (FIELD_VALUE (ctx.has_content_blk)) {
     FIELD_HANDLE (ctx.content.blk.block_table, 4, 341);
   }
   FIELD_HANDLE (mleaderstyle, 5, 340);

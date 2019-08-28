@@ -1828,16 +1828,16 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                          pair->code);
               break;
             case 290:
-              ctx->has_content = pair->value.i;
-              LOG_TRACE ("%s.ctx.has_content = %d [%d B]\n", obj->name, pair->value.i,
-                         pair->code);
+              ctx->has_content_txt = pair->value.i;
+              LOG_TRACE ("%s.ctx.has_content_txt = %d [%d B]\n", obj->name,
+                         pair->value.i, pair->code);
               break;
             case 302:
               if (strEQc (pair->value.s, "LEADER{"))
                 pair = add_MULTILEADER_leaders (obj, dat, pair);
               break;
             case 304:
-              if (ctx->has_content)
+              if (ctx->has_content_txt)
                 {
                   if (dat->version >= R_2007)
                     ctx->content.txt.default_text = (char*)bit_utf8_to_TU (pair->value.s);
@@ -1848,7 +1848,7 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 }
               break;
             case 340:
-              if (ctx->has_content)
+              if (ctx->has_content_txt)
                 {
                   ctx->content.txt.style = add_handleref (obj->parent, 5,
                                                           pair->value.u, obj);
@@ -1996,11 +1996,11 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                          obj->name, i, pair->value.d, pair->code);
               break;
             case 296:
-              ctx->has_content_block = pair->value.i;
-              LOG_TRACE ("%s.ctx.has_content_block = %i [%d B]\n",
+              ctx->has_content_blk = pair->value.i;
+              LOG_TRACE ("%s.ctx.has_content_blk = %i [%d B]\n",
                          obj->name, pair->value.i, pair->code);
               break;
-            case 14: // has_content_block
+            case 14: // has_block
               ctx->content.blk.normal.x = pair->value.d;
               LOG_TRACE ("%s.ctx.content.blk.normal.x = %f [%d 3BD]\n",
                          obj->name, pair->value.d, pair->code);
@@ -2021,7 +2021,7 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               LOG_TRACE ("%s.ctx.content.blk.block_table = " FORMAT_REF " [%d H]\n",
                          obj->name, ARGS_REF (ctx->content.blk.block_table), pair->code);
               break;
-            case 15: // has_content_block
+            case 15: // has_block
               ctx->content.blk.location.x = pair->value.d;
               break;
             case 25:
@@ -2035,7 +2035,7 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   ctx->content.blk.location.y, ctx->content.blk.location.z,
                   pair->code);
               break;
-            case 16: // has_content_block
+            case 16: // has_block
               ctx->content.blk.scale.x = pair->value.d;
               break;
             case 26:

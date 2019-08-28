@@ -7561,9 +7561,9 @@ BS
 BS
 @item attach_type
 BS
-@item has_content
+@item has_content_txt
 B
-@item has_content_block
+@item has_content_blk
 B
 @item content
 Dwg_MLEADER_Content
