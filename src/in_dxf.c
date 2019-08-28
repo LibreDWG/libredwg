@@ -1030,7 +1030,7 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           add_eed (obj, "LWPOLYLINE", pair);
         }
       else
-        LOG_ERROR ("Unknown DXF code %d for LWPOLYLINE", pair->code);
+        LOG_ERROR ("Unknown DXF code %d for %s", pair->code, "LWPOLYLINE");
     }
   return pair;
 }
@@ -1506,7 +1506,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           add_eed (obj, "HATCH", pair);
         }
       else
-        LOG_ERROR ("Unknown DXF code %d for HATCH", pair->code);
+        LOG_ERROR ("Unknown DXF code %d for %s", pair->code, "HATCH");
     }
   return pair;
 }
@@ -2119,7 +2119,7 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             case 301: // end ctx
               return pair;
             default:
-              LOG_ERROR ("Unknown DXF code %d for MULTILEADER", pair->code);
+              LOG_ERROR ("Unknown DXF code %d for %s", pair->code, "MULTILEADER");
             }
           dxf_free_pair (pair);
           pair = dxf_read_pair (dat);
@@ -4159,7 +4159,7 @@ dxf_thumbnail_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           }
           break;
         default:
-          LOG_ERROR ("Unknown DXF code %d for THUMBNAILIMAGE", pair->code);
+          LOG_ERROR ("Unknown DXF code %d for %s", pair->code, "THUMBNAILIMAGE");
           break;
         }
       dxf_free_pair (pair);
