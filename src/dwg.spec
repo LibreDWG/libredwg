@@ -5387,7 +5387,7 @@ DWG_ENTITY(MULTILEADER)
     {
       FIELD_T (ctx.content.txt.default_text, 304);
       FIELD_3BD (ctx.content.txt.normal, 11);
-      //FIELD_HANDLE (ctx.content.txt.style, 5, 340); // ODA bug
+      //FIELD_HANDLE (ctx.content.txt.style, 5, 340); // deferred
       FIELD_3BD (ctx.content.txt.location, 12);
       FIELD_3BD (ctx.content.txt.direction, 13);
       FIELD_BD (ctx.content.txt.rotation, 42);

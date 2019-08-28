@@ -1512,6 +1512,623 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 }
 
 static Dxf_Pair *
+add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                       Dxf_Pair *restrict pair, Dwg_LEADER *lnode)
+{
+  Dwg_Entity_MULTILEADER *o = obj->tio.entity->tio.MULTILEADER;
+  if (pair->code == 304 && strEQc (pair->value.s, "LEADER_LINE{"))
+    {
+      int i = 0, j = -1, k = -1;
+      Dwg_MLEADER_AnnotContext *ctx = &o->ctx;
+      lnode->lines = calloc (1, sizeof (Dwg_LEADER_Line));
+
+      // lines and breaks
+      while (pair->code != 305 && pair->code != 0)
+        {
+          Dwg_LEADER_Line *lline = &lnode->lines[i];
+          dxf_free_pair (pair);
+          pair = dxf_read_pair (dat);
+          switch (pair->code)
+            {
+            case 10:
+              j++;
+              lline->num_points = j + 1;
+              lline->points = realloc (lline->points, (j + 1) * sizeof (BITCODE_3BD));
+              lline->points[j].x = pair->value.d;
+              LOG_TRACE ("%s.leaders[].lines[%d].points[%d].x = %f [%d BD]\n",
+                         obj->name, i, j, pair->value.d, pair->code);
+              break;
+            case 20:
+              lline->points[j].y = pair->value.d;
+              LOG_TRACE ("%s.leaders[].lines[%d].points[%d].y = %f [%d BD]\n",
+                         obj->name, i, j, pair->value.d, pair->code);
+              break;
+            case 30:
+              lline->points[j].z = pair->value.d;
+              LOG_TRACE ("%s.leaders[].lines[%d].points[%d].z = %f [%d BD]\n",
+                         obj->name, i, j, pair->value.d, pair->code);
+              break;
+            case 11:
+              k++;
+              lline->num_breaks = k + 1;
+              lline->breaks = realloc (lline->breaks, (k + 1) * sizeof (Dwg_LEADER_Break));
+              lline->breaks[k].start.x = pair->value.d;
+              LOG_TRACE ("%s.leaders[].lines[%d].breaks[%d].start.x = %f [%d 3BD]\n",
+                         obj->name, i, k, pair->value.d, pair->code);
+              break;
+            case 21:
+              lline->breaks[k].start.y = pair->value.d;
+              LOG_TRACE ("%s.leaders[].lines[%d].breaks[%d].start.y = %f [%d 3BD]\n",
+                         obj->name, i, k, pair->value.d, pair->code);
+              break;
+            case 31:
+              lline->breaks[k].start.z = pair->value.d;
+              LOG_TRACE ("%s.leaders[].lines[%d].breaks[%d].start.z = %f [%d 3BD]\n",
+                         obj->name, i, k, pair->value.d, pair->code);
+              break;
+            case 12:
+              lline->breaks[k].end.x = pair->value.d;
+              LOG_TRACE ("%s.leaders[].lines[%d].breaks[%d].end.x = %f [%d 3BD]\n",
+                         obj->name, i, k, pair->value.d, pair->code);
+              break;
+            case 22:
+              lline->breaks[k].end.y = pair->value.d;
+              LOG_TRACE ("%s.leaders[].lines[%d].breaks[%d].end.y = %f [%d 3BD]\n",
+                         obj->name, i, k, pair->value.d, pair->code);
+              break;
+            case 32:
+              lline->breaks[k].end.z = pair->value.d;
+              LOG_TRACE ("%s.leaders[].lines[%d].breaks[%d].end.z = %f [%d 3BD]\n",
+                         obj->name, i, k, pair->value.d, pair->code);
+              break;
+            case 91:
+              lline->line_index = pair->value.u;
+              LOG_TRACE ("%s.leaders[].lines[%d].line_index = %u [%d BL]\n",
+                         obj->name, i, pair->value.u, pair->code);
+              i++;
+              lnode->lines = realloc (lnode->lines, i * sizeof (Dwg_LEADER_Line));
+              lnode->num_lines = i;
+              break;
+            case 170:
+              lline->type = pair->value.i;
+              LOG_TRACE ("%s.leaders[].lines[%d].line_index = %d [%d BS]\n",
+                         obj->name, i, pair->value.i, pair->code);
+              break;
+            case 92:
+              lline->color.index = pair->value.i;
+              LOG_TRACE ("%s.leaders[].lines[%d].color.index = %d [%d CMC]\n",
+                         obj->name, i, pair->value.i, pair->code);
+              break;
+            case 171:
+              lline->linewt = pair->value.i;
+              LOG_TRACE ("%s.leaders[].lines[%d].linewt = %d [%d BL]\n",
+                         obj->name, i, pair->value.i, pair->code);
+              break;
+            case 40:
+              lline->arrow_size = pair->value.d;
+              LOG_TRACE ("%s.leaders[].lines[%d].arrow_size = %f [%d BD]\n",
+                         obj->name, i, pair->value.d, pair->code);
+              break;
+            case 93:
+              lline->flags = pair->value.i;
+              LOG_TRACE ("%s.leaders[].lines[%d].line_index = %d [%d BL]\n",
+                         obj->name, i, pair->value.i, pair->code);
+              break;
+            case 305: //end
+              break;
+            default:
+              LOG_ERROR ("Unknown DXF code %d for MULTILEADER.leaders[].lines[%d]",
+                         pair->code, i);
+            }
+        }
+    }
+  return pair;
+}
+
+static Dxf_Pair *
+add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                         Dxf_Pair *restrict pair)
+{
+  Dwg_Entity_MULTILEADER *o = obj->tio.entity->tio.MULTILEADER;
+  if (pair->code == 302 && strEQc (pair->value.s, "LEADER{"))
+    {
+      int i = -1, j = -1;
+      Dwg_MLEADER_AnnotContext *ctx = &o->ctx;
+      while (pair->code != 303 && pair->code != 0)
+        {
+          Dwg_LEADER *lnode = &ctx->leaders[i];
+          dxf_free_pair (pair);
+          pair = dxf_read_pair (dat);
+
+          switch (pair->code)
+            {
+            case 290:
+              i++;
+              ctx->num_leaders = i + 1;
+              ctx->leaders = realloc (ctx->leaders, (i + 1) * sizeof (Dwg_LEADER));
+              ctx->leaders[i].has_lastleaderlinepoint = pair->value.i;
+              LOG_TRACE ("%s.ctx.leaders[%d].has_lastleaderlinepoint = %d [%d B]\n",
+                         obj->name, i, pair->value.i, pair->code);
+              break;
+            case 291:
+              lnode->has_dogleg = pair->value.i;
+              LOG_TRACE ("%s.ctx.leaders[%d].has_dogleg = %d [%d B]\n",
+                         obj->name, i, pair->value.i, pair->code);
+              break;
+            case 90:
+              lnode->branch_index = pair->value.u;
+              LOG_TRACE ("%s.ctx.leaders[%d].branch_index = %u [%d BL]\n",
+                         obj->name, i, pair->value.u, pair->code);
+              break;
+            case 271:
+              lnode->attach_dir = pair->value.i;
+              LOG_TRACE ("%s.ctx.leaders[%d].branch_index = %d [%d BS]\n",
+                         obj->name, i, pair->value.i, pair->code);
+              break;
+            case 40:
+              lnode->dogleg_length = pair->value.d;
+              LOG_TRACE ("%s.ctx.leaders[%d].dogleg_length = %f [%d BD]\n",
+                         obj->name, i, pair->value.d, pair->code);
+              break;
+            case 10:
+              lnode->lastleaderlinepoint.x = pair->value.d;
+              LOG_TRACE ("%s.ctx.leaders[%d].lastleaderlinepoint.x = %f [%d 3BD]\n",
+                         obj->name, i, pair->value.d, pair->code);
+              break;
+            case 20:
+              lnode->lastleaderlinepoint.y = pair->value.d;
+              LOG_TRACE ("%s.ctx.leaders[%d].lastleaderlinepoint.y = %f [%d 3BD]\n",
+                         obj->name, i, pair->value.d, pair->code);
+              break;
+            case 30:
+              lnode->lastleaderlinepoint.z = pair->value.d;
+              LOG_TRACE ("%s.ctx.leaders[%d].lastleaderlinepoint.z = %f [%d BD]\n",
+                         obj->name, i, pair->value.d, pair->code);
+              break;
+            case 11:
+              if (lnode->has_dogleg)
+                {
+                  lnode->dogleg_vector.x = pair->value.d;
+                  LOG_TRACE ("%s.ctx.leaders[%d].dogleg_vector.x = %f [%d 3BD]\n",
+                             obj->name, i, pair->value.d, pair->code);
+                }
+              else
+                {
+                  j++;
+                  lnode->num_breaks = j + 1;
+                  lnode->breaks = realloc (
+                      lnode->breaks, (j + 1) * sizeof (Dwg_LEADER_Break));
+                  lnode->breaks[j].start.x = pair->value.d;
+                  LOG_TRACE (
+                      "%s.ctx.leaders[%d].breaks[%d].start.x = %f [%d 3BD]\n",
+                      obj->name, i, j, pair->value.d, pair->code);
+                }
+              break;
+            case 21:
+              if (lnode->has_dogleg)
+                {
+                  lnode->dogleg_vector.y = pair->value.d;
+                  LOG_TRACE ("%s.ctx.leaders[%d].dogleg_vector.y = %f [%d 3BD]\n",
+                             obj->name, i, pair->value.d, pair->code);
+                }
+              else
+                {
+                  lnode->breaks[j].start.y = pair->value.d;
+                  LOG_TRACE ("%s.ctx.leaders[%d].breaks[%d].start.y = %f [%d 3BD]\n",
+                             obj->name, i, j, pair->value.d, pair->code);
+                }
+              break;
+            case 31:
+              if (lnode->has_dogleg)
+                {
+                  lnode->dogleg_vector.z = pair->value.d;
+                  LOG_TRACE ("%s.ctx.leaders[%d].dogleg_vector.z = %f [%d 3BD]\n",
+                             obj->name, i, pair->value.d, pair->code);
+                }
+              else
+                {
+                  lnode->breaks[j].start.z = pair->value.d;
+                  LOG_TRACE ("%s.ctx.leaders[%d].breaks[%d].start.z = %f [%d 3BD]\n",
+                             obj->name, i, j, pair->value.d, pair->code);
+                }
+              break;
+            case 12:
+              lnode->breaks[j].end.x = pair->value.d;
+              LOG_TRACE ("%s.ctx.leaders[%d].breaks[%d].end.x = %f [%d 3BD]\n",
+                             obj->name, i, j, pair->value.d, pair->code);
+              break;
+            case 22:
+              lnode->breaks[j].end.y = pair->value.d;
+              LOG_TRACE ("%s.ctx.leaders[%d].breaks[%d].end.y = %f [%d 3BD]\n",
+                             obj->name, i, j, pair->value.d, pair->code);
+              break;
+            case 32:
+              lnode->breaks[j].end.z = pair->value.d;
+              LOG_TRACE ("%s.ctx.leaders[%d].breaks[%d].end.z = %f [%d 3BD]\n",
+                             obj->name, i, j, pair->value.d, pair->code);
+              break;
+            case 304:
+              if (strEQc (pair->value.s, "LEADER_LINE{"))
+                pair = add_MULTILEADER_lines (obj, dat, pair, lnode);
+              break;
+            case 303: //end
+              break;
+            default:
+              LOG_ERROR ("Unknown DXF code %d for MULTILEADER.leaders[]", pair->code);
+            }
+        }
+    }
+  return pair;
+}
+
+static Dxf_Pair *
+add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                 Dxf_Pair *restrict pair)
+{
+  Dwg_Entity_MULTILEADER *o = obj->tio.entity->tio.MULTILEADER;
+  int i = -1, j = -1;
+
+  if (pair->code == 300 && strEQc (pair->value.s, "CONTEXT_DATA{"))
+    {
+      //const Dwg_DYNAPI_field *fields = dwg_dynapi_subclass_fields ("MLEADER_AnnotContext");
+      Dwg_MLEADER_AnnotContext *ctx = &o->ctx;
+      while (pair->code != 301 && pair->code != 0)
+        {
+          switch (pair->code)
+            {
+            case 40:
+              ctx->scale = pair->value.d;
+              LOG_TRACE ("%s.ctx.scale = %f [%d BD]\n", obj->name, pair->value.d,
+                         pair->code);
+              break;
+            case 10:
+              ctx->content_base.x = pair->value.d; break;
+            case 20:
+              ctx->content_base.y = pair->value.d; break;
+            case 30:
+              ctx->content_base.z = pair->value.d;
+              LOG_TRACE ("%s.ctx.content_base = (%f, %f, %f) [10 3BD]\n", obj->name,
+                         ctx->content_base.x, ctx->content_base.y, ctx->content_base.z);
+              break;
+            case 41:
+              ctx->text_height = pair->value.d;
+              LOG_TRACE ("%s.ctx.text_height = %f [%d BD]\n", obj->name, pair->value.d,
+                         pair->code);
+              break;
+            case 140:
+              ctx->arrow_size = pair->value.d;
+              LOG_TRACE ("%s.ctx.arrow_size = %f [%d BD]\n", obj->name, pair->value.d,
+                         pair->code);
+              break;
+            case 145:
+              ctx->landing_gap = pair->value.d;
+              LOG_TRACE ("%s.ctx.landing_gap = %f [%d BD]\n", obj->name, pair->value.d,
+                         pair->code);
+              break;
+            case 174:
+              ctx->text_left = pair->value.i;
+              LOG_TRACE ("%s.ctx.text_left = %d [%d BS]\n", obj->name, pair->value.i,
+                         pair->code);
+              break;
+            case 175:
+              ctx->text_right = pair->value.i;
+              LOG_TRACE ("%s.ctx.text_right = %d [%d BS]\n", obj->name, pair->value.i,
+                         pair->code);
+              break;
+            case 176:
+              ctx->text_alignment = pair->value.i;
+              LOG_TRACE ("%s.ctx.text_alignment = %d [%d BS]\n", obj->name, pair->value.i,
+                         pair->code);
+              break;
+            case 177:
+              ctx->attach_type = pair->value.i;
+              LOG_TRACE ("%s.ctx.attach_type = %d [%d BS]\n", obj->name, pair->value.i,
+                         pair->code);
+              break;
+            case 290:
+              ctx->has_content = pair->value.i;
+              LOG_TRACE ("%s.ctx.has_content = %d [%d B]\n", obj->name, pair->value.i,
+                         pair->code);
+              break;
+            case 302:
+              if (strEQc (pair->value.s, "LEADER{"))
+                pair = add_MULTILEADER_leaders (obj, dat, pair);
+              break;
+            case 304:
+              if (ctx->has_content)
+                {
+                  if (dat->version >= R_2007)
+                    ctx->content.txt.default_text = (char*)bit_utf8_to_TU (pair->value.s);
+                  else
+                    ctx->content.txt.default_text = strdup (pair->value.s);
+                  LOG_TRACE ("%s.ctx.content.txt.default_text = %s [%d T]\n", obj->name,
+                             pair->value.s, pair->code);
+                }
+              break;
+            case 340:
+              if (ctx->has_content)
+                {
+                  ctx->content.txt.style = add_handleref (obj->parent, 5,
+                                                          pair->value.u, obj);
+                  LOG_TRACE ("%s.ctx.content.txt.style = " FORMAT_REF " [%d H]\n",
+                             obj->name, ARGS_REF (ctx->content.txt.style), pair->code);
+                }
+              break;
+            case 11:
+              ctx->content.txt.normal.x = pair->value.d; break;
+              break;
+            case 21:
+              ctx->content.txt.normal.y = pair->value.d; break;
+            case 31:
+              ctx->content.txt.normal.z = pair->value.d;
+              LOG_TRACE ("%s.ctx.content.txt.normal = (%f, %f, %f) [11 3BD]\n", obj->name,
+                         ctx->content.txt.normal.x, ctx->content.txt.normal.y,
+                         ctx->content.txt.normal.z);
+              break;
+            case 12:
+              ctx->content.txt.location.x = pair->value.d; break;
+              break;
+            case 22:
+              ctx->content.txt.location.y = pair->value.d; break;
+            case 32:
+              ctx->content.txt.location.z = pair->value.d;
+              LOG_TRACE ("%s.ctx.content.txt.location = (%f, %f, %f) [12 3BD]\n",
+                         obj->name,
+                         ctx->content.txt.location.x, ctx->content.txt.location.y,
+                         ctx->content.txt.location.z);
+              break;
+            case 13:
+              ctx->content.txt.direction.x = pair->value.d; break;
+              break;
+            case 23:
+              ctx->content.txt.direction.y = pair->value.d; break;
+            case 33:
+              ctx->content.txt.direction.z = pair->value.d;
+              LOG_TRACE ("%s.ctx.content.txt.direction = (%f, %f, %f) [13 3BD]\n",
+                         obj->name,
+                         ctx->content.txt.direction.x, ctx->content.txt.direction.y,
+                         ctx->content.txt.direction.z);
+              break;
+            case 42:
+              ctx->content.txt.rotation = deg2rad (pair->value.d);
+              LOG_TRACE ("%s.ctx.content.txt.rotation = %f [%d BD]\n",
+                         obj->name, ctx->content.txt.rotation, pair->code);
+              break;
+            case 43:
+              ctx->content.txt.width = pair->value.d;
+              LOG_TRACE ("%s.ctx.content.txt.width = %f [%d BD]\n",
+                         obj->name, pair->value.d, pair->code);
+              break;
+            case 44:
+              ctx->content.txt.height = pair->value.d;
+              LOG_TRACE ("%s.ctx.content.txt.height = %f [%d BD]\n",
+                         obj->name, pair->value.d, pair->code);
+              break;
+            case 45:
+              ctx->content.txt.line_spacing_factor = pair->value.d;
+              LOG_TRACE ("%s.ctx.content.txt.line_spacing_factor = %f [%d BD]\n",
+                         obj->name, pair->value.d, pair->code);
+              break;
+            case 170:
+              ctx->content.txt.line_spacing_style = pair->value.i;
+              LOG_TRACE ("%s.ctx.content.txt.line_spacing_style = %d [%d BS]\n",
+                         obj->name, pair->value.i, pair->code);
+              break;
+            case 171:
+              ctx->content.txt.alignment = pair->value.i;
+              LOG_TRACE ("%s.ctx.content.txt.alignment = %d [%d BS]\n",
+                         obj->name, pair->value.i, pair->code);
+              break;
+            case 172:
+              ctx->content.txt.flow = pair->value.i;
+              LOG_TRACE ("%s.ctx.content.txt.flow = %d [%d BS]\n",
+                         obj->name, pair->value.i, pair->code);
+              break;
+            case 90:
+              ctx->content.txt.color.index = pair->value.i;
+              LOG_TRACE ("%s.ctx.content.txt.color.index = %d [%d BS]\n",
+                         obj->name, pair->value.i, pair->code);
+              break;
+            case 91:
+              ctx->content.txt.bg_color.index = pair->value.i;
+              LOG_TRACE ("%s.ctx.content.txt.bg_color.index = %d [%d BS]\n",
+                         obj->name, pair->value.i, pair->code);
+              break;
+            case 141:
+              ctx->content.txt.bg_scale = pair->value.d;
+              LOG_TRACE ("%s.ctx.content.txt.bg_scale = %f [%d BD]\n",
+                         obj->name, pair->value.d, pair->code);
+              break;
+            case 142:
+              ctx->content.txt.col_width = pair->value.d;
+              LOG_TRACE ("%s.ctx.content.txt.col_width = %f [%d BD]\n",
+                         obj->name, pair->value.d, pair->code);
+              break;
+            case 143:
+              ctx->content.txt.col_gutter = pair->value.d;
+              LOG_TRACE ("%s.ctx.content.txt.col_gutter = %f [%d BD]\n",
+                         obj->name, pair->value.d, pair->code);
+              break;
+            case 92:
+              ctx->content.txt.bg_transparency = pair->value.u;
+              LOG_TRACE ("%s.ctx.content.txt.bg_transparency = %u [%d BL]\n",
+                         obj->name, pair->value.u, pair->code);
+              break;
+            case 291:
+              ctx->content.txt.is_bg_fill = pair->value.i;
+              LOG_TRACE ("%s.ctx.content.txt.is_bg_fill = %i [%d B]\n",
+                         obj->name, pair->value.i, pair->code);
+              break;
+            case 292:
+              ctx->content.txt.is_bg_mask_fill = pair->value.i;
+              LOG_TRACE ("%s.ctx.content.txt.is_bg_mask_fill = %i [%d B]\n",
+                         obj->name, pair->value.i, pair->code);
+              break;
+            case 293:
+              ctx->content.txt.is_height_auto = pair->value.i;
+              LOG_TRACE ("%s.ctx.content.txt.is_height_auto = %i [%d B]\n",
+                         obj->name, pair->value.i, pair->code);
+              break;
+            case 294:
+              ctx->content.txt.is_col_flow_reversed = pair->value.i;
+              LOG_TRACE ("%s.ctx.content.txt.is_col_flow_reversed = %i [%d B]\n",
+                         obj->name, pair->value.i, pair->code);
+              break;
+            case 295:
+              ctx->content.txt.word_break = pair->value.i;
+              LOG_TRACE ("%s.ctx.content.txt.word_break = %i [%d B]\n",
+                         obj->name, pair->value.i, pair->code);
+              break;
+            case 173:
+              ctx->content.txt.col_type = pair->value.i;
+              LOG_TRACE ("%s.ctx.content.txt.col_type = %d [%d BS]\n",
+                         obj->name, pair->value.i, pair->code);
+              break;
+            case 144:
+              i++;
+              ctx->content.txt.num_col_sizes = i + 1;
+              ctx->content.txt.col_sizes = realloc (ctx->content.txt.col_sizes,
+                                                    (i + 1) * sizeof (double));
+              ctx->content.txt.col_sizes[i] = pair->value.d;
+              LOG_TRACE ("%s.ctx.content.txt.col_sizes[%d] = %f [%d BD]\n",
+                         obj->name, i, pair->value.d, pair->code);
+              break;
+            case 14: // has_content_block
+              ctx->has_content_block = 1;
+              ctx->content.blk.normal.x = pair->value.d;
+              LOG_TRACE ("%s.ctx.content.blk.normal.x = %f [%d 3BD]\n",
+                         obj->name, pair->value.d, pair->code);
+              break;
+            case 24:
+              ctx->content.blk.normal.y = pair->value.d;
+              LOG_TRACE ("%s.ctx.content.blk.normal.y = %f [%d 3BD]\n",
+                         obj->name, pair->value.d, pair->code);
+              break;
+            case 34:
+              ctx->content.blk.normal.z = pair->value.d;
+              LOG_TRACE ("%s.ctx.content.blk.normal.z = %f [%d 3BD]\n",
+                         obj->name, pair->value.d, pair->code);
+              break;
+            case 341:
+              ctx->content.blk.block_table = add_handleref (obj->parent, 4,
+                                                            pair->value.u, obj);
+              LOG_TRACE ("%s.ctx.content.blk.block_table = " FORMAT_REF " [%d H]\n",
+                         obj->name, ARGS_REF (ctx->content.blk.block_table), pair->code);
+              break;
+            case 15: // has_content_block
+              ctx->content.blk.location.x = pair->value.d;
+              break;
+            case 25:
+              ctx->content.blk.location.y = pair->value.d;
+              break;
+            case 35:
+              ctx->content.blk.location.z = pair->value.d;
+              LOG_TRACE (
+                  "%s.ctx.content.blk.location = (%f, %f, %f) [%d 3BD]\n",
+                  obj->name, ctx->content.blk.location.x,
+                  ctx->content.blk.location.y, ctx->content.blk.location.z,
+                  pair->code);
+              break;
+            case 16: // has_content_block
+              ctx->content.blk.scale.x = pair->value.d;
+              break;
+            case 26:
+              ctx->content.blk.scale.y = pair->value.d;
+              break;
+            case 36:
+              ctx->content.blk.scale.z = pair->value.d;
+              LOG_TRACE (
+                  "%s.ctx.content.blk.scale = (%f, %f, %f) [%d 3BD]\n",
+                  obj->name, ctx->content.blk.scale.x,
+                  ctx->content.blk.scale.y, ctx->content.blk.scale.z,
+                  pair->code);
+              break;
+            case 46:
+              ctx->content.blk.rotation = pair->value.d; // deg2rad?
+              LOG_TRACE ("%s.ctx.content.blk.rotation = %f [%d BD]\n",
+                         obj->name, pair->value.d, pair->code);
+              break;
+            case 93:
+              ctx->content.blk.color.index = pair->value.i;
+              LOG_TRACE ("%s.ctx.content.blk.color.index = %d [%d CMC]\n",
+                         obj->name, pair->value.i, pair->code);
+              break;
+            case 47:
+              j++;
+              if (!j)
+                ctx->content.blk.transform = calloc (16, sizeof (double));
+              ctx->content.blk.transform[j] = pair->value.d;
+              LOG_TRACE ("%s.ctx.content.blk.transform[%d] = %f [%d BD]\n",
+                         obj->name, j, pair->value.d, pair->code);
+              break;
+            case 110:
+              ctx->base.x = pair->value.d;
+              break;
+            case 120:
+              ctx->base.y = pair->value.d;
+              break;
+            case 130:
+              ctx->base.z = pair->value.d;
+              LOG_TRACE (
+                  "%s.ctx.base = (%f, %f, %f) [%d 3BD]\n",
+                  obj->name, ctx->base.x, ctx->base.y, ctx->base.z,
+                  pair->code);
+              break;
+            case 111:
+              ctx->base_dir.x = pair->value.d;
+              break;
+            case 121:
+              ctx->base_dir.y = pair->value.d;
+              break;
+            case 131:
+              ctx->base_dir.z = pair->value.d;
+              LOG_TRACE (
+                  "%s.ctx.base = (%f, %f, %f) [%d 3BD]\n",
+                  obj->name, ctx->base_dir.x, ctx->base_dir.y, ctx->base_dir.z,
+                  pair->code);
+              break;
+            case 112:
+              ctx->base_vert.x = pair->value.d;
+              break;
+            case 122:
+              ctx->base_vert.y = pair->value.d;
+              break;
+            case 132:
+              ctx->base_vert.z = pair->value.d;
+              LOG_TRACE (
+                  "%s.ctx.base = (%f, %f, %f) [%d 3BD]\n",
+                  obj->name, ctx->base_vert.x, ctx->base_vert.y, ctx->base_vert.z,
+                  pair->code);
+              break;
+            case 297:
+              ctx->is_normal_reversed = pair->value.i;
+              LOG_TRACE ("%s.ctx.is_normal_reversed = %i [%d B]\n",
+                         obj->name, pair->value.i, pair->code);
+              break;
+            case 273:
+              ctx->text_top = pair->value.i;
+              LOG_TRACE ("%s.ctx.text_top = %i [%d BS]\n",
+                         obj->name, pair->value.i, pair->code);
+              break;
+            case 272:
+              ctx->text_bottom = pair->value.i;
+              LOG_TRACE ("%s.ctx.text_bottom = %i [%d BS]\n",
+                         obj->name, pair->value.i, pair->code);
+              break;
+
+            case 301: // end ctx
+              return pair;
+            default:
+              LOG_ERROR ("Unknown DXF code %d for MULTILEADER", pair->code);
+            }
+          dxf_free_pair (pair);
+          pair = dxf_read_pair (dat);
+        }
+    }
+  return pair;
+}
+
+static Dxf_Pair *
 new_table_control (const char *restrict name, Bit_Chain *restrict dat,
                    Dwg_Data *restrict dwg)
 {
@@ -3258,6 +3875,15 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                    obj->fixedtype == DWG_TYPE_ARC_DIMENSION)) */
                 {
                   pair = add_ent_preview (obj, dat, pair);
+                  goto start_loop;
+                }
+              else if (strEQc (name, "MULTILEADER"))
+                {
+                  // for the unknown subfields: 300, 140, 145, 302, 304, ...
+                  pair = add_MULTILEADER (obj, dat, pair);
+                  // returns with 0 or 301
+                  if (pair && pair->code == 301)
+                    goto next_pair;
                   goto start_loop;
                 }
               else if (strEQc (name, "BLOCK") &&
