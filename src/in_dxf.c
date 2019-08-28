@@ -1480,7 +1480,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 421 && o->num_colors)
         {
           o->colors[j].color.alpha = pair->value.u;
-          LOG_TRACE ("HATCH.colors[%d].color.alpha = %06X [421 CMC]\n",
+          LOG_TRACE ("HATCH.colors[%d].color.rgb = %06X [421 CMC]\n",
                      j, pair->value.u);
         }
       else if (pair->code == 470)
@@ -2799,6 +2799,125 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                                        is_utf);
               LOG_TRACE ("%s.flag = %d [70 RC]\n", name, pair->value.i);
               break;
+            }
+          // fall through
+        case 420: // color.rgb's
+        case 421:
+        case 422:
+        case 423:
+        case 424:
+        case 425:
+        case 426:
+        case 427:
+          if (pair->code >= 420 && pair->code <= 427)
+            {
+              const char *fname = NULL;
+              if (pair->code == 421 &&
+                  (strEQc (name, "VPORT") ||
+                   strEQc (name, "VIEWPORT") ||
+                   strEQc (name, "VIEW")))
+                fname = "ambient_color";
+              else if (pair->code == 421 && strEQc (name, "MTEXT"))
+                fname = "bg_fill_color";
+              else if (pair->code == 420 && strEQc (name, "MLINESTYLE"))
+                // TODO or lines[].color
+                fname = "fill_color";
+              else if (pair->code == 420 && strEQc (name, "VISUALSTYLE"))
+                fname = "color";
+              else if (pair->code == 421 && strEQc (name, "VISUALSTYLE"))
+                fname = "face_mono_color";
+              else if (pair->code == 422 && strEQc (name, "VISUALSTYLE"))
+                fname = "edge_intersection_color";
+              else if (pair->code == 423 && strEQc (name, "VISUALSTYLE"))
+                fname = "edge_obscured_color";
+              else if (pair->code == 424 && strEQc (name, "VISUALSTYLE"))
+                fname = "edge_color";
+              else if (pair->code == 425 && strEQc (name, "VISUALSTYLE"))
+                fname = "edge_silhouette_color";
+              else if (strEQc (name, "TABLE"))
+                {
+                  BITCODE_BL table_flag
+                      = obj->tio.entity->tio.TABLE->table_flag_override;
+                  BITCODE_BL border_color = obj->tio.entity->tio.TABLE
+                                                ->border_color_overrides_flag;
+                  if (pair->code == 421)
+                    {
+                      if (table_flag & 0x0800)
+                        fname = "title_row_fill_color";
+                      else if (table_flag & 0x01000)
+                        fname = "header_row_fill_color";
+                      else if (table_flag & 0x02000)
+                        fname = "data_row_fill_color";
+                      else if (border_color & 0x0008)
+                        fname = "title_vert_left_color";
+                      else if (border_color & 0x0200)
+                        fname = "header_vert_left_color";
+                      else if (border_color & 0x8000)
+                        fname = "data_vert_left_color";
+                    }
+                  else if (pair->code == 422)
+                    {
+                      if (table_flag & 0x0020)
+                        fname = "title_row_color";
+                      else if (table_flag & 0x0040)
+                        fname = "header_row_color";
+                      else if (table_flag & 0x0080)
+                        fname = "data_row_color";
+                      else if (border_color & 0x0001)
+                        fname = "title_horiz_top_color";
+                      else if (border_color & 0x0040)
+                        fname = "header_horiz_top_color";
+                      else if (border_color & 0x1000)
+                        fname = "data_horiz_top_color";
+                    }
+                  else if (pair->code == 423)
+                    {
+                      if (border_color & 0x0002)
+                        fname = "title_horiz_ins_color";
+                      else if (border_color & 0x0080)
+                        fname = "header_horiz_ins_color";
+                      else if (border_color & 0x2000)
+                        fname = "data_horiz_ins_color";
+                    }
+                  else if (pair->code == 424)
+                    {
+                      if (border_color & 0x0004)
+                        fname = "title_horiz_bottom_color";
+                      else if (border_color & 0x0100)
+                        fname = "header_horiz_bottom_color";
+                      else if (border_color & 0x4000)
+                        fname = "data_horiz_bottom_color";
+                    }
+                  else if (pair->code == 426)
+                    {
+                      if (border_color & 0x0010)
+                        fname = "title_vert_ins_color";
+                      else if (border_color & 0x0400)
+                        fname = "header_vert_ins_color";
+                      else if (border_color & 0x10000)
+                        fname = "data_vert_ins_color";
+                    }
+                  else if (pair->code == 427)
+                    {
+                      if (border_color & 0x0020)
+                        fname = "title_vert_right_color";
+                      else if (border_color & 0x0800)
+                        fname = "header_vert_right_color";
+                      else if (border_color & 0x20000)
+                        fname = "data_vert_right_color";
+                    }
+                }
+
+              if (fname)
+                {
+                  BITCODE_CMC color;
+                  dwg_dynapi_entity_value (_obj, obj->name, fname, &color, NULL);
+                  color.rgb = pair->value.l;
+                  LOG_TRACE ("%s.%s.rgb = %06X [%d CMC]\n", name, fname, pair->value.u,
+                             pair->code);
+                  dwg_dynapi_entity_set_value (_obj, obj->name, fname, &color, is_utf);
+                  break;
+                }
             }
           // fall through
         default:
