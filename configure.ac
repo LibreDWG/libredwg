@@ -549,6 +549,7 @@ AC_CONFIG_FILES([programs/alive.test], [chmod +x programs/alive.test])
 AC_CONFIG_FILES([programs/json.test], [chmod +x programs/json.test])
 AC_CONFIG_FILES([logs-all.sh:$logs_all], [chmod +x logs-all.sh])
 AC_CONFIG_FILES([log], [chmod +x log])
+AC_CONFIG_FILES([dxf], [chmod +x dxf])
 
 AC_OUTPUT
 
