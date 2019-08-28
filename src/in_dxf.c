@@ -1776,6 +1776,8 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           switch (pair->code)
             {
+            case 300:
+              break;
             case 40:
               ctx->scale = pair->value.d;
               LOG_TRACE ("%s.ctx.scale = %f [%d BD]\n", obj->name, pair->value.d,
@@ -1993,8 +1995,12 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               LOG_TRACE ("%s.ctx.content.txt.col_sizes[%d] = %f [%d BD]\n",
                          obj->name, i, pair->value.d, pair->code);
               break;
+            case 296:
+              ctx->has_content_block = pair->value.i;
+              LOG_TRACE ("%s.ctx.has_content_block = %i [%d B]\n",
+                         obj->name, pair->value.i, pair->code);
+              break;
             case 14: // has_content_block
-              ctx->has_content_block = 1;
               ctx->content.blk.normal.x = pair->value.d;
               LOG_TRACE ("%s.ctx.content.blk.normal.x = %f [%d 3BD]\n",
                          obj->name, pair->value.d, pair->code);

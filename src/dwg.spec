@@ -5415,7 +5415,7 @@ DWG_ENTITY(MULTILEADER)
     }
   else
     {
-      FIELD_B (ctx.has_content_block, 0);
+      FIELD_B (ctx.has_content_block, 296);
       if (FIELD_VALUE (ctx.has_content_block))
         {
           //FIELD_HANDLE (ctx.content.blk.block_table, 4, 341);
