@@ -5500,7 +5500,7 @@ DWG_ENTITY(MULTILEADER)
   }
 
   COMMON_ENTITY_HANDLE_DATA;
-  // wrong documentation in the ODA. the handles are at the end.
+  // TODO: seperate hdl_dat earlier, and use it above.
   _REPEAT_N(_obj->ctx.num_leaders, ctx.leaders, Dwg_LEADER, 1)
   REPEAT_BLOCK
       #define lnode ctx.leaders[rcount1]

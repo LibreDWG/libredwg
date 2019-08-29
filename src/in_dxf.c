@@ -1539,11 +1539,13 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                          obj->name, i, j, pair->value.d, pair->code);
               break;
             case 20:
+              assert (j >= 0);
               lline->points[j].y = pair->value.d;
               LOG_TRACE ("%s.leaders[].lines[%d].points[%d].y = %f [%d BD]\n",
                          obj->name, i, j, pair->value.d, pair->code);
               break;
             case 30:
+              assert (j >= 0);
               lline->points[j].z = pair->value.d;
               LOG_TRACE ("%s.leaders[].lines[%d].points[%d].z = %f [%d BD]\n",
                          obj->name, i, j, pair->value.d, pair->code);
@@ -1557,26 +1559,31 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                          obj->name, i, k, pair->value.d, pair->code);
               break;
             case 21:
+              assert (k >= 0);
               lline->breaks[k].start.y = pair->value.d;
               LOG_TRACE ("%s.leaders[].lines[%d].breaks[%d].start.y = %f [%d 3BD]\n",
                          obj->name, i, k, pair->value.d, pair->code);
               break;
             case 31:
+              assert (k >= 0);
               lline->breaks[k].start.z = pair->value.d;
               LOG_TRACE ("%s.leaders[].lines[%d].breaks[%d].start.z = %f [%d 3BD]\n",
                          obj->name, i, k, pair->value.d, pair->code);
               break;
             case 12:
+              assert (k >= 0);
               lline->breaks[k].end.x = pair->value.d;
               LOG_TRACE ("%s.leaders[].lines[%d].breaks[%d].end.x = %f [%d 3BD]\n",
                          obj->name, i, k, pair->value.d, pair->code);
               break;
             case 22:
+              assert (k >= 0);
               lline->breaks[k].end.y = pair->value.d;
               LOG_TRACE ("%s.leaders[].lines[%d].breaks[%d].end.y = %f [%d 3BD]\n",
                          obj->name, i, k, pair->value.d, pair->code);
               break;
             case 32:
+              assert (k >= 0);
               lline->breaks[k].end.z = pair->value.d;
               LOG_TRACE ("%s.leaders[].lines[%d].breaks[%d].end.z = %f [%d 3BD]\n",
                          obj->name, i, k, pair->value.d, pair->code);
@@ -1622,6 +1629,11 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             }
         }
     }
+  if (!lnode->num_lines)
+    {
+      free (lnode->lines);
+      lnode->lines = NULL;
+    }
   return pair;
 }
 
@@ -1636,9 +1648,15 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       Dwg_MLEADER_AnnotContext *ctx = &o->ctx;
       while (pair->code != 303 && pair->code != 0)
         {
-          Dwg_LEADER *lnode = &ctx->leaders[i];
+          Dwg_LEADER *lnode = i >= 0 ? &ctx->leaders[i] : NULL;
           dxf_free_pair (pair);
           pair = dxf_read_pair (dat);
+
+          if (!lnode && pair->code != 290 && pair->code != 304 && pair->code != 303)
+            {
+              LOG_ERROR ("Missing MULTILEADER.LEADER{ 290 start");
+              return pair;
+            }
 
           switch (pair->code)
             {
