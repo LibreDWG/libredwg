@@ -90,6 +90,7 @@
 #  define SUB_FIELD_BS(o, nam, dxf) FIELDG (o.nam, BS, dxf)
 #  define SUB_FIELD_BL(o, nam, dxf) FIELDG (o.nam, BL, dxf)
 #  define SUB_FIELD_BLx(o, nam, dxf) FIELD_BLx (o.nam, dxf)
+#  define SUB_FIELD_BLd(o, nam, dxf) FIELD_BLd (o.nam, dxf)
 #  define SUB_FIELD_BD(o, nam, dxf) FIELDG (o.nam, BD, dxf)
 #  define SUB_FIELD_RC(o, nam, dxf) FIELDG (o.nam, RC, dxf)
 #  define SUB_FIELD_RS(o, nam, dxf) FIELDG (o.nam, RS, dxf)
@@ -114,6 +115,9 @@
 #endif
 #ifndef FIELD_BLx
 #  define FIELD_BLx(name, dxf) FIELD_BL (name, dxf)
+#endif
+#ifndef FIELD_BLd
+#  define FIELD_BLd(name, dxf) FIELD_BL (name, dxf)
 #endif
 #ifndef FIELD_BSx
 #  define FIELD_BSx(name, dxf) FIELD_BS (name, dxf)

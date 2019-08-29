@@ -344,6 +344,7 @@ static void _prefix (Bit_Chain *dat);
 #define SUB_FIELD_BS(o, nam, dxf) SUB_FIELD (o, nam, BS, dxf)
 #define SUB_FIELD_BL(o, nam, dxf) SUB_FIELD (o, nam, BL, dxf)
 #define SUB_FIELD_BLx(o, nam, dxf) SUB_FIELD (o, nam, BLx, dxf)
+#define SUB_FIELD_BLd(o, nam, dxf) SUB_FIELD (o, nam, BLd, dxf)
 #define SUB_FIELD_BD(o, nam, dxf) SUB_FIELD (o, nam, BD, dxf)
 #define SUB_FIELD_RC(o, nam, dxf) SUB_FIELD (o, nam, RC, dxf)
 #define SUB_FIELD_RS(o, nam, dxf) SUB_FIELD (o, nam, RS, dxf)

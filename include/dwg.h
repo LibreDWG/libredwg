@@ -2654,7 +2654,7 @@ typedef struct _dwg_LEADER_Line // as documented by DXF
   BITCODE_BS type; // 0 = invisible leader, 1 = straight leader, 2 = spline leader
   BITCODE_CMC color;
   BITCODE_H ltype; // 5 340
-  BITCODE_BL linewt;
+  BITCODE_BLd linewt;
   BITCODE_BD arrow_size;
   BITCODE_H  arrow_handle; // 5 341
   BITCODE_BL flags; // 1 = leader type, 2 = line color, 4 = line type, 8 = line weight,
@@ -2674,7 +2674,7 @@ typedef struct _dwg_ODALeader_Line //// as documented by ODA
   BITCODE_BS type; // 0 = invisible leader, 1 = straight leader, 2 = spline leader
   BITCODE_CMC color;
   BITCODE_H ltype;
-  BITCODE_BL linewt;
+  BITCODE_BLd linewt;
   BITCODE_BD arrow_size;
   BITCODE_H arrow_handle;
   BITCODE_BL flags;
@@ -2828,7 +2828,7 @@ typedef struct _dwg_entity_MULTILEADER
   BITCODE_BS type;
   BITCODE_CMC color;
   BITCODE_H ltype;
-  BITCODE_BL linewt;
+  BITCODE_BLd linewt;
   BITCODE_B has_landing;
   BITCODE_B has_dogleg;
   BITCODE_BD landing_dist;
@@ -2884,7 +2884,7 @@ typedef struct _dwg_object_MLEADERSTYLE
   BITCODE_BS type;
   BITCODE_CMC line_color;
   BITCODE_H line_type;
-  BITCODE_BL linewt;
+  BITCODE_BLd linewt;
   BITCODE_B has_landing;
   BITCODE_B has_dogleg;
   BITCODE_BD landing_gap;
@@ -3351,7 +3351,7 @@ typedef struct _dwg_BorderStyle
   BITCODE_BL border_property_overrides_flag;
   BITCODE_BL border_type;
   BITCODE_CMC color;
-  BITCODE_BL linewt;
+  BITCODE_BLd linewt;
   BITCODE_H line_type;
   BITCODE_BL invisible;
   BITCODE_BD double_line_spacing;

@@ -14332,18 +14332,17 @@ static int test_MULTILEADER (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_BL linewt;
+    BITCODE_BLd linewt;
     if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "linewt", &linewt, NULL)
         && linewt == multileader->linewt)
       pass ();
     else
-      fail ("MULTILEADER.linewt [BL] %u != %u", multileader->linewt, linewt);
-    linewt++;
+      fail ("MULTILEADER.linewt [BLd] " FORMAT_BLd " != " FORMAT_BLd "", multileader->linewt, linewt);
     if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "linewt", &linewt, 0)
         && linewt == multileader->linewt)
       pass ();
     else
-      fail ("MULTILEADER.linewt [BL] set+1 %u != %u", multileader->linewt, linewt);
+      fail ("MULTILEADER.linewt [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", multileader->linewt, linewt);
     multileader->linewt--;
 
   }
@@ -30631,18 +30630,17 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         fail ("MLEADERSTYLE.line_type [H]");
   }
   {
-    BITCODE_BL linewt;
+    BITCODE_BLd linewt;
     if (dwg_dynapi_entity_value (mleaderstyle, "MLEADERSTYLE", "linewt", &linewt, NULL)
         && linewt == mleaderstyle->linewt)
       pass ();
     else
-      fail ("MLEADERSTYLE.linewt [BL] %u != %u", mleaderstyle->linewt, linewt);
-    linewt++;
+      fail ("MLEADERSTYLE.linewt [BLd] " FORMAT_BLd " != " FORMAT_BLd "", mleaderstyle->linewt, linewt);
     if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "linewt", &linewt, 0)
         && linewt == mleaderstyle->linewt)
       pass ();
     else
-      fail ("MLEADERSTYLE.linewt [BL] set+1 %u != %u", mleaderstyle->linewt, linewt);
+      fail ("MLEADERSTYLE.linewt [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", mleaderstyle->linewt, linewt);
     mleaderstyle->linewt--;
 
   }

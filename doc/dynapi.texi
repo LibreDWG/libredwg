@@ -2420,7 +2420,7 @@ CMC,	DXF 91
 @item ltype
 H,	DXF 341
 @item linewt
-BL,	DXF 171
+BLd,	DXF 171
 @item has_landing
 B,	DXF 290
 @item has_dogleg
@@ -5680,7 +5680,7 @@ CMC,	DXF 91
 @item line_type
 H,	DXF 340
 @item linewt
-BL,	DXF 92
+BLd,	DXF 92
 @item has_landing
 B,	DXF 290
 @item has_dogleg
@@ -7438,7 +7438,7 @@ CMC
 @item ltype
 H
 @item linewt
-BL
+BLd
 @item arrow_size
 BD
 @item arrow_handle

@@ -294,6 +294,11 @@
     _obj->nam = bit_read_BS (dat);                                            \
     LOG_TRACE (#nam ": " FORMAT_BSd " [BSd %d]\n", _obj->nam, dxf);           \
   }
+#define FIELD_BLd(nam, dxf)                                                   \
+  {                                                                           \
+    _obj->nam = bit_read_BL (dat);                                            \
+    LOG_TRACE (#nam ": " FORMAT_BLd " [BLd %d]\n", _obj->nam, dxf);           \
+  }
 #define FIELD_RC(nam, dxf) FIELDG (nam, RC, dxf)
 #define FIELD_RCu(nam, dxf)                                                   \
   {                                                                           \

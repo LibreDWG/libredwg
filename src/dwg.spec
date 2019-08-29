@@ -4475,7 +4475,7 @@ DWG_OBJECT_END
           SUB_FIELD_BL (sty.border[rcount2],border_property_overrides_flag, 90); \
           SUB_FIELD_BL (sty.border[rcount2],border_type, 91);               \
           SUB_FIELD_CMC (sty.border[rcount2],color, 62,420);                \
-          SUB_FIELD_BL (sty.border[rcount2],linewt, 92);                    \
+          SUB_FIELD_BLd (sty.border[rcount2],linewt, 92);                    \
           SUB_FIELD_HANDLE (sty.border[rcount2],line_type, 3, 340);         \
           SUB_FIELD_BL (sty.border[rcount2],invisible, 93);                 \
           SUB_FIELD_BD (sty.border[rcount2],double_line_spacing, 93);       \
@@ -5355,7 +5355,7 @@ DWG_ENTITY(MULTILEADER)
               SUB_FIELD_BS (lline, type, 170);
               SUB_FIELD_CMC (lline, color, 92,0);
               //SUB_FIELD_HANDLE (lline, ltype, 5, 340);
-              SUB_FIELD_BL (lline, linewt, 171);
+              SUB_FIELD_BLd (lline, linewt, 171);
               SUB_FIELD_BD (lline, arrow_size, 40);
               //SUB_FIELD_HANDLE (lline, arrow_handle, 5, 341);
               SUB_FIELD_BL (lline, flags, 93);
@@ -5444,7 +5444,7 @@ DWG_ENTITY(MULTILEADER)
   FIELD_BL (flags, 90); // override flags
   FIELD_BS (type, 170);
   FIELD_CMC (color, 91,0);
-  FIELD_BL (linewt, 171);
+  FIELD_BLd (linewt, 171);
   FIELD_B (has_landing, 290);
   FIELD_B (has_dogleg, 291);
   FIELD_BD (landing_dist, 41);
@@ -5550,7 +5550,7 @@ DWG_OBJECT(MLEADERSTYLE)
   FIELD_BD (second_seg_angle, 41);
   FIELD_BS (type, 173);
   FIELD_CMC (line_color, 91,0);
-  FIELD_BL (linewt, 92);
+  FIELD_BLd (linewt, 92);
   FIELD_B (has_landing, 290);
   FIELD_BD (landing_gap, 42);
   FIELD_B (has_dogleg, 291);
