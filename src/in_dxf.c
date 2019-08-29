@@ -1035,6 +1035,67 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return pair;
 }
 
+// only code 1
+static Dxf_Pair *
+add_3DSOLID_encr (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                  Dxf_Pair *restrict pair)
+{
+  Dwg_Entity_3DSOLID *o = obj->tio.entity->tio._3DSOLID;
+  int i = 0, total = 0;
+  o->num_blocks = 1;
+  o->encr_sat_data = calloc (2, sizeof (char*));
+  o->encr_sat_data[0] = NULL;
+  o->block_size = calloc (2, sizeof (BITCODE_BL));
+
+  while (pair->code == 1)
+    {
+      int len = strlen (pair->value.s) + 1; // + the \n
+      if (!total)
+        {
+          total = len;
+          o->encr_sat_data[0] = malloc (total+1); // + the \0
+          //memcpy (o->encr_sat_data[0], pair->value.s, len + 1);
+          strcpy (o->encr_sat_data[0], pair->value.s);
+        }
+      else
+        {
+          total += len;
+          o->encr_sat_data[0] = realloc (o->encr_sat_data[0], total+1);
+          strcat (o->encr_sat_data[0], pair->value.s);
+        }
+      strcat (o->encr_sat_data[0], "\n");
+      i++;
+
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+    }
+  LOG_TRACE("%s.block_size[0]: %d\n", obj->name, total);
+
+  if (o->version == 1)
+    {
+      int idx = 0;
+      o->unknown = 1; // ??
+      o->acis_data = calloc (1, total+1);
+      for (i=0; i < total; i++)
+        {
+          if (o->encr_sat_data[0][i] == '^' && i <= total &&
+              o->encr_sat_data[0][i+1] == ' ')
+            {
+              o->acis_data[idx++] = 'A'; i++;
+            }
+          else if (o->encr_sat_data[0][i] <= 32)
+            o->acis_data[idx++] = o->encr_sat_data[0][i];
+          else
+            o->acis_data[idx++] = 159 - o->encr_sat_data[0][i];
+        }
+      o->acis_data[idx] = '\0';
+      o->block_size[0] = idx;
+      LOG_TRACE("%s.acis_data:\n%s\n", obj->name, o->acis_data);
+    }
+
+  return pair;
+}
+
 static Dxf_Pair *
 add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
            Dxf_Pair *restrict pair)
@@ -3570,6 +3631,14 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
           else if (pair->code == 310 && strEQc (obj->name, "BLOCK_HEADER"))
             {
               pair = add_block_preview (obj, dat, pair);
+              goto start_loop;
+            }
+          else if (pair->code == 1 &&
+                   (strEQc (name, "_3DSOLID") ||
+                    strEQc (name, "BODY") ||
+                    strEQc (name, "REGION")))
+            {
+              pair = add_3DSOLID_encr (obj, dat, pair);
               goto start_loop;
             }
           else if (pair->code == 370 && strEQc (name, "LAYER"))
