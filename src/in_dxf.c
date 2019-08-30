@@ -1008,10 +1008,11 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_TRACE ("LWPOLYLINE.vertexids[%d] = %f [91 BD]\n",
                      j, pair->value.d);
         }
-      else if (pair->code == 40 && (_o->flag & 4)) // not const_width
+      else if (pair->code == 40) // not const_width
         {
           if (!j)
             {
+              _o->flag |= 4;
               _o->widths = calloc (num_points, sizeof (Dwg_LWPOLYLINE_width));
               _o->num_widths = num_points;
             }
