@@ -391,6 +391,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_LIGHT,
   DWG_TYPE_LIGHTLIST,
   DWG_TYPE_MATERIAL,
+  DWG_TYPE_MESH,
   DWG_TYPE_MLEADERSTYLE,
   DWG_TYPE_MULTILEADER,
   DWG_TYPE_NAVISWORKSMODELDEF,
@@ -4519,8 +4520,41 @@ typedef struct _dwg_entity_SWEPTSURFACE
 } Dwg_Entity_SWEPTSURFACE;
 
 /**
+ Entity MESH (varies)
+ Types: Sphere|Cylinder|Cone|Torus|Box|Wedge|Pyramid
+ --enable-debug only, unknown fields
+*/
+typedef struct _dwg_MESH_edge
+{
+  BITCODE_BL from;
+  BITCODE_BL to;
+} Dwg_MESH_edge;
+
+typedef struct _dwg_entity_MESH
+{
+  struct _dwg_object_entity *parent;
+  //_3DSOLID_FIELDS;
+  BITCODE_BL class_version;	/*!< DXF 90 */
+
+  BITCODE_RC dlevel; 		/*!< DXF 71 (2) */
+  BITCODE_RC is_watertight; 	/*!< DXF 72 (0) */
+  BITCODE_BL num_subdiv_vertex; /*!< DXF 91 ?? */
+  BITCODE_3BD* subdiv_vertex; 	/*!< DXF 10 ?? */
+  BITCODE_BL num_vertex;  	/*!< DXF 92 */
+  BITCODE_3BD* vertex; 		/*!< DXF 10 */
+  BITCODE_BL num_faces;  	/*!< DXF 93 */
+  BITCODE_BL* faces;  	        /*!< DXF 90 */
+  BITCODE_BL num_edges;  	/*!< DXF 94 */
+  Dwg_MESH_edge* edges;   	/*!< DXF 90 */
+  BITCODE_BL num_crease;  	/*!< DXF 95 */
+  BITCODE_BD* crease;   	/*!< DXF 140 */
+
+} Dwg_Entity_MESH;
+
+/**
  Object SUN (varies) UNKNOWN FIELDS
  wrongly documented by ACAD DXF as entity
+ --enable-debug only, unknown fields
  */
 typedef struct _dwg_object_SUN
 {
@@ -4554,6 +4588,7 @@ typedef struct _dwg_SUNSTUDY_Dates
 
 /**
  Object SUNSTUDY (varies) UNKNOWN FIELDS
+ --enable-debug only
  */
 typedef struct _dwg_object_SUNSTUDY
 {
@@ -4591,6 +4626,7 @@ typedef struct _dwg_object_SUNSTUDY
 
 /**
  Object DATATABLE (varies) UNKNOWN FIELDS
+ --enable-debug only
  */
 typedef struct _dwg_object_DATATABLE
 {
@@ -4600,6 +4636,7 @@ typedef struct _dwg_object_DATATABLE
 
 /**
  Object DIMASSOC (varies) DEBUGGING
+ --enable-debug only
  */
 typedef struct _dwg_DIMASSOC_ref
 {
@@ -5138,6 +5175,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_UNDERLAY *UNDERLAY;
     Dwg_Entity_WIPEOUT *WIPEOUT;
     Dwg_Entity_ARC_DIMENSION *ARC_DIMENSION;
+    Dwg_Entity_MESH *MESH;
 
     Dwg_Entity_UNKNOWN_ENT *UNKNOWN_ENT;
   } tio;
@@ -5950,6 +5988,7 @@ EXPORT int dwg_add_GEOPOSITIONMARKER (Dwg_Object *obj);
 //EXPORT int dwg_add_LEADEROBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_add_LIGHTLIST (Dwg_Object *obj);
 EXPORT int dwg_add_MATERIAL (Dwg_Object *obj);
+EXPORT int dwg_add_MESH (Dwg_Object *obj);
 //EXPORT int dwg_add_NPOCOLLECTION (Dwg_Object *obj);
 EXPORT int dwg_add_PLOTSETTINGS (Dwg_Object *obj);
 //EXPORT int dwg_add_POINTCLOUD (Dwg_Object *obj);

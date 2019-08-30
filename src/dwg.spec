@@ -7050,6 +7050,49 @@ DWG_ENTITY(ARC_DIMENSION)
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
+// varies: UNKNOWN FIELDS
+// types: Sphere|Cylinder|Cone|Torus|Box|Wedge|Pyramid
+DWG_ENTITY(MESH)
+  DECODE_UNKNOWN_BITS
+  FIELD_BL (class_version, 90);
+  if (FIELD_VALUE(class_version) > 10)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
+
+  SUBCLASS (AcDbSubDMesh)
+  FIELD_RC (dlevel, 71); // 2
+  FIELD_RC (is_watertight, 72); // 0
+  FIELD_BL (num_subdiv_vertex, 91); //?
+  if (FIELD_VALUE(num_subdiv_vertex) > 1000)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
+  FIELD_VECTOR (subdiv_vertex, 3BD, num_subdiv_vertex, 10); //?
+  FIELD_BL (num_vertex, 92);
+  if (FIELD_VALUE(num_vertex) > 1000)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
+  FIELD_VECTOR (vertex, 3BD, num_vertex, 10);
+  FIELD_BL (num_faces, 93);
+  if (FIELD_VALUE(num_faces) > 1000)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
+  FIELD_VECTOR (faces, BL, num_faces, 90);
+  FIELD_BL (num_edges, 94);
+  if (FIELD_VALUE(num_edges) > 1000)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
+  REPEAT(num_edges, edges, Dwg_MESH_edge)
+  REPEAT_BLOCK
+      SUB_FIELD_BL (edges[rcount1], from, 90);
+      SUB_FIELD_BL (edges[rcount1], to, 90);
+  END_REPEAT_BLOCK
+  SET_PARENT_OBJ(edges);
+  END_REPEAT(edges);
+  //FIELD_VECTOR (edges, Dwg_MESH_edge, num_edges, 90);
+  FIELD_BL (num_crease, 95);
+  if (FIELD_VALUE(num_crease) > 1000)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
+  FIELD_VECTOR (crease, BD, num_crease, 140);
+  /* 90 ?
+     ? BD crease
+  */
+  COMMON_ENTITY_HANDLE_DATA;
+DWG_ENTITY_END
 
 #endif /* DEBUG_CLASSES */
 
@@ -7064,6 +7107,7 @@ DWG_ENTITY_END
   ATTBLOCKREF  ATTDYNBLOCKREF  BLOCKREF  CENTERMARK CENTERLINE
   DYNBLOCKREF XREF
   SECTIONOBJECT
+  MESH
 */
 
 // r2000+

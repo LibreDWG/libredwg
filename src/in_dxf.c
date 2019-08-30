@@ -1097,6 +1097,184 @@ add_3DSOLID_encr (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 }
 
 static Dxf_Pair *
+add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+          Dxf_Pair *restrict pair)
+{
+  Dwg_Entity_MESH *o = obj->tio.entity->tio.MESH;
+  BITCODE_BL j = 0;
+  int vector = 0;
+
+  // valid entry code: 91
+  if (pair->code == 91)
+    {
+      vector = pair->code;
+      o->num_subdiv_vertex = pair->value.u;
+      if (pair->value.u)
+        o->subdiv_vertex = calloc (o->num_subdiv_vertex, sizeof (BITCODE_3BD));
+      LOG_TRACE ("MESH.num_subdiv_vertex = %u [91 BL]\n", pair->value.u);
+    }
+
+  while (pair->code != 0)
+    {
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+
+      if (pair->code == 0)
+        return pair;
+      else if (pair->code == 92)
+        {
+          j = 0;
+          vector = pair->code;
+          o->num_vertex = pair->value.u;
+          LOG_TRACE ("MESH.num_vertex = %u [92 BL]\n", pair->value.u);
+          if (pair->value.u)
+            o->vertex = calloc (o->num_vertex, sizeof (BITCODE_3BD));
+        }
+      else if (pair->code == 93)
+        {
+          j = 0;
+          vector = pair->code;
+          o->num_faces = pair->value.u;
+          LOG_TRACE ("MESH.num_faces = %u [%d BL]\n", pair->value.u,
+                     pair->code);
+          if (pair->value.u)
+            o->faces = calloc (o->num_faces, sizeof (BITCODE_BL));
+        }
+      else if (pair->code == 94)
+        {
+          j = 0;
+          vector = pair->code;
+          o->num_edges = pair->value.u;
+          LOG_TRACE ("MESH.num_edges = %u [%d BL]\n", pair->value.u,
+                     pair->code);
+          if (pair->value.u) // from face - to face
+            o->edges = calloc (o->num_edges, sizeof (Dwg_MESH_edge));
+        }
+      else if (pair->code == 95)
+        {
+          j = 0;
+          vector = pair->code;
+          o->num_crease = pair->value.u;
+          LOG_TRACE ("MESH.num_crease = %u [%d BL]\n", pair->value.u,
+                     pair->code);
+          if (pair->value.u)
+            o->crease = calloc (o->num_crease, sizeof (BITCODE_BD));
+        }
+      else if (pair->code == 10)
+        {
+          if (vector == 91)
+            {
+              assert (j < o->num_subdiv_vertex);
+              o->subdiv_vertex[j].x = pair->value.d;
+            }
+          else if (vector == 92)
+            {
+              assert (j < o->num_vertex);
+              o->vertex[j].x = pair->value.d;
+            }
+          else
+            goto mesh_error;
+        }
+      else if (pair->code == 20)
+        {
+          if (vector == 91)
+            {
+              assert (j < o->num_subdiv_vertex);
+              o->subdiv_vertex[j].y = pair->value.d;
+            }
+          else if (vector == 92)
+            {
+              assert (j < o->num_vertex);
+              o->vertex[j].y = pair->value.d;
+            }
+          else
+            goto mesh_error;
+        }
+      else if (pair->code == 30)
+        {
+          if (vector == 91)
+            {
+              assert (j < o->num_subdiv_vertex);
+              o->subdiv_vertex[j].z = pair->value.d;
+              LOG_TRACE ("MESH.subdiv_vertex[%d] = (%f, %f, %f) [%d 3BD]\n", j,
+                         o->subdiv_vertex[j].x, o->subdiv_vertex[j].y,
+                         o->subdiv_vertex[j].z, pair->code);
+              j++;
+            }
+          else if (vector == 92)
+            {
+              assert (j < o->num_vertex);
+              o->vertex[j].z = pair->value.d;
+              LOG_TRACE ("MESH.vertex[%d] = (%f, %f, %f) [%d 3BD]\n", j,
+                         o->vertex[j].x, o->vertex[j].y, o->vertex[j].z,
+                         pair->code);
+              j++;
+            }
+          else
+            goto mesh_error;
+        }
+      else if (pair->code == 90)
+        {
+          if (vector == 93)
+            {
+              assert (j < o->num_faces);
+              o->faces[j] = pair->value.u;
+              LOG_TRACE ("MESH.faces[%d] = %u [%d BL]\n", j, pair->value.u,
+                         pair->code);
+              j++;
+            }
+          else if (vector == 94)
+            {
+              int i = j/2;
+              assert (j < 2 * o->num_edges);
+              if (j % 2 == 0)
+                {
+                  o->edges[i].from = pair->value.u;
+                }
+              else
+                {
+                  o->edges[i].to = pair->value.u;
+                  LOG_TRACE ("MESH.edges[%d] = (%u, %u) [%d 2BL]\n", i,
+                             o->edges[i].from, pair->value.u, pair->code);
+                }
+              j++;
+            }
+          else if (vector == 95) //??
+            {
+              o->class_version = pair->value.u;
+              LOG_TRACE ("MESH.class_version = %u [%d BL]\n", pair->value.u,
+                         pair->code);
+            }
+          else
+            goto mesh_error;
+        }
+      else if (pair->code == 140)
+        {
+          if (vector == 95)
+            {
+              assert (j < o->num_crease);
+              o->crease[j] = pair->value.u;
+              LOG_TRACE ("MESH.crease[%d] = %u [%d BD]\n", j, pair->value.u,
+                         pair->code);
+              j++;
+            }
+          else
+            goto mesh_error;
+        }
+      else if (pair->code >= 1000 && pair->code < 1999)
+        {
+          add_eed (obj, "MESH", pair);
+        }
+      else
+        {
+        mesh_error:
+          LOG_ERROR ("Unknown DXF code %d for %s", pair->code, "MESH");
+        }
+    }
+  return pair;
+}
+
+static Dxf_Pair *
 add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
            Dxf_Pair *restrict pair)
 {
@@ -3075,6 +3253,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
   int j = 0, k = 0, l = 0, error = 0;
   BITCODE_RL curr_inserts = 0;
   BITCODE_RS flag = 0;
+  subclass[0] = '\0';
 
   if (ctrl || i)
     {
@@ -3636,8 +3815,10 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
           else if (pair->code == 1 &&
                    (strEQc (name, "_3DSOLID") ||
                     strEQc (name, "BODY") ||
-                    strEQc (name, "REGION")))
+                    strEQc (name, "REGION") ||
+                    strEQc (subclass, "AcDbModelerGeometry")))
             {
+              j = 0; k = 0;
               pair = add_3DSOLID_encr (obj, dat, pair);
               goto start_loop;
             }
@@ -3707,6 +3888,18 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               else
                 goto search_field;
             }
+          else if (strEQc (name, "MESH"))
+            {
+              if (pair->code == 91)
+                {
+                  pair = add_MESH (obj, dat, pair);
+                  if (pair->code == 0) // end or unknown
+                    return pair;
+                  goto search_field;
+                }
+              else
+                goto search_field;
+            }
           else
           search_field:
             { // search all specific fields and common fields for the DXF
@@ -3730,10 +3923,11 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                     }
                   else if (f->dxf == pair->code) // matching DXF code
                     {
-                      if (pair->code == 92 &&
-                          obj->fixedtype == DWG_TYPE_MULTILEADER &&
-                          // not MULTILEADER.text_color
+                      // exceptions, where there's another field 92:
+                      if ((pair->code == 92) && is_entity &&
+                          obj->fixedtype > DWG_TYPE_LAYOUT &&
                           strEQc (subclass, "AcDbEntity"))
+                          // not MULTILEADER.text_color, nor MESH.num_vertex
                         {
                           pair = add_ent_preview (obj, dat, pair);
                           goto start_loop;
@@ -3879,6 +4073,35 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                                  pair->value.d, pair->code, f->type);
                       goto next_pair; // found, early exit
                     }
+                  // FIELD_VECTOR_N BITCODE_BD transmatrix[16]:
+                  else if (strEQc (f->type, "BD*") &&
+                           (strEQc (name, "EXTRUDEDSURFACE") ||
+                            strEQc (name, "LOFTEDSURFACE") ||
+                            strEQc (name, "SWEPTSURFACE") ||
+                            strEQc (name, "REVOLVEDSURFACE") ||
+                            strEQc (name, "MATERIAL") ||
+                            strEQc (name, "SPATIAL_FILTER") || /* max 12 */
+                            strEQc (name, "ACSH_SWEEP_CLASS")) &&
+                           ((pair->code >= 40 && pair->code <= 49) ||
+                            (pair->code <= 142 && pair->code <= 147)))
+                    {
+                      // 16x BD, via j
+                      BITCODE_BD *matrix;
+                      dwg_dynapi_entity_value (_obj, obj->name, f->name, &matrix, NULL);
+                      if (!matrix)
+                        {
+                          matrix = calloc (16, sizeof (BITCODE_BD));
+                          j = 0;
+                        }
+                      assert (j >= 0 && j < 16);
+                      matrix[j] = pair->value.d;
+                      dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
+                                                   &matrix, 0);
+                      LOG_TRACE ("%s.%s[%d] = %f [%d %s]\n", name, f->name, j,
+                                 pair->value.d, pair->code, f->type);
+                      j++;
+                      goto next_pair;
+                    }
                 }
 
               fields = is_entity ? dwg_dynapi_common_entity_fields ()
@@ -3955,12 +4178,14 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                         }
                     }
                 }
+              // still needed? already handled above
               // not in dynapi: 92 as 310 size prefix for PROXY vector preview data
               if ((pair->code == 92) && is_entity &&
                   obj->fixedtype > DWG_TYPE_LAYOUT &&
                   strEQc (subclass, "AcDbEntity"))
                 /*
                   (obj->fixedtype == DWG_TYPE_WIPEOUT ||
+                   obj->fixedtype == DWG_TYPE_MESH ||
                    obj->fixedtype == DWG_TYPE_MULTILEADER ||
                    obj->fixedtype == DWG_TYPE_UNDERLAY ||
                    obj->fixedtype == DWG_TYPE_HELIX ||

@@ -13245,6 +13245,199 @@ static int test_LWPOLYLINE (const Dwg_Object *obj)
   }
   return failed;
 }
+static int test_MESH (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_MESH *restrict mesh = obj->tio.entity->tio.MESH;
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (mesh, "MESH", "class_version", &class_version, NULL)
+        && class_version == mesh->class_version)
+      pass ();
+    else
+      fail ("MESH.class_version [BL] %u != %u", mesh->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (mesh, "MESH", "class_version", &class_version, 0)
+        && class_version == mesh->class_version)
+      pass ();
+    else
+      fail ("MESH.class_version [BL] set+1 %u != %u", mesh->class_version, class_version);
+    mesh->class_version--;
+
+  }
+  {
+    BITCODE_BD* crease;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (mesh, "MESH", "num_crease", &count, NULL)
+        && dwg_dynapi_entity_value (mesh, "MESH", "crease", &crease, NULL)
+        && crease == mesh->crease)
+      pass ();
+    else
+      fail ("MESH.crease [BD*] * %u num_crease", count);
+  }
+  {
+    BITCODE_RC dlevel;
+    if (dwg_dynapi_entity_value (mesh, "MESH", "dlevel", &dlevel, NULL)
+        && dlevel == mesh->dlevel)
+      pass ();
+    else
+      fail ("MESH.dlevel [RC] %u != %u", mesh->dlevel, dlevel);
+    dlevel++;
+    if (dwg_dynapi_entity_set_value (mesh, "MESH", "dlevel", &dlevel, 0)
+        && dlevel == mesh->dlevel)
+      pass ();
+    else
+      fail ("MESH.dlevel [RC] set+1 %u != %u", mesh->dlevel, dlevel);
+    mesh->dlevel--;
+
+  }
+  {
+    Dwg_MESH_edge* edges;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (mesh, "MESH", "num_edges", &count, NULL)
+        && dwg_dynapi_entity_value (mesh, "MESH", "edges", &edges, NULL)
+        && edges == mesh->edges)
+      pass ();
+    else
+      fail ("MESH.edges [Dwg_MESH_edge*] * %u num_edges", count);
+  }
+  {
+    BITCODE_BL* faces;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (mesh, "MESH", "num_faces", &count, NULL)
+        && dwg_dynapi_entity_value (mesh, "MESH", "faces", &faces, NULL)
+        && faces == mesh->faces)
+      pass ();
+    else
+      fail ("MESH.faces [BL*] * %u num_faces", count);
+  }
+  {
+    BITCODE_RC is_watertight;
+    if (dwg_dynapi_entity_value (mesh, "MESH", "is_watertight", &is_watertight, NULL)
+        && is_watertight == mesh->is_watertight)
+      pass ();
+    else
+      fail ("MESH.is_watertight [RC] %u != %u", mesh->is_watertight, is_watertight);
+    is_watertight++;
+    if (dwg_dynapi_entity_set_value (mesh, "MESH", "is_watertight", &is_watertight, 0)
+        && is_watertight == mesh->is_watertight)
+      pass ();
+    else
+      fail ("MESH.is_watertight [RC] set+1 %u != %u", mesh->is_watertight, is_watertight);
+    mesh->is_watertight--;
+
+  }
+  {
+    BITCODE_BL num_crease;
+    if (dwg_dynapi_entity_value (mesh, "MESH", "num_crease", &num_crease, NULL)
+        && num_crease == mesh->num_crease)
+      pass ();
+    else
+      fail ("MESH.num_crease [BL] %u != %u", mesh->num_crease, num_crease);
+    num_crease++;
+    if (dwg_dynapi_entity_set_value (mesh, "MESH", "num_crease", &num_crease, 0)
+        && num_crease == mesh->num_crease)
+      pass ();
+    else
+      fail ("MESH.num_crease [BL] set+1 %u != %u", mesh->num_crease, num_crease);
+    mesh->num_crease--;
+
+  }
+  {
+    BITCODE_BL num_edges;
+    if (dwg_dynapi_entity_value (mesh, "MESH", "num_edges", &num_edges, NULL)
+        && num_edges == mesh->num_edges)
+      pass ();
+    else
+      fail ("MESH.num_edges [BL] %u != %u", mesh->num_edges, num_edges);
+    num_edges++;
+    if (dwg_dynapi_entity_set_value (mesh, "MESH", "num_edges", &num_edges, 0)
+        && num_edges == mesh->num_edges)
+      pass ();
+    else
+      fail ("MESH.num_edges [BL] set+1 %u != %u", mesh->num_edges, num_edges);
+    mesh->num_edges--;
+
+  }
+  {
+    BITCODE_BL num_faces;
+    if (dwg_dynapi_entity_value (mesh, "MESH", "num_faces", &num_faces, NULL)
+        && num_faces == mesh->num_faces)
+      pass ();
+    else
+      fail ("MESH.num_faces [BL] %u != %u", mesh->num_faces, num_faces);
+    num_faces++;
+    if (dwg_dynapi_entity_set_value (mesh, "MESH", "num_faces", &num_faces, 0)
+        && num_faces == mesh->num_faces)
+      pass ();
+    else
+      fail ("MESH.num_faces [BL] set+1 %u != %u", mesh->num_faces, num_faces);
+    mesh->num_faces--;
+
+  }
+  {
+    BITCODE_BL num_subdiv_vertex;
+    if (dwg_dynapi_entity_value (mesh, "MESH", "num_subdiv_vertex", &num_subdiv_vertex, NULL)
+        && num_subdiv_vertex == mesh->num_subdiv_vertex)
+      pass ();
+    else
+      fail ("MESH.num_subdiv_vertex [BL] %u != %u", mesh->num_subdiv_vertex, num_subdiv_vertex);
+    num_subdiv_vertex++;
+    if (dwg_dynapi_entity_set_value (mesh, "MESH", "num_subdiv_vertex", &num_subdiv_vertex, 0)
+        && num_subdiv_vertex == mesh->num_subdiv_vertex)
+      pass ();
+    else
+      fail ("MESH.num_subdiv_vertex [BL] set+1 %u != %u", mesh->num_subdiv_vertex, num_subdiv_vertex);
+    mesh->num_subdiv_vertex--;
+
+  }
+  {
+    BITCODE_BL num_vertex;
+    if (dwg_dynapi_entity_value (mesh, "MESH", "num_vertex", &num_vertex, NULL)
+        && num_vertex == mesh->num_vertex)
+      pass ();
+    else
+      fail ("MESH.num_vertex [BL] %u != %u", mesh->num_vertex, num_vertex);
+    num_vertex++;
+    if (dwg_dynapi_entity_set_value (mesh, "MESH", "num_vertex", &num_vertex, 0)
+        && num_vertex == mesh->num_vertex)
+      pass ();
+    else
+      fail ("MESH.num_vertex [BL] set+1 %u != %u", mesh->num_vertex, num_vertex);
+    mesh->num_vertex--;
+
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (mesh, "MESH", "parent", &parent, NULL)
+        && !memcmp (&parent, &mesh->parent, sizeof (mesh->parent)))
+        pass ();
+    else
+        fail ("MESH.parent [struct _dwg_object_entity*]");
+  }
+  {
+    BITCODE_3BD* subdiv_vertex;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (mesh, "MESH", "num_subdiv_vertex", &count, NULL)
+        && dwg_dynapi_entity_value (mesh, "MESH", "subdiv_vertex", &subdiv_vertex, NULL)
+        && subdiv_vertex == mesh->subdiv_vertex)
+      pass ();
+    else
+      fail ("MESH.subdiv_vertex [3BD*] * %u num_subdiv_vertex", count);
+  }
+  {
+    BITCODE_3BD* vertex;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (mesh, "MESH", "num_owned", &count, NULL)
+        && dwg_dynapi_entity_value (mesh, "MESH", "vertex", &vertex, NULL)
+        && vertex == mesh->vertex)
+      pass ();
+    else
+      fail ("MESH.vertex [3BD*] * %u num_owned", count);
+  }
+  return failed;
+}
 static int test_MINSERT (const Dwg_Object *obj)
 {
   int error = 0;
@@ -36212,6 +36405,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_LOFTEDSURFACE(obj);
   else  if (obj->fixedtype == DWG_TYPE_LWPOLYLINE)
     error += test_LWPOLYLINE(obj);
+  else  if (obj->fixedtype == DWG_TYPE_MESH)
+    error += test_MESH(obj);
   else  if (obj->fixedtype == DWG_TYPE_MINSERT)
     error += test_MINSERT(obj);
   else  if (obj->fixedtype == DWG_TYPE_MLINE)
@@ -36496,6 +36691,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_LOFTEDSURFACE (obj);
   else  if (obj->fixedtype == DWG_TYPE_LWPOLYLINE)
     error += test_LWPOLYLINE (obj);
+  else  if (obj->fixedtype == DWG_TYPE_MESH)
+    error += test_MESH (obj);
   else  if (obj->fixedtype == DWG_TYPE_MINSERT)
     error += test_MINSERT (obj);
   else  if (obj->fixedtype == DWG_TYPE_MLINE)

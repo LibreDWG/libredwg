@@ -5,9 +5,12 @@ srcdir="@srcdir@"
 make -s -j4
 @DSYMUTIL@ programs/dxf2dwg
 v=-v3
+y=
 
 for d in "$@"; do
     case $d in
+        -y) y="-y"
+             ;;
         -v*) v=$d
              ;;
         *)
@@ -21,8 +24,8 @@ for d in "$@"; do
         if [ x$dir = x_test-data ]; then dir=""; fi
         if [ x$dir = x_td ]; then dir=""; fi
         log=`basename "$d" .dxf`$dir.dxf.log
-        echo programs/dxf2dwg $v "$d" 2\>$log
-        @TIMEOUT_10@ @LTEXEC@ programs/dxf2dwg $v "$d" 2>$log
+        echo programs/dxf2dwg $y $v "$d" 2\>$log
+        @TIMEOUT_10@ @LTEXEC@ programs/dxf2dwg $y $v "$d" 2>$log
         ;;
     esac
 done

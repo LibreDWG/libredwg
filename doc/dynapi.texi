@@ -2247,6 +2247,45 @@ Dwg_LWPOLYLINE_width*
 @end vtable
 @end indentedblock
 
+@strong{MESH} @anchor{MESH}
+@cindex entity, MESH
+@vindex MESH
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+@item class_version
+BL,	DXF 90
+@item dlevel
+RC,	DXF 71
+@item is_watertight
+RC,	DXF 72
+@item num_subdiv_vertex
+BL,	DXF 91
+@item subdiv_vertex
+3BD*,	DXF 10
+@item num_vertex
+BL,	DXF 92
+@item vertex
+3BD*,	DXF 10
+@item num_faces
+BL,	DXF 93
+@item faces
+BL*,	DXF 90
+@item num_edges
+BL,	DXF 94
+@item edges
+Dwg_MESH_edge*
+@item num_crease
+BL,	DXF 95
+@item crease
+BD*,	DXF 140
+
+@end vtable
+@end indentedblock
+
 @strong{MINSERT} @anchor{MINSERT}
 @cindex entity, MINSERT
 @vindex MINSERT
@@ -7519,6 +7558,20 @@ BS
 BD
 @item end
 BD
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_MESH_edge} @anchor{Dwg_MESH_edge}
+@vindex Dwg_MESH_edge
+
+@indentedblock
+@vtable @code
+
+@item from
+BL
+@item to
+BL
 
 @end vtable
 @end indentedblock

@@ -10,6 +10,7 @@
       {
         VERSIONS(R_13, R_2007)
           {
+            // or DXF 92 for all PROXY vector preview data with classes
             FIELD_CAST (preview_size, RL, BLL, 160);
           }
         SINCE(R_2010)
