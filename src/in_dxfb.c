@@ -868,10 +868,24 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               break;
             }
           // // DICTIONARY or DICTIONARYWDFLT, but not DICTIONARYVAR
-          else if (strlen (obj->name) >= sizeof ("DICTIONARY") - 1 &&
-                   !memcmp (obj->name, "DICTIONARY", sizeof ("DICTIONARY") - 1))
+          else if (memBEGINc (name, "DICTIONARY") &&
+                   strNE (name, "DICTIONARYVAR"))
             {
-              add_dictionary_handle (obj, pair, text);
+              add_dictionary_itemhandles (obj, pair, text);
+              break;
+            }
+          // fall through
+        case 340:
+          if (pair->code == 340 && strEQc (name, "GROUP"))
+            {
+              Dwg_Object_GROUP *_o = obj->tio.object->tio.GROUP;
+              BITCODE_H hdl = add_handleref (dwg, 5, pair->value.u, obj);
+              LOG_TRACE ("GROUP.groups[%d] = " FORMAT_REF " [340 H]\n",
+                         _o->num_groups, ARGS_REF (hdl));
+              _o->groups = realloc (_o->groups,
+                                    (_o->num_groups + 1) * sizeof (BITCODE_H));
+              _o->groups[_o->num_groups] = hdl;
+              _o->num_groups++;
               break;
             }
           // fall through

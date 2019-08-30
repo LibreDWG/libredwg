@@ -2753,8 +2753,9 @@ add_xdata (Bit_Chain *restrict dat,
   return pair;
 }
 
-void add_dictionary_handle (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
-                            char *restrict text)
+// 350 or 360
+void add_dictionary_itemhandles (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
+                                 char *restrict text)
 {
   // but not DICTIONARYVAR
   Dwg_Object_DICTIONARY *_obj = obj->tio.object->tio.DICTIONARY; // also DICTIONARYWDFLT
@@ -2766,8 +2767,8 @@ void add_dictionary_handle (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
     _obj->hard_owner = 1;
   num = _obj->numitems;
   hdl = add_handleref (dwg, 2, pair->value.u, obj);
-  LOG_TRACE ("%s.itemhandles[%d] = " FORMAT_REF " [330 H]\n", obj->name,
-             num, ARGS_REF (hdl));
+  LOG_TRACE ("%s.itemhandles[%d] = " FORMAT_REF " [%d H]\n", obj->name,
+             num, ARGS_REF (hdl), pair->code);
   _obj->itemhandles = realloc (_obj->itemhandles, (num + 1) * sizeof (BITCODE_H));
   _obj->itemhandles[num] = hdl;
   _obj->texts = realloc (_obj->texts, (num + 1) * sizeof (BITCODE_TV));
@@ -3628,7 +3629,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
           else if (memBEGINc (name, "DICTIONARY") &&
                    strNE (name, "DICTIONARYVAR"))
             {
-              add_dictionary_handle (obj, pair, text);
+              add_dictionary_itemhandles (obj, pair, text);
               break;
             }
           // fall through
