@@ -3736,8 +3736,6 @@ typedef struct _dwg_entity_IMAGE
   BITCODE_RC fade;
   BITCODE_B clip_mode;
   BITCODE_BS clip_boundary_type;
-  BITCODE_2RD boundary_pt0;
-  BITCODE_2RD boundary_pt1;
   BITCODE_BL num_clip_verts;
   BITCODE_2RD* clip_verts;
   BITCODE_H imagedef;
@@ -3921,8 +3919,6 @@ typedef struct _dwg_entity_WIPEOUT
   BITCODE_RC fade;
   BITCODE_B clip_mode;
   BITCODE_BS clip_boundary_type;
-  BITCODE_2RD boundary_pt0;
-  BITCODE_2RD boundary_pt1;
   BITCODE_BL num_clip_verts;
   BITCODE_2RD* clip_verts;
   BITCODE_H imagedef;

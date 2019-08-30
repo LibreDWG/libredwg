@@ -15410,8 +15410,8 @@ dwg_ent_image_get_boundary_pt0 (const dwg_ent_image *restrict image,
   )
     {
       *error = 0;
-      point->x = image->boundary_pt0.x;
-      point->y = image->boundary_pt0.y;
+      point->x = image->clip_verts[0].x;
+      point->y = image->clip_verts[0].y;
     }
   else
     {
@@ -15434,8 +15434,8 @@ dwg_ent_image_set_boundary_pt0 (dwg_ent_image *restrict image,
   )
     {
       *error = 0;
-      image->boundary_pt0.x = point->x;
-      image->boundary_pt0.y = point->y;
+      image->clip_verts[0].x = point->x;
+      image->clip_verts[0].y = point->y;
     }
   else
     {
@@ -15458,8 +15458,8 @@ dwg_ent_image_get_boundary_pt1 (const dwg_ent_image *restrict image,
   )
     {
       *error = 0;
-      point->x = image->boundary_pt1.x;
-      point->y = image->boundary_pt1.y;
+      point->x = image->clip_verts[1].x;
+      point->y = image->clip_verts[1].y;
     }
   else
     {
@@ -15482,8 +15482,8 @@ dwg_ent_image_set_boundary_pt1 (dwg_ent_image *restrict image,
   )
     {
       *error = 0;
-      image->boundary_pt1.x = point->x;
-      image->boundary_pt1.y = point->y;
+      image->clip_verts[1].x = point->x;
+      image->clip_verts[1].y = point->y;
     }
   else
     {

@@ -1917,10 +1917,6 @@ RC,	DXF 283
 B,	DXF 290
 @item clip_boundary_type
 BS,	DXF 71
-@item boundary_pt0
-2RD,	DXF 14
-@item boundary_pt1
-2RD,	DXF 14
 @item num_clip_verts
 BL,	DXF 91
 @item clip_verts
@@ -3794,10 +3790,6 @@ RC,	DXF 283
 B,	DXF 290
 @item clip_boundary_type
 BS,	DXF 71
-@item boundary_pt0
-2RD,	DXF 14
-@item boundary_pt1
-2RD,	DXF 14
 @item num_clip_verts
 BL,	DXF 91
 @item clip_verts

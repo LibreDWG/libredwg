@@ -3770,15 +3770,10 @@ DWG_ENTITY(IMAGE)
   }
   FIELD_BS (clip_boundary_type, 71); // 1 rect, 2 polygon
   if (FIELD_VALUE(clip_boundary_type) == 1)
-    {
-      FIELD_2RD (boundary_pt0, 14);
-      FIELD_2RD (boundary_pt1, 14); // yes, the same DXF. see the vector below
-    }
+    FIELD_VALUE (num_clip_verts) = 2;
   else
-    {
-      FIELD_BL (num_clip_verts, 91);
-      FIELD_2RD_VECTOR(clip_verts, num_clip_verts, 14);
-    }
+    FIELD_BL (num_clip_verts, 91);
+  FIELD_2RD_VECTOR (clip_verts, num_clip_verts, 14);
 
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (imagedef, 5, 340); // hard pointer
@@ -5636,18 +5631,10 @@ DWG_ENTITY(WIPEOUT)
   }
   FIELD_BS (clip_boundary_type, 71); // 1 rect, 2 polygon
   if (FIELD_VALUE(clip_mode))
-    {
-      FIELD_2RD (boundary_pt0, 14);
-      FIELD_2RD (boundary_pt1, 14);
-    }
+    FIELD_VALUE (num_clip_verts) = 2;
   else
-    {
-      FIELD_BL (num_clip_verts, 91);
-      if (FIELD_VALUE(num_clip_verts) < 0x1000)
-        {
-          FIELD_2RD_VECTOR(clip_verts, num_clip_verts, 14);
-        }
-    }
+    FIELD_BL (num_clip_verts, 91);
+  FIELD_2RD_VECTOR (clip_verts, num_clip_verts, 14);
 
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (imagedef, 5, 340);

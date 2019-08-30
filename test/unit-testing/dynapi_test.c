@@ -11347,22 +11347,6 @@ static int test_IMAGE (const Dwg_Object *obj)
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_IMAGE *restrict image = obj->tio.entity->tio.IMAGE;
   {
-    BITCODE_2RD boundary_pt0;
-    if (dwg_dynapi_entity_value (image, "IMAGE", "boundary_pt0", &boundary_pt0, NULL)
-        && !memcmp (&boundary_pt0, &image->boundary_pt0, sizeof (image->boundary_pt0)))
-        pass ();
-    else
-        fail ("IMAGE.boundary_pt0 [2RD]");
-  }
-  {
-    BITCODE_2RD boundary_pt1;
-    if (dwg_dynapi_entity_value (image, "IMAGE", "boundary_pt1", &boundary_pt1, NULL)
-        && !memcmp (&boundary_pt1, &image->boundary_pt1, sizeof (image->boundary_pt1)))
-        pass ();
-    else
-        fail ("IMAGE.boundary_pt1 [2RD]");
-  }
-  {
     BITCODE_RC brightness;
     if (dwg_dynapi_entity_value (image, "IMAGE", "brightness", &brightness, NULL)
         && brightness == image->brightness)
@@ -20758,22 +20742,6 @@ static int test_WIPEOUT (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_WIPEOUT *restrict wipeout = obj->tio.entity->tio.WIPEOUT;
-  {
-    BITCODE_2RD boundary_pt0;
-    if (dwg_dynapi_entity_value (wipeout, "WIPEOUT", "boundary_pt0", &boundary_pt0, NULL)
-        && !memcmp (&boundary_pt0, &wipeout->boundary_pt0, sizeof (wipeout->boundary_pt0)))
-        pass ();
-    else
-        fail ("WIPEOUT.boundary_pt0 [2RD]");
-  }
-  {
-    BITCODE_2RD boundary_pt1;
-    if (dwg_dynapi_entity_value (wipeout, "WIPEOUT", "boundary_pt1", &boundary_pt1, NULL)
-        && !memcmp (&boundary_pt1, &wipeout->boundary_pt1, sizeof (wipeout->boundary_pt1)))
-        pass ();
-    else
-        fail ("WIPEOUT.boundary_pt1 [2RD]");
-  }
   {
     BITCODE_RC brightness;
     if (dwg_dynapi_entity_value (wipeout, "WIPEOUT", "brightness", &brightness, NULL)

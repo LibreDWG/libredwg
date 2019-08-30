@@ -3961,10 +3961,47 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                 }
               for (f = &fields[0]; f->name; f++)
                 {
-                  // VECTOR, needs to be malloced, and treated specially
-                  if (pair->code != 3 && f->is_malloc && !f->is_string)
+                  // VECTORs. need to be malloced, and treated specially
+                  if (pair->code != 3 && f->is_malloc && !f->is_string &&
+                      strNE (f->name, "parent")) // parent set in NEW_OBJECT
                     {
-                      if (f->dxf == pair->code)
+                      // FIELD_2RD_VECTOR (clip_verts, num_clip_verts, 11|14);
+                      if (pair->code >= 10 &&
+                          pair->code <= 24 &&
+                          strEQc (f->name, "clip_verts")) // 11 or 14
+                        {
+                          BITCODE_BL num_clip_verts;
+                          BITCODE_2RD *clip_verts;
+                          dwg_dynapi_entity_value (_obj, obj->name, "num_clip_verts",
+                                                   &num_clip_verts, NULL);
+                          dwg_dynapi_entity_value (_obj, obj->name, "clip_verts",
+                                                   &clip_verts, NULL);
+                          LOG_INSANE ("%s.num_clip_verts = %d, j = %d\n", name,
+                                      num_clip_verts, j);
+                          assert (j == 0 || j < (int)num_clip_verts);
+                          if (pair->code < 20)
+                            {
+                              // no need to realloc
+                              if (!j)
+                                {
+                                  clip_verts = calloc (num_clip_verts,
+                                                       sizeof (BITCODE_2RD));
+                                  dwg_dynapi_entity_set_value (
+                                      _obj, obj->name, f->name, &clip_verts, 0);
+                                }
+                              clip_verts[j].x = pair->value.d;
+                            }
+                          else if (pair->code < 30)
+                            {
+                              clip_verts[j].y = pair->value.d;
+                              LOG_TRACE ("%s.%s[%d] = (%f, %f) [%d 2RD*]\n", name,
+                                         "clip_verts", j, clip_verts[j].x,
+                                         clip_verts[j].y, pair->code - 10);
+                              j++;
+                            }
+                          goto next_pair;
+                        }
+                      else if (f->dxf == pair->code)
                         LOG_TRACE ("Warning: Ignore %s.%s VECTOR [%s %d]\n", name,
                                    f->name, f->type, pair->code);
                     }
