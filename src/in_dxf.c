@@ -3929,6 +3929,23 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               else
                 goto search_field;
             }
+          else if (strEQc (name, "MLEADERSTYLE"))
+            {
+              Dwg_Object_MLEADERSTYLE *o = obj->tio.object->tio.MLEADERSTYLE;
+              if (pair->code == 47)
+                o->block_scale.x = pair->value.d;
+              else if (pair->code == 49)
+                o->block_scale.y = pair->value.d;
+              else if (pair->code == 140)
+                {
+                  o->block_scale.z = pair->value.d;
+                  LOG_TRACE (
+                      "MLEADERSTYLE.block_scale = (%f, %f, %f) [47 3BD]\n",
+                      o->block_scale.x, o->block_scale.y, o->block_scale.z);
+                }
+              else
+                goto search_field;
+            }
           else
           search_field:
             { // search all specific fields and common fields for the DXF
