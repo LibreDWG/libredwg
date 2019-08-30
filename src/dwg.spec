@@ -6009,6 +6009,7 @@ DWG_OBJECT(DBCOLOR)
     strcat(s, "$");
     strcat(s, _obj->name);
     VALUE_TV (s, 430);
+    free (s);
   }
   FIELD_T (name, 0);    //2nd part of 430: DIC \d+
   FIELD_T (catalog, 0); //1st part of 430: DIC COLOR GUIDE(R)

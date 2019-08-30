@@ -3593,7 +3593,7 @@ typedef struct _dwg_object_DBCOLOR
   BITCODE_RC unknown2; //     256
   BITCODE_T name;      //430: DIC 6
   BITCODE_T catalog;   //430: DIC COLOR GUIDE(R)
-  //BITCODE_CMC color;   //62: 253 color index only as EED
+  BITCODE_CMC color;   //62: 253 color index only as EED
   //...
 } Dwg_Object_DBCOLOR;
 

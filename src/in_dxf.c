@@ -3901,6 +3901,34 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               else
                 goto search_field;
             }
+          else if (strEQc (name, "DBCOLOR"))
+            {
+              Dwg_Object_DBCOLOR *o = obj->tio.object->tio.DBCOLOR;
+              if (pair->code == 62)
+                {
+                  o->color.index = pair->value.i;
+                  LOG_TRACE ("DBCOLOR.color.index = %d [%d CMC]\n",
+                             pair->value.i, pair->code);
+                  goto next_pair;
+                }
+              else if (pair->code == 430)
+                {
+                  char *x;
+                  o->catalog = strdup (pair->value.s);
+                  x = strchr (o->catalog, '$');
+                  if (!x)
+                    goto search_field;
+                  o->name = strdup (x+1);
+                  x[0] = '\0';
+                  LOG_TRACE ("DBCOLOR.catalog = %s [%d CMC]\n",
+                             o->catalog, pair->code);
+                  LOG_TRACE ("DBCOLOR.name = %s [%d CMC]\n",
+                             o->name, pair->code);
+                  goto next_pair;
+                }
+              else
+                goto search_field;
+            }
           else
           search_field:
             { // search all specific fields and common fields for the DXF

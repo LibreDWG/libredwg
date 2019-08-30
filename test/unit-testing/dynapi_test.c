@@ -24282,6 +24282,14 @@ static int test_DBCOLOR (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_CMC color;
+    if (dwg_dynapi_entity_value (dbcolor, "DBCOLOR", "color", &color, NULL)
+        && !memcmp (&color, &dbcolor->color, sizeof (dbcolor->color)))
+        pass ();
+    else
+        fail ("DBCOLOR.color [CMC]");
+  }
+  {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (dbcolor, "DBCOLOR", "name", &name, NULL)
         && !memcmp (&name, &dbcolor->name, sizeof (dbcolor->name)))

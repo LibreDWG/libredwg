@@ -4077,6 +4077,8 @@ static const Dwg_DYNAPI_field _dwg_DBCOLOR_fields[] = {
     1,1,1, 0 },
   { "catalog",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_DBCOLOR, catalog),
     1,1,1, 0 },
+  { "color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_object_DBCOLOR, color),
+    1,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_DICTIONARY: (sorted by offset) */

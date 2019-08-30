@@ -4483,6 +4483,8 @@ RC
 T
 @item catalog
 T
+@item color
+CMC
 
 @end vtable
 @end indentedblock
