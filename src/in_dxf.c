@@ -4046,23 +4046,30 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                           dwg_dynapi_entity_value (_obj, obj->name, f->name,
                                                    &color, NULL);
                           if (pair->code < 100)
-                            color.index = pair->value.i;
+                            {
+                              color.index = pair->value.i;
+                              LOG_TRACE ("%s.%s.index = %d [%d %s]\n", name, f->name,
+                                         pair->value.i, pair->code, "CMC");
+                            }
                           else if (pair->code < 430)
-                            color.rgb = pair->value.l;
+                            {
+                              color.rgb = pair->value.l & 0x00FFFFFF;
+                              color.alpha = (pair->value.l & 0xFF000000) >> 24;
+                              if (color.alpha)
+                                color.alpha_type = 3;
+                              LOG_TRACE ("%s.%s.rgb = %08X [%d %s]\n", name, f->name,
+                                         pair->value.u, pair->code, "CMC");
+                            }
                           else if (pair->code < 440)
                             {
                               color.flag |= 1;
                               color.name = strdup (pair->value.s);
-                            }
-                          else
-                            {
-                              color.alpha_type = 3;
-                              color.alpha = pair->value.i;
+                              LOG_TRACE ("%s.%s.name = %s [%d %s]\n", name, f->name,
+                                         pair->value.s, pair->code, "CMC");
                             }
                           dwg_dynapi_entity_set_value (
                               _obj, obj->name, f->name, &color, is_utf);
-                          LOG_TRACE ("%s.%s = %d [%d %s]\n", name, f->name,
-                                     pair->value.i, pair->code, "CMC");
+                          goto next_pair; // found, early exit
                         }
                       else
                         dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
@@ -4154,7 +4161,41 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                                  : dwg_dynapi_common_object_fields ();
               for (f = &fields[0]; f->name; f++)
                 {
-                  if (f->dxf == pair->code) // TODO alt. color fields
+                  if ((pair->code == 62 ||
+                       pair->code == 420 ||
+                       pair->code == 430) &&
+                      (f->size > 8 && strEQc (f->type, "CMC")))  // alt. color fields
+                    {
+                      BITCODE_CMC color;
+                      dwg_dynapi_common_value (_obj, f->name, &color, NULL);
+                      if (pair->code == 62)
+                        {
+                          color.index = pair->value.i;
+                          LOG_TRACE ("COMMON.%s.index = %d [%d %s]\n", f->name,
+                                     pair->value.i, pair->code, "CMC");
+                        }
+                      else if (pair->code == 420)
+                        {
+                          color.rgb = pair->value.l;
+                          color.alpha = (pair->value.l & 0xFF000000) >> 24;
+                          if (color.alpha)
+                            color.alpha_type = 3;
+                          LOG_TRACE ("COMMON.%s.rgb = %08X [%d %s]\n", f->name,
+                                     pair->value.u, pair->code, "CMC");
+                        }
+                      else if (pair->code == 430)
+                        {
+                          color.flag |= 1;
+                          color.name = strdup (pair->value.s);
+                          // TODO: book_name or name?
+                          LOG_TRACE ("COMMON.%s.name = %s [%d %s]\n", f->name,
+                                     pair->value.s, pair->code, "CMC");
+                        }
+                      dwg_dynapi_common_set_value (_obj, f->name, &color,
+                                                   is_utf);
+                      goto next_pair; // found, early exit
+                    }
+                  else if (f->dxf == pair->code)
                     {
                       /// resolve handle (table entry) given by name or ref
                       if (strEQc (f->type, "H"))
@@ -4176,30 +4217,6 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                           else
                             dwg_dynapi_common_set_value (_obj, f->name,
                                                          &handle, is_utf);
-                        }
-                      else if (f->size > 8 && strEQc (f->type, "CMC"))
-                        {
-                          BITCODE_CMC color;
-                          dwg_dynapi_common_value (_obj, f->name, &color,
-                                                   NULL);
-                          if (pair->code < 100)
-                            color.index = pair->value.i;
-                          else if (pair->code < 430)
-                            color.rgb = pair->value.l;
-                          else if (pair->code < 440)
-                            {
-                              color.flag |= 1;
-                              color.name = strdup (pair->value.s);
-                            }
-                          else
-                            {
-                              color.alpha_type = 3;
-                              color.alpha = pair->value.i;
-                            }
-                          dwg_dynapi_common_set_value (_obj, f->name, &color,
-                                                       is_utf);
-                          LOG_TRACE ("COMMON.%s = %d [%d %s]\n", f->name,
-                                     pair->value.i, pair->code, "CMC");
                         }
                       else
                         {
