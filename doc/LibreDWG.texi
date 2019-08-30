@@ -154,7 +154,7 @@ For a detailed overview see the files @file{TODO} or @file{src/classes.inc}.
 @item Unhandled (fields spec'ed but broken/untested):
 
   MATERIAL CELLSTYLEMAP PROXY PROXY_ENTITY VBA_PROJECT
-  PLOTSETTINGS SUN GEOPOSITIONMARKER *SURFACE
+  PLOTSETTINGS SUN GEOPOSITIONMARKER *SURFACE MESH
   TABLECONTENT TABLEGEOMETRY TABLE (works only pre-2010).
 
 Missing:
@@ -185,7 +185,7 @@ I.e. we need an extended @file{example_2018.dwg} with all types,
 for the following missing entities:
 
   ARCALIGNEDTEXT BODY CAMERA DIMENSION_ANG3PT DIMENSION_DIAMETER
-  DIMENSION_RADIUS DUMMY DGNUNDERLAY DWFUNDERLAY
+  DIMENSION_RADIUS DGNUNDERLAY DWFUNDERLAY
   GEOPOSITIONMARKER IMAGE LEADER LONG_TRANSACTION MINSERT
   OLE2FRAME OLEFRAME POLYLINE_2D POLYLINE_MESH
   PROXY_ENTITY PROXY_LWPOLYLINE SHAPE
@@ -699,7 +699,7 @@ the option @code{--overwrite} or @code{-y} is given.
 
 @item @file{dxf2dwg}
 @cindex dxf2dwg
-Convert a DXF (or Binary DXF) to DWG, optionally via @code{--as-rVER} as another
+Converts DXF (or Binary DXF) files to DWG, optionally via @code{--as-rVER} as another
 version, an earlier or later version.
 
 The DWG files are created in the current directory and not overwritten, unless
