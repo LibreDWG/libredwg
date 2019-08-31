@@ -5630,7 +5630,7 @@ DWG_ENTITY(WIPEOUT)
     FIELD_B (clip_mode, 290);
   }
   FIELD_BS (clip_boundary_type, 71); // 1 rect, 2 polygon
-  if (FIELD_VALUE(clip_mode))
+  if (FIELD_VALUE(clip_boundary_type) == 1)
     FIELD_VALUE (num_clip_verts) = 2;
   else
     FIELD_BL (num_clip_verts, 91);

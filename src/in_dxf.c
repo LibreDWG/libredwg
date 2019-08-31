@@ -3970,21 +3970,32 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                           pair->code <= 24 &&
                           strEQc (f->name, "clip_verts")) // 11 or 14
                         {
-                          BITCODE_BL num_clip_verts;
+                          BITCODE_BL num_clip_verts = 0;
                           BITCODE_2RD *clip_verts;
-                          dwg_dynapi_entity_value (_obj, obj->name, "num_clip_verts",
-                                                   &num_clip_verts, NULL);
+                          // 11 has no num_clip_verts: realloc
+                          if (pair->code == 14)
+                            {
+                              dwg_dynapi_entity_value (_obj, obj->name, "num_clip_verts",
+                                                       &num_clip_verts, NULL);
+                              LOG_INSANE ("%s.num_clip_verts = %d, j = %d\n", name,
+                                          num_clip_verts, j);
+                            }
                           dwg_dynapi_entity_value (_obj, obj->name, "clip_verts",
                                                    &clip_verts, NULL);
-                          LOG_INSANE ("%s.num_clip_verts = %d, j = %d\n", name,
-                                      num_clip_verts, j);
-                          assert (j == 0 || j < (int)num_clip_verts);
+                          //assert (j == 0 || j < (int)num_clip_verts);
                           if (pair->code < 20)
                             {
                               // no need to realloc
-                              if (!j)
+                              if (!j && pair->code == 14)
                                 {
                                   clip_verts = calloc (num_clip_verts,
+                                                       sizeof (BITCODE_2RD));
+                                  dwg_dynapi_entity_set_value (
+                                      _obj, obj->name, f->name, &clip_verts, 0);
+                                }
+                              else if (pair->code == 11)
+                                {
+                                  clip_verts = realloc (clip_verts, (j+1) *
                                                        sizeof (BITCODE_2RD));
                                   dwg_dynapi_entity_set_value (
                                       _obj, obj->name, f->name, &clip_verts, 0);
@@ -3998,6 +4009,13 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                                          "clip_verts", j, clip_verts[j].x,
                                          clip_verts[j].y, pair->code - 10);
                               j++;
+                              if (pair->code == 21)
+                                {
+                                  dwg_dynapi_entity_set_value (
+                                      _obj, obj->name, "num_clip_verts", &j, 0);
+                                  LOG_TRACE ("%s.num_clip_verts = %d\n", name,
+                                              j);
+                                }
                             }
                           goto next_pair;
                         }
@@ -4424,6 +4442,8 @@ entity_alias (char *name)
     strcpy (name, "POLYLINE_2D"); // other POLYLINE_* by flag or subclass?
   else if (strEQc (name, "VERTEX"))
     strcpy (name, "VERTEX_2D");   // other VERTEX_* by flag?
+  else if (strlen (name) == strlen ("PDFUNDERLAY") && strEQc (&name[3], "UNDERLAY"))
+    strcpy (name, "UNDERLAY");
   //else if (strEQc (name, "VERTEX_MESH") || strEQc (name, "VERTEX_PFACE"))
   //  strcpy (name, "VERTEX_3D");
   //else if (strEQc (name, "DIMENSION"))
