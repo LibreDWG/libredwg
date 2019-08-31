@@ -3255,6 +3255,8 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
   int j = 0, k = 0, l = 0, error = 0;
   BITCODE_RL curr_inserts = 0;
   BITCODE_RS flag = 0;
+  BITCODE_BB scale_flag;
+  BITCODE_3BD pt;
   subclass[0] = '\0';
 
   if (ctrl || i)
@@ -3376,6 +3378,34 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
       return pair;
     }
 
+  {
+    int log = obj->parent->opts & 0xF;
+    obj->parent->opts = 0; // silence field not found
+    // set defaults not in dxf:
+    if (dwg_dynapi_entity_value (_obj, obj->name, "scale_flag", &scale_flag,
+                                 NULL))
+      {
+        scale_flag = 3;
+        dwg_dynapi_entity_set_value (_obj, obj->name, "scale_flag",
+                                     &scale_flag, 0);
+        LOG_TRACE ("%s.scale_flag = 3 (default)\n", obj->name);
+      }
+    if (dwg_dynapi_entity_value (_obj, obj->name, "scale", &pt, NULL))
+      {
+        pt.x = pt.y = pt.z = 1.0;
+        dwg_dynapi_entity_set_value (_obj, obj->name, "scale", &pt, 0);
+        LOG_TRACE ("%s.scale = (1,1,1) (default)\n", obj->name);
+      }
+    if (dwg_dynapi_entity_value (_obj, obj->name, "extrusion", &pt, NULL))
+      {
+        pt.x = pt.y = 0.0;
+        pt.z = 1.0;
+        dwg_dynapi_entity_set_value (_obj, obj->name, "extrusion", &pt, 0);
+        LOG_TRACE ("%s.extrusion = (0,0,1) (default)\n", obj->name);
+      }
+    obj->parent->opts = log;
+  }
+
   // read table fields until next 0 table or 0 ENDTAB
   while (pair->code != 0)
     {
@@ -3394,13 +3424,6 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
       switch (pair->code)
         { // common flags: name, xrefref, xrefdep, ...
         case 0:
-          // set defaults not in dxf:
-          if (strEQc (name, "_3DFACE") &&
-              dwg->header.version >= R_2000)
-            {
-              Dwg_Entity__3DFACE *o = obj->tio.entity->tio._3DFACE;
-              o->has_no_flags = 1;
-            }
           return pair;
         case 105: /* DIMSTYLE only for 5 */
           if (strNE (name, "DIMSTYLE"))
@@ -4122,7 +4145,6 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                       else if (f->size > 8
                           && (strchr (f->type, '2') || strchr (f->type, '3')))
                         {
-                          BITCODE_3BD pt;
                           if (pair->value.d == 0.0) // ignore defaults
                             goto next_pair;
                           pt.x = pair->value.d;
@@ -4189,7 +4211,6 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                             ? f->dxf + 1 == pair->code // 2BD_1
                             : f->dxf + 10 == pair->code))
                     {
-                      BITCODE_3DPOINT pt;
                       if (pair->value.d == 0.0) // ignore defaults
                         goto next_pair;
                       dwg_dynapi_entity_value (_obj, obj->name, f->name, &pt,
@@ -4206,8 +4227,6 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                             ? f->dxf + 2 == pair->code // 2BD_1
                             : f->dxf + 20 == pair->code))
                   {
-                      BITCODE_3DPOINT pt;
-                      BITCODE_BB scale_flag;
                       // can ignore z or 0.0?
                       if (strNE (name, "_3DFACE") && strNE (f->name, "scale") &&
                           (pair->value.d == 0.0 || *f->type == '2'))
@@ -4415,6 +4434,15 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
     }
+
+  // set defaults not in dxf:
+  if (strEQc (name, "_3DFACE") &&
+      dwg->header.version >= R_2000)
+    {
+      Dwg_Entity__3DFACE *o = obj->tio.entity->tio._3DFACE;
+      o->has_no_flags = 1;
+      LOG_TRACE ("_3DFACE.has_no_flags = 1 [B]\n");
+    }
   return pair;
 }
 
@@ -4514,6 +4542,8 @@ entity_alias (char *name)
     strcpy (name, "VERTEX_2D");   // other VERTEX_* by flag?
   else if (strlen (name) == strlen ("PDFUNDERLAY") && strEQc (&name[3], "UNDERLAY"))
     strcpy (name, "UNDERLAY");
+  //if (strEQc (name, "BLOCK"))
+  //  strcpy (name, "BLOCK_HEADER");
   //else if (strEQc (name, "VERTEX_MESH") || strEQc (name, "VERTEX_PFACE"))
   //  strcpy (name, "VERTEX_3D");
   //else if (strEQc (name, "DIMENSION"))
