@@ -3957,6 +3957,25 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               LOG_TRACE ("MTEXT.column_heights[%d] = %f [50 BD*]\n", j,
                          pair->value.d);
             }
+          else if (strEQc (name, "LEADER") &&
+                   (pair->code == 10 || pair->code == 20 || pair->code == 30))
+            {
+              Dwg_Entity_LEADER *o = obj->tio.entity->tio.LEADER;
+              if (!j && pair->code == 10)
+                o->points = calloc (o->num_points, sizeof (BITCODE_3BD));
+              assert (j < (int)o->num_points);
+              if (pair->code == 10)
+                o->points[j].x = pair->value.d;
+              else if (pair->code == 20)
+                o->points[j].y = pair->value.d;
+              else if (pair->code == 30)
+                {
+                  o->points[j].z = pair->value.d;
+                  LOG_TRACE ("LEADER.points[%d] = (%f, %f, %f) [10 3BD*]\n", j,
+                             o->points[j].x, o->points[j].y, o->points[j].z);
+                  j++;
+                }
+            }
           else
           search_field:
             { // search all specific fields and common fields for the DXF

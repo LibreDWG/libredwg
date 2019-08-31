@@ -2019,7 +2019,7 @@ static const Dwg_DYNAPI_field _dwg_LEADER_fields[] = {
   { "associated_annotation",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_LEADER, associated_annotation),
     1,0,0, 340 },
   { "dimstyle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_LEADER, dimstyle),
-    1,0,0, 2 },
+    1,0,0, 3 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_LIGHT: (sorted by offset) */

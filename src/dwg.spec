@@ -2221,7 +2221,7 @@ DWG_ENTITY(LEADER)
   SINCE (R_13) {
     FIELD_HANDLE (associated_annotation, 2, 340);
   }
-  FIELD_HANDLE (dimstyle, 5, 2);
+  FIELD_HANDLE (dimstyle, 5, 3); // ODA bug, DXF documented as 2
 
 DWG_ENTITY_END
 

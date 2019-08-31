@@ -2024,7 +2024,7 @@ B
 @item associated_annotation
 H,	DXF 340
 @item dimstyle
-H,	DXF 2
+H,	DXF 3
 
 @end vtable
 @end indentedblock
