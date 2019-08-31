@@ -3394,6 +3394,13 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
       switch (pair->code)
         { // common flags: name, xrefref, xrefdep, ...
         case 0:
+          // set defaults not in dxf:
+          if (strEQc (name, "_3DFACE") &&
+              dwg->header.version >= R_2000)
+            {
+              Dwg_Entity__3DFACE *o = obj->tio.entity->tio._3DFACE;
+              o->has_no_flags = 1;
+            }
           return pair;
         case 105: /* DIMSTYLE only for 5 */
           if (strNE (name, "DIMSTYLE"))
@@ -4200,15 +4207,49 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                             : f->dxf + 20 == pair->code))
                   {
                       BITCODE_3DPOINT pt;
-                      if (pair->value.d == 0.0 || *f->type == '2') // ignore z or 0.0
+                      BITCODE_BB scale_flag;
+                      // can ignore z or 0.0?
+                      if (strNE (name, "_3DFACE") && strNE (f->name, "scale") &&
+                          (pair->value.d == 0.0 || *f->type == '2'))
                         goto next_pair;
                       dwg_dynapi_entity_value (_obj, obj->name, f->name, &pt,
                                                NULL);
                       pt.z = pair->value.d;
                       dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
-                                                   &pt, is_utf);
+                                                   &pt, 0);
                       LOG_TRACE ("%s.%s.z = %f [%d %s]\n", name, f->name,
                                  pair->value.d, pair->code, f->type);
+
+                      // 3DD scale
+                      if (strEQc (f->name, "scale") &&
+                          dwg->header.version >= R_2000 &&
+                          dwg_dynapi_entity_value (_obj, obj->name, "scale_flag",
+                                                   &scale_flag, NULL))
+                        { // set scale_flag
+                          scale_flag = 0;
+                          if (pt.x == 1.0 && pt.y == 1.0 && pt.z == 1.0)
+                            scale_flag = 3;
+                          else if (pt.x == 1.0)
+                            scale_flag = 1;
+                          else if (pt.x == pt.y && pt.x == pt.z)
+                            scale_flag = 2;
+                          dwg_dynapi_entity_set_value (_obj, obj->name, "scale_flag",
+                                                       &scale_flag, 0);
+                          LOG_TRACE ("%s.scale_flag = %d [BB 0]\n", name,
+                                     scale_flag);
+                        }
+                      // 3DFACE.z_is_zero
+                      else if (strEQc (name, "_3DFACE") &&
+                               strEQc (f->name, "corner1") &&
+                               dwg->header.version >= R_2000 &&
+                               pt.z == 0.0)
+                        {
+                          BITCODE_B z_is_zero = 1;
+                          dwg_dynapi_entity_set_value (_obj, obj->name, "z_is_zero",
+                                                       &z_is_zero, 0);
+                          LOG_TRACE ("%s.z_is_zero = 1 [B 0]\n", name);
+                        }
+
                       goto next_pair; // found, early exit
                     }
                   // FIELD_VECTOR_N BITCODE_BD transmatrix[16]:

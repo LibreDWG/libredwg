@@ -1291,7 +1291,7 @@ DWG_ENTITY(_3DFACE)
           FIELD_RD (corner1.x, 10);
           FIELD_RD (corner1.y, 20);
           if (FIELD_VALUE(z_is_zero))
-              FIELD_VALUE(corner1.z) = 0;
+            FIELD_VALUE(corner1.z) = 0;
           else
             FIELD_RD (corner1.z, 30);
         }
