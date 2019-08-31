@@ -3947,6 +3947,16 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               else
                 goto search_field;
             }
+          else if (strEQc (name, "MTEXT") && pair->code == 50)
+            {
+              Dwg_Entity_MTEXT *o = obj->tio.entity->tio.MTEXT;
+              if (!j)
+                o->column_heights
+                    = calloc (o->num_column_heights, sizeof (BITCODE_BD));
+              o->column_heights[j] = pair->value.d;
+              LOG_TRACE ("MTEXT.column_heights[%d] = %f [50 BD*]\n", j,
+                         pair->value.d);
+            }
           else
           search_field:
             { // search all specific fields and common fields for the DXF
