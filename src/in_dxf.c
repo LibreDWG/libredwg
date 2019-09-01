@@ -4138,8 +4138,11 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                             {
                               if (pair->code > 300)
                                 {
-                                  LOG_WARN ("TODO resolve handle name %s.%s %X",
+                                  LOG_WARN ("TODO resolve handle %s.%s %X",
                                             name, f->name, pair->value.u)
+                                }
+                              else if (0) // TODO check alias names: BYLAYER, BYBLOCK, CONTINUOUS
+                                {
                                 }
                               else
                                 {
@@ -4824,6 +4827,8 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               if (!dwg->header_vars.LTYPE_BYLAYER)
                 {
                   if ((hdl = dwg_find_tablehandle (dwg, (char *)"ByLayer",
+                                                   "LTYPE")) ||
+                      (hdl = dwg_find_tablehandle (dwg, (char *)"BYLAYER",
                                                    "LTYPE")))
                     dwg->header_vars.LTYPE_BYLAYER
                         = add_handleref (dwg, 5, hdl->handleref.value, NULL);
@@ -4831,6 +4836,8 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               if (!dwg->header_vars.LTYPE_BYBLOCK)
                 {
                   if ((hdl = dwg_find_tablehandle (dwg, (char *)"ByBlock",
+                                                   "LTYPE")) ||
+                      (hdl = dwg_find_tablehandle (dwg, (char *)"BYBLOCK",
                                                    "LTYPE")))
                     dwg->header_vars.LTYPE_BYBLOCK
                         = add_handleref (dwg, 5, hdl->handleref.value, NULL);
@@ -4838,6 +4845,8 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               if (!dwg->header_vars.LTYPE_CONTINUOUS)
                 {
                   if ((hdl = dwg_find_tablehandle (dwg, (char *)"Continuous",
+                                                   "LTYPE")) ||
+                      (hdl = dwg_find_tablehandle (dwg, (char *)"CONTINUOUS",
                                                    "LTYPE")))
                     dwg->header_vars.LTYPE_CONTINUOUS
                         = add_handleref (dwg, 5, hdl->handleref.value, NULL);
@@ -4854,6 +4863,8 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               if (!dwg->header_vars.BLOCK_RECORD_PSPACE)
                 {
                   if ((hdl = dwg_find_tablehandle (dwg, (char *)"*Paper_Space",
+                                                   "BLOCK")) ||
+                      (hdl = dwg_find_tablehandle (dwg, (char *)"*PAPER_SPACE",
                                                    "BLOCK")))
                     dwg->header_vars.BLOCK_RECORD_PSPACE
                         = add_handleref (dwg, 5, hdl->handleref.value, NULL);
@@ -4861,6 +4872,8 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               if (!dwg->header_vars.BLOCK_RECORD_MSPACE)
                 {
                   if ((hdl = dwg_find_tablehandle (dwg, (char *)"*Model_Space",
+                                                   "BLOCK")) ||
+                      (hdl = dwg_find_tablehandle (dwg, (char *)"*MODEL_SPACE",
                                                    "BLOCK")))
                     dwg->header_vars.BLOCK_RECORD_MSPACE
                         = add_handleref (dwg, 5, hdl->handleref.value, NULL);
