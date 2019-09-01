@@ -3250,7 +3250,7 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
  */
 static Dxf_Pair *
 new_object (char *restrict name, Bit_Chain *restrict dat,
-            Dwg_Data *restrict dwg, Dwg_Object *restrict ctrl, BITCODE_BL i)
+            Dwg_Data *restrict dwg, BITCODE_BL ctrl_id, BITCODE_BL i)
 {
   int is_utf = dwg->header.version >= R_2007 ? 1 : 0;
   Dwg_Object *obj;
@@ -3271,9 +3271,10 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
   BITCODE_RS flag = 0;
   BITCODE_BB scale_flag;
   BITCODE_3BD pt;
+  Dwg_Object *ctrl;
   subclass[0] = '\0';
 
-  if (ctrl || i)
+  if (ctrl_id || i)
     {
       LOG_TRACE ("add %s [%d]\n", name, i)
     }
@@ -3322,7 +3323,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
     {
       NEW_OBJECT (dwg, obj);
 
-      if (!ctrl) // no table
+      if (!ctrl_id) // no table
         {
           // clang-format off
 
@@ -3391,6 +3392,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
       LOG_ERROR ("Empty _obj at DXF AcDbSymbolTableRecord %s", name);
       return pair;
     }
+  ctrl = &dwg->object[ctrl_id];
 
   {
     int log = obj->parent->opts & 0xF;
@@ -3448,11 +3450,11 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
             add_handle (&obj->handle, 0, pair->value.u, obj);
             LOG_TRACE ("%s.handle = " FORMAT_H " [5 H]\n", name,
                        ARGS_H (obj->handle));
-            if (ctrl)
+            if (ctrl_id)
               {
                 // add to ctrl "entries" HANDLE_VECTOR
                 Dwg_Object_APPID_CONTROL *_ctrl
-                    = ctrl->tio.object->tio.APPID_CONTROL;
+                    = dwg->object[ctrl_id].tio.object->tio.APPID_CONTROL;
                 BITCODE_H *hdls = NULL;
                 BITCODE_BL num_entries = 0;
                 dwg_dynapi_entity_value (_ctrl, ctrlname, "num_entries",
@@ -3598,7 +3600,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
             in_xdict = 1;
           else if (strEQc (pair->value.s, "{ACAD_REACTORS"))
             in_reactors = 1;
-          else if (ctrl && strEQc (pair->value.s, "{BLKREFS"))
+          else if (ctrl_id && strEQc (pair->value.s, "{BLKREFS"))
             in_blkrefs = 1; // unique handle 331
           else if (strEQc (pair->value.s, "}"))
             in_reactors = in_xdict = in_blkrefs = 0;
@@ -3608,7 +3610,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
             LOG_WARN ("Unknown DXF 102 %s in %s", pair->value.s, name)
           break;
         case 331:
-          if (ctrl && in_blkrefs) // BLKREFS
+          if (ctrl_id && in_blkrefs) // BLKREFS TODO into BLOCK_RECORD, not BLOCK_HEADER
             {
               BITCODE_H *inserts = NULL;
               BITCODE_H hdl;
@@ -3693,7 +3695,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
             }
           // fall through
         case 2:
-          if (ctrl && pair->code == 2)
+          if (ctrl_id && pair->code == 2)
             {
               dwg_dynapi_entity_set_value (_obj, obj->name, "name", &pair->value,
                                            is_utf);
@@ -3720,7 +3722,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
             }
           // fall through
         case 70:
-          if (ctrl && pair->code == 70)
+          if (ctrl_id && pair->code == 70)
             {
               dwg_dynapi_entity_set_value (_obj, obj->name, "flag", &pair->value,
                                        is_utf);
@@ -4488,15 +4490,15 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       if (pair->code == 2 && strlen (pair->value.s) < 80
           && is_table_name (pair->value.s)) // new table NAME
         {
-          Dwg_Object *ctrl;
           BITCODE_BL i = 0;
+          BITCODE_BL ctrl_id;
           strncpy (table, pair->value.s, 79);
           pair = new_table_control (table, dat, dwg); // until 0 table
-          ctrl = &dwg->object[dwg->num_objects - 1];
+          ctrl_id = dwg->num_objects - 1; // dwg->object might move
           while (pair && pair->code == 0 && strEQ (pair->value.s, table))
             {
               // until 0 table or 0 ENDTAB
-              pair = new_object (table, dat, dwg, ctrl, i++);
+              pair = new_object (table, dat, dwg, ctrl_id, i++);
             }
         }
       DXF_RETURN_ENDSEC (0); // next TABLE or ENDSEC
@@ -4522,7 +4524,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           while (pair->code == 0 && strEQc (pair->value.s, "BLOCK"))
             {
               // until 0 BLOCK or 0 ENDBLK
-              pair = new_object ((char *)"BLOCK", dat, dwg, NULL, i++);
+              pair = new_object ((char *)"BLOCK", dat, dwg, 0, i++);
             }
           if (strEQc (pair->value.s, "ENDBLK"))
             name[0] = '\0'; // close table
@@ -4578,7 +4580,7 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       while (pair->code == 0 &&
              (is_dwg_entity (name) || strEQc (name, "DIMENSION")))
         {
-          pair = new_object (name, dat, dwg, NULL, 0);
+          pair = new_object (name, dat, dwg, 0, 0);
           if (pair->code == 0)
             {
               strncpy (name, pair->value.s, 79);
@@ -4614,7 +4616,7 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           while (pair->code == 0 && is_dwg_object (pair->value.s))
             {
               strncpy (name, pair->value.s, 79);
-              pair = new_object (name, dat, dwg, NULL, 0);
+              pair = new_object (name, dat, dwg, 0, 0);
             }
           if (strEQc (pair->value.s, "ENDSEC"))
             {
@@ -4646,7 +4648,7 @@ dxf_unknownsection_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           while (pair->code == 0 && is_dwg_object (pair->value.s))
             {
               strncpy (name, pair->value.s, 79);
-              pair = new_object (name, dat, dwg, NULL, 0);
+              pair = new_object (name, dat, dwg, 0, 0);
             }
           if (strEQc (pair->value.s, "ENDSEC"))
             {
