@@ -883,6 +883,20 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
           // else needs to be postponed, because we don't have the tables yet
         }
       break;
+    case 5:
+      {
+        // HANDLE (absref)
+        const char *pos = pair->value.s;
+        unsigned long l = 0;
+        /* code [RC] + BLL */
+        size = 1 + 8;
+        eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
+        eed[i].data->code = code; // 1005
+        sscanf (pos, "%lX", &l);
+        eed[i].data->u.eed_5.entity = (BITCODE_RLL)l;
+        eed[i].size += size;
+        break;
+      }
     default:
       LOG_ERROR ("Not yet implemented EED.code %d", pair->code);
     }
