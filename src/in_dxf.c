@@ -413,8 +413,14 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           const Dwg_DYNAPI_field *f = dwg_dynapi_header_field (&field[1]);
           if (!f)
             {
-              LOG_ERROR ("skipping HEADER: 9 %s, unknown field with code %d",
-                         field, pair->code);
+              if (strEQc (field, "$3DDWFPREC"))
+                {
+                  LOG_TRACE ("HEADER.%s [%s]\n", &field[1], "BD");
+                  dwg->header_vars._3DDWFPREC = pair->value.d;
+                }
+              else
+                LOG_ERROR ("skipping HEADER: 9 %s, unknown field with code %d",
+                           field, pair->code);
             }
           else if (!matches_type (pair, f) &&
                    strNE (field, "$XCLIPFRAME") &&
