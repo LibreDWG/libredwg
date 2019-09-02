@@ -53,6 +53,7 @@ static unsigned int cur_ver = 0;
 static char buf[4096];
 static long start, end; // stream offsets
 static array_hdls *header_hdls = NULL;
+static array_hdls *eed_hdls = NULL;
 
 static long num_dxf_objs;  // how many elements are added
 static long size_dxf_objs; // how many elements are allocated
@@ -247,6 +248,18 @@ array_push (array_hdls *restrict hdls, char *restrict field,
   hdls->items[i].code = code;
   return hdls;
 }
+
+void
+free_array_hdls (array_hdls *hdls)
+{
+  for (uint32_t i = 0; i < hdls->nitems; i++)
+    {
+      free (hdls->items[i].field);
+      free (hdls->items[i].name);
+    }
+  free (hdls);
+}
+
 
 #define DXF_CHECK_ENDSEC                                                      \
   if (pair != NULL && (dat->byte >= dat->size || pair->code == 0))            \
@@ -863,12 +876,12 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       eed[i].size += size;
       break;
     case 1:
+      eed[i].size += sizeof (Dwg_Handle);
       if (strEQc (pair->value.s, "ACAD"))
         {
           Dwg_Handle hdl = { 5, 1, 0x12 };
           add_handle (&hdl, 5, 12, NULL);
           memcpy (&eed[i].handle, &hdl, sizeof (hdl));
-          eed[i].size += sizeof (Dwg_Handle);
         }
       else
         {
@@ -877,10 +890,16 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
           hdl = dwg_find_tablehandle (dwg, pair->value.s, "APPID");
           if (hdl)
             {
-              memcpy (&eed[i].handle, &hdl->handleref, sizeof (hdl));
-              eed[i].size += sizeof (Dwg_Handle);
+              memcpy (&eed[i].handle, &hdl->handleref, sizeof (Dwg_Handle));
             }
-          // else needs to be postponed, because we don't have the tables yet
+          // needs to be postponed, because we don't have the tables yet
+          else
+            {
+              char idx[12];
+              snprintf (idx, 12, "%d", obj->index);
+              eed_hdls = array_push (eed_hdls, idx, pair->value.s, (short)i);
+              LOG_HANDLE ("eed[%d].handle for APPID.%s later\n", i, pair->value.s);
+            }
         }
       break;
     case 5:
@@ -4764,7 +4783,28 @@ void resolve_postponed_header_refs (Dwg_Data *restrict dwg)
             }
         }
     }
+}
 
+void resolve_postponed_eed_refs (Dwg_Data *restrict dwg)
+{
+  for (uint32_t i = 0; i < eed_hdls->nitems; i++)
+    {
+      char *name = eed_hdls->items[i].name;
+      BITCODE_H ref = dwg_find_tablehandle (dwg, eed_hdls->items[i].name, "APPID");
+      if (ref)
+        {
+          // copy to eed[i].handle. need: objid + eed[i]
+          BITCODE_RL objid;
+          Dwg_Eed *eed;
+          int j = (int)eed_hdls->items[i].code;
+          sscanf (eed_hdls->items[i].field, "%d", &objid);
+          eed = dwg->object[objid].tio.object->eed;
+          memcpy (&eed[j].handle, &ref->handleref, sizeof (Dwg_Handle));
+          eed[j].handle.code = 5;
+          LOG_TRACE ("postponed eed[%d].handle for APPID.%s => " FORMAT_H " [H]\n",
+                     j, name, ARGS_H (eed[j].handle));
+        }
+    }
 }
 
 int
@@ -4784,6 +4824,8 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   header_hdls = calloc (1, 8 + 16 * sizeof (struct array_hdl));
   header_hdls->size = 16;
+  eed_hdls = calloc (1, 8 + 16 * sizeof (struct array_hdl));
+  eed_hdls->size = 16;
 
   // start with the BLOCK_HEADER at objid 0
   if (!dwg->num_objects)
@@ -4823,6 +4865,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               dxf_tables_read (dat, dwg);
 
               resolve_postponed_header_refs (dwg);
+              resolve_postponed_eed_refs (dwg);
 
               if (!dwg->header_vars.LTYPE_BYLAYER)
                 {
@@ -4902,6 +4945,8 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             }
         }
     }
+  free_array_hdls (header_hdls);
+  free_array_hdls (eed_hdls);
   return dwg->num_objects ? 1 : 0;
 }
 

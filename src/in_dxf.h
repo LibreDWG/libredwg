@@ -75,6 +75,7 @@ typedef struct _array_hdls {
 
 array_hdls *array_push (array_hdls *restrict hdls, char *restrict field,
                         char *restrict name, short code);
+void free_array_hdls (array_hdls *hdls);
 int matches_type (Dxf_Pair *restrict pair, const Dwg_DYNAPI_field *restrict f);
 
 void dxf_add_field (Dwg_Object *restrict obj, const char *restrict name,
@@ -99,6 +100,7 @@ Dxf_Pair *add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 void add_dictionary_itemhandles (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
                                  char *restrict text);
 void resolve_postponed_header_refs (Dwg_Data *restrict dwg);
+void resolve_postponed_eed_refs (Dwg_Data *restrict dwg);
 BITCODE_H find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair);
 int is_table_name (const char *name);
 
