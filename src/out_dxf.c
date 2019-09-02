@@ -344,6 +344,9 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 #define HEADER_BL(nam, dxf)                                                   \
   HEADER_9 (nam);                                                             \
   FIELDG (nam, BL, dxf)
+#define HEADER_BLd(nam, dxf)                                                   \
+  HEADER_9 (nam);                                                             \
+  FIELDG (nam, BLd, dxf)
 
 #define VALUE_BB(value, dxf) VALUE (value, RC, dxf)
 #define VALUE_3B(value, dxf) VALUE (value, RC, dxf)

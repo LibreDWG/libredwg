@@ -416,9 +416,12 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               LOG_ERROR ("skipping HEADER: 9 %s, unknown field with code %d",
                          field, pair->code);
             }
-          else if (!matches_type (pair, f) && strNE (field, "$XCLIPFRAME"))
+          else if (!matches_type (pair, f) &&
+                   strNE (field, "$XCLIPFRAME") &&
+                   strNE (field, "$TIMEZONE"))
             {
               // XCLIPFRAME is 280 RC or 290 B in dynapi.
+              // TIMEZONE is BLd (signed)
               LOG_ERROR ("skipping HEADER: 9 %s, wrong type code %d <=> field %s",
                          field, pair->code, f->type);
             }
