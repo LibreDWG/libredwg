@@ -3896,6 +3896,27 @@ B,	DXF 296
 @end vtable
 @end indentedblock
 
+@strong{ANNOTSCALEOBJECTCONTEXTDATA} @anchor{ANNOTSCALEOBJECTCONTEXTDATA}
+@cindex object, ANNOTSCALEOBJECTCONTEXTDATA
+@vindex ANNOTSCALEOBJECTCONTEXTDATA
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 70
+@item has_file
+B,	DXF 290
+@item defaultflag
+B
+@item scale
+H,	DXF 340
+
+@end vtable
+@end indentedblock
+
 @strong{APPID} @anchor{APPID}
 @cindex object, APPID
 @vindex APPID
@@ -5848,9 +5869,9 @@ B
 @item parent
 struct _dwg_object_object*
 @item class_version
-BS
+BS,	DXF 70
 @item has_file
-B
+B,	DXF 290
 @item defaultflag
 B
 

@@ -4789,11 +4789,22 @@ object_alias (char *name)
     strcpy (name, "PROXY_OBJECT");
   else if (strEQc (name, "CSACDOCUMENTOPTIONS"))
     strcpy (name, "DOCUMENTOPTIONS");
+  // TODO: not sure yet, if all of them can be one object. i.e. MLEADER looks larger
   else if (strEQc (name, "ACDB_LEADEROBJECTCONTEXTDATA_CLASS"))
-    strcpy (name, "LEADEROBJECTCONTEXTDATA");
+    strcpy (name, "ANNOTSCALEOBJECTCONTEXTDATA");
+  else if (strEQc (name, "ACDB_MLEADEROBJECTCONTEXTDATA_CLASS"))
+    strcpy (name, "ANNOTSCALEOBJECTCONTEXTDATA");
+  else if (strEQc (name, "ACDB_MTEXTOBJECTCONTEXTDATA_CLASS"))
+    strcpy (name, "ANNOTSCALEOBJECTCONTEXTDATA");
+  else if (strEQc (name, "ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS"))
+    strcpy (name, "ANNOTSCALEOBJECTCONTEXTDATA");
+  else if (strEQc (name, "ACDB_BLKREFOBJECTCONTEXTDATA_CLASS"))
+    strcpy (name, "ANNOTSCALEOBJECTCONTEXTDATA");
+  else if (strEQc (name, "ACDB_ALDIMOBJECTCONTEXTDATA_CLASS"))
+    strcpy (name, "ANNOTSCALEOBJECTCONTEXTDATA");
   else if (strEQc (name, "EXACXREFPANELOBJECT"))
     strcpy (name, "XREFPANELOBJECT");
-  // strip a ACAD_ prefix
+  // strip ACAD_ prefix
   else if (memBEGINc (name, "ACAD_") && is_dwg_object (&name[5]))
     memmove (name, &name[5], len - 4);
   // strip the ACDB prefix
@@ -4818,7 +4829,7 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             DXF_RETURN_ENDSEC (0)
           else
             {
-              LOG_WARN ("Unhandled 0 %s (%s)", pair->value.s, "objects");
+              LOG_WARN ("Unhandled 0 %s (%s)", name, "objects");
               break;
             }
         }
@@ -4849,7 +4860,7 @@ dxf_unknownsection_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             DXF_RETURN_ENDSEC (0)
           else
             {
-              LOG_WARN ("Unhandled 0 %s (%s)", pair->value.s, "unknownsection");
+              LOG_WARN ("Unhandled 0 %s (%s)", name, "unknownsection");
               break;
             }
         }

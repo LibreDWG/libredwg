@@ -4145,15 +4145,16 @@ DWG_OBJECT_END
 
 DWG_OBJECT(OBJECTCONTEXTDATA)
 
+  SUBCLASS (AcDbObjectContextData)
   SINCE (R_2010) {
     IF_ENCODE_FROM_EARLIER {
       FIELD_VALUE(class_version) = 3;
     }
-    FIELD_BS (class_version, 0);
+    FIELD_BS (class_version, 70);
     if (FIELD_VALUE(class_version) > 10)
       return DWG_ERR_VALUEOUTOFBOUNDS;
   }
-  FIELD_B (has_file, 0);
+  FIELD_B (has_file, 290);
   FIELD_B (defaultflag, 0);
 
   START_OBJECT_HANDLE_STREAM;
@@ -7201,8 +7202,39 @@ geoimage_height
 */
 DWG_OBJECT_END
 
-DWG_OBJECT(LEADEROBJECTCONTEXTDATA)
+DWG_OBJECT(ANNOTSCALEOBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
+
+  SUBCLASS (AcDbObjectContextData)
+  SINCE (R_2010) {
+    IF_ENCODE_FROM_EARLIER {
+      FIELD_VALUE(class_version) = 3;
+    }
+    FIELD_BS (class_version, 70);
+    if (FIELD_VALUE(class_version) > 10)
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+  }
+  FIELD_B (has_file, 290);
+  FIELD_B (defaultflag, 0);
+  SUBCLASS (AcDbAnnotScaleObjectContextData)
+  // 70
+  // 10
+  // 11
+  // 40
+  // 41
+  // 42
+  // 43
+  // 71
+  // 72
+  // 44
+  // 45
+  // 73
+  // 74
+  // 46
+
+  START_OBJECT_HANDLE_STREAM;
+  FIELD_HANDLE (scale, 5, 340); /* to SCALE */
+
 DWG_OBJECT_END
 
 DWG_OBJECT(LIGHTLIST)
