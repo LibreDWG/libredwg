@@ -27822,30 +27822,6 @@ static int test_LAYER (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_H linetype;
-    if (dwg_dynapi_entity_value (layer, "LAYER", "linetype", &linetype, NULL)
-        && !memcmp (&linetype, &layer->linetype, sizeof (layer->linetype)))
-        pass ();
-    else
-        fail ("LAYER.linetype [H]");
-  }
-  {
-    BITCODE_RS linetype_rs;
-    if (dwg_dynapi_entity_value (layer, "LAYER", "linetype_rs", &linetype_rs, NULL)
-        && linetype_rs == layer->linetype_rs)
-      pass ();
-    else
-      fail ("LAYER.linetype_rs [RS] %hu != %hu", layer->linetype_rs, linetype_rs);
-    linetype_rs++;
-    if (dwg_dynapi_entity_set_value (layer, "LAYER", "linetype_rs", &linetype_rs, 0)
-        && linetype_rs == layer->linetype_rs)
-      pass ();
-    else
-      fail ("LAYER.linetype_rs [RS] set+1 %hu != %hu", layer->linetype_rs, linetype_rs);
-    layer->linetype_rs--;
-
-  }
-  {
     BITCODE_RC linewt;
     if (dwg_dynapi_entity_value (layer, "LAYER", "linewt", &linewt, NULL)
         && linewt == layer->linewt)
@@ -27875,6 +27851,30 @@ static int test_LAYER (const Dwg_Object *obj)
     else
       fail ("LAYER.locked [B] set+1 " FORMAT_B " != " FORMAT_B "", layer->locked, locked);
     layer->locked--;
+
+  }
+  {
+    BITCODE_H ltype;
+    if (dwg_dynapi_entity_value (layer, "LAYER", "ltype", &ltype, NULL)
+        && !memcmp (&ltype, &layer->ltype, sizeof (layer->ltype)))
+        pass ();
+    else
+        fail ("LAYER.ltype [H]");
+  }
+  {
+    BITCODE_RS ltype_rs;
+    if (dwg_dynapi_entity_value (layer, "LAYER", "ltype_rs", &ltype_rs, NULL)
+        && ltype_rs == layer->ltype_rs)
+      pass ();
+    else
+      fail ("LAYER.ltype_rs [RS] %hu != %hu", layer->ltype_rs, ltype_rs);
+    ltype_rs++;
+    if (dwg_dynapi_entity_set_value (layer, "LAYER", "ltype_rs", &ltype_rs, 0)
+        && ltype_rs == layer->ltype_rs)
+      pass ();
+    else
+      fail ("LAYER.ltype_rs [RS] set+1 %hu != %hu", layer->ltype_rs, ltype_rs);
+    layer->ltype_rs--;
 
   }
   {

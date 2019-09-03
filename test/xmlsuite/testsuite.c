@@ -105,7 +105,7 @@ common_entity_attrs (xmlNodePtr node, const Dwg_Object *obj)
   if (!error)
     newXMLcProp ("Linetype", name); // leaks r2007+
 
-  buf = doubletochar (ent->linetype_scale);
+  buf = doubletochar (ent->ltype_scale);
   newXMLProp ("LinetypeScale", buf);
 
   buf = inttochar (dxf_cvt_lweight (ent->linewt));

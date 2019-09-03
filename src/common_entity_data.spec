@@ -52,7 +52,7 @@
     {
       FIELD_B (isbylayerlt, 0);
       if (FIELD_VALUE(isbylayerlt))
-        FIELD_VALUE(linetype_flags) = FIELD_VALUE(isbylayerlt) ? 0 : 3;
+        FIELD_VALUE(ltype_flags) = FIELD_VALUE(isbylayerlt) ? 0 : 3;
     }
   SINCE(R_2004) //ODA bug
     {
@@ -158,15 +158,15 @@
     FIELD_CMC(color, 62,420);
 
   DXF {
-    if (FIELD_VALUE(linetype_scale) != 1.0)
-      FIELD_BD (linetype_scale, 48);
+    if (FIELD_VALUE(ltype_scale) != 1.0)
+      FIELD_BD (ltype_scale, 48);
   } else {
-    FIELD_BD (linetype_scale, 48);
+    FIELD_BD (ltype_scale, 48);
   }
   SINCE(R_2000)
     {
       // 00 BYLAYER, 01 BYBLOCK, 10 CONTINUOUS, 11 ltype handle
-      FIELD_BB (linetype_flags, 0);
+      FIELD_BB (ltype_flags, 0);
       // 00 BYLAYER, 01 BYBLOCK, 10 CONTINUOUS, 11 plotstyle handle
       FIELD_BB (plotstyle_flags, 0);
     }

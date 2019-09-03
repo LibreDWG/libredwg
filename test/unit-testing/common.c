@@ -388,7 +388,7 @@ api_common_entity (dwg_object *obj)
   BITCODE_RC linewt;
   BITCODE_RL preview_size_rl;
   BITCODE_BLL preview_size;
-  BITCODE_BD linetype_scale;
+  BITCODE_BD ltype_scale;
   BITCODE_BS invisible;
   Dwg_Object_Entity *_ent =  obj->tio.entity;
   Dwg_Entity_LINE *ent =  obj->tio.entity->tio.LINE;
@@ -418,11 +418,11 @@ api_common_entity (dwg_object *obj)
     }
   else
     {
-      if (_ent->linetype_flags == 3)
+      if (_ent->ltype_flags == 3)
         CHK_COMMON_H (ent, ltype, handle);
     }
   CHK_COMMON_TYPE (ent, linewt, RC, linewt);
-  CHK_COMMON_TYPE (ent, linetype_scale, BD, linetype_scale);
+  CHK_COMMON_TYPE (ent, ltype_scale, BD, ltype_scale);
   if (version >= R_2007)
     {
       if (_ent->material_flags == 3)

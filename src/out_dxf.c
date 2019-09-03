@@ -1619,12 +1619,12 @@ dxf_common_entity_handle_data (Bit_Chain *restrict dat,
     if ((ent->color.flag & 0x42) == 0x42)
       FIELD_TV (color.book_name, 430)
   }
-  if (ent->linetype_scale > 0.0)
-    FIELD_BD (linetype_scale, 48)
+  if (ent->ltype_scale > 0.0)
+    FIELD_BD (ltype_scale, 48)
 
   SINCE (R_2000)
   {
-    switch (ent->linetype_flags)
+    switch (ent->ltype_flags)
       {
       case 1:
         VALUE_TV ("ByBlock", 7);

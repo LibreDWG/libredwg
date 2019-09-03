@@ -115,15 +115,15 @@ typedef int32_t BITCODE_RLd;
 #endif
 */
 //#ifdef HAVE_INTTYPES_H
-# define FORMAT_BS "%" PRIu16
-# define FORMAT_BSd "%" PRId16
-# define FORMAT_RS "%" PRIu16
-# define FORMAT_BL "%" PRIu32
-# define FORMAT_RL "%" PRIu32
-# define FORMAT_BLd "%" PRId32
-# define FORMAT_RLd "%" PRId32
-# define FORMAT_BLX "%" PRIX32
-# define FORMAT_BLx "%" PRIx32
+#define FORMAT_BS "%" PRIu16
+#define FORMAT_BSd "%" PRId16
+#define FORMAT_RS "%" PRIu16
+#define FORMAT_BL "%" PRIu32
+#define FORMAT_RL "%" PRIu32
+#define FORMAT_BLd "%" PRId32
+#define FORMAT_RLd "%" PRId32
+#define FORMAT_BLX "%" PRIX32
+#define FORMAT_BLx "%" PRIx32
 /*#else
 # define FORMAT_BS "%hu"
 # define FORMAT_RS "%hu"
@@ -1979,11 +1979,11 @@ typedef struct _dwg_object_LAYER
   //BITCODE_BS flag_s;
   BITCODE_CMC color;
   short      color_rs;    /* preR13, needs to be signed */
-  BITCODE_RS linetype_rs; /* preR13 */
+  BITCODE_RS ltype_rs;    /* preR13 */
   BITCODE_H xref;
   BITCODE_H plotstyle;
   BITCODE_H material;
-  BITCODE_H linetype;
+  BITCODE_H ltype;
 } Dwg_Object_LAYER;
 
 /**
@@ -2363,8 +2363,10 @@ typedef struct _dwg_MLINESTYLE_line
   struct _dwg_object_MLINESTYLE *parent;
   BITCODE_BD offset;
   BITCODE_CMC color;
-  BITCODE_BS ltindex; /* until 2018 */
-  BITCODE_H ltype;    /* since 2018 */
+  union {
+    BITCODE_BSd index;   /* until 2018 */
+    BITCODE_H ltype;     /* since 2018 */
+  } lt;
 } Dwg_MLINESTYLE_line;
 
 typedef struct _dwg_object_MLINESTYLE
@@ -5194,8 +5196,8 @@ typedef struct _dwg_object_entity
   BITCODE_B nolinks;            /*!< r13-r2000 */
   BITCODE_B has_ds_binary_data; /*!< r2013+ */
   BITCODE_CMC color;
-  BITCODE_BD linetype_scale;
-  BITCODE_BB linetype_flags;    /*!< r2000+ */
+  BITCODE_BD ltype_scale;
+  BITCODE_BB ltype_flags;       /*!< r2000+ */
   BITCODE_BB plotstyle_flags;   /*!< r2000+ */
   BITCODE_BB material_flags;    /*!< r2007+ */
   BITCODE_RC shadow_flags;      /*!< r2007+: 0 both, 1 casts, 2, receives,
@@ -5213,7 +5215,7 @@ typedef struct _dwg_object_entity
   BITCODE_RC extra_r11;
   BITCODE_RS layer_r11;
   BITCODE_RC color_r11;
-  BITCODE_RS linetype_r11;
+  BITCODE_RS ltype_r11;
   BITCODE_RD elevation_r11;
   BITCODE_RD thickness_r11;
   BITCODE_RS paper_r11;

@@ -20576,13 +20576,13 @@ EXPORT double
 dwg_ent_get_linetype_scale (const dwg_obj_ent *restrict ent,
                             int *restrict error)
 {
-  _BODY_FIELD (ent, linetype_scale);
+  _BODY_FIELD (ent, ltype_scale);
 }
 
 EXPORT BITCODE_BB dwg_ent_get_linetype_flags (const dwg_obj_ent *restrict ent,
                                               int *restrict error) // r2000+
 {
-  _BODY_FIELD (ent, linetype_flags);
+  _BODY_FIELD (ent, ltype_flags);
 }
 
 EXPORT BITCODE_BB dwg_ent_get_plotstyle_flags (const dwg_obj_ent *restrict ent,

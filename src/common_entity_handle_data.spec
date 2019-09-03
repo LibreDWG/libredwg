@@ -36,13 +36,13 @@
       FIELD_HANDLE(layer, 5, 8);
       ENCODER {
         if (dat->from_version == R_2000)
-          FIELD_VALUE(isbylayerlt) = FIELD_VALUE(linetype_flags) == 3 ? 1 : 0;
+          FIELD_VALUE(isbylayerlt) = FIELD_VALUE(ltype_flags) < 3 ? 1 : 0;
       }
 #ifdef IS_DXF
-      switch (FIELD_VALUE(linetype_flags)) {
+      switch (FIELD_VALUE(ltype_flags)) {
       case 0: VALUE_TV("BYLAYER", 6); break;
       case 1: VALUE_TV("BYBLOCK", 6); break;
-      case 3: VALUE_TV("CONTINUOUS", 6); break;
+      case 2: VALUE_TV("CONTINUOUS", 6); break;
       default: break;
       }
 #endif
@@ -65,14 +65,14 @@
       FIELD_HANDLE(layer, 5, 8);
 
 #ifdef IS_DXF
-      switch (FIELD_VALUE(linetype_flags)) {
+      switch (FIELD_VALUE(ltype_flags)) {
       case 0: VALUE_TV("BYLAYER", 6); break;
       case 1: VALUE_TV("BYBLOCK", 6); break;
-      case 3: VALUE_TV("CONTINUOUS", 6); break;
+      case 2: VALUE_TV("CONTINUOUS", 6); break;
       default: break;
       }
 #endif
-      if (FIELD_VALUE(linetype_flags) == 3)
+      if (FIELD_VALUE(ltype_flags) == 3)
         FIELD_HANDLE(ltype, 5, 6);
     }
 

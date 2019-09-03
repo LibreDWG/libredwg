@@ -294,6 +294,11 @@
     _obj->nam = bit_read_BS (dat);                                            \
     LOG_TRACE (#nam ": " FORMAT_BSd " [BSd %d]\n", _obj->nam, dxf);           \
   }
+#define SUB_FIELD_BSd(o, nam, dxf)                                            \
+  {                                                                           \
+    _obj->o.nam = (BITCODE_BSd)bit_read_BS (dat);                             \
+    LOG_TRACE (#nam ": " FORMAT_BSd " [BSd %d]\n", _obj->o.nam, dxf);         \
+  }
 #define FIELD_BLd(nam, dxf)                                                   \
   {                                                                           \
     _obj->nam = bit_read_BL (dat);                                            \

@@ -41,9 +41,9 @@ DWG_ENTITY(TEXT)
     if (R11OPTS(4))
       FIELD_RD (oblique_ang, 51);
     if (R11OPTS(8)) {
-      DECODER { _ent->linetype_r11 = bit_read_RC(dat); }
-      ENCODER { bit_write_RC(dat, _ent->linetype_r11); }
-      PRINT   { LOG_TRACE("linetype_rs: " FORMAT_RS "\n", _ent->linetype_r11); }
+      DECODER { _ent->ltype_r11 = bit_read_RC(dat); }
+      ENCODER { bit_write_RC(dat, _ent->ltype_r11); }
+      PRINT   { LOG_TRACE("ltype_r11: " FORMAT_RS "\n", _ent->ltype_r11); }
     }
     if (R11OPTS(16))
       FIELD_CAST (generation, RC, BS, 71);
@@ -116,7 +116,7 @@ DWG_ENTITY(TEXT)
     {
       IF_ENCODE_FROM_PRE_R13 {
         //FIXME: should really just lookup the style table; style is the index.
-        FIELD_VALUE(style) = 0; //dwg_resolve_handle(dwg, obj->linetype_rs);
+        FIELD_VALUE(style) = 0; //dwg_resolve_handle(dwg, obj->ltype_rs);
       }
 #ifndef IS_DXF
       FIELD_HANDLE (style, 5, 7);
@@ -798,7 +798,7 @@ DWG_ENTITY(VERTEX_PFACE_FACE)
     FIELD_BS (vertind[2], 73);
     FIELD_BS (vertind[3], 74);
   }
-  //TODO R13 has color_rs and linetype_rs for all vertices, not in DXF
+  //TODO R13 has color_rs and ltype_rs for all vertices, not in DXF
 
   COMMON_ENTITY_HANDLE_DATA;
 
@@ -2457,8 +2457,8 @@ DWG_OBJECT(LAYER)
 
   PRE (R_13)
   {
-    FIELD_RS (color_rs, 62);     // color
-    FIELD_RS (linetype_rs, 7);   // style
+    FIELD_RS (color_rs, 62);  // color
+    FIELD_RS (ltype_rs, 7);   // style
 
     DECODER {
       FIELD_VALUE(on)            = FIELD_VALUE(color_rs) >= 0;
@@ -2513,7 +2513,7 @@ DWG_OBJECT(LAYER)
   SINCE (R_2007) {
     FIELD_HANDLE (material, ANYCODE, 347);
   }
-  FIELD_HANDLE (linetype, 5, 6); // DXF: the name
+  FIELD_HANDLE (ltype, 5, 6);
   //TODO handle: DXF 370
   //FIELD_HANDLE (null_handle, 5); // doc error?
 
@@ -3431,16 +3431,16 @@ DWG_OBJECT(MLINESTYLE)
     PRE (R_2018)
     {
 #if defined(IS_DXF) && !defined(IS_ENCODE)
-        switch (FIELD_VALUE(lines[rcount1].ltindex)) {
-        case 32767: VALUE_TFF("BYLAYER", 6); break; /* default */
+        switch (FIELD_VALUE(lines[rcount1].lt.index)) {
+        case 32767: VALUE_TFF("BYLAYER", 6); break; /* default (SHRT_MAX) */
         case 32766: VALUE_TFF("BYBLOCK", 6); break;
-        case 0:     VALUE_TFF("CONTINUOUS", 6); break;
-        //else lookup on LTYPE_CONTROL list
-        default:    /*FIELD_HANDLE_NAME(ltype, 5, 6);*/
-                    VALUE_TFF("", 6); break;
+        case 0:  VALUE_TFF("CONTINUOUS", 6); break;
+        //else lookup on LTYPE_CONTROL list TODO
+        default: /*FIELD_HANDLE_NAME(lt.ltype, 5, 6);*/
+                 VALUE_TFF("", 6); break;
         }
 #else
-        SUB_FIELD_BS (lines[rcount1], ltindex, 6);
+        SUB_FIELD_BSd (lines[rcount1], lt.index, 6);
 #endif
     }
   END_REPEAT_BLOCK
@@ -3453,7 +3453,7 @@ DWG_OBJECT(MLINESTYLE)
   {
     _REPEAT_N (FIELD_VALUE (num_lines), lines, Dwg_MLINESTYLE_line, 1)
     REPEAT_BLOCK
-    SUB_FIELD_HANDLE (lines[rcount1], ltype, 5, 6);
+    SUB_FIELD_HANDLE (lines[rcount1], lt.ltype, 5, 6);
     END_REPEAT_BLOCK
     //SET_PARENT_OBJ(lines)
     END_REPEAT(lines);

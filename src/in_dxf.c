@@ -949,6 +949,7 @@ new_MLINESTYLE_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 {
   int num_lines = pair->value.i;
   Dwg_Object_MLINESTYLE *_o = obj->tio.object->tio.MLINESTYLE;
+  Dwg_Data *dwg = obj->parent;
   _o->lines = calloc (num_lines, sizeof (Dwg_MLINESTYLE_line));
   for (int j = -1; j < (int)num_lines; )
     {
@@ -972,19 +973,39 @@ new_MLINESTYLE_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_TRACE ("MLINESTYLE.lines[%d].color.index = %d [62 CMC]\n",
                      j, pair->value.i);
         }
+      else if (pair->code == 420)
+        {
+          if (j<0) j++;
+          assert (j < num_lines);
+          _o->lines[j].color.rgb = pair->value.u;
+          LOG_TRACE ("MLINESTYLE.lines[%d].color.rgb = %06X [420 CMC]\n",
+                     j, pair->value.u);
+        }
       else if (pair->code == 6)
         {
           if (j<0) j++;
           assert (j < num_lines);
-          if (strEQc (pair->value.s, "BYLAYER"))
-            _o->lines[j].ltindex = 32767;
-          else if (strEQc (pair->value.s, "BYBLOCK"))
-            _o->lines[j].ltindex = 32766;
-          else if (strEQc (pair->value.s, "CONTINUOUS"))
-            _o->lines[j].ltindex = 0;
-          //else lookup on LTYPE_CONTROL list
-          LOG_TRACE ("MLINESTYLE.lines[%d].color.ltindex = %d [6]\n",
-                     j, _o->lines[j].ltindex);
+          if (strEQc (pair->value.s, "BYLAYER") || strEQc (pair->value.s, "ByLayer"))
+            _o->lines[j].lt.index = 32767; // TODO SHRT_MAX, but should be -1 really
+          else if (strEQc (pair->value.s, "BYBLOCK") || strEQc (pair->value.s, "ByBlock"))
+            _o->lines[j].lt.index = 32766; // TODO should be -2 really
+          else if (strEQc (pair->value.s, "CONTINUOUS") ||
+                   strEQc (pair->value.s, "Continuous"))
+            _o->lines[j].lt.index = 0;
+          else //lookup on LTYPE_CONTROL list
+            {
+              BITCODE_H hdl;
+              if ((hdl = dwg_find_tablehandle (dwg, pair->value.s, "LTYPE")))
+                {
+                  hdl->handleref.code = 5;
+                  _o->lines[j].lt.ltype = hdl;
+                  LOG_TRACE ("MLINESTYLE.lines[%d].lt.ltype %s => " FORMAT_REF " [H 6]\n",
+                             j, pair->value.s, ARGS_REF (hdl));
+                }
+            }
+          if (_o->lines[j].lt.index >= -2 && _o->lines[j].lt.index <= 0)
+            LOG_TRACE ("MLINESTYLE.lines[%d].lt.index = %d [BSd 6]\n",
+                       j, _o->lines[j].lt.index);
         }
       else
         break; // not a Dwg_MLINESTYLE_line
@@ -4659,6 +4680,8 @@ entity_alias (char *name)
     strcpy (name, "TABLE");
   else if (strEQc (name, "ACAD_PROXY_ENTITY"))
     strcpy (name, "PROXY_ENTITY");
+  else if (strEQc (name, "ACDBPLACEHOLDER"))
+    strcpy (name, "PLACEHOLDER");
   else if (strEQc (name, "POLYLINE"))
     strcpy (name, "POLYLINE_2D"); // other POLYLINE_* by flag or subclass?
   else if (strEQc (name, "VERTEX"))

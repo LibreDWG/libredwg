@@ -359,7 +359,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           FIELD_RS (used, 0);
 
           FIELD_RS (color_rs, 62);   // color, off if negative
-          FIELD_RS (linetype_rs, 6); // style
+          FIELD_RS (ltype_rs, 6);    // style
           // FIELD_RS (crc, 0);
           CHK_ENDPOS;
         }

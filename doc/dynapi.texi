@@ -5211,7 +5211,7 @@ RC
 CMC,	DXF 62
 @item color_rs
 short,	DXF 62
-@item linetype_rs
+@item ltype_rs
 RS,	DXF 7
 @item xref
 H
@@ -5219,7 +5219,7 @@ H
 H,	DXF 390
 @item material
 H,	DXF 347
-@item linetype
+@item ltype
 H,	DXF 6
 
 @end vtable
@@ -7642,10 +7642,6 @@ struct _dwg_object_MLINESTYLE*
 BD
 @item color
 CMC
-@item ltindex
-BS
-@item ltype
-H
 
 @end vtable
 @end indentedblock
@@ -8014,16 +8010,16 @@ RS
 H,	DXF 8
 @item layer_r11
 RS
-@item linetype_flags
-BB
-@item linetype_r11
-RS
-@item linetype_scale
-BD,	DXF 48
 @item linewt
 RC,	DXF 370
 @item ltype
 H,	DXF 6
+@item ltype_flags
+BB
+@item ltype_r11
+RS
+@item ltype_scale
+BD,	DXF 48
 @item material
 H,	DXF 347
 @item material_flags

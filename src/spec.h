@@ -81,6 +81,9 @@
 #ifndef FIELDG
 #  define FIELDG(nam, type, dxf) FIELD (nam, type)
 #endif
+#ifndef SUB_FIELD_BSd
+#  define SUB_FIELD_BSd(o, nam, dxf) FIELD_BSd (o.nam, dxf)
+#endif
 #ifndef SUB_FIELD_BL
 #  define SUB_FIELD_T(o, nam, dxf) FIELD_T (o.nam, dxf)
 #  define SUB_FIELD_B(o, nam, dxf) FIELDG (o.nam, B, dxf)
