@@ -726,7 +726,16 @@ Dwg_Object_Ref *
 add_handleref (Dwg_Data *restrict dwg, BITCODE_RC code, BITCODE_RL value,
                Dwg_Object *restrict obj)
 {
-  Dwg_Object_Ref *ref = dwg_new_ref (dwg);
+  Dwg_Object_Ref *ref;
+  // first search of this code-value pair already exists
+  for (BITCODE_BL i = 0; i < dwg->num_object_refs; i++)
+    {
+      Dwg_Object_Ref *refi = dwg->object_ref[i];
+      if (refi->absolute_ref == (BITCODE_BL)value && refi->handleref.code == code)
+        return refi;
+    }
+  // else create a new ref
+  ref = dwg_new_ref (dwg);
   add_handle (&ref->handleref, code, value, obj);
   ref->absolute_ref = value;
   // fill ->obj later
@@ -2716,11 +2725,13 @@ find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair)
     ref = dwg_find_tablehandle (dwg, pair->value.s, "LTYPE");
   else if (pair->code == 7)
     ref = dwg_find_tablehandle (dwg, pair->value.s, "STYLE");
+
+  if (ref) // turn a 2 (hardowner) into a 5 (softref)
+    return add_handleref (dwg, 5, ref->absolute_ref, NULL);
   /* I think all these >300 are given by hex value, not by name */
-  else if (pair->code > 300)
+  if (!ref && pair->code > 300)
     {
-      BITCODE_BL i;
-      for (i = 0; i < dwg->num_object_refs; i++)
+      for (BITCODE_BL i = 0; i < dwg->num_object_refs; i++)
         {
           Dwg_Object_Ref *refi = dwg->object_ref[i];
           if (refi->absolute_ref == (BITCODE_BL)pair->value.u)
