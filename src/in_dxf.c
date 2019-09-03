@@ -1045,12 +1045,39 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 43)
         {
           _o->const_width = pair->value.d;
+          _o->flag |= 4;
           LOG_TRACE ("LWPOLYLINE.const_width = %f [43 BD]\n", pair->value.d);
         }
       else if (pair->code == 70)
         {
-          _o->flag = pair->value.i;
+          _o->flag |= pair->value.i; /* only if closed or not */
           LOG_TRACE ("LWPOLYLINE.flag = %d [70 BS]\n", pair->value.i);
+        }
+      else if (pair->code == 38)
+        {
+          _o->elevation = pair->value.d;
+          _o->flag |= 8;
+          LOG_TRACE ("LWPOLYLINE.elevation = %f [38 BD]\n", pair->value.d);
+        }
+      else if (pair->code == 39)
+        {
+          _o->thickness = pair->value.d;
+          _o->flag |= 2;
+          LOG_TRACE ("LWPOLYLINE.thickness = %f [39 BD]\n", pair->value.d);
+        }
+      else if (pair->code == 210)
+        {
+          _o->extrusion.x = pair->value.d;
+        }
+      else if (pair->code == 220)
+        {
+          _o->extrusion.y = pair->value.d;
+        }
+      else if (pair->code == 230)
+        {
+          _o->extrusion.z = pair->value.d;
+          LOG_TRACE ("LWPOLYLINE.extrusion = (%f, %f, %f) [210 3BD]\n",
+                     _o->extrusion.x, _o->extrusion.y, _o->extrusion.z);
         }
       else if (pair->code == 10)
         {
@@ -4024,8 +4051,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               goto next_pair;
             }
           else if (pair->code == 90 &&
-                   strEQc (name, "LWPOLYLINE") &&
-                   pair->value.i != 0)
+                   strEQc (name, "LWPOLYLINE"))
             {
               pair = new_LWPOLYLINE (obj, dat, pair);
               if (pair->code == 0)
@@ -4505,7 +4531,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                             {
                               if (pair->code > 300)
                                 {
-                                  LOG_WARN ("TODO resolve common handle name %s %X",
+                                  LOG_WARN ("TODO resolve common handle %s %X",
                                             f->name, pair->value.u)
                                 }
                               else
@@ -4515,8 +4541,11 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                                 }
                             }
                           else
-                            dwg_dynapi_common_set_value (_obj, f->name,
-                                                         &handle, is_utf);
+                            {
+                              dwg_dynapi_common_set_value (_obj, f->name,
+                                                           &handle, is_utf);
+                              goto next_pair; // found, early exit
+                            }
                         }
                       else
                         {
