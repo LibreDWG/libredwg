@@ -4675,6 +4675,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static void
 entity_alias (char *name)
 {
+  const int len = strlen (name);
   // check aliases (dxfname => name)
   if (strEQc (name, "ACAD_TABLE"))
     strcpy (name, "TABLE");
@@ -4686,7 +4687,7 @@ entity_alias (char *name)
     strcpy (name, "POLYLINE_2D"); // other POLYLINE_* by flag or subclass?
   else if (strEQc (name, "VERTEX"))
     strcpy (name, "VERTEX_2D");   // other VERTEX_* by flag?
-  else if (strlen (name) == strlen ("PDFUNDERLAY") && strEQc (&name[3], "UNDERLAY"))
+  else if (len == strlen ("PDFUNDERLAY") && strEQc (&name[3], "UNDERLAY"))
     strcpy (name, "UNDERLAY");
   //if (strEQc (name, "BLOCK"))
   //  strcpy (name, "BLOCK_HEADER");
@@ -4694,6 +4695,12 @@ entity_alias (char *name)
   //  strcpy (name, "VERTEX_3D");
   //else if (strEQc (name, "DIMENSION"))
   //  strcpy (name, "DIMENSION_ANG2LN");   // allocate room for the largest
+  // strip a ACAD_ prefix
+  else if (memBEGINc (name, "ACAD_") && is_dwg_entity (&name[5]))
+    memmove (name, &name[5], len - 4);
+  // strip the ACDB prefix
+  else if (memBEGINc (name, "ACDB") && is_dwg_entity (&name[4]))
+    memmove (name, &name[4], len - 3);
 }
 
 static int
@@ -4732,30 +4739,59 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
+static void
+object_alias (char *name)
+{
+  const int len = strlen (name);
+  // check aliases (dxfname => name)
+  if (len == strlen ("PDFDEFINITION") &&
+      strEQc (&name[3], "DEFINITION"))
+    strcpy (name, "UNDERLAYDEFINITION");
+  else if (strEQc (name, "ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION"))
+    strcpy (name, "DYNAMICBLOCKPURGEPREVENTER");
+  else if (strEQc (name, "PROXY"))
+    strcpy (name, "PROXY_OBJECT");
+  else if (strEQc (name, "CSACDOCUMENTOPTIONS"))
+    strcpy (name, "DOCUMENTOPTIONS");
+  else if (strEQc (name, "ACDB_LEADEROBJECTCONTEXTDATA_CLASS"))
+    strcpy (name, "LEADEROBJECTCONTEXTDATA");
+  else if (strEQc (name, "EXACXREFPANELOBJECT"))
+    strcpy (name, "XREFPANELOBJECT");
+  // strip a ACAD_ prefix
+  else if (memBEGINc (name, "ACAD_") && is_dwg_object (&name[5]))
+    memmove (name, &name[5], len - 4);
+  // strip the ACDB prefix
+  else if (memBEGINc (name, "ACDB") && is_dwg_object (&name[4]))
+    memmove (name, &name[4], len - 3);
+}
+
 static int
 dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dxf_Pair *pair = dxf_read_pair (dat);
 
-  while (1)
+  while (pair->code == 0)
     {
-      if (pair->code == 0)
+      char name[80];
+      strncpy (name, pair->value.s, 79);
+      object_alias (name);
+      // until 0 ENDSEC
+      while (pair->code == 0 && is_dwg_object (name))
         {
-          char name[80];
-          // until 0 ENDSEC
-          while (pair->code == 0 && is_dwg_object (pair->value.s))
+          pair = new_object (name, dat, dwg, 0, 0);
+          if (pair->code == 0)
             {
               strncpy (name, pair->value.s, 79);
-              pair = new_object (name, dat, dwg, 0, 0);
+              object_alias (name);
             }
-          if (strEQc (pair->value.s, "ENDSEC"))
-            {
-              dxf_free_pair (pair);
-              return 0;
-            }
-          else
-            LOG_WARN ("Unknown 0 %s (%s)", pair->value.s, "objects");
         }
+      if (strEQc (name, "ENDSEC"))
+        {
+          dxf_free_pair (pair);
+          return 0;
+        }
+      else
+        LOG_WARN ("Unknown 0 %s (%s)", pair->value.s, "objects");
       DXF_RETURN_ENDSEC (0);
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
