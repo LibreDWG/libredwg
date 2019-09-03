@@ -205,8 +205,12 @@ dxf_read_pair (Bit_Chain *dat)
 
 #define DXF_CHECK_EOF                                                         \
   if (dat->byte >= dat->size                                                  \
-      || (pair->code == 0 && strEQc (pair->value.s, "EOF")))                  \
+      || (pair != NULL && pair->code == 0 && strEQc (pair->value.s, "EOF")))  \
   return 1
+#define DXF_RETURN_EOF(what)                                                  \
+  if (dat->byte >= dat->size                                                  \
+      || (pair != NULL && pair->code == 0 && strEQc (pair->value.s, "EOF")))  \
+  return what
 
 static int
 dxf_skip_comment (Bit_Chain *dat, Dxf_Pair *pair)
@@ -263,21 +267,19 @@ free_array_hdls (array_hdls *hdls)
 
 #define DXF_CHECK_ENDSEC                                                      \
   if (pair != NULL && (dat->byte >= dat->size || pair->code == 0))            \
-  return 0
+    return 0
 #define DXF_BREAK_ENDSEC                                                      \
   if (pair != NULL                                                            \
       && (dat->byte >= dat->size                                              \
           || (pair->code == 0 && strEQc (pair->value.s, "ENDSEC"))))          \
   break
-#define DXF_RETURN_ENDSEC(what)                                               \
-  if (pair != NULL)                                                           \
-    {                                                                         \
-      if (dat->byte >= dat->size                                              \
-          || (pair->code == 0 && strEQc (pair->value.s, "ENDSEC")))           \
-        {                                                                     \
-          dxf_free_pair (pair);                                               \
-          return what;                                                        \
-        }                                                                     \
+#define DXF_RETURN_ENDSEC(what)                                         \
+  if (pair != NULL &&                                                   \
+      (dat->byte >= dat->size ||                                        \
+       (pair->code == 0 && strEQc (pair->value.s, "ENDSEC"))))          \
+    {                                                                   \
+      dxf_free_pair (pair);                                             \
+      return what;                                                      \
     }
 
 static int
@@ -675,7 +677,7 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           dxf_free_pair (pair);
           pair = dxf_read_pair (dat);
         }
-      DXF_RETURN_ENDSEC (0); // next class or ENDSEC
+      DXF_RETURN_ENDSEC (0) // next class or ENDSEC
       dwg->num_classes++;
     }
   dxf_free_pair (pair);
@@ -4617,6 +4619,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
     next_pair:
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
+      DXF_RETURN_EOF (pair);
     }
 
   // set defaults not in dxf:
@@ -4669,9 +4672,10 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               pair = new_object (table, dat, dwg, ctrl_id, i++);
             }
         }
-      DXF_RETURN_ENDSEC (0); // next TABLE or ENDSEC
+      DXF_RETURN_ENDSEC (0) // next TABLE or ENDSEC
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
+      DXF_CHECK_EOF;
     }
   dxf_free_pair (pair);
   return 0;
@@ -4694,19 +4698,15 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               // until 0 BLOCK or 0 ENDBLK
               pair = new_object ((char *)"BLOCK", dat, dwg, 0, i++);
             }
-          if (strEQc (pair->value.s, "ENDBLK"))
+          DXF_RETURN_ENDSEC (0) // next BLOCK or ENDSEC
+          else if (strEQc (pair->value.s, "ENDBLK"))
             name[0] = '\0'; // close table
-          else if (strEQc (pair->value.s, "ENDSEC"))
-            {
-              dxf_free_pair (pair);
-              return 0;
-            }
           else
             LOG_WARN ("Unknown 0 %s (%s)", pair->value.s, "blocks");
         }
-      DXF_RETURN_ENDSEC (0); // next BLOCK or ENDSEC
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
+      DXF_CHECK_EOF;
     }
   dxf_free_pair (pair);
   return 0;
@@ -4764,16 +4764,12 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               entity_alias (name);
             }
         }
-      if (strEQc (name, "ENDSEC"))
-        {
-          dxf_free_pair (pair);
-          return 0;
-        }
+      DXF_RETURN_ENDSEC (0)
       else
-        LOG_WARN ("Unknown 0 %s (%s)", name, "entities");
-      DXF_RETURN_ENDSEC (0);
+        LOG_WARN ("Unhandled 0 %s (%s)", name, "entities");
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
+      DXF_CHECK_EOF;
     }
   dxf_free_pair (pair);
   return 0;
@@ -4809,32 +4805,26 @@ static int
 dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dxf_Pair *pair = dxf_read_pair (dat);
-
-  while (pair->code == 0)
+  char name[80];
+  while (1)
     {
-      char name[80];
-      strncpy (name, pair->value.s, 79);
-      object_alias (name);
-      // until 0 ENDSEC
-      while (pair->code == 0 && is_dwg_object (name))
+      while (pair->code == 0)
         {
-          pair = new_object (name, dat, dwg, 0, 0);
-          if (pair->code == 0)
+          strncpy (name, pair->value.s, 79);
+          object_alias (name);
+          if (is_dwg_object (name))
+            pair = new_object (name, dat, dwg, 0, 0);
+          else
+            DXF_RETURN_ENDSEC (0)
+          else
             {
-              strncpy (name, pair->value.s, 79);
-              object_alias (name);
+              LOG_WARN ("Unhandled 0 %s (%s)", pair->value.s, "objects");
+              break;
             }
         }
-      if (strEQc (name, "ENDSEC"))
-        {
-          dxf_free_pair (pair);
-          return 0;
-        }
-      else
-        LOG_WARN ("Unknown 0 %s (%s)", pair->value.s, "objects");
-      DXF_RETURN_ENDSEC (0);
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
+      DXF_CHECK_EOF;
     }
   dxf_free_pair (pair);
   return 0;
@@ -4843,30 +4833,29 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static int
 dxf_unknownsection_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
+  char name[80];
   Dxf_Pair *pair = dxf_read_pair (dat);
 
+  // until 0 ENDSEC
   while (1)
     {
-      if (pair->code == 0)
+      while (pair->code == 0)
         {
-          char name[80];
-          // until 0 ENDSEC
-          while (pair->code == 0 && is_dwg_object (pair->value.s))
-            {
-              strncpy (name, pair->value.s, 79);
-              pair = new_object (name, dat, dwg, 0, 0);
-            }
-          if (strEQc (pair->value.s, "ENDSEC"))
-            {
-              dxf_free_pair (pair);
-              return 0;
-            }
+          strncpy (name, pair->value.s, 79);
+          object_alias (name);
+          if (is_dwg_object (name))
+            pair = new_object (name, dat, dwg, 0, 0);
           else
-            LOG_WARN ("Unknown 0 %s (%s)", pair->value.s, "unknownsection");
+            DXF_RETURN_ENDSEC (0)
+          else
+            {
+              LOG_WARN ("Unhandled 0 %s (%s)", pair->value.s, "unknownsection");
+              break;
+            }
         }
-      DXF_RETURN_ENDSEC (0);
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
+      DXF_CHECK_EOF;
     }
   dxf_free_pair (pair);
   return 0;
