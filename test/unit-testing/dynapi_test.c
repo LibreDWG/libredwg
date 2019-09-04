@@ -145,13 +145,49 @@ test_header (const Dwg_Data *dwg)
       fail ("HEADER.DWGCODEPAGE [TV]");
   }
   {
-    BITCODE_TU lastsavedby;
+    BITCODE_T title;
+    if (dwg_dynapi_header_value (dwg, "TITLE", &title, NULL)
+        && !memcmp (&title, &dwg->header_vars.TITLE, sizeof (dwg->header_vars.TITLE))
+       )
+      pass ();
+    else
+      fail ("HEADER.TITLE [T]");
+  }
+  {
+    BITCODE_T subject;
+    if (dwg_dynapi_header_value (dwg, "SUBJECT", &subject, NULL)
+        && !memcmp (&subject, &dwg->header_vars.SUBJECT, sizeof (dwg->header_vars.SUBJECT))
+       )
+      pass ();
+    else
+      fail ("HEADER.SUBJECT [T]");
+  }
+  {
+    BITCODE_T author;
+    if (dwg_dynapi_header_value (dwg, "AUTHOR", &author, NULL)
+        && !memcmp (&author, &dwg->header_vars.AUTHOR, sizeof (dwg->header_vars.AUTHOR))
+       )
+      pass ();
+    else
+      fail ("HEADER.AUTHOR [T]");
+  }
+  {
+    BITCODE_T keywords;
+    if (dwg_dynapi_header_value (dwg, "KEYWORDS", &keywords, NULL)
+        && !memcmp (&keywords, &dwg->header_vars.KEYWORDS, sizeof (dwg->header_vars.KEYWORDS))
+       )
+      pass ();
+    else
+      fail ("HEADER.KEYWORDS [T]");
+  }
+  {
+    BITCODE_T lastsavedby;
     if (dwg_dynapi_header_value (dwg, "LASTSAVEDBY", &lastsavedby, NULL)
         && !memcmp (&lastsavedby, &dwg->header_vars.LASTSAVEDBY, sizeof (dwg->header_vars.LASTSAVEDBY))
        )
       pass ();
     else
-      fail ("HEADER.LASTSAVEDBY [TU]");
+      fail ("HEADER.LASTSAVEDBY [T]");
   }
   {
     BITCODE_BD unknown_0;

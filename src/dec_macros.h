@@ -353,7 +353,7 @@
 #define FIELD_TV(nam, dxf) FIELDG (nam, TV, dxf)
 #define FIELD_TU(nam, dxf)                                                    \
   {                                                                           \
-    _obj->nam = (char *)bit_read_TU (str_dat);                                \
+    _obj->nam = (BITCODE_T)bit_read_TU (str_dat);                                \
     LOG_TRACE_TU (#nam, (BITCODE_TU)FIELD_VALUE (nam), dxf);                  \
   }
 #define FIELD_T(nam, dxf)                                                     \
@@ -537,7 +537,7 @@
           LOG_TRACE (#color ".rgb: 0x%06x [ENC.BL %d]\n",                     \
                      (unsigned)_obj->color.rgb, dxf2);                        \
         if (_obj->color.flag & 0x40 && _obj->color.handle)                    \
-          LOG_TRACE (#color ".handle: %lX [ENC.H %d]\n",                      \
+          LOG_TRACE (#color ".handle: %X [ENC.H %d]\n",                       \
                      _obj->color.handle->handleref.value, dxf2 + 10);         \
       }                                                                       \
   }

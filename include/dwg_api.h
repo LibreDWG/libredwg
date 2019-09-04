@@ -563,7 +563,6 @@ typedef struct _dwg_object_SUN                    dwg_obj_sun;
 typedef struct _dwg_object_SUNSTUDY               dwg_obj_sunstudy;
 typedef struct _dwg_object_VBA_PROJECT            dwg_obj_vba_project;
 typedef struct _dwg_object_ACSH_SWEEP_CLASS       dwg_obj_acsh_sweep_class;
-typedef struct _dwg_object_ACDBNAVISWORKSMODELDEF dwg_obj_acdbnavisworksmodeldef;
 typedef struct _dwg_object_ASSOCACTION            dwg_obj_assocaction;
 typedef struct _dwg_object_ASSOCNETWORK           dwg_obj_assocnetwork;
 typedef struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY dwg_obj_assocaligneddimactionbody;
@@ -571,6 +570,7 @@ typedef struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM dwg_obj_assocosnappoint
 typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER dwg_obj_assocperssubentmanager;
 typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP dwg_obj_assoc2dconstraintgroup;
 typedef struct _dwg_object_EVALUATION_GRAPH       dwg_obj_evaluation_graph;
+typedef struct _dwg_object_NAVISWORKSMODELDEF     dwg_obj_navisworksmodeldef;
 #endif
 // unhandled:
 //typedef struct _dwg_object_ACSH_HISTORY_CLASS   dwg_obj_acsh_history_class;
@@ -750,7 +750,6 @@ DWG_GETALL_OBJECT_DECL(SUN)
 DWG_GETALL_OBJECT_DECL(SUNSTUDY)
 DWG_GETALL_OBJECT_DECL(VBA_PROJECT)
 DWG_GETALL_OBJECT_DECL(ACSH_SWEEP_CLASS)
-DWG_GETALL_OBJECT_DECL(ACDBNAVISWORKSMODELDEF)
 DWG_GETALL_OBJECT_DECL(ASSOCACTION)
 DWG_GETALL_OBJECT_DECL(ASSOCNETWORK)
 DWG_GETALL_OBJECT_DECL(ASSOCALIGNEDDIMACTIONBODY)
@@ -758,6 +757,7 @@ DWG_GETALL_OBJECT_DECL(ASSOCOSNAPPOINTREFACTIONPARAM)
 DWG_GETALL_OBJECT_DECL(ASSOCPERSSUBENTMANAGER)
 DWG_GETALL_OBJECT_DECL(ASSOC2DCONSTRAINTGROUP)
 DWG_GETALL_OBJECT_DECL(EVALUATION_GRAPH)
+DWG_GETALL_OBJECT_DECL(NAVISWORKSMODELDEF)
 #endif
 // unhandled:
 //DWG_GETALL_OBJECT_DECL(ACSH_HISTORY_CLASS)
@@ -914,7 +914,6 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL(UNDERLAYDEFINITION)
 
 #ifdef DEBUG_CLASSES
 CAST_DWG_OBJECT_TO_OBJECT_DECL(ACSH_SWEEP_CLASS)
-CAST_DWG_OBJECT_TO_OBJECT_DECL(ACDBNAVISWORKSMODELDEF)
 CAST_DWG_OBJECT_TO_OBJECT_DECL(ASSOCACTION)
 CAST_DWG_OBJECT_TO_OBJECT_DECL(ASSOCNETWORK)
 CAST_DWG_OBJECT_TO_OBJECT_DECL(ASSOCALIGNEDDIMACTIONBODY)
@@ -922,6 +921,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL(ASSOCOSNAPPOINTREFACTIONPARAM)
 CAST_DWG_OBJECT_TO_OBJECT_DECL(ASSOCPERSSUBENTMANAGER)
 CAST_DWG_OBJECT_TO_OBJECT_DECL(ASSOC2DCONSTRAINTGROUP)
 CAST_DWG_OBJECT_TO_OBJECT_DECL(EVALUATION_GRAPH)
+CAST_DWG_OBJECT_TO_OBJECT_DECL(NAVISWORKSMODELDEF)
 CAST_DWG_OBJECT_TO_OBJECT_DECL(MATERIAL)
 CAST_DWG_OBJECT_TO_OBJECT_DECL(TABLECONTENT)
 CAST_DWG_OBJECT_TO_OBJECT_DECL(TABLEGEOMETRY)
@@ -1134,14 +1134,14 @@ dwg_get_OBJECT_DECL(obj_sun, SUN);
 dwg_get_OBJECT_DECL(obj_sunstudy, SUNSTUDY);
 dwg_get_OBJECT_DECL(obj_vba_project, PROJECT);
 dwg_get_OBJECT_DECL(obj_acsh_sweep_class, CLASS);
-dwg_get_OBJECT_DECL(obj_acdbnavisworksmodeldef, ACDBNAVISWORKSMODELDEF);
 dwg_get_OBJECT_DECL(obj_assocaction, ASSOCACTION);
 dwg_get_OBJECT_DECL(obj_assocnetwork, ASSOCNETWORK);
 dwg_get_OBJECT_DECL(obj_assocaligneddimactionbody, ASSOCALIGNEDDIMACTIONBODY);
 dwg_get_OBJECT_DECL(obj_assocosnappointrefactionparam, ASSOCOSNAPPOINTREFACTIONPARAM);
 dwg_get_OBJECT_DECL(obj_assocperssubentmanager, ASSOCPERSSUBENTMANAGER);
 dwg_get_OBJECT_DECL(obj_assoc2dconstraintgroup, ASSOC2DCONSTRAINTGROUP);
-dwg_get_OBJECT_DECL(obj_evaluation_graph, GRAPH);
+dwg_get_OBJECT_DECL(obj_evaluation_graph, EVALUATION_GRAPH);
+dwg_get_OBJECT_DECL(obj_navisworksmodeldef, NAVISWORKSMODELDEF);
 #endif
 // unhandled:
 //dwg_get_OBJECT_DECL(obj_acsh_history_class, ACSH_HISTORY_CLASS);

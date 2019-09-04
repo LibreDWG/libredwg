@@ -29,6 +29,8 @@ B,	DXF 70
 BS,	DXF 70
 @item AUPREC
 BS,	DXF 70
+@item AUTHOR
+T,	DXF 1
 @item BLIPMODE
 B
 @item BLOCK_CONTROL_OBJECT
@@ -355,8 +357,10 @@ RC,	DXF 280
 BS
 @item JOINSTYLE
 B,	DXF 280
+@item KEYWORDS
+T,	DXF 1
 @item LASTSAVEDBY
-TU,	DXF 1
+T,	DXF 1
 @item LATITUDE
 BD,	DXF 40
 @item LAYER_CONTROL_OBJECT
@@ -537,6 +541,8 @@ BD,	DXF 40
 TV,	DXF 1
 @item STYLE_CONTROL_OBJECT
 H
+@item SUBJECT
+T,	DXF 1
 @item SURFTAB1
 BS,	DXF 70
 @item SURFTAB2
@@ -573,6 +579,8 @@ B,	DXF 70
 RC,	DXF 280
 @item TIMEZONE
 BL,	DXF 70
+@item TITLE
+T,	DXF 1
 @item TRACEWID
 BD,	DXF 40
 @item TREEDEPTH
@@ -5846,15 +5854,15 @@ Dwg_MLINESTYLE_line*
 @item parent
 struct _dwg_object_object*
 @item path
-T
+T,	DXF 1
 @item status
-B
+B,	DXF 290
 @item min_extent
-3BD
+3BD,	DXF 10
 @item max_extent
-3BD
+3BD,	DXF 11
 @item host_drawing_visibility
-B
+B,	DXF 290
 
 @end vtable
 @end indentedblock
@@ -7583,6 +7591,8 @@ BD
 @indentedblock
 @vtable @code
 
+@item parent
+struct _dwg_entity_MESH*
 @item from
 BL
 @item to

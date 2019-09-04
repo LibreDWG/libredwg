@@ -1601,8 +1601,8 @@ DWG_ENTITY(SPLINE)
     }
 
   if (FIELD_VALUE(scenario) & 1) {
-    FIELD_VECTOR(knots, BD, num_knots, 40)
-    REPEAT(num_ctrl_pts, ctrl_pts, Dwg_SPLINE_control_point)
+    FIELD_VECTOR (knots, BD, num_knots, 40)
+    REPEAT (num_ctrl_pts, ctrl_pts, Dwg_SPLINE_control_point)
     REPEAT_BLOCK
         SUB_FIELD_3BD_inl (ctrl_pts[rcount1], xyz, 10);
         if (!FIELD_VALUE(weighted))
@@ -1611,15 +1611,15 @@ DWG_ENTITY(SPLINE)
           SUB_FIELD_BD (ctrl_pts[rcount1], w, 41);
     END_REPEAT_BLOCK
     SET_PARENT_OBJ(ctrl_pts);
-    END_REPEAT(ctrl_pts);
+    END_REPEAT (ctrl_pts);
   }
   if (FIELD_VALUE(scenario) & 2) {
-    REPEAT(num_fit_pts, fit_pts, Dwg_SPLINE_point)
+    REPEAT (num_fit_pts, fit_pts, Dwg_SPLINE_point)
     REPEAT_BLOCK
         SUB_FIELD_3BD_inl (fit_pts[rcount1], xyz, 11);
     END_REPEAT_BLOCK
-    SET_PARENT_OBJ(fit_pts);
-    END_REPEAT(fit_pts);
+    SET_PARENT_OBJ (fit_pts);
+    END_REPEAT (fit_pts);
   }
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -3709,7 +3709,7 @@ DWG_ENTITY(HATCH)
           SUB_FIELD_2BD_1 (deflines[rcount1], pt0, 43);
           SUB_FIELD_2BD_1 (deflines[rcount1], offset, 45);
           SUB_FIELD_BS (deflines[rcount1], num_dashes, 79);
-          FIELD_VECTOR(deflines[rcount1].dashes, BD, deflines[rcount1].num_dashes, 49)
+          FIELD_VECTOR (deflines[rcount1].dashes, BD, deflines[rcount1].num_dashes, 49)
           //REPEAT2 (deflines[rcount1].num_dashes, deflines[rcount1].dashes, BITCODE_BD)
           //REPEAT_BLOCK
           //    SUB_FIELD_BD (deflines[rcount1], dashes[rcount2], 49);
@@ -4491,7 +4491,7 @@ DWG_OBJECT(TABLECONTENT)
   REPEAT_BLOCK
       SUB_FIELD_T (tdata.cols[rcount1],name, 300);
       SUB_FIELD_BL (tdata.cols[rcount1],custom_data, 91);
-      Cell_Style_Fields(tdata.cols[rcount1].cell_style);
+      Cell_Style_Fields(tdata.cols[rcount1].cellstyle);
   END_REPEAT_BLOCK
   SET_PARENT(tdata.cols, &_obj->tdata)
   END_REPEAT(tdata.cols);
@@ -4632,7 +4632,7 @@ DWG_OBJECT(TABLECONTENT)
       SET_PARENT_FIELD(row.customdata_items, row_parent, &_obj->row)
       END_REPEAT(row.customdata_items);
       {
-        Cell_Style_Fields(row.cell_style);
+        Cell_Style_Fields(row.cellstyle);
         SUB_FIELD_BL (row,style_id, 90);
         SUB_FIELD_BL (row,height, 40);
       }
@@ -4851,8 +4851,9 @@ DWG_ENTITY(TABLE)
                 SUB_FIELD_CMC (cells[rcount1],background_color, 63,421);
               if (cell_flag & 0x08)
                 SUB_FIELD_CMC (cells[rcount1],content_color, 64,422);
-              if (cell_flag & 0x10)
+              if (cell_flag & 0x10) {
                 SUB_FIELD_HANDLE (cells[rcount1],text_style, 5, 7);
+              }
               if (cell_flag & 0x20)
                 SUB_FIELD_BD (cells[rcount1],text_height, 140);
               if (cell_flag & 0x00040)
@@ -6961,7 +6962,7 @@ DWG_OBJECT_END
 
 // (varies) TODO
 // no coverage. Stored in ACAD_BIM_DEFINITIONS dictionary
-DWG_OBJECT(ACDBNAVISWORKSMODELDEF)
+DWG_OBJECT(NAVISWORKSMODELDEF)
 
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbNavisworksModelDef)
@@ -7050,14 +7051,16 @@ DWG_ENTITY(MESH)
   SUBCLASS (AcDbSubDMesh)
   FIELD_RC (dlevel, 71); // 2
   FIELD_RC (is_watertight, 72); // 0
+
   FIELD_BL (num_subdiv_vertex, 91); //?
   if (FIELD_VALUE(num_subdiv_vertex) > 1000)
     return DWG_ERR_VALUEOUTOFBOUNDS;
-  FIELD_VECTOR (subdiv_vertex, 3BD, num_subdiv_vertex, 10); //?
+  FIELD_3DPOINT_VECTOR (subdiv_vertex, num_subdiv_vertex, 10);
+
   FIELD_BL (num_vertex, 92);
   if (FIELD_VALUE(num_vertex) > 1000)
     return DWG_ERR_VALUEOUTOFBOUNDS;
-  FIELD_VECTOR (vertex, 3BD, num_vertex, 10);
+  FIELD_3DPOINT_VECTOR (vertex, num_vertex, 10);
   FIELD_BL (num_faces, 93);
   if (FIELD_VALUE(num_faces) > 1000)
     return DWG_ERR_VALUEOUTOFBOUNDS;
@@ -7065,6 +7068,7 @@ DWG_ENTITY(MESH)
   FIELD_BL (num_edges, 94);
   if (FIELD_VALUE(num_edges) > 1000)
     return DWG_ERR_VALUEOUTOFBOUNDS;
+
   REPEAT(num_edges, edges, Dwg_MESH_edge)
   REPEAT_BLOCK
       SUB_FIELD_BL (edges[rcount1], from, 90);
@@ -7082,6 +7086,48 @@ DWG_ENTITY(MESH)
   */
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
+
+// LiveMap raster image underlay r2015+
+DWG_OBJECT(GEOMAPIMAGE)
+  DECODE_UNKNOWN_BITS
+
+  //SUBCLASS (AcDbImage)
+  //SUBCLASS (AcDbRasterImage)
+  SUBCLASS (AcDbGeomapImage)
+  FIELD_BL (class_version, 90);
+  if (FIELD_VALUE(class_version) > 10)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
+  FIELD_3DPOINT (pt0, 10);
+  //FIELD_3DPOINT (uvec, 11);
+  //FIELD_3DPOINT (vvec, 12);
+  FIELD_2RD (size, 13);
+  FIELD_BS (display_props, 70);
+  FIELD_B (clipping, 280); // i.e. clipping_enabled
+  FIELD_RC (brightness, 281);
+  FIELD_RC (contrast, 282);
+  FIELD_RC (fade, 283);
+
+/* VBA props:
+origin
+  FIELD_BD (rotation, 0);
+image_width
+image_height
+name
+image_file
+image_visibility
+transparency
+height
+width
+  FIELD_B (show_rotation, 0);
+  FIELD_BD (scale_factor, 0);
+geoimage_brightness
+geoimage_contrast
+geoimage_fade
+geoimage_position
+geoimage_width
+geoimage_height
+*/
+DWG_OBJECT_END
 
 #endif /* DEBUG_CLASSES */
 
@@ -7158,48 +7204,6 @@ DWG_OBJECT_END
 // EXACXREFPANELOBJECT
 DWG_OBJECT(XREFPANELOBJECT)
   DECODE_UNKNOWN_BITS
-DWG_OBJECT_END
-
-// LiveMap raster image underlay r2015+
-DWG_OBJECT(GEOMAPIMAGE)
-  DECODE_UNKNOWN_BITS
-
-  //SUBCLASS (AcDbImage)
-  //SUBCLASS (AcDbRasterImage)
-  SUBCLASS (AcDbGeomapImage)
-  FIELD_BL (class_version, 90);
-  if (FIELD_VALUE(class_version) > 10)
-    return DWG_ERR_VALUEOUTOFBOUNDS;
-  FIELD_3DPOINT (pt0, 10);
-  //FIELD_3DPOINT (uvec, 11);
-  //FIELD_3DPOINT (vvec, 12);
-  FIELD_2RD (size, 13);
-  FIELD_BS (display_props, 70);
-  FIELD_B (clipping, 280); // i.e. clipping_enabled
-  FIELD_RC (brightness, 281);
-  FIELD_RC (contrast, 282);
-  FIELD_RC (fade, 283);
-
-/* VBA props:
-origin
-  FIELD_BD (rotation, 0);
-image_width
-image_height
-name
-image_file
-image_visibility
-transparency
-height
-width
-  FIELD_B (show_rotation, 0);
-  FIELD_BD (scale_factor, 0);
-geoimage_brightness
-geoimage_contrast
-geoimage_fade
-geoimage_position
-geoimage_width
-geoimage_height
-*/
 DWG_OBJECT_END
 
 DWG_OBJECT(ANNOTSCALEOBJECTCONTEXTDATA)
