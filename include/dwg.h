@@ -5746,11 +5746,23 @@ dwg_bmp (const Dwg_Data *restrict, BITCODE_RL *restrict);
  */
 EXPORT int dxf_cvt_lweight (const BITCODE_RC value);
 
-/* search for the name in the associated table, and return its handle. */
+/* Search for the name in the associated table, and return its handle. */
 EXPORT BITCODE_H
-dwg_find_tablehandle (const Dwg_Data *restrict dwg,
-                      char *restrict name,
+dwg_find_tablehandle (Dwg_Data *restrict dwg,
+                      const char *restrict name,
                       const char *restrict table);
+
+/** Not checking the header_vars entry, only searching the objects
+ *  Returning a hardowner or hardpointer (DICTIONARY) ref (code 3 or 5)
+ *  to it, as stored in header_vars. table must contain the "_CONTROL" suffix.
+ */
+EXPORT BITCODE_H
+dwg_find_table_control (Dwg_Data *restrict dwg, const char *restrict table);
+
+/** Searching for a named dictionary entry.
+ *  Returning a hardpointer ref (5) to it, as stored in header_vars. */
+EXPORT BITCODE_H
+dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name);
 
 EXPORT double dwg_model_x_min (const Dwg_Data *);
 EXPORT double dwg_model_x_max (const Dwg_Data *);
@@ -5856,9 +5868,25 @@ dwg_free (Dwg_Data * dwg);
 EXPORT void
 dwg_free_object (Dwg_Object *obj);
 
-/** Add the empty ref to the DWG, or NULL.
+/** Add the empty ref to the DWG (freshly malloc'ed), or NULL.
 */
 EXPORT Dwg_Object_Ref *dwg_new_ref (Dwg_Data *dwg);
+
+/** For encode:
+ *  May need obj to shorten the code to a relative offset, but not in header_vars.
+ *  There obj is NULL.
+ */
+EXPORT int
+dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, BITCODE_RL value,
+                Dwg_Object *restrict obj);
+
+/** Returns an existing ref with the same ownership (hard/soft, owner/pointer)
+    or creates it. With obj non-NULL it may return a relative offset, otherwise
+    always absolute.
+*/
+EXPORT Dwg_Object_Ref *
+dwg_add_handleref (Dwg_Data *restrict dwg, BITCODE_RC code, BITCODE_RL value,
+                   Dwg_Object *restrict obj);
 
 /** Add the empty object to the DWG.
     Returns DWG_ERR_OUTOFMEM, -1 for realloced or 0 if not.

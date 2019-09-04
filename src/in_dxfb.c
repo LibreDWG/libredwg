@@ -303,7 +303,7 @@ dxfb_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           else if (strEQc (f->type, "H"))
             {
               BITCODE_H hdl;
-              hdl = add_handleref (dwg, 0, pair->value.u, NULL);
+              hdl = dwg_add_handleref (dwg, 0, pair->value.u, NULL);
               LOG_TRACE ("HEADER.%s %X [H]\n", &field[1], pair->value.u);
               dwg_dynapi_header_set_value (dwg, &field[1], &hdl, is_utf);
             }
@@ -515,8 +515,8 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
           {
             Dwg_Object_Ref *ref;
             char ctrlobj[80];
-            add_handle (&obj->handle, 0, pair->value.u, obj);
-            ref = add_handleref (dwg, 3, pair->value.u, obj);
+            dwg_add_handle (&obj->handle, 0, pair->value.u, obj);
+            ref = dwg_add_handleref (dwg, 3, pair->value.u, obj);
             LOG_TRACE ("%s.handle = " FORMAT_H " [%d]\n", ctrlname,
                        ARGS_H (obj->handle), pair->code);
             // also set the matching HEADER.*_CONTROL_OBJECT
@@ -535,7 +535,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
           if (pair->value.u)
             {
               obj->tio.object->ownerhandle
-                  = add_handleref (dwg, 4, pair->value.u, obj);
+                  = dwg_add_handleref (dwg, 4, pair->value.u, obj);
               LOG_TRACE ("%s.ownerhandle = " FORMAT_REF " [330]\n", ctrlname,
                          ARGS_REF (obj->tio.object->ownerhandle));
             }
@@ -551,7 +551,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
                   break;
                 }
               assert (_o->morehandles);
-              _o->morehandles[j] = add_handleref (dwg, 4, pair->value.u, obj);
+              _o->morehandles[j] = dwg_add_handleref (dwg, 4, pair->value.u, obj);
               LOG_TRACE ("%s.morehandles[%d] = " FORMAT_REF " [330]\n",
                          ctrlname, j, ARGS_REF (_o->morehandles[j]));
               j++;
@@ -559,7 +559,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
           break;
         case 360: // {ACAD_XDICTIONARY TODO
           obj->tio.object->xdicobjhandle
-              = add_handleref (dwg, 0, pair->value.u, obj);
+              = dwg_add_handleref (dwg, 0, pair->value.u, obj);
           LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [330]\n", ctrlname,
                      ARGS_REF (obj->tio.object->xdicobjhandle));
           break;
@@ -746,7 +746,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
           // fall through
         case 5:
           {
-            add_handle (&obj->handle, 0, pair->value.u, obj);
+            dwg_add_handle (&obj->handle, 0, pair->value.u, obj);
             LOG_TRACE ("%s.handle = " FORMAT_H " [5 H]\n", name,
                        ARGS_H (obj->handle));
             if (*ctrl_hdlv)
@@ -781,7 +781,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                     hdls = realloc (hdls,
                                     num_entries * sizeof (Dwg_Object_Ref *));
                   }
-                hdls[i] = add_handleref (dwg, 2, pair->value.u, obj);
+                hdls[i] = dwg_add_handleref (dwg, 2, pair->value.u, obj);
                 dwg_dynapi_entity_set_value (_ctrl, ctrlname, ctrl_hdlv, &hdls,
                                              0);
                 LOG_TRACE ("%s.%s[%d] = " FORMAT_REF " [0]\n", ctrlname,
@@ -832,7 +832,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
               dwg_dynapi_entity_set_value (_obj, obj->name, "insert_handles",
                                            &insert_handles, 0);
               insert_handles[curr_inserts++]
-                  = add_handleref (dwg, 4, pair->value.u, obj);
+                  = dwg_add_handleref (dwg, 4, pair->value.u, obj);
               break;
             }
           // fall through
@@ -840,7 +840,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
           if (in_reactors)
             {
               BITCODE_BL num = obj->tio.object->num_reactors;
-              BITCODE_H reactor = add_handleref (dwg, 4, pair->value.u, obj);
+              BITCODE_H reactor = dwg_add_handleref (dwg, 4, pair->value.u, obj);
               LOG_TRACE ("%s.reactors[%d] = " FORMAT_REF " [330 H]\n", name,
                          num, ARGS_REF (reactor));
               obj->tio.object->reactors = realloc (
@@ -851,7 +851,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
           else if (pair->value.u) // valid ownerhandle
             {
               obj->tio.object->ownerhandle
-                  = add_handleref (dwg, 4, pair->value.u, obj);
+                  = dwg_add_handleref (dwg, 4, pair->value.u, obj);
               LOG_TRACE ("%s.ownerhandle = " FORMAT_REF " [330 H]\n", name,
                          ARGS_REF (obj->tio.object->ownerhandle));
             }
@@ -861,7 +861,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
           if (pair->code == 360 && in_xdict)
             {
               obj->tio.object->xdicobjhandle
-                = add_handleref (dwg, 3, pair->value.u, obj);
+                = dwg_add_handleref (dwg, 3, pair->value.u, obj);
               obj->tio.object->xdic_missing_flag = 0;
               LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [360 H]\n", name,
                          ARGS_REF (obj->tio.object->xdicobjhandle));
@@ -879,7 +879,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
           if (pair->code == 340 && strEQc (name, "GROUP"))
             {
               Dwg_Object_GROUP *_o = obj->tio.object->tio.GROUP;
-              BITCODE_H hdl = add_handleref (dwg, 5, pair->value.u, obj);
+              BITCODE_H hdl = dwg_add_handleref (dwg, 5, pair->value.u, obj);
               LOG_TRACE ("GROUP.groups[%d] = " FORMAT_REF " [340 H]\n",
                          _o->num_groups, ARGS_REF (hdl));
               _o->groups = realloc (_o->groups,

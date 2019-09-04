@@ -724,8 +724,8 @@
           PRE (R_2007)                                                        \
           {                                                                   \
             _obj->name[vcount] = bit_read_TV (dat);                           \
-            LOG_INSANE (#name "[%ld]: %s\n", (long)vcount,                    \
-                        _obj->name[vcount])                                   \
+            LOG_TRACE (#name "[%ld]: %s\n", (long)vcount,                     \
+                       _obj->name[vcount])                                    \
           }                                                                   \
           LATER_VERSIONS                                                      \
           {                                                                   \

@@ -3243,6 +3243,7 @@ dwg_decode_add_object_ref (Dwg_Data *restrict dwg, Dwg_Object_Ref *ref)
   return 0;
 }
 
+/* Returns a freshly allocated ref */
 Dwg_Object_Ref *
 dwg_new_ref (Dwg_Data *restrict dwg)
 {

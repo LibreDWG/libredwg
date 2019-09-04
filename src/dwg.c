@@ -1297,12 +1297,123 @@ dxf_cvt_lweight (const BITCODE_RC value)
   return lweights[value % 32];
 }
 
-// search for name in associated table, and store its handle.
-// note that newer tables, like MATERIAL are stored in a DICTIONARY instead.
+/** For encode:
+ * May need obj to shorten the code to a relative offset, but not in header_vars.
+ * There obj is NULL.
+ */
+EXPORT int
+dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, BITCODE_RL value,
+                Dwg_Object *restrict obj)
+{
+  int offset = obj ? (value - (int)obj->handle.value) : 0;
+  int i;
+  unsigned char *val = (unsigned char *)&hdl->value;
+  hdl->code = code;
+  hdl->value = value;
+  if (obj && !offset) // same obj
+    {
+      LOG_HANDLE ("object_map{%X} = %u\n", (unsigned)value, obj->index);
+      hash_set (obj->parent->object_map, value, (uint32_t)obj->index);
+    }
+
+  // FIXME: little endian only
+  for (i = 3; i >= 0; i--)
+    if (val[i])
+      break;
+  hdl->size = i + 1;
+  if (code != 5 && obj && abs (offset) == 1)
+    {
+      // change code to 6.0.0 or 8.0.0
+      if (offset == 1)
+        {
+          hdl->code = 6;
+          hdl->value = 0;
+          hdl->size = 0;
+        }
+      else if (offset == -1)
+        {
+          hdl->code = 8;
+          hdl->value = 0;
+          hdl->size = 0;
+        }
+    }
+  return 0;
+}
+
+// Returns an existing ref with the same ownership (hard/soft, owner/pointer)
+// or creates it. May return a freshly allocated ref via dwg_new_ref.
+EXPORT Dwg_Object_Ref *
+dwg_add_handleref (Dwg_Data *restrict dwg, BITCODE_RC code, BITCODE_RL value,
+                   Dwg_Object *restrict obj)
+{
+  Dwg_Object_Ref *ref;
+  // first search of this code-value pair already exists
+  for (BITCODE_BL i = 0; i < dwg->num_object_refs; i++)
+    {
+      Dwg_Object_Ref *refi = dwg->object_ref[i];
+      if (refi->absolute_ref == (BITCODE_BL)value && refi->handleref.code == code)
+        return refi;
+    }
+  // else create a new ref
+  ref = dwg_new_ref (dwg);
+  dwg_add_handle (&ref->handleref, code, value, obj);
+  ref->absolute_ref = value;
+  // fill ->obj later
+  return ref;
+}
+
+// Not checking the header_vars entry, only searching the objects
+// Returning a hardowner ref (code 3) to it, as stored in header_vars.
+EXPORT BITCODE_H
+dwg_find_table_control (Dwg_Data *restrict dwg,
+                        const char *restrict table)
+{
+  BITCODE_BL i;
+  for (i = 0; i < dwg->num_objects; i++)
+    {
+      if (strEQ (dwg->object[i].name, table))
+        {
+          Dwg_Handle *hdl = &dwg->object[i].handle;
+          return dwg_add_handleref (dwg, 3, hdl->value, NULL);
+        }
+    }
+  LOG_ERROR ("dwg_find_table_control: table control object %s not found", table)
+  return NULL;
+}
+
+// Searching for a named dictionary entry.
+// Returning a hardpointer ref (5) to it, as stored in header_vars.
+EXPORT BITCODE_H
+dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name)
+{
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *obj = &dwg->object[i];
+      // ACAD_GROUP => 1st DICTIONARY: search handle to "ACAD_GROUP"
+      if (strEQc (obj->name, "DICTIONARY"))
+        {
+          Dwg_Object_DICTIONARY *_obj = obj->tio.object->tio.DICTIONARY;
+          for (BITCODE_BL j = 0; j < _obj->numitems; j++)
+            {
+              if (strEQ (_obj->texts[j], name))
+                {
+                  Dwg_Object_Ref *ref = _obj->itemhandles[j];
+                  dwg_resolve_handleref (ref, obj); // relative? (8.0.0, 6.0.0, ...)
+                  return dwg_add_handleref (dwg, 5, ref->absolute_ref, NULL);
+                }
+            }
+        }
+    }
+  LOG_ERROR ("dwg_find_dictionary: %s not found", name)
+  return NULL;
+}
+
+// Search for name in associated table, and return its handle.
+// Note that newer tables, like MATERIAL are stored in a DICTIONARY instead.
 // Note that we cannot set the ref->obj here, as it may still move by realloc dwg->object[]
 EXPORT BITCODE_H
-dwg_find_tablehandle (const Dwg_Data *restrict dwg,
-                      char *restrict name,
+dwg_find_tablehandle (Dwg_Data *restrict dwg,
+                      const char *restrict name,
                       const char *restrict table)
 {
   BITCODE_BL i, num_entries = 0;
@@ -1312,14 +1423,28 @@ dwg_find_tablehandle (const Dwg_Data *restrict dwg,
 
   // look for the _CONTROL table, and search for name in all entries
   if (strEQc (table, "BLOCK"))
-    ctrl = dwg->header_vars.BLOCK_CONTROL_OBJECT;
+    {
+      if (!(ctrl = dwg->header_vars.BLOCK_CONTROL_OBJECT))
+        dwg->header_vars.BLOCK_CONTROL_OBJECT = ctrl
+          = dwg_find_table_control (dwg, "BLOCK_CONTROL");
+    }
   else if (strEQc (table, "LAYER"))
-    ctrl = dwg->header_vars.LAYER_CONTROL_OBJECT;
+    {
+      if (!(ctrl = dwg->header_vars.LAYER_CONTROL_OBJECT))
+        dwg->header_vars.LAYER_CONTROL_OBJECT = ctrl
+          = dwg_find_table_control (dwg, "LAYER_CONTROL");
+    }
   else if (strEQc (table, "STYLE"))
-    ctrl = dwg->header_vars.STYLE_CONTROL_OBJECT;
+    {
+      if (!(ctrl = dwg->header_vars.STYLE_CONTROL_OBJECT))
+        dwg->header_vars.STYLE_CONTROL_OBJECT = ctrl
+          = dwg_find_table_control (dwg, "STYLE_CONTROL");
+    }
   else if (strEQc (table, "LTYPE"))
     {
-      ctrl = dwg->header_vars.LTYPE_CONTROL_OBJECT;
+      if (!(ctrl = dwg->header_vars.LTYPE_CONTROL_OBJECT))
+        dwg->header_vars.LTYPE_CONTROL_OBJECT = ctrl
+            = dwg_find_table_control (dwg, "LTYPE_CONTROL");
       if (strEQc (name, "BYLAYER") || strEQc (name, "ByLayer"))
         {
           if (dwg->header_vars.LTYPE_BYLAYER)
@@ -1337,22 +1462,54 @@ dwg_find_tablehandle (const Dwg_Data *restrict dwg,
         }
     }
   else if (strEQc (table, "VIEW"))
-    ctrl = dwg->header_vars.VIEW_CONTROL_OBJECT;
+    {
+      if (!(ctrl = dwg->header_vars.VIEW_CONTROL_OBJECT))
+        dwg->header_vars.VIEW_CONTROL_OBJECT = ctrl
+          = dwg_find_table_control (dwg, "VIEW_CONTROL");
+    }
   else if (strEQc (table, "UCS"))
-    ctrl = dwg->header_vars.UCS_CONTROL_OBJECT;
+    {
+      if (!(ctrl = dwg->header_vars.UCS_CONTROL_OBJECT))
+        dwg->header_vars.UCS_CONTROL_OBJECT = ctrl
+          = dwg_find_table_control (dwg, "UCS_CONTROL");
+    }
   else if (strEQc (table, "VPORT"))
-    ctrl = dwg->header_vars.VPORT_CONTROL_OBJECT;
+    {
+      if (!(ctrl = dwg->header_vars.VPORT_CONTROL_OBJECT))
+        dwg->header_vars.VPORT_CONTROL_OBJECT = ctrl
+          = dwg_find_table_control (dwg, "VPORT_CONTROL");
+    }
   else if (strEQc (table, "APPID"))
-    ctrl = dwg->header_vars.APPID_CONTROL_OBJECT;
+    {
+      if (!(ctrl = dwg->header_vars.APPID_CONTROL_OBJECT))
+        dwg->header_vars.APPID_CONTROL_OBJECT = ctrl
+          = dwg_find_table_control (dwg, "APPID_CONTROL");
+    }
   // TODO ACAD_DSTYLE_DIM* are probably different handles
   else if (strEQc (table, "DIMSTYLE") || memBEGINc (table, "ACAD_DSTYLE_DIM"))
-    ctrl = dwg->header_vars.DIMSTYLE_CONTROL_OBJECT;
+    {
+      if (!(ctrl = dwg->header_vars.DIMSTYLE_CONTROL_OBJECT))
+        dwg->header_vars.DIMSTYLE_CONTROL_OBJECT = ctrl
+          = dwg_find_table_control (dwg, "DIMSTYLE_CONTROL");
+    }
   else if (strEQc (table, "VPORT_ENTITY"))
-    ctrl = dwg->header_vars.VPORT_ENTITY_CONTROL_OBJECT;
+    {
+      if (!(ctrl = dwg->header_vars.VPORT_ENTITY_CONTROL_OBJECT))
+        dwg->header_vars.VPORT_ENTITY_CONTROL_OBJECT = ctrl
+          = dwg_find_table_control (dwg, "VPORT_ENTITY_CONTROL");
+    }
   else if (strEQc (table, "GROUP"))
-    ctrl = dwg->header_vars.DICTIONARY_ACAD_GROUP;
+    {
+      if (!(ctrl = dwg->header_vars.DICTIONARY_ACAD_GROUP))
+        dwg->header_vars.DICTIONARY_ACAD_GROUP = ctrl
+          = dwg_find_dictionary (dwg, "ACAD_GROUP");
+    }
   else if (strEQc (table, "MLSTYLE") || strEQc (table, "ACAD_MLEADERVER"))
-    ctrl = dwg->header_vars.DICTIONARY_ACAD_MLINESTYLE;
+    {
+      if (!(ctrl = dwg->header_vars.DICTIONARY_ACAD_MLINESTYLE))
+        dwg->header_vars.DICTIONARY_ACAD_MLINESTYLE = ctrl
+          = dwg_find_dictionary (dwg, "ACAD_MLINESTYLE");
+    }
   else if (strEQc (table, "NAMED_OBJECT"))
     ctrl = dwg->header_vars.DICTIONARY_NAMED_OBJECT;
   else if (strEQc (table, "LAYOUT"))
@@ -1376,7 +1533,7 @@ dwg_find_tablehandle (const Dwg_Data *restrict dwg,
       return 0;
     }
   if (!ctrl)
-    {
+    {  // TODO: silently search table_control. header_vars can be empty
       LOG_ERROR ("dwg_find_tablehandle: Empty header_vars table %s", table);
       return 0;
     }
