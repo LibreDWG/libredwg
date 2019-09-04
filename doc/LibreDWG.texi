@@ -705,7 +705,8 @@ version, an earlier or later version.
 The DWG files are created in the current directory and not overwritten, unless
 the option @code{--overwrite} or @code{-y} is given.
 
-This program is very experimental and may fail. Only R2000 DWG's can be written yet.
+This program is very experimental and may fail. Only r13-r2000 DWG's can be written yet,
+currently the default is writing as r2000.
 
 @item @file{dwgrewrite}
 @cindex dwgrewrite
