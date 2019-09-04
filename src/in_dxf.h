@@ -92,6 +92,7 @@ void add_dictionary_itemhandles (Dwg_Object *restrict obj, Dxf_Pair *restrict pa
                                  char *restrict text);
 void resolve_postponed_header_refs (Dwg_Data *restrict dwg);
 void resolve_postponed_eed_refs (Dwg_Data *restrict dwg);
+void resolve_header_dicts (Dwg_Data *restrict dwg);
 BITCODE_H find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair);
 int is_table_name (const char *name);
 

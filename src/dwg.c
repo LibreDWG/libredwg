@@ -1377,7 +1377,8 @@ dwg_find_table_control (Dwg_Data *restrict dwg,
           return dwg_add_handleref (dwg, 3, hdl->value, NULL);
         }
     }
-  LOG_ERROR ("dwg_find_table_control: table control object %s not found", table)
+  // if we haven't read all objects yet, ignore this error
+  LOG_TRACE ("dwg_find_table_control: table control object %s not found\n", table)
   return NULL;
 }
 
@@ -1395,16 +1396,27 @@ dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name)
           Dwg_Object_DICTIONARY *_obj = obj->tio.object->tio.DICTIONARY;
           for (BITCODE_BL j = 0; j < _obj->numitems; j++)
             {
-              if (strEQ (_obj->texts[j], name))
+              char *u8 = _obj->texts[j];
+              if (!u8)
+                continue;
+              if (dwg->header.version >= R_2007)
+                u8 = bit_convert_TU ((BITCODE_TU)u8);
+              if (strEQ (u8, name))
                 {
                   Dwg_Object_Ref *ref = _obj->itemhandles[j];
+                  if (!ref)
+                    continue;
                   dwg_resolve_handleref (ref, obj); // relative? (8.0.0, 6.0.0, ...)
+                  if (dwg->header.version >= R_2007)
+                    free (u8);
                   return dwg_add_handleref (dwg, 5, ref->absolute_ref, NULL);
                 }
+              if (dwg->header.version >= R_2007)
+                free (u8);
             }
         }
     }
-  LOG_ERROR ("dwg_find_dictionary: %s not found", name)
+  LOG_TRACE ("dwg_find_dictionary: DICTIONARY with %s not found\n", name)
   return NULL;
 }
 
@@ -1567,13 +1579,13 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg,
     }
   if (!ctrl)
     {  // TODO: silently search table_control. header_vars can be empty
-      LOG_ERROR ("dwg_find_tablehandle: Empty header_vars table %s", table);
+      LOG_TRACE ("dwg_find_tablehandle: Empty header_vars table %s\n", table);
       return 0;
     }
   obj = dwg_resolve_handle (dwg, ctrl->handleref.value);
   if (!obj)
     {
-      LOG_ERROR ("dwg_find_tablehandle: Could not resolve table %s", table);
+      LOG_TRACE ("dwg_find_tablehandle: Could not resolve table %s\n", table);
       return 0;
     }
   if (!dwg_obj_is_control (obj))

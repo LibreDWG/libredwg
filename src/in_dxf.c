@@ -2896,7 +2896,7 @@ void add_dictionary_itemhandles (Dwg_Object *restrict obj, Dxf_Pair *restrict pa
     _obj->texts[num] = (char *)bit_utf8_to_TU (text);
   else
     _obj->texts[num] = strdup (text);
-  LOG_TRACE ("%s.text[%d] = %s [3 T]\n", obj->name, num, text);
+  LOG_TRACE ("%s.texts[%d] = %s [3 T]\n", obj->name, num, text);
   _obj->numitems = num + 1;
 }
 
@@ -4909,6 +4909,42 @@ void resolve_postponed_header_refs (Dwg_Data *restrict dwg)
     }
 }
 
+#define CHECK_DICTIONARY_HDR(name)                                            \
+  if (!vars->DICTIONARY_##name)                                               \
+    {                                                                         \
+      vars->DICTIONARY_##name = dwg_find_dictionary (dwg, #name);             \
+      if (vars->DICTIONARY_##name)                                            \
+        LOG_TRACE ("HEADER.DICTIONARY_" #name " = " FORMAT_REF "\n",          \
+                   ARGS_REF (vars->DICTIONARY_##name))                        \
+    }
+
+void resolve_header_dicts (Dwg_Data *restrict dwg)
+{
+  Dwg_Header_Variables *vars = &dwg->header_vars;
+
+  if (!vars->DICTIONARY_NAMED_OBJECT)
+    vars->DICTIONARY_NAMED_OBJECT = dwg_add_handleref (dwg, 3, 0xC, NULL);
+  // only possible after OBJECTS
+  CHECK_DICTIONARY_HDR (ACAD_GROUP)
+  CHECK_DICTIONARY_HDR (ACAD_MLINESTYLE)
+  if (dwg->header.version >= R_2000)
+    {
+      CHECK_DICTIONARY_HDR (LAYOUT)
+      CHECK_DICTIONARY_HDR (PLOTSETTINGS)
+      CHECK_DICTIONARY_HDR (PLOTSTYLENAME)
+    }
+  if (dwg->header.version >= R_2004)
+    {
+      CHECK_DICTIONARY_HDR (MATERIAL)
+      CHECK_DICTIONARY_HDR (COLOR)
+    }
+  if (dwg->header.version >= R_2007)
+    {
+      CHECK_DICTIONARY_HDR (VISUALSTYLE)
+    }
+}
+#undef CHECK_DICTIONARY_HDR
+
 void resolve_postponed_eed_refs (Dwg_Data *restrict dwg)
 {
   for (uint32_t i = 0; i < eed_hdls->nitems; i++)
@@ -5055,6 +5091,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               dxf_free_pair (pair);
               dxf_objects_read (dat, dwg);
+              resolve_header_dicts (dwg);
             }
           else if (strEQc (pair->value.s, "THUMBNAILIMAGE"))
             {
