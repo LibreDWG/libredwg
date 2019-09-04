@@ -1511,22 +1511,55 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg,
           = dwg_find_dictionary (dwg, "ACAD_MLINESTYLE");
     }
   else if (strEQc (table, "NAMED_OBJECT"))
-    ctrl = dwg->header_vars.DICTIONARY_NAMED_OBJECT;
+    // The very first DICTIONARY 0.1.C with all the names
+    {
+      if (!(ctrl = dwg->header_vars.DICTIONARY_NAMED_OBJECT))
+        dwg->header_vars.DICTIONARY_NAMED_OBJECT = ctrl
+          = dwg_add_handleref (dwg, 3, 0xC, NULL);
+    }
   else if (strEQc (table, "LAYOUT"))
-    ctrl = dwg->header_vars.DICTIONARY_LAYOUTS;
-  else if (strEQc (table, "PLOTSETTING"))
-    ctrl = dwg->header_vars.DICTIONARY_PLOTSETTINGS;
-  else if (strEQc (table, "PLOTSTYLE"))
-    ctrl = dwg->header_vars.DICTIONARY_PLOTSTYLES;
+    {
+      if (!(ctrl = dwg->header_vars.DICTIONARY_LAYOUT))
+        dwg->header_vars.DICTIONARY_LAYOUT = ctrl
+          = dwg_find_dictionary (dwg, "ACAD_LAYOUT");
+    }
+  else if (strEQc (table, "PLOTSETTINGS"))
+    {
+      if (!(ctrl = dwg->header_vars.DICTIONARY_PLOTSETTINGS))
+        dwg->header_vars.DICTIONARY_PLOTSETTINGS = ctrl
+          = dwg_find_dictionary (dwg, "ACAD_PLOTSETTINGS");
+    }
+  else if (strEQc (table, "PLOTSTYLENAME"))
+    {
+      if (!(ctrl = dwg->header_vars.DICTIONARY_PLOTSTYLENAME))
+        dwg->header_vars.DICTIONARY_PLOTSTYLENAME = ctrl
+          = dwg_find_dictionary (dwg, "ACAD_PLOTSTYLENAME");
+    }
   // TODO but maybe the mappers are different
   else if (strEQc (table, "MATERIAL") || memBEGINc (table, "ACAD_MATERIAL_MAPPER"))
-    ctrl = dwg->header_vars.DICTIONARY_MATERIALS;
+    {
+      if (!(ctrl = dwg->header_vars.DICTIONARY_MATERIAL))
+        dwg->header_vars.DICTIONARY_MATERIAL = ctrl
+          = dwg_find_dictionary (dwg, "ACAD_MATERIAL");
+    }
   else if (strEQc (table, "COLOR"))
-    ctrl = dwg->header_vars.DICTIONARY_COLORS;
+    {
+      if (!(ctrl = dwg->header_vars.DICTIONARY_COLOR))
+        dwg->header_vars.DICTIONARY_COLOR = ctrl
+          = dwg_find_dictionary (dwg, "ACAD_COLOR");
+    }
   else if (strEQc (table, "VISUALSTYLE"))
-    ctrl = dwg->header_vars.DICTIONARY_VISUALSTYLE;
+    {
+      if (!(ctrl = dwg->header_vars.DICTIONARY_VISUALSTYLE))
+        dwg->header_vars.DICTIONARY_VISUALSTYLE = ctrl
+          = dwg_find_dictionary (dwg, "ACAD_VISUALSTYLE");
+    }
   else if (strEQc (table, "LIGHTLIST"))
-    ctrl = dwg->header_vars.DICTIONARY_LIGHTLIST;
+    {
+      if (!(ctrl = dwg->header_vars.DICTIONARY_LIGHTLIST))
+        dwg->header_vars.DICTIONARY_LIGHTLIST = ctrl
+          = dwg_find_dictionary (dwg, "ACAD_LIGHTLIST");
+    }
   else
     {
       LOG_ERROR ("dwg_find_tablehandle: Unsupported table %s", table);

@@ -4186,13 +4186,13 @@ test_header (const Dwg_Data *dwg)
       fail ("HEADER.STYLESHEET [TV]");
   }
   {
-    BITCODE_H dictionary_layouts;
-    if (dwg_dynapi_header_value (dwg, "DICTIONARY_LAYOUTS", &dictionary_layouts, NULL)
-        && !memcmp (&dictionary_layouts, &dwg->header_vars.DICTIONARY_LAYOUTS, sizeof (dwg->header_vars.DICTIONARY_LAYOUTS))
+    BITCODE_H dictionary_layout;
+    if (dwg_dynapi_header_value (dwg, "DICTIONARY_LAYOUT", &dictionary_layout, NULL)
+        && !memcmp (&dictionary_layout, &dwg->header_vars.DICTIONARY_LAYOUT, sizeof (dwg->header_vars.DICTIONARY_LAYOUT))
        )
       pass ();
     else
-      fail ("HEADER.DICTIONARY_LAYOUTS [H]");
+      fail ("HEADER.DICTIONARY_LAYOUT [H]");
   }
   {
     BITCODE_H dictionary_plotsettings;
@@ -4204,31 +4204,31 @@ test_header (const Dwg_Data *dwg)
       fail ("HEADER.DICTIONARY_PLOTSETTINGS [H]");
   }
   {
-    BITCODE_H dictionary_plotstyles;
-    if (dwg_dynapi_header_value (dwg, "DICTIONARY_PLOTSTYLES", &dictionary_plotstyles, NULL)
-        && !memcmp (&dictionary_plotstyles, &dwg->header_vars.DICTIONARY_PLOTSTYLES, sizeof (dwg->header_vars.DICTIONARY_PLOTSTYLES))
+    BITCODE_H dictionary_plotstylename;
+    if (dwg_dynapi_header_value (dwg, "DICTIONARY_PLOTSTYLENAME", &dictionary_plotstylename, NULL)
+        && !memcmp (&dictionary_plotstylename, &dwg->header_vars.DICTIONARY_PLOTSTYLENAME, sizeof (dwg->header_vars.DICTIONARY_PLOTSTYLENAME))
        )
       pass ();
     else
-      fail ("HEADER.DICTIONARY_PLOTSTYLES [H]");
+      fail ("HEADER.DICTIONARY_PLOTSTYLENAME [H]");
   }
   {
-    BITCODE_H dictionary_materials;
-    if (dwg_dynapi_header_value (dwg, "DICTIONARY_MATERIALS", &dictionary_materials, NULL)
-        && !memcmp (&dictionary_materials, &dwg->header_vars.DICTIONARY_MATERIALS, sizeof (dwg->header_vars.DICTIONARY_MATERIALS))
+    BITCODE_H dictionary_material;
+    if (dwg_dynapi_header_value (dwg, "DICTIONARY_MATERIAL", &dictionary_material, NULL)
+        && !memcmp (&dictionary_material, &dwg->header_vars.DICTIONARY_MATERIAL, sizeof (dwg->header_vars.DICTIONARY_MATERIAL))
        )
       pass ();
     else
-      fail ("HEADER.DICTIONARY_MATERIALS [H]");
+      fail ("HEADER.DICTIONARY_MATERIAL [H]");
   }
   {
-    BITCODE_H dictionary_colors;
-    if (dwg_dynapi_header_value (dwg, "DICTIONARY_COLORS", &dictionary_colors, NULL)
-        && !memcmp (&dictionary_colors, &dwg->header_vars.DICTIONARY_COLORS, sizeof (dwg->header_vars.DICTIONARY_COLORS))
+    BITCODE_H dictionary_color;
+    if (dwg_dynapi_header_value (dwg, "DICTIONARY_COLOR", &dictionary_color, NULL)
+        && !memcmp (&dictionary_color, &dwg->header_vars.DICTIONARY_COLOR, sizeof (dwg->header_vars.DICTIONARY_COLOR))
        )
       pass ();
     else
-      fail ("HEADER.DICTIONARY_COLORS [H]");
+      fail ("HEADER.DICTIONARY_COLOR [H]");
   }
   {
     BITCODE_H dictionary_visualstyle;

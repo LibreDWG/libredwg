@@ -2720,7 +2720,7 @@ find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair)
   else if (pair->code == 331)
     ref = dwg_find_tablehandle (dwg, pair->value.s, "VPORT");
   else if (pair->code == 390)
-    ref = dwg_find_tablehandle (dwg, pair->value.s, "PLOTSTYLE");
+    ref = dwg_find_tablehandle (dwg, pair->value.s, "PLOTSTYLENAME");
   else if (pair->code == 347)
     ref = dwg_find_tablehandle (dwg, pair->value.s, "MATERIAL");
   else if (pair->code == 345 || pair->code == 346)
