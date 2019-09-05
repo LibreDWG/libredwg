@@ -146,6 +146,9 @@ static int read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl_dat,
                                       Dwg_Data *restrict dwg,
                                       r2007_section *restrict sections_map,
                                       r2007_page *restrict pages_map);
+static int read_2007_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                                      r2007_section *restrict sections_map,
+                                      r2007_page *restrict pages_map);
 static r2007_page *read_pages_map (Bit_Chain *dat, int64_t size_comp,
                                    int64_t size_uncomp, int64_t correction)
   ATTRIBUTE_MALLOC;
@@ -704,7 +707,7 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
   r2007_page *page;
   uint64_t max_decomp_size;
   BITCODE_RC *decomp;
-  int error, i;
+  int error = 0, i;
 
   section = get_section (sections_map, sec_type);
   if (section == NULL)
@@ -720,6 +723,12 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
       LOG_ERROR ("Out of memory")
       return DWG_ERR_OUTOFMEM;
     }
+
+  sec_dat->bit = 0;
+  sec_dat->byte = 0;
+  sec_dat->size = max_decomp_size;
+  sec_dat->version = dat->version;
+  sec_dat->chain = decomp;
 
   for (i = 0; i < (int)section->num_pages; i++)
     {
@@ -740,23 +749,26 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
         }
 
       dat->byte = page->offset;
-      error = read_data_page (dat, &decomp[section_page->offset], page->size,
-                              section_page->comp_size,
-                              section_page->uncomp_size);
-      if (error)
+      // only if compressed. TODO: Isn't there a compressed flag as with 2004+?
+      // theoretically the sizes could still be the same.
+      if (section_page->comp_size != section_page->uncomp_size)
         {
-          free (decomp);
-          LOG_ERROR ("Failed to read page")
-          return error;
+          error = read_data_page (dat, &decomp[section_page->offset], page->size,
+                                  section_page->comp_size,
+                                  section_page->uncomp_size);
+          if (error)
+            {
+              free (decomp);
+              LOG_ERROR ("Failed to read compressed page")
+              return error;
+            }
+        }
+      else
+        {
+          memcpy (&decomp[section_page->offset], &dat->chain[dat->byte],
+                  section_page->uncomp_size);
         }
     }
-
-  sec_dat->bit = 0;
-  sec_dat->byte = 0;
-  sec_dat->chain = decomp;
-  sec_dat->size = max_decomp_size;
-  sec_dat->version = dat->version;
-
   return 0;
 }
 
@@ -1624,6 +1636,41 @@ read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl,
   return error;
 }
 
+static int
+read_2007_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                           r2007_section *restrict sections_map,
+                           r2007_page *restrict pages_map)
+{
+  static Bit_Chain old_dat, obj_dat = { 0 };
+  Bit_Chain *str_dat;
+  struct Dwg_SummaryInfo *_obj = &dwg->summaryinfo;
+  Dwg_Object *obj = NULL;
+  int error;
+  BITCODE_RL rcount1 = 0, rcount2 = 0;
+
+  old_dat = *dat;
+  error = read_data_section (&obj_dat, dat, sections_map, pages_map,
+                             SECTION_SUMMARYINFO);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      LOG_ERROR ("Failed to read SummaryInfo section");
+      if (obj_dat.chain)
+        free (obj_dat.chain);
+      return error;
+    }
+
+  if (dwg->header.summaryinfo_address != (BITCODE_RL)dat->byte)
+    LOG_WARN ("summaryinfo_address mismatch: " FORMAT_RL " != %lu",
+              dwg->header.summaryinfo_address, dat->byte);
+  LOG_TRACE ("\nSummaryInfo\n-------------------\n")
+  str_dat = dat = &obj_dat;  //restrict in size
+
+  #include "summaryinfo.spec"
+
+  *dat = old_dat; //unrestrict
+  return error;
+}
+
 /* exported */
 void
 read_r2007_init (Dwg_Data *dwg)
@@ -1692,10 +1739,11 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
     goto error;
 
   error = read_2007_section_classes (dat, dwg, sections_map, pages_map);
-  error += read_2007_section_header (dat, hdl_dat, dwg, sections_map,
+  error |= read_2007_section_header (dat, hdl_dat, dwg, sections_map,
                                      pages_map);
-  error += read_2007_section_handles (dat, hdl_dat, dwg, sections_map,
+  error |= read_2007_section_handles (dat, hdl_dat, dwg, sections_map,
                                       pages_map);
+  error |= read_2007_section_summary (dat, dwg, sections_map, pages_map);
   // read_2007_blocks (dat, hdl_dat, dwg, sections_map, pages_map);
 
  error:

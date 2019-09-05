@@ -1379,7 +1379,9 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   // step II of handles parsing: resolve pointers from handle value
   // XXX: move this somewhere else
-  LOG_TRACE ("\nResolving pointers from ObjectRef vector.\n")
+  LOG_INFO ("\nnum_objects: %lu\n", (unsigned long)dwg->num_objects)
+  LOG_TRACE ("num_object_refs: %lu\n", (unsigned long)dwg->num_object_refs)
+  LOG_TRACE ("Resolving pointers from ObjectRef vector:\n")
   error |= resolve_objectref_vector (dat, dwg);
   return error;
 }
@@ -1985,7 +1987,7 @@ static int
 read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
                               Bit_Chain *sec_dat, BITCODE_RL section_type)
 {
-  uint32_t address, sec_mask;
+  uint32_t address, sec_mask, initial_address;
   uint32_t max_decomp_size;
   Dwg_Section_Info *info = NULL;
   encrypted_section_header es;
@@ -2015,23 +2017,21 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
                  info->compressed == 2 ? "" : "un");
     }
 
-  if (info->compressed == 2)
+  max_decomp_size = info->num_sections * info->max_decomp_size;
+  if (max_decomp_size == 0)
     {
-      max_decomp_size = info->num_sections * info->max_decomp_size;
-      if (max_decomp_size == 0)
-        {
-          LOG_ERROR ("Section %s count or max decompression size is zero. "
-                     "Sections: %u, Max size: %u",
-                     info->name, info->num_sections, info->max_decomp_size);
-          return DWG_ERR_INVALIDDWG;
-        }
-      decomp = (BITCODE_RC *)calloc (max_decomp_size, sizeof (BITCODE_RC));
-      if (!decomp)
-        {
-          LOG_ERROR ("Out of memory with %u sections", info->num_sections);
-          return DWG_ERR_OUTOFMEM;
-        }
+      LOG_ERROR ("Section %s count or max decompression size is zero. "
+                 "Sections: %u, Max size: %u",
+                 info->name, info->num_sections, info->max_decomp_size);
+      return DWG_ERR_INVALIDDWG;
     }
+  decomp = (BITCODE_RC *)calloc (max_decomp_size, sizeof (BITCODE_RC));
+  if (!decomp)
+    {
+      LOG_ERROR ("Out of memory with %u sections", info->num_sections);
+      return DWG_ERR_OUTOFMEM;
+    }
+  initial_address = info->sections[0]->address;
 
   for (i = 0; i < info->num_sections; ++i)
     {
@@ -2044,6 +2044,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       dat->byte = address;
       bit_read_fixed (dat, es.char_data, 32);
 
+      //? if encrypted properties: security_type & 2 ??
       sec_mask = 0x4164536b ^ address;
       for (j = 0; j < 8; ++j)
         es.long_data[j] ^= sec_mask;
@@ -2067,7 +2068,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       LOG_TRACE ("StartOffset:      0x%x\n", (unsigned)es.fields.address)
       LOG_HANDLE ("Unknown:          0x%x\n", (unsigned)es.fields.unknown);
       LOG_HANDLE ("Checksum1:        0x%x\n", (unsigned)es.fields.checksum_1)
-      LOG_HANDLE ("Checksum2:        0x%x\n\n", (unsigned)es.fields.checksum_2)
+      LOG_HANDLE ("Checksum2:        0x%x\n\n", (unsigned)es.fields.checksum_2);
 
       //GH #126 part 4
       //LOG_INSANE ("i:                     %u\n", i)
@@ -2076,6 +2077,11 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       //LOG_INSANE ("max_decomp_size:       %u\n", max_decomp_size)
       //LOG_INSANE ("bytes_left:            %d\n",
       //            max_decomp_size - (i * info->max_decomp_size))
+
+      sec_dat->bit = 0;
+      sec_dat->byte = 0;
+      sec_dat->version = dat->version;
+      sec_dat->from_version = dat->from_version;
 
       // check if compressed at all
       if (info->compressed == 2)
@@ -2089,30 +2095,15 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
               free (decomp);
               return error;
             }
-
-          sec_dat->bit = 0;
-          sec_dat->byte = 0;
           sec_dat->chain = decomp;
           sec_dat->size = max_decomp_size;
-          sec_dat->version = dat->version;
-          sec_dat->from_version = dat->from_version;
         }
       else
         {
-          if (info->num_sections > 1)
-            {
-              // TODO combine the pages into one buffer
-              LOG_ERROR ("Cannot yet handle %d more than 1 uncompressed section",
-                         info->num_sections)
-              error |= DWG_ERR_NOTYETSUPPORTED;
-              // but read the first
-            }
-          sec_dat->bit = 0;
-          sec_dat->byte = 0;
-          sec_dat->chain = &dat->chain[address + es.fields.address + 32];
+          memcpy (&decomp[i * info->size], &dat->chain[address + es.fields.address + 32],
+                  info->size);
+          sec_dat->chain = decomp;
           sec_dat->size = info->size;
-          sec_dat->version = dat->version;
-          sec_dat->from_version = dat->from_version;
         }
     }
 
@@ -2421,7 +2412,6 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
   while (section_size > 2);
 
-  LOG_TRACE ("\nNum objects: %lu\n", (unsigned long)dwg->num_objects);
   free (hdl_dat.chain);
   free (obj_dat.chain);
   return error;
@@ -2446,17 +2436,17 @@ read_2004_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_ERROR ("Failed to read uncompressed %s section", "SummaryInfo");
       return error;
     }
-  if (dwg->header.summaryinfo_address != dat->byte)
-    LOG_WARN ("summaryinfo_address mismatch: " FORMAT_RL " != " FORMAT_RL,
+  if (dwg->header.summaryinfo_address != (BITCODE_RL)dat->byte)
+    LOG_WARN ("summaryinfo_address mismatch: " FORMAT_RL " != %lu",
               dwg->header.summaryinfo_address, dat->byte);
-  LOG_TRACE ("\nSummaryInfo\n-------------------\n")
+  LOG_TRACE ("SummaryInfo\n-------------------\n")
   old_dat = *dat;
   str_dat = dat = &sec_dat;  //restrict in size
 
   #include "summaryinfo.spec"
 
   *dat = old_dat; //unrestrict
-  return 0;
+  return error;
 }
 
 static void
@@ -2609,7 +2599,9 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
 #endif
 
-  LOG_TRACE ("\nresolve objectrefs:\n")
+  LOG_INFO ("\nnum_objects: %lu\n", (unsigned long)dwg->num_objects)
+  LOG_TRACE ("num_object_refs: %lu\n", (unsigned long)dwg->num_object_refs)
+  LOG_TRACE ("Resolving pointers from ObjectRef vector:\n")
   error |= resolve_objectref_vector (dat, dwg);
   return error;
 }
@@ -2633,14 +2625,15 @@ decode_R2007 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // this includes classes, header, handles + objects
   error = read_r2007_meta_data (dat, &hdl_dat, dwg);
 
-  LOG_INFO ("Num objects: %lu\n", (unsigned long)dwg->num_objects)
-  LOG_TRACE ("  num object_refs: %lu\n", (unsigned long)dwg->num_object_refs)
+  LOG_INFO ("\nnum_objects: %lu\n", (unsigned long)dwg->num_objects)
+  LOG_TRACE ("num_object_refs: %lu\n", (unsigned long)dwg->num_object_refs)
   if (error >= DWG_ERR_CRITICAL)
     {
       LOG_ERROR ("Failed to read 2007 meta data")
       return error;
     }
 
+  LOG_TRACE ("Resolving pointers from ObjectRef vector:\n")
   return error | resolve_objectref_vector (dat, dwg);
 }
 

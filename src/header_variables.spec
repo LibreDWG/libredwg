@@ -638,22 +638,23 @@
     }
 
   SINCE(R_2007) {
+    // TODO split str_dat stream and get rid of this block
     SECTION_STRING_STREAM
-    FIELD_TU (unknown_text1, 0);
-    FIELD_TU (unknown_text2, 0);
-    FIELD_TU (unknown_text3, 0);
-    FIELD_TU (unknown_text4, 0);
-    FIELD_TU (MENU, 1);
-    FIELD_TU (DIMPOST, 1);
-    FIELD_TU (DIMAPOST, 1);
+    FIELD_T (unknown_text1, 0);
+    FIELD_T (unknown_text2, 0);
+    FIELD_T (unknown_text3, 0);
+    FIELD_T (unknown_text4, 0);
+    FIELD_T (MENU, 1);
+    FIELD_T (DIMPOST, 1);
+    FIELD_T (DIMAPOST, 1);
     SINCE(R_2010) {
-      FIELD_TU (DIMALTMZS, 70);
-      FIELD_TU (DIMMZS, 70);
+      FIELD_T (DIMALTMZS, 70);
+      FIELD_T (DIMMZS, 70);
     }
-    FIELD_TU (HYPERLINKBASE, 1); // see SummaryInfo
-    FIELD_TU (STYLESHEET, 1);
-    FIELD_TU (FINGERPRINTGUID, 1);
-    FIELD_TU (VERSIONGUID, 1);
-    FIELD_TU (PROJECTNAME, 1);
+    FIELD_T (HYPERLINKBASE, 1); // see SummaryInfo
+    FIELD_T (STYLESHEET, 1);
+    FIELD_T (FINGERPRINTGUID, 1);
+    FIELD_T (VERSIONGUID, 1);
+    FIELD_T (PROJECTNAME, 1);
     END_STRING_STREAM
   }

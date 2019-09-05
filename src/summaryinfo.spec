@@ -23,7 +23,7 @@
       FIELD_VALUE(TDINDWG)    = dwg->header_vars.TDINDWG;
       FIELD_VALUE(TDCREATE)   = dwg->header_vars.TDCREATE;
       FIELD_VALUE(TDUPDATE)   = dwg->header_vars.TDUPDATE;
-      FIELD_VALUE(HYPERLINKBASE) = dwg->header_vars.HYPERLINKBASE;
+      FIELD_VALUE(HYPERLINKBASE) = (BITCODE_TU)dwg->header_vars.HYPERLINKBASE;
     }
   }
 
