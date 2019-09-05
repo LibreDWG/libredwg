@@ -1838,7 +1838,7 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
       LOG_TRACE ("\nsection_info[%d] fields:\n", i)
       LOG_TRACE ("size:            %ld\n", (long)info->size)
-      LOG_TRACE ("num_sections:       %u\n", info->num_sections)
+      LOG_TRACE ("num_sections:    %u\n", info->num_sections)
       LOG_TRACE ("max_decomp_size: %u / 0x%x\n", // normally 0x7400
                  info->max_decomp_size, info->max_decomp_size)
       LOG_TRACE ("unknown:         %u\n", info->unknown)
@@ -2015,20 +2015,22 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
                  info->compressed == 2 ? "" : "un");
     }
 
-  max_decomp_size = info->num_sections * info->max_decomp_size;
-  if (max_decomp_size == 0)
+  if (info->compressed == 2)
     {
-      LOG_ERROR ("Section %s count or max decompression size is zero. "
-                 "Sections: %u, Max size: %u",
-                 info->name, info->num_sections, info->max_decomp_size);
-      return DWG_ERR_INVALIDDWG;
-    }
-
-  decomp = (BITCODE_RC *)calloc (max_decomp_size, sizeof (BITCODE_RC));
-  if (!decomp)
-    {
-      LOG_ERROR ("Out of memory with %u sections", info->num_sections);
-      return DWG_ERR_OUTOFMEM;
+      max_decomp_size = info->num_sections * info->max_decomp_size;
+      if (max_decomp_size == 0)
+        {
+          LOG_ERROR ("Section %s count or max decompression size is zero. "
+                     "Sections: %u, Max size: %u",
+                     info->name, info->num_sections, info->max_decomp_size);
+          return DWG_ERR_INVALIDDWG;
+        }
+      decomp = (BITCODE_RC *)calloc (max_decomp_size, sizeof (BITCODE_RC));
+      if (!decomp)
+        {
+          LOG_ERROR ("Out of memory with %u sections", info->num_sections);
+          return DWG_ERR_OUTOFMEM;
+        }
     }
 
   for (i = 0; i < info->num_sections; ++i)
@@ -2082,23 +2084,39 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
             dat, &decomp[i * info->max_decomp_size],       // offset
             max_decomp_size - (i * info->max_decomp_size), // bytes left
             es.fields.data_size);
+          if (error > DWG_ERR_CRITICAL)
+            {
+              free (decomp);
+              return error;
+            }
+
+          sec_dat->bit = 0;
+          sec_dat->byte = 0;
+          sec_dat->chain = decomp;
+          sec_dat->size = max_decomp_size;
+          sec_dat->version = dat->version;
+          sec_dat->from_version = dat->from_version;
         }
-      
-      if (error > DWG_ERR_CRITICAL)
+      else
         {
-          free (decomp);
-          return error;
+          if (info->num_sections > 1)
+            {
+              // TODO combine the pages into one buffer
+              LOG_ERROR ("Cannot yet handle %d more than 1 uncompressed section",
+                         info->num_sections)
+              error |= DWG_ERR_NOTYETSUPPORTED;
+              // but read the first
+            }
+          sec_dat->bit = 0;
+          sec_dat->byte = 0;
+          sec_dat->chain = &dat->chain[address + es.fields.address + 32];
+          sec_dat->size = info->size;
+          sec_dat->version = dat->version;
+          sec_dat->from_version = dat->from_version;
         }
     }
 
-  sec_dat->bit = 0;
-  sec_dat->byte = 0;
-  sec_dat->chain = decomp;
-  sec_dat->size = max_decomp_size;
-  sec_dat->version = dat->version;
-  sec_dat->from_version = dat->from_version;
-
-  return 0;
+  return error;
 }
 
 /* R2004, 2010+ Class Section
@@ -2414,10 +2432,9 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static int
 read_2004_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  Bit_Chain sec_dat = { 0 };
-  Bit_Chain old_dat = *dat;
-  Bit_Chain *str_dat = &sec_dat;
-  //Bit_Chain *hdl_dat = dat;
+  Bit_Chain old_dat, sec_dat = { 0 };
+  Bit_Chain *str_dat;
+  //Bit_Chain *hdl_dat = dat; //unneeded
   struct Dwg_SummaryInfo *_obj = &dwg->summaryinfo;
   Dwg_Object *obj = NULL;
   int error = 0;
@@ -2427,19 +2444,18 @@ read_2004_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (error >= DWG_ERR_CRITICAL)
     {
       LOG_ERROR ("Failed to read uncompressed %s section", "SummaryInfo");
-      if (sec_dat.chain)
-        free (sec_dat.chain);
       return error;
     }
-
+  if (dwg->header.summaryinfo_address != dat->byte)
+    LOG_WARN ("summaryinfo_address mismatch: " FORMAT_RL " != " FORMAT_RL,
+              dwg->header.summaryinfo_address, dat->byte);
   LOG_TRACE ("\nSummaryInfo\n-------------------\n")
+  old_dat = *dat;
+  str_dat = dat = &sec_dat;  //restrict in size
 
   #include "summaryinfo.spec"
 
-  // then RS: CRC
-
-  free (sec_dat.chain);
-  *dat = old_dat;
+  *dat = old_dat; //unrestrict
   return 0;
 }
 
@@ -2593,6 +2609,7 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
 #endif
 
+  LOG_TRACE ("\nresolve objectrefs:\n")
   error |= resolve_objectref_vector (dat, dwg);
   return error;
 }

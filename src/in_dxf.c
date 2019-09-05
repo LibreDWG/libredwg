@@ -582,7 +582,7 @@ static void dxf_fixup_header (Dwg_Data *dwg)
     {
       hdr->is_maint = 0xf; // 0x6 - 0xf
       hdr->zero_one_or_three = 1;
-      hdr->thumbnail_addr = 220;
+      hdr->thumbnail_address = 220;
       hdr->dwg_version = 0x1f;
       hdr->maint_version = 0x8;
 

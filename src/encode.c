@@ -857,10 +857,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   /*------------------------------------------------------------
    * THUMBNAIL preview pictures (Pre-R13C3?)
    */
-  // FIXME if !thumbnail_addr but thumbnail exists
-  if (dwg->header.thumbnail_addr)
+  // FIXME if !thumbnail_address but thumbnail exists
+  if (dwg->header.thumbnail_address)
     {
-      dat->byte = dwg->header.thumbnail_addr;
+      dat->byte = dwg->header.thumbnail_address;
       // dwg->thumbnail.size = 0; // If one desires not to copy thumbnail previews,
       // should un-comment this line
       bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_THUMBNAIL_BEGIN));

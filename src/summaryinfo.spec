@@ -16,15 +16,18 @@
  * written by Reini Urban
  */
 
-#include "spec.h"
+  #include "spec.h"
 
   SINCE(R_2004) {
     IF_ENCODE_FROM_EARLIER {
+      FIELD_VALUE(TDINDWG)    = dwg->header_vars.TDINDWG;
       FIELD_VALUE(TDCREATE)   = dwg->header_vars.TDCREATE;
       FIELD_VALUE(TDUPDATE)   = dwg->header_vars.TDUPDATE;
+      FIELD_VALUE(HYPERLINKBASE) = dwg->header_vars.HYPERLINKBASE;
     }
   }
 
+  //DEBUG_HERE
   FIELD_TU (TITLE, 1);
   FIELD_TU (SUBJECT, 1);
   FIELD_TU (AUTHOR, 1);
@@ -33,19 +36,18 @@
   FIELD_TU (LASTSAVEDBY, 1);
   FIELD_TU (REVISIONNUMBER, 1);
   FIELD_TU (HYPERLINKBASE, 1);
-  DEBUG_HERE;
+  //DEBUG_HERE;
   FIELD_TIMERLL (TDINDWG, 0);
   FIELD_TIMERLL (TDCREATE, 0);
   FIELD_TIMERLL (TDUPDATE, 0);
   FIELD_RS (num_props, 0);
-  DEBUG_HERE;
+  //DEBUG_HERE;
   REPEAT(num_props, props, Dwg_SummaryInfo_Property)
     {
       FIELD_T (props[rcount1].key, 0);
       FIELD_T (props[rcount1].value, 0);
     }
   END_REPEAT(texts)
-  DEBUG_HERE;
+  //DEBUG_HERE;
   FIELD_RL (unknown1, 0);
   FIELD_RL (unknown2, 0);
-
