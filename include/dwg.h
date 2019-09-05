@@ -5675,21 +5675,21 @@ typedef struct _dwg_struct
 
   struct Dwg_SummaryInfo
   {
-    BITCODE_TU       TITLE;
-    BITCODE_TU       SUBJECT;
-    BITCODE_TU       AUTHOR;
-    BITCODE_TU       KEYWORDS;
-    BITCODE_TU       COMMENTS;
-    BITCODE_TU       LASTSAVEDBY;
-    BITCODE_TU       REVISIONNUMBER;
-    BITCODE_TU       HYPERLINKBASE;
+    BITCODE_T    TITLE;
+    BITCODE_T    SUBJECT;
+    BITCODE_T    AUTHOR;
+    BITCODE_T    KEYWORDS;
+    BITCODE_T    COMMENTS;
+    BITCODE_T    LASTSAVEDBY;
+    BITCODE_T    REVISIONNUMBER;
+    BITCODE_T    HYPERLINKBASE;
     BITCODE_TIMERLL  TDINDWG; /* days + ms, fixed size! */
     BITCODE_TIMERLL  TDCREATE;
     BITCODE_TIMERLL  TDUPDATE;
-    BITCODE_RS       num_props;
+    BITCODE_RS   num_props;
     Dwg_SummaryInfo_Property *props;
-    BITCODE_RL       unknown1;
-    BITCODE_RL       unknown2;
+    BITCODE_RL   unknown1;
+    BITCODE_RL   unknown2;
   } summaryinfo;
   
   Dwg_Chain thumbnail;

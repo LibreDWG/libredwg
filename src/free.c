@@ -130,6 +130,7 @@ static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
 #define FIELD_3BD_1(name, dxf) {}
 #define FIELD_3DPOINT(name, dxf) {}
 #define FIELD_TIMEBLL(name, dxf)
+#define FIELD_TIMERLL(name, dxf)
 #define FIELD_CMC(color, dxf1, dxf2)                                    \
   {                                                                     \
     FIELD_T (color.name, 0);                                            \
@@ -739,7 +740,18 @@ dwg_free_header_vars (Dwg_Data *dwg)
   Dwg_Header_Variables *_obj = &dwg->header_vars;
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
-#include "header_variables.spec"
+  #include "header_variables.spec"
+  return 0;
+}
+
+static int
+dwg_free_summaryinfo (Dwg_Data *dwg)
+{
+  struct Dwg_SummaryInfo *_obj = &dwg->summaryinfo;
+  Dwg_Object *obj = NULL;
+  Bit_Chain *dat = &pdat;
+  BITCODE_RL rcount1, rcount2;
+  #include "summaryinfo.spec"
   return 0;
 }
 
@@ -772,6 +784,7 @@ dwg_free (Dwg_Data *dwg)
         }
       FREE_IF (dwg->header.section);
       dwg_free_header_vars (dwg);
+      dwg_free_summaryinfo (dwg);
       if (dwg->thumbnail.size && dwg->thumbnail.chain)
         FREE_IF (dwg->thumbnail.chain);
       if (dwg->header.section_infohdr.num_desc)
@@ -782,6 +795,7 @@ dwg_free (Dwg_Data *dwg)
         }
       for (i = 0; i < dwg->second_header.num_handlers; i++)
         FREE_IF (dwg->second_header.handlers[i].data);
+      // auxheader has no strings
       for (i = 0; i < dwg->num_objects; ++i)
         {
           if (dwg_obj_is_control (&dwg->object[i]))

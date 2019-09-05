@@ -23,19 +23,19 @@
       FIELD_VALUE(TDINDWG)    = dwg->header_vars.TDINDWG;
       FIELD_VALUE(TDCREATE)   = dwg->header_vars.TDCREATE;
       FIELD_VALUE(TDUPDATE)   = dwg->header_vars.TDUPDATE;
-      FIELD_VALUE(HYPERLINKBASE) = (BITCODE_TU)dwg->header_vars.HYPERLINKBASE;
+      FIELD_VALUE(HYPERLINKBASE) = dwg->header_vars.HYPERLINKBASE;
     }
   }
 
   //DEBUG_HERE
-  FIELD_TU (TITLE, 1);
-  FIELD_TU (SUBJECT, 1);
-  FIELD_TU (AUTHOR, 1);
-  FIELD_TU (KEYWORDS, 1);
-  FIELD_TU (COMMENTS, 1);
-  FIELD_TU (LASTSAVEDBY, 1);
-  FIELD_TU (REVISIONNUMBER, 1);
-  FIELD_TU (HYPERLINKBASE, 1);
+  FIELD_T (TITLE, 1);
+  FIELD_T (SUBJECT, 1);
+  FIELD_T (AUTHOR, 1);
+  FIELD_T (KEYWORDS, 1);
+  FIELD_T (COMMENTS, 1);
+  FIELD_T (LASTSAVEDBY, 1);
+  FIELD_T (REVISIONNUMBER, 1);
+  FIELD_T (HYPERLINKBASE, 1);
   //DEBUG_HERE;
   FIELD_TIMERLL (TDINDWG, 0);
   FIELD_TIMERLL (TDCREATE, 0);
@@ -47,7 +47,7 @@
       FIELD_T (props[rcount1].key, 0);
       FIELD_T (props[rcount1].value, 0);
     }
-  END_REPEAT(texts)
+  END_REPEAT(props)
   //DEBUG_HERE;
   FIELD_RL (unknown1, 0);
   FIELD_RL (unknown2, 0);

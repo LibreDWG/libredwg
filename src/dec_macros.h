@@ -353,7 +353,7 @@
 #define FIELD_TV(nam, dxf) FIELDG (nam, TV, dxf)
 #define FIELD_TU(nam, dxf)                                                    \
   {                                                                           \
-    _obj->nam = bit_read_TU (str_dat);                                        \
+    _obj->nam = (BITCODE_TU)bit_read_TU (str_dat);                            \
     LOG_TRACE_TU (#nam, (BITCODE_TU)FIELD_VALUE (nam), dxf);                  \
   }
 #define FIELD_T(nam, dxf)                                                     \
@@ -364,7 +364,7 @@
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        if (obj->has_strings)                                                 \
+       if (!obj || obj->has_strings) /* header_vars */                        \
           {                                                                   \
            _obj->nam = (BITCODE_T)bit_read_TU (str_dat);                      \
            LOG_TRACE_TU (#nam, (BITCODE_TU)FIELD_VALUE (nam), dxf);           \

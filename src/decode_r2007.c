@@ -1667,6 +1667,8 @@ read_2007_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
   #include "summaryinfo.spec"
 
+  if (obj_dat.chain)
+    free (obj_dat.chain);
   *dat = old_dat; //unrestrict
   return error;
 }
