@@ -16,8 +16,6 @@
  * written by Reini Urban
  */
 
-//TODO: SINCE(R_2010): LASTSAVEDBY, 1, ""
-
 #include "spec.h"
 
   SECTION(HEADER);
@@ -39,14 +37,19 @@
   SINCE(R_10) {
     HEADER_VALUE (DWGCODEPAGE, TV, 3, codepage);
   }
-  SINCE(R_2018) {
-    HEADER_TU (TITLE, 1);
-    HEADER_TU (SUBJECT, 1);
-    HEADER_TU (AUTHOR, 1);
-    HEADER_TU (KEYWORDS, 1);
-  }
-  SINCE(R_2010) {
-    HEADER_TU (LASTSAVEDBY, 1);
+  SINCE(R_2004) {
+    // usually only since 2010
+    if (dwg->summaryinfo.TITLE && strlen (dwg->summaryinfo.TITLE))
+      {
+        HEADER_VALUE (TITLE, TU, 1, dwg->summaryinfo.TITLE);
+        HEADER_VALUE (SUBJECT, TU, 1, dwg->summaryinfo.SUBJECT);
+        HEADER_VALUE (AUTHOR, TU, 1, dwg->summaryinfo.AUTHOR);
+        HEADER_VALUE (KEYWORDS, TU, 1, dwg->summaryinfo.KEYWORDS);
+      }
+    if (dwg->summaryinfo.LASTSAVEDBY && strlen (dwg->summaryinfo.LASTSAVEDBY))
+      {
+        HEADER_VALUE (LASTSAVEDBY, TU, 1, dwg->summaryinfo.LASTSAVEDBY);
+      }
   }
   SINCE(R_2013) {
     HEADER_BLL (REQUIREDVERSIONS, 160);

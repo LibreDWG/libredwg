@@ -70,6 +70,34 @@ help (void)
   return 0;
 }
 
+/* handles r2007 wide chars (=> utf8) */
+static int
+set_info (PSDoc *restrict ps, Dwg_Data *restrict dwg,
+          const char *restrict key, char *restrict text)
+{
+  int ret = 0;
+  if (dwg->header.version >= R_2007 && text)
+    {
+      char *u8 = bit_convert_TU ((BITCODE_TU)text);
+      if (u8 && strlen (u8))
+        {
+          PS_set_info (ps, key, u8);
+          ret = 1;
+        }
+      if (u8)
+        free (u8);
+    }
+  else
+    {
+      if (text && strlen (text))
+        {
+          PS_set_info (ps, key, text);
+          ret = 1;
+        }
+    }
+  return 1;
+}
+
 static void
 create_postscript (Dwg_Data *dwg, char *output)
 {
@@ -93,10 +121,14 @@ create_postscript (Dwg_Data *dwg, char *output)
     }
 
   PS_set_info (ps, "Creator", "dwg2ps " PACKAGE_VERSION);
-  if (dwg->header_vars.LASTSAVEDBY)
-    PS_set_info (ps, "Author", bit_convert_TU (dwg->header_vars.LASTSAVEDBY));
-  PS_set_info (ps, "Title", output);
-  PS_set_info (ps, "Keywords", "dwg, postscript, conversion, CAD, plot");
+  (void)set_info (ps, dwg, "Author", dwg->summaryinfo.LASTSAVEDBY);
+  if (set_info (ps, dwg, "Title", dwg->summaryinfo.TITLE))
+    set_info (ps, dwg, "Keywords", dwg->summaryinfo.KEYWORDS);
+  else  
+    {
+      PS_set_info (ps, "Title", output);
+      PS_set_info (ps, "Keywords", "dwg, postscript, conversion, CAD, plot");
+    }
 
   /* First page: Model Space (?)
    */
@@ -133,7 +165,7 @@ create_postscript (Dwg_Data *dwg, char *output)
       Dwg_Object *obj = &dwg->object[i];
       if (obj->supertype == DWG_SUPERTYPE_UNKNOWN) // unknown
         continue;
-      if (obj->type == DWG_SUPERTYPE_OBJECT) // not entity
+      if (obj->type == DWG_SUPERTYPE_OBJECT) // no entity
         continue;
       // if (obj->tio.entity->entity_mode == 0) // belongs to block
       //  continue;

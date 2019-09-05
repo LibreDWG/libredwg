@@ -585,11 +585,6 @@ typedef struct _dwg_header_variables {
   BITCODE_RC ACADMAINTVER; /*!< r13+ */
   BITCODE_BLL REQUIREDVERSIONS; /*!< r2013+ */
   BITCODE_TV DWGCODEPAGE;  /*!< r10+ */
-  BITCODE_T  TITLE;        /*!< r2018+ */
-  BITCODE_T  SUBJECT;      /*!< r2018+ */
-  BITCODE_T  AUTHOR;       /*!< r2018+ */
-  BITCODE_T  KEYWORDS;     /*!< r2018+ */
-  BITCODE_T  LASTSAVEDBY;  /*!< r2010+ */
   BITCODE_BD unknown_0; /* 412148564080.0 */
   BITCODE_BD unknown_1; /* 1.0 */
   BITCODE_BD unknown_2; /* 1.0 */
