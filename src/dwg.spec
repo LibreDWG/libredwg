@@ -1078,7 +1078,7 @@ DWG_ENTITY_END
     } \
     DXF { \
       if (dat->from_version >= R_2007) { \
-        FIELD_TU (user_text, 1); \
+        FIELD_T (user_text, 1); \
       } else if (_obj->user_text && strlen(_obj->user_text)) { \
         FIELD_TV (user_text, 1); \
       } \

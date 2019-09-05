@@ -64,6 +64,7 @@ EXTRA_HEADERS = \
         header.spec \
         auxheader.spec \
 	r2004_file_header.spec \
+        summaryinfo.spec \
 	classes.inc \
 	objects.inc \
 	spec.h \

@@ -2010,8 +2010,9 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
   else
     {
       LOG_TRACE ("\nFound section_info[" FORMAT_BL
-                 "] %s type 0x%x with %d sections:\n",
-                 i, info->name, section_type, info->num_sections);
+                 "] %s type 0x%x with %d sections (%scompressed):\n",
+                 i, info->name, section_type, info->num_sections,
+                 info->compressed == 2 ? "" : "un");
     }
 
   max_decomp_size = info->num_sections * info->max_decomp_size;
@@ -2074,10 +2075,15 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       //LOG_INSANE ("bytes_left:            %d\n",
       //            max_decomp_size - (i * info->max_decomp_size))
 
-      error = decompress_R2004_section (
-          dat, &decomp[i * info->max_decomp_size],       // offset
-          max_decomp_size - (i * info->max_decomp_size), // bytes left
-          es.fields.data_size);
+      // check if compressed at all
+      if (info->compressed == 2)
+        {
+          error = decompress_R2004_section (
+            dat, &decomp[i * info->max_decomp_size],       // offset
+            max_decomp_size - (i * info->max_decomp_size), // bytes left
+            es.fields.data_size);
+        }
+      
       if (error > DWG_ERR_CRITICAL)
         {
           free (decomp);
@@ -2110,7 +2116,7 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_CLASSES);
   if (error >= DWG_ERR_CRITICAL)
     {
-      LOG_ERROR ("Failed to read compressed class section");
+      LOG_ERROR ("Failed to read compressed %s section", "Classes");
       if (sec_dat.chain)
         free (sec_dat.chain);
       return error;
@@ -2242,7 +2248,7 @@ read_2004_section_header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_HEADER);
   if (error >= DWG_ERR_CRITICAL)
     {
-      LOG_ERROR ("Failed to read compressed header section");
+      LOG_ERROR ("Failed to read compressed %s section", "Header");
       if (sec_dat.chain)
         free (sec_dat.chain);
       return error;
@@ -2299,7 +2305,7 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   error = read_2004_compressed_section (dat, dwg, &obj_dat, SECTION_OBJECTS);
   if (error >= DWG_ERR_CRITICAL || !obj_dat.chain)
     {
-      LOG_ERROR ("Failed to read compressed objects section");
+      LOG_ERROR ("Failed to read compressed %s section", "AcDbObjects");
       if (obj_dat.chain)
         free (obj_dat.chain);
       return error;
@@ -2308,7 +2314,7 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   error = read_2004_compressed_section (dat, dwg, &hdl_dat, SECTION_HANDLES);
   if (error >= DWG_ERR_CRITICAL || !hdl_dat.chain)
     {
-      LOG_ERROR ("Failed to read compressed handles section");
+      LOG_ERROR ("Failed to read compressed %s section", "Handles");
       free (obj_dat.chain);
       if (hdl_dat.chain)
         free (hdl_dat.chain);
@@ -2401,6 +2407,40 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   free (hdl_dat.chain);
   free (obj_dat.chain);
   return error;
+}
+
+/* R2004, 2010+ SummaryInfo Section
+ */
+static int
+read_2004_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain sec_dat = { 0 };
+  Bit_Chain old_dat = *dat;
+  Bit_Chain *str_dat = &sec_dat;
+  //Bit_Chain *hdl_dat = dat;
+  struct Dwg_SummaryInfo *_obj = &dwg->summaryinfo;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+
+  // not compressed, page size: 0x100
+  error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_SUMMARYINFO);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      LOG_ERROR ("Failed to read uncompressed %s section", "SummaryInfo");
+      if (sec_dat.chain)
+        free (sec_dat.chain);
+      return error;
+    }
+
+  LOG_TRACE ("\nSummaryInfo\n-------------------\n")
+
+  #include "summaryinfo.spec"
+
+  // then RS: CRC
+
+  free (sec_dat.chain);
+  *dat = old_dat;
+  return 0;
 }
 
 static void
@@ -2536,6 +2576,7 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   error |= read_2004_section_classes (dat, dwg);
   error |= read_2004_section_header (dat, dwg);
   error |= read_2004_section_handles (dat, dwg);
+  error |= read_2004_section_summary (dat, dwg);
 
   /* Clean up. XXX? Need this to write the sections, at least the name and type
    */

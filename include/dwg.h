@@ -5572,6 +5572,13 @@ typedef struct
   Dwg_Section **sections;
 } Dwg_Section_Info;
 
+
+typedef struct _dwg_SummaryInfo_Property
+{
+  BITCODE_T key;
+  BITCODE_T value;
+} Dwg_SummaryInfo_Property;
+
 /**
  Main DWG struct
  */
@@ -5670,10 +5677,29 @@ typedef struct _dwg_struct
     BITCODE_RS   zero_18[3]; /* R2018+ */
   } auxheader;
 
+  struct Dwg_SummaryInfo
+  {
+    BITCODE_TU       TITLE;
+    BITCODE_TU       SUBJECT;
+    BITCODE_TU       AUTHOR;
+    BITCODE_TU       KEYWORDS;
+    BITCODE_TU       COMMENTS;
+    BITCODE_TU       LASTSAVEDBY;
+    BITCODE_TU       REVISIONNUMBER;
+    BITCODE_TU       HYPERLINKBASE;
+    BITCODE_TIMEBLL  total_editing_time;
+    BITCODE_TIMEBLL  TDCREATE; /* format TIMEBLL */
+    BITCODE_TIMEBLL  TDUPDATE;
+    BITCODE_RS       num_props;
+    Dwg_SummaryInfo_Property *props;
+    BITCODE_RL       unknown1;
+    BITCODE_RL       unknown2;
+  } summaryinfo;
+  
   Dwg_Chain thumbnail;
 
   Dwg_Header_Variables header_vars;
-
+  
   BITCODE_BS num_classes;    /*!< size of dwg_class */
   Dwg_Class * dwg_class;     /*!< list of all classes */
 
@@ -5685,7 +5711,7 @@ typedef struct _dwg_struct
   Dwg_Object_Ref **object_ref;   /*!< array of all handles */
   struct _inthash *object_map;   /*!< map of all handles */
   int dirty_refs; /* 1 if we added an entity, and invalidated all the internal ref->obj's */
-
+ 
   Dwg_Object *mspace_block;
   Dwg_Object *pspace_block;
   /* Those TABLES might be empty with num_entries=0 */
