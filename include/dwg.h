@@ -5588,7 +5588,7 @@ typedef struct _dwg_struct
     BITCODE_RC   is_maint;
     BITCODE_RC   zero_one_or_three;
     BITCODE_RS   unknown_s[3];         /* <R13 */
-    BITCODE_RL   thumbnail_address;
+    BITCODE_RL   thumbnail_address;    /* THUMBNAIL or AdDb:Preview */
     BITCODE_RC   dwg_version;
     BITCODE_RC   maint_version;
     BITCODE_RS   codepage;
@@ -5596,9 +5596,9 @@ typedef struct _dwg_struct
     BITCODE_RC   app_dwg_version;      /* R2004+ */
     BITCODE_RC   app_maint_version;    /* R2004+ */
     BITCODE_RL   security_type;        /* R2004+ */
-    BITCODE_RL   rl_1c_address;        /* R2004+ */
+    BITCODE_RL   rl_1c_address;        /* R2004+ mostly 0 */
     BITCODE_RL   summaryinfo_address;  /* R2004+ */
-    BITCODE_RL   vba_proj_address;     /* R2004+ */
+    BITCODE_RL   vbaproj_address;      /* R2004+ */
     BITCODE_RL   rl_28_80;             /* R2004+ */
     BITCODE_RL   num_sections;
     Dwg_Section* section;

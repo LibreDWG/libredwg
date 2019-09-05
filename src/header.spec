@@ -57,10 +57,10 @@
     FIELD_RC (app_dwg_version, 0);
     FIELD_RC (app_maint_version, 0);
     FIELD_RL (security_type, 0);
-    FIELD_RL (rl_1c_address, 0);
+    FIELD_RL (rl_1c_address, 0); /* mostly 0 */
     FIELD_RL (summaryinfo_address, 0);
-    FIELD_RL (vba_proj_address, 0);
-    FIELD_RL (rl_28_80, 0);
+    FIELD_RL (vbaproj_address, 0);
+    FIELD_RL (rl_28_80, 0); /* mostly 128/0x80 */
     ENCODER {
       for (i = 0; i < 54; i++)
         bit_write_RC (dat, 0);

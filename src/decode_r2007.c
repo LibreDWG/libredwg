@@ -1745,7 +1745,16 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
                                      pages_map);
   error |= read_2007_section_handles (dat, hdl_dat, dwg, sections_map,
                                       pages_map);
-  error |= read_2007_section_summary (dat, dwg, sections_map, pages_map);
+  if (dwg->header.summaryinfo_address)
+    error |= read_2007_section_summary (dat, dwg, sections_map, pages_map);
+  //if (dwg->header.thumbnail_address)
+  //  error |= read_2007_section_preview (dat, dwg);
+  //if (dwg->header.vbaproj_address)
+  //  error |= read_2007_section_vbaproject (dat, dwg);
+  //error |= read_2007_section_appinfo (dat, dwg);
+  //error |= read_2007_section_filedeplist (dat, dwg);
+  //error |= read_2007_section_security (dat, dwg);
+  //error |= read_2007_section_revhistory (dat, dwg);
   // read_2007_blocks (dat, hdl_dat, dwg, sections_map, pages_map);
 
  error:

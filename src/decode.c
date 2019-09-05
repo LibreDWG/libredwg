@@ -142,8 +142,8 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dwg->object_map = hash_new (dat->size / 1000);
   if (!dwg->object_map)
     {
-      dwg->object_map
-          = hash_new (1024); // whatever, we are obviously on a tiny system
+      // whatever, we are obviously on a tiny system
+      dwg->object_map = hash_new (1024);
       if (!dwg->object_map)
         {
           LOG_ERROR ("Out of memory");
@@ -151,7 +151,9 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
     }
 
-  memset (&dwg->header_vars, 0, sizeof (Dwg_Header_Variables));
+  //memset (&dwg->header, 0, sizeof (dwg->header)); // nope. needed for version
+  memset (&dwg->header_vars, 0, sizeof (dwg->header_vars));
+  memset (&dwg->summaryinfo, 0, sizeof (dwg->summaryinfo));
   memset (&dwg->r2004_header.file_ID_string[0], 0, sizeof (dwg->r2004_header));
   memset (&dwg->auxheader.aux_intro[0], 0, sizeof (dwg->auxheader));
   memset (&dwg->second_header, 0, sizeof (dwg->second_header));
@@ -2049,7 +2051,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       for (j = 0; j < 8; ++j)
         es.long_data[j] ^= sec_mask;
 
-      LOG_INFO ("=== Section %s (%u) ===\n", info->name, i)
+      LOG_INFO ("=== Section %s (%u) @%u ===\n", info->name, i, address)
       if (es.fields.tag != 0x4163043b)
         {
           LOG_WARN ("Section Tag:      0x%x  (should be 0x4163043b)",
@@ -2066,9 +2068,10 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
                 (unsigned)es.fields.data_size)
       LOG_INFO ("Comp data size:   0x%x\n", (unsigned)es.fields.section_size)
       LOG_TRACE ("StartOffset:      0x%x\n", (unsigned)es.fields.address)
-      LOG_HANDLE ("Unknown:          0x%x\n", (unsigned)es.fields.unknown);
+      LOG_HANDLE ("Unknown:          0x%x\n", (unsigned)es.fields.unknown)
       LOG_HANDLE ("Checksum1:        0x%x\n", (unsigned)es.fields.checksum_1)
-      LOG_HANDLE ("Checksum2:        0x%x\n\n", (unsigned)es.fields.checksum_2);
+      LOG_HANDLE ("Checksum2:        0x%x\n", (unsigned)es.fields.checksum_2)
+      LOG_TRACE ("Section start:    %lu\n\n", dat->byte);
 
       //GH #126 part 4
       //LOG_INSANE ("i:                     %u\n", i)
@@ -2100,8 +2103,8 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
         }
       else
         {
-          memcpy (&decomp[i * info->size], &dat->chain[address + es.fields.address + 32],
-                  info->size);
+          memcpy (&decomp[i * info->size],
+                  &dat->chain[address + es.fields.address + 32], info->size);
           sec_dat->chain = decomp;
           sec_dat->size = info->size;
         }
@@ -2445,11 +2448,18 @@ read_2004_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   #include "summaryinfo.spec"
 
-  *dat = old_dat; //unrestrict
   if (sec_dat.chain)
     free (sec_dat.chain);
+  *dat = old_dat; //unrestrict
   return error;
 }
+
+//static int read_2004_section_preview (dat, dwg)
+//static int read_2004_section_vbaproject (dat, dwg)
+//static int read_2004_section_appinfo (dat, dwg)
+//static int read_2004_section_filedeplist (dat, dwg)
+//static int read_2004_section_security (dat, dwg)
+//static int read_2004_section_revhistory (dat, dwg)
 
 static void
 decrypt_R2004_header (Bit_Chain *restrict dat, BITCODE_RC *restrict decrypted,
@@ -2584,7 +2594,16 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   error |= read_2004_section_classes (dat, dwg);
   error |= read_2004_section_header (dat, dwg);
   error |= read_2004_section_handles (dat, dwg);
-  error |= read_2004_section_summary (dat, dwg);
+  if (dwg->header.summaryinfo_address)
+    error |= read_2004_section_summary (dat, dwg);
+  //if (dwg->header.thumbnail_address)
+  //  error |= read_2004_section_preview (dat, dwg);
+  //if (dwg->header.vbaproj_address)
+  //  error |= read_2004_section_vbaproject (dat, dwg);
+  //error |= read_2004_section_appinfo (dat, dwg);
+  //error |= read_2004_section_filedeplist (dat, dwg);
+  //error |= read_2004_section_security (dat, dwg);
+  //error |= read_2004_section_revhistory (dat, dwg);
 
   /* Clean up. XXX? Need this to write the sections, at least the name and type
    */
