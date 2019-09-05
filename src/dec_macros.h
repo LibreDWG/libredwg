@@ -489,6 +489,12 @@
     LOG_TRACE (#nam ": %.8f  (" FORMAT_BL ", " FORMAT_BL ") [TIMEBLL %d]\n",  \
                _obj->nam.value, _obj->nam.days, _obj->nam.ms, dxf);           \
   }
+#define FIELD_TIMERLL(nam, dxf)                                               \
+  {                                                                           \
+    _obj->nam = bit_read_TIMERLL (dat);                                       \
+    LOG_TRACE (#nam ": %.8f  (" FORMAT_RL ", " FORMAT_RL ") [TIMERLL %d]\n",  \
+               _obj->nam.value, _obj->nam.days, _obj->nam.ms, dxf);           \
+  }
 #define FIELD_CMC(color, dxf1, dxf2)                                          \
   {                                                                           \
     bit_read_CMC (dat, &_obj->color);                                         \

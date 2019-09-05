@@ -1566,6 +1566,30 @@ bit_write_TIMEBLL (Bit_Chain *dat, BITCODE_TIMEBLL date)
     }
 }
 
+BITCODE_TIMERLL
+bit_read_TIMERLL (Bit_Chain *dat)
+{
+  BITCODE_TIMERLL date;
+  BITCODE_BD ms;
+  date.days = bit_read_RL (dat);
+  date.ms = bit_read_RL (dat);
+  ms = (double)date.ms;
+  while (ms > 1.0)
+    ms /= 10.0;
+  date.value = date.days + ms; // just for display, not calculations
+  return date;
+}
+
+/** Write 2x time RL.
+ *  Ignores the double value.
+ */
+void
+bit_write_TIMERLL (Bit_Chain *dat, BITCODE_TIMERLL date)
+{
+  bit_write_RL (dat, date.days);
+  bit_write_RL (dat, date.ms);
+}
+
 /** Read color
  */
 void

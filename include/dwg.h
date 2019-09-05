@@ -210,6 +210,7 @@ typedef struct _dwg_bitcode_3bd
 } Dwg_Bitcode_3BD;
 
 typedef Dwg_Bitcode_TimeBLL BITCODE_TIMEBLL;
+typedef Dwg_Bitcode_TimeBLL BITCODE_TIMERLL;
 /* #define FORMAT_TIMEBLL FORMAT_BL "." FORMAT_BL */
 typedef Dwg_Bitcode_2RD  BITCODE_2RD;
 typedef Dwg_Bitcode_2BD  BITCODE_2BD;
@@ -5687,9 +5688,9 @@ typedef struct _dwg_struct
     BITCODE_TU       LASTSAVEDBY;
     BITCODE_TU       REVISIONNUMBER;
     BITCODE_TU       HYPERLINKBASE;
-    BITCODE_TIMEBLL  total_editing_time;
-    BITCODE_TIMEBLL  TDCREATE; /* format TIMEBLL */
-    BITCODE_TIMEBLL  TDUPDATE;
+    BITCODE_TIMERLL  TDINDWG; /* days + ms, fixed size! */
+    BITCODE_TIMERLL  TDCREATE;
+    BITCODE_TIMERLL  TDUPDATE;
     BITCODE_RS       num_props;
     Dwg_SummaryInfo_Property *props;
     BITCODE_RL       unknown1;

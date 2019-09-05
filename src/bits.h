@@ -235,28 +235,24 @@ EXPORT BITCODE_TU bit_utf8_to_TU (char *restrict str)
 /* compare an ASCII/utf-8 string to a r2007+ name */
 int bit_eq_TU (const char *str, BITCODE_TU restrict wstr);
 
-BITCODE_RL
-bit_read_L (Bit_Chain *dat);
-
+BITCODE_RL bit_read_L (Bit_Chain *dat);
 void bit_write_L (Bit_Chain *dat, BITCODE_RL value);
 
-BITCODE_TIMEBLL
-bit_read_TIMEBLL (Bit_Chain *dat);
+BITCODE_TIMEBLL bit_read_TIMEBLL (Bit_Chain *dat);
+void bit_write_TIMEBLL (Bit_Chain *dat, BITCODE_TIMEBLL date);
 
-void bit_write_TIMEBLL (Bit_Chain *dat, BITCODE_TIMEBLL value);
+BITCODE_TIMERLL bit_read_TIMERLL (Bit_Chain *dat);
+void bit_write_TIMERLL (Bit_Chain *dat, BITCODE_TIMERLL date);
 
 void bit_read_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color);
-
 void bit_write_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color);
 
 void bit_read_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat,
                    Bit_Chain *str_dat, Dwg_Color *restrict color);
-
 void bit_write_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat,
                     Bit_Chain *str_dat, Dwg_Color *restrict color);
 
 int bit_search_sentinel (Bit_Chain *dat, unsigned char sentinel[16]);
-
 void bit_write_sentinel (Bit_Chain *dat, unsigned char sentinel[16]);
 
 void bit_chain_alloc (Bit_Chain *dat);
