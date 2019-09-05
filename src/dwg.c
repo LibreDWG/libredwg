@@ -1432,145 +1432,147 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg,
   BITCODE_H ctrl = NULL, *hdlv;
   Dwg_Object *obj;
   Dwg_Object_APPID_CONTROL *_obj; // just some random generic type
+  Dwg_Header_Variables *vars = &dwg->header_vars;
 
   // look for the _CONTROL table, and search for name in all entries
   if (strEQc (table, "BLOCK"))
     {
-      if (!(ctrl = dwg->header_vars.BLOCK_CONTROL_OBJECT))
-        dwg->header_vars.BLOCK_CONTROL_OBJECT = ctrl
-          = dwg_find_table_control (dwg, "BLOCK_CONTROL");
+      if (!(ctrl = vars->BLOCK_CONTROL_OBJECT))
+        vars->BLOCK_CONTROL_OBJECT = ctrl
+            = dwg_find_table_control (dwg, "BLOCK_CONTROL");
     }
   else if (strEQc (table, "LAYER"))
     {
-      if (!(ctrl = dwg->header_vars.LAYER_CONTROL_OBJECT))
-        dwg->header_vars.LAYER_CONTROL_OBJECT = ctrl
-          = dwg_find_table_control (dwg, "LAYER_CONTROL");
+      if (!(ctrl = vars->LAYER_CONTROL_OBJECT))
+        vars->LAYER_CONTROL_OBJECT = ctrl
+            = dwg_find_table_control (dwg, "LAYER_CONTROL");
     }
   else if (strEQc (table, "STYLE"))
     {
-      if (!(ctrl = dwg->header_vars.STYLE_CONTROL_OBJECT))
-        dwg->header_vars.STYLE_CONTROL_OBJECT = ctrl
-          = dwg_find_table_control (dwg, "STYLE_CONTROL");
+      if (!(ctrl = vars->STYLE_CONTROL_OBJECT))
+        vars->STYLE_CONTROL_OBJECT = ctrl
+            = dwg_find_table_control (dwg, "STYLE_CONTROL");
     }
   else if (strEQc (table, "LTYPE"))
     {
-      if (!(ctrl = dwg->header_vars.LTYPE_CONTROL_OBJECT))
-        dwg->header_vars.LTYPE_CONTROL_OBJECT = ctrl
+      if (!(ctrl = vars->LTYPE_CONTROL_OBJECT))
+        vars->LTYPE_CONTROL_OBJECT = ctrl
             = dwg_find_table_control (dwg, "LTYPE_CONTROL");
       if (strEQc (name, "BYLAYER") || strEQc (name, "ByLayer"))
         {
-          if (dwg->header_vars.LTYPE_BYLAYER)
-            return dwg->header_vars.LTYPE_BYLAYER;
+          if (vars->LTYPE_BYLAYER)
+            return vars->LTYPE_BYLAYER;
         }
       else if (strEQc (name, "BYBLOCK") || strEQc (name, "ByBlock"))
         {
-          if (dwg->header_vars.LTYPE_BYBLOCK)
-            return dwg->header_vars.LTYPE_BYBLOCK;
+          if (vars->LTYPE_BYBLOCK)
+            return vars->LTYPE_BYBLOCK;
         }
       else if (strEQc (name, "CONTINUOUS") || strEQc (name, "Continuous"))
         {
-          if (dwg->header_vars.LTYPE_CONTINUOUS)
-            return dwg->header_vars.LTYPE_CONTINUOUS;
+          if (vars->LTYPE_CONTINUOUS)
+            return vars->LTYPE_CONTINUOUS;
         }
     }
   else if (strEQc (table, "VIEW"))
     {
-      if (!(ctrl = dwg->header_vars.VIEW_CONTROL_OBJECT))
-        dwg->header_vars.VIEW_CONTROL_OBJECT = ctrl
-          = dwg_find_table_control (dwg, "VIEW_CONTROL");
+      if (!(ctrl = vars->VIEW_CONTROL_OBJECT))
+        vars->VIEW_CONTROL_OBJECT = ctrl
+            = dwg_find_table_control (dwg, "VIEW_CONTROL");
     }
   else if (strEQc (table, "UCS"))
     {
-      if (!(ctrl = dwg->header_vars.UCS_CONTROL_OBJECT))
-        dwg->header_vars.UCS_CONTROL_OBJECT = ctrl
-          = dwg_find_table_control (dwg, "UCS_CONTROL");
+      if (!(ctrl = vars->UCS_CONTROL_OBJECT))
+        vars->UCS_CONTROL_OBJECT = ctrl
+            = dwg_find_table_control (dwg, "UCS_CONTROL");
     }
   else if (strEQc (table, "VPORT"))
     {
-      if (!(ctrl = dwg->header_vars.VPORT_CONTROL_OBJECT))
-        dwg->header_vars.VPORT_CONTROL_OBJECT = ctrl
-          = dwg_find_table_control (dwg, "VPORT_CONTROL");
+      if (!(ctrl = vars->VPORT_CONTROL_OBJECT))
+        vars->VPORT_CONTROL_OBJECT = ctrl
+            = dwg_find_table_control (dwg, "VPORT_CONTROL");
     }
   else if (strEQc (table, "APPID"))
     {
-      if (!(ctrl = dwg->header_vars.APPID_CONTROL_OBJECT))
-        dwg->header_vars.APPID_CONTROL_OBJECT = ctrl
-          = dwg_find_table_control (dwg, "APPID_CONTROL");
+      if (!(ctrl = vars->APPID_CONTROL_OBJECT))
+        vars->APPID_CONTROL_OBJECT = ctrl
+            = dwg_find_table_control (dwg, "APPID_CONTROL");
     }
   // TODO ACAD_DSTYLE_DIM* are probably different handles
   else if (strEQc (table, "DIMSTYLE") || memBEGINc (table, "ACAD_DSTYLE_DIM"))
     {
-      if (!(ctrl = dwg->header_vars.DIMSTYLE_CONTROL_OBJECT))
-        dwg->header_vars.DIMSTYLE_CONTROL_OBJECT = ctrl
-          = dwg_find_table_control (dwg, "DIMSTYLE_CONTROL");
+      if (!(ctrl = vars->DIMSTYLE_CONTROL_OBJECT))
+        vars->DIMSTYLE_CONTROL_OBJECT = ctrl
+            = dwg_find_table_control (dwg, "DIMSTYLE_CONTROL");
     }
   else if (strEQc (table, "VPORT_ENTITY"))
     {
-      if (!(ctrl = dwg->header_vars.VPORT_ENTITY_CONTROL_OBJECT))
-        dwg->header_vars.VPORT_ENTITY_CONTROL_OBJECT = ctrl
-          = dwg_find_table_control (dwg, "VPORT_ENTITY_CONTROL");
+      if (!(ctrl = vars->VPORT_ENTITY_CONTROL_OBJECT))
+        vars->VPORT_ENTITY_CONTROL_OBJECT = ctrl
+            = dwg_find_table_control (dwg, "VPORT_ENTITY_CONTROL");
     }
   else if (strEQc (table, "GROUP"))
     {
-      if (!(ctrl = dwg->header_vars.DICTIONARY_ACAD_GROUP))
-        dwg->header_vars.DICTIONARY_ACAD_GROUP = ctrl
-          = dwg_find_dictionary (dwg, "ACAD_GROUP");
+      if (!(ctrl = vars->DICTIONARY_ACAD_GROUP))
+        vars->DICTIONARY_ACAD_GROUP = ctrl
+            = dwg_find_dictionary (dwg, "ACAD_GROUP");
     }
   else if (strEQc (table, "MLSTYLE") || strEQc (table, "ACAD_MLEADERVER"))
     {
-      if (!(ctrl = dwg->header_vars.DICTIONARY_ACAD_MLINESTYLE))
-        dwg->header_vars.DICTIONARY_ACAD_MLINESTYLE = ctrl
-          = dwg_find_dictionary (dwg, "ACAD_MLINESTYLE");
+      if (!(ctrl = vars->DICTIONARY_ACAD_MLINESTYLE))
+        vars->DICTIONARY_ACAD_MLINESTYLE = ctrl
+            = dwg_find_dictionary (dwg, "ACAD_MLINESTYLE");
     }
   else if (strEQc (table, "NAMED_OBJECT"))
     // The very first DICTIONARY 0.1.C with all the names
     {
-      if (!(ctrl = dwg->header_vars.DICTIONARY_NAMED_OBJECT))
-        dwg->header_vars.DICTIONARY_NAMED_OBJECT = ctrl
-          = dwg_add_handleref (dwg, 3, 0xC, NULL);
+      if (!(ctrl = vars->DICTIONARY_NAMED_OBJECT))
+        vars->DICTIONARY_NAMED_OBJECT = ctrl
+            = dwg_add_handleref (dwg, 3, 0xC, NULL);
     }
   else if (strEQc (table, "LAYOUT"))
     {
-      if (!(ctrl = dwg->header_vars.DICTIONARY_LAYOUT))
-        dwg->header_vars.DICTIONARY_LAYOUT = ctrl
-          = dwg_find_dictionary (dwg, "ACAD_LAYOUT");
+      if (!(ctrl = vars->DICTIONARY_LAYOUT))
+        vars->DICTIONARY_LAYOUT = ctrl
+            = dwg_find_dictionary (dwg, "ACAD_LAYOUT");
     }
   else if (strEQc (table, "PLOTSETTINGS"))
     {
-      if (!(ctrl = dwg->header_vars.DICTIONARY_PLOTSETTINGS))
-        dwg->header_vars.DICTIONARY_PLOTSETTINGS = ctrl
-          = dwg_find_dictionary (dwg, "ACAD_PLOTSETTINGS");
+      if (!(ctrl = vars->DICTIONARY_PLOTSETTINGS))
+        vars->DICTIONARY_PLOTSETTINGS = ctrl
+            = dwg_find_dictionary (dwg, "ACAD_PLOTSETTINGS");
     }
   else if (strEQc (table, "PLOTSTYLENAME"))
     {
-      if (!(ctrl = dwg->header_vars.DICTIONARY_PLOTSTYLENAME))
-        dwg->header_vars.DICTIONARY_PLOTSTYLENAME = ctrl
-          = dwg_find_dictionary (dwg, "ACAD_PLOTSTYLENAME");
+      if (!(ctrl = vars->DICTIONARY_PLOTSTYLENAME))
+        vars->DICTIONARY_PLOTSTYLENAME = ctrl
+            = dwg_find_dictionary (dwg, "ACAD_PLOTSTYLENAME");
     }
   // TODO but maybe the mappers are different
-  else if (strEQc (table, "MATERIAL") || memBEGINc (table, "ACAD_MATERIAL_MAPPER"))
+  else if (strEQc (table, "MATERIAL")
+           || memBEGINc (table, "ACAD_MATERIAL_MAPPER"))
     {
-      if (!(ctrl = dwg->header_vars.DICTIONARY_MATERIAL))
-        dwg->header_vars.DICTIONARY_MATERIAL = ctrl
-          = dwg_find_dictionary (dwg, "ACAD_MATERIAL");
+      if (!(ctrl = vars->DICTIONARY_MATERIAL))
+        vars->DICTIONARY_MATERIAL = ctrl
+            = dwg_find_dictionary (dwg, "ACAD_MATERIAL");
     }
   else if (strEQc (table, "COLOR"))
     {
-      if (!(ctrl = dwg->header_vars.DICTIONARY_COLOR))
-        dwg->header_vars.DICTIONARY_COLOR = ctrl
-          = dwg_find_dictionary (dwg, "ACAD_COLOR");
+      if (!(ctrl = vars->DICTIONARY_COLOR))
+        vars->DICTIONARY_COLOR = ctrl
+            = dwg_find_dictionary (dwg, "ACAD_COLOR");
     }
   else if (strEQc (table, "VISUALSTYLE"))
     {
-      if (!(ctrl = dwg->header_vars.DICTIONARY_VISUALSTYLE))
-        dwg->header_vars.DICTIONARY_VISUALSTYLE = ctrl
-          = dwg_find_dictionary (dwg, "ACAD_VISUALSTYLE");
+      if (!(ctrl = vars->DICTIONARY_VISUALSTYLE))
+        vars->DICTIONARY_VISUALSTYLE = ctrl
+            = dwg_find_dictionary (dwg, "ACAD_VISUALSTYLE");
     }
   else if (strEQc (table, "LIGHTLIST"))
     {
-      if (!(ctrl = dwg->header_vars.DICTIONARY_LIGHTLIST))
-        dwg->header_vars.DICTIONARY_LIGHTLIST = ctrl
-          = dwg_find_dictionary (dwg, "ACAD_LIGHTLIST");
+      if (!(ctrl = vars->DICTIONARY_LIGHTLIST))
+        vars->DICTIONARY_LIGHTLIST = ctrl
+            = dwg_find_dictionary (dwg, "ACAD_LIGHTLIST");
     }
   else
     {
@@ -1578,7 +1580,7 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg,
       return 0;
     }
   if (!ctrl)
-    {  // TODO: silently search table_control. header_vars can be empty
+    { // TODO: silently search table_control. header_vars can be empty
       LOG_TRACE ("dwg_find_tablehandle: Empty header_vars table %s\n", table);
       return 0;
     }
@@ -1590,13 +1592,13 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg,
     }
   if (!dwg_obj_is_control (obj))
     {
-      LOG_ERROR ("dwg_find_tablehandle: Could not resolve CONTROL object %s for table %s",
+      LOG_ERROR ("dwg_find_tablehandle: Could not resolve CONTROL object %s "
+                 "for table %s",
                  obj->name, table);
       return 0;
     }
   _obj = obj->tio.object->tio.APPID_CONTROL; // just random type
-  dwg_dynapi_entity_value (_obj, obj->name, "num_entries",
-                           &num_entries, NULL);
+  dwg_dynapi_entity_value (_obj, obj->name, "num_entries", &num_entries, NULL);
   if (!num_entries)
     return 0;
   dwg_dynapi_entity_value (_obj, obj->name, "entries", &hdlv, NULL);
@@ -1612,8 +1614,7 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg,
       if (!hobj)
         continue;
       _o = hobj->tio.object->tio.APPID;
-      dwg_dynapi_entity_utf8text (_o, hobj->name, "name",
-                                  &hdlname, NULL);
+      dwg_dynapi_entity_utf8text (_o, hobj->name, "name", &hdlname, NULL);
       LOG_HANDLE (" %s.%s[%d] => %s.name: %s\n", obj->name, "entries", i,
                   hobj->name, hdlname ? hdlname : "NULL");
       if (hdlname && strEQ (name, hdlname))
