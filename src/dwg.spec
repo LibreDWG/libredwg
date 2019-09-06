@@ -1128,8 +1128,8 @@ DWG_ENTITY(DIMENSION_ORDINATE)
   }
 
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (dimstyle, 5, 3);
-  FIELD_HANDLE (block, 5, 2);
+  FIELD_HANDLE (dimstyle, 5, 0);
+  FIELD_HANDLE (block, 5, 0);
 
 DWG_ENTITY_END
 
@@ -1565,11 +1565,10 @@ DWG_ENTITY(SPLINE)
       FIELD_VALUE(scenario) = 1;
   }
 
-  DXF {
-    // extrusion on planar
-    VALUE_RD(0.0, 210); VALUE_RD(0.0, 220); VALUE_RD(1.0, 230);
-    FIELD_BL(flag, 70);
-  }
+  // extrusion on planar
+  DXF { VALUE_RD(0.0, 210); VALUE_RD(0.0, 220); VALUE_RD(1.0, 230);
+        FIELD_BL(flag, 70);
+      }
   FIELD_BL (degree, 71);
 
   if (FIELD_VALUE(scenario) & 2) // bezier spline
@@ -1602,7 +1601,7 @@ DWG_ENTITY(SPLINE)
 
   if (FIELD_VALUE(scenario) & 1) {
     FIELD_VECTOR (knots, BD, num_knots, 40)
-    REPEAT (num_ctrl_pts, ctrl_pts, Dwg_SPLINE_control_point)
+    REPEAT(num_ctrl_pts, ctrl_pts, Dwg_SPLINE_control_point)
     REPEAT_BLOCK
         SUB_FIELD_3BD_inl (ctrl_pts[rcount1], xyz, 10);
         if (!FIELD_VALUE(weighted))
@@ -1628,7 +1627,7 @@ DWG_ENTITY_END
 
 //TODO: 37, 38 and 39 are ACIS entities
 
-#define PARSE_WIRE_STRUCT(name)                       \
+#define WIRESTRUCT_fields(name)                       \
   FIELD_RC (name.type, 0);                            \
   FIELD_BL (name.selection_marker, 0);                \
   FIELD_BS (name.color, 0);                           \
@@ -1765,7 +1764,7 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
               FIELD_BL (num_wires, 0);
               REPEAT (num_wires, wires, Dwg_3DSOLID_wire)
               REPEAT_BLOCK
-                  PARSE_WIRE_STRUCT (wires[rcount1])
+                  WIRESTRUCT_fields (wires[rcount1])
               END_REPEAT_BLOCK
               SET_PARENT_OBJ (wires)
               END_REPEAT (wires);
@@ -1779,9 +1778,9 @@ static int decode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
                   SUB_FIELD_B (silhouettes[rcount1], vp_perspective, 0);
                   SUB_FIELD_BL (silhouettes[rcount1], num_wires, 0);
                   REPEAT2 (silhouettes[rcount1].num_wires, silhouettes[rcount1].wires,
-                          Dwg_3DSOLID_wire)
+                           Dwg_3DSOLID_wire)
                   REPEAT_BLOCK
-                      PARSE_WIRE_STRUCT (silhouettes[rcount1].wires[rcount2])
+                      WIRESTRUCT_fields (silhouettes[rcount1].wires[rcount2])
                   END_REPEAT_BLOCK
                   SET_PARENT_OBJ (silhouettes[rcount1].wires)
                   END_REPEAT (silhouettes[rcount1].wires);
@@ -1861,7 +1860,7 @@ static int free_3dsolid(Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _
 
       REPEAT (num_wires, wires, Dwg_3DSOLID_wire)
       REPEAT_BLOCK
-        PARSE_WIRE_STRUCT (wires[rcount1])
+        WIRESTRUCT_fields (wires[rcount1])
         END_REPEAT_BLOCK
         SET_PARENT_OBJ (wires)
       END_REPEAT (wires);
@@ -1877,7 +1876,7 @@ static int free_3dsolid(Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _
         REPEAT2 (silhouettes[rcount1].num_wires, silhouettes[rcount1].wires,
                 Dwg_3DSOLID_wire)
         REPEAT_BLOCK
-          PARSE_WIRE_STRUCT (silhouettes[rcount1].wires[rcount2])
+          WIRESTRUCT_fields (silhouettes[rcount1].wires[rcount2])
         END_REPEAT_BLOCK
         END_REPEAT (silhouettes[rcount1].wires);
       END_REPEAT_BLOCK
@@ -3451,7 +3450,7 @@ DWG_OBJECT(MLINESTYLE)
   // FIXME: init HANDLE_STREAM earlier, merge into upper repeat_block
   SINCE (R_2018)
   {
-    _REPEAT_N (FIELD_VALUE (num_lines), lines, Dwg_MLINESTYLE_line, 1)
+    _REPEAT_N (_obj->num_lines, lines, Dwg_MLINESTYLE_line, 1)
     REPEAT_BLOCK
     SUB_FIELD_HANDLE (lines[rcount1], lt.ltype, 5, 6);
     END_REPEAT_BLOCK
@@ -3557,11 +3556,9 @@ DWG_ENTITY(HATCH)
 #ifdef IS_JSON
               NOCOMMA; ENDHASH;
 #endif
-              END_REPEAT(paths);
-              return DWG_ERR_VALUEOUTOFBOUNDS;
+              END_REPEAT(paths); return DWG_ERR_VALUEOUTOFBOUNDS;
             }
-          REPEAT2(paths[rcount1].num_segs_or_paths, paths[rcount1].segs,
-                  Dwg_HATCH_PathSeg)
+          REPEAT2(paths[rcount1].num_segs_or_paths, paths[rcount1].segs, Dwg_HATCH_PathSeg)
           REPEAT_BLOCK
               SUB_FIELD_RC (paths[rcount1].segs[rcount2],type_status, 72);
               switch (FIELD_VALUE(paths[rcount1].segs[rcount2].type_status))
@@ -3598,9 +3595,8 @@ DWG_ENTITY(HATCH)
 #ifdef IS_JSON
                           NOCOMMA; ENDHASH;
                           NOCOMMA; ENDHASH;
-                          END_REPEAT(paths[rcount1].segs);
-                          END_REPEAT(paths);
 #endif
+                          END_REPEAT(paths[rcount1].segs); END_REPEAT(paths);
                           return DWG_ERR_VALUEOUTOFBOUNDS;
                         }
                       FIELD_VECTOR (paths[rcount1].segs[rcount2].knots, BD,
@@ -3613,13 +3609,10 @@ DWG_ENTITY(HATCH)
                           NOCOMMA; ENDHASH;
                           NOCOMMA; ENDHASH;
 #endif
-                          END_REPEAT(paths[rcount1].segs);
-                          END_REPEAT(paths);
+                          END_REPEAT(paths[rcount1].segs); END_REPEAT(paths);
                           return DWG_ERR_VALUEOUTOFBOUNDS;
                         }
-                      REPEAT3(paths[rcount1].segs[rcount2].num_control_points,
-                              paths[rcount1].segs[rcount2].control_points,
-                              Dwg_HATCH_ControlPoint)
+                      REPEAT3(paths[rcount1].segs[rcount2].num_control_points, paths[rcount1].segs[rcount2].control_points, Dwg_HATCH_ControlPoint)
                       REPEAT_BLOCK
                           SUB_FIELD_2RD (paths[rcount1].segs[rcount2].control_points[rcount3], point, 10);
                           if (FIELD_VALUE(paths[rcount1].segs[rcount2].is_rational))
@@ -3645,8 +3638,7 @@ DWG_ENTITY(HATCH)
                       NOCOMMA; ENDHASH;
                       NOCOMMA; ENDHASH;
 #endif
-                      END_REPEAT(paths[rcount1].segs);
-                      END_REPEAT(paths);
+                      END_REPEAT(paths[rcount1].segs); END_REPEAT(paths);
                       return DWG_ERR_VALUEOUTOFBOUNDS;
                 }
           END_REPEAT_BLOCK
@@ -3658,8 +3650,7 @@ DWG_ENTITY(HATCH)
           SUB_FIELD_B (paths[rcount1],bulges_present, 72);
           SUB_FIELD_B (paths[rcount1],closed, 73);
           SUB_FIELD_BL (paths[rcount1],num_segs_or_paths, 93);
-          REPEAT2(paths[rcount1].num_segs_or_paths, paths[rcount1].polyline_paths,
-                  Dwg_HATCH_PolylinePath)
+          REPEAT2(paths[rcount1].num_segs_or_paths, paths[rcount1].polyline_paths, Dwg_HATCH_PolylinePath)
           REPEAT_BLOCK
               FIELD_2RD (paths[rcount1].polyline_paths[rcount2].point, 10);
               if (FIELD_VALUE(paths[rcount1].bulges_present))
@@ -4162,7 +4153,7 @@ DWG_OBJECT(OBJECTCONTEXTDATA)
 DWG_OBJECT_END
 
 // 20.4.99 Value, page 241. for FIELD and TABLE
-#define Table_Value(value) \
+#define TABLE_value_fields(value) \
   SINCE (R_2007) \
     { \
       FIELD_BL (value.flags, 93); \
@@ -4252,7 +4243,7 @@ DWG_OBJECT(FIELD)
   FIELD_BL (evaluation_error_code, 96);
   //DEBUG_HERE_OBJ
   FIELD_T (evaluation_error_msg, 300);
-  Table_Value(value)
+  TABLE_value_fields(value)
   if (error & DWG_ERR_INVALIDTYPE)
     return error;
 
@@ -4263,7 +4254,7 @@ DWG_OBJECT(FIELD)
   REPEAT(num_childval, childval, Dwg_FIELD_ChildValue)
   REPEAT_BLOCK
       SUB_FIELD_T (childval[rcount1],key, 6);
-      Table_Value(childval[rcount1].value)
+      TABLE_value_fields(childval[rcount1].value)
       if (error & DWG_ERR_INVALIDTYPE)
         {
 #ifdef IS_JSON
@@ -4435,7 +4426,7 @@ DWG_OBJECT_END
 #ifdef DEBUG_CLASSES
 
 // 20.4.101.3 Content format for TABLECONTENT and Cell_Style_Field
-#define Content_Format(fmt) \
+#define ContentFormat_fields(fmt) \
       FIELD_BL (fmt.property_override_flags, 90); \
       FIELD_BL (fmt.property_flags, 91); \
       FIELD_BL (fmt.value_data_type, 92); \
@@ -4449,14 +4440,14 @@ DWG_OBJECT_END
       FIELD_BD (fmt.text_height, 92)
 
 // Cell style 20.4.101.4 for TABLE, TABLECONTENT and CELLSTYLEMAP
-#define Cell_Style_Fields(sty) \
+#define CellStyle_fields(sty) \
       FIELD_BL (sty.type, 90); \
       FIELD_BS (sty.data_flags, 170); \
       FIELD_BL (sty.property_override_flags, 91); \
       FIELD_BL (sty.merge_flags, 92); \
       FIELD_CMC (sty.background_color, 62,420);    \
       FIELD_BL (sty.content_layout, 93); \
-      Content_Format(sty.content_format); \
+      ContentFormat_fields(sty.content_format); \
       FIELD_BS (sty.margin_override_flags, 171); \
       FIELD_BD (sty.vert_margin, 40); \
       FIELD_BD (sty.horiz_margin, 40); \
@@ -4491,7 +4482,7 @@ DWG_OBJECT(TABLECONTENT)
   REPEAT_BLOCK
       SUB_FIELD_T (tdata.cols[rcount1],name, 300);
       SUB_FIELD_BL (tdata.cols[rcount1],custom_data, 91);
-      Cell_Style_Fields(tdata.cols[rcount1].cellstyle);
+      CellStyle_fields(tdata.cols[rcount1].cellstyle);
   END_REPEAT_BLOCK
   SET_PARENT(tdata.cols, &_obj->tdata)
   END_REPEAT(tdata.cols);
@@ -4510,7 +4501,7 @@ DWG_OBJECT(TABLECONTENT)
           REPEAT3(cell.num_customdata_items, cell.customdata_items, Dwg_TABLE_CustomDataItem)
           REPEAT_BLOCK
               SUB_FIELD_T (cell.customdata_items[rcount3],name, 300);
-              Table_Value(cell.customdata_items[rcount3].value);
+              TABLE_value_fields(cell.customdata_items[rcount3].value);
               if (error & DWG_ERR_INVALIDTYPE)
                 {
 #ifdef IS_JSON
@@ -4543,7 +4534,7 @@ DWG_OBJECT(TABLECONTENT)
               if (FIELD_VALUE(content.type) == 1)
                 {
                   // 20.4.99 Value, page 241
-                  Table_Value(content.value)
+                  TABLE_value_fields(content.value)
                   if (error & DWG_ERR_INVALIDTYPE)
                     {
 #ifdef IS_JSON
@@ -4576,7 +4567,7 @@ DWG_OBJECT(TABLECONTENT)
               END_REPEAT(content.attrs);
               if (FIELD_VALUE(content.has_content_format_overrides))
                 {
-                  Content_Format(content.content_format);
+                  ContentFormat_fields(content.content_format);
                 }
               #undef content
           END_REPEAT_BLOCK
@@ -4595,7 +4586,7 @@ DWG_OBJECT(TABLECONTENT)
                 {
                   REPEAT_N(1, cell.geom_data, Dwg_CellContentGeometry)
                   REPEAT_BLOCK
-#define geom cell.geom_data[0]
+                      #define geom cell.geom_data[0]
                       SUB_FIELD_3BD (geom,dist_top_left, 0);
                       SUB_FIELD_3BD (geom,dist_center, 0);
                       SUB_FIELD_BD (geom,content_width, 0);
@@ -4617,7 +4608,7 @@ DWG_OBJECT(TABLECONTENT)
       REPEAT3(row.num_customdata_items, row.customdata_items, Dwg_TABLE_CustomDataItem)
       REPEAT_BLOCK
           SUB_FIELD_T (row.customdata_items[rcount3],name, 300);
-          Table_Value(row.customdata_items[rcount3].value);
+          TABLE_value_fields(row.customdata_items[rcount3].value);
           if (error & DWG_ERR_INVALIDTYPE)
             {
 #ifdef IS_JSON
@@ -4632,7 +4623,7 @@ DWG_OBJECT(TABLECONTENT)
       SET_PARENT_FIELD(row.customdata_items, row_parent, &_obj->row)
       END_REPEAT(row.customdata_items);
       {
-        Cell_Style_Fields(row.cellstyle);
+        CellStyle_fields(row.cellstyle);
         SUB_FIELD_BL (row,style_id, 90);
         SUB_FIELD_BL (row,height, 40);
       }
@@ -4671,7 +4662,7 @@ DWG_OBJECT(CELLSTYLEMAP)
   FIELD_BL (num_cells, 90);
   REPEAT(num_cells, cells, Dwg_CELLSTYLEMAP_Cell)
   REPEAT_BLOCK
-      Cell_Style_Fields(cells[rcount1].style);
+      CellStyle_fields(cells[rcount1].style);
       SUB_FIELD_BL (cells[rcount1],id, 90);
       SUB_FIELD_BL (cells[rcount1],type, 91);
       SUB_FIELD_T (cells[rcount1],name, 300);
@@ -4884,7 +4875,7 @@ DWG_ENTITY(TABLE)
               SUB_FIELD_BL (cells[rcount1],unknown, 0);
 
               // 20.4.99 Value, page 241
-              Table_Value(cells[rcount1].value)
+              TABLE_value_fields(cells[rcount1].value)
               if (error & DWG_ERR_INVALIDTYPE)
                 {
 #ifdef IS_JSON
@@ -5306,7 +5297,7 @@ DWG_ENTITY(MULTILEADER)
     return DWG_ERR_VALUEOUTOFBOUNDS;
   }
   DXF_OR_PRINT { VALUE_TFF ("LEADER{", 302); }
-  REPEAT(ctx.num_leaders, ctx.leaders, Dwg_LEADER)
+  REPEAT(ctx.num_leaders, ctx.leaders, Dwg_LEADER_Node)
   REPEAT_BLOCK
       #define lnode ctx.leaders[rcount1]
       SUB_FIELD_B (lnode, has_lastleaderlinepoint, 290);
@@ -5479,7 +5470,7 @@ DWG_ENTITY(MULTILEADER)
           SUB_FIELD_BD (blocklabels[rcount1],width, 44);
       END_REPEAT_BLOCK
       SET_PARENT_OBJ(blocklabels)
-      END_REPEAT(blocklabels);
+      END_REPEAT(blocklabels)
       FIELD_B (neg_textdir, 294);
       FIELD_BS (ipe_alignment, 178);
       FIELD_BS (justification, 179);
@@ -5498,7 +5489,7 @@ DWG_ENTITY(MULTILEADER)
 
   COMMON_ENTITY_HANDLE_DATA;
   // TODO: seperate hdl_dat earlier, and use it above.
-  _REPEAT_N(_obj->ctx.num_leaders, ctx.leaders, Dwg_LEADER, 1)
+  _REPEAT_N(_obj->ctx.num_leaders, ctx.leaders, Dwg_LEADER_Node, 1)
   REPEAT_BLOCK
       #define lnode ctx.leaders[rcount1]
       _REPEAT_N(_obj->lnode.num_lines, lnode.lines, Dwg_LEADER_Line, 2)
@@ -5508,7 +5499,7 @@ DWG_ENTITY(MULTILEADER)
           SUB_FIELD_HANDLE (lline,arrow_handle, 5, 341);
       END_REPEAT_BLOCK
       SET_PARENT(lnode.lines, _obj->ctx.leaders)
-      END_REPEAT(lnode.lines)
+      END_REPEAT(lnode.lines);
   END_REPEAT_BLOCK
   SET_PARENT_OBJ(ctx.leaders)
   END_REPEAT(ctx.leaders)

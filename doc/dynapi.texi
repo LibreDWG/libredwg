@@ -905,7 +905,7 @@ RC,	DXF 71
 @item dimstyle
 H,	DXF 3
 @item block
-H,	DXF 2
+H
 
 @end vtable
 @end indentedblock
@@ -1159,7 +1159,7 @@ BD
 @item dimstyle
 H,	DXF 3
 @item block
-H,	DXF 2
+H
 
 @end vtable
 @end indentedblock
@@ -1226,7 +1226,7 @@ B,	DXF 75
 @item dimstyle
 H,	DXF 3
 @item block
-H,	DXF 2
+H
 
 @end vtable
 @end indentedblock
@@ -1291,7 +1291,7 @@ B,	DXF 75
 @item dimstyle
 H,	DXF 3
 @item block
-H,	DXF 2
+H
 
 @end vtable
 @end indentedblock
@@ -1354,7 +1354,7 @@ BD,	DXF 40
 @item dimstyle
 H,	DXF 3
 @item block
-H,	DXF 2
+H
 
 @end vtable
 @end indentedblock
@@ -1421,7 +1421,7 @@ BD,	DXF 50
 @item dimstyle
 H,	DXF 3
 @item block
-H,	DXF 2
+H
 
 @end vtable
 @end indentedblock
@@ -1486,7 +1486,7 @@ RC,	DXF 70
 @item dimstyle
 H,	DXF 3
 @item block
-H,	DXF 2
+H
 
 @end vtable
 @end indentedblock
@@ -1549,7 +1549,7 @@ BD,	DXF 40
 @item dimstyle
 H,	DXF 3
 @item block
-H,	DXF 2
+H
 
 @end vtable
 @end indentedblock
@@ -7104,21 +7104,21 @@ BL
 @vtable @code
 
 @item edge_flags
-BL
+BL,	DXF 95
 @item border_property_overrides_flag
-BL
+BL,	DXF 90
 @item border_type
-BL
+BL,	DXF 91
 @item color
 CMC
 @item linewt
-BLd
+BLd,	DXF 92
 @item line_type
 H
 @item invisible
-BL
+BL,	DXF 93
 @item double_line_spacing
-BD
+BD,	DXF 93
 @item parent
 struct _dwg_CellStyle*
 
@@ -7134,11 +7134,11 @@ struct _dwg_CellStyle*
 @item style
 Dwg_CellStyle
 @item id
-BL
+BL,	DXF 90
 @item type
-BL
+BL,	DXF 91
 @item name
-TV
+TV,	DXF 300
 @item parent
 struct _dwg_object_CELLSTYLEMAP*
 
@@ -7356,7 +7356,7 @@ BL
 @vtable @code
 
 @item key
-TV
+TV,	DXF 6
 @item value
 Dwg_TABLE_value
 @item parent
@@ -7390,13 +7390,13 @@ struct _dwg_object_TABLECONTENT*
 @vtable @code
 
 @item top_row
-BL
+BL,	DXF 91
 @item left_col
-BL
+BL,	DXF 92
 @item bottom_row
-BL
+BL,	DXF 93
 @item right_col
-BL
+BL,	DXF 94
 @item parent
 struct _dwg_FormattedTableData*
 
@@ -7435,6 +7435,38 @@ BL
 @end vtable
 @end indentedblock
 
+@strong{Dwg_HATCH_Color} @anchor{Dwg_HATCH_Color}
+@vindex Dwg_HATCH_Color
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_entity_HATCH*
+@item shift_value
+BD,	DXF 463
+@item color
+CMC
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_HATCH_ControlPoint} @anchor{Dwg_HATCH_ControlPoint}
+@vindex Dwg_HATCH_ControlPoint
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_HATCH_PathSeg*
+@item point
+2RD,	DXF 10
+@item weight
+BD,	DXF 40
+
+@end vtable
+@end indentedblock
+
 @strong{Dwg_HATCH_DefLine} @anchor{Dwg_HATCH_DefLine}
 @vindex Dwg_HATCH_DefLine
 
@@ -7444,53 +7476,21 @@ BL
 @item parent
 struct _dwg_entity_HATCH*
 @item angle
-BD
+BD,	DXF 53
 @item pt0
-2BD
+2BD,	DXF 43
 @item offset
-2BD
+2BD,	DXF 45
 @item num_dashes
-BS
+BS,	DXF 79
 @item dashes
 BD*
 
 @end vtable
 @end indentedblock
 
-@strong{Dwg_HATCH_color} @anchor{Dwg_HATCH_color}
-@vindex Dwg_HATCH_color
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_entity_HATCH*
-@item shift_value
-BD
-@item color
-CMC
-
-@end vtable
-@end indentedblock
-
-@strong{Dwg_HATCH_control_point} @anchor{Dwg_HATCH_control_point}
-@vindex Dwg_HATCH_control_point
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_HATCH_pathseg*
-@item point
-2RD
-@item weight
-BD
-
-@end vtable
-@end indentedblock
-
-@strong{Dwg_HATCH_path} @anchor{Dwg_HATCH_path}
-@vindex Dwg_HATCH_path
+@strong{Dwg_HATCH_Path} @anchor{Dwg_HATCH_Path}
+@vindex Dwg_HATCH_Path
 
 @indentedblock
 @vtable @code
@@ -7498,67 +7498,67 @@ BD
 @item parent
 struct _dwg_entity_HATCH*
 @item flag
-BL
+BL,	DXF 92
 @item num_segs_or_paths
-BL
+BL,	DXF 93
 @item segs
 Dwg_HATCH_PathSeg*
 @item bulges_present
-B
+B,	DXF 72
 @item closed
-B
+B,	DXF 73
 @item polyline_paths
 Dwg_HATCH_PolylinePath*
 @item num_boundary_handles
-BL
+BL,	DXF 97
 
 @end vtable
 @end indentedblock
 
-@strong{Dwg_HATCH_pathseg} @anchor{Dwg_HATCH_pathseg}
-@vindex Dwg_HATCH_pathseg
+@strong{Dwg_HATCH_PathSeg} @anchor{Dwg_HATCH_PathSeg}
+@vindex Dwg_HATCH_PathSeg
 
 @indentedblock
 @vtable @code
 
 @item parent
-struct _dwg_HATCH_path*
+struct _dwg_HATCH_Path*
 @item type_status
-RC
+RC,	DXF 72
 @item first_endpoint
-2RD
+2RD,	DXF 10
 @item second_endpoint
-2RD
+2RD,	DXF 11
 @item center
-2RD
+2RD,	DXF 10
 @item radius
-BD
+BD,	DXF 40
 @item start_angle
-BD
+BD,	DXF 50
 @item end_angle
-BD
+BD,	DXF 51
 @item is_ccw
-B
+B,	DXF 73
 @item endpoint
-2RD
+2RD,	DXF 11
 @item minor_major_ratio
-BD
+BD,	DXF 40
 @item degree
-BL
+BL,	DXF 94
 @item is_rational
-B
+B,	DXF 73
 @item is_periodic
-B
+B,	DXF 74
 @item num_knots
-BL
+BL,	DXF 95
 @item num_control_points
-BL
+BL,	DXF 96
 @item knots
 BD*
 @item control_points
 Dwg_HATCH_ControlPoint*
 @item num_fitpts
-BL
+BL,	DXF 97
 @item fitpts
 2RD*
 @item start_tangent
@@ -7569,18 +7569,34 @@ BL
 @end vtable
 @end indentedblock
 
-@strong{Dwg_HATCH_polylinepath} @anchor{Dwg_HATCH_polylinepath}
-@vindex Dwg_HATCH_polylinepath
+@strong{Dwg_HATCH_PolylinePath} @anchor{Dwg_HATCH_PolylinePath}
+@vindex Dwg_HATCH_PolylinePath
 
 @indentedblock
 @vtable @code
 
 @item parent
-struct _dwg_HATCH_path*
+struct _dwg_HATCH_Path*
 @item point
 2RD
 @item bulge
-BD
+BD,	DXF 42
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_LAYER_entry} @anchor{Dwg_LAYER_entry}
+@vindex Dwg_LAYER_entry
+
+@indentedblock
+@vtable @code
+
+@item idxlong
+BL
+@item layername
+T,	DXF 8
+@item parent
+struct _dwg_object_LAYER_INDEX*
 
 @end vtable
 @end indentedblock
@@ -7594,7 +7610,7 @@ BD
 @item parent
 struct _dwg_entity_MULTILEADER*
 @item is_default
-BL
+BL,	DXF 94
 @item arrowhead
 H
 
@@ -7612,11 +7628,11 @@ struct _dwg_entity_MULTILEADER*
 @item attdef
 H
 @item label_text
-TV
+TV,	DXF 302
 @item ui_index
-BS
+BS,	DXF 177
 @item width
-BD
+BD,	DXF 44
 
 @end vtable
 @end indentedblock
@@ -7630,9 +7646,9 @@ BD
 @item parent
 struct _dwg_LEADER_Line*
 @item start
-3BD
+3BD,	DXF 11
 @item end
-3BD
+3BD,	DXF 12
 
 @end vtable
 @end indentedblock
@@ -7654,21 +7670,21 @@ BL
 @item breaks
 Dwg_LEADER_Break*
 @item line_index
-BL
+BL,	DXF 91
 @item type
-BS
+BS,	DXF 170
 @item color
 CMC
 @item ltype
-H
+H,	DXF 340
 @item linewt
-BLd
+BLd,	DXF 171
 @item arrow_size
-BD
+BD,	DXF 40
 @item arrow_handle
-H
+H,	DXF 341
 @item flags
-BL
+BL,	DXF 93
 
 @end vtable
 @end indentedblock
@@ -7682,17 +7698,17 @@ BL
 @item parent
 struct _dwg_entity_MULTILEADER*
 @item has_lastleaderlinepoint
-B
+B,	DXF 290
 @item has_dogleg
-B
+B,	DXF 291
 @item lastleaderlinepoint
-3BD
+3BD,	DXF 10
 @item dogleg_vector
-3BD
+3BD,	DXF 11
 @item branch_index
-BL
+BL,	DXF 90
 @item dogleg_length
-BD
+BD,	DXF 40
 @item num_lines
 BL
 @item lines
@@ -7702,7 +7718,7 @@ BL
 @item breaks
 Dwg_LEADER_Break*
 @item attach_dir
-BS
+BS,	DXF 271
 
 @end vtable
 @end indentedblock
@@ -7716,19 +7732,19 @@ BS
 @item parent
 struct _dwg_object_LTYPE*
 @item length
-BD
+BD,	DXF 49
 @item complex_shapecode
-BS
+BS,	DXF 74
 @item x_offset
-RD
+RD,	DXF 44
 @item y_offset
-RD
+RD,	DXF 45
 @item scale
-BD
+BD,	DXF 46
 @item rotation
-BD
+BD,	DXF 50
 @item shape_flag
-BS
+BS,	DXF 75
 
 @end vtable
 @end indentedblock
@@ -7740,9 +7756,9 @@ BS
 @vtable @code
 
 @item start
-BD
+BD,	DXF 40
 @item end
-BD
+BD,	DXF 41
 
 @end vtable
 @end indentedblock
@@ -7792,9 +7808,9 @@ H*
 @item parent
 struct _dwg_entity_MESH*
 @item from
-BL
+BL,	DXF 90
 @item to
-BL
+BL,	DXF 90
 
 @end vtable
 @end indentedblock
@@ -7816,7 +7832,7 @@ H
 @item num_leaders
 BL
 @item leaders
-Dwg_LEADER*
+Dwg_LEADER_Node*
 @item attach_dir
 BS
 @item scale
@@ -7868,7 +7884,7 @@ BS
 @item parent
 struct _dwg_object_MLINESTYLE*
 @item offset
-BD
+BD,	DXF 49
 @item color
 CMC
 
@@ -7884,11 +7900,11 @@ CMC
 @item parent
 struct _dwg_MLINE_vertex*
 @item num_segparms
-BS
+BS,	DXF 74
 @item segparms
 BD*
 @item num_areafillparms
-BS
+BS,	DXF 75
 @item areafillparms
 BD*
 
@@ -7904,11 +7920,11 @@ BD*
 @item parent
 struct _dwg_entity_MLINE*
 @item vertex
-3BD
+3BD,	DXF 11
 @item vertex_direction
-3BD
+3BD,	DXF 12
 @item miter_direction
-3BD
+3BD,	DXF 13
 @item num_lines
 RC
 @item lines
@@ -7932,7 +7948,7 @@ BD
 @item z
 BD
 @item w
-BD
+BD,	DXF 41
 
 @end vtable
 @end indentedblock
@@ -7962,9 +7978,9 @@ BD
 @vtable @code
 
 @item julian_day
-BL
+BL,	DXF 90
 @item time
-BL
+BL,	DXF 90
 
 @end vtable
 @end indentedblock
@@ -7990,15 +8006,15 @@ T
 @vtable @code
 
 @item flag
-BL
+BL,	DXF 93
 @item width_w_gap
-BD
+BD,	DXF 40
 @item height_w_gap
-BD
+BD,	DXF 41
 @item unknown
-H
+H,	DXF 330
 @item num_geom_data
-BL
+BL,	DXF 94
 @item geom_data
 Dwg_CellContentGeometry*
 @item parent
@@ -8063,64 +8079,46 @@ struct _dwg_entity_TABLE*
 @end vtable
 @end indentedblock
 
-@strong{Dwg_TABLE_CustomDataItem} @anchor{Dwg_TABLE_CustomDataItem}
-@vindex Dwg_TABLE_CustomDataItem
-
-@indentedblock
-@vtable @code
-
-@item name
-TV
-@item value
-Dwg_TABLE_value
-@item cell_parent
-struct _dwg_TableCell*
-@item row_parent
-struct _dwg_TableRow*
-
-@end vtable
-@end indentedblock
-
-@strong{Dwg_TABLE_cell} @anchor{Dwg_TABLE_cell}
-@vindex Dwg_TABLE_cell
+@strong{Dwg_TABLE_Cell} @anchor{Dwg_TABLE_Cell}
+@vindex Dwg_TABLE_Cell
 
 @indentedblock
 @vtable @code
 
 @item type
-BS
+BS,	DXF 171
 @item flags
-RC
+RC,	DXF 172
 @item merged_value
-B
+B,	DXF 173
 @item autofit_flag
-B
+B,	DXF 174
 @item merged_width_flag
-BL
+BL,	DXF 175
 @item merged_height_flag
-BL
+BL,	DXF 176
 @item rotation_value
-BD
+BD,	DXF 145
 @item text_string
-TV
+TV,	DXF 1
 @item block_scale
-BD
+BD,	DXF 144
 @item additional_data_flag
 B
 @item attr_def_index
 BS
 @item attr_def_text
-TV
+TV,	DXF 300
 @item additional_data_flag2
 B
 @item cell_flag_override
-BL
+BL,	DXF 177
 @item virtual_edge_flag
-RC
+RC,	DXF 178
 @item cell_alignment
-RS
+RS,	DXF 170
 @item background_fill_none
-B
+B,	DXF 283
 @item background_color
 CMC
 @item content_color
@@ -8128,31 +8126,31 @@ CMC
 @item text_style
 H
 @item text_height
-BD
+BD,	DXF 140
 @item top_grid_color
 CMC
 @item top_grid_linewt
-BS
+BS,	DXF 279
 @item top_visibility
-BS
+BS,	DXF 289
 @item right_grid_color
 CMC
 @item right_grid_linewt
-BS
+BS,	DXF 275
 @item right_visibility
-BS
+BS,	DXF 285
 @item bottom_grid_color
 CMC
 @item bottom_grid_linewt
-BS
+BS,	DXF 276
 @item bottom_visibility
-BS
+BS,	DXF 286
 @item left_grid_color
 CMC
 @item left_grid_linewt
-BS
+BS,	DXF 278
 @item left_visibility
-BS
+BS,	DXF 288
 @item unknown
 BL
 @item value
@@ -8160,13 +8158,31 @@ Dwg_TABLE_value
 @item cell_handle
 H
 @item num_attr_defs
-BS
+BS,	DXF 179
 @item attr_def_id
 H*
 @item text_style_override
 H
 @item parent
 struct _dwg_entity_TABLE*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_TABLE_CustomDataItem} @anchor{Dwg_TABLE_CustomDataItem}
+@vindex Dwg_TABLE_CustomDataItem
+
+@indentedblock
+@vtable @code
+
+@item name
+TV,	DXF 300
+@item value
+Dwg_TABLE_value
+@item cell_parent
+struct _dwg_TableCell*
+@item row_parent
+struct _dwg_TableRow*
 
 @end vtable
 @end indentedblock
@@ -8212,13 +8228,13 @@ TV
 @vtable @code
 
 @item flag
-BL
+BL,	DXF 90
 @item tooltip
-TV
+TV,	DXF 300
 @item customdata
-BL
+BL,	DXF 91
 @item num_customdata_items
-BL
+BL,	DXF 90
 @item customdata_items
 Dwg_TABLE_CustomDataItem*
 @item has_linked_data
@@ -8266,7 +8282,7 @@ struct _dwg_TableRow*
 @vtable @code
 
 @item type
-BL
+BL,	DXF 90
 @item value
 Dwg_TABLE_value
 @item handle
@@ -8292,11 +8308,11 @@ struct _dwg_TableCell*
 @vtable @code
 
 @item attdef
-H
+H,	DXF 330
 @item value
-TV
+TV,	DXF 301
 @item index
-BL
+BL,	DXF 92
 @item parent
 struct _dwg_TableCellContent*
 
@@ -8310,9 +8326,9 @@ struct _dwg_TableCellContent*
 @vtable @code
 
 @item name
-TV
+TV,	DXF 300
 @item custom_data
-BL
+BL,	DXF 91
 @item cellstyle
 Dwg_CellStyle
 @item cellstyle_id

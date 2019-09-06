@@ -2492,23 +2492,23 @@ typedef struct _dwg_object_PROXY_OBJECT
 /**
  Structs for HATCH (78 + varies)
  */
-typedef struct _dwg_HATCH_color
+typedef struct _dwg_HATCH_Color
 {
   struct _dwg_entity_HATCH *parent;
   BITCODE_BD shift_value; //0.0 non-shifted, 1.0 shifted
   BITCODE_CMC color;
 } Dwg_HATCH_Color;
 
-typedef struct _dwg_HATCH_control_point
+typedef struct _dwg_HATCH_ControlPoint
 {
-  struct _dwg_HATCH_pathseg *parent;
+  struct _dwg_HATCH_PathSeg *parent;
   BITCODE_2RD point;
   BITCODE_BD weight;
 } Dwg_HATCH_ControlPoint;
 
-typedef struct _dwg_HATCH_pathseg
+typedef struct _dwg_HATCH_PathSeg
 {
-  struct _dwg_HATCH_path *parent;
+  struct _dwg_HATCH_Path *parent;
   BITCODE_RC type_status;
   /* LINE */
   BITCODE_2RD first_endpoint;
@@ -2540,14 +2540,14 @@ typedef struct _dwg_HATCH_pathseg
   BITCODE_2RD end_tangent;
 } Dwg_HATCH_PathSeg;
 
-typedef struct _dwg_HATCH_polylinepath
+typedef struct _dwg_HATCH_PolylinePath
 {
-  struct _dwg_HATCH_path *parent;
+  struct _dwg_HATCH_Path *parent;
   BITCODE_2RD point;
   BITCODE_BD bulge;
 } Dwg_HATCH_PolylinePath;
 
-typedef struct _dwg_HATCH_path
+typedef struct _dwg_HATCH_Path
 {
   struct _dwg_entity_HATCH *parent;
   /* Segment path */
@@ -2733,7 +2733,7 @@ typedef struct _dwg_LEADER_Node
   Dwg_LEADER_Break * breaks;            /*!< DXF 12, 13 */
 
   BITCODE_BS attach_dir; //2010+ 271
-} Dwg_LEADER;
+} Dwg_LEADER_Node;
 
 typedef union _dwg_MLEADER_Content
 {
@@ -2791,7 +2791,7 @@ typedef struct _dwg_MLEADER_AnnotContext
   BITCODE_H scale_handle;      /*!< DXF 340 hard ptr to AcDbScale */
 
   BITCODE_BL num_leaders;
-  Dwg_LEADER * leaders;
+  Dwg_LEADER_Node * leaders;
 
   BITCODE_BS attach_dir;
 
@@ -3058,7 +3058,7 @@ typedef struct _dwg_TABLE_CustomDataItem
   struct _dwg_TableRow *row_parent;
 } Dwg_TABLE_CustomDataItem;
 
-typedef struct _dwg_TABLE_cell
+typedef struct _dwg_TABLE_Cell
 {
   BITCODE_BS type;
   BITCODE_RC flags;
@@ -3773,7 +3773,7 @@ typedef struct _dwg_object_IMAGEDEF_REACTOR
 /**
  Classes for LAYER_INDEX (varies)
  */
-typedef struct _dwg_layer_entry
+typedef struct _dwg_LAYER_entry
 {
   BITCODE_BL idxlong;
   BITCODE_T layername;

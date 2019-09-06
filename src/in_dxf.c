@@ -1870,7 +1870,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
 static Dxf_Pair *
 add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
-                       Dxf_Pair *restrict pair, Dwg_LEADER *lnode)
+                       Dxf_Pair *restrict pair, Dwg_LEADER_Node *lnode)
 {
   Dwg_Entity_MULTILEADER *o = obj->tio.entity->tio.MULTILEADER;
   if (pair->code == 304 && strEQc (pair->value.s, "LEADER_LINE{"))
@@ -2005,7 +2005,7 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       Dwg_MLEADER_AnnotContext *ctx = &o->ctx;
       while (pair->code != 303 && pair->code != 0)
         {
-          Dwg_LEADER *lnode = i >= 0 ? &ctx->leaders[i] : NULL;
+          Dwg_LEADER_Node *lnode = i >= 0 ? &ctx->leaders[i] : NULL;
           dxf_free_pair (pair);
           pair = dxf_read_pair (dat);
 
@@ -2020,7 +2020,7 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             case 290:
               i++;
               ctx->num_leaders = i + 1;
-              ctx->leaders = realloc (ctx->leaders, (i + 1) * sizeof (Dwg_LEADER));
+              ctx->leaders = realloc (ctx->leaders, (i + 1) * sizeof (Dwg_LEADER_Node));
               ctx->leaders[i].has_lastleaderlinepoint = pair->value.i;
               LOG_TRACE ("%s.ctx.leaders[%d].has_lastleaderlinepoint = %d [%d B]\n",
                          obj->name, i, pair->value.i, pair->code);

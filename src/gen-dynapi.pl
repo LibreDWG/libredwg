@@ -147,8 +147,13 @@ while (<$in>) {
 #$h{Dwg_Bitcode_2RD} = '2RD';
 close $in;
 
+# parse a spec for its objects, subclasses and dxf values
 sub dxf_in {
   $in = shift;
+  my @old;
+  my $v = qr /[\w\.\[\]]+/;
+  my $vx = qr /[\w\.\[\]>-]+/;
+  my $outdef;
   while (<$in>) {
     $f = '';
     s/DXF \{ //;
@@ -163,17 +168,75 @@ sub dxf_in {
       } elsif (/^int DWG_FUNC_N\(ACTION,_HATCH(\w+)\)/) {
         $n = 'HATCH';
         warn $n;
-      } elsif (/^\#define (COMMON_ENTITY_DIMENSION)/) {
+      } elsif (/^\#define (COMMON_ENTITY_(?:POLYLINE|DIMENSION|))/) {
         $n = $1;
         warn $n;
-      } elsif (/^\#define (COMMON_ENTITY_POLYLINE)/) {
+      } elsif (/^\#define (\w+)_fields/) {
         $n = $1;
-        warn $n;
+        warn "define $n";
       }
+    } elsif (/^\#define (\w+)_fields/) {
+      $n = $1;
+      warn "define $n";
+    # i.e. after #define
+    } elsif (/^DWG_(ENTITY|OBJECT)\((\w+)\)/) {
+      $n = $2;
+      $n =~ s/^_3/3/;
+      warn $n;
     } elsif (/^DWG_(ENTITY|OBJECT)_END/) { # close
       $n = '';
+      @old = ();
+      $outdef = 0;
     } elsif (!$n) {
       ;
+    #} elsif ($outdef) {
+    #  ;
+    #} elsif (/^\s*\#ifdef IS_JSON/) {
+    #  $outdef++;
+    #} elsif ($outdef && /^\s*\#endif/) {
+    #  $outdef = 0;
+    # single-line REPEAT
+    } elsif (/^\s+REPEAT.*\($v,\s*$v,\s*(\w+)\)/) {
+      my $tmp = $1; # subclass?
+      if ($tmp =~ /^Dwg_(.*)/) {
+        push @old, $n;
+        $n = $1; # not _dwg_$1
+        warn "$n pushed";
+      } else {
+        push @old, '';
+      }
+    } elsif (/^\s+_REPEAT_N\s*\($vx,\s*$v,\s*(\w+),/) {
+      my $tmp = $1; # subclass?
+      if ($tmp =~ /^Dwg_(.*)/) {
+        push @old, $n;
+        $n = $1;
+        warn "$n pushed";
+      } else {
+        push @old, '';
+      }
+    # multiline REPEAT
+    } elsif (/^\s+REPEAT.*\($v,\s*$v,$/) {
+      $_ = <$in>;
+      if (/^\s+(\w+)\)/) {
+        my $tmp = $1; # subclass?
+        if ($tmp =~ /^Dwg_(.*)/) {
+          push @old, $n;
+          $n = $1;
+          warn "$n pushed";
+        } else {
+          push @old, '';
+        }
+      }
+    # skip END_REPEAT(paths); return DWG_ERR_VALUEOUTOFBOUNDS;
+    } elsif (/^\s+END_REPEAT\s*\(($vx)\);?$/) { # close
+      my $tmp = pop @old;
+      if ($tmp) {
+        $n = $tmp;
+        warn "$n popped";
+      } elsif (!defined $tmp) {
+        # mostly due to type being a primitive, not a subclass (like T)
+        warn "missing REPEAT block in $n: $1";
+      }
     } elsif (/^\s+FIELD_HANDLE\s*\((\w+),\s*\d+,\s*(\d+)\)/) {
       $f = $1;
       $DXF{$n}->{$f} = $2 if $2;
@@ -183,10 +246,16 @@ sub dxf_in {
     } elsif (/^\s+FIELD_(.+?)\s*\((\w+),\s*(\d+)\)/) {
       my $type = $1;
       $f = $2;
-      $DXF{$n}->{$f} = $3 if $3;
+      my $dxf = $3;
+      $f =~ s/^(?:fmt|sty|name|value)\.//;
+      $DXF{$n}->{$f} = $dxf if $dxf;
       if ($type =~ /^[23][RB]D_1/) {
         $ENT{$n}->{$f} = $type;
       }
+    } elsif (@old && /^\s+SUB_FIELD_(.+?)\s*\($v,\s*(\w+),\s*(\d+)\)/) {
+      my $type = $1;
+      $f = $2;
+      $DXF{$n}->{$f} = $3 if $3;
     } elsif (/^\s+FIELD_(?:CMC|ENC)\s*\((\w+),\s*(\d+),\s*(\d+)\)/) {
       $f = $1;
       $DXF{$n}->{$f} = $2 if $2;
@@ -203,6 +272,10 @@ sub dxf_in {
       if ($type =~ /^[23][RB]D_1/) {
         $ENT{$n}->{$f} = $type;
       }
+    } elsif (@old && /^\s+SUB_FIELD_(.+?)\s*\(\w+,\s*(\w+),.*,\s*(\d+)\)/) {
+      my $type = $1;
+      $f = $2;
+      $DXF{$n}->{$f} = $3 if $3;
     } elsif (/^\s+HANDLE_VECTOR\s*\((\w+),.*?,\s*(\d+)\)/) {
       $f = $1;
       $DXF{$n}->{$f} = $2 if $2;
@@ -244,6 +317,7 @@ $DXF{'3DSOLID'}->{'encr_sat_data'} = 1;
 $DXF{'REGION'}->{'encr_sat_data'} = 1;
 $DXF{'BODY'}->{'encr_sat_data'} = 1;
 $DXF{'BLOCK'}->{'name'} = 2; # and 3
+$DXF{'HATCH'}->{'boundary_handles'} = 330; # special DXF logic
 $DXF{'VISUALSTYLE'}->{'edge_hide_precision_flag'} = 290;
 $DXF{'VISUALSTYLE'}->{'is_internal_use_only'} = 291;
 $DXF{'DIMSTYLE_CONTROL'}->{'morehandles'} = 340;
@@ -644,7 +718,7 @@ for (<DATA>) {
       for (@subclasses) {
         my ($name) = $_ =~ /^_dwg_(.*)/;
         print $doc "\@strong{Dwg_$name} \@anchor{Dwg_$name}\n\@vindex Dwg_$name\n\n";
-        out_struct("struct $_", $_);
+        out_struct("struct $_", $name);
       }
     } elsif ($tmpl =~ /^struct _dwg_(\w+)/) {
       if ($1 eq 'header_variables') {
