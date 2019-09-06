@@ -1,5 +1,5 @@
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 908 "gen-dynapi.pl"
+#line 1061 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -6161,6 +6161,28 @@ static const Dwg_DYNAPI_field _dwg_ACTIONBODY_fields[] = {
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
+/* from typedef struct _dwg_BorderStyle: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_BorderStyle_fields[] = {
+  { "edge_flags",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_BorderStyle, edge_flags),
+    0,0,0, 0 },
+  { "border_property_overrides_flag",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_BorderStyle, border_property_overrides_flag),
+    0,0,0, 0 },
+  { "border_type",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_BorderStyle, border_type),
+    0,0,0, 0 },
+  { "color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_BorderStyle, color),
+    1,0,0, 0 },
+  { "linewt",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_BorderStyle, linewt),
+    0,0,0, 0 },
+  { "line_type",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_BorderStyle, line_type),
+    1,0,0, 0 },
+  { "invisible",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_BorderStyle, invisible),
+    0,0,0, 0 },
+  { "double_line_spacing",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_BorderStyle, double_line_spacing),
+    0,0,0, 0 },
+  { "parent",	"struct _dwg_CellStyle*", sizeof (void *),  OFF (struct _dwg_BorderStyle, parent),
+    1,1,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
 /* from typedef struct _dwg_CELLSTYLEMAP_Cell: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_CELLSTYLEMAP_Cell_fields[] = {
   { "style",	"Dwg_CellStyle", sizeof (Dwg_CellStyle),  OFF (struct _dwg_CELLSTYLEMAP_Cell, style),
@@ -6173,6 +6195,94 @@ static const Dwg_DYNAPI_field _dwg_CELLSTYLEMAP_Cell_fields[] = {
     1,1,1, 0 },
   { "parent",	"struct _dwg_object_CELLSTYLEMAP*", sizeof (void *),  OFF (struct _dwg_CELLSTYLEMAP_Cell, parent),
     1,1,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_CellContentGeometry: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_CellContentGeometry_fields[] = {
+  { "dist_top_left",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_CellContentGeometry, dist_top_left),
+    1,0,0, 0 },
+  { "dist_center",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_CellContentGeometry, dist_center),
+    1,0,0, 0 },
+  { "content_width",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_CellContentGeometry, content_width),
+    0,0,0, 0 },
+  { "content_height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_CellContentGeometry, content_height),
+    0,0,0, 0 },
+  { "width",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_CellContentGeometry, width),
+    0,0,0, 0 },
+  { "height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_CellContentGeometry, height),
+    0,0,0, 0 },
+  { "unknown",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_CellContentGeometry, unknown),
+    0,0,0, 0 },
+  { "cell_parent",	"struct _dwg_TableCell*", sizeof (void *),  OFF (struct _dwg_CellContentGeometry, cell_parent),
+    1,1,0, 0 },
+  { "geom_parent",	"struct _dwg_TABLEGEOMETRY_Cell*", sizeof (void *),  OFF (struct _dwg_CellContentGeometry, geom_parent),
+    1,1,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_CellStyle: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_CellStyle_fields[] = {
+  { "type",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_CellStyle, type),
+    0,0,0, 0 },
+  { "data_flags",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_CellStyle, data_flags),
+    0,0,0, 0 },
+  { "property_override_flags",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_CellStyle, property_override_flags),
+    0,0,0, 0 },
+  { "merge_flags",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_CellStyle, merge_flags),
+    0,0,0, 0 },
+  { "background_color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_CellStyle, background_color),
+    1,0,0, 0 },
+  { "content_layout",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_CellStyle, content_layout),
+    0,0,0, 0 },
+  { "content_format",	"Dwg_ContentFormat", sizeof (Dwg_ContentFormat),  OFF (struct _dwg_CellStyle, content_format),
+    0,0,0, 0 },
+  { "margin_override_flags",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_CellStyle, margin_override_flags),
+    0,0,0, 0 },
+  { "vert_margin",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_CellStyle, vert_margin),
+    0,0,0, 0 },
+  { "horiz_margin",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_CellStyle, horiz_margin),
+    0,0,0, 0 },
+  { "bottom_margin",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_CellStyle, bottom_margin),
+    0,0,0, 0 },
+  { "right_margin",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_CellStyle, right_margin),
+    0,0,0, 0 },
+  { "margin_horiz_spacing",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_CellStyle, margin_horiz_spacing),
+    0,0,0, 0 },
+  { "margin_vert_spacing",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_CellStyle, margin_vert_spacing),
+    0,0,0, 0 },
+  { "num_borders",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_CellStyle, num_borders),
+    0,0,0, 0 },
+  { "border",	"Dwg_BorderStyle*", sizeof (Dwg_BorderStyle*),  OFF (struct _dwg_CellStyle, border),
+    1,1,0, 0 },
+  { "tablerow_parent",	"struct _dwg_TableRow*", sizeof (void *),  OFF (struct _dwg_CellStyle, tablerow_parent),
+    1,1,0, 0 },
+  { "tabledatacolumn_parent",	"struct _dwg_TableDataColumn*", sizeof (void *),  OFF (struct _dwg_CellStyle, tabledatacolumn_parent),
+    1,1,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_ContentFormat: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_ContentFormat_fields[] = {
+  { "property_override_flags",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_ContentFormat, property_override_flags),
+    0,0,0, 0 },
+  { "property_flags",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_ContentFormat, property_flags),
+    0,0,0, 0 },
+  { "value_data_type",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_ContentFormat, value_data_type),
+    0,0,0, 0 },
+  { "value_unit_type",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_ContentFormat, value_unit_type),
+    0,0,0, 0 },
+  { "value_format_string",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_ContentFormat, value_format_string),
+    1,1,1, 0 },
+  { "rotation",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_ContentFormat, rotation),
+    0,0,0, 0 },
+  { "block_scale",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_ContentFormat, block_scale),
+    0,0,0, 0 },
+  { "cell_alignment",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_ContentFormat, cell_alignment),
+    0,0,0, 0 },
+  { "content_color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_ContentFormat, content_color),
+    1,0,0, 0 },
+  { "text_style",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_ContentFormat, text_style),
+    1,0,0, 0 },
+  { "text_height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_ContentFormat, text_height),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_DIMASSOC_ref: (sorted by offset) */
@@ -6262,6 +6372,32 @@ static const Dwg_DYNAPI_field _dwg_FIELD_ChildValue_fields[] = {
   { "value",	"Dwg_TABLE_value", sizeof (Dwg_TABLE_value),  OFF (struct _dwg_FIELD_ChildValue, value),
     0,0,0, 0 },
   { "parent",	"struct _dwg_object_FIELD*", sizeof (void *),  OFF (struct _dwg_FIELD_ChildValue, parent),
+    1,1,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_FormattedTableData: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_FormattedTableData_fields[] = {
+  { "cellstyle",	"Dwg_CellStyle", sizeof (Dwg_CellStyle),  OFF (struct _dwg_FormattedTableData, cellstyle),
+    0,0,0, 0 },
+  { "num_merged_cells",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_FormattedTableData, num_merged_cells),
+    0,0,0, 0 },
+  { "merged_cells",	"Dwg_FormattedTableMerged*", sizeof (Dwg_FormattedTableMerged*),  OFF (struct _dwg_FormattedTableData, merged_cells),
+    1,1,0, 0 },
+  { "parent",	"struct _dwg_object_TABLECONTENT*", sizeof (void *),  OFF (struct _dwg_FormattedTableData, parent),
+    1,1,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_FormattedTableMerged: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_FormattedTableMerged_fields[] = {
+  { "top_row",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_FormattedTableMerged, top_row),
+    0,0,0, 0 },
+  { "left_col",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_FormattedTableMerged, left_col),
+    0,0,0, 0 },
+  { "bottom_row",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_FormattedTableMerged, bottom_row),
+    0,0,0, 0 },
+  { "right_col",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_FormattedTableMerged, right_col),
+    0,0,0, 0 },
+  { "parent",	"struct _dwg_FormattedTableData*", sizeof (void *),  OFF (struct _dwg_FormattedTableMerged, parent),
     1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -6519,6 +6655,30 @@ static const Dwg_DYNAPI_field _dwg_LWPOLYLINE_width_fields[] = {
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
+/* from typedef struct _dwg_LinkedData: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_LinkedData_fields[] = {
+  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_LinkedData, name),
+    1,1,1, 0 },
+  { "desc",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_LinkedData, desc),
+    1,1,1, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_LinkedTableData: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_LinkedTableData_fields[] = {
+  { "num_cols",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_LinkedTableData, num_cols),
+    0,0,0, 0 },
+  { "cols",	"Dwg_TableDataColumn*", sizeof (Dwg_TableDataColumn*),  OFF (struct _dwg_LinkedTableData, cols),
+    1,1,0, 0 },
+  { "num_rows",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_LinkedTableData, num_rows),
+    0,0,0, 0 },
+  { "rows",	"Dwg_TableRow*", sizeof (Dwg_TableRow*),  OFF (struct _dwg_LinkedTableData, rows),
+    1,1,0, 0 },
+  { "num_field_refs",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_LinkedTableData, num_field_refs),
+    0,0,0, 0 },
+  { "field_refs",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_LinkedTableData, field_refs),
+    1,1,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
 /* from typedef struct _dwg_MESH_edge: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_MESH_edge_fields[] = {
   { "parent",	"struct _dwg_entity_MESH*", sizeof (void *),  OFF (struct _dwg_MESH_edge, parent),
@@ -6655,6 +6815,14 @@ static const Dwg_DYNAPI_field _dwg_SUNSTUDY_Dates_fields[] = {
     0,0,0, 0 },
   { "time",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_SUNSTUDY_Dates, time),
     0,0,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_SummaryInfo_Property: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_SummaryInfo_Property_fields[] = {
+  { "key",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_SummaryInfo_Property, key),
+    1,1,1, 0 },
+  { "value",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_SummaryInfo_Property, value),
+    1,1,1, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_TABLEGEOMETRY_Cell: (sorted by offset) */
@@ -6837,6 +7005,124 @@ static const Dwg_DYNAPI_field _dwg_TABLE_value_fields[] = {
     1,1,1, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
+/* from typedef struct _dwg_TableCell: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_TableCell_fields[] = {
+  { "flag",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TableCell, flag),
+    0,0,0, 0 },
+  { "tooltip",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_TableCell, tooltip),
+    1,1,1, 0 },
+  { "customdata",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TableCell, customdata),
+    0,0,0, 0 },
+  { "num_customdata_items",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TableCell, num_customdata_items),
+    0,0,0, 0 },
+  { "customdata_items",	"Dwg_TABLE_CustomDataItem*", sizeof (Dwg_TABLE_CustomDataItem*),  OFF (struct _dwg_TableCell, customdata_items),
+    1,1,0, 0 },
+  { "has_linked_data",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TableCell, has_linked_data),
+    0,0,0, 0 },
+  { "data_link",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_TableCell, data_link),
+    1,0,0, 0 },
+  { "num_rows",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TableCell, num_rows),
+    0,0,0, 0 },
+  { "num_cols",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TableCell, num_cols),
+    0,0,0, 0 },
+  { "unknown",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TableCell, unknown),
+    0,0,0, 0 },
+  { "num_cell_contents",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TableCell, num_cell_contents),
+    0,0,0, 0 },
+  { "cell_contents",	"Dwg_TableCellContent*", sizeof (Dwg_TableCellContent*),  OFF (struct _dwg_TableCell, cell_contents),
+    1,1,0, 0 },
+  { "style_id",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TableCell, style_id),
+    0,0,0, 0 },
+  { "has_geom_data",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TableCell, has_geom_data),
+    0,0,0, 0 },
+  { "geom_data_flag",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TableCell, geom_data_flag),
+    0,0,0, 0 },
+  { "unknown_d40",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_TableCell, unknown_d40),
+    0,0,0, 0 },
+  { "unknown_d41",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_TableCell, unknown_d41),
+    0,0,0, 0 },
+  { "has_cell_geom",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TableCell, has_cell_geom),
+    0,0,0, 0 },
+  { "cell_geom_handle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_TableCell, cell_geom_handle),
+    1,0,0, 0 },
+  { "geom_data",	"Dwg_CellContentGeometry*", sizeof (Dwg_CellContentGeometry*),  OFF (struct _dwg_TableCell, geom_data),
+    1,1,0, 0 },
+  { "style_parent",	"struct _dwg_CellStyle*", sizeof (void *),  OFF (struct _dwg_TableCell, style_parent),
+    1,1,0, 0 },
+  { "row_parent",	"struct _dwg_TableRow*", sizeof (void *),  OFF (struct _dwg_TableCell, row_parent),
+    1,1,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_TableCellContent: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_TableCellContent_fields[] = {
+  { "type",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TableCellContent, type),
+    0,0,0, 0 },
+  { "value",	"Dwg_TABLE_value", sizeof (Dwg_TABLE_value),  OFF (struct _dwg_TableCellContent, value),
+    0,0,0, 0 },
+  { "handle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_TableCellContent, handle),
+    1,0,0, 0 },
+  { "num_attrs",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TableCellContent, num_attrs),
+    0,0,0, 0 },
+  { "attrs",	"Dwg_TableCellContent_Attr*", sizeof (Dwg_TableCellContent_Attr*),  OFF (struct _dwg_TableCellContent, attrs),
+    1,1,0, 0 },
+  { "has_content_format_overrides",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_TableCellContent, has_content_format_overrides),
+    0,0,0, 0 },
+  { "content_format",	"Dwg_ContentFormat", sizeof (Dwg_ContentFormat),  OFF (struct _dwg_TableCellContent, content_format),
+    0,0,0, 0 },
+  { "parent",	"struct _dwg_TableCell*", sizeof (void *),  OFF (struct _dwg_TableCellContent, parent),
+    1,1,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_TableCellContent_Attr: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_TableCellContent_Attr_fields[] = {
+  { "attdef",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_TableCellContent_Attr, attdef),
+    1,0,0, 0 },
+  { "value",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_TableCellContent_Attr, value),
+    1,1,1, 0 },
+  { "index",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TableCellContent_Attr, index),
+    0,0,0, 0 },
+  { "parent",	"struct _dwg_TableCellContent*", sizeof (void *),  OFF (struct _dwg_TableCellContent_Attr, parent),
+    1,1,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_TableDataColumn: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_TableDataColumn_fields[] = {
+  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_TableDataColumn, name),
+    1,1,1, 0 },
+  { "custom_data",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TableDataColumn, custom_data),
+    0,0,0, 0 },
+  { "cellstyle",	"Dwg_CellStyle", sizeof (Dwg_CellStyle),  OFF (struct _dwg_TableDataColumn, cellstyle),
+    0,0,0, 0 },
+  { "cellstyle_id",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TableDataColumn, cellstyle_id),
+    0,0,0, 0 },
+  { "width",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TableDataColumn, width),
+    0,0,0, 0 },
+  { "parent",	"struct _dwg_LinkedTableData*", sizeof (void *),  OFF (struct _dwg_TableDataColumn, parent),
+    1,1,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_TableRow: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_TableRow_fields[] = {
+  { "num_cells",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TableRow, num_cells),
+    0,0,0, 0 },
+  { "cells",	"Dwg_TableCell*", sizeof (Dwg_TableCell*),  OFF (struct _dwg_TableRow, cells),
+    1,1,0, 0 },
+  { "custom_data",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TableRow, custom_data),
+    0,0,0, 0 },
+  { "num_customdata_items",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TableRow, num_customdata_items),
+    0,0,0, 0 },
+  { "customdata_items",	"Dwg_TABLE_CustomDataItem*", sizeof (Dwg_TABLE_CustomDataItem*),  OFF (struct _dwg_TableRow, customdata_items),
+    1,1,0, 0 },
+  { "cellstyle",	"Dwg_CellStyle", sizeof (Dwg_CellStyle),  OFF (struct _dwg_TableRow, cellstyle),
+    0,0,0, 0 },
+  { "style_id",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TableRow, style_id),
+    0,0,0, 0 },
+  { "height",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TableRow, height),
+    0,0,0, 0 },
+  { "parent",	"struct _dwg_LinkedTableData*", sizeof (void *),  OFF (struct _dwg_TableRow, parent),
+    1,1,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
 
 
 /* common fields: */
@@ -6965,6 +7251,42 @@ static const Dwg_DYNAPI_field _dwg_object_object_fields[] = {
     0,0,0, 0 },
   { "xdicobjhandle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_object, xdicobjhandle),
     1,0,0, 360 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+
+
+/* from typedef struct Dwg_SummaryInfo: (sorted by name) */
+static const Dwg_DYNAPI_field _dwg_SummaryInfo_fields[] = {
+  { "AUTHOR",	"TV", sizeof (BITCODE_TV),  OFF (struct Dwg_SummaryInfo, AUTHOR),
+    1,1,1, 1 },
+  { "COMMENTS",	"TV", sizeof (BITCODE_TV),  OFF (struct Dwg_SummaryInfo, COMMENTS),
+    1,1,1, 1 },
+  { "HYPERLINKBASE",	"TV", sizeof (BITCODE_TV),  OFF (struct Dwg_SummaryInfo, HYPERLINKBASE),
+    1,1,1, 1 },
+  { "KEYWORDS",	"TV", sizeof (BITCODE_TV),  OFF (struct Dwg_SummaryInfo, KEYWORDS),
+    1,1,1, 1 },
+  { "LASTSAVEDBY",	"TV", sizeof (BITCODE_TV),  OFF (struct Dwg_SummaryInfo, LASTSAVEDBY),
+    1,1,1, 1 },
+  { "REVISIONNUMBER",	"TV", sizeof (BITCODE_TV),  OFF (struct Dwg_SummaryInfo, REVISIONNUMBER),
+    1,1,1, 1 },
+  { "SUBJECT",	"TV", sizeof (BITCODE_TV),  OFF (struct Dwg_SummaryInfo, SUBJECT),
+    1,1,1, 1 },
+  { "TDCREATE",	"TIMERLL", sizeof (BITCODE_TIMERLL),  OFF (struct Dwg_SummaryInfo, TDCREATE),
+    1,0,0, 0 },
+  { "TDINDWG",	"TIMERLL", sizeof (BITCODE_TIMERLL),  OFF (struct Dwg_SummaryInfo, TDINDWG),
+    1,0,0, 0 },
+  { "TDUPDATE",	"TIMERLL", sizeof (BITCODE_TIMERLL),  OFF (struct Dwg_SummaryInfo, TDUPDATE),
+    1,0,0, 0 },
+  { "TITLE",	"TV", sizeof (BITCODE_TV),  OFF (struct Dwg_SummaryInfo, TITLE),
+    1,1,1, 1 },
+  { "num_props",	"RS", sizeof (BITCODE_RS),  OFF (struct Dwg_SummaryInfo, num_props),
+    0,0,0, 0 },
+  { "props",	"Dwg_SummaryInfo_Property*", sizeof (Dwg_SummaryInfo_Property*),  OFF (struct Dwg_SummaryInfo, props),
+    1,1,0, 0 },
+  { "unknown1",	"RL", sizeof (BITCODE_RL),  OFF (struct Dwg_SummaryInfo, unknown1),
+    0,0,0, 0 },
+  { "unknown2",	"RL", sizeof (BITCODE_RL),  OFF (struct Dwg_SummaryInfo, unknown2),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 
@@ -7156,45 +7478,59 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
   { "3DSOLID_silhouette",	(int)DWG_TYPE__3DSOLID,	NULL,	_dwg_3DSOLID_silhouette_fields },	/* 0 */
   { "3DSOLID_wire",	(int)DWG_TYPE__3DSOLID,	NULL,	_dwg_3DSOLID_wire_fields },	/* 1 */
   { "ACTIONBODY",	0,	"AcDbAssocActionBody",	_dwg_ACTIONBODY_fields },	/* 2 */
-  { "CELLSTYLEMAP_Cell",	(int)DWG_TYPE_CELLSTYLEMAP,	NULL,	_dwg_CELLSTYLEMAP_Cell_fields },	/* 3 */
-  { "DIMASSOC_ref",	(int)DWG_TYPE_DIMASSOC,	NULL,	_dwg_DIMASSOC_ref_fields },	/* 4 */
-  { "DIMENSION_common",	0,	"AcDbDimension",	_dwg_DIMENSION_common_fields },	/* 5 */
-  { "EVAL_Node",	0,	NULL,	_dwg_EVAL_Node_fields },	/* 6 */
-  { "FIELD_ChildValue",	(int)DWG_TYPE_FIELD,	NULL,	_dwg_FIELD_ChildValue_fields },	/* 7 */
-  { "GEODATA_meshface",	(int)DWG_TYPE_GEODATA,	NULL,	_dwg_GEODATA_meshface_fields },	/* 8 */
-  { "GEODATA_meshpt",	(int)DWG_TYPE_GEODATA,	NULL,	_dwg_GEODATA_meshpt_fields },	/* 9 */
-  { "HATCH_DefLine",	(int)DWG_TYPE_HATCH,	NULL,	_dwg_HATCH_DefLine_fields },	/* 10 */
-  { "HATCH_color",	(int)DWG_TYPE_HATCH,	NULL,	_dwg_HATCH_color_fields },	/* 11 */
-  { "HATCH_control_point",	(int)DWG_TYPE_HATCH,	NULL,	_dwg_HATCH_control_point_fields },	/* 12 */
-  { "HATCH_path",	(int)DWG_TYPE_HATCH,	NULL,	_dwg_HATCH_path_fields },	/* 13 */
-  { "HATCH_pathseg",	(int)DWG_TYPE_HATCH,	NULL,	_dwg_HATCH_pathseg_fields },	/* 14 */
-  { "HATCH_polylinepath",	(int)DWG_TYPE_HATCH,	NULL,	_dwg_HATCH_polylinepath_fields },	/* 15 */
-  { "LEADER_ArrowHead",	(int)DWG_TYPE_LEADER,	NULL,	_dwg_LEADER_ArrowHead_fields },	/* 16 */
-  { "LEADER_BlockLabel",	(int)DWG_TYPE_LEADER,	NULL,	_dwg_LEADER_BlockLabel_fields },	/* 17 */
-  { "LEADER_Break",	(int)DWG_TYPE_LEADER,	NULL,	_dwg_LEADER_Break_fields },	/* 18 */
-  { "LEADER_Line",	(int)DWG_TYPE_LEADER,	NULL,	_dwg_LEADER_Line_fields },	/* 19 */
-  { "LEADER_Node",	(int)DWG_TYPE_LEADER,	NULL,	_dwg_LEADER_Node_fields },	/* 20 */
-  { "LTYPE_dash",	(int)DWG_TYPE_LTYPE,	NULL,	_dwg_LTYPE_dash_fields },	/* 21 */
-  { "LWPOLYLINE_width",	(int)DWG_TYPE_LWPOLYLINE,	NULL,	_dwg_LWPOLYLINE_width_fields },	/* 22 */
-  { "MESH_edge",	(int)DWG_TYPE_MESH,	NULL,	_dwg_MESH_edge_fields },	/* 23 */
-  { "MLEADER_AnnotContext",	0,	NULL,	_dwg_MLEADER_AnnotContext_fields },	/* 24 */
-  { "MLINESTYLE_line",	(int)DWG_TYPE_MLINESTYLE,	NULL,	_dwg_MLINESTYLE_line_fields },	/* 25 */
-  { "MLINE_line",	(int)DWG_TYPE_MLINE,	NULL,	_dwg_MLINE_line_fields },	/* 26 */
-  { "MLINE_vertex",	(int)DWG_TYPE_MLINE,	NULL,	_dwg_MLINE_vertex_fields },	/* 27 */
-  { "SPLINE_control_point",	(int)DWG_TYPE_SPLINE,	NULL,	_dwg_SPLINE_control_point_fields },	/* 28 */
-  { "SPLINE_point",	(int)DWG_TYPE_SPLINE,	NULL,	_dwg_SPLINE_point_fields },	/* 29 */
-  { "SUNSTUDY_Dates",	(int)DWG_TYPE_SUNSTUDY,	NULL,	_dwg_SUNSTUDY_Dates_fields },	/* 30 */
-  { "TABLEGEOMETRY_Cell",	(int)DWG_TYPE_TABLEGEOMETRY,	NULL,	_dwg_TABLEGEOMETRY_Cell_fields },	/* 31 */
-  { "TABLESTYLE_Cell",	(int)DWG_TYPE_TABLESTYLE,	NULL,	_dwg_TABLESTYLE_Cell_fields },	/* 32 */
-  { "TABLE_BreakHeight",	(int)DWG_TYPE_TABLE,	NULL,	_dwg_TABLE_BreakHeight_fields },	/* 33 */
-  { "TABLE_BreakRow",	(int)DWG_TYPE_TABLE,	NULL,	_dwg_TABLE_BreakRow_fields },	/* 34 */
-  { "TABLE_CustomDataItem",	(int)DWG_TYPE_TABLE,	NULL,	_dwg_TABLE_CustomDataItem_fields },	/* 35 */
-  { "TABLE_cell",	(int)DWG_TYPE_TABLE,	NULL,	_dwg_TABLE_cell_fields },	/* 36 */
-  { "TABLE_value",	(int)DWG_TYPE_TABLE,	NULL,	_dwg_TABLE_value_fields },	/* 37 */
+  { "BorderStyle",	0,	NULL,	_dwg_BorderStyle_fields },	/* 3 */
+  { "CELLSTYLEMAP_Cell",	(int)DWG_TYPE_CELLSTYLEMAP,	NULL,	_dwg_CELLSTYLEMAP_Cell_fields },	/* 4 */
+  { "CellContentGeometry",	0,	NULL,	_dwg_CellContentGeometry_fields },	/* 5 */
+  { "CellStyle",	0,	NULL,	_dwg_CellStyle_fields },	/* 6 */
+  { "ContentFormat",	0,	NULL,	_dwg_ContentFormat_fields },	/* 7 */
+  { "DIMASSOC_ref",	(int)DWG_TYPE_DIMASSOC,	NULL,	_dwg_DIMASSOC_ref_fields },	/* 8 */
+  { "DIMENSION_common",	0,	"AcDbDimension",	_dwg_DIMENSION_common_fields },	/* 9 */
+  { "EVAL_Node",	0,	NULL,	_dwg_EVAL_Node_fields },	/* 10 */
+  { "FIELD_ChildValue",	(int)DWG_TYPE_FIELD,	NULL,	_dwg_FIELD_ChildValue_fields },	/* 11 */
+  { "FormattedTableData",	0,	NULL,	_dwg_FormattedTableData_fields },	/* 12 */
+  { "FormattedTableMerged",	0,	NULL,	_dwg_FormattedTableMerged_fields },	/* 13 */
+  { "GEODATA_meshface",	(int)DWG_TYPE_GEODATA,	NULL,	_dwg_GEODATA_meshface_fields },	/* 14 */
+  { "GEODATA_meshpt",	(int)DWG_TYPE_GEODATA,	NULL,	_dwg_GEODATA_meshpt_fields },	/* 15 */
+  { "HATCH_DefLine",	(int)DWG_TYPE_HATCH,	NULL,	_dwg_HATCH_DefLine_fields },	/* 16 */
+  { "HATCH_color",	(int)DWG_TYPE_HATCH,	NULL,	_dwg_HATCH_color_fields },	/* 17 */
+  { "HATCH_control_point",	(int)DWG_TYPE_HATCH,	NULL,	_dwg_HATCH_control_point_fields },	/* 18 */
+  { "HATCH_path",	(int)DWG_TYPE_HATCH,	NULL,	_dwg_HATCH_path_fields },	/* 19 */
+  { "HATCH_pathseg",	(int)DWG_TYPE_HATCH,	NULL,	_dwg_HATCH_pathseg_fields },	/* 20 */
+  { "HATCH_polylinepath",	(int)DWG_TYPE_HATCH,	NULL,	_dwg_HATCH_polylinepath_fields },	/* 21 */
+  { "LEADER_ArrowHead",	(int)DWG_TYPE_LEADER,	NULL,	_dwg_LEADER_ArrowHead_fields },	/* 22 */
+  { "LEADER_BlockLabel",	(int)DWG_TYPE_LEADER,	NULL,	_dwg_LEADER_BlockLabel_fields },	/* 23 */
+  { "LEADER_Break",	(int)DWG_TYPE_LEADER,	NULL,	_dwg_LEADER_Break_fields },	/* 24 */
+  { "LEADER_Line",	(int)DWG_TYPE_LEADER,	NULL,	_dwg_LEADER_Line_fields },	/* 25 */
+  { "LEADER_Node",	(int)DWG_TYPE_LEADER,	NULL,	_dwg_LEADER_Node_fields },	/* 26 */
+  { "LTYPE_dash",	(int)DWG_TYPE_LTYPE,	NULL,	_dwg_LTYPE_dash_fields },	/* 27 */
+  { "LWPOLYLINE_width",	(int)DWG_TYPE_LWPOLYLINE,	NULL,	_dwg_LWPOLYLINE_width_fields },	/* 28 */
+  { "LinkedData",	0,	NULL,	_dwg_LinkedData_fields },	/* 29 */
+  { "LinkedTableData",	0,	NULL,	_dwg_LinkedTableData_fields },	/* 30 */
+  { "MESH_edge",	(int)DWG_TYPE_MESH,	NULL,	_dwg_MESH_edge_fields },	/* 31 */
+  { "MLEADER_AnnotContext",	0,	NULL,	_dwg_MLEADER_AnnotContext_fields },	/* 32 */
+  { "MLINESTYLE_line",	(int)DWG_TYPE_MLINESTYLE,	NULL,	_dwg_MLINESTYLE_line_fields },	/* 33 */
+  { "MLINE_line",	(int)DWG_TYPE_MLINE,	NULL,	_dwg_MLINE_line_fields },	/* 34 */
+  { "MLINE_vertex",	(int)DWG_TYPE_MLINE,	NULL,	_dwg_MLINE_vertex_fields },	/* 35 */
+  { "SPLINE_control_point",	(int)DWG_TYPE_SPLINE,	NULL,	_dwg_SPLINE_control_point_fields },	/* 36 */
+  { "SPLINE_point",	(int)DWG_TYPE_SPLINE,	NULL,	_dwg_SPLINE_point_fields },	/* 37 */
+  { "SUNSTUDY_Dates",	(int)DWG_TYPE_SUNSTUDY,	NULL,	_dwg_SUNSTUDY_Dates_fields },	/* 38 */
+  { "SummaryInfo_Property",	0,	NULL,	_dwg_SummaryInfo_Property_fields },	/* 39 */
+  { "TABLEGEOMETRY_Cell",	(int)DWG_TYPE_TABLEGEOMETRY,	NULL,	_dwg_TABLEGEOMETRY_Cell_fields },	/* 40 */
+  { "TABLESTYLE_Cell",	(int)DWG_TYPE_TABLESTYLE,	NULL,	_dwg_TABLESTYLE_Cell_fields },	/* 41 */
+  { "TABLE_BreakHeight",	(int)DWG_TYPE_TABLE,	NULL,	_dwg_TABLE_BreakHeight_fields },	/* 42 */
+  { "TABLE_BreakRow",	(int)DWG_TYPE_TABLE,	NULL,	_dwg_TABLE_BreakRow_fields },	/* 43 */
+  { "TABLE_CustomDataItem",	(int)DWG_TYPE_TABLE,	NULL,	_dwg_TABLE_CustomDataItem_fields },	/* 44 */
+  { "TABLE_cell",	(int)DWG_TYPE_TABLE,	NULL,	_dwg_TABLE_cell_fields },	/* 45 */
+  { "TABLE_value",	(int)DWG_TYPE_TABLE,	NULL,	_dwg_TABLE_value_fields },	/* 46 */
+  { "TableCell",	0,	NULL,	_dwg_TableCell_fields },	/* 47 */
+  { "TableCellContent",	0,	NULL,	_dwg_TableCellContent_fields },	/* 48 */
+  { "TableCellContent_Attr",	0,	NULL,	_dwg_TableCellContent_Attr_fields },	/* 49 */
+  { "TableDataColumn",	0,	NULL,	_dwg_TableDataColumn_fields },	/* 50 */
+  { "TableRow",	0,	NULL,	_dwg_TableRow_fields },	/* 51 */
 
 };
 
-#line 979 "gen-dynapi.pl"
+#line 1141 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {

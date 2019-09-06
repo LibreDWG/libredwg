@@ -373,6 +373,7 @@ native fallback types int/long, which are different across platforms.
 * HEADER::            All Header variables
 * ENTITIES::          All Entities and its special and common fields
 * OBJECTS::           All Objects and its special and common fields
+* SummaryInfo::       All SummaryInfo fields
 @end menu
 
 @include dynapi.texi

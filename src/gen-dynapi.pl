@@ -93,13 +93,16 @@ for (sort $c->struct_names) {
   } elsif (/_dwg_object_([A-Z0-9_]+)/) {
     $structs{$1}++;
     push @object_names, $1;
-  } elsif (/_dwg_header_variables/) {
+  } elsif (/^_dwg_header_variables/) {
     ;
-  } elsif (/_dwg_([A-Z0-9]+)(_|$)/) {
+  } elsif (/^Dwg_([A-Z0-9]+)/) { # AuxHeader, Header, R2004_Header, SummaryInfo
+    my $n = $1;
+    $structs{$n}++;
+  } elsif (/_dwg_([A-Z0-9_]+)/ && !/_dwg_ODA/) {
     $structs{$_}++;
     push @subclasses, $_;
   } else {
-    #print " (?)";
+    warn "skip struct $_\n";
   }
 }
 push @entity_names, qw(XLINE REGION BODY);
@@ -272,6 +275,9 @@ $DXF{$n}->{'ownerhandle'} = 330;
 $DXF{$n}->{'xdicobjhandle'} = 360;
 $DXF{$n}->{'reactors'} = 330;
 
+$n = 'SummaryInfo';
+dxfin_spec "$srcdir/summaryinfo.spec";
+
 # dxfclassname for each of our classes and subclasses (not complete)
 # Our NAME => 100
 %SUBCLASS = (
@@ -408,7 +414,7 @@ sub out_struct {
   my $s = $c->struct($tmpl);
   return unless $s->{declarations};
   my @declarations = @{$s->{declarations}};
-  if ($n =~ /^_dwg_(header_variables|object_object|object_entity)$/) {
+  if ($n =~ /^_dwg_(header_variables|object_object|object_entity|SummaryInfo)$/) {
     @declarations = sort {
       my $aname = $a->{declarators}->[0]->{declarator};
       my $bname = $b->{declarators}->[0]->{declarator};
@@ -650,6 +656,18 @@ for (<DATA>) {
       } elsif ($1 eq 'object_entity') {
         print $doc "\@strong{Common Entity fields} \@anchor{Common Entity fields}\n";
         print $doc "\@cindex Common Entity fields\n\n";
+      } elsif ($1 eq 'SummaryInfo') {
+        print $doc "\n\@node SummaryInfo\n\@section SummaryInfo\n\@cindex SummaryInfo\n\n";
+        print $doc "All Section SummaryInfo fields.\n\n";
+      } else {
+        print $doc "\@strong{$1}\n";
+        print $doc "\@vindex $1\n\n";
+      }
+      out_struct($tmpl, $1);
+    } elsif ($tmpl =~ /^struct Dwg_(\w+)/) {
+      if ($1 eq 'SummaryInfo') {
+        print $doc "\n\@node SummaryInfo\n\@section SummaryInfo\n\@cindex SummaryInfo\n\n";
+        print $doc "All Section SummaryInfo fields.\n\n";
       } else {
         print $doc "\@strong{$1}\n";
         print $doc "\@vindex $1\n\n";
@@ -1039,7 +1057,7 @@ close $fh;
 
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 908 "gen-dynapi.pl"
+#line 1061 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -1094,6 +1112,8 @@ static const char dwg_object_names[][MAXLEN_OBJECTS] = {
 @@struct _dwg_object_entity@@
 @@struct _dwg_object_object@@
 
+@@struct Dwg_SummaryInfo@@
+
 struct _name_type_fields {
   const char *const name;
   const enum DWG_OBJECT_TYPE type;
@@ -1117,7 +1137,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
-#line 979 "gen-dynapi.pl"
+#line 1141 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {

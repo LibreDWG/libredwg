@@ -7097,6 +7097,34 @@ BL
 @end vtable
 @end indentedblock
 
+@strong{Dwg_BorderStyle} @anchor{Dwg_BorderStyle}
+@vindex Dwg_BorderStyle
+
+@indentedblock
+@vtable @code
+
+@item edge_flags
+BL
+@item border_property_overrides_flag
+BL
+@item border_type
+BL
+@item color
+CMC
+@item linewt
+BLd
+@item line_type
+H
+@item invisible
+BL
+@item double_line_spacing
+BD
+@item parent
+struct _dwg_CellStyle*
+
+@end vtable
+@end indentedblock
+
 @strong{Dwg_CELLSTYLEMAP_Cell} @anchor{Dwg_CELLSTYLEMAP_Cell}
 @vindex Dwg_CELLSTYLEMAP_Cell
 
@@ -7113,6 +7141,112 @@ BL
 TV
 @item parent
 struct _dwg_object_CELLSTYLEMAP*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_CellContentGeometry} @anchor{Dwg_CellContentGeometry}
+@vindex Dwg_CellContentGeometry
+
+@indentedblock
+@vtable @code
+
+@item dist_top_left
+3BD
+@item dist_center
+3BD
+@item content_width
+BD
+@item content_height
+BD
+@item width
+BD
+@item height
+BD
+@item unknown
+BD
+@item cell_parent
+struct _dwg_TableCell*
+@item geom_parent
+struct _dwg_TABLEGEOMETRY_Cell*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_CellStyle} @anchor{Dwg_CellStyle}
+@vindex Dwg_CellStyle
+
+@indentedblock
+@vtable @code
+
+@item type
+BL
+@item data_flags
+BS
+@item property_override_flags
+BL
+@item merge_flags
+BL
+@item background_color
+CMC
+@item content_layout
+BL
+@item content_format
+Dwg_ContentFormat
+@item margin_override_flags
+BS
+@item vert_margin
+BD
+@item horiz_margin
+BD
+@item bottom_margin
+BD
+@item right_margin
+BD
+@item margin_horiz_spacing
+BD
+@item margin_vert_spacing
+BD
+@item num_borders
+BL
+@item border
+Dwg_BorderStyle*
+@item tablerow_parent
+struct _dwg_TableRow*
+@item tabledatacolumn_parent
+struct _dwg_TableDataColumn*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_ContentFormat} @anchor{Dwg_ContentFormat}
+@vindex Dwg_ContentFormat
+
+@indentedblock
+@vtable @code
+
+@item property_override_flags
+BL
+@item property_flags
+BL
+@item value_data_type
+BL
+@item value_unit_type
+BL
+@item value_format_string
+TV
+@item rotation
+BD
+@item block_scale
+BD
+@item cell_alignment
+BL
+@item content_color
+CMC
+@item text_style
+H
+@item text_height
+BD
 
 @end vtable
 @end indentedblock
@@ -7227,6 +7361,44 @@ TV
 Dwg_TABLE_value
 @item parent
 struct _dwg_object_FIELD*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_FormattedTableData} @anchor{Dwg_FormattedTableData}
+@vindex Dwg_FormattedTableData
+
+@indentedblock
+@vtable @code
+
+@item cellstyle
+Dwg_CellStyle
+@item num_merged_cells
+BL
+@item merged_cells
+Dwg_FormattedTableMerged*
+@item parent
+struct _dwg_object_TABLECONTENT*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_FormattedTableMerged} @anchor{Dwg_FormattedTableMerged}
+@vindex Dwg_FormattedTableMerged
+
+@indentedblock
+@vtable @code
+
+@item top_row
+BL
+@item left_col
+BL
+@item bottom_row
+BL
+@item right_col
+BL
+@item parent
+struct _dwg_FormattedTableData*
 
 @end vtable
 @end indentedblock
@@ -7575,6 +7747,42 @@ BD
 @end vtable
 @end indentedblock
 
+@strong{Dwg_LinkedData} @anchor{Dwg_LinkedData}
+@vindex Dwg_LinkedData
+
+@indentedblock
+@vtable @code
+
+@item name
+TV
+@item desc
+TV
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_LinkedTableData} @anchor{Dwg_LinkedTableData}
+@vindex Dwg_LinkedTableData
+
+@indentedblock
+@vtable @code
+
+@item num_cols
+BL
+@item cols
+Dwg_TableDataColumn*
+@item num_rows
+BL
+@item rows
+Dwg_TableRow*
+@item num_field_refs
+BL
+@item field_refs
+H*
+
+@end vtable
+@end indentedblock
+
 @strong{Dwg_MESH_edge} @anchor{Dwg_MESH_edge}
 @vindex Dwg_MESH_edge
 
@@ -7757,6 +7965,20 @@ BD
 BL
 @item time
 BL
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_SummaryInfo_Property} @anchor{Dwg_SummaryInfo_Property}
+@vindex Dwg_SummaryInfo_Property
+
+@indentedblock
+@vtable @code
+
+@item key
+T
+@item value
+T
 
 @end vtable
 @end indentedblock
@@ -7983,6 +8205,154 @@ TV
 @end vtable
 @end indentedblock
 
+@strong{Dwg_TableCell} @anchor{Dwg_TableCell}
+@vindex Dwg_TableCell
+
+@indentedblock
+@vtable @code
+
+@item flag
+BL
+@item tooltip
+TV
+@item customdata
+BL
+@item num_customdata_items
+BL
+@item customdata_items
+Dwg_TABLE_CustomDataItem*
+@item has_linked_data
+BL
+@item data_link
+H
+@item num_rows
+BL
+@item num_cols
+BL
+@item unknown
+BL
+@item num_cell_contents
+BL
+@item cell_contents
+Dwg_TableCellContent*
+@item style_id
+BL
+@item has_geom_data
+BL
+@item geom_data_flag
+BL
+@item unknown_d40
+BD
+@item unknown_d41
+BD
+@item has_cell_geom
+BL
+@item cell_geom_handle
+H
+@item geom_data
+Dwg_CellContentGeometry*
+@item style_parent
+struct _dwg_CellStyle*
+@item row_parent
+struct _dwg_TableRow*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_TableCellContent} @anchor{Dwg_TableCellContent}
+@vindex Dwg_TableCellContent
+
+@indentedblock
+@vtable @code
+
+@item type
+BL
+@item value
+Dwg_TABLE_value
+@item handle
+H
+@item num_attrs
+BL
+@item attrs
+Dwg_TableCellContent_Attr*
+@item has_content_format_overrides
+BS
+@item content_format
+Dwg_ContentFormat
+@item parent
+struct _dwg_TableCell*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_TableCellContent_Attr} @anchor{Dwg_TableCellContent_Attr}
+@vindex Dwg_TableCellContent_Attr
+
+@indentedblock
+@vtable @code
+
+@item attdef
+H
+@item value
+TV
+@item index
+BL
+@item parent
+struct _dwg_TableCellContent*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_TableDataColumn} @anchor{Dwg_TableDataColumn}
+@vindex Dwg_TableDataColumn
+
+@indentedblock
+@vtable @code
+
+@item name
+TV
+@item custom_data
+BL
+@item cellstyle
+Dwg_CellStyle
+@item cellstyle_id
+BL
+@item width
+BL
+@item parent
+struct _dwg_LinkedTableData*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_TableRow} @anchor{Dwg_TableRow}
+@vindex Dwg_TableRow
+
+@indentedblock
+@vtable @code
+
+@item num_cells
+BL
+@item cells
+Dwg_TableCell*
+@item custom_data
+BL
+@item num_customdata_items
+BL
+@item customdata_items
+Dwg_TABLE_CustomDataItem*
+@item cellstyle
+Dwg_CellStyle
+@item style_id
+BL
+@item height
+BL
+@item parent
+struct _dwg_LinkedTableData*
+
+@end vtable
+@end indentedblock
+
 @strong{Common Entity fields} @anchor{Common Entity fields}
 @cindex Common Entity fields
 
@@ -8117,6 +8487,50 @@ H*,	DXF 330
 B
 @item xdicobjhandle
 H,	DXF 360
+
+@end vtable
+@end indentedblock
+
+
+@node SummaryInfo
+@section SummaryInfo
+@cindex SummaryInfo
+
+All Section SummaryInfo fields.
+
+@indentedblock
+@vtable @code
+
+@item AUTHOR
+TV,	DXF 1
+@item COMMENTS
+TV,	DXF 1
+@item HYPERLINKBASE
+TV,	DXF 1
+@item KEYWORDS
+TV,	DXF 1
+@item LASTSAVEDBY
+TV,	DXF 1
+@item REVISIONNUMBER
+TV,	DXF 1
+@item SUBJECT
+TV,	DXF 1
+@item TDCREATE
+TIMERLL
+@item TDINDWG
+TIMERLL
+@item TDUPDATE
+TIMERLL
+@item TITLE
+TV,	DXF 1
+@item num_props
+RS
+@item props
+Dwg_SummaryInfo_Property*
+@item unknown1
+RL
+@item unknown2
+RL
 
 @end vtable
 @end indentedblock
