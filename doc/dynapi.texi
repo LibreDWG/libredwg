@@ -3984,12 +3984,16 @@ struct _dwg_object_object*
 BL,	DXF 90
 @item geometry_status
 BL,	DXF 90
+@item readdep
+H,	DXF 330
+@item writedep
+H,	DXF 360
 @item constraint_status
 BL,	DXF 90
 @item dof
 BL,	DXF 90
-@item l4
-BL,	DXF 90
+@item is_body_a_proxy
+B,	DXF 90
 @item l5
 BL,	DXF 90
 @item b1
@@ -4037,26 +4041,28 @@ BD,	DXF 40
 
 @item parent
 struct _dwg_object_object*
+@item solution_status
+BL,	DXF 90
+@item geometry_status
+BL,	DXF 90
+@item readdep
+H,	DXF 330
+@item writedep
+H,	DXF 360
+@item constraint_status
+BL,	DXF 90
+@item dof
+BL,	DXF 90
 @item is_body_a_proxy
 B,	DXF 90
 @item body
 Dwg_ACTIONBODY
-@item status
-BL,	DXF 90
 @item actionbody
 H
 @item callback
 H
 @item owningnetwork
 H
-@item num_deps
-BL,	DXF 90
-@item readdeps
-H*,	DXF 330
-@item writedeps
-H*,	DXF 360
-@item unknown_assoc
-BL,	DXF 90
 
 @end vtable
 @end indentedblock
@@ -4146,16 +4152,22 @@ H,	DXF 330
 
 @item parent
 struct _dwg_object_object*
-@item status
+@item solution_status
 BL,	DXF 90
-@item num_deps
+@item geometry_status
 BL,	DXF 90
 @item readdep
 H,	DXF 330
 @item writedep
 H,	DXF 360
-@item unknown_assoc
+@item constraint_status
 BL,	DXF 90
+@item dof
+BL,	DXF 90
+@item is_body_a_proxy
+B,	DXF 90
+@item unknown_assoc
+BL
 @item unknown_n1
 BL,	DXF 90
 @item unknown_n2

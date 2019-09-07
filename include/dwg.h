@@ -4673,20 +4673,26 @@ typedef struct _dwg_ACTIONBODY
   BITCODE_BL value; //resbuf
 } Dwg_ACTIONBODY;
 
+#define ASSOCACTION_fields \
+  BITCODE_BL solution_status; /* 90 */ \
+  BITCODE_BL geometry_status; /* 90 */ \
+  /*BITCODE_BL num_deps; */   /* 90 */ \
+  BITCODE_H readdep;          /* 330 */ \
+  BITCODE_H writedep;         /* 360 */ \
+  BITCODE_BL constraint_status; /* 90 */ \
+  BITCODE_BL dof;               /* 90 */ \
+  BITCODE_B  is_body_a_proxy    /* 90 */
+
 typedef struct _dwg_object_ASSOCACTION
 {
   struct _dwg_object_object *parent;
-  BITCODE_B  is_body_a_proxy;
+  ASSOCACTION_fields;
+
   //BITCODE_B is_actionevaluation_in_progress; // 90
   Dwg_ACTIONBODY body;
-  BITCODE_BL status; // 90
   BITCODE_H  actionbody;
   BITCODE_H  callback;
   BITCODE_H  owningnetwork;
-  BITCODE_BL num_deps; // 90
-  BITCODE_H* readdeps;  // 330
-  BITCODE_H* writedeps; // 360
-  BITCODE_BL unknown_assoc; // 90
 } Dwg_Object_ASSOCACTION;
 
 typedef struct _dwg_object_ASSOCDEPENDENCY
@@ -4733,15 +4739,13 @@ typedef struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY
 typedef struct _dwg_object_ASSOCNETWORK
 {
   struct _dwg_object_object *parent;
-  BITCODE_BL status; // 90
+  ASSOCACTION_fields;
   //BITCODE_H assocaction;
   //or inlined:
   //90:2 90:0 330:0 360:0 7x90:0
-  BITCODE_BL num_deps; // 90
-  BITCODE_H readdep;  // 330
-  BITCODE_H writedep; // 360
-  BITCODE_BL unknown_assoc; // 90
+  //BITCODE_BL num_deps; // 90
 
+  BITCODE_BL unknown_assoc; // 90
   //90, 90, [90, 330], 90
   BITCODE_BL unknown_n1; // 90 0
   BITCODE_BL unknown_n2; // 90 1
@@ -4776,11 +4780,8 @@ typedef struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM
 typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP
 {
   struct _dwg_object_object *parent;
-  BITCODE_BL solution_status;   //90 1
-  BITCODE_BL geometry_status;   //90 0
-  BITCODE_BL constraint_status; //90 1
-  BITCODE_BL dof;               //90 2
-  BITCODE_BL l4; //90 1
+  ASSOCACTION_fields;
+
   BITCODE_BL l5; //90 1
   BITCODE_B  b1; //70 0
   BITCODE_3BD workplane[3]; //3x10 workplane

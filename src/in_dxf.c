@@ -2509,6 +2509,55 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return pair;
 }
 
+// with ASSOC2DCONSTRAINTGROUP, ASSOCNETWORK, ASSOCACTION
+static Dxf_Pair *
+add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                 Dxf_Pair *restrict pair)
+{
+  Dwg_Object_ASSOCACTION *o = obj->tio.object->tio.ASSOCACTION;
+  Dwg_Data *dwg = obj->parent;
+
+#define EXPECT_INT_DXF(field, dxf, type)        \
+  pair = dxf_read_pair (dat);                   \
+  if (pair->code != dxf)                        \
+    {                                           \
+      LOG_ERROR ("%s: Unexpected DXF code %d, expected %d for %s", obj->name, \
+                 pair->code, dxf, field);       \
+      return pair;                              \
+    }                                           \
+  dwg_dynapi_entity_set_value (o, obj->name, field, &pair->value, 1);   \
+  LOG_TRACE ("%s.%s = %d [%d " #type "]\n", obj->name, field,           \
+             pair->value.i, pair->code);                                \
+  dxf_free_pair (pair)
+
+#define EXPECT_H_DXF(field, htype, dxf, type)   \
+  pair = dxf_read_pair (dat);                   \
+  if (pair->code != dxf)                        \
+    {                                           \
+      LOG_ERROR ("%s: Unexpected DXF code %d, expected %d for %s", obj->name, \
+                 pair->code, dxf, field);       \
+      return pair;                              \
+    }                                           \
+  if (pair->value.u)                            \
+    {                                           \
+      BITCODE_H hdl = dwg_add_handleref (dwg, htype, pair->value.u, obj); \
+      dwg_dynapi_entity_set_value (o, obj->name, field, &hdl, 1);       \
+      LOG_TRACE ("%s.%s = " FORMAT_REF " [%d H]\n", obj->name,          \
+                 field, ARGS_REF(hdl), pair->code);                     \
+    }                                           \
+  dxf_free_pair (pair)
+
+  EXPECT_INT_DXF ("solution_status", 90, BL);
+  EXPECT_INT_DXF ("geometry_status", 90, BL);
+  EXPECT_H_DXF ("readdep", 5, 330, H); // or vector?
+  EXPECT_H_DXF ("writedep", 5, 360, H);
+  EXPECT_INT_DXF ("constraint_status", 90, BL);
+  EXPECT_INT_DXF ("dof", 90, BL);
+  EXPECT_INT_DXF ("is_body_a_proxy", 90, B);
+
+  return NULL;
+}
+
 static Dxf_Pair *
 new_table_control (const char *restrict name, Bit_Chain *restrict dat,
                    Dwg_Data *restrict dwg)
@@ -3659,7 +3708,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                     }
                 }
               // set the real objname
-              if (strEQc (obj->name, "POLYLINE_2D"))
+              else if (strEQc (obj->name, "POLYLINE_2D"))
                 {
                   if (strEQc (subclass, "AcDb3dPolyline"))
                     {
@@ -3697,6 +3746,16 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                     {
                       UPGRADE_ENTITY (VERTEX_2D, VERTEX_PFACE_FACE)
                     }
+                }
+              // with ASSOC2DCONSTRAINTGROUP, ASSOCNETWORK, ASSOCACTION
+              else if (strstr (obj->name, "ASSOC") &&
+                       strEQc (subclass, "AcDbAssocAction"))
+                {
+                  pair = add_ASSOCACTION (obj, dat, pair); //NULL for success
+                  if (!pair)
+                    goto next_pair;
+                  else
+                    goto start_loop;
                 }
             }
           break;

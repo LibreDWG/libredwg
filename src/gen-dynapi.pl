@@ -589,6 +589,9 @@ sub out_struct {
     if (!$dxf && $key =~ /DIMENSION/) {
       $dxf = $DXF{COMMON_ENTITY_DIMENSION}->{$name};
     }
+    if (!$dxf && $key =~ /ASSOC/) {
+      $dxf = $DXF{ASSOCACTION}->{$name};
+    }
     $dxf = 0 unless $dxf;
     warn "no dxf for $key: $name 0\n" unless $dxf or
       ($name eq 'parent') or

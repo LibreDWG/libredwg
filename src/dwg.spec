@@ -6153,18 +6153,24 @@ DWG_OBJECT(ASSOCALIGNEDDIMACTIONBODY)
   }
 DWG_OBJECT_END
 
+#define ASSOCACTION_fields   \
+  SUBCLASS (AcDbAssocAction) \
+  /* 0 WellDefined, 1 UnderConstrained, 2 OverConstrained, \
+     3 Inconsistent, 4 NotEvaluated, 5 NotAvailable,       \
+     6 RejectedByClient */                                 \
+  FIELD_BL (solution_status, 90);                          \
+  FIELD_BL (geometry_status, 90); /* 0 */                  \
+  FIELD_HANDLE (readdep, 5, 330);                          \
+  FIELD_HANDLE (writedep, 5, 360);                         \
+  FIELD_BL (constraint_status, 90); /* 1 */                             \
+  FIELD_BL (dof, 90);               /* 2 remaining degree of freedom */ \
+  FIELD_B (is_body_a_proxy, 90)     /* 0 */
+
 // subclass of AcDbAssocAction DEBUGGING
 // Object1 --ReadDep--> Action1 --WriteDep1--> Object2 --ReadDep--> Action2 ...
 DWG_OBJECT(ASSOCNETWORK)
-
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbAssocAction)
-  //FIELD_HANDLE (assocaction, 5, 0);   // handle or inlined?
-  FIELD_BL (status, 90); //0-9
-  FIELD_BL (num_deps, 90); //10-11 ?? not really
-  FIELD_HANDLE (readdep, 5, 330);
-  FIELD_HANDLE (writedep, 5, 360);
-  FIELD_BL (unknown_assoc, 90);
+  ASSOCACTION_fields;
 
   SUBCLASS (AcDbAssocNetwork)
   FIELD_BL (unknown_n1, 90);
@@ -6737,9 +6743,9 @@ DWG_ENTITY_END
 // (varies) DEBUGGING
 DWG_OBJECT(ASSOCACTION)
   DECODE_UNKNOWN_BITS
-  SUBCLASS(AcDbAssocAction)
+  ASSOCACTION_fields;
+
   rcount1 = bit_position(dat);
-  FIELD_B (is_body_a_proxy, 90); //0-9
   DEBUG_HERE_OBJ
   //17bit 00101000101000101:
   FIELD_T (body.evaluatorid, 0);
@@ -6757,14 +6763,14 @@ DWG_OBJECT(ASSOCACTION)
   FIELD_HANDLE (actionbody, 5, 0);
   FIELD_HANDLE (callback, 3, 0);
   FIELD_HANDLE (owningnetwork, 3, 0);
-  FIELD_BL (num_deps, 90);
+  //FIELD_BL (num_deps, 90);
   if (FIELD_VALUE(status)>0x100) {
     LOG_ERROR("Invalid ASSOCACTION.num_deps " FORMAT_BL, FIELD_VALUE(num_deps));
     return DWG_ERR_VALUEOUTOFBOUNDS;
   }
-  HANDLE_VECTOR (readdeps, num_deps, 5, 330);
-  HANDLE_VECTOR (writedeps, num_deps, 0, 360);
-  FIELD_BL (unknown_assoc, 90);
+  //HANDLE_VECTOR (readdeps, num_deps, 5, 330);
+  //HANDLE_VECTOR (writedeps, num_deps, 0, 360);
+  //FIELD_BL (unknown_assoc, 90);
 
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -6857,16 +6863,9 @@ DWG_OBJECT_END
 // see https://help.autodesk.com/view/OARX/2018/ENU/?guid=OREF-AcDbAssoc2dConstraintGroup
 DWG_OBJECT(ASSOC2DCONSTRAINTGROUP)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbAssocAction)
-  // This has multiple handles and types.
-  FIELD_BL (solution_status, 90); // 0 WellDefined, 1 UnderConstrained, 2 OverConstrained,
-                                // 3 Inconsistent, 4 NotEvaluated, 5 NotAvailable,
-                                // 6 RejectedByClient
-  FIELD_BL (geometry_status, 90);   //0
-  /* 330, 360 */
-  FIELD_BL (constraint_status, 90); //1
-  FIELD_BL (dof, 90); //2 remaining degree of freedom
-  FIELD_BL (l4, 90); //0
+  ASSOCACTION_fields;
+
+  SUBCLASS (AcDbAssocNetwork)
   FIELD_BL (l5, 90); //2
   FIELD_B (b1, 70);  //0
   FIELD_3BD (workplane[0], 10); // 0,0,0
