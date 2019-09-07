@@ -420,54 +420,23 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   LOG_TRACE ("HEADER.%s [%s]\n", &field[1], "BD");
                   dwg->header_vars._3DDWFPREC = pair->value.d;
                 }
-              else if (strEQc (field, "$TITLE"))
-                {
-                  LOG_TRACE ("SUMMARY.%s [%s]\n", &field[1], "T");
-                  if (dwg->header.version >= R_2007)
-                    dwg->summaryinfo.TITLE = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
-                  else
-                    dwg->summaryinfo.TITLE = strdup (pair->value.s);
+
+#define SUMMARY_T(name)                   \
+              (strEQc (field, "$" #name)) \
+                {                                                  \
+                  LOG_TRACE ("SUMMARY.%s = %s [1 T]\n", &field[1], pair->value.s); \
+                  if (dwg->header.version >= R_2007)                    \
+                    dwg->summaryinfo.name = (BITCODE_T)bit_utf8_to_TU (pair->value.s); \
+                  else                                                  \
+                    dwg->summaryinfo.name = strdup (pair->value.s);     \
                 }
-              else if (strEQc (field, "$AUTHOR"))
-                {
-                  LOG_TRACE ("SUMMARY.%s [%s]\n", &field[1], "T");
-                  if (dwg->header.version >= R_2007)
-                    dwg->summaryinfo.AUTHOR = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
-                  else
-                    dwg->summaryinfo.AUTHOR = strdup (pair->value.s);
-                }
-              else if (strEQc (field, "$SUBJECT"))
-                {
-                  LOG_TRACE ("SUMMARY.%s [%s]\n", &field[1], "T");
-                  if (dwg->header.version >= R_2007)
-                    dwg->summaryinfo.SUBJECT = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
-                  else
-                    dwg->summaryinfo.SUBJECT = strdup (pair->value.s);
-                }
-              else if (strEQc (field, "$KEYWORDS"))
-                {
-                  LOG_TRACE ("SUMMARY.%s [%s]\n", &field[1], "T");
-                  if (dwg->header.version >= R_2007)
-                    dwg->summaryinfo.KEYWORDS = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
-                  else
-                    dwg->summaryinfo.KEYWORDS = strdup (pair->value.s);
-                }
-              else if (strEQc (field, "$COMMENTS"))
-                {
-                  LOG_TRACE ("SUMMARY.%s [%s]\n", &field[1], "T");
-                  if (dwg->header.version >= R_2007)
-                    dwg->summaryinfo.COMMENTS = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
-                  else
-                    dwg->summaryinfo.COMMENTS = strdup (pair->value.s);
-                }
-              else if (strEQc (field, "$LASTSAVEDBY"))
-                {
-                  LOG_TRACE ("SUMMARY.%s [%s]\n", &field[1], "T");
-                  if (dwg->header.version >= R_2007)
-                    dwg->summaryinfo.LASTSAVEDBY = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
-                  else
-                    dwg->summaryinfo.LASTSAVEDBY = strdup (pair->value.s);
-                }
+
+              else if SUMMARY_T (TITLE)
+              else if SUMMARY_T (AUTHOR)
+              else if SUMMARY_T (SUBJECT)
+              else if SUMMARY_T (KEYWORDS)
+              else if SUMMARY_T (COMMENTS)
+              else if SUMMARY_T (LASTSAVEDBY)
               else
                 LOG_ERROR ("skipping HEADER: 9 %s, unknown field with code %d",
                            field, pair->code);
