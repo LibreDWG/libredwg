@@ -1720,6 +1720,15 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   pair->value.l);
             }
         }
+      else if (pair->code == 97 && is_plpath)
+        {
+          assert (j < (int)o->num_paths);
+          o->paths[j].num_boundary_handles = pair->value.l;
+          o->num_boundary_handles += pair->value.l;
+          LOG_TRACE ("HATCH.paths[%d].num_boundary_handles = %ld [93 BL]\n", j,
+                     pair->value.l);
+          k = 0;
+        }
       else if (pair->code == 78)
         {
           o->num_deflines = pair->value.l;
