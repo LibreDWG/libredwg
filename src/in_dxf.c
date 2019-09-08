@@ -5094,6 +5094,12 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               dxf_free_pair (pair);
               dxf_header_read (dat, dwg);
               dxf_fixup_header (dwg);
+              // skip minimal DXF
+              if (!dwg->header_vars.DIMPOST) // T in all versions
+                {
+                  LOG_ERROR ("Unsupported minimal DXF");
+                  return DWG_ERR_INVALIDDWG;
+                }
             }
           else if (strEQc (pair->value.s, "CLASSES"))
             {
