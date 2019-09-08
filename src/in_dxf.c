@@ -1892,19 +1892,25 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   Dwg_Entity_MULTILEADER *o = obj->tio.entity->tio.MULTILEADER;
   if (pair->code == 304 && strEQc (pair->value.s, "LEADER_LINE{"))
     {
-      int i = 0, j = -1, k = -1;
+      int i = -1, j = -1, k = -1;
       Dwg_MLEADER_AnnotContext *ctx = &o->ctx;
       lnode->lines = calloc (1, sizeof (Dwg_LEADER_Line));
 
       // lines and breaks
       while (pair->code != 305 && pair->code != 0)
         {
-          Dwg_LEADER_Line *lline = &lnode->lines[i];
+          Dwg_LEADER_Line *lline = &lnode->lines[0];
           dxf_free_pair (pair);
           pair = dxf_read_pair (dat);
           switch (pair->code)
             {
             case 10:
+              i++;
+              lnode->num_lines = i + 1;
+              if (i > 0)
+                lnode->lines = realloc (
+                    lnode->lines, lnode->num_lines * sizeof (Dwg_LEADER_Line));
+              lline = &lnode->lines[i];
               j++;
               lline->num_points = j + 1;
               lline->points = realloc (lline->points, (j + 1) * sizeof (BITCODE_3BD));
@@ -1966,9 +1972,6 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               lline->line_index = pair->value.u;
               LOG_TRACE ("%s.leaders[].lines[%d].line_index = %u [%d BL]\n",
                          obj->name, i, pair->value.u, pair->code);
-              i++;
-              lnode->lines = realloc (lnode->lines, i * sizeof (Dwg_LEADER_Line));
-              lnode->num_lines = i;
               break;
             case 170:
               lline->type = pair->value.i;
@@ -1976,9 +1979,20 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                          obj->name, i, pair->value.i, pair->code);
               break;
             case 92:
-              lline->color.index = pair->value.i;
-              LOG_TRACE ("%s.leaders[].lines[%d].color.index = %d [%d CMC]\n",
-                         obj->name, i, pair->value.i, pair->code);
+              if (pair->value.u > 256)
+                {
+                  lline->color.index = 256;
+                  lline->color.rgb = pair->value.u & 0xFFFFFF;
+                  lline->color.alpha = pair->value.u & 0xFF000000;
+                  LOG_TRACE ("%s.leaders[].lines[%d].color.rgb = %06X [%d CMC]\n",
+                             obj->name, i, pair->value.u, pair->code);
+                }
+              else
+                {
+                  lline->color.index = pair->value.i;
+                  LOG_TRACE ("%s.leaders[].lines[%d].color.index = %d [%d CMC]\n",
+                             obj->name, i, pair->value.i, pair->code);
+                }
               break;
             case 171:
               lline->linewt = pair->value.i;
