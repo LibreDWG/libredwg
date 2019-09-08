@@ -148,8 +148,12 @@ dxf_read_pair (Bit_Chain *dat)
 
 #define DXF_CHECK_EOF                                                         \
   if (dat->byte >= dat->size                                                  \
-      || (pair->code == 0 && strEQc (pair->value.s, "EOF")))                  \
+      || (pair != NULL && pair->code == 0 && strEQc (pair->value.s, "EOF")))  \
   return 1
+#define DXF_RETURN_EOF(what)                                                  \
+  if (dat->byte >= dat->size                                                  \
+      || (pair != NULL && pair->code == 0 && strEQc (pair->value.s, "EOF")))  \
+  return what
 
 static int
 dxf_skip_comment (Bit_Chain *dat, Dxf_Pair *pair)
@@ -191,22 +195,22 @@ dxf_skip_comment (Bit_Chain *dat, Dxf_Pair *pair)
         }                                                                     \
     }
 
-static int
-dxf_expect_code (Bit_Chain *restrict dat, Dxf_Pair *restrict pair, int code)
+static Dxf_Pair *
+dxfb_expect_code (Bit_Chain *restrict dat, Dxf_Pair *restrict pair, int code)
 {
   while (pair->code != code)
     {
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
       dxf_skip_comment (dat, pair);
-      DXF_CHECK_EOF;
+      DXF_RETURN_EOF (pair);
       if (pair->code != code)
         {
           LOG_ERROR ("Expecting DXF code %d, got %d (at %lu)", code,
                      pair->code, dat->byte);
         }
     }
-  return 0;
+  return pair;
 }
 
 // see
@@ -1286,13 +1290,13 @@ dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   while (dat->byte < dat->size)
     {
       pair = dxf_read_pair (dat);
-      dxf_expect_code (dat, pair, 0);
+      pair = dxfb_expect_code (dat, pair, 0);
       DXF_CHECK_EOF;
       if (pair->type == VT_STRING && strEQc (pair->value.s, "SECTION"))
         {
           dxf_free_pair (pair);
           pair = dxf_read_pair (dat);
-          dxf_expect_code (dat, pair, 2);
+          pair = dxfb_expect_code (dat, pair, 2);
           DXF_CHECK_EOF;
           if (strEQc (pair->value.s, "HEADER"))
             {

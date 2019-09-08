@@ -282,7 +282,7 @@ free_array_hdls (array_hdls *hdls)
       return what;                                                      \
     }
 
-static int
+static Dxf_Pair *
 dxf_expect_code (Bit_Chain *restrict dat, Dxf_Pair *restrict pair, int code)
 {
   while (pair->code != code)
@@ -290,14 +290,14 @@ dxf_expect_code (Bit_Chain *restrict dat, Dxf_Pair *restrict pair, int code)
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
       dxf_skip_comment (dat, pair);
-      DXF_CHECK_EOF;
+      DXF_RETURN_EOF (pair);
       if (pair->code != code)
         {
           LOG_ERROR ("Expecting DXF code %d, got %d (at %lu)", code,
                      pair->code, dat->byte);
         }
     }
-  return 0;
+  return pair;
 }
 
 int
@@ -5081,13 +5081,13 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   while (dat->byte < dat->size)
     {
       pair = dxf_read_pair (dat);
-      dxf_expect_code (dat, pair, 0);
+      pair = dxf_expect_code (dat, pair, 0);
       DXF_CHECK_EOF;
       if (pair->type == VT_STRING && strEQc (pair->value.s, "SECTION"))
         {
           dxf_free_pair (pair);
           pair = dxf_read_pair (dat);
-          dxf_expect_code (dat, pair, 2);
+          pair = dxf_expect_code (dat, pair, 2);
           DXF_CHECK_EOF;
           if (strEQc (pair->value.s, "HEADER"))
             {
