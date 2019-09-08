@@ -194,8 +194,9 @@ static int decompress_r2007 (BITCODE_RC *restrict dst, int dst_size,
   memcpy (&dst[8], &src[offset], 8);                                          \
   dst += 16
 
+/* Don't use restrict here: GH #141 broken for most newer compilers */
 static inline BITCODE_RC *
-copy_bytes_2 (BITCODE_RC *restrict dst, const BITCODE_RC *restrict src)
+copy_bytes_2 (BITCODE_RC *dst, const BITCODE_RC *src)
 {
   dst[0] = src[1];
   dst[1] = src[0];
@@ -203,7 +204,7 @@ copy_bytes_2 (BITCODE_RC *restrict dst, const BITCODE_RC *restrict src)
 }
 
 static inline BITCODE_RC *
-copy_bytes_3 (BITCODE_RC *restrict dst, const BITCODE_RC *restrict src)
+copy_bytes_3 (BITCODE_RC *dst, const BITCODE_RC *src)
 {
   dst[0] = src[2];
   dst[1] = src[1];

@@ -103,6 +103,7 @@ ac_cv_func_realloc_0_nonnull=yes
 AC_CHECK_HEADERS([stdlib.h string.h stddef.h unistd.h malloc.h wchar.h ctype.h \
                   libgen.h getopt.h alloca.h valgrind/valgrind.h])
 AX_INCLUDE_STRCASECMP
+# AX_RESTRICT
 
 # Don't bother testing for libps headers if libps is not available.
 if test yes = "$libredwg_have_libps" ; then
