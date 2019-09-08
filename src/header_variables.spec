@@ -125,9 +125,11 @@
   FIELD_B (DISPSILH, 70);
   FIELD_B (PELLIPSE, 70);
 
-  //VERSION(R_13) {
-  //  FIELD_BS (SAVEIMAGES, 70); // not in R13. maybe R13C3 only? also not in ODA
-  //}
+#if 0
+  VERSION(R_13) {
+    FIELD_BS (SAVEIMAGES, 70); // not in R13. maybe R13C3 only? also not in ODA
+  }
+#endif
   FIELD_BS (PROXYGRAPHICS, 70);
   UNTIL(R_14) {
     IF_ENCODE_FROM_EARLIER {

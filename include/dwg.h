@@ -624,6 +624,7 @@ typedef struct _dwg_header_variables {
   BITCODE_B DELOBJ;
   BITCODE_B DISPSILH;
   BITCODE_B PELLIPSE;
+  BITCODE_BS SAVEIMAGES; //some r13 only
   BITCODE_BS PROXYGRAPHICS;
   BITCODE_BS MEASUREMENT; /* 0 English, 1 Metric. Stored as Section 4 */
   BITCODE_BS DRAGMODE;

@@ -802,6 +802,24 @@ test_header (const Dwg_Data *dwg)
 
   }
   {
+    BITCODE_BS saveimages;
+    if (dwg_dynapi_header_value (dwg, "SAVEIMAGES", &saveimages, NULL)
+        && saveimages == dwg->header_vars.SAVEIMAGES)
+      pass ();
+    else
+      fail ("HEADER.SAVEIMAGES [BS] %hu != %hu", dwg->header_vars.SAVEIMAGES, saveimages);
+    saveimages++;
+    if (dwg_dynapi_header_set_value (dwg, "SAVEIMAGES", &saveimages, 0)
+        && saveimages == dwg->header_vars.SAVEIMAGES)
+      pass ();
+    else
+      fail ("HEADER.SAVEIMAGES [BS] set+1 %hu != %hu",
+            dwg->header_vars.SAVEIMAGES, saveimages);
+    saveimages--;
+    dwg_dynapi_header_set_value (dwg, "SAVEIMAGES", &saveimages, 0);
+
+  }
+  {
     BITCODE_BS proxygraphics;
     if (dwg_dynapi_header_value (dwg, "PROXYGRAPHICS", &proxygraphics, NULL)
         && proxygraphics == dwg->header_vars.PROXYGRAPHICS)

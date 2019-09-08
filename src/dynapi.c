@@ -674,6 +674,8 @@ static const Dwg_DYNAPI_field _dwg_header_variables_fields[] = {
     0,0,0, 70 },
   { "REQUIREDVERSIONS",	"BLL", sizeof (BITCODE_BLL),  OFF (struct _dwg_header_variables, REQUIREDVERSIONS),
     0,0,0, 160 },
+  { "SAVEIMAGES",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_header_variables, SAVEIMAGES),
+    0,0,0, 0 },
   { "SHADEDGE",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_header_variables, SHADEDGE),
     0,0,0, 70 },
   { "SHADEDIF",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_header_variables, SHADEDIF),
