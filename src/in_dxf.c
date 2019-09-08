@@ -2734,17 +2734,24 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
             }
           break;
         case 71:
-          if (strEQc (name, "DIMSTYLE") && pair->value.u)
+          if (strEQc (ctrlname, "DIMSTYLE_CONTROL"))
             {
-              BITCODE_H *hdls;
-              dwg_dynapi_entity_set_value (_obj, obj->name, "num_morehandles",
+              if (pair->value.u)
+                {
+                  BITCODE_H *hdls;
+                  dwg_dynapi_entity_set_value (_obj, obj->name, "num_morehandles",
                                            &pair->value, is_utf);
-              LOG_TRACE ("%s.num_morehandles = %u [71]\n", ctrlname,
-                         pair->value.u)
-              hdls = calloc (pair->value.u, sizeof (Dwg_Object_Ref *));
-              dwg_dynapi_entity_set_value (_obj, obj->name, "morehandles",
-                                           &hdls, 0);
-              LOG_TRACE ("Add %s.morehandles[%d]\n", ctrlname, pair->value.u);
+                  LOG_TRACE ("%s.num_morehandles = %u [71]\n", ctrlname,
+                             pair->value.u);
+                  hdls = calloc (pair->value.u, sizeof (Dwg_Object_Ref *));
+                  dwg_dynapi_entity_set_value (_obj, obj->name, "morehandles",
+                                               &hdls, 0);
+                  LOG_TRACE ("Add %s.morehandles[%d]\n", ctrlname, pair->value.u);
+                }
+              else
+                {
+                  LOG_TRACE ("%s.num_morehandles = %u [71]\n", ctrlname, pair->value.u)
+                }
               break;
             }
           // fall through
