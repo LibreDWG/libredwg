@@ -3770,9 +3770,15 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                 {
                   pair = add_ASSOCACTION (obj, dat, pair); //NULL for success
                   if (!pair)
-                    goto next_pair;
+                    {
+                      // TODO: yet unsupported
+                      if (strEQc (name, "ASSOC2DCONSTRAINTGROUP"))
+                        return dxf_read_pair (dat);
+                      else
+                        goto next_pair;
+                    }
                   else
-                    goto start_loop;
+                    goto start_loop; /* failure */
                 }
             }
           break;
