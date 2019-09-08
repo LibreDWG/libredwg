@@ -4480,6 +4480,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                       // 3DD scale
                       if (strEQc (f->name, "scale") &&
                           dwg->header.version >= R_2000 &&
+                          dwg_dynapi_entity_field (obj->name, "scale_flag") &&
                           dwg_dynapi_entity_value (_obj, obj->name, "scale_flag",
                                                    &scale_flag, NULL))
                         { // set scale_flag
