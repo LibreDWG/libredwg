@@ -2413,8 +2413,6 @@ B
 H
 @item column_type
 BL,	DXF 75
-@item num_column_heights
-BL,	DXF 76
 @item column_width
 BD,	DXF 48
 @item gutter
@@ -2423,6 +2421,8 @@ BD,	DXF 49
 B,	DXF 79
 @item flow_reversed
 B,	DXF 74
+@item num_column_heights
+BL,	DXF 76
 @item column_heights
 BD*,	DXF 50
 

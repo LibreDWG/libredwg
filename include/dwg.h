@@ -1793,11 +1793,11 @@ typedef struct _dwg_entity_MTEXT
   BITCODE_B default_flag;
   BITCODE_H appid;
   BITCODE_BL column_type;    /*!< DXF 75 */
-  BITCODE_BL num_column_heights;/*!< DXF 76 */
   BITCODE_BD column_width;   /*!< DXF 48 */
   BITCODE_BD gutter;         /*!< DXF 49 */
   BITCODE_B auto_height;     /*!< DXF 79 */
   BITCODE_B flow_reversed;   /*!< DXF 74 */
+  BITCODE_BL num_column_heights;/*!< DXF 76 */
   BITCODE_BD *column_heights;/*!< DXF 50 */
 } Dwg_Entity_MTEXT;
 

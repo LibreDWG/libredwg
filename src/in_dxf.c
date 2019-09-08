@@ -4196,9 +4196,12 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
           else if (strEQc (name, "MTEXT") && pair->code == 50)
             {
               Dwg_Entity_MTEXT *o = obj->tio.entity->tio.MTEXT;
+              if (!o->num_column_heights)
+                o->num_column_heights = 1;
               if (!j)
                 o->column_heights
                     = calloc (o->num_column_heights, sizeof (BITCODE_BD));
+              assert (j < (int)o->num_column_heights);
               o->column_heights[j] = pair->value.d;
               LOG_TRACE ("MTEXT.column_heights[%d] = %f [50 BD*]\n", j,
                          pair->value.d);
