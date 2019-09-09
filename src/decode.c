@@ -1463,8 +1463,8 @@ dwg_resolve_objectrefs_silent (Dwg_Data *restrict dwg)
 
   loglevel = 0;
   // Dwg_Object_Ref->obj are stored all over. dirty it to update dynamically.
-  dwg->dirty_refs
-      = 1; // TODO: this is now forever. find a way to resolve all objs also.
+  // TODO: this is now forever. find a way to resolve all objs also.
+  dwg->dirty_refs = 1; 
   for (i = 0; i < dwg->num_object_refs; i++)
     {
       // scan num_objects for the id (absolute_ref)
@@ -2592,11 +2592,11 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   else
     error |= DWG_ERR_SECTIONNOTFOUND;
 
-  error |= read_2004_section_classes (dat, dwg);
   error |= read_2004_section_header (dat, dwg);
-  error |= read_2004_section_handles (dat, dwg);
   if (dwg->header.summaryinfo_address)
     error |= read_2004_section_summary (dat, dwg);
+  error |= read_2004_section_classes (dat, dwg);
+  error |= read_2004_section_handles (dat, dwg);
   //if (dwg->header.thumbnail_address)
   //  error |= read_2004_section_preview (dat, dwg);
   //if (dwg->header.vbaproj_address)
