@@ -2062,7 +2062,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
         {
           LOG_INFO ("Section Tag:      0x%x\n", (unsigned)es.fields.tag);
         }
-      LOG_INFO ("Section Type:     0x%x\n", (unsigned)es.fields.section_type)
+      LOG_INFO ("Section Type:     %u\n", (unsigned)es.fields.section_type)
       // this is the number of bytes that is read in decompress_R2004_section
       // (+ 2bytes)
       LOG_INFO ("Data size:        0x%x/%u\n", (unsigned)es.fields.data_size,
@@ -2104,6 +2104,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
         }
       else
         {
+          assert (info->size <= max_decomp_size);
           memcpy (&decomp[i * info->size],
                   &dat->chain[address + es.fields.address + 32], info->size);
           sec_dat->chain = decomp;
@@ -2455,7 +2456,38 @@ read_2004_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return error;
 }
 
-//static int read_2004_section_preview (dat, dwg)
+static int
+read_2004_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain sec_dat = { 0 };
+  int error = 0;
+  BITCODE_RL size;
+
+  // not compressed, num_sections: 1
+  error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_PREVIEW);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      LOG_ERROR ("Failed to read uncompressed %s section", "Preview");
+      return error;
+    }
+  if (dwg->header.thumbnail_address != (BITCODE_RL)dat->byte)
+    LOG_WARN ("thumbnail_address mismatch: " FORMAT_RL " != %lu",
+              dwg->header.thumbnail_address, dat->byte);
+  LOG_TRACE ("Preview\n-------------------\n");
+
+  dwg->thumbnail.size = sec_dat.size;
+  dwg->thumbnail.chain = sec_dat.chain;
+
+  dwg_bmp (dwg, &size);
+  if (size != dwg->thumbnail.size)
+    LOG_WARN ("thumbnail.size mismatch: %lu != " FORMAT_RL,
+              dwg->thumbnail.size, size);
+
+  dat->byte += dwg->thumbnail.size;
+
+  return error;
+}
+
 //static int read_2004_section_vbaproject (dat, dwg)
 //static int read_2004_section_appinfo (dat, dwg)
 //static int read_2004_section_filedeplist (dat, dwg)
@@ -2597,8 +2629,8 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     error |= read_2004_section_summary (dat, dwg);
   error |= read_2004_section_classes (dat, dwg);
   error |= read_2004_section_handles (dat, dwg);
-  //if (dwg->header.thumbnail_address)
-  //  error |= read_2004_section_preview (dat, dwg);
+  if (dwg->header.thumbnail_address)
+    error |= read_2004_section_preview (dat, dwg);
   //if (dwg->header.vbaproj_address)
   //  error |= read_2004_section_vbaproject (dat, dwg);
   //error |= read_2004_section_appinfo (dat, dwg);

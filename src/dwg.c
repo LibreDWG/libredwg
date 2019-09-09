@@ -389,7 +389,7 @@ EXPORT unsigned char *
 dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
 {
   BITCODE_RC i, num_pictures, code;
-  int plene;
+  int found;
   BITCODE_RL header_size, address, osize;
   Bit_Chain *dat;
 
@@ -417,14 +417,24 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
 #endif /* USE_TRACING */
 
   osize = bit_read_RL (dat); /* overall size of all images */
-  LOG_TRACE ("overall size: " FORMAT_RL "\n", osize)
+  LOG_TRACE ("overall size: " FORMAT_RL "\n", osize);
+  if (osize > dat->size)
+    {
+      LOG_ERROR ("Preview overflow > %lu", dat->size);
+      return NULL;
+    }
   num_pictures = bit_read_RC (dat);
-  LOG_INFO ("num_pictures: " FORMAT_RC "\n", num_pictures)
+  LOG_INFO ("num_pictures: %d\n", (int)num_pictures)
 
-  plene = 0;
+  found = 0;
   header_size = 0;
   for (i = 0; i < num_pictures; i++)
     {
+      if (dat->byte > dat->size)
+        {
+          LOG_ERROR ("Preview overflow");
+          break;
+        }
       code = bit_read_RC (dat);
       LOG_TRACE ("\t[%i] Code: %i\n", i, code)
       address = bit_read_RL (dat);
@@ -434,21 +444,21 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
           header_size += bit_read_RL (dat);
           LOG_TRACE ("\t\tHeader data size: %i\n", header_size)
         }
-      else if (code == 2 && plene == 0)
+      else if (code == 2 && found == 0)
         {
           *size = bit_read_RL (dat);
-          plene = 1;
-          LOG_TRACE ("\t\tBMP size: %i\n", *size)
+          found = 1;
+          LOG_INFO ("\t\tBMP size: %i\n", *size)
         }
       else if (code == 3)
         {
           osize = bit_read_RL (dat);
-          LOG_TRACE ("\t\tWMF size: 0x%x\n", osize)
+          LOG_INFO ("\t\tWMF size: %i\n", osize)
         }
       else
         {
           osize = bit_read_RL (dat);
-          LOG_TRACE ("\t\tSize of unknown code %d: 0x%x\n", code, osize)
+          LOG_TRACE ("\t\tSize of unknown code %i: %i\n", code, osize)
         }
     }
   dat->byte += header_size;

@@ -149,6 +149,9 @@ static int read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl_dat,
 static int read_2007_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                                       r2007_section *restrict sections_map,
                                       r2007_page *restrict pages_map);
+static int read_2007_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                                      r2007_section *restrict sections_map,
+                                      r2007_page *restrict pages_map);
 static r2007_page *read_pages_map (Bit_Chain *dat, int64_t size_comp,
                                    int64_t size_uncomp, int64_t correction)
   ATTRIBUTE_MALLOC;
@@ -1674,6 +1677,43 @@ read_2007_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   return error;
 }
 
+static int
+read_2007_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                           r2007_section *restrict sections_map,
+                           r2007_page *restrict pages_map)
+{
+  static Bit_Chain sec_dat = { 0 };
+  int error;
+  BITCODE_RL size;
+
+  error = read_data_section (&sec_dat, dat, sections_map, pages_map,
+                             SECTION_PREVIEW);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      LOG_ERROR ("Failed to read uncompressed %s section", "Preview");
+      if (sec_dat.chain)
+        free (sec_dat.chain);
+      return error;
+    }
+
+  if (dwg->header.thumbnail_address != (BITCODE_RL)dat->byte)
+    LOG_WARN ("thumbnail_address mismatch: " FORMAT_RL " != %lu",
+              dwg->header.thumbnail_address, dat->byte);
+  LOG_TRACE ("\nPreview\n-------------------\n")
+
+  dwg->thumbnail.size = sec_dat.size;
+  dwg->thumbnail.chain = sec_dat.chain;
+
+  dwg_bmp (dwg, &size);
+  if (size != dwg->thumbnail.size)
+    LOG_WARN ("thumbnail.size mismatch: %lu != " FORMAT_RL,
+              dwg->thumbnail.size, size);
+
+  dat->byte += dwg->thumbnail.size;
+
+  return error;
+}
+
 /* exported */
 void
 read_r2007_init (Dwg_Data *dwg)
@@ -1748,14 +1788,14 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   error |= read_2007_section_classes (dat, dwg, sections_map, pages_map);
   error |= read_2007_section_handles (dat, hdl_dat, dwg, sections_map,
                                       pages_map);
-  //if (dwg->header.thumbnail_address)
-  //  error |= read_2007_section_preview (dat, dwg);
+  if (dwg->header.thumbnail_address)
+    error |= read_2007_section_preview (dat, dwg, sections_map, pages_map);
   //if (dwg->header.vbaproj_address)
-  //  error |= read_2007_section_vbaproject (dat, dwg);
-  //error |= read_2007_section_appinfo (dat, dwg);
-  //error |= read_2007_section_filedeplist (dat, dwg);
-  //error |= read_2007_section_security (dat, dwg);
-  //error |= read_2007_section_revhistory (dat, dwg);
+  //  error |= read_2007_section_vbaproject (dat, dwg, sections_map, pages_map);
+  //error |= read_2007_section_appinfo (dat, dwg, sections_map, pages_map);
+  //error |= read_2007_section_filedeplist (dat, dwg, sections_map, pages_map);
+  //error |= read_2007_section_security (dat, dwg, sections_map, pages_map);
+  //error |= read_2007_section_revhistory (dat, dwg, sections_map, pages_map);
   // read_2007_blocks (dat, hdl_dat, dwg, sections_map, pages_map);
 
  error:
