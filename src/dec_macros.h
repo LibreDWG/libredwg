@@ -338,14 +338,14 @@
 /* preR13 we have no obj->address and obj->size yet, skip VECTOR_CHKCOUNT */
 #define FIELD_TF(nam, len, dxf)                                               \
   {                                                                           \
-    SINCE (R_13){ VECTOR_CHKCOUNT (nam, TF, len) }                            \
+    SINCE (R_13){ VECTOR_CHKCOUNT (nam, TF, len, dat) }                       \
     _obj->nam = bit_read_TF (dat, (int)len);                                  \
     LOG_TRACE (#nam ": %lu [TF " #dxf "]\n", (unsigned long)len);             \
     LOG_INSANE_TF (FIELD_VALUE (nam), (int)len);                              \
   }
 #define FIELD_TFF(nam, len, dxf)                                              \
   {                                                                           \
-    SINCE (R_13){ VECTOR_CHKCOUNT (nam, TF, len) }                            \
+    SINCE (R_13){ VECTOR_CHKCOUNT (nam, TF, len, dat) }                       \
     bit_read_fixed (dat, _obj->nam, (int)len);                                \
     LOG_TRACE (#nam ": %d [TFF " #dxf "]\n", (int)len);                       \
     LOG_INSANE_TF (FIELD_VALUE (nam), (int)len);                              \
@@ -670,41 +670,39 @@
   _DEBUG_HERE
 
 // check for overflow into next object (invalid num_elems)
-#define AVAIL_BITS()                                                          \
-  (obj ? (long long)((long long)(obj->address + obj->size) * 8                \
-                     - bit_position (dat) + 20)                               \
-       : 0xff00LL)
+#define AVAIL_BITS(dat)                                                       \
+  (obj ? (long)((obj->size * 8) - bit_position (dat) + 20) : 0xff00L)
 #define TYPE_MAXELEMSIZE(type) (unsigned)dwg_bits_size[BITS_##type]
-#define VECTOR_CHKCOUNT(nam, type, size)                                      \
-  if ((long long)((size)*TYPE_MAXELEMSIZE (type)) > AVAIL_BITS ())            \
+#define VECTOR_CHKCOUNT(nam, type, size, dat)                                 \
+  if ((long)((size)*TYPE_MAXELEMSIZE (type)) > AVAIL_BITS (dat))              \
     {                                                                         \
-      LOG_ERROR ("Invalid " #nam " size %lld. Need min. %u bits for " #type   \
-                 ", have %lld for %s.",                                       \
-                 (long long)(size), (unsigned)(size)*TYPE_MAXELEMSIZE (type), \
-                 AVAIL_BITS (), obj && obj->dxfname ? obj->dxfname : "");     \
+      LOG_ERROR ("Invalid " #nam " size %ld. Need min. %u bits for " #type    \
+                 ", have %ld for %s.",                                        \
+                 (long)(size), (unsigned)(size)*TYPE_MAXELEMSIZE (type),      \
+                 AVAIL_BITS (dat), obj && obj->dxfname ? obj->dxfname : "");  \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }
 #define VECTOR_CHKCOUNT_LV(nam, type, size)                                   \
-  if ((long long)((size)*TYPE_MAXELEMSIZE (type)) > AVAIL_BITS ())            \
+  if ((long)((size)*TYPE_MAXELEMSIZE (type)) > AVAIL_BITS (dat))              \
     {                                                                         \
-      LOG_ERROR ("Invalid " #nam " size %lld. Need min. %u bits for " #type   \
-                 ", have %lld for %s.",                                       \
-                 (long long)(size), (unsigned)(size)*TYPE_MAXELEMSIZE (type), \
-                 AVAIL_BITS (), obj && obj->dxfname ? obj->dxfname : "");     \
+      LOG_ERROR ("Invalid " #nam " size %ld. Need min. %u bits for " #type    \
+                 ", have %ld for %s.",                                        \
+                 (long)(size), (unsigned)(size)*TYPE_MAXELEMSIZE (type),      \
+                 AVAIL_BITS (dat), obj && obj->dxfname ? obj->dxfname : "");  \
       size = 0;                                                               \
       /* return DWG_ERR_VALUEOUTOFBOUNDS; */                                  \
     }
-#define _VECTOR_CHKCOUNT(nam, size, maxelemsize)                              \
-  if ((long long)(size) * (maxelemsize) > AVAIL_BITS ())                      \
+#define _VECTOR_CHKCOUNT(nam, size, maxelemsize, dat)                         \
+  if ((long)(size) * (maxelemsize) > AVAIL_BITS (dat))                        \
     {                                                                         \
       LOG_ERROR ("Invalid " #nam                                              \
-                 " size %lld. Need min. %u bits, have %lld for %s.",          \
-                 (long long)(size), (unsigned)(size) * (maxelemsize),         \
-                 AVAIL_BITS (), obj && obj->dxfname ? obj->dxfname : "");     \
+                 " size %ld. Need min. %u bits, have %ld for %s.",            \
+                 (long)(size), (unsigned)(size) * (maxelemsize),              \
+                 AVAIL_BITS (dat), obj && obj->dxfname ? obj->dxfname : "");  \
       size = 0;                                                               \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }
-#define HANDLE_VECTOR_CHKCOUNT(nam, size) VECTOR_CHKCOUNT (nam, HANDLE, size)
+#define HANDLE_VECTOR_CHKCOUNT(nam, size) VECTOR_CHKCOUNT (nam, HANDLE, size, hdl_dat)
 
 // FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
@@ -712,7 +710,7 @@
 #define FIELD_VECTOR_N(name, type, size, dxf)                                 \
   if (size > 0)                                                               \
     {                                                                         \
-      VECTOR_CHKCOUNT (name, type, size)                                      \
+      VECTOR_CHKCOUNT (name, type, size, dat)                                 \
       _obj->name = (BITCODE_##type *)calloc (size, sizeof (BITCODE_##type));  \
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
@@ -724,7 +722,7 @@
 #define FIELD_VECTOR_T(name, size, dxf)                                       \
   if (_obj->size > 0)                                                         \
     {                                                                         \
-      _VECTOR_CHKCOUNT (name, _obj->size, dat->version >= R_2007 ? 18 : 2)    \
+      _VECTOR_CHKCOUNT (name, _obj->size, dat->version >= R_2007 ? 18 : 2, dat) \
       _obj->name = calloc (_obj->size, sizeof (char *));                      \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
@@ -745,7 +743,7 @@
   if (size > 0)                                                               \
     {                                                                         \
       int _dxf = dxf;                                                         \
-      VECTOR_CHKCOUNT (name, type, size)                                      \
+      VECTOR_CHKCOUNT (name, type, size, dat)                                 \
       _obj->name = (BITCODE_##type *)calloc (size, sizeof (BITCODE_##type));  \
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
@@ -831,7 +829,7 @@
     }
 
 #define HANDLE_VECTOR(nam, sizefield, code, dxf)                              \
-  _VECTOR_CHKCOUNT (nam, FIELD_VALUE (sizefield), TYPE_MAXELEMSIZE (HANDLE))  \
+  _VECTOR_CHKCOUNT (nam, FIELD_VALUE (sizefield), TYPE_MAXELEMSIZE (HANDLE), hdl_dat) \
   HANDLE_VECTOR_N (nam, FIELD_VALUE (sizefield), code, dxf)
 
 // count 1 bytes, until non-1 bytes or a terminating zero
@@ -859,7 +857,7 @@
 #define REACTORS(code)                                                        \
   if (obj->tio.object->num_reactors > 0)                                      \
     {                                                                         \
-      VECTOR_CHKCOUNT (reactors, HANDLE, obj->tio.object->num_reactors)       \
+      HANDLE_VECTOR_CHKCOUNT (reactors, obj->tio.object->num_reactors)        \
       obj->tio.object->reactors                                               \
           = calloc (obj->tio.object->num_reactors, sizeof (BITCODE_H));       \
       for (vcount = 0; vcount < obj->tio.object->num_reactors; vcount++)      \
@@ -872,7 +870,7 @@
 #define ENT_REACTORS(code)                                                    \
   if (_ent->num_reactors > 0)                                                 \
     {                                                                         \
-      VECTOR_CHKCOUNT (reactors, HANDLE, _ent->num_reactors)                  \
+      HANDLE_VECTOR_CHKCOUNT (reactors, _ent->num_reactors)                   \
       _ent->reactors = calloc (_ent->num_reactors, sizeof (BITCODE_H));       \
       for (vcount = 0; vcount < _ent->num_reactors; vcount++)                 \
         {                                                                     \
@@ -954,32 +952,32 @@
     }
 
 #define REPEAT_CHKCOUNT(name, times, type)                                    \
-  if (AVAIL_BITS () < 0)                                                      \
+  if (AVAIL_BITS (dat) < 0)                                                   \
     {                                                                         \
       LOG_ERROR ("Invalid " #name " in %s. No bytes left.\n", obj->dxfname);  \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }                                                                         \
-  LOG_INSANE ("REPEAT_CHKCOUNT %s." #name " x %ld: %lld > %lld?\n",           \
+  LOG_INSANE ("REPEAT_CHKCOUNT %s." #name " x %ld: %ld > %ld?\n",             \
               obj->dxfname, (long)times,                                      \
-              (long long)((times) * sizeof (type)), AVAIL_BITS ());           \
+              (long)((times) * sizeof (type)), AVAIL_BITS (dat));             \
   if (dat->version >= R_2004                                                  \
-      && (long long)((times) * sizeof (type)) > AVAIL_BITS ())                \
+      && (long)((times) * sizeof (type)) > AVAIL_BITS (dat))                  \
     {                                                                         \
       LOG_ERROR ("Invalid %s." #name " x %ld\n", obj->dxfname, (long)times);  \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }
 #define REPEAT_CHKCOUNT_LVAL(name, times, type)                               \
-  if (AVAIL_BITS () < 0)                                                      \
+  if (AVAIL_BITS (dat) < 0)                                                   \
     {                                                                         \
       LOG_ERROR ("Invalid %s." #name ". No bytes left.\n", obj->dxfname);     \
       times = 0;                                                              \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }                                                                         \
-  LOG_INSANE ("REPEAT_CHKCOUNT_LVAL %s." #name " x %ld: %lld > %lld?\n",      \
+  LOG_INSANE ("REPEAT_CHKCOUNT_LVAL %s." #name " x %ld: %ld > %ld?\n",        \
               obj->dxfname, (long)times,                                      \
-              (long long)((times) * sizeof (type)), AVAIL_BITS ());           \
+              (long)((times) * sizeof (type)), AVAIL_BITS (dat));             \
   if (dat->version >= R_2004                                                  \
-      && (long long)((times) * sizeof (type)) > AVAIL_BITS ())                \
+      && (long)((times) * sizeof (type)) > AVAIL_BITS (dat))                  \
     {                                                                         \
       LOG_ERROR ("Invalid %s." #name " x %ld\n", obj->dxfname, (long)times);  \
       times = 0;                                                              \

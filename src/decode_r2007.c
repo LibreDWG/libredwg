@@ -1210,10 +1210,10 @@ obj_handle_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       obj->handlestream_size = (obj->size * 8) - obj->bitsize;
       LOG_TRACE (" Hdlsize: %lu,", obj->handlestream_size);
     }
-  hdl_dat->size = obj->size + obj->address;
+  hdl_dat->size = obj->size;
   pos = (pos*8) + obj->bitsize + obj->handlestream_size;
-  LOG_HANDLE (" hdl_dat: @%lu.%u - @%lu.%lu", bit8, hdl_dat->bit, pos / 8,
-              pos % 8);
+  LOG_HANDLE (" hdl_dat: @%lu.%u - @%lu.%lu (%lu)", bit8, hdl_dat->bit, pos / 8,
+              pos % 8, hdl_dat->size);
   LOG_TRACE ("\n")
   return 0;
 }
