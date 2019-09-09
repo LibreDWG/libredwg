@@ -2690,10 +2690,10 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
         case 330: // TODO: most likely {ACAD_REACTORS
           if (pair->value.u)
             {
-              obj->tio.object->ownerhandle
-                  = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+              BITCODE_H owh = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+              obj->tio.object->ownerhandle = owh;
               LOG_TRACE ("%s.ownerhandle = " FORMAT_REF " [330]\n", ctrlname,
-                         ARGS_REF (obj->tio.object->ownerhandle));
+                         ARGS_REF (owh));
             }
           break;
         case 340:
@@ -3435,6 +3435,63 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return found;
 }
 
+// see GH #138. add vertices / attribs
+static void
+postprocess_SEQEND (Dwg_Object *obj)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Entity_SEQEND *o = obj->tio.entity->tio.SEQEND;
+  Dwg_Object *owner = dwg_ref_object (dwg, obj->tio.entity->ownerhandle);
+  Dwg_Entity_POLYLINE_2D *ow;
+  BITCODE_BL i, j, num_owned;
+  BITCODE_H seqend;
+  BITCODE_H *owned;
+  const char* owhdls;
+  if (!owner)
+    return;
+  owhdls = memBEGINc (owner->name, "POLYLINE_")
+    ? "vertex" : "attrib_handles";
+  ow = owner->tio.entity->tio.POLYLINE_2D;
+  dwg_dynapi_entity_value (ow, owner->name, "num_owned", &num_owned, NULL);
+  seqend = dwg_add_handleref (dwg, 3, obj->handle.value, owner);
+  dwg_dynapi_entity_set_value (ow, owner->name, "seqend", &seqend, 0);
+  LOG_TRACE ("%s.seqend = " FORMAT_REF "[H]\n", owner->name, ARGS_REF (seqend));
+  if (!num_owned) // or add NULL handles?
+    return;
+  owned = calloc (num_owned, sizeof (BITCODE_H));
+  // collect children hdls. all objects from owner to here
+  for (j = 0, i = owner->index + 1; i < obj->index; i++)
+    {
+      Dwg_Object *_o = &dwg->object[i];
+      assert (j < num_owned);
+      owned[j] = dwg_add_handleref (dwg, 4, _o->handle.value, owner);
+      LOG_TRACE ("%s.%s[%d] = " FORMAT_REF "[H*]\n", owner->name, owhdls, j,
+                 ARGS_REF (seqend));
+    }
+  if (dwg->header.version >= R_13 && dwg->header.version <= R_2000)
+    {
+      const char* firstfield; const char* lastfield;
+      if (memBEGINc (owner->name, "POLYLINE_"))
+        {
+          firstfield = "first_vertex"; lastfield = "last_vertex";
+        }
+      else
+        {
+          firstfield = "first_attrib"; lastfield = "last_attrib";
+        }
+      dwg_dynapi_entity_set_value (ow, owner->name, firstfield, &owned[0], 0);
+      LOG_TRACE ("%s.%s = " FORMAT_REF "[H]\n", owner->name, firstfield,
+                 ARGS_REF (owned[0]));
+      dwg_dynapi_entity_set_value (ow, owner->name, lastfield, &owned[num_owned-1], 0);
+      LOG_TRACE ("%s.%s] = " FORMAT_REF "[H]\n", owner->name, lastfield,
+                 ARGS_REF (owned[num_owned-1]));
+    }
+  else if (dwg->header.version >= R_2004)
+    {
+      dwg_dynapi_entity_set_value (ow, owner->name, owhdls, &owned, 0);
+    }
+}
+
 #define UPGRADE_ENTITY(FROM, TO)                 \
   obj->type = obj->fixedtype = DWG_TYPE_##TO;    \
   obj->name = obj->dxfname = (char*)#TO;         \
@@ -3641,6 +3698,8 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
       switch (pair->code)
         { // common flags: name, xrefref, xrefdep, ...
         case 0:
+          if (strEQc (name, "SEQEND"))
+            postprocess_SEQEND (obj);
           return pair;
         case 105: /* DIMSTYLE only for 5 */
           if (strNE (name, "DIMSTYLE"))
@@ -3861,32 +3920,51 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
         case 330:
           if (in_reactors)
             {
-              BITCODE_BL num = obj->tio.object->num_reactors;
+              BITCODE_BL num = is_entity ? obj->tio.object->num_reactors
+                : obj->tio.entity->num_reactors;
               BITCODE_H reactor = dwg_add_handleref (dwg, 4, pair->value.u, obj);
               LOG_TRACE ("%s.reactors[%d] = " FORMAT_REF " [330 H]\n", name,
                          num, ARGS_REF (reactor));
-              obj->tio.object->reactors = realloc (
-                  obj->tio.object->reactors, (num + 1) * sizeof (BITCODE_H));
-              obj->tio.object->reactors[num] = reactor;
-              obj->tio.object->num_reactors++;
+              if (is_entity)
+                {
+                  obj->tio.entity->reactors
+                      = realloc (obj->tio.entity->reactors,
+                                 (num + 1) * sizeof (BITCODE_H));
+                  obj->tio.entity->reactors[num] = reactor;
+                  obj->tio.entity->num_reactors++;
+                }
+              else
+                {
+                  obj->tio.object->reactors
+                      = realloc (obj->tio.object->reactors,
+                                 (num + 1) * sizeof (BITCODE_H));
+                  obj->tio.object->reactors[num] = reactor;
+                  obj->tio.object->num_reactors++;
+                }
             }
           else if (pair->value.u) // valid ownerhandle
             {
-              obj->tio.object->ownerhandle
-                  = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+              BITCODE_H owh = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+              if (is_entity)
+                obj->tio.entity->ownerhandle = owh;
+              else
+                obj->tio.object->ownerhandle = owh;
               LOG_TRACE ("%s.ownerhandle = " FORMAT_REF " [330 H]\n", name,
-                         ARGS_REF (obj->tio.object->ownerhandle));
+                         ARGS_REF (owh));
             }
           break;
         case 350: // DICTIONARY softhandle
         case 360: // {ACAD_XDICTIONARY or some hardowner
           if (pair->code == 360 && in_xdict)
             {
-              obj->tio.object->xdicobjhandle
-                = dwg_add_handleref (dwg, 3, pair->value.u, obj);
-              obj->tio.object->xdic_missing_flag = 0;
+              BITCODE_H xdic = dwg_add_handleref (dwg, 3, pair->value.u, obj);
+              if (is_entity)
+                obj->tio.entity->xdicobjhandle = xdic;
+              else
+                obj->tio.object->xdicobjhandle = xdic;
+              //obj->tio.object->xdic_missing_flag = 0; // default
               LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [360 H]\n", name,
-                         ARGS_REF (obj->tio.object->xdicobjhandle));
+                         ARGS_REF (xdic));
               break;
             }
           // // DICTIONARY or DICTIONARYWDFLT, but not DICTIONARYVAR
@@ -4678,8 +4756,10 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
       DXF_RETURN_EOF (pair);
     }
 
+  if (strEQc (name, "SEQEND"))
+    postprocess_SEQEND (obj);
   // set defaults not in dxf:
-  if (strEQc (name, "_3DFACE") &&
+  else if (strEQc (name, "_3DFACE") &&
       dwg->header.version >= R_2000)
     {
       Dwg_Entity__3DFACE *o = obj->tio.entity->tio._3DFACE;
