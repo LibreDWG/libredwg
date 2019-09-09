@@ -1954,7 +1954,7 @@ dwg_encode_common_entity_handle_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   ent = obj->tio.entity;
   _obj = ent;
 
-#include "common_entity_handle_data.spec"
+  #include "common_entity_handle_data.spec"
 
   return error;
 }
@@ -2043,9 +2043,8 @@ dwg_encode_object (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   {
     obj->bitsize_pos = bit_position (dat);
     if (!obj->bitsize)
-      bit_write_RL (dat, obj->size * 8);
-    else
-      bit_write_RL (dat, obj->bitsize);
+      obj->bitsize = obj->size * 8;
+    bit_write_RL (dat, obj->bitsize);
     LOG_INFO ("Object bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
               dat->byte, dat->bit);
   }
@@ -2065,14 +2064,14 @@ dwg_encode_object (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   {
     obj->bitsize_pos = bit_position (dat);
     if (!obj->bitsize)
-      bit_write_RL (dat, obj->size * 8);
-    else
-      bit_write_RL (dat, obj->bitsize);
+      obj->bitsize = obj->size * 8;
+    bit_write_RL (dat, obj->bitsize);
+    LOG_TRACE ("Object bitsize: %u [RL]\n", obj->bitsize);
   }
 
   bit_write_BL (dat, ord->num_reactors);
-
   SINCE (R_2004) { bit_write_B (dat, ord->xdic_missing_flag); }
+  SINCE (R_2013) { bit_write_B (dat, ord->has_ds_binary_data); }
   return error;
 }
 
