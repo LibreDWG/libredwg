@@ -1321,17 +1321,22 @@ dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, BITCODE_RL value,
   unsigned char *val = (unsigned char *)&hdl->value;
   hdl->code = code;
   hdl->value = value;
-  if (obj && !offset) // same obj
+  if (obj && !offset && value) // same obj
     {
       LOG_HANDLE ("object_map{%X} = %u\n", (unsigned)value, obj->index);
       hash_set (obj->parent->object_map, value, (uint32_t)obj->index);
     }
 
   // FIXME: little endian only
-  for (i = 3; i >= 0; i--)
-    if (val[i])
-      break;
-  hdl->size = i + 1;
+  if (value)
+    {
+      for (i = 3; i >= 0; i--)
+        if (val[i])
+          break;
+      hdl->size = i + 1;
+    }
+  else
+      hdl->size = 0;
   if (code != 5 && obj && abs (offset) == 1)
     {
       // change code to 6.0.0 or 8.0.0

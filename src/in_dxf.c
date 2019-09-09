@@ -3553,6 +3553,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
     {
       NEW_ENTITY (dwg, obj);
 
+      obj->tio.entity->xdic_missing_flag = 1;
       if (*name == '3')
         {
           // Looks dangerous but name[80] is big enough
@@ -3589,6 +3590,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
     {
       NEW_OBJECT (dwg, obj);
 
+      obj->tio.object->xdic_missing_flag = 1;
       if (!ctrl_id) // no table
         {
           // clang-format off
@@ -3928,9 +3930,10 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
         case 330:
           if (in_reactors)
             {
-              BITCODE_BL num = is_entity ? obj->tio.object->num_reactors
-                : obj->tio.entity->num_reactors;
-              BITCODE_H reactor = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+              BITCODE_BL num = is_entity ? obj->tio.entity->num_reactors
+                                         : obj->tio.object->num_reactors;
+              BITCODE_H reactor
+                  = dwg_add_handleref (dwg, 4, pair->value.u, obj);
               LOG_TRACE ("%s.reactors[%d] = " FORMAT_REF " [330 H]\n", name,
                          num, ARGS_REF (reactor));
               if (is_entity)
@@ -3967,10 +3970,15 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
             {
               BITCODE_H xdic = dwg_add_handleref (dwg, 3, pair->value.u, obj);
               if (is_entity)
-                obj->tio.entity->xdicobjhandle = xdic;
+                {
+                  obj->tio.entity->xdicobjhandle = xdic;
+                  obj->tio.entity->xdic_missing_flag = 0;
+                }
               else
-                obj->tio.object->xdicobjhandle = xdic;
-              //obj->tio.object->xdic_missing_flag = 0; // default
+                {
+                  obj->tio.object->xdicobjhandle = xdic;
+                  obj->tio.object->xdic_missing_flag = 0;
+                }
               LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [360 H]\n", name,
                          ARGS_REF (xdic));
               break;
