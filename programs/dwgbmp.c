@@ -86,6 +86,8 @@ bmp_free_dwg (Dwg_Data *dwg)
     dwg_free (dwg);
 }
 
+#pragma pack(1)
+
 static int
 get_bmp (char *dwgfile, char *bmpfile)
 {
@@ -98,9 +100,9 @@ get_bmp (char *dwgfile, char *bmpfile)
   struct _BITMAP_HEADER
   {
     char magic[2];
-    long file_size;
-    long reserved;
-    long offset;
+    BITCODE_RL file_size;
+    BITCODE_RL reserved;
+    BITCODE_RL offset;
   } bmp_h;
 
   memset (&dwg, 0, sizeof (Dwg_Data));
@@ -155,7 +157,7 @@ get_bmp (char *dwgfile, char *bmpfile)
       perror ("writing BMP magic");
       return 1;
     }
-  retval = fwrite (&bmp_h.file_size, sizeof (long), 3, fh);
+  retval = fwrite (&bmp_h.file_size, 4, 3, fh);
   if (!retval)
     {
       free (bmpfile);
@@ -165,7 +167,7 @@ get_bmp (char *dwgfile, char *bmpfile)
     }
 
   /* Write data (DIB header + bitmap) */
-  retval = fwrite (data, sizeof (unsigned char), size, fh);
+  retval = fwrite (data, sizeof (char), size, fh);
   if (!retval)
     {
       free (bmpfile);
