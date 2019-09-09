@@ -2668,7 +2668,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
       switch (pair->code)
         {
         case 0:
-          return pair;
+          goto do_return;
         case 5:
         case 105: // for DIMSTYLE
           {
@@ -2718,7 +2718,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
           break;
         case 360: // {ACAD_XDICTIONARY TODO
           obj->tio.object->xdicobjhandle
-              = dwg_add_handleref (dwg, 0, pair->value.u, obj);
+              = dwg_add_handleref (dwg, 3, pair->value.u, obj);
           obj->tio.object->xdic_missing_flag = 0;
           LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [330]\n", ctrlname,
                      ARGS_REF (obj->tio.object->xdicobjhandle));
@@ -2770,6 +2770,10 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
     }
+ do_return:
+  // default NULL handle
+  if (dwg->header.version < R_2004 && !obj->tio.object->xdicobjhandle)
+    obj->tio.object->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
   return pair;
 }
 
@@ -4777,6 +4781,14 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
         obj->tio.entity->xdic_missing_flag = 1;
       else if (!is_entity && !obj->tio.object->xdicobjhandle)
         obj->tio.object->xdic_missing_flag = 1;
+    }
+  else
+    {
+      // default NULL handle
+      if (!is_entity && !obj->tio.object->xdicobjhandle)
+        obj->tio.object->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
+      else if (is_entity && !obj->tio.entity->xdicobjhandle)
+        obj->tio.entity->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
     }
   return pair;
 }
