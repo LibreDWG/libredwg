@@ -111,8 +111,7 @@ get_bmp (char *dwgfile, char *bmpfile)
   error = dwg_read_file (dwgfile, &dwg);
   if (error >= DWG_ERR_CRITICAL)
     {
-      fprintf (stderr, "Unable to read file %s: 0x%x\n", dwgfile, error);
-      free (bmpfile);
+      fprintf (stderr, "Unable to read file %s. ERROR 0x%x\n", dwgfile, error);
       bmp_free_dwg (&dwg);
       return error;
     }
@@ -121,15 +120,13 @@ get_bmp (char *dwgfile, char *bmpfile)
   data = dwg_bmp (&dwg, &size);
   if (!data)
     {
-      fprintf (stderr, "No thumbnail bmp image in dwg file\n");
-      free (bmpfile);
+      fprintf (stderr, "No thumbnail bmp image in %s\n", dwgfile);
       bmp_free_dwg (&dwg);
       return 0;
     }
   if (size < 1)
     {
-      fprintf (stderr, "Empty thumbnail data in dwg file\n");
-      free (bmpfile);
+      fprintf (stderr, "Empty thumbnail data in %s\n", dwgfile);
       bmp_free_dwg (&dwg);
       return -3;
     }
@@ -138,7 +135,6 @@ get_bmp (char *dwgfile, char *bmpfile)
   if (!fh)
     {
       fprintf (stderr, "Unable to write BMP file '%s'\n", bmpfile);
-      free (bmpfile);
       bmp_free_dwg (&dwg);
       return -4;
     }
@@ -152,7 +148,6 @@ get_bmp (char *dwgfile, char *bmpfile)
   retval = fwrite (&bmp_h.magic[0], sizeof (char), 2, fh);
   if (!retval)
     {
-      free (bmpfile);
       bmp_free_dwg (&dwg);
       perror ("writing BMP magic");
       return 1;
@@ -160,7 +155,6 @@ get_bmp (char *dwgfile, char *bmpfile)
   retval = fwrite (&bmp_h.file_size, 4, 3, fh);
   if (!retval)
     {
-      free (bmpfile);
       bmp_free_dwg (&dwg);
       perror ("writing BMP file_size");
       return 1;
@@ -170,7 +164,6 @@ get_bmp (char *dwgfile, char *bmpfile)
   retval = fwrite (data, sizeof (char), size, fh);
   if (!retval)
     {
-      free (bmpfile);
       bmp_free_dwg (&dwg);
       perror ("writing BMP header");
       return 1;
@@ -178,7 +171,6 @@ get_bmp (char *dwgfile, char *bmpfile)
   fclose (fh);
 
   printf ("Success. Written thumbnail image to '%s'\n", bmpfile);
-  free (bmpfile);
   bmp_free_dwg (&dwg);
 
   return 0;
@@ -187,7 +179,7 @@ get_bmp (char *dwgfile, char *bmpfile)
 int
 main (int argc, char *argv[])
 {
-  int i = 1;
+  int i = 1, error;
   char *dwgfile, *bmpfile;
   int c;
 #ifdef HAVE_GETOPT_LONG
@@ -281,6 +273,12 @@ main (int argc, char *argv[])
     return usage ();
 
   dwgfile = argv[i];
-  bmpfile = suffix (dwgfile, "bmp");
-  return get_bmp (dwgfile, bmpfile);
+  if (i == argc-2)
+    bmpfile = argv[i+1];
+  else
+    bmpfile = suffix (dwgfile, "bmp");
+  error = get_bmp (dwgfile, bmpfile);
+  if (i != argc-2)
+    free (bmpfile);
+  return error;
 }
