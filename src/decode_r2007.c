@@ -1685,6 +1685,7 @@ read_2007_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   static Bit_Chain sec_dat = { 0 };
   int error;
   BITCODE_RL size;
+  unsigned char *sentinel;
 
   error = read_data_section (&sec_dat, dat, sections_map, pages_map,
                              SECTION_PREVIEW);
@@ -1701,11 +1702,19 @@ read_2007_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               dwg->header.thumbnail_address, dat->byte);
   LOG_TRACE ("\nPreview\n-------------------\n")
 
-  dwg->thumbnail.size = sec_dat.size;
+  sentinel = dwg_sentinel(DWG_SENTINEL_THUMBNAIL_BEGIN);
+  if (memcmp (sentinel, sec_dat.chain, 16))
+    {
+      LOG_WARN ("thumbnail sentinel mismatch");
+      return error |= DWG_ERR_WRONGCRC;
+    }
+
+  dwg->thumbnail.size = sec_dat.size - 32; // 2x sentinel
   dwg->thumbnail.chain = sec_dat.chain;
+  dwg->thumbnail.byte = 16; // sentinel
 
   dwg_bmp (dwg, &size);
-  if (size != dwg->thumbnail.size)
+  if (abs((int)((long)size - (long)dwg->thumbnail.size)) > 200) // various headers
     LOG_WARN ("thumbnail.size mismatch: %lu != " FORMAT_RL,
               dwg->thumbnail.size, size);
 

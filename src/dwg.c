@@ -403,7 +403,8 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
       return NULL;
     }
   dat->bit = 0;
-  dat->byte = 0;
+  dat->version = dwg->header.version;
+  dat->from_version = dwg->header.from_version;
 
 #ifdef USE_TRACING
   /* Before starting, set the logging level, but only do so once.  */

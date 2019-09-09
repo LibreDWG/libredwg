@@ -2462,6 +2462,7 @@ read_2004_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Bit_Chain sec_dat = { 0 };
   int error = 0;
   BITCODE_RL size;
+  unsigned char *sentinel;
 
   // not compressed, num_sections: 1
   error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_PREVIEW);
@@ -2474,12 +2475,24 @@ read_2004_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     LOG_WARN ("thumbnail_address mismatch: " FORMAT_RL " != %lu",
               dwg->header.thumbnail_address, dat->byte);
   LOG_TRACE ("Preview\n-------------------\n");
+  if (sec_dat.size < 16)
+    {
+      LOG_WARN ("Empty thumbnail");
+      return error;
+    }
+  sentinel = dwg_sentinel(DWG_SENTINEL_THUMBNAIL_BEGIN);
+  if (sec_dat.size < 16 || memcmp (sentinel, sec_dat.chain, 16))
+    {
+      LOG_WARN ("thumbnail sentinel mismatch");
+      return error;
+    }
 
-  dwg->thumbnail.size = sec_dat.size;
+  dwg->thumbnail.size = sec_dat.size - 32; // 2x sentinel
   dwg->thumbnail.chain = sec_dat.chain;
+  dwg->thumbnail.byte = 16; // sentinel
 
   dwg_bmp (dwg, &size);
-  if (size != dwg->thumbnail.size)
+  if (abs((int)((long)size - (long)dwg->thumbnail.size)) > 200) // various headers
     LOG_WARN ("thumbnail.size mismatch: %lu != " FORMAT_RL,
               dwg->thumbnail.size, size);
 
