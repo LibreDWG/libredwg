@@ -3386,6 +3386,11 @@ DWG_OBJECT(GROUP)
   FIELD_BS (unnamed, 70);
   FIELD_BS (selectable, 71);
   FIELD_BL (num_groups, 0);
+  if (FIELD_VALUE(num_groups > 10000))
+    {
+      LOG_ERROR("Invalid GROUP.num_groups " FORMAT_BL, _obj->num_groups);
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
 
   START_OBJECT_HANDLE_STREAM;
   HANDLE_VECTOR (groups, num_groups, 5, 340);

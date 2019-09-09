@@ -2360,13 +2360,13 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
       // last_handle = 0;
       last_offset = 0;
-      while (hdl_dat.byte - startpos < section_size)
+      while ((int)(hdl_dat.byte - startpos) < section_size)
         {
           int added;
           BITCODE_UMC handle;
           BITCODE_MC offset;
 
-          oldpos = dat->byte;
+          oldpos = hdl_dat.byte;
           handle = bit_read_UMC (&hdl_dat);
           offset = bit_read_MC (&hdl_dat);
           // last_handle += handle;
@@ -2374,9 +2374,9 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           LOG_TRACE ("\n< Next object: %lu\t", (unsigned long)dwg->num_objects)
           LOG_HANDLE ("Handle: " FORMAT_UMC
                       "\tOffset: " FORMAT_MC " @%lu\n", handle,
-                      offset, last_offset)
+                      offset, last_offset);
 
-          if (hdl_dat.byte == oldpos)
+          if (hdl_dat.byte == oldpos) // ?? completely unrelated
             break;
 
           added = dwg_decode_add_object (dwg, &obj_dat, &obj_dat, last_offset);
