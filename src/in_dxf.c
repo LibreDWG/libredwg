@@ -2657,6 +2657,9 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
       return pair;
     }
   dwg_dynapi_entity_set_value (_obj, obj->name, "objid", &obj->index, is_utf);
+  // default xdic_missing_flag
+  if (dwg->header.version >= R_2004)
+    obj->tio.object->xdic_missing_flag = 1;
 
   pair = dxf_read_pair (dat);
   // read common table until next 0 table or endtab
@@ -2716,6 +2719,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
         case 360: // {ACAD_XDICTIONARY TODO
           obj->tio.object->xdicobjhandle
               = dwg_add_handleref (dwg, 0, pair->value.u, obj);
+          obj->tio.object->xdic_missing_flag = 0;
           LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [330]\n", ctrlname,
                      ARGS_REF (obj->tio.object->xdicobjhandle));
           break;
@@ -4765,6 +4769,14 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
       Dwg_Entity__3DFACE *o = obj->tio.entity->tio._3DFACE;
       o->has_no_flags = 1;
       LOG_TRACE ("_3DFACE.has_no_flags = 1 [B]\n");
+    }
+  // set xdic_missing_flag
+  if (dwg->header.version >= R_2004)
+    {
+      if (is_entity && !obj->tio.entity->xdicobjhandle)
+        obj->tio.entity->xdic_missing_flag = 1;
+      else if (!is_entity && !obj->tio.object->xdicobjhandle)
+        obj->tio.object->xdic_missing_flag = 1;
     }
   return pair;
 }
