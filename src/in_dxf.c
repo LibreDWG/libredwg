@@ -3456,7 +3456,12 @@ postprocess_SEQEND (Dwg_Object *obj)
   BITCODE_H *owned;
   const char* owhdls;
   if (!owner)
-    return;
+    {
+      LOG_WARN ("Missing owner from " FORMAT_REF " [H]",
+                ARGS_REF (obj->tio.entity->ownerhandle));
+      return;
+    }
+  obj->tio.entity->ownerhandle->obj = NULL;
   owhdls = memBEGINc (owner->name, "POLYLINE_")
     ? "vertex" : "attrib_handles";
   ow = owner->tio.entity->tio.POLYLINE_2D;
@@ -3717,6 +3722,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
           // fall through
         case 5:
           {
+            obj->handle.value = pair->value.u;
             dwg_add_handle (&obj->handle, 0, pair->value.u, obj);
             LOG_TRACE ("%s.handle = " FORMAT_H " [5 H]\n", name,
                        ARGS_H (obj->handle));

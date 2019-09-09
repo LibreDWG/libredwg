@@ -1321,7 +1321,7 @@ dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, BITCODE_RL value,
   unsigned char *val = (unsigned char *)&hdl->value;
   hdl->code = code;
   hdl->value = value;
-  if (obj && !offset && value) // same obj
+  if (obj && !offset && value) // only if same obj
     {
       LOG_HANDLE ("object_map{%X} = %u\n", (unsigned)value, obj->index);
       hash_set (obj->parent->object_map, value, (uint32_t)obj->index);
