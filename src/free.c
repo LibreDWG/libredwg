@@ -145,13 +145,13 @@ static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
 // FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'name'.
-#define FIELD_VECTOR_N(name, type, size, dxf)                                 \
-  if (size && _obj->name)                                                     \
+#define FIELD_VECTOR_N(nam, type, size, dxf)                                  \
+  if ((size) && _obj->nam)                                                    \
     {                                                                         \
-      for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
-        FIELD_##type (name[vcount], dxf);                                     \
+      for (vcount = 0; vcount < (BITCODE_BL)(size); vcount++)                 \
+        FIELD_##type (nam[vcount], dxf);                                      \
     }                                                                         \
-  FIELD_TV (name, dxf);
+  FIELD_TV (nam, dxf);
 #define FIELD_VECTOR_T(name, size, dxf)                                       \
   FIELD_VECTOR_N (name, TV, _obj->size, dxf)
 #define FIELD_VECTOR(name, type, size, dxf)                                   \
