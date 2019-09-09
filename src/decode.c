@@ -1690,7 +1690,7 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   BITCODE_RC *decomp, *ptr;
   int i, error;
   BITCODE_RL section_address;
-  BITCODE_RL bytes_remaining;
+  int64_t bytes_remaining;
   uint32_t comp_data_size = dwg->r2004_header.comp_data_size;
   uint32_t decomp_data_size = dwg->r2004_header.decomp_data_size;
 
@@ -1713,11 +1713,11 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   section_address = 0x100; // starting address
   i = 0;
-  bytes_remaining = decomp_data_size;
+  bytes_remaining = (int64_t)decomp_data_size;
   ptr = decomp;
   dwg->header.num_sections = 0;
 
-  while (bytes_remaining)
+  while (bytes_remaining >= 8)
     {
       if (dwg->header.num_sections == 0)
         dwg->header.section = calloc (1, sizeof (Dwg_Section));
@@ -1734,6 +1734,7 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           LOG_ERROR ("Out of memory");
           return DWG_ERR_OUTOFMEM;
         }
+      dwg->header.num_sections++;
 
       /* endian specific code: */
       bfr_read (&dwg->header.section[i], &ptr, 8);
@@ -1745,7 +1746,8 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_TRACE (" size: %5u,", dwg->header.section[i].size)
       LOG_TRACE (" address: 0x%04x\n", dwg->header.section[i].address)
 
-      if (dwg->header.section[i].number < 0) // negative: gap/unused data
+      if (bytes_remaining >= 16 &&
+          dwg->header.section[i].number < 0) // negative: gap/unused data
         {
           /* endian specific code: */
           bfr_read (&dwg->header.section[i].parent, &ptr, 16);
@@ -1756,7 +1758,6 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           LOG_TRACE ("0x00:   %d\n", dwg->header.section[i].x00)
         }
 
-      dwg->header.num_sections++;
       i++;
     }
   free (decomp);
