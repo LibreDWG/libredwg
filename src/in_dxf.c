@@ -3451,36 +3451,41 @@ postprocess_SEQEND (Dwg_Object *obj)
   Dwg_Entity_SEQEND *o = obj->tio.entity->tio.SEQEND;
   Dwg_Object *owner = dwg_ref_object (dwg, obj->tio.entity->ownerhandle);
   Dwg_Entity_POLYLINE_2D *ow;
-  BITCODE_BL i, j, num_owned;
+  BITCODE_BL i, j, num_owned = 0;
   BITCODE_H seqend;
-  BITCODE_H *owned;
+  BITCODE_H *owned = NULL;
   const char* owhdls;
   if (!owner)
     {
-      LOG_WARN ("Missing owner from " FORMAT_REF " [H]",
-                ARGS_REF (obj->tio.entity->ownerhandle));
+      if (obj->tio.entity->ownerhandle)
+        LOG_WARN ("Missing owner from " FORMAT_REF " [H]",
+                  ARGS_REF (obj->tio.entity->ownerhandle))
+      else
+        LOG_WARN ("Missing owner")
       return;
     }
   obj->tio.entity->ownerhandle->obj = NULL;
   owhdls = memBEGINc (owner->name, "POLYLINE_")
     ? "vertex" : "attrib_handles";
   ow = owner->tio.entity->tio.POLYLINE_2D;
-  dwg_dynapi_entity_value (ow, owner->name, "num_owned", &num_owned, NULL);
   seqend = dwg_add_handleref (dwg, 3, obj->handle.value, owner);
   dwg_dynapi_entity_set_value (ow, owner->name, "seqend", &seqend, 0);
-  LOG_TRACE ("%s.seqend = " FORMAT_REF "[H]\n", owner->name, ARGS_REF (seqend));
-  if (!num_owned) // or add NULL handles?
-    return;
-  owned = calloc (num_owned, sizeof (BITCODE_H));
+  LOG_TRACE ("%s.seqend = " FORMAT_REF " [H]\n", owner->name, ARGS_REF (seqend));
+  // num_owned is not properly stored in a DXF
   // collect children hdls. all objects from owner to here
-  for (j = 0, i = owner->index + 1; i < obj->index; i++)
+  for (j = 0, i = owner->index + 1; i < obj->index; i++, j++)
     {
       Dwg_Object *_o = &dwg->object[i];
-      assert (j < num_owned);
+      num_owned = j + 1;
+      owned = realloc (owned, num_owned * sizeof (BITCODE_H));
       owned[j] = dwg_add_handleref (dwg, 4, _o->handle.value, owner);
-      LOG_TRACE ("%s.%s[%d] = " FORMAT_REF "[H*]\n", owner->name, owhdls, j,
-                 ARGS_REF (seqend));
+      LOG_TRACE ("%s.%s[%d] = " FORMAT_REF " [H*]\n", owner->name, owhdls, j,
+                 ARGS_REF (owned[j]));
     }
+  if (!num_owned)
+    return;
+  dwg_dynapi_entity_set_value (ow, owner->name, "num_owned", &num_owned, 0);
+  LOG_TRACE ("%s.num_owned = " FORMAT_BL " [BL]\n", owner->name, num_owned);
   if (dwg->header.version >= R_13 && dwg->header.version <= R_2000)
     {
       const char* firstfield; const char* lastfield;
