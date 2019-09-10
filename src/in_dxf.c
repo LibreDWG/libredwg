@@ -5475,6 +5475,9 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             }
         }
     }
+  LOG_HANDLE ("Resolving pointers from ObjectRef vector:\n");
+  dwg_resolve_objectrefs_silent (dwg);
+  dwg->dirty_refs = 0;
   free_array_hdls (header_hdls);
   free_array_hdls (eed_hdls);
   return dwg->num_objects ? 1 : 0;
