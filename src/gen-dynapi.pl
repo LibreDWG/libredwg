@@ -327,6 +327,9 @@ $DXF{'DIMSTYLE_CONTROL'}->{'morehandles'} = 340;
 # $DXF{'DIMENSION_ORDINATE'}->{'flag2'} = 70;
 # $DXF{'DIMENSION_ORDINATE'}->{'dimstyle'} = 3;
 # $DXF{'DIMENSION_ORDINATE'}->{'block'} = 2;
+$DXF{$_}->{'has_attribs'} = 66 for qw(INSERT MINSERT);
+#$DXF{$_}->{'has_vertex'} = 66 for qw (POLYLINE_2D POLYLINE_3D POLYLINE_PFACE);
+$DXF{$_}->{'flag'} = 70 for qw(VERTEX_3D VERTEX_MESH VERTEX_PFACE_FACE POLYLINE_PFACE);
 
 dxfin_spec "$srcdir/header_variables_dxf.spec";
 $DXF{header_variables}->{'_3DDWFPREC'} = 40;

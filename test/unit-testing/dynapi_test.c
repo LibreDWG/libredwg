@@ -15499,6 +15499,22 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_B has_vertex;
+    if (dwg_dynapi_entity_value (polyline_2d, "POLYLINE_2D", "has_vertex", &has_vertex, NULL)
+        && has_vertex == polyline_2d->has_vertex)
+      pass ();
+    else
+      fail ("POLYLINE_2D.has_vertex [B] " FORMAT_B " != " FORMAT_B "", polyline_2d->has_vertex, has_vertex);
+    has_vertex++;
+    if (dwg_dynapi_entity_set_value (polyline_2d, "POLYLINE_2D", "has_vertex", &has_vertex, 0)
+        && has_vertex == polyline_2d->has_vertex)
+      pass ();
+    else
+      fail ("POLYLINE_2D.has_vertex [B] set+1 " FORMAT_B " != " FORMAT_B "", polyline_2d->has_vertex, has_vertex);
+    polyline_2d->has_vertex--;
+
+  }
+  {
     BITCODE_H last_vertex;
     if (dwg_dynapi_entity_value (polyline_2d, "POLYLINE_2D", "last_vertex", &last_vertex, NULL)
         && !memcmp (&last_vertex, &polyline_2d->last_vertex, sizeof (polyline_2d->last_vertex)))
@@ -15627,6 +15643,22 @@ static int test_POLYLINE_3D (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_B has_vertex;
+    if (dwg_dynapi_entity_value (polyline_3d, "POLYLINE_3D", "has_vertex", &has_vertex, NULL)
+        && has_vertex == polyline_3d->has_vertex)
+      pass ();
+    else
+      fail ("POLYLINE_3D.has_vertex [B] " FORMAT_B " != " FORMAT_B "", polyline_3d->has_vertex, has_vertex);
+    has_vertex++;
+    if (dwg_dynapi_entity_set_value (polyline_3d, "POLYLINE_3D", "has_vertex", &has_vertex, 0)
+        && has_vertex == polyline_3d->has_vertex)
+      pass ();
+    else
+      fail ("POLYLINE_3D.has_vertex [B] set+1 " FORMAT_B " != " FORMAT_B "", polyline_3d->has_vertex, has_vertex);
+    polyline_3d->has_vertex--;
+
+  }
+  {
     BITCODE_H last_vertex;
     if (dwg_dynapi_entity_value (polyline_3d, "POLYLINE_3D", "last_vertex", &last_vertex, NULL)
         && !memcmp (&last_vertex, &polyline_3d->last_vertex, sizeof (polyline_3d->last_vertex)))
@@ -15721,6 +15753,22 @@ static int test_POLYLINE_MESH (const Dwg_Object *obj)
     else
       fail ("POLYLINE_MESH.flag [BS] set+1 %hu != %hu", polyline_mesh->flag, flag);
     polyline_mesh->flag--;
+
+  }
+  {
+    BITCODE_B has_vertex;
+    if (dwg_dynapi_entity_value (polyline_mesh, "POLYLINE_MESH", "has_vertex", &has_vertex, NULL)
+        && has_vertex == polyline_mesh->has_vertex)
+      pass ();
+    else
+      fail ("POLYLINE_MESH.has_vertex [B] " FORMAT_B " != " FORMAT_B "", polyline_mesh->has_vertex, has_vertex);
+    has_vertex++;
+    if (dwg_dynapi_entity_set_value (polyline_mesh, "POLYLINE_MESH", "has_vertex", &has_vertex, 0)
+        && has_vertex == polyline_mesh->has_vertex)
+      pass ();
+    else
+      fail ("POLYLINE_MESH.has_vertex [B] set+1 " FORMAT_B " != " FORMAT_B "", polyline_mesh->has_vertex, has_vertex);
+    polyline_mesh->has_vertex--;
 
   }
   {
@@ -15851,6 +15899,22 @@ static int test_POLYLINE_PFACE (const Dwg_Object *obj)
         pass ();
     else
         fail ("POLYLINE_PFACE.first_vertex [H]");
+  }
+  {
+    BITCODE_B has_vertex;
+    if (dwg_dynapi_entity_value (polyline_pface, "POLYLINE_PFACE", "has_vertex", &has_vertex, NULL)
+        && has_vertex == polyline_pface->has_vertex)
+      pass ();
+    else
+      fail ("POLYLINE_PFACE.has_vertex [B] " FORMAT_B " != " FORMAT_B "", polyline_pface->has_vertex, has_vertex);
+    has_vertex++;
+    if (dwg_dynapi_entity_set_value (polyline_pface, "POLYLINE_PFACE", "has_vertex", &has_vertex, 0)
+        && has_vertex == polyline_pface->has_vertex)
+      pass ();
+    else
+      fail ("POLYLINE_PFACE.has_vertex [B] set+1 " FORMAT_B " != " FORMAT_B "", polyline_pface->has_vertex, has_vertex);
+    polyline_pface->has_vertex--;
+
   }
   {
     BITCODE_H last_vertex;
@@ -20231,6 +20295,22 @@ static int test_VERTEX_PFACE_FACE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_VERTEX_PFACE_FACE *restrict vertex_pface_face = obj->tio.entity->tio.VERTEX_PFACE_FACE;
+  {
+    BITCODE_RC flag;
+    if (dwg_dynapi_entity_value (vertex_pface_face, "VERTEX_PFACE_FACE", "flag", &flag, NULL)
+        && flag == vertex_pface_face->flag)
+      pass ();
+    else
+      fail ("VERTEX_PFACE_FACE.flag [RC] %u != %u", vertex_pface_face->flag, flag);
+    flag++;
+    if (dwg_dynapi_entity_set_value (vertex_pface_face, "VERTEX_PFACE_FACE", "flag", &flag, 0)
+        && flag == vertex_pface_face->flag)
+      pass ();
+    else
+      fail ("VERTEX_PFACE_FACE.flag [RC] set+1 %u != %u", vertex_pface_face->flag, flag);
+    vertex_pface_face->flag--;
+
+  }
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (vertex_pface_face, "VERTEX_PFACE_FACE", "parent", &parent, NULL)

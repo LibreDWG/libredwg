@@ -4800,7 +4800,25 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                         pair->code == 210 ||
                         pair->code == 220 ||
                         pair->code == 230))
-                ; // ignore those DIMENSION fields. DXF artifacts
+                ; // ignore the POLYLINE elevation.x,y. DXF artifacts
+              else if ((strEQc (name, "POLYLINE_2D") ||
+                        strEQc (name, "POLYLINE_3D") ||
+                        strEQc (name, "HATCH")) &&
+                       (pair->code == 10 ||
+                        pair->code == 20))
+                ; // ignore the VERTEX_PFACE_FACE 3BD 10
+              else if ((strEQc (name, "VERTEX_PFACE_FACE") ||
+                        strEQc (name, "POLYLINE_PFACE")) &&
+                       (pair->code == 10 ||
+                        pair->code == 20 ||
+                        pair->code == 30))
+                ; // ignore the POLYLINE_PFACE flag 70
+              else if (strEQc (name, "POLYLINE_PFACE") &&
+                       pair->code == 70)
+                ;
+              else if (strEQc (name, "POLYLINE_3D") &&
+                       pair->code == 30)
+                ;
               else
                 LOG_WARN ("Unknown DXF code %d for %s", pair->code, name);
             }

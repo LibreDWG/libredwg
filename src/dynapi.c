@@ -2569,6 +2569,8 @@ static const Dwg_DYNAPI_field _dwg_POINT_fields[] = {
 static const Dwg_DYNAPI_field _dwg_POLYLINE_2D_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_POLYLINE_2D, parent),
     1,1,0, 0 },
+  { "has_vertex",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_POLYLINE_2D, has_vertex),
+    0,0,0, 66 },
   { "num_owned",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_POLYLINE_2D, num_owned),
     0,0,0, 0 },
   { "first_vertex",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_POLYLINE_2D, first_vertex),
@@ -2599,6 +2601,8 @@ static const Dwg_DYNAPI_field _dwg_POLYLINE_2D_fields[] = {
 static const Dwg_DYNAPI_field _dwg_POLYLINE_3D_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_POLYLINE_3D, parent),
     1,1,0, 0 },
+  { "has_vertex",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_POLYLINE_3D, has_vertex),
+    0,0,0, 66 },
   { "num_owned",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_POLYLINE_3D, num_owned),
     0,0,0, 0 },
   { "first_vertex",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_POLYLINE_3D, first_vertex),
@@ -2619,6 +2623,8 @@ static const Dwg_DYNAPI_field _dwg_POLYLINE_3D_fields[] = {
 static const Dwg_DYNAPI_field _dwg_POLYLINE_MESH_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_POLYLINE_MESH, parent),
     1,1,0, 0 },
+  { "has_vertex",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_POLYLINE_MESH, has_vertex),
+    0,0,0, 0 },
   { "num_owned",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_POLYLINE_MESH, num_owned),
     0,0,0, 0 },
   { "first_vertex",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_POLYLINE_MESH, first_vertex),
@@ -2647,6 +2653,8 @@ static const Dwg_DYNAPI_field _dwg_POLYLINE_MESH_fields[] = {
 static const Dwg_DYNAPI_field _dwg_POLYLINE_PFACE_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_POLYLINE_PFACE, parent),
     1,1,0, 0 },
+  { "has_vertex",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_POLYLINE_PFACE, has_vertex),
+    0,0,0, 66 },
   { "num_owned",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_POLYLINE_PFACE, num_owned),
     0,0,0, 0 },
   { "first_vertex",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_POLYLINE_PFACE, first_vertex),
@@ -3413,6 +3421,8 @@ static const Dwg_DYNAPI_field _dwg_VERTEX_3D_fields[] = {
 static const Dwg_DYNAPI_field _dwg_VERTEX_PFACE_FACE_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_VERTEX_PFACE_FACE, parent),
     1,1,0, 0 },
+  { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_VERTEX_PFACE_FACE, flag),
+    0,0,0, 70 },
   { "vertind[4]",	"BS", 4 * sizeof (BITCODE_BS),  OFF (struct _dwg_entity_VERTEX_PFACE_FACE, vertind),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},

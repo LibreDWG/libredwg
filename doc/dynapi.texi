@@ -2671,6 +2671,8 @@ BD,	DXF 50
 
 @item parent
 struct _dwg_object_entity*
+@item has_vertex
+B,	DXF 66
 @item num_owned
 BL
 @item first_vertex
@@ -2708,6 +2710,8 @@ BE,	DXF 210
 
 @item parent
 struct _dwg_object_entity*
+@item has_vertex
+B,	DXF 66
 @item num_owned
 BL
 @item first_vertex
@@ -2735,6 +2739,8 @@ RC,	DXF 70
 
 @item parent
 struct _dwg_object_entity*
+@item has_vertex
+B
 @item num_owned
 BL
 @item first_vertex
@@ -2770,6 +2776,8 @@ BS,	DXF 74
 
 @item parent
 struct _dwg_object_entity*
+@item has_vertex
+B,	DXF 66
 @item num_owned
 BL
 @item first_vertex
@@ -3666,6 +3674,8 @@ RC,	DXF 70
 
 @item parent
 struct _dwg_object_entity*
+@item flag
+RC,	DXF 70
 @item vertind[4]
 BS
 

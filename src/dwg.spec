@@ -793,6 +793,8 @@ DWG_ENTITY(VERTEX_PFACE_FACE)
     if (FIELD_VALUE(vertind[3]))
       FIELD_BS (vertind[3], 74);
   } else {
+    //FIELD_VALUE (pt) = { 0.0, 0.0, 0.0 };
+    FIELD_VALUE (flag) = 128;
     FIELD_BS (vertind[0], 71);
     FIELD_BS (vertind[1], 72);
     FIELD_BS (vertind[2], 73);
@@ -823,8 +825,11 @@ DWG_ENTITY(POLYLINE_2D)
   }
   SINCE (R_13)
   {
-    DXF { // i.e. has_attrib
-      KEY(has_vertex); VALUE_B (1, 66);
+    DXF {
+      FIELD_B (has_vertex, 66);
+    }
+    else {
+      FIELD_VALUE (has_vertex) = 1;
     }
     DXF {
       if (FIELD_VALUE(flag) != 0)
@@ -880,6 +885,12 @@ DWG_ENTITY_END
 DWG_ENTITY(POLYLINE_3D)
 
   SUBCLASS (AcDb3dPolyline)
+  DXF {
+    FIELD_B (has_vertex, 66);
+  }
+  else {
+    FIELD_VALUE (has_vertex) = 1;
+  }
   FIELD_RC (curve_type, 75);
   FIELD_RC (flag, 70);
 
@@ -1319,6 +1330,15 @@ DWG_ENTITY_END
 DWG_ENTITY(POLYLINE_PFACE)
 
   SUBCLASS (AcDbPolyFaceMesh)
+  DXF {
+    BITCODE_3RD pt = { 0.0, 0.0, 0.0 };
+    FIELD_B (has_vertex, 66);
+    KEY(elevation); VALUE_3BD (pt, 10);
+    KEY(flag); VALUE_BL (64, 70);
+  }
+  else {
+    FIELD_VALUE (has_vertex) = 1;
+  }
   FIELD_BS (numverts, 71);
   FIELD_BS (numfaces, 72);
 
