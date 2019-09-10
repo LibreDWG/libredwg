@@ -898,9 +898,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
    */
   pvzadr_2 = dat->byte;
   pvzbit = dat->bit;
+  assert (pvzadr);
   dat->byte = pvzadr;
   dat->bit = 0;
   bit_write_RL (dat, pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
+  assert (pvzadr_2);
   dat->byte = pvzadr_2;
   dat->bit = pvzbit;
   // printf ("Size: %lu\n", pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
@@ -1050,7 +1052,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           dat->size = end_address;
           bit_chain_alloc (dat);
         }
-      bit_write_CRC (dat, obj->address, 0xC0C1);
+      //bit_write_CRC (dat, obj->address, 0xC0C1);
     }
 
   /*for (j = 0; j < dwg->num_objects; j++)
@@ -1113,6 +1115,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   if (ckr_missing)
     {
       sekcisize = dat->byte - pvzadr;
+      assert (pvzadr);
       dat->chain[pvzadr] = sekcisize >> 8;
       dat->chain[pvzadr + 1] = sekcisize & 0xFF;
       bit_write_CRC (dat, pvzadr, 0xC0C1);
@@ -1222,6 +1225,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       // patch size at pvzadr
       {
         unsigned long pos = bit_position (dat);
+        assert (pvzadr);
         _obj->size = dat->byte - pvzadr;
         bit_set_position (dat, pvzadr * 8);
         FIELD_RL (size, 0);
@@ -1265,6 +1269,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   /* Write section addresses
    */
+  assert (section_address);
   dat->byte = section_address;
   dat->bit = 0;
   for (j = 0; j < dwg->header.num_sections; j++)
