@@ -268,6 +268,8 @@ main (int argc, char *argv[])
         {
           // FIXME: for now only R_2000. later remove this line.
           dwg.header.version = dwg_version;
+          if (dwg.header.from_version == R_INVALID)
+            dwg.header.from_version = dwg.header.version;
           printf ("\n");
         }
 
@@ -290,7 +292,10 @@ main (int argc, char *argv[])
                     && !S_ISLNK (attrib.st_mode)
 #endif
                     )
-                  unlink (filename_out);
+                  {
+                    unlink (filename_out);
+                    error = dwg_write_file (filename_out, &dwg);
+                  }
                 else
                   {
                     LOG_ERROR ("Not writable file or symlink: %s\n", filename_out);
