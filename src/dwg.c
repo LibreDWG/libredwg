@@ -637,11 +637,13 @@ dwg_ref_object (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
     return ref->obj;
   // Without obj we don't get an absolute_ref from relative OFFSETOBJHANDLE
   // handle types.
-  if (ref->handleref.code < 6
-      && dwg_resolve_handleref ((Dwg_Object_Ref *)ref, NULL))
+  if ((ref->handleref.code < 6 && dwg_resolve_handleref ((Dwg_Object_Ref *)ref, NULL)) ||
+      ref->absolute_ref)
     {
-      ref->obj = dwg_resolve_handle (dwg, ref->absolute_ref);
-      return ref->obj;
+      Dwg_Object *obj = dwg_resolve_handle (dwg, ref->absolute_ref);
+      if (!dwg->dirty_refs)
+        ref->obj = obj;
+      return obj;
     }
   else
     return NULL;

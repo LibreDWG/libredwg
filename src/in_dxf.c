@@ -4918,16 +4918,87 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       if (pair->code == 0)
         {
           BITCODE_BL i = 0;
-          while (pair->code == 0 && strEQc (pair->value.s, "BLOCK"))
+          BITCODE_BB entmode = 0;
+          while (pair->code == 0 && strNE (pair->value.s, "ENDSEC"))
             {
-              // until 0 BLOCK or 0 ENDBLK
-              pair = new_object ((char *)"BLOCK", dat, dwg, 0, i++);
+              Dwg_Object *obj, *blkhdr = NULL;
+              BITCODE_BL idx = dwg->num_objects;
+              strncpy (name, pair->value.s, 79);
+              pair = new_object (pair->value.s, dat, dwg, 0, i++);
+              obj = &dwg->object[idx];
+              if (strEQc (obj->name, "BLOCK"))
+                {
+                  Dwg_Object_Entity *ent = obj->tio.entity;
+                  Dwg_Entity_BLOCK *_obj = obj->tio.entity->tio.BLOCK;
+                  i = 0;
+                  if (ent->ownerhandle)
+                    {
+                      if ((blkhdr = dwg_ref_object (dwg, ent->ownerhandle)))
+                        {
+                          Dwg_Object_BLOCK_HEADER *_hdr
+                              = blkhdr->tio.object->tio.BLOCK_HEADER;
+                          ent->ownerhandle->obj = NULL; // still dirty
+                          _hdr->block_entity = dwg_add_handleref (
+                              dwg, 3, obj->handle.value, blkhdr);
+                          LOG_TRACE ("BLOCK_HEADER.block_entity = " FORMAT_REF
+                                     " [H] (blocks)\n",
+                                     ARGS_REF (_hdr->block_entity));
+                        }
+                    }
+                  else
+                    blkhdr = NULL;
+                  if (strEQc (_obj->name, "*Model_Space"))
+                      entmode = ent->entmode = 2;
+                  else if (strEQc (_obj->name, "*Paper_Space"))
+                      entmode = ent->entmode = 1;
+                }
+              else if (obj->type == DWG_TYPE_ENDBLK)
+                {
+                  obj->tio.entity->entmode = entmode;
+                  LOG_TRACE ("%s.entmode = %d [BB] (blocks)\n", obj->name,
+                             entmode);
+                  // set BLOCK_HEADER.endblk_entity handle
+                  if (blkhdr)
+                    {
+                      BITCODE_H ref = dwg_add_handleref (
+                          dwg, 3, obj->handle.value, blkhdr);
+                      LOG_TRACE ("BLOCK_HEADER.endblk_entity = " FORMAT_REF
+                                 " [H] (blocks)\n",
+                                 ARGS_REF (ref));
+                    }
+                }
+              // normal entity
+              else if (obj->supertype == DWG_SUPERTYPE_ENTITY)
+                {
+                  obj->tio.entity->entmode = entmode;
+                  LOG_TRACE ("%s.entmode = %d [BB] (blocks)\n", obj->name,
+                             entmode);
+                  // blkhdr.entries[] array already done in TABLES section
+                  if (blkhdr && dwg->header.version >= R_13
+                      && dwg->header.version < R_2004)
+                    {
+                      Dwg_Object_BLOCK_HEADER *_hdr
+                          = blkhdr->tio.object->tio.BLOCK_HEADER;
+                      if (i == 1)
+                        {
+                          _hdr->first_entity = dwg_add_handleref (
+                              dwg, 4, obj->handle.value, blkhdr);
+                          LOG_TRACE ("BLOCK_HEADER.first_entity = " FORMAT_REF
+                                     " [H] (blocks)\n",
+                                     ARGS_REF (_hdr->first_entity));
+                        }
+                      else
+                        {
+                          _hdr->last_entity = dwg_add_handleref (
+                              dwg, 4, obj->handle.value, blkhdr);
+                          LOG_TRACE ("BLOCK_HEADER.last_entity = " FORMAT_REF
+                                     " [H] (blocks)\n",
+                                     ARGS_REF (_hdr->last_entity));
+                        }
+                    }
+                }
             }
           DXF_RETURN_ENDSEC (0) // next BLOCK or ENDSEC
-          else if (strEQc (pair->value.s, "ENDBLK"))
-            name[0] = '\0'; // close table
-          else
-            LOG_WARN ("Unknown 0 %s (%s)", pair->value.s, "blocks");
         }
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
