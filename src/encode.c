@@ -380,7 +380,7 @@ static bool env_var_checked_p;
       {                                                                       \
         if (handle_code != ANYCODE &&                                         \
             hdlptr->handleref.code != handle_code &&                          \
-            hdlptr->handleref.code < 6)                                       \
+            (handle_code == 4 && hdlptr->handleref.code < 6))                 \
           {                                                                   \
             LOG_WARN ("Expected a CODE %d handle, got a %d", handle_code,     \
                       hdlptr->handleref.code);                                \
@@ -410,7 +410,7 @@ static bool env_var_checked_p;
       {                                                                       \
         if (handle_code != ANYCODE                                            \
             && _obj->nam->handleref.code != handle_code &&                    \
-            && _obj->nam->handleref.code < 6)                                 \
+            (handle_code == 4 && _obj->nam->handleref.code < 6))              \
           {                                                                   \
             LOG_WARN ("Expected a CODE %x handle, got a %x", handle_code,     \
                       _obj->nam->handleref.code);                             \

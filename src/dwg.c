@@ -709,21 +709,22 @@ dwg_resolve_handleref (Dwg_Object_Ref *restrict ref,
    *   3 Hard owner
    *   4 Soft pointer
    *   5 Hard pointer
-   * With OFFSETOBJHANDLE >5 the handle is stored as an offset from some other
+   * With OFFSETOBJHANDLE >5 the code 4 handle is stored as an offset from some other
    * handle.
    */
   switch (ref->handleref.code)
     {
-    case 0x06:
+    // implicit code: 4
+    case 6:
       ref->absolute_ref = (obj->handle.value + 1);
       break;
-    case 0x08:
+    case 8:
       ref->absolute_ref = (obj->handle.value - 1);
       break;
-    case 0x0A:
+    case 10:
       ref->absolute_ref = (obj->handle.value + ref->handleref.value);
       break;
-    case 0x0C:
+    case 12:
       ref->absolute_ref = (obj->handle.value - ref->handleref.value);
       break;
     case 2:
@@ -1339,7 +1340,7 @@ dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, BITCODE_RL value,
     }
   else
       hdl->size = 0;
-  if (code != 5 && obj && abs (offset) == 1)
+  if (code == 4 && obj && abs (offset) < 256)
     {
       // change code to 6.0.0 or 8.0.0
       if (offset == 1)
@@ -1353,6 +1354,18 @@ dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, BITCODE_RL value,
           hdl->code = 8;
           hdl->value = 0;
           hdl->size = 0;
+        }
+      else if (offset > 0)
+        {
+          hdl->code = 10;
+          hdl->value = offset;
+          hdl->size = 1;
+        }
+      else if (offset < 0)
+        {
+          hdl->code = 12;
+          hdl->value = -offset;
+          hdl->size = 1;
         }
     }
   return 0;
