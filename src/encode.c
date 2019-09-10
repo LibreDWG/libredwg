@@ -1044,8 +1044,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       obj = &dwg->object[index];
       // change the address to the linearly sorted one
       obj->address = dat->byte;
+      assert (dat->byte);
       error |= dwg_encode_add_object (obj, dat, dat->byte);
 
+      if (dwg->header.version >= R_1_2)
+        {
+          assert (dat->chain[0] == 'A');
+          assert (dat->chain[1] == 'C');
+        }
       end_address = obj->address + (unsigned long)obj->size; // from RL
       if (end_address > dat->size)
         {
@@ -1060,7 +1066,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                  j, omap[j].handle, omap[j].address, omap[j].index);
   */
 
-  /* Unknown bitdouble between objects and object map (or short?)
+  /* Unknown CRC between objects and object map
    */
   bit_write_RS (dat, 0);
 
@@ -1101,6 +1107,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         {
           ckr_missing = 0;
           sekcisize = dat->byte - pvzadr;
+          assert (pvzadr);
           dat->chain[pvzadr] = sekcisize >> 8;
           dat->chain[pvzadr + 1] = sekcisize & 0xFF;
           bit_write_CRC (dat, pvzadr, 0xC0C1);
@@ -1120,7 +1127,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dat->chain[pvzadr + 1] = sekcisize & 0xFF;
       bit_write_CRC (dat, pvzadr, 0xC0C1);
     }
+  if (dwg->header.version >= R_1_2)
+    {
+      assert (dat->chain[0] == 'A');
+      assert (dat->chain[1] == 'C');
+    }
   pvzadr = dat->byte;
+  assert (pvzadr);
   bit_write_RC (dat, 0);
   bit_write_RC (dat, 2);
   bit_write_CRC (dat, pvzadr, 0xC0C1);
@@ -1141,6 +1154,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     Dwg_Object *obj = NULL;
     BITCODE_BL vcount;
 
+    assert (dat->byte);
     if (!_obj->address)
       _obj->address = dat->byte;
     dwg->header.section[SECTION_2NDHEADER_R13].number = 3;
@@ -1340,6 +1354,40 @@ dwg_section_page_checksum (const uint32_t seed, Bit_Chain *dat, uint32_t size)
 
 #include "dwg.spec"
 
+// expand aliases: name => CLASSES.dxfname
+static const char *
+dxf_encode_alias (char *name)
+{
+  if (strEQc (name, "DICTIONARYWDFLT"))
+    return "ACDBDICTIONARYWDFLT";
+  else if (strEQc (name, "SECTIONVIEWSTYLE"))
+    return "ACDBSECTIONVIEWSTYLE";
+  else if (strEQc (name, "PLACEHOLDER"))
+    return "ACDBPLACEHOLDER";
+  else if (strEQc (name, "DETAILVIEWSTYLE"))
+    return "ACDBDETAILVIEWSTYLE";
+  else if (strEQc (name, "ASSOCPERSSUBENTMANAGER"))
+    return "ACDBASSOCPERSSUBENTMANAGER";
+  else if (strEQc (name, "EVALUATION_GRAPH"))
+    return "ACAD_EVALUATION_GRAPH";
+  else if (strEQc (name, "ASSOCACTION"))
+    return "ACDBASSOCACTION";
+  else if (strEQc (name, "ASSOCALIGNEDDIMACTIONBODY"))
+    return "ACDBASSOCALIGNEDDIMACTIONBODY";
+  else if (strEQc (name, "ASSOCOSNAPPOINTREFACTIONPARAM"))
+    return "ACDBASSOCOSNAPPOINTREFACTIONPARAM";
+  else if (strEQc (name, "ASSOCVERTEXACTIONPARAM"))
+    return "ACDBASSOCVERTEXACTIONPARAM";
+  else if (strEQc (name, "ASSOCGEOMDEPENDENCY"))
+    return "ACDBASSOCGEOMDEPENDENCY";
+  else if (strEQc (name, "ASSOCDEPENDENCY"))
+    return "ACDBASSOCDEPENDENCY";
+  else if (strEQc (name, "TABLE"))
+    return "ACAD_TABLE";
+  else
+    return NULL;
+}
+
 static Dwg_Class*
 dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj)
 {
@@ -1357,7 +1405,17 @@ dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj)
               break;
             }
           else
-            klass = NULL; // inefficient
+            {
+              // alias DICTIONARYWDFLT => ACDBDICTIONARYWDFLT
+              const char *alias = dxf_encode_alias (obj->dxfname);
+              if (alias && strEQ (alias, klass->dxfname))
+                {
+                  obj->dxfname = alias;
+                  obj->type = 500 + i;
+                  break;
+                }
+              klass = NULL; // inefficient
+            }
         }
     }
   else // search by index
@@ -1399,8 +1457,8 @@ dwg_encode_variable_type (Dwg_Data *dwg, Bit_Chain *dat, Dwg_Object *obj)
             klass->number, klass->dxfname, klass->proxyflag,
             klass->wasazombie ? " was proxy" : "")
 
-#undef WARN_UNHANDLED_CLASS
-#undef WARN_UNSTABLE_CLASS
+  #undef WARN_UNHANDLED_CLASS
+  #undef WARN_UNSTABLE_CLASS
 
   return DWG_ERR_UNHANDLEDCLASS;
 }
@@ -1415,6 +1473,7 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
 
   previous_address = dat->byte;
   previous_bit = dat->bit;
+  assert (address);
   dat->byte = address;
   dat->bit = 0;
 
@@ -1688,6 +1747,7 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
           int i = obj->type - 500;
           Dwg_Class *klass = dwg_encode_get_class (dwg, obj);
 
+          assert (address);
           dat->byte = address; // restart and write into the UNKNOWN_OBJ object
           dat->bit = 0;
           bit_write_MS (dat, obj->size); // unknown blobs have a known size
@@ -1725,6 +1785,7 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
   if (!obj->size)
     {
       BITCODE_BL pos = bit_position (dat);
+      assert (previous_address);
       obj->size = dat->byte - previous_address;
       if (dat->bit)
         obj->size++;
@@ -1741,10 +1802,13 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
           bit_write_UMC (dat, obj->handlestream_size);
           LOG_TRACE ("handlestream_size: %lu\n", obj->handlestream_size);
         }
-      bit_set_position (dat, obj->bitsize_pos);
-      bit_write_RL (dat, obj->bitsize);
-      LOG_TRACE ("bitsize: %u [RL] @%u.%u\n", obj->bitsize,
-                 pos / 8, pos %8);
+      if (obj->bitsize_pos && obj->bitsize)
+        {
+          bit_set_position (dat, obj->bitsize_pos);
+          bit_write_RL (dat, obj->bitsize);
+          LOG_TRACE ("bitsize: %u [RL] @%u.%u\n", obj->bitsize,
+                     pos / 8, pos %8);
+        }
       bit_set_position (dat, pos);
     }
 

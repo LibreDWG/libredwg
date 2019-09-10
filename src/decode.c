@@ -4169,8 +4169,8 @@ dwg_decode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *dat,
   // almost always false
   is_entity = dwg_class_is_entity (klass);
 
-// global class dispatcher
-#include "classes.inc"
+  // global class dispatcher
+  #include "classes.inc"
 
   LOG_WARN ("Unknown Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object",
             klass->number, klass->dxfname, klass->proxyflag,
