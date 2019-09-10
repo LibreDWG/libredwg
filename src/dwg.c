@@ -765,10 +765,11 @@ dwg_block_control (Dwg_Data *dwg)
 EXPORT Dwg_Object_Ref *
 dwg_model_space_ref (Dwg_Data *dwg)
 {
-  if (dwg->header_vars.BLOCK_RECORD_MSPACE
-      && dwg->header_vars.BLOCK_RECORD_MSPACE->obj)
+  if (dwg->header_vars.BLOCK_RECORD_MSPACE &&
+      dwg->header_vars.BLOCK_RECORD_MSPACE->obj)
     return dwg->header_vars.BLOCK_RECORD_MSPACE;
-  return dwg->block_control.model_space && dwg->block_control.model_space->obj
+  return dwg->block_control.model_space &&
+         dwg->block_control.model_space->obj
              ? dwg->block_control.model_space
              : NULL;
 }
@@ -778,10 +779,11 @@ dwg_model_space_ref (Dwg_Data *dwg)
 EXPORT Dwg_Object_Ref *
 dwg_paper_space_ref (Dwg_Data *dwg)
 {
-  if (dwg->header_vars.BLOCK_RECORD_PSPACE
-      && dwg->header_vars.BLOCK_RECORD_PSPACE->obj)
+  if (dwg->header_vars.BLOCK_RECORD_PSPACE &&
+      dwg->header_vars.BLOCK_RECORD_PSPACE->obj)
     return dwg->header_vars.BLOCK_RECORD_PSPACE;
-  return dwg->block_control.paper_space && dwg->block_control.paper_space->obj
+  return dwg->block_control.paper_space &&
+         dwg->block_control.paper_space->obj
              ? dwg->block_control.paper_space
              : NULL;
 }
@@ -799,6 +801,9 @@ dwg_model_space_object (Dwg_Data *dwg)
   ctrl = dwg_block_control (dwg);
   if (ctrl && ctrl->model_space && ctrl->model_space->obj)
     return ctrl->model_space->obj;
+  if (dwg->header_vars.BLOCK_RECORD_MSPACE &&
+      dwg->header_vars.BLOCK_RECORD_MSPACE->obj)
+    return dwg->header_vars.BLOCK_RECORD_MSPACE->obj;
   return dwg_resolve_handle (dwg, dwg->header.version >= R_2000 ? 0x1F : 0x17);
 }
 

@@ -2153,6 +2153,9 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int i;
   Dwg_Object *mspace = dwg_model_space_object (dwg);
 
+  if (!mspace)
+    return DWG_ERR_UNHANDLEDCLASS;
+
   // If there's no *Model_Space block skip this BLOCKS section.
   // Or try handle 1F with r2000+, 17 with r14
   // obj = get_first_owned_block(hdr);
@@ -2188,7 +2191,10 @@ dxf_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
   int i;
-  Dwg_Object *mspace = dwg->header_vars.BLOCK_RECORD_MSPACE->obj;
+  Dwg_Object *mspace = dwg_model_space_object (dwg);
+
+  if (!mspace)
+    return DWG_ERR_INVALIDDWG;
 
   SECTION (ENTITIES);
   for (i = 0; (BITCODE_BL)i < dwg->num_objects; i++)
