@@ -95,6 +95,8 @@ void resolve_postponed_eed_refs (Dwg_Data *restrict dwg);
 void resolve_header_dicts (Dwg_Data *restrict dwg);
 BITCODE_H find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair);
 int is_table_name (const char *name);
+void entity_alias (char *name);
+void object_alias (char *name);
 
 EXPORT int dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 EXPORT int dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
@@ -130,8 +132,9 @@ EXPORT int dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 
 #define ADD_OBJECT(token)                                      \
   obj->type = obj->fixedtype = DWG_TYPE_##token;               \
-  obj->name = obj->dxfname = (char *)#token;                   \
-  LOG_TRACE ("  ADD_OBJECT %s %d\n", obj->name, obj->index);   \
+  obj->name = (char *)#token;                                  \
+  obj->dxfname = dxfname;                                      \
+  LOG_TRACE ("  ADD_OBJECT %s %d\n", obj->name, obj->index)    \
   _obj = calloc (1, sizeof (Dwg_Object_##token));              \
   obj->tio.object->tio.token = (Dwg_Object_##token *)_obj;     \
   obj->tio.object->tio.token->parent = obj->tio.object;        \
@@ -140,10 +143,11 @@ EXPORT int dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 #define ADD_ENTITY(token)                                      \
   obj->type = obj->fixedtype = DWG_TYPE_##token;               \
   if (strlen (#token) > 3 && !memcmp (#token, "_3D", 3))       \
-    obj->name = obj->dxfname = (char *)&#token[1];             \
+    obj->name = (char *)&#token[1];                            \
   else                                                         \
-    obj->name = obj->dxfname = (char *)#token;                 \
-  LOG_TRACE ("  ADD_ENTITY %s %d\n", obj->name, obj->index);   \
+    obj->name = (char *)#token;                                \
+  obj->dxfname = dxfname;                                      \
+  LOG_TRACE ("  ADD_ENTITY %s %d\n", obj->name, obj->index)    \
   _obj = calloc (1, sizeof (Dwg_Entity_##token));              \
   obj->tio.entity->tio.token = (Dwg_Entity_##token *)_obj;     \
   obj->tio.entity->tio.token->parent = obj->tio.entity;        \

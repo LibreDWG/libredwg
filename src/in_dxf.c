@@ -2611,6 +2611,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   int is_utf = dwg->header.version >= R_2007 ? 1 : 0;
   char *fieldname;
   char ctrlname[80];
+  char dxfname[80];
 
   NEW_OBJECT (dwg, obj);
 
@@ -2622,6 +2623,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
       strcat (ctrlname, "_CONTROL");
     }
   LOG_TRACE ("add %s\n", ctrlname);
+  strcpy (dxfname, ctrlname);
 
   // clang-format off
   ADD_TABLE_IF (LTYPE, LTYPE_CONTROL)
@@ -3553,7 +3555,7 @@ postprocess_SEQEND (Dwg_Object *obj)
 /* For tables, entities and objects.
  */
 static Dxf_Pair *
-new_object (char *restrict name, Bit_Chain *restrict dat,
+new_object (char *restrict name, char *restrict dxfname, Bit_Chain *restrict dat,
             Dwg_Data *restrict dwg, BITCODE_BL ctrl_id, BITCODE_BL i)
 {
   int is_utf = dwg->header.version >= R_2007 ? 1 : 0;
@@ -3584,7 +3586,10 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
     }
   else
     {
-      LOG_TRACE ("add %s\n", name)
+      if (strcmp (name, dxfname) != 0)
+        LOG_TRACE ("add %s (%s)\n", name, dxfname)
+      else
+        LOG_TRACE ("add %s\n", name)
     }
 
   if (is_entity)
@@ -4894,7 +4899,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           while (pair && pair->code == 0 && strEQ (pair->value.s, table))
             {
               // until 0 table or 0 ENDTAB
-              pair = new_object (table, dat, dwg, ctrl_id, i++);
+              pair = new_object (table, pair->value.s, dat, dwg, ctrl_id, i++);
             }
         }
       DXF_RETURN_ENDSEC (0) // next TABLE or ENDSEC
@@ -4924,7 +4929,8 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               Dwg_Object *obj, *blkhdr = NULL;
               BITCODE_BL idx = dwg->num_objects;
               strncpy (name, pair->value.s, 79);
-              pair = new_object (pair->value.s, dat, dwg, 0, i++);
+              entity_alias (name);
+              pair = new_object (name, pair->value.s, dat, dwg, 0, i++);
               obj = &dwg->object[idx];
               if (strEQc (obj->name, "BLOCK"))
                 {
@@ -5008,7 +5014,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
-static void
+void
 entity_alias (char *name)
 {
   const int len = strlen (name);
@@ -5053,7 +5059,7 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       while (pair->code == 0 &&
              (is_dwg_entity (name) || strEQc (name, "DIMENSION")))
         {
-          pair = new_object (name, dat, dwg, 0, 0);
+          pair = new_object (name, pair->value.s, dat, dwg, 0, 0);
           if (pair->code == 0)
             {
               strncpy (name, pair->value.s, 79);
@@ -5071,7 +5077,7 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
-static void
+void
 object_alias (char *name)
 {
   const int len = strlen (name);
@@ -5120,7 +5126,7 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           strncpy (name, pair->value.s, 79);
           object_alias (name);
           if (is_dwg_object (name))
-            pair = new_object (name, dat, dwg, 0, 0);
+            pair = new_object (name, pair->value.s, dat, dwg, 0, 0);
           else
             DXF_RETURN_ENDSEC (0)
           else
@@ -5151,7 +5157,7 @@ dxf_unknownsection_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           strncpy (name, pair->value.s, 79);
           object_alias (name);
           if (is_dwg_object (name))
-            pair = new_object (name, dat, dwg, 0, 0);
+            pair = new_object (name, pair->value.s, dat, dwg, 0, 0);
           else
             DXF_RETURN_ENDSEC (0)
           else
@@ -5348,6 +5354,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       Dwg_Object *obj;
       Dwg_Object_BLOCK_HEADER *_obj;
+      char *dxfname = (char*)"BLOCK_HEADER";
       NEW_OBJECT (dwg, obj);
       ADD_OBJECT (BLOCK_HEADER);
     }
