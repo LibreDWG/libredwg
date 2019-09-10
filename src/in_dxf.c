@@ -3771,8 +3771,8 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                 if (num_entries <= i)
                   {
                     // DXF often lies about num_entries, skipping defaults
-                    LOG_WARN ("Misleading %s.num_entries %d for %dth entry",
-                              ctrlname, num_entries, i + 1);
+                    LOG_TRACE ("Misleading %s.num_entries %d for %dth entry\n",
+                               ctrlname, num_entries, i + 1);
                     num_entries = i + 1;
                     dwg_dynapi_entity_set_value (
                         _ctrl, ctrlname, "num_entries", &num_entries, 0);
@@ -3935,7 +3935,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
             LOG_WARN ("Unknown DXF 102 %s in %s", pair->value.s, name)
           break;
         case 331:
-          if (ctrl_id && in_blkrefs) // BLKREFS TODO into BLOCK_RECORD, not BLOCK_HEADER
+          if (ctrl_id && in_blkrefs) // BLKREFS TODO
             {
               BITCODE_H *inserts = NULL;
               BITCODE_H hdl;
@@ -3947,7 +3947,7 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                                          &inserts, 0);
               if (curr_inserts + 1 > num_inserts)
                 {
-                  LOG_HANDLE ("  extending %s.num_inserts %d < %d\n", name,
+                  LOG_HANDLE ("  extending %s.num_inserts %d < %d\n", obj->name,
                               num_inserts, curr_inserts + 1);
                   num_inserts = curr_inserts + 1;
                   dwg_dynapi_entity_set_value (_obj, obj->name, "num_inserts",
@@ -3957,11 +3957,11 @@ new_object (char *restrict name, Bit_Chain *restrict dat,
                 inserts = realloc (inserts, num_inserts * sizeof (BITCODE_H));
               else
                 inserts = calloc (num_inserts, sizeof (BITCODE_H));
-              dwg_dynapi_entity_set_value (_obj, name, "inserts",
+              dwg_dynapi_entity_set_value (_obj, obj->name, "inserts",
                                            &inserts, 0);
               hdl = dwg_add_handleref (dwg, 4, pair->value.u, obj);
               LOG_TRACE ("%s.inserts[%d] = " FORMAT_REF " [331 H*]\n",
-                         name, curr_inserts, ARGS_REF (hdl));
+                         obj->name, curr_inserts, ARGS_REF (hdl));
               inserts[curr_inserts++] = hdl;
               break;
             }
