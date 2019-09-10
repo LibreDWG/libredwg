@@ -3455,6 +3455,29 @@ postprocess_SEQEND (Dwg_Object *obj)
   BITCODE_H seqend;
   BITCODE_H *owned = NULL;
   const char* owhdls;
+
+  // r12 and earlier: search for owner backwards
+  if (dwg->header.version < R_13 && !owner && !obj->tio.entity->ownerhandle)
+    {
+      for (i = obj->index - 1; i > 0; i--)
+        {
+          Dwg_Object *_o = &dwg->object[i];
+          if (_o->type == DWG_TYPE_INSERT ||
+              _o->type == DWG_TYPE_MINSERT ||
+              _o->type == DWG_TYPE_POLYLINE_2D ||
+              _o->type == DWG_TYPE_POLYLINE_3D ||
+              _o->type == DWG_TYPE_POLYLINE_PFACE ||
+              _o->type == DWG_TYPE_POLYLINE_MESH)
+            {
+              owner = _o;
+              obj->tio.entity->ownerhandle
+                  = dwg_add_handleref (dwg, 4, _o->handle.value, obj);
+              LOG_TRACE ("SEQEND.owner = " FORMAT_H " (%s) [H*]\n",
+                         ARGS_H(_o->handle), _o->name);
+              break;
+            }
+        }
+    }
   if (!owner)
     {
       if (obj->tio.entity->ownerhandle)
@@ -3477,15 +3500,19 @@ postprocess_SEQEND (Dwg_Object *obj)
     {
       Dwg_Object *_o = &dwg->object[i];
       num_owned = j + 1;
-      owned = realloc (owned, num_owned * sizeof (BITCODE_H));
-      owned[j] = dwg_add_handleref (dwg, 4, _o->handle.value, owner);
-      LOG_TRACE ("%s.%s[%d] = " FORMAT_REF " [H*]\n", owner->name, owhdls, j,
-                 ARGS_REF (owned[j]));
+      if (dwg->header.version >= R_13)
+        {
+          owned = realloc (owned, num_owned * sizeof (BITCODE_H));
+          owned[j] = dwg_add_handleref (dwg, 4, _o->handle.value, owner);
+          LOG_TRACE ("%s.%s[%d] = " FORMAT_REF " [H*]\n", owner->name, owhdls, j,
+                     ARGS_REF (owned[j]));
+        }
     }
   if (!num_owned)
     return;
   dwg_dynapi_entity_set_value (ow, owner->name, "num_owned", &num_owned, 0);
   LOG_TRACE ("%s.num_owned = " FORMAT_BL " [BL]\n", owner->name, num_owned);
+  // TODO: store all these fields, or just the ones for the requested version?
   if (dwg->header.version >= R_13 && dwg->header.version <= R_2000)
     {
       const char* firstfield; const char* lastfield;
@@ -3503,6 +3530,7 @@ postprocess_SEQEND (Dwg_Object *obj)
       dwg_dynapi_entity_set_value (ow, owner->name, lastfield, &owned[num_owned-1], 0);
       LOG_TRACE ("%s.%s] = " FORMAT_REF "[H]\n", owner->name, lastfield,
                  ARGS_REF (owned[num_owned-1]));
+      free (owned);
     }
   else if (dwg->header.version >= R_2004)
     {
