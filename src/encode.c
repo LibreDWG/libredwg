@@ -1410,7 +1410,7 @@ dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj)
               const char *alias = dxf_encode_alias (obj->dxfname);
               if (alias && strEQ (alias, klass->dxfname))
                 {
-                  obj->dxfname = alias;
+                  obj->dxfname = (char*)alias;
                   obj->type = 500 + i;
                   break;
                 }
