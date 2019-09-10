@@ -1,5 +1,5 @@
 #!/bin/sh
-# create -v3 logs for indxf
+# create -v3 logs and dwg's with dxf2dwg
 srcdir="@srcdir@"
 
 make -s -j4
@@ -24,8 +24,9 @@ for d in "$@"; do
         if [ x$dir = x_test-data ]; then dir=""; fi
         if [ x$dir = x_td ]; then dir=""; fi
         log=`basename "$d" .dxf`$dir.dxf.log
-        echo programs/dxf2dwg $y $v "$d" 2\>$log
-        @TIMEOUT_10@ @LTEXEC@ programs/dxf2dwg $y $v "$d" 2>$log
+        dwg=`basename "$d" .dxf`$dir.dwg
+        echo programs/dxf2dwg $y $v -o "$dwg" "$d" 2\>$log
+        @TIMEOUT_10@ @LTEXEC@ programs/dxf2dwg $y $v -o "$dwg" "$d" 2>$log
         ;;
     esac
 done
