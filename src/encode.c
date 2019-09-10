@@ -378,7 +378,9 @@ static bool env_var_checked_p;
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        if (handle_code != ANYCODE && hdlptr->handleref.code != handle_code)  \
+        if (handle_code != ANYCODE &&                                         \
+            hdlptr->handleref.code != handle_code &&                          \
+            hdlptr->handleref.code < 6)                                       \
           {                                                                   \
             LOG_WARN ("Expected a CODE %d handle, got a %d", handle_code,     \
                       hdlptr->handleref.code);                                \
@@ -407,7 +409,8 @@ static bool env_var_checked_p;
     else                                                                      \
       {                                                                       \
         if (handle_code != ANYCODE                                            \
-            && _obj->nam->handleref.code != handle_code)                      \
+            && _obj->nam->handleref.code != handle_code &&                    \
+            && _obj->nam->handleref.code < 6)                                 \
           {                                                                   \
             LOG_WARN ("Expected a CODE %x handle, got a %x", handle_code,     \
                       _obj->nam->handleref.code);                             \
@@ -733,7 +736,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   PRE (R_13)
   {
     // TODO: tables, entities, block entities
-    LOG_ERROR (WE_CAN "We don't encode tables, entities, blocks yet")
+    LOG_ERROR (WE_CAN "We don't encode preR13 tables, entities, blocks yet")
 #ifndef IS_RELEASE
     return encode_preR13 (dwg, dat);
 #endif
@@ -743,6 +746,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   {
     if (!dwg->header.num_sections) /* Usually 3-5, max 6 */
       dwg->header.num_sections = 6;
+    LOG_TRACE ("num_sections: " FORMAT_RL " [RL]\n", dwg->header.num_sections);
     bit_write_RL (dat, dwg->header.num_sections);
     if (!dwg->header.section)
       dwg->header.section
