@@ -1726,6 +1726,8 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
     {
       BITCODE_BL pos = bit_position (dat);
       obj->size = dat->byte - previous_address;
+      if (dat->bit)
+        obj->size++;
       obj->bitsize = pos - (previous_address * 8);
 
       bit_set_position (dat, previous_address * 8);
@@ -1767,11 +1769,11 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
   bit_write_CRC (dat, address, 0xC0C1);
 
   {
-    unsigned long next_addr = address + obj->size + 4;
+    unsigned long next_addr = address + obj->size + 2;
     if (next_addr != dat->byte)
       {
         if (obj->size)
-          LOG_WARN ("Wrong object size: %lu + %u + 4 != %lu: %ld off", address,
+          LOG_WARN ("Wrong object size: %lu + %u + 2 != %lu: %ld off", address,
                     obj->size, dat->byte, (long)(next_addr - dat->byte));
         dat->byte = next_addr;
       }
