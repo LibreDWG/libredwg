@@ -667,6 +667,26 @@ static int dwg_encode_xdata (Bit_Chain *restrict dat,
  * Public functions
  */
 
+static BITCODE_RL
+encode_patch_RLsize (Bit_Chain *dat, long unsigned int pvzadr)
+{
+  unsigned long pos;
+  BITCODE_RL size;
+  if (dat->bit) // padding
+    {
+      dat->bit = 0;
+      dat->byte++;
+    }
+  size = dat->byte - pvzadr;
+  pos = bit_position (dat);
+  assert (pvzadr);
+  bit_set_position (dat, pvzadr * 8);
+  bit_write_RL (dat, size);
+  LOG_TRACE ("size: " FORMAT_RL " [RL] @%lu\n", size, pvzadr);
+  bit_set_position (dat, pos);
+  return size;
+}
+
 /**
  * dwg_encode(): the current generic encoder entry point.
  *
@@ -744,17 +764,23 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   PRE (R_2004)
   {
+    /* section 0: header vars
+     *         1: class section
+     *         2: object map
+     *         3: (R13 c3 and later): 2nd header (special table no sentinels)
+     *         4: optional: MEASUREMENT
+     *         5: optional: AuxHeader
+     */
     if (!dwg->header.num_sections) /* Usually 3-5, max 6 */
-      dwg->header.num_sections = 6;
+      dwg->header.num_sections = dwg->header.version < R_2000 ? 5 : 6;
     LOG_TRACE ("num_sections: " FORMAT_RL " [RL]\n", dwg->header.num_sections);
     bit_write_RL (dat, dwg->header.num_sections);
     if (!dwg->header.section)
       dwg->header.section
           = calloc (dwg->header.num_sections, sizeof (Dwg_Section));
-    section_address = dat->byte; // Jump to section address
-    dat->byte += (dwg->header.num_sections * 9);
+    section_address = dat->byte; // save section address
+    dat->byte += (dwg->header.num_sections * 9); /* RC + 2*RL */
     bit_write_CRC (dat, 0, 0xC0C1);
-
     bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_HEADER_END));
 
     /*------------------------------------------------------------
@@ -765,11 +791,35 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       {
         struct Dwg_AuxHeader *_obj = &dwg->auxheader;
         Dwg_Object *obj = NULL;
+        assert (!dat->bit);
+        LOG_INFO ("\n=======> AuxHeader: %8lX\n", dat->byte); // size: 123
 
-        dwg->header.section[5].number = 5;
-        dwg->header.section[5].address = dat->byte;
+        dwg->header.section[SECTION_AUXHEADER_R2000].number = 5;
+        dwg->header.section[SECTION_AUXHEADER_R2000].address = dat->byte;
+
+        if (!_obj->dwg_version)
+          {
+            BITCODE_RS tmpunknown[] = { 4, 0x565, 0, 0, 2, 1 };
+            LOG_TRACE ("Use AuxHeader defaults...\n");
+            FIELD_VALUE (aux_intro[0]) = 0xff;
+            FIELD_VALUE (aux_intro[1]) = 0x77;
+            FIELD_VALUE (aux_intro[2]) = 0x01;
+            FIELD_VALUE (minus_1) = -1;
+            FIELD_VALUE (dwg_version) = dwg->header.dwg_version;
+            FIELD_VALUE (maint_version) = dwg->header.maint_version;
+            FIELD_VALUE (dwg_version_2) = dwg->header.dwg_version;
+            FIELD_VALUE (maint_version_2) = dwg->header.maint_version;
+            memcpy (FIELD_VALUE (unknown_rs), tmpunknown, sizeof (tmpunknown));
+            FIELD_VALUE (TDCREATE) = dwg->header_vars.TDCREATE.value;
+            FIELD_VALUE (TDUPDATE) = dwg->header_vars.TDUPDATE.value;
+            FIELD_VALUE (HANDSEED) = dwg->header_vars.HANDSEED->absolute_ref;
+          }
 
         #include "auxheader.spec"
+
+        assert (!dat->bit);
+        dwg->header.section[SECTION_AUXHEADER_R2000].size
+          = dat->byte - dwg->header.section[SECTION_AUXHEADER_R2000].address;
       }
   }
 
@@ -859,14 +909,15 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   }
 
   /*------------------------------------------------------------
-   * THUMBNAIL preview pictures (Pre-R13C3?)
+   * THUMBNAIL preview pictures
    */
   // FIXME if !thumbnail_address but thumbnail exists
   if (dwg->header.thumbnail_address)
     {
       dat->byte = dwg->header.thumbnail_address;
-      // dwg->thumbnail.size = 0; // If one desires not to copy thumbnail previews,
-      // should un-comment this line
+      dat->bit = 0;
+      LOG_TRACE ("\n=======> Thumbnail: %8lX\n", dat->byte);
+      // dwg->thumbnail.size = 0; // to disable
       bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_THUMBNAIL_BEGIN));
       if (dwg->thumbnail.size == 0)
         {
@@ -876,56 +927,43 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       else
         bit_write_TF (dat, (char *)dwg->thumbnail.chain, dwg->thumbnail.size);
       bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_THUMBNAIL_END));
+      LOG_TRACE (   "        Thumbnail (end): %4lX\n", dat->byte);
     }
 
   /*------------------------------------------------------------
    * Header Variables
    */
+  assert (!dat->bit);
+  LOG_INFO ("\n=======> Header Variables: %8lX\n", dat->byte);
   dwg->header.section[0].number = 0;
   dwg->header.section[0].address = dat->byte;
   bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_VARIABLE_BEGIN));
-  pvzadr = dat->byte; // Afterwards one must rewrite the correct values of size
-                      // here
+  pvzadr = dat->byte;      // Size position
+  bit_write_RL (dat, 540); // Size placeholder
 
-  bit_write_RL (dat, 0); // placeholder for the size
-
-  // encode
   // if (dat->version >= R_2007)
   //  str_dat = dat;
   dwg_encode_header_variables (dat, hdl_dat, dat, dwg);
 
-  /* Write the size of the section at its beginning
-   */
-  pvzadr_2 = dat->byte;
-  pvzbit = dat->bit;
-  assert (pvzadr);
-  dat->byte = pvzadr;
-  dat->bit = 0;
-  bit_write_RL (dat, pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
-  assert (pvzadr_2);
-  dat->byte = pvzadr_2;
-  dat->bit = pvzbit;
-  // printf ("Size: %lu\n", pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
-
-  /* CRC and sentinel
-   */
+  encode_patch_RLsize (dat, pvzadr);
   bit_write_CRC (dat, pvzadr, 0xC0C1);
-
   // XXX trying to fix CRC 2-byte overflow. Must find actual reason
-  dat->byte -= 2;
-
+  // dat->byte -= 2;
   bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_VARIABLE_END));
-  dwg->header.section[0].size = dat->byte - dwg->header.section[0].address;
+  assert ((long)dat->byte > (long)dwg->header.section[0].address);
+  dwg->header.section[0].size
+      = (BITCODE_RL) ((long)dat->byte - (long)dwg->header.section[0].address);
+  LOG_TRACE ("         Header Variables (end): %4lX\n", dat->byte);
 
   /*------------------------------------------------------------
    * Classes
    */
+  LOG_INFO ("\n=======> Classes: %8lX\n", dat->byte);
   dwg->header.section[SECTION_CLASSES_R13].number = 1;
   dwg->header.section[SECTION_CLASSES_R13].address = dat->byte;
   bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_CLASS_BEGIN));
-  pvzadr = dat->byte; // Afterwards one must rewrite the correct values of size
-                      // here
-  bit_write_RL (dat, 0); // Size of the section
+  pvzadr = dat->byte;    // Size position
+  bit_write_RL (dat, 0); // Size placeholder
 
   for (j = 0; j < dwg->num_classes; j++)
     {
@@ -958,35 +996,25 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   /* Write the size of the section at its beginning
    */
-  pvzadr_2 = dat->byte;
-  pvzbit = dat->bit;
-  dat->byte = pvzadr;
-  dat->bit = 0;
-  bit_write_RL (dat, pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
-  dat->byte = pvzadr_2;
-  dat->bit = pvzbit;
-  // printf ("Size: %lu\n", pvzadr_2 - pvzadr - (pvzbit ? 3 : 4));
-
-  /* CRC and sentinel
-   */
+  assert (pvzadr);
+  encode_patch_RLsize (dat, pvzadr);
   bit_write_CRC (dat, pvzadr, 0xC0C1);
-
   bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_CLASS_END));
   dwg->header.section[SECTION_CLASSES_R13].size =
     dat->byte - dwg->header.section[SECTION_CLASSES_R13].address;
+  LOG_TRACE ("       Classes (end): %4lX\n", dat->byte);
 
-  bit_write_RL (dat,
-                0x00000000); // 0xDCA Unknown bitlong inter class and objects
+  bit_write_RL (dat, 0L); // 0xDCA Unknown bitlong inter class and objects
 
   /*------------------------------------------------------------
    * Objects
    */
 
+  LOG_INFO ("\n=======> Objects: %8lX\n", dat->byte);
   pvzadr = dat->byte;
-
   /* Define object-map
    */
-  omap = (Object_Map *)malloc (dwg->num_objects * sizeof (Object_Map));
+  omap = (Object_Map *)calloc (dwg->num_objects, sizeof (Object_Map));
   if (!omap)
     {
       LOG_ERROR ("Out of memory");
@@ -1073,6 +1101,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   /*------------------------------------------------------------
    * Object-map
    */
+  LOG_INFO ("\n=======> Object Map: %8lX\n", dat->byte);
   dwg->header.section[SECTION_OBJECTS_R13].number = 2;
   dwg->header.section[SECTION_OBJECTS_R13].address = dat->byte;
   // Value of size should be calculated later
@@ -1148,7 +1177,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
    * Second header, section 3. R13-R2000 only.
    * But partially also since r2004.
    */
-  if (dwg->header.version >= R_13 && dwg->second_header.num_sections) //TODO
+  if (dwg->header.version >= R_13 && dwg->second_header.num_sections > 3)
   {
     struct _dwg_second_header *_obj = &dwg->second_header;
     Dwg_Object *obj = NULL;
@@ -1160,9 +1189,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     dwg->header.section[SECTION_2NDHEADER_R13].number = 3;
     dwg->header.section[SECTION_2NDHEADER_R13].address = _obj->address;
     dwg->header.section[SECTION_2NDHEADER_R13].size = _obj->size;
+    LOG_INFO ("\n=======> Second Header: %8lX\n", dat->byte);
     bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_SECOND_HEADER_BEGIN));
 
-    LOG_INFO ("\n=======> Second Header: %8X\n", (unsigned int)dat->byte - 16);
     pvzadr = dat->byte; // Keep the first address of the section to write its
                         // size later
     LOG_TRACE ("pvzadr: %lx\n", pvzadr);
@@ -1236,15 +1265,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           FIELD_VECTOR (handlers[i].data, RC, handlers[i].size, 0);
         }
 
-      // patch size at pvzadr
-      {
-        unsigned long pos = bit_position (dat);
-        assert (pvzadr);
-        _obj->size = dat->byte - pvzadr;
-        bit_set_position (dat, pvzadr * 8);
-        FIELD_RL (size, 0);
-        bit_set_position (dat, pos);
-      }
+      _obj->size = encode_patch_RLsize (dat, pvzadr);
       bit_write_CRC (dat, pvzadr, 0xC0C1);
 
       VERSION (R_14)
@@ -1270,6 +1291,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
    */
   if (dwg->header.num_sections > SECTION_MEASUREMENT_R13)
     {
+      LOG_INFO ("\n=======> MEASUREMENT: %8lX\n", dat->byte);
       dwg->header.section[SECTION_MEASUREMENT_R13].number = 4;
       dwg->header.section[SECTION_MEASUREMENT_R13].address = dat->byte;
       dwg->header.section[SECTION_MEASUREMENT_R13].size = 4;
@@ -1286,11 +1308,18 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   assert (section_address);
   dat->byte = section_address;
   dat->bit = 0;
+  LOG_INFO ("\n=======> section addresses: %8lX\n", dat->byte);
   for (j = 0; j < dwg->header.num_sections; j++)
     {
       bit_write_RC (dat, dwg->header.section[j].number);
       bit_write_RL (dat, dwg->header.section[j].address);
       bit_write_RL (dat, dwg->header.section[j].size);
+      LOG_TRACE ("section[%u].number: %2d [RC]\n", j,
+                 (int)dwg->header.section[j].number)
+      LOG_TRACE ("section[%u].offset: 0x%x [RLx]\n", j,
+                 (unsigned)dwg->header.section[j].address)
+      LOG_TRACE ("section[%u].size: %4d [RL]\n", j,
+                 (int)dwg->header.section[j].size)
     }
 
   /* Write CRC's
@@ -1301,21 +1330,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   dat->byte -= 2;
   switch (dwg->header.num_sections)
     {
-    case 3:
-      bit_write_RS (dat, ckr ^ 0xA598);
-      break;
-    case 4:
-      bit_write_RS (dat, ckr ^ 0x8101);
-      break;
-    case 5:
-      bit_write_RS (dat, ckr ^ 0x3CC4);
-      break;
-    case 6:
-      bit_write_RS (dat, ckr ^ 0x8461);
-      break;
-    default:
-      bit_write_RS (dat, ckr);
+    case 3: ckr ^= 0xA598; break;
+    case 4: ckr ^= 0x8101; break;
+    case 5: ckr ^= 0x3CC4; break;
+    case 6: ckr ^= 0x8461; break;
+    default:               break;
     }
+  bit_write_RS (dat, ckr);
+  LOG_TRACE ("crc: %04X\n", ckr);
 
   return 0;
 }
@@ -2156,15 +2178,9 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
 {
   Dwg_Header_Variables *_obj = &dwg->header_vars;
   Dwg_Object *obj = NULL;
-  BITCODE_BL addr = bit_position (dat);
 
   #include "header_variables.spec"
 
-  if (dwg->header.num_sections > SECTION_HEADER_R13)
-    {
-      dwg->header.section[SECTION_HEADER_R13].address = addr;
-      dwg->header.section[SECTION_HEADER_R13].size = bit_position (dat) - addr;
-    }
   return 0;
 }
 

@@ -849,9 +849,9 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   /* section 0: header vars
    *         1: class section
    *         2: object map
-   *         3: (R13 c3 and later): 2nd header (special table no sentinels)
+   *         3: (R13 c3 and later): 2nd header (special table, no sentinels)
    *         4: optional: MEASUREMENT
-   *         5: optional: AuxHeader
+   *         5: optional: AuxHeader (no sentinels)
    */
   for (j = 0; j < dwg->header.num_sections; j++)
     {
@@ -877,7 +877,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
 
   if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_HEADER_END)))
-    LOG_TRACE ("\n=======> HEADER (end): %8X\n", (unsigned int)dat->byte)
+    LOG_TRACE ("\n=======> HEADER (end): %4X\n", (unsigned int)dat->byte)
 
   /*-------------------------------------------------------------------------
    * Section 5 AuxHeader
@@ -894,16 +894,12 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             + dwg->header.section[SECTION_AUXHEADER_R2000].size;
 
       obj = NULL;
-      LOG_TRACE (
-          "\n=======> AuxHeader: %8X\n",
-          (unsigned int)dwg->header.section[SECTION_AUXHEADER_R2000].address)
-      LOG_TRACE (
-          "         AuxHeader (end): %8X\n",
-          (unsigned int)end_address)
       dat->byte = dwg->header.section[SECTION_AUXHEADER_R2000].address;
+      LOG_TRACE ("\n=======> AuxHeader:       %4lX\n", dat->byte)
+      LOG_TRACE (  "         AuxHeader (end): %4X\n", (unsigned)end_address)
       if (dat->size < end_address)
         {
-          LOG_ERROR ("Invalid AuxHeader: buffer overflow")
+          LOG_ERROR ("Invalid AuxHeader size: buffer overflow")
           error |= DWG_ERR_SECTIONNOTFOUND;
         }
       else

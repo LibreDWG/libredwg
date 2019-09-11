@@ -18,7 +18,7 @@
 
 #include "spec.h"
 
-  SINCE(R_2000) {
+  SINCE (R_2000) {
     IF_ENCODE_FROM_EARLIER {
       BITCODE_RS tmpunknown[] = {5, 0x893, 5, 0x893, 0, 1};
       FIELD_VALUE(aux_intro[0]) = 0xff;
@@ -27,9 +27,12 @@
       FIELD_VALUE(minus_1) = -1;
       FIELD_VALUE(dwg_version) = dwg->header.dwg_version;
       FIELD_VALUE(maint_version) = dwg->header.maint_version;
-      memcpy(FIELD_VALUE(unknown_rs),tmpunknown,sizeof(tmpunknown));
-      //FIELD_VALUE(TDCREATE)   = dwg->header_vars.TDCREATE;
-      //FIELD_VALUE(TDUPDATE)   = dwg->header_vars.TDUPDATE;
+      FIELD_VALUE (dwg_version_2) = dwg->header.dwg_version;
+      FIELD_VALUE (maint_version_2) = dwg->header.maint_version;
+      memcpy (FIELD_VALUE(unknown_rs), tmpunknown, sizeof(tmpunknown));
+      FIELD_VALUE(TDCREATE)   = dwg->header_vars.TDCREATE.value;
+      FIELD_VALUE(TDUPDATE)   = dwg->header_vars.TDUPDATE.value;
+      FIELD_VALUE (HANDSEED)  = dwg->header_vars.HANDSEED->absolute_ref;
     }
   }
 
@@ -48,33 +51,29 @@
   FIELD_RS (dwg_version_2, 0);
   FIELD_RS (maint_version_2, 0);
   for (i=0; i<6; i++) {
-    #undef FORMAT_RS
-    #define FORMAT_RS "0x%" PRIx16
-    FIELD_RS(unknown_rs[i], 0); /* 5 0x893 5 0x893 0 1 */
-    #undef FORMAT_RS
-    #define FORMAT_RS "%" PRIu16
+    FIELD_RSx (unknown_rs[i], 0); /* 5 0x893 5 0x893 0 1 */
   }
-  FIELD_TFF(unknown_rc, 20, 0) // documented as 5xRL, but really looks like some RC flags
+  FIELD_TFF (unknown_rc, 20, 0) // documented as 5xRL, but really looks like some RC flags
   DEBUG_HERE;
-  FIELD_RD(TDCREATE, 0);
+  FIELD_RD (TDCREATE, 0);
   DEBUG_HERE;
-  FIELD_RD(TDUPDATE, 0);
-  FIELD_RLx(HANDSEED, 0);
-  FIELD_RL(plot_stamp, 0);
-  FIELD_RS(zero_1, 0);
-  FIELD_RS(num_saves_3, 0);
-  FIELD_RL(zero_2, 0);
-  FIELD_RL(zero_3, 0);
-  FIELD_RL(zero_4, 0);
-  FIELD_RL(num_saves_4, 0);
-  FIELD_RL(zero_5, 0);
-  FIELD_RL(zero_6, 0);
-  FIELD_RL(zero_7, 0);
-  FIELD_RL(zero_8, 0);
+  FIELD_RD (TDUPDATE, 0);
+  FIELD_RLx (HANDSEED, 0);
+  FIELD_RL (plot_stamp, 0);
+  FIELD_RS (zero_1, 0);
+  FIELD_RS (num_saves_3, 0);
+  FIELD_RL (zero_2, 0);
+  FIELD_RL (zero_3, 0);
+  FIELD_RL (zero_4, 0);
+  FIELD_RL (num_saves_4, 0);
+  FIELD_RL (zero_5, 0);
+  FIELD_RL (zero_6, 0);
+  FIELD_RL (zero_7, 0);
+  FIELD_RL (zero_8, 0);
   DEBUG_HERE;
 
-  SINCE(R_2018) {
+  SINCE (R_2018) {
     for (i = 0; i < 3; i++) {
-      FIELD_RS(zero_18[i], 0);
+      FIELD_RS (zero_18[i], 0);
     }
   }

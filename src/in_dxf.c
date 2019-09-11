@@ -600,10 +600,8 @@ static void dxf_fixup_header (Dwg_Data *dwg)
       hdr->is_maint = 0xf; // 0x6 - 0xf
       hdr->zero_one_or_three = 1;
       hdr->thumbnail_address = 220;
-      hdr->dwg_version = 0x1f;
+      hdr->dwg_version = 0x21;
       hdr->maint_version = 0x8;
-
-      hdr->num_sections = 5; // no auxheader for now
     }
   else if (hdr->version <= R_2004)
     hdr->is_maint = 0x68;
