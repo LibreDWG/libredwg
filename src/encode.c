@@ -709,7 +709,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   long unsigned int last_address;
   BITCODE_BL last_handle;
   Object_Map *omap;
-  Object_Map pvzmap;
   Bit_Chain *hdl_dat;
 
   if (dwg->opts)
@@ -1012,43 +1011,50 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   LOG_INFO ("\n=======> Objects: %4u\n", (unsigned)dat->byte);
   pvzadr = dat->byte;
-  /* Define object-map
+
+  /* Sort object-map by ascending handles
    */
+  LOG_TRACE ("num_objects: %i\n", dwg->num_objects);
+  LOG_TRACE ("num_object_refs: %i\n", dwg->num_object_refs);
   omap = (Object_Map *)calloc (dwg->num_objects, sizeof (Object_Map));
   if (!omap)
     {
       LOG_ERROR ("Out of memory");
       return DWG_ERR_OUTOFMEM;
     }
+  if (loglevel >= DWG_LOGLEVEL_HANDLE)
+    {
+      LOG_HANDLE ("\nSorting objects...\n");
+      for (i = 0; i < dwg->num_objects; i++)
+        fprintf (OUTPUT, "Object(%3i): %4X / idx: %u\n", i,
+                 dwg->object[i].handle.value, dwg->object[i].index);
+    }
   for (j = 0; j < dwg->num_objects; j++)
     {
-      /* Define the handle of each object, including unknown */
+      Dwg_Object *obj = &dwg->object[j];
       omap[j].index = j;
-      omap[j].handle = dwg->object[j].handle.value;
-
-      /* Arrange the sequence of handles according to a growing order  */
-      if (j > 0)
-        {
-          BITCODE_BL k = j;
-          while (omap[k].handle < omap[k - 1].handle)
-            {
-              pvzmap.handle = omap[k].handle;
-              pvzmap.index = omap[k].index;
-
-              omap[k - 1].handle = pvzmap.handle;
-              omap[k - 1].index = pvzmap.index;
-
-              omap[k].handle = omap[k - 1].handle;
-              omap[k].index = omap[k - 1].index;
-
-              k--;
-              if (k == 0)
-                break;
-            }
-        }
+      omap[j].handle = obj->handle.value;
     }
-  // for (i = 0; i < dwg->num_objects; i++)
-  //  printf ("Handle(%i): %lu / Idc: %u\n", i, omap[i].handle, omap[i].index);
+  for (j = 0; j < dwg->num_objects; j++)
+    {
+      // insertion sort
+      Object_Map tmap;
+      BITCODE_BL k = j;
+      tmap = omap[j];
+      while (k > 0 && omap[k - 1].handle > tmap.handle)
+        {
+          omap[k] = omap[k - 1];
+          k--;
+        }
+      omap[k] = tmap;
+    }
+  if (loglevel >= DWG_LOGLEVEL_HANDLE)
+    {
+      LOG_HANDLE ("\nSorted handles:\n");
+      for (i = 0; i < dwg->num_objects; i++)
+        fprintf (OUTPUT, "Handle(%3i): %4X / idx: %u\n", i,
+                 omap[i].handle, omap[i].index);
+    }
 
   /* Write the re-sorted objects
    */
@@ -1075,18 +1081,20 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       assert (dat->byte);
       error |= dwg_encode_add_object (obj, dat, dat->byte);
 
+#ifndef NDEBUG
+      // check if this object overwrote at address 0
       if (dwg->header.version >= R_1_2)
         {
           assert (dat->chain[0] == 'A');
           assert (dat->chain[1] == 'C');
         }
+#endif
       end_address = obj->address + (unsigned long)obj->size; // from RL
       if (end_address > dat->size)
         {
           dat->size = end_address;
           bit_chain_alloc (dat);
         }
-      //bit_write_CRC (dat, obj->address, 0xC0C1);
     }
 
   /*for (j = 0; j < dwg->num_objects; j++)
@@ -1135,6 +1143,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       if (dat->byte - pvzadr > 2030) // 2029
         {
           ckr_missing = 0;
+          //TODO encode_patch_RLsize
           sekcisize = dat->byte - pvzadr;
           assert (pvzadr);
           dat->chain[pvzadr] = sekcisize >> 8;
@@ -1150,6 +1159,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   // printf ("Obj size: %u\n", i);
   if (ckr_missing)
     {
+      //TODO encode_patch_RLsize
       sekcisize = dat->byte - pvzadr;
       assert (pvzadr);
       dat->chain[pvzadr] = sekcisize >> 8;
