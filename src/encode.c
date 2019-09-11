@@ -792,7 +792,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         struct Dwg_AuxHeader *_obj = &dwg->auxheader;
         Dwg_Object *obj = NULL;
         assert (!dat->bit);
-        LOG_INFO ("\n=======> AuxHeader: %8lX\n", dat->byte); // size: 123
+        LOG_INFO ("\n=======> AuxHeader: %8u\n", (unsigned)dat->byte); // size: 123
 
         dwg->header.section[SECTION_AUXHEADER_R2000].number = 5;
         dwg->header.section[SECTION_AUXHEADER_R2000].address = dat->byte;
@@ -916,7 +916,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {
       dat->byte = dwg->header.thumbnail_address;
       dat->bit = 0;
-      LOG_TRACE ("\n=======> Thumbnail: %8lX\n", dat->byte);
+      LOG_TRACE ("\n=======> Thumbnail:       %4u\n", (unsigned)dat->byte);
       // dwg->thumbnail.size = 0; // to disable
       bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_THUMBNAIL_BEGIN));
       if (dwg->thumbnail.size == 0)
@@ -927,14 +927,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       else
         bit_write_TF (dat, (char *)dwg->thumbnail.chain, dwg->thumbnail.size);
       bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_THUMBNAIL_END));
-      LOG_TRACE (   "        Thumbnail (end): %4lX\n", dat->byte);
+      LOG_TRACE (   "        Thumbnail (end): %4u\n", (unsigned)dat->byte);
     }
 
   /*------------------------------------------------------------
    * Header Variables
    */
   assert (!dat->bit);
-  LOG_INFO ("\n=======> Header Variables: %8lX\n", dat->byte);
+  LOG_INFO ("\n=======> Header Variables:   %4u\n", (unsigned)dat->byte);
   dwg->header.section[0].number = 0;
   dwg->header.section[0].address = dat->byte;
   bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_VARIABLE_BEGIN));
@@ -953,12 +953,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   assert ((long)dat->byte > (long)dwg->header.section[0].address);
   dwg->header.section[0].size
       = (BITCODE_RL) ((long)dat->byte - (long)dwg->header.section[0].address);
-  LOG_TRACE ("         Header Variables (end): %4lX\n", dat->byte);
+  LOG_TRACE ("         Header Variables (end): %4u\n", (unsigned)dat->byte);
 
   /*------------------------------------------------------------
    * Classes
    */
-  LOG_INFO ("\n=======> Classes: %8lX\n", dat->byte);
+  LOG_INFO ("\n=======> Classes: %4u\n", (unsigned)dat->byte);
   dwg->header.section[SECTION_CLASSES_R13].number = 1;
   dwg->header.section[SECTION_CLASSES_R13].address = dat->byte;
   bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_CLASS_BEGIN));
@@ -1002,7 +1002,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_CLASS_END));
   dwg->header.section[SECTION_CLASSES_R13].size =
     dat->byte - dwg->header.section[SECTION_CLASSES_R13].address;
-  LOG_TRACE ("       Classes (end): %4lX\n", dat->byte);
+  LOG_TRACE ("       Classes (end): %4u\n", (unsigned)dat->byte);
 
   bit_write_RL (dat, 0L); // 0xDCA Unknown bitlong inter class and objects
 
@@ -1010,7 +1010,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
    * Objects
    */
 
-  LOG_INFO ("\n=======> Objects: %8lX\n", dat->byte);
+  LOG_INFO ("\n=======> Objects: %4u\n", (unsigned)dat->byte);
   pvzadr = dat->byte;
   /* Define object-map
    */
@@ -1101,7 +1101,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   /*------------------------------------------------------------
    * Object-map
    */
-  LOG_INFO ("\n=======> Object Map: %8lX\n", dat->byte);
+  LOG_INFO ("\n=======> Object Map: %4u\n", (unsigned)dat->byte);
   dwg->header.section[SECTION_OBJECTS_R13].number = 2;
   dwg->header.section[SECTION_OBJECTS_R13].address = dat->byte;
   // Value of size should be calculated later
@@ -1189,7 +1189,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     dwg->header.section[SECTION_2NDHEADER_R13].number = 3;
     dwg->header.section[SECTION_2NDHEADER_R13].address = _obj->address;
     dwg->header.section[SECTION_2NDHEADER_R13].size = _obj->size;
-    LOG_INFO ("\n=======> Second Header: %8lX\n", dat->byte);
+    LOG_INFO ("\n=======> Second Header: %4u\n", (unsigned)dat->byte);
     bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_SECOND_HEADER_BEGIN));
 
     pvzadr = dat->byte; // Keep the first address of the section to write its
@@ -1291,7 +1291,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
    */
   if (dwg->header.num_sections > SECTION_MEASUREMENT_R13)
     {
-      LOG_INFO ("\n=======> MEASUREMENT: %8lX\n", dat->byte);
+      LOG_INFO ("\n=======> MEASUREMENT: %4u\n", (unsigned)dat->byte);
       dwg->header.section[SECTION_MEASUREMENT_R13].number = 4;
       dwg->header.section[SECTION_MEASUREMENT_R13].address = dat->byte;
       dwg->header.section[SECTION_MEASUREMENT_R13].size = 4;
@@ -1308,7 +1308,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   assert (section_address);
   dat->byte = section_address;
   dat->bit = 0;
-  LOG_INFO ("\n=======> section addresses: %8lX\n", dat->byte);
+  LOG_INFO ("\n=======> section addresses: %4u\n", (unsigned)dat->byte);
   for (j = 0; j < dwg->header.num_sections; j++)
     {
       bit_write_RC (dat, dwg->header.section[j].number);

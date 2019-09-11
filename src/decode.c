@@ -858,11 +858,11 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       dwg->header.section[j].number = bit_read_RC (dat);
       dwg->header.section[j].address = bit_read_RL (dat);
       dwg->header.section[j].size = bit_read_RL (dat);
-      LOG_TRACE ("section[%u].number: %2d [RC]\n", j,
+      LOG_TRACE ("section[%u].number: %4d [RC]\n", j,
                  (int)dwg->header.section[j].number)
-      LOG_TRACE ("section[%u].offset: 0x%x [RLx]\n", j,
+      LOG_TRACE ("section[%u].offset: %4u [RL]\n", j,
                  (unsigned)dwg->header.section[j].address)
-      LOG_TRACE ("section[%u].size: %4d [RL]\n", j,
+      LOG_TRACE ("section[%u].size:   %4d [RL]\n", j,
                  (int)dwg->header.section[j].size)
     }
 
@@ -877,7 +877,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
 
   if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_HEADER_END)))
-    LOG_TRACE ("\n=======> HEADER (end): %4X\n", (unsigned int)dat->byte)
+    LOG_TRACE (  "         HEADER (end):    %4u\n", (unsigned)dat->byte)
 
   /*-------------------------------------------------------------------------
    * Section 5 AuxHeader
@@ -895,8 +895,8 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
       obj = NULL;
       dat->byte = dwg->header.section[SECTION_AUXHEADER_R2000].address;
-      LOG_TRACE ("\n=======> AuxHeader:       %4lX\n", dat->byte)
-      LOG_TRACE (  "         AuxHeader (end): %4X\n", (unsigned)end_address)
+      LOG_TRACE ("\n=======> AuxHeader:       %4u\n", (unsigned)dat->byte)
+      LOG_TRACE (  "         AuxHeader (end): %4u\n", (unsigned)end_address)
       if (dat->size < end_address)
         {
           LOG_ERROR ("Invalid AuxHeader size: buffer overflow")
@@ -923,10 +923,10 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
       dat->bit = 0;
       start_address = dat->byte;
-      LOG_TRACE ("\n=======> THUMBNAIL: %8X\n", (unsigned int)start_address - 16)
+      LOG_TRACE (  "\n=======> THUMBNAIL:       %4u\n", (unsigned int)start_address - 16)
       if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_THUMBNAIL_END)))
         {
-          LOG_TRACE ("         THUMBNAIL (end): %8X\n", (unsigned int)dat->byte)
+          LOG_TRACE ("         THUMBNAIL (end): %4u\n", (unsigned int)dat->byte)
           dwg->thumbnail.size = (dat->byte - 16) - start_address;
           dwg->thumbnail.chain = (unsigned char *)calloc (dwg->thumbnail.size, 1);
           if (!dwg->thumbnail.chain)
@@ -944,9 +944,9 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
    * Header Variables, section 0
    */
 
-  LOG_INFO ("\n=======> Header Variables: %8X\n",
+  LOG_INFO ("\n=======> Header Variables:     %4u\n",
             (unsigned int)dwg->header.section[SECTION_HEADER_R13].address)
-  LOG_INFO ("         Header Variables (end): %8X\n",
+  LOG_INFO ("         Header Variables (end): %4u\n",
             (unsigned int)(dwg->header.section[SECTION_HEADER_R13].address
                            + dwg->header.section[SECTION_HEADER_R13].size))
   if (dwg->header.section[SECTION_HEADER_R13].address < 58 ||
@@ -1009,9 +1009,9 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
    */
  classes_section:
   LOG_INFO ("\n"
-            "=======> CLASS 1 (start): %8lX\n",
+            "=======> CLASS (start): %4lu\n",
             (long)dwg->header.section[SECTION_CLASSES_R13].address)
-  LOG_INFO ("         CLASS 1 (end)  : %8lX\n",
+  LOG_INFO ("         CLASS (end)  : %4lu\n",
             (long)(dwg->header.section[SECTION_CLASSES_R13].address
                    + dwg->header.section[SECTION_CLASSES_R13].size))
   dat->byte = dwg->header.section[SECTION_CLASSES_R13].address + 16;
