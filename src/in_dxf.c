@@ -854,9 +854,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       eed[i].size += sizeof (Dwg_Handle);
       if (strEQc (pair->value.s, "ACAD"))
         {
-          Dwg_Handle hdl = { 5, 1, 0x12 };
-          dwg_add_handle (&hdl, 5, 12, NULL);
-          memcpy (&eed[i].handle, &hdl, sizeof (hdl));
+          dwg_add_handle (&eed[i].handle, 5, 0x12, NULL);
         }
       else
         {
@@ -5360,8 +5358,17 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       Dwg_Object *obj;
       Dwg_Object_BLOCK_HEADER *_obj;
       char *dxfname = (char*)"BLOCK_HEADER";
+      char *name = (char*)"*Model_Space";
       NEW_OBJECT (dwg, obj);
       ADD_OBJECT (BLOCK_HEADER);
+      if (dwg->header.version >= R_2007)
+        _obj->name = (BITCODE_T)bit_utf8_to_TU (name);
+      else
+        _obj->name = strdup (name);
+      _obj->xrefref = 1;
+      //TODO dwg->header.version here still unknown. <r2000: 0x17
+      dwg_add_handle (&obj->handle, 0, 0x1F, obj);
+      obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, 1, NULL);
     }
 
   while (dat->byte < dat->size)
