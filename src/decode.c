@@ -2364,12 +2364,14 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           BITCODE_MC offset;
 
           oldpos = hdl_dat.byte;
+          // the offset from the previous handle. default: 1, unsigned
           handle = bit_read_UMC (&hdl_dat);
+          // the offset from the previous address. default: obj->size
           offset = bit_read_MC (&hdl_dat);
           // last_handle += handle;
           last_offset += offset;
           LOG_TRACE ("\n< Next object: %lu\t", (unsigned long)dwg->num_objects)
-          LOG_HANDLE ("Handle: " FORMAT_UMC
+          LOG_HANDLE ("Handleoff: " FORMAT_UMC
                       "\tOffset: " FORMAT_MC " @%lu\n", handle,
                       offset, last_offset);
 

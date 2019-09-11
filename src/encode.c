@@ -706,7 +706,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   long unsigned int pvzadr_2;
   unsigned int ckr;
   unsigned int sekcisize = 0;
-  long unsigned int last_address;
+  long unsigned int last_offset;
   BITCODE_BL last_handle;
   Object_Map *omap;
   Bit_Chain *hdl_dat;
@@ -1115,32 +1115,28 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   LOG_INFO ("\n=======> Object Map: %4u\n", (unsigned)dat->byte);
   dwg->header.section[SECTION_OBJECTS_R13].number = 2;
   dwg->header.section[SECTION_OBJECTS_R13].address = dat->byte;
-  // Value of size should be calculated later
-  // printf ("Begin: 0x%08X\n", dat->byte);
 
   sekcisize = 0;
   pvzadr = dat->byte; // Correct value of section size must be written later
   dat->byte += 2;
-  last_address = 0;
+  last_offset = 0;
   last_handle = 0;
-  for (j = 0; j < dwg->num_objects; j++)
+  for (i = 0; i < dwg->num_objects; i++)
     {
       BITCODE_BL index;
-      long int pvz;
+      BITCODE_UMC handleoff;
+      BITCODE_MC offset;
 
-      index = omap[j].index;
+      index = omap[i].index;
+      handleoff = omap[i].handle - last_handle;
+      bit_write_UMC (dat, handleoff);
+      LOG_HANDLE ("Handleoff(%3i): %4d (%4X)\t", index, handleoff, omap[i].handle)
+      last_handle = omap[i].handle;
 
-      pvz = omap[index].handle - last_handle;
-      bit_write_UMC (dat, pvz);
-      // printf ("Handle(%i): %6lu / ", j, pvz);
-      last_handle = omap[index].handle;
-
-      pvz = omap[index].address - last_address;
-      bit_write_MC (dat, pvz);
-      // printf ("Address: %08X\n", pvz);
-      last_address = omap[index].address;
-
-      // dwg dwg_encode_add_object(dwg->object[j], dat, last_address);
+      offset = omap[i].address - last_offset;
+      bit_write_MC (dat, offset);
+      last_offset = omap[i].address;
+      LOG_HANDLE ("Offset: %8d  @%lu\n", (int)offset, last_offset);
 
       ckr_missing = 1;
       if (dat->byte - pvzadr > 2030) // 2029
@@ -1155,7 +1151,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
           pvzadr = dat->byte;
           dat->byte += 2;
-          last_address = 0;
+          last_offset = 0;
           last_handle = 0;
         }
     }
