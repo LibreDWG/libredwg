@@ -698,8 +698,8 @@ int
 dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 {
   int ckr_missing = 1;
-  int i, error = 0;
-  BITCODE_BL j;
+  int error = 0;
+  BITCODE_BL i, j;
   long unsigned int section_address;
   unsigned char pvzbit;
   long unsigned int pvzadr;
@@ -862,7 +862,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                                          sizeof (Dwg_Section_Info));
 
     dat->byte = 0x80;
-    for (i = 0; i < size; i++)
+    for (i = 0; i < (BITCODE_BL)size; i++)
       {
         rseed *= 0x343fd;
         rseed += 0x269ec3;
@@ -1029,24 +1029,24 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         fprintf (OUTPUT, "Object(%3i): %4X / idx: %u\n", i,
                  dwg->object[i].handle.value, dwg->object[i].index);
     }
-  for (j = 0; j < dwg->num_objects; j++)
+  // init unsorted
+  for (i = 0; i < dwg->num_objects; i++)
     {
-      Dwg_Object *obj = &dwg->object[j];
-      omap[j].index = j;
-      omap[j].handle = obj->handle.value;
+      omap[i].index = i; // i.e. dwg->object[j].index
+      omap[i].handle = dwg->object[i].handle.value;
     }
-  for (j = 0; j < dwg->num_objects; j++)
+  // insertion sort
+  for (i = 0; i < dwg->num_objects; i++)
     {
-      // insertion sort
       Object_Map tmap;
-      BITCODE_BL k = j;
-      tmap = omap[j];
-      while (k > 0 && omap[k - 1].handle > tmap.handle)
+      j = i;
+      tmap = omap[i];
+      while (j > 0 && omap[j - 1].handle > tmap.handle)
         {
-          omap[k] = omap[k - 1];
-          k--;
+          omap[j] = omap[j - 1];
+          j--;
         }
-      omap[k] = tmap;
+      omap[j] = tmap;
     }
   if (loglevel >= DWG_LOGLEVEL_HANDLE)
     {
@@ -1058,15 +1058,15 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   /* Write the re-sorted objects
    */
-  for (j = 0; j < dwg->num_objects; j++)
+  for (i = 0; i < dwg->num_objects; i++)
     {
       Dwg_Object *obj;
-      BITCODE_BL index = omap[j].index;
+      BITCODE_BL index = omap[i].index;
       unsigned long end_address;
       LOG_TRACE ("\n> Next object: " FORMAT_BL " \tHandle: %X\tOffset: %lu\n"
                  "==========================================\n",
-                 j, omap[j].handle, dat->byte);
-      omap[j].address = dat->byte;
+                 i, omap[i].handle, dat->byte);
+      omap[i].address = dat->byte;
       if (index > dwg->num_objects)
         {
           LOG_ERROR ("Invalid object map index " FORMAT_BL ", max " FORMAT_BL
@@ -1097,10 +1097,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
     }
 
-  /*for (j = 0; j < dwg->num_objects; j++)
-      LOG_INFO ("Object(%lu): %6lu / Address: %08lX / Idc: %u\n",
-                 j, omap[j].handle, omap[j].address, omap[j].index);
-  */
+  if (loglevel >= DWG_LOGLEVEL_HANDLE)
+    {
+      LOG_HANDLE ("\nSorted objects:\n");
+      for (i = 0; i < dwg->num_objects; i++)
+        LOG_HANDLE ("Object(%d): %X / Address: %ld / Idx: %d\n",
+                    i, omap[i].handle, omap[i].address, omap[i].index);
+    }
 
   /* Unknown CRC between objects and object map
    */
