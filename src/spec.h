@@ -332,7 +332,7 @@
 #  define REPEAT_N(times, name, type)                                         \
     if (dat->version >= R_2000 && times > 0x1000)                             \
       {                                                                       \
-        LOG_ERROR ("Invalid %s." #name " rcount1 %ld", obj->dxfname,          \
+        LOG_ERROR ("Invalid %s." #name " rcount1 %ld", SAFEDXFNAME,           \
                    (long)times);                                              \
         return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
       }                                                                       \
@@ -342,7 +342,7 @@
 #  define _REPEAT(times, name, type, idx)                                     \
     if (dat->version >= R_2000 && _obj->times > 0x1000)                       \
       {                                                                       \
-        LOG_ERROR ("Invalid %s." #name " rcount" #idx " %ld", obj->dxfname,   \
+        LOG_ERROR ("Invalid %s." #name " rcount" #idx " %ld", SAFEDXFNAME,    \
                    (long)_obj->times);                                        \
         return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
       }                                                                       \

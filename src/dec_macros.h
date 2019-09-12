@@ -679,7 +679,7 @@
       LOG_ERROR ("Invalid " #nam " size %ld. Need min. %u bits for " #type    \
                  ", have %ld for %s.",                                        \
                  (long)(size), (unsigned)(size)*TYPE_MAXELEMSIZE (type),      \
-                 AVAIL_BITS (dat), obj && obj->dxfname ? obj->dxfname : "");  \
+                 AVAIL_BITS (dat), SAFEDXFNAME);                              \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }
 #define VECTOR_CHKCOUNT_LV(nam, type, size)                                   \
@@ -688,7 +688,7 @@
       LOG_ERROR ("Invalid " #nam " size %ld. Need min. %u bits for " #type    \
                  ", have %ld for %s.",                                        \
                  (long)(size), (unsigned)(size)*TYPE_MAXELEMSIZE (type),      \
-                 AVAIL_BITS (dat), obj && obj->dxfname ? obj->dxfname : "");  \
+                 AVAIL_BITS (dat), SAFEDXFNAME);                              \
       size = 0;                                                               \
       /* return DWG_ERR_VALUEOUTOFBOUNDS; */                                  \
     }
@@ -698,7 +698,7 @@
       LOG_ERROR ("Invalid " #nam                                              \
                  " size %ld. Need min. %u bits, have %ld for %s.",            \
                  (long)(size), (unsigned)(size) * (maxelemsize),              \
-                 AVAIL_BITS (dat), obj && obj->dxfname ? obj->dxfname : "");  \
+                 AVAIL_BITS (dat), SAFEDXFNAME);                              \
       size = 0;                                                               \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }
@@ -954,32 +954,32 @@
 #define REPEAT_CHKCOUNT(name, times, type)                                    \
   if (AVAIL_BITS (dat) < 0)                                                   \
     {                                                                         \
-      LOG_ERROR ("Invalid " #name " in %s. No bytes left.\n", obj->dxfname);  \
+      LOG_ERROR ("Invalid " #name " in %s. No bytes left.\n", SAFEDXFNAME);   \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }                                                                         \
   LOG_INSANE ("REPEAT_CHKCOUNT %s." #name " x %ld: %ld > %ld?\n",             \
-              obj->dxfname, (long)times,                                      \
+              SAFEDXFNAME, (long)times,                                       \
               (long)((times) * sizeof (type)), AVAIL_BITS (dat));             \
   if (dat->version >= R_2004                                                  \
       && (long)((times) * sizeof (type)) > AVAIL_BITS (dat))                  \
     {                                                                         \
-      LOG_ERROR ("Invalid %s." #name " x %ld\n", obj->dxfname, (long)times);  \
+      LOG_ERROR ("Invalid %s." #name " x %ld\n", SAFEDXFNAME, (long)times);   \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }
 #define REPEAT_CHKCOUNT_LVAL(name, times, type)                               \
   if (AVAIL_BITS (dat) < 0)                                                   \
     {                                                                         \
-      LOG_ERROR ("Invalid %s." #name ". No bytes left.\n", obj->dxfname);     \
+      LOG_ERROR ("Invalid %s." #name ". No bytes left.\n", SAFEDXFNAME);      \
       times = 0;                                                              \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }                                                                         \
   LOG_INSANE ("REPEAT_CHKCOUNT_LVAL %s." #name " x %ld: %ld > %ld?\n",        \
-              obj->dxfname, (long)times,                                      \
+              SAFEDXFNAME, (long)times,                                       \
               (long)((times) * sizeof (type)), AVAIL_BITS (dat));             \
   if (dat->version >= R_2004                                                  \
       && (long)((times) * sizeof (type)) > AVAIL_BITS (dat))                  \
     {                                                                         \
-      LOG_ERROR ("Invalid %s." #name " x %ld\n", obj->dxfname, (long)times);  \
+      LOG_ERROR ("Invalid %s." #name " x %ld\n", SAFEDXFNAME, (long)times);   \
       times = 0;                                                              \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }

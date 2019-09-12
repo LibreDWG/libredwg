@@ -146,6 +146,9 @@
 #define DEBUG_POS_OBJ
 #define DEBUG_HERE_OBJ
 
+#define SAFENAME(name) (name) ? (name) : ""
+#define SAFEDXFNAME (obj && obj->dxfname ? obj->dxfname : "")
+
 extern const char version_codes[DWG_VERSIONS][7];
 
 EXPORT Dwg_Version_Type dwg_version_as (const char *);

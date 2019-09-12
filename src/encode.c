@@ -140,7 +140,7 @@ static bool env_var_checked_p;
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        if (obj->has_strings)                                                 \
+        if (!obj || obj->has_strings)                                         \
           {                                                                   \
             FIELD_TU (nam, dxf)                                               \
           }                                                                   \
