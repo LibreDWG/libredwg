@@ -4957,15 +4957,18 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   else
                     blkhdr = NULL;
                   if (strEQc (_obj->name, "*Model_Space"))
-                      entmode = ent->entmode = 2;
+                    entmode = ent->entmode = 2;
                   else if (strEQc (_obj->name, "*Paper_Space"))
-                      entmode = ent->entmode = 1;
+                    entmode = ent->entmode = 1;
+                  else
+                    entmode = 0;
                 }
               else if (obj->type == DWG_TYPE_ENDBLK)
                 {
                   obj->tio.entity->entmode = entmode;
                   LOG_TRACE ("%s.entmode = %d [BB] (blocks)\n", obj->name,
                              entmode);
+                  entmode = 0;
                   // set BLOCK_HEADER.endblk_entity handle
                   if (blkhdr)
                     {
