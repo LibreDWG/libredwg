@@ -4095,7 +4095,7 @@ static const Dwg_DYNAPI_field _dwg_DBCOLOR_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_DBCOLOR, parent),
     1,1,0, 0 },
   { "class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_DBCOLOR, class_version),
-    0,0,0, 0 },
+    0,0,0, 90 },
   { "unknown1",	"BB", sizeof (BITCODE_BB),  OFF (struct _dwg_object_DBCOLOR, unknown1),
     0,0,0, 0 },
   { "rgb",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_object_DBCOLOR, rgb),

@@ -4507,7 +4507,7 @@ struct _dwg_object_object*
 @item parent
 struct _dwg_object_object*
 @item class_version
-BL
+BL,	DXF 90
 @item unknown1
 BB
 @item rgb
