@@ -1580,22 +1580,21 @@ read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl,
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
 
-      // last_handle = 0;
       last_offset = 0;
       while (hdl_dat.byte - startpos < section_size)
         {
           int added;
-          BITCODE_UMC handle;
+          BITCODE_UMC handleoff;
           BITCODE_MC offset;
 
           oldpos = hdl_dat.byte;
-          handle = bit_read_UMC (&hdl_dat);
+          handleoff = bit_read_UMC (&hdl_dat);
           offset = bit_read_MC (&hdl_dat);
-          // last_handle += handle;
           last_offset += offset;
-          LOG_TRACE ("\nNext object: %lu\t", (unsigned long)dwg->num_objects)
-          LOG_TRACE ("Handle: %lX\tOffset: " FORMAT_MC " @%lu\n", handle,
-                     offset, last_offset)
+          LOG_TRACE ("\nNext object: %lu ", (unsigned long)dwg->num_objects)
+          LOG_TRACE ("Handleoff: " FORMAT_MC " [UMC] "
+                     "Offset: " FORMAT_MC " [MC] @%lu\n",
+                     handleoff, offset, last_offset)
 
           if (hdl_dat.byte == oldpos)
             break;

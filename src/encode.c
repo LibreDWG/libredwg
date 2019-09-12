@@ -489,6 +489,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)    \
   BITCODE_BL num_objs  = dwg->num_objects;      \
   int error = 0;                                \
   dat.size = sizeof(Dwg_Entity_##token) + 40;   \
+  LOG_INFO ("Add entity " #token " ")           \
   dat.chain = calloc(dat.size, 1);              \
   dat.version = dwg->header.version;            \
   dat.from_version = dwg->header.from_version;  \
@@ -516,6 +517,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
   int error = 0; \
   BITCODE_BL num_objs  = dwg->num_objects;       \
   dat.size = sizeof(Dwg_Object_##token) + 40;    \
+  LOG_INFO ("Add object " #token " ")            \
   dat.chain = calloc(dat.size, 1);               \
   dat.version = dwg->header.version;             \
   dat.from_version = dwg->header.from_version;   \
@@ -550,7 +552,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
     Bit_Chain *hdl_dat = dat;                                                 \
     Bit_Chain *str_dat = dat;                                                 \
     Dwg_Data *dwg = obj->parent;                                              \
-    LOG_INFO ("Entity " #token ":\n")                                         \
+    LOG_INFO ("Encode entity " #token "\n")                                   \
     error = dwg_encode_entity (obj, dat, hdl_dat, str_dat);                   \
     if (error)                                                                \
       return error;
@@ -1062,10 +1064,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {
       Dwg_Object *obj;
       BITCODE_BL index = omap[i].index;
+      unsigned hdloff = omap[i].handle - (i ? omap[i-1].handle : 0);
+      int off = dat->byte - (i ? omap[i-1].address : 0);
       unsigned long end_address;
-      LOG_TRACE ("\n> Next object: " FORMAT_BL " \tHandle: %X\tOffset: %lu\n"
+      LOG_TRACE ("\n> Next object: " FORMAT_BL " Handleoff: %u [UMC] Offset: %d [MC] @%lu\n"
                  "==========================================\n",
-                 i, omap[i].handle, dat->byte);
+                 i, hdloff, off, dat->byte);
       omap[i].address = dat->byte;
       if (index > dwg->num_objects)
         {
@@ -1130,7 +1134,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       index = omap[i].index;
       handleoff = omap[i].handle - last_handle;
       bit_write_UMC (dat, handleoff);
-      LOG_HANDLE ("Handleoff(%3i): %4d (%4X)\t", index, handleoff, omap[i].handle)
+      LOG_HANDLE ("Handleoff(%3i): %4lu (%4X)\t", index, handleoff, omap[i].handle)
       last_handle = omap[i].handle;
 
       offset = omap[i].address - last_offset;

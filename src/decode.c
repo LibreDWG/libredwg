@@ -1144,22 +1144,20 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
 
-      // last_handle = 0;
       last_offset = 0;
       while (dat->byte - startpos < section_size)
         {
-          BITCODE_UMC handle;
+          BITCODE_UMC handleoff;
           BITCODE_MC offset;
 
           oldpos = dat->byte;
-          handle = bit_read_UMC (dat);
+          handleoff = bit_read_UMC (dat);
           offset = bit_read_MC (dat);
-          // last_handle += handle;
           last_offset += offset;
-          LOG_TRACE ("\nNext object: %lu\t", (unsigned long)dwg->num_objects)
-          LOG_TRACE ("Handle: " FORMAT_UMC " [UMC]"
-                     "\tOffset: " FORMAT_MC " [MC] @%lu\n",
-                     handle, offset, last_offset)
+          LOG_TRACE ("\nNext object: %lu ", (unsigned long)dwg->num_objects)
+          LOG_TRACE ("Handleoff: " FORMAT_UMC " [UMC] "
+                     "Offset: " FORMAT_MC " [MC] @%lu\n",
+                     handleoff, offset, last_offset)
 
           if (dat->byte == oldpos)
             break;
@@ -2360,19 +2358,19 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       while ((int)(hdl_dat.byte - startpos) < section_size)
         {
           int added;
-          BITCODE_UMC handle;
+          BITCODE_UMC handleoff;
           BITCODE_MC offset;
 
           oldpos = hdl_dat.byte;
           // the offset from the previous handle. default: 1, unsigned
-          handle = bit_read_UMC (&hdl_dat);
+          handleoff = bit_read_UMC (&hdl_dat);
           // the offset from the previous address. default: obj->size
           offset = bit_read_MC (&hdl_dat);
           // last_handle += handle;
           last_offset += offset;
-          LOG_TRACE ("\n< Next object: %lu\t", (unsigned long)dwg->num_objects)
-          LOG_HANDLE ("Handleoff: " FORMAT_UMC
-                      "\tOffset: " FORMAT_MC " @%lu\n", handle,
+          LOG_TRACE ("\n< Next object: %lu ", (unsigned long)dwg->num_objects)
+          LOG_HANDLE ("Handleoff: " FORMAT_UMC " [UMC] "
+                      "Offset: " FORMAT_MC " [MC] @%lu\n", handleoff,
                       offset, last_offset);
 
           if (hdl_dat.byte == oldpos) // ?? completely unrelated
