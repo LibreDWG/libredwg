@@ -97,6 +97,7 @@ BITCODE_H find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair);
 int is_table_name (const char *name);
 void entity_alias (char *name);
 void object_alias (char *name);
+Dwg_Object *find_prev_entity (Dwg_Object *obj);
 
 EXPORT int dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 EXPORT int dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);

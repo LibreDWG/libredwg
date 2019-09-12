@@ -2594,6 +2594,21 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return NULL;
 }
 
+Dwg_Object *find_prev_entity (Dwg_Object *obj)
+{
+  Dwg_Data *dwg = obj->parent;
+  if (obj->supertype != DWG_SUPERTYPE_ENTITY)
+    return NULL;
+  for (BITCODE_BL i = obj->index - 1; i > 0; i--)
+    {
+      Dwg_Object *prev = &dwg->object[i];
+      if (prev->supertype == DWG_SUPERTYPE_ENTITY &&
+          prev->tio.entity->entmode == obj->tio.entity->entmode)
+        return prev;
+    }
+  return NULL;
+}
+
 static Dxf_Pair *
 new_table_control (const char *restrict name, Bit_Chain *restrict dat,
                    Dwg_Data *restrict dwg)
@@ -2657,7 +2672,12 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   dwg_dynapi_entity_set_value (_obj, obj->name, "objid", &obj->index, is_utf);
   // default xdic_missing_flag
   if (dwg->header.version >= R_2004)
-    obj->tio.object->xdic_missing_flag = 1;
+    {
+      if (obj->supertype == DWG_SUPERTYPE_ENTITY)
+        obj->tio.entity->xdic_missing_flag = 1;
+      else
+        obj->tio.object->xdic_missing_flag = 1;
+    }
 
   pair = dxf_read_pair (dat);
   // read common table until next 0 table or endtab
@@ -2770,8 +2790,12 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
     }
  do_return:
   // default NULL handle
-  if (dwg->header.version < R_2004 && !obj->tio.object->xdicobjhandle)
-    obj->tio.object->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
+  if (!obj->tio.object->xdicobjhandle)
+    {
+      obj->tio.object->xdic_missing_flag = 1;
+      if (dwg->header.version < R_2004)
+        obj->tio.object->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
+    }
   return pair;
 }
 
@@ -4841,28 +4865,69 @@ new_object (char *restrict name, char *restrict dxfname, Bit_Chain *restrict dat
     postprocess_SEQEND (obj);
   // set defaults not in dxf:
   else if (strEQc (name, "_3DFACE") &&
-      dwg->header.version >= R_2000)
+           dwg->header.version >= R_2000)
     {
       Dwg_Entity__3DFACE *o = obj->tio.entity->tio._3DFACE;
       o->has_no_flags = 1;
       LOG_TRACE ("_3DFACE.has_no_flags = 1 [B]\n");
     }
+
+  // common_entity_handle_data:
   // set xdic_missing_flag
-  if (dwg->header.version >= R_2004)
+  if (is_entity ? !obj->tio.entity->xdicobjhandle : !obj->tio.object->xdicobjhandle)
     {
-      if (is_entity && !obj->tio.entity->xdicobjhandle)
-        obj->tio.entity->xdic_missing_flag = 1;
-      else if (!is_entity && !obj->tio.object->xdicobjhandle)
-        obj->tio.object->xdic_missing_flag = 1;
+      if (dwg->header.version >= R_2004)
+        {
+          if (is_entity)
+            obj->tio.entity->xdic_missing_flag = 1;
+          else
+            obj->tio.object->xdic_missing_flag = 1;
+        }
+      else
+        {
+          // default NULL handle
+          if (is_entity)
+            obj->tio.entity->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
+          else
+            obj->tio.object->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
+        }
     }
-  else
+  if (is_entity)
     {
-      // default NULL handle
-      if (!is_entity && !obj->tio.object->xdicobjhandle)
-        obj->tio.object->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
-      else if (is_entity && !obj->tio.entity->xdicobjhandle)
-        obj->tio.entity->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
+      Dwg_Object_Entity *ent = obj->tio.entity;
+      if (dwg->header.version >= R_13 && dwg->header.version <= R_14)
+        {
+          if (ent->ltype_flags < 3)
+            ent->isbylayerlt = 1;
+        }
+      if (dwg->header.version >= R_13 && dwg->header.version <= R_2000)
+        {
+          Dwg_Object *prev = find_prev_entity (obj);
+          ent->next_entity = dwg_add_handleref (dwg, 4, 0, obj); // temp.
+          if (prev)
+            {
+              if (prev->tio.entity->prev_entity)
+                prev->tio.entity->nolinks = 0;
+              prev->tio.entity->next_entity
+                = dwg_add_handleref (dwg, 4, obj->handle.value, prev);
+              ent->prev_entity = dwg_add_handleref (dwg, 4, prev->handle.value, obj);
+              LOG_TRACE ("prev %s(%X).next_entity = " FORMAT_REF "\n",
+                         prev->name, prev->handle.value,
+                         ARGS_REF (prev->tio.entity->next_entity));
+              LOG_TRACE ("%s.prev_entity = " FORMAT_REF "\n",
+                         name, ARGS_REF (ent->prev_entity));
+            }
+          else
+            {
+              LOG_TRACE ("%s.prev_entity = NULL HANDLE 4\n", name);
+              ent->prev_entity = dwg_add_handleref (dwg, 4, 0, obj);
+              ent->nolinks = 1;
+            }
+        }
+      else
+        ent->nolinks = 1;
     }
+
   return pair;
 }
 
