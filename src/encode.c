@@ -587,7 +587,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
     error = dwg_encode_object (obj, dat, hdl_dat, str_dat);                   \
     if (error)                                                                \
       return error;                                                           \
-    LOG_INFO ("Object " #token " handle: " FORMAT_H "\n", ARGS_H(obj->handle))
+    LOG_INFO ("Encode object " #token "\n")
 
 #define DWG_OBJECT_END                                                        \
   if (obj->bitsize == 0 && dat->version >= R_13 && dat->version <= R_2007)    \
@@ -1803,11 +1803,11 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
               SINCE (R_2000)
               {
                 bit_write_RL (dat, obj->bitsize);
-                LOG_INFO ("Object bitsize: " FORMAT_RL " @%lu.%u\n",
-                          obj->bitsize, dat->byte, dat->bit);
+                LOG_INFO ("bitsize: " FORMAT_RL " (@%lu.%u)\n",
+                          obj->bitsize, dat->byte - 4, dat->bit);
               }
-              bit_write_H (dat, &(obj->handle));
-              LOG_INFO ("Object handle: " FORMAT_H "\n", ARGS_H(obj->handle));
+              bit_write_H (dat, &obj->handle);
+              LOG_INFO ("handle: " FORMAT_H " [H 5]\n", ARGS_H(obj->handle));
               // write obj->size bytes, excl. bitsize and handle.
               // overshoot the bitsize and handle size.
               bit_write_TF (dat, obj->tio.unknown, obj->size);
@@ -1834,14 +1834,17 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
           if (!obj->handlestream_size && obj->bitsize)
             obj->handlestream_size = obj->size * 8 - obj->bitsize;
           bit_write_UMC (dat, obj->handlestream_size);
-          LOG_TRACE ("handlestream_size: %lu\n", obj->handlestream_size);
+          LOG_TRACE ("handlestream_size: %lu [UMC]\n", obj->handlestream_size);
         }
-      if (obj->bitsize_pos && obj->bitsize)
+      SINCE (R_2000)
         {
-          bit_set_position (dat, obj->bitsize_pos);
-          bit_write_RL (dat, obj->bitsize);
-          LOG_TRACE ("bitsize: %u [RL] @%u.%u\n", obj->bitsize,
-                     pos / 8, pos %8);
+          if (obj->bitsize_pos && obj->bitsize)
+            {
+              bit_set_position (dat, obj->bitsize_pos);
+              bit_write_RL (dat, obj->bitsize);
+              LOG_TRACE ("bitsize: %u [RL] @%lu.%lu\n", obj->bitsize,
+                         obj->bitsize_pos / 8, obj->bitsize_pos % 8);
+            }
         }
       bit_set_position (dat, pos);
     }
@@ -1883,7 +1886,7 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
 /** writes the data part, if there's no raw.
  */
 static int
-dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data)
+dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data, int i)
 {
   bit_write_RC (dat, data->code);
   switch (data->code)
@@ -1895,31 +1898,37 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data)
             bit_write_RC (dat, data->u.eed_0.length);
             bit_write_RS_LE (dat, data->u.eed_0.codepage);
             bit_write_TF (dat, data->u.eed_0.string, data->u.eed_0.length);
+            LOG_TRACE ("eed[%d]: \"%s\" [TF %d %d]\n", i,
+                       data->u.eed_0.string, data->u.eed_0.length, data->code);
           }
         LATER_VERSIONS
           {
             BITCODE_RS *s = (BITCODE_RS *)&data->u.eed_0_r2007.string;
             bit_write_RS (dat, data->u.eed_0_r2007.length);
             bit_write_RS_LE (dat, data->u.eed_0.codepage);
-            for (int i = 0; i < data->u.eed_0_r2007.length; i++)
-              {
-                bit_write_RS (dat, *s++);
-              }
+            for (int j = 0; j < data->u.eed_0_r2007.length; j++)
+              bit_write_RS (dat, *s++);
           }
       }
       break;
     case 2:
       bit_write_RC (dat, data->u.eed_2.byte);
+      LOG_TRACE ("eed[%d]: %d [RC %d]\n", i, (int)data->u.eed_2.byte, data->code);
       break;
     case 3:
       bit_write_RL (dat, data->u.eed_3.layer);
+      LOG_TRACE ("eed[%d]: %d [RL %d]\n", i, (int)data->u.eed_3.layer, data->code);
       break;
     case 4:
       bit_write_RC (dat, data->u.eed_4.length);
       bit_write_TF (dat, data->u.eed_4.data, data->u.eed_4.length);
+      LOG_TRACE ("eed[%d]: \"%s\" [TF %d %d]\n", i, data->u.eed_4.data,
+                 data->u.eed_4.length, data->code);
       break;
     case 5:
       bit_write_RLL (dat, data->u.eed_5.entity);
+      LOG_TRACE ("eed[%d]: \"%ld\" [RLL %d]\n", i, (long)data->u.eed_5.entity,
+                 data->code);
       break;
     case 10:
     case 11:
@@ -1930,17 +1939,26 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data)
       bit_write_RD (dat, data->u.eed_10.point.x);
       bit_write_RD (dat, data->u.eed_10.point.y);
       bit_write_RD (dat, data->u.eed_10.point.z);
+      LOG_TRACE ("eed[%d]: (%f, %f, %f) [3RD %d]\n", i,
+                 data->u.eed_10.point.x, data->u.eed_10.point.y,
+                 data->u.eed_10.point.z, data->code);
       break;
     case 40:
     case 41:
     case 42:
       bit_write_RD (dat, data->u.eed_40.real);
+      LOG_TRACE ("eed[%d]: %f [RD %d]\n", i,
+                 data->u.eed_40.real, data->code);
       break;
     case 70:
       bit_write_RS (dat, data->u.eed_70.rs);
+      LOG_TRACE ("eed[%d]: %d [RS %d]\n", i,
+                 (int)data->u.eed_70.rs, data->code);
       break;
     case 71:
       bit_write_RL (dat, data->u.eed_71.rl);
+      LOG_TRACE ("eed[%d]: %ld [RL %d]\n", i,
+                 (long)data->u.eed_71.rl, data->code);
       break;
     default:
       LOG_ERROR ("unknown EED code %d", data->code);
@@ -1971,7 +1989,7 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict ent)
           if (eed->raw)
             bit_write_TF (dat, eed->raw, size);
           else // indxf
-            dwg_encode_eed_data (dat, eed->data);
+            dwg_encode_eed_data (dat, eed->data, i);
         }
     }
   bit_write_BS (dat, 0);
@@ -2022,6 +2040,8 @@ dwg_encode_entity (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
       bit_write_RL (dat, obj->size * 8);
     else
       bit_write_RL (dat, obj->bitsize);
+    LOG_TRACE ("bitsize: %u [RL] (@%lu.%lu)\n", obj->bitsize,
+               obj->bitsize_pos / 8, obj->bitsize_pos %8);
   }
   SINCE (R_2007)
   {
@@ -2031,15 +2051,15 @@ dwg_encode_entity (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
     SINCE (R_2010)
     {
       obj->hdlpos += 8;
-      LOG_HANDLE ("(bitsize: " FORMAT_RL ", ", obj->bitsize);
-      LOG_HANDLE ("hdlpos: %lu)\n", obj->hdlpos);
+      //LOG_HANDLE ("(bitsize: " FORMAT_RL ", ", obj->bitsize);
+      LOG_HANDLE ("hdlpos: %lu\n", obj->hdlpos);
     }
     // and set the string stream (restricted to size)
     error |= obj_string_stream (dat, obj, str_dat);
   }
 
   bit_write_H (dat, &(obj->handle));
-  LOG_TRACE ("handle: " FORMAT_H " [5]\n", ARGS_H(obj->handle))
+  LOG_TRACE ("handle: " FORMAT_H " [H 5]\n", ARGS_H(obj->handle))
   PRE (R_13) { return DWG_ERR_NOTYETSUPPORTED; }
 
   error |= dwg_encode_eed (dat, (Dwg_Object_Object *)ent);
@@ -2154,19 +2174,20 @@ dwg_encode_object (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
     if (!obj->bitsize)
       obj->bitsize = obj->size * 8;
     bit_write_RL (dat, obj->bitsize);
-    LOG_INFO ("Object bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
-              dat->byte, dat->bit);
+    LOG_INFO ("bitsize: " FORMAT_RL " (@%lu.%u)\n", obj->bitsize,
+              dat->byte - 4, dat->bit);
   }
   SINCE (R_2010)
   {
     obj->bitsize = dat->size - 0;
-    LOG_INFO ("Object bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
-              dat->byte, dat->bit);
+    //LOG_INFO ("bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
+    //          dat->byte, dat->bit);
   }
   obj->hdlpos = bit_position (dat) + obj->bitsize; // the handle stream offset
   SINCE (R_2007) { obj_string_stream (dat, obj, str_dat); }
 
-  bit_write_H (dat, &(obj->handle));
+  bit_write_H (dat, &obj->handle);
+  LOG_TRACE ("handle: " FORMAT_H " [H 5]\n", ARGS_H(obj->handle));
   error |= dwg_encode_eed (dat, ord);
 
   VERSIONS (R_13, R_14)
@@ -2175,12 +2196,20 @@ dwg_encode_object (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
     if (!obj->bitsize)
       obj->bitsize = obj->size * 8;
     bit_write_RL (dat, obj->bitsize);
-    LOG_TRACE ("Object bitsize: %u [RL]\n", obj->bitsize);
+    LOG_INFO ("bitsize: " FORMAT_RL " (@%lu.%u)\n", obj->bitsize,
+              dat->byte - 4, dat->bit);
   }
 
   bit_write_BL (dat, ord->num_reactors);
-  SINCE (R_2004) { bit_write_B (dat, ord->xdic_missing_flag); }
-  SINCE (R_2013) { bit_write_B (dat, ord->has_ds_binary_data); }
+  LOG_TRACE ("num_reactors: " FORMAT_BL " [BL]\n", ord->num_reactors);
+  SINCE (R_2004) {
+    bit_write_B (dat, ord->xdic_missing_flag);
+    LOG_TRACE ("xdic_missing_flag: " FORMAT_B " [B]\n", ord->xdic_missing_flag);
+  }
+  SINCE (R_2013) {
+    bit_write_B (dat, ord->has_ds_binary_data);
+    LOG_TRACE ("has_ds_binary_data: " FORMAT_B " [B]\n", ord->has_ds_binary_data);
+  }
   return error;
 }
 

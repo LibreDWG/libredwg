@@ -3815,8 +3815,8 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
             length = rbuf->value.str.size = bit_read_RS (dat);
             rbuf->value.str.codepage = bit_read_RC (dat);
             rbuf->value.str.u.data = bit_read_TF (dat, length);
-            LOG_TRACE ("xdata[%d]: \"%s\" [%d]\n", num_xdata,
-                       rbuf->value.str.u.data, rbuf->type);
+            LOG_TRACE ("xdata[%d]: \"%s\" [TF %d %d]\n", num_xdata,
+                       rbuf->value.str.u.data, length, rbuf->type);
           }
           LATER_VERSIONS
           {
@@ -3846,48 +3846,48 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
           break;
         case VT_REAL:
           rbuf->value.dbl = bit_read_RD (dat);
-          LOG_TRACE ("xdata[%d]: %f [%d]\n", num_xdata, rbuf->value.dbl,
+          LOG_TRACE ("xdata[%d]: %f [RD %d]\n", num_xdata, rbuf->value.dbl,
                      rbuf->type);
           break;
         case VT_BOOL:
         case VT_INT8:
           rbuf->value.i8 = bit_read_RC (dat);
-          LOG_TRACE ("xdata[%d]: %d [%d]\n", num_xdata, (int)rbuf->value.i8,
+          LOG_TRACE ("xdata[%d]: %d [RC %d]\n", num_xdata, (int)rbuf->value.i8,
                      rbuf->type);
           break;
         case VT_INT16:
           rbuf->value.i16 = bit_read_RS (dat);
-          LOG_TRACE ("xdata[%d]: %d [%d]\n", num_xdata, (int)rbuf->value.i16,
+          LOG_TRACE ("xdata[%d]: %d [RS %d]\n", num_xdata, (int)rbuf->value.i16,
                      rbuf->type);
           break;
         case VT_INT32:
           rbuf->value.i32 = bit_read_RL (dat);
-          LOG_TRACE ("xdata[%d]: %d [%d]\n", num_xdata, (int)rbuf->value.i32,
+          LOG_TRACE ("xdata[%d]: %d [RL %d]\n", num_xdata, (int)rbuf->value.i32,
                      rbuf->type);
           break;
         case VT_INT64:
           rbuf->value.i64 = bit_read_BLL (dat);
-          LOG_TRACE ("xdata[%d]: " FORMAT_BLL " [%d]\n", num_xdata, rbuf->value.i64,
+          LOG_TRACE ("xdata[%d]: " FORMAT_BLL " [BLL %d]\n", num_xdata, rbuf->value.i64,
                      rbuf->type);
           break;
         case VT_POINT3D:
           rbuf->value.pt[0] = bit_read_RD (dat);
           rbuf->value.pt[1] = bit_read_RD (dat);
           rbuf->value.pt[2] = bit_read_RD (dat);
-          LOG_TRACE ("xdata[%d]: %f,%f,%f [%d]\n", num_xdata,
-                     rbuf->value.pt[0], rbuf->value.pt[2], rbuf->value.pt[2],
+          LOG_TRACE ("xdata[%d]: %f,%f,%f [3RD %d]\n", num_xdata,
+                     rbuf->value.pt[0], rbuf->value.pt[1], rbuf->value.pt[2],
                      rbuf->type);
           break;
         case VT_BINARY:
           rbuf->value.str.size = bit_read_RC (dat);
           rbuf->value.str.u.data = bit_read_TF (dat, rbuf->value.str.size);
-          LOG_TRACE ("xdata[%d]: ", num_xdata);
+          LOG_TRACE ("xdata[%d]: [TF %d %d]", num_xdata, rbuf->value.str.size, rbuf->type);
           LOG_TRACE_TF (rbuf->value.str.u.data, rbuf->value.str.size);
           break;
         case VT_HANDLE:
         case VT_OBJECTID:
           bit_read_fixed (dat, rbuf->value.hdl, 8);
-          LOG_TRACE ("xdata[%d]: %X [HDL %d]\n", num_xdata,
+          LOG_TRACE ("xdata[%d]: %X [H %d]\n", num_xdata,
                      (unsigned)*(uint64_t *)rbuf->value.hdl, rbuf->type);
           break;
         case VT_INVALID:
