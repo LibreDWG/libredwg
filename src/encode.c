@@ -304,8 +304,7 @@ static bool env_var_checked_p;
   {                                                                           \
     SINCE (R_13)                                                              \
     {                                                                         \
-      VALUE_HANDLE (obj->tio.object->xdicobjhandle, xdicobjhandle, code,      \
-                    360);                                                     \
+      VALUE_HANDLE (obj->tio.object->xdicobjhandle, xdicobjhandle, code, 360); \
     }                                                                         \
   }                                                                           \
   RESET_VER
@@ -316,16 +315,14 @@ static bool env_var_checked_p;
   {                                                                           \
     if (!obj->tio.entity->xdic_missing_flag)                                  \
       {                                                                       \
-        VALUE_HANDLE (obj->tio.entity->xdicobjhandle, xdicobjhandle, code,    \
-                      360);                                                   \
+        VALUE_HANDLE (obj->tio.entity->xdicobjhandle, xdicobjhandle, code, 360); \
       }                                                                       \
   }                                                                           \
   else                                                                        \
   {                                                                           \
     SINCE (R_13)                                                              \
     {                                                                         \
-      VALUE_HANDLE (obj->tio.entity->xdicobjhandle, xdicobjhandle, code,      \
-                    360);                                                     \
+      VALUE_HANDLE (obj->tio.entity->xdicobjhandle, xdicobjhandle, code, 360); \
     }                                                                         \
   }                                                                           \
   RESET_VER
@@ -374,7 +371,7 @@ static bool env_var_checked_p;
       {                                                                       \
         Dwg_Handle null_handle = { 0, 0, 0 };                                 \
         bit_write_H (hdl_dat, &null_handle);                                  \
-        LOG_TRACE (#nam ": HANDLE(0.0.0) absolute:0 [%d]\n", dxf)             \
+        LOG_TRACE (#nam ": NULL %d [H %d]\n", handle_code, dxf)               \
       }                                                                       \
     else                                                                      \
       {                                                                       \
@@ -386,8 +383,7 @@ static bool env_var_checked_p;
                       hdlptr->handleref.code);                                \
           }                                                                   \
         bit_write_H (hdl_dat, &hdlptr->handleref);                            \
-        LOG_TRACE (#nam ": HANDLE" FORMAT_REF " [%d]\n",                      \
-                   ARGS_REF(hdlptr), dxf)                                     \
+        LOG_TRACE (#nam ": " FORMAT_REF " [H %d]\n", ARGS_REF(hdlptr), dxf)   \
       }                                                                       \
   }
 
@@ -405,7 +401,10 @@ static bool env_var_checked_p;
   {                                                                           \
     RESET_VER                                                                 \
     if (!_obj->nam)                                                           \
-      bit_write_H (hdl_dat, NULL);                                            \
+      {                                                                       \
+        bit_write_H (hdl_dat, NULL);                                          \
+        LOG_TRACE (#nam "[%d]: NULL %d [H* %d]\n", (int)vcount, handle_code, dxf) \
+      }                                                                       \
     else                                                                      \
       {                                                                       \
         if (handle_code != ANYCODE                                            \
@@ -416,7 +415,7 @@ static bool env_var_checked_p;
                       _obj->nam->handleref.code);                             \
           }                                                                   \
         bit_write_H (hdl_dat, &_obj->nam->handleref);                         \
-        LOG_TRACE (#nam "[%d]: HANDLE" FORMAT_REF " [%d]\n",                  \
+        LOG_TRACE (#nam "[%d]: " FORMAT_REF " [H* %d]\n",                     \
                    (int)vcount, ARGS_REF(_obj->nam), dxf)                     \
       }                                                                       \
   }

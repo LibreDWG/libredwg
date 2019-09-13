@@ -200,12 +200,11 @@
         handleptr = dwg_decode_handleref (hdl_dat, obj, dwg);                 \
     if (handleptr)                                                            \
       {                                                                       \
-        LOG_TRACE (#nam ": HANDLE %x: " FORMAT_REF " [H %d]",                 \
-                   handle_code, ARGS_REF(handleptr), dxf)                     \
+        LOG_TRACE (#nam ": " FORMAT_REF " [H %d]", ARGS_REF(handleptr), dxf)  \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        LOG_TRACE (#nam ": %x: NULL HANDLE [H %d]", handle_code, dxf);        \
+        LOG_TRACE (#nam ": NULL %d [H %d]", handle_code, dxf);                \
       }                                                                       \
     LOG_INSANE (" @%lu.%u", pos / 8, (unsigned)(pos % 8));                    \
     LOG_TRACE ("\n");                                                         \
@@ -225,12 +224,12 @@
         handleptr = dwg_decode_handleref (hdl_dat, obj, dwg);                 \
     if (handleptr)                                                            \
       {                                                                       \
-        LOG_TRACE (#nam "[%d]: HANDLE %x: " FORMAT_REF " [H %d]",             \
-                   (int)vcount, handle_code, ARGS_REF(handleptr), dxf)        \
+        LOG_TRACE (#nam "[%d]: " FORMAT_REF " [H* %d]",                       \
+                   (int)vcount, ARGS_REF(handleptr), dxf)                     \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        LOG_TRACE (#nam "[%d]: %x: NULL HANDLE [H %d]", (int)vcount,          \
+        LOG_TRACE (#nam "[%d]: NULL %d [H* %d]", (int)vcount,                 \
                    handle_code, dxf);                                         \
       }                                                                       \
     LOG_INSANE (" @%lu.%u", pos / 8, (unsigned)(pos % 8));                    \
@@ -244,7 +243,7 @@
     _obj->nam = dwg_decode_handleref (dat, obj, dwg);                         \
     if (_obj->nam)                                                            \
       {                                                                       \
-        LOG_TRACE (#nam ": HANDLE" FORMAT_H " [H %d]\n",                      \
+        LOG_TRACE (#nam ": " FORMAT_H " [H %d]\n",                            \
                    ARGS_H(_obj->nam->handleref), dxf);                        \
       }                                                                       \
   }

@@ -2791,11 +2791,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
  do_return:
   // default NULL handle
   if (!obj->tio.object->xdicobjhandle)
-    {
-      obj->tio.object->xdic_missing_flag = 1;
-      if (dwg->header.version < R_2004)
-        obj->tio.object->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
-    }
+    obj->tio.object->xdic_missing_flag = 1;
   return pair;
 }
 
@@ -4894,14 +4890,6 @@ new_object (char *restrict name, char *restrict dxfname, Bit_Chain *restrict dat
             obj->tio.entity->xdic_missing_flag = 1;
           else
             obj->tio.object->xdic_missing_flag = 1;
-        }
-      else
-        {
-          // default NULL handle
-          if (is_entity)
-            obj->tio.entity->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
-          else
-            obj->tio.object->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
         }
     }
   if (is_entity)
