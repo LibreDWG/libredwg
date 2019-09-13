@@ -2895,6 +2895,7 @@ add_xdata (Bit_Chain *restrict dat,
   else
     _obj->xdata = rbuf;
 
+  num_databytes += 2; //RS
   rbuf->type = pair->code;
   switch (get_base_value_type (rbuf->type))
     {
