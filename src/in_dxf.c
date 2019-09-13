@@ -4897,31 +4897,39 @@ new_object (char *restrict name, char *restrict dxfname, Bit_Chain *restrict dat
           if (ent->ltype_flags < 3)
             ent->isbylayerlt = 1;
         }
-      if (dwg->header.version >= R_13 && dwg->header.version <= R_2000)
+      if (dwg->header.version >= R_13 &&
+          dwg->header.version <= R_2000 &&
+          obj->type != DWG_TYPE_SEQEND &&
+          obj->type != DWG_TYPE_ENDBLK)
         {
           Dwg_Object *prev = find_prev_entity (obj);
-          ent->next_entity = dwg_add_handleref (dwg, 4, 0, obj); // temp.
+          ent->next_entity = NULL; // temp.
           if (prev)
             {
               if (prev->tio.entity->prev_entity)
                 prev->tio.entity->nolinks = 0;
-              prev->tio.entity->next_entity
-                = dwg_add_handleref (dwg, 4, obj->handle.value, prev);
+              if (prev->type != DWG_TYPE_SEQEND &&
+                  prev->type != DWG_TYPE_ENDBLK)
+                {
+                  prev->tio.entity->next_entity
+                    = dwg_add_handleref (dwg, 4, obj->handle.value, prev);
+                  LOG_TRACE ("prev %s(%X).next_entity = " FORMAT_REF "\n",
+                             prev->name, prev->handle.value,
+                             ARGS_REF (prev->tio.entity->next_entity));
+                }
               ent->prev_entity = dwg_add_handleref (dwg, 4, prev->handle.value, obj);
-              LOG_TRACE ("prev %s(%X).next_entity = " FORMAT_REF "\n",
-                         prev->name, prev->handle.value,
-                         ARGS_REF (prev->tio.entity->next_entity));
               LOG_TRACE ("%s.prev_entity = " FORMAT_REF "\n",
                          name, ARGS_REF (ent->prev_entity));
             }
           else
             {
               LOG_TRACE ("%s.prev_entity = NULL HANDLE 4\n", name);
-              ent->prev_entity = dwg_add_handleref (dwg, 4, 0, obj);
+              ent->prev_entity = NULL;
               ent->nolinks = 1;
             }
         }
-      else
+      else if (obj->type != DWG_TYPE_SEQEND &&
+               obj->type != DWG_TYPE_ENDBLK)
         ent->nolinks = 1;
     }
 
