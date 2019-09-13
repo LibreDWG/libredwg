@@ -5213,8 +5213,7 @@ DWG_OBJECT(XRECORD)
 #endif
 
   START_OBJECT_HANDLE_STREAM;
-  DECODER
-    {
+  DECODER {
       for (vcount=0; bit_position(hdl_dat) < obj->handlestream_size; vcount++)
         {
           FIELD_VALUE(objid_handles) = vcount
@@ -5228,17 +5227,17 @@ DWG_OBJECT(XRECORD)
       FIELD_VALUE(num_objid_handles) = vcount;
       FIELD_TRACE(num_objid_handles, BL);
     }
-    VALUEOUTOFBOUNDS (num_objid_handles, 10000)
-    #ifndef IS_DECODER
-      HANDLE_VECTOR (objid_handles, num_objid_handles, 4, 0);
-    #endif
-    #ifdef IS_DXF
+  VALUEOUTOFBOUNDS (num_objid_handles, 10000)
+  #ifndef IS_DECODER
+    HANDLE_VECTOR (objid_handles, num_objid_handles, 4, 0);
+  #endif
+  #ifdef IS_DXF
     if (FIELD_VALUE(objid_handles)) {
       REPEAT(num_objid_handles, objid_handles, T)
           VALUE_H (_obj->objid_handles[rcount1], 340);
       END_REPEAT(objid_handles)
     }
-    #endif
+  #endif
 
 DWG_OBJECT_END
 
