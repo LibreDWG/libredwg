@@ -2200,13 +2200,12 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
 static int
 dwg_encode_xdata (Bit_Chain *dat, Dwg_Object_XRECORD *obj, int size)
 {
-  Dwg_Resbuf *tmp, *rbuf = obj->xdata;
-  short type;
+  Dwg_Resbuf *rbuf = obj->xdata;
+  enum RES_BUF_VALUE_TYPE type;
   int i, j = 0;
 
   while (rbuf)
     {
-      tmp = rbuf->next;
       type = get_base_value_type (rbuf->type);
       switch (type)
         {
@@ -2264,7 +2263,7 @@ dwg_encode_xdata (Bit_Chain *dat, Dwg_Object_XRECORD *obj, int size)
           bit_write_RC (dat, rbuf->value.str.size);
           bit_write_TF (dat, rbuf->value.str.u.data, rbuf->value.str.size);
           LOG_TRACE ("xdata[%d]: ", j);
-          //LOG_TRACE_TF (rbuf->value.str.u.data, rbuf->value.str.size);
+          LOG_TRACE_TF (rbuf->value.str.u.data, rbuf->value.str.size);
           break;
         case VT_HANDLE:
         case VT_OBJECTID:
@@ -2278,7 +2277,7 @@ dwg_encode_xdata (Bit_Chain *dat, Dwg_Object_XRECORD *obj, int size)
           LOG_ERROR ("Invalid group code in xdata: %d", rbuf->type)
           return DWG_ERR_INVALIDEED;
         }
-      rbuf = tmp;
+      rbuf = rbuf->next;
       j++;
     }
   return 0;

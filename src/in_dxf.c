@@ -2865,26 +2865,39 @@ find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair)
   return ref;
 }
 
-// with XRECORD only
+// add pair to XRECORD
 Dxf_Pair *
 add_xdata (Bit_Chain *restrict dat,
            Dwg_Object *restrict obj, Dxf_Pair *restrict pair)
 {
   BITCODE_BL num_xdata, num_databytes;
   // add pairs to xdata linked list
-  Dwg_Resbuf *xdata, *rbuf;
+  Dwg_Resbuf *rbuf;
   Dwg_Object_XRECORD *_obj = obj->tio.object->tio.XRECORD;
 
   num_xdata = _obj->num_xdata;
   num_databytes = _obj->num_databytes;
   rbuf = calloc (1, sizeof (Dwg_Resbuf));
-  if (num_xdata)
+  if (!rbuf)
     {
+      LOG_ERROR ("Out of memory");
+      return NULL;
+    }
+  if (num_xdata && _obj->xdata)
+    {
+      Dwg_Resbuf *xdata, *prev;
+      // add to end, not front
+      prev = xdata = _obj->xdata;
+      while (xdata)
+        {
+          prev = xdata;
+          xdata = xdata->next;
+        }
+      prev->next = rbuf;
       xdata = _obj->xdata;
-      rbuf->next = xdata;
     }
   else
-    xdata = rbuf;
+    _obj->xdata = rbuf;
 
   rbuf->type = pair->code;
   switch (get_base_value_type (rbuf->type))
@@ -2999,7 +3012,6 @@ add_xdata (Bit_Chain *restrict dat,
       LOG_ERROR ("Invalid group code in rbuf: %d", rbuf->type)
     }
 
-  _obj->xdata = rbuf;
   num_xdata++;
   _obj->num_xdata = num_xdata;
   _obj->num_databytes = num_databytes;
