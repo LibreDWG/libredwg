@@ -2202,7 +2202,7 @@ dwg_encode_xdata (Bit_Chain *dat, Dwg_Object_XRECORD *obj, int size)
 {
   Dwg_Resbuf *tmp, *rbuf = obj->xdata;
   short type;
-  int i;
+  int i, j = 0;
 
   while (rbuf)
     {
@@ -2216,6 +2216,8 @@ dwg_encode_xdata (Bit_Chain *dat, Dwg_Object_XRECORD *obj, int size)
             bit_write_RS (dat, rbuf->value.str.size);
             bit_write_RC (dat, rbuf->value.str.codepage);
             bit_write_TF (dat, rbuf->value.str.u.data, rbuf->value.str.size);
+            LOG_TRACE ("xdata[%d]: \"%s\" [%d]\n", j,
+                       rbuf->value.str.u.data, rbuf->type);
           }
           LATER_VERSIONS
           {
@@ -2226,30 +2228,50 @@ dwg_encode_xdata (Bit_Chain *dat, Dwg_Object_XRECORD *obj, int size)
           break;
         case VT_REAL:
           bit_write_RD (dat, rbuf->value.dbl);
+          LOG_TRACE ("xdata[%d]: %f [%d]\n", j, rbuf->value.dbl,
+                     rbuf->type);
           break;
         case VT_BOOL:
         case VT_INT8:
           bit_write_RC (dat, rbuf->value.i8);
+          LOG_TRACE ("xdata[%d]: %d [%d]\n", j, (int)rbuf->value.i8,
+                     rbuf->type);
           break;
         case VT_INT16:
           bit_write_RS (dat, rbuf->value.i16);
+          LOG_TRACE ("xdata[%d]: %d [%d]\n", j, (int)rbuf->value.i16,
+                     rbuf->type);
           break;
         case VT_INT32:
           bit_write_RL (dat, rbuf->value.i32);
+          LOG_TRACE ("xdata[%d]: %ld [%d]\n", j, (long)rbuf->value.i32,
+                     rbuf->type);
+          break;
+        case VT_INT64:
+          bit_write_BLL (dat, rbuf->value.i64);
+          LOG_TRACE ("xdata[%d]: " FORMAT_BLL " [%d]\n", j, rbuf->value.i64,
+                     rbuf->type);
           break;
         case VT_POINT3D:
           bit_write_RD (dat, rbuf->value.pt[0]);
           bit_write_RD (dat, rbuf->value.pt[1]);
           bit_write_RD (dat, rbuf->value.pt[2]);
+          LOG_TRACE ("xdata[%d]: (%f,%f,%f) [%d]\n", j,
+                     rbuf->value.pt[0], rbuf->value.pt[1], rbuf->value.pt[2],
+                     rbuf->type);
           break;
         case VT_BINARY:
           bit_write_RC (dat, rbuf->value.str.size);
           bit_write_TF (dat, rbuf->value.str.u.data, rbuf->value.str.size);
+          LOG_TRACE ("xdata[%d]: ", j);
+          //LOG_TRACE_TF (rbuf->value.str.u.data, rbuf->value.str.size);
           break;
         case VT_HANDLE:
         case VT_OBJECTID:
           for (i = 0; i < 8; i++)
             bit_write_RC (dat, rbuf->value.hdl[i]);
+          LOG_TRACE ("xdata[%d]: " FORMAT_H " [H %d]\n", j,
+                     ARGS_H (rbuf->value.h), rbuf->type);
           break;
         case VT_INVALID:
         default:
@@ -2257,6 +2279,7 @@ dwg_encode_xdata (Bit_Chain *dat, Dwg_Object_XRECORD *obj, int size)
           return DWG_ERR_INVALIDEED;
         }
       rbuf = tmp;
+      j++;
     }
   return 0;
 }
