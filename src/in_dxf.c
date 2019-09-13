@@ -2672,12 +2672,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   dwg_dynapi_entity_set_value (_obj, obj->name, "objid", &obj->index, is_utf);
   // default xdic_missing_flag
   if (dwg->header.version >= R_2004)
-    {
-      if (obj->supertype == DWG_SUPERTYPE_ENTITY)
-        obj->tio.entity->xdic_missing_flag = 1;
-      else
-        obj->tio.object->xdic_missing_flag = 1;
-    }
+    obj->tio.object->xdic_missing_flag = 1;
 
   pair = dxf_read_pair (dat);
   // read common table until next 0 table or endtab
@@ -3633,6 +3628,7 @@ new_object (char *restrict name, char *restrict dxfname, Bit_Chain *restrict dat
       NEW_ENTITY (dwg, obj);
 
       obj->tio.entity->xdic_missing_flag = 1;
+      obj->tio.entity->color.index = 256; //ByLayer
       if (*name == '3')
         {
           // Looks dangerous but name[80] is big enough

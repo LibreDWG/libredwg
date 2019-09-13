@@ -34,13 +34,13 @@
   VERSIONS(R_13, R_14)
     {
 #ifdef IS_DECODER
-      obj->bitsize = bit_read_RL(dat); // until the handles
+      obj->bitsize = bit_read_RL (dat); // until the handles
 #endif
 #ifdef IS_ENCODER
-      bit_write_RL(dat, obj->bitsize);
+      bit_write_RL (dat, obj->bitsize);
 #endif
-      LOG_TRACE("Entity bitsize: " FORMAT_BL " @%lu.%u\n", obj->bitsize,
-                dat->byte, dat->bit)
+      LOG_TRACE("bitsize: " FORMAT_BL " @%lu.%u\n", obj->bitsize,
+                dat->byte - 4, dat->bit)
     }
 
   // TODO: r13-r14: 6B flags + 6B common params
