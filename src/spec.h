@@ -42,12 +42,6 @@
 #  define SET_PARENT_OBJ(field)
 #  define SET_PARENT_FIELD(field, what_parent, obj)
 
-#  ifndef M_PI_2
-#    define M_PI_2 1.57079632679489661923132169163975144
-#  endif
-#  define rad2deg(ang) (ang) * 90.0 / M_PI_2
-#  define deg2rad(ang) (ang) * M_PI_2 / 90.0
-
 #  define VALUEOUTOFBOUNDS(field, maxvalue)                                   \
     if (_obj->field > maxvalue)                                               \
       {                                                                       \
