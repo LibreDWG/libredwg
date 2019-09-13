@@ -199,48 +199,48 @@ static void _prefix (Bit_Chain *dat);
 #define FIELD_VALUE(nam) _obj->nam
 #define ANYCODE -1
 // todo: only the name, not the ref
-#define VALUE_HANDLE(hdlptr, nam, handle_code, dxf)                     \
-  if (hdlptr)                                                           \
-    {                                                                   \
-      fprintf (dat->fh, FORMAT_H ",\n", ARGS_H(hdlptr->handleref));     \
-    }                                                                   \
-  else                                                                  \
-    {                                                                   \
-      fprintf (dat->fh, "[0, 0],\n");                                   \
+#define VALUE_HANDLE(hdlptr, nam, handle_code, dxf)                           \
+  if (hdlptr)                                                                 \
+    {                                                                         \
+      fprintf (dat->fh, FORMAT_H ",\n", ARGS_H (hdlptr->handleref));          \
+    }                                                                         \
+  else                                                                        \
+    {                                                                         \
+      fprintf (dat->fh, "[0, 0],\n");                                         \
     }
-#define VALUE_H(hdl, dxf)                                               \
-  fprintf (dat->fh, FORMAT_H ",\n", ARGS_H(hdl))
-#define FIELD_HANDLE(nam, handle_code, dxf)                             \
-  {                                                                     \
-    if (_obj->nam)                                                      \
-      {                                                                 \
-        PREFIX fprintf (dat->fh, "\"" #nam "\": " FORMAT_H ",\n",       \
-                        ARGS_H(_obj->nam->handleref));                  \
-      }                                                                 \
-    else                                                                \
-      {                                                                 \
-        PREFIX fprintf (dat->fh, "\"" #nam "\": [0, 0],\n");            \
-      }                                                                 \
+#define VALUE_H(hdl, dxf) fprintf (dat->fh, FORMAT_H ",\n", ARGS_H (hdl))
+#define FIELD_HANDLE(nam, handle_code, dxf)                                   \
+  {                                                                           \
+    if (_obj->nam)                                                            \
+      {                                                                       \
+        PREFIX fprintf (dat->fh, "\"" #nam "\": " FORMAT_H ",\n",             \
+                        ARGS_H (_obj->nam->handleref));                       \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        PREFIX fprintf (dat->fh, "\"" #nam "\": [0, 0],\n");                  \
+      }                                                                       \
   }
-#define SUB_FIELD_HANDLE(o, nam, handle_code, dxf)                      \
-  if (_obj->o.nam)                                                      \
-    {                                                                   \
-      PREFIX fprintf (dat->fh, "\"" #nam "\": " FORMAT_H ",\n",         \
-               ARGS_H(_obj->o.nam->handleref));                         \
-    }                                                                   \
-  else                                                                  \
-    {                                                                   \
-      PREFIX fprintf (dat->fh, "\"" #nam "\": [0, 0],\n");              \
+#define SUB_FIELD_HANDLE(o, nam, handle_code, dxf)                            \
+  if (_obj->o.nam)                                                            \
+    {                                                                         \
+      PREFIX fprintf (dat->fh, "\"" #nam "\": " FORMAT_H ",\n",               \
+                      ARGS_H (_obj->o.nam->handleref));                       \
+    }                                                                         \
+  else                                                                        \
+    {                                                                         \
+      PREFIX fprintf (dat->fh, "\"" #nam "\": [0, 0],\n");                    \
     }
 #define FIELD_DATAHANDLE(nam, code, dxf) FIELD_HANDLE (nam, code, dxf)
-#define FIELD_HANDLE_N(nam, vcount, handle_code, dxf)                   \
-  if (_obj->nam)                                                        \
-    {                                                                   \
-      PREFIX fprintf (dat->fh, FORMAT_H ",\n", ARGS_H(_obj->nam->handleref)); \
-    }                                                                   \
-  else                                                                  \
-    {                                                                   \
-      PREFIX fprintf (dat->fh, "[0, 0],\n");                            \
+#define FIELD_HANDLE_N(nam, vcount, handle_code, dxf)                         \
+  if (_obj->nam)                                                              \
+    {                                                                         \
+      PREFIX fprintf (dat->fh, FORMAT_H ",\n",                                \
+                      ARGS_H (_obj->nam->handleref));                         \
+    }                                                                         \
+  else                                                                        \
+    {                                                                         \
+      PREFIX fprintf (dat->fh, "[0, 0],\n");                                  \
     }
 #define FIELD_BINARY(nam, size, dxf)                                          \
   {                                                                           \
@@ -544,8 +544,8 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
     HASH;
 #undef END_REPEAT_BLOCK
 #define END_REPEAT_BLOCK                                                      \
-    NOCOMMA;                                                                  \
-    ENDHASH;                                                                  \
+  NOCOMMA;                                                                    \
+  ENDHASH;                                                                    \
   }
 #undef END_REPEAT
 #define END_REPEAT(nam)                                                       \
@@ -561,8 +561,8 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
 #define FIELD_XDATA(nam, size)
 
 #define REACTORS(code)                                                        \
-   if (dat->version >= R_13 && obj->tio.object->num_reactors &&               \
-      obj->tio.object->reactors)                                              \
+  if (dat->version >= R_13 && obj->tio.object->num_reactors                   \
+      && obj->tio.object->reactors)                                           \
     {                                                                         \
       KEY (reactors);                                                         \
       ARRAY;                                                                  \
@@ -573,36 +573,35 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
         }                                                                     \
       NOCOMMA;                                                                \
       ENDARRAY;                                                               \
-  }
+    }
 #define ENT_REACTORS(code)                                                    \
-   if (dat->version >= R_13 && ent->num_reactors && ent->reactors)            \
+  if (dat->version >= R_13 && ent->num_reactors && ent->reactors)             \
     {                                                                         \
       KEY (reactors);                                                         \
       ARRAY;                                                                  \
       for (vcount = 0; vcount < ent->num_reactors; vcount++)                  \
         {                                                                     \
-          PREFIX VALUE_HANDLE (ent->reactors[vcount], reactors,               \
-                               code, 330);                                    \
+          PREFIX VALUE_HANDLE (ent->reactors[vcount], reactors, code, 330);   \
         }                                                                     \
       NOCOMMA;                                                                \
       ENDARRAY;                                                               \
-  }
+    }
 
-#define XDICOBJHANDLE(code)                                             \
-  if ((dat->version < R_2004 || obj->tio.object->xdic_missing_flag != 0) && \
-      (obj->tio.object->xdicobjhandle != NULL) &&                       \
-      (obj->tio.object->xdicobjhandle->handleref.value != 0))           \
-    {                                                                   \
-      KEY (xdicobjhandle);                                              \
+#define XDICOBJHANDLE(code)                                                   \
+  if ((dat->version < R_2004 || obj->tio.object->xdic_missing_flag != 0)      \
+      && (obj->tio.object->xdicobjhandle != NULL)                             \
+      && (obj->tio.object->xdicobjhandle->handleref.value != 0))              \
+    {                                                                         \
+      KEY (xdicobjhandle);                                                    \
       VALUE_HANDLE (obj->tio.object->xdicobjhandle, xdicobjhandle, code, -3); \
     }
-#define ENT_XDICOBJHANDLE(code)                                         \
-  if ((dat->version < R_2004 || (ent->xdic_missing_flag != 0)) &&       \
-      (ent->xdicobjhandle != NULL) &&                                   \
-      (ent->xdicobjhandle->handleref.value != 0))                       \
-    {                                                                   \
-      KEY (xdicobjhandle);                                              \
-      VALUE_HANDLE (ent->xdicobjhandle, xdicobjhandle, code, -3);       \
+#define ENT_XDICOBJHANDLE(code)                                               \
+  if ((dat->version < R_2004 || (ent->xdic_missing_flag != 0))                \
+      && (ent->xdicobjhandle != NULL)                                         \
+      && (ent->xdicobjhandle->handleref.value != 0))                          \
+    {                                                                         \
+      KEY (xdicobjhandle);                                                    \
+      VALUE_HANDLE (ent->xdicobjhandle, xdicobjhandle, code, -3);             \
     }
 
 #define COMMON_ENTITY_HANDLE_DATA
@@ -686,9 +685,10 @@ json_common_entity_data (Bit_Chain *restrict dat,
   ent = obj->tio.entity;
   _obj = ent;
 
+  // clang-format off
   #include "common_entity_handle_data.spec"
-
   #include "common_entity_data.spec"
+  // clang-format on
 
   return error;
 }
@@ -854,7 +854,9 @@ dwg_json_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   // almost always false
   is_entity = dwg_class_is_entity (klass);
 
-#include "classes.inc"
+  // clang-format off
+  #include "classes.inc"
+  // clang-format on
 
   return DWG_ERR_UNHANDLEDCLASS;
 }
@@ -1055,8 +1057,8 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
               LOG_WARN ("Unknown object, skipping eed/reactors/xdic");
               SINCE (R_2000){
                 LOG_INFO ("Object bitsize: %u\n", obj->bitsize)
-              }
-              LOG_INFO ("Object handle: " FORMAT_H "\n", ARGS_H(obj->handle));
+              } LOG_INFO ("Object handle: " FORMAT_H "\n",
+                          ARGS_H (obj->handle));
             }
         }
     }
@@ -1074,7 +1076,9 @@ json_fileheader_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   KEY (version);
   fprintf (dat->fh, "\"%s\",\n", version_codes[dwg->header.version]);
 
-#include "header.spec"
+  // clang-format off
+  #include "header.spec"
+  // clang-format on
 
   ENDRECORD ();
   return 0;
@@ -1094,7 +1098,9 @@ json_header_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             : (dwg->header.version >= R_2007) ? "UTF-8" : "ANSI_1252";
 
   RECORD (HEADER); // single hash
-#include "header_variables.spec"
+                   // clang-format off
+  #include "header_variables.spec"
+  // clang-format on
   ENDRECORD ();
   return 0;
 }

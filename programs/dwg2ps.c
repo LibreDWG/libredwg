@@ -72,8 +72,8 @@ help (void)
 
 /* handles r2007 wide chars (=> utf8) */
 static int
-set_info (PSDoc *restrict ps, Dwg_Data *restrict dwg,
-          const char *restrict key, char *restrict text)
+set_info (PSDoc *restrict ps, Dwg_Data *restrict dwg, const char *restrict key,
+          char *restrict text)
 {
   int ret = 0;
   if (dwg->header.version >= R_2007 && text)
@@ -124,7 +124,7 @@ create_postscript (Dwg_Data *dwg, char *output)
   (void)set_info (ps, dwg, "Author", dwg->summaryinfo.LASTSAVEDBY);
   if (set_info (ps, dwg, "Title", dwg->summaryinfo.TITLE))
     set_info (ps, dwg, "Keywords", dwg->summaryinfo.KEYWORDS);
-  else  
+  else
     {
       PS_set_info (ps, "Title", output);
       PS_set_info (ps, "Keywords", "dwg, postscript, conversion, CAD, plot");

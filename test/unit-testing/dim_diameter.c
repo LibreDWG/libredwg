@@ -20,19 +20,23 @@ api_process (dwg_object *obj)
 
   /* common */
   CHK_ENTITY_TYPE (dim, DIMENSION_DIAMETER, class_version, RC, class_version);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_DIAMETER, lspace_style, BS, lspace_style);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_DIAMETER, lspace_factor, BD, lspace_factor);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_DIAMETER, act_measurement,
-                         BD, act_measurement);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_DIAMETER, lspace_style, BS,
+                         lspace_style);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_DIAMETER, lspace_factor, BD,
+                         lspace_factor);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_DIAMETER, act_measurement, BD,
+                         act_measurement);
   CHK_ENTITY_TYPE (dim, DIMENSION_DIAMETER, attachment, BS, attachment);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_DIAMETER, elevation, BD, elevation);
   CHK_ENTITY_3RD (dim, DIMENSION_DIAMETER, extrusion, ext);
   CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_DIAMETER, clone_ins_pt, pt12);
   CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_DIAMETER, text_midpt, text_midpt);
   CHK_ENTITY_UTF8TEXT (dim, DIMENSION_DIAMETER, user_text, user_text);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_DIAMETER, text_rotation, BD, text_rotation);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_DIAMETER, text_rotation, BD,
+                         text_rotation);
   CHK_ENTITY_3RD_W_OLD (dim, DIMENSION_DIAMETER, ins_scale, ins_scale);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_DIAMETER, ins_rotation, BD, ins_rotation);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_DIAMETER, ins_rotation, BD,
+                         ins_rotation);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_DIAMETER, horiz_dir, BD, horiz_dir);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_DIAMETER, flip_arrow1, B, flip_arrow1);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_DIAMETER, flip_arrow2, B, flip_arrow2);
@@ -45,7 +49,8 @@ api_process (dwg_object *obj)
                         first_arc_pt);
   CHK_ENTITY_TYPE (dim_diameter, DIMENSION_DIAMETER, leader_len, BD,
                    leader_len);
-  if (leader_len != dwg_ent_dim_diameter_get_leader_length (dim_diameter, &error)
+  if (leader_len
+          != dwg_ent_dim_diameter_get_leader_length (dim_diameter, &error)
       || error)
     fail ("old API dwg_ent_dim_diameter_get_leader_length");
   else

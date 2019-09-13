@@ -45,7 +45,8 @@ api_process (dwg_object *obj)
     fail ("old API dwg_ent_body_get_point");
 
   CHK_ENTITY_TYPE (body, BODY, isoline_present, B, isoline_present);
-  if (dwg_ent_body_get_isoline_present (body, &error) != isoline_present || error)
+  if (dwg_ent_body_get_isoline_present (body, &error) != isoline_present
+      || error)
     fail ("old API dwg_ent_body_get_isoline_present");
   CHK_ENTITY_TYPE (body, BODY, num_isolines, BL, num_isolines);
   if (dwg_ent_body_get_num_isolines (body, &error) != num_isolines || error)
@@ -61,8 +62,7 @@ api_process (dwg_object *obj)
   if (!error)
     {
       for (i = 0; i < num_wires; i++)
-        printf ("BODY.wire[%u]: " FORMAT_BL "\n", i,
-                wire[i].selection_marker);
+        printf ("BODY.wire[%u]: " FORMAT_BL "\n", i, wire[i].selection_marker);
     }
   else
     fail ("num wires");

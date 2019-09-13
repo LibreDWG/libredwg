@@ -79,8 +79,8 @@ static struct _unknown_dxf
   const int bitsize;
   const struct _unknown_field *fields;
 } unknown_dxf[] = {
-  // see log_unknown_dxf.pl
-  #include "alldxf_0.inc"
+// see log_unknown_dxf.pl
+#include "alldxf_0.inc"
   { NULL, NULL, 0, "", 0, 0, 0, 0, 0, 0, 0, NULL }
 };
 
@@ -91,7 +91,7 @@ struct _dxf
 {
   unsigned char *found;    // coverage per bit for found 1
   unsigned char *possible; // coverage for mult. finds >1
-  int num_bits;             // copy of unknown_dxf.num_bits
+  int num_bits;            // copy of unknown_dxf.num_bits
   int num_filled;
   int num_empty;
   int num_possible;
@@ -129,7 +129,7 @@ static struct _unknown {
      97 TABLESTYLE
     */
     // see log_unknown.pl
-  #include "alldwg.inc"
+#  include "alldwg.inc"
 
   { 0, NULL, "", "", NULL, 0L, 0, 0, 0, 0, 0, 0 }
 };
@@ -140,8 +140,8 @@ static struct _bd
   const char *value;
   const char *bin;
 } bd[] = {
-  // see bd-unknown.pl
-  #include "bd-unknown.inc"
+// see bd-unknown.pl
+#include "bd-unknown.inc"
   { NULL, NULL }
 };
 
@@ -320,7 +320,7 @@ bits_CMC (Bit_Chain *restrict dat, struct _unknown_field *restrict g)
       // check next g field
       struct _unknown_field *ng = g + 1;
       struct _unknown_field *ng2 = g + 2;
-      //TODO: need to detect book_name (flag 2)
+      // TODO: need to detect book_name (flag 2)
       if (ng->code >= 420 && ng->code < 430)
         {
           color.rgb = strtol (ng->value, NULL, 10);
@@ -461,8 +461,7 @@ bits_handle (Bit_Chain *restrict dat, struct _unknown_field *restrict g,
     handle.size = 3;
   else
     handle.size = 4;
-  printf ("  handle " FORMAT_H " (%X)\n", ARGS_H(handle),
-          objhandle);
+  printf ("  handle " FORMAT_H " (%X)\n", ARGS_H (handle), objhandle);
   bit_write_H (dat, &handle);
   g->type = BITS_HANDLE;
 }
@@ -489,14 +488,15 @@ bits_try_handle (struct _unknown_field *g, int code, unsigned int objhandle)
 static int
 dxf_is16 (struct _unknown_dxf *dxf)
 {
-  return strstr (dxf->dxf, "/2007/")
-    || strstr (dxf->dxf, "_2007.dxf")
-    || strstr (dxf->dxf, "/201")
-    || strstr (dxf->dxf, "_201") ? 1 : 0;
+  return strstr (dxf->dxf, "/2007/") || strstr (dxf->dxf, "_2007.dxf")
+                 || strstr (dxf->dxf, "/201") || strstr (dxf->dxf, "_201")
+             ? 1
+             : 0;
 }
 
 static void
-bits_format (struct _unknown_field *g, const int version, struct _unknown_dxf *dxf)
+bits_format (struct _unknown_field *g, const int version,
+             struct _unknown_dxf *dxf)
 {
   int code = g->code;
   Bit_Chain dat = { NULL, 16, 0, 0, NULL, 0, 0 };
@@ -812,7 +812,9 @@ main (int argc, char *argv[])
   char *classes[MAX_CLASSES]; // create files per classes
   struct _dxf *dxf = calloc (sizeof (unknown_dxf) / sizeof (unknown_dxf[0]),
                              sizeof (struct _dxf));
-#include "alldxf_2.inc"
+// clang-format off
+  #include "alldxf_2.inc"
+  // clang-format on
 
   if (argc > 2 && !strcmp (argv[i], "--class"))
     {
@@ -905,7 +907,7 @@ main (int argc, char *argv[])
             {
               s = strstr (unknown_dxf[i].dxf, "_r");
               if (s)
-                sscanf (s+2, "%d", &version);
+                sscanf (s + 2, "%d", &version);
             }
           dxf[i].found = calloc (1, unknown_dxf[i].num_bits + 1);
           dxf[i].possible = calloc (1, unknown_dxf[i].num_bits + 1);
@@ -1430,8 +1432,8 @@ main (int argc, char *argv[])
                       "%s %d: %s [%s] found 3 at offsets %d-%d, %d, %d /%d\n",
                       3 == g[j].num ? "+" : "?", g[j].code, g[j].value,
                       dwg_bits_name[g[j].type], g[j].pos[0],
-                      g[j].pos[0] + g[j].num_bits - 1, g[j].pos[1], g[j].pos[2],
-                      size);
+                      g[j].pos[0] + g[j].num_bits - 1, g[j].pos[1],
+                      g[j].pos[2], size);
                   if (3 == g[j].num)
                     {
                       printf ("        and we have %d same DXF fields\n", 3);

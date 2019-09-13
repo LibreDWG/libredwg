@@ -155,11 +155,12 @@ output_INSERT (Dwg_Object *obj)
               transform_Y (insert->ins_pt.y),
               (180.0 / M_PI) * insert->rotation, insert->scale.x,
               insert->scale.y, insert->block_header->absolute_ref,
-              ARGS_H(insert->block_header->handleref));
+              ARGS_H (insert->block_header->handleref));
     }
   else
     {
-      printf ("\n\n<!-- WRONG INSERT(" FORMAT_H ") -->\n", ARGS_H(obj->handle));
+      printf ("\n\n<!-- WRONG INSERT(" FORMAT_H ") -->\n",
+              ARGS_H (obj->handle));
     }
 }
 

@@ -32,9 +32,10 @@ api_process (dwg_object *obj)
     {
       for (i = 0; i < num_verts; i++)
         {
-          ok ("MLINE.vertex[%d]: (%f, %f, %f)", i,
-              verts[i].vertex.x, verts[i].vertex.y, verts[i].vertex.z);
-          if (memcmp (&v1[i].vertex, &verts[i].vertex, sizeof (verts[i].vertex)))
+          ok ("MLINE.vertex[%d]: (%f, %f, %f)", i, verts[i].vertex.x,
+              verts[i].vertex.y, verts[i].vertex.z);
+          if (memcmp (&v1[i].vertex, &verts[i].vertex,
+                      sizeof (verts[i].vertex)))
             fail ("MLINE.verts[%d]", i);
         }
     }

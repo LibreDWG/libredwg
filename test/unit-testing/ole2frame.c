@@ -26,9 +26,8 @@ api_process (dwg_object *obj)
 #if 0
       || memcmp (&data, &data1, data_length)
 #endif
-      )
+  )
     fail ("TODO: dynapi data: %p, old api data: %p", data, data1);
   else
     ok ("OLE2FRAME.data: %p == old api data: %p", data, data1);
-
 }

@@ -35,15 +35,15 @@
 #include <stdio.h>
 #include "config.h"
 #ifdef HAVE_WCHAR_H
-# include <wchar.h>
+#  include <wchar.h>
 #endif
 #include "common.h"
 #include "dwg.h"
 
 // avoid double linkage on windows with unit-testing
 #if defined(BITS_TEST_C) || defined(DECODE_TEST_C)
-# undef EXPORT
-# define EXPORT
+#  undef EXPORT
+#  define EXPORT
 #endif
 
 /**
@@ -224,13 +224,11 @@ BITCODE_T bit_read_T (Bit_Chain *restrict dat);
 void bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict chain);
 
 /* Converts UCS-2 to UTF-8, returning a copy. */
-EXPORT char *bit_convert_TU (BITCODE_TU restrict wstr)
-  ATTRIBUTE_MALLOC;
+EXPORT char *bit_convert_TU (BITCODE_TU restrict wstr) ATTRIBUTE_MALLOC;
 
 /** Converts UTF-8 to UCS-2. Returns a copy.
     Eventually needed by dwg writers (dxf2dwg) */
-EXPORT BITCODE_TU bit_utf8_to_TU (char *restrict str)
-  ATTRIBUTE_MALLOC;
+EXPORT BITCODE_TU bit_utf8_to_TU (char *restrict str) ATTRIBUTE_MALLOC;
 
 /* compare an ASCII/utf-8 string to a r2007+ name */
 int bit_eq_TU (const char *str, BITCODE_TU restrict wstr);
@@ -247,10 +245,10 @@ void bit_write_TIMERLL (Bit_Chain *dat, BITCODE_TIMERLL date);
 void bit_read_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color);
 void bit_write_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color);
 
-void bit_read_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat,
-                   Bit_Chain *str_dat, Dwg_Color *restrict color);
-void bit_write_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat,
-                    Bit_Chain *str_dat, Dwg_Color *restrict color);
+void bit_read_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
+                   Dwg_Color *restrict color);
+void bit_write_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
+                    Dwg_Color *restrict color);
 
 int bit_search_sentinel (Bit_Chain *dat, unsigned char sentinel[16]);
 void bit_write_sentinel (Bit_Chain *dat, unsigned char sentinel[16]);

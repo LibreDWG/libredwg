@@ -69,7 +69,7 @@ static unsigned int cur_ver = 0;
   if (handleptr)                                                              \
     {                                                                         \
       LOG_TRACE (#name ": HANDLE" FORMAT_REF "/%u [%d]\n",                    \
-                 ARGS_REF(handleptr), handleptr->absolute_ref, dxf);          \
+                 ARGS_REF (handleptr), handleptr->absolute_ref, dxf);         \
     }
 #define FIELD_HANDLE(nam, handle_code, dxf)                                   \
   VALUE_HANDLE (_obj->nam, nam, handle_code, dxf)
@@ -79,9 +79,8 @@ static unsigned int cur_ver = 0;
 #define VALUE_HANDLE_N(handleptr, name, vcount, handle_code, dxf)             \
   if (handleptr)                                                              \
     {                                                                         \
-      LOG_TRACE (#name "[%d]: HANDLE" FORMAT_REF "/%u [%d]\n",                \
-                 (int)vcount, ARGS_REF(handleptr), handleptr->absolute_ref,   \
-                 dxf);                                                        \
+      LOG_TRACE (#name "[%d]: HANDLE" FORMAT_REF "/%u [%d]\n", (int)vcount,   \
+                 ARGS_REF (handleptr), handleptr->absolute_ref, dxf);         \
     }
 #define FIELD_HANDLE_N(name, vcount, handle_code, dxf)                        \
   VALUE_HANDLE_N (_obj->name, name, vcount, handle_code, dxf)
@@ -189,7 +188,7 @@ static unsigned int cur_ver = 0;
                      (int)_obj->color.alpha, dxf2 + 20);                      \
         if (_obj->color.flag & 0x40)                                          \
           LOG_TRACE (#color ".handle: " FORMAT_REF " [ENC.H %d]\n",           \
-                     ARGS_REF(_obj->color.handle), dxf2 + 10);                \
+                     ARGS_REF (_obj->color.handle), dxf2 + 10);               \
         if (_obj->color.flag & 0x80)                                          \
           LOG_TRACE (#color ".rgb: 0x%06x [ENC.BL %d]\n",                     \
                      (unsigned)_obj->color.rgb, dxf2);                        \
@@ -341,7 +340,7 @@ static unsigned int cur_ver = 0;
     LOG_INFO ("Entity " #token ":\n")                                         \
     _ent = obj->tio.entity;                                                   \
     _obj = ent = _ent->tio.token;                                             \
-    LOG_TRACE ("Entity handle: " FORMAT_H "\n", ARGS_H(obj->handle))
+    LOG_TRACE ("Entity handle: " FORMAT_H "\n", ARGS_H (obj->handle))
 
 #define DWG_ENTITY_END                                                        \
   return 0;                                                                   \
@@ -359,7 +358,7 @@ static unsigned int cur_ver = 0;
     int error = 0;                                                            \
     LOG_INFO ("Object " #token ":\n")                                         \
     _obj = obj->tio.object->tio.token;                                        \
-    LOG_TRACE ("Object handle: " FORMAT_H "\n", ARGS_H(obj->handle))
+    LOG_TRACE ("Object handle: " FORMAT_H "\n", ARGS_H (obj->handle))
 
 #define DWG_OBJECT_END                                                        \
   return 0;                                                                   \
@@ -388,7 +387,9 @@ dwg_print_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   // almost always false
   is_entity = dwg_class_is_entity (klass);
 
-#include "classes.inc"
+  // clang-format off
+  #include "classes.inc"
+  // clang-format on
 
   return DWG_ERR_UNHANDLEDCLASS;
 }
@@ -598,8 +599,8 @@ dwg_print_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
               LOG_WARN ("Unknown object, skipping eed/reactors/xdic");
               SINCE (R_2000){
                 LOG_INFO ("Object bitsize: %u\n", obj->bitsize)
-              }
-              LOG_INFO ("Object handle: " FORMAT_H "\n", ARGS_H(obj->handle));
+              } LOG_INFO ("Object handle: " FORMAT_H "\n",
+                          ARGS_H (obj->handle));
               return error | DWG_ERR_INVALIDTYPE;
             }
         }

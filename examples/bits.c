@@ -109,8 +109,7 @@ decode (Bit_Chain *dat, int off, const int size)
       p = (int)bit_position (dat);
       if (!err && h.size == 1 && p <= size - off)
         {
-          printf ("%x.%d.%lX H @%d (%d)\n", h.code, h.size, h.value, p,
-                  size);
+          printf ("%x.%d.%lX H @%d (%d)\n", h.code, h.size, h.value, p, size);
           pos = p;
         }
       bit_set_position (dat, off);
@@ -166,7 +165,7 @@ decode (Bit_Chain *dat, int off, const int size)
       if (maxoff < pos)
         maxoff = pos;
       // printf ("offset %d\n", pos);
-      return decode (dat, off+1, size);
+      return decode (dat, off + 1, size);
     }
   return 0;
 }
@@ -184,7 +183,8 @@ main (int argc, char *argv[])
       printf ("usage: examples/bits "
               "001100000000000000000000000000011000000000000000100000001010010"
               "00\n");
-      printf ("or examples/bits -x '8055 40f9 3284 d222 3e40 7436 e0d9 23fd'\n");
+      printf (
+          "or examples/bits -x '8055 40f9 3284 d222 3e40 7436 e0d9 23fd'\n");
       return 1;
     }
   if (argc > 2 && !strcmp (argv[1], "-x"))
@@ -197,10 +197,10 @@ main (int argc, char *argv[])
       i = 1;
     }
 
-  //dat.chain = malloc (size + 1);
-  //dat.size = size;
+  // dat.chain = malloc (size + 1);
+  // dat.size = size;
   dat.version = R_2004;
-  do 
+  do
     {
       char *input = argv[i];
       int bits = strlen (input);

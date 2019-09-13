@@ -182,10 +182,12 @@ dwg_version_as (const char *version)
     return R_INVALID;
 }
 
-/* replace from ("[rcount1]") with to ("[%d]") in s (e.g. "ref[rcount1].classname").
-   s is a global constant (#nam), so we cannot change it in-place.
+/* replace from ("[rcount1]") with to ("[%d]") in s (e.g.
+   "ref[rcount1].classname"). s is a global constant (#nam), so we cannot
+   change it in-place.
  */
-char *strrplc (const char* s, const char *from, const char *to)
+char *
+strrplc (const char *s, const char *from, const char *to)
 {
   char *p = strstr (s, from);
   if (p)
@@ -204,7 +206,8 @@ char *strrplc (const char* s, const char *from, const char *to)
 }
 
 // print errors as string to stderr
-EXPORT void dwg_errstrings (int error)
+EXPORT void
+dwg_errstrings (int error)
 {
   if (error & 1)
     fprintf (stderr, "WRONGCRC ");
@@ -239,4 +242,3 @@ EXPORT void dwg_errstrings (int error)
     fprintf (stderr, "OUTOFMEM ");
   fprintf (stderr, "\n");
 }
-

@@ -9,16 +9,18 @@ api_process (dwg_object *obj)
   dwg_point_3d ins_pt, x_dir, ext, pt3d;
   char *text_string;
   BITCODE_BS unknown_short;
-  BITCODE_H dimstyle; 
+  BITCODE_H dimstyle;
 
   Dwg_Version_Type version = obj->parent->header.version;
   dwg_ent_tolerance *tolerance = dwg_object_to_TOLERANCE (obj);
 
   if (tolerance->text_string)
     {
-      CHK_ENTITY_UTF8TEXT_W_OLD (tolerance, TOLERANCE, text_string, text_string);
+      CHK_ENTITY_UTF8TEXT_W_OLD (tolerance, TOLERANCE, text_string,
+                                 text_string);
       /*if (version < R_2007 &&
-        (strcmp (dwg_ent_tolerance_get_text_string (tolerance, &error), text_string)
+        (strcmp (dwg_ent_tolerance_get_text_string (tolerance, &error),
+        text_string)
         || error))
         fail ("old API dwg_ent_tolerance_get_text_string");*/
     }

@@ -162,7 +162,7 @@ main (int argc, char *argv[])
 
   // forget about valgrind. really huge DWG's need endlessly here.
   if ((dwg.header.version && dwg.num_objects < 1000)
-#if defined __SANITIZE_ADDRESS__ || __has_feature (address_sanitizer)
+#if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
       || 1
 #endif
 #ifdef HAVE_VALGRIND_VALGRIND_H

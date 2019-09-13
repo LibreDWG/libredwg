@@ -115,7 +115,7 @@ DWG_GETALL_ENTITY (LIGHT)
 DWG_GETALL_ENTITY (MULTILEADER)
 DWG_GETALL_ENTITY (UNDERLAY)
 DWG_GETALL_ENTITY (WIPEOUT)
-#ifdef DEBUG_CLASSES
+#  ifdef DEBUG_CLASSES
 DWG_GETALL_ENTITY (TABLE)
 DWG_GETALL_ENTITY (PLANESURFACE)
 DWG_GETALL_ENTITY (GEOPOSITIONMARKER)
@@ -123,7 +123,7 @@ DWG_GETALL_ENTITY (EXTRUDEDSURFACE)
 DWG_GETALL_ENTITY (LOFTEDSURFACE)
 DWG_GETALL_ENTITY (REVOLVEDSURFACE)
 DWG_GETALL_ENTITY (SWEPTSURFACE)
-#endif
+#  endif
 // DWG_GETALL_ENTITY(ARC_DIMENSION)
 
 /********************************************************************
@@ -194,7 +194,7 @@ DWG_GETALL_OBJECT (OBJECT_PTR)
 DWG_GETALL_OBJECT (PERSSUBENTMANAGER)
 DWG_GETALL_OBJECT (UNDERLAYDEFINITION)
 DWG_GETALL_OBJECT (VISUALSTYLE)
-#ifdef DEBUG_CLASSES
+#  ifdef DEBUG_CLASSES
 DWG_GETALL_OBJECT (TABLECONTENT)
 DWG_GETALL_OBJECT (TABLEGEOMETRY)
 DWG_GETALL_OBJECT (CELLSTYLEMAP)
@@ -231,7 +231,7 @@ DWG_GETALL_OBJECT (NAVISWORKSMODELDEF)
 // DWG_GETALL_OBJECT(SECTIONVIEWSTYLE)
 // DWG_GETALL_OBJECT(TABLESTYLE)
 // DWG_GETALL_OBJECT(XREFPANELOBJECT)
-#endif
+#  endif
 
 #endif /* __AFL_COMPILER */
 
@@ -301,7 +301,7 @@ CAST_DWG_OBJECT_TO_ENTITY_BYNAME (LIGHT)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (MULTILEADER)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (UNDERLAY)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (WIPEOUT)
-#ifdef DEBUG_CLASSES
+#  ifdef DEBUG_CLASSES
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (TABLE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (PLANESURFACE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (GEOPOSITIONMARKER)
@@ -309,7 +309,7 @@ CAST_DWG_OBJECT_TO_ENTITY_BYNAME (EXTRUDEDSURFACE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (LOFTEDSURFACE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (REVOLVEDSURFACE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (SWEPTSURFACE)
-#endif
+#  endif
 
 #endif /* __AFL_COMPILER */
 
@@ -377,7 +377,7 @@ CAST_DWG_OBJECT_TO_OBJECT (GEODATA)
 CAST_DWG_OBJECT_TO_OBJECT (OBJECT_PTR)
 CAST_DWG_OBJECT_TO_OBJECT (PERSSUBENTMANAGER)
 CAST_DWG_OBJECT_TO_OBJECT (UNDERLAYDEFINITION)
-#ifdef DEBUG_CLASSES
+#  ifdef DEBUG_CLASSES
 CAST_DWG_OBJECT_TO_OBJECT (TABLECONTENT)
 CAST_DWG_OBJECT_TO_OBJECT (TABLEGEOMETRY)
 CAST_DWG_OBJECT_TO_OBJECT (CELLSTYLEMAP)
@@ -414,7 +414,7 @@ CAST_DWG_OBJECT_TO_OBJECT (NAVISWORKSMODELDEF)
 // CAST_DWG_OBJECT_TO_OBJECT(SECTIONVIEWSTYLE)
 // CAST_DWG_OBJECT_TO_OBJECT(TABLESTYLE)
 // CAST_DWG_OBJECT_TO_OBJECT(XREFPANELOBJECT)
-#endif
+#  endif
 
 /*******************************************************************
  *                FUNCTIONS START HERE ENTITY SPECIFIC               *
@@ -479,8 +479,8 @@ dwg_get_HEADER (const Dwg_Data *restrict dwg, const char *restrict fieldname,
 }
 
 EXPORT bool
-dwg_get_HEADER_utf8text (const Dwg_Data *restrict dwg, const char *restrict fieldname,
-                         char **restrict textp)
+dwg_get_HEADER_utf8text (const Dwg_Data *restrict dwg,
+                         const char *restrict fieldname, char **restrict textp)
 {
 #ifndef HAVE_NONNULL
   if (dwg && fieldname && out)
@@ -507,7 +507,8 @@ dwg_set_HEADER (Dwg_Data *restrict dwg, const char *restrict fieldname,
 }
 
 EXPORT bool
-dwg_set_HEADER_utf8text (Dwg_Data *restrict dwg, const char *restrict fieldname,
+dwg_set_HEADER_utf8text (Dwg_Data *restrict dwg,
+                         const char *restrict fieldname,
                          const char *restrict utf8)
 {
 #ifndef HAVE_NONNULL
@@ -535,7 +536,8 @@ dwg_get_ENTITY_common (Dwg_Object_Entity *restrict obj,
 }
 
 EXPORT bool
-dwg_set_ENTITY_common (Dwg_Object_Entity *restrict obj, const char *restrict fieldname,
+dwg_set_ENTITY_common (Dwg_Object_Entity *restrict obj,
+                       const char *restrict fieldname,
                        const void *restrict value)
 {
 #ifndef HAVE_NONNULL
@@ -549,8 +551,8 @@ dwg_set_ENTITY_common (Dwg_Object_Entity *restrict obj, const char *restrict fie
 }
 
 EXPORT bool
-dwg_get_OBJECT_common (Dwg_Object_Object *restrict obj, const char *restrict fieldname,
-                       void *restrict out)
+dwg_get_OBJECT_common (Dwg_Object_Object *restrict obj,
+                       const char *restrict fieldname, void *restrict out)
 {
 #ifndef HAVE_NONNULL
   if (obj && fieldname && out)
@@ -563,7 +565,8 @@ dwg_get_OBJECT_common (Dwg_Object_Object *restrict obj, const char *restrict fie
 }
 
 EXPORT bool
-dwg_set_OBJECT_common (Dwg_Object_Object *restrict obj, const char *restrict fieldname,
+dwg_set_OBJECT_common (Dwg_Object_Object *restrict obj,
+                       const char *restrict fieldname,
                        const void *restrict value)
 {
 #ifndef HAVE_NONNULL
@@ -577,7 +580,8 @@ dwg_set_OBJECT_common (Dwg_Object_Object *restrict obj, const char *restrict fie
 }
 
 EXPORT bool
-dwg_get_ENTITY_common_utf8text (Dwg_Object_Entity *restrict obj, const char *restrict fieldname,
+dwg_get_ENTITY_common_utf8text (Dwg_Object_Entity *restrict obj,
+                                const char *restrict fieldname,
                                 char **restrict textp)
 {
 #ifndef HAVE_NONNULL
@@ -591,7 +595,8 @@ dwg_get_ENTITY_common_utf8text (Dwg_Object_Entity *restrict obj, const char *res
 }
 
 EXPORT bool
-dwg_set_ENTITY_common_utf8text (Dwg_Object_Entity *restrict obj, const char *restrict fieldname,
+dwg_set_ENTITY_common_utf8text (Dwg_Object_Entity *restrict obj,
+                                const char *restrict fieldname,
                                 const char *restrict utf8)
 {
 #ifndef HAVE_NONNULL
@@ -605,7 +610,8 @@ dwg_set_ENTITY_common_utf8text (Dwg_Object_Entity *restrict obj, const char *res
 }
 
 EXPORT bool
-dwg_get_OBJECT_common_utf8text (Dwg_Object_Object *restrict obj, const char *restrict fieldname,
+dwg_get_OBJECT_common_utf8text (Dwg_Object_Object *restrict obj,
+                                const char *restrict fieldname,
                                 char **restrict textp)
 {
 #ifndef HAVE_NONNULL
@@ -619,7 +625,8 @@ dwg_get_OBJECT_common_utf8text (Dwg_Object_Object *restrict obj, const char *res
 }
 
 EXPORT bool
-dwg_set_OBJECT_common_utf8text (Dwg_Object_Object *restrict obj, const char *restrict fieldname,
+dwg_set_OBJECT_common_utf8text (Dwg_Object_Object *restrict obj,
+                                const char *restrict fieldname,
                                 const char *restrict utf8)
 {
 #ifndef HAVE_NONNULL
@@ -676,180 +683,231 @@ dwg_set_OBJECT_common_utf8text (Dwg_Object_Object *restrict obj, const char *res
 #endif
 
 #ifndef __AFL_COMPILER
-dwg_get_OBJECT(ent_text, TEXT)
-dwg_get_OBJECT(ent_attrib, ATTRIB)
-dwg_get_OBJECT(ent_attdef, ATTDEF)
-dwg_get_OBJECT(ent_block, BLOCK)
-dwg_get_OBJECT(ent_endblk, ENDBLK)
-dwg_get_OBJECT(ent_seqend, SEQEND)
-dwg_get_OBJECT(ent_insert, INSERT)
-dwg_get_OBJECT(ent_minsert, MINSERT)
-dwg_get_OBJECT(ent_vertex_2d, VERTEX_2D)
-dwg_get_OBJECT(ent_vertex_3d, VERTEX_3D)
-dwg_get_OBJECT(ent_vertex_mesh, VERTEX_MESH)
-dwg_get_OBJECT(ent_vertex_pface, VERTEX_PFACE)
-dwg_get_OBJECT(ent_vertex_pface_face, VERTEX_PFACE_FACE)
-dwg_get_OBJECT(ent_polyline_2d, POLYLINE_2D)
-dwg_get_OBJECT(ent_polyline_3d, POLYLINE_3D)
-dwg_get_OBJECT(ent_arc, ARC)
+dwg_get_OBJECT (ent_text, TEXT) dwg_get_OBJECT (ent_attrib, ATTRIB) dwg_get_OBJECT (
+    ent_attdef, ATTDEF) dwg_get_OBJECT (ent_block,
+                                        BLOCK) dwg_get_OBJECT (ent_endblk,
+                                                               ENDBLK)
+    dwg_get_OBJECT (ent_seqend, SEQEND) dwg_get_OBJECT (
+        ent_insert,
+        INSERT) dwg_get_OBJECT (ent_minsert,
+                                MINSERT) dwg_get_OBJECT (ent_vertex_2d,
+                                                         VERTEX_2D)
+        dwg_get_OBJECT (ent_vertex_3d, VERTEX_3D) dwg_get_OBJECT (
+            ent_vertex_mesh, VERTEX_MESH) dwg_get_OBJECT (ent_vertex_pface,
+                                                          VERTEX_PFACE)
+            dwg_get_OBJECT (ent_vertex_pface_face, VERTEX_PFACE_FACE) dwg_get_OBJECT (
+                ent_polyline_2d,
+                POLYLINE_2D) dwg_get_OBJECT (ent_polyline_3d,
+                                             POLYLINE_3D) dwg_get_OBJECT (ent_arc,
+                                                                          ARC)
 #endif
-dwg_get_OBJECT(ent_circle, CIRCLE)
-dwg_get_OBJECT(ent_line, LINE)
+                dwg_get_OBJECT (ent_circle, CIRCLE) dwg_get_OBJECT (ent_line,
+                                                                    LINE)
 #ifndef __AFL_COMPILER
-dwg_get_OBJECT(ent_dim_ordinate, DIMENSION_ORDINATE)
-dwg_get_OBJECT(ent_dim_linear, DIMENSION_LINEAR)
-dwg_get_OBJECT(ent_dim_aligned, DIMENSION_ALIGNED)
-dwg_get_OBJECT(ent_dim_ang3pt, DIMENSION_ANG3PT)
-dwg_get_OBJECT(ent_dim_ang2ln, DIMENSION_ANG2LN)
-dwg_get_OBJECT(ent_dim_radius, DIMENSION_RADIUS)
-dwg_get_OBJECT(ent_dim_diameter, DIMENSION_DIAMETER)
-dwg_get_OBJECT(ent_point, POINT)
-dwg_get_OBJECT(ent_polyline_pface, POLYLINE_PFACE)
-dwg_get_OBJECT(ent_polyline_mesh, POLYLINE_MESH)
-dwg_get_OBJECT(ent_solid, SOLID)
-dwg_get_OBJECT(ent_trace, TRACE)
-dwg_get_OBJECT(ent_shape, SHAPE)
-dwg_get_OBJECT(ent_viewport, VIEWPORT)
-dwg_get_OBJECT(ent_ellipse, ELLIPSE)
-dwg_get_OBJECT(ent_spline, SPLINE)
-dwg_get_OBJECT(ent_region, REGION)
-dwg_get_OBJECT(ent_body, BODY)
-dwg_get_OBJECT(ent_ray, RAY)
-dwg_get_OBJECT(ent_xline, XLINE)
-dwg_get_OBJECT(ent_oleframe, OLEFRAME)
-dwg_get_OBJECT(ent_mtext, MTEXT)
-dwg_get_OBJECT(ent_leader, LEADER)
-dwg_get_OBJECT(ent_tolerance, TOLERANCE)
-dwg_get_OBJECT(ent_mline, MLINE)
-dwg_get_OBJECT(ent_ole2frame, OLE2FRAME)
-dwg_get_OBJECT(ent_lwpline, LWPOLYLINE)
-//dwg_get_OBJECT(ent_proxy_entity, PROXY_ENTITY)
-dwg_get_OBJECT(ent_hatch, HATCH)
-//dwg_get_OBJECT(ent_arc_dimension, ARC_DIMENSION)
-dwg_get_OBJECT(ent_image, IMAGE)
-dwg_get_OBJECT(ent_camera, CAMERA)
-dwg_get_OBJECT(ent_helix, HELIX)
-dwg_get_OBJECT(ent_light, LIGHT)
-dwg_get_OBJECT(ent_mleader, MULTILEADER)
-dwg_get_OBJECT(ent_underlay, UNDERLAY)
-dwg_get_OBJECT(ent_wipeout, WIPEOUT)
-#ifdef DEBUG_CLASSES
-dwg_get_OBJECT(ent_planesurface, PLANESURFACE)
-dwg_get_OBJECT(ent_extrudedsurface, EXTRUDEDSURFACE)
-dwg_get_OBJECT(ent_loftedsurface, LOFTEDSURFACE)
-dwg_get_OBJECT(ent_revolvedsurface, REVOLVEDSURFACE)
-dwg_get_OBJECT(ent_sweptsurface, SWEPTSURFACE)
-dwg_get_OBJECT(ent_geopositionmarker, GEOPOSITIONMARKER)
-dwg_get_OBJECT(ent_table, TABLE)
-#endif
+                    dwg_get_OBJECT (ent_dim_ordinate, DIMENSION_ORDINATE) dwg_get_OBJECT (
+                        ent_dim_linear,
+                        DIMENSION_LINEAR) dwg_get_OBJECT (ent_dim_aligned,
+                                                          DIMENSION_ALIGNED)
+                        dwg_get_OBJECT (ent_dim_ang3pt, DIMENSION_ANG3PT) dwg_get_OBJECT (
+                            ent_dim_ang2ln,
+                            DIMENSION_ANG2LN) dwg_get_OBJECT (ent_dim_radius,
+                                                              DIMENSION_RADIUS)
+                            dwg_get_OBJECT (ent_dim_diameter, DIMENSION_DIAMETER) dwg_get_OBJECT (
+                                ent_point,
+                                POINT) dwg_get_OBJECT (ent_polyline_pface,
+                                                       POLYLINE_PFACE)
+                                dwg_get_OBJECT (
+                                    ent_polyline_mesh,
+                                    POLYLINE_MESH) dwg_get_OBJECT (ent_solid,
+                                                                   SOLID)
+                                    dwg_get_OBJECT (ent_trace, TRACE) dwg_get_OBJECT (
+                                        ent_shape,
+                                        SHAPE) dwg_get_OBJECT (ent_viewport,
+                                                               VIEWPORT)
+                                        dwg_get_OBJECT (ent_ellipse, ELLIPSE) dwg_get_OBJECT (
+                                            ent_spline,
+                                            SPLINE) dwg_get_OBJECT (ent_region,
+                                                                    REGION)
+                                            dwg_get_OBJECT (ent_body, BODY) dwg_get_OBJECT (
+                                                ent_ray,
+                                                RAY) dwg_get_OBJECT (ent_xline,
+                                                                     XLINE)
+                                                dwg_get_OBJECT (
+                                                    ent_oleframe,
+                                                    OLEFRAME) dwg_get_OBJECT (ent_mtext,
+                                                                              MTEXT)
+                                                    dwg_get_OBJECT (ent_leader,
+                                                                    LEADER)
+                                                        dwg_get_OBJECT (
+                                                            ent_tolerance,
+                                                            TOLERANCE)
+                                                            dwg_get_OBJECT (
+                                                                ent_mline,
+                                                                MLINE)
+                                                                dwg_get_OBJECT (
+                                                                    ent_ole2frame,
+                                                                    OLE2FRAME)
+                                                                    dwg_get_OBJECT (
+                                                                        ent_lwpline,
+                                                                        LWPOLYLINE)
+    // dwg_get_OBJECT(ent_proxy_entity, PROXY_ENTITY)
+    dwg_get_OBJECT (ent_hatch, HATCH)
+    // dwg_get_OBJECT(ent_arc_dimension, ARC_DIMENSION)
+    dwg_get_OBJECT (ent_image, IMAGE) dwg_get_OBJECT (
+        ent_camera, CAMERA) dwg_get_OBJECT (ent_helix,
+                                            HELIX) dwg_get_OBJECT (ent_light,
+                                                                   LIGHT)
+        dwg_get_OBJECT (ent_mleader, MULTILEADER) dwg_get_OBJECT (
+            ent_underlay, UNDERLAY) dwg_get_OBJECT (ent_wipeout, WIPEOUT)
+#  ifdef DEBUG_CLASSES
+            dwg_get_OBJECT (ent_planesurface, PLANESURFACE) dwg_get_OBJECT (
+                ent_extrudedsurface,
+                EXTRUDEDSURFACE) dwg_get_OBJECT (ent_loftedsurface,
+                                                 LOFTEDSURFACE) dwg_get_OBJECT (ent_revolvedsurface,
+                                                                                REVOLVEDSURFACE)
+                dwg_get_OBJECT (ent_sweptsurface, SWEPTSURFACE) dwg_get_OBJECT (
+                    ent_geopositionmarker,
+                    GEOPOSITIONMARKER) dwg_get_OBJECT (ent_table, TABLE)
+#  endif
 
-dwg_get_OBJECT(obj_block_control, BLOCK_CONTROL)
-dwg_get_OBJECT(obj_block_header, BLOCK_HEADER)
-dwg_get_OBJECT(obj_layer_control, LAYER_CONTROL)
-dwg_get_OBJECT(obj_layer, LAYER)
-dwg_get_OBJECT(obj_style_control, CONTROL)
-dwg_get_OBJECT(obj_style, STYLE)
-dwg_get_OBJECT(obj_ltype_control, LTYPE_CONTROL)
-dwg_get_OBJECT(obj_ltype, LTYPE)
-dwg_get_OBJECT(obj_view_control, VIEW_CONTROL)
-dwg_get_OBJECT(obj_view, VIEW)
-dwg_get_OBJECT(obj_ucs_control, UCS_CONTROL)
-dwg_get_OBJECT(obj_ucs, UCS)
-dwg_get_OBJECT(obj_vport_control, VPORT_CONTROL)
-dwg_get_OBJECT(obj_vport, VPORT)
-dwg_get_OBJECT(obj_appid_control, APPID_CONTROL)
-dwg_get_OBJECT(obj_appid, APPID)
-dwg_get_OBJECT(obj_dimstyle_control, DIMSTYLE_CONTROL)
-dwg_get_OBJECT(obj_dimstyle, DIMSTYLE)
-dwg_get_OBJECT(obj_vport_entity_control, VPORT_ENTITY_CONTROL)
-dwg_get_OBJECT(obj_vport_entity_header, VPORT_ENTITY_HEADER)
-dwg_get_OBJECT(obj_dictionary, DICTIONARY)
-dwg_get_OBJECT(obj_mlinestyle, MLINESTYLE)
-dwg_get_OBJECT(obj_proxy_object, OBJECT)
-// stable:
-dwg_get_OBJECT(obj_dictionaryvar, DICTIONARYVAR)
-dwg_get_OBJECT(obj_dictionarywdflt, DICTIONARYWDFLT)
-dwg_get_OBJECT(obj_field, FIELD)
-dwg_get_OBJECT(obj_fieldlist, FIELDLIST)
-dwg_get_OBJECT(obj_group, GROUP)
-dwg_get_OBJECT(obj_idbuffer, IDBUFFER)
-dwg_get_OBJECT(obj_imagedef, IMAGEDEF)
-dwg_get_OBJECT(obj_imagedef_reactor, REACTOR)
-dwg_get_OBJECT(obj_layer_index, LAYER_INDEX)
-dwg_get_OBJECT(obj_layout, LAYOUT)
-dwg_get_OBJECT(obj_mleaderstyle, MLEADERSTYLE)
-dwg_get_OBJECT(obj_objectcontextdata, OBJECTCONTEXTDATA)
-dwg_get_OBJECT(obj_placeholder, PLACEHOLDER)
-dwg_get_OBJECT(obj_rastervariables, RASTERVARIABLES)
-dwg_get_OBJECT(obj_scale, SCALE)
-dwg_get_OBJECT(obj_sortentstable, SORTENTSTABLE)
-dwg_get_OBJECT(obj_spatial_filter, FILTER)
-dwg_get_OBJECT(obj_spatial_index, INDEX)
-dwg_get_OBJECT(obj_wipeoutvariables, WIPEOUTVARIABLES)
-dwg_get_OBJECT(obj_xrecord, XRECORD)
-// unstable:
-dwg_get_OBJECT(obj_assocdependency, ASSOCDEPENDENCY)
-dwg_get_OBJECT(obj_assocplanesurfaceactionbody, ASSOCPLANESURFACEACTIONBODY)
-dwg_get_OBJECT(obj_dimassoc, DIMASSOC)
-dwg_get_OBJECT(obj_dbcolor, DBCOLOR)
-dwg_get_OBJECT(obj_dynamicblockpurgepreventer, DYNAMICBLOCKPURGEPREVENTER)
-dwg_get_OBJECT(obj_geodata, GEODATA)
-dwg_get_OBJECT(obj_object_ptr, PTR)
-//dwg_get_OBJECT(obj_proxy_object, OBJECT)
-dwg_get_OBJECT(obj_perssubentmanager, PERSSUBENTMANAGER)
-dwg_get_OBJECT(obj_underlaydefinition, UNDERLAYDEFINITION)
-dwg_get_OBJECT(obj_visualstyle, VISUALSTYLE)
-#ifdef DEBUG_CLASSES
-dwg_get_OBJECT(obj_tablecontent, TABLECONTENT)
-dwg_get_OBJECT(obj_tablegeometry, TABLEGEOMETRY)
-dwg_get_OBJECT(obj_cellstylemap, CELLSTYLEMAP)
-dwg_get_OBJECT(obj_material, MATERIAL)
-dwg_get_OBJECT(obj_plotsettings, PLOTSETTINGS)
-dwg_get_OBJECT(obj_sun, SUN)
-dwg_get_OBJECT(obj_sunstudy, SUNSTUDY)
-dwg_get_OBJECT(obj_vba_project, PROJECT)
-dwg_get_OBJECT(obj_acsh_sweep_class, CLASS)
-dwg_get_OBJECT(obj_assocaction, ASSOCACTION)
-dwg_get_OBJECT(obj_assocnetwork, ASSOCNETWORK)
-dwg_get_OBJECT(obj_assocaligneddimactionbody, ASSOCALIGNEDDIMACTIONBODY)
-dwg_get_OBJECT(obj_assocosnappointrefactionparam, ASSOCOSNAPPOINTREFACTIONPARAM)
-dwg_get_OBJECT(obj_assocperssubentmanager, ASSOCPERSSUBENTMANAGER)
-dwg_get_OBJECT(obj_assoc2dconstraintgroup, ASSOC2DCONSTRAINTGROUP)
-dwg_get_OBJECT(obj_evaluation_graph, EVALUATION_GRAPH)
-dwg_get_OBJECT(obj_navisworksmodeldef, NAVISWORKSMODELDEF)
-#endif
-// unhandled:
-//dwg_get_OBJECT(obj_acsh_history_class, ACSH_HISTORY_CLASS)
-//dwg_get_OBJECT(obj_arcalignedtext, ARCALIGNEDTEXT)
-//dwg_get_OBJECT(obj_assocgeomdependency, ASSOCGEOMDEPENDENCY)
-//dwg_get_OBJECT(obj_assocosnappointrefactionparam, ASSOCOSNAPPOINTREFACTIONPARAM)
-//dwg_get_OBJECT(obj_assocvertexactionparam, ASSOCVERTEXACTIONPARAM)
-//dwg_get_OBJECT(obj_datatable, DATATABLE)
-//dwg_get_OBJECT(obj_detailviewstyle, DETAILVIEWSTYLE)
-//dwg_get_OBJECT(obj_documentoptions, DOCUMENTOPTIONS)
-//dwg_get_OBJECT(obj_layer_filter, LAYER_FILTER)
-//dwg_get_OBJECT(obj_layoutprintconfig, LAYOUTPRINTCONFIG)
-//dwg_get_OBJECT(obj_leaderobjectcontextdata, LEADEROBJECTCONTEXTDATA)
-//dwg_get_OBJECT(obj_lightlist, LIGHTLIST)
-//dwg_get_OBJECT(obj_npocollection, NPOCOLLECTION)
-//dwg_get_OBJECT(obj_pointcloud, POINTCLOUD)
-//dwg_get_OBJECT(obj_rtext, RTEXT)
-//dwg_get_OBJECT(obj_sectionviewstyle, SECTIONVIEWSTYLE)
-//dwg_get_OBJECT(obj_tablestyle, TABLESTYLE)
-//dwg_get_OBJECT(obj_xrefpanelobject, XREFPANELOBJECT)
+                    dwg_get_OBJECT (obj_block_control, BLOCK_CONTROL) dwg_get_OBJECT (
+                        obj_block_header,
+                        BLOCK_HEADER) dwg_get_OBJECT (obj_layer_control,
+                                                      LAYER_CONTROL)
+                        dwg_get_OBJECT (obj_layer, LAYER) dwg_get_OBJECT (
+                            obj_style_control,
+                            CONTROL) dwg_get_OBJECT (obj_style, STYLE)
+                            dwg_get_OBJECT (obj_ltype_control, LTYPE_CONTROL) dwg_get_OBJECT (
+                                obj_ltype,
+                                LTYPE) dwg_get_OBJECT (obj_view_control,
+                                                       VIEW_CONTROL)
+                                dwg_get_OBJECT (
+                                    obj_view,
+                                    VIEW) dwg_get_OBJECT (obj_ucs_control,
+                                                          UCS_CONTROL)
+                                    dwg_get_OBJECT (
+                                        obj_ucs,
+                                        UCS) dwg_get_OBJECT (obj_vport_control,
+                                                             VPORT_CONTROL)
+                                        dwg_get_OBJECT (obj_vport, VPORT) dwg_get_OBJECT (
+                                            obj_appid_control, APPID_CONTROL)
+                                            dwg_get_OBJECT (obj_appid, APPID) dwg_get_OBJECT (
+                                                obj_dimstyle_control,
+                                                DIMSTYLE_CONTROL)
+                                                dwg_get_OBJECT (
+                                                    obj_dimstyle, DIMSTYLE)
+                                                    dwg_get_OBJECT (
+                                                        obj_vport_entity_control,
+                                                        VPORT_ENTITY_CONTROL)
+                                                        dwg_get_OBJECT (
+                                                            obj_vport_entity_header,
+                                                            VPORT_ENTITY_HEADER)
+                                                            dwg_get_OBJECT (
+                                                                obj_dictionary,
+                                                                DICTIONARY)
+                                                                dwg_get_OBJECT (
+                                                                    obj_mlinestyle,
+                                                                    MLINESTYLE)
+                                                                    dwg_get_OBJECT (
+                                                                        obj_proxy_object,
+                                                                        OBJECT)
+    // stable:
+    dwg_get_OBJECT (obj_dictionaryvar, DICTIONARYVAR) dwg_get_OBJECT (
+        obj_dictionarywdflt, DICTIONARYWDFLT) dwg_get_OBJECT (obj_field, FIELD)
+        dwg_get_OBJECT (obj_fieldlist, FIELDLIST) dwg_get_OBJECT (
+            obj_group, GROUP) dwg_get_OBJECT (obj_idbuffer, IDBUFFER)
+            dwg_get_OBJECT (obj_imagedef, IMAGEDEF) dwg_get_OBJECT (
+                obj_imagedef_reactor, REACTOR) dwg_get_OBJECT (obj_layer_index,
+                                                               LAYER_INDEX)
+                dwg_get_OBJECT (obj_layout, LAYOUT) dwg_get_OBJECT (
+                    obj_mleaderstyle,
+                    MLEADERSTYLE) dwg_get_OBJECT (obj_objectcontextdata,
+                                                  OBJECTCONTEXTDATA)
+                    dwg_get_OBJECT (obj_placeholder, PLACEHOLDER)
+                        dwg_get_OBJECT (obj_rastervariables, RASTERVARIABLES)
+                            dwg_get_OBJECT (obj_scale, SCALE) dwg_get_OBJECT (
+                                obj_sortentstable, SORTENTSTABLE)
+                                dwg_get_OBJECT (obj_spatial_filter, FILTER)
+                                    dwg_get_OBJECT (obj_spatial_index, INDEX)
+                                        dwg_get_OBJECT (obj_wipeoutvariables,
+                                                        WIPEOUTVARIABLES)
+                                            dwg_get_OBJECT (obj_xrecord,
+                                                            XRECORD)
+    // unstable:
+    dwg_get_OBJECT (obj_assocdependency, ASSOCDEPENDENCY)
+        dwg_get_OBJECT (obj_assocplanesurfaceactionbody,
+                        ASSOCPLANESURFACEACTIONBODY)
+            dwg_get_OBJECT (obj_dimassoc, DIMASSOC)
+                dwg_get_OBJECT (obj_dbcolor, DBCOLOR)
+                    dwg_get_OBJECT (obj_dynamicblockpurgepreventer,
+                                    DYNAMICBLOCKPURGEPREVENTER)
+                        dwg_get_OBJECT (obj_geodata, GEODATA)
+                            dwg_get_OBJECT (obj_object_ptr, PTR)
+    // dwg_get_OBJECT(obj_proxy_object, OBJECT)
+    dwg_get_OBJECT (obj_perssubentmanager, PERSSUBENTMANAGER) dwg_get_OBJECT (
+        obj_underlaydefinition,
+        UNDERLAYDEFINITION) dwg_get_OBJECT (obj_visualstyle, VISUALSTYLE)
+#  ifdef DEBUG_CLASSES
+        dwg_get_OBJECT (obj_tablecontent, TABLECONTENT) dwg_get_OBJECT (
+            obj_tablegeometry, TABLEGEOMETRY) dwg_get_OBJECT (obj_cellstylemap,
+                                                              CELLSTYLEMAP)
+            dwg_get_OBJECT (obj_material, MATERIAL) dwg_get_OBJECT (
+                obj_plotsettings, PLOTSETTINGS) dwg_get_OBJECT (obj_sun, SUN)
+                dwg_get_OBJECT (obj_sunstudy, SUNSTUDY) dwg_get_OBJECT (
+                    obj_vba_project,
+                    PROJECT) dwg_get_OBJECT (obj_acsh_sweep_class, CLASS)
+                    dwg_get_OBJECT (obj_assocaction, ASSOCACTION)
+                        dwg_get_OBJECT (obj_assocnetwork, ASSOCNETWORK)
+                            dwg_get_OBJECT (obj_assocaligneddimactionbody,
+                                            ASSOCALIGNEDDIMACTIONBODY)
+                                dwg_get_OBJECT (
+                                    obj_assocosnappointrefactionparam,
+                                    ASSOCOSNAPPOINTREFACTIONPARAM)
+                                    dwg_get_OBJECT (obj_assocperssubentmanager,
+                                                    ASSOCPERSSUBENTMANAGER)
+                                        dwg_get_OBJECT (
+                                            obj_assoc2dconstraintgroup,
+                                            ASSOC2DCONSTRAINTGROUP)
+                                            dwg_get_OBJECT (
+                                                obj_evaluation_graph,
+                                                EVALUATION_GRAPH)
+                                                dwg_get_OBJECT (
+                                                    obj_navisworksmodeldef,
+                                                    NAVISWORKSMODELDEF)
+#  endif
+    // unhandled:
+    // dwg_get_OBJECT(obj_acsh_history_class, ACSH_HISTORY_CLASS)
+    // dwg_get_OBJECT(obj_arcalignedtext, ARCALIGNEDTEXT)
+    // dwg_get_OBJECT(obj_assocgeomdependency, ASSOCGEOMDEPENDENCY)
+    // dwg_get_OBJECT(obj_assocosnappointrefactionparam,
+    // ASSOCOSNAPPOINTREFACTIONPARAM)
+    // dwg_get_OBJECT(obj_assocvertexactionparam, ASSOCVERTEXACTIONPARAM)
+    // dwg_get_OBJECT(obj_datatable, DATATABLE)
+    // dwg_get_OBJECT(obj_detailviewstyle, DETAILVIEWSTYLE)
+    // dwg_get_OBJECT(obj_documentoptions, DOCUMENTOPTIONS)
+    // dwg_get_OBJECT(obj_layer_filter, LAYER_FILTER)
+    // dwg_get_OBJECT(obj_layoutprintconfig, LAYOUTPRINTCONFIG)
+    // dwg_get_OBJECT(obj_leaderobjectcontextdata, LEADEROBJECTCONTEXTDATA)
+    // dwg_get_OBJECT(obj_lightlist, LIGHTLIST)
+    // dwg_get_OBJECT(obj_npocollection, NPOCOLLECTION)
+    // dwg_get_OBJECT(obj_pointcloud, POINTCLOUD)
+    // dwg_get_OBJECT(obj_rtext, RTEXT)
+    // dwg_get_OBJECT(obj_sectionviewstyle, SECTIONVIEWSTYLE)
+    // dwg_get_OBJECT(obj_tablestyle, TABLESTYLE)
+    // dwg_get_OBJECT(obj_xrefpanelobject, XREFPANELOBJECT)
 
-/********************************************************************
- *                FUNCTIONS TYPE SPECIFIC                            *
- *********************************************************************/
+    /********************************************************************
+     *                FUNCTIONS TYPE SPECIFIC                            *
+     *********************************************************************/
 
-/* Should we accept dwg and entities? or add dwg_header_get_TYPE */
-EXPORT dwg_point_2d *dwg_ent_get_POINT2D (const void *restrict _obj,
-                                          const char *restrict fieldname)
+    /* Should we accept dwg and entities? or add dwg_header_get_TYPE */
+    EXPORT dwg_point_2d *dwg_ent_get_POINT2D (const void *restrict _obj,
+                                              const char *restrict fieldname)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (!_obj || !fieldname)
     return NULL;
-#endif
+#  endif
   {
     dwg_point_2d *point;
     Dwg_DYNAPI_field field;
@@ -869,8 +927,9 @@ EXPORT dwg_point_2d *dwg_ent_get_POINT2D (const void *restrict _obj,
       }
     else
       {
-        LOG_ERROR ("%s.%s has type %s, which is not a POINT2D (2RD,2BD,2DPOINT)",
-                   obj->name, fieldname, field.type)
+        LOG_ERROR (
+            "%s.%s has type %s, which is not a POINT2D (2RD,2BD,2DPOINT)",
+            obj->name, fieldname, field.type)
         return NULL;
       }
   }
@@ -880,10 +939,10 @@ EXPORT bool
 dwg_ent_set_POINT2D (void *restrict _obj, const char *restrict fieldname,
                      const dwg_point_2d *point)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (!_obj || !fieldname || !point)
     return NULL;
-#endif
+#  endif
   {
     dwg_point_2d dummy;
     Dwg_DYNAPI_field field;
@@ -904,8 +963,9 @@ dwg_ent_set_POINT2D (void *restrict _obj, const char *restrict fieldname,
       }
     else
       {
-        LOG_ERROR ("%s.%s has type %s, which is not a POINT2D (2RD,2BD,2DPOINT)",
-                   obj->name, fieldname, field.type)
+        LOG_ERROR (
+            "%s.%s has type %s, which is not a POINT2D (2RD,2BD,2DPOINT)",
+            obj->name, fieldname, field.type)
         return false;
       }
   }
@@ -914,10 +974,10 @@ dwg_ent_set_POINT2D (void *restrict _obj, const char *restrict fieldname,
 EXPORT dwg_point_3d *
 dwg_ent_get_POINT3D (const void *restrict _obj, const char *restrict fieldname)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (!_obj || !fieldname)
     return NULL;
-#endif
+#  endif
   {
     dwg_point_3d *point;
     Dwg_DYNAPI_field field;
@@ -949,10 +1009,10 @@ EXPORT bool
 dwg_ent_set_POINT3D (void *restrict _obj, const char *restrict fieldname,
                      const dwg_point_3d *point)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (!_obj || !fieldname || !point)
     return NULL;
-#endif
+#  endif
   {
     dwg_point_3d dummy;
     Dwg_DYNAPI_field field;
@@ -983,10 +1043,10 @@ dwg_ent_set_POINT3D (void *restrict _obj, const char *restrict fieldname,
 EXPORT char *
 dwg_ent_get_STRING (const void *restrict _obj, const char *restrict fieldname)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (!_obj || !fieldname)
     return NULL;
-#endif
+#  endif
   {
     char *str;
     Dwg_DYNAPI_field field;
@@ -1015,10 +1075,10 @@ dwg_ent_get_STRING (const void *restrict _obj, const char *restrict fieldname)
 EXPORT char *
 dwg_ent_get_UTF8 (const void *restrict _obj, const char *restrict fieldname)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (!_obj || !fieldname)
     return NULL;
-#endif
+#  endif
   {
     char *str;
     Dwg_DYNAPI_field field;
@@ -1028,7 +1088,7 @@ dwg_ent_get_UTF8 (const void *restrict _obj, const char *restrict fieldname)
       return NULL;
 
     if (!dwg_dynapi_entity_utf8text ((void *)_obj, obj->name, fieldname, &str,
-                                  &field))
+                                     &field))
       return NULL;
     if (field.is_string || strEQc (field.type, "TF"))
       {
@@ -1047,10 +1107,10 @@ EXPORT bool
 dwg_ent_set_STRING (void *restrict _obj, const char *restrict fieldname,
                     const char *restrict str)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (!_obj || !fieldname || !str)
     return false;
-#endif
+#  endif
   {
     char *dummy;
     Dwg_DYNAPI_field field;
@@ -1080,10 +1140,10 @@ EXPORT bool
 dwg_ent_set_UTF8 (void *restrict _obj, const char *restrict fieldname,
                   const char *restrict utf8text)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (!_obj || !fieldname || !utf8text)
     return false;
-#endif
+#  endif
   {
     char *dummy;
     Dwg_DYNAPI_field field;
@@ -1112,10 +1172,10 @@ dwg_ent_set_UTF8 (void *restrict _obj, const char *restrict fieldname,
 EXPORT BITCODE_BD
 dwg_ent_get_REAL (const void *restrict _obj, const char *restrict fieldname)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (!_obj || !fieldname)
     return 0.0;
-#endif
+#  endif
   {
     BITCODE_BD num;
     Dwg_DYNAPI_field field;
@@ -1144,10 +1204,10 @@ EXPORT bool
 dwg_ent_set_REAL (void *restrict _obj, const char *restrict fieldname,
                   const BITCODE_BD num)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (!_obj || !fieldname)
     return false;
-#endif
+#  endif
   {
     BITCODE_BD dummy;
     Dwg_DYNAPI_field field;
@@ -1175,10 +1235,10 @@ dwg_ent_set_REAL (void *restrict _obj, const char *restrict fieldname,
 EXPORT BITCODE_BS
 dwg_ent_get_INT16 (const void *restrict _obj, const char *restrict fieldname)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (!_obj || !fieldname)
     return 0;
-#endif
+#  endif
   {
     BITCODE_BS num;
     Dwg_DYNAPI_field field;
@@ -1207,10 +1267,10 @@ EXPORT bool
 dwg_ent_set_INT16 (void *restrict _obj, const char *restrict fieldname,
                    const BITCODE_BS num)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (!_obj || !fieldname)
     return false;
-#endif
+#  endif
   {
     BITCODE_BS dummy;
     Dwg_DYNAPI_field field;
@@ -1239,10 +1299,10 @@ dwg_ent_set_INT16 (void *restrict _obj, const char *restrict fieldname,
 EXPORT BITCODE_BL
 dwg_ent_get_INT32 (const void *restrict _obj, const char *restrict fieldname)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (!_obj || !fieldname)
     return 0;
-#endif
+#  endif
   {
     BITCODE_BL num;
     Dwg_DYNAPI_field field;
@@ -1272,10 +1332,10 @@ EXPORT bool
 dwg_ent_set_INT32 (void *restrict _obj, const char *restrict fieldname,
                    const BITCODE_BL num)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (!_obj || !fieldname)
     return false;
-#endif
+#  endif
   {
     BITCODE_BL dummy;
     Dwg_DYNAPI_field field;
@@ -1319,10 +1379,10 @@ dwg_ent_circle_get_center (const dwg_ent_circle *restrict circle,
                            dwg_point_3d *restrict point, int *restrict error)
 {
   if (circle
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
-      )
+#  endif
+  )
     {
       *error = 0;
       point->x = circle->center.x;
@@ -1350,9 +1410,9 @@ dwg_ent_circle_set_center (dwg_ent_circle *restrict circle,
                            int *restrict error)
 {
   if (circle
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
       && dwg_dynapi_entity_set_value (circle, "CIRCLE", "center", point, 0))
     *error = 0;
   else
@@ -1473,9 +1533,9 @@ dwg_ent_circle_set_extrusion (dwg_ent_circle *restrict circle,
                               int *restrict error)
 {
   if (circle
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
       && dwg_dynapi_entity_set_value ((void *)circle, "CIRCLE", "extrusion",
                                       vector, 0))
     {
@@ -1501,9 +1561,9 @@ dwg_ent_circle_get_extrusion (const dwg_ent_circle *restrict circle,
                               int *restrict error)
 {
   if (circle
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
       && dwg_dynapi_entity_value ((void *)circle, "CIRCLE", "extrusion",
                                   vector, NULL))
     {
@@ -1534,9 +1594,9 @@ dwg_ent_line_get_start_point (const dwg_ent_line *restrict line,
                               int *restrict error)
 {
   if (line
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
       && dwg_dynapi_entity_value ((void *)line, "LINE", "start", point, NULL))
     {
       *error = 0;
@@ -1562,9 +1622,9 @@ dwg_ent_line_set_start_point (dwg_ent_line *restrict line,
                               int *restrict error)
 {
   if (line
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
       && dwg_dynapi_entity_set_value ((void *)line, "LINE", "start", point, 0))
     {
       *error = 0;
@@ -1589,9 +1649,9 @@ dwg_ent_line_get_end_point (const dwg_ent_line *restrict line,
                             dwg_point_3d *restrict point, int *restrict error)
 {
   if (line
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -1620,9 +1680,9 @@ dwg_ent_line_set_end_point (dwg_ent_line *restrict line,
                             int *restrict error)
 {
   if (line
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -1697,9 +1757,9 @@ dwg_ent_line_get_extrusion (const dwg_ent_line *restrict line,
                             dwg_point_3d *restrict vector, int *restrict error)
 {
   if (line
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -1728,9 +1788,9 @@ dwg_ent_line_set_extrusion (dwg_ent_line *restrict line,
                             int *restrict error)
 {
   if (line
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -1762,9 +1822,9 @@ dwg_ent_arc_get_center (const dwg_ent_arc *restrict arc,
                         dwg_point_3d *restrict point, int *restrict error)
 {
   if (arc
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -1793,9 +1853,9 @@ dwg_ent_arc_set_center (dwg_ent_arc *restrict arc,
                         int *restrict error)
 {
   if (arc
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -1918,9 +1978,9 @@ dwg_ent_arc_get_extrusion (const dwg_ent_arc *restrict arc,
                            dwg_point_3d *restrict vector, int *restrict error)
 {
   if (arc
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -1949,9 +2009,9 @@ dwg_ent_arc_set_extrusion (dwg_ent_arc *restrict arc,
                            int *restrict error)
 {
   if (arc
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -2081,9 +2141,9 @@ dwg_ent_ellipse_get_center (const dwg_ent_ellipse *restrict ellipse,
                             dwg_point_3d *restrict point, int *restrict error)
 {
   if (ellipse
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -2112,9 +2172,9 @@ dwg_ent_ellipse_set_center (dwg_ent_ellipse *restrict ellipse,
                             int *restrict error)
 {
   if (ellipse
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -2142,9 +2202,9 @@ dwg_ent_ellipse_get_sm_axis (const dwg_ent_ellipse *restrict ellipse,
                              dwg_point_3d *restrict point, int *restrict error)
 {
   if (ellipse
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -2173,9 +2233,9 @@ dwg_ent_ellipse_set_sm_axis (dwg_ent_ellipse *restrict ellipse,
                              int *restrict error)
 {
   if (ellipse
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -2204,9 +2264,9 @@ dwg_ent_ellipse_get_extrusion (const dwg_ent_ellipse *restrict ellipse,
                                int *restrict error)
 {
   if (ellipse
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -2235,9 +2295,9 @@ dwg_ent_ellipse_set_extrusion (dwg_ent_ellipse *restrict ellipse,
                                int *restrict error)
 {
   if (ellipse
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -2463,9 +2523,9 @@ dwg_ent_text_get_insertion_point (const dwg_ent_text *restrict text,
                                   int *restrict error)
 {
   if (text
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -2493,9 +2553,9 @@ dwg_ent_text_set_insertion_point (dwg_ent_text *restrict text,
                                   int *restrict error)
 {
   if (text
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -2570,9 +2630,9 @@ dwg_ent_text_get_extrusion (const dwg_ent_text *restrict text,
                             dwg_point_3d *restrict vector, int *restrict error)
 {
   if (text
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -2601,9 +2661,9 @@ dwg_ent_text_set_extrusion (dwg_ent_text *restrict text,
                             int *restrict error)
 {
   if (text
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -2886,9 +2946,9 @@ dwg_ent_attrib_get_insertion_point (const dwg_ent_attrib *restrict attrib,
                                     int *restrict error)
 {
   if (attrib
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -2916,9 +2976,9 @@ dwg_ent_attrib_set_insertion_point (dwg_ent_attrib *restrict attrib,
                                     int *restrict error)
 {
   if (attrib
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -2994,9 +3054,9 @@ dwg_ent_attrib_get_extrusion (const dwg_ent_attrib *restrict attrib,
                               int *restrict error)
 {
   if (attrib
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -3025,9 +3085,9 @@ dwg_ent_attrib_set_extrusion (dwg_ent_attrib *restrict attrib,
                               int *restrict error)
 {
   if (attrib
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -3304,9 +3364,9 @@ dwg_ent_attdef_get_insertion_point (const dwg_ent_attdef *restrict attdef,
                                     int *restrict error)
 {
   if (attdef
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -3334,9 +3394,9 @@ dwg_ent_attdef_set_insertion_point (dwg_ent_attdef *restrict attdef,
                                     int *restrict error)
 {
   if (attdef
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -3412,9 +3472,9 @@ dwg_ent_attdef_get_extrusion (const dwg_ent_attdef *restrict attdef,
                               int *restrict error)
 {
   if (attdef
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -3443,9 +3503,9 @@ dwg_ent_attdef_set_extrusion (dwg_ent_attdef *restrict attdef,
                               int *restrict error)
 {
   if (attdef
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -3668,9 +3728,9 @@ dwg_ent_point_set_point (dwg_ent_point *restrict point,
                          int *restrict error)
 {
   if (point
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && retpoint
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -3698,9 +3758,9 @@ dwg_ent_point_get_point (const dwg_ent_point *restrict point,
                          dwg_point_3d *restrict retpoint, int *restrict error)
 {
   if (point
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && retpoint
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -3777,9 +3837,9 @@ dwg_ent_point_set_extrusion (dwg_ent_point *restrict point,
                              int *restrict error)
 {
   if (point
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -3808,9 +3868,9 @@ dwg_ent_point_get_extrusion (const dwg_ent_point *restrict point,
                              int *restrict error)
 {
   if (point
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -3938,9 +3998,9 @@ dwg_ent_solid_get_corner1 (const dwg_ent_solid *restrict solid,
                            dwg_point_2d *restrict point, int *restrict error)
 {
   if (solid
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -3968,9 +4028,9 @@ dwg_ent_solid_set_corner1 (dwg_ent_solid *restrict solid,
                            int *restrict error)
 {
   if (solid
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -3997,9 +4057,9 @@ dwg_ent_solid_get_corner2 (const dwg_ent_solid *restrict solid,
                            dwg_point_2d *restrict point, int *restrict error)
 {
   if (solid
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4027,9 +4087,9 @@ dwg_ent_solid_set_corner2 (dwg_ent_solid *restrict solid,
                            int *restrict error)
 {
   if (solid
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4056,9 +4116,9 @@ dwg_ent_solid_get_corner3 (const dwg_ent_solid *restrict solid,
                            dwg_point_2d *restrict point, int *restrict error)
 {
   if (solid
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4086,9 +4146,9 @@ dwg_ent_solid_set_corner3 (dwg_ent_solid *restrict solid,
                            int *restrict error)
 {
   if (solid
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4115,9 +4175,9 @@ dwg_ent_solid_get_corner4 (const dwg_ent_solid *restrict solid,
                            dwg_point_2d *restrict point, int *restrict error)
 {
   if (solid
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4145,9 +4205,9 @@ dwg_ent_solid_set_corner4 (dwg_ent_solid *restrict solid,
                            int *restrict error)
 {
   if (solid
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4175,9 +4235,9 @@ dwg_ent_solid_get_extrusion (const dwg_ent_solid *restrict solid,
                              int *restrict error)
 {
   if (solid
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4206,9 +4266,9 @@ dwg_ent_solid_set_extrusion (dwg_ent_solid *restrict solid,
                              int *restrict error)
 {
   if (solid
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4299,9 +4359,9 @@ dwg_ent_ray_get_point (const dwg_ent_ray *restrict ray,
                        dwg_point_3d *restrict point, int *restrict error)
 {
   if (ray
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4329,9 +4389,9 @@ dwg_ent_ray_set_point (dwg_ent_ray *restrict ray,
                        const dwg_point_3d *restrict point, int *restrict error)
 {
   if (ray
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4359,9 +4419,9 @@ dwg_ent_ray_get_vector (const dwg_ent_ray *restrict ray,
                         dwg_point_3d *restrict vector, int *restrict error)
 {
   if (ray
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4390,9 +4450,9 @@ dwg_ent_ray_set_vector (dwg_ent_ray *restrict ray,
                         int *restrict error)
 {
   if (ray
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4424,9 +4484,9 @@ dwg_ent_xline_get_point (const dwg_ent_xline *restrict xline,
                          dwg_point_3d *restrict point, int *restrict error)
 {
   if (xline
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4455,9 +4515,9 @@ dwg_ent_xline_set_point (dwg_ent_xline *restrict xline,
                          int *restrict error)
 {
   if (xline
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4485,9 +4545,9 @@ dwg_ent_xline_get_vector (const dwg_ent_xline *restrict xline,
                           dwg_point_3d *restrict vector, int *restrict error)
 {
   if (xline
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4515,9 +4575,9 @@ dwg_ent_xline_set_vector (dwg_ent_xline *restrict xline,
                           int *restrict error)
 {
   if (xline
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4645,9 +4705,9 @@ dwg_ent_trace_get_corner1 (const dwg_ent_trace *restrict trace,
                            dwg_point_2d *restrict point, int *restrict error)
 {
   if (trace
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4675,9 +4735,9 @@ dwg_ent_trace_set_corner1 (dwg_ent_trace *restrict trace,
                            int *restrict error)
 {
   if (trace
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4704,9 +4764,9 @@ dwg_ent_trace_get_corner2 (const dwg_ent_trace *restrict trace,
                            dwg_point_2d *restrict point, int *restrict error)
 {
   if (trace
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4734,9 +4794,9 @@ dwg_ent_trace_set_corner2 (dwg_ent_trace *restrict trace,
                            int *restrict error)
 {
   if (trace
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4763,9 +4823,9 @@ dwg_ent_trace_get_corner3 (const dwg_ent_trace *restrict trace,
                            dwg_point_2d *restrict point, int *restrict error)
 {
   if (trace
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4793,9 +4853,9 @@ dwg_ent_trace_set_corner3 (dwg_ent_trace *restrict trace,
                            int *restrict error)
 {
   if (trace
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4822,9 +4882,9 @@ dwg_ent_trace_get_corner4 (const dwg_ent_trace *restrict trace,
                            dwg_point_2d *restrict point, int *restrict error)
 {
   if (trace
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4852,9 +4912,9 @@ dwg_ent_trace_set_corner4 (dwg_ent_trace *restrict trace,
                            int *restrict error)
 {
   if (trace
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4882,9 +4942,9 @@ dwg_ent_trace_get_extrusion (const dwg_ent_trace *restrict trace,
                              int *restrict error)
 {
   if (trace
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4913,9 +4973,9 @@ dwg_ent_trace_set_extrusion (dwg_ent_trace *restrict trace,
                              int *restrict error)
 {
   if (trace
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -4995,9 +5055,9 @@ dwg_ent_vertex_3d_get_point (const dwg_ent_vertex_3d *restrict vert,
                              dwg_point_3d *restrict point, int *restrict error)
 {
   if (vert
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -5026,9 +5086,9 @@ dwg_ent_vertex_3d_set_point (dwg_ent_vertex_3d *restrict vert,
                              int *restrict error)
 {
   if (vert
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -5109,9 +5169,9 @@ dwg_ent_vertex_mesh_get_point (const dwg_ent_vertex_mesh *restrict vert,
                                int *restrict error)
 {
   if (vert
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -5140,9 +5200,9 @@ dwg_ent_vertex_mesh_set_point (dwg_ent_vertex_mesh *restrict vert,
                                int *restrict error)
 {
   if (vert
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -5223,9 +5283,9 @@ dwg_ent_vertex_pface_get_point (const dwg_ent_vertex_pface *restrict vert,
                                 int *restrict error)
 {
   if (vert
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -5254,9 +5314,9 @@ dwg_ent_vertex_pface_set_point (dwg_ent_vertex_pface *restrict vert,
                                 int *restrict error)
 {
   if (vert
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -5336,9 +5396,9 @@ dwg_ent_vertex_2d_get_point (const dwg_ent_vertex_2d *restrict vert,
                              dwg_point_3d *restrict point, int *restrict error)
 {
   if (vert
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -5367,9 +5427,9 @@ dwg_ent_vertex_2d_set_point (dwg_ent_vertex_2d *restrict vert,
                              int *restrict error)
 {
   if (vert
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -5593,9 +5653,9 @@ dwg_ent_insert_get_ins_pt (const dwg_ent_insert *restrict insert,
                            dwg_point_3d *restrict point, int *restrict error)
 {
   if (insert
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -5623,9 +5683,9 @@ dwg_ent_insert_set_ins_pt (dwg_ent_insert *restrict insert,
                            int *restrict error)
 {
   if (insert
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -5652,9 +5712,9 @@ dwg_ent_insert_get_scale (const dwg_ent_insert *restrict insert,
                           dwg_point_3d *restrict scale3d, int *restrict error)
 {
   if (insert
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && scale3d
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -5682,9 +5742,9 @@ dwg_ent_insert_set_scale (dwg_ent_insert *restrict insert,
                           int *restrict error)
 {
   if (insert
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && scale3d
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -5761,9 +5821,9 @@ dwg_ent_insert_get_extrusion (const dwg_ent_insert *restrict insert,
                               int *restrict error)
 {
   if (insert
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -5792,9 +5852,9 @@ dwg_ent_insert_set_extrusion (dwg_ent_insert *restrict insert,
                               int *restrict error)
 {
   if (insert
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -5900,9 +5960,9 @@ dwg_ent_minsert_get_ins_pt (const dwg_ent_minsert *restrict minsert,
                             dwg_point_3d *restrict point, int *restrict error)
 {
   if (minsert
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -5931,9 +5991,9 @@ dwg_ent_minsert_set_ins_pt (dwg_ent_minsert *restrict minsert,
                             int *restrict error)
 {
   if (minsert
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -5960,9 +6020,9 @@ dwg_ent_minsert_get_scale (const dwg_ent_minsert *restrict minsert,
                            dwg_point_3d *restrict scale3d, int *restrict error)
 {
   if (minsert
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && scale3d
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -5990,9 +6050,9 @@ dwg_ent_minsert_set_scale (dwg_ent_minsert *restrict minsert,
                            int *restrict error)
 {
   if (minsert
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && scale3d
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -6070,9 +6130,9 @@ dwg_ent_minsert_get_extrusion (const dwg_ent_minsert *restrict minsert,
                                int *restrict error)
 {
   if (minsert
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -6101,9 +6161,9 @@ dwg_ent_minsert_set_extrusion (dwg_ent_minsert *restrict minsert,
                                int *restrict error)
 {
   if (minsert
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -7193,9 +7253,9 @@ dwg_ent_dim_set_extrusion (dwg_ent_dim *restrict dim,
                            int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -7223,9 +7283,9 @@ dwg_ent_dim_get_extrusion (const dwg_ent_dim *restrict dim,
                            dwg_point_3d *restrict vector, int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -7500,9 +7560,9 @@ dwg_ent_dim_set_text_midpt (dwg_ent_dim *restrict dim,
                             int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -7529,9 +7589,9 @@ dwg_ent_dim_get_text_midpt (const dwg_ent_dim *restrict dim,
                             dwg_point_2d *restrict point, int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -7558,9 +7618,9 @@ dwg_ent_dim_set_ins_scale (dwg_ent_dim *restrict dim,
                            int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && scale3d
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -7587,9 +7647,9 @@ dwg_ent_dim_get_ins_scale (const dwg_ent_dim *restrict dim,
                            dwg_point_3d *restrict scale3d, int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && scale3d
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -7618,9 +7678,9 @@ dwg_ent_dim_set_clone_ins_pt (dwg_ent_dim *restrict dim,
                               int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -7648,9 +7708,9 @@ dwg_ent_dim_get_clone_ins_pt (const dwg_ent_dim *restrict dim,
                               int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -7730,9 +7790,9 @@ dwg_ent_dim_ordinate_set_def_pt (dwg_ent_dim_ordinate *restrict dim,
                                  int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -7761,9 +7821,9 @@ dwg_ent_dim_ordinate_get_def_pt (const dwg_ent_dim_ordinate *restrict dim,
                                  int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -7792,9 +7852,9 @@ dwg_ent_dim_ordinate_set_feature_location_pt (
     int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -7823,9 +7883,9 @@ dwg_ent_dim_ordinate_get_feature_location_pt (
     int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -7854,9 +7914,9 @@ dwg_ent_dim_ordinate_set_leader_endpt (dwg_ent_dim_ordinate *restrict dim,
                                        int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -7885,9 +7945,9 @@ dwg_ent_dim_ordinate_get_leader_endpt (
     int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -7920,9 +7980,9 @@ dwg_ent_dim_linear_set_def_pt (dwg_ent_dim_linear *restrict dim,
                                int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -7951,9 +8011,9 @@ dwg_ent_dim_linear_get_def_pt (const dwg_ent_dim_linear *restrict dim,
                                int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -7982,9 +8042,9 @@ dwg_ent_dim_linear_set_13_pt (dwg_ent_dim_linear *restrict dim,
                               int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8013,9 +8073,9 @@ dwg_ent_dim_linear_get_13_pt (const dwg_ent_dim_linear *restrict dim,
                               int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8044,9 +8104,9 @@ dwg_ent_dim_linear_set_14_pt (dwg_ent_dim_linear *restrict dim,
                               int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8075,9 +8135,9 @@ dwg_ent_dim_linear_get_14_pt (const dwg_ent_dim_linear *restrict dim,
                               int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8206,9 +8266,9 @@ dwg_ent_dim_aligned_set_def_pt (dwg_ent_dim_aligned *restrict dim,
                                 int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8237,9 +8297,9 @@ dwg_ent_dim_aligned_get_def_pt (const dwg_ent_dim_aligned *restrict dim,
                                 int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8268,9 +8328,9 @@ dwg_ent_dim_aligned_set_13_pt (dwg_ent_dim_aligned *restrict dim,
                                int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8299,9 +8359,9 @@ dwg_ent_dim_aligned_get_13_pt (const dwg_ent_dim_aligned *restrict dim,
                                int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8330,9 +8390,9 @@ dwg_ent_dim_aligned_set_14_pt (dwg_ent_dim_aligned *restrict dim,
                                int *restrict error)
 {
   if (dim
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8439,9 +8499,9 @@ dwg_ent_dim_ang3pt_set_def_pt (dwg_ent_dim_ang3pt *restrict ang,
                                int *restrict error)
 {
   if (ang
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8497,9 +8557,9 @@ dwg_ent_dim_ang3pt_set_13_pt (dwg_ent_dim_ang3pt *restrict ang,
                               int *restrict error)
 {
   if (ang
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8528,9 +8588,9 @@ dwg_ent_dim_ang3pt_get_13_pt (const dwg_ent_dim_ang3pt *restrict ang,
                               int *restrict error)
 {
   if (ang
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8559,9 +8619,9 @@ dwg_ent_dim_ang3pt_set_14_pt (dwg_ent_dim_ang3pt *restrict ang,
                               int *restrict error)
 {
   if (ang
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8590,9 +8650,9 @@ dwg_ent_dim_ang3pt_get_14_pt (const dwg_ent_dim_ang3pt *restrict ang,
                               int *restrict error)
 {
   if (ang
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8621,9 +8681,9 @@ dwg_ent_dim_ang3pt_set_first_arc_pt (dwg_ent_dim_ang3pt *restrict ang,
                                      int *restrict error)
 {
   if (ang
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8652,9 +8712,9 @@ dwg_ent_dim_ang3pt_get_first_arc_pt (const dwg_ent_dim_ang3pt *restrict ang,
                                      int *restrict error)
 {
   if (ang
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8681,9 +8741,9 @@ dwg_ent_dim_ang2ln_set_def_pt (dwg_ent_dim_ang2ln *restrict ang,
                                int *restrict error)
 {
   if (ang
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8706,9 +8766,9 @@ dwg_ent_dim_ang2ln_get_def_pt (const dwg_ent_dim_ang2ln *restrict ang,
                                int *restrict error)
 {
   if (ang
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8731,9 +8791,9 @@ dwg_ent_dim_ang2ln_set_13_pt (dwg_ent_dim_ang2ln *restrict ang,
                               int *restrict error)
 {
   if (ang
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8756,9 +8816,9 @@ dwg_ent_dim_ang2ln_get_13_pt (const dwg_ent_dim_ang2ln *restrict ang,
                               int *restrict error)
 {
   if (ang
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8781,9 +8841,9 @@ dwg_ent_dim_ang2ln_set_14_pt (dwg_ent_dim_ang2ln *restrict ang,
                               int *restrict error)
 {
   if (ang
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8806,9 +8866,9 @@ dwg_ent_dim_ang2ln_get_14_pt (const dwg_ent_dim_ang2ln *restrict ang,
                               int *restrict error)
 {
   if (ang
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8831,9 +8891,9 @@ dwg_ent_dim_ang2ln_set_first_arc_pt (dwg_ent_dim_ang2ln *restrict ang,
                                      int *restrict error)
 {
   if (ang
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8856,9 +8916,9 @@ dwg_ent_dim_ang2ln_get_first_arc_pt (const dwg_ent_dim_ang2ln *restrict ang,
                                      int *restrict error)
 {
   if (ang
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8881,9 +8941,9 @@ dwg_ent_dim_ang2ln_set_16_pt (dwg_ent_dim_ang2ln *restrict ang,
                               int *restrict error)
 {
   if (ang
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8905,9 +8965,9 @@ dwg_ent_dim_ang2ln_get_16_pt (const dwg_ent_dim_ang2ln *restrict ang,
                               int *restrict error)
 {
   if (ang
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8933,9 +8993,9 @@ dwg_ent_dim_radius_set_def_pt (dwg_ent_dim_radius *restrict radius,
                                int *restrict error)
 {
   if (radius
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8958,9 +9018,9 @@ dwg_ent_dim_radius_get_def_pt (const dwg_ent_dim_radius *restrict radius,
                                int *restrict error)
 {
   if (radius
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -8983,9 +9043,9 @@ dwg_ent_dim_radius_set_first_arc_pt (dwg_ent_dim_radius *restrict radius,
                                      int *restrict error)
 {
   if (radius
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -9008,9 +9068,9 @@ dwg_ent_dim_radius_get_first_arc_pt (const dwg_ent_dim_radius *restrict radius,
                                      int *restrict error)
 {
   if (radius
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -9074,9 +9134,9 @@ dwg_ent_dim_diameter_set_def_pt (dwg_ent_dim_diameter *restrict dia,
                                  int *restrict error)
 {
   if (dia
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -9099,9 +9159,9 @@ dwg_ent_dim_diameter_get_def_pt (const dwg_ent_dim_diameter *restrict dia,
                                  int *restrict error)
 {
   if (dia
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -9124,9 +9184,9 @@ dwg_ent_dim_diameter_set_first_arc_pt (dwg_ent_dim_diameter *restrict dia,
                                        int *restrict error)
 {
   if (dia
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -9149,9 +9209,9 @@ dwg_ent_dim_diameter_get_first_arc_pt (
     int *restrict error)
 {
   if (dia
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -9215,9 +9275,9 @@ dwg_ent_shape_get_ins_pt (const dwg_ent_shape *restrict shape,
                           dwg_point_3d *restrict point, int *restrict error)
 {
   if (shape
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -9240,9 +9300,9 @@ dwg_ent_shape_set_ins_pt (dwg_ent_shape *restrict shape,
                           int *restrict error)
 {
   if (shape
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -9486,9 +9546,9 @@ dwg_ent_shape_get_extrusion (const dwg_ent_shape *restrict shape,
                              dwg_point_3d *restrict point, int *restrict error)
 {
   if (shape
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -9511,9 +9571,9 @@ dwg_ent_shape_set_extrusion (dwg_ent_shape *restrict shape,
                              int *restrict error)
 {
   if (shape
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -9540,9 +9600,9 @@ dwg_ent_mtext_set_insertion_pt (dwg_ent_mtext *restrict mtext,
                                 int *restrict error)
 {
   if (mtext
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -9565,9 +9625,9 @@ dwg_ent_mtext_get_insertion_pt (const dwg_ent_mtext *restrict mtext,
                                 int *restrict error)
 {
   if (mtext
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -9590,9 +9650,9 @@ dwg_ent_mtext_set_extrusion (dwg_ent_mtext *restrict mtext,
                              int *restrict error)
 {
   if (mtext
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -9614,9 +9674,9 @@ dwg_ent_mtext_get_extrusion (const dwg_ent_mtext *restrict mtext,
                              dwg_point_3d *restrict point, int *restrict error)
 {
   if (mtext
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -9639,9 +9699,9 @@ dwg_ent_mtext_set_x_axis_dir (dwg_ent_mtext *restrict mtext,
                               int *restrict error)
 {
   if (mtext
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -9664,9 +9724,9 @@ dwg_ent_mtext_get_x_axis_dir (const dwg_ent_mtext *restrict mtext,
                               int *restrict error)
 {
   if (mtext
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -10163,9 +10223,9 @@ dwg_ent_leader_set_origin (dwg_ent_leader *restrict leader,
                            int *restrict error)
 {
   if (leader
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -10187,9 +10247,9 @@ dwg_ent_leader_get_origin (const dwg_ent_leader *restrict leader,
                            dwg_point_3d *restrict point, int *restrict error)
 {
   if (leader
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -10212,9 +10272,9 @@ dwg_ent_leader_set_extrusion (dwg_ent_leader *restrict leader,
                               int *restrict error)
 {
   if (leader
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -10237,9 +10297,9 @@ dwg_ent_leader_get_extrusion (const dwg_ent_leader *restrict leader,
                               int *restrict error)
 {
   if (leader
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -10262,9 +10322,9 @@ dwg_ent_leader_set_x_direction (dwg_ent_leader *restrict leader,
                                 int *restrict error)
 {
   if (leader
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -10287,9 +10347,9 @@ dwg_ent_leader_get_x_direction (const dwg_ent_leader *restrict leader,
                                 int *restrict error)
 {
   if (leader
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -10312,9 +10372,9 @@ dwg_ent_leader_set_offset_to_block_ins_pt (dwg_ent_leader *restrict leader,
                                            int *restrict error)
 {
   if (leader
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -10337,9 +10397,9 @@ dwg_ent_leader_get_offset_to_block_ins_pt (
     int *restrict error)
 {
   if (leader
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -10736,9 +10796,9 @@ dwg_ent_tolerance_set_ins_pt (dwg_ent_tolerance *restrict tol,
                               int *restrict error)
 {
   if (tol
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -10761,9 +10821,9 @@ dwg_ent_tolerance_get_ins_pt (const dwg_ent_tolerance *restrict tol,
                               int *restrict error)
 {
   if (tol
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -10786,9 +10846,9 @@ dwg_ent_tolerance_set_x_direction (dwg_ent_tolerance *restrict tol,
                                    int *restrict error)
 {
   if (tol
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -10811,9 +10871,9 @@ dwg_ent_tolerance_get_x_direction (const dwg_ent_tolerance *restrict tol,
                                    int *restrict error)
 {
   if (tol
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -10836,9 +10896,9 @@ dwg_ent_tolerance_set_extrusion (dwg_ent_tolerance *restrict tol,
                                  int *restrict error)
 {
   if (tol
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -10861,9 +10921,9 @@ dwg_ent_tolerance_get_extrusion (const dwg_ent_tolerance *restrict tol,
                                  int *restrict error)
 {
   if (tol
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -11135,9 +11195,9 @@ dwg_ent_lwpline_get_extrusion (const dwg_ent_lwpline *restrict lwpline,
                                int *restrict error)
 {
   if (lwpline
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -11160,9 +11220,9 @@ dwg_ent_lwpline_set_extrusion (dwg_ent_lwpline *restrict lwpline,
                                int *restrict error)
 {
   if (lwpline
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -11283,8 +11343,7 @@ dwg_ent_ole2frame_get_type (const dwg_ent_ole2frame *restrict frame,
  */
 void
 dwg_ent_ole2frame_set_type (dwg_ent_ole2frame *restrict frame,
-                            const BITCODE_BS type,
-                            int *restrict error)
+                            const BITCODE_BS type, int *restrict error)
 {
   if (frame && type >= 1 && type <= 3)
     {
@@ -11378,8 +11437,7 @@ dwg_ent_ole2frame_get_data (const dwg_ent_ole2frame *restrict frame,
 void
 dwg_ent_ole2frame_set_data (dwg_ent_ole2frame *restrict frame,
                             const char *restrict data,
-                            const BITCODE_BL data_length,
-                            int *restrict error)
+                            const BITCODE_BL data_length, int *restrict error)
 {
   if (frame)
     {
@@ -11809,9 +11867,9 @@ dwg_ent_spline_get_begin_tan_vector (const dwg_ent_spline *restrict spline,
                                      int *restrict error)
 {
   if (spline
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -11834,9 +11892,9 @@ dwg_ent_spline_set_begin_tan_vector (dwg_ent_spline *restrict spline,
                                      int *restrict error)
 {
   if (spline
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -11859,9 +11917,9 @@ dwg_ent_spline_get_end_tan_vector (const dwg_ent_spline *restrict spline,
                                    int *restrict error)
 {
   if (spline
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -11884,9 +11942,9 @@ dwg_ent_spline_set_end_tan_vector (dwg_ent_spline *restrict spline,
                                    int *restrict error)
 {
   if (spline
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -12271,9 +12329,9 @@ dwg_ent_viewport_get_center (const dwg_ent_viewport *restrict vp,
                              dwg_point_3d *restrict point, int *restrict error)
 {
   if (vp
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -12296,9 +12354,9 @@ dwg_ent_viewport_set_center (dwg_ent_viewport *restrict vp,
                              int *restrict error)
 {
   if (vp
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -12699,9 +12757,9 @@ dwg_ent_viewport_set_view_target (dwg_ent_viewport *restrict vp,
                                   int *restrict error)
 {
   if (vp
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -12724,9 +12782,9 @@ dwg_ent_viewport_get_view_target (const dwg_ent_viewport *restrict vp,
                                   int *restrict error)
 {
   if (vp
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -12749,9 +12807,9 @@ dwg_ent_viewport_set_view_direction (dwg_ent_viewport *restrict vp,
                                      int *restrict error)
 {
   if (vp
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -12774,9 +12832,9 @@ dwg_ent_viewport_get_view_direction (const dwg_ent_viewport *restrict vp,
                                      int *restrict error)
 {
   if (vp
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -13021,9 +13079,9 @@ dwg_ent_viewport_get_view_center (const dwg_ent_viewport *restrict vp,
                                   int *restrict error)
 {
   if (vp
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -13065,9 +13123,9 @@ dwg_ent_viewport_get_grid_spacing (const dwg_ent_viewport *restrict vp,
                                    int *restrict error)
 {
   if (vp
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -13089,9 +13147,9 @@ dwg_ent_viewport_set_grid_spacing (dwg_ent_viewport *restrict vp,
                                    int *restrict error)
 {
   if (vp
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -13113,9 +13171,9 @@ dwg_ent_viewport_get_snap_base (const dwg_ent_viewport *restrict vp,
                                 int *restrict error)
 {
   if (vp
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -13137,9 +13195,9 @@ dwg_ent_viewport_set_snap_base (dwg_ent_viewport *restrict vp,
                                 int *restrict error)
 {
   if (vp
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -13161,9 +13219,9 @@ dwg_ent_viewport_get_snap_spacing (const dwg_ent_viewport *restrict vp,
                                    int *restrict error)
 {
   if (vp
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -13185,9 +13243,9 @@ dwg_ent_viewport_set_snap_spacing (dwg_ent_viewport *restrict vp,
                                    int *restrict error)
 {
   if (vp
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -13209,9 +13267,9 @@ dwg_ent_viewport_set_ucs_origin (dwg_ent_viewport *restrict vp,
                                  int *restrict error)
 {
   if (vp
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -13234,9 +13292,9 @@ dwg_ent_viewport_get_ucs_origin (const dwg_ent_viewport *restrict vp,
                                  int *restrict error)
 {
   if (vp
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -13259,9 +13317,9 @@ dwg_ent_viewport_set_ucs_x_axis (dwg_ent_viewport *restrict vp,
                                  int *restrict error)
 {
   if (vp
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -13284,9 +13342,9 @@ dwg_ent_viewport_get_ucs_x_axis (const dwg_ent_viewport *restrict vp,
                                  int *restrict error)
 {
   if (vp
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -13309,9 +13367,9 @@ dwg_ent_viewport_set_ucs_y_axis (dwg_ent_viewport *restrict vp,
                                  int *restrict error)
 {
   if (vp
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -13334,9 +13392,9 @@ dwg_ent_viewport_get_ucs_y_axis (const dwg_ent_viewport *restrict vp,
                                  int *restrict error)
 {
   if (vp
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -13906,9 +13964,9 @@ dwg_ent_polyline_2d_get_extrusion (const dwg_ent_polyline_2d *restrict pline2d,
                                    int *restrict error)
 {
   if (pline2d
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -13935,9 +13993,9 @@ dwg_ent_polyline_2d_set_extrusion (dwg_ent_polyline_2d *restrict pline2d,
                                    int *restrict error)
 {
   if (pline2d
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -14294,7 +14352,7 @@ dwg_object_polyline_2d_get_points (const dwg_object *restrict obj,
               }
           }
       // iterate over first_vertex - last_vertex
-      else if (dwg->header.version >= R_13) 
+      else if (dwg->header.version >= R_13)
         {
           Dwg_Object *vobj = dwg_ref_object (dwg, _obj->first_vertex);
           Dwg_Object *vlast = dwg_ref_object (dwg, _obj->last_vertex);
@@ -14688,9 +14746,9 @@ dwg_ent_3dface_get_corner1 (const dwg_ent_3dface *restrict _3dface,
                             dwg_point_2d *restrict point, int *restrict error)
 {
   if (_3dface
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -14718,9 +14776,9 @@ dwg_ent_3dface_set_corner1 (dwg_ent_3dface *restrict _3dface,
                             int *restrict error)
 {
   if (_3dface
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -14747,9 +14805,9 @@ dwg_ent_3dface_get_corner2 (const dwg_ent_3dface *restrict _3dface,
                             dwg_point_2d *restrict point, int *restrict error)
 {
   if (_3dface
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -14777,9 +14835,9 @@ dwg_ent_3dface_set_corner2 (dwg_ent_3dface *restrict _3dface,
                             int *restrict error)
 {
   if (_3dface
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -14806,9 +14864,9 @@ dwg_ent_3dface_get_corner3 (const dwg_ent_3dface *restrict _3dface,
                             dwg_point_2d *restrict point, int *restrict error)
 {
   if (_3dface
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -14836,9 +14894,9 @@ dwg_ent_3dface_set_corner3 (dwg_ent_3dface *restrict _3dface,
                             int *restrict error)
 {
   if (_3dface
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -14865,9 +14923,9 @@ dwg_ent_3dface_get_corner4 (const dwg_ent_3dface *restrict _3dface,
                             dwg_point_2d *restrict point, int *restrict error)
 {
   if (_3dface
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -14895,9 +14953,9 @@ dwg_ent_3dface_set_corner4 (dwg_ent_3dface *restrict _3dface,
                             int *restrict error)
 {
   if (_3dface
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -14960,9 +15018,9 @@ dwg_ent_image_get_pt0 (const dwg_ent_image *restrict image,
                        dwg_point_3d *restrict point, int *restrict error)
 {
   if (image
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -14984,9 +15042,9 @@ dwg_ent_image_set_pt0 (dwg_ent_image *restrict image,
                        const dwg_point_3d *restrict point, int *restrict error)
 {
   if (image
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -15008,9 +15066,9 @@ dwg_ent_image_get_u_vector (const dwg_ent_image *restrict image,
                             dwg_point_3d *restrict point, int *restrict error)
 {
   if (image
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -15033,9 +15091,9 @@ dwg_ent_image_set_u_vector (dwg_ent_image *restrict image,
                             int *restrict error)
 {
   if (image
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -15057,9 +15115,9 @@ dwg_ent_image_get_v_vector (const dwg_ent_image *restrict image,
                             dwg_point_3d *restrict point, int *restrict error)
 {
   if (image
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -15082,9 +15140,9 @@ dwg_ent_image_set_v_vector (dwg_ent_image *restrict image,
                             int *restrict error)
 {
   if (image
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -15404,9 +15462,9 @@ dwg_ent_image_get_boundary_pt0 (const dwg_ent_image *restrict image,
                                 int *restrict error)
 {
   if (image
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -15428,9 +15486,9 @@ dwg_ent_image_set_boundary_pt0 (dwg_ent_image *restrict image,
                                 int *restrict error)
 {
   if (image
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -15452,9 +15510,9 @@ dwg_ent_image_get_boundary_pt1 (const dwg_ent_image *restrict image,
                                 int *restrict error)
 {
   if (image
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -15476,9 +15534,9 @@ dwg_ent_image_set_boundary_pt1 (dwg_ent_image *restrict image,
                                 int *restrict error)
 {
   if (image
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -15622,9 +15680,9 @@ dwg_ent_mline_set_base_point (dwg_ent_mline *restrict mline,
                               int *restrict error)
 {
   if (mline
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -15647,9 +15705,9 @@ dwg_ent_mline_get_base_point (const dwg_ent_mline *restrict mline,
                               int *restrict error)
 {
   if (mline
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -15672,9 +15730,9 @@ dwg_ent_mline_set_extrusion (dwg_ent_mline *restrict mline,
                              int *restrict error)
 {
   if (mline
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -15696,9 +15754,9 @@ dwg_ent_mline_get_extrusion (const dwg_ent_mline *restrict mline,
                              dwg_point_3d *restrict point, int *restrict error)
 {
   if (mline
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -15865,9 +15923,9 @@ dwg_ent_vertex_pface_face_set_vertind (dwg_ent_vert_pface_face *restrict face,
                                        const BITCODE_BS vertind[4])
 {
   if (face
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vertind
-#endif
+#  endif
   )
     {
       face->vertind[0] = vertind[0];
@@ -16063,9 +16121,9 @@ dwg_ent_3dsolid_get_point (const dwg_ent_3dsolid *restrict _3dsolid,
                            dwg_point_3d *restrict point, int *restrict error)
 {
   if (_3dsolid
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -16088,9 +16146,9 @@ dwg_ent_3dsolid_set_point (dwg_ent_3dsolid *restrict _3dsolid,
                            int *restrict error)
 {
   if (_3dsolid
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -16759,9 +16817,9 @@ dwg_ent_table_set_insertion_point (dwg_ent_table *restrict table,
                                    int *restrict error)
 {
   if (table
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -16788,9 +16846,9 @@ dwg_ent_table_get_insertion_point (const dwg_ent_table *restrict table,
                                    int *restrict error)
 {
   if (table
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && point
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -16817,9 +16875,9 @@ dwg_ent_table_set_scale (dwg_ent_table *restrict table,
                          int *restrict error)
 {
   if (table
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && scale3d
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -16858,9 +16916,9 @@ dwg_ent_table_get_scale (const dwg_ent_table *restrict table,
                          dwg_point_3d *restrict scale3d, int *restrict error)
 {
   if (table
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && scale3d
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -16975,9 +17033,9 @@ dwg_ent_table_set_extrusion (dwg_ent_table *restrict table,
                              int *restrict error)
 {
   if (table
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -17004,9 +17062,9 @@ dwg_ent_table_get_extrusion (const dwg_ent_table *restrict table,
                              int *restrict error)
 {
   if (table
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -17084,9 +17142,9 @@ dwg_ent_table_set_flag_for_table_value (dwg_ent_table *restrict table,
                                         int *restrict error)
 {
   if (table
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && value < 0x30
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -17134,9 +17192,9 @@ dwg_ent_table_set_horiz_direction (dwg_ent_table *restrict table,
                                    int *restrict error)
 {
   if (table
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -17163,9 +17221,9 @@ dwg_ent_table_get_horiz_direction (const dwg_ent_table *restrict table,
                                    int *restrict error)
 {
   if (table
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
       && vector
-#endif
+#  endif
   )
     {
       *error = 0;
@@ -20560,8 +20618,9 @@ dwg_ent_get_xdic_missing_flag (const dwg_obj_ent *restrict ent,
   _BODY_FIELD (ent, xdic_missing_flag);
 }
 
-EXPORT BITCODE_B dwg_ent_get_isbylayerlt (const dwg_obj_ent *restrict ent,
-                                          int *restrict error) // r13-r14 only
+EXPORT BITCODE_B
+dwg_ent_get_isbylayerlt (const dwg_obj_ent *restrict ent,
+                         int *restrict error) // r13-r14 only
 {
   _BODY_FIELD (ent, isbylayerlt);
 }
@@ -20579,44 +20638,51 @@ dwg_ent_get_linetype_scale (const dwg_obj_ent *restrict ent,
   _BODY_FIELD (ent, ltype_scale);
 }
 
-EXPORT BITCODE_BB dwg_ent_get_linetype_flags (const dwg_obj_ent *restrict ent,
-                                              int *restrict error) // r2000+
+EXPORT BITCODE_BB
+dwg_ent_get_linetype_flags (const dwg_obj_ent *restrict ent,
+                            int *restrict error) // r2000+
 {
   _BODY_FIELD (ent, ltype_flags);
 }
 
-EXPORT BITCODE_BB dwg_ent_get_plotstyle_flags (const dwg_obj_ent *restrict ent,
-                                               int *restrict error) // r2000+
+EXPORT BITCODE_BB
+dwg_ent_get_plotstyle_flags (const dwg_obj_ent *restrict ent,
+                             int *restrict error) // r2000+
 {
   _BODY_FIELD (ent, plotstyle_flags);
 }
 
-EXPORT BITCODE_BB dwg_ent_get_material_flags (const dwg_obj_ent *restrict ent,
-                                              int *restrict error) // r2007+
+EXPORT BITCODE_BB
+dwg_ent_get_material_flags (const dwg_obj_ent *restrict ent,
+                            int *restrict error) // r2007+
 {
   _BODY_FIELD (ent, material_flags);
 }
 
-EXPORT BITCODE_RC dwg_ent_get_shadow_flags (const dwg_obj_ent *restrict ent,
-                                            int *restrict error) // r2007+
+EXPORT BITCODE_RC
+dwg_ent_get_shadow_flags (const dwg_obj_ent *restrict ent,
+                          int *restrict error) // r2007+
 {
   _BODY_FIELD (ent, shadow_flags);
 }
 
-EXPORT BITCODE_B dwg_ent_has_full_visualstyle (dwg_obj_ent *restrict ent,
-                                               int *restrict error) // r2010+
+EXPORT BITCODE_B
+dwg_ent_has_full_visualstyle (dwg_obj_ent *restrict ent,
+                              int *restrict error) // r2010+
 {
   _BODY_FIELD (ent, has_full_visualstyle);
 }
 
-EXPORT BITCODE_B dwg_ent_has_face_visualstyle (dwg_obj_ent *restrict ent,
-                                               int *restrict error) // r2010+
+EXPORT BITCODE_B
+dwg_ent_has_face_visualstyle (dwg_obj_ent *restrict ent,
+                              int *restrict error) // r2010+
 {
   _BODY_FIELD (ent, has_face_visualstyle);
 }
 
-EXPORT BITCODE_B dwg_ent_has_edge_visualstyle (dwg_obj_ent *restrict ent,
-                                               int *restrict error) // r2010+
+EXPORT BITCODE_B
+dwg_ent_has_edge_visualstyle (dwg_obj_ent *restrict ent,
+                              int *restrict error) // r2010+
 {
   _BODY_FIELD (ent, has_edge_visualstyle);
 }
@@ -20627,8 +20693,9 @@ dwg_ent_get_invisible (const dwg_obj_ent *restrict ent, int *restrict error)
   _BODY_FIELD (ent, invisible);
 }
 
-EXPORT BITCODE_RC dwg_ent_get_linewt (const dwg_obj_ent *restrict ent,
-                                      int *restrict error) // r2000+
+EXPORT BITCODE_RC
+dwg_ent_get_linewt (const dwg_obj_ent *restrict ent,
+                    int *restrict error) // r2000+
 {
   _BODY_FIELD (ent, linewt);
 }
@@ -20679,14 +20746,16 @@ dwg_ent_get_ltype (const dwg_obj_ent *restrict ent, int *restrict error)
   _BODY_FIELD (ent, ltype);
 }
 
-EXPORT dwg_object_ref *dwg_ent_get_material (const dwg_obj_ent *restrict ent,
-                                             int *restrict error) // r2007+
+EXPORT dwg_object_ref *
+dwg_ent_get_material (const dwg_obj_ent *restrict ent,
+                      int *restrict error) // r2007+
 {
   _BODY_FIELD (ent, material);
 }
 
-EXPORT dwg_object_ref *dwg_ent_get_plotstyle (const dwg_obj_ent *restrict ent,
-                                              int *restrict error) // r2000+
+EXPORT dwg_object_ref *
+dwg_ent_get_plotstyle (const dwg_obj_ent *restrict ent,
+                       int *restrict error) // r2000+
 {
   _BODY_FIELD (ent, plotstyle);
 }
@@ -21214,11 +21283,11 @@ dwg_obj_generic_to_object (const dwg_obj_generic *restrict obj,
     {
       dwg_data *dwg = obj->parent->dwg;
       dwg_object *retval = &dwg->object[obj->parent->objid];
-      if (obj->parent->objid > dwg->num_objects ||
-          dwg->header.version > R_AFTER)
+      if (obj->parent->objid > dwg->num_objects
+          || dwg->header.version > R_AFTER)
         {
           *error = 1;
-          LOG_ERROR("%s: Invalid obj", __FUNCTION__)
+          LOG_ERROR ("%s: Invalid obj", __FUNCTION__)
           return NULL;
         }
       *error = 0;

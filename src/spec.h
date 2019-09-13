@@ -48,12 +48,14 @@
 #  define rad2deg(ang) (ang) * 90.0 / M_PI_2
 #  define deg2rad(ang) (ang) * M_PI_2 / 90.0
 
-#  define VALUEOUTOFBOUNDS(field, maxvalue)                             \
-  if (_obj->field > maxvalue) {                                         \
-    LOG_ERROR("Invalid %s." #field " %lu" , obj->name, (unsigned long)_obj->field); \
-    _obj->field = 0;                                                    \
-    return DWG_ERR_VALUEOUTOFBOUNDS;                                    \
-  }
+#  define VALUEOUTOFBOUNDS(field, maxvalue)                                   \
+    if (_obj->field > maxvalue)                                               \
+      {                                                                       \
+        LOG_ERROR ("Invalid %s." #field " %lu", obj->name,                    \
+                   (unsigned long)_obj->field);                               \
+        _obj->field = 0;                                                      \
+        return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
+      }
 
 #endif /* SPEC_H */
 

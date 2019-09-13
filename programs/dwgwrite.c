@@ -116,8 +116,8 @@ main (int argc, char *argv[])
       = { { "verbose", 1, &opts, 1 }, // optional
           { "format", 1, 0, 'I' },    { "file", 1, 0, 'o' },
           { "as", 1, 0, 'a' },        { "help", 0, 0, 0 },
-          { "overwrite", 0, 0, 'y' },
-          { "version", 0, 0, 0 },     { NULL, 0, NULL, 0 } };
+          { "overwrite", 0, 0, 'y' }, { "version", 0, 0, 0 },
+          { NULL, 0, NULL, 0 } };
 #endif
 
   if (argc < 2)
@@ -271,7 +271,7 @@ main (int argc, char *argv[])
     }
   else */
   if ((fmt && !strcasecmp (fmt, "dxfb"))
-           || (infile && !strcasecmp (infile, ".dxfb")))
+      || (infile && !strcasecmp (infile, ".dxfb")))
     {
       if (opts > 1)
         fprintf (stderr, "Reading Binary DXF file %s\n",
@@ -339,17 +339,18 @@ main (int argc, char *argv[])
           }
         else
           {
-            if (S_ISREG (attrib.st_mode) && // refuse to remove a directory
+            if (S_ISREG (attrib.st_mode) &&   // refuse to remove a directory
                 (access (outfile, W_OK) == 0) // writable
 #ifndef _WIN32
                 // refuse to remove a symlink. even with overwrite. security
                 && !S_ISLNK (attrib.st_mode)
 #endif
-                )
+            )
               unlink (outfile);
             else
               {
-                fprintf (stderr, "Not writable file or symlink: %s\n", outfile);
+                fprintf (stderr, "Not writable file or symlink: %s\n",
+                         outfile);
                 error |= DWG_ERR_IOERROR;
               }
           }
@@ -360,7 +361,7 @@ main (int argc, char *argv[])
 
   // forget about valgrind. really huge DWG's need endlessly here.
   if ((dwg.header.version && dwg.num_objects < 1000)
-#if defined __SANITIZE_ADDRESS__ || __has_feature (address_sanitizer)
+#if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
       || 1
 #endif
 #ifdef HAVE_VALGRIND_VALGRIND_H

@@ -90,6 +90,6 @@ for dir in "$@"; do
            -e's, (-Wmissing - prototypes), (-Wmissing-prototypes),;' \
            -e's, (-Wdeprecated - declarations), (-Wdeprecated-declarations),;' \
            -e's, (-Wpragma - pack), (-Wpragma-pack),;' \
-        `grep -l 'DIAG_IGNORE' */*.c *.c`
+        `grep -l 'DIAG_IGNORE' */*.{c,h} *.{c,h}`
     popd &>/dev/null
 done

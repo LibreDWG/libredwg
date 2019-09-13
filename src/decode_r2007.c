@@ -128,8 +128,7 @@ static void pages_destroy (r2007_page *page);
 static void sections_destroy (r2007_section *section);
 static r2007_section *read_sections_map (Bit_Chain *dat, int64_t size_comp,
                                          int64_t size_uncomp,
-                                         int64_t correction)
-  ATTRIBUTE_MALLOC;
+                                         int64_t correction) ATTRIBUTE_MALLOC;
 static int read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
                               r2007_section *restrict sections_map,
                               r2007_page *restrict pages_map,
@@ -146,15 +145,17 @@ static int read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl_dat,
                                       Dwg_Data *restrict dwg,
                                       r2007_section *restrict sections_map,
                                       r2007_page *restrict pages_map);
-static int read_2007_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+static int read_2007_section_summary (Bit_Chain *restrict dat,
+                                      Dwg_Data *restrict dwg,
                                       r2007_section *restrict sections_map,
                                       r2007_page *restrict pages_map);
-static int read_2007_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+static int read_2007_section_preview (Bit_Chain *restrict dat,
+                                      Dwg_Data *restrict dwg,
                                       r2007_section *restrict sections_map,
                                       r2007_page *restrict pages_map);
 static r2007_page *read_pages_map (Bit_Chain *dat, int64_t size_comp,
-                                   int64_t size_uncomp, int64_t correction)
-  ATTRIBUTE_MALLOC;
+                                   int64_t size_uncomp,
+                                   int64_t correction) ATTRIBUTE_MALLOC;
 static int read_file_header (Bit_Chain *restrict dat,
                              r2007_file_header *restrict file_header);
 static void read_instructions (BITCODE_RC *restrict *restrict src,
@@ -171,11 +172,9 @@ static uint32_t read_literal_length (BITCODE_RC *restrict *restrict src,
 static void copy_compressed_bytes (BITCODE_RC *restrict dst,
                                    BITCODE_RC *restrict src, int length);
 static DWGCHAR *bfr_read_string (BITCODE_RC *restrict *restrict src,
-                                 int64_t size)
-  ATTRIBUTE_MALLOC;
+                                 int64_t size) ATTRIBUTE_MALLOC;
 static BITCODE_RC *decode_rs (const BITCODE_RC *src, int block_count,
-                              int data_size)
-  ATTRIBUTE_MALLOC;
+                              int data_size) ATTRIBUTE_MALLOC;
 static int decompress_r2007 (BITCODE_RC *restrict dst, int dst_size,
                              BITCODE_RC *restrict src, int src_size);
 
@@ -538,12 +537,12 @@ decompress_r2007 (BITCODE_RC *restrict dst, int dst_size,
               LOG_ERROR ("Decompression error: length overflow");
               return DWG_ERR_INTERNALERROR;
             }
-          if (offset > (uint32_t)(dst - dst_start))
+          if (offset > (uint32_t) (dst - dst_start))
             {
               LOG_ERROR ("Decompression error: offset underflow");
               return DWG_ERR_INTERNALERROR;
             }
-          LOG_INSANE("copy_bytes(%p %u %u)\n", dst, length, offset);
+          LOG_INSANE ("copy_bytes(%p %u %u)\n", dst, length, offset);
           copy_bytes (dst, length, offset);
 
           dst += length;
@@ -757,8 +756,8 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
       // theoretically the sizes could still be the same.
       if (section_page->comp_size != section_page->uncomp_size)
         {
-          error = read_data_page (dat, &decomp[section_page->offset], page->size,
-                                  section_page->comp_size,
+          error = read_data_page (dat, &decomp[section_page->offset],
+                                  page->size, section_page->comp_size,
                                   section_page->uncomp_size);
           if (error)
             {
@@ -869,8 +868,8 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       // debugging sanity
 #if 1
       /* compressed */
-      if (section->data_size > 10 * dat->size ||
-          section->name_length >= (int64_t)dat->size)
+      if (section->data_size > 10 * dat->size
+          || section->name_length >= (int64_t)dat->size)
         {
           LOG_ERROR ("Invalid System Section");
           free (section);
@@ -878,13 +877,13 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
           sections_destroy (sections); // the root
           return NULL;
         }
-      //assert(section->data_size < dat->size + 0x100000);
-      //assert(section->max_size  < dat->size + 0x100000);
-      //assert(section->num_pages < DBG_MAX_COUNT);
+        // assert(section->data_size < dat->size + 0x100000);
+        // assert(section->max_size  < dat->size + 0x100000);
+        // assert(section->num_pages < DBG_MAX_COUNT);
 #endif
-      //section->next = NULL;
-      //section->pages = NULL;
-      //section->name = NULL;
+      // section->next = NULL;
+      // section->pages = NULL;
+      // section->name = NULL;
 
       if (!sections)
         {
@@ -1207,16 +1206,16 @@ obj_handle_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   // restrict it to 0-end
   hdl_dat->byte = bit8;
   hdl_dat->bit = obj->bitsize % 8;
-  //bit_reset_chain (hdl_dat); //but keep the same start
+  // bit_reset_chain (hdl_dat); //but keep the same start
   if (!obj->handlestream_size)
     {
       obj->handlestream_size = (obj->size * 8) - obj->bitsize;
       LOG_TRACE (" Hdlsize: %lu,", obj->handlestream_size);
     }
   hdl_dat->size = obj->size;
-  pos = (pos*8) + obj->bitsize + obj->handlestream_size;
-  LOG_HANDLE (" hdl_dat: @%lu.%u - @%lu.%lu (%lu)", bit8, hdl_dat->bit, pos / 8,
-              pos % 8, hdl_dat->size);
+  pos = (pos * 8) + obj->bitsize + obj->handlestream_size;
+  LOG_HANDLE (" hdl_dat: @%lu.%u - @%lu.%lu (%lu)", bit8, hdl_dat->bit,
+              pos / 8, pos % 8, hdl_dat->size);
   LOG_TRACE ("\n")
   return 0;
 }
@@ -1233,32 +1232,34 @@ obj_string_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   old_byte = str->byte;
 
   str->chain += str->byte;
-  //obj->strpos = str->byte * 8 + str->bit;
+  // obj->strpos = str->byte * 8 + str->bit;
 
   str->byte = 0;
   str->bit = 0;
   str->size = (obj->bitsize / 8) + ((obj->bitsize % 8) ? 1 : 0);
   bit_advance_position (str, start - 8);
 
-  if (obj->supertype == DWG_SUPERTYPE_UNKNOWN) {
-    str->size = 0;
-    //bit_reset_chain (str);
-    return 0;
-  }
+  if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
+    {
+      str->size = 0;
+      // bit_reset_chain (str);
+      return 0;
+    }
   if (str->byte >= old_size - old_byte)
     {
       LOG_WARN ("obj_string_stream overflow");
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
   LOG_HANDLE (" obj string stream +%u: @%lu.%u (%lu)", start, str->byte,
-             str->bit & 7, bit_position (str));
+              str->bit & 7, bit_position (str));
   obj->has_strings = bit_read_B (str);
   LOG_TRACE (" has_strings: %d\n", (int)obj->has_strings);
-  if (!obj->has_strings) {
-    str->size = 0;
-    //bit_reset_chain (str);
-    return 0;
-  }
+  if (!obj->has_strings)
+    {
+      str->size = 0;
+      // bit_reset_chain (str);
+      return 0;
+    }
 
   bit_advance_position (str, -1); //-17
   str->byte -= 2;
@@ -1283,18 +1284,18 @@ obj_string_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   if (data_size > obj->bitsize)
     {
       LOG_WARN ("Invalid string stream data_size: @%lu.%u\n", str->byte,
-                 str->bit & 7);
+                str->bit & 7);
       obj->has_strings = 0;
       bit_reset_chain (str);
       return DWG_ERR_NOTYETSUPPORTED; // a very low severity error
     }
   obj->stringstream_size = data_size;
   bit_advance_position (str, -(int)data_size);
-  //bit_reset_chain (str);
+  // bit_reset_chain (str);
   // LOG_TRACE(" %d: @%lu.%u (%lu)\n", -(int)data_size - 16, str->byte,
   // str->bit & 7,
   //          bit_position(str));
-  //obj->strpos = obj->bitsize_pos + obj->bitsize - obj->stringstream_size;
+  // obj->strpos = obj->bitsize_pos + obj->bitsize - obj->stringstream_size;
   return 0;
 }
 
@@ -1306,15 +1307,15 @@ section_string_stream (Bit_Chain *restrict dat, BITCODE_RL bitsize,
   BITCODE_RL data_size; // in bits
   BITCODE_B endbit;
   PRE (R_2010)
-    {
-      // r2007: + 24 bytes (sentinel+size+hsize) - 1 bit (endbit)
-      start = bitsize + 159;
-    }
+  {
+    // r2007: + 24 bytes (sentinel+size+hsize) - 1 bit (endbit)
+    start = bitsize + 159;
+  }
   else
-    {
-      // r2010: + 24 bytes (sentinel+size+hSize) - 1 bit (endbit)
-      start = bitsize + 191; /* 8*24 = 192 */
-    }
+  {
+    // r2010: + 24 bytes (sentinel+size+hSize) - 1 bit (endbit)
+    start = bitsize + 191; /* 8*24 = 192 */
+  }
   *str = *dat;
   bit_set_position (str, start);
   LOG_TRACE ("section string stream\n  pos: " FORMAT_RL ", %lu/%u\n", start,
@@ -1620,9 +1621,9 @@ read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl,
         }
       else
         {
-          LOG_WARN (
-              "Handles section page CRC mismatch: %04X vs calc. %04X from %lx-%lx\n",
-              crc2, crc1, startpos, hdl_dat.byte - 2);
+          LOG_WARN ("Handles section page CRC mismatch: %04X vs calc. %04X "
+                    "from %lx-%lx\n",
+                    crc2, crc1, startpos, hdl_dat.byte - 2);
           error |= DWG_ERR_WRONGCRC;
         }
 #endif
@@ -1666,13 +1667,15 @@ read_2007_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     LOG_WARN ("summaryinfo_address mismatch: " FORMAT_RL " != %lu",
               dwg->header.summaryinfo_address, dat->byte);
   LOG_TRACE ("\nSummaryInfo\n-------------------\n")
-  str_dat = dat = &obj_dat;  //restrict in size
+  str_dat = dat = &obj_dat; // restrict in size
 
+  // clang-format off
   #include "summaryinfo.spec"
+  // clang-format on
 
   if (obj_dat.chain)
     free (obj_dat.chain);
-  *dat = old_dat; //unrestrict
+  *dat = old_dat; // unrestrict
   return error;
 }
 
@@ -1701,7 +1704,7 @@ read_2007_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               dwg->header.thumbnail_address, dat->byte);
   LOG_TRACE ("\nPreview\n-------------------\n")
 
-  sentinel = dwg_sentinel(DWG_SENTINEL_THUMBNAIL_BEGIN);
+  sentinel = dwg_sentinel (DWG_SENTINEL_THUMBNAIL_BEGIN);
   if (memcmp (sentinel, sec_dat.chain, 16))
     {
       LOG_WARN ("thumbnail sentinel mismatch");
@@ -1713,7 +1716,8 @@ read_2007_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   dwg->thumbnail.byte = 16; // sentinel
 
   dwg_bmp (dwg, &size);
-  if (abs((int)((long)size - (long)dwg->thumbnail.size)) > 200) // various headers
+  if (abs ((int)((long)size - (long)dwg->thumbnail.size))
+      > 200) // various headers
     LOG_WARN ("thumbnail.size mismatch: %lu != " FORMAT_RL,
               dwg->thumbnail.size, size);
 
@@ -1789,8 +1793,8 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   if (!sections_map)
     goto error;
 
-  error = read_2007_section_header (dat, hdl_dat, dwg, sections_map,
-                                     pages_map);
+  error
+      = read_2007_section_header (dat, hdl_dat, dwg, sections_map, pages_map);
   if (dwg->header.summaryinfo_address)
     error |= read_2007_section_summary (dat, dwg, sections_map, pages_map);
   error |= read_2007_section_classes (dat, dwg, sections_map, pages_map);
@@ -1798,15 +1802,17 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
                                       pages_map);
   if (dwg->header.thumbnail_address)
     error |= read_2007_section_preview (dat, dwg, sections_map, pages_map);
-  //if (dwg->header.vbaproj_address)
-  //  error |= read_2007_section_vbaproject (dat, dwg, sections_map, pages_map);
-  //error |= read_2007_section_appinfo (dat, dwg, sections_map, pages_map);
-  //error |= read_2007_section_filedeplist (dat, dwg, sections_map, pages_map);
-  //error |= read_2007_section_security (dat, dwg, sections_map, pages_map);
-  //error |= read_2007_section_revhistory (dat, dwg, sections_map, pages_map);
+  // if (dwg->header.vbaproj_address)
+  //  error |= read_2007_section_vbaproject (dat, dwg, sections_map,
+  //  pages_map);
+  // error |= read_2007_section_appinfo (dat, dwg, sections_map, pages_map);
+  // error |= read_2007_section_filedeplist (dat, dwg, sections_map,
+  // pages_map); error |= read_2007_section_security (dat, dwg, sections_map,
+  // pages_map); error |= read_2007_section_revhistory (dat, dwg, sections_map,
+  // pages_map);
   // read_2007_blocks (dat, hdl_dat, dwg, sections_map, pages_map);
 
- error:
+error:
   pages_destroy (pages_map);
   if (sections_map)
     sections_destroy (sections_map);

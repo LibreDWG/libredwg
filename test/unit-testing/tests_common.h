@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #if defined(BITS_TEST_C) || defined(DECODE_TEST_C)
-# include "../../src/bits.h"
+#  include "../../src/bits.h"
 #endif
 
 static int num = 0;
@@ -15,27 +15,30 @@ static char buffer[512];
 int numpassed (void);
 int numfailed (void);
 static inline void pass (void);
-static void fail (const char* fmt, ...)
+static void fail (const char *fmt, ...)
 #ifdef HAVE_FUNC_ATTRIBUTE_FORMAT
-  __attribute__((format(printf, 1, 2)))
+    __attribute__ ((format (printf, 1, 2)))
 #endif
-  ;
-static void ok (const char* fmt, ...)
+    ;
+static void ok (const char *fmt, ...)
 #ifdef HAVE_FUNC_ATTRIBUTE_FORMAT
-  __attribute__((format(printf, 1, 2)))
+    __attribute__ ((format (printf, 1, 2)))
 #endif
-  ;
+    ;
 
-int numpassed (void)
+int
+numpassed (void)
 {
   return passed;
 }
-int numfailed (void)
+int
+numfailed (void)
 {
   return failed;
 }
 
-static void ok (const char* fmt, ...)
+static void
+ok (const char *fmt, ...)
 {
   va_list ap;
 
@@ -46,12 +49,15 @@ static void ok (const char* fmt, ...)
   printf ("ok %d\t# %s\n", ++num, buffer);
 }
 
-static inline void pass (void)
+static inline void
+pass (void)
 {
-  passed++; num++;
+  passed++;
+  num++;
 }
 
-static void fail (const char* fmt, ...)
+static void
+fail (const char *fmt, ...)
 {
   va_list ap;
 
@@ -97,7 +103,7 @@ strtobt (const char *binarystring)
   const int length = strlen (binarystring);
   int size_needed = length / 8;
   if (length % 8)
-    size_needed ++;
+    size_needed++;
 
   bitprepare (&bitchain, size_needed);
 
@@ -109,7 +115,7 @@ strtobt (const char *binarystring)
         bit_write_B (&bitchain, 1);
     }
 
-  //LOG_TRACE(bit_print (&bitchain, size_need));
+  // LOG_TRACE(bit_print (&bitchain, size_need));
 
   // Reset the bit position
   bitchain.bit = 0;

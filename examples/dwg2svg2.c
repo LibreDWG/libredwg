@@ -78,10 +78,10 @@ help (void)
       exit (1);                                                               \
     }
 #define log_error(msg)                                                        \
-    {                                                                         \
-      fprintf (stderr, "ERROR: %s", msg);                                     \
-      exit (1);                                                               \
-    }
+  {                                                                           \
+    fprintf (stderr, "ERROR: %s", msg);                                       \
+    exit (1);                                                                 \
+  }
 #define dynget(obj, name, field, var)                                         \
   if (!dwg_dynapi_entity_value (obj, "" name, "" field, var, NULL))           \
     {                                                                         \
@@ -151,7 +151,7 @@ output_TEXT (dwg_object *obj)
           text_value);
 
   if (text_value && dwg_version >= R_2007)
-    free (text_value);  
+    free (text_value);
 }
 
 static void
@@ -264,12 +264,12 @@ output_INSERT (dwg_object *obj)
               "block_header->handleref: " FORMAT_H " -->\n",
               index, transform_X (ins_pt.x), transform_Y (ins_pt.y),
               (180.0 / M_PI) * rotation, _scale.x, _scale.y, abs_ref,
-              ARGS_H(*obj_handle));
+              ARGS_H (*obj_handle));
     }
   else
     {
       printf ("\n\n<!-- WRONG INSERT(" FORMAT_H ") -->\n",
-              ARGS_H(*obj_handle));
+              ARGS_H (*obj_handle));
     }
 }
 
@@ -336,10 +336,11 @@ output_BLOCK_HEADER (dwg_object_ref *ref)
 
   _hdr = dwg_object_to_BLOCK_HEADER (hdr);
   dynget (_hdr, "BLOCK_HEADER", "name", &name);
-  //name = dwg_obj_block_header_get_name (_hdr, &error);
-  //log_if_error ("block_header_get_name");
+  // name = dwg_obj_block_header_get_name (_hdr, &error);
+  // log_if_error ("block_header_get_name");
   printf ("\t<g id=\"symbol-%X\" >\n\t\t<!-- %s -->\n", abs_ref, name);
-  if (name != NULL && name != _hdr->name && hdr->parent->header.version >= R_2007)
+  if (name != NULL && name != _hdr->name
+      && hdr->parent->header.version >= R_2007)
     free (name);
 
   obj = get_first_owned_entity (hdr);

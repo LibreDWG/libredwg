@@ -64,7 +64,8 @@ help (void)
   printf ("Default DWGFILE: DXFFILE with .dwg extension in the current "
           "directory.\n"
           "Existing files are not overwritten, unless -y is given.\n"
-          "Encoding currently only works for R13-R2000, dxf2dwg is highly experimental.\n"
+          "Encoding currently only works for R13-R2000, dxf2dwg is highly "
+          "experimental.\n"
           "\n");
 #ifdef HAVE_GETOPT_LONG
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
@@ -73,7 +74,8 @@ help (void)
   printf ("             r12, r14, r2000 (default)\n");
   printf ("           Planned versions:\n");
   printf ("             r9, r10, r11, r2004, r2007, r2010, r2013, r2018\n");
-  printf ("  -o outfile, --file        optional, only valid with one single DXFFILE\n");
+  printf ("  -o outfile, --file        optional, only valid with one single "
+          "DXFFILE\n");
   printf ("       --help               display this help and exit\n");
   printf ("       --version            output version information and exit\n"
           "\n");
@@ -95,9 +97,11 @@ help (void)
 }
 
 // lsan/valgrind leaks still TODO
-#if defined __SANITIZE_ADDRESS__ || __has_feature (address_sanitizer)
+#if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
 const char *__asan_default_options (void);
-const char *__asan_default_options (void) {
+const char *
+__asan_default_options (void)
+{
   return "detect_leaks=0";
 }
 #endif
@@ -120,9 +124,8 @@ main (int argc, char *argv[])
   static struct option long_options[]
       = { { "verbose", 1, &opts, 1 }, // optional
           { "file", 1, 0, 'o' },      { "as", 1, 0, 'a' },
-          { "overwrite", 0, 0, 'y' },
-          { "help", 0, 0, 0 },        { "version", 0, 0, 0 },
-          { NULL, 0, NULL, 0 } };
+          { "overwrite", 0, 0, 'y' }, { "help", 0, 0, 0 },
+          { "version", 0, 0, 0 },     { NULL, 0, NULL, 0 } };
 #endif
 
   if (argc < 2)
@@ -238,7 +241,7 @@ main (int argc, char *argv[])
 
       if (strEQ (filename_in, filename_out))
         {
-          if (filename_out != argv[i-1])
+          if (filename_out != argv[i - 1])
             free (filename_out);
           return usage ();
         }
@@ -280,25 +283,28 @@ main (int argc, char *argv[])
           {
             if (!overwrite)
               {
-                LOG_ERROR ("File not overwritten: %s, use -y.\n", filename_out);
+                LOG_ERROR ("File not overwritten: %s, use -y.\n",
+                           filename_out);
                 error |= DWG_ERR_IOERROR;
               }
             else
               {
                 if (S_ISREG (attrib.st_mode) && // refuse to remove a directory
                     (access (filename_out, W_OK) == 0) // writable
-#ifndef _WIN32
-                    // refuse to remove a symlink. even with overwrite. security
+#  ifndef _WIN32
+                    // refuse to remove a symlink. even with overwrite.
+                    // security
                     && !S_ISLNK (attrib.st_mode)
-#endif
-                    )
+#  endif
+                )
                   {
                     unlink (filename_out);
                     error = dwg_write_file (filename_out, &dwg);
                   }
                 else
                   {
-                    LOG_ERROR ("Not writable file or symlink: %s\n", filename_out);
+                    LOG_ERROR ("Not writable file or symlink: %s\n",
+                               filename_out);
                     error |= DWG_ERR_IOERROR;
                   }
               }
@@ -315,7 +321,7 @@ main (int argc, char *argv[])
 
       // forget about valgrind. really huge DWG's need endlessly here.
       if (do_free
-#if defined __SANITIZE_ADDRESS__ || __has_feature (address_sanitizer)
+#if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
           || 0 /* and skip detect_leaks via __asan_default_options() */
 #endif
 #ifdef HAVE_VALGRIND_VALGRIND_H

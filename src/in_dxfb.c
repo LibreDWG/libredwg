@@ -297,8 +297,8 @@ dxfb_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           else if (pair->type == VT_STRING && strEQc (f->type, "H"))
             {
               char *key, *str;
-              LOG_TRACE ("HEADER.%s %s [%s] %d later\n", &field[1], pair->value.s,
-                         f->type, (int)pair->code);
+              LOG_TRACE ("HEADER.%s %s [%s] %d later\n", &field[1],
+                         pair->value.s, f->type, (int)pair->code);
               // name (which table?) => handle
               // needs to be postponed, because we don't have the tables yet.
               header_hdls = array_push (header_hdls, &field[1], pair->value.s,
@@ -557,7 +557,8 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
                   break;
                 }
               assert (_o->morehandles);
-              _o->morehandles[j] = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+              _o->morehandles[j]
+                  = dwg_add_handleref (dwg, 4, pair->value.u, obj);
               LOG_TRACE ("%s.morehandles[%d] = " FORMAT_REF " [330]\n",
                          ctrlname, j, ARGS_REF (_o->morehandles[j]));
               j++;
@@ -617,8 +618,9 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
    How to initialize _obj? To generic only?
  */
 static Dxf_Pair *
-new_object (char *restrict name, char *restrict dxfname, Bit_Chain *restrict dat,
-            Dwg_Data *restrict dwg, Dwg_Object *restrict ctrl, BITCODE_BL i)
+new_object (char *restrict name, char *restrict dxfname,
+            Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+            Dwg_Object *restrict ctrl, BITCODE_BL i)
 {
   int is_utf = dwg->header.version >= R_2007 ? 1 : 0;
   Dwg_Object *obj;
@@ -650,7 +652,7 @@ new_object (char *restrict name, char *restrict dxfname, Bit_Chain *restrict dat
           *name = '_';
         }
 
-      // clang-format off
+        // clang-format off
       // ADD_ENTITY by name
       // check all objects
       #undef DWG_ENTITY
@@ -830,11 +832,10 @@ new_object (char *restrict name, char *restrict dxfname, Bit_Chain *restrict dat
                                                &num_inserts, 0);
                 }
               if (insert_handles)
-                insert_handles
-                  = realloc (insert_handles, num_inserts * sizeof (BITCODE_H));
+                insert_handles = realloc (insert_handles,
+                                          num_inserts * sizeof (BITCODE_H));
               else
-                insert_handles
-                  = calloc (num_inserts, sizeof (BITCODE_H));
+                insert_handles = calloc (num_inserts, sizeof (BITCODE_H));
               dwg_dynapi_entity_set_value (_obj, obj->name, "insert_handles",
                                            &insert_handles, 0);
               insert_handles[curr_inserts++]
@@ -846,7 +847,8 @@ new_object (char *restrict name, char *restrict dxfname, Bit_Chain *restrict dat
           if (in_reactors)
             {
               BITCODE_BL num = obj->tio.object->num_reactors;
-              BITCODE_H reactor = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+              BITCODE_H reactor
+                  = dwg_add_handleref (dwg, 4, pair->value.u, obj);
               LOG_TRACE ("%s.reactors[%d] = " FORMAT_REF " [330 H]\n", name,
                          num, ARGS_REF (reactor));
               obj->tio.object->reactors = realloc (
@@ -867,15 +869,15 @@ new_object (char *restrict name, char *restrict dxfname, Bit_Chain *restrict dat
           if (pair->code == 360 && in_xdict)
             {
               obj->tio.object->xdicobjhandle
-                = dwg_add_handleref (dwg, 3, pair->value.u, obj);
+                  = dwg_add_handleref (dwg, 3, pair->value.u, obj);
               obj->tio.object->xdic_missing_flag = 0;
               LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [360 H]\n", name,
                          ARGS_REF (obj->tio.object->xdicobjhandle));
               break;
             }
           // // DICTIONARY or DICTIONARYWDFLT, but not DICTIONARYVAR
-          else if (memBEGINc (name, "DICTIONARY") &&
-                   strNE (name, "DICTIONARYVAR"))
+          else if (memBEGINc (name, "DICTIONARY")
+                   && strNE (name, "DICTIONARYVAR"))
             {
               add_dictionary_itemhandles (obj, pair, text);
               break;
@@ -898,8 +900,8 @@ new_object (char *restrict name, char *restrict dxfname, Bit_Chain *restrict dat
         case 2:
           if (ctrl && pair->code == 2)
             {
-              dwg_dynapi_entity_set_value (_obj, obj->name, "name", &pair->value,
-                                       is_utf);
+              dwg_dynapi_entity_set_value (_obj, obj->name, "name",
+                                           &pair->value, is_utf);
               LOG_TRACE ("%s.name = %s [2 T]\n", name, pair->value.s);
               break;
             }
@@ -907,8 +909,8 @@ new_object (char *restrict name, char *restrict dxfname, Bit_Chain *restrict dat
         case 70:
           if (ctrl && pair->code == 70)
             {
-              dwg_dynapi_entity_set_value (_obj, obj->name, "flag", &pair->value,
-                                       is_utf);
+              dwg_dynapi_entity_set_value (_obj, obj->name, "flag",
+                                           &pair->value, is_utf);
               LOG_TRACE ("%s.flag = %d [70 RC]\n", name, pair->value.i);
               break;
             }
@@ -1163,9 +1165,9 @@ dxfb_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   else
                     blkhdr = NULL;
                   if (strEQc (_obj->name, "*Model_Space"))
-                      entmode = ent->entmode = 2;
+                    entmode = ent->entmode = 2;
                   else if (strEQc (_obj->name, "*Paper_Space"))
-                      entmode = ent->entmode = 1;
+                    entmode = ent->entmode = 1;
                 }
               else if (obj->type == DWG_TYPE_ENDBLK)
                 {
@@ -1353,7 +1355,7 @@ dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       Dwg_Object *obj;
       Dwg_Object_BLOCK_HEADER *_obj;
-      char *dxfname = (char*)"BLOCK_HEADER";
+      char *dxfname = (char *)"BLOCK_HEADER";
       NEW_OBJECT (dwg, obj);
       ADD_OBJECT (BLOCK_HEADER);
     }

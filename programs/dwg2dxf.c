@@ -76,7 +76,8 @@ help (void)
           "ENTITIES\n");
   printf ("  -b, --binary              save as binary DXF\n");
   printf ("  -y, --overwrite           overwrite existing files\n");
-  printf ("  -o outfile, --file        optional, only valid with one single DWGFILE\n");
+  printf ("  -o outfile, --file        optional, only valid with one single "
+          "DWGFILE\n");
   printf ("      --help                display this help and exit\n");
   printf ("      --version             output version information and exit\n"
           "\n");
@@ -120,9 +121,8 @@ main (int argc, char *argv[])
       = { { "verbose", 1, &opts, 1 }, // optional
           { "file", 1, 0, 'o' },      { "as", 1, 0, 'a' },
           { "minimal", 0, 0, 'm' },   { "binary", 0, 0, 'b' },
-          { "overwrite", 0, 0, 'y' },
-          { "help", 0, 0, 0 },        { "version", 0, 0, 0 },
-          { NULL, 0, NULL, 0 } };
+          { "overwrite", 0, 0, 'y' }, { "help", 0, 0, 0 },
+          { "version", 0, 0, 0 },     { NULL, 0, NULL, 0 } };
 #endif
 
   if (argc < 2)
@@ -244,7 +244,7 @@ main (int argc, char *argv[])
         }
       if (strEQ (filename_in, filename_out))
         {
-          if (filename_out != argv[i-1])
+          if (filename_out != argv[i - 1])
             free (filename_out);
           return usage ();
         }
@@ -283,7 +283,8 @@ main (int argc, char *argv[])
           {
             if (!overwrite)
               {
-                LOG_ERROR ("File not overwritten: %s, use -y.\n", filename_out);
+                LOG_ERROR ("File not overwritten: %s, use -y.\n",
+                           filename_out);
                 error |= DWG_ERR_IOERROR;
               }
             else
@@ -291,17 +292,19 @@ main (int argc, char *argv[])
                 if (S_ISREG (attrib.st_mode) && // refuse to remove a directory
                     (access (filename_out, W_OK) == 0) // writable
 #ifndef _WIN32
-                    // refuse to remove a symlink. even with overwrite. security
+                    // refuse to remove a symlink. even with overwrite.
+                    // security
                     && !S_ISLNK (attrib.st_mode)
 #endif
-                    )
+                )
                   {
                     unlink (filename_out);
                     dat.fh = fopen (filename_out, "wb");
                   }
                 else
                   {
-                    LOG_ERROR ("Not writable file or symlink: %s\n", filename_out);
+                    LOG_ERROR ("Not writable file or symlink: %s\n",
+                               filename_out);
                     error |= DWG_ERR_IOERROR;
                   }
               }
@@ -328,7 +331,7 @@ main (int argc, char *argv[])
 
       // forget about valgrind. really huge DWG's need endlessly here.
       if (do_free
-#if defined __SANITIZE_ADDRESS__ || __has_feature (address_sanitizer)
+#if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
           || 1
 #endif
 #ifdef HAVE_VALGRIND_VALGRIND_H

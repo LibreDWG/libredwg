@@ -18,9 +18,9 @@
 
 #include "config.h"
 #ifdef __STDC_ALLOC_LIB__
-# define __STDC_WANT_LIB_EXT2__ 1 /* for strdup */
+#  define __STDC_WANT_LIB_EXT2__ 1 /* for strdup */
 #else
-# define _USE_BSD 1
+#  define _USE_BSD 1
 #endif
 #include <stdio.h>
 #include <stdlib.h>
@@ -107,39 +107,64 @@ static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
 #define FIELD_RLL(name, dxf) FIELD (name, RLL)
 #define FIELD_MC(name, dxf) FIELD (name, MC)
 #define FIELD_MS(name, dxf) FIELD (name, MS)
-#define FIELD_TV(name, dxf)                     \
-  FREE_IF (FIELD_VALUE (name))
+#define FIELD_TV(name, dxf) FREE_IF (FIELD_VALUE (name))
 #define VALUE_TV(value, dxf) FREE_IF (value)
 #define VALUE_TF(value, dxf) FREE_IF (value)
 #define VALUE_TFF(value, dxf)
 #define FIELD_TU(name, dxf) FIELD_TV (name, dxf)
 #define FIELD_TF(name, len, dxf) FIELD_TV (name, dxf)
-#define FIELD_TFF(name, len, dxf) {}
+#define FIELD_TFF(name, len, dxf)                                             \
+  {                                                                           \
+  }
 #define FIELD_T(name, dxf) FIELD_TV (name, dxf)
 #define FIELD_BT(name, dxf) FIELD (name, BT);
-#define FIELD_4BITS(name, dxf) {}
-#define FIELD_BE(name, dxf) {}
-#define FIELD_DD(name, _default, dxf) {}
-#define FIELD_2DD(name, d1, d2, dxf) {}
-#define FIELD_3DD(name, def, dxf) {}
-#define FIELD_2RD(name, dxf)  {}
-#define FIELD_2BD(name, dxf)  {}
-#define FIELD_2BD_1(name, dxf) {}
-#define FIELD_3RD(name, dxf) {}
-#define FIELD_3BD(name, dxf) {}
-#define FIELD_3BD_1(name, dxf) {}
-#define FIELD_3DPOINT(name, dxf) {}
+#define FIELD_4BITS(name, dxf)                                                \
+  {                                                                           \
+  }
+#define FIELD_BE(name, dxf)                                                   \
+  {                                                                           \
+  }
+#define FIELD_DD(name, _default, dxf)                                         \
+  {                                                                           \
+  }
+#define FIELD_2DD(name, d1, d2, dxf)                                          \
+  {                                                                           \
+  }
+#define FIELD_3DD(name, def, dxf)                                             \
+  {                                                                           \
+  }
+#define FIELD_2RD(name, dxf)                                                  \
+  {                                                                           \
+  }
+#define FIELD_2BD(name, dxf)                                                  \
+  {                                                                           \
+  }
+#define FIELD_2BD_1(name, dxf)                                                \
+  {                                                                           \
+  }
+#define FIELD_3RD(name, dxf)                                                  \
+  {                                                                           \
+  }
+#define FIELD_3BD(name, dxf)                                                  \
+  {                                                                           \
+  }
+#define FIELD_3BD_1(name, dxf)                                                \
+  {                                                                           \
+  }
+#define FIELD_3DPOINT(name, dxf)                                              \
+  {                                                                           \
+  }
 #define FIELD_TIMEBLL(name, dxf)
 #define FIELD_TIMERLL(name, dxf)
-#define FIELD_CMC(color, dxf1, dxf2)                                    \
-  {                                                                     \
-    FIELD_T (color.name, 0);                                            \
-    FIELD_T (color.book_name, 0);                                       \
+#define FIELD_CMC(color, dxf1, dxf2)                                          \
+  {                                                                           \
+    FIELD_T (color.name, 0);                                                  \
+    FIELD_T (color.book_name, 0);                                             \
   }
-#define SUB_FIELD_CMC(o, color, dxf1, dxf2)                             \
-  {                                                                     \
-    VALUE_TV (_obj->o.color.name, 0);                                   \
-    VALUE_TV (_obj->o.color.book_name, 0);                              \
+#define SUB_FIELD_CMC(o, color, dxf1, dxf2)                                   \
+  {                                                                           \
+    VALUE_TV (_obj->o.color.name, 0);                                         \
+    VALUE_TV (_obj->o.color.book_name, 0);                                    \
   }
 
 // FIELD_VECTOR_N(name, type, size):
@@ -148,7 +173,7 @@ static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
 #define FIELD_VECTOR_N(nam, type, size, dxf)                                  \
   if ((size) && _obj->nam)                                                    \
     {                                                                         \
-      for (vcount = 0; vcount < (BITCODE_BL)(size); vcount++)                 \
+      for (vcount = 0; vcount < (BITCODE_BL) (size); vcount++)                \
         FIELD_##type (nam[vcount], dxf);                                      \
     }                                                                         \
   FIELD_TV (nam, dxf);
@@ -337,7 +362,9 @@ dwg_free_common_entity_handle_data (Dwg_Object *obj)
     return;
   _obj = ent;
 
+  // clang-format off
   #include "common_entity_handle_data.spec"
+  // clang-format on
 }
 
 static void
@@ -357,7 +384,9 @@ dwg_free_common_entity_data (Dwg_Object *obj)
     return;
   _obj = ent;
 
+  // clang-format off
   #include "common_entity_data.spec"
+  // clang-format on
 }
 
 static void
@@ -419,11 +448,13 @@ dwg_free_variable_type (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
   // almost always false
   is_entity = dwg_class_is_entity (klass);
 
-// global class dispatcher
-#include "classes.inc"
+  // global class dispatcher
+  // clang-format off
+  #include "classes.inc"
 
-#undef WARN_UNHANDLED_CLASS
-#undef WARN_UNSTABLE_CLASS
+  #undef WARN_UNHANDLED_CLASS
+  #undef WARN_UNSTABLE_CLASS
+  // clang-format on
 
   return DWG_ERR_UNHANDLEDCLASS;
 }
@@ -740,7 +771,9 @@ dwg_free_header_vars (Dwg_Data *dwg)
   Dwg_Header_Variables *_obj = &dwg->header_vars;
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
+  // clang-format off
   #include "header_variables.spec"
+  // clang-format on
   return 0;
 }
 
@@ -751,7 +784,9 @@ dwg_free_summaryinfo (Dwg_Data *dwg)
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
   BITCODE_RL rcount1, rcount2;
+  // clang-format off
   #include "summaryinfo.spec"
+  // clang-format on
   return 0;
 }
 

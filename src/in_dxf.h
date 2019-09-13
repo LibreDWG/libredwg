@@ -60,12 +60,14 @@ typedef struct _dxf_pair
    Store all handle fieldnames and string values into this array,
    which is prefixed with the number of stored items.
  */
-struct array_hdl {
+struct array_hdl
+{
   char *field;
   char *name;
   short code;
 };
-typedef struct _array_hdls {
+typedef struct _array_hdls
+{
   uint32_t nitems;
   uint32_t size;            // in chunks of 16
   struct array_hdl items[]; // Flexible array grows
@@ -88,8 +90,8 @@ void add_eed (Dwg_Object *restrict obj, const char *restrict name,
               Dxf_Pair *restrict pair);
 Dxf_Pair *add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
                      Dxf_Pair *restrict pair);
-void add_dictionary_itemhandles (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
-                                 char *restrict text);
+void add_dictionary_itemhandles (Dwg_Object *restrict obj,
+                                 Dxf_Pair *restrict pair, char *restrict text);
 void resolve_postponed_header_refs (Dwg_Data *restrict dwg);
 void resolve_postponed_eed_refs (Dwg_Data *restrict dwg);
 void resolve_header_dicts (Dwg_Data *restrict dwg);
@@ -109,59 +111,59 @@ EXPORT int dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 #define DWG_OBJECT(token)
 #define DWG_ENTITY(token)
 
-#define NEW_OBJECT(dwg, obj)                    \
-  {                                             \
-    BITCODE_BL idx = dwg->num_objects;          \
-    (void)dwg_add_object (dwg);                 \
-    obj = &dwg->object[idx];                    \
-    obj->supertype = DWG_SUPERTYPE_OBJECT;      \
-    obj->tio.object = calloc (1, sizeof (Dwg_Object_Object)); \
-    obj->tio.object->objid = obj->index;        \
-    obj->tio.object->dwg = dwg;                 \
+#define NEW_OBJECT(dwg, obj)                                                  \
+  {                                                                           \
+    BITCODE_BL idx = dwg->num_objects;                                        \
+    (void)dwg_add_object (dwg);                                               \
+    obj = &dwg->object[idx];                                                  \
+    obj->supertype = DWG_SUPERTYPE_OBJECT;                                    \
+    obj->tio.object = calloc (1, sizeof (Dwg_Object_Object));                 \
+    obj->tio.object->objid = obj->index;                                      \
+    obj->tio.object->dwg = dwg;                                               \
   }
 
-#define NEW_ENTITY(dwg, obj)                    \
-  {                                             \
-    BITCODE_BL idx = dwg->num_objects;          \
-    (void)dwg_add_object (dwg);                 \
-    obj = &dwg->object[idx];                    \
-    obj->supertype = DWG_SUPERTYPE_ENTITY;      \
-    obj->tio.entity = calloc (1, sizeof (Dwg_Object_Entity)); \
-    obj->tio.entity->objid = obj->index;        \
-    obj->tio.entity->dwg = dwg;                 \
+#define NEW_ENTITY(dwg, obj)                                                  \
+  {                                                                           \
+    BITCODE_BL idx = dwg->num_objects;                                        \
+    (void)dwg_add_object (dwg);                                               \
+    obj = &dwg->object[idx];                                                  \
+    obj->supertype = DWG_SUPERTYPE_ENTITY;                                    \
+    obj->tio.entity = calloc (1, sizeof (Dwg_Object_Entity));                 \
+    obj->tio.entity->objid = obj->index;                                      \
+    obj->tio.entity->dwg = dwg;                                               \
   }
 
-#define ADD_OBJECT(token)                                      \
-  obj->type = obj->fixedtype = DWG_TYPE_##token;               \
-  obj->name = (char *)#token;                                  \
-  obj->dxfname = dxfname;                                      \
-  LOG_TRACE ("  ADD_OBJECT %s %d\n", obj->name, obj->index)    \
-  _obj = calloc (1, sizeof (Dwg_Object_##token));              \
-  obj->tio.object->tio.token = (Dwg_Object_##token *)_obj;     \
-  obj->tio.object->tio.token->parent = obj->tio.object;        \
+#define ADD_OBJECT(token)                                                     \
+  obj->type = obj->fixedtype = DWG_TYPE_##token;                              \
+  obj->name = (char *)#token;                                                 \
+  obj->dxfname = dxfname;                                                     \
+  LOG_TRACE ("  ADD_OBJECT %s %d\n", obj->name, obj->index)                   \
+  _obj = calloc (1, sizeof (Dwg_Object_##token));                             \
+  obj->tio.object->tio.token = (Dwg_Object_##token *)_obj;                    \
+  obj->tio.object->tio.token->parent = obj->tio.object;                       \
   obj->tio.object->objid = obj->index
 
-#define ADD_ENTITY(token)                                      \
-  obj->type = obj->fixedtype = DWG_TYPE_##token;               \
-  if (strlen (#token) > 3 && !memcmp (#token, "_3D", 3))       \
-    obj->name = (char *)&#token[1];                            \
-  else                                                         \
-    obj->name = (char *)#token;                                \
-  obj->dxfname = dxfname;                                      \
-  LOG_TRACE ("  ADD_ENTITY %s %d\n", obj->name, obj->index)    \
-  _obj = calloc (1, sizeof (Dwg_Entity_##token));              \
-  obj->tio.entity->tio.token = (Dwg_Entity_##token *)_obj;     \
-  obj->tio.entity->tio.token->parent = obj->tio.entity;        \
+#define ADD_ENTITY(token)                                                     \
+  obj->type = obj->fixedtype = DWG_TYPE_##token;                              \
+  if (strlen (#token) > 3 && !memcmp (#token, "_3D", 3))                      \
+    obj->name = (char *)&#token[1];                                           \
+  else                                                                        \
+    obj->name = (char *)#token;                                               \
+  obj->dxfname = dxfname;                                                     \
+  LOG_TRACE ("  ADD_ENTITY %s %d\n", obj->name, obj->index)                   \
+  _obj = calloc (1, sizeof (Dwg_Entity_##token));                             \
+  obj->tio.entity->tio.token = (Dwg_Entity_##token *)_obj;                    \
+  obj->tio.entity->tio.token->parent = obj->tio.entity;                       \
   obj->tio.entity->objid = obj->index
 
-#define ADD_TABLE_IF(nam, token)                       \
-  if (strEQc (name, #nam))                             \
-    {                                                  \
-      ADD_OBJECT(token);                               \
+#define ADD_TABLE_IF(nam, token)                                              \
+  if (strEQc (name, #nam))                                                    \
+    {                                                                         \
+      ADD_OBJECT (token);                                                     \
     }
 
-#define STRADD(field, string)                          \
-  field = malloc (strlen (string) + 1);                \
+#define STRADD(field, string)                                                 \
+  field = malloc (strlen (string) + 1);                                       \
   strcpy (field, string)
 
 // normally in spec.h, but indxf does not import spec.h

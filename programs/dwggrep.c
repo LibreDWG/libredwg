@@ -304,8 +304,8 @@ do_match (const int is16, const char *restrict filename,
 #  define MATCH_TYPE(type, ENTITY, text_field, dxfgroup)                      \
     text = (char *)obj->tio.type->tio.ENTITY->text_field;                     \
     if (text)                                                                 \
-      found += do_match (obj->parent->header.version >= R_2007, filename,     \
-                         #ENTITY, dxfgroup, text)
+    found += do_match (obj->parent->header.version >= R_2007, filename,       \
+                       #ENTITY, dxfgroup, text)
 #else
 #  define MATCH_TYPE(type, ENTITY, text_field, dxfgroup)                      \
     text = (char *)obj->tio.type->tio.ENTITY->text_field;                     \
@@ -1001,8 +1001,8 @@ match_BLOCK_HEADER (const char *restrict filename,
                 found += match_LTYPE (filename, obj);
               else if (obj->type == DWG_TYPE_DIMSTYLE)
                 found += match_DIMSTYLE (filename, obj);
-              else if (obj->fixedtype == DWG_TYPE_DICTIONARY ||
-                       obj->fixedtype == DWG_TYPE_DICTIONARYWDFLT)
+              else if (obj->fixedtype == DWG_TYPE_DICTIONARY
+                       || obj->fixedtype == DWG_TYPE_DICTIONARYWDFLT)
                 found += match_DICTIONARY (filename, obj);
 
               else if (obj->fixedtype == DWG_TYPE_GROUP)
@@ -1265,8 +1265,7 @@ main (int argc, char *argv[])
       count += match_BLOCK_HEADER (filename, dwg_model_space_ref (&dwg));
       for (k = 0; k < dwg.block_control.num_entries; k++)
         {
-          count += match_BLOCK_HEADER (filename,
-                                       dwg.block_control.entries[k]);
+          count += match_BLOCK_HEADER (filename, dwg.block_control.entries[k]);
         }
       count += match_BLOCK_HEADER (filename, dwg_paper_space_ref (&dwg));
 

@@ -35,7 +35,8 @@ api_process (dwg_object *obj)
       fail ("old API dwg_ent_region_get_acis_data");
     }
 
-  CHK_ENTITY_TYPE (region, REGION, wireframe_data_present, B, wireframe_data_present);
+  CHK_ENTITY_TYPE (region, REGION, wireframe_data_present, B,
+                   wireframe_data_present);
   if (dwg_ent_region_get_wireframe_data_present (region, &error)
           != wireframe_data_present
       || error)
@@ -57,12 +58,14 @@ api_process (dwg_object *obj)
     }
 
   CHK_ENTITY_TYPE (region, REGION, isoline_present, B, isoline_present);
-  if (dwg_ent_region_get_isoline_present (region, &error) != isoline_present || error)
+  if (dwg_ent_region_get_isoline_present (region, &error) != isoline_present
+      || error)
     {
       fail ("old API dwg_ent_region_get_isoline_present");
     }
   CHK_ENTITY_TYPE (region, REGION, num_isolines, BL, num_isolines);
-  if (dwg_ent_region_get_num_isolines (region, &error) != num_isolines || error)
+  if (dwg_ent_region_get_num_isolines (region, &error) != num_isolines
+      || error)
     {
       fail ("old API dwg_ent_region_get_num_isolines");
     }

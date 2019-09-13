@@ -54,13 +54,15 @@ api_process (dwg_object *obj)
       || error)
     fail ("old API dwg_ent_3dsolid_get_isoline_present");
   CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, num_isolines, BL, num_isolines);
-  if (dwg_ent_3dsolid_get_num_isolines (_3dsolid, &error) != num_isolines || error)
+  if (dwg_ent_3dsolid_get_num_isolines (_3dsolid, &error) != num_isolines
+      || error)
     fail ("old API dwg_ent_3dsolid_get_num_isolines");
   CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, num_wires, BL, num_wires);
   if (dwg_ent_3dsolid_get_num_wires (_3dsolid, &error) != num_wires || error)
     fail ("old API dwg_ent_3dsolid_get_num_wires");
   CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, num_silhouettes, BL, num_sil);
-  if (dwg_ent_3dsolid_get_num_silhouettes (_3dsolid, &error) != num_sil || error)
+  if (dwg_ent_3dsolid_get_num_silhouettes (_3dsolid, &error) != num_sil
+      || error)
     fail ("old API dwg_ent_3dsolid_get_num_sil");
 
   wire = dwg_ent_3dsolid_get_wires (_3dsolid, &error);
@@ -83,7 +85,8 @@ api_process (dwg_object *obj)
   else
     fail ("silhouettes");
 
-  if (dwg_version >= R_2007 && _3dsolid->history_id) // if it did not fail before
+  if (dwg_version >= R_2007
+      && _3dsolid->history_id) // if it did not fail before
     {
       CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, unknown_2007, BL, unknown_2007);
       CHK_ENTITY_H (_3dsolid, 3DSOLID, history_id, history_id);

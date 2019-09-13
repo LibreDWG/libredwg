@@ -1127,7 +1127,7 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
     {
       loglevel = dat->opts & 0xf;
       LOG_WARN ("Invalid handle-reference, longer than 4 bytes: " FORMAT_H,
-                ARGS_H(*handle))
+                ARGS_H (*handle))
       return DWG_ERR_INVALIDHANDLE;
     }
 
@@ -1214,8 +1214,8 @@ bit_check_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
   if (start_address > dat->byte || dat->byte >= dat->size)
     {
       loglevel = dat->opts & 0xf;
-      LOG_ERROR ("%s buffer overflow at pos %lu-%lu, size %lu",
-                 __FUNCTION__, start_address, dat->byte, dat->size)
+      LOG_ERROR ("%s buffer overflow at pos %lu-%lu, size %lu", __FUNCTION__,
+                 start_address, dat->byte, dat->size)
       return 0;
     }
 
@@ -1226,13 +1226,13 @@ bit_check_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
   if (calculated == read)
     {
       LOG_HANDLE (" check_CRC %lu-%lu: %04X == %04X\n", start_address,
-                  dat->byte-2, calculated, read);
+                  dat->byte - 2, calculated, read);
       return 1;
     }
   else
     {
       LOG_WARN ("check_CRC mismatch %lu-%lu: %04X <=> %04X\n", start_address,
-                 dat->byte-2, calculated, read)
+                dat->byte - 2, calculated, read)
       return 0;
     }
 }
@@ -1478,13 +1478,15 @@ bit_utf8_to_TU (char *restrict str)
       else if ((c & 0xf0) == 0xe0)
         {
           /* ignore invalid utf8? */
-          if ((unsigned char)str[1] < 0x80 || (unsigned char)str[1] > 0xBF ||
-              (unsigned char)str[2] < 0x80 || (unsigned char)str[2] > 0xBF) {
-            LOG_WARN ("utf-8: BAD_CONTINUATION_BYTE %s", str);
-          }
-          if (c == 0xe0 && (unsigned char)str[1] < 0xa0) {
-            LOG_WARN ("utf-8: NON_SHORTEST %s", str);
-          }
+          if ((unsigned char)str[1] < 0x80 || (unsigned char)str[1] > 0xBF
+              || (unsigned char)str[2] < 0x80 || (unsigned char)str[2] > 0xBF)
+            {
+              LOG_WARN ("utf-8: BAD_CONTINUATION_BYTE %s", str);
+            }
+          if (c == 0xe0 && (unsigned char)str[1] < 0xa0)
+            {
+              LOG_WARN ("utf-8: NON_SHORTEST %s", str);
+            }
           wstr[i++]
               = ((c & 0x0f) << 12) | ((str[1] & 0x3f) << 6) | (str[2] & 0x3f);
           str++;
@@ -1629,8 +1631,8 @@ bit_write_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color)
  *  Does also references, DBCOLOR lookups.
  */
 void
-bit_read_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat,
-              Bit_Chain *str_dat, Dwg_Color *restrict color)
+bit_read_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
+              Dwg_Color *restrict color)
 {
   color->index = bit_read_BS (dat);
   if (dat->version >= R_2004)
@@ -1658,8 +1660,8 @@ bit_read_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat,
 /** Write entity color (2004+)
  */
 void
-bit_write_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat,
-               Bit_Chain *str_dat, Dwg_Color *restrict color)
+bit_write_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
+               Dwg_Color *restrict color)
 {
   bit_write_BS (dat, (color->index & 0x1ff) | (color->flag << 8));
   if (dat->version >= R_2004)
@@ -1815,10 +1817,11 @@ bit_write_hexbits (Bit_Chain *restrict dat, const char *restrict bytes)
               else
                 bit_write_RC (dat, b + *p - '0');
             }
-          else {
-            fprintf (stderr, "Invalid hex input %s\n", p);
-            return 0;
-          }
+          else
+            {
+              fprintf (stderr, "Invalid hex input %s\n", p);
+              return 0;
+            }
         }
     }
   return len;

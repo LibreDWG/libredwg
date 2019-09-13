@@ -357,7 +357,7 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
       LOG_ERROR ("Failed to create the file: %s\n", filename)
       return error | DWG_ERR_IOERROR;
     }
-  
+
   // Write the data into the file
   if (fwrite (dat.chain, sizeof (char), dat.size, fh) != dat.size)
     {
@@ -637,8 +637,9 @@ dwg_ref_object (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
     return ref->obj;
   // Without obj we don't get an absolute_ref from relative OFFSETOBJHANDLE
   // handle types.
-  if ((ref->handleref.code < 6 && dwg_resolve_handleref ((Dwg_Object_Ref *)ref, NULL)) ||
-      ref->absolute_ref)
+  if ((ref->handleref.code < 6
+       && dwg_resolve_handleref ((Dwg_Object_Ref *)ref, NULL))
+      || ref->absolute_ref)
     {
       Dwg_Object *obj = dwg_resolve_handle (dwg, ref->absolute_ref);
       if (!dwg->dirty_refs)
@@ -709,8 +710,8 @@ dwg_resolve_handleref (Dwg_Object_Ref *restrict ref,
    *   3 Hard owner
    *   4 Soft pointer
    *   5 Hard pointer
-   * With OFFSETOBJHANDLE >5 the code 4 handle is stored as an offset from some other
-   * handle.
+   * With OFFSETOBJHANDLE >5 the code 4 handle is stored as an offset from some
+   * other handle.
    */
   switch (ref->handleref.code)
     {
@@ -765,11 +766,10 @@ dwg_block_control (Dwg_Data *dwg)
 EXPORT Dwg_Object_Ref *
 dwg_model_space_ref (Dwg_Data *dwg)
 {
-  if (dwg->header_vars.BLOCK_RECORD_MSPACE &&
-      dwg->header_vars.BLOCK_RECORD_MSPACE->obj)
+  if (dwg->header_vars.BLOCK_RECORD_MSPACE
+      && dwg->header_vars.BLOCK_RECORD_MSPACE->obj)
     return dwg->header_vars.BLOCK_RECORD_MSPACE;
-  return dwg->block_control.model_space &&
-         dwg->block_control.model_space->obj
+  return dwg->block_control.model_space && dwg->block_control.model_space->obj
              ? dwg->block_control.model_space
              : NULL;
 }
@@ -779,11 +779,10 @@ dwg_model_space_ref (Dwg_Data *dwg)
 EXPORT Dwg_Object_Ref *
 dwg_paper_space_ref (Dwg_Data *dwg)
 {
-  if (dwg->header_vars.BLOCK_RECORD_PSPACE &&
-      dwg->header_vars.BLOCK_RECORD_PSPACE->obj)
+  if (dwg->header_vars.BLOCK_RECORD_PSPACE
+      && dwg->header_vars.BLOCK_RECORD_PSPACE->obj)
     return dwg->header_vars.BLOCK_RECORD_PSPACE;
-  return dwg->block_control.paper_space &&
-         dwg->block_control.paper_space->obj
+  return dwg->block_control.paper_space && dwg->block_control.paper_space->obj
              ? dwg->block_control.paper_space
              : NULL;
 }
@@ -801,8 +800,8 @@ dwg_model_space_object (Dwg_Data *dwg)
   ctrl = dwg_block_control (dwg);
   if (ctrl && ctrl->model_space && ctrl->model_space->obj)
     return ctrl->model_space->obj;
-  if (dwg->header_vars.BLOCK_RECORD_MSPACE &&
-      dwg->header_vars.BLOCK_RECORD_MSPACE->obj)
+  if (dwg->header_vars.BLOCK_RECORD_MSPACE
+      && dwg->header_vars.BLOCK_RECORD_MSPACE->obj)
     return dwg->header_vars.BLOCK_RECORD_MSPACE->obj;
   return dwg_resolve_handle (dwg, dwg->header.version >= R_2000 ? 0x1F : 0x17);
 }
@@ -954,11 +953,10 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
     {
       Dwg_Entity_INSERT *_obj = owner->tio.entity->tio.INSERT;
       if (version <= R_2000)
-        return (_obj->last_attrib
-                && current != _obj->last_attrib->obj
+        return (_obj->last_attrib && current != _obj->last_attrib->obj
                 && obj->type == DWG_TYPE_ATTRIB)
-          ? obj
-          : NULL;
+                   ? obj
+                   : NULL;
       else
         {
           ent->__iterator++;
@@ -969,19 +967,18 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
             }
           else
             return _obj->attrib_handles
-              ? _obj->attrib_handles[ent->__iterator]->obj
-              : NULL;
+                       ? _obj->attrib_handles[ent->__iterator]->obj
+                       : NULL;
         }
     }
   else if (type == DWG_TYPE_MINSERT)
     {
       Dwg_Entity_MINSERT *_obj = owner->tio.entity->tio.MINSERT;
       if (version <= R_2000)
-        return (_obj->last_attrib
-                && current != _obj->last_attrib->obj
+        return (_obj->last_attrib && current != _obj->last_attrib->obj
                 && obj->type == DWG_TYPE_ATTRIB)
-          ? obj
-          : NULL;
+                   ? obj
+                   : NULL;
       else
         {
           ent->__iterator++;
@@ -992,8 +989,8 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
             }
           else
             return _obj->attrib_handles
-              ? _obj->attrib_handles[ent->__iterator]->obj
-              : NULL;
+                       ? _obj->attrib_handles[ent->__iterator]->obj
+                       : NULL;
         }
     }
   else if (type == DWG_TYPE_POLYLINE_2D || type == DWG_TYPE_POLYLINE_3D
@@ -1014,9 +1011,7 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
               return NULL;
             }
           else
-            return _obj->vertex
-              ? _obj->vertex[ent->__iterator]->obj
-              : NULL;
+            return _obj->vertex ? _obj->vertex[ent->__iterator]->obj : NULL;
         }
     }
   else
@@ -1119,7 +1114,8 @@ get_last_owned_block (const Dwg_Object *restrict hdr)
                     {
                       _hdr->endblk_entity->obj = obj;
                       _hdr->endblk_entity->handleref.value
-                        = _hdr->endblk_entity->absolute_ref = obj->handle.value;
+                          = _hdr->endblk_entity->absolute_ref
+                          = obj->handle.value;
                     }
                 }
               else if (!_hdr->endblk_entity->obj)
@@ -1317,8 +1313,8 @@ dxf_cvt_lweight (const BITCODE_RC value)
 }
 
 /** For encode:
- * May need obj to shorten the code to a relative offset, but not in header_vars.
- * There obj is NULL.
+ * May need obj to shorten the code to a relative offset, but not in
+ * header_vars. There obj is NULL.
  */
 EXPORT int
 dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, BITCODE_RL value,
@@ -1344,7 +1340,7 @@ dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, BITCODE_RL value,
       hdl->size = i + 1;
     }
   else
-      hdl->size = 0;
+    hdl->size = 0;
   if (code == 4 && obj && abs (offset) < 256)
     {
       // change code to 6.0.0 or 8.0.0
@@ -1387,7 +1383,8 @@ dwg_add_handleref (Dwg_Data *restrict dwg, BITCODE_RC code, BITCODE_RL value,
   for (BITCODE_BL i = 0; i < dwg->num_object_refs; i++)
     {
       Dwg_Object_Ref *refi = dwg->object_ref[i];
-      if (refi->absolute_ref == (BITCODE_BL)value && refi->handleref.code == code)
+      if (refi->absolute_ref == (BITCODE_BL)value
+          && refi->handleref.code == code)
         return refi;
     }
   // else create a new ref
@@ -1401,8 +1398,7 @@ dwg_add_handleref (Dwg_Data *restrict dwg, BITCODE_RC code, BITCODE_RL value,
 // Not checking the header_vars entry, only searching the objects
 // Returning a hardowner ref (code 3) to it, as stored in header_vars.
 EXPORT BITCODE_H
-dwg_find_table_control (Dwg_Data *restrict dwg,
-                        const char *restrict table)
+dwg_find_table_control (Dwg_Data *restrict dwg, const char *restrict table)
 {
   BITCODE_BL i;
   for (i = 0; i < dwg->num_objects; i++)
@@ -1414,7 +1410,8 @@ dwg_find_table_control (Dwg_Data *restrict dwg,
         }
     }
   // if we haven't read all objects yet, ignore this error
-  LOG_TRACE ("dwg_find_table_control: table control object %s not found\n", table)
+  LOG_TRACE ("dwg_find_table_control: table control object %s not found\n",
+             table)
   return NULL;
 }
 
@@ -1442,7 +1439,8 @@ dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name)
                   Dwg_Object_Ref *ref = _obj->itemhandles[j];
                   if (!ref)
                     continue;
-                  dwg_resolve_handleref (ref, obj); // relative? (8.0.0, 6.0.0, ...)
+                  dwg_resolve_handleref (ref,
+                                         obj); // relative? (8.0.0, 6.0.0, ...)
                   if (dwg->header.version >= R_2007)
                     free (u8);
                   return dwg_add_handleref (dwg, 5, ref->absolute_ref, NULL);
@@ -1458,10 +1456,10 @@ dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name)
 
 // Search for name in associated table, and return its handle.
 // Note that newer tables, like MATERIAL are stored in a DICTIONARY instead.
-// Note that we cannot set the ref->obj here, as it may still move by realloc dwg->object[]
+// Note that we cannot set the ref->obj here, as it may still move by realloc
+// dwg->object[]
 EXPORT BITCODE_H
-dwg_find_tablehandle (Dwg_Data *restrict dwg,
-                      const char *restrict name,
+dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
                       const char *restrict table)
 {
   BITCODE_BL i, num_entries = 0;

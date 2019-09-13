@@ -5,8 +5,8 @@ void
 api_process (dwg_object *obj)
 {
   int error = 0;
-  BITCODE_RD elevation, thickness, rotation, height, oblique_ang,
-    width_factor, rdvalue;
+  BITCODE_RD elevation, thickness, rotation, height, oblique_ang, width_factor,
+      rdvalue;
   BITCODE_BS generation, vert_align, horiz_align, bsvalue;
   BITCODE_RC dataflags, rcvalue;
   char *text_value;
@@ -18,10 +18,9 @@ api_process (dwg_object *obj)
   dwg_ent_text *text = dwg_object_to_TEXT (obj);
 
   CHK_ENTITY_UTF8TEXT (text, TEXT, text_value, text_value);
-  if (version < R_2007 &&
-      (strcmp (dwg_ent_text_get_text (text, &error), text_value)
-       || error))
-       fail ("old API dwg_ent_text_get_text");
+  if (version < R_2007
+      && (strcmp (dwg_ent_text_get_text (text, &error), text_value) || error))
+    fail ("old API dwg_ent_text_get_text");
 
   CHK_ENTITY_2RD (text, TEXT, insertion_pt, ins_pt);
   dwg_ent_text_get_insertion_point (text, &pt2d, &error);

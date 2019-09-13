@@ -20,13 +20,14 @@ api_process (dwg_object *obj)
   if (error)
     fail ("polyline_3d_get_numpoints");
   if (numpoints != num_owned)
-    ok ("TODO polyline_3d_get_numpoints: %d != num_owned: %d", numpoints, num_owned);
+    ok ("TODO polyline_3d_get_numpoints: %d != num_owned: %d", numpoints,
+        num_owned);
 
   points = dwg_object_polyline_3d_get_points (obj, &error);
   if (!error)
     for (BITCODE_BL i = 0; i < numpoints; i++)
-      ok ("POLYLINE_3D.points[%d]: (%f, %f)", (int)i,
-          points[i].x, points[i].y);
+      ok ("POLYLINE_3D.points[%d]: (%f, %f)", (int)i, points[i].x,
+          points[i].y);
   else
     fail ("POLYLINE_3D.points");
 

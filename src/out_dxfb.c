@@ -584,10 +584,10 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
                    DWG_TYPE_##token, #token);                                 \
         return DWG_ERR_INVALIDTYPE;                                           \
       }                                                                       \
-    if (strEQc (#token, "GEOPOSITIONMARKER"))                                \
+    if (strEQc (#token, "GEOPOSITIONMARKER"))                                 \
       RECORD (POSITIONMARKER)                                                 \
     else if (dat->version < R_13 && strlen (#token) == 10                     \
-             && strEQc (#token, "LWPOLYLINE"))                               \
+             && strEQc (#token, "LWPOLYLINE"))                                \
       RECORD (POLYLINE)                                                       \
     else if (strlen (#token) > 11 && !memcmp (#token, "DIMENSION_", 11))      \
       RECORD (DIMENSION)                                                      \
@@ -612,7 +612,7 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
     SINCE (R_11)                                                              \
     {                                                                         \
       uint32_t i = (uint32_t)obj->handle.value;                               \
-      LOG_TRACE ("Entity handle: " FORMAT_H "\n", ARGS_H(obj->handle))        \
+      LOG_TRACE ("Entity handle: " FORMAT_H "\n", ARGS_H (obj->handle))       \
       GROUP (330);                                                            \
       fwrite (&i, sizeof (uint32_t), 1, dat->fh);                             \
     }                                                                         \
@@ -1048,7 +1048,9 @@ dwg_dxfb_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   // almost always false
   is_entity = dwg_class_is_entity (klass);
 
-#include "classes.inc"
+  // clang-format off
+  #include "classes.inc"
+  // clang-format on
 
   return DWG_ERR_UNHANDLEDCLASS;
 }
@@ -1407,7 +1409,9 @@ dxfb_common_entity_handle_data (Bit_Chain *restrict dat,
   ent = obj->tio.entity;
   _obj = ent;
 
-#include "common_entity_handle_data.spec"
+  // clang-format off
+  #include "common_entity_handle_data.spec"
+  // clang-format on
 
   return error;
 }
@@ -1433,7 +1437,9 @@ dxfb_header_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 dwg->header.codepage);
     }
 
-#include "header_variables_dxf.spec"
+    // clang-format off
+  #include "header_variables_dxf.spec"
+  // clang-format on
 
   return 0;
 }
@@ -1671,8 +1677,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           error |= dwg_dxfb_VPORT_ENTITY_CONTROL (dat, ctrl);
           for (i = 0; i < dwg->vport_entity_control.num_entries; i++)
             {
-              Dwg_Object *obj
-                  = dwg_ref_object (dwg, _ctrl->entries[i]);
+              Dwg_Object *obj = dwg_ref_object (dwg, _ctrl->entries[i]);
               if (obj && obj->type == DWG_TYPE_VPORT_ENTITY_HEADER)
                 {
                   error |= dwg_dxfb_VPORT_ENTITY_HEADER (dat, obj);
