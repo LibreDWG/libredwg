@@ -46,8 +46,9 @@
 #define rad2deg(ang) (ang) * 90.0 / M_PI_2
 #define deg2rad(ang) (ang) * M_PI_2 / 90.0
 
-void *memmem (const void *big, size_t big_len, const void *little,
-              size_t little_len);
+// not needed anymore
+//void *memmem (const void *big, size_t big_len, const void *little,
+//              size_t little_len);
 
 int cur_hdl; // to avoid dupl. search
 
