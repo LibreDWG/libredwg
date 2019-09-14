@@ -2089,10 +2089,12 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static void
 dxf_ENDBLK_empty (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr)
 {
+  // temp. only. not registered in dwg->object[]
   Dwg_Object *obj = calloc (1, sizeof (Dwg_Object));
+  Dwg_Data *dwg = hdr->parent;
   // Dwg_Entity_ENDBLK *_obj;
-  obj->parent = hdr->parent;
-  obj->index = obj->parent->num_objects;
+  obj->parent = dwg;
+  obj->index = dwg->num_objects;
   dwg_add_ENDBLK (obj);
   obj->tio.entity->ownerhandle = calloc (1, sizeof (Dwg_Object_Ref));
   obj->tio.entity->ownerhandle->obj = (Dwg_Object *)hdr;

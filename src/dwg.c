@@ -1109,7 +1109,7 @@ get_last_owned_block (const Dwg_Object *restrict hdr)
             {
               if (!_hdr->endblk_entity)
                 {
-                  _hdr->endblk_entity = dwg_new_ref (dwg);
+                  _hdr->endblk_entity = calloc (1, sizeof (Dwg_Object_Ref));
                   if (_hdr->endblk_entity)
                     {
                       _hdr->endblk_entity->obj = obj;

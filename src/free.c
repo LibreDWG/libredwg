@@ -849,8 +849,10 @@ dwg_free (Dwg_Data *dwg)
         }
       if (dwg->object_ref)
         {
+          //LOG_HANDLE ("free %d refs:\n", dwg->num_object_refs)
           for (i = 0; i < dwg->num_object_refs; ++i)
             {
+              //LOG_HANDLE ("free ref %d\n", i)
               FREE_IF (dwg->object_ref[i]);
             }
         }
