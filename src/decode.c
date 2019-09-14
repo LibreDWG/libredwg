@@ -2998,7 +2998,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
                               = obj->tio.MLEADERSTYLE;
                           this->is_new_format = 1;
                           LOG_TRACE (
-                              "EED found ACAD_MLEADERVER %X: new format\n",
+                              "EED found ACAD_MLEADERVER %lX: new format\n",
                               ref.absolute_ref);
                         }
                     }
@@ -4010,8 +4010,8 @@ check_POLYLINE_handles (Dwg_Object *obj)
         layer->obj = dwg_ref_object_relative (dwg, layer, obj);
       if (!layer || !layer->obj)
         { // maybe a reactor pointing forwards or vertex
-          LOG_WARN ("Wrong POLYLINE.layer %X",
-                    layer ? layer->handleref.value : 0);
+          LOG_WARN ("Wrong POLYLINE.layer %lX",
+                    layer ? layer->handleref.value : 0L);
           if (_obj->num_owned > 0)
             {
               Dwg_Object_Ref *vertex = _obj->vertex[0];
@@ -4023,7 +4023,7 @@ check_POLYLINE_handles (Dwg_Object *obj)
                   Dwg_Object *seq;
                   obj->tio.entity->layer = layer = vertex;
                   LOG_WARN (
-                      "POLYLINE.layer is vertex[0] %X, shift em, NULL seqend",
+                      "POLYLINE.layer is vertex[0] %lX, shift em, NULL seqend",
                       layer->handleref.value);
                   /* shift vertices one back */
                   for (i = 0; i < _obj->num_owned - 1; i++)
@@ -4038,7 +4038,7 @@ check_POLYLINE_handles (Dwg_Object *obj)
                   seq = dwg_next_object (obj);
                   if (seq && seq->type == DWG_TYPE_SEQEND)
                     {
-                      LOG_WARN ("POLYLINE.seqend = POLYLINE+1 %X",
+                      LOG_WARN ("POLYLINE.seqend = POLYLINE+1 %lX",
                                 seq->handle.value);
                       seqend = _obj->seqend = dwg_find_objectref (dwg, seq);
                     }
@@ -4047,7 +4047,7 @@ check_POLYLINE_handles (Dwg_Object *obj)
                       seq = dwg_next_object (seqend->obj);
                       if (seq && seq->type == DWG_TYPE_SEQEND)
                         {
-                          LOG_WARN ("POLYLINE.seqend = VERTEX+1 %X",
+                          LOG_WARN ("POLYLINE.seqend = VERTEX+1 %lX",
                                     seq->handle.value);
                           seqend = _obj->seqend
                               = dwg_find_objectref (dwg, seq);
@@ -4083,7 +4083,7 @@ check_POLYLINE_handles (Dwg_Object *obj)
                    && v->obj->fixedtype != DWG_TYPE_VERTEX_PFACE
                    && v->obj->fixedtype != DWG_TYPE_VERTEX_PFACE_FACE)
             {
-              LOG_WARN ("Wrong POLYLINE.vertex[%d] %X %s", i,
+              LOG_WARN ("Wrong POLYLINE.vertex[%d] %lX %s", i,
                         v->handleref.value, v->obj->dxfname)
             }
         }
@@ -4782,7 +4782,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
 
   if (obj->handle.value)
     { // empty only with UNKNOWN
-      LOG_HANDLE (" object_map{%X} = %lu\n", obj->handle.value,
+      LOG_HANDLE (" object_map{%lX} = %lu\n", obj->handle.value,
                   (unsigned long)num);
       hash_set (dwg->object_map, obj->handle.value, (uint32_t)num);
     }
@@ -4907,9 +4907,9 @@ dwg_validate_INSERT (Dwg_Object *obj)
         return 1;
       if (!seqend || next == seqend->obj)
         {
-          LOG_TRACE ("unsorted INSERT %X SEQEND %X ATTRIB\n",
+          LOG_TRACE ("unsorted INSERT %lX SEQEND %lX ATTRIB\n",
                      obj->handle.value,
-                     seqend && seqend->obj ? seqend->obj->handle.value : 0)
+                     seqend && seqend->obj ? seqend->obj->handle.value : 0L)
           return 0;
         }
     }
@@ -4921,9 +4921,9 @@ dwg_validate_INSERT (Dwg_Object *obj)
         return 1;
       if (!seqend || next == seqend->obj)
         {
-          LOG_TRACE ("unsorted INSERT %X SEQEND %X ATTRIB\n",
+          LOG_TRACE ("unsorted INSERT %lX SEQEND %lX ATTRIB\n",
                      obj->handle.value,
-                     seqend && seqend->obj ? seqend->obj->handle.value : 0)
+                     seqend && seqend->obj ? seqend->obj->handle.value : 0L)
           return 0;
         }
     }
@@ -5009,7 +5009,7 @@ dwg_validate_POLYLINE (Dwg_Object *obj)
              layer,vertex*,seqend. check the types then also */
           if (first_vertex->obj->index < obj->index)
             {
-              LOG_WARN ("skip wrong POLYLINE.vertex[0] handle %X < %X\n",
+              LOG_WARN ("skip wrong POLYLINE.vertex[0] handle %lX < %lX\n",
                         first_vertex->obj->handle.value, obj->handle.value);
               if (_obj->num_owned > 1)
                 first_vertex = _obj->vertex[1];

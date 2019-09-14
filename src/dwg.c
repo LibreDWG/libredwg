@@ -676,13 +676,13 @@ dwg_ref_object_relative (const Dwg_Data *restrict dwg,
  * Note that absref 0 is illegal here, I think.
  */
 EXPORT Dwg_Object *
-dwg_resolve_handle (const Dwg_Data *dwg, const BITCODE_BL absref)
+dwg_resolve_handle (const Dwg_Data *dwg, const unsigned long absref)
 {
   uint32_t i;
   if (!absref) // illegal usage
     return NULL;
   i = hash_get (dwg->object_map, (uint32_t)absref);
-  LOG_HANDLE ("object_map{%lX} => %u\n", (unsigned long)absref, i);
+  LOG_HANDLE ("object_map{%lX} => %u\n", absref, i);
   if (i == HASH_NOT_FOUND
       || (BITCODE_BL)i >= dwg->num_objects) // the latter being an invalid
                                             // handle (read from DWG)
@@ -690,9 +690,9 @@ dwg_resolve_handle (const Dwg_Data *dwg, const BITCODE_BL absref)
       // ignore warning on invalid handles. These are warned earlier already
       if (absref && absref < dwg->num_objects)
         {
-          LOG_WARN ("Object handle not found, " FORMAT_BL " in " FORMAT_BL
+          LOG_WARN ("Object handle not found, %lu/%lX in " FORMAT_BL
                     " objects",
-                    absref, dwg->num_objects);
+                    absref, absref, dwg->num_objects);
         }
       return NULL;
     }
@@ -1317,7 +1317,7 @@ dxf_cvt_lweight (const BITCODE_RC value)
  * header_vars. There obj is NULL.
  */
 EXPORT int
-dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, BITCODE_RL value,
+dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, unsigned long value,
                 Dwg_Object *restrict obj)
 {
   int offset = obj ? (value - (int)obj->handle.value) : 0;
@@ -1327,7 +1327,7 @@ dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, BITCODE_RL value,
   hdl->value = value;
   if (obj && !offset && value) // only if same obj
     {
-      LOG_HANDLE ("object_map{%X} = %u\n", (unsigned)value, obj->index);
+      LOG_HANDLE ("object_map{%lX} = %u\n", value, obj->index);
       hash_set (obj->parent->object_map, value, (uint32_t)obj->index);
     }
 
@@ -1377,7 +1377,7 @@ dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, BITCODE_RL value,
 // Returns an existing ref with the same ownership (hard/soft, owner/pointer)
 // or creates it. May return a freshly allocated ref via dwg_new_ref.
 EXPORT Dwg_Object_Ref *
-dwg_add_handleref (Dwg_Data *restrict dwg, BITCODE_RC code, BITCODE_RL value,
+dwg_add_handleref (Dwg_Data *restrict dwg, BITCODE_RC code, unsigned long value,
                    Dwg_Object *restrict obj)
 {
   Dwg_Object_Ref *ref;
@@ -1385,7 +1385,7 @@ dwg_add_handleref (Dwg_Data *restrict dwg, BITCODE_RC code, BITCODE_RL value,
   for (BITCODE_BL i = 0; i < dwg->num_object_refs; i++)
     {
       Dwg_Object_Ref *refi = dwg->object_ref[i];
-      if (refi->absolute_ref == (BITCODE_BL)value
+      if (refi->absolute_ref == value
           && refi->handleref.code == code)
         return refi;
     }

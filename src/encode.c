@@ -1,3 +1,4 @@
+
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -648,8 +649,8 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
 /*--------------------------------------------------------------------------------*/
 typedef struct
 {
-  BITCODE_BL handle;
-  long int address;
+  unsigned long handle;
+  long address;
   BITCODE_BL index;
 } Object_Map;
 
@@ -1054,7 +1055,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {
       LOG_HANDLE ("\nSorting objects...\n");
       for (i = 0; i < dwg->num_objects; i++)
-        fprintf (OUTPUT, "Object(%3i): %4X / idx: %u\n", i,
+        fprintf (OUTPUT, "Object(%3i): %4lX / idx: %u\n", i,
                  dwg->object[i].handle.value, dwg->object[i].index);
     }
   // init unsorted
@@ -1080,7 +1081,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {
       LOG_HANDLE ("\nSorted handles:\n");
       for (i = 0; i < dwg->num_objects; i++)
-        fprintf (OUTPUT, "Handle(%3i): %4X / idx: %u\n", i, omap[i].handle,
+        fprintf (OUTPUT, "Handle(%3i): %4lX / idx: %u\n", i, omap[i].handle,
                  omap[i].index);
     }
 
@@ -1090,11 +1091,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {
       Dwg_Object *obj;
       BITCODE_BL index = omap[i].index;
-      unsigned hdloff = omap[i].handle - (i ? omap[i - 1].handle : 0);
+      unsigned long hdloff = omap[i].handle - (i ? omap[i - 1].handle : 0);
       int off = dat->byte - (i ? omap[i - 1].address : 0);
       unsigned long end_address;
       LOG_TRACE ("\n> Next object: " FORMAT_BL
-                 " Handleoff: %u [UMC] Offset: %d [MC] @%lu\n"
+                 " Handleoff: %lu [UMC] Offset: %d [MC] @%lu\n"
                  "==========================================\n",
                  i, hdloff, off, dat->byte);
       omap[i].address = dat->byte;
@@ -1132,7 +1133,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {
       LOG_HANDLE ("\nSorted objects:\n");
       for (i = 0; i < dwg->num_objects; i++)
-        LOG_HANDLE ("Object(%d): %X / Address: %ld / Idx: %d\n", i,
+        LOG_HANDLE ("Object(%d): %lX / Address: %ld / Idx: %d\n", i,
                     omap[i].handle, omap[i].address, omap[i].index);
     }
 
@@ -1161,7 +1162,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       index = omap[i].index;
       handleoff = omap[i].handle - last_handle;
       bit_write_UMC (dat, handleoff);
-      LOG_HANDLE ("Handleoff(%3i): %4lu (%4X)\t", index, handleoff,
+      LOG_HANDLE ("Handleoff(%3i): %4lu (%4lX)\t", index, handleoff,
                   omap[i].handle)
       last_handle = omap[i].handle;
 

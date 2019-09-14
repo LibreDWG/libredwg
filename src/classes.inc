@@ -29,12 +29,12 @@
 #define _STR(s)  #s
 
 #define WARN_UNHANDLED_CLASS \
-      LOG_WARN("Unhandled Class %s %d %s (0x%x%s) %u/%X", is_entity ? "entity" : "object",\
+      LOG_WARN("Unhandled Class %s %d %s (0x%x%s) %u/%lX", is_entity ? "entity" : "object",\
                klass->number, klass->dxfname, klass->proxyflag,\
                klass->wasazombie ? " was proxy" : "",\
                obj->index, obj->handle.value)
 #define WARN_UNSTABLE_CLASS \
-      LOG_WARN("Unstable Class %s %d %s (0x%x%s) %u/%X", is_entity ? "entity" : "object",\
+      LOG_WARN("Unstable Class %s %d %s (0x%x%s) %u/%lX", is_entity ? "entity" : "object",\
                klass->number, klass->dxfname, klass->proxyflag,\
                klass->wasazombie ? " was proxy" : "",\
                obj->index, obj->handle.value)

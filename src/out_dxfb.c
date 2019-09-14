@@ -1309,7 +1309,7 @@ decl_dxfb_process_VERTEX (2D) decl_dxfb_process_VERTEX (3D)
       // TODO: looks good, but acad import crashes
       return dwg_dxfb_MLINE (dat, obj);
 #else
-      LOG_WARN ("Unhandled Entity MLINE in out_dxfb %u/%X", obj->index,
+      LOG_WARN ("Unhandled Entity MLINE in out_dxfb %u/%lX", obj->index,
                 obj->handle.value)
       if (0)
         dwg_dxfb_MLINE (dat, obj);

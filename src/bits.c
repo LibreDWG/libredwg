@@ -1171,8 +1171,9 @@ bit_write_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
     }
 
   // TODO: little-endian only. support sizes <= 8, not just 4
+  memset (&val, 0, sizeof(val));
   val = (unsigned char *)&handle->value;
-  for (i = sizeof(val)-1; i >= 0; i--)
+  for (i = sizeof(val) - 1; i >= 0; i--)
     if (val[i])
       break;
 

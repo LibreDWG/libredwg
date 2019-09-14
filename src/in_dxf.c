@@ -5018,7 +5018,7 @@ new_object (char *restrict name, char *restrict dxfname,
                 {
                   prev->tio.entity->next_entity
                       = dwg_add_handleref (dwg, 4, obj->handle.value, prev);
-                  LOG_TRACE ("prev %s(%X).next_entity = " FORMAT_REF "\n",
+                  LOG_TRACE ("prev %s(%lX).next_entity = " FORMAT_REF "\n",
                              prev->name, prev->handle.value,
                              ARGS_REF (prev->tio.entity->next_entity));
                 }

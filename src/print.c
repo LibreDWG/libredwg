@@ -68,8 +68,8 @@ static unsigned int cur_ver = 0;
 #define VALUE_HANDLE(handleptr, name, handle_code, dxf)                       \
   if (handleptr)                                                              \
     {                                                                         \
-      LOG_TRACE (#name ": HANDLE" FORMAT_REF "/%u [%d]\n",                    \
-                 ARGS_REF (handleptr), handleptr->absolute_ref, dxf);         \
+      LOG_TRACE (#name ": HANDLE" FORMAT_REF " [%d]\n", ARGS_REF (handleptr), \
+                 dxf);                                                        \
     }
 #define FIELD_HANDLE(nam, handle_code, dxf)                                   \
   VALUE_HANDLE (_obj->nam, nam, handle_code, dxf)
@@ -79,8 +79,8 @@ static unsigned int cur_ver = 0;
 #define VALUE_HANDLE_N(handleptr, name, vcount, handle_code, dxf)             \
   if (handleptr)                                                              \
     {                                                                         \
-      LOG_TRACE (#name "[%d]: HANDLE" FORMAT_REF "/%u [%d]\n", (int)vcount,   \
-                 ARGS_REF (handleptr), handleptr->absolute_ref, dxf);         \
+      LOG_TRACE (#name "[%d]: HANDLE" FORMAT_REF " [%d]\n", (int)vcount,      \
+                 ARGS_REF (handleptr),  dxf);                                 \
     }
 #define FIELD_HANDLE_N(name, vcount, handle_code, dxf)                        \
   VALUE_HANDLE_N (_obj->name, name, vcount, handle_code, dxf)

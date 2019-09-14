@@ -104,7 +104,7 @@ static void _prefix (Bit_Chain *dat);
 #define ENDSEC() ENDARRAY
 
 #undef FORMAT_H
-#define FORMAT_H "[%u, %u]"
+#define FORMAT_H "[%u, %lu]"
 #undef ARGS_H
 #define ARGS_H(hdl) hdl.code, hdl.value
 #undef FORMAT_RC
@@ -1161,7 +1161,7 @@ json_handles_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       Dwg_Object *obj = &dwg->object[j];
       // handle => abs. offset
       PREFIX;
-      fprintf (dat->fh, "[ %u, %lu ],\n", obj->handle.value, obj->address);
+      fprintf (dat->fh, "[ %lu, %lu ],\n", obj->handle.value, obj->address);
     }
   NOCOMMA;
   ENDSEC ();

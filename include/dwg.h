@@ -489,12 +489,12 @@ typedef struct _dwg_handle
 {
   BITCODE_RC code; /*!< OFFSETOBJHANDLE if > 6 */
   BITCODE_RC size;
-  BITCODE_RL value;
+  unsigned long value;
 } Dwg_Handle;
 
-#define FORMAT_H "%u.%u.%X"
+#define FORMAT_H "%u.%u.%lX"
 #define ARGS_H(hdl) (hdl).code, (hdl).size, (hdl).value
-#define FORMAT_REF "(%u.%u.%X) abs:%X"
+#define FORMAT_REF "(%u.%u.%lX) abs:%lX"
 #define ARGS_REF(ref) (ref)->handleref.code, (ref)->handleref.size, \
     (ref)->handleref.value, (ref)->absolute_ref
 
@@ -511,7 +511,7 @@ typedef struct _dwg_object_ref
 {
   struct _dwg_object* obj;
   Dwg_Handle handleref;
-  BITCODE_RL absolute_ref;
+  unsigned long absolute_ref;
 } Dwg_Object_Ref;
 
 typedef Dwg_Object_Ref* BITCODE_H;
@@ -5881,7 +5881,7 @@ get_next_owned_block (const Dwg_Object *restrict hdr,
 
 EXPORT Dwg_Object *
 dwg_resolve_handle (const Dwg_Data* dwg,
-                    const BITCODE_BL absref);
+                    const unsigned long absref);
 EXPORT int
 dwg_resolve_handleref (Dwg_Object_Ref *restrict ref,
                       const Dwg_Object *restrict obj);
@@ -5908,7 +5908,7 @@ EXPORT Dwg_Object_Ref *dwg_new_ref (Dwg_Data *dwg);
  *  There obj is NULL.
  */
 EXPORT int
-dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, BITCODE_RL value,
+dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, unsigned long value,
                 Dwg_Object *restrict obj);
 
 /** Returns an existing ref with the same ownership (hard/soft, owner/pointer)
@@ -5916,7 +5916,7 @@ dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, BITCODE_RL value,
     always absolute.
 */
 EXPORT Dwg_Object_Ref *
-dwg_add_handleref (Dwg_Data *restrict dwg, BITCODE_RC code, BITCODE_RL value,
+dwg_add_handleref (Dwg_Data *restrict dwg, BITCODE_RC code, unsigned long value,
                    Dwg_Object *restrict obj);
 
 /** Add the empty object to the DWG.
