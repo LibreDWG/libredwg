@@ -1069,7 +1069,8 @@ classes_section:
                  klass->cppname, klass->appname, klass->wasazombie,
                  klass->item_class_id)
 
-      SINCE (R_2007)
+#if 0
+      SINCE (R_2007) //? dead code it seems. see read_2004_section_classes()
       {
         klass->num_instances = bit_read_BL (dat);
         klass->dwg_version = bit_read_BL (dat);
@@ -1081,6 +1082,7 @@ classes_section:
             klass->num_instances, klass->dwg_version, klass->maint_version,
             klass->unknown_1, klass->unknown_2);
       }
+#endif
 
       if (strEQc ((const char *)klass->dxfname, "LAYOUT"))
         dwg->layout_number = klass->number;
@@ -1131,22 +1133,22 @@ classes_section:
    * Object-map, section 2
    */
 
-  dat->byte = dwg->header.section[SECTION_OBJECTS_R13].address;
+  dat->byte = dwg->header.section[SECTION_HANDLES_R13].address;
   dat->bit = 0;
 
-  lastmap = dat->byte + dwg->header.section[SECTION_OBJECTS_R13].size; // 4
+  lastmap = dat->byte + dwg->header.section[SECTION_HANDLES_R13].size; // 4
   dwg->num_objects = 0;
   object_begin = dat->size;
   object_end = 0;
   LOG_TRACE ("@ %lu RL Object-map section 2, size %u\n", dat->byte,
-             (unsigned)dwg->header.section[SECTION_OBJECTS_R13].size)
+             (unsigned)dwg->header.section[SECTION_HANDLES_R13].size)
   do
     {
       long unsigned int last_offset;
       // long unsigned int last_handle;
       long unsigned int oldpos = 0;
       int added;
-      BITCODE_BL max_handles = dwg->header.section[SECTION_OBJECTS_R13].size * 2;
+      BITCODE_BL max_handles = dwg->header.section[SECTION_HANDLES_R13].size * 2;
 
       startpos = dat->byte;
       section_size = bit_read_RS_LE (dat);
@@ -1171,16 +1173,15 @@ classes_section:
           // Recover invalid object-map pairs
           handleoff = bit_read_UMC (dat);
           offset = bit_read_MC (dat);
-          if (!handleoff ||
-              (handleoff > max_handles - last_handle) ||
-              (offset > 0 && offset < prevsize && prevsize > 0))
+          if (!handleoff || handleoff > max_handles - last_handle)
+              //(offset > 0 && offset < prevsize && prevsize > 0))
             {
-              handleoff = 1;
-              if (offset != prevsize)
-                LOG_TRACE ("Invalid offset: %ld [MC]\n", offset)
-              offset = prevsize;
-              LOG_WARN ("Recover invalid handleoff to 1, offset to %ld (@%lu)",
-                        offset, oldpos)
+              LOG_WARN ("Ignore invalid handleoff (@%lu)", oldpos)
+              //if (offset != prevsize)
+              //  LOG_TRACE ("Invalid offset: %ld [MC]\n", offset)
+              //offset = prevsize;
+              //LOG_WARN ("Recover invalid handleoff to 1, offset to %ld (@%lu)",
+              //          offset, oldpos)
             }
           last_offset += offset;
           LOG_TRACE ("\nNext object: %lu ", (unsigned long)dwg->num_objects)
@@ -1217,7 +1218,7 @@ classes_section:
       if (crc != crc2)
         {
           LOG_ERROR ("Object Section[%ld] CRC mismatch %04X <=> %04X",
-                     (long)dwg->header.section[SECTION_OBJECTS_R13].number,
+                     (long)dwg->header.section[SECTION_HANDLES_R13].number,
                      crc, crc2);
           // fails with r14
           // if (dwg->header.version == R_2000)
@@ -1244,7 +1245,7 @@ classes_section:
    // TODO: if the previous Handleoff got corrupted somehow, read this handle map 
    // and try again.
 
-   dat->byte = dwg->header.section[SECTION_OBJECTS_R13].address - 2;
+   dat->byte = dwg->header.section[SECTION_HANDLES_R13].address - 2;
    // Unknown bitdouble inter object data and object map
    antcrc = bit_read_CRC (dat);
    LOG_TRACE("Address: %08u / Content: 0x%04X", dat->byte - 2, antcrc)
@@ -1271,10 +1272,10 @@ classes_section:
    */
   LOG_INFO ("\n"
             "=======> Object Map (start)     : %8d\n",
-            (unsigned int)dwg->header.section[SECTION_OBJECTS_R13].address)
+            (unsigned int)dwg->header.section[SECTION_HANDLES_R13].address)
   LOG_INFO ("         Object Map (end)       : %8d\n",
-            (unsigned int)(dwg->header.section[SECTION_OBJECTS_R13].address
-                           + dwg->header.section[SECTION_OBJECTS_R13].size))
+            (unsigned int)(dwg->header.section[SECTION_HANDLES_R13].address
+                           + dwg->header.section[SECTION_HANDLES_R13].size))
 
   /*-------------------------------------------------------------------------
    * Second header, section 3. R13-R2000 only.
@@ -2364,6 +2365,7 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       // long unsigned int last_handle;
       long unsigned int oldpos = 0;
       long unsigned int startpos = hdl_dat.byte;
+      BITCODE_BL max_handles = hdl_dat.size * 2;
       uint16_t crc1, crc2;
 
       section_size = bit_read_RS_LE (&hdl_dat);
@@ -2387,21 +2389,23 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           BITCODE_MC offset;
           BITCODE_BL prevsize = dwg->num_objects
             ? dwg->object[dwg->num_objects - 1].size + 4 : 0;
+          BITCODE_BL last_handle = dwg->num_objects
+            ? dwg->object[dwg->num_objects - 1].handle.value : 0;
 
           oldpos = hdl_dat.byte;
           // the offset from the previous handle. default: 1, unsigned
           handleoff = bit_read_UMC (&hdl_dat);
           // the offset from the previous address. default: obj->size
           offset = bit_read_MC (&hdl_dat);
-          // Recover invalid object-map pairs
-          if (!handleoff || (offset > 0 && offset < prevsize && prevsize > 0))
+          if (!handleoff || handleoff > max_handles - last_handle)
+            // (offset > 0 && offset < prevsize && prevsize > 0))
             {
-              handleoff = 1;
-              if (offset != prevsize)
-                LOG_TRACE ("Invalid offset: %ld [MC]\n", offset)
-              offset = prevsize;
-              LOG_WARN ("Recover invalid handleoff to 1, offset to %ld (@%lu)",
-                        offset, oldpos)
+              LOG_WARN ("Ignore invalid handleoff (@%lu)", oldpos)
+              //if (offset != prevsize)
+              //  LOG_TRACE ("Invalid offset: %ld [MC]\n", offset)
+              //offset = prevsize;
+              //LOG_WARN ("Recover invalid handleoff to 1, offset to %ld (@%lu)",
+              //          offset, oldpos)
             }
           last_offset += offset;
           LOG_TRACE ("\n< Next object: %lu ", (unsigned long)dwg->num_objects)

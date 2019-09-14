@@ -1144,8 +1144,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
    * Object-map
    */
   LOG_INFO ("\n=======> Object Map: %4u\n", (unsigned)dat->byte);
-  dwg->header.section[SECTION_OBJECTS_R13].number = 2;
-  dwg->header.section[SECTION_OBJECTS_R13].address = dat->byte;
+  dwg->header.section[SECTION_HANDLES_R13].number = 2;
+  dwg->header.section[SECTION_HANDLES_R13].address = dat->byte;
 
   sekcisize = 0;
   pvzadr = dat->byte; // Correct value of section size must be written later
@@ -1210,8 +1210,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   /* Calculate and write the size of the object map
    */
-  dwg->header.section[SECTION_OBJECTS_R13].size
-      = dat->byte - dwg->header.section[SECTION_OBJECTS_R13].address;
+  dwg->header.section[SECTION_HANDLES_R13].size
+      = dat->byte - dwg->header.section[SECTION_HANDLES_R13].address;
   free (omap);
 
   /*------------------------------------------------------------

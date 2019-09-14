@@ -863,7 +863,8 @@ bit_write_MC (Bit_Chain *dat, BITCODE_MC val)
     bit_write_RC (dat, byte[j]);
 }
 
-/** Read 1 modular char (max 5 bytes, unsigned).
+/** Read unsigned modular char (max 5 bytes, unsigned).
+    Can be quite large if there are many deleted handles.
  */
 BITCODE_UMC
 bit_read_UMC (Bit_Chain *dat)
@@ -889,12 +890,14 @@ bit_read_UMC (Bit_Chain *dat)
     }
 
   loglevel = dat->opts & 0xf;
+  // ignore overflow here
   LOG_ERROR (
-      "bit_read_UMC: error parsing modular char. i=%d, j=%d, result=0x%lx,\n"
-      " @%lu.@%u: [0x%x 0x%x 0x%x 0x%x 0x%x]",
-      i, j, result, dat->byte - 5, dat->bit, dat->chain[dat->byte - 5],
-      dat->chain[dat->byte - 4], dat->chain[dat->byte - 3],
-      dat->chain[dat->byte - 2], dat->chain[dat->byte - 1])
+      "bit_read_UMC: error parsing modular char. i=%d, j=%d, result=0x%lx", i,
+      j, result)
+  LOG_HANDLE ("  @%lu.%u: [0x%x 0x%x 0x%x 0x%x 0x%x]\n", dat->byte - 5,
+              dat->bit, dat->chain[dat->byte - 5], dat->chain[dat->byte - 4],
+              dat->chain[dat->byte - 3], dat->chain[dat->byte - 2],
+              dat->chain[dat->byte - 1])
   return 0; /* error... */
 }
 
