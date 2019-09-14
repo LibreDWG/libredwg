@@ -1322,7 +1322,7 @@ dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, BITCODE_RL value,
 {
   int offset = obj ? (value - (int)obj->handle.value) : 0;
   int i;
-  unsigned char *val = (unsigned char *)&hdl->value;
+  unsigned char *val;
   hdl->code = code;
   hdl->value = value;
   if (obj && !offset && value) // only if same obj
@@ -1334,7 +1334,9 @@ dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, BITCODE_RL value,
   // FIXME: little endian only
   if (value)
     {
-      for (i = 3; i >= 0; i--)
+      memset (&val, 0, sizeof(val));
+      val = (unsigned char *)&hdl->value;
+      for (i = sizeof(val) - 1; i >= 0; i--)
         if (val[i])
           break;
       hdl->size = i + 1;

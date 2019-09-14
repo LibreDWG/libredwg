@@ -870,12 +870,13 @@ BITCODE_UMC
 bit_read_UMC (Bit_Chain *dat)
 {
   int i, j;
-  unsigned char byte[5];
+  // eg handle FD485E65F
+  #define MAX_BYTE_UMC 6
+  unsigned char byte[MAX_BYTE_UMC];
   BITCODE_UMC result;
 
   result = 0;
-  
-  for (i = 4, j = 0; i >= 0; i--, j += 7)
+  for (i = MAX_BYTE_UMC-1, j = 0; i >= 0; i--, j += 7)
     {
       byte[i] = bit_read_RC (dat);
       if (!(byte[i] & 0x80))
@@ -890,14 +891,13 @@ bit_read_UMC (Bit_Chain *dat)
     }
 
   loglevel = dat->opts & 0xf;
-  // ignore overflow here
   LOG_ERROR (
-      "bit_read_UMC: error parsing modular char. i=%d, j=%d, result=0x%lx", i,
-      j, result)
+      "bit_read_UMC: error parsing modular char, i=%d,j=%d,result=0x%lx", i, j,
+      result)
   LOG_HANDLE ("  @%lu.%u: [0x%x 0x%x 0x%x 0x%x 0x%x]\n", dat->byte - 5,
-              dat->bit, dat->chain[dat->byte - 5], dat->chain[dat->byte - 4],
-              dat->chain[dat->byte - 3], dat->chain[dat->byte - 2],
-              dat->chain[dat->byte - 1])
+            dat->bit, dat->chain[dat->byte - 5], dat->chain[dat->byte - 4],
+            dat->chain[dat->byte - 3], dat->chain[dat->byte - 2],
+            dat->chain[dat->byte - 1])
   return 0; /* error... */
 }
 
@@ -1134,10 +1134,10 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   handle->code = (handle->code & 0xf0) >> 4;
 
   handle->value = 0;
-  if (handle->size > 4 || handle->code > 14)
+  if (handle->size > sizeof(val) || handle->code > 14)
     {
       loglevel = dat->opts & 0xf;
-      LOG_WARN ("Invalid handle-reference, longer than 4 bytes: " FORMAT_H,
+      LOG_WARN ("Invalid handle-reference, longer than 8 bytes: " FORMAT_H,
                 ARGS_H (*handle))
       return DWG_ERR_INVALIDHANDLE;
     }
@@ -1166,19 +1166,18 @@ bit_write_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
     }
   if (handle->value == 0)
     {
-      bit_write_RC (dat, (handle->code << 4));
+      bit_write_RC (dat, handle->code << 4);
       return;
     }
 
-  // TODO: little-endian only
+  // TODO: little-endian only. support sizes <= 8, not just 4
   val = (unsigned char *)&handle->value;
-  for (i = 3; i >= 0; i--)
+  for (i = sizeof(val)-1; i >= 0; i--)
     if (val[i])
       break;
 
   size = handle->code << 4;
   size |= i + 1;
-
   bit_write_RC (dat, size);
 
   for (; i >= 0; i--)
