@@ -5526,7 +5526,7 @@ typedef struct _dwg_section
   BITCODE_RL x00;
   Dwg_Section_Type type; /* to be casted to Dwg_Section_Type_r11 preR13 */
   /* => section_info? */
-  BITCODE_TV name;
+  char name[64];
   /*!< r2004 section fields: */
   BITCODE_RL section_type;
   BITCODE_RL decomp_data_size;

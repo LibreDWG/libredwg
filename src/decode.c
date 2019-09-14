@@ -249,7 +249,7 @@ decode_preR13_section_ptr (const char *restrict name, Dwg_Section_Type_r11 id,
   tbl->size = bit_read_RS (dat);
   tbl->number = bit_read_RL (dat);
   tbl->address = bit_read_RL (dat);
-  tbl->name = (BITCODE_TV)name;
+  strncpy (tbl->name, name, 79);
   LOG_TRACE ("ptr table %-8s [%2d]: size:%-4u nr:%-2ld (0x%x-0x%lx)\n",
              tbl->name, id, tbl->size, (long)tbl->number, tbl->address,
              (long)(tbl->address + tbl->number * tbl->size))
@@ -653,6 +653,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   tbl_id = 0;
   dwg->header.section[0].number = 0;
   dwg->header.section[0].type = (Dwg_Section_Type)SECTION_HEADER_R11;
+  strcpy (dwg->header.section[0].name, "HEADER");
 
   decode_preR13_section_ptr ("BLOCK", SECTION_BLOCK, dat, dwg);
   decode_preR13_section_ptr ("LAYER", SECTION_LAYER, dat, dwg);
@@ -814,6 +815,9 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   long unsigned int pvz;
   BITCODE_BL j, k;
   int error = 0;
+  const char *section_names[]
+      = { "AcDb:Header", "AcDb:Classes", "AcDb:Handles",
+          "2NDHEADER",   "MEASUREMENT",  "AcDb:AuxHeader" };
 
   {
     int i;
@@ -862,11 +866,12 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       dwg->header.section[j].number = bit_read_RC (dat);
       dwg->header.section[j].address = bit_read_RL (dat);
       dwg->header.section[j].size = bit_read_RL (dat);
-      LOG_TRACE ("section[%u].number: %4d [RC]\n", j,
-                 (int)dwg->header.section[j].number)
-      LOG_TRACE ("section[%u].offset: %4u [RL]\n", j,
+      strcpy (dwg->header.section[j].name, section_names[j]);
+      LOG_TRACE ("section[%u].number:  %4d [RC] %s\n", j,
+                 (int)dwg->header.section[j].number, dwg->header.section[j].name)
+      LOG_TRACE ("section[%u].address: %4u [RL]\n", j,
                  (unsigned)dwg->header.section[j].address)
-      LOG_TRACE ("section[%u].size:   %4d [RL]\n", j,
+      LOG_TRACE ("section[%u].size:    %4d [RL]\n", j,
                  (int)dwg->header.section[j].size)
     }
 
@@ -1141,8 +1146,9 @@ classes_section:
       // long unsigned int last_handle;
       long unsigned int oldpos = 0;
       int added;
-      startpos = dat->byte;
+      BITCODE_BL max_handles = dwg->header.section[SECTION_OBJECTS_R13].size * 2;
 
+      startpos = dat->byte;
       section_size = bit_read_RS_LE (dat);
       LOG_TRACE ("\nSection size: %u [RS_LE]\n", section_size);
       if (section_size > 2040)
@@ -1156,16 +1162,24 @@ classes_section:
         {
           BITCODE_UMC handleoff;
           BITCODE_MC offset;
+          BITCODE_BL prevsize = dwg->num_objects
+            ? dwg->object[dwg->num_objects - 1].size + 4 : 0;
+          BITCODE_BL last_handle = dwg->num_objects
+            ? dwg->object[dwg->num_objects - 1].handle.value : 0;
 
           oldpos = dat->byte;
+          // Recover invalid object-map pairs
           handleoff = bit_read_UMC (dat);
           offset = bit_read_MC (dat);
-          if (!handleoff)
+          if (!handleoff ||
+              (handleoff > max_handles - last_handle) ||
+              (offset > 0 && offset < prevsize && prevsize > 0))
             {
               handleoff = 1;
-              LOG_TRACE ("offset: %ld [MC]\n", offset)
-              offset = dwg->object[dwg->num_objects - 1].size + 4;
-              LOG_WARN ("Defaulting handleoff to 1, offset to %ld (@%lu)",
+              if (offset != prevsize)
+                LOG_TRACE ("Invalid offset: %ld [MC]\n", offset)
+              offset = prevsize;
+              LOG_WARN ("Recover invalid handleoff to 1, offset to %ld (@%lu)",
                         offset, oldpos)
             }
           last_offset += offset;
@@ -1219,18 +1233,21 @@ classes_section:
 
   LOG_INFO ("Num objects: %lu\n", (unsigned long)dwg->num_objects)
   LOG_INFO ("\n"
-            "=======> Object Data 2 (start)  : %8lX\n",
+            "=======> Object Data 2 (start)  : %8lu\n",
             (unsigned long)object_begin)
   dat->byte = object_end;
   object_begin = bit_read_MS (dat);
-  LOG_INFO ("         Object Data 2 (end)    : %8lX (%8lX)\n",
+  LOG_INFO ("         Object Data 2 (end)    : %8lu (%8lu)\n",
             (unsigned long)(object_end + object_begin + 2), object_begin)
 
   /*
+   // TODO: if the previous Handleoff got corrupted somehow, read this handle map 
+   // and try again.
+
    dat->byte = dwg->header.section[SECTION_OBJECTS_R13].address - 2;
    // Unknown bitdouble inter object data and object map
    antcrc = bit_read_CRC (dat);
-   LOG_TRACE("Address: %08X / Content: 0x%04X", dat->byte - 2, antcrc)
+   LOG_TRACE("Address: %08u / Content: 0x%04X", dat->byte - 2, antcrc)
 
    // check CRC-on
    antcrc = 0xC0C1;
@@ -1253,9 +1270,9 @@ classes_section:
    } while (section_size > 0);
    */
   LOG_INFO ("\n"
-            "=======> Object Map (start)     : %8X\n",
+            "=======> Object Map (start)     : %8d\n",
             (unsigned int)dwg->header.section[SECTION_OBJECTS_R13].address)
-  LOG_INFO ("         Object Map (end)       : %8X\n",
+  LOG_INFO ("         Object Map (end)       : %8d\n",
             (unsigned int)(dwg->header.section[SECTION_OBJECTS_R13].address
                            + dwg->header.section[SECTION_OBJECTS_R13].size))
 
@@ -1275,7 +1292,7 @@ classes_section:
       obj = NULL;
 
       LOG_INFO ("\n"
-                "=======> Second Header 3 (start): %8X\n",
+                "=======> Second Header 3 (start): %8u\n",
                 (unsigned int)dat->byte - 16)
       pvzadr = dat->byte;
       LOG_TRACE ("pvzadr: %lx\n", pvzadr)
@@ -1357,7 +1374,7 @@ classes_section:
 
       if (bit_search_sentinel (dat,
                                dwg_sentinel (DWG_SENTINEL_SECOND_HEADER_END)))
-        LOG_INFO ("         Second Header 3 (end)  : %8X\n",
+        LOG_INFO ("         Second Header 3 (end)  : %8u\n",
                   (unsigned int)dat->byte)
     }
 
@@ -1368,9 +1385,9 @@ classes_section:
   if (dwg->header.num_sections > 4)
     {
       LOG_INFO ("\n"
-                "=======> MEASUREMENT 4 (start)  : %8X\n",
+                "=======> MEASUREMENT 4 (start)  : %8u\n",
                 (unsigned int)dwg->header.section[4].address)
-      LOG_INFO ("         MEASUREMENT 4 (end)    : %8X\n",
+      LOG_INFO ("         MEASUREMENT 4 (end)    : %8u\n",
                 (unsigned int)(dwg->header.section[4].address
                                + dwg->header.section[4].size))
       dat->byte = dwg->header.section[4].address;
@@ -2362,28 +2379,30 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
 
-      // last_handle = 0;
       last_offset = 0;
       while ((int)(hdl_dat.byte - startpos) < section_size)
         {
           int added;
           BITCODE_UMC handleoff;
           BITCODE_MC offset;
+          BITCODE_BL prevsize = dwg->num_objects
+            ? dwg->object[dwg->num_objects - 1].size + 4 : 0;
 
           oldpos = hdl_dat.byte;
           // the offset from the previous handle. default: 1, unsigned
           handleoff = bit_read_UMC (&hdl_dat);
           // the offset from the previous address. default: obj->size
           offset = bit_read_MC (&hdl_dat);
-          if (!handleoff)
+          // Recover invalid object-map pairs
+          if (!handleoff || (offset > 0 && offset < prevsize && prevsize > 0))
             {
               handleoff = 1;
-              LOG_TRACE ("offset: %ld [MC]\n", offset)
-              offset = dwg->object[dwg->num_objects - 1].size + 4;
-              LOG_WARN ("Defaulting handleoff to 1, offset to %ld (@%lu)",
+              if (offset != prevsize)
+                LOG_TRACE ("Invalid offset: %ld [MC]\n", offset)
+              offset = prevsize;
+              LOG_WARN ("Recover invalid handleoff to 1, offset to %ld (@%lu)",
                         offset, oldpos)
             }
-          // last_handle += handle;
           last_offset += offset;
           LOG_TRACE ("\n< Next object: %lu ", (unsigned long)dwg->num_objects)
           LOG_HANDLE ("Handleoff: " FORMAT_UMC " [UMC] "
