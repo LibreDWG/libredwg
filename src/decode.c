@@ -1160,6 +1160,14 @@ classes_section:
           oldpos = dat->byte;
           handleoff = bit_read_UMC (dat);
           offset = bit_read_MC (dat);
+          if (!handleoff)
+            {
+              handleoff = 1;
+              LOG_TRACE ("offset: %ld [MC]\n", offset)
+              offset = dwg->object[dwg->num_objects - 1].size + 4;
+              LOG_WARN ("Defaulting handleoff to 1, offset to %ld (@%lu)",
+                        offset, oldpos)
+            }
           last_offset += offset;
           LOG_TRACE ("\nNext object: %lu ", (unsigned long)dwg->num_objects)
           LOG_TRACE ("Handleoff: " FORMAT_UMC " [UMC] "
@@ -1177,12 +1185,6 @@ classes_section:
           added = dwg_decode_add_object (dwg, dat, dat, last_offset);
           if (added > 0)
             error |= added; // else not added (skipped) or -1 for re-allocated
-#if 0
-          kobj = dwg->num_objects;
-          if (dwg->num_objects > kobj)
-            dwg->object[dwg->num_objects - 1].handle.value = last_handle;
-          //TODO: blame Juca
-#endif
           // LOG_HANDLE ("dat: @%lu.%u\n", dat->byte, dat->bit);
         }
       if (dat->byte == oldpos)
@@ -2373,6 +2375,14 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           handleoff = bit_read_UMC (&hdl_dat);
           // the offset from the previous address. default: obj->size
           offset = bit_read_MC (&hdl_dat);
+          if (!handleoff)
+            {
+              handleoff = 1;
+              LOG_TRACE ("offset: %ld [MC]\n", offset)
+              offset = dwg->object[dwg->num_objects - 1].size + 4;
+              LOG_WARN ("Defaulting handleoff to 1, offset to %ld (@%lu)",
+                        offset, oldpos)
+            }
           // last_handle += handle;
           last_offset += offset;
           LOG_TRACE ("\n< Next object: %lu ", (unsigned long)dwg->num_objects)

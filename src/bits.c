@@ -819,8 +819,12 @@ bit_read_MC (Bit_Chain *dat)
     }
 
   loglevel = dat->opts & 0xf;
-  LOG_ERROR ("bit_read_MC: error parsing modular char, i=%d,j=%d,result=0x%lx",
-             i, j, result)
+  LOG_ERROR (
+      "bit_read_MC: error parsing modular char. i=%d, j=%d, result=0x%lx,\n"
+      " @%lu.@%u: [0x%x 0x%x 0x%x 0x%x 0x%x]",
+      i, j, result, dat->byte - 5, dat->bit, dat->chain[dat->byte - 5],
+      dat->chain[dat->byte - 4], dat->chain[dat->byte - 3],
+      dat->chain[dat->byte - 2], dat->chain[dat->byte - 1])
   return 0; /* error... */
 }
 
@@ -869,6 +873,7 @@ bit_read_UMC (Bit_Chain *dat)
   BITCODE_UMC result;
 
   result = 0;
+  
   for (i = 4, j = 0; i >= 0; i--, j += 7)
     {
       byte[i] = bit_read_RC (dat);
@@ -885,8 +890,11 @@ bit_read_UMC (Bit_Chain *dat)
 
   loglevel = dat->opts & 0xf;
   LOG_ERROR (
-      "bit_read_UMC: error parsing modular char, i=%d,j=%d,result=0x%lx", i, j,
-      result)
+      "bit_read_UMC: error parsing modular char. i=%d, j=%d, result=0x%lx,\n"
+      " @%lu.@%u: [0x%x 0x%x 0x%x 0x%x 0x%x]",
+      i, j, result, dat->byte - 5, dat->bit, dat->chain[dat->byte - 5],
+      dat->chain[dat->byte - 4], dat->chain[dat->byte - 3],
+      dat->chain[dat->byte - 2], dat->chain[dat->byte - 1])
   return 0; /* error... */
 }
 
