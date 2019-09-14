@@ -21,6 +21,7 @@
           {
             FIELD_BINARY (preview, ent->preview_size, 310);
           }
+#ifndef IS_FREE
         else
           {
             LOG_ERROR("Invalid preview_size: %lu kB",
@@ -28,6 +29,7 @@
             //bit_set_position(dat, pos+1);
             error |= DWG_ERR_VALUEOUTOFBOUNDS;
           }
+#endif
       }
   }
 

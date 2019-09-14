@@ -42,14 +42,18 @@
 #  define SET_PARENT_OBJ(field)
 #  define SET_PARENT_FIELD(field, what_parent, obj)
 
-#  define VALUEOUTOFBOUNDS(field, maxvalue)                                   \
-    if (_obj->field > maxvalue)                                               \
-      {                                                                       \
-        LOG_ERROR ("Invalid %s." #field " %lu", obj->name,                    \
-                   (unsigned long)_obj->field);                               \
-        _obj->field = 0;                                                      \
-        return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
-      }
+#  ifndef IS_FREE
+#    define VALUEOUTOFBOUNDS(field, maxvalue)                                 \
+      if (_obj->field > maxvalue)                                             \
+        {                                                                     \
+          LOG_ERROR ("Invalid %s." #field " %lu", obj->name,                  \
+                     (unsigned long)_obj->field);                             \
+          _obj->field = 0;                                                    \
+          return DWG_ERR_VALUEOUTOFBOUNDS;                                    \
+        }
+#  else
+#    define VALUEOUTOFBOUNDS(field, maxvalue) if (0) { }
+#  endif
 
 #endif /* SPEC_H */
 
