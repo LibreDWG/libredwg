@@ -1446,8 +1446,8 @@ dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name)
                   Dwg_Object_Ref *ref = _obj->itemhandles[j];
                   if (!ref)
                     continue;
-                  dwg_resolve_handleref (ref,
-                                         obj); // relative? (8.0.0, 6.0.0, ...)
+                  // relative? (8.0.0, 6.0.0, ...)
+                  dwg_resolve_handleref (ref, obj);
                   if (dwg->header.version >= R_2007)
                     free (u8);
                   return dwg_add_handleref (dwg, 5, ref->absolute_ref, NULL);

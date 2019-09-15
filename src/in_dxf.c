@@ -5487,6 +5487,10 @@ resolve_postponed_header_refs (Dwg_Data *restrict dwg)
       if (vars->DICTIONARY_##name)                                            \
         LOG_TRACE ("HEADER.DICTIONARY_" #name " = " FORMAT_REF "\n",          \
                    ARGS_REF (vars->DICTIONARY_##name))                        \
+      else                                                                    \
+        if ((vars->DICTIONARY_##name = dwg_find_dictionary (dwg, "ACAD_"#name))) \
+          LOG_TRACE ("HEADER.DICTIONARY_" #name " = " FORMAT_REF "\n",        \
+                     ARGS_REF (vars->DICTIONARY_##name))                      \
     }
 
 void
