@@ -343,8 +343,9 @@ matches_type (Dxf_Pair *restrict pair, const Dwg_DYNAPI_field *restrict f)
         return 1;
       break;
     case VT_POINT3D:
-      // 3BD or 3RD or 3DPOINT
-      if (f->size == 24 && f->type[0] == '3')
+      // 3BD or 3RD or 3DPOINT or BE
+      if (f->size == 24 &&
+          (f->type[0] == '3' || strEQc (f->type, "BE")))
         return 1;
       // accept 2BD or 2RD or 2DPOINT also
       if (f->size == 16 && f->type[0] == '2')
@@ -4660,7 +4661,8 @@ new_object (char *restrict name, char *restrict dxfname,
                       // only 2D or 3D points .x
                       else if (f->size > 8
                                && (strchr (f->type, '2')
-                                   || strchr (f->type, '3')))
+                                   || strchr (f->type, '3')
+                                   || strEQc (f->type, "BE")))
                         {
                           if (pair->value.d == 0.0) // ignore defaults
                             goto next_pair;
@@ -4726,7 +4728,8 @@ new_object (char *restrict name, char *restrict dxfname,
                       goto next_pair; // found, early exit
                     }
                   // wrong code, maybe a point .y or .z
-                  else if ((*f->type == '3' || *f->type == '2')
+                  else if ((*f->type == '3' || *f->type == '2'
+                            || strEQc (f->type, "BE"))
                            && (strstr (f->type, "_1")
                                    ? f->dxf + 1 == pair->code // 2BD_1
                                    : f->dxf + 10 == pair->code))
@@ -4742,7 +4745,8 @@ new_object (char *restrict name, char *restrict dxfname,
                                  pair->value.d, pair->code, f->type);
                       goto next_pair; // found, early exit
                     }
-                  else if ((*f->type == '3' || *f->type == '2')
+                  else if ((*f->type == '3' || *f->type == '2'
+                            || strEQc (f->type, "BE"))
                            && (strstr (f->type, "_1")
                                    ? f->dxf + 2 == pair->code // 2BD_1
                                    : f->dxf + 20 == pair->code))
