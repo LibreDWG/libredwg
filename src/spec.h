@@ -25,6 +25,7 @@
 #  define JSON if (0)
 #  define FREE if (0)
 #  define IF_ENCODE_FROM_EARLIER if (0)
+#  define IF_ENCODE_FROM_EARLIER_OR_DXF if (0)
 #  define IF_ENCODE_FROM_PRE_R13 if (0)
 #  define IF_ENCODE_FROM_SINCE_R13 if (0)
 #  define IF_IS_ENCODER 0
@@ -183,10 +184,13 @@
 // when writing, check also rewriting from an earlier version and fill in
 // defaults then
 #  undef IF_ENCODE_FROM_EARLIER
+#  undef IF_ENCODE_FROM_EARLIER_OR_DXF
 #  undef IF_ENCODE_FROM_PRE_R13
 #  undef IF_ENCODE_FROM_SINCE_R13
 #  define IF_ENCODE_FROM_EARLIER                                              \
     if (dat->from_version && dat->from_version < cur_ver)
+#  define IF_ENCODE_FROM_EARLIER_OR_DXF                                       \
+    if ((dat->from_version && dat->from_version < cur_ver) || dwg->opts & 0x20)
 #  define IF_ENCODE_FROM_PRE_R13                                              \
     if (dat->from_version && dat->from_version < R_13)
 #  define IF_ENCODE_SINCE_R13                                                 \

@@ -31,7 +31,7 @@
 
   SINCE(R_13)
     {
-      IF_ENCODE_FROM_EARLIER {
+      IF_ENCODE_FROM_EARLIER_OR_DXF {
         FIELD_VALUE(unknown_0) = 412148564080.0;
         FIELD_VALUE(unknown_1) = 1.0;
         FIELD_VALUE(unknown_2) = 1.0;
@@ -50,7 +50,7 @@
   }
   SINCE(R_13)
     {
-      IF_ENCODE_FROM_EARLIER {
+      IF_ENCODE_FROM_EARLIER_OR_DXF {
         FIELD_VALUE(unknown_8) = 24;
       }
       FIELD_BL (unknown_8, 0);
@@ -480,7 +480,7 @@
 
   SINCE(R_2000)
     {
-      IF_ENCODE_FROM_EARLIER {
+      IF_ENCODE_FROM_EARLIER_OR_DXF {
          FIELD_VALUE(TSTACKALIGN) = 1;
          FIELD_VALUE(TSTACKSIZE) = 70;
       }

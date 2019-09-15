@@ -1010,15 +1010,15 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   dwg->header.section[0].number = 0;
   dwg->header.section[0].address = dat->byte;
   bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_VARIABLE_BEGIN));
+
   pvzadr = dat->byte;      // Size position
   bit_write_RL (dat, 540); // Size placeholder
-
   // if (dat->version >= R_2007)
   //  str_dat = dat;
   dwg_encode_header_variables (dat, hdl_dat, dat, dwg);
-
   encode_patch_RLsize (dat, pvzadr);
   bit_write_CRC (dat, pvzadr, 0xC0C1);
+
   // XXX trying to fix CRC 2-byte overflow. Must find actual reason
   // dat->byte -= 2;
   bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_VARIABLE_END));
@@ -1434,7 +1434,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       break;
     }
   bit_write_RS (dat, ckr);
-  LOG_TRACE ("crc: %04X\n", ckr);
+  LOG_TRACE ("crc: %04X (from 0)\n", ckr);
 
   return 0;
 }
@@ -2315,9 +2315,13 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
 {
   Dwg_Header_Variables *_obj = &dwg->header_vars;
   Dwg_Object *obj = NULL;
+  int old_from = (int)dat->from_version;
 
   if (!_obj->HANDSEED) // minimal DXF
     {
+      dwg->opts |= 0x3f;
+      dat->from_version = dat->version - 1;
+      LOG_TRACE ("encode from minimal DXF\n");
       _obj->HANDSEED = calloc(1, sizeof(Dwg_Object_Ref));
       _obj->HANDSEED->absolute_ref = 0x72E;
     }
@@ -2326,6 +2330,7 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
   #include "header_variables.spec"
   // clang-format on
 
+  dat->from_version = old_from;
   return 0;
 }
 

@@ -254,7 +254,7 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   /* Load whole file into memory
    */
   memset (dwg, 0, sizeof (Dwg_Data));
-  dwg->opts = loglevel;
+  dwg->opts = loglevel | 0x2f;
   memset (&dat, 0, sizeof (Bit_Chain));
   dat.size = attrib.st_size;
   dat.chain = (unsigned char *)calloc (1, dat.size);
@@ -298,6 +298,7 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   else
     error = dwg_read_dxf (&dat, dwg);
 
+  dwg->opts |= 0x2f;
   if (error >= DWG_ERR_CRITICAL)
     {
       LOG_ERROR ("Failed to decode DXF file: %s\n", filename)

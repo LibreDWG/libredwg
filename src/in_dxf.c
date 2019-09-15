@@ -3834,7 +3834,7 @@ new_object (char *restrict name, char *restrict dxfname,
   ctrl = &dwg->object[ctrl_id];
 
   {
-    int log = obj->parent->opts & 0xF;
+    int log = obj->parent->opts;
     obj->parent->opts = 0; // silence field not found
     // set defaults not in dxf:
     if (dwg_dynapi_entity_value (_obj, obj->name, "scale_flag", &scale_flag,
@@ -5679,6 +5679,8 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dwg->dirty_refs = 0;
   free_array_hdls (header_hdls);
   free_array_hdls (eed_hdls);
+  dwg->opts |= 0x2f; // from DXF
+  LOG_TRACE ("import from DXF\n");
   return dwg->num_objects ? 1 : 0;
 }
 

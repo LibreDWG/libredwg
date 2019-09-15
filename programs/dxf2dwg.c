@@ -256,7 +256,7 @@ main (int argc, char *argv[])
           continue;
         }
 
-      dwg.opts = opts;
+      dwg.opts |= opts;
       printf ("Writing DWG file %s", filename_out);
       if (version)
         {

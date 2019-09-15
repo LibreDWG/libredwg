@@ -988,10 +988,10 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   pvz + dwg->header_vars.size + 4 - dat->byte, r);
     }
   // Check CRC, hardcoded to 2 before end sentinel
-  LOG_HANDLE ("crc pos: 0x%lx\n", pvz + dwg->header_vars.size + 4);
+  LOG_HANDLE ("crc pos: %lu\n", pvz + dwg->header_vars.size + 4);
   bit_set_position (dat, (pvz + dwg->header_vars.size + 4) * 8);
   crc = bit_read_RS (dat);
-  LOG_TRACE ("crc: %04X [RSx]\n", crc);
+  LOG_TRACE ("crc: %04X [RSx] from %lu-%lu\n", crc, pvz, dat->byte-2);
   crc2 = 0;
   // LOG_HANDLE ("@ 0x%lx\n", bit_position (dat)/8);
   // LOG_HANDLE ("HEADER_R13.address of size 0x%lx\n", pvz);
