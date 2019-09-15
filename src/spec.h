@@ -180,8 +180,8 @@
 #  define ENCODER if (1)
 #  undef DECODER_OR_ENCODER
 #  define DECODER_OR_ENCODER if (1)
-// when writing, check also rewriting from an earlier version and fill in a
-// default then
+// when writing, check also rewriting from an earlier version and fill in
+// defaults then
 #  undef IF_ENCODE_FROM_EARLIER
 #  undef IF_ENCODE_FROM_PRE_R13
 #  undef IF_ENCODE_FROM_SINCE_R13

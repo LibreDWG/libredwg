@@ -765,6 +765,39 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   {
     struct Dwg_Header *_obj = &dwg->header;
     Dwg_Object *obj = NULL;
+    if (!_obj->dwg_version)
+      {
+        switch (dwg->header.version)
+          {
+          case R_13:
+            _obj->dwg_version = 0x15;
+            break;
+          case R_2000:
+            _obj->dwg_version = 0x17;
+            break;
+          case R_2004:
+            _obj->dwg_version = 0x19;
+            break;
+          case R_2007:
+            _obj->dwg_version = 0x1b;
+            break;
+          case R_2010:
+            _obj->dwg_version = 0x1d;
+            break;
+          case R_2013:
+            _obj->dwg_version = 0x1f;
+            break;
+          case R_2018:
+            _obj->dwg_version = 0x21;
+            break;
+          default:
+            break;
+          }
+        if (!_obj->app_dwg_version)
+          _obj->app_dwg_version = _obj->dwg_version;
+      }
+    if (!_obj->codepage)
+      _obj->codepage = 30;
 
     // clang-format off
     #include "header.spec"
@@ -795,7 +828,17 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
      *         5: optional: AuxHeader
      */
     if (!dwg->header.num_sections) /* Usually 3-5, max 6 */
-      dwg->header.num_sections = dwg->header.version < R_2000 ? 5 : 6;
+      {
+        dwg->header.num_sections = dwg->header.version < R_2000 ? 5 : 6;
+        // minimal DXF:
+        if (!dwg->header_vars.HANDSEED || !dwg->header_vars.TDCREATE.days)
+          {
+            dwg->header.num_sections = 5;
+            dat->from_version = R_11; // to trigger IF_ENCODE_FROM_EARLIER defaults
+            if (dat->version <= dat->from_version)
+              dat->from_version = dat->version - 1;
+          }
+      }
     LOG_TRACE ("num_sections: " FORMAT_RL " [RL]\n", dwg->header.num_sections);
     bit_write_RL (dat, dwg->header.num_sections);
     if (!dwg->header.section)
@@ -836,7 +879,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             memcpy (FIELD_VALUE (unknown_rs), tmpunknown, sizeof (tmpunknown));
             FIELD_VALUE (TDCREATE) = dwg->header_vars.TDCREATE.value;
             FIELD_VALUE (TDUPDATE) = dwg->header_vars.TDUPDATE.value;
-            FIELD_VALUE (HANDSEED) = dwg->header_vars.HANDSEED->absolute_ref;
+            if (dwg->header_vars.HANDSEED)
+              FIELD_VALUE (HANDSEED) = dwg->header_vars.HANDSEED->absolute_ref;
           }
 
           // clang-format off
@@ -2271,6 +2315,12 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
 {
   Dwg_Header_Variables *_obj = &dwg->header_vars;
   Dwg_Object *obj = NULL;
+
+  if (!_obj->HANDSEED) // minimal DXF
+    {
+      _obj->HANDSEED = calloc(1, sizeof(Dwg_Object_Ref));
+      _obj->HANDSEED->absolute_ref = 0x72E;
+    }
 
   // clang-format off
   #include "header_variables.spec"
