@@ -1631,6 +1631,8 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
       LOG_TRACE ("dwg_find_tablehandle: Could not resolve table %s\n", table);
       return 0;
     }
+  if (obj->type == DWG_TYPE_DICTIONARY)
+    return dwg_find_dictionary (dwg, name);
   if (!dwg_obj_is_control (obj))
     {
       LOG_ERROR ("dwg_find_tablehandle: Could not resolve CONTROL object %s "
