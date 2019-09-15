@@ -211,6 +211,10 @@ dxf_read_pair (Bit_Chain *dat)
   if (dat->byte >= dat->size                                                  \
       || (pair != NULL && pair->code == 0 && strEQc (pair->value.s, "EOF")))  \
   return what
+#define DXF_BREAK_EOF                                                         \
+  if (dat->byte >= dat->size                                                  \
+      || (pair != NULL && pair->code == 0 && strEQc (pair->value.s, "EOF")))  \
+  break
 
 static int
 dxf_skip_comment (Bit_Chain *dat, Dxf_Pair *pair)
@@ -481,17 +485,26 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           else if (pair->type == VT_STRING && strEQc (f->type, "H"))
             {
               char *key, *str;
-              LOG_TRACE ("HEADER.%s %s [%s] %d later\n", &field[1],
-                         pair->value.s, f->type, (int)pair->code);
-              // name (which table?) => handle
-              // needs to be postponed, because we don't have the tables yet.
-              header_hdls = array_push (header_hdls, &field[1], pair->value.s,
-                                        pair->code);
+              if (strlen (pair->value.s))
+                {
+                  LOG_TRACE ("HEADER.%s %s [%s] %d later\n", &field[1],
+                             pair->value.s, f->type, (int)pair->code);
+                  // name (which table?) => handle
+                  // needs to be postponed, because we don't have the tables yet.
+                  header_hdls = array_push (header_hdls, &field[1], pair->value.s,
+                                            pair->code);
+                }
+              else
+                {
+                  BITCODE_H hdl = dwg_add_handleref (dwg, 5, 0, NULL);
+                  LOG_TRACE ("HEADER.%s NULL 5 [H]\n", &field[1]);
+                  dwg_dynapi_header_set_value (dwg, &field[1], &hdl, is_utf);
+                }
             }
           else if (strEQc (f->type, "H"))
             {
               BITCODE_H hdl;
-              hdl = dwg_add_handleref (dwg, 0, pair->value.u, NULL);
+              hdl = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
               LOG_TRACE ("HEADER.%s %X [H]\n", &field[1], pair->value.u);
               dwg_dynapi_header_set_value (dwg, &field[1], &hdl, is_utf);
             }
@@ -5422,6 +5435,7 @@ resolve_postponed_header_refs (Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables *vars = &dwg->header_vars;
   uint32_t i;
+  LOG_TRACE ("resolve %d postponed header ref names\n", header_hdls->nitems);
   for (i = 0; i < header_hdls->nitems; i++)
     {
       char *field = header_hdls->items[i].field;
@@ -5429,31 +5443,40 @@ resolve_postponed_header_refs (Dwg_Data *restrict dwg)
       BITCODE_H hdl = NULL;
       p.value.s = header_hdls->items[i].name;
       if (!p.value.s || !*p.value.s)
-        return;
+        {
+          LOG_WARN ("HEADER.%s empty dxf:%d", field, (int)p.code);
+          continue;
+        }
       p.code = header_hdls->items[i].code;
-      if (strEQc (p.value.s, "DIMSTYLE"))
+      if (strEQc (field, "DIMSTYLE"))
         p.code = 3;
-      else if (strstr (p.value.s, "UCS"))
+      else if (strstr (field, "UCS"))
         p.code = 345;
       hdl = find_tablehandle (dwg, &p);
       if (hdl)
         {
           hdl->handleref.code = 5; // FIXME?
           dwg_dynapi_header_set_value (dwg, field, &hdl, 1);
-          LOG_TRACE ("HEADER.%s %s => " FORMAT_REF " [H] %d\n", field,
+          LOG_TRACE ("HEADER.%s %s => " FORMAT_REF " [H] dxf:%d\n", field,
                      p.value.s, ARGS_REF (hdl), (int)p.code);
         }
-      else if (strstr (p.value.s, "CMLSTYLE"))
+      else if (strstr (field, "CMLSTYLE"))
         {
           hdl = dwg_find_tablehandle (dwg, p.value.s, "MLSTYLE");
           if (hdl)
             {
               hdl->handleref.code = 5; // FIXME?
               dwg_dynapi_header_set_value (dwg, field, &hdl, 1);
-              LOG_TRACE ("HEADER.%s %s => " FORMAT_REF " [H] %d\n", field,
-                         p.value.s, ARGS_REF (hdl), (int)p.code);
+              LOG_TRACE ("HEADER.%s %s => " FORMAT_REF " [H] dxf:%d\n", field,
+                         p.value.s, ARGS_REF (hdl), (int)p.code)
             }
+          else
+            LOG_WARN ("Unknown HEADER.%s %s dxf:%d", field,
+                      p.value.s, (int)p.code)
         }
+      else
+        LOG_WARN ("Unknown HEADER.%s %s dxf:%d", field,
+                  p.value.s, (int)p.code)
     }
 }
 
@@ -5497,6 +5520,7 @@ resolve_header_dicts (Dwg_Data *restrict dwg)
 void
 resolve_postponed_eed_refs (Dwg_Data *restrict dwg)
 {
+  LOG_TRACE ("resolve %d postponed eed APPID refs\n", eed_hdls->nitems);
   for (uint32_t i = 0; i < eed_hdls->nitems; i++)
     {
       char *name = eed_hdls->items[i].name;
@@ -5516,6 +5540,8 @@ resolve_postponed_eed_refs (Dwg_Data *restrict dwg)
                      " [H]\n",
                      j, name, ARGS_H (eed[j].handle));
         }
+      else
+        LOG_WARN ("Unknown eed[].handle for APPID.%s", name)
     }
 }
 
@@ -5562,24 +5588,26 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       pair = dxf_read_pair (dat);
       pair = dxf_expect_code (dat, pair, 0);
-      DXF_CHECK_EOF;
+      DXF_BREAK_EOF;
       if (pair->type == VT_STRING && strEQc (pair->value.s, "SECTION"))
         {
           dxf_free_pair (pair);
           pair = dxf_read_pair (dat);
           pair = dxf_expect_code (dat, pair, 2);
-          DXF_CHECK_EOF;
+          DXF_BREAK_EOF;
           if (strEQc (pair->value.s, "HEADER"))
             {
               dxf_free_pair (pair);
               dxf_header_read (dat, dwg);
               dxf_fixup_header (dwg);
               // skip minimal DXF
+              /*
               if (!dwg->header_vars.DIMPOST) // T in all versions
                 {
                   LOG_ERROR ("Unsupported minimal DXF");
                   return DWG_ERR_INVALIDDWG;
                 }
+              */
             }
           else if (strEQc (pair->value.s, "CLASSES"))
             {
@@ -5629,8 +5657,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               dxf_free_pair (pair);
               dxf_blocks_read (dat, dwg);
 
-              resolve_postponed_header_refs (dwg);
-
+              //resolve_postponed_header_refs (dwg);
               if (!dwg->header_vars.BLOCK_RECORD_PSPACE)
                 {
                   if ((hdl = dwg_find_tablehandle (dwg, (char *)"*Paper_Space",
@@ -5674,6 +5701,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             }
         }
     }
+  resolve_postponed_header_refs (dwg);
   LOG_HANDLE ("Resolving pointers from ObjectRef vector:\n");
   dwg_resolve_objectrefs_silent (dwg);
   dwg->dirty_refs = 0;

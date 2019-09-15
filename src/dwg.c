@@ -26,6 +26,10 @@
 #include <stdbool.h>
 #include <sys/stat.h>
 #include <assert.h>
+// strings.h or string.h
+#ifdef AX_STRCASECMP_HEADER
+#  include AX_STRCASECMP_HEADER
+#endif
 
 #include "bits.h"
 #include "common.h"
@@ -1654,7 +1658,7 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
       dwg_dynapi_entity_utf8text (_o, hobj->name, "name", &hdlname, NULL);
       LOG_HANDLE (" %s.%s[%d] => %s.name: %s\n", obj->name, "entries", i,
                   hobj->name, hdlname ? hdlname : "NULL");
-      if (hdlname && strEQ (name, hdlname))
+      if (hdlname && (strEQ (name, hdlname) || !strcasecmp (name, hdlname)))
         {
           return hdlv[i];
         }
