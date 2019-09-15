@@ -848,16 +848,16 @@
   vcount = 0;                                                                 \
   while ((vcount = (BITCODE_RC)bit_read_RC (dat)))                            \
     {                                                                         \
+      FIELD_VALUE (num_inserts)++;                                            \
+      LOG_INSANE ("num_inserts [RC " FORMAT_RL "]: %d\n",                     \
+                  FIELD_VALUE (num_inserts), (unsigned char)vcount)           \
       if (vcount != 1)                                                        \
         {                                                                     \
-          LOG_ERROR ("num_inserts [RC " FORMAT_RL "]: %d!\n",                 \
+          LOG_WARN ("num_inserts [RC " FORMAT_RL "]: %d != 1",                \
                      FIELD_VALUE (num_inserts), (unsigned char)vcount)        \
           bit_advance_position (dat, -8);                                     \
           break;                                                              \
         }                                                                     \
-      FIELD_VALUE (num_inserts)++;                                            \
-      LOG_INSANE ("num_inserts [RC " FORMAT_RL "]: %d\n",                     \
-                  FIELD_VALUE (num_inserts), (unsigned char)vcount)           \
     }                                                                         \
   FIELD_G_TRACE (num_inserts, type, dxf)
 
