@@ -1263,8 +1263,9 @@ bit_write_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
                       dat->byte - start_address);
 
   bit_write_RS (dat, crc);
-  LOG_TRACE ("write CRC from %lu-%lu: %04X\n", start_address, dat->byte, crc)
-  return (crc);
+  LOG_TRACE ("write CRC from %lu-%lu: %04X\n", start_address, dat->byte - 2,
+             crc)
+  return crc;
 }
 
 void

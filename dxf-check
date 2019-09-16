@@ -24,11 +24,11 @@ case `uname` in
     Windows) TeighaFileConverter=TeighaFileConverter ;;
 esac
 
-./log $d
+./log -v4 $d
 rm $d.dwg 2>/dev/null
-./dxf $d
-echo programs/dwg2dxf -v3 -y $d.dwg 2\>$b.dwg.log
-programs/dwg2dxf -v3 -y $d.dwg 2>$b.dwg.log
+./dxf -y -v4 $d
+echo programs/dwg2dxf -v4 -y $d.dwg 2\>$b.dwg.log
+programs/dwg2dxf -v4 -y $d.dwg 2>$b.dwg.log
 
 cp $d.dwg test/
 echo TeighaFileConverter "test" "." ACAD2000 DXF 0 1 $d.dwg

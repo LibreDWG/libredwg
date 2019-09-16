@@ -1001,7 +1001,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       else
         bit_write_TF (dat, (char *)dwg->thumbnail.chain, dwg->thumbnail.size);
       bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_THUMBNAIL_END));
-      LOG_TRACE ("        Thumbnail (end): %4u\n", (unsigned)dat->byte);
+      LOG_TRACE ("         Thumbnail (end): %4u\n", (unsigned)dat->byte);
     }
 
   /*------------------------------------------------------------
