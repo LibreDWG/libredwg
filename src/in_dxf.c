@@ -463,6 +463,8 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           else if (pair->type == VT_POINT3D)
             {
               BITCODE_3BD pt = { 0.0, 0.0, 0.0 };
+              if (i)
+                dwg_dynapi_header_value (dwg, &field[1], &pt, NULL);
               if (i == 0)
                 pt.x = pair->value.d;
               else if (i == 1)

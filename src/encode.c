@@ -874,7 +874,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             FIELD_VALUE (minus_1) = -1;
             FIELD_VALUE (dwg_version) = dwg->header.dwg_version;
             FIELD_VALUE (maint_version) = dwg->header.maint_version;
+            FIELD_VALUE (dwg_version_1) = dwg->header.dwg_version;
             FIELD_VALUE (dwg_version_2) = dwg->header.dwg_version;
+            FIELD_VALUE (maint_version_1) = dwg->header.maint_version;
             FIELD_VALUE (maint_version_2) = dwg->header.maint_version;
             memcpy (FIELD_VALUE (unknown_rs), tmpunknown, sizeof (tmpunknown));
             FIELD_VALUE (TDCREATE) = dwg->header_vars.TDCREATE.value;

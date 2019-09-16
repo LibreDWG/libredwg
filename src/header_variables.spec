@@ -43,6 +43,9 @@
       FIELD_BD (unknown_3, 0);
     }
   VERSIONS(R_13, R_2004) { // undocumented as such in the ODA spec
+      IF_ENCODE_FROM_EARLIER_OR_DXF {
+        FIELD_VALUE(unknown_text1) = strdup("m");
+      }
       FIELD_TV (unknown_text1, 0);
       FIELD_TV (unknown_text2, 0);
       FIELD_TV (unknown_text3, 0);
@@ -210,6 +213,9 @@
   FIELD_BD (CMLSCALE, 40);
   FIELD_BD (CELTSCALE, 40);
   PRE(R_2007) {
+    IF_ENCODE_FROM_EARLIER_OR_DXF {
+      FIELD_VALUE(MENU) = strdup(".");
+    }
     FIELD_TV (MENU, 1);
   }
   FIELD_TIMEBLL (TDCREATE, 40);
