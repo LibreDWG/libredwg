@@ -566,25 +566,105 @@ dxf_fixup_header (Dwg_Data *dwg)
 {
   Dwg_Header_Variables *vars = &dwg->header_vars;
   struct Dwg_Header *hdr = &dwg->header;
-  struct Dwg_AuxHeader *aux = &dwg->auxheader; // skip it for now
+  //struct Dwg_AuxHeader *aux = &dwg->auxheader;
   LOG_TRACE ("dxf_fixup_header\n");
 
   if (vars->DWGCODEPAGE)
     {
       if (strEQc (vars->DWGCODEPAGE, "ANSI_1252"))
         hdr->codepage = 30;
+      else if (strEQc (vars->DWGCODEPAGE, "UTF-8"))
+        hdr->codepage = 30;
+      else if (strEQc (vars->DWGCODEPAGE, "US_ASCII"))
+        hdr->codepage = 1;
+      else if (strEQc (vars->DWGCODEPAGE, "ISO-8859-1"))
+        hdr->codepage = 2;
+      else if (strEQc (vars->DWGCODEPAGE, "ISO-8859-2"))
+        hdr->codepage = 3;
+      else if (strEQc (vars->DWGCODEPAGE, "ISO-8859-3")) //unused?
+        hdr->codepage = 4;
+      else if (strEQc (vars->DWGCODEPAGE, "ISO-8859-4"))
+        hdr->codepage = 5;
+      else if (strEQc (vars->DWGCODEPAGE, "ISO-8859-5"))
+        hdr->codepage = 6;
+      else if (strEQc (vars->DWGCODEPAGE, "ISO-8859-6"))
+        hdr->codepage = 7;
+      else if (strEQc (vars->DWGCODEPAGE, "ISO-8859-7"))
+        hdr->codepage = 8;
+      else if (strEQc (vars->DWGCODEPAGE, "ISO-8859-8"))
+        hdr->codepage = 9;
+      else if (strEQc (vars->DWGCODEPAGE, "ISO-8859-9"))
+        hdr->codepage = 10;
+      else if (strEQc (vars->DWGCODEPAGE, "CP437"))
+        hdr->codepage = 11;
+      else if (strEQc (vars->DWGCODEPAGE, "CP850"))
+        hdr->codepage = 12;
+      else if (strEQc (vars->DWGCODEPAGE, "CP852"))
+        hdr->codepage = 13;
+      else if (strEQc (vars->DWGCODEPAGE, "CP855"))
+        hdr->codepage = 14;
+      else if (strEQc (vars->DWGCODEPAGE, "CP857"))
+        hdr->codepage = 15;
+      else if (strEQc (vars->DWGCODEPAGE, "CP860"))
+        hdr->codepage = 16;
+      else if (strEQc (vars->DWGCODEPAGE, "CP861"))
+        hdr->codepage = 17;
+      else if (strEQc (vars->DWGCODEPAGE, "CP863"))
+        hdr->codepage = 18;
+      else if (strEQc (vars->DWGCODEPAGE, "CP864"))
+        hdr->codepage = 19;
+      else if (strEQc (vars->DWGCODEPAGE, "CP865"))
+        hdr->codepage = 20;
+      else if (strEQc (vars->DWGCODEPAGE, "CP869"))
+        hdr->codepage = 21;
+      else if (strEQc (vars->DWGCODEPAGE, "CP932"))
+        hdr->codepage = 22;
+      else if (strEQc (vars->DWGCODEPAGE, "MACINTOSH"))
+        hdr->codepage = 23;
+      else if (strEQc (vars->DWGCODEPAGE, "BIG5"))
+        hdr->codepage = 24;
+      else if (strEQc (vars->DWGCODEPAGE, "CP949"))
+        hdr->codepage = 25;
+      else if (strEQc (vars->DWGCODEPAGE, "JOHAB"))
+        hdr->codepage = 27;
+      else if (strEQc (vars->DWGCODEPAGE, "CP866"))
+        hdr->codepage = 27;
+      else if (strEQc (vars->DWGCODEPAGE, "ANSI_1250"))
+        hdr->codepage = 28;
       else if (strEQc (vars->DWGCODEPAGE, "ANSI_1251"))
         hdr->codepage = 29;
-      else if (strEQc (vars->DWGCODEPAGE, "ANSI_1253")) // ?
+      else if (strEQc (vars->DWGCODEPAGE, "GB2312"))
+        hdr->codepage = 31;
+      else if (strEQc (vars->DWGCODEPAGE, "ANSI_1253"))
         hdr->codepage = 32;
       else if (strEQc (vars->DWGCODEPAGE, "ANSI_1254"))
-        hdr->codepage = 23;
+        hdr->codepage = 33;
+      else if (strEQc (vars->DWGCODEPAGE, "ANSI_1255"))
+        hdr->codepage = 34;
+      else if (strEQc (vars->DWGCODEPAGE, "ANSI_1256"))
+        hdr->codepage = 35;
+      else if (strEQc (vars->DWGCODEPAGE, "ANSI_1257"))
+        hdr->codepage = 36;
+      else if (strEQc (vars->DWGCODEPAGE, "ANSI_874"))
+        hdr->codepage = 37;
+      else if (strEQc (vars->DWGCODEPAGE, "ANSI_932"))
+        hdr->codepage = 38;
       else if (strEQc (vars->DWGCODEPAGE, "ANSI_936"))
         hdr->codepage = 39;
       else if (strEQc (vars->DWGCODEPAGE, "ANSI_949"))
         hdr->codepage = 40;
+      else if (strEQc (vars->DWGCODEPAGE, "ANSI_950"))
+        hdr->codepage = 41;
+      else if (strEQc (vars->DWGCODEPAGE, "ANSI_1258"))
+        hdr->codepage = 44;
+      else if (strEQc (vars->DWGCODEPAGE, "ANSI_1361"))
+        hdr->codepage = 42;
+      else if (strEQc (vars->DWGCODEPAGE, "UTF-16"))
+        hdr->codepage = 43;
+      else if (strEQc (vars->DWGCODEPAGE, "ANSI_1258"))
+        hdr->codepage = 44;
       else
-        hdr->codepage = 30;
+        hdr->codepage = 0;
     }
   LOG_TRACE ("HEADER.codepage = %d [%s]\n", hdr->codepage, vars->DWGCODEPAGE);
 

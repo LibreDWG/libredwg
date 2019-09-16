@@ -1727,28 +1727,104 @@ dxf_format (int code)
   return "(unknown code)";
 }
 
-/* missing: ANSI_874 ANSI_932 ANSI_950 ANSI_1250 ANSI_1250 ANSI_1255 ANSI_1256
- * ANSI_1257 ANSI_1258
+/* num => string. for the reverse see in_dxf.c:dxf_fixup_header()
+   TODO: maybe use a table.
  */
 const char *
 dxf_codepage (int code, Dwg_Data *dwg)
 {
   if (code == 30 || code == 0)
     return "ANSI_1252";
+  else if (code == 1)
+    return "US_ASCII";
+  else if (code == 2)
+    return "ISO-8859-1";
+  else if (code == 3)
+    return "ISO-8859-2";
+  else if (code == 4)
+    return "ISO-8859-3"; //unused?
+  else if (code == 5)
+    return "ISO-8859-4";
+  else if (code == 6)
+    return "ISO-8859-5";
+  else if (code == 7)
+    return "ISO-8859-6";
+  else if (code == 8)
+    return "ISO-8859-7";
+  else if (code == 9)
+    return "ISO-8859-8";
+  else if (code == 10)
+    return "ISO-8859-9";
+  else if (code == 11)
+    return "CP437";
+  else if (code == 12)
+    return "CP850";
+  else if (code == 13)
+    return "CP852";
+  else if (code == 14)
+    return "CP855";
+  else if (code == 15)
+    return "CP857";
+  else if (code == 16)
+    return "CP860";
+  else if (code == 17)
+    return "CP861";
+  else if (code == 18)
+    return "CP863";
+  else if (code == 19)
+    return "CP864";
+  else if (code == 20)
+    return "CP865";
+  else if (code == 21)
+    return "CP869";
+  else if (code == 22)
+    return "CP932";
+  else if (code == 23)
+    return "MACINTOSH";
+  else if (code == 24)
+    return "BIG5";
+  else if (code == 25)
+    return "CP949";
+  else if (code == 26)
+    return "JOHAB";
+  else if (code == 27)
+    return "CP866";
+  else if (code == 28)
+    return "ANSI_1250";
   else if (code == 29)
     return "ANSI_1251";
+  else if (code == 31)
+    return "GB2312";
   else if (code == 32)
-    return "ANSI_1253"; //?
+    return "ANSI_1253";
   else if (code == 33)
     return "ANSI_1254";
+  else if (code == 34)
+    return "ANSI_1255";
+  else if (code == 35)
+    return "ANSI_1256";
+  else if (code == 36)
+    return "ANSI_1257";
+  else if (code == 37)
+    return "ANSI_874";
+  else if (code == 38)
+    return "ANSI_932";
   else if (code == 39)
     return "ANSI_936";
   else if (code == 40)
     return "ANSI_949";
+  else if (code == 41)
+    return "ANSI_950";
+  else if (code == 42)
+    return "ANSI_1361";
+  else if (code == 43)
+    return "ANSI_1200"; // UTF-16
+  else if (code == 44)
+    return "ANSI_1258";
   else if (dwg->header.version >= R_2007)
     return "UTF-8"; // dwg internally: UCS-16, for DXF: UTF-8
   else
-    return "ANSI_1252";
+    return "";
 }
 
 GCC30_DIAG_IGNORE (-Wformat-nonliteral)
