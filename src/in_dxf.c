@@ -28,6 +28,10 @@
 #include <limits.h>
 //#include <ctype.h>
 #include <math.h>
+// strings.h or string.h
+#ifdef AX_STRCASECMP_HEADER
+#  include AX_STRCASECMP_HEADER
+#endif
 
 #include "common.h"
 #include "bits.h"
@@ -3766,6 +3770,32 @@ postprocess_SEQEND (Dwg_Object *obj)
     }
 }
 
+// seperate model_space and model_space into its own fields, out of entries[]
+static void
+move_out_BLOCK_CONTROL (Dwg_Object *restrict obj,
+                        Dwg_Object_BLOCK_CONTROL *restrict _ctrl,
+                        const char *f)
+{
+  // move out of entries
+  for (BITCODE_BL j = 0; j < _ctrl->num_entries; j++)
+    {
+      if (_ctrl->entries[j]
+          && _ctrl->entries[j]->absolute_ref == obj->handle.value)
+        {
+          LOG_TRACE ("remove %s from entries[%d]: " FORMAT_H "\n", f, j,
+                     ARGS_H (obj->handle));
+          _ctrl->num_entries--;
+          LOG_TRACE ("BLOCK_CONTROL.num_entries = " FORMAT_BL "\n", _ctrl->num_entries);
+          if (j < _ctrl->num_entries)
+            memmove (&_ctrl->entries[j], &_ctrl->entries[j + 1],
+                     (_ctrl->num_entries - 1) * sizeof (BITCODE_H));
+          _ctrl->entries = realloc (_ctrl->entries,
+                                    _ctrl->num_entries * sizeof (BITCODE_H));
+          break;
+        }
+    }
+}
+
 #define UPGRADE_ENTITY(FROM, TO)                                              \
   obj->type = obj->fixedtype = DWG_TYPE_##TO;                                 \
   obj->name = obj->dxfname = (char *)#TO;                                     \
@@ -3995,8 +4025,8 @@ new_object (char *restrict name, char *restrict dxfname,
             if (ctrl_id)
               {
                 // add to ctrl "entries" HANDLE_VECTOR
-                Dwg_Object_APPID_CONTROL *_ctrl
-                    = dwg->object[ctrl_id].tio.object->tio.APPID_CONTROL;
+                Dwg_Object_BLOCK_CONTROL *_ctrl
+                    = dwg->object[ctrl_id].tio.object->tio.BLOCK_CONTROL;
                 BITCODE_H *hdls = NULL;
                 BITCODE_BL num_entries = 0;
                 dwg_dynapi_entity_value (_ctrl, ctrlname, "num_entries",
@@ -4004,15 +4034,16 @@ new_object (char *restrict name, char *restrict dxfname,
                 if (num_entries <= i)
                   {
                     // DXF often lies about num_entries, skipping defaults
-                    LOG_TRACE ("Misleading %s.num_entries %d for %dth entry\n",
-                               ctrlname, num_entries, i + 1);
+                    // e.g. BLOCK_CONTROL contains mspace+pspace in DXF, but in
+                    // the DWG they are extra. But this is fixed at case 2, not here.
+                    LOG_WARN ("Misleading %s.num_entries %d for %dth entry",
+                              ctrlname, num_entries, i + 1);
                     num_entries = i + 1;
                     dwg_dynapi_entity_set_value (
                         _ctrl, ctrlname, "num_entries", &num_entries, 0);
                     LOG_TRACE ("%s.num_entries = %d [70 BL]\n", ctrlname,
                                num_entries);
                   }
-
                 dwg_dynapi_entity_value (_ctrl, ctrlname, "entries", &hdls,
                                          NULL);
                 if (!hdls)
@@ -4286,15 +4317,34 @@ new_object (char *restrict name, char *restrict dxfname,
               LOG_TRACE ("%s.name = %s [2 T]\n", name, pair->value.s);
               if (strEQc (name, "BLOCK_RECORD"))
                 {
-                  if (strEQc (pair->value.s, "*Paper_Space"))
+                  // seperate mspace and pspace into its own fields
+                  Dwg_Object_BLOCK_CONTROL *_ctrl
+                      = ctrl->tio.object->tio.BLOCK_CONTROL;
+                  if (!strcasecmp (pair->value.s, "*Paper_Space"))
                     {
+                      const char *f = "paper_space";
+                      _ctrl->paper_space
+                          = dwg_add_handleref (dwg, 3, obj->handle.value, obj);
+                      LOG_TRACE ("%s.%s = " FORMAT_REF " [H 0]\n", ctrlname, f,
+                                 ARGS_REF (_ctrl->paper_space));
                       dwg->header_vars.BLOCK_RECORD_PSPACE
                           = dwg_add_handleref (dwg, 5, obj->handle.value, obj);
+                      // move out of entries
+                      move_out_BLOCK_CONTROL (obj, _ctrl, f);
+                      i--;
                     }
-                  if (strEQc (pair->value.s, "*Model_Space"))
+                  else if (!strcasecmp (pair->value.s, "*Model_Space"))
                     {
+                      const char *f = "model_space";
+                      _ctrl->model_space
+                          = dwg_add_handleref (dwg, 3, obj->handle.value, obj);
+                      LOG_TRACE ("%s.%s = " FORMAT_REF " [H 0]\n", ctrlname, f,
+                                 ARGS_REF (_ctrl->model_space));
                       dwg->header_vars.BLOCK_RECORD_MSPACE
                           = dwg_add_handleref (dwg, 5, obj->handle.value, obj);
+                      // move out of entries
+                      move_out_BLOCK_CONTROL (obj, _ctrl, f);
+                      i--;
                     }
                 }
               break;
@@ -5182,6 +5232,21 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               // until 0 table or 0 ENDTAB
               pair = new_object (table, pair->value.s, dat, dwg, ctrl_id, i++);
+              // undo BLOCK_CONTROL.entries++
+              if (strEQc (table, "BLOCK_RECORD"))
+                {
+                  Dwg_Object *obj = &dwg->object[dwg->num_objects - 1];
+                  Dwg_Object *ctrl = &dwg->object[ctrl_id];
+                  Dwg_Object_BLOCK_CONTROL *_ctrl
+                      = ctrl->tio.object->tio.BLOCK_CONTROL;
+                  if (_ctrl->model_space
+                      && obj->handle.value == _ctrl->model_space->absolute_ref)
+                    i--;
+                  else if (_ctrl->paper_space
+                           && obj->handle.value
+                                  == _ctrl->paper_space->absolute_ref)
+                    i--;
+                }
             }
         }
       DXF_RETURN_ENDSEC (0) // next TABLE or ENDSEC
