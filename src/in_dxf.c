@@ -2810,6 +2810,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   char *fieldname;
   char ctrlname[80];
   char dxfname[80];
+  BITCODE_B xrefref;
 
   NEW_OBJECT (dwg, obj);
 
@@ -2857,6 +2858,9 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
       return pair;
     }
   dwg_dynapi_entity_set_value (_obj, obj->name, "objid", &obj->index, is_utf);
+  xrefref = 1;
+  if (dwg_dynapi_entity_field (obj->name, "xrefref"))
+    dwg_dynapi_entity_set_value (_obj, obj->name, "xrefref", &xrefref, is_utf);
   // default xdic_missing_flag
   if (dwg->header.version >= R_2004)
     obj->tio.object->xdic_missing_flag = 1;
@@ -3964,31 +3968,30 @@ new_object (char *restrict name, char *restrict dxfname,
   ctrl = &dwg->object[ctrl_id];
 
   {
-    int log = obj->parent->opts;
-    obj->parent->opts = 0; // silence field not found
+    BITCODE_B xrefref = 1;
     // set defaults not in dxf:
-    if (dwg_dynapi_entity_value (_obj, obj->name, "scale_flag", &scale_flag,
-                                 NULL))
+    if (dwg_dynapi_entity_field (obj->name, "xrefref"))
+      dwg_dynapi_entity_set_value (_obj, obj->name, "xrefref", &xrefref, 0);
+    if (dwg_dynapi_entity_field (obj->name, "scale_flag"))
       {
         scale_flag = 3;
         dwg_dynapi_entity_set_value (_obj, obj->name, "scale_flag",
                                      &scale_flag, 0);
         LOG_TRACE ("%s.scale_flag = 3 (default)\n", obj->name);
       }
-    if (dwg_dynapi_entity_value (_obj, obj->name, "scale", &pt, NULL))
+    if (dwg_dynapi_entity_field (obj->name, "scale"))
       {
         pt.x = pt.y = pt.z = 1.0;
         dwg_dynapi_entity_set_value (_obj, obj->name, "scale", &pt, 0);
         LOG_TRACE ("%s.scale = (1,1,1) (default)\n", obj->name);
       }
-    if (dwg_dynapi_entity_value (_obj, obj->name, "extrusion", &pt, NULL))
+    if (dwg_dynapi_entity_field (obj->name, "extrusion"))
       {
         pt.x = pt.y = 0.0;
         pt.z = 1.0;
         dwg_dynapi_entity_set_value (_obj, obj->name, "extrusion", &pt, 0);
         LOG_TRACE ("%s.extrusion = (0,0,1) (default)\n", obj->name);
       }
-    obj->parent->opts = log;
   }
 
   // read table fields until next 0 table or 0 ENDTAB
