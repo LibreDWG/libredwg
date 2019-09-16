@@ -1,0 +1,40 @@
+#!/bin/sh
+d=${1:-example_2000}
+b=$(basename $d .dwg)
+r=2000
+if [ $(dirname $d) != . ]; then
+    r=$(dirname $d)
+    b=$b_$r
+fi
+case $r in
+    20*)      ;;
+    r9)       r=9 ;;
+    r1[0234]) r=${r:1} ;;
+    *)  case $f in
+            *_20*)      r=${b:(-4)}; f=`basename $b _$r` ;;
+            *_r9)       r=9;         f=`basename $b _r$r` ;;
+            *_r1[0234]) r=${b:(-2)}; f=`basename $b _r$r` ;;
+            *) echo wrong version $r ;;
+        esac ;;
+esac
+
+case `uname` in
+    Darwin)  TeighaFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
+    Linux)   TeighaFileConverter=/usr/bin/TeighaFileConverter ;;
+    Windows) TeighaFileConverter=TeighaFileConverter ;;
+esac
+
+./log $d
+rm $d.dwg 2>/dev/null
+./dxf $d
+echo programs/dwg2dxf -v3 -y $d.dwg 2\>$b.dwg.log
+programs/dwg2dxf -v3 -y $d.dwg 2>$b.dwg.log
+
+cp $d.dwg test/
+echo TeighaFileConverter "test" "." ACAD2000 DXF 0 1 $d.dwg
+$TeighaFileConverter "test" "." ACAD2000 DXF 0 1 $d.dwg
+cat $d.dxf.err
+
+echo diff -bu $d.log $b.dwg.log
+diff -bu $b.log $b.dwg.log
+

@@ -2,9 +2,9 @@
 # test dwg2dxf via teigha roundtrips
 # for f in test/test-data/20*/*.dwg; do ./dxf-roundtrip.sh $f; done
 case `uname` in
-    Darwin)  app=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
-    Linux)   app=/usr/bin/TeighaFileConverter ;;
-    Windows) app=TeighaFileConverter ;;
+    Darwin)  TeighaFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
+    Linux)   TeighaFileConverter=/usr/bin/TeighaFileConverter ;;
+    Windows) TeighaFileConverter=TeighaFileConverter ;;
 esac
 #full=test/test-data/2000/$f.dwg
 full=$1
@@ -31,8 +31,8 @@ programs/dwg2dxf -v4 -o ${f}_${r}.dxf $full 2>${f}_${r}.log || \
     grep Error ${f}_${r}.log
 
 mv ${f}_${r}.dxf test/
-echo `basename $app` "test" . ACAD$r DWG 0 1 ${f}_${r}.dxf
-$app "test" "." ACAD$r DWG 0 1 ${f}_${r}.dxf
+echo TeighaFileConverter "test" . ACAD$r DWG 0 1 ${f}_${r}.dxf
+$TeighaFileConverter "test" "." ACAD$r DWG 0 1 ${f}_${r}.dxf
 mv test/${f}_${r}.dxf ./
 
 if [ -f ${f}_${r}.dwg ]; then
