@@ -752,14 +752,19 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           dxf_free_pair (pair);
           pair = dxf_read_pair (dat);
         }
+      klass->number = 500 + i;
       while (pair->code != 0)
         { // read until next 0 CLASS
           switch (pair->code)
             {
             case 1:
-              STRADD (klass->dxfname, pair->value.s);
-              LOG_TRACE ("CLASS[%d].dxfname = %s [1]\n", i, pair->value.s);
-              break;
+              {
+                const char *n = strEQc (pair->value.s, "ACDBDATATABLE")
+                  ? "DATATABLE" : pair->value.s;
+                STRADD (klass->dxfname, n);
+                LOG_TRACE ("CLASS[%d].dxfname = %s [1]\n", i, n);
+                break;
+              }
             case 2:
               STRADD (klass->cppname, pair->value.s);
               LOG_TRACE ("CLASS[%d].cppname = %s [2]\n", i, pair->value.s);
@@ -783,7 +788,7 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                          pair->value.i);
               break;
             case 281:
-              klass->item_class_id = pair->value.i ? 0x1f3 : 0x1f2;
+              klass->item_class_id = pair->value.i ? 0x1f2 : 0x1f3;
               LOG_TRACE ("CLASS[%d].item_class_id = %x [281]\n", i,
                          klass->item_class_id);
               break;
@@ -794,8 +799,8 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           dxf_free_pair (pair);
           pair = dxf_read_pair (dat);
         }
-      DXF_RETURN_ENDSEC (0) // next class or ENDSEC
       dwg->num_classes++;
+      DXF_RETURN_ENDSEC (0) // next class or ENDSEC
     }
   dxf_free_pair (pair);
   return 0;

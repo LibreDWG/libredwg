@@ -1051,7 +1051,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       bit_write_B (dat, klass->wasazombie);
       bit_write_BS (dat, klass->item_class_id);
       LOG_TRACE ("Class %d 0x%x %s\n"
-                 "%s \"%s\" %d 0x%x\n",
+                 " %s \"%s\" %d 0x%x\n",
                  klass->number, klass->proxyflag, klass->dxfname,
                  klass->cppname, klass->appname, klass->wasazombie,
                  klass->item_class_id)
@@ -1063,7 +1063,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         bit_write_BL (dat, klass->maint_version);
         bit_write_BL (dat, klass->unknown_1);
         bit_write_BL (dat, klass->unknown_2);
-        LOG_TRACE ("%d %d\n", (int)klass->num_instances,
+        LOG_TRACE (" %d %d\n", (int)klass->num_instances,
                    (int)klass->dwg_version);
       }
     }

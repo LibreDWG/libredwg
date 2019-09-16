@@ -1101,32 +1101,12 @@ classes_section:
               + dwg->header.section[SECTION_CLASSES_R13].size - 18;
   dat->bit = 0;
   pvz = dwg->header.section[SECTION_CLASSES_R13].address + 16;
-#if 1
   if (!bit_check_CRC (dat, pvz, 0xC0C1))
     error |= DWG_ERR_WRONGCRC;
-#else
-  if (dwg->header.section[SECTION_CLASSES_R13].size < 0xfff && pvz < dat->byte
-      && pvz + dwg->header.section[SECTION_CLASSES_R13].size < dat->size)
-    {
-      crc2 = bit_calc_CRC (0xC0C1, &(dat->chain[pvz]),
-                           dwg->header.section[SECTION_CLASSES_R13].size - 34);
-    }
-  crc = bit_read_RS (dat);
-  LOG_TRACE ("crc: %04X [RSx]\n", crc);
-  if (crc != crc2 /* && dwg->header.version != R_2000 */)
-    {
-      LOG_ERROR ("Class Section[%ld] CRC mismatch %04X <=> %04X",
-                 (long)dwg->header.section[SECTION_CLASSES_R13].number, crc,
-                 crc2);
-      // if (dwg->header.version != R_2000)
-      //  return DWG_ERR_WRONGCRC;
-      error |= DWG_ERR_WRONGCRC;
-    }
-#endif
 
-  dat->byte += 16;
+  dat->byte += 16; //sentinel
   pvz = bit_read_RL (dat); // Unknown bitlong inter class and object
-  LOG_TRACE ("@ %lu RL: 0x%lx\n", dat->byte - 4, pvz)
+  LOG_TRACE ("@ %lu RL: 0x%04lx\n", dat->byte - 4, pvz)
   LOG_INFO ("Number of classes read: %u\n", dwg->num_classes)
 
   /*-------------------------------------------------------------------------
