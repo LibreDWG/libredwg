@@ -1214,6 +1214,7 @@ bit_check_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
 {
   uint16_t calculated;
   uint16_t read;
+  long size;
   loglevel = dat->opts & 0xf;
 
   if (dat->bit > 0)
@@ -1230,20 +1231,20 @@ bit_check_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
       return 0;
     }
 
-  calculated = bit_calc_CRC (seed, &(dat->chain[start_address]),
-                             dat->byte - start_address);
+  size = dat->byte - start_address;
+  calculated = bit_calc_CRC (seed, &dat->chain[start_address], size);
   read = bit_read_RS (dat);
   LOG_TRACE ("crc: %04X [RSx]\n", read);
   if (calculated == read)
     {
-      LOG_HANDLE (" check_CRC %lu-%lu: %04X == %04X\n", start_address,
-                  dat->byte - 2, calculated, read);
+      LOG_HANDLE (" check_CRC %lu-%lu = %ld: %04X == %04X\n", start_address,
+                  dat->byte - 2, size, calculated, read)
       return 1;
     }
   else
     {
-      LOG_WARN ("check_CRC mismatch %lu-%lu: %04X <=> %04X\n", start_address,
-                dat->byte - 2, calculated, read)
+      LOG_WARN ("check_CRC mismatch %lu-%lu = %ld: %04X <=> %04X\n",
+                start_address, dat->byte - 2, size, calculated, read)
       return 0;
     }
 }

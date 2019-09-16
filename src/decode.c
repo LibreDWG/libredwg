@@ -3248,7 +3248,7 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   {
     obj->bitsize = bit_read_RL (dat); // until the handles
     LOG_TRACE ("bitsize: " FORMAT_RL " [RL] @%lu.%u\n", obj->bitsize,
-               dat->byte, dat->bit)
+               dat->byte-2, dat->bit)
   }
   SINCE (R_2007)
   {
@@ -3318,8 +3318,8 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   VERSIONS (R_2000, R_2007)
   {
     obj->bitsize = bit_read_RL (dat);
-    LOG_TRACE ("bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize, dat->byte,
-               dat->bit)
+    LOG_TRACE ("bitsize: " FORMAT_RL " [RL] @%lu.%u\n", obj->bitsize,
+               dat->byte - 2, dat->bit)
   }
   SINCE (R_2007)
   {
@@ -4300,12 +4300,12 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
             (unsigned long)num, (unsigned long)num)
 
   obj->size = bit_read_MS (dat);
-  LOG_INFO (", Size: %d", obj->size)
+  LOG_INFO (", Size: %d [MS]", obj->size)
   SINCE (R_2010)
   {
     /* This is not counted in the object size */
     obj->handlestream_size = bit_read_UMC (dat);
-    LOG_INFO (", Hdlsize: " FORMAT_UMC " ", obj->handlestream_size);
+    LOG_INFO (", Hdlsize: " FORMAT_UMC " [UMC] ", obj->handlestream_size);
     obj->bitsize = obj->size * 8 - obj->handlestream_size;
     // TODO boundscheck
   }
@@ -4325,7 +4325,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
 
   SINCE (R_2010) { obj->type = bit_read_BOT (dat); }
   else { obj->type = bit_read_BS (dat); }
-  LOG_INFO (", Type: %d\n", obj->type);
+  LOG_INFO (", Type: %d [%s]\n", obj->type, dat->version >= R_2010 ? "BOT" : "BS");
   restartpos = bit_position (dat); // relative
 
   /* Check the type of the object
@@ -4745,8 +4745,8 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
               SINCE (R_2000)
               {
                 obj->bitsize = bit_read_RL (dat);
-                LOG_TRACE ("bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
-                           dat->byte, dat->bit);
+                LOG_TRACE ("bitsize: " FORMAT_RL " [RL] @%lu.%u\n",
+                           obj->bitsize, dat->byte-2, dat->bit);
               }
               if (!bit_read_H (dat, &obj->handle))
                 {

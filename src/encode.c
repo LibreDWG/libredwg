@@ -769,8 +769,20 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       {
         switch (dwg->header.version)
           {
+          case R_9:
+            _obj->dwg_version = 0x11; // ?
+            break;
+          case R_10:
+            _obj->dwg_version = 0x12; // ?
+            break;
+          case R_11:
+            _obj->dwg_version = 0x13; // ?
+            break;
           case R_13:
             _obj->dwg_version = 0x15;
+            break;
+          case R_14:
+            _obj->dwg_version = 0x16;
             break;
           case R_2000:
             _obj->dwg_version = 0x17;
@@ -790,6 +802,15 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           case R_2018:
             _obj->dwg_version = 0x21;
             break;
+          case R_INVALID:
+          case R_AFTER:
+          case R_1_1:
+          case R_1_2:
+          case R_1_4:
+          case R_2_0:
+          case R_2_1:
+          case R_2_5:
+          case R_2_6:
           default:
             break;
           }
@@ -1139,7 +1160,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       BITCODE_BL index = omap[i].index;
       unsigned long hdloff = omap[i].handle - (i ? omap[i - 1].handle : 0);
       int off = dat->byte - (i ? omap[i - 1].address : 0);
-      unsigned long end_address;
+      unsigned long address, end_address;
       LOG_TRACE ("\n> Next object: " FORMAT_BL
                  " Handleoff: %lu [UMC] Offset: %d [MC] @%lu\n"
                  "==========================================\n",
@@ -1155,7 +1176,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
       obj = &dwg->object[index];
       // change the address to the linearly sorted one
-      obj->address = dat->byte;
       assert (dat->byte);
       error |= dwg_encode_add_object (obj, dat, dat->byte);
 
@@ -1167,7 +1187,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           assert (dat->chain[1] == 'C');
         }
 #endif
-      end_address = obj->address + (unsigned long)obj->size; // from RL
+      end_address = omap[i].address + (unsigned long)obj->size; // from RL
       if (end_address > dat->size)
         {
           dat->size = end_address;
@@ -1590,12 +1610,10 @@ int
 dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
 {
   int error = 0;
-  unsigned long previous_address;
-  unsigned long object_address;
-  unsigned char previous_bit;
+  unsigned long oldpos;
+  unsigned long end_address = address + obj->size;
 
-  previous_address = dat->byte;
-  previous_bit = dat->bit;
+  oldpos = bit_position (dat);
   assert (address);
   dat->byte = address;
   dat->bit = 0;
@@ -1607,16 +1625,21 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
   // TODO: calculate size from the fields. either <0x7fff or more
   // patch it afterwards and check old<>new size if enough space allocated.
   bit_write_MS (dat, obj->size);
-  PRE (R_2010) { bit_write_BS (dat, obj->type); }
+  obj->address = dat->byte;
+  PRE (R_2010) {
+    bit_write_BS (dat, obj->type);
+    LOG_INFO (", Size: %d [MS], Type: %d [BS]\n", obj->size, obj->type)
+  }
   LATER_VERSIONS
   {
     if (!obj->handlestream_size && obj->bitsize)
       obj->handlestream_size = obj->size * 8 - obj->bitsize;
     bit_write_UMC (dat, obj->handlestream_size);
+    obj->address = dat->byte;
     bit_write_BOT (dat, obj->type);
+    LOG_INFO (", Size: %d [MS], Hdlsize: %lu [UMC], Type: %d [BOT]\n",
+              obj->size, (unsigned long)obj->handlestream_size, obj->type)
   }
-
-  LOG_INFO (", Size: %d, Type: %d\n", obj->size, obj->type)
 
   /* Write the specific type to dat */
   switch (obj->type)
@@ -1908,16 +1931,18 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
   if (!obj->size)
     {
       BITCODE_BL pos = bit_position (dat);
-      assert (previous_address);
-      obj->size = dat->byte - previous_address;
+      assert (address);
+      obj->size = dat->byte - address - 2; // excludes the CRC
       if (dat->bit)
         obj->size++;
-      obj->bitsize = pos - (previous_address * 8);
+      obj->bitsize = pos - (address * 8);
 
-      bit_set_position (dat, previous_address * 8);
+      bit_set_position (dat, address * 8);
+      if (obj->size > 0x7fff)
+        // TODO: with overlarge sizes >0x7fff memmove dat
+        LOG_ERROR ("Unhandled size %u > 0x7fff", (unsigned)obj->size);
       bit_write_MS (dat, obj->size);
-      // TODO: with overlarge sizes >0x7fff memmove dat
-      LOG_TRACE ("size: %u [MS] @%lu\n", obj->size, previous_address);
+      LOG_TRACE ("size: %u [MS] @%lu\n", obj->size, address);
       SINCE (R_2013)
       {
         if (!obj->handlestream_size && obj->bitsize)
@@ -1949,26 +1974,18 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
    */
 
   /* Now 1 padding bits until next byte, and then a RS CRC */
-  if (dat->bit)
+  while (dat->bit)
+    bit_write_B (dat, 1);
+  end_address = obj->address + obj->size;
+  if (end_address != dat->byte)
     {
-      for (int i = dat->bit; i < 8; i++)
-        {
-          bit_write_B (dat, 1);
-        }
+      if (obj->size)
+        LOG_WARN ("Wrong object size: %lu + %u = %lu != %lu: %ld off", obj->address,
+                  obj->size, end_address, dat->byte, (long)(end_address - dat->byte));
+      dat->byte = end_address;
     }
+  assert (!dat->bit);
   bit_write_CRC (dat, address, 0xC0C1);
-
-  {
-    unsigned long next_addr = address + obj->size + 2;
-    if (next_addr != dat->byte)
-      {
-        if (obj->size)
-          LOG_WARN ("Wrong object size: %lu + %u + 2 != %lu: %ld off", address,
-                    obj->size, dat->byte, (long)(next_addr - dat->byte));
-        dat->byte = next_addr;
-      }
-  }
-  dat->bit = 0;
   return error;
 }
 
