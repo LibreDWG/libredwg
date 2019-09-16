@@ -1254,17 +1254,18 @@ uint16_t
 bit_write_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
 {
   uint16_t crc;
+  long size;
   loglevel = dat->opts & 0xf;
 
   while (dat->bit > 0)
     bit_write_B (dat, 0);
 
-  crc = bit_calc_CRC (seed, &(dat->chain[start_address]),
-                      dat->byte - start_address);
+  size = dat->byte - start_address;
+  crc = bit_calc_CRC (seed, &dat->chain[start_address], size);
 
+  LOG_TRACE ("write CRC %04X from %lu-%lu = %ld\n", crc, start_address,
+             dat->byte, size);
   bit_write_RS (dat, crc);
-  LOG_TRACE ("write CRC from %lu-%lu: %04X\n", start_address, dat->byte - 2,
-             crc)
   return crc;
 }
 
