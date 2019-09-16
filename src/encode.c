@@ -699,7 +699,7 @@ encode_patch_RLsize (Bit_Chain *dat, long unsigned int pvzadr)
       dat->bit = 0;
       dat->byte++;
     }
-  size = dat->byte - pvzadr;
+  size = dat->byte - pvzadr - 4; // minus the RL size
   pos = bit_position (dat);
   assert (pvzadr);
   bit_set_position (dat, pvzadr * 8);
@@ -1032,7 +1032,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   /*------------------------------------------------------------
    * Classes
    */
-  LOG_INFO ("\n=======> Classes: %4u\n", (unsigned)dat->byte);
+  LOG_INFO ("\n=======> Classes: %4u (%d)\n", (unsigned)dat->byte, dwg->num_classes);
   dwg->header.section[SECTION_CLASSES_R13].number = 1;
   dwg->header.section[SECTION_CLASSES_R13].address = dat->byte;
   bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_CLASS_BEGIN));
@@ -1078,7 +1078,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       = dat->byte - dwg->header.section[SECTION_CLASSES_R13].address;
   LOG_TRACE ("       Classes (end): %4u\n", (unsigned)dat->byte);
 
-  bit_write_RL (dat, 0L); // 0xDCA Unknown bitlong inter class and objects
+  bit_write_RL (dat, 0x0DCA); // 0xDCA Unknown bitlong inter class and objects
 
   /*------------------------------------------------------------
    * Objects
