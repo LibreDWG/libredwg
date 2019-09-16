@@ -493,8 +493,10 @@ static bool env_var_checked_p;
   }
 #define START_HANDLE_STREAM                                                   \
   *hdl_dat = *dat;                                                            \
-  if (dat->version >= R_2007)                                                 \
+  if (dat->version >= R_2007 && obj->bitsize)                                 \
     bit_set_position (hdl_dat, obj->hdlpos);                                  \
+  if (!obj->bitsize)                                                          \
+    obj->bitsize =  bit_position (dat) - (obj->address * 8);                  \
   RESET_VER
 
 #if 0
@@ -1935,7 +1937,8 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
       obj->size = dat->byte - address - 2; // excludes the CRC
       if (dat->bit)
         obj->size++;
-      obj->bitsize = pos - (address * 8);
+      if (!obj->bitsize)
+        obj->bitsize = pos - (address * 8); // minus hdlpos
 
       bit_set_position (dat, address * 8);
       if (obj->size > 0x7fff)
@@ -2165,7 +2168,7 @@ dwg_encode_entity (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
     error |= obj_string_stream (dat, obj, str_dat);
   }
 
-  bit_write_H (dat, &(obj->handle));
+  bit_write_H (dat, &obj->handle);
   LOG_TRACE ("handle: " FORMAT_H " [H 5]\n", ARGS_H (obj->handle))
   PRE (R_13) { return DWG_ERR_NOTYETSUPPORTED; }
 
@@ -2282,15 +2285,13 @@ dwg_encode_object (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   VERSIONS (R_2000, R_2007)
   {
     obj->bitsize_pos = bit_position (dat);
-    if (!obj->bitsize)
-      obj->bitsize = obj->size * 8;
     bit_write_RL (dat, obj->bitsize);
     LOG_INFO ("bitsize: " FORMAT_RL " (@%lu.%u)\n", obj->bitsize,
               dat->byte - 4, dat->bit);
   }
   SINCE (R_2010)
   {
-    obj->bitsize = dat->size - 0;
+    // obj->bitsize = dat->size - 0;
     // LOG_INFO ("bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
     //          dat->byte, dat->bit);
   }
@@ -2304,8 +2305,6 @@ dwg_encode_object (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   VERSIONS (R_13, R_14)
   {
     obj->bitsize_pos = bit_position (dat);
-    if (!obj->bitsize)
-      obj->bitsize = obj->size * 8;
     bit_write_RL (dat, obj->bitsize);
     LOG_INFO ("bitsize: " FORMAT_RL " (@%lu.%u)\n", obj->bitsize,
               dat->byte - 4, dat->bit);
