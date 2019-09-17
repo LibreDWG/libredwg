@@ -39,16 +39,16 @@
   for (i=0; i<3; i++) {
     FIELD_RC(aux_intro[i], 0); /* ff 77 01 */
   }
-  FIELD_RS (dwg_version, 0); /* AC1010 = 17 ... AC1032 = 33 */
+  FIELD_RSx (dwg_version, 0);
   FIELD_RS (maint_version, 0);
   FIELD_RL (num_saves, 0);
   FIELD_RL (minus_1, 0);
   FIELD_RS (num_saves_1, 0);
   FIELD_RS (num_saves_2, 0);
   FIELD_RL (zero, 0);
-  FIELD_RS (dwg_version_1, 0);
+  FIELD_RSx (dwg_version_1, 0);
   FIELD_RS (maint_version_1, 0);
-  FIELD_RS (dwg_version_2, 0);
+  FIELD_RSx (dwg_version_2, 0);
   FIELD_RS (maint_version_2, 0);
   for (i=0; i<6; i++) {
     FIELD_RSx (unknown_rs[i], 0); /* 5 0x893 5 0x893 0 1 */

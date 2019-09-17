@@ -769,6 +769,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     Dwg_Object *obj = NULL;
     if (!_obj->dwg_version)
       {
+        _obj->is_maint = 0;
         switch (dwg->header.version)
           {
           case R_9:
@@ -788,21 +789,27 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             break;
           case R_2000:
             _obj->dwg_version = 0x17;
+            _obj->is_maint = 0xf;
             break;
           case R_2004:
             _obj->dwg_version = 0x19;
+            _obj->is_maint = 0x68;
             break;
           case R_2007:
             _obj->dwg_version = 0x1b;
+            _obj->is_maint = 0x32;
             break;
           case R_2010:
             _obj->dwg_version = 0x1d;
+            _obj->is_maint = 0x6d;
             break;
           case R_2013:
             _obj->dwg_version = 0x1f;
+            _obj->is_maint = 0x7d;
             break;
           case R_2018:
             _obj->dwg_version = 0x21;
+            _obj->is_maint = 0x4;
             break;
           case R_INVALID:
           case R_AFTER:
