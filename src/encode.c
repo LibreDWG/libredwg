@@ -1164,7 +1164,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       int off = dat->byte - (i ? omap[i - 1].address : 0);
       unsigned long address, end_address;
       LOG_TRACE ("\n> Next object: " FORMAT_BL
-                 " Handleoff: %lu [UMC] Offset: %d [MC] @%lu\n"
+                 " Handleoff: %lX [UMC] Offset: %d [MC] @%lu\n"
                  "==========================================\n",
                  i, hdloff, off, dat->byte);
       omap[i].address = dat->byte;
@@ -1231,7 +1231,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       index = omap[i].index;
       handleoff = omap[i].handle - last_handle;
       bit_write_UMC (dat, handleoff);
-      LOG_HANDLE ("Handleoff(%3i): %4lu (%4lX) [UMC]\t", index, handleoff,
+      LOG_HANDLE ("Handleoff(%3i): %4lX [UMC] (%4lX), ", index, handleoff,
                   omap[i].handle)
       last_handle = omap[i].handle;
 
@@ -1249,7 +1249,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           // i.e. encode_patch_RS_LE_size
           dat->chain[pvzadr] = sec_size >> 8;
           dat->chain[pvzadr + 1] = sec_size & 0xFF;
-          LOG_TRACE ("Handles Section size: %u [RS_LE] @%lu", sec_size, pvzadr);
+          LOG_TRACE ("Handles page size: %u [RS_LE] @%lu\n", sec_size, pvzadr);
           bit_write_CRC_LE (dat, pvzadr, 0xC0C1);
 
           pvzadr = dat->byte;
@@ -1266,7 +1266,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       // i.e. encode_patch_RS_LE_size
       dat->chain[pvzadr] = sec_size >> 8;
       dat->chain[pvzadr + 1] = sec_size & 0xFF;
-      LOG_TRACE ("Handles Section size: %u [RS_LE] @%lu", sec_size, pvzadr);
+      LOG_TRACE ("Handles page size: %u [RS_LE] @%lu\n", sec_size, pvzadr);
       bit_write_CRC_LE (dat, pvzadr, 0xC0C1);
     }
   if (dwg->header.version >= R_1_2)
@@ -1277,6 +1277,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   pvzadr = dat->byte;
   assert (pvzadr);
   bit_write_RS_LE (dat, 2); // last section_size 2
+  LOG_TRACE ("Handles page size: %u [RS_LE] @%lu\n", 2, pvzadr);
   bit_write_CRC_LE (dat, pvzadr, 0xC0C1);
 
   /* Calculate and write the size of the object map

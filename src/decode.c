@@ -1121,33 +1121,38 @@ classes_section:
   dwg->num_objects = 0;
   object_begin = dat->size;
   object_end = 0;
-  LOG_TRACE ("\n=======> Handles:\n");
-  LOG_HANDLE ("@ %lu RL Object-map section 2, size %u\n", dat->byte,
-              (unsigned)dwg->header.section[SECTION_HANDLES_R13].size)
+  LOG_INFO ("\n"
+            "=======> Handles (start) : %8u\n",
+            (unsigned int)dwg->header.section[SECTION_HANDLES_R13].address)
+  LOG_INFO ("         Handles (end)   : %8u\n",
+            (unsigned int)(dwg->header.section[SECTION_HANDLES_R13].address
+                           + dwg->header.section[SECTION_HANDLES_R13].size))
+  LOG_INFO ("         Length: %u\n",
+            (unsigned int)dwg->header.section[SECTION_HANDLES_R13].size)
+
   do
     {
-      long unsigned int last_offset;
-      // long unsigned int last_handle;
+      long unsigned int last_offset = 0;
+      long unsigned int last_handle = 0;
       long unsigned int oldpos = 0;
       int added;
       BITCODE_BL max_handles = dwg->header.section[SECTION_HANDLES_R13].size * 2;
 
       startpos = dat->byte;
       section_size = bit_read_RS_LE (dat);
-      LOG_TRACE ("Section size: %u [RS_LE] @%lu (Handles)\n", section_size, startpos);
+      LOG_TRACE ("Handles page size: %u [RS_LE] @%lu\n", section_size, startpos);
       if (section_size > 2040)
         {
           LOG_ERROR ("Object-map section size greater than 2040!")
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
 
-      last_offset = 0;
       while (dat->byte - startpos < section_size)
         {
           BITCODE_UMC handleoff;
           BITCODE_MC offset;
-          BITCODE_BL last_handle = dwg->num_objects
-            ? dwg->object[dwg->num_objects - 1].handle.value : 0;
+          //BITCODE_BL last_handle = dwg->num_objects
+          //  ? dwg->object[dwg->num_objects - 1].handle.value : 0;
 
           oldpos = dat->byte;
           // the offset from the previous handle. default: 1, unsigned
@@ -1171,7 +1176,7 @@ classes_section:
             }
           last_offset += offset;
           LOG_TRACE ("\nNext object: %lu ", (unsigned long)dwg->num_objects)
-          LOG_TRACE ("Handleoff: " FORMAT_UMC " [UMC] "
+          LOG_TRACE ("Handleoff: %lX [UMC] "
                      "Offset: " FORMAT_MC " [MC] @%lu\n",
                      handleoff, offset, last_offset)
 
@@ -1186,6 +1191,7 @@ classes_section:
           added = dwg_decode_add_object (dwg, dat, dat, last_offset);
           if (added > 0)
             error |= added; // else not added (skipped) or -1 for re-allocated
+          last_handle = dwg->object[dwg->num_objects - 1].handle.value;
           // LOG_HANDLE ("dat: @%lu.%u\n", dat->byte, dat->bit);
         }
       if (dat->byte == oldpos)
@@ -1199,12 +1205,12 @@ classes_section:
         }
 
       crc = bit_read_RS_LE (dat);
-      LOG_TRACE ("\nsection_crc: %04X [RS_LE] (Handles: %lu-%lu = %u)\n", crc,
+      LOG_TRACE ("\nHandles page crc: %04X [RS_LE] (%lu-%lu = %u)\n", crc,
                  startpos, startpos + section_size, section_size);
       crc2 = bit_calc_CRC (0xC0C1, dat->chain + startpos, section_size);
       if (crc != crc2)
         {
-          LOG_ERROR ("Handles Section[%ld] CRC mismatch %04X <=> %04X",
+          LOG_ERROR ("Handles Section[%ld] page CRC mismatch %04X <=> %04X",
                      (long)dwg->header.section[SECTION_HANDLES_R13].number,
                      crc, crc2);
           // fails with r14
@@ -1213,7 +1219,6 @@ classes_section:
           if (dat->version != R_14)
             error |= DWG_ERR_WRONGCRC;
         }
-
       if (dat->byte >= lastmap)
         break;
     }
@@ -1221,12 +1226,12 @@ classes_section:
 
   LOG_INFO ("Num objects: %lu\n", (unsigned long)dwg->num_objects)
   LOG_INFO ("\n"
-            "=======> Object Data 2 (start)  : %8lu\n",
+            "=======> Last Object      : %8lu\n",
             (unsigned long)object_begin)
   dat->byte = object_end;
   object_begin = bit_read_MS (dat);
-  LOG_TRACE ("some size: %lu [MS]\n", object_begin)
-  LOG_INFO ("         Object Data 2 (end)    : %8lu\n",
+  LOG_TRACE ("last object size: %lu [MS] (@%lu)\n", object_begin, object_end)
+  LOG_INFO ("         Last Object (end): %8lu\n",
             (unsigned long)(object_end + object_begin + 2))
 
   /*
@@ -1258,12 +1263,6 @@ classes_section:
      //antcrc = crc;
    } while (section_size > 0);
    */
-  LOG_INFO ("\n"
-            "=======> Object Map (start)     : %8d\n",
-            (unsigned int)dwg->header.section[SECTION_HANDLES_R13].address)
-  LOG_INFO ("         Object Map (end)       : %8d\n",
-            (unsigned int)(dwg->header.section[SECTION_HANDLES_R13].address
-                           + dwg->header.section[SECTION_HANDLES_R13].size))
 
   /*-------------------------------------------------------------------------
    * Second header, section 3. R13-R2000 only.
@@ -2400,7 +2399,7 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             }
           last_offset += offset;
           LOG_TRACE ("\n< Next object: %lu ", (unsigned long)dwg->num_objects)
-          LOG_HANDLE ("Handleoff: " FORMAT_UMC " [UMC] "
+          LOG_HANDLE ("Handleoff: %lX [UMC] "
                       "Offset: " FORMAT_MC " [MC] @%lu\n",
                       handleoff, offset, last_offset);
 
