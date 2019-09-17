@@ -119,13 +119,14 @@ typedef int32_t BITCODE_RLd;
 #define FORMAT_BS "%" PRIu16
 #define FORMAT_BSd "%" PRId16
 #define FORMAT_RS "%" PRIu16
-#define FORMAT_RSx "%" PRIx16
+#define FORMAT_RSx "0x%" PRIx16
 #define FORMAT_BL "%" PRIu32
 #define FORMAT_RL "%" PRIu32
 #define FORMAT_BLd "%" PRId32
 #define FORMAT_RLd "%" PRId32
+#define FORMAT_RLx "0x%" PRIx32
 #define FORMAT_BLX "%" PRIX32
-#define FORMAT_BLx "%" PRIx32
+#define FORMAT_BLx "0x%" PRIx32
 /*#else
 # define FORMAT_BS "%hu"
 # define FORMAT_RS "%hu"
