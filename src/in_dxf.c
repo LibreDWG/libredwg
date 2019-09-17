@@ -5854,29 +5854,23 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               resolve_postponed_eed_refs (dwg);
 
               // should not happen
-              if (!dwg->header_vars.LTYPE_BYLAYER)
-                {
-                  if ((hdl = dwg_find_tablehandle (dwg, (char *)"ByLayer",
-                                                   "LTYPE")))
-                    dwg->header_vars.LTYPE_BYLAYER = dwg_add_handleref (
-                        dwg, 5, hdl->handleref.value, NULL);
-                }
+              if (!dwg->header_vars.LTYPE_BYLAYER
+                  && (hdl = dwg_find_tablehandle (dwg, (char *)"ByLayer",
+                                                  "LTYPE")))
+                dwg->header_vars.LTYPE_BYLAYER
+                    = dwg_add_handleref (dwg, 5, hdl->handleref.value, NULL);
               // should not happen
-              if (!dwg->header_vars.LTYPE_BYBLOCK)
-                {
-                  if ((hdl = dwg_find_tablehandle (dwg, (char *)"ByBlock",
-                                                   "LTYPE")))
-                    dwg->header_vars.LTYPE_BYBLOCK = dwg_add_handleref (
-                        dwg, 5, hdl->handleref.value, NULL);
-                }
+              if (!dwg->header_vars.LTYPE_BYBLOCK
+                  && (hdl = dwg_find_tablehandle (dwg, (char *)"ByBlock",
+                                                  "LTYPE")))
+                dwg->header_vars.LTYPE_BYBLOCK
+                    = dwg_add_handleref (dwg, 5, hdl->handleref.value, NULL);
               // but this is needed
-              if (!dwg->header_vars.LTYPE_CONTINUOUS)
-                {
-                  if ((hdl = dwg_find_tablehandle (dwg, (char *)"Continuous",
-                                                   "LTYPE")))
-                    dwg->header_vars.LTYPE_CONTINUOUS = dwg_add_handleref (
-                        dwg, 5, hdl->handleref.value, NULL);
-                }
+              if (!dwg->header_vars.LTYPE_CONTINUOUS
+                  && (hdl = dwg_find_tablehandle (dwg, (char *)"Continuous",
+                                                  "LTYPE")))
+                dwg->header_vars.LTYPE_CONTINUOUS
+                    = dwg_add_handleref (dwg, 5, hdl->handleref.value, NULL);
             }
           else if (strEQc (pair->value.s, "BLOCKS"))
             {
@@ -5884,21 +5878,17 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               dxf_free_pair (pair);
               dxf_blocks_read (dat, dwg);
 
-              //resolve_postponed_header_refs (dwg);
-              if (!dwg->header_vars.BLOCK_RECORD_PSPACE)
-                {
-                  if ((hdl = dwg_find_tablehandle (dwg, (char *)"*Paper_Space",
-                                                   "BLOCK")))
-                    dwg->header_vars.BLOCK_RECORD_PSPACE = dwg_add_handleref (
-                        dwg, 5, hdl->handleref.value, NULL);
-                }
-              if (!dwg->header_vars.BLOCK_RECORD_MSPACE)
-                {
-                  if ((hdl = dwg_find_tablehandle (dwg, (char *)"*Model_Space",
-                                                   "BLOCK")))
-                    dwg->header_vars.BLOCK_RECORD_MSPACE = dwg_add_handleref (
-                        dwg, 5, hdl->handleref.value, NULL);
-                }
+              // resolve_postponed_header_refs (dwg);
+              if (!dwg->header_vars.BLOCK_RECORD_PSPACE
+                  && (hdl = dwg_find_tablehandle (dwg, (char *)"*Paper_Space",
+                                                  "BLOCK")))
+                dwg->header_vars.BLOCK_RECORD_PSPACE
+                    = dwg_add_handleref (dwg, 5, hdl->handleref.value, NULL);
+              if (!dwg->header_vars.BLOCK_RECORD_MSPACE
+                  && (hdl = dwg_find_tablehandle (dwg, (char *)"*Model_Space",
+                                                  "BLOCK")))
+                dwg->header_vars.BLOCK_RECORD_MSPACE
+                    = dwg_add_handleref (dwg, 5, hdl->handleref.value, NULL);
             }
           else if (strEQc (pair->value.s, "ENTITIES"))
             {
