@@ -729,7 +729,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   long unsigned int pvzadr;
   long unsigned int pvzadr_2;
   unsigned int ckr;
-  unsigned int sekcisize = 0;
+  unsigned int sec_size = 0;
   long unsigned int last_offset;
   BITCODE_BL last_handle;
   Object_Map *omap;
@@ -1154,7 +1154,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                  omap[i].index);
     }
 
-  /* Write the re-sorted objects
+  /* Write the sorted objects
    */
   for (i = 0; i < dwg->num_objects; i++)
     {
@@ -1211,12 +1211,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   /*------------------------------------------------------------
    * Object-map
+   * split into chunks of max. 2030
    */
   LOG_INFO ("\n=======> Object Map: %4u\n", (unsigned)dat->byte);
   dwg->header.section[SECTION_HANDLES_R13].number = 2;
   dwg->header.section[SECTION_HANDLES_R13].address = dat->byte;
 
-  sekcisize = 0;
+  sec_size = 0;
   pvzadr = dat->byte; // Correct value of section size must be written later
   dat->byte += 2;
   last_offset = 0;
@@ -1230,25 +1231,26 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       index = omap[i].index;
       handleoff = omap[i].handle - last_handle;
       bit_write_UMC (dat, handleoff);
-      LOG_HANDLE ("Handleoff(%3i): %4lu (%4lX)\t", index, handleoff,
+      LOG_HANDLE ("Handleoff(%3i): %4lu (%4lX) [UMC]\t", index, handleoff,
                   omap[i].handle)
       last_handle = omap[i].handle;
 
       offset = omap[i].address - last_offset;
       bit_write_MC (dat, offset);
       last_offset = omap[i].address;
-      LOG_HANDLE ("Offset: %8d  @%lu\n", (int)offset, last_offset);
+      LOG_HANDLE ("Offset: %8d [MC] @%lu\n", (int)offset, last_offset);
 
       ckr_missing = 1;
       if (dat->byte - pvzadr > 2030) // 2029
         {
           ckr_missing = 0;
-          // TODO encode_patch_RLsize
-          sekcisize = dat->byte - pvzadr;
+          sec_size = dat->byte - pvzadr;
           assert (pvzadr);
-          dat->chain[pvzadr] = sekcisize >> 8;
-          dat->chain[pvzadr + 1] = sekcisize & 0xFF;
-          bit_write_CRC (dat, pvzadr, 0xC0C1);
+          // i.e. encode_patch_RS_LE_size
+          dat->chain[pvzadr] = sec_size >> 8;
+          dat->chain[pvzadr + 1] = sec_size & 0xFF;
+          LOG_TRACE ("Handles Section size: %u [RS_LE] @%lu", sec_size, pvzadr);
+          bit_write_CRC_LE (dat, pvzadr, 0xC0C1);
 
           pvzadr = dat->byte;
           dat->byte += 2;
@@ -1259,12 +1261,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   // printf ("Obj size: %u\n", i);
   if (ckr_missing)
     {
-      // TODO encode_patch_RLsize
-      sekcisize = dat->byte - pvzadr;
+      sec_size = dat->byte - pvzadr;
       assert (pvzadr);
-      dat->chain[pvzadr] = sekcisize >> 8;
-      dat->chain[pvzadr + 1] = sekcisize & 0xFF;
-      bit_write_CRC (dat, pvzadr, 0xC0C1);
+      // i.e. encode_patch_RS_LE_size
+      dat->chain[pvzadr] = sec_size >> 8;
+      dat->chain[pvzadr + 1] = sec_size & 0xFF;
+      LOG_TRACE ("Handles Section size: %u [RS_LE] @%lu", sec_size, pvzadr);
+      bit_write_CRC_LE (dat, pvzadr, 0xC0C1);
     }
   if (dwg->header.version >= R_1_2)
     {
@@ -1273,9 +1276,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     }
   pvzadr = dat->byte;
   assert (pvzadr);
-  bit_write_RC (dat, 0);
-  bit_write_RC (dat, 2);
-  bit_write_CRC (dat, pvzadr, 0xC0C1);
+  bit_write_RS_LE (dat, 2); // last section_size 2
+  bit_write_CRC_LE (dat, pvzadr, 0xC0C1);
 
   /* Calculate and write the size of the object map
    */

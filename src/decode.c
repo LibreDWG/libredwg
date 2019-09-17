@@ -1121,6 +1121,7 @@ classes_section:
   dwg->num_objects = 0;
   object_begin = dat->size;
   object_end = 0;
+  LOG_TRACE ("\n=======> Handles:\n");
   LOG_HANDLE ("@ %lu RL Object-map section 2, size %u\n", dat->byte,
               (unsigned)dwg->header.section[SECTION_HANDLES_R13].size)
   do
@@ -1133,7 +1134,7 @@ classes_section:
 
       startpos = dat->byte;
       section_size = bit_read_RS_LE (dat);
-      LOG_TRACE ("\nSection size: %u [RS_LE] @%lu\n", section_size, startpos);
+      LOG_TRACE ("Section size: %u [RS_LE] @%lu (Handles)\n", section_size, startpos);
       if (section_size > 2040)
         {
           LOG_ERROR ("Object-map section size greater than 2040!")
@@ -1198,11 +1199,12 @@ classes_section:
         }
 
       crc = bit_read_RS_LE (dat);
-      LOG_TRACE ("\nsection_crc: %04X [RS_LE]\n", crc);
+      LOG_TRACE ("\nsection_crc: %04X [RS_LE] (Handles: %lu-%lu = %u)\n", crc,
+                 startpos, startpos + section_size, section_size);
       crc2 = bit_calc_CRC (0xC0C1, dat->chain + startpos, section_size);
       if (crc != crc2)
         {
-          LOG_ERROR ("Object Section[%ld] CRC mismatch %04X <=> %04X",
+          LOG_ERROR ("Handles Section[%ld] CRC mismatch %04X <=> %04X",
                      (long)dwg->header.section[SECTION_HANDLES_R13].number,
                      crc, crc2);
           // fails with r14
@@ -1223,8 +1225,9 @@ classes_section:
             (unsigned long)object_begin)
   dat->byte = object_end;
   object_begin = bit_read_MS (dat);
-  LOG_INFO ("         Object Data 2 (end)    : %8lu (%8lu)\n",
-            (unsigned long)(object_end + object_begin + 2), object_begin)
+  LOG_TRACE ("some size: %lu [MS]\n", object_begin)
+  LOG_INFO ("         Object Data 2 (end)    : %8lu\n",
+            (unsigned long)(object_end + object_begin + 2))
 
   /*
    // TODO: if the previous Handleoff got corrupted somehow, read this handle map 
@@ -1382,7 +1385,7 @@ classes_section:
       LOG_TRACE ("MEASUREMENT: " FORMAT_BS " (0 English/1 Metric)\n",
                  dwg->header_vars.MEASUREMENT)
 
-      LOG_TRACE ("         Size bytes :\t%lu\n", dat->size)
+      //LOG_TRACE ("         Size bytes :\t%lu\n", dat->size)
     }
 
   // step II of handles parsing: resolve pointers from handle value

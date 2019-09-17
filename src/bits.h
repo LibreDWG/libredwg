@@ -196,6 +196,9 @@ int bit_check_CRC (Bit_Chain *dat, long unsigned int start_address,
 
 uint16_t bit_write_CRC (Bit_Chain *dat, long unsigned int start_address,
                         const uint16_t seed);
+// object-map only
+uint16_t bit_write_CRC_LE (Bit_Chain *dat, long unsigned int start_address,
+                           const uint16_t seed);
 
 uint16_t bit_calc_CRC (const uint16_t seed, unsigned char *adr, long len);
 

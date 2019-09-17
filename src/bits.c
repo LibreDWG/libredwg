@@ -1270,6 +1270,25 @@ bit_write_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
   return crc;
 }
 
+uint16_t
+bit_write_CRC_LE (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
+{
+  uint16_t crc;
+  long size;
+  loglevel = dat->opts & 0xf;
+
+  while (dat->bit > 0)
+    bit_write_B (dat, 0);
+
+  size = dat->byte - start_address;
+  crc = bit_calc_CRC (seed, &dat->chain[start_address], size);
+
+  LOG_TRACE ("write CRC %04X from %lu-%lu = %ld\n", crc, start_address,
+             dat->byte, size);
+  bit_write_RS_LE (dat, crc);
+  return crc;
+}
+
 void
 bit_read_fixed (Bit_Chain *restrict dat, BITCODE_RC *restrict dest, int length)
 {
