@@ -91,6 +91,7 @@ typedef unsigned char BITCODE_3B;
 typedef uint16_t BITCODE_BS;
 typedef int16_t BITCODE_BSd;
 typedef uint16_t BITCODE_RS;
+typedef uint16_t BITCODE_RSx;
 typedef uint32_t BITCODE_BL;
 typedef uint32_t BITCODE_RL;
 typedef int32_t BITCODE_BLd;
@@ -118,6 +119,7 @@ typedef int32_t BITCODE_RLd;
 #define FORMAT_BS "%" PRIu16
 #define FORMAT_BSd "%" PRId16
 #define FORMAT_RS "%" PRIu16
+#define FORMAT_RSx "%" PRIx16
 #define FORMAT_BL "%" PRIu32
 #define FORMAT_RL "%" PRIu32
 #define FORMAT_BLd "%" PRId32

@@ -99,27 +99,17 @@ static bool env_var_checked_p;
 
 #define FIELD_VALUE(nam) _obj->nam
 
-#define FIELD_B(nam, dxf) FIELDG (nam, B, dxf)
-#define FIELD_BB(nam, dxf) FIELDG (nam, BB, dxf)
-#define FIELD_3B(nam, dxf) FIELDG (nam, 3B, dxf)
-#define FIELD_BS(nam, dxf) FIELDG (nam, BS, dxf)
-#define FIELD_BSd(nam, dxf)                                                   \
-  {                                                                           \
-    bit_write_BS (dat, (BITCODE_BS)_obj->nam);                                \
-    FIELD_G_TRACE (nam, BSd, dxf);                                            \
-  }
-#define FIELD_BLx(nam, dxf)                                                   \
-  {                                                                           \
-    bit_write_BL (dat, (BITCODE_BS)_obj->nam);                                \
-    FIELD_G_TRACE (nam, BLx, dxf);                                            \
-  }
-#define FIELD_BLd(nam, dxf)                                                   \
-  {                                                                           \
-    bit_write_BL (dat, (BITCODE_BS)_obj->nam);                                \
-    FIELD_G_TRACE (nam, BLd, dxf);                                            \
-  }
-#define FIELD_BL(nam, dxf) FIELDG (nam, BL, dxf)
-#define FIELD_BLL(nam, dxf) FIELDG (nam, BLL, dxf)
+#define FIELD_B(nam, dxf)    FIELDG (nam, B, dxf)
+#define FIELD_BB(nam, dxf)   FIELDG (nam, BB, dxf)
+#define FIELD_3B(nam, dxf)   FIELDG (nam, 3B, dxf)
+#define FIELD_BS(nam, dxf)   FIELDG (nam, BS, dxf)
+#define FIELD_BSd(nam, dxf)  FIELD_CAST(nam, BS, BSd, dxf)
+#define FIELD_RSx(nam, dxf)  FIELD_CAST(nam, RS, RSx, dxf)
+#define FIELD_BLx(nam, dxf)  FIELD_CAST(nam, BL, BLx, dxf)
+#define FIELD_BLd(nam, dxf)  FIELD_CAST(nam, BL, BLd, dxf)
+#define FIELD_RLd(nam, dxf)  FIELD_CAST(nam, RL, RLd, dxf)
+#define FIELD_BL(nam, dxf)   FIELDG (nam, BL, dxf)
+#define FIELD_BLL(nam, dxf)  FIELDG (nam, BLL, dxf)
 #define FIELD_BD(nam, dxf) FIELDG (nam, BD, dxf)
 #define FIELD_RC(nam, dxf) FIELDG (nam, RC, dxf)
 #define FIELD_RS(nam, dxf) FIELDG (nam, RS, dxf)
