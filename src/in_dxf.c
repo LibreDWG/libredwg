@@ -3800,6 +3800,31 @@ move_out_BLOCK_CONTROL (Dwg_Object *restrict obj,
     }
 }
 
+static void
+move_out_LTYPE_CONTROL (Dwg_Object *restrict obj,
+                        Dwg_Object_LTYPE_CONTROL *restrict _ctrl,
+                        const char *f)
+{
+  // move out of entries
+  for (BITCODE_BL j = 0; j < _ctrl->num_entries; j++)
+    {
+      if (_ctrl->entries[j]
+          && _ctrl->entries[j]->absolute_ref == obj->handle.value)
+        {
+          LOG_TRACE ("remove %s from entries[%d]: " FORMAT_H "\n", f, j,
+                     ARGS_H (obj->handle));
+          _ctrl->num_entries--;
+          LOG_TRACE ("LTYPE_CONTROL.num_entries = " FORMAT_BL "\n", _ctrl->num_entries);
+          if (j < _ctrl->num_entries)
+            memmove (&_ctrl->entries[j], &_ctrl->entries[j + 1],
+                     (_ctrl->num_entries - 1) * sizeof (BITCODE_H));
+          _ctrl->entries = realloc (_ctrl->entries,
+                                    _ctrl->num_entries * sizeof (BITCODE_H));
+          break;
+        }
+    }
+}
+
 #define UPGRADE_ENTITY(FROM, TO)                                              \
   obj->type = obj->fixedtype = DWG_TYPE_##TO;                                 \
   obj->name = obj->dxfname = (char *)#TO;                                     \
@@ -4347,6 +4372,38 @@ new_object (char *restrict name, char *restrict dxfname,
                           = dwg_add_handleref (dwg, 5, obj->handle.value, obj);
                       // move out of entries
                       move_out_BLOCK_CONTROL (obj, _ctrl, f);
+                      i--;
+                    }
+                }
+              else if (strEQc (name, "LTYPE"))
+                {
+                  // seperate bylayer and byblock into its own fields
+                  Dwg_Object_LTYPE_CONTROL *_ctrl
+                      = ctrl->tio.object->tio.LTYPE_CONTROL;
+                  if (!strcasecmp (pair->value.s, "ByLayer"))
+                    {
+                      const char *f = "bylayer";
+                      _ctrl->bylayer
+                          = dwg_add_handleref (dwg, 3, obj->handle.value, obj);
+                      LOG_TRACE ("%s.%s = " FORMAT_REF " [H 0]\n", ctrlname, f,
+                                 ARGS_REF (_ctrl->bylayer));
+                      dwg->header_vars.LTYPE_BYLAYER
+                          = dwg_add_handleref (dwg, 5, obj->handle.value, obj);
+                      // move out of entries
+                      move_out_LTYPE_CONTROL (obj, _ctrl, f);
+                      i--;
+                    }
+                  else if (!strcasecmp (pair->value.s, "ByBlock"))
+                    {
+                      const char *f = "byblock";
+                      _ctrl->byblock
+                          = dwg_add_handleref (dwg, 3, obj->handle.value, obj);
+                      LOG_TRACE ("%s.%s = " FORMAT_REF " [H 0]\n", ctrlname, f,
+                                 ARGS_REF (_ctrl->byblock));
+                      dwg->header_vars.LTYPE_BYBLOCK
+                          = dwg_add_handleref (dwg, 5, obj->handle.value, obj);
+                      // move out of entries
+                      move_out_LTYPE_CONTROL (obj, _ctrl, f);
                       i--;
                     }
                 }
@@ -5235,7 +5292,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               // until 0 table or 0 ENDTAB
               pair = new_object (table, pair->value.s, dat, dwg, ctrl_id, i++);
-              // undo BLOCK_CONTROL.entries++
+              // undo BLOCK_CONTROL.entries and LTYPE_CONTROL.entries
               if (strEQc (table, "BLOCK_RECORD"))
                 {
                   Dwg_Object *obj = &dwg->object[dwg->num_objects - 1];
@@ -5248,6 +5305,20 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   else if (_ctrl->paper_space
                            && obj->handle.value
                                   == _ctrl->paper_space->absolute_ref)
+                    i--;
+                }
+              else if (strEQc (table, "LTYPE"))
+                {
+                  Dwg_Object *obj = &dwg->object[dwg->num_objects - 1];
+                  Dwg_Object *ctrl = &dwg->object[ctrl_id];
+                  Dwg_Object_LTYPE_CONTROL *_ctrl
+                      = ctrl->tio.object->tio.LTYPE_CONTROL;
+                  if (_ctrl->bylayer
+                      && obj->handle.value == _ctrl->bylayer->absolute_ref)
+                    i--;
+                  else if (_ctrl->byblock
+                           && obj->handle.value
+                                  == _ctrl->byblock->absolute_ref)
                     i--;
                 }
             }
@@ -5782,6 +5853,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               resolve_postponed_header_refs (dwg);
               resolve_postponed_eed_refs (dwg);
 
+              // should not happen
               if (!dwg->header_vars.LTYPE_BYLAYER)
                 {
                   if ((hdl = dwg_find_tablehandle (dwg, (char *)"ByLayer",
@@ -5791,6 +5863,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                     dwg->header_vars.LTYPE_BYLAYER = dwg_add_handleref (
                         dwg, 5, hdl->handleref.value, NULL);
                 }
+              // should not happen
               if (!dwg->header_vars.LTYPE_BYBLOCK)
                 {
                   if ((hdl = dwg_find_tablehandle (dwg, (char *)"ByBlock",
@@ -5800,6 +5873,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                     dwg->header_vars.LTYPE_BYBLOCK = dwg_add_handleref (
                         dwg, 5, hdl->handleref.value, NULL);
                 }
+              // but this is needed
               if (!dwg->header_vars.LTYPE_CONTINUOUS)
                 {
                   if ((hdl = dwg_find_tablehandle (dwg, (char *)"Continuous",
