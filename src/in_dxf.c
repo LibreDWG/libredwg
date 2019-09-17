@@ -5857,9 +5857,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               if (!dwg->header_vars.LTYPE_BYLAYER)
                 {
                   if ((hdl = dwg_find_tablehandle (dwg, (char *)"ByLayer",
-                                                   "LTYPE"))
-                      || (hdl = dwg_find_tablehandle (dwg, (char *)"BYLAYER",
-                                                      "LTYPE")))
+                                                   "LTYPE")))
                     dwg->header_vars.LTYPE_BYLAYER = dwg_add_handleref (
                         dwg, 5, hdl->handleref.value, NULL);
                 }
@@ -5867,9 +5865,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               if (!dwg->header_vars.LTYPE_BYBLOCK)
                 {
                   if ((hdl = dwg_find_tablehandle (dwg, (char *)"ByBlock",
-                                                   "LTYPE"))
-                      || (hdl = dwg_find_tablehandle (dwg, (char *)"BYBLOCK",
-                                                      "LTYPE")))
+                                                   "LTYPE")))
                     dwg->header_vars.LTYPE_BYBLOCK = dwg_add_handleref (
                         dwg, 5, hdl->handleref.value, NULL);
                 }
@@ -5877,9 +5873,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               if (!dwg->header_vars.LTYPE_CONTINUOUS)
                 {
                   if ((hdl = dwg_find_tablehandle (dwg, (char *)"Continuous",
-                                                   "LTYPE"))
-                      || (hdl = dwg_find_tablehandle (
-                              dwg, (char *)"CONTINUOUS", "LTYPE")))
+                                                   "LTYPE")))
                     dwg->header_vars.LTYPE_CONTINUOUS = dwg_add_handleref (
                         dwg, 5, hdl->handleref.value, NULL);
                 }
@@ -5894,18 +5888,14 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               if (!dwg->header_vars.BLOCK_RECORD_PSPACE)
                 {
                   if ((hdl = dwg_find_tablehandle (dwg, (char *)"*Paper_Space",
-                                                   "BLOCK"))
-                      || (hdl = dwg_find_tablehandle (
-                              dwg, (char *)"*PAPER_SPACE", "BLOCK")))
+                                                   "BLOCK")))
                     dwg->header_vars.BLOCK_RECORD_PSPACE = dwg_add_handleref (
                         dwg, 5, hdl->handleref.value, NULL);
                 }
               if (!dwg->header_vars.BLOCK_RECORD_MSPACE)
                 {
                   if ((hdl = dwg_find_tablehandle (dwg, (char *)"*Model_Space",
-                                                   "BLOCK"))
-                      || (hdl = dwg_find_tablehandle (
-                              dwg, (char *)"*MODEL_SPACE", "BLOCK")))
+                                                   "BLOCK")))
                     dwg->header_vars.BLOCK_RECORD_MSPACE = dwg_add_handleref (
                         dwg, 5, hdl->handleref.value, NULL);
                 }
