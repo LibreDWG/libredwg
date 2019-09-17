@@ -425,14 +425,14 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               if (strEQc (field, "$3DDWFPREC"))
                 {
-                  LOG_TRACE ("HEADER.%s [%s]\n", &field[1], "BD");
+                  LOG_TRACE ("HEADER.%s [%s %d]\n", &field[1], "BD", pair->code);
                   dwg->header_vars._3DDWFPREC = pair->value.d;
                 }
 
 #define SUMMARY_T(name)                                                       \
   (strEQc (field, "$" #name))                                                 \
   {                                                                           \
-    LOG_TRACE ("SUMMARY.%s = %s [1 T]\n", &field[1], pair->value.s);          \
+    LOG_TRACE ("SUMMARY.%s = %s [T 1]\n", &field[1], pair->value.s);          \
     if (dwg->header.version >= R_2007)                                        \
       dwg->summaryinfo.name = (BITCODE_T)bit_utf8_to_TU (pair->value.s);      \
     else                                                                      \
@@ -483,7 +483,8 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               else
                 {
                   // yes, set it 2-3 times
-                  LOG_TRACE ("HEADER.%s [%s][%d]\n", &field[1], f->type, i);
+                  LOG_TRACE ("HEADER.%s [%s %d][%d]\n", &field[1], f->type,
+                             pair->code, i);
                   dwg_dynapi_header_set_value (dwg, &field[1], &pt, is_utf);
                   i++;
                 }
@@ -493,7 +494,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               char *key, *str;
               if (strlen (pair->value.s))
                 {
-                  LOG_TRACE ("HEADER.%s %s [%s] %d later\n", &field[1],
+                  LOG_TRACE ("HEADER.%s %s [%s %d] later\n", &field[1],
                              pair->value.s, f->type, (int)pair->code);
                   // name (which table?) => handle
                   // needs to be postponed, because we don't have the tables yet.
@@ -503,7 +504,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               else
                 {
                   BITCODE_H hdl = dwg_add_handleref (dwg, 5, 0, NULL);
-                  LOG_TRACE ("HEADER.%s NULL 5 [H]\n", &field[1]);
+                  LOG_TRACE ("HEADER.%s NULL 5 [H %d]\n", &field[1], pair->code);
                   dwg_dynapi_header_set_value (dwg, &field[1], &hdl, is_utf);
                 }
             }
@@ -511,7 +512,8 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               BITCODE_H hdl;
               hdl = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
-              LOG_TRACE ("HEADER.%s %X [H]\n", &field[1], pair->value.u);
+              LOG_TRACE ("HEADER.%s %X [H %d]\n", &field[1], pair->value.u,
+                         pair->code);
               dwg_dynapi_header_set_value (dwg, &field[1], &hdl, is_utf);
             }
           else if (strEQc (f->type, "CMC"))
@@ -519,8 +521,8 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               static BITCODE_CMC color = { 0 };
               if (pair->code <= 70)
                 {
-                  LOG_TRACE ("HEADER.%s.index %d [CMC]\n", &field[1],
-                             pair->value.i);
+                  LOG_TRACE ("HEADER.%s.index %d [CMC %d]\n", &field[1],
+                             pair->value.i, pair->code);
                   color.index = pair->value.i;
                   dwg_dynapi_header_set_value (dwg, &field[1], &color, 0);
                 }
@@ -540,15 +542,19 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 }
               // date.ms = (BITCODE_BL)(1000000 * (date.value - date.days));
               date.ms = (BITCODE_BL) (j / 10 * (date.value - date.days));
-              LOG_TRACE ("HEADER.%s %f (%u, %u) [TIMEBLL]\n", &field[1],
-                         date.value, date.days, date.ms);
+              LOG_TRACE ("HEADER.%s %f (%u, %u) [TIMEBLL %d]\n", &field[1],
+                         date.value, date.days, date.ms, pair->code);
               dwg_dynapi_header_set_value (dwg, &field[1], &date, 0);
+            }
+          else if (pair->type == VT_STRING)
+            {
+              LOG_TRACE ("HEADER.%s [%s %d]\n", &field[1], f->type, pair->code);
+              dwg_dynapi_header_set_value (dwg, &field[1], &pair->value, 1);
             }
           else
             {
-              LOG_TRACE ("HEADER.%s [%s]\n", &field[1], f->type);
-              dwg_dynapi_header_set_value (dwg, &field[1], &pair->value,
-                                           is_utf);
+              LOG_TRACE ("HEADER.%s [%s %d]\n", &field[1], f->type, pair->code);
+              dwg_dynapi_header_set_value (dwg, &field[1], &pair->value, is_utf);
             }
         }
       else

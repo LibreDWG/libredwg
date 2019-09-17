@@ -121,7 +121,7 @@ static bool env_var_checked_p;
 #define FIELD_MS(nam, dxf) FIELDG (nam, MS, dxf)
 #define FIELD_TV(nam, dxf)                                                    \
   {                                                                           \
-    IF_ENCODE_FROM_EARLIER { _obj->nam = strdup (""); }                       \
+    IF_ENCODE_FROM_EARLIER { if (!_obj->nam) _obj->nam = strdup (""); }       \
     FIELDG (nam, TV, dxf);                                                    \
   }
 #define FIELD_T(nam, dxf)                                                     \
