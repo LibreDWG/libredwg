@@ -1022,7 +1022,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           LOG_TRACE ("Thumbnail num_pictures: 0 [RC]\n");
         }
       else
-        bit_write_TF (dat, (char *)dwg->thumbnail.chain, dwg->thumbnail.size);
+        {
+          BITCODE_RL size;
+          bit_write_TF (dat, (char *)dwg->thumbnail.chain, dwg->thumbnail.size);
+          dwg_bmp (dwg, &size);
+          if (size > dwg->thumbnail.size)
+            LOG_ERROR ("BMP size overflow: %i > %lu\n", size, dwg->thumbnail.size)
+        }
       bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_THUMBNAIL_END));
       LOG_TRACE ("         Thumbnail (end): %4u\n", (unsigned)dat->byte);
     }
