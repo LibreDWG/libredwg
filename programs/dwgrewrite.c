@@ -22,6 +22,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include <getopt.h>
 
 #include <dwg.h>
@@ -256,8 +258,30 @@ main (int argc, char *argv[])
     {
       printf ("\n");
     }
+
+  {
+    struct stat attrib;
+    if (!stat (filename_out, &attrib)) // exists
+      {
+        if (S_ISREG (attrib.st_mode) &&        // refuse to remove a directory
+            (access (filename_out, W_OK) == 0) // is writable
+#ifndef _WIN32
+            // refuse to remove a symlink. even with overwrite. security
+            && !S_ISLNK (attrib.st_mode)
+#endif
+            )
+          unlink (filename_out);
+        else
+          {
+            fprintf (stderr, "Not writable file or symlink: %s\n",
+                     filename_out);
+            error |= DWG_ERR_IOERROR;
+          }
+      }
+  }
   error = dwg_write_file (filename_out, &dwg);
 #endif
+
   if (error >= DWG_ERR_CRITICAL)
     {
       printf ("WRITE ERROR 0x%x\n", error);
