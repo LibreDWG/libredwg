@@ -2931,7 +2931,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
           obj->tio.object->xdicobjhandle
               = dwg_add_handleref (dwg, 3, pair->value.u, obj);
           obj->tio.object->xdic_missing_flag = 0;
-          LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [330]\n", ctrlname,
+          LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [360]\n", ctrlname,
                      ARGS_REF (obj->tio.object->xdicobjhandle));
           break;
         case 70:
@@ -2987,7 +2987,11 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
 do_return:
   // default NULL handle
   if (!obj->tio.object->xdicobjhandle)
-    obj->tio.object->xdic_missing_flag = 1;
+    {
+      obj->tio.object->xdic_missing_flag = 1;
+      if (dwg->header.version >= R_13 && dwg->header.version < R_2004)
+        obj->tio.object->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, obj);
+    }
   return pair;
 }
 
@@ -5204,7 +5208,7 @@ new_object (char *restrict name, char *restrict dxfname,
     }
 
   // common_entity_handle_data:
-  // set xdic_missing_flag
+  // set xdic_missing_flag and xdicobjhandle if <2004
   if (is_entity ? !obj->tio.entity->xdicobjhandle
                 : !obj->tio.object->xdicobjhandle)
     {
@@ -5215,6 +5219,10 @@ new_object (char *restrict name, char *restrict dxfname,
           else
             obj->tio.object->xdic_missing_flag = 1;
         }
+      else if (dwg->header.version >= R_13 && !is_entity)
+        obj->tio.object->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, obj);
+      else if (dwg->header.version >= R_13 && is_entity)
+        obj->tio.entity->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, obj);
     }
   if (is_entity)
     {

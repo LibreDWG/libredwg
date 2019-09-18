@@ -2006,7 +2006,7 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
 
   /* Now 1 padding bits until next byte, and then a RS CRC */
   if (dat->bit)
-    LOG_TRACE ("padding: %d [*B]\n", dat->bit)
+    LOG_TRACE ("padding: +%d [*B]\n", 8 - dat->bit)
   while (dat->bit)
     bit_write_B (dat, 1);
   end_address = obj->address + obj->size;

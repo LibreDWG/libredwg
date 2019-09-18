@@ -5229,6 +5229,7 @@ DWG_OBJECT(XRECORD)
     }
   VALUEOUTOFBOUNDS (num_objid_handles, 10000)
   #ifndef IS_DECODER
+    FIELD_TRACE(num_objid_handles, BL);
     HANDLE_VECTOR (objid_handles, num_objid_handles, 4, 0);
   #endif
   #ifdef IS_DXF
