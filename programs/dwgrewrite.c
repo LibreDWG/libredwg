@@ -300,8 +300,9 @@ main (int argc, char *argv[])
   if (num_objects && (num_objects != dwg.num_objects))
     printf ("re-READ num_objects: %lu, should be %lu\n",
             (unsigned long)dwg.num_objects, (unsigned long)num_objects);
+  dwg_free (&dwg);
 #endif
-  // if (filename_out != argv[2])
-  //  free (filename_out);
+  if (filename_out != argv[i + 1])
+    free (filename_out);
   return error >= DWG_ERR_CRITICAL ? error : 0;
 }

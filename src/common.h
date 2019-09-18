@@ -127,7 +127,7 @@
   cur_ver = v;                                                                \
   if (dat->version != v)
 #define VERSIONS(v1, v2)                                                      \
-  cur_ver = v2;                                                               \
+  cur_ver = v1;                                                               \
   if (dat->version >= v1 && dat->version <= v2)
 #define OTHER_VERSIONS else
 #define PRE(v)                                                                \
