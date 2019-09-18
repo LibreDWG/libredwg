@@ -1006,32 +1006,32 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   /*------------------------------------------------------------
    * THUMBNAIL preview pictures
    */
-  // FIXME if !thumbnail_address but thumbnail exists
-  if (dwg->header.thumbnail_address)
+  if (!dwg->header.thumbnail_address)
+    dwg->header.thumbnail_address = dat->byte;
+  dat->bit = 0;
+  LOG_TRACE ("\n=======> Thumbnail:       %4u\n", (unsigned)dat->byte);
+  // dwg->thumbnail.size = 0; // to disable
+  bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_THUMBNAIL_BEGIN));
+  if (dwg->thumbnail.size == 0)
     {
-      dat->byte = dwg->header.thumbnail_address;
-      dat->bit = 0;
-      LOG_TRACE ("\n=======> Thumbnail:       %4u\n", (unsigned)dat->byte);
-      // dwg->thumbnail.size = 0; // to disable
-      bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_THUMBNAIL_BEGIN));
-      if (dwg->thumbnail.size == 0)
-        {
-          bit_write_RL (dat, 5); // overall size
-          LOG_TRACE ("Thumbnail size: 5 [RL]\n");
-          bit_write_RC (dat, 0); // num_pictures
-          LOG_TRACE ("Thumbnail num_pictures: 0 [RC]\n");
-        }
-      else
-        {
-          BITCODE_RL size;
-          bit_write_TF (dat, (char *)dwg->thumbnail.chain, dwg->thumbnail.size);
-          dwg_bmp (dwg, &size);
-          if (size > dwg->thumbnail.size)
-            LOG_ERROR ("BMP size overflow: %i > %lu\n", size, dwg->thumbnail.size)
-        }
-      bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_THUMBNAIL_END));
-      LOG_TRACE ("         Thumbnail (end): %4u\n", (unsigned)dat->byte);
+      bit_write_RL (dat, 5); // overall size
+      LOG_TRACE ("Thumbnail size: 5 [RL]\n");
+      bit_write_RC (dat, 0); // num_pictures
+      LOG_TRACE ("Thumbnail num_pictures: 0 [RC]\n");
     }
+  else
+    {
+      bit_write_TF (dat, (char *)dwg->thumbnail.chain, dwg->thumbnail.size);
+    }
+  bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_THUMBNAIL_END));
+
+  {
+    BITCODE_RL size;
+    dwg_bmp (dwg, &size);
+    if (size > dwg->thumbnail.size)
+      LOG_ERROR ("BMP size overflow: %i > %lu\n", size, dwg->thumbnail.size);
+  }
+  LOG_TRACE ("         Thumbnail (end): %4u\n", (unsigned)dat->byte);
 
   /*------------------------------------------------------------
    * Header Variables

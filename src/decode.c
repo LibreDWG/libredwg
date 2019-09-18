@@ -933,12 +933,16 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
       dat->bit = 0;
       start_address = dat->byte;
-      LOG_TRACE ("\n=======> THUMBNAIL:       %4u\n",
-                 (unsigned int)start_address - 16)
+      LOG_TRACE ("\n=======> Thumbnail:       %4u\n", (unsigned int)start_address - 16);
+      if (dwg->header.thumbnail_address
+          && dwg->header.thumbnail_address != dat->byte - 16)
+        LOG_WARN ("Illegal HEADER.thumbnail_address: %i != %lu",
+                  dwg->header.thumbnail_address, dat->byte - 16)
+      dwg->header.thumbnail_address = dat->byte - 16;
       if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_THUMBNAIL_END)))
         {
           BITCODE_RL bmpsize;
-          LOG_TRACE ("         THUMBNAIL (end): %4u\n",
+          LOG_TRACE ("         Thumbnail (end): %4u\n",
                      (unsigned int)dat->byte)
           dwg->thumbnail.size = (dat->byte - 16) - start_address;
           dwg->thumbnail.chain
@@ -950,10 +954,11 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             }
           memcpy (dwg->thumbnail.chain, &dat->chain[start_address],
                   dwg->thumbnail.size);
+          dat->byte += dwg->thumbnail.size;
+
           dwg_bmp (dwg, &bmpsize);
           if (bmpsize > dwg->thumbnail.size)
             LOG_ERROR ("BMP size overflow: %i > %lu\n", bmpsize, dwg->thumbnail.size)
-          dat->byte += dwg->thumbnail.size;
         }
     }
 
