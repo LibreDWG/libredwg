@@ -423,7 +423,7 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
 #endif /* USE_TRACING */
 
   osize = bit_read_RL (dat); /* overall size of all images */
-  LOG_TRACE ("overall size: " FORMAT_RL "\n", osize);
+  LOG_TRACE ("overall size: " FORMAT_RL " [RL]\n", osize);
   if (osize > dat->size)
     {
       LOG_ERROR ("Preview overflow > %lu", dat->size);
@@ -468,7 +468,8 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
         }
     }
   dat->byte += header_size;
-  LOG_TRACE ("Current address: 0x%lx\n", dat->byte)
+  if (*size)
+    LOG_TRACE ("BMP offset: %lu\n", dat->byte)
 
   if (*size > 0)
     return (dat->chain + dat->byte);
