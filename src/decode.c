@@ -249,7 +249,7 @@ decode_preR13_section_ptr (const char *restrict name, Dwg_Section_Type_r11 id,
   tbl->size = bit_read_RS (dat);
   tbl->number = bit_read_RL (dat);
   tbl->address = bit_read_RL (dat);
-  strncpy (tbl->name, name, 79);
+  strncpy (tbl->name, name, 63);
   LOG_TRACE ("ptr table %-8s [%2d]: size:%-4u nr:%-2ld (0x%x-0x%lx)\n",
              tbl->name, id, tbl->size, (long)tbl->number, tbl->address,
              (long)(tbl->address + tbl->number * tbl->size))
