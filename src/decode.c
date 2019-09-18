@@ -3586,11 +3586,12 @@ dwg_decode_handleref_with_code (Bit_Chain *restrict dat,
     }
   else if (!ref->handleref.value)
     {
-      if (obj)
+      /*if (obj)
         {
           free (ref);
           return NULL;
         }
+      */
       ref->absolute_ref = 0;
       ref->obj = NULL;
       return ref;
