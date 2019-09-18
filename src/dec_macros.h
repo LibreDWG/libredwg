@@ -326,7 +326,7 @@
 #define FIELD_RSx(nam, dxf)                                                   \
   {                                                                           \
     _obj->nam = bit_read_RS (dat);                                            \
-    LOG_TRACE (#nam ": %04X [RSx %d]\n", (uint16_t)_obj->nam, dxf);           \
+    LOG_TRACE (#nam ": " FORMAT_RSx " [RSx %d]\n", _obj->nam, dxf);           \
   }
 #define FIELD_RD(nam, dxf)                                                    \
   {                                                                           \
