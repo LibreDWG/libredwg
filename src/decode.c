@@ -966,9 +966,10 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
    * Header Variables, section 0
    */
 
-  LOG_INFO ("\n=======> Header Variables:     %4u\n",
+  LOG_INFO ("\n"
+            "=======> Header Variables:         %4u\n",
             (unsigned int)dwg->header.section[SECTION_HEADER_R13].address)
-  LOG_INFO ("         Header Variables (end): %4u\n",
+  LOG_INFO ("         Header Variables   (end): %4u\n",
             (unsigned int)(dwg->header.section[SECTION_HEADER_R13].address
                            + dwg->header.section[SECTION_HEADER_R13].size))
   if (dwg->header.section[SECTION_HEADER_R13].address < 58
