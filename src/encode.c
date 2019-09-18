@@ -503,21 +503,21 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)    \
   int error = 0;                                \
   dat.size = sizeof(Dwg_Entity_##token) + 40;   \
   LOG_INFO ("Add entity " #token " ")           \
-  dat.chain = calloc(dat.size, 1);              \
+  dat.chain = calloc (dat.size, 1);             \
   dat.version = dwg->header.version;            \
   dat.from_version = dwg->header.from_version;  \
-  bit_write_MS(&dat, dat.size);                 \
+  bit_write_MS (&dat, dat.size);                \
   if (dat.version >= R_2010) {                  \
-    /* FIXME: should be UMC handlestream_size */ \
-    bit_write_UMC(&dat, 8*sizeof(Dwg_Entity_##token)); \
-    bit_write_BOT(&dat, DWG_TYPE_##token);      \
+    /* FIXME: should be UMC handlestream_size */\
+    bit_write_UMC (&dat, 8*sizeof(Dwg_Entity_##token)); \
+    bit_write_BOT &dat, DWG_TYPE_##token);      \
   } else {                                      \
-    bit_write_BS(&dat, DWG_TYPE_##token);       \
+    bit_write_BS (&dat, DWG_TYPE_##token);      \
   }                                             \
-  bit_set_position(&dat, 0);                    \
-  error = dwg_decode_add_object(dwg, &dat, &dat, 0);\
-  if (-1 == error) \
-    dwg_resolve_objectrefs_silent(dwg);         \
+  bit_set_position (&dat, 0);                   \
+  error = dwg_decode_add_object (dwg, &dat, &dat, 0);\
+  if (-1 == error)                              \
+    dwg_resolve_objectrefs_silent (dwg);        \
   if (num_objs == dwg->num_objects)             \
     return -1;                                  \
   else                                          \
@@ -531,16 +531,16 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
   BITCODE_BL num_objs  = dwg->num_objects;       \
   dat.size = sizeof(Dwg_Object_##token) + 40;    \
   LOG_INFO ("Add object " #token " ")            \
-  dat.chain = calloc(dat.size, 1);               \
+  dat.chain = calloc (dat.size, 1);              \
   dat.version = dwg->header.version;             \
   dat.from_version = dwg->header.from_version;   \
-  bit_write_MS(&dat, dat.size);                  \
+  bit_write_MS (&dat, dat.size);                 \
   if (dat.version >= R_2010) {                   \
     /* FIXME: should be UMC handlestream_size */ \
-    bit_write_UMC(&dat, 8*sizeof(Dwg_Object_##token)); \
-    bit_write_BOT(&dat, DWG_TYPE_##token);       \
+    bit_write_UMC (&dat, 8*sizeof(Dwg_Object_##token)); \
+    bit_write_BOT (&dat, DWG_TYPE_##token);      \
   } else {                                       \
-    bit_write_BS(&dat, DWG_TYPE_##token);        \
+    bit_write_BS (&dat, DWG_TYPE_##token);       \
   }                                              \
   bit_set_position(&dat, 0);                     \
   error = dwg_decode_add_object(dwg, &dat, &dat, 0);\
@@ -1599,11 +1599,22 @@ dwg_encode_variable_type (Dwg_Data *dwg, Bit_Chain *dat, Dwg_Object *obj)
 {
   int error = 0;
   int is_entity;
+  unsigned long pos;
   Dwg_Class *klass = dwg_encode_get_class (dwg, obj);
 
   if (!klass)
     return DWG_ERR_INTERNALERROR;
   is_entity = dwg_class_is_entity (klass);
+
+  if (dwg->opts & 0x20) // DXF import
+    {
+      pos = bit_position (dat);
+      dat->byte = obj->address;
+      dat->bit = 0;
+      LOG_TRACE ("fixup Type: %d [BS] @%lu\n", obj->type, obj->address);
+      bit_write_BS (dat, obj->type); // fixup wrong type
+      bit_set_position (dat, pos);
+    }
 
   // clang-format off
   #include "classes.inc"
@@ -1910,7 +1921,13 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
           dat->byte = address; // restart and write into the UNKNOWN_OBJ object
           dat->bit = 0;
           bit_write_MS (dat, obj->size); // unknown blobs have a known size
-          bit_write_BS (dat, obj->type); // type
+          if (dat->version >= R_2010)
+            {
+              bit_write_UMC (dat, obj->handlestream_size);
+              bit_write_BOT (dat, obj->type);
+            }
+          else
+            bit_write_BS (dat, obj->type);
 
           if (klass && obj->supertype == DWG_SUPERTYPE_UNKNOWN)
             is_entity = dwg_class_is_entity (klass);
