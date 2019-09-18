@@ -430,7 +430,7 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
       return NULL;
     }
   num_pictures = bit_read_RC (dat);
-  LOG_INFO ("num_pictures: %d\n", (int)num_pictures)
+  LOG_INFO ("num_pictures: %d [RC]\n", (int)num_pictures)
 
   found = 0;
   header_size = 0;
@@ -442,29 +442,29 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
           break;
         }
       code = bit_read_RC (dat);
-      LOG_TRACE ("\t[%i] Code: %i\n", i, code)
+      LOG_TRACE ("\t[%i] Code: %i [RC]\n", i, code)
       address = bit_read_RL (dat);
-      LOG_TRACE ("\t\tHeader data start: 0x%x\n", address)
+      LOG_TRACE ("\t\tHeader data start: 0x%x [RL]\n", address)
       if (code == 1)
         {
           header_size += bit_read_RL (dat);
-          LOG_TRACE ("\t\tHeader data size: %i\n", header_size)
+          LOG_TRACE ("\t\tHeader data size: %i [RL]\n", header_size)
         }
       else if (code == 2 && found == 0)
         {
           *size = bit_read_RL (dat);
           found = 1;
-          LOG_INFO ("\t\tBMP size: %i\n", *size)
+          LOG_INFO ("\t\tBMP size: %i [RL]\n", *size)
         }
       else if (code == 3)
         {
           osize = bit_read_RL (dat);
-          LOG_INFO ("\t\tWMF size: %i\n", osize)
+          LOG_INFO ("\t\tWMF size: %i [RL]\n", osize)
         }
       else
         {
           osize = bit_read_RL (dat);
-          LOG_TRACE ("\t\tSize of unknown code %i: %i\n", code, osize)
+          LOG_TRACE ("\t\tSize of unknown code %i: %i [RL]\n", code, osize)
         }
     }
   dat->byte += header_size;

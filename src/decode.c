@@ -878,7 +878,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // Check CRC up to now (note: ODA has a bug here)
   crc2 = bit_calc_CRC (0xC0C1, &dat->chain[0], dat->byte); // from 0 to now
   crc = bit_read_RS (dat);
-  LOG_TRACE ("crc: %04X [RSx]\n", crc);
+  LOG_TRACE ("crc: %04X [RSx] from 0-%lu\n", crc, dat->byte - 2);
   if (crc != crc2)
     {
       LOG_ERROR ("Header CRC mismatch %04X <=> %04X", crc, crc2);
@@ -904,7 +904,8 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
       obj = NULL;
       dat->byte = dwg->header.section[SECTION_AUXHEADER_R2000].address;
-      LOG_TRACE ("\n=======> AuxHeader:       %4u\n", (unsigned)dat->byte)
+      LOG_TRACE ("\n"
+                 "=======> AuxHeader:       %4u\n", (unsigned)dat->byte)
       LOG_TRACE ("         AuxHeader (end): %4u\n", (unsigned)end_address)
       if (dat->size < end_address)
         {
@@ -1032,7 +1033,7 @@ classes_section:
 
   size = bit_read_RL (dat);
   lasta = dat->byte + size;
-  LOG_TRACE ("         Length: %lu\n", size);
+  LOG_TRACE ("         Length: %lu [RL]\n", size);
 
   /* Read the classes
    */
@@ -1107,7 +1108,7 @@ classes_section:
 
   dat->byte += 16; //sentinel
   pvz = bit_read_RL (dat); // Unknown bitlong inter class and object
-  LOG_TRACE ("@ %lu RL: 0x%04lx\n", dat->byte - 4, pvz)
+  LOG_TRACE ("unknown: 0x%04lx [RL] @%lu\n", pvz, dat->byte - 4)
   LOG_INFO ("Number of classes read: %u\n", dwg->num_classes)
 
   /*-------------------------------------------------------------------------
@@ -1298,7 +1299,7 @@ classes_section:
       // AC1012, AC1014 or AC1015. This is a char[11], zero padded.
       // with \n at 12.
       bit_read_fixed (dat, _obj->version, 12);
-      LOG_TRACE ("version: %s\n", _obj->version)
+      LOG_TRACE ("version: %s [TFF 12]\n", _obj->version)
       for (i = 0; i < 4; i++)
         FIELD_B (null_b[i], 0);
       // DEBUG_HERE;
@@ -1352,6 +1353,7 @@ classes_section:
 
         // TODO: CRC check
         crc = bit_read_CRC (dat);
+        LOG_TRACE ("crc: %04X\n", crc);
 
         VERSION (R_14)
         {
@@ -1381,7 +1383,7 @@ classes_section:
       dat->byte = dwg->header.section[4].address;
       dat->bit = 0;
       dwg->header_vars.MEASUREMENT = (BITCODE_BS)bit_read_RL (dat);
-      LOG_TRACE ("MEASUREMENT: " FORMAT_BS " (0 English/1 Metric)\n",
+      LOG_TRACE ("MEASUREMENT: " FORMAT_BS " [RL] (0 English/1 Metric)\n",
                  dwg->header_vars.MEASUREMENT)
 
       //LOG_TRACE ("         Size bytes :\t%lu\n", dat->size)
@@ -2199,8 +2201,8 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           dwg->dwg_class[i].number = bit_read_BS (&sec_dat);
           dwg->dwg_class[i].proxyflag = bit_read_BS (&sec_dat);
           LOG_TRACE ("-------------------\n")
-          LOG_TRACE ("Number:           %d\n", dwg->dwg_class[i].number)
-          LOG_TRACE ("Proxyflag:        %x\n", dwg->dwg_class[i].proxyflag)
+          LOG_TRACE ("Number:           %d [BS]\n", dwg->dwg_class[i].number)
+          LOG_TRACE ("Proxyflag:        %x [BS]\n", dwg->dwg_class[i].proxyflag)
           if (dwg->header.version >= R_2007)
             {
               dwg->dwg_class[i].appname = (char *)bit_read_TU (&str_dat);
@@ -2217,13 +2219,13 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               dwg->dwg_class[i].appname = bit_read_TV (&sec_dat);
               dwg->dwg_class[i].cppname = bit_read_TV (&sec_dat);
               dwg->dwg_class[i].dxfname = bit_read_TV (&sec_dat);
-              LOG_TRACE ("Application name: %s\n", dwg->dwg_class[i].appname)
-              LOG_TRACE ("C++ class name:   %s\n", dwg->dwg_class[i].cppname)
-              LOG_TRACE ("DXF record name:  %s\n", dwg->dwg_class[i].dxfname)
+              LOG_TRACE ("Application name: %s [TV]\n", dwg->dwg_class[i].appname)
+              LOG_TRACE ("C++ class name:   %s [TV]\n", dwg->dwg_class[i].cppname)
+              LOG_TRACE ("DXF record name:  %s [TV]\n", dwg->dwg_class[i].dxfname)
             }
           dwg->dwg_class[i].wasazombie = bit_read_B (&sec_dat);
           dwg->dwg_class[i].item_class_id = bit_read_BS (&sec_dat);
-          LOG_TRACE ("Class ID:         0x%x "
+          LOG_TRACE ("Class ID:         0x%x [BS] "
                      "(0x1f3 for object, 0x1f2 for entity)\n",
                      dwg->dwg_class[i].item_class_id)
 
@@ -2281,7 +2283,7 @@ read_2004_section_header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       LOG_TRACE ("\nHeader\n-------------------\n")
       dwg->header_vars.size = bit_read_RL (&sec_dat);
-      LOG_TRACE ("size: " FORMAT_RL "\n", dwg->header_vars.size);
+      LOG_TRACE ("size: " FORMAT_RL " [RL]\n", dwg->header_vars.size);
       PRE (R_2007)
       {
         error
@@ -2356,13 +2358,13 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       uint16_t crc1, crc2;
 
       section_size = bit_read_RS_LE (&hdl_dat);
-      LOG_TRACE ("\nSection size: %u\n", section_size);
+      LOG_TRACE ("\nHandles page size: %u [RS_LE]\n", section_size);
       /* ***********************************************
        * ODA p. 251 "Note that each section is cut off at a maximum length of
        * 2032." BUT in fact files exist with 2036 section size */
       if (section_size > 2040)
         {
-          LOG_ERROR ("Object-map/handles section size greater than 2040!");
+          LOG_ERROR ("Object-map/handles page size greater than 2040!");
           free (hdl_dat.chain);
           free (obj_dat.chain);
           return DWG_ERR_VALUEOUTOFBOUNDS;
@@ -2424,16 +2426,17 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       crc1 = bit_calc_CRC (0xC0C1, &(hdl_dat.chain[startpos]),
                            hdl_dat.byte - startpos);
       crc2 = bit_read_RS_LE (&hdl_dat);
+      LOG_TRACE ("Handles page crc: %04X [RS_LE]\n", crc2);
       if (crc1 == crc2)
         {
-          LOG_INSANE ("Handles section page CRC: %04X from %lu-%lu\n", crc2,
-                      startpos, hdl_dat.byte - 2);
+          LOG_INSANE ("Handles page CRC: %04X from %lu-%lu=%ld\n", crc2,
+                      startpos, hdl_dat.byte - 2, hdl_dat.byte - startpos - 2);
         }
       else
         {
           LOG_WARN (
-              "Handles section page CRC: %04X vs calc. %04X from %lu-%lu\n",
-              crc2, crc1, startpos, hdl_dat.byte - 2);
+              "Handles page CRC: %04X vs calc. %04X from %lu-%lu=%ld\n",
+              crc2, crc1, startpos, hdl_dat.byte - 2, hdl_dat.byte - startpos - 2);
           error |= DWG_ERR_WRONGCRC;
         }
 #endif
@@ -2770,7 +2773,7 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
   BITCODE_RS lens;
 
   data->code = bit_read_RC (dat);
-  LOG_TRACE ("code: %d ", (int)data->code);
+  LOG_TRACE ("code: %d [RC] ", (int)data->code);
 
   switch (data->code)
     {
@@ -2925,7 +2928,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
       long unsigned int end, offset;
       long unsigned int sav_byte;
 
-      LOG_TRACE ("EED[%u] size: " FORMAT_BS "\n", idx, size);
+      LOG_TRACE ("EED[%u] size: " FORMAT_BS " [BS]\n", idx, size);
       if (size > _obj->size)
         {
           LOG_ERROR ("Invalid EED size " FORMAT_BS " > %u", size, _obj->size)
@@ -4752,7 +4755,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
               }
               if (!bit_read_H (dat, &obj->handle))
                 {
-                  LOG_TRACE ("handle: " FORMAT_H " [5]\n",
+                  LOG_TRACE ("handle: " FORMAT_H " [H 5]\n",
                              ARGS_H (obj->handle));
                 }
               restartpos = dat->byte;

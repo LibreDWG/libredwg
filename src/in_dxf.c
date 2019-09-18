@@ -5359,7 +5359,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               entity_alias (name);
               pair = new_object (name, pair->value.s, dat, dwg, 0, i++);
               obj = &dwg->object[idx];
-              if (strEQc (obj->name, "BLOCK"))
+              if (obj->type == DWG_TYPE_BLOCK)
                 {
                   Dwg_Object_Entity *ent = obj->tio.entity;
                   Dwg_Entity_BLOCK *_obj = obj->tio.entity->tio.BLOCK;
@@ -5380,6 +5380,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                     }
                   else
                     blkhdr = NULL;
+                  // TODO R2007+
                   if (strEQc (_obj->name, "*Model_Space"))
                     entmode = ent->entmode = 2;
                   else if (strEQc (_obj->name, "*Paper_Space"))

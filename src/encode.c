@@ -1017,7 +1017,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       if (dwg->thumbnail.size == 0)
         {
           bit_write_RL (dat, 5); // overall size
+          LOG_TRACE ("Thumbnail size: 5 [RL]\n");
           bit_write_RC (dat, 0); // num_pictures
+          LOG_TRACE ("Thumbnail num_pictures: 0 [RC]\n");
         }
       else
         bit_write_TF (dat, (char *)dwg->thumbnail.chain, dwg->thumbnail.size);
@@ -1100,6 +1102,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   LOG_TRACE ("       Classes (end): %4u\n", (unsigned)dat->byte);
 
   bit_write_RL (dat, 0x0DCA); // 0xDCA Unknown bitlong inter class and objects
+  LOG_TRACE ("unknown: %04X [RL]\n", 0x0DCA);
 
   /*------------------------------------------------------------
    * Objects
@@ -1206,6 +1209,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   /* Unknown CRC between objects and object map
    */
   bit_write_RS (dat, 0);
+  LOG_TRACE ("unknown crc?: %04X [RS]\n", 0);
 
   /*------------------------------------------------------------
    * Object-map
@@ -1301,8 +1305,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dwg->header.section[SECTION_2NDHEADER_R13].address = _obj->address;
       dwg->header.section[SECTION_2NDHEADER_R13].size = _obj->size;
       LOG_INFO ("\n=======> Second Header: %4u\n", (unsigned)dat->byte);
-      bit_write_sentinel (dat,
-                          dwg_sentinel (DWG_SENTINEL_SECOND_HEADER_BEGIN));
+      bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_SECOND_HEADER_BEGIN));
 
       pvzadr = dat->byte; // Keep the first address of the section to write its
                           // size later
@@ -1346,7 +1349,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       // AC1012, AC1014 or AC1015. This is a char[11], zero padded.
       // with \n at 12.
       bit_write_TF (dat, (char *)_obj->version, 12);
-      LOG_TRACE ("version: %s\n", _obj->version)
+      LOG_TRACE ("version: %s [TFF 12]\n", _obj->version)
 
       for (i = 0; i < 4; i++)
         FIELD_B (null_b[i], 0);
@@ -1410,6 +1413,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dwg->header.section[SECTION_MEASUREMENT_R13].size = 4;
       // 0 - English, 1- Metric
       bit_write_RL (dat, (BITCODE_RL)dwg->header_vars.MEASUREMENT);
+      LOG_TRACE ("HEADER.MEASUREMENT: %d [RL]\n", dwg->header_vars.MEASUREMENT);
     }
 
   /* End of the file
@@ -1918,7 +1922,7 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
               SINCE (R_2000)
               {
                 bit_write_RL (dat, obj->bitsize);
-                LOG_INFO ("bitsize: " FORMAT_RL " (@%lu.%u)\n", obj->bitsize,
+                LOG_INFO ("bitsize: " FORMAT_RL " [RL] (@%lu.%u)\n", obj->bitsize,
                           dat->byte - 4, dat->bit);
               }
               bit_write_H (dat, &obj->handle);
@@ -1978,6 +1982,8 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
    */
 
   /* Now 1 padding bits until next byte, and then a RS CRC */
+  if (dat->bit)
+    LOG_TRACE ("padding: %d [*B]\n", dat->bit)
   while (dat->bit)
     bit_write_B (dat, 1);
   end_address = obj->address + obj->size;
@@ -2092,10 +2098,10 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict ent)
       if (size && eed->data)
         {
           int code = (int)eed->data->code;
-          LOG_TRACE ("EED[%u] size: %d, code: %d\n", i, (int)size, code);
+          LOG_TRACE ("EED[%u] size: %d [BS], code: %d\n", i, (int)size, code);
           bit_write_BS (dat, size);
           bit_write_H (dat, &eed->handle);
-          LOG_TRACE ("EED[%u] handle: " FORMAT_H "\n", i,
+          LOG_TRACE ("EED[%u] handle: " FORMAT_H " [H]\n", i,
                      ARGS_H (eed->handle));
           if (eed->raw)
             bit_write_TF (dat, eed->raw, size);
@@ -2104,6 +2110,7 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict ent)
         }
     }
   bit_write_BS (dat, 0);
+  LOG_TRACE ("EED[%u] size: 0 [BS]\n", i);
   return 0;
 }
 
@@ -2287,7 +2294,7 @@ dwg_encode_object (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   {
     obj->bitsize_pos = bit_position (dat);
     bit_write_RL (dat, obj->bitsize);
-    LOG_INFO ("bitsize: " FORMAT_RL " (@%lu.%u)\n", obj->bitsize,
+    LOG_INFO ("bitsize: " FORMAT_RL " [RL] (@%lu.%u)\n", obj->bitsize,
               dat->byte - 4, dat->bit);
   }
   SINCE (R_2010)
@@ -2307,7 +2314,7 @@ dwg_encode_object (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   {
     obj->bitsize_pos = bit_position (dat);
     bit_write_RL (dat, obj->bitsize);
-    LOG_INFO ("bitsize: " FORMAT_RL " (@%lu.%u)\n", obj->bitsize,
+    LOG_INFO ("bitsize: " FORMAT_RL " [RL] (@%lu.%u)\n", obj->bitsize,
               dat->byte - 4, dat->bit);
   }
 
