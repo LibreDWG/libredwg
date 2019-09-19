@@ -4275,7 +4275,7 @@ new_object (char *restrict name, char *restrict dxfname,
               BITCODE_BL num = is_entity ? obj->tio.entity->num_reactors
                                          : obj->tio.object->num_reactors;
               BITCODE_H reactor
-                  = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+                  = dwg_add_handleref (dwg, 4, pair->value.u, NULL); // always abs
               LOG_TRACE ("%s.reactors[%d] = " FORMAT_REF " [330 H]\n", name,
                          num, ARGS_REF (reactor));
               if (is_entity)

@@ -1349,7 +1349,7 @@ dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, unsigned long value,
     }
   else
     hdl->size = 0;
-  if (code == 4 && obj && abs (offset) < 256)
+  if (code == 4 && obj)
     {
       // change code to 6.0.0 or 8.0.0
       if (offset == 1)
@@ -1369,12 +1369,37 @@ dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, unsigned long value,
           hdl->code = 10;
           hdl->value = offset;
           hdl->size = 1;
+          if (offset > 0xff)
+            {
+              if (offset > 0xffff)
+                {
+                  if (offset > 0xffffff)
+                    hdl->size = 4;
+                  else
+                    hdl->size = 3;
+                }
+              else
+                hdl->size = 2;
+            }
         }
       else if (offset < 0)
         {
           hdl->code = 12;
           hdl->value = -offset;
+          offset = -offset;
           hdl->size = 1;
+          if (offset > 0xff)
+            {
+              if (offset > 0xffff)
+                {
+                  if (offset > 0xffffff)
+                    hdl->size = 4;
+                  else
+                    hdl->size = 3;
+                }
+              else
+                hdl->size = 2;
+            }
         }
     }
   return 0;
