@@ -779,11 +779,6 @@
           FIELD_2RD (name[vcount], dxf);                                      \
         }                                                                     \
     }                                                                         \
-  else if (dat->version >= R_2007 && obj->supertype == DWG_SUPERTYPE_ENTITY)  \
-    {                                                                         \
-      COMMON_ENTITY_HANDLE_DATA;                                              \
-      return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
-    }                                                                         \
   else                                                                        \
     return DWG_ERR_VALUEOUTOFBOUNDS;
 
@@ -803,11 +798,6 @@
                      _obj->name[vcount].y, dxf)                               \
         }                                                                     \
     }                                                                         \
-  else if (dat->version >= R_2007 && obj->supertype == DWG_SUPERTYPE_ENTITY)  \
-    {                                                                         \
-      COMMON_ENTITY_HANDLE_DATA;                                              \
-      return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
-    }                                                                         \
   else                                                                        \
     return DWG_ERR_VALUEOUTOFBOUNDS;
 
@@ -821,11 +811,6 @@
         {                                                                     \
           FIELD_3DPOINT (name[vcount], dxf);                                  \
         }                                                                     \
-    }                                                                         \
-  else if (dat->version >= R_2007 && obj->supertype == DWG_SUPERTYPE_ENTITY)  \
-    {                                                                         \
-      COMMON_ENTITY_HANDLE_DATA;                                              \
-      return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }                                                                         \
   else                                                                        \
     return DWG_ERR_VALUEOUTOFBOUNDS;
@@ -1032,7 +1017,10 @@
   SINCE (R_13)                                                                \
   {                                                                           \
     START_HANDLE_STREAM;                                                      \
-    error |= dwg_decode_common_entity_handle_data (dat, hdl_dat, obj);        \
+    PRE (R_2007)                                                              \
+    {                                                                         \
+      error |= dwg_decode_common_entity_handle_data (dat, hdl_dat, obj);      \
+    }                                                                         \
   }
 
 /** Add the empty entity or object with its three structs to the DWG.

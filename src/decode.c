@@ -105,6 +105,9 @@ static int dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat,
 static int dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat,
                               Bit_Chain *str_dat,
                               Dwg_Object_Entity *restrict ent);
+static int dwg_decode_common_entity_handle_data (Bit_Chain *dat,
+                                                 Bit_Chain *hdl_dat,
+                                                 Dwg_Object *restrict obj);
 
 /*----------------------------------------------------------------------------
  * Public variables
@@ -3302,9 +3305,13 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   if (error & (DWG_ERR_INVALIDEED | DWG_ERR_VALUEOUTOFBOUNDS))
     return error;
 
-    // clang-format off
+  // clang-format off
   #include "common_entity_data.spec"
   // clang-format on
+
+  SINCE (R_2007) {
+    dwg_decode_common_entity_handle_data (dat, hdl_dat, obj);
+  }
 
   // elsewhere: object data, handles, padding bits, crc
   obj->common_size = bit_position (dat) - objectpos;

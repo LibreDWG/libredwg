@@ -5355,26 +5355,25 @@ DWG_ENTITY(MULTILEADER)
             {
               SUB_FIELD_BS (lline, type, 170);
               SUB_FIELD_CMC (lline, color, 92,0);
-              //SUB_FIELD_HANDLE (lline, ltype, 5, 340);
+              SUB_FIELD_HANDLE (lline, ltype, 5, 340);
               SUB_FIELD_BLd (lline, linewt, 171);
               SUB_FIELD_BD (lline, arrow_size, 40);
-              //SUB_FIELD_HANDLE (lline, arrow_handle, 5, 341);
+              SUB_FIELD_HANDLE (lline, arrow_handle, 5, 341);
               SUB_FIELD_BL (lline, flags, 93);
             }
             #undef lline
       END_REPEAT_BLOCK
       SET_PARENT(lnode.lines, &_obj->lnode);
-#ifndef IS_FREE
       END_REPEAT(lnode.lines)
-#endif
       SINCE (R_2010)
         SUB_FIELD_BS (lnode, attach_dir, 271);
       DXF_OR_PRINT { VALUE_TFF ("}", 305); }
   END_REPEAT_BLOCK
   SET_PARENT_OBJ(ctx.leaders)
-#ifndef IS_FREE
-  END_REPEAT(ctx.leaders)
-#endif
+  // free ctx.leaders only r2007+, when there's no 2nd loop below
+  if (!IF_IS_FREE || dat->version >= R_2007) {
+    END_REPEAT(ctx.leaders)
+  }
   DXF_OR_PRINT { VALUE_TFF ("}", 303); }
 
   FIELD_BD (ctx.scale, 40);
@@ -5392,7 +5391,8 @@ DWG_ENTITY(MULTILEADER)
     {
       FIELD_T (ctx.content.txt.default_text, 304);
       FIELD_3BD (ctx.content.txt.normal, 11);
-      //FIELD_HANDLE (ctx.content.txt.style, 5, 340); // deferred
+      SINCE (R_2007)
+        FIELD_HANDLE (ctx.content.txt.style, 5, 340);
       FIELD_3BD (ctx.content.txt.location, 12);
       FIELD_3BD (ctx.content.txt.direction, 13);
       FIELD_BD (ctx.content.txt.rotation, 42);
@@ -5424,7 +5424,8 @@ DWG_ENTITY(MULTILEADER)
       FIELD_B (ctx.has_content_blk, 296);
       if (FIELD_VALUE (ctx.has_content_blk))
         {
-          //FIELD_HANDLE (ctx.content.blk.block_table, 4, 341);
+          SINCE (R_2007)
+            FIELD_HANDLE (ctx.content.blk.block_table, 4, 341);
           FIELD_3BD (ctx.content.blk.normal, 14);
           FIELD_3BD (ctx.content.blk.location, 15);
           FIELD_3BD (ctx.content.blk.scale, 16);
@@ -5475,7 +5476,8 @@ DWG_ENTITY(MULTILEADER)
       REPEAT(num_arrowheads, arrowheads, Dwg_LEADER_ArrowHead)
       REPEAT_BLOCK
           SUB_FIELD_BL (arrowheads[rcount1],is_default, 94);
-          SUB_FIELD_HANDLE (arrowheads[rcount1],arrowhead, 5, 345);
+          SINCE (R_2007)
+            SUB_FIELD_HANDLE (arrowheads[rcount1],arrowhead, 5, 345);
       END_REPEAT_BLOCK
       SET_PARENT_OBJ(arrowheads)
       END_REPEAT(arrowheads);
@@ -5484,7 +5486,8 @@ DWG_ENTITY(MULTILEADER)
       VALUEOUTOFBOUNDS (num_blocklabels, 5000)
       REPEAT(num_blocklabels, blocklabels, Dwg_LEADER_BlockLabel)
       REPEAT_BLOCK
-          SUB_FIELD_HANDLE (blocklabels[rcount1],attdef, 4, 330);
+          SINCE (R_2007)
+            SUB_FIELD_HANDLE (blocklabels[rcount1],attdef, 4, 330);
           SUB_FIELD_T (blocklabels[rcount1],label_text, 302);
           SUB_FIELD_BS (blocklabels[rcount1],ui_index, 177);
           SUB_FIELD_BD (blocklabels[rcount1],width, 44);
@@ -5503,28 +5506,43 @@ DWG_ENTITY(MULTILEADER)
       FIELD_BS (attach_top, 273);
       FIELD_BS (attach_bottom, 272);
     }
-  SINCE (R_2013) {
+  SINCE (R_2013)
     FIELD_B (text_extended, 295);
-  }
 
   COMMON_ENTITY_HANDLE_DATA;
   // TODO: seperate hdl_dat earlier, and use it above.
-  _REPEAT_N(_obj->ctx.num_leaders, ctx.leaders, Dwg_LEADER_Node, 1)
-  REPEAT_BLOCK
-      #define lnode ctx.leaders[rcount1]
-      _REPEAT_N(_obj->lnode.num_lines, lnode.lines, Dwg_LEADER_Line, 2)
+  // 2nd loop, use the variant without calloc
+  VERSIONS (R_13, R_2004) {
+    _REPEAT_N(_obj->ctx.num_leaders, ctx.leaders, Dwg_LEADER_Node, 1)
+    REPEAT_BLOCK
+        #define lnode ctx.leaders[rcount1]
+        _REPEAT_N(_obj->lnode.num_lines, lnode.lines, Dwg_LEADER_Line, 2)
+        REPEAT_BLOCK
+            #define lline lnode.lines[rcount2]
+            SUB_FIELD_HANDLE (lline,ltype, 5, 340);
+            SUB_FIELD_HANDLE (lline,arrow_handle, 5, 341);
+        END_REPEAT_BLOCK
+        END_REPEAT(lnode.lines);
+    END_REPEAT_BLOCK
+    END_REPEAT(ctx.leaders)
+    if (FIELD_VALUE (ctx.has_content_txt)) {
+      FIELD_HANDLE (ctx.content.txt.style, 5, 340);
+    } else if (FIELD_VALUE (ctx.has_content_blk)) {
+      FIELD_HANDLE (ctx.content.blk.block_table, 4, 341);
+    }
+    VERSIONS (R_2000, R_2004)
+    {
+      _REPEAT_N(_obj->num_arrowheads, arrowheads, Dwg_LEADER_ArrowHead, 1)
       REPEAT_BLOCK
-          #define lline lnode.lines[rcount2]
-          SUB_FIELD_HANDLE (lline,ltype, 5, 340);
-          SUB_FIELD_HANDLE (lline,arrow_handle, 5, 341);
+          SUB_FIELD_HANDLE (arrowheads[rcount1],arrowhead, 5, 345);
       END_REPEAT_BLOCK
-      END_REPEAT(lnode.lines);
-  END_REPEAT_BLOCK
-  END_REPEAT(ctx.leaders)
-  if (FIELD_VALUE (ctx.has_content_txt)) {
-    FIELD_HANDLE (ctx.content.txt.style, 5, 340);
-  } else if (FIELD_VALUE (ctx.has_content_blk)) {
-    FIELD_HANDLE (ctx.content.blk.block_table, 4, 341);
+      END_REPEAT(arrowheads);
+      _REPEAT_N(_obj->num_blocklabels, blocklabels, Dwg_LEADER_BlockLabel, 1)
+      REPEAT_BLOCK
+          SUB_FIELD_HANDLE (blocklabels[rcount1],attdef, 4, 330);
+      END_REPEAT_BLOCK
+      END_REPEAT(blocklabels)
+    }
   }
   FIELD_HANDLE (mleaderstyle, 5, 340);
   FIELD_HANDLE (ltype, 5, 341);

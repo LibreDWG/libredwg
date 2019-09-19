@@ -148,7 +148,7 @@
           //ent->color.book_name = bit_read_TV(dat);
           //LOG_TRACE("color.book_name: %s [ENC.TV 430]\n", ent->color.book_name);
         }
-#ifndef IS_DECODER
+#if !defined(IS_DECODER) && !defined(IS_FREE)
       if (!(flags & 0xf0))
         {
           LOG_TRACE("color.index: %u [ENC 62]\n", (unsigned)ent->color.index);

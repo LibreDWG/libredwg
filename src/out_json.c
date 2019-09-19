@@ -222,15 +222,17 @@ static void _prefix (Bit_Chain *dat);
       }                                                                       \
   }
 #define SUB_FIELD_HANDLE(o, nam, handle_code, dxf)                            \
-  if (_obj->o.nam)                                                            \
-    {                                                                         \
-      PREFIX fprintf (dat->fh, "\"" #nam "\": " FORMAT_H ",\n",               \
-                      ARGS_H (_obj->o.nam->handleref));                       \
-    }                                                                         \
-  else                                                                        \
-    {                                                                         \
-      PREFIX fprintf (dat->fh, "\"" #nam "\": [0, 0],\n");                    \
-    }
+  {                                                                           \
+    if (_obj->o.nam)                                                          \
+      {                                                                       \
+        PREFIX fprintf (dat->fh, "\"" #nam "\": " FORMAT_H ",\n",             \
+                        ARGS_H (_obj->o.nam->handleref));                     \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        PREFIX fprintf (dat->fh, "\"" #nam "\": [0, 0],\n");                  \
+      }                                                                       \
+  }
 #define FIELD_DATAHANDLE(nam, code, dxf) FIELD_HANDLE (nam, code, dxf)
 #define FIELD_HANDLE_N(nam, vcount, handle_code, dxf)                         \
   if (_obj->nam)                                                              \

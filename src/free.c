@@ -242,8 +242,7 @@ static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
 
 #define END_REPEAT(field) FIELD_TV (field, 0)
 
-#define COMMON_ENTITY_HANDLE_DATA                                             \
-  SINCE (R_13) { dwg_free_common_entity_handle_data (obj); }
+#define COMMON_ENTITY_HANDLE_DATA
 #define SECTION_STRING_STREAM
 #define START_STRING_STREAM
 #define END_STRING_STREAM
@@ -347,35 +346,14 @@ static int dwg_free_UNKNOWN_OBJ (Bit_Chain *restrict dat,
   }
 
 static void
-dwg_free_common_entity_handle_data (Dwg_Object *obj)
-{
-
-  Dwg_Data *dwg = obj->parent;
-  Bit_Chain *dat = &pdat;
-  Dwg_Object_Entity *_obj;
-  BITCODE_BL vcount;
-  Dwg_Object_Entity *ent;
-  int error = 0;
-
-  ent = obj->tio.entity;
-  if (!ent)
-    return;
-  _obj = ent;
-
-  // clang-format off
-  #include "common_entity_handle_data.spec"
-  // clang-format on
-}
-
-static void
 dwg_free_common_entity_data (Dwg_Object *obj)
 {
 
   Dwg_Data *dwg = obj->parent;
   Bit_Chain *dat = &pdat;
+  Bit_Chain *hdl_dat = &pdat;
   Dwg_Object_Entity *_obj;
   Dwg_Object_Entity *ent;
-  Bit_Chain *hdl_dat = NULL;
   BITCODE_BL vcount;
   int error = 0;
 
@@ -386,6 +364,9 @@ dwg_free_common_entity_data (Dwg_Object *obj)
 
   // clang-format off
   #include "common_entity_data.spec"
+  SINCE (R_13) {
+  #include "common_entity_handle_data.spec"
+  }
   // clang-format on
 }
 

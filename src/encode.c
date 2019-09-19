@@ -2140,7 +2140,7 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict ent)
 /* The first common part of every entity.
 
    The last common part is common_entity_handle_data.spec
-   called by COMMON_ENTITY_HANDLE_DATA in dwg.spec
+   which is read from the hdl stream.
    See DWG_SUPERTYPE_ENTITY in dwg_encode().
  */
 static int
