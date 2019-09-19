@@ -5225,20 +5225,21 @@ DWG_OBJECT(XRECORD)
             break;
         }
       FIELD_VALUE(num_objid_handles) = vcount;
-      FIELD_TRACE(num_objid_handles, BL);
     }
   VALUEOUTOFBOUNDS (num_objid_handles, 10000)
-  #ifndef IS_DECODER
-    FIELD_TRACE(num_objid_handles, BL);
-    HANDLE_VECTOR (objid_handles, num_objid_handles, 4, 0);
-  #endif
-  #ifdef IS_DXF
-    if (FIELD_VALUE(objid_handles)) {
-      REPEAT(num_objid_handles, objid_handles, T)
-          VALUE_H (_obj->objid_handles[rcount1], 340);
-      END_REPEAT(objid_handles)
-    }
-  #endif
+#ifndef IS_FREE
+  FIELD_TRACE(num_objid_handles, BL);
+#endif
+#ifndef IS_DECODER
+  HANDLE_VECTOR (objid_handles, num_objid_handles, 4, 0);
+#endif
+#ifdef IS_DXF
+  if (FIELD_VALUE(objid_handles)) {
+    REPEAT(num_objid_handles, objid_handles, T)
+        VALUE_H (_obj->objid_handles[rcount1], 340);
+    END_REPEAT(objid_handles)
+  }
+#endif
 
 DWG_OBJECT_END
 
