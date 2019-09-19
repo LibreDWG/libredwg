@@ -1318,6 +1318,25 @@ dxf_cvt_lweight (const BITCODE_RC value)
   return lweights[value % 32];
 }
 
+static void
+set_handle_size (Dwg_Handle *restrict hdl)
+{
+  if (hdl->value)
+    {
+      int i;
+      unsigned char *val;
+      memset (&val, 0, sizeof(val));
+      val = (unsigned char *)&hdl->value;
+      // FIXME: little endian only
+      for (i = sizeof(val) - 1; i >= 0; i--)
+        if (val[i])
+          break;
+      hdl->size = i + 1;
+    }
+  else
+     hdl->size = 0;
+}
+
 /** For encode:
  * May need obj to shorten the code to a relative offset, but not in
  * header_vars. There obj is NULL.
@@ -1327,8 +1346,6 @@ dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, unsigned long value,
                 Dwg_Object *restrict obj)
 {
   int offset = obj ? (value - (int)obj->handle.value) : 0;
-  int i;
-  unsigned char *val;
   hdl->code = code;
   hdl->value = value;
   if (obj && !offset && value) // only if same obj
@@ -1337,18 +1354,7 @@ dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, unsigned long value,
       hash_set (obj->parent->object_map, value, (uint32_t)obj->index);
     }
 
-  // FIXME: little endian only
-  if (value)
-    {
-      memset (&val, 0, sizeof(val));
-      val = (unsigned char *)&hdl->value;
-      for (i = sizeof(val) - 1; i >= 0; i--)
-        if (val[i])
-          break;
-      hdl->size = i + 1;
-    }
-  else
-    hdl->size = 0;
+  set_handle_size (hdl);
   if (code == 4 && obj)
     {
       // change code to 6.0.0 or 8.0.0
@@ -1368,38 +1374,13 @@ dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, unsigned long value,
         {
           hdl->code = 10;
           hdl->value = offset;
-          hdl->size = 1;
-          if (offset > 0xff)
-            {
-              if (offset > 0xffff)
-                {
-                  if (offset > 0xffffff)
-                    hdl->size = 4;
-                  else
-                    hdl->size = 3;
-                }
-              else
-                hdl->size = 2;
-            }
+          set_handle_size (hdl);
         }
       else if (offset < 0)
         {
           hdl->code = 12;
           hdl->value = -offset;
-          offset = -offset;
-          hdl->size = 1;
-          if (offset > 0xff)
-            {
-              if (offset > 0xffff)
-                {
-                  if (offset > 0xffffff)
-                    hdl->size = 4;
-                  else
-                    hdl->size = 3;
-                }
-              else
-                hdl->size = 2;
-            }
+          set_handle_size (hdl);
         }
     }
   return 0;
