@@ -44,7 +44,11 @@
     _obj->nam = bit_read_##type (dat);                                        \
     FIELD_TRACE (nam, type);                                                  \
   }
-#define SUB_FIELD(o, nam, type, dxf) FIELD (o.nam, type)
+#define SUB_FIELD(o, nam, type, dxf)                                          \
+  {                                                                           \
+    _obj->o.nam = bit_read_##type (dat);                                      \
+    FIELD_G_TRACE (o.nam, type, dxf);                                         \
+  }
 
 #define FIELD_CAST(nam, type, cast, dxf)                                      \
   {                                                                           \
@@ -219,7 +223,7 @@
 #define FIELD_HANDLE(nam, handle_code, dxf)                                   \
   VALUE_HANDLE (_obj->nam, nam, handle_code, dxf)
 #define SUB_FIELD_HANDLE(o, nam, handle_code, dxf)                            \
-  VALUE_HANDLE (_obj->o.nam, nam, handle_code, dxf)
+  VALUE_HANDLE (_obj->o.nam, o.nam, handle_code, dxf)
 
 #define VALUE_HANDLE_N(handleptr, nam, vcount, handle_code, dxf)              \
   {                                                                           \
@@ -303,7 +307,7 @@
 #define SUB_FIELD_BSd(o, nam, dxf)                                            \
   {                                                                           \
     _obj->o.nam = (BITCODE_BSd)bit_read_BS (dat);                             \
-    LOG_TRACE (#nam ": " FORMAT_BSd " [BSd %d]\n", _obj->o.nam, dxf);         \
+    LOG_TRACE (#o "." #nam ": " FORMAT_BSd " [BSd %d]\n", _obj->o.nam, dxf);  \
   }
 #define FIELD_BLd(nam, dxf)                                                   \
   {                                                                           \
@@ -523,17 +527,17 @@
 #define SUB_FIELD_CMC(o, color, dxf1, dxf2)                                   \
   {                                                                           \
     bit_read_CMC (dat, &_obj->o.color);                                       \
-    LOG_TRACE (#color ".index: %d [CMC.BS %d]\n", _obj->o.color.index, dxf1); \
+    LOG_TRACE (#o "." #color ".index: %d [CMC.BS %d]\n", _obj->o.color.index, dxf1); \
     if (dat->version >= R_2004)                                               \
       {                                                                       \
-        LOG_TRACE (#color ".rgb: 0x%06x [CMC.BL %d]\n",                       \
+        LOG_TRACE (#o "." #color ".rgb: 0x%06x [CMC.BL %d]\n",                       \
                    (unsigned)_obj->o.color.rgb, dxf2);                        \
-        LOG_TRACE (#color ".flag: 0x%x [CMC.RC]\n",                           \
+        LOG_TRACE (#o "." #color ".flag: 0x%x [CMC.RC]\n",                           \
                    (unsigned)_obj->o.color.flag);                             \
         if (_obj->o.color.flag & 1)                                           \
-          LOG_TRACE (#color ".name: %s [CMC.TV]\n", _obj->o.color.name);      \
+          LOG_TRACE (#o "." #color ".name: %s [CMC.TV]\n", _obj->o.color.name);      \
         if (_obj->o.color.flag & 2)                                           \
-          LOG_TRACE (#color ".bookname: %s [CMC.TV]\n",                       \
+          LOG_TRACE (#o "." #color ".bookname: %s [CMC.TV]\n",                       \
                      _obj->o.color.book_name);                                \
       }                                                                       \
   }
@@ -559,19 +563,19 @@
 #define SUB_FIELD_ENC(o, color, dxf1, dxf2)                                   \
   {                                                                           \
     bit_read_ENC (dat, hdl_dat, str_dat, &_obj->o.color);                     \
-    LOG_TRACE (#color ".index: %d [ENC.BS %d]\n", _obj->o.color.index, dxf1); \
+    LOG_TRACE (#o "." #color ".index: %d [ENC.BS %d]\n", _obj->o.color.index, dxf1); \
     if (dat->version >= R_2004)                                               \
       {                                                                       \
         if (_obj->o.color.flag)                                               \
-          LOG_TRACE (#color ".flag: 0x%x\n", (unsigned)_obj->o.color.flag);   \
+          LOG_TRACE (#o "." #color ".flag: 0x%x\n", (unsigned)_obj->o.color.flag);   \
         if (_obj->o.color.flag & 0x20)                                        \
-          LOG_TRACE (#color ".alpha: %d [ENC.BL %d]\n",                       \
+          LOG_TRACE (#o "." #color ".alpha: %d [ENC.BL %d]\n",                       \
                      (unsigned)_obj->o.color.alpha, dxf2 + 20);               \
         if (_obj->o.color.flag & 0x80)                                        \
-          LOG_TRACE (#color ".rgb: 0x%06x [ENC.BL %d]\n",                     \
+          LOG_TRACE (#o "." #color ".rgb: 0x%06x [ENC.BL %d]\n",                     \
                      (unsigned)_obj->o.color.rgb, dxf2);                      \
         if (_obj->o.color.flag & 0x40 && _obj->o.color.handle)                \
-          LOG_TRACE (#color ".handle: %lX [ENC.H %d]\n",                      \
+          LOG_TRACE (#o "." #color ".handle: %lX [ENC.H %d]\n",                      \
                      _obj->o.color.handle->handleref.value, dxf2 + 10);       \
       }                                                                       \
   }
@@ -1013,9 +1017,6 @@
   if (_obj->times > 0)                                                        \
     _obj->name = (type *)calloc (_obj->times, sizeof (type));                 \
   for (rcount##idx = 0; rcount##idx < (BITCODE_BL)_obj->times; rcount##idx++)
-#define _REPEAT_N(times, name, type, idx)                                     \
-  if (_obj->name)                                                             \
-    for (rcount##idx = 0; rcount##idx < (BITCODE_BL)times; rcount##idx++)
 
 #define REPEAT(times, name, type) _REPEAT (times, name, type, 1)
 #define REPEAT2(times, name, type) _REPEAT (times, name, type, 2)

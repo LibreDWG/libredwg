@@ -366,9 +366,6 @@
         for (rcount##idx = 0; rcount##idx < (BITCODE_BL)_obj->times;          \
              rcount##idx++)
 #  endif
-#  define _REPEAT_N(times, name, type, idx)                                   \
-    if (_obj->name)                                                           \
-      for (rcount##idx = 0; rcount##idx < (BITCODE_BL)times; rcount##idx++)
 #  define REPEAT(times, name, type) _REPEAT (times, name, type, 1)
 #  define REPEAT2(times, name, type) _REPEAT (times, name, type, 2)
 #  define REPEAT3(times, name, type) _REPEAT (times, name, type, 3)
@@ -377,5 +374,9 @@
 #  define REPEAT2_C(times, name, type) _REPEAT_C (times, name, type, 2)
 #  define REPEAT3_C(times, name, type) _REPEAT_C (times, name, type, 3)
 #  define REPEAT4_C(times, name, type) _REPEAT_C (times, name, type, 4)
-
+#endif
+#ifndef _REPEAT_N
+#  define _REPEAT_N(times, name, type, idx)                                   \
+    if (_obj->name)                                                           \
+      for (rcount##idx = 0; rcount##idx < (BITCODE_BL)times; rcount##idx++)
 #endif

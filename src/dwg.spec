@@ -5364,13 +5364,17 @@ DWG_ENTITY(MULTILEADER)
             #undef lline
       END_REPEAT_BLOCK
       SET_PARENT(lnode.lines, &_obj->lnode);
+#ifndef IS_FREE
       END_REPEAT(lnode.lines)
+#endif
       SINCE (R_2010)
         SUB_FIELD_BS (lnode, attach_dir, 271);
       DXF_OR_PRINT { VALUE_TFF ("}", 305); }
   END_REPEAT_BLOCK
   SET_PARENT_OBJ(ctx.leaders)
+#ifndef IS_FREE
   END_REPEAT(ctx.leaders)
+#endif
   DXF_OR_PRINT { VALUE_TFF ("}", 303); }
 
   FIELD_BD (ctx.scale, 40);
@@ -5514,10 +5518,8 @@ DWG_ENTITY(MULTILEADER)
           SUB_FIELD_HANDLE (lline,ltype, 5, 340);
           SUB_FIELD_HANDLE (lline,arrow_handle, 5, 341);
       END_REPEAT_BLOCK
-      SET_PARENT(lnode.lines, _obj->ctx.leaders)
       END_REPEAT(lnode.lines);
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ(ctx.leaders)
   END_REPEAT(ctx.leaders)
   if (FIELD_VALUE (ctx.has_content_txt)) {
     FIELD_HANDLE (ctx.content.txt.style, 5, 340);
