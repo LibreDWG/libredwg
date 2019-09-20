@@ -208,19 +208,26 @@
       ref = dwg_decode_handleref_with_code (hdl_dat, obj, dwg, code);         \
     else                                                                      \
       ref = dwg_decode_handleref (hdl_dat, obj, dwg);                         \
-    if (ref)                                                                  \
+    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                   \
       {                                                                       \
-        LOG_TRACE (#nam ": " FORMAT_REF " [H %d]", ARGS_REF (ref), dxf)       \
+        if (ref)                                                              \
+          {                                                                   \
+            LOG_TRACE (#nam ": " FORMAT_REF " [H %d]", ARGS_REF (ref), dxf);  \
+            if (dwg_ref_object (dwg, ref))                                    \
+              {                                                               \
+                LOG_TRACE (" => %s %s", dwg_ref_objname (dwg, ref),           \
+                           dwg_ref_tblname (dwg, ref));                       \
+              }                                                               \
+          }                                                                   \
+        else                                                                  \
+          {                                                                   \
+            LOG_TRACE (#nam ": NULL %d [H %d]", code, dxf);                   \
+          }                                                                   \
+        LOG_INSANE (" @%lu.%u", pos / 8, (unsigned)(pos % 8));                \
+        LOG_TRACE ("\n");                                                     \
       }                                                                       \
-    else                                                                      \
-      {                                                                       \
-        LOG_TRACE (#nam ": NULL %d [H %d]", code, dxf);                       \
-      }                                                                       \
-    LOG_INSANE (" @%lu.%u", pos / 8, (unsigned)(pos % 8));                    \
-    LOG_TRACE ("\n");                                                         \
   }
-#define FIELD_HANDLE(nam, code, dxf)                                          \
-  VALUE_HANDLE (_obj->nam, nam, code, dxf)
+#define FIELD_HANDLE(nam, code, dxf) VALUE_HANDLE (_obj->nam, nam, code, dxf)
 #define SUB_FIELD_HANDLE(o, nam, code, dxf)                                   \
   VALUE_HANDLE (_obj->o.nam, o.nam, code, dxf)
 
@@ -231,19 +238,25 @@
       ref = dwg_decode_handleref_with_code (hdl_dat, obj, dwg, code);         \
     else                                                                      \
       ref = dwg_decode_handleref (hdl_dat, obj, dwg);                         \
-    if (ref)                                                                  \
+    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                   \
       {                                                                       \
-        LOG_TRACE (#nam "[%d]: " FORMAT_REF " [H* %d]", (int)vcount,          \
-                   ARGS_REF (ref), dxf)                                       \
-        /*LOG_TRACE (" %s %s", ref_objname (ref), ref_name (ref))*/           \
+        if (ref)                                                              \
+          {                                                                   \
+            LOG_TRACE (#nam "[%d]: " FORMAT_REF " [H* %d]", (int)vcount,      \
+                       ARGS_REF (ref), dxf);                                  \
+            if (dwg_ref_object (dwg, ref))                                    \
+              {                                                               \
+                LOG_TRACE (" => %s %s", dwg_ref_objname (dwg, ref),           \
+                           dwg_ref_tblname (dwg, ref));                       \
+              }                                                               \
+          }                                                                   \
+        else                                                                  \
+          {                                                                   \
+            LOG_TRACE (#nam "[%d]: NULL %d [H* %d]", (int)vcount, code, dxf); \
+          }                                                                   \
+        LOG_INSANE (" @%lu.%u", pos / 8, (unsigned)(pos % 8));                \
+        LOG_TRACE ("\n");                                                     \
       }                                                                       \
-    else                                                                      \
-      {                                                                       \
-        LOG_TRACE (#nam "[%d]: NULL %d [H* %d]", (int)vcount, code,           \
-                   dxf);                                                      \
-      }                                                                       \
-    LOG_INSANE (" @%lu.%u", pos / 8, (unsigned)(pos % 8));                    \
-    LOG_TRACE ("\n");                                                         \
   }
 #define FIELD_HANDLE_N(nam, vcount, code, dxf)                                \
   VALUE_HANDLE_N (_obj->nam, nam, vcount, code, dxf)
@@ -253,9 +266,8 @@
     _obj->nam = dwg_decode_handleref (dat, obj, dwg);                         \
     if (_obj->nam)                                                            \
       {                                                                       \
-        LOG_TRACE (#nam ": " FORMAT_H " [H %d]",                              \
+        LOG_TRACE (#nam ": " FORMAT_H " [H %d]\n",                            \
                    ARGS_H (_obj->nam->handleref), dxf);                       \
-        /*LOG_TRACE (" %s %s\n", ref_objname (ref), ref_name (ref))*/         \
       }                                                                       \
   }
 

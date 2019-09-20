@@ -42,6 +42,7 @@
 #include "decode.h"
 #include "print.h"
 #include "free.h"
+#include "dynapi.h"
 
 /* The logging level for the read (decode) path.  */
 static unsigned int loglevel;
@@ -109,6 +110,11 @@ static int dwg_decode_common_entity_handle_data (Bit_Chain *dat,
                                                  Bit_Chain *hdl_dat,
                                                  Dwg_Object *restrict obj);
 
+static const char *dwg_ref_objname (const Dwg_Data *restrict dwg,
+                                    Dwg_Object_Ref *restrict ref);
+static const char *dwg_ref_tblname (const Dwg_Data *restrict dwg,
+                                    Dwg_Object_Ref *restrict ref);
+
 /*----------------------------------------------------------------------------
  * Public variables
  */
@@ -153,6 +159,7 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           return DWG_ERR_OUTOFMEM;
         }
     }
+  dwg->dirty_refs = 1;
 
   // memset (&dwg->header, 0, sizeof (dwg->header)); // nope. needed for
   // version
@@ -1417,6 +1424,7 @@ resolve_objectref_vector (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   BITCODE_BL i;
   Dwg_Object *obj;
 
+  dwg->dirty_refs = 0;
   for (i = 0; i < dwg->num_object_refs; i++)
     {
       Dwg_Object_Ref *ref = dwg->object_ref[i];
@@ -5036,6 +5044,25 @@ dwg_validate_POLYLINE (Dwg_Object *obj)
         }
     }
   return 1;
+}
+
+static const char *
+dwg_ref_objname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
+{
+  int old_log = loglevel;
+  Dwg_Object *obj;
+  loglevel = 0;
+  obj = dwg_ref_object (dwg, ref);
+  loglevel = old_log;
+  return obj ? obj->name : "";
+}
+
+// supports tables entries and everything with a name
+static const char *
+dwg_ref_tblname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
+{
+  const char *name = dwg_dynapi_handle_name (dwg, ref);
+  return name ? name : "";
 }
 
 #undef IS_DECODER
