@@ -1026,7 +1026,6 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
   SINCE (R_14)                                                                \
   {                                                                           \
     /* TODO: ACAD_XDICTIONARY */                                              \
-    VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 3, 330);         \
   }                                                                           \
   SINCE (R_13)                                                                \
   {                                                                           \
