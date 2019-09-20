@@ -326,12 +326,8 @@ DWG_ENTITY(ATTDEF)
 
   DXF { FIELD_HANDLE (style, 5, 7); }
   SUBCLASS (AcDbAttributeDefinition)
-  DXF {
-    SINCE (R_2010) {
-      //FIELD_RC (class_version, 280);
-      FIELD_T (prompt, 3);
-    }
-  }
+  DXF { FIELD_T (prompt, 3); }
+  //DXF { SINCE (R_2010) { FIELD_RC (class_version, 280); }}
   FIELD_T (tag, 2);
   FIELD_BS (field_length, 0); //DXF 73, unused
   FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify, 8 preset
