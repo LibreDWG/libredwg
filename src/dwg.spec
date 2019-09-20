@@ -2011,10 +2011,12 @@ DWG_OBJECT(DICTIONARY)
 #endif
 
   START_OBJECT_HANDLE_STREAM;
+#ifndef IS_DXF
   SINCE (R_2000)
     {
       HANDLE_VECTOR (itemhandles, numitems, 2, 350); // or 360 if hard_owner
     }
+#endif
 
 DWG_OBJECT_END
 
@@ -2058,10 +2060,12 @@ DWG_OBJECT(DICTIONARYWDFLT)
 #endif
 
   START_OBJECT_HANDLE_STREAM;
+#ifndef IS_DXF
   SINCE (R_2000)
     {
       HANDLE_VECTOR (itemhandles, numitems, 2, 350); // or 360 if hard_owner
     }
+#endif
   SUBCLASS (AcDbDictionaryWithDefault)
   FIELD_HANDLE (defaultid, 5, 340);
 
