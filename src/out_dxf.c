@@ -839,8 +839,8 @@ dxf_write_xdata (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           break;
         case VT_POINT3D:
           VALUE_RD (rbuf->value.pt[0], dxftype);
-          VALUE_RD (rbuf->value.pt[1], dxftype + 1);
-          VALUE_RD (rbuf->value.pt[2], dxftype + 2);
+          VALUE_RD (rbuf->value.pt[1], dxftype + 10);
+          VALUE_RD (rbuf->value.pt[2], dxftype + 20);
           break;
         case VT_BINARY:
           VALUE_BINARY (rbuf->value.str.u.data, rbuf->value.str.size, dxftype);
