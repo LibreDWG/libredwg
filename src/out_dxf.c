@@ -1012,7 +1012,7 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
     {                                                                         \
       SINCE (R_13)                                                            \
       {                                                                       \
-        fprintf (dat->fh, "%3i\r\n%lX\r\n", 5, ctrl->handle.value);            \
+        fprintf (dat->fh, "%3i\r\n%lX\r\n", 5, ctrl->handle.value);           \
       }                                                                       \
       SINCE (R_14)                                                            \
       {                                                                       \
@@ -1349,11 +1349,14 @@ decl_dxf_process_VERTEX (PFACE)
     return error;                                                             \
   }
 
-        decl_dxf_process_INSERT (INSERT) decl_dxf_process_INSERT (MINSERT)
+// clang-format off
+decl_dxf_process_INSERT (INSERT)
+decl_dxf_process_INSERT (MINSERT)
+// clang-format on
 
-            static int dwg_dxf_object (Bit_Chain *restrict dat,
-                                       const Dwg_Object *restrict obj,
-                                       int *restrict i)
+static int dwg_dxf_object (Bit_Chain *restrict dat,
+                           const Dwg_Object *restrict obj,
+                           int *restrict i)
 {
   int error = 0;
   int minimal;

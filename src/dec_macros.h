@@ -201,61 +201,61 @@
 #define FIELD_VALUE(nam) _obj->nam
 
 #define ANYCODE -1
-#define VALUE_HANDLE(handleptr, nam, handle_code, dxf)                        \
+#define VALUE_HANDLE(ref, nam, code, dxf)                                     \
   {                                                                           \
     unsigned long pos = bit_position (hdl_dat);                               \
-    if (handle_code >= 0)                                                     \
-      handleptr                                                               \
-          = dwg_decode_handleref_with_code (hdl_dat, obj, dwg, handle_code);  \
+    if (code >= 0)                                                            \
+      ref = dwg_decode_handleref_with_code (hdl_dat, obj, dwg, code);         \
     else                                                                      \
-      handleptr = dwg_decode_handleref (hdl_dat, obj, dwg);                   \
-    if (handleptr)                                                            \
+      ref = dwg_decode_handleref (hdl_dat, obj, dwg);                         \
+    if (ref)                                                                  \
       {                                                                       \
-        LOG_TRACE (#nam ": " FORMAT_REF " [H %d]", ARGS_REF (handleptr), dxf) \
+        LOG_TRACE (#nam ": " FORMAT_REF " [H %d]", ARGS_REF (ref), dxf)       \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        LOG_TRACE (#nam ": NULL %d [H %d]", handle_code, dxf);                \
+        LOG_TRACE (#nam ": NULL %d [H %d]", code, dxf);                       \
       }                                                                       \
     LOG_INSANE (" @%lu.%u", pos / 8, (unsigned)(pos % 8));                    \
     LOG_TRACE ("\n");                                                         \
   }
-#define FIELD_HANDLE(nam, handle_code, dxf)                                   \
-  VALUE_HANDLE (_obj->nam, nam, handle_code, dxf)
-#define SUB_FIELD_HANDLE(o, nam, handle_code, dxf)                            \
-  VALUE_HANDLE (_obj->o.nam, o.nam, handle_code, dxf)
+#define FIELD_HANDLE(nam, code, dxf)                                          \
+  VALUE_HANDLE (_obj->nam, nam, code, dxf)
+#define SUB_FIELD_HANDLE(o, nam, code, dxf)                                   \
+  VALUE_HANDLE (_obj->o.nam, o.nam, code, dxf)
 
-#define VALUE_HANDLE_N(handleptr, nam, vcount, handle_code, dxf)              \
+#define VALUE_HANDLE_N(ref, nam, vcount, code, dxf)                           \
   {                                                                           \
     unsigned long pos = bit_position (hdl_dat);                               \
-    if (handle_code >= 0)                                                     \
-      handleptr                                                               \
-          = dwg_decode_handleref_with_code (hdl_dat, obj, dwg, handle_code);  \
+    if (code >= 0)                                                            \
+      ref = dwg_decode_handleref_with_code (hdl_dat, obj, dwg, code);         \
     else                                                                      \
-      handleptr = dwg_decode_handleref (hdl_dat, obj, dwg);                   \
-    if (handleptr)                                                            \
+      ref = dwg_decode_handleref (hdl_dat, obj, dwg);                         \
+    if (ref)                                                                  \
       {                                                                       \
         LOG_TRACE (#nam "[%d]: " FORMAT_REF " [H* %d]", (int)vcount,          \
-                   ARGS_REF (handleptr), dxf)                                 \
+                   ARGS_REF (ref), dxf)                                       \
+        /*LOG_TRACE (" %s %s", ref_objname (ref), ref_name (ref))*/           \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        LOG_TRACE (#nam "[%d]: NULL %d [H* %d]", (int)vcount, handle_code,    \
+        LOG_TRACE (#nam "[%d]: NULL %d [H* %d]", (int)vcount, code,           \
                    dxf);                                                      \
       }                                                                       \
     LOG_INSANE (" @%lu.%u", pos / 8, (unsigned)(pos % 8));                    \
     LOG_TRACE ("\n");                                                         \
   }
-#define FIELD_HANDLE_N(nam, vcount, handle_code, dxf)                         \
-  VALUE_HANDLE_N (_obj->nam, nam, vcount, handle_code, dxf)
+#define FIELD_HANDLE_N(nam, vcount, code, dxf)                                \
+  VALUE_HANDLE_N (_obj->nam, nam, vcount, code, dxf)
 
-#define FIELD_DATAHANDLE(nam, handle_code, dxf)                               \
+#define FIELD_DATAHANDLE(nam, code, dxf)                                      \
   {                                                                           \
     _obj->nam = dwg_decode_handleref (dat, obj, dwg);                         \
     if (_obj->nam)                                                            \
       {                                                                       \
-        LOG_TRACE (#nam ": " FORMAT_H " [H %d]\n",                            \
+        LOG_TRACE (#nam ": " FORMAT_H " [H %d]",                              \
                    ARGS_H (_obj->nam->handleref), dxf);                       \
+        /*LOG_TRACE (" %s %s\n", ref_objname (ref), ref_name (ref))*/         \
       }                                                                       \
   }
 
