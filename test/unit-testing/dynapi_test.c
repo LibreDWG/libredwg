@@ -4285,18 +4285,18 @@ test_header (const Dwg_Data *dwg)
 
   }
   {
-    BITCODE_RC celweight;
+    BITCODE_BSd celweight;
     if (dwg_dynapi_header_value (dwg, "CELWEIGHT", &celweight, NULL)
         && celweight == dwg->header_vars.CELWEIGHT)
       pass ();
     else
-      fail ("HEADER.CELWEIGHT [RC] %u != %u", dwg->header_vars.CELWEIGHT, celweight);
+      fail ("HEADER.CELWEIGHT [BSd] " FORMAT_BSd " != " FORMAT_BSd "", dwg->header_vars.CELWEIGHT, celweight);
     celweight++;
     if (dwg_dynapi_header_set_value (dwg, "CELWEIGHT", &celweight, 0)
         && celweight == dwg->header_vars.CELWEIGHT)
       pass ();
     else
-      fail ("HEADER.CELWEIGHT [RC] set+1 %u != %u",
+      fail ("HEADER.CELWEIGHT [BSd] set+1 " FORMAT_BSd " != " FORMAT_BSd "",
             dwg->header_vars.CELWEIGHT, celweight);
     celweight--;
     dwg_dynapi_header_set_value (dwg, "CELWEIGHT", &celweight, 0);

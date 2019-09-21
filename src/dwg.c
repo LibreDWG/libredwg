@@ -1317,43 +1317,55 @@ dwg_section_type (const DWGCHAR *wname)
   return SECTION_UNKNOWN;
 }
 
+// See acdb.h: 100th of a mm, enum of
+const int lweights[] = { 0,
+                         5,
+                         9,
+                         13,
+                         15,
+                         18,
+                         20,
+                         25,
+                         30,
+                         35,
+                         40,
+                         50,
+                         53,
+                         60,
+                         70,
+                         80,
+                         90,
+                         100,
+                         106,
+                         120,
+                         140,
+                         158,
+                         200,
+                         211,
+                         /*illegal/reserved:*/ 0,
+                         0,
+                         0,
+                         0,
+                         0,
+                         /*29:*/ -1, // BYLAYER
+                         -2,         // BYBLOCK
+                         -3 };       // BYLWDEFAULT
+
 EXPORT int
-dxf_cvt_lweight (const BITCODE_RC value)
+dxf_cvt_lweight (const BITCODE_BSd value)
 {
-  // See acdb.h: 100th of a mm, enum of
-  const int lweights[] = { 0,
-                           5,
-                           9,
-                           13,
-                           15,
-                           18,
-                           20,
-                           25,
-                           30,
-                           35,
-                           40,
-                           50,
-                           53,
-                           60,
-                           70,
-                           80,
-                           90,
-                           100,
-                           106,
-                           120,
-                           140,
-                           158,
-                           200,
-                           211,
-                           /*illegal/reserved:*/ 0,
-                           0,
-                           0,
-                           0,
-                           0,
-                           /*29:*/ -1, // BYLAYER
-                           -2,         // BYBLOCK
-                           -3 };       // BYLWDEFAULT
   return lweights[value % 32];
+}
+
+#define ARRAY_SIZE(arr) (sizeof (arr) / sizeof (arr[0]))
+
+EXPORT BITCODE_BSd
+dxf_revcvt_lweight (const int lw)
+{
+  for (BITCODE_BSd i = 0; i < (BITCODE_BSd)ARRAY_SIZE (lweights); i++)
+    if (lweights[i] == lw)
+      return i;
+  return 0;
 }
 
 static void

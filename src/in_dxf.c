@@ -334,6 +334,8 @@ matches_type (Dxf_Pair *restrict pair, const Dwg_DYNAPI_field *restrict f)
         return 1;
       if (strEQc (f->type, "CMC"))
         return 1;
+      if (strEQc (f->type, "BSd"))
+        return 1;
       // fall through
     case VT_INT8:
       if (strEQc (f->type, "RC"))
@@ -383,10 +385,16 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // const int minimal = dwg->opts & 0x10;
   int is_utf = 1;
   int i = 0;
+  Dxf_Pair *pair;
+
+  // defaults, not often found in a DXF
+  _obj->ISOLINES = 4;
+  _obj->TEXTQLTY = 50;
+  _obj->FACETRES = 0.5;
 
   // here SECTION(HEADER) was already consumed
   // read the first group 9, $field pair
-  Dxf_Pair *pair = dxf_read_pair (dat);
+  pair = dxf_read_pair (dat);
 
   while (pair->code == 9)
     {
@@ -568,6 +576,23 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       if (pair->code != 9 /* && pair->code != 0 */)
         goto next_hdrvalue; // for mult. 10,20,30 values
     }
+
+  SINCE(R_2000)
+  {
+    _obj->CELWEIGHT = dxf_revcvt_lweight (_obj->CELWEIGHT);
+    LOG_TRACE ("HEADER.%s => %d\n", "CELWEIGHT", _obj->CELWEIGHT);
+    // clang-format off
+    _obj->FLAGS = (_obj->CELWEIGHT & 0x1f) |
+          (_obj->ENDCAPS     ? 0x60   : 0) |
+          (_obj->JOINSTYLE   ? 0x180  : 0) |
+          (_obj->LWDISPLAY   ? 0 : 0x200)  |
+          (_obj->XEDIT       ? 0 : 0x400)  |
+          (_obj->EXTNAMES    ? 0x800  : 0) |
+          (_obj->PSTYLEMODE  ? 0x2000 : 0) |
+          (_obj->OLESTARTUP  ? 0x4000 : 0);
+    // clang-format on
+    LOG_TRACE ("HEADER.%s => 0x%x\n", "FLAGS", (unsigned)_obj->FLAGS);
+  }
 
   dxf_free_pair (pair);
   return 0;

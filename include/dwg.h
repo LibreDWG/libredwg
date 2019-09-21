@@ -93,6 +93,7 @@ typedef int16_t BITCODE_BSd;
 typedef uint16_t BITCODE_RS;
 typedef uint16_t BITCODE_RSx;
 typedef uint32_t BITCODE_BL;
+typedef uint32_t BITCODE_BLx;
 typedef uint32_t BITCODE_RL;
 typedef int32_t BITCODE_BLd;
 typedef int32_t BITCODE_RLd;
@@ -872,7 +873,7 @@ typedef struct _dwg_header_variables {
   BITCODE_H DICTIONARY_LIGHTLIST;   /*!< r2010+ ?? */
   BITCODE_H unknown_20;             /*!< r2013+ */
   BITCODE_BL FLAGS;
-  BITCODE_RC CELWEIGHT; /* = FLAGS & 0x1f, see dxf_cvt_lweight() */
+  BITCODE_BSd CELWEIGHT; /* = FLAGS & 0x1f, see dxf_cvt_lweight() DXF 370 (int16) */
   BITCODE_B  ENDCAPS;   /* = FLAGS & 0x60 */
   BITCODE_B  JOINSTYLE; /* = FLAGS & 0x180 */
   BITCODE_B  LWDISPLAY; /* = !(FLAGS & 0x200) */
@@ -5777,7 +5778,12 @@ EXPORT unsigned char *dwg_bmp (const Dwg_Data *restrict, BITCODE_RL *restrict);
 /** Converts the internal enum RC into 100th mm lineweight, with
  *  -1 BYLAYER, -2 BYBLOCK, -3 BYLWDEFAULT.
  */
-EXPORT int dxf_cvt_lweight (const BITCODE_RC value);
+EXPORT int dxf_cvt_lweight (const BITCODE_BSd value);
+
+/** Converts the 100th mm lineweight, with -1 BYLAYER, -2 BYBLOCK, -3 BYLWDEFAULT,
+    into the internal enum RC.
+ */
+EXPORT BITCODE_BSd dxf_revcvt_lweight (const int lw);
 
 /* Search for the name in the associated table, and return its handle. */
 EXPORT BITCODE_H dwg_find_tablehandle (Dwg_Data *restrict dwg,

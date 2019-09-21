@@ -330,10 +330,11 @@
       HEADER_9 (CELWEIGHT);
       VALUE(dxf_cvt_lweight(_obj->CELWEIGHT), RCs, 370);
     }
-    ENCODER {
-      // TODO reverse lookup
-      HEADER_RC (CELWEIGHT, 370);
-    }
+    /* ENCODER {
+      HEADER_9 (CELWEIGHT);
+      // reverse lookup
+      VALUE(dxf_revcvt_lweight(_obj->CELWEIGHT), RCs, 370);
+    } */
 
     HEADER_RC (ENDCAPS, 280);
     HEADER_RC (JOINSTYLE, 280);
