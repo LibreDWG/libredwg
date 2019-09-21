@@ -2607,8 +2607,8 @@ DWG_OBJECT(LTYPE_CONTROL)
 
   START_OBJECT_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
-  FIELD_HANDLE (bylayer, 3, 0);
   FIELD_HANDLE (byblock, 3, 0);
+  FIELD_HANDLE (bylayer, 3, 0);
 
 DWG_OBJECT_END
 
