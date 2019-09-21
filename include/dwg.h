@@ -5772,8 +5772,7 @@ EXPORT int
 dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg);
 #endif
 
-EXPORT unsigned char*
-dwg_bmp (const Dwg_Data *restrict, BITCODE_RL *restrict);
+EXPORT unsigned char *dwg_bmp (const Dwg_Data *restrict, BITCODE_RL *restrict);
 
 /** Converts the internal enum RC into 100th mm lineweight, with
  *  -1 BYLAYER, -2 BYBLOCK, -3 BYLWDEFAULT.
@@ -5781,22 +5780,21 @@ dwg_bmp (const Dwg_Data *restrict, BITCODE_RL *restrict);
 EXPORT int dxf_cvt_lweight (const BITCODE_RC value);
 
 /* Search for the name in the associated table, and return its handle. */
-EXPORT BITCODE_H
-dwg_find_tablehandle (Dwg_Data *restrict dwg,
-                      const char *restrict name,
-                      const char *restrict table);
+EXPORT BITCODE_H dwg_find_tablehandle (Dwg_Data *restrict dwg,
+                                       const char *restrict name,
+                                       const char *restrict table);
 
 /** Not checking the header_vars entry, only searching the objects
  *  Returning a hardowner or hardpointer (DICTIONARY) ref (code 3 or 5)
  *  to it, as stored in header_vars. table must contain the "_CONTROL" suffix.
  */
-EXPORT BITCODE_H
-dwg_find_table_control (Dwg_Data *restrict dwg, const char *restrict table);
+EXPORT BITCODE_H dwg_find_table_control (Dwg_Data *restrict dwg,
+                                         const char *restrict table);
 
 /** Searching for a named dictionary entry.
  *  Returning a hardpointer ref (5) to it, as stored in header_vars. */
-EXPORT BITCODE_H
-dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name);
+EXPORT BITCODE_H dwg_find_dictionary (Dwg_Data *restrict dwg,
+                                      const char *restrict name);
 
 EXPORT double dwg_model_x_min (const Dwg_Data *);
 EXPORT double dwg_model_x_max (const Dwg_Data *);
@@ -5809,85 +5807,66 @@ EXPORT double dwg_page_x_max (const Dwg_Data *);
 EXPORT double dwg_page_y_min (const Dwg_Data *);
 EXPORT double dwg_page_y_max (const Dwg_Data *);
 
-EXPORT Dwg_Object_BLOCK_CONTROL*
-dwg_block_control (Dwg_Data *dwg);
+EXPORT Dwg_Object_BLOCK_CONTROL *dwg_block_control (Dwg_Data *dwg);
 
-EXPORT Dwg_Object_Ref* dwg_model_space_ref (Dwg_Data *dwg);
-EXPORT Dwg_Object_Ref* dwg_paper_space_ref (Dwg_Data *dwg);
-EXPORT Dwg_Object*     dwg_model_space_object (Dwg_Data *dwg);
+EXPORT Dwg_Object_Ref *dwg_model_space_ref (Dwg_Data *dwg);
+EXPORT Dwg_Object_Ref *dwg_paper_space_ref (Dwg_Data *dwg);
+EXPORT Dwg_Object *dwg_model_space_object (Dwg_Data *dwg);
 
-EXPORT unsigned int
-dwg_get_layer_count (const Dwg_Data *dwg);
+EXPORT unsigned int dwg_get_layer_count (const Dwg_Data *dwg);
 
-EXPORT Dwg_Object_LAYER**
-dwg_get_layers (const Dwg_Data *dwg);
+EXPORT Dwg_Object_LAYER **dwg_get_layers (const Dwg_Data *dwg);
 
-EXPORT BITCODE_BL
-dwg_get_num_objects (const Dwg_Data *dwg);
+EXPORT BITCODE_BL dwg_get_num_objects (const Dwg_Data *dwg);
 
-EXPORT BITCODE_BL
-dwg_get_object_num_objects (const Dwg_Data *dwg);
+EXPORT BITCODE_BL dwg_get_object_num_objects (const Dwg_Data *dwg);
 
-EXPORT int
-dwg_class_is_entity (const Dwg_Class *klass);
+EXPORT int dwg_class_is_entity (const Dwg_Class *klass);
 
-EXPORT int
-dwg_obj_is_control (const Dwg_Object *obj);
+EXPORT int dwg_obj_is_control (const Dwg_Object *obj);
 
-EXPORT int
-dwg_obj_is_table (const Dwg_Object *obj);
+EXPORT int dwg_obj_is_table (const Dwg_Object *obj);
 
-EXPORT int
-dwg_obj_is_subentity (const Dwg_Object *obj);
+EXPORT int dwg_obj_is_subentity (const Dwg_Object *obj);
 
-EXPORT int
-dwg_obj_has_subentity (const Dwg_Object *obj);
+EXPORT int dwg_obj_has_subentity (const Dwg_Object *obj);
 
-EXPORT BITCODE_BL
-dwg_get_num_entities (const Dwg_Data *);
+EXPORT BITCODE_BL dwg_get_num_entities (const Dwg_Data *);
 
-EXPORT Dwg_Object_Entity **
-dwg_get_entities (const Dwg_Data *);
+EXPORT Dwg_Object_Entity **dwg_get_entities (const Dwg_Data *);
 
-EXPORT Dwg_Object_LAYER *
-dwg_get_entity_layer (const Dwg_Object_Entity *);
+EXPORT Dwg_Object_LAYER *dwg_get_entity_layer (const Dwg_Object_Entity *);
 
-EXPORT Dwg_Object*
-dwg_next_object (const Dwg_Object* obj);
+EXPORT Dwg_Object *dwg_next_object (const Dwg_Object *obj);
 
-EXPORT Dwg_Object*
-dwg_ref_object (const Dwg_Data *restrict dwg,
-                Dwg_Object_Ref *restrict ref);
+EXPORT Dwg_Object *dwg_ref_object (const Dwg_Data *restrict dwg,
+                                   Dwg_Object_Ref *restrict ref);
 
-EXPORT Dwg_Object*
-dwg_ref_object_relative (const Dwg_Data *restrict dwg,
-                         Dwg_Object_Ref *restrict ref,
-                         const Dwg_Object *restrict obj);
+EXPORT Dwg_Object *dwg_ref_object_relative (const Dwg_Data *restrict dwg,
+                                            Dwg_Object_Ref *restrict ref,
+                                            const Dwg_Object *restrict obj);
+EXPORT Dwg_Object *dwg_ref_object_silent (const Dwg_Data *restrict dwg,
+                                          Dwg_Object_Ref *restrict ref);
 
-EXPORT Dwg_Object*
-get_first_owned_entity (const Dwg_Object *restrict hdr);
-EXPORT Dwg_Object*
-get_next_owned_entity (const Dwg_Object *restrict hdr,
-                       const Dwg_Object *restrict current);
-EXPORT Dwg_Object*
+EXPORT Dwg_Object *get_first_owned_entity (const Dwg_Object *restrict hdr);
+EXPORT Dwg_Object *get_next_owned_entity (const Dwg_Object *restrict hdr,
+                                          const Dwg_Object *restrict current);
+EXPORT Dwg_Object *
 get_first_owned_subentity (const Dwg_Object *restrict owner);
-EXPORT Dwg_Object*
+EXPORT Dwg_Object *
 get_next_owned_subentity (const Dwg_Object *restrict owner,
                           const Dwg_Object *restrict current);
-EXPORT Dwg_Object*
-get_first_owned_block (const Dwg_Object *hdr);
-EXPORT Dwg_Object*
-get_last_owned_block (const Dwg_Object *hdr);
-EXPORT Dwg_Object*
-get_next_owned_block (const Dwg_Object *restrict hdr,
-                     const Dwg_Object *restrict current);
+EXPORT Dwg_Object *get_first_owned_block (const Dwg_Object *hdr);
+EXPORT Dwg_Object *get_last_owned_block (const Dwg_Object *hdr);
+EXPORT Dwg_Object *get_next_owned_block (const Dwg_Object *restrict hdr,
+                                         const Dwg_Object *restrict current);
 
-EXPORT Dwg_Object *
-dwg_resolve_handle (const Dwg_Data* dwg,
-                    const unsigned long absref);
-EXPORT int
-dwg_resolve_handleref (Dwg_Object_Ref *restrict ref,
-                      const Dwg_Object *restrict obj);
+EXPORT Dwg_Object *dwg_resolve_handle (const Dwg_Data *dwg,
+                                       const unsigned long absref);
+EXPORT Dwg_Object *dwg_resolve_handle_silent (const Dwg_Data *dwg,
+                                              const BITCODE_BL absref);
+EXPORT int dwg_resolve_handleref (Dwg_Object_Ref *restrict ref,
+                                  const Dwg_Object *restrict obj);
 
 EXPORT Dwg_Section_Type
 dwg_section_type (const DWGCHAR *wname);

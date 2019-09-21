@@ -213,7 +213,7 @@
         if (ref)                                                              \
           {                                                                   \
             LOG_TRACE (#nam ": " FORMAT_REF " [H %d]", ARGS_REF (ref), dxf);  \
-            if (dwg_ref_object (dwg, ref))                                    \
+            if (dwg_ref_object_silent (dwg, ref))                                    \
               {                                                               \
                 LOG_TRACE (" => %s %s", dwg_ref_objname (dwg, ref),           \
                            dwg_ref_tblname (dwg, ref));                       \
@@ -244,7 +244,7 @@
           {                                                                   \
             LOG_TRACE (#nam "[%d]: " FORMAT_REF " [H* %d]", (int)vcount,      \
                        ARGS_REF (ref), dxf);                                  \
-            if (dwg_ref_object (dwg, ref))                                    \
+            if (dwg_ref_object_silent (dwg, ref))                             \
               {                                                               \
                 LOG_TRACE (" => %s %s", dwg_ref_objname (dwg, ref),           \
                            dwg_ref_tblname (dwg, ref));                       \

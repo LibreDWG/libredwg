@@ -53,9 +53,6 @@ static bool env_var_checked_p;
 /*------------------------------------------------------------------------------
  * Public functions
  */
-Dwg_Object *dwg_resolve_handle_silent (const Dwg_Data *dwg,
-                                       const BITCODE_BL absref);
-
 static int
 dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
                const char *restrict filename)
@@ -644,11 +641,11 @@ dwg_ref_object (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
   // Without obj we don't get an absolute_ref from relative OFFSETOBJHANDLE
   // handle types.
   if ((ref->handleref.code < 6
-       && dwg_resolve_handleref ((Dwg_Object_Ref *)ref, NULL))
+       && dwg_resolve_handleref (ref, NULL))
       || ref->absolute_ref)
     {
       Dwg_Object *obj = dwg_resolve_handle (dwg, ref->absolute_ref);
-      if (!dwg->dirty_refs)
+      if (!dwg->dirty_refs && obj)
         ref->obj = obj;
       return obj;
     }
@@ -667,10 +664,12 @@ dwg_ref_object_relative (const Dwg_Data *restrict dwg,
 {
   if (ref->obj && !dwg->dirty_refs)
     return ref->obj;
-  if (dwg_resolve_handleref ((Dwg_Object_Ref *)ref, obj))
+  if (dwg_resolve_handleref (ref, obj))
     {
-      ref->obj = dwg_resolve_handle (dwg, ref->absolute_ref);
-      return ref->obj;
+      Dwg_Object *o = dwg_resolve_handle (dwg, ref->absolute_ref);
+      if (!dwg->dirty_refs && o)
+        ref->obj = o;
+      return o;
     }
   else
     return NULL;
@@ -688,7 +687,8 @@ dwg_resolve_handle (const Dwg_Data *dwg, const unsigned long absref)
   if (!absref) // illegal usage
     return NULL;
   i = hash_get (dwg->object_map, (uint32_t)absref);
-  LOG_HANDLE ("object_map{%lX} => %u\n", absref, i);
+  if (i != HASH_NOT_FOUND)
+    LOG_HANDLE ("object_map{%lX} => %u\n", absref, i);
   if (i == HASH_NOT_FOUND
       || (BITCODE_BL)i >= dwg->num_objects) // the latter being an invalid
                                             // handle (read from DWG)
@@ -703,6 +703,44 @@ dwg_resolve_handle (const Dwg_Data *dwg, const unsigned long absref)
       return NULL;
     }
   return &dwg->object[i]; // allow value 0
+}
+
+/**
+ * Silent variant of dwg_resolve_handle
+ */
+EXPORT Dwg_Object *
+dwg_resolve_handle_silent (const Dwg_Data *dwg, const BITCODE_BL absref)
+{
+  uint32_t i;
+  if (!absref) // illegal usage
+    return NULL;
+  i = hash_get (dwg->object_map, (uint32_t)absref);
+  if (i == HASH_NOT_FOUND
+      || (BITCODE_BL)i >= dwg->num_objects) // the latter being an invalid
+                                            // handle (read from DWG)
+    return NULL;
+  return &dwg->object[i]; // allow value 0
+}
+
+EXPORT Dwg_Object *
+dwg_ref_object_silent (const Dwg_Data *restrict dwg,
+                       Dwg_Object_Ref *restrict ref)
+{
+  if (!ref)
+    return NULL;
+  if (ref->obj && !dwg->dirty_refs)
+    return ref->obj;
+  if ((ref->handleref.code < 6
+       && dwg_resolve_handleref ((Dwg_Object_Ref *)ref, NULL))
+      || ref->absolute_ref)
+    {
+      Dwg_Object *obj = dwg_resolve_handle_silent (dwg, ref->absolute_ref);
+      if (!dwg->dirty_refs && obj)
+        ref->obj = obj;
+      return obj;
+    }
+  else
+    return NULL;
 }
 
 /* set ref->absolute_ref from obj, for a subsequent dwg_resolve_handle() */

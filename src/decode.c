@@ -1453,23 +1453,6 @@ resolve_objectref_vector (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return dwg->num_object_refs ? 0 : DWG_ERR_VALUEOUTOFBOUNDS;
 }
 
-/**
- * Silent variant of dwg_resolve_handle
- */
-static Dwg_Object *
-dwg_resolve_handle_silent (const Dwg_Data *dwg, const BITCODE_BL absref)
-{
-  uint32_t i;
-  if (!absref) // illegal usage
-    return NULL;
-  i = hash_get (dwg->object_map, (uint32_t)absref);
-  if (i == HASH_NOT_FOUND
-      || (BITCODE_BL)i >= dwg->num_objects) // the latter being an invalid
-                                            // handle (read from DWG)
-    return NULL;
-  return &dwg->object[i]; // allow value 0
-}
-
 /* Find the BITCODE_H for an object */
 Dwg_Object_Ref *
 dwg_find_objectref (const Dwg_Data *restrict dwg,
@@ -5049,11 +5032,7 @@ dwg_validate_POLYLINE (Dwg_Object *obj)
 static const char *
 dwg_ref_objname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
 {
-  int old_log = loglevel;
-  Dwg_Object *obj;
-  loglevel = 0;
-  obj = dwg_ref_object (dwg, ref);
-  loglevel = old_log;
+  Dwg_Object *obj = dwg_ref_object_silent (dwg, ref);
   return obj ? obj->name : "";
 }
 

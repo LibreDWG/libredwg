@@ -1163,6 +1163,7 @@ __DATA__
 #include "dynapi.h"
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
+#include "decode.h"
 #include "dwg.h"
 #include "bits.h"
   
@@ -1835,7 +1836,7 @@ dwg_dynapi_handle_name (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict h
     return NULL;
 #endif
 
-  obj = dwg_ref_object (dwg, hdl);
+  obj = dwg_ref_object_silent (dwg, hdl);
   if (!obj)
     return NULL;
   {
