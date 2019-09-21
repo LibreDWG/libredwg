@@ -1615,11 +1615,15 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
         vars->DICTIONARY_ACAD_GROUP = ctrl
             = dwg_find_dictionary (dwg, "ACAD_GROUP");
     }
-  else if (strEQc (table, "MLSTYLE") || strEQc (table, "ACAD_MLEADERVER"))
+  else if (strEQc (table, "MLSTYLE") || strEQc (table, "MLINESTYLE"))
     {
       if (!(ctrl = vars->DICTIONARY_ACAD_MLINESTYLE))
         vars->DICTIONARY_ACAD_MLINESTYLE = ctrl
             = dwg_find_dictionary (dwg, "ACAD_MLINESTYLE");
+    }
+  else if (strEQc (table, "MLEADERSTYLE") || strEQc (table, "ACAD_MLEADERVER"))
+    {
+      ctrl = dwg_find_dictionary (dwg, "ACAD_MLEADERSTYLE");
     }
   else if (strEQc (table, "NAMED_OBJECT"))
     // The very first DICTIONARY 0.1.C with all the names

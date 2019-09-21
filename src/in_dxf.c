@@ -5721,17 +5721,19 @@ resolve_postponed_header_refs (Dwg_Data *restrict dwg)
       hdl = find_tablehandle (dwg, &p);
       if (hdl)
         {
-          hdl->handleref.code = 5; // FIXME?
+          if (hdl->handleref.code != 5)
+            hdl = dwg_add_handleref (dwg, 5, hdl->absolute_ref, NULL);
           dwg_dynapi_header_set_value (dwg, field, &hdl, 1);
           LOG_TRACE ("HEADER.%s %s => " FORMAT_REF " [H] dxf:%d\n", field,
                      p.value.s, ARGS_REF (hdl), (int)p.code);
         }
       else if (strstr (field, "CMLSTYLE"))
         {
-          hdl = dwg_find_tablehandle (dwg, p.value.s, "MLSTYLE");
+          hdl = dwg_find_tablehandle (dwg, p.value.s, "MLINESTYLE");
           if (hdl)
             {
-              hdl->handleref.code = 5; // FIXME?
+              if (hdl->handleref.code != 5)
+                hdl = dwg_add_handleref (dwg, 5, hdl->absolute_ref, NULL);
               dwg_dynapi_header_set_value (dwg, field, &hdl, 1);
               LOG_TRACE ("HEADER.%s %s => " FORMAT_REF " [H] dxf:%d\n", field,
                          p.value.s, ARGS_REF (hdl), (int)p.code)
