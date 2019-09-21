@@ -144,16 +144,20 @@ static bool env_var_checked_p;
   }
 #define FIELD_TF(nam, len, dxf)                                               \
   {                                                                           \
-    if (_obj->nam && len > 0)                                                 \
-      bit_write_TF (dat, (BITCODE_TF)_obj->nam, len);                         \
+    if (len > 0)                                                              \
+      {                                                                       \
+        if (!_obj->nam)                                                       \
+          {                                                                   \
+            char *_tmp = calloc (len, 1);                                     \
+            bit_write_TF (dat, _tmp, len);                                    \
+            free (_tmp);                                                      \
+          }                                                                   \
+        else                                                                  \
+          bit_write_TF (dat, (BITCODE_TF)_obj->nam, len);                     \
+      }                                                                       \
     FIELD_G_TRACE (nam, TF, dxf);                                             \
   }
-#define FIELD_TFF(nam, len, dxf)                                              \
-  {                                                                           \
-    if (_obj->nam && len > 0)                                                 \
-      bit_write_TF (dat, (BITCODE_TF)_obj->nam, len);                         \
-    FIELD_G_TRACE (nam, TF, dxf);                                             \
-  }
+#define FIELD_TFF(nam, len, dxf)  FIELD_TF(nam, len, dxf)
 #define FIELD_TU(nam, dxf)                                                    \
   {                                                                           \
     if (_obj->nam)                                                            \

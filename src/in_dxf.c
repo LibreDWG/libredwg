@@ -5353,6 +5353,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               else if (strEQc (table, "LTYPE"))
                 {
                   Dwg_Object *obj = &dwg->object[dwg->num_objects - 1];
+                  Dwg_Object_LTYPE *_obj = obj->tio.object->tio.LTYPE;
                   Dwg_Object *ctrl = &dwg->object[ctrl_id];
                   Dwg_Object_LTYPE_CONTROL *_ctrl
                       = ctrl->tio.object->tio.LTYPE_CONTROL;
@@ -5363,6 +5364,14 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                            && obj->handle.value
                                   == _ctrl->byblock->absolute_ref)
                     i--;
+                  else if (dwg->header.version > R_2004 &&
+                           strNE (_obj->name, "Continuous"))
+                    {
+                      _obj->text_area_is_present = 0;
+                      //or _obj->strings_area = calloc (512, 1);
+                    }
+                  if (dwg->header.version <= R_2004)
+                    _obj->strings_area = calloc (256, 1);
                 }
             }
         }
