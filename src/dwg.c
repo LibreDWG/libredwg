@@ -1405,7 +1405,7 @@ dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, unsigned long value,
     }
 
   set_handle_size (hdl);
-  if (code == 4 && obj)
+  if (code == 4 && obj && value)
     {
       // change code to 6.0.0 or 8.0.0
       if (offset == 1)

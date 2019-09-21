@@ -2926,7 +2926,6 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
         case 102: // TODO {ACAD_XDICTIONARY {ACAD_REACTORS {BLKREFS
           break;
         case 330: // TODO: most likely {ACAD_REACTORS
-          if (pair->value.u)
             {
               BITCODE_H owh = dwg_add_handleref (dwg, 4, pair->value.u, obj);
               obj->tio.object->ownerhandle = owh;
@@ -4320,7 +4319,7 @@ new_object (char *restrict name, char *restrict dxfname,
                   obj->tio.object->num_reactors++;
                 }
             }
-          else if (pair->value.u) // valid ownerhandle
+          else // valid ownerhandle
             {
               BITCODE_H owh = dwg_add_handleref (dwg, 4, pair->value.u, obj);
               if (is_entity)
