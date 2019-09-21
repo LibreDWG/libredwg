@@ -4876,6 +4876,10 @@ new_object (char *restrict name, char *restrict dxfname,
                         {
                           BITCODE_H ref = find_tablehandle (dwg, pair);
                           if (!ref)
+                            /*
+                              ref = dwg_add_handleref (dwg, 5, 0, obj);
+                          if (0)
+                            */
                             {
                               if (pair->code > 300)
                                 {

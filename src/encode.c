@@ -382,8 +382,9 @@ static bool env_var_checked_p;
     if (!hdlptr)                                                              \
       {                                                                       \
         Dwg_Handle null_handle = { 0, 0, 0 };                                 \
+        null_handle.code = handle_code;                                       \
         bit_write_H (hdl_dat, &null_handle);                                  \
-        LOG_TRACE (#nam ": NULL %d [H %d]\n", handle_code, dxf)               \
+        LOG_TRACE (#nam ": (%d.0.0) abs:0 [H %d]\n", handle_code, dxf)        \
       }                                                                       \
     else                                                                      \
       {                                                                       \
