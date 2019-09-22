@@ -5645,6 +5645,10 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dxf_Pair *pair = dxf_read_pair (dat);
   char name[80];
+  unsigned long mspace = dwg->header_vars.BLOCK_RECORD_MSPACE ?
+    dwg->header_vars.BLOCK_RECORD_MSPACE->absolute_ref : 0x1F;
+  unsigned long pspace = dwg->header_vars.BLOCK_RECORD_PSPACE ?
+    dwg->header_vars.BLOCK_RECORD_PSPACE->absolute_ref : 0UL;
 
   while (pair->code == 0)
     {
@@ -5657,6 +5661,18 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           pair = new_object (name, pair->value.s, dat, dwg, 0, 0);
           if (pair->code == 0)
             {
+              Dwg_Object *obj = &dwg->object[dwg->num_objects - 1];
+              Dwg_Object_Entity *ent = obj->tio.entity;
+              if (ent->ownerhandle)
+                {
+                  if (ent->ownerhandle->absolute_ref == mspace)
+                    ent->entmode = 2;
+                  else if (pspace && ent->ownerhandle->absolute_ref == pspace)
+                    ent->entmode = 1;
+                }
+              else
+                ent->entmode = 2;
+
               strncpy (name, pair->value.s, 79);
               entity_alias (name);
             }
