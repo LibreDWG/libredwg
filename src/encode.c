@@ -2043,7 +2043,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
           bit_write_RC (dat, data->u.eed_0.length);
           bit_write_RS_LE (dat, data->u.eed_0.codepage);
           bit_write_TF (dat, data->u.eed_0.string, data->u.eed_0.length);
-          LOG_TRACE ("eed[%d]: \"%s\" [TF %d %d]\n", i, data->u.eed_0.string,
+          LOG_TRACE ("EED[%d]: \"%s\" [TF %d %d]\n", i, data->u.eed_0.string,
                      data->u.eed_0.length, data->code);
         }
         LATER_VERSIONS
@@ -2058,23 +2058,23 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       break;
     case 2:
       bit_write_RC (dat, data->u.eed_2.byte);
-      LOG_TRACE ("eed[%d]: %d [RC %d]\n", i, (int)data->u.eed_2.byte,
+      LOG_TRACE ("EED[%d]: %d [RC %d]\n", i, (int)data->u.eed_2.byte,
                  data->code);
       break;
     case 3:
       bit_write_RL (dat, data->u.eed_3.layer);
-      LOG_TRACE ("eed[%d]: %d [RL %d]\n", i, (int)data->u.eed_3.layer,
+      LOG_TRACE ("EED[%d]: %d [RL %d]\n", i, (int)data->u.eed_3.layer,
                  data->code);
       break;
     case 4:
       bit_write_RC (dat, data->u.eed_4.length);
       bit_write_TF (dat, data->u.eed_4.data, data->u.eed_4.length);
-      LOG_TRACE ("eed[%d]: \"%s\" [TF %d %d]\n", i, data->u.eed_4.data,
+      LOG_TRACE ("EED[%d]: \"%s\" [TF %d %d]\n", i, data->u.eed_4.data,
                  data->u.eed_4.length, data->code);
       break;
     case 5:
       bit_write_RLL (dat, data->u.eed_5.entity);
-      LOG_TRACE ("eed[%d]: \"%ld\" [RLL %d]\n", i, (long)data->u.eed_5.entity,
+      LOG_TRACE ("EED[%d]: \"%ld\" [RLL %d]\n", i, (long)data->u.eed_5.entity,
                  data->code);
       break;
     case 10:
@@ -2093,16 +2093,16 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
     case 41:
     case 42:
       bit_write_RD (dat, data->u.eed_40.real);
-      LOG_TRACE ("eed[%d]: %f [RD %d]\n", i, data->u.eed_40.real, data->code);
+      LOG_TRACE ("EED[%d]: %f [RD %d]\n", i, data->u.eed_40.real, data->code);
       break;
     case 70:
       bit_write_RS (dat, data->u.eed_70.rs);
-      LOG_TRACE ("eed[%d]: %d [RS %d]\n", i, (int)data->u.eed_70.rs,
+      LOG_TRACE ("EED[%d]: %d [RS %d]\n", i, (int)data->u.eed_70.rs,
                  data->code);
       break;
     case 71:
       bit_write_RL (dat, data->u.eed_71.rl);
-      LOG_TRACE ("eed[%d]: %ld [RL %d]\n", i, (long)data->u.eed_71.rl,
+      LOG_TRACE ("EED[%d]: %ld [RL %d]\n", i, (long)data->u.eed_71.rl,
                  data->code);
       break;
     default:
@@ -2126,11 +2126,14 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict ent)
       if (size && eed->data)
         {
           int code = (int)eed->data->code;
-          LOG_TRACE ("EED[%u] size: %d [BS], code: %d\n", i, (int)size, code);
+          LOG_TRACE ("EED[%d] size: %d [BS]\n", i, (int)size);
           bit_write_BS (dat, size);
-          bit_write_H (dat, &eed->handle);
-          LOG_TRACE ("EED[%u] handle: " FORMAT_H " [H]\n", i,
-                     ARGS_H (eed->handle));
+          if (i == 0)
+            {
+              bit_write_H (dat, &eed->handle);
+              LOG_TRACE ("EED handle: " FORMAT_H "\n",
+                         ARGS_H (eed->handle));
+            }
           if (eed->raw)
             bit_write_TF (dat, eed->raw, size);
           else // indxf
@@ -2138,7 +2141,7 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict ent)
         }
     }
   bit_write_BS (dat, 0);
-  LOG_TRACE ("EED[%u] size: 0 [BS]\n", i);
+  // LOG_TRACE ("EED[%u] size: 0 [BS]\n", i);
   return 0;
 }
 

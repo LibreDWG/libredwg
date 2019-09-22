@@ -868,8 +868,10 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       obj->tio.object->eed = eed;
       obj->tio.object->num_eed++;
     }
+  else
+    i--;
   code = pair->code - 1000; // 1000
-  LOG_TRACE ("eed[%d] code:%d\n", i, code);
+  //LOG_TRACE ("EED[%d] code:%d\n", i, code);
   switch (code)
     {
     case 0:
@@ -882,10 +884,10 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
             eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
             eed[i].data->code = code; // 1000
             eed[i].data->u.eed_0.length = len;
-            eed[i].data->u.eed_0.codepage = obj->parent->header.codepage;
+            eed[i].data->u.eed_0.codepage = dwg->header.codepage;
             if (len && len < 256)
               {
-                LOG_HANDLE ("eed[%d] string %d %d\n", i, len, size);
+                LOG_HANDLE ("EED[%d] \"%s\" [TV %d]\n", i, pair->value.s, code);
                 memcpy (eed[i].data->u.eed_0.string, pair->value.s, len + 1);
               }
           }
@@ -900,7 +902,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
             if (len && len < 32767)
               {
                 BITCODE_TU tu = bit_utf8_to_TU (pair->value.s);
-                LOG_HANDLE ("eed[%d] wstring %d %d\n", i, len, size);
+                LOG_HANDLE ("EED[%d] \"%s\" [TU %d]\n", i, pair->value.s, code);
                 memcpy (eed[i].data->u.eed_0_r2007.string, tu, 2 * (len + 1));
                 free (tu);
               }
@@ -914,6 +916,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
       eed[i].data->code = code; // 1002
       eed[i].data->u.eed_2.byte = (BITCODE_RC)pair->value.i;
+      LOG_HANDLE ("EED[%d] %d [RC %d]\n", i, pair->value.i, code);
       eed[i].size += size;
       break;
     case 4:
@@ -926,6 +929,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
         eed[i].data->code = code; // 1004
         eed[i].data->u.eed_4.length = len / 2;
+        LOG_HANDLE ("EED[%d] [TF %d %d]\n", i, len, code);
         for (j = 0; j < len / 2; j++)
           {
             sscanf (pos, "%2hhX", &eed[i].data->u.eed_4.data[j]);
@@ -953,9 +957,9 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
     case 23:
     case 24:
     case 25:
-      if (!i)
+      if (i < 0)
         return;
-      eed[i - 1].data->u.eed_10.point.y = pair->value.d;
+      eed[i].data->u.eed_10.point.y = pair->value.d;
       break;
     case 30:
     case 31:
@@ -963,9 +967,11 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
     case 33:
     case 34:
     case 35:
-      if (!i)
+      if (i < 0)
         return;
-      eed[i - 1].data->u.eed_10.point.z = pair->value.d;
+      eed[i].data->u.eed_10.point.z = pair->value.d;
+      LOG_HANDLE ("EED[%d] (%f,%f,%f) [3RD %d]\n", i, eed[i].data->u.eed_10.point.x,
+                  eed[i].data->u.eed_10.point.y, pair->value.d, code-20);
       break;
     case 40:
     case 41:
@@ -975,6 +981,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
       eed[i].data->code = code; // 1071
       eed[i].data->u.eed_40.real = pair->value.d;
+      LOG_HANDLE ("EED[%d] %f [RD %d]\n", i, pair->value.d, code);
       eed[i].size += size;
       break;
     case 70:
@@ -983,6 +990,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
       eed[i].data->code = code; // 1071
       eed[i].data->u.eed_70.rs = pair->value.i;
+      LOG_HANDLE ("EED[%d] %d [RS %d]\n", i, pair->value.i, code);
       eed[i].size += size;
       break;
     case 71:
@@ -991,13 +999,17 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
       eed[i].data->code = code; // 1071
       eed[i].data->u.eed_71.rl = pair->value.l;
+      LOG_HANDLE ("EED[%d] %ld [RL %d]\n", i, pair->value.l, code);
       eed[i].size += size;
       break;
     case 1:
+      if (!i)
+        obj->tio.object->num_eed--;
       eed[i].size += sizeof (Dwg_Handle);
       if (strEQc (pair->value.s, "ACAD"))
         {
           dwg_add_handle (&eed[i].handle, 5, 0x12, NULL);
+          LOG_TRACE ("EED[%d] 12 [H] for APPID.%s\n", i, pair->value.s);
         }
       else
         {
@@ -1007,6 +1019,8 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
           if (hdl)
             {
               memcpy (&eed[i].handle, &hdl->handleref, sizeof (Dwg_Handle));
+              LOG_TRACE ("EED[%d] %lX [H] for APPID.%s\n", i, hdl->absolute_ref,
+                         pair->value.s);
             }
           // needs to be postponed, because we don't have the tables yet
           else
@@ -1014,7 +1028,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
               char idx[12];
               snprintf (idx, 12, "%d", obj->index);
               eed_hdls = array_push (eed_hdls, idx, pair->value.s, (short)i);
-              LOG_HANDLE ("eed[%d].handle for APPID.%s later\n", i,
+              LOG_TRACE ("EED[%d] ? [H} for APPID.%s later\n", i,
                           pair->value.s);
             }
         }
@@ -1030,11 +1044,12 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         eed[i].data->code = code; // 1005
         sscanf (pos, "%lX", &l);
         eed[i].data->u.eed_5.entity = (BITCODE_RLL)l;
+        LOG_TRACE ("EED[%d] %lX [H %d]\n", i, l, code);
         eed[i].size += size;
         break;
       }
     default:
-      LOG_ERROR ("Not yet implemented EED.code %d", pair->code);
+      LOG_ERROR ("Not yet implemented EED[%d] code %d", i, pair->code);
     }
   return;
 }
@@ -3001,7 +3016,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
         default:
           if (pair->code >= 1000 && pair->code < 1999)
             {
-              add_eed (obj, ctrlname, pair);
+              add_eed (obj, obj->name, pair);
             }
           else
             LOG_ERROR ("Unknown DXF code %d for %s", pair->code, ctrlname);
@@ -4582,7 +4597,7 @@ new_object (char *restrict name, char *restrict dxfname,
         default:
         object_default:
           if (pair->code >= 1000 && pair->code < 1999)
-            add_eed (obj, name, pair);
+            add_eed (obj, obj->name, pair);
           else if (pair->code != 280 && strEQc (name, "XRECORD"))
             pair = add_xdata (dat, obj, pair);
           else if (pair->code == 310 && strEQc (obj->name, "BLOCK_HEADER"))
