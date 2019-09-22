@@ -5374,6 +5374,38 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                     _obj->strings_area = calloc (256, 1);
                 }
             }
+          // next table
+          // fixup entries vs num_entries (no NULL entries)
+          {
+            Dwg_Object *ctrl = &dwg->object[ctrl_id];
+            Dwg_Object_BLOCK_CONTROL *_ctrl
+              = ctrl->tio.object->tio.BLOCK_CONTROL;
+            int at_end = 1;
+            for (int j = _ctrl->num_entries - 1; j >= 0; j--)
+              {
+                BITCODE_H ref = _ctrl->entries[j];
+                if (!ref)
+                  {
+                    if (at_end)
+                      {
+                        _ctrl->num_entries--;
+                        _ctrl->entries = realloc (_ctrl->entries,
+                                                  _ctrl->num_entries
+                                                      * sizeof (BITCODE_H));
+                        LOG_TRACE ("%s.num_entries-- => %d\n", ctrl->name,
+                                    _ctrl->num_entries);
+                      }
+                    else
+                      {
+                        _ctrl->entries[j] = dwg_add_handleref (dwg, 2, 0, NULL);
+                        LOG_TRACE ("%s.entries[%d] = (2.0.0)\n", ctrl->name,
+                                   j);
+                      }
+                  }
+                else
+                  at_end = 0;
+              }
+          }
         }
       DXF_RETURN_ENDSEC (0) // next TABLE or ENDSEC
       dxf_free_pair (pair);
