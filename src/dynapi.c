@@ -2074,7 +2074,7 @@ static const Dwg_DYNAPI_field _dwg_LIGHT_fields[] = {
 static const Dwg_DYNAPI_field _dwg_LINE_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_LINE, parent),
     1,1,0, 0 },
-  { "Zs_are_zero",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_LINE, Zs_are_zero),
+  { "z_is_zero",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_LINE, z_is_zero),
     0,0,0, 0 },
   { "start",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_LINE, start),
     1,0,0, 10 },

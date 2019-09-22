@@ -7,7 +7,7 @@ api_process (dwg_object *obj)
   int error;
   double thickness;
   dwg_point_3d pt3d, ext, start, end;
-  BITCODE_B zs_are_zero;
+  BITCODE_B z_is_zero;
 
   dwg_ent_line *line = dwg_object_to_LINE (obj);
 
@@ -24,5 +24,5 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (line, LINE, thickness, RD, thickness);
   CHK_ENTITY_3RD_W_OLD (line, LINE, extrusion, ext);
 
-  CHK_ENTITY_TYPE (line, LINE, Zs_are_zero, B, zs_are_zero);
+  CHK_ENTITY_TYPE (line, LINE, z_is_zero, B, z_is_zero);
 }

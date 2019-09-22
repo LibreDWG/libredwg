@@ -993,13 +993,13 @@ DWG_ENTITY(LINE)
         }
       DECODER
         {
-          FIELD_B (Zs_are_zero, 0);
+          FIELD_B (z_is_zero, 0);
           FIELD_RD (start.x, 10);
           FIELD_DD (end.x, FIELD_VALUE(start.x), 11);
           FIELD_RD (start.y, 20);
           FIELD_DD (end.y, FIELD_VALUE(start.y), 21);
 
-          if (FIELD_VALUE(Zs_are_zero))
+          if (FIELD_VALUE(z_is_zero))
             {
               FIELD_VALUE(start.z) = 0.0;
               FIELD_VALUE(end.z) = 0.0;
@@ -1015,14 +1015,14 @@ DWG_ENTITY(LINE)
 
       ENCODER
         {
-          FIELD_VALUE(Zs_are_zero) = (FIELD_VALUE(start.z) == 0.0 &&
-                                      FIELD_VALUE (end.z) == 0.0);
-          FIELD_B (Zs_are_zero, 0);
+          FIELD_VALUE(z_is_zero) = (FIELD_VALUE(start.z) == 0.0 &&
+                                      FIELD_VALUE(end.z) == 0.0);
+          FIELD_B (z_is_zero, 0);
           FIELD_RD (start.x, 10);
           FIELD_DD (end.x, FIELD_VALUE(start.x), 11);
           FIELD_RD (start.y, 20);
           FIELD_DD (end.y, FIELD_VALUE(start.y), 21);
-          if (!FIELD_VALUE(Zs_are_zero))
+          if (!FIELD_VALUE(z_is_zero))
             {
               FIELD_RD (start.z, 30);
               FIELD_DD (end.z, FIELD_VALUE(start.z), 31);

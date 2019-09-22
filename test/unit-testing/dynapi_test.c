@@ -12366,19 +12366,19 @@ static int test_LINE (const Dwg_Object *obj)
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_LINE *restrict line = obj->tio.entity->tio.LINE;
   {
-    BITCODE_RC Zs_are_zero;
-    if (dwg_dynapi_entity_value (line, "LINE", "Zs_are_zero", &Zs_are_zero, NULL)
-        && Zs_are_zero == line->Zs_are_zero)
+    BITCODE_RC z_is_zero;
+    if (dwg_dynapi_entity_value (line, "LINE", "z_is_zero", &z_is_zero, NULL)
+        && z_is_zero == line->z_is_zero)
       pass ();
     else
-      fail ("LINE.Zs_are_zero [RC] %u != %u", line->Zs_are_zero, Zs_are_zero);
-    Zs_are_zero++;
-    if (dwg_dynapi_entity_set_value (line, "LINE", "Zs_are_zero", &Zs_are_zero, 0)
-        && Zs_are_zero == line->Zs_are_zero)
+      fail ("LINE.z_is_zero [RC] %u != %u", line->z_is_zero, z_is_zero);
+    z_is_zero++;
+    if (dwg_dynapi_entity_set_value (line, "LINE", "z_is_zero", &z_is_zero, 0)
+        && z_is_zero == line->z_is_zero)
       pass ();
     else
-      fail ("LINE.Zs_are_zero [RC] set+1 %u != %u", line->Zs_are_zero, Zs_are_zero);
-    line->Zs_are_zero--;
+      fail ("LINE.z_is_zero [RC] set+1 %u != %u", line->z_is_zero, z_is_zero);
+    line->z_is_zero--;
 
   }
   {

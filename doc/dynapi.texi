@@ -2091,7 +2091,7 @@ H
 
 @item parent
 struct _dwg_object_entity*
-@item Zs_are_zero
+@item z_is_zero
 RC
 @item start
 3BD,	DXF 10

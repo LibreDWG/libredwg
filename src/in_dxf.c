@@ -4059,6 +4059,7 @@ new_object (char *restrict name, char *restrict dxfname,
         pt.x = pt.y = pt.z = 1.0;
         dwg_dynapi_entity_set_value (_obj, obj->name, "scale", &pt, 0);
         LOG_TRACE ("%s.scale = (1,1,1) (default)\n", obj->name);
+        pt.x = pt.y = pt.z = 0.0;
       }
     if (dwg_dynapi_entity_field (obj->name, "extrusion"))
       {
@@ -4066,6 +4067,7 @@ new_object (char *restrict name, char *restrict dxfname,
         pt.z = 1.0;
         dwg_dynapi_entity_set_value (_obj, obj->name, "extrusion", &pt, 0);
         LOG_TRACE ("%s.extrusion = (0,0,1) (default)\n", obj->name);
+        pt.z = 0.0;
       }
   }
 
@@ -4928,6 +4930,7 @@ new_object (char *restrict name, char *restrict dxfname,
                                    || strchr (f->type, '3')
                                    || strEQc (f->type, "BE")))
                         {
+                          pt.x = 0.0;
                           if (pair->value.d == 0.0) // ignore defaults
                             goto next_pair;
                           pt.x = pair->value.d;
@@ -4998,6 +5001,7 @@ new_object (char *restrict name, char *restrict dxfname,
                                    ? f->dxf + 1 == pair->code // 2BD_1
                                    : f->dxf + 10 == pair->code))
                     {
+                      pt.y = 0.0;
                       if (pair->value.d == 0.0) // ignore defaults
                         goto next_pair;
                       dwg_dynapi_entity_value (_obj, obj->name, f->name, &pt,
@@ -5015,6 +5019,7 @@ new_object (char *restrict name, char *restrict dxfname,
                                    ? f->dxf + 2 == pair->code // 2BD_1
                                    : f->dxf + 20 == pair->code))
                     {
+                      pt.z = 0.0;
                       // can ignore z or 0.0?
                       if (strNE (name, "_3DFACE") && strNE (f->name, "scale")
                           && (pair->value.d == 0.0 || *f->type == '2'))
@@ -5165,7 +5170,7 @@ new_object (char *restrict name, char *restrict dxfname,
                           if (f->is_string)
                             {
                               LOG_TRACE ("COMMON.%s = %s [%d %s]\n", f->name,
-                                         pair->value.s, pair->code, f->type);
+                                         pair->value.s, pair->code, f->type)
                             }
                           else
                             {
@@ -5174,8 +5179,12 @@ new_object (char *restrict name, char *restrict dxfname,
                                   pair = add_ent_preview (obj, dat, pair);
                                   goto start_loop; // already fresh pair
                                 }
-                              LOG_TRACE ("COMMON.%s = %ld [%d %s]\n", f->name,
-                                         pair->value.l, pair->code, f->type);
+                              if (strchr (f->type, 'D'))
+                                LOG_TRACE ("COMMON.%s = %f [%d %s]\n", f->name,
+                                           pair->value.d, pair->code, f->type)
+                              else
+                                LOG_TRACE ("COMMON.%s = %ld [%d %s]\n", f->name,
+                                           pair->value.l, pair->code, f->type)
                             }
                           goto next_pair; // found, early exit
                         }

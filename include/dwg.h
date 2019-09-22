@@ -1242,7 +1242,7 @@ typedef struct _dwg_entity_LINE
 {
   struct _dwg_object_entity *parent;
 
-  BITCODE_RC Zs_are_zero;
+  BITCODE_RC z_is_zero;
   BITCODE_3BD start;
   BITCODE_3BD end;
   BITCODE_BT thickness;
