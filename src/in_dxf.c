@@ -5146,8 +5146,12 @@ new_object (char *restrict name, char *restrict dxfname,
                             {
                               if (pair->code > 300)
                                 {
-                                  LOG_WARN ("TODO resolve common handle %s %X",
-                                            f->name, pair->value.u)
+                                  handle = dwg_add_handleref (
+                                      dwg, 5, pair->value.u, obj);
+                                  dwg_dynapi_common_set_value (_obj, f->name,
+                                                               &handle, 0);
+                                  LOG_TRACE ("COMMON.%s = %X [H %d]\n",
+                                             f->name, pair->value.u, pair->code)
                                 }
                               else
                                 {
@@ -5158,10 +5162,62 @@ new_object (char *restrict name, char *restrict dxfname,
                             }
                           else
                             {
+                              if (pair->code > 300)
+                                LOG_TRACE ("COMMON.%s = %lX [H %d]\n",
+                                           f->name, pair->value.l, 
+                                           pair->code)
+                              else
+                                LOG_TRACE ("COMMON.%s = %s [H %d]\n", f->name,
+                                           pair->value.s, pair->code)
                               dwg_dynapi_common_set_value (_obj, f->name,
-                                                           &handle, is_utf);
-                              goto next_pair; // found, early exit
+                                                           &handle, 0);
                             }
+                          if (is_entity && pair->code == 6
+                              && dwg->header.version >= R_2000)
+                            {
+                              BITCODE_BB flags = 3;
+                              if (!strcasecmp (pair->value.s, "BYLAYER"))
+                                flags = 0;
+                              if (!strcasecmp (pair->value.s, "BYBLOCK"))
+                                flags = 1;
+                              if (!strcasecmp (pair->value.s, "CONTINUOUS"))
+                                flags = 2;
+                              dwg_dynapi_common_set_value (_obj, "ltype_flags",
+                                                           &flags, 0);
+                              LOG_TRACE ("COMMON.%s = %d [BB 0]\n",
+                                         "ltype_flags", flags);
+                            }
+                          if (is_entity && pair->code == 390
+                              && dwg->header.version >= R_2000)
+                            {
+                              BITCODE_BB flags = 3;
+                              /*
+                              if (!strcasecmp (pair->value.s, "BYLAYER"))
+                                flags = 0;
+                              if (!strcasecmp (pair->value.s, "BYBLOCK"))
+                                flags = 1;
+                              */
+                              dwg_dynapi_common_set_value (
+                                  _obj, "plotstyle_flags", &flags, 0);
+                              LOG_TRACE ("COMMON.%s = %d [BB 0]\n",
+                                         "plotstyle_flags", flags);
+                            }
+                          if (is_entity && pair->code == 347
+                              && dwg->header.version >= R_2007)
+                            {
+                              BITCODE_BB flags = 3;
+                              /*
+                              if (!strcasecmp (pair->value.s, "BYLAYER"))
+                                flags = 0;
+                              if (!strcasecmp (pair->value.s, "BYBLOCK"))
+                                flags = 1;
+                              */
+                              dwg_dynapi_common_set_value (
+                                  _obj, "material_flags", &flags, 0);
+                              LOG_TRACE ("COMMON.%s = %d [BB 0]\n",
+                                         "material_flags", flags);
+                            }
+                          goto next_pair; // found, early exit
                         }
                       else
                         {
