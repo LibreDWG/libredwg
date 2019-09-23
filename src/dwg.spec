@@ -388,7 +388,11 @@ DWG_ENTITY_END
 DWG_ENTITY(INSERT)
 
   SUBCLASS (AcDbBlockReference)
-  DXF { FIELD_B (has_attribs, 66); }
+#ifdef IS_DXF
+    FIELD_HANDLE_NAME (block_header, 2, BLOCK_HEADER);
+    if (FIELD_VALUE(has_attribs))
+      FIELD_B (has_attribs, 66);
+#endif
   PRE (R_13) {
     FIELD_2RD (ins_pt, 10);
   } else {
@@ -403,7 +407,8 @@ DWG_ENTITY(INSERT)
   SINCE (R_2000)
     {
       DXF_OR_PRINT {
-        FIELD_3BD_1 (scale, 41);
+        if (_obj->scale.x != 1.0 || _obj->scale.y != 1.0 || _obj->scale.z != 1.0)
+          FIELD_3BD_1 (scale, 41);
       }
       DECODER
         {
@@ -486,7 +491,7 @@ DWG_ENTITY(INSERT)
     }
 
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (block_header, 5, 2);
+  FIELD_HANDLE (block_header, 5, 0);
   //There is a typo in the spec. it says "R13-R200:".
   //I guess it means "R13-R2000:" (just like in MINSERT)
   VERSIONS(R_13, R_2000)
@@ -518,8 +523,11 @@ DWG_ENTITY_END
 DWG_ENTITY(MINSERT)
 
   SUBCLASS (AcDbBlockReference)
-  DXF { FIELD_B (has_attribs, 66); }
-
+#ifdef IS_DXF
+    FIELD_HANDLE_NAME (block_header, 2, BLOCK_HEADER);
+    if (FIELD_VALUE(has_attribs))
+      FIELD_B (has_attribs, 66);
+#endif
   FIELD_3DPOINT (ins_pt, 10);
 
   VERSIONS(R_13, R_14) {
@@ -529,7 +537,8 @@ DWG_ENTITY(MINSERT)
   SINCE (R_2000)
     {
       DXF_OR_PRINT {
-        FIELD_3BD_1 (scale, 41);
+        if (_obj->scale.x != 1.0 || _obj->scale.y != 1.0 || _obj->scale.z != 1.0)
+          FIELD_3BD_1 (scale, 41);
       }
       DECODER
         {
@@ -613,7 +622,7 @@ DWG_ENTITY(MINSERT)
   FIELD_BD (row_spacing, 45);
 
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (block_header, 5, 2);
+  FIELD_HANDLE (block_header, 5, 0);
   VERSIONS(R_13, R_2000)
   {
     if (FIELD_VALUE(has_attribs))
