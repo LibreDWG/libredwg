@@ -45,7 +45,7 @@ static int help (void);
 static int
 usage (void)
 {
-  printf ("\nUsage: dwgwrite [-v[0-9]] [--as rNNNN] [-I FMT] [-o DWGFILE] "
+  printf ("\nUsage: dwgwrite [-v[0-9]] [-y] [--as rNNNN] [-I FMT] [-o DWGFILE] "
           "INFILE\n");
   return 1;
 }
@@ -346,7 +346,11 @@ main (int argc, char *argv[])
                 && !S_ISLNK (attrib.st_mode)
 #endif
             )
-              unlink (outfile);
+              {
+                unlink (outfile);
+                dwg.opts |= opts;
+                error = dwg_write_file (outfile, &dwg);
+              }
             else
               {
                 fprintf (stderr, "Not writable file or symlink: %s\n",
@@ -356,7 +360,10 @@ main (int argc, char *argv[])
           }
       }
     else
-      error = dwg_write_file (outfile, &dwg);
+      {
+        dwg.opts |= opts;
+        error = dwg_write_file (outfile, &dwg);
+      }
   }
 
   // forget about valgrind. really huge DWG's need endlessly here.

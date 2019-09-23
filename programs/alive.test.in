@@ -52,6 +52,7 @@ run ()
     dwg2dxf)    arg="-y $arg" ;;
     dwggrep)    arg="-i tekst $arg" ;;
     dxf2dwg)    arg="-y -v2 ${datadir}/$dwg.dxf" ;;
+    dwgwrite)   arg="-y -v2 ${datadir}/$dwg.dxf" ;;
     #dwgrewrite) arg="-v2 $arg" ;;
     *)          arg="-v2 $arg" ;;
     esac
