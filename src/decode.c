@@ -260,9 +260,9 @@ decode_preR13_section_ptr (const char *restrict name, Dwg_Section_Type_r11 id,
   tbl->number = bit_read_RL (dat);
   tbl->address = bit_read_RL (dat);
   strncpy (tbl->name, name, 63);
-  LOG_TRACE ("ptr table %-8s [%2d]: size:%-4u nr:%-2ld (0x%x-0x%lx)\n",
-             tbl->name, id, tbl->size, (long)tbl->number, tbl->address,
-             (long)(tbl->address + tbl->number * tbl->size))
+  LOG_TRACE ("ptr table %-8s [%2d]: size:%-4u nr:%-2ld (0x%lx-0x%lx)\n",
+             tbl->name, id, tbl->size, (long)tbl->number, (unsigned long)tbl->address,
+             (unsigned long)(tbl->address + tbl->number * tbl->size))
 }
 
 static void
@@ -306,8 +306,8 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   long unsigned int size = tbl->number * sizeof (Dwg_Object);
   long unsigned int pos;
 
-  LOG_TRACE ("\ncontents table %-8s [%2d]: size:%-4u nr:%-3ld (0x%x-0x%lx)\n",
-             tbl->name, id, tbl->size, (long)tbl->number, tbl->address,
+  LOG_TRACE ("\ncontents table %-8s [%2d]: size:%-4u nr:%-3ld (0x%lx-0x%lx)\n",
+             tbl->name, id, tbl->size, (long)tbl->number, (unsigned long)tbl->address,
              (unsigned long)(tbl->address + tbl->number * tbl->size))
   dat->byte = tbl->address;
   if (dwg->num_objects % REFS_PER_REALLOC == 0)
@@ -1348,7 +1348,7 @@ classes_section:
             LOG_HANDLE ("1st header was:\n");
             for (i = 0; i < dwg->header.num_sections; i++)
               {
-                LOG_HANDLE ("section[" FORMAT_RL "] " FORMAT_RLd " " FORMAT_RL
+                LOG_HANDLE ("section[" FORMAT_RL "] " FORMAT_RLd " " FORMAT_RLL
                             " " FORMAT_RL " \n",
                             i, dwg->header.section[i].number,
                             dwg->header.section[i].address,
@@ -1703,7 +1703,7 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   BITCODE_RC *decomp, *ptr;
   int i, error;
-  BITCODE_RL section_address;
+  uint64_t section_address;
   int64_t bytes_remaining;
   uint32_t comp_data_size = dwg->r2004_header.comp_data_size;
   uint32_t decomp_data_size = dwg->r2004_header.decomp_data_size;
@@ -1758,7 +1758,7 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
       LOG_TRACE ("Section[%2d]=%2d,", i, (int)dwg->header.section[i].number)
       LOG_TRACE (" size: %5u,", dwg->header.section[i].size)
-      LOG_TRACE (" address: 0x%04x\n", dwg->header.section[i].address)
+      LOG_TRACE (" address: 0x%04lx\n", (unsigned long)dwg->header.section[i].address)
 
       if (bytes_remaining >= 16
           && dwg->header.section[i].number < 0) // negative: gap/unused data
@@ -1949,7 +1949,7 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   LOG_TRACE (" size: %5" PRIu32, page.size) // compressed
                   LOG_TRACE (" address: 0x%" PRIx64, page.address)
                   if (info->sections[j])
-                    LOG_TRACE (" info: 0x%x", info->sections[j]->address);
+                    LOG_TRACE (" info: 0x%" PRIx64, info->sections[j]->address);
                   LOG_TRACE ("\n")
                   ptr -= 16;
                   break;
@@ -1961,9 +1961,9 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   prev_address = page.address;
                 }
               LOG_TRACE (" size: %5" PRIu32, page.size) // compressed
-              LOG_TRACE (" address: 0x%" PRIx64 "", page.address)
+              LOG_TRACE (" address: 0x%" PRIx64, page.address)
               if (info->sections[j])
-                LOG_TRACE (" info: 0x%x", info->sections[j]->address);
+                LOG_TRACE (" info: 0x%" PRIx64, info->sections[j]->address);
               LOG_TRACE ("\n")
             }
         }
@@ -2653,8 +2653,8 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       Dwg_Object *obj = NULL;
       Dwg_Section *_obj = section;
-      LOG_TRACE ("\n=== Data Section (Section Info %d) ===\n",
-                 dwg->r2004_header.section_info_id)
+      LOG_TRACE ("\n=== Data Section (Section Info %d) @%lx ===\n",
+                 dwg->r2004_header.section_info_id, (unsigned long)section->address)
       dat->byte = section->address;
 
       FIELD_RLx (section_type, 0);

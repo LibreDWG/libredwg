@@ -5523,7 +5523,7 @@ typedef struct _dwg_section
 {
   int32_t    number; /* preR13: count of entries, r2007: id */
   BITCODE_RL size;
-  BITCODE_RL address;
+  uint64_t   address;
   BITCODE_RL parent;
   BITCODE_RL left;
   BITCODE_RL right;
