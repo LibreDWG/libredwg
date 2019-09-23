@@ -90,6 +90,7 @@
         LOG_HANDLE(" color.index: %d [ENC 62]\n", ent->color.index);
       }
       DXF {
+        // 0: byblock
         if (FIELD_VALUE(color.index) != 256) // not bylayer
           FIELD_BS (color.index, 62);
       }

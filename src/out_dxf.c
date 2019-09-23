@@ -482,9 +482,10 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
   }
 #define FIELD_3DPOINT(nam, dxf) FIELD_3BD (nam, dxf)
 // TODO r2004+: lookup the rgb index for 62
+// skip index 256 bylayer
 #define FIELD_CMC(color, dxf1, dxf2)                                          \
   {                                                                           \
-    if (dxf1 > 0 && (dat->version < R_2004 || _obj->color.index == 256))      \
+    if (dxf1 > 0 && _obj->color.index != 256)                                 \
       {                                                                       \
         VALUE_RS ((_obj->color.index & 255), dxf1);                           \
       }                                                                       \
@@ -496,7 +497,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
   }
 #define SUB_FIELD_CMC(o, color, dxf1, dxf2)                                   \
   {                                                                           \
-    if (dxf1 > 0 && (dat->version < R_2004 || _obj->o.color.index == 256))    \
+    if (dxf1 > 0 && _obj->o.color.index != 256)                               \
       {                                                                       \
         VALUE_RS ((_obj->o.color.index & 255), dxf1);                         \
       }                                                                       \
