@@ -94,8 +94,9 @@ typedef uint16_t BITCODE_RS;
 typedef uint16_t BITCODE_RSx;
 typedef uint32_t BITCODE_BL;
 typedef uint32_t BITCODE_BLx;
-typedef uint32_t BITCODE_RL;
 typedef int32_t BITCODE_BLd;
+typedef uint32_t BITCODE_RL;
+typedef uint32_t BITCODE_RLx;
 typedef int32_t BITCODE_RLd;
 /* e.g. old cygwin 64 vs 32 */
 /*#else
@@ -148,10 +149,10 @@ typedef BITCODE_BL BITCODE_MS;
 typedef BITCODE_DOUBLE BITCODE_RD;
 #define FORMAT_RD "%f"
 /* Since R2004 */
-typedef int64_t BITCODE_RLL;
-typedef int64_t BITCODE_BLL;
-#define FORMAT_RLL "%" PRId64
-#define FORMAT_BLL "%" PRId64
+typedef uint64_t BITCODE_RLL;
+typedef uint64_t BITCODE_BLL;
+#define FORMAT_RLL "0x%" PRIx64
+#define FORMAT_BLL "0x%" PRIx64
 #ifndef HAVE_NATIVE_WCHAR2
   typedef BITCODE_RS dwg_wchar_t;
 # define DWGCHAR dwg_wchar_t
@@ -5522,7 +5523,7 @@ typedef enum DWG_SECTION_TYPE_R11 /* tables */
 typedef struct _dwg_section
 {
   int32_t    number; /* preR13: count of entries, r2007: id */
-  BITCODE_RL size;
+  int32_t    size;
   uint64_t   address;
   BITCODE_RL parent;
   BITCODE_RL left;
@@ -5617,18 +5618,18 @@ typedef struct _dwg_struct
   struct Dwg_R2004_Header /* encrypted */
     {
       BITCODE_RC file_ID_string[12];
-      BITCODE_RL header_address;
+      BITCODE_RLx header_address;
       BITCODE_RL header_size;
       BITCODE_RL x04;
-      BITCODE_RL root_tree_node_gap;
-      BITCODE_RL lowermost_left_tree_node_gap;
-      BITCODE_RL lowermost_right_tree_node_gap;
+      BITCODE_RLd root_tree_node_gap;
+      BITCODE_RLd lowermost_left_tree_node_gap;
+      BITCODE_RLd lowermost_right_tree_node_gap;
       BITCODE_RL unknown_long;
       BITCODE_RL last_section_id;
       BITCODE_RLL last_section_address;
       BITCODE_RLL second_header_address;
-      BITCODE_RL gap_amount;
-      BITCODE_RL section_amount;
+      BITCODE_RL num_gaps;
+      BITCODE_RL num_sections;
       BITCODE_RL x20;
       BITCODE_RL x80;
       BITCODE_RL x40;
@@ -5637,14 +5638,14 @@ typedef struct _dwg_struct
       BITCODE_RL section_info_id;
       BITCODE_RL section_array_size;
       BITCODE_RL gap_array_size;
-      BITCODE_RL crc32; /* p 2.14.2 32bit CRC 2004+ */
+      BITCODE_RLx crc32; /* p 2.14.2 32bit CRC 2004+ */
       BITCODE_RC padding[12];
       /* System Section: Section Page Map */
       BITCODE_RL section_type; /* 0x4163043b */
       BITCODE_RL decomp_data_size;
       BITCODE_RL comp_data_size;
       BITCODE_RL compression_type;
-      BITCODE_RL checksum;
+      BITCODE_RLx checksum;
   } r2004_header;
 
   /* #define DWG_AUXHEADER_SIZE 123 */
