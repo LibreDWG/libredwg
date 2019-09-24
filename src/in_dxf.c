@@ -856,10 +856,11 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
 
   if (pair->code < 1020 || pair->code > 1035) // followup y and z pairs
     {
-      if (i)
+      if (i || eed)
         {
           eed = (Dwg_Eed *)realloc (eed, (i + 1) * sizeof (Dwg_Eed));
-          memset (&eed[i], 0, sizeof (Dwg_Eed));
+          if (i)
+            memset (&eed[i], 0, sizeof (Dwg_Eed));
         }
       else
         {
@@ -1009,7 +1010,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       if (strEQc (pair->value.s, "ACAD"))
         {
           dwg_add_handle (&eed[i].handle, 5, 0x12, NULL);
-          LOG_TRACE ("EED[%d] 12 [H] for APPID.%s\n", i, pair->value.s);
+          LOG_TRACE ("EED[%d] handle: 5.1.12 [H] for APPID.%s\n", i, pair->value.s);
         }
       else
         {
@@ -1019,7 +1020,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
           if (hdl)
             {
               memcpy (&eed[i].handle, &hdl->handleref, sizeof (Dwg_Handle));
-              LOG_TRACE ("EED[%d] %lX [H] for APPID.%s\n", i, hdl->absolute_ref,
+              LOG_TRACE ("EED[%d] handle: %lX [H] for APPID.%s\n", i, hdl->absolute_ref,
                          pair->value.s);
             }
           // needs to be postponed, because we don't have the tables yet
@@ -1028,7 +1029,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
               char idx[12];
               snprintf (idx, 12, "%d", obj->index);
               eed_hdls = array_push (eed_hdls, idx, pair->value.s, (short)i);
-              LOG_TRACE ("EED[%d] ? [H} for APPID.%s later\n", i,
+              LOG_TRACE ("EED[%d] handle: ? [H} for APPID.%s later\n", i,
                           pair->value.s);
             }
         }
@@ -2990,7 +2991,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
               hdls = calloc (num_entries, sizeof (Dwg_Object_Ref *));
               dwg_dynapi_entity_set_value (_obj, obj->name, "entries", &hdls,
                                            0);
-              LOG_TRACE ("Add %s.%s[%d]\n", ctrlname, "entries", num_entries);
+              LOG_TRACE ("Add %d %s.%s\n", num_entries, ctrlname, "entries");
             }
           break;
         case 71:
