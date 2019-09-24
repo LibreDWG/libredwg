@@ -4362,7 +4362,12 @@ new_object (char *restrict name, char *restrict dxfname,
           else if (obj->fixedtype != DWG_TYPE_XRECORD
                    || !obj->tio.object->ownerhandle)
             {
-              BITCODE_H owh = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+              BITCODE_H owh;
+              //TODO: dwg_encode_get_class for >500?
+              if (obj->type < DWG_TYPE_PLACEHOLDER) // absolute
+                owh = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
+              else // relative
+                owh = dwg_add_handleref (dwg, 4, pair->value.u, obj);
               if (is_entity)
                 obj->tio.entity->ownerhandle = owh;
               else
