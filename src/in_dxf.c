@@ -3933,6 +3933,9 @@ new_object (char *restrict name, char *restrict dxfname,
 
       obj->tio.entity->xdic_missing_flag = 1;
       obj->tio.entity->color.index = 256; // ByLayer
+      obj->tio.entity->ltype_scale = 1.0;
+      obj->tio.entity->linewt = 0x1d;
+
       if (*name == '3')
         {
           // Looks dangerous but name[80] is big enough
@@ -5361,16 +5364,24 @@ new_object (char *restrict name, char *restrict dxfname,
               if (prev->type != DWG_TYPE_SEQEND
                   && prev->type != DWG_TYPE_ENDBLK)
                 {
+                  prev->tio.entity->nolinks = 0;
                   prev->tio.entity->next_entity
                       = dwg_add_handleref (dwg, 4, obj->handle.value, prev);
                   LOG_TRACE ("prev %s(%lX).next_entity = " FORMAT_REF "\n",
                              prev->name, prev->handle.value,
                              ARGS_REF (prev->tio.entity->next_entity));
+                  ent->nolinks = 0;
+                  ent->prev_entity
+                    = dwg_add_handleref (dwg, 4, prev->handle.value, obj);
+                  LOG_TRACE ("%s.prev_entity = " FORMAT_REF "\n", name,
+                             ARGS_REF (ent->prev_entity));
                 }
-              ent->prev_entity
-                  = dwg_add_handleref (dwg, 4, prev->handle.value, obj);
-              LOG_TRACE ("%s.prev_entity = " FORMAT_REF "\n", name,
-                         ARGS_REF (ent->prev_entity));
+              else
+                {
+                  LOG_TRACE ("%s.prev_entity = NULL HANDLE 4\n", name);
+                  ent->prev_entity = NULL;
+                  ent->nolinks = 1;
+                }
             }
           else
             {
