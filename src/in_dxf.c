@@ -2837,7 +2837,13 @@ find_prev_entity (Dwg_Object *obj)
       Dwg_Object *prev = &dwg->object[i];
       if (prev->supertype == DWG_SUPERTYPE_ENTITY
           && prev->tio.entity->entmode == obj->tio.entity->entmode)
-        return prev;
+        {
+          if (prev->fixedtype == DWG_TYPE_SEQEND ||
+              prev->fixedtype == DWG_TYPE_ENDBLK)
+            return NULL;
+          else
+            return prev;
+        }
     }
   return NULL;
 }
