@@ -798,34 +798,34 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 const char *n = strEQc (pair->value.s, "ACDBDATATABLE")
                   ? "DATATABLE" : pair->value.s;
                 STRADD (klass->dxfname, n);
-                LOG_TRACE ("CLASS[%d].dxfname = %s [1]\n", i, n);
+                LOG_TRACE ("CLASS[%d].dxfname = %s [TV 1]\n", i, n);
                 break;
               }
             case 2:
               STRADD (klass->cppname, pair->value.s);
-              LOG_TRACE ("CLASS[%d].cppname = %s [2]\n", i, pair->value.s);
+              LOG_TRACE ("CLASS[%d].cppname = %s [TV 2]\n", i, pair->value.s);
               break;
             case 3:
               STRADD (klass->appname, pair->value.s);
-              LOG_TRACE ("CLASS[%d].appname = %s [3]\n", i, pair->value.s);
+              LOG_TRACE ("CLASS[%d].appname = %s [TV 3]\n", i, pair->value.s);
               break;
             case 90:
               klass->proxyflag = pair->value.l;
-              LOG_TRACE ("CLASS[%d].proxyflag = %ld [90]\n", i, pair->value.l);
+              LOG_TRACE ("CLASS[%d].proxyflag = %ld [BS 90]\n", i, pair->value.l);
               break;
             case 91:
               klass->num_instances = pair->value.l;
-              LOG_TRACE ("CLASS[%d].num_instances = %ld [91]\n", i,
+              LOG_TRACE ("CLASS[%d].num_instances = %ld [BL 91]\n", i,
                          pair->value.l);
               break;
             case 280:
               klass->wasazombie = (BITCODE_B)pair->value.i;
-              LOG_TRACE ("CLASS[%d].wasazombie = %d [280]\n", i,
+              LOG_TRACE ("CLASS[%d].wasazombie = %d [B 280]\n", i,
                          pair->value.i);
               break;
             case 281:
               klass->item_class_id = pair->value.i ? 0x1f2 : 0x1f3;
-              LOG_TRACE ("CLASS[%d].item_class_id = %x [281]\n", i,
+              LOG_TRACE ("CLASS[%d].item_class_id = %x [BS 281]\n", i,
                          klass->item_class_id);
               break;
             default:
@@ -1085,7 +1085,7 @@ new_MLINESTYLE_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           j++;
           assert (j < num_lines);
           _o->lines[j].offset = pair->value.d;
-          LOG_TRACE ("MLINESTYLE.lines[%d].offset = %f [49 BD]\n", j,
+          LOG_TRACE ("MLINESTYLE.lines[%d].offset = %f [BD 49]\n", j,
                      pair->value.d);
         }
       else if (pair->code == 62)
@@ -1094,7 +1094,7 @@ new_MLINESTYLE_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             j++;
           assert (j < num_lines);
           _o->lines[j].color.index = pair->value.i;
-          LOG_TRACE ("MLINESTYLE.lines[%d].color.index = %d [62 CMC]\n", j,
+          LOG_TRACE ("MLINESTYLE.lines[%d].color.index = %d [CMC 62]\n", j,
                      pair->value.i);
         }
       else if (pair->code == 420)
@@ -1103,7 +1103,7 @@ new_MLINESTYLE_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             j++;
           assert (j < num_lines);
           _o->lines[j].color.rgb = pair->value.u;
-          LOG_TRACE ("MLINESTYLE.lines[%d].color.rgb = %06X [420 CMC]\n", j,
+          LOG_TRACE ("MLINESTYLE.lines[%d].color.rgb = %06X [CMC 420]\n", j,
                      pair->value.u);
         }
       else if (pair->code == 6)
@@ -1155,7 +1155,7 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   _o->points = calloc (num_points, sizeof (BITCODE_2RD));
   _o->bulges = calloc (num_points, sizeof (BITCODE_BD));
   _o->num_bulges = num_points;
-  LOG_TRACE ("LWPOLYLINE.num_points = %u [90 BS]\n", num_points);
+  LOG_TRACE ("LWPOLYLINE.num_points = %u [BS 90]\n", num_points);
 
   while (pair->code != 0)
     {
@@ -1167,12 +1167,12 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           _o->const_width = pair->value.d;
           _o->flag |= 4;
-          LOG_TRACE ("LWPOLYLINE.const_width = %f [43 BD]\n", pair->value.d);
+          LOG_TRACE ("LWPOLYLINE.const_width = %f [BD 43]\n", pair->value.d);
         }
       else if (pair->code == 70)
         {
           _o->flag |= pair->value.i; /* only if closed or not */
-          LOG_TRACE ("LWPOLYLINE.flag = %d [70 BS]\n", pair->value.i);
+          LOG_TRACE ("LWPOLYLINE.flag = %d [BS 70]\n", pair->value.i);
         }
       else if (pair->code == 38)
         {
@@ -1184,7 +1184,7 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           _o->thickness = pair->value.d;
           _o->flag |= 2;
-          LOG_TRACE ("LWPOLYLINE.thickness = %f [39 BD]\n", pair->value.d);
+          LOG_TRACE ("LWPOLYLINE.thickness = %f [BD 39]\n", pair->value.d);
         }
       else if (pair->code == 210)
         {
@@ -1197,7 +1197,7 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 230)
         {
           _o->extrusion.z = pair->value.d;
-          LOG_TRACE ("LWPOLYLINE.extrusion = (%f, %f, %f) [210 3BD]\n",
+          LOG_TRACE ("LWPOLYLINE.extrusion = (%f, %f, %f) [3BD 210]\n",
                      _o->extrusion.x, _o->extrusion.y, _o->extrusion.z);
         }
       else if (pair->code == 10)
@@ -1210,14 +1210,14 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           assert (j < (int)_o->num_points);
           _o->points[j].y = pair->value.d;
-          LOG_TRACE ("LWPOLYLINE.points[%d] = (%f, %f) [10 2RD]\n", j,
+          LOG_TRACE ("LWPOLYLINE.points[%d] = (%f, %f) [2RD 10]\n", j,
                      _o->points[j].x, _o->points[j].y);
         }
       else if (pair->code == 42)
         {
           assert (j < (int)_o->num_bulges);
           _o->bulges[j] = pair->value.d;
-          LOG_TRACE ("LWPOLYLINE.bulges[%d] = %f [42 BD]\n", j, pair->value.d);
+          LOG_TRACE ("LWPOLYLINE.bulges[%d] = %f [BD 42]\n", j, pair->value.d);
         }
       else if (pair->code == 91)
         {
@@ -1228,7 +1228,7 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             }
           assert (j < (int)_o->num_vertexids);
           _o->vertexids[j] = pair->value.d;
-          LOG_TRACE ("LWPOLYLINE.vertexids[%d] = %f [91 BD]\n", j,
+          LOG_TRACE ("LWPOLYLINE.vertexids[%d] = %f [BD 91]\n", j,
                      pair->value.d);
         }
       else if (pair->code == 40) // not const_width
@@ -1241,14 +1241,14 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             }
           assert (j < (int)_o->num_widths);
           _o->widths[j].start = pair->value.d;
-          LOG_TRACE ("LWPOLYLINE.widths[%d].start = %f [40 BD]\n", j,
+          LOG_TRACE ("LWPOLYLINE.widths[%d].start = %f [BD 40]\n", j,
                      pair->value.d);
         }
       else if (pair->code == 41 && (_o->flag & 4)) // not const_width
         {
           assert (j < (int)_o->num_widths);
           _o->widths[j].end = pair->value.d;
-          LOG_TRACE ("LWPOLYLINE.widths[%d].end = %f [41 BD]\n", j,
+          LOG_TRACE ("LWPOLYLINE.widths[%d].end = %f [BD 41]\n", j,
                      pair->value.d);
         }
       else if (pair->code >= 1000 && pair->code < 1999)
@@ -1338,7 +1338,7 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       o->num_subdiv_vertex = pair->value.u;
       if (pair->value.u)
         o->subdiv_vertex = calloc (o->num_subdiv_vertex, sizeof (BITCODE_3BD));
-      LOG_TRACE ("MESH.num_subdiv_vertex = %u [91 BL]\n", pair->value.u);
+      LOG_TRACE ("MESH.num_subdiv_vertex = %u [BL 91]\n", pair->value.u);
     }
 
   while (pair->code != 0)
@@ -1353,7 +1353,7 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           j = 0;
           vector = pair->code;
           o->num_vertex = pair->value.u;
-          LOG_TRACE ("MESH.num_vertex = %u [92 BL]\n", pair->value.u);
+          LOG_TRACE ("MESH.num_vertex = %u [BL 92]\n", pair->value.u);
           if (pair->value.u)
             o->vertex = calloc (o->num_vertex, sizeof (BITCODE_3BD));
         }
@@ -1362,7 +1362,7 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           j = 0;
           vector = pair->code;
           o->num_faces = pair->value.u;
-          LOG_TRACE ("MESH.num_faces = %u [%d BL]\n", pair->value.u,
+          LOG_TRACE ("MESH.num_faces = %u [BL %d]\n", pair->value.u,
                      pair->code);
           if (pair->value.u)
             o->faces = calloc (o->num_faces, sizeof (BITCODE_BL));
@@ -1372,7 +1372,7 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           j = 0;
           vector = pair->code;
           o->num_edges = pair->value.u;
-          LOG_TRACE ("MESH.num_edges = %u [%d BL]\n", pair->value.u,
+          LOG_TRACE ("MESH.num_edges = %u [BL %d]\n", pair->value.u,
                      pair->code);
           if (pair->value.u) // from face - to face
             o->edges = calloc (o->num_edges, sizeof (Dwg_MESH_edge));
@@ -1382,7 +1382,7 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           j = 0;
           vector = pair->code;
           o->num_crease = pair->value.u;
-          LOG_TRACE ("MESH.num_crease = %u [%d BL]\n", pair->value.u,
+          LOG_TRACE ("MESH.num_crease = %u [BL %d]\n", pair->value.u,
                      pair->code);
           if (pair->value.u)
             o->crease = calloc (o->num_crease, sizeof (BITCODE_BD));
@@ -1423,18 +1423,17 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             {
               assert (j < o->num_subdiv_vertex);
               o->subdiv_vertex[j].z = pair->value.d;
-              LOG_TRACE ("MESH.subdiv_vertex[%d] = (%f, %f, %f) [%d 3BD]\n", j,
+              LOG_TRACE ("MESH.subdiv_vertex[%d] = (%f, %f, %f) [3BD 10]\n", j,
                          o->subdiv_vertex[j].x, o->subdiv_vertex[j].y,
-                         o->subdiv_vertex[j].z, pair->code);
+                         o->subdiv_vertex[j].z);
               j++;
             }
           else if (vector == 92)
             {
               assert (j < o->num_vertex);
               o->vertex[j].z = pair->value.d;
-              LOG_TRACE ("MESH.vertex[%d] = (%f, %f, %f) [%d 3BD]\n", j,
-                         o->vertex[j].x, o->vertex[j].y, o->vertex[j].z,
-                         pair->code);
+              LOG_TRACE ("MESH.vertex[%d] = (%f, %f, %f) [3BD 10]\n", j,
+                         o->vertex[j].x, o->vertex[j].y, o->vertex[j].z);
               j++;
             }
           else
@@ -1446,7 +1445,7 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             {
               assert (j < o->num_faces);
               o->faces[j] = pair->value.u;
-              LOG_TRACE ("MESH.faces[%d] = %u [%d BL]\n", j, pair->value.u,
+              LOG_TRACE ("MESH.faces[%d] = %u [BL %d]\n", j, pair->value.u,
                          pair->code);
               j++;
             }
@@ -1461,7 +1460,7 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               else
                 {
                   o->edges[i].to = pair->value.u;
-                  LOG_TRACE ("MESH.edges[%d] = (%u, %u) [%d 2BL]\n", i,
+                  LOG_TRACE ("MESH.edges[%d] = (%u, %u) [2BL %d]\n", i,
                              o->edges[i].from, pair->value.u, pair->code);
                 }
               j++;
@@ -1469,7 +1468,7 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           else if (vector == 95) //??
             {
               o->class_version = pair->value.u;
-              LOG_TRACE ("MESH.class_version = %u [%d BL]\n", pair->value.u,
+              LOG_TRACE ("MESH.class_version = %u [BL %d]\n", pair->value.u,
                          pair->code);
             }
           else
@@ -1481,7 +1480,7 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             {
               assert (j < o->num_crease);
               o->crease[j] = pair->value.u;
-              LOG_TRACE ("MESH.crease[%d] = %u [%d BD]\n", j, pair->value.u,
+              LOG_TRACE ("MESH.crease[%d] = %u [BD %d]\n", j, pair->value.u,
                          pair->code);
               j++;
             }
@@ -1517,18 +1516,18 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     {
       o->num_paths = pair->value.u;
       o->paths = calloc (o->num_paths, sizeof (Dwg_HATCH_Path));
-      LOG_TRACE ("HATCH.num_paths = %u [91 BS]\n", o->num_paths);
+      LOG_TRACE ("HATCH.num_paths = %u [BS 91]\n", o->num_paths);
     }
   else if (pair->code == 78)
     {
       o->num_deflines = pair->value.l;
-      LOG_TRACE ("HATCH.num_deflines = %ld [78 BS]\n", pair->value.l);
+      LOG_TRACE ("HATCH.num_deflines = %ld [BS 78]\n", pair->value.l);
       o->deflines = calloc (pair->value.l, sizeof (Dwg_HATCH_DefLine));
     }
   if (pair->code == 453)
     {
       o->num_colors = pair->value.l;
-      LOG_TRACE ("HATCH.num_colors = %ld [453 BL]\n", pair->value.l);
+      LOG_TRACE ("HATCH.num_colors = %ld [BL 453]\n", pair->value.l);
       o->colors = calloc (pair->value.l, sizeof (Dwg_HATCH_Color));
     }
 
@@ -1544,16 +1543,16 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           j++;
           assert (j < (int)o->num_paths);
           o->paths[j].flag = pair->value.u;
-          LOG_TRACE ("HATCH.paths[%d].flag = %u [92 BL]\n", j, pair->value.u);
+          LOG_TRACE ("HATCH.paths[%d].flag = %u [BL 92]\n", j, pair->value.u);
           is_plpath = pair->value.u & 2;
           o->has_derived = pair->value.u & 4;
-          LOG_TRACE ("HATCH.has_derived = %d [0 B]\n", o->has_derived);
+          LOG_TRACE ("HATCH.has_derived = %d [B 0]\n", o->has_derived);
         }
       else if (pair->code == 93)
         {
           assert (j < (int)o->num_paths);
           o->paths[j].num_segs_or_paths = pair->value.u;
-          LOG_TRACE ("HATCH.paths[%d].num_segs_or_paths = %u [93 BL]\n", j,
+          LOG_TRACE ("HATCH.paths[%d].num_segs_or_paths = %u [BL 93]\n", j,
                      pair->value.u);
           k = -1;
           if (!is_plpath)
@@ -1578,14 +1577,14 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 {
                   o->paths[j].segs[k].type_status = pair->value.i;
                   LOG_TRACE (
-                      "HATCH.paths[%d].segs[%d].type_status = %d [72 RC]\n", j,
+                      "HATCH.paths[%d].segs[%d].type_status = %d [RC 72]\n", j,
                       k, pair->value.i);
                 }
             }
           else
             {
               o->paths[j].bulges_present = pair->value.i;
-              LOG_TRACE ("HATCH.paths[%d].bulges_present = %d [72 RC]\n", j,
+              LOG_TRACE ("HATCH.paths[%d].bulges_present = %d [RC 72]\n", j,
                          pair->value.i);
             }
         }
@@ -1593,7 +1592,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           assert (j < (int)o->num_paths);
           o->paths[j].closed = pair->value.i;
-          LOG_TRACE ("HATCH.paths[%d].closed = %d [73 RC]\n", j,
+          LOG_TRACE ("HATCH.paths[%d].closed = %d [RC 73]\n", j,
                      pair->value.i);
         }
       else if (pair->code == 94 && !is_plpath && pair->value.l)
@@ -1601,7 +1600,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
           o->paths[j].segs[k].degree = pair->value.l;
-          LOG_TRACE ("HATCH.paths[%d].segs[%d].degree = %ld [94 BL]\n", j, k,
+          LOG_TRACE ("HATCH.paths[%d].segs[%d].degree = %ld [BL 94]\n", j, k,
                      pair->value.l);
         }
       else if (pair->code == 74 && !is_plpath && pair->value.i)
@@ -1609,7 +1608,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
           o->paths[j].segs[k].is_periodic = pair->value.i;
-          LOG_TRACE ("HATCH.paths[%d].segs[%d].is_periodic = %d [74 B]\n", j,
+          LOG_TRACE ("HATCH.paths[%d].segs[%d].is_periodic = %d [B 74]\n", j,
                      k, pair->value.i);
         }
       else if (pair->code == 95 && !is_plpath)
@@ -1617,7 +1616,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
           o->paths[j].segs[k].num_knots = pair->value.l;
-          LOG_TRACE ("HATCH.paths[%d].segs[%d].num_knots = %ld [95 BL]\n", j,
+          LOG_TRACE ("HATCH.paths[%d].segs[%d].num_knots = %ld [BL 95]\n", j,
                      k, pair->value.l);
           o->paths[j].segs[k].knots = calloc (pair->value.l, sizeof (double));
           l = -1;
@@ -1628,7 +1627,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           assert (k < (int)o->paths[j].num_segs_or_paths);
           o->paths[j].segs[k].num_control_points = pair->value.l;
           LOG_TRACE (
-              "HATCH.paths[%d].segs[%d].num_control_points = %ld [95 BL]\n", j,
+              "HATCH.paths[%d].segs[%d].num_control_points = %ld [BL 96]\n", j,
               k, pair->value.l);
           o->paths[j].segs[k].control_points
               = calloc (pair->value.l, sizeof (Dwg_HATCH_ControlPoint));
@@ -1677,21 +1676,21 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             case 1: /* LINE */
               o->paths[j].segs[k].second_endpoint.x = pair->value.d;
               // LOG_TRACE ("HATCH.paths[%d].segs[%d].second_endpoint.x = %f
-              // [11 2BD]\n",
+              // [2BD 11]\n",
               //           j, k, pair->value.d);
               break;
             case 3: /* ELLIPTICAL ARC */
               o->paths[j].segs[k].endpoint.x = pair->value.d;
-              // LOG_TRACE ("HATCH.paths[%d].segs[%d].endpoint.x = %f [11
-              // 2BD]\n",
+              // LOG_TRACE ("HATCH.paths[%d].segs[%d].endpoint.x = %f [
+              // 2BD 11]\n",
               //           j, k, pair->value.d);
               break;
             case 4: /* SPLINE */
               l++;
               assert (l < (int)o->paths[j].segs[k].num_fitpts);
               o->paths[j].segs[k].fitpts[l].x = pair->value.d;
-              // LOG_TRACE ("HATCH.paths[%d].segs[%d].fitpts[%d].x = %f [11
-              // 2RD]\n",
+              // LOG_TRACE ("HATCH.paths[%d].segs[%d].fitpts[%d].x = %f [
+              // 2RD 11]\n",
               //           j, k, l, pair->value.d);
               break;
             default:
@@ -1709,7 +1708,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             case 1: /* LINE */
               o->paths[j].segs[k].first_endpoint.y = pair->value.d;
               LOG_TRACE ("HATCH.paths[%d].segs[%d].first_endpoint = (%f, %f) "
-                         "[10 2RD]\n",
+                         "[2RD 10]\n",
                          j, k, o->paths[j].segs[k].first_endpoint.x,
                          pair->value.d);
               break;
@@ -1717,14 +1716,14 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             case 3: /* ELLIPTICAL ARC */
               o->paths[j].segs[k].center.y = pair->value.d;
               LOG_TRACE (
-                  "HATCH.paths[%d].segs[%d].center = (%f, %f) [10 2RD]\n", j,
+                  "HATCH.paths[%d].segs[%d].center = (%f, %f) [2RD 10]\n", j,
                   k, o->paths[j].segs[k].center.x, pair->value.d);
               break;
             case 4: /* SPLINE */
               assert (l < (int)o->paths[j].segs[k].num_control_points);
               o->paths[j].segs[k].control_points[l].point.y = pair->value.d;
               LOG_TRACE ("HATCH.paths[%d].segs[%d].control_points[%d].point = "
-                         "(%f, %f) [10 2RD]\n",
+                         "(%f, %f) [2RD 10]\n",
                          j, k, l,
                          o->paths[j].segs[k].control_points[l].point.x,
                          pair->value.d);
@@ -1745,21 +1744,21 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             case 1: /* LINE */
               o->paths[j].segs[k].second_endpoint.y = pair->value.d;
               LOG_TRACE ("HATCH.paths[%d].segs[%d].second_endpoint = (%f, %f) "
-                         "[11 2RD]\n",
+                         "[2RD 11]\n",
                          j, k, o->paths[j].segs[k].second_endpoint.x,
                          pair->value.d);
               break;
             case 3: /* ELLIPTICAL ARC */
               o->paths[j].segs[k].endpoint.y = pair->value.d;
               LOG_TRACE (
-                  "HATCH.paths[%d].segs[%d].endpoint = (%f, %f) [11 2RD]\n", j,
+                  "HATCH.paths[%d].segs[%d].endpoint = (%f, %f) [2RD 11]\n", j,
                   k, o->paths[j].segs[k].endpoint.x, pair->value.d);
               break;
             case 4: /* SPLINE */
               assert (l < (int)o->paths[j].segs[k].num_fitpts);
               o->paths[j].segs[k].fitpts[l].y = pair->value.d;
               LOG_TRACE ("HATCH.paths[%d].segs[%d].fitpts[%d].y = (%f, %f) "
-                         "[11 2RD]\n",
+                         "[2RD 11]\n",
                          j, k, l, o->paths[j].segs[k].fitpts[l].x,
                          pair->value.d);
               break;
@@ -1777,13 +1776,13 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             {
             case 2: /* CIRCULAR ARC */
               o->paths[j].segs[k].radius = pair->value.d;
-              LOG_TRACE ("HATCH.paths[%d].segs[%d].radius = %f [40 BD]\n", j,
+              LOG_TRACE ("HATCH.paths[%d].segs[%d].radius = %f [BD 40]\n", j,
                          k, pair->value.d);
               break;
             case 3: /* ELLIPTICAL ARC */
               o->paths[j].segs[k].minor_major_ratio = pair->value.d;
               LOG_TRACE (
-                  "HATCH.paths[%d].segs[%d].minor_major_ratio = %f [40 BD]\n",
+                  "HATCH.paths[%d].segs[%d].minor_major_ratio = %f [BD 40]\n",
                   j, k, pair->value.d);
               break;
             case 4: /* SPLINE */
@@ -1792,7 +1791,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   assert (l < (int)o->paths[j].segs[k].num_control_points);
                   o->paths[j].segs[k].control_points[l].weight = pair->value.d;
                   LOG_TRACE ("HATCH.paths[%d].segs[%d].control_points[%d]."
-                             "weight = %f [40 BD]\n",
+                             "weight = %f [BD 40]\n",
                              j, k, l, pair->value.d);
                 }
               else
@@ -1801,7 +1800,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   assert (l < (int)o->paths[j].segs[k].num_knots);
                   o->paths[j].segs[k].knots[l] = pair->value.d;
                   LOG_TRACE (
-                      "HATCH.paths[%d].segs[%d].knots[%d] = %f [40 BD]\n", j,
+                      "HATCH.paths[%d].segs[%d].knots[%d] = %f [BD 40]\n", j,
                       k, l, pair->value.d);
                 }
               break;
@@ -1820,7 +1819,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             case 2: /* CIRCULAR ARC */
             case 3: /* ELLIPTICAL ARC */
               o->paths[j].segs[k].start_angle = deg2rad (pair->value.d);
-              LOG_TRACE ("HATCH.paths[%d].segs[%d].start_angle = %f [50 BD]\n",
+              LOG_TRACE ("HATCH.paths[%d].segs[%d].start_angle = %f [BD 50]\n",
                          j, k, pair->value.d);
               break;
             default:
@@ -1838,7 +1837,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             case 2: /* CIRCULAR ARC */
             case 3: /* ELLIPTICAL ARC */
               o->paths[j].segs[k].end_angle = deg2rad (pair->value.d);
-              LOG_TRACE ("HATCH.paths[%d].segs[%d].end_angle = %f [51 BD]\n",
+              LOG_TRACE ("HATCH.paths[%d].segs[%d].end_angle = %f [BD 51]\n",
                          j, k, pair->value.d);
               break;
             default:
@@ -1856,12 +1855,12 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             case 2: /* CIRCULAR ARC */
             case 3: /* ELLIPTICAL ARC */
               o->paths[j].segs[k].is_ccw = pair->value.i;
-              LOG_TRACE ("HATCH.paths[%d].segs[%d].is_ccw = %d [73 B]\n", j, k,
+              LOG_TRACE ("HATCH.paths[%d].segs[%d].is_ccw = %d [B 73]\n", j, k,
                          pair->value.i);
               break;
             default:
               o->paths[j].segs[k].is_rational = pair->value.i;
-              LOG_TRACE ("HATCH.paths[%d].segs[%d].is_rational = %d [73 B]\n",
+              LOG_TRACE ("HATCH.paths[%d].segs[%d].is_rational = %d [B 73]\n",
                          j, k, pair->value.i);
             }
         }
@@ -1871,8 +1870,8 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
           o->paths[j].polyline_paths[k].point.x = pair->value.d;
-          // LOG_TRACE ("HATCH.paths[%d].polyline_paths[%d].point.x = %f [10
-          // BD]\n",
+          // LOG_TRACE ("HATCH.paths[%d].polyline_paths[%d].point.x = %f [BD 10
+          // ]\n",
           //           j, k, pair->value.d);
         }
       else if (pair->code == 20 && is_plpath && !o->num_seeds)
@@ -1881,7 +1880,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           assert (k < (int)o->paths[j].num_segs_or_paths);
           o->paths[j].polyline_paths[k].point.y = pair->value.d;
           LOG_TRACE (
-              "HATCH.paths[%d].polyline_paths[%d].point = (%f, %f) [10 2RD]\n",
+              "HATCH.paths[%d].polyline_paths[%d].point = (%f, %f) [2RD 10]\n",
               j, k, o->paths[j].polyline_paths[k].point.x, pair->value.d);
         }
       else if (pair->code == 42 && is_plpath)
@@ -1889,7 +1888,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
           o->paths[j].polyline_paths[k].bulge = pair->value.d;
-          LOG_TRACE ("HATCH.paths[%d].polyline_paths[%d].bulge = %f [42 BD]\n",
+          LOG_TRACE ("HATCH.paths[%d].polyline_paths[%d].bulge = %f [BD 42]\n",
                      j, k, pair->value.d);
         }
       else if (pair->code == 97 && !is_plpath)
@@ -1901,7 +1900,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               o->paths[j].num_boundary_handles = pair->value.l;
               o->num_boundary_handles += pair->value.l;
               LOG_TRACE (
-                  "HATCH.paths[%d].num_boundary_handles = %ld [93 BL]\n", j,
+                  "HATCH.paths[%d].num_boundary_handles = %ld [BL 97]\n", j,
                   pair->value.l);
               k = 0;
             }
@@ -1909,7 +1908,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             {
               o->paths[j].segs[k].num_fitpts = pair->value.l;
               LOG_TRACE (
-                  "HATCH.paths[%d].segs[%d].num_fitpts  = %ld [93 BL]\n", j, k,
+                  "HATCH.paths[%d].segs[%d].num_fitpts  = %ld [BL 97]\n", j, k,
                   pair->value.l);
             }
         }
@@ -1918,14 +1917,14 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           assert (j < (int)o->num_paths);
           o->paths[j].num_boundary_handles = pair->value.l;
           o->num_boundary_handles += pair->value.l;
-          LOG_TRACE ("HATCH.paths[%d].num_boundary_handles = %ld [93 BL]\n", j,
+          LOG_TRACE ("HATCH.paths[%d].num_boundary_handles = %ld [BL 97]\n", j,
                      pair->value.l);
           k = 0;
         }
       else if (pair->code == 78)
         {
           o->num_deflines = pair->value.l;
-          LOG_TRACE ("HATCH.num_deflines = %ld [78 BS]\n", pair->value.l);
+          LOG_TRACE ("HATCH.num_deflines = %ld [BS 78]\n", pair->value.l);
           o->deflines = calloc (pair->value.l, sizeof (Dwg_HATCH_DefLine));
           j = -1;
         }
@@ -1934,42 +1933,42 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           j++;
           assert (j < (int)o->num_deflines);
           o->deflines[j].angle = deg2rad (pair->value.d);
-          LOG_TRACE ("HATCH.deflines[%d].angle = %f [53 BD]\n", j,
+          LOG_TRACE ("HATCH.deflines[%d].angle = %f [BD 53]\n", j,
                      o->deflines[j].angle);
         }
       else if (pair->code == 43 && o->num_deflines)
         {
           assert (j < (int)o->num_deflines);
           o->deflines[j].pt0.x = pair->value.d;
-          LOG_TRACE ("HATCH.deflines[%d].pt0.x = %f [43 BD]\n", j,
+          LOG_TRACE ("HATCH.deflines[%d].pt0.x = %f [BD 43]\n", j,
                      pair->value.d);
         }
       else if (pair->code == 44 && o->num_deflines)
         {
           assert (j < (int)o->num_deflines);
           o->deflines[j].pt0.y = pair->value.d;
-          LOG_TRACE ("HATCH.deflines[%d].pt0.y = %f [43 BD]\n", j,
+          LOG_TRACE ("HATCH.deflines[%d].pt0.y = %f [BD 44]\n", j,
                      pair->value.d);
         }
       else if (pair->code == 45 && o->num_deflines)
         {
           assert (j < (int)o->num_deflines);
           o->deflines[j].offset.x = pair->value.d;
-          LOG_TRACE ("HATCH.deflines[%d].offset.x = %f [43 BD]\n", j,
+          LOG_TRACE ("HATCH.deflines[%d].offset.x = %f [BD 45]\n", j,
                      pair->value.d);
         }
       else if (pair->code == 46 && o->num_deflines)
         {
           assert (j < (int)o->num_deflines);
           o->deflines[j].offset.y = pair->value.d;
-          LOG_TRACE ("HATCH.deflines[%d].offset.y = %f [43 BD]\n", j,
+          LOG_TRACE ("HATCH.deflines[%d].offset.y = %f [BD 46]\n", j,
                      pair->value.d);
         }
       else if (pair->code == 79 && o->num_deflines)
         {
           assert (j < (int)o->num_deflines);
           o->deflines[j].num_dashes = pair->value.u;
-          LOG_TRACE ("HATCH.deflines[%d].num_dashes = %u [79 BS]\n", j,
+          LOG_TRACE ("HATCH.deflines[%d].num_dashes = %u [BS 79]\n", j,
                      pair->value.u);
           if (pair->value.u)
             o->deflines[j].dashes
@@ -1982,18 +1981,18 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           k++;
           assert (k < (int)o->deflines[j].num_dashes);
           o->deflines[j].dashes[k] = pair->value.d;
-          LOG_TRACE ("HATCH.deflines[%d].dashes[%d] = %f [49 BD]\n", j, k,
+          LOG_TRACE ("HATCH.deflines[%d].dashes[%d] = %f [BD 49]\n", j, k,
                      pair->value.d);
         }
       else if (pair->code == 47)
         {
           o->pixel_size = pair->value.d;
-          LOG_TRACE ("HATCH.pixel_size = %f [47 BD]\n", pair->value.d);
+          LOG_TRACE ("HATCH.pixel_size = %f [BD 47]\n", pair->value.d);
         }
       else if (pair->code == 98)
         {
           o->num_seeds = pair->value.u;
-          LOG_TRACE ("HATCH.num_seeds = %u [98 BL]\n", pair->value.u);
+          LOG_TRACE ("HATCH.num_seeds = %u [BL 98]\n", pair->value.u);
           if (pair->value.u)
             o->seeds = calloc (pair->value.u, sizeof (BITCODE_2RD));
           k = -1;
@@ -2010,7 +2009,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           assert (k < (int)o->num_seeds);
           o->seeds[k].y = pair->value.d;
-          LOG_TRACE ("HATCH.seeds[%d] = (%f, %f) [10 2RD]\n", k, o->seeds[k].x,
+          LOG_TRACE ("HATCH.seeds[%d] = (%f, %f) [2RD 10]\n", k, o->seeds[k].x,
                      pair->value.d);
         }
       else if (pair->code == 330 && o->num_boundary_handles)
@@ -2018,13 +2017,13 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           BITCODE_H ref
               = dwg_add_handleref (obj->parent, 3, pair->value.u, obj);
           // o->boundary_handles[k++] = ref;
-          LOG_TRACE ("HATCH.boundary_handles[%d] = " FORMAT_REF " [330 H]\n",
+          LOG_TRACE ("HATCH.boundary_handles[%d] = " FORMAT_REF " [H 330]\n",
                      k, ARGS_REF (ref));
         }
       else if (pair->code == 453)
         {
           o->num_colors = pair->value.u;
-          LOG_TRACE ("HATCH.num_colors = %u [453 BL]\n", pair->value.u);
+          LOG_TRACE ("HATCH.num_colors = %u [BL 453]\n", pair->value.u);
           if (pair->value.u)
             o->colors = calloc (pair->value.u, sizeof (Dwg_HATCH_Color));
           j = -1;
@@ -2034,28 +2033,28 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           j++;
           assert (j < (int)o->num_colors);
           o->colors[j].shift_value = pair->value.d;
-          LOG_TRACE ("HATCH.colors[%d].shift_value = %f [463 BD]\n", j,
+          LOG_TRACE ("HATCH.colors[%d].shift_value = %f [BD 463]\n", j,
                      pair->value.d);
         }
       else if (pair->code == 63 && o->num_colors)
         {
           assert (j < (int)o->num_colors);
           o->colors[j].color.index = pair->value.i;
-          LOG_TRACE ("HATCH.colors[%d].color.index = %u [63 CMC]\n", j,
+          LOG_TRACE ("HATCH.colors[%d].color.index = %u [CMC 63]\n", j,
                      pair->value.i);
         }
       else if (pair->code == 421 && o->num_colors)
         {
           assert (j < (int)o->num_colors);
           o->colors[j].color.rgb = pair->value.u;
-          LOG_TRACE ("HATCH.colors[%d].color.rgb = %06X [421 CMC]\n", j,
+          LOG_TRACE ("HATCH.colors[%d].color.rgb = %06X [CMC 421]\n", j,
                      pair->value.u);
         }
       else if (pair->code == 431 && o->num_colors)
         {
           assert (j < (int)o->num_colors);
           o->colors[j].color.name = strdup (pair->value.s);
-          LOG_TRACE ("HATCH.colors[%d].color.name = %s [431 CMC]\n", j,
+          LOG_TRACE ("HATCH.colors[%d].color.name = %s [CMC 431]\n", j,
                      pair->value.s);
         }
       else if (pair->code == 470)
@@ -2063,17 +2062,17 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           dwg_dynapi_entity_set_value (o, "HATCH", "gradient_name",
                                        &pair->value, 1);
           // o->gradient_name = strdup (pair->value.s);
-          LOG_TRACE ("HATCH.gradient_name = %s [470 T]\n", pair->value.s);
+          LOG_TRACE ("HATCH.gradient_name = %s [T 470]\n", pair->value.s);
         }
       else if (pair->code == 462)
         {
           o->gradient_tint = pair->value.d;
-          LOG_TRACE ("HATCH.gradient_tint = %f [462 BD]\n", pair->value.d);
+          LOG_TRACE ("HATCH.gradient_tint = %f [BD 462]\n", pair->value.d);
         }
       else if (pair->code == 452)
         {
           o->single_color_gradient = pair->value.u;
-          LOG_TRACE ("HATCH.single_color_gradient = %u [452 BL]\n",
+          LOG_TRACE ("HATCH.single_color_gradient = %u [BL 452]\n",
                      pair->value.u);
         }
       else if (pair->code >= 1000 && pair->code < 1999)
@@ -2117,19 +2116,19 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               lline->points
                   = realloc (lline->points, (j + 1) * sizeof (BITCODE_3BD));
               lline->points[j].x = pair->value.d;
-              LOG_TRACE ("%s.leaders[].lines[%d].points[%d].x = %f [%d BD]\n",
+              LOG_TRACE ("%s.leaders[].lines[%d].points[%d].x = %f [BD %d]\n",
                          obj->name, i, j, pair->value.d, pair->code);
               break;
             case 20:
               assert (j >= 0);
               lline->points[j].y = pair->value.d;
-              LOG_TRACE ("%s.leaders[].lines[%d].points[%d].y = %f [%d BD]\n",
+              LOG_TRACE ("%s.leaders[].lines[%d].points[%d].y = %f [BD %d]\n",
                          obj->name, i, j, pair->value.d, pair->code);
               break;
             case 30:
               assert (j >= 0);
               lline->points[j].z = pair->value.d;
-              LOG_TRACE ("%s.leaders[].lines[%d].points[%d].z = %f [%d BD]\n",
+              LOG_TRACE ("%s.leaders[].lines[%d].points[%d].z = %f [BD %d]\n",
                          obj->name, i, j, pair->value.d, pair->code);
               break;
             case 11:
@@ -2139,52 +2138,52 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                                        (k + 1) * sizeof (Dwg_LEADER_Break));
               lline->breaks[k].start.x = pair->value.d;
               LOG_TRACE (
-                  "%s.leaders[].lines[%d].breaks[%d].start.x = %f [%d 3BD]\n",
+                  "%s.leaders[].lines[%d].breaks[%d].start.x = %f [3BD %d]\n",
                   obj->name, i, k, pair->value.d, pair->code);
               break;
             case 21:
               assert (k >= 0);
               lline->breaks[k].start.y = pair->value.d;
               LOG_TRACE (
-                  "%s.leaders[].lines[%d].breaks[%d].start.y = %f [%d 3BD]\n",
+                  "%s.leaders[].lines[%d].breaks[%d].start.y = %f [3BD %d]\n",
                   obj->name, i, k, pair->value.d, pair->code);
               break;
             case 31:
               assert (k >= 0);
               lline->breaks[k].start.z = pair->value.d;
               LOG_TRACE (
-                  "%s.leaders[].lines[%d].breaks[%d].start.z = %f [%d 3BD]\n",
+                  "%s.leaders[].lines[%d].breaks[%d].start.z = %f [3BD %d]\n",
                   obj->name, i, k, pair->value.d, pair->code);
               break;
             case 12:
               assert (k >= 0);
               lline->breaks[k].end.x = pair->value.d;
               LOG_TRACE (
-                  "%s.leaders[].lines[%d].breaks[%d].end.x = %f [%d 3BD]\n",
+                  "%s.leaders[].lines[%d].breaks[%d].end.x = %f [3BD %d]\n",
                   obj->name, i, k, pair->value.d, pair->code);
               break;
             case 22:
               assert (k >= 0);
               lline->breaks[k].end.y = pair->value.d;
               LOG_TRACE (
-                  "%s.leaders[].lines[%d].breaks[%d].end.y = %f [%d 3BD]\n",
+                  "%s.leaders[].lines[%d].breaks[%d].end.y = %f [3BD %d]\n",
                   obj->name, i, k, pair->value.d, pair->code);
               break;
             case 32:
               assert (k >= 0);
               lline->breaks[k].end.z = pair->value.d;
               LOG_TRACE (
-                  "%s.leaders[].lines[%d].breaks[%d].end.z = %f [%d 3BD]\n",
+                  "%s.leaders[].lines[%d].breaks[%d].end.z = %f [3BD %d]\n",
                   obj->name, i, k, pair->value.d, pair->code);
               break;
             case 91:
               lline->line_index = pair->value.u;
-              LOG_TRACE ("%s.leaders[].lines[%d].line_index = %u [%d BL]\n",
+              LOG_TRACE ("%s.leaders[].lines[%d].line_index = %u [BL %d]\n",
                          obj->name, i, pair->value.u, pair->code);
               break;
             case 170:
               lline->type = pair->value.i;
-              LOG_TRACE ("%s.leaders[].lines[%d].line_index = %d [%d BS]\n",
+              LOG_TRACE ("%s.leaders[].lines[%d].line_index = %d [BS %d]\n",
                          obj->name, i, pair->value.i, pair->code);
               break;
             case 92:
@@ -2194,30 +2193,30 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   lline->color.rgb = pair->value.u & 0xFFFFFF;
                   lline->color.alpha = pair->value.u & 0xFF000000;
                   LOG_TRACE (
-                      "%s.leaders[].lines[%d].color.rgb = %06X [%d CMC]\n",
+                      "%s.leaders[].lines[%d].color.rgb = %06X [CMC %d]\n",
                       obj->name, i, pair->value.u, pair->code);
                 }
               else
                 {
                   lline->color.index = pair->value.i;
                   LOG_TRACE (
-                      "%s.leaders[].lines[%d].color.index = %d [%d CMC]\n",
+                      "%s.leaders[].lines[%d].color.index = %d [CMC %d]\n",
                       obj->name, i, pair->value.i, pair->code);
                 }
               break;
             case 171:
               lline->linewt = pair->value.i;
-              LOG_TRACE ("%s.leaders[].lines[%d].linewt = %d [%d BL]\n",
+              LOG_TRACE ("%s.leaders[].lines[%d].linewt = %d [BL %d]\n",
                          obj->name, i, pair->value.i, pair->code);
               break;
             case 40:
               lline->arrow_size = pair->value.d;
-              LOG_TRACE ("%s.leaders[].lines[%d].arrow_size = %f [%d BD]\n",
+              LOG_TRACE ("%s.leaders[].lines[%d].arrow_size = %f [BD %d]\n",
                          obj->name, i, pair->value.d, pair->code);
               break;
             case 93:
               lline->flags = pair->value.i;
-              LOG_TRACE ("%s.leaders[].lines[%d].line_index = %d [%d BL]\n",
+              LOG_TRACE ("%s.leaders[].lines[%d].line_index = %d [BL %d]\n",
                          obj->name, i, pair->value.i, pair->code);
               break;
             case 305: // end
@@ -2268,45 +2267,45 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   = realloc (ctx->leaders, (i + 1) * sizeof (Dwg_LEADER_Node));
               ctx->leaders[i].has_lastleaderlinepoint = pair->value.i;
               LOG_TRACE (
-                  "%s.ctx.leaders[%d].has_lastleaderlinepoint = %d [%d B]\n",
+                  "%s.ctx.leaders[%d].has_lastleaderlinepoint = %d [B %d]\n",
                   obj->name, i, pair->value.i, pair->code);
               break;
             case 291:
               lnode->has_dogleg = pair->value.i;
-              LOG_TRACE ("%s.ctx.leaders[%d].has_dogleg = %d [%d B]\n",
+              LOG_TRACE ("%s.ctx.leaders[%d].has_dogleg = %d [B %d]\n",
                          obj->name, i, pair->value.i, pair->code);
               break;
             case 90:
               lnode->branch_index = pair->value.u;
-              LOG_TRACE ("%s.ctx.leaders[%d].branch_index = %u [%d BL]\n",
+              LOG_TRACE ("%s.ctx.leaders[%d].branch_index = %u [BL %d]\n",
                          obj->name, i, pair->value.u, pair->code);
               break;
             case 271:
               lnode->attach_dir = pair->value.i;
-              LOG_TRACE ("%s.ctx.leaders[%d].branch_index = %d [%d BS]\n",
+              LOG_TRACE ("%s.ctx.leaders[%d].branch_index = %d [BS %d]\n",
                          obj->name, i, pair->value.i, pair->code);
               break;
             case 40:
               lnode->dogleg_length = pair->value.d;
-              LOG_TRACE ("%s.ctx.leaders[%d].dogleg_length = %f [%d BD]\n",
+              LOG_TRACE ("%s.ctx.leaders[%d].dogleg_length = %f [BD %d]\n",
                          obj->name, i, pair->value.d, pair->code);
               break;
             case 10:
               lnode->lastleaderlinepoint.x = pair->value.d;
               LOG_TRACE (
-                  "%s.ctx.leaders[%d].lastleaderlinepoint.x = %f [%d 3BD]\n",
+                  "%s.ctx.leaders[%d].lastleaderlinepoint.x = %f [3BD %d]\n",
                   obj->name, i, pair->value.d, pair->code);
               break;
             case 20:
               lnode->lastleaderlinepoint.y = pair->value.d;
               LOG_TRACE (
-                  "%s.ctx.leaders[%d].lastleaderlinepoint.y = %f [%d 3BD]\n",
+                  "%s.ctx.leaders[%d].lastleaderlinepoint.y = %f [3BD %d]\n",
                   obj->name, i, pair->value.d, pair->code);
               break;
             case 30:
               lnode->lastleaderlinepoint.z = pair->value.d;
               LOG_TRACE (
-                  "%s.ctx.leaders[%d].lastleaderlinepoint.z = %f [%d BD]\n",
+                  "%s.ctx.leaders[%d].lastleaderlinepoint.z = %f [BD %d]\n",
                   obj->name, i, pair->value.d, pair->code);
               break;
             case 11:
@@ -2314,7 +2313,7 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 {
                   lnode->dogleg_vector.x = pair->value.d;
                   LOG_TRACE (
-                      "%s.ctx.leaders[%d].dogleg_vector.x = %f [%d 3BD]\n",
+                      "%s.ctx.leaders[%d].dogleg_vector.x = %f [3BD %d]\n",
                       obj->name, i, pair->value.d, pair->code);
                 }
               else
@@ -2325,7 +2324,7 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                       lnode->breaks, (j + 1) * sizeof (Dwg_LEADER_Break));
                   lnode->breaks[j].start.x = pair->value.d;
                   LOG_TRACE (
-                      "%s.ctx.leaders[%d].breaks[%d].start.x = %f [%d 3BD]\n",
+                      "%s.ctx.leaders[%d].breaks[%d].start.x = %f [3BD %d]\n",
                       obj->name, i, j, pair->value.d, pair->code);
                 }
               break;
@@ -2334,14 +2333,14 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 {
                   lnode->dogleg_vector.y = pair->value.d;
                   LOG_TRACE (
-                      "%s.ctx.leaders[%d].dogleg_vector.y = %f [%d 3BD]\n",
+                      "%s.ctx.leaders[%d].dogleg_vector.y = %f [3BD %d]\n",
                       obj->name, i, pair->value.d, pair->code);
                 }
               else
                 {
                   lnode->breaks[j].start.y = pair->value.d;
                   LOG_TRACE (
-                      "%s.ctx.leaders[%d].breaks[%d].start.y = %f [%d 3BD]\n",
+                      "%s.ctx.leaders[%d].breaks[%d].start.y = %f [3BD %d]\n",
                       obj->name, i, j, pair->value.d, pair->code);
                 }
               break;
@@ -2350,30 +2349,30 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 {
                   lnode->dogleg_vector.z = pair->value.d;
                   LOG_TRACE (
-                      "%s.ctx.leaders[%d].dogleg_vector.z = %f [%d 3BD]\n",
+                      "%s.ctx.leaders[%d].dogleg_vector.z = %f [3BD %d]\n",
                       obj->name, i, pair->value.d, pair->code);
                 }
               else
                 {
                   lnode->breaks[j].start.z = pair->value.d;
                   LOG_TRACE (
-                      "%s.ctx.leaders[%d].breaks[%d].start.z = %f [%d 3BD]\n",
+                      "%s.ctx.leaders[%d].breaks[%d].start.z = %f [3BD %d]\n",
                       obj->name, i, j, pair->value.d, pair->code);
                 }
               break;
             case 12:
               lnode->breaks[j].end.x = pair->value.d;
-              LOG_TRACE ("%s.ctx.leaders[%d].breaks[%d].end.x = %f [%d 3BD]\n",
+              LOG_TRACE ("%s.ctx.leaders[%d].breaks[%d].end.x = %f [3BD %d]\n",
                          obj->name, i, j, pair->value.d, pair->code);
               break;
             case 22:
               lnode->breaks[j].end.y = pair->value.d;
-              LOG_TRACE ("%s.ctx.leaders[%d].breaks[%d].end.y = %f [%d 3BD]\n",
+              LOG_TRACE ("%s.ctx.leaders[%d].breaks[%d].end.y = %f [3BD %d]\n",
                          obj->name, i, j, pair->value.d, pair->code);
               break;
             case 32:
               lnode->breaks[j].end.z = pair->value.d;
-              LOG_TRACE ("%s.ctx.leaders[%d].breaks[%d].end.z = %f [%d 3BD]\n",
+              LOG_TRACE ("%s.ctx.leaders[%d].breaks[%d].end.z = %f [3BD %d]\n",
                          obj->name, i, j, pair->value.d, pair->code);
               break;
             case 304:
@@ -2411,7 +2410,7 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               break;
             case 40:
               ctx->scale = pair->value.d;
-              LOG_TRACE ("%s.ctx.scale = %f [%d BD]\n", obj->name,
+              LOG_TRACE ("%s.ctx.scale = %f [BD %d]\n", obj->name,
                          pair->value.d, pair->code);
               break;
             case 10:
@@ -2428,42 +2427,42 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               break;
             case 41:
               ctx->text_height = pair->value.d;
-              LOG_TRACE ("%s.ctx.text_height = %f [%d BD]\n", obj->name,
+              LOG_TRACE ("%s.ctx.text_height = %f [BD %d]\n", obj->name,
                          pair->value.d, pair->code);
               break;
             case 140:
               ctx->arrow_size = pair->value.d;
-              LOG_TRACE ("%s.ctx.arrow_size = %f [%d BD]\n", obj->name,
+              LOG_TRACE ("%s.ctx.arrow_size = %f [BD %d]\n", obj->name,
                          pair->value.d, pair->code);
               break;
             case 145:
               ctx->landing_gap = pair->value.d;
-              LOG_TRACE ("%s.ctx.landing_gap = %f [%d BD]\n", obj->name,
+              LOG_TRACE ("%s.ctx.landing_gap = %f [BD %d]\n", obj->name,
                          pair->value.d, pair->code);
               break;
             case 174:
               ctx->text_left = pair->value.i;
-              LOG_TRACE ("%s.ctx.text_left = %d [%d BS]\n", obj->name,
+              LOG_TRACE ("%s.ctx.text_left = %d [BS %d]\n", obj->name,
                          pair->value.i, pair->code);
               break;
             case 175:
               ctx->text_right = pair->value.i;
-              LOG_TRACE ("%s.ctx.text_right = %d [%d BS]\n", obj->name,
+              LOG_TRACE ("%s.ctx.text_right = %d [BS %d]\n", obj->name,
                          pair->value.i, pair->code);
               break;
             case 176:
               ctx->text_alignment = pair->value.i;
-              LOG_TRACE ("%s.ctx.text_alignment = %d [%d BS]\n", obj->name,
+              LOG_TRACE ("%s.ctx.text_alignment = %d [BS %d]\n", obj->name,
                          pair->value.i, pair->code);
               break;
             case 177:
               ctx->attach_type = pair->value.i;
-              LOG_TRACE ("%s.ctx.attach_type = %d [%d BS]\n", obj->name,
+              LOG_TRACE ("%s.ctx.attach_type = %d [BS %d]\n", obj->name,
                          pair->value.i, pair->code);
               break;
             case 290:
               ctx->has_content_txt = pair->value.i;
-              LOG_TRACE ("%s.ctx.has_content_txt = %d [%d B]\n", obj->name,
+              LOG_TRACE ("%s.ctx.has_content_txt = %d [B %d]\n", obj->name,
                          pair->value.i, pair->code);
               break;
             case 302:
@@ -2536,100 +2535,100 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               break;
             case 42:
               ctx->content.txt.rotation = deg2rad (pair->value.d);
-              LOG_TRACE ("%s.ctx.content.txt.rotation = %f [%d BD]\n",
+              LOG_TRACE ("%s.ctx.content.txt.rotation = %f [BD %d]\n",
                          obj->name, ctx->content.txt.rotation, pair->code);
               break;
             case 43:
               ctx->content.txt.width = pair->value.d;
-              LOG_TRACE ("%s.ctx.content.txt.width = %f [%d BD]\n", obj->name,
+              LOG_TRACE ("%s.ctx.content.txt.width = %f [BD %d]\n", obj->name,
                          pair->value.d, pair->code);
               break;
             case 44:
               ctx->content.txt.height = pair->value.d;
-              LOG_TRACE ("%s.ctx.content.txt.height = %f [%d BD]\n", obj->name,
+              LOG_TRACE ("%s.ctx.content.txt.height = %f [BD %d]\n", obj->name,
                          pair->value.d, pair->code);
               break;
             case 45:
               ctx->content.txt.line_spacing_factor = pair->value.d;
               LOG_TRACE (
-                  "%s.ctx.content.txt.line_spacing_factor = %f [%d BD]\n",
+                  "%s.ctx.content.txt.line_spacing_factor = %f [BD %d]\n",
                   obj->name, pair->value.d, pair->code);
               break;
             case 170:
               ctx->content.txt.line_spacing_style = pair->value.i;
               LOG_TRACE (
-                  "%s.ctx.content.txt.line_spacing_style = %d [%d BS]\n",
+                  "%s.ctx.content.txt.line_spacing_style = %d [BS %d]\n",
                   obj->name, pair->value.i, pair->code);
               break;
             case 171:
               ctx->content.txt.alignment = pair->value.i;
-              LOG_TRACE ("%s.ctx.content.txt.alignment = %d [%d BS]\n",
+              LOG_TRACE ("%s.ctx.content.txt.alignment = %d [BS %d]\n",
                          obj->name, pair->value.i, pair->code);
               break;
             case 172:
               ctx->content.txt.flow = pair->value.i;
-              LOG_TRACE ("%s.ctx.content.txt.flow = %d [%d BS]\n", obj->name,
+              LOG_TRACE ("%s.ctx.content.txt.flow = %d [BS %d]\n", obj->name,
                          pair->value.i, pair->code);
               break;
             case 90:
               ctx->content.txt.color.index = pair->value.i;
-              LOG_TRACE ("%s.ctx.content.txt.color.index = %d [%d BS]\n",
+              LOG_TRACE ("%s.ctx.content.txt.color.index = %d [BS %d]\n",
                          obj->name, pair->value.i, pair->code);
               break;
             case 91:
               ctx->content.txt.bg_color.index = pair->value.i;
-              LOG_TRACE ("%s.ctx.content.txt.bg_color.index = %d [%d BS]\n",
+              LOG_TRACE ("%s.ctx.content.txt.bg_color.index = %d [BS %d]\n",
                          obj->name, pair->value.i, pair->code);
               break;
             case 141:
               ctx->content.txt.bg_scale = pair->value.d;
-              LOG_TRACE ("%s.ctx.content.txt.bg_scale = %f [%d BD]\n",
+              LOG_TRACE ("%s.ctx.content.txt.bg_scale = %f [BD %d]\n",
                          obj->name, pair->value.d, pair->code);
               break;
             case 142:
               ctx->content.txt.col_width = pair->value.d;
-              LOG_TRACE ("%s.ctx.content.txt.col_width = %f [%d BD]\n",
+              LOG_TRACE ("%s.ctx.content.txt.col_width = %f [BD %d]\n",
                          obj->name, pair->value.d, pair->code);
               break;
             case 143:
               ctx->content.txt.col_gutter = pair->value.d;
-              LOG_TRACE ("%s.ctx.content.txt.col_gutter = %f [%d BD]\n",
+              LOG_TRACE ("%s.ctx.content.txt.col_gutter = %f [BD %d]\n",
                          obj->name, pair->value.d, pair->code);
               break;
             case 92:
               ctx->content.txt.bg_transparency = pair->value.u;
-              LOG_TRACE ("%s.ctx.content.txt.bg_transparency = %u [%d BL]\n",
+              LOG_TRACE ("%s.ctx.content.txt.bg_transparency = %u [BL %d]\n",
                          obj->name, pair->value.u, pair->code);
               break;
             case 291:
               ctx->content.txt.is_bg_fill = pair->value.i;
-              LOG_TRACE ("%s.ctx.content.txt.is_bg_fill = %i [%d B]\n",
+              LOG_TRACE ("%s.ctx.content.txt.is_bg_fill = %i [B %d]\n",
                          obj->name, pair->value.i, pair->code);
               break;
             case 292:
               ctx->content.txt.is_bg_mask_fill = pair->value.i;
-              LOG_TRACE ("%s.ctx.content.txt.is_bg_mask_fill = %i [%d B]\n",
+              LOG_TRACE ("%s.ctx.content.txt.is_bg_mask_fill = %i [B %d]\n",
                          obj->name, pair->value.i, pair->code);
               break;
             case 293:
               ctx->content.txt.is_height_auto = pair->value.i;
-              LOG_TRACE ("%s.ctx.content.txt.is_height_auto = %i [%d B]\n",
+              LOG_TRACE ("%s.ctx.content.txt.is_height_auto = %i [B %d]\n",
                          obj->name, pair->value.i, pair->code);
               break;
             case 294:
               ctx->content.txt.is_col_flow_reversed = pair->value.i;
               LOG_TRACE (
-                  "%s.ctx.content.txt.is_col_flow_reversed = %i [%d B]\n",
+                  "%s.ctx.content.txt.is_col_flow_reversed = %i [B %d]\n",
                   obj->name, pair->value.i, pair->code);
               break;
             case 295:
               ctx->content.txt.word_break = pair->value.i;
-              LOG_TRACE ("%s.ctx.content.txt.word_break = %i [%d B]\n",
+              LOG_TRACE ("%s.ctx.content.txt.word_break = %i [B %d]\n",
                          obj->name, pair->value.i, pair->code);
               break;
             case 173:
               ctx->content.txt.col_type = pair->value.i;
-              LOG_TRACE ("%s.ctx.content.txt.col_type = %d [%d BS]\n",
+              LOG_TRACE ("%s.ctx.content.txt.col_type = %d [BS %d]\n",
                          obj->name, pair->value.i, pair->code);
               break;
             case 144:
@@ -2638,27 +2637,27 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               ctx->content.txt.col_sizes = realloc (ctx->content.txt.col_sizes,
                                                     (i + 1) * sizeof (double));
               ctx->content.txt.col_sizes[i] = pair->value.d;
-              LOG_TRACE ("%s.ctx.content.txt.col_sizes[%d] = %f [%d BD]\n",
+              LOG_TRACE ("%s.ctx.content.txt.col_sizes[%d] = %f [BD %d]\n",
                          obj->name, i, pair->value.d, pair->code);
               break;
             case 296:
               ctx->has_content_blk = pair->value.i;
-              LOG_TRACE ("%s.ctx.has_content_blk = %i [%d B]\n", obj->name,
+              LOG_TRACE ("%s.ctx.has_content_blk = %i [B %d]\n", obj->name,
                          pair->value.i, pair->code);
               break;
             case 14: // has_block
               ctx->content.blk.normal.x = pair->value.d;
-              LOG_TRACE ("%s.ctx.content.blk.normal.x = %f [%d 3BD]\n",
+              LOG_TRACE ("%s.ctx.content.blk.normal.x = %f [3BD %d]\n",
                          obj->name, pair->value.d, pair->code);
               break;
             case 24:
               ctx->content.blk.normal.y = pair->value.d;
-              LOG_TRACE ("%s.ctx.content.blk.normal.y = %f [%d 3BD]\n",
+              LOG_TRACE ("%s.ctx.content.blk.normal.y = %f [3BD %d]\n",
                          obj->name, pair->value.d, pair->code);
               break;
             case 34:
               ctx->content.blk.normal.z = pair->value.d;
-              LOG_TRACE ("%s.ctx.content.blk.normal.z = %f [%d 3BD]\n",
+              LOG_TRACE ("%s.ctx.content.blk.normal.z = %f [3BD %d]\n",
                          obj->name, pair->value.d, pair->code);
               break;
             case 341:
@@ -2678,7 +2677,7 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             case 35:
               ctx->content.blk.location.z = pair->value.d;
               LOG_TRACE (
-                  "%s.ctx.content.blk.location = (%f, %f, %f) [%d 3BD]\n",
+                  "%s.ctx.content.blk.location = (%f, %f, %f) [3BD %d]\n",
                   obj->name, ctx->content.blk.location.x,
                   ctx->content.blk.location.y, ctx->content.blk.location.z,
                   pair->code);
@@ -2691,19 +2690,19 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               break;
             case 36:
               ctx->content.blk.scale.z = pair->value.d;
-              LOG_TRACE ("%s.ctx.content.blk.scale = (%f, %f, %f) [%d 3BD]\n",
+              LOG_TRACE ("%s.ctx.content.blk.scale = (%f, %f, %f) [3BD %d]\n",
                          obj->name, ctx->content.blk.scale.x,
                          ctx->content.blk.scale.y, ctx->content.blk.scale.z,
                          pair->code);
               break;
             case 46:
               ctx->content.blk.rotation = pair->value.d; // deg2rad?
-              LOG_TRACE ("%s.ctx.content.blk.rotation = %f [%d BD]\n",
+              LOG_TRACE ("%s.ctx.content.blk.rotation = %f [BD %d]\n",
                          obj->name, pair->value.d, pair->code);
               break;
             case 93:
               ctx->content.blk.color.index = pair->value.i;
-              LOG_TRACE ("%s.ctx.content.blk.color.index = %d [%d CMC]\n",
+              LOG_TRACE ("%s.ctx.content.blk.color.index = %d [CMC %d]\n",
                          obj->name, pair->value.i, pair->code);
               break;
             case 47:
@@ -2711,7 +2710,7 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               if (!j)
                 ctx->content.blk.transform = calloc (16, sizeof (double));
               ctx->content.blk.transform[j] = pair->value.d;
-              LOG_TRACE ("%s.ctx.content.blk.transform[%d] = %f [%d BD]\n",
+              LOG_TRACE ("%s.ctx.content.blk.transform[%d] = %f [BD %d]\n",
                          obj->name, j, pair->value.d, pair->code);
               break;
             case 110:
@@ -2722,7 +2721,7 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               break;
             case 130:
               ctx->base.z = pair->value.d;
-              LOG_TRACE ("%s.ctx.base = (%f, %f, %f) [%d 3BD]\n", obj->name,
+              LOG_TRACE ("%s.ctx.base = (%f, %f, %f) [3BD %d]\n", obj->name,
                          ctx->base.x, ctx->base.y, ctx->base.z, pair->code);
               break;
             case 111:
@@ -2733,7 +2732,7 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               break;
             case 131:
               ctx->base_dir.z = pair->value.d;
-              LOG_TRACE ("%s.ctx.base = (%f, %f, %f) [%d 3BD]\n", obj->name,
+              LOG_TRACE ("%s.ctx.base = (%f, %f, %f) [3BD %d]\n", obj->name,
                          ctx->base_dir.x, ctx->base_dir.y, ctx->base_dir.z,
                          pair->code);
               break;
@@ -2745,23 +2744,23 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               break;
             case 132:
               ctx->base_vert.z = pair->value.d;
-              LOG_TRACE ("%s.ctx.base = (%f, %f, %f) [%d 3BD]\n", obj->name,
+              LOG_TRACE ("%s.ctx.base = (%f, %f, %f) [3BD %d]\n", obj->name,
                          ctx->base_vert.x, ctx->base_vert.y, ctx->base_vert.z,
                          pair->code);
               break;
             case 297:
               ctx->is_normal_reversed = pair->value.i;
-              LOG_TRACE ("%s.ctx.is_normal_reversed = %i [%d B]\n", obj->name,
+              LOG_TRACE ("%s.ctx.is_normal_reversed = %i [B %d]\n", obj->name,
                          pair->value.i, pair->code);
               break;
             case 273:
               ctx->text_top = pair->value.i;
-              LOG_TRACE ("%s.ctx.text_top = %i [%d BS]\n", obj->name,
+              LOG_TRACE ("%s.ctx.text_top = %i [BS %d]\n", obj->name,
                          pair->value.i, pair->code);
               break;
             case 272:
               ctx->text_bottom = pair->value.i;
-              LOG_TRACE ("%s.ctx.text_bottom = %i [%d BS]\n", obj->name,
+              LOG_TRACE ("%s.ctx.text_bottom = %i [BS %d]\n", obj->name,
                          pair->value.i, pair->code);
               break;
 
@@ -2795,7 +2794,7 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       return pair;                                                            \
     }                                                                         \
   dwg_dynapi_entity_set_value (o, obj->name, field, &pair->value, 1);         \
-  LOG_TRACE ("%s.%s = %d [%d " #type "]\n", obj->name, field, pair->value.i,  \
+  LOG_TRACE ("%s.%s = %d [" #type " %d]\n", obj->name, field, pair->value.i,  \
              pair->code);                                                     \
   dxf_free_pair (pair)
 
@@ -2811,7 +2810,7 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     {                                                                         \
       BITCODE_H hdl = dwg_add_handleref (dwg, htype, pair->value.u, obj);     \
       dwg_dynapi_entity_set_value (o, obj->name, field, &hdl, 1);             \
-      LOG_TRACE ("%s.%s = " FORMAT_REF " [%d H]\n", obj->name, field,         \
+      LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n", obj->name, field,         \
                  ARGS_REF (hdl), pair->code);                                 \
     }                                                                         \
   dxf_free_pair (pair)
@@ -2927,13 +2926,13 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
             char ctrlobj[80];
             dwg_add_handle (&obj->handle, 0, pair->value.u, obj);
             ref = dwg_add_handleref (dwg, 3, pair->value.u, obj);
-            LOG_TRACE ("%s.handle = " FORMAT_H " [%d]\n", ctrlname,
+            LOG_TRACE ("%s.handle = " FORMAT_H " [H %d]\n", ctrlname,
                        ARGS_H (obj->handle), pair->code);
             // also set the matching HEADER.*_CONTROL_OBJECT
             strncpy (ctrlobj, ctrlname, 70);
             strcat (ctrlobj, "_OBJECT");
             dwg_dynapi_header_set_value (dwg, ctrlobj, &ref, 0);
-            LOG_TRACE ("HEADER.%s = " FORMAT_REF " [0]\n", ctrlobj,
+            LOG_TRACE ("HEADER.%s = " FORMAT_REF " [H 0]\n", ctrlobj,
                        ARGS_REF (ref));
           }
           break;
@@ -2945,7 +2944,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
             {
               BITCODE_H owh = dwg_add_handleref (dwg, 4, pair->value.u, obj);
               obj->tio.object->ownerhandle = owh;
-              LOG_TRACE ("%s.ownerhandle = " FORMAT_REF " [330]\n", ctrlname,
+              LOG_TRACE ("%s.ownerhandle = " FORMAT_REF " [H 330]\n", ctrlname,
                          ARGS_REF (owh));
             }
           break;
@@ -2962,7 +2961,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
               assert (_o->morehandles);
               _o->morehandles[j]
                   = dwg_add_handleref (dwg, 4, pair->value.u, obj);
-              LOG_TRACE ("%s.morehandles[%d] = " FORMAT_REF " [330]\n",
+              LOG_TRACE ("%s.morehandles[%d] = " FORMAT_REF " [H 330]\n",
                          ctrlname, j, ARGS_REF (_o->morehandles[j]));
               j++;
             }
@@ -2971,7 +2970,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
           obj->tio.object->xdicobjhandle
               = dwg_add_handleref (dwg, 3, pair->value.u, obj);
           obj->tio.object->xdic_missing_flag = 0;
-          LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [360]\n", ctrlname,
+          LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [H 360]\n", ctrlname,
                      ARGS_REF (obj->tio.object->xdicobjhandle));
           break;
         case 70:
@@ -2981,7 +2980,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
               BITCODE_BL num_entries = (BITCODE_BL)pair->value.u;
               dwg_dynapi_entity_set_value (_obj, obj->name, "num_entries",
                                            &num_entries, is_utf);
-              LOG_TRACE ("%s.num_entries = %u [70]\n", ctrlname, num_entries);
+              LOG_TRACE ("%s.num_entries = %u [BL 70]\n", ctrlname, num_entries);
               hdls = calloc (num_entries, sizeof (Dwg_Object_Ref *));
               dwg_dynapi_entity_set_value (_obj, obj->name, "entries", &hdls,
                                            0);
@@ -2997,7 +2996,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
                   dwg_dynapi_entity_set_value (_obj, obj->name,
                                                "num_morehandles", &pair->value,
                                                is_utf);
-                  LOG_TRACE ("%s.num_morehandles = %u [71]\n", ctrlname,
+                  LOG_TRACE ("%s.num_morehandles = %u [BL 71]\n", ctrlname,
                              pair->value.u);
                   hdls = calloc (pair->value.u, sizeof (Dwg_Object_Ref *));
                   dwg_dynapi_entity_set_value (_obj, obj->name, "morehandles",
@@ -3007,7 +3006,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
                 }
               else
                 {
-                  LOG_TRACE ("%s.num_morehandles = %u [71]\n", ctrlname,
+                  LOG_TRACE ("%s.num_morehandles = %u [BL 71]\n", ctrlname,
                              pair->value.u)
                 }
               break;
@@ -3272,7 +3271,7 @@ add_dictionary_itemhandles (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
     _obj->hard_owner = 1;
   num = _obj->numitems;
   hdl = dwg_add_handleref (dwg, 2, pair->value.u, obj);
-  LOG_TRACE ("%s.itemhandles[%d] = " FORMAT_REF " [%d H]\n", obj->name, num,
+  LOG_TRACE ("%s.itemhandles[%d] = " FORMAT_REF " [H* %d]\n", obj->name, num,
              ARGS_REF (hdl), pair->code);
   _obj->itemhandles
       = realloc (_obj->itemhandles, (num + 1) * sizeof (BITCODE_H));
@@ -3282,7 +3281,7 @@ add_dictionary_itemhandles (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
     _obj->texts[num] = (char *)bit_utf8_to_TU (text);
   else
     _obj->texts[num] = strdup (text);
-  LOG_TRACE ("%s.texts[%d] = %s [3 T]\n", obj->name, num, text);
+  LOG_TRACE ("%s.texts[%d] = %s [T* 3]\n", obj->name, num, text);
   _obj->numitems = num + 1;
 }
 
@@ -3359,7 +3358,7 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       LOG_ERROR ("Out of memory");
       return NULL;
     }
-  LOG_TRACE ("%s.preview_size = " FORMAT_BLL " [%d BLL]\n", obj->name,
+  LOG_TRACE ("%s.preview_size = " FORMAT_BLL " [BLL %d]\n", obj->name,
              ent->preview_size, pair->code);
   ent->preview_exists = 1;
 
@@ -3433,7 +3432,7 @@ add_block_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       pair = dxf_read_pair (dat);
     }
   _obj->preview_data_size = written;
-  LOG_TRACE ("BLOCK_HEADER.preview_data_size = %u [BL]\n", written);
+  LOG_TRACE ("BLOCK_HEADER.preview_data_size = %u [BL 0]\n", written);
   return pair;
 }
 
@@ -3450,31 +3449,31 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
       BITCODE_RS flag = *flagp;
       *flagp = flag = pair->value.i;
       _o->flag = flag;
-      LOG_TRACE ("SPLINE.flag = %d [70 RS]\n", flag);
+      LOG_TRACE ("SPLINE.flag = %d [RS 70]\n", flag);
       if (flag & 1)
         {
           _o->closed_b = 1;
-          LOG_TRACE ("SPLINE.closed_b = 1 [B] (1st bit)\n");
+          LOG_TRACE ("SPLINE.closed_b = 1 [B 0] (1st bit)\n");
         }
       if (flag & 2)
         {
           _o->periodic = 1;
-          LOG_TRACE ("SPLINE.periodic = 1 [B] (2nd bit)\n");
+          LOG_TRACE ("SPLINE.periodic = 1 [B 0] (2nd bit)\n");
         }
       if (flag & 4)
         {
           _o->rational = 1;
-          LOG_TRACE ("SPLINE.rational = 1 [B] (3rd bit)\n");
+          LOG_TRACE ("SPLINE.rational = 1 [B 0] (3rd bit)\n");
         }
       if (flag & 8)
         {
           _o->weighted = 1;
-          LOG_TRACE ("SPLINE.weighted = 1 [B] (4th bit)\n");
+          LOG_TRACE ("SPLINE.weighted = 1 [B 0] (4th bit)\n");
         }
       if (flag & 1024)
         {
           _o->scenario = 2; // bezier: planar, not rational (8+32)
-          LOG_TRACE ("SPLINE.scenario = 2 [B] (bezier)\n");
+          LOG_TRACE ("SPLINE.scenario = 2 [B 0] (bezier)\n");
         }
       return 1; // found
     }
@@ -3483,7 +3482,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
       _o->num_knots = pair->value.i;
       *jp = 0;
       _o->knots = calloc (_o->num_knots, sizeof (BITCODE_BD));
-      LOG_TRACE ("SPLINE.num_knots = %d [72 BS]\n", _o->num_knots);
+      LOG_TRACE ("SPLINE.num_knots = %d [BS 72]\n", _o->num_knots);
       return 1; // found
     }
   else if (pair->code == 73)
@@ -3492,7 +3491,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
       *jp = 0;
       _o->ctrl_pts
           = calloc (_o->num_ctrl_pts, sizeof (Dwg_SPLINE_control_point));
-      LOG_TRACE ("SPLINE.ctrl_pts = %d [73 BS]\n", _o->num_ctrl_pts);
+      LOG_TRACE ("SPLINE.ctrl_pts = %d [BS 73]\n", _o->num_ctrl_pts);
       return 1; // found
     }
   else if (pair->code == 74)
@@ -3501,7 +3500,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
       *jp = 0;
       _o->fit_pts = calloc (_o->num_fit_pts, sizeof (Dwg_SPLINE_point));
       _o->scenario = 2;
-      LOG_TRACE ("SPLINE.num_fit_pts = %d [74 BS]\n", _o->num_fit_pts);
+      LOG_TRACE ("SPLINE.num_fit_pts = %d [BS 74]\n", _o->num_fit_pts);
       return 1; // found
     }
   else if (pair->code == 40) // knots[] BD*
@@ -3512,7 +3511,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
           return 1; // found
         }
       _o->knots[j] = pair->value.d;
-      LOG_TRACE ("SPLINE.knots[%d] = %f [40 BD*]\n", *jp, pair->value.d);
+      LOG_TRACE ("SPLINE.knots[%d] = %f [BD* 40]\n", *jp, pair->value.d);
       j++;
       *jp = j;
       if (j == (int)_o->num_knots)
@@ -3539,7 +3538,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
   else if (pair->code == 30) // ctrl_pts[].z 3BD
     {
       _o->ctrl_pts[j].z = pair->value.d;
-      LOG_TRACE ("SPLINE.ctrl_pts[%d] = (%f, %f, %f) [10 BD*]\n", *jp,
+      LOG_TRACE ("SPLINE.ctrl_pts[%d] = (%f, %f, %f) [3BD* 10]\n", *jp,
                  _o->ctrl_pts[j].x, _o->ctrl_pts[j].y, _o->ctrl_pts[j].z);
       j++;
       *jp = j;
@@ -3550,7 +3549,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
   else if (pair->code == 41) // ctrl_pts[].z 3BD
     {
       _o->ctrl_pts[j].w = pair->value.d;
-      LOG_TRACE ("SPLINE.ctrl_pts[%d].w = %f [41 BD*]\n", *jp,
+      LOG_TRACE ("SPLINE.ctrl_pts[%d].w = %f [BD* 41]\n", *jp,
                  _o->ctrl_pts[j].w);
       j++;
       *jp = j;
@@ -3576,7 +3575,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
   else if (pair->code == 31) // fit_pts[].z 3BD
     {
       _o->fit_pts[j].z = pair->value.d;
-      LOG_TRACE ("SPLINE.fit_pts[%d] = (%f, %f, %f) [10 BD*]\n", *jp,
+      LOG_TRACE ("SPLINE.fit_pts[%d] = (%f, %f, %f) [3BD* 11]\n", *jp,
                  _o->fit_pts[j].x, _o->fit_pts[j].y, _o->fit_pts[j].z);
       j++;
       *jp = j;
@@ -3603,7 +3602,7 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       _o->num_verts = pair->value.i;
       _o->parent = obj->tio.entity;
       _o->verts = calloc (_o->num_verts, sizeof (Dwg_MLINE_vertex));
-      LOG_TRACE ("MLINE.num_verts = %d [72 BS]\n", _o->num_verts);
+      LOG_TRACE ("MLINE.num_verts = %d [BS 72]\n", _o->num_verts);
       *jp = 0;
     }
   else if (pair->code == 73)
@@ -3614,7 +3613,7 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           _o->verts[_j].lines
               = calloc (_o->num_lines, sizeof (Dwg_MLINE_line));
         }
-      LOG_TRACE ("MLINE.num_lines = %d [73 BS]\n", _o->num_lines);
+      LOG_TRACE ("MLINE.num_lines = %d [BS 73]\n", _o->num_lines);
       *kp = 0;
     }
   else if (pair->code == 11 && _o->num_verts)
@@ -3627,7 +3626,7 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   else if (pair->code == 31 && _o->num_verts)
     {
       _o->verts[j].vertex.z = pair->value.d;
-      LOG_TRACE ("MLINE.verts[%d] = (%f, %f, %f) [11 3BD*]\n", j,
+      LOG_TRACE ("MLINE.verts[%d] = (%f, %f, %f) [3BD* 11]\n", j,
                  _o->verts[j].vertex.x, _o->verts[j].vertex.y,
                  _o->verts[j].vertex.z);
     }
@@ -3638,7 +3637,7 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   else if (pair->code == 32 && _o->num_verts)
     {
       _o->verts[j].vertex_direction.z = pair->value.d;
-      LOG_TRACE ("MLINE.vertex_direction[%d] = (%f, %f, %f) [12 3BD*]\n", j,
+      LOG_TRACE ("MLINE.vertex_direction[%d] = (%f, %f, %f) [3BD* 12]\n", j,
                  _o->verts[j].vertex_direction.x,
                  _o->verts[j].vertex_direction.y,
                  _o->verts[j].vertex_direction.z);
@@ -3650,7 +3649,7 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   else if (pair->code == 33 && _o->num_verts)
     {
       _o->verts[j].miter_direction.z = pair->value.d;
-      LOG_TRACE ("MLINE.miter_direction[%d] = (%f, %f, %f) [12 3BD*]\n", j,
+      LOG_TRACE ("MLINE.miter_direction[%d] = (%f, %f, %f) [3BD* 13]\n", j,
                  _o->verts[j].miter_direction.x,
                  _o->verts[j].miter_direction.y,
                  _o->verts[j].miter_direction.z);
@@ -3669,14 +3668,14 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       _o->verts[j].lines[k].num_segparms = pair->value.i;
       _o->verts[j].lines[k].segparms
           = calloc (pair->value.i, sizeof (BITCODE_BD));
-      LOG_TRACE ("MLINE.v[%d].l[%d].num_segparms = %d [74 BS]\n", j, k,
+      LOG_TRACE ("MLINE.v[%d].l[%d].num_segparms = %d [BS 74]\n", j, k,
                  pair->value.i);
       *lp = 0;
     }
   else if (pair->code == 41 && _o->num_lines)
     {
       _o->verts[j].lines[k].segparms[l] = pair->value.d;
-      LOG_TRACE ("MLINE.v[%d].l[%d].segparms[%d] = %f [41 BD]\n", j, k, l,
+      LOG_TRACE ("MLINE.v[%d].l[%d].segparms[%d] = %f [BD 41]\n", j, k, l,
                  pair->value.d);
       l++;
       *lp = l;
@@ -3684,7 +3683,7 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   else if (pair->code == 75 && _o->num_lines)
     {
       _o->verts[j].lines[k].num_areafillparms = pair->value.i;
-      LOG_TRACE ("MLINE.v[%d].l[%d].num_areafillparms = %d [75 BS]\n", j, k,
+      LOG_TRACE ("MLINE.v[%d].l[%d].num_areafillparms = %d [BS 75]\n", j, k,
                  pair->value.i);
       if (!pair->value.i)
         {
@@ -3702,7 +3701,7 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   else if (pair->code == 42 && _o->num_lines)
     {
       _o->verts[j].lines[k].areafillparms[l] = pair->value.d;
-      LOG_TRACE ("MLINE.v[%d].l[%d].areafillparms[%d] = %f [42 BD]\n", j, k, l,
+      LOG_TRACE ("MLINE.v[%d].l[%d].areafillparms[%d] = %f [BD 42]\n", j, k, l,
                  pair->value.d);
       l++;
       *lp = l;
@@ -3754,7 +3753,7 @@ postprocess_SEQEND (Dwg_Object *obj)
               owner = _o;
               obj->tio.entity->ownerhandle
                   = dwg_add_handleref (dwg, 4, _o->handle.value, obj);
-              LOG_TRACE ("SEQEND.owner = " FORMAT_H " (%s) [H*]\n",
+              LOG_TRACE ("SEQEND.owner = " FORMAT_H " (%s) [H* 0]\n",
                          ARGS_H (_o->handle), _o->name);
               break;
             }
@@ -3763,7 +3762,7 @@ postprocess_SEQEND (Dwg_Object *obj)
   if (!owner)
     {
       if (obj->tio.entity->ownerhandle)
-        LOG_WARN ("Missing owner from " FORMAT_REF " [H]",
+        LOG_WARN ("Missing owner from " FORMAT_REF " [H 330]",
                   ARGS_REF (obj->tio.entity->ownerhandle))
       else
         LOG_WARN ("Missing owner")
@@ -3774,7 +3773,7 @@ postprocess_SEQEND (Dwg_Object *obj)
   ow = owner->tio.entity->tio.POLYLINE_2D;
   seqend = dwg_add_handleref (dwg, 3, obj->handle.value, owner);
   dwg_dynapi_entity_set_value (ow, owner->name, "seqend", &seqend, 0);
-  LOG_TRACE ("%s.seqend = " FORMAT_REF " [H]\n", owner->name,
+  LOG_TRACE ("%s.seqend = " FORMAT_REF " [H 0]\n", owner->name,
              ARGS_REF (seqend));
   // num_owned is not properly stored in a DXF
   // collect children hdls. all objects from owner to here
@@ -3786,14 +3785,14 @@ postprocess_SEQEND (Dwg_Object *obj)
         {
           owned = realloc (owned, num_owned * sizeof (BITCODE_H));
           owned[j] = dwg_add_handleref (dwg, 4, _o->handle.value, owner);
-          LOG_TRACE ("%s.%s[%d] = " FORMAT_REF " [H*]\n", owner->name, owhdls,
+          LOG_TRACE ("%s.%s[%d] = " FORMAT_REF " [H* 0]\n", owner->name, owhdls,
                      j, ARGS_REF (owned[j]));
         }
     }
   if (!num_owned)
     return;
   dwg_dynapi_entity_set_value (ow, owner->name, "num_owned", &num_owned, 0);
-  LOG_TRACE ("%s.num_owned = " FORMAT_BL " [BL]\n", owner->name, num_owned);
+  LOG_TRACE ("%s.num_owned = " FORMAT_BL " [BL 0]\n", owner->name, num_owned);
   // TODO: store all these fields, or just the ones for the requested version?
   if (dwg->header.version >= R_13 && dwg->header.version <= R_2000)
     {
@@ -3810,11 +3809,11 @@ postprocess_SEQEND (Dwg_Object *obj)
           lastfield = "last_attrib";
         }
       dwg_dynapi_entity_set_value (ow, owner->name, firstfield, &owned[0], 0);
-      LOG_TRACE ("%s.%s = " FORMAT_REF "[H]\n", owner->name, firstfield,
+      LOG_TRACE ("%s.%s = " FORMAT_REF "[H 0]\n", owner->name, firstfield,
                  ARGS_REF (owned[0]));
       dwg_dynapi_entity_set_value (ow, owner->name, lastfield,
                                    &owned[num_owned - 1], 0);
-      LOG_TRACE ("%s.%s] = " FORMAT_REF "[H]\n", owner->name, lastfield,
+      LOG_TRACE ("%s.%s] = " FORMAT_REF "[H 0]\n", owner->name, lastfield,
                  ARGS_REF (owned[num_owned - 1]));
       free (owned);
     }
@@ -4317,7 +4316,7 @@ new_object (char *restrict name, char *restrict dxfname,
               dwg_dynapi_entity_set_value (_obj, obj->name, "inserts",
                                            &inserts, 0);
               hdl = dwg_add_handleref (dwg, 4, pair->value.u, obj);
-              LOG_TRACE ("%s.inserts[%d] = " FORMAT_REF " [331 H*]\n",
+              LOG_TRACE ("%s.inserts[%d] = " FORMAT_REF " [H* 331]\n",
                          obj->name, curr_inserts, ARGS_REF (hdl));
               inserts[curr_inserts++] = hdl;
               break;
@@ -4330,7 +4329,7 @@ new_object (char *restrict name, char *restrict dxfname,
                                          : obj->tio.object->num_reactors;
               BITCODE_H reactor
                   = dwg_add_handleref (dwg, 4, pair->value.u, NULL); // always abs
-              LOG_TRACE ("%s.reactors[%d] = " FORMAT_REF " [330 H]\n", name,
+              LOG_TRACE ("%s.reactors[%d] = " FORMAT_REF " [H* 330]\n", name,
                          num, ARGS_REF (reactor));
               if (is_entity)
                 {
@@ -4356,7 +4355,7 @@ new_object (char *restrict name, char *restrict dxfname,
                 obj->tio.entity->ownerhandle = owh;
               else
                 obj->tio.object->ownerhandle = owh;
-              LOG_TRACE ("%s.ownerhandle = " FORMAT_REF " [330 H]\n", name,
+              LOG_TRACE ("%s.ownerhandle = " FORMAT_REF " [H 330]\n", name,
                          ARGS_REF (owh));
             }
           break;
@@ -4375,7 +4374,7 @@ new_object (char *restrict name, char *restrict dxfname,
                   obj->tio.object->xdicobjhandle = xdic;
                   obj->tio.object->xdic_missing_flag = 0;
                 }
-              LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [360 H]\n", name,
+              LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [H 360]\n", name,
                          ARGS_REF (xdic));
               break;
             }
@@ -4392,7 +4391,7 @@ new_object (char *restrict name, char *restrict dxfname,
             {
               Dwg_Object_GROUP *_o = obj->tio.object->tio.GROUP;
               BITCODE_H hdl = dwg_add_handleref (dwg, 5, pair->value.u, obj);
-              LOG_TRACE ("GROUP.groups[%d] = " FORMAT_REF " [340 H]\n",
+              LOG_TRACE ("GROUP.groups[%d] = " FORMAT_REF " [H* 340]\n",
                          _o->num_groups, ARGS_REF (hdl));
               _o->groups = realloc (_o->groups,
                                     (_o->num_groups + 1) * sizeof (BITCODE_H));
@@ -4406,7 +4405,7 @@ new_object (char *restrict name, char *restrict dxfname,
             {
               dwg_dynapi_entity_set_value (_obj, obj->name, "name",
                                            &pair->value, is_utf);
-              LOG_TRACE ("%s.name = %s [2 T]\n", name, pair->value.s);
+              LOG_TRACE ("%s.name = %s [T 2]\n", name, pair->value.s);
               if (strEQc (name, "BLOCK_RECORD"))
                 {
                   // seperate mspace and pspace into its own fields
@@ -4484,7 +4483,7 @@ new_object (char *restrict name, char *restrict dxfname,
             {
               dwg_dynapi_entity_set_value (_obj, obj->name, "flag",
                                            &pair->value, is_utf);
-              LOG_TRACE ("%s.flag = %d [70 RC]\n", name, pair->value.i);
+              LOG_TRACE ("%s.flag = %d [RC 70]\n", name, pair->value.i);
               break;
             }
           // fall through
@@ -4600,7 +4599,7 @@ new_object (char *restrict name, char *restrict dxfname,
                   dwg_dynapi_entity_value (_obj, obj->name, fname, &color,
                                            NULL);
                   color.rgb = pair->value.l;
-                  LOG_TRACE ("%s.%s.rgb = %06X [%d CMC]\n", name, fname,
+                  LOG_TRACE ("%s.%s.rgb = %06X [CMC %d]\n", name, fname,
                              pair->value.u, pair->code);
                   dwg_dynapi_entity_set_value (_obj, obj->name, fname, &color,
                                                is_utf);
@@ -4635,7 +4634,7 @@ new_object (char *restrict name, char *restrict dxfname,
               layer->linewt = dxf_find_lweight (pair->value.i);
               LOG_TRACE ("LAYER.linewt = %d\n", layer->linewt);
               layer->flag |= layer->linewt << 5;
-              LOG_TRACE ("LAYER.flag = 0x%x [70 BS]\n", layer->flag);
+              LOG_TRACE ("LAYER.flag = 0x%x [BS 70]\n", layer->flag);
             }
           else if (pair->code == 71 && strEQc (name, "MLINESTYLE")
                    && pair->value.i != 0)
@@ -4667,7 +4666,7 @@ new_object (char *restrict name, char *restrict dxfname,
                   = (Dwg_Entity_VERTEX_PFACE_FACE *)_obj;
               j = pair->code - 71;
               _o->vertind[j] = pair->value.i;
-              LOG_TRACE ("VERTEX_PFACE_FACE.vertind[%d] = %d [%d BS]\n", j,
+              LOG_TRACE ("VERTEX_PFACE_FACE.vertind[%d] = %d [BS %d]\n", j,
                          pair->value.i, pair->code);
             }
           else if (strEQc (name, "SPLINE"))
@@ -4713,7 +4712,7 @@ new_object (char *restrict name, char *restrict dxfname,
               if (pair->code == 62)
                 {
                   o->color.index = pair->value.i;
-                  LOG_TRACE ("DBCOLOR.color.index = %d [%d CMC]\n",
+                  LOG_TRACE ("DBCOLOR.color.index = %d [CMC %d]\n",
                              pair->value.i, pair->code);
                   goto next_pair;
                 }
@@ -4726,9 +4725,9 @@ new_object (char *restrict name, char *restrict dxfname,
                     goto search_field;
                   o->name = strdup (x + 1);
                   x[0] = '\0';
-                  LOG_TRACE ("DBCOLOR.catalog = %s [%d CMC]\n", o->catalog,
+                  LOG_TRACE ("DBCOLOR.catalog = %s [CMC %d]\n", o->catalog,
                              pair->code);
-                  LOG_TRACE ("DBCOLOR.name = %s [%d CMC]\n", o->name,
+                  LOG_TRACE ("DBCOLOR.name = %s [CMC %d]\n", o->name,
                              pair->code);
                   goto next_pair;
                 }
@@ -4746,7 +4745,7 @@ new_object (char *restrict name, char *restrict dxfname,
                 {
                   o->block_scale.z = pair->value.d;
                   LOG_TRACE (
-                      "MLEADERSTYLE.block_scale = (%f, %f, %f) [47 3BD]\n",
+                      "MLEADERSTYLE.block_scale = (%f, %f, %f) [3BD 47]\n",
                       o->block_scale.x, o->block_scale.y, o->block_scale.z);
                 }
               else
@@ -4762,7 +4761,7 @@ new_object (char *restrict name, char *restrict dxfname,
                     = calloc (o->num_column_heights, sizeof (BITCODE_BD));
               assert (j < (int)o->num_column_heights);
               o->column_heights[j] = pair->value.d;
-              LOG_TRACE ("MTEXT.column_heights[%d] = %f [50 BD*]\n", j,
+              LOG_TRACE ("MTEXT.column_heights[%d] = %f [BD* 50]\n", j,
                          pair->value.d);
             }
           else if (strEQc (name, "LEADER")
@@ -4780,7 +4779,7 @@ new_object (char *restrict name, char *restrict dxfname,
               else if (pair->code == 30)
                 {
                   o->points[j].z = pair->value.d;
-                  LOG_TRACE ("LEADER.points[%d] = (%f, %f, %f) [10 3BD*]\n", j,
+                  LOG_TRACE ("LEADER.points[%d] = (%f, %f, %f) [3BD* 10]\n", j,
                              o->points[j].x, o->points[j].y, o->points[j].z);
                   j++;
                 }
@@ -4847,7 +4846,7 @@ new_object (char *restrict name, char *restrict dxfname,
                           else if (pair->code < 30)
                             {
                               clip_verts[j].y = pair->value.d;
-                              LOG_TRACE ("%s.%s[%d] = (%f, %f) [%d 2RD*]\n",
+                              LOG_TRACE ("%s.%s[%d] = (%f, %f) [2RD* %d]\n",
                                          name, "clip_verts", j,
                                          clip_verts[j].x, clip_verts[j].y,
                                          pair->code - 10);
@@ -4895,9 +4894,9 @@ new_object (char *restrict name, char *restrict dxfname,
                           ang = deg2rad (pair->value.d);
                           dwg_dynapi_entity_set_value (_obj, obj->name,
                                                        f->name, &ang, 0);
-                          LOG_TRACE ("%s.%s = %f (from DEG %f°) [%d %s]\n",
+                          LOG_TRACE ("%s.%s = %f (from DEG %f°) [%s %d]\n",
                                      name, f->name, ang, pair->value.d,
-                                     pair->code, f->type);
+                                     f->type, pair->code);
                           goto next_pair; // found
                         }
                       // resolve handle, by name or ref
@@ -4930,7 +4929,7 @@ new_object (char *restrict name, char *restrict dxfname,
                             {
                               dwg_dynapi_entity_set_value (
                                   _obj, obj->name, f->name, &ref, is_utf);
-                              LOG_TRACE ("%s.%s = " FORMAT_REF " [%d H]\n",
+                              LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n",
                                          name, f->name, ARGS_REF (ref),
                                          pair->code);
                             }
@@ -4948,8 +4947,8 @@ new_object (char *restrict name, char *restrict dxfname,
                           pt.x = pair->value.d;
                           dwg_dynapi_entity_set_value (_obj, obj->name,
                                                        f->name, &pt, is_utf);
-                          LOG_TRACE ("%s.%s.x = %f [%d %s]\n", name, f->name,
-                                     pair->value.d, pair->code, f->type);
+                          LOG_TRACE ("%s.%s.x = %f [%s %d]\n", name, f->name,
+                                     pair->value.d, f->type, pair->code);
                           goto next_pair; // found
                         }
                       else if (f->size > 8 && strEQc (f->type, "CMC"))
@@ -4960,9 +4959,8 @@ new_object (char *restrict name, char *restrict dxfname,
                           if (pair->code < 100)
                             {
                               color.index = pair->value.i;
-                              LOG_TRACE ("%s.%s.index = %d [%d %s]\n", name,
-                                         f->name, pair->value.i, pair->code,
-                                         "CMC");
+                              LOG_TRACE ("%s.%s.index = %d [%s %d]\n", name,
+                                         f->name, pair->value.i, "CMC", pair->code);
                             }
                           else if (pair->code < 430)
                             {
@@ -4970,17 +4968,15 @@ new_object (char *restrict name, char *restrict dxfname,
                               color.alpha = (pair->value.l & 0xFF000000) >> 24;
                               if (color.alpha)
                                 color.alpha_type = 3;
-                              LOG_TRACE ("%s.%s.rgb = %08X [%d %s]\n", name,
-                                         f->name, pair->value.u, pair->code,
-                                         "CMC");
+                              LOG_TRACE ("%s.%s.rgb = %08X [%s %d]\n", name,
+                                         f->name, pair->value.u, "CMC", pair->code);
                             }
                           else if (pair->code < 440)
                             {
                               color.flag |= 1;
                               color.name = strdup (pair->value.s);
-                              LOG_TRACE ("%s.%s.name = %s [%d %s]\n", name,
-                                         f->name, pair->value.s, pair->code,
-                                         "CMC");
+                              LOG_TRACE ("%s.%s.name = %s [%s %d]\n", name,
+                                         f->name, pair->value.s, "CMC", pair->code);
                             }
                           dwg_dynapi_entity_set_value (
                               _obj, obj->name, f->name, &color, is_utf);
@@ -4991,18 +4987,18 @@ new_object (char *restrict name, char *restrict dxfname,
                                                      &pair->value, is_utf);
                       if (f->is_string)
                         {
-                          LOG_TRACE ("%s.%s = %s [%d %s]\n", name, f->name,
-                                     pair->value.s, pair->code, f->type);
+                          LOG_TRACE ("%s.%s = %s [%s %d]\n", name, f->name,
+                                     pair->value.s, f->type, pair->code);
                         }
                       else if (strchr (&f->type[1], 'D'))
                         {
-                          LOG_TRACE ("%s.%s = %f [%d %s]\n", name, f->name,
-                                     pair->value.d, pair->code, f->type);
+                          LOG_TRACE ("%s.%s = %f [%s %d]\n", name, f->name,
+                                     pair->value.d, f->type, pair->code);
                         }
                       else
                         {
-                          LOG_TRACE ("%s.%s = %ld [%d %s]\n", name, f->name,
-                                     pair->value.l, pair->code, f->type);
+                          LOG_TRACE ("%s.%s = %ld [%s %d]\n", name, f->name,
+                                     pair->value.l, f->type, pair->code);
                         }
                       goto next_pair; // found, early exit
                     }
@@ -5021,8 +5017,8 @@ new_object (char *restrict name, char *restrict dxfname,
                       pt.y = pair->value.d;
                       dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
                                                    &pt, is_utf);
-                      LOG_TRACE ("%s.%s.y = %f [%d %s]\n", name, f->name,
-                                 pair->value.d, pair->code, f->type);
+                      LOG_TRACE ("%s.%s.y = %f [%s %d]\n", name, f->name,
+                                 pair->value.d, f->type, pair->code);
                       goto next_pair; // found, early exit
                     }
                   else if ((*f->type == '3' || *f->type == '2'
@@ -5041,8 +5037,8 @@ new_object (char *restrict name, char *restrict dxfname,
                       pt.z = pair->value.d;
                       dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
                                                    &pt, 0);
-                      LOG_TRACE ("%s.%s.z = %f [%d %s]\n", name, f->name,
-                                 pair->value.d, pair->code, f->type);
+                      LOG_TRACE ("%s.%s.z = %f [%s %d]\n", name, f->name,
+                                 pair->value.d, f->type, pair->code);
 
                       // 3DD scale
                       if (strEQc (f->name, "scale")
@@ -5103,8 +5099,8 @@ new_object (char *restrict name, char *restrict dxfname,
                       matrix[j] = pair->value.d;
                       dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
                                                    &matrix, 0);
-                      LOG_TRACE ("%s.%s[%d] = %f [%d %s]\n", name, f->name, j,
-                                 pair->value.d, pair->code, f->type);
+                      LOG_TRACE ("%s.%s[%d] = %f [%s %d]\n", name, f->name, j,
+                                 pair->value.d, f->type, pair->code);
                       j++;
                       goto next_pair;
                     }
@@ -5124,8 +5120,8 @@ new_object (char *restrict name, char *restrict dxfname,
                       if (pair->code == 62)
                         {
                           color.index = pair->value.i;
-                          LOG_TRACE ("COMMON.%s.index = %d [%d %s]\n", f->name,
-                                     pair->value.i, pair->code, "CMC");
+                          LOG_TRACE ("COMMON.%s.index = %d [%s %d]\n", f->name,
+                                     pair->value.i, "CMC", pair->code);
                         }
                       else if (pair->code == 420)
                         {
@@ -5133,16 +5129,16 @@ new_object (char *restrict name, char *restrict dxfname,
                           color.alpha = (pair->value.l & 0xFF000000) >> 24;
                           if (color.alpha)
                             color.alpha_type = 3;
-                          LOG_TRACE ("COMMON.%s.rgb = %08X [%d %s]\n", f->name,
-                                     pair->value.u, pair->code, "CMC");
+                          LOG_TRACE ("COMMON.%s.rgb = %08X [%s %d]\n", f->name,
+                                     pair->value.u, "CMC", pair->code);
                         }
                       else if (pair->code == 430)
                         {
                           color.flag |= 1;
                           color.name = strdup (pair->value.s);
                           // TODO: book_name or name?
-                          LOG_TRACE ("COMMON.%s.name = %s [%d %s]\n", f->name,
-                                     pair->value.s, pair->code, "CMC");
+                          LOG_TRACE ("COMMON.%s.name = %s [%s %d]\n", f->name,
+                                     pair->value.s, "CMC", pair->code);
                         }
                       dwg_dynapi_common_set_value (_obj, f->name, &color,
                                                    is_utf);
@@ -5237,8 +5233,8 @@ new_object (char *restrict name, char *restrict dxfname,
                                                        &pair->value, is_utf);
                           if (f->is_string)
                             {
-                              LOG_TRACE ("COMMON.%s = %s [%d %s]\n", f->name,
-                                         pair->value.s, pair->code, f->type)
+                              LOG_TRACE ("COMMON.%s = %s [%s %d]\n", f->name,
+                                         pair->value.s, f->type, pair->code)
                             }
                           else
                             {
@@ -5248,11 +5244,11 @@ new_object (char *restrict name, char *restrict dxfname,
                                   goto start_loop; // already fresh pair
                                 }
                               if (strchr (f->type, 'D'))
-                                LOG_TRACE ("COMMON.%s = %f [%d %s]\n", f->name,
-                                           pair->value.d, pair->code, f->type)
+                                LOG_TRACE ("COMMON.%s = %f [%s %d]\n", f->name,
+                                           pair->value.d, f->type, pair->code)
                               else
-                                LOG_TRACE ("COMMON.%s = %ld [%d %s]\n", f->name,
-                                           pair->value.l, pair->code, f->type)
+                                LOG_TRACE ("COMMON.%s = %ld [%s %d]\n", f->name,
+                                           pair->value.l, f->type, pair->code)
                             }
                           goto next_pair; // found, early exit
                         }
@@ -5883,7 +5879,7 @@ resolve_postponed_header_refs (Dwg_Data *restrict dwg)
           if (hdl->handleref.code != 5)
             hdl = dwg_add_handleref (dwg, 5, hdl->absolute_ref, NULL);
           dwg_dynapi_header_set_value (dwg, field, &hdl, 1);
-          LOG_TRACE ("HEADER.%s %s => " FORMAT_REF " [H] dxf:%d\n", field,
+          LOG_TRACE ("HEADER.%s %s => " FORMAT_REF " [H %d]\n", field,
                      p.value.s, ARGS_REF (hdl), (int)p.code);
         }
       else if (strstr (field, "CMLSTYLE"))
@@ -5894,7 +5890,7 @@ resolve_postponed_header_refs (Dwg_Data *restrict dwg)
               if (hdl->handleref.code != 5)
                 hdl = dwg_add_handleref (dwg, 5, hdl->absolute_ref, NULL);
               dwg_dynapi_header_set_value (dwg, field, &hdl, 1);
-              LOG_TRACE ("HEADER.%s %s => " FORMAT_REF " [H] dxf:%d\n", field,
+              LOG_TRACE ("HEADER.%s %s => " FORMAT_REF " [H %d]\n", field,
                          p.value.s, ARGS_REF (hdl), (int)p.code)
             }
           else
