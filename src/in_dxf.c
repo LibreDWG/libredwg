@@ -4099,8 +4099,19 @@ new_object (char *restrict name, char *restrict dxfname,
         case 5:
           {
             obj->handle.value = pair->value.u;
+            // check for existing BLOCK_HEADER.*Model_Space
+            if (obj->fixedtype == DWG_TYPE_BLOCK_HEADER &&
+                dwg->object[0].handle.value == pair->value.u)
+              {
+                dwg->num_objects--;
+                free (obj->tio.object->tio.BLOCK_HEADER);
+                obj = &dwg->object[0];
+                _obj = obj->tio.object->tio.APPID;
+                LOG_TRACE ("Reuse existing BLOCK_HEADER.*Model_Space %X [0]\n",
+                           pair->value.u)
+              }
             dwg_add_handle (&obj->handle, 0, pair->value.u, obj);
-            LOG_TRACE ("%s.handle = " FORMAT_H " [5 H]\n", name,
+            LOG_TRACE ("%s.handle = " FORMAT_H " [H 5]\n", name,
                        ARGS_H (obj->handle));
             if (ctrl_id)
               {
@@ -4109,6 +4120,7 @@ new_object (char *restrict name, char *restrict dxfname,
                     = dwg->object[ctrl_id].tio.object->tio.BLOCK_CONTROL;
                 BITCODE_H *hdls = NULL;
                 BITCODE_BL num_entries = 0;
+
                 dwg_dynapi_entity_value (_ctrl, ctrlname, "num_entries",
                                          &num_entries, NULL);
                 if (num_entries <= i)
@@ -4121,7 +4133,7 @@ new_object (char *restrict name, char *restrict dxfname,
                     num_entries = i + 1;
                     dwg_dynapi_entity_set_value (
                         _ctrl, ctrlname, "num_entries", &num_entries, 0);
-                    LOG_TRACE ("%s.num_entries = %d [70 BL]\n", ctrlname,
+                    LOG_TRACE ("%s.num_entries = %d [BL 70]\n", ctrlname,
                                num_entries);
                   }
                 dwg_dynapi_entity_value (_ctrl, ctrlname, "entries", &hdls,
@@ -4138,7 +4150,7 @@ new_object (char *restrict name, char *restrict dxfname,
                 hdls[i] = dwg_add_handleref (dwg, 2, pair->value.u, obj);
                 dwg_dynapi_entity_set_value (_ctrl, ctrlname, "entries", &hdls,
                                              0);
-                LOG_TRACE ("%s.%s[%d] = " FORMAT_REF " [0]\n", ctrlname,
+                LOG_TRACE ("%s.%s[%d] = " FORMAT_REF " [H* 0]\n", ctrlname,
                            "entries", i, ARGS_REF (hdls[i]));
               }
           }
@@ -4155,7 +4167,7 @@ new_object (char *restrict name, char *restrict dxfname,
               else
                 {
                   dwg_dynapi_common_set_value (_obj, "layer", &handle, is_utf);
-                  LOG_TRACE ("%s.layer = %s " FORMAT_REF " [8 H]\n", name,
+                  LOG_TRACE ("%s.layer = %s " FORMAT_REF " [H 8]\n", name,
                              pair->value.s, ARGS_REF (handle));
                 }
               break;
@@ -5993,12 +6005,14 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       char *name = (char *)"*Model_Space";
       NEW_OBJECT (dwg, obj);
       ADD_OBJECT (BLOCK_HEADER);
+      // dwg->header.version here still unknown. <r2000: 0x17
+      // later fixed up when reading the BLOCK_HEADER.name
       if (dwg->header.version >= R_2007)
         _obj->name = (BITCODE_T)bit_utf8_to_TU (name);
       else
         _obj->name = strdup (name);
+      obj->tio.object->xdic_missing_flag = 1;
       _obj->xrefref = 1;
-      // TODO dwg->header.version here still unknown. <r2000: 0x17
       dwg_add_handle (&obj->handle, 0, 0x1F, obj);
       obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, 1, NULL);
     }

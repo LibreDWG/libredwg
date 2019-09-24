@@ -3422,7 +3422,7 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
       ent->preview_exists = 0;
       return error;
     }
-  LOG_TRACE ("handle: " FORMAT_H " [5]\n", ARGS_H (obj->handle))
+  LOG_TRACE ("handle: " FORMAT_H " [H 5]\n", ARGS_H (obj->handle))
 
   PRE (R_13) { return DWG_ERR_NOTYETSUPPORTED; }
 
@@ -3494,7 +3494,7 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
       LOG_ERROR ("Wrong object handle at pos 0x%0lx", dat->byte)
       return error;
     }
-  LOG_TRACE ("handle: " FORMAT_H " [5]\n", ARGS_H (obj->handle))
+  LOG_TRACE ("handle: " FORMAT_H " [H 5]\n", ARGS_H (obj->handle))
 
   error |= dwg_decode_eed (dat, _obj);
   if (error & (DWG_ERR_INVALIDEED | DWG_ERR_VALUEOUTOFBOUNDS))
