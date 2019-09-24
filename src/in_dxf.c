@@ -5469,7 +5469,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             Dwg_Object_BLOCK_CONTROL *_ctrl
               = ctrl->tio.object->tio.BLOCK_CONTROL;
             int at_end = 1;
-            for (int j = _ctrl->num_entries - 1; j >= 1; j--)
+            for (int j = _ctrl->num_entries - 1; j >= 0; j--)
               {
                 BITCODE_H ref = _ctrl->entries[j];
                 if (!ref)
