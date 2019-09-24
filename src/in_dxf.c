@@ -911,6 +911,37 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         eed[i].size += size;
       }
       break;
+    // 1001 is the APPID handle, not part of size nor data
+    case 1:
+      if (!i)
+        obj->tio.object->num_eed--;
+      if (strEQc (pair->value.s, "ACAD"))
+        {
+          dwg_add_handle (&eed[i].handle, 5, 0x12, NULL);
+          LOG_TRACE ("EED[%d] handle: 5.1.12 [H] for APPID.%s\n", i, pair->value.s);
+        }
+      else
+        {
+          // search name in APPID table (if already added)
+          BITCODE_H hdl;
+          hdl = dwg_find_tablehandle (dwg, pair->value.s, "APPID");
+          if (hdl)
+            {
+              memcpy (&eed[i].handle, &hdl->handleref, sizeof (Dwg_Handle));
+              LOG_TRACE ("EED[%d] handle: %lX [H] for APPID.%s\n", i, hdl->absolute_ref,
+                         pair->value.s);
+            }
+          // needs to be postponed, because we don't have the tables yet
+          else
+            {
+              char idx[12];
+              snprintf (idx, 12, "%d", obj->index);
+              eed_hdls = array_push (eed_hdls, idx, pair->value.s, (short)i);
+              LOG_TRACE ("EED[%d] handle: ? [H} for APPID.%s later\n", i,
+                          pair->value.s);
+            }
+        }
+      break;
     case 2:
       /* code [RC] + byte [RC] */
       size = 1 + 1;
@@ -1002,37 +1033,6 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       eed[i].data->u.eed_71.rl = pair->value.l;
       LOG_HANDLE ("EED[%d] %ld [RL %d]\n", i, pair->value.l, code);
       eed[i].size += size;
-      break;
-    case 1:
-      if (!i)
-        obj->tio.object->num_eed--;
-      eed[i].size += sizeof (Dwg_Handle);
-      if (strEQc (pair->value.s, "ACAD"))
-        {
-          dwg_add_handle (&eed[i].handle, 5, 0x12, NULL);
-          LOG_TRACE ("EED[%d] handle: 5.1.12 [H] for APPID.%s\n", i, pair->value.s);
-        }
-      else
-        {
-          // search name in APPID table (if already added)
-          BITCODE_H hdl;
-          hdl = dwg_find_tablehandle (dwg, pair->value.s, "APPID");
-          if (hdl)
-            {
-              memcpy (&eed[i].handle, &hdl->handleref, sizeof (Dwg_Handle));
-              LOG_TRACE ("EED[%d] handle: %lX [H] for APPID.%s\n", i, hdl->absolute_ref,
-                         pair->value.s);
-            }
-          // needs to be postponed, because we don't have the tables yet
-          else
-            {
-              char idx[12];
-              snprintf (idx, 12, "%d", obj->index);
-              eed_hdls = array_push (eed_hdls, idx, pair->value.s, (short)i);
-              LOG_TRACE ("EED[%d] handle: ? [H} for APPID.%s later\n", i,
-                          pair->value.s);
-            }
-        }
       break;
     case 5:
       {
