@@ -4351,7 +4351,9 @@ new_object (char *restrict name, char *restrict dxfname,
                   obj->tio.object->num_reactors++;
                 }
             }
-          else // valid ownerhandle
+          // valid ownerhandle, if not XRECORD with an ownerhandle already
+          else if (obj->fixedtype != DWG_TYPE_XRECORD
+                   || !obj->tio.object->ownerhandle)
             {
               BITCODE_H owh = dwg_add_handleref (dwg, 4, pair->value.u, obj);
               if (is_entity)
