@@ -567,7 +567,7 @@ dwg_print_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
     case DWG_TYPE_PROXY_OBJECT: // DXF name: PROXY
       return dwg_print_PROXY_OBJECT (dat, obj);
     default:
-      if (obj->type == obj->parent->layout_number)
+      if (obj->type == obj->parent->layout_type)
         {
           return dwg_print_LAYOUT (dat, obj);
         }

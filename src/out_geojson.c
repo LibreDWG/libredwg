@@ -730,7 +730,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       (void)dwg_geojson_LWPOLYLINE (dat, obj);
       break;
     default:
-      if (obj->type != obj->parent->layout_number)
+      if (obj->type != obj->parent->layout_type)
         dwg_geojson_variable_type (obj->parent, dat, obj);
     }
 }

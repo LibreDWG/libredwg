@@ -1370,7 +1370,7 @@ decl_dxfb_process_VERTEX (2D) decl_dxfb_process_VERTEX (3D)
     case DWG_TYPE_LAYOUT:
       return minimal ? 0 : dwg_dxfb_LAYOUT (dat, obj);
     default:
-      if (obj->type == obj->parent->layout_number)
+      if (obj->type == obj->parent->layout_type)
         {
           return minimal ? 0 : dwg_dxfb_LAYOUT (dat, obj);
         }

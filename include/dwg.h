@@ -5756,7 +5756,7 @@ typedef struct _dwg_struct
     BITCODE_RL junk_r14_2; /*!< r14 only */
   } second_header;
 
-  unsigned int layout_number;
+  unsigned int layout_type;
   unsigned int opts; /* 0xf: loglevel, ... */
 } Dwg_Data;
 

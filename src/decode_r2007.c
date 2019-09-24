@@ -1396,7 +1396,7 @@ read_2007_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       c = bit_read_B (&sec_dat); // 1
       LOG_HANDLE ("c: " FORMAT_B " [B]\n", c);
 
-      dwg->layout_number = 0;
+      dwg->layout_type = 0;
       dwg->num_classes = max_num - 499;
       if (max_num < 500 || max_num > 5000)
         {
@@ -1453,7 +1453,7 @@ read_2007_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           dwg->dwg_class[i].dxfname
               = bit_convert_TU (dwg->dwg_class[i].dxfname_u);
           if (strEQc (dwg->dwg_class[i].dxfname, "LAYOUT"))
-            dwg->layout_number = dwg->dwg_class[i].number;
+            dwg->layout_type = dwg->dwg_class[i].number;
         }
     }
   else

@@ -704,7 +704,7 @@ dwg_free_object (Dwg_Object *obj)
       dwg_free_PROXY_OBJECT (dat, obj);
       break;
     default:
-      if (obj->type == obj->parent->layout_number)
+      if (obj->type == obj->parent->layout_type)
         {
           SINCE (R_13)
           {

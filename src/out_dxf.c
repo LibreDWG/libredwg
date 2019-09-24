@@ -1552,7 +1552,7 @@ static int dwg_dxf_object (Bit_Chain *restrict dat,
     case DWG_TYPE_LAYOUT:
       return minimal ? 0 : dwg_dxf_LAYOUT (dat, obj);
     default:
-      if (obj->type == obj->parent->layout_number)
+      if (obj->type == obj->parent->layout_type)
         {
           return minimal ? 0 : dwg_dxf_LAYOUT (dat, obj);
         }

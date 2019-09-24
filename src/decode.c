@@ -1057,7 +1057,7 @@ classes_section:
 
   /* Read the classes
    */
-  dwg->layout_number = 0;
+  dwg->layout_type = 0;
   dwg->num_classes = 0;
   do
     {
@@ -1107,7 +1107,7 @@ classes_section:
 #endif
 
       if (strEQc ((const char *)klass->dxfname, "LAYOUT"))
-        dwg->layout_number = klass->number;
+        dwg->layout_type = klass->number;
 
       dwg->num_classes++;
       if (dwg->num_classes > 500)
@@ -2309,7 +2309,7 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       c = bit_read_B (&sec_dat); // 1
       LOG_HANDLE ("c: " FORMAT_B " [B]\n", c)
 
-      dwg->layout_number = 0;
+      dwg->layout_type = 0;
       dwg->num_classes = max_num - 499;
       if (max_num < 500
           || dwg->num_classes > 100 + (size / sizeof (Dwg_Class)))
@@ -2380,7 +2380,7 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                       dwg->dwg_class[i].unknown_2)
 
           if (strEQ (dwg->dwg_class[i].dxfname, "LAYOUT"))
-            dwg->layout_number = dwg->dwg_class[i].number;
+            dwg->layout_type = dwg->dwg_class[i].number;
         }
     }
   else
@@ -4815,7 +4815,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
       error = dwg_decode_PROXY_OBJECT (dat, obj);
       break;
     default:
-      if (obj->type == dwg->layout_number)
+      if (obj->type == dwg->layout_type)
         error = dwg_decode_LAYOUT (dat, obj);
       /* > 500 */
       else if ((error = dwg_decode_variable_type (dwg, dat, hdl_dat, obj))

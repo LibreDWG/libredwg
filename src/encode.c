@@ -56,6 +56,9 @@ static bool env_var_checked_p;
 
 #include "logging.h"
 
+static Dwg_Class *
+dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj);
+
 /*--------------------------------------------------------------------------------
  * spec MACROS
  */
@@ -1873,9 +1876,11 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
       break;
     case DWG_TYPE_MLINESTYLE:
       error = dwg_encode_MLINESTYLE (dat, obj);
+      (void)dwg_encode_get_class (obj->parent, obj);
       break;
     case DWG_TYPE_OLE2FRAME:
       error = dwg_encode_OLE2FRAME (dat, obj);
+      (void)dwg_encode_get_class (obj->parent, obj);
       break;
     case DWG_TYPE_DUMMY:
       error = dwg_encode_DUMMY (dat, obj);
@@ -1885,18 +1890,23 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
       break;
     case DWG_TYPE_LWPOLYLINE:
       error = dwg_encode_LWPOLYLINE (dat, obj);
+      (void)dwg_encode_get_class (obj->parent, obj);
       break;
     case DWG_TYPE_HATCH:
       error = dwg_encode_HATCH (dat, obj);
+      (void)dwg_encode_get_class (obj->parent, obj);
       break;
     case DWG_TYPE_XRECORD:
       error = dwg_encode_XRECORD (dat, obj);
+      (void)dwg_encode_get_class (obj->parent, obj);
       break;
     case DWG_TYPE_PLACEHOLDER:
       error = dwg_encode_PLACEHOLDER (dat, obj);
+      (void)dwg_encode_get_class (obj->parent, obj);
       break;
     case DWG_TYPE_OLEFRAME:
       error = dwg_encode_OLEFRAME (dat, obj);
+      (void)dwg_encode_get_class (obj->parent, obj);
       break;
     case DWG_TYPE_VBA_PROJECT:
       LOG_ERROR ("Unhandled Object VBA_PROJECT. Has its own section");
@@ -1904,6 +1914,7 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
       break;
     case DWG_TYPE_LAYOUT:
       error |= dwg_encode_LAYOUT (dat, obj);
+      (void)dwg_encode_get_class (obj->parent, obj);
       break;
     case DWG_TYPE_PROXY_ENTITY:
       error = dwg_encode_PROXY_ENTITY (dat, obj);
@@ -1912,8 +1923,11 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
       error = dwg_encode_PROXY_OBJECT (dat, obj);
       break;
     default:
-      if (obj->type == obj->parent->layout_number)
-        error = dwg_encode_LAYOUT (dat, obj);
+      if (obj->type == obj->parent->layout_type)
+        {
+          error = dwg_encode_LAYOUT (dat, obj);
+          (void)dwg_encode_get_class (obj->parent, obj);
+        }
       else if ((error = dwg_encode_variable_type (obj->parent, dat, obj))
                & DWG_ERR_UNHANDLEDCLASS)
         {

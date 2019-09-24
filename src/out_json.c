@@ -1040,7 +1040,7 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
     case DWG_TYPE_LAYOUT:
       return dwg_json_LAYOUT (dat, obj);
     default:
-      if (obj->type != 0 && obj->type == obj->parent->layout_number)
+      if (obj->type != 0 && obj->type == obj->parent->layout_type)
         {
           return dwg_json_LAYOUT (dat, obj);
         }
