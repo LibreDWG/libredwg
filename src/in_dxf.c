@@ -5602,18 +5602,23 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 }
               else if (obj->type == DWG_TYPE_ENDBLK)
                 {
-                  obj->tio.entity->entmode = entmode;
+                  Dwg_Object_Entity *ent = obj->tio.entity;
+                  Dwg_Entity_BLOCK *_obj = obj->tio.entity->tio.BLOCK;
+                  ent->entmode = entmode;
                   LOG_TRACE ("%s.entmode = %d [BB] (blocks)\n", obj->name,
                              entmode);
                   entmode = 0;
                   // set BLOCK_HEADER.endblk_entity handle
-                  if (blkhdr)
+                  if ((blkhdr = dwg_ref_object (dwg, ent->ownerhandle)))
                     {
-                      BITCODE_H ref = dwg_add_handleref (
+                      Dwg_Object_BLOCK_HEADER *_hdr
+                          = blkhdr->tio.object->tio.BLOCK_HEADER;
+                      ent->ownerhandle->obj = NULL; // still dirty
+                      _hdr->endblk_entity = dwg_add_handleref (
                           dwg, 3, obj->handle.value, blkhdr);
                       LOG_TRACE ("BLOCK_HEADER.endblk_entity = " FORMAT_REF
                                  " [H] (blocks)\n",
-                                 ARGS_REF (ref));
+                                 ARGS_REF (_hdr->endblk_entity));
                     }
                 }
               // normal entity
@@ -5688,6 +5693,34 @@ entity_alias (char *name)
     memmove (name, &name[4], len - 3);
 }
 
+static void
+postprocess_BLOCK_HEADER (Dwg_Object *restrict obj,
+                          Dwg_Object_Ref *restrict ownerhandle)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Object_BLOCK_HEADER *_ctrl;
+  Dwg_Object *ctrl = dwg_ref_object (dwg, ownerhandle);
+
+  if (!ctrl || ctrl->type != DWG_TYPE_BLOCK_HEADER)
+    return;
+  _ctrl = ctrl->tio.object->tio.BLOCK_HEADER;
+  if (obj->type == DWG_TYPE_ENDBLK)
+    {
+      if (!_ctrl->endblk_entity)
+        _ctrl->endblk_entity = dwg_add_handleref (dwg, 3, obj->handle.value, ctrl);
+    }
+  else if (obj->type == DWG_TYPE_BLOCK)
+    {
+      if (!_ctrl->block_entity)
+        _ctrl->block_entity
+            = dwg_add_handleref (dwg, 3, obj->handle.value, ctrl);
+    }
+  else if (!_ctrl->first_entity)
+    _ctrl->first_entity = dwg_add_handleref (dwg, 4, obj->handle.value, ctrl);
+  else // always overwrite
+    _ctrl->last_entity = dwg_add_handleref (dwg, 4, obj->handle.value, ctrl);
+}
+
 static int
 dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
@@ -5717,6 +5750,7 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                     ent->entmode = 2;
                   else if (pspace && ent->ownerhandle->absolute_ref == pspace)
                     ent->entmode = 1;
+                  postprocess_BLOCK_HEADER (obj, ent->ownerhandle);
                 }
               else
                 ent->entmode = 2;
