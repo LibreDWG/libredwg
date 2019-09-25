@@ -728,7 +728,7 @@ TV
 @section ENTITIES
 @cindex ENTITIES
 
-All non-graphical objects with its fields. @xref{Common Entity fields}
+All graphical objects with its fields. @xref{Common Entity fields}
 
 @strong{3DFACE} @anchor{3DFACE}
 @cindex entity, 3DFACE

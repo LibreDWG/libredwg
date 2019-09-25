@@ -709,7 +709,7 @@ for (<DATA>) {
       printf $fh ${$n};
     } elsif ($tmpl =~ /^for dwg_entity_ENTITY/) {
       print $doc "\n\@node ENTITIES\n\@section ENTITIES\n\@cindex ENTITIES\n\n";
-      print $doc "All non-graphical objects with its fields. \@xref{Common Entity fields}\n\n";
+      print $doc "All graphical objects with its fields. \@xref{Common Entity fields}\n\n";
       for (@entity_names) {
         print $doc "\@strong{$_} \@anchor{$_}\n\@cindex entity, $_\n",
           "\@vindex $_\n\n" unless $_ eq 'DIMENSION_';
