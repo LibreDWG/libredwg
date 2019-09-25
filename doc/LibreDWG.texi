@@ -57,6 +57,7 @@ Texts.  A copy of the license is included in the section entitled
 * Usage::               How to use LibreDWG.
 * Types::               Common types, enums, structs.
 * Objects::             All supported objects and entities.
+* Structures::          Special structures.
 * Functions::           Call them.
 * Errors::              Error levels.
 * Programs::            Included binaries.
@@ -377,6 +378,80 @@ native fallback types int/long, which are different across platforms.
 @end menu
 
 @include dynapi.texi
+
+@node Structures
+@chapter Structures
+
+@cindex structures
+
+@menu
+* EED::            eed[] array
+* XDATA::          xdata list for XRECORD
+@end menu
+
+@node EED
+@section EED
+
+@cindex EED
+
+``Extended Entity Data'' (EED) may be optionally attached to each object.
+They consist of a handle to the registered APPID, and a list of
+typed data. Each block is preceded with a size, the processing stops with
+size 0.
+
+Internally libredwg stores each eed line as an array of num_eed structs.
+If the size > 0, then new block starts with a handle, an optional raw string
+(when reading from a DWG), and a number of typed data entries. Only the first
+eed struct of each block has a size, all subsequent eed structs have size 0.
+
+Example:
+@example
+  EED[0] size: 109 [BS]
+  EED[0] handle: 5.2.762
+  EED[0] code: 70 [RC] short: 2 [RS]
+  EED[1] code: 70 [RC] short: 0 [RS]
+  EED[2] code: 70 [RC] short: 0 [RS]
+  EED[3] code: 11 [RC] 3dpoint: (0.000000, 0.000000, 0.000000) [3RD]
+  EED[4] code: 11 [RC] 3dpoint: (1.000000, 0.000000, 0.000000) [3RD]
+  EED[5] code: 11 [RC] 3dpoint: (0.000000, 1.000000, 0.000000) [3RD]
+  EED[6] code: 11 [RC] 3dpoint: (0.000000, 0.000000, 1.000000) [3RD]
+  EED[7] size: 6 [BS]
+  EED[7] handle: 5.2.763
+  EED[7] code: 70 [RC] short: 0 [RS]
+  EED[8] code: 70 [RC] short: 0 [RS]
+  EED[9] size: 23 [BS]
+  EED[9] handle: 5.1.12
+  EED[9] code: 0 [RC] string: "RTMaterial" len=10 cp=30
+  EED[10] code: 5 [RC] entity: 0x6507000000000000 [RLL]
+  - size: 0 [BS]
+@end example
+
+These 10 num_eed structs consist of 3 blocks with 3 size and handle entries.
+EED[0] starts with size 109, the handle pointing to object 762, 3 shorts
+and 4 points. The next block at EED[7] has size 6, the handle pointing to object 763
+and 2 shorts. The last block at EED[9] has size 9, the handle pointing to object 12
+(the APPID.ACAD application) and a string and an entity reference.
+The size is calculated by the needed room for all data code + values, without the handle.
+E.g. EED[7] size: 6 is 1 + 2 for EED[7] RC + RS, and 1 + 2 for EED[8] RC + RS.
+
+Each data block consists of a RC code, and a variable value.
+A string may be a an old pre-r2007 ASCII string with a RC length (max 255
+chars), a codepage and the string. Or a r2007+ wide string with a RS
+length (max 32767 chars), a codepage, and a UCS-2 wide string.
+
+decode stores both, the raw data, and the structured data.
+in_dxf just the data.
+encode prefers raw over the data.
+
+@node XDATA
+@section XDATA
+
+@cindex XDATA
+
+XRECORD XDATA are very similar to the EED array, but internally it is
+a single linked-list, consisting of something like the EED data code
++ value pairs. There's only one size, num_databytes, and only one handle
+to the APPID, which handles this XRECORD XDATA.
 
 @node Functions
 @chapter Functions
