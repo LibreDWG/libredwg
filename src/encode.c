@@ -1989,13 +1989,13 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
         // TODO: with overlarge sizes >0x7fff memmove dat
         LOG_ERROR ("Unhandled size %u > 0x7fff", (unsigned)obj->size);
       bit_write_MS (dat, obj->size);
-      LOG_TRACE ("size: %u [MS] @%lu\n", obj->size, address);
+      LOG_TRACE ("-size: %u [MS] @%lu\n", obj->size, address);
       SINCE (R_2013)
       {
         if (!obj->handlestream_size && obj->bitsize)
           obj->handlestream_size = obj->size * 8 - obj->bitsize;
         bit_write_UMC (dat, obj->handlestream_size);
-        LOG_TRACE ("handlestream_size: %lu [UMC]\n", obj->handlestream_size);
+        LOG_TRACE ("-handlestream_size: %lu [UMC]\n", obj->handlestream_size);
       }
       SINCE (R_2000)
       {
@@ -2003,7 +2003,7 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
           {
             bit_set_position (dat, obj->bitsize_pos);
             bit_write_RL (dat, obj->bitsize);
-            LOG_TRACE ("bitsize: %u [RL] @%lu.%lu\n", obj->bitsize,
+            LOG_TRACE ("-bitsize: %u [RL] @%lu.%lu\n", obj->bitsize,
                        obj->bitsize_pos / 8, obj->bitsize_pos % 8);
           }
       }
