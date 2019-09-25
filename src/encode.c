@@ -56,9 +56,6 @@ static bool env_var_checked_p;
 
 #include "logging.h"
 
-static Dwg_Class *
-dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj);
-
 /*--------------------------------------------------------------------------------
  * spec MACROS
  */
@@ -1550,7 +1547,7 @@ dxf_encode_alias (char *name)
     return NULL;
 }
 
-static Dwg_Class *
+Dwg_Class *
 dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj)
 {
   int i;

@@ -2949,7 +2949,13 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
           break;
         case 330: // TODO: most likely {ACAD_REACTORS
             {
-              BITCODE_H owh = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+              BITCODE_H owh;
+              if (obj->type < DWG_TYPE_PLACEHOLDER && // absolute
+                  obj->fixedtype != DWG_TYPE_DICTIONARY &&
+                  obj->fixedtype != DWG_TYPE_XRECORD)
+                owh = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
+              else // relative
+                owh = dwg_add_handleref (dwg, 4, pair->value.u, obj);
               obj->tio.object->ownerhandle = owh;
               LOG_TRACE ("%s.ownerhandle = " FORMAT_REF " [H 330]\n", ctrlname,
                          ARGS_REF (owh));
@@ -4363,8 +4369,9 @@ new_object (char *restrict name, char *restrict dxfname,
                    || !obj->tio.object->ownerhandle)
             {
               BITCODE_H owh;
-              //TODO: dwg_encode_get_class for >500?
-              if (obj->type < DWG_TYPE_PLACEHOLDER) // absolute
+              if (obj->type < DWG_TYPE_PLACEHOLDER && // absolute
+                  obj->fixedtype != DWG_TYPE_DICTIONARY &&
+                  obj->fixedtype != DWG_TYPE_XRECORD)
                 owh = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
               else // relative
                 owh = dwg_add_handleref (dwg, 4, pair->value.u, obj);
@@ -5375,8 +5382,9 @@ new_object (char *restrict name, char *restrict dxfname,
             {
               if (prev->tio.entity->prev_entity)
                 prev->tio.entity->nolinks = 0;
-              if (prev->type != DWG_TYPE_SEQEND
-                  && prev->type != DWG_TYPE_ENDBLK)
+              if (obj->type == DWG_TYPE_BLOCK
+                  || (prev->type != DWG_TYPE_SEQEND
+                      && prev->type != DWG_TYPE_ENDBLK))
                 {
                   prev->tio.entity->nolinks = 0;
                   prev->tio.entity->next_entity
@@ -5386,7 +5394,7 @@ new_object (char *restrict name, char *restrict dxfname,
                              ARGS_REF (prev->tio.entity->next_entity));
                   ent->nolinks = 0;
                   ent->prev_entity
-                    = dwg_add_handleref (dwg, 4, prev->handle.value, obj);
+                      = dwg_add_handleref (dwg, 4, prev->handle.value, obj);
                   LOG_TRACE ("%s.prev_entity = " FORMAT_REF "\n", name,
                              ARGS_REF (ent->prev_entity));
                 }

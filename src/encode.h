@@ -27,5 +27,13 @@
 int dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat);
 uint32_t dwg_section_page_checksum (const uint32_t seed, Bit_Chain *dat,
                                     uint32_t size);
+/** Returns the class for the object.
+    First searching class by name, not offset
+    because indxf has a different class order. Fixes up the obj->type then.
+    Also searches via dxfname aliases, like DICTIONARYWDFLT => ACDBDICTIONARYWDFLT
+    and fixes up obj->type also then.
+    If obj->dxfname is NULL, the search is done by index, without any fixups.
+ */
+Dwg_Class *dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj);
 
 #endif

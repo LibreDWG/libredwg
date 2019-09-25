@@ -137,7 +137,9 @@ EXPORT int dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
   obj->type = obj->fixedtype = DWG_TYPE_##token;                              \
   obj->name = (char *)#token;                                                 \
   obj->dxfname = dxfname;                                                     \
-  LOG_TRACE ("  ADD_OBJECT %s %d\n", obj->name, obj->index)                   \
+  if (obj->type >= DWG_TYPE_GROUP)                                            \
+    (void)dwg_encode_get_class (obj->parent, obj);                            \
+  LOG_TRACE ("  ADD_OBJECT %s [%d]\n", obj->name, obj->index)                 \
   _obj = calloc (1, sizeof (Dwg_Object_##token));                             \
   obj->tio.object->tio.token = (Dwg_Object_##token *)_obj;                    \
   obj->tio.object->tio.token->parent = obj->tio.object;                       \
@@ -150,7 +152,9 @@ EXPORT int dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
   else                                                                        \
     obj->name = (char *)#token;                                               \
   obj->dxfname = dxfname;                                                     \
-  LOG_TRACE ("  ADD_ENTITY %s %d\n", obj->name, obj->index)                   \
+  if (obj->type >= DWG_TYPE_GROUP)                                            \
+    (void)dwg_encode_get_class (obj->parent, obj);                            \
+  LOG_TRACE ("  ADD_ENTITY %s [%d]\n", obj->name, obj->index)                 \
   _obj = calloc (1, sizeof (Dwg_Entity_##token));                             \
   obj->tio.entity->tio.token = (Dwg_Entity_##token *)_obj;                    \
   obj->tio.entity->tio.token->parent = obj->tio.entity;                       \
