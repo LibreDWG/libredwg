@@ -1443,13 +1443,23 @@ dwg_add_handleref (Dwg_Data *restrict dwg, BITCODE_RC code, unsigned long value,
                    Dwg_Object *restrict obj)
 {
   Dwg_Object_Ref *ref;
-  // first search of this code-value pair already exists
-  for (BITCODE_BL i = 0; i < dwg->num_object_refs; i++)
+  // DICTIONARY, XRECORD or class may need to be relative.
+  // skip the search for existing absolute ref then.
+  if (code > 5
+      || (code == 4 && obj
+          && ((obj->fixedtype == DWG_TYPE_DICTIONARY
+               || obj->fixedtype == DWG_TYPE_XRECORD
+               || obj->type >= DWG_TYPE_GROUP))))
+    ;
+  else
     {
-      Dwg_Object_Ref *refi = dwg->object_ref[i];
-      if (refi->absolute_ref == value
-          && refi->handleref.code == code)
-        return refi;
+      // search of this code-value pair already exists
+      for (BITCODE_BL i = 0; i < dwg->num_object_refs; i++)
+        {
+          Dwg_Object_Ref *refi = dwg->object_ref[i];
+          if (refi->absolute_ref == value && refi->handleref.code == code)
+            return refi;
+        }
     }
   // else create a new ref
   ref = dwg_new_ref (dwg);
