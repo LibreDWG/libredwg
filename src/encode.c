@@ -2139,20 +2139,21 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict ent)
           int code = (int)eed->data->code;
           LOG_TRACE ("EED[%d] size: %d [BS]\n", i, (int)size);
           bit_write_BS (dat, size);
-          if (i == 0)
-            {
-              bit_write_H (dat, &eed->handle);
-              LOG_TRACE ("EED handle: " FORMAT_H "\n",
-                         ARGS_H (eed->handle));
-            }
+          bit_write_H (dat, &eed->handle);
+          LOG_TRACE ("EED[%d] handle: " FORMAT_H " [H]\n", i,
+                     ARGS_H (eed->handle));
           if (eed->raw)
-            bit_write_TF (dat, eed->raw, size);
+            {
+              LOG_TRACE ("EED[%d] raw [TF %d]\n", i, size);
+              bit_write_TF (dat, eed->raw, size);
+            }
           else // indxf
             dwg_encode_eed_data (dat, eed->data, i);
         }
     }
   bit_write_BS (dat, 0);
-  // LOG_TRACE ("EED[%u] size: 0 [BS]\n", i);
+  if (i)
+    LOG_TRACE ("EED[%d] size: 0 [BS] (end)\n", i);
   return 0;
 }
 
