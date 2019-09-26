@@ -52,6 +52,11 @@ static unsigned int loglevel;
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
 
+// from dwg.c
+BITCODE_H
+dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
+                             const char *restrict table);
+
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
 static char buf[4096];
@@ -924,7 +929,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         {
           // search name in APPID table (if already added)
           BITCODE_H hdl;
-          hdl = dwg_find_tablehandle (dwg, pair->value.s, "APPID");
+          hdl = dwg_find_tablehandle_silent (dwg, pair->value.s, "APPID");
           if (hdl)
             {
               memcpy (&eed[i].handle, &hdl->handleref, sizeof (Dwg_Handle));
@@ -1125,7 +1130,7 @@ new_MLINESTYLE_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           else // lookup on LTYPE_CONTROL list
             {
               BITCODE_H hdl;
-              if ((hdl = dwg_find_tablehandle (dwg, pair->value.s, "LTYPE")))
+              if ((hdl = dwg_find_tablehandle_silent (dwg, pair->value.s, "LTYPE")))
                 {
                   hdl->handleref.code = 5;
                   _o->lines[j].lt.ltype = hdl;
@@ -3065,19 +3070,19 @@ find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair)
 {
   BITCODE_H ref = NULL;
   if (pair->code == 8)
-    ref = dwg_find_tablehandle (dwg, pair->value.s, "LAYER");
+    ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "LAYER");
   else if (pair->code == 1) // $DIMBLK
-    ref = dwg_find_tablehandle (dwg, pair->value.s, "BLOCK");
+    ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "BLOCK");
   else if (pair->code
            == 2) // some name: $DIMSTYLE, $UCSBASE, $UCSORTHOREF, $CMLSTYLE
     ;            // not enough info, decide later
   else if (pair->code == 3)
-    ref = dwg_find_tablehandle (dwg, pair->value.s, "DIMSTYLE");
+    ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "DIMSTYLE");
   // what is/was 4 and 5? VIEW? VPORT_ENTITY?
   else if (pair->code == 6)
-    ref = dwg_find_tablehandle (dwg, pair->value.s, "LTYPE");
+    ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "LTYPE");
   else if (pair->code == 7)
-    ref = dwg_find_tablehandle (dwg, pair->value.s, "STYLE");
+    ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "STYLE");
 
   if (ref) // turn a 2 (hardowner) into a 5 (softref)
     return dwg_add_handleref (dwg, 5, ref->absolute_ref, NULL);
@@ -3102,23 +3107,23 @@ find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair)
     }
 #if 0
   else if (pair->code == 331)
-    ref = dwg_find_tablehandle (dwg, pair->value.s, "VPORT");
+    ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "VPORT");
   else if (pair->code == 390)
-    ref = dwg_find_tablehandle (dwg, pair->value.s, "PLOTSTYLENAME");
+    ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "PLOTSTYLENAME");
   else if (pair->code == 347)
-    ref = dwg_find_tablehandle (dwg, pair->value.s, "MATERIAL");
+    ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "MATERIAL");
   else if (pair->code == 345 || pair->code == 346)
-    ref = dwg_find_tablehandle (dwg, pair->value.s, "UCS");
+    ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "UCS");
   else if (pair->code == 361) // SUN
-    ref = dwg_find_tablehandle (dwg, pair->value.s, "SHADOW");
+    ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "SHADOW");
   else if (pair->code == 340) // or TABLESTYLE or LAYOUT ...
-    ref = dwg_find_tablehandle (dwg, pair->value.s, "STYLE");
+    ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "STYLE");
   else if (pair->code == 342 || pair->code == 343)
-    ref = dwg_find_tablehandle (dwg, pair->value.s, "STYLE");
+    ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "STYLE");
   else if (pair->code == 348)
-    ref = dwg_find_tablehandle (dwg, pair->value.s, "VISUALSTYLE");
+    ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "VISUALSTYLE");
   else if (pair->code == 332)
-    ref = dwg_find_tablehandle (dwg, pair->value.s, "BACKGROUND");
+    ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "BACKGROUND");
 #endif
   return ref;
 }
@@ -5958,7 +5963,7 @@ resolve_postponed_header_refs (Dwg_Data *restrict dwg)
         }
       else if (strstr (field, "CMLSTYLE"))
         {
-          hdl = dwg_find_tablehandle (dwg, p.value.s, "MLINESTYLE");
+          hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "MLINESTYLE");
           if (hdl)
             {
               if (hdl->handleref.code != 5)
@@ -6128,20 +6133,20 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
               // should not happen
               if (!dwg->header_vars.LTYPE_BYLAYER
-                  && (hdl = dwg_find_tablehandle (dwg, (char *)"ByLayer",
-                                                  "LTYPE")))
+                  && (hdl = dwg_find_tablehandle_silent (
+                          dwg, (char *)"ByLayer", "LTYPE")))
                 dwg->header_vars.LTYPE_BYLAYER
                     = dwg_add_handleref (dwg, 5, hdl->handleref.value, NULL);
               // should not happen
               if (!dwg->header_vars.LTYPE_BYBLOCK
-                  && (hdl = dwg_find_tablehandle (dwg, (char *)"ByBlock",
-                                                  "LTYPE")))
+                  && (hdl = dwg_find_tablehandle_silent (
+                          dwg, (char *)"ByBlock", "LTYPE")))
                 dwg->header_vars.LTYPE_BYBLOCK
                     = dwg_add_handleref (dwg, 5, hdl->handleref.value, NULL);
               // but this is needed
               if (!dwg->header_vars.LTYPE_CONTINUOUS
-                  && (hdl = dwg_find_tablehandle (dwg, (char *)"Continuous",
-                                                  "LTYPE")))
+                  && (hdl = dwg_find_tablehandle_silent (
+                          dwg, (char *)"Continuous", "LTYPE")))
                 dwg->header_vars.LTYPE_CONTINUOUS
                     = dwg_add_handleref (dwg, 5, hdl->handleref.value, NULL);
             }
@@ -6153,13 +6158,13 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
               // resolve_postponed_header_refs (dwg);
               if (!dwg->header_vars.BLOCK_RECORD_PSPACE
-                  && (hdl = dwg_find_tablehandle (dwg, (char *)"*Paper_Space",
-                                                  "BLOCK")))
+                  && (hdl = dwg_find_tablehandle_silent (
+                          dwg, (char *)"*Paper_Space", "BLOCK")))
                 dwg->header_vars.BLOCK_RECORD_PSPACE
                     = dwg_add_handleref (dwg, 5, hdl->handleref.value, NULL);
               if (!dwg->header_vars.BLOCK_RECORD_MSPACE
-                  && (hdl = dwg_find_tablehandle (dwg, (char *)"*Model_Space",
-                                                  "BLOCK")))
+                  && (hdl = dwg_find_tablehandle_silent (
+                          dwg, (char *)"*Model_Space", "BLOCK")))
                 dwg->header_vars.BLOCK_RECORD_MSPACE
                     = dwg_add_handleref (dwg, 5, hdl->handleref.value, NULL);
             }

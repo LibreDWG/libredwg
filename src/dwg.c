@@ -51,7 +51,15 @@ static bool env_var_checked_p;
 #include "logging.h"
 
 /*------------------------------------------------------------------------------
- * Public functions
+ * Internal functions
+ */
+// used only by in_dxf.c for now
+BITCODE_H
+dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
+                             const char *restrict table);
+
+/*------------------------------------------------------------------------------
+ * Private functions
  */
 static int
 dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
@@ -124,6 +132,10 @@ dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp)
     }
   return 0;
 }
+
+/*------------------------------------------------------------------------------
+ * Public functions
+ */
 
 /** dwg_read_file
  * returns 0 on success.
@@ -1526,6 +1538,18 @@ dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name)
     }
   LOG_TRACE ("dwg_find_dictionary: DICTIONARY with %s not found\n", name)
   return NULL;
+}
+
+BITCODE_H
+dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
+                             const char *restrict table)
+{
+  BITCODE_H ref;
+  int oldopts = dwg->opts;
+  dwg->opts = loglevel = dwg->opts & ~0xf;
+  ref = dwg_find_tablehandle (dwg, name, table);
+  dwg->opts = loglevel = oldopts;
+  return ref;
 }
 
 // Search for name in associated table, and return its handle.
