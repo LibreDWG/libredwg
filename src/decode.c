@@ -2903,7 +2903,7 @@ eed_need_size (BITCODE_BS need, BITCODE_BS have)
 }
 
 #define LOG_POS \
-  LOG_HANDLE (" @%lu.%u\n", dat->byte, dat->bit)
+  LOG_INSANE (" @%lu.%u\n", dat->byte, dat->bit)
 
 static int
 dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
@@ -3067,6 +3067,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
   unsigned int idx = 0;
   Dwg_Data *dwg = obj->dwg;
   Dwg_Object *_obj;
+  long unsigned int sav_byte = dat->byte;
 
   if (!dwg)
     return DWG_ERR_INVALIDEED;
@@ -3077,11 +3078,10 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
       int i;
       BITCODE_BS j;
       long unsigned int end, offset;
-      long unsigned int sav_byte;
 
       LOG_TRACE ("EED[%u] size: " FORMAT_BS " [BS]\n", idx, size);
       LOG_POS
-      if (size > _obj->size)
+      if (size > _obj->size || dat->byte == sav_byte)
         {
           LOG_ERROR ("Invalid EED size " FORMAT_BS " > %u", size, _obj->size)
           dwg_free_eed (_obj);
@@ -3114,7 +3114,9 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
         {
           LOG_TRACE ("EED[%u] handle: " FORMAT_H "\n", idx,
                      ARGS_H (obj->eed[idx].handle));
-          LOG_POS
+          LOG_POS;
+          if (dat->byte >= dat->size)
+            end = dat->byte;
           if (_obj->supertype == DWG_SUPERTYPE_OBJECT && _obj->dxfname
               && strEQc (_obj->dxfname, "MLEADERSTYLE"))
             { // check for is_new_format: has extended data for APPID
@@ -3159,6 +3161,9 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
           obj->eed[idx].data = (Dwg_Eed_Data *)calloc (size + 8, 1);
           //LOG_TRACE ("EED[%u] ", idx);
           error |= dwg_decode_eed_data (dat, obj->eed[idx].data, end, size);
+          // overflow or no advance
+          if (dat->byte >= dat->size || dat->byte == sav_byte)
+            error |= DWG_ERR_INVALIDEED;
           if (error & DWG_ERR_INVALIDEED)
             {
               free (obj->eed[idx].data);
@@ -3183,6 +3188,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
               obj->eed[idx].handle = obj->eed[idx - 1].handle;
               obj->eed[idx].size = 0;
               obj->eed[idx].raw = NULL;
+              sav_byte = dat->byte;
             }
           else
             {

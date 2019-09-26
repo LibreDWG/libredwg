@@ -2140,7 +2140,7 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   unsigned long off = obj->address;
 
 #define LOG_POS \
-  LOG_HANDLE (" @%lu.%u\n", dat->byte - off, dat->bit)
+  LOG_INSANE (" @%lu.%u\n", dat->byte - off, dat->bit)
 
   int i, num_eed = obj->tio.object->num_eed;
   for (i = 0; i < num_eed; i++)
@@ -2405,7 +2405,7 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
   Dwg_Object *obj = NULL;
   int old_from = (int)dat->from_version;
 
-  if (!_obj->HANDSEED) // minimal DXF
+  if (!_obj->HANDSEED) // minimal or broken DXF
     {
       dwg->opts |= 0x3f;
       dat->from_version = dat->version - 1;
