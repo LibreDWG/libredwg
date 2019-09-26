@@ -251,13 +251,13 @@ static bool env_var_checked_p;
 #  define OVERFLOW_CHECK_LV(nam, size)
 #else
 #  define OVERFLOW_CHECK(nam, size)                                           \
-    if ((size) > 0xff00)                                                      \
+    if ((long)(size) > 0xff00L)                                               \
       {                                                                       \
         LOG_ERROR ("Invalid " #nam " %ld", (long)size);                       \
         return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
       }
 #  define OVERFLOW_CHECK_LV(nam, size)                                        \
-    if ((size) > 0xff00)                                                      \
+    if ((long)(size) > 0xff00L)                                               \
       {                                                                       \
         LOG_ERROR ("Invalid " #nam " %ld, set to 0", (long)size);             \
         size = 0;                                                             \
