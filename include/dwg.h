@@ -2954,6 +2954,7 @@ typedef struct _dwg_object_LAYOUT
 {
   struct _dwg_object_object *parent;
 
+  // AcDbPlotSettings:
   BITCODE_TV page_setup_name;
   BITCODE_TV printer_or_config;
   BITCODE_BS plot_layout_flags;
@@ -2980,6 +2981,8 @@ typedef struct _dwg_object_LAYOUT
   BITCODE_BS shade_plot_mode;
   BITCODE_BS shade_plot_res_level;
   BITCODE_BS shade_plot_custom_dpi;
+
+  // AcDbLayout:
   BITCODE_TV layout_name;
   BITCODE_BS tab_order;
   BITCODE_BS flag;
@@ -2993,14 +2996,14 @@ typedef struct _dwg_object_LAYOUT
   BITCODE_BS orthoview_type;
   BITCODE_3DPOINT extent_min;
   BITCODE_3DPOINT extent_max;
-  BITCODE_BL num_viewports;
-  BITCODE_H plot_view;
-  BITCODE_H visualstyle;
-  BITCODE_H pspace_block_record;
-  BITCODE_H last_viewport;
+  BITCODE_H plot_view; 		// r2004+
+  BITCODE_H visualstyle; 	// r2007+
+  BITCODE_H block_header;
+  BITCODE_H active_viewport;
   BITCODE_H base_ucs;
   BITCODE_H named_ucs;
-  BITCODE_H* viewports;
+  BITCODE_BL num_viewports; 	// r2004+
+  BITCODE_H* viewports;     	// r2004+
 } Dwg_Object_LAYOUT;
 
 /**

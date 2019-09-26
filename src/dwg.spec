@@ -3842,7 +3842,6 @@ DWG_OBJECT_END
 DWG_OBJECT(LAYOUT)
 
   SUBCLASS (AcDbPlotSettings)
-  SUBCLASS (AcDbLayout)
   FIELD_T (page_setup_name, 1);
   FIELD_T (printer_or_config, 2);
   FIELD_BS (plot_layout_flags, 70);
@@ -3878,6 +3877,7 @@ DWG_OBJECT(LAYOUT)
       FIELD_BS (shade_plot_custom_dpi, 78);
     }
 
+  SUBCLASS (AcDbLayout)
   FIELD_T (layout_name, 1);
   FIELD_BS (tab_order, 71);
   FIELD_BS (flag, 70);
@@ -3904,8 +3904,8 @@ DWG_OBJECT(LAYOUT)
   SINCE (R_2007) {
     FIELD_HANDLE (visualstyle, 4, 0);
   }
-  FIELD_HANDLE (pspace_block_record, 4, 330);
-  FIELD_HANDLE (last_viewport, 4, 331);
+  FIELD_HANDLE (block_header, 4, 330); // => BLOCK_HEADER.pspace or mspace
+  FIELD_HANDLE (active_viewport, 4, 331);
   FIELD_HANDLE (base_ucs, 5, 346);
   FIELD_HANDLE (named_ucs, 5, 345);
 

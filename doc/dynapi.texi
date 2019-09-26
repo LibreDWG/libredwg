@@ -5401,20 +5401,20 @@ BS,	DXF 76
 3DPOINT,	DXF 14
 @item extent_max
 3DPOINT,	DXF 15
-@item num_viewports
-BL
 @item plot_view
 H,	DXF 6
 @item visualstyle
 H
-@item pspace_block_record
+@item block_header
 H,	DXF 330
-@item last_viewport
+@item active_viewport
 H,	DXF 331
 @item base_ucs
 H,	DXF 346
 @item named_ucs
 H,	DXF 345
+@item num_viewports
+BL
 @item viewports
 H*
 

@@ -4123,6 +4123,11 @@ new_object (char *restrict name, char *restrict dxfname,
         pt.z = 0.0;
       }
   }
+  if (obj->fixedtype == DWG_TYPE_LAYOUT)
+    {
+      Dwg_Object_LAYOUT *_o = obj->tio.object->tio.LAYOUT;
+      _o->real_world_units = 1.0; // default
+    }
 
   // read table fields until next 0 table or 0 ENDTAB
   while (pair->code != 0)
@@ -4375,6 +4380,14 @@ new_object (char *restrict name, char *restrict dxfname,
               inserts[curr_inserts++] = hdl;
               break;
             }
+          else if (pair->code == 331 && obj->fixedtype == DWG_TYPE_LAYOUT)
+            {
+              Dwg_Object_LAYOUT *_o = obj->tio.object->tio.LAYOUT;
+              _o->active_viewport = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
+              LOG_TRACE ("%s.active_viewport = " FORMAT_REF " [H 331]\n",
+                         obj->name, ARGS_REF (_o->active_viewport));
+              break;
+            }
           // fall through
         case 330:
           if (in_reactors)
@@ -4402,9 +4415,19 @@ new_object (char *restrict name, char *restrict dxfname,
                   obj->tio.object->num_reactors++;
                 }
             }
+          else if (pair->code == 330 && obj->fixedtype == DWG_TYPE_LAYOUT
+                   && obj->tio.object->ownerhandle)
+            {
+              Dwg_Object_LAYOUT *_o = obj->tio.object->tio.LAYOUT;
+              _o->block_header
+                  = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
+              LOG_TRACE ("%s.block_header = " FORMAT_REF " [H 330]\n",
+                         obj->name, ARGS_REF (_o->block_header));
+            }
           // valid ownerhandle, if not XRECORD with an ownerhandle already
-          else if (obj->fixedtype != DWG_TYPE_XRECORD
-                   || !obj->tio.object->ownerhandle)
+          else if (pair->code == 330
+                   && (obj->fixedtype != DWG_TYPE_XRECORD
+                       || !obj->tio.object->ownerhandle))
             {
               BITCODE_H owh;
               if (is_obj_absref (obj))
@@ -4544,6 +4567,27 @@ new_object (char *restrict name, char *restrict dxfname,
               dwg_dynapi_entity_set_value (_obj, obj->name, "flag",
                                            &pair->value, is_utf);
               LOG_TRACE ("%s.flag = %d [RC 70]\n", name, pair->value.i);
+              break;
+            }
+          else if (pair->code == 70 && obj->fixedtype == DWG_TYPE_LAYOUT)
+            {
+              Dwg_Object_LAYOUT *_o = obj->tio.object->tio.LAYOUT;
+              if (strEQc (subclass, "AcDbPlotSettings"))
+                {
+                  _o->plot_layout_flags = pair->value.i;
+                  LOG_TRACE ("LAYOUT.plot_layout_flags = %d [BS 70]", pair->value.i);
+                }
+              else if (strEQc (subclass, "AcDbLayout"))
+                {
+                  _o->flag = pair->value.i;
+                  LOG_TRACE ("LAYOUT.flag = %d [BS 70]", pair->value.i);
+                }
+              else
+                {
+                  LOG_WARN ("Unhandled LAYOUT.70 in subclass %s", subclass);
+                  _o->flag = pair->value.i;
+                  LOG_TRACE ("LAYOUT.flag = %d [BS 70]", pair->value.i);
+                }
               break;
             }
           // fall through
@@ -4687,6 +4731,27 @@ new_object (char *restrict name, char *restrict dxfname,
               k = 0;
               pair = add_3DSOLID_encr (obj, dat, pair);
               goto start_loop;
+            }
+          else if (pair->code == 1 && obj->fixedtype == DWG_TYPE_LAYOUT)
+            {
+              Dwg_Object_LAYOUT *_o = obj->tio.object->tio.LAYOUT;
+              if (strEQc (subclass, "AcDbPlotSettings"))
+                {
+                  dwg_dynapi_entity_set_value (_obj, obj->name, "page_setup_name",
+                                               &pair->value, is_utf);
+                  LOG_TRACE ("%s.page_setup_name = %s [T 1]\n",
+                             obj->name, pair->value.s);
+                }
+              else if (strEQc (subclass, "AcDbLayout"))
+                {
+                  dwg_dynapi_entity_set_value (_obj, obj->name, "layout_name",
+                                               &pair->value, is_utf);
+                  LOG_TRACE ("%s.layout_name = %s [T 1]\n",
+                             obj->name, pair->value.s);
+                }
+              else
+                LOG_WARN ("Unhandled LAYOUT.1 in subclass %s", subclass);
+              goto next_pair;
             }
           else if (pair->code == 370 && strEQc (name, "LAYER"))
             {
@@ -5374,10 +5439,10 @@ new_object (char *restrict name, char *restrict dxfname,
       DXF_RETURN_EOF (pair);
     }
 
-  if (strEQc (name, "SEQEND"))
+  if (obj->type == DWG_TYPE_SEQEND)
     postprocess_SEQEND (obj);
   // set defaults not in dxf:
-  else if (strEQc (name, "_3DFACE") && dwg->header.version >= R_2000)
+  else if (obj->type == DWG_TYPE__3DFACE && dwg->header.version >= R_2000)
     {
       Dwg_Entity__3DFACE *o = obj->tio.entity->tio._3DFACE;
       o->has_no_flags = 1;

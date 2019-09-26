@@ -28399,12 +28399,28 @@ static int test_LAYOUT (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_LAYOUT *restrict layout = obj->tio.object->tio.LAYOUT;
   {
+    BITCODE_H active_viewport;
+    if (dwg_dynapi_entity_value (layout, "LAYOUT", "active_viewport", &active_viewport, NULL)
+        && !memcmp (&active_viewport, &layout->active_viewport, sizeof (layout->active_viewport)))
+        pass ();
+    else
+        fail ("LAYOUT.active_viewport [H]");
+  }
+  {
     BITCODE_H base_ucs;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "base_ucs", &base_ucs, NULL)
         && !memcmp (&base_ucs, &layout->base_ucs, sizeof (layout->base_ucs)))
         pass ();
     else
         fail ("LAYOUT.base_ucs [H]");
+  }
+  {
+    BITCODE_H block_header;
+    if (dwg_dynapi_entity_value (layout, "LAYOUT", "block_header", &block_header, NULL)
+        && !memcmp (&block_header, &layout->block_header, sizeof (layout->block_header)))
+        pass ();
+    else
+        fail ("LAYOUT.block_header [H]");
   }
   {
     BITCODE_BD bottom_margin;
@@ -28503,14 +28519,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
         pass ();
     else
         fail ("LAYOUT.ins_point [3DPOINT]");
-  }
-  {
-    BITCODE_H last_viewport;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "last_viewport", &last_viewport, NULL)
-        && !memcmp (&last_viewport, &layout->last_viewport, sizeof (layout->last_viewport)))
-        pass ();
-    else
-        fail ("LAYOUT.last_viewport [H]");
   }
   {
     BITCODE_TV layout_name;
@@ -28761,14 +28769,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
       pass ();
     else
       fail ("LAYOUT.printer_or_config [TV] '%s' <> '%s'", printer_or_config, layout->printer_or_config);
-  }
-  {
-    BITCODE_H pspace_block_record;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "pspace_block_record", &pspace_block_record, NULL)
-        && !memcmp (&pspace_block_record, &layout->pspace_block_record, sizeof (layout->pspace_block_record)))
-        pass ();
-    else
-        fail ("LAYOUT.pspace_block_record [H]");
   }
   {
     BITCODE_BD real_world_units;
