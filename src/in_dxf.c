@@ -5441,6 +5441,14 @@ new_object (char *restrict name, char *restrict dxfname,
                   ent->nolinks = 1;
                 }
             }
+          else if (obj->type == DWG_TYPE_BLOCK)
+            {
+              ent->nolinks = 0;
+              ent->prev_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+              ent->next_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+              LOG_TRACE ("%s.prev_entity = next_entity = " FORMAT_REF "\n",
+                         name, ARGS_REF (ent->prev_entity));
+            }
           else
             {
               LOG_TRACE ("%s.prev_entity = NULL HANDLE 4\n", name);
