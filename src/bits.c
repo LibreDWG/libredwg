@@ -1313,7 +1313,7 @@ bit_read_TF (Bit_Chain *restrict dat, int length)
   return (BITCODE_TF)chain;
 }
 
-/** Write fixed text.
+/** Write fixed text. Without ending \0
  */
 void
 bit_write_TF (Bit_Chain *restrict dat, BITCODE_TF restrict chain, int length)

@@ -3195,7 +3195,8 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
               break;
             }
         }
-      dat->byte = end;
+      //dat->byte = end;
+      //LOG_POS
       idx++;
     }
   LOG_HANDLE ("EED[%u] size: " FORMAT_BS " [BS] (end)\n", idx, size);
