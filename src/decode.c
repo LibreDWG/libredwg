@@ -2902,6 +2902,9 @@ eed_need_size (BITCODE_BS need, BITCODE_BS have)
   return 0;
 }
 
+#define LOG_POS
+//LOG_HANDLE (" @%lu.%u\n", dat->byte, dat->bit)
+
 static int
 dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
                      unsigned long int end, BITCODE_BS size)
@@ -2911,6 +2914,7 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
   BITCODE_RS lens;
 
   data->code = bit_read_RC (dat);
+  LOG_POS
   LOG_TRACE ("code: %d [RC], ", (int)data->code);
 
   switch (data->code)
@@ -2944,8 +2948,8 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
           return DWG_ERR_INVALIDEED;
         bit_read_fixed (dat, (BITCODE_RC *)data->u.eed_0.string, lenc);
         data->u.eed_0.string[lenc] = '\0';
-        LOG_TRACE ("string: \"%s\" len=%d cp=%d\n", data->u.eed_0.string,
-                   (int)lenc, (int)data->u.eed_0.codepage);
+        LOG_TRACE ("string: len=%d [RC] cp=%d [RS_LE] \"%s\" [TF]\n", (int)lenc,
+                   (int)data->u.eed_0.codepage, data->u.eed_0.string);
       }
       LATER_VERSIONS
       {
@@ -2959,24 +2963,33 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
           data->u.eed_0_r2007.string[j] = bit_read_RS_LE (dat);
           // data->u.eed_0_r2007.string[j] = 0; //already calloc'ed
 #ifdef _WIN32
-        LOG_TRACE ("string: \"" FORMAT_TU "\" len=%d\n",
+        LOG_TRACE ("wstring: len=%d [RS] \"" FORMAT_TU "\" [TU]\n",
                    data->u.eed_0_r2007.string, (int)lens);
 #else
-        LOG_TRACE ("string: len=%d\n", (int)lens);
+        if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)
+          {
+            char *u8 = bit_convert_TU (data->u.eed_0_r2007.string);
+            LOG_TRACE ("wstring: len=%d [RS] \"%s\" [TU]\n",
+                       (int)data->u.eed_0_r2007.length, u8);
+            free (u8);
+          }
 #endif
       }
+      LOG_POS
       break;
     case 2:
       if (eed_need_size (1, size))
         return DWG_ERR_INVALIDEED;
       data->u.eed_2.byte = bit_read_RC (dat);
       LOG_TRACE ("byte: " FORMAT_RC " [RC]\n", data->u.eed_2.byte);
+      LOG_POS
       break;
     case 3:
       if (eed_need_size (4, size))
         return DWG_ERR_INVALIDEED;
       data->u.eed_3.layer = bit_read_RL (dat);
       LOG_TRACE ("layer: " FORMAT_RL " [RL]\n", data->u.eed_3.layer);
+      LOG_POS
       break;
     case 4:
       if (eed_need_size (1, size))
@@ -2988,17 +3001,21 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       for (j = 0; j < MIN (lenc, size - 2); j++)
         data->u.eed_4.data[j] = bit_read_RC (dat);
       LOG_TRACE ("binary[%d] \"%s\" [TF]\n", j-1, data->u.eed_4.data);
+      LOG_POS
       break;
     case 5:
       if (eed_need_size (8, size))
         return DWG_ERR_INVALIDEED;
       data->u.eed_5.entity = bit_read_RLL (dat);
       LOG_TRACE ("entity: 0x%" PRIx64 " [RLL]\n", data->u.eed_5.entity);
+      LOG_POS
       break;
     case 10:
     case 11:
     case 12:
-    case 13: /*case 14: case 15:*/
+    case 13:
+    case 14:
+    case 15:
       if (eed_need_size (3 * 8, size))
         return DWG_ERR_INVALIDEED;
       data->u.eed_10.point.x = bit_read_RD (dat);
@@ -3006,6 +3023,7 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       data->u.eed_10.point.z = bit_read_RD (dat);
       LOG_TRACE ("3dpoint: (%f, %f, %f) [3RD]\n", data->u.eed_10.point.x,
                  data->u.eed_10.point.y, data->u.eed_10.point.z);
+      LOG_POS
       break;
     case 40:
     case 41:
@@ -3015,22 +3033,26 @@ case 51: case 54:*/
         return DWG_ERR_INVALIDEED;
       data->u.eed_40.real = bit_read_RD (dat);
       LOG_TRACE ("real: %f [RD]\n", data->u.eed_40.real);
+      LOG_POS
       break;
     case 70:
       if (eed_need_size (2, size))
         return DWG_ERR_INVALIDEED;
       data->u.eed_70.rs = bit_read_RS (dat);
       LOG_TRACE ("short: " FORMAT_RS " [RS]\n", data->u.eed_70.rs);
+      LOG_POS
       break;
     case 71:
       if (eed_need_size (4, size))
         return DWG_ERR_INVALIDEED;
       data->u.eed_71.rl = bit_read_RL (dat);
       LOG_TRACE ("long: " FORMAT_RL " [RL]\n", data->u.eed_71.rl);
+      LOG_POS
       break;
     default:
       LOG_ERROR ("unknown EED code %d", data->code);
       dat->byte = end;
+      LOG_POS
       return DWG_ERR_INVALIDEED; /* may continue */
     }
 
@@ -3067,6 +3089,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
       long unsigned int sav_byte;
 
       LOG_TRACE ("EED[%u] size: " FORMAT_BS " [BS]\n", idx, size);
+      LOG_POS
       if (size > _obj->size)
         {
           LOG_ERROR ("Invalid EED size " FORMAT_BS " > %u", size, _obj->size)
@@ -3100,6 +3123,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
         {
           LOG_TRACE ("EED[%u] handle: " FORMAT_H "\n", idx,
                      ARGS_H (obj->eed[idx].handle));
+          LOG_POS
           if (_obj->supertype == DWG_SUPERTYPE_OBJECT && _obj->dxfname
               && strEQc (_obj->dxfname, "MLEADERSTYLE"))
             { // check for is_new_format: has extended data for APPID
@@ -3134,6 +3158,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
       obj->eed[idx].raw = bit_read_TF (dat, size);
       LOG_INSANE_TF (obj->eed[idx].raw, size);
       dat->byte = sav_byte;
+      LOG_POS
 
       while (dat->byte < end)
         {
@@ -3144,6 +3169,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
           if (error & DWG_ERR_INVALIDEED)
             {
               free (obj->eed[idx].data);
+              LOG_POS
               obj->eed[idx].data = NULL;
               obj->num_eed--;
               dat->byte = end; // skip eed
@@ -3156,6 +3182,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
               obj->num_eed = idx + 1;
               size = (long)(end - dat->byte + 1);
               LOG_INSANE ("        size remaining: %ld\n", (long)size);
+              LOG_POS
 
               obj->eed = (Dwg_Eed *)realloc (obj->eed,
                                              obj->num_eed * sizeof (Dwg_Eed));
@@ -3172,8 +3199,11 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
       idx++;
     }
   LOG_HANDLE ("EED[%u] size: " FORMAT_BS " [BS] (end)\n", idx, size);
+  LOG_POS
   return error;
 }
+
+#undef LOG_POS
 
 /** OL2FRAME.data potentially contains as 128 byte of custom specific data:
   BITCODE_BS oleversion;   DXF 70, always 2

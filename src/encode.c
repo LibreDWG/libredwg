@@ -1132,7 +1132,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       LOG_ERROR ("Out of memory");
       return DWG_ERR_OUTOFMEM;
     }
-  if (loglevel >= DWG_LOGLEVEL_HANDLE)
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
     {
       LOG_HANDLE ("\nSorting objects...\n");
       for (i = 0; i < dwg->num_objects; i++)
@@ -1158,7 +1158,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
       omap[j] = tmap;
     }
-  if (loglevel >= DWG_LOGLEVEL_HANDLE)
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
     {
       LOG_HANDLE ("\nSorted handles:\n");
       for (i = 0; i < dwg->num_objects; i++)
@@ -1209,7 +1209,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
     }
 
-  if (loglevel >= DWG_LOGLEVEL_HANDLE)
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
     {
       LOG_HANDLE ("\nSorted objects:\n");
       for (i = 0; i < dwg->num_objects; i++)
@@ -2055,17 +2055,27 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
           bit_write_RC (dat, data->u.eed_0.length);
           bit_write_RS_LE (dat, data->u.eed_0.codepage);
           bit_write_TF (dat, data->u.eed_0.string, data->u.eed_0.length);
-          LOG_TRACE ("string: \"%s\" [TV %d] + cp\n", data->u.eed_0.string,
-                     data->u.eed_0.length);
+          LOG_TRACE ("string: len=%d [RC] cp=%d [RS_LE] \"%s\" [TF]\n",
+                     data->u.eed_0.length, data->u.eed_0.codepage, data->u.eed_0.string);
         }
         LATER_VERSIONS
         {
           BITCODE_RS *s = (BITCODE_RS *)&data->u.eed_0_r2007.string;
           bit_write_RS (dat, data->u.eed_0_r2007.length);
-          bit_write_RS_LE (dat, data->u.eed_0.codepage);
           for (int j = 0; j < data->u.eed_0_r2007.length; j++)
             bit_write_RS (dat, *s++);
-          LOG_TRACE ("wstring [TU %d] + cp\n", data->u.eed_0_r2007.length);
+#ifdef _WIN32
+          LOG_TRACE ("wstring: len=%d [RS] \"" FORMAT_TU "\" [TU]\n",
+                     (int)data->u.eed_0_r2007.length, data->u.eed_0_r2007.string);
+#else
+          if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)
+            {
+              char *u8 = bit_convert_TU (data->u.eed_0_r2007.string);
+              LOG_TRACE ("wstring: len=%d [RS] \"%s\" [TU]\n",
+                         (int)data->u.eed_0_r2007.length, u8);
+              free (u8);
+            }
+#endif
         }
       }
       break;
@@ -2124,20 +2134,27 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
     Otherwise (indxf) defer to dwg_encode_eed_data.
  */
 static int
-dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict ent)
+dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
-  int i, num_eed = ent->num_eed;
+  unsigned long off = obj->address;
+
+#define LOG_POS
+//LOG_HANDLE (" @%lu.%u\n", dat->byte - off, dat->bit)
+
+  int i, num_eed = obj->tio.object->num_eed;
   for (i = 0; i < num_eed; i++)
     {
-      Dwg_Eed *eed = &ent->eed[i];
+      Dwg_Eed *eed = &obj->tio.object->eed[i];
       BITCODE_BS size = eed->size;
       if (size)
         {
-          LOG_TRACE ("EED[%d] size: " FORMAT_BS " [BS]\n", i, size);
           bit_write_BS (dat, size);
+          LOG_TRACE ("EED[%d] size: " FORMAT_BS " [BS]\n", i, size);
+          LOG_POS
           bit_write_H (dat, &eed->handle);
           LOG_TRACE ("EED[%d] handle: " FORMAT_H " [H]\n", i,
                      ARGS_H (eed->handle));
+          LOG_POS
           if (eed->raw)
             {
               LOG_TRACE ("EED[%d] raw [TF %d]\n", i, size);
@@ -2145,12 +2162,17 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict ent)
             }
         }
       if (!eed->raw && eed->data) // indxf
-        dwg_encode_eed_data (dat, eed->data, i);
+        {
+          dwg_encode_eed_data (dat, eed->data, i);
+          LOG_POS
+        }
     }
   bit_write_BS (dat, 0);
   if (i)
     LOG_TRACE ("EED[%d] size: 0 [BS] (end)\n", i);
-  return 0;
+  LOG_POS
+#undef LOG_POS
+    return 0;
 }
 
 /* The first common part of every entity.
@@ -2219,7 +2241,7 @@ dwg_encode_entity (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   LOG_TRACE ("handle: " FORMAT_H " [H 5]\n", ARGS_H (obj->handle))
   PRE (R_13) { return DWG_ERR_NOTYETSUPPORTED; }
 
-  error |= dwg_encode_eed (dat, (Dwg_Object_Object *)ent);
+  error |= dwg_encode_eed (dat, obj);
   // if (error & (DWG_ERR_INVALIDTYPE|DWG_ERR_VALUEOUTOFBOUNDS))
   //  return error;
 
@@ -2347,7 +2369,7 @@ dwg_encode_object (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
 
   bit_write_H (dat, &obj->handle);
   LOG_TRACE ("handle: " FORMAT_H " [H 5]\n", ARGS_H (obj->handle));
-  error |= dwg_encode_eed (dat, ord);
+  error |= dwg_encode_eed (dat, obj);
 
   VERSIONS (R_13, R_14)
   {

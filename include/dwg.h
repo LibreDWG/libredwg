@@ -5389,7 +5389,7 @@ typedef struct _dwg_object_object
   BITCODE_B has_ds_binary_data; /*!< r2013+ */
 
   /*unsigned int num_handles;*/
-  Dwg_Handle *handleref;
+  Dwg_Handle *handleref; //??
 } Dwg_Object_Object;
 
 /**

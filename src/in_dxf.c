@@ -893,7 +893,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         if (dwg->header.version < R_2007)
           {
             /* code [RC] + len+0 + length [RC] + codepage [RS] */
-            size = 1 + len + 1 + 1 + 2;
+            size = 1 + 1 + 2 + (len + 1);
             eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
             eed[i].data->code = code; // 1000
             eed[i].data->u.eed_0.length = len;
@@ -906,16 +906,16 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
           }
         else
           {
-            /* code [RC] + 2*len+00 + length [TU] + codepage [RS] */
-            size = 1 + len * 2 + 2 + 2 + 2;
+            /* code [RC] + 2*len+00 + length [TU] */
+            size = 1 + 2 + ((len+1) * 2);
             eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
             eed[i].data->code = code;
             eed[i].data->u.eed_0_r2007.length = len;
-            eed[i].data->u.eed_0.codepage = obj->parent->header.codepage;
+            eed[i].data->u.eed_0.codepage = obj->parent->header.codepage; /* UTF-8 */
             if (len && len < 32767)
               {
                 BITCODE_TU tu = bit_utf8_to_TU (pair->value.s);
-                LOG_TRACE ("string: \"%s\" [TU %d]\n", pair->value.s, size - 1);
+                LOG_TRACE ("wstring: \"%s\" [TU %d]\n", pair->value.s, size - 1);
                 memcpy (eed[i].data->u.eed_0_r2007.string, tu, 2 * (len + 1));
                 free (tu);
               }
