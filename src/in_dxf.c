@@ -5753,9 +5753,9 @@ postprocess_BLOCK_HEADER (Dwg_Object *restrict obj,
             = dwg_add_handleref (dwg, 3, obj->handle.value, ctrl);
     }
   else if (!_ctrl->first_entity)
-    _ctrl->first_entity = dwg_add_handleref (dwg, 4, obj->handle.value, ctrl);
+    _ctrl->first_entity = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
   else // always overwrite
-    _ctrl->last_entity = dwg_add_handleref (dwg, 4, obj->handle.value, ctrl);
+    _ctrl->last_entity = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
 }
 
 static int
