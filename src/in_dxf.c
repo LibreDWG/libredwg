@@ -4123,10 +4123,19 @@ new_object (char *restrict name, char *restrict dxfname,
         pt.z = 0.0;
       }
   }
+  // more DXF defaults
   if (obj->fixedtype == DWG_TYPE_LAYOUT)
     {
       Dwg_Object_LAYOUT *_o = obj->tio.object->tio.LAYOUT;
       _o->real_world_units = 1.0; // default
+    }
+  else if (obj->fixedtype == DWG_TYPE_DIMSTYLE)
+    {
+      Dwg_Object_DIMSTYLE *_o = obj->tio.object->tio.DIMSTYLE;
+      _o->DIMSCALE = _o->DIMLFAC = _o->DIMTFAC = 1.0; // default
+      _o->DIMALTU = _o->DIMLUNIT = 2; // default
+      _o->DIMFIT = 3;
+      _o->DIMLWD = _o->DIMLWE = -2;
     }
 
   // read table fields until next 0 table or 0 ENDTAB
