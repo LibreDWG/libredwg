@@ -892,9 +892,9 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         int len = strlen (pair->value.s);
         if (dwg->header.version < R_2007)
           {
-            /* code [RC] + len+0 + length [RC] + codepage [RS] */
-            size = 1 + 1 + 2 + (len + 1);
-            eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
+            /* code [RC] + len [RC] + cp [RS] + str[len] */
+            size = 1 + 1 + 2 + len;
+            eed[i].data = (Dwg_Eed_Data *)calloc (1, size+1);
             eed[i].data->code = code; // 1000
             eed[i].data->u.eed_0.length = len;
             eed[i].data->u.eed_0.codepage = dwg->header.codepage;
@@ -906,9 +906,9 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
           }
         else
           {
-            /* code [RC] + 2*len+00 + length [TU] */
-            size = 1 + 2 + ((len+1) * 2);
-            eed[i].data = (Dwg_Eed_Data *)calloc (1, size);
+            /* code [RC] + length [RS] + 2*len [TU] */
+            size = 1 + 2 + (len * 2);
+            eed[i].data = (Dwg_Eed_Data *)calloc (1, size+2);
             eed[i].data->code = code;
             eed[i].data->u.eed_0_r2007.length = len;
             eed[i].data->u.eed_0.codepage = obj->parent->header.codepage; /* UTF-8 */

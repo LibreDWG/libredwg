@@ -2139,8 +2139,8 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   unsigned long off = obj->address;
 
-#define LOG_POS
-//LOG_HANDLE (" @%lu.%u\n", dat->byte - off, dat->bit)
+#define LOG_POS \
+  LOG_HANDLE (" @%lu.%u\n", dat->byte - off, dat->bit)
 
   int i, num_eed = obj->tio.object->num_eed;
   for (i = 0; i < num_eed; i++)
