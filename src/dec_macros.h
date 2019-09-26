@@ -865,7 +865,7 @@
           break;                                                              \
         }                                                                     \
     }                                                                         \
-  FIELD_G_TRACE (num_inserts, type, dxf)
+  LOG_TRACE ("num_inserts: %d [RC* 0]\n", FIELD_VALUE (num_inserts))
 
 #define FIELD_XDATA(name, size)                                               \
   _obj->name = dwg_decode_xdata (dat, _obj, _obj->size)

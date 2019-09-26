@@ -455,7 +455,8 @@ static bool env_var_checked_p;
     {                                                                         \
       bit_write_RC (dat, 1);                                                  \
     }                                                                         \
-  bit_write_RC (dat, 0)
+  bit_write_RC (dat, 0);                                                      \
+  LOG_TRACE ("num_inserts: %d [RC* 0]\n", FIELD_VALUE (num_inserts))
 
 #define HANDLE_VECTOR(nam, sizefield, code, dxf)                              \
   HANDLE_VECTOR_N (nam, FIELD_VALUE (sizefield), code, dxf)
