@@ -2,7 +2,8 @@
 # create -v3 logs and dwg's with dxf2dwg
 srcdir="@srcdir@"
 
-make -s -j4
+make -s -j4 -C src
+make -s -j4 -C programs dxf2dwg
 @DSYMUTIL@ programs/dxf2dwg
 v=-v3
 y=
@@ -15,9 +16,14 @@ for d in "$@"; do
              ;;
         *)
         if [ ! -f $d ]; then
-            if [ -f $srcdir/test/test-data/$d ]; then d=$srcdir/test/test-data/$d;
+            if [ -f $srcdir/test/test-data/$d ]
+            then
+                d=$srcdir/test/test-data/$d;
             else
-                if [ -f $srcdir/test/test-data/$d.dxf ]; then d=$srcdir/test/test-data/$d.dxf; fi
+                if [ -f $srcdir/test/test-data/$d.dxf ]
+                then
+                    d=$srcdir/test/test-data/$d.dxf
+                fi
             fi
         fi
         dir=_$(basename `dirname "$d"`)

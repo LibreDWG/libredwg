@@ -2,7 +2,8 @@
 # create -v4 logs for DWGs, you can override -v?
 srcdir="@srcdir@"
 
-make -s -j4
+make -s -j4 -C src
+make -s -j4 -C programs dwgread
 @DSYMUTIL@ programs/dwgread
 v=-v4
 

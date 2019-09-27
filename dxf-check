@@ -28,6 +28,8 @@ esac
 ./log -v4 $d
 rm $d.dwg 2>/dev/null
 ./dxf -y -v4 $d
+
+make -s -j4 -C programs dwg2dxf
 echo programs/dwg2dxf -v4 -y $b.dwg 2\>$b.dwg.log
 programs/dwg2dxf -v4 -y $b.dwg 2>$b.dwg.log
 
