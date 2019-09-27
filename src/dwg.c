@@ -1503,6 +1503,7 @@ dwg_find_table_control (Dwg_Data *restrict dwg, const char *restrict table)
 
 // Searching for a named dictionary entry.
 // Returning a hardpointer ref (5) to it, as stored in header_vars.
+// Usually another dictionary.
 EXPORT BITCODE_H
 dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name)
 {
@@ -1538,6 +1539,52 @@ dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name)
         }
     }
   LOG_TRACE ("dwg_find_dictionary: DICTIONARY with %s not found\n", name)
+  return NULL;
+}
+
+EXPORT BITCODE_H
+dwg_find_dicthandle (Dwg_Data *restrict dwg, BITCODE_H dict, const char *restrict name)
+{
+  BITCODE_BL i;
+  Dwg_Object_DICTIONARY *_obj;
+  Dwg_Object *obj = dwg_resolve_handle (dwg, dict->absolute_ref);
+
+  if (!obj)
+    {
+      LOG_TRACE ("dwg_find_dicthandle: Could not resolve dict " FORMAT_REF "\n",
+                 ARGS_REF(dict));
+      return NULL;
+    }
+  if (obj->type != DWG_TYPE_DICTIONARY)
+    {
+      LOG_ERROR ("dwg_find_dicthandle: dict not a DICTIONARY\n");
+      return NULL;
+    }
+
+  _obj = obj->tio.object->tio.DICTIONARY;
+  if (!_obj->numitems)
+    return 0;
+  for (i = 0; i < _obj->numitems; i++)
+    {
+      char *hdlname;
+      BITCODE_H *hdlv = _obj->itemhandles;
+      Dwg_Object *hobj;
+      Dwg_Object_APPID *_o; // just some random type
+
+      if (!hdlv[i])
+        continue;
+      hobj = dwg_resolve_handle (dwg, hdlv[i]->absolute_ref);
+      if (!hobj)
+        continue;
+      _o = hobj->tio.object->tio.APPID;
+      dwg_dynapi_entity_utf8text (_o, hobj->name, "name", &hdlname, NULL);
+      LOG_HANDLE (" %s.%s[%d] => %s.name: %s\n", obj->name, "entries", i,
+                  hobj->name, hdlname ? hdlname : "NULL");
+      if (hdlname && (strEQ (name, hdlname) || !strcasecmp (name, hdlname)))
+        {
+          return hdlv[i];
+        }
+    }
   return NULL;
 }
 
@@ -1721,14 +1768,14 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
       LOG_TRACE ("dwg_find_tablehandle: Empty header_vars table %s\n", table);
       return 0;
     }
-  obj = dwg_resolve_handle (dwg, ctrl->handleref.value);
+  obj = dwg_resolve_handle (dwg, ctrl->absolute_ref);
   if (!obj)
     {
       LOG_TRACE ("dwg_find_tablehandle: Could not resolve table %s\n", table);
       return 0;
     }
   if (obj->type == DWG_TYPE_DICTIONARY)
-    return dwg_find_dictionary (dwg, name);
+    return dwg_find_dicthandle (dwg, ctrl, name);
   if (!dwg_obj_is_control (obj))
     {
       LOG_ERROR ("dwg_find_tablehandle: Could not resolve CONTROL object %s "
@@ -1749,7 +1796,7 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
 
       if (!hdlv[i])
         continue;
-      hobj = dwg_resolve_handle (dwg, hdlv[i]->handleref.value);
+      hobj = dwg_resolve_handle (dwg, hdlv[i]->absolute_ref);
       if (!hobj)
         continue;
       _o = hobj->tio.object->tio.APPID;
