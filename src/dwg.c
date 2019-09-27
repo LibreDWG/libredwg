@@ -1506,11 +1506,12 @@ dwg_find_table_control (Dwg_Data *restrict dwg, const char *restrict table)
 EXPORT BITCODE_H
 dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name)
 {
+  // The NOD (Named Object Dict) is always the very first DICTIONARY
   for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
     {
       Dwg_Object *obj = &dwg->object[i];
       // ACAD_GROUP => 1st DICTIONARY: search handle to "ACAD_GROUP"
-      if (strEQc (obj->name, "DICTIONARY"))
+      if (obj->fixedtype == DWG_TYPE_DICTIONARY)
         {
           Dwg_Object_DICTIONARY *_obj = obj->tio.object->tio.DICTIONARY;
           for (BITCODE_BL j = 0; j < _obj->numitems; j++)

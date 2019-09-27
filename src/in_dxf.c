@@ -3097,9 +3097,10 @@ find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair)
     ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "LAYER");
   else if (pair->code == 1) // $DIMBLK
     ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "BLOCK");
-  else if (pair->code
-           == 2) // some name: $DIMSTYLE, $UCSBASE, $UCSORTHOREF, $CMLSTYLE
-    ;            // not enough info, decide later
+  // some name: $DIMSTYLE, $UCSBASE, $UCSORTHOREF, $CMLSTYLE
+  // not enough info, decide later
+  else if (pair->code == 2)
+    ;
   else if (pair->code == 3)
     ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "DIMSTYLE");
   // what is/was 4 and 5? VIEW? VPORT_ENTITY?
@@ -3140,7 +3141,7 @@ find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair)
     ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "UCS");
   else if (pair->code == 361) // SUN
     ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "SHADOW");
-  else if (pair->code == 340) // or TABLESTYLE or LAYOUT ...
+  else if (pair->code == 340) // or TABLESTYLE or LAYOUT or MLINESTYLE ...
     ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "STYLE");
   else if (pair->code == 342 || pair->code == 343)
     ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "STYLE");
@@ -6067,7 +6068,7 @@ resolve_postponed_header_refs (Dwg_Data *restrict dwg)
           LOG_TRACE ("HEADER.%s %s => " FORMAT_REF " [H %d]\n", field,
                      p.value.s, ARGS_REF (hdl), (int)p.code);
         }
-      else if (strstr (field, "CMLSTYLE"))
+      else if (strEQc (field, "CMLSTYLE"))
         {
           hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "MLINESTYLE");
           if (hdl)
