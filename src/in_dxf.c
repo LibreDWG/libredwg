@@ -407,7 +407,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       strncpy (field, pair->value.s, 79);
       i = 0;
 
-      // now read the code, value pair
+      // now read the code, value pair. for points it may be multiple (index i)
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
       DXF_BREAK_ENDSEC;
@@ -496,8 +496,8 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               else
                 {
                   // yes, set it 2-3 times
-                  LOG_TRACE ("HEADER.%s [%s %d][%d]\n", &field[1], f->type,
-                             pair->code, i);
+                  LOG_TRACE ("HEADER.%s [%s %d][%d] = %f\n", &field[1], f->type,
+                             pair->code, i, pair->value.d);
                   dwg_dynapi_header_set_value (dwg, &field[1], &pt, is_utf);
                   i++;
                 }
