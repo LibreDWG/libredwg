@@ -2567,9 +2567,9 @@ BS,	DXF 70
 @item mode
 BS
 @item data_length
-BL
+BL,	DXF 90
 @item data
-TV
+TV,	DXF 310
 
 @end vtable
 @end indentedblock

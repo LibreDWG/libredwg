@@ -2487,9 +2487,9 @@ static const Dwg_DYNAPI_field _dwg_OLEFRAME_fields[] = {
   { "mode",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_OLEFRAME, mode),
     0,0,0, 0 },
   { "data_length",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_OLEFRAME, data_length),
-    0,0,0, 0 },
+    0,0,0, 90 },
   { "data",	"TV", sizeof (char*),  OFF (struct _dwg_entity_OLEFRAME, data),
-    1,1,1, 0 },
+    1,1,1, 310 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_PLANESURFACE: (sorted by offset) */

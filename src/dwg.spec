@@ -2092,8 +2092,12 @@ DWG_ENTITY(OLEFRAME)
     FIELD_BS (mode, 0);
   }
 
-  FIELD_BL (data_length, 0);
-  FIELD_TF (data, FIELD_VALUE(data_length), 0);
+  ENCODER {
+    if (FIELD_VALUE(data_length) && !FIELD_VALUE(data))
+      FIELD_VALUE(data_length) = 0;
+  }
+  FIELD_BL (data_length, 90);
+  FIELD_TF (data, FIELD_VALUE(data_length), 310);
 
   COMMON_ENTITY_HANDLE_DATA;
 
@@ -4019,6 +4023,10 @@ DWG_ENTITY(OLE2FRAME)
   SINCE (R_2000) {
     FIELD_BS (mode, 72); // tile_mode, 0: mspace, 1: pspace
     DXF { FIELD_RC (lock_aspect, 73); }
+  }
+  ENCODER {
+    if (FIELD_VALUE(data_length) && !FIELD_VALUE(data))
+      FIELD_VALUE(data_length) = 0;
   }
   FIELD_BL (data_length, 90);
   FIELD_BINARY (data, FIELD_VALUE(data_length), 310);

@@ -147,10 +147,9 @@ static bool env_var_checked_p;
     if (len > 0)                                                              \
       {                                                                       \
         if (!_obj->nam)                                                       \
-          {                                                                   \
-            char *_tmp = calloc (len, 1);                                     \
-            bit_write_TF (dat, _tmp, len);                                    \
-            free (_tmp);                                                      \
+          { /* empty field, write zeros */                                    \
+            for (int _i = 0; _i < (int)(len); _i++)                           \
+              bit_write_RC (dat, 0);                                          \
           }                                                                   \
         else                                                                  \
           bit_write_TF (dat, (BITCODE_TF)_obj->nam, len);                     \

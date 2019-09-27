@@ -3962,6 +3962,7 @@ new_object (char *restrict name, char *restrict dxfname,
   // BITCODE_BL rcount1, rcount2, rcount3, vcount;
   // Bit_Chain *hdl_dat, *str_dat;
   int j = 0, k = 0, l = 0, error = 0;
+  unsigned written = 0;
   BITCODE_RL curr_inserts = 0;
   BITCODE_RS flag = 0;
   BITCODE_BB scale_flag;
@@ -4733,6 +4734,38 @@ new_object (char *restrict name, char *restrict dxfname,
             {
               pair = add_block_preview (obj, dat, pair);
               goto start_loop;
+            }
+          else if (pair->code == 90 && obj->fixedtype == DWG_TYPE_OLE2FRAME)
+            {
+              Dwg_Entity_OLE2FRAME *_o = obj->tio.entity->tio.OLE2FRAME;
+              _o->data_length = pair->value.l;
+              _o->data = calloc (pair->value.l, 1);
+              LOG_TRACE ("OLE2FRAME.data_length = %ld [BL 90]\n", pair->value.l);
+            }
+          else if (pair->code == 310 && obj->fixedtype == DWG_TYPE_OLE2FRAME)
+            {
+              Dwg_Entity_OLE2FRAME *_o = obj->tio.entity->tio.OLE2FRAME;
+              unsigned len = strlen (pair->value.s);
+              unsigned blen = len / 2;
+              const char *pos = pair->value.s;
+              unsigned char *s = (unsigned char *)&_o->data[written];
+              assert (_o->data);
+              if (blen + written > _o->data_length)
+                {
+                  dxf_free_pair (pair);
+                  LOG_ERROR ("OLE2FRAME.data overflow: %u + written %u > "
+                             "data_length: %u",
+                             blen, written, _o->data_length);
+                  return NULL;
+                }
+              for (unsigned _i = 0; _i < blen; _i++)
+                {
+                  sscanf (pos, "%2hhX", &s[_i]);
+                  pos += 2;
+                }
+              written += blen;
+              LOG_TRACE ("OLE2FRAME.data += %u (%u/%u) [TF 310]\n", blen,
+                         written, _o->data_length);
             }
           else if (pair->code == 1
                    && (strEQc (name, "_3DSOLID") || strEQc (name, "BODY")
