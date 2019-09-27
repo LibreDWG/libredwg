@@ -2902,8 +2902,8 @@ eed_need_size (BITCODE_BS need, BITCODE_BS have)
   return 0;
 }
 
-#define LOG_POS \
-  LOG_INSANE (" @%lu.%u\n", dat->byte, dat->bit)
+#define LOG_POS
+// LOG_INSANE (" @%lu.%u\n", dat->byte, dat->bit)
 
 static int
 dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
@@ -3504,7 +3504,7 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   SINCE (R_2007)
   {
     SINCE (R_2010)
-    LOG_HANDLE (" bitsize: " FORMAT_RL ",", obj->bitsize);
+      LOG_HANDLE (" bitsize: " FORMAT_RL ",", obj->bitsize);
     // restrict the hdl_dat stream
     error |= obj_handle_stream (dat, obj, hdl_dat);
 

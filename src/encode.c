@@ -466,7 +466,11 @@ static bool env_var_checked_p;
 #define COMMON_ENTITY_HANDLE_DATA                                             \
   SINCE (R_13)                                                                \
   {                                                                           \
-    error |= dwg_encode_common_entity_handle_data (dat, hdl_dat, obj);        \
+    START_HANDLE_STREAM;                                                      \
+    PRE (R_2007)                                                              \
+    {                                                                         \
+      error |= dwg_encode_common_entity_handle_data (dat, hdl_dat, obj);      \
+    }                                                                         \
   }                                                                           \
   RESET_VER
 
@@ -492,7 +496,11 @@ static bool env_var_checked_p;
   if (dat->version >= R_2007 && obj->bitsize)                                 \
     bit_set_position (hdl_dat, obj->hdlpos);                                  \
   if (!obj->bitsize)                                                          \
-    obj->bitsize =  bit_position (dat) - (obj->address * 8);                  \
+    {                                                                         \
+      LOG_TRACE ("-bitsize calc from HANDLE_STREAM @%lu.%u (%lu)\n",          \
+                 dat->byte, dat->bit, obj->address);                          \
+      obj->bitsize = bit_position (dat) - (obj->address * 8);                 \
+    }                                                                         \
   RESET_VER
 
 #if 0
@@ -575,17 +583,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
     if (error)                                                                \
       return error;
 
-/* patch in the final bitsize */
 #define DWG_ENTITY_END                                                        \
-  if (obj->bitsize == 0 && dat->version >= R_13 && dat->version <= R_2010)    \
-    {                                                                         \
-      unsigned long address = bit_position (dat);                             \
-      unsigned long bitsize = address - obj->bitsize_pos;                     \
-      bit_set_position (dat, obj->bitsize_pos);                               \
-      bit_write_RL (dat, bitsize);                                            \
-      bit_set_position (dat, address);                                        \
-      /* TODO CRC */                                                          \
-    }                                                                         \
   return error;                                                               \
   }
 
@@ -609,15 +607,6 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
     LOG_INFO ("Encode object " #token "\n")
 
 #define DWG_OBJECT_END                                                        \
-  if (obj->bitsize == 0 && dat->version >= R_13 && dat->version <= R_2007)    \
-    {                                                                         \
-      unsigned long address = bit_position (dat);                             \
-      unsigned long bitsize = address - obj->bitsize_pos;                     \
-      bit_set_position (dat, obj->bitsize_pos);                               \
-      bit_write_RL (dat, bitsize);                                            \
-      bit_set_position (dat, address);                                        \
-      /* CRC? */                                                              \
-    }                                                                         \
   return error;                                                               \
   }
 
@@ -1981,9 +1970,13 @@ dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
       obj->size = dat->byte - address - 2; // excludes the CRC
       if (dat->bit)
         obj->size++;
+      //assert (obj->bitsize); // on errors
       if (!obj->bitsize)
-        obj->bitsize = pos - (address * 8); // minus hdlpos
-
+        {
+          LOG_TRACE ("-bitsize calc from address (no handle) @%lu.%u\n",
+                     dat->byte, dat->bit);
+          obj->bitsize = pos - (obj->address * 8);
+        }
       bit_set_position (dat, address * 8);
       if (obj->size > 0x7fff)
         // TODO: with overlarge sizes >0x7fff memmove dat
@@ -2138,8 +2131,8 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   unsigned long off = obj->address;
 
-#define LOG_POS \
-  LOG_INSANE (" @%lu.%u\n", dat->byte - off, dat->bit)
+#define LOG_POS
+  // LOG_INSANE (" @%lu.%u\n", dat->byte - off, dat->bit)
 
   int i, num_eed = obj->tio.object->num_eed;
   for (i = 0; i < num_eed; i++)
@@ -2215,23 +2208,24 @@ dwg_encode_entity (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   VERSIONS (R_2000, R_2007)
   {
     obj->bitsize_pos = bit_position (dat);
-    if (!obj->bitsize)
-      bit_write_RL (dat, obj->size * 8);
-    else
-      bit_write_RL (dat, obj->bitsize);
+    bit_write_RL (dat, obj->bitsize);
     LOG_TRACE ("bitsize: %u [RL] (@%lu.%lu)\n", obj->bitsize,
                obj->bitsize_pos / 8, obj->bitsize_pos % 8);
   }
+  if (obj->bitsize)
+    obj->hdlpos = obj->address * 8 + obj->bitsize;
   SINCE (R_2007)
   {
     // The handle stream offset, i.e. end of the object, right after
     // the has_strings bit.
-    obj->hdlpos = obj->address * 8 + obj->bitsize;
     SINCE (R_2010)
     {
-      obj->hdlpos += 8;
-      // LOG_HANDLE ("(bitsize: " FORMAT_RL ", ", obj->bitsize);
-      LOG_HANDLE ("hdlpos: %lu\n", obj->hdlpos);
+      if (obj->bitsize)
+        {
+          obj->hdlpos += 8;
+          // LOG_HANDLE ("(bitsize: " FORMAT_RL ", ", obj->bitsize);
+          LOG_HANDLE ("hdlpos: %lu\n", obj->hdlpos);
+        }
     }
     // and set the string stream (restricted to size)
     error |= obj_string_stream (dat, obj, str_dat);
@@ -2358,13 +2352,8 @@ dwg_encode_object (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
     LOG_INFO ("bitsize: " FORMAT_RL " [RL] (@%lu.%u)\n", obj->bitsize,
               dat->byte - 4, dat->bit);
   }
-  SINCE (R_2010)
-  {
-    // obj->bitsize = dat->size - 0;
-    // LOG_INFO ("bitsize: " FORMAT_RL " @%lu.%u\n", obj->bitsize,
-    //          dat->byte, dat->bit);
-  }
-  obj->hdlpos = bit_position (dat) + obj->bitsize; // the handle stream offset
+  if (obj->bitsize)
+    obj->hdlpos = bit_position (dat) + obj->bitsize; // the handle stream offset
   SINCE (R_2007) { obj_string_stream (dat, obj, str_dat); }
 
   bit_write_H (dat, &obj->handle);
