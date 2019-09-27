@@ -1103,6 +1103,8 @@ new_MLINESTYLE_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   int num_lines = pair->value.i;
   Dwg_Object_MLINESTYLE *_o = obj->tio.object->tio.MLINESTYLE;
   Dwg_Data *dwg = obj->parent;
+  _o->num_lines = num_lines;
+  LOG_TRACE ("MLINESTYLE.num_lines = %d [RC 71]\n", num_lines);
   _o->lines = calloc (num_lines, sizeof (Dwg_MLINESTYLE_line));
   for (int j = -1; j < (int)num_lines;)
     {
@@ -4763,7 +4765,7 @@ new_object (char *restrict name, char *restrict dxfname,
                 LOG_WARN ("Unhandled LAYOUT.1 in subclass %s", subclass);
               goto next_pair;
             }
-          else if (pair->code == 370 && strEQc (name, "LAYER"))
+          else if (pair->code == 370 && obj->fixedtype == DWG_TYPE_LAYER)
             {
               Dwg_Object_LAYER *layer = obj->tio.object->tio.LAYER;
               layer->linewt = dxf_find_lweight (pair->value.i);
@@ -4771,7 +4773,7 @@ new_object (char *restrict name, char *restrict dxfname,
               layer->flag |= layer->linewt << 5;
               LOG_TRACE ("LAYER.flag = 0x%x [BS 70]\n", layer->flag);
             }
-          else if (pair->code == 71 && strEQc (name, "MLINESTYLE")
+          else if (pair->code == 71 && obj->fixedtype == DWG_TYPE_MLINESTYLE
                    && pair->value.i != 0)
             {
               pair = new_MLINESTYLE_lines (obj, dat, pair);
@@ -4779,14 +4781,14 @@ new_object (char *restrict name, char *restrict dxfname,
                 return pair;
               goto next_pair;
             }
-          else if (pair->code == 90 && strEQc (name, "LWPOLYLINE"))
+          else if (pair->code == 90 && obj->fixedtype == DWG_TYPE_LWPOLYLINE)
             {
               pair = new_LWPOLYLINE (obj, dat, pair);
               if (pair->code == 0)
                 return pair;
               goto next_pair;
             }
-          else if (strEQc (name, "MLINE"))
+          else if (obj->fixedtype == DWG_TYPE_MLINE)
             {
               int status = add_MLINE (obj, dat, pair, &j, &k, &l);
               if (status == 0)
