@@ -4067,8 +4067,12 @@ BL,	DXF 90
 BL,	DXF 90
 @item is_body_a_proxy
 B,	DXF 90
+@item num_deps
+BL,	DXF 90
 @item body
 Dwg_ACTIONBODY
+@item status
+BL,	DXF 90
 @item actionbody
 H
 @item callback
@@ -6462,19 +6466,21 @@ struct _dwg_object_object*
 @item class_version
 BS
 @item name
-TV
+TV,	DXF 3
 @item flags
-BL
-@item title_suppressed
-B
-@item header_suppressed
-B
+BS,	DXF 71
 @item flow_direction
-BS
+BS,	DXF 70
 @item horiz_cell_margin
-BD
+BD,	DXF 40
 @item vert_cell_margin
-BD
+BD,	DXF 41
+@item title_suppressed
+B,	DXF 280
+@item header_suppressed
+B,	DXF 281
+@item rowstyles
+Dwg_TABLESTYLE_rowstyles*
 @item num_cells
 BL
 @item cells
@@ -8061,6 +8067,38 @@ BL
 BL
 @item name
 TV
+@item parent
+struct _dwg_object_TABLESTYLE*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_TABLESTYLE_rowstyles} @anchor{Dwg_TABLESTYLE_rowstyles}
+@vindex Dwg_TABLESTYLE_rowstyles
+
+@indentedblock
+@vtable @code
+
+@item text_style
+H,	DXF 7
+@item text_height
+BD,	DXF 140
+@item text_alignment
+BS,	DXF 170
+@item text_color
+CMC
+@item fill_color
+CMC
+@item has_bgcolor
+B,	DXF 283
+@item borders
+Dwg_BorderStyle*
+@item data_type
+BL,	DXF 90
+@item unit_type
+BL,	DXF 91
+@item format_string
+TV,	DXF 1
 @item parent
 struct _dwg_object_TABLESTYLE*
 

@@ -4681,8 +4681,10 @@ DWG_OBJECT(TABLECONTENT)
 
 DWG_OBJECT_END
 
-// pg.246 20.4.102
+// pg.246 20.4.102 and TABLE
 // added with r2008, backcompat with r2007
+// The cellstyle map can contain custom cell styles, whereas the TABLESTYLE
+// only contains the Table (R24), _Title, _Header and _Data cell style.
 // unused
 DWG_OBJECT(CELLSTYLEMAP)
 
@@ -5208,6 +5210,57 @@ DWG_ENTITY(TABLE)
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
+
+// See TABLE and p20.4.101
+// Added with r2005
+// TABLESTYLE only contains the Table (R24), _Title, _Header and _Data cell style.
+DWG_OBJECT(TABLESTYLE)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbTableStyle)
+  PRE(R_2010) {
+    FIELD_T (name, 3);
+    FIELD_BS (flow_direction, 70);
+    FIELD_BS (flags, 71);
+    FIELD_BD (horiz_cell_margin, 40);
+    FIELD_BD (vert_cell_margin, 41);
+    FIELD_B (title_suppressed, 280);
+    FIELD_B (header_suppressed, 281);
+
+    // 0: data, 1: title, 2: header
+    _REPEAT_N(3, rowstyles, Dwg_TABLESTYLE_rowstyles, 1)
+    REPEAT_BLOCK
+        #define rowstyle rowstyles[rcount1]
+        SUB_FIELD_HANDLE (rowstyle,text_style, 5, 7);
+        SUB_FIELD_BD (rowstyle,text_height, 140);
+        SUB_FIELD_BS (rowstyle,text_alignment, 170);
+        SUB_FIELD_CMC (rowstyle,text_color, 62,0);
+        SUB_FIELD_CMC (rowstyle,fill_color, 63,0);
+        SUB_FIELD_B (rowstyle,has_bgcolor, 283);
+
+        // top, horizontal inside, bottom, left, vertical inside, right
+        _REPEAT_N(6, rowstyle.borders, Dwg_BorderStyle, 2)
+        REPEAT_BLOCK
+            #define border rowstyle.borders[rcount2]
+            SUB_FIELD_BLd (border,linewt, 274+rcount2);
+            SUB_FIELD_B (border,invisible, 284+rcount2);
+            SUB_FIELD_CMC (border,color, 64+rcount2, 0);
+        END_REPEAT_BLOCK
+        END_REPEAT(rowstyle.borders)
+
+        SINCE(R_2007) {
+          SUB_FIELD_BL (rowstyle,data_type, 90);
+          SUB_FIELD_BL (rowstyle,unit_type, 91);
+          SUB_FIELD_T (rowstyle,format_string, 1);
+        }
+    END_REPEAT_BLOCK
+    END_REPEAT(rowstyles)
+  }
+  LATER_VERSIONS {
+    LOG_ERROR ("TABLESTYLE r2010+ not yet implemented") // TABLE/CELLSTYLEMAP
+  }
+  START_OBJECT_HANDLE_STREAM;
+
+DWG_OBJECT_END
 
 #endif /* DEBUG_CLASSES */
 
@@ -6214,6 +6267,7 @@ DWG_OBJECT(ASSOCALIGNEDDIMACTIONBODY)
   }
 DWG_OBJECT_END
 
+#undef ASSOCACTION_fields
 #define ASSOCACTION_fields   \
   SUBCLASS (AcDbAssocAction) \
   /* 0 WellDefined, 1 UnderConstrained, 2 OverConstrained, \
@@ -7237,11 +7291,6 @@ DWG_OBJECT_END
 
 DWG_OBJECT(SECTIONVIEWSTYLE)
   DECODE_UNKNOWN_BITS
-DWG_OBJECT_END
-
-DWG_OBJECT(TABLESTYLE)
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbTableStyle)
 DWG_OBJECT_END
 
 // EXACXREFPANELOBJECT

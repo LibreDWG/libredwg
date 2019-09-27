@@ -22263,6 +22263,22 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_BL num_deps;
+    if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "num_deps", &num_deps, NULL)
+        && num_deps == assocaction->num_deps)
+      pass ();
+    else
+      fail ("ASSOCACTION.num_deps [BL] %u != %u", assocaction->num_deps, num_deps);
+    num_deps++;
+    if (dwg_dynapi_entity_set_value (assocaction, "ASSOCACTION", "num_deps", &num_deps, 0)
+        && num_deps == assocaction->num_deps)
+      pass ();
+    else
+      fail ("ASSOCACTION.num_deps [BL] set+1 %u != %u", assocaction->num_deps, num_deps);
+    assocaction->num_deps--;
+
+  }
+  {
     BITCODE_H owningnetwork;
     if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "owningnetwork", &owningnetwork, NULL)
         && !memcmp (&owningnetwork, &assocaction->owningnetwork, sizeof (assocaction->owningnetwork)))
@@ -22300,6 +22316,22 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
     else
       fail ("ASSOCACTION.solution_status [BL] set+1 %u != %u", assocaction->solution_status, solution_status);
     assocaction->solution_status--;
+
+  }
+  {
+    BITCODE_BL status;
+    if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "status", &status, NULL)
+        && status == assocaction->status)
+      pass ();
+    else
+      fail ("ASSOCACTION.status [BL] %u != %u", assocaction->status, status);
+    status++;
+    if (dwg_dynapi_entity_set_value (assocaction, "ASSOCACTION", "status", &status, 0)
+        && status == assocaction->status)
+      pass ();
+    else
+      fail ("ASSOCACTION.status [BL] set+1 %u != %u", assocaction->status, status);
+    assocaction->status--;
 
   }
   {
@@ -33960,18 +33992,18 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_BL flags;
+    BITCODE_BS flags;
     if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "flags", &flags, NULL)
         && flags == tablestyle->flags)
       pass ();
     else
-      fail ("TABLESTYLE.flags [BL] %u != %u", tablestyle->flags, flags);
+      fail ("TABLESTYLE.flags [BS] %hu != %hu", tablestyle->flags, flags);
     flags++;
     if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "flags", &flags, 0)
         && flags == tablestyle->flags)
       pass ();
     else
-      fail ("TABLESTYLE.flags [BL] set+1 %u != %u", tablestyle->flags, flags);
+      fail ("TABLESTYLE.flags [BS] set+1 %hu != %hu", tablestyle->flags, flags);
     tablestyle->flags--;
 
   }
@@ -34056,6 +34088,16 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
         pass ();
     else
         fail ("TABLESTYLE.parent [struct _dwg_object_object*]");
+  }
+  {
+    Dwg_TABLESTYLE_rowstyles* rowstyles;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "num_rowstyles", &count, NULL)
+        && dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "rowstyles", &rowstyles, NULL)
+        && rowstyles == tablestyle->rowstyles)
+      pass ();
+    else
+      fail ("TABLESTYLE.rowstyles [Dwg_TABLESTYLE_rowstyles*] * %u num_rowstyles", count);
   }
   {
     BITCODE_B title_suppressed;

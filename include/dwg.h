@@ -3481,18 +3481,41 @@ typedef struct _dwg_TABLESTYLE_Cell
   struct _dwg_object_TABLESTYLE *parent;
 } Dwg_TABLESTYLE_Cell;
 
+typedef struct _dwg_TABLESTYLE_rowstyles
+{
+  BITCODE_H text_style;
+  BITCODE_BD text_height;
+  BITCODE_BS text_alignment;
+  BITCODE_CMC text_color;
+  BITCODE_CMC fill_color;
+  BITCODE_B has_bgcolor;
+
+  //6: top, horizontal inside, bottom, left, vertical inside, right
+  Dwg_BorderStyle *borders;
+
+  BITCODE_BL data_type;
+  BITCODE_BL unit_type;
+  BITCODE_TV format_string;
+
+  struct _dwg_object_TABLESTYLE *parent;
+} Dwg_TABLESTYLE_rowstyles;
+
 typedef struct _dwg_object_TABLESTYLE
 {
   struct _dwg_object_object *parent;
 
   BITCODE_BS class_version;
   BITCODE_TV name;
-  BITCODE_BL flags;
-  BITCODE_B title_suppressed;
-  BITCODE_B header_suppressed;
+  BITCODE_BS flags;
   BITCODE_BS flow_direction;
   BITCODE_BD horiz_cell_margin;
   BITCODE_BD vert_cell_margin;
+  BITCODE_B title_suppressed;
+  BITCODE_B header_suppressed;
+
+  // 0: data, 1: title, 2: header
+  Dwg_TABLESTYLE_rowstyles *rowstyles;
+
   BITCODE_BL num_cells;
   Dwg_TABLESTYLE_Cell* cells;
 } Dwg_Object_TABLESTYLE;
@@ -4687,7 +4710,6 @@ typedef struct _dwg_ACTIONBODY
 #define ASSOCACTION_fields \
   BITCODE_BL solution_status; /* 90 */ \
   BITCODE_BL geometry_status; /* 90 */ \
-  /*BITCODE_BL num_deps; */   /* 90 */ \
   BITCODE_H readdep;          /* 330 */ \
   BITCODE_H writedep;         /* 360 */ \
   BITCODE_BL constraint_status; /* 90 */ \
@@ -4699,8 +4721,10 @@ typedef struct _dwg_object_ASSOCACTION
   struct _dwg_object_object *parent;
   ASSOCACTION_fields;
 
+  BITCODE_BL num_deps;    /* 90 */
   //BITCODE_B is_actionevaluation_in_progress; // 90
   Dwg_ACTIONBODY body;
+  BITCODE_BL status;
   BITCODE_H  actionbody;
   BITCODE_H  callback;
   BITCODE_H  owningnetwork;
@@ -6089,7 +6113,7 @@ EXPORT int dwg_add_SWEPTSURFACE (Dwg_Object *obj);
 EXPORT int dwg_add_SUN (Dwg_Object *obj);
 EXPORT int dwg_add_SUNSTUDY (Dwg_Object *obj);
 EXPORT int dwg_add_TABLE (Dwg_Object *obj);
-//EXPORT int dwg_add_TABLESTYLE (Dwg_Object *obj);
+EXPORT int dwg_add_TABLESTYLE (Dwg_Object *obj);
 EXPORT int dwg_add_TABLECONTENT (Dwg_Object *obj);
 EXPORT int dwg_add_TABLEGEOMETRY (Dwg_Object *obj);
 //EXPORT int dwg_add_XREFPANELOBJECT (Dwg_Object *obj);
