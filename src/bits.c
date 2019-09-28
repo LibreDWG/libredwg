@@ -1333,7 +1333,13 @@ bit_read_TV (Bit_Chain *restrict dat)
   unsigned char *chain;
 
   length = bit_read_BS (dat);
-  // if (length > AVAIL_BITS()) return DWG_ERR_VALUEOUTOFBOUNDS;
+  if (dat->byte + length >= dat->size)
+    {
+      loglevel = dat->opts & 0xf;
+      LOG_ERROR ("%s buffer overflow at %lu, length %u", __FUNCTION__,
+                 dat->byte, length)
+      return NULL;
+    }
   chain = (unsigned char *)malloc (length + 1);
   for (i = 0; i < length; i++)
     {
@@ -1374,6 +1380,13 @@ bit_read_TU (Bit_Chain *restrict dat)
   BITCODE_TU chain;
 
   length = bit_read_BS (dat);
+  if (dat->byte + (length * 2) >= dat->size)
+    {
+      loglevel = dat->opts & 0xf;
+      LOG_ERROR ("%s buffer overflow at %lu, length %u", __FUNCTION__,
+                 dat->byte, length)
+      return NULL;
+    }
   chain = (BITCODE_TU)malloc ((length + 1) * 2);
   for (i = 0; i < length; i++)
     {
