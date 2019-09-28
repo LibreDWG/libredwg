@@ -165,55 +165,57 @@ static bool env_var_checked_p;
   }
 #define FIELD_BT(nam, dxf) FIELDG (nam, BT, dxf);
 
+#define _FIELD_DD(nam, _default, dxf)                                         \
+  bit_write_DD (dat, FIELD_VALUE (nam), _default);
 #define FIELD_DD(nam, _default, dxf)                                          \
-  bit_write_DD (dat, FIELD_VALUE (nam), _default);                            \
-  FIELD_G_TRACE (nam, RD, dxf);
+  _FIELD_DD(nam, _default, dxf);                                              \
+  LOG_TRACE (#nam ": %f [DD %d]\n", _obj->nam, dxf)
 #define FIELD_2DD(nam, d1, d2, dxf)                                           \
   {                                                                           \
-    FIELD_DD (nam.x, d1, dxf);                                                \
-    FIELD_DD (nam.y, d2, dxf + 10);                                           \
+    _FIELD_DD (nam.x, d1, dxf);                                               \
+    _FIELD_DD (nam.y, d2, dxf + 10);                                          \
+    LOG_TRACE (#nam ": (%f, %f) [2DD %d]\n", _obj->nam.x, _obj->nam.y, dxf)   \
   }
 #define FIELD_3DD(nam, def, dxf)                                              \
   {                                                                           \
-    FIELD_DD (nam.x, FIELD_VALUE (def.x), dxf);                               \
-    FIELD_DD (nam.y, FIELD_VALUE (def.y), dxf + 10);                          \
-    FIELD_DD (nam.z, FIELD_VALUE (def.z), dxf + 20);                          \
+    _FIELD_DD (nam.x, FIELD_VALUE (def.x), dxf);                              \
+    _FIELD_DD (nam.y, FIELD_VALUE (def.y), dxf + 10);                         \
+    _FIELD_DD (nam.z, FIELD_VALUE (def.z), dxf + 20);                         \
+    LOG_TRACE (#nam ": (%f, %f, %f) [3DD %d]\n", _obj->nam.x, _obj->nam.y,    \
+               _obj->nam.z, dxf)                                              \
   }
 #define FIELD_2RD(nam, dxf)                                                   \
   {                                                                           \
-    FIELDG (nam.x, RD, dxf);                                                  \
-    FIELDG (nam.y, RD, dxf + 10);                                             \
+    bit_write_RD (dat, _obj->nam.x);                                          \
+    bit_write_RD (dat, _obj->nam.y);                                          \
+    LOG_TRACE (#nam ": (%f, %f) [3RD %d]\n", _obj->nam.x, _obj->nam.y, dxf)   \
   }
 #define FIELD_2BD(nam, dxf)                                                   \
   {                                                                           \
-    FIELDG (nam.x, BD, dxf);                                                  \
-    FIELDG (nam.y, BD, dxf + 10);                                             \
+    bit_write_BD (dat, _obj->nam.x);                                          \
+    bit_write_BD (dat, _obj->nam.y);                                          \
+    LOG_TRACE (#nam ": (%f, %f) [3BD %d]\n", _obj->nam.x, _obj->nam.y, dxf)   \
   }
-#define FIELD_2BD_1(nam, dxf)                                                 \
-  {                                                                           \
-    FIELDG (nam.x, BD, dxf);                                                  \
-    FIELDG (nam.y, BD, dxf + 1);                                              \
-  }
+#define FIELD_2BD_1(nam, dxf) FIELD_2BD(nam, dxf)
 #define FIELD_3RD(nam, dxf)                                                   \
   {                                                                           \
-    FIELDG (nam.x, RD, dxf);                                                  \
-    FIELDG (nam.y, RD, dxf + 10);                                             \
-    FIELDG (nam.z, RD, dxf + 20);                                             \
+    bit_write_RD (dat, _obj->nam.x);                                          \
+    bit_write_RD (dat, _obj->nam.y);                                          \
+    bit_write_RD (dat, _obj->nam.z);                                          \
+    LOG_TRACE (#nam ": (%f, %f, %f) [3RD %d]\n", _obj->nam.x, _obj->nam.y,    \
+               _obj->nam.z, dxf)                                              \
   }
 #define FIELD_3BD(nam, dxf)                                                   \
   {                                                                           \
-    FIELDG (nam.x, BD, dxf);                                                  \
-    FIELDG (nam.y, BD, dxf + 10);                                             \
-    FIELDG (nam.z, BD, dxf + 20);                                             \
+    bit_write_BD (dat, _obj->nam.x);                                          \
+    bit_write_BD (dat, _obj->nam.y);                                          \
+    bit_write_BD (dat, _obj->nam.z);                                          \
+    LOG_TRACE (#nam ": (%f, %f, %f) [3BD %d]\n", _obj->nam.x, _obj->nam.y,    \
+               _obj->nam.z, dxf)                                              \
   }
-#define FIELD_3BD_1(nam, dxf)                                                 \
-  {                                                                           \
-    FIELDG (nam.x, BD, dxf);                                                  \
-    FIELDG (nam.y, BD, dxf + 1);                                              \
-    FIELDG (nam.z, BD, dxf + 2);                                              \
-  }
+#define FIELD_3BD_1(nam, dxf)   FIELD_3BD(nam, dxf)
 #define FIELD_3DPOINT(nam, dxf) FIELD_3BD (nam, dxf)
-#define FIELD_4BITS(nam, dxf) bit_write_4BITS (dat, _obj->nam);
+#define FIELD_4BITS(nam, dxf)   bit_write_4BITS (dat, _obj->nam);
 #define FIELD_TIMEBLL(nam, dxf)                                               \
   {                                                                           \
     bit_write_TIMEBLL (dat, (BITCODE_TIMEBLL)_obj->nam);                      \
