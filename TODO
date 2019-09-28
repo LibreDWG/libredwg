@@ -46,6 +46,14 @@
   *2007: XRECORD read error
   example_2000: REGION starting at line 2506: Xdata wasn't read
   Drawing_2000_min: crash at AcDbLine
+* INDXF:
+  MTEXT: 11, 42, 43
+  REGION: encr_sat_data
+  ATTDEF, ATTRIB, TEXT: skip defaults (elevation, ...)
+  INSERT.block_header missing
+  WIPEOUT.uvec wrong
+  WIPEOUT.imagedefreactor 360: code 5 => 3
+  VPORT: 41, 71 wrong
 
 * convert XRECORD xdata linked-list ResBuf to array of eed[],
   same structure as common EED.
