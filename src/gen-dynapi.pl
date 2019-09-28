@@ -1001,7 +1001,7 @@ EOF
       print $fh "\n  }\n";
     } elsif ($type =~ /\*$/ and $type !~ /(RC\*|struct _dwg_object_)/
              # no countfield
-             and $var !~ /^(ref|block_size|extra_acis_data|objid_object_handles)$/
+             and $var !~ /^(ref|block_size|extra_acis_data|objid_object_handles|rowstyles)$/
              # VECTOR_N
              and $var !~ /(_transform|_transmatrix1?|shhn_pts)$/) {
       my %countfield = (
@@ -1220,7 +1220,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
-#line 1221 "gen-dynapi.pl"
+#line 1222 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {

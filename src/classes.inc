@@ -206,6 +206,7 @@
   UNSTABLE_CLASS_DXF (ACTION, PROXY_OBJECT, PROXY)
   UNSTABLE_CLASS_DXF (ACTION, PERSSUBENTMANAGER, ACDBPERSSUBENTMANAGER)
   UNSTABLE_CLASS     (ACTION, VISUALSTYLE)
+  UNSTABLE_CLASS     (ACTION, TABLESTYLE)        // pre-r2010 only
 
   // coverage exists, but broken and being worked on. needs -DDEBUG_CLASSES. See also
   // examples/unknown with all the unknown blobs of these.
@@ -222,7 +223,6 @@
   DEBUGGING_CLASS     (ACTION, TABLECONTENT) //wrong values
   DEBUGGING_CLASS     (ACTION, TABLEGEOMETRY) //wrong geom_data
   DEBUGGING_CLASS     (ACTION, CELLSTYLEMAP) //broken
-  DEBUGGING_CLASS     (ACTION, TABLESTYLE)   //working on, pre-r2010 only
   DEBUGGING_CLASS     (ACTION, MATERIAL)     //working on
   DEBUGGING_CLASS     (ACTION, PLOTSETTINGS) //yet unsorted
   DEBUGGING_CLASS     (ACTION, SUN)          //90%

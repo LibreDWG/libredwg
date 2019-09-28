@@ -5377,7 +5377,7 @@ test_header (const Dwg_Data *dwg)
   return error;
 }
 
-#line 5389 "dynapi_test.c"
+#line 5380 "dynapi_test.c"
 /* @@for test_OBJECT@@ */
 static int test__3DFACE (const Dwg_Object *obj)
 {
@@ -34091,13 +34091,11 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
   }
   {
     Dwg_TABLESTYLE_rowstyles* rowstyles;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "num_rowstyles", &count, NULL)
-        && dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "rowstyles", &rowstyles, NULL)
-        && rowstyles == tablestyle->rowstyles)
-      pass ();
+    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "rowstyles", &rowstyles, NULL)
+        && !memcmp (&rowstyles, &tablestyle->rowstyles, sizeof (tablestyle->rowstyles)))
+        pass ();
     else
-      fail ("TABLESTYLE.rowstyles [Dwg_TABLESTYLE_rowstyles*] * %u num_rowstyles", count);
+        fail ("TABLESTYLE.rowstyles [Dwg_TABLESTYLE_rowstyles*]");
   }
   {
     BITCODE_B title_suppressed;
@@ -36597,7 +36595,7 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
   int error = 0;
   if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
     return 0;
-#line 36154 "dynapi_test.c"
+#line 36598 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);

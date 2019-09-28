@@ -5218,6 +5218,8 @@ DWG_ENTITY(TABLE)
 
 DWG_ENTITY_END
 
+#endif /* DEBUG_CLASSES */
+
 // See TABLE and p20.4.101
 // Added with r2005
 // TABLESTYLE only contains the Table (R24), _Title, _Header and _Data cell style.
@@ -5268,8 +5270,6 @@ DWG_OBJECT(TABLESTYLE)
   START_OBJECT_HANDLE_STREAM;
 
 DWG_OBJECT_END
-
-#endif /* DEBUG_CLASSES */
 
 //(79 + varies) pg.247 20.4.104
 DWG_OBJECT(XRECORD)
