@@ -1185,8 +1185,6 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
   _o->num_points = num_points;
   _o->points = calloc (num_points, sizeof (BITCODE_2RD));
-  _o->bulges = calloc (num_points, sizeof (BITCODE_BD));
-  _o->num_bulges = num_points;
   LOG_TRACE ("LWPOLYLINE.num_points = %u [BS 90]\n", num_points);
 
   while (pair->code != 0)
@@ -1194,28 +1192,37 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
       if (pair->code == 0)
-        return pair;
+        {
+          LOG_TRACE ("LWPOLYLINE.flag = %d [BS 70]\n", _o->flag);
+          return pair;
+        }
       else if (pair->code == 43)
         {
           _o->const_width = pair->value.d;
-          _o->flag |= 4;
+          if (pair->value.d != 0.0)
+            _o->flag |= 4;
           LOG_TRACE ("LWPOLYLINE.const_width = %f [BD 43]\n", pair->value.d);
         }
       else if (pair->code == 70)
         {
-          _o->flag |= pair->value.i; /* only if closed or not */
-          LOG_TRACE ("LWPOLYLINE.flag = %d [BS 70]\n", pair->value.i);
+          if (pair->value.i & 1) /* only if closed or not */
+            _o->flag |= 512;
+          else if (pair->value.i & 128) /* plinegen? */
+            _o->flag |= 128;
+          LOG_TRACE ("LWPOLYLINE.flag = %d [BS 70]\n", _o->flag);
         }
       else if (pair->code == 38)
         {
           _o->elevation = pair->value.d;
-          _o->flag |= 8;
+          if (pair->value.d != 0.0)
+            _o->flag |= 8;
           LOG_TRACE ("LWPOLYLINE.elevation = %f [38 BD]\n", pair->value.d);
         }
       else if (pair->code == 39)
         {
           _o->thickness = pair->value.d;
-          _o->flag |= 2;
+          if (pair->value.d != 0.0)
+            _o->flag |= 2;
           LOG_TRACE ("LWPOLYLINE.thickness = %f [BD 39]\n", pair->value.d);
         }
       else if (pair->code == 210)
@@ -1229,6 +1236,8 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 230)
         {
           _o->extrusion.z = pair->value.d;
+          if (_o->extrusion.x != 0.0 || _o->extrusion.y != 0.0 || _o->extrusion.z != 1.0)
+            _o->flag |= 1;
           LOG_TRACE ("LWPOLYLINE.extrusion = (%f, %f, %f) [3BD 210]\n",
                      _o->extrusion.x, _o->extrusion.y, _o->extrusion.z);
         }
@@ -1247,6 +1256,11 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 42)
         {
+          if (!j)
+            {
+              _o->bulges = calloc (num_points, sizeof (BITCODE_BD));
+              _o->num_bulges = num_points;
+            }
           assert (j < (int)_o->num_bulges);
           _o->bulges[j] = pair->value.d;
           LOG_TRACE ("LWPOLYLINE.bulges[%d] = %f [BD 42]\n", j, pair->value.d);

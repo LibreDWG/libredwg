@@ -166,7 +166,8 @@ static bool env_var_checked_p;
 #define FIELD_BT(nam, dxf) FIELDG (nam, BT, dxf);
 
 #define FIELD_DD(nam, _default, dxf)                                          \
-  bit_write_DD (dat, FIELD_VALUE (nam), _default);
+  bit_write_DD (dat, FIELD_VALUE (nam), _default);                            \
+  FIELD_G_TRACE (nam, RD, dxf);
 #define FIELD_2DD(nam, d1, d2, dxf)                                           \
   {                                                                           \
     FIELD_DD (nam.x, d1, dxf);                                                \
