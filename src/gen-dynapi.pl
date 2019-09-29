@@ -205,7 +205,7 @@ sub dxf_in {
       } else {
         push @old, '';
       }
-    } elsif (/^\s+_REPEAT_N\s*\($vx,\s*$v,\s*(\w+),/) {
+    } elsif (/^\s+_REPEAT_C?N\s*\($vx,\s*$v,\s*(\w+),/) {
       my $tmp = $1; # subclass?
       if ($tmp =~ /^Dwg_(.*)/) {
         push @old, $n;

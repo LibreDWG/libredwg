@@ -998,27 +998,44 @@
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }
 
-// unchecked with a constant
+/* REPEAT names:
+  _ adds idx
+  C does no checks
+  N does constant times (else _obj->times)
+  F does not calloc/free
+*/
+
+// unchecked with constant times
 #define REPEAT_CN(times, name, type)                                          \
   if (times > 0)                                                              \
     _obj->name = (type *)calloc (times, sizeof (type));                       \
   for (rcount1 = 0; rcount1 < (BITCODE_BL)times; rcount1++)
+// checked with constant times
 #define REPEAT_N(times, name, type)                                           \
   REPEAT_CHKCOUNT (name, times, type)                                         \
   if (times > 0)                                                              \
     _obj->name = (type *)calloc (times, sizeof (type));                       \
   for (rcount1 = 0; rcount1 < (BITCODE_BL)times; rcount1++)
 
+// checked with var. times
 #define _REPEAT(times, name, type, idx)                                       \
   REPEAT_CHKCOUNT_LVAL (name, _obj->times, type)                              \
   if (_obj->times > 0)                                                        \
     _obj->name = (type *)calloc (_obj->times, sizeof (type));                 \
   for (rcount##idx = 0; rcount##idx < (BITCODE_BL)_obj->times; rcount##idx++)
+// unchecked with var. times
 #define _REPEAT_C(times, name, type, idx)                                     \
-  REPEAT_CHKCOUNT_LVAL (name, _obj->times, type)                              \
   if (_obj->times > 0)                                                        \
     _obj->name = (type *)calloc (_obj->times, sizeof (type));                 \
   for (rcount##idx = 0; rcount##idx < (BITCODE_BL)_obj->times; rcount##idx++)
+// unchecked with constant times
+#define _REPEAT_CN(times, name, type, idx)                                    \
+  if (times > 0)                                                              \
+    _obj->name = (type *)calloc (times, sizeof (type));                       \
+  if (_obj->name)                                                             \
+    for (rcount##idx = 0; rcount##idx < (BITCODE_BL)times; rcount##idx++)
+// not allocating versions unchecked: _REPEAT_CNF
+// not allocating versions checked: _REPEAT_NF
 
 #define REPEAT(times, name, type) _REPEAT (times, name, type, 1)
 #define REPEAT2(times, name, type) _REPEAT (times, name, type, 2)

@@ -339,12 +339,21 @@
 #  define END_REPEAT_BLOCK }
 #endif
 
+/* REPEAT names:
+  _ adds idx
+  C does no checks
+  N does constant times (else _obj->times)
+  F does not calloc/free
+*/
+
+// unchecked with constant times
 #ifndef REPEAT
 #  define REPEAT_CN(times, name, type)                                        \
     if (_obj->name)                                                           \
       for (rcount1 = 0; rcount1 < (BITCODE_BL)times; rcount1++)
+// checked with constant times
 #  define REPEAT_N(times, name, type)                                         \
-    if (dat->version >= R_2000 && times > 0x1000)                             \
+    if (dat->version >= R_2000 && (BITCODE_BL)times > 0x1000)                 \
       {                                                                       \
         LOG_ERROR ("Invalid %s." #name " rcount1 %ld", SAFEDXFNAME,           \
                    (long)times);                                              \
@@ -353,8 +362,9 @@
     if (_obj->name)                                                           \
       for (rcount1 = 0; rcount1 < (BITCODE_BL)times; rcount1++)
 
+// checked with var. times
 #  define _REPEAT(times, name, type, idx)                                     \
-    if (dat->version >= R_2000 && _obj->times > 0x1000)                       \
+    if (dat->version >= R_2000 && (BITCODE_BL)_obj->times > 0x1000)           \
       {                                                                       \
         LOG_ERROR ("Invalid %s." #name " rcount" #idx " %ld", SAFEDXFNAME,    \
                    (long)_obj->times);                                        \
@@ -363,6 +373,7 @@
     if (_obj->name)                                                           \
       for (rcount##idx = 0; rcount##idx < (BITCODE_BL)_obj->times;            \
            rcount##idx++)
+// unchecked with var. times
 #  ifndef _REPEAT_C
 #    define _REPEAT_C(times, name, type, idx)                                 \
       if (_obj->name)                                                         \
@@ -378,8 +389,28 @@
 #  define REPEAT3_C(times, name, type) _REPEAT_C (times, name, type, 3)
 #  define REPEAT4_C(times, name, type) _REPEAT_C (times, name, type, 4)
 #endif
-#ifndef _REPEAT_N
-#  define _REPEAT_N(times, name, type, idx)                                   \
+// unchecked with constant times
+#ifndef _REPEAT_CN
+#  define _REPEAT_CN(times, name, type, idx)                                  \
+    if (_obj->name)                                                           \
+      for (rcount##idx = 0; rcount##idx < (BITCODE_BL)times; rcount##idx++)
+#endif
+// not allocating versions:
+// unchecked
+#ifndef _REPEAT_CNF
+#  define _REPEAT_CNF(times, name, type, idx)                                 \
+    if (_obj->name)                                                           \
+      for (rcount##idx = 0; rcount##idx < (BITCODE_BL)times; rcount##idx++)
+#endif
+#ifndef _REPEAT_NF
+// checked
+#  define _REPEAT_NF(times, name, type, idx)                                  \
+    if (dat->version >= R_2000 && times > 0x1000)                             \
+      {                                                                       \
+        LOG_ERROR ("Invalid %s." #name " rcount" #idx " %ld", SAFEDXFNAME,    \
+                   (long)times);                                              \
+        return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
+      }                                                                       \
     if (_obj->name)                                                           \
       for (rcount##idx = 0; rcount##idx < (BITCODE_BL)times; rcount##idx++)
 #endif

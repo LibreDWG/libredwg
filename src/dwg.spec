@@ -2285,7 +2285,7 @@ DWG_ENTITY(MLINE)
       SUB_FIELD_3DPOINT (verts[rcount1], miter_direction, 13);
       FIELD_VALUE (verts[rcount1].num_lines) = FIELD_VALUE (num_lines);
 
-      REPEAT2_C(num_lines, verts[rcount1].lines, Dwg_MLINE_line)
+      REPEAT2(num_lines, verts[rcount1].lines, Dwg_MLINE_line)
       REPEAT_BLOCK
           SUB_FIELD_BS (verts[rcount1].lines[rcount2], num_segparms, 74);
           FIELD_VECTOR (verts[rcount1].lines[rcount2].segparms, BD, verts[rcount1].lines[rcount2].num_segparms, 41)
@@ -2642,7 +2642,7 @@ DWG_OBJECT(LTYPE)
     FIELD_RC (alignment, 72);
   }
   FIELD_RC (num_dashes, 73);
-  REPEAT_C(num_dashes, dashes, Dwg_LTYPE_dash)
+  REPEAT(num_dashes, dashes, Dwg_LTYPE_dash)
   REPEAT_BLOCK
       PRE (R_13)
       {
@@ -3435,7 +3435,7 @@ DWG_OBJECT(MLINESTYLE)
   FIELD_BD (end_angle, 52);   /*!< default 90 deg */
 #endif
   FIELD_RC (num_lines, 71);
-  REPEAT_C(num_lines, lines, Dwg_MLINESTYLE_line)
+  REPEAT(num_lines, lines, Dwg_MLINESTYLE_line)
   REPEAT_BLOCK
     SUB_FIELD_BD (lines[rcount1], offset, 49);
 #ifndef IS_FREE
@@ -3464,7 +3464,7 @@ DWG_OBJECT(MLINESTYLE)
   // FIXME: init HANDLE_STREAM earlier, merge into upper repeat_block
   SINCE (R_2018)
   {
-    _REPEAT_N (_obj->num_lines, lines, Dwg_MLINESTYLE_line, 1)
+    _REPEAT_CNF (_obj->num_lines, lines, Dwg_MLINESTYLE_line, 1)
     REPEAT_BLOCK
     SUB_FIELD_HANDLE (lines[rcount1], lt.ltype, 5, 6);
     END_REPEAT_BLOCK
@@ -5237,7 +5237,7 @@ DWG_OBJECT(TABLESTYLE)
     FIELD_B (header_suppressed, 281);
 
     // 0: data, 1: title, 2: header
-    _REPEAT_N(3, rowstyles, Dwg_TABLESTYLE_rowstyles, 1)
+    REPEAT_CN(3, rowstyles, Dwg_TABLESTYLE_rowstyles)
     REPEAT_BLOCK
         #define rowstyle rowstyles[rcount1]
         SUB_FIELD_HANDLE (rowstyle,text_style, 5, 7);
@@ -5248,7 +5248,7 @@ DWG_OBJECT(TABLESTYLE)
         SUB_FIELD_B (rowstyle,has_bgcolor, 283);
 
         // top, horizontal inside, bottom, left, vertical inside, right
-        _REPEAT_N(6, rowstyle.borders, Dwg_BorderStyle, 2)
+        _REPEAT_CN(6, rowstyle.borders, Dwg_BorderStyle, 2)
         REPEAT_BLOCK
             #define border rowstyle.borders[rcount2]
             SUB_FIELD_BLd (border,linewt, 274+rcount2);
@@ -5592,10 +5592,10 @@ DWG_ENTITY(MULTILEADER)
   // TODO: seperate hdl_dat earlier, and use it above.
   // 2nd loop, use the variant without calloc
   VERSIONS (R_13, R_2004) {
-    _REPEAT_N(_obj->ctx.num_leaders, ctx.leaders, Dwg_LEADER_Node, 1)
+    _REPEAT_CNF(_obj->ctx.num_leaders, ctx.leaders, Dwg_LEADER_Node, 1)
     REPEAT_BLOCK
         #define lnode ctx.leaders[rcount1]
-        _REPEAT_N(_obj->lnode.num_lines, lnode.lines, Dwg_LEADER_Line, 2)
+        _REPEAT_CNF(_obj->lnode.num_lines, lnode.lines, Dwg_LEADER_Line, 2)
         REPEAT_BLOCK
             #define lline lnode.lines[rcount2]
             SUB_FIELD_HANDLE (lline,ltype, 5, 340);
@@ -5611,12 +5611,12 @@ DWG_ENTITY(MULTILEADER)
     }
     VERSIONS (R_2000, R_2004)
     {
-      _REPEAT_N(_obj->num_arrowheads, arrowheads, Dwg_LEADER_ArrowHead, 1)
+      _REPEAT_CNF(_obj->num_arrowheads, arrowheads, Dwg_LEADER_ArrowHead, 1)
       REPEAT_BLOCK
           SUB_FIELD_HANDLE (arrowheads[rcount1],arrowhead, 5, 345);
       END_REPEAT_BLOCK
       END_REPEAT(arrowheads);
-      _REPEAT_N(_obj->num_blocklabels, blocklabels, Dwg_LEADER_BlockLabel, 1)
+      _REPEAT_CNF(_obj->num_blocklabels, blocklabels, Dwg_LEADER_BlockLabel, 1)
       REPEAT_BLOCK
           SUB_FIELD_HANDLE (blocklabels[rcount1],attdef, 4, 330);
       END_REPEAT_BLOCK
