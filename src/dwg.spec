@@ -4730,6 +4730,7 @@ DWG_OBJECT(TABLEGEOMETRY)
       SUB_FIELD_BD (cell,height_w_gap, 41);
       SUB_FIELD_HANDLE (cell,unknown, 3, 330);
       SUB_FIELD_BL (cell,num_geom_data, 94);
+      VALUEOUTOFBOUNDS (cell.num_geom_data, 10000)
       REPEAT2(cell.num_geom_data, cell.geom_data, Dwg_CellContentGeometry)
       REPEAT_BLOCK
           #define geom cell.geom_data[rcount2]
