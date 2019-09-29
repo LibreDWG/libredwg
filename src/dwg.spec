@@ -4768,7 +4768,13 @@ DWG_ENTITY(TABLE)
       //TODO continue as 20.4.96.2 AcDbTableContent subclass: 20.4.97
       //either as sub-struct or separate call
 #ifdef DEBUG_CLASSES
-      return DWG_FUNC_N(ACTION,TABLECONTENT) (dat, obj);
+#  if defined(IS_DECODER)
+      return DWG_PRIVATE_N(ACTION, TABLECONTENT) (dat, hdl_dat, str_dat, obj);
+#  elif defined(IS_FREE)
+      return DWG_PRIVATE_N(ACTION, TABLECONTENT) (dat, obj);
+#  else
+      return DWG_FUNC_N(ACTION, TABLECONTENT) (dat, obj);
+#  endif
 #endif
     }
 
@@ -5131,6 +5137,10 @@ DWG_ENTITY(TABLE)
 
   SINCE (R_2004)
     {
+#if defined(IS_JSON) || defined(IS_DXF)
+      if (!_obj->attrib_handles && _obj->num_owned)
+        _obj->num_owned = 0;
+#endif
       HANDLE_VECTOR (attrib_handles, num_owned, 4, 0)
     }
 

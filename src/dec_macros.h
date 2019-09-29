@@ -1220,7 +1220,7 @@
     return error;                                                             \
   }                                                                           \
                                                                               \
-  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                   \
+  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                     \
   static int dwg_decode_##token##_private (                                   \
       Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
       Dwg_Object *restrict obj)                                               \
@@ -1230,9 +1230,12 @@
     Dwg_Object_##token *_obj;                                                 \
     Dwg_Data *dwg = obj->parent;                                              \
     LOG_INFO ("Decode object " #token "\n")                                   \
-    _obj = obj->tio.object->tio.token;                                        \
-    error = dwg_decode_object (dat, hdl_dat, str_dat, obj->tio.object);       \
-    if (error >= DWG_ERR_CRITICAL)                                            \
-      return error;
+    if (strNE (#token, "TABLECONTENT") || obj->fixedtype != DWG_TYPE_TABLE)   \
+      {                                                                       \
+        _obj = obj->tio.object->tio.token;                                    \
+        error = dwg_decode_object (dat, hdl_dat, str_dat, obj->tio.object);   \
+        if (error >= DWG_ERR_CRITICAL)                                        \
+          return error;                                                       \
+      }
 
 #define DWG_OBJECT_END DWG_ENTITY_END

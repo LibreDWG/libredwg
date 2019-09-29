@@ -38,6 +38,8 @@
 #  endif
 #  define _DWG_FUNC_N(ACTION, name) dwg_##ACTION##_##name
 #  define DWG_FUNC_N(ACTION, name) _DWG_FUNC_N (ACTION, name)
+#  define _DWG_PRIVATE_N(ACTION, name) dwg_##ACTION##_##name##_private
+#  define DWG_PRIVATE_N(ACTION, name) _DWG_PRIVATE_N (ACTION, name)
 
 #  define SET_PARENT(field, obj)
 #  define SET_PARENT_OBJ(field)
