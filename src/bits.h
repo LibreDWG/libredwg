@@ -230,7 +230,7 @@ void bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict chain);
 EXPORT char *bit_convert_TU (BITCODE_TU restrict wstr) ATTRIBUTE_MALLOC;
 
 /** Converts UTF-8 to UCS-2. Returns a copy.
-    Eventually needed by dwg writers (dxf2dwg) */
+    Needed by dwg importers, writers (e.g. dxf2dwg) */
 EXPORT BITCODE_TU bit_utf8_to_TU (char *restrict str) ATTRIBUTE_MALLOC;
 
 /* compare an ASCII/utf-8 string to a r2007+ name */

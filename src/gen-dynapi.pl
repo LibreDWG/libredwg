@@ -1001,7 +1001,7 @@ EOF
       print $fh "\n  }\n";
     } elsif ($type =~ /\*$/ and $type !~ /(RC\*|struct _dwg_object_)/
              # no countfield
-             and $var !~ /^(ref|block_size|extra_acis_data|objid_object_handles|rowstyles)$/
+             and $var !~ /^(ref|block_size|extra_acis_data|objid_object_handles)$/
              # VECTOR_N
              and $var !~ /(_transform|_transmatrix1?|shhn_pts)$/) {
       my %countfield = (

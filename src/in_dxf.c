@@ -382,6 +382,51 @@ matches_type (Dxf_Pair *restrict pair, const Dwg_DYNAPI_field *restrict f)
   return 0;
 }
 
+/* convert to flag */
+static BITCODE_RC
+dxf_find_lweight (const int lw)
+{
+  // See acdb.h: 100th of a mm, enum of
+  const int lweights[] = { 0,
+                           5,
+                           9,
+                           13,
+                           15,
+                           18,
+                           20,
+                           25,
+                           30,
+                           35,
+                           40,
+                           50,
+                           53,
+                           60,
+                           70,
+                           80,
+                           90,
+                           100,
+                           106,
+                           120,
+                           140,
+                           158,
+                           200,
+                           211,
+                           /*illegal/reserved:*/ 0,
+                           0,
+                           0,
+                           0,
+                           0,
+                           /*29:*/ -1, // BYLAYER
+                           -2,         // BYBLOCK
+                           -3 };       // BYLWDEFAULT
+  for (int i = 0; i < 32; i++)
+    {
+      if (lweights[i] == lw)
+        return i;
+    }
+  return 0;
+}
+
 static int
 dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
@@ -2251,9 +2296,9 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 }
               break;
             case 171:
-              lline->linewt = pair->value.i;
+              lline->linewt = dxf_find_lweight (pair->value.i);
               LOG_TRACE ("%s.leaders[].lines[%d].linewt = %d [BL %d]\n",
-                         obj->name, i, pair->value.i, pair->code);
+                         obj->name, i, lline->linewt, pair->code);
               break;
             case 40:
               lline->arrow_size = pair->value.d;
@@ -2823,6 +2868,123 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return pair;
 }
 
+// returns with 0
+static Dxf_Pair *
+add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                Dxf_Pair *restrict pair)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Object_TABLESTYLE *o = obj->tio.object->tio.TABLESTYLE;
+  BITCODE_H hdl;
+  int i = -1, j = -1;
+
+  while (pair->code != 0)
+    {
+      switch (pair->code)
+        {
+        case 0:
+          break;
+        case 7:
+          i++;
+          assert (i >= 0 && i <= 3);
+          hdl = find_tablehandle (dwg, pair);
+          o->rowstyles[i].text_style = hdl;
+          LOG_TRACE ("%s.rowstyles[%d].text_style = " FORMAT_REF " [H %d]\n",
+                       obj->name, i, ARGS_REF(hdl), pair->code);
+          break;
+        case 140:
+          o->rowstyles[i].text_height = pair->value.d;
+          LOG_TRACE ("%s.rowstyles[%d].text_height = %f [BD %d]\n",
+                       obj->name, i, pair->value.d, pair->code);
+          break;
+        case 170:
+          o->rowstyles[i].text_alignment = pair->value.i;
+          LOG_TRACE ("%s.rowstyles[%d].text_alignment = " FORMAT_BS " [BS %d]\n",
+                     obj->name, i, o->rowstyles[i].text_alignment, pair->code);
+          break;
+        case 62:
+          o->rowstyles[i].text_color.index = pair->value.i;
+          //TODO rgb, alpha with 420,430?
+          LOG_TRACE ("%s.rowstyles[%d].text_color.index = %d [CMC %d]\n",
+                     obj->name, i, pair->value.i, pair->code);
+          break;
+        case 63:
+          o->rowstyles[i].fill_color.index = pair->value.i;
+          LOG_TRACE ("%s.rowstyles[%d].fill_color.index = %d [CMC %d]\n",
+                     obj->name, i, pair->value.i, pair->code);
+          break;
+        case 283:
+          o->rowstyles[i].has_bgcolor = pair->value.i;
+          LOG_TRACE ("%s.rowstyles[%d].has_bgcolor = %d [B %d]\n",
+                     obj->name, i, pair->value.i, pair->code);
+          break;
+        case 90:
+          o->rowstyles[i].data_type = pair->value.i;
+          LOG_TRACE ("%s.rowstyles[%d].data_type = %d [BL %d]\n",
+                     obj->name, i, pair->value.i, pair->code);
+          break;
+        case 91:
+          o->rowstyles[i].unit_type = pair->value.i;
+          LOG_TRACE ("%s.rowstyles[%d].unit_type = %d [BL %d]\n",
+                     obj->name, i, pair->value.i, pair->code);
+          break;
+        case 1:
+          o->rowstyles[i].format_string = bit_utf8_to_TU (pair->value.s);
+          LOG_TRACE ("%s.rowstyles[%d].format_string = %s [TU %d]\n",
+                     obj->name, i, pair->value.s, pair->code);
+          break;
+        case 274:
+        case 275:
+        case 276:
+        case 277:
+        case 278:
+        case 279:
+          j = pair->code - 274;
+          assert (j >= 0 && j <= 6);
+          if (!o->rowstyles[i].borders)
+            {
+              o->rowstyles[i].borders = calloc (6, sizeof (Dwg_TABLESTYLE_border));
+              o->rowstyles[i].num_borders = 6;
+            }
+          o->rowstyles[i].borders[j].linewt = dxf_find_lweight (pair->value.i);
+          LOG_TRACE ("%s.rowstyles[%d].borders[%d].linewt = %d [BSd %d]\n",
+                     obj->name, i, j, o->rowstyles[i].borders[j].linewt, pair->code);
+          break;
+        case 284:
+        case 285:
+        case 286:
+        case 287:
+        case 288:
+        case 289:
+          j = pair->code - 284;
+          assert (j >= 0 && j <= 6);
+          o->rowstyles[i].borders[j].visible = pair->value.i;
+          LOG_TRACE ("%s.rowstyles[%d].borders[%d].visible = %d [B %d]\n",
+                     obj->name, i, j, pair->value.i, pair->code);
+          break;
+        case 64:
+        case 65:
+        case 66:
+        case 67:
+        case 68:
+        case 69:
+          j = pair->code - 64;
+          assert (j >= 0 && j <= 6);
+          o->rowstyles[i].borders[j].color.index = pair->value.i;
+          LOG_TRACE ("%s.rowstyles[%d].borders[%d].color.index = %d [CMC %d]\n",
+                     obj->name, i, j, pair->value.i, pair->code);
+          break;
+        default:
+          LOG_ERROR ("Unknown DXF code %d for %s", pair->code,
+                     "TABLESTYLE");
+        }
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+    }
+  return pair;
+}
+
+
 // with ASSOC2DCONSTRAINTGROUP, ASSOCNETWORK, ASSOCACTION
 static Dxf_Pair *
 add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
@@ -3351,51 +3513,6 @@ add_dictionary_itemhandles (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
     _obj->texts[num] = strdup (text);
   LOG_TRACE ("%s.texts[%d] = %s [T* 3]\n", obj->name, num, text);
   _obj->numitems = num + 1;
-}
-
-/* convert to flag */
-static BITCODE_RC
-dxf_find_lweight (const int lw)
-{
-  // See acdb.h: 100th of a mm, enum of
-  const int lweights[] = { 0,
-                           5,
-                           9,
-                           13,
-                           15,
-                           18,
-                           20,
-                           25,
-                           30,
-                           35,
-                           40,
-                           50,
-                           53,
-                           60,
-                           70,
-                           80,
-                           90,
-                           100,
-                           106,
-                           120,
-                           140,
-                           158,
-                           200,
-                           211,
-                           /*illegal/reserved:*/ 0,
-                           0,
-                           0,
-                           0,
-                           0,
-                           /*29:*/ -1, // BYLAYER
-                           -2,         // BYBLOCK
-                           -3 };       // BYLWDEFAULT
-  for (int i = 0; i < 32; i++)
-    {
-      if (lweights[i] == lw)
-        return i;
-    }
-  return 0;
 }
 
 /* read to ent->preview, starting with code 160 for bitmap previews,
@@ -4154,6 +4271,25 @@ new_object (char *restrict name, char *restrict dxfname,
       _o->DIMALTU = _o->DIMLUNIT = 2; // default
       _o->DIMFIT = 3;
       _o->DIMLWD = _o->DIMLWE = -2;
+    }
+  else if (obj->fixedtype == DWG_TYPE_TABLESTYLE)
+    {
+      Dwg_Object_TABLESTYLE *_o = obj->tio.object->tio.TABLESTYLE;
+      _o->num_rowstyles = 3;
+      _o->rowstyles = calloc (3, sizeof (Dwg_TABLESTYLE_rowstyles));
+      for (j = 0; j < 3; j++)
+        {
+          _o->rowstyles[i].borders = calloc (6, sizeof (Dwg_TABLESTYLE_border));
+          _o->rowstyles[i].num_borders = 6;
+          for (k = 0; k < 3; k++) // defaults: ByLayer
+            {
+              _o->rowstyles[i].borders[k].visible = 1;
+              _o->rowstyles[i].borders[k].linewt = 29;
+              _o->rowstyles[i].borders[k].color.index = 256;
+            }
+        }
+      k = 0;
+      j = 0;
     }
 
   // read table fields until next 0 table or 0 ENDTAB
@@ -5464,6 +5600,14 @@ new_object (char *restrict name, char *restrict dxfname,
                   if (pair && pair->code == 301)
                     goto next_pair;
                   goto start_loop;
+                }
+              else if (obj->fixedtype == DWG_TYPE_TABLESTYLE)
+                {
+                  // for the unknown subfields: 7, 140, ...
+                  pair = add_TABLESTYLE (obj, dat, pair);
+                  // returns with 0
+                  if (pair && pair->code == 0)
+                    goto start_loop;
                 }
               else if (strEQc (name, "BLOCK")
                        && (pair->code == 70 || pair->code == 10

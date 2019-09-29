@@ -6479,6 +6479,8 @@ BD,	DXF 41
 B,	DXF 280
 @item header_suppressed
 B,	DXF 281
+@item num_rowstyles
+BL
 @item rowstyles
 Dwg_TABLESTYLE_rowstyles*
 @item num_cells
@@ -7146,7 +7148,7 @@ BLd,	DXF 92
 @item line_type
 H
 @item invisible
-BL,	DXF 93
+B,	DXF 93
 @item double_line_spacing
 BD,	DXF 93
 @item parent
@@ -8073,6 +8075,24 @@ struct _dwg_object_TABLESTYLE*
 @end vtable
 @end indentedblock
 
+@strong{Dwg_TABLESTYLE_border} @anchor{Dwg_TABLESTYLE_border}
+@vindex Dwg_TABLESTYLE_border
+
+@indentedblock
+@vtable @code
+
+@item linewt
+BSd
+@item visible
+B
+@item color
+CMC
+@item parent
+struct _dwg_TABLESTYLE_rowstyles*
+
+@end vtable
+@end indentedblock
+
 @strong{Dwg_TABLESTYLE_rowstyles} @anchor{Dwg_TABLESTYLE_rowstyles}
 @vindex Dwg_TABLESTYLE_rowstyles
 
@@ -8091,14 +8111,16 @@ CMC
 CMC
 @item has_bgcolor
 B,	DXF 283
+@item num_borders
+BL
 @item borders
-Dwg_BorderStyle*
+Dwg_TABLESTYLE_border*
 @item data_type
 BL,	DXF 90
 @item unit_type
 BL,	DXF 91
 @item format_string
-TV,	DXF 1
+TU,	DXF 1
 @item parent
 struct _dwg_object_TABLESTYLE*
 

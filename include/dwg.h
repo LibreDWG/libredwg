@@ -3367,7 +3367,7 @@ typedef struct _dwg_BorderStyle
   BITCODE_CMC color;
   BITCODE_BLd linewt;
   BITCODE_H line_type;
-  BITCODE_BL invisible;
+  BITCODE_B invisible;
   BITCODE_BD double_line_spacing;
 
   struct _dwg_CellStyle *parent;
@@ -3481,6 +3481,15 @@ typedef struct _dwg_TABLESTYLE_Cell
   struct _dwg_object_TABLESTYLE *parent;
 } Dwg_TABLESTYLE_Cell;
 
+typedef struct _dwg_TABLESTYLE_border
+{
+  BITCODE_BSd linewt;
+  BITCODE_B visible;
+  BITCODE_CMC color;
+
+  struct _dwg_TABLESTYLE_rowstyles *parent;
+} Dwg_TABLESTYLE_border;
+
 typedef struct _dwg_TABLESTYLE_rowstyles
 {
   BITCODE_H text_style;
@@ -3491,11 +3500,12 @@ typedef struct _dwg_TABLESTYLE_rowstyles
   BITCODE_B has_bgcolor;
 
   //6: top, horizontal inside, bottom, left, vertical inside, right
-  Dwg_BorderStyle *borders;
+  BITCODE_BL num_borders; // always 6
+  Dwg_TABLESTYLE_border *borders;
 
-  BITCODE_BL data_type;
+  BITCODE_BL data_type;  // r2007+
   BITCODE_BL unit_type;
-  BITCODE_TV format_string;
+  BITCODE_TU format_string;
 
   struct _dwg_object_TABLESTYLE *parent;
 } Dwg_TABLESTYLE_rowstyles;
@@ -3514,9 +3524,10 @@ typedef struct _dwg_object_TABLESTYLE
   BITCODE_B header_suppressed;
 
   // 0: data, 1: title, 2: header
+  BITCODE_BL num_rowstyles; // always 3
   Dwg_TABLESTYLE_rowstyles *rowstyles;
 
-  BITCODE_BL num_cells;
+  BITCODE_BL num_cells;   // r2010+ nyi
   Dwg_TABLESTYLE_Cell* cells;
 } Dwg_Object_TABLESTYLE;
 

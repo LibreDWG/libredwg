@@ -34082,6 +34082,22 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_BL num_rowstyles;
+    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "num_rowstyles", &num_rowstyles, NULL)
+        && num_rowstyles == tablestyle->num_rowstyles)
+      pass ();
+    else
+      fail ("TABLESTYLE.num_rowstyles [BL] %u != %u", tablestyle->num_rowstyles, num_rowstyles);
+    num_rowstyles++;
+    if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "num_rowstyles", &num_rowstyles, 0)
+        && num_rowstyles == tablestyle->num_rowstyles)
+      pass ();
+    else
+      fail ("TABLESTYLE.num_rowstyles [BL] set+1 %u != %u", tablestyle->num_rowstyles, num_rowstyles);
+    tablestyle->num_rowstyles--;
+
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "parent", &parent, NULL)
         && !memcmp (&parent, &tablestyle->parent, sizeof (tablestyle->parent)))
@@ -34091,11 +34107,13 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
   }
   {
     Dwg_TABLESTYLE_rowstyles* rowstyles;
-    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "rowstyles", &rowstyles, NULL)
-        && !memcmp (&rowstyles, &tablestyle->rowstyles, sizeof (tablestyle->rowstyles)))
-        pass ();
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "num_rowstyles", &count, NULL)
+        && dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "rowstyles", &rowstyles, NULL)
+        && rowstyles == tablestyle->rowstyles)
+      pass ();
     else
-        fail ("TABLESTYLE.rowstyles [Dwg_TABLESTYLE_rowstyles*]");
+      fail ("TABLESTYLE.rowstyles [Dwg_TABLESTYLE_rowstyles*] * %u num_rowstyles", count);
   }
   {
     BITCODE_B title_suppressed;

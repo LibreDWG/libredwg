@@ -4487,11 +4487,11 @@ DWG_OBJECT_END
       FIELD_BL (sty.num_borders, 94); /* 0-6 */ \
       REPEAT2(sty.num_borders, sty.border, Dwg_BorderStyle) \
       REPEAT_BLOCK \
-          SUB_FIELD_BL (sty.border[rcount2],edge_flags, 95);              \
+          SUB_FIELD_BL (sty.border[rcount2],edge_flags, 95);                \
           SUB_FIELD_BL (sty.border[rcount2],border_property_overrides_flag, 90); \
           SUB_FIELD_BL (sty.border[rcount2],border_type, 91);               \
           SUB_FIELD_CMC (sty.border[rcount2],color, 62,420);                \
-          SUB_FIELD_BLd (sty.border[rcount2],linewt, 92);                    \
+          SUB_FIELD_BLd (sty.border[rcount2],linewt, 92);                   \
           SUB_FIELD_HANDLE (sty.border[rcount2],line_type, 3, 340);         \
           SUB_FIELD_BL (sty.border[rcount2],invisible, 93);                 \
           SUB_FIELD_BD (sty.border[rcount2],double_line_spacing, 93);       \
@@ -5236,6 +5236,7 @@ DWG_OBJECT(TABLESTYLE)
     FIELD_B (title_suppressed, 280);
     FIELD_B (header_suppressed, 281);
 
+    FIELD_VALUE(num_rowstyles) = 3;
     // 0: data, 1: title, 2: header
     REPEAT_CN(3, rowstyles, Dwg_TABLESTYLE_rowstyles)
     REPEAT_BLOCK
@@ -5247,12 +5248,13 @@ DWG_OBJECT(TABLESTYLE)
         SUB_FIELD_CMC (rowstyle,fill_color, 63,0);
         SUB_FIELD_B (rowstyle,has_bgcolor, 283);
 
+        _obj->rowstyle.num_borders = 6;
         // top, horizontal inside, bottom, left, vertical inside, right
-        _REPEAT_CN(6, rowstyle.borders, Dwg_BorderStyle, 2)
+        _REPEAT_CN(6, rowstyle.borders, Dwg_TABLESTYLE_border, 2)
         REPEAT_BLOCK
             #define border rowstyle.borders[rcount2]
-            SUB_FIELD_BLd (border,linewt, 274+rcount2);
-            SUB_FIELD_B (border,invisible, 284+rcount2);
+            SUB_FIELD_BSd (border,linewt, 274+rcount2);
+            SUB_FIELD_B (border,visible, 284+rcount2);
             SUB_FIELD_CMC (border,color, 64+rcount2, 0);
         END_REPEAT_BLOCK
         END_REPEAT(rowstyle.borders)
@@ -5260,7 +5262,7 @@ DWG_OBJECT(TABLESTYLE)
         SINCE(R_2007) {
           SUB_FIELD_BL (rowstyle,data_type, 90);
           SUB_FIELD_BL (rowstyle,unit_type, 91);
-          SUB_FIELD_T (rowstyle,format_string, 1);
+          SUB_FIELD_TU (rowstyle,format_string, 1);
         }
     END_REPEAT_BLOCK
     END_REPEAT(rowstyles)
