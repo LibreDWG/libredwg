@@ -2984,6 +2984,114 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return pair;
 }
 
+// starts with 71 or 75
+static Dxf_Pair *
+add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+              Dxf_Pair *restrict pair)
+{
+  Dwg_Object_DIMASSOC *o = obj->tio.object->tio.DIMASSOC;
+  Dwg_Data *dwg = obj->parent;
+  int i = -1;
+  int have_rotated_type = 0;
+  o->ref = calloc (4, sizeof (Dwg_DIMASSOC_Ref));
+
+  while (pair->code != 0)
+    {
+      switch (pair->code)
+        {
+        case 0:
+          break;
+        case 71: // not always
+          i++;
+          while (!(o->associativity & (1<<i)) && i < 4) // popcount x
+            i++;
+          assert (i >= 0 && i <= 3);
+          o->ref[i].rotated_type = pair->value.i;
+          have_rotated_type = 1; // early bump
+          LOG_TRACE ("%s.ref[%d].rotated_type = %d [BS %d]\n",
+                     obj->name, i, pair->value.i, pair->code);
+          break;
+        case 1:
+          if (strNE (pair->value.s, "AcDbOsnapPointRef"))
+            {
+              LOG_ERROR ("Invalid DIMASSOC subclass %s", pair->value.s);
+              return pair;
+            }
+          if (!have_rotated_type) // not already bumped
+            {
+              o->ref[i].rotated_type = 1; // the default
+              i++;
+              while (!(o->associativity & (1<<i)) && i < 4) // popcount x
+                i++;
+              assert (i >= 0 && i <= 3);
+            }
+          o->ref[i].classname = strdup (pair->value.s);
+          LOG_TRACE ("%s.ref[%d].classname = %s [TV %d]\n",
+                     obj->name, i, pair->value.s, pair->code);
+          have_rotated_type = 0;
+          break;
+        case 72:
+          o->ref[i].osnap_type = pair->value.i;
+          LOG_TRACE ("%s.ref[%d].osnap_type = %d [RC %d]\n",
+                     obj->name, i, pair->value.i, pair->code);
+          break;
+        case 331:
+          o->ref[i].mainobj = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+          LOG_TRACE ("%s.ref[%d].mainobj = " FORMAT_REF " [H %d]\n",
+                       obj->name, i, ARGS_REF(o->ref[i].mainobj), pair->code);
+          break;
+        case 332:
+          o->ref[i].intsectobj = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+          LOG_TRACE ("%s.ref[%d].intsectobj = " FORMAT_REF " [H %d]\n",
+                       obj->name, i, ARGS_REF(o->ref[i].intsectobj), pair->code);
+          break;
+        case 73:
+          o->ref[i].main_subent_type = pair->value.i;
+          LOG_TRACE ("%s.ref[%d].main_subent_type = %d [BS %d]\n",
+                     obj->name, i, pair->value.i, pair->code);
+          break;
+        case 74:
+          o->ref[i].intsect_subent_type = pair->value.i;
+          LOG_TRACE ("%s.ref[%d].intsect_subent_type = %d [BS %d]\n",
+                     obj->name, i, pair->value.i, pair->code);
+          break;
+        case 75:
+          o->ref[i].has_lastpt_ref = pair->value.i;
+          LOG_TRACE ("%s.ref[%d].has_lastpt_ref = %d [B %d]\n",
+                     obj->name, i, pair->value.i, pair->code);
+          break;
+        case 91:
+          o->ref[i].main_gsmarker = pair->value.i;
+          LOG_TRACE ("%s.ref[%d].main_gsmarker = %d [BL %d]\n",
+                     obj->name, i, pair->value.i, pair->code);
+          break;
+        case 40:
+          o->ref[i].osnap_dist = pair->value.d;
+          LOG_TRACE ("%s.ref[%d].osnap_dist = %f [BD %d]\n",
+                     obj->name, i, pair->value.d, pair->code);
+          break;
+        case 10:
+          o->ref[i].osnap_pt.x = pair->value.d;
+          break;
+        case 20:
+          o->ref[i].osnap_pt.y = pair->value.d;
+          break;
+        case 30:
+          o->ref[i].osnap_pt.z = pair->value.d;
+          LOG_TRACE ("%s.ref[%d].osnap_pt = (%f, %f, %f) [3BD 10]\n",
+                     obj->name, i, o->ref[i].osnap_pt.x, o->ref[i].osnap_pt.y,
+                     pair->value.d);
+          break;
+        default:
+          LOG_ERROR ("Unknown DXF code %d for %s", pair->code,
+                     "DIMASSOC");
+        }
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+    }
+  return pair;
+}
+
 
 // with ASSOC2DCONSTRAINTGROUP, ASSOCNETWORK, ASSOCACTION
 static Dxf_Pair *
@@ -4658,6 +4766,8 @@ new_object (char *restrict name, char *restrict dxfname,
               else if (strstr (obj->name, "ASSOC")
                        && strEQc (subclass, "AcDbAssocAction"))
                 {
+                  dxf_free_pair (pair);
+                  pair = dxf_read_pair (dat);
                   pair = add_ASSOCACTION (obj, dat, pair); // NULL for success
                   if (!pair)
                     {
@@ -5066,7 +5176,6 @@ new_object (char *restrict name, char *restrict dxfname,
               _o->data = calloc (pair->value.l, 1);
               LOG_TRACE ("OLE2FRAME.data_length = %ld [BL 90]\n", pair->value.l);
             }
-          // with PERSSUBENTMANAGER
           else if (pair->code == 90 && obj->fixedtype == DWG_TYPE_PERSSUBENTMANAGER)
             {
               pair = add_PERSSUBENTMANAGER (obj, dat, pair); // NULL for success
@@ -5074,6 +5183,16 @@ new_object (char *restrict name, char *restrict dxfname,
                 goto next_pair;
               else
                 goto start_loop; /* failure */
+            }
+          else if ((pair->code == 71 || pair->code == 75 || pair->code == 1) &&
+                   obj->fixedtype == DWG_TYPE_DIMASSOC)
+            {
+              pair = add_DIMASSOC (obj, dat, pair);
+              // returns with 0
+              if (pair && pair->code == 0)
+                goto start_loop;
+              else
+                goto search_field;
             }
           else if (pair->code == 310 && obj->fixedtype == DWG_TYPE_OLE2FRAME)
             {

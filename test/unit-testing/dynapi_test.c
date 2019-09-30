@@ -24860,14 +24860,6 @@ static int test_DIMASSOC (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_H dimensionobj;
-    if (dwg_dynapi_entity_value (dimassoc, "DIMASSOC", "dimensionobj", &dimensionobj, NULL)
-        && !memcmp (&dimensionobj, &dimassoc->dimensionobj, sizeof (dimassoc->dimensionobj)))
-        pass ();
-    else
-        fail ("DIMASSOC.dimensionobj [H]");
-  }
-  {
     BITCODE_BL intsect_gsmarker;
     if (dwg_dynapi_entity_value (dimassoc, "DIMASSOC", "intsect_gsmarker", &intsect_gsmarker, NULL)
         && intsect_gsmarker == dimassoc->intsect_gsmarker)
@@ -24882,30 +24874,6 @@ static int test_DIMASSOC (const Dwg_Object *obj)
       fail ("DIMASSOC.intsect_gsmarker [BL] set+1 %u != %u", dimassoc->intsect_gsmarker, intsect_gsmarker);
     dimassoc->intsect_gsmarker--;
 
-  }
-  {
-    BITCODE_H intsectobj;
-    if (dwg_dynapi_entity_value (dimassoc, "DIMASSOC", "intsectobj", &intsectobj, NULL)
-        && !memcmp (&intsectobj, &dimassoc->intsectobj, sizeof (dimassoc->intsectobj)))
-        pass ();
-    else
-        fail ("DIMASSOC.intsectobj [H]");
-  }
-  {
-    BITCODE_H intsectxrefobj;
-    if (dwg_dynapi_entity_value (dimassoc, "DIMASSOC", "intsectxrefobj", &intsectxrefobj, NULL)
-        && !memcmp (&intsectxrefobj, &dimassoc->intsectxrefobj, sizeof (dimassoc->intsectxrefobj)))
-        pass ();
-    else
-        fail ("DIMASSOC.intsectxrefobj [H]");
-  }
-  {
-    BITCODE_H mainobj;
-    if (dwg_dynapi_entity_value (dimassoc, "DIMASSOC", "mainobj", &mainobj, NULL)
-        && !memcmp (&mainobj, &dimassoc->mainobj, sizeof (dimassoc->mainobj)))
-        pass ();
-    else
-        fail ("DIMASSOC.mainobj [H]");
   }
   {
     struct _dwg_object_object* parent;
@@ -24938,14 +24906,6 @@ static int test_DIMASSOC (const Dwg_Object *obj)
       fail ("DIMASSOC.trans_space_flag [RC] set+1 %u != %u", dimassoc->trans_space_flag, trans_space_flag);
     dimassoc->trans_space_flag--;
 
-  }
-  {
-    BITCODE_H xrefobj;
-    if (dwg_dynapi_entity_value (dimassoc, "DIMASSOC", "xrefobj", &xrefobj, NULL)
-        && !memcmp (&xrefobj, &dimassoc->xrefobj, sizeof (dimassoc->xrefobj)))
-        pass ();
-    else
-        fail ("DIMASSOC.xrefobj [H]");
   }
   return failed;
 }

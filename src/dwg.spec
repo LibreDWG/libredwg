@@ -6023,20 +6023,28 @@ DWG_OBJECT(DIMASSOC)
   FIELD_RC (trans_space_flag, 70);
   REPEAT_CN(4, ref, Dwg_DIMASSOC_Ref)
   REPEAT_BLOCK
-      // 0 1 2 3 => 1 2 4 8
-      if (!(FIELD_VALUE(associativity) & (1<<rcount1))) {
+      // 0 1 2 3 => 1 2 4 8. skip unset bits
+      if (!(FIELD_VALUE(associativity) & (1<<rcount1)))
+        {
 #ifdef IS_JSON
-        ENDHASH;
+          ENDHASH;
 #endif
-        continue;
-      }
+          continue;
+        }
+      LOG_TRACE ("rcount1: %d\n", rcount1);
       SUB_FIELD_B  (ref[rcount1], has_lastpt_ref, 75);
       SUB_FIELD_T  (ref[rcount1], classname, 1); // "AcDbOsnapPointRef"
       SUB_FIELD_RC (ref[rcount1], osnap_type, 72);
-      SUB_FIELD_BS (ref[rcount1], main_subent_type, 73);
-      SUB_FIELD_BS (ref[rcount1], intsect_subent_type, 74);
+#if defined(IS_JSON) || defined (IS_DXF) || defined (IS_FREE)
+      if (FIELD_VALUE (ref[rcount1].main_subent_type))
+        SUB_FIELD_HANDLE (ref[rcount1], mainobj, 4, 331);
+      if (FIELD_VALUE (ref[rcount1].intsect_subent_type))
+        SUB_FIELD_HANDLE (ref[rcount1], intsectobj, 4, 332);
+#endif
       SUB_FIELD_BS (ref[rcount1], rotated_type, 71);
+      SUB_FIELD_BS (ref[rcount1], main_subent_type, 73);
       SUB_FIELD_BL (ref[rcount1], main_gsmarker, 91);
+      SUB_FIELD_BS (ref[rcount1], intsect_subent_type, 74);
       SUB_FIELD_BD (ref[rcount1], osnap_dist, 40);
       SUB_FIELD_3BD(ref[rcount1], osnap_pt, 10);
   END_REPEAT_BLOCK
@@ -6045,11 +6053,23 @@ DWG_OBJECT(DIMASSOC)
   //FIELD_BL (intsect_gsmarker, 92);
 
   START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (dimensionobj, 4, 330);
-  FIELD_HANDLE (mainobj, 4, 331);
-  FIELD_HANDLE (intsectobj, 4, 332);
-  FIELD_HANDLE (xrefobj, 4, 0); //as 301
-  FIELD_HANDLE (intsectxrefobj, 4, 0); //as 302
+#if !defined(IS_JSON) && !defined (IS_DXF) && !defined (IS_FREE)
+  _REPEAT_CNF(4, ref, Dwg_DIMASSOC_Ref, 1)
+  REPEAT_BLOCK
+      // skip unset bits
+      if (!(FIELD_VALUE(associativity) & (1<<rcount1)))
+        continue;
+      LOG_TRACE ("rcount1: %d\n", rcount1);
+      if (FIELD_VALUE (ref[rcount1].main_subent_type))
+        SUB_FIELD_HANDLE (ref[rcount1], mainobj, 4, 0);
+      if (FIELD_VALUE (ref[rcount1].intsect_subent_type))
+        SUB_FIELD_HANDLE (ref[rcount1], intsectobj, 4, 0);
+  END_REPEAT_BLOCK
+  END_REPEAT(ref)
+#endif
+  //FIELD_HANDLE (dimensionobj, 4, 330);
+  //FIELD_HANDLE (xrefobj, 4, 301);
+  //FIELD_HANDLE (intsectxrefobj, 4, 302);
 
 DWG_OBJECT_END
 

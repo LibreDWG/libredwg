@@ -527,7 +527,6 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
     for (rcount##idx = 0; rcount##idx < (BITCODE_BL)times; rcount##idx++)
 #define REPEAT_N(times, nam, type) _REPEAT_N(times, nam, type, 1)
 #define REPEAT_CN(times, nam, type) REPEAT_N(times, nam, type)
-#define _REPEAT_CN(times, nam, type, idx) _REPEAT_N (times, nam, type, idx)
 #define _REPEAT_C(times, nam, type, idx) _REPEAT_N (_obj->times, nam, type, idx)
 #define _REPEAT(times, nam, type, idx) _REPEAT_N (_obj->times, nam, type, idx)
 #define REPEAT(times, nam, type) _REPEAT (times, nam, type, 1)
@@ -538,6 +537,7 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
 #define REPEAT2_C(times, nam, type) _REPEAT_C (times, nam, type, 2)
 #define REPEAT3_C(times, nam, type) _REPEAT_C (times, nam, type, 3)
 #define REPEAT4_C(times, nam, type) _REPEAT_C (times, nam, type, 4)
+#define _REPEAT_CN(times, nam, type, idx) _REPEAT_N (times, nam, type, idx)
 #define _REPEAT_CNF(times, nam, type, idx) _REPEAT_N (times, nam, type, idx)
 #define _REPEAT_NF(times, nam, type, idx) _REPEAT_N (times, nam, type, idx)
 

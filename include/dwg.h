@@ -4694,6 +4694,8 @@ typedef struct _dwg_DIMASSOC_ref
   BITCODE_BD osnap_dist;      /*!< DXF 40 */
   BITCODE_3BD osnap_pt;       /*!< DXF 10 */
   BITCODE_B has_lastpt_ref;   /*!< DXF 75 */
+  BITCODE_H mainobj;          /*!< DXF 331 the geometry object */
+  BITCODE_H intsectobj;       /*!< DXF 332 the intersection object */
 } Dwg_DIMASSOC_Ref;
 
 typedef struct _dwg_object_DIMASSOC
@@ -4701,13 +4703,12 @@ typedef struct _dwg_object_DIMASSOC
   struct _dwg_object_object *parent;
   BITCODE_BL associativity;   /*!< DXF 90 */
   BITCODE_RC trans_space_flag;/*!< DXF 70 */
-  Dwg_DIMASSOC_Ref *ref;       /* 1-4x */
+  Dwg_DIMASSOC_Ref *ref;       /* 1-4x, with possible holes,
+                                  depend. on associativity bitmask */
   BITCODE_BL intsect_gsmarker; /*!< DXF 92 */
-  BITCODE_H dimensionobj;     /*!< DXF 330 */
-  BITCODE_H xrefobj;          /*!< DXF 301 */
-  BITCODE_H intsectxrefobj;   /*!< DXF 302 */
-  BITCODE_H mainobj;          /*!< DXF 331 the geometry object */
-  BITCODE_H intsectobj;       /*!< DXF 332 the intersection object */
+  //BITCODE_H dimensionobj;     /*!< DXF 330 */
+  //BITCODE_H xrefobj;          /*!< DXF 301 */
+  //BITCODE_H intsectxrefobj;   /*!< DXF 302 */
 } Dwg_Object_DIMASSOC;
 
 typedef struct _dwg_ACTIONBODY

@@ -4175,16 +4175,6 @@ static const Dwg_DYNAPI_field _dwg_DIMASSOC_fields[] = {
     1,1,0, 0 },
   { "intsect_gsmarker",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_DIMASSOC, intsect_gsmarker),
     0,0,0, 0 },
-  { "dimensionobj",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_DIMASSOC, dimensionobj),
-    1,0,0, 330 },
-  { "xrefobj",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_DIMASSOC, xrefobj),
-    1,0,0, 0 },
-  { "intsectxrefobj",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_DIMASSOC, intsectxrefobj),
-    1,0,0, 0 },
-  { "mainobj",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_DIMASSOC, mainobj),
-    1,0,0, 331 },
-  { "intsectobj",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_DIMASSOC, intsectobj),
-    1,0,0, 332 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_DIMSTYLE: (sorted by offset) */
@@ -6340,6 +6330,10 @@ static const Dwg_DYNAPI_field _dwg_DIMASSOC_ref_fields[] = {
     1,0,0, 0 },
   { "has_lastpt_ref",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_DIMASSOC_ref, has_lastpt_ref),
     0,0,0, 0 },
+  { "mainobj",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_DIMASSOC_ref, mainobj),
+    1,0,0, 0 },
+  { "intsectobj",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_DIMASSOC_ref, intsectobj),
+    1,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_DIMENSION_common: (sorted by offset) */

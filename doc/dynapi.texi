@@ -4614,16 +4614,6 @@ RC,	DXF 70
 Dwg_DIMASSOC_Ref*
 @item intsect_gsmarker
 BL
-@item dimensionobj
-H,	DXF 330
-@item xrefobj
-H
-@item intsectxrefobj
-H
-@item mainobj
-H,	DXF 331
-@item intsectobj
-H,	DXF 332
 
 @end vtable
 @end indentedblock
@@ -7309,6 +7299,10 @@ BD
 3BD
 @item has_lastpt_ref
 B
+@item mainobj
+H
+@item intsectobj
+H
 
 @end vtable
 @end indentedblock
