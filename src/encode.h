@@ -35,5 +35,6 @@ uint32_t dwg_section_page_checksum (const uint32_t seed, Bit_Chain *dat,
     If obj->dxfname is NULL, the search is done by index, without any fixups.
  */
 Dwg_Class *dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj);
+char *encrypt_sat1 (BITCODE_BL blocksize, BITCODE_RC *acis_data, int *idx);
 
 #endif

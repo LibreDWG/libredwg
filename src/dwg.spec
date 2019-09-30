@@ -1846,12 +1846,97 @@ static int encode_3dsolid(Bit_Chain* dat, Bit_Chain* hdl_dat,
                           Dwg_Object *restrict obj,
                           Dwg_Entity_3DSOLID *restrict _obj)
 {
+  Dwg_Data* dwg = obj->parent;
+  //BITCODE_BL j;
+  //BITCODE_BL vcount;
+  BITCODE_BL i = 0;
+  BITCODE_BL num_blocks = FIELD_VALUE (num_blocks);
+  int idx = 0;
   int error = 0;
-  //TODO Implement-me
-  assert(dat);
-  assert(obj);
-  LOG_ERROR("encode_3dsolid nyi")
-  return DWG_ERR_NOTYETSUPPORTED;
+
+  FIELD_B (acis_empty, 0);
+  if (!FIELD_VALUE (acis_empty))
+    {
+      FIELD_B (unknown, 0);
+      FIELD_BS (version, 70);
+      // which is SAT format ACIS 4.0 (since r2000+)
+      if (FIELD_VALUE (version) == 1)
+        {
+          // from decode and indxf we already have all fields.
+          // from other importers we have acis_data, but maybe not
+          // encr_sat_data.
+          if (!num_blocks)
+            num_blocks = 100; // max
+          if (!FIELD_VALUE (block_size))
+            {
+              if (!FIELD_VALUE (acis_data))
+                {
+                  VALUE_RL (0, 0);
+                  return error;
+                }
+              FIELD_VALUE (block_size) = calloc (2, sizeof (BITCODE_BL));
+              FIELD_VALUE (block_size[0]) = strlen ((char*)FIELD_VALUE (acis_data));
+              FIELD_VALUE (block_size[1]) = 0;
+              LOG_TRACE ("default block_size[0] = %d\n", (int)FIELD_VALUE (block_size[0]));
+              num_blocks = 1;
+            }
+          LOG_TRACE ("acis_data:\n%s\n", FIELD_VALUE (acis_data));
+          for (i = 0; FIELD_VALUE (block_size[i]) && i < num_blocks; i++)
+            {
+              if (!FIELD_VALUE (encr_sat_data[i]))
+                {
+                  if (!FIELD_VALUE (acis_data))
+                    {
+                      VALUE_RL (0, 0);
+                      return error;
+                    }
+                  FIELD_VALUE (encr_sat_data[i])
+                    = encrypt_sat1 (FIELD_VALUE (block_size[i]),
+                                    FIELD_VALUE (acis_data), &idx);
+                  LOG_TRACE ("encrypt_sat1 %d\n", i);
+                }
+              FIELD_BL (block_size[i], 0);
+              FIELD_TF (encr_sat_data[i], FIELD_VALUE (block_size[i]), 1);
+            }
+        }
+      else //if (FIELD_VALUE(version)==2)
+        {
+          LOG_TRACE ("acis_data:\n%s\n", FIELD_VALUE (acis_data));
+          VALUE_RL (15, 0);
+          if (!FIELD_VALUE (encr_sat_data) || !FIELD_VALUE (encr_sat_data[0]))
+            bit_write_TF (dat, (BITCODE_TF)"ACIS BinaryFile", 15);
+          else
+            FIELD_TF (encr_sat_data[0], 15, 1);
+          if (!FIELD_VALUE (block_size))
+            {
+              FIELD_VALUE (block_size) = calloc (3, sizeof (BITCODE_BL));
+              FIELD_VALUE (block_size[0]) = 15;
+              if (!FIELD_VALUE (acis_data))
+                {
+                  VALUE_RL (0, 0);
+                  return error;
+                }
+              FIELD_VALUE (block_size[1]) = strlen ((char*)FIELD_VALUE (acis_data));
+              LOG_TRACE ("default block_size[0] = %d\n", (int)FIELD_VALUE (block_size[1]));
+            }
+          if (!FIELD_VALUE (block_size[1]))
+            {
+              if (FIELD_VALUE (acis_data))
+                FIELD_VALUE (block_size[1]) = strlen ((char*)FIELD_VALUE (acis_data));
+              else if (FIELD_VALUE (encr_sat_data[1]))
+                FIELD_VALUE (block_size[1]) = strlen (FIELD_VALUE (encr_sat_data[1]));
+              else
+                {
+                  VALUE_RL (0, 0);
+                  return error;
+                }
+            }
+          FIELD_RL (block_size[1], 0);
+          // Binary SAB, unencrypted
+          FIELD_TF (encr_sat_data[1], FIELD_VALUE (block_size[1]), 1);
+        }
+    }
+  return error;
 }
 #else
 #define ENCODE_3DSOLID {}
