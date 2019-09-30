@@ -2994,7 +2994,6 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   Dwg_Data *dwg = obj->parent;
 
 #define EXPECT_INT_DXF(field, dxf, type)                                      \
-  pair = dxf_read_pair (dat);                                                 \
   if (pair->code != dxf)                                                      \
     {                                                                         \
       LOG_ERROR ("%s: Unexpected DXF code %d, expected %d for %s", obj->name, \
@@ -3007,7 +3006,6 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   dxf_free_pair (pair)
 
 #define EXPECT_H_DXF(field, htype, dxf, type)                                 \
-  pair = dxf_read_pair (dat);                                                 \
   if (pair->code != dxf)                                                      \
     {                                                                         \
       LOG_ERROR ("%s: Unexpected DXF code %d, expected %d for %s", obj->name, \
@@ -3024,12 +3022,80 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   dxf_free_pair (pair)
 
   EXPECT_INT_DXF ("solution_status", 90, BL);
+  pair = dxf_read_pair (dat);
   EXPECT_INT_DXF ("geometry_status", 90, BL);
+  pair = dxf_read_pair (dat);
   EXPECT_H_DXF ("readdep", 5, 330, H); // or vector?
+  pair = dxf_read_pair (dat);
   EXPECT_H_DXF ("writedep", 5, 360, H);
+  pair = dxf_read_pair (dat);
   EXPECT_INT_DXF ("constraint_status", 90, BL);
+  pair = dxf_read_pair (dat);
   EXPECT_INT_DXF ("dof", 90, BL);
+  pair = dxf_read_pair (dat);
   EXPECT_INT_DXF ("is_body_a_proxy", 90, B);
+
+  return NULL;
+}
+
+static Dxf_Pair *
+add_PERSSUBENTMANAGER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                       Dxf_Pair *restrict pair)
+{
+  Dwg_Object_PERSSUBENTMANAGER *o = obj->tio.object->tio.PERSSUBENTMANAGER;
+  Dwg_Data *dwg = obj->parent;
+
+  EXPECT_INT_DXF ("class_version", 90, BL);
+  pair = dxf_read_pair (dat);
+  EXPECT_INT_DXF ("unknown_bl1", 90, BL);
+  pair = dxf_read_pair (dat);
+  EXPECT_INT_DXF ("unknown_bl2", 90, BL);
+  pair = dxf_read_pair (dat);
+  EXPECT_INT_DXF ("unknown_bl3", 90, BL);
+  pair = dxf_read_pair (dat);
+  EXPECT_INT_DXF ("unknown_bl4", 90, BL);
+  pair = dxf_read_pair (dat);
+  EXPECT_INT_DXF ("unknown_bl5", 90, BL);
+  pair = dxf_read_pair (dat);
+  EXPECT_INT_DXF ("unknown_bl6", 90, BL);
+
+  return NULL;
+}
+
+static Dxf_Pair *
+add_ASSOCDEPENDENCY (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                       Dxf_Pair *restrict pair)
+{
+  Dwg_Object_ASSOCDEPENDENCY *o = obj->tio.object->tio.ASSOCDEPENDENCY;
+  Dwg_Data *dwg = obj->parent;
+
+  EXPECT_INT_DXF ("class_version", 90, BL);
+  pair = dxf_read_pair (dat);
+  EXPECT_INT_DXF ("status", 90, BL);
+  pair = dxf_read_pair (dat);
+  EXPECT_INT_DXF ("isread_dep", 290, B);
+  pair = dxf_read_pair (dat);
+  EXPECT_INT_DXF ("iswrite_dep", 290, B);
+  pair = dxf_read_pair (dat);
+  EXPECT_INT_DXF ("isobjectstate_dep", 290, B);
+  pair = dxf_read_pair (dat);
+  EXPECT_INT_DXF ("unknown_b4", 290, B);
+  pair = dxf_read_pair (dat);
+  EXPECT_INT_DXF ("order", 90, BL);
+  pair = dxf_read_pair (dat);
+  EXPECT_H_DXF ("readdep", 5, 330, H); //?
+  pair = dxf_read_pair (dat);
+  EXPECT_INT_DXF ("unknown_b5", 290, B);
+  pair = dxf_read_pair (dat);
+  EXPECT_INT_DXF ("depbodyid", 90, BL);
+  pair = dxf_read_pair (dat);
+  EXPECT_H_DXF ("readdep", 5, 330, H);
+  pair = dxf_read_pair (dat);
+  EXPECT_H_DXF ("node", 5, 330, H);
+  pair = dxf_read_pair (dat);
+  EXPECT_H_DXF ("writedep", 5, 360, H);
+  pair = dxf_read_pair (dat);
+  EXPECT_INT_DXF ("depbodyid", 90, BL); //?
 
   return NULL;
 }
@@ -4563,6 +4629,31 @@ new_object (char *restrict name, char *restrict dxfname,
                       UPGRADE_ENTITY (VERTEX_2D, VERTEX_PFACE_FACE)
                     }
                 }
+              // with PERSSUBENTMANAGER
+              else if (obj->fixedtype == DWG_TYPE_PERSSUBENTMANAGER
+                       && strEQc (subclass, "AcDbPersSubentManager"))
+                {
+                  dxf_free_pair (pair);
+                  pair = dxf_read_pair (dat);
+                  pair = add_PERSSUBENTMANAGER (obj, dat, pair); // NULL for success
+                  if (!pair)
+                    goto next_pair;
+                  else
+                    goto start_loop; /* failure */
+                }
+              // with ASSOCDEPENDENCY or ACDBASSOCGEOMDEPENDENCY
+              else if (strstr (obj->name, "ASSOC") &&
+                       strstr (obj->name, "DEPENDENCY") &&
+                       strEQc (subclass, "AcDbAssocDependency"))
+                {
+                  dxf_free_pair (pair);
+                  pair = dxf_read_pair (dat);
+                  pair = add_ASSOCDEPENDENCY (obj, dat, pair); // NULL for success
+                  if (!pair)
+                    goto next_pair;
+                  else
+                    goto start_loop; /* failure */
+                }
               // with ASSOC2DCONSTRAINTGROUP, ASSOCNETWORK, ASSOCACTION
               else if (strstr (obj->name, "ASSOC")
                        && strEQc (subclass, "AcDbAssocAction"))
@@ -4974,6 +5065,15 @@ new_object (char *restrict name, char *restrict dxfname,
               _o->data_length = pair->value.l;
               _o->data = calloc (pair->value.l, 1);
               LOG_TRACE ("OLE2FRAME.data_length = %ld [BL 90]\n", pair->value.l);
+            }
+          // with PERSSUBENTMANAGER
+          else if (pair->code == 90 && obj->fixedtype == DWG_TYPE_PERSSUBENTMANAGER)
+            {
+              pair = add_PERSSUBENTMANAGER (obj, dat, pair); // NULL for success
+              if (!pair)
+                goto next_pair;
+              else
+                goto start_loop; /* failure */
             }
           else if (pair->code == 310 && obj->fixedtype == DWG_TYPE_OLE2FRAME)
             {
