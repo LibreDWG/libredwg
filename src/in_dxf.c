@@ -4059,6 +4059,58 @@ move_out_LTYPE_CONTROL (Dwg_Object *restrict obj,
     }
 }
 
+static void
+postprocess_TEXTlike (Dwg_Object *obj)
+{
+  BITCODE_RC dataflags;
+  BITCODE_2RD alignment_pt;
+  BITCODE_RD oblique_ang, rotation, width_factor;
+  BITCODE_BS generation, horiz_alignment, vert_alignment;
+  BITCODE_H style;
+  Dwg_Entity_TEXT *_obj = obj->tio.entity->tio.TEXT;
+
+  dwg_dynapi_entity_value (_obj, obj->name, "dataflags", &dataflags, NULL);
+  dwg_dynapi_entity_value (_obj, obj->name, "alignment_pt", &alignment_pt, NULL);
+  dwg_dynapi_entity_value (_obj, obj->name, "oblique_ang", &oblique_ang, NULL);
+  dwg_dynapi_entity_value (_obj, obj->name, "rotation", &rotation, NULL);
+  dwg_dynapi_entity_value (_obj, obj->name, "width_factor", &width_factor, NULL);
+  dwg_dynapi_entity_value (_obj, obj->name, "generation", &generation, NULL);
+  dwg_dynapi_entity_value (_obj, obj->name, "horiz_alignment", &horiz_alignment, NULL);
+  dwg_dynapi_entity_value (_obj, obj->name, "vert_alignment", &vert_alignment, NULL);
+  dwg_dynapi_entity_value (_obj, obj->name, "style", &style, NULL);
+
+  if (alignment_pt.x == 0.0 && alignment_pt.y == 0.0)
+    dataflags |= 2;
+  if (oblique_ang == 0.0)
+    dataflags |= 4;
+  if (rotation == 0.0)
+    dataflags |= 8;
+  if (width_factor == 0.0)
+    dataflags |= 0x10;
+  if (generation == 0)
+    dataflags |= 0x20;
+  if (horiz_alignment == 0)
+    dataflags |= 0x40;
+  if (vert_alignment == 0)
+    dataflags |= 0x80;
+
+  if (!style)
+    {
+      Dwg_Data *dwg = obj->parent;
+      // set style to Standard (5.1.11)
+      style = dwg_find_tablehandle_silent (dwg, "Standard", "STYLE");
+      if (style)
+        {
+          if (style->handleref.code != 5)
+            style = dwg_add_handleref (dwg, 5, style->absolute_ref, NULL);
+          dwg_dynapi_entity_set_value (_obj, obj->name, "style", &style, 0);
+          LOG_TRACE ("%s.style = " FORMAT_REF "\n", obj->name, ARGS_REF (style));
+        }
+    }
+  dwg_dynapi_entity_set_value (_obj, obj->name, "dataflags", &dataflags, 0);
+  LOG_TRACE ("%s.dataflags = 0x%x\n", obj->name, dataflags);
+}
+
 #define UPGRADE_ENTITY(FROM, TO)                                              \
   obj->type = obj->fixedtype = DWG_TYPE_##TO;                                 \
   obj->name = obj->dxfname = (char *)#TO;                                     \
@@ -4070,6 +4122,15 @@ move_out_LTYPE_CONTROL (Dwg_Object *restrict obj,
       _obj = realloc (_obj, sizeof (Dwg_Entity_##TO));                        \
       obj->tio.entity->tio.TO = (Dwg_Entity_##TO *)_obj;                      \
     }
+
+static int
+is_textlike (Dwg_Object *obj)
+{
+  // has dataflags and common text fields
+  return obj->fixedtype == DWG_TYPE_TEXT ||
+    obj->fixedtype == DWG_TYPE_ATTDEF ||
+    obj->fixedtype == DWG_TYPE_ATTRIB;
+}
 
 /* For tables, entities and objects.
  */
@@ -4290,6 +4351,28 @@ new_object (char *restrict name, char *restrict dxfname,
         }
       k = 0;
       j = 0;
+    }
+  /*
+  else if (is_textlike (obj))
+    {
+      BITCODE_RC dataflags = 0x2 + 0x4 + 0x8;
+      dwg_dynapi_entity_set_value (_obj, obj->name, "dataflags",
+                                   &dataflags, 0);
+    }
+  */
+  else if (obj->fixedtype == DWG_TYPE_MTEXT)
+    {
+      BITCODE_H style;
+      Dwg_Entity_MTEXT *_o = obj->tio.entity->tio.MTEXT;
+      _o->x_axis_dir.x = 1.0;
+      // set style to Standard (5.1.11)
+      style = dwg_find_tablehandle_silent (dwg, "Standard", "STYLE");
+      if (style)
+        {
+          if (style->handleref.code != 5)
+            style = dwg_add_handleref (dwg, 5, style->absolute_ref, NULL);
+          _o->style = style;
+        }
     }
 
   // read table fields until next 0 table or 0 ENDTAB
@@ -4989,7 +5072,7 @@ new_object (char *restrict name, char *restrict dxfname,
               LOG_TRACE ("VERTEX_PFACE_FACE.vertind[%d] = %d [BS %d]\n", j,
                          pair->value.i, pair->code);
             }
-          else if (strEQc (name, "SPLINE"))
+          else if (obj->fixedtype == DWG_TYPE_SPLINE)
             {
               if (pair->code == 210 || pair->code == 220 || pair->code == 230)
                 break; // ignore extrusion in the dwg (planar only)
@@ -4999,7 +5082,7 @@ new_object (char *restrict name, char *restrict dxfname,
               else
                 goto search_field;
             }
-          else if (strEQc (name, "HATCH"))
+          else if (obj->fixedtype == DWG_TYPE_HATCH)
             {
               if (pair->code == 10 || pair->code == 20)
                 break; // elevation
@@ -5014,7 +5097,25 @@ new_object (char *restrict name, char *restrict dxfname,
               else
                 goto search_field;
             }
-          else if (strEQc (name, "MESH"))
+          else if (is_textlike (obj))
+            {
+              BITCODE_RC dataflags;
+              if (pair->code == 10 || pair->code == 20)
+                goto search_field;
+              else if (pair->code == 30 && pair->value.d == 0.0)
+                {
+                  dwg_dynapi_entity_value (_obj, obj->name, "dataflags",
+                                           &dataflags, NULL);
+                  dataflags |= 1;
+                  LOG_TRACE ("%s.elevation 0.0 => dataflags = 0x%x\n",
+                             obj->name, dataflags);
+                  dwg_dynapi_entity_set_value (_obj, obj->name, "dataflags",
+                                               &dataflags, 0);
+                }
+              else
+                goto search_field;
+            }
+          else if (obj->fixedtype == DWG_TYPE_MESH)
             {
               if (pair->code == 91)
                 {
@@ -5026,7 +5127,7 @@ new_object (char *restrict name, char *restrict dxfname,
               else
                 goto search_field;
             }
-          else if (strEQc (name, "DBCOLOR"))
+          else if (obj->fixedtype == DWG_TYPE_DBCOLOR)
             {
               Dwg_Object_DBCOLOR *o = obj->tio.object->tio.DBCOLOR;
               if (pair->code == 62)
@@ -5054,7 +5155,7 @@ new_object (char *restrict name, char *restrict dxfname,
               else
                 goto search_field;
             }
-          else if (strEQc (name, "MLEADERSTYLE"))
+          else if (obj->fixedtype == DWG_TYPE_MLEADERSTYLE)
             {
               Dwg_Object_MLEADERSTYLE *o = obj->tio.object->tio.MLEADERSTYLE;
               if (pair->code == 47)
@@ -5071,7 +5172,7 @@ new_object (char *restrict name, char *restrict dxfname,
               else
                 goto search_field;
             }
-          else if (strEQc (name, "MTEXT") && pair->code == 50)
+          else if (obj->fixedtype == DWG_TYPE_MTEXT && pair->code == 50)
             {
               Dwg_Entity_MTEXT *o = obj->tio.entity->tio.MTEXT;
               if (!o->num_column_heights)
@@ -5084,7 +5185,7 @@ new_object (char *restrict name, char *restrict dxfname,
               LOG_TRACE ("MTEXT.column_heights[%d] = %f [BD* 50]\n", j,
                          pair->value.d);
             }
-          else if (strEQc (name, "LEADER")
+          else if (obj->fixedtype == DWG_TYPE_LEADER
                    && (pair->code == 10 || pair->code == 20
                        || pair->code == 30))
             {
@@ -5651,6 +5752,8 @@ new_object (char *restrict name, char *restrict dxfname,
       o->has_no_flags = 1;
       LOG_TRACE ("_3DFACE.has_no_flags = 1 [B]\n");
     }
+  else if (is_textlike (obj))
+    postprocess_TEXTlike (obj);
 
   // common_entity_handle_data:
   // set xdic_missing_flag and xdicobjhandle if <2004

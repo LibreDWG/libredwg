@@ -39,7 +39,7 @@
   NPOCOLLECTION OBJECT_PTR PLOTSETTINGS PROXY_OBJECT
   RASTERVARIABLES SPATIAL_INDEX UCS VBA_PROJECT VIEW VPORT_ENTITY_CONTROL
   VPORT_ENTITY_HEADER
-* check-dxf: DXFIN coverage for all generated dxfs. some objects even crash acad:
+* check-dxf/outdxf: DXFIN coverage for all generated dxfs. some objects even crash acad:
   VERTEX_3D, MLINE.
 * DXFIN errors:
   Drawing_2007-18: XRECORD starting at line 5318: Could not set the Color dictionary:
@@ -47,10 +47,8 @@
   *2007: XRECORD read error
   example_2000: REGION starting at line 2506: Xdata wasn't read
   Drawing_2000_min: crash at AcDbLine
-* INDXF:
-  MTEXT: 11, 42, 43
+* indxf (dxf2dwg):
   REGION: encr_sat_data
-  ATTDEF, ATTRIB, TEXT: skip defaults (elevation, ...)
   INSERT.block_header missing
   WIPEOUT.uvec wrong
   WIPEOUT.imagedefreactor 360: code 5 => 3
