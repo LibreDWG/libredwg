@@ -5592,9 +5592,9 @@ new_object (char *restrict name, char *restrict dxfname,
                                    || strchr (f->type, '3')
                                    || strEQc (f->type, "BE")))
                         {
-                          pt.x = 0.0;
-                          if (pair->value.d == 0.0) // ignore defaults
-                            goto next_pair;
+                          //pt.x = 0.0;
+                          //if (pair->value.d == 0.0) // ignore defaults
+                          //  goto next_pair;
                           pt.x = pair->value.d;
                           dwg_dynapi_entity_set_value (_obj, obj->name,
                                                        f->name, &pt, is_utf);
@@ -5660,9 +5660,9 @@ new_object (char *restrict name, char *restrict dxfname,
                                    ? f->dxf + 1 == pair->code // 2BD_1
                                    : f->dxf + 10 == pair->code))
                     {
-                      pt.y = 0.0;
-                      if (pair->value.d == 0.0) // ignore defaults
-                        goto next_pair;
+                      //pt.y = 0.0;
+                      //if (pair->value.d == 0.0) // ignore defaults
+                      //  goto next_pair;
                       dwg_dynapi_entity_value (_obj, obj->name, f->name, &pt,
                                                NULL);
                       pt.y = pair->value.d;
