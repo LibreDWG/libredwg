@@ -4915,6 +4915,17 @@ new_object (char *restrict name, char *restrict dxfname,
               add_dictionary_itemhandles (obj, pair, text);
               break;
             }
+          else if (pair->code == 360 && // hardowner, not soft
+                   (obj->fixedtype == DWG_TYPE_IMAGE ||
+                    obj->fixedtype == DWG_TYPE_WIPEOUT))
+            {
+              BITCODE_H ref = dwg_add_handleref (dwg, 3, pair->value.u, obj);
+              dwg_dynapi_entity_set_value (_obj, obj->name, "imagedefreactor",
+                                           ref, 0);
+              LOG_TRACE ("%s.imagedefreactor = " FORMAT_REF " [H %d]\n", name,
+                         ARGS_REF (ref), pair->code);
+              break;
+            }
           // fall through
         case 340:
           if (pair->code == 340 && strEQc (name, "GROUP"))
