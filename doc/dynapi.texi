@@ -3218,6 +3218,14 @@ B,	DXF 296
 
 @item parent
 struct _dwg_object_entity*
+@item ldata
+Dwg_LinkedData
+@item tdata
+Dwg_LinkedTableData
+@item fdata
+Dwg_FormattedTableData
+@item table_style
+H,	DXF 342
 @item unknown_rc
 RC
 @item unknown_h
@@ -3438,8 +3446,6 @@ H
 H*
 @item seqend
 H
-@item table_style
-H,	DXF 342
 @item title_row_style_override
 H,	DXF 7
 @item header_row_style_override
@@ -3470,12 +3476,6 @@ Dwg_TABLE_BreakHeight*
 BL
 @item break_rows
 Dwg_TABLE_BreakRow*
-@item ldata
-struct _dwg_LinkedData
-@item tdata
-struct _dwg_LinkedTableData
-@item fdata
-struct _dwg_FormattedTableData
 
 @end vtable
 @end indentedblock
@@ -8372,9 +8372,9 @@ BL,	DXF 90
 @item value
 Dwg_TABLE_value
 @item handle
-H
+H,	DXF 340
 @item num_attrs
-BL
+BL,	DXF 91
 @item attrs
 Dwg_TableCellContent_Attr*
 @item has_content_format_overrides

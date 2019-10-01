@@ -4590,187 +4590,183 @@ DWG_OBJECT_END
       END_REPEAT_BLOCK \
       END_REPEAT (sty.border)
 
-//pg.237 20.4.97
+#ifdef IS_JSON
+#  define JSON_ENDHASH  NOCOMMA; ENDHASH;
+#else
+#  define JSON_ENDHASH
+#endif
+
+// clang-format off
+#define row tdata.rows[rcount1]
+#define cell row.cells[rcount2]
+#define content cell.cell_contents[rcount3]
+#define geom cell.geom_data[0]
+#define attr content.attrs[rcount4]
+#define merged fdata.merged_cells[rcount1]
+
+// pg.237 20.4.97 for TABLE (2010+) and TABLECONTENT
+#define TABLECONTENT_fields             \
+  SUBCLASS (AcDbDataTableContent)	\
+  FIELD_T (ldata.name, 1);		\
+  FIELD_T (ldata.desc, 300);		\
+  FIELD_BL (tdata.num_cols, 90);	\
+  REPEAT(tdata.num_cols, tdata.cols, Dwg_TableDataColumn)	\
+  REPEAT_BLOCK				\
+      SUB_FIELD_T (tdata.cols[rcount1],name, 300);		\
+      SUB_FIELD_BL (tdata.cols[rcount1],custom_data, 91);	\
+      CellStyle_fields(tdata.cols[rcount1].cellstyle);		\
+  END_REPEAT_BLOCK			\
+  SET_PARENT(tdata.cols, &_obj->tdata)	\
+  END_REPEAT(tdata.cols);		\
+  FIELD_BL (tdata.num_rows, 90);	\
+  REPEAT(tdata.num_rows, tdata.rows, Dwg_TableRow)	\
+  REPEAT_BLOCK				\
+      FIELD_BL (row.num_cells, 90);	\
+      REPEAT2(row.num_cells, row.cells, Dwg_TableCell)	\
+      REPEAT_BLOCK			\
+          SUB_FIELD_BL (cell,flag, 90);		\
+          SUB_FIELD_T (cell,tooltip, 300);	\
+          SUB_FIELD_BL (cell,customdata, 91);	\
+          SUB_FIELD_BL (cell,num_customdata_items, 90);	\
+          REPEAT3(cell.num_customdata_items, cell.customdata_items, Dwg_TABLE_CustomDataItem)	\
+          REPEAT_BLOCK				\
+              SUB_FIELD_T (cell.customdata_items[rcount3],name, 300);	\
+              TABLE_value_fields(cell.customdata_items[rcount3].value);	\
+              if (error & DWG_ERR_INVALIDTYPE)	\
+                {			\
+                  JSON_ENDHASH		\
+                  JSON_ENDHASH		\
+                  JSON_ENDHASH		\
+                  END_REPEAT(cell.customdata_items)	\
+                  END_REPEAT(row.cells)	\
+                  END_REPEAT(tdata.rows)\
+                  return error;		\
+                }			\
+          END_REPEAT_BLOCK		\
+          SET_PARENT_FIELD(cell.customdata_items, cell_parent, &_obj->cell)	\
+          END_REPEAT(cell.customdata_items);		\
+          SUB_FIELD_BL (cell,has_linked_data, 92);	\
+          if (FIELD_VALUE(cell.has_linked_data))	\
+            {						\
+              SUB_FIELD_HANDLE (cell,data_link, 5, 340);\
+              SUB_FIELD_BL (cell,num_rows, 93);		\
+              SUB_FIELD_BL (cell,num_cols, 94);		\
+              SUB_FIELD_BL (cell,unknown, 96);		\
+            }						\
+          SUB_FIELD_BL (cell,num_cell_contents, 95);	\
+          REPEAT3(cell.num_cell_contents, cell.cell_contents, Dwg_TableCellContent)	\
+          REPEAT_BLOCK					\
+              SUB_FIELD_BL(content,type, 90);		\
+              if (FIELD_VALUE(content.type) == 1)	\
+                {					\
+                  /* 20.4.99 Value, page 241 */         \
+                  TABLE_value_fields(content.value)	\
+                  if (error & DWG_ERR_INVALIDTYPE)	\
+                    {					\
+                      JSON_ENDHASH          		\
+                      JSON_ENDHASH          		\
+                      JSON_ENDHASH          		\
+                      END_REPEAT(cell.cell_contents)	\
+                      END_REPEAT(row.cells)		\
+                      END_REPEAT(tdata.rows)		\
+                      return error;			\
+                    }					\
+                }					\
+              else if (FIELD_VALUE(content.type) == 2) { /* Field */	\
+                SUB_FIELD_HANDLE (content,handle, 3, 340);	\
+              }						\
+              else if (FIELD_VALUE(content.type) == 4) { /* Block */	\
+                SUB_FIELD_HANDLE (content,handle, 3, 340);	\
+              }						\
+              SUB_FIELD_BL (content,num_attrs, 91);	\
+              REPEAT4(content.num_attrs, content.attrs, Dwg_TableCellContent_Attr)	\
+              REPEAT_BLOCK				\
+                  SUB_FIELD_HANDLE (attr,attdef, 5, 330);	\
+                  SUB_FIELD_T (attr,value, 301);	\
+                  SUB_FIELD_BL (attr,index, 92);	\
+              END_REPEAT_BLOCK				\
+              SET_PARENT(content.attrs, &_obj->content)	\
+              END_REPEAT(content.attrs);		\
+              if (FIELD_VALUE(content.has_content_format_overrides))	\
+                {					\
+                  ContentFormat_fields(content.content_format);	\
+                }					\
+          END_REPEAT_BLOCK				\
+          SET_PARENT(cell.cell_contents, &_obj->cell)	\
+          END_REPEAT(cell.cell_contents);		\
+          SUB_FIELD_BL (cell, style_id, 90);		\
+          SUB_FIELD_BL (cell, has_geom_data, 91);	\
+          if (FIELD_VALUE(cell.has_geom_data))		\
+            {						\
+              SUB_FIELD_BL (cell,geom_data_flag, 91);	\
+              SUB_FIELD_BD (cell,unknown_d40, 40);	\
+              SUB_FIELD_BD (cell,unknown_d41, 41);	\
+              SUB_FIELD_BL (cell,has_cell_geom, 0);	\
+              SUB_FIELD_HANDLE (cell,cell_geom_handle, ANYCODE, 0);	\
+              if (FIELD_VALUE(cell.has_cell_geom))	\
+                {					\
+                  REPEAT_N(1, cell.geom_data, Dwg_CellContentGeometry)	\
+                  REPEAT_BLOCK				\
+                      SUB_FIELD_3BD (geom,dist_top_left, 0);	\
+                      SUB_FIELD_3BD (geom,dist_center, 0);	\
+                      SUB_FIELD_BD (geom,content_width, 0);	\
+                      SUB_FIELD_BD (geom,width, 0);	\
+                      SUB_FIELD_BD (geom,height, 0);	\
+                      SUB_FIELD_BD (geom,unknown, 0);	\
+                  END_REPEAT_BLOCK			\
+                  SET_PARENT_FIELD(cell.geom_data, cell_parent, &_obj->cell)	\
+                  END_REPEAT (cell.geom_data);		\
+                }					\
+            }						\
+      END_REPEAT_BLOCK					\
+      SET_PARENT_FIELD(row.cells, row_parent, &_obj->row)	\
+      END_REPEAT(row.cells);				\
+      SUB_FIELD_BL (row,custom_data, 91);		\
+      SUB_FIELD_BL (row,num_customdata_items, 90);	\
+      REPEAT3(row.num_customdata_items, row.customdata_items, Dwg_TABLE_CustomDataItem)	\
+      REPEAT_BLOCK					\
+          SUB_FIELD_T (row.customdata_items[rcount3],name, 300);	\
+          TABLE_value_fields(row.customdata_items[rcount3].value);	\
+          if (error & DWG_ERR_INVALIDTYPE)		\
+            {						\
+              JSON_ENDHASH                  		\
+              JSON_ENDHASH                  		\
+              END_REPEAT(row.customdata_items)		\
+              END_REPEAT(tdata.rows)			\
+              return error;				\
+            }						\
+      END_REPEAT_BLOCK					\
+      SET_PARENT_FIELD(row.customdata_items, row_parent, &_obj->row)	\
+      END_REPEAT(row.customdata_items);			\
+      {							\
+        CellStyle_fields(row.cellstyle);		\
+        SUB_FIELD_BL (row,style_id, 90);		\
+        SUB_FIELD_BL (row,height, 40);			\
+      }							\
+  END_REPEAT_BLOCK					\
+  SET_PARENT(tdata.rows, &_obj->tdata)			\
+  END_REPEAT(tdata.rows);				\
+  FIELD_BL (tdata.num_field_refs, 0);			\
+  HANDLE_VECTOR (tdata.field_refs, tdata.num_field_refs, 3, 0);	\
+  FIELD_BL (fdata.num_merged_cells, 90);		\
+  REPEAT(fdata.num_merged_cells, fdata.merged_cells, Dwg_FormattedTableMerged)	\
+  REPEAT_BLOCK						\
+      SUB_FIELD_BL (merged,top_row, 91);		\
+      SUB_FIELD_BL (merged,left_col, 92);		\
+      SUB_FIELD_BL (merged,bottom_row, 93);		\
+      SUB_FIELD_BL (merged,right_col, 94);		\
+  END_REPEAT_BLOCK					\
+  SET_PARENT(fdata.merged_cells, &_obj->fdata)		\
+  END_REPEAT(fdata.merged_cells)
+
+// clang-format on
+
 DWG_OBJECT(TABLECONTENT)
-
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbDataTableContent)
-  FIELD_T (ldata.name, 1);
-  FIELD_T (ldata.desc, 300);
-
-  FIELD_BL (tdata.num_cols, 90);
-  REPEAT(tdata.num_cols, tdata.cols, Dwg_TableDataColumn)
-  REPEAT_BLOCK
-      SUB_FIELD_T (tdata.cols[rcount1],name, 300);
-      SUB_FIELD_BL (tdata.cols[rcount1],custom_data, 91);
-      CellStyle_fields(tdata.cols[rcount1].cellstyle);
-  END_REPEAT_BLOCK
-  SET_PARENT(tdata.cols, &_obj->tdata)
-  END_REPEAT(tdata.cols);
-  FIELD_BL (tdata.num_rows, 90);
-  REPEAT(tdata.num_rows, tdata.rows, Dwg_TableRow)
-  REPEAT_BLOCK
-      #define row tdata.rows[rcount1]
-      FIELD_BL (row.num_cells, 90);
-      REPEAT2(row.num_cells, row.cells, Dwg_TableCell)
-      REPEAT_BLOCK
-          #define cell row.cells[rcount2]
-          SUB_FIELD_BL (cell,flag, 90);
-          SUB_FIELD_T (cell,tooltip, 300);
-          SUB_FIELD_BL (cell,customdata, 91);
-          SUB_FIELD_BL (cell,num_customdata_items, 90);
-          REPEAT3(cell.num_customdata_items, cell.customdata_items, Dwg_TABLE_CustomDataItem)
-          REPEAT_BLOCK
-              SUB_FIELD_T (cell.customdata_items[rcount3],name, 300);
-              TABLE_value_fields(cell.customdata_items[rcount3].value);
-              if (error & DWG_ERR_INVALIDTYPE)
-                {
-#ifdef IS_JSON
-                  NOCOMMA; ENDHASH;
-                  NOCOMMA; ENDHASH;
-                  NOCOMMA; ENDHASH;
-#endif
-                  END_REPEAT(cell.customdata_items)
-                  END_REPEAT(row.cells)
-                  END_REPEAT(tdata.rows)
-                  return error;
-                }
-          END_REPEAT_BLOCK
-          SET_PARENT_FIELD(cell.customdata_items, cell_parent, &_obj->cell)
-          END_REPEAT(cell.customdata_items);
-          SUB_FIELD_BL (cell,has_linked_data, 92);
-          if (FIELD_VALUE(cell.has_linked_data))
-            {
-              SUB_FIELD_HANDLE (cell,data_link, 5, 340);
-              SUB_FIELD_BL (cell,num_rows, 93);
-              SUB_FIELD_BL (cell,num_cols, 94);
-              SUB_FIELD_BL (cell,unknown, 96);
-            }
-          SUB_FIELD_BL (cell,num_cell_contents, 95);
-          REPEAT3(cell.num_cell_contents, cell.cell_contents, Dwg_TableCellContent)
-          REPEAT_BLOCK
-              #define content tdata.rows[rcount1].cells[rcount2].cell_contents[rcount3]
-
-              SUB_FIELD_BL(content,type, 90);
-              if (FIELD_VALUE(content.type) == 1)
-                {
-                  // 20.4.99 Value, page 241
-                  TABLE_value_fields(content.value)
-                  if (error & DWG_ERR_INVALIDTYPE)
-                    {
-#ifdef IS_JSON
-                      NOCOMMA; ENDHASH;
-                      NOCOMMA; ENDHASH;
-                      NOCOMMA; ENDHASH;
-#endif
-                      END_REPEAT(cell.cell_contents)
-                      END_REPEAT(row.cells)
-                      END_REPEAT(tdata.rows)
-                      return error;
-                    }
-                }
-              else if (FIELD_VALUE(content.type) == 2) { // Field
-                SUB_FIELD_HANDLE (content,handle, 3, 340);
-              }
-              else if (FIELD_VALUE(content.type) == 4) { // Block
-                SUB_FIELD_HANDLE (content,handle, 3, 340);
-              }
-              SUB_FIELD_BL (content,num_attrs, 91);
-              REPEAT4(content.num_attrs, content.attrs, Dwg_TableCellContent_Attr)
-              REPEAT_BLOCK
-                  #define attr content.attrs[rcount4]
-                  SUB_FIELD_HANDLE (attr,attdef, 5, 330);
-                  SUB_FIELD_T (attr,value, 301);
-                  SUB_FIELD_BL (attr,index, 92);
-                  #undef attr
-              END_REPEAT_BLOCK
-              SET_PARENT(content.attrs, &_obj->content)
-              END_REPEAT(content.attrs);
-              if (FIELD_VALUE(content.has_content_format_overrides))
-                {
-                  ContentFormat_fields(content.content_format);
-                }
-              #undef content
-          END_REPEAT_BLOCK
-          SET_PARENT(cell.cell_contents, &_obj->cell)
-          END_REPEAT(cell.cell_contents);
-          SUB_FIELD_BL (cell, style_id, 90);
-          SUB_FIELD_BL (cell, has_geom_data, 91);
-          if (FIELD_VALUE(cell.has_geom_data))
-            {
-              SUB_FIELD_BL (cell,geom_data_flag, 91);
-              SUB_FIELD_BD (cell,unknown_d40, 40);
-              SUB_FIELD_BD (cell,unknown_d41, 41);
-              SUB_FIELD_BL (cell,has_cell_geom, 0);
-              SUB_FIELD_HANDLE (cell,cell_geom_handle, ANYCODE, 0);
-              if (FIELD_VALUE(cell.has_cell_geom))
-                {
-                  REPEAT_N(1, cell.geom_data, Dwg_CellContentGeometry)
-                  REPEAT_BLOCK
-                      #define geom cell.geom_data[0]
-                      SUB_FIELD_3BD (geom,dist_top_left, 0);
-                      SUB_FIELD_3BD (geom,dist_center, 0);
-                      SUB_FIELD_BD (geom,content_width, 0);
-                      SUB_FIELD_BD (geom,width, 0);
-                      SUB_FIELD_BD (geom,height, 0);
-                      SUB_FIELD_BD (geom,unknown, 0);
-#undef geom
-                  END_REPEAT_BLOCK
-                  SET_PARENT_FIELD(cell.geom_data, cell_parent, &_obj->cell)
-                  END_REPEAT (cell.geom_data);
-                }
-            }
-          #undef cell
-      END_REPEAT_BLOCK
-      SET_PARENT_FIELD(row.cells, row_parent, &_obj->row)
-      END_REPEAT(row.cells);
-      SUB_FIELD_BL (row,custom_data, 91);
-      SUB_FIELD_BL (row,num_customdata_items, 90);
-      REPEAT3(row.num_customdata_items, row.customdata_items, Dwg_TABLE_CustomDataItem)
-      REPEAT_BLOCK
-          SUB_FIELD_T (row.customdata_items[rcount3],name, 300);
-          TABLE_value_fields(row.customdata_items[rcount3].value);
-          if (error & DWG_ERR_INVALIDTYPE)
-            {
-#ifdef IS_JSON
-              NOCOMMA; ENDHASH;
-              NOCOMMA; ENDHASH;
-#endif
-              END_REPEAT(row.customdata_items)
-              END_REPEAT(tdata.rows)
-              return error;
-            }
-      END_REPEAT_BLOCK
-      SET_PARENT_FIELD(row.customdata_items, row_parent, &_obj->row)
-      END_REPEAT(row.customdata_items);
-      {
-        CellStyle_fields(row.cellstyle);
-        SUB_FIELD_BL (row,style_id, 90);
-        SUB_FIELD_BL (row,height, 40);
-      }
-      #undef row
-  END_REPEAT_BLOCK
-  SET_PARENT(tdata.rows, &_obj->tdata)
-  END_REPEAT(tdata.rows);
-  FIELD_BL (tdata.num_field_refs, 0);
-  HANDLE_VECTOR (tdata.field_refs, tdata.num_field_refs, 3, 0);
-
-  FIELD_BL (fdata.num_merged_cells, 90);
-  REPEAT(fdata.num_merged_cells, fdata.merged_cells, Dwg_FormattedTableMerged)
-  REPEAT_BLOCK
-      #define merged fdata.merged_cells[rcount1]
-      SUB_FIELD_BL (merged,top_row, 91);
-      SUB_FIELD_BL (merged,left_col, 92);
-      SUB_FIELD_BL (merged,bottom_row, 93);
-      SUB_FIELD_BL (merged,right_col, 94);
-      #undef merged
-  END_REPEAT_BLOCK
-  SET_PARENT(fdata.merged_cells, &_obj->fdata)
-  END_REPEAT(fdata.merged_cells);
+  TABLECONTENT_fields;
 
   START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (table_style, 3, 340);
-
 DWG_OBJECT_END
 
 // pg.246 20.4.102 and TABLE
@@ -4802,6 +4798,483 @@ DWG_OBJECT(CELLSTYLEMAP)
   END_REPEAT (cells);
 
 DWG_OBJECT_END
+
+// pg.229 20.4.96, as ACAD_TABLE (varies)
+// works ok for the pre-2010 variant, deriving from INSERT
+// r2010+ it is TABLECONTENT
+DWG_ENTITY(TABLE)
+
+  DECODE_UNKNOWN_BITS
+  SINCE (R_2010) //AC1024
+    {
+      FIELD_RC (unknown_rc, 0);
+      FIELD_HANDLE (unknown_h, 5, 0);
+      FIELD_BL (unknown_bl, 0);
+      VERSION(R_2010)
+        FIELD_B (unknown_b, 0); // default 1
+      VERSION(R_2013)
+        FIELD_BL (unknown_bl1, 0);
+      // i.e. TABLECONTENT: 20.4.96.2 AcDbTableContent subclass: 20.4.97
+      TABLECONTENT_fields;
+    }
+  else {
+    SUBCLASS (AcDbBlockReference)
+    FIELD_3BD (insertion_point, 10);
+    VERSIONS(R_13, R_14) {
+      FIELD_3BD_1 (scale, 41);
+    }
+    SINCE (R_2000)
+      {
+        FIELD_BB (data_flags, 0);
+        switch (FIELD_VALUE(data_flags))
+          {
+            case 0:
+              FIELD_VALUE(scale.x) = 1.0;
+              FIELD_DD (scale.y, FIELD_VALUE (scale.x), 42);
+              FIELD_DD (scale.z, FIELD_VALUE (scale.x), 43);
+              break;
+            case 1:
+              FIELD_VALUE(scale.x) = 1.0;
+              FIELD_DD (scale.y, 1.0, 42);
+              FIELD_DD (scale.z, 1.0, 43);
+              break;
+            case 2:
+              FIELD_RD (scale.x, 41);
+              FIELD_VALUE(scale.y) = FIELD_VALUE (scale.x);
+              FIELD_VALUE(scale.z) = FIELD_VALUE (scale.x);
+              break;
+            case 3:
+              FIELD_VALUE(scale.x) = 1.0;
+              FIELD_VALUE(scale.y) = 1.0;
+              FIELD_VALUE(scale.z) = 1.0;
+              break;
+            default:
+              LOG_ERROR("Invalid data_flags in TABLE entity %d\n",
+                        (int)FIELD_VALUE(data_flags))
+              _obj->data_flags = 0;
+              DEBUG_HERE_OBJ
+              return DWG_ERR_INVALIDTYPE;
+              //break;
+          }
+  #ifndef IS_FREE
+        FIELD_3PT_TRACE(scale, DD, 41);
+  #endif
+      }
+  
+    FIELD_BD (rotation, 50);
+    FIELD_3BD (extrusion, 210);
+    FIELD_B (has_attribs, 66);
+  
+    SINCE (R_2004) {
+      FIELD_BL (num_owned, 0);
+      VALUEOUTOFBOUNDS (num_owned, 10000)
+    }
+  
+    SUBCLASS (AcDbTable)
+    FIELD_BS (flag_for_table_value, 90);
+    FIELD_3BD (horiz_direction, 11);
+    FIELD_BL (num_cols, 92);
+    VALUEOUTOFBOUNDS (num_cols, 5000)
+    FIELD_BL (num_rows, 91);
+    VALUEOUTOFBOUNDS (num_rows, 5000)
+    FIELD_VECTOR (col_widths, BD, num_cols, 142);
+    FIELD_VECTOR (row_heights, BD, num_rows, 141);
+    FIELD_VALUE(num_cells) = FIELD_VALUE(num_rows) * FIELD_VALUE(num_cols);
+    REPEAT(num_cells, cells, Dwg_TABLE_Cell)
+    REPEAT_BLOCK
+        //SUBCLASS (AcDbDataCell)
+        SUB_FIELD_BS (cells[rcount1],type, 171);
+        SUB_FIELD_RC (cells[rcount1],flags, 172);
+        SUB_FIELD_B (cells[rcount1],merged_value, 173);
+        SUB_FIELD_B (cells[rcount1],autofit_flag, 174);
+        SUB_FIELD_BL (cells[rcount1],merged_width_flag, 175);
+        SUB_FIELD_BL (cells[rcount1],merged_height_flag, 176);
+        SUB_FIELD_BD (cells[rcount1],rotation_value, 145);
+  
+        if (FIELD_VALUE(cells[rcount1].type) == 1)
+          { /* text cell */
+            SUB_FIELD_T (cells[rcount1],text_string, 1);
+          }
+        if (FIELD_VALUE(cells[rcount1].type) == 2)
+          { /* block cell */
+            SUB_FIELD_BD (cells[rcount1],block_scale, 144);
+            SUB_FIELD_B (cells[rcount1],additional_data_flag, 0);
+            if (FIELD_VALUE(cells[rcount1].additional_data_flag) == 1)
+              {
+                SUB_FIELD_BS (cells[rcount1],num_attr_defs, 179);
+                SUB_FIELD_BS (cells[rcount1],attr_def_index, 0);
+                SUB_FIELD_T (cells[rcount1],attr_def_text, 300);
+                //total_num_attr_defs += FIELD_VALUE (cells[rcount1].num_attr_defs);
+              }
+          }
+        if (FIELD_VALUE(cells) &&
+            (FIELD_VALUE(cells[rcount1].type) == 1 ||
+             FIELD_VALUE(cells[rcount1].type) == 2))
+          { /* common to both text and block cells */
+            SUB_FIELD_B (cells[rcount1],additional_data_flag, 0);
+            if (FIELD_VALUE(cells[rcount1].additional_data_flag) == 1)
+              {
+                BITCODE_BL cell_flag;
+                SUB_FIELD_BL (cells[rcount1],cell_flag_override, 177);
+                cell_flag = FIELD_VALUE(cells[rcount1].cell_flag_override);
+                SUB_FIELD_RC (cells[rcount1],virtual_edge_flag, 178);
+  
+                if (cell_flag & 0x01)
+                  SUB_FIELD_RS (cells[rcount1],cell_alignment, 170);
+                if (cell_flag & 0x02)
+                  SUB_FIELD_B (cells[rcount1],background_fill_none, 283);
+                if (cell_flag & 0x04)
+                  SUB_FIELD_CMC (cells[rcount1],background_color, 63,421);
+                if (cell_flag & 0x08)
+                  SUB_FIELD_CMC (cells[rcount1],content_color, 64,422);
+                if (cell_flag & 0x10) {
+                  SUB_FIELD_HANDLE (cells[rcount1],text_style, 5, 7);
+                }
+                if (cell_flag & 0x20)
+                  SUB_FIELD_BD (cells[rcount1],text_height, 140);
+                if (cell_flag & 0x00040)
+                  SUB_FIELD_CMC (cells[rcount1],top_grid_color, 69,0);
+                if (cell_flag & 0x00400)
+                  SUB_FIELD_BS (cells[rcount1],top_grid_linewt, 279);
+                if (cell_flag & 0x04000)
+                  SUB_FIELD_BS (cells[rcount1],top_visibility, 289);
+                if (cell_flag & 0x00080)
+                  SUB_FIELD_CMC (cells[rcount1],right_grid_color, 65,423);
+                if (cell_flag & 0x00800)
+                  SUB_FIELD_BS (cells[rcount1],right_grid_linewt, 275);
+                if (cell_flag & 0x08000)
+                  SUB_FIELD_BS (cells[rcount1],right_visibility, 285);
+                if (cell_flag & 0x00100)
+                  SUB_FIELD_CMC (cells[rcount1],bottom_grid_color, 66,0);
+                if (cell_flag & 0x01000)
+                  SUB_FIELD_BS (cells[rcount1],bottom_grid_linewt, 276);
+                if (cell_flag & 0x10000)
+                  SUB_FIELD_BS (cells[rcount1],bottom_visibility, 286);
+                if (cell_flag & 0x00200)
+                  SUB_FIELD_CMC (cells[rcount1],left_grid_color, 68,0);
+                if (cell_flag & 0x02000)
+                  SUB_FIELD_BS (cells[rcount1],left_grid_linewt, 278);
+                if (cell_flag & 0x20000)
+                  SUB_FIELD_BS (cells[rcount1],left_visibility, 288);
+  
+                SUB_FIELD_BL (cells[rcount1],unknown, 0);
+  
+                // 20.4.99 Value, page 241
+                TABLE_value_fields(cells[rcount1].value)
+                if (error & DWG_ERR_INVALIDTYPE)
+                  {
+  #ifdef IS_JSON
+                    NOCOMMA; ENDHASH;
+  #endif
+                    END_REPEAT(cells);
+                    return error;
+                  }
+              }
+          }
+    END_REPEAT_BLOCK
+    SET_PARENT_OBJ(cells)
+    END_REPEAT(cells);
+    /* End Cell Data (remaining data applies to entire table)*/
+  
+    /* COMMON: */
+  
+    FIELD_B (has_table_overrides, 0);
+    if (FIELD_VALUE(has_table_overrides))
+      {
+        BITCODE_BL table_flag;
+        FIELD_BL (table_flag_override, 93);
+        table_flag = FIELD_VALUE(table_flag_override);
+        if (table_flag & 0x0001)
+          FIELD_B (title_suppressed, 280);
+        FIELD_B (header_suppressed, 281); // yes, unchecked. always true
+        if (table_flag & 0x0004)
+          FIELD_BS (flow_direction, 70);
+        if (table_flag & 0x0008)
+          FIELD_BD (horiz_cell_margin, 40);
+        if (table_flag & 0x0010)
+          FIELD_BD (vert_cell_margin, 41);
+        if (table_flag & 0x0020)
+          FIELD_CMC (title_row_color, 64,422);
+        if (table_flag & 0x0040)
+          FIELD_CMC (header_row_color, 64,422);
+        if (table_flag & 0x0080)
+          FIELD_CMC (data_row_color, 64,422);
+        if (table_flag & 0x0100)
+          FIELD_B (title_row_fill_none, 283);
+        if (table_flag & 0x0200)
+          FIELD_B (header_row_fill_none, 283);
+        if (table_flag & 0x0400)
+          FIELD_B (data_row_fill_none, 283);
+        if (table_flag & 0x0800)
+          FIELD_CMC (title_row_fill_color, 63,421);
+        if (table_flag & 0x1000)
+          FIELD_CMC (header_row_fill_color, 63,421);
+        if (table_flag & 0x2000)
+          FIELD_CMC (data_row_fill_color, 63,421);
+        if (table_flag & 0x4000)
+          FIELD_BS (title_row_alignment, 170);
+        if (table_flag & 0x8000)
+          FIELD_BS (header_row_alignment, 170);
+        if (table_flag & 0x10000)
+          FIELD_BS (data_row_alignment, 170);
+        if (table_flag & 0x20000)
+          FIELD_HANDLE (title_text_style, 5, 7);
+        if (table_flag & 0x40000)
+          FIELD_HANDLE (header_text_style, 5, 7); // doc error
+        if (table_flag & 0x80000)
+          FIELD_HANDLE (data_text_style, 5, 7); // doc error
+        if (table_flag & 0x100000)
+          FIELD_BD (title_row_height, 140);
+        if (table_flag & 0x200000)
+          FIELD_BD (header_row_height, 140);
+        if (table_flag & 0x400000)
+          FIELD_BD (data_row_height, 140);
+      }
+  
+    FIELD_B (has_border_color_overrides, 0);
+    if (FIELD_VALUE(has_border_color_overrides))
+      {
+        BITCODE_BL border_color;
+        FIELD_BL (border_color_overrides_flag, 94);
+        border_color = FIELD_VALUE(border_color_overrides_flag);
+        if (border_color & 0x0001)
+          FIELD_CMC (title_horiz_top_color, 64,422);
+        if (border_color & 0x0002)
+          FIELD_CMC (title_horiz_ins_color, 65,423);
+        if (border_color & 0x0004)
+          FIELD_CMC (title_horiz_bottom_color, 66,424);
+        if (border_color & 0x0008)
+          FIELD_CMC (title_vert_left_color, 63,421);
+        if (border_color & 0x0010)
+          FIELD_CMC (title_vert_ins_color, 68,426);
+        if (border_color & 0x0020)
+          FIELD_CMC (title_vert_right_color, 69,427);
+        if (border_color & 0x0040)
+          FIELD_CMC (header_horiz_top_color, 64,422);
+        if (border_color & 0x0080)
+          FIELD_CMC (header_horiz_ins_color, 65,423);
+        if (border_color & 0x0100)
+          FIELD_CMC (header_horiz_bottom_color, 66,424);
+        if (border_color & 0x0200)
+          FIELD_CMC (header_vert_left_color, 63,421);
+        if (border_color & 0x0400)
+          FIELD_CMC (header_vert_ins_color, 68,426);
+        if (border_color & 0x0800)
+          FIELD_CMC (header_vert_right_color, 69,427);
+        if (border_color & 0x1000)
+          FIELD_CMC (data_horiz_top_color, 64,422);
+        if (border_color & 0x2000)
+          FIELD_CMC (data_horiz_ins_color, 65,423);
+        if (border_color & 0x4000)
+          FIELD_CMC (data_horiz_bottom_color, 66,424);
+        if (border_color & 0x8000)
+          FIELD_CMC (data_vert_left_color, 63,421);
+        if (border_color & 0x10000)
+          FIELD_CMC (data_vert_ins_color, 68,426);
+        if (border_color & 0x20000)
+          FIELD_CMC (data_vert_right_color, 69,427);
+      }
+  
+    FIELD_B (has_border_lineweight_overrides, 0);
+    if (FIELD_VALUE(has_border_lineweight_overrides))
+      {
+        BITCODE_BL border_linewt;
+        FIELD_BL (border_lineweight_overrides_flag, 95);
+        border_linewt = FIELD_VALUE(border_lineweight_overrides_flag);
+        if (border_linewt & 0x0001)
+          FIELD_BS (title_horiz_top_linewt, 0);
+        if (border_linewt & 0x0002)
+          FIELD_BS (title_horiz_ins_linewt, 0);
+        if (border_linewt & 0x0004)
+          FIELD_BS (title_horiz_bottom_linewt, 0);
+        if (border_linewt & 0x0008)
+          FIELD_BS (title_vert_left_linewt, 0);
+        if (border_linewt & 0x0010)
+          FIELD_BS (title_vert_ins_linewt, 0);
+        if (border_linewt & 0x0020)
+          FIELD_BS (title_vert_right_linewt, 0);
+        if (border_linewt & 0x0040)
+          FIELD_BS (header_horiz_top_linewt, 0);
+        if (border_linewt & 0x0080)
+          FIELD_BS (header_horiz_ins_linewt, 0);
+        if (border_linewt & 0x0100)
+          FIELD_BS (header_horiz_bottom_linewt, 0);
+        if (border_linewt & 0x0200)
+          FIELD_BS (header_vert_left_linewt, 0);
+        if (border_linewt & 0x0400)
+          FIELD_BS (header_vert_ins_linewt, 0);
+        if (border_linewt & 0x0800)
+          FIELD_BS (header_vert_right_linewt, 0);
+        if (border_linewt & 0x1000)
+          FIELD_BS (data_horiz_top_linewt, 0);
+        if (border_linewt & 0x2000)
+          FIELD_BS (data_horiz_ins_linewt, 0);
+        if (border_linewt & 0x4000)
+          FIELD_BS (data_horiz_bottom_linewt, 0);
+        if (border_linewt & 0x8000)
+          FIELD_BS (data_vert_left_linewt, 0);
+        if (border_linewt & 0x10000)
+          FIELD_BS (data_vert_ins_linewt, 0);
+        if (border_linewt & 0x20000)
+          FIELD_BS (data_vert_right_linewt, 0);
+      }
+  
+    FIELD_B (has_border_visibility_overrides, 0);
+    if (FIELD_VALUE(has_border_visibility_overrides))
+      {
+        BITCODE_BL border_visibility;
+        FIELD_BL (border_visibility_overrides_flag, 96);
+        border_visibility = FIELD_VALUE(border_visibility_overrides_flag);
+        if (border_visibility & 0x0001)
+          FIELD_BS (title_horiz_top_visibility, 0);
+        if (border_visibility & 0x0002)
+          FIELD_BS (title_horiz_ins_visibility, 0);
+        if (border_visibility & 0x0004)
+          FIELD_BS (title_horiz_bottom_visibility, 0);
+        if (border_visibility & 0x0008)
+          FIELD_BS (title_vert_left_visibility, 0);
+        if (border_visibility & 0x0010)
+          FIELD_BS (title_vert_ins_visibility, 0);
+        if (border_visibility & 0x0020)
+          FIELD_BS (title_vert_right_visibility, 0);
+        if (border_visibility & 0x0040)
+          FIELD_BS (header_horiz_top_visibility, 0);
+        if (border_visibility & 0x0080)
+          FIELD_BS (header_horiz_ins_visibility, 0);
+        if (border_visibility & 0x0100)
+          FIELD_BS (header_horiz_bottom_visibility, 0);
+        if (border_visibility & 0x0200)
+          FIELD_BS (header_vert_left_visibility, 0);
+        if (border_visibility & 0x0400)
+          FIELD_BS (header_vert_ins_visibility, 0);
+        if (border_visibility & 0x0800)
+          FIELD_BS (header_vert_right_visibility, 0);
+        if (border_visibility & 0x1000)
+          FIELD_BS (data_horiz_top_visibility, 0);
+        if (border_visibility & 0x2000)
+          FIELD_BS (data_horiz_ins_visibility, 0);
+        if (border_visibility & 0x4000)
+          FIELD_BS (data_horiz_bottom_visibility, 0);
+        if (border_visibility & 0x8000)
+          FIELD_BS (data_vert_left_visibility, 0);
+        if (border_visibility & 0x10000)
+          FIELD_BS (data_vert_ins_visibility, 0);
+        if (border_visibility & 0x20000)
+          FIELD_BS (data_vert_right_visibility, 0);
+      }
+  
+    COMMON_ENTITY_HANDLE_DATA;
+    FIELD_HANDLE (block_header, 5, 2);
+    VERSIONS(R_13, R_2000)
+      {
+        if (FIELD_VALUE(has_attribs))
+          {
+            FIELD_HANDLE (first_attrib, 4, 0);
+            FIELD_HANDLE (last_attrib, 4, 0);
+          }
+      }
+  
+    SINCE (R_2004)
+      {
+  #if defined(IS_JSON) || defined(IS_DXF)
+        if (!_obj->attrib_handles && _obj->num_owned)
+          _obj->num_owned = 0;
+  #endif
+        HANDLE_VECTOR (attrib_handles, num_owned, 4, 0)
+      }
+  
+    if (FIELD_VALUE(has_attribs)) {
+      FIELD_HANDLE (seqend, 3, 0);
+    }
+    FIELD_HANDLE (table_style, 5, 342);
+  
+    REPEAT(num_cells, cells, Dwg_TABLE_Cell)
+    REPEAT_BLOCK
+        if (FIELD_VALUE(cells[rcount1].type) == 1)
+          { /* text cell */
+            SUB_FIELD_HANDLE (cells[rcount1],cell_handle, 5, 344);
+          }
+        else
+          { /* block cell */
+            SUB_FIELD_HANDLE (cells[rcount1],cell_handle, 5, 340);
+          }
+  
+        if (FIELD_VALUE(cells[rcount1].type) == 2 &&
+            FIELD_VALUE(cells[rcount1].additional_data_flag) == 1)
+          {
+            HANDLE_VECTOR (cells[rcount1].attr_def_id, cells[rcount1].num_attr_defs, 4, 331);
+          }
+  
+        if (FIELD_VALUE(cells[rcount1].additional_data_flag2) == 1 &&
+            FIELD_VALUE(cells[rcount1].cell_flag_override) & 0x08)
+          {
+            SUB_FIELD_HANDLE (cells[rcount1],text_style_override, ANYCODE, 7);
+          }
+    END_REPEAT_BLOCK
+    SET_PARENT_OBJ(cells)
+    END_REPEAT(cells);
+  
+    if (FIELD_VALUE(has_table_overrides))
+      {
+        BITCODE_BL table_flag;
+        table_flag = FIELD_VALUE(table_flag_override);
+        if (table_flag & 0x20000)
+          FIELD_HANDLE (title_row_style_override, ANYCODE, 7);
+        if (table_flag & 0x40000)
+          FIELD_HANDLE (header_row_style_override, ANYCODE, 7);
+        if (table_flag & 0x80000)
+          FIELD_HANDLE (data_row_style_override, ANYCODE, 7);
+      }
+  }
+  SINCE (R_2010)
+  {
+    //... p237
+    LOG_WARN("TODO TABLE r2010+")
+  
+    FIELD_BS (unknown_bs, 0); //default 38
+    FIELD_3BD (hor_dir, 11);
+    FIELD_BL (has_break_data, 0); //BL or B?
+    if (FIELD_VALUE(has_break_data))
+      {
+        FIELD_BL (break_flag, 0);
+        FIELD_BL (break_flow_direction, 0);
+        FIELD_BD (break_spacing, 0);
+        FIELD_BL (break_unknown1, 0);
+        FIELD_BL (break_unknown2, 0);
+        FIELD_BL (num_break_heights, 0);
+        VALUEOUTOFBOUNDS (num_break_heights, 5000)
+        REPEAT(num_break_heights, break_heights, Dwg_TABLE_BreakHeight)
+        REPEAT_BLOCK
+            SUB_FIELD_3BD (break_heights[rcount1],position, 0);
+            SUB_FIELD_BD (break_heights[rcount1],height, 0);
+            SUB_FIELD_BL (break_heights[rcount1],flag, 0);
+        END_REPEAT_BLOCK
+        SET_PARENT_OBJ(break_heights)
+        END_REPEAT(break_heights);
+      }
+    FIELD_BL (num_break_rows, 0);
+    VALUEOUTOFBOUNDS (num_break_rows, 5000)
+    REPEAT(num_break_rows, break_rows, Dwg_TABLE_BreakRow)
+    REPEAT_BLOCK
+        SUB_FIELD_3BD (break_rows[rcount1],position, 0);
+        SUB_FIELD_BL (break_rows[rcount1],start, 0);
+        SUB_FIELD_BL (break_rows[rcount1],end, 0);
+    END_REPEAT_BLOCK
+    SET_PARENT_OBJ(break_rows)
+    END_REPEAT(break_rows);
+
+    COMMON_ENTITY_HANDLE_DATA;
+    FIELD_HANDLE (table_style, 5, 342);
+  }
+
+DWG_ENTITY_END
+
+#undef row
+#undef cell
+#undef content
+#undef geom
+#undef attr
+#undef merged
 
 //pg.246 20.4.103
 DWG_OBJECT(TABLEGEOMETRY)
@@ -4842,653 +5315,6 @@ DWG_OBJECT(TABLEGEOMETRY)
   END_REPEAT(cells);
 
 DWG_OBJECT_END
-
-// pg.229 20.4.96, as ACAD_TABLE (varies)
-// works ok for the pre-2010 variant, deriving from INSERT
-// r2010+ it is TABLECONTENT
-DWG_ENTITY(TABLE)
-
-  DECODE_UNKNOWN_BITS
-  SINCE (R_2010) //AC1024
-    {
-      FIELD_RC (unknown_rc, 0);
-      FIELD_HANDLE (unknown_h, 5, 0);
-      FIELD_BL (unknown_bl, 0);
-      VERSION(R_2010)
-        FIELD_B (unknown_b, 0); // default 1
-      VERSION(R_2013)
-        FIELD_BL (unknown_bl1, 0);
-
-  // i.e. TABLECONTENT: 20.4.96.2 AcDbTableContent subclass: 20.4.97
-  SUBCLASS (AcDbDataTableContent)
-  FIELD_T (ldata.name, 1);
-  FIELD_T (ldata.desc, 300);
-
-  FIELD_BL (tdata.num_cols, 90);
-  REPEAT(tdata.num_cols, tdata.cols, Dwg_TableDataColumn)
-  REPEAT_BLOCK
-      SUB_FIELD_T (tdata.cols[rcount1],name, 300);
-      SUB_FIELD_BL (tdata.cols[rcount1],custom_data, 91);
-      CellStyle_fields(tdata.cols[rcount1].cellstyle);
-  END_REPEAT_BLOCK
-  SET_PARENT(tdata.cols, &_obj->tdata)
-  END_REPEAT(tdata.cols);
-  FIELD_BL (tdata.num_rows, 90);
-  REPEAT(tdata.num_rows, tdata.rows, Dwg_TableRow)
-  REPEAT_BLOCK
-      #define row tdata.rows[rcount1]
-      FIELD_BL (row.num_cells, 90);
-      REPEAT2(row.num_cells, row.cells, Dwg_TableCell)
-      REPEAT_BLOCK
-          #define cell row.cells[rcount2]
-          SUB_FIELD_BL (cell,flag, 90);
-          SUB_FIELD_T (cell,tooltip, 300);
-          SUB_FIELD_BL (cell,customdata, 91);
-          SUB_FIELD_BL (cell,num_customdata_items, 90);
-          REPEAT3(cell.num_customdata_items, cell.customdata_items, Dwg_TABLE_CustomDataItem)
-          REPEAT_BLOCK
-              SUB_FIELD_T (cell.customdata_items[rcount3],name, 300);
-              TABLE_value_fields(cell.customdata_items[rcount3].value);
-              if (error & DWG_ERR_INVALIDTYPE)
-                {
-#ifdef IS_JSON
-                  NOCOMMA; ENDHASH;
-                  NOCOMMA; ENDHASH;
-                  NOCOMMA; ENDHASH;
-#endif
-                  END_REPEAT(cell.customdata_items)
-                  END_REPEAT(row.cells)
-                  END_REPEAT(tdata.rows)
-                  return error;
-                }
-          END_REPEAT_BLOCK
-          SET_PARENT_FIELD(cell.customdata_items, cell_parent, &_obj->cell)
-          END_REPEAT(cell.customdata_items);
-          SUB_FIELD_BL (cell,has_linked_data, 92);
-          if (FIELD_VALUE(cell.has_linked_data))
-            {
-              SUB_FIELD_HANDLE (cell,data_link, 5, 340);
-              SUB_FIELD_BL (cell,num_rows, 93);
-              SUB_FIELD_BL (cell,num_cols, 94);
-              SUB_FIELD_BL (cell,unknown, 96);
-            }
-          SUB_FIELD_BL (cell,num_cell_contents, 95);
-          REPEAT3(cell.num_cell_contents, cell.cell_contents, Dwg_TableCellContent)
-          REPEAT_BLOCK
-              #define content tdata.rows[rcount1].cells[rcount2].cell_contents[rcount3]
-
-              SUB_FIELD_BL(content,type, 90);
-              if (FIELD_VALUE(content.type) == 1)
-                {
-                  // 20.4.99 Value, page 241
-                  TABLE_value_fields(content.value)
-                  if (error & DWG_ERR_INVALIDTYPE)
-                    {
-#ifdef IS_JSON
-                      NOCOMMA; ENDHASH;
-                      NOCOMMA; ENDHASH;
-                      NOCOMMA; ENDHASH;
-#endif
-                      END_REPEAT(cell.cell_contents)
-                      END_REPEAT(row.cells)
-                      END_REPEAT(tdata.rows)
-                      return error;
-                    }
-                }
-              else if (FIELD_VALUE(content.type) == 2) { // Field
-                SUB_FIELD_HANDLE (content,handle, 3, 340);
-              }
-              else if (FIELD_VALUE(content.type) == 4) { // Block
-                SUB_FIELD_HANDLE (content,handle, 3, 340);
-              }
-              SUB_FIELD_BL (content,num_attrs, 91);
-              REPEAT4(content.num_attrs, content.attrs, Dwg_TableCellContent_Attr)
-              REPEAT_BLOCK
-                  #define attr content.attrs[rcount4]
-                  SUB_FIELD_HANDLE (attr,attdef, 5, 330);
-                  SUB_FIELD_T (attr,value, 301);
-                  SUB_FIELD_BL (attr,index, 92);
-                  #undef attr
-              END_REPEAT_BLOCK
-              SET_PARENT(content.attrs, &_obj->content)
-              END_REPEAT(content.attrs);
-              if (FIELD_VALUE(content.has_content_format_overrides))
-                {
-                  ContentFormat_fields(content.content_format);
-                }
-              #undef content
-          END_REPEAT_BLOCK
-          SET_PARENT(cell.cell_contents, &_obj->cell)
-          END_REPEAT(cell.cell_contents);
-          SUB_FIELD_BL (cell, style_id, 90);
-          SUB_FIELD_BL (cell, has_geom_data, 91);
-          if (FIELD_VALUE(cell.has_geom_data))
-            {
-              SUB_FIELD_BL (cell,geom_data_flag, 91);
-              SUB_FIELD_BD (cell,unknown_d40, 40);
-              SUB_FIELD_BD (cell,unknown_d41, 41);
-              SUB_FIELD_BL (cell,has_cell_geom, 0);
-              SUB_FIELD_HANDLE (cell,cell_geom_handle, ANYCODE, 0);
-              if (FIELD_VALUE(cell.has_cell_geom))
-                {
-                  REPEAT_N(1, cell.geom_data, Dwg_CellContentGeometry)
-                  REPEAT_BLOCK
-                      #define geom cell.geom_data[0]
-                      SUB_FIELD_3BD (geom,dist_top_left, 0);
-                      SUB_FIELD_3BD (geom,dist_center, 0);
-                      SUB_FIELD_BD (geom,content_width, 0);
-                      SUB_FIELD_BD (geom,width, 0);
-                      SUB_FIELD_BD (geom,height, 0);
-                      SUB_FIELD_BD (geom,unknown, 0);
-#undef geom
-                  END_REPEAT_BLOCK
-                  SET_PARENT_FIELD(cell.geom_data, cell_parent, &_obj->cell)
-                  END_REPEAT (cell.geom_data);
-                }
-            }
-          #undef cell
-      END_REPEAT_BLOCK
-      SET_PARENT_FIELD(row.cells, row_parent, &_obj->row)
-      END_REPEAT(row.cells);
-      SUB_FIELD_BL (row,custom_data, 91);
-      SUB_FIELD_BL (row,num_customdata_items, 90);
-      REPEAT3(row.num_customdata_items, row.customdata_items, Dwg_TABLE_CustomDataItem)
-      REPEAT_BLOCK
-          SUB_FIELD_T (row.customdata_items[rcount3],name, 300);
-          TABLE_value_fields(row.customdata_items[rcount3].value);
-          if (error & DWG_ERR_INVALIDTYPE)
-            {
-#ifdef IS_JSON
-              NOCOMMA; ENDHASH;
-              NOCOMMA; ENDHASH;
-#endif
-              END_REPEAT(row.customdata_items)
-              END_REPEAT(tdata.rows)
-              return error;
-            }
-      END_REPEAT_BLOCK
-      SET_PARENT_FIELD(row.customdata_items, row_parent, &_obj->row)
-      END_REPEAT(row.customdata_items);
-      {
-        CellStyle_fields(row.cellstyle);
-        SUB_FIELD_BL (row,style_id, 90);
-        SUB_FIELD_BL (row,height, 40);
-      }
-      #undef row
-  END_REPEAT_BLOCK
-  SET_PARENT(tdata.rows, &_obj->tdata)
-  END_REPEAT(tdata.rows);
-  FIELD_BL (tdata.num_field_refs, 0);
-  HANDLE_VECTOR (tdata.field_refs, tdata.num_field_refs, 3, 0);
-
-  FIELD_BL (fdata.num_merged_cells, 90);
-  REPEAT(fdata.num_merged_cells, fdata.merged_cells, Dwg_FormattedTableMerged)
-  REPEAT_BLOCK
-      #define merged fdata.merged_cells[rcount1]
-      SUB_FIELD_BL (merged,top_row, 91);
-      SUB_FIELD_BL (merged,left_col, 92);
-      SUB_FIELD_BL (merged,bottom_row, 93);
-      SUB_FIELD_BL (merged,right_col, 94);
-      #undef merged
-  END_REPEAT_BLOCK
-  SET_PARENT(fdata.merged_cells, &_obj->fdata)
-  END_REPEAT(fdata.merged_cells);
-
-  START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (table_style, 3, 340);
-  return error;
-    }
-
-  SUBCLASS (AcDbBlockReference)
-  FIELD_3BD (insertion_point, 10);
-
-  VERSIONS(R_13, R_14) {
-    FIELD_3BD_1 (scale, 41);
-  }
-
-  SINCE (R_2000)
-    {
-      FIELD_BB (data_flags, 0);
-      switch (FIELD_VALUE(data_flags))
-        {
-          case 0:
-            FIELD_VALUE(scale.x) = 1.0;
-            FIELD_DD (scale.y, FIELD_VALUE (scale.x), 42);
-            FIELD_DD (scale.z, FIELD_VALUE (scale.x), 43);
-            break;
-          case 1:
-            FIELD_VALUE(scale.x) = 1.0;
-            FIELD_DD (scale.y, 1.0, 42);
-            FIELD_DD (scale.z, 1.0, 43);
-            break;
-          case 2:
-            FIELD_RD (scale.x, 41);
-            FIELD_VALUE(scale.y) = FIELD_VALUE (scale.x);
-            FIELD_VALUE(scale.z) = FIELD_VALUE (scale.x);
-            break;
-          case 3:
-            FIELD_VALUE(scale.x) = 1.0;
-            FIELD_VALUE(scale.y) = 1.0;
-            FIELD_VALUE(scale.z) = 1.0;
-            break;
-          default:
-            LOG_ERROR("Invalid data_flags in TABLE entity %d\n", (int)FIELD_VALUE(data_flags))
-            _obj->data_flags = 0;
-            DEBUG_HERE_OBJ
-            return DWG_ERR_INVALIDTYPE;
-            //break;
-        }
-#ifndef IS_FREE
-      FIELD_3PT_TRACE(scale, DD, 41);
-#endif
-    }
-
-  FIELD_BD (rotation, 50);
-  FIELD_3BD (extrusion, 210);
-  FIELD_B (has_attribs, 66);
-
-  SINCE (R_2004) {
-    FIELD_BL (num_owned, 0);
-    VALUEOUTOFBOUNDS (num_owned, 10000)
-  }
-
-  SUBCLASS (AcDbTable)
-  FIELD_BS (flag_for_table_value, 90);
-  FIELD_3BD (horiz_direction, 11);
-  FIELD_BL (num_cols, 92);
-  VALUEOUTOFBOUNDS (num_cols, 5000)
-  FIELD_BL (num_rows, 91);
-  VALUEOUTOFBOUNDS (num_rows, 5000)
-  FIELD_VECTOR (col_widths, BD, num_cols, 142);
-  FIELD_VECTOR (row_heights, BD, num_rows, 141);
-  FIELD_VALUE(num_cells) = FIELD_VALUE(num_rows) * FIELD_VALUE(num_cols);
-  REPEAT(num_cells, cells, Dwg_TABLE_Cell)
-  REPEAT_BLOCK
-      //SUBCLASS (AcDbDataCell)
-      SUB_FIELD_BS (cells[rcount1],type, 171);
-      SUB_FIELD_RC (cells[rcount1],flags, 172);
-      SUB_FIELD_B (cells[rcount1],merged_value, 173);
-      SUB_FIELD_B (cells[rcount1],autofit_flag, 174);
-      SUB_FIELD_BL (cells[rcount1],merged_width_flag, 175);
-      SUB_FIELD_BL (cells[rcount1],merged_height_flag, 176);
-      SUB_FIELD_BD (cells[rcount1],rotation_value, 145);
-
-      if (FIELD_VALUE(cells[rcount1].type) == 1)
-        { /* text cell */
-          SUB_FIELD_T (cells[rcount1],text_string, 1);
-        }
-      if (FIELD_VALUE(cells[rcount1].type) == 2)
-        { /* block cell */
-          SUB_FIELD_BD (cells[rcount1],block_scale, 144);
-          SUB_FIELD_B (cells[rcount1],additional_data_flag, 0);
-          if (FIELD_VALUE(cells[rcount1].additional_data_flag) == 1)
-            {
-              SUB_FIELD_BS (cells[rcount1],num_attr_defs, 179);
-              SUB_FIELD_BS (cells[rcount1],attr_def_index, 0);
-              SUB_FIELD_T (cells[rcount1],attr_def_text, 300);
-              //total_num_attr_defs += FIELD_VALUE (cells[rcount1].num_attr_defs);
-            }
-        }
-      if (FIELD_VALUE(cells) &&
-          (FIELD_VALUE(cells[rcount1].type) == 1 ||
-           FIELD_VALUE(cells[rcount1].type) == 2))
-        { /* common to both text and block cells */
-          SUB_FIELD_B (cells[rcount1],additional_data_flag, 0);
-          if (FIELD_VALUE(cells[rcount1].additional_data_flag) == 1)
-            {
-              BITCODE_BL cell_flag;
-              SUB_FIELD_BL (cells[rcount1],cell_flag_override, 177);
-              cell_flag = FIELD_VALUE(cells[rcount1].cell_flag_override);
-              SUB_FIELD_RC (cells[rcount1],virtual_edge_flag, 178);
-
-              if (cell_flag & 0x01)
-                SUB_FIELD_RS (cells[rcount1],cell_alignment, 170);
-              if (cell_flag & 0x02)
-                SUB_FIELD_B (cells[rcount1],background_fill_none, 283);
-              if (cell_flag & 0x04)
-                SUB_FIELD_CMC (cells[rcount1],background_color, 63,421);
-              if (cell_flag & 0x08)
-                SUB_FIELD_CMC (cells[rcount1],content_color, 64,422);
-              if (cell_flag & 0x10) {
-                SUB_FIELD_HANDLE (cells[rcount1],text_style, 5, 7);
-              }
-              if (cell_flag & 0x20)
-                SUB_FIELD_BD (cells[rcount1],text_height, 140);
-              if (cell_flag & 0x00040)
-                SUB_FIELD_CMC (cells[rcount1],top_grid_color, 69,0);
-              if (cell_flag & 0x00400)
-                SUB_FIELD_BS (cells[rcount1],top_grid_linewt, 279);
-              if (cell_flag & 0x04000)
-                SUB_FIELD_BS (cells[rcount1],top_visibility, 289);
-              if (cell_flag & 0x00080)
-                SUB_FIELD_CMC (cells[rcount1],right_grid_color, 65,423);
-              if (cell_flag & 0x00800)
-                SUB_FIELD_BS (cells[rcount1],right_grid_linewt, 275);
-              if (cell_flag & 0x08000)
-                SUB_FIELD_BS (cells[rcount1],right_visibility, 285);
-              if (cell_flag & 0x00100)
-                SUB_FIELD_CMC (cells[rcount1],bottom_grid_color, 66,0);
-              if (cell_flag & 0x01000)
-                SUB_FIELD_BS (cells[rcount1],bottom_grid_linewt, 276);
-              if (cell_flag & 0x10000)
-                SUB_FIELD_BS (cells[rcount1],bottom_visibility, 286);
-              if (cell_flag & 0x00200)
-                SUB_FIELD_CMC (cells[rcount1],left_grid_color, 68,0);
-              if (cell_flag & 0x02000)
-                SUB_FIELD_BS (cells[rcount1],left_grid_linewt, 278);
-              if (cell_flag & 0x20000)
-                SUB_FIELD_BS (cells[rcount1],left_visibility, 288);
-
-              SUB_FIELD_BL (cells[rcount1],unknown, 0);
-
-              // 20.4.99 Value, page 241
-              TABLE_value_fields(cells[rcount1].value)
-              if (error & DWG_ERR_INVALIDTYPE)
-                {
-#ifdef IS_JSON
-                  NOCOMMA; ENDHASH;
-#endif
-                  END_REPEAT(cells);
-                  return error;
-                }
-            }
-        }
-  END_REPEAT_BLOCK
-  SET_PARENT_OBJ(cells)
-  END_REPEAT(cells);
-  /* End Cell Data (remaining data applies to entire table)*/
-
-  /* COMMON: */
-
-  FIELD_B (has_table_overrides, 0);
-  if (FIELD_VALUE(has_table_overrides))
-    {
-      BITCODE_BL table_flag;
-      FIELD_BL (table_flag_override, 93);
-      table_flag = FIELD_VALUE(table_flag_override);
-      if (table_flag & 0x0001)
-        FIELD_B (title_suppressed, 280);
-      FIELD_B (header_suppressed, 281); // yes, unchecked. always true
-      if (table_flag & 0x0004)
-        FIELD_BS (flow_direction, 70);
-      if (table_flag & 0x0008)
-        FIELD_BD (horiz_cell_margin, 40);
-      if (table_flag & 0x0010)
-        FIELD_BD (vert_cell_margin, 41);
-      if (table_flag & 0x0020)
-        FIELD_CMC (title_row_color, 64,422);
-      if (table_flag & 0x0040)
-        FIELD_CMC (header_row_color, 64,422);
-      if (table_flag & 0x0080)
-        FIELD_CMC (data_row_color, 64,422);
-      if (table_flag & 0x0100)
-        FIELD_B (title_row_fill_none, 283);
-      if (table_flag & 0x0200)
-        FIELD_B (header_row_fill_none, 283);
-      if (table_flag & 0x0400)
-        FIELD_B (data_row_fill_none, 283);
-      if (table_flag & 0x0800)
-        FIELD_CMC (title_row_fill_color, 63,421);
-      if (table_flag & 0x1000)
-        FIELD_CMC (header_row_fill_color, 63,421);
-      if (table_flag & 0x2000)
-        FIELD_CMC (data_row_fill_color, 63,421);
-      if (table_flag & 0x4000)
-        FIELD_BS (title_row_alignment, 170);
-      if (table_flag & 0x8000)
-        FIELD_BS (header_row_alignment, 170);
-      if (table_flag & 0x10000)
-        FIELD_BS (data_row_alignment, 170);
-      if (table_flag & 0x20000)
-        FIELD_HANDLE (title_text_style, 5, 7);
-      if (table_flag & 0x40000)
-        FIELD_HANDLE (header_text_style, 5, 7); // doc error
-      if (table_flag & 0x80000)
-        FIELD_HANDLE (data_text_style, 5, 7); // doc error
-      if (table_flag & 0x100000)
-        FIELD_BD (title_row_height, 140);
-      if (table_flag & 0x200000)
-        FIELD_BD (header_row_height, 140);
-      if (table_flag & 0x400000)
-        FIELD_BD (data_row_height, 140);
-    }
-
-  FIELD_B (has_border_color_overrides, 0);
-  if (FIELD_VALUE(has_border_color_overrides))
-    {
-      BITCODE_BL border_color;
-      FIELD_BL (border_color_overrides_flag, 94);
-      border_color = FIELD_VALUE(border_color_overrides_flag);
-      if (border_color & 0x0001)
-        FIELD_CMC (title_horiz_top_color, 64,422);
-      if (border_color & 0x0002)
-        FIELD_CMC (title_horiz_ins_color, 65,423);
-      if (border_color & 0x0004)
-        FIELD_CMC (title_horiz_bottom_color, 66,424);
-      if (border_color & 0x0008)
-        FIELD_CMC (title_vert_left_color, 63,421);
-      if (border_color & 0x0010)
-        FIELD_CMC (title_vert_ins_color, 68,426);
-      if (border_color & 0x0020)
-        FIELD_CMC (title_vert_right_color, 69,427);
-      if (border_color & 0x0040)
-        FIELD_CMC (header_horiz_top_color, 64,422);
-      if (border_color & 0x0080)
-        FIELD_CMC (header_horiz_ins_color, 65,423);
-      if (border_color & 0x0100)
-        FIELD_CMC (header_horiz_bottom_color, 66,424);
-      if (border_color & 0x0200)
-        FIELD_CMC (header_vert_left_color, 63,421);
-      if (border_color & 0x0400)
-        FIELD_CMC (header_vert_ins_color, 68,426);
-      if (border_color & 0x0800)
-        FIELD_CMC (header_vert_right_color, 69,427);
-      if (border_color & 0x1000)
-        FIELD_CMC (data_horiz_top_color, 64,422);
-      if (border_color & 0x2000)
-        FIELD_CMC (data_horiz_ins_color, 65,423);
-      if (border_color & 0x4000)
-        FIELD_CMC (data_horiz_bottom_color, 66,424);
-      if (border_color & 0x8000)
-        FIELD_CMC (data_vert_left_color, 63,421);
-      if (border_color & 0x10000)
-        FIELD_CMC (data_vert_ins_color, 68,426);
-      if (border_color & 0x20000)
-        FIELD_CMC (data_vert_right_color, 69,427);
-    }
-
-  FIELD_B (has_border_lineweight_overrides, 0);
-  if (FIELD_VALUE(has_border_lineweight_overrides))
-    {
-      BITCODE_BL border_linewt;
-      FIELD_BL (border_lineweight_overrides_flag, 95);
-      border_linewt = FIELD_VALUE(border_lineweight_overrides_flag);
-      if (border_linewt & 0x0001)
-        FIELD_BS (title_horiz_top_linewt, 0);
-      if (border_linewt & 0x0002)
-        FIELD_BS (title_horiz_ins_linewt, 0);
-      if (border_linewt & 0x0004)
-        FIELD_BS (title_horiz_bottom_linewt, 0);
-      if (border_linewt & 0x0008)
-        FIELD_BS (title_vert_left_linewt, 0);
-      if (border_linewt & 0x0010)
-        FIELD_BS (title_vert_ins_linewt, 0);
-      if (border_linewt & 0x0020)
-        FIELD_BS (title_vert_right_linewt, 0);
-      if (border_linewt & 0x0040)
-        FIELD_BS (header_horiz_top_linewt, 0);
-      if (border_linewt & 0x0080)
-        FIELD_BS (header_horiz_ins_linewt, 0);
-      if (border_linewt & 0x0100)
-        FIELD_BS (header_horiz_bottom_linewt, 0);
-      if (border_linewt & 0x0200)
-        FIELD_BS (header_vert_left_linewt, 0);
-      if (border_linewt & 0x0400)
-        FIELD_BS (header_vert_ins_linewt, 0);
-      if (border_linewt & 0x0800)
-        FIELD_BS (header_vert_right_linewt, 0);
-      if (border_linewt & 0x1000)
-        FIELD_BS (data_horiz_top_linewt, 0);
-      if (border_linewt & 0x2000)
-        FIELD_BS (data_horiz_ins_linewt, 0);
-      if (border_linewt & 0x4000)
-        FIELD_BS (data_horiz_bottom_linewt, 0);
-      if (border_linewt & 0x8000)
-        FIELD_BS (data_vert_left_linewt, 0);
-      if (border_linewt & 0x10000)
-        FIELD_BS (data_vert_ins_linewt, 0);
-      if (border_linewt & 0x20000)
-        FIELD_BS (data_vert_right_linewt, 0);
-    }
-
-  FIELD_B (has_border_visibility_overrides, 0);
-  if (FIELD_VALUE(has_border_visibility_overrides))
-    {
-      BITCODE_BL border_visibility;
-      FIELD_BL (border_visibility_overrides_flag, 96);
-      border_visibility = FIELD_VALUE(border_visibility_overrides_flag);
-      if (border_visibility & 0x0001)
-        FIELD_BS (title_horiz_top_visibility, 0);
-      if (border_visibility & 0x0002)
-        FIELD_BS (title_horiz_ins_visibility, 0);
-      if (border_visibility & 0x0004)
-        FIELD_BS (title_horiz_bottom_visibility, 0);
-      if (border_visibility & 0x0008)
-        FIELD_BS (title_vert_left_visibility, 0);
-      if (border_visibility & 0x0010)
-        FIELD_BS (title_vert_ins_visibility, 0);
-      if (border_visibility & 0x0020)
-        FIELD_BS (title_vert_right_visibility, 0);
-      if (border_visibility & 0x0040)
-        FIELD_BS (header_horiz_top_visibility, 0);
-      if (border_visibility & 0x0080)
-        FIELD_BS (header_horiz_ins_visibility, 0);
-      if (border_visibility & 0x0100)
-        FIELD_BS (header_horiz_bottom_visibility, 0);
-      if (border_visibility & 0x0200)
-        FIELD_BS (header_vert_left_visibility, 0);
-      if (border_visibility & 0x0400)
-        FIELD_BS (header_vert_ins_visibility, 0);
-      if (border_visibility & 0x0800)
-        FIELD_BS (header_vert_right_visibility, 0);
-      if (border_visibility & 0x1000)
-        FIELD_BS (data_horiz_top_visibility, 0);
-      if (border_visibility & 0x2000)
-        FIELD_BS (data_horiz_ins_visibility, 0);
-      if (border_visibility & 0x4000)
-        FIELD_BS (data_horiz_bottom_visibility, 0);
-      if (border_visibility & 0x8000)
-        FIELD_BS (data_vert_left_visibility, 0);
-      if (border_visibility & 0x10000)
-        FIELD_BS (data_vert_ins_visibility, 0);
-      if (border_visibility & 0x20000)
-        FIELD_BS (data_vert_right_visibility, 0);
-    }
-
-  FIELD_HANDLE (block_header, 5, 2);
-
-  VERSIONS(R_13, R_2000)
-    {
-      if (FIELD_VALUE(has_attribs))
-        {
-          FIELD_HANDLE (first_attrib, 4, 0);
-          FIELD_HANDLE (last_attrib, 4, 0);
-        }
-    }
-
-  SINCE (R_2004)
-    {
-#if defined(IS_JSON) || defined(IS_DXF)
-      if (!_obj->attrib_handles && _obj->num_owned)
-        _obj->num_owned = 0;
-#endif
-      HANDLE_VECTOR (attrib_handles, num_owned, 4, 0)
-    }
-
-  if (FIELD_VALUE(has_attribs)) {
-    FIELD_HANDLE (seqend, 3, 0);
-  }
-
-  FIELD_HANDLE (table_style, 5, 342);
-
-  REPEAT(num_cells, cells, Dwg_TABLE_Cell)
-  REPEAT_BLOCK
-      if (FIELD_VALUE(cells[rcount1].type) == 1)
-        { /* text cell */
-          SUB_FIELD_HANDLE (cells[rcount1],cell_handle, 5, 344);
-        }
-      else
-        { /* block cell */
-          SUB_FIELD_HANDLE (cells[rcount1],cell_handle, 5, 340);
-        }
-
-      if (FIELD_VALUE(cells[rcount1].type) == 2 &&
-          FIELD_VALUE(cells[rcount1].additional_data_flag) == 1)
-        {
-          HANDLE_VECTOR (cells[rcount1].attr_def_id, cells[rcount1].num_attr_defs, 4, 331);
-        }
-
-      if (FIELD_VALUE(cells[rcount1].additional_data_flag2) == 1 &&
-          FIELD_VALUE(cells[rcount1].cell_flag_override) & 0x08)
-        {
-          SUB_FIELD_HANDLE (cells[rcount1],text_style_override, ANYCODE, 7);
-        }
-  END_REPEAT_BLOCK
-  SET_PARENT_OBJ(cells)
-  END_REPEAT(cells);
-
-  if (FIELD_VALUE(has_table_overrides))
-    {
-      BITCODE_BL table_flag;
-      table_flag = FIELD_VALUE(table_flag_override);
-      if (table_flag & 0x20000)
-        FIELD_HANDLE (title_row_style_override, ANYCODE, 7);
-      if (table_flag & 0x40000)
-        FIELD_HANDLE (header_row_style_override, ANYCODE, 7);
-      if (table_flag & 0x80000)
-        FIELD_HANDLE (data_row_style_override, ANYCODE, 7);
-    }
-
-  SINCE (R_2010)
-    {
-      //... p237
-      LOG_WARN("TODO TABLE r2010+")
-
-      FIELD_BS (unknown_bs, 0); //default 38
-      FIELD_3BD (hor_dir, 11);
-      FIELD_BL (has_break_data, 0); //BL or B?
-      if (FIELD_VALUE(has_break_data))
-        {
-          FIELD_BL (break_flag, 0);
-          FIELD_BL (break_flow_direction, 0);
-          FIELD_BD (break_spacing, 0);
-          FIELD_BL (break_unknown1, 0);
-          FIELD_BL (break_unknown2, 0);
-          FIELD_BL (num_break_heights, 0);
-          VALUEOUTOFBOUNDS (num_break_heights, 5000)
-          REPEAT(num_break_heights, break_heights, Dwg_TABLE_BreakHeight)
-          REPEAT_BLOCK
-              SUB_FIELD_3BD (break_heights[rcount1],position, 0);
-              SUB_FIELD_BD (break_heights[rcount1],height, 0);
-              SUB_FIELD_BL (break_heights[rcount1],flag, 0);
-          END_REPEAT_BLOCK
-          SET_PARENT_OBJ(break_heights)
-          END_REPEAT(break_heights);
-        }
-      FIELD_BL (num_break_rows, 0);
-      VALUEOUTOFBOUNDS (num_break_rows, 5000)
-      REPEAT(num_break_rows, break_rows, Dwg_TABLE_BreakRow)
-      REPEAT_BLOCK
-          SUB_FIELD_3BD (break_rows[rcount1],position, 0);
-          SUB_FIELD_BL (break_rows[rcount1],start, 0);
-          SUB_FIELD_BL (break_rows[rcount1],end, 0);
-      END_REPEAT_BLOCK
-      SET_PARENT_OBJ(break_rows)
-      END_REPEAT(break_rows);
-    }
-  COMMON_ENTITY_HANDLE_DATA;
-
-DWG_ENTITY_END
 
 #endif /* DEBUG_CLASSES */
 

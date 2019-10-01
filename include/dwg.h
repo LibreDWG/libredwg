@@ -3315,20 +3315,23 @@ typedef struct _dwg_FormattedTableData
   struct _dwg_object_TABLECONTENT *parent;
 } Dwg_FormattedTableData;
 
+#define TABLECONTENT_fields                                                   \
+  Dwg_LinkedData ldata;                                                       \
+  Dwg_LinkedTableData tdata;                                                  \
+  Dwg_FormattedTableData fdata;                                               \
+  BITCODE_H table_style
+
 typedef struct _dwg_object_TABLECONTENT
 {
   struct _dwg_object_object *parent;
-
-  Dwg_LinkedData ldata;
-  Dwg_LinkedTableData tdata;
-  Dwg_FormattedTableData fdata;
-  BITCODE_H table_style;
+  TABLECONTENT_fields;
 } Dwg_Object_TABLECONTENT;
-
 
 typedef struct _dwg_entity_TABLE
 {
   struct _dwg_object_entity *parent;
+  //r2010+ TABLECONTENT:
+  TABLECONTENT_fields;
 
   BITCODE_RC unknown_rc;
   BITCODE_H unknown_h;
@@ -3448,7 +3451,6 @@ typedef struct _dwg_entity_TABLE
   BITCODE_H last_attrib;
   BITCODE_H* attrib_handles;
   BITCODE_H seqend;
-  BITCODE_H table_style;
   BITCODE_H title_row_style_override;
   BITCODE_H header_row_style_override;
   BITCODE_H data_row_style_override;
@@ -3466,12 +3468,9 @@ typedef struct _dwg_entity_TABLE
   BITCODE_BL num_break_rows;
   Dwg_TABLE_BreakRow *break_rows;
 
-  //r2010+ TABLECONTENT:
-  struct _dwg_LinkedData ldata;
-  struct _dwg_LinkedTableData tdata;
-  struct _dwg_FormattedTableData fdata;
-  
 } Dwg_Entity_TABLE;
+
+#undef TABLECONTENT_fields
 
 /**
  Class TABLESTYLE (varies)

@@ -18433,12 +18433,12 @@ static int test_TABLE (const Dwg_Object *obj)
         fail ("TABLE.extrusion [3BD]");
   }
   {
-    struct _dwg_FormattedTableData fdata;
+    Dwg_FormattedTableData fdata;
     if (dwg_dynapi_entity_value (table, "TABLE", "fdata", &fdata, NULL)
         && !memcmp (&fdata, &table->fdata, sizeof (table->fdata)))
         pass ();
     else
-        fail ("TABLE.fdata [struct _dwg_FormattedTableData]");
+        fail ("TABLE.fdata [Dwg_FormattedTableData]");
   }
   {
     BITCODE_H first_attrib;
@@ -18961,12 +18961,12 @@ static int test_TABLE (const Dwg_Object *obj)
         fail ("TABLE.last_attrib [H]");
   }
   {
-    struct _dwg_LinkedData ldata;
+    Dwg_LinkedData ldata;
     if (dwg_dynapi_entity_value (table, "TABLE", "ldata", &ldata, NULL)
         && !memcmp (&ldata, &table->ldata, sizeof (table->ldata)))
         pass ();
     else
-        fail ("TABLE.ldata [struct _dwg_LinkedData]");
+        fail ("TABLE.ldata [Dwg_LinkedData]");
   }
   {
     BITCODE_BL num_break_heights;
@@ -19139,12 +19139,12 @@ static int test_TABLE (const Dwg_Object *obj)
         fail ("TABLE.table_style [H]");
   }
   {
-    struct _dwg_LinkedTableData tdata;
+    Dwg_LinkedTableData tdata;
     if (dwg_dynapi_entity_value (table, "TABLE", "tdata", &tdata, NULL)
         && !memcmp (&tdata, &table->tdata, sizeof (table->tdata)))
         pass ();
     else
-        fail ("TABLE.tdata [struct _dwg_LinkedTableData]");
+        fail ("TABLE.tdata [Dwg_LinkedTableData]");
   }
   {
     BITCODE_CMC title_horiz_bottom_color;
