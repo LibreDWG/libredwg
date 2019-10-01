@@ -19,11 +19,14 @@
 #define OUT_JSON_H
 
 #include "dwg.h"
+#include "common.h"
 #include "bits.h"
 
 EXPORT int dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 EXPORT int dwg_write_geojson (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 
 char *json_cquote (char *restrict dest, const char *restrict src);
+char * ATTRIBUTE_MALLOC htmlescape (const char *restrict src, const int codepage);
+char * ATTRIBUTE_MALLOC htmlwescape (BITCODE_TU wsrc);
 
 #endif

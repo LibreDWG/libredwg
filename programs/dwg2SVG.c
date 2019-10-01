@@ -29,6 +29,7 @@
 
 #include <dwg.h>
 #include "bits.h"
+#include "out_json.h"
 #include "suffix.inc"
 
 #ifndef M_PI
@@ -91,17 +92,21 @@ transform_Y (double y)
 static void
 output_TEXT (Dwg_Object *obj)
 {
+  Dwg_Data *dwg = obj->parent;
   Dwg_Entity_TEXT *text = obj->tio.entity->tio.TEXT;
+  char *escaped;
 
-  /*TODO: Juca, fix it properly: */
-  if (text->text_value[0] == '&')
-    return;
+  if (dwg->header.version >= R_2007)
+    escaped = htmlwescape ((BITCODE_TU)text->text_value);
+  else
+    escaped = htmlescape (text->text_value, (int)dwg->header.codepage);
 
   printf ("\t<text id=\"dwg-object-%d\" x=\"%f\" y=\"%f\" "
           "font-family=\"Verdana\" font-size=\"%f\" fill=\"blue\">%s</text>\n",
           obj->index, transform_X (text->insertion_pt.x),
           transform_Y (text->insertion_pt.y), text->height /* fontsize */,
-          text->text_value);
+          escaped ? escaped : "");
+  free (escaped);
 }
 
 static void
@@ -202,7 +207,8 @@ output_BLOCK_HEADER (Dwg_Object_Ref *ref)
       fprintf (stderr, "Found null ref->obj\n");
       return;
     }
-  if (ref->obj->type != DWG_TYPE_BLOCK_HEADER)
+  obj = ref->obj;
+  if (obj->type != DWG_TYPE_BLOCK_HEADER)
     {
       fprintf (stderr, "Argument not a BLOCK_HEADER reference\n");
       return;
@@ -210,15 +216,26 @@ output_BLOCK_HEADER (Dwg_Object_Ref *ref)
 
   /* TODO: Review.  (This check avoids a segfault, but it is
      still unclear whether or not the condition is valid.)  */
-  if (!ref->obj->tio.object)
+  if (!obj->tio.object)
     {
-      fprintf (stderr, "Found null ref->obj->tio.object\n");
+      fprintf (stderr, "Found null obj->tio.object\n");
       return;
     }
 
-  hdr = ref->obj->tio.object->tio.BLOCK_HEADER;
-  printf ("\t<g id=\"symbol-%lX\" >\n\t\t<!-- %s -->\n", ref->absolute_ref,
-          hdr->name);
+  hdr = obj->tio.object->tio.BLOCK_HEADER;
+  if (hdr->name)
+    {
+      char *escaped;
+      Dwg_Data *dwg = obj->parent;
+      if (dwg->header.version >= R_2007)
+        escaped = htmlwescape ((BITCODE_TU)hdr->name);
+      else
+        escaped = htmlescape (hdr->name, dwg->header.codepage);
+      printf ("\t<g id=\"symbol-%lX\" >\n\t\t<!-- %s -->\n", ref->absolute_ref,
+              escaped ? escaped : "");
+      if (escaped)
+        free (escaped);
+    }
 
   obj = get_first_owned_entity (ref->obj);
   while (obj)
@@ -235,6 +252,7 @@ output_SVG (Dwg_Data *dwg)
 {
   BITCODE_BS i;
   Dwg_Object *obj;
+  Dwg_Object_Ref *ref;
   Dwg_Object_BLOCK_CONTROL *block_control;
   double dx, dy;
 
@@ -261,12 +279,15 @@ output_SVG (Dwg_Data *dwg)
           ">\n",
           page_width, page_height);
 
-  output_BLOCK_HEADER (dwg_model_space_ref (dwg));
-  output_BLOCK_HEADER (dwg_paper_space_ref (dwg));
+  if ((ref = dwg_model_space_ref (dwg)))
+      output_BLOCK_HEADER (ref);
+  if ((ref = dwg_paper_space_ref (dwg)))
+    output_BLOCK_HEADER (ref);
   printf ("\t<defs>\n");
   for (i = 0; i < dwg->block_control.num_entries; i++)
     {
-      output_BLOCK_HEADER (dwg->block_control.entries[i]);
+      if ((ref = dwg->block_control.entries[i]))
+        output_BLOCK_HEADER (ref);
     }
   printf ("\t</defs>\n");
 
