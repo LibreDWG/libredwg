@@ -407,8 +407,9 @@
 #define FIELD_BT(nam, dxf) FIELDG (nam, BT, dxf)
 #define FIELD_4BITS(nam, dxf)                                                 \
   {                                                                           \
-    _obj->nam = bit_read_4BITS (dat);                                         \
-    FIELD_G_TRACE (nam, 4BITS, dxf);                                          \
+    int _b = _obj->nam = bit_read_4BITS (dat);                                \
+    LOG_TRACE (#nam ": b%d%d%d%d [4BITS %d]\n", _b & 8, _b & 4, _b & 2,       \
+               _b & 1, dxf);                                                  \
   }
 
 #define FIELD_BE(nam, dxf)                                                    \

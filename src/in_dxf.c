@@ -5277,6 +5277,17 @@ new_object (char *restrict name, char *restrict dxfname,
                 return pair;
               goto next_pair;
             }
+          else if (pair->code == 65 && obj->fixedtype == DWG_TYPE_VPORT)
+            {
+              Dwg_Object_VPORT *o = obj->tio.object->tio.VPORT;
+              o->UCSVP = pair->value.i;
+              o->UCSFOLLOW = o->VIEWMODE & 4 ? 1 : 0;
+              o->VIEWMODE |= o->UCSVP;
+              LOG_TRACE ("VPORT.UCSVP = %d [B 65]\n", o->UCSVP)
+              LOG_TRACE ("VPORT.UCSFOLLOW => %d [B 0] (calc)\n", o->UCSFOLLOW)
+              LOG_TRACE ("VPORT.VIEWMODE => %d [4BITS 71] (calc)\n", o->VIEWMODE)
+              goto next_pair;
+            }
           else if (pair->code == 90 && obj->fixedtype == DWG_TYPE_LWPOLYLINE)
             {
               pair = new_LWPOLYLINE (obj, dat, pair);

@@ -259,12 +259,12 @@ bit_write_3B (Bit_Chain *dat, unsigned char value)
 BITCODE_4BITS
 bit_read_4BITS (Bit_Chain *dat)
 {
-  BITCODE_4BITS result = bit_read_RC (dat);
-  bit_advance_position (dat, -4);
-  // perhaps we have an issue here when the 4bit field is near the end of a
-  // bitstream?
-  // (since we initially advance 8bits and then later rewind 4bits)
-  return (result & 0xf0) >> 4;
+  // clang-format off
+  return bit_read_B (dat) << 4 |
+         bit_read_B (dat) << 2 |
+         bit_read_B (dat) << 1 |
+         bit_read_B (dat);
+  // clang-format on
 }
 
 /** Write 1 nibble.
@@ -272,10 +272,10 @@ bit_read_4BITS (Bit_Chain *dat)
 void
 bit_write_4BITS (Bit_Chain *dat, unsigned char value)
 {
-  bit_write_B (dat, value & 1);
-  bit_write_B (dat, value & 2);
-  bit_write_B (dat, value & 4);
   bit_write_B (dat, value & 8);
+  bit_write_B (dat, value & 4);
+  bit_write_B (dat, value & 2);
+  bit_write_B (dat, value & 1);
 }
 
 /** Read 1 byte (raw char).

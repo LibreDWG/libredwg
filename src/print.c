@@ -132,7 +132,12 @@ static unsigned int cur_ver = 0;
 #define FIELD_TU(name, dxf) LOG_TRACE_TU (#name, (BITCODE_TU)_obj->name, dxf)
 #define FIELD_T FIELD_TV /*TODO: implement version dependent string fields */
 #define FIELD_BT(name, dxf) FIELDG (name, BT, dxf);
-#define FIELD_4BITS(name, dxf) FIELD_G_TRACE (name, 4BITS, dxf)
+#define FIELD_4BITS(nam, dxf)                                                 \
+  {                                                                           \
+    int _b = _obj->nam;                                                       \
+    LOG_TRACE (#nam ": b%d%d%d%d [4BITS %d]\n", _b & 8, _b & 4, _b & 2,       \
+               _b & 1, dxf);                                                  \
+  }
 #define FIELD_BE(name, dxf) FIELD_3RD (name, dxf)
 #define FIELD_DD(name, _default, dxf)
 #define FIELD_2DD(name, d1, d2, dxf) FIELD_2PT_TRACE (name, DD, dxf)

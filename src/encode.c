@@ -215,7 +215,13 @@ static bool env_var_checked_p;
   }
 #define FIELD_3BD_1(nam, dxf)   FIELD_3BD(nam, dxf)
 #define FIELD_3DPOINT(nam, dxf) FIELD_3BD (nam, dxf)
-#define FIELD_4BITS(nam, dxf)   bit_write_4BITS (dat, _obj->nam);
+#define FIELD_4BITS(nam, dxf)                                                 \
+  {                                                                           \
+    unsigned char _b = (unsigned char)_obj->nam;                              \
+    bit_write_4BITS (dat, _b);                                                \
+    LOG_TRACE (#nam ": b%d%d%d%d [4BITS %d]\n", _b & 8, _b & 4, _b & 2,       \
+               _b & 1, dxf);                                                  \
+  }
 #define FIELD_TIMEBLL(nam, dxf)                                               \
   {                                                                           \
     bit_write_TIMEBLL (dat, (BITCODE_TIMEBLL)_obj->nam);                      \
