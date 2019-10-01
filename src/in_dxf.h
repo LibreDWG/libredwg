@@ -57,6 +57,7 @@ typedef struct _dxf_pair
 
 /* We need to postpone the HEADER handles from names,
    when we didn't read the TABLES yet, which sets the handle values.
+   Also for EED appid handles, and some object names => handle.
    Store all handle fieldnames and string values into this array,
    which is prefixed with the number of stored items.
  */
@@ -64,7 +65,7 @@ struct array_hdl
 {
   char *field;
   char *name;
-  short code;
+  int code; // or objid
 };
 typedef struct _array_hdls
 {
@@ -75,8 +76,9 @@ typedef struct _array_hdls
 
 #define ARRAY_SIZE(arr) (sizeof (arr) / sizeof (arr[0]))
 
-array_hdls *array_push (array_hdls *restrict hdls, char *restrict field,
-                        char *restrict name, short code);
+array_hdls *array_push (array_hdls *restrict hdls, const char *restrict field,
+                        const char *restrict name, const int code);
+array_hdls *new_array_hdls (int size);
 void free_array_hdls (array_hdls *hdls);
 int matches_type (Dxf_Pair *restrict pair, const Dwg_DYNAPI_field *restrict f);
 
@@ -93,6 +95,7 @@ Dxf_Pair *add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 void add_dictionary_itemhandles (Dwg_Object *restrict obj,
                                  Dxf_Pair *restrict pair, char *restrict text);
 void resolve_postponed_header_refs (Dwg_Data *restrict dwg);
+void resolve_postponed_object_refs (Dwg_Data *restrict dwg);
 void resolve_postponed_eed_refs (Dwg_Data *restrict dwg);
 void resolve_header_dicts (Dwg_Data *restrict dwg);
 BITCODE_H find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair);

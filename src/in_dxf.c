@@ -63,6 +63,7 @@ static char buf[4096];
 static long start, end; // stream offsets
 static array_hdls *header_hdls = NULL;
 static array_hdls *eed_hdls = NULL;
+static array_hdls *obj_hdls = NULL;
 
 static long num_dxf_objs;  // how many elements are added
 static long size_dxf_objs; // how many elements are allocated
@@ -250,8 +251,8 @@ dxf_skip_comment (Bit_Chain *dat, Dxf_Pair *pair)
    We need strdup'd copies, the dxf input will be freed.
  */
 array_hdls *
-array_push (array_hdls *restrict hdls, char *restrict field,
-            char *restrict name, short code)
+array_push (array_hdls *restrict hdls, const char *restrict field,
+            const char *restrict name, const int code)
 {
   uint32_t i = hdls->nitems;
   if (i >= hdls->size)
@@ -263,6 +264,14 @@ array_push (array_hdls *restrict hdls, char *restrict field,
   hdls->items[i].field = strdup (field);
   hdls->items[i].name = strdup (name);
   hdls->items[i].code = code;
+  return hdls;
+}
+
+array_hdls *
+new_array_hdls (int size)
+{
+  array_hdls *hdls = calloc (1, 8 + size * sizeof (struct array_hdl));
+  hdls->size = size;
   return hdls;
 }
 
@@ -995,7 +1004,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
               char idx[12];
               snprintf (idx, 12, "%d", obj->index);
               eed[i].handle.code = 5;
-              eed_hdls = array_push (eed_hdls, idx, pair->value.s, (short)i);
+              eed_hdls = array_push (eed_hdls, idx, pair->value.s, i);
               LOG_TRACE ("handle: ? [H} for APPID.%s later\n",
                           pair->value.s);
             }
@@ -4639,8 +4648,10 @@ new_object (char *restrict name, char *restrict dxfname,
               BITCODE_H handle = find_tablehandle (dwg, pair);
               if (!handle)
                 {
-                  LOG_WARN ("TODO resolve handle name %s %s", "layer",
-                            pair->value.s)
+                  obj_hdls = array_push (obj_hdls, "layer", pair->value.s,
+                                         obj->tio.object->objid);
+                  LOG_TRACE ("%s.layer: name %s -> H later\n", obj->name,
+                             pair->value.s)
                 }
               else
                 {
@@ -5574,25 +5585,23 @@ new_object (char *restrict name, char *restrict dxfname,
                         {
                           BITCODE_H ref = find_tablehandle (dwg, pair);
                           if (!ref)
-                            /*
-                              ref = dwg_add_handleref (dwg, 5, 0, obj);
-                          if (0)
-                            */
                             {
                               if (pair->code > 300)
                                 {
-                                  LOG_WARN ("TODO resolve handle %s.%s %X",
-                                            name, f->name, pair->value.u)
-                                }
-                              else if (0) // TODO check alias names: BYLAYER,
-                                          // BYBLOCK, CONTINUOUS
-                                {
+                                  ref = dwg_add_handleref (dwg, 5,
+                                                           pair->value.u, obj);
+                                  LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n",
+                                             name, f->name, ARGS_REF (ref),
+                                             pair->code);
                                 }
                               else
                                 {
-                                  LOG_WARN (
-                                      "TODO resolve handle name %s.%s %s",
-                                      name, f->name, pair->value.s)
+                                  obj_hdls = array_push (
+                                      obj_hdls, f->name, pair->value.s,
+                                      obj->tio.object->objid);
+                                  LOG_TRACE ("%s.%s: name %s -> H for code "
+                                             "%d later\n", name, f->name,
+                                             pair->value.s, pair->code);
                                 }
                             }
                           else
@@ -6587,7 +6596,7 @@ resolve_postponed_header_refs (Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables *vars = &dwg->header_vars;
   uint32_t i;
-  LOG_TRACE ("resolve %d postponed header ref names\n", header_hdls->nitems);
+  LOG_TRACE ("resolve %d postponed header ref names:\n", header_hdls->nitems);
   for (i = 0; i < header_hdls->nitems; i++)
     {
       char *field = header_hdls->items[i].field;
@@ -6631,6 +6640,95 @@ resolve_postponed_header_refs (Dwg_Data *restrict dwg)
       else
         LOG_WARN ("Unknown HEADER.%s %s dxf:%d", field,
                   p.value.s, (int)p.code)
+    }
+}
+
+// i.e. layer or block name
+void
+resolve_postponed_object_refs (Dwg_Data *restrict dwg)
+{
+  uint32_t i;
+  LOG_TRACE ("resolve %d postponed object ref names:\n", obj_hdls->nitems);
+  for (i = 0; i < obj_hdls->nitems; i++)
+    {
+      char *field = obj_hdls->items[i].field;
+      Dxf_Pair p = { 0, VT_STRING };
+      BITCODE_H hdl = NULL;
+      int objid = obj_hdls->items[i].code;
+      Dwg_Object *obj = &dwg->object[objid];
+      int is_entity = obj->supertype == DWG_SUPERTYPE_ENTITY;
+
+      p.value.s = obj_hdls->items[i].name;
+      if (!p.value.s || !*p.value.s)
+        {
+          LOG_WARN ("%s.%s empty", obj->name, field);
+          continue;
+        }
+      // TODO find field type => dxf code
+      if (strEQc (field, "block_header"))
+        hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "BLOCK");
+      else if (strEQc (field, "style"))
+        hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "STYLE");
+      else if (strEQc (field, "dimstyle"))
+        hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "DIMSTYLE");
+      else if (strEQc (field, "block_header"))
+        hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "BLOCK");
+      else if (is_entity && strEQc (field, "layer"))
+        {
+          p.code = 8;
+          hdl = find_tablehandle (dwg, &p);
+        }
+      else if (is_entity && strEQc (field, "ltype"))
+        {
+          p.code = 6;
+          hdl = find_tablehandle (dwg, &p);
+        }
+      else if (is_entity && strEQc (field, "material"))
+        {
+          p.code = 347;
+          hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "MATERIAL");
+        }
+      else if (is_entity && strEQc (field, "shadow"))
+        {
+          p.code = 361;
+          hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "SHADOW");
+        }
+      else if (is_entity && strEQc (field, "plotstyle"))
+        {
+          p.code = 390;
+          hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "PLOTSTYLENAME");
+        }
+      else if (is_entity && strEQc (field, "full_visualstyle"))
+        {
+          p.code = 348;
+          hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "VISUALSTYLE");
+        }
+      else if (is_entity && strEQc (field, "face_visualstyle"))
+        {
+          p.code = 348;
+          hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "VISUALSTYLE");
+        }
+      else if (is_entity && strEQc (field, "edge_visualstyle"))
+        {
+          p.code = 348;
+          hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "VISUALSTYLE");
+        }
+      else
+        LOG_WARN ("missing code for %s", field)
+      if (hdl)
+        {
+          Dwg_Object_APPID *_obj = obj->tio.object->tio.APPID;
+          if (hdl->handleref.code != 5)
+            hdl = dwg_add_handleref (dwg, 5, hdl->absolute_ref, NULL);
+          if (p.code > 0)
+            dwg_dynapi_common_set_value (_obj, field, &hdl, 0);
+          else
+            dwg_dynapi_entity_set_value (_obj, obj->name, field, &hdl, 0);
+          LOG_TRACE ("%s.%s %s => " FORMAT_REF " [H %d]\n", obj->name, field,
+                     p.value.s, ARGS_REF (hdl), (int)p.code);
+        }
+      else
+        LOG_WARN ("Unknown %s.%s %s", obj->name, field, p.value.s)
     }
 }
 
@@ -6718,10 +6816,9 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // cannot rely on ref->obj during realloc's
   dwg->dirty_refs = 1;
 
-  header_hdls = calloc (1, 8 + 16 * sizeof (struct array_hdl));
-  header_hdls->size = 16;
-  eed_hdls = calloc (1, 8 + 16 * sizeof (struct array_hdl));
-  eed_hdls->size = 16;
+  header_hdls = new_array_hdls (16);
+  eed_hdls = new_array_hdls (16);
+  obj_hdls = new_array_hdls (16);
 
   // start with the BLOCK_HEADER at objid 0
   if (!dwg->num_objects)
@@ -6845,11 +6942,13 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
     }
   resolve_postponed_header_refs (dwg);
+  resolve_postponed_object_refs (dwg);              
   LOG_HANDLE ("Resolving pointers from ObjectRef vector:\n");
   dwg_resolve_objectrefs_silent (dwg);
   dwg->dirty_refs = 0;
   free_array_hdls (header_hdls);
   free_array_hdls (eed_hdls);
+  free_array_hdls (obj_hdls);
   dwg->opts |= 0x2f; // from DXF
   LOG_TRACE ("import from DXF\n");
   return dwg->num_objects ? 1 : 0;
