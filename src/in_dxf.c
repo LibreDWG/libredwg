@@ -5679,9 +5679,9 @@ new_object (char *restrict name, char *restrict dxfname,
                                    : f->dxf + 20 == pair->code))
                     {
                       pt.z = 0.0;
-                      // can ignore z or 0.0?
+                      // can ignore z or 0.0? e.g. no VPORT.view_target
                       if (strNE (name, "_3DFACE") && strNE (f->name, "scale")
-                          && (pair->value.d == 0.0 || *f->type == '2'))
+                          && *f->type == '2')
                         goto next_pair;
                       dwg_dynapi_entity_value (_obj, obj->name, f->name, &pt,
                                                NULL);
