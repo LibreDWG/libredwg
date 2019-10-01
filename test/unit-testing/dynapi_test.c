@@ -36127,6 +36127,22 @@ static int test_VPORT (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_BD viewwidth;
+    if (dwg_dynapi_entity_value (vport, "VPORT", "viewwidth", &viewwidth, NULL)
+        && viewwidth == vport->viewwidth)
+      pass ();
+    else
+      fail ("VPORT.viewwidth [BD] %g != %g", vport->viewwidth, viewwidth);
+    viewwidth++;
+    if (dwg_dynapi_entity_set_value (vport, "VPORT", "viewwidth", &viewwidth, 0)
+        && viewwidth == vport->viewwidth)
+      pass ();
+    else
+      fail ("VPORT.viewwidth [BD] set+1 %g != %g", vport->viewwidth, viewwidth);
+    vport->viewwidth--;
+
+  }
+  {
     BITCODE_H visualstyle;
     if (dwg_dynapi_entity_value (vport, "VPORT", "visualstyle", &visualstyle, NULL)
         && !memcmp (&visualstyle, &vport->visualstyle, sizeof (vport->visualstyle)))

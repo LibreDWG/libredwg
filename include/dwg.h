@@ -2151,8 +2151,9 @@ typedef struct _dwg_object_VPORT_CONTROL
 typedef struct _dwg_object_VPORT
 {
   COMMON_TABLE_FIELDS();
-  BITCODE_BD VIEWSIZE;
-  BITCODE_BD aspect_ratio;
+  BITCODE_BD VIEWSIZE;  // really the view height
+  BITCODE_BD viewwidth; // in DWG r13+, needed to calc. aspect_ratio
+  BITCODE_BD aspect_ratio; // DXF 41 = viewwidth / VIEWSIZE
   BITCODE_2RD VIEWCTR;
   BITCODE_3BD view_target;
   BITCODE_3BD VIEWDIR;

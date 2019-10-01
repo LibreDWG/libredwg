@@ -5415,6 +5415,14 @@ new_object (char *restrict name, char *restrict dxfname,
               LOG_TRACE ("MTEXT.column_heights[%d] = %f [BD* 50]\n", j,
                          pair->value.d);
             }
+          else if (obj->fixedtype == DWG_TYPE_VPORT && pair->code == 41)
+            {
+              Dwg_Object_VPORT *o = obj->tio.object->tio.VPORT;
+              o->aspect_ratio = pair->value.d;
+              o->viewwidth = o->aspect_ratio * o->VIEWSIZE;
+              LOG_TRACE ("VPORT.aspect_ratio = %f [BD 41]\n", o->aspect_ratio);
+              LOG_TRACE ("VPORT.viewwidth = %f [BD 0]\n", o->viewwidth);
+            }
           else if (obj->fixedtype == DWG_TYPE_LEADER
                    && (pair->code == 10 || pair->code == 20
                        || pair->code == 30))

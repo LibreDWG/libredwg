@@ -5951,6 +5951,8 @@ static const Dwg_DYNAPI_field _dwg_VPORT_fields[] = {
     0,0,0, 0 },
   { "VIEWSIZE",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_VPORT, VIEWSIZE),
     0,0,0, 40 },
+  { "viewwidth",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_VPORT, viewwidth),
+    0,0,0, 0 },
   { "aspect_ratio",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_VPORT, aspect_ratio),
     0,0,0, 41 },
   { "VIEWCTR",	"2RD", sizeof (BITCODE_2RD),  OFF (struct _dwg_object_VPORT, VIEWCTR),

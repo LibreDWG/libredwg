@@ -6820,6 +6820,8 @@ BS
 B
 @item VIEWSIZE
 BD,	DXF 40
+@item viewwidth
+BD
 @item aspect_ratio
 BD,	DXF 41
 @item VIEWCTR

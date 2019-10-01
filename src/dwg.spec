@@ -2965,11 +2965,7 @@ DWG_OBJECT(VPORT)
   FIELD_3RD (VIEWDIR, 16);
   FIELD_3RD (view_target, 17);
   FIELD_RD (VIEWSIZE, 40);
-  PRE (R_13) {
-    FIELD_RD (aspect_ratio, 41);
-  } else {
-    VALUE_RD(FIELD_VALUE(aspect_ratio) / FIELD_VALUE(VIEWSIZE), 41);
-  }
+  FIELD_RD (aspect_ratio, 41); // = viewwidth / VIEWSIZE
   FIELD_RD (lens_length, 42);
   FIELD_RD (front_clip, 43);
   FIELD_RD (back_clip, 44);
@@ -3040,6 +3036,9 @@ DWG_OBJECT(VPORT)
   { // TODO verify
     FIELD_RD (VIEWSIZE, 40);
     FIELD_RD (aspect_ratio, 41);
+    DECODER {
+      FIELD_VALUE (viewwidth) = FIELD_VALUE (aspect_ratio) * FIELD_VALUE (VIEWSIZE);
+    }
     FIELD_2RD (VIEWCTR, 12);
     FIELD_3RD (view_target, 17);
     FIELD_3RD (VIEWDIR, 16);
@@ -3066,8 +3065,14 @@ DWG_OBJECT(VPORT)
   }
   else
   {
-    FIELD_BD (VIEWSIZE, 40);
-    FIELD_BD (aspect_ratio, 41); //wrong
+    FIELD_BD (VIEWSIZE, 40); // i.e view height
+    FIELD_BD (viewwidth, 0);
+    DECODER {
+      FIELD_VALUE (aspect_ratio) = FIELD_VALUE (viewwidth) / FIELD_VALUE (VIEWSIZE);
+    }
+    JSON {
+      FIELD_BD (aspect_ratio, 0);
+    }
     FIELD_2RD (VIEWCTR, 12);
     FIELD_3BD (view_target, 17);
     FIELD_3BD (VIEWDIR, 16);
