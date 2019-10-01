@@ -29,7 +29,7 @@
 
 #include <dwg.h>
 #include "bits.h"
-#include "out_json.h"
+#include "escape.h"
 #include "suffix.inc"
 
 #ifndef M_PI
