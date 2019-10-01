@@ -18433,6 +18433,14 @@ static int test_TABLE (const Dwg_Object *obj)
         fail ("TABLE.extrusion [3BD]");
   }
   {
+    struct _dwg_FormattedTableData fdata;
+    if (dwg_dynapi_entity_value (table, "TABLE", "fdata", &fdata, NULL)
+        && !memcmp (&fdata, &table->fdata, sizeof (table->fdata)))
+        pass ();
+    else
+        fail ("TABLE.fdata [struct _dwg_FormattedTableData]");
+  }
+  {
     BITCODE_H first_attrib;
     if (dwg_dynapi_entity_value (table, "TABLE", "first_attrib", &first_attrib, NULL)
         && !memcmp (&first_attrib, &table->first_attrib, sizeof (table->first_attrib)))
@@ -18953,6 +18961,14 @@ static int test_TABLE (const Dwg_Object *obj)
         fail ("TABLE.last_attrib [H]");
   }
   {
+    struct _dwg_LinkedData ldata;
+    if (dwg_dynapi_entity_value (table, "TABLE", "ldata", &ldata, NULL)
+        && !memcmp (&ldata, &table->ldata, sizeof (table->ldata)))
+        pass ();
+    else
+        fail ("TABLE.ldata [struct _dwg_LinkedData]");
+  }
+  {
     BITCODE_BL num_break_heights;
     if (dwg_dynapi_entity_value (table, "TABLE", "num_break_heights", &num_break_heights, NULL)
         && num_break_heights == table->num_break_heights)
@@ -19115,12 +19131,20 @@ static int test_TABLE (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_H table_style_id;
-    if (dwg_dynapi_entity_value (table, "TABLE", "table_style_id", &table_style_id, NULL)
-        && !memcmp (&table_style_id, &table->table_style_id, sizeof (table->table_style_id)))
+    BITCODE_H table_style;
+    if (dwg_dynapi_entity_value (table, "TABLE", "table_style", &table_style, NULL)
+        && !memcmp (&table_style, &table->table_style, sizeof (table->table_style)))
         pass ();
     else
-        fail ("TABLE.table_style_id [H]");
+        fail ("TABLE.table_style [H]");
+  }
+  {
+    struct _dwg_LinkedTableData tdata;
+    if (dwg_dynapi_entity_value (table, "TABLE", "tdata", &tdata, NULL)
+        && !memcmp (&tdata, &table->tdata, sizeof (table->tdata)))
+        pass ();
+    else
+        fail ("TABLE.tdata [struct _dwg_LinkedTableData]");
   }
   {
     BITCODE_CMC title_horiz_bottom_color;

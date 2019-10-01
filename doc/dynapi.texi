@@ -3438,7 +3438,7 @@ H
 H*
 @item seqend
 H
-@item table_style_id
+@item table_style
 H,	DXF 342
 @item title_row_style_override
 H,	DXF 7
@@ -3470,6 +3470,12 @@ Dwg_TABLE_BreakHeight*
 BL
 @item break_rows
 Dwg_TABLE_BreakRow*
+@item ldata
+struct _dwg_LinkedData
+@item tdata
+struct _dwg_LinkedTableData
+@item fdata
+struct _dwg_FormattedTableData
 
 @end vtable
 @end indentedblock

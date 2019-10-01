@@ -4836,14 +4836,16 @@ DWG_OBJECT(TABLEGEOMETRY)
       END_REPEAT_BLOCK
       SET_PARENT_FIELD(cell.geom_data, geom_parent, &_obj->cell)
       END_REPEAT(cell.geom_data);
+      #undef cell
   END_REPEAT_BLOCK
   SET_PARENT_OBJ(cells)
   END_REPEAT(cells);
 
 DWG_OBJECT_END
 
-//pg.229 20.4.96, as ACAD_TABLE
-//this works for the pre-2010 variant, deriving from INSERT
+// pg.229 20.4.96, as ACAD_TABLE (varies)
+// works ok for the pre-2010 variant, deriving from INSERT
+// r2010+ it is TABLECONTENT
 DWG_ENTITY(TABLE)
 
   DECODE_UNKNOWN_BITS
@@ -4857,17 +4859,184 @@ DWG_ENTITY(TABLE)
       VERSION(R_2013)
         FIELD_BL (unknown_bl1, 0);
 
-      //TODO continue as 20.4.96.2 AcDbTableContent subclass: 20.4.97
-      //either as sub-struct or separate call
-#ifdef DEBUG_CLASSES
-#  if defined(IS_DECODER)
-      return DWG_PRIVATE_N(ACTION, TABLECONTENT) (dat, hdl_dat, str_dat, obj);
-#  elif defined(IS_FREE)
-      return DWG_PRIVATE_N(ACTION, TABLECONTENT) (dat, obj);
-#  else
-      return DWG_FUNC_N(ACTION, TABLECONTENT) (dat, obj);
-#  endif
+  // i.e. TABLECONTENT: 20.4.96.2 AcDbTableContent subclass: 20.4.97
+  SUBCLASS (AcDbDataTableContent)
+  FIELD_T (ldata.name, 1);
+  FIELD_T (ldata.desc, 300);
+
+  FIELD_BL (tdata.num_cols, 90);
+  REPEAT(tdata.num_cols, tdata.cols, Dwg_TableDataColumn)
+  REPEAT_BLOCK
+      SUB_FIELD_T (tdata.cols[rcount1],name, 300);
+      SUB_FIELD_BL (tdata.cols[rcount1],custom_data, 91);
+      CellStyle_fields(tdata.cols[rcount1].cellstyle);
+  END_REPEAT_BLOCK
+  SET_PARENT(tdata.cols, &_obj->tdata)
+  END_REPEAT(tdata.cols);
+  FIELD_BL (tdata.num_rows, 90);
+  REPEAT(tdata.num_rows, tdata.rows, Dwg_TableRow)
+  REPEAT_BLOCK
+      #define row tdata.rows[rcount1]
+      FIELD_BL (row.num_cells, 90);
+      REPEAT2(row.num_cells, row.cells, Dwg_TableCell)
+      REPEAT_BLOCK
+          #define cell row.cells[rcount2]
+          SUB_FIELD_BL (cell,flag, 90);
+          SUB_FIELD_T (cell,tooltip, 300);
+          SUB_FIELD_BL (cell,customdata, 91);
+          SUB_FIELD_BL (cell,num_customdata_items, 90);
+          REPEAT3(cell.num_customdata_items, cell.customdata_items, Dwg_TABLE_CustomDataItem)
+          REPEAT_BLOCK
+              SUB_FIELD_T (cell.customdata_items[rcount3],name, 300);
+              TABLE_value_fields(cell.customdata_items[rcount3].value);
+              if (error & DWG_ERR_INVALIDTYPE)
+                {
+#ifdef IS_JSON
+                  NOCOMMA; ENDHASH;
+                  NOCOMMA; ENDHASH;
+                  NOCOMMA; ENDHASH;
 #endif
+                  END_REPEAT(cell.customdata_items)
+                  END_REPEAT(row.cells)
+                  END_REPEAT(tdata.rows)
+                  return error;
+                }
+          END_REPEAT_BLOCK
+          SET_PARENT_FIELD(cell.customdata_items, cell_parent, &_obj->cell)
+          END_REPEAT(cell.customdata_items);
+          SUB_FIELD_BL (cell,has_linked_data, 92);
+          if (FIELD_VALUE(cell.has_linked_data))
+            {
+              SUB_FIELD_HANDLE (cell,data_link, 5, 340);
+              SUB_FIELD_BL (cell,num_rows, 93);
+              SUB_FIELD_BL (cell,num_cols, 94);
+              SUB_FIELD_BL (cell,unknown, 96);
+            }
+          SUB_FIELD_BL (cell,num_cell_contents, 95);
+          REPEAT3(cell.num_cell_contents, cell.cell_contents, Dwg_TableCellContent)
+          REPEAT_BLOCK
+              #define content tdata.rows[rcount1].cells[rcount2].cell_contents[rcount3]
+
+              SUB_FIELD_BL(content,type, 90);
+              if (FIELD_VALUE(content.type) == 1)
+                {
+                  // 20.4.99 Value, page 241
+                  TABLE_value_fields(content.value)
+                  if (error & DWG_ERR_INVALIDTYPE)
+                    {
+#ifdef IS_JSON
+                      NOCOMMA; ENDHASH;
+                      NOCOMMA; ENDHASH;
+                      NOCOMMA; ENDHASH;
+#endif
+                      END_REPEAT(cell.cell_contents)
+                      END_REPEAT(row.cells)
+                      END_REPEAT(tdata.rows)
+                      return error;
+                    }
+                }
+              else if (FIELD_VALUE(content.type) == 2) { // Field
+                SUB_FIELD_HANDLE (content,handle, 3, 340);
+              }
+              else if (FIELD_VALUE(content.type) == 4) { // Block
+                SUB_FIELD_HANDLE (content,handle, 3, 340);
+              }
+              SUB_FIELD_BL (content,num_attrs, 91);
+              REPEAT4(content.num_attrs, content.attrs, Dwg_TableCellContent_Attr)
+              REPEAT_BLOCK
+                  #define attr content.attrs[rcount4]
+                  SUB_FIELD_HANDLE (attr,attdef, 5, 330);
+                  SUB_FIELD_T (attr,value, 301);
+                  SUB_FIELD_BL (attr,index, 92);
+                  #undef attr
+              END_REPEAT_BLOCK
+              SET_PARENT(content.attrs, &_obj->content)
+              END_REPEAT(content.attrs);
+              if (FIELD_VALUE(content.has_content_format_overrides))
+                {
+                  ContentFormat_fields(content.content_format);
+                }
+              #undef content
+          END_REPEAT_BLOCK
+          SET_PARENT(cell.cell_contents, &_obj->cell)
+          END_REPEAT(cell.cell_contents);
+          SUB_FIELD_BL (cell, style_id, 90);
+          SUB_FIELD_BL (cell, has_geom_data, 91);
+          if (FIELD_VALUE(cell.has_geom_data))
+            {
+              SUB_FIELD_BL (cell,geom_data_flag, 91);
+              SUB_FIELD_BD (cell,unknown_d40, 40);
+              SUB_FIELD_BD (cell,unknown_d41, 41);
+              SUB_FIELD_BL (cell,has_cell_geom, 0);
+              SUB_FIELD_HANDLE (cell,cell_geom_handle, ANYCODE, 0);
+              if (FIELD_VALUE(cell.has_cell_geom))
+                {
+                  REPEAT_N(1, cell.geom_data, Dwg_CellContentGeometry)
+                  REPEAT_BLOCK
+                      #define geom cell.geom_data[0]
+                      SUB_FIELD_3BD (geom,dist_top_left, 0);
+                      SUB_FIELD_3BD (geom,dist_center, 0);
+                      SUB_FIELD_BD (geom,content_width, 0);
+                      SUB_FIELD_BD (geom,width, 0);
+                      SUB_FIELD_BD (geom,height, 0);
+                      SUB_FIELD_BD (geom,unknown, 0);
+#undef geom
+                  END_REPEAT_BLOCK
+                  SET_PARENT_FIELD(cell.geom_data, cell_parent, &_obj->cell)
+                  END_REPEAT (cell.geom_data);
+                }
+            }
+          #undef cell
+      END_REPEAT_BLOCK
+      SET_PARENT_FIELD(row.cells, row_parent, &_obj->row)
+      END_REPEAT(row.cells);
+      SUB_FIELD_BL (row,custom_data, 91);
+      SUB_FIELD_BL (row,num_customdata_items, 90);
+      REPEAT3(row.num_customdata_items, row.customdata_items, Dwg_TABLE_CustomDataItem)
+      REPEAT_BLOCK
+          SUB_FIELD_T (row.customdata_items[rcount3],name, 300);
+          TABLE_value_fields(row.customdata_items[rcount3].value);
+          if (error & DWG_ERR_INVALIDTYPE)
+            {
+#ifdef IS_JSON
+              NOCOMMA; ENDHASH;
+              NOCOMMA; ENDHASH;
+#endif
+              END_REPEAT(row.customdata_items)
+              END_REPEAT(tdata.rows)
+              return error;
+            }
+      END_REPEAT_BLOCK
+      SET_PARENT_FIELD(row.customdata_items, row_parent, &_obj->row)
+      END_REPEAT(row.customdata_items);
+      {
+        CellStyle_fields(row.cellstyle);
+        SUB_FIELD_BL (row,style_id, 90);
+        SUB_FIELD_BL (row,height, 40);
+      }
+      #undef row
+  END_REPEAT_BLOCK
+  SET_PARENT(tdata.rows, &_obj->tdata)
+  END_REPEAT(tdata.rows);
+  FIELD_BL (tdata.num_field_refs, 0);
+  HANDLE_VECTOR (tdata.field_refs, tdata.num_field_refs, 3, 0);
+
+  FIELD_BL (fdata.num_merged_cells, 90);
+  REPEAT(fdata.num_merged_cells, fdata.merged_cells, Dwg_FormattedTableMerged)
+  REPEAT_BLOCK
+      #define merged fdata.merged_cells[rcount1]
+      SUB_FIELD_BL (merged,top_row, 91);
+      SUB_FIELD_BL (merged,left_col, 92);
+      SUB_FIELD_BL (merged,bottom_row, 93);
+      SUB_FIELD_BL (merged,right_col, 94);
+      #undef merged
+  END_REPEAT_BLOCK
+  SET_PARENT(fdata.merged_cells, &_obj->fdata)
+  END_REPEAT(fdata.merged_cells);
+
+  START_OBJECT_HANDLE_STREAM;
+  FIELD_HANDLE (table_style, 3, 340);
+  return error;
     }
 
   SUBCLASS (AcDbBlockReference)
@@ -5240,7 +5409,7 @@ DWG_ENTITY(TABLE)
     FIELD_HANDLE (seqend, 3, 0);
   }
 
-  FIELD_HANDLE (table_style_id, 5, 342);
+  FIELD_HANDLE (table_style, 5, 342);
 
   REPEAT(num_cells, cells, Dwg_TABLE_Cell)
   REPEAT_BLOCK

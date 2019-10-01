@@ -3242,7 +3242,7 @@ static const Dwg_DYNAPI_field _dwg_TABLE_fields[] = {
     1,1,0, 0 },
   { "seqend",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_TABLE, seqend),
     1,0,0, 0 },
-  { "table_style_id",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_TABLE, table_style_id),
+  { "table_style",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_TABLE, table_style),
     1,0,0, 342 },
   { "title_row_style_override",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_TABLE, title_row_style_override),
     1,0,0, 7 },
@@ -3274,6 +3274,12 @@ static const Dwg_DYNAPI_field _dwg_TABLE_fields[] = {
     0,0,0, 0 },
   { "break_rows",	"Dwg_TABLE_BreakRow*", sizeof (Dwg_TABLE_BreakRow*),  OFF (struct _dwg_entity_TABLE, break_rows),
     1,1,0, 0 },
+  { "ldata",	"struct _dwg_LinkedData", sizeof (void *),  OFF (struct _dwg_entity_TABLE, ldata),
+    1,0,0, 0 },
+  { "tdata",	"struct _dwg_LinkedTableData", sizeof (void *),  OFF (struct _dwg_entity_TABLE, tdata),
+    1,0,0, 0 },
+  { "fdata",	"struct _dwg_FormattedTableData", sizeof (void *),  OFF (struct _dwg_entity_TABLE, fdata),
+    1,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_TEXT: (sorted by offset) */
