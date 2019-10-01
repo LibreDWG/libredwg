@@ -3038,6 +3038,7 @@ DWG_OBJECT(VPORT)
     FIELD_RD (aspect_ratio, 41);
     DECODER {
       FIELD_VALUE (viewwidth) = FIELD_VALUE (aspect_ratio) * FIELD_VALUE (VIEWSIZE);
+      LOG_TRACE ("viewwidth: %f (calc)\n", FIELD_VALUE (viewwidth))
     }
     FIELD_2RD (VIEWCTR, 12);
     FIELD_3RD (view_target, 17);
@@ -3069,6 +3070,7 @@ DWG_OBJECT(VPORT)
     FIELD_BD (viewwidth, 0);
     DECODER {
       FIELD_VALUE (aspect_ratio) = FIELD_VALUE (viewwidth) / FIELD_VALUE (VIEWSIZE);
+      LOG_TRACE ("aspect_ratio: %f (calc)\n", FIELD_VALUE (aspect_ratio))
     }
     JSON {
       FIELD_BD (aspect_ratio, 0);

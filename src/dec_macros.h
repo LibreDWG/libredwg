@@ -426,14 +426,14 @@
   {                                                                           \
     FIELD_DD (nam.x, d1, dxf);                                                \
     FIELD_DD (nam.y, d2, dxf + 10);                                           \
-    FIELD_2PT_TRACE (nam, DD, dxf);                                           \
+    FIELD_2PT_TRACE (nam, 2DD, dxf);                                           \
   }
 #define FIELD_3DD(nam, def, dxf)                                              \
   {                                                                           \
     FIELD_DD (nam.x, FIELD_VALUE (def.x), dxf);                               \
     FIELD_DD (nam.y, FIELD_VALUE (def.y), dxf + 10);                          \
     FIELD_DD (nam.z, FIELD_VALUE (def.z), dxf + 20);                          \
-    FIELD_3PT_TRACE (nam, DD, dxf);                                           \
+    FIELD_3PT_TRACE (nam, 3DD, dxf);                                           \
   }
 #define FIELD_3RD(nam, dxf)                                                   \
   {                                                                           \
@@ -446,7 +446,7 @@
         LOG_ERROR ("Invalid 3RD " #nam);                                      \
         return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
       }                                                                       \
-    FIELD_3PT_TRACE (nam, RD, dxf);                                           \
+    FIELD_3PT_TRACE (nam, 3RD, dxf);                                           \
   }
 #define FIELD_3BD(nam, dxf)                                                   \
   {                                                                           \
@@ -459,7 +459,7 @@
         LOG_ERROR ("Invalid 3BD " #nam);                                      \
         return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
       }                                                                       \
-    FIELD_3PT_TRACE (nam, BD, dxf);                                           \
+    FIELD_3PT_TRACE (nam, 3BD, dxf);                                           \
   }
 #define FIELD_2RD(nam, dxf)                                                   \
   {                                                                           \
@@ -470,7 +470,7 @@
         LOG_ERROR ("Invalid 2RD " #nam);                                      \
         return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
       }                                                                       \
-    FIELD_2PT_TRACE (nam, RD, dxf);                                           \
+    FIELD_2PT_TRACE (nam, 2RD, dxf);                                           \
   }
 #define FIELD_2BD(nam, dxf)                                                   \
   {                                                                           \
@@ -481,7 +481,7 @@
         LOG_ERROR ("Invalid 2BD " #nam);                                      \
         return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
       }                                                                       \
-    FIELD_2PT_TRACE (nam, BD, dxf);                                           \
+    FIELD_2PT_TRACE (nam, 2BD, dxf);                                           \
   }
 #define FIELD_2BD_1(nam, dxf)                                                 \
   {                                                                           \
@@ -492,7 +492,7 @@
         LOG_ERROR ("Invalid 2BD_1 " #nam);                                    \
         return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
       }                                                                       \
-    FIELD_2PT_TRACE (nam, BD, dxf);                                           \
+    FIELD_2PT_TRACE (nam, 2BD_1, dxf);                                           \
   }
 // FIELDG(nam.x, BD, dxf); FIELDG(nam.y, BD, dxf+1);
 #define FIELD_3BD_1(nam, dxf)                                                 \
@@ -506,7 +506,7 @@
         LOG_ERROR ("Invalid 3BD_1 " #nam);                                    \
         return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
       }                                                                       \
-    FIELD_3PT_TRACE (nam, BD, dxf);                                           \
+    FIELD_3PT_TRACE (nam, 3BD_1, dxf);                                           \
   }
 //    FIELDG(nam.x, BD, dxf); FIELDG(nam.y, BD, dxf+1);
 //    FIELDG(nam.z, BD, dxf+2); }
