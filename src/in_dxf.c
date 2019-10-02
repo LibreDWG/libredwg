@@ -1151,7 +1151,77 @@ is_table_name (const char *name)
 }
 
 static Dxf_Pair *
-new_MLINESTYLE_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                  Dxf_Pair *restrict pair)
+{
+  Dwg_Object_LTYPE *_o = obj->tio.object->tio.LTYPE;
+  Dwg_Data *dwg = obj->parent;
+  int num_dashes = (int)_o->num_dashes;
+  _o->dashes = calloc (_o->num_dashes, sizeof (Dwg_LTYPE_dash));
+  for (int j = -1; j < num_dashes;)
+    {
+      if (pair->code == 0)
+        return pair;
+      else if (pair->code == 49)
+        {
+          j++;
+          assert (j < num_dashes);
+          _o->dashes[j].length = pair->value.d;
+          LOG_TRACE ("LTYPE.dashes[%d].length = %f [BD 49]\n", j,
+                     pair->value.d);
+        }
+      else if (pair->code == 74)
+        {
+          if (j < 0)
+            j++;
+          assert (j < num_dashes);
+          _o->dashes[j].complex_shapecode = pair->value.i;
+          LOG_TRACE ("LTYPE.dashes[%d].complex_shapecode = %d [RS 74]\n", j,
+                     pair->value.i);
+        }
+      else if (pair->code == 75)
+        {
+          _o->dashes[j].shape_flag = pair->value.i;
+          LOG_TRACE ("LTYPE.dashes[%d].shape_flag = %d [RS 75]\n", j,
+                     pair->value.i);
+          if (_o->dashes[j].shape_flag & 0x2)
+            _o->text_area_is_present = 1;
+        }
+      else if (pair->code == 44)
+        {
+          _o->dashes[j].x_offset = pair->value.d;
+          LOG_TRACE ("LTYPE.dashes[%d].x_offset = %f [BD 44]\n", j,
+                     pair->value.d);
+        }
+      else if (pair->code == 45)
+        {
+          _o->dashes[j].y_offset = pair->value.d;
+          LOG_TRACE ("LTYPE.dashes[%d].y_offset = %f [BD 45]\n", j,
+                     pair->value.d);
+        }
+      else if (pair->code == 46)
+        {
+          _o->dashes[j].scale = pair->value.d;
+          LOG_TRACE ("LTYPE.dashes[%d].scale = %f [BD 46]\n", j,
+                     pair->value.d);
+        }
+      else if (pair->code == 50)
+        {
+          _o->dashes[j].rotation = deg2rad (pair->value.d);
+          LOG_TRACE ("LTYPE.dashes[%d].rotation = %f [BD 50]\n", j,
+                     _o->dashes[j].rotation);
+        }
+      else
+        break; // not a Dwg_LTYPE_dash
+
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+    }
+  return pair;
+}
+
+static Dxf_Pair *
+add_MLINESTYLE_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                       Dxf_Pair *restrict pair)
 {
   int num_lines = pair->value.i;
@@ -2796,7 +2866,7 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                          pair->code);
               break;
             case 46:
-              ctx->content.blk.rotation = pair->value.d; // deg2rad?
+              ctx->content.blk.rotation = deg2rad (pair->value.d);
               LOG_TRACE ("%s.ctx.content.blk.rotation = %f [BD %d]\n",
                          obj->name, pair->value.d, pair->code);
               break;
@@ -5280,10 +5350,17 @@ new_object (char *restrict name, char *restrict dxfname,
               layer->flag |= layer->linewt << 5;
               LOG_TRACE ("LAYER.flag = 0x%x [BS 70]\n", layer->flag);
             }
+          else if (pair->code == 49 && obj->fixedtype == DWG_TYPE_LTYPE)
+            {
+              pair = add_LTYPE_dashes (obj, dat, pair);
+              if (pair->code == 0)
+                return pair;
+              goto next_pair;
+            }
           else if (pair->code == 71 && obj->fixedtype == DWG_TYPE_MLINESTYLE
                    && pair->value.i != 0)
             {
-              pair = new_MLINESTYLE_lines (obj, dat, pair);
+              pair = add_MLINESTYLE_lines (obj, dat, pair);
               if (pair->code == 0)
                 return pair;
               goto next_pair;
