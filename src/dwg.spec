@@ -1384,6 +1384,7 @@ DWG_ENTITY(POLYLINE_MESH)
     }
   SINCE (R_2004)
     {
+      VALUEOUTOFBOUNDS (num_owned, 100000)
       HANDLE_VECTOR (vertex, num_owned, 4, 0);
     }
   FIELD_HANDLE (seqend, 3, 0);
