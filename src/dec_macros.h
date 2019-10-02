@@ -723,7 +723,7 @@
       /* return DWG_ERR_VALUEOUTOFBOUNDS; */                                  \
     }
 #define _VECTOR_CHKCOUNT(nam, size, maxelemsize, dat)                         \
-  if ((long)(size) * (maxelemsize) > AVAIL_BITS (dat))                        \
+  if ((long)((size) * (maxelemsize)) > AVAIL_BITS (dat))                      \
     {                                                                         \
       LOG_ERROR ("Invalid " #nam                                              \
                  " size %ld. Need min. %u bits, have %ld for %s.",            \
