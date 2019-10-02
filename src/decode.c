@@ -2380,7 +2380,8 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           LOG_HANDLE ("unknown:          %u %u\n", dwg->dwg_class[i].unknown_1,
                       dwg->dwg_class[i].unknown_2)
 
-          if (strEQ (dwg->dwg_class[i].dxfname, "LAYOUT"))
+          if (dwg->dwg_class[i].dxfname
+              && strEQ (dwg->dwg_class[i].dxfname, "LAYOUT"))
             dwg->layout_type = dwg->dwg_class[i].number;
         }
     }
