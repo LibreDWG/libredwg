@@ -196,24 +196,16 @@ output_BLOCK_HEADER (Dwg_Object_Ref *ref)
   Dwg_Object *obj;
   Dwg_Object_BLOCK_HEADER *hdr;
 
-  if (!ref)
-    {
-      fprintf (stderr, "Found null object reference. Could not output an SVG "
-                       "symbol for this BLOCK_HEADER\n");
-      return;
-    }
+  if (!ref) // silently ignore empty pspaces
+    return;
   if (!ref->obj)
-    {
-      fprintf (stderr, "Found null ref->obj\n");
-      return;
-    }
+    return;
   obj = ref->obj;
   if (obj->type != DWG_TYPE_BLOCK_HEADER)
     {
       fprintf (stderr, "Argument not a BLOCK_HEADER reference\n");
       return;
     }
-
   /* TODO: Review.  (This check avoids a segfault, but it is
      still unclear whether or not the condition is valid.)  */
   if (!obj->tio.object)
