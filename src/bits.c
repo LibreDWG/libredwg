@@ -100,7 +100,8 @@ bit_reset_chain (Bit_Chain *dat)
 {
   unsigned long pos = dat->byte;
   dat->byte = 0;
-  dat->chain += pos;
+  if (dat->byte <= dat->size) // not already overflowed
+    dat->chain += pos;
   if (dat->size > 0)
     dat->size -= pos;
 }
