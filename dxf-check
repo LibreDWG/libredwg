@@ -1,6 +1,6 @@
 #!/bin/sh
 d=${1:-example_2000}
-b=$(basename $d .dwg)
+b=$(basename $d .dxf)
 r=2000
 if [ $(dirname $d) != . ]; then
     r=$(dirname $d)
