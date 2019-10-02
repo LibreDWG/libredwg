@@ -6094,8 +6094,8 @@ DWG_OBJECT(VISUALSTYLE)
   FIELD_BS (edge_model, 74);
   FIELD_BL (edge_style, 91);
   //UNTIL (R_2007) {
-    FIELD_CMC (edge_intersection_color, 64,422);
-    FIELD_CMC (edge_obscured_color, 65,423);
+  FIELD_CMC (edge_intersection_color, 64,422);
+  FIELD_CMC (edge_obscured_color, 65,423);
   //}
 #ifdef DEBUG_CLASSES
   DEBUG_HERE_OBJ
@@ -6124,7 +6124,9 @@ DWG_OBJECT(VISUALSTYLE)
   FIELD_BS (display_shadow_type, 173);
   DXF  { FIELD_B (is_internal_use_only, 291); }
   else { FIELD_BS (is_internal_use_only, 291); }
-  //FIELD_BS (unknown_float45, 45); // only in DXF, not in header
+  /*
+  FIELD_BS (unknown_float45, 45); // only in DXF, not in header
+  */
 #endif
 
   START_OBJECT_HANDLE_STREAM;

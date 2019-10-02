@@ -6794,7 +6794,7 @@ BS,	DXF 173
 @item is_internal_use_only
 BS,	DXF 291
 @item unknown_float45
-BS
+BS,	DXF 45
 
 @end vtable
 @end indentedblock

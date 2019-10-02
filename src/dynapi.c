@@ -5936,7 +5936,7 @@ static const Dwg_DYNAPI_field _dwg_VISUALSTYLE_fields[] = {
   { "is_internal_use_only",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_VISUALSTYLE, is_internal_use_only),
     0,0,0, 291 },
   { "unknown_float45",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_VISUALSTYLE, unknown_float45),
-    0,0,0, 0 },
+    0,0,0, 45 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_VPORT: (sorted by offset) */
