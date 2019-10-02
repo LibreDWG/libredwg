@@ -2253,7 +2253,15 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
         }
       else
         {
-          assert (info->size <= max_decomp_size);
+          if (!(info->size <= max_decomp_size)
+              || !((unsigned long)(address + es.fields.address + 32
+                                   + info->size)
+                   <= dat->size))
+            {
+              sec_dat->chain = NULL;
+              free (decomp);
+              return DWG_ERR_INVALIDDWG;
+            }
           memcpy (&decomp[i * info->size],
                   &dat->chain[address + es.fields.address + 32], info->size);
           sec_dat->chain = decomp;
