@@ -17,7 +17,7 @@
           {
             FIELD_BLL (preview_size, 160);
           }
-        if (ent->preview_size >= 0 && ent->preview_size < 210210)
+        if ((int)ent->preview_size >= 0 && ent->preview_size < 210210)
           {
             FIELD_BINARY (preview, ent->preview_size, 310);
           }
@@ -206,3 +206,4 @@
       FIELD_RC (linewt, 370);
     }
   }
+

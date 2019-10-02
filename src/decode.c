@@ -1182,8 +1182,8 @@ classes_section:
           offset = bit_read_MC (dat);
           if (!handleoff || handleoff > max_handles - last_handle)
             {
-              BITCODE_BL prevsize = dwg->num_objects
-                ? dwg->object[dwg->num_objects - 1].size + 4 : 0;
+              BITCODE_MC prevsize = dwg->num_objects
+                ? dwg->object[dwg->num_objects - 1].size + 4 : 0L;
               LOG_WARN ("Ignore invalid handleoff (@%lu)", oldpos);
               if (offset == 1 ||
                   (offset > 0 && offset < prevsize && prevsize > 0) ||
@@ -2535,7 +2535,7 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           offset = bit_read_MC (&hdl_dat);
           if (!handleoff || handleoff > max_handles - last_handle)
             {
-              BITCODE_BL prevsize = dwg->num_objects
+              BITCODE_MC prevsize = dwg->num_objects
                 ? dwg->object[dwg->num_objects - 1].size + 4 : 0;
               LOG_WARN ("Ignore invalid handleoff (@%lu)", oldpos)
               if (offset == 1 ||
