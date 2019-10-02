@@ -2153,6 +2153,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
           break;
         }
     }
+  sec_dat->chain = NULL; // fixes double-free
   if (!info)
     {
       LOG_WARN ("Failed to find section_info[" FORMAT_BL "] with type 0x%x", i,
@@ -2182,6 +2183,10 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       return DWG_ERR_OUTOFMEM;
     }
   initial_address = info->sections[0]->address;
+  sec_dat->bit = 0;
+  sec_dat->byte = 0;
+  sec_dat->version = dat->version;
+  sec_dat->from_version = dat->from_version;
 
   for (i = 0; i < info->num_sections; ++i)
     {
@@ -2229,11 +2234,6 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       // LOG_INSANE ("bytes_left:            %d\n",
       //            max_decomp_size - (i * info->max_decomp_size))
 
-      sec_dat->bit = 0;
-      sec_dat->byte = 0;
-      sec_dat->version = dat->version;
-      sec_dat->from_version = dat->from_version;
-
       // check if compressed at all
       if (info->compressed == 2)
         {
@@ -2243,6 +2243,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
               es.fields.data_size);
           if (error > DWG_ERR_CRITICAL)
             {
+              sec_dat->chain = NULL; // fix double-free
               free (decomp);
               return error;
             }

@@ -731,7 +731,6 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
   sec_dat->byte = 0;
   sec_dat->size = max_decomp_size;
   sec_dat->version = dat->version;
-  sec_dat->chain = decomp;
 
   for (i = 0; i < (int)section->num_pages; i++)
     {
@@ -772,6 +771,7 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
                   section_page->uncomp_size);
         }
     }
+  sec_dat->chain = decomp;
   return 0;
 }
 
