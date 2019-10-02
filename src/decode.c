@@ -1869,7 +1869,8 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           error |= DWG_ERR_VALUEOUTOFBOUNDS;
           dwg->header.section[i].number = section_map_id;
           dwg->header.section[i].address = section_map_address;
-          dwg->header.section[i].size
+          if (i > 0)
+            dwg->header.section[i].size
               = section_map_address - dwg->header.section[i - 1].address;
         }
       info = find_section (dwg, dwg->r2004_header.section_info_id);
