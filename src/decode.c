@@ -2356,9 +2356,15 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               dwg->dwg_class[i].appname = (char *)bit_read_TU (&str_dat);
               dwg->dwg_class[i].cppname = (char *)bit_read_TU (&str_dat);
               dwg->dwg_class[i].dxfname_u = bit_read_TU (&str_dat);
-              LOG_TRACE_TU ("Application name", dwg->dwg_class[i].appname, 0)
-              LOG_TRACE_TU ("C++ class name  ", dwg->dwg_class[i].cppname, 0)
-              LOG_TRACE_TU ("DXF record name ", dwg->dwg_class[i].dxfname_u, 0)
+              if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)
+                {
+                  char *appu8 = bit_convert_TU ((BITCODE_TU)dwg->dwg_class[i].appname);
+                  LOG_TRACE ("Application name: \"%s\" [TU 0 (as utf-8)]\n", appu8);
+                  //LOG_TRACE_TU ("Application name", dwg->dwg_class[i].appname, 0)
+                  LOG_TRACE_TU ("C++ class name  ", dwg->dwg_class[i].cppname, 0)
+                  LOG_TRACE_TU ("DXF record name ", dwg->dwg_class[i].dxfname_u, 0)
+                  free (appu8);
+                }
               dwg->dwg_class[i].dxfname
                   = bit_convert_TU (dwg->dwg_class[i].dxfname_u);
             }

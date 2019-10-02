@@ -75,26 +75,13 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
     GROUP (dxf);                                                              \
     dxf_fixup_string (dat, (char *)value);                                    \
   }
-#ifdef HAVE_NATIVE_WCHAR2
-#  define VALUE_TU(value, dxf)                                                \
+#define VALUE_TU(wstr, dxf)                                                   \
     {                                                                         \
+      char *u8 = bit_convert_TU ((BITCODE_TU)wstr);                           \
       GROUP (dxf);                                                            \
-      fprintf (dat->fh, "%ls\r\n", value ? (wchar_t *)value : L"");           \
+      fprintf (dat->fh, "%s\r\n", u8);                                        \
+      free (u8);                                                              \
     }
-#else
-#  define VALUE_TU(wstr, dxf)                                                 \
-    {                                                                         \
-      BITCODE_TU ws = (BITCODE_TU)wstr;                                       \
-      uint16_t _c;                                                            \
-      GROUP (dxf);                                                            \
-      if (wstr)                                                               \
-        while ((_c = *ws++))                                                  \
-          {                                                                   \
-            fprintf (dat->fh, "%c", (char)(_c & 0xff));                       \
-          }                                                                   \
-      fprintf (dat->fh, "\r\n");                                              \
-    }
-#endif
 #define VALUE_TFF(str, dxf)                                                   \
   {                                                                           \
     GROUP (dxf);                                                              \
