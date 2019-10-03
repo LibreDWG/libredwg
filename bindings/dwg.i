@@ -25,6 +25,7 @@
 %}
 
 %include "carrays.i"
+%include "stdint.i"
 %array_functions(Dwg_Object, Dwg_Object_Array);
 
 %include "dwg.h"
