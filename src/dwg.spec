@@ -4578,6 +4578,7 @@ DWG_OBJECT_END
       FIELD_BD (sty.margin_horiz_spacing, 40); \
       FIELD_BD (sty.margin_vert_spacing, 40); \
       FIELD_BL (sty.num_borders, 94); /* 0-6 */ \
+      VALUEOUTOFBOUNDS (sty.num_borders, 10000) \
       REPEAT2(sty.num_borders, sty.border, Dwg_BorderStyle) \
       REPEAT_BLOCK \
           SUB_FIELD_BL (sty.border[rcount2],edge_flags, 95);                \
