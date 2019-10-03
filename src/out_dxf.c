@@ -194,14 +194,14 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
     }
 
 #define GROUP(dxf) fprintf (dat->fh, "%3i\r\n", dxf)
-/* avoid empty numbers, and fixup some bad %f libc formatting */
+/* avoid empty numbers, and fixup some bad %f GNU/BSD libc formatting */
 #define VALUE(value, type, dxf)                                               \
   if (dxf)                                                                    \
     {                                                                         \
       char *_s;                                                               \
       const char *_fmt = dxf_format (dxf);                                    \
       GROUP (dxf);                                                            \
-      GCC46_DIAG_IGNORE (-Wformat-nonliteral)                               \
+      GCC46_DIAG_IGNORE (-Wformat-nonliteral)                                 \
       snprintf (buf, 255, _fmt, value);                                       \
       GCC46_DIAG_RESTORE                                                      \
       /* not a string, empty num. must be zero */                             \
@@ -244,13 +244,12 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
         fprintf (dat->fh, "%-16.14f\r\n", value);
     }
 }
-#define VALUE_TYPE(value, type, dxf)                                          \
+#define VALUE_BSd(value, dxf)                                                 \
   if (dxf)                                                                    \
     {                                                                         \
       GROUP (dxf);                                                            \
-      fprintf (dat->fh, FORMAT_##type "\r\n", value);                         \
+      fprintf (dat->fh, "%6i\r\n", value);                                    \
     }
-#define VALUE_BSd(value, dxf) VALUE_TYPE (value, BSd, dxf)
 #define VALUE_RD(value, dxf) dxf_print_rd (dat, value, dxf)
 #define VALUE_B(value, dxf)                                                   \
   if (dxf)                                                                    \
@@ -322,9 +321,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 #define HEADER_BS(nam, dxf)                                                   \
   HEADER_9 (nam);                                                             \
   FIELDG (nam, BS, dxf)
-#define HEADER_BSd(nam, dxf)                                                  \
-  HEADER_9 (nam);                                                             \
-  VALUE_BSd (_obj->nam, dxf)
+#define HEADER_BSd(nam, dxf)   HEADER_BS(nam, dxf)
 #define HEADER_BD(nam, dxf)                                                   \
   HEADER_9 (nam);                                                             \
   FIELD_BD (nam, dxf)
