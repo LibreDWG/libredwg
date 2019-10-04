@@ -262,7 +262,7 @@ decode_preR13_section_ptr (const char *restrict name, Dwg_Section_Type_r11 id,
   strncpy (tbl->name, name, 63);
   LOG_TRACE ("ptr table %-8s [%2d]: size:%-4u nr:%-2ld (0x%lx-0x%lx)\n",
              tbl->name, id, tbl->size, (long)tbl->number, (unsigned long)tbl->address,
-             (unsigned long)(tbl->address + tbl->number * tbl->size))
+             (unsigned long)(tbl->address + (unsigned long)(tbl->number * tbl->size)))
 }
 
 static void
@@ -308,7 +308,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 
   LOG_TRACE ("\ncontents table %-8s [%2d]: size:%-4u nr:%-3ld (0x%lx-0x%lx)\n",
              tbl->name, id, tbl->size, (long)tbl->number, (unsigned long)tbl->address,
-             (unsigned long)(tbl->address + tbl->number * tbl->size))
+             (unsigned long)(tbl->address + (unsigned long)(tbl->number * tbl->size)))
   dat->byte = tbl->address;
   if (dwg->num_objects % REFS_PER_REALLOC == 0)
     dwg->object = realloc (dwg->object, old_size + size + REFS_PER_REALLOC);
@@ -333,7 +333,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   LOG_TRACE ("\n-- table entry " #token " [%d]:\n", i)
 
 #define CHK_ENDPOS                                                            \
-  pos = tbl->address + (i + 1) * tbl->size;                                   \
+  pos = tbl->address + ((long)(i + 1) * tbl->size);                           \
   if ((long)(pos - dat->byte) != 2)                                           \
     {                                                                         \
       LOG_WARN ("offset %ld", pos - dat->byte);                               \
