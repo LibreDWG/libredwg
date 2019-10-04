@@ -6,7 +6,7 @@ from libredwg import *
 import sys
 
 if (len(sys.argv) != 2):
-        print "Usage: load_dwg.py <filename>"
+        print("Usage: load_dwg.py <filename>")
         exit()
 
 filename = sys.argv[1]
@@ -19,8 +19,8 @@ if (error > 0): # critical errors
     if (error > 127):
         exit()
 
-print ".dwg version: %s" % a.header.version
-print "Num objects: %d " % a.num_objects
+print(".dwg version: %s" % a.header.version)
+print("Num objects: %d " % a.num_objects)
 
 #XXX TODO Error: Dwg_Object_LAYER_CONTROL object has no attribute 'tio'
 #print "Num layers: %d" % a.layer_control.tio.object.tio.LAYER_CONTROL.num_entries
@@ -28,5 +28,5 @@ print "Num objects: %d " % a.num_objects
 #XXX ugly, but works
 for i in range(0, a.num_objects):
     obj = Dwg_Object_Array_getitem(a.object, i)
-    print " Supertype: " ,   obj.supertype
-    print "      Type: " ,   obj.type
+    print(" Supertype: " ,   obj.supertype)
+    print("      Type: " ,   obj.type)
