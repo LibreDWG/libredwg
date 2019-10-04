@@ -29,8 +29,85 @@
 %array_functions(Dwg_Object, Dwg_Object_Array);
 
 %include "dwg.h"
-//too large
+//too large. TODO ifdef there
 //%include "dwg_api.h"
+
+/** dynapi */
+typedef struct dwg_field_name_type_offset
+{
+  const char *const name;
+  const char *const type;
+  const unsigned short size;
+  const unsigned short offset;
+  const unsigned short is_indirect:1;
+  const unsigned short is_malloc:1;
+  const unsigned short is_string:1;
+  const short dxf;
+} Dwg_DYNAPI_field;
+
+EXPORT bool is_dwg_entity (const char *name);
+EXPORT bool is_dwg_object (const char *name);
+EXPORT bool dwg_dynapi_header_value (const Dwg_Data *restrict dwg,
+                                     const char *restrict fieldname,
+                                     void *restrict out,
+                                     Dwg_DYNAPI_field *restrict fp);
+EXPORT bool dwg_dynapi_entity_value (void *restrict entity,
+                                     const char *restrict dxfname,
+                                     const char *restrict fieldname,
+                                     void *restrict out,
+                                     Dwg_DYNAPI_field *restrict fp);
+EXPORT bool dwg_dynapi_common_value (void *restrict _obj,
+                                     const char *restrict fieldname,
+                                     void *restrict out,
+                                     Dwg_DYNAPI_field *restrict fp);
+EXPORT bool dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
+                                        const char *restrict fieldname,
+                                        char **restrict textp,
+                                        Dwg_DYNAPI_field *restrict fp);
+EXPORT bool dwg_dynapi_entity_utf8text (void *restrict entity,
+                                        const char *restrict name,
+                                        const char *restrict fieldname,
+                                        char **restrict textp,
+                                        Dwg_DYNAPI_field *restrict fp);
+EXPORT bool dwg_dynapi_common_utf8text (void *restrict _obj,
+                                        const char *restrict fieldname,
+                                        char **restrict textp,
+                                        Dwg_DYNAPI_field *restrict fp);
+EXPORT bool dwg_dynapi_header_set_value (const Dwg_Data *restrict dwg,
+                                         const char *restrict fieldname,
+                                         const void *restrict value,
+                                         const bool is_utf8);
+EXPORT bool dwg_dynapi_entity_set_value (void *restrict entity,
+                                         const char *restrict dxfname,
+                                         const char *restrict fieldname,
+                                         const void *restrict value,
+                                         const bool is_utf8);
+EXPORT bool dwg_dynapi_common_set_value (void *restrict _obj,
+                                         const char *restrict fieldname,
+                                         const void *restrict value,
+                                         const bool is_utf8);
+EXPORT char *dwg_dynapi_handle_name (const Dwg_Data *restrict dwg,
+                                     Dwg_Object_Ref *restrict hdl);
+EXPORT const Dwg_DYNAPI_field *
+dwg_dynapi_header_field (const char *restrict fieldname);
+EXPORT const Dwg_DYNAPI_field *
+dwg_dynapi_entity_field (const char *restrict name,
+                         const char *restrict fieldname);
+EXPORT const Dwg_DYNAPI_field *
+dwg_dynapi_common_entity_field (const char *restrict fieldname);
+EXPORT const Dwg_DYNAPI_field *
+dwg_dynapi_common_object_field (const char *restrict fieldname);
+/* Find the fields for this entity or object. */
+EXPORT const Dwg_DYNAPI_field *
+dwg_dynapi_entity_fields (const char *restrict name);
+EXPORT const Dwg_DYNAPI_field *
+dwg_dynapi_common_entity_fields (void);
+EXPORT const Dwg_DYNAPI_field *
+dwg_dynapi_common_object_fields (void);
+/* Find the fields for this subclass. See dwg.h */
+EXPORT const Dwg_DYNAPI_field *
+dwg_dynapi_subclass_fields (const char *restrict name);
+
 
 EXPORT Dwg_Object_Ref **
 dwg_object_tablectrl_get_entries(const Dwg_Object *restrict obj,
@@ -79,6 +156,13 @@ EXPORT Dwg_Class *
 dwg_get_class(const Dwg_Data *dwg, unsigned int index);
 EXPORT Dwg_Object *
 dwg_get_object(Dwg_Data *dwg, BITCODE_BL index);
+EXPORT dwg_object *
+dwg_obj_generic_to_object (const dwg_obj_generic *restrict obj,
+                           int *restrict error);
+EXPORT dwg_obj_obj *
+dwg_obj_generic_parent (const dwg_obj_generic *restrict obj,
+                        int *restrict error);
+
 
 struct dwg_entity_DIMENSION_common *
 dwg_object_to_DIMENSION(Dwg_Object *obj);
@@ -355,4 +439,6 @@ EXPORT Dwg_Object_ASSOCPERSSUBENTMANAGER* dwg_object_to_ASSOCPERSSUBENTMANAGER (
 EXPORT Dwg_Object_ASSOC2DCONSTRAINTGROUP* dwg_object_to_ASSOC2DCONSTRAINTGROUP (Dwg_Object* obj);
 EXPORT Dwg_Object_EVALUATION_GRAPH* dwg_object_to_EVALUATION_GRAPH (Dwg_Object* obj);
 //EXPORT Dwg_Object_LIGHTLIST* dwg_object_to_LIGHTLIST (Dwg_Object* obj);
+
+
 #endif
