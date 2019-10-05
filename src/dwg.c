@@ -931,9 +931,10 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
               && obj->tio.entity->ownerhandle->absolute_ref
                      != hdr->handle.value)
             obj = NULL;
+          if (obj == _hdr->last_entity->obj) // early exit
+            return obj;
         }
-      return (!_hdr->last_entity || obj == _hdr->last_entity->obj) ? NULL
-                                                                   : obj;
+      return obj;
     }
   else if (version >= R_2004)
     {
