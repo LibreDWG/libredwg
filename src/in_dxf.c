@@ -3459,7 +3459,8 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
           if (pair->value.u)
             {
               BITCODE_H *hdls;
-              BITCODE_BL num_entries = (BITCODE_BL)pair->value.u;
+              // can be -1
+              BITCODE_BL num_entries = pair->value.i < 0 ? 0 : pair->value.i;
               dwg_dynapi_entity_set_value (_obj, obj->name, "num_entries",
                                            &num_entries, is_utf);
               LOG_TRACE ("%s.num_entries = %u [BL 70]\n", ctrlname, num_entries);
