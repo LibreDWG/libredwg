@@ -358,10 +358,23 @@ DWG_ENTITY(BLOCK)
 
 #ifdef IS_DXF
   {
-    Dwg_Bitcode_3RD pt = {0,0,0};
+    Dwg_Object *o
+        = _ent->ownerhandle && _ent->ownerhandle->obj
+              ? _ent->ownerhandle->obj : NULL;
     VALUE_BL (0, 70);
-    VALUE_3BD (pt, 10);
-    BLOCK_NAME(name, 3); //special pre-R13 naming rules
+    if (!o)
+      o = dwg_ref_object (dwg, _ent->ownerhandle);
+    if (!o || o->fixedtype != DWG_TYPE_BLOCK_HEADER)
+      {
+        Dwg_Bitcode_3RD nullpt = { 0.0, 0.0, 0.0 };
+        VALUE_3BD (nullpt, 10);
+      }
+    else
+      {
+        Dwg_Object_BLOCK_HEADER *hdr = o->tio.object->tio.BLOCK_HEADER;
+        VALUE_3BD (hdr->base_pt, 10);
+      }
+    BLOCK_NAME (name, 3); // special pre-R13 naming rules
     VALUE_TFF ("", 1);
   }
 #endif
