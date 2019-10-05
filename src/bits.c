@@ -1463,6 +1463,10 @@ bit_convert_TU (BITCODE_TU restrict wstr)
         len++;
       if (c >= 0x800)
         len++;
+#if 0
+        loglevel = 5;
+        LOG_INSANE ("U+%04X ", c);
+#endif
     }
   str = malloc (len + 1);
   i = 0;
@@ -1470,31 +1474,34 @@ bit_convert_TU (BITCODE_TU restrict wstr)
     {
       if (c < 256)
         {
-          str[i++] = c & 0xff;
+          str[i++] = c & 0xFF;
         }
       else if (c < 0x800)
         {
+          str[i++] = (c >> 6) | 0xC0;
+          str[i++] = (c & 0x3F) | 0x80;
+        }
+      else /* if (c < 0x10000) */
+        { /* windows ucs-2 has no D800-DC00 surrogate pairs. go straight up */
           /*if (i+3 > len) {
             str = realloc(str, i+3);
             len = i+2;
           }*/
-          str[i + 1] = (c & 0x3f) | 0x80;
-          str[i] = (c >> 6) | 0xc0;
-          i += 2;
+          str[i++] = (c >> 12) | 0xE0;
+          str[i++] = ((c >> 6) & 0x3F) | 0x80;
+          str[i++] = (c & 0x3F) | 0x80;
+        }
+      /*
+      else if (c < 0x110000)
+        {
+          str[i++] = (c >> 18) | 0xF0;
+          str[i++] = ((c >> 12) & 0x3F) | 0x80;
+          str[i++] = ((c >> 6) & 0x3F) | 0x80;
+          str[i++] = (c & 0x3F) | 0x80;
         }
       else
-        { /* windows ucs-2 has no D800-DC00 surrogate pairs. go straight up */
-          /*if (i+3 > len) {
-            str = realloc(str, i+4);
-            len = i+3;
-          }*/
-          str[i + 2] = (c & 0x3f) | 0x80;
-          c >>= 6;
-          str[i + 1] = (c & 0x3f) | 0x80;
-          c >>= 6;
-          str[i] = c | 0xe0;
-          i += 3;
-        }
+        fprintf (stderr, "ERROR: overlarge unicode codepoint U+%0X", c);
+     */
     }
   str[i] = '\0';
   return str;
