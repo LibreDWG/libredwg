@@ -2,9 +2,11 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2019 Free Software Foundation, Inc.
 See the end for copying conditions.
 
-LibreDWG version 0.9 - released 2019/?? - beta:
+LibreDWG version 0.9 - released 2019/10/6 - beta:
 
 new API:
+  * Added the dxf importer, using the new dynapi and the r2000 encoder.
+    Status: experimental. Only for r2000 dxf's yet.
   * Added utf8text conversion functions to the dynapi:
     dwg_dynapi_header_utf8text, dwg_dynapi_entity_utf8text,
     dwg_dynapi_common_utf8text converting unicode strings to UTF-8.
@@ -13,14 +15,23 @@ new API:
     dwg_{g,s}et_{ENTITY,OBJECT}_common_utf8text,
     dwg_ent_{g,s}et_UTF8.
   * Added the missing dwg_dynapi_common_set_value.
-  * Add dwg_dynapi_handle_name helper.
+  * Added dwg_dynapi_handle_name helper.
+  * Added to unstable objects: TABLESTYLE, TABLE.
+    TABLE r2018+ now includes TABLECONTENT.
+  * Added SummaryInfo section.
+  * Added 3DSOLID encoder.
+  * Added API's to find handles for names, searching in tables and dicts.
+  * Added TIMERLL type. raw, unencoded 2xRL julian date, for SummaryInfo.
+  * Added signed d variants to some types: BLd, BSd, RLd, ...
+    and x formatters: RLx.
+  * Added reverse dxf_revcvt_lweight().
 
 API breaking changes:
   * Added an is_utf8 arg to the dynapi setters:
     dwg_dynapi_header_set_value, dwg_dynapi_entity_set_value,
     dwg_dynapi_common_set_value, converting UTF-8 strings to TV or TU.
   * Generalize object handles:
-    * Rename common field ownerhandle, exp. not NAME_control 330.
+    * Rename common field ownerhandle, esp. not NAME_control 330.
     * Remove various null_handle fields.
     * Rename LTYPE.null_handle to LTYPE.extref_handle
     * Add SORTENTSTABLE.dict_handle (previous called ownerhandle,
@@ -31,11 +42,25 @@ API breaking changes:
       This field is common to all objects. (#118)
     * Remove unneeded ownerhandle fields.
     * Renamed STYLE.null_handle to STYLE.extref_handle
+  * Changed DIMASSOC spec
+  * Minor POLYLINE/VERTEX field fixups for DXF. add COMMON_ENTITY_POLYLINE.has_vertex 66,
+    add VERTEX_PFACE_FACE.flag 70.
+  * Renamed two LAYOUT fields: pspace_block_record => block_header,
+    last_viewport => active_viewport.
+  * Harmonize DICTIONARY_NAMED_OBJECT (NOD) names:
+      LAYOUTS => LAYOUT, PLOTSTYLES => PLOTSTYLENAME, MATERIALS => MATERIAL,
+      COLORS => COLOR.
+  * Renamed all linetype* fields to ltype.
+  * Removed IMAGE/WIPEOUT boundary_pt{0,1} fields. Use clip_verts[0,1] instead.
 
 Important bugfixes:
   * Fixed all remaining null pointer dereferences and memory leaks. We added
-    a smoke with asan, ubsan and lsan.
+    a smoke with asan, ubsan and lsan. Only the dxf importer is leaking.
   * Fixed dwg_dynapi_common_*
+  * Fixed get_next_owned_entity, which omitted the last entity for r13-r2000.
+    (#143)
+  * Fixed the UCS-2 to utf-8 converter, causing corrupt DXF with unicode names
+    and strings. (#143)
   * Fixed wrong object address (#112). handlestream_size is not part of obj->size.
     This fixes the hdlpos += 8 FIXME's and many handles.
   * Fixed FIELDLIST standard handles (#118)
@@ -59,16 +84,34 @@ Important bugfixes:
       APPID
       DICTIONARYVAR
       VPORT_ENTITY_HEADER
+  * Fixed OLE2FRAME encoder.
   * Fixed EED code 5 as int64 (#110)
+  * More stable eed decoder with overflow, e.g. when dat does not advance error earlier.
+    Avoid endless loops on eed decoding errors.
+  * Various minor improvements in the dxf writer. (#143)
+  * Major improvements in the dxf reader. Most r2000 entities and many objects
+    can be imported, and read from acad dwg's.
+  * Various minor improvements in the dwg writer, esp. calculating the object
+    size and bitsize. fixed bit_write_4BITS (for VPORT.VIEWMODE)
+  * Protect all sizes from VALUEOUTOFBOUNDS with sensical values.
+    (i.e. new size restrictions)
 
 Other newsworthy changes:
   * Restricted the three dat, hdl_dat and str_dat streams in its size and
     offset to the current object to detect every overflow. And report this
     overflow.
+  * Read COMMON_ENTITY_HANDLE_DATA earlier, so that we can remove extra 2nd
+    handle loops at the end for r2007+ (#85)
+  * Support reading uncompressed sections (e.g SummaryInfo)
+  * Added -y/--overwrite flag to most programs.
   * Better LOG_TRACE [rcount1], [rcount2] logging, expanded to the actual
     index.
   * Removed the dejagnu based test/testcases, merged with proper
     test/unit-testing
+  * With the new dxf importer, a lot of logic had to be added for missing fields,
+    calculating them, adding defaults, and support dxfname aliases.
+  * Harmonized internal REPEAT macro names.
+  * Added decode code to recover from invalid HANDLES handleoff UMC or offset MC.
 
 LibreDWG version 0.8 - released 2019/6/25 - still alpha:
 

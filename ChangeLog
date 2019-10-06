@@ -1,6 +1,2832 @@
 Full history from the git log
 -----------------------------
 
+2019-10-06  Reini Urban  <rurban@cpan.org>
+
+	Release 0.9
+
+2019-10-05  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix VIEW_CONTROL 70 -1
+	which appears in the wild.
+
+	fix get_next_owned_entity
+	esp needed for dwg2dxf, which missed the very last
+	block entity. Fixes GH #143, thanks to @soundd1
+
+	dxf: fix BLOCK.base_pt
+	take it from the BLOCK_HEADER. see GH #143
+
+	fix bit_convert_TU for >U+0800
+	a major blunder. wrong order of bytes AND wrong numbers.
+	thanks to some chinese examples with chinese application names,
+	esp. GH #109 and #143
+
+2019-10-04  Reini Urban  <rurban@cpan.org>
+
+	fix int overflows
+	detected by lgtm
+
+	dxf: VALUEOUTOFBOUNDS CellStyle.num_borders
+	overflow with gh143/testBlock
+
+	regen broken 2000/TS1.dxf example
+	it could not even be loaded by acad
+
+	dxf: fix FIELD_BSd formatting
+	%6i, not %d.
+	E.g. $DIMLWE
+
+	bindings: add dynapi
+
+2019-10-04  lorenz  <looooo@users.noreply.github.com>
+
+	swig: swig4 needs  "stdint.i" to be included (PR #153)
+
+2019-10-02  Reini Urban  <rurban@cpan.org>
+
+	dxf: encode all r2007+ strings as utf-8
+	see e.g. GH #109 and #143
+
+	dxf-check: we start with dxf not dwg
+
+	dynapi: add dxf for VISUALSTYLE.unknown_float45
+	even if unused in DWG
+
+	indxf: add_LTYPE_dashes
+
+	spec: restrict POLYLINE_MESH to max 100000 vertices
+	alloc failure with 32bit fuzzing there
+
+	dwg2SVG: ignore empty pspaces
+	We also assume all refs are resolved already.
+	Fixes GH #109
+
+	decode: fix more -Wsign-compare
+	and -Wtype-limits
+
+	decode: fix a -Wsign-compare
+
+	fuzz: skip corrupt classes
+	avoid strcmp on NULL
+
+	fuzz: fail on corrupt es.fields.address
+	protect from overflow segv, found via fuzzing.
+	Turn asserts into an error
+
+	fuzz: more section repair protection
+	segv on i = 0 with [i - 1]
+
+2019-10-02  Reini Urban  <rurban@cpan.org>
+
+	fuzz: protect from dat overflow
+	ERROR: bit_read_RC buffer overflow at 18446744073709549374
+	bits.c:103:14: runtime error: addition of unsigned offset to 0x7ff41c4a9800 overflowed
+	undefined-behavior
+
+	dont advance already overflowed pointer
+
+2019-10-02  Reini Urban  <rurban@cpan.org>
+
+	decode: fix NULL strcmp
+	found via fuzzing, with corrupt input
+
+	decode: fix double-free
+	with corrupt compressed sections.
+	Found via fuzzing
+
+	fixup htmlescape in src/out_json.h
+	this is not library specific, just for helper programs.
+	moved to programs/escape.h
+
+2019-10-01  Reini Urban  <rurban@cpan.org>
+
+	new programs/escape.c,h
+	extract from out_json, because we dont want
+	to add these to the API
+
+2019-10-01  Reini Urban  <rurban@cpan.org>
+
+	dwg2SVG: htmlescape strings and names
+	and for widestrings escape to hex.
+	Also protect from a few NULL strings.
+
+	Closes GH #149
+
+2019-10-01  Reini Urban  <rurban@cpan.org>
+
+	spec: splice TABLECONTENT into TABLE r2010+
+	as macro, not to duplicate it.
+
+	spec: merge TABLECONTENT into TABLE r2010+
+	a call will not work. TABLECONTENT is only an object, not an entity
+	and has totally different offsets.
+	Either put it into a macro or duplicate it.
+
+2019-10-01  Reini Urban  <rurban@cpan.org>
+
+	indxf: resolve_postponed_object_refs
+	some TABLE/BLOCK/OBJECT field handles neeed to be resolved
+	at the end, when the blocks and tables are all read.
+	e.g. INSERT.block_header and various layer or other entity names
+
+	Fixes GH #150, INSERT.block_header missing
+
+2019-10-01  Reini Urban  <rurban@cpan.org>
+
+	encode: fix VPORT.VIEWMODE
+	bit_write_4BITS was broken, and the indxf calculation was missing.
+	simplify the 4BITS reader and writer, add proper bit logging.
+
+	indxf: set UCSFOLLOW and VIEWMODE
+
+2019-10-01  Reini Urban  <rurban@cpan.org>
+
+	decode: better pt logging
+	print the proper point types, not just RD or BD
+
+	indxf: fix VPORT.aspect_ratio
+	r13+ aspect_ratio is calculated, the internal field
+	really is VPORT.viewwidth. added to the API.
+	calculate both.
+
+	indxf: more default points values
+	e.g. VPORT.view_target.z (GH #150)
+
+2019-09-30  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix default points values
+	e.g. WIPEOUT.uvec  (GH #150)
+
+	indxf: IMAGE,WIPEOUT.imagedefreactor is code 3
+	not 5.
+
+2019-09-30  Reini Urban  <rurban@cpan.org>
+
+	change DIMASSOC, indxf: add_DIMASSOC
+	change the spec a bit.
+	H 331 seems to be repeated with main_subent_type 73,
+	H 332 with intsect_subent_type 74
+
+	The other handles seem to be superfluous.
+	Change the order of order of some fields to allow proper dxf
+	roundtrips.
+	(just rotated_type fails still)
+
+	Only the indices with the bit set in associativity are filled. (no change)
+
+2019-09-30  Reini Urban  <rurban@cpan.org>
+
+	indxf: add_PERSSUBENTMANAGER, add_ASSOCDEPENDENCY
+	but some of them are not yet encoded.
+
+	encode: implement encode_3dsolid
+	for most cases no encryption needed.
+	decode has it already, indxf also
+
+	indxf: add postprocess_TEXTlike and MTEXT defaults
+	to minimize defaults to dataflags,
+	and set default style handle.
+
+2019-09-29  Reini Urban  <rurban@cpan.org>
+
+	json: work on TABLE segv
+	when it errored on decode TABLE after num_owned.
+
+	Don't decode a r2010+ TABLE/CONTENT object header twice, only
+	process the fields, because it's an entity afterall, not an object.
+
+	But now we need to share the struct fields somehow.
+
+2019-09-29  Reini Urban  <rurban@cpan.org>
+
+	indxf: add_TABLESTYLE
+	for the subfields.
+
+	We need a seperate Dwg_TABELSTYLE_border from Dwg_BorderStyle
+	because of two major differences: BL visible vs B invisible, and
+	BL vs BS linewt.
+
+2019-09-29  Reini Urban  <rurban@cpan.org>
+
+	harmonize REPEAT names
+	  _ adds idx
+	  C does no checks
+	  N does constant times (else _obj->times)
+	    (and cannot reset times to 0 on error)
+	  F does not calloc/free
+
+	spec: VALUEOUTOFBOUNDS TABLEGEOMETRY cell.num_geom_data
+	as it happens in example_r13.dwg
+
+	more DEBUG: unstable TABLESTYLE
+	promote TABLESTYLE from debugging-only to unstable (just r2010+ is unhandled).
+
+2019-09-28  Reini Urban  <rurban@cpan.org>
+
+	more DEBUG: check CELLSTYLEMAP overflow
+	samples with too small CELLSTYLEMAP survive now roundtrips.
+	fix MATERIAL color types
+
+	decode: check for bits string overflows
+
+	encode: better point logging
+
+	indxf: fix new_LWPOLYLINE
+	no bulges unless needed.
+	properly encode flags from dxf, honor defaults.
+	e.g. no const_width if 0.0.
+
+2019-09-28  Reini Urban  <rurban@cpan.org>
+
+	spec: add TABLESTYLE
+	at least until r2010.
+
+	reformat wrong dwg_api.
+	also fix a few minor ASSOCACTION decl problems.
+
+2019-09-27  Reini Urban  <rurban@cpan.org>
+
+	DOCUMENTOPTIONS is alias for CSACDOCUMENTOPTIONS
+
+	dxf, log: shorter make
+
+2019-09-27  Reini Urban  <rurban@cpan.org>
+
+	encode: fix entity bitsize calculation
+	set START_HANDLE_STREAM for entities in COMMON_ENTITY_HANDLE_DATA.
+
+	Fixes GH #142, the very first version which imports most entities.
+
+2019-09-27  Reini Urban  <rurban@cpan.org>
+
+	indxf: comments, logging only
+
+	dxf-check for 2000/TS1
+	use the proper basename
+
+	indxf: encode OLE2FRAME.data 310
+
+2019-09-27  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix new_MLINESTYLE_lines
+	forgot to set MLINESTYLE.num_lines
+
+	also improve some obj->type checks. by int, not by name
+
+2019-09-27  Reini Urban  <rurban@cpan.org>
+
+	api: add dwg_find_dicthandle
+	fixes dwg_find_tablehandle for dicts.
+	We need to search for the name in the dict given by the first NOD search.
+	Not just returning this dict. With MLSTYLE we need to return the
+	MLINESTYLE object ref.
+
+	Also use the absolute refs, even if dict handles are code 2, not 4.
+
+2019-09-27  Reini Urban  <rurban@cpan.org>
+
+	indxf: cosmetics only
+	HEADER.CMLSTYLE is still pointing to the wrong
+	MLEADERSTYLE object, not MLINESTYLE.
+
+	decode: more stable eed decoder
+	with overflow, e.g. when dat does not advance error earlier.
+	avoid endless loops on eed decoding errors.
+
+	indxf: more eed size fixes
+	the final string \0 does not count. It is just allocated
+	for better logging.
+
+	indxf: add DIMSTYLE defaults
+
+2019-09-27  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix LAYOUT subclass conflicts
+	groups 70 and 1 are in both subclasses.
+
+	rename two LAYOUT fields:
+	  pspace_block_record => block_header,
+	  last_viewport => active_viewport.
+
+	fix setting mspace_block_header and active_viewport from dxf.
+
+2019-09-26  Reini Urban  <rurban@cpan.org>
+
+	log BLOCK_HEADER.num_inserts
+	for de,encode consistently
+
+	indxf: fix BLOCK_HEADER first|last_entity to abs
+	Fixes Reading handle 1F object type AcDbBlockTableRecord
+	Error 34 (eWrongObjectType) Object discarded
+
+	indxf: nolinks = 0 for BLOCK
+	always add r2000 prev_entity + next_entity BLOCK, even
+	if 0
+
+	decode eed: fix data decoding
+	dont jump to a wrong end pos
+
+	encode eed: no codepage r2007+
+	and add a bunch of LOG_POS dat->byte locations for debugging.
+
+	indxf: collect eed sizes
+	only add a new EED size block with a new handle.
+	else add size to previous block
+
+	encode: fix encode_eed
+	always write the handle after each new sized data block.
+	not just the first
+
+	add dwg_find_tablehandle_silent
+	and use it in in_dxf.
+	not exported for now.
+
+	encode: fix -Wtautological-constant-out-of-range-compare
+	warnings. case size to long to compare same types
+
+	doc: fix ENTITIES summary line
+
+	doc: add Structures for EED and XDATA.
+	Maybe more special structs later
+
+	indxf: add postprocess_BLOCK_HEADER
+	Closes GH #146
+
+	encode: - logging prefix
+	for patched sizes
+
+2019-09-25  Reini Urban  <rurban@cpan.org>
+
+	indxf: more abs/rel ownerhandle logic
+	dwg_add_handleref: when searching for existing refs,
+	DICTIONARY, XRECORD or class may need to be relative.
+	skip the search for existing absolute ref then.
+
+	< GROUP needs to be abs, MLINESTYLE e.g. not, is rel.
+
+2019-09-25  Reini Urban  <rurban@cpan.org>
+
+	indxf: resolve class types earlier
+	via dwg_encode_get_class, from encode.
+	improve the abs/rel ownerhandle logic for DICTIONARY and XRECORD
+
+	sample_2000.dxf: add THUMBNAILIMAGE section
+
+2019-09-24  Reini Urban  <rurban@cpan.org>
+
+	indxf: ownerhandle abs logic
+	abs for all old-style types < 500
+	rel for all classes
+	WIP dwg_encode_get_class
+
+	indxf: WIP skip eed[0].size for handles
+	still wrong though
+
+	indxf: preserve eed[0] handle
+	and size.
+	handle is unfortunately stored at eed[0], and was
+	cleared by the first non-handle value at eed[0].
+
+	indxf: no SEQEND nor ENDBLK prev entities
+
+	indxf: no 2x XRECORD.ownerhandle
+	xdata then
+
+	encode: prefer class->number over old type
+	When a class with the same type exists, such as
+	ACDBPLACEHOLDER or OLE2FRAME, prefer the varies type (>500),
+	over the fixed type.
+	Fixes Error 34 (eWrongObjectType)
+
+	indxf: better entity defaults
+	entities bordering to SEQEND, ENDBLK have nolinks.
+	set ltype defaults
+
+	indxf: fixup BLOCK_CONTROL[0].entries[0]
+	wrong num_entries
+
+	indxf: flip logging type code
+
+	indxf: fix duplicate handle for BLOCK_HEADER.*Model_Space
+	it is allocated at objid 0 for minimal DXFs. Reuse the pre-allocated
+	object then.
+
+2019-09-23  Reini Urban  <rurban@cpan.org>
+
+	dxf: fix wrong INSERT.block_header 2 (name)
+	Thanks to @soundd1 detecting this bug.
+	Closes GH #143
+
+	dxf: fix wrong COLOR.byblock GH #143
+	index 256 == bylayer
+	index 0 == byblock
+	skip bylayer for dxf, and index & 255 turned bylayer into byblock.
+	Thanks to @soundd1 detecting this bug
+
+	decode: try to repair the section_info_id WIP
+	See GH #144
+
+2019-09-23  Reini Urban  <rurban@cpan.org>
+
+	WIP decode: more r2004 section map checks
+	try to fix GH #144.
+	allow negative Dwg_Section.size ??
+
+	ignore overlarge Section id > last_section_id.
+	added various consistency checks and a section_map_address repair.
+
+2019-09-23  Reini Urban  <rurban@cpan.org>
+
+	json: no 0x%x numeric formats
+	they cannot be parsed
+
+	api: change Dwg_Section address to uint64_t
+	It is read as such. see GH #144 for a testcase
+
+	dwgwrite: fix -y overwrite
+	write the dwg then
+
+	alive.test: timeout 10s
+	fails on my mac air with asan and 2 larger dwgs, example_2013
+	and example2018 with dxf2dwg
+
+	indxf: set entities entmode
+	2 for mspace (default)
+
+	indxf: set entity codes 6, 390, 347
+	BB ltype_flags, plotstyle_flags, material_flags
+
+2019-09-22  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix init of points
+	with extrusion setting pt.z to 1.0, i.e. LINE start.z
+
+	indxf: fix EED for points and handle
+	add proper logging
+
+	indxf: but leave room for one active entry
+
+	indxf: fixup entries vs num_entries
+	no NULL entries[] allowed. esp. VIEW_CONTROL entries
+	are mostly NULL.
+
+	encode LTYPE.strings_area if empty
+	All TF, TFF strings must be dumped, even if NULL.
+	Fixes Reading handle 14 object type AcDbLinetypeTableRecord
+	Error 67 (eDwgObjectImproperlyRead) Object discarded
+
+	encode: no NULL handles, always with code
+	Fixes Recover: error eWrongObjectType reading Header.
+
+	spec: fixup LTYPE_CONTROL.bylayer and byblock
+	mixed up.
+
+2019-09-22  Reini Urban  <rurban@cpan.org>
+
+	indxf: fixup HEADER.CMLSTYLE
+	MLINESTYLE, not MLEADERSTYLE.
+
+	Also don't change existing ref.code to 5, recreate if not 5 already
+
+2019-09-22  Reini Urban  <rurban@cpan.org>
+
+	indxf: fixup HEADER.HANDSEED->code = 0
+
+	indxf: no NULL ownerhandle, 4.0.0 then
+	encode all ownerhandles. do relative offsets only for valid absref
+	targets.
+
+	indxf: encode HEADER.FLAGS and CELWEIGHT
+	add reverse dxf_revcvt_lweight(), add more HEADER defaults
+	which dont appear in most DXFs
+
+2019-09-21  Reini Urban  <rurban@cpan.org>
+
+	silence FIELD_HANDLE names
+	add 2 new API funcs: dwg_ref_object_silent,
+	dwg_resolve_handle_silent (was static)
+
+2019-09-20  Reini Urban  <rurban@cpan.org>
+
+	dxf: fix xdata 3DPOINT DXF
+	fixes XRECORD:
+	10 group not followed by 20 group
+
+	dxf: fix DICTIONARY bug
+	with dupl. itemhandles
+
+	dxf: skip dupl. 330 ownerhandle
+	already via common_entity_handle_data now
+
+2019-09-20  Reini Urban  <rurban@cpan.org>
+
+	decode: log bwd handleref names
+	to log fwd handles we would need to scan all object
+	types in advance, and then a 2nd time for its fields
+
+	This might catch at least some wrong H refs.
+
+2019-09-20  Reini Urban  <rurban@cpan.org>
+
+	decode: macro aesthetics
+	shorten a few vars. add clang-format directives
+
+	example_2000.dxf: add THUMBNAILIMAGE
+	to have closer numbers in the generated DWG
+
+	dxf: ATTDEF.prompt 3 is DXF mandatory
+	not just SINCE (R_2010)
+
+2019-09-19  Reini Urban  <rurban@cpan.org>
+
+	abstract set_handle_size
+	for longer handles
+
+	indxf: reactors[] always absolute,
+	but the others, esp. ownrhandle always relative
+
+	XRECORD logging spec
+	free aesthetics
+
+2019-09-19  Reini Urban  <rurban@cpan.org>
+
+	GH #85: COMMON_ENTITY_HANDLE_DATA earlier
+	Since r2007 we have a seperate hdl stream, which we can call at the
+	beginning already.
+	This enables the removal of the extra handles loops in the spec.
+	But just r2007+, before those handles are still after the normal
+	fields. Needs a special free logic there, not to delete ctx.leaders
+	before the 2nd loop.
+
+	free: combine common_entity_data with common_entity_handle_data,
+	just call them in series.
+
+2019-09-19  Reini Urban  <rurban@cpan.org>
+
+	fix MULTILEADER leak
+	in 2nd REPEAT loop for the handles, when
+	the leaders field was already removed by the 1st loop.
+	This will be properly fixed later, when we seperate the
+	hdl_dat stream earlier from the obj stream, to process both at once.
+	The text stream str_dat also. See GH #85, branch work/gh85-common
+
+2019-09-18  Reini Urban  <rurban@cpan.org>
+
+	encode: set xdicobjhandle to (3.0.0) not NULL
+	when empty on r13-r2000
+
+	decode refs not as NULL handle
+	To store the original handle.code on encode.
+
+	more logging aesthetics
+
+	dwg_bmp: better BMP offset logging
+
+	decode: fix FIELD_RSx logging
+
+	encode: fixup type with dwg_encode_variable_type
+	need the proper class id.
+	Fixes ACAD eNoClassId and eWrongObjectType
+
+	decode preR13: strncpy overflow
+	tbl->name has only 64 byte
+
+	fix dwgrewrite leaks
+
+	encode: Thumbnail even with empty HEADER.thumbnail_address
+	The address may be computed.
+
+	parse the thumbnail data
+	mostly for logging
+
+	dwgrewrite: overwrite existing -rewrite.dwg
+
+	log more types
+	each read and write should be logged ideally.
+	not yet for eed, xdata, sentinels, class.
+
+2019-09-17  Reini Urban  <rurban@cpan.org>
+
+	indxf HEADER strings
+	they disappeared in encode FIELD_TV
+	with IF_ENCODE_FROM_EARLIER.
+
+	indxf: log HEADER dxf codes also.
+
+2019-09-17  Reini Urban  <rurban@cpan.org>
+
+	add proper FORMAT_RLx ditto
+
+	add RSx type
+
+	encode header: set is_maint defaults
+
+	decode: Clearer Handles logging
+
+	encode: fix Handles CRC_LE
+	The little-endian variant, not BE.
+
+	indxf: reformat prev.
+
+	indxf: dwg_find_tablehandle is already case-insensitive
+	since 7222ec07edb48ab298a3d90f66f5bcb23c1ef245
+
+	indxf: seperate LTYPE bylayer/byblock
+	into its own fields in LTYPE_CONTROL. Like with BLOCK_CONTROL
+	model/paper_space before
+
+	encode: fix bitsize calculation
+
+	indxf: set tablerecord->xrefref = 1 as default
+
+	encode: fix object CRC
+	fix bitsize_pos logging,
+	fix object address for the size calculation (dxf only).
+
+2019-09-16  Reini Urban  <rurban@cpan.org>
+
+	log the CRC sizes also
+
+	encode: fix bit_write_CRC logging
+	off-by-2
+
+	dxf: add dxf-check
+	similar to dxf-roundtrip.sh via TeighaFileConverter, but
+	the other way round, for dxf2dwg.
+
+	indxf: seperate {model,paper}_space into its own fields
+	set the proper BLOCK_CONTROL fields.
+
+	encode: fixup encode_patch_RLsize
+	the size doesn't contain itself.
+
+	indx: set klass->number, fixup ACDBDATATABLE
+	in DXF DATATABLE is ACDBDATATABLE, in DWG not.
+	fixup dwg->num_classes, to fix writing the last class.
+
+	indxf: fix HEADER points
+	and add some more defaults
+
+	dxf: add all the missing codepages
+	and its names
+
+2019-09-15  Reini Urban  <rurban@cpan.org>
+
+	dwg_find_tablehandle: find in DICTIONARY
+	when the ctrl object is a DICTIONARY. Finds HEADER.CMLSTYLE
+
+	indxf: find more HEADER DICTIONARYs
+	LAYOUT, PLOTSETTINGS, PLOTSTYLENAME, ... with an ACAD_ prefix
+	in the NOD
+
+	indxf: resolve more header handles
+	resolve_postponed_header_refs also had a bug.
+	search names case-insensitive.
+	need DICTIONARY objects for CMLSTYLE.
+
+	indxf: add IF_ENCODE_FROM_EARLIER_OR_DXF
+	set dwg->opts 0x20 on indxf, and 0x30 on minimal DXF,
+	to set defaults which are not defined in a DXF
+
+	decode: fix FIELD_NUM_INSERTS
+	when num_inserts RC > 1, let it count.
+	fixes GH #44 to accept one inserts[vcount][0] entity.
+	compared to gh44-error.dxf: there's only on num_inserts BLKREF there, so
+	it looks correct now.
+
+	encode: better minimal DXF support
+	set dat->from_version lower to trigger IF_ENCODE_FROM_EARLIER defaults.
+	set empty header.dwg_version, app_dwg_version, codepage, and
+	empty HANDSEED.
+	skip AuxHeader then.
+
+2019-09-15  Reini Urban  <rurban@cpan.org>
+
+	dynapi: BE is a 3DPOINT also
+	It could be renamed to 3BE, but that would change the API too much.
+
+	This fixes heap-overflows when importing r12 DXFs, on the first 210 line.
+
+2019-09-14  Reini Urban  <rurban@cpan.org>
+
+	api: change handle sizes to long
+
+	support handle sizes > 4, up to 8 byte on 64bit.
+	as demonstrated in GH #143 they can be as large as D485E5D6 or even
+	FD485E65F.
+	Fixes GH #143
+
+	rename SECTION_OBJECTS_R13 => SECTION_HANDLES_R13
+	and dont recover offsets for illegal handleoff values yet
+
+2019-09-14  Reini Urban  <rurban@cpan.org>
+
+	decode: recover from invalid HANDLES
+	either wrong handleoff UMC or offset [MC], which come in pairs.
+	default to the next objects then.
+	See testcase in GH #143.
+
+	set r2000 section names (for logging).
+
+2019-09-14  Reini Urban  <rurban@cpan.org>
+
+	bit_read_UMC: default illegal handleoff to 1
+	not 0, and the offset from the previous size, to read the next
+	object.
+	But the root problem remains in bit_read_UMC. See testcase in GH #143
+
+	free: fix double-free of late added refs
+	They were added by dxf_block_write - get_last_owned_block.
+	This added endblk_entity is not a new ref, it already exists.
+	It get's freed by dwg_free.
+
+	free: advoid wrong warnings
+	and skip bounds check exits. we want to free all fields
+
+	common.h: fix memBEGIN, unused
+	because broken
+
+	move rad2deg to common.h
+	define only at one place, not 3
+
+	memmem not used anymore
+	was replaced by membits
+
+	build-aux/clang-format-all
+
+2019-09-13  Reini Urban  <rurban@cpan.org>
+
+	indxf: ENDBLK,SEQEND NULL prev_entity,next_entity
+	See GH #142
+
+	indxf: default color.index = 256 ByLayer
+	and log CMC
+
+	spec: reformat XRECORD
+	misleading identation
+
+	encode: xdata forgot the type RS
+
+	encode: log more fields
+
+2019-09-13  Reini Urban  <rurban@cpan.org>
+
+	encode/indxf: NULL HANDLE is NULL
+	and not a ref to 0.
+
+	harmonize logging of it.
+
+2019-09-13  Reini Urban  <rurban@cpan.org>
+
+	indxf: reverse XRECORD.xdata order
+	push to end of list, not front
+
+	encode: log XRECORD xdata
+
+2019-09-12  Reini Urban  <rurban@cpan.org>
+
+	dynapi: regen doc
+
+	spec: many more VALUEOUTOFBOUNDS checks
+	and esp. reset the wrong num_ fields.
+
+	indxf: set prev_entity, next_entity
+	now common_entity_handle_data is complete
+
+2019-09-12  Reini Urban  <rurban@cpan.org>
+
+	fix -Wnull-dereference, add SAFEDXFNAME
+	e.g. when logging HEADER or SUMMARY there is no obj.
+	also for r2007 strings, there is no obj->has_strings there
+
+	Only detected by gcc -O2.
+
+2019-09-12  Reini Urban  <rurban@cpan.org>
+
+	indxf: reset entmode for each block
+	otherwise all ents end up in Paperspace.
+
+	unify object-map logging
+	log the Handleoff properly
+
+	encode: fix the Object-Map
+	Handleoff is the offset from the previous handle, default: 1,
+	the next handle. With deleted objects there are holes.
+	Use the proper types: UMC (unsigned) and MC.
+
+	encode: rename loop indices to i
+
+2019-09-11  Reini Urban  <rurban@cpan.org>
+
+	encode: fix omap sorting
+	use a proper insertion sort, add an init pass
+
+	indxf: init BLOCK_HEADER *Model_Space .1F
+
+	log: print section addresses as decimal, not hex
+
+	encode: add AuxHeader, minor improvements
+	abstract encode_patch_RLsize(),
+	add auxheader defaults
+	fix header.section[0].size calculation (not in dwg_encode_header_variables)
+
+	indxf: calc. XRECORD.num_databytes
+	acad complained about missing XRECORD data:
+	Error 151 (eOutOfRange) Object discarded
+
+2019-09-10  Reini Urban  <rurban@cpan.org>
+
+	dxf2dwg: overwrite existing files
+
+	-Wincompatible-pointer-types-discards-qualifiers
+
+	indxf: resolve_objectrefs
+	the object_map handles.
+	TODO There are still many holes and duplicates in there
+
+	improve dwg_model_space_object
+	and fail when it fails, mostly with dxf2dwg dwgs
+
+	dxf: write to versioned dwgs
+
+2019-09-10  Reini Urban  <rurban@cpan.org>
+
+	indxf: pass dxfname through
+	so we don't need to resolve klassnames later.
+	This dxfname is from the 0 NAME section in the dxf.
+
+	Also update dxfb_blocks_read from ascii
+
+2019-09-10  Reini Urban  <rurban@cpan.org>
+
+	encode: support dwg_encode_get_class aliases
+	though it's still very stupid to do it twice.
+	classes.inc should be enough for a linear search for dxfnames.
+	set the proper obj->dxfname.
+
+	Avoid writing to dat->chain[0] on empty obj->bitsize_pos
+
+2019-09-10  Reini Urban  <rurban@cpan.org>
+
+	encode: fixup padded obj->size
+	Fixes off-by-one Wrong object size warnings
+
+	encode: no 2x object CRC, add asserts
+	TODO: someone is still writing to dat->chain[0]
+
+2019-09-10  Reini Urban  <rurban@cpan.org>
+
+	restrict OFFSETOBJHANDLE code to 4
+	create relative offsets only for code 4.
+
+	support code 10 and 12 with offsets < 256, size 1.
+
+2019-09-10  Reini Urban  <rurban@cpan.org>
+
+	encode: minor improvements
+	avoid wrong Expected a CODE 3 handle, got a 6
+	warnings. Allow relativ offsets (TODO: only 4)
+
+2019-09-10  Reini Urban  <rurban@cpan.org>
+
+	indxf: read BLOCKS
+	The previous TABLES section already has the BLOCK_HEADER.entries.
+	Link it to the block_entity, endblk_entity, first_entity,
+	last_entity.
+	Set entmode (mspace, pspace) for all the block entities.
+
+	Fix dwg_ref_object for relative refs, when ref->absolute_ref is known.
+	Fix dwg_ref_object to don't set ref->obj on dirty_refs (as in the importer).
+
+	Closes GH #133
+
+2019-09-10  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix Invalid entity type BLOCK_HEADER, wanted BLOCK_RECORD
+	dxf calls the BLOCK_HEADER BLOCK_RECORD. use the proper obj->name
+	in {BLKREFS
+
+	dxf: minor POLYLINE/VERTEX field fixups
+	add COMMON_ENTITY_POLYLINE.has_vertex 66,
+	add VERTEX_PFACE_FACE.flag 70,
+	print and accept more DXF POLYLINE_* elevation points.
+
+	indxf: search SEQEND.owner with <r13
+	but dont store the list of handles there
+
+2019-09-09  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix postprocess SEQEND
+	was pretty broken.
+	Closes GH #138
+
+	indxf: store owner handle in map
+	which fixes postprocess_SEQEND, because we can now
+	find the owner
+
+	indxf: fix num_reactors
+	improve add NULL handleref
+	always set xdic_missing_flag
+
+	indxf: set NULL xdicobjhandle for r2000
+
+	indxf: set xdic_missing_flag needed to avoid accessing the NULL xdicobjhandle
+
+	encode: add 2013+ has_ds_binary_data
+	yet unused.
+	set calc. bitsize
+
+2019-09-09  Reini Urban  <rurban@cpan.org>
+
+	indxf: postprocess SEQEND
+	and its owner. set the owned[] handles.
+	Fix setting ownerhandle, reactors and xdicobjhandle
+	for entities.
+
+	See GH #138
+	WIP owner->ownerhandle
+
+2019-09-09  Reini Urban  <rurban@cpan.org>
+
+	preview is embedded in sentinels
+
+	dwgbmp: support optional 2nd arg bmpfile
+	as documented
+
+	dwgbmp: fix for 64bit
+	on 64bit long is wrong, need BITCODE_RL sizes.
+
+	decode Preview section to dwg->thumbnail
+	with some consistency checks (failing still).
+	This enables dwgbmp for all 2004+ dwgs.
+
+	2004+ resort sections: classes before handles,
+	and summary after header.
+	similar to 2000
+
+	free DICTIONARY FIELD_VECTOR_T aesthetics only
+
+2019-09-09  Reini Urban  <rurban@cpan.org>
+
+	fix obj_handle_stream and VECTOR_CHKCOUNT
+	the streams are already restricted from 0 to size, independent of
+	obj->address.
+	pass the right stream to AVAIL_BITS.
+
+	Fixes many overflow checks, esp. GH #132 08.dwg
+
+2019-09-09  Reini Urban  <rurban@cpan.org>
+
+	read_2004_section_handles: fix oldpos
+	wrong check. we advance hdl_dat.byte for the handles, not dat.
+
+	also check GROUP.num_groups overflow (#132 08.dwg)
+
+2019-09-09  Reini Urban  <rurban@cpan.org>
+
+	decode: fix R2004_section_map int overflow
+	causing bytes_remaining switch from +8 to -8 but unsigned.
+	Fixes the crash from #132 with 00.dwg
+	Closes #93
+
+	needs int64_t, but we already required that earlier (RLL, BLL types, ...)
+
+2019-09-08  Reini Urban  <rurban@cpan.org>
+
+	probe for broken restrict
+	new AX_RESTRICT probe.
+	rust reports gcc broken from 5 - 10, but I can only confirm
+	clang 6-8 failing. gcc should not be used since 9 for other reasons.
+	Disabled since we don't have short restrict loops yet.
+
+	Closes GH #141
+
+2019-09-08  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix Invalid UNDERLAY field scale_flag error
+	check of this field exists, without silencing the loglevel
+
+	indxf: avoid Unknown DXF code 71 for DIMSTYLE_CONTROL
+	warning. for the default DIMSTYLE_CONTROL.num_morehandles = 0 case
+
+	indxf: more HATCH 97, 330 boundary_handles
+	also for polyline_paths
+
+	indxf: accept r13 SAVEIMAGES
+	is present in some r13 DXFs
+
+	indxf: fix MTEXT crash with empty num_column_heights
+	with LCAD_libereco_R2000.dxf
+
+2019-09-08  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix add_MULTILEADER_lines i++
+	fixes heap-buffer-overflow on wrong line.color.
+	bump for each new point.
+
+	Also support rgb colors.
+
+2019-09-08  Reini Urban  <rurban@cpan.org>
+
+	indxf: skip yet unsupported minimal DXF
+
+	indxf: fix dxf_expect_code heap-use-after-free
+
+	indxf: skip ASSOC2DCONSTRAINTGROUP
+	stack-buffer-overflow on unsupported fields
+
+2019-09-07  Reini Urban  <rurban@cpan.org>
+
+	indxf: simplify the summaryinfo texts
+
+	indxf: set the summaryinfo texts
+
+	abstract ASSOCACTION
+	from subclass AcDbAssocAction for three ASSOC objects:
+	ASSOC2DCONSTRAINTGROUP, ASSOCNETWORK, ASSOCACTION
+
+	dynapi: more subclass structs and DXF values
+	parse the stacked .spec REPEAT blocks and defines also.
+	renamed some subclass structs to match the types.
+
+2019-09-06  Reini Urban  <rurban@cpan.org>
+
+	dynapi: all subclasses + summaryinfo
+
+	more 2004 section stuff
+	rename vba_proj_address to vbaproj_address.
+
+	shorten dwg_find_tablehandle
+
+	free: fix summaryinfo leaks
+
+	dxf: move last 4 HEADER vars to summaryinfo
+
+2019-09-05  Reini Urban  <rurban@cpan.org>
+
+	decode_2007: support uncompressed sections
+	add summaryinfo
+
+	decode: support uncompressed sections
+	summaryinfo.
+	rename dwg->header.summary_info_address to summaryinfo_address
+	rename dwg->header.thumbnail_addr to thumbnail_address.
+
+	api: add TIMERLL type
+	raw, unencoded 2xRL julian date, for summaryinfo
+
+	decode: add AcDb:SummaryInfo
+	for the 4 new HEADER variables
+
+2019-09-04  Reini Urban  <rurban@cpan.org>
+
+	debug: add 4 new HEADER texts, fix some DEBUGGING classes
+	TITLE, SUBJECT, AUTHOR, KEYWORDS are at least set by DXF, but we have
+	no location for them in the DWG yet
+
+	doc: dxf2dwg default writes to r2000 now
+	later when encode supports all versions, it will be the DXF version
+
+	indxf: resolve_header_dicts
+	and fix an utf8 bug in dwg_find_dictionary (r2007+)
+
+	api: harmonize DICTIONARY_NAMED_OBJECT names
+	LAYOUTS => LAYOUT, PLOTSTYLES => PLOTSTYLENAME, MATERIALS => MATERIAL,
+	COLORS => COLOR.
+
+2019-09-04  Reini Urban  <rurban@cpan.org>
+
+	api: fix Empty header_vars table LAYER...
+	Search and set HEADER.*_CONTROL_OBJECTs, via added
+	dwg_find_table_control() and dwg_find_dictionary().
+	These return only a ref, not the object, as the objects are
+	still moving. (used only during encode/import)
+
+	Export add_handle and add_handleref with dwg_ prefix.
+
+	Trace the DICTIONARY texts
+
+2019-09-03  Reini Urban  <rurban@cpan.org>
+
+	api: add ANNOTSCALEOBJECTCONTEXTDATA object
+	for the various ACDB_nameOBJECTCONTEXTDATA_CLASS DXF objects.
+	They all seem to be based on the AcDbObjectContextData
+	and AcDbAnnotScaleObjectContextData subclass, but some seem to
+	have more. WIP
+
+	indxf: simplify DXF_RETURN_ENDSEC and 0 loops
+	DXF_RETURN_ENDSEC ends with an if block, we can do an else here
+	break the inner 0 loop for unhandled objects.
+
+	indxf: support more LWPOLYLINE fields
+	and don't report common found handles (e.g ltype) as not found.
+
+	indxf: search existing handlerefs
+	with the same code and value. dont create fresh refs for everything
+	only for new owners, not refs
+
+	indxf: improve dxf_objects_read
+	add object_alias (for all known object names)
+
+2019-09-03  Reini Urban  <rurban@cpan.org>
+
+	api: rename all linetype* fields to ltype
+	make MLINESTYLE_line.ltindex a union of index|ltype handle
+	and have type BSd (values SHRT_MAX still: 32767, 32766)
+
+	indxf: resolve MLINESTYLE.lines[%d].lt.ltype name
+
+2019-09-02  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix HEADER._3DDWFPREC
+	need a special name rule here. invalid identifier
+
+	api: HEADER.TIMEZONE BL => BLd (signed)
+	change the type.
+	e.g. -8000 is a typical value
+
+	indxf: fix $XCLIPFRAME type error
+	ERROR: skipping HEADER: 9 $XCLIPFRAME, wrong type code 290 <=> field RC.
+	XCLIPFRAME is 280 RC or 290 B in dynapi. Set is as a byte (RC).
+
+	indxf: more subfield checks and fixes
+
+2019-09-02  Reini Urban  <rurban@cpan.org>
+
+	indxf: resolve_postponed_eed_refs
+	to fill in eed.handle refs to APPID entries,
+	when APPID is not yet read.
+
+	Also free all the postponed arrays of hdls.
+
+2019-09-01  Reini Urban  <rurban@cpan.org>
+
+	indxf: check UPPERCASE table names also
+	for the few standard names, when setting the header vars:
+	BYLAYER, BYBLOCK, CONTINUOUS
+
+	indxf: fix UAF with ctrl TABLE
+	dwg->object[] might move. use the ctrl objid index instead.
+
+	indxf: fix Not yet implemented EED.code 1005
+
+	indxf: add defaults
+	before reading an object: scale, extrusion, scale_flag
+	and after: _3DFACE.has_no_flags
+
+	indxf: support scale 3DD points (with defaults)
+	and 3DFACE.z_is_zero
+
+2019-08-31  Reini Urban  <rurban@cpan.org>
+
+	dxf: fix LEADER.dimstyle to DXF 3
+	ODA bug, documented there as DXF 2.
+	also handle LEADER.points[] [10 3BD*]
+
+	indxf: support MTEXT.column_heights[] [50 BD*]
+
+	indxf: fix UNDERLAY and clip_verts
+	Accept PDFUNDERLAY from dxf, fix WIPEOUT rect mode,
+	handle realloced clip_verts, there is no num_clip_verts there, but set it.
+
+2019-08-31  Reini Urban  <rurban@cpan.org>
+
+	api: remove boundary_pt{0,1} fields
+	indxf: handle IMAGE|WIPEOUT|UNDERLAY.clip_verts 2RD*
+	WIPEOUT todo
+
+	for images use just clip_verts[0,1] instead.
+	set num_clip_verts = 2 then.
+
+2019-08-30  Reini Urban  <rurban@cpan.org>
+
+	indxf: add flag 4 on width.start 40
+	DXF does not set the flag 70 & 4 (const_width) correctly
+
+	indxf: handle alt. color codes
+	and dont print them twice
+
+	indxf: MLEADERSTYLE.block_scale special case
+	weird DXF codes
+
+	indxf: handle DBCOLOR color and names
+	DXF: fix a 430 memleak in out_dxf.
+
+	indxf: rename add_dictionary_handle to add_dictionary_itemhandles
+
+	docs
+
+2019-08-30  Reini Urban  <rurban@cpan.org>
+
+	add MESH entity, indxf transform matrix
+	MEDSH with --enable-debug, but always with indxf.
+	Unknown fields, untested.
+	But we have a 2004/Surface.dxf and we do the indxf import for it.
+
+	Support the fixed size transform matrix BD[16] and one BD[12] for
+	indxf.
+	Fix DXF 92 preview size for all class proxy vector data.
+
+2019-08-29  Reini Urban  <rurban@cpan.org>
+
+	indxf: add_3DSOLID_encr
+	only ACIS version 1.
+	version 2 with 290: 1 and 2: {000...} not yet.
+
+	The DXF variant has a special quoting case for '^ ' => 'A',
+	not in the DWG.
+
+	also missing:
+	wireframe_data_present, point_present, point, num_isolines,
+	isoline_present, wires, silhouettes.
+
+2019-08-29  Reini Urban  <rurban@cpan.org>
+
+	api: new type BL linewt => BLd linewt (signed)
+	to represent -1 [BLd] (ByLayer), and -2
+
+	indxf: more MULTILEADER defenses
+	some more asserts and checks
+
+2019-08-29  Reini Urban  <rurban@cpan.org>
+
+	api: rename 2 MULTILEADER has_content* fields
+	MULTILEADER.ctx.has_content 290 => ctx.has_content_txt
+	and .ctx.has_content_block 296 => ctx.has_content_blk
+
+	They must be outside, because content is a union of either txt or blk.
+
+2019-08-29  Reini Urban  <rurban@cpan.org>
+
+	dxf: add dxf 296 for MLEADER.has_content_block
+
+	indxf: simplify LOG_ERROR
+	save space
+
+	indxf: add_MULTILEADER
+	only missing: ctx.296
+
+2019-08-28  Reini Urban  <rurban@cpan.org>
+
+	indxf: add color.rgb fields
+	manually. SUB fields not yet (TABLE)
+
+	add dxf tool (for indxf only yet)
+
+	indxf: add_HATCH
+
+	indxf: add_MLINE
+	Abstract away the MLINE logic.
+	Either break (2), next_pair (1) or search_field (0).
+
+	indxf: add_SPLINE
+	Abstract away the SPLINE logic.
+	Either the field is handled or not.
+
+2019-08-28  Reini Urban  <rurban@cpan.org>
+
+	decode: fix Header Section[0] CRC mismatch error
+	always failed on r13 and r14, because of missing slack
+	(unknown header vars).
+
+	Remove HEADER.crc field, it really belongs to the section logic.
+	Set the proper crc position, and check the slack (padding).
+
+	Add the 4 final HEADER.unknown_54 - 57 fields to r13 also.
+	Always 65535. An ODA bug, which says r14+ (maybe its R13C3?).
+
+2019-08-26  Reini Urban  <rurban@cpan.org>
+
+	bit_check_CRC: fix wrong buffer overflow check
+
+	bits: where did a buffer overflow occur
+	Note: at bit_check_CRC with r13 objects
+
+	add example_r13.{dwg,dxf}
+	created via Teigha from example_2000.dwg
+
+2019-08-26  Reini Urban  <rurban@cpan.org>
+
+	decode r13-2000: simplify CRC
+	Clarify calculation of the header CRC, which is wrongly described
+	in the ODA. There is no need for an xor, dependent on the num_sections.
+
+	Use the simpler bit_check_CRC over bit_calc_CRC, which ensures
+	that we don't include the CRC into our calculation (striking it out).
+
+2019-08-26  Reini Urban  <rurban@cpan.org>
+
+	api: remove HEADER.SAVEIMAGES, rename vport_entity_header
+	SAVEIMAGES is only dumped for R13.dxf, calculate it.
+
+	HEADER.vport_entity_header refers to the VPORT_ENTITY_HEADER handle.
+	Rename it.
+
+2019-08-23  Reini Urban  <rurban@cpan.org>
+
+	indxf: upgrade POLYLINE_2D and VERTEX_2D
+	to the appropriate subclass/ENTITY.
+
+	dynapi: fix DIMENSION_common dxf
+
+2019-08-23  Reini Urban  <rurban@cpan.org>
+
+	dynapi: add 100 subclass to dwg_list_subclasses
+	but only 2 subclasses are actually code 100 in the dxf related to
+	our subclasses. some are enclosed into 300 NAME{ groups instead.
+
+	use symbolic DWG_TYPE_* for dwg_name_types, more readable.
+	list some more aliases and subclasses, not yet used.
+
+2019-08-23  Reini Urban  <rurban@cpan.org>
+
+	dynapi: more DIMENSION_common dxf
+	_ORDINATE went missing. needed to add manually
+
+	indxf: special-case DIMENSION
+	first handle it as DIMENSION_ANG2LN, the largest, then
+	change type to the actual subclass.
+
+	dynapi: add subclass API
+	to get the fields of the named subclass.
+	Note that DIMENSION_common is implemented as
+	subclass, not parent class.
+
+2019-08-21  Reini Urban  <rurban@cpan.org>
+
+	indxf: accept dxfname aliases
+	but we dont upgrade POLYLINE to POLYLINE_3D, ... or DIMENSION_*
+	objects yet.
+	add missing entity aliases to dynapi
+
+	dynapi: forgot regen for visualstyle DXF 348
+
+2019-08-20  Reini Urban  <rurban@cpan.org>
+
+	spec: harmonize FIELD_BINARY fields
+	esp. the 310 fields.
+	FIELD_BINARY falls back to FIELD_TF elsewhere,
+	and is needed for dxf *and* json. json cannot print \0.
+
+	json: add common_entity_data, HANDLE now a list
+	layers, ...
+	make handle a list of [code, value].
+	The code changes (owner, pointer, soft, hard),
+	but the absolute value is the same. easier to parse.
+
+	dwgwrite: fail earlier on missing input
+
+2019-08-20  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix wrong MULTILEADER add_ent_preview
+	when being the text_color 92. check the subclass.
+	The 92 RGB value leads to Out of memory on 32bit.
+
+	Also protect from various other strcpy stack overflows.
+
+2019-08-19  Reini Urban  <rurban@cpan.org>
+
+	indxf: BINARY comment
+	why we convert to hex later, not already in read_pair
+
+	dwgwrite: support -y --overwrite
+
+	dwgwrite: support dxf from stdin
+
+2019-08-19  Reini Urban  <rurban@cpan.org>
+
+	dwgread/dwgwrite: -v logging
+	we should support reading from stdin, therefore be silent on default,
+	print only to stderr.
+
+	also resolve error numbers to strings
+
+2019-08-19  Reini Urban  <rurban@cpan.org>
+
+	out_json: fix NULL handle output
+
+	dwg_encode_eed: simplify
+
+	add dwg_encode_eed_data, needed for indxf
+	write encoded EED.data, not just the raw bits
+
+2019-08-19  Reini Urban  <rurban@cpan.org>
+
+	stabilize dwg_encode_eed
+	with dxf data, where we might have no data, and certainly no raw.
+	TODO encode from data only.
+
+	This fixes writing DWGs from r12 DXFs
+
+2019-08-19  Reini Urban  <rurban@cpan.org>
+
+	simplify dwg_resolve_handle usage
+	we silently return NULL now
+
+	silently disallow hash_get 0
+
+2019-08-19  Reini Urban  <rurban@cpan.org>
+
+	dwg_find_tablehandle: always compute ref->obj (indxf)
+	we are still constructing the objects, which move (realloc dwg->objects[]),
+	so we cannot rely on any ref->obj. don't even set them.
+	only compute them temporarily.
+
+	This fixes now the many indxf use-after-free failures.
+
+2019-08-19  Reini Urban  <rurban@cpan.org>
+
+	indxf: support eed points and r2007 strings
+
+2019-08-18  Reini Urban  <rurban@cpan.org>
+
+	indxf: search APPID for eed.1001
+	but this still fails if the TABLEs are not yet added
+
+	indxf: implement binary EED 1004
+
+	indxf: strdup the color.name
+	it was never allocated.
+	protect add_eed a bit more. memcpy is safer than strcpy.
+
+	indxf: check obj/ent in add_eed
+	theoretically they should have the same layout
+	but some compiles do crash there.
+
+	dwg: move dwg->measurement to HEADER.MEASUREMENT
+	as header var. It is read from DXF as HEADER.
+	This fixes indxf for it most elegantly.
+	But we need to store it as BS, not RL, otherwise
+	in_dxf will complain:
+	ERROR: skipping HEADER: 9 $MEASUREMENT, wrong type code 70 <=> field RL
+
+	api: rename dwg->preview to thumbnail
+	for better seperation of the global THUMBNAIL dxf section,
+	vs the entity preview fields.
+	A thumbnail may contain multiple pictures, as BMP or WMF.
+	An entity preview BMP or proxy graphics vector data.
+
+	api: rename picture to preview
+	A dwg preview may contain multiple pictures, BMP or WMF.
+	An old entity may contain under 160 a bitmap.
+	A new class-based variable-type entity may contain under 92
+	PROXY GRAPHICS vector data, to be displayed under older apps.
+
+	indxf: more add_ent_picture
+	for more variable entities (class-based).
+	They store their PROXY GRAPHIS vector data under DXF code 92,
+	not 160, but at the same DWG field.
+
+2019-08-17  Reini Urban  <rurban@cpan.org>
+
+	dxf2dwg: skip lsan leak checks, and dwg_free failures
+	for now. TODO
+
+	indxf: fix invalid free_3dsolid
+	for empty encr_sat_data
+
+2019-08-17  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix write exhaustion, skip lsan leak
+	with lsan call dwg_free, but dont check leaks yet.
+	extend the chain on object writes.
+	fixes a valgrind problem.
+
+	there are still a couple of dxf_read_pair leaks:
+	6363 bytes on example_2013.dxf
+
+2019-08-17  Reini Urban  <rurban@cpan.org>
+
+	dwg_write_file: set dat->opts
+	even if loglevel is set by dwg->opts. it is used by bits at least
+
+2019-08-17  Reini Urban  <rurban@cpan.org>
+
+	dxf2dwg,dwg2dxf: check write permissions
+	change error message on symlink.
+	we refuse to overwrite a symlink, even with --overwrite
+	for security reasons. ditto for -w files.
+
+	we now also check for write perms, and refuse to write to non-files.
+
+2019-08-17  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix eed double-free
+	eed might be realloced, but was not set.
+
+	indxf: fix find_tablehandle double-free
+	always create a fresh new table ref, don't reuse one.
+	we need to seperate owners from pointers.
+	the table control is the owner, the referenced handle is a pointer.
+
+2019-08-17  Reini Urban  <rurban@cpan.org>
+
+	api: rename all table control handles to entries
+	e.g.
+	LAYER_CONTROL.layers => entries,
+	APPID_CONTROL.apps => entries,
+	BLOCK_CONTROL.block_headers => entries,
+	DIMSTYLE_CONTROL.dimstyles => entries,
+	...
+
+	remove all ctrl_hdlv[] special-cases, depending on different names.
+	esp. in indxf.
+
+2019-08-17  Reini Urban  <rurban@cpan.org>
+
+	bits: add bit_(read.write)_T api
+	switching on the version automatically.
+	simplifies the types, if TV, TU or T.
+
+2019-08-17  Reini Urban  <rurban@cpan.org>
+
+	api: strip _handle suffix, ...
+	from all handle fields but null_handle.
+
+	harmonize some names:
+	GROUP.num_handles => num_groups
+	GROUP.group_entries => groups
+	BLOCK_HEADER.insert_handles => inserts,
+	FIELDLIST.field_handles => fields,
+	SORTENTSTABLE.sort_handles => sort_ents
+	LAYER_INDEX.layer => layername
+	LAYER_INDEX.entry_handles => layers
+
+	visual_style => visualstyle,
+	live_section_handle => livesection,
+	cell_style => cellstyle,
+	dict_handle => dictionary,
+	dict => dictionary
+
+2019-08-17  Reini Urban  <rurban@cpan.org>
+
+	dynapi: adjust #line
+
+	indxf: support bll, add dxf_read_long
+	but not really used yet. most picture sizes are just
+	4G, unsigned long. (dat->size)
+
+	document dwg->measurement
+	(0 English/1 Metric)
+
+	encode: add 2NDHEADER defaults
+	but yet unused. handles[] missing
+
+	api: add BSd type
+	for some DIMSTYLE/HEADER vars, which need to be signed
+
+	json: protect from empty parent->layout_number
+
+	indxf: silence Unknown DXF code for BLOCK warnings
+	These are DXF artifacts, not in the DWG
+
+	add test-data/example_r14.dxf
+	needed for alive.test with dxf2dwg.
+	This version does not support ACDBPERSSUBENTMANAGER nor
+	ACDBASSOCDEPENDENCY so skip these dxf tests there.
+
+	alive.test: disable TODO for dxf2dwg
+	should not crash anymore.
+
+	indxf: support common CMC [62,420,430]
+
+	indxf: add_block_picture (analog)
+	and log BLOCK_HEADER.insert_handles[]
+
+	indxf: add_ent_picture
+	the entity.picture, not the dwg thumbnail
+
+2019-08-16  Reini Urban  <rurban@cpan.org>
+
+	indxf: re-arm Warning: Ignore VECTOR
+	Only 375 warnings now with examples_2013.dxf
+
+	indxf: add GROUP.group_entries [340 H*]
+	and set GROUP.num_handles
+
+	indxf: new_LWPOLYLINE
+	all vectors do have the same size
+
+	dynapi: add 2BD_1 types
+	needed in indxf for some objects, like LAYOUT.window_max.y, ...
+	Improve VECTOR detection
+
+	indxf: skip .z of 2D points
+	like with SOLID
+
+	dxf2dwg: adjust limitation warnings
+
+	indxf: read MLINE entity
+	with its various subentities. dynapi does not have its dxf values,
+	which does not make sense here
+
+	add DXF 46 to MTEXT.rect_height
+	was missing. ODA specifies it
+
+	indxf: read SPLINE entity
+	at least the Bezier spline, scenario 2
+
+	dynapi: fix setting r2007+ wchar strings
+	T types are just TV, just check for TF or 2007.
+	find_tablehandle: check against the utf8, not the wide name.
+
+	dwg_find_tablehandle: use a better temp. type
+	just to check the _obj->name earlier
+
+	indxf: protect NULL hdlv[i] in dwg_find_tablehandle
+	some handle vector entries might still be NULL
+
+	indxf: fix some handleref double-free's
+	need to make a copy of refs. But not all yet.
+
+	programs: add -y --overwrite
+	dont overwrite existing files per default with
+	the dxf converters.
+	regen the manual, adjust the docs
+
+	encode: patchup obj size and bitsize
+	for DXF, to fix overflows.
+	Many dxf2dwg dwg's can now be read.
+
+	encode: use SECTION enums
+	and calc the section[0] address and size.
+
+2019-08-16  Reini Urban  <rurban@cpan.org>
+
+	indxf: dxf_fixup_header
+	fixup some values, like table or block refs (with proper code),
+	and values not in the DXF.
+
+	make LOG_* a block to be more useful in if () else statements.
+
+2019-08-15  Reini Urban  <rurban@cpan.org>
+
+	api: rename ACDBNAVISWORKSMODELDEF to NAVISWORKSMODELDEF
+
+2019-08-15  Reini Urban  <rurban@cpan.org>
+
+	indxf: add dxf_preview_read
+	read the hex THUMBNAILIMAGE.
+
+	also abstract away new_MLINESTYLE_lines()
+
+2019-08-15  Reini Urban  <rurban@cpan.org>
+
+	dxf2dwg: set dwg.header.from_version
+
+	dxf2dwg: disable free under asan for now
+	should be enabled to test for leaks when encode is stable enough
+
+	indxf: MLINESTYLE.lines[]
+
+	indxf: add LAYER.linewt, flag logic
+
+	indxf: resolve VT_HANDLE handles
+	by ref, not by name (i.e. all code > 300)
+
+	dwg_encode_add_object: lookup class by name
+	same as in dwg_encode_variable_type().
+	This fixes DEBUGGING objects, like CELLSTYLEMAP.
+
+	indxf: add hex2bin for VT_BINARY hex string
+	e.g. handle XRECORD 311 values
+
+	dwg_encode_variable_type: lookup class by name
+	indxf has a different class order, which breaks lookup by type/class[i].
+	either fixup the obj->type then (now), or resort the classes, when
+	being read from DXF.
+
+	indxf: fix classes_read logging
+	wrong num_instances copy&pasta
+
+	indxf: resolve ENTITY.layer
+	special-case.
+	also excempt DICTIONARYVAR from DICTIONARY* cases.
+
+	fix deg2rad
+	wrong calculation!, prev. only used in unknown/bd
+
+	indxf: deg2rad angles
+	convert angles from degree to radian
+
+	indxf: fix add_dictionary_handle
+	and simplify without using the dynapi.
+	But the problem was setting texts [3 TV*] before to TV
+
+2019-08-14  Reini Urban  <rurban@cpan.org>
+
+	api: sync struct DICTIONARY with DICTIONARYWDFLT
+	use the same names and offsets, for easier in_dxf.
+	rename DICTIONARY*.text => texts,
+	DICTIONARY.unknown_r14 => cloning_r14
+	DICTIONARYWDFLT.cloning_rl => cloning_r14
+
+	indxf: add text to add_dictionary_handle
+
+	perl: fix out-of-tree
+	make distcheck
+	No rule to make target 'perl/LibreDWG.xs', needed by 'all-am'
+
+	dynapi: add HANDLE_VECTOR dxf values
+
+	bits: -Wmaybe-uninitialized b in bit_write_hexbits
+	Clearly an optimizer problem, but no big deal.
+
+	indxf: sync in_dxf to in_dxfb
+
+	indxf: fixup add_xdata
+	may free the original pair, avoid double-free and leak
+
+	indxf: add_dictionary_handle
+
+2019-08-06  Reini Urban  <rurban@cpan.org>
+
+	indxf: XRECORD add_xdata
+	all unknown XRECORD fields are xdata
+
+	suffix: also strip other known extensions
+	e.g. dxf2dwg would create a .dwg, not a .dxf.dwg
+
+	dxf2dwg: sync with dwg2dxf
+	allow multiple input files,
+	silently overwrite existing dwg files
+	in the current dir.
+
+	workaround old darwin makeinfo
+	need the texi2any version for @indentedblock
+
+	Merge branch 'indxf' [GH #129]
+	Not yet fully finished but ready for master
+
+	dxf2dwg: more stability
+	dwg_find_tablehandle can find a NULL hdlname
+	free can run into NULL _obj->eed
+	resolve_postponed_header_refs can run into an empty string pair
+
+	indxf: add BLOCK_CONTROL.insert_handles 331
+
+	indxf: add resolve_postponed_header_refs
+	array_push: need the code also
+	to get to the right table
+
+	indxf: fill dwg->object_ref[] via
+	dwg_decode_add_object_ref()
+
+	indxf: more object_map, HEADER handles, ...
+	Can now write most of the entities.
+	set the object_map from the handles,
+	fix reading HEADER handles,
+	rename dxf_find_tablehandle to dwg_find_tablehandle. It is not just
+	DXF-only
+
+	indxf: support 3DFACE and 3DSOLID names
+
+	indxf: start testing dxf2dwg
+	for now just the alive.text. not a functional test
+
+	indxf: dxf_find_tablehandle
+	resolve table names to handle
+
+2019-08-05  Reini Urban  <rurban@cpan.org>
+
+	index: finished reading all sections
+	start writing the dwg
+
+	index: WIP OBJECTS and ENTITIES
+
+	indxf: check common_entity_fields
+	for entities. fixes e.g. BLOCK.layer.
+	skip old table-only specific fields for new_object()
+	and let it search the dynapi fields instead.
+
+	doc: fix some more indices
+	Now the object appears in the new 2nd index,
+	but for pdf not the entities in the first yet.
+
+	doc: dwg_get_ => dwg_getall_
+
+2019-08-05  Reini Urban  <rurban@cpan.org>
+
+	generate dynapi.texi
+	for all HEADER, OBJECTS, ENTITIES and internal subfields.
+	Not CLASSES yet. Not sure about TABLES.
+
+	TODO The makeinfo for pdf index and menu generation does not work
+	for an included file. Maybe include it via gen-dynapi.pl
+
+	Closes #127
+
+2019-08-05  Reini Urban  <rurban@cpan.org>
+
+	generate src/objects.inc
+	This attempt is much better than a polluted dwg.spec
+	Get rid of all the hacks from the previous commit
+
+	WIP indxf refactor
+	define IS_INDXF (not DXF nor ENCODER).
+	delete all the FIELD, VALUE and HEADER macros,
+	as we only parse dwg.spec to get the OBJECT and ENTITY definitions
+	but we don't care about the fields and the additional logic.
+
+	more minor BLOCK_RECORD fixups
+	search fields with the right name (and log the error).
+	fix color.index value
+
+	add VT_INT64 type to dxf/eed
+	e.g. BLL REQUIREDVERSIONS [160] since r2013+
+
+	dynapi: fix utf8 conversion
+	is_utf8 denotes an UTF-8 input string, not that
+	the target may be unicode. is_utf8 is always on in ascii importers.
+	dont convert every string pair to unicode, because some fields
+	are just TV or TF. we need to wait for that, dynapi_set_helper does that
+
+	add COMMON_TABLE_FIELDS, handle indxf BLOCK_RECORD tables
+	ensure the same binary layout for all but the LAYER table.
+	fix the wrong BLOCK_CONTROL.entries[] handle vector, and name confusion.
+	fixup the seperation of BLOCK_RECORD tables to BLOCK_HEADER and
+	BLOCK_CONTROL objects.
+
+	indxf: fix table common handle vectors
+	check and fix CONTROL.num_entries,
+	check if in reactors or xdict or ownerhandle,
+	implement reactors[], xdicobjhandle.
+
+	dynapi: enable color.index, fix DXF
+	indxf: read colors (always "CMC"), seperate from points
+
+	api: rename VPORT.ucs_pre_viewport to UCSVP [65]
+	which is bit 0 of VIEWMODE [71].
+
+2019-08-05  Reini Urban  <rurban@cpan.org>
+
+	indxf: more table fields
+	don't translate certain header strings to unicode: 0, 2, 9
+
+	Fixup test-data/2000/TS1.dxf to R2000, it was R2018.
+	For now done manually in HEADER only.
+
+2019-08-05  Reini Urban  <rurban@cpan.org>
+
+	indxf: points
+
+	indxf: search also in common fields
+	add the common fields for obejcts and entities to the dynapi.
+	search also point members (like dxf 20 for a 2DPOINT matching dxf 10  in the field)
+
+	indxf: finish most tables, start with BLOCK_RECORD
+	only a few fields are unknown, like 20, 30 for 3DPOINT 10,
+	and the common object fields.
+
+	indxf: add_eed
+	Only for a very limited number of supported EED codes yet,
+	and only for handle 1001 ACAD.
+
+	indxf: add table.handle to table_control hdls vector
+	allocate and special-case DIMSTYLE_CONTROL.morehandle[]
+	allocate and set TABLE_CONTROL.hdls[]
+
+	indxf: NEW_OBJECT and ADD_OBJECT macros
+
+	examples: change handle types
+
+2019-08-05  Reini Urban  <rurban@cpan.org>
+
+	change handle types, add formatting macros
+	handle.value is now BITCODE_BL (uint32_t)
+	.code and .size are BITCODE_RC (uint8_t)
+
+	Add FORMAT_H, ARGS_H(hdl) and FORMAT_REF, ARGS_REF(ref) macros
+	for uniform handle output.
+
+	Add indxf add_handle and add_handleref helpers
+
+2019-08-05  Reini Urban  <rurban@cpan.org>
+
+	dynapi: fix dwg_dynapi_entity_set_value for strings
+
+	adjust dynapi line#
+
+	indxf: more new_table
+
+	indxf: more dxf_tables_read
+	new_table and problems with certain *Active_CONTROL tables
+
+	rename HEADER.LINETYPE_CONTROL_OBJECT to LTYPE_CONTROL_OBJECT
+	and HEADER.DICTIONARY_NAMED_OBJECTS to DICTIONARY_NAMED_OBJECT
+	for consistency, esp. needed by in_dxf
+
+	indxf: start with dxf_tables_read
+
+	indxf: fix dxf_classes_read
+
+	indxf: fix empty strings
+	dont scan past the \n
+
+	indxf: handle unknown HEADER fields
+	add 2 DXF-only TIME fields.
+	most header fields can now be read.
+
+	fix array_push
+	need to return the changed hdls
+
+	make Dxf_Pair, array_push, matches_type avail to in_dxfb
+
+	dynapi: export all functions
+	also the ones returning fields.
+	optimize NULL type checks
+
+	Replace AC_FUNC_STRTOD by AC_CHECK_FUNC
+	AC_FUNC_STRTOD broken for cross-compiling
+
+	add AC_FUNC_STRTOD probe
+
+	indxf: postpone header_hdls, accept space in strings
+	header_hdls is an array of fields and names, which needs to be
+	filled after reading the tables with its handles.
+	dxf_read_string failed to read strings with a space, like "Tavolo 3"
+
+	indxf: improve logging
+
+	indxf: fix the sscanf (%f) part
+	advance dat (via strtod). Next: handles as string
+
+	indxf: check types, handle points
+	but the sscanf (%f) part is still wrong
+
+	add dwg_dynapi_header_field, dwg_dynapi_common_*_field
+	needed to do type-checking before setting a value.
+	not in in the public API for now.
+
+	indxf: dxf_header_read
+
+2019-08-01  Reini Urban  <rurban@cpan.org>
+
+	OLE2FRAME dynapi dxf values
+
+	revive bd-unknown.inc
+	destroyed before
+
+	examples/bits: try all combinations
+	avoid stack overflow, always try the next offset.
+
+2019-08-01  Reini Urban  <rurban@cpan.org>
+
+	add -x option to examples/bd|bits
+	to easier decode hexdumps
+
+	avoid stack overflow, don't restart with a smaller offset
+
+2019-08-01  Reini Urban  <rurban@cpan.org>
+
+	More OLE2FRAME
+	found the MSD-CFB offset in the OLE2FRAME.data at 0x80
+	The header before are most likely the missing fields.
+
+2019-08-01  Reini Urban  <rurban@cpan.org>
+
+	Change OLE2FRAME
+	remove flag 70, it is a fixed oleversion 70: always 2
+	mode is r2000+ DXF 72, tile_mode, 0: mspace, 1: pspace
+	unknown is most likely the boolean lock_aspect, DXF 73
+	data is DXF type BINARY, 310
+	data_length is DXF 90
+
+	data embeds more fields, we do not decode yet:
+	oleversion: always 2 (was flag)
+	oleclient (e.g. "OLE" or "Paintbrush Picture")
+	pt1 DXF 10, upper left corner
+	pt2 DXF 11, lower right corner
+
+2019-08-01  Reini Urban  <rurban@cpan.org>
+
+	Fix types in 2 unit-tests
+	Not detected by gcc, only clang-7 via -Wformat
+
+2019-07-31  Reini Urban  <rurban@cpan.org>
+
+	fix log out-of-tree
+
+	fix logs-all.sh out-of-tree
+
+2019-07-30  Reini Urban  <rurban@cpan.org>
+
+	fixup dynapi.c generation
+	when out-of-tree
+	A fix for a51de973e5dca582536d425b28c82cc98165bbc1
+
+	r2007: rename internal unused sections_amount to num_sections
+
+	r2007: more defenses
+
+2019-07-29  Reini Urban  <rurban@cpan.org>
+
+	fix out-of-tree make check-dwg
+	and check-dxf, check-dwg-valgrind
+
+	fix leak with Invalid System Section data_size
+
+	fix gen-dynapi.pl out-of-tree
+	when configured elsewhere
+
+	WIP decompress_R2004_section: fix one more
+	dst overflow. This time better
+
+	Protect from illegal dwg->num _classes
+
+	new error: dwg too small: n bytes
+
+	decompress_R2004_section assert => error
+	ERROR: decompress_R2004_section: src offset underflow
+	many afl-fuzz cases
+
+	Fix decompress_R2004_section overflow
+	when writing to dst. Caught by afl-fuzz.
+
+	Stabilize validate_POLYLINE
+	when _obj->vertex[_obj->num_owned - 1]->obj is empty
+
+	Add r2007 system section checks
+	checking against a corrupt section map.
+	Note that the size factor depends on the compression.
+	we kill it when the compression would expand > 10x
+
+	Fix unused page crash
+	when we find a page.number < 0 (gap/unused page)
+	initialize the next new page with NULL
+
+	r2004 sections: clear on realloc
+	otherwise we do have uninitialized chunk there
+
+	renamed Dwg_Section_Info.pagecount to num_sections
+	This was always very confusing. num-sections was not used and always 0,
+	and pagecount was the number of pages/i.e. Dwg_Section **sections
+
+	unit-testing: fix out-of-tree deps
+
+	examples: fix out-of-tree deps
+
+	afl: re-add more dwg_api functions
+	so that the api examples can be built and fuzzed
+
+2019-07-28  Reini Urban  <rurban@cpan.org>
+
+	spec formatting
+
+	Fix dwg_validate_POLYLINE without vertex[]
+	Found via afl-fuzz
+
+	Fix a R13 heap-buffer-overflow
+	An off-by-one error, detected by afl-fuzz.
+
+	Fix free dwg_class NULL deref
+	Fixes part 14 of GH #126
+
+	Fix dwg2svg2 NULL deref
+	Fixes part 13 of GH #126
+
+	Check Invalid Header section, skip
+	when section[0] is invalid.
+	Fixes part 9 and 11 of GH #126
+
+	Check Invalid AuxHeader: buffer overflow
+	when section[5] is invalid
+
+	harmonize logging of header.num_sections
+
+	header.spec: formatting
+
+2019-07-28  Reini Urban  <rurban@cpan.org>
+
+	afl: disable most of the old dwg_api
+	when compiling via afl-gcc/clang.
+
+	with asan:
+	make -j4 -s clean
+	export ASAN_OPTIONS="abort_on_error=1:detect_leaks=0:symbolize=0:allocator_may_return_null=1"
+	export AFL_CC="gcc"
+	PERL=cperl5.30.0-nt \
+	CC="afl-gcc" \
+	CFLAGS="-m32 -O2 -g -fsanitize=address,undefined -fno-omit-frame-pointer -I/usr/local/include" \
+	    ./configure --disable-static --disable-bindings --disable-dxf --disable-write $@
+	AFL_USE_ASAN=1 make -j4 -s -C src
+	AFL_USE_ASAN=1 make -j4 -s -C programs dwgread
+	LD_LIBRARY_PATH=`pwd`/src/.libs afl-fuzz -m none -i .fuzz-in -o .fuzz-out programs/.libs/dwgread @@ /dev/null
+
+	without:
+	make -j4 -s clean
+	unset ASAN_OPTIONS
+	unset AFL_CC
+	PERL=cperl5.30.0-nt \
+	CC="afl-gcc" \
+	CFLAGS="-O2 -g -I/usr/local/include" \
+	    ./configure --disable-shared --disable-bindings --disable-dxf --disable-write $@
+	make -j4 -s
+	afl-fuzz -m none -i .fuzz-in -o .fuzz-out programs/dwgread @@ /dev/null
+
+2019-07-28  Reini Urban  <rurban@cpan.org>
+
+	Protect Invalid XRECORD.num_databytes
+	Found via afl-fuzz
+
+2019-07-28  Reini Urban  <rurban@cpan.org>
+
+	Check obj->size overflow
+	Throws ERROR: Invalid object size. Would overflow
+	Fixes part 7 and 8 of GH #126, thanks to @strongcourage.
+	A very hypothetical data corruption issue.
+
+	Closes GH #126
+
+2019-07-28  Reini Urban  <rurban@cpan.org>
+
+	Fix heap-buffer-overflow in decompress_r2007
+	check offset underflow, pass thru error.
+	Fixes part 5 and 6 of GH #126.
+	Thanks to @strongcourage
+
+	Fix heap-buffer-overflow in decompress_R2004_section
+	check for dst overflow. Fixes part 4 of GH #126.
+	Also check for invalid R134 num_sections.
+	Thanks to @strongcourage
+
+	protect bit_check_CRC from buffer overflow
+	Fixes part 2 and 3 of GH #126
+	Thanks to @strongcourage
+
+	Fix invalid free at decode.c:2289
+	part 1 of GH #126. We forgot to reset dat to abs_dat in one branch
+	Thanks to @strongcourage
+
+	dxf: fix some MTEXT dxf codes
+	a followup to c6c36153ef3ea6fec406dfd53cd6ac8201485b5d
+
+2019-07-27  Reini Urban  <rurban@cpan.org>
+
+	use strEQ helper macros
+
+	add strEQ helper macros
+
+	regen-unknown: add new AEC objects to unknown
+	But since AEC doesn't file to DXF, we have no known
+	DXF objects/fields. They are parametric blocks, exploding to
+	LINE, HATCH, ARC, TEXT, ...
+
+2019-07-26  Reini Urban  <rurban@cpan.org>
+
+	fix json test with new 2018 dwg
+	MLINESTYLE.ltype [] was missing the final ]
+
+	fix MTEXT for r2018
+	almost. The column_heights vector is still missing.
+
+	new example_2018.dwg, TS1.dxf
+	The old dwg was an old version
+
+	add GEOMAPIMAGE as debugging class
+	but no coverage
+
+	fix out-of-tree gen-dynapi.pl
+	gen-dynapi.pl is in srcdir
+
+	fix unit-testing coverage
+	2000/PolyLine2D.dwg was missing from DIST.
+	fix out-of-tree builds for one and two levels down, ../configure
+	or ../../configure
+
+	Update NEWS, TODO
+	Added a lot of coverage and really found some bugs.
+
+	xrecord: skip xdata test
+	xdata is still a linked list, not an array
+
+	ole2frame: data != dat_length mismatch TODO
+
+	add 2000/TS1.dwg
+	by Guruprasad Rane, 2011 (GPL3)
+	needed for more unit-testing coverage
+
+	unit-testing: improve api_common_entity
+	dont print the common values, only the handles. speeds it up
+
+	unit-testing: add api_common_object
+	check more common handles
+
+	LWPOLYLINE needs to be checked by name
+	because it might be a class (535), when being backported to R14.
+	Fixes lwpoline unit-test for r14.
+
+	unit-testing: allow NULL handles
+	and switch the logic, fail first.
+	many layers r2004+ are empty.
+
+	fix unit-tests found with new coverage
+
+	add dynapi coverage, fix dwg_dynapi_common_value
+	detected by adding tests for it.
+
+2019-07-25  Reini Urban  <rurban@cpan.org>
+
+	Update NEWS TODO
+
+	Merge branch 'gh124-dejagnu'
+	See GH #124
+	Now only the unit-testing coverage needs to be improved.
+
+	rm test/testcases
+	Closes GH #124
+
+	fix dynapi_test for char** encr_sat_data
+	There is no num_encr_sat_data
+
+	unit-testing: allow NULL strings
+
+	unit-testing: fix VERTEX_(MESH|PFACE), 3DSOLID
+	VERTEX_(MESH|PFACE) missed the VERTEX_3D typedef.
+	3dsolid may fail before, and thus have a NULL history_id.
+	Also ensure that unknown_2007 and history_id are only for version 2
+
+	unit-testing: finish the rest
+
+	unit-testing: fix a few text errors
+	and add more checks
+
+	unit-testing: dimension
+
+2019-07-24  Reini Urban  <rurban@cpan.org>
+
+	unit-testing: polyline
+
+	windows: fix warning: "alloca" redefined
+
+	unit-testing: enhance coverage
+
+	add pass,fail,ok to unit-testing
+	check coverage,
+	enhance coverage by checking more dwg's,
+	remove INPUT from TESTS_ENVIRONMENT,
+	don't exit immediately, collect errors, return error_code at the end.
+
+	more double linkage on windows with dynapi
+	and get rid of the -lm dependency
+
+	avoid double linkage on windows with unit-testing
+	2 bits functions are exported, which clashes on windows.
+	disable the EXPORT attribute there when linked locally.
+
+	change bits_test.cbmc target
+	use macros
+
+2019-07-23  Reini Urban  <rurban@cpan.org>
+
+	disable lsan for unit-testing
+	just too much work for now to clean up all the copies
+
+	add ATTRIBUTE_MALLOC, probe for FUNC_ATTRIBUTE_FORMAT
+
+	more scan-build warnings
+	Potential leak of memory decomp
+	Dead assignment
+	uninitialized value
+
+	add test/unit-testing/dynapi_test.c
+	dont rely in Convert::Binary::C
+
+	Improve dwg_dynapi_handle_name
+	Dont convert obj to _obj to obj back & forth
+
+	dwg_dynapi_handle_name return UTF-8 strings
+	when the field is a wide-string.
+	All the tables use FIELD_T names.
+	But the dynapi sometimes misrepresents T types as TV, so only check
+	against TF, which is always single-byte.
+
+	add dwg_dynapi_handle_name
+	similar to  dwg_obj_table_get_name, which only supports tables.
+	This supports all objects and entities with a name field.
+
+	fix xline dynapi
+	caught with the new unit-tests
+
+	export dwg.c functions
+	in the body also. just to seperate it more clearly from static
+
+2019-07-23  Reini Urban  <rurban@cpan.org>
+
+	more unit-testing entities
+	make -C test/unit-testing check \
+	  TESTS_ENVIRONMENT='INPUT=../../td/example_2004.dwg' ...
+
+	for most dwg's
+
+2019-07-23  Reini Urban  <rurban@cpan.org>
+
+	enhance unit-testing iterator
+	catch also ATTRIB and ATTDEF entities.
+	Check more NULL refs
+
+	disable dejagnu
+	See GH #124
+
+2019-07-22  Reini Urban  <rurban@cpan.org>
+
+	dynapi_test: simplify pass ()
+
+	move some testcases to unit-testing
+	fix some string tests with valid NULL strings.
+	get rid of dejagnu there, i.e. roll our own (better one)
+
+	WIP: unit-testing dynapi
+	we need to get rid of the old dejagnu testcases,
+	get rid of the unit-testing print-only check: compare
+	to low-level values, test the new APIs: by object and by type.
+
+	strdup: set the feature at first
+	need __STDC_WANT_LIB_EXT2__ set before including any feature.h
+	on older glibc's, which do need _USE_BSD instead.
+
+2019-07-21  Reini Urban  <rurban@cpan.org>
+
+	unknown: remove 1 DIMASSOC with invalid handle
+
+	WIP GEOMAPIMAGE fields
+	And some more docs
+
+	Update NEWS
+	for the new API functions
+
+2019-07-20  Reini Urban  <rurban@cpan.org>
+
+	more GCC30_DIAG fixups
+	They are ignored for newer gccs. Use the new decl. also
+
+	decode_r2007: pages_map memory leak on error
+
+	dynapi: null pointer dereference [-Wnull-dereference]
+
+	decode: null pointer dereference [-Wnull-dereference]
+
+	encode: declare strdup
+	warning: incompatible implicit declaration of built-in function ‘strdup’
+
+2019-07-20  Reini Urban  <rurban@cpan.org>
+
+	api: Allocator sizeof operand mismatch
+	eg wrong string handling:
+	dwg_ent_set_UTF8 Result of 'calloc' is converted to a pointer of
+	type 'char', which is incompatible with sizeof operand type 'char *'
+
+	make -s scan-build SCAN_BUILD=scan-build-7
+
+2019-07-20  Reini Urban  <rurban@cpan.org>
+
+	dwg_api: potential null pointer dereference [-Wnull-dereference]
+
+2019-07-19  Reini Urban  <rurban@cpan.org>
+
+	Fix warning: declaration of ‘index’ shadows a global declaration
+	i.e. the index function. only with older compilers.
+
+	Fix GCC30_DIAG_IGNORE (-Wformat-nonliteral) for older gcc <4.6
+	only allowed outside functions until gcc 4.6 (or clang).
+	Before gcc-4.6 the pragma needs to be before the function
+	in question.
+
+	.c.ii without cc extensions -MT -MD -MP -MF
+	pgcc struggles with it
+
+2019-07-19  Reini Urban  <rurban@cpan.org>
+
+	revamp CC_DIAG_IGNORE
+	remove unused defines, simplify.
+
+	Note that clang -Wtautological-constant-out-of-range-compare in 3 places
+	cannot be suppressed, but we'll get rid of these old overflow checks
+	soon, as we do better now.
+
+2019-07-19  Reini Urban  <rurban@cpan.org>
+
+	gcc -Wformat-nonliteral is since 3.0.4 at least
+	and in clang also
+
+2019-07-18  Reini Urban  <rurban@cpan.org>
+
+	Merge branch 'gh97-dynapi'
+	Closes GH #97, but there are no test-cases for the new API yet.
+
+	dwg2svg2: use the new partially typed API
+
+	missing dynapi utf8text functions (2)
+	the simplified dwg_{g,s}et_OBJECT_utf8text() API
+
+	add the missing dynapi functions, add is_utf8 to setters
+
+	update NEWS for 9.0
+
+	add dwg_dynapi_entity_utf8text
+	which returns a fresh copy of a TU string converted to
+	UTF-8, as with the deprecated API.
+
+2019-07-17  Reini Urban  <rurban@cpan.org>
+
+	dynapi: replace deprecated API functions WIP
+	See GH #97
+
+	api: move Dwg_Version_Type to dwg.h
+	make dwg->header.version a public enum, not some strange
+	unrelated int.
+	This also adds documentation to R_* release <> AC* DWG versions.
+
+	minor dwg.spec simplification
+
+	fix a suffix() edgecase, when basename() fails
+
+	darwin fprintf dtoa leak
+	and more darwin leaks. not detected via lsan, only via valgrind.
+	convert dxf VALUE_RD to a function, too large for a macro.
+	maybe add a 0-stripper here later.
+
+	dxf: non-destructive FIELD_BD
+	for angles, dont change the field value. convert only
+	the printed value on-the-fly rad2deg
+
+	fix logs_all.sh to use parallel version
+
+2019-07-17  Reini Urban  <rurban@cpan.org>
+
+	unknown: disallow TV in r2007+ versions
+	cannot try TV fallback in TU dwgs.
+
+	also stabilize PICAT and PARALLEL version probes a bit (space in pathname).
+	The logs-all.sh target is still wrong though, fixed in next commit.
+
+2019-07-16  Reini Urban  <rurban@cpan.org>
+
+	unknown: add is_entity flag
+	check ENC or CMC based on it (see GH #123)
+
+	fix bd-unknown.pl to be run from examples
+	via make. add some new
+
+	unknown: skip some overlarge ACAD_TABLE objects
+	leading to picat out-of-memory errors
+
+	fix -Wnull-dereference warnings
+	potential null dereferences, detected by -flto -O3
+
+	regen-unknown with fixed hdlsize
+	some objects Hdlsize: were missing
+
+	unknown: add hdlsize
+	which is needed to find the last handle, to seperate it from the final
+	padding until the crc.
+
+	unknown: rename bitsize => num_bits
+	use bitsize only for the matching obj->bitsize
+	and num_bits for the calculated unknown->num_bits
+
+	unknown: comment sizes
+	and add [RL] to the read bitsize (opposite to a calculated value)
+
+	bit_read_ENC: we do have hdl_dat now
+
+	fix unknown bit_ENC for 2+ streams
+
+	run make regen-unknown: with more unknown pairs
+	got a couple of more dwg/dxf pairs, with new objects
+
+	fix regen-unknown
+	with the changed log format for bitsize.
+	also get a few new files
+
+	add generated json.test to .gitignore
+
+2019-07-15  Reini Urban  <rurban@cpan.org>
+
+	bump copyright year to 2019
+	to all in 2019 changed files
+
+	stabilize autogen.sh
+	See GH #101
+
+	move -version-info upwards
+
+	add -version-info for the shared lib
+	was only 0:0:0, now 0:8:0
+
+	fix -Wrestrict in dwg_decode_##token##_private
+	warned only by gcc, not clang
+
+	fix ax_python_devel.m4
+	wrong -z check
+
+2019-07-15  Reini Urban  <rurban@cpan.org>
+
+	add .c.ic rule, probe for $(CLANG_FORMAT)
+	make -C src decode.ic will create an expanded version
+	of decode.c in-place, keep a proper backup!
+	used to find problems in macros.
+
+	clang-7 started omitting the .0
+
+2019-07-15  Reini Urban  <rurban@cpan.org>
+
+	silence -Wformat-nonliteral
+	Closes GH #121
+
+2019-07-15  Reini Urban  <rurban@cpan.org>
+
+	expand [rcount1], [rcount2] to [%d] for LOG_TRACE
+	better logging.
+
+	It looks expensive, timings:
+	                 without     with
+	make check       0m12.034s   0m12.303s
+	  (mostly -v2)
+	./logs-all.sh    0m35.934s   0m37.324s
+	  (only -v4)
+	so it's neglectable.
+	TODO -Wno-format-nonliteral
+
+2019-07-15  Reini Urban  <rurban@cpan.org>
+
+	Merge branch 'gh85-limitall' into smoke/master
+	Closes #85
+
+2019-07-14  Reini Urban  <rurban@cpan.org>
+
+	unrestrict dat before the CRC calculation
+	and fix it for the restricted range. The CRC exceeds it,
+	do it absolutely.
+	We unfortunately start our dat after the obj->size,
+	not before, at obj->adress.
+
+	unknown_bits: permit overflow of one byte
+	temporary.
+	the new restricted streams found this overflow
+
+2019-07-14  Reini Urban  <rurban@cpan.org>
+
+	seperate and restrict the 3 streams
+	to catch overflows, put them on the stack.
+	See #85
+	This enables now interleaving of handles in the spec,
+	need not to be at the very end.
+
+	restrict dat at dwg_decode_add_object(),
+	keep the 3 streams at the same initial offset, the
+	obj->address - obj->size, and also its size,
+	and tighten it later as of now (in decode private).
+	Previously the hdl_dat 0 and str_dat 0 were at their resp.
+	starts, but this way we can compare them easier.
+	Calculating the relative stream positions is now trivial, e.g.
+	for the padding check in DWG_ENTITY_END.
+
+	add helper function obj_stream_position() which returns
+	the furthest handle position (data, handle, string streams)
+	set dat position to the max(dat, hdl_dat, str_dat) for the padding
+	and crc check.
+
+	harmonize pos and address name suffices
+	pos for bit positions, address for absolute byte addresses (objects only)
+
+	There's no need for the offset fields dat_address,
+	hdlpos, strpos, only bitsize_pos is needed for encode, to patch-in
+	the bitsize.
+	Remove unneeded obj->handle_offset (== obj->bitsize)
+	and obj->string_offset.
+
+	XRECORD: fixup objid_handles[] hdl_dat loop
+
+2019-07-14  Reini Urban  <rurban@cpan.org>
+
+	fixup crc logging
+
+	fixup logging indentation
+	any read value needs to be logged at col 1, and calculated value indented.
+
+	change FIELD_HANDLE @pos logging to INSANE (v5)
+
+	protect NULL ptrs in get_next_owned_entity
+	by dwg2dxf example_2007
+
+	add bits dat->opts for loglevel
+	this way we can silence known overflows,
+	and honor the given loglevel
+
+2019-07-13  Reini Urban  <rurban@cpan.org>
+
+	bits: log overflow errors
+
+	log hdl @pos for each handle
+
+2019-07-12  Reini Urban  <rurban@cpan.org>
+
+	Merge branch 'smoke/asan'
+	Fixed all leaks
+
+	travis: re-enable full lsan/asan checks
+
+	fix dwg_ent_get_ltype_name doc
+
+	fix unittest leaks
+
+	fix dwg2svg2 leaks
+	a bit more tricky, because dwg_api does not contain the R_2007 enum
+
+	dwg2dxf: fix invalid free
+
+	fix dwggrep leak with pcre2_16
+
+	fix geojson leaks
+
+	travis: re-check without lsan
+
+	lsan fixes: detect asan and call dwg_free then
+	Never skip dwg_free when compiled with asan, even if lsan is disabled.
+	(i.e. by default under darwin)
+	We don't check for getenv(ASAN_OPTIONS) =~ detect_leaks=1
+
+	add dsymutil to log on darwin
+	Note: this really should be added to COMPILE somewhen.
+
+	fix 3dsolid leaks
+	with version 1 also free the last empty block,
+	with version 2 calloc 3 blocks, with size 0 for the last.
+
+	travis: use xenial for pcre2/dwggrep tests
+
+	travis: add asan
+
+2019-07-11  Reini Urban  <rurban@cpan.org>
+
+	protect invalid free
+
+2019-07-09  Reini Urban  <rurban@cpan.org>
+
+	dxf: protect empty last_attrib
+
+	fixup wrong clang-formatting
+
+2019-07-08  Reini Urban  <rurban@cpan.org>
+
+	fixup --enable-debug json nan values
+	for json.test. With debug many numeric values are nan.
+	use the probed paths for sed and jq.
+
+	See #108, but we don't want to intercept fprintf %f for nan.
+	An error is an error.
+
+2019-07-08  Reini Urban  <rurban@cpan.org>
+
+	remove xrecord,proxy get_ownerhandle API
+
+2019-07-07  Reini Urban  <rurban@cpan.org>
+
+	remove unneeded ownerhandle
+	and update the dynapi
+
+	Move ownerhandle to parent Object_Object
+	along reactors and xdicobjhandle. This field is common to all
+	objects. See #118
+
+	fix print FIELD_ENC for color.handle change
+	For the change in 84bdc444fc5262c4
+
+2019-07-07  Reini Urban  <rurban@cpan.org>
+
+	START_OBJECT_HANDLE_STREAM #118
+	Generalize object handles:
+	Rename common field ownerhandle, exp. not NAME_control 330.
+	Remove various null_handle fields.
+
+	Rename LTYPE.null_handle to LTYPE.extref_handle
+	Add SORTENTSTABLE.dict_handle (previous called ownerhandle,
+	it IS the ownerhandle. ok, there we do have both, the parenthandle
+	and the ownerhandle)
+
+2019-07-07  Reini Urban  <rurban@cpan.org>
+
+	Add more missing ownerhandle fields
+	But that really should be in Dwg_Object_Object instead.
+	See #118
+
+2019-07-07  Reini Urban  <rurban@cpan.org>
+
+	Fix FIELDLIST standard handles
+	See #118, thanks to normwill-beast.
+
+	This will be simplified to a generic handle stream reader, outside the
+	dwg.spec, only carrying object-specific fields there.
+	With the handles intermixed, not necessarily at the end.
+
+2019-07-07  Reini Urban  <rurban@cpan.org>
+
+	Fix FIELD.childs and objects
+	And add ownerhandle and the other missing standard handles.
+	Closes #117, thanks to normwill-beast
+
+	Fix MLINESTYLE.ltype handles
+	Read them from the handlestream, after all others.
+	Closes #116, thanks to normwill-beast.
+
+2019-07-07  Reini Urban  <rurban@cpan.org>
+
+	Fix MULTILEADER content_block
+	And fix invalid free of ctx.content.txt.style.
+
+	Only set ctx.content.blk.block_table with ctx.has_content_block, and move it
+	down to the handle stream (will be fixed up later, with a proper hdl_dat)
+	Fixes e.g.  ERROR: Invalid 3BD ctx.content.blk.{scale,normal}, because we
+	have no hdl_dat setup yet.
+
+	Closes #113, thanks to normwill-beast
+
+2019-07-07  Reini Urban  <rurban@cpan.org>
+
+	Add many missing handles 2007+
+	Due to the fixed handle_stream offset, we can now
+	reliably read many more handles.
+
+	DIMENSION_ORDINATE
+	DIMENSION_LINEAR
+	DIMENSION_ALIGNED
+	DIMENSION_ANG3PT
+	DIMENSION_ANG2LN
+	DIMENSION_RADIUS
+	DIMENSION_DIAMETER
+	MTEXT
+	BLOCK_CONTROL
+	STYLE
+	SORTENTSTABLE
+
+	Closes GH #115, thanks to normwill-beast.
+
+	Renamed STYLE.null_handle to STYLE.extref_handle.
+	Kept SORTENTSTABLE.owner_dict name, documented as SORTENTSTABLE.parenthandle.
+	owner_dict sounds more specific and less general, but we have no other parenthandle
+	fields.
+
+2019-07-07  Reini Urban  <rurban@cpan.org>
+
+	Missing START_HANDLE_STREAM
+	in APPID, DICTIONARYVAR, VPORT_ENTITY_HEADER.
+	Fixes many missing APPID.app_control and DICTIONARYVAR.ownerhandle.
+	and Invalid handleref: warnings.
+
+	Closes GH #114, thanks to normwill-beast
+
+2019-07-07  Reini Urban  <rurban@cpan.org>
+
+	Incorrect object address #112
+	handlestream_size is not part of obj->size.
+	This fixes the hdlpos += 8 FIXME
+	and many Invalid handleref and Invalid handle pointer code errors.
+	Also many ownerhandle, and other handle offsets.
+
+	Thanks to normwill-beast
+
+2019-07-06  Reini Urban  <rurban@cpan.org>
+
+	clang-format
+
+2019-07-06  Reini Urban  <rurban@cpan.org>
+
+	defer color.handle to handle_stream
+	for >= R_2007 we dont know the handle stream yet, when reading the
+	common_entity_data. Defer to the start of the common_entity_handle_data
+	reading the common color.handle then.
+	Fixes #111, Thanks to normwill-beast.
+
+	And while we are there sanitize the common entity color.handle:
+	No extra color_handle needed. Make the handle a real H (ie. ref* to
+	the DBCOLOR object).
+	Remove the obsolete dwg_ent_get_color_handle API.
+
+	Extend bit_{read,write}_ENC to include
+	all 3 streams, but it is still not used yet.
+
+2019-07-06  Reini Urban  <rurban@cpan.org>
+
+	fix EED code 5 as int64
+	Incorrect reading of the spec, fixes many MTEXT entities.
+	Fixes GH #110. Thanks to normwill-beast
+
+2019-06-26  Reini Urban  <rurban@cpan.org>
+
+	dwg_ref_get_object: error on !ref->obj
+	the caller has to resolve it, we have no dwg here
+
+	fix NULL in out_geojson
+	Thanks to @UmlauteUeberall
+	Closes #107
+
+2019-06-25  Reini Urban  <rurban@cpan.org>
+
+	Release 0.8
+	See NEWS
+
 2019-04-26  Reini Urban  <rurban@cpan.org>
 
 	redo build-aux/clang-format-all.sh src test examples programs
