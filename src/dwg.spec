@@ -6193,12 +6193,12 @@ DWG_ENTITY(LIGHT)
   FIELD_BS (attenuation_type, 72);
   FIELD_B (use_attenuation_limits, 292);
   FIELD_BD (attenuation_start_limit, 41);
+  FIELD_BS (shadow_map_size, 91); //256 11
   FIELD_BD (attenuation_end_limit, 42);
   FIELD_BD (hotspot_angle, 50);
   FIELD_BD (falloff_angle, 51);
   FIELD_B (cast_shadows, 293);
   FIELD_BS (shadow_type, 73);   // 0 or 1
-  FIELD_BS (shadow_map_size, 91); //256 11
   FIELD_RC (shadow_map_softness, 280);
 
   COMMON_ENTITY_HANDLE_DATA;
