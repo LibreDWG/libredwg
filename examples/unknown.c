@@ -382,7 +382,7 @@ handle_string (char *restrict dest, const int code, const char *restrict hdl,
 {
   Dwg_Handle handle;
   // parse hex -> owner handle;
-  sscanf (hdl, "%X", &handle.value);
+  sscanf (hdl, "%lX", &handle.value);
   handle.code = code;
   if (code > 5)
     { // relative offset to objhandle
@@ -423,7 +423,7 @@ bits_handle (Bit_Chain *restrict dat, struct _unknown_field *restrict g,
 {
   Dwg_Handle handle;
   // parse hex -> owner handle;
-  sscanf (g->value, "%X", &handle.value);
+  sscanf (g->value, "%lX", &handle.value);
   handle.code = code;
   cur_hdl = code;
   if (code > 5)
@@ -866,6 +866,11 @@ main (int argc, char *argv[])
       strcat (pi_fn, class);
       strcat (pi_fn, ".pi");
       pi = fopen (pi_fn, "w");
+      if (!pi)
+        {
+          fprintf (stderr, "Failed to write %s\n", pi_fn);
+          continue;
+        }
       fprintf (pi,
                "import unknown.\n\n"
                "/* %s field packing problem.\n"
