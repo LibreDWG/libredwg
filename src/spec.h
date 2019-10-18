@@ -358,7 +358,7 @@
       for (rcount1 = 0; rcount1 < (BITCODE_BL)times; rcount1++)
 // checked with constant times
 #  define REPEAT_N(times, name, type)                                         \
-    if (dat->version >= R_2000 && (BITCODE_BL)times > 0x1000)                 \
+    if (dat->version >= R_2000 && (BITCODE_BL)times > 0x7ff)                  \
       {                                                                       \
         LOG_ERROR ("Invalid %s." #name " rcount1 %ld", SAFEDXFNAME,           \
                    (long)times);                                              \
@@ -369,7 +369,7 @@
 
 // checked with var. times
 #  define _REPEAT(times, name, type, idx)                                     \
-    if (dat->version >= R_2000 && (BITCODE_BL)_obj->times > 0x1000)           \
+    if (dat->version >= R_2000 && (BITCODE_BL)_obj->times > 0x7ff)            \
       {                                                                       \
         LOG_ERROR ("Invalid %s." #name " rcount" #idx " %ld", SAFEDXFNAME,    \
                    (long)_obj->times);                                        \
@@ -410,7 +410,7 @@
 #ifndef _REPEAT_NF
 // checked
 #  define _REPEAT_NF(times, name, type, idx)                                  \
-    if (dat->version >= R_2000 && times > 0x1000)                             \
+    if (dat->version >= R_2000 && times > 0x7ff)                              \
       {                                                                       \
         LOG_ERROR ("Invalid %s." #name " rcount" #idx " %ld", SAFEDXFNAME,    \
                    (long)times);                                              \
