@@ -22,6 +22,13 @@
 #include "../src/config.h"
 #include <stdio.h>
 #include <stdlib.h>
+#ifdef HAVE_STRCASESTR
+#  undef __DARWIN_C_LEVEL
+#  define __DARWIN_C_LEVEL __DARWIN_C_FULL
+#  ifndef __USE_GNU
+#    define __USE_GNU
+#  endif
+#endif
 #include <string.h>
 #include <unistd.h>
 #include <math.h>
@@ -95,16 +102,42 @@ output_TEXT (Dwg_Object *obj)
   Dwg_Data *dwg = obj->parent;
   Dwg_Entity_TEXT *text = obj->tio.entity->tio.TEXT;
   char *escaped;
+  const char *fontfamily;
+  BITCODE_H style_ref = text->style;
+  Dwg_Object *o = style_ref ? dwg_ref_object_silent (dwg, style_ref) : NULL;
+  Dwg_Object_STYLE *style = o ? o->tio.object->tio.STYLE : NULL;
 
   if (dwg->header.version >= R_2007)
     escaped = htmlwescape ((BITCODE_TU)text->text_value);
   else
     escaped = htmlescape (text->text_value, (int)dwg->header.codepage);
+  if (style && style->font_name && *style->font_name
+#ifdef HAVE_STRCASESTR
+      && strcasestr (style->font_name, ".ttf")
+#else
+      && (strstr (style->font_name, ".ttf") || strstr (style->font_name, ".TTF"))
+#endif
+      )
+    {
+#ifdef HAVE_STRCASESTR
+      if (strcasestr (style->font_name, "Arial"))
+#else
+      if ((strstr (style->font_name, "arial")) || strstr (style->font_name, "Arial"))
+#endif
+        {
+          fontfamily = "Arial";
+        }
+      else
+          fontfamily = "Verdana";
+    }
+  else
+    fontfamily = "Courier";
 
   printf ("\t<text id=\"dwg-object-%d\" x=\"%f\" y=\"%f\" "
-          "font-family=\"Verdana\" font-size=\"%f\" fill=\"blue\">%s</text>\n",
+          "font-family=\"%s\" font-size=\"%f\" fill=\"blue\">%s</text>\n",
           obj->index, transform_X (text->insertion_pt.x),
-          transform_Y (text->insertion_pt.y), text->height /* fontsize */,
+          transform_Y (text->insertion_pt.y),
+          fontfamily, text->height /* fontsize */,
           escaped ? escaped : "");
   free (escaped);
 }
