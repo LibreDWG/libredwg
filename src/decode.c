@@ -2979,13 +2979,13 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
           // data->u.eed_0_r2007.string[j] = 0; //already calloc'ed
 #ifdef _WIN32
         LOG_TRACE ("wstring: len=%d [RS] \"" FORMAT_TU "\" [TU]\n",
-                   data->u.eed_0_r2007.string, (int)lens);
+                   (int)lens, data->u.eed_0_r2007.string);
 #else
         if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)
           {
             char *u8 = bit_convert_TU (data->u.eed_0_r2007.string);
             LOG_TRACE ("wstring: len=%d [RS] \"%s\" [TU]\n",
-                       (int)data->u.eed_0_r2007.length, u8);
+                       (int)lens, u8);
             free (u8);
           }
 #endif
