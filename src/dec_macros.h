@@ -213,10 +213,13 @@
         if (ref)                                                              \
           {                                                                   \
             LOG_TRACE (#nam ": " FORMAT_REF " [H %d]", ARGS_REF (ref), dxf);  \
-            if (dwg_ref_object_silent (dwg, ref))                                    \
+            if (dwg_ref_object_silent (dwg, ref)                              \
+                && DWG_LOGLEVEL > DWG_LOGLEVEL_TRACE)                         \
               {                                                               \
-                LOG_TRACE (" => %s %s", dwg_ref_objname (dwg, ref),           \
-                           dwg_ref_tblname (dwg, ref));                       \
+                const char *u8 = dwg_ref_tblname (dwg, ref);                  \
+                HANDLER (OUTPUT, " => %s %s", dwg_ref_objname (dwg, ref), u8);\
+                if (dwg->header.version >= R_2007 && u8 && *u8)               \
+                  free ((void*)u8);                                           \
               }                                                               \
           }                                                                   \
         else                                                                  \
@@ -244,10 +247,13 @@
           {                                                                   \
             LOG_TRACE (#nam "[%d]: " FORMAT_REF " [H* %d]", (int)vcount,      \
                        ARGS_REF (ref), dxf);                                  \
-            if (dwg_ref_object_silent (dwg, ref))                             \
+            if (dwg_ref_object_silent (dwg, ref)                              \
+                && DWG_LOGLEVEL > DWG_LOGLEVEL_TRACE)                         \
               {                                                               \
-                LOG_TRACE (" => %s %s", dwg_ref_objname (dwg, ref),           \
-                           dwg_ref_tblname (dwg, ref));                       \
+                const char *u8 = dwg_ref_tblname (dwg, ref);                  \
+                HANDLER (OUTPUT, " => %s %s", dwg_ref_objname (dwg, ref), u8);\
+                if (dwg->header.version >= R_2007 && u8 && *u8)               \
+                  free ((void*)u8);                                           \
               }                                                               \
           }                                                                   \
         else                                                                  \

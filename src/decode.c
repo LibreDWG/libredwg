@@ -5220,7 +5220,8 @@ dwg_ref_objname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
   return obj ? obj->name : "";
 }
 
-// supports tables entries and everything with a name
+// supports tables entries and everything with a name.
+// r2007 names are returned as malloc'ed utf-8
 static const char *
 dwg_ref_tblname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
 {
