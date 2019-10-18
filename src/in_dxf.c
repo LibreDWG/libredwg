@@ -229,7 +229,7 @@ dxf_read_pair (Bit_Chain *dat)
 static int
 dxf_skip_comment (Bit_Chain *dat, Dxf_Pair *pair)
 {
-  while (pair->code == 999)
+  while (pair != NULL && pair->code == 999)
     {
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
@@ -4630,7 +4630,7 @@ new_object (char *restrict name, char *restrict dxfname,
     }
 
   // read table fields until next 0 table or 0 ENDTAB
-  while (pair->code != 0)
+  while (pair != NULL && pair->code != 0)
     {
     start_loop:
 #if 0
@@ -6475,7 +6475,7 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   unsigned long pspace = dwg->header_vars.BLOCK_RECORD_PSPACE ?
     dwg->header_vars.BLOCK_RECORD_PSPACE->absolute_ref : 0UL;
 
-  while (pair->code == 0)
+  while (pair != NULL && pair->code == 0)
     {
       strncpy (name, pair->value.s, 79);
       entity_alias (name);

@@ -18,6 +18,11 @@
  */
 
 #include "config.h"
+#ifdef __STDC_ALLOC_LIB__
+#  define __STDC_WANT_LIB_EXT2__ 1 /* for strdup */
+#else
+#  define _USE_BSD 1
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -158,7 +163,7 @@ dxf_read_pair (Bit_Chain *dat)
 static int
 dxf_skip_comment (Bit_Chain *dat, Dxf_Pair *pair)
 {
-  while (pair->code == 999)
+  while (pair != NULL && pair->code == 999)
     {
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
@@ -1084,7 +1089,7 @@ dxfb_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   table[0] = '\0'; // init
   while (1)        // read next 0 TABLE
     {
-      if (pair->code == 0) // TABLE or ENDTAB
+      if (pair != NULL && pair->code == 0) // TABLE or ENDTAB
         {
           if (strEQc (pair->value.s, "TABLE"))
             table[0] = '\0'; // new table coming up
@@ -1108,7 +1113,7 @@ dxfb_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           strcpy (table, pair->value.s);
           pair = new_table_control (table, dat, dwg); // until 0 table
           ctrl = &dwg->object[dwg->num_objects - 1];
-          while (pair && pair->code == 0 && strEQ (pair->value.s, table))
+          while (pair != NULL &&  pair->code == 0 && strEQ (pair->value.s, table))
             {
               // until 0 table or 0 ENDTAB
               pair = new_object (table, pair->value.s, dat, dwg, ctrl, i++);
@@ -1131,11 +1136,11 @@ dxfb_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   name[0] = '\0'; // init
   while (1)       // read next 0 TABLE
     {
-      if (pair->code == 0)
+      if (pair != NULL && pair->code == 0)
         {
           BITCODE_BL i = 0;
           BITCODE_BB entmode = 0;
-          while (pair->code == 0 && strNE (pair->value.s, "ENDSEC"))
+          while (pair != NULL && pair->code == 0 && strNE (pair->value.s, "ENDSEC"))
             {
               Dwg_Object *obj, *blkhdr = NULL;
               BITCODE_BL idx = dwg->num_objects;
@@ -1232,18 +1237,19 @@ dxfb_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   while (1)
     {
-      if (pair->code == 0)
+      if (pair != NULL && pair->code == 0)
         {
           char name[80];
           // until 0 ENDSEC
-          while (pair->code == 0 && is_dwg_entity (pair->value.s))
+          while (pair != NULL && pair->code == 0 && is_dwg_entity (pair->value.s))
             {
               strcpy (name, pair->value.s);
               pair = new_object (name, pair->value.s, dat, dwg, NULL, 0);
             }
-          if (strEQc (pair->value.s, "ENDSEC"))
+          if (pair == NULL || strEQc (pair->value.s, "ENDSEC"))
             {
-              dxf_free_pair (pair);
+              if (pair)
+                dxf_free_pair (pair);
               return 0;
             }
           else
@@ -1273,9 +1279,10 @@ dxfb_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               strcpy (name, pair->value.s);
               pair = new_object (name, pair->value.s, dat, dwg, NULL, 0);
             }
-          if (strEQc (pair->value.s, "ENDSEC"))
+          if (pair == NULL || strEQc (pair->value.s, "ENDSEC"))
             {
-              dxf_free_pair (pair);
+              if (pair)
+                dxf_free_pair (pair);
               return 0;
             }
           else
@@ -1296,18 +1303,19 @@ dxfb_unknownsection_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   while (1)
     {
-      if (pair->code == 0)
+      if (pair != NULL && pair->code == 0)
         {
           char name[80];
           // until 0 ENDSEC
-          while (pair->code == 0 && is_dwg_object (pair->value.s))
+          while (pair != NULL && pair->code == 0 && is_dwg_object (pair->value.s))
             {
               strcpy (name, pair->value.s);
               pair = new_object (name, pair->value.s, dat, dwg, NULL, 0);
             }
-          if (strEQc (pair->value.s, "ENDSEC"))
+          if (pair == NULL || strEQc (pair->value.s, "ENDSEC"))
             {
-              dxf_free_pair (pair);
+              if (pair)
+                dxf_free_pair (pair);
               return 0;
             }
           else
