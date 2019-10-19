@@ -206,6 +206,16 @@ AC_CHECK_FUNCS([basename],[],
 AC_CHECK_FUNCS([strcasestr],[],
   AC_MSG_WARN([strcasestr not found. Using a slower workaround.]))
 
+dnl mingw-w64 7.0 bug with _FORTIFY_SOURCE, need -lssp
+case $host in
+ *-w64-mingw32)
+   case $CFLAGS in
+     *-fstack-protector*) ;;
+     *) CFLAGS="$CFLAGS -fstack-protector" ;;
+   esac
+   ;;
+esac
+
 dnl Feature: --disable-write
 AC_MSG_CHECKING([--disable-write])
 AC_ARG_ENABLE([write],AS_HELP_STRING([--disable-write],[
