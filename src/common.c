@@ -183,7 +183,7 @@ dwg_version_as (const char *version)
 }
 
 /** The reverse of dwg_version_as(char*) */
-EXPORT const char *
+const char *
 dwg_version_type (const Dwg_Version_Type version)
 {
   switch (version)
