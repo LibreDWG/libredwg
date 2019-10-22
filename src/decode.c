@@ -221,7 +221,8 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dat->version = dwg->header.version;
   dwg->header.from_version = dat->version;
   dat->from_version = dat->version;
-  LOG_INFO ("This file's version code is: %s\n", version)
+  LOG_INFO ("This file's version code is: %s (%s)\n", version,
+            dwg_version_type(dat->version))
 
 #define WE_CAN                                                                \
   "This version of LibreDWG is only capable of decoding "                     \

@@ -182,6 +182,57 @@ dwg_version_as (const char *version)
     return R_INVALID;
 }
 
+/** The reverse of dwg_version_as(char*) */
+EXPORT const char *
+dwg_version_type (const Dwg_Version_Type version)
+{
+  switch (version)
+    {
+    case R_INVALID:
+      return "invalid version";
+    case R_1_1:
+      return "r1.1";
+    case R_1_2:
+      return "r1.2";
+    case R_1_4:
+      return "r1.4";
+    case R_2_0:
+      return "r2.0";
+    case R_2_1:
+      return "r2.1";
+    case R_2_5:
+      return "r2.5";
+    case R_2_6:
+      return "r2.6";
+    case R_9:
+      return "r9";
+    case R_10:
+      return "r10";
+    case R_11:
+      return "r11";
+    case R_13:
+      return "r13";
+    case R_14:
+      return "r14";
+    case R_2000:
+      return "r2000";
+    case R_2004:
+      return "r2004";
+    case R_2007:
+      return "r2007";
+    case R_2010:
+      return "r2010";
+    case R_2013:
+      return "r2013";
+    case R_2018:
+      return "r2018";
+    case R_AFTER:
+      return "invalid after";
+    default:
+      return "";
+    }
+}
+
 /* replace from ("[rcount1]") with to ("[%d]") in s (e.g.
    "ref[rcount1].classname"). s is a global constant (#nam), so we cannot
    change it in-place.

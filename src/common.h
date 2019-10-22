@@ -154,6 +154,7 @@
 extern const char version_codes[DWG_VERSIONS][7];
 
 EXPORT Dwg_Version_Type dwg_version_as (const char *);
+EXPORT const char *dwg_version_type (const Dwg_Version_Type version);
 EXPORT void dwg_errstrings (int error);
 
 /**
