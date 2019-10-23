@@ -150,6 +150,7 @@ bit_read_4BITS_tests (void)
     pass ();
   else
     fail ("bit_read_4BITS 0x%X != 0xF dat:%x", (unsigned)result, bitchain.chain[0]);
+  bitfree (&bitchain);
 
 #define test_4bits(s, x)                                                      \
   bitchain = strtobt (s);                                                     \
@@ -279,6 +280,7 @@ bit_read_RD_tests (void)
   double result;
 
   bitprepare (&bitchain, sizeof (double));
+  free (bitchain.chain);
   bitchain.chain = (unsigned char *)&value;
   // bit_print (&bitchain, sizeof (double));
 
@@ -306,6 +308,7 @@ bit_write_RD_tests (void)
     pass ();
   else
     fail ("bit_write_RD");
+  bitfree (&bitchain);
 }
 
 int
@@ -320,6 +323,7 @@ main (int argc, char const *argv[])
   BITCODE_UMC umc;
   unsigned long pos;
   long size;
+  char *str;
   unsigned char sentinel[]
       = { 0xCF, 0x7B, 0x1F, 0x23, 0xFD, 0xDE, 0x38, 0xA9,
           0x5F, 0x7C, 0x68, 0xB8, 0x4E, 0x6D, 0x33, 0x5F };
@@ -359,7 +363,7 @@ main (int argc, char const *argv[])
   else
     fail ("bit_write_RD @%lu.%d", bitchain.byte, bitchain.bit);
 
-  bit_advance_position (&bitchain, -64);
+  bit_advance_position (&bitchain, -64L);
   // bit_print (&bitchain, sizeof (double));
   if ((dbl = bit_read_RD (&bitchain)) == 0xBA43B7400)
     pass ();
@@ -372,13 +376,13 @@ main (int argc, char const *argv[])
   else
     fail ("bit_write_BS @%lu.%d", bitchain.byte, bitchain.bit);
 
-  bit_advance_position (&bitchain, -18);
+  bit_advance_position (&bitchain, -18L);
   // bit_print (&bitchain, 4);
   if ((bs = bit_read_BS (&bitchain)) == 32767)
     pass ();
   else
     fail ("bit_read_BS %d", bs);
-  bit_advance_position (&bitchain, -18);
+  bit_advance_position (&bitchain, -18L);
 
   bit_write_BS (&bitchain, 256);
   if (bitchain.byte == 8 && bitchain.bit == 2)
@@ -386,7 +390,7 @@ main (int argc, char const *argv[])
   else
     fail ("bit_write_BS @%lu.%d", bitchain.byte, bitchain.bit);
 
-  bit_advance_position (&bitchain, -2);
+  bit_advance_position (&bitchain, -2L);
   // bit_print (&bitchain, 1);
   if ((bs = bit_read_BS (&bitchain)) == 256)
     pass ();
@@ -399,7 +403,7 @@ main (int argc, char const *argv[])
   else
     fail ("bit_write_BL @%lu.%d", bitchain.byte, bitchain.bit);
 
-  bit_advance_position (&bitchain, -2);
+  bit_advance_position (&bitchain, -2L);
   // bit_print (&bitchain, 1);
   if ((bl = bit_read_BL (&bitchain)) == 0)
     pass ();
@@ -420,7 +424,7 @@ main (int argc, char const *argv[])
   else
     fail ("bit_read_BD %f", dbl);
 
-  bit_advance_position (&bitchain, 2); // 9.0
+  bit_advance_position (&bitchain, 2L); // 9.0
 
   for (umc = 1; umc <= 0x88000000UL; umc <<= 4)
     {
@@ -466,14 +470,14 @@ main (int argc, char const *argv[])
         break;
     }
 
-  bit_advance_position (&bitchain, 16);
+  bit_advance_position (&bitchain, 16L);
   bit_write_MS (&bitchain, 5000);
   if (bitchain.byte == 13)
     pass ();
   else
     fail ("bit_write_MS @%lu.%d", bitchain.byte, bitchain.bit);
 
-  bit_advance_position (&bitchain, -16);
+  bit_advance_position (&bitchain, -16L);
   if ((bs = bit_read_MS (&bitchain)) == 5000)
     pass ();
   else
@@ -485,7 +489,7 @@ main (int argc, char const *argv[])
   else
     fail ("bit_write_BE @%lu.%d", bitchain.byte, bitchain.bit);
 
-  bit_advance_position (&bitchain, -199);
+  bit_advance_position (&bitchain, -199L);
   {
     double x, y, z;
     bit_read_BE (&bitchain, &x, &y, &z);
@@ -508,7 +512,7 @@ main (int argc, char const *argv[])
   else
     fail ("bit_read_DD %f", dbl);
 
-  bit_advance_position (&bitchain, 64);
+  bit_advance_position (&bitchain, 64L);
   pos = bit_position (&bitchain);
   bit_write_BT (&bitchain, 3.0);
   if (bitchain.bit == 4 && bitchain.byte == 62)
@@ -552,33 +556,33 @@ main (int argc, char const *argv[])
       }
   }
 #define _CRC 0x6024
-  bit_advance_position (&bitchain, -2);
+  bit_advance_position (&bitchain, -2L);
   {
-    unsigned int crc = bit_write_CRC (&bitchain, 0, 0x64);
+    uint16_t crc = bit_write_CRC (&bitchain, 0UL, 0x64);
     if (crc == _CRC)
       pass ();
     else
       fail ("bit_write_CRC %X", crc);
   }
 
-  bit_advance_position (&bitchain, -16);
-  if (bit_check_CRC (&bitchain, 0, 0x64))
+  bit_advance_position (&bitchain, -16L);
+  if (bit_check_CRC (&bitchain, 0UL, 0x64))
     pass ();
   else
     fail ("bit_check_CRC");
 
-  bit_advance_position (&bitchain, -16);
+  bit_advance_position (&bitchain, -16L);
   if ((bs = bit_read_CRC (&bitchain)) == _CRC)
     pass ();
   else
     fail ("bit_read_CRC %X", bs);
-  bit_advance_position (&bitchain, -16);
+  bit_advance_position (&bitchain, -16L);
 
-  if ((bs = bit_calc_CRC (0x64, (unsigned char *)&bitchain.chain, 0)) == 0x64)
+  if ((bs = bit_calc_CRC (0x64, (unsigned char *)&bitchain.chain, 0L)) == 0x64)
     pass ();
   else
     fail ("bit_calc_CRC %X", bs);
-  bit_advance_position (&bitchain, 16);
+  bit_advance_position (&bitchain, 16L);
 
   bit_write_TV (&bitchain, (char *)"GNU"); // now we store the \0 also
   if (bitchain.byte == 70 && bitchain.bit == 2)
@@ -586,12 +590,14 @@ main (int argc, char const *argv[])
   else
     fail ("bit_write_TV @%ld.%d", bitchain.byte, bitchain.bit);
 
-  bit_advance_position (&bitchain, -42);
-  if (!strcmp ((const char *)bit_read_TV (&bitchain), "GNU"))
+  bit_advance_position (&bitchain, -42L);
+  str = bit_read_TV (&bitchain);
+  if (!strcmp (str, "GNU"))
     pass ();
   else
     fail ("bit_read_TV");
-  bit_advance_position (&bitchain, -8);
+  free (str);
+  bit_advance_position (&bitchain, -8L);
 
   bit_write_L (&bitchain, 20);
   if (bitchain.byte == 73 && bitchain.bit == 2)
@@ -599,7 +605,7 @@ main (int argc, char const *argv[])
   else
     fail ("bit_write_L @%ld.%d", bitchain.byte, bitchain.bit);
 
-  bit_advance_position (&bitchain, -32);
+  bit_advance_position (&bitchain, -32L);
   if ((bl = bit_read_L (&bitchain)) == 20)
     pass ();
   else
@@ -661,6 +667,7 @@ main (int argc, char const *argv[])
     else
       fail ("bit_read_CMC (%d,%u,%d) %s", color.index, color.rgb, color.flag,
             color.name);
+    free (color.name);
   }
 
   bitchain.byte++;
@@ -685,7 +692,7 @@ main (int argc, char const *argv[])
   }
   {
     unsigned int check
-        = bit_calc_CRC (0xC0C1, (unsigned char *)bitchain.chain, 108);
+        = bit_calc_CRC (0xC0C1, (unsigned char *)bitchain.chain, 108L);
     if (check == 0xEB57)
       pass ();
     else
