@@ -34,6 +34,7 @@ bit_advance_position_tests (void)
     ok ("bit_advance_position");
   else
     fail ("bit_advance_position");
+  bitfree (&bitchain);
 }
 
 void
@@ -45,6 +46,7 @@ bit_read_B_tests (void)
     pass ();
   else
     fail ("bit_read_B %c", result);
+  bitfree (&bitchain);
 }
 
 void
@@ -57,6 +59,7 @@ bit_write_B_tests (void)
     pass ();
   else
     fail ("bit_write_B");
+  bitfree (&bitchain);
 }
 
 void
@@ -68,6 +71,7 @@ bit_read_BB_tests (void)
     pass ();
   else
     fail ("bit_read_BB %d", result);
+  bitfree (&bitchain);
 }
 
 void
@@ -81,6 +85,7 @@ bit_write_BB_tests (void)
     pass ();
   else
     fail ("bit_write_BB %d", bitchain.chain[0]);
+  bitfree (&bitchain);
 }
 
 void
@@ -102,6 +107,7 @@ bit_read_3B_tests (void)
     pass ();
   else
     fail ("bit_read_3B %d", result);
+  bitfree (&bitchain);
 }
 
 void
@@ -115,6 +121,7 @@ bit_write_3B_tests (void)
     pass ();
   else
     fail ("bit_write_3B %d", bitchain.chain[0]);
+  bitfree (&bitchain);
 }
 
 /* This function calls tests for bit_write_4BITS_tests()
@@ -131,6 +138,7 @@ bit_write_4BITS_tests (void)
     pass ();
   else
     fail ("bit_write_4BITS %x", bitchain.chain[0]);
+  bitfree (&bitchain);
 }
 
 void
@@ -142,6 +150,29 @@ bit_read_4BITS_tests (void)
     pass ();
   else
     fail ("bit_read_4BITS 0x%X != 0xF dat:%x", (unsigned)result, bitchain.chain[0]);
+
+#define test_4bits(s, x)                                                      \
+  bitchain = strtobt (s);                                                     \
+  result = bit_read_4BITS (&bitchain);                                        \
+  if (result == x)                                                            \
+    pass ();                                                                  \
+  else                                                                        \
+    fail ("bit_read_4BITS 0x%X != 0xF dat:%x", (unsigned)result,              \
+          bitchain.chain[0]);                                                 \
+  bitfree (&bitchain)
+
+  test_4bits ("0000", 0x0);
+  test_4bits ("0001", 0x1);
+  test_4bits ("0010", 0x2);
+  test_4bits ("0011", 0x3);
+  test_4bits ("0100", 0x4);
+  test_4bits ("0101", 0x5);
+  test_4bits ("0111", 0x7);
+  test_4bits ("1000", 0x8);
+  test_4bits ("1001", 0x9);
+  test_4bits ("1100", 0xC);
+  test_4bits ("1101", 0xD);
+  test_4bits ("1111", 0xF);
 }
 
 void
@@ -154,6 +185,7 @@ bit_read_BLL_tests (void)
     pass ();
   else
     fail ("bit_read_BLL " FORMAT_BLL, result);
+  bitfree (&bitchain);
 }
 
 void
@@ -165,6 +197,7 @@ bit_read_RC_tests (void)
     pass ();
   else
     fail ("bit_read_RC");
+  bitfree (&bitchain);
 }
 
 void
@@ -176,6 +209,7 @@ bit_write_RC_tests (void)
     pass ();
   else
     fail ("bit_write_RC");
+  bitfree (&bitchain);
 }
 
 void
@@ -188,6 +222,7 @@ bit_read_RS_tests (void)
     pass ();
   else
     fail ("bit_write_RS");
+  bitfree (&bitchain);
 }
 
 void
@@ -200,6 +235,7 @@ bit_write_RS_tests (void)
     pass ();
   else
     fail ("bit_write_RS");
+  bitfree (&bitchain);
 }
 
 void
@@ -216,6 +252,7 @@ bit_write_RL_tests (void)
   else
     fail ("bit_write_RL %d %d %d %d", bitchain.chain[0], bitchain.chain[1],
           bitchain.chain[2], bitchain.chain[3]);
+  bitfree (&bitchain);
 }
 
 void
@@ -231,6 +268,7 @@ bit_read_RL_tests (void)
     pass ();
   else
     fail ("bit_read_RL 0x%x", (unsigned)result);
+  bitfree (&bitchain);
 }
 
 void

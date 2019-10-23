@@ -71,6 +71,7 @@ fail (const char *fmt, ...)
 #if defined(BITS_TEST_C) || defined(DECODE_TEST_C)
 
 void bitprepare (Bit_Chain *dat, size_t size);
+void bitfree (Bit_Chain *dat);
 Bit_Chain strtobt (const char *binarystring);
 
 /*
@@ -89,6 +90,20 @@ bitprepare (Bit_Chain *dat, size_t size)
   dat->size = size;
   dat->fh = NULL;
   dat->chain = (unsigned char *)calloc (size, 1);
+}
+
+/*
+ * This functions resets and free's the dat chain.
+ * @param Bit_Chain* dat
+ */
+void
+bitfree (Bit_Chain *dat)
+{
+  dat->bit = 0;
+  dat->byte = 0;
+  dat->size = 0;
+  if (dat->chain)
+    free (dat->chain);
 }
 
 /*
