@@ -2666,12 +2666,14 @@ read_2004_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (sec_dat.size < 16)
     {
       LOG_WARN ("Empty thumbnail");
+      free (sec_dat.chain);
       return error;
     }
   sentinel = dwg_sentinel (DWG_SENTINEL_THUMBNAIL_BEGIN);
   if (sec_dat.size < 16 || memcmp (sentinel, sec_dat.chain, 16))
     {
       LOG_WARN ("thumbnail sentinel mismatch");
+      free (sec_dat.chain);
       return error;
     }
 
