@@ -255,20 +255,22 @@ bit_write_3B (Bit_Chain *dat, unsigned char value)
     }
 }
 
-/** Read 1 nibble.
+/** Read 4 bits.
  */
 BITCODE_4BITS
 bit_read_4BITS (Bit_Chain *dat)
 {
   // clang-format off
-  return bit_read_B (dat) << 4 |
+  BITCODE_4BITS b =
+         bit_read_B (dat) << 3 |
          bit_read_B (dat) << 2 |
          bit_read_B (dat) << 1 |
          bit_read_B (dat);
   // clang-format on
+  return b;
 }
 
-/** Write 1 nibble.
+/** Write 4 bits.
  */
 void
 bit_write_4BITS (Bit_Chain *dat, unsigned char value)

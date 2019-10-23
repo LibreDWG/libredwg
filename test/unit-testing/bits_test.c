@@ -141,7 +141,7 @@ bit_read_4BITS_tests (void)
   if (result == 0xF)
     pass ();
   else
-    fail ("bit_read_4BITS");
+    fail ("bit_read_4BITS 0x%X != 0xF dat:%x", (unsigned)result, bitchain.chain[0]);
 }
 
 void

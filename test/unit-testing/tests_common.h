@@ -70,58 +70,60 @@ fail (const char *fmt, ...)
 
 #if defined(BITS_TEST_C) || defined(DECODE_TEST_C)
 
-void bitprepare (Bit_Chain *bitchain, size_t size);
+void bitprepare (Bit_Chain *dat, size_t size);
 Bit_Chain strtobt (const char *binarystring);
 
 /*
- * This functions initializes bitchain and allocates the given
+ * This functions initializes dat and allocates the given
  * size.
- * @param Bit_Chain* bitchain
+ * @param Bit_Chain* dat
  * @param size_t size
  */
 void
-bitprepare (Bit_Chain *bitchain, size_t size)
+bitprepare (Bit_Chain *dat, size_t size)
 {
-  bitchain->bit = 0;
-  bitchain->byte = 0;
-  bitchain->version = R_2000;
-  bitchain->size = size;
-  bitchain->chain = (unsigned char *)calloc (size, 1);
+  dat->bit = 0;
+  dat->byte = 0;
+  dat->from_version = dat->version = R_2000;
+  dat->opts = 1;
+  dat->size = size;
+  dat->fh = NULL;
+  dat->chain = (unsigned char *)calloc (size, 1);
 }
 
 /*
  * This function converts the given binary string to binary
  * value
  * for eg "010101" => 010101
- * and puts it in bitchain to be examined
+ * and puts it in dat to be examined
  */
 Bit_Chain
 strtobt (const char *binarystring)
 {
-  Bit_Chain bitchain;
+  Bit_Chain dat;
   int i;
   const int length = strlen (binarystring);
   int size_needed = length / 8;
   if (length % 8)
     size_needed++;
 
-  bitprepare (&bitchain, size_needed);
+  bitprepare (&dat, size_needed);
 
   for (i = 0; i < length; ++i)
     {
       if (binarystring[i] == '0')
-        bit_write_B (&bitchain, 0);
+        bit_write_B (&dat, 0);
       else
-        bit_write_B (&bitchain, 1);
+        bit_write_B (&dat, 1);
     }
 
-  // LOG_TRACE(bit_print (&bitchain, size_need));
+  // LOG_TRACE(bit_print (&dat, size_need));
 
   // Reset the bit position
-  bitchain.bit = 0;
-  bitchain.byte = 0;
+  dat.bit = 0;
+  dat.byte = 0;
 
-  return bitchain;
+  return dat;
 }
 
 #endif
