@@ -16,12 +16,16 @@ int numpassed (void);
 int numfailed (void);
 static inline void pass (void);
 static void fail (const char *fmt, ...)
-#ifdef HAVE_FUNC_ATTRIBUTE_FORMAT
+#ifdef HAVE_FUNC_ATTRIBUTE_GNU_FORMAT
+    __attribute__ ((format (gnu_printf, 1, 2)))
+#elif HAVE_FUNC_ATTRIBUTE_FORMAT
     __attribute__ ((format (printf, 1, 2)))
 #endif
     ;
 static void ok (const char *fmt, ...)
-#ifdef HAVE_FUNC_ATTRIBUTE_FORMAT
+#ifdef HAVE_FUNC_ATTRIBUTE_GNU_FORMAT
+    __attribute__ ((format (gnu_printf, 1, 2)))
+#elif HAVE_FUNC_ATTRIBUTE_FORMAT
     __attribute__ ((format (printf, 1, 2)))
 #endif
     ;

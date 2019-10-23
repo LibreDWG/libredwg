@@ -45,6 +45,9 @@
 /* Define to 1 if the system has the `format' function attribute */
 #undef HAVE_FUNC_ATTRIBUTE_FORMAT
 
+/* Define to 1 if the system has the `gnu_format' function attribute */
+#undef HAVE_FUNC_ATTRIBUTE_GNU_FORMAT
+
 /* Define to 1 if the system has the `malloc' function attribute */
 #undef HAVE_FUNC_ATTRIBUTE_MALLOC
 

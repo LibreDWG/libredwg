@@ -166,6 +166,7 @@ then
     [Define if __attribute__((visibility("default"))) is supported.])
 fi
 dnl AX_GCC_FUNC_ATTRIBUTE(visibility)
+AX_GCC_FUNC_ATTRIBUTE(gnu_format)
 AX_GCC_FUNC_ATTRIBUTE(format)
 AX_GCC_FUNC_ATTRIBUTE(malloc)
 AX_ADD_FORTIFY_SOURCE
