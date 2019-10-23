@@ -354,7 +354,9 @@ main (int argc, char const *argv[])
   bitchain.size = 100;
   bitchain.bit = 0;
   bitchain.byte = 0;
-  bitchain.version = R_2000;
+  bitchain.opts = 1;
+  bitchain.fh = NULL;
+  bitchain.version = bitchain.from_version = R_2000;
   bitchain.chain = (unsigned char *)calloc (bitchain.size, 1);
 
   bit_write_RD (&bitchain, 0xBA43B7400);
