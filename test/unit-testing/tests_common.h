@@ -26,7 +26,9 @@ int numpassed (void);
 int numfailed (void);
 static inline void pass (void);
 static void fail (const char *fmt, ...) ATTRIBUTE_FORMAT (1, 2);
+#ifndef DYNAPI_TEST_C
 static void ok (const char *fmt, ...) ATTRIBUTE_FORMAT (1, 2);
+#endif
 
 int
 numpassed (void)
@@ -39,6 +41,7 @@ numfailed (void)
   return failed;
 }
 
+#ifndef DYNAPI_TEST_C
 static void
 ok (const char *fmt, ...)
 {
@@ -50,6 +53,7 @@ ok (const char *fmt, ...)
   va_end (ap);
   printf ("ok %d\t# %s\n", ++num, buffer);
 }
+#endif
 
 static inline void
 pass (void)
