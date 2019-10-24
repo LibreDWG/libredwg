@@ -7,6 +7,16 @@
 #  include "../../src/bits.h"
 #endif
 
+#if   defined HAVE_FUNC_ATTRIBUTE_MS_FORMAT
+#  define ATTRIBUTE_FORMAT(x, y) __attribute__ ((format (ms_printf, x, y)))
+#elif defined HAVE_FUNC_ATTRIBUTE_GNU_FORMAT
+#  define ATTRIBUTE_FORMAT(x, y) __attribute__ ((format (gnu_printf, x, y)))
+#elif defined HAVE_FUNC_ATTRIBUTE_FORMAT
+#  define ATTRIBUTE_FORMAT(x, y) __attribute__ ((format (printf, x, y)))
+#else
+#  define ATTRIBUTE_FORMAT(x, y)
+#endif
+
 static int num = 0;
 static int failed = 0;
 static int passed = 0;
@@ -15,20 +25,8 @@ static char buffer[512];
 int numpassed (void);
 int numfailed (void);
 static inline void pass (void);
-static void fail (const char *fmt, ...)
-#ifdef HAVE_FUNC_ATTRIBUTE_GNU_FORMAT
-    __attribute__ ((format (gnu_printf, 1, 2)))
-#elif HAVE_FUNC_ATTRIBUTE_FORMAT
-    __attribute__ ((format (printf, 1, 2)))
-#endif
-    ;
-static void ok (const char *fmt, ...)
-#ifdef HAVE_FUNC_ATTRIBUTE_GNU_FORMAT
-    __attribute__ ((format (gnu_printf, 1, 2)))
-#elif HAVE_FUNC_ATTRIBUTE_FORMAT
-    __attribute__ ((format (printf, 1, 2)))
-#endif
-    ;
+static void fail (const char *fmt, ...) ATTRIBUTE_FORMAT (1, 2);
+static void ok (const char *fmt, ...) ATTRIBUTE_FORMAT (1, 2);
 
 int
 numpassed (void)
