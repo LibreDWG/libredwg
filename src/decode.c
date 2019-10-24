@@ -1107,7 +1107,7 @@ classes_section:
       }
 #endif
 
-      if (strEQc ((const char *)klass->dxfname, "LAYOUT"))
+      if (klass->dxfname && strEQc ((const char *)klass->dxfname, "LAYOUT"))
         dwg->layout_type = klass->number;
 
       dwg->num_classes++;
