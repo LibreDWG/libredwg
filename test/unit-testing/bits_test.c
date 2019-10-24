@@ -528,6 +528,10 @@ main (int argc, char const *argv[])
   else
     fail ("bit_read_BT %f", dbl);
 
+  // mingw-w64 gcc-9.2.0 miscompilation in bit_read_H with val[i]: (%rbx) being dat+1
+#if defined(__MINGW64_VERSION_MAJOR) && defined(__GNUC__) && __GNUC__ >= 9
+  if (0)
+#endif
   {
     int i;
     Dwg_Handle handles[]

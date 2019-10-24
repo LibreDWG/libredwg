@@ -217,6 +217,7 @@ case $host in
    esac
    ;;
 esac
+dnl x86_64-mingw-w64-gcc-9.2 is seriously broken, and not just mingw-w64
 
 dnl Feature: --disable-write
 AC_MSG_CHECKING([--disable-write])
