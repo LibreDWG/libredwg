@@ -1820,6 +1820,8 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           error |= DWG_ERR_VALUEOUTOFBOUNDS;
           LOG_WARN ("Overflow section_array_size: %d >= %d",
                     i, (int)section_array_size);
+          if (i > 1000)
+            return error;
         }
 
       if (bytes_remaining >= 16
