@@ -41,7 +41,7 @@ void
 read_two_byte_offset_tests (void)
 {
   Bit_Chain bitchain = strtobt ("1111000000000111");
-  int litlength = 0x03;
+  unsigned int litlength = 0x03;
   int result = read_two_byte_offset (&bitchain, &litlength);
   if (result == 508 && litlength == 0)
     {

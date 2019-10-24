@@ -1500,10 +1500,10 @@ bfr_read (void *restrict dst, BITCODE_RC *restrict *restrict src, size_t size)
 
 /* R2004 Literal Length
  */
-static int
+static unsigned int
 read_literal_length (Bit_Chain *restrict dat, unsigned char *restrict opcode)
 {
-  int total = 0;
+  unsigned int total = 0;
   BITCODE_RC byte = bit_read_RC (dat);
 
   *opcode = 0x00;
@@ -1544,7 +1544,7 @@ read_long_compression_offset (Bit_Chain *dat)
 /* R2004 Two Byte Offset
  */
 static int
-read_two_byte_offset (Bit_Chain *restrict dat, int *restrict lit_length)
+read_two_byte_offset (Bit_Chain *restrict dat, unsigned int *restrict lit_length)
 {
   int offset;
   BITCODE_RC firstByte = bit_read_RC (dat);
@@ -1560,7 +1560,7 @@ static int
 decompress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
                           uint32_t decomp_data_size, uint32_t comp_data_size)
 {
-  int lit_length, i;
+  unsigned int i, lit_length;
   uint32_t comp_offset, comp_bytes, bytes_left;
   unsigned char opcode1 = 0, opcode2;
   long unsigned int start_byte = dat->byte;
@@ -1576,6 +1576,12 @@ decompress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
     }
   // length of the first sequence of uncompressed or literal data.
   lit_length = read_literal_length (dat, &opcode1);
+  if (lit_length > bytes_left)
+    {
+      LOG_ERROR ("Invalid literal_length %u > %u bytes left",
+                 lit_length, (unsigned)decomp_data_size)
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
   bit_read_fixed (dat, decomp, lit_length);
   dst += lit_length;
   bytes_left -= lit_length;
@@ -1672,7 +1678,7 @@ decompress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
                          (unsigned long)comp_bytes, (unsigned long)bytes_left)
               return DWG_ERR_VALUEOUTOFBOUNDS;
             }
-          for (i = 0; (uint32_t)i < comp_bytes; ++i)
+          for (i = 0; i < comp_bytes; ++i)
             *dst++ = *src++;
           bytes_left -= comp_bytes;
         }
@@ -1680,11 +1686,11 @@ decompress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
       LOG_INSANE ("<L %d\n", lit_length)
       if (lit_length)
         {
-          if (((uint32_t)lit_length > bytes_left) // bytes left to write
+          if ((lit_length > bytes_left) // bytes left to write
               || dst + lit_length > maxdst)       // dst overflow
             {
-              LOG_ERROR ("Invalid lit_length %lu > %lu bytes left",
-                         (unsigned long)lit_length, (unsigned long)bytes_left)
+              LOG_ERROR ("Invalid lit_length %u > %lu bytes left",
+                         lit_length, (unsigned long)bytes_left)
               return DWG_ERR_VALUEOUTOFBOUNDS;
             }
           for (i = 0; i < lit_length; ++i)
