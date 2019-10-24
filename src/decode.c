@@ -1769,8 +1769,11 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   error = decompress_R2004_section (dat, decomp, decomp_data_size + 1024,
                                     comp_data_size);
-  if (error > DWG_ERR_CRITICAL)
-    return error;
+  if (error > DWG_ERR_CRITICAL || error == DWG_ERR_VALUEOUTOFBOUNDS)
+    {
+      free (decomp);
+      return error;
+    }
   LOG_TRACE ("\n#### Read 2004 Section Page Map ####\n")
 
   section_address = 0x100; // starting address
@@ -1959,7 +1962,7 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
   error = decompress_R2004_section (dat, decomp, decomp_data_size + 1024,
                                     comp_data_size);
-  if (error > DWG_ERR_CRITICAL)
+  if (error > DWG_ERR_CRITICAL || error == DWG_ERR_VALUEOUTOFBOUNDS)
     {
       free (decomp);
       return error;
