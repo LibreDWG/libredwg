@@ -1021,7 +1021,9 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // LOG_HANDLE ("HEADER_R13.size %d\n",
   // dwg->header.section[SECTION_HEADER_R13].size);
   // typical sizes: 400-599
-  if (dwg->header.section[SECTION_HEADER_R13].size < 0xfff && pvz < dat->byte
+  if (dwg->header.section[SECTION_HEADER_R13].size > 34
+      && dwg->header.section[SECTION_HEADER_R13].size < 0xfff
+      && pvz < dat->byte
       && pvz + dwg->header.section[SECTION_HEADER_R13].size < dat->size)
     {
       // not dwg->header_vars.size, rather -4 (minus the section_size).
