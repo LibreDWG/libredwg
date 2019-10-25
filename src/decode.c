@@ -1515,7 +1515,7 @@ read_literal_length (Bit_Chain *restrict dat, unsigned char *restrict opcode)
   else if (byte == 0)
     {
       total = 0x0F;
-      while ((byte = bit_read_RC (dat)) == 0)
+      while ((byte = bit_read_RC (dat)) == 0 && dat->size - dat->byte > 1)
         {
           total += 0xFF;
         }
@@ -1537,7 +1537,7 @@ read_long_compression_offset (Bit_Chain *dat)
   if (byte == 0)
     {
       total = 0xFF;
-      while ((byte = bit_read_RC (dat)) == 0)
+      while ((byte = bit_read_RC (dat)) == 0 && dat->size - dat->byte > 1)
         total += 0xFF;
     }
   return total + byte;
