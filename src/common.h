@@ -42,8 +42,6 @@
 #elif defined HAVE_MACHINE_ENDIAN_H && defined __APPLE__
 # include <machine/endian.h>
 # include <libkern/OSByteOrder.h>
-# define htole16 OSSwapHostToLittleInt16
-# define le16toh OSSwapLittleToHostInt16
 # define htole32 OSSwapHostToLittleInt32
 # define le32toh OSSwapLittleToHostInt32
 # define htole64 OSSwapHostToLittleInt64
@@ -51,39 +49,50 @@
 #elif defined HAVE_WINSOCK2_H && defined __WINDOWS__
 # include <winsock2.h>
 # ifndef WORDS_BIGENDIAN
-#  define htole16(x) (x)
-#  define le16toh(x) (x)
 #  define htole32(x) (x)
 #  define le32toh(x) (x)
 #  define htole64(x) (x)
 #  define le64toh(x) (x)
 # else /* e.g. xbox 360 */
-#  define htole16(x) __builtin_bswap16(x)
-#  define le16toh(x) __builtin_bswap16(x)
 #  define htole32(x) __builtin_bswap32(x)
 #  define le32toh(x) __builtin_bswap32(x)
-#  define htole64(x) __builtin_bswap32(x)
-#  define le64toh(x) __builtin_bswap32(x)
+#  define htole64(x) __builtin_bswap64(x)
+#  define le64toh(x) __builtin_bswap64(x)
 # endif
 #elif defined WORDS_BIGENDIAN
 /* TODO more converters */
 # if defined HAVE_SYS_PARAM_H
 #  include <sys/param.h>
 # endif
-# if defined HAVE_BYTEORDER_H
-#  include <byteorder.h>
-#  error unsupported big-endian platform with byteorder.h
-# elif defined HAVE_SYS_BYTEORDER_H
+# if defined HAVE_SYS_BYTEORDER_H
+/* e.g. solaris */
 #  include <sys/byteorder.h>
-#  error unsupported big-endian platform with sys/byteorder.h
+#  define htole32(x) BSWAP_32(x)
+#  define le32toh(x) BSWAP_32(x)
+#  define htole64(x) BSWAP_64(x)
+#  define le64toh(x) BSWAP_64(x)
 # elif defined HAVE_BYTESWAP_H
 #  include <byteswap.h>
-#  error unsupported big-endian platform with byteswap.h
+#  define htole32(x) bswap32(x)
+#  define le32toh(x) bswap32(x)
+#  define htole64(x) bswap64(x)
+#  define le64toh(x) bswap64(x)
+# elif defined HAVE_BYTEORDER_H
+#  include <byteorder.h>
+/* which os? riot-os */
+#  ifdef RIOT_VERSION
+#   define htole32(x) byteorder_swapl(x)
+#   define le32toh(x) byteorder_swapl(x)
+#   define htole64(x) byteorder_swapll(x)
+#   define le64toh(x) byteorder_swapll(x)
+#  else
+/* rtems/libcpu: ... */
+#   error unsupported big-endian platform with byteorder.h
+#  endif
+# else
+#  error unsupported big-endian platform
 # endif
-# error unsupported big-endian platform
 #else /* little endian: just pass-thru */
-# define htole16(x) (x)
-# define le16toh(x) (x)
 # define htole32(x) (x)
 # define le32toh(x) (x)
 # define htole64(x) (x)
