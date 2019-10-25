@@ -29,8 +29,10 @@
 #ifdef IS_DECODER
   if (_obj->num_reactors > 100000)
     {
-      LOG_TRACE ("num_reactors: " FORMAT_BL ", AVAIL_BITS(hdl_dat): %ld\n",
+      LOG_ERROR ("num_reactors: " FORMAT_BL ", AVAIL_BITS(hdl_dat): %ld\n",
                  _obj->num_reactors, AVAIL_BITS(hdl_dat))
+      _obj->num_reactors = 0;
+      return DWG_ERR_VALUEOUTOFBOUNDS;
     }
 #endif
   ENT_REACTORS(4)
