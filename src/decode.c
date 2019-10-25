@@ -1110,10 +1110,25 @@ bfr_read_64 (void *restrict dst, BITCODE_RC *restrict *restrict src,
   size_t n;
   uint64_t *dp = (uint64_t *)dst;
 
-  for (n = 0; n < size / sizeof (uint64_t); n++)
+  // src may be misaligned, needs 8
+  if ((intptr_t)src % 8)
     {
-      *dp++ = le64toh (*(uint64_t *)*src);
-      *src += sizeof (uint64_t);
+      BITCODE_RC *restrict *restrict tmp = malloc (size);
+      memcpy ((void *)tmp, (const void *)src, size);
+      for (n = 0; n < size / sizeof (uint64_t); n++)
+        {
+          *dp++ = le64toh (*(uint64_t *)*tmp);
+          *tmp += sizeof (uint64_t);
+        }
+      free ((void *)tmp);
+    }
+  else
+    {
+      for (n = 0; n < size / sizeof (uint64_t); n++)
+        {
+          *dp++ = le64toh (*(uint64_t *)*src);
+          *src += sizeof (uint64_t);
+        }
     }
   size -= n * sizeof (uint64_t);
   assert (size == 0);
