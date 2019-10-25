@@ -4205,7 +4205,7 @@ check_POLYLINE_handles (Dwg_Object *obj)
         { // maybe a reactor pointing forwards or vertex
           LOG_WARN ("Wrong POLYLINE.layer %lX",
                     layer ? layer->handleref.value : 0L);
-          if (_obj->num_owned > 0)
+          if (_obj->num_owned > 0 && _obj->vertex)
             {
               Dwg_Object_Ref *vertex = _obj->vertex[0];
               if (vertex && !vertex->obj)
@@ -4263,6 +4263,8 @@ check_POLYLINE_handles (Dwg_Object *obj)
         { // most likely a vertex, off by one
           LOG_WARN ("Wrong POLYLINE.seqend %s", seqend->obj->dxfname)
         }
+      if (!_obj->vertex)
+        return;
       for (; i < _obj->num_owned; i++)
         {
           Dwg_Object_Ref *v = _obj->vertex[i];
