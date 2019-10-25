@@ -50,47 +50,44 @@
 # define le64toh OSSwapLittleToHostInt64
 #elif defined HAVE_WINSOCK2_H && defined __WINDOWS__
 # include <winsock2.h>
-# if BYTE_ORDER == LITTLE_ENDIAN
+# ifndef WORDS_BIGENDIAN
 #  define htole16(x) (x)
 #  define le16toh(x) (x)
 #  define htole32(x) (x)
 #  define le32toh(x) (x)
 #  define htole64(x) (x)
 #  define le64toh(x) (x)
-# elif BYTE_ORDER == BIG_ENDIAN /* e.g. xbox 360 */
+# else /* e.g. xbox 360 */
 #  define htole16(x) __builtin_bswap16(x)
 #  define le16toh(x) __builtin_bswap16(x)
 #  define htole32(x) __builtin_bswap32(x)
 #  define le32toh(x) __builtin_bswap32(x)
 #  define htole64(x) __builtin_bswap32(x)
 #  define le64toh(x) __builtin_bswap32(x)
-# else
-#  error unsupported byte order /* should not happen */
 # endif
 #elif defined WORDS_BIGENDIAN
-# error unsupported big-endian platform
-#else /* most likely little endian */
-/* TODO: */
+/* TODO more converters */
 # if defined HAVE_SYS_PARAM_H
 #  include <sys/param.h>
 # endif
 # if defined HAVE_BYTEORDER_H
 #  include <byteorder.h>
+#  error unsupported big-endian platform with byteorder.h
 # elif defined HAVE_SYS_BYTEORDER_H
 #  include <sys/byteorder.h>
+#  error unsupported big-endian platform with sys/byteorder.h
 # elif defined HAVE_BYTESWAP_H
 #  include <byteswap.h>
+#  error unsupported big-endian platform with byteswap.h
 # endif
-# if defined __LITTLE_ENDIAN__
-#  define htole16(x) (x)
-#  define le16toh(x) (x)
-#  define htole32(x) (x)
-#  define le32toh(x) (x)
-#  define htole64(x) (x)
-#  define le64toh(x) (x)
-# else
-#  error unknown byte order
-# endif
+# error unsupported big-endian platform
+#else /* little endian: just pass-thru */
+# define htole16(x) (x)
+# define le16toh(x) (x)
+# define htole32(x) (x)
+# define le32toh(x) (x)
+# define htole64(x) (x)
+# define le64toh(x) (x)
 #endif
 
 /* Used warning suppressions:
