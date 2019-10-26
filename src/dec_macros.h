@@ -372,7 +372,7 @@
 // clang-format off
 #define FIELD_TF(nam, len, dxf)                                               \
   {                                                                           \
-    SINCE (R_13) { VECTOR_CHKCOUNT (nam, TF, len, dat) }                      \
+    SINCE (R_13) { _obj->nam = NULL; VECTOR_CHKCOUNT (nam, TF, len, dat) }    \
     _obj->nam = bit_read_TF (dat, (int)len);                                  \
     LOG_TRACE (#nam ": \"%s\" [TF %lu " #dxf "]\n", _obj->nam, (unsigned long)len); \
     LOG_INSANE_TF (FIELD_VALUE (nam), (int)len);                              \
