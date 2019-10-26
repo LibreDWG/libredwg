@@ -707,23 +707,25 @@
 
 // check for overflow into next object (invalid num_elems)
 #define AVAIL_BITS(dat)                                                       \
-  (obj ? (long)((obj->size * 8) - bit_position (dat) + 20) : 0xff00L)
-#define TYPE_MAXELEMSIZE(type) (unsigned)dwg_bits_size[BITS_##type]
+  (obj ? (long long)((obj->size * 8) - bit_position (dat) + 20) : 0xff00LL)
+#define TYPE_MAXELEMSIZE(type) dwg_bits_size[BITS_##type]
 #define VECTOR_CHKCOUNT(nam, type, size, dat)                                 \
-  if ((long)((size)*TYPE_MAXELEMSIZE (type)) > AVAIL_BITS (dat))              \
+  if ((long long)(size) > AVAIL_BITS (dat) ||                                 \
+      (long long)((size)*TYPE_MAXELEMSIZE (type)) > AVAIL_BITS (dat))         \
     {                                                                         \
       LOG_ERROR ("Invalid " #nam " size %ld. Need min. %u bits for " #type    \
-                 ", have %ld for %s.",                                        \
+                 ", have %lld for %s.",                                       \
                  (long)(size), (unsigned)(size)*TYPE_MAXELEMSIZE (type),      \
                  AVAIL_BITS (dat), SAFEDXFNAME);                              \
       if (_obj->nam) free (_obj->nam);                                        \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }
-#define VECTOR_CHKCOUNT_LV(nam, type, size)                                   \
-  if ((long)((size)*TYPE_MAXELEMSIZE (type)) > AVAIL_BITS (dat))              \
+#define VECTOR_CHKCOUNT_LV(nam, type, size, dat)                              \
+  if ((long long)(size) > AVAIL_BITS (dat) ||                                 \
+      (long long)((size)*TYPE_MAXELEMSIZE (type)) > AVAIL_BITS (dat))         \
     {                                                                         \
       LOG_ERROR ("Invalid " #nam " size %ld. Need min. %u bits for " #type    \
-                 ", have %ld for %s.",                                        \
+                 ", have %lld for %s.",                                       \
                  (long)(size), (unsigned)(size)*TYPE_MAXELEMSIZE (type),      \
                  AVAIL_BITS (dat), SAFEDXFNAME);                              \
       if (_obj->nam) free (_obj->nam);                                        \
@@ -731,10 +733,11 @@
       /* return DWG_ERR_VALUEOUTOFBOUNDS; */                                  \
     }
 #define _VECTOR_CHKCOUNT(nam, size, maxelemsize, dat)                         \
-  if ((long)((size) * (maxelemsize)) > AVAIL_BITS (dat))                      \
+  if ((long long)(size) > AVAIL_BITS (dat) ||                                 \
+      (long long)((size) * (maxelemsize)) > AVAIL_BITS (dat))                 \
     {                                                                         \
       LOG_ERROR ("Invalid " #nam                                              \
-                 " size %ld. Need min. %u bits, have %ld for %s.",            \
+                 " size %ld. Need min. %u bits, have %lld for %s.",           \
                  (long)(size), (unsigned)(size) * (maxelemsize),              \
                  AVAIL_BITS (dat), SAFEDXFNAME);                              \
       size = 0;                                                               \
@@ -796,7 +799,7 @@
   FIELD_VECTOR_N (name, type, _obj->size, dxf)
 
 #define FIELD_2RD_VECTOR(name, size, dxf)                                     \
-  VECTOR_CHKCOUNT_LV (name, 2RD, _obj->size)                                  \
+  VECTOR_CHKCOUNT_LV (name, 2RD, _obj->size, dat)                             \
   if (_obj->size > 0)                                                         \
     {                                                                         \
       _obj->name = (BITCODE_2RD *)calloc (_obj->size, sizeof (BITCODE_2RD));  \
@@ -809,7 +812,7 @@
     return DWG_ERR_VALUEOUTOFBOUNDS;
 
 #define FIELD_2DD_VECTOR(name, size, dxf)                                     \
-  VECTOR_CHKCOUNT_LV (name, 2DD, _obj->size)                                  \
+  VECTOR_CHKCOUNT_LV (name, 2DD, _obj->size, dat)                             \
   if (_obj->size > 0)                                                         \
     {                                                                         \
       _obj->name = (BITCODE_2RD *)calloc (_obj->size, sizeof (BITCODE_2RD));  \
@@ -828,7 +831,7 @@
     return DWG_ERR_VALUEOUTOFBOUNDS;
 
 #define FIELD_3DPOINT_VECTOR(name, size, dxf)                                 \
-  VECTOR_CHKCOUNT_LV (name, 3BD, _obj->size)                                  \
+  VECTOR_CHKCOUNT_LV (name, 3BD, _obj->size, dat)                             \
   if (_obj->size > 0)                                                         \
     {                                                                         \
       _obj->name                                                              \
@@ -853,7 +856,7 @@
     }
 
 #define HANDLE_VECTOR(nam, sizefield, code, dxf)                              \
-  VECTOR_CHKCOUNT (nam, HANDLE, FIELD_VALUE (sizefield), hdl_dat)             \
+  VECTOR_CHKCOUNT_LV (nam, HANDLE, FIELD_VALUE (sizefield), hdl_dat)          \
   HANDLE_VECTOR_N (nam, FIELD_VALUE (sizefield), code, dxf)
 
 // count 1 bytes, until non-1 bytes or a terminating zero
@@ -868,7 +871,7 @@
       if (vcount != 1)                                                        \
         {                                                                     \
           LOG_WARN ("num_inserts [RC " FORMAT_RL "]: %d != 1",                \
-                     FIELD_VALUE (num_inserts), (unsigned char)vcount)        \
+                    FIELD_VALUE (num_inserts), (unsigned char)vcount)         \
           bit_advance_position (dat, -8);                                     \
           break;                                                              \
         }                                                                     \
@@ -980,11 +983,11 @@
       if (_obj->name) { free (_obj->name); _obj->name = NULL; }               \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }                                                                         \
-  LOG_INSANE ("REPEAT_CHKCOUNT %s." #name " x %ld: %ld > %ld?\n",             \
-              SAFEDXFNAME, (long)times, (long)((times) * sizeof (type)),      \
+  LOG_INSANE ("REPEAT_CHKCOUNT %s." #name " x %ld: %lld > %lld?\n",           \
+              SAFEDXFNAME, (long)times, (long long)((times) * sizeof (type)), \
               AVAIL_BITS (dat));                                              \
   if (dat->version >= R_2004                                                  \
-      && (long)((times) * sizeof (type)) > AVAIL_BITS (dat))                  \
+      && (long long)((times) * sizeof (type)) > AVAIL_BITS (dat))             \
     {                                                                         \
       LOG_ERROR ("Invalid %s." #name " x %ld\n", SAFEDXFNAME, (long)times);   \
       if (_obj->name) { free (_obj->name); _obj->name = NULL; }               \
@@ -998,11 +1001,11 @@
       if (_obj->name) { free (_obj->name); _obj->name = NULL; }               \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }                                                                         \
-  LOG_INSANE ("REPEAT_CHKCOUNT_LVAL %s." #name " x %ld: %ld > %ld?\n",        \
-              SAFEDXFNAME, (long)times, (long)((times) * sizeof (type)),      \
+  LOG_INSANE ("REPEAT_CHKCOUNT_LVAL %s." #name " x %ld: %lld > %lld?\n",      \
+              SAFEDXFNAME, (long)times, (long long)((times) * sizeof (type)), \
               AVAIL_BITS (dat));                                              \
   if (dat->version >= R_2004                                                  \
-      && (long)((times) * sizeof (type)) > AVAIL_BITS (dat))                  \
+      && (long long)((times) * sizeof (type)) > AVAIL_BITS (dat))             \
     {                                                                         \
       LOG_ERROR ("Invalid %s." #name " x %ld\n", SAFEDXFNAME, (long)times);   \
       times = 0;                                                              \
