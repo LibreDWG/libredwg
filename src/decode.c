@@ -2198,7 +2198,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Out of memory with %u sections", info->num_sections);
       return DWG_ERR_OUTOFMEM;
     }
-  initial_address = info->sections[0]->address;
+  initial_address = info->sections[0] ? info->sections[0]->address : 0;
   sec_dat->bit = 0;
   sec_dat->byte = 0;
   sec_dat->version = dat->version;
