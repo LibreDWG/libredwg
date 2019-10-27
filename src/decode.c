@@ -877,7 +877,8 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       dwg->header.section[j].number = bit_read_RC (dat);
       dwg->header.section[j].address = bit_read_RL (dat);
       dwg->header.section[j].size = bit_read_RL (dat);
-      strcpy (dwg->header.section[j].name, section_names[j]);
+      if (j < 6)
+        strcpy (dwg->header.section[j].name, section_names[j]);
       LOG_TRACE ("section[%u].number:  %4d [RC] %s\n", j,
                  (int)dwg->header.section[j].number, dwg->header.section[j].name)
       LOG_TRACE ("section[%u].address: %4u [RL]\n", j,
