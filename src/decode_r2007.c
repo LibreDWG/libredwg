@@ -952,6 +952,14 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
           LOG_HANDLE (" checksum: %016" PRIx64, section->pages[i]->checksum);
           LOG_HANDLE (" crc64: %016" PRIx64 "\n", section->pages[i]->crc);
           // debugging sanity
+          if (section->pages[i]->size >= DBG_MAX_SIZE
+              || section->pages[i]->uncomp_size >= DBG_MAX_SIZE
+              || section->pages[i]->comp_size >= DBG_MAX_SIZE)
+            {
+              LOG_ERROR ("Invalid section->pages[%d].*size", i);
+              section->num_pages = i; // skip this last section
+              return sections;
+            }
           assert (section->pages[i]->size < DBG_MAX_SIZE);
           assert (section->pages[i]->uncomp_size < DBG_MAX_SIZE);
           assert (section->pages[i]->comp_size < DBG_MAX_SIZE);
