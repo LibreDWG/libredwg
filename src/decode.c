@@ -4049,6 +4049,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
       if (size > o->size)
         {
           LOG_ERROR ("Invalid XRECORD.num_databytes " FORMAT_BL, size);
+          obj->num_databytes = 0;
           return NULL;
         }
     }
@@ -4057,6 +4058,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
 
   while (dat->byte < end_address)
     {
+      enum RES_BUF_VALUE_TYPE vtype;
       rbuf = (Dwg_Resbuf *)calloc (1, sizeof (Dwg_Resbuf));
       if (!rbuf)
         {
@@ -4066,8 +4068,14 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
         }
       rbuf->next = NULL;
       rbuf->type = bit_read_RS (dat);
-
-      switch (get_base_value_type (rbuf->type))
+      if (rbuf->type < 0 || rbuf->type >= 2000)
+        {
+          LOG_ERROR ("Invalid xdata type %d [RS]", rbuf->type);
+          dat->byte = end_address;
+          break;
+        }
+      vtype = get_base_value_type (rbuf->type);
+      switch (vtype)
         {
         case VT_STRING:
           PRE (R_2007)
