@@ -4033,7 +4033,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
 {
   Dwg_Resbuf *rbuf, *root = NULL, *curr = NULL;
   unsigned char codepage;
-  long unsigned int end_address;
+  long unsigned int end_address, curr_address;
   BITCODE_BL i, num_xdata = 0;
   BITCODE_RS length;
   int error;
@@ -4055,6 +4055,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
     }
   LOG_INSANE ("xdata:\n");
   LOG_INSANE_TF (&dat->chain[dat->byte], (int)size);
+  curr_address = dat->byte;
 
   while (dat->byte < end_address)
     {
@@ -4068,6 +4069,12 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
         }
       rbuf->next = NULL;
       rbuf->type = bit_read_RS (dat);
+      if (dat->byte == curr_address)
+        {
+          // no advance, by dat overflow
+          dat->byte = end_address;
+          break;
+        }
       if (rbuf->type < 0 || rbuf->type >= 2000)
         {
           LOG_ERROR ("Invalid xdata type %d [RS]", rbuf->type);
@@ -4082,6 +4089,8 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
           {
             length = rbuf->value.str.size = bit_read_RS (dat);
             rbuf->value.str.codepage = bit_read_RC (dat);
+            if (length > size)
+              break;
             rbuf->value.str.u.data = bit_read_TF (dat, length);
             LOG_TRACE ("xdata[%d]: \"%s\" [TF %d %d]\n", num_xdata,
                        rbuf->value.str.u.data, length, rbuf->type);
@@ -4089,7 +4098,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
           LATER_VERSIONS
           {
             length = rbuf->value.str.size = bit_read_RS (dat);
-            if (length > 0)
+            if (length > 0 && length < size)
               {
                 rbuf->value.str.u.wdata = calloc (length + 1, 2);
                 if (!rbuf->value.str.u.wdata)
@@ -4179,6 +4188,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
           curr->next = rbuf;
           curr = rbuf;
         }
+      curr_address = dat->byte;
     }
   obj->num_xdata = num_xdata;
   return root;
