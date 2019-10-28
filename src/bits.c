@@ -307,6 +307,12 @@ bit_read_RC (Bit_Chain *dat)
           byte = dat->chain[dat->byte + 1];
           result |= byte >> (8 - dat->bit);
         }
+      else
+        {
+          loglevel = dat->opts & 0xf;
+          LOG_ERROR ("%s buffer overflow at %lu", __FUNCTION__, dat->byte + 1)
+          return 0;
+        }
     }
 
   bit_advance_position (dat, 8);

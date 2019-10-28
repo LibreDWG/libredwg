@@ -3458,12 +3458,19 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   {
     obj->bitsize = bit_read_RL (dat); // until the handles
     LOG_TRACE ("bitsize: " FORMAT_RL " [RL] @%lu.%u\n", obj->bitsize,
-               dat->byte-2, dat->bit)
+               dat->byte-2, dat->bit);
+    if (obj->bitsize > obj->size * 8)
+      {
+        LOG_ERROR ("Invalid bitsize " FORMAT_RL " => " FORMAT_RL, obj->bitsize,
+                   obj->size * 8);
+        obj->bitsize = obj->size * 8;
+        error |= DWG_ERR_VALUEOUTOFBOUNDS;
+      }
   }
   SINCE (R_2007)
   {
     SINCE (R_2010)
-    LOG_HANDLE (" bitsize: " FORMAT_RL ",", obj->bitsize);
+      LOG_HANDLE (" bitsize: " FORMAT_RL ",", obj->bitsize);
     // restrict the hdl_dat stream
     error |= obj_handle_stream (dat, obj, hdl_dat);
     // and set the string stream (restricted to size)
@@ -3534,6 +3541,13 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
     obj->bitsize = bit_read_RL (dat);
     LOG_TRACE ("bitsize: " FORMAT_RL " [RL] @%lu.%u\n", obj->bitsize,
                dat->byte - 2, dat->bit)
+    if (obj->bitsize > obj->size * 8)
+      {
+        LOG_ERROR ("Invalid bitsize " FORMAT_RL " => " FORMAT_RL, obj->bitsize,
+                   obj->size * 8);
+        obj->bitsize = obj->size * 8;
+        error |= DWG_ERR_VALUEOUTOFBOUNDS;
+      }
   }
   SINCE (R_2007)
   {
