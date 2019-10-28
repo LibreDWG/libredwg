@@ -1980,6 +1980,14 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   LOG_TRACE ("encrypted:  %d\n", dwg->header.section_infohdr.encrypted)
   LOG_TRACE ("num_desc2:  %d/0x%x\n", dwg->header.section_infohdr.num_desc2,
              dwg->header.section_infohdr.num_desc2)
+  if (dwg->header.section_infohdr.num_desc > 0xf000000)
+    {
+      LOG_ERROR ("Illegal num_desc2");
+      free (decomp);
+      dwg->header.section_infohdr.num_desc = 0;
+      dwg->header.section_infohdr.num_desc2 = 0;
+      return error | DWG_ERR_INVALIDDWG;
+    }
   dwg->header.section_info = (Dwg_Section_Info *)calloc (
       dwg->header.section_infohdr.num_desc, sizeof (Dwg_Section_Info));
   if (!dwg->header.section_info)
