@@ -120,6 +120,10 @@ fi
 
 dnl Checks for typedefs, structures, and compiler characteristics
 AC_PROG_CC_C99
+case $CFLAGS in
+     *-fsanitize=undefined*)   ax_cv_have_aligned_access_required=yes  ;;
+     *-fsanitize=*,undefined*) ax_cv_have_aligned_access_required=yes  ;;
+esac
 AX_CHECK_ALIGNED_ACCESS_REQUIRED
 AC_TYPE_SIZE_T
 AC_TYPE_UINT16_T
