@@ -1477,6 +1477,8 @@ bit_convert_TU (BITCODE_TU restrict wstr)
 
   if (!wstr)
     return NULL;
+#ifdef HAVE_ALIGNED_ACCESS_REQUIRED
+#endif
   while ((c = *tmp++))
     {
       len++;

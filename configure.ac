@@ -120,6 +120,7 @@ fi
 
 dnl Checks for typedefs, structures, and compiler characteristics
 AC_PROG_CC_C99
+AX_CHECK_ALIGNED_ACCESS_REQUIRED
 AC_TYPE_SIZE_T
 AC_TYPE_UINT16_T
 AC_TYPE_INT32_T

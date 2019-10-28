@@ -20,6 +20,9 @@
 /* Define to 1 if a shared library will be built */
 #undef ENABLE_SHARED
 
+/* Define if pointers to integers require aligned access */
+#undef HAVE_ALIGNED_ACCESS_REQUIRED
+
 /* Define to 1 if you have `alloca', as a function or macro. */
 #undef HAVE_ALLOCA
 
