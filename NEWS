@@ -2,6 +2,20 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2019 Free Software Foundation, Inc.
 See the end for copying conditions.
 
+LibreDWG version 0.9.1 - released 2019/10/28 - beta:
+
+Minor bugfixes:
+  * Fixed bit_read_4BITS, off-by-one for the first bit.
+  * Fixed more null pointer dereferences, overflows, hangs and memory leaks
+    for fuzzed (i.e. illegal) dwg's.
+  * Fixed some more compiler warnings.
+  * Workaround stricter CPU's with ALIGNED_ACCESS_REQUIRED.
+  * Add -fstack-protector for newer mingw, to link -lssp, which is now mandatory
+    for _FORTIFY_SOURCE (a mingw-w64 libc headers bug).
+  * Do not use gcc-9.0 - gcc-9.2! This series is seriously broken, not
+    just for this project.
+  * dwg2SVG: honor TTF font styles => Verdana or Courier (#156)
+
 LibreDWG version 0.9 - released 2019/10/6 - beta:
 
 new API:

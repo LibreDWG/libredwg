@@ -1,6 +1,176 @@
 Full history from the git log
 -----------------------------
 
+2019-10-28  Reini Urban  <rurban@cpan.org>
+
+	Release 0.9.1
+
+	Implement ALIGNED_ACCESS_REQUIRED bit_convert_TU
+	when the wstr pointer is unaligned. E.g. for ubsan
+
+	check for ALIGNED_ACCESS_REQUIRED
+	stricter risc machines, like sparc, alpha.
+	but also settable for intel or with ubsan.
+
+2019-10-27  Reini Urban  <rurban@cpan.org>
+
+	fix r2007 Invalid section->pages[%d].*size
+	via fuzzing. skip invalid sections. replace assert
+	with proper error
+
+	fix xdata hang
+	on buf overflow. check for advance
+
+	fix info->sections[0] NULL deref
+	found by fuzzing
+
+	fix xdata hangs
+	error with wrong xdata types
+
+	fix decode_R13_R2000 stack-overflow
+	with too many sections (i.e. 8)
+
+2019-10-26  Reini Urban  <rurban@cpan.org>
+
+	fix VECTOR_CHKCOUNT overflow
+	e.g. with num_owned = 2147483899 * unsigned, overflowing to a low int (512)
+
+	fix divide by zero in VPORT.aspect_ratio
+
+	fix ub in bit_reset_chain overflow
+	ubsan runtime error: addition of unsigned offset to 0x00010a401800
+	overflowed to 0x00010a4014c1, asan fuzzing.
+
+	fix decode_3DSOLID VECTOR_CHKCOUNT
+	where obj->nam may be realloced but not cleared, resulting
+	in an invalid free
+
+2019-10-25  Reini Urban  <rurban@cpan.org>
+
+	fail with VALUEOUTOFBOUNDS ent num_reactors
+	usually only found when fuzzing
+
+	fix #162 decompression DOS
+	check while loops for exhaustion.
+
+	fix #163 header.section[SECTION_HEADER_R13].size - 34
+	overflow, with empty size. Illegal fuzzed dwg only.
+
+	fix #162 Null pointer dereference in check_POLYLINE_handles
+	fuzzed DWG only, not a real one
+
+2019-10-24  Reini Urban  <rurban@cpan.org>
+
+	skip test with x86_64-mingw-w64 gcc-9.2.0 miscompilation
+	in bit_read_H with val[i]: (%rbx) being dat+1.
+	Previous compilers are fine.
+	similar errors also in other packages.
+
+	warn about this problem, to use an older working compiler.
+
+2019-10-24  Reini Urban  <rurban@cpan.org>
+
+	fix section[].size overflow
+	Fixes GH #160
+
+	fix Overflow section_array_size dos
+	Only allow a certain amount of overflows, to repair it later.
+	Fixes GH #161
+
+	fix decode 2004 literal_length overflow
+	Fixes GH #159.
+	Check the initial literal_length also, not only in the loop
+
+	fix Null pointer dereference in decode_R13_R2000 #158
+
+	unit-testing: fix -Wunused-function warning
+	ok is unused in dynapi_test.c
+
+	probe for attribute format(ms_printf)
+
+2019-10-23  Reini Urban  <rurban@cpan.org>
+
+	decode: fix more leaks on DWG_ERR_VALUEOUTOFBOUNDS
+	found by e.g. GH #156 fuzzing testcases, bailing out early
+	on REPEAT_CHKCOUNT
+
+	decode: fix thumbnail sentinel mismatch leak
+	detected by GH #156
+
+	bits_test: fix Conditional jump or move depends on uninitialised value
+	bitchain.opts was left uninitialized on the stack, needed for LOG_TRACE
+
+	probe for attribute format(gnu_printf)
+
+	bits_test: more leaks
+	all now
+
+	bits_test: fix leaks
+
+	fix bit_read_4BITS
+	off-by-one for the first bit.
+	Only detected by mingw-w64-x86_64
+
+2019-10-22  Reini Urban  <rurban@cpan.org>
+
+	fix win32 multiple definition of `dwg_version_type
+	in test/unit-testing/decode_test
+
+	add dwg_version_type()
+	a printable release version string
+
+	_FORTIFY_SOURCE: and add -fstack-protector
+	on mingw32-w64 for broken _FORTIFY_SOURCE.
+	This adds -lssp (needed for _FORTIFY_SOURCE)
+	and is useful in its own acount.
+
+2019-10-19  Reini Urban  <rurban@cpan.org>
+
+	fixup prev. ax_add_fortify_source
+	[] needs to be quoted. use something else.
+
+2019-10-19  Reini Urban  <rurban@cpan.org>
+
+	fix AX_ADD_FORTIFY_SOURCE for msys2
+	msys2 bug with headers-git-7.0.0.5546.d200317d-1
+	either add -fstack-protector for -lssp to be added,
+	or omit adding -D_FORTIFY_SOURCE=2 to CPPFLAGS.
+	See https://github.com/msys2/MINGW-packages/issues/5868
+
+	actually try to link it, to catch it
+
+2019-10-18  Reini Urban  <rurban@cpan.org>
+
+	fix REPEAT -Wtype-limits checks
+	uint32_t has only 4 byte. check for signedness overflow.
+
+	indxf: protect NULL derefs
+	detected by mingw gcc only
+
+	fix win32 decode logging
+	eed wstring
+
+2019-10-18  Reini Urban  <rurban@cpan.org>
+
+	dwg2SVG: honor TTF font styles => Verdana or Courier.
+	Translate font-styles to svg font-families.
+	Use Courier for all non-ttf fonts, and Arial or Verdana for ttf fonts.
+	There's no SIMPLEX or COMPLEX in svg imho.
+
+	Closes #156
+
+2019-10-18  Reini Urban  <rurban@cpan.org>
+
+	fix leak in r2007+ dwg_ref_tblname logging
+	a temp. utf8 handle ref name
+
+2019-10-08  Reini Urban  <rurban@cpan.org>
+
+	spec: LIGHT.shadow_map_size
+	see unknown LIGHT.pi
+
+	unknown: minor fixes
+
 2019-10-06  Reini Urban  <rurban@cpan.org>
 
 	Release 0.9
