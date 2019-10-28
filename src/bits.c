@@ -1478,6 +1478,23 @@ bit_convert_TU (BITCODE_TU restrict wstr)
   if (!wstr)
     return NULL;
 #ifdef HAVE_ALIGNED_ACCESS_REQUIRED
+  /* access bytewise. cannot copy to heap yet, because we have no length */
+  if ((uintptr_t)wstr % SIZEOF_SIZE_T)
+    {
+      unsigned char *b = (unsigned char*)wstr;
+      c = (b[0] << 8) + b[1];
+      while (c)
+        {
+          len++;
+          if (c >= 256)
+            len++;
+          if (c >= 0x800)
+            len++;
+          b += 2;
+          c = (b[0] << 8) + b[1];
+        }
+    }
+  else
 #endif
   while ((c = *tmp++))
     {
@@ -1493,6 +1510,35 @@ bit_convert_TU (BITCODE_TU restrict wstr)
     }
   str = malloc (len + 1);
   i = 0;
+#ifdef HAVE_ALIGNED_ACCESS_REQUIRED
+  if ((uintptr_t)wstr % SIZEOF_SIZE_T)
+    {
+      unsigned char *b = (unsigned char*)wstr;
+      c = (b[0] << 8) + b[1];
+      while (c)
+        {
+          if (c < 256)
+            {
+              str[i++] = c & 0xFF;
+            }
+          else if (c < 0x800)
+            {
+              str[i++] = (c >> 6) | 0xC0;
+              str[i++] = (c & 0x3F) | 0x80;
+            }
+          else /* if (c < 0x10000) */
+            {
+              str[i++] = (c >> 12) | 0xE0;
+              str[i++] = ((c >> 6) & 0x3F) | 0x80;
+              str[i++] = (c & 0x3F) | 0x80;
+            }
+
+          b += 2;
+          c = (b[0] << 8) + b[1];
+        }
+    }
+  else
+#endif
   while ((c = *wstr++))
     {
       if (c < 256)
