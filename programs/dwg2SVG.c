@@ -97,6 +97,65 @@ transform_Y (double y)
 }
 
 static void
+normalize (BITCODE_3DPOINT *out, BITCODE_3DPOINT pt)
+{
+  double l = sqrt ((pt.x * pt.x) + (pt.y * pt.y) + (pt.z * pt.z));
+  *out = pt;
+  if (l != 1.0)
+    {
+      out->x = pt.x / l;
+      out->y = pt.y / l;
+      out->z = pt.z / l;
+    }
+}
+
+static void
+cross (BITCODE_3DPOINT *out, BITCODE_3DPOINT pt1, BITCODE_3DPOINT pt2)
+{
+  out->x = pt1.y * pt2.z - pt1.z * pt2.y;
+  out->y = pt1.z * pt2.x - pt1.x * pt2.z;
+  out->z = pt1.x * pt2.y - pt1.y * pt2.x;
+}
+
+// transform a point to a non-default extrusion
+static void
+transform_OCS (BITCODE_3DPOINT *out, BITCODE_3DPOINT pt, BITCODE_BE ext)
+{
+  if (ext.x == 0.0 && ext.y == 0.0 && ext.z == 1.0)
+    {
+      *out = pt;
+    }
+  else if (ext.x == 0.0 && ext.y == 0.0 && ext.z == -1.0)
+    {
+      *out = pt;
+      out->x = - out->x;
+    }
+  else
+    {
+      BITCODE_3DPOINT ax, ay, az;
+      normalize (&ax, ext);
+      if ((fabs (az.x) < 1 / 64.0) && (fabs (az.y) < 1 / 64.0))
+        {
+          BITCODE_3DPOINT tmp = { 0.0, 1.0, 0.0 };
+          cross (&tmp, tmp, az);
+          normalize (&ax, tmp);
+        }
+      else
+        {
+          BITCODE_3DPOINT tmp = { 0.0, 0.0, 1.0 };
+          cross (&tmp, tmp, az);
+          normalize (&ax, tmp);
+        }
+      cross (&ay, az, ax);
+      normalize (&ay, ay);
+      out->x = pt.x * ax.x + pt.y * ax.y + pt.z * ax.z;
+      out->y = pt.x * ay.x + pt.y * ax.y + pt.z * ay.z;
+      out->z = pt.x * az.x + pt.y * ax.y + pt.z * az.z;
+    }
+  return;
+}
+
+static void
 output_TEXT (Dwg_Object *obj)
 {
   Dwg_Data *dwg = obj->parent;
@@ -106,6 +165,7 @@ output_TEXT (Dwg_Object *obj)
   BITCODE_H style_ref = text->style;
   Dwg_Object *o = style_ref ? dwg_ref_object_silent (dwg, style_ref) : NULL;
   Dwg_Object_STYLE *style = o ? o->tio.object->tio.STYLE : NULL;
+  BITCODE_3DPOINT pt;
 
   if (dwg->header.version >= R_2007)
     escaped = htmlwescape ((BITCODE_TU)text->text_value);
@@ -133,10 +193,13 @@ output_TEXT (Dwg_Object *obj)
   else
     fontfamily = "Courier";
 
+  pt.x = text->insertion_pt.x;
+  pt.y = text->insertion_pt.y;
+  pt.z = 0.0;
+  transform_OCS (&pt, pt, text->extrusion);
   printf ("\t<text id=\"dwg-object-%d\" x=\"%f\" y=\"%f\" "
           "font-family=\"%s\" font-size=\"%f\" fill=\"blue\">%s</text>\n",
-          obj->index, transform_X (text->insertion_pt.x),
-          transform_Y (text->insertion_pt.y),
+          obj->index, transform_X (pt.x), transform_Y (pt.y),
           fontfamily, text->height /* fontsize */,
           escaped ? escaped : "");
   free (escaped);
@@ -146,32 +209,45 @@ static void
 output_LINE (Dwg_Object *obj)
 {
   Dwg_Entity_LINE *line = obj->tio.entity->tio.LINE;
+  BITCODE_3DPOINT start, end;
+
+  transform_OCS (&start, line->start, line->extrusion);
+  transform_OCS (&end, line->end, line->extrusion);
   printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f %f,%f\" "
           "style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n",
-          obj->index, transform_X (line->start.x), transform_Y (line->start.y),
-          transform_X (line->end.x), transform_Y (line->end.y));
+          obj->index, transform_X (start.x), transform_Y (start.y),
+          transform_X (end.x), transform_Y (end.y));
 }
 
 static void
 output_CIRCLE (Dwg_Object *obj)
 {
   Dwg_Entity_CIRCLE *circle = obj->tio.entity->tio.CIRCLE;
+  BITCODE_3DPOINT center;
+
+  transform_OCS (&center, circle->center, circle->extrusion);
   printf ("\t<circle id=\"dwg-object-%d\" cx=\"%f\" cy=\"%f\" r=\"%f\" "
           "fill=\"none\" stroke=\"blue\" stroke-width=\"0.1px\" />\n",
-          obj->index, transform_X (circle->center.x),
-          transform_Y (circle->center.y), circle->radius);
+          obj->index, transform_X (center.x), transform_Y (center.y),
+          circle->radius);
 }
 
 static void
 output_ARC (Dwg_Object *obj)
 {
   Dwg_Entity_ARC *arc = obj->tio.entity->tio.ARC;
-  double x_start = arc->center.x + arc->radius * cos (arc->start_angle);
-  double y_start = arc->center.y + arc->radius * sin (arc->start_angle);
-  double x_end = arc->center.x + arc->radius * cos (arc->end_angle);
-  double y_end = arc->center.y + arc->radius * sin (arc->end_angle);
+  BITCODE_3DPOINT center;
+  double x_start, y_start, x_end, y_end;
+  int large_arc;
+
+  transform_OCS (&center, arc->center, arc->extrusion);
+
+  x_start = center.x + arc->radius * cos (arc->start_angle);
+  y_start = center.y + arc->radius * sin (arc->start_angle);
+  x_end = center.x + arc->radius * cos (arc->end_angle);
+  y_end = center.y + arc->radius * sin (arc->end_angle);
   // Assuming clockwise arcs.
-  int large_arc = (arc->end_angle - arc->start_angle < 3.1415) ? 0 : 1;
+  large_arc = (arc->end_angle - arc->start_angle < 3.1415) ? 0 : 1;
 
   printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f A %f,%f 0 %d 0 %f,%f\" "
           "fill=\"none\" stroke=\"blue\" stroke-width=\"%f\" />\n",
@@ -186,11 +262,15 @@ output_INSERT (Dwg_Object *obj)
   Dwg_Entity_INSERT *insert = obj->tio.entity->tio.INSERT;
   if (insert->block_header && insert->block_header->handleref.value)
     {
+      BITCODE_3DPOINT ins_pt;
+      ins_pt.x = insert->ins_pt.x;
+      ins_pt.y = insert->ins_pt.y;
+      ins_pt.z = 0.0;
+      transform_OCS (&ins_pt, ins_pt, insert->extrusion);
       printf ("\t<use id=\"dwg-object-%d\" transform=\"translate(%f %f) "
               "rotate(%f) scale(%f %f)\" xlink:href=\"#symbol-%lX\" />"
               "<!-- block_header->handleref: " FORMAT_H " -->\n",
-              obj->index, transform_X (insert->ins_pt.x),
-              transform_Y (insert->ins_pt.y),
+              obj->index, transform_X (ins_pt.x), transform_Y (ins_pt.y),
               (180.0 / M_PI) * insert->rotation, insert->scale.x,
               insert->scale.y, insert->block_header->absolute_ref,
               ARGS_H (insert->block_header->handleref));
