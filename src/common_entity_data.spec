@@ -43,6 +43,15 @@
 #endif
       LOG_TRACE("bitsize: " FORMAT_BL " @%lu.%u\n", obj->bitsize,
                 dat->byte - 4, dat->bit)
+#ifdef IS_DECODER
+    if (obj->bitsize > obj->size * 8)
+      {
+        LOG_ERROR ("Invalid bitsize " FORMAT_RL " => " FORMAT_RL, obj->bitsize,
+                   obj->size * 8);
+        obj->bitsize = obj->size * 8;
+        error |= DWG_ERR_VALUEOUTOFBOUNDS;
+      }
+#endif
     }
 
   // TODO: r13-r14: 6B flags + 6B common params

@@ -3593,6 +3593,13 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   {
     obj->bitsize = bit_read_RL (dat);
     LOG_TRACE ("bitsize: %u [RL]\n", obj->bitsize);
+    if (obj->bitsize > obj->size * 8)
+      {
+        LOG_ERROR ("Invalid bitsize " FORMAT_RL " => " FORMAT_RL, obj->bitsize,
+                   obj->size * 8);
+        obj->bitsize = obj->size * 8;
+        error |= DWG_ERR_VALUEOUTOFBOUNDS;
+      }
   }
   // documentation bug, same BL type as with entity
   FIELD_BL (num_reactors, 0);
@@ -5004,6 +5011,13 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
                 obj->bitsize = bit_read_RL (dat);
                 LOG_TRACE ("bitsize: " FORMAT_RL " [RL] @%lu.%u\n",
                            obj->bitsize, dat->byte-2, dat->bit);
+                if (obj->bitsize > obj->size * 8)
+                  {
+                    LOG_ERROR ("Invalid bitsize " FORMAT_RL " => " FORMAT_RL,
+                               obj->bitsize, obj->size * 8);
+                    obj->bitsize = obj->size * 8;
+                    error |= DWG_ERR_VALUEOUTOFBOUNDS;
+                  }
               }
               if (!bit_read_H (dat, &obj->handle))
                 {
