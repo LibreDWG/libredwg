@@ -419,7 +419,12 @@
   }
 
 #define FIELD_BE(nam, dxf)                                                    \
-  bit_read_BE (dat, &_obj->nam.x, &_obj->nam.y, &_obj->nam.z)
+  {                                                                           \
+    bit_read_BE (dat, &_obj->nam.x, &_obj->nam.y, &_obj->nam.z);              \
+    if (_obj->nam.z != 1.0)                                                   \
+        LOG_TRACE (#nam ": (%f, %f, %f) [BE %d]\n", _obj->nam.x, _obj->nam.y, \
+                   _obj->nam.z, dxf);                                         \
+  }
 #define FIELD_DD(nam, _default, dxf)                                          \
   {                                                                           \
     FIELD_VALUE (nam) = bit_read_DD (dat, _default);                          \
