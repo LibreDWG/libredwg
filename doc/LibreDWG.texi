@@ -339,7 +339,7 @@ Note that this specifies an OCS (Object Coordinate System) for each
 entity, with the default (0, 0, 1).  An extrusion of (0, 0, -1) is
 typically caused by exploding a block inserted with a negative x
 scale, i.e. the sign of each X point needs to be flipped.  For more
-see the vendor DXF documentation on OCS.
+see the vendor DXF documentation on OCS and @file{programs/geom.c}.
 
 @cindex OCS
 @end deftypevr

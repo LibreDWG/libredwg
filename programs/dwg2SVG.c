@@ -35,13 +35,11 @@
 #include <getopt.h>
 
 #include <dwg.h>
+#include <dwg_api.h>
 #include "bits.h"
 #include "escape.h"
+#include "geom.h"
 #include "suffix.inc"
-
-#ifndef M_PI
-#  define M_PI 3.14159265358979323846264338327950288
-#endif
 
 static int opts = 0;
 Dwg_Data g_dwg;
@@ -97,65 +95,6 @@ transform_Y (double y)
 }
 
 static void
-normalize (BITCODE_3DPOINT *out, BITCODE_3DPOINT pt)
-{
-  double l = sqrt ((pt.x * pt.x) + (pt.y * pt.y) + (pt.z * pt.z));
-  *out = pt;
-  if (l != 1.0)
-    {
-      out->x = pt.x / l;
-      out->y = pt.y / l;
-      out->z = pt.z / l;
-    }
-}
-
-static void
-cross (BITCODE_3DPOINT *out, BITCODE_3DPOINT pt1, BITCODE_3DPOINT pt2)
-{
-  out->x = pt1.y * pt2.z - pt1.z * pt2.y;
-  out->y = pt1.z * pt2.x - pt1.x * pt2.z;
-  out->z = pt1.x * pt2.y - pt1.y * pt2.x;
-}
-
-// transform a point to a non-default extrusion
-static void
-transform_OCS (BITCODE_3DPOINT *out, BITCODE_3DPOINT pt, BITCODE_BE ext)
-{
-  if (ext.x == 0.0 && ext.y == 0.0 && ext.z == 1.0)
-    {
-      *out = pt;
-    }
-  else if (ext.x == 0.0 && ext.y == 0.0 && ext.z == -1.0)
-    {
-      *out = pt;
-      out->x = - out->x;
-    }
-  else
-    {
-      BITCODE_3DPOINT ax, ay, az;
-      normalize (&ax, ext);
-      if ((fabs (az.x) < 1 / 64.0) && (fabs (az.y) < 1 / 64.0))
-        {
-          BITCODE_3DPOINT tmp = { 0.0, 1.0, 0.0 };
-          cross (&tmp, tmp, az);
-          normalize (&ax, tmp);
-        }
-      else
-        {
-          BITCODE_3DPOINT tmp = { 0.0, 0.0, 1.0 };
-          cross (&tmp, tmp, az);
-          normalize (&ax, tmp);
-        }
-      cross (&ay, az, ax);
-      normalize (&ay, ay);
-      out->x = pt.x * ax.x + pt.y * ax.y + pt.z * ax.z;
-      out->y = pt.x * ay.x + pt.y * ax.y + pt.z * ay.z;
-      out->z = pt.x * az.x + pt.y * ax.y + pt.z * az.z;
-    }
-  return;
-}
-
-static void
 output_TEXT (Dwg_Object *obj)
 {
   Dwg_Data *dwg = obj->parent;
@@ -165,7 +104,7 @@ output_TEXT (Dwg_Object *obj)
   BITCODE_H style_ref = text->style;
   Dwg_Object *o = style_ref ? dwg_ref_object_silent (dwg, style_ref) : NULL;
   Dwg_Object_STYLE *style = o ? o->tio.object->tio.STYLE : NULL;
-  BITCODE_3DPOINT pt;
+  BITCODE_2DPOINT pt;
 
   if (dwg->header.version >= R_2007)
     escaped = htmlwescape ((BITCODE_TU)text->text_value);
@@ -193,10 +132,7 @@ output_TEXT (Dwg_Object *obj)
   else
     fontfamily = "Courier";
 
-  pt.x = text->insertion_pt.x;
-  pt.y = text->insertion_pt.y;
-  pt.z = 0.0;
-  transform_OCS (&pt, pt, text->extrusion);
+  transform_OCS_2d (&pt, text->insertion_pt, text->extrusion);
   printf ("\t<text id=\"dwg-object-%d\" x=\"%f\" y=\"%f\" "
           "font-family=\"%s\" font-size=\"%f\" fill=\"blue\">%s</text>\n",
           obj->index, transform_X (pt.x), transform_Y (pt.y),
@@ -263,10 +199,7 @@ output_INSERT (Dwg_Object *obj)
   if (insert->block_header && insert->block_header->handleref.value)
     {
       BITCODE_3DPOINT ins_pt;
-      ins_pt.x = insert->ins_pt.x;
-      ins_pt.y = insert->ins_pt.y;
-      ins_pt.z = 0.0;
-      transform_OCS (&ins_pt, ins_pt, insert->extrusion);
+      transform_OCS (&ins_pt, insert->ins_pt, insert->extrusion);
       printf ("\t<use id=\"dwg-object-%d\" transform=\"translate(%f %f) "
               "rotate(%f) scale(%f %f)\" xlink:href=\"#symbol-%lX\" />"
               "<!-- block_header->handleref: " FORMAT_H " -->\n",

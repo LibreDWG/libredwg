@@ -12,7 +12,7 @@
 /*****************************************************************************/
 
 /*
- * dwg_ps.c: create a PostScript file of lines from a DWG
+ * dwg2ps.c: create a PostScript file of lines from a DWG
  * TODO: more 2D elements, see dwg2SVG
  * written by Felipe Castro
  * modified by Felipe Corrêa da Silva Sances
@@ -33,6 +33,7 @@
 #include "common.h"
 #include "../src/bits.h" //bit_convert_TU
 #include "suffix.inc"
+#include "geom.h"
 
 static int opts = 0;
 
@@ -171,24 +172,35 @@ create_postscript (Dwg_Data *dwg, char *output)
       //  continue;
       if (obj->type == DWG_TYPE_LINE)
         {
-          Dwg_Entity_LINE *line;
-          line = obj->tio.entity->tio.LINE;
-          PS_moveto (ps, (float)line->start.x, (float)line->start.y);
-          PS_lineto (ps, (float)line->end.x, (float)line->end.y);
+          Dwg_Entity_LINE *line = obj->tio.entity->tio.LINE;
+          BITCODE_3DPOINT start, end;
+
+          transform_OCS (&start, line->start, line->extrusion);
+          transform_OCS (&end, line->end, line->extrusion);
+          PS_moveto (ps, (float)start.x, (float)start.y);
+          PS_lineto (ps, (float)end.x, (float)end.y);
           PS_stroke (ps);
         }
       else if (obj->type == DWG_TYPE_POLYLINE_2D)
         {
           int error;
           BITCODE_RL j,
-              numpts = dwg_object_polyline_2d_get_numpoints (obj, &error);
+            numpts = dwg_object_polyline_2d_get_numpoints (obj, &error);
           dwg_point_2d *pts = dwg_object_polyline_2d_get_points (obj, &error);
+          Dwg_Entity_POLYLINE_2D *pline = obj->tio.entity->tio.POLYLINE_2D;
           if (numpts && !error)
             {
-              PS_moveto (ps, (float)pts[0].x, (float)pts[0].y);
+              BITCODE_2DPOINT pt, ptin;
+              ptin.x = pts[0].x;
+              ptin.y = pts[0].y;
+              transform_OCS_2d (&pt, ptin, pline->extrusion);
+              PS_moveto (ps, (float)pt.x, (float)pt.y);
               for (j = 1; j < numpts; j++)
                 {
-                  PS_lineto (ps, (float)pts[j].x, (float)pts[j].y);
+                  ptin.x = pts[j].x;
+                  ptin.y = pts[j].y;
+                  transform_OCS_2d (&pt, ptin, pline->extrusion);
+                  PS_lineto (ps, (float)pt.x, (float)pt.y);
                   PS_stroke (ps);
                 }
             }
@@ -196,15 +208,19 @@ create_postscript (Dwg_Data *dwg, char *output)
       else if (obj->type == DWG_TYPE_ARC)
         {
           Dwg_Entity_ARC *arc = obj->tio.entity->tio.ARC;
-          PS_arc (ps, (float)arc->center.x, (float)arc->center.y,
+          BITCODE_3DPOINT center;
+          transform_OCS (&center, arc->center, arc->extrusion);
+          PS_arc (ps, (float)center.x, (float)center.y,
                   (float)arc->radius, (float)arc->start_angle,
                   (float)arc->end_angle);
         }
       else if (obj->type == DWG_TYPE_CIRCLE)
         {
-          Dwg_Entity_CIRCLE *cir = obj->tio.entity->tio.CIRCLE;
-          PS_circle (ps, (float)cir->center.x, (float)cir->center.y,
-                     (float)cir->radius);
+          Dwg_Entity_CIRCLE *circle = obj->tio.entity->tio.CIRCLE;
+          BITCODE_3DPOINT center;
+          transform_OCS (&center, circle->center, circle->extrusion);
+          PS_circle (ps, (float)center.x, (float)center.y,
+                     (float)circle->radius);
         }
     }
 

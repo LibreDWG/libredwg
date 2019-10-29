@@ -34,7 +34,7 @@ DISTCLEANFILES = core
 if !DISABLE_DXF
 if HAVE_LIBPS
 bin_PROGRAMS  += dwg2ps
-dwg2ps_SOURCES = dwg2ps.c
+dwg2ps_SOURCES = dwg2ps.c geom.c
 dwg2ps_LDADD   = $(LDADD) -lps
 endif
 endif
@@ -43,7 +43,7 @@ dwgread_SOURCES   = dwgread.c
 dwgbmp_SOURCES    = dwgbmp.c
 dwg2dxf_SOURCES   = dwg2dxf.c
 dwglayers_SOURCES = dwglayers.c
-dwg2SVG_SOURCES   = dwg2SVG.c escape.c
+dwg2SVG_SOURCES   = dwg2SVG.c escape.c geom.c
 dwggrep_SOURCES   = dwggrep.c
 dwggrep_CFLAGS    = $(CFLAGS) $(AM_CFLAGS) $(PCRE2_CFLAGS)
 dwggrep_LDADD     = $(LDADD) $(PCRE2_LIBS)
@@ -87,7 +87,7 @@ TESTS += json.test
 endif
 endif
 
-EXTRA_DIST  = suffix.inc escape.h common.inc $(TESTS) cmp_dxf.pl
+EXTRA_DIST  = suffix.inc escape.h geom.h common.inc $(TESTS) cmp_dxf.pl
 CLEANFILES  = {example_,sample_}*.{bmp,ps,svg,dxf,log}
 if USE_WRITE
 CLEANFILES += {example_,sample_}*rewrite.{dwg,log}
