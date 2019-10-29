@@ -333,7 +333,15 @@ DWG structure, which is passed around the functions x(@pxref{Functions}).
 1 modular short, max 2 words
 @end deftypevr
 @deftypevr {define} BITCODE_BE double[3]
-1 bitencoded extrusion vector
+1 bitencoded extrusion vector.
+
+Note that this specifies an OCS (Object Coordinate System) for each
+entity, with the default (0, 0, 1).  An extrusion of (0, 0, -1) is
+typically caused by exploding a block inserted with a negative x
+scale, i.e. the sign of each X point needs to be flipped.  For more
+see the vendor DXF documentation on OCS.
+
+@cindex OCS
 @end deftypevr
 @deftypevr {define} BITCODE_BT double
 1 bitencoded thickness value
