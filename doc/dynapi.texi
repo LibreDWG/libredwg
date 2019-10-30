@@ -851,7 +851,7 @@ RC,	DXF 280
 @item blockname
 TV,	DXF 2
 @item extrusion
-3BD,	DXF 210
+BE,	DXF 210
 @item def_pt
 3BD,	DXF 10
 @item text_midpt
@@ -928,7 +928,7 @@ BD,	DXF 30
 @item alignment_pt
 2DPOINT,	DXF 11
 @item extrusion
-3DPOINT,	DXF 210
+BE,	DXF 210
 @item thickness
 RD,	DXF 39
 @item oblique_ang
@@ -997,7 +997,7 @@ BD,	DXF 30
 @item alignment_pt
 2DPOINT,	DXF 11
 @item extrusion
-3DPOINT,	DXF 210
+BE,	DXF 210
 @item thickness
 RD,	DXF 39
 @item oblique_ang
@@ -1115,7 +1115,7 @@ RC,	DXF 280
 @item blockname
 TV,	DXF 2
 @item extrusion
-3BD,	DXF 210
+BE,	DXF 210
 @item def_pt
 3BD,	DXF 10
 @item text_midpt
@@ -1180,7 +1180,7 @@ RC,	DXF 280
 @item blockname
 TV,	DXF 2
 @item extrusion
-3BD,	DXF 210
+BE,	DXF 210
 @item def_pt
 3BD,	DXF 10
 @item text_midpt
@@ -1247,7 +1247,7 @@ RC,	DXF 280
 @item blockname
 TV,	DXF 2
 @item extrusion
-3BD,	DXF 210
+BE,	DXF 210
 @item def_pt
 3BD,	DXF 10
 @item text_midpt
@@ -1312,7 +1312,7 @@ RC,	DXF 280
 @item blockname
 TV,	DXF 2
 @item extrusion
-3BD,	DXF 210
+BE,	DXF 210
 @item def_pt
 3BD,	DXF 10
 @item text_midpt
@@ -1375,7 +1375,7 @@ RC,	DXF 280
 @item blockname
 TV,	DXF 2
 @item extrusion
-3BD,	DXF 210
+BE,	DXF 210
 @item def_pt
 3BD,	DXF 10
 @item text_midpt
@@ -1442,7 +1442,7 @@ RC,	DXF 280
 @item blockname
 TV,	DXF 2
 @item extrusion
-3BD,	DXF 210
+BE,	DXF 210
 @item def_pt
 3BD,	DXF 10
 @item text_midpt
@@ -1507,7 +1507,7 @@ RC,	DXF 280
 @item blockname
 TV,	DXF 2
 @item extrusion
-3BD,	DXF 210
+BE,	DXF 210
 @item def_pt
 3BD,	DXF 10
 @item text_midpt
@@ -1570,7 +1570,7 @@ struct _dwg_object_entity*
 @item sm_axis
 3BD,	DXF 11
 @item extrusion
-3BD,	DXF 210
+BE,	DXF 210
 @item axis_ratio
 BD,	DXF 40
 @item start_angle
@@ -1717,7 +1717,7 @@ BS
 @item position
 3BD,	DXF 10
 @item extrusion
-3BD,	DXF 210
+BE,	DXF 210
 @item radius
 BD,	DXF 40
 @item landing_gap
@@ -1770,7 +1770,7 @@ TV,	DXF 470
 @item elevation
 BD,	DXF 30
 @item extrusion
-3BD,	DXF 210
+BE,	DXF 210
 @item name
 TV,	DXF 2
 @item solid_fill
@@ -1947,7 +1947,7 @@ BB
 @item rotation
 BD,	DXF 50
 @item extrusion
-3DPOINT,	DXF 210
+BE,	DXF 210
 @item has_attribs
 B,	DXF 66
 @item num_owned
@@ -1988,7 +1988,7 @@ BL,	DXF 76
 @item origin
 3DPOINT
 @item extrusion
-3DPOINT,	DXF 210
+BE,	DXF 210
 @item x_direction
 3DPOINT,	DXF 211
 @item offset_to_block_ins_pt
@@ -2222,7 +2222,7 @@ BD,	DXF 38
 @item thickness
 BD,	DXF 39
 @item extrusion
-3BD,	DXF 210
+BE,	DXF 210
 @item num_points
 BL,	DXF 90
 @item points
@@ -2300,7 +2300,7 @@ BB
 @item rotation
 BD,	DXF 50
 @item extrusion
-3DPOINT,	DXF 210
+BE,	DXF 210
 @item has_attribs
 B,	DXF 66
 @item num_owned
@@ -2343,7 +2343,7 @@ RC,	DXF 70
 @item base_point
 3BD,	DXF 10
 @item extrusion
-3BD,	DXF 210
+BE,	DXF 210
 @item flags
 BS,	DXF 71
 @item num_lines
@@ -2370,7 +2370,7 @@ struct _dwg_object_entity*
 @item insertion_pt
 3BD,	DXF 10
 @item extrusion
-3BD,	DXF 210
+BE,	DXF 210
 @item x_axis_dir
 3BD,	DXF 11
 @item rect_height
@@ -2843,7 +2843,7 @@ BD,	DXF 38
 @item thickness
 BD,	DXF 39
 @item extrusion
-3BD,	DXF 210
+BE,	DXF 210
 @item num_points
 BL,	DXF 90
 @item points
@@ -3011,7 +3011,7 @@ BD,	DXF 39
 @item shape_no
 BS,	DXF 2
 @item extrusion
-3BD,	DXF 210
+BE,	DXF 210
 @item style
 H,	DXF 7
 
@@ -3245,7 +3245,7 @@ BB
 @item rotation
 BD,	DXF 50
 @item extrusion
-3BD,	DXF 210
+BE,	DXF 210
 @item has_attribs
 B,	DXF 66
 @item num_owned
@@ -3498,7 +3498,7 @@ RD,	DXF 30
 @item alignment_pt
 2DPOINT,	DXF 11
 @item extrusion
-3DPOINT,	DXF 210
+BE,	DXF 210
 @item thickness
 RD,	DXF 39
 @item oblique_ang
@@ -3543,7 +3543,7 @@ BD
 @item x_direction
 3BD,	DXF 11
 @item extrusion
-3BD
+BE
 @item text_string
 TV,	DXF 1
 @item dimstyle
@@ -3589,7 +3589,7 @@ BE,	DXF 210
 @item parent
 struct _dwg_object_entity*
 @item extrusion
-3BD,	DXF 210
+BE,	DXF 210
 @item insertion_pt
 3BD,	DXF 10
 @item scale
@@ -6190,7 +6190,7 @@ BS,	DXF 70
 @item points
 2RD*,	DXF 10
 @item extrusion
-3BD,	DXF 210
+BE,	DXF 210
 @item clip_bound_origin
 3BD,	DXF 10
 @item display_boundary
@@ -7328,7 +7328,7 @@ RC,	DXF 280
 @item blockname
 TV,	DXF 2
 @item extrusion
-3BD,	DXF 210
+BE,	DXF 210
 @item def_pt
 3BD,	DXF 10
 @item text_midpt

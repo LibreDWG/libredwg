@@ -1362,7 +1362,7 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           _o->extrusion.z = pair->value.d;
           if (_o->extrusion.x != 0.0 || _o->extrusion.y != 0.0 || _o->extrusion.z != 1.0)
             _o->flag |= 1;
-          LOG_TRACE ("LWPOLYLINE.extrusion = (%f, %f, %f) [3BD 210]\n",
+          LOG_TRACE ("LWPOLYLINE.extrusion = (%f, %f, %f) [BE 210]\n",
                      _o->extrusion.x, _o->extrusion.y, _o->extrusion.z);
         }
       else if (pair->code == 10)

@@ -960,7 +960,7 @@ typedef struct _dwg_entity_TEXT
   BITCODE_RD elevation;        /*!< DXF 30 (z coord of 10), when dataflags & 1 */
   BITCODE_2DPOINT insertion_pt; /*!< DXF 10 */
   BITCODE_2DPOINT alignment_pt; /*!< DXF 11. optional, when dataflags & 2, i.e 72/73 != 0 */
-  BITCODE_3DPOINT extrusion;  /*!< DXF 210. Default 0,0,1 */
+  BITCODE_BE extrusion;       /*!< DXF 210. Default 0,0,1 */
   BITCODE_RD thickness;       /*!< DXF 39 */
   BITCODE_RD oblique_ang;     /*!< DXF 51 */
   BITCODE_RD rotation;        /*!< DXF 50 */
@@ -986,7 +986,7 @@ typedef struct _dwg_entity_ATTRIB
   BITCODE_BD elevation;
   BITCODE_2DPOINT insertion_pt;
   BITCODE_2DPOINT alignment_pt;
-  BITCODE_3DPOINT extrusion;
+  BITCODE_BE extrusion;
   BITCODE_RD thickness;
   BITCODE_RD oblique_ang;
   BITCODE_RD rotation;
@@ -1021,7 +1021,7 @@ typedef struct _dwg_entity_ATTDEF
   BITCODE_BD elevation;
   BITCODE_2DPOINT insertion_pt;
   BITCODE_2DPOINT alignment_pt;
-  BITCODE_3DPOINT extrusion;
+  BITCODE_BE extrusion;
   BITCODE_RD thickness;
   BITCODE_RD oblique_ang;
   BITCODE_RD rotation;
@@ -1086,7 +1086,7 @@ typedef struct _dwg_entity_INSERT
   BITCODE_BB        scale_flag;
   BITCODE_3DPOINT   scale;
   BITCODE_BD        rotation;
-  BITCODE_3DPOINT   extrusion;
+  BITCODE_BE        extrusion;
   BITCODE_B         has_attribs;
   BITCODE_BL        num_owned;
 
@@ -1108,7 +1108,7 @@ typedef struct _dwg_entity_MINSERT
   BITCODE_BB        scale_flag;
   BITCODE_3DPOINT   scale;
   BITCODE_BD        rotation;
-  BITCODE_3DPOINT   extrusion;
+  BITCODE_BE        extrusion;
   BITCODE_B         has_attribs;
   BITCODE_BL        num_owned;
 
@@ -1257,7 +1257,7 @@ typedef struct _dwg_entity_LINE
     struct _dwg_object_entity *parent; \
     BITCODE_RC class_version; /* R2010+ */ \
     BITCODE_TV blockname; \
-    BITCODE_3BD extrusion; \
+    BITCODE_BE extrusion; \
     BITCODE_3BD def_pt; \
     BITCODE_2RD text_midpt; \
     BITCODE_BD elevation; \
@@ -1497,7 +1497,7 @@ typedef struct _dwg_entity_SHAPE
   BITCODE_BD oblique;
   BITCODE_BD thickness;
   BITCODE_BS shape_no;
-  BITCODE_3BD extrusion;
+  BITCODE_BE extrusion;
   BITCODE_H style;
 } Dwg_Entity_SHAPE;
 
@@ -1556,7 +1556,7 @@ typedef struct _dwg_entity_ELLIPSE
 
   BITCODE_3BD center;
   BITCODE_3BD sm_axis;
-  BITCODE_3BD extrusion;
+  BITCODE_BE extrusion;
   BITCODE_BD axis_ratio;
   BITCODE_BD start_angle;
   BITCODE_BD end_angle;
@@ -1764,7 +1764,7 @@ typedef struct _dwg_entity_MTEXT
   struct _dwg_object_entity *parent;
 
   BITCODE_3BD insertion_pt;/*!< DXF 10 */
-  BITCODE_3BD extrusion;   /*!< DXF 210 */
+  BITCODE_BE extrusion;   /*!< DXF 210 */
   BITCODE_3BD x_axis_dir;  /*!< DXF 1 */
   BITCODE_BD rect_height;  /*!< no DXF */
   BITCODE_BD rect_width;   /*!< DXF 41 */
@@ -1822,7 +1822,7 @@ typedef struct _dwg_entity_LEADER
   BITCODE_BL num_points;    /*< DXF(76) */
   BITCODE_3DPOINT* points;
   BITCODE_3DPOINT origin;
-  BITCODE_3DPOINT extrusion;
+  BITCODE_BE extrusion;
   BITCODE_3DPOINT x_direction;
   BITCODE_3DPOINT offset_to_block_ins_pt;
   BITCODE_3DPOINT endptproj; /* R_14-R_2007 ? */
@@ -1855,7 +1855,7 @@ typedef struct _dwg_entity_TOLERANCE
   BITCODE_BD dimgap;
   BITCODE_3BD ins_pt;
   BITCODE_3BD x_direction;
-  BITCODE_3BD extrusion;
+  BITCODE_BE extrusion;
   BITCODE_TV text_string;
   BITCODE_H dimstyle;
 } Dwg_Entity_TOLERANCE;
@@ -1889,7 +1889,7 @@ typedef struct _dwg_entity_MLINE
   BITCODE_BD scale;
   BITCODE_RC justification;
   BITCODE_3BD base_point;
-  BITCODE_3BD extrusion;
+  BITCODE_BE extrusion;
   BITCODE_BS flags;
   BITCODE_RC num_lines; /* Linesinstyle */
   BITCODE_BS num_verts;
@@ -2450,7 +2450,7 @@ typedef struct _dwg_entity_PROXY_LWPOLYLINE
   BITCODE_BD const_width;
   BITCODE_BD elevation;
   BITCODE_BD thickness;
-  BITCODE_3BD extrusion;
+  BITCODE_BE extrusion;
   BITCODE_BL num_points;
   BITCODE_2RD* points;
   BITCODE_BL num_bulges;
@@ -2596,7 +2596,7 @@ typedef struct _dwg_entity_HATCH
   Dwg_HATCH_Color* colors;
   BITCODE_TV gradient_name;
   BITCODE_BD elevation;
-  BITCODE_3BD extrusion;
+  BITCODE_BE extrusion;
   BITCODE_TV name;
   BITCODE_B solid_fill;
   BITCODE_B associative;
@@ -3342,7 +3342,7 @@ typedef struct _dwg_entity_TABLE
   BITCODE_3BD scale;        /*!< DXF 41 */
   BITCODE_BB data_flags;
   BITCODE_BD rotation;      /*!< DXF 50 */
-  BITCODE_3BD extrusion;    /*!< DXF 210 */
+  BITCODE_BE extrusion;    /*!< DXF 210 */
   BITCODE_B has_attribs;    /*!< DXF 66 */
   BITCODE_BL num_owned;
   BITCODE_BS flag_for_table_value; /*!< DXF 90.
@@ -3613,7 +3613,7 @@ typedef struct _dwg_entity_UNDERLAY
 {
   struct _dwg_object_entity *parent;
 
-  BITCODE_3BD extrusion; /*!< DXF 210 normal */
+  BITCODE_BE extrusion; /*!< DXF 210 normal */
   BITCODE_3BD insertion_pt; /*!< DXF 10 */
   BITCODE_3BD scale;   /*!< DXF 41 */
   BITCODE_BD angle;    /*!< DXF 50 */
@@ -3856,7 +3856,7 @@ typedef struct _dwg_entity_LWPOLYLINE
   BITCODE_BD const_width;       /*!< DXF 43 */
   BITCODE_BD elevation;         /*!< DXF 38 */
   BITCODE_BD thickness;         /*!< DXF 39 */
-  BITCODE_3BD extrusion;        /*!< DXF 210 */
+  BITCODE_BE extrusion;        /*!< DXF 210 */
   BITCODE_BL num_points;        /*!< DXF 90 */
   BITCODE_2RD* points;          /*!< DXF 10,20 */
   BITCODE_BL num_bulges;
@@ -3930,7 +3930,7 @@ typedef struct _dwg_object_SPATIAL_FILTER
 
   BITCODE_BS num_points;
   BITCODE_2RD* points;
-  BITCODE_3BD extrusion;
+  BITCODE_BE extrusion;
   BITCODE_3BD clip_bound_origin;
   BITCODE_BS display_boundary;
   BITCODE_BS front_clip_on;
@@ -4324,7 +4324,7 @@ typedef struct _dwg_entity_GEOPOSITIONMARKER
   struct _dwg_object_entity *parent;
   BITCODE_BS type;        /*!< point, lat_lon, mylocation */
   BITCODE_3BD position;   /*!< DXF 10 */
-  BITCODE_3BD extrusion;  /*!< DXF 210 */
+  BITCODE_BE extrusion;   /*!< DXF 210 */
   BITCODE_BD radius;      /*!< DXF 40 */
   BITCODE_BD landing_gap; /*!< DXF 41 */
   BITCODE_T text;         /*!< DXF 1 */

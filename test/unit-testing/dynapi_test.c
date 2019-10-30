@@ -6013,12 +6013,12 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_3BD extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &arc_dimension->extrusion, sizeof (arc_dimension->extrusion)))
         pass ();
     else
-        fail ("ARC_DIMENSION.extrusion [3BD]");
+        fail ("ARC_DIMENSION.extrusion [BE]");
   }
   {
     BITCODE_RC flag;
@@ -6400,12 +6400,12 @@ static int test_ATTDEF (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_3DPOINT extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (attdef, "ATTDEF", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &attdef->extrusion, sizeof (attdef->extrusion)))
         pass ();
     else
-        fail ("ATTDEF.extrusion [3DPOINT]");
+        fail ("ATTDEF.extrusion [BE]");
   }
   {
     BITCODE_BS field_length;
@@ -6771,12 +6771,12 @@ static int test_ATTRIB (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_3DPOINT extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (attrib, "ATTRIB", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &attrib->extrusion, sizeof (attrib->extrusion)))
         pass ();
     else
-        fail ("ATTRIB.extrusion [3DPOINT]");
+        fail ("ATTRIB.extrusion [BE]");
   }
   {
     BITCODE_BS field_length;
@@ -7285,12 +7285,12 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_3BD extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &dimension_aligned->extrusion, sizeof (dimension_aligned->extrusion)))
         pass ();
     else
-        fail ("DIMENSION_ALIGNED.extrusion [3BD]");
+        fail ("DIMENSION_ALIGNED.extrusion [BE]");
   }
   {
     BITCODE_RC flag;
@@ -7624,12 +7624,12 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_3BD extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &dimension_ang2ln->extrusion, sizeof (dimension_ang2ln->extrusion)))
         pass ();
     else
-        fail ("DIMENSION_ANG2LN.extrusion [3BD]");
+        fail ("DIMENSION_ANG2LN.extrusion [BE]");
   }
   {
     BITCODE_3BD first_arc_pt;
@@ -7963,12 +7963,12 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_3BD extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &dimension_ang3pt->extrusion, sizeof (dimension_ang3pt->extrusion)))
         pass ();
     else
-        fail ("DIMENSION_ANG3PT.extrusion [3BD]");
+        fail ("DIMENSION_ANG3PT.extrusion [BE]");
   }
   {
     BITCODE_3BD first_arc_pt;
@@ -8286,12 +8286,12 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_3BD extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (dimension_diameter, "DIMENSION_DIAMETER", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &dimension_diameter->extrusion, sizeof (dimension_diameter->extrusion)))
         pass ();
     else
-        fail ("DIMENSION_DIAMETER.extrusion [3BD]");
+        fail ("DIMENSION_DIAMETER.extrusion [BE]");
   }
   {
     BITCODE_3BD first_arc_pt;
@@ -8673,12 +8673,12 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_3BD extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (dimension_linear, "DIMENSION_LINEAR", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &dimension_linear->extrusion, sizeof (dimension_linear->extrusion)))
         pass ();
     else
-        fail ("DIMENSION_LINEAR.extrusion [3BD]");
+        fail ("DIMENSION_LINEAR.extrusion [BE]");
   }
   {
     BITCODE_RC flag;
@@ -8988,12 +8988,12 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_3BD extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (dimension_ordinate, "DIMENSION_ORDINATE", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &dimension_ordinate->extrusion, sizeof (dimension_ordinate->extrusion)))
         pass ();
     else
-        fail ("DIMENSION_ORDINATE.extrusion [3BD]");
+        fail ("DIMENSION_ORDINATE.extrusion [BE]");
   }
   {
     BITCODE_3BD feature_location_pt;
@@ -9335,12 +9335,12 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_3BD extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (dimension_radius, "DIMENSION_RADIUS", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &dimension_radius->extrusion, sizeof (dimension_radius->extrusion)))
         pass ();
     else
-        fail ("DIMENSION_RADIUS.extrusion [3BD]");
+        fail ("DIMENSION_RADIUS.extrusion [BE]");
   }
   {
     BITCODE_3BD first_arc_pt;
@@ -9608,12 +9608,12 @@ static int test_ELLIPSE (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_3BD extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (ellipse, "ELLIPSE", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &ellipse->extrusion, sizeof (ellipse->extrusion)))
         pass ();
     else
-        fail ("ELLIPSE.extrusion [3BD]");
+        fail ("ELLIPSE.extrusion [BE]");
   }
   {
     struct _dwg_object_entity* parent;
@@ -10347,12 +10347,12 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_3BD extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (geopositionmarker, "GEOPOSITIONMARKER", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &geopositionmarker->extrusion, sizeof (geopositionmarker->extrusion)))
         pass ();
     else
-        fail ("GEOPOSITIONMARKER.extrusion [3BD]");
+        fail ("GEOPOSITIONMARKER.extrusion [BE]");
   }
   {
     BITCODE_BD landing_gap;
@@ -10584,12 +10584,12 @@ static int test_HATCH (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_3BD extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (hatch, "HATCH", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &hatch->extrusion, sizeof (hatch->extrusion)))
         pass ();
     else
-        fail ("HATCH.extrusion [3BD]");
+        fail ("HATCH.extrusion [BE]");
   }
   {
     BITCODE_BD gradient_angle;
@@ -11591,12 +11591,12 @@ static int test_INSERT (const Dwg_Object *obj)
         fail ("INSERT.block_header [H]");
   }
   {
-    BITCODE_3DPOINT extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (insert, "INSERT", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &insert->extrusion, sizeof (insert->extrusion)))
         pass ();
     else
-        fail ("INSERT.extrusion [3DPOINT]");
+        fail ("INSERT.extrusion [BE]");
   }
   {
     BITCODE_H first_attrib;
@@ -11870,12 +11870,12 @@ static int test_LEADER (const Dwg_Object *obj)
         fail ("LEADER.endptproj [3DPOINT]");
   }
   {
-    BITCODE_3DPOINT extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (leader, "LEADER", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &leader->extrusion, sizeof (leader->extrusion)))
         pass ();
     else
-        fail ("LEADER.extrusion [3DPOINT]");
+        fail ("LEADER.extrusion [BE]");
   }
   {
     BITCODE_B hookline_dir;
@@ -13095,12 +13095,12 @@ static int test_LWPOLYLINE (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_3BD extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (lwpolyline, "LWPOLYLINE", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &lwpolyline->extrusion, sizeof (lwpolyline->extrusion)))
         pass ();
     else
-        fail ("LWPOLYLINE.extrusion [3BD]");
+        fail ("LWPOLYLINE.extrusion [BE]");
   }
   {
     BITCODE_BS flag;
@@ -13471,12 +13471,12 @@ static int test_MINSERT (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_3DPOINT extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (minsert, "MINSERT", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &minsert->extrusion, sizeof (minsert->extrusion)))
         pass ();
     else
-        fail ("MINSERT.extrusion [3DPOINT]");
+        fail ("MINSERT.extrusion [BE]");
   }
   {
     BITCODE_H first_attrib;
@@ -13654,12 +13654,12 @@ static int test_MLINE (const Dwg_Object *obj)
         fail ("MLINE.base_point [3BD]");
   }
   {
-    BITCODE_3BD extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (mline, "MLINE", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &mline->extrusion, sizeof (mline->extrusion)))
         pass ();
     else
-        fail ("MLINE.extrusion [3BD]");
+        fail ("MLINE.extrusion [BE]");
   }
   {
     BITCODE_BS flags;
@@ -14009,12 +14009,12 @@ static int test_MTEXT (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_3BD extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (mtext, "MTEXT", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &mtext->extrusion, sizeof (mtext->extrusion)))
         pass ();
     else
-        fail ("MTEXT.extrusion [3BD]");
+        fail ("MTEXT.extrusion [BE]");
   }
   {
     BITCODE_B flow_reversed;
@@ -16696,12 +16696,12 @@ static int test_SHAPE (const Dwg_Object *obj)
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_SHAPE *restrict shape = obj->tio.entity->tio.SHAPE;
   {
-    BITCODE_3BD extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (shape, "SHAPE", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &shape->extrusion, sizeof (shape->extrusion)))
         pass ();
     else
-        fail ("SHAPE.extrusion [3BD]");
+        fail ("SHAPE.extrusion [BE]");
   }
   {
     BITCODE_3BD ins_pt;
@@ -18425,12 +18425,12 @@ static int test_TABLE (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_3BD extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (table, "TABLE", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &table->extrusion, sizeof (table->extrusion)))
         pass ();
     else
-        fail ("TABLE.extrusion [3BD]");
+        fail ("TABLE.extrusion [BE]");
   }
   {
     Dwg_FormattedTableData fdata;
@@ -19634,12 +19634,12 @@ static int test_TEXT (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_3DPOINT extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (text, "TEXT", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &text->extrusion, sizeof (text->extrusion)))
         pass ();
     else
-        fail ("TEXT.extrusion [3DPOINT]");
+        fail ("TEXT.extrusion [BE]");
   }
   {
     BITCODE_BS generation;
@@ -19835,12 +19835,12 @@ static int test_TOLERANCE (const Dwg_Object *obj)
         fail ("TOLERANCE.dimstyle [H]");
   }
   {
-    BITCODE_3BD extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (tolerance, "TOLERANCE", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &tolerance->extrusion, sizeof (tolerance->extrusion)))
         pass ();
     else
-        fail ("TOLERANCE.extrusion [3BD]");
+        fail ("TOLERANCE.extrusion [BE]");
   }
   {
     BITCODE_BD height;
@@ -20052,12 +20052,12 @@ static int test_UNDERLAY (const Dwg_Object *obj)
         fail ("UNDERLAY.definition_id [H]");
   }
   {
-    BITCODE_3BD extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &underlay->extrusion, sizeof (underlay->extrusion)))
         pass ();
     else
-        fail ("UNDERLAY.extrusion [3BD]");
+        fail ("UNDERLAY.extrusion [BE]");
   }
   {
     BITCODE_RC fade;
@@ -32804,12 +32804,12 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_3BD extrusion;
+    BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &spatial_filter->extrusion, sizeof (spatial_filter->extrusion)))
         pass ();
     else
-        fail ("SPATIAL_FILTER.extrusion [3BD]");
+        fail ("SPATIAL_FILTER.extrusion [BE]");
   }
   {
     BITCODE_BD front_clip_dist;
