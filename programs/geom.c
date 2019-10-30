@@ -25,7 +25,7 @@ normalize (BITCODE_3DPOINT *out, BITCODE_3DPOINT pt)
 {
   double l = sqrt ((pt.x * pt.x) + (pt.y * pt.y) + (pt.z * pt.z));
   *out = pt;
-  if (l != 1.0)
+  if (l != 1.0 && l != 0.0)
     {
       out->x = pt.x / l;
       out->y = pt.y / l;
