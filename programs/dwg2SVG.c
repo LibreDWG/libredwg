@@ -66,6 +66,7 @@ help (void)
   printf ("\nUsage: dwg2SVG [OPTION]... DWGFILE >SVGFILE\n");
   printf ("Converts some 2D elements of the DWG to a SVG.\n"
           "\n");
+  // TODO: -p for paperspace only, -m for modelspace only
 #ifdef HAVE_GETOPT_LONG
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
   printf ("           --help           display this help and exit\n");
@@ -193,6 +194,78 @@ output_ARC (Dwg_Object *obj)
 }
 
 static void
+output_POLYLINE_2D (Dwg_Object *obj)
+{
+  int error;
+  Dwg_Entity_POLYLINE_2D *pline = obj->tio.entity->tio.POLYLINE_2D;
+  BITCODE_RL numpts = dwg_object_polyline_2d_get_numpoints (obj, &error);
+
+  if (numpts && !error)
+    {
+      BITCODE_2DPOINT pt, ptin;
+      dwg_point_2d *pts = dwg_object_polyline_2d_get_points (obj, &error);
+      BITCODE_RL j;
+
+      if (error)
+        return;
+      ptin.x = pts[0].x;
+      ptin.y = pts[0].y;
+      transform_OCS_2d (&pt, ptin, pline->extrusion);
+      printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f",
+              obj->index, transform_X (pt.x), transform_Y (pt.y));
+      // TODO curve_types, C for Bezier
+      for (j = 1; j < numpts; j++)
+        {
+          ptin.x = pts[j].x;
+          ptin.y = pts[j].y;
+          transform_OCS_2d (&pt, ptin, pline->extrusion);
+          // TODO bulge -> arc, widths
+          printf (" L %f,%f", transform_X (pt.x), transform_Y (pt.y));
+        }
+      if (pline->flag & 1) // closed
+        printf (" Z");
+      printf ("\" style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n");
+      free (pts);
+    }
+}
+
+static void
+output_LWPOLYLINE (Dwg_Object *obj)
+{
+  int error;
+  Dwg_Entity_LWPOLYLINE *pline = obj->tio.entity->tio.LWPOLYLINE;
+  BITCODE_RL numpts = dwg_ent_lwpline_get_numpoints (pline, &error);
+
+  if (numpts && !error)
+    {
+      BITCODE_2DPOINT pt, ptin;
+      dwg_point_2d *pts = dwg_ent_lwpline_get_points (pline, &error);
+      BITCODE_RL j;
+
+      if (error)
+        return;
+      ptin.x = pts[0].x;
+      ptin.y = pts[0].y;
+      transform_OCS_2d (&pt, ptin, pline->extrusion);
+      printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f",
+              obj->index, transform_X (pt.x), transform_Y (pt.y));
+      // TODO curve_types, C for Bezier
+      for (j = 1; j < numpts; j++)
+        {
+          ptin.x = pts[j].x;
+          ptin.y = pts[j].y;
+          transform_OCS_2d (&pt, ptin, pline->extrusion);
+          // TODO bulge -> arc, widths
+          printf (" L %f,%f", transform_X (pt.x), transform_Y (pt.y));
+        }
+      if (pline->flag & 512) // closed
+        printf (" Z");
+      printf ("\" style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n");
+      free (pts);
+    }
+}
+
+static void
 output_INSERT (Dwg_Object *obj)
 {
   Dwg_Entity_INSERT *insert = obj->tio.entity->tio.INSERT;
@@ -224,16 +297,33 @@ output_object (Dwg_Object *obj)
       return;
     }
 
-  if (obj->type == DWG_TYPE_INSERT)
-    output_INSERT (obj);
-  else if (obj->type == DWG_TYPE_LINE)
-    output_LINE (obj);
-  else if (obj->type == DWG_TYPE_CIRCLE)
-    output_CIRCLE (obj);
-  else if (obj->type == DWG_TYPE_TEXT)
-    output_TEXT (obj);
-  else if (obj->type == DWG_TYPE_ARC)
-    output_ARC (obj);
+  switch (obj->type)
+    {
+    case DWG_TYPE_INSERT:
+      output_INSERT (obj);
+      break;
+    case DWG_TYPE_LINE:
+      output_LINE (obj);
+      break;
+    case DWG_TYPE_CIRCLE:
+      output_CIRCLE (obj);
+      break;
+    case DWG_TYPE_TEXT:
+      output_TEXT (obj);
+      break;
+    case DWG_TYPE_ARC:
+      output_ARC (obj);
+      break;
+    case DWG_TYPE_POLYLINE_2D:
+      output_POLYLINE_2D (obj);
+      break;
+    case DWG_TYPE_LWPOLYLINE:
+      output_LWPOLYLINE (obj);
+      break;
+    default:
+      // ignored
+      break;
+    }
 }
 
 static void

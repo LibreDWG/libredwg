@@ -190,19 +190,58 @@ create_postscript (Dwg_Data *dwg, char *output)
           Dwg_Entity_POLYLINE_2D *pline = obj->tio.entity->tio.POLYLINE_2D;
           if (numpts && !error)
             {
-              BITCODE_2DPOINT pt, ptin;
+              BITCODE_2DPOINT pt0, ptin;
               ptin.x = pts[0].x;
               ptin.y = pts[0].y;
-              transform_OCS_2d (&pt, ptin, pline->extrusion);
-              PS_moveto (ps, (float)pt.x, (float)pt.y);
+              transform_OCS_2d (&pt0, ptin, pline->extrusion);
+              PS_moveto (ps, (float)pt0.x, (float)pt0.y);
               for (j = 1; j < numpts; j++)
                 {
+                  BITCODE_2DPOINT pt;
                   ptin.x = pts[j].x;
                   ptin.y = pts[j].y;
                   transform_OCS_2d (&pt, ptin, pline->extrusion);
                   PS_lineto (ps, (float)pt.x, (float)pt.y);
                   PS_stroke (ps);
                 }
+              if (pline->flag & 1) // closed
+                {
+                  PS_lineto (ps, (float)pt0.x, (float)pt0.y);
+                  PS_stroke (ps);
+                }
+              free (pts);
+            }
+        }
+      else if (obj->type == DWG_TYPE_LWPOLYLINE)
+        {
+          int error;
+          Dwg_Entity_LWPOLYLINE *pline = obj->tio.entity->tio.LWPOLYLINE;
+          BITCODE_RL numpts = dwg_ent_lwpline_get_numpoints (pline, &error);
+          if (numpts && !error)
+            {
+              BITCODE_2DPOINT pt0, ptin;
+              dwg_point_2d *pts = dwg_ent_lwpline_get_points (pline, &error);
+              BITCODE_RL j;
+              ptin.x = pts[0].x;
+              ptin.y = pts[0].y;
+              transform_OCS_2d (&pt0, ptin, pline->extrusion);
+              PS_moveto (ps, (float)pt0.x, (float)pt0.y);
+              for (j = 1; j < numpts; j++)
+                {
+                  BITCODE_2DPOINT pt;
+                  ptin.x = pts[j].x;
+                  ptin.y = pts[j].y;
+                  transform_OCS_2d (&pt, ptin, pline->extrusion);
+                  PS_lineto (ps, (float)pt.x, (float)pt.y);
+                  PS_stroke (ps);
+                }
+              if (pline->flag & 512) // closed
+                {
+                  PS_lineto (ps, (float)pt0.x, (float)pt0.y);
+                  PS_stroke (ps);
+                }
+                
+              free (pts);
             }
         }
       else if (obj->type == DWG_TYPE_ARC)
