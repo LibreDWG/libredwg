@@ -184,7 +184,7 @@ output_ARC (Dwg_Object *obj)
   x_end = center.x + arc->radius * cos (arc->end_angle);
   y_end = center.y + arc->radius * sin (arc->end_angle);
   // Assuming clockwise arcs.
-  large_arc = (arc->end_angle - arc->start_angle < 3.1415) ? 0 : 1;
+  large_arc = (arc->end_angle - arc->start_angle < M_PI) ? 0 : 1;
 
   printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f A %f,%f 0 %d 0 %f,%f\" "
           "fill=\"none\" stroke=\"blue\" stroke-width=\"%f\" />\n",

@@ -26,10 +26,7 @@
 
 #include <dwg.h>
 #include <dwg_api.h>
-
-#ifndef M_PI
-#  define M_PI 3.14159265358979323846264338327950288
-#endif
+#include "../programs/geom.h"
 
 static int opts = 0;
 static dwg_data g_dwg;
@@ -225,7 +222,7 @@ output_ARC (dwg_object *obj)
   x_end = center.x + radius * cos (end_angle);
   y_end = center.y + radius * sin (end_angle);
   // Assuming clockwise arcs.
-  large_arc = (end_angle - start_angle < 3.1415) ? 0 : 1;
+  large_arc = (end_angle - start_angle < M_PI) ? 0 : 1;
 
   printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f A %f,%f 0 %d 0 %f,%f\" "
           "fill=\"none\" stroke=\"blue\" stroke-width=\"%f\" />\n",
