@@ -1,8 +1,6 @@
 * pre-R13: finish remaining entities and the blocks.
 * PROXY subentities, PROXY_ENTITY
 * CELLSTYLEMAP TABLE_Cell struct
-* DIMSTYLE_CONTROL: one R2000+ RC missing
-* r2010+ some AEC (Autodesk Architectural Desktop) object invalid EED's.
 * Enabled, but un(der)tested:
   GEODATA HELIX LONG_TRANSACTION PROXY_OBJECT DIMASSOC MULTILEADER
   LIGHT DYNAMICBLOCKPURGEPREVENTER
@@ -47,12 +45,6 @@
   *2007: XRECORD read error
   example_2000: REGION starting at line 2506: Xdata wasn't read
   Drawing_2000_min: crash at AcDbLine
-* indxf (dxf2dwg):
-  REGION: encr_sat_data
-  INSERT.block_header missing
-  WIPEOUT.uvec wrong
-  WIPEOUT.imagedefreactor 360: code 5 => 3
-  VPORT: 41, 71 wrong
 
 * convert XRECORD xdata linked-list ResBuf to array of eed[],
   same structure as common EED.
@@ -62,7 +54,6 @@
   the 2004 format.
 * encode for 2004+: move the local structs to the dwg, as union?
 * finish binary DXF (easy). cross-check via: filedia 0, dxfout => Binary
-* add DXF reading (medium)
 * finish GeoJSON http://geojson.org/geojson-spec.html
 * maybe dwgfilter, as from the osmctools, with keep and drop rules.
 * check osm tools https://gitlab.com/osm-c-tools/osmctools how
@@ -72,7 +63,6 @@
   See https://wiki.openstreetmap.org/wiki/Dxf2gpx
   https://grass.osgeo.org/grass74/manuals/v.in.dxf.html and dwg (teigha and opencad)
 * add geomutils to tessellate curves (e.g. GeoJSON),
-  and to transform OCS/UCS objects when being displayed (e.g. svg, ps).
   add API funcs to find table elements (layer, ltype).
 * ACIS: Maybe convert binary SAB to ASCII SAT version 2 (ASM ShapeManager,
   forked from ACIS 7.0)
@@ -88,11 +78,9 @@
 * add unit-testing dwg coverage for the following entities:
   body, minsert, shape, solid
 
-* fix the remaining leaks: unit-testing
+* fix the remaining leaks: indxf
 * finish documentation of the API functions, refman.
 * add the basic DWG layout and API to the docs.
-* publish manual and link to doxygen refman API
-* add more defaults when encoding from older to newer versions.
 * add fuzzing and solver-based test generation (bits)
 * check testsuite errors when cross-compiled under wine.
 * check for a waiver/copyright assignment from
