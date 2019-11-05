@@ -4520,7 +4520,8 @@ DWG_OBJECT(SORTENTSTABLE)
 
   START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (dictionary, 4, 0);
-  HANDLE_VECTOR (ents, num_ents, 4, 331);
+  //??
+  HANDLE_VECTOR_N (ents, FIELD_VALUE (num_ents), 4, 331);
 
 DWG_OBJECT_END
 
