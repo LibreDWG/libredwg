@@ -276,7 +276,7 @@ sub dxf_in {
       my $type = $1;
       $f = $2;
       $DXF{$n}->{$f} = $3 if $3;
-    } elsif (/^\s+HANDLE_VECTOR\s*\((\w+),.*?,\s*(\d+)\)/) {
+    } elsif (/^\s+HANDLE_VECTOR(?:_N)?\s*\((\w+),.*?,\s*(\d+)\)/) {
       $f = $1;
       $DXF{$n}->{$f} = $2 if $2;
     } elsif (/^\s+HEADER_.+\s*\((\w+),\s*(\d+)\)/) { # HEADER_RC
