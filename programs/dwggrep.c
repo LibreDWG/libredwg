@@ -1269,6 +1269,7 @@ main (int argc, char *argv[])
         }
       count += match_BLOCK_HEADER (filename, dwg_paper_space_ref (&dwg));
 
+      fflush (stdout);
       if (j < argc)
         dwg_free (&dwg); // skip the last free
     }
