@@ -141,7 +141,7 @@ main (int argc, char *argv[])
   for (i = 0; i < dwg.layer_control.num_entries; i++)
     {
       Dwg_Object *obj = dwg.layer_control.entries[i]->obj;
-      if (obj->type != DWG_TYPE_LAYER) // can be DICTIONARY also
+      if (!obj || obj->type != DWG_TYPE_LAYER) // can be DICTIONARY also
         continue;
       layer = dwg.layer_control.entries[i]->obj->tio.object->tio.LAYER;
       if (on && (!layer->on || layer->frozen))
