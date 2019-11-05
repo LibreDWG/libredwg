@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 #include <getopt.h>
 #ifdef HAVE_VALGRIND_VALGRIND_H
 #  include <valgrind/valgrind.h>
@@ -140,9 +141,13 @@ main (int argc, char *argv[])
 
   for (i = 0; i < dwg.layer_control.num_entries; i++)
     {
-      Dwg_Object *obj = dwg.layer_control.entries[i]->obj;
+      Dwg_Object *obj;
+      assert (dwg.layer_control.entries);
+      assert (dwg.layer_control.entries[i]);
+      obj = dwg.layer_control.entries[i]->obj;
       if (!obj || obj->type != DWG_TYPE_LAYER) // can be DICTIONARY also
         continue;
+      assert (dwg.layer_control.entries[i]->obj->tio.object);
       layer = dwg.layer_control.entries[i]->obj->tio.object->tio.LAYER;
       if (on && (!layer->on || layer->frozen))
         continue;
@@ -158,8 +163,8 @@ main (int argc, char *argv[])
         }
       else
         printf ("%s\n", layer->name);
+      fflush (stdout);
     }
-  fflush (stdout);
 
   // forget about valgrind. really huge DWG's need endlessly here.
   if ((dwg.header.version && dwg.num_objects < 1000)
