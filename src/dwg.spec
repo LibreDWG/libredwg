@@ -2120,10 +2120,8 @@ DWG_OBJECT(DICTIONARY)
 
   START_OBJECT_HANDLE_STREAM;
 #ifndef IS_DXF
-  SINCE (R_2000)
-    {
-      HANDLE_VECTOR (itemhandles, numitems, 2, 350); // or 360 if hard_owner
-    }
+  // or DXF 360 if hard_owner
+  HANDLE_VECTOR_N (itemhandles, FIELD_VALUE(numitems), 2, 350);
 #endif
 
 DWG_OBJECT_END
