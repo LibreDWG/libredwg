@@ -144,8 +144,6 @@ main (int argc, char *argv[])
   error = dwg_read_file (filename_in, &dwg);
   if (error >= DWG_ERR_CRITICAL)
     fprintf (stderr, "READ ERROR %s: 0x%x\n", filename_in, error);
-  if (extnames)
-    printf ("%s\n", "Warning: no extnames yet");
 
   for (i = 0; i < dwg.layer_control.num_entries; i++)
     {
@@ -165,7 +163,6 @@ main (int argc, char *argv[])
                 layer->locked ? "l" : " ");
       if (extnames)
         {
-          // TODO (GH #167)
           if (!(name = dwg_find_table_extname (&dwg, obj)))
             name = layer->name;
         }

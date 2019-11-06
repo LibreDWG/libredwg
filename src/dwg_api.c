@@ -20347,7 +20347,7 @@ char *
 dwg_obj_table_get_name (const dwg_object *restrict obj, int *restrict error)
 {
   if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT
-      && (dwg_obj_is_table (obj) || obj->type == DWG_TYPE_DICTIONARY))
+      && (dwg_obj_is_table (obj) /* || obj->type == DWG_TYPE_DICTIONARY */))
     {
       // HACK: we can guarantee that the table name is always the first field,
       // by using COMMON_TABLE_FLAGS.

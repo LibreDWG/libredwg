@@ -1817,6 +1817,108 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
 EXPORT char*
 dwg_find_table_extname (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
 {
+  char *name;
+  Dwg_Object *xdic;
+  Dwg_Object_DICTIONARY *_xdic;
+  Dwg_Object_Ref *xdicref;
+  Dwg_Object *xrec;
+
   // TODO (GH #167) via DICTIONARY ACAD_XREC_ROUNDTRIP to XRECORD EXTNAMES
+  if (!dwg_obj_is_table (obj))
+    return NULL;
+  // HACK: we can guarantee that the table name is always the first field. See
+  // dwg_obj_table_get_name().
+  name = obj->tio.object->tio.LAYER->name;
+  xdicref = obj->tio.object->xdicobjhandle;
+  if (!xdicref)
+    return NULL;
+  xdic = dwg_ref_object (dwg, xdicref);
+  if (!xdic || xdic->type != DWG_TYPE_DICTIONARY)
+    return NULL;
+  _xdic = xdic->tio.object->tio.DICTIONARY;
+  if (_xdic->numitems < 1 || !_xdic->texts[0])
+    return NULL;
+  if (!strEQc (_xdic->texts[0], "ACAD_XREC_ROUNDTRIP"))
+    return NULL;
+  if (xdic->tio.object->ownerhandle->absolute_ref != obj->handle.value)
+    return NULL;
+  // if the next object is a XRECORD check that. else all XRECORDS
+  xrec = &dwg->object[xdic->index + 1];
+  if (xrec->fixedtype != DWG_TYPE_XRECORD ||
+      !xrec->tio.object->ownerhandle ||
+      xrec->tio.object->ownerhandle->absolute_ref != xdic->handle.value)
+    {
+      // search in all
+      for (BITCODE_BL i = 1; i < dwg->num_objects; i++)
+        {
+          xrec = &dwg->object[i];
+          if (xrec->fixedtype == DWG_TYPE_XRECORD &&
+              xrec->tio.object->ownerhandle &&
+              xrec->tio.object->ownerhandle->absolute_ref == xdic->handle.value)
+            break;
+          xrec = NULL;
+        }
+    }
+  if (xrec)
+    {
+      // pairs of EXTNAMES
+      Dwg_Object_XRECORD *_xrec = xrec->tio.object->tio.XRECORD;
+      Dwg_Resbuf *xdata = _xrec->xdata;
+      if (_xrec->num_xdata < 2 || xdata->type != 102)
+        return NULL;
+      if (dwg->header.from_version < R_2007)
+        {
+          if (!strEQc (xdata->value.str.u.data, "EXTNAMES"))
+            return NULL;
+        }
+      else
+        {
+          int16_t w[8] = { 'E', 'X', 'T', 'N', 'A', 'M', 'E', 'S' };
+          if (xdata->value.str.size != 8
+              || memcmp (xdata->value.str.u.wdata, w,
+                         xdata->value.str.size * 2))
+            return NULL;
+        }
+      xdata = xdata->next;
+      if (xdata->type == 1) // pairs of 1: old name, 2: new name
+        {
+          // step to the matching name
+          if (dwg->header.from_version < R_2007)
+            {
+            scmp:
+              if (!strEQ (xdata->value.str.u.data, name))
+                {
+                  xdata = xdata->next;
+                  while (xdata && xdata->type != 1)
+                    xdata = xdata->next;
+                  if (xdata)
+                    goto scmp;
+                }
+            }
+          else
+            {
+            wcmp:
+              if (memcmp (xdata->value.str.u.wdata, name, xdata->value.str.size * 2))
+                {
+                  xdata = xdata->next;
+                  while (xdata && xdata->type != 1)
+                    xdata = xdata->next;
+                  if (xdata)
+                    goto wcmp;
+                }
+            }
+          if (!xdata)
+            return NULL;
+          xdata = xdata->next;
+          if (xdata->type == 2) // new name
+            {
+              if (dwg->header.from_version < R_2007)
+                return xdata->value.str.u.data;
+              else
+                return (char*)xdata->value.str.u.wdata;
+            }
+        }
+    }
+
   return NULL;
 }
