@@ -1812,3 +1812,11 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
 
   return 0;
 }
+
+// Return a table EXTNAME or NULL
+EXPORT char*
+dwg_find_table_extname (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
+{
+  // TODO (GH #167) via DICTIONARY ACAD_XREC_ROUNDTRIP to XRECORD EXTNAMES
+  return NULL;
+}

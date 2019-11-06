@@ -5853,6 +5853,9 @@ EXPORT BITCODE_H dwg_find_dictionary (Dwg_Data *restrict dwg,
  * case-insensitive */
 EXPORT BITCODE_H dwg_find_dicthandle (Dwg_Data *restrict dwg, BITCODE_H dict,
                                       const char *restrict name);
+/* Search for a table EXTNAME */
+EXPORT char *dwg_find_table_extname (Dwg_Data *restrict dwg,
+                                     Dwg_Object *restrict obj);
 
 EXPORT double dwg_model_x_min (const Dwg_Data *);
 EXPORT double dwg_model_x_max (const Dwg_Data *);

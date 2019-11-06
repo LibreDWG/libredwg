@@ -144,10 +144,13 @@ main (int argc, char *argv[])
   error = dwg_read_file (filename_in, &dwg);
   if (error >= DWG_ERR_CRITICAL)
     fprintf (stderr, "READ ERROR %s: 0x%x\n", filename_in, error);
+  if (extnames)
+    printf ("%s\n", "Warning: no extnames yet");
 
   for (i = 0; i < dwg.layer_control.num_entries; i++)
     {
       Dwg_Object *obj;
+      char *name;
       assert (dwg.layer_control.entries);
       assert (dwg.layer_control.entries[i]);
       obj = dwg.layer_control.entries[i]->obj;
@@ -162,18 +165,21 @@ main (int argc, char *argv[])
                 layer->locked ? "l" : " ");
       if (extnames)
         {
-          // TODO
-          printf ("(%s) ", "no extnames yet");
+          // TODO (GH #167)
+          if (!(name = dwg_find_table_extname (&dwg, obj)))
+            name = layer->name;
         }
+      else
+        name = layer->name;
       // since r2007 unicode, converted to utf-8
       if (dwg.header.version >= R_2007)
         {
-          char *utf8 = bit_convert_TU ((BITCODE_TU)layer->name);
+          char *utf8 = bit_convert_TU ((BITCODE_TU)name);
           printf ("%s\n", utf8);
           free (utf8);
         }
       else
-        printf ("%s\n", layer->name);
+        printf ("%s\n", name);
       fflush (stdout);
     }
 
