@@ -1813,6 +1813,38 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
   return 0;
 }
 
+static bool
+xdata_string_match (Dwg_Data *restrict dwg, Dwg_Resbuf *restrict xdata,
+                    int type, char *restrict str)
+{
+  if (xdata->type != type)
+    return 0;
+  if (dwg->header.from_version < R_2007)
+    {
+      return strEQ (xdata->value.str.u.data, str);
+    }
+  else
+    {
+      return memcmp (xdata->value.str.u.wdata, str, xdata->value.str.size * 2) == 0;
+    }
+}
+
+static bool
+is_extnames_xrecord (Dwg_Data *restrict dwg, Dwg_Object *restrict xrec,
+                     Dwg_Object *restrict xdic)
+{
+  const int16_t w[8] = { 'E', 'X', 'T', 'N', 'A', 'M', 'E', 'S' };
+  const char *extnames = dwg->header.from_version < R_2007 ? "EXTNAMES" : (const char*)w;
+
+  return (xrec->fixedtype == DWG_TYPE_XRECORD
+          && xrec->tio.object->ownerhandle
+          && xrec->tio.object->ownerhandle->absolute_ref
+          == xdic->handle.value
+          && xrec->tio.object->tio.XRECORD->num_xdata >= 2
+          && xdata_string_match (dwg, xrec->tio.object->tio.XRECORD->xdata,
+                                 102, (char *)extnames));
+}
+
 // Return a table EXTNAME or NULL
 EXPORT char*
 dwg_find_table_extname (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
@@ -1821,7 +1853,7 @@ dwg_find_table_extname (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
   Dwg_Object *xdic;
   Dwg_Object_DICTIONARY *_xdic;
   Dwg_Object_Ref *xdicref;
-  Dwg_Object *xrec;
+  Dwg_Object *xrec = NULL;
 
   // TODO (GH #167) via DICTIONARY ACAD_XREC_ROUNDTRIP to XRECORD EXTNAMES
   if (!dwg_obj_is_table (obj))
@@ -1842,70 +1874,38 @@ dwg_find_table_extname (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
     return NULL;
   if (xdic->tio.object->ownerhandle->absolute_ref != obj->handle.value)
     return NULL;
-  // if the next object is a XRECORD check that. else all XRECORDS
-  xrec = &dwg->object[xdic->index + 1];
-  if (xrec->fixedtype != DWG_TYPE_XRECORD ||
-      !xrec->tio.object->ownerhandle ||
-      xrec->tio.object->ownerhandle->absolute_ref != xdic->handle.value)
+  // if the next object is a EXTNAMES XRECORD check that
+  if (is_extnames_xrecord (dwg, &dwg->object[xdic->index + 1], xdic))
     {
-      // search in all
+      xrec = &dwg->object[xdic->index + 1];
+    }
+  else // search all XRECORDS
+    {
       for (BITCODE_BL i = 1; i < dwg->num_objects; i++)
         {
-          xrec = &dwg->object[i];
-          if (xrec->fixedtype == DWG_TYPE_XRECORD &&
-              xrec->tio.object->ownerhandle &&
-              xrec->tio.object->ownerhandle->absolute_ref == xdic->handle.value)
-            break;
-          xrec = NULL;
+          if (is_extnames_xrecord (dwg, &dwg->object[i], xdic))
+            {
+              xrec = &dwg->object[i];
+              break;
+            }
         }
     }
-  if (xrec)
+  if (xrec) // found pairs of EXTNAMES
     {
-      // pairs of EXTNAMES
       Dwg_Object_XRECORD *_xrec = xrec->tio.object->tio.XRECORD;
       Dwg_Resbuf *xdata = _xrec->xdata;
-      if (_xrec->num_xdata < 2 || xdata->type != 102)
-        return NULL;
-      if (dwg->header.from_version < R_2007)
-        {
-          if (!strEQc (xdata->value.str.u.data, "EXTNAMES"))
-            return NULL;
-        }
-      else
-        {
-          int16_t w[8] = { 'E', 'X', 'T', 'N', 'A', 'M', 'E', 'S' };
-          if (xdata->value.str.size != 8
-              || memcmp (xdata->value.str.u.wdata, w,
-                         xdata->value.str.size * 2))
-            return NULL;
-        }
       xdata = xdata->next;
       if (xdata->type == 1) // pairs of 1: old name, 2: new name
         {
           // step to the matching name
-          if (dwg->header.from_version < R_2007)
+        cmp:
+          if (!xdata_string_match (dwg, xdata, 1, name))
             {
-            scmp:
-              if (!strEQ (xdata->value.str.u.data, name))
-                {
-                  xdata = xdata->next;
-                  while (xdata && xdata->type != 1)
-                    xdata = xdata->next;
-                  if (xdata)
-                    goto scmp;
-                }
-            }
-          else
-            {
-            wcmp:
-              if (memcmp (xdata->value.str.u.wdata, name, xdata->value.str.size * 2))
-                {
-                  xdata = xdata->next;
-                  while (xdata && xdata->type != 1)
-                    xdata = xdata->next;
-                  if (xdata)
-                    goto wcmp;
-                }
+              xdata = xdata->next;
+              while (xdata && xdata->type != 1 && xdata->type != 102)
+                xdata = xdata->next;
+              if (xdata)
+                goto cmp;
             }
           if (!xdata)
             return NULL;
