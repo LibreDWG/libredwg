@@ -50,6 +50,7 @@ help (void)
   printf ("Print list of layers.\n"
           "\n");
 #ifdef HAVE_GETOPT_LONG
+  printf ("  -x, --extnames            prints EXTNAMES, i.e. space instead of _\n");
   printf ("  -f, --flags               prints also flags:\n"
           "                3 chars for: f for frozen, + or - for ON or OFF, l "
           "for locked\n");
@@ -58,6 +59,7 @@ help (void)
   printf ("      --version             output version information and exit\n"
           "\n");
 #else
+  printf ("  -x            prints EXTNAMES, i.e. space instead of _\n");
   printf ("  -f            prints also flags:\n"
           "                3 chars for: f for frozen, + or - for ON or OFF, l "
           "for locked\n");
@@ -76,7 +78,7 @@ main (int argc, char *argv[])
 {
   int error;
   long i = 1;
-  int flags = 0, on = 0;
+  int flags = 0, on = 0, extnames = 0;
   char *filename_in;
   Dwg_Data dwg;
   Dwg_Object_LAYER *layer;
@@ -84,6 +86,7 @@ main (int argc, char *argv[])
 #ifdef HAVE_GETOPT_LONG
   int option_index = 0;
   static struct option long_options[] = { { "flags", 0, 0, 'f' },
+                                          { "extnames", 0, 0, 'x' },
                                           { "on", 0, 0, 'o' },
                                           { "help", 0, 0, 0 },
                                           { "version", 0, 0, 0 },
@@ -92,10 +95,10 @@ main (int argc, char *argv[])
 
   while
 #ifdef HAVE_GETOPT_LONG
-      ((c = getopt_long (argc, argv, "foh", long_options, &option_index))
+      ((c = getopt_long (argc, argv, "xfoh", long_options, &option_index))
        != -1)
 #else
-      ((c = getopt (argc, argv, "fohi")) != -1)
+      ((c = getopt (argc, argv, "xfohi")) != -1)
 #endif
     {
       if (c == -1)
@@ -113,6 +116,9 @@ main (int argc, char *argv[])
         case 'i':
           return opt_version ();
 #endif
+        case 'x':
+          extnames = 1;
+          break;
         case 'f':
           flags = 1;
           break;
@@ -154,6 +160,11 @@ main (int argc, char *argv[])
       if (flags)
         printf ("%s%s%s\t", layer->frozen ? "f" : " ", layer->on ? "+" : "-",
                 layer->locked ? "l" : " ");
+      if (extnames)
+        {
+          // TODO
+          printf ("(%s) ", "no extnames yet");
+        }
       // since r2007 unicode, converted to utf-8
       if (dwg.header.version >= R_2007)
         {
