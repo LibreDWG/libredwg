@@ -1845,7 +1845,7 @@ is_extnames_xrecord (Dwg_Data *restrict dwg, Dwg_Object *restrict xrec,
                                  102, (char *)extnames));
 }
 
-// Return a table EXTNAME or NULL
+// Return a table EXTNAME or NULL. extnames only exist for r13-r14 dwgs
 EXPORT char*
 dwg_find_table_extname (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
 {
@@ -1854,8 +1854,11 @@ dwg_find_table_extname (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
   Dwg_Object_DICTIONARY *_xdic;
   Dwg_Object_Ref *xdicref;
   Dwg_Object *xrec = NULL;
+  Dwg_Object_XRECORD *_xrec;
+  Dwg_Resbuf *xdata;
+  BITCODE_BL i;
 
-  // TODO (GH #167) via DICTIONARY ACAD_XREC_ROUNDTRIP to XRECORD EXTNAMES
+  // (GH #167) via DICTIONARY ACAD_XREC_ROUNDTRIP to XRECORD EXTNAMES
   if (!dwg_obj_is_table (obj))
     return NULL;
   // HACK: we can guarantee that the table name is always the first field. See
@@ -1870,53 +1873,43 @@ dwg_find_table_extname (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
   _xdic = xdic->tio.object->tio.DICTIONARY;
   if (_xdic->numitems < 1 || !_xdic->texts[0])
     return NULL;
-  if (!strEQc (_xdic->texts[0], "ACAD_XREC_ROUNDTRIP"))
-    return NULL;
   if (xdic->tio.object->ownerhandle->absolute_ref != obj->handle.value)
     return NULL;
-  // if the next object is a EXTNAMES XRECORD check that
-  if (is_extnames_xrecord (dwg, &dwg->object[xdic->index + 1], xdic))
+  for (i = 0; i < _xdic->numitems; i++)
     {
-      xrec = &dwg->object[xdic->index + 1];
+      if (strEQc (_xdic->texts[i], "ACAD_XREC_ROUNDTRIP"))
+        break;
     }
-  else // search all XRECORDS
+  if (i == _xdic->numitems) // not found
+    return NULL;
+  xrec = dwg_ref_object (dwg, _xdic->itemhandles[i]);
+  if (!is_extnames_xrecord (dwg, xrec, xdic))
+    return NULL;
+
+  _xrec = xrec->tio.object->tio.XRECORD;
+  xdata = _xrec->xdata;
+  xdata = xdata->next;
+  if (xdata->type == 1) // pairs of 1: old name, 2: new name
     {
-      for (BITCODE_BL i = 1; i < dwg->num_objects; i++)
+      // step to the matching name
+    cmp:
+      if (!xdata_string_match (dwg, xdata, 1, name))
         {
-          if (is_extnames_xrecord (dwg, &dwg->object[i], xdic))
-            {
-              xrec = &dwg->object[i];
-              break;
-            }
-        }
-    }
-  if (xrec) // found pairs of EXTNAMES
-    {
-      Dwg_Object_XRECORD *_xrec = xrec->tio.object->tio.XRECORD;
-      Dwg_Resbuf *xdata = _xrec->xdata;
-      xdata = xdata->next;
-      if (xdata->type == 1) // pairs of 1: old name, 2: new name
-        {
-          // step to the matching name
-        cmp:
-          if (!xdata_string_match (dwg, xdata, 1, name))
-            {
-              xdata = xdata->next;
-              while (xdata && xdata->type != 1 && xdata->type != 102)
-                xdata = xdata->next;
-              if (xdata)
-                goto cmp;
-            }
-          if (!xdata)
-            return NULL;
           xdata = xdata->next;
-          if (xdata->type == 2) // new name
-            {
-              if (dwg->header.from_version < R_2007)
-                return xdata->value.str.u.data;
-              else
-                return (char*)xdata->value.str.u.wdata;
-            }
+          while (xdata && xdata->type != 1 && xdata->type != 102)
+            xdata = xdata->next;
+          if (xdata)
+            goto cmp;
+        }
+      if (!xdata)
+        return NULL;
+      xdata = xdata->next;
+      if (xdata->type == 2) // new name
+        {
+          if (dwg->header.from_version < R_2007)
+            return xdata->value.str.u.data;
+          else
+            return (char *)xdata->value.str.u.wdata;
         }
     }
 
