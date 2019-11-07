@@ -4208,7 +4208,7 @@ DWG_ENTITY(PROXY_ENTITY)
   FIELD_BL (class_id, 91);
   PRE (R_2018)
   {
-    FIELD_BL (version, 95);
+    FIELD_BL (version, 95); // i.e. version << 8 + maint_version
   }
   SINCE (R_2018)
   { // if encode from earlier: maint_version = version<<16 + acad version
@@ -4222,12 +4222,13 @@ DWG_ENTITY(PROXY_ENTITY)
 
   LOG_INFO("TODO PROXY_ENTITY data\n");
   /*
-  //TODO: figure out how to deal with the arbitrary size vector databits described on the spec
+  //TODO: figure out how to deal with the arbitrary size vector databits
+  //      described on the spec
   FIELD_RC (*data);
   */
 
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_MS (size, 0);
+  //FIELD_MS (size, 0);
 
 DWG_ENTITY_END
 

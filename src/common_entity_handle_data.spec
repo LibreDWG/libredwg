@@ -7,7 +7,8 @@
   ENT_XDICOBJHANDLE(3)
 #endif
   //free: avoid double-free #43
-  if ((FIELD_VALUE(entmode) == 0) && !IF_IS_FREE)
+  if ((FIELD_VALUE(entmode) == 0) &&
+      (!IF_IS_FREE || obj->fixedtype == DWG_TYPE_PROXY_ENTITY))
     {
       FIELD_HANDLE(ownerhandle, 4, 330);
     }
