@@ -50,16 +50,18 @@ help (void)
   printf ("Print list of layers.\n"
           "\n");
 #ifdef HAVE_GETOPT_LONG
-  printf ("  -x, --extnames            prints EXTNAMES, i.e. space instead of _\n");
+  printf ("  -x, --extnames            prints EXTNAMES (r13-r14 only)\n"
+          "                i.e. space instead of _\n");
   printf ("  -f, --flags               prints also flags:\n"
           "                3 chars for: f for frozen, + or - for ON or OFF, l "
           "for locked\n");
-  printf ("      --on                  prints only ON layers\n");
-  printf ("      --help                display this help and exit\n");
+  printf ("  -o, --on                  prints only ON layers\n");
+  printf ("  -h, --help                display this help and exit\n");
   printf ("      --version             output version information and exit\n"
           "\n");
 #else
-  printf ("  -x            prints EXTNAMES, i.e. space instead of _\n");
+  printf ("  -x            prints EXTNAMES (r13-r14 only)\n"
+          "                i.e. space instead of _\n");
   printf ("  -f            prints also flags:\n"
           "                3 chars for: f for frozen, + or - for ON or OFF, l "
           "for locked\n");
@@ -161,7 +163,7 @@ main (int argc, char *argv[])
       if (flags)
         printf ("%s%s%s\t", layer->frozen ? "f" : " ", layer->on ? "+" : "-",
                 layer->locked ? "l" : " ");
-      if (extnames)
+      if (extnames && dwg.header.from_version >= R_13 && dwg.header.from_version < R_2000)
         {
           if (!(name = dwg_find_table_extname (&dwg, obj)))
             name = layer->name;
@@ -169,7 +171,7 @@ main (int argc, char *argv[])
       else
         name = layer->name;
       // since r2007 unicode, converted to utf-8
-      if (dwg.header.version >= R_2007)
+      if (dwg.header.from_version >= R_2007)
         {
           char *utf8 = bit_convert_TU ((BITCODE_TU)name);
           printf ("%s\n", utf8);
