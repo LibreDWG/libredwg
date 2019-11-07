@@ -801,6 +801,9 @@ Read and write the DWG, optionally via @code{--as-rNNNN} as another version, an 
 @cindex dwglayers
 
 Prints all layers in a DWG.
+With @code{-x} or @code{--extnames} prints the extended displayed layer name with spaces,
+not the internally stored old-style name with @code{_} instead.
+Only relevant with old r13 and r14 DWGs, after that layers are always stored in the extended format.
 With @code{-f} or @code{--flags} also the status of frown, on/off and locked.
 With @code{--on} only the visible layers, which are on and not frozen.
 
