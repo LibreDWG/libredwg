@@ -12,6 +12,7 @@
 
 /*
  * geom.c: geometric projections from OCS
+ * Note: There are certainly bugs lurking here. Not thoroughly tested yet.
  * written by Reini Urban
 */
 
@@ -60,7 +61,7 @@ transform_OCS_2d (BITCODE_2DPOINT *out, BITCODE_2DPOINT pt, BITCODE_BE ext)
          the OCS x-axis from the extrusion z-vector */
       BITCODE_3DPOINT ax, ay, az, be;
       be = (BITCODE_3DPOINT)ext;
-      normalize (&ax, be);
+      normalize (&az, be);
       if ((fabs (az.x) < 1 / 64.0) && (fabs (az.y) < 1 / 64.0))
         {
           BITCODE_3DPOINT tmp = { 0.0, 1.0, 0.0 };
@@ -100,7 +101,7 @@ transform_OCS (BITCODE_3DPOINT *out, BITCODE_3DPOINT pt, BITCODE_BE ext)
          the OCS x-axis from the extrusion z-vector */
       BITCODE_3DPOINT ax, ay, az, be;
       be = (BITCODE_3DPOINT)ext;
-      normalize (&ax, be);
+      normalize (&az, be);
       if ((fabs (az.x) < 1 / 64.0) && (fabs (az.y) < 1 / 64.0))
         {
           BITCODE_3DPOINT tmp = { 0.0, 1.0, 0.0 };
