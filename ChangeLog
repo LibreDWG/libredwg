@@ -1,6 +1,127 @@
 Full history from the git log
 -----------------------------
 
+2019-11-07  Reini Urban  <rurban@cpan.org>
+
+	geom: fix transform_OCS
+	normalized the wrong vector, ax => az typo,
+	worked with random stack values.
+
+	fix PROXY_ENTITY.ownerhandle leak
+	found in example r13 DWGs
+
+	extnames: add documentation
+	Closes GH #167
+
+	dwg_find_table_extname improved
+	find more ACAD_XREC_ROUNDTRIP, not only at the first index.
+	find the correct XRECORD via the xdic itemhandles[], no need to search
+	the next or all XRECORDs
+
+	extnames: only for r13-r14
+	EXTNAMES do not exist since r2000. just ignore it
+	and return the normal layer name
+
+	extnames: abstract is_extnames_xrecord
+	and xdata_string_match, which catches now
+	linked xrecs, which are not EXTNAMES
+
+	DICTIONARY.itemhandles always
+	i.e. also for r13 and r14, where it is needed for XRECORD
+	EXTNAMES
+
+	implement dwg_find_table_extname
+	See GH #167
+
+2019-11-06  Reini Urban  <rurban@cpan.org>
+
+	extnames: use dwg_find_table_extname
+	to be implemented yet
+
+	prepare dwglayers --extnames
+	see GH #167
+
+2019-11-05  Reini Urban  <rurban@cpan.org>
+
+	fixup gen-dynapi.pl for HANDLE_VECTOR_N
+	to generate the same docs (dxf 331)
+
+2019-11-05  Reini Urban  <rurban@cpan.org>
+
+	fix SORTENTSTABLE leak
+	HANDLE_VECTOR does an overflow check, with resetting the
+	num_ents field. Which does not free the sort_ents then anymore.
+
+	Note that SORTENTSTABLE.ents can be empty in some dwgs. They are
+	filled with NULLs then.
+
+2019-11-05  Reini Urban  <rurban@cpan.org>
+
+	fixup dwglayers, add asserts
+	and flush each layer line. It can error during the loop.
+
+	fix dwglayers
+	on empty layer_control.entries.
+	Closes GH #166, thanks to @fpmalard for the testcase
+
+	fflush (stdout) before dwg_free
+	on programs printing to stdout. They might fail there.
+	See GH #166, thanks to @fpmalard.
+
+2019-10-31  Reini Urban  <rurban@cpan.org>
+
+	update TODO
+
+2019-10-30  Reini Urban  <rurban@cpan.org>
+
+	rm README-alpha
+	already beta since 0.9
+
+	more geom.h use
+	use M_PI
+
+	change extrusion types from 3DPOINT,3BD to BE
+
+2019-10-30  Reini Urban  <rurban@cpan.org>
+
+	dwg2SVG: add POLYLINE_2D and LWPOLYLINE
+	basic lines only. no arcs (bulges), no other curve_types (spline, bezier)
+	no widths.
+
+	Closes GH #137
+
+2019-10-30  Reini Urban  <rurban@cpan.org>
+
+	fix geom normalize div by zero
+
+	add programs/geom.c utilities
+	for dwg2SVG and dwg2ps
+
+	dwg2SVG: add transform_OCS
+	See #165
+
+	add OCS doc Closes #165
+
+2019-10-29  Reini Urban  <rurban@cpan.org>
+
+	add FIELD_BE logging to decode
+	some .x values are flipped when extrusion.z is -1.0. see GH #165
+
+	more fixup illegal bitsizes
+
+	document codepage names
+
+2019-10-28  Reini Urban  <rurban@cpan.org>
+
+	set aligned_access_required on ubsan
+
+	fail with illegal section_info num_desc2
+	with a fuzzed dwg. cannot continue then
+
+	fix bit_read_RC overflow
+	found when fuzzing on 32bit.
+	fixup illegal bitsize's.
+
 2019-10-28  Reini Urban  <rurban@cpan.org>
 
 	Release 0.9.1

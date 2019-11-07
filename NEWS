@@ -2,6 +2,25 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2019 Free Software Foundation, Inc.
 See the end for copying conditions.
 
+LibreDWG version 0.9.2 - released 2019/11/08 - beta:
+
+new API:
+  * Added the -x,--extnames option to dwglayers for r13-r14 DWGs,
+    displaying the extended variants with spaces. Since r2000 only
+    those "extended" names are stored. (#167)
+
+Minor bugfixes:
+  * Fixed some leaks: SORTENTSTABLE, PROXY_ENTITY.ownerhandle for r13.
+  * Add DICTIONARY.itemhandles[] for r13 and r14
+  * Fixed some dwglayers null pointer derefs, and flush its output
+    for each layer. (#166)
+
+Other newsworthy changes:
+  * Add geom utils to some programs: dwg2SVG and dwgps to transcode
+    points via its OCS (i.e. extrusion vector)
+  * Add basic POLYLINE_2D and LWPOLYLINE support to dwg2SVG. no arcs (bulges),
+    no other curve_types (spline, bezier), no widths.
+
 LibreDWG version 0.9.1 - released 2019/10/28 - beta:
 
 Minor bugfixes:
