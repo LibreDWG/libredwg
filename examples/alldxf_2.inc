@@ -2708,5 +2708,3 @@ unknown_dxf[2705].fields = unknown_dxf_2705;
 unknown_dxf[2706].fields = unknown_dxf_2706;
 unknown_dxf[2707].fields = unknown_dxf_2707;
 unknown_dxf[2708].fields = unknown_dxf_2708;
-unknown_dxf[2709].fields = unknown_dxf_2709;
-unknown_dxf[2710].fields = unknown_dxf_2710;

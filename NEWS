@@ -16,7 +16,7 @@ Minor bugfixes:
     for each layer. (#166)
 
 Other newsworthy changes:
-  * Add geom utils to some programs: dwg2SVG and dwgps to transcode
+  * Add geom utils to some programs: dwg2SVG and dwg2ps to transcode
     points via its OCS (i.e. extrusion vector)
   * Add basic POLYLINE_2D and LWPOLYLINE support to dwg2SVG. no arcs (bulges),
     no other curve_types (spline, bezier), no widths.
