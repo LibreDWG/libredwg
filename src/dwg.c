@@ -1836,11 +1836,15 @@ is_extnames_xrecord (Dwg_Data *restrict dwg, Dwg_Object *restrict xrec,
   const int16_t w[8] = { 'E', 'X', 'T', 'N', 'A', 'M', 'E', 'S' };
   const char *extnames = dwg->header.from_version < R_2007 ? "EXTNAMES" : (const char*)w;
 
-  return (xrec->fixedtype == DWG_TYPE_XRECORD
+  return (xrec
+          && xdic
+          && dwg
+          && xrec->fixedtype == DWG_TYPE_XRECORD
           && xrec->tio.object->ownerhandle
           && xrec->tio.object->ownerhandle->absolute_ref
-          == xdic->handle.value
+               == xdic->handle.value
           && xrec->tio.object->tio.XRECORD->num_xdata >= 2
+          && xrec->tio.object->tio.XRECORD->xdata
           && xdata_string_match (dwg, xrec->tio.object->tio.XRECORD->xdata,
                                  102, (char *)extnames));
 }
@@ -1883,7 +1887,7 @@ dwg_find_table_extname (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
   if (i == _xdic->numitems) // not found
     return NULL;
   xrec = dwg_ref_object (dwg, _xdic->itemhandles[i]);
-  if (!is_extnames_xrecord (dwg, xrec, xdic))
+  if (!xrec || !is_extnames_xrecord (dwg, xrec, xdic))
     return NULL;
 
   _xrec = xrec->tio.object->tio.XRECORD;
