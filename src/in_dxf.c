@@ -459,6 +459,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       char field[80];
       strncpy (field, pair->value.s, 79);
+      field[79] = '\0';
       i = 0;
 
       // now read the code, value pair. for points it may be multiple (index i)
@@ -3343,6 +3344,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   else
     {
       strncpy (ctrlname, name, 70);
+      ctrlname[69] = '\0';
       strcat (ctrlname, "_CONTROL");
     }
   LOG_TRACE ("add %s\n", ctrlname);
@@ -3408,6 +3410,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
                        ARGS_H (obj->handle), pair->code);
             // also set the matching HEADER.*_CONTROL_OBJECT
             strncpy (ctrlobj, ctrlname, 70);
+            ctrlobj[69] = '\0';
             strcat (ctrlobj, "_OBJECT");
             dwg_dynapi_header_set_value (dwg, ctrlobj, &ref, 0);
             LOG_TRACE ("HEADER.%s = " FORMAT_REF " [H 0]\n", ctrlobj,
@@ -4504,6 +4507,7 @@ new_object (char *restrict name, char *restrict dxfname,
           else
             {
               strncpy (ctrlname, name, 70);
+              ctrlname[69] = '\0';
               strcat (ctrlname, "_CONTROL");
             }
 
@@ -4737,6 +4741,7 @@ new_object (char *restrict name, char *restrict dxfname,
           if (pair->code == 100)
             {
               strncpy (subclass, pair->value.s, 79);
+              subclass[79] = '\0';
               // set the real objname
               if (strEQc (obj->name, "DIMENSION_ANG2LN")
                   || strEQc (obj->name, "DIMENSION"))
@@ -6201,6 +6206,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           BITCODE_BL i = 0;
           BITCODE_BL ctrl_id;
           strncpy (table, pair->value.s, 79);
+          table[79] = '\0';
           pair = new_table_control (table, dat, dwg); // until 0 table
           ctrl_id = dwg->num_objects - 1;             // dwg->object might move
           while (pair && pair->code == 0 && strEQ (pair->value.s, table))
@@ -6312,6 +6318,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               Dwg_Object *obj, *blkhdr = NULL;
               BITCODE_BL idx = dwg->num_objects;
               strncpy (name, pair->value.s, 79);
+              name[79] = '\0';
               entity_alias (name);
               pair = new_object (name, pair->value.s, dat, dwg, 0, i++);
               obj = &dwg->object[idx];
@@ -6478,6 +6485,7 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   while (pair != NULL && pair->code == 0)
     {
       strncpy (name, pair->value.s, 79);
+      name[79] = '\0';
       entity_alias (name);
       // until 0 ENDSEC
       while (pair->code == 0
@@ -6500,6 +6508,7 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 ent->entmode = 2;
 
               strncpy (name, pair->value.s, 79);
+              name[79] = '\0';
               entity_alias (name);
             }
         }
@@ -6560,6 +6569,7 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       while (pair->code == 0)
         {
           strncpy (name, pair->value.s, 79);
+          name[79] = '\0';
           object_alias (name);
           if (is_dwg_object (name))
             pair = new_object (name, pair->value.s, dat, dwg, 0, 0);
@@ -6591,6 +6601,7 @@ dxf_unknownsection_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       while (pair->code == 0)
         {
           strncpy (name, pair->value.s, 79);
+          name[79] = '\0';
           object_alias (name);
           if (is_dwg_object (name))
             pair = new_object (name, pair->value.s, dat, dwg, 0, 0);

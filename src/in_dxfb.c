@@ -1145,6 +1145,7 @@ dxfb_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               Dwg_Object *obj, *blkhdr = NULL;
               BITCODE_BL idx = dwg->num_objects;
               strncpy (name, pair->value.s, 79);
+              name[79] = '\0';
               entity_alias (name);
               pair = new_object (name, pair->value.s, dat, dwg, 0, i++);
               obj = &dwg->object[idx];

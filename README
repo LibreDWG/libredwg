@@ -61,7 +61,7 @@ See INSTALL for generic instructions.  Basically, you do:
 $ sh ./autogen.sh (if you checked out the source code from git)
 $ ./configure [--enable-trace] [--disable--write] [--disable-shared]
 $ make
-$ make check    # optional but strongly encouraged while LibreDWG is alpha
+$ make check
 $ sudo make install
 
 This builds and installs various files in the "installation dirs":
