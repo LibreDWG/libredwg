@@ -7,7 +7,7 @@
 #  include "../../src/bits.h"
 #endif
 
-#if   defined HAVE_FUNC_ATTRIBUTE_MS_FORMAT
+#if defined(_WIN32) && defined HAVE_FUNC_ATTRIBUTE_MS_FORMAT
 #  define ATTRIBUTE_FORMAT(x, y) __attribute__ ((format (ms_printf, x, y)))
 #elif defined HAVE_FUNC_ATTRIBUTE_GNU_FORMAT
 #  define ATTRIBUTE_FORMAT(x, y) __attribute__ ((format (gnu_printf, x, y)))
