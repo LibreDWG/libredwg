@@ -3716,7 +3716,7 @@ dwg_decode_handleref (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         {
           LOG_ERROR ("Empty obj argument for handleref code %d",
                      ref->handleref.code);
-          free (ref);
+          ref->obj = NULL;
           return NULL;
         }
     }
