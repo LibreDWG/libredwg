@@ -991,8 +991,7 @@
   LOG_INSANE ("REPEAT_CHKCOUNT %s." #name " x %ld: %lld > %lld?\n",           \
               SAFEDXFNAME, (long)times, (long long)((times) * sizeof (type)), \
               AVAIL_BITS (dat));                                              \
-  if (dat->version >= R_2004                                                  \
-      && (long long)((times) * sizeof (type)) > AVAIL_BITS (dat))             \
+  if ((long long)((times) * sizeof (type)) > AVAIL_BITS (dat))                \
     {                                                                         \
       LOG_ERROR ("Invalid %s." #name " x %ld\n", SAFEDXFNAME, (long)times);   \
       if (_obj->name) { free (_obj->name); _obj->name = NULL; }               \
@@ -1009,8 +1008,7 @@
   LOG_INSANE ("REPEAT_CHKCOUNT_LVAL %s." #name " x %ld: %lld > %lld?\n",      \
               SAFEDXFNAME, (long)times, (long long)((times) * sizeof (type)), \
               AVAIL_BITS (dat));                                              \
-  if (dat->version >= R_2004                                                  \
-      && (long long)((times) * sizeof (type)) > AVAIL_BITS (dat))             \
+  if ((long long)((times) * sizeof (type)) > AVAIL_BITS (dat))                \
     {                                                                         \
       LOG_ERROR ("Invalid %s." #name " x %ld\n", SAFEDXFNAME, (long)times);   \
       times = 0;                                                              \
