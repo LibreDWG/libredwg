@@ -1589,7 +1589,7 @@ DWG_ENTITY(SPLINE)
   FIELD_BL (scenario, 0);
   UNTIL(R_2013) {
     if (FIELD_VALUE(scenario) != 1 && FIELD_VALUE(scenario) != 2)
-      fprintf(stderr, "Error: unknown scenario %d", FIELD_VALUE (scenario));
+      fprintf(stderr, "Error: unknown scenario %d\n", FIELD_VALUE (scenario));
   }
   SINCE (R_2013) {
     FIELD_BL (splineflags1, 0);
@@ -1606,7 +1606,7 @@ DWG_ENTITY(SPLINE)
       }
   FIELD_BL (degree, 71);
 
-  if (FIELD_VALUE(scenario) & 2) // bezier spline
+  if (FIELD_VALUE(scenario) == 2) // bezier spline
     {
       FIELD_VALUE(flag) = 8 + 32 + //planar, not rational
         // ignore method fit points and closed bits
@@ -1616,7 +1616,7 @@ DWG_ENTITY(SPLINE)
       FIELD_3BD (end_tan_vec, 13);
       FIELD_BL (num_fit_pts, 74);
     }
-  if (FIELD_VALUE(scenario) & 1) // spline
+  if (FIELD_VALUE(scenario) == 1) // spline
     {
       FIELD_B (rational, 0); // flag bit 2
       FIELD_B (closed_b, 0); // flag bit 0
@@ -1634,7 +1634,7 @@ DWG_ENTITY(SPLINE)
         (FIELD_VALUE(weighted) << 3);
     }
 
-  if (FIELD_VALUE(scenario) & 1) {
+  if (FIELD_VALUE(scenario) == 1) {
     FIELD_VECTOR (knots, BD, num_knots, 40)
     REPEAT(num_ctrl_pts, ctrl_pts, Dwg_SPLINE_control_point)
     REPEAT_BLOCK
@@ -1647,7 +1647,7 @@ DWG_ENTITY(SPLINE)
     SET_PARENT_OBJ(ctrl_pts);
     END_REPEAT (ctrl_pts);
   }
-  if (FIELD_VALUE(scenario) & 2) {
+  if (FIELD_VALUE(scenario) == 2) {
     REPEAT (num_fit_pts, fit_pts, Dwg_SPLINE_point)
     REPEAT_BLOCK
         SUB_FIELD_3BD_inl (fit_pts[rcount1], xyz, 11);
@@ -7513,3 +7513,4 @@ DWG_OBJECT(DOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+
