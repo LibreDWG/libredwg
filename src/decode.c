@@ -318,6 +318,11 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 #define PREP_TABLE(token)                                                     \
   Dwg_Object *obj = &dwg->object[num + i];                                    \
   Dwg_Object_##token *_obj = calloc (1, sizeof (Dwg_Object_##token));         \
+  if (dat->byte > dat->size)                                                  \
+    {                                                                         \
+      free (_obj);                                                            \
+      return DWG_ERR_INVALIDDWG;                                              \
+    }                                                                         \
   obj->index = num + i;                                                       \
   obj->tio.object = calloc (1, sizeof (Dwg_Object_Object));                   \
   if (!_obj || !obj->tio.object)                                              \

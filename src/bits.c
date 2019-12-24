@@ -31,6 +31,13 @@
 #endif
 // else we roll our own, Latin-1 only.
 
+#ifdef DWG_ABORT
+static unsigned int errors = 0;
+#  ifndef DWG_ABORT_LIMIT
+#    define DWG_ABORT_LIMIT 200
+#  endif
+#endif
+
 static unsigned int loglevel;
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
@@ -119,6 +126,10 @@ bit_read_B (Bit_Chain *dat)
     {
       loglevel = dat->opts & 0xf;
       LOG_ERROR ("%s buffer overflow at %lu", __FUNCTION__, dat->byte)
+#ifdef DWG_ABORT
+      if (++errors > DWG_ABORT_LIMIT)
+        abort();
+#endif
       return 0;
     }
   byte = dat->chain[dat->byte];
@@ -156,6 +167,10 @@ bit_read_BB (Bit_Chain *dat)
     {
       loglevel = dat->opts & 0xf;
       LOG_ERROR ("%s buffer overflow at %lu", __FUNCTION__, dat->byte)
+#ifdef DWG_ABORT
+      if (++errors > DWG_ABORT_LIMIT)
+        abort();
+#endif
       return 0;
     }
   byte = dat->chain[dat->byte];
@@ -294,6 +309,10 @@ bit_read_RC (Bit_Chain *dat)
     {
       loglevel = dat->opts & 0xf;
       LOG_ERROR ("%s buffer overflow at %lu", __FUNCTION__, dat->byte)
+#ifdef DWG_ABORT
+      if (++errors > DWG_ABORT_LIMIT)
+        abort();
+#endif
       return 0;
     }
   byte = dat->chain[dat->byte];
