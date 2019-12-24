@@ -632,8 +632,9 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   BITCODE_RL entities_start, entities_end, blocks_start, blocks_end;
   BITCODE_RL rl1, rl2;
   BITCODE_RS rs2;
-  int tbl_id;
   Dwg_Object *obj = NULL;
+  int tbl_id;
+  int error = 0;
 
   {
     int i;
@@ -708,21 +709,27 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   decode_preR13_section_ptr ("VPORT_ENTITY", SECTION_VPORT_ENTITY, dat, dwg);
   dat->byte += 38;
   // entities
-  decode_preR13_entities (entities_start, entities_end, 0, dat, dwg);
+  error |= decode_preR13_entities (entities_start, entities_end, 0, dat, dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    return error;
   dat->byte += 19; /* crc + sentinel? */
-  decode_preR13_section (SECTION_BLOCK, dat, dwg);
-  decode_preR13_section (SECTION_LAYER, dat, dwg);
-  decode_preR13_section (SECTION_STYLE, dat, dwg);
-  decode_preR13_section (SECTION_LTYPE, dat, dwg);
-  decode_preR13_section (SECTION_VIEW, dat, dwg);
-  decode_preR13_section (SECTION_UCS, dat, dwg);
-  decode_preR13_section (SECTION_VPORT, dat, dwg);
-  decode_preR13_section (SECTION_APPID, dat, dwg);
-  decode_preR13_section (SECTION_DIMSTYLE, dat, dwg);
-  decode_preR13_section (SECTION_VPORT_ENTITY, dat, dwg);
+  error |= decode_preR13_section (SECTION_BLOCK, dat, dwg);
+  error |= decode_preR13_section (SECTION_LAYER, dat, dwg);
+  error |= decode_preR13_section (SECTION_STYLE, dat, dwg);
+  error |= decode_preR13_section (SECTION_LTYPE, dat, dwg);
+  error |= decode_preR13_section (SECTION_VIEW, dat, dwg);
+  error |= decode_preR13_section (SECTION_UCS, dat, dwg);
+  error |= decode_preR13_section (SECTION_VPORT, dat, dwg);
+  error |= decode_preR13_section (SECTION_APPID, dat, dwg);
+  error |= decode_preR13_section (SECTION_DIMSTYLE, dat, dwg);
+  error |= decode_preR13_section (SECTION_VPORT_ENTITY, dat, dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    return error;
   // blocks
-  decode_preR13_entities (blocks_start, blocks_end, blocks_start - 0x40000000,
+  error |= decode_preR13_entities (blocks_start, blocks_end, blocks_start - 0x40000000,
                           dat, dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    return error;
   LOG_TRACE ("@0x%lx\n", dat->byte);
   // 36 byte: 9x long
   rl1 = bit_read_RL (dat);
