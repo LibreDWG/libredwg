@@ -307,10 +307,21 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   long unsigned int size = tbl->number * sizeof (Dwg_Object);
   long unsigned int pos;
 
+  if ((unsigned)tbl->number > 100000 || size > dat->size)
+    {
+      LOG_ERROR ("Invalid table number %ld for %-8s [%2d]", (long)tbl->number, tbl->name, id);
+      return DWG_ERR_INVALIDDWG;
+    }
   LOG_TRACE ("\ncontents table %-8s [%2d]: size:%-4u nr:%-3ld (0x%lx-0x%lx)\n",
              tbl->name, id, tbl->size, (long)tbl->number, (unsigned long)tbl->address,
-             (unsigned long)(tbl->address + (unsigned long)(tbl->number * tbl->size)))
+             (unsigned long)(tbl->address + ((unsigned long long)tbl->number * tbl->size)))
   dat->byte = tbl->address;
+  if ((unsigned long)(tbl->number * tbl->size) > dat->size - dat->byte)
+    {
+      LOG_ERROR ("Invalid table number %ld or size %ld for %-8s [%2d]", (long)tbl->number, (long)tbl->size,
+                 tbl->name, id);
+      return DWG_ERR_INVALIDDWG;
+    }
   if (dwg->num_objects % REFS_PER_REALLOC == 0)
     dwg->object = realloc (dwg->object, old_size + size + REFS_PER_REALLOC);
 
