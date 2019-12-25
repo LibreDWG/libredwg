@@ -175,7 +175,6 @@ AX_GCC_FUNC_ATTRIBUTE(gnu_format)
 AX_GCC_FUNC_ATTRIBUTE(ms_format)
 AX_GCC_FUNC_ATTRIBUTE(format)
 AX_GCC_FUNC_ATTRIBUTE(malloc)
-AX_ADD_FORTIFY_SOURCE
 
 dnl until we can make a release, favor no -O2 optims.
 dnl it's fast enough and better for debugging.
@@ -262,6 +261,8 @@ AC_ARG_ENABLE([debug],AS_HELP_STRING([--enable-debug],[
   AC_MSG_RESULT([yes]),
   AC_MSG_RESULT([no (default)]))
 AM_CONDITIONAL([ENABLE_DEBUG], [test x$enable_debug = xyes])
+
+AX_ADD_FORTIFY_SOURCE
 
 dnl --disable-dxf only useful for faster debug/test cycles
 AC_MSG_CHECKING([--disable-dxf])

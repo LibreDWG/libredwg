@@ -9,9 +9,9 @@
 # DESCRIPTION
 #
 #   Check whether -D_FORTIFY_SOURCE=2 can be added to CPPFLAGS without macro
-#   redefinition warnings or linker errors. Some distributions (such as
-#   Gentoo Linux) enable _FORTIFY_SOURCE globally in their compilers,
-#   leading to unnecessary warnings in the form of
+#   redefinition warnings, other cpp warnings or linker. Some distributions
+#   (such as Gentoo Linux) enable _FORTIFY_SOURCE globally in their
+#   compilers, leading to unnecessary warnings in the form of
 #
 #     <command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
 #     <built-in>: note: this is the location of the previous definition
@@ -21,10 +21,10 @@
 #   to CPPFLAGS.
 #
 #   Newer mingw-w64 msys2 package comes with a bug in
-#   headers-git-7.0.0.5546.d200317d-1. It broke -D_FORTIFY_SOURCE
-#   support, and would need -lssp or -fstack-protector.  See
-#   https://github.com/msys2/MINGW-packages/issues/5803. Try to
-#   actually link it.
+#   headers-git-7.0.0.5546.d200317d-1. It broke -D_FORTIFY_SOURCE support,
+#   and would need -lssp or -fstack-protector.  See
+#   https://github.com/msys2/MINGW-packages/issues/5803. Try to actually
+#   link it.
 #
 # LICENSE
 #
@@ -36,9 +36,12 @@
 #   and this notice are preserved.  This file is offered as-is, without any
 #   warranty.
 
-#serial 3
+#serial 4
 
 AC_DEFUN([AX_ADD_FORTIFY_SOURCE],[
+    ac_save_cflags=$CFLAGS
+    ac_cwerror_flag=yes
+    AX_CHECK_COMPILE_FLAG([-Werror],[CFLAGS="$CFLAGS -Werror"])
     AC_MSG_CHECKING([whether to add -D_FORTIFY_SOURCE=2 to CPPFLAGS])
     AC_LINK_IFELSE([
         AC_LANG_PROGRAM([],
@@ -55,7 +58,7 @@ AC_DEFUN([AX_ADD_FORTIFY_SOURCE],[
                 #define _FORTIFY_SOURCE 2
                 #include <string.h>
                 int main() {
-                    const char *s = " ";
+                    char *s = " ";
                     strcpy(s, "x");
                     return strlen(s)-1;
                 }
@@ -63,12 +66,15 @@ AC_DEFUN([AX_ADD_FORTIFY_SOURCE],[
             )],
             [
               AC_MSG_RESULT([yes])
+              CFLAGS=$ac_save_cflags
               CPPFLAGS="$CPPFLAGS -D_FORTIFY_SOURCE=2"
             ], [
               AC_MSG_RESULT([no])
+              CFLAGS=$ac_save_cflags
             ],
         ),
         [
-            AC_MSG_RESULT([no])
-    ])
+          AC_MSG_RESULT([no])
+          CFLAGS=$ac_save_cflags
+        ])
 ])
