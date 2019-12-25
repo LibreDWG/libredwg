@@ -45,7 +45,7 @@ EXTRA_DIST = $(top_srcdir)/.version \
 	     $(VALGRIND_SUPPRESSIONS_FILE)
 
 .PHONY: check-dwg check-dxf check-dwg-valgrind \
-        regen-man man manual refman refman-pdf scan-build gcov \
+        regen-man man manual refman scan-build gcov \
 	unknown regen-unknown
 
 UNKNOWN_LOG = unknown-`git describe --long --tags --dirty --always`.log

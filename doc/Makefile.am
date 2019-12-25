@@ -32,6 +32,7 @@ dynapi.texi: $(top_srcdir)/src/gen-dynapi.pl
 	-$(PERL) $(top_srcdir)/src/gen-dynapi.pl
 
 if HAVE_DOXYGEN
+.PHONY: refman doxygen refman-pdf
 refman doxygen html/index.html: Doxyfile ../include/dwg_api.h ../include/dwg.h ../src/dynapi.c
 	-rm ../{src,include}/*_flymake.{c,h} ../{src,include}/*.ii
 	cd .. && $(DOXYGEN) doc/Doxyfile
