@@ -85,7 +85,7 @@ endif
 TESTS = $(top_builddir)/programs/alive.test
 
 EXTRA_DIST = alldxf_0.inc alldxf_1.inc alldxf_2.inc alldwg.inc
-EXTRA_DIST += load_dwg.py
+EXTRA_DIST += load_dwg.py unknown.pi
 CLEANFILES = {example,sample}_2000.svg alldwg.inc~ \
 	     alldxf_0.inc~ alldxf_1.inc~ alldxf_2.inc~
 MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
