@@ -1,6 +1,58 @@
 Full history from the git log
 -----------------------------
 
+2019-12-25  Reini Urban  <rurban@cpan.org>
+
+	Release 0.9.3
+
+2019-12-25  Reini Urban  <rurban@cpan.org>
+
+	enable ax_restrict
+	re-format docs: autoconf-archive is pretty strict
+	gcc-9.2 on fedora has it fixed.
+
+	enable it.  we do have several small inlined functions with loops on arrays,
+	so it might affects us. See GH #141
+
+2019-12-25  Reini Urban  <rurban@cpan.org>
+
+	fix -Wcpp warning with AX_ADD_FORTIFY_SOURCE
+
+	protect from invalid preR13 table numbers
+	various int overflows. Fixes GH #176, case 8.
+
+	add more preR13 error handling.
+	Fixes the remaining GH #176 case 9
+
+	more illegal preR13 protections
+	and optional byte overflow counter to abort >200
+	errors. Helpful in fuzzing, but not really useful for
+	libs, the program must install a SIGABRT handler then.
+	Fixes part of the remaining GH #176 case 9 (id:000024)
+
+2019-12-24  Reini Urban  <rurban@cpan.org>
+
+	fix REPEAT overflow check for <r2004
+	earlier DWGs can also be broken to include wrong REPEAT counts.
+	Fixes Case 3 of GH #176
+
+	fix ref double-free on error
+	Let the ref loop in dwg_free() free those refs.
+	Fixes case 5 of GH #176.
+
+	fix illegal SPLINE scenarios
+	from fuzzed DWGs, See GH #176, case 1
+
+2019-12-20  Reini Urban  <rurban@cpan.org>
+
+	fix dwg_find_table_extname -Wnull-dereference
+
+	use format(ms_printf) only on _WIN32
+	silences a few warnings
+
+	fix theoretical strncpy truncations
+	gcc-9 warns too much to my taste.
+
 2019-11-07  Reini Urban  <rurban@cpan.org>
 
 	geom: fix transform_OCS
