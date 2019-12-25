@@ -103,7 +103,6 @@ ac_cv_func_realloc_0_nonnull=yes
 AC_CHECK_HEADERS([stdlib.h string.h stddef.h unistd.h malloc.h wchar.h ctype.h \
                   libgen.h getopt.h alloca.h valgrind/valgrind.h])
 AX_INCLUDE_STRCASECMP
-# AX_RESTRICT
 
 # Don't bother testing for libps headers if libps is not available.
 if test yes = "$libredwg_have_libps" ; then
@@ -223,6 +222,21 @@ case $host in
 esac
 dnl x86_64-mingw-w64-gcc-9.2 is seriously broken, and not just mingw-w64
 
+dnl --enable-debug sets DEBUG_CLASSES, will crash acad import
+AC_MSG_CHECKING([--enable-debug])
+AC_ARG_ENABLE([debug],AS_HELP_STRING([--enable-debug],[
+    Enable unstable DEBUG_CLASSES (default: no).]),
+  [if test x$ac_compiler_gnu = xyes; then
+    CFLAGS="`echo $CFLAGS|sed 's,-O2,,'` -fno-omit-frame-pointer"
+  fi
+  CFLAGS="$CFLAGS -DDEBUG_CLASSES"]
+  AC_MSG_RESULT([yes]),
+  AC_MSG_RESULT([no (default)]))
+AM_CONDITIONAL([ENABLE_DEBUG], [test x$enable_debug = xyes])
+
+AX_ADD_FORTIFY_SOURCE
+AX_RESTRICT
+
 dnl Feature: --disable-write
 AC_MSG_CHECKING([--disable-write])
 AC_ARG_ENABLE([write],AS_HELP_STRING([--disable-write],[
@@ -249,20 +263,6 @@ AC_CHECK_FUNCS([setenv],[],
       Only -v args are taken for verbosity not the LIBREDWG_TRACE env var.])],
     [AC_MSG_RESULT([setenv not needed. no --enable-trace.])]
     ))
-
-dnl --enable-debug sets DEBUG_CLASSES, will crash acad import
-AC_MSG_CHECKING([--enable-debug])
-AC_ARG_ENABLE([debug],AS_HELP_STRING([--enable-debug],[
-    Enable unstable DEBUG_CLASSES (default: no).]),
-  [if test x$ac_compiler_gnu = xyes; then
-    CFLAGS="`echo $CFLAGS|sed 's,-O2,,'` -fno-omit-frame-pointer"
-  fi
-  CFLAGS="$CFLAGS -DDEBUG_CLASSES"]
-  AC_MSG_RESULT([yes]),
-  AC_MSG_RESULT([no (default)]))
-AM_CONDITIONAL([ENABLE_DEBUG], [test x$enable_debug = xyes])
-
-AX_ADD_FORTIFY_SOURCE
 
 dnl --disable-dxf only useful for faster debug/test cycles
 AC_MSG_CHECKING([--disable-dxf])

@@ -1,5 +1,5 @@
 # ===========================================================================
-#  https://www.gnu.org/software/autoconf-archive/ax_restrict.html
+#       https://www.gnu.org/software/autoconf-archive/ax_restrict.html
 # ===========================================================================
 #
 # SYNOPSIS
@@ -9,10 +9,11 @@
 # DESCRIPTION
 #
 #   This macro checks if the C99 restrict keyword is broken with the current
-#   compiler and optimizations settings. If broken, it undefines restrict to do
-#   no harm. As of 2019 gcc since 5.0 and clang since 6.0 (June 2017) are known to be
-#   broken and not yet fixed. See https://github.com/rust-lang/rust/issues/54878
-#   with the links to the gcc and clang tickets.
+#   compiler and optimizations settings. If broken, it undefines restrict to
+#   do no harm. As of 2019 gcc since 5.0 and clang since 6.0 (June 2017) are
+#   known to be broken and not yet fixed. See
+#   https://github.com/rust-lang/rust/issues/54878 with the links to the gcc
+#   and clang tickets.
 #
 # LICENSE
 #
