@@ -244,7 +244,7 @@ main (int argc, char *argv[])
         }
       if (strEQ (filename_in, filename_out))
         {
-          if (filename_out != argv[i - 1])
+          if (need_free)
             free (filename_out);
           return usage ();
         }
