@@ -231,7 +231,11 @@ main (int argc, char *argv[])
     {
       printf ("Read 0 objects\n");
       if (error >= DWG_ERR_CRITICAL)
-        return error;
+        {
+          if (filename_out != argv[i + 1])
+            free (filename_out);
+          return error;
+        }
     }
 
   if (opts)
@@ -285,6 +289,8 @@ main (int argc, char *argv[])
   if (error >= DWG_ERR_CRITICAL)
     {
       printf ("WRITE ERROR 0x%x\n", error);
+      if (filename_out != argv[i + 1])
+        free (filename_out);
       return error;
     }
   dwg_free (&dwg); // this is slow, but on needed on low memory systems
