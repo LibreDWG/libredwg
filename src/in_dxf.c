@@ -6712,12 +6712,14 @@ dxf_thumbnail_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       switch (pair->code)
         {
         case 0: // ENDSEC
+          dxf_free_pair (pair);
           return 0;
         case 90:
           dwg->thumbnail.size = pair->value.l; // INT32 => long
           dwg->thumbnail.chain = calloc (dwg->thumbnail.size, 1);
           if (!dwg->thumbnail.chain)
             {
+              dxf_free_pair (pair);
               LOG_ERROR ("Out of memory");
               return DWG_ERR_OUTOFMEM;
             }
