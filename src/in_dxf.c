@@ -6252,7 +6252,11 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   table[0] = '\0'; // init
   while (1)        // read next 0 TABLE
     {
-      if (pair != NULL && pair->code == 0) // TABLE or ENDTAB
+      if (pair == NULL)
+        {
+          return 0;
+        }
+      if (pair->code == 0 && pair->value.s) // TABLE or ENDTAB
         {
           if (strEQc (pair->value.s, "TABLE"))
             table[0] = '\0'; // new table coming up
@@ -6268,8 +6272,8 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           else
             LOG_WARN ("Unknown 0 %s (%s)", pair->value.s, "tables");
         }
-      if (pair->code == 2 && strlen (pair->value.s) < 80
-          && is_table_name (pair->value.s)) // new table NAME
+      else if (pair->code == 2 && pair->value.s && strlen (pair->value.s) < 80
+               && is_table_name (pair->value.s)) // new table NAME
         {
           BITCODE_BL i = 0;
           BITCODE_BL ctrl_id;
