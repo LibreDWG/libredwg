@@ -4339,12 +4339,12 @@ postprocess_SEQEND (Dwg_Object *obj)
                                    &owned[num_owned - 1], 0);
       LOG_TRACE ("%s.%s] = " FORMAT_REF "[H 0]\n", owner->name, lastfield,
                  ARGS_REF (owned[num_owned - 1]));
-      free (owned);
     }
   else if (dwg->header.version >= R_2004)
     {
       dwg_dynapi_entity_set_value (ow, owner->name, owhdls, &owned, 0);
     }
+  free (owned);
 }
 
 // seperate model_space and model_space into its own fields, out of entries[]
