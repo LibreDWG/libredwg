@@ -296,15 +296,18 @@ dxf_read_pair (Bit_Chain *dat)
 
 #define DXF_CHECK_EOF                                                         \
   if (dat->byte >= dat->size                                                  \
-      || (pair != NULL && pair->code == 0 && strEQc (pair->value.s, "EOF")))  \
+      || (pair == NULL)                                                       \
+      || (pair->code == 0 && strEQc (pair->value.s, "EOF")))                  \
   return 1
 #define DXF_RETURN_EOF(what)                                                  \
   if (dat->byte >= dat->size                                                  \
-      || (pair != NULL && pair->code == 0 && strEQc (pair->value.s, "EOF")))  \
+      || (pair == NULL)                                                       \
+      || (pair->code == 0 && strEQc (pair->value.s, "EOF")))                  \
   return what
 #define DXF_BREAK_EOF                                                         \
   if (dat->byte >= dat->size                                                  \
-      || (pair != NULL && pair->code == 0 && strEQc (pair->value.s, "EOF")))  \
+      || (pair == NULL)                                                       \
+      || (pair->code == 0 && strEQc (pair->value.s, "EOF")))                  \
   break
 
 static Dxf_Pair *
