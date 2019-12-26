@@ -2702,20 +2702,24 @@ read_2004_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (error >= DWG_ERR_CRITICAL)
     {
       LOG_ERROR ("Failed to read uncompressed %s section", "Preview");
+      if (sec_dat.chain)
+        free (sec_dat.chain);
       return error;
     }
+
   if (dwg->header.thumbnail_address != (BITCODE_RL)dat->byte)
     LOG_WARN ("thumbnail_address mismatch: " FORMAT_RL " != %lu",
               dwg->header.thumbnail_address, dat->byte);
   LOG_TRACE ("Preview\n-------------------\n");
-  if (sec_dat.size < 16)
+  if (!sec_dat.chain || sec_dat.size < 16)
     {
       LOG_WARN ("Empty thumbnail");
-      free (sec_dat.chain);
+      if (sec_dat.chain)
+        free (sec_dat.chain);
       return error;
     }
   sentinel = dwg_sentinel (DWG_SENTINEL_THUMBNAIL_BEGIN);
-  if (sec_dat.size < 16 || memcmp (sentinel, sec_dat.chain, 16))
+  if (memcmp (sentinel, sec_dat.chain, 16))
     {
       LOG_WARN ("thumbnail sentinel mismatch");
       free (sec_dat.chain);

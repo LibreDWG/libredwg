@@ -1712,6 +1712,13 @@ read_2007_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     LOG_WARN ("thumbnail_address mismatch: " FORMAT_RL " != %lu",
               dwg->header.thumbnail_address, dat->byte);
   LOG_TRACE ("\nPreview\n-------------------\n")
+  if (!sec_dat.chain || sec_dat.size < 16)
+    {
+      LOG_WARN ("Empty thumbnail");
+      if (sec_dat.chain)
+        free (sec_dat.chain);
+      return error;
+    }
 
   sentinel = dwg_sentinel (DWG_SENTINEL_THUMBNAIL_BEGIN);
   if (memcmp (sentinel, sec_dat.chain, 16))
