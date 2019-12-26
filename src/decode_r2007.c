@@ -1591,7 +1591,7 @@ read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl,
         }
 
       last_offset = 0;
-      while (hdl_dat.byte - startpos < section_size)
+      while ((long)(hdl_dat.byte - startpos) < (long)section_size)
         {
           int added;
           BITCODE_UMC handleoff;

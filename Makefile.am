@@ -127,7 +127,7 @@ check-dxf: all
 	  done; \
 	done
 
-# clang-analyzer.llvm.org, debian: clang-tools-{6.0,7}
+# clang-analyzer.llvm.org, debian: clang-tools-{6.0,7}, redhat: clang-analyzer
 SCAN_BUILD = scan-build
 scan-build: clean
 	$(SCAN_BUILD) -V -o .analysis $(MAKE) -j4 &

@@ -2572,7 +2572,7 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
 
       last_offset = 0;
-      while ((int)(hdl_dat.byte - startpos) < section_size)
+      while ((long)(hdl_dat.byte - startpos) < (long)section_size)
         {
           int added;
           BITCODE_UMC handleoff;
