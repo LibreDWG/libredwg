@@ -23,6 +23,9 @@
 #include "decode.h"
 #include "dynapi.h"
 
+EXPORT int dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
+EXPORT int dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
+
 // global array of [obj -> [fields], ...]
 typedef struct _dxf_field
 {
@@ -80,7 +83,6 @@ array_hdls *array_push (array_hdls *restrict hdls, const char *restrict field,
                         const char *restrict name, const int code);
 array_hdls *new_array_hdls (int size);
 void free_array_hdls (array_hdls *hdls);
-int matches_type (Dxf_Pair *restrict pair, const Dwg_DYNAPI_field *restrict f);
 
 void dxf_add_field (Dwg_Object *restrict obj, const char *restrict name,
                     const char *restrict type, int dxf);
@@ -88,45 +90,12 @@ Dxf_Field *dxf_search_field (Dwg_Object *restrict obj,
                              const char *restrict name,
                              const char *restrict type, int dxf);
 
-void add_eed (Dwg_Object *restrict obj, const char *restrict name,
-              Dxf_Pair *restrict pair);
-Dxf_Pair *add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
-                     Dxf_Pair *restrict pair);
-void add_dictionary_itemhandles (Dwg_Object *restrict obj,
-                                 Dxf_Pair *restrict pair, char *restrict text);
-int add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
-                Dxf_Pair *restrict pair, int *restrict jp,
-                BITCODE_RS *restrict flagp);
-int add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
-               Dxf_Pair *restrict pair, int *restrict jp, int *restrict kp,
-               int *restrict lp);
-
-void dxf_fixup_header (Dwg_Data *dwg);
-void resolve_postponed_header_refs (Dwg_Data *restrict dwg);
-void resolve_postponed_object_refs (Dwg_Data *restrict dwg);
-void resolve_postponed_eed_refs (Dwg_Data *restrict dwg);
-void resolve_header_dicts (Dwg_Data *restrict dwg);
-void postprocess_SEQEND (Dwg_Object *obj);
-void move_out_BLOCK_CONTROL (Dwg_Object *restrict obj,
-                             Dwg_Object_BLOCK_CONTROL *restrict _ctrl,
-                             const char *f);
-void move_out_LTYPE_CONTROL (Dwg_Object *restrict obj,
-                             Dwg_Object_LTYPE_CONTROL *restrict _ctrl,
-                             const char *f);
-void postprocess_TEXTlike (Dwg_Object *obj);
-void postprocess_BLOCK_HEADER (Dwg_Object *restrict obj,
-                               Dwg_Object_Ref *restrict ownerhandle);
-
 BITCODE_H find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair);
 int is_table_name (const char *name);
 int is_textlike (Dwg_Object *obj);
 void entity_alias (char *name);
 void object_alias (char *name);
-Dwg_Object *find_prev_entity (Dwg_Object *obj);
 BITCODE_RC dxf_find_lweight (const int lw);
-
-EXPORT int dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
-EXPORT int dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 
 // for sscanf with BD we need to use %lf not %g
 #undef FORMAT_BD

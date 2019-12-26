@@ -49,8 +49,7 @@ libredwg_la_SOURCES += \
 #       in_json.c
 if !DISABLE_DXF
 libredwg_la_SOURCES += \
-	in_dxf.c \
-	in_dxfb.c
+	in_dxf.c
 endif
 endif
 

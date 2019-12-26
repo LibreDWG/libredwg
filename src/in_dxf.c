@@ -72,6 +72,9 @@ static Dxf_Objs *dxf_objs;
 static inline void
 dxf_skip_ws (Bit_Chain *dat)
 {
+  const int is_binary = dat->opts & 0x20;
+  if (is_binary)
+    return;
   // clang-format off
   for (; (!dat->chain[dat->byte] ||
           dat->chain[dat->byte] == ' ' ||
@@ -82,59 +85,138 @@ dxf_skip_ws (Bit_Chain *dat)
   // clang-format on
 }
 
-static int
-dxf_read_code (Bit_Chain *dat)
+static BITCODE_RS
+dxf_read_rs (Bit_Chain *dat)
 {
-  char *endptr;
-  long num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
-  dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
-  if (dat->chain[dat->byte] == '\r')
-    dat->byte++;
-  if (dat->chain[dat->byte] == '\n')
-    dat->byte++;
-  if (num > INT_MAX)
-    LOG_ERROR ("%s: int overflow %ld (at %lu)", __FUNCTION__, num, dat->byte);
-  return (int)num;
+  const int is_binary = dat->opts & 0x20;
+  if (is_binary)
+    {
+      return bit_read_RS (dat);
+    }
+  else
+    {
+      char *endptr;
+      long num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
+      dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
+      if (dat->chain[dat->byte] == '\r')
+        dat->byte++;
+      if (dat->chain[dat->byte] == '\n')
+        dat->byte++;
+      if (num > 65534)
+        LOG_ERROR ("%s: RS overflow %ld (at %lu)", __FUNCTION__, num, dat->byte);
+      return (BITCODE_RS)num;
+    }
 }
 
-static long
-dxf_read_long (Bit_Chain *dat)
+static BITCODE_RL
+dxf_read_rl (Bit_Chain *dat)
 {
-  char *endptr;
-  long num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
-  dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
-  if (dat->chain[dat->byte] == '\r')
-    dat->byte++;
-  if (dat->chain[dat->byte] == '\n')
-    dat->byte++;
-  if ((unsigned long)num > LONG_MAX) // or wrap to negative
-    LOG_ERROR ("%s: long overflow %ld (at %lu)", __FUNCTION__, num, dat->byte);
-  return num;
+  const int is_binary = dat->opts & 0x20;
+  if (is_binary)
+    {
+      return bit_read_RL (dat);
+    }
+  else
+    {
+      char *endptr;
+      long num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
+      dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
+      if (dat->chain[dat->byte] == '\r')
+        dat->byte++;
+      if (dat->chain[dat->byte] == '\n')
+        dat->byte++;
+      if (num > INT_MAX)
+        LOG_ERROR ("%s: RL overflow %ld (at %lu)", __FUNCTION__, num, dat->byte);
+      return (BITCODE_RL)num;
+    }
+}
+
+static BITCODE_RLL
+dxf_read_rll (Bit_Chain *dat)
+{
+  const int is_binary = dat->opts & 0x20;
+  if (is_binary)
+    {
+      return bit_read_RLL (dat);
+    }
+  else
+    {
+      char *endptr;
+      BITCODE_RLL num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
+      dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
+      if (dat->chain[dat->byte] == '\r')
+        dat->byte++;
+      if (dat->chain[dat->byte] == '\n')
+        dat->byte++;
+      if ((unsigned long)num > LONG_MAX) // or wrap to negative
+        LOG_ERROR ("%s: long overflow %ld (at %lu)", __FUNCTION__, num, dat->byte);
+      return num;
+    }
+}
+
+static BITCODE_RD
+dxf_read_rd (Bit_Chain *dat)
+{
+  const int is_binary = dat->opts & 0x20;
+  if (is_binary)
+    {
+      return bit_read_RLL (dat);
+    }
+  else
+    {
+      char *str, *endptr;
+      BITCODE_RD num;
+      dxf_skip_ws (dat);
+      str = (char *)&dat->chain[dat->byte];
+      num = strtod (str, &endptr);
+      if (endptr)
+        dat->byte += endptr - str;
+      return num;
+    }
 }
 
 static void
 dxf_read_string (Bit_Chain *dat, char **string)
 {
-  int i;
-  dxf_skip_ws (dat);
-  for (i = 0; dat->chain[dat->byte] != '\n'; dat->byte++)
+  const int is_binary = dat->opts & 0x20;
+  if (is_binary)
     {
-      buf[i++] = dat->chain[dat->byte];
+      int len = dxf_read_rs (dat);
+      if (!string)
+        {
+          memcpy (buf, &dat->chain[dat->byte], len);
+          buf[len] = '\0';
+          return; // ignore, just advanced dat
+        }
+      if (!*string)
+        *string = malloc (len + 1);
+      else
+        *string = realloc (*string, len + 1);
+      memcpy (*string, &dat->chain[dat->byte], len);
     }
-  if (i && buf[i - 1] == '\r')
-    buf[i - 1] = '\0';
   else
-    buf[i] = '\0';
-  dat->byte++;
-  // dxf_skip_ws (dat);
-  if (!string)
-    return; // ignore, just advanced dat
+    {
+      int i;
+      dxf_skip_ws (dat);
+      for (i = 0; dat->chain[dat->byte] != '\n'; dat->byte++)
+        {
+          buf[i++] = dat->chain[dat->byte];
+        }
+      if (i && buf[i - 1] == '\r')
+        buf[i - 1] = '\0';
+      else
+        buf[i] = '\0';
+      dat->byte++;
 
-  if (!*string)
-    *string = malloc (strlen (buf) + 1);
-  else
-    *string = realloc (*string, strlen (buf) + 1);
-  strcpy (*string, buf);
+      // dxf_skip_ws (dat);
+      if (!string)
+        return; // ignore, just advanced dat
+      if (!*string)
+        *string = malloc (strlen (buf) + 1);
+      else
+        *string = realloc (*string, strlen (buf) + 1);
+      strcpy (*string, buf);
+    }
 }
 
 static void
@@ -154,7 +236,8 @@ static Dxf_Pair *ATTRIBUTE_MALLOC
 dxf_read_pair (Bit_Chain *dat)
 {
   Dxf_Pair *pair = calloc (1, sizeof (Dxf_Pair));
-  pair->code = (short)dxf_read_code (dat);
+  const int is_binary = dat->opts & 0x20;
+  pair->code = (short)dxf_read_rs (dat);
   pair->type = get_base_value_type (pair->code);
   switch (pair->type)
     {
@@ -167,42 +250,39 @@ dxf_read_pair (Bit_Chain *dat)
     case VT_BOOL:
     case VT_INT8:
     case VT_INT16:
-      pair->value.i = dxf_read_code (dat);
+      pair->value.i = dxf_read_rs (dat);
       LOG_TRACE ("  dxf (%d, %d)\n", (int)pair->code, pair->value.i);
       break;
     case VT_INT32:
-      pair->value.l = dxf_read_code (dat);
+      pair->value.l = dxf_read_rl (dat);
       LOG_TRACE ("  dxf (%d, %ld)\n", (int)pair->code, pair->value.l);
       break;
     case VT_INT64:
-      pair->value.bll = dxf_read_long (dat);
+      pair->value.bll = dxf_read_rll (dat);
       LOG_TRACE ("  dxf (%d, " FORMAT_BLL ")\n", (int)pair->code,
                  pair->value.bll);
       break;
     case VT_REAL:
     case VT_POINT3D:
       dxf_skip_ws (dat);
-      {
-        const char *str = (const char *)&dat->chain[dat->byte];
-        char *endp;
-        pair->value.d = strtod (str, &endp);
-        if (endp)
-          dat->byte += endp - str;
-        // sscanf ((char *)&dat->chain[dat->byte], "%lf", &pair->value.d);
-      }
+      pair->value.d = dxf_read_rd (dat);
       LOG_TRACE ("  dxf (%d, %f)\n", pair->code, pair->value.d);
       break;
     case VT_BINARY:
-      // read into buf only?
       dxf_read_string (dat, &pair->value.s);
-      // cannot convert %02X to string here, because we don't store the length
-      // in the pair, and binary contains \0
       LOG_TRACE ("  dxf (%d, %s)\n", (int)pair->code, pair->value.s);
       break;
     case VT_HANDLE:
     case VT_OBJECTID:
-      dxf_read_string (dat, NULL);
-      sscanf (buf, "%X", &pair->value.u);
+      if (is_binary)
+        {
+          pair->value.u = dxf_read_rl (dat);
+        }
+      else
+        {
+          dxf_read_string (dat, NULL);
+          sscanf (buf, "%X", &pair->value.u);
+        }
       LOG_TRACE ("  dxf (%d, %X)\n", (int)pair->code, pair->value.u);
       break;
     case VT_INVALID:
@@ -321,7 +401,7 @@ dxf_expect_code (Bit_Chain *restrict dat, Dxf_Pair *restrict pair, int code)
   return pair;
 }
 
-int
+static int
 matches_type (Dxf_Pair *restrict pair, const Dwg_DYNAPI_field *restrict f)
 {
   switch (pair->type)
@@ -658,7 +738,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
-void
+static void
 dxf_fixup_header (Dwg_Data *dwg)
 {
   Dwg_Header_Variables *vars = &dwg->header_vars;
@@ -902,7 +982,7 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
-void
+static void
 add_eed (Dwg_Object *restrict obj, const char *restrict name,
          Dxf_Pair *restrict pair)
 {
@@ -3288,7 +3368,7 @@ add_ASSOCDEPENDENCY (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return NULL;
 }
 
-Dwg_Object *
+static Dwg_Object *
 find_prev_entity (Dwg_Object *obj)
 {
   Dwg_Data *dwg = obj->parent;
@@ -3589,7 +3669,7 @@ find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair)
 }
 
 // add pair to XRECORD
-Dxf_Pair *
+static Dxf_Pair *
 add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
            Dxf_Pair *restrict pair)
 {
@@ -3743,7 +3823,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 }
 
 // 350 or 360
-void
+static void
 add_dictionary_itemhandles (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
                             char *restrict text)
 {
@@ -3878,7 +3958,7 @@ add_block_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return pair;
 }
 
-int
+static int
 add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
             Dxf_Pair *restrict pair, int *restrict jp,
             BITCODE_RS *restrict flagp)
@@ -4028,7 +4108,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
   return 0;
 }
 
-int
+static int
 add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
            Dxf_Pair *restrict pair, int *restrict jp, int *restrict kp,
            int *restrict lp)
@@ -4168,7 +4248,7 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 }
 
 // see GH #138. add vertices / attribs
-void
+static void
 postprocess_SEQEND (Dwg_Object *obj)
 {
   Dwg_Data *dwg = obj->parent;
@@ -4266,7 +4346,7 @@ postprocess_SEQEND (Dwg_Object *obj)
 }
 
 // seperate model_space and model_space into its own fields, out of entries[]
-void
+static void
 move_out_BLOCK_CONTROL (Dwg_Object *restrict obj,
                         Dwg_Object_BLOCK_CONTROL *restrict _ctrl,
                         const char *f)
@@ -4291,7 +4371,7 @@ move_out_BLOCK_CONTROL (Dwg_Object *restrict obj,
     }
 }
 
-void
+static void
 move_out_LTYPE_CONTROL (Dwg_Object *restrict obj,
                         Dwg_Object_LTYPE_CONTROL *restrict _ctrl,
                         const char *f)
@@ -4316,7 +4396,7 @@ move_out_LTYPE_CONTROL (Dwg_Object *restrict obj,
     }
 }
 
-void
+static void
 postprocess_TEXTlike (Dwg_Object *obj)
 {
   BITCODE_RC dataflags;
@@ -6432,7 +6512,7 @@ entity_alias (char *name)
     memmove (name, &name[4], len - 3);
 }
 
-void
+static void
 postprocess_BLOCK_HEADER (Dwg_Object *restrict obj,
                           Dwg_Object_Ref *restrict ownerhandle)
 {
@@ -6668,7 +6748,7 @@ dxf_thumbnail_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
-void
+static void
 resolve_postponed_header_refs (Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables *vars = &dwg->header_vars;
@@ -6721,7 +6801,7 @@ resolve_postponed_header_refs (Dwg_Data *restrict dwg)
 }
 
 // i.e. layer or block name
-void
+static void
 resolve_postponed_object_refs (Dwg_Data *restrict dwg)
 {
   uint32_t i;
@@ -6822,7 +6902,7 @@ resolve_postponed_object_refs (Dwg_Data *restrict dwg)
                      ARGS_REF (vars->DICTIONARY_##name))                      \
     }
 
-void
+static void
 resolve_header_dicts (Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables *vars = &dwg->header_vars;
@@ -6850,7 +6930,7 @@ resolve_header_dicts (Dwg_Data *restrict dwg)
 }
 #undef CHECK_DICTIONARY_HDR
 
-void
+static void
 resolve_postponed_eed_refs (Dwg_Data *restrict dwg)
 {
   LOG_TRACE ("resolve %d postponed eed APPID refs\n", eed_hdls->nitems);
@@ -7036,6 +7116,13 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dwg->opts |= 0x2f; // from DXF
   LOG_TRACE ("import from DXF\n");
   return dwg->num_objects ? 1 : 0;
+}
+
+int
+dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  dwg->opts |= 0x2f; // binary
+  return dwg_read_dxf (dat, dwg);
 }
 
 #undef IS_INDXF
