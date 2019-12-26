@@ -110,6 +110,7 @@ main (int argc, char *argv[])
   const char *version = NULL;
   Dwg_Version_Type dwg_version = R_INVALID;
   int c;
+  int free_outfile = 0;
 #ifdef HAVE_GETOPT_LONG
   int option_index = 0;
   static struct option long_options[]
@@ -323,7 +324,10 @@ main (int argc, char *argv[])
       dat.version = dwg.header.version = R_2000;
     }
   if (!outfile)
-    outfile = suffix (infile, "dwg");
+    {
+      outfile = suffix (infile, "dwg");
+      free_outfile = 1;
+    }
 
   if (opts > 1)
     fprintf (stderr, "Writing DWG file %s\n", outfile);
@@ -395,5 +399,7 @@ main (int argc, char *argv[])
         fprintf (stderr, "SUCCESS\n");
     }
 
+  if (free_outfile)
+    free (outfile);
   return error >= DWG_ERR_CRITICAL ? 1 : 0;
 }
