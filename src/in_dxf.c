@@ -5465,6 +5465,14 @@ new_object (char *restrict name, char *restrict dxfname,
                 return pair;
               goto next_pair;
             }
+          else if (pair->code == 350 && strEQc (subclass, "AcDb3dSolid"))
+            {
+              Dwg_Entity__3DSOLID *o = obj->tio.entity->tio._3DSOLID;
+              BITCODE_H hdl = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+              LOG_TRACE ("%s.history_id = " FORMAT_REF " [H 350]\n",
+                         obj->name, ARGS_REF (hdl));
+              o->history_id = hdl;
+            }
           else if (obj->fixedtype == DWG_TYPE_MLINE)
             {
               int status = add_MLINE (obj, dat, pair, &j, &k, &l);
