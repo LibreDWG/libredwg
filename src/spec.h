@@ -375,13 +375,13 @@
                    (long)_obj->times);                                        \
         return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
       }                                                                       \
-    if (_obj->name)                                                           \
+    if (_obj->times && _obj->name)                                            \
       for (rcount##idx = 0; rcount##idx < (BITCODE_BL)_obj->times;            \
            rcount##idx++)
 // unchecked with var. times
 #  ifndef _REPEAT_C
 #    define _REPEAT_C(times, name, type, idx)                                 \
-      if (_obj->name)                                                         \
+      if (_obj->times && _obj->name)                                          \
         for (rcount##idx = 0; rcount##idx < (BITCODE_BL)_obj->times;          \
              rcount##idx++)
 #  endif

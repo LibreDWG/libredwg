@@ -2347,6 +2347,7 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   Dwg_Entity_MULTILEADER *o = obj->tio.entity->tio.MULTILEADER;
   if (!lnode)
     return NULL;
+  lnode->num_lines = 0;
   if (pair->code == 304 && strEQc (pair->value.s, "LEADER_LINE{"))
     {
       int i = -1, j = -1, k = -1;
@@ -2364,10 +2365,12 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             case 10:
               i++;
               lnode->num_lines = i + 1;
+              LOG_TRACE ("%s.leaders[].num_lines = %d\n", obj->name, i + 1);
               if (i > 0)
                 lnode->lines = realloc (
                     lnode->lines, lnode->num_lines * sizeof (Dwg_LEADER_Line));
               lline = &lnode->lines[i];
+              lline->num_breaks = 0;
               j++;
               lline->num_points = j + 1;
               lline->points
@@ -2502,6 +2505,7 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     {
       int i = -1, j = -1;
       Dwg_MLEADER_AnnotContext *ctx = &o->ctx;
+      ctx->num_leaders = 0;
       while (pair != NULL && pair->code != 303 && pair->code != 0)
         {
           Dwg_LEADER_Node *lnode = i >= 0 ? &ctx->leaders[i] : NULL;
@@ -2514,12 +2518,14 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               LOG_ERROR ("Missing MULTILEADER.LEADER{ 290 start");
               return pair;
             }
-
+          if (lnode)
+            lnode->num_breaks = 0;
           switch (pair->code)
             {
             case 290:
               i++;
               ctx->num_leaders = i + 1;
+              LOG_TRACE ("%s.ctx.num_leaders = %d\n", obj->name, i + 1);
               ctx->leaders
                   = realloc (ctx->leaders, (i + 1) * sizeof (Dwg_LEADER_Node));
               ctx->leaders[i].has_lastleaderlinepoint = pair->value.i;
@@ -2577,6 +2583,7 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 {
                   j++;
                   lnode->num_breaks = j + 1;
+                  LOG_TRACE ("%s.leaders[%d].num_breaks = %d\n", obj->name, i, j + 1);
                   lnode->breaks = realloc (
                       lnode->breaks, (j + 1) * sizeof (Dwg_LEADER_Break));
                   lnode->breaks[j].start.x = pair->value.d;
