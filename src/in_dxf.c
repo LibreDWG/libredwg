@@ -149,7 +149,7 @@ dxf_read_rll (Bit_Chain *dat)
       if (dat->chain[dat->byte] == '\n')
         dat->byte++;
       if ((unsigned long)num > LONG_MAX) // or wrap to negative
-        LOG_ERROR ("%s: long overflow %ld (at %lu)", __FUNCTION__, num, dat->byte);
+        LOG_ERROR ("%s: long overflow %ld (at %lu)", __FUNCTION__, (long)num, dat->byte);
       return num;
     }
 }
