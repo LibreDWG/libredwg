@@ -3411,7 +3411,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   // VPORT_CONTROL.entries[num_entries] handles
   Dwg_Object *obj;
   Dxf_Pair *pair = NULL;
-  Dwg_Object_APPID_CONTROL *_obj = NULL;
+  Dwg_Object_LTYPE_CONTROL *_obj = NULL; // the largest
   int j = 0;
   int is_utf = dwg->header.version >= R_2007 ? 1 : 0;
   char *fieldname;
@@ -4707,6 +4707,11 @@ new_object (char *restrict name, char *restrict dxfname,
   while (pair != NULL && pair->code != 0)
     {
     start_loop:
+      if (pair == NULL)
+        {
+          pair = dxf_read_pair (dat);
+          DXF_RETURN_EOF (pair);
+        }
 #if 0
       // don't set defaults. TODO but needed to reset counters j, k, l
       if ((pair->type == VT_INT8 || pair->type == VT_INT16 || pair->type == VT_BOOL) &&
