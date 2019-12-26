@@ -1474,13 +1474,13 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           if (!j)
             {
-              _o->vertexids = calloc (num_points, sizeof (BITCODE_2RD));
+              _o->vertexids = calloc (num_points, sizeof (BITCODE_BL));
               _o->num_vertexids = num_points;
             }
           assert (j < (int)_o->num_vertexids);
-          _o->vertexids[j] = pair->value.d;
-          LOG_TRACE ("LWPOLYLINE.vertexids[%d] = %f [BD 91]\n", j,
-                     pair->value.d);
+          _o->vertexids[j] = pair->value.i;
+          LOG_TRACE ("LWPOLYLINE.vertexids[%d] = %d [BL 91]\n", j,
+                     pair->value.i);
         }
       else if (pair->code == 40) // not const_width
         {
