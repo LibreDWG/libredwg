@@ -877,7 +877,10 @@ EXPORT dwg_point_2d *dwg_ent_get_POINT2D (const void *restrict _obj,
     point = calloc (1, sizeof (dwg_point_2d));
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &point,
                                   &field))
-      return NULL;
+      {
+        free (point);
+        return false;
+      }
     if (strEQc (field.type, "2RD") || strEQc (field.type, "2BD")
         || strEQc (field.type, "2DPOINT"))
       {
@@ -885,6 +888,7 @@ EXPORT dwg_point_2d *dwg_ent_get_POINT2D (const void *restrict _obj,
       }
     else
       {
+        free (point);
         LOG_ERROR (
             "%s.%s has type %s, which is not a POINT2D (2RD,2BD,2DPOINT)",
             obj->name, fieldname, field.type)
@@ -909,10 +913,11 @@ dwg_ent_set_POINT2D (void *restrict _obj, const char *restrict fieldname,
     if (!obj || !obj->name)
       return NULL;
 
-    point = calloc (1, sizeof (dummy));
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &dummy,
                                   &field))
-      return false;
+      {
+        return false;
+      }
     if (strEQc (field.type, "2RD") || strEQc (field.type, "2BD")
         || strEQc (field.type, "2DPOINT"))
       {
@@ -947,7 +952,10 @@ dwg_ent_get_POINT3D (const void *restrict _obj, const char *restrict fieldname)
     point = calloc (1, sizeof (dwg_point_3d));
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &point,
                                   &field))
-      return NULL;
+      {
+        free (point);
+        return NULL;
+      }
     if (strEQc (field.type, "3RD") || strEQc (field.type, "3BD")
         || strEQc (field.type, "BE") || strEQc (field.type, "3DPOINT"))
       {
@@ -955,6 +963,7 @@ dwg_ent_get_POINT3D (const void *restrict _obj, const char *restrict fieldname)
       }
     else
       {
+        free (point);
         LOG_ERROR (
             "%s.%s has type %s, which is not a POINT3D (3RD,3BD,BE,3DPOINT)",
             obj->name, fieldname, field.type)
