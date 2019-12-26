@@ -160,7 +160,7 @@ dxf_read_rd (Bit_Chain *dat)
   const int is_binary = dat->opts & DWG_OPTS_DXFB;
   if (is_binary)
     {
-      return bit_read_RLL (dat);
+      return bit_read_RD (dat);
     }
   else
     {
