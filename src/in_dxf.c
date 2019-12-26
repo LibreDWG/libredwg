@@ -306,16 +306,16 @@ dxf_read_pair (Bit_Chain *dat)
       || (pair != NULL && pair->code == 0 && strEQc (pair->value.s, "EOF")))  \
   break
 
-static int
+static Dxf_Pair *
 dxf_skip_comment (Bit_Chain *dat, Dxf_Pair *pair)
 {
   while (pair != NULL && pair->code == 999)
     {
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
-      DXF_CHECK_EOF;
+      DXF_RETURN_EOF (pair);
     }
-  return 0;
+  return pair;
 }
 
 /*--------------------------------------------------------------------------------
@@ -386,13 +386,13 @@ free_array_hdls (array_hdls *hdls)
 static Dxf_Pair *
 dxf_expect_code (Bit_Chain *restrict dat, Dxf_Pair *restrict pair, int code)
 {
-  while (pair->code != code)
+  while (pair != NULL && pair->code != code)
     {
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
-      dxf_skip_comment (dat, pair);
+      pair = dxf_skip_comment (dat, pair);
       DXF_RETURN_EOF (pair);
-      if (pair->code != code)
+      if (pair && pair->code != code)
         {
           LOG_ERROR ("Expecting DXF code %d, got %d (at %lu)", code,
                      pair->code, dat->byte);
