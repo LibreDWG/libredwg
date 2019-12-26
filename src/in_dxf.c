@@ -2341,6 +2341,8 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                        Dxf_Pair *restrict pair, Dwg_LEADER_Node *lnode)
 {
   Dwg_Entity_MULTILEADER *o = obj->tio.entity->tio.MULTILEADER;
+  if (!lnode)
+    return NULL;
   if (pair->code == 304 && strEQc (pair->value.s, "LEADER_LINE{"))
     {
       int i = -1, j = -1, k = -1;
