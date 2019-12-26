@@ -288,6 +288,7 @@ dxf_read_pair (Bit_Chain *dat)
     case VT_INVALID:
     default:
       LOG_ERROR ("Invalid DXF group code: %d", pair->code);
+      dxf_free_pair (pair);
       return NULL;
     }
   return pair;
