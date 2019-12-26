@@ -392,7 +392,7 @@ matches_type (Dxf_Pair *restrict pair, const Dwg_DYNAPI_field *restrict f)
 }
 
 /* convert to flag */
-static BITCODE_RC
+BITCODE_RC
 dxf_find_lweight (const int lw)
 {
   // See acdb.h: 100th of a mm, enum of
@@ -658,7 +658,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
-static void
+void
 dxf_fixup_header (Dwg_Data *dwg)
 {
   Dwg_Header_Variables *vars = &dwg->header_vars;
@@ -3878,7 +3878,7 @@ add_block_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return pair;
 }
 
-static int
+int
 add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
             Dxf_Pair *restrict pair, int *restrict jp,
             BITCODE_RS *restrict flagp)
@@ -4028,7 +4028,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
   return 0;
 }
 
-static int
+int
 add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
            Dxf_Pair *restrict pair, int *restrict jp, int *restrict kp,
            int *restrict lp)
@@ -4168,7 +4168,7 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 }
 
 // see GH #138. add vertices / attribs
-static void
+void
 postprocess_SEQEND (Dwg_Object *obj)
 {
   Dwg_Data *dwg = obj->parent;
@@ -4266,7 +4266,7 @@ postprocess_SEQEND (Dwg_Object *obj)
 }
 
 // seperate model_space and model_space into its own fields, out of entries[]
-static void
+void
 move_out_BLOCK_CONTROL (Dwg_Object *restrict obj,
                         Dwg_Object_BLOCK_CONTROL *restrict _ctrl,
                         const char *f)
@@ -4291,7 +4291,7 @@ move_out_BLOCK_CONTROL (Dwg_Object *restrict obj,
     }
 }
 
-static void
+void
 move_out_LTYPE_CONTROL (Dwg_Object *restrict obj,
                         Dwg_Object_LTYPE_CONTROL *restrict _ctrl,
                         const char *f)
@@ -4316,7 +4316,7 @@ move_out_LTYPE_CONTROL (Dwg_Object *restrict obj,
     }
 }
 
-static void
+void
 postprocess_TEXTlike (Dwg_Object *obj)
 {
   BITCODE_RC dataflags;
@@ -4368,19 +4368,7 @@ postprocess_TEXTlike (Dwg_Object *obj)
   LOG_TRACE ("%s.dataflags = 0x%x\n", obj->name, dataflags);
 }
 
-#define UPGRADE_ENTITY(FROM, TO)                                              \
-  obj->type = obj->fixedtype = DWG_TYPE_##TO;                                 \
-  obj->name = obj->dxfname = (char *)#TO;                                     \
-  strcpy (name, obj->name);                                                   \
-  LOG_TRACE ("change type to %s\n", name);                                    \
-  if (sizeof (Dwg_Entity_##TO) > sizeof (Dwg_Entity_##FROM))                  \
-    {                                                                         \
-      LOG_TRACE ("realloc to %s\n", name);                                    \
-      _obj = realloc (_obj, sizeof (Dwg_Entity_##TO));                        \
-      obj->tio.entity->tio.TO = (Dwg_Entity_##TO *)_obj;                      \
-    }
-
-static int
+int
 is_textlike (Dwg_Object *obj)
 {
   // has dataflags and common text fields
@@ -6184,7 +6172,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   table[0] = '\0'; // init
   while (1)        // read next 0 TABLE
     {
-      if (pair->code == 0) // TABLE or ENDTAB
+      if (pair != NULL && pair->code == 0) // TABLE or ENDTAB
         {
           if (strEQc (pair->value.s, "TABLE"))
             table[0] = '\0'; // new table coming up
@@ -6309,11 +6297,11 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   name[0] = '\0'; // init
   while (1)       // read next 0 TABLE
     {
-      if (pair->code == 0)
+      if (pair != NULL && pair->code == 0)
         {
           BITCODE_BL i = 0;
           BITCODE_BB entmode = 0;
-          while (pair->code == 0 && strNE (pair->value.s, "ENDSEC"))
+          while (pair != NULL && pair->code == 0 && strNE (pair->value.s, "ENDSEC"))
             {
               Dwg_Object *obj, *blkhdr = NULL;
               BITCODE_BL idx = dwg->num_objects;
@@ -6444,7 +6432,7 @@ entity_alias (char *name)
     memmove (name, &name[4], len - 3);
 }
 
-static void
+void
 postprocess_BLOCK_HEADER (Dwg_Object *restrict obj,
                           Dwg_Object_Ref *restrict ownerhandle)
 {
@@ -6941,7 +6929,13 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           pair = dxf_read_pair (dat);
           pair = dxf_expect_code (dat, pair, 2);
           DXF_BREAK_EOF;
-          if (strEQc (pair->value.s, "HEADER"))
+          if (!pair->value.s)
+            {
+              LOG_ERROR ("Expected SECTION string code 2, got code %d", pair->code);
+              dxf_free_pair (pair);
+              break;
+            }
+          else if (strEQc (pair->value.s, "HEADER"))
             {
               dxf_free_pair (pair);
               dxf_header_read (dat, dwg);
@@ -7030,6 +7024,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             }
         }
     }
+
   resolve_postponed_header_refs (dwg);
   resolve_postponed_object_refs (dwg);              
   LOG_HANDLE ("Resolving pointers from ObjectRef vector:\n");
