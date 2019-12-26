@@ -2494,11 +2494,11 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                          Dxf_Pair *restrict pair)
 {
   Dwg_Entity_MULTILEADER *o = obj->tio.entity->tio.MULTILEADER;
-  if (pair->code == 302 && strEQc (pair->value.s, "LEADER{"))
+  if (pair != NULL && pair->code == 302 && strEQc (pair->value.s, "LEADER{"))
     {
       int i = -1, j = -1;
       Dwg_MLEADER_AnnotContext *ctx = &o->ctx;
-      while (pair->code != 303 && pair->code != 0)
+      while (pair != NULL && pair->code != 303 && pair->code != 0)
         {
           Dwg_LEADER_Node *lnode = i >= 0 ? &ctx->leaders[i] : NULL;
           dxf_free_pair (pair);
