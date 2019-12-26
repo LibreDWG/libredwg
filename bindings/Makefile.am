@@ -29,9 +29,9 @@ endif
 
 if HAVE_SWIG_PERL
 
-dist_perl_PERL = perl/swig_perl.c perl/LibreDWG.pm perl/LibreDWG.xs \
+dist_perl_PERL = perl/LibreDWG.c perl/LibreDWG.pm perl/LibreDWG.xs \
                  perl/Makefile.PL perl/MANIFEST
-EXTRA_DIST     = perl/swig_perl.c perl/LibreDWG.pm perl/LibreDWG.xs \
+EXTRA_DIST     = perl/LibreDWG.c perl/LibreDWG.pm perl/LibreDWG.xs \
                  perl/Makefile.PL perl/MANIFEST
 
 all-am: $(dist_perl_PERL)
@@ -47,9 +47,12 @@ all-am: $(dist_perl_PERL)
 # crypt.h, sys/wait.h on windows.
 # grep rem: with a command.com compat Makefile we cannot continue from bash
 perl/LibreDWG.$(OBJEXT): perl/LibreDWG.pm perl/Makefile perl/LibreDWG.xs
-	@echo Note swig_perl.c is huge. This will need some time...
+	@echo Note LibreDWG.c is huge. This will need some time...
+	-if test -f perl/pm_to_blib; then rm perl/pm_to_blib; fi
+	-if test -d perl/blib; then rm -rf perl/blib; fi
 	-if grep "NOOP = rem" perl/Makefile; then false; else \
-	    cd perl && $(MAKE) OPTIMIZE=""; fi
+	    cd perl && $(MAKE) OPTIMIZE="-I$(abs_top_srcdir)/include -I$(abs_top_builddir)/src" \
+	                       OTHERLDFLAGS="-L$(abs_top_builddir)/src/.libs"; fi
 
 perl/Makefile: perl/Makefile.PL
 	-cd perl && \
@@ -60,11 +63,14 @@ perl/Makefile: perl/Makefile.PL
 check-am: $(dist_perl_PERL) perl/Makefile perl/LibreDWG.$(OBJEXT)
 	@echo Making check for perl
 	-if grep "NOOP = rem" perl/Makefile; then false; else \
-	    $(MAKE) -C perl test OPTIMIZE="" LD_LIBRARY_PATH="$(abs_top_builddir)/src/.libs"; fi
+	    LD_LIBRARY_PATH="$(abs_top_builddir)/src/.libs" $(MAKE) -C perl test \
+	      OPTIMIZE="-I$(abs_top_srcdir)/include -I$(abs_top_builddir)/src" \
+              OTHERLDFLAGS="-L$(abs_top_builddir)/src/.libs"; fi
 
 install-am: $(dist_perl_PERL) perl/Makefile perl/LibreDWG.$(OBJEXT)
 	@echo Making install for perl
-	-if grep "NOOP = rem" perl/Makefile; then false; else $(MAKE) -C perl install; fi
+	-if grep "NOOP = rem" perl/Makefile; then false; else \
+	    $(MAKE) -C perl install; fi
 
 clean-am:
 	-$(MAKE) -C perl clean
@@ -78,15 +84,15 @@ PERL_sources =  $(top_srcdir)/bindings/dwg.i \
 		$(top_srcdir)/src/dwg_api.c \
 		$(top_srcdir)/src/dwg.c
 
-perl/LibreDWG.pm: perl/swig_perl.c
-perl/swig_perl.c: $(PERL_sources) Makefile.am
-	$(SWIG) -perl5 -I$(abs_top_srcdir)/include -o perl/swig_perl.c $(srcdir)/dwg.i
+perl/LibreDWG.pm: perl/LibreDWG.c
+perl/LibreDWG.c: $(PERL_sources) Makefile.am
+	$(SWIG) -perl5 -I$(abs_top_srcdir)/include -o perl/LibreDWG.c $(srcdir)/dwg.i
 
 distclean-local: distclean-am
 	rm -rf perl/blib
 
 MOSTLYCLEANFILES = perl/LibreDWG.bs perl/LibreDWG.$(OBJEXT)
-CLEANFILES       = perl/LibreDWG.c perl/pm_to_blib perl/Makefile
-DISTCLEANFILES   = perl/Makefile.PL
+CLEANFILES       = perl/pm_to_blib perl/Makefile
+DISTCLEANFILES   = perl/Makefile.PL perl/LibreDWG.c
 
 endif
