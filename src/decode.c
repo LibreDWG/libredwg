@@ -337,6 +337,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   obj->index = num + i;                                                       \
   obj->tio.object = calloc (1, sizeof (Dwg_Object_Object));                   \
   if (!_obj || !obj->tio.object)                                              \
+    if (_obj) free (_obj);                                                    \
     return DWG_ERR_OUTOFMEM;                                                  \
   obj->tio.object->tio.token = _obj;                                          \
   obj->tio.object->objid = obj->index;                                        \
