@@ -170,7 +170,10 @@ EXPORT int dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
     }
 
 #define STRADD(field, string)                                                 \
-  field = malloc (strlen (string) + 1);                                       \
-  strcpy (field, string)
+  if (string)                                                                 \
+    {                                                                         \
+      field = malloc (strlen (string) + 1);                                   \
+      strcpy (field, string);                                                 \
+    }
 
 #endif
