@@ -640,7 +640,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           else if (pair->type == VT_STRING && strEQc (f->type, "H"))
             {
               char *key, *str;
-              if (strlen (pair->value.s))
+              if (pair->value.s && strlen (pair->value.s))
                 {
                   LOG_TRACE ("HEADER.%s %s [%s %d] later\n", &field[1],
                              pair->value.s, f->type, (int)pair->code);

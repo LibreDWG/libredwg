@@ -3609,7 +3609,7 @@ int DWG_FUNC_N(ACTION,_HATCH_gradientfill)(
   BITCODE_BL rcount1, rcount2;
 #endif
   int error = 0;
-  Dwg_Data* dwg = obj->parent;
+  //Dwg_Data* dwg = obj->parent;
 
   FIELD_BL (is_gradient_fill, 450);
   FIELD_BL (reserved, 451);
