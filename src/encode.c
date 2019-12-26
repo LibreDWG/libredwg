@@ -1,4 +1,3 @@
-
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -730,7 +729,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   Bit_Chain *hdl_dat;
 
   if (dwg->opts)
-    loglevel = dwg->opts & 0xf;
+    loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
 #ifdef USE_TRACING
   /* Before starting, set the logging level, but only do so once.  */
   if (!env_var_checked_p)
@@ -1609,7 +1608,7 @@ dwg_encode_variable_type (Dwg_Data *dwg, Bit_Chain *dat, Dwg_Object *obj)
     return DWG_ERR_INTERNALERROR;
   is_entity = dwg_class_is_entity (klass);
 
-  if (dwg->opts & 0x20) // DXF import
+  if (dwg->opts & DWG_OPTS_INDXF) // DXF import
     {
       pos = bit_position (dat);
       dat->byte = obj->address;
@@ -2404,7 +2403,7 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
 
   if (!_obj->HANDSEED) // minimal or broken DXF
     {
-      dwg->opts |= 0x3f;
+      dwg->opts |= (DWG_OPTS_MINIMAL | DWG_OPTS_INDXF);
       dat->from_version = dat->version - 1;
       LOG_TRACE ("encode from minimal DXF\n");
       _obj->HANDSEED = calloc(1, sizeof(Dwg_Object_Ref));

@@ -1747,7 +1747,7 @@ void
 read_r2007_init (Dwg_Data *dwg)
 {
   if (dwg->opts)
-    loglevel = dwg->opts & 0xf;
+    loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
 }
 
 int

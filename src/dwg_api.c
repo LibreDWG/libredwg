@@ -428,7 +428,7 @@ void
 dwg_api_init_version (Dwg_Data *dwg)
 {
   dwg_version = (Dwg_Version_Type)dwg->header.version;
-  loglevel = dwg->opts & 0xf;
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
 }
 
 /** To access the common DIMENSION fields (only).

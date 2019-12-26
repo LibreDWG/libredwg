@@ -58,7 +58,7 @@ bit_advance_position (Bit_Chain *dat, long advance)
       // but allow pointing to the very end.
       if (dat->byte != dat->size - 1 || dat->bit != 0)
         {
-          loglevel = dat->opts & 0xf;
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("%s buffer overflow at pos %lu, size %lu, advance by %ld",
                      __FUNCTION__, dat->byte, dat->size, advance)
         }
@@ -68,7 +68,7 @@ bit_advance_position (Bit_Chain *dat, long advance)
     }
   if ((long)dat->byte + (endpos / 8) < 0)
     {
-      loglevel = dat->opts & 0xf;
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("buffer underflow at pos %lu, size %lu, advance by %ld",
                  dat->byte, dat->size, advance)
       dat->byte = 0;
@@ -96,7 +96,7 @@ bit_set_position (Bit_Chain *dat, unsigned long bitpos)
   dat->bit = bitpos & 7;
   if (dat->byte > dat->size || (dat->byte == dat->size && dat->bit))
     {
-      loglevel = dat->opts & 0xf;
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("%s buffer overflow at %lu, have %lu", __FUNCTION__,
                  dat->byte, dat->size)
     }
@@ -124,7 +124,7 @@ bit_read_B (Bit_Chain *dat)
 
   if (dat->byte >= dat->size)
     {
-      loglevel = dat->opts & 0xf;
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("%s buffer overflow at %lu", __FUNCTION__, dat->byte)
 #ifdef DWG_ABORT
       if (++errors > DWG_ABORT_LIMIT)
@@ -165,7 +165,7 @@ bit_read_BB (Bit_Chain *dat)
 
   if (dat->byte >= dat->size)
     {
-      loglevel = dat->opts & 0xf;
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("%s buffer overflow at %lu", __FUNCTION__, dat->byte)
 #ifdef DWG_ABORT
       if (++errors > DWG_ABORT_LIMIT)
@@ -254,7 +254,7 @@ bit_write_3B (Bit_Chain *dat, unsigned char value)
 {
   if (value > 7)
     {
-      loglevel = dat->opts & 0xf;
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("Invalid bit_write_3B value %d > 7", value)
       return;
     }
@@ -307,7 +307,7 @@ bit_read_RC (Bit_Chain *dat)
 
   if (dat->byte >= dat->size)
     {
-      loglevel = dat->opts & 0xf;
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("%s buffer overflow at %lu", __FUNCTION__, dat->byte)
 #ifdef DWG_ABORT
       if (++errors > DWG_ABORT_LIMIT)
@@ -328,7 +328,7 @@ bit_read_RC (Bit_Chain *dat)
         }
       else
         {
-          loglevel = dat->opts & 0xf;
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("%s buffer overflow at %lu", __FUNCTION__, dat->byte + 1)
           return 0;
         }
@@ -567,7 +567,7 @@ bit_read_BL (Bit_Chain *dat)
     return 0;
   else /* if (two_bit_code == 3) */
     {
-      loglevel = dat->opts & 0xf;
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("bit_read_BL: unexpected 2-bit code: '11'")
       return 256;
     }
@@ -769,7 +769,7 @@ bit_read_BD (Bit_Chain *dat)
     return 0.0;
   else /* if (two_bit_code == 3) */
     {
-      loglevel = dat->opts & 0xf;
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("bit_read_BD: unexpected 2-bit code: '11'")
       return bit_nan ();
     }
@@ -847,7 +847,7 @@ bit_read_MC (Bit_Chain *dat)
       result |= ((BITCODE_UMC)byte[i]) << j;
     }
 
-  loglevel = dat->opts & 0xf;
+  loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
   LOG_ERROR (
       "bit_read_MC: error parsing modular char. i=%d, j=%d, result=0x%lx,\n"
       " @%lu.@%u: [0x%x 0x%x 0x%x 0x%x 0x%x]",
@@ -919,7 +919,7 @@ bit_read_UMC (Bit_Chain *dat)
       result |= ((BITCODE_UMC)byte[i]) << j;
     }
 
-  loglevel = dat->opts & 0xf;
+  loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
   LOG_ERROR (
       "bit_read_UMC: error parsing modular char, i=%d,j=%d,result=0x%lx", i, j,
       result)
@@ -982,7 +982,7 @@ bit_read_MS (Bit_Chain *dat)
         word[i] &= 0x7fff;
       result |= ((BITCODE_MS)word[i]) << j;
     }
-  loglevel = dat->opts & 0xf;
+  loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
   LOG_ERROR ("bit_read_MS: error parsing modular short, i=%d,j=%d", i, j)
   return 0; /* error... */
 }
@@ -1164,7 +1164,7 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   handle->value = 0;
   if (handle->size > sizeof(BITCODE_RC *) || handle->code > 14)
     {
-      loglevel = dat->opts & 0xf;
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_WARN ("Invalid handle-reference, longer than 8 bytes: " FORMAT_H,
                 ARGS_H (*handle))
       return DWG_ERR_INVALIDHANDLE;
@@ -1240,7 +1240,7 @@ bit_read_CRC (Bit_Chain *dat)
 {
   uint16_t result;
   long unsigned int start_address;
-  loglevel = dat->opts & 0xf;
+  loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
 
   if (dat->bit > 0)
     {
@@ -1262,7 +1262,7 @@ bit_check_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
   uint16_t calculated;
   uint16_t read;
   long size;
-  loglevel = dat->opts & 0xf;
+  loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
 
   if (dat->bit > 0)
     {
@@ -1272,7 +1272,7 @@ bit_check_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
 
   if (start_address > dat->byte || dat->byte >= dat->size)
     {
-      loglevel = dat->opts & 0xf;
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("%s buffer overflow at pos %lu-%lu, size %lu", __FUNCTION__,
                  start_address, dat->byte, dat->size)
       return 0;
@@ -1303,7 +1303,7 @@ bit_write_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
 {
   uint16_t crc;
   long size;
-  loglevel = dat->opts & 0xf;
+  loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
 
   while (dat->bit > 0)
     bit_write_B (dat, 0);
@@ -1322,7 +1322,7 @@ bit_write_CRC_LE (Bit_Chain *dat, long unsigned int start_address, uint16_t seed
 {
   uint16_t crc;
   long size;
-  loglevel = dat->opts & 0xf;
+  loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
 
   while (dat->bit > 0)
     bit_write_B (dat, 0);
@@ -1382,7 +1382,7 @@ bit_read_TV (Bit_Chain *restrict dat)
   length = bit_read_BS (dat);
   if (dat->byte + length >= dat->size)
     {
-      loglevel = dat->opts & 0xf;
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("%s buffer overflow at %lu, length %u", __FUNCTION__,
                  dat->byte, length)
       return NULL;
@@ -1429,7 +1429,7 @@ bit_read_TU (Bit_Chain *restrict dat)
   length = bit_read_BS (dat);
   if (dat->byte + (length * 2) >= dat->size)
     {
-      loglevel = dat->opts & 0xf;
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("%s buffer overflow at %lu, length %u", __FUNCTION__,
                  dat->byte, length)
       return NULL;

@@ -58,7 +58,7 @@ typedef struct _bit_chain
   FILE *fh;
   Dwg_Version_Type version;
   Dwg_Version_Type from_version;
-  unsigned char opts;
+  unsigned char opts; // from dwg->opts, see DWG_OPTS_*
 } Bit_Chain;
 
 /* Functions for raw data manipulations.

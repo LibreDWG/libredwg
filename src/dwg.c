@@ -152,7 +152,7 @@ dwg_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   Bit_Chain bit_chain = { 0 };
   int error;
 
-  loglevel = dwg->opts;
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   memset (dwg, 0, sizeof (Dwg_Data));
   dwg->opts = loglevel;
 
@@ -241,7 +241,7 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   size_t size;
   Bit_Chain dat = { 0 };
 
-  loglevel = dwg->opts;
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
 
   if (!filename || stat (filename, &attrib))
     {
@@ -267,7 +267,7 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   /* Load whole file into memory
    */
   memset (dwg, 0, sizeof (Dwg_Data));
-  dwg->opts = loglevel | 0x2f;
+  dwg->opts = loglevel | DWG_OPTS_INDXF;
   memset (&dat, 0, sizeof (Bit_Chain));
   dat.size = attrib.st_size;
   dat.chain = (unsigned char *)calloc (1, dat.size);
@@ -311,7 +311,7 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   else
     error = dwg_read_dxf (&dat, dwg);
 
-  dwg->opts |= 0x2f;
+  dwg->opts |= (DWG_OPTS_INDXF | loglevel);
   if (error >= DWG_ERR_CRITICAL)
     {
       LOG_ERROR ("Failed to decode DXF file: %s\n", filename)
@@ -337,7 +337,7 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
   Bit_Chain dat = { 0 };
   int error;
 
-  loglevel = dwg->opts;
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   assert (filename);
   assert (dwg);
   dat.opts = dwg->opts;
@@ -407,7 +407,7 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
   BITCODE_RL header_size, address, osize;
   Bit_Chain *dat;
 
-  loglevel = dwg->opts;
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   *size = 0;
   assert (dwg);
   dat = (Bit_Chain *)&dwg->thumbnail;
@@ -1595,9 +1595,13 @@ dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
 {
   BITCODE_H ref;
   int oldopts = dwg->opts;
-  dwg->opts = loglevel = dwg->opts & ~0xf;
+  dwg->opts &= ~(DWG_OPTS_LOGLEVEL);
+  loglevel = 0;
+
   ref = dwg_find_tablehandle (dwg, name, table);
-  dwg->opts = loglevel = oldopts;
+
+  dwg->opts = oldopts;
+  loglevel = oldopts & DWG_OPTS_LOGLEVEL;
   return ref;
 }
 

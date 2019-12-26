@@ -5803,8 +5803,13 @@ typedef struct _dwg_struct
   } second_header;
 
   unsigned int layout_type;
-  unsigned int opts; /* 0xf: loglevel, ... */
+  unsigned int opts; /* See DWG_OPTS_* below */
 } Dwg_Data;
+
+#define DWG_OPTS_LOGLEVEL 0xf
+#define DWG_OPTS_MINIMAL  0x10
+#define DWG_OPTS_INDXF    0x20
+#define DWG_OPTS_DXFB     0x40
 
 /*--------------------------------------------------
  * Exported Functions

@@ -143,7 +143,7 @@ create_postscript (Dwg_Data *dwg, char *output)
   PS_scale (ps, (float)scale, (float)scale);
   PS_translate (ps, (float)-dwg_model_x_min (dwg),
                 (float)-dwg_model_y_min (dwg));
-  if (dwg->opts & 0xf)
+  if (dwg->opts & DWG_OPTS_LOGLEVEL)
     {
       fprintf (stderr, "Limits: %f, %f\n", dx, dy);
       fprintf (stderr, "Scale: %f (%f, %f)\n", scale, scale_x, scale_y);

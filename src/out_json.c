@@ -1190,7 +1190,7 @@ json_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 EXPORT int
 dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  const int minimal = dwg->opts & 0x10;
+  const int minimal = dwg->opts & DWG_OPTS_MINIMAL;
   struct Dwg_Header *obj = &dwg->header;
 
   fprintf (dat->fh,

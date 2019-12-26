@@ -171,7 +171,7 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   if (dwg->opts)
     {
-      loglevel = dwg->opts & 0xf;
+      loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
       dat->opts = dwg->opts;
     }
 
@@ -2469,7 +2469,7 @@ read_2004_section_header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int error;
   Bit_Chain sec_dat = { 0 };
 
-  sec_dat.opts = dwg->opts & 0xf;
+  sec_dat.opts = dwg->opts & DWG_OPTS_LOGLEVEL;
   error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_HEADER);
   if (error >= DWG_ERR_CRITICAL)
     {
@@ -2526,7 +2526,7 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   long unsigned int endpos;
   int error;
 
-  obj_dat.opts = hdl_dat.opts = dwg->opts & 0xf;
+  obj_dat.opts = hdl_dat.opts = dwg->opts & DWG_OPTS_LOGLEVEL;
   error = read_2004_compressed_section (dat, dwg, &obj_dat, SECTION_OBJECTS);
   if (error >= DWG_ERR_CRITICAL || !obj_dat.chain)
     {

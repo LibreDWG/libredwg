@@ -349,7 +349,7 @@ Dwg_Entity_##token *dwg_object_to_##token (Dwg_Object *obj) \
     }                                                  \
   else                                                 \
     {                                                  \
-      loglevel = obj && obj->parent ? obj->parent->opts & 0xf : 0; \
+      loglevel = obj && obj->parent ? obj->parent->opts & DWG_OPTS_LOGLEVEL : 0; \
       LOG_ERROR("Invalid %s type: got 0x%x", #token, obj ? obj->type : 0); \
     }                                                  \
   return ret_obj;                                      \
@@ -368,7 +368,7 @@ Dwg_Entity_##token *dwg_object_to_##token (Dwg_Object *obj) \
       } \
     else \
       { \
-        loglevel = obj && obj->parent ? obj->parent->opts & 0xf : 0; \
+        loglevel = obj && obj->parent ? obj->parent->opts & DWG_OPTS_LOGLEVEL : 0; \
         LOG_ERROR("Invalid %s type: got %s, 0x%x", #token, \
                   obj ? obj->dxfname : "<no obj>", \
                   obj ? obj->type : 0); \
@@ -393,7 +393,7 @@ Dwg_Object_##token *dwg_object_to_##token (Dwg_Object *obj) \
       } \
     else \
       { \
-        loglevel = obj && obj->parent ? obj->parent->opts & 0xf : 0; \
+        loglevel = obj && obj->parent ? obj->parent->opts & DWG_OPTS_LOGLEVEL : 0; \
         LOG_ERROR("Invalid %s type: got 0x%x", #token, obj ? obj->type : 0); \
       } \
   return ret_obj; \
@@ -411,7 +411,7 @@ Dwg_Object_##token *dwg_object_to_##token (Dwg_Object *obj) \
       } \
     else \
       { \
-        loglevel = obj && obj->parent ? obj->parent->opts & 0xf : 0; \
+        loglevel = obj && obj->parent ? obj->parent->opts & DWG_OPTS_LOGLEVEL : 0; \
         LOG_ERROR("Invalid %s type: got 0x%x", #token, obj ? obj->type : 0); \
       } \
   return ret_obj; \

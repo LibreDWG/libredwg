@@ -780,7 +780,7 @@ dwg_free (Dwg_Data *dwg)
       pdat.version = dwg->header.version;
       pdat.from_version = dwg->header.version;
       if (dwg->opts)
-        loglevel = dwg->opts & 0xf;
+        loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
 #ifdef USE_TRACING
       /* Before starting, set the logging level, but only do so once.  */
       if (!env_var_checked_p)

@@ -1184,7 +1184,7 @@ decl_dxfb_process_VERTEX (2D) decl_dxfb_process_VERTEX (3D)
     return DWG_ERR_INTERNALERROR;
   if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
     return 0;
-  minimal = obj->parent->opts & 0x10;
+  minimal = obj->parent->opts & DWG_OPTS_MINIMAL;
 
   switch (obj->type)
     {
@@ -1424,7 +1424,7 @@ dxfb_header_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_Header_Variables *_obj = &dwg->header_vars;
   Dwg_Object *obj = NULL;
   double ms;
-  const int minimal = dwg->opts & 0x10;
+  const int minimal = dwg->opts & DWG_OPTS_MINIMAL;
   const char *codepage = dxf_codepage (dwg->header.codepage, dwg);
 
   if (dwg->header.codepage != 30 && dwg->header.codepage != 29
@@ -1919,9 +1919,9 @@ dxfb_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 int
 dwg_write_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  const int minimal = dwg->opts & 0x10;
+  const int minimal = dwg->opts & DWG_OPTS_MINIMAL;
 
-  loglevel = dwg->opts & 0xf;
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   if (dat->from_version == R_INVALID)
     dat->from_version = dat->version;
   fprintf (dat->fh, "AutoCAD Binary DXF\r\n%c%c", 0x1a, 0);

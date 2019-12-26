@@ -198,7 +198,7 @@
 #  define IF_ENCODE_FROM_EARLIER                                              \
     if (dat->from_version && dat->from_version < cur_ver)
 #  define IF_ENCODE_FROM_EARLIER_OR_DXF                                       \
-    if ((dat->from_version && dat->from_version < cur_ver) || dwg->opts & 0x20)
+    if ((dat->from_version && dat->from_version < cur_ver) || dwg->opts & DWG_OPTS_INDXF)
 #  define IF_ENCODE_FROM_PRE_R13                                              \
     if (dat->from_version && dat->from_version < R_13)
 #  define IF_ENCODE_SINCE_R13                                                 \

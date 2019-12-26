@@ -72,7 +72,7 @@ static Dxf_Objs *dxf_objs;
 static inline void
 dxf_skip_ws (Bit_Chain *dat)
 {
-  const int is_binary = dat->opts & 0x20;
+  const int is_binary = dat->opts & DWG_OPTS_DXFB;
   if (is_binary)
     return;
   // clang-format off
@@ -88,7 +88,7 @@ dxf_skip_ws (Bit_Chain *dat)
 static BITCODE_RS
 dxf_read_rs (Bit_Chain *dat)
 {
-  const int is_binary = dat->opts & 0x20;
+  const int is_binary = dat->opts & DWG_OPTS_DXFB;
   if (is_binary)
     {
       return bit_read_RS (dat);
@@ -111,7 +111,7 @@ dxf_read_rs (Bit_Chain *dat)
 static BITCODE_RL
 dxf_read_rl (Bit_Chain *dat)
 {
-  const int is_binary = dat->opts & 0x20;
+  const int is_binary = dat->opts & DWG_OPTS_DXFB;
   if (is_binary)
     {
       return bit_read_RL (dat);
@@ -134,7 +134,7 @@ dxf_read_rl (Bit_Chain *dat)
 static BITCODE_RLL
 dxf_read_rll (Bit_Chain *dat)
 {
-  const int is_binary = dat->opts & 0x20;
+  const int is_binary = dat->opts & DWG_OPTS_DXFB;
   if (is_binary)
     {
       return bit_read_RLL (dat);
@@ -157,7 +157,7 @@ dxf_read_rll (Bit_Chain *dat)
 static BITCODE_RD
 dxf_read_rd (Bit_Chain *dat)
 {
-  const int is_binary = dat->opts & 0x20;
+  const int is_binary = dat->opts & DWG_OPTS_DXFB;
   if (is_binary)
     {
       return bit_read_RLL (dat);
@@ -178,7 +178,7 @@ dxf_read_rd (Bit_Chain *dat)
 static void
 dxf_read_string (Bit_Chain *dat, char **string)
 {
-  const int is_binary = dat->opts & 0x20;
+  const int is_binary = dat->opts & DWG_OPTS_DXFB;
   if (is_binary)
     {
       int len = dxf_read_rs (dat);
@@ -236,7 +236,7 @@ static Dxf_Pair *ATTRIBUTE_MALLOC
 dxf_read_pair (Bit_Chain *dat)
 {
   Dxf_Pair *pair = calloc (1, sizeof (Dxf_Pair));
-  const int is_binary = dat->opts & 0x20;
+  const int is_binary = dat->opts & DWG_OPTS_DXFB;
   pair->code = (short)dxf_read_rs (dat);
   pair->type = get_base_value_type (pair->code);
   switch (pair->type)
@@ -521,7 +521,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables *_obj = &dwg->header_vars;
   Dwg_Object *obj = NULL;
-  // const int minimal = dwg->opts & 0x10;
+  // const int minimal = dwg->opts & DWG_OPTS_MINIMAL;
   int is_utf = 1;
   int i = 0;
   Dxf_Pair *pair;
@@ -6961,10 +6961,10 @@ resolve_postponed_eed_refs (Dwg_Data *restrict dwg)
 int
 dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  // const int minimal = dwg->opts & 0x10;
+  // const int minimal = dwg->opts & DWG_OPTS_MINIMAL;
   Dxf_Pair *pair;
 
-  loglevel = dwg->opts & 0xf;
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   num_dxf_objs = 0;
   size_dxf_objs = 1000;
   dxf_objs = malloc (1000 * sizeof (Dxf_Objs));
@@ -7113,7 +7113,6 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   free_array_hdls (header_hdls);
   free_array_hdls (eed_hdls);
   free_array_hdls (obj_hdls);
-  dwg->opts |= 0x2f; // from DXF
   LOG_TRACE ("import from DXF\n");
   return dwg->num_objects ? 1 : 0;
 }
@@ -7121,7 +7120,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 int
 dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  dwg->opts |= 0x2f; // binary
+  dwg->opts |= DWG_OPTS_DXFB; // binary
   return dwg_read_dxf (dat, dwg);
 }
 
