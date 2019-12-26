@@ -23,6 +23,7 @@
 
 #include "common.h"
 #include "bits.h"
+//#include "myalloca.h"
 #include "dwg.h"
 #include "decode.h"
 #include "out_dxf.h"
@@ -43,8 +44,8 @@ static int dwg_dxfb_object (Bit_Chain *restrict dat,
 static int dxfb_3dsolid (Bit_Chain *restrict dat,
                          const Dwg_Object *restrict obj,
                          Dwg_Entity_3DSOLID *restrict _obj);
-static int dxfb_block_write (Bit_Chain *restrict dat, Dwg_Object *restrict hdr,
-                             int *restrict i);
+static int dxfb_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict mspace,
+                             Dwg_Object *restrict hdr, int *restrict i);
 static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
                                   const Dwg_Object *restrict obj,
                                   char *restrict name, const int dxf);
@@ -343,13 +344,17 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
   HEADER_9 (nam);                                                             \
   VALUE_HANDLE_NAME (dwg->header_vars.nam, dxf, table)
 
-#define HEADER_RLL(nam, dxf)                                                  \
+#define FIELD_BLL(nam, dxf)                                                   \
   {                                                                           \
-    BITCODE_RLL s = _obj->nam;                                                \
-    GROUP (9);                                                                \
-    fprintf (dat->fh, "$%s%c", #nam, 0);                                      \
+    BITCODE_BLL s = _obj->nam;                                                \
     GROUP (dxf);                                                              \
     fwrite (&s, sizeof (BITCODE_RLL), 1, dat->fh);                            \
+  }
+#define HEADER_RLL(nam, dxf)                                                  \
+  {                                                                           \
+    GROUP (9);                                                                \
+    fprintf (dat->fh, "$%s%c", #nam, 0);                                      \
+    FIELD_BLL (nam, dxf);                                                     \
   }
 
 #define FIELD_MC(nam, dxf) FIELD_RC (nam, dxf)
@@ -434,13 +439,13 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'nam'.
 #define FIELD_VECTOR_N(nam, type, size, dxf)                                  \
-  if (dxf)                                                                    \
+  if (dxf && _obj->nam)                                                       \
     {                                                                         \
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         VALUE (_obj->nam[vcount], type, dxf);                                 \
     }
 #define FIELD_VECTOR_T(nam, size, dxf)                                        \
-  if (dxf)                                                                    \
+  if (dxf && _obj->nam)                                                       \
     {                                                                         \
       PRE (R_2007)                                                            \
       {                                                                       \
@@ -458,7 +463,7 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
   FIELD_VECTOR_N (nam, type, _obj->size, dxf)
 
 #define FIELD_2RD_VECTOR(nam, size, dxf)                                      \
-  if (dxf)                                                                    \
+  if (dxf && _obj->nam)                                                       \
     {                                                                         \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
@@ -467,7 +472,7 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
     }
 
 #define FIELD_2DD_VECTOR(nam, size, dxf)                                      \
-  if (dxf)                                                                    \
+  if (dxf && _obj->nam)                                                       \
     {                                                                         \
       FIELD_2RD (nam[0], 0);                                                  \
       for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)             \
@@ -478,7 +483,7 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
     }
 
 #define FIELD_3DPOINT_VECTOR(nam, size, dxf)                                  \
-  if (dxf)                                                                    \
+  if (dxf && _obj->nam)                                                       \
     {                                                                         \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
@@ -487,7 +492,7 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
     }
 
 #define HANDLE_VECTOR_N(nam, size, code, dxf)                                 \
-  if (dxf)                                                                    \
+  if (dxf && _obj->nam)                                                       \
     {                                                                         \
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
@@ -573,11 +578,11 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
                                const Dwg_Object *restrict obj)                \
   {                                                                           \
     BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;                    \
+    int error = 0;                                                            \
     Dwg_Data *dwg = obj->parent;                                              \
     Bit_Chain *str_dat = dat;                                                 \
     Dwg_Entity_##token *ent, *_obj;                                           \
     Dwg_Object_Entity *_ent;                                                  \
-    int error = 0;                                                            \
     if (obj->fixedtype != DWG_TYPE_##token)                                   \
       {                                                                       \
         LOG_ERROR ("Invalid type 0x%x, expected 0x%x %s", obj->fixedtype,     \
@@ -624,7 +629,7 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
     }
 
 #define DWG_ENTITY_END                                                        \
-  return 0;                                                                   \
+    return error;                                                             \
   }
 
 #define DWG_OBJECT(token)                                                     \
@@ -632,10 +637,10 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
                                const Dwg_Object *restrict obj)                \
   {                                                                           \
     BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;                    \
+    int error = 0;                                                            \
     Bit_Chain *hdl_dat = dat;                                                 \
     Dwg_Data *dwg = obj->parent;                                              \
     Dwg_Object_##token *_obj;                                                 \
-    int error = 0;                                                            \
     LOG_INFO ("Object " #token ":\n")                                         \
     if (obj->fixedtype != DWG_TYPE_##token)                                   \
       {                                                                       \
@@ -663,10 +668,15 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
           _XDICOBJHANDLE (3);                                                 \
           _REACTORS (4);                                                      \
         }                                                                     \
-      }
+        SINCE (R_14)                                                          \
+        {                                                                     \
+          VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 3, 330);   \
+        }                                                                     \
+      }                                                                       \
+    LOG_TRACE ("Object handle: " FORMAT_H "\n", ARGS_H (obj->handle))
 
 #define DWG_OBJECT_END                                                        \
-  return 0;                                                                   \
+    return error;                                                             \
   }
 
 static void
@@ -839,7 +849,7 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
 
 #define START_OBJECT_HANDLE_STREAM
 
-// 5 written here first
+// Handle 5 written here first
 #define COMMON_TABLE_CONTROL_FLAGS                                            \
   SINCE (R_13)                                                                \
   {                                                                           \
@@ -1119,8 +1129,13 @@ dwg_dxfb_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     }                                                                         \
     return error;                                                             \
   }
-decl_dxfb_process_VERTEX (2D) decl_dxfb_process_VERTEX (3D)
-    decl_dxfb_process_VERTEX (MESH) decl_dxfb_process_VERTEX (PFACE)
+
+// clang-format off
+decl_dxfb_process_VERTEX (2D)
+decl_dxfb_process_VERTEX (3D)
+decl_dxfb_process_VERTEX (MESH)
+decl_dxfb_process_VERTEX (PFACE)
+// clang-format on
 
 /* process seqend before attribs */
 #define decl_dxfb_process_INSERT(token)                                       \
@@ -1171,11 +1186,15 @@ decl_dxfb_process_VERTEX (2D) decl_dxfb_process_VERTEX (3D)
     }                                                                         \
     return error;                                                             \
   }
-        decl_dxfb_process_INSERT (INSERT) decl_dxfb_process_INSERT (MINSERT)
 
-            static int dwg_dxfb_object (Bit_Chain *restrict dat,
-                                        const Dwg_Object *restrict obj,
-                                        int *restrict i)
+// clang-format off
+decl_dxfb_process_INSERT (INSERT)
+decl_dxfb_process_INSERT (MINSERT)
+// clang-format on
+
+static int dwg_dxfb_object (Bit_Chain *restrict dat,
+                            const Dwg_Object *restrict obj,
+                            int *restrict i)
 {
   int error = 0;
   int minimal;
@@ -1217,7 +1236,6 @@ decl_dxfb_process_VERTEX (2D) decl_dxfb_process_VERTEX (3D)
         else
           return error;
       }
-
     case DWG_TYPE_POLYLINE_2D:
       error = dwg_dxfb_POLYLINE_2D (dat, obj);
       return error | dxfb_process_VERTEX_2D (dat, obj, i);
@@ -1380,7 +1398,6 @@ decl_dxfb_process_VERTEX (2D) decl_dxfb_process_VERTEX (3D)
                                                   (Dwg_Object *)obj)))
         {
           Dwg_Data *dwg = obj->parent;
-          int is_entity;
           int j = obj->type - 500;
           Dwg_Class *klass = NULL;
 
@@ -1411,6 +1428,7 @@ dxfb_common_entity_handle_data (Bit_Chain *restrict dat,
 
   // clang-format off
   #include "common_entity_handle_data.spec"
+  #include "common_entity_data.spec"
   // clang-format on
 
   return error;
@@ -1772,8 +1790,8 @@ dxfb_ENDBLK_empty (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr)
 }
 
 static int
-dxfb_block_write (Bit_Chain *restrict dat, Dwg_Object *restrict hdr,
-                  int *restrict i)
+dxfb_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict mspace,
+                  Dwg_Object *restrict hdr, int *restrict i)
 {
   int error = 0;
   Dwg_Object *restrict obj = get_first_owned_block (hdr); // BLOCK
@@ -1781,6 +1799,7 @@ dxfb_block_write (Bit_Chain *restrict dat, Dwg_Object *restrict hdr,
       = hdr->tio.object->tio.BLOCK_HEADER;
   Dwg_Object *restrict endblk;
   Dwg_Data *dwg = hdr->parent;
+  unsigned long int mspace_ref = mspace->handle.value;
 
   if (obj)
     error |= dwg_dxfb_object (dat, obj, i);
@@ -1789,16 +1808,20 @@ dxfb_block_write (Bit_Chain *restrict dat, Dwg_Object *restrict hdr,
       LOG_ERROR ("BLOCK_HEADER.block_entity missing");
       return DWG_ERR_INVALIDDWG;
     }
-  // skip *Model_Space UNDERLAY's, they are all under ENTITIES
-  if (hdr == dwg->header_vars.BLOCK_RECORD_MSPACE->obj)
+  // Skip all *Model_Space entities, esp. new ones: UNDERLAY, MULTILEADER, ...
+  // They are all under ENTITIES later.
+  // Note: the objects may vary (e.g. example_2000), but the index not
+  if ((hdr == mspace) || (hdr->index == mspace->index))
     obj = NULL;
   else
     obj = get_first_owned_entity (hdr); // first_entity
   while (obj)
     {
-      if (obj->supertype == DWG_SUPERTYPE_ENTITY)
+      if (obj->supertype == DWG_SUPERTYPE_ENTITY
+          && obj->tio.entity->ownerhandle != NULL
+          && obj->tio.entity->ownerhandle->absolute_ref != mspace_ref)
         error |= dwg_dxfb_object (dat, obj, i);
-      obj = get_next_owned_entity (hdr, obj);
+      obj = get_next_owned_entity (hdr, obj); // until last_entity
     }
   endblk = get_last_owned_block (hdr);
   if (endblk)
@@ -1816,30 +1839,11 @@ static int
 dxfb_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
-  Dwg_Object_BLOCK_CONTROL *_ctrl = &dwg->block_control;
-  // Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
-  /* let's see if this control block is correct... */
-  Dwg_Object_Ref *msref = dwg->header_vars.BLOCK_RECORD_MSPACE;
-  // Dwg_Object_Ref *psref = dwg->header_vars.BLOCK_RECORD_PSPACE;
-  Dwg_Object *mspace;
   int i = 0;
+  Dwg_Object *mspace = dwg_model_space_object (dwg);
 
-  // The modelspace header needs to have an block_entity.
-  // There are cases (r2010 AEC dwgs) where they don't have one.
-  if (msref && msref->obj && msref->obj->type == DWG_TYPE_BLOCK_HEADER
-      && msref->obj->tio.object->tio.BLOCK_HEADER->block_entity)
-    mspace = msref->obj;
-  else
-    mspace = _ctrl->model_space->obj; // these two really should be the same
-
-  // If there's no *Model_Space block skip this BLOCKS section.
-  // Or try handle 1F with r2000+, 17 with r14
-  // obj = get_first_owned_block(hdr);
-  // if (!obj)
-  //  obj = dwg_resolve_handle(dwg, dwg->header.version >= R_2000 ? 0x1f :
-  //  0x17);
-  // if (!obj)
-  //  return 1;
+  if (!mspace)
+    return DWG_ERR_UNHANDLEDCLASS;
 
   SECTION (BLOCKS);
   /* There may be unconnected blocks (not caught by above),
@@ -1852,7 +1856,7 @@ dxfb_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         if (dwg->object[i].supertype == DWG_SUPERTYPE_OBJECT
             && dwg->object[i].type == DWG_TYPE_BLOCK_HEADER)
           {
-            error |= dxfb_block_write (dat, &dwg->object[i], &i);
+            error |= dxfb_block_write (dat, mspace, &dwg->object[i], &i);
           }
       }
   }
@@ -1866,7 +1870,9 @@ dxfb_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
   int i;
-  Dwg_Object *mspace = dwg->header_vars.BLOCK_RECORD_MSPACE->obj;
+  Dwg_Object *mspace = dwg_model_space_object (dwg);
+  if (!mspace)
+    return DWG_ERR_INVALIDDWG;
 
   SECTION (ENTITIES);
   for (i = 0; (BITCODE_BL)i < dwg->num_objects; i++)

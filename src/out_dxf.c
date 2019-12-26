@@ -761,7 +761,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
 // then 330, SUBCLASS
 
 #define DWG_OBJECT_END                                                        \
-  return error;                                                               \
+    return error;                                                             \
   }
 
 GCC30_DIAG_IGNORE (-Wformat-nonliteral)
@@ -1546,15 +1546,11 @@ static int dwg_dxf_object (Bit_Chain *restrict dat,
                & DWG_ERR_UNHANDLEDCLASS)
         {
           Dwg_Data *dwg = obj->parent;
-          int is_entity;
           int j = obj->type - 500;
           Dwg_Class *klass = NULL;
 
           if (j >= 0 && j < (int)dwg->num_classes)
-            {
-              klass = &dwg->dwg_class[j];
-              is_entity = dwg_class_is_entity (klass);
-            }
+            klass = &dwg->dwg_class[j];
           if (!klass)
             {
               LOG_WARN ("Unknown object, skipping eed/reactors/xdic");
@@ -1580,61 +1576,8 @@ dxf_common_entity_handle_data (Bit_Chain *restrict dat,
 
   // clang-format off
   #include "common_entity_handle_data.spec"
-
-#if 1
   #include "common_entity_data.spec"
   // clang-format on
-#else
-  if (ent->preview_exists && ent->preview_size >= 0
-      && ent->preview_size < 210210)
-    {
-      FIELD_RL (preview_size, 160);
-      FIELD_BINARY (preview, ent->preview_size, 310); // chunked hex encoding
-    }
-  SINCE (R_2004)
-  {
-    if (ent->color.index > 0)
-      FIELD_BL (color.index, 62);
-    if (ent->color.flag & 0x80)
-      FIELD_BL (color.rgb & 0x00ffffff, 420);
-    if (ent->color.flag & 0x20)
-      {
-        if (ent->color.transparency_type == 0)
-          VALUE_TV ("ByLayer", 440)
-        else if (ent->color.transparency_type == 1)
-          VALUE_TV ("ByBlock", 440)
-        else if (ent->color.transparency_type == 3)
-          FIELD_BL (color.alpha, 440)
-      }
-    if ((ent->color.flag & 0x41) == 0x41)
-      FIELD_TV (color.name, 430)
-    if ((ent->color.flag & 0x42) == 0x42)
-      FIELD_TV (color.book_name, 430)
-  }
-  if (ent->ltype_scale > 0.0)
-    FIELD_BD (ltype_scale, 48)
-
-  SINCE (R_2000)
-  {
-    switch (ent->ltype_flags)
-      {
-      case 1:
-        VALUE_TV ("ByBlock", 7);
-        break;
-      case 2:
-        VALUE_TV ("CONTINUOUS", 7);
-        break;
-        // case 3: HANDLE_NAME(LTYPE, 7); break;
-      }
-    // 00 BYLAYER, 01 BYBLOCK, 10 CONTINUOUS, 11 plotstyle handle
-    FIELD_BB (plotstyle_flags, 0);
-  }
-  SINCE (R_2007)
-  {
-    FIELD_BB (material_flags, 0); // if not BYLAYER 00: 347 material handle
-    FIELD_RC (shadow_flags, 284);
-  }
-#endif
 
   return error;
 }
@@ -2259,7 +2202,6 @@ dxf_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int error = 0;
   int i;
   Dwg_Object *mspace = dwg_model_space_object (dwg);
-
   if (!mspace)
     return DWG_ERR_INVALIDDWG;
 
