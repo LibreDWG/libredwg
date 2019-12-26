@@ -124,11 +124,11 @@
 #endif
           if (ent->color.alpha_type == 3) {
 #ifdef IS_ENCODER
-            DXF { FIELD_BL (color.alpha >> 8, 430); }
+            DXF { FIELD_BL (color.alpha >> 8, 440); }
 #else
-            DXF { FIELD_BL (color.alpha, 430); }
+            DXF { FIELD_BL (color.alpha, 440); }
 #endif
-            //else LOG_TRACE("color.alpha: %d [ENC 430]\n", ent->color.alpha >> 8);
+            //else LOG_TRACE("color.alpha: %d [ENC 440]\n", ent->color.alpha >> 8);
           }
         }
       if (flags & 0x80 && !(flags & 0x40)) // and not a reference

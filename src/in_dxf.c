@@ -4957,7 +4957,7 @@ new_object (char *restrict name, char *restrict dxfname,
           else if (strEQc (name, "XRECORD"))
             pair = add_xdata (dat, obj, pair);
           else
-            LOG_WARN ("Unknown DXF 102 %s in %s", pair->value.s, name)
+            LOG_WARN ("Unknown DXF code 102 %s in %s", pair->value.s, name)
           break;
         case 331:
           if (ctrl_id && in_blkrefs) // BLKREFS TODO
@@ -5811,10 +5811,18 @@ new_object (char *restrict name, char *restrict dxfname,
                             }
                           else if (pair->code < 440)
                             {
-                              color.flag |= 1;
+                              color.flag |= 0x10;
                               color.name = strdup (pair->value.s);
                               LOG_TRACE ("%s.%s.name = %s [%s %d]\n", name,
                                          f->name, pair->value.s, "CMC", pair->code);
+                            }
+                          else if (pair->code < 450)
+                            {
+                              color.alpha = (pair->value.l & 0xFF000000) >> 24;
+                              if (color.alpha)
+                                color.alpha_type = 3;
+                              LOG_TRACE ("%s.%s.alpha = %08X [%s %d]\n", name,
+                                         f->name, pair->value.u, "CMC", pair->code);
                             }
                           dwg_dynapi_entity_set_value (
                               _obj, obj->name, f->name, &color, is_utf);
@@ -5949,7 +5957,7 @@ new_object (char *restrict name, char *restrict dxfname,
               for (f = &fields[0]; f->name; f++)
                 {
                   if ((pair->code == 62 || pair->code == 420
-                       || pair->code == 430)
+                       || pair->code == 430 || pair->code == 440)
                       && (f->size > 8
                           && strEQc (f->type, "CMC"))) // alt. color fields
                     {
@@ -5970,9 +5978,19 @@ new_object (char *restrict name, char *restrict dxfname,
                           LOG_TRACE ("COMMON.%s.rgb = %08X [%s %d]\n", f->name,
                                      pair->value.u, "CMC", pair->code);
                         }
+                      else if (pair->code == 440)
+                        {
+                          color.flag |= 0x20;
+                          color.alpha = (pair->value.l & 0xFF000000) >> 24;
+                          color.alpha_type = pair->value.u >> 8;
+                          if (color.alpha && !color.alpha_type)
+                            color.alpha_type = 3;
+                          LOG_TRACE ("COMMON.%s.alpha = %08X [%s %d]\n", f->name,
+                                     pair->value.u, "CMC", pair->code);
+                        }
                       else if (pair->code == 430)
                         {
-                          color.flag |= 1;
+                          color.flag |= 0x10;
                           color.name = strdup (pair->value.s);
                           // TODO: book_name or name?
                           LOG_TRACE ("COMMON.%s.name = %s [%s %d]\n", f->name,
