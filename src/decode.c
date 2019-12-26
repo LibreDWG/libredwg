@@ -2235,6 +2235,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
   sec_dat->byte = 0;
   sec_dat->version = dat->version;
   sec_dat->from_version = dat->from_version;
+  sec_dat->chain = decomp;
 
   for (i = 0; i < info->num_sections; ++i)
     {
@@ -2295,7 +2296,6 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
               free (decomp);
               return error;
             }
-          sec_dat->chain = decomp;
           sec_dat->size = max_decomp_size;
         }
       else
@@ -2311,7 +2311,6 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
             }
           memcpy (&decomp[i * info->size],
                   &dat->chain[address + es.fields.address + 32], info->size);
-          sec_dat->chain = decomp;
           sec_dat->size = info->size;
         }
     }
