@@ -410,13 +410,13 @@
       HEADER_RC (DGNFRAME, 280);
       HEADER_B (REALWORLDSCALE, 290);
       HEADER_CMC (INTERFERECOLOR, 62);
-      if (_obj->INTERFEREOBJVS->absolute_ref) {
+      if (_obj->INTERFEREOBJVS && _obj->INTERFEREOBJVS->absolute_ref) {
         HEADER_H (INTERFEREOBJVS, 345);
       }
-      if (_obj->INTERFEREVPVS->absolute_ref) {
+      if (_obj->INTERFEREVPVS && _obj->INTERFEREVPVS->absolute_ref) {
         HEADER_H (INTERFEREVPVS, 346);
       }
-      if (_obj->DRAGVS->absolute_ref) {
+      if (_obj->DRAGVS && _obj->DRAGVS->absolute_ref) {
         HEADER_H (DRAGVS, 349);
       }
       HEADER_RC (CSHADOW, 280);
@@ -424,3 +424,4 @@
     }
 
   ENDSEC();
+
