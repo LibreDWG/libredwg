@@ -198,8 +198,8 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
 #define VALUE(value, type, dxf)                                               \
   if (dxf)                                                                    \
     {                                                                         \
-      char *_s;                                                               \
       const char *_fmt = dxf_format (dxf);                                    \
+      assert (_fmt);                                                          \
       GROUP (dxf);                                                            \
       GCC46_DIAG_IGNORE (-Wformat-nonliteral)                                 \
       snprintf (buf, 255, _fmt, value);                                       \
@@ -215,6 +215,7 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
         }                                                                     \
       else if (strEQc (_fmt, "%-16.14f"))                                     \
         {                                                                     \
+          char *_s;                                                           \
           if (strEQc (buf, "0.00000000000000"))                               \
             strcpy (buf, "0.0");                                              \
           else if ((_s = strstr (buf, ".00000000000000")))                    \
