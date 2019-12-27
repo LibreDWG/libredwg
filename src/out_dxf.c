@@ -1796,6 +1796,8 @@ dxf_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   for (j = 0; j < dwg->num_classes; j++)
     {
       const char *dxfname = dwg->dwg_class[j].dxfname;
+      if (!dxfname)
+        continue;
       // some classes are now builtin
       if (dat->version >= R_2004
           && (strEQc (dxfname, "ACDBPLACEHOLDER")
