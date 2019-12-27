@@ -3785,10 +3785,10 @@ DWG_ENTITY(HATCH)
       SUB_FIELD_BL (paths[rcount1],num_boundary_handles, 97);
 #if defined(IS_DXF) && !defined(IS_ENCODER)
       DXF {
-        if (rcount1 < _obj->num_boundary_handles) {
+        if (_obj->boundary_handles && rcount1 < _obj->num_boundary_handles) {
           FIELD_HANDLE (boundary_handles[rcount1], 0, 330)
         } else {
-          LOG_WARN("HATCH.num_path < num_boundary_handles")
+          LOG_WARN("HATCH.num_path < num_boundary_handles or empty boundary_handles")
           VALUE_HANDLE ((BITCODE_H)NULL, boundary_handles, 0, 330)
         }
       }
