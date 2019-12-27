@@ -582,7 +582,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 }
 
 #define SUMMARY_T(name)                                                       \
-  (strEQc (field, "$" #name))                                                 \
+  (strEQc (field, "$" #name) && pair->value.s != NULL)                        \
   {                                                                           \
     LOG_TRACE ("SUMMARY.%s = %s [T 1]\n", &field[1], pair->value.s);          \
     if (dwg->header.version >= R_2007)                                        \
