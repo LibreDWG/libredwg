@@ -116,7 +116,7 @@ main (int argc, char *argv[])
   const char *version = NULL;
   char *filename_out = NULL;
   Dwg_Version_Type dwg_version = R_2000;
-  int do_free;
+  int do_free = 0;
   int need_free = 0;
   int c;
 #ifdef HAVE_GETOPT_LONG
@@ -125,6 +125,7 @@ main (int argc, char *argv[])
       = { { "verbose", 1, &opts, 1 }, // optional
           { "file", 1, 0, 'o' },      { "as", 1, 0, 'a' },
           { "overwrite", 0, 0, 'y' }, { "help", 0, 0, 0 },
+          { "force-free", 0, 0, 0 },
           { "version", 0, 0, 0 },     { NULL, 0, NULL, 0 } };
 #endif
 
@@ -173,6 +174,8 @@ main (int argc, char *argv[])
             return opt_version ();
           if (!strcmp (long_options[option_index].name, "help"))
             return help ();
+          if (!strcmp (long_options[option_index].name, "force-free"))
+            do_free = 1;
           break;
 #else
         case 'i':
@@ -222,12 +225,12 @@ main (int argc, char *argv[])
     }
   i = optind;
 
-  if (filename_out && i + 1 < argc)
+  if (filename_out != NULL && (i + 1) < argc)
     {
       fprintf (stderr, "%s: no -o with multiple input files\n", argv[0]);
       return usage ();
     }
-  do_free = i + 1 < argc;
+  do_free |= (i + 1) < argc; // if more than one file
 
   while (i < argc)
     {
