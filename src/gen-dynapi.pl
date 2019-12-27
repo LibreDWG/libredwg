@@ -1139,7 +1139,7 @@ close $fh;
 
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1141 "gen-dynapi.pl"
+#line 1143 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -1220,7 +1220,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
-#line 1222 "gen-dynapi.pl"
+#line 1224 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
