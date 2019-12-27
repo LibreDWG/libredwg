@@ -295,18 +295,23 @@ dxf_read_pair (Bit_Chain *dat)
 }
 
 #define DXF_CHECK_EOF                                                         \
-  if (dat->byte >= dat->size                                                  \
-      || (pair == NULL)                                                       \
+  if (dat->byte >= dat->size || (pair == NULL)                                \
       || (pair->code == 0 && strEQc (pair->value.s, "EOF")))                  \
-  return 1
+    {                                                                         \
+      if (pair)                                                               \
+        dxf_free_pair (pair);                                                 \
+      return 1;                                                               \
+    }
 #define DXF_RETURN_EOF(what)                                                  \
-  if (dat->byte >= dat->size                                                  \
-      || (pair == NULL)                                                       \
+  if (dat->byte >= dat->size || (pair == NULL)                                \
       || (pair->code == 0 && strEQc (pair->value.s, "EOF")))                  \
-  return what
+    {                                                                         \
+      if (pair)                                                               \
+        dxf_free_pair (pair);                                                 \
+      return what;                                                            \
+    }
 #define DXF_BREAK_EOF                                                         \
-  if (dat->byte >= dat->size                                                  \
-      || (pair == NULL)                                                       \
+  if (dat->byte >= dat->size || (pair == NULL)                                \
       || (pair->code == 0 && strEQc (pair->value.s, "EOF")))                  \
   break
 
@@ -6678,8 +6683,8 @@ object_alias (char *name)
 static int
 dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  Dxf_Pair *pair = dxf_read_pair (dat);
   char name[80];
+  Dxf_Pair *pair = dxf_read_pair (dat);
   while (1)
     {
       while (pair->code == 0)
