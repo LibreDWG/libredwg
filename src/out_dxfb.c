@@ -922,7 +922,7 @@ static int
 dxfb_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               Dwg_Entity_3DSOLID *restrict _obj)
 {
-  Dwg_Data *dwg = obj->parent;
+  //Dwg_Data *dwg = obj->parent;
   unsigned long j;
   BITCODE_BL vcount, rcount1, rcount2;
   BITCODE_BL i;

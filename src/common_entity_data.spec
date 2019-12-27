@@ -111,13 +111,13 @@
       if (flags & 0x20)
         {
           int type;
-          BITCODE_BL alpha;
+          //BITCODE_BL alpha;
 #ifndef IS_DXF
           FIELD_BL (color.alpha, 0);
 #endif
           /* 0 BYLAYER, 1 BYBLOCK, 3 alpha */
           ent->color.alpha_type = ent->color.alpha & 0xff;
-          alpha = ent->color.alpha >> 8;
+          //alpha = ent->color.alpha >> 8;
           //LOG_HANDLE("alpha: %06x [BL 0]\n", ent->color.alpha);
 #ifdef IS_DECODER
           LOG_TRACE(" color.alpha_type: %d\n", ent->color.alpha_type);
@@ -133,9 +133,8 @@
         }
       if (flags & 0x80 && !(flags & 0x40)) // and not a reference
         {
-          int type;
+          int type = ent->color.rgb >> 24; //?
           FIELD_BL (color.rgb, 0); //ODA bug, documented as BS
-          type = ent->color.rgb & 0xff;
 #ifdef IS_DECODER
           LOG_TRACE("color.rgb: %06x [ENC.BL 420] (%d)\n", (unsigned)ent->color.rgb,
                     (int32_t)(ent->color.rgb & 0x00ffffff));
@@ -215,4 +214,3 @@
       FIELD_RC (linewt, 370);
     }
   }
-

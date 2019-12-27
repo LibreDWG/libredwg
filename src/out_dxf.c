@@ -2121,7 +2121,6 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict mspace,
   const Dwg_Object_BLOCK_HEADER *restrict _hdr
       = hdr->tio.object->tio.BLOCK_HEADER;
   Dwg_Object *restrict endblk;
-  Dwg_Data *dwg = hdr->parent;
   unsigned long int mspace_ref = mspace->handle.value;
 
   if (obj)
@@ -2276,7 +2275,7 @@ int
 dwg_write_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   const int minimal = dwg->opts & DWG_OPTS_MINIMAL;
-  struct Dwg_Header *obj = &dwg->header;
+  //struct Dwg_Header *obj = &dwg->header;
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   if (dat->from_version == R_INVALID)

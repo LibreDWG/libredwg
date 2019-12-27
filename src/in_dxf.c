@@ -551,7 +551,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       pair = dxf_read_pair (dat);
       DXF_BREAK_ENDSEC;
     next_hdrvalue:
-      if (pair->code == 1 && strEQc (field, "$ACADVER") && pair->value.s)
+      if (pair->code == 1 && strEQc (field, "$ACADVER") && pair->value.s != NULL)
         {
           // Note: Here version is still R_INVALID, thus pair->value.s
           // is never TU.
