@@ -1582,6 +1582,7 @@ dxf_common_entity_handle_data (Bit_Chain *restrict dat,
   return error;
 }
 
+RETURNS_NONNULL
 const char *
 dxf_format (int code)
 {
@@ -1660,6 +1661,7 @@ dxf_format (int code)
 /* num => string. for the reverse see in_dxf.c:dxf_fixup_header()
    TODO: maybe use a table.
  */
+RETURNS_NONNULL
 const char *
 dxf_codepage (int code, Dwg_Data *dwg)
 {

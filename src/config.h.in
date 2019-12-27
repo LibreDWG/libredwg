@@ -57,6 +57,9 @@
 /* Define to 1 if the system has the `ms_format' function attribute */
 #undef HAVE_FUNC_ATTRIBUTE_MS_FORMAT
 
+/* Define to 1 if the system has the `returns_nonnull' function attribute */
+#undef HAVE_FUNC_ATTRIBUTE_RETURNS_NONNULL
+
 /* Define to 1 if you have the <getopt.h> header file. */
 #undef HAVE_GETOPT_H
 

@@ -103,6 +103,12 @@
 #  define ATTRIBUTE_MALLOC
 #endif
 
+#ifdef HAVE_FUNC_ATTRIBUTE_RETURNS_NONNULL
+#  define RETURNS_NONNULL __attribute__ ((returns_nonnull))
+#else
+#  define RETURNS_NONNULL
+#endif
+
 #ifndef EXPORT
 #  if defined(_WIN32) && defined(ENABLE_SHARED)
 #    ifdef DLL_EXPORT

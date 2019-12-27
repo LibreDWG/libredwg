@@ -21,9 +21,8 @@
 #include "dwg.h"
 #include "bits.h"
 
-const char *dxf_format (int code);
-const char *dxf_codepage (int code, Dwg_Data *dwg);
-
+const char *dxf_format (int code) RETURNS_NONNULL;
+const char *dxf_codepage (int code, Dwg_Data *dwg)  RETURNS_NONNULL;
 int dxf_is_sorted_INSERT (const Dwg_Object *restrict obj);
 int dxf_is_sorted_POLYLINE (const Dwg_Object *restrict obj);
 int dxf_validate_DICTIONARY (Dwg_Object *obj);
