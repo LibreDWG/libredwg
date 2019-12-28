@@ -37,6 +37,7 @@ LTEXEC = @LTEXEC@
 
 VALGRIND_SUPPRESSIONS = @VALGRIND_SUPPRESSIONS@
 VALGRIND_SUPPRESSIONS_FILE = @VALGRIND_SUPPRESSIONS_FILE@
+VALGRIND_OPTS = --leak-check=full --show-reachable=no --num-callers=30
 EXTRA_DIST = $(top_srcdir)/.version \
              README \
 	     dwg.in dxf.in dxf-allcvt.lsp dxf-allcvt.sh test-dxf.sh \
@@ -107,8 +108,8 @@ check-dwg: all
 check-dwg-valgrind: all
 	-mv check-dwg-valgrind.log check-dwg-valgrind.log~ 2>/dev/null
 	for d in `find $(srcdir)/test/test-data -iname \*.dwg -size -10M`; do \
-	  echo $(VALGRIND) --leak-check=full --show-reachable=no --num-callers=30 $(VALGRIND_SUPPRESSIONS) programs/dwgread $$d | tee -a check-dwg-valgrind.log; \
-	  $(VALGRIND) --leak-check=full --show-reachable=no --num-callers=30 $(VALGRIND_SUPPRESSIONS) $(LTEXEC) programs/dwgread $$d >> check-dwg-valgrind.log 2>&1; \
+	  echo $(VALGRIND) $(VALGRIND_OPTS) $(VALGRIND_SUPPRESSIONS) programs/dwgread $$d | tee -a check-dwg-valgrind.log; \
+	  $(VALGRIND) $(VALGRIND_OPTS) $(VALGRIND_SUPPRESSIONS) $(LTEXEC) programs/dwgread $$d >> check-dwg-valgrind.log 2>&1; \
 	done
 check-dxf: all
 	-mv check-dxf.log check-dxf.log~ 2>/dev/null
