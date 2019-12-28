@@ -2403,11 +2403,11 @@ DWG_ENTITY (MLINE)
       SUB_FIELD_3DPOINT (verts[rcount1], miter_direction, 13);
       FIELD_VALUE (verts[rcount1].num_lines) = FIELD_VALUE (num_lines);
 
-      REPEAT2(num_lines, verts[rcount1].lines, Dwg_MLINE_line)
+      REPEAT2 (num_lines, verts[rcount1].lines, Dwg_MLINE_line)
       REPEAT_BLOCK
           SUB_FIELD_BS (verts[rcount1].lines[rcount2], num_segparms, 74);
           FIELD_VECTOR (verts[rcount1].lines[rcount2].segparms, BD, verts[rcount1].lines[rcount2].num_segparms, 41)
-          //REPEAT3(verts[rcount1].lines[rcount2].num_segparms,
+          //REPEAT3 (verts[rcount1].lines[rcount2].num_segparms,
           //        verts[rcount1].lines[rcount2].segparms,
           //        BITCODE_BD)
           //REPEAT_BLOCK
@@ -2417,7 +2417,7 @@ DWG_ENTITY (MLINE)
 
           SUB_FIELD_BS (verts[rcount1].lines[rcount2], num_areafillparms, 75);
           FIELD_VECTOR (verts[rcount1].lines[rcount2].areafillparms, BD, verts[rcount1].lines[rcount2].num_areafillparms, 42)
-          //REPEAT3(verts[rcount1].lines[rcount2].num_areafillparms,
+          //REPEAT3 (verts[rcount1].lines[rcount2].num_areafillparms,
           //        verts[rcount1].lines[rcount2].areafillparms,
           //        BITCODE_BD)
           //REPEAT_BLOCK
@@ -3697,7 +3697,7 @@ DWG_ENTITY (HATCH)
 #endif
               END_REPEAT (paths); return DWG_ERR_VALUEOUTOFBOUNDS;
             }
-          REPEAT2(paths[rcount1].num_segs_or_paths, paths[rcount1].segs, Dwg_HATCH_PathSeg)
+          REPEAT2 (paths[rcount1].num_segs_or_paths, paths[rcount1].segs, Dwg_HATCH_PathSeg)
           REPEAT_BLOCK
               SUB_FIELD_RC (paths[rcount1].segs[rcount2],type_status, 72);
               switch (FIELD_VALUE (paths[rcount1].segs[rcount2].type_status))
@@ -3757,9 +3757,7 @@ DWG_ENTITY (HATCH)
                       REPEAT_BLOCK
                           SUB_FIELD_2RD (paths[rcount1].segs[rcount2].control_points[rcount3], point, 10);
                           if (FIELD_VALUE (paths[rcount1].segs[rcount2].is_rational))
-                            {
-                              SUB_FIELD_BD (paths[rcount1].segs[rcount2].control_points[rcount3], weight, 40);
-                            }
+                            SUB_FIELD_BD (paths[rcount1].segs[rcount2].control_points[rcount3], weight, 40)
                       END_REPEAT_BLOCK
                       SET_PARENT (paths[rcount1].segs[rcount2].control_points,
                                  &_obj->paths[rcount1].segs[rcount2])
@@ -3792,7 +3790,7 @@ DWG_ENTITY (HATCH)
           SUB_FIELD_B (paths[rcount1],bulges_present, 72);
           SUB_FIELD_B (paths[rcount1],closed, 73);
           SUB_FIELD_BL (paths[rcount1],num_segs_or_paths, 93);
-          REPEAT2(paths[rcount1].num_segs_or_paths, paths[rcount1].polyline_paths, Dwg_HATCH_PolylinePath)
+          REPEAT2 (paths[rcount1].num_segs_or_paths, paths[rcount1].polyline_paths, Dwg_HATCH_PolylinePath)
           REPEAT_BLOCK
               FIELD_2RD (paths[rcount1].polyline_paths[rcount2].point, 10);
               if (FIELD_VALUE (paths[rcount1].bulges_present))
@@ -4615,7 +4613,7 @@ DWG_OBJECT_END
       FIELD_BD (sty.margin_vert_spacing, 40); \
       FIELD_BL (sty.num_borders, 94); /* 0-6 */ \
       VALUEOUTOFBOUNDS (sty.num_borders, 10000) \
-      REPEAT2(sty.num_borders, sty.border, Dwg_BorderStyle) \
+      REPEAT2 (sty.num_borders, sty.border, Dwg_BorderStyle) \
       REPEAT_BLOCK \
           SUB_FIELD_BL (sty.border[rcount2],edge_flags, 95);                \
           SUB_FIELD_BL (sty.border[rcount2],border_property_overrides_flag, 90); \
@@ -4660,7 +4658,7 @@ DWG_OBJECT_END
   REPEAT (tdata.num_rows, tdata.rows, Dwg_TableRow)	\
   REPEAT_BLOCK				\
       FIELD_BL (row.num_cells, 90);	\
-      REPEAT2(row.num_cells, row.cells, Dwg_TableCell)	\
+      REPEAT2 (row.num_cells, row.cells, Dwg_TableCell)	\
       REPEAT_BLOCK			\
           SUB_FIELD_BL (cell,flag, 90);		\
           SUB_FIELD_T (cell,tooltip, 300);	\
@@ -4668,8 +4666,8 @@ DWG_OBJECT_END
           SUB_FIELD_BL (cell,num_customdata_items, 90);	\
           REPEAT3 (cell.num_customdata_items, cell.customdata_items, Dwg_TABLE_CustomDataItem) \
           REPEAT_BLOCK				\
-              SUB_FIELD_T (cell.customdata_items[rcount3],name, 300);	\
-              TABLE_value_fields (cell.customdata_items[rcount3].value);	\
+              SUB_FIELD_T (cell.customdata_items[rcount3],name, 300);	 \
+              TABLE_value_fields (cell.customdata_items[rcount3].value); \
               if (error & DWG_ERR_INVALIDTYPE)	\
                 {			\
                   JSON_ENDHASH		\
@@ -4692,7 +4690,7 @@ DWG_OBJECT_END
               SUB_FIELD_BL (cell,unknown, 96);		\
             }						\
           SUB_FIELD_BL (cell,num_cell_contents, 95);	\
-          REPEAT3(cell.num_cell_contents, cell.cell_contents, Dwg_TableCellContent)	\
+          REPEAT3 (cell.num_cell_contents, cell.cell_contents, Dwg_TableCellContent) \
           REPEAT_BLOCK					\
               SUB_FIELD_BL (content,type, 90);		\
               if (FIELD_VALUE (content.type) == 1)	\
@@ -4717,7 +4715,7 @@ DWG_OBJECT_END
                 SUB_FIELD_HANDLE (content,handle, 3, 340);	\
               }						\
               SUB_FIELD_BL (content,num_attrs, 91);	\
-              REPEAT4(content.num_attrs, content.attrs, Dwg_TableCellContent_Attr)	\
+              REPEAT4 (content.num_attrs, content.attrs, Dwg_TableCellContent_Attr)	\
               REPEAT_BLOCK				\
                   SUB_FIELD_HANDLE (attr,attdef, 5, 330);	\
                   SUB_FIELD_T (attr,value, 301);	\
@@ -4761,7 +4759,7 @@ DWG_OBJECT_END
       END_REPEAT (row.cells);				\
       SUB_FIELD_BL (row,custom_data, 91);		\
       SUB_FIELD_BL (row,num_customdata_items, 90);	\
-      REPEAT3(row.num_customdata_items, row.customdata_items, Dwg_TABLE_CustomDataItem)	\
+      REPEAT3 (row.num_customdata_items, row.customdata_items, Dwg_TABLE_CustomDataItem) \
       REPEAT_BLOCK					\
           SUB_FIELD_T (row.customdata_items[rcount3],name, 300);	\
           TABLE_value_fields (row.customdata_items[rcount3].value);	\
@@ -5334,7 +5332,7 @@ DWG_OBJECT (TABLEGEOMETRY)
       SUB_FIELD_HANDLE (cell,unknown, 3, 330);
       SUB_FIELD_BL (cell,num_geom_data, 94);
       VALUEOUTOFBOUNDS (cell.num_geom_data, 10000)
-      REPEAT2(cell.num_geom_data, cell.geom_data, Dwg_CellContentGeometry)
+      REPEAT2 (cell.num_geom_data, cell.geom_data, Dwg_CellContentGeometry)
       REPEAT_BLOCK
           #define geom cell.geom_data[rcount2]
           SUB_FIELD_3BD (geom,dist_top_left, 0);
@@ -5538,7 +5536,7 @@ DWG_ENTITY (MULTILEADER)
         }
       SUB_FIELD_BL (lnode, num_breaks, 0);
       VALUEOUTOFBOUNDS (lnode.num_breaks, 5000)
-      REPEAT2(lnode.num_breaks, lnode.breaks, Dwg_LEADER_Break)
+      REPEAT2 (lnode.num_breaks, lnode.breaks, Dwg_LEADER_Break)
       REPEAT_BLOCK
           SUB_FIELD_3BD (lnode.breaks[rcount2], start, 11);
           SUB_FIELD_3BD (lnode.breaks[rcount2], end, 12);
@@ -5586,10 +5584,7 @@ DWG_ENTITY (MULTILEADER)
       DXF_OR_PRINT { VALUE_TFF ("}", 305); }
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (ctx.leaders)
-  // free ctx.leaders only r2007+, when there's no 2nd loop below
-  if (!IF_IS_FREE || dat->version >= R_2007) {
-    END_REPEAT (ctx.leaders)
-  }
+  END_REPEAT (ctx.leaders)
   DXF_OR_PRINT { VALUE_TFF ("}", 303); }
 
   FIELD_BD (ctx.scale, 40);
@@ -5729,23 +5724,12 @@ DWG_ENTITY (MULTILEADER)
   // TODO: seperate hdl_dat earlier, and use it above.
   // 2nd loop, use the variant without calloc
   VERSIONS (R_13, R_2004) {
-    _REPEAT_CNF (_obj->ctx.num_leaders, ctx.leaders, Dwg_LEADER_Node, 1)
-    REPEAT_BLOCK
-        #define lnode ctx.leaders[rcount1]
-        _REPEAT_CNF (_obj->lnode.num_lines, lnode.lines, Dwg_LEADER_Line, 2)
-        REPEAT_BLOCK
-            #define lline lnode.lines[rcount2]
-            SUB_FIELD_HANDLE (lline,ltype, 5, 340);
-            SUB_FIELD_HANDLE (lline,arrow_handle, 5, 341);
-        END_REPEAT_BLOCK
-        END_REPEAT (lnode.lines);
-    END_REPEAT_BLOCK
-    END_REPEAT (ctx.leaders)
     if (FIELD_VALUE (ctx.has_content_txt)) {
       FIELD_HANDLE (ctx.content.txt.style, 5, 340);
     } else if (FIELD_VALUE (ctx.has_content_blk)) {
       FIELD_HANDLE (ctx.content.blk.block_table, 4, 341);
     }
+    // ??
     VERSIONS (R_2000, R_2004)
     {
       _REPEAT_CNF (_obj->num_arrowheads, arrowheads, Dwg_LEADER_ArrowHead, 1)
