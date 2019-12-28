@@ -10,7 +10,9 @@ y=
 
 for d in "$@"; do
     case $d in
-        -y) y="-y"
+        -y) y="$y -y"
+             ;;
+        --force-free) y="$y $d"
              ;;
         -v*) v=$d
              ;;
