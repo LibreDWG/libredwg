@@ -918,6 +918,8 @@
       {                                                                       \
         VALUE_HANDLE (obj->tio.object->xdicobjhandle, xdicobjhandle, code,    \
                       360);                                                   \
+        if (!obj->tio.object->xdicobjhandle)                                  \
+          obj->tio.object->xdic_missing_flag = 1;                             \
       }                                                                       \
   }                                                                           \
   else                                                                        \
