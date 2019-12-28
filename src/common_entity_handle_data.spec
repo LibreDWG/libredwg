@@ -6,9 +6,7 @@
   ENT_REACTORS (4)
   ENT_XDICOBJHANDLE (3)
 #endif
-  //free: avoid double-free #43
-  if ((FIELD_VALUE (entmode) == 0) &&
-      (!IF_IS_FREE || obj->fixedtype == DWG_TYPE_PROXY_ENTITY))
+  if (FIELD_VALUE (entmode) == 0)
     {
       FIELD_HANDLE (ownerhandle, 4, 330);
     }
