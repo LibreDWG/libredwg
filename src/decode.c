@@ -2652,16 +2652,28 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return error;
 }
 
+// may return OUTOFBOUNDS, needs to free the chain then
+static int
+summaryinfo_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain *str_dat = dat;
+  struct Dwg_SummaryInfo *_obj = &dwg->summaryinfo;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+
+  // clang-format off
+  #include "summaryinfo.spec"
+  // clang-format on
+
+  return error;
+}
+
 /* R2004, 2010+ SummaryInfo Section
  */
 static int
 read_2004_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain old_dat, sec_dat = { 0 };
-  Bit_Chain *str_dat;
-  // Bit_Chain *hdl_dat = dat; //unneeded
-  struct Dwg_SummaryInfo *_obj = &dwg->summaryinfo;
-  Dwg_Object *obj = NULL;
   int error = 0;
 
   // not compressed, page size: 0x100
@@ -2677,11 +2689,9 @@ read_2004_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               dwg->header.summaryinfo_address, dat->byte);
   LOG_TRACE ("SummaryInfo\n-------------------\n")
   old_dat = *dat;
-  str_dat = dat = &sec_dat; // restrict in size
+  dat = &sec_dat; // restrict in size
 
-  // clang-format off
-  #include "summaryinfo.spec"
-  // clang-format on
+  error = summaryinfo_private (dat, dwg);
 
   if (sec_dat.chain)
     free (sec_dat.chain);
@@ -2886,16 +2896,17 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   error |= read_2004_section_handles (dat, dwg);
   if (dwg->header.thumbnail_address)
     error |= read_2004_section_preview (dat, dwg);
-    // if (dwg->header.vbaproj_address)
-    //  error |= read_2004_section_vbaproject (dat, dwg);
-    // error |= read_2004_section_appinfo (dat, dwg);
-    // error |= read_2004_section_filedeplist (dat, dwg);
-    // error |= read_2004_section_security (dat, dwg);
-    // error |= read_2004_section_revhistory (dat, dwg);
+  // TODO:
+  // if (dwg->header.vbaproj_address)
+  //  error |= read_2004_section_vbaproject (dat, dwg);
+  // error |= read_2004_section_appinfo (dat, dwg);
+  // error |= read_2004_section_filedeplist (dat, dwg);
+  // error |= read_2004_section_security (dat, dwg);
+  // error |= read_2004_section_revhistory (dat, dwg);
 
-    /* Clean up. XXX? Need this to write the sections, at least the name and
-     * type
-     */
+  /* Clean up. XXX? Need this to write the sections, at least the name and
+   * type
+   */
 #if 0
   if (dwg->header.section_info != NULL)
     {
