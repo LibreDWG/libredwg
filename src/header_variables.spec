@@ -24,58 +24,58 @@
 
 // size, bitsize_hi and bitsize read before
 
-  SINCE(R_2013)
+  SINCE (R_2013)
     {
-      FIELD_BLL(REQUIREDVERSIONS, 160);
+      FIELD_BLL (REQUIREDVERSIONS, 160);
     }
 
-  SINCE(R_13)
+  SINCE (R_13)
     {
       IF_ENCODE_FROM_EARLIER_OR_DXF {
-        FIELD_VALUE(unknown_0) = 412148564080.0;
-        FIELD_VALUE(unknown_1) = 1.0;
-        FIELD_VALUE(unknown_2) = 1.0;
-        FIELD_VALUE(unknown_3) = 1.0;
+        FIELD_VALUE (unknown_0) = 412148564080.0;
+        FIELD_VALUE (unknown_1) = 1.0;
+        FIELD_VALUE (unknown_2) = 1.0;
+        FIELD_VALUE (unknown_3) = 1.0;
       }
       FIELD_BD (unknown_0, 0);
       FIELD_BD (unknown_1, 0);
       FIELD_BD (unknown_2, 0);
       FIELD_BD (unknown_3, 0);
     }
-  VERSIONS(R_13, R_2004) { // undocumented as such in the ODA spec
+  VERSIONS (R_13, R_2004) { // undocumented as such in the ODA spec
       IF_ENCODE_FROM_EARLIER_OR_DXF {
-        FIELD_VALUE(unknown_text1) = strdup("m");
+        FIELD_VALUE (unknown_text1) = strdup("m");
       }
       FIELD_TV (unknown_text1, 0);
       FIELD_TV (unknown_text2, 0);
       FIELD_TV (unknown_text3, 0);
       FIELD_TV (unknown_text4, 0);
   }
-  SINCE(R_13)
+  SINCE (R_13)
     {
       IF_ENCODE_FROM_EARLIER_OR_DXF {
-        FIELD_VALUE(unknown_8) = 24;
+        FIELD_VALUE (unknown_8) = 24;
       }
       FIELD_BL (unknown_8, 0);
       FIELD_BL (unknown_9, 0);
     }
-  VERSIONS(R_13, R_14) // or maybe UNTIL(R_14)
+  VERSIONS (R_13, R_14) // or maybe UNTIL (R_14)
     {
       FIELD_BS (unknown_10, 0);
     }
-  VERSIONS(R_13, R_2000)
+  VERSIONS (R_13, R_2000)
     {
       FIELD_HANDLE (VPORT_ENTITY_HEADER, 5, 0); //current view
     }
-  SINCE(R_13)
+  SINCE (R_13)
     {
       FIELD_B (DIMASO, 70);
       FIELD_B (DIMSHO, 70);
     }
-  VERSIONS(R_13, R_14) {
+  VERSIONS (R_13, R_14) {
     FIELD_B (DIMSAV, 70);
   }
-  SINCE(R_13)
+  SINCE (R_13)
     {
       FIELD_B (PLINEGEN, 70);
       FIELD_B (ORTHOMODE, 70);
@@ -85,10 +85,10 @@
       FIELD_B (PSLTSCALE, 70);
       FIELD_B (LIMCHECK, 70);
     }
-  VERSIONS(R_13, R_14) {
+  VERSIONS (R_13, R_14) {
     FIELD_B (BLIPMODE, 70);
   }
-  SINCE(R_2004) {
+  SINCE (R_2004) {
     FIELD_B (unknown_11, 0); //undocumented
   }
 
@@ -97,12 +97,12 @@
   FIELD_B (ANGDIR, 70);
   FIELD_B (SPLFRAME, 70);
 
-  VERSIONS(R_13, R_14)
+  VERSIONS (R_13, R_14)
     {
       IF_ENCODE_FROM_EARLIER {
-         FIELD_VALUE(ATTREQ) = 1;
-         FIELD_VALUE(ATTDIA) = 1;
-         FIELD_VALUE(HANDLING) = 1;
+         FIELD_VALUE (ATTREQ) = 1;
+         FIELD_VALUE (ATTDIA) = 1;
+         FIELD_VALUE (HANDLING) = 1;
       }
       FIELD_B (ATTREQ, 70);
       FIELD_B (ATTDIA, 70);
@@ -111,7 +111,7 @@
   FIELD_B (MIRRTEXT, 70);
   FIELD_B (WORLDVIEW, 70); // default: 1
 
-  VERSIONS(R_13, R_14)
+  VERSIONS (R_13, R_14)
     {
       FIELD_B (WIREFRAME, 0); //Undocumented, not in DXF
     }
@@ -120,7 +120,7 @@
   FIELD_B (PLIMCHECK, 70);
   FIELD_B (VISRETAIN, 70); // default: 1
 
-  VERSIONS(R_13, R_14)
+  VERSIONS (R_13, R_14)
     {
       FIELD_B (DELOBJ, 70);
     }
@@ -129,20 +129,20 @@
   FIELD_B (PELLIPSE, 70);
 
 #if 0
-  VERSION(R_13) {
+  VERSION (R_13) {
     FIELD_BS (SAVEIMAGES, 70); // not in R13. maybe R13C3 only? also not in ODA
   }
 #endif
   FIELD_BS (PROXYGRAPHICS, 70);
-  UNTIL(R_14) {
+  UNTIL (R_14) {
     IF_ENCODE_FROM_EARLIER {
-      FIELD_VALUE(DRAGMODE) = 2;
+      FIELD_VALUE (DRAGMODE) = 2;
     }
     FIELD_BS (DRAGMODE, 70);
   }
-  SINCE(R_13) {
+  SINCE (R_13) {
     IF_ENCODE_FROM_EARLIER {
-      FIELD_VALUE(TREEDEPTH) = 3020;
+      FIELD_VALUE (TREEDEPTH) = 3020;
     }
     FIELD_BS (TREEDEPTH, 70);
   }
@@ -150,27 +150,27 @@
   FIELD_BS (LUPREC, 70);
   FIELD_BS (AUNITS, 70);
   FIELD_BS (AUPREC, 70);
-  UNTIL(R_14) {
+  UNTIL (R_14) {
     FIELD_BS (OSMODE, 70);
   }
   FIELD_BS (ATTMODE, 70);
-  UNTIL(R_14) {
+  UNTIL (R_14) {
     FIELD_BS (COORDS, 70);
   }
   FIELD_BS (PDMODE, 70);
-  UNTIL(R_14) {
+  UNTIL (R_14) {
     FIELD_BS (PICKSTYLE, 70);
   }
-  SINCE(R_2004) {
+  SINCE (R_2004) {
     FIELD_BL (unknown_12, 0);
     FIELD_BL (unknown_13, 0);
     FIELD_BL (unknown_14, 0);
   }
 
   IF_ENCODE_FROM_PRE_R13 {
-    FIELD_VALUE(SHADEDGE) = 3;
-    FIELD_VALUE(SHADEDIF) = 70;
-    FIELD_VALUE(MAXACTVP) = 64;
+    FIELD_VALUE (SHADEDGE) = 3;
+    FIELD_VALUE (SHADEDIF) = 70;
+    FIELD_VALUE (MAXACTVP) = 64;
   }
   FIELD_BS (USERI1, 70);
   FIELD_BS (USERI2, 70);
@@ -212,16 +212,16 @@
   FIELD_BD (FACETRES, 40);
   FIELD_BD (CMLSCALE, 40);
   FIELD_BD (CELTSCALE, 40);
-  PRE(R_2007) {
+  PRE (R_2007) {
     FIELD_TV (MENU, 1);
   }
   FIELD_TIMEBLL (TDCREATE, 40);
   FIELD_TIMEBLL (TDUPDATE, 40);
-  SINCE(R_13) {
+  SINCE (R_13) {
   //FIELD_TIMEBLL (TDUCREATE, 40);
   //FIELD_TIMEBLL (TDUUPDATE, 40);
   }
-  SINCE(R_2004)
+  SINCE (R_2004)
     {
       FIELD_BL (unknown_15, 0);
       FIELD_BL (unknown_16, 0);
@@ -236,7 +236,7 @@
   FIELD_HANDLE (TEXTSTYLE, 5, 7);
   FIELD_HANDLE (CELTYPE, 5, 6);
 
-  SINCE(R_2007)
+  SINCE (R_2007)
     {
       FIELD_HANDLE (CMATERIAL, 5, 0);
     }
@@ -244,12 +244,12 @@
   FIELD_HANDLE (DIMSTYLE, 5, 2);
   FIELD_HANDLE (CMLSTYLE, 5, 2);
 
-  SINCE(R_2000)
+  SINCE (R_2000)
     {
       FIELD_BD (PSVPSCALE, 40);
     }
 
-  SINCE(R_13)
+  SINCE (R_13)
     {
       FIELD_3BD (PINSBASE, 10);
       FIELD_3BD (PEXTMIN, 10);
@@ -263,7 +263,7 @@
       FIELD_HANDLE (PUCSNAME, 5, 2);
     }
 
-  SINCE(R_2000)
+  SINCE (R_2000)
     {
       FIELD_HANDLE (PUCSORTHOREF, 5, 2);
       FIELD_BS (PUCSORTHOVIEW, 70);
@@ -287,7 +287,7 @@
   FIELD_3BD (UCSYDIR, 10);
   FIELD_HANDLE (UCSNAME, 5, 2);
 
-  SINCE(R_2000)
+  SINCE (R_2000)
     {
       FIELD_HANDLE (UCSORTHOREF, 5, 2);
       FIELD_BS (UCSORTHOVIEW, 70);
@@ -298,13 +298,13 @@
       FIELD_3BD (UCSORGRIGHT, 10);
       FIELD_3BD (UCSORGFRONT, 10);
       FIELD_3BD (UCSORGBACK, 10);
-      PRE(R_2007) {
+      PRE (R_2007) {
         FIELD_TV (DIMPOST, 1);
         FIELD_TV (DIMAPOST, 1);
       }
     }
 
-  VERSIONS(R_13, R_14)
+  VERSIONS (R_13, R_14)
     {
       FIELD_B (DIMTOL, 70);
       FIELD_B (DIMLIM, 70);
@@ -348,7 +348,7 @@
   FIELD_BD (DIMTP, 40);
   FIELD_BD (DIMTM, 40);
 
-  SINCE(R_2007)
+  SINCE (R_2007)
     {
       FIELD_BD (DIMFXL, 40);
       FIELD_BD (DIMJOGANG, 40);
@@ -356,7 +356,7 @@
       FIELD_CMC (DIMTFILLCLR, 70,0);
     }
 
-  SINCE(R_2000)
+  SINCE (R_2000)
     {
       FIELD_B (DIMTOL, 70);
       FIELD_B (DIMLIM, 70);
@@ -369,7 +369,7 @@
       FIELD_BS (DIMAZIN, 70);
     }
 
-  SINCE(R_2007)
+  SINCE (R_2007)
     {
       FIELD_BS (DIMARCSYM, 70);
     }
@@ -383,7 +383,7 @@
   FIELD_BD (DIMTFAC, 40);
   FIELD_BD (DIMGAP, 40);
 
-  VERSIONS(R_13, R_14)
+  VERSIONS (R_13, R_14)
     {
       FIELD_TV (DIMPOST, 1);
       FIELD_TV (DIMAPOST, 1);
@@ -392,7 +392,7 @@
       FIELD_TV (DIMBLK2_T, 1);
     }
 
-  SINCE(R_2000)
+  SINCE (R_2000)
     {
       FIELD_BD (DIMALTRND, 40);
       FIELD_B (DIMALT, 70);
@@ -407,7 +407,7 @@
   FIELD_CMC (DIMCLRE, 70,0);
   FIELD_CMC (DIMCLRT, 70,0);
 
-  SINCE(R_2000)
+  SINCE (R_2000)
     {
       FIELD_BS (DIMADEC, 70);
       FIELD_BS (DIMDEC, 70);
@@ -430,19 +430,19 @@
       FIELD_BS (DIMATFIT, 70);
     }
 
-  SINCE(R_2007)
+  SINCE (R_2007)
     {
       FIELD_B (DIMFXLON, 70);
     }
 
-  SINCE(R_2010)
+  SINCE (R_2010)
     {
       FIELD_B (DIMTXTDIRECTION, 70);
       FIELD_BD (DIMALTMZF, 40);
       FIELD_BD (DIMMZF, 40);
     }
 
-  SINCE(R_2000)
+  SINCE (R_2000)
     {
       FIELD_HANDLE (DIMTXSTY, 5, 7);
       FIELD_HANDLE (DIMLDRBLK, 5, 1);
@@ -451,14 +451,14 @@
       FIELD_HANDLE (DIMBLK2, 5, 1);
     }
 
-  SINCE(R_2007)
+  SINCE (R_2007)
     {
       FIELD_HANDLE (DIMLTYPE, 5, 6);
       FIELD_HANDLE (DIMLTEX1, 5, 6);
       FIELD_HANDLE (DIMLTEX2, 5, 6);
     }
 
-  SINCE(R_2000)
+  SINCE (R_2000)
     {
       FIELD_BSd (DIMLWD, 70);
       FIELD_BSd (DIMLWE, 70);
@@ -473,7 +473,7 @@
   FIELD_HANDLE (VPORT_CONTROL_OBJECT, 3, 0);
   FIELD_HANDLE (APPID_CONTROL_OBJECT, 5, 0);
   FIELD_HANDLE (DIMSTYLE_CONTROL_OBJECT, 3, 0);
-  VERSIONS(R_13, R_2000) {
+  VERSIONS (R_13, R_2000) {
     FIELD_HANDLE (VPORT_ENTITY_CONTROL_OBJECT, 3, 0);
   }
 
@@ -481,15 +481,15 @@
   FIELD_HANDLE (DICTIONARY_ACAD_MLINESTYLE, 5, 0);
   FIELD_HANDLE (DICTIONARY_NAMED_OBJECT, 5, 0);
 
-  SINCE(R_2000)
+  SINCE (R_2000)
     {
       IF_ENCODE_FROM_EARLIER_OR_DXF {
-         FIELD_VALUE(TSTACKALIGN) = 1;
-         FIELD_VALUE(TSTACKSIZE) = 70;
+         FIELD_VALUE (TSTACKALIGN) = 1;
+         FIELD_VALUE (TSTACKSIZE) = 70;
       }
       FIELD_BS (TSTACKALIGN, 70);
       FIELD_BS (TSTACKSIZE, 70);
-      PRE(R_2007) {
+      PRE (R_2007) {
         FIELD_TV (HYPERLINKBASE, 1);
         FIELD_TV (STYLESHEET, 1);
       }
@@ -498,55 +498,55 @@
       FIELD_HANDLE (DICTIONARY_PLOTSTYLENAME, 5, 0);
     }
 
-  SINCE(R_2004)
+  SINCE (R_2004)
     {
       FIELD_HANDLE (DICTIONARY_MATERIAL, 5, 0);
       FIELD_HANDLE (DICTIONARY_COLOR, 5, 0);
     }
 
-  SINCE(R_2007)
+  SINCE (R_2007)
     {
       FIELD_HANDLE (DICTIONARY_VISUALSTYLE, 5, 0);
     }
 
-  SINCE(R_2013)
+  SINCE (R_2013)
     {
       FIELD_HANDLE (unknown_20, 5, 0); //  DICTIONARY_LIGHTLIST? since 2010
     }
-  SINCE(R_2000)
+  SINCE (R_2000)
     {
       FIELD_BLx (FLAGS, 70);
       DECODER {
-          FIELD_VALUE(CELWEIGHT) = FIELD_VALUE(FLAGS) & 0x1f;
+          FIELD_VALUE (CELWEIGHT) = FIELD_VALUE (FLAGS) & 0x1f;
           FIELD_G_TRACE (CELWEIGHT, BSd, 370)
-          FIELD_VALUE(ENDCAPS)   = FIELD_VALUE(FLAGS) & 0x60 ? 1 : 0;
+          FIELD_VALUE (ENDCAPS)   = FIELD_VALUE (FLAGS) & 0x60 ? 1 : 0;
           FIELD_G_TRACE (ENDCAPS, RC, 280)
-          FIELD_VALUE(JOINSTYLE) = FIELD_VALUE(FLAGS) & 0x180 ? 1 : 0;
+          FIELD_VALUE (JOINSTYLE) = FIELD_VALUE (FLAGS) & 0x180 ? 1 : 0;
           FIELD_G_TRACE (JOINSTYLE, RC, 280)
-          FIELD_VALUE(LWDISPLAY) = FIELD_VALUE(FLAGS) & 0x200 ? 0 : 1;
+          FIELD_VALUE (LWDISPLAY) = FIELD_VALUE (FLAGS) & 0x200 ? 0 : 1;
           FIELD_G_TRACE (LWDISPLAY, B, 290)
-          FIELD_VALUE(XEDIT)     = FIELD_VALUE(FLAGS) & 0x400 ? 0 : 1;
+          FIELD_VALUE (XEDIT)     = FIELD_VALUE (FLAGS) & 0x400 ? 0 : 1;
           FIELD_G_TRACE (XEDIT, B, 290)
-          FIELD_VALUE(EXTNAMES)  = FIELD_VALUE(FLAGS) & 0x800 ? 1 : 0;
+          FIELD_VALUE (EXTNAMES)  = FIELD_VALUE (FLAGS) & 0x800 ? 1 : 0;
           FIELD_G_TRACE (EXTNAMES, B, 290)
-          FIELD_VALUE(PSTYLEMODE) = FIELD_VALUE(FLAGS) & 0x2000 ? 1 : 0;
+          FIELD_VALUE (PSTYLEMODE) = FIELD_VALUE (FLAGS) & 0x2000 ? 1 : 0;
           FIELD_G_TRACE (PSTYLEMODE, B, 290)
-          FIELD_VALUE(OLESTARTUP) = FIELD_VALUE(FLAGS) & 0x4000 ? 1 : 0;
+          FIELD_VALUE (OLESTARTUP) = FIELD_VALUE (FLAGS) & 0x4000 ? 1 : 0;
           FIELD_G_TRACE (OLESTARTUP, B, 290)
       }
       FIELD_BS (INSUNITS, 70);
       FIELD_BS (CEPSNTYPE, 70);
-      if (FIELD_VALUE(CEPSNTYPE) == 3)
+      if (FIELD_VALUE (CEPSNTYPE) == 3)
         {
           FIELD_HANDLE (CPSNID, 5, 0);
         }
-      PRE(R_2007) {
+      PRE (R_2007) {
         FIELD_TV (FINGERPRINTGUID, 2);
         FIELD_TV (VERSIONGUID, 2);
       }
     }
 
-  SINCE(R_2004)
+  SINCE (R_2004)
     {
       FIELD_RC (SORTENTS, 280);
       FIELD_RC (INDEXCTL, 280);
@@ -558,7 +558,7 @@
       FIELD_BS (INTERSECTIONCOLOR, 280);
       FIELD_RC (OBSLTYPE, 280);
       FIELD_RC (INTERSECTIONDISPLAY, 290);
-      PRE(R_2007) {
+      PRE (R_2007) {
         FIELD_TV (PROJECTNAME, 1);
       }
     }
@@ -569,28 +569,28 @@
   FIELD_HANDLE (LTYPE_BYBLOCK, 5, 0);
   FIELD_HANDLE (LTYPE_CONTINUOUS, 5, 0);
 
-  SINCE(R_2007)
+  SINCE (R_2007)
     {
       IF_ENCODE_FROM_EARLIER {
-         FIELD_VALUE(STEPSPERSEC) = 2.0;
-         FIELD_VALUE(STEPSIZE)   = 50.0;
-         FIELD_VALUE(LENSLENGTH) = 50.0;
-         FIELD_VALUE(_3DDWFPREC) = 2.0;
-         FIELD_VALUE(PSOLWIDTH)  = 5.0;
-         FIELD_VALUE(PSOLHEIGHT) = 80.0;
-         FIELD_VALUE(LOFTANG1) = M_PI_2;
-         FIELD_VALUE(LOFTANG2) = M_PI_2;
-         FIELD_VALUE(LOFTPARAM) = 7;
-         FIELD_VALUE(LOFTNORMALS) = 1;
-         FIELD_VALUE(LATITUDE) = 1.0;
-         FIELD_VALUE(LONGITUDE) = 1.0;
-         FIELD_VALUE(TIMEZONE) = -8000;
-         FIELD_VALUE(LIGHTGLYPHDISPLAY) = 1;
-         FIELD_VALUE(TILEMODELIGHTSYNCH) = 1;
-         FIELD_VALUE(SOLIDHIST) = 1;
-         FIELD_VALUE(SHOWHIST) = 1;
-         FIELD_VALUE(DWFFRAME) = 2;
-         FIELD_VALUE(REALWORLDSCALE) = 1;
+         FIELD_VALUE (STEPSPERSEC) = 2.0;
+         FIELD_VALUE (STEPSIZE)   = 50.0;
+         FIELD_VALUE (LENSLENGTH) = 50.0;
+         FIELD_VALUE (_3DDWFPREC) = 2.0;
+         FIELD_VALUE (PSOLWIDTH)  = 5.0;
+         FIELD_VALUE (PSOLHEIGHT) = 80.0;
+         FIELD_VALUE (LOFTANG1) = M_PI_2;
+         FIELD_VALUE (LOFTANG2) = M_PI_2;
+         FIELD_VALUE (LOFTPARAM) = 7;
+         FIELD_VALUE (LOFTNORMALS) = 1;
+         FIELD_VALUE (LATITUDE) = 1.0;
+         FIELD_VALUE (LONGITUDE) = 1.0;
+         FIELD_VALUE (TIMEZONE) = -8000;
+         FIELD_VALUE (LIGHTGLYPHDISPLAY) = 1;
+         FIELD_VALUE (TILEMODELIGHTSYNCH) = 1;
+         FIELD_VALUE (SOLIDHIST) = 1;
+         FIELD_VALUE (SHOWHIST) = 1;
+         FIELD_VALUE (DWFFRAME) = 2;
+         FIELD_VALUE (REALWORLDSCALE) = 1;
       }
       FIELD_B (CAMERADISPLAY, 290);
       FIELD_BL (unknown_21, 0);
@@ -628,7 +628,7 @@
       FIELD_BD (SHADOWPLANELOCATION, 40);
     }
 
-  SINCE(R_13)
+  SINCE (R_13)
     {
       FIELD_BS (unknown_54, 0); /* (type 5/6 only) these do not seem to be required */
       FIELD_BS (unknown_55, 0);
@@ -636,7 +636,7 @@
       FIELD_BS (unknown_57, 0);
     }
 
-  SINCE(R_2007) {
+  SINCE (R_2007) {
     // TODO split str_dat stream and get rid of this block
     SECTION_STRING_STREAM
     FIELD_T (unknown_text1, 0);
@@ -646,7 +646,7 @@
     FIELD_T (MENU, 1);
     FIELD_T (DIMPOST, 1);
     FIELD_T (DIMAPOST, 1);
-    SINCE(R_2010) {
+    SINCE (R_2010) {
       FIELD_T (DIMALTMZS, 70);
       FIELD_T (DIMMZS, 70);
     }
@@ -657,3 +657,4 @@
     FIELD_T (PROJECTNAME, 1);
     END_STRING_STREAM
   }
+

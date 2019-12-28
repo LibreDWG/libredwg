@@ -18,12 +18,12 @@
 
   #include "spec.h"
 
-  SINCE(R_2004) {
+  SINCE (R_2004) {
     IF_ENCODE_FROM_EARLIER {
-      FIELD_VALUE(TDINDWG)    = dwg->header_vars.TDINDWG;
-      FIELD_VALUE(TDCREATE)   = dwg->header_vars.TDCREATE;
-      FIELD_VALUE(TDUPDATE)   = dwg->header_vars.TDUPDATE;
-      FIELD_VALUE(HYPERLINKBASE) = dwg->header_vars.HYPERLINKBASE;
+      FIELD_VALUE (TDINDWG)    = dwg->header_vars.TDINDWG;
+      FIELD_VALUE (TDCREATE)   = dwg->header_vars.TDCREATE;
+      FIELD_VALUE (TDUPDATE)   = dwg->header_vars.TDUPDATE;
+      FIELD_VALUE (HYPERLINKBASE) = dwg->header_vars.HYPERLINKBASE;
     }
   }
 
@@ -42,12 +42,13 @@
   FIELD_TIMERLL (TDUPDATE, 0);
   FIELD_RS (num_props, 0);
   //DEBUG_HERE;
-  REPEAT(num_props, props, Dwg_SummaryInfo_Property)
+  REPEAT (num_props, props, Dwg_SummaryInfo_Property)
     {
       FIELD_T (props[rcount1].key, 0);
       FIELD_T (props[rcount1].value, 0);
     }
-  END_REPEAT(props)
+  END_REPEAT (props)
   //DEBUG_HERE;
   FIELD_RL (unknown1, 0);
   FIELD_RL (unknown2, 0);
+

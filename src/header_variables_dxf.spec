@@ -18,26 +18,26 @@
 
 #include "spec.h"
 
-  SECTION(HEADER);
+  SECTION (HEADER);
 
   HEADER_VALUE (ACADVER, TV, 1, version_codes[dwg->header.version]);
 
   if (minimal) {
     HEADER_VALUE (HANDSEED, RS, 5, _obj->HANDSEED->absolute_ref);
-    ENDSEC();
+    ENDSEC ();
     return 0;
   }
 
-  VERSIONS(R_13, R_2013) {
+  VERSIONS (R_13, R_2013) {
     HEADER_VALUE (ACADMAINTVER, RC, 70, dwg->header.maint_version);
   }
-  SINCE(R_2018) {
+  SINCE (R_2018) {
     HEADER_VALUE (ACADMAINTVER, RC, 90, dwg->header.maint_version);
   }
-  SINCE(R_10) {
+  SINCE (R_10) {
     HEADER_VALUE (DWGCODEPAGE, TV, 3, codepage);
   }
-  SINCE(R_2004) {
+  SINCE (R_2004) {
     // usually only since 2010
     if (dwg->summaryinfo.TITLE && strlen (dwg->summaryinfo.TITLE))
       {
@@ -51,7 +51,7 @@
         HEADER_VALUE (LASTSAVEDBY, TU, 1, dwg->summaryinfo.LASTSAVEDBY);
       }
   }
-  SINCE(R_2013) {
+  SINCE (R_2013) {
     HEADER_BLL (REQUIREDVERSIONS, 160);
   }
   HEADER_3D (INSBASE);
@@ -65,11 +65,11 @@
   HEADER_RC (FILLMODE, 70);
   HEADER_RC (QTEXTMODE, 70);
   HEADER_RC (MIRRTEXT, 70);
-  UNTIL(R_14) {
+  UNTIL (R_14) {
     HEADER_RC (DRAGMODE, 70);
   }
   HEADER_RD (LTSCALE, 40);
-  UNTIL(R_14) {
+  UNTIL (R_14) {
     HEADER_RC (OSMODE, 70);
   }
   HEADER_RC (ATTMODE, 70);
@@ -80,9 +80,9 @@
   HEADER_HANDLE_NAME (CLAYER, 8, LAYER);
   HEADER_HANDLE_NAME (CELTYPE, 6, LTYPE);
   HEADER_CMC (CECOLOR, 62);
-  SINCE(R_13) {
+  SINCE (R_13) {
     HEADER_RD (CELTSCALE, 40);
-    UNTIL(R_14) {
+    UNTIL (R_14) {
       HEADER_RC (DELOBJ, 70);
     }
     HEADER_RC (DISPSILH, 70); // this is WIREFRAME
@@ -110,7 +110,7 @@
   HEADER_HANDLE_NAME (DIMBLK, 1, BLOCK_HEADER);
   HEADER_RC (DIMASO, 70);
   HEADER_RC (DIMSHO, 70);
-  PRE(R_14) {
+  PRE (R_14) {
     HEADER_RC (DIMSAV, 70);
   }
   HEADER_TV (DIMPOST, 1);
@@ -132,7 +132,7 @@
   HEADER_CMC (DIMCLRT, 70);
   HEADER_RD (DIMTFAC, 40);
   HEADER_RD (DIMGAP, 40);
-  SINCE(R_13) {
+  SINCE (R_13) {
     HEADER_RC (DIMJUST, 70);
     HEADER_RC (DIMSD1, 70);
     HEADER_RC (DIMSD2, 70);
@@ -150,7 +150,7 @@
     HEADER_HANDLE_NAME (DIMTXSTY, 7, STYLE);
     HEADER_RC (DIMAUNIT, 70);
   }
-  SINCE(R_2000) {
+  SINCE (R_2000) {
     HEADER_RC (DIMADEC, 70);
     HEADER_RD (DIMALTRND, 40);
     HEADER_RC (DIMAZIN, 70);
@@ -165,7 +165,7 @@
     HEADER_BSd (DIMLWE, 70);
     HEADER_RC (DIMTMOVE, 70);
   }
-  SINCE(R_2007)
+  SINCE (R_2007)
     {
       HEADER_BD (DIMFXL, 40);
       HEADER_B (DIMFXLON, 70);
@@ -177,7 +177,7 @@
       HEADER_HANDLE_NAME (DIMLTEX1, 6, LTYPE);
       HEADER_HANDLE_NAME (DIMLTEX2, 6, LTYPE);
     }
-  SINCE(R_2010)
+  SINCE (R_2010)
     {
       HEADER_B (DIMTXTDIRECTION, 70);
     }
@@ -192,23 +192,23 @@
   HEADER_RD (PELEVATION, 40);
   HEADER_RD (THICKNESS, 40);
   HEADER_RC (LIMCHECK, 70);
-  UNTIL(R_14) {
+  UNTIL (R_14) {
     //HEADER_RC (BLIPMODE, 70); //documented but nowhere found
   }
   HEADER_RD (CHAMFERA, 40);
   HEADER_RD (CHAMFERB, 40);
-  SINCE(R_13) {
+  SINCE (R_13) {
     HEADER_RD (CHAMFERC, 40);
     HEADER_RD (CHAMFERD, 40);
   }
   HEADER_RC (SKPOLY, 70);
 
   HEADER_TIMEBLL (TDCREATE, 40);
-  SINCE(R_13) {
+  SINCE (R_13) {
     HEADER_TIMEBLL (TDUCREATE, 40);
   }
   HEADER_TIMEBLL (TDUPDATE, 40);
-  SINCE(R_13) {
+  SINCE (R_13) {
     HEADER_TIMEBLL (TDUUPDATE, 40);
   }
   HEADER_TIMEBLL (TDINDWG, 40);
@@ -220,13 +220,13 @@
   HEADER_RC (PDMODE, 70);
   HEADER_RD (PDSIZE, 40);
   HEADER_RD (PLINEWID, 40);
-  UNTIL(R_14) {
+  UNTIL (R_14) {
     HEADER_RC (COORDS, 70); // 2
   }
   HEADER_RC (SPLFRAME, 70);
   HEADER_RC (SPLINETYPE, 70);
   HEADER_RC (SPLINESEGS, 70);
-  UNTIL(R_14) {
+  UNTIL (R_14) {
     HEADER_RC (ATTDIA, 70); //default 1
     HEADER_RC (ATTREQ, 70); //default 1
     HEADER_RC (HANDLING, 70); //default 1
@@ -240,14 +240,14 @@
   HEADER_RC (SURFTYPE, 70); // 6
   HEADER_RC (SURFU, 70); // 6
   HEADER_RC (SURFV, 70); // 6
-  SINCE(R_2000) {
+  SINCE (R_2000) {
     HEADER_HANDLE_NAME (UCSBASE, 2, UCS);
   }
   HEADER_HANDLE_NAME (UCSNAME, 2, UCS);
   HEADER_3D (UCSORG);
   HEADER_3D (UCSXDIR);
   HEADER_3D (UCSYDIR);
-  SINCE(R_2000) {
+  SINCE (R_2000) {
     HEADER_HANDLE_NAME (UCSORTHOREF, 2, UCS);
     HEADER_RC (UCSORTHOVIEW, 70);
     HEADER_3D (UCSORGTOP);
@@ -262,7 +262,7 @@
   HEADER_3D (PUCSORG);
   HEADER_3D (PUCSXDIR);
   HEADER_3D (PUCSYDIR);
-  SINCE(R_2000) {
+  SINCE (R_2000) {
     HEADER_HANDLE_NAME (PUCSORTHOREF, 2, UCS);
     HEADER_RC (PUCSORTHOVIEW, 70);
     HEADER_3D (PUCSORGTOP);
@@ -285,7 +285,7 @@
   HEADER_RD (USERR5, 40);
 
   HEADER_RC (WORLDVIEW, 70);
-  //VERSION(R_13) {
+  //VERSION (R_13) {
   //  HEADER_RC (WIREFRAME, 70); //Undocumented
   //}
   HEADER_RC (SHADEDGE, 70);
@@ -302,38 +302,38 @@
 
   HEADER_RC (UNITMODE, 70);
   HEADER_RC (VISRETAIN, 70);
-  VERSION(R_13) {
+  VERSION (R_13) {
     HEADER_RC (DELOBJ, 70);
   }
   HEADER_RC (PLINEGEN, 70);
   HEADER_RC (PSLTSCALE, 70);
   HEADER_RC (TREEDEPTH, 70);
-  UNTIL(R_11) {
+  UNTIL (R_11) {
     HEADER_VALUE (DWGCODEPAGE, TV, 3, codepage);
   }
-  VERSIONS(R_14, R_2000) { //? maybe only for r14
+  VERSIONS (R_14, R_2000) { //? maybe only for r14
     HEADER_RC (PICKSTYLE, 70);
   }
   HEADER_HANDLE_NAME (CMLSTYLE, 2, MLINESTYLE); //default: Standard
   HEADER_RC (CMLJUST, 70);
   HEADER_RD (CMLSCALE, 40); //default: 20
-  VERSION(R_13) {
+  VERSION (R_13) {
     HEADER_9 (SAVEIMAGES);
-    VALUE(1, RC, 70);
+    VALUE (1, RC, 70);
   }
-  SINCE(R_14) {
+  SINCE (R_14) {
     HEADER_RC (PROXYGRAPHICS, 70);
   }
   HEADER_RL (MEASUREMENT, 70);
-  SINCE(R_2000) {
+  SINCE (R_2000) {
     PRINT {
       HEADER_9 (CELWEIGHT);
-      VALUE(dxf_cvt_lweight(_obj->CELWEIGHT), RCs, 370);
+      VALUE (dxf_cvt_lweight(_obj->CELWEIGHT), RCs, 370);
     }
     /* ENCODER {
       HEADER_9 (CELWEIGHT);
       // reverse lookup
-      VALUE(dxf_revcvt_lweight(_obj->CELWEIGHT), RCs, 370);
+      VALUE (dxf_revcvt_lweight(_obj->CELWEIGHT), RCs, 370);
     } */
 
     HEADER_RC (ENDCAPS, 280);
@@ -357,17 +357,17 @@
     HEADER_B (OLESTARTUP, 290);
   }
 
-  SINCE(R_2004)
+  SINCE (R_2004)
     {
       HEADER_RC (SORTENTS, 280);
       HEADER_RC (INDEXCTL, 280);
       HEADER_RC (HIDETEXT, 280);
-      SINCE(R_2007) {
+      SINCE (R_2007) {
         HEADER_RC (XCLIPFRAME, 280);
       } else {
         HEADER_B (XCLIPFRAME, 290);
       }
-      PRE(R_2007) {
+      PRE (R_2007) {
         HEADER_RC (DIMASSOC, 280);
       }
       HEADER_RC (HALOGAP, 280);
@@ -375,13 +375,13 @@
       HEADER_RC (OBSLTYPE, 280);
       HEADER_RC (INTERSECTIONDISPLAY, 280);
       HEADER_BS (INTERSECTIONCOLOR, 70);
-      SINCE(R_2007) {
+      SINCE (R_2007) {
         HEADER_RC (DIMASSOC, 280);
       }
       HEADER_T (PROJECTNAME, 1);
     }
 
-  SINCE(R_2007)
+  SINCE (R_2007)
     {
       HEADER_B (CAMERADISPLAY, 290);
       HEADER_BD (LENSLENGTH, 40);
@@ -423,5 +423,6 @@
       HEADER_BD (SHADOWPLANELOCATION, 40);
     }
 
-  ENDSEC();
+  ENDSEC ();
+
 

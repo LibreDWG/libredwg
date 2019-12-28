@@ -21,23 +21,23 @@
   SINCE (R_2000) {
     IF_ENCODE_FROM_EARLIER {
       BITCODE_RS tmpunknown[] = {5, 0x893, 5, 0x893, 0, 1};
-      FIELD_VALUE(aux_intro[0]) = 0xff;
-      FIELD_VALUE(aux_intro[1]) = 0x77;
-      FIELD_VALUE(aux_intro[2]) = 0x01;
-      FIELD_VALUE(minus_1) = -1;
-      FIELD_VALUE(dwg_version) = dwg->header.dwg_version;
-      FIELD_VALUE(maint_version) = dwg->header.maint_version;
+      FIELD_VALUE (aux_intro[0]) = 0xff;
+      FIELD_VALUE (aux_intro[1]) = 0x77;
+      FIELD_VALUE (aux_intro[2]) = 0x01;
+      FIELD_VALUE (minus_1) = -1;
+      FIELD_VALUE (dwg_version) = dwg->header.dwg_version;
+      FIELD_VALUE (maint_version) = dwg->header.maint_version;
       FIELD_VALUE (dwg_version_2) = dwg->header.dwg_version;
       FIELD_VALUE (maint_version_2) = dwg->header.maint_version;
-      memcpy (FIELD_VALUE(unknown_rs), tmpunknown, sizeof(tmpunknown));
-      FIELD_VALUE(TDCREATE)   = dwg->header_vars.TDCREATE.value;
-      FIELD_VALUE(TDUPDATE)   = dwg->header_vars.TDUPDATE.value;
-      FIELD_VALUE (HANDSEED)  = dwg->header_vars.HANDSEED->absolute_ref;
+      memcpy (FIELD_VALUE (unknown_rs), tmpunknown, sizeof(tmpunknown));
+      FIELD_VALUE (TDCREATE) = dwg->header_vars.TDCREATE.value;
+      FIELD_VALUE (TDUPDATE) = dwg->header_vars.TDUPDATE.value;
+      FIELD_VALUE (HANDSEED) = dwg->header_vars.HANDSEED->absolute_ref;
     }
   }
 
   for (i=0; i<3; i++) {
-    FIELD_RC(aux_intro[i], 0); /* ff 77 01 */
+    FIELD_RC (aux_intro[i], 0); /* ff 77 01 */
   }
   FIELD_RSx (dwg_version, 0);
   FIELD_RS (maint_version, 0);
@@ -77,3 +77,4 @@
       FIELD_RS (zero_18[i], 0);
     }
   }
+

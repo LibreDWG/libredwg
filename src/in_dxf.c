@@ -540,7 +540,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   _obj->TEXTQLTY = 50;
   _obj->FACETRES = 0.5;
 
-  // here SECTION(HEADER) was already consumed
+  // here SECTION (HEADER) was already consumed
   // read the first group 9, $field pair
   pair = dxf_read_pair (dat);
 

@@ -158,14 +158,14 @@ sub dxf_in {
     $f = '';
     s/DXF \{ //;
     if (!$n) {
-      if (/^DWG_(ENTITY|OBJECT)\((\w+)\)/) {
+      if (/^DWG_(ENTITY|OBJECT)\s?\((\w+)\)/) {
         $n = $2;
         $n =~ s/^_3/3/;
         warn $n;
-      } elsif (/^\s*SECTION\(HEADER\)/) {
+      } elsif (/^\s*SECTION\s?\(HEADER\)/) {
         $n = 'header_variables';
         warn $n;
-      } elsif (/^int DWG_FUNC_N\(ACTION,_HATCH(\w+)\)/) {
+      } elsif (/^int DWG_FUNC_N\s?\(ACTION,_HATCH(\w+)\)/) {
         $n = 'HATCH';
         warn $n;
       } elsif (/^\#define (COMMON_ENTITY_(?:POLYLINE|DIMENSION|))/) {
@@ -179,7 +179,7 @@ sub dxf_in {
       $n = $1;
       warn "define $n";
     # i.e. after #define
-    } elsif (/^DWG_(ENTITY|OBJECT)\((\w+)\)/) {
+    } elsif (/^DWG_(ENTITY|OBJECT)\s?\((\w+)\)/) {
       $n = $2;
       $n =~ s/^_3/3/;
       warn $n;
