@@ -16768,28 +16768,28 @@ static int test_SHAPE (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_BS shape_no;
-    if (dwg_dynapi_entity_value (shape, "SHAPE", "shape_no", &shape_no, NULL)
-        && shape_no == shape->shape_no)
-      pass ();
-    else
-      fail ("SHAPE.shape_no [BS] %hu != %hu", shape->shape_no, shape_no);
-    shape_no++;
-    if (dwg_dynapi_entity_set_value (shape, "SHAPE", "shape_no", &shape_no, 0)
-        && shape_no == shape->shape_no)
-      pass ();
-    else
-      fail ("SHAPE.shape_no [BS] set+1 %hu != %hu", shape->shape_no, shape_no);
-    shape->shape_no--;
-
-  }
-  {
     BITCODE_H style;
     if (dwg_dynapi_entity_value (shape, "SHAPE", "style", &style, NULL)
         && !memcmp (&style, &shape->style, sizeof (shape->style)))
         pass ();
     else
         fail ("SHAPE.style [H]");
+  }
+  {
+    BITCODE_BS style_id;
+    if (dwg_dynapi_entity_value (shape, "SHAPE", "style_id", &style_id, NULL)
+        && style_id == shape->style_id)
+      pass ();
+    else
+      fail ("SHAPE.style_id [BS] %hu != %hu", shape->style_id, style_id);
+    style_id++;
+    if (dwg_dynapi_entity_set_value (shape, "SHAPE", "style_id", &style_id, 0)
+        && style_id == shape->style_id)
+      pass ();
+    else
+      fail ("SHAPE.style_id [BS] set+1 %hu != %hu", shape->style_id, style_id);
+    shape->style_id--;
+
   }
   {
     BITCODE_BD thickness;

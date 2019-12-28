@@ -2837,12 +2837,20 @@ EXPORT void dwg_ent_shape_set_thickness (dwg_ent_shape *restrict shape,
                                          int *restrict error)
     __nonnull ((3)) _deprecated_dynapi_setter;
 
-EXPORT double dwg_ent_shape_get_shape_no (const dwg_ent_shape *restrict shape,
-                                          int *restrict error)
+EXPORT BITCODE_BS dwg_ent_shape_get_shape_no (const dwg_ent_shape *restrict shape,
+                                              int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
 
 EXPORT void dwg_ent_shape_set_shape_no (dwg_ent_shape *restrict shape,
-                                        const double no, int *restrict error)
+                                        const BITCODE_BS id, int *restrict error)
+    __nonnull ((3)) _deprecated_dynapi_setter;
+
+EXPORT BITCODE_BS dwg_ent_shape_get_style_id (const dwg_ent_shape *restrict shape,
+                                              int *restrict error)
+    __nonnull ((2)) _deprecated_dynapi_getter;
+
+EXPORT void dwg_ent_shape_set_style_id (dwg_ent_shape *restrict shape,
+                                        const BITCODE_BS id, int *restrict error)
     __nonnull ((3)) _deprecated_dynapi_setter;
 
 EXPORT void dwg_ent_shape_get_extrusion (const dwg_ent_shape *restrict shape,

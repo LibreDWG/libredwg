@@ -1496,7 +1496,7 @@ typedef struct _dwg_entity_SHAPE
   BITCODE_BD width_factor;
   BITCODE_BD oblique;
   BITCODE_BD thickness;
-  BITCODE_BS shape_no;
+  BITCODE_BS style_id;
   BITCODE_BE extrusion;
   BITCODE_H style;
 } Dwg_Entity_SHAPE;

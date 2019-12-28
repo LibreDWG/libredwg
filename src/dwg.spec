@@ -1468,7 +1468,7 @@ DWG_ENTITY(SHAPE)
   PRE (R_13) {
     FIELD_HANDLE (style, 5, 0);
     FIELD_2RD (ins_pt, 10);
-    FIELD_RS (shape_no, 2);
+    FIELD_RS (style_id, 0); // dxf: 2
     if (R11OPTS(1))
       FIELD_3RD (extrusion, 210);
     if (R11OPTS(2))
@@ -1476,12 +1476,35 @@ DWG_ENTITY(SHAPE)
   }
   LATER_VERSIONS {
     FIELD_3BD (ins_pt, 10);
-    FIELD_BD (scale, 40);
+    FIELD_BD (scale, 40);  // documented as size
     FIELD_BD (rotation, 50);
     FIELD_BD (width_factor, 41);
     FIELD_BD (oblique, 51);
     FIELD_BD (thickness, 39);
-    FIELD_BS (shape_no, 2);
+#ifdef IS_DXF
+    {
+      Dwg_Object *style;
+      if (_obj->style)
+        style = dwg_resolve_handle (dwg, _obj->style->absolute_ref);
+      else
+        {
+          Dwg_Object_Ref *ctrlref = dwg->header_vars.STYLE_CONTROL_OBJECT;
+          Dwg_Object *ctrl
+            = ctrlref ? dwg_resolve_handle (dwg, ctrlref->absolute_ref) : NULL;
+          Dwg_Object_STYLE_CONTROL *_ctrl
+            = ctrl ? ctrl->tio.object->tio.STYLE_CONTROL : NULL;
+          Dwg_Object_Ref *styleref = _ctrl && _obj->style_id < _ctrl->num_entries
+                                     ? _ctrl->entries[_obj->style_id] // index
+                                     : NULL;
+          style = styleref ? dwg_resolve_handle (dwg, styleref->absolute_ref) : NULL;
+        }
+      if (style && style->fixedtype == DWG_TYPE_STYLE)
+        // dxf 2 for the name from SHAPE styles
+        VALUE_T (style->tio.object->tio.STYLE->name, 2);
+    }
+#else
+    FIELD_BS (style_id, 0); // STYLE index in dwg to SHAPEFILE
+#endif
     FIELD_3BD (extrusion, 210);
 
     COMMON_ENTITY_HANDLE_DATA;

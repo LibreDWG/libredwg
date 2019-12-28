@@ -3008,8 +3008,8 @@ BD,	DXF 41
 BD,	DXF 51
 @item thickness
 BD,	DXF 39
-@item shape_no
-BS,	DXF 2
+@item style_id
+BS
 @item extrusion
 BE,	DXF 210
 @item style

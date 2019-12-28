@@ -9469,16 +9469,16 @@ dwg_ent_shape_set_thickness (dwg_ent_shape *restrict shape,
     }
 }
 
-/** Returns shape shape no
+/** Returns SHAPE.style_id
  */
-double
+BITCODE_BS
 dwg_ent_shape_get_shape_no (const dwg_ent_shape *restrict shape,
                             int *restrict error)
 {
   if (shape)
     {
       *error = 0;
-      return shape->shape_no;
+      return shape->style_id;
     }
   else
     {
@@ -9488,16 +9488,55 @@ dwg_ent_shape_get_shape_no (const dwg_ent_shape *restrict shape,
     }
 }
 
-/** Sets shape shape no
+/** Sets SHAPE.style_id by index, not name.
  */
 void
-dwg_ent_shape_set_shape_no (dwg_ent_shape *restrict shape, const double no,
+dwg_ent_shape_set_shape_no (dwg_ent_shape *restrict shape, const BITCODE_BS id,
                             int *restrict error)
 {
   if (shape)
     {
       *error = 0;
-      shape->shape_no = no;
+      // FIXME: check valid index: STYLE_CONTROL.num_entries
+      shape->style_id = id;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
+    }
+}
+
+/** Returns SHAPE.style_id
+ */
+BITCODE_BS
+dwg_ent_shape_get_style_id (const dwg_ent_shape *restrict shape,
+                            int *restrict error)
+{
+  if (shape)
+    {
+      *error = 0;
+      return shape->style_id;
+    }
+  else
+    {
+      *error = 1;
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
+      return bit_nan ();
+    }
+}
+
+/** Sets SHAPE.style_id by index, not name.
+ */
+void
+dwg_ent_shape_set_style_id (dwg_ent_shape *restrict shape, const BITCODE_BS id,
+                            int *restrict error)
+{
+  if (shape)
+    {
+      *error = 0;
+      // FIXME: check valid index: STYLE_CONTROL.num_entries
+      shape->style_id = id;
     }
   else
     {
