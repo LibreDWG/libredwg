@@ -3432,7 +3432,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   int is_utf = dwg->header.version >= R_2007 ? 1 : 0;
   char *fieldname;
   char ctrlname[80];
-  char dxfname[80];
+  char *dxfname;
   BITCODE_B xrefref;
 
   NEW_OBJECT (dwg, obj);
@@ -3446,7 +3446,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
       strcat (ctrlname, "_CONTROL");
     }
   LOG_TRACE ("add %s\n", ctrlname);
-  strcpy (dxfname, ctrlname);
+  dxfname = strdup (ctrlname);
 
   // clang-format off
   ADD_TABLE_IF (LTYPE, LTYPE_CONTROL)
@@ -4840,28 +4840,32 @@ new_object (char *restrict name, char *restrict dxfname,
                   if (strEQc (subclass, "AcDbRotatedDimension"))
                     {
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_LINEAR;
-                      obj->name = obj->dxfname = (char *)"DIMENSION_LINEAR";
+                      obj->name = (char *)"DIMENSION_LINEAR";
+                      obj->dxfname = strdup (obj->name);
                       strcpy (name, obj->name);
                       LOG_TRACE ("change type to %s\n", name);
                     }
                   else if (strEQc (subclass, "AcDbAlignedDimension"))
                     {
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_ALIGNED;
-                      obj->name = obj->dxfname = (char *)"DIMENSION_ALIGNED";
+                      obj->name = (char *)"DIMENSION_ALIGNED";
+                      obj->dxfname = strdup (obj->name);
                       strcpy (name, obj->name);
                       LOG_TRACE ("change type to %s\n", name);
                     }
                   else if (strEQc (subclass, "AcDbOrdinateDimension"))
                     {
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_ORDINATE;
-                      obj->name = obj->dxfname = (char *)"DIMENSION_ORDINATE";
+                      obj->name = (char *)"DIMENSION_ORDINATE";
+                      obj->dxfname = strdup (obj->name);
                       strcpy (name, obj->name);
                       LOG_TRACE ("change type to %s\n", name);
                     }
                   else if (strEQc (subclass, "AcDbDiametricDimension"))
                     {
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_DIAMETER;
-                      obj->name = obj->dxfname = (char *)"DIMENSION_DIAMETER";
+                      obj->name = (char *)"DIMENSION_DIAMETER";
+                      obj->dxfname = strdup (obj->name);
                       strcpy (name, obj->name);
                       LOG_TRACE ("change type to %s\n", name);
                     }
@@ -6332,8 +6336,10 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           ctrl_id = dwg->num_objects - 1;             // dwg->object might move
           while (pair && pair->code == 0 && strEQ (pair->value.s, table))
             {
+              char *dxfname = strdup (pair->value.s);
+              dxf_free_pair (pair);
               // until 0 table or 0 ENDTAB
-              pair = new_object (table, pair->value.s, dat, dwg, ctrl_id, i++);
+              pair = new_object (table, dxfname, dat, dwg, ctrl_id, i++);
               // undo BLOCK_CONTROL.entries and LTYPE_CONTROL.entries
               if (strEQc (table, "BLOCK_RECORD"))
                 {
@@ -6438,10 +6444,11 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               Dwg_Object *obj, *blkhdr = NULL;
               BITCODE_BL idx = dwg->num_objects;
-              strncpy (name, pair->value.s, 79);
-              name[79] = '\0';
+              char *dxfname = strdup (pair->value.s);
+              strncpy (name, dxfname, 79);
               entity_alias (name);
-              pair = new_object (name, pair->value.s, dat, dwg, 0, i++);
+              dxf_free_pair (pair);
+              pair = new_object (name, dxfname, dat, dwg, 0, i++);
               obj = &dwg->object[idx];
               if (obj->type == DWG_TYPE_BLOCK)
                 {
@@ -6612,7 +6619,9 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       while (pair->code == 0
              && (is_dwg_entity (name) || strEQc (name, "DIMENSION")))
         {
-          pair = new_object (name, pair->value.s, dat, dwg, 0, 0);
+          char *dxfname = strdup (pair->value.s);
+          dxf_free_pair (pair);
+          pair = new_object (name, dxfname, dat, dwg, 0, 0);
           if (pair->code == 0)
             {
               Dwg_Object *obj = &dwg->object[dwg->num_objects - 1];
@@ -6689,11 +6698,15 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       while (pair->code == 0)
         {
-          strncpy (name, pair->value.s, 79);
+          char *dxfname = strdup (pair->value.s);
+          strncpy (name, dxfname, 79);
           name[79] = '\0';
           object_alias (name);
           if (is_dwg_object (name))
-            pair = new_object (name, pair->value.s, dat, dwg, 0, 0);
+            {
+              dxf_free_pair (pair);
+              pair = new_object (name, dxfname, dat, dwg, 0, 0);
+            }
           else
             DXF_RETURN_ENDSEC (0)
           else
@@ -6721,11 +6734,15 @@ dxf_unknownsection_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       while (pair->code == 0)
         {
-          strncpy (name, pair->value.s, 79);
+          char *dxfname = strdup (pair->value.s);
+          strncpy (name, dxfname, 79);
           name[79] = '\0';
           object_alias (name);
           if (is_dwg_object (name))
-            pair = new_object (name, pair->value.s, dat, dwg, 0, 0);
+            {
+              dxf_free_pair (pair);
+              pair = new_object (name, dxfname, dat, dwg, 0, 0);
+            }
           else
             DXF_RETURN_ENDSEC (0)
           else
@@ -7037,7 +7054,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       Dwg_Object *obj;
       Dwg_Object_BLOCK_HEADER *_obj;
-      char *dxfname = (char *)"BLOCK_HEADER";
+      char *dxfname = strdup ((char*)"BLOCK_HEADER");
       NEW_OBJECT (dwg, obj);
       ADD_OBJECT (BLOCK_HEADER);
       // dwg->header.version here still unknown. <r2000: 0x17

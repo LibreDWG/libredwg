@@ -83,6 +83,8 @@ static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
 #define FIELD_HANDLE(nam, code, dxf) VALUE_HANDLE (_obj->nam, nam, code, dxf)
 #define SUB_FIELD_HANDLE(o, nam, code, dxf)                                   \
   VALUE_HANDLE (_obj->o.nam, nam, code, dxf)
+// compare to dwg_decode_handleref_with_code: not all refs are stored in the
+// object_ref vector
 #define VALUE_HANDLE(ref, nam, _code, dxf)                                    \
   if (ref)                                                                    \
     {                                                                         \
@@ -743,6 +745,9 @@ dwg_free_object (Dwg_Object *obj)
             }
         }
     }
+  /* With this importer the dxfname is dynamic, just the name is const */
+  if (dwg->opts & DWG_OPTS_INDXF)
+    FREE_IF (obj->dxfname);
   obj->type = DWG_TYPE_FREED;
 }
 
