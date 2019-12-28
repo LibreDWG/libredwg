@@ -105,10 +105,11 @@ $(srcdir)/dynapi.c: $(srcdir)/gen-dynapi.pl $(top_srcdir)/include/dwg.h
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
 	$(COMPILE) -c -E -P -o $@ $<
 
-.c.ic: # replace the original .c with the expanded version. keep a backup!
+.c.ic: # replace the original .c with the expanded version.
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
 	$(COMPILE) -c -E -P -o $@ $<
 	$(CLANG_FORMAT) -i $@
+	$(am__mv) $< $<.orig
 	$(am__mv) $@ $<
 
 # emacs flymake-mode

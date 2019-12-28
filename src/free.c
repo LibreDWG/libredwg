@@ -84,13 +84,16 @@ static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
 #define SUB_FIELD_HANDLE(o, nam, code, dxf)                                   \
   VALUE_HANDLE (_obj->o.nam, nam, code, dxf)
 // compare to dwg_decode_handleref_with_code: not all refs are stored in the
-// object_ref vector
-#define VALUE_HANDLE(ref, nam, _code, dxf)                                    \
-  if (ref)                                                                    \
-    {                                                                         \
-      if (!(ref->handleref.size || (obj && ref->handleref.code > 5)))         \
-        free (ref);                                                           \
-      ref = NULL;                                                             \
+// object_ref vector, like relative ptrs and NULL.
+// But indxf skip the NULL HDL, it is global.
+// obj is the relative base object here and there.
+#define VALUE_HANDLE(ref, nam, _code, dxf)                              \
+  if (ref &&                                                            \
+      !(dat->opts & DWG_OPTS_INDXF && ref->handleref.size == 0) &&      \
+      !(ref->handleref.size || (obj && ref->handleref.code > 5)))       \
+    {                                                                   \
+      free (ref);                                                       \
+      ref = NULL;                                                       \
     } /* else freed globally */
 #define FIELD_DATAHANDLE(name, code, dxf) FIELD_HANDLE (name, code, dxf)
 #define FIELD_HANDLE_N(name, vcount, code, dxf) FIELD_HANDLE (name, code, dxf)
@@ -835,7 +838,7 @@ dwg_free (Dwg_Data *dwg)
         }
       if (dwg->object_ref)
         {
-          //LOG_HANDLE ("free %d refs:\n", dwg->num_object_refs)
+          LOG_HANDLE ("free %d global refs\n", dwg->num_object_refs)
           for (i = 0; i < dwg->num_object_refs; ++i)
             {
               //LOG_HANDLE ("free ref %d\n", i)

@@ -3828,9 +3828,10 @@ dwg_decode_handleref_with_code (Bit_Chain *restrict dat,
       return NULL;
     }
 
-  // If the handle size is 0 and not a relative handle, it is probably
-  // a null handle.
-  // It shouldn't be placed in the object ref vector.
+  /* If the handle size is 0 and not a relative handle, it is probably
+     a null handle.
+     It shouldn't be placed in the object ref vector,
+     just with indxf the NULL HDL is. */
   if (ref->handleref.size || (obj && ref->handleref.code > 5))
     {
       if (dwg_decode_add_object_ref (dwg, ref))
