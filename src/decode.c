@@ -3152,7 +3152,8 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
       LOG_POS
       if (size > _obj->size || dat->byte == sav_byte)
         {
-          LOG_ERROR ("Invalid EED size " FORMAT_BS " > %u", size, _obj->size)
+          LOG_ERROR ("Invalid EED size " FORMAT_BS " > %u", size, _obj->size);
+          obj->num_eed = idx;
           dwg_free_eed (_obj);
           return DWG_ERR_INVALIDEED; /* may not continue */
         }
@@ -5012,7 +5013,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
               if (err >= DWG_ERR_CRITICAL)
                 *dat = abs_dat;
             }
-          else if (klass)
+          else if (klass) // is_entity
             {
               int err;
 #if 0 && !defined(IS_RELEASE)
