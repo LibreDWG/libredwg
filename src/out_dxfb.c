@@ -978,9 +978,8 @@ dxfb_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         }
       else // if (FIELD_VALUE(version)==2)
         {
-          // TODO
           LOG_ERROR ("TODO: Implement parsing of SAT file (version 2) "
-                     "in entities 37,38 and 39.\n");
+                     "in entities 37,38 and 39.");
         }
       /*
             FIELD_B (wireframe_data_present, 0);
@@ -1026,7 +1025,7 @@ dxfb_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       if (!FIELD_VALUE (acis_empty_bit))
         {
           LOG_ERROR ("TODO: Implement parsing of ACIS data at the end "
-                     "of 3dsolid object parsing (acis_empty_bit==0).\n");
+                     "of 3dsolid object parsing (acis_empty_bit==0).");
         }
 
       SINCE (R_2007)
