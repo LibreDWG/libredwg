@@ -268,7 +268,7 @@ static int dwg_free_UNKNOWN_OBJ (Bit_Chain *restrict dat,
     int error = 0;                                                            \
     if (obj->tio.entity)                                                      \
       {                                                                       \
-        LOG_HANDLE ("Free entity " #token "\n")                               \
+        LOG_HANDLE ("Free entity " #token " [%d]\n", obj->index)              \
         if (obj->tio.entity->tio.token)                                       \
           error = dwg_free_##token##_private (dat, obj);                      \
                                                                               \
@@ -312,7 +312,7 @@ static int dwg_free_UNKNOWN_OBJ (Bit_Chain *restrict dat,
     if (obj->tio.object)                                                      \
       {                                                                       \
         _obj = obj->tio.object->tio.token;                                    \
-        LOG_HANDLE ("Free object " #token " %p\n", obj)                       \
+        LOG_HANDLE ("Free object " #token " [%d]\n", obj->index)              \
         if (strcmp (#token, "UNKNOWN_OBJ")                                    \
             && obj->supertype == DWG_SUPERTYPE_UNKNOWN)                       \
           {                                                                   \
