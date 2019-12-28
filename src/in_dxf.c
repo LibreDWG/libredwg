@@ -4379,9 +4379,10 @@ move_out_BLOCK_CONTROL (Dwg_Object *restrict obj,
                      ARGS_H (obj->handle));
           _ctrl->num_entries--;
           LOG_TRACE ("BLOCK_CONTROL.num_entries = " FORMAT_BL "\n", _ctrl->num_entries);
-          if (j < _ctrl->num_entries)
+          if (j < _ctrl->num_entries) // if last, skip move, realloc is enough
+            /* 1 < 4 (was 5, i.e 0-4): 1, 2, 4-1-1: 2 */
             memmove (&_ctrl->entries[j], &_ctrl->entries[j + 1],
-                     (_ctrl->num_entries - 1) * sizeof (BITCODE_H));
+                     (_ctrl->num_entries - j - 1) * sizeof (BITCODE_H));
           _ctrl->entries = realloc (_ctrl->entries,
                                     _ctrl->num_entries * sizeof (BITCODE_H));
           break;
@@ -4406,7 +4407,7 @@ move_out_LTYPE_CONTROL (Dwg_Object *restrict obj,
           LOG_TRACE ("LTYPE_CONTROL.num_entries = " FORMAT_BL "\n", _ctrl->num_entries);
           if (j < _ctrl->num_entries)
             memmove (&_ctrl->entries[j], &_ctrl->entries[j + 1],
-                     (_ctrl->num_entries - 1) * sizeof (BITCODE_H));
+                     (_ctrl->num_entries - j - 1) * sizeof (BITCODE_H));
           _ctrl->entries = realloc (_ctrl->entries,
                                     _ctrl->num_entries * sizeof (BITCODE_H));
           break;
