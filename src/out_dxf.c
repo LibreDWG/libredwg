@@ -1257,7 +1257,7 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       Dwg_Object *o;                                                          \
       for (BITCODE_BL j = 0; j < _obj->num_owned; j++)                        \
         {                                                                     \
-          o = _obj->vertex[j] ? _obj->vertex[j]->obj : NULL;                  \
+          o = _obj->vertex && _obj->vertex[j] ? _obj->vertex[j]->obj : NULL;  \
           if (strEQc (#token, "PFACE") && o                                   \
               && o->fixedtype == DWG_TYPE_VERTEX_PFACE_FACE)                  \
             {                                                                 \
@@ -1322,7 +1322,9 @@ decl_dxf_process_VERTEX (PFACE)
       Dwg_Object *o;                                                          \
       for (BITCODE_BL j = 0; j < _obj->num_owned; j++)                        \
         {                                                                     \
-          o = _obj->attrib_handles[j] ? _obj->attrib_handles[j]->obj : NULL;  \
+          o = _obj->attrib_handles && _obj->attrib_handles[j]                 \
+                  ? _obj->attrib_handles[j]->obj                              \
+                  : NULL;                                                     \
           if (o && o->fixedtype == DWG_TYPE_ATTRIB)                           \
             error |= dwg_dxf_ATTRIB (dat, o);                                 \
         }                                                                     \
