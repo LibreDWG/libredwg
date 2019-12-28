@@ -1,0 +1,38 @@
+#!/bin/sh
+# create -v3 logs and dxf's from dwg's with dwg2dxf
+srcdir="@srcdir@"
+
+make -s -j4 -C src
+make -s -j4 -C programs dwg2dxf
+@DSYMUTIL@ programs/dwg2dxf
+v=-v3
+y=
+
+for d in "$@"; do
+    case $d in
+        -y) y="-y"
+             ;;
+        -v*) v=$d
+             ;;
+        *)
+        if [ ! -f $d ]; then
+            if [ -f $srcdir/test/test-data/$d ]
+            then
+                d=$srcdir/test/test-data/$d;
+            else
+                if [ -f $srcdir/test/test-data/$d.dwg ]
+                then
+                    d=$srcdir/test/test-data/$d.dwg
+                fi
+            fi
+        fi
+        dir=_$(basename `dirname "$d"`)
+        if [ x$dir = x_test-data ]; then dir=""; fi
+        if [ x$dir = x_td ]; then dir=""; fi
+        log=`basename "$d" .dxf`$dir.log
+        dxf=`basename "$d" .dxf`$dir.dxf
+        echo programs/dwg2dwg $y $v -o "$dxf" "$d" 2\>$log
+        @TIMEOUT_10@ @LTEXEC@ programs/dwg2dxf $y $v -o "$dxf" "$d" 2>$log
+        ;;
+    esac
+done
