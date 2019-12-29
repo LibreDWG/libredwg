@@ -555,6 +555,12 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       // now read the code, value pair. for points it may be multiple (index i)
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
+      if (!pair)
+        {
+          pair = dxf_read_pair (dat);
+          if (!pair)
+            return 1;
+        }
       DXF_BREAK_ENDSEC;
     next_hdrvalue:
       if (pair->code == 1 && strEQc (field, "$ACADVER") && pair->value.s != NULL)
@@ -722,6 +728,12 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
+      if (!pair)
+        {
+          pair = dxf_read_pair (dat);
+          if (!pair)
+            return 1;
+        }
       DXF_BREAK_ENDSEC;
       if (pair->code != 9 /* && pair->code != 0 */)
         goto next_hdrvalue; // for mult. 10,20,30 values
