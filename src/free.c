@@ -426,7 +426,7 @@ dwg_free_variable_type (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
   Bit_Chain *dat = &pdat;
 
   i = obj->type - 500;
-  if (i < 0 || i > (int)dwg->num_classes)
+  if (i < 0 || i >= (int)dwg->num_classes)
     return DWG_ERR_INVALIDTYPE;
 
   klass = &dwg->dwg_class[i];

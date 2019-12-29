@@ -4992,14 +4992,14 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
           // LOG_TRACE("Unknown pos %lu, offset %lu\n", obj->unknown_pos,
           // obj->unknown_off);
 
-          if (i > 0 && i <= (int)dwg->num_classes)
+          if (i >= 0 && i < (int)dwg->num_classes)
             {
               klass = &dwg->dwg_class[i];
               is_entity = dwg_class_is_entity (klass);
             }
           else
             {
-              if (i <= 0)
+              if (i < 0)
                 {
                   LOG_ERROR ("Invalid class index %d <0", i);
                 }
