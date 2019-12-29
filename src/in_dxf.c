@@ -950,6 +950,12 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         {
           dxf_free_pair (pair);
           pair = dxf_read_pair (dat);
+          if (!pair)
+            {
+              pair = dxf_read_pair (dat);
+              if (!pair)
+                return 1;
+            }
         }
       klass->number = 500 + i;
       while (pair->code != 0)
@@ -997,6 +1003,12 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             }
           dxf_free_pair (pair);
           pair = dxf_read_pair (dat);
+          if (!pair)
+            {
+              pair = dxf_read_pair (dat);
+              if (!pair)
+                return 1;
+            }
         }
       dwg->num_classes++;
       DXF_RETURN_ENDSEC (0) // next class or ENDSEC
