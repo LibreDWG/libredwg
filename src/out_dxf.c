@@ -851,19 +851,25 @@ dxf_write_xdata (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
 #define DXF_3DSOLID dxf_3dsolid (dat, obj, (Dwg_Entity_3DSOLID *)_obj);
 
 static char *
-cquote (char *restrict dest, const char *restrict src)
+cquote (char *restrict dest, const char *restrict src, const int len)
 {
   char c;
   char *d = dest;
+  const char* endp = dest + len;
   char *s = (char *)src;
   while ((c = *s++))
     {
-      if (c == '\n')
+      if (dest >= endp)
+        {
+          *dest = 0;
+          return d;
+        }
+      if (c == '\n' && dest+1 < endp)
         {
           *dest++ = '^';
           *dest++ = 'J';
         }
-      else if (c == '\r')
+      else if (c == '\r' && dest+1 < endp)
         {
           *dest++ = '^';
           *dest++ = 'M';
@@ -871,7 +877,8 @@ cquote (char *restrict dest, const char *restrict src)
       else
         *dest++ = c;
     }
-  *dest = 0; // add final delim, skipped above
+  if (dest < endp)
+    *dest = 0; // add final delim, skipped above
   return d;
 }
 
@@ -883,8 +890,9 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str)
     {
       if (strchr (str, '\n') || strchr (str, '\r'))
         {
-          char *_buf = alloca (2 * strlen (str));
-          fprintf (dat->fh, "%s\r\n", cquote (_buf, str));
+          const int len = 2 * strlen (str) + 1;
+          char *_buf = alloca (len);
+          fprintf (dat->fh, "%s\r\n", cquote (_buf, str, len));
           freea (_buf);
         }
       else

@@ -168,16 +168,18 @@ static void _prefix (Bit_Chain *dat);
         const int len = strlen (str);                                         \
         if (len < 4096 / 6)                                                   \
           {                                                                   \
-            char *_buf = alloca (6 * len + 1);                                \
+            const int _len = 6 * len + 1;                                     \
+            char *_buf = alloca (_len);                                       \
             fprintf (dat->fh, "\"" #nam "\": \"%s\",\n",                      \
-                     json_cquote (_buf, str));                                \
+                     json_cquote (_buf, str, _len));                          \
             freea (_buf);                                                     \
           }                                                                   \
         else                                                                  \
           {                                                                   \
-            char *_buf = malloc (6 * len + 1);                                \
+            const int _len = 6 * len + 1;                                     \
+            char *_buf = malloc (_len);                                       \
             fprintf (dat->fh, "\"" #nam "\": \"%s\",\n",                      \
-                     json_cquote (_buf, str));                                \
+                     json_cquote (_buf, str, _len));                          \
             free (_buf);                                                      \
           }                                                                   \
       }                                                                       \
@@ -794,34 +796,40 @@ wcquote (wchar_t *restrict dest, const wchar_t *restrict src)
 #endif /* HAVE_NATIVE_WCHAR2 */
 
 char *
-json_cquote (char *restrict dest, const char *restrict src)
+json_cquote (char *restrict dest, const char *restrict src, const int len)
 {
   unsigned char c;
   unsigned char *s = (unsigned char *)src;
+  const char* endp = dest + len;
   char *d = dest;
   while ((c = *s++))
     {
-      if (c == '"')
+      if (dest >= endp)
+        {
+          *dest = 0;
+          return d;
+        }
+      if (c == '"' && dest+1 < endp)
         {
           *dest++ = '\\';
           *dest++ = c;
         }
-      else if (c == '\\')
+      else if (c == '\\' && dest+1 < endp)
         {
           *dest++ = '\\';
           *dest++ = c;
         }
-      else if (c == '\n')
+      else if (c == '\n' && dest+1 < endp)
         {
           *dest++ = '\\';
           *dest++ = 'n';
         }
-      else if (c == '\r')
+      else if (c == '\r' && dest+1 < endp)
         {
           *dest++ = '\\';
           *dest++ = 'r';
         }
-      else if (c < 0x1f)
+      else if (c < 0x1f && dest+5 < endp)
         {
           *dest++ = '\\';
           *dest++ = 'u';
