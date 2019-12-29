@@ -4565,6 +4565,7 @@ new_object (char *restrict name, char *restrict dxfname,
           if (strEQc (name, #token))            \
             {                                   \
               ADD_ENTITY (token);               \
+              goto found_ent;                   \
             }                                   \
           else
 
@@ -4575,6 +4576,8 @@ new_object (char *restrict name, char *restrict dxfname,
           #undef DWG_ENTITY
           #define DWG_ENTITY(token)
           // clang-format on
+        found_ent:
+          ;
         }
     }
   else
@@ -4593,13 +4596,15 @@ new_object (char *restrict name, char *restrict dxfname,
             if (strEQc (name, #token))      \
               {                             \
                 ADD_OBJECT (token);         \
+                goto found_obj;             \
               }
 
           #include "objects.inc"
 
           #undef DWG_OBJECT
           #define DWG_OBJECT(token)
-
+        found_obj:
+          ;
           // clang-format on
         }
       else // a table
