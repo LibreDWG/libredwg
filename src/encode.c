@@ -657,21 +657,21 @@ static int encode_preR13 (Dwg_Data *restrict dwg, Bit_Chain *restrict dat);
 static int dwg_encode_entity (Dwg_Object *restrict obj, Bit_Chain *dat,
                               Bit_Chain *hdl_dat, Bit_Chain *str_dat);
 static int dwg_encode_object (Dwg_Object *restrict obj,
-                              Bit_Chain *restrict dat, Bit_Chain *hdl_dat,
-                              Bit_Chain *str_dat);
+                              Bit_Chain *str_dat, Bit_Chain *hdl_dat,
+                              Bit_Chain *dat);
 static int dwg_encode_common_entity_handle_data (Bit_Chain *dat,
                                                  Bit_Chain *hdl_dat,
                                                  Dwg_Object *restrict obj);
 static int dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
-                                        Bit_Chain *str_dat, Dwg_Data *dwg);
+                                        Bit_Chain *str_dat, Dwg_Data *restrict dwg);
 static int dwg_encode_variable_type (Dwg_Data *restrict dwg,
                                      Bit_Chain *restrict dat,
                                      Dwg_Object *restrict obj);
-void dwg_encode_handleref (Bit_Chain *hdl_dat, Dwg_Object *obj,
+void dwg_encode_handleref (Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
                            Dwg_Data *restrict dwg,
                            Dwg_Object_Ref *restrict ref);
-void dwg_encode_handleref_with_code (Bit_Chain *hdl_dat, Dwg_Object *obj,
-                                     Dwg_Data *dwg,
+void dwg_encode_handleref_with_code (Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
+                                     Dwg_Data *restrict dwg,
                                      Dwg_Object_Ref *restrict ref,
                                      unsigned int code);
 int dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
@@ -1477,7 +1477,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 }
 
 static int
-encode_preR13 (Dwg_Data *dwg, Bit_Chain *dat)
+encode_preR13 (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 {
   return DWG_ERR_NOTYETSUPPORTED;
 }
@@ -1486,7 +1486,7 @@ encode_preR13 (Dwg_Data *dwg, Bit_Chain *dat)
 // p 4.3: first calc with seed 0, then compress, then recalc with prev.
 // checksum
 uint32_t
-dwg_section_page_checksum (const uint32_t seed, Bit_Chain *dat, uint32_t size)
+dwg_section_page_checksum (const uint32_t seed, Bit_Chain *restrict dat, uint32_t size)
 {
   uint32_t sum1 = seed & 0xffff;
   uint32_t sum2 = seed >> 0x10;
@@ -1597,7 +1597,7 @@ dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj)
  * Returns 0 on success, else some Dwg_Error.
  */
 static int
-dwg_encode_variable_type (Dwg_Data *dwg, Bit_Chain *dat, Dwg_Object *obj)
+dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   int error = 0;
   int is_entity;
@@ -1633,7 +1633,8 @@ dwg_encode_variable_type (Dwg_Data *dwg, Bit_Chain *dat, Dwg_Object *obj)
 }
 
 int
-dwg_encode_add_object (Dwg_Object *obj, Bit_Chain *dat, unsigned long address)
+dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                       unsigned long address)
 {
   int error = 0;
   unsigned long oldpos;
@@ -2183,7 +2184,7 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
    See DWG_SUPERTYPE_ENTITY in dwg_encode().
  */
 static int
-dwg_encode_entity (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
+dwg_encode_entity (Dwg_Object *restrict obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
                    Bit_Chain *dat)
 {
   int error = 0;
@@ -2256,7 +2257,7 @@ dwg_encode_entity (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
 
 static int
 dwg_encode_common_entity_handle_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
-                                      Dwg_Object *obj)
+                                      Dwg_Object *restrict obj)
 {
   Dwg_Object_Entity *ent;
   // Dwg_Data *dwg = obj->parent;
@@ -2274,8 +2275,8 @@ dwg_encode_common_entity_handle_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
 }
 
 void
-dwg_encode_handleref (Bit_Chain *hdl_dat, Dwg_Object *obj, Dwg_Data *dwg,
-                      Dwg_Object_Ref *ref)
+dwg_encode_handleref (Bit_Chain *hdl_dat, Dwg_Object *restrict obj, Dwg_Data *restrict dwg,
+                      Dwg_Object_Ref *restrict ref)
 {
   // this function should receive a Object_Ref without an abs_ref, calculate it
   // and return a Dwg_Handle this should be a higher level function not sure if
@@ -2297,8 +2298,8 @@ dwg_encode_handleref (Bit_Chain *hdl_dat, Dwg_Object *obj, Dwg_Data *dwg,
  *   c ref - offset
  */
 void
-dwg_encode_handleref_with_code (Bit_Chain *hdl_dat, Dwg_Object *obj,
-                                Dwg_Data *dwg, Dwg_Object_Ref *ref,
+dwg_encode_handleref_with_code (Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
+                                Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref,
                                 unsigned int code)
 {
   // XXX fixme. create the handle, then check the code. allow relative handle
@@ -2347,7 +2348,7 @@ dwg_encode_handleref_with_code (Bit_Chain *hdl_dat, Dwg_Object *obj,
    See DWG_SUPERTYPE_OBJECT in dwg_encode().
 */
 static int
-dwg_encode_object (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
+dwg_encode_object (Dwg_Object *restrict obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
                    Bit_Chain *dat)
 {
   int error = 0;
@@ -2395,7 +2396,7 @@ dwg_encode_object (Dwg_Object *obj, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
 
 static int
 dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
-                             Bit_Chain *str_dat, Dwg_Data *dwg)
+                             Bit_Chain *str_dat, Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables *_obj = &dwg->header_vars;
   Dwg_Object *obj = NULL;
@@ -2419,7 +2420,7 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
 }
 
 static int
-dwg_encode_xdata (Bit_Chain *dat, Dwg_Object_XRECORD *obj, int size)
+dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj, int size)
 {
   Dwg_Resbuf *rbuf = obj->xdata;
   enum RES_BUF_VALUE_TYPE type;

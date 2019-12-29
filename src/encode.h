@@ -25,7 +25,7 @@
 #include "dwg.h"
 
 int dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat);
-uint32_t dwg_section_page_checksum (const uint32_t seed, Bit_Chain *dat,
+uint32_t dwg_section_page_checksum (const uint32_t seed, Bit_Chain *restrict dat,
                                     uint32_t size);
 /** Returns the class for the object.
     First searching class by name, not offset
@@ -34,7 +34,7 @@ uint32_t dwg_section_page_checksum (const uint32_t seed, Bit_Chain *dat,
     and fixes up obj->type also then.
     If obj->dxfname is NULL, the search is done by index, without any fixups.
  */
-Dwg_Class *dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj);
-char *encrypt_sat1 (BITCODE_BL blocksize, BITCODE_RC *acis_data, int *idx);
+Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict obj);
+char *encrypt_sat1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data, int *restrict idx);
 
 #endif
