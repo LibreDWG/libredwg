@@ -11136,6 +11136,8 @@ dwg_ent_lwpline_set_thickness (dwg_ent_lwpline *restrict lwpline,
       LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
+#endif /* #ifndef __AFL_COMPILER */
+
 /** Returns lwpline point count
  */
 BITCODE_BL
@@ -11154,6 +11156,8 @@ dwg_ent_lwpline_get_numpoints (const dwg_ent_lwpline *restrict lwpline,
       return 0L;
     }
 }
+
+#ifndef __AFL_COMPILER
 
 /** Returns lwpline bulges count
  */
@@ -11267,6 +11271,7 @@ dwg_ent_lwpline_get_bulges (const dwg_ent_lwpline *restrict lwpline,
       return NULL;
     }
 }
+#endif /* #ifndef __AFL_COMPILER */
 
 /** Returns lwpline points
  */
@@ -11294,6 +11299,8 @@ dwg_ent_lwpline_get_points (const dwg_ent_lwpline *restrict lwpline,
       return NULL;
     }
 }
+
+#ifndef __AFL_COMPILER
 
 /** Returns lwpline widths
  */
