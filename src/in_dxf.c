@@ -756,7 +756,8 @@ dxf_fixup_header (Dwg_Data *dwg)
   //struct Dwg_AuxHeader *aux = &dwg->auxheader;
   LOG_TRACE ("dxf_fixup_header\n");
 
-  vars->HANDSEED->handleref.code = 0;
+  if (vars->HANDSEED)
+    vars->HANDSEED->handleref.code = 0;
   if (vars->DWGCODEPAGE)
     {
       if (strEQc (vars->DWGCODEPAGE, "ANSI_1252"))
