@@ -124,6 +124,17 @@ case $CFLAGS in
      *-fsanitize=*,undefined*) ax_cv_have_aligned_access_required=yes  ;;
 esac
 AX_CHECK_ALIGNED_ACCESS_REQUIRED
+
+case $CFLAGS in
+     *-fsanitize=address*)     HAVE_ASAN=yes ;;
+     *-fsanitize=*,address*)   HAVE_ASAN=yes ;;
+esac
+case $CFLAGS in
+     *-fsanitize=leak*)        HAVE_ASAN=yes ;;
+     *-fsanitize=*,leak*)      HAVE_ASAN=yes ;;
+esac
+AC_SUBST(HAVE_ASAN)
+
 AC_TYPE_SIZE_T
 AC_TYPE_UINT16_T
 AC_TYPE_INT32_T
