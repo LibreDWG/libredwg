@@ -1552,9 +1552,15 @@ dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj)
   // indxf has a different class order
   if (obj->dxfname) // search class by name, not offset
     {
+      int invalid_klass = 0;
       for (i = 0; i < dwg->num_classes; i++)
         {
           klass = &dwg->dwg_class[i];
+          if (!klass->dxfname)
+            {
+              invalid_klass++;
+              continue;
+            }
           if (strEQ (obj->dxfname, klass->dxfname))
             {
               obj->type = 500 + i;
@@ -1564,18 +1570,21 @@ dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj)
             {
               // alias DICTIONARYWDFLT => ACDBDICTIONARYWDFLT
               const char *alias = dxf_encode_alias (obj->dxfname);
-              if (alias && strEQ (alias, klass->dxfname))
+              if (alias && klass->dxfname && strEQ (alias, klass->dxfname))
                 {
                   obj->dxfname = (char *)alias;
                   obj->type = 500 + i;
                   break;
                 }
               klass = NULL; // inefficient
+              if (invalid_klass)
+                goto search_by_index;
             }
         }
     }
   else // search by index
     {
+    search_by_index:
       i = obj->type - 500;
       if (i < 0 || i >= (int)dwg->num_classes)
         {
