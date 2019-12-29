@@ -42,7 +42,7 @@ enum RES_BUF_VALUE_TYPE
 
 enum RES_BUF_VALUE_TYPE get_base_value_type (short gc);
 
-int dwg_decode (Bit_Chain *dat, Dwg_Data *dwg);
+int dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 int dwg_decode_unknown (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 Dwg_Object_Ref *dwg_find_objectref (const Dwg_Data *restrict dwg,
                                     const Dwg_Object *restrict obj);
@@ -66,7 +66,7 @@ void bfr_read (void *restrict dst, BITCODE_RC *restrict *restrict src,
                size_t size);
 
 /* reused with free */
-void dwg_free_xdata_resbuf (Dwg_Resbuf *rbuf);
+void dwg_free_xdata_resbuf (Dwg_Resbuf *restrict rbuf);
 
 /* reused with encode */
 void dwg_resolve_objectrefs_silent (Dwg_Data *restrict dwg);
@@ -75,8 +75,8 @@ void dwg_resolve_objectrefs_silent (Dwg_Data *restrict dwg);
 char *dwg_dim_blockname (Dwg_Data *restrict dwg,
                          const Dwg_Object *restrict obj);
 
-int dwg_validate_INSERT (Dwg_Object *obj);
-int dwg_validate_POLYLINE (Dwg_Object *obj);
+int dwg_validate_INSERT (Dwg_Object *restrict obj);
+int dwg_validate_POLYLINE (Dwg_Object *restrict obj);
 
 /* from decode_r2007.c */
 int obj_handle_stream (Bit_Chain *dat, Dwg_Object *restrict obj,
@@ -87,7 +87,7 @@ unsigned long obj_stream_position (Bit_Chain *restrict dat,
                                    Bit_Chain *restrict hdl_dat,
                                    Bit_Chain *restrict str_dat);
 
-void read_r2007_init (Dwg_Data *dwg);
+void read_r2007_init (Dwg_Data *restrict dwg);
 int read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
                           Dwg_Data *restrict dwg);
 void section_string_stream (Bit_Chain *restrict dat, BITCODE_RL bitsize,

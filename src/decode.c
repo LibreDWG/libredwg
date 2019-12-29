@@ -4537,16 +4537,16 @@ dwg_decode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *dat,
     Returns DWG_ERR_OUTOFMEM otherwise.
  */
 EXPORT int
-dwg_add_object (Dwg_Data *dwg)
+dwg_add_object (Dwg_Data *restrict dwg)
 {
-  Dwg_Object *obj;
+  Dwg_Object *restrict obj;
   BITCODE_BL num = dwg->num_objects;
   int realloced = 0;
   if (!num)
     dwg->object = calloc (REFS_PER_REALLOC, sizeof (Dwg_Object));
   else if (num % REFS_PER_REALLOC == 0)
     {
-      Dwg_Object *old = dwg->object;
+      Dwg_Object *restrict old = dwg->object;
       dwg->object = realloc (dwg->object,
                              (num + REFS_PER_REALLOC) * sizeof (Dwg_Object));
       realloced = old != dwg->object;
@@ -4574,7 +4574,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
   long unsigned int objpos, restartpos;
   Bit_Chain abs_dat = { NULL };
   unsigned char previous_bit;
-  Dwg_Object *obj;
+  Dwg_Object *restrict obj;
   BITCODE_BL num = dwg->num_objects;
   int error = 0;
   int realloced = 0;
@@ -4655,7 +4655,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
       error = dwg_decode_SEQEND (dat, obj);
       if (dat->version >= R_13 && obj->tio.entity->ownerhandle)
         {
-          Dwg_Object *owner = dwg_resolve_handle (
+          Dwg_Object *restrict owner = dwg_resolve_handle (
               dwg, obj->tio.entity->ownerhandle->absolute_ref);
           if (!owner)
             {
@@ -4673,7 +4673,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
                    || owner->fixedtype == DWG_TYPE_POLYLINE_PFACE
                    || owner->fixedtype == DWG_TYPE_POLYLINE_MESH)
             {
-              Dwg_Entity_POLYLINE_2D *_obj
+              Dwg_Entity_POLYLINE_2D *restrict _obj
                   = owner->tio.entity->tio.POLYLINE_2D;
               if (!_obj->seqend)
                 /* SEQEND handle for the owner needed in validate_POLYLINE */
@@ -5157,8 +5157,8 @@ char *
 dwg_dim_blockname (Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   BITCODE_BL id = obj->tio.entity->objid;
-  Dwg_Object *hdr = &dwg->object[id + 1];
-  Dwg_Object *blk = &dwg->object[id + 2];
+  Dwg_Object *restrict hdr = &dwg->object[id + 1];
+  Dwg_Object *restrict blk = &dwg->object[id + 2];
 
   if ((hdr->type == DWG_TYPE_LAYER || hdr->type == DWG_TYPE_DICTIONARY)
       && blk->type == DWG_TYPE_BLOCK_HEADER)
@@ -5168,7 +5168,7 @@ dwg_dim_blockname (Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     }
   if (hdr->type == DWG_TYPE_BLOCK_HEADER && blk->type == DWG_TYPE_BLOCK)
     {
-      Dwg_Entity_BLOCK *_blk = blk->tio.entity->tio.BLOCK;
+      Dwg_Entity_BLOCK *restrict _blk = blk->tio.entity->tio.BLOCK;
       return _blk->name;
     }
   return NULL;
@@ -5187,14 +5187,14 @@ ref_after (const Dwg_Object_Ref *restrict r1,
 
 /* just look at the next object, if it's a SEQEND (i.e ENDBLK) */
 int
-dwg_validate_INSERT (Dwg_Object *obj)
+dwg_validate_INSERT (Dwg_Object *restrict obj)
 {
-  Dwg_Object *next = dwg_next_object (obj);
+  Dwg_Object *restrict next = dwg_next_object (obj);
 
   if (obj->fixedtype == DWG_TYPE_INSERT)
     {
-      Dwg_Entity_INSERT *_obj = obj->tio.entity->tio.INSERT;
-      Dwg_Object_Ref *seqend = _obj->seqend;
+      Dwg_Entity_INSERT *restrict _obj = obj->tio.entity->tio.INSERT;
+      Dwg_Object_Ref *restrict seqend = _obj->seqend;
       if (!_obj->has_attribs)
         return 1;
       if (!seqend || next == seqend->obj)
@@ -5207,8 +5207,8 @@ dwg_validate_INSERT (Dwg_Object *obj)
     }
   else if (obj->fixedtype == DWG_TYPE_MINSERT)
     {
-      Dwg_Entity_MINSERT *_obj = obj->tio.entity->tio.MINSERT;
-      Dwg_Object_Ref *seqend = _obj->seqend;
+      Dwg_Entity_MINSERT *restrict _obj = obj->tio.entity->tio.MINSERT;
+      Dwg_Object_Ref *restrict seqend = _obj->seqend;
       if (!_obj->has_attribs)
         return 1;
       if (!seqend || next == seqend->obj)
@@ -5223,19 +5223,19 @@ dwg_validate_INSERT (Dwg_Object *obj)
 }
 
 int
-dwg_validate_POLYLINE (Dwg_Object *obj)
+dwg_validate_POLYLINE (Dwg_Object *restrict obj)
 {
   /* We ensured the common fields structure is shared with all 4 types */
-  Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
-  Dwg_Data *dwg = obj->parent;
+  Dwg_Entity_POLYLINE_2D *restrict _obj = obj->tio.entity->tio.POLYLINE_2D;
+  Dwg_Data *restrict dwg = obj->parent;
 
   if (dwg->header.version > R_11)
     {
-      Dwg_Object_Ref *seqend = _obj->seqend;
+      Dwg_Object_Ref *restrict seqend = _obj->seqend;
       /* if shifted in check_POLYLINE_handles() seqend might be empty */
       if (!seqend)
         { /* either the first or last */
-          Dwg_Object *next = dwg_next_object (obj);
+          Dwg_Object *restrict next = dwg_next_object (obj);
           if (next && next->fixedtype == DWG_TYPE_SEQEND)
             {
               seqend = dwg_find_objectref (
@@ -5254,7 +5254,7 @@ dwg_validate_POLYLINE (Dwg_Object *obj)
             }
           else if (_obj->vertex)
             {
-              Dwg_Object_Ref *ref = _obj->vertex[_obj->num_owned - 1];
+              Dwg_Object_Ref *restrict ref = _obj->vertex[_obj->num_owned - 1];
               if (ref && ref->obj)
                 {
                   next = dwg_next_object (ref->obj);
@@ -5280,9 +5280,9 @@ dwg_validate_POLYLINE (Dwg_Object *obj)
     }
   if (dwg->header.version > R_11 && dwg->header.version <= R_2000)
     {
-      Dwg_Object_Ref *first_vertex = _obj->first_vertex;
-      Dwg_Object_Ref *last_vertex = _obj->last_vertex;
-      Dwg_Object_Ref *seqend = _obj->seqend;
+      Dwg_Object_Ref *restrict first_vertex = _obj->first_vertex;
+      Dwg_Object_Ref *restrict last_vertex = _obj->last_vertex;
+      Dwg_Object_Ref *restrict seqend = _obj->seqend;
       if (ref_after (first_vertex, last_vertex)
           || ref_after (last_vertex, seqend))
         {
@@ -5293,8 +5293,8 @@ dwg_validate_POLYLINE (Dwg_Object *obj)
   else if (dwg->header.version >= R_2004 && _obj->vertex)
     {
       BITCODE_BL i = 1;
-      Dwg_Object_Ref *first_vertex = _obj->vertex[0];
-      Dwg_Object_Ref *seqend = _obj->seqend;
+      Dwg_Object_Ref *restrict first_vertex = _obj->vertex[0];
+      Dwg_Object_Ref *restrict seqend = _obj->seqend;
       if (ref_after (first_vertex, seqend))
         {
           /* r2010+ often mix up the hdlstream offset:
@@ -5329,7 +5329,7 @@ dwg_validate_POLYLINE (Dwg_Object *obj)
 static const char *
 dwg_ref_objname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
 {
-  Dwg_Object *obj = dwg_ref_object_silent (dwg, ref);
+  Dwg_Object *restrict obj = dwg_ref_object_silent (dwg, ref);
   return obj ? obj->name : "";
 }
 
@@ -5338,7 +5338,7 @@ dwg_ref_objname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
 static const char *
 dwg_ref_tblname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
 {
-  const char *name = dwg_dynapi_handle_name (dwg, ref);
+  const char *restrict name = dwg_dynapi_handle_name (dwg, ref);
   return name ? name : "";
 }
 

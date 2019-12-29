@@ -1744,7 +1744,7 @@ read_2007_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
 /* exported */
 void
-read_r2007_init (Dwg_Data *dwg)
+read_r2007_init (Dwg_Data *restrict dwg)
 {
   if (dwg->opts)
     loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
