@@ -1512,7 +1512,7 @@ dwg_section_page_checksum (const uint32_t seed, Bit_Chain *restrict dat, uint32_
 
 // expand aliases: name => CLASSES.dxfname
 static const char *
-dxf_encode_alias (char *name)
+dxf_encode_alias (char *restrict name)
 {
   if (strEQc (name, "DICTIONARYWDFLT"))
     return "ACDBDICTIONARYWDFLT";
@@ -1577,7 +1577,8 @@ dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj)
                   break;
                 }
               klass = NULL; // inefficient
-              if (invalid_klass)
+
+              if (invalid_klass > 2 && !(dwg->opts & DWG_OPTS_INDXF))
                 goto search_by_index;
             }
         }
