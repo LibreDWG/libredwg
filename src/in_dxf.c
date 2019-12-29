@@ -348,6 +348,7 @@ array_push (array_hdls *restrict hdls, const char *restrict field,
     {
       hdls->size += 16;
       hdls = realloc (hdls, 8 + (hdls->size * sizeof (struct array_hdl)));
+      //memset (hdls, 0, 8 + (hdls->size * sizeof (struct array_hdl));
     }
   hdls->nitems = i + 1;
   hdls->items[i].field = strdup (field);
@@ -2375,11 +2376,13 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 lnode->lines = realloc (
                     lnode->lines, lnode->num_lines * sizeof (Dwg_LEADER_Line));
               lline = &lnode->lines[i];
+              memset (lline, 0, sizeof (Dwg_LEADER_Line));
               lline->num_breaks = 0;
               j++;
               lline->num_points = j + 1;
               lline->points
                   = realloc (lline->points, (j + 1) * sizeof (BITCODE_3BD));
+              memset (&lline->points[j], 0, sizeof (BITCODE_3BD));
               lline->points[j].x = pair->value.d;
               LOG_TRACE ("%s.leaders[].lines[%d].points[%d].x = %f [BD %d]\n",
                          obj->name, i, j, pair->value.d, pair->code);
@@ -2401,6 +2404,7 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               lline->num_breaks = k + 1;
               lline->breaks = realloc (lline->breaks,
                                        (k + 1) * sizeof (Dwg_LEADER_Break));
+              memset (&ctx->leaders[k], 0, sizeof (Dwg_LEADER_Break));
               lline->breaks[k].start.x = pair->value.d;
               LOG_TRACE (
                   "%s.leaders[].lines[%d].breaks[%d].start.x = %f [3BD %d]\n",
@@ -2533,6 +2537,7 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               LOG_TRACE ("%s.ctx.num_leaders = %d\n", obj->name, i + 1);
               ctx->leaders
                   = realloc (ctx->leaders, (i + 1) * sizeof (Dwg_LEADER_Node));
+              memset (&ctx->leaders[i], 0, sizeof (Dwg_LEADER_Node));
               ctx->leaders[i].has_lastleaderlinepoint = pair->value.i;
               LOG_TRACE (
                   "%s.ctx.leaders[%d].has_lastleaderlinepoint = %d [B %d]\n",
@@ -5705,6 +5710,7 @@ new_object (char *restrict name, char *restrict dxfname,
                                   clip_verts = realloc (
                                       clip_verts,
                                       (j + 1) * sizeof (BITCODE_2RD));
+                                  memset (&clip_verts[j], 0, sizeof (BITCODE_2RD));
                                   dwg_dynapi_entity_set_value (_obj, obj->name,
                                                                f->name,
                                                                &clip_verts, 0);
