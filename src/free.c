@@ -162,13 +162,14 @@ static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
   }
 #define FIELD_TIMEBLL(name, dxf)
 #define FIELD_TIMERLL(name, dxf)
+// indxf does not assign names yet
 #define FIELD_CMC(color, dxf1, dxf2)                                          \
-  {                                                                           \
+  if (!(dat->opts & DWG_OPTS_INDXF)) {                                        \
     FIELD_T (color.name, 0);                                                  \
     FIELD_T (color.book_name, 0);                                             \
   }
 #define SUB_FIELD_CMC(o, color, dxf1, dxf2)                                   \
-  {                                                                           \
+  if (!(dat->opts & DWG_OPTS_INDXF)) {                                        \
     VALUE_TV (_obj->o.color.name, 0);                                         \
     VALUE_TV (_obj->o.color.book_name, 0);                                    \
   }
@@ -735,11 +736,11 @@ dwg_free_object (Dwg_Object *obj)
               klass = &dwg->dwg_class[i];
               is_entity = klass ? dwg_class_is_entity (klass) : 0;
             }
-          if (klass && !is_entity)
+          if (klass && obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ)
             {
               dwg_free_UNKNOWN_OBJ (dat, obj);
             }
-          else if (klass)
+          else if (klass && obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
             {
               dwg_free_UNKNOWN_ENT (dat, obj);
             }
