@@ -3521,7 +3521,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
 
   pair = dxf_read_pair (dat);
   // read common table until next 0 table or endtab
-  while (pair->code != 0)
+  while (pair != NULL && pair->code != 0)
     {
       switch (pair->code)
         {
@@ -3934,7 +3934,7 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
   dxf_free_pair (pair);
   pair = dxf_read_pair (dat);
-  while (pair->code == 310)
+  while (pair != NULL && pair->code == 310)
     {
       unsigned len = strlen (pair->value.s);
       unsigned blen = len / 2;
@@ -3981,7 +3981,7 @@ add_block_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                  pair->code);
       return pair;
     }
-  while (pair->code == 310)
+  while (pair != NULL && pair->code == 310)
     {
       unsigned len = strlen (pair->value.s);
       unsigned blen = len / 2;
@@ -7136,7 +7136,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, 1, NULL);
     }
 
-  while (dat->byte < dat->size)
+  while (dat->byte < dat->size && pair != NULL)
     {
       pair = dxf_read_pair (dat);
       pair = dxf_expect_code (dat, pair, 0);
