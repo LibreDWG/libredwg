@@ -29,12 +29,12 @@
 #define _STR(s)  #s
 
 #define WARN_UNHANDLED_CLASS \
-      LOG_WARN("Unhandled Class %s %d %s (0x%x%s) %u/%lX", is_entity ? "entity" : "object",\
+      LOG_WARN ("Unhandled Class %s %d %s (0x%x%s) %u/%lX", is_entity ? "entity" : "object",\
                klass->number, klass->dxfname, klass->proxyflag,\
                klass->wasazombie ? " was proxy" : "",\
                obj->index, obj->handle.value)
 #define WARN_UNSTABLE_CLASS \
-      LOG_WARN("Unstable Class %s %d %s (0x%x%s) %u/%lX", is_entity ? "entity" : "object",\
+      LOG_WARN ("Unstable Class %s %d %s (0x%x%s) %u/%lX", is_entity ? "entity" : "object",\
                klass->number, klass->dxfname, klass->proxyflag,\
                klass->wasazombie ? " was proxy" : "",\
                obj->index, obj->handle.value)
@@ -50,13 +50,13 @@
 #define ALLOW_DXF(action, _name)
 
 #ifdef DEBUG_CLASSES
-#define DEBUGGING_DXF(action, name)                 ALLOW_DXF(action, name)
-#define DEBUGGING_CLASS(action, name)               UNSTABLE_CLASS(action, name)
-#define DEBUGGING_CLASS_DXF(action, name, _dxfname) UNSTABLE_CLASS_DXF(action, name, _dxfname)
+# define DEBUGGING_DXF(action, name)                 ALLOW_DXF(action, name)
+# define DEBUGGING_CLASS(action, name)               UNSTABLE_CLASS(action, name)
+# define DEBUGGING_CLASS_DXF(action, name, _dxfname) UNSTABLE_CLASS_DXF(action, name, _dxfname)
 #else
-#define DEBUGGING_DXF(action, name)                 DISALLOW_DXF(action, name)
-#define DEBUGGING_CLASS(action, name)               UNHANDLED_CLASS(action, name)
-#define DEBUGGING_CLASS_DXF(action, name, _dxfname) UNHANDLED_CLASS_DXF(action, name, _dxfname)
+# define DEBUGGING_DXF(action, name)                 DISALLOW_DXF(action, name)
+# define DEBUGGING_CLASS(action, name)               UNHANDLED_CLASS(action, name)
+# define DEBUGGING_CLASS_DXF(action, name, _dxfname) UNHANDLED_CLASS_DXF(action, name, _dxfname)
 #endif
 
 //#define _DWG_FUNC_N(action,name) dwg_ ## action ## _ ## name
@@ -65,60 +65,60 @@
 #define STABLE_CLASS(action, _name) \
   if (klass->dxfname && strEQc (klass->dxfname, #_name)) \
     { \
-      if (strEQc (_STR(action), "decode") || !memcmp(_STR(action), "in", 2)) { \
+      if (strEQc (_STR(action), "decode") || !memcmp (_STR(action), "in", 2)) { \
         obj->name = (char*) #_name; \
         obj->dxfname = (char*) #_name; \
         obj->fixedtype = DWG_TYPE_##_name; \
       } \
-      return DWG_FUNC_N(action,_name)(dat, obj); \
+      return DWG_FUNC_N(action,_name) (dat, obj); \
     }
 #define STABLE_CLASS_DXF(action, _name, _dxfname) \
   if (klass->dxfname && strEQc (klass->dxfname, #_dxfname)) \
     { \
-      if (strEQc (_STR(action), "decode") || !memcmp(_STR(action), "in", 2)) { \
+      if (strEQc (_STR(action), "decode") || !memcmp (_STR(action), "in", 2)) { \
         obj->name = (char*) #_name; \
         obj->dxfname = (char*) #_dxfname; \
         obj->fixedtype = DWG_TYPE_##_name; \
       } \
-      return DWG_FUNC_N(action,_name)(dat, obj); \
+      return DWG_FUNC_N(action,_name) (dat, obj); \
     }
 #define STABLE_CLASS_CPP(action, _name, _cppname) \
   if (klass->cppname && strEQc (klass->cppname, #_name)) \
     { \
-      if (strEQc (_STR(action), "decode") || !memcmp(_STR(action), "in", 2)) { \
+      if (strEQc (_STR(action), "decode") || !memcmp (_STR(action), "in", 2)) { \
         obj->name = (char*) #_name; \
         obj->dxfname = (char*) #_name; \
         obj->fixedtype = DWG_TYPE_##_name; \
       } \
-      return DWG_FUNC_N(action,_name)(dat, obj); \
+      return DWG_FUNC_N(action,_name) (dat, obj); \
     }
 #define UNSTABLE_CLASS(action, _name) \
   if (klass->dxfname && strEQc (klass->dxfname, #_name)) \
     { \
       WARN_UNSTABLE_CLASS; \
-      if (strEQc (_STR(action), "decode") || !memcmp(_STR(action), "in", 2)) { \
+      if (strEQc (_STR(action), "decode") || !memcmp (_STR(action), "in", 2)) { \
         obj->name = (char*) #_name; \
         obj->dxfname = (char*) #_name; \
         obj->fixedtype = DWG_TYPE_##_name; \
       } \
-      return DEBUGGING_DXF(action, name) DWG_FUNC_N(action,_name)(dat, obj); \
+      return DEBUGGING_DXF(action, name) DWG_FUNC_N(action,_name) (dat, obj); \
     }
 #define UNSTABLE_CLASS_DXF(action, _name, _dxfname) \
   if (klass->dxfname && strEQc (klass->dxfname, #_dxfname)) \
     { \
       WARN_UNSTABLE_CLASS; \
-      if (strEQc (_STR(action), "decode") || !memcmp(_STR(action), "in", 2)) { \
+      if (strEQc (_STR(action), "decode") || !memcmp (_STR(action), "in", 2)) { \
         obj->name = (char*) #_name; \
         obj->dxfname = (char*) #_dxfname; \
         obj->fixedtype = DWG_TYPE_##_name; \
       } \
-      return DEBUGGING_DXF(action, name) DWG_FUNC_N(action,_name)(dat, obj); \
+      return DEBUGGING_DXF(action, name) DWG_FUNC_N(action,_name) (dat, obj); \
     }
 #define UNSTABLE_CLASS_CPP(action, _name, _cppname) \
   if (klass->cppname && strEQc (klass->cppname, #_cppname)) \
     { \
       WARN_UNSTABLE_CLASS; \
-      if (strEQc (_STR(action), "decode") || !memcmp(_STR(action), "in", 2)) { \
+      if (strEQc (_STR(action), "decode") || !memcmp (_STR(action), "in", 2)) { \
         obj->name = (char*) #_name; \
         obj->dxfname = (char*) #_name; \
         obj->fixedtype = DWG_TYPE_##_name; \
@@ -129,7 +129,7 @@
   if (klass->dxfname && strEQc (klass->dxfname, #_name)) \
     { \
       WARN_UNHANDLED_CLASS; \
-      if (strEQc (_STR(action), "decode") || !memcmp(_STR(action), "in", 2)) { \
+      if (strEQc (_STR(action), "decode") || !memcmp (_STR(action), "in", 2)) { \
         obj->name = (char*) #_name; \
         obj->dxfname = (char*) #_name; \
         /*obj->fixedtype = DWG_TYPE_##_name; */ \
@@ -141,7 +141,7 @@
   if (strEQc (klass->dxfname, #_dxfname)) \
     { \
       WARN_UNHANDLED_CLASS; \
-      if (strEQc (_STR(action), "decode") || !memcmp(_STR(action), "in", 2)) { \
+      if (strEQc (_STR(action), "decode") || !memcmp (_STR(action), "in", 2)) { \
         obj->name = (char*) #_name; \
         obj->dxfname = (char*) #_dxfname; \
         /*obj->fixedtype = DWG_TYPE_##_name; */ \
@@ -211,7 +211,7 @@
   // coverage exists, but broken and being worked on. needs -DDEBUG_CLASSES. See also
   // examples/unknown with all the unknown blobs of these.
   // PROXY_ENTITY has a fixed type
-  // DXF output skipped
+  // DXF output skipped, but some INDXF are done.
   DEBUGGING_CLASS     (ACTION, GEOPOSITIONMARKER) /*ent, yet unsorted. no coverage */
   DEBUGGING_CLASS     (ACTION, PLANESURFACE)      /*ent */
   DEBUGGING_CLASS     (ACTION, EXTRUDEDSURFACE)   /*ent */
