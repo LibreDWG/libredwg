@@ -7127,9 +7127,9 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       // dwg->header.version here still unknown. <r2000: 0x17
       // later fixed up when reading the BLOCK_HEADER.name
       if (dwg->header.version >= R_2007)
-        _obj->name = (char*)"*\0M\0o\0d\0e\0l\0_\0S\0p\0a\0c\0e\0";
+        _obj->name = strdup ((char*)"*\0M\0o\0d\0e\0l\0_\0S\0p\0a\0c\0e\0");
       else
-        _obj->name = (char*)"*Model_Space";
+        _obj->name = strdup ((char*)"*Model_Space");
       obj->tio.object->xdic_missing_flag = 1;
       _obj->xrefref = 1;
       dwg_add_handle (&obj->handle, 0, 0x1F, obj);
