@@ -6492,9 +6492,10 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   Dwg_Object_Entity *ent = obj->tio.entity;
                   Dwg_Entity_BLOCK *_obj = obj->tio.entity->tio.BLOCK;
                   i = 0;
-                  if (ent->ownerhandle)
+                  if (ent->ownerhandle
+                      && (blkhdr = dwg_ref_object (dwg, ent->ownerhandle)))
                     {
-                      if ((blkhdr = dwg_ref_object (dwg, ent->ownerhandle)))
+                      if (blkhdr->fixedtype == DWG_TYPE_BLOCK_HEADER)
                         {
                           Dwg_Object_BLOCK_HEADER *_hdr
                               = blkhdr->tio.object->tio.BLOCK_HEADER;
@@ -6504,6 +6505,33 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                           LOG_TRACE ("BLOCK_HEADER.block_entity = " FORMAT_REF
                                      " [H] (blocks)\n",
                                      ARGS_REF (_hdr->block_entity));
+                        }
+                      else if (blkhdr->fixedtype == DWG_TYPE_BLOCK_CONTROL)
+                        {
+                          Dwg_Object_BLOCK_CONTROL *_ctrl
+                              = blkhdr->tio.object->tio.BLOCK_CONTROL;
+                          ent->ownerhandle->obj = NULL; // still dirty
+                          // TODO R2007+
+                          if (!_ctrl->model_space
+                              && strEQc (_obj->name, "*Model_Space"))
+                            {
+                              _ctrl->model_space = dwg_add_handleref (
+                                  dwg, 3, obj->handle.value, blkhdr);
+                              LOG_TRACE (
+                                  "BLOCK_CONTROL.model_space = " FORMAT_REF
+                                  " [H] (blocks)\n",
+                                  ARGS_REF (_ctrl->model_space));
+                            }
+                          else if (!_ctrl->paper_space
+                                   && strEQc (_obj->name, "*Paper_Space"))
+                            {
+                              _ctrl->paper_space = dwg_add_handleref (
+                                  dwg, 3, obj->handle.value, blkhdr);
+                              LOG_TRACE (
+                                  "BLOCK_CONTROL.paper_space = " FORMAT_REF
+                                  " [H] (blocks)\n",
+                                  ARGS_REF (_ctrl->paper_space));
+                            }
                         }
                     }
                   else
@@ -6525,7 +6553,8 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                              entmode);
                   entmode = 0;
                   // set BLOCK_HEADER.endblk_entity handle
-                  if ((blkhdr = dwg_ref_object (dwg, ent->ownerhandle)))
+                  if ((blkhdr = dwg_ref_object (dwg, ent->ownerhandle))
+                      && blkhdr->fixedtype == DWG_TYPE_BLOCK_HEADER)
                     {
                       Dwg_Object_BLOCK_HEADER *_hdr
                           = blkhdr->tio.object->tio.BLOCK_HEADER;
@@ -6545,7 +6574,8 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                              entmode);
                   // blkhdr.entries[] array already done in TABLES section
                   if (blkhdr && dwg->header.version >= R_13
-                      && dwg->header.version < R_2004)
+                      && dwg->header.version < R_2004
+                      && blkhdr->fixedtype == DWG_TYPE_BLOCK_HEADER)
                     {
                       Dwg_Object_BLOCK_HEADER *_hdr
                           = blkhdr->tio.object->tio.BLOCK_HEADER;
