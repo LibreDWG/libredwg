@@ -1799,6 +1799,7 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
       char *hdlname;
       Dwg_Object *hobj;
       Dwg_Object_APPID *_o;
+      bool ok;
 
       if (!hdlv[i])
         continue;
@@ -1806,13 +1807,17 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
       if (!hobj)
         continue;
       _o = hobj->tio.object->tio.APPID;
-      dwg_dynapi_entity_utf8text (_o, hobj->name, "name", &hdlname, NULL);
+      ok = dwg_dynapi_entity_utf8text (_o, hobj->name, "name", &hdlname, NULL);
       LOG_HANDLE (" %s.%s[%d] => %s.name: %s\n", obj->name, "entries", i,
                   hobj->name, hdlname ? hdlname : "NULL");
-      if (hdlname && (strEQ (name, hdlname) || !strcasecmp (name, hdlname)))
+      if (ok && hdlname && (strEQ (name, hdlname) || !strcasecmp (name, hdlname)))
         {
+          if (dwg->header.version >= R_2007)
+            free (hdlname);
           return hdlv[i];
         }
+      if (ok && dwg->header.version >= R_2007)
+        free (hdlname);
     }
 
   return 0;
