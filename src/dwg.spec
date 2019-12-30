@@ -5513,9 +5513,9 @@ DWG_ENTITY (MULTILEADER)
       VALUEOUTOFBOUNDS (class_version, 10)
     }
 #if 0
-      FIELD_BS (ctx.class_version, 70); // default 3
-      FIELD_B (ctx.has_xdic_file, 0);
-      FIELD_B (ctx.is_default, 290);
+  FIELD_BS (ctx.class_version, 70); // default 3
+  FIELD_B (ctx.has_xdic_file, 0);
+  FIELD_B (ctx.is_default, 290);
 #endif
 
   FIELD_BL (ctx.num_leaders, 0);

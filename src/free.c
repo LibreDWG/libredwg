@@ -424,23 +424,27 @@ dwg_free_eed (Dwg_Object *obj)
 static int
 dwg_free_variable_type (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
 {
-  int i;
-  int is_entity;
+  const int i = obj->type - 500;
   Dwg_Class *klass;
   Bit_Chain *dat = &pdat;
 
-  i = obj->type - 500;
   if (i < 0 || i >= (int)dwg->num_classes)
     return DWG_ERR_INVALIDTYPE;
 
   klass = &dwg->dwg_class[i];
   if (!klass || !klass->dxfname)
     return DWG_ERR_INTERNALERROR;
-  // almost always false
-  is_entity = dwg_class_is_entity (klass);
+
+  if (strNE (obj->dxfname, klass->dxfname))
+    {
+      LOG_ERROR ("Wrong %s.type %d for obj [%d]: != %s",  obj->dxfname, obj->type,
+                 obj->index, klass->dxfname);
+      return DWG_ERR_INVALIDTYPE;
+    }
 
   // global class dispatcher:
-  // with indxf even DEBUGGING objects, such as TABLE are created. usually not written/encoded though.
+  // with indxf even DEBUGGING objects, such as TABLE are created.
+  // usually not written/encoded though.
 
   // clang-format off
   #include "classes.inc"
@@ -746,6 +750,10 @@ dwg_free_object (Dwg_Object *obj)
             {
               // just the preview, i.e. common. plus some colors: leak
               dwg_free_UNKNOWN_ENT (dat, obj);
+            }
+          else if (obj->fixedtype == DWG_TYPE_DATATABLE)
+            {
+              dwg_free_UNKNOWN_OBJ (dat, obj);
             }
           else if (klass && !is_entity)
             {
