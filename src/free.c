@@ -123,6 +123,7 @@ static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
   {                                                                           \
   }
 #define FIELD_T(name, dxf) FIELD_TV (name, dxf)
+#define FIELD_BINARY(name, len, dxf) FIELD_TV (name, dxf)
 #define FIELD_BT(name, dxf) FIELD (name, BT);
 #define FIELD_4BITS(name, dxf)                                                \
   {                                                                           \
@@ -276,7 +277,7 @@ static int dwg_free_UNKNOWN_OBJ (Bit_Chain *restrict dat,
                                                                               \
         dwg_free_common_entity_data (obj);                                    \
         dwg_free_eed (obj);                                                   \
-        if (obj->tio.object)                                                  \
+        if (obj->tio.entity)                                                  \
           {                                                                   \
             FREE_IF (obj->tio.entity->tio.token);                             \
             FREE_IF (obj->tio.entity);                                        \
@@ -369,6 +370,8 @@ dwg_free_common_entity_data (Dwg_Object *obj)
     return;
   _obj = ent;
 
+  FREE_IF (ent->preview);
+
   // clang-format off
   #include "common_entity_data.spec"
   SINCE (R_13) {
@@ -436,7 +439,9 @@ dwg_free_variable_type (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
   // almost always false
   is_entity = dwg_class_is_entity (klass);
 
-  // global class dispatcher
+  // global class dispatcher:
+  // with indxf even DEBUGGING objects, such as TABLE are created. usually not written/encoded though.
+
   // clang-format off
   #include "classes.inc"
 
@@ -736,11 +741,17 @@ dwg_free_object (Dwg_Object *obj)
               klass = &dwg->dwg_class[i];
               is_entity = klass ? dwg_class_is_entity (klass) : 0;
             }
-          if (klass && obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ)
+          // indxf (and later injson) already creates some DEBUGGING classes
+          if (obj->fixedtype == DWG_TYPE_TABLE)
+            {
+              // just the preview, i.e. common. plus some colors: leak
+              dwg_free_UNKNOWN_ENT (dat, obj);
+            }
+          else if (klass && !is_entity)
             {
               dwg_free_UNKNOWN_OBJ (dat, obj);
             }
-          else if (klass && obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
+          else if (klass && is_entity)
             {
               dwg_free_UNKNOWN_ENT (dat, obj);
             }
