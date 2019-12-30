@@ -281,6 +281,7 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   dat.bit = 0;
   dat.from_version = dwg->header.from_version;
   dat.version = dwg->header.version;
+  dat.opts = dwg->opts;
 
   size = fread (dat.chain, sizeof (char), dat.size, fp);
   if (size != dat.size)

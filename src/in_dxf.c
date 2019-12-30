@@ -7136,7 +7136,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, 1, NULL);
     }
 
-  while (dat->byte < dat->size && pair != NULL)
+  while (dat->byte < dat->size)
     {
       pair = dxf_read_pair (dat);
       pair = dxf_expect_code (dat, pair, 0);
@@ -7259,6 +7259,7 @@ int
 dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   dwg->opts |= DWG_OPTS_DXFB; // binary
+  dat->opts |= DWG_OPTS_DXFB;
   return dwg_read_dxf (dat, dwg);
 }
 
