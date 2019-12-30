@@ -370,7 +370,7 @@ main (int argc, char *argv[])
       }
   }
 
-  // forget about valgrind. really huge DWG's need endlessly here.
+  // forget about leaks. really huge DWG's need endlessly here.
   if ((dwg.header.version && dwg.num_objects < 1000)
 #if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
       || 1

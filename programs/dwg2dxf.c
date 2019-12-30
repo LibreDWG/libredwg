@@ -329,7 +329,7 @@ main (int argc, char *argv[])
       if (dat.fh)
         fclose (dat.fh);
 
-      // forget about valgrind. really huge DWG's need endlessly here.
+      // forget about leaks. really huge DWG's need endlessly here.
       if (do_free
 #if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
           || 1
