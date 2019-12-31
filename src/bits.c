@@ -883,7 +883,7 @@ bit_write_MC (Bit_Chain *dat, BITCODE_MC val)
     if (byte[i] & 0x7f)
       break;
 
-  if (byte[i] & 0x40)
+  if (byte[i] & 0x40 && i > 0)
     i--;
   byte[i] &= 0x7f;
   if (negative)
@@ -953,7 +953,7 @@ bit_write_UMC (Bit_Chain *dat, BITCODE_UMC val)
     if (byte[i] & 0x7f)
       break;
 
-  if (byte[i] & 0x40)
+  if (byte[i] & 0x40 && i > 0)
     i--;
   byte[i] &= 0x7f;
   for (j = 4; j >= i; j--)
