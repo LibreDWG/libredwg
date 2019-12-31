@@ -731,43 +731,11 @@ dwg_free_object (Dwg_Object *obj)
       else if ((error = dwg_free_variable_type (obj->parent, obj))
                & DWG_ERR_UNHANDLEDCLASS)
         {
-          int is_entity;
-          int i;
-          Dwg_Class *klass;
-
         unhandled:
-          is_entity = 0;
-          i = obj->type - 500;
-          klass = NULL;
-
-          dwg = obj->parent;
-          if (dwg->dwg_class && i >= 0 && i < (int)dwg->num_classes)
-            {
-              klass = &dwg->dwg_class[i];
-              is_entity = klass ? dwg_class_is_entity (klass) : 0;
-            }
-          // indxf (and later injson) already creates some DEBUGGING classes
-          if (obj->fixedtype == DWG_TYPE_TABLE)
-            {
-              // just the preview, i.e. common. plus some colors: leak
+          if (obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
               dwg_free_UNKNOWN_ENT (dat, obj);
-            }
-          else if (obj->fixedtype == DWG_TYPE_DATATABLE)
-            {
+          else if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ)
               dwg_free_UNKNOWN_OBJ (dat, obj);
-            }
-          else if (klass && !is_entity)
-            {
-              dwg_free_UNKNOWN_OBJ (dat, obj);
-            }
-          else if (klass && is_entity)
-            {
-              dwg_free_UNKNOWN_ENT (dat, obj);
-            }
-          else // not a class
-            {
-              FREE_IF (obj->tio.unknown);
-            }
         }
     }
   /* With this importer the dxfname is dynamic, just the name is const */

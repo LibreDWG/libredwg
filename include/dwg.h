@@ -5456,7 +5456,6 @@ typedef struct _dwg_object
   {
     Dwg_Object_Entity *entity;
     Dwg_Object_Object *object;
-    char *unknown; /* i.e. unhandled class as raw bits */
   } tio;
 
   Dwg_Handle handle;

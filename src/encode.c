@@ -1970,26 +1970,10 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           else
             is_entity = obj->supertype == DWG_SUPERTYPE_ENTITY;
           // properly dwg_decode_object/_entity for eed, reactors, xdic
-          if (klass && !is_entity)
-            error = dwg_encode_UNKNOWN_OBJ (dat, obj);
-          else if (klass)
+          if (is_entity)
             error = dwg_encode_UNKNOWN_ENT (dat, obj);
-          else // not a class
-            {
-              LOG_WARN ("Unknown object, skipping eed/reactors/xdic");
-              error = DWG_ERR_UNHANDLEDCLASS;
-              SINCE (R_2000)
-              {
-                bit_write_RL (dat, obj->bitsize);
-                LOG_INFO ("bitsize: " FORMAT_RL " [RL] (@%lu.%u)\n", obj->bitsize,
-                          dat->byte - 4, dat->bit);
-              }
-              bit_write_H (dat, &obj->handle);
-              LOG_INFO ("handle: " FORMAT_H " [H 5]\n", ARGS_H (obj->handle));
-              // write obj->size bytes, excl. bitsize and handle.
-              // overshoot the bitsize and handle size.
-              bit_write_TF (dat, obj->tio.unknown, obj->size);
-            }
+          else
+            error = dwg_encode_UNKNOWN_OBJ (dat, obj);
         }
     }
 

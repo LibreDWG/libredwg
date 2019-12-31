@@ -5011,10 +5011,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
           // LOG_HANDLE("common_size: %lu\n", obj->common_size); // needed for
           // unknown
           bit_set_position (dat, restartpos);
-
-          // obj->unknown_off = obj->unknown_pos - restartpos;
-          // LOG_TRACE("Unknown pos %lu, offset %lu\n", obj->unknown_pos,
-          // obj->unknown_off);
+          obj->supertype = DWG_SUPERTYPE_UNKNOWN;
 
           if (i >= 0 && i < (int)dwg->num_classes)
             {
@@ -5032,67 +5029,20 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
                   LOG_ERROR ("Invalid class index %d >%d", i,
                              (int)dwg->num_classes);
                 }
-              obj->supertype = DWG_SUPERTYPE_UNKNOWN;
               obj->type = 0;
               *dat = abs_dat;
               return error | DWG_ERR_VALUEOUTOFBOUNDS;
             }
           // properly dwg_decode_object/_entity for eed, reactors, xdic
-          if (klass && !is_entity)
-            {
-              int err = dwg_decode_UNKNOWN_OBJ (dat, obj);
-              error |= err;
-              obj->supertype = DWG_SUPERTYPE_UNKNOWN;
-              if (!dat)
-                return error;
-              if (err >= DWG_ERR_CRITICAL)
-                *dat = abs_dat;
-            }
-          else if (klass) // is_entity
-            {
-              int err;
-#if 0 && !defined(IS_RELEASE)
-              if (strEQc(klass->dxfname, "MULTILEADER")) { //debug CED
-                char *mleader = bit_read_TF(dat, obj->size);
-                LOG_INSANE_TF(mleader, (int)obj->size)
-                bit_set_position(dat, restartpos);
-                free (mleader);
-              }
-#endif
-              err = dwg_decode_UNKNOWN_ENT (dat, obj);
-              error |= err;
-              obj->supertype = DWG_SUPERTYPE_UNKNOWN;
-              if (!dat)
-                return error;
-              if (err >= DWG_ERR_CRITICAL)
-                *dat = abs_dat;
-            }
-          else // not a class
-            {
-              LOG_WARN ("Unknown object, skipping eed/reactors/xdic");
-              SINCE (R_2000)
-              {
-                obj->bitsize = bit_read_RL (dat);
-                LOG_TRACE ("bitsize: " FORMAT_RL " [RL] @%lu.%u\n",
-                           obj->bitsize, dat->byte-2, dat->bit);
-                if (obj->bitsize > obj->size * 8)
-                  {
-                    LOG_ERROR ("Invalid bitsize " FORMAT_RL " => " FORMAT_RL,
-                               obj->bitsize, obj->size * 8);
-                    obj->bitsize = obj->size * 8;
-                    error |= DWG_ERR_VALUEOUTOFBOUNDS;
-                  }
-              }
-              if (!bit_read_H (dat, &obj->handle))
-                {
-                  LOG_TRACE ("handle: " FORMAT_H " [H 5]\n",
-                             ARGS_H (obj->handle));
-                }
-              restartpos = dat->byte;
-              obj->supertype = DWG_SUPERTYPE_UNKNOWN;
-              obj->tio.unknown = bit_read_TF (dat, obj->size);
-              dat->byte = restartpos;
-            }
+          if (is_entity)
+              error |= dwg_decode_UNKNOWN_ENT (dat, obj);
+          else
+              error |= dwg_decode_UNKNOWN_OBJ (dat, obj);
+
+          if (!dat)
+            return error;
+          if (error >= DWG_ERR_CRITICAL)
+            *dat = abs_dat;
         }
     }
 
