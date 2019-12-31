@@ -907,8 +907,13 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                  (int)dwg->header.section[j].number, dwg->header.section[j].name)
       LOG_TRACE ("section[%u].address: %4u [RL]\n", j,
                  (unsigned)dwg->header.section[j].address)
-      LOG_TRACE ("section[%u].size:    %4d [RL]\n", j,
-                 (int)dwg->header.section[j].size)
+      LOG_TRACE ("section[%u].size:    %4u [RL]\n", j,
+                 (unsigned)dwg->header.section[j].size);
+      if (dwg->header.section[j].address + dwg->header.section[j].size > dat->size)
+        {
+          LOG_ERROR ("section[%u] address or size overflow", j);
+          return DWG_ERR_INVALIDDWG;
+        }
     }
 
   // Check CRC up to now (note: ODA has a bug here)
@@ -1184,8 +1189,10 @@ classes_section:
       long unsigned int last_offset = 0;
       long unsigned int last_handle = 0;
       long unsigned int oldpos = 0;
+      long unsigned int maxh = (unsigned long)dwg->header.section[SECTION_HANDLES_R13].size << 1;
+      BITCODE_BL max_handles = maxh < INT32_MAX ? (BITCODE_BL)maxh
+        : dwg->header.section[SECTION_HANDLES_R13].size;
       int added;
-      BITCODE_BL max_handles = dwg->header.section[SECTION_HANDLES_R13].size * 2;
 
       startpos = dat->byte;
       section_size = bit_read_RS_LE (dat);
@@ -1336,6 +1343,18 @@ classes_section:
 
       FIELD_RL (size, 0);
       FIELD_BLx (address, 0);
+
+      if (dwg->header.num_sections <= SECTION_2NDHEADER_R13)
+        {
+          LOG_WARN ("Only %d num_sections, but 2ndheader found, extending to 4",
+                    dwg->header.num_sections);
+          dwg->header.num_sections = SECTION_2NDHEADER_R13 + 1; /* 4 */
+          dwg->header.section
+              = realloc (dwg->header.section,
+                         dwg->header.num_sections * sizeof (Dwg_Section));
+          memset (&dwg->header.section[SECTION_2NDHEADER_R13], 0,
+                  sizeof (Dwg_Section));
+        }
       if (!dwg->header.section[SECTION_2NDHEADER_R13].address)
         {
           dwg->header.section[SECTION_2NDHEADER_R13].address
