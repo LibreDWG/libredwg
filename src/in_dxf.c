@@ -966,15 +966,30 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               {
                 const char *n = strEQc (pair->value.s, "ACDBDATATABLE")
                   ? "DATATABLE" : pair->value.s;
+                if (klass->dxfname)
+                  {
+                    LOG_ERROR ("Group 1 for CLASS %s already read", klass->dxfname);
+                    break;
+                  }
                 STRADD (klass->dxfname, n);
                 LOG_TRACE ("CLASS[%d].dxfname = %s [TV 1]\n", i, n);
                 break;
               }
             case 2:
+              if (klass->cppname)
+                {
+                  LOG_ERROR ("Group 2 for CLASS %s already read", klass->dxfname);
+                  break;
+                }
               STRADD (klass->cppname, pair->value.s);
               LOG_TRACE ("CLASS[%d].cppname = %s [TV 2]\n", i, pair->value.s);
               break;
             case 3:
+              if (klass->appname)
+                {
+                  LOG_ERROR ("Group 3 for CLASS %s already read", klass->dxfname);
+                  break;
+                }
               STRADD (klass->appname, pair->value.s);
               LOG_TRACE ("CLASS[%d].appname = %s [TV 3]\n", i, pair->value.s);
               break;
