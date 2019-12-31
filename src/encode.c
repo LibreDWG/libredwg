@@ -281,7 +281,8 @@ static bool env_var_checked_p;
 
 #define FIELD_2DD_VECTOR(nam, size, dxf)                                      \
   OVERFLOW_CHECK (nam, _obj->size)                                            \
-  FIELD_2RD (nam[0], dxf);                                                    \
+  if (_obj->size)                                                             \
+    FIELD_2RD (nam[0], dxf);                                                  \
   for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)                 \
     {                                                                         \
       FIELD_2DD (nam[vcount], FIELD_VALUE (nam[vcount - 1].x),                \
