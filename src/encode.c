@@ -2420,7 +2420,7 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
 
   if (!_obj->HANDSEED) // minimal or broken DXF
     {
-      dwg->opts |= (DWG_OPTS_MINIMAL | DWG_OPTS_INDXF);
+      dwg->opts |= DWG_OPTS_MINIMAL;
       dat->from_version = dat->version - 1;
       LOG_TRACE ("encode from minimal DXF\n");
       _obj->HANDSEED = calloc(1, sizeof(Dwg_Object_Ref));

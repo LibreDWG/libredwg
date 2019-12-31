@@ -197,7 +197,7 @@ main (int argc, char *argv[])
   i = optind;
 
   memset (&dwg, 0, sizeof (Dwg_Data));
-  dwg.opts = opts;
+  dwg.opts = opts & 0xf;
 
   filename_in = argv[i];
   if (!filename_in)
