@@ -1934,7 +1934,8 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       error = dwg_encode_PROXY_OBJECT (dat, obj);
       break;
     default:
-      if (obj->type == obj->parent->layout_type)
+      if (obj->type == obj->parent->layout_type
+          && obj->fixedtype == DWG_TYPE_LAYOUT)
         {
           error = dwg_encode_LAYOUT (dat, obj);
           (void)dwg_encode_get_class (obj->parent, obj);

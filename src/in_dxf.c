@@ -6551,8 +6551,10 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                     }
                   else
                     blkhdr = NULL;
+                  if (!_obj || !_obj->name)
+                    ;
                   // TODO R2007+
-                  if (strEQc (_obj->name, "*Model_Space"))
+                  else if (strEQc (_obj->name, "*Model_Space"))
                     entmode = ent->entmode = 2;
                   else if (strEQc (_obj->name, "*Paper_Space"))
                     entmode = ent->entmode = 1;
@@ -6698,13 +6700,14 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       name[79] = '\0';
       entity_alias (name);
       // until 0 ENDSEC
-      while (pair->code == 0
+      while (pair != NULL
+             && pair->code == 0
              && (is_dwg_entity (name) || strEQc (name, "DIMENSION")))
         {
           char *dxfname = strdup (pair->value.s);
           dxf_free_pair (pair);
           pair = new_object (name, dxfname, dat, dwg, 0, 0);
-          if (pair->code == 0)
+          if (pair != NULL && pair->code == 0)
             {
               Dwg_Object *obj = &dwg->object[dwg->num_objects - 1];
               Dwg_Object_Entity *ent = obj->tio.entity;
@@ -6778,7 +6781,7 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dxf_Pair *pair = dxf_read_pair (dat);
   while (1)
     {
-      while (pair->code == 0)
+      while (pair && pair->code == 0)
         {
           char *dxfname = strdup (pair->value.s);
           strncpy (name, dxfname, 79);
@@ -6814,7 +6817,7 @@ dxf_unknownsection_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // until 0 ENDSEC
   while (1)
     {
-      while (pair->code == 0)
+      while (pair && pair->code == 0)
         {
           char *dxfname = strdup (pair->value.s);
           strncpy (name, dxfname, 79);
@@ -6897,6 +6900,8 @@ dxf_thumbnail_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
+      if (!pair)
+        break;
     }
   dxf_free_pair (pair);
   return 0;
