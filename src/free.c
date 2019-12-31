@@ -720,14 +720,14 @@ dwg_free_object (Dwg_Object *obj)
       dwg_free_PROXY_OBJECT (dat, obj);
       break;
     default:
-      if (obj->type == obj->parent->layout_type)
+      if (obj->type == obj->parent->layout_type
+          && obj->fixedtype == DWG_TYPE_LAYOUT)
         {
           SINCE (R_13)
           {
             dwg_free_LAYOUT (dat, obj); // XXX avoid double-free, esp. in eed
           }
         }
-
       else if ((error = dwg_free_variable_type (obj->parent, obj))
                & DWG_ERR_UNHANDLEDCLASS)
         {
