@@ -627,6 +627,11 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
     }                                                                         \
   SINCE (R_13)                                                                \
   {                                                                           \
+    if (_obj->num_reactors && !_obj->reactors)                                \
+      {                                                                       \
+        LOG_ERROR ("NULL entity.reactors");                                   \
+        return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
+      }                                                                       \
     for (vcount = 0; vcount < _obj->num_reactors; vcount++)                   \
       {                                                                       \
         FIELD_HANDLE_N (reactors[vcount], vcount, code, 330);                 \
@@ -2447,7 +2452,10 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj, int
           {
             bit_write_RS (dat, rbuf->value.str.size);
             bit_write_RC (dat, rbuf->value.str.codepage);
-            bit_write_TF (dat, rbuf->value.str.u.data, rbuf->value.str.size);
+            if (rbuf->value.str.u.data)
+              bit_write_TF (dat, rbuf->value.str.u.data, rbuf->value.str.size);
+            else
+              bit_write_TF (dat, (char*)"", 0);
             LOG_TRACE ("xdata[%d]: \"%s\" [TF %d %d]\n", j,
                        rbuf->value.str.u.data, rbuf->value.str.size,
                        rbuf->type);
