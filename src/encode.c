@@ -2073,7 +2073,10 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
         {
           bit_write_RC (dat, data->u.eed_0.length);
           bit_write_RS_LE (dat, data->u.eed_0.codepage);
-          bit_write_TF (dat, data->u.eed_0.string, data->u.eed_0.length);
+          if (data->u.eed_0.string)
+            bit_write_TF (dat, data->u.eed_0.string, data->u.eed_0.length);
+          else
+            bit_write_TF (dat, (char*)"", 0);
           LOG_TRACE ("string: len=%d [RC] cp=%d [RS_LE] \"%s\" [TF]\n",
                      data->u.eed_0.length, data->u.eed_0.codepage, data->u.eed_0.string);
         }
