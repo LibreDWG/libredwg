@@ -4825,6 +4825,8 @@ new_object (char *restrict name, char *restrict dxfname,
                 BITCODE_H *hdls = NULL;
                 BITCODE_BL num_entries = 0;
 
+                if ((int)i < 0)
+                  i = 0;
                 dwg_dynapi_entity_value (_ctrl, ctrlname, "num_entries",
                                          &num_entries, NULL);
                 if (num_entries <= i)
