@@ -1662,6 +1662,11 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   dat->bit = 0;
 
   LOG_INFO ("Object number: %lu", (unsigned long)obj->index);
+  if (obj->size > 0x100000)
+    {
+      LOG_ERROR ("Object size %u overflow", obj->size);
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
   while (dat->byte + obj->size >= dat->size)
     bit_chain_alloc (dat);
 
