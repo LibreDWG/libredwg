@@ -736,6 +736,7 @@ dwg_free_object (Dwg_Object *obj)
           Dwg_Class *klass;
 
         unhandled:
+          is_entity = 0;
           i = obj->type - 500;
           klass = NULL;
 
