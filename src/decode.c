@@ -691,6 +691,11 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   decode_preR13_section_ptr ("LTYPE", SECTION_LTYPE, dat, dwg);
   decode_preR13_section_ptr ("VIEW", SECTION_VIEW, dat, dwg);
 
+  if (dwg->header.section[SECTION_BLOCK].size > dat->size)
+    {
+      LOG_ERROR ("BLOCK.size overflow")
+      return DWG_ERR_INVALIDDWG;
+    }
   LOG_TRACE ("@0x%lx\n", dat->byte); // 0x5e
   {
     Dwg_Header_Variables *_obj = &dwg->header_vars;
