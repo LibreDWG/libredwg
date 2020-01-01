@@ -4410,7 +4410,7 @@ typedef struct _dwg_entity_HELIX
   BITCODE_BD num_turns;     //41
   BITCODE_BD turn_height;   //42
   BITCODE_B handedness;     //290
-  BITCODE_BS constraint_type; //280
+  BITCODE_BS constraint_type; //280: 0=turn_height, 1=turns, 2=height
 
 } Dwg_Entity_HELIX;
 

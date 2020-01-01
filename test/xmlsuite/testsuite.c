@@ -184,42 +184,48 @@ add_helix (xmlNodePtr rootnode, const Dwg_Object *obj)
 {
   // TODO: decode some AcDbHelix class
   // but it is not even parsed by dwgread
-  Dwg_Entity_CIRCLE *circle = obj->tio.entity->tio.CIRCLE;
+  Dwg_Entity_HELIX *helix = obj->tio.entity->tio.HELIX;
   xmlChar *buf, *dtostring;
   xmlNodePtr node = newXMLEntity (rootnode);
 
   newXMLcProp ("type", "IAcadHelix");
   newXMLcProp ("desc", "IAcadHelix: IAcadSpring Interface");
 
-  buf = spointprepare (circle->center.x, circle->center.y, circle->center.z);
+  buf = spointprepare (helix->start_pt.x, helix->start_pt.y, helix->start_pt.z);
   newXMLProp ("Position", buf);
 
-  dtostring = doubletochar (circle->radius);
+  buf = spointprepare (helix->axis_base_pt.x, helix->axis_base_pt.y, helix->axis_base_pt.z);
+  newXMLProp ("AxisPoint", buf);
+
+  buf = spointprepare (helix->axis_vector.x, helix->axis_vector.y, helix->axis_vector.z);
+  newXMLProp ("AxisVector", buf);
+
+  dtostring = doubletochar (helix->turn_height);
+  newXMLProp ("Height", dtostring);
+
+  dtostring = doubletochar (helix->radius);
   newXMLProp ("BaseRadius", dtostring);
 
-  dtostring = doubletochar (circle->thickness);
-  newXMLProp ("Thickness", dtostring);
-
-  dtostring = doubletochar (1);
-  newXMLProp ("Constrain", dtostring); // typo!
-
-  dtostring = doubletochar (circle->thickness);
+  dtostring = doubletochar (0);
   newXMLProp ("TopRadius", dtostring);
 
-  dtostring = doubletochar (circle->thickness);
-  newXMLProp ("TotalLength", dtostring);
-
-  dtostring = doubletochar (circle->thickness);
+  dtostring = doubletochar (helix->turn_height);
   newXMLProp ("TurnHeight", dtostring);
 
-  dtostring = doubletochar (circle->thickness);
+  dtostring = doubletochar (helix->num_turns);
   newXMLProp ("Turns", dtostring);
 
-  dtostring = doubletochar (circle->thickness);
+  dtostring = doubletochar (0);
+  newXMLProp ("Twist", dtostring);
+
+  dtostring = doubletochar (helix->constraint_type);
+  newXMLProp ("Constrain", dtostring); // typo!
+
+  dtostring = doubletochar (0);
   newXMLProp ("TurnSlope", dtostring);
 
-  dtostring = doubletochar (circle->thickness);
-  newXMLProp ("Twist", dtostring);
+  dtostring = doubletochar (0);
+  newXMLProp ("TotalLength", dtostring);
 
   common_entity_attrs (node, obj);
   xmlAddChild (rootnode, node);
@@ -704,7 +710,8 @@ load_dwg (char *dwgfilename, xmlNodePtr rootnode)
   for (i = 0; i < dwg.num_objects; i++)
     {
       const Dwg_Object *obj = &dwg.object[i];
-      switch (dwg.object[i].type)
+      int type = (int)obj->fixedtype;
+      switch (type)
         {
         case DWG_TYPE_ARC:
           add_arc (rootnode, obj);
@@ -750,9 +757,9 @@ load_dwg (char *dwgfilename, xmlNodePtr rootnode)
           add_ray (rootnode, obj);
           break;
 
-          /*case DWG_TYPE_HELIX:
-            add_helix (rootnode, obj);
-            break;*/
+        case DWG_TYPE_HELIX:
+          add_helix (rootnode, obj);
+          break;
 
         case DWG_TYPE_TEXT:
           add_text (rootnode, obj);
@@ -766,19 +773,15 @@ load_dwg (char *dwgfilename, xmlNodePtr rootnode)
           add_xline (rootnode, obj);
           break;
 
-          /*      case DWG_TYPE_TABLE:
-                    add_table(rootnode, obj);
-                    break;*/
+        /*case DWG_TYPE_TABLE:
+          add_table(rootnode, obj);
+          break;*/
 
         default:
           if (obj->type < 500 || (obj->type - 500) >= dwg.num_classes)
             break;
           if (!obj->dxfname || obj->supertype == DWG_SUPERTYPE_UNKNOWN)
             break;
-          if (!strcmp (obj->dxfname, "HELIX"))
-            add_helix (rootnode, obj);
-
-          break;
         }
     }
 
