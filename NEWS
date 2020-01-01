@@ -2,10 +2,47 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2019 Free Software Foundation, Inc.
 See the end for copying conditions.
 
+LibreDWG version 0.10 - released 2020/01/04 - beta:
+
+API breaking changes:
+  * removed the UNKNOWN supertype, there are only UNKNOWN_OBJ and UNKNOWN_ENT
+    left, with common_entity_data.
+  * renamed SHAPE.shape_no to style_id
+
+Major bugfixes:
+  * Improved building the perl5 binding, proper dependencies.
+    Set proper -I and -L paths, create LibreDWG.c not swig_perl.c
+  * Harmonized INDXFB with INDXF, removed extra src/in_dxfb.c (#134).
+    Slimmed the .so size by 260Kb. Still untested though.
+
+Minor bugfixes:
+  * Many fuzzing and static analyzer fixes for dwg2dxf, dxf2dwg, dwgrewrite
+    of various harmless categories, but also a stack-overflow on outdxf cquote.
+    (#172-174, #178).
+    indxf is pretty robust now, but still highly experimental, as many dxf2dwg
+    import and DWG validity tests are missing.
+  * Fixed most indxf leaks. (#151)
+  * Stabilized the ASAN leak tests for make check.
+  * Fix MULTILEADER.ctx.lline handles <r2010
+  * Fix indxf color.alpha; at DXF 440
+  * Fixed most important make scan-build warnings, the rest are mostly bogus.
+
+Other newsworthy changes:
+  * Added support for AcDb3dSolid history_id (r2007+)
+  * Improved the indxf speed in new_object. Do a proper linear search, and
+    break on first found type.
+  * Rename the ./dxf helper to ./dwg, and added a ./dxf test helper.
+  * dxf2dwg got a new experimental --force-free option to check for leaks and
+    UAF or double-free's.
+  * Harmonized *.spec formatting and adjusted gen-dynapi.pl
+  * Harmonized out_dxfb with out_dxf, e.g. the new mspace improvements (#173).
+
 LibreDWG version 0.9.3 - released 2019/12/25 - beta:
 
 Minor bugfixes:
   * Added several overflow checks from fuzzing (#176)
+    CVE-2019-20009, CVE-2019-20010, CVE-2019-20011, CVE-2019-20012,
+    CVE-2019-20013, CVE-2019-20014, CVE-2019-20015
   * Enabled AX_RESTRICT, undefining restrict in broken compilers (#141)
   * Fixed AX_ADD_FORTIFY_SOURCE warnings with gcc-9 -Wcpp
   * Disallow illegal SPLINE scenarios (#176)
