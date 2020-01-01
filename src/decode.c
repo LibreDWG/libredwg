@@ -5020,14 +5020,15 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
           else
             {
               if (i < 0)
-                LOG_ERROR ("Invalid class index %d <0", i)
+                LOG_ERROR ("Invalid class index %d < 0", i)
               else
-                LOG_ERROR ("Invalid class index %d >%d", i,
+                LOG_ERROR ("Invalid class index %d >= %d", i,
                            (int)dwg->num_classes)
               obj->type = 0;
               *dat = abs_dat;
               return error | DWG_ERR_VALUEOUTOFBOUNDS;
             }
+
           // properly dwg_decode_object/_entity for eed, reactors, xdic
           if (is_entity)
               error |= dwg_decode_UNKNOWN_ENT (dat, obj);
