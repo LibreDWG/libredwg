@@ -1134,19 +1134,22 @@
     if (error)                                                                \
       return error;                                                           \
     SINCE (R_2007)                                                            \
-    {                                                                         \
-      Bit_Chain obj_dat, str_dat, hdl_dat;                                    \
-      obj_dat = *dat;                                                         \
-      hdl_dat = *dat;                                                         \
-      str_dat = *dat;                                                         \
-      error                                                                   \
-          = dwg_decode_##token##_private (&obj_dat, &hdl_dat, &str_dat, obj); \
-    }                                                                         \
-    else { error = dwg_decode_##token##_private (dat, dat, dat, obj); }       \
+      {                                                                       \
+        Bit_Chain obj_dat, str_dat, hdl_dat;                                  \
+        obj_dat = *dat;                                                       \
+        hdl_dat = *dat;                                                       \
+        str_dat = *dat;                                                       \
+        error = dwg_decode_##token##_private (&obj_dat, &hdl_dat,             \
+                                              &str_dat, obj);                 \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        error = dwg_decode_##token##_private (dat, dat, dat, obj);            \
+      }                                                                       \
     return error;                                                             \
   }                                                                           \
                                                                               \
-  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                   \
+  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                     \
   static int dwg_decode_##token##_private (                                   \
       Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
       Dwg_Object *restrict obj)                                               \

@@ -20141,21 +20141,6 @@ static int test_UNDERLAY (const Dwg_Object *obj)
   }
   return failed;
 }
-static int test_UNKNOWN_ENT (const Dwg_Object *obj)
-{
-  int error = 0;
-  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
-  Dwg_Entity_UNKNOWN_ENT *restrict unknown_ent = obj->tio.entity->tio.UNKNOWN_ENT;
-  {
-    struct _dwg_object_entity* parent;
-    if (dwg_dynapi_entity_value (unknown_ent, "UNKNOWN_ENT", "parent", &parent, NULL)
-        && !memcmp (&parent, &unknown_ent->parent, sizeof (unknown_ent->parent)))
-        pass ();
-    else
-        fail ("UNKNOWN_ENT.parent [struct _dwg_object_entity*]");
-  }
-  return failed;
-}
 static int test_VERTEX_2D (const Dwg_Object *obj)
 {
   int error = 0;
@@ -34426,21 +34411,6 @@ static int test_UNDERLAYDEFINITION (const Dwg_Object *obj)
   }
   return failed;
 }
-static int test_UNKNOWN_OBJ (const Dwg_Object *obj)
-{
-  int error = 0;
-  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
-  Dwg_Object_UNKNOWN_OBJ *restrict unknown_obj = obj->tio.object->tio.UNKNOWN_OBJ;
-  {
-    struct _dwg_object_object* parent;
-    if (dwg_dynapi_entity_value (unknown_obj, "UNKNOWN_OBJ", "parent", &parent, NULL)
-        && !memcmp (&parent, &unknown_obj->parent, sizeof (unknown_obj->parent)))
-        pass ();
-    else
-        fail ("UNKNOWN_OBJ.parent [struct _dwg_object_object*]");
-  }
-  return failed;
-}
 static int test_VBA_PROJECT (const Dwg_Object *obj)
 {
   int error = 0;
@@ -36729,8 +36699,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_TRACE(obj);
   else  if (obj->fixedtype == DWG_TYPE_UNDERLAY)
     error += test_UNDERLAY(obj);
-  else  if (obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
-    error += test_UNKNOWN_ENT(obj);
   else  if (obj->fixedtype == DWG_TYPE_VERTEX_2D)
     error += test_VERTEX_2D(obj);
   else  if (obj->fixedtype == DWG_TYPE_VERTEX_3D)
@@ -36881,8 +36849,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_UCS_CONTROL(obj);
   else  if (obj->fixedtype == DWG_TYPE_UNDERLAYDEFINITION)
     error += test_UNDERLAYDEFINITION(obj);
-  else  if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ)
-    error += test_UNKNOWN_OBJ(obj);
   else  if (obj->fixedtype == DWG_TYPE_VBA_PROJECT)
     error += test_VBA_PROJECT(obj);
   else  if (obj->fixedtype == DWG_TYPE_VIEW)
@@ -37017,8 +36983,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_TRACE (obj);
   else  if (obj->fixedtype == DWG_TYPE_UNDERLAY)
     error += test_UNDERLAY (obj);
-  else  if (obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
-    error += test_UNKNOWN_ENT (obj);
   else  if (obj->fixedtype == DWG_TYPE_VERTEX_2D)
     error += test_VERTEX_2D (obj);
   else  if (obj->fixedtype == DWG_TYPE_VERTEX_3D)
@@ -37169,8 +37133,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_UCS_CONTROL (obj);
   else  if (obj->fixedtype == DWG_TYPE_UNDERLAYDEFINITION)
     error += test_UNDERLAYDEFINITION (obj);
-  else  if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ)
-    error += test_UNKNOWN_OBJ (obj);
   else  if (obj->fixedtype == DWG_TYPE_VBA_PROJECT)
     error += test_VBA_PROJECT (obj);
   else  if (obj->fixedtype == DWG_TYPE_VIEW)

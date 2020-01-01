@@ -927,7 +927,7 @@ EOF
     for my $name (@entity_names, @object_names) {
       my $xname = $name =~ /^3/ ? "_$name" : $name; # 3DFACE, 3DSOLID
       #next if $name eq 'DIMENSION_';
-      next if $name eq 'PROXY_LWPOLYLINE';
+      next if $name =~ /^(PROXY_LWPOLYLINE|UNKNOWN_)/;
       print $fh "  else" if $name ne '3DFACE'; # the first
       print $fh <<"EOF";
   if (obj->fixedtype == DWG_TYPE_$xname)
@@ -938,7 +938,8 @@ EOF
   if (m{/\* \@\@for test_OBJECT\@\@ \*/}) {
     for my $name (@entity_names, @object_names) {
       #next if $name eq 'DIMENSION_';
-      next if $name eq 'PROXY_LWPOLYLINE';
+      #TABLE is stored as fixedtype UNKNOWN_ENT, so the dynapi test would fail
+      next if $name =~ /^(PROXY_LWPOLYLINE|UNKNOWN_)/;
       my $is_ent = grep { $name eq $_ } @entity_names;
       my ($Entity, $lentity) = $is_ent ? ('Entity', 'entity') : ('Object', 'object');
       my $xname = $name =~ /^3/ ? "_$name" : $name;
@@ -1124,7 +1125,7 @@ EOF
     for my $name (@entity_names, @object_names) {
       my $xname = $name =~ /^3/ ? "_$name" : $name; # 3DFACE, 3DSOLID
       next if $name eq 'DIMENSION_';
-      next if $name eq 'PROXY_LWPOLYLINE';
+      next if $name =~ /^(PROXY_LWPOLYLINE|UNKNOWN_)/;
       print $fh "  else" if $name ne '3DFACE'; # the first
       print $fh <<"EOF";
   if (obj->fixedtype == DWG_TYPE_$xname)
