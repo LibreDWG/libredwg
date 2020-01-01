@@ -1200,8 +1200,6 @@ static int dwg_dxfb_object (Bit_Chain *restrict dat,
 
   if (!obj || !obj->parent)
     return DWG_ERR_INTERNALERROR;
-  if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
-    return 0;
   minimal = obj->parent->opts & DWG_OPTS_MINIMAL;
 
   switch (obj->type)

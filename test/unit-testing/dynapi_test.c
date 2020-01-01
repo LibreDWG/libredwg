@@ -36581,8 +36581,6 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-  if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
-    return 0;
 #line 36598 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)

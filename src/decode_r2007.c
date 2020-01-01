@@ -1247,12 +1247,6 @@ obj_string_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   str->size = (obj->bitsize / 8) + ((obj->bitsize % 8) ? 1 : 0);
   bit_advance_position (str, start - 8);
 
-  if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
-    {
-      str->size = 0;
-      // bit_reset_chain (str);
-      return 0;
-    }
   if (str->byte >= old_size - old_byte)
     {
       LOG_WARN ("obj_string_stream overflow");

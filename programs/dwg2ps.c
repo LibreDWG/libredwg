@@ -164,8 +164,6 @@ create_postscript (Dwg_Data *dwg, char *output)
   for (i = 0; i < dwg->num_objects; i++)
     {
       Dwg_Object *obj = &dwg->object[i];
-      if (obj->supertype == DWG_SUPERTYPE_UNKNOWN) // unknown
-        continue;
       if (obj->type == DWG_SUPERTYPE_OBJECT) // no entity
         continue;
       // if (obj->tio.entity->entity_mode == 0) // belongs to block

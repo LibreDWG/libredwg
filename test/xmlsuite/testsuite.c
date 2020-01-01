@@ -780,7 +780,7 @@ load_dwg (char *dwgfilename, xmlNodePtr rootnode)
         default:
           if (obj->type < 500 || (obj->type - 500) >= dwg.num_classes)
             break;
-          if (!obj->dxfname || obj->supertype == DWG_SUPERTYPE_UNKNOWN)
+          if (!obj->dxfname)
             break;
         }
     }

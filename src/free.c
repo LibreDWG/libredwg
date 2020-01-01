@@ -316,16 +316,7 @@ static int dwg_free_UNKNOWN_OBJ (Bit_Chain *restrict dat,
       {                                                                       \
         _obj = obj->tio.object->tio.token;                                    \
         LOG_HANDLE ("Free object " #token " [%d]\n", obj->index)              \
-        if (strcmp (#token, "UNKNOWN_OBJ")                                    \
-            && obj->supertype == DWG_SUPERTYPE_UNKNOWN)                       \
-          {                                                                   \
-            _obj = NULL;                                                      \
-            error = dwg_free_UNKNOWN_OBJ (dat, obj);                          \
-          }                                                                   \
-        else                                                                  \
-          {                                                                   \
-            error = dwg_free_##token##_private (dat, obj);                    \
-          }                                                                   \
+        error = dwg_free_##token##_private (dat, obj);                        \
         dwg_free_eed (obj);                                                   \
         FREE_IF (_obj);                                                       \
         FREE_IF (obj->tio.object);                                            \
@@ -475,8 +466,6 @@ dwg_free_object (Dwg_Object *obj)
   if (obj->type == DWG_TYPE_FREED || obj->tio.object == NULL)
     return;
   dat->from_version = dat->version;
-  if (obj->supertype == DWG_SUPERTYPE_UNKNOWN)
-    goto unhandled;
 
   switch (obj->type)
     {
@@ -731,7 +720,6 @@ dwg_free_object (Dwg_Object *obj)
       else if ((error = dwg_free_variable_type (obj->parent, obj))
                & DWG_ERR_UNHANDLEDCLASS)
         {
-        unhandled:
           if (obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
               dwg_free_UNKNOWN_ENT (dat, obj);
           else if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ)

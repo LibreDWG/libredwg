@@ -1965,7 +1965,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           else
             bit_write_BS (dat, obj->type);
 
-          if (klass && obj->supertype == DWG_SUPERTYPE_UNKNOWN)
+          if (klass)
             is_entity = dwg_class_is_entity (klass);
           else
             is_entity = obj->supertype == DWG_SUPERTYPE_ENTITY;
@@ -2017,16 +2017,6 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       }
       bit_set_position (dat, pos);
     }
-
-  /*
-   if (obj->supertype != DWG_SUPERTYPE_UNKNOWN)
-   {
-     fprintf (stderr, "Begin address:\t%10lu\n", address);
-     fprintf (stderr, "Last address:\t%10lu\tSize: %10lu\n", dat->byte,
-   obj->size); fprintf (stderr, "End address:\t%10lu (calculated)\n", address +
-   2 + obj->size);
-   }
-   */
 
   /* Now 1 padding bits until next byte, and then a RS CRC */
   if (dat->bit)
