@@ -1015,7 +1015,7 @@ EOF
         #inserts => 'num_inserts',
         #groups => 'num_groups',
         #field_handles => 'num_fields',
-        sort_handles => 'num_ents',
+        sort_ents => 'num_ents',
         attr_def_id => 'num_attr_defs',
         readdeps  => 'num_deps',
         writedeps => 'num_deps',

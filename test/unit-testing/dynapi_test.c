@@ -32710,12 +32710,12 @@ static int test_SORTENTSTABLE (const Dwg_Object *obj)
   {
     BITCODE_H* sort_ents;
     BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (sortentstable, "SORTENTSTABLE", "num_sort_ents", &count, NULL)
+    if (dwg_dynapi_entity_value (sortentstable, "SORTENTSTABLE", "num_ents", &count, NULL)
         && dwg_dynapi_entity_value (sortentstable, "SORTENTSTABLE", "sort_ents", &sort_ents, NULL)
         && sort_ents == sortentstable->sort_ents)
       pass ();
     else
-      fail ("SORTENTSTABLE.sort_ents [H*] * %u num_sort_ents", count);
+      fail ("SORTENTSTABLE.sort_ents [H*] * %u num_ents", count);
   }
   return failed;
 }
