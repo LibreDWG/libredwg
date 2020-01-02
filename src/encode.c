@@ -41,6 +41,10 @@
 #include "encode.h"
 #include "decode.h"
 
+// from dwg_api
+bool is_dwg_object (const char *name);
+bool is_dwg_entity (const char *name);
+
 /* The logging level for the write (encode) path.  */
 static unsigned int loglevel;
 /* the current version per spec block */
@@ -1619,16 +1623,67 @@ dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat, Dwg_O
 {
   int error = 0;
   int is_entity;
-  unsigned long pos;
   Dwg_Class *klass = dwg_encode_get_class (dwg, obj);
 
   if (!klass)
-    return DWG_ERR_INTERNALERROR;
+    return DWG_ERR_INVALIDTYPE;
   is_entity = dwg_class_is_entity (klass);
+  // check if it really was an entity
+  if ((is_entity && obj->supertype == DWG_SUPERTYPE_OBJECT)
+      || (!is_entity && obj->supertype == DWG_SUPERTYPE_ENTITY))
+    {
+      if (is_dwg_object (obj->name))
+        {
+          if (is_entity)
+            {
+              LOG_INFO ("Fixup Class %s item_class_id to %s for %s\n",
+                        klass->dxfname, "OBJECT", obj->name);
+              klass->item_class_id = 0x1f2;
+              if (strNE (klass->dxfname, obj->dxfname))
+                {
+                  free (klass->dxfname);
+                  klass->dxfname = strdup (obj->dxfname);
+                }
+              is_entity = 0;
+            }
+          else
+            {
+              LOG_INFO ("Fixup %s.supertype to %s\n", obj->name, "OBJECT");
+              obj->supertype = DWG_SUPERTYPE_OBJECT;
+            }
+        }
+      else if (is_dwg_entity (obj->name))
+        {
+          if (!is_entity)
+            {
+              LOG_INFO ("Fixup Class %s item_class_id to %s for %s\n",
+                        klass->dxfname, "ENTITY", obj->name);
+              klass->item_class_id = 0x1f3;
+              if (strNE (klass->dxfname, obj->dxfname))
+                {
+                  free (klass->dxfname);
+                  klass->dxfname = strdup (obj->dxfname);
+                }
+              is_entity = 1;
+            }
+          else
+            {
+              LOG_INFO ("Fixup %s.supertype to %s", obj->name, "ENTITY");
+              obj->supertype = DWG_SUPERTYPE_ENTITY;
+            }
+        }
+      else
+        {
+          LOG_ERROR ("Illegal Class %s is_%s item_class_id for %s",
+                     klass->dxfname, is_entity ? "entity" : "object",
+                     obj->name);
+          return DWG_ERR_INVALIDTYPE;
+        }
+    }
 
   if (dwg->opts & DWG_OPTS_INDXF) // DXF import
     {
-      pos = bit_position (dat);
+      unsigned long pos = bit_position (dat);
       dat->byte = obj->address;
       dat->bit = 0;
       LOG_TRACE ("fixup Type: %d [BS] @%lu\n", obj->type, obj->address);
@@ -1952,7 +2007,6 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           Dwg_Data *dwg = obj->parent;
           int is_entity;
-          int i = obj->type - 500;
           Dwg_Class *klass = dwg_encode_get_class (dwg, obj);
 
           assert (address);
@@ -1968,7 +2022,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             bit_write_BS (dat, obj->type);
 
           if (klass)
-            is_entity = dwg_class_is_entity (klass);
+            is_entity = klass->item_class_id == 0x1f2 && obj->supertype == DWG_SUPERTYPE_ENTITY;
           else
             is_entity = obj->supertype == DWG_SUPERTYPE_ENTITY;
           // properly dwg_decode_object/_entity for eed, reactors, xdic

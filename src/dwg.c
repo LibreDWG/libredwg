@@ -1192,9 +1192,9 @@ get_last_owned_block (const Dwg_Object *restrict hdr)
 }
 
 EXPORT int
-dwg_class_is_entity (const Dwg_Class *klass)
+dwg_class_is_entity (const Dwg_Class *restrict klass)
 {
-  return klass && klass->item_class_id == 0x1f2;
+  return (klass != NULL && (int)klass->item_class_id == 0x1f2) ? 1 : 0;
 }
 
 EXPORT int
