@@ -14,7 +14,7 @@
    do not modify */
 /* written by: Reini Urban */
 
-#line 17 "dynapi_test.c.in"
+#line 16 "dynapi_test.c.in"
 #define DYNAPI_TEST_C
 #include <stdio.h>
 #include <stdlib.h>
@@ -5373,11 +5373,11 @@ test_header (const Dwg_Data *dwg)
     dwg_dynapi_header_set_value (dwg, "unknown_57", &unknown_57, 0);
 
   }
-#line 48 "dynapi_test.c.in"
+#line 47 "dynapi_test.c.in"
   return error;
 }
-
-#line 5380 "dynapi_test.c"
+// NOTE: below __LINE__+1
+#line 5381 "dynapi_test.c"
 /* @@for test_OBJECT@@ */
 static int test__3DFACE (const Dwg_Object *obj)
 {
@@ -36576,12 +36576,12 @@ static int test_XRECORD (const Dwg_Object *obj)
   return failed;
 }
 
-#line 55 "dynapi_test.c.in"
+#line 54 "dynapi_test.c.in"
 static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
-  int error = 0;
-#line 36598 "dynapi_test.c"
+  int error = 0; // NOTE: below __LINE__+1
+#line 36585 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -37151,7 +37151,7 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_WIPEOUTVARIABLES (obj);
   else  if (obj->fixedtype == DWG_TYPE_XRECORD)
     error += test_XRECORD (obj);
-#line 64 "dynapi_test.c.in"
+#line 61 "dynapi_test.c.in"
   return error + failed;
 }
 

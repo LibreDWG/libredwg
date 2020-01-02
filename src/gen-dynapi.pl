@@ -977,6 +977,7 @@ EOF
     $type =~ s/D_1$/D/;
     $type = 'BITCODE_'.$type unless ($type =~ /^(struct|Dwg_)/ or $type =~ /^[a-z]/);
     if (!$is_ptr) {
+      # TODO DEBUGGING [BR]D can be nan
       print $fh <<"EOF";
   {
     $type $var;
@@ -1070,7 +1071,10 @@ EOF
     if (dwg_dynapi_entity_value ($lname, "$name", "$countfield", &count, NULL)
         && dwg_dynapi_entity_value ($lname, "$name", "$var", &$svar, NULL)
 EOF
-        if ($type !~ /\*\*/) {
+        if ($type eq 'BITCODE_BD') {
+          print $fh "        && (isnan ($svar) || $svar == $lname->$svar)";
+        }
+        elsif ($type !~ /\*\*/) {
           print $fh "        && $svar == $lname->$svar";
         }
         print $fh ")\n";
@@ -1138,9 +1142,10 @@ close $in;
 chmod 0444, $fh;
 close $fh;
 
+# NOTE: in the 2 #line's below use __LINE__+1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1143 "gen-dynapi.pl"
+#line 1148 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -1221,7 +1226,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
-#line 1224 "gen-dynapi.pl"
+#line 1229 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
