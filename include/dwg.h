@@ -23,6 +23,11 @@
 #ifndef DWG_H
 #define DWG_H
 
+#define LIBREDWG_VERSION_MAJOR 0
+#define LIBREDWG_VERSION_MINOR 10
+#define LIBREDWG_VERSION       ((LIBREDWG_VERSION_MAJOR * 100) + LIBREDWG_VERSION_MINOR)
+#define LIBREDWG_SO_VERSION    0:10:0
+
 /* for uint64_t, but not in swig */
 #ifndef SWIGIMPORTED
 #  include <stdint.h>

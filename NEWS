@@ -29,6 +29,7 @@ Minor bugfixes:
   * Fixed most important make scan-build warnings, the rest are mostly bogus.
 
 Other newsworthy changes:
+  * Added LIBREDWG_VERSION et al to include/dwg.h
   * Added support for AcDb3dSolid history_id (r2007+)
   * Improved the indxf speed in new_object. Do a proper linear search, and
     break on first found type.
