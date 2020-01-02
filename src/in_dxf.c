@@ -1002,15 +1002,16 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               LOG_TRACE ("CLASS[%d].num_instances = %ld [BL 91]\n", i,
                          pair->value.l);
               break;
-            case 280:
+            case 280: // ie was_a_proxy/is_zombie
               klass->wasazombie = (BITCODE_B)pair->value.i;
               LOG_TRACE ("CLASS[%d].wasazombie = %d [B 280]\n", i,
                          pair->value.i);
               break;
-            case 281:
+            case 281: // ie is_entity
+              // 1f2 for entities, 1f3 for objects
               klass->item_class_id = pair->value.i ? 0x1f2 : 0x1f3;
-              LOG_TRACE ("CLASS[%d].item_class_id = %x [BS 281]\n", i,
-                         klass->item_class_id);
+              LOG_TRACE ("CLASS[%d].item_class_id = 0x%x [BSx 281] (%s)\n", i,
+                         klass->item_class_id, pair->value.i ? "is_entity" : "is_object");
               break;
             default:
               LOG_WARN ("Unknown DXF code for class[%d].%d", i, pair->code);

@@ -5497,10 +5497,10 @@ typedef struct _dwg_class
   char *appname;
   char *cppname;
   char *dxfname; /*!< ASCII or UTF-8 */
-  BITCODE_TU dxfname_u; /* r2007+, always transformed to dxfname as UTF-8 */
-  BITCODE_B  wasazombie; /*!< really Was-a-proxy flag */
-  BITCODE_BS item_class_id; /* Is-an-entity. 1f2 for entities, 1f3 for objects */
-  BITCODE_BL num_instances; /* 91 Instance count for a custom class */
+  BITCODE_TU dxfname_u; /*!< r2007+, always transformed to dxfname as UTF-8 */
+  BITCODE_B  wasazombie; /*!< really is_zombie or was_a_proxy flag */
+  BITCODE_BS item_class_id; /*!< really is_entity. 1f2 for entities, 1f3 for objects */
+  BITCODE_BL num_instances; /*!< 91 instance count for a custom class */
   BITCODE_BL dwg_version;
   BITCODE_BL maint_version;
   BITCODE_BL unknown_1; /*!< def: 0L */
