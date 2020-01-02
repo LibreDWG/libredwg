@@ -1017,6 +1017,7 @@ EOF
         #field_handles => 'num_fields',
         sort_ents => 'num_ents',
         attr_def_id => 'num_attr_defs',
+        layer_entries => 'num_entries',
         readdeps  => 'num_deps',
         writedeps => 'num_deps',
         dashes_r11 => 'num_dashes',
@@ -1142,10 +1143,10 @@ close $in;
 chmod 0444, $fh;
 close $fh;
 
-# NOTE: in the 2 #line's below use __LINE__+1
+# NOTE: in the 2 #line's below use __LINE__
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1148 "gen-dynapi.pl"
+#line 1149 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -1226,7 +1227,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
-#line 1229 "gen-dynapi.pl"
+#line 1230 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {

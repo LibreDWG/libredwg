@@ -47,18 +47,17 @@ test_header (const Dwg_Data *dwg)
 #line 47 "dynapi_test.c.in"
   return error;
 }
-// NOTE: below __LINE__+1
-#line 5381 "dynapi_test.c"
+#line 5379 "dynapi_test.c"
 /* @@for test_OBJECT@@ */
 
-#line 54 "dynapi_test.c.in"
+#line 53 "dynapi_test.c.in"
 static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
-  int error = 0; // NOTE: below __LINE__+1
-#line 36585 "dynapi_test.c"
+  int error = 0;
+#line 36583 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
-#line 61 "dynapi_test.c.in"
+#line 60 "dynapi_test.c.in"
   return error + failed;
 }
 

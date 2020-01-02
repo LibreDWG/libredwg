@@ -5376,8 +5376,7 @@ test_header (const Dwg_Data *dwg)
 #line 47 "dynapi_test.c.in"
   return error;
 }
-// NOTE: below __LINE__+1
-#line 5381 "dynapi_test.c"
+#line 5379 "dynapi_test.c"
 /* @@for test_OBJECT@@ */
 static int test__3DFACE (const Dwg_Object *obj)
 {
@@ -28329,12 +28328,12 @@ static int test_LAYER_INDEX (const Dwg_Object *obj)
   {
     BITCODE_H* layer_entries;
     BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (layer_index, "LAYER_INDEX", "num_layer_entries", &count, NULL)
+    if (dwg_dynapi_entity_value (layer_index, "LAYER_INDEX", "num_entries", &count, NULL)
         && dwg_dynapi_entity_value (layer_index, "LAYER_INDEX", "layer_entries", &layer_entries, NULL)
         && layer_entries == layer_index->layer_entries)
       pass ();
     else
-      fail ("LAYER_INDEX.layer_entries [H*] * %u num_layer_entries", count);
+      fail ("LAYER_INDEX.layer_entries [H*] * %u num_entries", count);
   }
   {
     BITCODE_BL num_entries;
@@ -36576,12 +36575,12 @@ static int test_XRECORD (const Dwg_Object *obj)
   return failed;
 }
 
-#line 54 "dynapi_test.c.in"
+#line 53 "dynapi_test.c.in"
 static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
-  int error = 0; // NOTE: below __LINE__+1
-#line 36585 "dynapi_test.c"
+  int error = 0;
+#line 36583 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -37151,7 +37150,7 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_WIPEOUTVARIABLES (obj);
   else  if (obj->fixedtype == DWG_TYPE_XRECORD)
     error += test_XRECORD (obj);
-#line 61 "dynapi_test.c.in"
+#line 60 "dynapi_test.c.in"
   return error + failed;
 }
 
