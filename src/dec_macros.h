@@ -1236,8 +1236,8 @@
       obj_dat = *dat;                                                         \
       hdl_dat = *dat;                                                         \
       str_dat = *dat;                                                         \
-      error                                                                   \
-          = dwg_decode_##token##_private (&obj_dat, &hdl_dat, &str_dat, obj); \
+      error = dwg_decode_##token##_private (&obj_dat, &hdl_dat, &str_dat,     \
+                                            obj);                             \
     }                                                                         \
     else { error = dwg_decode_##token##_private (dat, dat, dat, obj); }       \
     return error;                                                             \

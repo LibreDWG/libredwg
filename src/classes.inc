@@ -53,10 +53,12 @@
 # define DEBUGGING_DXF(action, name)                 ALLOW_DXF(action, name)
 # define DEBUGGING_CLASS(action, name)               UNSTABLE_CLASS(action, name)
 # define DEBUGGING_CLASS_DXF(action, name, _dxfname) UNSTABLE_CLASS_DXF(action, name, _dxfname)
+# define DEBUGGING_CLASS_CPP(action, name, _cppname) UNSTABLE_CLASS_CPP(action, name, _cppname)
 #else
 # define DEBUGGING_DXF(action, name)                 DISALLOW_DXF(action, name)
 # define DEBUGGING_CLASS(action, name)               UNHANDLED_CLASS(action, name)
 # define DEBUGGING_CLASS_DXF(action, name, _dxfname) UNHANDLED_CLASS_DXF(action, name, _dxfname)
+# define DEBUGGING_CLASS_CPP(action, name, _cppname) UNHANDLED_CLASS_CPP(action, name, _cppname)
 #endif
 
 //#define _DWG_FUNC_N(action,name) dwg_ ## action ## _ ## name
@@ -123,7 +125,7 @@
         obj->dxfname = (char*) #_name; \
         obj->fixedtype = DWG_TYPE_##_name; \
       } \
-      return DEBUGGING_DXF(action, name) DWG_FUNC_N(action,_name)(dat, obj); \
+      return DEBUGGING_DXF(action, name) DWG_FUNC_N(action,_name) (dat, obj); \
     }
 #define UNHANDLED_CLASS(action, _name) \
   if (klass->dxfname && strEQc (klass->dxfname, #_name)) \
@@ -132,9 +134,7 @@
       if (strEQc (_STR(action), "decode") || !memcmp (_STR(action), "in", 2)) { \
         obj->name = (char*) #_name; \
         obj->dxfname = (char*) #_name; \
-        /*obj->fixedtype = DWG_TYPE_##_name; */ \
       } \
-      /* return dwg_##action_##_name(dat, obj); */ \
       return DWG_ERR_UNHANDLEDCLASS; \
     }
 #define UNHANDLED_CLASS_DXF(action, _name, _dxfname) \
@@ -144,9 +144,17 @@
       if (strEQc (_STR(action), "decode") || !memcmp (_STR(action), "in", 2)) { \
         obj->name = (char*) #_name; \
         obj->dxfname = (char*) #_dxfname; \
-        /*obj->fixedtype = DWG_TYPE_##_name; */ \
       } \
-      /* return dwg_##action_##name(dat, obj); */ \
+      return DWG_ERR_UNHANDLEDCLASS; \
+    }
+#define UNHANDLED_CLASS_CPP(action, _name, _cppname) \
+  if (klass->cppname && strEQc (klass->cppname, #_cppname)) \
+    { \
+      WARN_UNHANDLED_CLASS; \
+      if (strEQc (_STR(action), "decode") || !memcmp (_STR(action), "in", 2)) { \
+        obj->name = (char*) #_name; \
+        obj->dxfname = (char*) #_name; \
+      } \
       return DWG_ERR_UNHANDLEDCLASS; \
     }
 
@@ -170,9 +178,9 @@
   STABLE_CLASS    (ACTION, IMAGEDEF)
   STABLE_CLASS    (ACTION, IMAGEDEF_REACTOR)
   STABLE_CLASS    (ACTION, LAYER_INDEX)
-  STABLE_CLASS    (ACTION, LAYOUT)
+  STABLE_CLASS    (ACTION, LAYOUT) // TODO bottom_margin nan
   STABLE_CLASS    (ACTION, LWPOLYLINE)
-  STABLE_CLASS    (ACTION, MLEADERSTYLE)
+  STABLE_CLASS    (ACTION, MLEADERSTYLE) // TODO block_rotation nan
   STABLE_CLASS    (ACTION, OBJECTCONTEXTDATA)
   STABLE_CLASS_CPP(ACTION, OBJECTCONTEXTDATA, AcDbObjectContextData)
   STABLE_CLASS_DXF(ACTION, PLACEHOLDER, ACDBPLACEHOLDER)
@@ -219,8 +227,8 @@
   DEBUGGING_CLASS     (ACTION, REVOLVEDSURFACE)   /*ent */
   DEBUGGING_CLASS     (ACTION, SWEPTSURFACE)      /*ent */
   DEBUGGING_CLASS_DXF (ACTION, TABLE, ACAD_TABLE) /*ent, r2010+ needs subclassing */
-  DEBUGGING_CLASS     (ACTION, ARC_DIMENSION) //ent
-  DEBUGGING_CLASS     (ACTION, TABLECONTENT) //wrong values
+  DEBUGGING_CLASS     (ACTION, ARC_DIMENSION)     /*ent */
+  DEBUGGING_CLASS_CPP (ACTION, TABLECONTENT, AcDbTableContent)
   DEBUGGING_CLASS     (ACTION, TABLEGEOMETRY) //wrong geom_data
   DEBUGGING_CLASS     (ACTION, CELLSTYLEMAP) //broken
   DEBUGGING_CLASS     (ACTION, MATERIAL)     //working on
