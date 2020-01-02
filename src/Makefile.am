@@ -84,9 +84,12 @@ EXTRA_HEADERS += \
 endif
 if USE_WRITE
 EXTRA_HEADERS += \
-	encode.h \
+	encode.h
+if !DISABLE_DXF
+EXTRA_HEADERS += \
 	in_dxf.h \
 	in_json.h
+endif
 endif
 
 EXTRA_DIST = \

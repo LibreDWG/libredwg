@@ -23,17 +23,19 @@ LDADD       = $(top_builddir)/src/libredwg.la -lm
 
 bin_PROGRAMS    = dwgread
 noinst_PROGRAMS =
+dist_man1_MANS  = $(srcdir)/dwgread.1
 if !DISABLE_DXF
 bin_PROGRAMS   += dwgbmp dwg2dxf dwg2SVG dwglayers dwggrep
+dist_man1_MANS += $(srcdir)/dwgbmp.1 $(srcdir)/dwg2dxf.1 \
+	          $(srcdir)/dwg2SVG.1 $(srcdir)/dwglayers.1 \
+		  $(srcdir)/dwggrep.1
 endif
-dist_man1_MANS = $(srcdir)/dwgread.1 $(srcdir)/dwgbmp.1 $(srcdir)/dwg2dxf.1 \
-	         $(srcdir)/dwg2SVG.1 $(srcdir)/dwglayers.1 $(srcdir)/dwg2ps.1 \
-		 $(srcdir)/dwggrep.1
 DISTCLEANFILES = core
 
 if !DISABLE_DXF
 if HAVE_LIBPS
-bin_PROGRAMS  += dwg2ps
+bin_PROGRAMS   += dwg2ps
+dist_man1_MANS += $(srcdir)/dwg2ps.1
 dwg2ps_SOURCES = dwg2ps.c geom.c
 dwg2ps_LDADD   = $(LDADD) -lps
 endif
@@ -48,15 +50,16 @@ dwggrep_SOURCES   = dwggrep.c
 dwggrep_CFLAGS    = $(CFLAGS) $(AM_CFLAGS) $(PCRE2_CFLAGS)
 dwggrep_LDADD     = $(LDADD) $(PCRE2_LIBS)
 
-if !DISABLE_DXF
 if USE_WRITE
-bin_PROGRAMS    += dwgrewrite dxf2dwg
-# not yet ready
-noinst_PROGRAMS += dwgwrite
-dist_man1_MANS  += $(srcdir)/dwgrewrite.1 $(srcdir)/dwgwrite.1 $(srcdir)/dxf2dwg.1
+bin_PROGRAMS     += dwgrewrite
+dist_man1_MANS   += $(srcdir)/dwgrewrite.1
 dwgrewrite_SOURCES = dwgrewrite.c
+if !DISABLE_DXF
+bin_PROGRAMS    += dxf2dwg
+noinst_PROGRAMS += dwgwrite
+dist_man1_MANS  += $(srcdir)/dxf2dwg.1 $(srcdir)/dwgwrite.1
+dxf2dwg_SOURCES  = dxf2dwg.c
 dwgwrite_SOURCES   = dwgwrite.c
-dxf2dwg_SOURCES    = dxf2dwg.c
 endif
 endif
 

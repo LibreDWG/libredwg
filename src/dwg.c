@@ -36,8 +36,12 @@
 #include "decode.h"
 #include "dwg.h"
 #include "hash.h"
-#include "encode.h"
-#include "in_dxf.h"
+#ifdef USE_WRITE
+#  include "encode.h"
+#endif
+#ifndef DISABLE_DXF
+#  include "in_dxf.h"
+#endif
 #include "free.h"
 
 /* The logging level per .o */
@@ -222,9 +226,7 @@ dwg_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   return error;
 }
 
-/* if write support is enabled */
-#if defined(USE_WRITE) && !defined(DISABLE_DXF)
-
+#if !defined(DISABLE_DXF) && defined(USE_WRITE)
 /** dxf_read_file
  * returns 0 on success.
  *
@@ -329,7 +331,9 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
 
   return 0;
 }
+#endif /* DISABLE_DXF */
 
+#ifdef USE_WRITE
 EXPORT int
 dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
 {

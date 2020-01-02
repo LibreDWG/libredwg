@@ -241,9 +241,6 @@ main (int argc, char *argv[])
   if (opts)
     printf ("\n");
   printf ("Writing DWG file %s", filename_out);
-#ifndef USE_WRITE
-  error = 1;
-#else
   if (version)
     { // forced -as-rXXX
       printf (" as %s\n", version);
@@ -284,7 +281,6 @@ main (int argc, char *argv[])
       }
   }
   error = dwg_write_file (filename_out, &dwg);
-#endif
 
   if (error >= DWG_ERR_CRITICAL)
     {
@@ -295,7 +291,6 @@ main (int argc, char *argv[])
     }
   dwg_free (&dwg); // this is slow, but on needed on low memory systems
 
-#ifdef USE_WRITE
   // try to read again
   if (opts)
     printf ("\n");
@@ -307,7 +302,7 @@ main (int argc, char *argv[])
     printf ("re-READ num_objects: %lu, should be %lu\n",
             (unsigned long)dwg.num_objects, (unsigned long)num_objects);
   dwg_free (&dwg);
-#endif
+
   if (filename_out != argv[i + 1])
     free (filename_out);
   return error >= DWG_ERR_CRITICAL ? error : 0;
