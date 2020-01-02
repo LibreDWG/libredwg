@@ -2054,14 +2054,11 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
         {
           if (data->u.eed_0.length + 3 <= size)
             {
-              if (!data->u.eed_0.string)
+              if (!*data->u.eed_0.string)
                 data->u.eed_0.length = 0;
               bit_write_RC (dat, data->u.eed_0.length);
               bit_write_RS_LE (dat, data->u.eed_0.codepage);
-              if (data->u.eed_0.string)
-                bit_write_TF (dat, data->u.eed_0.string, data->u.eed_0.length);
-              else
-                bit_write_TF (dat, (char*)"", 0);
+              bit_write_TF (dat, data->u.eed_0.string, data->u.eed_0.length);
             }
           LOG_TRACE ("string: len=%d [RC] cp=%d [RS_LE] \"%s\" [TF]\n",
                      data->u.eed_0.length, data->u.eed_0.codepage, data->u.eed_0.string);
@@ -2069,7 +2066,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
         LATER_VERSIONS
         {
           BITCODE_RS *s = (BITCODE_RS *)&data->u.eed_0_r2007.string;
-          if (data->u.eed_0_r2007.string && data->u.eed_0.length * 2 + 2 <= size)
+          if (data->u.eed_0.length * 2 + 2 <= size)
             {
               bit_write_RS (dat, data->u.eed_0_r2007.length);
               for (int j = 0; j < data->u.eed_0_r2007.length; j++)
