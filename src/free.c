@@ -59,6 +59,11 @@ static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
     ptr = NULL;                                                               \
   }
 
+#undef SINCE
+#define SINCE(v)                                                              \
+  cur_ver = v;                                                                \
+  if (dat->from_version >= v)
+
 #define VALUE(value, type, dxf)
 #define VALUE_RC(value, dxf) VALUE (value, RC, dxf)
 #define VALUE_RS(value, dxf) VALUE (value, RS, dxf)
@@ -460,12 +465,12 @@ dwg_free_object (Dwg_Object *obj)
     {
       dwg = obj->parent;
       dat->version = dwg->header.version;
+      dat->from_version = dwg->header.from_version;
     }
   else
     return;
   if (obj->type == DWG_TYPE_FREED || obj->tio.object == NULL)
     return;
-  dat->from_version = dat->version;
 
   switch (obj->type)
     {
@@ -764,7 +769,7 @@ dwg_free (Dwg_Data *dwg)
   if (dwg)
     {
       pdat.version = dwg->header.version;
-      pdat.from_version = dwg->header.version;
+      pdat.from_version = dwg->header.from_version;
       if (dwg->opts)
         {
           loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
@@ -812,7 +817,7 @@ dwg_free (Dwg_Data *dwg)
               FREE_IF (dwg->dwg_class[i].appname);
               FREE_IF (dwg->dwg_class[i].cppname);
               FREE_IF (dwg->dwg_class[i].dxfname);
-              if (dwg->header.version >= R_2007)
+              if (dwg->header.from_version >= R_2007)
                 FREE_IF (dwg->dwg_class[i].dxfname_u);
             }
           FREE_IF (dwg->dwg_class);
