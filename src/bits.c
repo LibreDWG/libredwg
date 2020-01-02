@@ -1882,6 +1882,7 @@ bit_chain_alloc (Bit_Chain *dat)
     {
       dat->chain
           = (unsigned char *)realloc (dat->chain, dat->size + CHAIN_BLOCK);
+      memset (&dat->chain[dat->size], 0, CHAIN_BLOCK);
       dat->size += CHAIN_BLOCK;
     }
 }

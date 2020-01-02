@@ -2547,10 +2547,9 @@ DWG_OBJECT (BLOCK_HEADER)
 
   SINCE (R_2004)
     {
-      if (FIELD_VALUE (num_owned) < 0xf00000)
-        {
-          HANDLE_VECTOR (entities, num_owned, 4, 0);
-        }
+      if (FIELD_VALUE (num_owned) < 0xf00000) {
+        HANDLE_VECTOR (entities, num_owned, 4, 0);
+      }
     }
 
   SINCE (R_13) {
@@ -7518,5 +7517,3 @@ DWG_OBJECT (DOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
-
-

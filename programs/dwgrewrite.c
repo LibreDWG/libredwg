@@ -223,7 +223,7 @@ main (int argc, char *argv[])
    * some very simple testing
    */
   printf ("Reading DWG file %s\n", filename_in);
-  error = dwg_read_file (filename_in, &dwg);
+  error = dwg_read_file (filename_in, &dwg); /* 1st read */
   if (error >= DWG_ERR_CRITICAL)
     fprintf (stderr, "READ ERROR 0x%x\n", error);
   num_objects = dwg.num_objects;
@@ -280,8 +280,8 @@ main (int argc, char *argv[])
           }
       }
   }
-  error = dwg_write_file (filename_out, &dwg);
 
+  error = dwg_write_file (filename_out, &dwg);
   if (error >= DWG_ERR_CRITICAL)
     {
       printf ("WRITE ERROR 0x%x\n", error);
@@ -289,13 +289,13 @@ main (int argc, char *argv[])
         free (filename_out);
       return error;
     }
-  dwg_free (&dwg); // this is slow, but on needed on low memory systems
+  dwg_free (&dwg);
 
   // try to read again
   if (opts)
     printf ("\n");
   printf ("Re-reading created file %s\n", filename_out);
-  error = dwg_read_file (filename_out, &dwg);
+  error = dwg_read_file (filename_out, &dwg); /* 2nd read */
   if (error >= DWG_ERR_CRITICAL)
     printf ("re-READ ERROR 0x%x\n", error);
   if (num_objects && (num_objects != dwg.num_objects))
