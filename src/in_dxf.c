@@ -4406,7 +4406,6 @@ postprocess_SEQEND (Dwg_Object *obj)
     {
       dwg_dynapi_entity_set_value (ow, owner->name, owhdls, &owned, 0);
     }
-  free (owned);
 }
 
 // seperate model_space and model_space into its own fields, out of entries[]
