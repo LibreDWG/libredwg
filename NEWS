@@ -8,6 +8,7 @@ API breaking changes:
   * removed the UNKNOWN supertype, there are only UNKNOWN_OBJ and UNKNOWN_ENT
     left, with common_entity_data.
   * renamed SHAPE.shape_no to style_id
+  * renamed CLASS.wasazombie to is_zombie
 
 Major bugfixes:
   * Improved building the perl5 binding, proper dependencies.

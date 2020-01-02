@@ -31,12 +31,12 @@
 #define WARN_UNHANDLED_CLASS \
       LOG_WARN ("Unhandled Class %s %d %s (0x%x%s) %u/%lX", is_entity ? "entity" : "object",\
                klass->number, klass->dxfname, klass->proxyflag,\
-               klass->wasazombie ? " was proxy" : "",\
+               klass->is_zombie ? "is_zombie" : "",\
                obj->index, obj->handle.value)
 #define WARN_UNSTABLE_CLASS \
       LOG_WARN ("Unstable Class %s %d %s (0x%x%s) %u/%lX", is_entity ? "entity" : "object",\
                klass->number, klass->dxfname, klass->proxyflag,\
-               klass->wasazombie ? " was proxy" : "",\
+               klass->is_zombie ? "is_zombie" : "",\
                obj->index, obj->handle.value)
 #if defined(IS_FREE) || defined(IS_PRINT)
 # undef WARN_UNSTABLE_CLASS

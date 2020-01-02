@@ -1085,12 +1085,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       bit_write_TV (dat, klass->appname);
       bit_write_TV (dat, klass->cppname);
       bit_write_TV (dat, klass->dxfname);
-      bit_write_B (dat, klass->wasazombie);
+      bit_write_B (dat, klass->is_zombie);
       bit_write_BS (dat, klass->item_class_id);
       LOG_TRACE ("Class %d 0x%x %s\n"
                  " %s \"%s\" %d 0x%x\n",
                  klass->number, klass->proxyflag, klass->dxfname,
-                 klass->cppname, klass->appname, klass->wasazombie,
+                 klass->cppname, klass->appname, klass->is_zombie,
                  klass->item_class_id)
 
       SINCE (R_2007)
@@ -1640,7 +1640,7 @@ dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat, Dwg_O
 
   LOG_WARN ("Unknown Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object",
             klass->number, klass->dxfname, klass->proxyflag,
-            klass->wasazombie ? " was proxy" : "")
+            klass->is_zombie ? "is_zombie" : "")
 
 #undef WARN_UNHANDLED_CLASS
 #undef WARN_UNSTABLE_CLASS

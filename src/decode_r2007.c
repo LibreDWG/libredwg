@@ -1427,8 +1427,8 @@ read_2007_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           dwg->dwg_class[i].appname = (char *)bit_read_TU (&str);
           dwg->dwg_class[i].cppname = (char *)bit_read_TU (&str);
           dwg->dwg_class[i].dxfname_u = bit_read_TU (&str);
-          dwg->dwg_class[i].wasazombie = bit_read_B (&sec_dat);
-          dwg->dwg_class[i].item_class_id = bit_read_BS (&sec_dat);
+          dwg->dwg_class[i].is_zombie = bit_read_B (&sec_dat); // DXF 280
+          dwg->dwg_class[i].item_class_id = bit_read_BS (&sec_dat); // DXF 281, is_entity is 0x1f3
 
           dwg->dwg_class[i].num_instances = bit_read_BL (&sec_dat); // DXF 91
           dwg->dwg_class[i].dwg_version = bit_read_BS (&sec_dat);

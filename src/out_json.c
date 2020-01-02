@@ -1132,7 +1132,7 @@ json_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       FIELD_T (appname, 3);
       FIELD_BS (proxyflag, 90);
       FIELD_BL (num_instances, 91);
-      FIELD_B (wasazombie, 280);
+      FIELD_B (is_zombie, 280);
       FIELD_BS (item_class_id, 281);
       NOCOMMA;
       ENDHASH;

@@ -1002,9 +1002,9 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               LOG_TRACE ("CLASS[%d].num_instances = %ld [BL 91]\n", i,
                          pair->value.l);
               break;
-            case 280: // ie was_a_proxy/is_zombie
-              klass->wasazombie = (BITCODE_B)pair->value.i;
-              LOG_TRACE ("CLASS[%d].wasazombie = %d [B 280]\n", i,
+            case 280: // ie was_proxy
+              klass->is_zombie = (BITCODE_B)pair->value.i;
+              LOG_TRACE ("CLASS[%d].is_zombie = %d [B 280]\n", i,
                          pair->value.i);
               break;
             case 281: // ie is_entity

@@ -1120,13 +1120,13 @@ classes_section:
       klass->appname = bit_read_TV (dat);
       klass->cppname = bit_read_TV (dat);
       klass->dxfname = bit_read_TV (dat);
-      klass->wasazombie = bit_read_B (dat);
+      klass->is_zombie = bit_read_B (dat);
       // 1f2 for entities, 1f3 for objects
       klass->item_class_id = bit_read_BS (dat);
       LOG_TRACE ("Class %d 0x%x %s\n"
                  " %s \"%s\" %d 0x%x\n",
                  klass->number, klass->proxyflag, klass->dxfname,
-                 klass->cppname, klass->appname, klass->wasazombie,
+                 klass->cppname, klass->appname, klass->is_zombie,
                  klass->item_class_id)
 
 #if 0
@@ -2447,7 +2447,7 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               LOG_TRACE ("C++ class name:   %s [TV]\n", dwg->dwg_class[i].cppname)
               LOG_TRACE ("DXF record name:  %s [TV]\n", dwg->dwg_class[i].dxfname)
             }
-          dwg->dwg_class[i].wasazombie = bit_read_B (&sec_dat);
+          dwg->dwg_class[i].is_zombie = bit_read_B (&sec_dat);
           dwg->dwg_class[i].item_class_id = bit_read_BS (&sec_dat);
           LOG_TRACE ("Class ID:         0x%x [BS] "
                      "(0x1f3 for object, 0x1f2 for entity)\n",
@@ -4547,7 +4547,7 @@ dwg_decode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *dat,
 
   LOG_WARN ("Unknown Class %s %d %s (0x%x%s)", is_entity ? "entity" : "object",
             klass->number, klass->dxfname, klass->proxyflag,
-            klass->wasazombie ? " was proxy" : "")
+            klass->is_zombie ? "is_zombie" : "")
 
   return DWG_ERR_UNHANDLEDCLASS;
 }
