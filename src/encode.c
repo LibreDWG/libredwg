@@ -256,35 +256,36 @@ static bool env_var_checked_p;
   bit_write_BE (dat, FIELD_VALUE (nam.x), FIELD_VALUE (nam.y),                \
                 FIELD_VALUE (nam.z));
 
-// No overflow check with IS_RELEASE
-#ifdef IS_RELEASE
-#  define OVERFLOW_CHECK(nam, size)
-#  define OVERFLOW_CHECK_LV(nam, size)
-#else
-#  define OVERFLOW_CHECK(nam, size)                                           \
-    if ((long)(size) > 0xff00L)                                               \
+#define OVERFLOW_CHECK(nam, size)                                           \
+    if ((long)(size) > 0xff00L || !_obj->nam)                                 \
       {                                                                       \
         LOG_ERROR ("Invalid " #nam " %ld", (long)size);                       \
         return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
       }
-#  define OVERFLOW_CHECK_LV(nam, size)                                        \
-    if ((long)(size) > 0xff00L)                                               \
+#define OVERFLOW_CHECK_LV(nam, size)                                        \
+  if ((long)(size) > 0xff00L)                                                 \
       {                                                                       \
         LOG_ERROR ("Invalid " #nam " %ld, set to 0", (long)size);             \
         size = 0;                                                             \
         return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
       }
-#endif
+#define OVERFLOW_NULL_CHECK_LV(nam, size)                                   \
+    if ((long)(size) > 0xff00L || !_obj->nam)                                 \
+      {                                                                       \
+        LOG_ERROR ("Invalid " #nam " %ld, set to 0", (long)size);             \
+        size = 0;                                                             \
+        return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
+      }
 
 #define FIELD_2RD_VECTOR(nam, size, dxf)                                      \
-  OVERFLOW_CHECK_LV (nam, _obj->size)                                         \
+  OVERFLOW_NULL_CHECK_LV (nam, _obj->size)                                    \
   for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)                 \
     {                                                                         \
       FIELD_2RD (nam[vcount], dxf);                                           \
     }
 
 #define FIELD_2DD_VECTOR(nam, size, dxf)                                      \
-  OVERFLOW_CHECK (nam, _obj->size)                                            \
+  OVERFLOW_NULL_CHECK_LV (nam, _obj->size)                                    \
   if (_obj->size)                                                             \
     FIELD_2RD (nam[0], dxf);                                                  \
   for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)                 \
@@ -294,7 +295,7 @@ static bool env_var_checked_p;
     }
 
 #define FIELD_3DPOINT_VECTOR(nam, size, dxf)                                  \
-  OVERFLOW_CHECK_LV (nam, _obj->size)                                         \
+  OVERFLOW_NULL_CHECK_LV (nam, _obj->size)                                    \
   for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)                 \
     {                                                                         \
       FIELD_3DPOINT (nam[vcount], dxf);                                       \
