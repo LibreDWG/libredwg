@@ -2492,6 +2492,8 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           Dwg_LEADER_Line *lline = &lnode->lines[0];
           dxf_free_pair (pair);
           pair = dxf_read_pair (dat);
+          if (!pair)
+            return NULL;
           switch (pair->code)
             {
             case 10:
@@ -2646,7 +2648,8 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           Dwg_LEADER_Node *lnode = i >= 0 ? &ctx->leaders[i] : NULL;
           dxf_free_pair (pair);
           pair = dxf_read_pair (dat);
-
+          if (!pair)
+            return NULL;
           if (!lnode && pair->code != 290 && pair->code != 304
               && pair->code != 303)
             {
@@ -2802,7 +2805,7 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       // const Dwg_DYNAPI_field *fields
       // = dwg_dynapi_subclass_fields ("MLEADER_AnnotContext");
       Dwg_MLEADER_AnnotContext *ctx = &o->ctx;
-      while (pair->code != 301 && pair->code != 0)
+      while (pair != NULL && pair->code != 301 && pair->code != 0)
         {
           switch (pair->code)
             {
@@ -3318,7 +3321,7 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   int have_rotated_type = 0;
   o->ref = calloc (4, sizeof (Dwg_DIMASSOC_Ref));
 
-  while (pair->code != 0)
+  while (pair != NULL && pair->code != 0)
     {
       switch (pair->code)
         {
@@ -3425,10 +3428,10 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   Dwg_Data *dwg = obj->parent;
 
 #define EXPECT_INT_DXF(field, dxf, type)                                      \
-  if (pair->code != dxf)                                                      \
+  if (pair == NULL || pair->code != dxf)                                      \
     {                                                                         \
       LOG_ERROR ("%s: Unexpected DXF code %d, expected %d for %s", obj->name, \
-                 pair->code, dxf, field);                                     \
+                 pair ? pair->code : -1, dxf, field);                         \
       return pair;                                                            \
     }                                                                         \
   dwg_dynapi_entity_set_value (o, obj->name, field, &pair->value, 1);         \
@@ -3437,10 +3440,10 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   dxf_free_pair (pair)
 
 #define EXPECT_H_DXF(field, htype, dxf, type)                                 \
-  if (pair->code != dxf)                                                      \
+  if (pair == NULL || pair->code != dxf)                                      \
     {                                                                         \
       LOG_ERROR ("%s: Unexpected DXF code %d, expected %d for %s", obj->name, \
-                 pair->code, dxf, field);                                     \
+                 pair ? pair->code : -1, dxf, field);                         \
       return pair;                                                            \
     }                                                                         \
   if (pair->value.u)                                                          \
@@ -3925,12 +3928,16 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       rbuf->value.pt[0] = pair->value.d;
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
+      if (!pair)
+        return NULL;
       rbuf->value.pt[1] = pair->value.d;
       dxf_free_pair (pair);
       num_databytes += 24;
       { // if 30
         long pos = bit_position (dat);
         pair = dxf_read_pair (dat);
+        if (!pair)
+          return NULL;
         if (get_base_value_type (pair->code) == VT_POINT3D)
           {
             rbuf->value.pt[2] = pair->value.d;
@@ -5712,7 +5719,7 @@ new_object (char *restrict name, char *restrict dxfname,
                        || pair->code == 453)
                 {
                   pair = add_HATCH (obj, dat, pair);
-                  if (pair->code == 0) // end or unknown
+                  if (!pair || pair->code == 0) // end or unknown
                     return pair;
                   goto search_field;
                 }
@@ -5742,7 +5749,7 @@ new_object (char *restrict name, char *restrict dxfname,
               if (pair->code == 91)
                 {
                   pair = add_MESH (obj, dat, pair);
-                  if (pair->code == 0) // end or unknown
+                  if (!pair || pair->code == 0) // end or unknown
                     return pair;
                   goto search_field;
                 }
