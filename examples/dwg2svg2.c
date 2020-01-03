@@ -322,16 +322,12 @@ output_BLOCK_HEADER (dwg_object_ref *ref)
       return;
     }
   hdr = dwg_ref_get_object (ref, &error);
-  log_if_error ("reference_get_object");
+  if (!hdr || error) log_error ("dwg_ref_get_object");
   abs_ref = dwg_ref_get_absref (ref, &error);
-  log_if_error ("ref_get_abs_ref");
-  if (!hdr)
-    {
-      fprintf (stderr, "Found null ref->obj\n");
-      return;
-    }
+  log_if_error ("dwg_ref_get_absref");
 
   _hdr = dwg_object_to_BLOCK_HEADER (hdr);
+  if (!_hdr) log_error ("dwg_object_to_BLOCK_HEADER");
   dynget (_hdr, "BLOCK_HEADER", "name", &name);
   // name = dwg_obj_block_header_get_name (_hdr, &error);
   // log_if_error ("block_header_get_name");
