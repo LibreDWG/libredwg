@@ -4708,7 +4708,7 @@ new_object (char *restrict name, char *restrict dxfname,
           *name = '_';
         }
       if (strEQc (name, "DIMENSION"))
-        {
+        { // the biggest
           ADD_ENTITY (DIMENSION_ANG2LN);
         }
       else

@@ -1280,7 +1280,9 @@ typedef struct _dwg_entity_LINE
     BITCODE_B unknown; \
     BITCODE_B flip_arrow1; \
     BITCODE_B flip_arrow2; \
-    BITCODE_2RD clone_ins_pt;
+    BITCODE_2RD clone_ins_pt; \
+    BITCODE_H dimstyle;       \
+    BITCODE_H block;
 
 typedef struct _dwg_DIMENSION_common
 {
@@ -1296,8 +1298,6 @@ typedef struct _dwg_entity_DIMENSION_ORDINATE
   BITCODE_3BD feature_location_pt;
   BITCODE_3BD leader_endpt;
   BITCODE_RC flag2;
-  BITCODE_H dimstyle;
-  BITCODE_H block;
 } Dwg_Entity_DIMENSION_ORDINATE;
 
 /**
@@ -1310,8 +1310,6 @@ typedef struct _dwg_entity_DIMENSION_LINEAR
   BITCODE_3BD _14_pt;
   BITCODE_BD ext_line_rotation;
   BITCODE_BD dim_rotation;
-  BITCODE_H dimstyle;
-  BITCODE_H block;
 } Dwg_Entity_DIMENSION_LINEAR;
 
 /**
@@ -1323,8 +1321,6 @@ typedef struct _dwg_entity_DIMENSION_ALIGNED
   BITCODE_3BD _13_pt;
   BITCODE_3BD _14_pt;
   BITCODE_BD ext_line_rotation;
-  BITCODE_H dimstyle;
-  BITCODE_H block;
 } Dwg_Entity_DIMENSION_ALIGNED;
 
 /**
@@ -1336,8 +1332,6 @@ typedef struct _dwg_entity_DIMENSION_ANG3PT
   BITCODE_3BD _13_pt;
   BITCODE_3BD _14_pt;
   BITCODE_3BD first_arc_pt;
-  BITCODE_H dimstyle;
-  BITCODE_H block;
 } Dwg_Entity_DIMENSION_ANG3PT;
 
 /**
@@ -1350,8 +1344,6 @@ typedef struct _dwg_entity_DIMENSION_ANG2LN
   BITCODE_3BD _13_pt;
   BITCODE_3BD _14_pt;
   BITCODE_3BD first_arc_pt;
-  BITCODE_H dimstyle;
-  BITCODE_H block;
 } Dwg_Entity_DIMENSION_ANG2LN;
 
 /**
@@ -1362,8 +1354,6 @@ typedef struct _dwg_entity_DIMENSION_RADIUS
   DIMENSION_COMMON
   BITCODE_3BD first_arc_pt; /*!< DXF 15 */
   BITCODE_BD leader_len;    /*!< DXF 40 */
-  BITCODE_H dimstyle;
-  BITCODE_H block;
 } Dwg_Entity_DIMENSION_RADIUS;
 
 /**
@@ -1374,8 +1364,6 @@ typedef struct _dwg_entity_DIMENSION_DIAMETER
   DIMENSION_COMMON
   BITCODE_3BD first_arc_pt; /*!< DXF 15 */
   BITCODE_BD leader_len;    /*!< DXF 40 */
-  BITCODE_H dimstyle;
-  BITCODE_H block;
 } Dwg_Entity_DIMENSION_DIAMETER;
 
 /**
@@ -1392,8 +1380,6 @@ typedef struct _dwg_entity_ARC_DIMENSION
   BITCODE_3BD _17_pt;
   BITCODE_BD leader_len;    /*!< DXF 40 */
   BITCODE_RC flag2;
-  BITCODE_H dimstyle;
-  BITCODE_H block;
 } Dwg_Entity_ARC_DIMENSION;
 
 /**

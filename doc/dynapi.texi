@@ -888,6 +888,10 @@ B,	DXF 74
 B,	DXF 75
 @item clone_ins_pt
 2RD,	DXF 12
+@item dimstyle
+H,	DXF 3
+@item block
+H
 @item _13_pt
 3BD,	DXF 13
 @item _14_pt
@@ -904,10 +908,6 @@ B,	DXF 75
 BD,	DXF 40
 @item flag2
 RC,	DXF 71
-@item dimstyle
-H,	DXF 3
-@item block
-H
 
 @end vtable
 @end indentedblock
@@ -1152,16 +1152,16 @@ B,	DXF 74
 B,	DXF 75
 @item clone_ins_pt
 2RD,	DXF 12
+@item dimstyle
+H,	DXF 3
+@item block
+H
 @item _13_pt
 3BD,	DXF 13
 @item _14_pt
 3BD,	DXF 14
 @item ext_line_rotation
 BD
-@item dimstyle
-H,	DXF 3
-@item block
-H
 
 @end vtable
 @end indentedblock
@@ -1217,6 +1217,10 @@ B,	DXF 74
 B,	DXF 75
 @item clone_ins_pt
 2RD,	DXF 12
+@item dimstyle
+H,	DXF 3
+@item block
+H
 @item _16_pt
 2RD,	DXF 16
 @item _13_pt
@@ -1225,10 +1229,6 @@ B,	DXF 75
 3BD,	DXF 14
 @item first_arc_pt
 3BD,	DXF 15
-@item dimstyle
-H,	DXF 3
-@item block
-H
 
 @end vtable
 @end indentedblock
@@ -1284,16 +1284,16 @@ B,	DXF 74
 B,	DXF 75
 @item clone_ins_pt
 2RD,	DXF 12
+@item dimstyle
+H,	DXF 3
+@item block
+H
 @item _13_pt
 3BD,	DXF 13
 @item _14_pt
 3BD,	DXF 14
 @item first_arc_pt
 3BD,	DXF 15
-@item dimstyle
-H,	DXF 3
-@item block
-H
 
 @end vtable
 @end indentedblock
@@ -1349,14 +1349,14 @@ B,	DXF 74
 B,	DXF 75
 @item clone_ins_pt
 2RD,	DXF 12
-@item first_arc_pt
-3BD,	DXF 15
-@item leader_len
-BD,	DXF 40
 @item dimstyle
 H,	DXF 3
 @item block
 H
+@item first_arc_pt
+3BD,	DXF 15
+@item leader_len
+BD,	DXF 40
 
 @end vtable
 @end indentedblock
@@ -1412,6 +1412,10 @@ B,	DXF 74
 B,	DXF 75
 @item clone_ins_pt
 2RD,	DXF 12
+@item dimstyle
+H,	DXF 3
+@item block
+H
 @item _13_pt
 3BD,	DXF 13
 @item _14_pt
@@ -1420,10 +1424,6 @@ B,	DXF 75
 BD,	DXF 52
 @item dim_rotation
 BD,	DXF 50
-@item dimstyle
-H,	DXF 3
-@item block
-H
 
 @end vtable
 @end indentedblock
@@ -1479,16 +1479,16 @@ B,	DXF 74
 B,	DXF 75
 @item clone_ins_pt
 2RD,	DXF 12
+@item dimstyle
+H,	DXF 3
+@item block
+H
 @item feature_location_pt
 3BD,	DXF 13
 @item leader_endpt
 3BD,	DXF 14
 @item flag2
 RC,	DXF 70
-@item dimstyle
-H,	DXF 3
-@item block
-H
 
 @end vtable
 @end indentedblock
@@ -1544,14 +1544,14 @@ B,	DXF 74
 B,	DXF 75
 @item clone_ins_pt
 2RD,	DXF 12
-@item first_arc_pt
-3BD,	DXF 15
-@item leader_len
-BD,	DXF 40
 @item dimstyle
 H,	DXF 3
 @item block
 H
+@item first_arc_pt
+3BD,	DXF 15
+@item leader_len
+BD,	DXF 40
 
 @end vtable
 @end indentedblock
@@ -7365,6 +7365,10 @@ B,	DXF 74
 B,	DXF 75
 @item clone_ins_pt
 2RD,	DXF 12
+@item dimstyle
+H,	DXF 3
+@item block
+H
 
 @end vtable
 @end indentedblock
