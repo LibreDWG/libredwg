@@ -5820,7 +5820,9 @@ new_object (char *restrict name, char *restrict dxfname,
               Dwg_Entity_LEADER *o = obj->tio.entity->tio.LEADER;
               if (!j && pair->code == 10)
                 o->points = calloc (o->num_points, sizeof (BITCODE_3BD));
+              assert (j >= 0);
               assert (j < (int)o->num_points);
+              assert (o->points);
               if (pair->code == 10)
                 o->points[j].x = pair->value.d;
               else if (pair->code == 20)
