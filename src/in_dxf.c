@@ -4155,11 +4155,23 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
     }
   else if (pair->code == 20) // ctrl_pts[].y 3BD
     {
+      if (j >= (int)_o->num_ctrl_pts)
+        {
+          LOG_ERROR ("SPLINE.ctrl_pts[%d] overflow, max %d", j,
+                     _o->num_ctrl_pts);
+          return 1; // found
+        }
       _o->ctrl_pts[j].y = pair->value.d;
       return 1; // found
     }
   else if (pair->code == 30) // ctrl_pts[].z 3BD
     {
+      if (j >= (int)_o->num_ctrl_pts)
+        {
+          LOG_ERROR ("SPLINE.ctrl_pts[%d] overflow, max %d", j,
+                     _o->num_ctrl_pts);
+          return 1; // found
+        }
       _o->ctrl_pts[j].z = pair->value.d;
       LOG_TRACE ("SPLINE.ctrl_pts[%d] = (%f, %f, %f) [3BD* 10]\n", *jp,
                  _o->ctrl_pts[j].x, _o->ctrl_pts[j].y, _o->ctrl_pts[j].z);
@@ -4170,8 +4182,14 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
       return 1; // found
     }
   else if (pair->code == 41) // ctrl_pts[].z 3BD
-    {
-      _o->ctrl_pts[j].w = pair->value.d;
+    { 
+      if (j >= (int)_o->num_ctrl_pts)
+        {
+          LOG_ERROR ("SPLINE.ctrl_pts[%d] overflow, max %d", j,
+                     _o->num_ctrl_pts);
+          return 1; // found
+        }
+     _o->ctrl_pts[j].w = pair->value.d;
       LOG_TRACE ("SPLINE.ctrl_pts[%d].w = %f [BD* 41]\n", *jp,
                  _o->ctrl_pts[j].w);
       j++;
@@ -4180,9 +4198,9 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
     }
   else if (pair->code == 11) // fit_pts[].x 3BD
     {
-      if (*jp >= _o->num_fit_pts)
+      if (j >= _o->num_fit_pts)
         {
-          LOG_ERROR ("SPLINE.fit_pts[%d] overflow, max %d", *jp,
+          LOG_ERROR ("SPLINE.fit_pts[%d] overflow, max %d", j,
                      _o->num_fit_pts);
           return 1; // found
         }
@@ -4192,11 +4210,23 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
     }
   else if (pair->code == 21) // fit_pts[].y 3BD
     {
+      if (j >= _o->num_fit_pts)
+        {
+          LOG_ERROR ("SPLINE.fit_pts[%d] overflow, max %d", j,
+                     _o->num_fit_pts);
+          return 1; // found
+        }
       _o->fit_pts[j].y = pair->value.d;
       return 1; // found
     }
   else if (pair->code == 31) // fit_pts[].z 3BD
     {
+      if (j >= _o->num_fit_pts)
+        {
+          LOG_ERROR ("SPLINE.fit_pts[%d] overflow, max %d", j,
+                     _o->num_fit_pts);
+          return 1; // found
+        }
       _o->fit_pts[j].z = pair->value.d;
       LOG_TRACE ("SPLINE.fit_pts[%d] = (%f, %f, %f) [3BD* 11]\n", *jp,
                  _o->fit_pts[j].x, _o->fit_pts[j].y, _o->fit_pts[j].z);
