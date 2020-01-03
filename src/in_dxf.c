@@ -1861,11 +1861,12 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
 
-      if (pair->code == 0 || pair->code == 75)
+      if (pair == NULL || pair->code == 0 || pair->code == 75)
         return pair;
       else if (pair->code == 92)
         {
           j++;
+          assert (j >= 0);
           assert (j < (int)o->num_paths);
           o->paths[j].flag = pair->value.u;
           LOG_TRACE ("HATCH.paths[%d].flag = %u [BL 92]\n", j, pair->value.u);
@@ -1875,6 +1876,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 93)
         {
+          assert (j >= 0);
           assert (j < (int)o->num_paths);
           o->paths[j].num_segs_or_paths = pair->value.u;
           LOG_TRACE ("HATCH.paths[%d].num_segs_or_paths = %u [BL 93]\n", j,
@@ -1893,10 +1895,12 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 72)
         {
+          assert (j >= 0);
           assert (j < (int)o->num_paths);
           if (!is_plpath)
             {
               k++;
+              assert (k >= 0);
               if (j < (int)o->num_paths
                   && k < (int)o->paths[j].num_segs_or_paths)
                 {
@@ -1915,6 +1919,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 73 && is_plpath && pair->value.i)
         {
+          assert (j >= 0);
           assert (j < (int)o->num_paths);
           o->paths[j].closed = pair->value.i;
           LOG_TRACE ("HATCH.paths[%d].closed = %d [RC 73]\n", j,
@@ -1922,6 +1927,8 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 94 && !is_plpath && pair->value.l)
         {
+          assert (j >= 0);
+          assert (k >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
           o->paths[j].segs[k].degree = pair->value.l;
@@ -1930,6 +1937,8 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 74 && !is_plpath && pair->value.i)
         {
+          assert (j >= 0);
+          assert (k >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
           o->paths[j].segs[k].is_periodic = pair->value.i;
@@ -1938,6 +1947,8 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 95 && !is_plpath)
         {
+          assert (j >= 0);
+          assert (k >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
           o->paths[j].segs[k].num_knots = pair->value.l;
@@ -1948,6 +1959,8 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 96 && !is_plpath)
         {
+          assert (j >= 0);
+          assert (k >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
           o->paths[j].segs[k].num_control_points = pair->value.l;
@@ -1960,6 +1973,8 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 10 && !is_plpath && !o->num_seeds)
         {
+          assert (j >= 0);
+          assert (k >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
           switch (o->paths[j].segs[k].type_status)
@@ -1994,6 +2009,8 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 11 && !is_plpath && !o->num_seeds)
         {
+          assert (j >= 0);
+          assert (k >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
           switch (o->paths[j].segs[k].type_status)
@@ -2012,6 +2029,9 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               break;
             case 4: /* SPLINE */
               l++;
+              assert (j >= 0);
+              assert (k >= 0);
+              assert (l >= 0);
               assert (l < (int)o->paths[j].segs[k].num_fitpts);
               o->paths[j].segs[k].fitpts[l].x = pair->value.d;
               // LOG_TRACE ("HATCH.paths[%d].segs[%d].fitpts[%d].x = %f [
@@ -2026,6 +2046,8 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 20 && !is_plpath && !o->num_seeds)
         {
+          assert (j >= 0);
+          assert (k >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
           switch (o->paths[j].segs[k].type_status)
@@ -2062,6 +2084,8 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 21 && !is_plpath && !o->num_seeds
                && pair->value.d != 0.0)
         {
+          assert (j >= 0);
+          assert (k >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
           switch (o->paths[j].segs[k].type_status)
@@ -2095,6 +2119,8 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 40 && !is_plpath)
         {
+          assert (j >= 0);
+          assert (k >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
           switch (o->paths[j].segs[k].type_status)
@@ -2122,6 +2148,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               else
                 {
                   l++;
+                  assert (l >= 0);
                   assert (l < (int)o->paths[j].segs[k].num_knots);
                   o->paths[j].segs[k].knots[l] = pair->value.d;
                   LOG_TRACE (
@@ -2137,6 +2164,8 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 50 && !is_plpath)
         {
+          assert (j >= 0);
+          assert (k >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
           switch (o->paths[j].segs[k].type_status)
@@ -2155,6 +2184,8 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 51 && !is_plpath)
         {
+          assert (j >= 0);
+          assert (k >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
           switch (o->paths[j].segs[k].type_status)
@@ -2173,6 +2204,8 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 73 && !is_plpath)
         {
+          assert (j >= 0);
+          assert (k >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
           switch (o->paths[j].segs[k].type_status)
@@ -2192,6 +2225,8 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 10 && is_plpath && !o->num_seeds)
         {
           k++;
+          assert (j >= 0);
+          assert (k >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
           o->paths[j].polyline_paths[k].point.x = pair->value.d;
@@ -2201,6 +2236,8 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 20 && is_plpath && !o->num_seeds)
         {
+          assert (j >= 0);
+          assert (k >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
           o->paths[j].polyline_paths[k].point.y = pair->value.d;
@@ -2210,6 +2247,8 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 42 && is_plpath)
         {
+          assert (j >= 0);
+          assert (k >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
           o->paths[j].polyline_paths[k].bulge = pair->value.d;
@@ -2218,6 +2257,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 97 && !is_plpath)
         {
+          assert (j >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
           if (k < 0 || o->paths[j].segs[k].type_status != 4)
@@ -2239,6 +2279,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 97 && is_plpath)
         {
+          assert (j >= 0);
           assert (j < (int)o->num_paths);
           o->paths[j].num_boundary_handles = pair->value.l;
           o->num_boundary_handles += pair->value.l;
@@ -2256,6 +2297,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 53 && o->num_deflines)
         {
           j++;
+          assert (j >= 0);
           assert (j < (int)o->num_deflines);
           o->deflines[j].angle = deg2rad (pair->value.d);
           LOG_TRACE ("HATCH.deflines[%d].angle = %f [BD 53]\n", j,
@@ -2263,6 +2305,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 43 && o->num_deflines)
         {
+          assert (j >= 0);
           assert (j < (int)o->num_deflines);
           o->deflines[j].pt0.x = pair->value.d;
           LOG_TRACE ("HATCH.deflines[%d].pt0.x = %f [BD 43]\n", j,
@@ -2270,6 +2313,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 44 && o->num_deflines)
         {
+          assert (j >= 0);
           assert (j < (int)o->num_deflines);
           o->deflines[j].pt0.y = pair->value.d;
           LOG_TRACE ("HATCH.deflines[%d].pt0.y = %f [BD 44]\n", j,
@@ -2277,6 +2321,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 45 && o->num_deflines)
         {
+          assert (j >= 0);
           assert (j < (int)o->num_deflines);
           o->deflines[j].offset.x = pair->value.d;
           LOG_TRACE ("HATCH.deflines[%d].offset.x = %f [BD 45]\n", j,
@@ -2284,6 +2329,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 46 && o->num_deflines)
         {
+          assert (j >= 0);
           assert (j < (int)o->num_deflines);
           o->deflines[j].offset.y = pair->value.d;
           LOG_TRACE ("HATCH.deflines[%d].offset.y = %f [BD 46]\n", j,
@@ -2291,6 +2337,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 79 && o->num_deflines)
         {
+          assert (j >= 0);
           assert (j < (int)o->num_deflines);
           o->deflines[j].num_dashes = pair->value.u;
           LOG_TRACE ("HATCH.deflines[%d].num_dashes = %u [BS 79]\n", j,
@@ -2300,10 +2347,17 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 = calloc (pair->value.u, sizeof (BITCODE_BD));
           k = -1;
         }
-      else if (pair->code == 49 && o->num_deflines && o->deflines[j].dashes)
+      else if (pair->code == 49 && o->num_deflines && j >= 0)
         {
+          assert (j >= 0);
           assert (j < (int)o->num_deflines);
+          if (!o->deflines[j].dashes)
+            {
+              LOG_ERROR ("DXF 79 num_dashes missing for HATCH.dashes 49")
+              goto unknown_HATCH;
+            }
           k++;
+          assert (k >= 0);
           assert (k < (int)o->deflines[j].num_dashes);
           o->deflines[j].dashes[k] = pair->value.d;
           LOG_TRACE ("HATCH.deflines[%d].dashes[%d] = %f [BD 49]\n", j, k,
@@ -2325,6 +2379,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 10 && o->num_seeds)
         {
           k++;
+          assert (k >= 0);
           assert (k < (int)o->num_seeds);
           o->seeds[k].x = pair->value.d;
           // LOG_TRACE ("HATCH.seeds[%d].x = %f [10 2RD]\n",
@@ -2332,6 +2387,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 20 && o->num_seeds)
         {
+          assert (k >= 0);
           assert (k < (int)o->num_seeds);
           o->seeds[k].y = pair->value.d;
           LOG_TRACE ("HATCH.seeds[%d] = (%f, %f) [2RD 10]\n", k, o->seeds[k].x,
@@ -2356,6 +2412,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 463 && o->num_colors)
         {
           j++;
+          assert (j >= 0);
           assert (j < (int)o->num_colors);
           o->colors[j].shift_value = pair->value.d;
           LOG_TRACE ("HATCH.colors[%d].shift_value = %f [BD 463]\n", j,
@@ -2370,6 +2427,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 421 && o->num_colors)
         {
+          assert (j >= 0);
           assert (j < (int)o->num_colors);
           o->colors[j].color.rgb = pair->value.u;
           LOG_TRACE ("HATCH.colors[%d].color.rgb = %06X [CMC 421]\n", j,
@@ -2377,6 +2435,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 431 && o->num_colors)
         {
+          assert (j >= 0);
           assert (j < (int)o->num_colors);
           o->colors[j].color.name = strdup (pair->value.s);
           LOG_TRACE ("HATCH.colors[%d].color.name = %s [CMC 431]\n", j,
@@ -2405,7 +2464,10 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           add_eed (obj, "HATCH", pair);
         }
       else
-        LOG_ERROR ("Unknown DXF code %d for %s", pair->code, "HATCH");
+        {
+        unknown_HATCH:
+          LOG_ERROR ("Unknown DXF code %d for %s", pair->code, "HATCH");
+        }
     }
   return pair;
 }
