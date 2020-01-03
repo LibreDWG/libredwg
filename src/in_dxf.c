@@ -1455,11 +1455,11 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   _o->points = calloc (num_points, sizeof (BITCODE_2RD));
   LOG_TRACE ("LWPOLYLINE.num_points = %u [BS 90]\n", num_points);
 
-  while (pair->code != 0)
+  while (pair != NULL && pair->code != 0)
     {
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
-      if (pair->code == 0)
+      if (pair == NULL || pair->code == 0)
         {
           LOG_TRACE ("LWPOLYLINE.flag = %d [BS 70]\n", _o->flag);
           return pair;
@@ -5559,7 +5559,7 @@ new_object (char *restrict name, char *restrict dxfname,
           else if (pair->code == 90 && obj->fixedtype == DWG_TYPE_LWPOLYLINE)
             {
               pair = new_LWPOLYLINE (obj, dat, pair);
-              if (pair->code == 0)
+              if (pair != NULL && pair->code == 0)
                 return pair;
               goto next_pair;
             }
