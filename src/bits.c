@@ -1239,7 +1239,6 @@ uint16_t
 bit_read_CRC (Bit_Chain *dat)
 {
   uint16_t result;
-  long unsigned int start_address;
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
 
   if (dat->bit > 0)
@@ -1247,9 +1246,8 @@ bit_read_CRC (Bit_Chain *dat)
       dat->byte++;
       dat->bit = 0;
     }
-  start_address = dat->byte;
   result = bit_read_RS (dat);
-  LOG_TRACE ("read CRC at %lu: %04X\n", start_address, result)
+  LOG_TRACE ("read CRC at %lu: %04X\n", dat->byte, result)
 
   return result;
 }
@@ -1277,7 +1275,6 @@ bit_check_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
                  start_address, dat->byte, dat->size)
       return 0;
     }
-
   size = dat->byte - start_address;
   calculated = bit_calc_CRC (seed, &dat->chain[start_address], size);
   read = bit_read_RS (dat);
@@ -1308,6 +1305,13 @@ bit_write_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
   while (dat->bit > 0)
     bit_write_B (dat, 0);
 
+  if (start_address > dat->byte || dat->byte >= dat->size)
+    {
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+      LOG_ERROR ("%s buffer overflow at pos %lu-%lu, size %lu", __FUNCTION__,
+                 start_address, dat->byte, dat->size)
+      return 0;
+    }
   size = dat->byte - start_address;
   crc = bit_calc_CRC (seed, &dat->chain[start_address], size);
 
@@ -1327,6 +1331,13 @@ bit_write_CRC_LE (Bit_Chain *dat, long unsigned int start_address, uint16_t seed
   while (dat->bit > 0)
     bit_write_B (dat, 0);
 
+  if (start_address > dat->byte || dat->byte >= dat->size)
+    {
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+      LOG_ERROR ("%s buffer overflow at pos %lu-%lu, size %lu", __FUNCTION__,
+                 start_address, dat->byte, dat->size)
+      return 0;
+    }
   size = dat->byte - start_address;
   crc = bit_calc_CRC (seed, &dat->chain[start_address], size);
 
