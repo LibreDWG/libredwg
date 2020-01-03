@@ -256,7 +256,7 @@ main (int argc, char *argv[])
       if (error >= DWG_ERR_CRITICAL)
         {
           fprintf (stderr, "READ ERROR 0x%x\n", error);
-          continue;
+          goto final;
         }
 
       printf ("Writing DXF file %s", filename_out);
@@ -329,6 +329,7 @@ main (int argc, char *argv[])
       if (dat.fh)
         fclose (dat.fh);
 
+    final:
       // forget about leaks. really huge DWG's need endlessly here.
       if (do_free
 #if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
