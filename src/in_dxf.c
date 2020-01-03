@@ -5891,21 +5891,21 @@ new_object (char *restrict name, char *restrict dxfname,
                                                                f->name,
                                                                &clip_verts, 0);
                                 }
-                              assert (j >= 0);
-                              assert (j < (int)num_clip_verts);
-                              assert (clip_verts);
-                              clip_verts[j].x = pair->value.d;
+                              if (j >= 0 && j < (int)num_clip_verts
+                                  && clip_verts)
+                                clip_verts[j].x = pair->value.d;
                             }
                           else if (pair->code < 30)
                             {
-                              assert (j >= 0);
-                              assert (j < (int)num_clip_verts);
-                              assert (clip_verts);
-                              clip_verts[j].y = pair->value.d;
-                              LOG_TRACE ("%s.%s[%d] = (%f, %f) [2RD* %d]\n",
-                                         name, "clip_verts", j,
-                                         clip_verts[j].x, clip_verts[j].y,
-                                         pair->code - 10);
+                              if (j >= 0 && j < (int)num_clip_verts
+                                  && clip_verts)
+                                {
+                                  clip_verts[j].y = pair->value.d;
+                                  LOG_TRACE (
+                                      "%s.%s[%d] = (%f, %f) [2RD* %d]\n", name,
+                                      "clip_verts", j, clip_verts[j].x,
+                                      clip_verts[j].y, pair->code - 10);
+                                }
                               j++;
                               if (pair->code == 21)
                                 {
