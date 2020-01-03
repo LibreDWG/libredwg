@@ -4802,7 +4802,8 @@ new_object (char *restrict name, char *restrict dxfname,
           else
           // clang-format on
           {
-            LOG_ERROR ("Unknown DXF AcDbSymbolTableRecord %s", name);
+            dwg->num_objects--;
+            LOG_ERROR ("Unknown DXF AcDbSymbolTableRecord %s, skipping", name);
             return pair;
           }
         }
@@ -4810,7 +4811,8 @@ new_object (char *restrict name, char *restrict dxfname,
 
   if (!_obj)
     {
-      LOG_ERROR ("Empty _obj at DXF AcDbSymbolTableRecord %s", name);
+      dwg->num_objects--;
+      LOG_ERROR ("Empty _obj at DXF AcDbSymbolTableRecord %s, skipping", name);
       return pair;
     }
   ctrl = &dwg->object[ctrl_id];
