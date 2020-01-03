@@ -929,7 +929,7 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dxf_Pair *pair = dxf_read_pair (dat);
   Dwg_Class *klass;
 
-  while (1)
+  while (pair)
     { // read next class
       // add class (see decode)
       i = dwg->num_classes;
@@ -946,7 +946,7 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
       klass = &dwg->dwg_class[i];
       memset (klass, 0, sizeof (Dwg_Class));
-      if (pair->code == 0 && strEQc (pair->value.s, "CLASS"))
+      if (pair != NULL && pair->code == 0 && strEQc (pair->value.s, "CLASS"))
         {
           dxf_free_pair (pair);
           pair = dxf_read_pair (dat);
@@ -1598,7 +1598,7 @@ add_3DSOLID_encr (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   o->encr_sat_data[0] = NULL;
   o->block_size = calloc (2, sizeof (BITCODE_BL));
 
-  while (pair->code == 1)
+  while (pair != NULL && pair->code == 1)
     {
       int len = strlen (pair->value.s) + 1; // + the \n
       if (!total)
@@ -3357,52 +3357,63 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           have_rotated_type = 0;
           break;
         case 72:
+          if (i < 0) break;
           o->ref[i].osnap_type = pair->value.i;
           LOG_TRACE ("%s.ref[%d].osnap_type = %d [RC %d]\n",
                      obj->name, i, pair->value.i, pair->code);
           break;
         case 331:
+          if (i < 0) break;
           o->ref[i].mainobj = dwg_add_handleref (dwg, 5, pair->value.u, obj);
           LOG_TRACE ("%s.ref[%d].mainobj = " FORMAT_REF " [H %d]\n",
                        obj->name, i, ARGS_REF(o->ref[i].mainobj), pair->code);
           break;
         case 332:
+          if (i < 0) break;
           o->ref[i].intsectobj = dwg_add_handleref (dwg, 5, pair->value.u, obj);
           LOG_TRACE ("%s.ref[%d].intsectobj = " FORMAT_REF " [H %d]\n",
                        obj->name, i, ARGS_REF(o->ref[i].intsectobj), pair->code);
           break;
         case 73:
+          if (i < 0) break;
           o->ref[i].main_subent_type = pair->value.i;
           LOG_TRACE ("%s.ref[%d].main_subent_type = %d [BS %d]\n",
                      obj->name, i, pair->value.i, pair->code);
           break;
         case 74:
+          if (i < 0) break;
           o->ref[i].intsect_subent_type = pair->value.i;
           LOG_TRACE ("%s.ref[%d].intsect_subent_type = %d [BS %d]\n",
                      obj->name, i, pair->value.i, pair->code);
           break;
         case 75:
+          if (i < 0) break;
           o->ref[i].has_lastpt_ref = pair->value.i;
           LOG_TRACE ("%s.ref[%d].has_lastpt_ref = %d [B %d]\n",
                      obj->name, i, pair->value.i, pair->code);
           break;
         case 91:
+          if (i < 0) break;
           o->ref[i].main_gsmarker = pair->value.i;
           LOG_TRACE ("%s.ref[%d].main_gsmarker = %d [BL %d]\n",
                      obj->name, i, pair->value.i, pair->code);
           break;
         case 40:
+          if (i < 0) break;
           o->ref[i].osnap_dist = pair->value.d;
           LOG_TRACE ("%s.ref[%d].osnap_dist = %f [BD %d]\n",
                      obj->name, i, pair->value.d, pair->code);
           break;
         case 10:
+          if (i < 0) break;
           o->ref[i].osnap_pt.x = pair->value.d;
           break;
         case 20:
+          if (i < 0) break;
           o->ref[i].osnap_pt.y = pair->value.d;
           break;
         case 30:
+          if (i < 0) break;
           o->ref[i].osnap_pt.z = pair->value.d;
           LOG_TRACE ("%s.ref[%d].osnap_pt = (%f, %f, %f) [3BD 10]\n",
                      obj->name, i, o->ref[i].osnap_pt.x, o->ref[i].osnap_pt.y,
@@ -5850,6 +5861,8 @@ new_object (char *restrict name, char *restrict dxfname,
               const Dwg_DYNAPI_field *f;
               const Dwg_DYNAPI_field *fields
                   = dwg_dynapi_entity_fields (obj->name);
+              if (!pair)
+                break;
               if (!fields)
                 {
                   LOG_ERROR ("Illegal object name %s, no dynapi fields",
