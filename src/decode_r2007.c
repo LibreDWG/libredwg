@@ -916,6 +916,11 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
 
       if (section->num_pages <= 0)
         continue;
+      if (section->num_pages > 0xf0000)
+        {
+          LOG_ERROR ("Invalid num_pages %lu, skip", (unsigned long)section->num_pages);
+          continue;
+        }
 
       section->pages = (r2007_section_page **)calloc (
           (size_t)section->num_pages, sizeof (r2007_section_page *));
@@ -1806,8 +1811,8 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   if (!sections_map)
     goto error;
 
-  error
-      = read_2007_section_header (dat, hdl_dat, dwg, sections_map, pages_map);
+  error = read_2007_section_header (dat, hdl_dat, dwg, sections_map,
+                                    pages_map);
   if (dwg->header.summaryinfo_address)
     error |= read_2007_section_summary (dat, dwg, sections_map, pages_map);
   error |= read_2007_section_classes (dat, dwg, sections_map, pages_map);
