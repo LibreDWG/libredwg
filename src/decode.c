@@ -2050,7 +2050,7 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       uint64_t sum_decomp = 0;
       uint64_t prev_address = 0;
 
-      if (ptr + 64 >= decomp_end)
+      if (ptr + 32 + 64 >= decomp_end)
         {
           free (decomp);
           dwg->header.section_infohdr.num_desc = i;
