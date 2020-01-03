@@ -933,6 +933,7 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
           obj = dwg_next_object (obj);
           // this may happen with r2000 attribs
           if (obj && obj->supertype == DWG_SUPERTYPE_ENTITY
+              && obj->tio.entity != NULL
               && obj->tio.entity->ownerhandle != NULL
               && obj->tio.entity->ownerhandle->absolute_ref
                      != hdr->handle.value)
