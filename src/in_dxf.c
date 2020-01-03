@@ -1512,15 +1512,18 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 10)
         {
           j++; // we always start with 10 (I hope)
+          assert (_o->num_points > 0);
           assert (j < (int)_o->num_points);
           _o->points[j].x = pair->value.d;
         }
       else if (pair->code == 20)
         {
+          assert (j >= 0);
+          assert (_o->num_points > 0);
           assert (j < (int)_o->num_points);
-          _o->points[j].y = pair->value.d;
           LOG_TRACE ("LWPOLYLINE.points[%d] = (%f, %f) [2RD 10]\n", j,
-                     _o->points[j].x, _o->points[j].y);
+                     _o->points[j].x, pair->value.d);
+          _o->points[j].y = pair->value.d;
         }
       else if (pair->code == 42)
         {
@@ -1529,6 +1532,8 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               _o->bulges = calloc (num_points, sizeof (BITCODE_BD));
               _o->num_bulges = num_points;
             }
+          assert (j >= 0);
+          assert (_o->num_bulges > 0);
           assert (j < (int)_o->num_bulges);
           _o->bulges[j] = pair->value.d;
           LOG_TRACE ("LWPOLYLINE.bulges[%d] = %f [BD 42]\n", j, pair->value.d);
@@ -1540,6 +1545,8 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               _o->vertexids = calloc (num_points, sizeof (BITCODE_BL));
               _o->num_vertexids = num_points;
             }
+          assert (j >= 0);
+          assert (_o->num_vertexids > 0);
           assert (j < (int)_o->num_vertexids);
           _o->vertexids[j] = pair->value.i;
           LOG_TRACE ("LWPOLYLINE.vertexids[%d] = %d [BL 91]\n", j,
@@ -1553,6 +1560,8 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               _o->widths = calloc (num_points, sizeof (Dwg_LWPOLYLINE_width));
               _o->num_widths = num_points;
             }
+          assert (j >= 0);
+          assert (_o->num_widths > 0);
           assert (j < (int)_o->num_widths);
           _o->widths[j].start = pair->value.d;
           LOG_TRACE ("LWPOLYLINE.widths[%d].start = %f [BD 40]\n", j,
@@ -1560,6 +1569,8 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 41 && (_o->flag & 4)) // not const_width
         {
+          assert (j >= 0);
+          assert (_o->num_widths > 0);
           assert (j < (int)_o->num_widths);
           _o->widths[j].end = pair->value.d;
           LOG_TRACE ("LWPOLYLINE.widths[%d].end = %f [BD 41]\n", j,
