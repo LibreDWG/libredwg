@@ -170,7 +170,8 @@ static void copy_bytes (BITCODE_RC *dst, uint32_t length, uint32_t offset);
 static uint32_t read_literal_length (BITCODE_RC *restrict *restrict src,
                                      unsigned char opcode);
 static void copy_compressed_bytes (BITCODE_RC *restrict dst,
-                                   BITCODE_RC *restrict src, int length);
+                                   BITCODE_RC *restrict src, BITCODE_RC *restrict src_end,
+                                   int length);
 static DWGCHAR *bfr_read_string (BITCODE_RC *restrict *restrict src,
                                  int64_t size) ATTRIBUTE_MALLOC;
 static BITCODE_RC *decode_rs (const BITCODE_RC *src, int block_count,
@@ -226,7 +227,7 @@ copy_bytes (BITCODE_RC *dst, uint32_t length, uint32_t offset)
 /* See spec version 5.0 page 30 */
 static void
 copy_compressed_bytes (BITCODE_RC *restrict dst, BITCODE_RC *restrict src,
-                       int length)
+                       BITCODE_RC *restrict src_end, int length)
 {
   while (length >= 32)
     {
@@ -235,6 +236,8 @@ copy_compressed_bytes (BITCODE_RC *restrict dst, BITCODE_RC *restrict src,
 
       src += 32;
       length -= 32;
+      if (src > src_end)
+        return;
     }
 
   switch (length)
@@ -516,7 +519,7 @@ decompress_r2007 (BITCODE_RC *restrict dst, int dst_size,
         }
 
       // LOG_INSANE("copy_compressed_bytes(%p %p %u)\n", dst, src, length);
-      copy_compressed_bytes (dst, src, length);
+      copy_compressed_bytes (dst, src, src_end, length);
 
       dst += length;
       src += length;
