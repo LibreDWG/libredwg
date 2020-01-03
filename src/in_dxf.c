@@ -5907,8 +5907,8 @@ new_object (char *restrict name, char *restrict dxfname,
                                       "%s.%s[%d] = (%f, %f) [2RD* %d]\n", name,
                                       "clip_verts", j, clip_verts[j].x,
                                       clip_verts[j].y, pair->code - 10);
+                                  j++;
                                 }
-                              j++;
                               if (pair->code == 21)
                                 {
                                   dwg_dynapi_entity_set_value (

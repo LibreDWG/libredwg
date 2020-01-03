@@ -1495,7 +1495,7 @@ dwg_find_table_control (Dwg_Data *restrict dwg, const char *restrict table)
   BITCODE_BL i;
   for (i = 0; i < dwg->num_objects; i++)
     {
-      if (strEQ (dwg->object[i].name, table))
+      if (dwg->object[i].name && strEQ (dwg->object[i].name, table))
         {
           Dwg_Handle *hdl = &dwg->object[i].handle;
           return dwg_add_handleref (dwg, 3, hdl->value, NULL);
