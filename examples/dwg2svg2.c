@@ -322,19 +322,23 @@ output_BLOCK_HEADER (dwg_object_ref *ref)
       return;
     }
   hdr = dwg_ref_get_object (ref, &error);
-  if (!hdr || error) log_error ("dwg_ref_get_object");
+  if (!hdr || error)
+    return;
   abs_ref = dwg_ref_get_absref (ref, &error);
-  log_if_error ("dwg_ref_get_absref");
 
   _hdr = dwg_object_to_BLOCK_HEADER (hdr);
-  if (!_hdr) log_error ("dwg_object_to_BLOCK_HEADER");
-  dynget (_hdr, "BLOCK_HEADER", "name", &name);
-  // name = dwg_obj_block_header_get_name (_hdr, &error);
-  // log_if_error ("block_header_get_name");
-  printf ("\t<g id=\"symbol-%X\" >\n\t\t<!-- %s -->\n", abs_ref, name);
-  if (name != NULL && name != _hdr->name
-      && hdr->parent->header.version >= R_2007)
-    free (name);
+  if (_hdr)
+    {
+      dynget (_hdr, "BLOCK_HEADER", "name", &name);
+      // name = dwg_obj_block_header_get_name (_hdr, &error);
+      printf ("\t<g id=\"symbol-%X\" >\n\t\t<!-- %s -->\n", abs_ref ? abs_ref : 0,
+              name ? name : "");
+      if (name != NULL && name != _hdr->name
+          && hdr->parent->header.version >= R_2007)
+        free (name);
+    }
+  else
+    printf ("\t<g id=\"symbol-%X\" >\n\t\t<!-- ? -->\n", abs_ref ? abs_ref : 0);
 
   obj = get_first_owned_entity (hdr);
   while (obj)
