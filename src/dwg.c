@@ -36,6 +36,7 @@
 #include "decode.h"
 #include "dwg.h"
 #include "hash.h"
+#include "dynapi.h"
 #ifdef USE_WRITE
 #  include "encode.h"
 #endif
