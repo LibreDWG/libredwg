@@ -1193,10 +1193,10 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
     case 25:
       if (i < 0)
         return;
-      if (eed[i].data->code != code - 10)
+      if (!eed[i].data || eed[i].data->code != code - 10)
         {
           LOG_ERROR ("Wrong EED DXF code %d, expected %d", code + 1000,
-                     eed[i].data->code + 1010)
+                     eed[i].data ? eed[i].data->code + 1010 : 1020)
           return;
         }
       eed[i].data->u.eed_10.point.y = pair->value.d;
@@ -1209,10 +1209,10 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
     case 35:
       if (i < 0)
         return;
-      if (eed[i].data->code != code - 20)
+      if (!eed[i].data || eed[i].data->code != code - 20)
         {
           LOG_ERROR ("Wrong EED DXF code %d, expected %d", code + 1000,
-                     eed[i].data->code + 1020)
+                     eed[i].data ? eed[i].data->code + 1020 : 1030)
           return;
         }
       eed[i].data->u.eed_10.point.z = pair->value.d;
