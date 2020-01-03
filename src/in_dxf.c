@@ -5891,10 +5891,16 @@ new_object (char *restrict name, char *restrict dxfname,
                                                                f->name,
                                                                &clip_verts, 0);
                                 }
+                              assert (j >= 0);
+                              assert (j < (int)num_clip_verts);
+                              assert (clip_verts);
                               clip_verts[j].x = pair->value.d;
                             }
                           else if (pair->code < 30)
                             {
+                              assert (j >= 0);
+                              assert (j < (int)num_clip_verts);
+                              assert (clip_verts);
                               clip_verts[j].y = pair->value.d;
                               LOG_TRACE ("%s.%s[%d] = (%f, %f) [2RD* %d]\n",
                                          name, "clip_verts", j,
