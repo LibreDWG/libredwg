@@ -366,7 +366,13 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
     }
 
   // try opening the output file in write mode
-  if (!stat (filename, &attrib))
+  if (!stat (filename, &attrib)
+#ifdef _WIN32
+      && strNE (filename, "NUL")
+#else
+      && strNE (filename, "/dev/null")
+#endif
+      )
     {
       LOG_ERROR ("The file already exists. We won't overwrite it.")
       return error | DWG_ERR_IOERROR;
