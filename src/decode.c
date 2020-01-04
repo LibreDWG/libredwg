@@ -2211,6 +2211,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
 {
   uint32_t address, sec_mask, initial_address;
   uint32_t max_decomp_size;
+  long bytes_left;
   Dwg_Section_Info *info = NULL;
   encrypted_section_header es;
   BITCODE_RC *decomp;
@@ -2243,7 +2244,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
   max_decomp_size = info->num_sections * info->max_decomp_size;
   if (max_decomp_size == 0)
     {
-      LOG_ERROR ("Section %s count or max decompression size is zero. "
+      LOG_ERROR ("Invalid section %s count or max decompression size. "
                  "Sections: %u, Max size: %u",
                  info->name, info->num_sections, info->max_decomp_size);
       return DWG_ERR_INVALIDDWG;
@@ -2300,20 +2301,22 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       LOG_TRACE ("Section start:    %lu\n\n", dat->byte);
 
       // GH #126 part 4
-      // LOG_INSANE ("i:                     %u\n", i)
-      // LOG_INSANE ("decomp:                %p\n", decomp)
-      // LOG_INSANE ("info->max_decomp_size: %u\n", info->max_decomp_size)
-      // LOG_INSANE ("max_decomp_size:       %u\n", max_decomp_size)
-      // LOG_INSANE ("bytes_left:            %d\n",
-      //            max_decomp_size - (i * info->max_decomp_size))
+      LOG_INSANE ("info[%d]->max_decomp_size: %lu (0x%lx)\n", i,
+                  (unsigned long)info->max_decomp_size,
+                  (unsigned long)info->max_decomp_size)
+      LOG_INSANE ("max_decomp_size:          %lu (0x%lx)\n",
+                  (unsigned long)max_decomp_size,
+                  (unsigned long)max_decomp_size)
+      bytes_left = max_decomp_size - (i * info->max_decomp_size);
+      LOG_INSANE ("bytes_left:               %ld\n", bytes_left);
 
       // check if compressed at all
-      if (info->compressed == 2)
+      if (info->compressed == 2 && bytes_left > 0 && bytes_left < UINT32_MAX
+          && (i * info->max_decomp_size) < max_decomp_size)
         {
           error = decompress_R2004_section (
-              dat, &decomp[i * info->max_decomp_size],       // offset
-              max_decomp_size - (i * info->max_decomp_size), // bytes left
-              es.fields.data_size);
+              dat, &decomp[i * info->max_decomp_size], // offset
+              bytes_left, es.fields.data_size);
           if (error > DWG_ERR_CRITICAL)
             {
               sec_dat->chain = NULL; // fix double-free
@@ -2324,11 +2327,13 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
         }
       else
         {
-          if (!(info->size <= max_decomp_size)
+          if (info->compressed == 2
+              || !(info->size <= max_decomp_size)
               || !((unsigned long)(address + es.fields.address + 32
                                    + info->size)
                    <= dat->size))
             {
+              LOG_ERROR ("Some section size out of bounds")
               sec_dat->chain = NULL;
               free (decomp);
               return DWG_ERR_INVALIDDWG;
