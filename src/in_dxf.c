@@ -182,8 +182,12 @@ dxf_read_string (Bit_Chain *dat, char **string)
   if (is_binary)
     {
       int len = dxf_read_rs (dat);
+      if (dat->byte + len >= dat->size)
+        return;
       if (!string)
         {
+          if (len > 4096)
+            return;
           memcpy (buf, &dat->chain[dat->byte], len);
           buf[len] = '\0';
           return; // ignore, just advanced dat
@@ -197,11 +201,17 @@ dxf_read_string (Bit_Chain *dat, char **string)
   else
     {
       int i;
+      if (dat->byte >= dat->size)
+        return;
       dxf_skip_ws (dat);
-      for (i = 0; dat->chain[dat->byte] != '\n'; dat->byte++)
+      for (i = 0;
+           dat->byte < dat->size && dat->chain[dat->byte] != '\n' && i < 4096;
+           dat->byte++)
         {
           buf[i++] = dat->chain[dat->byte];
         }
+      if (dat->byte >= dat->size || i >= 4096)
+        return;
       if (i && buf[i - 1] == '\r')
         buf[i - 1] = '\0';
       else
@@ -237,6 +247,8 @@ dxf_read_pair (Bit_Chain *dat)
 {
   Dxf_Pair *pair = calloc (1, sizeof (Dxf_Pair));
   const int is_binary = dat->opts & DWG_OPTS_DXFB;
+  if (dat->size - dat->byte < 4) // at least 0\nEOF\n
+    return NULL;
   pair->code = (short)dxf_read_rs (dat);
   pair->type = get_base_value_type (pair->code);
   switch (pair->type)
@@ -6553,7 +6565,11 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               return 0;
             }
           else
-            LOG_WARN ("Unknown 0 %s (%s)", pair->value.s, "tables");
+            {
+              LOG_ERROR ("Unknown 0 %s (%s)", pair->value.s, "tables");
+              dxf_free_pair (pair);
+              return 1;
+            }
         }
       else if (pair->code == 2 && pair->value.s && strlen (pair->value.s) < 80
                && is_table_name (pair->value.s)) // new table NAME
@@ -6616,35 +6632,39 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             Dwg_Object_BLOCK_CONTROL *_ctrl
               = ctrl->tio.object->tio.BLOCK_CONTROL;
             int at_end = 1;
-            for (int j = _ctrl->num_entries - 1; j >= 0; j--)
+            if (_ctrl)
               {
-                BITCODE_H ref = _ctrl->entries[j];
-                if (!ref)
+                for (int j = _ctrl->num_entries - 1; j >= 0; j--)
                   {
-                    if (at_end)
+                    BITCODE_H ref = _ctrl->entries[j];
+                    if (!ref)
                       {
-                        _ctrl->num_entries--;
-                        _ctrl->entries = realloc (_ctrl->entries,
-                                                  _ctrl->num_entries
-                                                      * sizeof (BITCODE_H));
-                        LOG_TRACE ("%s.num_entries-- => %d\n", ctrl->name,
-                                    _ctrl->num_entries);
+                        if (at_end)
+                          {
+                            _ctrl->num_entries--;
+                            _ctrl->entries = realloc (
+                                _ctrl->entries,
+                                _ctrl->num_entries * sizeof (BITCODE_H));
+                            LOG_TRACE ("%s.num_entries-- => %d\n", ctrl->name,
+                                       _ctrl->num_entries);
+                          }
+                        else
+                          {
+                            _ctrl->entries[j]
+                                = dwg_add_handleref (dwg, 2, 0, NULL);
+                            LOG_TRACE ("%s.entries[%d] = (2.0.0)\n",
+                                       ctrl->name, j);
+                          }
                       }
                     else
-                      {
-                        _ctrl->entries[j] = dwg_add_handleref (dwg, 2, 0, NULL);
-                        LOG_TRACE ("%s.entries[%d] = (2.0.0)\n", ctrl->name,
-                                   j);
-                      }
+                      at_end = 0;
                   }
-                else
-                  at_end = 0;
-              }
-            // leave room for one active entry
-            if (_ctrl->num_entries == 1 && !_ctrl->entries[0])
-              {
-                _ctrl->entries[0] = dwg_add_handleref (dwg, 2, 0, NULL);
-                LOG_TRACE ("%s.entries[0] = (2.0.0)\n", ctrl->name);
+                // leave room for one active entry
+                if (_ctrl->num_entries == 1 && !_ctrl->entries[0])
+                  {
+                    _ctrl->entries[0] = dwg_add_handleref (dwg, 2, 0, NULL);
+                    LOG_TRACE ("%s.entries[0] = (2.0.0)\n", ctrl->name);
+                  }
               }
           }
         }
