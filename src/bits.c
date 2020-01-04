@@ -1326,7 +1326,6 @@ bit_write_CRC_LE (Bit_Chain *dat, long unsigned int start_address, uint16_t seed
 {
   uint16_t crc;
   long size;
-  loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
 
   while (dat->bit > 0)
     bit_write_B (dat, 0);
@@ -1341,6 +1340,7 @@ bit_write_CRC_LE (Bit_Chain *dat, long unsigned int start_address, uint16_t seed
   size = dat->byte - start_address;
   crc = bit_calc_CRC (seed, &dat->chain[start_address], size);
 
+  loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
   LOG_TRACE ("write CRC %04X from %lu-%lu = %ld\n", crc, start_address,
              dat->byte, size);
   bit_write_RS_LE (dat, crc);
@@ -1348,9 +1348,17 @@ bit_write_CRC_LE (Bit_Chain *dat, long unsigned int start_address, uint16_t seed
 }
 
 void
-bit_read_fixed (Bit_Chain *restrict dat, BITCODE_RC *restrict dest, int length)
+bit_read_fixed (Bit_Chain *restrict dat, BITCODE_RC *restrict dest,
+                unsigned int length)
 {
-  for (int i = 0; i < length; i++)
+  if (dat->byte + length >= dat->size)
+    {
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+      LOG_ERROR ("%s buffer overflow at pos %lu, size %lu", __FUNCTION__,
+                 dat->byte, dat->size)
+      return;
+    }
+  for (unsigned int i = 0; i < length; i++)
     {
       dest[i] = bit_read_RC (dat);
     }
@@ -1360,8 +1368,9 @@ bit_read_fixed (Bit_Chain *restrict dat, BITCODE_RC *restrict dest, int length)
  *  After usage, the allocated memory must be properly freed.
  *  preR11
  */
+ATTRIBUTE_MALLOC
 BITCODE_TF
-bit_read_TF (Bit_Chain *restrict dat, int length)
+bit_read_TF (Bit_Chain *restrict dat, unsigned int length)
 {
   BITCODE_RC *chain = malloc (length + 1);
 
@@ -1374,9 +1383,9 @@ bit_read_TF (Bit_Chain *restrict dat, int length)
 /** Write fixed text. Without ending \0
  */
 void
-bit_write_TF (Bit_Chain *restrict dat, BITCODE_TF restrict chain, int length)
+bit_write_TF (Bit_Chain *restrict dat, BITCODE_TF restrict chain, unsigned int length)
 {
-  int i;
+  unsigned int i;
   for (i = 0; i < length; i++)
     bit_write_RC (dat, (BITCODE_RC)chain[i]);
 }

@@ -204,17 +204,15 @@ uint16_t bit_calc_CRC (const uint16_t seed, unsigned char *adr, long len);
 
 uint32_t bit_calc_CRC32 (const uint32_t seed, unsigned char *adr, long len);
 
-BITCODE_TF
-bit_read_TF (Bit_Chain *dat, int length);
-
 void bit_read_fixed (Bit_Chain *restrict dat, BITCODE_RC *restrict dest,
-                     int length);
+                     unsigned int length);
+
+BITCODE_TF bit_read_TF (Bit_Chain *dat, unsigned int length) ATTRIBUTE_MALLOC;
 
 void bit_write_TF (Bit_Chain *restrict dat, BITCODE_TF restrict chain,
-                   int length);
+                   unsigned int length);
 
-BITCODE_TV
-bit_read_TV (Bit_Chain *restrict dat);
+BITCODE_TV bit_read_TV (Bit_Chain *restrict dat);
 
 void bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict value);
 
