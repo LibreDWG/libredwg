@@ -6527,12 +6527,8 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dxf_Pair *pair = dxf_read_pair (dat);
 
   table[0] = '\0'; // init
-  while (1)        // read next 0 TABLE
+  while (pair)     // read next 0 TABLE
     {
-      if (pair == NULL)
-        {
-          return 0;
-        }
       if (pair->code == 0 && pair->value.s) // TABLE or ENDTAB
         {
           if (strEQc (pair->value.s, "TABLE"))
@@ -7322,8 +7318,8 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         _obj->name = strdup ((char*)"*\0M\0o\0d\0e\0l\0_\0S\0p\0a\0c\0e\0");
       else
         _obj->name = strdup ((char*)"*Model_Space");
-      obj->tio.object->xdic_missing_flag = 1;
       _obj->xrefref = 1;
+      obj->tio.object->xdic_missing_flag = 1;
       dwg_add_handle (&obj->handle, 0, 0x1F, obj);
       obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, 1, NULL);
     }

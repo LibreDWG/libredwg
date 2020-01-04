@@ -1632,6 +1632,8 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
   Dwg_Object_APPID_CONTROL *_obj; // just some random generic type
   Dwg_Header_Variables *vars = &dwg->header_vars;
 
+  if (!dwg || !name || !table)
+    return NULL;
   // look for the _CONTROL table, and search for name in all entries
   if (strEQc (table, "BLOCK"))
     {
@@ -1816,7 +1818,7 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
       if (!hdlv[i])
         continue;
       hobj = dwg_resolve_handle (dwg, hdlv[i]->absolute_ref);
-      if (!hobj)
+      if (!hobj || !hobj->tio.object || !hobj->tio.object->tio.APPID)
         continue;
       _o = hobj->tio.object->tio.APPID;
       ok = dwg_dynapi_entity_utf8text (_o, hobj->name, "name", &hdlname, NULL);
@@ -1824,11 +1826,12 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
                   hobj->name, hdlname ? hdlname : "NULL");
       if (ok && hdlname && (strEQ (name, hdlname) || !strcasecmp (name, hdlname)))
         {
+          // freeable if r2007 and not TF. I've checked, there are none, only T (as TV)
           if (dwg->header.version >= R_2007)
             free (hdlname);
           return hdlv[i];
         }
-      if (ok && dwg->header.version >= R_2007)
+      if (ok && dwg->header.version >= R_2007 && hdlname)
         free (hdlname);
     }
 
