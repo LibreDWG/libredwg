@@ -2882,6 +2882,8 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                          pair->value.i, pair->code);
               break;
             case 290:
+              if (ctx->has_content_blk)
+                goto unknown_mleader;
               ctx->has_content_txt = pair->value.i;
               LOG_TRACE ("%s.ctx.has_content_txt = %d [B %d]\n", obj->name,
                          pair->value.i, pair->code);
@@ -2893,6 +2895,8 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             case 304:
               if (ctx->has_content_txt)
                 {
+                  if (ctx->has_content_blk)
+                    goto unknown_mleader;
                   if (dat->version >= R_2007)
                     ctx->content.txt.default_text
                         = (char *)bit_utf8_to_TU (pair->value.s);
@@ -2905,6 +2909,8 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             case 340:
               if (ctx->has_content_txt)
                 {
+                  if (ctx->has_content_blk)
+                    goto unknown_mleader;
                   ctx->content.txt.style
                       = dwg_add_handleref (obj->parent, 5, pair->value.u, obj);
                   LOG_TRACE ("%s.ctx.content.txt.style = " FORMAT_REF
@@ -2914,26 +2920,36 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 }
               break;
             case 11:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.normal.x = pair->value.d;
               break;
-              break;
             case 21:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.normal.y = pair->value.d;
               break;
             case 31:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.normal.z = pair->value.d;
               LOG_TRACE ("%s.ctx.content.txt.normal = (%f, %f, %f) [11 3BD]\n",
                          obj->name, ctx->content.txt.normal.x,
                          ctx->content.txt.normal.y, ctx->content.txt.normal.z);
               break;
             case 12:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.location.x = pair->value.d;
               break;
-              break;
             case 22:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.location.y = pair->value.d;
               break;
             case 32:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.location.z = pair->value.d;
               LOG_TRACE (
                   "%s.ctx.content.txt.location = (%f, %f, %f) [12 3BD]\n",
@@ -2941,13 +2957,18 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   ctx->content.txt.location.y, ctx->content.txt.location.z);
               break;
             case 13:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.direction.x = pair->value.d;
               break;
-              break;
             case 23:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.direction.y = pair->value.d;
               break;
             case 33:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.direction.z = pair->value.d;
               LOG_TRACE (
                   "%s.ctx.content.txt.direction = (%f, %f, %f) [13 3BD]\n",
@@ -2955,104 +2976,144 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   ctx->content.txt.direction.y, ctx->content.txt.direction.z);
               break;
             case 42:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.rotation = deg2rad (pair->value.d);
               LOG_TRACE ("%s.ctx.content.txt.rotation = %f [BD %d]\n",
                          obj->name, ctx->content.txt.rotation, pair->code);
               break;
             case 43:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.width = pair->value.d;
               LOG_TRACE ("%s.ctx.content.txt.width = %f [BD %d]\n", obj->name,
                          pair->value.d, pair->code);
               break;
             case 44:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.height = pair->value.d;
               LOG_TRACE ("%s.ctx.content.txt.height = %f [BD %d]\n", obj->name,
                          pair->value.d, pair->code);
               break;
             case 45:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.line_spacing_factor = pair->value.d;
               LOG_TRACE (
                   "%s.ctx.content.txt.line_spacing_factor = %f [BD %d]\n",
                   obj->name, pair->value.d, pair->code);
               break;
             case 170:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.line_spacing_style = pair->value.i;
               LOG_TRACE (
                   "%s.ctx.content.txt.line_spacing_style = %d [BS %d]\n",
                   obj->name, pair->value.i, pair->code);
               break;
             case 171:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.alignment = pair->value.i;
               LOG_TRACE ("%s.ctx.content.txt.alignment = %d [BS %d]\n",
                          obj->name, pair->value.i, pair->code);
               break;
             case 172:
+              if (!ctx->has_content_txt)
+                break;
               ctx->content.txt.flow = pair->value.i;
               LOG_TRACE ("%s.ctx.content.txt.flow = %d [BS %d]\n", obj->name,
                          pair->value.i, pair->code);
               break;
             case 90:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.color.index = pair->value.i;
               LOG_TRACE ("%s.ctx.content.txt.color.index = %d [BS %d]\n",
                          obj->name, pair->value.i, pair->code);
               break;
             case 91:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.bg_color.index = pair->value.i;
               LOG_TRACE ("%s.ctx.content.txt.bg_color.index = %d [BS %d]\n",
                          obj->name, pair->value.i, pair->code);
               break;
             case 141:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.bg_scale = pair->value.d;
               LOG_TRACE ("%s.ctx.content.txt.bg_scale = %f [BD %d]\n",
                          obj->name, pair->value.d, pair->code);
               break;
             case 142:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.col_width = pair->value.d;
               LOG_TRACE ("%s.ctx.content.txt.col_width = %f [BD %d]\n",
                          obj->name, pair->value.d, pair->code);
               break;
             case 143:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.col_gutter = pair->value.d;
               LOG_TRACE ("%s.ctx.content.txt.col_gutter = %f [BD %d]\n",
                          obj->name, pair->value.d, pair->code);
               break;
             case 92:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.bg_transparency = pair->value.u;
               LOG_TRACE ("%s.ctx.content.txt.bg_transparency = %u [BL %d]\n",
                          obj->name, pair->value.u, pair->code);
               break;
             case 291:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.is_bg_fill = pair->value.i;
               LOG_TRACE ("%s.ctx.content.txt.is_bg_fill = %i [B %d]\n",
                          obj->name, pair->value.i, pair->code);
               break;
             case 292:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.is_bg_mask_fill = pair->value.i;
               LOG_TRACE ("%s.ctx.content.txt.is_bg_mask_fill = %i [B %d]\n",
                          obj->name, pair->value.i, pair->code);
               break;
             case 293:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.is_height_auto = pair->value.i;
               LOG_TRACE ("%s.ctx.content.txt.is_height_auto = %i [B %d]\n",
                          obj->name, pair->value.i, pair->code);
               break;
             case 294:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.is_col_flow_reversed = pair->value.i;
               LOG_TRACE (
                   "%s.ctx.content.txt.is_col_flow_reversed = %i [B %d]\n",
                   obj->name, pair->value.i, pair->code);
               break;
             case 295:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.word_break = pair->value.i;
               LOG_TRACE ("%s.ctx.content.txt.word_break = %i [B %d]\n",
                          obj->name, pair->value.i, pair->code);
               break;
             case 173:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->content.txt.col_type = pair->value.i;
               LOG_TRACE ("%s.ctx.content.txt.col_type = %d [BS %d]\n",
                          obj->name, pair->value.i, pair->code);
               break;
             case 144:
+              if (!ctx->has_content_txt)
+                goto unknown_mleader;
               i++;
               ctx->content.txt.num_col_sizes = i + 1;
               ctx->content.txt.col_sizes = realloc (ctx->content.txt.col_sizes,
@@ -3062,26 +3123,36 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                          obj->name, i, pair->value.d, pair->code);
               break;
             case 296:
+              if (ctx->has_content_txt)
+                goto unknown_mleader;
               ctx->has_content_blk = pair->value.i;
               LOG_TRACE ("%s.ctx.has_content_blk = %i [B %d]\n", obj->name,
                          pair->value.i, pair->code);
               break;
             case 14: // has_block
+              if (!ctx->has_content_blk)
+                goto unknown_mleader;
               ctx->content.blk.normal.x = pair->value.d;
               LOG_TRACE ("%s.ctx.content.blk.normal.x = %f [3BD %d]\n",
                          obj->name, pair->value.d, pair->code);
               break;
             case 24:
+              if (!ctx->has_content_blk)
+                goto unknown_mleader;
               ctx->content.blk.normal.y = pair->value.d;
               LOG_TRACE ("%s.ctx.content.blk.normal.y = %f [3BD %d]\n",
                          obj->name, pair->value.d, pair->code);
               break;
             case 34:
+              if (!ctx->has_content_blk)
+                goto unknown_mleader;
               ctx->content.blk.normal.z = pair->value.d;
               LOG_TRACE ("%s.ctx.content.blk.normal.z = %f [3BD %d]\n",
                          obj->name, pair->value.d, pair->code);
               break;
             case 341:
+              if (!ctx->has_content_blk)
+                goto unknown_mleader;
               ctx->content.blk.block_table
                   = dwg_add_handleref (obj->parent, 4, pair->value.u, obj);
               LOG_TRACE ("%s.ctx.content.blk.block_table = " FORMAT_REF
@@ -3090,12 +3161,20 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                          pair->code);
               break;
             case 15: // has_block
-              ctx->content.blk.location.x = pair->value.d;
+              if (!ctx->has_content_blk)
+                goto unknown_mleader;
+              ctx->content.blk.normal.x = pair->value.d;
+              LOG_TRACE ("%s.ctx.content.blk.normal.x = %f [3BD %d]\n",
+                         obj->name, pair->value.d, pair->code);
               break;
             case 25:
+              if (!ctx->has_content_blk)
+                goto unknown_mleader;
               ctx->content.blk.location.y = pair->value.d;
               break;
             case 35:
+              if (!ctx->has_content_blk)
+                goto unknown_mleader;
               ctx->content.blk.location.z = pair->value.d;
               LOG_TRACE (
                   "%s.ctx.content.blk.location = (%f, %f, %f) [3BD %d]\n",
@@ -3104,12 +3183,18 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   pair->code);
               break;
             case 16: // has_block
+              if (!ctx->has_content_blk)
+                goto unknown_mleader;
               ctx->content.blk.scale.x = pair->value.d;
               break;
             case 26:
+              if (!ctx->has_content_blk)
+                goto unknown_mleader;
               ctx->content.blk.scale.y = pair->value.d;
               break;
             case 36:
+              if (!ctx->has_content_blk)
+                goto unknown_mleader;
               ctx->content.blk.scale.z = pair->value.d;
               LOG_TRACE ("%s.ctx.content.blk.scale = (%f, %f, %f) [3BD %d]\n",
                          obj->name, ctx->content.blk.scale.x,
@@ -3117,16 +3202,22 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                          pair->code);
               break;
             case 46:
+              if (!ctx->has_content_blk)
+                goto unknown_mleader;
               ctx->content.blk.rotation = deg2rad (pair->value.d);
               LOG_TRACE ("%s.ctx.content.blk.rotation = %f [BD %d]\n",
                          obj->name, pair->value.d, pair->code);
               break;
             case 93:
+              if (!ctx->has_content_blk)
+                goto unknown_mleader;
               ctx->content.blk.color.index = pair->value.i;
               LOG_TRACE ("%s.ctx.content.blk.color.index = %d [CMC %d]\n",
                          obj->name, pair->value.i, pair->code);
               break;
             case 47:
+              if (!ctx->has_content_blk)
+                goto unknown_mleader;
               j++;
               if (!j)
                 ctx->content.blk.transform = calloc (16, sizeof (double));
@@ -3188,6 +3279,7 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             case 301: // end ctx
               return pair;
             default:
+            unknown_mleader:
               LOG_ERROR ("Unknown DXF code %d for %s", pair->code,
                          "MULTILEADER");
             }
