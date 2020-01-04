@@ -1343,21 +1343,21 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           _obj->unknown_rc4[1] = 0x74;
           _obj->unknown_rc4[2] = 0x78;
           _obj->unknown_rc4[3] = 0x1;
-          if (dwg->header.version <= R_2000)
-            {
-              _obj->num_sections = dwg->header.num_sections;
-              for (i = 0; i < _obj->num_sections; i++)
-                {
-                  _obj->section[i].nr = dwg->header.section[i].number;
-                  _obj->section[i].address = dwg->header.section[i].address;
-                  _obj->section[i].size = dwg->header.section[i].size;
-                }
-              // TODO handlers
-            }
           _obj->junk_r14_1 = 1957593121; //?
           _obj->junk_r14_2 = 2559919056; //?
+          // TODO handlers defaults
         }
-
+      // always recomputed, even with dwgrewrite
+      if (dwg->header.version <= R_2000)
+        {
+          _obj->num_sections = dwg->header.num_sections;
+          for (i = 0; i < _obj->num_sections; i++)
+            {
+              _obj->section[i].nr = dwg->header.section[i].number;
+              _obj->section[i].address = dwg->header.section[i].address;
+              _obj->section[i].size = dwg->header.section[i].size;
+            }
+        }
       FIELD_RL (size, 0);
       if (FIELD_VALUE (address) != (BITCODE_RL) (pvzadr - 16))
         {
