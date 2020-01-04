@@ -32,7 +32,9 @@
       memcpy (FIELD_VALUE (unknown_rs), tmpunknown, sizeof(tmpunknown));
       FIELD_VALUE (TDCREATE) = dwg->header_vars.TDCREATE.value;
       FIELD_VALUE (TDUPDATE) = dwg->header_vars.TDUPDATE.value;
-      FIELD_VALUE (HANDSEED) = dwg->header_vars.HANDSEED->absolute_ref;
+      FIELD_VALUE (HANDSEED) = dwg->header_vars.HANDSEED
+                                   ? dwg->header_vars.HANDSEED->absolute_ref
+                                   : 0;
     }
   }
 
@@ -77,4 +79,5 @@
       FIELD_RS (zero_18[i], 0);
     }
   }
+
 
