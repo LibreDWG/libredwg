@@ -304,6 +304,16 @@ main (int argc, char *argv[])
                     unlink (filename_out);
                     error = dwg_write_file (filename_out, &dwg);
                   }
+                else if (
+#ifdef _WIN32
+      strEQc (filename_out, "NUL")
+#else
+      strEQc (filename_out, "/dev/null")
+#endif
+                         )
+                  {
+                    error = dwg_write_file (filename_out, &dwg);
+                  }
                 else
                   {
                     LOG_ERROR ("Not writable file or symlink: %s\n",

@@ -301,6 +301,16 @@ main (int argc, char *argv[])
                     unlink (filename_out);
                     dat.fh = fopen (filename_out, "wb");
                   }
+                else if (
+#ifdef _WIN32
+      strEQc (filename_out, "NUL")
+#else
+      strEQc (filename_out, "/dev/null")
+#endif
+                         )
+                  {
+                    dat.fh = fopen (filename_out, "wb");
+                  }
                 else
                   {
                     LOG_ERROR ("Not writable file or symlink: %s\n",
