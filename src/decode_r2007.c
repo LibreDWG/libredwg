@@ -170,7 +170,7 @@ static void copy_bytes (BITCODE_RC *dst, uint32_t length, uint32_t offset);
 static uint32_t read_literal_length (BITCODE_RC *restrict *restrict src,
                                      unsigned char opcode);
 static void copy_compressed_bytes (BITCODE_RC *restrict dst,
-                                   BITCODE_RC *restrict src, BITCODE_RC *restrict src_end,
+                                   BITCODE_RC *restrict src,
                                    int length);
 static DWGCHAR *bfr_read_string (BITCODE_RC *restrict *restrict src,
                                  int64_t size) ATTRIBUTE_MALLOC;
@@ -227,7 +227,7 @@ copy_bytes (BITCODE_RC *dst, uint32_t length, uint32_t offset)
 /* See spec version 5.0 page 30 */
 static void
 copy_compressed_bytes (BITCODE_RC *restrict dst, BITCODE_RC *restrict src,
-                       BITCODE_RC *restrict src_end, int length)
+                       int length)
 {
   while (length >= 32)
     {
@@ -236,8 +236,6 @@ copy_compressed_bytes (BITCODE_RC *restrict dst, BITCODE_RC *restrict src,
 
       src += 32;
       length -= 32;
-      if (src > src_end)
-        return;
     }
 
   switch (length)
@@ -487,19 +485,18 @@ decompress_r2007 (BITCODE_RC *restrict dst, int dst_size,
   BITCODE_RC *src_end = src + src_size;
   unsigned char opcode;
 
-  if (!src)
+  LOG_INSANE ("decompress_r2007 (%p, %d, %p, %d)\n", dst, dst_size, src, src_size);
+  if (!dst || !src || !dst_size || !src_size)
     {
-      LOG_ERROR ("Empty src argument to %s\n", __FUNCTION__);
+      LOG_ERROR ("Empty argument to %s\n", __FUNCTION__);
       return DWG_ERR_INTERNALERROR;
     }
-  opcode = *src++;
-  LOG_INSANE ("decompress_r2007(%p %d %p %d)\n", dst, dst_size, src, src_size);
 
+  opcode = *src++;
   if ((opcode & 0xf0) == 0x20)
     {
       src += 2;
       length = *src++ & 0x07;
-
       if (length == 0)
         {
           LOG_ERROR ("Decompression error: zero length")
@@ -512,14 +509,14 @@ decompress_r2007 (BITCODE_RC *restrict dst, int dst_size,
       if (length == 0)
         length = read_literal_length (&src, opcode);
 
-      if ((dst + length) > dst_end)
+      if ((dst + length) > dst_end || (src + length) > src_end)
         {
           LOG_ERROR ("Decompression error: length overflow");
           return DWG_ERR_INTERNALERROR;
         }
 
-      // LOG_INSANE("copy_compressed_bytes(%p %p %u)\n", dst, src, length);
-      copy_compressed_bytes (dst, src, src_end, length);
+      LOG_INSANE("copy_compressed_bytes (%p, %p, %u)\n", dst, src, length);
+      copy_compressed_bytes (dst, src, length);
 
       dst += length;
       src += length;
@@ -545,7 +542,7 @@ decompress_r2007 (BITCODE_RC *restrict dst, int dst_size,
               LOG_ERROR ("Decompression error: offset underflow");
               return DWG_ERR_INTERNALERROR;
             }
-          LOG_INSANE ("copy_bytes(%p %u %u)\n", dst, length, offset);
+          LOG_INSANE ("copy_bytes (%p, %u, %u)\n", dst, length, offset);
           copy_bytes (dst, length, offset);
 
           dst += length;
