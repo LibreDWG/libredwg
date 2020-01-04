@@ -738,6 +738,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   BITCODE_BL last_handle;
   Object_Map *omap;
   Bit_Chain *hdl_dat;
+  const char *section_names[]
+      = { "AcDb:Header", "AcDb:Classes", "AcDb:Handles",
+          "2NDHEADER",   "MEASUREMENT",  "AcDb:AuxHeader" };
 
   if (dwg->opts)
     loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
@@ -1330,7 +1333,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
       pvzadr = dat->byte; // Keep the first address of the section to write its
                           // size later
-      LOG_TRACE ("pvzadr: %lx\n", pvzadr);
+      LOG_TRACE ("pvzadr: %u\n", (unsigned)pvzadr);
       if (!_obj->size && !_obj->num_sections)
         {
           LOG_TRACE ("Use second_header defaults...\n");
@@ -1361,11 +1364,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       FIELD_RL (size, 0);
       if (FIELD_VALUE (address) != (BITCODE_RL) (pvzadr - 16))
         {
-          LOG_WARN ("second_header->address %x != %x", FIELD_VALUE (address),
+          LOG_WARN ("second_header->address %u != %u", FIELD_VALUE (address),
                     (unsigned)(pvzadr - 16));
           FIELD_VALUE (address) = pvzadr - 16;
+          dwg->header.section[SECTION_2NDHEADER_R13].address = _obj->address;
+          dwg->header.section[SECTION_2NDHEADER_R13].size = _obj->size;
         }
-      FIELD_BLx (address, 0);
+      FIELD_BL (address, 0);
 
       // AC1012, AC1014 or AC1015. This is a char[11], zero padded.
       // with \n at 12.
@@ -1384,7 +1389,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         for (i = 0; i < FIELD_VALUE (num_sections); i++)
           {
             FIELD_RC (section[i].nr, 0);
-            FIELD_BLx (section[i].address, 0);
+            FIELD_BL (section[i].address, 0);
             FIELD_BLd (section[i].size, 0);
           }
 
@@ -1440,7 +1445,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   /* End of the file
    */
   dat->size = dat->byte;
-  LOG_INFO ("Final size: %u\n", (unsigned)dat->size);
+  LOG_INFO ("\nFinal DWG size: %u\n", (unsigned)dat->size);
 
   /* Write section addresses
    */
@@ -1453,12 +1458,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       bit_write_RC (dat, dwg->header.section[j].number);
       bit_write_RL (dat, dwg->header.section[j].address);
       bit_write_RL (dat, dwg->header.section[j].size);
-      LOG_TRACE ("section[%u].number: %2d [RC]\n", j,
-                 (int)dwg->header.section[j].number)
-      LOG_TRACE ("section[%u].offset: 0x%x [RLx] %u\n", j,
-                 (unsigned)dwg->header.section[j].address,
+      LOG_TRACE ("section[%u].number: %4d [RC] %s\n", j,
+                 (int)dwg->header.section[j].number,
+                 j < 6 ? section_names[j] : "")
+      LOG_TRACE ("section[%u].offset: %4u [RL]\n", j,
                  (unsigned)dwg->header.section[j].address)
-      LOG_TRACE ("section[%u].size: %4d [RL]\n", j,
+      LOG_TRACE ("section[%u].size:   %4u [RL]\n", j,
                  (int)dwg->header.section[j].size)
       if (dwg->header.section[j].address + dwg->header.section[j].size > dat->size)
         {
