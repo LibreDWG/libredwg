@@ -576,6 +576,12 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   dat->version = dat->from_version = dwg->header.version;
                   is_utf = dat->version >= R_2007;
                   LOG_TRACE ("HEADER.version = dat->version = %s\n", version);
+                  if (is_utf)
+                    {
+                      Dwg_Object_BLOCK_HEADER *_o = dwg->object[0].tio.object->tio.BLOCK_HEADER;
+                      free (_o->name);
+                      _o->name = (char*)bit_utf8_to_TU ((char*)"*Model_Space");
+                    }
                   break;
                 }
               if (v == R_AFTER)
@@ -7312,10 +7318,10 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       char *dxfname = strdup ((char*)"BLOCK_HEADER");
       NEW_OBJECT (dwg, obj);
       ADD_OBJECT (BLOCK_HEADER);
-      // dwg->header.version here still unknown. <r2000: 0x17
-      // later fixed up when reading the BLOCK_HEADER.name
+      // dwg->header.version probably here still unknown. <r2000: 0x17
+      // later fixed up when reading $ACADVER and the BLOCK_HEADER.name
       if (dwg->header.version >= R_2007)
-        _obj->name = strdup ((char*)"*\0M\0o\0d\0e\0l\0_\0S\0p\0a\0c\0e\0");
+        _obj->name = (char*)bit_utf8_to_TU ((char*)"*Model_Space");
       else
         _obj->name = strdup ((char*)"*Model_Space");
       _obj->xrefref = 1;
