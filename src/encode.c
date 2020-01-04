@@ -1440,6 +1440,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   /* End of the file
    */
   dat->size = dat->byte;
+  LOG_INFO ("Final size: %u\n", (unsigned)dat->size);
 
   /* Write section addresses
    */
@@ -1454,10 +1455,16 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       bit_write_RL (dat, dwg->header.section[j].size);
       LOG_TRACE ("section[%u].number: %2d [RC]\n", j,
                  (int)dwg->header.section[j].number)
-      LOG_TRACE ("section[%u].offset: 0x%x [RLx]\n", j,
+      LOG_TRACE ("section[%u].offset: 0x%x [RLx] %u\n", j,
+                 (unsigned)dwg->header.section[j].address,
                  (unsigned)dwg->header.section[j].address)
       LOG_TRACE ("section[%u].size: %4d [RL]\n", j,
                  (int)dwg->header.section[j].size)
+      if (dwg->header.section[j].address + dwg->header.section[j].size > dat->size)
+        {
+          LOG_ERROR ("section[%u] address or size overflow", j);
+          return DWG_ERR_INVALIDDWG;
+        }
     }
 
   /* Write CRC's
