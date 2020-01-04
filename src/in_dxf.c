@@ -576,7 +576,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   dat->version = dat->from_version = dwg->header.version;
                   is_utf = dat->version >= R_2007;
                   LOG_TRACE ("HEADER.version = dat->version = %s\n", version);
-                  if (is_utf)
+                  if (is_utf && dwg->num_objects && dwg->object[0].fixedtype == DWG_TYPE_BLOCK_HEADER)
                     {
                       Dwg_Object_BLOCK_HEADER *_o = dwg->object[0].tio.object->tio.BLOCK_HEADER;
                       free (_o->name);
@@ -655,7 +655,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   // yes, set it 2-3 times
                   LOG_TRACE ("HEADER.%s [%s %d][%d] = %f\n", &field[1], f->type,
                              pair->code, i, pair->value.d);
-                  dwg_dynapi_header_set_value (dwg, &field[1], &pt, is_utf);
+                  dwg_dynapi_header_set_value (dwg, &field[1], &pt, 1);
                   i++;
                 }
             }
@@ -675,7 +675,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 {
                   BITCODE_H hdl = dwg_add_handleref (dwg, 5, 0, NULL);
                   LOG_TRACE ("HEADER.%s NULL 5 [H %d]\n", &field[1], pair->code);
-                  dwg_dynapi_header_set_value (dwg, &field[1], &hdl, is_utf);
+                  dwg_dynapi_header_set_value (dwg, &field[1], &hdl, 1);
                 }
             }
           else if (strEQc (f->type, "H"))
@@ -684,7 +684,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               hdl = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
               LOG_TRACE ("HEADER.%s %X [H %d]\n", &field[1], pair->value.u,
                          pair->code);
-              dwg_dynapi_header_set_value (dwg, &field[1], &hdl, is_utf);
+              dwg_dynapi_header_set_value (dwg, &field[1], &hdl, 1);
             }
           else if (strEQc (f->type, "CMC"))
             {
@@ -724,7 +724,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           else
             {
               LOG_TRACE ("HEADER.%s [%s %d]\n", &field[1], f->type, pair->code);
-              dwg_dynapi_header_set_value (dwg, &field[1], &pair->value, is_utf);
+              dwg_dynapi_header_set_value (dwg, &field[1], &pair->value, 1);
             }
         }
       else
@@ -3657,10 +3657,10 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
       LOG_ERROR ("Empty _obj at DXF TABLE %s nor %s_CONTROL", name, name);
       return pair;
     }
-  dwg_dynapi_entity_set_value (_obj, obj->name, "objid", &obj->index, is_utf);
+  dwg_dynapi_entity_set_value (_obj, obj->name, "objid", &obj->index, 1);
   xrefref = 1;
   if (dwg_dynapi_entity_field (obj->name, "xrefref"))
-    dwg_dynapi_entity_set_value (_obj, obj->name, "xrefref", &xrefref, is_utf);
+    dwg_dynapi_entity_set_value (_obj, obj->name, "xrefref", &xrefref, 1);
   // default xdic_missing_flag
   if (dwg->header.version >= R_2004)
     obj->tio.object->xdic_missing_flag = 1;
@@ -3739,7 +3739,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
               // can be -1
               BITCODE_BL num_entries = pair->value.i < 0 ? 0 : pair->value.i;
               dwg_dynapi_entity_set_value (_obj, obj->name, "num_entries",
-                                           &num_entries, is_utf);
+                                           &num_entries, 1);
               LOG_TRACE ("%s.num_entries = %u [BL 70]\n", ctrlname, num_entries);
               hdls = calloc (num_entries, sizeof (Dwg_Object_Ref *));
               dwg_dynapi_entity_set_value (_obj, obj->name, "entries", &hdls,
@@ -4692,7 +4692,7 @@ new_object (char *restrict name, char *restrict dxfname,
             Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             BITCODE_BL ctrl_id, BITCODE_BL i)
 {
-  int is_utf = dwg->header.version >= R_2007 ? 1 : 0;
+  const int is_utf = 1;
   Dwg_Object *obj;
   Dxf_Pair *pair = dxf_read_pair (dat);
   Dwg_Object_APPID *_obj = NULL; // the smallest
@@ -5040,7 +5040,7 @@ new_object (char *restrict name, char *restrict dxfname,
                 }
               else
                 {
-                  dwg_dynapi_common_set_value (_obj, "layer", &handle, is_utf);
+                  dwg_dynapi_common_set_value (_obj, "layer", &handle, 1);
                   LOG_TRACE ("%s.layer = %s " FORMAT_REF " [H 8]\n", name,
                              pair->value.s, ARGS_REF (handle));
                 }
@@ -5346,7 +5346,7 @@ new_object (char *restrict name, char *restrict dxfname,
           if (ctrl_id && pair->code == 2)
             {
               dwg_dynapi_entity_set_value (_obj, obj->name, "name",
-                                           &pair->value, is_utf);
+                                           &pair->value, 1);
               LOG_TRACE ("%s.name = %s [T 2]\n", name, pair->value.s);
               if (strEQc (name, "BLOCK_RECORD"))
                 {
@@ -5424,7 +5424,7 @@ new_object (char *restrict name, char *restrict dxfname,
           if (ctrl_id && pair->code == 70)
             {
               dwg_dynapi_entity_set_value (_obj, obj->name, "flag",
-                                           &pair->value, is_utf);
+                                           &pair->value, 1);
               LOG_TRACE ("%s.flag = %d [RC 70]\n", name, pair->value.i);
               break;
             }
@@ -5647,14 +5647,14 @@ new_object (char *restrict name, char *restrict dxfname,
               if (strEQc (subclass, "AcDbPlotSettings"))
                 {
                   dwg_dynapi_entity_set_value (_obj, obj->name, "page_setup_name",
-                                               &pair->value, is_utf);
+                                               &pair->value, 1);
                   LOG_TRACE ("%s.page_setup_name = %s [T 1]\n",
                              obj->name, pair->value.s);
                 }
               else if (strEQc (subclass, "AcDbLayout"))
                 {
                   dwg_dynapi_entity_set_value (_obj, obj->name, "layout_name",
-                                               &pair->value, is_utf);
+                                               &pair->value, 1);
                   LOG_TRACE ("%s.layout_name = %s [T 1]\n",
                              obj->name, pair->value.s);
                 }
@@ -6023,7 +6023,7 @@ new_object (char *restrict name, char *restrict dxfname,
                           else
                             {
                               dwg_dynapi_entity_set_value (
-                                  _obj, obj->name, f->name, &ref, is_utf);
+                                  _obj, obj->name, f->name, &ref, 1);
                               LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n",
                                          name, f->name, ARGS_REF (ref),
                                          pair->code);
@@ -6041,7 +6041,7 @@ new_object (char *restrict name, char *restrict dxfname,
                           //  goto next_pair;
                           pt.x = pair->value.d;
                           dwg_dynapi_entity_set_value (_obj, obj->name,
-                                                       f->name, &pt, is_utf);
+                                                       f->name, &pt, 1);
                           LOG_TRACE ("%s.%s.x = %f [%s %d]\n", name, f->name,
                                      pair->value.d, f->type, pair->code);
                           goto next_pair; // found
@@ -6082,12 +6082,12 @@ new_object (char *restrict name, char *restrict dxfname,
                                          f->name, pair->value.u, "CMC", pair->code);
                             }
                           dwg_dynapi_entity_set_value (
-                              _obj, obj->name, f->name, &color, is_utf);
+                              _obj, obj->name, f->name, &color, 1);
                           goto next_pair; // found, early exit
                         }
                       else
                         dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
-                                                     &pair->value, is_utf);
+                                                     &pair->value, 1);
                       if (f->is_string)
                         {
                           LOG_TRACE ("%s.%s = %s [%s %d]\n", name, f->name,
@@ -6119,7 +6119,7 @@ new_object (char *restrict name, char *restrict dxfname,
                                                NULL);
                       pt.y = pair->value.d;
                       dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
-                                                   &pt, is_utf);
+                                                   &pt, 1);
                       LOG_TRACE ("%s.%s.y = %f [%s %d]\n", name, f->name,
                                  pair->value.d, f->type, pair->code);
                       goto next_pair; // found, early exit
@@ -6343,7 +6343,7 @@ new_object (char *restrict name, char *restrict dxfname,
                       else
                         {
                           dwg_dynapi_common_set_value (_obj, f->name,
-                                                       &pair->value, is_utf);
+                                                       &pair->value, 1);
                           if (f->is_string)
                             {
                               LOG_TRACE ("COMMON.%s = %s [%s %d]\n", f->name,
