@@ -4211,7 +4211,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
       *jp = 0;
       _o->ctrl_pts
           = calloc (_o->num_ctrl_pts, sizeof (Dwg_SPLINE_control_point));
-      LOG_TRACE ("SPLINE.ctrl_pts = %d [BS 73]\n", _o->num_ctrl_pts);
+      LOG_TRACE ("SPLINE.num_ctrl_pts = %d [BS 73]\n", _o->num_ctrl_pts);
       return 1; // found
     }
   else if (pair->code == 74)
@@ -4220,6 +4220,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
       *jp = 0;
       _o->fit_pts = calloc (_o->num_fit_pts, sizeof (Dwg_SPLINE_point));
       _o->scenario = 2;
+      _o->flag |= 1024;
       LOG_TRACE ("SPLINE.num_fit_pts = %d [BS 74]\n", _o->num_fit_pts);
       return 1; // found
     }
