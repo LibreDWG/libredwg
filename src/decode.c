@@ -586,7 +586,8 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
     case SECTION_VPORT_ENTITY:
       if (tbl->number)
         {
-          LOG_WARN ("VPORT_ENTITY table");
+          LOG_WARN ("VPORT_ENTITY table ignored");
+          tbl->number = 0;
         }
       break;
 
