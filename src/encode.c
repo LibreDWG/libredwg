@@ -1204,6 +1204,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       obj = &dwg->object[index];
       // change the address to the linearly sorted one
       assert (dat->byte);
+      if (!obj->parent)
+        obj->parent = dwg;
       error |= dwg_encode_add_object (obj, dat, dat->byte);
 
 #ifndef NDEBUG
@@ -2009,14 +2011,16 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       error = dwg_encode_PROXY_OBJECT (dat, obj);
       break;
     default:
-      if (obj->type == obj->parent->layout_type
+      if (obj->parent
+          && obj->type == obj->parent->layout_type
           && obj->fixedtype == DWG_TYPE_LAYOUT)
         {
           error = dwg_encode_LAYOUT (dat, obj);
           (void)dwg_encode_get_class (obj->parent, obj);
         }
-      else if ((error = dwg_encode_variable_type (obj->parent, dat, obj))
-               & DWG_ERR_UNHANDLEDCLASS)
+      else if (obj->parent != NULL
+               && (error = dwg_encode_variable_type (obj->parent, dat, obj))
+                      & DWG_ERR_UNHANDLEDCLASS)
         {
           Dwg_Data *dwg = obj->parent;
           int is_entity;
