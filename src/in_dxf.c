@@ -4971,8 +4971,11 @@ new_object (char *restrict name, char *restrict dxfname,
           {
             obj->handle.value = pair->value.u;
             // check for existing BLOCK_HEADER.*Model_Space
-            if (obj->fixedtype == DWG_TYPE_BLOCK_HEADER &&
-                dwg->object[0].handle.value == pair->value.u)
+            if (obj->fixedtype == DWG_TYPE_BLOCK_HEADER
+                && dwg->object[0].handle.value == pair->value.u
+                && obj->tio.object->tio.BLOCK_HEADER
+                       != dwg->object[0].tio.object->tio.BLOCK_HEADER
+                && dwg->num_objects)
               {
                 dwg->num_objects--;
                 free (obj->tio.object->tio.BLOCK_HEADER);
