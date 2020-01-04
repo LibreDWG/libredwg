@@ -93,6 +93,7 @@ main (int argc, char *argv[])
   char *filename_in;
   const char *version = NULL;
   char *filename_out = NULL;
+  int free_fnout = 0;
   Dwg_Version_Type dwg_version;
   BITCODE_BL num_objects;
   int c;
@@ -210,11 +211,14 @@ main (int argc, char *argv[])
       if (argc > i + 1)
         filename_out = argv[i + 1];
       else
-        filename_out = suffix (filename_in, "-rewrite.dwg");
+        {
+          free_fnout = 1;
+          filename_out = suffix (filename_in, "-rewrite.dwg");
+        }
     }
   if (!filename_out || !strcmp (filename_in, filename_out))
     {
-      if (filename_out != argv[i + 1])
+      if (free_fnout)
         free (filename_out);
       return usage ();
     }
@@ -232,7 +236,7 @@ main (int argc, char *argv[])
       printf ("Read 0 objects\n");
       if (error >= DWG_ERR_CRITICAL)
         {
-          if (filename_out != argv[i + 1])
+          if (free_fnout)
             free (filename_out);
           return error;
         }
@@ -274,7 +278,7 @@ main (int argc, char *argv[])
           unlink (filename_out);
         else
           {
-            fprintf (stderr, "Not writable file or symlink: %s\n",
+            fprintf (stderr, "ERROR: Not writable file or symlink: %s\n",
                      filename_out);
             error |= DWG_ERR_IOERROR;
           }
@@ -285,7 +289,7 @@ main (int argc, char *argv[])
   if (error >= DWG_ERR_CRITICAL)
     {
       printf ("WRITE ERROR 0x%x\n", error);
-      if (filename_out != argv[i + 1])
+      if (free_fnout)
         free (filename_out);
       return error;
     }
@@ -303,7 +307,7 @@ main (int argc, char *argv[])
             (unsigned long)dwg.num_objects, (unsigned long)num_objects);
   dwg_free (&dwg);
 
-  if (filename_out != argv[i + 1])
+  if (free_fnout)
     free (filename_out);
   return error >= DWG_ERR_CRITICAL ? error : 0;
 }
