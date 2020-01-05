@@ -273,7 +273,7 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   dwg->opts = loglevel | DWG_OPTS_INDXF;
   memset (&dat, 0, sizeof (Bit_Chain));
   dat.size = attrib.st_size;
-  dat.chain = (unsigned char *)calloc (1, dat.size);
+  dat.chain = (unsigned char *)calloc (1, dat.size + 2);
   if (!dat.chain)
     {
       LOG_ERROR ("Not enough memory.\n")
@@ -298,6 +298,9 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
       return DWG_ERR_IOERROR;
     }
   fclose (fp);
+  // properly end the buffer for strtol()/... readers
+  dat.chain[size] = '\n';
+  dat.chain[size + 1] = '\0';
 
   /* Fail on DWG */
   if (!memcmp (dat.chain, "AC10", 4))
