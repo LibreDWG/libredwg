@@ -722,6 +722,7 @@ encode_patch_RLsize (Bit_Chain *dat, long unsigned int pvzadr)
  * 2010+ uses the 2004 format.
  * Returns a summary bitmask of all errors.
  */
+AFL_GCC_TOOBIG
 int
 dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 {
@@ -1502,6 +1503,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   return 0;
 }
+AFL_GCC_POP
 
 static int
 encode_preR13 (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
@@ -2485,6 +2487,7 @@ dwg_encode_object (Dwg_Object *restrict obj, Bit_Chain *hdl_dat, Bit_Chain *str_
   return error;
 }
 
+AFL_GCC_TOOBIG
 static int
 dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
                              Bit_Chain *str_dat, Dwg_Data *restrict dwg)
@@ -2509,6 +2512,7 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
   dat->from_version = old_from;
   return 0;
 }
+AFL_GCC_POP
 
 static int
 dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj, int size)

@@ -86,6 +86,21 @@
 #  define __has_feature(x) 0
 #endif
 
+/* */
+#if defined(__AFL_COMPILER) && defined(__clang__)
+#  define AFL_GCC_TOOBIG __attribute__((optnone))
+#  define AFL_GCC_POP
+#elif defined(__AFL_COMPILER) && defined(__GNUC__)
+#  define AFL_GCC_TOOBIG \
+    _Pragma ("GCC push_options") \
+    _Pragma ("GCC optimize (\"-fno-var-tracking-assignments\")")
+#  define AFL_GCC_POP \
+    _Pragma ("GCC pop_options")
+#else
+#  define AFL_GCC_TOOBIG
+#  define AFL_GCC_POP
+#endif
+
 /* The __nonnull function attribute marks pointer arguments which
    must not be NULL.  */
 #if (defined(__GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 303)

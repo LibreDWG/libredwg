@@ -1768,9 +1768,10 @@ dxf_codepage (int code, Dwg_Data *dwg)
     return "";
 }
 
-GCC30_DIAG_IGNORE (-Wformat-nonliteral)
 // see
 // https://www.autodesk.com/techpubs/autocad/acad2000/dxf/header_section_group_codes_dxf_02.htm
+GCC30_DIAG_IGNORE (-Wformat-nonliteral)
+AFL_GCC_TOOBIG
 static int
 dxf_header_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
@@ -1792,6 +1793,7 @@ dxf_header_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   return 0;
 }
+AFL_GCC_POP
 
 // only called since r2000. but not really needed, unless referenced
 static int
@@ -2284,6 +2286,7 @@ dxf_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
+AFL_GCC_TOOBIG
 int
 dwg_write_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
@@ -2340,6 +2343,7 @@ dwg_write_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 fail:
   return 1;
 }
+AFL_GCC_POP
 
 #undef IS_PRINT
 #undef IS_DXF

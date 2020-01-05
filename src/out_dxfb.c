@@ -1433,6 +1433,7 @@ dxfb_common_entity_handle_data (Bit_Chain *restrict dat,
 
 // see
 // https://www.autodesk.com/techpubs/autocad/acad2000/dxf/header_section_group_codes_dxf_02.htm
+AFL_GCC_TOOBIG
 static int
 dxfb_header_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
@@ -1458,6 +1459,7 @@ dxfb_header_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   return 0;
 }
+AFL_GCC_POP
 
 static int
 dxfb_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)

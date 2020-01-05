@@ -30,11 +30,13 @@
 #include "../src/common.h"
 #include "suffix.inc"
 
-static int opts = 1;
+// avoid the slow fork loop, for afl-clang-fast
+#ifdef __AFL_COMPILER
+static volatile char *__afl_persistent_sig = "##SIG_AFL_PERSISTENT##";
+#endif
 
+static int opts = 1;
 static int help (void);
-// int verbosity(int argc, char **argv, int i, unsigned int *opts);
-//#include "common.inc"
 
 static int
 usage (void)
@@ -200,6 +202,11 @@ main (int argc, char *argv[])
   memset (&dwg, 0, sizeof (Dwg_Data));
   dwg.opts = opts & 0xf;
 
+#ifdef __AFL_HAVE_MANUAL_CONTROL
+  __AFL_INIT();
+  while (__AFL_LOOP(1000)) {
+#endif
+
   filename_in = argv[i];
   if (!filename_in)
     {
@@ -306,6 +313,10 @@ main (int argc, char *argv[])
     printf ("re-READ num_objects: %lu, should be %lu\n",
             (unsigned long)dwg.num_objects, (unsigned long)num_objects);
   dwg_free (&dwg);
+
+#ifdef __AFL_HAVE_MANUAL_CONTROL
+  }
+#endif
 
   if (free_fnout)
     free (filename_out);

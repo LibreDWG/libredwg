@@ -639,6 +639,7 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   return 0;
 }
 
+AFL_GCC_TOOBIG
 static int
 decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
@@ -811,6 +812,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   return 0;
 }
+AFL_GCC_POP
 
 /* ODA 3.2.6 SECTION-LOCATOR RECORDS: p.21
    This is an ODA calculation mistake, it's not needed at all.
@@ -3945,6 +3947,7 @@ dwg_decode_handleref_with_code (Bit_Chain *restrict dat,
   return ref;
 }
 
+AFL_GCC_TOOBIG
 int
 dwg_decode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
                              Bit_Chain *str_dat, Dwg_Data *restrict dwg)
@@ -3959,6 +3962,7 @@ dwg_decode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
 
   return error;
 }
+AFL_GCC_POP
 
 static int
 dwg_decode_common_entity_handle_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
