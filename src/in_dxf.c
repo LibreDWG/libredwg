@@ -26,6 +26,7 @@
 #include <string.h>
 #include <assert.h>
 #include <limits.h>
+#include <errno.h>
 //#include <ctype.h>
 #include <math.h>
 // strings.h or string.h
@@ -81,7 +82,8 @@ dxf_skip_ws (Bit_Chain *dat)
           dat->chain[dat->byte] == '\t' ||
           dat->chain[dat->byte] == '\r');
        dat->byte++)
-    ;
+    if (dat->byte >= dat->size)
+      return;
   // clang-format on
 }
 
@@ -96,8 +98,15 @@ dxf_read_rs (Bit_Chain *dat)
   else
     {
       char *endptr;
-      long num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
+      long num;
+      if (dat->byte + 2 >= dat->size)
+        return (BITCODE_RS)-1;
+      num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
+      if (errno == ERANGE)
+        return (BITCODE_RS)num;
       dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
+      if (dat->byte + 1 >= dat->size)
+        return (BITCODE_RS)num;
       if (dat->chain[dat->byte] == '\r')
         dat->byte++;
       if (dat->chain[dat->byte] == '\n')
@@ -119,8 +128,15 @@ dxf_read_rl (Bit_Chain *dat)
   else
     {
       char *endptr;
-      long num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
+      long num;
+      if (dat->byte + 2 >= dat->size)
+        return (BITCODE_RL)-1;
+      num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
+      if (errno == ERANGE)
+        return (BITCODE_RL)num;
       dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
+      if (dat->byte + 1 >= dat->size)
+        return 0;
       if (dat->chain[dat->byte] == '\r')
         dat->byte++;
       if (dat->chain[dat->byte] == '\n')
@@ -142,8 +158,15 @@ dxf_read_rll (Bit_Chain *dat)
   else
     {
       char *endptr;
-      BITCODE_RLL num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
+      BITCODE_RLL num;
+      if (dat->byte + 2 >= dat->size)
+        return (BITCODE_RLL)-1;
+      num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
+      if (errno == ERANGE)
+        return (BITCODE_RLL)num;
       dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
+      if (dat->byte + 1 >= dat->size)
+        return 0L;
       if (dat->chain[dat->byte] == '\r')
         dat->byte++;
       if (dat->chain[dat->byte] == '\n')
@@ -167,8 +190,12 @@ dxf_read_rd (Bit_Chain *dat)
       char *str, *endptr;
       BITCODE_RD num;
       dxf_skip_ws (dat);
+      if (dat->byte + 2 >= dat->size)
+        return 0.0;
       str = (char *)&dat->chain[dat->byte];
       num = strtod (str, &endptr);
+      if (errno == ERANGE)
+        return 0.0;
       if (endptr)
         dat->byte += endptr - str;
       return num;
@@ -240,6 +267,7 @@ dxf_free_pair (Dxf_Pair *pair)
       pair->value.s = NULL;
     }
   free (pair);
+  pair = NULL;
 }
 
 static Dxf_Pair *ATTRIBUTE_MALLOC
@@ -247,9 +275,16 @@ dxf_read_pair (Bit_Chain *dat)
 {
   Dxf_Pair *pair = calloc (1, sizeof (Dxf_Pair));
   const int is_binary = dat->opts & DWG_OPTS_DXFB;
-  if (dat->size - dat->byte < 4) // at least 0\nEOF\n
-    return NULL;
+  if (dat->size - dat->byte < 6) // at least 0\nEOF\n
+    {
+    err:
+      LOG_ERROR ("Unexpected DXF end-of-file");
+      free (pair);
+      return NULL;
+    }
   pair->code = (short)dxf_read_rs (dat);
+  if (dat->size - dat->byte < 4) // at least EOF\n
+    goto err;
   pair->type = get_base_value_type (pair->code);
   switch (pair->type)
     {
@@ -312,6 +347,7 @@ dxf_read_pair (Bit_Chain *dat)
     {                                                                         \
       if (pair)                                                               \
         dxf_free_pair (pair);                                                 \
+      pair = NULL;                                                            \
       return 1;                                                               \
     }
 #define DXF_RETURN_EOF(what)                                                  \
@@ -320,6 +356,7 @@ dxf_read_pair (Bit_Chain *dat)
     {                                                                         \
       if (pair)                                                               \
         dxf_free_pair (pair);                                                 \
+      pair = NULL;                                                            \
       return what;                                                            \
     }
 #define DXF_BREAK_EOF                                                         \
@@ -7076,9 +7113,9 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   char name[80];
   Dxf_Pair *pair = dxf_read_pair (dat);
-  while (1)
+  while (pair != NULL)
     {
-      while (pair && pair->code == 0)
+      while (pair != NULL && pair->code == 0)
         {
           char *dxfname = strdup (pair->value.s);
           strncpy (name, dxfname, 79);
