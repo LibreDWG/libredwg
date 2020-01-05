@@ -1518,7 +1518,7 @@ dwg_find_table_control (Dwg_Data *restrict dwg, const char *restrict table)
   return NULL;
 }
 
-// Searching for a named dictionary entry.
+// Searching for a named dictionary entry, name is utf8.
 // Returning a hardpointer ref (5) to it, as stored in header_vars.
 // Usually another dictionary.
 EXPORT BITCODE_H
@@ -1534,12 +1534,15 @@ dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name)
           Dwg_Object_DICTIONARY *_obj = obj->tio.object->tio.DICTIONARY;
           for (BITCODE_BL j = 0; j < _obj->numitems; j++)
             {
-              char *u8 = _obj->texts[j];
+              char *u8;
+              if (!_obj->texts || !_obj->itemhandles)
+                continue;
+              u8 = _obj->texts[j];
               if (!u8)
                 continue;
               if (dwg->header.version >= R_2007)
                 u8 = bit_convert_TU ((BITCODE_TU)u8);
-              if (strEQ (u8, name))
+              if (u8 && strEQ (u8, name))
                 {
                   Dwg_Object_Ref *ref = _obj->itemhandles[j];
                   if (!ref)
@@ -1566,7 +1569,7 @@ dwg_find_dicthandle (Dwg_Data *restrict dwg, BITCODE_H dict, const char *restric
   Dwg_Object_DICTIONARY *_obj;
   Dwg_Object *obj = dwg_resolve_handle (dwg, dict->absolute_ref);
 
-  if (!obj)
+  if (!obj || !obj->tio.object)
     {
       LOG_TRACE ("dwg_find_dicthandle: Could not resolve dict " FORMAT_REF "\n",
                  ARGS_REF(dict));
@@ -1588,10 +1591,10 @@ dwg_find_dicthandle (Dwg_Data *restrict dwg, BITCODE_H dict, const char *restric
       Dwg_Object *hobj;
       Dwg_Object_APPID *_o; // just some random type
 
-      if (!hdlv[i])
+      if (!hdlv | !hdlv[i])
         continue;
       hobj = dwg_resolve_handle (dwg, hdlv[i]->absolute_ref);
-      if (!hobj)
+      if (!hobj || !hobj->tio.object || !hobj->tio.object->tio.APPID || !hobj->name)
         continue;
       _o = hobj->tio.object->tio.APPID;
       dwg_dynapi_entity_utf8text (_o, hobj->name, "name", &hdlname, NULL);
@@ -1630,7 +1633,7 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
                       const char *restrict table)
 {
   BITCODE_BL i, num_entries = 0;
-  BITCODE_H ctrl = NULL, *hdlv;
+  BITCODE_H ctrl = NULL, *hdlv = NULL;
   Dwg_Object *obj;
   Dwg_Object_APPID_CONTROL *_obj; // just some random generic type
   Dwg_Header_Variables *vars = &dwg->header_vars;
@@ -1811,6 +1814,8 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
   if (!num_entries)
     return 0;
   dwg_dynapi_entity_value (_obj, obj->name, "entries", &hdlv, NULL);
+  if (!hdlv)
+    return 0;
   for (i = 0; i < num_entries; i++)
     {
       char *hdlname;
