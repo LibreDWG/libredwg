@@ -11,6 +11,7 @@ api_process (dwg_object *obj)
   BITCODE_RC class_version, flag, flag1;
   BITCODE_BS lspace_style, attachment;
   char *user_text;
+  int isnew;
   dwg_point_2d text_midpt, pt12;
   dwg_point_3d def_pt, first_arc_pt, ext, ins_scale;
   BITCODE_H dimstyle, block;

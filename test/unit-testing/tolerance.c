@@ -8,6 +8,7 @@ api_process (dwg_object *obj)
   double height, dimgap;
   dwg_point_3d ins_pt, x_dir, ext, pt3d;
   char *text_string;
+  int isnew;
   BITCODE_BS unknown_short;
   BITCODE_H dimstyle;
 

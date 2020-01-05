@@ -1590,6 +1590,8 @@ dwg_find_dicthandle (Dwg_Data *restrict dwg, BITCODE_H dict, const char *restric
       BITCODE_H *hdlv = _obj->itemhandles;
       Dwg_Object *hobj;
       Dwg_Object_APPID *_o; // just some random type
+      int isnew = 0;
+      bool ok;
 
       if (!hdlv | !hdlv[i])
         continue;
@@ -1597,13 +1599,17 @@ dwg_find_dicthandle (Dwg_Data *restrict dwg, BITCODE_H dict, const char *restric
       if (!hobj || !hobj->tio.object || !hobj->tio.object->tio.APPID || !hobj->name)
         continue;
       _o = hobj->tio.object->tio.APPID;
-      dwg_dynapi_entity_utf8text (_o, hobj->name, "name", &hdlname, NULL);
+      ok = dwg_dynapi_entity_utf8text (_o, hobj->name, "name", &hdlname, &isnew, NULL);
       LOG_HANDLE (" %s.%s[%d] => %s.name: %s\n", obj->name, "entries", i,
                   hobj->name, hdlname ? hdlname : "NULL");
-      if (hdlname && (strEQ (name, hdlname) || !strcasecmp (name, hdlname)))
+      if (ok && hdlname && (strEQ (name, hdlname) || !strcasecmp (name, hdlname)))
         {
+          if (isnew)
+            free (hdlname);
           return hdlv[i];
         }
+      if (ok && isnew && hdlname)
+        free (hdlname);
     }
   return NULL;
 }
@@ -1821,6 +1827,7 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
       char *hdlname;
       Dwg_Object *hobj;
       Dwg_Object_APPID *_o;
+      int isnew = 0;
       bool ok;
 
       if (!hdlv[i])
@@ -1829,17 +1836,16 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
       if (!hobj || !hobj->tio.object || !hobj->tio.object->tio.APPID)
         continue;
       _o = hobj->tio.object->tio.APPID;
-      ok = dwg_dynapi_entity_utf8text (_o, hobj->name, "name", &hdlname, NULL);
+      ok = dwg_dynapi_entity_utf8text (_o, hobj->name, "name", &hdlname, &isnew, NULL);
       LOG_HANDLE (" %s.%s[%d] => %s.name: %s\n", obj->name, "entries", i,
                   hobj->name, hdlname ? hdlname : "NULL");
       if (ok && hdlname && (strEQ (name, hdlname) || !strcasecmp (name, hdlname)))
         {
-          // freeable if r2007 and not TF. I've checked, there are none, only T (as TV)
-          if (dwg->header.version >= R_2007)
+          if (isnew)
             free (hdlname);
           return hdlv[i];
         }
-      if (ok && dwg->header.version >= R_2007 && hdlname)
+      if (ok && isnew && hdlname)
         free (hdlname);
     }
 

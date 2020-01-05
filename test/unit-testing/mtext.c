@@ -11,6 +11,7 @@ api_process (dwg_object *obj)
   BITCODE_B unknown_bit, annotative, default_flag;
   BITCODE_BL bg_fill_flag, bg_fill_scale, bg_fill_trans, column_type;
   char *text;
+  int isnew;
   dwg_point_3d ins_pt, ext, x_axis_dir, pt3d;
   BITCODE_H appid, style;
 
@@ -18,7 +19,7 @@ api_process (dwg_object *obj)
   Dwg_Version_Type version = obj->parent->header.version;
 
   printf ("MTEXT.text: \"%s\"\n", mtext->text);
-  if (!dwg_dynapi_entity_utf8text (mtext, "MTEXT", "text", &text, NULL))
+  if (!dwg_dynapi_entity_utf8text (mtext, "MTEXT", "text", &text, &isnew, NULL))
     {
       fail ("dynapi for MTEXT.text");
     }
@@ -28,6 +29,8 @@ api_process (dwg_object *obj)
     }
   if (strcmp (dwg_ent_mtext_get_text (mtext, &error), mtext->text))
     fail ("old API dwg_ent_mtext_get_text");
+  if (isnew)
+    free (text);
   CHK_ENTITY_3RD_W_OLD (mtext, MTEXT, insertion_pt, ins_pt);
   CHK_ENTITY_3RD_W_OLD (mtext, MTEXT, extrusion, ext);
   CHK_ENTITY_3RD_W_OLD (mtext, MTEXT, x_axis_dir, x_axis_dir);

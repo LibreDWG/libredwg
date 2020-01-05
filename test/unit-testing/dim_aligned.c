@@ -14,6 +14,7 @@ api_process (dwg_object *obj)
   dwg_point_2d text_midpt, pt12, pt2d;
   dwg_point_3d pt10, pt13, pt14, ext, ins_scale, pt3d;
   BITCODE_H dimstyle, block;
+  int isnew;
 
   dwg_ent_dim_aligned *dim_aligned = dwg_object_to_DIMENSION_ALIGNED (obj);
   dwg_ent_dim *dim = dwg_object_to_DIMENSION (obj);

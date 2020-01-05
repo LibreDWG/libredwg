@@ -62,16 +62,16 @@ EXPORT bool dwg_dynapi_common_value (void *restrict _obj,
                                      Dwg_DYNAPI_field *restrict fp);
 EXPORT bool dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
                                         const char *restrict fieldname,
-                                        char **restrict textp,
+                                        char **restrict textp, int *isnew,
                                         Dwg_DYNAPI_field *restrict fp);
 EXPORT bool dwg_dynapi_entity_utf8text (void *restrict entity,
                                         const char *restrict name,
                                         const char *restrict fieldname,
-                                        char **restrict textp,
+                                        char **restrict textp, int *isnew,
                                         Dwg_DYNAPI_field *restrict fp);
 EXPORT bool dwg_dynapi_common_utf8text (void *restrict _obj,
                                         const char *restrict fieldname,
-                                        char **restrict textp,
+                                        char **restrict textp, int *isnew,
                                         Dwg_DYNAPI_field *restrict fp);
 EXPORT bool dwg_dynapi_header_set_value (const Dwg_Data *restrict dwg,
                                          const char *restrict fieldname,

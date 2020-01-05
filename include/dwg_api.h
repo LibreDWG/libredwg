@@ -127,9 +127,10 @@ EXPORT bool dwg_dynapi_common_value (void *restrict _obj,
                                      Dwg_DYNAPI_field *restrict fp)
   __nonnull ((1, 2, 3));
 // Converts T or TU wide-strings to utf-8. Only for text values
+// isnew is set to 1 if textp is freshly malloced (r2007+), otherwise 0
 EXPORT bool dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
                                         const char *restrict fieldname,
-                                        char **restrict textp,
+                                        char **restrict textp, int *isnewp,
                                         Dwg_DYNAPI_field *restrict fp)
   __nonnull ((1, 2, 3));
 /** Returns the ENTITY|OBJECT.fieldname text value in textp as utf-8.
@@ -140,16 +141,17 @@ EXPORT bool dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
    wchar value (which needs to be free'd), with older DWG's or with TV, TF or TFF
    returns the unconverted text value.
    Only valid for text fields.
+   isnew is set to 1 if textp is freshly malloced (r2007+), otherwise 0
 */
 EXPORT bool dwg_dynapi_entity_utf8text (void *restrict entity,
                                         const char *restrict name,
                                         const char *restrict fieldname,
-                                        char **restrict textp,
+                                        char **restrict textp, int *isnewp,
                                         Dwg_DYNAPI_field *restrict fp)
   __nonnull ((1, 2, 3, 4));
 EXPORT bool dwg_dynapi_common_utf8text (void *restrict _obj,
                                         const char *restrict fieldname,
-                                        char **restrict textp,
+                                        char **restrict textp, int *isnewp,
                                         Dwg_DYNAPI_field *restrict fp)
   __nonnull ((1, 2, 3));
 
@@ -956,7 +958,8 @@ EXPORT bool dwg_get_HEADER (const Dwg_Data *restrict dwg,
                             const char *restrict fieldname, void *restrict out)
     __nonnull ((1, 2, 3));
 EXPORT bool dwg_get_HEADER_utf8text (const Dwg_Data *restrict dwg,
-                            const char *restrict fieldname, char **restrict textp)
+                                     const char *restrict fieldname,
+                                     char **restrict textp, int *isnewp)
     __nonnull ((1, 2, 3));
 EXPORT bool dwg_set_HEADER (Dwg_Data *restrict dwg,
                             const char *restrict fieldname,
@@ -970,7 +973,7 @@ EXPORT bool dwg_get_ENTITY_common (Dwg_Object_Entity *restrict obj,
                                    void *restrict value) __nonnull ((1, 2, 3));
 EXPORT bool dwg_get_ENTITY_common_utf8text (Dwg_Object_Entity *restrict obj,
                                      const char *restrict fieldname,
-                                     char **restrict textp)
+                                     char **restrict textp, int *isnewp)
     __nonnull ((1, 2, 3));
 EXPORT bool dwg_get_OBJECT_common (Dwg_Object_Object *restrict obj,
                                    const char *restrict fieldname,
@@ -978,7 +981,7 @@ EXPORT bool dwg_get_OBJECT_common (Dwg_Object_Object *restrict obj,
     __nonnull ((1, 2, 3));
 EXPORT bool dwg_get_OBJECT_common_utf8text (Dwg_Object_Object *restrict obj,
                                             const char *restrict fieldname,
-                                            char **restrict textp)
+                                            char **restrict textp, int *isnewp)
     __nonnull ((1, 2, 3));
 EXPORT bool dwg_set_ENTITY_common (Dwg_Object_Entity *restrict obj,
                             const char *restrict fieldname,
@@ -1194,7 +1197,7 @@ EXPORT bool dwg_ent_set_STRING (void *restrict _obj,
     __nonnull ((1, 2, 3));
 
 EXPORT char *dwg_ent_get_UTF8 (const void *restrict _obj,
-                               const char *restrict fieldname)
+                               const char *restrict fieldname, int *isnewp)
     __nonnull ((1, 2));
 EXPORT bool dwg_ent_set_UTF8 (void *restrict _obj,
                               const char *restrict fieldname,

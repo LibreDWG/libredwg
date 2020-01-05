@@ -7797,8 +7797,11 @@ dwg_dynapi_entity_value (void *restrict _obj, const char *restrict name,
 EXPORT bool
 dwg_dynapi_entity_utf8text (void *restrict _obj, const char *restrict name,
                             const char *restrict fieldname,
-                            char **restrict out, Dwg_DYNAPI_field *restrict fp)
+                            char **restrict out, int *isnew,
+                            Dwg_DYNAPI_field *restrict fp)
 {
+  if (isnew)
+    *isnew = 0;
 #ifndef HAVE_NONNULL
   if (!_obj || !name || !fieldname || !out)
     return false;
@@ -7837,6 +7840,8 @@ dwg_dynapi_entity_utf8text (void *restrict _obj, const char *restrict name,
           if (!utf8) // some conversion error, invalid wchar (nyi)
             return false;
           *out = utf8;
+          if (isnew)
+            *isnew = 1;
         }
       else
         {
@@ -7880,9 +7885,11 @@ dwg_dynapi_header_value (const Dwg_Data *restrict dwg,
 EXPORT bool
 dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
                             const char *restrict fieldname,
-                            char **restrict out,
+                            char **restrict out, int *isnew,
                             Dwg_DYNAPI_field *restrict fp)
 {
+  if (isnew)
+    *isnew = 0;
 #ifndef HAVE_NONNULL
   if (!dwg || !fieldname || !out)
     return false;
@@ -7904,6 +7911,8 @@ dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
             if (!utf8) // some conversion error, invalid wchar (nyi)
               return false;
             *out = utf8;
+            if (isnew)
+              *isnew = 1;
           }
         else
           {
@@ -7976,8 +7985,10 @@ dwg_dynapi_common_value(void *restrict _obj, const char *restrict fieldname,
 
 EXPORT bool
 dwg_dynapi_common_utf8text(void *restrict _obj, const char *restrict fieldname,
-                           char **restrict out, Dwg_DYNAPI_field *restrict fp)
+                           char **restrict out, int *isnew, Dwg_DYNAPI_field *restrict fp)
 {
+  if (isnew)
+    *isnew = 0;
 #ifndef HAVE_NONNULL
   if (!_obj || !fieldname || !out)
     return false;
@@ -8033,6 +8044,8 @@ dwg_dynapi_common_utf8text(void *restrict _obj, const char *restrict fieldname,
             if (!utf8) // some conversion error, invalid wchar (nyi)
               return false;
             *out = utf8;
+            if (isnew)
+              *isnew = 1;
           }
         else
           {

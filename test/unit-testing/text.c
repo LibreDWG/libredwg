@@ -10,6 +10,7 @@ api_process (dwg_object *obj)
   BITCODE_BS generation, vert_align, horiz_align, bsvalue;
   BITCODE_RC dataflags, rcvalue;
   char *text_value;
+  int isnew;
   dwg_point_3d ext;
   dwg_point_2d pt2d, ins_pt, alignment_pt;
   BITCODE_H style;

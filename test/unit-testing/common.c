@@ -443,8 +443,8 @@ api_common_entity (dwg_object *obj)
   CHK_COMMON_TYPE (ent, num_eed, BL, num_eed);
 }
 
-#define CHK_ENTITY_UTF8TEXT(ent, name, field, value)                          \
-  if (dwg_dynapi_entity_utf8text (ent, #name, #field, &value, NULL))          \
+#define _CHK_ENTITY_UTF8TEXT(ent, name, field, value)                         \
+  if (dwg_dynapi_entity_utf8text (ent, #name, #field, &value, &isnew, NULL))  \
     ok (#name "." #field ":\t\"%s\"", value);                                 \
   else                                                                        \
     {                                                                         \
@@ -454,6 +454,11 @@ api_common_entity (dwg_object *obj)
       else                                                                    \
         fail (#name "." #field);                                              \
     }
+
+#define CHK_ENTITY_UTF8TEXT(ent, name, field, value)                          \
+  _CHK_ENTITY_UTF8TEXT (ent, name, field, value);                             \
+  if (isnew)                                                                  \
+    free (value)
 
 #define CHK_ENTITY_TYPE(ent, name, field, type, value)                        \
   if (!dwg_dynapi_entity_value (ent, #name, #field, &value, NULL))            \
@@ -539,13 +544,15 @@ api_common_entity (dwg_object *obj)
 #define DWGAPI_ENT_NAME(ent, field) _DWGAPI_ENT_NAME (ent, field)
 
 #define CHK_ENTITY_UTF8TEXT_W_OLD(ent, name, field, value)                    \
-  CHK_ENTITY_UTF8TEXT (ent, name, field, value);                              \
+  _CHK_ENTITY_UTF8TEXT (ent, name, field, value);                             \
   {                                                                           \
     Dwg_Version_Type _dwg_version = ent->parent->dwg->header.version;         \
     if (_dwg_version < R_2007 && ent->field                                   \
         && ((strcmp (DWGAPI_ENT_NAME (ent, field) (ent, &error), value)       \
              || error)))                                                      \
       fail ("old API dwg_ent_" #ent "_get_" #field ": \"%s\"", value);        \
+    if (isnew)                                                                \
+      free (value);                                                           \
   }
 
 #define CHK_ENTITY_TYPE_W_OLD(ent, name, field, type, value)                  \

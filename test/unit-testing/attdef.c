@@ -18,14 +18,11 @@ api_process (dwg_object *obj)
   BITCODE_H style, annotative_app;
   BITCODE_H mtext_handles;
   Dwg_Version_Type version = obj->parent->header.version;
+  int isnew;
 
   dwg_ent_attdef *attdef = dwg_object_to_ATTDEF (obj);
 
   CHK_ENTITY_UTF8TEXT_W_OLD (attdef, ATTDEF, default_value, text_value);
-  /*if (version < R_2007 &&
-      (strcmp (dwg_ent_attdef_get_default_value (attdef, &error), text_value)
-       || error))
-       fail ("old API dwg_ent_attdef_get_default_value"); */
   CHK_ENTITY_UTF8TEXT (attdef, ATTDEF, tag, text_value);
   CHK_ENTITY_UTF8TEXT (attdef, ATTDEF, prompt, text_value);
 

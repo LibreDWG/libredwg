@@ -86,7 +86,7 @@ help (void)
       exit (1);                                                               \
     }
 #define dynget_utf8(obj, name, field, var)                                    \
-  if (!dwg_dynapi_entity_utf8text (obj, "" name, "" field, var, NULL))        \
+  if (!dwg_dynapi_entity_utf8text (obj, "" name, "" field, var, &isnew, NULL)) \
     {                                                                         \
       fprintf (stderr, "ERROR: %s.%s", name, field);                          \
       exit (1);                                                               \
@@ -132,6 +132,7 @@ output_TEXT (dwg_object *obj)
   char *text_value;
   double fontsize;
   const Dwg_Version_Type dwg_version = obj->parent->header.version;
+  int isnew = 0;
 
   index = dwg_object_get_index (obj, &error);
   log_if_error ("object_get_index");
@@ -147,7 +148,7 @@ output_TEXT (dwg_object *obj)
           index, transform_X (ins_pt.x), transform_Y (ins_pt.y), fontsize,
           text_value);
 
-  if (text_value && dwg_version >= R_2007)
+  if (text_value && isnew)
     free (text_value);
 }
 

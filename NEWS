@@ -5,6 +5,8 @@ See the end for copying conditions.
 LibreDWG version 0.10 - released 2020/01/07 - beta:
 
 API breaking changes:
+  * added a new int *isnewp argument to all dynapi utf8text getters,
+    if the returned string is freshly malloced or not.
   * removed the UNKNOWN supertype, there are only UNKNOWN_OBJ and UNKNOWN_ENT
     left, with common_entity_data.
   * renamed SHAPE.shape_no to style_id

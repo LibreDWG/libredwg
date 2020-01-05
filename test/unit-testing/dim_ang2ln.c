@@ -14,6 +14,7 @@ api_process (dwg_object *obj)
   dwg_point_2d text_midpt, pt12, pt16, pt2d;
   dwg_point_3d pt10, pt13, pt14, first_arc_pt, ext, ins_scale, pt3d;
   BITCODE_H dimstyle, block;
+  int isnew;
 
   dwg_ent_dim_ang2ln *dim_ang2ln = dwg_object_to_DIMENSION_ANG2LN (obj);
   dwg_ent_dim *dim = dwg_object_to_DIMENSION (obj);

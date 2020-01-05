@@ -13,6 +13,7 @@ api_process (dwg_object *obj)
   dwg_point_3d ext, pt3d;
   dwg_point_2d ins_pt, alignment_pt, pt2d;
   BITCODE_H style;
+  int isnew;
 
   Dwg_Version_Type version = obj->parent->header.version;
   dwg_ent_attrib *attrib = dwg_object_to_ATTRIB (obj);

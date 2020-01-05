@@ -480,12 +480,12 @@ dwg_get_HEADER (const Dwg_Data *restrict dwg, const char *restrict fieldname,
 
 EXPORT bool
 dwg_get_HEADER_utf8text (const Dwg_Data *restrict dwg,
-                         const char *restrict fieldname, char **restrict textp)
+                         const char *restrict fieldname, char **restrict textp, int *isnewp)
 {
 #ifndef HAVE_NONNULL
   if (dwg && fieldname && out)
 #endif
-    return dwg_dynapi_header_utf8text (dwg, fieldname, textp, NULL);
+    return dwg_dynapi_header_utf8text (dwg, fieldname, textp, isnewp, NULL);
 #ifndef HAVE_NONNULL
   else
     return false;
@@ -582,12 +582,12 @@ dwg_set_OBJECT_common (Dwg_Object_Object *restrict obj,
 EXPORT bool
 dwg_get_ENTITY_common_utf8text (Dwg_Object_Entity *restrict obj,
                                 const char *restrict fieldname,
-                                char **restrict textp)
+                                char **restrict textp, int *isnewp)
 {
 #ifndef HAVE_NONNULL
   if (obj && fieldname && textp)
 #endif
-    return dwg_dynapi_common_value (obj, fieldname, textp, NULL);
+    return dwg_dynapi_common_utf8text (obj, fieldname, textp, isnewp, NULL);
 #ifndef HAVE_NONNULL
   else
     return false;
@@ -612,12 +612,12 @@ dwg_set_ENTITY_common_utf8text (Dwg_Object_Entity *restrict obj,
 EXPORT bool
 dwg_get_OBJECT_common_utf8text (Dwg_Object_Object *restrict obj,
                                 const char *restrict fieldname,
-                                char **restrict textp)
+                                char **restrict textp, int *isnewp)
 {
 #ifndef HAVE_NONNULL
   if (obj && fieldname && textp)
 #endif
-    return dwg_dynapi_common_value (obj, fieldname, textp, NULL);
+    return dwg_dynapi_common_utf8text (obj, fieldname, textp, isnewp, NULL);
 #ifndef HAVE_NONNULL
   else
     return false;
@@ -1040,8 +1040,10 @@ dwg_ent_get_STRING (const void *restrict _obj, const char *restrict fieldname)
 
 // convert string to UTF-8
 EXPORT char *
-dwg_ent_get_UTF8 (const void *restrict _obj, const char *restrict fieldname)
+dwg_ent_get_UTF8 (const void *restrict _obj, const char *restrict fieldname, int *isnewp)
 {
+  if (isnewp)
+    *isnewp = 0;
 #  ifndef HAVE_NONNULL
   if (!_obj || !fieldname)
     return NULL;
@@ -1055,7 +1057,7 @@ dwg_ent_get_UTF8 (const void *restrict _obj, const char *restrict fieldname)
       return NULL;
 
     if (!dwg_dynapi_entity_utf8text ((void *)_obj, obj->name, fieldname, &str,
-                                     &field))
+                                     isnewp, &field))
       return NULL;
     if (field.is_string || strEQc (field.type, "TF"))
       {
