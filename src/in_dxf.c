@@ -2640,6 +2640,7 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               LOG_ERROR (
                   "Unknown DXF code %d for MULTILEADER.leaders[].lines[%d]",
                   pair->code, i);
+              return pair;
             }
         }
     }
@@ -2759,6 +2760,7 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 }
               else
                 {
+                  assert (j >= 0);
                   lnode->breaks[j].start.y = pair->value.d;
                   LOG_TRACE (
                       "%s.ctx.leaders[%d].breaks[%d].start.y = %f [3BD %d]\n",
@@ -2775,6 +2777,7 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 }
               else
                 {
+                  assert (j >= 0);
                   lnode->breaks[j].start.z = pair->value.d;
                   LOG_TRACE (
                       "%s.ctx.leaders[%d].breaks[%d].start.z = %f [3BD %d]\n",
@@ -2782,16 +2785,19 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 }
               break;
             case 12:
+              assert (j >= 0);
               lnode->breaks[j].end.x = pair->value.d;
               LOG_TRACE ("%s.ctx.leaders[%d].breaks[%d].end.x = %f [3BD %d]\n",
                          obj->name, i, j, pair->value.d, pair->code);
               break;
             case 22:
+              assert (j >= 0);
               lnode->breaks[j].end.y = pair->value.d;
               LOG_TRACE ("%s.ctx.leaders[%d].breaks[%d].end.y = %f [3BD %d]\n",
                          obj->name, i, j, pair->value.d, pair->code);
               break;
             case 32:
+              assert (j >= 0);
               lnode->breaks[j].end.z = pair->value.d;
               LOG_TRACE ("%s.ctx.leaders[%d].breaks[%d].end.z = %f [3BD %d]\n",
                          obj->name, i, j, pair->value.d, pair->code);
@@ -2805,6 +2811,7 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             default:
               LOG_ERROR ("Unknown DXF code %d for MULTILEADER.leaders[]",
                          pair->code);
+              return pair;
             }
         }
     }
