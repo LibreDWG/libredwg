@@ -2,7 +2,7 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2019 Free Software Foundation, Inc.
 See the end for copying conditions.
 
-LibreDWG version 0.10 - released 2020/01/04 - beta:
+LibreDWG version 0.10 - released 2020/01/07 - beta:
 
 API breaking changes:
   * removed the UNKNOWN supertype, there are only UNKNOWN_OBJ and UNKNOWN_ENT
@@ -15,14 +15,17 @@ Major bugfixes:
     Set proper -I and -L paths, create LibreDWG.c not swig_perl.c
   * Harmonized INDXFB with INDXF, removed extra src/in_dxfb.c (#134).
     Slimmed the .so size by 260Kb. Still untested though.
+  * Fixed encoding of added r2000 AUXHEADER address (broken since 0.9)
 
 Minor bugfixes:
-  * Many fuzzing and static analyzer fixes for dwg2dxf, dxf2dwg, dwgrewrite
-    of various harmless categories, but also a stack-overflow on outdxf cquote.
-    (#172-174, #178).
-    indxf is pretty robust now, but still highly experimental, as many dxf2dwg
-    import and DWG validity tests are missing.
-  * Fixed most indxf leaks. (#151)
+  * Many fuzzing and static analyzer fixes for dwg2dxf, dxf2dwg, dwgrewrite,
+    including a stack-overflow on outdxf cquote. (#172-174, #178, #179).
+    dwgrewrite and indxf are pretty robust now, but still highly experimental,
+    as many dxf2dwg import and DWG validity tests are missing.
+    indxf still has many asserts on many structural DXF errors.
+  * Protect indxf from many NULL ptr, overflows and truncation.
+  * Fixed most indxf and encode leaks. (#151)
+  * More section decoders protections from invalid (fuzzed) values.
   * Stabilized the ASAN leak tests for make check.
   * Fix MULTILEADER.ctx.lline handles <r2010
   * Fix indxf color.alpha; at DXF 440
@@ -36,6 +39,7 @@ Other newsworthy changes:
   * Rename the ./dxf helper to ./dwg, and added a ./dxf test helper.
   * dxf2dwg got a new experimental --force-free option to check for leaks and
     UAF or double-free's.
+  * Allow -o /dev/null sinks for dxf2dwg and dwg2dxf, for faster fuzzing.
   * Harmonized *.spec formatting and adjusted gen-dynapi.pl
   * Harmonized out_dxfb with out_dxf, e.g. the new mspace improvements (#173).
 
