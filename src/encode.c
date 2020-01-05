@@ -34,6 +34,9 @@
 #include <stdint.h>
 #include <string.h>
 #include <assert.h>
+#ifdef HAVE_CTYPE_H
+#  include <ctype.h>
+#endif
 
 #include "common.h"
 #include "bits.h"
@@ -252,17 +255,38 @@ static bool env_var_checked_p;
 
 #define SUB_FIELD_CMC(o, nam, dxf1, dxf2) bit_write_CMC (dat, &_obj->o.nam)
 
+#define LOG_TF(level, var, len)                                               \
+  {                                                                           \
+    int _i;                                                                   \
+    for (_i = 0; _i < (len); _i++)                                            \
+      {                                                                       \
+        LOG (level, "%02x", (unsigned char)((char *)var)[_i]);                \
+      }                                                                       \
+    LOG (level, "\n");                                                        \
+    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)                                  \
+      {                                                                       \
+        for (_i = 0; _i < (len); _i++)                                        \
+          {                                                                   \
+            unsigned char c = ((unsigned char *)var)[_i];                     \
+            LOG_INSANE ("%-2c", isprint (c) ? c : ' ');                       \
+          }                                                                   \
+        LOG_INSANE ("\n");                                                    \
+      }                                                                       \
+  }
+#define LOG_TRACE_TF(var, len) LOG_TF (TRACE, var, len)
+#define LOG_INSANE_TF(var, len) LOG_TF (INSANE, var, len)
+
 #define FIELD_BE(nam, dxf)                                                    \
   bit_write_BE (dat, FIELD_VALUE (nam.x), FIELD_VALUE (nam.y),                \
                 FIELD_VALUE (nam.z));
 
-#define OVERFLOW_CHECK(nam, size)                                           \
+#define OVERFLOW_CHECK(nam, size)                                             \
     if ((long)(size) > 0xff00L || !_obj->nam)                                 \
       {                                                                       \
         LOG_ERROR ("Invalid " #nam " %ld", (long)size);                       \
         return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
       }
-#define OVERFLOW_CHECK_LV(nam, size)                                        \
+#define OVERFLOW_CHECK_LV(nam, size)                                          \
   if ((long)(size) > 0xff00L)                                                 \
       {                                                                       \
         LOG_ERROR ("Invalid " #nam " %ld, set to 0", (long)size);             \

@@ -19,6 +19,7 @@
  * modified by Denis Pruchkovsky
  */
 
+#include "config.h"
 #ifdef HAVE_CTYPE_H
 #  include <ctype.h>
 #endif
@@ -94,7 +95,7 @@
           char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
           if (s2)                                                             \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
               LOG_TRACE (strcat (s2, ": " FORMAT_##type " " #type "\n"),      \
                          rcount1, rcount2, _obj->nam)                         \
               GCC46_DIAG_RESTORE                                              \
@@ -103,7 +104,7 @@
             }                                                                 \
           else                                                                \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
               LOG_TRACE (strcat (s1, ": " FORMAT_##type " " #type "\n"),      \
                          rcount1, _obj->nam)                                  \
               GCC46_DIAG_RESTORE                                              \
@@ -133,6 +134,7 @@
   }
 #define LOG_TRACE_TF(var, len) LOG_TF (TRACE, var, len)
 #define LOG_INSANE_TF(var, len) LOG_TF (INSANE, var, len)
+
 #define FIELD_2PT_TRACE(nam, type, dxf)                                       \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
     {                                                                         \
@@ -142,7 +144,7 @@
           char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
           if (s2)                                                             \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
               LOG_TRACE (strcat (s2, ": (" FORMAT_BD ", " FORMAT_BD           \
                                      ") [" #type " %d]\n"),                   \
                          rcount1, rcount2, _obj->nam.x, _obj->nam.y, dxf)     \
@@ -152,7 +154,7 @@
             }                                                                 \
           else                                                                \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
               LOG_TRACE (strcat (s1, ": (" FORMAT_BD ", " FORMAT_BD           \
                                      ") [" #type " %d]\n"),                   \
                          rcount1, _obj->nam.x, _obj->nam.y, dxf)              \
@@ -604,10 +606,11 @@
           LOG_TRACE (#o "." #color ".rgb: 0x%06x [ENC.BL %d]\n",                     \
                      (unsigned)_obj->o.color.rgb, dxf2);                      \
         if (_obj->o.color.flag & 0x40 && _obj->o.color.handle)                \
-          LOG_TRACE (#o "." #color ".handle: %lX [ENC.H %d]\n",                      \
+          LOG_TRACE (#o "." #color ".handle: %lX [ENC.H %d]\n",               \
                      _obj->o.color.handle->handleref.value, dxf2 + 10);       \
       }                                                                       \
   }
+
 
 #undef DEBUG_POS
 #undef DEBUG_HERE

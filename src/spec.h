@@ -156,6 +156,10 @@
 #ifndef FIELD_BINARY
 #  define FIELD_BINARY(name, len, dxf) FIELD_TF (name, len, dxf)
 #endif
+#ifndef LOG_TRACE_TF
+#  define LOG_TRACE_TF(var, len)
+#  define LOG_INSANE_TF(var, len)
+#endif
 #ifndef SUBCLASS
 #  define SUBCLASS(text)
 #endif
@@ -170,10 +174,6 @@
     LOG_TRACE (#name ": (" FORMAT_BD ", " FORMAT_BD ", " FORMAT_BD            \
                      ") [" #type " %d]\n",                                    \
                _obj->name.x, _obj->name.y, _obj->name.z, dxf)
-#endif
-#ifndef LOG_TRACE_TF
-#  define LOG_TRACE_TF(var, len)
-#  define LOG_INSANE_TF(var, len)
 #endif
 #ifndef FIELD_ENC
 #  define FIELD_ENC(a, b, c) FIELD_CMC (a, b, c)
