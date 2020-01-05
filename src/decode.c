@@ -3191,13 +3191,12 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
       long unsigned int end, offset;
 
       LOG_TRACE ("EED[%u] size: " FORMAT_BS " [BS]\n", idx, size);
-      LOG_POS
+      //LOG_POS
       if (size > _obj->size || dat->byte == sav_byte)
         {
           LOG_ERROR ("Invalid EED size " FORMAT_BS " > %u", size, _obj->size);
           obj->num_eed = idx;
-          dwg_free_eed (_obj);
-          return DWG_ERR_INVALIDEED; /* may not continue */
+          return DWG_ERR_INVALIDEED;
         }
 
       obj->num_eed = idx + 1;
@@ -3226,7 +3225,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
         {
           LOG_TRACE ("EED[%u] handle: " FORMAT_H "\n", idx,
                      ARGS_H (obj->eed[idx].handle));
-          LOG_POS;
+          //LOG_POS;
           if (dat->byte >= dat->size)
             end = dat->byte;
           if (_obj->supertype == DWG_SUPERTYPE_OBJECT && _obj->dxfname
@@ -3261,17 +3260,15 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
 
       sav_byte = dat->byte;
       obj->eed[idx].raw = bit_read_TF (dat, size);
-      if (DWG_LOGLEVEL < DWG_LOGLEVEL_INSANE)
-        LOG_TRACE ("EED[0] raw: %d\n", size)
-      else
-        LOG_INSANE_TF (obj->eed[idx].raw, size);
+      LOG_TRACE ("EED[%u] raw: %d\n", idx, size);
+      LOG_INSANE_TF (obj->eed[idx].raw, size);
       dat->byte = sav_byte;
-      LOG_POS
+      //LOG_POS
 
       while (dat->byte < end)
         {
           obj->eed[idx].data = (Dwg_Eed_Data *)calloc (size + 8, 1);
-          //LOG_TRACE ("EED[%u] ", idx);
+          LOG_TRACE ("EED[%u] ", idx);
           error |= dwg_decode_eed_data (dat, obj->eed[idx].data, end, size);
           // overflow or no advance
           if (dat->byte >= dat->size || dat->byte == sav_byte)
@@ -3280,7 +3277,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
             {
               free (obj->eed[idx].data);
               LOG_HANDLE ("        invalid eed[%d]: skip\n", idx);
-              LOG_POS
+              //LOG_POS
               obj->eed[idx].data = NULL;
               obj->num_eed--;
               dat->byte = end; // skip eed
@@ -3292,8 +3289,8 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
               idx++;
               obj->num_eed = idx + 1;
               size = (long)(end - dat->byte + 1);
-              LOG_HANDLE ("        size remaining: %ld\n", (long)size);
-              LOG_POS
+              LOG_INSANE ("        size remaining: %ld\n", (long)size);
+              //LOG_POS
 
               obj->eed = (Dwg_Eed *)realloc (obj->eed,
                                              obj->num_eed * sizeof (Dwg_Eed));
@@ -3313,7 +3310,8 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
       idx++;
     }
   LOG_HANDLE ("EED[%u] size: " FORMAT_BS " [BS] (end)\n", idx, size);
-  LOG_POS
+  LOG_TRACE ("num_eed: " FORMAT_BL "\n", obj->num_eed);
+  //LOG_POS
   return error;
 }
 
