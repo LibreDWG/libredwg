@@ -3860,12 +3860,15 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
             {
               Dwg_Object_DIMSTYLE_CONTROL *_o
                   = (Dwg_Object_DIMSTYLE_CONTROL *)_obj;
-              if (!_o->num_morehandles)
+              if (!_o->num_morehandles || j < 0 || j >= _o->num_morehandles)
                 {
-                  LOG_ERROR ("Empty DIMSTYLE_CONTROL.num_morehandles")
+                  LOG_ERROR ("Invalid DIMSTYLE_CONTROL.num_morehandles %d or index %d",
+                             _o->num_morehandles, j)
                   break;
                 }
               assert (_o->morehandles);
+              assert (j >= 0);
+              assert (j < _o->num_morehandles);
               _o->morehandles[j]
                   = dwg_add_handleref (dwg, 4, pair->value.u, obj);
               LOG_TRACE ("%s.morehandles[%d] = " FORMAT_REF " [H 330]\n",
