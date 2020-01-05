@@ -1372,7 +1372,7 @@ ATTRIBUTE_MALLOC
 BITCODE_TF
 bit_read_TF (Bit_Chain *restrict dat, unsigned int length)
 {
-  BITCODE_RC *chain = malloc (length + 1);
+  BITCODE_RC *chain = calloc (length + 1, 1);
 
   bit_read_fixed (dat, chain, length);
   chain[length] = '\0';
