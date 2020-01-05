@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009-2019 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2009-2020 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -27,6 +27,7 @@
            \______/ \______/ \______/
             byte 1   byte 2   byte 3  ...
 \endcode
+(i.e. little endian)
  */
 
 #ifndef BITS_H
