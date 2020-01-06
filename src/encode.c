@@ -2540,11 +2540,15 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
 AFL_GCC_POP
 
 static int
-dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj, int size)
+dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj, int num_databytes)
 {
   Dwg_Resbuf *rbuf = obj->xdata;
   enum RES_BUF_VALUE_TYPE type;
-  int i, j = 0;
+  int i;
+  unsigned j = 0;
+  BITCODE_BL num_xdata = obj->num_xdata;
+  unsigned long start = dat->byte, end = start + num_databytes;
+  int error = 0;
 
   while (rbuf)
     {
@@ -2555,77 +2559,106 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj, int
         case VT_STRING:
           UNTIL (R_2007)
           {
+            if (dat->byte + 3 + rbuf->value.str.size > end)
+              break;
             bit_write_RS (dat, rbuf->value.str.size);
             bit_write_RC (dat, rbuf->value.str.codepage);
             if (rbuf->value.str.u.data)
               bit_write_TF (dat, rbuf->value.str.u.data, rbuf->value.str.size);
             else
               bit_write_TF (dat, (char*)"", 0);
-            LOG_TRACE ("xdata[%d]: \"%s\" [TF %d %d]\n", j,
+            LOG_TRACE ("xdata[%u]: \"%s\" [TF %d %d]\n", j,
                        rbuf->value.str.u.data, rbuf->value.str.size,
                        rbuf->type);
           }
           LATER_VERSIONS
           {
+            if (dat->byte + 2 + (2 * rbuf->value.str.size) > end)
+              break;
             bit_write_RS (dat, rbuf->value.str.size);
             for (i = 0; i < rbuf->value.str.size; i++)
               bit_write_RS (dat, rbuf->value.str.u.wdata[i]);
           }
           break;
         case VT_REAL:
+          if (dat->byte + 8 > end)
+            break;
           bit_write_RD (dat, rbuf->value.dbl);
-          LOG_TRACE ("xdata[%d]: %f [RD %d]\n", j, rbuf->value.dbl,
+          LOG_TRACE ("xdata[%u]: %f [RD %d]\n", j, rbuf->value.dbl,
                      rbuf->type);
           break;
         case VT_BOOL:
         case VT_INT8:
           bit_write_RC (dat, rbuf->value.i8);
-          LOG_TRACE ("xdata[%d]: %d [RC %d]\n", j, (int)rbuf->value.i8,
+          LOG_TRACE ("xdata[%u]: %d [RC %d]\n", j, (int)rbuf->value.i8,
                      rbuf->type);
           break;
         case VT_INT16:
+          if (dat->byte + 2 > end)
+            break;
           bit_write_RS (dat, rbuf->value.i16);
-          LOG_TRACE ("xdata[%d]: %d [RS %d]\n", j, (int)rbuf->value.i16,
+          LOG_TRACE ("xdata[%u]: %d [RS %d]\n", j, (int)rbuf->value.i16,
                      rbuf->type);
           break;
         case VT_INT32:
+          if (dat->byte + 4 > end)
+            break;
           bit_write_RL (dat, rbuf->value.i32);
           LOG_TRACE ("xdata[%d]: %ld [RL %d]\n", j, (long)rbuf->value.i32,
                      rbuf->type);
           break;
         case VT_INT64:
+          if (dat->byte + 8 > end)
+            break;
           bit_write_BLL (dat, rbuf->value.i64);
-          LOG_TRACE ("xdata[%d]: " FORMAT_BLL " [BLL %d]\n", j,
+          LOG_TRACE ("xdata[%u]: " FORMAT_BLL " [BLL %d]\n", j,
                      rbuf->value.i64, rbuf->type);
           break;
         case VT_POINT3D:
+          if (dat->byte + 24 > end)
+            break;
           bit_write_RD (dat, rbuf->value.pt[0]);
           bit_write_RD (dat, rbuf->value.pt[1]);
           bit_write_RD (dat, rbuf->value.pt[2]);
-          LOG_TRACE ("xdata[%d]: (%f,%f,%f) [3RD %d]\n", j, rbuf->value.pt[0],
+          LOG_TRACE ("xdata[%u]: (%f,%f,%f) [3RD %d]\n", j, rbuf->value.pt[0],
                      rbuf->value.pt[1], rbuf->value.pt[2], rbuf->type);
           break;
         case VT_BINARY:
+          if (dat->byte + rbuf->value.str.size > end)
+            break;
           bit_write_RC (dat, rbuf->value.str.size);
           bit_write_TF (dat, rbuf->value.str.u.data, rbuf->value.str.size);
-          LOG_TRACE ("xdata[%d]: [TF %d %d] ", j, rbuf->value.str.size,
+          LOG_TRACE ("xdata[%u]: [TF %d %d] ", j, rbuf->value.str.size,
                      rbuf->type);
           LOG_TRACE_TF (rbuf->value.str.u.data, rbuf->value.str.size);
           break;
         case VT_HANDLE:
         case VT_OBJECTID:
+          if (dat->byte + 8 > end)
+            break;
           for (i = 0; i < 8; i++)
             bit_write_RC (dat, rbuf->value.hdl[i]);
-          LOG_TRACE ("xdata[%d]: " FORMAT_H " [H %d]\n", j,
+          LOG_TRACE ("xdata[%u]: " FORMAT_H " [H %d]\n", j,
                      ARGS_H (rbuf->value.h), rbuf->type);
           break;
         case VT_INVALID:
         default:
-          LOG_ERROR ("Invalid group code in xdata: %d", rbuf->type)
-          return DWG_ERR_INVALIDEED;
+          LOG_ERROR ("Invalid group code in xdata: %d", rbuf->type);
+          error = DWG_ERR_INVALIDEED;
+          break;
         }
       rbuf = rbuf->next;
+      if (j > obj->num_xdata)
+        break;
+      if (dat->byte - start >= (unsigned long)num_databytes)
+        break;
       j++;
+    }
+  if (obj->num_databytes != dat->byte - start)
+    {
+      LOG_WARN ("xdata Written %lu, expected %d", dat->byte - start, obj->num_databytes);
+      obj->num_databytes = dat->byte - start;
+      return error ? error : 1;
     }
   return 0;
 }
