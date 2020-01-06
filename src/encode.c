@@ -2257,8 +2257,7 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   unsigned long off = obj->address;
 
-#define LOG_POS
-  // LOG_INSANE (" @%lu.%u\n", dat->byte - off, dat->bit)
+#define LOG_POS LOG_INSANE (" @%lu.%u\n", dat->byte - off, dat->bit)
 
   int i, num_eed = obj->tio.object->num_eed;
   for (i = 0; i < num_eed; i++)
@@ -2278,6 +2277,7 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
             {
               LOG_TRACE ("EED[%d] raw [TF %d]\n", i, size);
               bit_write_TF (dat, eed->raw, size);
+              LOG_INSANE_TF (eed->raw, size);
             }
         }
       if (!eed->raw && eed->data) // indxf
@@ -2289,6 +2289,7 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   bit_write_BS (dat, 0);
   if (i)
     LOG_TRACE ("EED[%d] size: 0 [BS] (end)\n", i);
+  LOG_TRACE ("num_eed: %d\n", num_eed);
   LOG_POS
 #undef LOG_POS
     return 0;

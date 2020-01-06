@@ -2,7 +2,7 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2020 Free Software Foundation, Inc.
 See the end for copying conditions.
 
-LibreDWG version 0.10 - released 2020/01/07 - beta:
+LibreDWG version 0.10 - released 2020/01/08 - beta:
 
 API breaking changes:
   * added a new int *isnewp argument to all dynapi utf8text getters,
