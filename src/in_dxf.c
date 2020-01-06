@@ -1019,14 +1019,15 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           dxf_free_pair (pair);
           pair = dxf_read_pair (dat);
           if (!pair)
-            {
-              pair = dxf_read_pair (dat);
-              if (!pair)
-                return 1;
-            }
+            return 1;
+        }
+      else
+        {
+          LOG_ERROR ("2 CLASSES must be followed by 0 CLASS")
+          return 1;
         }
       klass->number = 500 + i;
-      while (pair->code != 0)
+      while (pair != NULL && pair->code != 0)
         { // read until next 0 CLASS
           switch (pair->code)
             {
