@@ -1571,7 +1571,7 @@ read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl,
 
   error = read_data_section (&obj_dat, dat, sections_map, pages_map,
                              SECTION_OBJECTS);
-  if (error >= DWG_ERR_CRITICAL)
+  if (error >= DWG_ERR_CRITICAL || !obj_dat.chain)
     {
       LOG_ERROR ("Failed to read objects section");
       if (obj_dat.chain)
@@ -1582,7 +1582,7 @@ read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl,
   LOG_TRACE ("\nHandles\n-------------------\n")
   error = read_data_section (&hdl_dat, dat, sections_map, pages_map,
                              SECTION_HANDLES);
-  if (error >= DWG_ERR_CRITICAL)
+  if (error >= DWG_ERR_CRITICAL|| !hdl_dat.chain)
     {
       LOG_ERROR ("Failed to read handles section");
       if (obj_dat.chain)
@@ -1686,7 +1686,7 @@ read_2007_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   old_dat = *dat;
   error = read_data_section (&obj_dat, dat, sections_map, pages_map,
                              SECTION_SUMMARYINFO);
-  if (error >= DWG_ERR_CRITICAL)
+  if (error >= DWG_ERR_CRITICAL || !obj_dat.chain)
     {
       LOG_ERROR ("Failed to read SummaryInfo section");
       if (obj_dat.chain)
