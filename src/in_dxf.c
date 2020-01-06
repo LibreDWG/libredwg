@@ -6546,12 +6546,28 @@ new_object (char *restrict name, char *restrict dxfname,
                                && obj->fixedtype > DWG_TYPE_LAYOUT
                                && strEQc (subclass, "AcDbEntity"))
                         {
-                          // This would corrupt the previous preview chain, don't append
-                          LOG_ERROR ("Skip duplicate/interrupted %s.preview", obj->name)
+                          // This would corrupt the previous preview chain,
+                          // don't append
+                          LOG_ERROR ("Skip duplicate/interrupted %s.preview",
+                                     obj->name)
+                          goto next_pair;
                         }
                       else
                         {
-                          //TODO: check if writing twice is allowed
+                          // Don't write a ptr twice. This will fuckup the num_
+                          // counter. Just add to 310 preview, when prefixed by 92
+                          if (f->is_malloc || f->is_string)
+                            {
+                              char *ptr = NULL;
+                              if (dwg_dynapi_common_value (_obj, f->name, &ptr,
+                                                           NULL)
+                                  && ptr != NULL)
+                                {
+                                  LOG_ERROR ("Skip duplicate %s.%s [%s %d]", obj->name,
+                                             f->name, f->type, pair->code)
+                                  goto next_pair;
+                                }
+                            }
                           dwg_dynapi_common_set_value (_obj, f->name,
                                                        &pair->value, 1);
                           if (f->is_string)
@@ -6579,10 +6595,11 @@ new_object (char *restrict name, char *restrict dxfname,
                 }
               // still needed? already handled above
               // not in dynapi: 92 as 310 size prefix for PROXY vector preview
-              // data
               if ((pair->code == 92) && is_entity
                   && obj->fixedtype > DWG_TYPE_LAYOUT
-                  && strEQc (subclass, "AcDbEntity"))
+                  && (strEQc (subclass, "AcDbEntity")
+                      || strEQc (subclass, "AcDbProxyEntity")
+                      || strstr (subclass, "Surface")))
                 /*
                   (obj->fixedtype == DWG_TYPE_WIPEOUT ||
                    obj->fixedtype == DWG_TYPE_MESH ||
@@ -6631,10 +6648,15 @@ new_object (char *restrict name, char *restrict dxfname,
                        && (pair->code == 10 || pair->code == 20
                            || pair->code == 30))
                 ; // ignore the POLYLINE_PFACE flag 70
-              else if (strEQc (name, "POLYLINE_PFACE") && pair->code == 70)
+              else if (pair->code == 70 && strEQc (name, "POLYLINE_PFACE"))
                 ;
-              else if (strEQc (name, "POLYLINE_3D") && pair->code == 30)
+              else if (pair->code == 30 && strEQc (name, "POLYLINE_3D"))
                 ;
+              else if (obj->fixedtype == DWG_TYPE_PROXY_ENTITY && pair->code == 92)
+                {
+                  pair = add_ent_preview (obj, dat, pair);
+                  goto start_loop;
+                }
               else
                 LOG_WARN ("Unknown DXF code %d for %s", pair->code, name);
             }
