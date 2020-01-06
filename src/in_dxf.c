@@ -6537,8 +6537,17 @@ new_object (char *restrict name, char *restrict dxfname,
                             }
                           goto next_pair; // found, early exit
                         }
+                      else if (pair->code == 310 && is_entity
+                               && obj->tio.entity->preview_size
+                               && obj->fixedtype > DWG_TYPE_LAYOUT
+                               && strEQc (subclass, "AcDbEntity"))
+                        {
+                          // This would corrupt the previous preview chain, don't append
+                          LOG_WARN ("Skip duplicate/interrupted %s.preview", obj->name)
+                        }
                       else
                         {
+                          //TODO: check if writing twice is allowed
                           dwg_dynapi_common_set_value (_obj, f->name,
                                                        &pair->value, 1);
                           if (f->is_string)
