@@ -34,7 +34,7 @@ for d in "$@"; do
         log=`basename "$d" .dxf`$dir.dxf.log
         dwg=`basename "$d" .dxf`$dir.dwg
         echo programs/dxf2dwg $y $v -o "$dwg" "$d" 2\>$log
-        @TIMEOUT_10@ @LTEXEC@ programs/dxf2dwg $y $v -o "$dwg" "$d" 2>$log
+        @TIMEOUT_30@ @LTEXEC@ programs/dxf2dwg $y $v -o "$dwg" "$d" 2>$log
         ;;
     esac
 done
