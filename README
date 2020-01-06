@@ -81,12 +81,24 @@ customize the installation dirs.  Other options recognized by configure are:
     Most tools do support an --verbosity|-v flag instead.
 
   --disable-write
-  
+
     Disable DWG write support (default: no). When enabled, you activate the write
     support for the DWG format.
     This is an experimental feature. Rewriting most DWG's to the r2000 format
     usually works fine, DWG versions since r2004 are not yet supported, and the
     API usage is very rough so far.
+
+  --disable-bindings
+
+    Disable SWIG bindings for python and perl5.
+
+  --disable-dxf
+
+    Disables all in and out modules: DXF, DXFB, JSON, GeoJSON.
+
+  --enable-debug
+
+    Activates support for unstable classes. For testing only.
 
 == Windows ==
 
@@ -117,10 +129,10 @@ The programs and examples directories contains some application code that uses o
 * dwg2dxf -- Converts a DWG to a DXF (ascii or binary, minimal or full), optionally
   under a different version. About 80% coverage.
 
-* dxf2dwg -- Converts a ascii or binary DXF to a DWG, optionally
-  under a different version. Under construction.
+* dxf2dwg -- Converts a ascii or binary DXF to a DWG (r2000 only so far).
+  About 80% coverage.
 
-* dwglayers -- Prints the list of layers in a DWG
+* dwglayers -- Prints the list of layers in a DWG. Optionally with --extnames
 
 * dwggrep -- Searches DWG files for a text string, via regular expressions.
 
@@ -132,7 +144,8 @@ The programs and examples directories contains some application code that uses o
   file.  SVG is a W3C standard for 2d vector graphics.  You can open these
   files on several free software tools.  We recommend Inkscape, a free software
   vector graphics editor.  The dwg2SVG program will not handle 3d content
-  from DWG since SVG only supports 2-dimensional images.
+  from DWG since SVG only supports 2-dimensional images. Handles only some
+  entities.
 
 * dwgbmp -- Extracts the bmp thumbnail of a dwg file when it is available.
 
@@ -146,7 +159,7 @@ The programs and examples directories contains some application code that uses o
   features is in the test/xmlsuite directory. It also features code to output entities
   in XML, but does not use the python bindings.
 
-Copyright (C) 2009, 2010, 2015, 2018, 2019 Free Software Foundation, Inc.
+Copyright (C) 2009, 2010, 2015, 2018-2020 Free Software Foundation, Inc.
 
 This library is free software, licensed under the terms of the GNU
 General Public License as published by the Free Software Foundation,
