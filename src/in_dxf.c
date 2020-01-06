@@ -6543,7 +6543,7 @@ new_object (char *restrict name, char *restrict dxfname,
                                && strEQc (subclass, "AcDbEntity"))
                         {
                           // This would corrupt the previous preview chain, don't append
-                          LOG_WARN ("Skip duplicate/interrupted %s.preview", obj->name)
+                          LOG_ERROR ("Skip duplicate/interrupted %s.preview", obj->name)
                         }
                       else
                         {

@@ -157,7 +157,7 @@ typedef BITCODE_DOUBLE BITCODE_RD;
 typedef uint64_t BITCODE_RLL;
 typedef uint64_t BITCODE_BLL;
 #define FORMAT_RLL "0x%" PRIx64
-#define FORMAT_BLL "0x%" PRIx64
+#define FORMAT_BLL "%" PRIu64
 #ifndef HAVE_NATIVE_WCHAR2
   typedef BITCODE_RS dwg_wchar_t;
 # define DWGCHAR dwg_wchar_t

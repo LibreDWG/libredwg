@@ -1358,9 +1358,17 @@ bit_read_fixed (Bit_Chain *restrict dat, BITCODE_RC *restrict dest,
                  dat->byte, dat->size)
       return;
     }
-  for (unsigned int i = 0; i < length; i++)
+  if (dat->bit == 0)
     {
-      dest[i] = bit_read_RC (dat);
+      memcpy (dest, &dat->chain[dat->byte], length);
+      dat->byte += length;
+    }
+  else
+    {
+      for (unsigned int i = 0; i < length; i++)
+        {
+          dest[i] = bit_read_RC (dat);
+        }
     }
 }
 
@@ -1385,9 +1393,16 @@ bit_read_TF (Bit_Chain *restrict dat, unsigned int length)
 void
 bit_write_TF (Bit_Chain *restrict dat, BITCODE_TF restrict chain, unsigned int length)
 {
-  unsigned int i;
-  for (i = 0; i < length; i++)
-    bit_write_RC (dat, (BITCODE_RC)chain[i]);
+  if (dat->bit == 0 && dat->byte + length < dat->size)
+    {
+      memcpy (&dat->chain[dat->byte], chain, length);
+      dat->byte += length;
+    }
+  else
+    {
+      for (unsigned int i = 0; i < length; i++)
+        bit_write_RC (dat, (BITCODE_RC)chain[i]);
+    }
 }
 
 /** Read simple text. After usage, the allocated memory must be properly freed.
