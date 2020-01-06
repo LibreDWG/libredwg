@@ -115,9 +115,10 @@ dxf_read_rs (Bit_Chain *dat)
       if (dat->byte + 2 >= dat->size)
         return (BITCODE_RS)-1;
       num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
+      if (endptr)
+        dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
       if (errno == ERANGE)
         return (BITCODE_RS)num;
-      dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
       if (dat->byte + 1 >= dat->size)
         return (BITCODE_RS)num;
       if (dat->chain[dat->byte] == '\r')
@@ -145,9 +146,10 @@ dxf_read_rl (Bit_Chain *dat)
       if (dat->byte + 2 >= dat->size)
         return (BITCODE_RL)-1;
       num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
+      if (endptr)
+        dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
       if (errno == ERANGE)
         return (BITCODE_RL)num;
-      dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
       if (dat->byte + 1 >= dat->size)
         return 0;
       if (dat->chain[dat->byte] == '\r')
@@ -175,9 +177,10 @@ dxf_read_rll (Bit_Chain *dat)
       if (dat->byte + 2 >= dat->size)
         return (BITCODE_RLL)-1;
       num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
+      if (endptr)
+        dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
       if (errno == ERANGE)
         return (BITCODE_RLL)num;
-      dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
       if (dat->byte + 1 >= dat->size)
         return 0L;
       if (dat->chain[dat->byte] == '\r')
