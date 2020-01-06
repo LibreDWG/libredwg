@@ -1014,7 +1014,7 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           LOG_ERROR ("Out of memory");
           return DWG_ERR_OUTOFMEM;
         }
-
+    restart:
       klass = &dwg->dwg_class[i];
       memset (klass, 0, sizeof (Dwg_Class));
       if (pair != NULL && pair->code == 0 && strEQc (pair->value.s, "CLASS"))
@@ -1027,7 +1027,7 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       else
         {
           LOG_ERROR ("2 CLASSES must be followed by 0 CLASS")
-          return 1;
+          pair = dxf_read_pair (dat);
         }
       klass->number = 500 + i;
       while (pair != NULL && pair->code != 0)
@@ -1098,8 +1098,16 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 return 1;
             }
         }
-      dwg->num_classes++;
-      DXF_RETURN_ENDSEC (0) // next class or ENDSEC
+      if (klass->dxfname && klass->cppname && klass->appname && klass->item_class_id)
+        {
+          dwg->num_classes++;
+          DXF_RETURN_ENDSEC (0)
+        }
+      else
+        {
+          DXF_RETURN_ENDSEC (0);
+          goto restart; // without alloc
+        }
     }
   dxf_free_pair (pair);
   return 0;
