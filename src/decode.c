@@ -2312,8 +2312,9 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       LOG_INSANE ("bytes_left:               %ld\n", bytes_left);
 
       // check if compressed at all
-      if (info->compressed == 2 && bytes_left > 0 && bytes_left < UINT32_MAX
-          && (i * info->max_decomp_size) < max_decomp_size)
+      if (info->compressed == 2
+          && bytes_left > 0
+          && (i * info->max_decomp_size) <= max_decomp_size)
         {
           error = decompress_R2004_section (
               dat, &decomp[i * info->max_decomp_size], // offset
@@ -2329,7 +2330,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       else
         {
           if (info->compressed == 2
-              || !(info->size <= max_decomp_size)
+              || info->size > max_decomp_size
               || !((unsigned long)(address + es.fields.address + 32
                                    + info->size)
                    <= dat->size))
