@@ -5191,14 +5191,15 @@ new_object (char *restrict name, char *restrict dxfname,
                   i = 0;
                 dwg_dynapi_entity_value (_ctrl, ctrlname, "num_entries",
                                          &num_entries, NULL);
-                if (num_entries <= i)
+                if (num_entries != i + 1)
                   {
                     // DXF often lies about num_entries, skipping defaults
                     // e.g. BLOCK_CONTROL contains mspace+pspace in DXF, but in
                     // the DWG they are extra. But this is fixed at case 2, not here.
                     LOG_WARN ("Misleading %s.num_entries %d for %dth entry",
-                              ctrlname, num_entries, i + 1);
-                    num_entries = i + 1;
+                              ctrlname, num_entries, i);
+                    i = num_entries;
+                    num_entries++;
                     dwg_dynapi_entity_set_value (
                         _ctrl, ctrlname, "num_entries", &num_entries, 0);
                     LOG_TRACE ("%s.num_entries = %d [BL 70]\n", ctrlname,
