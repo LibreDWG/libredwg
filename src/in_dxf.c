@@ -607,7 +607,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // read the first group 9, $field pair
   pair = dxf_read_pair (dat);
 
-  while (pair->code == 9)
+  while (pair != NULL && pair->code == 9)
     {
       char field[80];
       strncpy (field, pair->value.s, 79);
@@ -655,14 +655,14 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           const Dwg_DYNAPI_field *f = dwg_dynapi_header_field (&field[1]);
           if (!f)
             {
-              if (strEQc (field, "$3DDWFPREC"))
+              if (pair->code == 40 && strEQc (field, "$3DDWFPREC"))
                 {
                   LOG_TRACE ("HEADER.%s [%s %d]\n", &field[1], "BD", pair->code);
                   dwg->header_vars._3DDWFPREC = pair->value.d;
                 }
 
 #define SUMMARY_T(name)                                                       \
-  (strEQc (field, "$" #name) && pair->value.s != NULL)                        \
+  (pair->code == 1 && strEQc (field, "$" #name) && pair->value.s != NULL)     \
   {                                                                           \
     LOG_TRACE ("SUMMARY.%s = %s [T 1]\n", &field[1], pair->value.s);          \
     if (dwg->header.version >= R_2007)                                        \
