@@ -1625,7 +1625,11 @@ dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj)
               const char *alias = dxf_encode_alias (obj->dxfname);
               if (alias && klass->dxfname && strEQ (alias, klass->dxfname))
                 {
-                  obj->dxfname = (char *)alias;
+                  // a static string, which cannot be free'd. important for indxf
+                  if (dwg->opts & DWG_OPTS_INDXF)
+                    obj->dxfname = strdup ((char *)alias);
+                  else
+                    obj->dxfname = (char *)alias;
                   obj->type = 500 + i;
                   break;
                 }
