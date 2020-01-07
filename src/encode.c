@@ -2212,7 +2212,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
     case 5:
       if (8 <= size)
         bit_write_RLL (dat, data->u.eed_5.entity);
-      LOG_TRACE ("entity: 0x\"%lX\" [RLL]\n", (unsigned long)data->u.eed_5.entity);
+      LOG_TRACE ("entity: 0x%lX [RLL]\n", (unsigned long)data->u.eed_5.entity);
       break;
     case 10:
     case 11:
