@@ -1732,13 +1732,15 @@ decompress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
           if ((long)comp_bytes > bytes_left)
             {
               LOG_ERROR ("\nInvalid comp_bytes %lu > %ld bytes left (vs %ld)",
-                         (unsigned long)comp_bytes, bytes_left, dst_end - dst)
+                         (unsigned long)comp_bytes, bytes_left,
+                         (long)(dst_end - dst))
               return DWG_ERR_VALUEOUTOFBOUNDS;
             }
           if (dst + comp_bytes > dst_end)
             {
               LOG_ERROR ("\nInvalid bytes_left %ld, %p + %u > %p (%ld)",
-                         bytes_left, dst, comp_bytes, dst_end, dst_end - dst)
+                         bytes_left, dst, comp_bytes, dst_end,
+                         (long)(dst_end - dst))
               return DWG_ERR_VALUEOUTOFBOUNDS;
             }
           for (i = 0; i < comp_bytes; ++i)
@@ -1750,7 +1752,7 @@ decompress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
       LOG_INSANE ("<L %d\n", lit_length)
       if (lit_length)
         {
-          if ((lit_length > bytes_left) // bytes left to write
+          if (((long)lit_length > bytes_left) // bytes left to write
               || dst + lit_length > dst_end)       // dst overflow
             {
               LOG_ERROR ("Invalid lit_length %u > %ld bytes left",
