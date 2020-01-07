@@ -6780,7 +6780,10 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           if (strEQc (pair->value.s, "TABLE"))
             table[0] = '\0'; // new table coming up
           else if (strEQc (pair->value.s, "BLOCK_RECORD"))
-            strncpy (table, pair->value.s, 79);
+            {
+              strncpy (table, pair->value.s, 79);
+              table[79] = '\0';
+            }
           else if (strEQc (pair->value.s, "ENDTAB"))
             table[0] = '\0'; // close table
           else if (strEQc (pair->value.s, "ENDSEC"))
@@ -6920,6 +6923,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               BITCODE_BL idx = dwg->num_objects;
               char *dxfname = strdup (pair->value.s);
               strncpy (name, dxfname, 79);
+              name[79] = '\0';
               entity_alias (name);
               dxf_free_pair (pair);
               pair = new_object (name, dxfname, dat, dwg, 0, i++);

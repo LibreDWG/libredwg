@@ -2710,6 +2710,7 @@ DWG_OBJECT (STYLE)
           else {
             strncpy (_buf, _obj->font_name, 255);
           }
+          _buf[255] = '\0';
           if ((s = strstr (_buf, ".ttf")) ||
               (s = strstr (_buf, ".TTF")))
             {
