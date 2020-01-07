@@ -3324,9 +3324,8 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
               idx++;
               obj->num_eed = idx + 1;
               size = (long)(end - dat->byte + 1);
-              LOG_INSANE ("        size remaining: %ld\n", (long)size);
-              LOG_POS
-
+              //LOG_INSANE ("        size remaining: %ld\n", (long)size);
+              //LOG_POS
               obj->eed = (Dwg_Eed *)realloc (obj->eed,
                                              obj->num_eed * sizeof (Dwg_Eed));
               obj->eed[idx].handle = obj->eed[idx - 1].handle;
@@ -3339,14 +3338,17 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
               break;
             }
         }
-      if (obj->eed[idx].raw)
-        dat->byte = end;
       LOG_POS
+      if (obj->eed[idx].raw)
+        {
+          dat->byte = end;
+          LOG_POS
+        }
       idx++;
     }
   LOG_HANDLE ("EED[%u] size: " FORMAT_BS " [BS] (end)\n", idx, size);
   LOG_TRACE ("num_eed: " FORMAT_BL "\n", obj->num_eed);
-  LOG_POS
+  //LOG_POS
   return error;
 }
 

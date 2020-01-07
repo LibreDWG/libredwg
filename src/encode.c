@@ -2260,6 +2260,7 @@ static int
 dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   unsigned long off = obj->address;
+  unsigned long last_handle = 0;
 
 #define LOG_POS LOG_INSANE (" @%lu.%u\n", dat->byte - off, dat->bit)
 
@@ -2279,12 +2280,20 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           LOG_POS
           if (eed->raw)
             {
+              last_handle = eed->handle.value;
               LOG_TRACE ("EED[%d] raw [TF %d]\n", i, size);
               bit_write_TF (dat, eed->raw, size);
               LOG_TRACE_TF (eed->raw, size);
             }
+          // indxf
+          else if (eed->data)
+            {
+              dwg_encode_eed_data (dat, eed->data, size, i);
+              LOG_POS
+            }
         }
-      if (!eed->raw && eed->data) // indxf
+      // and if not already written by the previous raw (this has size=0)
+      else if (eed->data != NULL && eed->handle.value != last_handle)
         {
           dwg_encode_eed_data (dat, eed->data, size, i);
           LOG_POS

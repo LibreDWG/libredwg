@@ -249,8 +249,8 @@ main (int argc, char *argv[])
         }
     }
 
-  if (opts)
-    printf ("\n");
+  //if (opts)
+  //  printf ("\n");
   printf ("Writing DWG file %s", filename_out);
   if (version)
     { // forced -as-rXXX
@@ -303,8 +303,8 @@ main (int argc, char *argv[])
   dwg_free (&dwg);
 
   // try to read again
-  if (opts)
-    printf ("\n");
+  //if (opts)
+  //  printf ("\n");
   printf ("Re-reading created file %s\n", filename_out);
   error = dwg_read_file (filename_out, &dwg); /* 2nd read */
   if (error >= DWG_ERR_CRITICAL)
