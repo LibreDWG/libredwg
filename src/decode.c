@@ -1562,17 +1562,19 @@ read_literal_length (Bit_Chain *restrict dat, unsigned char *restrict opcode)
   BITCODE_RC byte = bit_read_RC (dat);
 
   *opcode = 0x00;
-
   if (byte >= 0x01 && byte <= 0x0F)
     return byte + 3;
   else if (byte == 0)
     {
       total = 0x0F;
-      while ((byte = bit_read_RC (dat)) == 0 && dat->size - dat->byte > 1)
+      while (((byte = bit_read_RC (dat)) == 0) && (dat->byte < dat->size))
         {
           total += 0xFF;
         }
-      return total + byte + 3;
+      if (dat->byte >= dat->size)
+        return 0;
+      else
+        return total + byte + 3;
     }
   else if (byte & 0xF0)
     *opcode = byte;
