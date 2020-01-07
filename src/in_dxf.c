@@ -6097,6 +6097,8 @@ new_object (char *restrict name, char *restrict dxfname,
                 }
               for (f = &fields[0]; f->name; f++)
                 {
+                  LOG_INSANE ("-%s.%s [%d %s] vs %d\n", obj->name, f->name, f->dxf,
+                              f->type, pair->code)
                   // VECTORs. need to be malloced, and treated specially
                   if (pair->code != 3 && f->is_malloc && !f->is_string
                       && strNE (f->name, "parent")) // parent set in NEW_OBJECT
@@ -6417,11 +6419,14 @@ new_object (char *restrict name, char *restrict dxfname,
                       goto next_pair;
                     }
                 }
+              LOG_INSANE ("----\n")
 
               fields = is_entity ? dwg_dynapi_common_entity_fields ()
                                  : dwg_dynapi_common_object_fields ();
               for (f = &fields[0]; f->name; f++)
                 {
+                  LOG_INSANE ("-%s.%s [%d %s] vs %d\n", is_entity ? "ENTITY" : "OBJECT",
+                              f->name, f->dxf, f->type, pair->code)
                   if ((pair->code == 62 || pair->code == 420
                        || pair->code == 430 || pair->code == 440)
                       && (f->size > 8
@@ -6601,6 +6606,7 @@ new_object (char *restrict name, char *restrict dxfname,
                         }
                     }
                 }
+              LOG_INSANE ("----\n")
               // still needed? already handled above
               // not in dynapi: 92 as 310 size prefix for PROXY vector preview
               if ((pair->code == 92) && is_entity
@@ -6627,7 +6633,6 @@ new_object (char *restrict name, char *restrict dxfname,
                   // returns with 0 or 301
                   if (pair && pair->code == 301)
                     goto next_pair;
-                  goto start_loop;
                 }
               else if (obj->fixedtype == DWG_TYPE_TABLESTYLE)
                 {
