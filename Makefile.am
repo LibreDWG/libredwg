@@ -51,11 +51,7 @@ EXTRA_DIST = $(top_srcdir)/.version \
 
 UNKNOWN_LOG = unknown-`git describe --long --tags --dirty --always`.log
 UNKNOWN_SKIP = examples/alldwg.skip
-if HAVE_TIMEOUT
-TIMEOUT_30 = @TIMEOUT@ 30
-else
-TIMEOUT_30 =
-endif
+TIMEOUT_30 = @TIMEOUT_30@
 
 unknown:
 	-mv examples/alldwg.skip examples/alldwg.skip~
