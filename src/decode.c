@@ -1615,33 +1615,36 @@ decompress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
                           uint32_t decomp_data_size, uint32_t comp_data_size)
 {
   unsigned int i, lit_length;
-  uint32_t comp_offset, comp_bytes, bytes_left;
+  uint32_t comp_offset, comp_bytes;
+  long bytes_left;
   unsigned char opcode1 = 0, opcode2;
   long unsigned int start_byte = dat->byte;
   BITCODE_RC *src, *dst = decomp;
-  BITCODE_RC *maxdst = decomp + decomp_data_size;
+  BITCODE_RC *dst_end = decomp + decomp_data_size;
 
-  bytes_left = decomp_data_size;               // to write to
+  bytes_left = (long)decomp_data_size;         // to write to
+  LOG_INSANE ("bytes_left: %ld\n", bytes_left)
   if (comp_data_size > dat->size - start_byte) // bytes left to read from
     {
-      LOG_WARN ("Invalid comp_data_size %lu > %lu bytes left",
-                (unsigned long)bytes_left, dat->size - dat->byte)
+      LOG_WARN ("Invalid comp_data_size %ld > %lu bytes left",
+                bytes_left, dat->size - dat->byte)
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
   // length of the first sequence of uncompressed or literal data.
   lit_length = read_literal_length (dat, &opcode1);
-  if (lit_length > bytes_left)
+  if ((long)lit_length > bytes_left)
     {
-      LOG_ERROR ("Invalid literal_length %u > %u bytes left",
-                 lit_length, (unsigned)decomp_data_size)
+      LOG_ERROR ("Invalid literal_length %u > %ld bytes left",
+                 lit_length, bytes_left)
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
   bit_read_fixed (dat, decomp, lit_length);
   dst += lit_length;
   bytes_left -= lit_length;
+  LOG_INSANE ("(%ld) ", bytes_left)
 
   opcode1 = 0x00;
-  while (dat->byte - start_byte < comp_data_size)
+  while (dat->byte - start_byte < comp_data_size && dst < dst_end)
     {
       LOG_INSANE ("-O %x ", opcode1)
       if (opcode1 == 0x00)
@@ -1723,32 +1726,40 @@ decompress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
         }
       if (comp_bytes)
         {
-          LOG_INSANE ("<C %d ", comp_bytes)
+          LOG_INSANE ("<C %d ", comp_bytes);
           // copy "compressed data"
-          if ((uint32_t)comp_bytes > bytes_left || // bytes left to write
-              dst + comp_bytes > maxdst)
+          if ((long)comp_bytes > bytes_left)
             {
-              LOG_ERROR ("Invalid comp_bytes %lu > %lu bytes left",
-                         (unsigned long)comp_bytes, (unsigned long)bytes_left)
+              LOG_ERROR ("\nInvalid comp_bytes %lu > %ld bytes left (vs %ld)",
+                         (unsigned long)comp_bytes, bytes_left, dst_end - dst)
+              return DWG_ERR_VALUEOUTOFBOUNDS;
+            }
+          if (dst + comp_bytes > dst_end)
+            {
+              LOG_ERROR ("\nInvalid bytes_left %ld, %p + %u > %p (%ld)",
+                         bytes_left, dst, comp_bytes, dst_end, dst_end - dst)
               return DWG_ERR_VALUEOUTOFBOUNDS;
             }
           for (i = 0; i < comp_bytes; ++i)
             *dst++ = *src++;
           bytes_left -= comp_bytes;
+          LOG_INSANE ("(%ld) ", bytes_left)
         }
       // copy "literal data"
       LOG_INSANE ("<L %d\n", lit_length)
       if (lit_length)
         {
           if ((lit_length > bytes_left) // bytes left to write
-              || dst + lit_length > maxdst)       // dst overflow
+              || dst + lit_length > dst_end)       // dst overflow
             {
-              LOG_ERROR ("Invalid lit_length %u > %lu bytes left",
-                         lit_length, (unsigned long)bytes_left)
+              LOG_ERROR ("Invalid lit_length %u > %ld bytes left",
+                         lit_length, bytes_left)
               return DWG_ERR_VALUEOUTOFBOUNDS;
             }
           for (i = 0; i < lit_length; ++i)
             *dst++ = bit_read_RC (dat);
+          bytes_left -= lit_length;
+          LOG_INSANE ("(%ld) ", bytes_left)
         }
     }
 
