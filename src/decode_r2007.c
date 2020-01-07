@@ -735,6 +735,11 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
     }
 
   max_decomp_size = section->data_size;
+  if (max_decomp_size > 0x2f000000) // 790Mb
+    {
+      LOG_ERROR ("Invalid max decompression size %" PRIu64, max_decomp_size);
+      return DWG_ERR_INVALIDDWG;
+    }
   decomp = calloc (max_decomp_size, 1);
   if (decomp == NULL)
     {

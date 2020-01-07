@@ -1774,7 +1774,9 @@ static int
 add_section (Dwg_Data *dwg)
 {
   if (dwg->header.num_sections == 0)
-    dwg->header.section = calloc (1, sizeof (Dwg_Section));
+    {
+      dwg->header.section = calloc (1, sizeof (Dwg_Section));
+    }
   else
     {
       dwg->header.section
@@ -1802,7 +1804,7 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   BITCODE_RC *decomp, *ptr;
   int i, error = 0, found_section_map_id = 0;
   uint64_t section_address;
-  int64_t bytes_remaining;
+  long bytes_remaining;
   const uint32_t comp_data_size = dwg->r2004_header.comp_data_size;
   const uint32_t decomp_data_size = dwg->r2004_header.decomp_data_size;
   const int32_t section_array_size = (int32_t)dwg->r2004_header.section_array_size;
@@ -1814,6 +1816,14 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dwg->header.section = 0;
 
   // decompressed data
+  if (decomp_data_size > 0x2f000000 && // 790Mb
+      (decomp_data_size > 8 * comp_data_size ||
+       comp_data_size > dat->size))
+    {
+      LOG_ERROR ("Invalid r2004_header.decomp_data_size %" PRIu32, decomp_data_size)
+      dwg->r2004_header.decomp_data_size = 8 * comp_data_size;
+      return DWG_ERR_OUTOFMEM;
+    }
   decomp = (BITCODE_RC *)calloc (decomp_data_size + 1024, sizeof (BITCODE_RC));
   if (!decomp)
     {
@@ -1832,7 +1842,7 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   section_address = 0x100; // starting address
   i = 0;
-  bytes_remaining = (int64_t)decomp_data_size;
+  bytes_remaining = (long)decomp_data_size;
   ptr = decomp;
   dwg->header.num_sections = 0;
 
@@ -1875,8 +1885,8 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       if (i >= (int)section_array_size)
         {
           error |= DWG_ERR_VALUEOUTOFBOUNDS;
-          LOG_WARN ("Overflow section_array_size: %d >= %d",
-                    i, (int)section_array_size);
+          LOG_WARN ("Overflow section_array_size: %d >= %d (remaining: %ld)",
+                    i, (int)section_array_size, (long)bytes_remaining);
           if (i > 1000)
             return error;
         }
@@ -2007,6 +2017,13 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   uint64_t offset;
   int error;
 
+  if (decomp_data_size > 0x2f000000 && // 790Mb
+      (decomp_data_size > 8 * comp_data_size ||
+       comp_data_size > dat->size))
+    {
+      LOG_ERROR ("Invalid r2004_header.decomp_data_size %" PRIu32, decomp_data_size)
+      return DWG_ERR_OUTOFMEM;
+    }
   decomp = (BITCODE_RC *)calloc (decomp_data_size + 1024, sizeof (BITCODE_RC));
   if (!decomp)
     {
@@ -2031,7 +2048,7 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   LOG_TRACE ("encrypted:  %d\n", dwg->header.section_infohdr.encrypted)
   LOG_TRACE ("num_desc2:  %d/0x%x\n", dwg->header.section_infohdr.num_desc2,
              dwg->header.section_infohdr.num_desc2)
-  if (dwg->header.section_infohdr.num_desc > 0xf000000)
+  if (dwg->header.section_infohdr.num_desc > 0x2f00000)
     {
       LOG_ERROR ("Illegal num_desc2");
       free (decomp);
@@ -2245,7 +2262,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
     }
 
   max_decomp_size = info->num_sections * info->max_decomp_size;
-  if (max_decomp_size == 0)
+  if (max_decomp_size == 0 || max_decomp_size > 0x2f000000) // 790Mb
     {
       LOG_ERROR ("Invalid section %s count or max decompression size. "
                  "Sections: %u, Max size: %u",
