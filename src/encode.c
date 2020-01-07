@@ -160,7 +160,7 @@ static bool env_var_checked_p;
         else                                                                  \
           bit_write_TF (dat, (BITCODE_TF)_obj->nam, len);                     \
       }                                                                       \
-    FIELD_G_TRACE (nam, TF, dxf);                                             \
+    LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \
   }
 #define FIELD_TFF(nam, len, dxf)  FIELD_TF(nam, len, dxf)
 #define FIELD_TU(nam, dxf)                                                    \
@@ -2281,7 +2281,7 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
             {
               LOG_TRACE ("EED[%d] raw [TF %d]\n", i, size);
               bit_write_TF (dat, eed->raw, size);
-              LOG_INSANE_TF (eed->raw, size);
+              LOG_TRACE_TF (eed->raw, size);
             }
         }
       if (!eed->raw && eed->data) // indxf

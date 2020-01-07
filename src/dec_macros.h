@@ -376,7 +376,8 @@
   {                                                                           \
     SINCE (R_13) { _obj->nam = NULL; VECTOR_CHKCOUNT (nam, TF, len, dat) }    \
     _obj->nam = bit_read_TF (dat, (int)len);                                  \
-    LOG_TRACE (#nam ": \"%s\" [TF %lu " #dxf "]\n", _obj->nam, (unsigned long)len); \
+    LOG_TRACE (#nam ": \"%s\" [TF %lu " #dxf "]\n", _obj->nam,                \
+               (unsigned long)len);                                           \
     LOG_INSANE_TF (FIELD_VALUE (nam), (int)len);                              \
   }
 #define FIELD_TFF(nam, len, dxf)                                              \

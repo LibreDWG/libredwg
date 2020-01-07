@@ -3296,7 +3296,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
       sav_byte = dat->byte;
       obj->eed[idx].raw = bit_read_TF (dat, size);
       LOG_TRACE ("EED[%u] raw: %d\n", idx, size);
-      LOG_INSANE_TF (obj->eed[idx].raw, size);
+      LOG_TRACE_TF (obj->eed[idx].raw, size);
       dat->byte = sav_byte;
       LOG_POS
 
