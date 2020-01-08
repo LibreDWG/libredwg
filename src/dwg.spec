@@ -2515,11 +2515,11 @@ DWG_OBJECT (BLOCK_HEADER)
       FIELD_NUM_INSERTS (num_inserts, RL, 0);
       FIELD_T (description, 4);
 
-      FIELD_BL (preview_data_size, 0);
-      VALUEOUTOFBOUNDS (preview_data_size, 0xa00000)
+      FIELD_BL (preview_size, 0);
+      VALUEOUTOFBOUNDS (preview_size, 0xa00000)
       else
         {
-          FIELD_BINARY (preview_data, FIELD_VALUE (preview_data_size), 310);
+          FIELD_BINARY (preview, FIELD_VALUE (preview_size), 310);
         }
     }
 

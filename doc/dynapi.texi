@@ -4447,9 +4447,9 @@ TV,	DXF 1
 RL
 @item description
 TV,	DXF 4
-@item preview_data_size
+@item preview_size
 BL
-@item preview_data
+@item preview
 TV,	DXF 310
 @item insert_units
 BS,	DXF 70

@@ -24323,29 +24323,29 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         fail ("BLOCK_HEADER.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_TV preview_data;
-    if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "preview_data", &preview_data, NULL)
-        && preview_data
-           ? strEQ ((char *)preview_data, (char *)block_header->preview_data)
-           : !block_header->preview_data)
+    BITCODE_TV preview;
+    if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "preview", &preview, NULL)
+        && preview
+           ? strEQ ((char *)preview, (char *)block_header->preview)
+           : !block_header->preview)
       pass ();
     else
-      fail ("BLOCK_HEADER.preview_data [TV] '%s' <> '%s'", preview_data, block_header->preview_data);
+      fail ("BLOCK_HEADER.preview [TV] '%s' <> '%s'", preview, block_header->preview);
   }
   {
-    BITCODE_BL preview_data_size;
-    if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "preview_data_size", &preview_data_size, NULL)
-        && preview_data_size == block_header->preview_data_size)
+    BITCODE_BL preview_size;
+    if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "preview_size", &preview_size, NULL)
+        && preview_size == block_header->preview_size)
       pass ();
     else
-      fail ("BLOCK_HEADER.preview_data_size [BL] %u != %u", block_header->preview_data_size, preview_data_size);
-    preview_data_size++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "preview_data_size", &preview_data_size, 0)
-        && preview_data_size == block_header->preview_data_size)
+      fail ("BLOCK_HEADER.preview_size [BL] %u != %u", block_header->preview_size, preview_size);
+    preview_size++;
+    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "preview_size", &preview_size, 0)
+        && preview_size == block_header->preview_size)
       pass ();
     else
-      fail ("BLOCK_HEADER.preview_data_size [BL] set+1 %u != %u", block_header->preview_data_size, preview_data_size);
-    block_header->preview_data_size--;
+      fail ("BLOCK_HEADER.preview_size [BL] set+1 %u != %u", block_header->preview_size, preview_size);
+    block_header->preview_size--;
 
   }
   {

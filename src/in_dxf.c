@@ -4316,7 +4316,7 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return pair;
 }
 
-// read to BLOCK_HEADER.preview_data (310), filling in the size
+// read to BLOCK_HEADER.preview (310), filling in the size
 static Dxf_Pair *
 add_block_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                    Dxf_Pair *restrict pair)
@@ -4331,7 +4331,7 @@ add_block_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     }
   if (pair->code != 310)
     {
-      LOG_ERROR ("Invalid %s.preview_data code %d, need 310", obj->name,
+      LOG_ERROR ("Invalid %s.preview code %d, need 310", obj->name,
                  pair->code);
       return pair;
     }
@@ -4342,21 +4342,21 @@ add_block_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       const char *pos = pair->value.s;
       char *s;
 
-      _obj->preview_data = realloc (_obj->preview_data, written + blen);
-      s = &_obj->preview_data[written];
+      _obj->preview = realloc (_obj->preview, written + blen);
+      s = &_obj->preview[written];
       for (unsigned i = 0; i < blen; i++)
         {
           sscanf (pos, "%2hhX", &s[i]);
           pos += 2;
         }
       written += blen;
-      LOG_TRACE ("BLOCK_HEADER.preview_data += %u (%u)\n", blen, written);
+      LOG_TRACE ("BLOCK_HEADER.preview += %u (%u)\n", blen, written);
 
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
     }
-  _obj->preview_data_size = written;
-  LOG_TRACE ("BLOCK_HEADER.preview_data_size = %u [BL 0]\n", written);
+  _obj->preview_size = written;
+  LOG_TRACE ("BLOCK_HEADER.preview_size = %u [BL 0]\n", written);
   return pair;
 }
 

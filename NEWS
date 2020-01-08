@@ -9,6 +9,7 @@ API breaking changes:
     if the returned string is freshly malloced or not.
   * removed the UNKNOWN supertype, there are only UNKNOWN_OBJ and UNKNOWN_ENT
     left, with common_entity_data.
+  * renamed BLOCK_HEADER.preview_data to preview, preview_data_size to preview_size
   * renamed SHAPE.shape_no to style_id
   * renamed CLASS.wasazombie to is_zombie
 
