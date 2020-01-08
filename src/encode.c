@@ -158,7 +158,9 @@ static bool env_var_checked_p;
               bit_write_RC (dat, 0);                                          \
           }                                                                   \
         else                                                                  \
-          bit_write_TF (dat, (BITCODE_TF)_obj->nam, len);                     \
+          {                                                                   \
+            bit_write_TF (dat, (BITCODE_TF)_obj->nam, len);                   \
+          }                                                                   \
       }                                                                       \
     LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \
   }
@@ -256,23 +258,24 @@ static bool env_var_checked_p;
 #define SUB_FIELD_CMC(o, nam, dxf1, dxf2) bit_write_CMC (dat, &_obj->o.nam)
 
 #define LOG_TF(level, var, len)                                               \
-  {                                                                           \
-    int _i;                                                                   \
-    for (_i = 0; _i < (len); _i++)                                            \
-      {                                                                       \
-        LOG (level, "%02x", (unsigned char)((char *)var)[_i]);                \
-      }                                                                       \
-    LOG (level, "\n");                                                        \
-    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)                                  \
-      {                                                                       \
-        for (_i = 0; _i < (len); _i++)                                        \
-          {                                                                   \
-            unsigned char c = ((unsigned char *)var)[_i];                     \
-            LOG_INSANE ("%-2c", isprint (c) ? c : ' ');                       \
-          }                                                                   \
-        LOG_INSANE ("\n");                                                    \
-      }                                                                       \
-  }
+  if (var)                                                                    \
+    {                                                                         \
+      int _i;                                                                 \
+      for (_i = 0; _i < (len); _i++)                                          \
+        {                                                                     \
+          LOG (level, "%02x", (unsigned char)((char *)var)[_i]);              \
+        }                                                                     \
+      LOG (level, "\n");                                                      \
+      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)                                \
+        {                                                                     \
+          for (_i = 0; _i < (len); _i++)                                      \
+            {                                                                 \
+              unsigned char c = ((unsigned char *)var)[_i];                   \
+              LOG_INSANE ("%-2c", isprint (c) ? c : ' ');                     \
+            }                                                                 \
+          LOG_INSANE ("\n");                                                  \
+        }                                                                     \
+    }
 #define LOG_TRACE_TF(var, len) LOG_TF (TRACE, var, len)
 #define LOG_INSANE_TF(var, len) LOG_TF (INSANE, var, len)
 
