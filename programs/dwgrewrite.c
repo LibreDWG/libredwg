@@ -245,6 +245,7 @@ main (int argc, char *argv[])
         {
           if (free_fnout)
             free (filename_out);
+          dwg_free (&dwg);
           return error;
         }
     }
@@ -298,6 +299,7 @@ main (int argc, char *argv[])
       printf ("WRITE ERROR 0x%x\n", error);
       if (free_fnout)
         free (filename_out);
+      dwg_free (&dwg);
       return error;
     }
   dwg_free (&dwg);
