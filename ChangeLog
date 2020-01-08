@@ -1,6 +1,867 @@
 Full history from the git log
 -----------------------------
 
+2020-01-08  Reini Urban  <rurban@cpan.org>
+
+	Release 0.10
+	Major bugfixes:
+	  * Improved building the perl5 binding, proper dependencies.
+	    Set proper -I and -L paths, create LibreDWG.c not swig_perl.c
+	  * Harmonized INDXFB with INDXF, removed extra src/in_dxfb.c (#134).
+	    Slimmed the .so size by 260Kb. Still untested though.
+	  * Fixed encoding of added r2000 AUXHEADER address (broken since 0.9)
+	  * Fixed EED encoding from dwgrewrite (a dxf2dwg regression from 0.9) (#180)
+	See NEWS and ChangeLog
+
+        decode: protect xdata overflows
+        reset the lengths when stopped reading invalig xdata,
+        which would overflow later.
+
+	api: rename BLOCK_HEADER.preview_data to preview
+	analog to the entities. In the headers called PreviewIcon.
+
+	encode: fix LOG_TF crash on null field
+
+	encode: fix EED writing
+	which was broken with indxf. don't write raw
+	plus data (from the next indices), when a previous
+	raw already covered it.
+	Fixes GH #180
+
+2020-01-07  Reini Urban  <rurban@cpan.org>
+
+	encode: enable TF logging
+	-v3 or -v5
+
+	decode: disable -v5 object_map printing
+	printing the whole object for the handle (again) makes no sense.
+	maybe later print the object name of the handle
+
+	encode: eed entity formatting logging
+
+	fix endless loop in 2004 decompression
+	on dat overflow.
+	This fixes all remaining fuzzed dwgrewrite hangs
+
+	indxf: fix endless MULTILEADER loop
+	with unknown DXF groups.
+	This fixes all fuzzed indxf hangs.
+
+	decode: fix a -Wsign-compare
+	and some -Wformat
+
+	protect strncpy from truncation
+	without ending \0
+
+	fix TIMEOUT_30 duplicate
+	remove the automake hack
+
+	decode: fix bytes_left calc. in decompress_R2004_section
+	and add various counterchecks. missed the final lit_length
+
+2020-01-07  Reini Urban  <rurban@cpan.org>
+
+	hangs: protect from overlarge mallocs
+	when using user-provided section sizes.
+	max_decomp_size, decomp_data_size, ... max ~790Mb per compressed section
+
+	Fixes a few fuzzer hangs.
+
+2020-01-07  Reini Urban  <rurban@cpan.org>
+
+	indxf: add only full classes
+	with all names and mandatory DXF fields
+
+2020-01-06  Reini Urban  <rurban@cpan.org>
+
+	dwg: enhance the dxf2dwg timeout to 30
+	larger DXF need longer
+
+	indxf: skip setting buffers twice,
+	with the exception of 310 previews, as in PROXY_ENTITY
+	and Surfaces.
+
+	indxf: avoid hang when reading illegal numbers
+	advance the ptr before erroring out
+
+	indxf: fix CLASSES hang
+	2 CLASSES must be followed by 0 CLASS, else
+	it might realloc constantly, leading to DOS/hang.
+
+	faster aligned bit_read_fixed, bit_write_TF
+	when aligned use memcpy, esp. for large data blocks
+
+	indxf: fix double entity.preview write
+	which would corrupt the previous preview, not matching
+	the preview_size. we dont append, we rather ERROR
+
+	protect bit_utf8_to_TU from invalid UTF-8
+	count len, not to overflow the utf8 string.
+	e.g. "4è^C"
+
+	indxf: stabilize adding BLOCK_CONTROL.entries
+	fuzzed DXF could lead to heap overflows (wrong i)
+
+	indxf: protect SUMMARY header fields
+	by checking NULL and the code 1
+
+2020-01-06  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix invalid free of static obj->dxfname
+	when dxfname came from dwg_encode_get_class() ->
+	dxf_encode_alias() returning a static string.
+
+	This should fix all the remaining fuzzing crashes. (for now)
+
+2020-01-06  Reini Urban  <rurban@cpan.org>
+
+	decode_r2007: protect from section overflow
+	when reading invalid section pages
+
+	decode: protect from empty dat sections r2007+
+	e.g. wrong summaryinfo, objects or handles.
+	some of these dont return a critical error
+
+	protect xdata overflows
+	in encode and decode. proper error handling, esp. with fuzzed wrong data.
+
+	Update docs for 2020
+
+	encode: add LOG_INSANE_TF EED logging
+	still broken. GH #180
+
+	Bump Copyright years to 2020
+	of all changed files so far, with more than a few lines
+
+	encode: add LOG_TF from decode
+	fixes xdata[] binary logging
+
+2020-01-06  Reini Urban  <rurban@cpan.org>
+
+	Add AFL_COMPILER persistent llvm_mode support to dwgrewrite
+	Instrument overly long functions as such.
+	Support persistent llvm_mode, via afl-clang-fast for dwgrewrite.
+
+	export AFL_PATH=/usr/local/lib/afl
+	PERL=cperl5.30.0-nt \
+	CC="afl-clang-fast" \
+	CFLAGS="-O2 -g -fsanitize=address,undefined -fno-omit-frame-pointer" \
+	    ../configure --disable-shared --disable-dxf --disable-bindings
+
+	export ASAN_OPTIONS="abort_on_error=1:detect_leaks=0:symbolize=0:allocator_may_return_null=1"
+
+	AFL_USE_ASAN=1 make -j4 -s -C src
+	AFL_USE_ASAN=1 make -j4 -s -C programs dwgrewrite
+
+	AFL_SKIP_CPUFREQ=1 afl-fuzz $@ -m none -i ../.fuzz-in -o .fuzz-out programs/dwgrewrite -v0 @@ /dev/null
+
+2020-01-06  Reini Urban  <rurban@cpan.org>
+
+	decode: eed logging
+	searching EED leaks with fuzzed DWGs.
+	let the last invalid EED[idx] leak in this case
+
+	init bit_read_TF
+	when bit_read_fixed failed earlier with overflows,
+	set the bits to 0. valgrind with fuzzing
+
+2020-01-06  Reini Urban  <rurban@cpan.org>
+
+	api: add int *isnew param to all dynapi _utf8text functions
+	we really need to know exactly if the returned string is freshly
+	malloced (from a r2007+ wide string), or the original string,
+	which may NOT be freed.
+
+	Fixes the remaining fuzzing double-free's, where the dwg/obj
+	version or string TF type might disagree. Tried hard to avoid this.
+
+2020-01-06  Reini Urban  <rurban@cpan.org>
+
+	dwg_find_dictionary: add NULL ptr protections
+
+	indxf: add xcalloc, exit on Out of Memory
+
+	indxf: protect invalid double DOS
+	advance endptr, with nums like 28ABC....
+
+	indxf: protect invalid DIMASSOC_Ref index
+
+	indxf: protect DIMSTYLE_CONTROL.morehandles[j]
+	gracefully
+
+	fixup check bytes_left for decompress_R2004_section 32bit
+	the overflow check does not work with 32bit, only 64.
+	Fixes up 80d17da65507ca1242c48ffe3b31afa48a0859aa
+
+2020-01-05  Reini Urban  <rurban@cpan.org>
+
+	Update NEWS
+
+	dxf_read_file: properly end DXF
+	with a final \n and \0 for libc strtol/strtod readers,
+	to avoid internal errors on truncated files we cannot avoid.
+
+	indxf: more truncated DXF protections
+	but not exhaustive. We really need to add a final \n to the read chain
+
+	indxf: stricter MLEADER subclasses
+	On unknown DXF code break the loop, and continue
+	with the main MLEADER loop. Add a few more array index asserts.
+	Fixes a few fuzzing cases.
+
+	indxf: protect from MLEADER blk/txt mixup
+	a union
+
+2020-01-04  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix truncated dxf
+	gracefully end on EOF or invalid ctrl object.
+	prevent indxf buf and most dat overflows.
+
+	indxf: fix double-free of BLOCK_HEADER.*Model_Space
+	when reusing it. Check if not already done before
+
+	fix dwgrewrite for preR13 with VPORT_ENTITY table
+	yet unsupported, dont add its num_objects to the table.
+
+	auxheader: protect from NULL HEADER.HANDSEED
+	usually with encode
+
+	encode: protect from NULL obj->parent
+	when erroring out early
+
+	decode_r2007: add decode_rs src overflow check
+	add the size of the src, to overvoid reading past it.
+	and use the actual computed src_size args, not the user-provided ones.
+
+	improve r2007 copy_compressed_bytes check
+	check for overflows before the loop. better than
+	c893d847716aa6d64c2ff25834c80b43c4806f9b
+
+	check bytes_left for decompress_R2004_section
+	Fixes heap overflows with fuzzed section values
+
+	fix bit_read_fixed overflow
+
+	fix bit_search_sentinel overflow
+	with empty dat chain
+
+	indxf: add_SPLINE cosmetics
+
+	indxf: set WIPEOUT.clip_verts[]
+	num_clip_verts got reset every pair
+
+	indxf: dxf sources are always utf8
+	for dynapi. without is_utf we assume the source is already TU.
+	no changes <r2007.
+
+	indxf: convert *Model_Space name to TU earlier
+	when $ACADVER is read.
+
+	more dwg_find_tablehandle protections
+	and some cosmetics.
+	analyzing a r2007 *Model_Space use-after-free
+	where BLOCK_HEADER.name stays the initial <r2007, due
+	to DXF errors.
+
+	indxf: protect from some NULL _obj->name
+	Fixes a few fuzzing cases
+
+	encode: fix 2NDHEADER address
+	needs to be recomputed, even with dwgrewrite.
+	Fixes section[3] address or size overflow with r2000 DWGs
+
+	encode: detect section address or size overflow
+	already in encode, not just later in decode.
+	i.e. only with r2000 DWGs
+
+	encode: always set 2ndheader section addresses
+	even with dwgrewrite.
+
+	dwgrewrite: fix filename_out leaks
+	use a var when suffix is used.
+
+	dxf2dwg, dwg2dxf: allow /dev/null sinks
+
+	dwg_write_file: allow /dev/null sink
+
+2020-01-03  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix TABLESTYLE rowstyles init
+
+	indxf: more NULL pair protections
+
+	dwg2svg2: protect from empty BLOCK_HEADERs
+	name is not really needed
+
+	add r2007 Page out of bounds check
+	Fixes case 1 of GH #179
+
+	fix bit_search_sentinel out of range check
+	off by 16, the sentinel length. Fixes case 2 of GH #179
+
+	fix read_R2004_section_info out of range check
+	forgot 32. Fixes case 3 of GH #179
+
+	protect r2007 section.num_pages overflow
+	skip section when >0xf0000. Fixes case 4 if GH #179
+
+	protect r2007 decode compression length
+	length is a user value, add src_end. Fixes GH #179, case 5
+
+	Fix NULL ptr deref in get_next_owned_entity
+	Fixes case 6 in GH #179
+
+	dwg2svg2: fail on NULL _hdr
+	Fixes GH #179, id:000026 (case 7)
+
+	dwg: add missing dynapi.h
+	code added with 0.9,
+	commit 359502ac86b389b248a9080c9ba8462aff1058ee
+	relevant only for --disable-dxf
+
+	indxf: more NULL pair protections
+
+2020-01-03  Reini Urban  <rurban@cpan.org>
+
+	api: move 2 DIMENSION handles to DIMENSION_COMMON
+	with in_dxf when changing the type this would change the
+	offset of DIMENSION.block and DIMENSION.dimstyle, leading
+	to invalid pointers. found via fuzzing, fixes 3 cases.
+
+	TODO: block has still DXF code 0, maybe indxf read DXF 2 into that.
+	Need a testcase for that.
+
+2020-01-03  Reini Urban  <rurban@cpan.org>
+
+	encode: add OVERFLOW_NULL_CHECK_LV
+	to check the ptr before loops
+
+2020-01-03  Reini Urban  <rurban@cpan.org>
+
+	indxf: skip creating empty invalid objects
+	rather dont create them than leaving them without type or name.
+	not unknown, but DWG_TYPE_UNUSED.
+	We dont want to check all object[i] loops.
+
+	Reverts the previous commit for a fuzzing testcase.
+
+2020-01-03  Reini Urban  <rurban@cpan.org>
+
+	dwg_find_table_control: protect from NULL object.name
+	which might happen somehow via fuzzing.
+
+	indxf: LEADER.points array protections
+	with asserts
+
+	indxf: replace IMAGE.clip_verts asserts
+	with graceful logic. Actually failed in the good tests,
+	not just with fuzzing
+
+	indxf: IMAGE.clip_verts array protections
+	with asserts
+
+	indxf: add_HATCH array protections
+	with asserts
+
+	indxf: add_SPLINE array protections
+	but here do it gracefully, no asserts
+
+	indxf: more eed point protections
+
+	indxf: add new_LWPOLYLINE asserts
+	on illegal array accesses. Here we rather abort.
+
+	indxf: NULL pair protections in new_LWPOLYLINE
+	fixes a few fuzzing cases
+
+	fix bit_write_CRC* overflows
+	analog to read, fixes some fuzzing cases
+
+	dwg2dxf: fix leaks on section overflow error
+
+2020-01-02  Reini Urban  <rurban@cpan.org>
+
+	indxf: protect eed points with wrong codes
+	found via fuzzing
+
+	indxf: some more ptr protections
+
+	fix strange dwg_class_is_entity miscompilation
+	where it returned wrong results.
+	(comparing a short field with an const int, without zeroing the previous short)
+	Add various measures.
+
+	indxf: fix postprocess_SEQEND use-after-free
+	the owner handles are used, they are not copied.
+
+2020-01-02  Reini Urban  <rurban@cpan.org>
+
+	fix write-as leaks
+	In free check from_version in the spec, not
+	the version we were last using (writing to).
+
+	Fixes most dwgrewrite leaks, just one eed leak remaining,
+	from the 2nd r2000 read.
+
+2020-01-02  Reini Urban  <rurban@cpan.org>
+
+	bits: avoid uninitialized reads on bit realloc
+	in bit_calc_CRC
+
+	encode: Fix -Wpointer-bool-conversion
+	address of data->u.eed_0.string is always true
+
+	encode: fix Too many sections
+	when down-converting from r2004+ to r2000, with
+	typically 10-30 num_sections.
+
+	enable dwgrewrite with --disable-dxf
+	for fuzzing
+
+	api: Add LIBREDWG_VERSION et al to include/dwg.h
+
+	api: renamed CLASS.wasazombie to is_zombie
+	i.e. was_proxy, or class not loaded
+
+	indxf: is_entity logging for CLASS 281
+
+	adjust dynapi_test for LAYER_INDEX
+	layer_entries was renamed with e3374397f386fd1b38b8d732a6ef601ddf7ec592
+	(0.9) and then later again.
+
+	adjust dynapi_test for SORTENTSTABLE
+	sort_handles was renamed with e3374397f386fd1b38b8d732a6ef601ddf7ec592
+	(0.9)
+
+	dynapi: add nan checks TODO
+
+	add DEBUGGING_CLASS_CPP
+	and use it for TABLECONTENT.
+	This is more stable than CLASS_DXF in cases when
+	TABLE is mixed up with TABLECONTENT. See e.g.
+	GH #178, where it fixes the heap_overflow2 case.
+
+	prepare 0.10 NEWS
+
+2020-01-01  Reini Urban  <rurban@cpan.org>
+
+	decode ERROR cosmetics
+
+	api: remove DWG_SUPERTYPE_UNKNOWN fully
+	we now have only entity or object, unknown_bits
+	are parts of these.
+
+	xmlsuite: proper add_helix
+
+	indxf: fix num_entries/i underflow
+	for the i = -1 case. (Fuzzing)
+
+	free: fix invalid dwg_free_LAYOUT
+
+	dynapi: remove UNKNOWN tests
+	as the obj->name does not fit the fixedtype anymore
+	for partially handled classes, like TABLE or ARC_DIMENSION
+
+2019-12-31  Reini Urban  <rurban@cpan.org>
+
+	cleanup tio.unknown
+	not needed anymore, we only have UNKNOWN_OBJ or UNKNOWN_ENT with full common
+	entity_data.
+	Fixes GH #178 heap_overflow2
+
+	encode: object.size overflow
+	decode fails when it overflows, but encode does not
+	know its final dat->size, so introduce a sensible limit.
+	Fixes the dos testcase of GH #178
+
+	decode: protect from preR13 section size overflow
+	More fuzzing testcase in GH #176 with some broken
+	sections
+
+	decode: protect from section size/address overflow
+	There is one fuzzing testcase in GH #176 with some broken
+	sections
+
+	dwg_free_object: avoid uninitialized is_entity warning
+	even if logically impossible.
+
+	encode: protect dwg_encode_eed_data overflows
+
+	encode: protect NULL eed string
+
+	indxf: more NULL ptr protections
+	fixes more fuzzer testcases
+
+	free: protect freeing obj->dxfname
+	dont set INDXF when HANDSEED is missing.
+	e.g. GH #178 null_pointer2 testcase
+
+	indxf: fix rootcause for prev. commit
+	Fail on duplicate CLASS groups, i.e. when O CLASS is replaced
+	by 2 CLASS.
+
+	free: fail on Wrong DATATABLE.type 529
+	for obj [index]: != MULTILEADER.
+	wrong class, maybe a dwg_encode_get_class() failure.
+	Fixes several fuzzing crashes.
+
+	encode: fix empty FIELD_2DD_VECTOR
+	Fixes GH #178 null_pointer1 case
+
+	encode: protect from stack under-flow
+	From GH #178 fuzzing
+
+	encode: protect some NULL pointers
+	Fixes some GH #178 fuzzing
+
+2019-12-30  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix r2007+ dwg_find_tablehandle() leaks
+	dwg_find_tablehandle searches by name, dwg_dynapi_entity_utf8text creates
+	fresh utf8 names, which were not freed.
+
+	This fixed now most of the indxf leaks, GH #151
+
+2019-12-30  Reini Urban  <rurban@cpan.org>
+
+	free: fix more indxf leaks
+	the underlying cause is that indxf already adds
+	DEBUGGING classes, for which no dwg_free_OBJECT code exists.
+	i.e. TABLE.preview (common entity data), or TABLE colors.
+	Let dwg_free_UNKNOWN_ENT handle that and leak the rest
+
+	classes.inc: formatting only
+
+2019-12-30  Reini Urban  <rurban@cpan.org>
+
+	fixup indxf, wrong NULL pair check
+	at dwg_read_dxf the initial pair is NULL,
+	so empty DWGs were produced.
+
+	also harmonize dat opts with dwg opts
+
+2019-12-30  Reini Urban  <rurban@cpan.org>
+
+	programs leaks comments
+
+	indxf: fix name "*Model_Space" free
+	must not be constant. broken with
+	27a4380702667391668d4693ea7bdfdc9cf823c7
+
+	indxf: more pair NULL protections
+	found via fuzzing
+
+	indxf: protect types in dxf_blocks_read
+	when reading mspace or pspace BLOCK's, its owners are
+	not a BLOCK_HEADER, but BLOCK_CONTROL.
+	Found via fuzzing
+
+2019-12-29  Reini Urban  <rurban@cpan.org>
+
+	more free indxf fuzzing fixes
+	skip color names, not assigned yet, and failing.
+	only free unknown if type is UNKNOWN, otherwise
+	it will free illegal reactors, ...
+
+	indxf: protect NULL pair
+	this time in dxf_classes_read. Fixes some fuzzer cases
+
+	in_dxf: improve new_object speed by 2x
+	make ADD_OBJECT/ADD_ENTITY linear search 2x faster, by aborting
+	on found.
+
+	improve dwg_encode_get_class
+	require more than one invalid klass->dxfname to switch
+	over to search by index, and never do it with indxf, because
+	there we do have the proper name already, and we just need the dynamic type
+
+	Fix off-by-one class indices
+
+	encode: protect from NULL klass->dxfname
+	only relevant with fuzzed dxf data.
+
+	rm .build-asan/dxf-check
+	accidently added
+
+	decode, dwg.h: add more restrict
+
+2019-12-29  Reini Urban  <rurban@cpan.org>
+
+	indxf: protect NULL pair
+	in dxf_header_read on overflowed values.
+	try a 2nd time then.
+
+	Fixes ERROR: dxf_read_rs: RS overflow 860276 (at 314)
+	ERROR: Invalid DXF group code: 8308
+	Segmentation fault (core dumped)
+
+2019-12-29  Reini Urban  <rurban@cpan.org>
+
+	indxf: protect null-dereference in dxf_fixup_header
+	found by fuzzing dxf2dwg
+
+	define 2 pline api funcs for afl-fuzz
+	needed by dwg2ps.
+
+	fix outdxf cquote buffer-overflow
+	stack or heap, detected by fuzzing. using for cquote 2*len+1 is enough,
+	but also protect from stack-overflow in cquote and json_cquote.
+
+	encode: add missing restrict
+
+	dxf <=> dwg helper
+	harmonize helpers, analog to log.
+	log creates a dwgread log file.
+	dxf should create a dxf from dwg,
+	dwg should create a dwg from dxf.
+
+	free: enable indxf VALUE_HANDLE logic
+	actually set dat->opts to detect global HULL handles,
+	which may not be double-freed
+
+2019-12-29  Reini Urban  <rurban@cpan.org>
+
+	alive.test: skip dxf2dwg leak test
+	this helps under asan/lsan when custom ASAN_OPTIONS are set.
+
+	writers do not hang anymore.
+
+2019-12-29  Reini Urban  <rurban@cpan.org>
+
+	indxf: clear realloced buffers
+	avoid uninitialized data and pointers, esp. for free
+	and valgrind.
+
+	indxf move_out_BLOCK_CONTROL: fix for j>1
+	when pspace is at entry 2 we need to avoid a classic heap-overflow
+
+	XDICOBJHANDLE
+	when add xdicobjhandle ref failed, set xdic_missing_flag
+
+	dxf: support --force-free
+	as dxf2dwg does. needed for leak debugging
+
+	harmonize some ACIS ERROR newlines
+
+	make: extract VALGRIND_OPTS for check-dwg-valgrind
+	it is now overridable
+
+	add LTEXEC for --enable-shared (the default)
+	for some top test targets
+
+	add dwg helper for dwg2dxf analog to dxf
+	Maybe the name is a bit unfortunate, but it is only
+	an internal helper
+
+	free: omit Free object pointer
+	so that all logs are diffable
+
+	fix MULTILEADER.ctx.lline[] handles <r2010+
+	unlike ODA I dont see them in the wild, only r2010+.
+	the logs do make sense now.
+
+	fix SummaryInfo leak
+	when summaryinfo.spec fails in one field
+	we forgot to restore dat (harmless), also to free
+	the decomp chain. E.g. DS_libereco_R2010.dwg
+
+	fix entity.ownerhandle leak
+	the double-free from #43 was fixed with 38bc21c643451c2e31af0cc631cc7d651b310e54.
+	ownerhandles are not really stored in the ref vector.
+
+	outdxf: fix null-dereference in dxf_process_INSERT
+	detected via dwg2dxf fuzzing
+
+	*.spec formatting
+	space after (
+	but beware of gen-dynapi.c: no wrapping in REPEAT or FIELD
+
+	common_entity_handle_data.spec formatting
+	space after (
+
+	fix eed leaks with UNKNOWN objects
+	when the overflowed early.
+	Found via fuzzing.
+
+2019-12-29  Reini Urban  <rurban@cpan.org>
+
+	Support SHAPE.style_id for DXF as name [2]
+	renamed from SHAPE.shape_no (changed API).
+	for out_dxf look up the name from the STYLE index,
+	for in_dxf still ignored.
+
+	BTW: We still don't have a testcase for SHAPE, but the afl
+	fuzzer was nice to create a proper one to detect this case!
+
+2019-12-29  Reini Urban  <rurban@cpan.org>
+
+	free: fix VALUE_HANDLE for INDXF
+	NULLIFY ref only if really freed. Fixes a few leaks and double-frees.
+
+	make -C src .ic: keep a physical backup, not just in git
+
+2019-12-28  Reini Urban  <rurban@cpan.org>
+
+	free: fix the dxf pair leaks
+	before each new_object.
+	The INDXF obj->dxfname is heap allocated, the obj->name const.
+
+	Biggest part of #151
+	Now leftovers are mostly some dynamic dynapi strings and SPLINE callocs.
+
+2019-12-28  Reini Urban  <rurban@cpan.org>
+
+	free: more indxf leaks
+	free pair on DXF_CHECK_EOF, DXF_RETURN_EOF. GH #151
+
+	free: work on indxf leaks
+	Keep the first BLOCK_HEADER name static, as all the others.
+	See GH #151
+
+	adjust gen-dynapi.pl line numbers +1 not -1
+
+2019-12-27  Reini Urban  <rurban@cpan.org>
+
+	dxf2dwg: add experimental --force-free option
+	to be able to debug into dwg_free leaks, as found by
+	valgrind
+
+	outdxf: protect from NULL HATCH.boundary_handles
+	found via fuzzing
+
+	outdxf: fix some dxf_tables_write null-dereferences
+	leading to fuzzing crashes
+
+	outdxf: fix 1 dxf_classes_write null-dereferences
+	leading to fuzzing crashes
+
+	outdxf: fix 3 header null-dereferences
+	leading to fuzzing crashes
+
+	No -Wformat-truncation warnings anymore.
+	Add an assert. The old code ran out of var-tracking size,
+	but the assert now makes it clear.
+
+	indxf: fix some nonnull warnings
+
+	Fix some -Wunused-but-set-variable
+	detected by clang-analyzer
+
+	Avoid -Wformat-truncation, add RETURNS_NONNULL attribute
+	mark dxf_format() and dxf_codepage() as __attribute__((returns_nonnull)),
+	avoiding clang warnings warning: null format string [-Wformat-truncation=]
+	       snprintf (buf, 255, _fmt, value);
+
+	indxfb: fix dxf_read_rd
+	copy pasta
+
+	indxf: fix -Wformat with 32bit
+
+2019-12-26  Reini Urban  <rurban@cpan.org>
+
+	indxf: init MLEADER counts
+	in REPEAT check num_vars before accessing the array,
+	which might still be NULL. esp. with indxf
+
+	indxf: fix DXF_*_EOF logic
+	treat NULL pair as EOF, and return immediately
+
+	indxf: support 3DSOLID.history_id
+	and for all its children (AcDb3dSolid). r2007+
+
+	indxf: fix color.alpha
+	at least since r2007 alpha is seperately at 440
+
+	indxf: dxf_read_pair() pair leak
+
+	indxf: dxf_thumbnail_read pair leak
+
+	indxf dxf_expect_code: use-after-free
+	and -Wnull-dereference
+
+	fix decomp leak in read_2004_compressed_section
+	with empty sections
+
+	fix preR13 PREP_TABLE memory leak
+
+	fix dwg2dxf filename_out memory leak
+
+	fix some dwg_api point memory leaks
+
+	refactor perl5 bindings
+	set proper -I and -L paths, create LibreDWG.c not swig_perl.c
+
+	fix dwgwrite outfile memory leak
+
+	fix 2 dwgrewrite filename_out memory leaks
+
+	indxf: fix postprocess_SEQEND memory leak
+
+	indxf new_object: -Wnull-dereference
+	(the last one)
+
+	indxf new_LWPOLYLINE: fix 91 vertexids type
+	detected by scan-build
+
+	in_dxf add_MULTILEADER_leaders: fix -Wnull-dereference
+
+	Harmonize out_dxfb.c with out_dxf.c
+	Fixes GH #173, esp. add the new mspace improvements.
+
+	in_dxf add_MULTILEADER_lines: fix -Wnull-dereference
+
+	dxf_header_read: add a strlen nonnull check
+
+	dxf_tables_read: -Wnull-dereference
+
+	abstract DWG_OPTS for dat->opts and dwg->opts
+	use constants
+
+2019-12-26  Reini Urban  <rurban@cpan.org>
+
+	remove in_dxfb.c GH #134
+	add some is_binary logic to in_dxf.c
+	use dat->opts flag 0x20 for DXFB
+
+	reduced size of the .so from 30521368 - 30260552 = 260816 byte.
+	It should be a bit slower though, but many indxf funcs are now static,
+	and there are no silly code duplicates anymore.
+
+	Closes GH #134
+
+2019-12-26  Reini Urban  <rurban@cpan.org>
+
+	in_dxfb.c: merge with in_dxf.c
+	add all the missing logic.
+
+	See GH #134, we really wanted to avoid that code duplication.
+
+2019-12-26  Reini Urban  <rurban@cpan.org>
+
+	in_dxf: pair->value.s nonnull as version
+	Argument with 'nonnull' attribute passed null
+
+	in_dxf: STRADD pair->value.s nonnull
+	Argument with 'nonnull' attribute passed null
+	STRADD with NULL pair->value.s
+
+	sec_dat.chain nonnull
+	Argument with 'nonnull' attribute passed null
+	Harmonize read_2004_section_preview with r2007 variant,
+	sec_dat.chain could be NULL
+
+	Type casting inconsistency #174
+	Avoid overflows by casting to the larger type, zero-extended
+
+2019-12-25  Reini Urban  <rurban@cpan.org>
+
+	examples: add unknown.pi to EXTRA_DIST
+	make unknown didnt work in checkouts with picat
+
+	Makefile: refman-pdf is not a prime-target
+	and does not work
+
 2019-12-25  Reini Urban  <rurban@cpan.org>
 
 	Release 0.9.3

@@ -19,6 +19,7 @@ Major bugfixes:
   * Harmonized INDXFB with INDXF, removed extra src/in_dxfb.c (#134).
     Slimmed the .so size by 260Kb. Still untested though.
   * Fixed encoding of added r2000 AUXHEADER address (broken since 0.9)
+  * Fixed EED encoding from dwgrewrite (a dxf2dwg regression from 0.9) (#180)
 
 Minor bugfixes:
   * Many fuzzing and static analyzer fixes for dwg2dxf, dxf2dwg, dwgrewrite,
