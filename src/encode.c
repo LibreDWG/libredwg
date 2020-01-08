@@ -2568,6 +2568,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj, int
 
   while (rbuf)
     {
+      LOG_INSANE ("xdata[%u] type: " FORMAT_RS " [RS]\n", num_xdata, rbuf->type)
       bit_write_RS (dat, rbuf->type);
       type = get_base_value_type (rbuf->type);
       switch (type)
@@ -2589,7 +2590,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj, int
           }
           LATER_VERSIONS
           {
-            if (dat->byte + 2 + (2 * rbuf->value.str.size) > end)
+            if (dat->byte + 2 + (2 * rbuf->value.str.size) > end || rbuf->value.str.size < 0)
               break;
             bit_write_RS (dat, rbuf->value.str.size);
             for (i = 0; i < rbuf->value.str.size; i++)

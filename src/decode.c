@@ -4207,15 +4207,18 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
         }
       rbuf->next = NULL;
       rbuf->type = bit_read_RS (dat);
-      if (dat->byte == curr_address)
+      LOG_INSANE ("xdata[%u] type: " FORMAT_RS " [RS]\n", num_xdata, rbuf->type)
+      if (dat->byte == curr_address || dat->byte >= end_address)
         {
           // no advance, by dat overflow
+          free (rbuf);
           dat->byte = end_address;
           break;
         }
       if (rbuf->type < 0 || rbuf->type >= 2000)
         {
           LOG_ERROR ("Invalid xdata type %d [RS]", rbuf->type);
+          free (rbuf);
           dat->byte = end_address;
           break;
         }
@@ -4225,18 +4228,23 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
         case VT_STRING:
           PRE (R_2007)
           {
-            length = rbuf->value.str.size = bit_read_RS (dat);
+            length = bit_read_RS (dat);
+            LOG_INSANE ("xdata[%u]: length " FORMAT_RS "\n", num_xdata, length)
             rbuf->value.str.codepage = bit_read_RC (dat);
-            if (dat->byte + length > end_address)
+            LOG_INSANE ("xdata[%u]: codepage %d\n", num_xdata,
+                        (int)rbuf->value.str.codepage)
+            if (dat->byte + length > end_address || (short)length < 0)
               break;
+            rbuf->value.str.size = length;
             rbuf->value.str.u.data = bit_read_TF (dat, length);
+            LOG_INSANE ("STRING ")
             LOG_TRACE ("xdata[%u]: \"%s\" [TF %d %d]\n", num_xdata,
                        rbuf->value.str.u.data, length, rbuf->type);
           }
           LATER_VERSIONS
           {
-            length = rbuf->value.str.size = bit_read_RS (dat);
-            if (length > 0 && dat->byte + (length * 2) <= end_address)
+            length = bit_read_RS (dat);
+            if ((short)length > 0 && dat->byte + (length * 2) <= end_address)
               {
                 rbuf->value.str.u.wdata = calloc (length + 1, 2);
                 if (!rbuf->value.str.u.wdata)
@@ -4254,40 +4262,58 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
                       dwg_free_xdata_resbuf (rbuf);
                     return NULL;
                   }
+                rbuf->value.str.size = length;
                 for (i = 0; i < length; i++)
                   rbuf->value.str.u.wdata[i] = bit_read_RS (dat);
                 rbuf->value.str.u.wdata[i] = '\0';
+                LOG_INSANE ("UNISTRING ")
                 LOG_TRACE_TU ("xdata", rbuf->value.str.u.wdata, rbuf->type);
+              }
+            else
+              {
+                rbuf->value.str.size = 0;
               }
           }
           break;
         case VT_REAL:
+          if (dat->byte + 8 > end_address)
+            break;
           rbuf->value.dbl = bit_read_RD (dat);
           LOG_TRACE ("xdata[%u]: %f [RD %d]\n", num_xdata, rbuf->value.dbl,
                      rbuf->type);
           break;
         case VT_BOOL:
         case VT_INT8:
+          if (dat->byte + 1 > end_address)
+            break;
           rbuf->value.i8 = bit_read_RC (dat);
           LOG_TRACE ("xdata[%u]: %d [RC %d]\n", num_xdata, (int)rbuf->value.i8,
                      rbuf->type);
           break;
         case VT_INT16:
+          if (dat->byte + 2 > end_address)
+            break;
           rbuf->value.i16 = bit_read_RS (dat);
           LOG_TRACE ("xdata[%u]: %d [RS %d]\n", num_xdata,
                      (int)rbuf->value.i16, rbuf->type);
           break;
         case VT_INT32:
+          if (dat->byte + 4 > end_address)
+            break;
           rbuf->value.i32 = bit_read_RL (dat);
           LOG_TRACE ("xdata[%u]: %d [RL %d]\n", num_xdata,
                      (int)rbuf->value.i32, rbuf->type);
           break;
         case VT_INT64:
+          if (dat->byte + 8 > end_address)
+            break;
           rbuf->value.i64 = bit_read_BLL (dat);
           LOG_TRACE ("xdata[%u]: " FORMAT_BLL " [BLL %d]\n", num_xdata,
                      rbuf->value.i64, rbuf->type);
           break;
         case VT_POINT3D:
+          if (dat->byte + 24 > end_address)
+            break;
           rbuf->value.pt[0] = bit_read_RD (dat);
           rbuf->value.pt[1] = bit_read_RD (dat);
           rbuf->value.pt[2] = bit_read_RD (dat);
@@ -4297,13 +4323,21 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
           break;
         case VT_BINARY:
           rbuf->value.str.size = bit_read_RC (dat);
+          if (dat->byte + rbuf->value.str.size > end_address)
+            {
+              rbuf->value.str.size = 0;
+              break;
+            }
           rbuf->value.str.u.data = bit_read_TF (dat, rbuf->value.str.size);
+          LOG_INSANE ("BINARY ")
           LOG_TRACE ("xdata[%u]: [TF %d %d] ", num_xdata, rbuf->value.str.size,
                      rbuf->type);
           LOG_TRACE_TF (rbuf->value.str.u.data, rbuf->value.str.size);
           break;
         case VT_HANDLE:
         case VT_OBJECTID:
+          if (dat->byte + 8 > end_address)
+            break;
           bit_read_fixed (dat, rbuf->value.hdl, 8);
           LOG_TRACE ("xdata[%u]: " FORMAT_H " [H %d]\n", num_xdata,
                      ARGS_H (rbuf->value.h), rbuf->type);
@@ -4314,6 +4348,8 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
                      rbuf->type)
           LOG_WARN ("xdata Read %lu, expected %d", dat->byte - start_address, obj->num_databytes);
           dwg_free_xdata_resbuf (rbuf);
+          if (curr)
+            curr->next = NULL;
           dat->byte = end_address;
           obj->num_xdata = num_xdata;
           return root;
