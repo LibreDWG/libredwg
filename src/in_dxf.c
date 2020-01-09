@@ -207,13 +207,13 @@ dxf_read_rd (Bit_Chain *dat)
       BITCODE_RD num;
       dxf_skip_ws (dat);
       if (dat->byte + 2 >= dat->size)
-        return NAN;
+        return (double)NAN;
       str = (char *)&dat->chain[dat->byte];
       num = strtod (str, &endptr);
       if (endptr)
         dat->byte += endptr - str;
       if (errno == ERANGE)
-        return NAN;
+        return (double)NAN;
       return num;
     }
 }
