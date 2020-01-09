@@ -3165,8 +3165,7 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       break;
     case 40:
     case 41:
-    case 42: /*case 43: case 44: case 45: case 46:
-case 51: case 54:*/
+    case 42:
       if (eed_need_size (8, size))
         return DWG_ERR_INVALIDEED;
       data->u.eed_40.real = bit_read_RD (dat);
@@ -3314,9 +3313,9 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
               LOG_HANDLE ("        invalid eed[%d]: skip\n", idx);
               LOG_POS
               obj->eed[idx].data = NULL;
-              obj->num_eed--;
-              dat->byte = end; // skip eed
-              continue;        // continue for next size = bit_read_BS(dat)
+              //obj->num_eed--; // we still have .raw
+              dat->byte = end;  // skip eed
+              continue;         // continue for next size = bit_read_BS(dat)
             }
 
           if (dat->byte < end - 1)
