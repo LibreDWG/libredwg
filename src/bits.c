@@ -1629,7 +1629,7 @@ bit_convert_TU (BITCODE_TU restrict wstr)
           str[i++] = (c & 0x3F) | 0x80;
         }
       else
-        fprintf (stderr, "ERROR: overlarge unicode codepoint U+%0X", c);
+        HANDLER (OUTPUT, "ERROR: overlarge unicode codepoint U+%0X", c);
      */
     }
   str[i] = '\0';
@@ -1970,7 +1970,7 @@ bit_write_bits (Bit_Chain *restrict dat, const char *restrict bits)
         bit_write_B (dat, *p != '0');
       else
         {
-          fprintf (stderr, "Invalid binary input %s\n", p);
+          HANDLER (OUTPUT, "ERROR: Invalid binary input %s\n", p);
           return;
         }
     }
@@ -2012,7 +2012,7 @@ bit_write_hexbits (Bit_Chain *restrict dat, const char *restrict bytes)
             }
           else
             {
-              fprintf (stderr, "Invalid hex input %s\n", p);
+              HANDLER (OUTPUT, "ERROR: Invalid hex input %s\n", p);
               return 0;
             }
         }
@@ -2041,8 +2041,8 @@ bit_fprint_bits (FILE *fp, unsigned char *bits, long unsigned int size)
       unsigned char bit = i % 8;
       unsigned char result = (bits[i / 8] & (0x80 >> bit)) >> (7 - bit);
       if (i && !bit)
-        printf (" ");
-      fprintf (fp, "%d", result ? 1 : 0);
+        HANDLER (fp, " ");
+      HANDLER (fp, "%d", result ? 1 : 0);
       // fprintf(fp, "%d", BIT(bits, i) ? 1 : 0);
     }
 }

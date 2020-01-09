@@ -654,8 +654,8 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
 #define ENT_REACTORS(code)                                                    \
   if (dat->version >= R_2000 && _obj->num_reactors > 0x1000)                  \
     {                                                                         \
-      fprintf (stderr, "Invalid num_reactors: %ld\n",                         \
-               (long)_obj->num_reactors);                                     \
+      LOG_ERROR ("Invalid num_reactors: %ld\n",                               \
+                 (long)_obj->num_reactors);                                   \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }                                                                         \
   SINCE (R_13)                                                                \

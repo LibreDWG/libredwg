@@ -288,8 +288,8 @@ static unsigned int cur_ver = 0;
 #define REACTORS(code)                                                        \
   if (dat->version >= R_2000 && obj->tio.object->num_reactors > 0x1000)       \
     {                                                                         \
-      fprintf (stderr, "Invalid num_reactors: %ld\n",                         \
-               (long)obj->tio.object->num_reactors);                          \
+      LOG_ERROR ("Invalid num_reactors: %ld\n",                               \
+                 (long)obj->tio.object->num_reactors);                        \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }                                                                         \
   if (obj->tio.object->reactors)                                              \

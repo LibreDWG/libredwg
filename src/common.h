@@ -138,8 +138,8 @@
 #  endif
 #endif
 
-#define TODO_ENCODER fprintf (stderr, "TODO: Encoder\n");
-#define TODO_DECODER fprintf (stderr, "TODO: Decoder\n");
+#define TODO_ENCODER HANDLER (OUTPUT, "TODO: Encoder\n");
+#define TODO_DECODER HANDLER (OUTPUT, "TODO: Decoder\n");
 
 #define VERSION(v)                                                            \
   cur_ver = v;                                                                \

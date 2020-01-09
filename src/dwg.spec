@@ -1612,7 +1612,7 @@ DWG_ENTITY (SPLINE)
   FIELD_BL (scenario, 0);
   UNTIL (R_2013) {
     if (FIELD_VALUE (scenario) != 1 && FIELD_VALUE (scenario) != 2)
-      fprintf (stderr, "Error: unknown scenario %d\n", FIELD_VALUE (scenario));
+      LOG_ERROR ("unknown scenario %d\n", FIELD_VALUE (scenario));
   }
   SINCE (R_2013) {
     FIELD_BL (splineflags1, 0);
@@ -6269,7 +6269,7 @@ DWG_ENTITY (HELIX)
   FIELD_BL (scenario, 0);
   UNTIL (R_2013) {
     if (FIELD_VALUE (scenario) != 1 && FIELD_VALUE (scenario) != 2)
-      fprintf (stderr, "Error: unknown scenario %d", FIELD_VALUE (scenario));
+      LOG_ERROR ("unknown scenario %d", FIELD_VALUE (scenario));
   }
   SINCE (R_2013) {
     FIELD_BL (splineflags1, 0);

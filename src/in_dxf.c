@@ -76,8 +76,8 @@ xcalloc (size_t n, size_t s)
   void *p = calloc (n, s);
   if (!p)
     {
-      fprintf (stderr, "ERROR: Out of memory with calloc %ld * %ld\n", (long)n,
-               (long)s);
+      LOG_ERROR ("Out of memory with calloc %ld * %ld\n", (long)n,
+                 (long)s);
       exit (1);
     }
   return p;

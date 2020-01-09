@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2013 Free Software Foundation, Inc.                        */
+/*  Copyright (C) 2013, 2018-2020 Free Software Foundation, Inc.             */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -22,9 +22,10 @@
 #ifdef HAVE_MALLOC_H
 #  include <malloc.h>
 #endif
+#include "logging.h"
 
 #define debug(fmt, ...)                                                       \
-  fprintf (stderr, "%s:%d: %s() - " fmt, __FILE__, __LINE__, __func__,        \
+  HANDLER (OUTPUT, "%s:%d: %s() - " fmt, __FILE__, __LINE__, __func__,        \
            ##__VA_ARGS__)
 #define POLY_LENGTH 32
 
@@ -458,16 +459,16 @@ debug_row (PolyRow row)
     {
       for (k = 0; k < 3; k++)
         {
-          fprintf (stderr, " %02x %02x %02x %02x ", row[k][4 * j + 0],
+          HANDLER (OUTPUT, " %02x %02x %02x %02x ", row[k][4 * j + 0],
                    row[k][4 * j + 1], row[k][4 * j + 2], row[k][4 * j + 3]);
           if (k != 2)
             {
-              fprintf (stderr, " | ");
+              HANDLER (OUTPUT, " | ");
             }
         }
-      fputc ('\n', stderr);
+      HANDLER (OUTPUT, "\n");
     }
-  fprintf (stderr, " %02x           |  %02x           |  %02x \n", row[0][16],
+  HANDLER (OUTPUT, " %02x           |  %02x           |  %02x \n", row[0][16],
            row[1][16], row[2][16]);
 }
 
@@ -476,7 +477,7 @@ dump_matrix (PolyMatrix matrix)
 {
   debug ("Matrix:\n");
   debug_row (matrix[0]);
-  fputc ('\n', stderr);
+  HANDLER (OUTPUT, "\n");
   debug_row (matrix[1]);
 }
 
@@ -490,8 +491,8 @@ dump_syndrome (unsigned char *s)
   for (i = 0; i < 16; i++)
     {
       if (i)
-        fputc ('-', stderr);
-      fprintf (stderr, "%02x", s[i]);
+        HANDLER (OUTPUT, "-");
+      HANDLER (OUTPUT, "%02x", s[i]);
     }
-  fputc ('\n', stderr);
+  HANDLER (OUTPUT, "\n");
 }

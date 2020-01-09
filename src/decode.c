@@ -1323,7 +1323,7 @@ classes_section:
      bit_write_CRC (dat, startpos, antcrc);
      dat->byte -= 2;
      crc2 = bit_read_CRC (dat);
-     if (loglevel) fprintf (stderr, "Read: %X\nCreated: %X\t SEMO: %X\n",
+     if (loglevel) HANDLER (OUTPUT, "Read: %X\nCreated: %X\t SEMO: %X\n",
                             crc, crc2, antcrc);
      //antcrc = crc;
    } while (section_size > 0);

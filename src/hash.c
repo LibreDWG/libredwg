@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-//#include "logging.h"
+#include "logging.h"
 
 dwg_inthash *
 hash_new (uint32_t size)
@@ -100,7 +100,7 @@ hash_get (dwg_inthash *hash, uint32_t key)
   uint32_t j = i;
   while (hash->array[i].key && hash->array[i].key != key)
     {
-      // fprintf(stderr, "get collision at %d\n", i);
+      //HANDLER (OUTPUT, "get collision at %d\n", i);
       i++; // linear probing with wrap around
       if (i == hash->size)
         i = 0;
@@ -121,7 +121,7 @@ hash_set (dwg_inthash *hash, uint32_t key, uint32_t value)
   uint32_t j = i;
   if (key == 0)
     {
-      fprintf (stderr, "forbidden 0 key\n");
+      HANDLER (OUTPUT, "forbidden 0 key\n");
       return;
     }
   // empty slot
@@ -139,30 +139,30 @@ hash_set (dwg_inthash *hash, uint32_t key, uint32_t value)
           hash->array[i].value = value;
           return;
         }
-      // fprintf(stderr, "set collision at %d\n", i);
+      // HANDLER (OUTPUT, "set collision at %d\n", i);
       i++; // linear probing with wrap around
       if (i == hash->size)
         i = 0;
       if (i == j) // not found
         {
-          // fprintf(stderr, "set not found at %d\n", i);
+          // HANDLER (OUTPUT, "set not found at %d\n", i);
           // if does not exist, add at i+1
           if (hash_need_resize (hash))
             {
-              // fprintf(stderr, "resize at %d\n", hash->size);
+              // HANDLER (OUTPUT, "resize at %d\n", hash->size);
               hash_resize (hash);
               return hash_set (hash, key, value);
             }
           while (hash->array[i].key) // find next empty slot
             {
               // up to here we have no coverage!
-              // fprintf(stderr, "set 2nd collision at %d\n", i);
+              // HANDLER (OUTPUT, "set 2nd collision at %d\n", i);
               i++; // again linear probing with wrap around
               if (i == hash->size)
                 i = 0;
               if (i == j) // not found
                 {
-                  // fprintf(stderr, "not found resize at %d\n", hash->size);
+                  // HANDLER (OUTPUT, "not found resize at %d\n", hash->size);
                   hash_resize (hash); // guarantees new empty slots
                   hash_set (hash, key, value);
                   return;

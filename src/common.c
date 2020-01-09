@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include "logging.h"
 
 unsigned char *
 dwg_sentinel (Dwg_Sentinel s)
@@ -261,35 +262,35 @@ EXPORT void
 dwg_errstrings (int error)
 {
   if (error & 1)
-    fprintf (stderr, "WRONGCRC ");
+    HANDLER (OUTPUT, "WRONGCRC ");
   if (error & 2)
-    fprintf (stderr, "NOTYETSUPPORTED ");
+    HANDLER (OUTPUT, "NOTYETSUPPORTED ");
   if (error & 4)
-    fprintf (stderr, "UNHANDLEDCLASS ");
+    HANDLER (OUTPUT, "UNHANDLEDCLASS ");
   if (error & 8)
-    fprintf (stderr, "INVALIDTYPE ");
+    HANDLER (OUTPUT, "INVALIDTYPE ");
   if (error & 16)
-    fprintf (stderr, "INVALIDHANDLE ");
+    HANDLER (OUTPUT, "INVALIDHANDLE ");
   if (error & 32)
-    fprintf (stderr, "INVALIDEED ");
+    HANDLER (OUTPUT, "INVALIDEED ");
   if (error & 64)
-    fprintf (stderr, "VALUEOUTOFBOUNDS ");
+    HANDLER (OUTPUT, "VALUEOUTOFBOUNDS ");
   // -- critical --
   if (error > 127)
-    fprintf (stderr, "\nCritical: ");
+    HANDLER (OUTPUT, "\nCritical: ");
   if (error & 128)
-    fprintf (stderr, "CLASSESNOTFOUND ");
+    HANDLER (OUTPUT, "CLASSESNOTFOUND ");
   if (error & 256)
-    fprintf (stderr, "SECTIONNOTFOUND ");
+    HANDLER (OUTPUT, "SECTIONNOTFOUND ");
   if (error & 512)
-    fprintf (stderr, "PAGENOTFOUND ");
+    HANDLER (OUTPUT, "PAGENOTFOUND ");
   if (error & 1024)
-    fprintf (stderr, "INTERNALERROR ");
+    HANDLER (OUTPUT, "INTERNALERROR ");
   if (error & 2048)
-    fprintf (stderr, "INVALIDDWG ");
+    HANDLER (OUTPUT, "INVALIDDWG ");
   if (error & 4096)
-    fprintf (stderr, "IOERROR ");
+    HANDLER (OUTPUT, "IOERROR ");
   if (error & 8192)
-    fprintf (stderr, "OUTOFMEM ");
-  fprintf (stderr, "\n");
+    HANDLER (OUTPUT, "OUTOFMEM ");
+  HANDLER (OUTPUT, "\n");
 }

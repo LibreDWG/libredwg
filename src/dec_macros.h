@@ -644,8 +644,8 @@
       tmp = bit_read_TF (dat, 24);                                            \
       if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)                                \
         {                                                                     \
-          bit_fprint_bits (stderr, (unsigned char *)tmp, 68);                 \
-          fprintf (stderr, "\n");                                             \
+          bit_fprint_bits (OUTPUT, (unsigned char *)tmp, 68);                 \
+          HANDLER (OUTPUT, "\n");                                             \
         }                                                                     \
       LOG_TRACE_TF (tmp, 24);                                                 \
       free (tmp);                                                             \
