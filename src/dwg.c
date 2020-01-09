@@ -1329,7 +1329,7 @@ dwg_section_type (const DWGCHAR *wname)
     }
   else if (strEQc (name, "AcDb:AcDsPrototype_1b"))
     {
-      return SECTION_PROTOTYPE;
+      return SECTION_PROTOTYPE; // 0xc or 0xd!
     }
   else if (strEQc (name, "AcDb:AuxHeader"))
     {

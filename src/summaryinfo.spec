@@ -51,4 +51,3 @@
   //DEBUG_HERE;
   FIELD_RL (unknown1, 0);
   FIELD_RL (unknown2, 0);
-

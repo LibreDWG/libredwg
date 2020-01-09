@@ -730,7 +730,8 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
   section = get_section (sections_map, sec_type);
   if (section == NULL)
     {
-      LOG_ERROR ("Failed to find section %d", (int)sec_type)
+      if (sec_type < SECTION_REVHISTORY)
+        LOG_ERROR ("Failed to find section %d", (int)sec_type)
       return DWG_ERR_SECTIONNOTFOUND;
     }
 
@@ -1688,7 +1689,7 @@ read_2007_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                            r2007_section *restrict sections_map,
                            r2007_page *restrict pages_map)
 {
-  static Bit_Chain old_dat, obj_dat = { 0 };
+  static Bit_Chain old_dat, sec_dat = { 0 };
   Bit_Chain *str_dat;
   struct Dwg_SummaryInfo *_obj = &dwg->summaryinfo;
   Dwg_Object *obj = NULL;
@@ -1696,13 +1697,13 @@ read_2007_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   BITCODE_RL rcount1 = 0, rcount2 = 0;
 
   old_dat = *dat;
-  error = read_data_section (&obj_dat, dat, sections_map, pages_map,
+  error = read_data_section (&sec_dat, dat, sections_map, pages_map,
                              SECTION_SUMMARYINFO);
-  if (error >= DWG_ERR_CRITICAL || !obj_dat.chain)
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
     {
       LOG_ERROR ("Failed to read SummaryInfo section");
-      if (obj_dat.chain)
-        free (obj_dat.chain);
+      if (sec_dat.chain)
+        free (sec_dat.chain);
       return error;
     }
 
@@ -1710,14 +1711,135 @@ read_2007_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     LOG_WARN ("summaryinfo_address mismatch: " FORMAT_RL " != %lu",
               dwg->header.summaryinfo_address, dat->byte);
   LOG_TRACE ("\nSummaryInfo\n-------------------\n")
-  str_dat = dat = &obj_dat; // restrict in size
+  str_dat = dat = &sec_dat; // restrict in size
 
   // clang-format off
   #include "summaryinfo.spec"
   // clang-format on
 
-  if (obj_dat.chain)
-    free (obj_dat.chain);
+  if (sec_dat.chain)
+    free (sec_dat.chain);
+  *dat = old_dat; // unrestrict
+  return error;
+}
+
+/* AppInfo Section
+ */
+static int
+read_2007_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                           r2007_section *restrict sections_map,
+                           r2007_page *restrict pages_map)
+{
+  Bit_Chain old_dat, sec_dat = { 0 };
+  Bit_Chain *str_dat;
+  struct Dwg_AppInfo *_obj = &dwg->appinfo;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  BITCODE_RL rcount1 = 0, rcount2 = 0;
+
+  // not compressed, page size: 0x80
+  error = read_data_section (&sec_dat, dat, sections_map, pages_map,
+                             SECTION_APPINFO);
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
+    {
+      LOG_INFO ("%s section not found\n", "AppInfo");
+      if (sec_dat.chain)
+        free (sec_dat.chain);
+      return error;
+    }
+
+  LOG_TRACE ("\nAppInfo\n-------------------\n")
+  old_dat = *dat;
+  str_dat = dat = &sec_dat; // restrict in size
+
+  // clang-format off
+  #include "appinfo.spec"
+  // clang-format on
+
+  LOG_TRACE ("\n")
+  if (sec_dat.chain)
+    free (sec_dat.chain);
+  *dat = old_dat; // unrestrict
+  return error;
+}
+
+/* r21 FileDepList Section
+ */
+static int
+read_2007_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                           r2007_section *restrict sections_map,
+                           r2007_page *restrict pages_map)
+{
+  Bit_Chain old_dat, sec_dat = { 0 };
+  int error;
+  Bit_Chain *str_dat;
+  struct Dwg_FileDepList *_obj = &dwg->filedeplist;
+  Dwg_Object *obj = NULL;
+  //BITCODE_BL vcount;
+  BITCODE_RL rcount1 = 0, rcount2 = 0;
+
+  // not compressed, page size: 0x80. 0xc or 0xd
+  error = read_data_section (&sec_dat, dat, sections_map, pages_map,
+                             SECTION_FILEDEPLIST);
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
+    {
+      LOG_INFO ("%s section not found\n", "FileDepList");
+      if (sec_dat.chain)
+        free (sec_dat.chain);
+      return 0;
+    }
+
+  LOG_TRACE ("FileDepList\n-------------------\n")
+  old_dat = *dat;
+  str_dat = dat = &sec_dat; // restrict in size
+
+  // clang-format off
+  #include "filedeplist.spec"
+  // clang-format on
+
+  LOG_TRACE ("\n")
+  if (sec_dat.chain)
+    free (sec_dat.chain);
+  *dat = old_dat; // unrestrict
+  return error;
+}
+
+/* r21 Security Section, if saved with password
+ */
+static int
+read_2007_section_security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                           r2007_section *restrict sections_map,
+                           r2007_page *restrict pages_map)
+{
+  Bit_Chain old_dat, sec_dat = { 0 };
+  int error;
+  Bit_Chain *str_dat;
+  struct Dwg_Security *_obj = &dwg->security;
+  Dwg_Object *obj = NULL;
+  BITCODE_RL rcount1 = 0, rcount2 = 0;
+
+  // compressed, page size: 0x7400
+  error = read_data_section (&sec_dat, dat, sections_map, pages_map,
+                             SECTION_SECURITY);
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
+    {
+      LOG_INFO ("%s section not found\n", "Security");
+      if (sec_dat.chain)
+        free (sec_dat.chain);
+      return 0;
+    }
+
+  LOG_TRACE ("Security\n-------------------\n")
+  old_dat = *dat;
+  str_dat = dat = &sec_dat; // restrict in size
+
+  // clang-format off
+  #include "security.spec"
+  // clang-format on
+
+  LOG_TRACE ("\n")
+  if (sec_dat.chain)
+    free (sec_dat.chain);
   *dat = old_dat; // unrestrict
   return error;
 }
@@ -1734,7 +1856,7 @@ read_2007_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
   error = read_data_section (&sec_dat, dat, sections_map, pages_map,
                              SECTION_PREVIEW);
-  if (error >= DWG_ERR_CRITICAL)
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
     {
       LOG_ERROR ("Failed to read uncompressed %s section", "Preview");
       if (sec_dat.chain)
@@ -1855,10 +1977,10 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   // if (dwg->header.vbaproj_address)
   //  error |= read_2007_section_vbaproject (dat, dwg, sections_map,
   //  pages_map);
-  // error |= read_2007_section_appinfo (dat, dwg, sections_map, pages_map);
-  // error |= read_2007_section_filedeplist (dat, dwg, sections_map,
-  // pages_map); error |= read_2007_section_security (dat, dwg, sections_map,
-  // pages_map); error |= read_2007_section_revhistory (dat, dwg, sections_map,
+  error |= read_2007_section_appinfo (dat, dwg, sections_map, pages_map);
+  error |= read_2007_section_filedeplist (dat, dwg, sections_map, pages_map);
+  error |= read_2007_section_security (dat, dwg, sections_map, pages_map);
+  // error |= read_2007_section_revhistory (dat, dwg, sections_map,
   // pages_map);
   // read_2007_blocks (dat, hdl_dat, dwg, sections_map, pages_map);
 

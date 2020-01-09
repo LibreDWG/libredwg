@@ -387,13 +387,37 @@
     LOG_TRACE (#nam ": \"%s\" [TFF %d " #dxf "]\n", _obj->nam, (int)len);     \
     LOG_INSANE_TF (FIELD_VALUE (nam), (int)len);                              \
   }
-// clang-format on
+#define FIELD_TFFx(nam, len, dxf)                                             \
+  {                                                                           \
+    SINCE (R_13) { VECTOR_CHKCOUNT (nam, TF, len, dat) }                      \
+    bit_read_fixed (dat, _obj->nam, (int)len);                                \
+    LOG_TRACE (#nam ": [TFFx %d " #dxf "]\n  ", (int)len);                    \
+    LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \
+  }
+#define FIELD_TU16(nam, dxf)                                                  \
+  {                                                                           \
+    _obj->nam = bit_read_TU16 (dat);                                          \
+    LOG_TRACE_TU (#nam, FIELD_VALUE (nam), dxf);                              \
+  }
+#define FIELD_T32(nam, dxf)                                                   \
+  {                                                                           \
+    _obj->nam = bit_read_T32 (dat);                                           \
+    if (dat->version < R_2007)                                                \
+      {                                                                       \
+        FIELD_G_TRACE (nam, T32, dxf)                                         \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        LOG_TRACE_TU_I (#nam, rcount1, FIELD_VALUE (nam), dxf)                \
+      }                                                                       \
+  }
 #define FIELD_TV(nam, dxf) FIELDG (nam, TV, dxf)
 #define FIELD_TU(nam, dxf)                                                    \
   {                                                                           \
     _obj->nam = (BITCODE_TU)bit_read_TU (str_dat);                            \
     LOG_TRACE_TU (#nam, (BITCODE_TU)FIELD_VALUE (nam), dxf);                  \
   }
+// clang-format on
 #define FIELD_T(nam, dxf)                                                     \
   {                                                                           \
     if (dat->version < R_2007)                                                \

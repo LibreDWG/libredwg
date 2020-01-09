@@ -208,17 +208,25 @@ uint32_t bit_calc_CRC32 (const uint32_t seed, unsigned char *adr, long len);
 void bit_read_fixed (Bit_Chain *restrict dat, BITCODE_RC *restrict dest,
                      unsigned int length);
 
+/* read fixed-length ASCII string */
 BITCODE_TF bit_read_TF (Bit_Chain *dat, unsigned int length) ATTRIBUTE_MALLOC;
 
 void bit_write_TF (Bit_Chain *restrict dat, BITCODE_TF restrict chain,
                    unsigned int length);
 
+/* read ASCII string, with length as BS */
 BITCODE_TV bit_read_TV (Bit_Chain *restrict dat);
 
 void bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict value);
 
-BITCODE_TU
-bit_read_TU (Bit_Chain *restrict dat);
+/* read UCS-2 string, with length as BS */
+BITCODE_TU bit_read_TU (Bit_Chain *restrict dat);
+/* read ASCII string, with length as RS */
+BITCODE_TV bit_read_T16 (Bit_Chain *restrict dat);
+/* read UCS-2 string, with length as RS */
+BITCODE_TU bit_read_TU16 (Bit_Chain *restrict dat);
+/* read ASCII string, with length as RL */
+BITCODE_T32 bit_read_T32 (Bit_Chain *restrict dat);
 
 void bit_write_TU (Bit_Chain *restrict dat, BITCODE_TU restrict value);
 

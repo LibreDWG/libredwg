@@ -64,6 +64,9 @@ EXTRA_HEADERS = \
         auxheader.spec \
 	r2004_file_header.spec \
         summaryinfo.spec \
+        appinfo.spec \
+        filedeplist.spec \
+        security.spec \
 	classes.inc \
 	objects.inc \
 	spec.h \

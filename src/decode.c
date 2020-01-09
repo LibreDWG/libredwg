@@ -49,6 +49,9 @@ static unsigned int loglevel;
 /* the current version per spec block */
 static int cur_ver = 0;
 static BITCODE_BL rcount1 = 0, rcount2 = 0;
+static int section_appinfo_type = 0;
+static int section_filedeplist_type = 0;
+static int section_security_type = 0;
 
 #ifdef USE_TRACING
 /* This flag means we have checked the environment variable
@@ -2105,10 +2108,17 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                  info->max_decomp_size, info->max_decomp_size)
       LOG_TRACE ("unknown:         %u\n", info->unknown)
       LOG_TRACE ("compressed:      %u (1=no, 2=yes)\n", info->compressed)
-      LOG_TRACE ("type:            0x%x\n", (unsigned)info->type)
+      LOG_TRACE ("type:            %d\n", (int)info->type)
       LOG_TRACE ("encrypted:       %d (0=no, 1=yes, 2=unknown)\n",
                  info->encrypted)
-      LOG_TRACE ("name:            %s\n\n", info->name)
+      LOG_TRACE ("name:            %s\n\n", info->name);
+
+      if (strEQc (info->name, "AcDb:FileDepList"))
+        section_filedeplist_type = info->type;
+      else if (strEQc (info->name, "AcDb:AppInfo"))
+        section_appinfo_type = info->type; // 0xc or 0xb
+      else if (strEQc (info->name, "AcDb:Security"))
+        section_security_type = info->type;
 
       if (ptr + (16 * info->num_sections) >= decomp_end)
         {
@@ -2741,11 +2751,9 @@ static int
 read_2004_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain old_dat, sec_dat = { 0 };
-  int error = 0;
-
   // not compressed, page size: 0x100
-  error
-      = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_SUMMARYINFO);
+  int error = read_2004_compressed_section (dat, dwg, &sec_dat,
+                                        SECTION_SUMMARYINFO); // always 9
   if (error >= DWG_ERR_CRITICAL)
     {
       LOG_ERROR ("Failed to read uncompressed %s section", "SummaryInfo");
@@ -2765,6 +2773,148 @@ read_2004_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   *dat = old_dat; // unrestrict
   return error;
 }
+
+// may return OUTOFBOUNDS, needs to free the chain then
+static int
+appinfo_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain *str_dat = dat;
+  struct Dwg_AppInfo *_obj = &dwg->appinfo;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+
+  // clang-format off
+  #include "appinfo.spec"
+  // clang-format on
+
+  return error;
+}
+
+/* R2004, 2010+ AppInfo Section
+ */
+static int
+read_2004_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain old_dat, sec_dat = { 0 };
+  int error;
+  // type: 0xc or 0xb
+  if (!section_appinfo_type)
+    return 0;
+  // not compressed, page size: 0x80
+  error = read_2004_compressed_section (dat, dwg, &sec_dat, section_appinfo_type);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      LOG_ERROR ("Failed to read uncompressed %s section", "AppInfo");
+      return error;
+    }
+
+  LOG_TRACE ("AppInfo\n-------------------\n")
+  old_dat = *dat;
+  dat = &sec_dat; // restrict in size
+
+  error = appinfo_private (dat, dwg);
+
+  LOG_TRACE ("\n")
+  if (sec_dat.chain)
+    free (sec_dat.chain);
+  *dat = old_dat; // unrestrict
+  return error;
+}
+
+// may return OUTOFBOUNDS
+static int
+filedeplist_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  struct Dwg_FileDepList *_obj = &dwg->filedeplist;
+  Dwg_Object *obj = NULL; // for obj->size overflow check
+  int error = 0;
+  BITCODE_BL vcount;
+
+  // clang-format off
+  #include "filedeplist.spec"
+  // clang-format on
+
+  return error;
+}
+
+/* r18 FileDepList Section
+ */
+static int
+read_2004_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain old_dat, sec_dat = { 0 };
+  int error;
+  if (!section_filedeplist_type)
+    return 0;
+  // not compressed, page size: 0x80. 0xc or 0xd
+  error = read_2004_compressed_section (dat, dwg, &sec_dat, section_filedeplist_type);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      LOG_INFO ("%s section not found\n", "FileDepList");
+      return 0;
+    }
+
+  LOG_TRACE ("FileDepList\n-------------------\n")
+  old_dat = *dat;
+  dat = &sec_dat; // restrict in size
+
+  error = filedeplist_private (dat, dwg);
+
+  LOG_TRACE ("\n")
+  if (sec_dat.chain)
+    free (sec_dat.chain);
+  *dat = old_dat; // unrestrict
+  return error;
+}
+
+// may return OUTOFBOUNDS
+static int
+security_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain *str_dat = dat;
+  struct Dwg_Security *_obj = &dwg->security;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+
+  // clang-format off
+  #include "security.spec"
+  // clang-format on
+
+  return error;
+}
+
+/* r18 Security Section, if saved with password
+ */
+static int
+read_2004_section_security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain old_dat, sec_dat = { 0 };
+  int error;
+  if (!section_security_type)
+    return 0;
+  // compressed, page size: 0x7400
+  error = read_2004_compressed_section (dat, dwg, &sec_dat, section_security_type);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      LOG_INFO ("%s section not found\n", "Security");
+      return 0;
+    }
+
+  LOG_TRACE ("Security\n-------------------\n")
+  old_dat = *dat;
+  dat = &sec_dat; // restrict in size
+
+  error = security_private (dat, dwg);
+
+  LOG_TRACE ("\n")
+  if (sec_dat.chain)
+    free (sec_dat.chain);
+  *dat = old_dat; // unrestrict
+  return error;
+}
+
+// static int read_2004_section_vbaproject (dat, dwg)
+// static int read_2004_section_revhistory (dat, dwg)
 
 static int
 read_2004_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
@@ -2817,12 +2967,6 @@ read_2004_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   return error;
 }
-
-// static int read_2004_section_vbaproject (dat, dwg)
-// static int read_2004_section_appinfo (dat, dwg)
-// static int read_2004_section_filedeplist (dat, dwg)
-// static int read_2004_section_security (dat, dwg)
-// static int read_2004_section_revhistory (dat, dwg)
 
 static void
 decrypt_R2004_header (Bit_Chain *restrict dat, BITCODE_RC *restrict decrypted,
@@ -2966,9 +3110,10 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // TODO:
   // if (dwg->header.vbaproj_address)
   //  error |= read_2004_section_vbaproject (dat, dwg);
-  // error |= read_2004_section_appinfo (dat, dwg);
-  // error |= read_2004_section_filedeplist (dat, dwg);
-  // error |= read_2004_section_security (dat, dwg);
+  error |= read_2004_section_appinfo (dat, dwg);
+  // error |= read_2004_section_appinfohistory (dat, dwg);
+  error |= read_2004_section_filedeplist (dat, dwg);
+  error |= read_2004_section_security (dat, dwg);
   // error |= read_2004_section_revhistory (dat, dwg);
 
   /* Clean up. XXX? Need this to write the sections, at least the name and

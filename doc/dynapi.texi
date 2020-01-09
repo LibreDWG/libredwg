@@ -7403,6 +7403,34 @@ struct _dwg_object_FIELD*
 @end vtable
 @end indentedblock
 
+@strong{Dwg_FileDepList_Files} @anchor{Dwg_FileDepList_Files}
+@vindex Dwg_FileDepList_Files
+
+@indentedblock
+@vtable @code
+
+@item filename
+T32
+@item filepath
+T32
+@item fingerprint
+T32
+@item version
+T32
+@item feature_index
+RL
+@item timestamp
+RL
+@item filesize
+RL
+@item affects_graphics
+RS
+@item refcount
+RL
+
+@end vtable
+@end indentedblock
+
 @strong{Dwg_FormattedTableData} @anchor{Dwg_FormattedTableData}
 @vindex Dwg_FormattedTableData
 

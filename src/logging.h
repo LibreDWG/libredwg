@@ -108,5 +108,21 @@
         }                                                                     \
     }
 #endif
+#define LOG_TRACE_TW(s, wstr, dxf)                                            \
+    LOG_TRACE ("%s: \"", s)                                                   \
+    LOG_TEXT32 (TRACE, (BITCODE_TW)wstr)                                      \
+    LOG_TRACE ("\" [TW %d]\n", dxf)
+#define LOG_TEXT32(level, wstr)                                               \
+    {                                                                         \
+      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level && wstr)                       \
+        {                                                                     \
+          BITCODE_TW ws = wstr;                                               \
+          uint32_t _c;                                                        \
+          while ((_c = *ws++))                                                \
+            {                                                                 \
+              HANDLER (OUTPUT, "%c", (char)(_c & 0xff));                      \
+            }                                                                 \
+        }                                                                     \
+    }
 
 #endif

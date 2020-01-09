@@ -166,6 +166,10 @@ typedef char* BITCODE_TF;
 #define FORMAT_TF "\"%s\""
 typedef char* BITCODE_TV;
 #define FORMAT_TV "\"%s\""
+#define BITCODE_T16 BITCODE_TV
+#define FORMAT_T16 "\"%s\""
+#define BITCODE_T32 BITCODE_TV
+#define FORMAT_T32 "\"%s\""
 typedef BITCODE_DOUBLE BITCODE_BT;
 #define FORMAT_BT "%f"
 typedef BITCODE_DOUBLE BITCODE_DD;
@@ -5527,7 +5531,7 @@ typedef enum DWG_SECTION_TYPE /* since r2004+ */
   SECTION_SECURITY,                     /* AcDb:Security, if stored with a password */
   SECTION_VBAPROJECT,                   /* AcDb:VBAProject */
   SECTION_SIGNATURE,                    /* AcDb:Signature */
-  SECTION_PROTOTYPE,                    /* AcDb:AcDsPrototype_1b */
+  SECTION_PROTOTYPE,                    /* AcDb:AcDsPrototype_1b = 12 */
   SECTION_UNKNOWN,
 } Dwg_Section_Type;
 
@@ -5620,6 +5624,19 @@ typedef struct _dwg_SummaryInfo_Property
   BITCODE_T value;
 } Dwg_SummaryInfo_Property;
 
+typedef struct _dwg_FileDepList_Files
+{
+  BITCODE_T32 filename;
+  BITCODE_T32 filepath;
+  BITCODE_T32 fingerprint;
+  BITCODE_T32 version;
+  BITCODE_RL feature_index;
+  BITCODE_RL timestamp;
+  BITCODE_RL filesize;
+  BITCODE_RS affects_graphics;
+  BITCODE_RL refcount;
+} Dwg_FileDepList_Files;
+
 /**
  Main DWG struct
  */
@@ -5650,6 +5667,21 @@ typedef struct _dwg_struct
     Dwg_Section_InfoHdr section_infohdr; /* R2004+ */
     Dwg_Section_Info* section_info;
   } header;
+
+  BITCODE_BS num_classes;    /*!< number of classes */
+  Dwg_Class * dwg_class;     /*!< array classes */
+  BITCODE_BL num_objects;    /*!< number of objects */
+  Dwg_Object * object;       /*!< list of all objects and entities */
+  BITCODE_BL num_entities;       /*!< number of entities in object */
+  BITCODE_BL num_object_refs;    /*!< number of object_ref's (resolved handles) */
+  Dwg_Object_Ref **object_ref;   /*!< array of most handles */
+  struct _inthash *object_map;   /*!< map of all handles */
+  int dirty_refs; /* 1 if we added an entity, and invalidated all the internal
+                     ref->obj's */
+  unsigned int opts; /* See DWG_OPTS_* below */
+
+  Dwg_Header_Variables header_vars;
+  Dwg_Chain thumbnail;
 
   struct Dwg_R2004_Header /* encrypted */
     {
@@ -5683,6 +5715,20 @@ typedef struct _dwg_struct
       BITCODE_RL compression_type;
       BITCODE_RLx checksum;
   } r2004_header;
+
+  Dwg_Object *mspace_block;
+  Dwg_Object *pspace_block;
+  /* Those TABLES might be empty with num_entries=0 */
+  Dwg_Object_BLOCK_CONTROL      block_control;
+  Dwg_Object_LAYER_CONTROL      layer_control;
+  Dwg_Object_STYLE_CONTROL      style_control;
+  Dwg_Object_LTYPE_CONTROL      ltype_control;
+  Dwg_Object_VIEW_CONTROL       view_control;
+  Dwg_Object_UCS_CONTROL        ucs_control;
+  Dwg_Object_VPORT_CONTROL      vport_control;
+  Dwg_Object_APPID_CONTROL      appid_control;
+  Dwg_Object_DIMSTYLE_CONTROL   dimstyle_control;
+  Dwg_Object_VPORT_ENTITY_CONTROL  vport_entity_control;
 
   /* #define DWG_AUXHEADER_SIZE 123 */
   struct Dwg_AuxHeader
@@ -5736,37 +5782,45 @@ typedef struct _dwg_struct
     BITCODE_RL   unknown1;
     BITCODE_RL   unknown2;
   } summaryinfo;
+
+  /* Contains information about the application that wrote
+     the .dwg file (encrypted = 2). */
+  struct Dwg_AppInfo
+  {
+    BITCODE_RL class_version;   // 3
+    BITCODE_RL unknown_rl;      // 3
+    BITCODE_TU appinfo_name;    // AppInfoDataList
+    BITCODE_RC version_checksum[16];
+    BITCODE_RC comment_checksum[16];
+    BITCODE_RC product_checksum[16];
+    BITCODE_TU version;
+    BITCODE_TU comment;
+    BITCODE_TU product_info;
+  } appinfo;
+
+  /* File Dependencies, IMAGE files, fonts, xrefs, plotconfigs */
+  struct Dwg_FileDepList
+  {
+    BITCODE_RL num_features;
+    BITCODE_TV *features; // Acad:XRef, Acad:Image, Acad:PlotConfig, Acad:Text
+    BITCODE_RL num_files;
+    Dwg_FileDepList_Files *files;
+  } filedeplist;
+
+  /* password info */
+  struct Dwg_Security
+  {
+    BITCODE_RL unknown_1;        // 0xc
+    BITCODE_RL unknown_2;        // 0
+    BITCODE_RL unknown_3;        // 0xabcdabcd
+    BITCODE_RL crypto_id;        //
+    BITCODE_TV crypto_name;      // "Microsoft Base DSS and Diffie-Hellman Cryptographic Provider"
+    BITCODE_RL algo_id;          // RC4
+    BITCODE_RL key_len;          // 40
+    BITCODE_RL encr_size;        //
+    BITCODE_TV encr_buffer;
+  } security;
   
-  Dwg_Chain thumbnail;
-
-  Dwg_Header_Variables header_vars;
-  
-  BITCODE_BS num_classes;    /*!< size of dwg_class */
-  Dwg_Class * dwg_class;     /*!< list of all classes */
-
-  BITCODE_BL num_objects;    /*!< size of object */
-  Dwg_Object * object;       /*!< list of all objects and entities */
-
-  BITCODE_BL num_entities;       /*!< number of entities in object */
-  BITCODE_BL num_object_refs;    /*!< number of object_ref's (resolved handles) */
-  Dwg_Object_Ref **object_ref;   /*!< array of all handles */
-  struct _inthash *object_map;   /*!< map of all handles */
-  int dirty_refs; /* 1 if we added an entity, and invalidated all the internal ref->obj's */
- 
-  Dwg_Object *mspace_block;
-  Dwg_Object *pspace_block;
-  /* Those TABLES might be empty with num_entries=0 */
-  Dwg_Object_BLOCK_CONTROL      block_control;
-  Dwg_Object_LAYER_CONTROL      layer_control;
-  Dwg_Object_STYLE_CONTROL      style_control;
-  Dwg_Object_LTYPE_CONTROL      ltype_control;
-  Dwg_Object_VIEW_CONTROL       view_control;
-  Dwg_Object_UCS_CONTROL        ucs_control;
-  Dwg_Object_VPORT_CONTROL      vport_control;
-  Dwg_Object_APPID_CONTROL      appid_control;
-  Dwg_Object_DIMSTYLE_CONTROL   dimstyle_control;
-  Dwg_Object_VPORT_ENTITY_CONTROL  vport_entity_control;
-
   struct _dwg_second_header {
     BITCODE_RL size;
     BITCODE_RL address;
@@ -5793,7 +5847,6 @@ typedef struct _dwg_struct
   } second_header;
 
   unsigned int layout_type;
-  unsigned int opts; /* See DWG_OPTS_* below */
 } Dwg_Data;
 
 #define DWG_OPTS_LOGLEVEL 0xf
