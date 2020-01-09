@@ -75,6 +75,7 @@ EXTRA_HEADERS = \
 	free.h \
         print.h \
 	logging.h \
+	reedsolomon.h \
         hash.h \
 	dynapi.h \
 	out_json.h

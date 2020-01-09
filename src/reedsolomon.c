@@ -24,6 +24,7 @@
 #  include <malloc.h>
 #endif
 #include "logging.h"
+#include "reedsolomon.h"
 
 #define debug(fmt, ...)                                                       \
   HANDLER (OUTPUT, "%s:%d: %s() - " fmt, __FILE__, __LINE__, __func__,        \
@@ -47,12 +48,6 @@ static void free_matrix (PolyMatrix);
 static PolyMatrix initialize_matrix (unsigned char *);
 static unsigned char f256_multiply (unsigned char, unsigned char);
 static void dump_syndrome (unsigned char *);
-
-/*
- * Public functions
- */
-int rs_decode_block (unsigned char *, int);
-void rs_encode_block (unsigned char *, unsigned char *, int);
 
 /*
  * Tables for dealing with the finite field. The specific representation
