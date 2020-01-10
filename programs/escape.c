@@ -113,9 +113,9 @@ htmlwescape (BITCODE_TU wstr)
   while ((c = *tmp++))
     len++;
   len += 16;
-  d = dest = malloc (len);
+  d = dest = calloc (len, 1);
 
-  while (*wstr++)
+  while (*wstr)
     {
       const int off = d - dest;
       if (off >= len - 8)
@@ -123,6 +123,7 @@ htmlwescape (BITCODE_TU wstr)
           len += 16;
           dest = realloc (dest, len);
           d = dest + off;
+          *d = 0;
         }
       switch (*wstr)
         {
@@ -139,10 +140,15 @@ htmlwescape (BITCODE_TU wstr)
             {
               sprintf (d, "&#x%X;", *wstr);
               d += strlen (d);
+              *d = 0;
             }
           else if (*wstr >= 20)
-            *d++ = *wstr;
+            {
+              *d++ = *wstr;
+              *d = 0;
+            }
         }
+      wstr++;
     }
   *d = 0;
   return dest;
