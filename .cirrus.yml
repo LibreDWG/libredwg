@@ -7,7 +7,7 @@ task:
   auto_cancellation: $CIRRUS_BRANCH != 'master' && $CIRRUS_BRANCH !=~ 'smoke/.*'
   only_if: $CIRRUS_BRANCH =~ 'smoke/.*' || $CIRRUS_BRANCH == 'master'
   install_script:
-    - pkg install -y autoconf automake libtool pkgconf python36 py36-libxml2 pcre2 libxml2 dejagnu texinfo
+    - pkg install -y autoconf automake libtool pkgconf python37 py37-libxml2 pcre2 libxml2 dejagnu texinfo
   build_script:
     - sh ./autogen.sh
     # --disable-python
