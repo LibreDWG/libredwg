@@ -95,6 +95,24 @@ transform_Y (double y)
   return page_height - (y - model_ymin);
 }
 
+static bool
+isnan_2BD (BITCODE_2BD pt)
+{
+  return isnan (pt.x) || isnan (pt.y);
+}
+
+static bool
+isnan_2pt (dwg_point_2d pt)
+{
+  return isnan (pt.x) || isnan (pt.y);
+}
+
+static bool
+isnan_3BD (BITCODE_3BD pt)
+{
+  return isnan (pt.x) || isnan (pt.y) || isnan (pt.z);
+}
+
 static void
 output_TEXT (Dwg_Object *obj)
 {
@@ -108,6 +126,8 @@ output_TEXT (Dwg_Object *obj)
   BITCODE_2DPOINT pt;
 
   if (!text->text_value)
+    return;
+  if (isnan_2BD (text->insertion_pt) || isnan_3BD (text->extrusion))
     return;
   if (dwg->header.version >= R_2007)
     escaped = htmlwescape ((BITCODE_TU)text->text_value);
@@ -150,6 +170,9 @@ output_LINE (Dwg_Object *obj)
   Dwg_Entity_LINE *line = obj->tio.entity->tio.LINE;
   BITCODE_3DPOINT start, end;
 
+  if (isnan_3BD (line->start) || isnan_3BD (line->end)
+      || isnan_3BD (line->extrusion))
+    return;
   transform_OCS (&start, line->start, line->extrusion);
   transform_OCS (&end, line->end, line->extrusion);
   printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f %f,%f\" "
@@ -164,6 +187,9 @@ output_CIRCLE (Dwg_Object *obj)
   Dwg_Entity_CIRCLE *circle = obj->tio.entity->tio.CIRCLE;
   BITCODE_3DPOINT center;
 
+  if (isnan_3BD (circle->center) || isnan_3BD (circle->extrusion)
+      || isnan (circle->radius))
+    return;
   transform_OCS (&center, circle->center, circle->extrusion);
   printf ("\t<circle id=\"dwg-object-%d\" cx=\"%f\" cy=\"%f\" r=\"%f\" "
           "fill=\"none\" stroke=\"blue\" stroke-width=\"0.1px\" />\n",
@@ -179,6 +205,10 @@ output_ARC (Dwg_Object *obj)
   double x_start, y_start, x_end, y_end;
   int large_arc;
 
+  if (isnan_3BD (arc->center) || isnan_3BD (arc->extrusion)
+      || isnan (arc->radius) || isnan (arc->start_angle)
+      || isnan (arc->start_angle))
+    return;
   transform_OCS (&center, arc->center, arc->extrusion);
 
   x_start = center.x + arc->radius * cos (arc->start_angle);
@@ -208,7 +238,7 @@ output_POLYLINE_2D (Dwg_Object *obj)
       dwg_point_2d *pts = dwg_object_polyline_2d_get_points (obj, &error);
       BITCODE_RL j;
 
-      if (error)
+      if (error || isnan_2pt (pts[0]) || isnan_3BD (pline->extrusion))
         return;
       ptin.x = pts[0].x;
       ptin.y = pts[0].y;
@@ -220,6 +250,8 @@ output_POLYLINE_2D (Dwg_Object *obj)
         {
           ptin.x = pts[j].x;
           ptin.y = pts[j].y;
+          if (isnan_2BD (ptin))
+            continue;
           transform_OCS_2d (&pt, ptin, pline->extrusion);
           // TODO bulge -> arc, widths
           printf (" L %f,%f", transform_X (pt.x), transform_Y (pt.y));
@@ -244,7 +276,7 @@ output_LWPOLYLINE (Dwg_Object *obj)
       dwg_point_2d *pts = dwg_ent_lwpline_get_points (pline, &error);
       BITCODE_RL j;
 
-      if (error)
+      if (error || isnan_2pt (pts[0]) || isnan_3BD (pline->extrusion))
         return;
       ptin.x = pts[0].x;
       ptin.y = pts[0].y;
@@ -256,6 +288,8 @@ output_LWPOLYLINE (Dwg_Object *obj)
         {
           ptin.x = pts[j].x;
           ptin.y = pts[j].y;
+          if (isnan_2BD (ptin))
+            continue;
           transform_OCS_2d (&pt, ptin, pline->extrusion);
           // TODO bulge -> arc, widths
           printf (" L %f,%f", transform_X (pt.x), transform_Y (pt.y));
@@ -274,6 +308,9 @@ output_INSERT (Dwg_Object *obj)
   if (insert->block_header && insert->block_header->handleref.value)
     {
       BITCODE_3DPOINT ins_pt;
+      if (isnan_3BD (insert->ins_pt) || isnan_3BD (insert->extrusion)
+          || isnan (insert->rotation) || isnan_3BD (insert->scale))
+        return;
       transform_OCS (&ins_pt, insert->ins_pt, insert->extrusion);
       printf ("\t<use id=\"dwg-object-%d\" transform=\"translate(%f %f) "
               "rotate(%f) scale(%f %f)\" xlink:href=\"#symbol-%lX\" />"
@@ -394,6 +431,10 @@ output_SVG (Dwg_Data *dwg)
   // double scale_x = dx / (dwg_page_x_max(dwg) - dwg_page_x_min(dwg));
   // double scale_y = dy / (dwg_page_y_max(dwg) - dwg_page_y_min(dwg));
   // scale = 25.4 / 72; // pt:mm
+  if (isnan (dx))
+    dx = 100.0;
+  if (isnan (dy))
+    dy = 100.0;
   page_width = dx;
   page_height = dy;
   // scale *= (scale_x > scale_y ? scale_x : scale_y);
@@ -420,7 +461,6 @@ output_SVG (Dwg_Data *dwg)
         output_BLOCK_HEADER (ref);
     }
   printf ("\t</defs>\n");
-
   printf ("</svg>\n");
 }
 
