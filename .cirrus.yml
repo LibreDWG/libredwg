@@ -1,7 +1,7 @@
 # Build configuration for https://cirrus-ci.com/github/LibreDWG/libredwg
 
 freebsd_instance:
-  image: freebsd-11-2-release-amd64
+  image_family: freebsd-12-1-snap
 
 task:
   auto_cancellation: $CIRRUS_BRANCH != 'master' && $CIRRUS_BRANCH !=~ 'smoke/.*'
