@@ -27,42 +27,74 @@ char * ATTRIBUTE_MALLOC
 htmlescape (const char *restrict src, const int cp)
 {
   int len;
-  char *dest, *d;
+  char *dest, *d, *end;
   unsigned char *s;
   if (!src)
     return NULL;
   len = strlen (src) + 10;
-  d = malloc (len);
+  d = calloc (len, 1);
   s = (unsigned char *)src;
   dest = d;
-  while (*s++)
+  end = dest + len;
+  while (*s)
     {
       const int off = d - dest;
-      if (off >= len - 8)
+      if (end - d <= 8)
         {
           len += 10;
           dest = realloc (dest, len);
           d = dest + off;
+          *d = 0;
+          end = dest + len;
         }
       switch (*s)
         {
-        case '"': strcat (d, "&quot;"); d += 6; break;
-        case '\'': strcat (d, "&#39;"); d += 5; break;
-        case '`': strcat (d, "&#96;"); d += 5; break;
-        case '&': strcat (d, "&amp;"); d += 5; break;
-        case '<': strcat (d, "&lt;"); d += 4; break;
-        case '>': strcat (d, "&gt;"); d += 4; break;
-        case '{': strcat (d, "&#123;"); d += 6; break;
-        case '}': strcat (d, "&#125;"); d += 6; break;
+        case '"':
+          strcat (d, "&quot;");
+          d += 6;
+          break;
+        case '\'':
+          strcat (d, "&#39;");
+          d += 5;
+          break;
+        case '`':
+          strcat (d, "&#96;");
+          d += 5;
+          break;
+        case '&':
+          strcat (d, "&amp;");
+          d += 5;
+          break;
+        case '<':
+          strcat (d, "&lt;");
+          d += 4;
+          break;
+        case '>':
+          strcat (d, "&gt;");
+          d += 4;
+          break;
+        case '{':
+          strcat (d, "&#123;");
+          d += 6;
+          break;
+        case '}':
+          strcat (d, "&#125;");
+          d += 6;
+          break;
         default:
           if (*s >= 127) // maybe encodings, no utf8 (see htmlwescape)
             {
               sprintf (d, "&#x%X;", *s); // 4 + 4
               d += strlen (d);
+              *d = 0;
             }
           else if (*s >= 20)
-            *d++ = *s;
+            {
+              *d++ = *s;
+              *d = 0;
+            }
         }
+      s++;
     }
   *d = 0;
   return dest;
