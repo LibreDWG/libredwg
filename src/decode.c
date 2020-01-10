@@ -4610,6 +4610,8 @@ dwg_decode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *dat,
   int i;
   int is_entity;
 
+  if (!dwg || !obj || !dat)
+    return DWG_ERR_INTERNALERROR;
   i = obj->type - 500;
   if (i < 0 || i >= dwg->num_classes)
     {
@@ -4619,10 +4621,9 @@ dwg_decode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *dat,
     }
 
   klass = &dwg->dwg_class[i];
-  if (!klass || !klass->dxfname)
+  if (!dwg->dwg_class || !klass->dxfname)
     return DWG_ERR_INTERNALERROR;
   obj->dxfname = klass->dxfname;
-  // almost always false
   is_entity = dwg_class_is_entity (klass);
 
   // clang-format off

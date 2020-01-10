@@ -1442,6 +1442,7 @@ read_2007_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       if (max_num < 500 || max_num > 5000)
         {
           LOG_ERROR ("Invalid max class number %d", max_num)
+          dwg->num_classes = 0;
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
       assert (max_num >= 500);
