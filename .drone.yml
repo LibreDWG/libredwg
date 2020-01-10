@@ -13,7 +13,7 @@ build:
     - if [ $$arch = 64 ]; then target=x86_64; fi
     - pacman -S --needed --noconfirm --noprogressbar mingw-w64-${target}-pkg-config
         mingw-w64-${target}-libxml2 mingw-w64-${target}-swig mingw-w64-${target}-python2
-        texinfo dejagnu
+        texinfo
     - sh ./autogen.sh
     - ./configure
     - make

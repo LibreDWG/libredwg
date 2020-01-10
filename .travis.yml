@@ -13,7 +13,6 @@ addons:
       - python-libxml2
       - swig
       - help2man
-      - dejagnu
       - libpcre2-dev
       - libpcre2-32-0
       - libconvert-binary-c-perl

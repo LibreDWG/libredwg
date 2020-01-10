@@ -32,5 +32,5 @@ rem bash -lc "pacman -R --noconfirm --nodeps mingw-w64-%MSYS2_ARCH%-python3 ming
 
 echo Installing dependencies...
 rem see https://github.com/Alexpux/MSYS2-packages
-bash -lc "pacman -S --needed --noconfirm mingw-w64-%MSYS2_ARCH%-toolchain mingw-w64-%MSYS2_ARCH%-libtool mingw-w64-%MSYS2_ARCH%-libiconv mingw-w64-%MSYS2_ARCH%-libxml2 mingw-w64-%MSYS2_ARCH%-swig mingw-w64-%MSYS2_ARCH%-python2 texinfo dejagnu mingw-w64-%MSYS2_ARCH%-perl mingw-w64-%MSYS2_ARCH%-pcre2"
+bash -lc "pacman -S --needed --noconfirm mingw-w64-%MSYS2_ARCH%-toolchain mingw-w64-%MSYS2_ARCH%-libtool mingw-w64-%MSYS2_ARCH%-libiconv mingw-w64-%MSYS2_ARCH%-libxml2 mingw-w64-%MSYS2_ARCH%-swig mingw-w64-%MSYS2_ARCH%-python2 texinfo mingw-w64-%MSYS2_ARCH%-perl mingw-w64-%MSYS2_ARCH%-pcre2"
 rem autoconf-2.69 automake-wrapper

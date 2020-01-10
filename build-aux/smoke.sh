@@ -11,8 +11,8 @@ Darwin) # macports compilers
 make=gmake
 
 # for dejagnu
-export PKG_CONFIG_PATH=/opt/local/lib/pkgconfig
-export PYTHONPATH=/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages
+#export PKG_CONFIG_PATH=/opt/local/lib/pkgconfig
+#export PYTHONPATH=/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages
 # for pslib    
 CFLAGS=-I/usr/local/include
 LDFLAGS=-L/usr/local/lib
