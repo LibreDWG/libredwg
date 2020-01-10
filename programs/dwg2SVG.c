@@ -133,24 +133,28 @@ output_TEXT (Dwg_Object *obj)
     escaped = htmlwescape ((BITCODE_TU)text->text_value);
   else
     escaped = htmlescape (text->text_value, (int)dwg->header.codepage);
-  if (style && style->font_name && *style->font_name
+
+  if (style && o->fixedtype == DWG_TYPE_STYLE && style->font_name
+      && *style->font_name
 #ifdef HAVE_STRCASESTR
       && strcasestr (style->font_name, ".ttf")
 #else
-      && (strstr (style->font_name, ".ttf") || strstr (style->font_name, ".TTF"))
+      && (strstr (style->font_name, ".ttf")
+          || strstr (style->font_name, ".TTF"))
 #endif
-      )
+  )
     {
 #ifdef HAVE_STRCASESTR
       if (strcasestr (style->font_name, "Arial"))
 #else
-      if ((strstr (style->font_name, "arial")) || strstr (style->font_name, "Arial"))
+      if ((strstr (style->font_name, "arial"))
+          || strstr (style->font_name, "Arial"))
 #endif
         {
           fontfamily = "Arial";
         }
       else
-          fontfamily = "Verdana";
+        fontfamily = "Verdana";
     }
   else
     fontfamily = "Courier";
@@ -158,9 +162,8 @@ output_TEXT (Dwg_Object *obj)
   transform_OCS_2d (&pt, text->insertion_pt, text->extrusion);
   printf ("\t<text id=\"dwg-object-%d\" x=\"%f\" y=\"%f\" "
           "font-family=\"%s\" font-size=\"%f\" fill=\"blue\">%s</text>\n",
-          obj->index, transform_X (pt.x), transform_Y (pt.y),
-          fontfamily, text->height /* fontsize */,
-          escaped ? escaped : "");
+          obj->index, transform_X (pt.x), transform_Y (pt.y), fontfamily,
+          text->height /* fontsize */, escaped ? escaped : "");
   free (escaped);
 }
 
@@ -243,8 +246,8 @@ output_POLYLINE_2D (Dwg_Object *obj)
       ptin.x = pts[0].x;
       ptin.y = pts[0].y;
       transform_OCS_2d (&pt, ptin, pline->extrusion);
-      printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f",
-              obj->index, transform_X (pt.x), transform_Y (pt.y));
+      printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f", obj->index,
+              transform_X (pt.x), transform_Y (pt.y));
       // TODO curve_types, C for Bezier
       for (j = 1; j < numpts; j++)
         {
@@ -281,8 +284,8 @@ output_LWPOLYLINE (Dwg_Object *obj)
       ptin.x = pts[0].x;
       ptin.y = pts[0].y;
       transform_OCS_2d (&pt, ptin, pline->extrusion);
-      printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f",
-              obj->index, transform_X (pt.x), transform_Y (pt.y));
+      printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f", obj->index,
+              transform_X (pt.x), transform_Y (pt.y));
       // TODO curve_types, C for Bezier
       for (j = 1; j < numpts; j++)
         {
@@ -451,7 +454,7 @@ output_SVG (Dwg_Data *dwg)
           page_width, page_height);
 
   if ((ref = dwg_model_space_ref (dwg)))
-      output_BLOCK_HEADER (ref);
+    output_BLOCK_HEADER (ref);
   if ((ref = dwg_paper_space_ref (dwg)))
     output_BLOCK_HEADER (ref);
   printf ("\t<defs>\n");
