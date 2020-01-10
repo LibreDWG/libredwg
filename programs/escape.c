@@ -26,9 +26,14 @@
 char * ATTRIBUTE_MALLOC
 htmlescape (const char *restrict src, const int cp)
 {
-  int len = strlen (src) + 10;
-  char *dest, *d = malloc (len);
-  unsigned char *s = (unsigned char *)src;
+  int len;
+  char *dest, *d;
+  unsigned char *s;
+  if (!src)
+    return NULL;
+  len = strlen (src) + 10;
+  d = malloc (len);
+  s = (unsigned char *)src;
   dest = d;
   while (*s++)
     {

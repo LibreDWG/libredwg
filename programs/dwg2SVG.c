@@ -107,6 +107,8 @@ output_TEXT (Dwg_Object *obj)
   Dwg_Object_STYLE *style = o ? o->tio.object->tio.STYLE : NULL;
   BITCODE_2DPOINT pt;
 
+  if (!text->text_value)
+    return;
   if (dwg->header.version >= R_2007)
     escaped = htmlwescape ((BITCODE_TU)text->text_value);
   else
