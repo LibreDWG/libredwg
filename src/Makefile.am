@@ -67,6 +67,7 @@ EXTRA_HEADERS = \
         appinfo.spec \
         filedeplist.spec \
         security.spec \
+        vbaproject.spec \
 	classes.inc \
 	objects.inc \
 	spec.h \

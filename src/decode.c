@@ -2913,7 +2913,40 @@ read_2004_section_security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return error;
 }
 
-// static int read_2004_section_vbaproject (dat, dwg)
+/* VBAProject Section
+ */
+static int
+read_2004_section_vbaproject (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain old_dat, sec_dat = { 0 };
+  int error;
+  struct Dwg_VBAProject *_obj = &dwg->vbaproject;
+  if (!dwg->header.vbaproj_address)
+    return 0;
+  // compressed
+  error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_VBAPROJECT);
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
+    {
+      LOG_INFO ("%s section not found\n", "VBAProject");
+      return 0;
+    }
+
+  LOG_TRACE ("VBAProject\n-------------------\n")
+  old_dat = *dat;
+  dat = &sec_dat; // restrict in size
+
+  DEBUG_HERE
+  _obj->size = dat->size;
+  _obj->unknown_bits = bit_read_TF (dat, _obj->size);
+  LOG_TRACE_TF (_obj->unknown_bits, _obj->size)
+
+  LOG_TRACE ("\n")
+  if (sec_dat.chain)
+    free (sec_dat.chain);
+  *dat = old_dat; // unrestrict
+  return error;
+}
+
 // static int read_2004_section_revhistory (dat, dwg)
 
 static int
@@ -3107,9 +3140,8 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   error |= read_2004_section_handles (dat, dwg);
   if (dwg->header.thumbnail_address)
     error |= read_2004_section_preview (dat, dwg);
-  // TODO:
-  // if (dwg->header.vbaproj_address)
-  //  error |= read_2004_section_vbaproject (dat, dwg);
+  if (dwg->header.vbaproj_address)
+    error |= read_2004_section_vbaproject (dat, dwg);
   error |= read_2004_section_appinfo (dat, dwg);
   // error |= read_2004_section_appinfohistory (dat, dwg);
   error |= read_2004_section_filedeplist (dat, dwg);

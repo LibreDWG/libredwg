@@ -1684,6 +1684,47 @@ read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl,
   return error;
 }
 
+/* VBAProject Section
+ */
+static int
+read_2007_section_vbaproject (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                              r2007_section *restrict sections_map,
+                              r2007_page *restrict pages_map)
+{
+  Bit_Chain old_dat, sec_dat = { 0 };
+  //Bit_Chain *str_dat;
+  struct Dwg_VBAProject *_obj = &dwg->vbaproject;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  //BITCODE_RL rcount1 = 0, rcount2 = 0;
+
+  // not compressed, page size: 0x80
+  error = read_data_section (&sec_dat, dat, sections_map, pages_map,
+                             SECTION_VBAPROJECT);
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
+    {
+      LOG_INFO ("%s section not found\n", "VBAProject");
+      if (sec_dat.chain)
+        free (sec_dat.chain);
+      return error;
+    }
+
+  LOG_TRACE ("\nVBAProject\n-------------------\n")
+  old_dat = *dat;
+  dat = &sec_dat; // restrict in size
+
+  DEBUG_HERE
+  _obj->size = dat->size;
+  _obj->unknown_bits = bit_read_TF (dat, _obj->size);
+  LOG_TRACE_TF (_obj->unknown_bits, _obj->size)
+
+  LOG_TRACE ("\n")
+  if (sec_dat.chain)
+    free (sec_dat.chain);
+  *dat = old_dat; // unrestrict
+  return error;
+}
+
 static int
 read_2007_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                            r2007_section *restrict sections_map,
@@ -1974,9 +2015,8 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
                                       pages_map);
   if (dwg->header.thumbnail_address)
     error |= read_2007_section_preview (dat, dwg, sections_map, pages_map);
-  // if (dwg->header.vbaproj_address)
-  //  error |= read_2007_section_vbaproject (dat, dwg, sections_map,
-  //  pages_map);
+  if (dwg->header.vbaproj_address)
+    error |= read_2007_section_vbaproject (dat, dwg, sections_map, pages_map);
   error |= read_2007_section_appinfo (dat, dwg, sections_map, pages_map);
   error |= read_2007_section_filedeplist (dat, dwg, sections_map, pages_map);
   error |= read_2007_section_security (dat, dwg, sections_map, pages_map);

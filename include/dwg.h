@@ -5821,6 +5821,12 @@ typedef struct _dwg_struct
     BITCODE_TV encr_buffer;
   } security;
   
+  struct Dwg_VBAProject
+  {
+    int    size;
+    char  *unknown_bits;
+  } vbaproject;
+
   struct _dwg_second_header {
     BITCODE_RL size;
     BITCODE_RL address;
