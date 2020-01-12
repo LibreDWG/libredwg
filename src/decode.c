@@ -2174,7 +2174,13 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 }
 #endif
               info->sections[j] = find_section (dwg, page.number);
-              //info->sections[j]->type = dwg_section_type (info->name);
+              if (info->sections[j])
+                {
+                  LOG_TRACE ("section[%d].info[%d]: %s type %d => ", i, j, info->name,
+                             info->sections[j]->type);
+                  info->sections[j]->type = dwg_section_type (info->name);
+                  LOG_TRACE ("type %d\n", info->sections[j]->type);
+                }
 
               if (page.number < 0)
                 { // gap/unused data
