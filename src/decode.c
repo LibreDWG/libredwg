@@ -2174,6 +2174,7 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 }
 #endif
               info->sections[j] = find_section (dwg, page.number);
+              //info->sections[j]->type = dwg_section_type (info->name);
 
               if (page.number < 0)
                 { // gap/unused data

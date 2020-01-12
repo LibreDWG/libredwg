@@ -1258,24 +1258,13 @@ dwg_obj_has_subentity (const Dwg_Object *obj)
 }
 
 EXPORT Dwg_Section_Type
-dwg_section_type (const DWGCHAR *wname)
+dwg_section_type (const char* restrict name)
 {
-  DWGCHAR *wp;
-  char name[24];
-  uint16_t c;
-  int i = 0;
-
-  if (wname == NULL)
-    return SECTION_UNKNOWN;
-
-  wp = (DWGCHAR *)wname;
-  while ((c = *wp++))
+  if (name == NULL)
     {
-      name[i++] = (char)(c & 0xff);
+      return SECTION_UNKNOWN;
     }
-  name[i] = '\0';
-
-  if (strEQc (name, "AcDb:Header"))
+  else if (strEQc (name, "AcDb:Header"))
     {
       return SECTION_HEADER;
     }
@@ -1344,6 +1333,25 @@ dwg_section_type (const DWGCHAR *wname)
       return SECTION_APPINFOHISTORY;
     }
   return SECTION_UNKNOWN;
+}
+
+EXPORT Dwg_Section_Type
+dwg_section_wtype (const DWGCHAR *restrict wname)
+{
+  DWGCHAR *wp;
+  char name[24];
+  uint16_t c;
+  int i = 0;
+
+  if (wname == NULL)
+    return SECTION_UNKNOWN;
+  wp = (DWGCHAR *)wname;
+  while ((c = *wp++))
+    {
+      name[i++] = (char)(c & 0xff);
+    }
+  name[i] = '\0';
+  return dwg_section_type (name);
 }
 
 // See acdb.h: 100th of a mm, enum of

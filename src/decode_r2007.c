@@ -920,7 +920,7 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       if (ptr >= ptr_end)
         break;
 
-      // Section Name
+      // Section Name (wchar)
       section->name = bfr_read_string (&ptr, section->name_length);
 #ifdef HAVE_NATIVE_WCHAR2
       LOG_TRACE ("  name:          " FORMAT_TU "\n\n",
@@ -930,7 +930,7 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       LOG_TEXT_UNICODE (TRACE, section->name)
       LOG_TRACE ("\n\n")
 #endif
-      section->type = dwg_section_type (section->name);
+      section->type = dwg_section_wtype (section->name);
 
       if (section->num_pages <= 0)
         continue;
