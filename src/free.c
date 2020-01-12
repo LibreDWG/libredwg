@@ -129,6 +129,9 @@ static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
   }
 #define FIELD_T(name, dxf) FIELD_TV (name, dxf)
 #define FIELD_BINARY(name, len, dxf) FIELD_TV (name, dxf)
+#define FIELD_T16(name, dxf) FIELD_TV (name, dxf)
+#define FIELD_TU16(name, dxf) FIELD_TV (name, dxf)
+#define FIELD_T32(name, dxf) FIELD_TV (name, dxf)
 #define FIELD_BT(name, dxf) FIELD (name, BT);
 #define FIELD_4BITS(name, dxf)                                                \
   {                                                                           \
@@ -762,6 +765,43 @@ dwg_free_summaryinfo (Dwg_Data *dwg)
   return 0;
 }
 
+static int
+dwg_free_appinfo (Dwg_Data *dwg)
+{
+  struct Dwg_AppInfo *_obj = &dwg->appinfo;
+  Dwg_Object *obj = NULL;
+  Bit_Chain *dat = &pdat;
+  BITCODE_RL rcount1, rcount2;
+  // clang-format off
+  #include "appinfo.spec"
+  // clang-format on
+  return 0;
+}
+static int
+dwg_free_filedeplist (Dwg_Data *dwg)
+{
+  struct Dwg_FileDepList *_obj = &dwg->filedeplist;
+  Dwg_Object *obj = NULL;
+  Bit_Chain *dat = &pdat;
+  BITCODE_RL rcount1, rcount2;
+  // clang-format off
+  #include "filedeplist.spec"
+  // clang-format on
+  return 0;
+}
+static int
+dwg_free_security (Dwg_Data *dwg)
+{
+  struct Dwg_Security *_obj = &dwg->security;
+  Dwg_Object *obj = NULL;
+  Bit_Chain *dat = &pdat;
+  BITCODE_RL rcount1, rcount2;
+  // clang-format off
+  #include "security.spec"
+  // clang-format on
+  return 0;
+}
+
 void
 dwg_free (Dwg_Data *dwg)
 {
@@ -792,7 +832,6 @@ dwg_free (Dwg_Data *dwg)
           if (!dwg_obj_is_control (&dwg->object[i]))
             dwg_free_object (&dwg->object[i]);
         }
-      FREE_IF (dwg->header.section);
       dwg_free_header_vars (dwg);
       dwg_free_summaryinfo (dwg);
       FREE_IF (dwg->thumbnail.chain);
@@ -802,6 +841,13 @@ dwg_free (Dwg_Data *dwg)
             FREE_IF (dwg->header.section_info[i].sections);
           FREE_IF (dwg->header.section_info);
         }
+      dwg_free_appinfo (dwg);
+      dwg_free_filedeplist (dwg);
+      dwg_free_security (dwg);
+      FREE_IF (dwg->vbaproject.unknown_bits);
+      FREE_IF (dwg->revhistory.unknown_bits);
+      FREE_IF (dwg->appinfohistory.unknown_bits);
+      FREE_IF (dwg->header.section);
       for (i = 0; i < dwg->second_header.num_handlers; i++)
         FREE_IF (dwg->second_header.handlers[i].data);
       // auxheader has no strings
