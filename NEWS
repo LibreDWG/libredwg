@@ -2,6 +2,17 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2020 Free Software Foundation, Inc.
 See the end for copying conditions.
 
+LibreDWG version 0.10.1 - released 2020/01/13 - beta:
+
+Major bugfixes:
+  * Fixed dwg2SVG htmlescape overflows and off-by-ones (#182)
+  * Removed direct usages of fprintf and stderr in the lib. All can be
+    redefined now. (#181)
+
+Minor bugfixes:
+  * Fuzzing fixes for dwg2SVG, dwgread. (#182)
+  * Fixed eed.raw leaks
+
 LibreDWG version 0.10 - released 2020/01/08 - beta:
 
 API breaking changes:

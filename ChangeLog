@@ -1,6 +1,71 @@
 Full history from the git log
 -----------------------------
 
+2020-01-10  Reini Urban  <rurban@cpan.org>
+
+	Release 0.10.1
+	de/encode: protect more class overflows and NULL
+	reset num_classes with r2007. check NULL dwg.
+	check NULL dwg->classes.
+	found via fuzzing
+
+	remove outdated dejagnu deps
+	we dont depend on it anymore for some time already
+
+	cirrus: add p5-Convert-Binary-C
+
+	switch cirrus to freebsd-12-1-snap
+	See https://cirrus-ci.org/guide/FreeBSD/
+	They are using Google Cloud Compute images:
+	13-0-snap, 12-1-snap (stable), 12-1 (release)
+	12-0, 11-3-snap and 11-3. Not our old image anymore,
+	hence the python problems
+
+	switch cirrus to py37
+	py36-libxml2 does not exist anymore
+
+	dwg2SVG: protect from wrong style
+	id's 144 and 109 of GH #182
+	Closes GH #182
+
+	htmslescape: fix off-by-one and overflow
+	ditto.
+	Fixes GH #182
+
+	htmlescape: fix off-by-one and overflow
+	need \0 termination to do strcat.
+	don't skip the very first char.
+	Fixes GH #182
+
+	dwg2SVG: skip nan values
+
+	dwg2SVG: skip NULL text_value
+	Fixes Case 1 of GH #182
+
+2020-01-09  Reini Urban  <rurban@cpan.org>
+
+	add reedsolomon.h
+	we will use it soon
+
+	reedsolomon: missing config.h
+	needed for HAVE_MALLOC_H
+
+	consistent logging handlers, no fprintf, stderr in the lib
+	library users want to catch fprintf and/or stderr.
+	Closes GH #181
+
+	indxf: silence clang -Wdouble-promotion
+	use (double)NAN, as it's apparently only float there,
+	__builtin_nanf().
+
+	decode eed: accept raw with unknown codes
+	For dwgrewrite passes it through, and let data be empty.
+	And fixes a EED raw leak with such unknown codes.
+
+2020-01-08  Reini Urban  <rurban@cpan.org>
+
+	dwgrewrite: fix leaks on early errors
+
 2020-01-08  Reini Urban  <rurban@cpan.org>
 
 	Release 0.10
