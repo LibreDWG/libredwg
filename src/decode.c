@@ -2275,8 +2275,14 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
   sec_dat->chain = NULL; // fixes double-free
   if (!info)
     {
-      LOG_WARN ("Failed to find section_info[" FORMAT_BL "] with type %d", i,
-                type);
+      if (type < SECTION_REVHISTORY)
+        {
+          LOG_WARN ("Failed to find section_info[%u] with type %d", i, type)
+        }
+      else
+        {
+          LOG_TRACE ("Found no section_info[%u] with type %d\n", i, type)
+        }
       return DWG_ERR_SECTIONNOTFOUND;
     }
   else
@@ -2301,6 +2307,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Out of memory with %u sections", info->num_sections);
       return DWG_ERR_OUTOFMEM;
     }
+  bytes_left = max_decomp_size;
   initial_address = info->sections[0] ? info->sections[0]->address : 0;
   sec_dat->bit = 0;
   sec_dat->byte = 0;
@@ -2353,7 +2360,6 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       LOG_INSANE ("max_decomp_size:          %lu (0x%lx)\n",
                   (unsigned long)max_decomp_size,
                   (unsigned long)max_decomp_size)
-      bytes_left = max_decomp_size - (i * info->max_decomp_size);
       LOG_INSANE ("bytes_left:               %ld\n", bytes_left);
 
       // check if compressed at all
@@ -2363,31 +2369,37 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
         {
           error = decompress_R2004_section (
               dat, &decomp[i * info->max_decomp_size], // offset
-              bytes_left, es.fields.data_size);
+              info->max_decomp_size, es.fields.data_size);
           if (error > DWG_ERR_CRITICAL)
             {
               sec_dat->chain = NULL; // fix double-free
               free (decomp);
               return error;
             }
+          bytes_left -= info->max_decomp_size;
           sec_dat->size = max_decomp_size;
         }
       else
         {
           if (info->compressed == 2
               || info->size > max_decomp_size
-              || !((unsigned long)(address + es.fields.address + 32
+              || bytes_left < 0
+            /*|| ((unsigned long)(address + es.fields.address + 32
                                    + info->size)
-                   <= dat->size))
+                                   > dat->size) */
+              )
             {
               LOG_ERROR ("Some section size out of bounds")
               sec_dat->chain = NULL;
               free (decomp);
-              return DWG_ERR_INVALIDDWG;
+              return type > SECTION_REVHISTORY ? DWG_ERR_INVALIDDWG
+                                               : DWG_ERR_VALUEOUTOFBOUNDS;
             }
           memcpy (&decomp[i * info->size],
-                  &dat->chain[address + es.fields.address + 32], info->size);
-          sec_dat->size = info->size;
+                  &dat->chain[address + es.fields.address + 32],
+                  MIN (bytes_left, info->size));
+          bytes_left -= info->size;
+          sec_dat->size = max_decomp_size;
         }
     }
 

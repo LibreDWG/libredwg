@@ -728,10 +728,17 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
   int error = 0, i;
 
   section = get_section (sections_map, sec_type);
+  sec_dat->chain = NULL;
   if (section == NULL)
     {
       if (sec_type < SECTION_REVHISTORY)
-        LOG_ERROR ("Failed to find section %d", (int)sec_type)
+        {
+          LOG_ERROR ("Failed to find section %d", (int)sec_type)
+        }
+      else
+        {
+          LOG_TRACE ("Found no section with type %d\n", sec_type)
+        }
       return DWG_ERR_SECTIONNOTFOUND;
     }
 
