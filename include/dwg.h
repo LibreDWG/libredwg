@@ -5840,6 +5840,29 @@ typedef struct _dwg_struct
     char  *unknown_bits;
   } revhistory;
 
+  struct Dwg_ObjFreeSpace
+  {
+    BITCODE_RLL zero;
+    BITCODE_RLL num_handles;
+    BITCODE_TIMERLL TDUPDATE;
+    BITCODE_RL objects_address;
+    BITCODE_RC num_nums; //  RLL (uint64_t) or uint128_t
+    BITCODE_RLL max32;
+    BITCODE_RLL max64;
+    BITCODE_RLL maxtbl;
+    BITCODE_RLL maxrl;
+    BITCODE_RLL max32_hi;
+    BITCODE_RLL max64_hi;
+    BITCODE_RLL maxtbl_hi;
+    BITCODE_RLL maxrl_hi;
+  } objfreespace;
+
+  struct Dwg_Template
+  {
+    BITCODE_T16 desc;
+    BITCODE_RS MEASUREMENT;
+  } template;
+
   struct _dwg_second_header {
     BITCODE_RL size;
     BITCODE_RL address;

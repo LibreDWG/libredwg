@@ -2275,7 +2275,9 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
   sec_dat->chain = NULL; // fixes double-free
   if (!info)
     {
-      if (type < SECTION_REVHISTORY)
+      if (type < SECTION_REVHISTORY
+          && type != SECTION_TEMPLATE
+          && type != SECTION_OBJFREESPACE)
         {
           LOG_WARN ("Failed to find section_info[%u] with type %d", i, type)
         }
@@ -2294,6 +2296,8 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
     }
 
   max_decomp_size = info->num_sections * info->max_decomp_size;
+  if (info->num_sections == 0)
+    return 0;
   if (max_decomp_size == 0 || max_decomp_size > 0x2f000000) // 790Mb
     {
       LOG_ERROR ("Invalid section %s count or max decompression size. "
@@ -2392,7 +2396,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
               LOG_ERROR ("Some section size out of bounds")
               sec_dat->chain = NULL;
               free (decomp);
-              return type > SECTION_REVHISTORY ? DWG_ERR_INVALIDDWG
+              return type < SECTION_REVHISTORY ? DWG_ERR_INVALIDDWG
                                                : DWG_ERR_VALUEOUTOFBOUNDS;
             }
           memcpy (&decomp[i * info->size],
@@ -2940,7 +2944,7 @@ read_2004_section_vbaproject (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
 
-  DEBUG_HERE
+  //DEBUG_HERE
   _obj->size = dat->size;
   _obj->unknown_bits = bit_read_TF (dat, _obj->size);
   LOG_TRACE_TF (_obj->unknown_bits, _obj->size)
@@ -2972,7 +2976,7 @@ read_2004_section_appinfohistory (Bit_Chain *restrict dat, Dwg_Data *restrict dw
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
 
-  DEBUG_HERE
+  //DEBUG_HERE
   _obj->size = dat->size;
   _obj->unknown_bits = bit_read_TF (dat, _obj->size);
   LOG_TRACE_TF (_obj->unknown_bits, _obj->size)
@@ -2984,7 +2988,7 @@ read_2004_section_appinfohistory (Bit_Chain *restrict dat, Dwg_Data *restrict dw
   return error;
 }
 
-/* RevHistory Section
+/* Unknown RevHistory Section
  */
 static int
 read_2004_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
@@ -3004,10 +3008,99 @@ read_2004_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
 
-  DEBUG_HERE
+  //DEBUG_HERE
   _obj->size = dat->size;
   _obj->unknown_bits = bit_read_TF (dat, _obj->size);
   LOG_TRACE_TF (_obj->unknown_bits, _obj->size)
+
+  LOG_TRACE ("\n")
+  if (sec_dat.chain)
+    free (sec_dat.chain);
+  *dat = old_dat; // unrestrict
+  return error;
+}
+
+/* ObjFreeSpace Section
+ */
+static int
+read_2004_section_objfreespace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain old_dat, sec_dat = { 0 };
+  int error;
+  struct Dwg_ObjFreeSpace *_obj = &dwg->objfreespace;
+
+  // compressed
+  error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_OBJFREESPACE);
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
+    {
+      LOG_INFO ("%s section not found\n", "ObjFreeSpace");
+      return 0;
+    }
+
+  LOG_TRACE ("ObjFreeSpace\n-------------------\n")
+  old_dat = *dat;
+  dat = &sec_dat; // restrict in size
+
+  // clang-format off
+  #include "objfreespace.spec"
+  // clang-format on
+
+  LOG_TRACE ("\n")
+  if (sec_dat.chain)
+    free (sec_dat.chain);
+  *dat = old_dat; // unrestrict
+  return error;
+}
+
+// may return OUTOFBOUNDS
+static int
+template_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain *str_dat = dat;
+  struct Dwg_Template *_obj = &dwg->template;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+
+  // clang-format off
+  #include "template.spec"
+  // clang-format on
+
+  dwg->header_vars.MEASUREMENT = _obj->MEASUREMENT;
+  LOG_TRACE ("HEADER.MEASUREMENT: " FORMAT_BS " (0 English/1 Metric)\n",
+             dwg->header_vars.MEASUREMENT)
+
+  return error;
+}
+
+/* Template Section. Optional r2004, mandatory r2007+
+   Contains the MEASUREMENT variable (0 = English, 1 = Metric).
+ */
+static int
+read_2004_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain old_dat, sec_dat = { 0 };
+  int error;
+  // compressed
+  error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_TEMPLATE);
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
+    {
+      UNTIL (R_2004)
+        {
+          LOG_INFO ("%s section not found\n", "Template")
+          return error;
+        }
+      LATER_VERSIONS
+        {
+          LOG_ERROR ("%s section not found\n", "Template")
+        }
+      return error | DWG_ERR_SECTIONNOTFOUND;
+    }
+
+  LOG_TRACE ("Template\n-------------------\n")
+  old_dat = *dat;
+  dat = &sec_dat; // restrict in size
+
+  error |= template_private (dat, dwg);
 
   LOG_TRACE ("\n")
   if (sec_dat.chain)
@@ -3214,6 +3307,8 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   error |= read_2004_section_filedeplist (dat, dwg);
   error |= read_2004_section_security (dat, dwg);
   error |= read_2004_section_revhistory (dat, dwg);
+  error |= read_2004_section_objfreespace (dat, dwg);
+  error |= read_2004_section_template (dat, dwg);
 
   /* Clean up. XXX? Need this to write the sections, at least the name and
    * type

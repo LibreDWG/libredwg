@@ -1811,7 +1811,7 @@ read_2007_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   return error;
 }
 
-/* AppInfoHistory Section
+/* Unknown AppInfoHistory Section
  */
 static int
 read_2007_section_appinfohistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
@@ -1852,7 +1852,7 @@ read_2007_section_appinfohistory (Bit_Chain *restrict dat, Dwg_Data *restrict dw
   return error;
 }
 
-/* RevHistory Section
+/* Unknown RevHistory Section
  */
 static int
 read_2007_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
@@ -1885,6 +1885,91 @@ read_2007_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   _obj->size = dat->size;
   _obj->unknown_bits = bit_read_TF (dat, _obj->size);
   LOG_TRACE_TF (_obj->unknown_bits, _obj->size)
+
+  LOG_TRACE ("\n")
+  if (sec_dat.chain)
+    free (sec_dat.chain);
+  *dat = old_dat; // unrestrict
+  return error;
+}
+
+/* ObjFreeSpace Section
+ */
+static int
+read_2007_section_objfreespace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                                r2007_section *restrict sections_map,
+                                r2007_page *restrict pages_map)
+{
+  Bit_Chain old_dat, sec_dat = { 0 };
+  //Bit_Chain *str_dat;
+  struct Dwg_ObjFreeSpace *_obj = &dwg->objfreespace;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  BITCODE_RL rcount1 = 0, rcount2 = 0;
+
+  // compressed, page size: 0x7400
+  error = read_data_section (&sec_dat, dat, sections_map, pages_map,
+                             SECTION_OBJFREESPACE);
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
+    {
+      LOG_INFO ("%s section not found\n", "ObjFreeSpace");
+      if (sec_dat.chain)
+        free (sec_dat.chain);
+      return error;
+    }
+
+  LOG_TRACE ("\nObjFreeSpace\n-------------------\n")
+  old_dat = *dat;
+  dat = &sec_dat; // restrict in size
+
+  // clang-format off
+  #include "objfreespace.spec"
+  // clang-format on
+
+  LOG_TRACE ("\n")
+  if (sec_dat.chain)
+    free (sec_dat.chain);
+  *dat = old_dat; // unrestrict
+  return error;
+}
+
+/* Template Section. Optional r13-r15, mandatory r18+.
+   Contains the MEASUREMENT variable (0 = English, 1 = Metric).
+ */
+static int
+read_2007_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                            r2007_section *restrict sections_map,
+                            r2007_page *restrict pages_map)
+{
+  Bit_Chain old_dat, sec_dat = { 0 };
+  //Bit_Chain *str_dat;
+  struct Dwg_Template *_obj = &dwg->template;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  BITCODE_RL rcount1 = 0, rcount2 = 0;
+
+  // compressed
+  error = read_data_section (&sec_dat, dat, sections_map, pages_map,
+                             SECTION_TEMPLATE);
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
+    {
+      LOG_ERROR ("%s section not found\n", "Template");
+      if (sec_dat.chain)
+        free (sec_dat.chain);
+      return error | DWG_ERR_SECTIONNOTFOUND;
+    }
+
+  LOG_TRACE ("\nTemplate\n-------------------\n")
+  old_dat = *dat;
+  dat = &sec_dat; // restrict in size
+
+  // clang-format off
+  #include "template.spec"
+  // clang-format on
+
+  dwg->header_vars.MEASUREMENT = _obj->MEASUREMENT;
+  LOG_TRACE ("HEADER.MEASUREMENT: " FORMAT_BS " (0 English/1 Metric)\n",
+             dwg->header_vars.MEASUREMENT)
 
   LOG_TRACE ("\n")
   if (sec_dat.chain)
@@ -2111,6 +2196,8 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   error |= read_2007_section_filedeplist (dat, dwg, sections_map, pages_map);
   error |= read_2007_section_security (dat, dwg, sections_map, pages_map);
   error |= read_2007_section_revhistory (dat, dwg, sections_map, pages_map);
+  error |= read_2007_section_objfreespace (dat, dwg, sections_map, pages_map);
+  error |= read_2007_section_template (dat, dwg, sections_map, pages_map);
   // read_2007_blocks (dat, hdl_dat, dwg, sections_map, pages_map);
 
 error:

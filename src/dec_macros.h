@@ -394,6 +394,7 @@
     LOG_TRACE (#nam ": [TFFx %d " #dxf "]\n  ", (int)len);                    \
     LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \
   }
+#define FIELD_T16(nam, dxf) FIELDG (nam, T16, dxf)
 #define FIELD_TU16(nam, dxf)                                                  \
   {                                                                           \
     _obj->nam = bit_read_TU16 (dat);                                          \
