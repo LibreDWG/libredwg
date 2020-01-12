@@ -5611,9 +5611,10 @@ typedef struct
   BITCODE_RL max_decomp_size;
   BITCODE_RL unknown;
   BITCODE_RL compressed; /* Compressed (1 = no, 2 = yes, normally 2) */
-  BITCODE_RL type;
-  BITCODE_RL encrypted; /* (0 = no, 1 = yes, 2 = unknown) */
+  BITCODE_RL type;       /* The dynamic index as read/written */
+  BITCODE_RL encrypted;  /* (0 = no, 1 = yes, 2 = unknown) */
   char name[64];
+  Dwg_Section_Type fixedtype;  /* to search for */
   Dwg_Section **sections;
 } Dwg_Section_Info;
 

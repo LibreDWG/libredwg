@@ -49,9 +49,6 @@ static unsigned int loglevel;
 /* the current version per spec block */
 static int cur_ver = 0;
 static BITCODE_BL rcount1 = 0, rcount2 = 0;
-static int section_appinfo_type = 0;
-static int section_filedeplist_type = 0;
-static int section_security_type = 0;
 
 #ifdef USE_TRACING
 /* This flag means we have checked the environment variable
@@ -2111,14 +2108,9 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_TRACE ("type:            %d\n", (int)info->type)
       LOG_TRACE ("encrypted:       %d (0=no, 1=yes, 2=unknown)\n",
                  info->encrypted)
-      LOG_TRACE ("name:            %s\n\n", info->name);
-
-      if (strEQc (info->name, "AcDb:FileDepList"))
-        section_filedeplist_type = info->type;
-      else if (strEQc (info->name, "AcDb:AppInfo"))
-        section_appinfo_type = info->type; // 0xc or 0xb
-      else if (strEQc (info->name, "AcDb:Security"))
-        section_security_type = info->type;
+      LOG_TRACE ("name:            %s\n", info->name);
+      info->fixedtype = dwg_section_type (info->name);
+      LOG_TRACE ("fixedtype:       %d\n\n", info->fixedtype);
 
       if (ptr + (16 * info->num_sections) >= decomp_end)
         {
@@ -2176,10 +2168,10 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               info->sections[j] = find_section (dwg, page.number);
               if (info->sections[j])
                 {
-                  LOG_TRACE ("section[%d].info[%d]: %s type %d => ", i, j, info->name,
+                  LOG_HANDLE ("     section[%d].info[%d]: %s type %d => ", i, j, info->name,
                              info->sections[j]->type);
-                  info->sections[j]->type = dwg_section_type (info->name);
-                  LOG_TRACE ("type %d\n", info->sections[j]->type);
+                  info->sections[j]->type = info->fixedtype;
+                  LOG_HANDLE ("type %d\n", info->sections[j]->type);
                 }
 
               if (page.number < 0)
@@ -2261,7 +2253,7 @@ typedef union _encrypted_section_header
 
 static int
 read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
-                              Bit_Chain *sec_dat, BITCODE_RL section_type)
+                              Bit_Chain *sec_dat, Dwg_Section_Type type)
 {
   uint32_t address, sec_mask, initial_address;
   uint32_t max_decomp_size;
@@ -2274,7 +2266,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
 
   for (i = 0; i < dwg->header.section_infohdr.num_desc && !info; ++i)
     {
-      if (dwg->header.section_info[i].type == section_type)
+      if (dwg->header.section_info[i].fixedtype == type)
         {
           info = &dwg->header.section_info[i];
           break;
@@ -2283,15 +2275,15 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
   sec_dat->chain = NULL; // fixes double-free
   if (!info)
     {
-      LOG_WARN ("Failed to find section_info[" FORMAT_BL "] with type 0x%x", i,
-                section_type);
+      LOG_WARN ("Failed to find section_info[" FORMAT_BL "] with type %d", i,
+                type);
       return DWG_ERR_SECTIONNOTFOUND;
     }
   else
     {
       LOG_TRACE ("\nFound section_info[" FORMAT_BL
-                 "] %s type 0x%x with %d sections (%scompressed):\n",
-                 i, info->name, section_type, info->num_sections,
+                 "] %s type %d with %d sections (%scompressed):\n",
+                 i, info->name, type, info->num_sections,
                  info->compressed == 2 ? "" : "un");
     }
 
@@ -2555,7 +2547,7 @@ read_2004_section_header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   sec_dat.opts = dwg->opts & DWG_OPTS_LOGLEVEL;
   error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_HEADER);
-  if (error >= DWG_ERR_CRITICAL)
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
     {
       LOG_ERROR ("Failed to read compressed %s section", "Header");
       if (sec_dat.chain)
@@ -2761,7 +2753,7 @@ read_2004_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // not compressed, page size: 0x100
   int error = read_2004_compressed_section (dat, dwg, &sec_dat,
                                         SECTION_SUMMARYINFO); // always 9
-  if (error >= DWG_ERR_CRITICAL)
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
     {
       LOG_ERROR ("Failed to read uncompressed %s section", "SummaryInfo");
       return error;
@@ -2805,10 +2797,8 @@ read_2004_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Bit_Chain old_dat, sec_dat = { 0 };
   int error;
   // type: 0xc or 0xb
-  if (!section_appinfo_type)
-    return 0;
   // not compressed, page size: 0x80
-  error = read_2004_compressed_section (dat, dwg, &sec_dat, section_appinfo_type);
+  error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_APPINFO);
   if (error >= DWG_ERR_CRITICAL)
     {
       LOG_ERROR ("Failed to read uncompressed %s section", "AppInfo");
@@ -2851,10 +2841,8 @@ read_2004_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain old_dat, sec_dat = { 0 };
   int error;
-  if (!section_filedeplist_type)
-    return 0;
   // not compressed, page size: 0x80. 0xc or 0xd
-  error = read_2004_compressed_section (dat, dwg, &sec_dat, section_filedeplist_type);
+  error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_FILEDEPLIST);
   if (error >= DWG_ERR_CRITICAL)
     {
       LOG_INFO ("%s section not found\n", "FileDepList");
@@ -2897,10 +2885,8 @@ read_2004_section_security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain old_dat, sec_dat = { 0 };
   int error;
-  if (!section_security_type)
-    return 0;
   // compressed, page size: 0x7400
-  error = read_2004_compressed_section (dat, dwg, &sec_dat, section_security_type);
+  error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_SECURITY);
   if (error >= DWG_ERR_CRITICAL)
     {
       LOG_INFO ("%s section not found\n", "Security");
