@@ -2947,7 +2947,69 @@ read_2004_section_vbaproject (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return error;
 }
 
-// static int read_2004_section_revhistory (dat, dwg)
+/* AppInfoHistory Section
+ */
+static int
+read_2004_section_appinfohistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain old_dat, sec_dat = { 0 };
+  int error;
+  struct Dwg_AppInfoHistory *_obj = &dwg->appinfohistory;
+  // compressed
+  error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_APPINFOHISTORY);
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
+    {
+      LOG_INFO ("%s section not found\n", "AppInfoHistory");
+      return 0;
+    }
+
+  LOG_TRACE ("AppInfoHistory\n-------------------\n")
+  old_dat = *dat;
+  dat = &sec_dat; // restrict in size
+
+  DEBUG_HERE
+  _obj->size = dat->size;
+  _obj->unknown_bits = bit_read_TF (dat, _obj->size);
+  LOG_TRACE_TF (_obj->unknown_bits, _obj->size)
+
+  LOG_TRACE ("\n")
+  if (sec_dat.chain)
+    free (sec_dat.chain);
+  *dat = old_dat; // unrestrict
+  return error;
+}
+
+/* RevHistory Section
+ */
+static int
+read_2004_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain old_dat, sec_dat = { 0 };
+  int error;
+  struct Dwg_RevHistory *_obj = &dwg->revhistory;
+  // compressed
+  error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_REVHISTORY);
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
+    {
+      LOG_INFO ("%s section not found\n", "RevHistory");
+      return 0;
+    }
+
+  LOG_TRACE ("RevHistory\n-------------------\n")
+  old_dat = *dat;
+  dat = &sec_dat; // restrict in size
+
+  DEBUG_HERE
+  _obj->size = dat->size;
+  _obj->unknown_bits = bit_read_TF (dat, _obj->size);
+  LOG_TRACE_TF (_obj->unknown_bits, _obj->size)
+
+  LOG_TRACE ("\n")
+  if (sec_dat.chain)
+    free (sec_dat.chain);
+  *dat = old_dat; // unrestrict
+  return error;
+}
 
 static int
 read_2004_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
@@ -3143,10 +3205,10 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (dwg->header.vbaproj_address)
     error |= read_2004_section_vbaproject (dat, dwg);
   error |= read_2004_section_appinfo (dat, dwg);
-  // error |= read_2004_section_appinfohistory (dat, dwg);
+  error |= read_2004_section_appinfohistory (dat, dwg);
   error |= read_2004_section_filedeplist (dat, dwg);
   error |= read_2004_section_security (dat, dwg);
-  // error |= read_2004_section_revhistory (dat, dwg);
+  error |= read_2004_section_revhistory (dat, dwg);
 
   /* Clean up. XXX? Need this to write the sections, at least the name and
    * type

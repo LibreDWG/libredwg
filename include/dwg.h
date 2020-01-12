@@ -5827,6 +5827,18 @@ typedef struct _dwg_struct
     char  *unknown_bits;
   } vbaproject;
 
+  struct Dwg_AppInfoHistory
+  {
+    int    size;
+    char  *unknown_bits;
+  } appinfohistory;
+
+  struct Dwg_RevHistory
+  {
+    int    size;
+    char  *unknown_bits;
+  } revhistory;
+
   struct _dwg_second_header {
     BITCODE_RL size;
     BITCODE_RL address;
