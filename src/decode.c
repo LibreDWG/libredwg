@@ -3074,7 +3074,7 @@ template_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return error;
 }
 
-/* Template Section. Optional r2004, mandatory r2007+
+/* Template Section. Optional r2004, mandatory r2007+ (but violated by Teigha)
    Contains the MEASUREMENT variable (0 = English, 1 = Metric).
  */
 static int
@@ -3089,13 +3089,13 @@ read_2004_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       UNTIL (R_2004)
         {
           LOG_INFO ("%s section not found\n", "Template")
-          return error;
         }
       LATER_VERSIONS
         {
+          // violated by Teigha 4.3.2
           LOG_ERROR ("%s section not found\n", "Template")
         }
-      return error | DWG_ERR_SECTIONNOTFOUND;
+      return 0;
     }
 
   LOG_TRACE ("Template\n-------------------\n")
@@ -3121,7 +3121,7 @@ read_2004_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   // not compressed, num_sections: 1
   error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_PREVIEW);
-  if (error >= DWG_ERR_CRITICAL)
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
     {
       LOG_ERROR ("Failed to read uncompressed %s section", "Preview");
       if (sec_dat.chain)
