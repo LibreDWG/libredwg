@@ -161,6 +161,12 @@ static void _prefix (Bit_Chain *dat);
 #define FIELD_TEXT(nam, str)                                                  \
   {                                                                           \
     PREFIX                                                                    \
+    fprintf (dat->fh, "\"" #nam "\": ");                                      \
+    VALUE_TEXT (str)                                                          \
+  }
+
+#define VALUE_TEXT(str)                                                       \
+  {                                                                           \
     if (str                                                                   \
         && (1 || strchr (str, '"') || strchr (str, '\\')                      \
             || strchr (str, '\n')))                                           \
@@ -170,22 +176,20 @@ static void _prefix (Bit_Chain *dat);
           {                                                                   \
             const int _len = 6 * len + 1;                                     \
             char *_buf = alloca (_len);                                       \
-            fprintf (dat->fh, "\"" #nam "\": \"%s\",\n",                      \
-                     json_cquote (_buf, str, _len));                          \
+            fprintf (dat->fh, "\"%s\",\n", json_cquote (_buf, str, _len));    \
             freea (_buf);                                                     \
           }                                                                   \
         else                                                                  \
           {                                                                   \
             const int _len = 6 * len + 1;                                     \
             char *_buf = malloc (_len);                                       \
-            fprintf (dat->fh, "\"" #nam "\": \"%s\",\n",                      \
-                     json_cquote (_buf, str, _len));                          \
+            fprintf (dat->fh, "\"%s\",\n", json_cquote (_buf, str, _len));    \
             free (_buf);                                                      \
           }                                                                   \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        fprintf (dat->fh, "\"" #nam "\": \"%s\",\n", str ? str : "");         \
+        fprintf (dat->fh, "\"%s\",\n", str ? str : "");                       \
       }                                                                       \
   }
 
@@ -463,7 +467,7 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
       {                                                                       \
         for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)           \
           {                                                                   \
-            PREFIX fprintf (dat->fh, "\"%s\",\n", _obj->nam[vcount]);         \
+            PREFIX VALUE_TEXT (_obj->nam[vcount])                             \
           }                                                                   \
       }                                                                       \
       else                                                                    \
@@ -711,6 +715,12 @@ json_common_entity_data (Bit_Chain *restrict dat,
 
 #include "dwg.spec"
 
+static int ishex (int c)
+{
+  return ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f')
+          || (c >= 'A' && c <= 'F'));
+}
+
 #ifndef HAVE_NATIVE_WCHAR2
 
 static void
@@ -729,6 +739,12 @@ print_wcquote (Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr)
       if (c == L'"')
         {
           fprintf (dat->fh, "\\\"");
+        }
+      else if (c == L'\\' && ws[0] == L'U' && ws[1] == L'+' && ishex (ws[2])
+               && ishex (ws[3]) && ishex (ws[4]) && ishex (ws[5]))
+        {
+          fprintf (dat->fh, "\\u");
+          ws += 2;
         }
       else if (c == L'\\')
         {
@@ -774,6 +790,13 @@ wcquote (wchar_t *restrict dest, const wchar_t *restrict src)
         {
           *dest++ = L'\\';
           *dest++ = c;
+        }
+      else if (c == L'\\' && s[0] == L'U' && s[1] == L'+' && ishex (s[2])
+               && ishex (s[3]) && ishex (s[4]) && ishex (s[5]))
+        {
+          *dest++ = '\\';
+          *dest++ = 'u';
+          s += 2;
         }
       else if (c == L'\\')
         {
@@ -827,10 +850,20 @@ json_cquote (char *restrict dest, const char *restrict src, const int len)
           *dest++ = '\\';
           *dest++ = c;
         }
-      else if (c == '\\' && dest+1 < endp)
+      else if (c == '\\' && dest+2 < endp)
         {
-          *dest++ = '\\';
-          *dest++ = c;
+          if (dest+5 < endp && s[0] == 'U' && s[1] == '+' && ishex (s[2])
+              && ishex (s[3]) && ishex (s[4]) && ishex (s[5]))
+            {
+              *dest++ = '\\';
+              *dest++ = 'u';
+              s += 2;
+            }
+          else
+            {
+              *dest++ = '\\';
+              *dest++ = c;
+            }
         }
       else if (c == '\n' && dest+1 < endp)
         {
