@@ -5836,8 +5836,10 @@ typedef struct _dwg_struct
 
   struct Dwg_RevHistory
   {
-    int    size;
-    char  *unknown_bits;
+    BITCODE_RL class_version;
+    BITCODE_RL class_minor;
+    BITCODE_RL num_histories;
+    BITCODE_RL *histories;
   } revhistory;
 
   struct Dwg_ObjFreeSpace

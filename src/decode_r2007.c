@@ -1716,7 +1716,7 @@ read_2007_section_vbaproject (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       return error;
     }
 
-  LOG_TRACE ("\nVBAProject\n-------------------\n")
+  LOG_TRACE ("\nVBAProject (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
 
@@ -1758,7 +1758,7 @@ read_2007_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   if (dwg->header.summaryinfo_address != (BITCODE_RL)dat->byte)
     LOG_WARN ("summaryinfo_address mismatch: " FORMAT_RL " != %lu",
               dwg->header.summaryinfo_address, dat->byte);
-  LOG_TRACE ("\nSummaryInfo\n-------------------\n")
+  LOG_TRACE ("\nSummaryInfo (%lu)\n-------------------\n", sec_dat.size)
   str_dat = dat = &sec_dat; // restrict in size
 
   // clang-format off
@@ -1796,7 +1796,7 @@ read_2007_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       return error;
     }
 
-  LOG_TRACE ("\nAppInfo\n-------------------\n")
+  LOG_TRACE ("\nAppInfo (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   str_dat = dat = &sec_dat; // restrict in size
 
@@ -1836,7 +1836,7 @@ read_2007_section_appinfohistory (Bit_Chain *restrict dat, Dwg_Data *restrict dw
       return error;
     }
 
-  LOG_TRACE ("\nAppInfoHistory\n-------------------\n")
+  LOG_TRACE ("\nAppInfoHistory (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
 
@@ -1852,7 +1852,7 @@ read_2007_section_appinfohistory (Bit_Chain *restrict dat, Dwg_Data *restrict dw
   return error;
 }
 
-/* Unknown RevHistory Section
+/* RevHistory Section
  */
 static int
 read_2007_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
@@ -1864,7 +1864,7 @@ read_2007_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   struct Dwg_RevHistory *_obj = &dwg->revhistory;
   Dwg_Object *obj = NULL;
   int error = 0;
-  //BITCODE_RL rcount1 = 0, rcount2 = 0;
+  BITCODE_RL rcount1 = 0, rcount2 = 0;
 
   // compressed, page size: 0x7400
   error = read_data_section (&sec_dat, dat, sections_map, pages_map,
@@ -1877,14 +1877,13 @@ read_2007_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       return error;
     }
 
-  LOG_TRACE ("\nRevHistory\n-------------------\n")
+  LOG_TRACE ("\nRevHistory (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
 
-  DEBUG_HERE
-  _obj->size = dat->size;
-  _obj->unknown_bits = bit_read_TF (dat, _obj->size);
-  LOG_TRACE_TF (_obj->unknown_bits, _obj->size)
+  // clang-format off
+  #include "revhistory.spec"
+  // clang-format on
 
   LOG_TRACE ("\n")
   if (sec_dat.chain)
@@ -1918,7 +1917,7 @@ read_2007_section_objfreespace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       return error;
     }
 
-  LOG_TRACE ("\nObjFreeSpace\n-------------------\n")
+  LOG_TRACE ("\nObjFreeSpace (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
 
@@ -1959,7 +1958,7 @@ read_2007_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       return error | DWG_ERR_SECTIONNOTFOUND;
     }
 
-  LOG_TRACE ("\nTemplate\n-------------------\n")
+  LOG_TRACE ("\nTemplate (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
 
@@ -2004,7 +2003,7 @@ read_2007_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       return 0;
     }
 
-  LOG_TRACE ("FileDepList\n-------------------\n")
+  LOG_TRACE ("FileDepList (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   str_dat = dat = &sec_dat; // restrict in size
 
@@ -2044,7 +2043,7 @@ read_2007_section_security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       return 0;
     }
 
-  LOG_TRACE ("Security\n-------------------\n")
+  LOG_TRACE ("Security (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   str_dat = dat = &sec_dat; // restrict in size
 
@@ -2082,7 +2081,7 @@ read_2007_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   if (dwg->header.thumbnail_address != (BITCODE_RL)dat->byte)
     LOG_WARN ("thumbnail_address mismatch: " FORMAT_RL " != %lu",
               dwg->header.thumbnail_address, dat->byte);
-  LOG_TRACE ("\nPreview\n-------------------\n")
+  LOG_TRACE ("\nPreview (%lu)\n-------------------\n", sec_dat.size)
   if (!sec_dat.chain || sec_dat.size < 16)
     {
       LOG_WARN ("Empty thumbnail");

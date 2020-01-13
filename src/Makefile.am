@@ -70,6 +70,7 @@ EXTRA_HEADERS = \
         vbaproject.spec \
         template.spec \
         objfreespace.spec \
+        revhistory.spec \
 	classes.inc \
 	objects.inc \
 	spec.h \

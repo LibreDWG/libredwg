@@ -845,7 +845,7 @@ dwg_free (Dwg_Data *dwg)
       dwg_free_filedeplist (dwg);
       dwg_free_security (dwg);
       FREE_IF (dwg->vbaproject.unknown_bits);
-      FREE_IF (dwg->revhistory.unknown_bits);
+      FREE_IF (dwg->revhistory.histories);
       FREE_IF (dwg->appinfohistory.unknown_bits);
       //FREE_IF (dwg->objfreespace...);
       FREE_IF (dwg->template.desc);
