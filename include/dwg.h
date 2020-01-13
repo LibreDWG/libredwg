@@ -5789,14 +5789,14 @@ typedef struct _dwg_struct
   struct Dwg_AppInfo
   {
     BITCODE_RL class_version;   // 3
-    BITCODE_RL unknown_rl;      // 3
+    BITCODE_RL num_strings;     // 2-3
     BITCODE_TU appinfo_name;    // AppInfoDataList
     BITCODE_RC version_checksum[16];
     BITCODE_RC comment_checksum[16];
     BITCODE_RC product_checksum[16];
-    BITCODE_TU version;
-    BITCODE_TU comment;
-    BITCODE_TU product_info;
+    BITCODE_TU version; // "19.0.55.0.0", "Teigha(R) 4.3.2.0"
+    BITCODE_TU comment; // "Autodesk DWG.  This file is a Trusted DWG "...
+    BITCODE_TU product_info; // XML ProductInformation
   } appinfo;
 
   /* File Dependencies, IMAGE files, fonts, xrefs, plotconfigs */
@@ -5846,10 +5846,10 @@ typedef struct _dwg_struct
     BITCODE_RLL num_handles;
     BITCODE_TIMERLL TDUPDATE;
     BITCODE_RL objects_address;
-    BITCODE_RC num_nums; //  RLL (uint64_t) or uint128_t
-    BITCODE_RLL max32;
-    BITCODE_RLL max64;
-    BITCODE_RLL maxtbl;
+    BITCODE_RC num_nums; // RLL (uint64_t) or uint128_t
+    BITCODE_RLL max32;  // 0x32
+    BITCODE_RLL max64;  // 0x64
+    BITCODE_RLL maxtbl; // 0x200
     BITCODE_RLL maxrl;
     BITCODE_RLL max32_hi;
     BITCODE_RLL max64_hi;
