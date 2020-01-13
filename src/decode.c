@@ -2319,11 +2319,12 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
   sec_dat->from_version = dat->from_version;
   sec_dat->chain = decomp;
 
-  for (i = 0; i < info->num_sections; ++i)
+  for (i = j = 0; i < info->num_sections; ++i, ++j)
     {
       if (!info->sections[i])
         {
           LOG_WARN ("Skip empty section %u %s", i, info->name);
+          j--; // index for writing info->size chunks
           continue;
         }
       address = info->sections[i]->address;
@@ -2332,8 +2333,11 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
 
       //? if encrypted properties: security_type & 2 ??
       sec_mask = 0x4164536b ^ address;
-      for (j = 0; j < 8; ++j)
-        es.long_data[j] ^= sec_mask;
+      {
+        int k;
+        for (k = 0; k < 8; ++k)
+          es.long_data[k] ^= sec_mask;
+      }
 
       LOG_INFO ("=== Section %s (%u) @%u ===\n", info->name, i, address)
       if (es.fields.tag != 0x4163043b)
@@ -2369,10 +2373,10 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       // check if compressed at all
       if (info->compressed == 2
           && bytes_left > 0
-          && (i * info->max_decomp_size) <= max_decomp_size)
+          && (j * info->max_decomp_size) <= max_decomp_size)
         {
           error = decompress_R2004_section (
-              dat, &decomp[i * info->max_decomp_size], // offset
+              dat, &decomp[j * info->max_decomp_size], // offset
               info->max_decomp_size, es.fields.data_size);
           if (error > DWG_ERR_CRITICAL)
             {
@@ -2386,11 +2390,9 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       else
         {
           if (info->compressed == 2
-              || info->size > max_decomp_size
               || bytes_left < 0
-            /*|| ((unsigned long)(address + es.fields.address + 32
-                                   + info->size)
-                                   > dat->size) */
+              || ((unsigned long)(address + es.fields.address + 32
+                                   + info->size) > max_decomp_size)
               )
             {
               LOG_ERROR ("Some section size out of bounds")
@@ -2399,7 +2401,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
               return type < SECTION_REVHISTORY ? DWG_ERR_INVALIDDWG
                                                : DWG_ERR_VALUEOUTOFBOUNDS;
             }
-          memcpy (&decomp[i * info->size],
+          memcpy (&decomp[j * info->size],
                   &dat->chain[address + es.fields.address + 32],
                   MIN (bytes_left, info->size));
           bytes_left -= info->size;
