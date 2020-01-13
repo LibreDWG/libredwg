@@ -2,6 +2,28 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2020 Free Software Foundation, Inc.
 See the end for copying conditions.
 
+LibreDWG version 0.11
+
+New features:
+  * Can now read all major 2004+ section types: added AppInfo, FileDepList,
+    Template, ObjFreeSpace;
+    and as blob: RevHistory, Security, AppInfoHistory
+  * Added new string types: T16, TU16, T32 (for those sections)
+
+API breaking changes:
+  * Renamed dwg_section_type to dwg_section_wtype, added a new dwg_section_type
+    for ASCII names.
+
+Major bugfixes:
+
+Minor bugfixes:
+  * Fixed uncompressed sections overflows, some fuzzed (#183), some
+    with the new sections.
+
+Other newsworthy changes:
+  * Harmonized 2004 section search with the better 2007 variant. Added a new
+    section and info fixedtype field.
+
 LibreDWG version 0.10.1 - released 2020/01/13 - beta:
 
 Major bugfixes:
