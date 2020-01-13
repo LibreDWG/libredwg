@@ -20192,6 +20192,14 @@ dwg_obj_layer_get_name (const dwg_obj_layer *restrict layer,
 {
   if (layer)
     {
+      const Dwg_Object *obj
+          = dwg_obj_generic_to_object ((const dwg_obj_generic *)layer, error);
+      if (*error || obj->fixedtype != DWG_TYPE_LAYER)
+        {
+          *error = 1;
+          LOG_ERROR ("%s: arg not a LAYER", __FUNCTION__)
+          return NULL;
+        }
       *error = 0;
       if (dwg_version >= R_2007)
         return bit_convert_TU ((BITCODE_TU)layer->name);
@@ -20203,6 +20211,44 @@ dwg_obj_layer_get_name (const dwg_obj_layer *restrict layer,
       *error = 1;
       LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return NULL;
+    }
+}
+
+/** Change name of the layer (utf-8 encoded).
+    The result is freshly allocated from the input, so it can be safely
+    free'd/deleted.
+\code Usage: error = dwg_obj_layer_set_name(layer, name);
+\endcode
+\param[in]  layer
+\param[in]  name, utf-8 encoded
+\param[out] error  set to 0 for ok, >0 if not found.
+*/
+void
+dwg_obj_layer_set_name (dwg_obj_layer *restrict layer,
+                        const char *restrict name, int *restrict error)
+{
+  if (layer)
+    {
+      const Dwg_Object *obj
+          = dwg_obj_generic_to_object ((const dwg_obj_generic *)layer, error);
+      if (*error || obj->fixedtype != DWG_TYPE_LAYER)
+        {
+          LOG_ERROR ("%s: arg not a LAYER", __FUNCTION__)
+          *error = 1;
+          return;
+        }
+      *error = 0;
+      if (dwg_version >= R_2007)
+        layer->name = bit_convert_TU ((BITCODE_TU)layer->name);
+      else
+        layer->name = strdup (name);
+      return;
+    }
+  else
+    {
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
+      *error = 1;
+      return;
     }
 }
 
@@ -20452,7 +20498,7 @@ dwg_ent_get_layer_name (const dwg_obj_ent *restrict ent, int *restrict error)
 
 /** Returns the entity linetype name (as UTF-8), or "ByLayer"
     Since r2007 it returns a malloc'd copy, before the direct reference
-    to the dwg field or the constant "0".
+    to the dwg field or the constant "ByLayer".
 \code Usage: char* ltype = dwg_ent_get_ltype_name(ent, &error);
 \endcode
 \param[in]  ent     dwg_obj_ent*

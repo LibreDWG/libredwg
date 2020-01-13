@@ -5138,9 +5138,12 @@ EXPORT dwg_object_ref *dwg_obj_block_control_get_paper_space (
 *                    FUNCTIONS FOR LAYER OBJECT                     *
 ********************************************************************/
 
-// Get Layer Name
+// Get/Set name (utf-8) of the layer object
 EXPORT char *dwg_obj_layer_get_name (const dwg_obj_layer *restrict layer,
                                      int *restrict error) __nonnull ((2));
+EXPORT void dwg_obj_layer_set_name (dwg_obj_layer *restrict layer,
+                                    const char *restrict name,
+                                    int *restrict error) __nonnull ((2, 3));
 
 /*******************************************************************
 *                    FUNCTIONS FOR TABLES                          *
