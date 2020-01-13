@@ -2438,7 +2438,7 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Bit_Chain sec_dat = { 0 }, str_dat = { 0 };
 
   error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_CLASSES);
-  if (error >= DWG_ERR_CRITICAL)
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
     {
       LOG_ERROR ("Failed to read compressed %s section", "Classes");
       if (sec_dat.chain)
@@ -2787,6 +2787,8 @@ read_2004_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
     {
       LOG_ERROR ("Failed to read uncompressed %s section", "SummaryInfo");
+      if (sec_dat.chain)
+        free (sec_dat.chain);
       return error;
     }
   if (dwg->header.summaryinfo_address != (BITCODE_RL)dat->byte)
@@ -2812,6 +2814,8 @@ appinfo_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   struct Dwg_AppInfo *_obj = &dwg->appinfo;
   Dwg_Object *obj = NULL;
   int error = 0;
+  if (!dat->chain || !dat->size)
+    return 1;
 
   // clang-format off
   #include "appinfo.spec"
@@ -2836,9 +2840,11 @@ read_2004_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // type: 0xc or 0xb
   // not compressed, page size: 0x80
   error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_APPINFO);
-  if (error >= DWG_ERR_CRITICAL)
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
     {
       LOG_ERROR ("Failed to read uncompressed %s section", "AppInfo");
+      if (sec_dat.chain)
+        free (sec_dat.chain);
       return error;
     }
 
@@ -2880,9 +2886,11 @@ read_2004_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int error;
   // not compressed, page size: 0x80. 0xc or 0xd
   error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_FILEDEPLIST);
-  if (error >= DWG_ERR_CRITICAL)
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
     {
       LOG_INFO ("%s section not found\n", "FileDepList");
+      if (sec_dat.chain)
+        free (sec_dat.chain);
       return 0;
     }
 
@@ -2924,9 +2932,11 @@ read_2004_section_security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int error;
   // compressed, page size: 0x7400
   error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_SECURITY);
-  if (error >= DWG_ERR_CRITICAL)
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
     {
       LOG_INFO ("%s section not found\n", "Security");
+      if (sec_dat.chain)
+        free (sec_dat.chain);
       return 0;
     }
 
@@ -2958,6 +2968,8 @@ read_2004_section_vbaproject (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
     {
       LOG_INFO ("%s section not found\n", "VBAProject");
+      if (sec_dat.chain)
+        free (sec_dat.chain);
       return 0;
     }
 
@@ -2990,6 +3002,8 @@ read_2004_section_appinfohistory (Bit_Chain *restrict dat, Dwg_Data *restrict dw
   if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
     {
       LOG_INFO ("%s section not found\n", "AppInfoHistory");
+      if (sec_dat.chain)
+        free (sec_dat.chain);
       return 0;
     }
 
@@ -3038,6 +3052,8 @@ read_2004_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
     {
       LOG_INFO ("%s section not found\n", "RevHistory");
+      if (sec_dat.chain)
+        free (sec_dat.chain);
       return 0;
     }
 
@@ -3068,6 +3084,8 @@ read_2004_section_objfreespace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
     {
       LOG_INFO ("%s section not found\n", "ObjFreeSpace");
+      if (sec_dat.chain)
+        free (sec_dat.chain);
       return 0;
     }
 
@@ -3127,6 +3145,8 @@ read_2004_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           // violated by Teigha 4.3.2
           LOG_ERROR ("%s section not found\n", "Template")
         }
+      if (sec_dat.chain)
+        free (sec_dat.chain);
       return 0;
     }
 
