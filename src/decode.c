@@ -49,6 +49,7 @@ static unsigned int loglevel;
 /* the current version per spec block */
 static int cur_ver = 0;
 static BITCODE_BL rcount1 = 0, rcount2 = 0;
+static bool is_teigha = false;
 
 #ifdef USE_TRACING
 /* This flag means we have checked the environment variable
@@ -2126,6 +2127,13 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       if (info->num_sections < 1000000)
         {
           int32_t old_section_number = 0;
+          // bug in Teigha with Template, with num_sections=0
+          if (info->num_sections == 0 && info->fixedtype == SECTION_TEMPLATE
+              /*&& is_teigha */ && info->size >= 4)
+            {
+              LOG_INFO ("Fixup TEMPLATE.num_sections to 1 (Teigha bug)\n")
+              info->num_sections = 1;
+            }
           LOG_INFO ("Page count %u in area %d\n", info->num_sections, i);
           info->sections = calloc (info->num_sections, sizeof (Dwg_Section *));
           if (!info->sections)
@@ -2294,10 +2302,15 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
                  i, info->name, type, info->num_sections,
                  info->compressed == 2 ? "" : "un");
     }
-
-  max_decomp_size = info->num_sections * info->max_decomp_size;
   if (info->num_sections == 0)
-    return 0;
+    {
+      // XXX: This Teigha bug is already fixed up before
+      if (type == SECTION_TEMPLATE && is_teigha && info->size >= 4 && info->unknown == 1)
+        info->num_sections = 1; // bug in Teigha with Template, with num_sections=0
+      else
+        return 0;
+    }
+  max_decomp_size = info->num_sections * info->max_decomp_size;
   if (max_decomp_size == 0 || max_decomp_size > 0x2f000000) // 790Mb
     {
       LOG_ERROR ("Invalid section %s count or max decompression size. "
@@ -2385,7 +2398,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
               return error;
             }
           bytes_left -= info->max_decomp_size;
-          sec_dat->size = max_decomp_size;
+          sec_dat->size = info->size;
         }
       else
         {
@@ -2401,11 +2414,11 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
               return type < SECTION_REVHISTORY ? DWG_ERR_INVALIDDWG
                                                : DWG_ERR_VALUEOUTOFBOUNDS;
             }
-          memcpy (&decomp[j * info->size],
+          memcpy (&decomp[j * info->max_decomp_size],
                   &dat->chain[address + es.fields.address + 32],
-                  MIN (bytes_left, info->size));
-          bytes_left -= info->size;
-          sec_dat->size = max_decomp_size;
+                  MIN (bytes_left, info->max_decomp_size));
+          bytes_left -= info->max_decomp_size;
+          sec_dat->size = info->size;
         }
     }
 
@@ -2803,6 +2816,12 @@ appinfo_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // clang-format off
   #include "appinfo.spec"
   // clang-format on
+
+  if (_obj->version && *_obj->version)
+    {
+      is_teigha = memcmp (_obj->version, "T\0e\0i\0g\0h\0a\0", 12) == 0;
+      LOG_TRACE ("is_teigha: %s\n", is_teigha ? "true" : "false")
+    }
 
   return error;
 }

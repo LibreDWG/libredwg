@@ -43,5 +43,4 @@
       //     registry_version, install_id_string: "ACAD-<num>:<num>", "ACADLT-<num>:<num>", registry_localeID
       // name: "Teigha(R)", CompanyName: ""Open Design Alliance", registry_version, install_id_string: "ODA",
       //     registry_localeID
-      DEBUG_HERE
     }
