@@ -650,6 +650,7 @@ _prefix (Bit_Chain *dat)
     FIELD_TEXT (entity, #token);                                              \
     if (strNE (obj->dxfname, #token))                                         \
       FIELD_TEXT (dxfname, obj->dxfname);                                     \
+    _FIELD (index, RL, 0);                                                    \
     _FIELD (type, RL, 0);                                                     \
     KEY (handle);                                                             \
     VALUE_H (obj->handle, 5);                                                 \
@@ -677,6 +678,7 @@ _prefix (Bit_Chain *dat)
     FIELD_TEXT (object, #token);                                              \
     if (strNE (obj->dxfname, #token))                                         \
       FIELD_TEXT (dxfname, obj->dxfname);                                     \
+    _FIELD (index, RL, 0);                                                    \
     _FIELD (type, RL, 0);                                                     \
     KEY (handle);                                                             \
     VALUE_H (obj->handle, 5);                                                 \
@@ -873,7 +875,6 @@ dwg_json_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   klass = &dwg->dwg_class[i];
   if (!klass || !klass->dxfname)
     return DWG_ERR_INTERNALERROR;
-  // almost always false
   is_entity = dwg_class_is_entity (klass);
 
   // clang-format off
@@ -1076,14 +1077,21 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
             }
           else // not a class
             {
-              LOG_WARN ("Unknown object, skipping eed/reactors/xdic");
-              SINCE (R_2000){
-                LOG_INFO ("Object bitsize: %u\n", obj->bitsize)
-              } LOG_INFO ("Object handle: " FORMAT_H "\n",
-                          ARGS_H (obj->handle));
+              goto invalid_type;
             }
         }
     }
+ invalid_type:
+  LOG_WARN ("Unknown object, skipping eed/reactors/xdic/...");
+  FIELD_TEXT (object, obj->name);
+  if (strNE (obj->dxfname, obj->name))
+    FIELD_TEXT (dxfname, obj->dxfname);
+  _FIELD (index, RL, 0);
+  _FIELD (type, RL, 0);
+  KEY (handle);
+  VALUE_H (obj->handle, 5);
+  _FIELD (size, RL, 0);
+  _FIELD (bitsize, BL, 0);
   return DWG_ERR_INVALIDTYPE;
 }
 
@@ -1161,9 +1169,10 @@ json_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   SECTION (OBJECTS);
   for (i = 0; i < dwg->num_objects; i++)
     {
+      int error;
       Dwg_Object *obj = &dwg->object[i];
       HASH;
-      dwg_json_object (dat, obj);
+      error = dwg_json_object (dat, obj);
       NOCOMMA;
       ENDHASH;
     }
