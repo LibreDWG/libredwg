@@ -289,9 +289,13 @@ static void _prefix (Bit_Chain *dat);
 #define FIELD_MC(nam, dxf) FIELD (nam, MC, dxf)
 #define FIELD_MS(nam, dxf) FIELD (nam, MS, dxf)
 #define FIELD_TF(nam, len, dxf) FIELD_TEXT (nam, _obj->nam)
-#define FIELD_TFF(nam, len, dxf) FIELD_TEXT (nam, _obj->nam)
+#define FIELD_TFF(nam, len, dxf) FIELD_TEXT (nam, (const char*)_obj->nam)
+#define FIELD_TFFx(nam, len, dxf) FIELD_BINARY (nam, len, dxf)
 #define FIELD_TV(nam, dxf) FIELD_TEXT (nam, _obj->nam)
 #define FIELD_TU(nam, dxf) FIELD_TEXT_TU (nam, (BITCODE_TU)_obj->nam)
+#define FIELD_T16(nam, dxf) FIELD_TV (nam, dxf)
+#define FIELD_TU16(nam, dxf) FIELD_TU (nam, dxf)
+#define FIELD_T32(nam, dxf) FIELD_T (nam, dxf)
 #define FIELD_T(nam, dxf)                                                     \
   {                                                                           \
     if (dat->version >= R_2007)                                               \
@@ -341,6 +345,11 @@ static void _prefix (Bit_Chain *dat);
 #define FIELD_3BD(nam, dxf) FIELD_3RD (nam, dxf)
 #define FIELD_3BD_1(nam, dxf) FIELD_3RD (nam, dxf)
 #define FIELD_3DPOINT(nam, dxf) FIELD_3BD (nam, dxf)
+#define FIELD_TIMERLL(nam, dxf)                                               \
+  {                                                                           \
+    PREFIX fprintf (dat->fh, "\"" #nam "\": [ %u, %u ],\n", _obj->nam.days,   \
+                    _obj->nam.ms);                                            \
+  }
 
 #define SUB_FIELD_T(o, nam, dxf)                                              \
   {                                                                           \
@@ -707,42 +716,44 @@ print_wcquote (Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr)
 {
   BITCODE_TU ws = (BITCODE_TU)wstr;
   uint16_t c;
-  fprintf (dat->fh, "\"");
-  if (ws)
+  if (!ws)
     {
-      while ((c = *ws++))
+      fprintf (dat->fh, "null,\n");
+      return;
+    }
+  fprintf (dat->fh, "\"");
+  while ((c = *ws++))
+    {
+      if (c == L'"')
         {
-          if (c == L'"')
-            {
-              fprintf (dat->fh, "\\\"");
-            }
-          else if (c == L'\\')
-            {
-              fprintf (dat->fh, "\\\\");
-            }
-          else if (c == L'\n')
-            {
-              fprintf (dat->fh, "\\n");
-            }
-          else if (c == L'\r')
-            {
-              fprintf (dat->fh, "\\r");
-            }
-          else if (c < 0x1f || c > 0xff)
-            {
-              // FIXME: handle surrogate pairs properly
-              if (c >= 0xd800 && c < 0xdc00)
-                {
-                  fprintf (dat->fh, "\\u%04x", c - 0x1000);
-                }
-              else if (c >= 0xdc00 && c < 0xe000)
-                ;
-              else
-                fprintf (dat->fh, "\\u%04x", c);
-            }
-          else
-            fprintf (dat->fh, "%c", (char)(c & 0xff));
+          fprintf (dat->fh, "\\\"");
         }
+      else if (c == L'\\')
+        {
+          fprintf (dat->fh, "\\\\");
+        }
+      else if (c == L'\n')
+        {
+          fprintf (dat->fh, "\\n");
+        }
+      else if (c == L'\r')
+        {
+          fprintf (dat->fh, "\\r");
+        }
+      else if (c < 0x1f || c > 0xff)
+        {
+          // FIXME: handle surrogate pairs properly
+          if (c >= 0xd800 && c < 0xdc00)
+            {
+              fprintf (dat->fh, "\\u%04x", c - 0x1000);
+            }
+          else if (c >= 0xdc00 && c < 0xe000)
+            ;
+          else
+            fprintf (dat->fh, "\\u%04x", c);
+        }
+      else
+        fprintf (dat->fh, "%c", (char)(c & 0xff));
     }
   fprintf (dat->fh, "\",\n");
 }
@@ -1156,7 +1167,8 @@ json_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       NOCOMMA;
       ENDHASH;
     }
-  NOCOMMA;
+  if (dwg->num_objects)
+    NOCOMMA;
   ENDSEC ();
   return 0;
 }
@@ -1195,11 +1207,209 @@ json_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
+static int
+json_section_r2004fileheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  struct Dwg_R2004_Header *_obj = &dwg->r2004_header;
+  Dwg_Object *obj = NULL;
+  int i;
+
+  RECORD (R2004_Header); // single hash
+  // clang-format off
+  #include "r2004_file_header.spec"
+  // clang-format on
+  ENDRECORD ();
+  return 0;
+}
+
+static int
+json_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  struct Dwg_SummaryInfo *_obj = &dwg->summaryinfo;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  BITCODE_RL rcount1;
+
+  RECORD (SummaryInfo); // single hash
+  // clang-format off
+  #include "summaryinfo.spec"
+  // clang-format on
+  ENDRECORD ();
+  return 0;
+}
+
+static int
+json_section_vbaproject (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  struct Dwg_VBAProject *_obj = &dwg->vbaproject;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  BITCODE_RL rcount1;
+
+  RECORD (VBAProject); // single hash
+  HASH;
+  // clang-format off
+  //#include "vbaproject.spec"
+  // clang-format on
+  ENDRECORD ();
+  return 0;
+}
+
+static int
+json_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  struct Dwg_AppInfo *_obj = &dwg->appinfo;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  BITCODE_RL rcount1;
+
+  RECORD (AppInfo); // single hash
+  // clang-format off
+  #include "appinfo.spec"
+  // clang-format on
+  ENDRECORD ();
+  return 0;
+}
+
+static int
+json_section_appinfohistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  struct Dwg_AppInfoHistory *_obj = &dwg->appinfohistory;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  BITCODE_RL rcount1;
+
+  RECORD (AppInfoHistory); // single hash
+  HASH;
+  // clang-format off
+  //#include "appinfohistory.spec"
+  // clang-format on
+  ENDRECORD ();
+  return 0;
+}
+
+static int
+json_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  struct Dwg_FileDepList *_obj = &dwg->filedeplist;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  BITCODE_RL rcount1;
+
+  RECORD (FileDepList); // single hash
+  // clang-format off
+  #include "filedeplist.spec"
+  // clang-format on
+  ENDRECORD ();
+  return 0;
+}
+
+static int
+json_section_security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  struct Dwg_Security *_obj = &dwg->security;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  BITCODE_RL rcount1;
+
+  RECORD (Security); // single hash
+  // clang-format off
+  #include "security.spec"
+  // clang-format on
+  ENDRECORD ();
+  return 0;
+}
+
+static int
+json_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  struct Dwg_RevHistory *_obj = &dwg->revhistory;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  BITCODE_RL vcount;
+
+  RECORD (RevHistory); // single hash
+  FIELD_RL (class_version, 0);
+  FIELD_RL (class_minor, 0);
+  FIELD_RL (num_histories, 0);
+  FIELD_VECTOR (histories, RL, num_histories, 0)
+  ENDRECORD ();
+  return 0;
+}
+
+static int
+json_section_objfreespace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  struct Dwg_ObjFreeSpace *_obj = &dwg->objfreespace;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  BITCODE_RL rcount1;
+
+  RECORD (ObjFreeSpace); // single hash
+  // clang-format off
+  #include "objfreespace.spec"
+  // clang-format on
+  ENDRECORD ();
+  return 0;
+}
+
+static int
+json_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  struct Dwg_Template *_obj = &dwg->template;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  BITCODE_RL rcount1;
+
+  RECORD (Template); // single hash. i.e MEASUREMENT metric/imperial
+  // clang-format off
+  #include "template.spec"
+  // clang-format on
+  ENDRECORD ();
+  return 0;
+}
+
+static int
+json_section_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  struct Dwg_AuxHeader *_obj = &dwg->auxheader;
+  Dwg_Object *obj = NULL;
+  int error = 0, i;
+  BITCODE_RL rcount1;
+
+  RECORD (AuxHeader); // single hash
+  // clang-format off
+  #include "auxheader.spec"
+  // clang-format on
+  ENDRECORD ();
+  return 0;
+}
+
+#if 0
+static int
+json_section_2ndheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  struct _dwg_second_header *_obj = &dwg->second_header;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  BITCODE_RL rcount1;
+
+  RECORD (SecondHeader); // single hash
+  HASH;
+  // clang-format off
+  //#include "2ndheader.spec"
+  // clang-format on
+  ENDRECORD ();
+  return 0;
+}
+#endif
+
 EXPORT int
 dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   const int minimal = dwg->opts & DWG_OPTS_MINIMAL;
   struct Dwg_Header *obj = &dwg->header;
+  int error = 0;
 
   fprintf (dat->fh,
            "{\n"
@@ -1210,9 +1420,6 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (!minimal)
     {
       json_fileheader_write (dat, dwg);
-      // TODO: 3-5 sections:
-      // auxheader.spec
-      // r2004_file_header.spec
     }
 
   // A minimal HEADER requires only $ACADVER, $HANDSEED, and then ENTITIES
@@ -1231,8 +1438,29 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       if (json_thumbnail_write (dat, dwg) >= DWG_ERR_CRITICAL)
         goto fail;
+      /* the other sections */
+      if (dat->version < R_13 && dat->version <= R_2000)
+        {
+          error |= json_section_template (dat, dwg); // i.e. MEASUREMENT
+          error |= json_section_auxheader (dat, dwg);
+          //error |= json_section_2ndheader (dat, dwg);
+        }
+      if (dat->version >= R_2004)
+        {
+          error |= json_section_r2004fileheader (dat, dwg);
+          if (dwg->header.summaryinfo_address)
+            error |= json_section_summary (dat, dwg);
+          if (dwg->header.vbaproj_address)
+            error |= json_section_vbaproject (dat, dwg);
+          error |= json_section_appinfo (dat, dwg);
+          error |= json_section_appinfohistory (dat, dwg);
+          error |= json_section_filedeplist (dat, dwg);
+          error |= json_section_security (dat, dwg);
+          error |= json_section_revhistory (dat, dwg);
+          error |= json_section_objfreespace (dat, dwg);
+          error |= json_section_template (dat, dwg);
+        }
     }
-
   /* object map */
   if (!minimal && dat->version >= R_13)
     {

@@ -20,13 +20,13 @@
 
   FIELD_RL (num_features, 0);
   REPEAT (num_features, features, BITCODE_TV)
-  {
+  REPEAT_BLOCK
     FIELD_T32 (features[rcount1], 0);
-  }
+  END_REPEAT_BLOCK
   END_REPEAT (features)
   FIELD_RL (num_files, 0);
   REPEAT (num_files, files, Dwg_FileDepList_Files)
-  {
+  REPEAT_BLOCK
     FIELD_T32 (files[rcount1].filename, 0);
     FIELD_T32 (files[rcount1].filepath, 0);
     FIELD_T32 (files[rcount1].fingerprint, 0);
@@ -36,6 +36,5 @@
     FIELD_RL (files[rcount1].filesize, 0);
     FIELD_RS (files[rcount1].affects_graphics, 0);
     FIELD_RL (files[rcount1].refcount, 0);
-  }
+  END_REPEAT_BLOCK
   END_REPEAT (files)
-

@@ -40,14 +40,14 @@
   FIELD_TIMERLL (TDINDWG, 0);
   FIELD_TIMERLL (TDCREATE, 0);
   FIELD_TIMERLL (TDUPDATE, 0);
+
   FIELD_RS (num_props, 0);
-  //DEBUG_HERE;
   REPEAT (num_props, props, Dwg_SummaryInfo_Property)
-    {
-      FIELD_T (props[rcount1].key, 0);
-      FIELD_T (props[rcount1].value, 0);
-    }
+  REPEAT_BLOCK
+    FIELD_T (props[rcount1].key, 0);
+    FIELD_T (props[rcount1].value, 0);
+  END_REPEAT_BLOCK
   END_REPEAT (props)
-  //DEBUG_HERE;
+
   FIELD_RL (unknown1, 0);
   FIELD_RL (unknown2, 0);

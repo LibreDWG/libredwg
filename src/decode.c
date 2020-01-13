@@ -2783,7 +2783,7 @@ read_2004_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Bit_Chain old_dat, sec_dat = { 0 };
   // not compressed, page size: 0x100
   int error = read_2004_compressed_section (dat, dwg, &sec_dat,
-                                        SECTION_SUMMARYINFO); // always 9
+                                            SECTION_SUMMARYINFO); // always 9
   if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
     {
       LOG_ERROR ("Failed to read uncompressed %s section", "SummaryInfo");
