@@ -2391,8 +2391,8 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
         {
           if (info->compressed == 2
               || bytes_left < 0
-              || ((unsigned long)(address + es.fields.address + 32
-                                   + info->size) > max_decomp_size)
+              || (unsigned long)(es.fields.address + 32 + info->size
+                                  > max_decomp_size)
               )
             {
               LOG_ERROR ("Some section size out of bounds")
