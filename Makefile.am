@@ -1,6 +1,6 @@
 ## Makefile.am
 ##
-## Copyright (C) 2010-2019 Free Software Foundation, Inc.
+## Copyright (C) 2010-2020 Free Software Foundation, Inc.
 ##
 ## This file is part of LibreDWG.
 ##
@@ -80,6 +80,8 @@ else
 endif
 endif
 
+regen-dynapi: $(srcdir)/src/gen-dynapi.pl $(srcdir)/include/dwg.h
+	-$(PERL) $(srcdir)/src/gen-dynapi.pl
 regen-unknown:
 	$(MAKE) -C examples $@
 regen-man:

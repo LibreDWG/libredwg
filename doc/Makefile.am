@@ -1,6 +1,6 @@
 ## Makefile.am
 ##
-## Copyright (C) 2010-2019 Free Software Foundation, Inc.
+## Copyright (C) 2010-2020 Free Software Foundation, Inc.
 ##
 ## This file is part of LibreDWG.
 ##
@@ -29,7 +29,7 @@ manual:
 endif
 
 dynapi.texi: $(top_srcdir)/src/gen-dynapi.pl
-	-$(PERL) $(top_srcdir)/src/gen-dynapi.pl
+	echo make regen-dynapi might be needed
 
 if HAVE_DOXYGEN
 .PHONY: refman doxygen refman-pdf
