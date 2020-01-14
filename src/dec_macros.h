@@ -1184,7 +1184,7 @@
       Dwg_Object *restrict obj)                                               \
   {                                                                           \
     BITCODE_BL vcount, rcount3, rcount4;                                      \
-    int error;                                                                \
+    int error = 0;                                                            \
     Dwg_Entity_##token *ent, *_obj;                                           \
     Dwg_Object_Entity *_ent;                                                  \
     Dwg_Data *dwg = obj->parent;                                              \
@@ -1278,8 +1278,8 @@
       Dwg_Object *restrict obj)                                               \
   {                                                                           \
     BITCODE_BL vcount, rcount3, rcount4;                                      \
-    int error;                                                                \
-    Dwg_Object_##token *_obj;                                                 \
+    int error = 0;                                                            \
+    Dwg_Object_##token *_obj = NULL;                                          \
     Dwg_Data *dwg = obj->parent;                                              \
     LOG_INFO ("Decode object " #token "\n")                                   \
     if (strNE (#token, "TABLECONTENT") || obj->fixedtype != DWG_TYPE_TABLE)   \
