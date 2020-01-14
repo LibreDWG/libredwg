@@ -720,6 +720,12 @@ static int ishex (int c)
   return ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f')
           || (c >= 'A' && c <= 'F'));
 }
+// Usage: hex(c >> 4), hex(c & 0xf)
+static int hex (unsigned char c)
+{
+  c &= 0xf; // 0-15
+  return c >= 10 ? 'a' + c - 10 : '0' + c;
+}
 
 #ifndef HAVE_NATIVE_WCHAR2
 
@@ -819,8 +825,8 @@ wcquote (wchar_t *restrict dest, const wchar_t *restrict src)
           *dest++ = L'u';
           *dest++ = L'0';
           *dest++ = L'0';
-          *dest++ = c < 0x10 ? L'0' : L'1';
-          *dest++ = (c % 16 > 10 ? L'a' + (c % 16) - 10 : L'0' + (c % 16));
+          *dest++ = hex (c >> 4);
+          *dest++ = hex (c & 0xf);
         }
       else
         *dest++ = c;
@@ -881,8 +887,8 @@ json_cquote (char *restrict dest, const char *restrict src, const int len)
           *dest++ = 'u';
           *dest++ = '0';
           *dest++ = '0';
-          *dest++ = c < 0x10 ? '0' : '1';
-          *dest++ = (c % 16) > 10 ? 'a' + (c % 16) - 10 : '0' + (c % 16);
+          *dest++ = hex (c >> 4);
+          *dest++ = hex (c & 0xf);
         }
       else
         *dest++ = c;
