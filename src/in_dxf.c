@@ -1459,7 +1459,7 @@ add_MLINESTYLE_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     {
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
-      if (pair->code == 0)
+      if (pair == NULL || pair->code == 0)
         return pair;
       else if (pair->code == 49)
         {
@@ -1754,7 +1754,7 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
 
-      if (pair->code == 0)
+      if (pair == NULL || pair->code == 0)
         return pair;
       else if (pair->code == 92)
         {
