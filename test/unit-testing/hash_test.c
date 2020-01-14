@@ -40,5 +40,6 @@ main (int argc, char const *argv[])
         fail ("hash_get(%d) => %d", rnd, v);
     }
 
+  hash_free (hash);
   return 0;
 }
