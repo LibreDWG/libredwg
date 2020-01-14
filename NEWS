@@ -8,13 +8,16 @@ New features:
   * Can now read all major 2004+ section types: added AppInfo, FileDepList,
     Template, ObjFreeSpace;
     and as blob: RevHistory, Security, AppInfoHistory
-  * Added new string types: T16, TU16, T32 (for those sections)
+  * Added new string types: T and T16, TU16, T32 (for those sections)
 
 API breaking changes:
   * Renamed dwg_section_type to dwg_section_wtype, added a new dwg_section_type
     for ASCII names.
 
 Major bugfixes:
+  * Fixed converting ASCII from and to Unicode strings, when converting across
+    versions. Embed Unicode as \U+XXXX into ASCII, and decode it back to Unicode.
+    Honor dat,dwg->from_version and use the new FIELD_T as seperate type. (#185)
 
 Minor bugfixes:
   * Fixed uncompressed sections overflows, some fuzzed (#183), some

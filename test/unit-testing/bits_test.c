@@ -589,44 +589,64 @@ main (int argc, char const *argv[])
   else
     fail ("bit_calc_CRC %X", bs);
   bit_advance_position (&bitchain, 16L);
+  pos = bit_position (&bitchain);
 
-  bit_write_TV (&bitchain, (char *)"GNU"); // now we store the \0 also
-  if (bitchain.byte == 70 && bitchain.bit == 2)
+  bit_write_TV (&bitchain, (char *)"GNU"); // we don't store the \0
+  if (bitchain.byte == 69 && bitchain.bit == 2)
     pass ();
   else
     fail ("bit_write_TV @%ld.%d", bitchain.byte, bitchain.bit);
 
-  bit_advance_position (&bitchain, -42L);
+  bit_set_position (&bitchain, pos);
   str = bit_read_TV (&bitchain);
   if (!strcmp (str, "GNU"))
     pass ();
   else
     fail ("bit_read_TV");
+  bit_set_position (&bitchain, pos);
   free (str);
-  bit_advance_position (&bitchain, -42L);
 
   {
     BITCODE_T wstr;
-    bitchain.version = R_2007;
-    bit_write_T (&bitchain, (char *)"GNU"); // now we store the \0 also
-    if (bitchain.byte == 70 && bitchain.bit == 2)
+    const uint16_t exp[] = {'T', 'e', 'i', 'g', 'h', 'a', 0x2122, 0};
+    bitchain.version = R_2007; // @65.0
+    bit_write_T (&bitchain, (char *)"Teigha\\U+2122"); // convert to unicode
+    if (bitchain.byte == 80 && bitchain.bit == 2)
       pass ();
     else
-      fail ("bit_write_T @%ld.%d", bitchain.byte, bitchain.bit);
-    
-    bit_advance_position (&bitchain, -84L);
+      fail ("bit_write_T => TU @%ld.%d", bitchain.byte, bitchain.bit);
+
+    bit_set_position (&bitchain, pos);
+    bitchain.from_version = R_2007;
+    bitchain.version = R_2000;
     wstr = bit_read_T (&bitchain);
-    if (!memcmp (wstr, "G\000N\000U\000", 6))
+    if (wstr && !memcmp (wstr, exp, sizeof (exp)))
       pass ();
     else
-      fail ("bit_read_T");
+      fail ("bit_read_T => TU");
+    bit_set_position (&bitchain, pos);
     free (wstr);
-    bit_advance_position (&bitchain, -84L);
+
+    bit_write_T (&bitchain, (char*)exp); // convert to ASCII via embed
+    if (bitchain.byte == 80 && bitchain.bit == 2)
+      pass ();
+    else
+      fail ("bit_write_T => TV @%ld.%d", bitchain.byte, bitchain.bit);
+
+    bit_set_position (&bitchain, 65 * 8);
+    bitchain.from_version = R_2000;
+    bitchain.version = R_2007;
+    wstr = bit_read_T (&bitchain);
+    if (wstr && !strcmp (wstr, "Teigha\\U+2122"))
+      pass ();
+    else
+      fail ("bit_read_T => TV");
+    bitchain.from_version = bitchain.version = R_2004;
+    free (wstr);
   }
 
-  bit_advance_position (&bitchain, -8L);
   bit_write_L (&bitchain, 20);
-  if (bitchain.byte == 73 && bitchain.bit == 2)
+  if (bitchain.byte == 83 && bitchain.bit == 2)
     pass ();
   else
     fail ("bit_write_L @%ld.%d", bitchain.byte, bitchain.bit);
@@ -647,7 +667,7 @@ main (int argc, char const *argv[])
     color.name = (char *)"Some name";
     color.book_name = (char *)"book_name";
     bit_write_CMC (&bitchain, &color);
-    if (bitchain.byte == 74 && bitchain.bit == 4)
+    if (bitchain.byte == 84 && bitchain.bit == 4)
       pass ();
     else
       fail ("bit_write_CMC @%ld.%d", bitchain.byte, bitchain.bit);
@@ -672,6 +692,7 @@ main (int argc, char const *argv[])
   bit_advance_position (&bitchain, -size);
   {
     Dwg_Color color;
+    pos = bit_position (&bitchain);
     bitchain.from_version = bitchain.version = R_2004;
     color.index = 19;
     color.rgb = 5190965;
@@ -679,7 +700,7 @@ main (int argc, char const *argv[])
     color.name = (char *)"Some name";
     color.book_name = (char *)"book_name";
     bit_write_CMC (&bitchain, &color);
-    if (bitchain.byte == 91 && bitchain.bit == 0)
+    if (bitchain.byte == 105 && bitchain.bit == 2)
       pass ();
     else
       fail ("bit_write_CMC @%ld.%d", bitchain.byte, bitchain.bit);
@@ -711,18 +732,18 @@ main (int argc, char const *argv[])
   bitchain.byte = 0;
   {
     int ret = bit_search_sentinel (&bitchain, sentinel);
-    if (bitchain.byte == 108)
+    if (bitchain.byte == 122)
       pass ();
     else
       {
         fail ("bit_search_sentinel %lu", bitchain.byte);
-        bitchain.byte = 108;
+        bitchain.byte = 122;
       }
   }
   {
     unsigned int check
-        = bit_calc_CRC (0xC0C1, (unsigned char *)bitchain.chain, 108L);
-    if (check == 0xEB57)
+        = bit_calc_CRC (0xC0C1, (unsigned char *)bitchain.chain, 122L);
+    if (check == 0x3144)
       pass ();
     else
       fail ("bit_calc_CRC %04X", check);
