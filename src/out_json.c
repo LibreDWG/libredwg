@@ -652,7 +652,7 @@ _prefix (Bit_Chain *dat)
     _ent = obj->tio.entity;                                                   \
     _obj = ent = _ent->tio.token;                                             \
     FIELD_TEXT (entity, #token);                                              \
-    if (strNE (obj->dxfname, #token))                                         \
+    if (obj->dxfname && strNE (obj->dxfname, #token))                         \
       FIELD_TEXT (dxfname, obj->dxfname);                                     \
     _FIELD (index, RL, 0);                                                    \
     _FIELD (type, RL, 0);                                                     \
@@ -680,7 +680,7 @@ _prefix (Bit_Chain *dat)
     LOG_INFO ("Object " #token ":\n")                                         \
     _obj = obj->tio.object->tio.token;                                        \
     FIELD_TEXT (object, #token);                                              \
-    if (strNE (obj->dxfname, #token))                                         \
+    if (obj->dxfname && strNE (obj->dxfname, #token))                         \
       FIELD_TEXT (dxfname, obj->dxfname);                                     \
     _FIELD (index, RL, 0);                                                    \
     _FIELD (type, RL, 0);                                                     \
@@ -1123,7 +1123,7 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
  invalid_type:
   LOG_WARN ("Unknown object, skipping eed/reactors/xdic/...");
   FIELD_TEXT (object, obj->name);
-  if (strNE (obj->dxfname, obj->name))
+  if (obj->dxfname && strNE (obj->dxfname, obj->name))
     FIELD_TEXT (dxfname, obj->dxfname);
   _FIELD (index, RL, 0);
   _FIELD (type, RL, 0);
