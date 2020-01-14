@@ -603,8 +603,28 @@ main (int argc, char const *argv[])
   else
     fail ("bit_read_TV");
   free (str);
-  bit_advance_position (&bitchain, -8L);
+  bit_advance_position (&bitchain, -42L);
 
+  {
+    BITCODE_T wstr;
+    bitchain.version = R_2007;
+    bit_write_T (&bitchain, (char *)"GNU"); // now we store the \0 also
+    if (bitchain.byte == 70 && bitchain.bit == 2)
+      pass ();
+    else
+      fail ("bit_write_T @%ld.%d", bitchain.byte, bitchain.bit);
+    
+    bit_advance_position (&bitchain, -84L);
+    wstr = bit_read_T (&bitchain);
+    if (!memcmp (wstr, "G\000N\000U\000", 6))
+      pass ();
+    else
+      fail ("bit_read_T");
+    free (wstr);
+    bit_advance_position (&bitchain, -84L);
+  }
+
+  bit_advance_position (&bitchain, -8L);
   bit_write_L (&bitchain, 20);
   if (bitchain.byte == 73 && bitchain.bit == 2)
     pass ();
@@ -652,7 +672,7 @@ main (int argc, char const *argv[])
   bit_advance_position (&bitchain, -size);
   {
     Dwg_Color color;
-    bitchain.version = R_2004;
+    bitchain.from_version = bitchain.version = R_2004;
     color.index = 19;
     color.rgb = 5190965;
     color.flag = 1;
@@ -694,7 +714,10 @@ main (int argc, char const *argv[])
     if (bitchain.byte == 108)
       pass ();
     else
-      fail ("bit_search_sentinel %lu", bitchain.byte);
+      {
+        fail ("bit_search_sentinel %lu", bitchain.byte);
+        bitchain.byte = 108;
+      }
   }
   {
     unsigned int check

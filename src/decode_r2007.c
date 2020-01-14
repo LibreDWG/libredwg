@@ -759,6 +759,7 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
   sec_dat->byte = 0;
   sec_dat->size = max_decomp_size;
   sec_dat->version = dat->version;
+  sec_dat->from_version = dat->from_version;
 
   for (i = 0; i < (int)section->num_pages; i++)
     {
@@ -1425,13 +1426,13 @@ read_2007_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       size = bit_read_RL (&sec_dat); // size of class data area
       LOG_TRACE ("size: " FORMAT_RL " [RL]\n", size)
       /*
-      if (dat->version >= R_2010 && dwg->header.maint_version > 3)
+      if (dat->from_version >= R_2010 && dwg->header.maint_version > 3)
         {
           BITCODE_RL hsize = bit_read_RL(&sec_dat);
           LOG_TRACE("hsize: " FORMAT_RL " [RL]\n", hsize)
         }
       */
-      if (dat->version >= R_2007)
+      if (dat->from_version >= R_2007)
         {
           bitsize = bit_read_RL (&sec_dat);
           LOG_TRACE ("bitsize: " FORMAT_RL " [RL]\n", bitsize)
@@ -1547,14 +1548,14 @@ read_2007_section_header (Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,
       *hdl_dat = sec_dat;
       // unused: later versions re-use the 2004 section format
       /*
-      if (dat->version >= R_2010 && dwg->header.maint_version > 3)
+      if (dat->from_version >= R_2010 && dwg->header.maint_version > 3)
         {
           dwg->header_vars.bitsize_hi = bit_read_RL(&sec_dat);
           LOG_TRACE("bitsize_hi: " FORMAT_RL " [RL]\n",
       dwg->header_vars.bitsize_hi) endbits += 32;
         }
       */
-      if (dat->version == R_2007) // always true so far
+      if (dat->from_version == R_2007) // always true so far
         {
           dwg->header_vars.bitsize = bit_read_RL (&sec_dat);
           LOG_TRACE ("bitsize: " FORMAT_RL " [RL]\n",

@@ -1282,7 +1282,7 @@ classes_section:
           // fails with r14
           // if (dwg->header.version == R_2000)
           //  return DWG_ERR_WRONGCRC;
-          if (dat->version != R_14)
+          if (dat->from_version != R_14)
             error |= DWG_ERR_WRONGCRC;
         }
       if (dat->byte >= lastmap)
@@ -1387,7 +1387,7 @@ classes_section:
       for (i = 0; i < 4; i++)
         FIELD_RC (unknown_rc4[i], 0);
 
-      if (dat->version < R_2000 && FIELD_VALUE (unknown_10) == 0x18
+      if (dat->from_version < R_2000 && FIELD_VALUE (unknown_10) == 0x18
           && FIELD_VALUE (unknown_rc4[0]) == 0x78)
         dat->byte -= 2;
       UNTIL (R_2000)
@@ -2452,13 +2452,13 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_TRACE ("\nClasses\n-------------------\n")
       size = bit_read_RL (&sec_dat); // size of class data area
       LOG_TRACE ("size: " FORMAT_RL " [RL]\n", size)
-      if ((dat->version >= R_2010 && dwg->header.maint_version > 3)
-          || dat->version >= R_2018)
+      if ((dat->from_version >= R_2010 && dwg->header.maint_version > 3)
+          || dat->from_version >= R_2018)
         {
           BITCODE_RL hsize = bit_read_RL (&sec_dat);
           LOG_TRACE ("hsize: " FORMAT_RL " [RL]\n", hsize)
         }
-      if (dat->version >= R_2007)
+      if (dat->from_version >= R_2007)
         {
           bitsize = bit_read_RL (&sec_dat);
           LOG_TRACE ("bitsize: " FORMAT_RL " [RL]\n", bitsize)
@@ -2484,7 +2484,7 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       assert (max_num >= 500);
       // assert (max_num < 5000);
 
-      if (dat->version >= R_2007)
+      if (dat->from_version >= R_2007)
         section_string_stream (&sec_dat, bitsize, &str_dat);
 
       dwg->dwg_class
@@ -2603,7 +2603,7 @@ read_2004_section_header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         BITCODE_RL endbits = 160; // start bit: 16 sentinel + 4 size
         hdl_dat = sec_dat;
         str_dat = sec_dat;
-        if (dwg->header.maint_version > 3 || dat->version >= R_2018)
+        if (dwg->header.maint_version > 3 || dat->from_version >= R_2018)
           {
             dwg->header_vars.bitsize_hi = bit_read_RL (&sec_dat);
             LOG_TRACE ("bitsize_hi: " FORMAT_RL " [RL]\n",
@@ -2953,7 +2953,7 @@ read_2004_section_security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return error;
 }
 
-/* VBAProject Section
+/* VBAProject Section. TODO dwg_decode_ole2
  */
 static int
 read_2004_section_vbaproject (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
@@ -2977,7 +2977,7 @@ read_2004_section_vbaproject (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
 
-  //DEBUG_HERE
+  //DEBUG_HERE dwg_decode_ole2 ()
   _obj->size = dat->size;
   _obj->unknown_bits = bit_read_TF (dat, _obj->size);
   LOG_TRACE_TF (_obj->unknown_bits, _obj->size)
@@ -3776,6 +3776,7 @@ dwg_decode_ole2 (Dwg_Entity_OLE2FRAME *restrict _obj)
   dat->size = 0x80;
   dat->chain = (unsigned char *)&_obj->data[0];
   dat->version = _obj->parent->dwg->header.version;
+  dat->from_version = _obj->parent->dwg->header.from_version;
 
   // TODO decode the unknowns
   /* Sample data from TS1.dwg:
@@ -4404,7 +4405,7 @@ dwg_decode_common_entity_handle_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   _obj = _ent = obj->tio.entity;
 
   // deferred from common_entity_data, which has no hdl_dat
-  if (dat->version >= R_2007 && _ent->color.flag & 0x40)
+  if (dat->from_version >= R_2007 && _ent->color.flag & 0x40)
     FIELD_HANDLE (color.handle, 0, 430);
 
     // clang-format off
@@ -5132,7 +5133,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
 
   SINCE (R_2010) { obj->type = bit_read_BOT (dat); }
   else { obj->type = bit_read_BS (dat); }
-  LOG_INFO (", Type: %d [%s]\n", obj->type, dat->version >= R_2010 ? "BOT" : "BS");
+  LOG_INFO (", Type: %d [%s]\n", obj->type, dat->from_version >= R_2010 ? "BOT" : "BS");
   restartpos = bit_position (dat); // relative
 
   /* Check the type of the object
@@ -5156,7 +5157,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
       break;
     case DWG_TYPE_SEQEND:
       error = dwg_decode_SEQEND (dat, obj);
-      if (dat->version >= R_13 && obj->tio.entity->ownerhandle)
+      if (dat->from_version >= R_13 && obj->tio.entity->ownerhandle)
         {
           Dwg_Object *restrict owner = dwg_resolve_handle (
               dwg, obj->tio.entity->ownerhandle->absolute_ref);
@@ -5208,12 +5209,12 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
       break;
     case DWG_TYPE_POLYLINE_2D:
       error = dwg_decode_POLYLINE_2D (dat, obj);
-      if (dat->version >= R_2010)
+      if (dat->from_version >= R_2010)
         check_POLYLINE_handles (obj);
       break;
     case DWG_TYPE_POLYLINE_3D:
       error = dwg_decode_POLYLINE_3D (dat, obj);
-      if (dat->version >= R_2010)
+      if (dat->from_version >= R_2010)
         check_POLYLINE_handles (obj);
       break;
     case DWG_TYPE_ARC:
@@ -5254,12 +5255,12 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
       break;
     case DWG_TYPE_POLYLINE_PFACE:
       error = dwg_decode_POLYLINE_PFACE (dat, obj);
-      if (dat->version >= R_2010)
+      if (dat->from_version >= R_2010)
         check_POLYLINE_handles (obj);
       break;
     case DWG_TYPE_POLYLINE_MESH:
       error = dwg_decode_POLYLINE_MESH (dat, obj);
-      if (dat->version >= R_2010)
+      if (dat->from_version >= R_2010)
         check_POLYLINE_handles (obj);
       break;
     case DWG_TYPE_SOLID:

@@ -134,22 +134,18 @@ static bool env_var_checked_p;
     }                                                                         \
     FIELDG (nam, TV, dxf);                                                    \
   }
+// may need to convert from/to TV<=>TU
 #define FIELD_T(nam, dxf)                                                     \
   {                                                                           \
     if (dat->version < R_2007)                                                \
       {                                                                       \
-        FIELD_TV (nam, dxf)                                                   \
+        bit_write_T (dat, _obj->nam);                                         \
+        LOG_TRACE (#nam ": \"%s\" [T %d]\n", _obj->nam, dxf);                 \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        if (!obj || obj->has_strings)                                         \
-          {                                                                   \
-            FIELD_TU (nam, dxf)                                               \
-          }                                                                   \
-        else                                                                  \
-          {                                                                   \
-            LOG_TRACE_TU (#nam, L"", dxf);                                    \
-          }                                                                   \
+        bit_write_T (str_dat, _obj->nam);                                     \
+        LOG_TRACE_TU (#nam, _obj->nam, dxf);                                  \
       }                                                                       \
   }
 #define FIELD_TF(nam, len, dxf)                                               \
@@ -172,7 +168,7 @@ static bool env_var_checked_p;
 #define FIELD_TU(nam, dxf)                                                    \
   {                                                                           \
     if (_obj->nam)                                                            \
-      bit_write_TU (dat, (BITCODE_TU)_obj->nam);                              \
+      bit_write_TU (str_dat, (BITCODE_TU)_obj->nam);                          \
     LOG_TRACE_TU (#nam, (BITCODE_TU)_obj->nam, dxf);                          \
   }
 #define FIELD_BT(nam, dxf) FIELDG (nam, BT, dxf);
@@ -905,8 +901,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         if (!dwg->header_vars.HANDSEED || !dwg->header_vars.TDCREATE.days)
           {
             dwg->header.num_sections = 5;
-            dat->from_version
-                = R_11; // to trigger IF_ENCODE_FROM_EARLIER defaults
+            // to trigger IF_ENCODE_FROM_EARLIER defaults
+            dat->from_version = R_11;
             if (dat->version <= dat->from_version)
               dat->from_version = dat->version - 1;
           }
