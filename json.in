@@ -1,0 +1,39 @@
+#!/bin/sh
+# create -v3 logs and json's from dwg's with dwgread -Ojson
+srcdir="@srcdir@"
+
+make -s -j4 -C src
+make -s -j4 -C programs dwgread
+@DSYMUTIL@ programs/dwgread
+v=-v3
+y=
+
+for d in "$@"; do
+    case $d in
+        -y) y="-y"
+             ;;
+        -v*) v=$d
+             ;;
+        *)
+        if [ ! -f $d ]; then
+            if [ -f $srcdir/test/test-data/$d ]
+            then
+                d=$srcdir/test/test-data/$d;
+            else
+                if [ -f $srcdir/test/test-data/$d.dwg ]
+                then
+                    d=$srcdir/test/test-data/$d.dwg
+                fi
+            fi
+        fi
+        dir=_$(basename `dirname "$d"`)
+        if [ x$dir = x_test-data ]; then dir=""; fi
+        if [ x$dir = x_td ]; then dir=""; fi
+        b=`basename "$d" .dwg`
+        log=$b$dir.log
+        json=$b$dir.json
+        echo programs/dwgread $y $v -o "$json" "$d" 2\>$log
+        @TIMEOUT_10@ @LTEXEC@ programs/dwgread $y $v -o "$json" "$d" 2>$log
+        ;;
+    esac
+done

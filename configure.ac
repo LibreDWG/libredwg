@@ -585,6 +585,7 @@ AC_CONFIG_FILES([logs-all.sh:$logs_all], [chmod +x logs-all.sh])
 AC_CONFIG_FILES([log], [chmod +x log])
 AC_CONFIG_FILES([dwg], [chmod +x dwg])
 AC_CONFIG_FILES([dxf], [chmod +x dxf])
+AC_CONFIG_FILES([json], [chmod +x json])
 
 AC_OUTPUT
 
