@@ -2534,7 +2534,10 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           assert (j >= 0);
           assert (j < (int)o->num_colors);
-          o->colors[j].color.name = strdup (pair->value.s);
+          if (dat->version >= R_2007)
+            o->colors[j].color.name = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
+          else
+            o->colors[j].color.name = strdup (pair->value.s);
           LOG_TRACE ("HATCH.colors[%d].color.name = %s [CMC 431]\n", j,
                      pair->value.s);
         }
@@ -2542,7 +2545,6 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           dwg_dynapi_entity_set_value (o, "HATCH", "gradient_name",
                                        &pair->value, 1);
-          // o->gradient_name = strdup (pair->value.s);
           LOG_TRACE ("HATCH.gradient_name = %s [T 470]\n", pair->value.s);
         }
       else if (pair->code == 462)
@@ -3569,8 +3571,11 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 i++;
               assert (i >= 0 && i <= 3);
             }
-          o->ref[i].classname = strdup (pair->value.s);
-          LOG_TRACE ("%s.ref[%d].classname = %s [TV %d]\n",
+          if (dwg->header.version >= R_2007)
+            o->ref[i].classname = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
+          else
+            o->ref[i].classname = strdup (pair->value.s);
+          LOG_TRACE ("%s.ref[%d].classname = %s [T %d]\n",
                      obj->name, i, pair->value.s, pair->code);
           have_rotated_type = 0;
           break;
@@ -6006,6 +6011,7 @@ new_object (char *restrict name, char *restrict dxfname,
               else if (pair->code == 430)
                 {
                   char *x;
+                  //FIXME TU
                   o->catalog = strdup (pair->value.s);
                   x = strchr (o->catalog, '$');
                   if (!x)
@@ -6016,6 +6022,15 @@ new_object (char *restrict name, char *restrict dxfname,
                              pair->code);
                   LOG_TRACE ("DBCOLOR.name = %s [CMC %d]\n", o->name,
                              pair->code);
+                  if (dwg->header.version >= R_2007)
+                    {
+                      char *tmp = o->catalog;
+                      o->catalog = (BITCODE_T)bit_utf8_to_TU (o->catalog);
+                      free (tmp);
+                      tmp = o->name;
+                      o->name = (BITCODE_T)bit_utf8_to_TU (o->name);
+                      free (tmp);
+                    }
                   goto next_pair;
                 }
               else
@@ -6280,7 +6295,10 @@ new_object (char *restrict name, char *restrict dxfname,
                           else if (pair->code < 440)
                             {
                               color.flag |= 0x10;
-                              color.name = strdup (pair->value.s);
+                              if (dwg->header.version >= R_2007)
+                                color.name = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
+                              else
+                                color.name = strdup (pair->value.s);
                               LOG_TRACE ("%s.%s.name = %s [%s %d]\n", name,
                                          f->name, pair->value.s, "CMC", pair->code);
                             }
@@ -6462,7 +6480,10 @@ new_object (char *restrict name, char *restrict dxfname,
                       else if (pair->code == 430)
                         {
                           color.flag |= 0x10;
-                          color.name = strdup (pair->value.s);
+                          if (dwg->header.version >= R_2007)
+                            color.name = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
+                          else
+                            color.name = strdup (pair->value.s);
                           // TODO: book_name or name?
                           LOG_TRACE ("COMMON.%s.name = %s [%s %d]\n", f->name,
                                      pair->value.s, "CMC", pair->code);
