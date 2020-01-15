@@ -71,7 +71,7 @@ void dwg_free_xdata_resbuf (Dwg_Resbuf *restrict rbuf);
 /* reused with encode */
 void dwg_resolve_objectrefs_silent (Dwg_Data *restrict dwg);
 uint32_t dwg_section_page_checksum (const uint32_t seed, Bit_Chain *restrict dat,
-                                    uint32_t size);
+                                    int32_t size);
 
 /* reused with out_dxf */
 char *dwg_dim_blockname (Dwg_Data *restrict dwg,
