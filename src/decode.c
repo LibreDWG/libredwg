@@ -1823,18 +1823,19 @@ add_section (Dwg_Data *dwg)
 // checksum
 uint32_t
 dwg_section_page_checksum (const uint32_t seed, Bit_Chain *restrict dat,
-                           uint32_t size)
+                           int32_t size)
 {
   uint32_t sum1 = seed & 0xffff;
   uint32_t sum2 = seed >> 0x10;
   unsigned char *data = &(dat->chain[dat->byte]);
+  unsigned char *end = dat->chain + dat->size;
 
-  while (size)
+  while (size > 0 && data < end)
     {
       uint32_t i;
-      uint32_t chunksize = size < 0x15b0 ? size : 0x15b0;
+      uint32_t chunksize = MIN (size, 0x15b0);
       size -= chunksize;
-      for (i = 0; i < chunksize; i++)
+      for (i = 0; i < chunksize && data < end; i++)
         {
           sum1 += *data++;
           sum2 += sum1;
@@ -1894,7 +1895,7 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_TRACE ("\n#### Read 2004 Section Page Map ####\n")
 
 #ifdef USE_WRITE
-  // FIXME: check checksum (ODA p.27)
+  // FIXME: check checksum (ODA p.27) Probably not here, but later.
   {
     BITCODE_RL after_decomp, calc_checksum;
     after_decomp = dat->byte; // after decomp
@@ -1902,16 +1903,15 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     checksum = dwg->r2004_header.checksum;
     dwg->r2004_header.checksum = 0;
     calc_checksum
-        = dwg_section_page_checksum (0, dat, sizeof (dwg->r2004_header));
-    LOG_TRACE ("First r2004_header.checksum 0x%08x\n", calc_checksum);
+        = dwg_section_page_checksum (0, dat, decomp_data_size);
+    LOG_TRACE ("  First r2004_header.checksum 0x%08x\n", calc_checksum);
     dwg->r2004_header.checksum = checksum;
     dat->byte = section_address; // before decomp
     calc_checksum
         = dwg_section_page_checksum (calc_checksum, dat, decomp_data_size);
     if (calc_checksum != checksum)
-      LOG_INFO ("Invalid 2004 System Section Page checksum 0x%08x != 0x%08x "
-                "(TODO)\n",
-                calc_checksum, checksum)
+      LOG_INFO ("  Invalid 2004 System Section Page checksum 0x%08x != 0x%08x "
+                "(TODO)\n", calc_checksum, checksum)
     dat->byte = after_decomp;
   }
 #endif
@@ -3460,8 +3460,8 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     // FIXME: only really needed for r2004 encode later
     crc32 = _obj->crc32;
     _obj->crc32 = 0;
-    calc_crc32
-        = bit_calc_CRC32 (0, &decrypted_data[0], 0x72); // without the padding
+    // without the padding, but the crc32 as 0
+    calc_crc32 = bit_calc_CRC32 (0, &decrypted_data[0], 0x72);
     _obj->crc32 = crc32;
     if (calc_crc32 != crc32)
       LOG_INFO ("r2004_file_header CRC mismatch 0x%08x != 0x%08x (TODO)\n",
@@ -3474,10 +3474,19 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
   {
     BITCODE_RL checksum;
     Bit_Chain *dat = file_dat;
-    BITCODE_RL old_address;
-    dat->byte = dwg->r2004_header.section_map_address + 0x100;
+    BITCODE_RL old_address = dat->byte;
+    BITCODE_RL start;
+    BITCODE_RC *map;
+    LOG_INSANE ("@0x%lx\n", dat->byte)
 
     LOG_TRACE ("\n=== Read System Section (Section Page Map) ===\n\n")
+    assert (dwg->r2004_header.section_map_address);
+    dat->byte = dwg->r2004_header.section_map_address + 0x100;
+    start = dwg->r2004_header.section_map_address;
+    map = &dat->chain[start];
+    LOG_INSANE ("section_map_address: 0x%x + 0x100:\n", start)
+    LOG_INSANE_TF (map, 0x100)
+    LOG_INSANE ("@0x%lx\n", dat->byte)
     FIELD_RLx (section_type, 0);
     if (FIELD_VALUE (section_type) != 0x41630e3b)
       {
@@ -3489,6 +3498,22 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     FIELD_RL (comp_data_size, 0);
     FIELD_RL (compression_type, 0);
     FIELD_RLx (checksum, 0);
+    LOG_INSANE ("@0x%lx\n", dat->byte)
+    for (int i = 0; i <= 0x100; i += 4)
+      {
+        BITCODE_RL old = dat->byte, size = dat->byte - start - 4 - i;
+        dat->byte = start + i;
+        checksum = dwg_section_page_checksum (0, dat, size);
+        dat->byte = old;
+        if (1 || checksum == _obj->checksum)
+          {
+            LOG_TRACE ("  checksum: 0x%08x (calculated with offset %3d, size %3d) ",
+                       checksum, i, size);
+            LOG_TRACE ("  0x%x - 0x%x\n", start + i, start + i + size);
+            if (checksum == _obj->checksum)
+              break;
+          }
+      }
   }
 
   return error;
