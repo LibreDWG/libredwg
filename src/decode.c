@@ -1894,28 +1894,6 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
   LOG_TRACE ("\n#### Read 2004 Section Page Map ####\n")
 
-#ifdef USE_WRITE
-  // FIXME: check checksum (ODA p.27) Probably not here, but later.
-  {
-    BITCODE_RL after_decomp, calc_checksum;
-    after_decomp = dat->byte; // after decomp
-    dat->byte = 0;
-    checksum = dwg->r2004_header.checksum;
-    dwg->r2004_header.checksum = 0;
-    calc_checksum
-        = dwg_section_page_checksum (0, dat, decomp_data_size);
-    LOG_TRACE ("  First r2004_header.checksum 0x%08x\n", calc_checksum);
-    dwg->r2004_header.checksum = checksum;
-    dat->byte = section_address; // before decomp
-    calc_checksum
-        = dwg_section_page_checksum (calc_checksum, dat, decomp_data_size);
-    if (calc_checksum != checksum)
-      LOG_INFO ("  Invalid 2004 System Section Page checksum 0x%08x != 0x%08x "
-                "(TODO)\n", calc_checksum, checksum)
-    dat->byte = after_decomp;
-  }
-#endif
-
   section_address = 0x100; // starting address
   i = 0;
   bytes_remaining = (long)decomp_data_size;
@@ -3461,7 +3439,7 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     crc32 = _obj->crc32;
     _obj->crc32 = 0;
     // without the padding, but the crc32 as 0
-    calc_crc32 = bit_calc_CRC32 (0, &decrypted_data[0], 0x72);
+    calc_crc32 = bit_calc_CRC32 (0, &decrypted_data[0], 0x6c);
     _obj->crc32 = crc32;
     if (calc_crc32 != crc32)
       LOG_INFO ("r2004_file_header CRC mismatch 0x%08x != 0x%08x (TODO)\n",
@@ -3490,6 +3468,7 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     FIELD_RLx (section_type, 0);
     if (FIELD_VALUE (section_type) != 0x41630e3b)
       {
+        dat->byte = start + 0x100 + 16;
         LOG_ERROR ("Invalid System Section Page Map type 0x%x != 0x41630e3b",
                    FIELD_VALUE (section_type));
         return DWG_ERR_SECTIONNOTFOUND;
@@ -3498,24 +3477,21 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     FIELD_RL (comp_data_size, 0);
     FIELD_RL (compression_type, 0);
     FIELD_RLx (checksum, 0);
-    LOG_INSANE ("@0x%lx\n", dat->byte)
-    for (int i = 0; i <= 0x100; i += 4)
+    LOG_INSANE ("@0x%lx\n", dat->byte);
+    // seed 0xa751074, offset 0x100, size 16
+    dat->byte = start + 0x100;
+    checksum = dwg_section_page_checksum (0x0a751074, dat, 16);
+    dat->byte = start + 0x114;
+    if (checksum == _obj->checksum)
       {
-        BITCODE_RL old = dat->byte, size = dat->byte - start - 4 - i;
-        dat->byte = start + i;
-        checksum = dwg_section_page_checksum (0, dat, size);
-        dat->byte = old;
-        if (1 || checksum == _obj->checksum)
-          {
-            LOG_TRACE ("  checksum: 0x%08x (calculated with offset %3d, size %3d) ",
-                       checksum, i, size);
-            LOG_TRACE ("  0x%x - 0x%x\n", start + i, start + i + size);
-            if (checksum == _obj->checksum)
-              break;
-          }
+        LOG_TRACE ("checksum: 0x%08x (verified)\n", checksum);
+      }
+    else
+      {
+        LOG_WARN ("checksum: 0x%08x (calculated) mismatch\n", checksum);
+        error |= DWG_ERR_WRONGCRC;
       }
   }
-
   return error;
 }
 
