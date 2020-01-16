@@ -54,6 +54,12 @@ Optionally:
 - Python 2.7 or 3.x development headers (debian: python-dev; yum: python-devel)
   and the libxml2 python bindings.
 - Perl 5 for the perl bindings
+- doxygen to generate the reference manual
+- jq to check json validity
+- valgrind to find leaks and memory bugs
+- timeout to help tests with large or hanging DWG's
+- GNU parallel to speed up special tests
+- picat to find unknown fields, a better prolog. picat-lang.org
 
 See INSTALL for generic instructions.  Basically, you do:
 
