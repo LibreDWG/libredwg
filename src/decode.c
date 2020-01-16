@@ -2426,6 +2426,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
         }
       else
         {
+          BITCODE_RL size;
           if (info->compressed == 2
               || bytes_left < 0
               || (unsigned long)(es.fields.address + 32 + info->size
@@ -2438,11 +2439,12 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
               return type < SECTION_REVHISTORY ? DWG_ERR_INVALIDDWG
                                                : DWG_ERR_VALUEOUTOFBOUNDS;
             }
+          // the remaining uncompressed size to read from
+          size = MIN (info->size, info->max_decomp_size);
           memcpy (&decomp[j * info->max_decomp_size],
-                  &dat->chain[address + es.fields.address + 32],
-                  MIN (bytes_left, info->max_decomp_size));
-          bytes_left -= info->max_decomp_size;
-          sec_dat->size += MIN (bytes_left, info->max_decomp_size);
+                  &dat->chain[address + es.fields.address + 32], size);
+          bytes_left -= size;
+          sec_dat->size += size;
         }
     }
   sec_dat->size = info->size;
