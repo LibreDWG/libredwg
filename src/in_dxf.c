@@ -3866,11 +3866,21 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   else
   // clang-format on
   {
+    //obj->name = "UNKNOWN_OBJ";
+    obj->fixedtype = DWG_TYPE_UNKNOWN_OBJ;
+    // undo NEW_OBJECT
+    free (obj->tio.object);
+    dwg->num_objects--;
     LOG_ERROR ("Unknown DXF TABLE %s nor %s_CONTROL", name, name);
     return pair;
   }
   if (!_obj)
     {
+      //obj->name = "UNKNOWN_OBJ";
+      obj->fixedtype = DWG_TYPE_UNKNOWN_OBJ;
+      // undo NEW_OBJECT
+      free (obj->tio.object);
+      dwg->num_objects--;
       LOG_ERROR ("Empty _obj at DXF TABLE %s nor %s_CONTROL", name, name);
       return pair;
     }
@@ -5253,7 +5263,7 @@ new_object (char *restrict name, char *restrict dxfname,
           }
           break;
         case 8:
-          if (is_entity)
+          if (is_entity && pair->value.s)
             {
               BITCODE_H handle = find_tablehandle (dwg, pair);
               if (!handle)
