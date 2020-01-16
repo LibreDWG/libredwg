@@ -621,7 +621,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // read the first group 9, $field pair
   pair = dxf_read_pair (dat);
 
-  while (pair != NULL && pair->code == 9)
+  while (pair != NULL && pair->code == 9 && pair->value.s)
     {
       char field[80];
       strncpy (field, pair->value.s, 79);
@@ -1028,7 +1028,8 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     restart:
       klass = &dwg->dwg_class[i];
       memset (klass, 0, sizeof (Dwg_Class));
-      if (pair != NULL && pair->code == 0 && strEQc (pair->value.s, "CLASS"))
+      if (pair != NULL && pair->code == 0 && pair->value.s
+          && strEQc (pair->value.s, "CLASS"))
         {
           dxf_free_pair (pair);
           pair = dxf_read_pair (dat);
@@ -1046,25 +1047,29 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           switch (pair->code)
             {
             case 1:
-              {
-                const char *n = strEQc (pair->value.s, "ACDBDATATABLE")
-                  ? "DATATABLE" : pair->value.s;
-                if (klass->dxfname)
-                  {
-                    LOG_ERROR ("Group 1 for CLASS %s already read", klass->dxfname);
-                    break;
-                  }
-                STRADD (klass->dxfname, n);
-                LOG_TRACE ("CLASS[%d].dxfname = %s [TV 1]\n", i, n);
-                break;
-              }
+              if (pair->value.s)
+                {
+                  const char *n = strEQc (pair->value.s, "ACDBDATATABLE")
+                    ? "DATATABLE" : pair->value.s;
+                  if (klass->dxfname)
+                    {
+                      LOG_ERROR ("Group 1 for CLASS %s already read", klass->dxfname);
+                      break;
+                    }
+                  STRADD (klass->dxfname, n);
+                  LOG_TRACE ("CLASS[%d].dxfname = %s [TV 1]\n", i, n);
+                }
+              break;
             case 2:
               if (klass->cppname)
                 {
                   LOG_ERROR ("Group 2 for CLASS %s already read", klass->dxfname);
                   break;
                 }
-              STRADD (klass->cppname, pair->value.s);
+              if (pair->value.s)
+                {
+                  STRADD (klass->cppname, pair->value.s);
+                }
               LOG_TRACE ("CLASS[%d].cppname = %s [TV 2]\n", i, pair->value.s);
               break;
             case 3:
@@ -1073,7 +1078,10 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   LOG_ERROR ("Group 3 for CLASS %s already read", klass->dxfname);
                   break;
                 }
-              STRADD (klass->appname, pair->value.s);
+              if (pair->value.s)
+                {
+                  STRADD (klass->appname, pair->value.s);
+                }
               LOG_TRACE ("CLASS[%d].appname = %s [TV 3]\n", i, pair->value.s);
               break;
             case 90:
@@ -1395,7 +1403,7 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   _o->dashes = xcalloc (_o->num_dashes, sizeof (Dwg_LTYPE_dash));
   for (int j = -1; j < num_dashes;)
     {
-      if (pair->code == 0)
+      if (!pair || pair->code == 0)
         return pair;
       else if (pair->code == 49)
         {
@@ -4131,6 +4139,8 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   switch (get_base_value_type (rbuf->type))
     {
     case VT_STRING:
+      if (!pair->value.s)
+        goto invalid;
       PRE (R_2007)
       {
         Dwg_Data *dwg = obj->parent;
@@ -4214,6 +4224,8 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       break;
     case VT_BINARY:
       // convert from hex
+      if (!pair->value.s)
+        goto invalid;
       {
         int i;
         int len = strlen (pair->value.s);
@@ -4241,6 +4253,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       break;
     case VT_INVALID:
     default:
+    invalid:
       LOG_ERROR ("Invalid group code in rbuf: %d", rbuf->type)
     }
 
@@ -4314,7 +4327,7 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
   dxf_free_pair (pair);
   pair = dxf_read_pair (dat);
-  while (pair != NULL && pair->code == 310)
+  while (pair != NULL && pair->code == 310 && pair->value.s)
     {
       unsigned len = strlen (pair->value.s);
       unsigned blen = len / 2;
@@ -4599,24 +4612,78 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     }
   else if (pair->code == 11 && _o->num_verts)
     {
+      if (j >= _o->num_verts || !_o->verts)
+        {
+          LOG_ERROR ("MLINE.verts[%d] out of bounds", j);
+          return 2;
+        }
+      assert (_o->verts);
+      assert (j >= 0);
+      assert (j < _o->num_verts);
       _o->verts[j].parent = _o;
       _o->verts[j].vertex.x = pair->value.d;
     }
   else if (pair->code == 21 && _o->num_verts)
-    _o->verts[j].vertex.y = pair->value.d;
+    {
+      if (j >= _o->num_verts || !_o->verts)
+        {
+          LOG_ERROR ("MLINE.verts[%d] out of bounds", j);
+          return 2;
+        }
+      assert (_o->verts);
+      assert (j >= 0);
+      assert (j < _o->num_verts);
+      _o->verts[j].vertex.y = pair->value.d;
+    }
   else if (pair->code == 31 && _o->num_verts)
     {
+      if (j >= _o->num_verts || !_o->verts)
+        {
+          LOG_ERROR ("MLINE.verts[%d] out of bounds", j);
+          return 2;
+        }
+      assert (_o->verts);
+      assert (j >= 0);
+      assert (j < _o->num_verts);
       _o->verts[j].vertex.z = pair->value.d;
       LOG_TRACE ("MLINE.verts[%d] = (%f, %f, %f) [3BD* 11]\n", j,
                  _o->verts[j].vertex.x, _o->verts[j].vertex.y,
                  _o->verts[j].vertex.z);
     }
   else if (pair->code == 12 && _o->num_verts)
-    _o->verts[j].vertex_direction.x = pair->value.d;
+    {
+      if (j >= _o->num_verts || !_o->verts)
+        {
+          LOG_ERROR ("MLINE.verts[%d] out of bounds", j);
+          return 2;
+        }
+      assert (_o->verts);
+      assert (j >= 0);
+      assert (j < _o->num_verts);
+      _o->verts[j].vertex_direction.x = pair->value.d;
+    }
   else if (pair->code == 22 && _o->num_verts)
-    _o->verts[j].vertex_direction.y = pair->value.d;
+    {
+      if (j >= _o->num_verts || !_o->verts)
+        {
+          LOG_ERROR ("MLINE.verts[%d] out of bounds", j);
+          return 2;
+        }
+      assert (_o->verts);
+      assert (j >= 0);
+      assert (j < _o->num_verts);
+      _o->verts[j].vertex_direction.y = pair->value.d;
+    }
   else if (pair->code == 32 && _o->num_verts)
     {
+      if (j >= _o->num_verts || !_o->verts)
+        {
+          LOG_ERROR ("MLINE.verts[%d] out of bounds", j);
+          return 2;
+        }
+      assert (_o->verts);
+      assert (j >= 0);
+      assert (j < _o->num_verts);
       _o->verts[j].vertex_direction.z = pair->value.d;
       LOG_TRACE ("MLINE.vertex_direction[%d] = (%f, %f, %f) [3BD* 12]\n", j,
                  _o->verts[j].vertex_direction.x,
@@ -4624,11 +4691,39 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                  _o->verts[j].vertex_direction.z);
     }
   else if (pair->code == 13 && _o->num_verts)
-    _o->verts[j].miter_direction.x = pair->value.d;
+    {
+      if (j >= _o->num_verts || !_o->verts)
+        {
+          LOG_ERROR ("MLINE.verts[%d] out of bounds", j);
+          return 2;
+        }
+      assert (_o->verts);
+      assert (j >= 0);
+      assert (j < _o->num_verts);
+      _o->verts[j].miter_direction.x = pair->value.d;
+    }
   else if (pair->code == 23 && _o->num_verts)
-    _o->verts[j].miter_direction.y = pair->value.d;
+    {
+      if (j >= _o->num_verts || !_o->verts)
+        {
+          LOG_ERROR ("MLINE.verts[%d] out of bounds", j);
+          return 2;
+        }
+      assert (_o->verts);
+      assert (j >= 0);
+      assert (j < _o->num_verts);
+      _o->verts[j].miter_direction.y = pair->value.d;
+    }
   else if (pair->code == 33 && _o->num_verts)
     {
+      if (j >= _o->num_verts || !_o->verts)
+        {
+          LOG_ERROR ("MLINE.verts[%d] out of bounds", j);
+          return 2;
+        }
+      assert (_o->verts);
+      assert (j >= 0);
+      assert (j < _o->num_verts);
       _o->verts[j].miter_direction.z = pair->value.d;
       LOG_TRACE ("MLINE.miter_direction[%d] = (%f, %f, %f) [3BD* 13]\n", j,
                  _o->verts[j].miter_direction.x,
@@ -4640,11 +4735,14 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     }
   else if (pair->code == 74 && _o->num_lines)
     {
-      if (j >= _o->num_verts || k >= _o->num_lines)
+      if (j >= _o->num_verts || k >= _o->num_lines || !_o->verts || !_o->verts[j].lines)
         {
-          LOG_ERROR ("MLINE overflow %d, %d", j, k);
+          LOG_ERROR ("MLINE.verts[%d].lines[%d] out of bounds", j, k);
           return 2;
         }
+      assert (_o->verts);
+      assert (j >= 0);
+      assert (k >= 0);
       _o->verts[j].lines[k].parent = &_o->verts[j];
       _o->verts[j].lines[k].num_segparms = pair->value.i;
       _o->verts[j].lines[k].segparms
@@ -4655,6 +4753,19 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     }
   else if (pair->code == 41 && _o->num_lines)
     {
+      if (j >= _o->num_verts || k >= _o->num_lines || !_o->verts || !_o->verts[j].lines)
+        {
+          LOG_ERROR ("MLINE.verts[%d].lines[%d] out of bounds", j, k);
+          return 2;
+        }
+      assert (_o->verts);
+      assert (j >= 0);
+      assert (j < _o->num_verts);
+      assert (k >= 0);
+      assert (k < _o->num_lines);
+      assert (l >= 0);
+      assert (_o->verts[j].lines);
+      assert (l < _o->verts[j].lines[k].num_segparms);
       _o->verts[j].lines[k].segparms[l] = pair->value.d;
       LOG_TRACE ("MLINE.v[%d].l[%d].segparms[%d] = %f [BD 41]\n", j, k, l,
                  pair->value.d);
@@ -4663,6 +4774,16 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     }
   else if (pair->code == 75 && _o->num_lines)
     {
+      if (j >= _o->num_verts || k >= _o->num_lines || !_o->verts || !_o->verts[j].lines)
+        {
+          LOG_ERROR ("MLINE.verts[%d].lines[%d] out of bounds", j, k);
+          return 2;
+        }
+      assert (_o->verts);
+      assert (j >= 0);
+      assert (j < _o->num_verts);
+      assert (k >= 0);
+      assert (k < _o->num_lines);
       _o->verts[j].lines[k].num_areafillparms = pair->value.i;
       LOG_TRACE ("MLINE.v[%d].l[%d].num_areafillparms = %d [BS 75]\n", j, k,
                  pair->value.i);
@@ -4681,6 +4802,18 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     }
   else if (pair->code == 42 && _o->num_lines)
     {
+      if (j >= _o->num_verts || k >= _o->num_lines || !_o->verts || !_o->verts[j].lines)
+        {
+          LOG_ERROR ("MLINE.verts[%d].lines[%d] out of bounds", j, k);
+          return 2;
+        }
+      assert (_o->verts);
+      assert (j >= 0);
+      assert (j < _o->num_verts);
+      assert (k >= 0);
+      assert (k < _o->num_lines);
+      assert (l >= 0);
+      assert (l < _o->verts[j].lines[k].num_areafillparms);
       _o->verts[j].lines[k].areafillparms[l] = pair->value.d;
       LOG_TRACE ("MLINE.v[%d].l[%d].areafillparms[%d] = %f [BD 42]\n", j, k, l,
                  pair->value.d);
@@ -5283,7 +5416,7 @@ new_object (char *restrict name, char *restrict dxfname,
             }
           // fall through
         case 100: // for nested structs
-          if (pair->code == 100)
+          if (pair->code == 100 && pair->value.s)
             {
               strncpy (subclass, pair->value.s, 79);
               subclass[79] = '\0';
@@ -5419,15 +5552,15 @@ new_object (char *restrict name, char *restrict dxfname,
             }
           break;
         case 102:
-          if (strEQc (pair->value.s, "{ACAD_XDICTIONARY"))
+          if (pair->value.s && strEQc (pair->value.s, "{ACAD_XDICTIONARY"))
             in_xdict = 1;
-          else if (strEQc (pair->value.s, "{ACAD_REACTORS"))
+          else if (pair->value.s && strEQc (pair->value.s, "{ACAD_REACTORS"))
             in_reactors = 1;
-          else if (ctrl_id && strEQc (pair->value.s, "{BLKREFS"))
+          else if (ctrl_id && pair->value.s && strEQc (pair->value.s, "{BLKREFS"))
             in_blkrefs = 1; // unique handle 331
-          else if (strEQc (pair->value.s, "}"))
+          else if (pair->value.s && strEQc (pair->value.s, "}"))
             in_reactors = in_xdict = in_blkrefs = 0;
-          else if (strEQc (name, "XRECORD"))
+          else if (pair->value.s && strEQc (name, "XRECORD"))
             pair = add_xdata (dat, obj, pair);
           else
             LOG_WARN ("Unknown DXF code 102 %s in %s", pair->value.s, name)
@@ -6222,6 +6355,7 @@ new_object (char *restrict name, char *restrict dxfname,
                           goto start_loop;
                         }
                       else if (pair->code == 3
+                               && pair->value.s
                                && memBEGINc (obj->name, "DICTIONARY")
                                && strNE (obj->name, "DICTIONARYVAR"))
                         {
@@ -6257,7 +6391,7 @@ new_object (char *restrict name, char *restrict dxfname,
                                              name, f->name, ARGS_REF (ref),
                                              pair->code);
                                 }
-                              else
+                              else if (pair->value.s)
                                 {
                                   obj_hdls = array_push (
                                       obj_hdls, f->name, pair->value.s,
@@ -6549,7 +6683,7 @@ new_object (char *restrict name, char *restrict dxfname,
                               dwg_dynapi_common_set_value (_obj, f->name,
                                                            &handle, 0);
                             }
-                          if (is_entity && pair->code == 6
+                          if (is_entity && pair->code == 6 && pair->value.s
                               && dwg->header.version >= R_2000)
                             {
                               BITCODE_BB flags = 3;
@@ -6854,7 +6988,8 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           table[79] = '\0';
           pair = new_table_control (table, dat, dwg); // until 0 table
           ctrl_id = dwg->num_objects - 1;             // dwg->object might move
-          while (pair && pair->code == 0 && strEQ (pair->value.s, table))
+          while (pair && pair->code == 0 && pair->value.s
+                 && strEQ (pair->value.s, table))
             {
               char *dxfname = strdup (pair->value.s);
               dxf_free_pair (pair);
@@ -6958,13 +7093,14 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dxf_Pair *pair = dxf_read_pair (dat);
 
   name[0] = '\0'; // init
-  while (1)       // read next 0 TABLE
+  while (pair)    // read next 0 TABLE
     {
-      if (pair != NULL && pair->code == 0)
+      if (pair != NULL && pair->code == 0 && pair->value.s)
         {
           BITCODE_BL i = 0;
           BITCODE_BB entmode = 0;
-          while (pair != NULL && pair->code == 0 && strNE (pair->value.s, "ENDSEC"))
+          while (pair != NULL && pair->code == 0 && pair->value.s
+                 && strNE (pair->value.s, "ENDSEC"))
             {
               Dwg_Object *obj, *blkhdr = NULL;
               BITCODE_BL idx = dwg->num_objects;
@@ -7167,7 +7303,7 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   unsigned long pspace = dwg->header_vars.BLOCK_RECORD_PSPACE ?
     dwg->header_vars.BLOCK_RECORD_PSPACE->absolute_ref : 0UL;
 
-  while (pair != NULL && pair->code == 0)
+  while (pair != NULL && pair->code == 0 && pair->value.s)
     {
       strncpy (name, pair->value.s, 79);
       name[79] = '\0';
@@ -7175,12 +7311,13 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       // until 0 ENDSEC
       while (pair != NULL
              && pair->code == 0
+             && pair->value.s
              && (is_dwg_entity (name) || strEQc (name, "DIMENSION")))
         {
           char *dxfname = strdup (pair->value.s);
           dxf_free_pair (pair);
           pair = new_object (name, dxfname, dat, dwg, 0, 0);
-          if (pair != NULL && pair->code == 0)
+          if (pair != NULL && pair->code == 0 && pair->value.s)
             {
               Dwg_Object *obj = &dwg->object[dwg->num_objects - 1];
               Dwg_Object_Entity *ent = obj->tio.entity;
@@ -7254,7 +7391,7 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dxf_Pair *pair = dxf_read_pair (dat);
   while (pair != NULL)
     {
-      while (pair != NULL && pair->code == 0)
+      while (pair != NULL && pair->code == 0 && pair->value.s)
         {
           char *dxfname = strdup (pair->value.s);
           strncpy (name, dxfname, 79);
@@ -7288,9 +7425,9 @@ dxf_unknownsection_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dxf_Pair *pair = dxf_read_pair (dat);
 
   // until 0 ENDSEC
-  while (1)
+  while (pair)
     {
-      while (pair && pair->code == 0)
+      while (pair && pair->code == 0 && pair->value.s)
         {
           char *dxfname = strdup (pair->value.s);
           strncpy (name, dxfname, 79);
@@ -7324,7 +7461,7 @@ dxf_thumbnail_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dxf_Pair *pair = dxf_read_pair (dat);
   unsigned written = 0;
 
-  while (1)
+  while (pair)
     {
       switch (pair->code)
         {
@@ -7343,28 +7480,29 @@ dxf_thumbnail_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           LOG_TRACE ("PREVIEW.size = %ld\n", dwg->thumbnail.size);
           break;
         case 310:
-          {
-            unsigned len = strlen (pair->value.s);
-            unsigned blen = len / 2;
-            const char *pos = pair->value.s;
-            unsigned char *s = &dwg->thumbnail.chain[written];
-            if (blen + written > dwg->thumbnail.size)
-              {
-                dxf_free_pair (pair);
-                LOG_ERROR ("PREVIEW.size overflow: %u + written %u > "
-                           "size: %lu",
-                           blen, written, dwg->thumbnail.size);
-                return 1;
-              }
-            for (unsigned i = 0; i < blen; i++)
-              {
-                sscanf (pos, "%2hhX", &s[i]);
-                pos += 2;
-              }
-            written += blen;
-            LOG_TRACE ("PREVIEW.chain += %u (%u/%lu)\n", blen, written,
-                       dwg->thumbnail.size);
-          }
+          if (pair->value.s)
+            {
+              unsigned len = strlen (pair->value.s);
+              unsigned blen = len / 2;
+              const char *pos = pair->value.s;
+              unsigned char *s = &dwg->thumbnail.chain[written];
+              if (blen + written > dwg->thumbnail.size)
+                {
+                  dxf_free_pair (pair);
+                  LOG_ERROR ("PREVIEW.size overflow: %u + written %u > "
+                             "size: %lu",
+                             blen, written, dwg->thumbnail.size);
+                  return 1;
+                }
+              for (unsigned i = 0; i < blen; i++)
+                {
+                  sscanf (pos, "%2hhX", &s[i]);
+                  pos += 2;
+                }
+              written += blen;
+              LOG_TRACE ("PREVIEW.chain += %u (%u/%lu)\n", blen, written,
+                         dwg->thumbnail.size);
+            }
           break;
         default:
           LOG_ERROR ("Unknown DXF code %d for %s", pair->code,
