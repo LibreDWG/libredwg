@@ -5815,7 +5815,7 @@ new_object (char *restrict name, char *restrict dxfname,
             {
               pair = add_DIMASSOC (obj, dat, pair);
               // returns with 0
-              if (pair && pair->code == 0)
+              if (pair != NULL && pair->code == 0)
                 goto start_loop;
               else
                 goto search_field;
@@ -5887,7 +5887,7 @@ new_object (char *restrict name, char *restrict dxfname,
           else if (pair->code == 49 && obj->fixedtype == DWG_TYPE_LTYPE)
             {
               pair = add_LTYPE_dashes (obj, dat, pair);
-              if (pair->code == 0)
+              if (pair != NULL && pair->code == 0)
                 return pair;
               goto next_pair;
             }
@@ -5895,7 +5895,7 @@ new_object (char *restrict name, char *restrict dxfname,
                    && pair->value.i != 0)
             {
               pair = add_MLINESTYLE_lines (obj, dat, pair);
-              if (pair->code == 0)
+              if (pair != NULL && pair->code == 0)
                 return pair;
               goto next_pair;
             }
