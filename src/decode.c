@@ -2345,9 +2345,9 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
                  info->name, info->num_sections, info->max_decomp_size);
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
-  if (info->size > info->num_sections * info->max_decomp_size)
+  if (info->size > info->num_sections * info->max_decomp_size || info->size < 0)
     {
-      LOG_ERROR ("Invalid section %s size %lu > %u * " FORMAT_RL,
+      LOG_ERROR ("Invalid section %s size %ld > %u * " FORMAT_RL,
                  info->name, info->size, info->num_sections, info->max_decomp_size);
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
@@ -2437,23 +2437,23 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
         }
       else
         {
-          BITCODE_RL size;
-          if (info->compressed == 2
-              || bytes_left < 0
+          const unsigned long offset = address + es.fields.address + 32;
+          // the remaining uncompressed size to read from
+          const BITCODE_RL size = MIN (info->size, info->max_decomp_size);
+          if (info->compressed == 2 || bytes_left < 0
               || (unsigned long)(es.fields.address + 32 + info->size
-                                  > max_decomp_size)
-              )
+                                 > max_decomp_size)
+              || (j * info->max_decomp_size) + size > max_decomp_size
+              || offset + size > dat->size)
             {
-              LOG_ERROR ("Some section size out of bounds")
+              LOG_ERROR ("Some section size or address out of bounds")
               sec_dat->chain = NULL;
               free (decomp);
               return type < SECTION_REVHISTORY ? DWG_ERR_INVALIDDWG
                                                : DWG_ERR_VALUEOUTOFBOUNDS;
             }
-          // the remaining uncompressed size to read from
-          size = MIN (info->size, info->max_decomp_size);
-          memcpy (&decomp[j * info->max_decomp_size],
-                  &dat->chain[address + es.fields.address + 32], size);
+          assert (j < info->num_sections);
+          memcpy (&decomp[j * info->max_decomp_size], &dat->chain[offset], size);
           bytes_left -= size;
           sec_dat->size += size;
         }
