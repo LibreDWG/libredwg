@@ -130,6 +130,15 @@ get_bmp (char *dwgfile, char *bmpfile)
       bmp_free_dwg (&dwg);
       return -3;
     }
+  if (size > dwg.thumbnail.size)
+    {
+      fprintf (stderr,
+               "Invalid thumbnail data in %s,"
+               " size " FORMAT_RL " > %lu\n",
+               dwgfile, size, dwg.thumbnail.size);
+      bmp_free_dwg (&dwg);
+      return -3;
+    }
 
   fh = fopen (bmpfile, "w");
   if (!fh)
