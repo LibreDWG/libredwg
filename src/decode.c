@@ -2131,21 +2131,6 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           info->max_decomp_size = info->size = 0;
           error |= DWG_ERR_VALUEOUTOFBOUNDS;
         }
-      if (info->size > info->num_sections * info->max_decomp_size)
-        {
-          LOG_ERROR ("Skip section %s with size %lu > %d * " FORMAT_RL,
-                     info->name, info->size, info->num_sections, info->max_decomp_size);
-          info->max_decomp_size = info->size = info->num_sections = 0;
-          error |= DWG_ERR_VALUEOUTOFBOUNDS;
-        }
-      if (info->num_sections > 1 && info->size < info->max_decomp_size)
-        {
-          // on mult. blocks, size must exceed the size of the first block
-          LOG_ERROR ("Skip section %s with size %lu < max_decomp_size " FORMAT_RL,
-                     info->name, info->size, info->max_decomp_size);
-          info->max_decomp_size = info->size = info->num_sections = 0;
-          error |= DWG_ERR_VALUEOUTOFBOUNDS;
-        }
       if (info->num_sections < 1000000)
         {
           int32_t old_section_number = 0;
@@ -2155,6 +2140,21 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               LOG_INFO ("Fixup TEMPLATE.num_sections to 1 (Teigha bug)\n")
               info->num_sections = 1;
+            }
+          if (info->size > info->num_sections * info->max_decomp_size)
+            {
+              LOG_ERROR ("Skip section %s with size %lu > %d * " FORMAT_RL,
+                         info->name, info->size, info->num_sections, info->max_decomp_size);
+              info->max_decomp_size = info->size = info->num_sections = 0;
+              error |= DWG_ERR_VALUEOUTOFBOUNDS;
+            }
+          if (info->num_sections > 1 && info->size < info->max_decomp_size)
+            {
+              // on mult. blocks, size must exceed the size of the first block
+              LOG_ERROR ("Skip section %s with size %lu < max_decomp_size " FORMAT_RL,
+                         info->name, info->size, info->max_decomp_size);
+              info->max_decomp_size = info->size = info->num_sections = 0;
+              error |= DWG_ERR_VALUEOUTOFBOUNDS;
             }
           LOG_INFO ("Page count %u in area %d\n", info->num_sections, i);
           info->sections = calloc (info->num_sections, sizeof (Dwg_Section *));
