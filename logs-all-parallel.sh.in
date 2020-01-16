@@ -12,5 +12,5 @@ cd $srcdir/test/test-data
 cd $abs_builddir
 
 cd $srcdir/test/test-big
-@PARALLEL@ @TIMEOUT_10@ $abs_builddir/libtool --mode=execute $abs_builddir/programs/dwgread -v3 {} \2\>$abs_builddir/{/.}_{//}.log ::: */*.dwg
+@PARALLEL@ @TIMEOUT_30@ $abs_builddir/libtool --mode=execute $abs_builddir/programs/dwgread -v3 {} \2\>$abs_builddir/{/.}_{//}.log ::: */*.dwg
 cd $abs_builddir

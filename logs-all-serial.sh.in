@@ -21,7 +21,7 @@ for d in $srcdir/test/test-big/2*/*.dwg; do
     dir=$(basename `dirname "$d"`)
     log=`basename "$d" .dwg`_$dir.log
     echo $d
-    @TIMEOUT_10@ ./libtool --mode=execute programs/dwgread -v3 "$d" 2>$log
+    @TIMEOUT_30@ ./libtool --mode=execute programs/dwgread -v3 "$d" 2>$log
     #(sleep 10s; kill %1 2>/dev/null) &
 done
 
