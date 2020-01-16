@@ -2332,12 +2332,23 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       else
         return 0;
     }
+  if (!info->sections)
+    {
+      LOG_ERROR ("Empty sections for %s", info->name);
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
   max_decomp_size = info->num_sections * info->max_decomp_size;
   if (max_decomp_size == 0 || max_decomp_size > 0x2f000000) // 790Mb
     {
       LOG_ERROR ("Invalid section %s count or max decompression size. "
                  "Sections: %u, Max size: " FORMAT_RL,
                  info->name, info->num_sections, info->max_decomp_size);
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
+  if (info->size > info->num_sections * info->max_decomp_size)
+    {
+      LOG_ERROR ("Invalid section %s size %lu > %u * " FORMAT_RL,
+                 info->name, info->size, info->num_sections, info->max_decomp_size);
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
   decomp = (BITCODE_RC *)calloc (max_decomp_size, sizeof (BITCODE_RC));
