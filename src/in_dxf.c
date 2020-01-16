@@ -358,7 +358,9 @@ dxf_read_pair (Bit_Chain *dat)
 }
 
 #define DXF_CHECK_EOF                                                         \
-  if (dat->byte >= dat->size || (pair == NULL)                                \
+  if (dat->byte >= dat->size                                                  \
+      || (pair == NULL)                                                       \
+      || (pair->code == 0 && !pair->value.s)                                  \
       || (pair->code == 0 && strEQc (pair->value.s, "EOF")))                  \
     {                                                                         \
       if (pair)                                                               \
@@ -367,7 +369,9 @@ dxf_read_pair (Bit_Chain *dat)
       return 1;                                                               \
     }
 #define DXF_RETURN_EOF(what)                                                  \
-  if (dat->byte >= dat->size || (pair == NULL)                                \
+  if (dat->byte >= dat->size                                                  \
+      || (pair == NULL)                                                       \
+      || (pair->code == 0 && !pair->value.s)                                  \
       || (pair->code == 0 && strEQc (pair->value.s, "EOF")))                  \
     {                                                                         \
       if (pair)                                                               \
@@ -376,7 +380,9 @@ dxf_read_pair (Bit_Chain *dat)
       return what;                                                            \
     }
 #define DXF_BREAK_EOF                                                         \
-  if (dat->byte >= dat->size || (pair == NULL)                                \
+  if (dat->byte >= dat->size                                                  \
+      || (pair == NULL)                                                       \
+      || (pair->code == 0 && !pair->value.s)                                  \
       || (pair->code == 0 && strEQc (pair->value.s, "EOF")))                  \
   break
 
@@ -442,16 +448,21 @@ free_array_hdls (array_hdls *hdls)
 }
 
 #define DXF_CHECK_ENDSEC                                                      \
-  if (pair != NULL && (dat->byte >= dat->size || pair->code == 0))            \
-  return 0
+  if (pair != NULL                                                            \
+      && (dat->byte >= dat->size                                              \
+          || (pair->code == 0 && !pair->value.s)                              \
+          || (pair->code == 0 && strEQc (pair->value.s, "ENDSEC"))))          \
+    return 0
 #define DXF_BREAK_ENDSEC                                                      \
   if (pair != NULL                                                            \
       && (dat->byte >= dat->size                                              \
+          || (pair->code == 0 && !pair->value.s)                              \
           || (pair->code == 0 && strEQc (pair->value.s, "ENDSEC"))))          \
   break
 #define DXF_RETURN_ENDSEC(what)                                               \
   if (pair != NULL                                                            \
       && (dat->byte >= dat->size                                              \
+          || (pair->code == 0 && !pair->value.s)                              \
           || (pair->code == 0 && strEQc (pair->value.s, "ENDSEC"))))          \
     {                                                                         \
       dxf_free_pair (pair);                                                   \
