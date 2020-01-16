@@ -2102,7 +2102,7 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_TRACE ("\nsection_info[%d] fields:\n", i)
       LOG_TRACE ("size:            %ld\n", (long)info->size)
       LOG_TRACE ("num_sections:    %u\n", info->num_sections)
-      LOG_TRACE ("max_decomp_size: %u / 0x%x\n", // normally 0x7400
+      LOG_TRACE ("max_decomp_size: %u / 0x%x\n", // normally 0x7400, max 0x8000
                  info->max_decomp_size, info->max_decomp_size)
       LOG_TRACE ("unknown:         %u\n", info->unknown)
       LOG_TRACE ("compressed:      %u (1=no, 2=yes)\n", info->compressed)
@@ -2123,7 +2123,29 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           LOG_ERROR ("read_R2004_section_info out of range");
           return DWG_ERR_INVALIDDWG;
         }
-
+      // max_decomp_size is the decompressed block size (max 0x7c00)
+      if (info->max_decomp_size > 0x8000)
+        {
+          LOG_ERROR ("Skip section %s with max decompression size 0x%x > 0x8000",
+                     info->name, info->max_decomp_size);
+          info->max_decomp_size = info->size = 0;
+          error |= DWG_ERR_VALUEOUTOFBOUNDS;
+        }
+      if (info->size > info->num_sections * info->max_decomp_size)
+        {
+          LOG_ERROR ("Skip section %s with size %lu > %d * " FORMAT_RL,
+                     info->name, info->size, info->num_sections, info->max_decomp_size);
+          info->max_decomp_size = info->size = info->num_sections = 0;
+          error |= DWG_ERR_VALUEOUTOFBOUNDS;
+        }
+      if (info->num_sections > 1 && info->size < info->max_decomp_size)
+        {
+          // on mult. blocks, size must exceed the size of the first block
+          LOG_ERROR ("Skip section %s with size %lu < max_decomp_size " FORMAT_RL,
+                     info->name, info->size, info->max_decomp_size);
+          info->max_decomp_size = info->size = info->num_sections = 0;
+          error |= DWG_ERR_VALUEOUTOFBOUNDS;
+        }
       if (info->num_sections < 1000000)
         {
           int32_t old_section_number = 0;
@@ -2314,14 +2336,15 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
   if (max_decomp_size == 0 || max_decomp_size > 0x2f000000) // 790Mb
     {
       LOG_ERROR ("Invalid section %s count or max decompression size. "
-                 "Sections: %u, Max size: %u",
+                 "Sections: %u, Max size: " FORMAT_RL,
                  info->name, info->num_sections, info->max_decomp_size);
-      return DWG_ERR_INVALIDDWG;
+      return DWG_ERR_VALUEOUTOFBOUNDS;
     }
   decomp = (BITCODE_RC *)calloc (max_decomp_size, sizeof (BITCODE_RC));
   if (!decomp)
     {
-      LOG_ERROR ("Out of memory with %u sections", info->num_sections);
+      LOG_ERROR ("Out of memory with %u sections of size: %u", info->num_sections,
+                 info->max_decomp_size);
       return DWG_ERR_OUTOFMEM;
     }
   bytes_left = max_decomp_size;
@@ -2331,6 +2354,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
   sec_dat->version = dat->version;
   sec_dat->from_version = dat->from_version;
   sec_dat->chain = decomp;
+  sec_dat->size = 0;
 
   for (i = j = 0; i < info->num_sections; ++i, ++j)
     {
@@ -2398,7 +2422,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
               return error;
             }
           bytes_left -= info->max_decomp_size;
-          sec_dat->size = info->size;
+          sec_dat->size += info->max_decomp_size;
         }
       else
         {
@@ -2418,10 +2442,10 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
                   &dat->chain[address + es.fields.address + 32],
                   MIN (bytes_left, info->max_decomp_size));
           bytes_left -= info->max_decomp_size;
-          sec_dat->size = info->size;
+          sec_dat->size += MIN (bytes_left, info->max_decomp_size);
         }
     }
-
+  sec_dat->size = info->size;
   return error;
 }
 
