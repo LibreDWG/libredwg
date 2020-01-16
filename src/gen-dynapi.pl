@@ -1681,13 +1681,17 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
   //  free (old);
   if (f->is_string)
     {
-      //ascii or wide?
-      if (strEQc (f->type, "TF") || dwg_version < R_2007)
+      // NULL ptr
+      if (!*(char**)value)
+        memcpy (old, value, f->size);
+      // ascii
+      else if (strEQc (f->type, "TF") || dwg_version < R_2007)
         {
           char *str = malloc (strlen (*(char**)value)+1);
           strcpy (str, *(char**)value);
           memcpy (old, &str, f->size); // size of ptr
         }
+      // or wide
       else if (strNE (f->type, "TF") && dwg_version >= R_2007)
         {
           BITCODE_TU wstr;
