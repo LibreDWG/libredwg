@@ -2100,14 +2100,14 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       bfr_read (info, &ptr, 32 + 64);
 
       LOG_TRACE ("\nsection_info[%d] fields:\n", i)
-      LOG_TRACE ("size:            %ld\n", (long)info->size)
-      LOG_TRACE ("num_sections:    %u\n", info->num_sections)
+      LOG_TRACE ("size:            %" PRIu64 "\n", info->size)
+      LOG_TRACE ("num_sections:    " FORMAT_RL "\n", info->num_sections)
       LOG_TRACE ("max_decomp_size: %u / 0x%x\n", // normally 0x7400, max 0x8000
                  info->max_decomp_size, info->max_decomp_size)
-      LOG_TRACE ("unknown:         %u\n", info->unknown)
-      LOG_TRACE ("compressed:      %u (1=no, 2=yes)\n", info->compressed)
-      LOG_TRACE ("type:            %d\n", (int)info->type)
-      LOG_TRACE ("encrypted:       %d (0=no, 1=yes, 2=unknown)\n",
+      LOG_TRACE ("unknown:         " FORMAT_RL "\n", info->unknown)
+      LOG_TRACE ("compressed:      " FORMAT_RL " (1=no, 2=yes)\n", info->compressed)
+      LOG_TRACE ("type:            " FORMAT_RL "\n", info->type)
+      LOG_TRACE ("encrypted:       " FORMAT_RL " (0=no, 1=yes, 2=unknown)\n",
                  info->encrypted)
       LOG_TRACE ("name:            %s\n", info->name);
       info->fixedtype = dwg_section_type (info->name);
@@ -2143,15 +2143,18 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             }
           if (info->size > info->num_sections * info->max_decomp_size)
             {
-              LOG_ERROR ("Skip section %s with size %lu > %d * " FORMAT_RL,
-                         info->name, info->size, info->num_sections, info->max_decomp_size);
+              LOG_ERROR ("Skip section %s with size %" PRId64 " > " FORMAT_RL
+                         " * " FORMAT_RL,
+                         info->name, info->size, info->num_sections,
+                         info->max_decomp_size);
               info->max_decomp_size = info->size = info->num_sections = 0;
               error |= DWG_ERR_VALUEOUTOFBOUNDS;
             }
           if (info->num_sections > 1 && info->size < info->max_decomp_size)
             {
               // on mult. blocks, size must exceed the size of the first block
-              LOG_ERROR ("Skip section %s with size %lu < max_decomp_size " FORMAT_RL,
+              LOG_ERROR ("Skip section %s with size %" PRId64
+                         " < max_decomp_size " FORMAT_RL,
                          info->name, info->size, info->max_decomp_size);
               info->max_decomp_size = info->size = info->num_sections = 0;
               error |= DWG_ERR_VALUEOUTOFBOUNDS;
@@ -2341,21 +2344,21 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
   if (max_decomp_size == 0 || max_decomp_size > 0x2f000000) // 790Mb
     {
       LOG_ERROR ("Invalid section %s count or max decompression size. "
-                 "Sections: %u, Max size: " FORMAT_RL,
+                 "Sections: " FORMAT_RL ", Max size: " FORMAT_RL,
                  info->name, info->num_sections, info->max_decomp_size);
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
   if (info->size > info->num_sections * info->max_decomp_size || info->size < 0)
     {
-      LOG_ERROR ("Invalid section %s size %ld > %u * " FORMAT_RL,
+      LOG_ERROR ("Invalid section %s size %" PRId64 " > %u * " FORMAT_RL,
                  info->name, info->size, info->num_sections, info->max_decomp_size);
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
   decomp = (BITCODE_RC *)calloc (max_decomp_size, sizeof (BITCODE_RC));
   if (!decomp)
     {
-      LOG_ERROR ("Out of memory with %u sections of size: %u", info->num_sections,
-                 info->max_decomp_size);
+      LOG_ERROR ("Out of memory with " FORMAT_RL " sections of size: " FORMAT_RL,
+                 info->num_sections, info->max_decomp_size);
       return DWG_ERR_OUTOFMEM;
     }
   bytes_left = max_decomp_size;
@@ -2441,8 +2444,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
           // the remaining uncompressed size to read from
           const BITCODE_RL size = MIN (info->size, info->max_decomp_size);
           if (info->compressed == 2 || bytes_left < 0
-              || (unsigned long)(es.fields.address + 32 + info->size
-                                 > max_decomp_size)
+              || es.fields.address + 32 + info->size > max_decomp_size
               || (j * info->max_decomp_size) + size > max_decomp_size
               || offset + size > dat->size)
             {
