@@ -702,7 +702,10 @@ read_data_page (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
   bit_read_fixed (dat, rsdata, page_size);
   pedata = decode_rs (rsdata, block_count, 0xFB, page_size);
   if (!pedata)
-    return DWG_ERR_OUTOFMEM;
+    {
+      free (rsdata);
+      return DWG_ERR_OUTOFMEM;
+    }
 
   if (size_comp < size_uncomp)
     error = decompress_r2007 (decomp, size_uncomp, pedata,
