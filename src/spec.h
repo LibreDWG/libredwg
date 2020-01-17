@@ -55,7 +55,11 @@
           return DWG_ERR_VALUEOUTOFBOUNDS;                                    \
         }
 #  else
-#    define VALUEOUTOFBOUNDS(field, maxvalue) if (0) { }
+#    define VALUEOUTOFBOUNDS(field, maxvalue)                                 \
+      if (_obj->field > maxvalue)                                             \
+        {                                                                     \
+          return DWG_ERR_VALUEOUTOFBOUNDS;                                    \
+        }
 #  endif
 
 #endif /* SPEC_H */

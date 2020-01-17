@@ -2395,6 +2395,7 @@ DWG_ENTITY (MLINE)
   FIELD_RCu (num_lines, 73); //aka linesinstyle
   FIELD_BS (num_verts, 72);
   VALUEOUTOFBOUNDS (num_verts, 5000)
+  VALUEOUTOFBOUNDS (num_lines, 1000)
 
   REPEAT (num_verts, verts, Dwg_MLINE_vertex)
   REPEAT_BLOCK
@@ -2406,6 +2407,7 @@ DWG_ENTITY (MLINE)
       REPEAT2 (num_lines, verts[rcount1].lines, Dwg_MLINE_line)
       REPEAT_BLOCK
           SUB_FIELD_BS (verts[rcount1].lines[rcount2], num_segparms, 74);
+          VALUEOUTOFBOUNDS (verts[rcount1].lines[rcount2].num_segparms, 5000)
           FIELD_VECTOR (verts[rcount1].lines[rcount2].segparms, BD, verts[rcount1].lines[rcount2].num_segparms, 41)
           //REPEAT3 (verts[rcount1].lines[rcount2].num_segparms,
           //        verts[rcount1].lines[rcount2].segparms,
@@ -2416,6 +2418,7 @@ DWG_ENTITY (MLINE)
           //END_REPEAT (verts[rcount1].lines[rcount2].segparms);
 
           SUB_FIELD_BS (verts[rcount1].lines[rcount2], num_areafillparms, 75);
+          VALUEOUTOFBOUNDS (verts[rcount1].lines[rcount2].num_areafillparms, 5000)
           FIELD_VECTOR (verts[rcount1].lines[rcount2].areafillparms, BD, verts[rcount1].lines[rcount2].num_areafillparms, 42)
           //REPEAT3 (verts[rcount1].lines[rcount2].num_areafillparms,
           //        verts[rcount1].lines[rcount2].areafillparms,
