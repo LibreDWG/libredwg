@@ -3693,6 +3693,8 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
           LOG_ERROR ("No EED[%d].handle", idx);
           obj->eed[idx].size = 0;
           obj->num_eed--;
+          if (!obj->num_eed)
+            dwg_free_eed (_obj);
           dat->byte = end; // skip eed
           continue;        // continue for size = bit_read_BS(dat)
         }
