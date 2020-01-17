@@ -373,6 +373,8 @@ dwg_free_common_entity_data (Dwg_Object *obj)
 
   // clang-format off
   #include "common_entity_data.spec"
+  if (dat->from_version >= R_2007 && ent->color.flag & 0x40)
+    FIELD_HANDLE (color.handle, 0, 430);
   SINCE (R_13) {
   #include "common_entity_handle_data.spec"
   }
