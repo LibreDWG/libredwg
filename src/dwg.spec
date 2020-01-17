@@ -2392,7 +2392,7 @@ DWG_ENTITY (MLINE)
   FIELD_3DPOINT (base_point, 10);
   FIELD_3DPOINT (extrusion, 210);
   FIELD_BS (flags, 71);
-  FIELD_RC (num_lines, 73); //aka linesinstyle
+  FIELD_RCu (num_lines, 73); //aka linesinstyle
   FIELD_BS (num_verts, 72);
   VALUEOUTOFBOUNDS (num_verts, 5000)
 
@@ -2759,7 +2759,7 @@ DWG_OBJECT (LTYPE)
     FIELD_BD (pattern_len, 40); // total length
     FIELD_RC (alignment, 72);
   }
-  FIELD_RC (num_dashes, 73);
+  FIELD_RCu (num_dashes, 73);
   REPEAT (num_dashes, dashes, Dwg_LTYPE_dash)
   REPEAT_BLOCK
       PRE (R_13)
@@ -3226,7 +3226,7 @@ DWG_OBJECT (DIMSTYLE_CONTROL)
   SUBCLASS (AcDbDimStyleTable)
   SINCE (R_2000)
     { /* number of additional hard handles, undocumented */
-      FIELD_RC (num_morehandles, 71);
+      FIELD_RCu (num_morehandles, 71);
     }
 
   START_OBJECT_HANDLE_STREAM;
@@ -3561,7 +3561,7 @@ DWG_OBJECT (MLINESTYLE)
   FIELD_BD (start_angle, 51); /*!< default 90 deg */
   FIELD_BD (end_angle, 52);   /*!< default 90 deg */
 #endif
-  FIELD_RC (num_lines, 71);
+  FIELD_RCu (num_lines, 71);
   REPEAT (num_lines, lines, Dwg_MLINESTYLE_line)
   REPEAT_BLOCK
     SUB_FIELD_BD (lines[rcount1], offset, 49);
@@ -7518,3 +7518,4 @@ DWG_OBJECT (DOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+

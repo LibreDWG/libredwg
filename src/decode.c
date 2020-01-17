@@ -4163,9 +4163,10 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
     LOG_TRACE ("bitsize: %u [RL]\n", obj->bitsize);
     if (obj->bitsize > obj->size * 8)
       {
-        LOG_ERROR ("Invalid bitsize " FORMAT_RL " => " FORMAT_RL, obj->bitsize,
+        LOG_ERROR ("Invalid bitsize " FORMAT_RL " > " FORMAT_RL, obj->bitsize,
                    obj->size * 8);
         obj->bitsize = obj->size * 8;
+        has_wrong_bitsize = 1;
         error |= DWG_ERR_VALUEOUTOFBOUNDS;
       }
   }
