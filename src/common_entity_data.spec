@@ -98,6 +98,9 @@
         ent->color.flag = flags;
         LOG_HANDLE (" color.index: %d [ENC 62]\n", ent->color.index);
       }
+      FREE {
+         flags = ent->color.flag;
+      }
       DXF {
         // 0: byblock
         if (FIELD_VALUE (color.index) != 256) // not bylayer
@@ -135,7 +138,7 @@
         {
           int type = ent->color.rgb >> 24; //?
           FIELD_BL (color.rgb, 0); //ODA bug, documented as BS
-#ifdef IS_DECODER
+#if defined(IS_DECODER) || defined(IS_FREE)
           LOG_TRACE ("color.rgb: %06x [ENC.BL 420] (%d)\n", (unsigned)ent->color.rgb,
                     (int32_t)(ent->color.rgb & 0x00ffffff));
 #elif defined(IS_ENCODER) && defined(IS_DXF)
@@ -144,7 +147,7 @@
           DXF { FIELD_BL (color.rgb & 0x00ffffff, 420); }
 #endif
         }
-      /* not with entities, only with CMC or dbcolor handle */
+      /* FIXME: not with entities, only with CMC or dbcolor handle */
       if ((flags & 0x41) == 0x41)
         {
           FIELD_TV (color.name, 430);
