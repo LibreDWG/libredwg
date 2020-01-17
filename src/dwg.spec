@@ -3565,9 +3565,7 @@ DWG_OBJECT (MLINESTYLE)
   REPEAT (num_lines, lines, Dwg_MLINESTYLE_line)
   REPEAT_BLOCK
     SUB_FIELD_BD (lines[rcount1], offset, 49);
-#ifndef IS_FREE
     SUB_FIELD_CMC (lines[rcount1], color, 62,420); /*!< default: 0 */
-#endif
     PRE (R_2018)
     {
 #if defined (IS_DXF) && !defined (IS_ENCODE)
