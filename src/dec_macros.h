@@ -759,7 +759,7 @@
       (long long)((size)*TYPE_MAXELEMSIZE (type)) > AVAIL_BITS (dat))         \
     {                                                                         \
       LOG_ERROR ("Invalid " #nam " size %ld. Need min. %u bits for " #type    \
-                 ", have %lld for %s.",                                       \
+                 ", have %lld for %s. Set " #size " to 0.",                   \
                  (long)(size), (unsigned)(size)*TYPE_MAXELEMSIZE (type),      \
                  AVAIL_BITS (dat), SAFEDXFNAME);                              \
       if (_obj->nam) free (_obj->nam);                                        \
@@ -771,7 +771,8 @@
       (long long)((size) * (maxelemsize)) > AVAIL_BITS (dat))                 \
     {                                                                         \
       LOG_ERROR ("Invalid " #nam                                              \
-                 " size %ld. Need min. %u bits, have %lld for %s.",           \
+                 " size %ld. Need min. %u bits, have %lld for %s. "           \
+                 "Set " #size " to 0",                                        \
                  (long)(size), (unsigned)(size) * (maxelemsize),              \
                  AVAIL_BITS (dat), SAFEDXFNAME);                              \
       size = 0;                                                               \
@@ -798,8 +799,8 @@
 #define FIELD_VECTOR_T(name, size, dxf)                                       \
   if (_obj->size > 0)                                                         \
     {                                                                         \
-      _VECTOR_CHKCOUNT (name, _obj->size, dat->version >= R_2007 ? 18 : 2,    \
-                        dat)                                                  \
+      _VECTOR_CHKCOUNT (name, _obj->size,                                     \
+                        dat->version >= R_2007 ? 18 : 2, dat)                 \
       _obj->name = calloc (_obj->size, sizeof (char *));                      \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
