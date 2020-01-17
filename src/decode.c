@@ -2354,6 +2354,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
                  info->name, info->size, info->num_sections, info->max_decomp_size);
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
+  LOG_HANDLE ("Alloc section %s size %" PRIu32 "\n", info->name, max_decomp_size);
   decomp = (BITCODE_RC *)calloc (max_decomp_size, sizeof (BITCODE_RC));
   if (!decomp)
     {
@@ -2375,6 +2376,12 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       if (!info->sections[i])
         {
           LOG_WARN ("Skip empty section %u %s", i, info->name);
+          if (i == info->num_sections - 1) // the last one
+            {
+              sec_dat->chain = NULL; // fix double-free
+              free (decomp);
+              return DWG_ERR_SECTIONNOTFOUND;
+            }
           j--; // index for writing info->max_decomp_size chunks
           continue;
         }
@@ -2518,6 +2525,8 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         {
           LOG_ERROR ("Invalid max class number %d", max_num)
           dwg->num_classes = 0;
+          if (sec_dat.chain)
+            free (sec_dat.chain);
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
       assert (max_num >= 500);
