@@ -1,7 +1,0 @@
-gcc:
-  script:
-    - sh autogen.sh && ./configure && make -j4 -s && make -j4 -s check && make -j4 -s distcheck 
-#  only:
-#    - master
-#    - /gitlab/
-#    - /smoke/
