@@ -759,6 +759,7 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
       LOG_ERROR ("Out of memory")
       return DWG_ERR_OUTOFMEM;
     }
+  LOG_HANDLE ("Alloc data section of size %" PRIu64 "\n", max_decomp_size)
 
   sec_dat->bit = 0;
   sec_dat->byte = 0;
@@ -1462,6 +1463,8 @@ read_2007_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         {
           LOG_ERROR ("Invalid max class number %d", max_num)
           dwg->num_classes = 0;
+          if (sec_dat.chain)
+            free (sec_dat.chain);
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
       assert (max_num >= 500);
