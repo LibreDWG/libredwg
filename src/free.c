@@ -90,12 +90,12 @@ static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
   VALUE_HANDLE (_obj->o.nam, nam, code, dxf)
 // compare to dwg_decode_handleref_with_code: not all refs are stored in the
 // object_ref vector, like relative ptrs and NULL.
-// But indxf skip the NULL HDL, it is global and shared there.
+// But with INDXF skip the NULL HDL, it is global and shared there.
 // obj is the relative base object here and there.
 #define VALUE_HANDLE(ref, nam, _code, dxf)                                    \
   if (ref                                                                     \
-      && !(dat->opts & DWG_OPTS_INDXF && ref->handleref.size == 0             \
-           && ref->absolute_ref == 0 && !ref->obj)                            \
+      && (!(dat->opts & DWG_OPTS_INDXF) && ref->handleref.size == 0           \
+          && ref->absolute_ref == 0 && !ref->obj)                             \
       && !(ref->handleref.size || (obj && ref->handleref.code > 5)))          \
     {                                                                         \
       free (ref);                                                             \
