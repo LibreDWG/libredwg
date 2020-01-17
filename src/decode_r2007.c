@@ -609,6 +609,7 @@ decode_rs (const BITCODE_RC *src, int block_count, int data_size,
   return dst_base;
 }
 
+ATTRIBUTE_MALLOC
 static BITCODE_RC *
 read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
                   int64_t repeat_count)
@@ -644,6 +645,7 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       return NULL;
     }
   data = (BITCODE_RC *)calloc (size_uncomp + page_size, 1);
+  LOG_HANDLE ("Alloc system page of size %" PRId64 "\n", size_uncomp + page_size)
   if (!data)
     {
       LOG_ERROR ("Out of memory")
@@ -664,8 +666,8 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
     error = decompress_r2007 (data, size_uncomp, pedata, MIN (pedata_size, size_comp));
   else
     memcpy (data, pedata, size_uncomp);
-  free (pedata);
 
+  free (pedata);
   if (error >= DWG_ERR_CRITICAL)
     {
       free (data);
@@ -881,6 +883,7 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       if (!section)
         {
           LOG_ERROR ("Out of memory");
+          free (data);
           sections_destroy (sections); // the root
           return NULL;
         }
@@ -956,6 +959,7 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       if (!section->pages)
         {
           LOG_ERROR ("Out of memory");
+          free (data);
           if (sections)
             sections_destroy (sections); // the root
           else
@@ -970,6 +974,7 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
           if (!section->pages[i])
             {
               LOG_ERROR ("Out of memory");
+              free (data);
               if (sections)
                 sections_destroy (sections); // the root
               else
@@ -980,6 +985,7 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
           if (ptr + 56 >= ptr_end)
             {
               LOG_ERROR ("Section[%d]->pages[%d] overflow", j, i);
+              free (section->pages[i]);
               section->num_pages = i; // skip this last section
               break;
             }
@@ -999,7 +1005,9 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
               || section->pages[i]->uncomp_size >= DBG_MAX_SIZE
               || section->pages[i]->comp_size >= DBG_MAX_SIZE)
             {
-              LOG_ERROR ("Invalid section->pages[%d].*size", i);
+              LOG_ERROR ("Invalid section->pages[%d] size", i);
+              free (data);
+              free (section->pages[i]);
               section->num_pages = i; // skip this last section
               return sections;
             }
@@ -1010,7 +1018,6 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
     }
 
   free (data);
-
   return sections;
 }
 
