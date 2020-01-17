@@ -3978,6 +3978,7 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   Dwg_Object *obj = &dwg->object[ent->objid];
   Dwg_Object_Entity *_obj = ent;
   unsigned long objectpos = bit_position (dat);
+  int has_wrong_bitsize = 0;
 
   // obj->dat_address = dat->byte; // the data stream offset
   obj->bitsize_pos = objectpos; // absolute. needed for encode
@@ -4006,9 +4007,10 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
                dat->byte-2, dat->bit);
     if (obj->bitsize > obj->size * 8)
       {
-        LOG_ERROR ("Invalid bitsize " FORMAT_RL " => " FORMAT_RL, obj->bitsize,
+        LOG_ERROR ("Invalid bitsize " FORMAT_RL " > " FORMAT_RL, obj->bitsize,
                    obj->size * 8);
         obj->bitsize = obj->size * 8;
+        has_wrong_bitsize = 1;
         error |= DWG_ERR_VALUEOUTOFBOUNDS;
       }
   }
@@ -4033,19 +4035,26 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   }
 
   error |= bit_read_H (dat, &(obj->handle));
-  if (error & DWG_ERR_INVALIDHANDLE)
+  if (error & DWG_ERR_INVALIDHANDLE || !obj->handle.value || !obj->handle.size
+      || obj->handle.code)
     {
-      LOG_WARN ("dwg_decode_entity handle @%lu.%u", dat->byte, dat->bit);
-      obj->bitsize = 0;
+      LOG_ERROR ("Invalid object handle " FORMAT_H " at pos @%lu.%u",
+                 ARGS_H (obj->handle), dat->byte, dat->bit);
+      // TODO reconstruct the handle and search in the bitsoup?
+      if (has_wrong_bitsize)
+        obj->bitsize = 0;
       ent->num_eed = 0;
       ent->preview_exists = 0;
-      return error;
+      return error | DWG_ERR_INVALIDHANDLE;
     }
   LOG_TRACE ("handle: " FORMAT_H " [H 5]\n", ARGS_H (obj->handle))
 
   PRE (R_13) { return DWG_ERR_NOTYETSUPPORTED; }
 
-  error |= dwg_decode_eed (dat, (Dwg_Object_Object *)ent);
+  if (has_wrong_bitsize)
+    LOG_WARN ("Skip eed")
+  else
+    error |= dwg_decode_eed (dat, (Dwg_Object_Object *)ent);
   if (error & (DWG_ERR_INVALIDEED | DWG_ERR_VALUEOUTOFBOUNDS))
     return error;
 
@@ -4078,6 +4087,7 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   Dwg_Data *dwg = _obj->dwg;
   Dwg_Object *obj = &dwg->object[_obj->objid];
   unsigned long objectpos = bit_position (dat);
+  int has_wrong_bitsize = 0; // first possibly fatal problem
 
   // obj->dat_address = dat->byte; // the data stream offset
   obj->bitsize_pos = objectpos; // absolute. needed for encode
@@ -4088,9 +4098,10 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
                dat->byte - 2, dat->bit)
     if (obj->bitsize > obj->size * 8)
       {
-        LOG_ERROR ("Invalid bitsize " FORMAT_RL " => " FORMAT_RL, obj->bitsize,
+        LOG_ERROR ("Invalid bitsize " FORMAT_RL " > " FORMAT_RL, obj->bitsize,
                    obj->size * 8);
         obj->bitsize = obj->size * 8;
+        has_wrong_bitsize = 1;
         error |= DWG_ERR_VALUEOUTOFBOUNDS;
       }
   }
@@ -4115,14 +4126,23 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   }
 
   error |= bit_read_H (dat, &obj->handle);
-  if (error & DWG_ERR_INVALIDHANDLE)
+  if (error & DWG_ERR_INVALIDHANDLE || !obj->handle.value || !obj->handle.size
+      || obj->handle.code)
     {
-      LOG_ERROR ("Wrong object handle at pos 0x%0lx", dat->byte)
-      return error;
+      LOG_ERROR ("Invalid object handle " FORMAT_H " at pos @%lu.%u",
+                 ARGS_H (obj->handle), dat->byte, dat->bit);
+      // TODO reconstruct the handle and search in the bitsoup?
+      if (has_wrong_bitsize)
+        obj->bitsize = 0;
+      obj->tio.object->num_eed = 0;
+      return error | DWG_ERR_INVALIDHANDLE;
     }
   LOG_TRACE ("handle: " FORMAT_H " [H 5]\n", ARGS_H (obj->handle))
 
-  error |= dwg_decode_eed (dat, _obj);
+  if (has_wrong_bitsize)
+    LOG_WARN ("Skip eed")
+  else
+    error |= dwg_decode_eed (dat, _obj);
   if (error & (DWG_ERR_INVALIDEED | DWG_ERR_VALUEOUTOFBOUNDS))
     return error;
 
