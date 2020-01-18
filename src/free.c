@@ -753,9 +753,13 @@ dwg_free_header_vars (Dwg_Data *dwg)
   Dwg_Header_Variables *_obj = &dwg->header_vars;
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
+
   // clang-format off
   #include "header_variables.spec"
   // clang-format on
+
+  if (dwg->opts & DWG_OPTS_MINIMAL)
+    FREE_IF (_obj->HANDSEED);
   return 0;
 }
 
@@ -766,6 +770,7 @@ dwg_free_summaryinfo (Dwg_Data *dwg)
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
   BITCODE_RL rcount1, rcount2;
+
   // clang-format off
   #include "summaryinfo.spec"
   // clang-format on
@@ -779,6 +784,7 @@ dwg_free_appinfo (Dwg_Data *dwg)
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
   BITCODE_RL rcount1, rcount2;
+
   // clang-format off
   #include "appinfo.spec"
   // clang-format on
@@ -791,6 +797,7 @@ dwg_free_filedeplist (Dwg_Data *dwg)
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
   BITCODE_RL rcount1, rcount2;
+
   // clang-format off
   #include "filedeplist.spec"
   // clang-format on
@@ -803,6 +810,7 @@ dwg_free_security (Dwg_Data *dwg)
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
   BITCODE_RL rcount1, rcount2;
+
   // clang-format off
   #include "security.spec"
   // clang-format on
