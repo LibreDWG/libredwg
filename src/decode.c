@@ -748,7 +748,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     return error;
   // blocks
   error |= decode_preR13_entities (blocks_start, blocks_end, blocks_start - 0x40000000,
-                          dat, dwg);
+                                   dat, dwg);
   if (error >= DWG_ERR_CRITICAL)
     return error;
   LOG_TRACE ("@0x%lx\n", dat->byte);

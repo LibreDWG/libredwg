@@ -3586,7 +3586,10 @@ DWG_OBJECT (MLINESTYLE)
     }
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (lines)
-  END_REPEAT (lines);
+  if (!IF_IS_FREE || dat->version < R_2018) // there's a 2nd loop below, don't free
+    {
+      END_REPEAT (lines);
+    }
 
   START_OBJECT_HANDLE_STREAM;
   // FIXME: init HANDLE_STREAM earlier, merge into upper repeat_block
@@ -3594,7 +3597,7 @@ DWG_OBJECT (MLINESTYLE)
   {
     _REPEAT_CNF (_obj->num_lines, lines, Dwg_MLINESTYLE_line, 1)
     REPEAT_BLOCK
-    SUB_FIELD_HANDLE (lines[rcount1], lt.ltype, 5, 6);
+        SUB_FIELD_HANDLE (lines[rcount1], lt.ltype, 5, 6);
     END_REPEAT_BLOCK
     //SET_PARENT_OBJ (lines)
     END_REPEAT (lines);
@@ -5696,7 +5699,11 @@ DWG_ENTITY (MULTILEADER)
             SUB_FIELD_HANDLE (arrowheads[rcount1],arrowhead, 5, 345);
       END_REPEAT_BLOCK
       SET_PARENT_OBJ (arrowheads)
-      END_REPEAT (arrowheads);
+      // dont free it for the 2nd loop below
+      if (!IF_IS_FREE || dat->version >= R_2007)
+        {
+          END_REPEAT (arrowheads);
+        }
 
       FIELD_BL (num_blocklabels, 0);
       VALUEOUTOFBOUNDS (num_blocklabels, 5000)
@@ -5709,7 +5716,11 @@ DWG_ENTITY (MULTILEADER)
           SUB_FIELD_BD (blocklabels[rcount1],width, 44);
       END_REPEAT_BLOCK
       SET_PARENT_OBJ (blocklabels)
-      END_REPEAT (blocklabels)
+      // dont free it for the 2nd loop below
+      if (!IF_IS_FREE || dat->version >= R_2007)
+        {
+          END_REPEAT (blocklabels)
+        }
       FIELD_B (neg_textdir, 294);
       FIELD_BS (ipe_alignment, 178);
       FIELD_BS (justification, 179);
