@@ -5436,7 +5436,11 @@ DWG_OBJECT (XRECORD)
             : malloc (sizeof (Dwg_Object_Ref));
           FIELD_HANDLE_N (objid_handles[vcount], vcount, ANYCODE, 0);
           if (!FIELD_VALUE (objid_handles[vcount]))
-            break;
+            {
+              if (!vcount)
+                free (FIELD_VALUE (objid_handles));
+              break;
+            }
         }
       FIELD_VALUE (num_objid_handles) = vcount;
     }
