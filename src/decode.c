@@ -339,8 +339,11 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   obj->index = num + i;                                                       \
   obj->tio.object = calloc (1, sizeof (Dwg_Object_Object));                   \
   if (!_obj || !obj->tio.object)                                              \
-    if (_obj) free (_obj);                                                    \
-    return DWG_ERR_OUTOFMEM;                                                  \
+    {                                                                         \
+      if (_obj) free (_obj);                                                  \
+      return DWG_ERR_OUTOFMEM;                                                \
+    } 	                                                                      \
+  dwg->num_objects++;                                                         \
   obj->tio.object->tio.token = _obj;                                          \
   obj->tio.object->objid = obj->index;                                        \
   obj->supertype = DWG_SUPERTYPE_OBJECT;                                      \
@@ -599,7 +602,6 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       tbl->number = 0;
       break;
     }
-  dwg->num_objects += tbl->number;
   dat->byte = tbl->address + (tbl->number * tbl->size);
   return error;
 }
