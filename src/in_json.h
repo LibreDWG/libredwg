@@ -23,6 +23,6 @@
 
 EXPORT int dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 //TODO needed? See [GH #136]
-void dwg_injson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+//void dwg_injson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 
 #endif

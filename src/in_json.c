@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018 Free Software Foundation, Inc.                        */
+/*  Copyright (C) 2020 Free Software Foundation, Inc.                        */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -20,21 +20,35 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <math.h>
 
 #include "common.h"
 #include "bits.h"
 #include "dwg.h"
 #include "decode.h"
+#include "dynapi.h"
+#include "in_json.h"
 
-//#include "in_json.h"
-// our files are bigger than 8000
-#define JSMN_PARENT_LINKS
+// not exported
 #define JSMN_STATIC
+// probably not needed in the final version (counting keys)
+#define JSMN_PARENT_LINKS
+// our files are bigger than 8000
 // In strict mode primitive must be followed by "," or "}" or "]"; comma/object/array
 // In strict mode an object or array can't become a key
 // In strict mode primitives are: numbers and booleans
 #undef JSMN_STRICT
 #include "../jsmn/jsmn.h"
+
+typedef struct jsmntokens {
+  unsigned int index;
+  jsmntok_t *tokens;
+  unsigned int num_tokens;
+} jsmntokens_t;
+
+// synced with enum jsmntype_t
+static const char *const t_typename[]
+    = { "UNDEFINED", "OBJECT", "ARRAY", "STRING", "PRIMITIVE" };
 
 static unsigned int loglevel;
 #define DWG_LOGLEVEL loglevel
@@ -42,7 +56,12 @@ static unsigned int loglevel;
 
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
+static char* created_by;
 static Bit_Chain *g_dat;
+
+#define json_expect(tokens, typ) \
+  if (tokens->tokens[tokens->index].type != JSMN_##typ) \
+    return DWG_ERR_INVALIDTYPE
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -209,21 +228,36 @@ static Bit_Chain *g_dat;
       }                                                                       \
     fprintf (g_dat->fh, "\",\n");                                             \
   }
+/******************************************************************/
+#define _FIELD_FLOAT(nam, type)                                  \
+      else if (strEQc (key, #nam))                               \
+        {                                                        \
+          _obj->nam = (BITCODE_##type)json_float (dat, tokens);  \
+          LOG_TRACE (#nam ": " FORMAT_##type "\n", _obj->nam)    \
+        }
+#define _FIELD_LONG(nam, type)                                   \
+      else if (strEQc (key, #nam))                               \
+        {                                                        \
+          _obj->nam = (BITCODE_##type)json_long (dat, tokens);   \
+          LOG_TRACE (#nam ": " FORMAT_##type "\n", _obj->nam)    \
+        }
 
-#define FIELD_B(nam, dxf) FIELDG (nam, B, dxf)
-#define FIELD_BB(nam, dxf) FIELDG (nam, BB, dxf)
-#define FIELD_3B(nam, dxf) FIELDG (nam, 3B, dxf)
-#define FIELD_BS(nam, dxf) FIELDG (nam, BS, dxf)
-#define FIELD_BL(nam, dxf) FIELDG (nam, BL, dxf)
-#define FIELD_BLL(nam, dxf) FIELDG (nam, BLL, dxf)
-#define FIELD_BD(nam, dxf) FIELDG (nam, BD, dxf)
-#define FIELD_RC(nam, dxf) FIELDG (nam, RC, dxf)
-#define FIELD_RS(nam, dxf) FIELDG (nam, RS, dxf)
-#define FIELD_RD(nam, dxf) FIELDG (nam, RD, dxf)
-#define FIELD_RL(nam, dxf) FIELDG (nam, RL, dxf)
-#define FIELD_RLL(nam, dxf) FIELDG (nam, RLL, dxf)
-#define FIELD_MC(nam, dxf) FIELDG (nam, MC, dxf)
-#define FIELD_MS(nam, dxf) FIELDG (nam, MS, dxf)
+#define FIELD_B(nam, dxf)   _FIELD_LONG (nam, B)
+#define FIELD_BB(nam, dxf)  _FIELD_LONG (nam, BB)
+#define FIELD_3B(nam, dxf)  _FIELD_LONG (nam, 3B)
+#define FIELD_BS(nam, dxf)  _FIELD_LONG (nam, BS)
+#define FIELD_BL(nam, dxf)  _FIELD_LONG (nam, BL)
+#define FIELD_BLL(nam, dxf) _FIELD_LONG (nam, BLL)
+#define FIELD_RC(nam, dxf)  _FIELD_LONG (nam, RC)
+#define FIELD_RS(nam, dxf)  _FIELD_LONG (nam, RS)
+#define FIELD_RL(nam, dxf)  _FIELD_LONG (nam, RL)
+#define FIELD_RLL(nam, dxf) _FIELD_LONG (nam, RLL)
+#define FIELD_MC(nam, dxf)  _FIELD_LONG (nam, MC)
+#define FIELD_MS(nam, dxf)  _FIELD_LONG (nam, MS)
+
+#define FIELD_BD(nam, dxf) _FIELD_FLOAT (nam, BD)
+#define FIELD_RD(nam, dxf) _FIELD_FLOAT (nam, RD)
+  
 #define FIELD_TF(nam, len, dxf) FIELD_TEXT (nam, _obj->nam)
 #define FIELD_TFF(nam, len, dxf) FIELD_TEXT (nam, _obj->nam)
 #define FIELD_TV(nam, dxf) FIELD_TEXT (nam, _obj->nam)
@@ -385,13 +419,9 @@ static Bit_Chain *g_dat;
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'nam'.
 #define FIELD_VECTOR_N(nam, type, size, dxf)                                  \
-  ARRAY;                                                                      \
-  for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                       \
-    {                                                                         \
-      PREFIX fprintf (g_dat->fh, "\"" #nam "\": " FORMAT_##type ",\n",        \
-                      _obj->nam[vcount]);                                     \
-    }                                                                         \
-  ENDARRAY;
+  // json_expect(tokens, ARRAY);
+  //...
+
 #define FIELD_VECTOR_T(nam, size, dxf)                                        \
   ARRAY;                                                                      \
   PRE (R_2007)                                                                \
@@ -535,9 +565,8 @@ static Bit_Chain *g_dat;
   return 0;                                                                   \
   }
 
-#include "dwg.spec"
-
 #if 0
+//#include "dwg.spec"
 
 /* returns 0 on success
  */
@@ -886,24 +915,552 @@ json_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
+#endif
+
+// advance until next known first-level type
+// on OBJECT to end of OBJECT
+// on ARRAY to end of ARRAY
+// on STRING (key) get next
+// TODO: recursion depth check
+static int
+json_advance_unknown (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
+                      int depth)
+{
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  int error = 0;
+  if (tokens->index >= tokens->num_tokens)
+    {
+      LOG_ERROR ("Unexpected end of JSON at %u of %u tokens",
+                 tokens->index, tokens->num_tokens);
+      return DWG_ERR_INVALIDDWG;
+    }
+  if (depth > 300)
+    {
+      LOG_ERROR ("JSON recursion limit");
+      return DWG_ERR_INVALIDDWG;
+    }
+  LOG_TRACE ("Skip JSON %s %.*s at %u of %u tokens\n",
+             t_typename[t->type], t->end - t->start, &dat->chain[t->start],
+             tokens->index, tokens->num_tokens);
+  switch (t->type)
+    {
+    case JSMN_OBJECT:
+    case JSMN_ARRAY:
+      for (int i = 0; i < t->size; i++)
+        {
+          tokens->index++;
+          error |= json_advance_unknown (dat, tokens, depth + 1);
+        }
+      return error;
+    case JSMN_STRING:
+    case JSMN_PRIMITIVE:
+      tokens->index++;
+      return error;
+    case JSMN_UNDEFINED:
+    default:
+      return error;
+    }
+  return error;
+}
+
+static void
+json_fixed_key (char *key, Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
+{
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  int len = t->end - t->start;
+  *key = 0;
+  if (t->type != JSMN_STRING)
+    {
+      LOG_ERROR ("Expected JSON STRING");
+      json_advance_unknown (dat, tokens, 0);
+      return;
+    }
+  if (len >= 80)
+    {
+      LOG_ERROR ("Expected JSON STRING");
+      tokens->index++;
+      return;
+    }
+  memcpy (key, &dat->chain[t->start], len);
+  key[len] = '\0';
+  tokens->index++;
+  return;
+}
+
+ATTRIBUTE_MALLOC
+static char *
+json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
+{
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  char *key;
+  int len = t->end - t->start;
+  if (t->type != JSMN_STRING)
+    {
+      LOG_ERROR ("Expected JSON STRING");
+      json_advance_unknown (dat, tokens, 0);
+      return NULL;
+    }
+  key = malloc (len + 1);
+  memcpy (key, &dat->chain[t->start], len);
+  key[len] = '\0';
+  tokens->index++;
+  return key;
+}
+
+static double
+json_float (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
+{
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  //int len = t->end - t->start;
+  if (t->type != JSMN_PRIMITIVE)
+    {
+      LOG_ERROR ("Expected JSON PRIMITIVE");
+      json_advance_unknown (dat, tokens, 0);
+      return (double)NAN;
+    }
+  tokens->index++;
+  return strtod ((char *)&dat->chain[t->start], NULL);
+}
+static long
+json_long (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
+{
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  //int len = t->end - t->start;
+  if (t->type != JSMN_PRIMITIVE)
+    {
+      LOG_ERROR ("Expected JSON PRIMITIVE");
+      json_advance_unknown (dat, tokens, 0);
+      return 0;
+    }
+  tokens->index++;
+  return strtol ((char *)&dat->chain[t->start], NULL, 10);
+}
 
 static int
-json_preview_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+json_created_by (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                 jsmntokens_t *restrict tokens)
 {
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
   (void)dat; (void)dwg;
-  //...
+  if (t->type != JSMN_STRING)
+    {
+      LOG_ERROR ("Expected %s STRING", "created_by");
+      json_advance_unknown (dat, tokens, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
+  created_by = json_string (dat, tokens);
+  tokens->index--; // advanced by the loop
   return 0;
 }
 
-#endif
+static int
+json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                 jsmntokens_t *restrict tokens)
+{
+  const char *section = "FILEHEADER";
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  struct Dwg_Header *_obj = &dwg->header;
+  Dwg_Object *obj = NULL;
+  char version[80];
+  int size = t->size;
+
+  if (t->type != JSMN_OBJECT)
+    {
+      LOG_ERROR ("Expected %s OBJECT at %u of %u tokens, got %s", section,
+                 tokens->index, tokens->num_tokens, t_typename[t->type]);
+      json_advance_unknown (dat, tokens, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
+  LOG_TRACE ("\n%s pos:%d [%d keys]\n", section, tokens->index, t->size);
+  tokens->tokens++;
+  // t = &tokens->tokens[tokens->index];
+  // json_expect(tokens, STRING);
+  // FIELD_TV (version, 0);
+  for (int i = 0; i < size; i++)
+    {
+      char key[80];
+      json_fixed_key (key, dat, tokens);
+      if (strEQc (key, "version"))
+        {
+          version[0] = '\0';
+          json_fixed_key (version, dat, tokens);
+          // set version's
+          for (Dwg_Version_Type v = 0; v <= R_AFTER; v++)
+            {
+              if (strEQ (version, version_codes[v]))
+                {
+                  dwg->header.version = dwg->header.from_version = v;
+                  dat->version = dat->from_version = dwg->header.version;
+                  //is_utf = dat->version >= R_2007;
+                  LOG_TRACE ("HEADER.version = dat->version = %s\n", version);
+                  /*
+                    if (is_utf && dwg->num_objects && dwg->object[0].fixedtype == DWG_TYPE_BLOCK_HEADER)
+                    {
+                    Dwg_Object_BLOCK_HEADER *_o = dwg->object[0].tio.object->tio.BLOCK_HEADER;
+                    free (_o->name);
+                    _o->name = (char*)bit_utf8_to_TU ((char*)"*Model_Space");
+                    }
+                  */
+                  break;
+                }
+              if (v == R_AFTER)
+                LOG_ERROR ("Invalid FILEHEADER.version %s", version);
+            }
+        }
+      else if (strEQc (key, "zero_5"))
+        {
+          json_expect(tokens, ARRAY);
+          json_advance_unknown (dat, tokens, 0);
+        }
+
+      FIELD_RC (is_maint, 0)
+      FIELD_RC (zero_one_or_three, 0)
+      FIELD_RL (thumbnail_address, 0) //@0x0d
+      FIELD_RC (dwg_version, 0)
+      FIELD_RC (maint_version, 0)
+      FIELD_RS (codepage, 0) //@0x13: 29/30 for ANSI_1252, since r2007 UTF-16
+      //SINCE (R_2004)
+      FIELD_RC (unknown_0, 0)
+      FIELD_RC (app_dwg_version, 0)
+      FIELD_RC (app_maint_version, 0)
+      FIELD_RL (security_type, 0)
+      FIELD_RL (rl_1c_address, 0) /* mostly 0 */
+      FIELD_RL (summaryinfo_address, 0)
+      FIELD_RL (vbaproj_address, 0)
+      FIELD_RL (rl_28_80, 0) /* mostly 128/0x80 */
+      else if (strEQc (key, "HEADER"))
+        {
+          tokens->tokens--;
+          tokens->tokens--;
+          return 0;
+        }
+      else
+        {
+          LOG_ERROR ("Unknown %s.%s ignored", section, key);
+          tokens->index++;
+        }
+    }
+  return -1;
+}
+
+static int
+json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+             jsmntokens_t *restrict tokens)
+{
+  const char *section = "HEADER";
+  jsmntok_t *t = &tokens->tokens[tokens->index];
+  Dwg_Header_Variables *_obj = &dwg->header_vars;
+  Dwg_Object *obj = NULL;
+  int size = t->size;
+  int is_utf = 1;
+
+  if (t->type != JSMN_OBJECT)
+    {
+      LOG_ERROR ("Expected %s OBJECT at %u of %u tokens, got %s", section,
+                 tokens->index, tokens->num_tokens, t_typename[t->type]);
+      json_advance_unknown (dat, tokens, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
+  LOG_TRACE ("\n%s pos:%d [%d keys]\n", section, tokens->index, t->size);
+  tokens->tokens++;
+  for (int i = 0; i < size; i++)
+    {
+      char key[80];
+      Dwg_DYNAPI_field *f;
+      json_fixed_key (key, dat, tokens);
+      t = &tokens->tokens[tokens->index];
+      f = (Dwg_DYNAPI_field *)dwg_dynapi_header_field (key);
+      if (!f)
+        {
+          json_advance_unknown (dat, tokens, 0);
+          continue;
+        }
+      else if (strEQc (f->type, "BD")
+               || strEQc (f->type, "RD"))
+        {
+          double num = json_float (dat, tokens);
+          LOG_TRACE ("%s: " FORMAT_RD "\n", key, num)
+          dwg_dynapi_header_set_value (dwg, key, &num, 0);
+        }
+      else if (strEQc (f->type, "RC")
+               || strEQc (f->type, "B")
+               || strEQc (f->type, "BB")
+               || strEQc (f->type, "RS")
+               || strEQc (f->type, "BS")
+               || strEQc (f->type, "RL")
+               || strEQc (f->type, "BL")
+               || strEQc (f->type, "RLL")
+               || strEQc (f->type, "BLL")
+               )
+        {
+          long num = json_long (dat, tokens);
+          LOG_TRACE ("%s: %ld\n", key, num)
+          dwg_dynapi_header_set_value (dwg, key, &num, 0);
+        }
+      else if (strEQc (key, "HEADER"))
+        {
+          tokens->tokens--;
+          tokens->tokens--;
+          return 0;
+        }
+      else
+        {
+          tokens->tokens++;
+          continue;
+        }
+      /*
+      else if (t->type == JSMN_ARRAY) // points
+        {
+          dwg_dynapi_header_set_value (dwg, key, &pt, NULL);
+        }
+      */
+    }
+  
+  return -1;
+}
+
+static int
+json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+             jsmntokens_t *restrict tokens)
+{
+  const char *section = "CLASSES";
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  (void)dat; (void)dwg;
+  if (t->type != JSMN_ARRAY)
+    {
+      LOG_ERROR ("Expected %s ARRAY at %u of %u tokens, got %s", section,
+                 tokens->index, tokens->num_tokens, t_typename[t->type]);
+      json_advance_unknown (dat, tokens, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
+  // ... dynapi
+  return -1;
+}
+
+static int
+json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+             jsmntokens_t *restrict tokens)
+{
+  const char *section = "OBJECTS";
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  (void)dat; (void)dwg;
+  if (t->type != JSMN_ARRAY)
+    {
+      LOG_ERROR ("Expected %s ARRAY at %u of %u tokens, got %s", section,
+                 tokens->index, tokens->num_tokens, t_typename[t->type]);
+      json_advance_unknown (dat, tokens, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
+  // ... dynapi
+  return -1;
+}
+
+static int
+json_HANDLES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+              jsmntokens_t *restrict tokens)
+{
+  const char *section = "HANDLES";
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  (void)dat; (void)dwg;
+  if (t->type != JSMN_ARRAY)
+    {
+      LOG_ERROR ("Expected %s ARRAY at %u of %u tokens, got %s", section,
+                 tokens->index, tokens->num_tokens, t_typename[t->type]);
+      json_advance_unknown (dat, tokens, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
+  // ... dynapi
+  return -1;
+}
+
+static int
+json_THUMBNAILIMAGE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                   jsmntokens_t *restrict tokens)
+{
+  const char *section = "THUMBNAILIMAGE";
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  (void)dat; (void)dwg;
+  if (t->type != JSMN_OBJECT)
+    {
+      LOG_ERROR ("Expected %s OBJECT at %u of %u tokens, got %s", section,
+                 tokens->index, tokens->num_tokens, t_typename[t->type]);
+      json_advance_unknown (dat, tokens, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
+  // ... dynapi
+  return -1;
+}
+
+static int
+json_R2004_Header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                   jsmntokens_t *restrict tokens)
+{
+  const char *section = "R2004_Header";
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  (void)dat; (void)dwg;
+  if (t->type != JSMN_OBJECT)
+    {
+      LOG_ERROR ("Expected %s OBJECT at %u of %u tokens, got %s", section,
+                 tokens->index, tokens->num_tokens, t_typename[t->type]);
+      json_advance_unknown (dat, tokens, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
+  // ... dynapi
+  return -1;
+}
+
+static int
+json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                  jsmntokens_t *restrict tokens)
+{
+  const char *section = "SummaryInfo";
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  (void)dat; (void)dwg;
+  if (t->type != JSMN_OBJECT)
+    {
+      LOG_ERROR ("Expected %s OBJECT at %u of %u tokens, got %s", section,
+                 tokens->index, tokens->num_tokens, t_typename[t->type]);
+      json_advance_unknown (dat, tokens, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
+  // ... dynapi
+  return -1;
+}
+
+static int
+json_AppInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                  jsmntokens_t *restrict tokens)
+{
+  const char *section = "AppInfo";
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  (void)dat; (void)dwg;
+  if (t->type != JSMN_OBJECT)
+    {
+      LOG_ERROR ("Expected %s OBJECT at %u of %u tokens, got %s", section,
+                 tokens->index, tokens->num_tokens, t_typename[t->type]);
+      json_advance_unknown (dat, tokens, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
+  // ... dynapi
+  return -1;
+}
+
+static int
+json_AppInfoHistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                  jsmntokens_t *restrict tokens)
+{
+  const char *section = "AppInfoHistory";
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  (void)dat; (void)dwg;
+  if (t->type != JSMN_OBJECT)
+    {
+      LOG_ERROR ("Expected %s OBJECT at %u of %u tokens, got %s", section,
+                 tokens->index, tokens->num_tokens, t_typename[t->type]);
+      json_advance_unknown (dat, tokens, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
+  // ... dynapi
+  return -1;
+}
+
+static int
+json_FileDepList (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                  jsmntokens_t *restrict tokens)
+{
+  const char *section = "FileDepList";
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  (void)dat; (void)dwg;
+  if (t->type != JSMN_OBJECT)
+    {
+      LOG_ERROR ("Expected %s OBJECT at %u of %u tokens, got %s", section,
+                 tokens->index, tokens->num_tokens, t_typename[t->type]);
+      json_advance_unknown (dat, tokens, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
+  // ... dynapi
+  return -1;
+}
+
+static int
+json_Security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                  jsmntokens_t *restrict tokens)
+{
+  const char *section = "Security";
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  (void)dat; (void)dwg;
+  if (t->type != JSMN_OBJECT)
+    {
+      LOG_ERROR ("Expected %s OBJECT at %u of %u tokens, got %s", section,
+                 tokens->index, tokens->num_tokens, t_typename[t->type]);
+      json_advance_unknown (dat, tokens, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
+  // ... dynapi
+  return -1;
+}
+
+static int
+json_RevHistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                  jsmntokens_t *restrict tokens)
+{
+  const char *section = "RevHistory";
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  (void)dat; (void)dwg;
+  if (t->type != JSMN_OBJECT)
+    {
+      LOG_ERROR ("Expected %s OBJECT at %u of %u tokens, got %s", section,
+                 tokens->index, tokens->num_tokens, t_typename[t->type]);
+      json_advance_unknown (dat, tokens, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
+  // ... dynapi
+  return -1;
+}
+
+static int
+json_ObjFreeSpace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                  jsmntokens_t *restrict tokens)
+{
+  const char *section = "ObjFreeSpace";
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  (void)dat; (void)dwg;
+  if (t->type != JSMN_OBJECT)
+    {
+      LOG_ERROR ("Expected %s OBJECT at %u of %u tokens, got %s", section,
+                 tokens->index, tokens->num_tokens, t_typename[t->type]);
+      json_advance_unknown (dat, tokens, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
+  // ... dynapi
+  return -1;
+}
+
+static int
+json_Template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+               jsmntokens_t *restrict tokens)
+{
+  const char *section = "Template";
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  (void)dat; (void)dwg;
+  if (t->type != JSMN_OBJECT)
+    {
+      LOG_ERROR ("Expected %s OBJECT at %u of %u tokens, got %s", section,
+                 tokens->index, tokens->num_tokens, t_typename[t->type]);
+      json_advance_unknown (dat, tokens, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
+  // ... dynapi
+  return -1;
+}
 
 EXPORT int
 dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   struct Dwg_Header *obj = &dwg->header;
   jsmn_parser parser;
-  int num_tokens;
-  jsmntok_t *tokens;
+  //int num_tokens;
+  //jsmntok_t *tokens;
+  jsmntokens_t tokens;
   unsigned int i;
   int error = -1;
 
@@ -920,8 +1477,8 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   jsmn_init (&parser);
   // How big will it be? This is the max. memory variant.
   // we could also use less, see jsmn/examples/jsondump.c for small devices.
-  num_tokens = jsmn_parse (&parser, (char *)dat->chain, dat->size, NULL, 0);
-  if (num_tokens <= 0)
+  tokens.num_tokens = jsmn_parse (&parser, (char *)dat->chain, dat->size, NULL, 0);
+  if (tokens.num_tokens <= 0)
     {
       char err[21];
       memcpy (&err, &dat->chain[parser.pos - 10], 20);
@@ -930,14 +1487,14 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                  err);
       return DWG_ERR_INVALIDDWG;
     }
-  LOG_TRACE ("  num_tokens: %d\n", num_tokens);
-  tokens = calloc (num_tokens + 1024, sizeof (jsmntok_t));
-  if (!tokens)
+  LOG_TRACE ("  num_tokens: %d\n", tokens.num_tokens);
+  tokens.tokens = calloc (tokens.num_tokens + 1024, sizeof (jsmntok_t));
+  if (!tokens.tokens)
     return DWG_ERR_OUTOFMEM;
 
   jsmn_init (&parser); // reset pos to 0
-  error = jsmn_parse (&parser, (char *)dat->chain, dat->size, tokens,
-                      num_tokens);
+  error = jsmn_parse (&parser, (char *)dat->chain, dat->size, tokens.tokens,
+                      tokens.num_tokens);
   if (error < 0)
     {
       char err[21];
@@ -949,28 +1506,105 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       return DWG_ERR_INVALIDDWG;
     }
 
-  for (i = 0; i < num_tokens; i++)
+  if (tokens.tokens[0].type != JSMN_OBJECT)
     {
-      const jsmntok_t *t = &tokens[i];
-      switch (t->type)
+      fprintf (stderr, "First JSON element is not an object/hash\n");
+      exit (1);
+    }
+
+  // valid first level tokens:
+  // created_by: string
+  // section objects: FILEHEADER, HEADER, THUMBNAILIMAGE, R2004_Header, SummaryInfo, AppInfo,
+  //                  AppInfoHistory, FileDepList, Security, RevHistory, ObjFreeSpace, Template
+  // section arrays: CLASSES, OBJECTS, HANDLES
+  for (tokens.index = 1; tokens.index < tokens.num_tokens; tokens.index++)
+    {
+      char key[80];
+      const jsmntok_t *t = &tokens.tokens[tokens.index];
+      if (t->type != JSMN_STRING)
         {
+          LOG_ERROR ("Expected JSON key at %u of %u tokens, got %s",
+                     tokens.index, tokens.num_tokens, t_typename[t->type]);
+          return DWG_ERR_INVALIDDWG;
+        }
+        /*
         case JSMN_OBJECT:
           {
-            int j;
-            printf ("OBJECT %.*s\n", t->end - t->start, &dat->chain[t->start]);
-            printf ("keys %d\n", t->size);
-            for (j = 0; j < t->size; j++)
-              ;
-            // HEADER,...
+            //int j;
+#ifdef JSMN_PARENT_LINKS
+            printf ("parent: [%d]\n", t->parent); // always i-1 for arrays and objects
+#endif
+            // one of: FILEHEADER, HEADER, THUMBNAILIMAGE, R2004_Header, SummaryInfo, AppInfo, AppInfoHistory
+            printf ("OBJECT[%d](%d) %.*s\n", i, t->size, t->end - t->start, &dat->chain[t->start]);
             // check keys
           }
           break;
         case JSMN_PRIMITIVE:
+          printf ("[%d] %.*s\n", i, t->end - t->start, &dat->chain[t->start]);
+          break;
         case JSMN_STRING:
-          printf ("%.*s\n", t->end - t->start, &dat->chain[t->start]);
+          */
+          {
+            int len = t->end - t->start;
+            if (len < 80)
+              {
+                memcpy (key, &dat->chain[t->start], len);
+                key[len] = '\0';
+                tokens.index++;
+                if (tokens.index >= tokens.num_tokens)
+                  {
+                    LOG_ERROR ("Unexpected end of JSON at %u of %u tokens",
+                               tokens.index, tokens.num_tokens);
+                    return DWG_ERR_INVALIDDWG;
+                  }
+                if (strEQc (key, "created_by"))
+                  error |= json_created_by (dat, dwg, &tokens);
+                else if (strEQc (key, "FILEHEADER"))
+                  error |= json_FILEHEADER (dat, dwg, &tokens);
+                else if (strEQc (key, "HEADER"))
+                  error |= json_HEADER (dat, dwg, &tokens);
+                else if (strEQc (key, "CLASSES"))
+                  error |= json_CLASSES (dat, dwg, &tokens);
+                else if (strEQc (key, "OBJECTS"))
+                  error |= json_OBJECTS (dat, dwg, &tokens);
+                else if (strEQc (key, "THUMBNAILIMAGE"))
+                  error |= json_THUMBNAILIMAGE (dat, dwg, &tokens);
+                else if (strEQc (key, "R2004_Header"))
+                  error |= json_R2004_Header (dat, dwg, &tokens);
+                else if (strEQc (key, "SummaryInfo"))
+                  error |= json_SummaryInfo (dat, dwg, &tokens);
+                else if (strEQc (key, "AppInfo"))
+                  error |= json_AppInfo (dat, dwg, &tokens);
+                else if (strEQc (key, "AppInfoHistory"))
+                  error |= json_AppInfoHistory (dat, dwg, &tokens);
+                else if (strEQc (key, "FileDepList"))
+                  error |= json_FileDepList (dat, dwg, &tokens);
+                else if (strEQc (key, "Security"))
+                  error |= json_Security (dat, dwg, &tokens);
+                else if (strEQc (key, "RevHistory"))
+                  error |= json_RevHistory (dat, dwg, &tokens);
+                else if (strEQc (key, "ObjFreeSpace"))
+                  error |= json_ObjFreeSpace (dat, dwg, &tokens);
+                else if (strEQc (key, "Template"))
+                  error |= json_Template (dat, dwg, &tokens);
+                else if (strEQc (key, "HANDLES"))
+                  error |= json_HANDLES (dat, dwg, &tokens);
+                else
+                  {
+                    LOG_ERROR ("Unexpected JSON key %s at %u of %u tokens", key, tokens.index,
+                               tokens.num_tokens);
+                    return DWG_ERR_INVALIDDWG;
+                  }
+              }
+            //printf ("[%d] \"%.*s\"\n", i, t->end - t->start, &dat->chain[t->start]);
+          }
+          /*
           break;
         case JSMN_ARRAY:
-          printf ("ARRAY %.*s\n", t->end - t->start, &dat->chain[t->start]);
+#ifdef JSMN_PARENT_LINKS
+          printf ("parent: [%d]\n", t->parent);
+#endif
+          printf ("ARRAY[%d] %.*s\n", i, t->end - t->start, &dat->chain[t->start]);
           break;
         case JSMN_UNDEFINED:
         default:
@@ -978,7 +1612,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           return DWG_ERR_INVALIDDWG;
         }
 
-      // TODO walk the tokens
+      // TODO walk the sections and keys
       // json_header_read   (tokens, num_tokens, dwg);
       // json_classes_read  (tokens, num_tokens, dwg);
       // json_tables_read   (tokens, num_tokens, dwg);
@@ -986,10 +1620,11 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       // json_entities_read (tokens, num_tokens, dwg);
       // json_objects_read  (tokens, num_tokens, dwg);
       // json_preview_read  (tokens, num_tokens, dwg);
+      */
     }
 
   return 0;
 }
 
 #undef IS_ENCODE
-#undef IS_DXF
+#undef IS_JSON
