@@ -8162,7 +8162,7 @@ dwg_dynapi_entity_set_value (void *restrict _obj, const char *restrict name,
       const Dwg_Data *dwg
         = obj ? obj->parent
               : ((Dwg_Object_UNKNOWN_OBJ *)_obj)->parent->dwg;
-      const Dwg_Version_Type dwg_version = dwg->header.version;
+      const Dwg_Version_Type dwg_version = dwg ? dwg->header.version : R_INVALID;
 
       if (!f)
         {
@@ -8225,12 +8225,14 @@ dwg_dynapi_common_set_value (void *restrict _obj,
     int error;
     void *old;
     const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+    Dwg_Data *dwg;
     if (!obj)
       {
         const int loglevel = DWG_LOGLEVEL_ERROR;
         LOG_ERROR ("%s: dwg_obj_generic_to_object failed", __FUNCTION__);
         return false;
       }
+    dwg = obj->parent;
     if (obj->supertype == DWG_SUPERTYPE_ENTITY)
       {
         _obj = obj->tio.entity;
@@ -8262,7 +8264,7 @@ dwg_dynapi_common_set_value (void *restrict _obj,
       }
 
     old = &((char*)_obj)[f->offset];
-    dynapi_set_helper (old, f, obj->parent->header.version, value, is_utf8);
+    dynapi_set_helper (old, f, dwg ? dwg->header.version : R_INVALID, value, is_utf8);
     return true;
   }
 }

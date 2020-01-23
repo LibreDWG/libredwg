@@ -21340,11 +21340,12 @@ dwg_object *
 dwg_obj_generic_to_object (const dwg_obj_generic *restrict obj,
                            int *restrict error)
 {
-  if (obj && obj->parent && obj->parent->objid)
+  if (obj && obj->parent)
     {
       dwg_data *dwg = obj->parent->dwg;
       dwg_object *retval = &dwg->object[obj->parent->objid];
-      if (obj->parent->objid > dwg->num_objects
+      if (!dwg
+          || obj->parent->objid > dwg->num_objects
           || dwg->header.version > R_AFTER)
         {
           *error = 1;
@@ -21352,8 +21353,8 @@ dwg_obj_generic_to_object (const dwg_obj_generic *restrict obj,
           return NULL;
         }
       *error = 0;
-      if (dwg_version == R_INVALID)
-        dwg_version = (Dwg_Version_Type)retval->parent->header.version;
+      if (dwg && dwg_version == R_INVALID)
+        dwg_version = (Dwg_Version_Type)dwg->header.version;
       return retval;
     }
   else
