@@ -27,6 +27,7 @@
 #include "dwg.h"
 #include "decode.h"
 #include "dynapi.h"
+#include "in_dxf.h"
 #include "in_json.h"
 
 // not exported
@@ -70,6 +71,38 @@ static Bit_Chain *g_dat;
 #define ACTION injson
 #define IS_ENCODE
 #define IS_JSON
+
+/******************************************************************/
+#define _FIELD_FLOAT(nam, type)                                  \
+      else if (strEQc (key, #nam))                               \
+        {                                                        \
+          _obj->nam = (BITCODE_##type)json_float (dat, tokens);  \
+          LOG_TRACE (#nam ": " FORMAT_##type "\n", _obj->nam)    \
+        }
+#define _FIELD_LONG(nam, type)                                   \
+      else if (strEQc (key, #nam))                               \
+        {                                                        \
+          _obj->nam = (BITCODE_##type)json_long (dat, tokens);   \
+          LOG_TRACE (#nam ": " FORMAT_##type "\n", _obj->nam)    \
+        }
+
+#define FIELD_B(nam, dxf)   _FIELD_LONG (nam, B)
+#define FIELD_BB(nam, dxf)  _FIELD_LONG (nam, BB)
+#define FIELD_3B(nam, dxf)  _FIELD_LONG (nam, 3B)
+#define FIELD_BS(nam, dxf)  _FIELD_LONG (nam, BS)
+#define FIELD_BL(nam, dxf)  _FIELD_LONG (nam, BL)
+#define FIELD_BLL(nam, dxf) _FIELD_LONG (nam, BLL)
+#define FIELD_RC(nam, dxf)  _FIELD_LONG (nam, RC)
+#define FIELD_RS(nam, dxf)  _FIELD_LONG (nam, RS)
+#define FIELD_RL(nam, dxf)  _FIELD_LONG (nam, RL)
+#define FIELD_RLL(nam, dxf) _FIELD_LONG (nam, RLL)
+#define FIELD_MC(nam, dxf)  _FIELD_LONG (nam, MC)
+#define FIELD_MS(nam, dxf)  _FIELD_LONG (nam, MS)
+
+#define FIELD_BD(nam, dxf) _FIELD_FLOAT (nam, BD)
+#define FIELD_RD(nam, dxf) _FIELD_FLOAT (nam, RD)
+
+#if 0
 
 // TODO: read, not write. see in_dxf.c
 #define PREFIX
@@ -228,36 +261,7 @@ static Bit_Chain *g_dat;
       }                                                                       \
     fprintf (g_dat->fh, "\",\n");                                             \
   }
-/******************************************************************/
-#define _FIELD_FLOAT(nam, type)                                  \
-      else if (strEQc (key, #nam))                               \
-        {                                                        \
-          _obj->nam = (BITCODE_##type)json_float (dat, tokens);  \
-          LOG_TRACE (#nam ": " FORMAT_##type "\n", _obj->nam)    \
-        }
-#define _FIELD_LONG(nam, type)                                   \
-      else if (strEQc (key, #nam))                               \
-        {                                                        \
-          _obj->nam = (BITCODE_##type)json_long (dat, tokens);   \
-          LOG_TRACE (#nam ": " FORMAT_##type "\n", _obj->nam)    \
-        }
 
-#define FIELD_B(nam, dxf)   _FIELD_LONG (nam, B)
-#define FIELD_BB(nam, dxf)  _FIELD_LONG (nam, BB)
-#define FIELD_3B(nam, dxf)  _FIELD_LONG (nam, 3B)
-#define FIELD_BS(nam, dxf)  _FIELD_LONG (nam, BS)
-#define FIELD_BL(nam, dxf)  _FIELD_LONG (nam, BL)
-#define FIELD_BLL(nam, dxf) _FIELD_LONG (nam, BLL)
-#define FIELD_RC(nam, dxf)  _FIELD_LONG (nam, RC)
-#define FIELD_RS(nam, dxf)  _FIELD_LONG (nam, RS)
-#define FIELD_RL(nam, dxf)  _FIELD_LONG (nam, RL)
-#define FIELD_RLL(nam, dxf) _FIELD_LONG (nam, RLL)
-#define FIELD_MC(nam, dxf)  _FIELD_LONG (nam, MC)
-#define FIELD_MS(nam, dxf)  _FIELD_LONG (nam, MS)
-
-#define FIELD_BD(nam, dxf) _FIELD_FLOAT (nam, BD)
-#define FIELD_RD(nam, dxf) _FIELD_FLOAT (nam, RD)
-  
 #define FIELD_TF(nam, len, dxf) FIELD_TEXT (nam, _obj->nam)
 #define FIELD_TFF(nam, len, dxf) FIELD_TEXT (nam, _obj->nam)
 #define FIELD_TV(nam, dxf) FIELD_TEXT (nam, _obj->nam)
@@ -565,7 +569,6 @@ static Bit_Chain *g_dat;
   return 0;                                                                   \
   }
 
-#if 0
 //#include "dwg.spec"
 
 /* returns 0 on success
@@ -1503,7 +1506,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 {
   const char *section = "OBJECTS";
   const jsmntok_t *t = &tokens->tokens[tokens->index];
-  (void)dat; (void)dwg;
+  int size;
   if (t->type != JSMN_ARRAY)
     {
       LOG_ERROR ("Expected %s ARRAY at %u of %u tokens, got %s", section,
@@ -1511,8 +1514,305 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       json_advance_unknown (dat, tokens, 0);
       return DWG_ERR_INVALIDTYPE;
     }
-  // ... dynapi
-  return -1;
+  size = t->size;
+  LOG_TRACE ("\n%s pos:%d [%d members]\n", section, tokens->index, size);
+  tokens->tokens++;
+  if (dwg->num_objects == 0)
+    dwg->object = malloc (size * sizeof (Dwg_Object));
+  else
+    dwg->object = realloc (dwg->object, (dwg->num_objects + size)
+                           * sizeof (Dwg_Object));
+  if (!dwg->object)
+    {
+      LOG_ERROR ("Out of memory");
+      return DWG_ERR_OUTOFMEM;
+    }
+  dwg->num_objects += size;
+  for (int i = 0; i < size; i++)
+    {
+      char name[80];
+      int keys;
+      int is_entity = 0;
+      Dwg_Object *obj = &dwg->object[i];
+      Dwg_Object_APPID *_obj = NULL;
+      const Dwg_DYNAPI_field *fields;
+      const Dwg_DYNAPI_field *f;
+
+      memset (obj, 0, sizeof (Dwg_Object));
+      t = &tokens->tokens[tokens->index];
+      if (t->type != JSMN_OBJECT)
+        {
+          LOG_ERROR ("Expected %s OBJECT at %u of %u tokens, got %s. %s:%d", section,
+                     tokens->index, tokens->num_tokens, t_typename[t->type],
+                     __FUNCTION__, __LINE__);
+          json_advance_unknown (dat, tokens, 0);
+          return DWG_ERR_INVALIDTYPE;
+        }
+      keys = t->size;
+
+      tokens->index++;
+      for (int j = 0; j < keys; j++)
+        {
+          char key[80];
+          json_fixed_key (key, dat, tokens);
+          t = &tokens->tokens[tokens->index];
+          if (strEQc (key, "object"))
+            {
+              int len = t->end - t->start;
+              int objsize = 16;
+              memcpy (name, &dat->chain[t->start], len);
+              name[len] = '\0';
+              is_entity = 0;
+              fields = dwg_dynapi_entity_fields (name);
+              // TODO: add tests that all calculated sizes are correct
+              objsize = dwg_dynapi_fields_size (name);
+              if (!fields || !objsize)
+                {
+                  LOG_ERROR ("Unknown object or entity %s", name);
+                  json_advance_unknown (dat, tokens, 0);
+                  break;
+                }
+              LOG_TRACE ("\nnew object %s [%d] (size: %d)\n", name, i, objsize);
+              obj->supertype = DWG_SUPERTYPE_OBJECT;
+              obj->tio.object = calloc (1, sizeof (Dwg_Object_Object));
+              obj->tio.object->dwg = dwg;
+              obj->tio.object->objid = i;
+              // NEW_OBJECT (dwg, obj)
+              // ADD_OBJECT loop?
+              _obj = calloc (1, objsize);
+              obj->tio.object->tio.APPID = _obj;
+              obj->tio.object->tio.APPID->parent = obj->tio.object;
+              obj->name = strdup (name);
+              // TODO alias
+              obj->dxfname = strdup (name);
+              tokens->index++;
+            }
+          else if (strEQc (key, "entity"))
+            {
+              int len = t->end - t->start;
+              int objsize;
+              memcpy (name, &dat->chain[t->start], len);
+              name[len] = '\0';
+              is_entity = 1;
+              fields = dwg_dynapi_entity_fields (name);
+              objsize = dwg_dynapi_fields_size (name);
+              if (!fields || !objsize)
+                {
+                  LOG_ERROR ("Unknown object or entity %s", name);
+                  json_advance_unknown (dat, tokens, 0);
+                  break;
+                }
+              return DWG_ERR_INVALIDDWG;
+              LOG_TRACE ("\nnew entity %s [%d] (size: %d)\n", name, i, objsize);
+              obj->supertype = DWG_SUPERTYPE_ENTITY;
+              obj->tio.entity = calloc (1, sizeof (Dwg_Object_Entity));
+              obj->tio.entity->dwg = dwg;
+              obj->tio.entity->objid = i;
+              // NEW_ENTITY (dwg, obj)
+              // ADD_ENTITY loop?
+              _obj = calloc (1, objsize);
+              obj->tio.entity->tio.POINT = (Dwg_Entity_POINT*)_obj;
+              obj->tio.entity->tio.POINT->parent = obj->tio.entity;
+              obj->name = strdup (name);
+              // TODO alias
+              obj->dxfname = strdup (name);
+              tokens->index++;
+            }
+          else if (!obj || !fields)
+            {
+              LOG_ERROR ("Required object or entity key missing");
+              json_advance_unknown (dat, tokens, 0);
+              return DWG_ERR_INVALIDDWG;
+            }
+          else if (strEQc (key, "index"))
+            {
+              obj->index = json_long (dat, tokens);
+              if (is_entity)
+                obj->tio.entity->objid = obj->index;
+              else
+                obj->tio.object->objid = obj->index;
+              LOG_TRACE ("%s[%d].index: %d\n", name, i, obj->index)
+            }
+          else if (strEQc (key, "type"))
+            {
+              obj->type = obj->fixedtype = json_long (dat, tokens);
+              LOG_TRACE ("type: %d\n", obj->type)
+            }
+          else if (strEQc (key, "size"))
+            {
+              obj->size = json_long (dat, tokens);
+              LOG_TRACE ("size: %d\n", obj->size)
+            }
+          else if (strEQc (key, "bitsize"))
+            {
+              obj->bitsize = json_long (dat, tokens);
+              LOG_TRACE ("bitsize: %d\n", obj->bitsize)
+            }
+          else if (strEQc (key, "handle"))
+            {
+              BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, key, obj);
+              obj->handle.code = hdl->handleref.code;
+              obj->handle.size = hdl->handleref.size;
+              obj->handle.value = hdl->handleref.value;
+            }
+          else
+            //search_field:
+            {
+              for (f = &fields[0]; f->name; f++)
+                {
+                  LOG_INSANE ("-%s.%s [%s]\n", name, f->name, f->type);
+                  // common and entity dynapi, check types
+                  if (strEQ (f->name, key))
+                    {
+                      if (strEQc (f->type, "BD") || strEQc (f->type, "RD"))
+                        {
+                          double num = json_float (dat, tokens);
+                          LOG_TRACE ("%s: " FORMAT_RD " [%s]\n", key, num, f->type);
+                          dwg_dynapi_entity_set_value (_obj, name, key, &num, 0);
+                        }
+                      else if (strEQc (f->type, "RC") || strEQc (f->type, "B")
+                               || strEQc (f->type, "BB") || strEQc (f->type, "RS")
+                               || strEQc (f->type, "BS") || strEQc (f->type, "RL")
+                               || strEQc (f->type, "BL") || strEQc (f->type, "RLL")
+                               || strEQc (f->type, "BLd") || strEQc (f->type, "BSd")
+                               || strEQc (f->type, "BLL"))
+                        {
+                          long num = json_long (dat, tokens);
+                          LOG_TRACE ("%s: %ld [%s]\n", key, num, f->type);
+                          dwg_dynapi_entity_set_value (_obj, name, key, &num, 0);
+                        }
+                      else if (strEQc (f->type, "TV") || strEQc (f->type, "T"))
+                        {
+                          char *str = json_string (dat, tokens);
+                          LOG_TRACE ("%s: \"%s\" [%s]\n", key, str, f->type)
+                            dwg_dynapi_entity_set_value (_obj, name, key, &str, 1);
+                        }
+                      else if (strEQc (f->type, "3BD") || strEQc (f->type, "3RD")
+                               || strEQc (f->type, "3DPOINT") || strEQc (f->type, "BE")
+                               || strEQc (f->type, "3BD_1"))
+                        {
+                          BITCODE_3DPOINT pt;
+                          json_3DPOINT (dat, tokens, key, f->type, &pt);
+                          dwg_dynapi_entity_set_value (_obj, name, key, &pt, 1);
+                        }
+                      else if (strEQc (f->type, "2BD") || strEQc (f->type, "2RD")
+                               || strEQc (f->type, "2DPOINT") || strEQc (f->type, "2BD_1"))
+                        {
+                          BITCODE_2DPOINT pt;
+                          json_2DPOINT (dat, tokens, key, f->type, &pt);
+                          dwg_dynapi_entity_set_value (_obj, name, key, &pt, 1);
+                        }
+                      else if (strEQc (f->type, "TIMEBLL"))
+                        {
+                          static BITCODE_TIMEBLL date = { 0, 0, 0 };
+                          json_TIMEBLL (dat, tokens, key, &date);
+                          dwg_dynapi_entity_set_value (_obj, name, key, &date, 0);
+                        }
+                      else if (strEQc (f->type, "CMC"))
+                        {
+                          static BITCODE_CMC color = { 0, 0, 0 };
+                          json_CMC (dat, dwg, tokens, key, &color);
+                          dwg_dynapi_entity_set_value (_obj, name, key, &color, 0);
+                        }
+                      else if (strEQc (f->type, "H"))
+                        {
+                          BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, key, NULL);
+                          dwg_dynapi_entity_set_value (_obj, name, key, &hdl, 0);
+                        }
+                      else
+                        {
+                          LOG_ERROR ("Unknown type for %s.%s %s", name, key, f->type);
+                          ++tokens->index;
+                        }
+                      break;
+                    }
+                }
+              if (f->name) // found
+                continue;
+              fields = is_entity ? dwg_dynapi_common_entity_fields ()
+                                 : dwg_dynapi_common_object_fields ();
+              for (f = &fields[0]; f->name; f++)
+                {
+                  LOG_INSANE ("-%s.%s [%s]\n", is_entity ? "ENTITY" : "OBJECT", f->name, f->type);
+                  // common and entity dynapi, check types
+                  if (strEQ (f->name, key))
+                    {
+                      if (strEQc (f->type, "BD") || strEQc (f->type, "RD"))
+                        {
+                          double num = json_float (dat, tokens);
+                          LOG_TRACE ("%s: " FORMAT_RD " [%s]\n", key, num, f->type)
+                          dwg_dynapi_common_set_value (_obj, f->name, &num, 1);
+                        }
+                      else if (strEQc (f->type, "RC") || strEQc (f->type, "B")
+                               || strEQc (f->type, "BB") || strEQc (f->type, "RS")
+                               || strEQc (f->type, "BS") || strEQc (f->type, "RL")
+                               || strEQc (f->type, "BL") || strEQc (f->type, "RLL")
+                               || strEQc (f->type, "BLd") || strEQc (f->type, "BSd")
+                               || strEQc (f->type, "BLL"))
+                        {
+                          long num = json_long (dat, tokens);
+                          LOG_TRACE ("%s: %ld [%s]\n", key, num, f->type)
+                          dwg_dynapi_common_set_value (_obj, f->name, &num, 1);
+                        }
+                      else if (strEQc (f->type, "TV") || strEQc (f->type, "T"))
+                        {
+                          char *str = json_string (dat, tokens);
+                          LOG_TRACE ("%s: \"%s\" [%s]\n", key, str, f->type)
+                          dwg_dynapi_common_set_value (_obj, f->name, &str, 1);
+                        }
+                      else if (strEQc (f->type, "3BD") || strEQc (f->type, "3RD")
+                               || strEQc (f->type, "3DPOINT") || strEQc (f->type, "BE")
+                               || strEQc (f->type, "3BD_1"))
+                        {
+                          BITCODE_3DPOINT pt;
+                          json_3DPOINT (dat, tokens, key, f->type, &pt);
+                          dwg_dynapi_common_set_value (_obj, f->name, &pt, 1);
+                        }
+                      else if (strEQc (f->type, "2BD") || strEQc (f->type, "2RD")
+                               || strEQc (f->type, "2DPOINT") || strEQc (f->type, "2BD_1"))
+                        {
+                          BITCODE_2DPOINT pt;
+                          json_2DPOINT (dat, tokens, key, f->type, &pt);
+                          dwg_dynapi_common_set_value (_obj, f->name, &pt, 1);
+                        }
+                      else if (strEQc (f->type, "TIMEBLL"))
+                        {
+                          static BITCODE_TIMEBLL date = { 0, 0, 0 };
+                          json_TIMEBLL (dat, tokens, key, &date);
+                          dwg_dynapi_common_set_value (_obj, f->name, &date, 1);
+                        }
+                      else if (strEQc (f->type, "CMC"))
+                        {
+                          static BITCODE_CMC color = { 0, 0, 0 };
+                          json_CMC (dat, dwg, tokens, key, &color);
+                          dwg_dynapi_common_set_value (_obj, f->name, &color, 1);
+                        }
+                      else if (strEQc (f->type, "H"))
+                        {
+                          BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, key, NULL);
+                          dwg_dynapi_common_set_value (_obj, f->name, &hdl, 0);
+                        }
+                      else
+                        {
+                          LOG_ERROR ("Unknown type for common %s.%s %s", name, key, f->type)
+                          ++tokens->index;
+                        }
+                      break;
+                    }
+                }
+              if (f->name) // found
+                continue;
+              if (!f->name)
+                {
+                  LOG_TRACE ("Unknown %s.%s %.*s\n", name, key,
+                             t->end - t->start, &dat->chain[t->start])
+                  ++tokens->index;
+                }
+            }
+        }
+    }
+  tokens->index--;
+  return 0;
 }
 
 static int

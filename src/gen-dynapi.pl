@@ -1143,10 +1143,10 @@ close $in;
 chmod 0444, $fh;
 close $fh;
 
-# NOTE: in the 2 #line's below use __LINE__
+# NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1149 "gen-dynapi.pl"
+#line 1150 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -1227,7 +1227,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
-#line 1230 "gen-dynapi.pl"
+#line 1231 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
@@ -1882,6 +1882,34 @@ dwg_dynapi_handle_name (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict h
         return *(char **)((char *)_obj + f->offset);
       }
   }
+}
+
+// The sum of the size of all fields
+int
+_fields_size_sum (const Dwg_DYNAPI_field *restrict fields)
+{
+  Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)fields;
+  int sum = 0;
+  for (; f->name; f++)
+    {
+      sum += f->size;
+    }
+  return sum;
+}
+
+// The sum of the size of all fields, by struct name
+EXPORT int
+dwg_dynapi_fields_size (const char *restrict name)
+{
+  Dwg_DYNAPI_field *f;
+#ifndef HAVE_NONNULL
+  if (!name)
+    return 0;
+#endif
+  if (is_dwg_entity (name) || is_dwg_object (name))
+    return _fields_size_sum (dwg_dynapi_entity_fields (name));
+  else
+    return _fields_size_sum (dwg_dynapi_subclass_fields (name));
 }
 
 /* Local Variables: */
