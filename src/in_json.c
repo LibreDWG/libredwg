@@ -1036,10 +1036,46 @@ json_long (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
   return strtol ((char *)&dat->chain[t->start], NULL, 10);
 }
 
+static void
+json_3DPOINT (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
+              const char *restrict name, const char *restrict type,
+              BITCODE_3DPOINT *restrict pt)
+{
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  if (t->type != JSMN_ARRAY || t->size != 3)
+    {
+      LOG_ERROR ("JSON 3DPOINT must be ARRAY of size 3")
+      return;
+    }
+  tokens->index++;
+  pt->x = json_float (dat, tokens);
+  pt->y = json_float (dat, tokens);
+  pt->z = json_float (dat, tokens);
+  LOG_TRACE ("%s (%f, %f, %f) [%s]\n", name, pt->x, pt->y, pt->z, type);
+}
+
+static void
+json_2DPOINT (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
+              const char *restrict name, const char *restrict type,
+              BITCODE_2DPOINT *restrict pt)
+{
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  if (t->type != JSMN_ARRAY || t->size != 2)
+    {
+      LOG_ERROR ("JSON 2DPOINT must be ARRAY of size 2")
+      return;
+    }
+  tokens->index++;
+  pt->x = json_float (dat, tokens);
+  pt->y = json_float (dat, tokens);
+  LOG_TRACE ("%s (%f, %f) [%s]\n", name, pt->x, pt->y, type);
+}
+
 ATTRIBUTE_MALLOC
 static BITCODE_H
 json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
-             jsmntokens_t *restrict tokens, const char *name)
+             jsmntokens_t *restrict tokens, const char *name,
+             Dwg_Object *restrict obj)
 {
   long code, value;
   const jsmntok_t *t = &tokens->tokens[tokens->index];
@@ -1052,7 +1088,7 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   code = json_long (dat, tokens);
   value = json_long (dat, tokens);
   LOG_TRACE ("%s [%u, %u] [H]\n", name, (unsigned)code, (unsigned)value);
-  return dwg_add_handleref (dwg, code, value, NULL);
+  return dwg_add_handleref (dwg, code, value, obj);
 }
 
 static void
@@ -1096,12 +1132,7 @@ json_CMC (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             }
           else if (strEQc (key, "handle")) // [4, value] ARRAY
             {
-              long code, value;
-              tokens->index++;
-              code = json_long (dat, tokens);
-              value = json_long (dat, tokens);
-              LOG_TRACE ("%s.handle [%u, %u] [H]\n", name, (unsigned)code, (unsigned)value);
-              color->handle = dwg_add_handleref (dwg, code, value, NULL);
+              color->handle = json_HANDLE (dat, dwg, tokens, name, NULL);
             }
           else if (strEQc (key, "name"))
             {
@@ -1297,6 +1328,7 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                || strEQc (f->type, "BB") || strEQc (f->type, "RS")
                || strEQc (f->type, "BS") || strEQc (f->type, "RL")
                || strEQc (f->type, "BL") || strEQc (f->type, "RLL")
+               || strEQc (f->type, "BLd") || strEQc (f->type, "BSd")
                || strEQc (f->type, "BLL"))
         {
           long num = json_long (dat, tokens);
@@ -1308,6 +1340,21 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           char *str = json_string (dat, tokens);
           LOG_TRACE ("%s: \"%s\" [%s]\n", key, str, f->type)
           dwg_dynapi_header_set_value (dwg, key, &str, 1);
+        }
+      else if (strEQc (f->type, "3BD") || strEQc (f->type, "3RD")
+               || strEQc (f->type, "3DPOINT") || strEQc (f->type, "BE")
+               || strEQc (f->type, "3BD_1"))
+        {
+          BITCODE_3DPOINT pt;
+          json_3DPOINT (dat, tokens, key, f->type, &pt);
+          dwg_dynapi_header_set_value (dwg, key, &pt, 1);
+        }
+      else if (strEQc (f->type, "2BD") || strEQc (f->type, "2RD")
+               || strEQc (f->type, "2DPOINT") || strEQc (f->type, "2BD_1"))
+        {
+          BITCODE_2DPOINT pt;
+          json_2DPOINT (dat, tokens, key, f->type, &pt);
+          dwg_dynapi_header_set_value (dwg, key, &pt, 1);
         }
       else if (strEQc (f->type, "TIMEBLL"))
         {
@@ -1323,7 +1370,7 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         }
       else if (strEQc (f->type, "H"))
         {
-          BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, key);
+          BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, key, NULL);
           dwg_dynapi_header_set_value (dwg, key, &hdl, 0);
         }
       //...
@@ -1340,15 +1387,10 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           tokens->tokens++;
           continue;
         }
-      /*
-      else if (t->type == JSMN_ARRAY) // points
-        {
-          dwg_dynapi_header_set_value (dwg, key, &pt, NULL);
-        }
-      */
     }
-  
-  return -1;
+  // the key
+  tokens->tokens--;
+  return 0;
 }
 
 static int
@@ -1357,7 +1399,7 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 {
   const char *section = "CLASSES";
   const jsmntok_t *t = &tokens->tokens[tokens->index];
-  (void)dat; (void)dwg;
+  int size;
   if (t->type != JSMN_ARRAY)
     {
       LOG_ERROR ("Expected %s ARRAY at %u of %u tokens, got %s", section,
@@ -1365,8 +1407,94 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       json_advance_unknown (dat, tokens, 0);
       return DWG_ERR_INVALIDTYPE;
     }
-  // ... dynapi
-  return -1;
+  size = t->size;
+  LOG_TRACE ("\n%s pos:%d [%d members]\n", section, tokens->index, size);
+  tokens->tokens++;
+  if (dwg->num_classes == 0)
+    dwg->dwg_class = calloc (size, sizeof (Dwg_Class));
+  else
+    dwg->dwg_class = realloc (dwg->dwg_class, (dwg->num_classes + size)
+                                                  * sizeof (Dwg_Class));
+  if (!dwg->dwg_class)
+    {
+      LOG_ERROR ("Out of memory");
+      return DWG_ERR_OUTOFMEM;
+    }
+  dwg->num_classes += size;
+  for (int i = 0; i < size; i++)
+    {
+      int keys;
+      Dwg_Class *klass = &dwg->dwg_class[i];
+      memset (klass, 0, sizeof (Dwg_Class));
+      t = &tokens->tokens[tokens->index];
+      if (t->type != JSMN_OBJECT)
+        {
+          LOG_ERROR ("Expected %s OBJECT at %u of %u tokens, got %s. %s:%d", section,
+                     tokens->index, tokens->num_tokens, t_typename[t->type],
+                     __FUNCTION__, __LINE__);
+          json_advance_unknown (dat, tokens, 0);
+          return DWG_ERR_INVALIDTYPE;
+        }
+      keys = t->size;
+      tokens->index++;
+      for (int j = 0; j < keys; j++)
+        {
+          char key[80];
+          json_fixed_key (key, dat, tokens);
+          t = &tokens->tokens[tokens->index];
+          if (strEQc (key, "number"))
+            {
+              klass->number = json_long (dat, tokens);
+              LOG_TRACE ("\nCLASS[%d].number: %d\n", i, klass->number)
+              if (klass->number != i + 500)
+                LOG_WARN ("Possibly illegal class number %d, expected %d",
+                          klass->number, i + 500)
+            }
+          else if (strEQc (key, "dxfname"))
+            {
+              klass->dxfname = json_string (dat, tokens);
+              LOG_TRACE ("dxfname: \"%s\"\n", klass->dxfname)
+            }
+          else if (strEQc (key, "cppname"))
+            {
+              klass->cppname = json_string (dat, tokens);
+              LOG_TRACE ("cppname: \"%s\"\n", klass->cppname)
+            }
+          else if (strEQc (key, "appname"))
+            {
+              klass->appname = json_string (dat, tokens);
+              LOG_TRACE ("appname \"%s\"\n", klass->appname)
+            }
+          else if (strEQc (key, "proxyflag"))
+            {
+              klass->proxyflag = json_long (dat, tokens);
+              LOG_TRACE ("proxyflag %d\n", klass->proxyflag)
+            }
+          else if (strEQc (key, "num_instances"))
+            {
+              klass->num_instances = json_long (dat, tokens);
+              LOG_TRACE ("num_instances %d\n", klass->num_instances)
+            }
+          else if (strEQc (key, "is_zombie"))
+            {
+              klass->is_zombie = json_long (dat, tokens);
+              LOG_TRACE ("is_zombie %d\n", klass->is_zombie)
+            }
+          else if (strEQc (key, "item_class_id"))
+            {
+              klass->item_class_id = json_long (dat, tokens);
+              LOG_TRACE ("item_class_id %d\n", klass->item_class_id)
+            }
+          else
+            {
+              LOG_TRACE ("Unknown CLASS key %s %.*s\n", key, t->end - t->start,
+                         &dat->chain[t->start])
+              ++tokens->index;
+            }
+        }
+    }
+  tokens->index--;
+  return 0;
 }
 
 static int
