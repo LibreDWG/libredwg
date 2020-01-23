@@ -1036,6 +1036,115 @@ json_long (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
   return strtol ((char *)&dat->chain[t->start], NULL, 10);
 }
 
+ATTRIBUTE_MALLOC
+static BITCODE_H
+json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+             jsmntokens_t *restrict tokens, const char *name)
+{
+  long code, value;
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  if (t->type != JSMN_ARRAY || t->size != 2)
+    {
+      LOG_ERROR ("JSON HANDLE must be ARRAY of [ code, value ]")
+      return NULL;
+    }
+  tokens->index++;
+  code = json_long (dat, tokens);
+  value = json_long (dat, tokens);
+  LOG_TRACE ("%s [%u, %u] [H]\n", name, (unsigned)code, (unsigned)value);
+  return dwg_add_handleref (dwg, code, value, NULL);
+}
+
+static void
+json_CMC (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+          jsmntokens_t *restrict tokens, const char *name,
+          Dwg_Color *restrict color)
+{
+  char key[80];
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  if (t->type == JSMN_OBJECT)
+    {
+      tokens->tokens++; // hash of index, rgb...
+      for (int j = 0; j < t->size; j++)
+        {
+          json_fixed_key (key, dat, tokens);
+          if (strEQc (key, "index"))
+            {
+              long num = json_long (dat, tokens);
+              LOG_TRACE ("%s.index %ld [CMC]\n", name, num);
+              color->index = (BITCODE_BSd)num;
+            }
+          else if (strEQc (key, "rgb"))
+            {
+              char hex[80];
+              json_fixed_key (hex, dat, tokens);
+              LOG_TRACE ("%s.rgb %s [CMC]\n", name, hex);
+              sscanf (hex, "%x", &color->rgb);
+            }
+          else if (strEQc (key, "flag"))
+            {
+              long num = json_long (dat, tokens);
+              LOG_TRACE ("%s.flag %u [CMC]\n", name, (unsigned)num);
+              color->flag = (BITCODE_BS)num;
+            }
+          else if (strEQc (key, "alpha"))
+            {
+              long num = json_long (dat, tokens);
+              LOG_TRACE ("%s.alpha %u [CMC]\n", name, (unsigned)num);
+              color->alpha = (BITCODE_RC)num;
+              color->alpha_type = 3;
+            }
+          else if (strEQc (key, "handle")) // [4, value] ARRAY
+            {
+              long code, value;
+              tokens->index++;
+              code = json_long (dat, tokens);
+              value = json_long (dat, tokens);
+              LOG_TRACE ("%s.handle [%u, %u] [H]\n", name, (unsigned)code, (unsigned)value);
+              color->handle = dwg_add_handleref (dwg, code, value, NULL);
+            }
+          else if (strEQc (key, "name"))
+            {
+              char *str = json_string (dat, tokens);
+              LOG_TRACE ("%s.name \"%s\" [CMC]\n", name, str);
+              color->name = str;
+            }
+          else if (strEQc (key, "book_name"))
+            {
+              char *str = json_string (dat, tokens);
+              LOG_TRACE ("%s.book_name \"%s\" [CMC]\n", name, str);
+              color->book_name = str;
+            }
+          else
+            {
+              LOG_WARN ("Unknown key color.%s", key);
+              tokens->index++;
+            }
+        }
+    }
+}
+
+static void
+json_TIMEBLL (Bit_Chain *restrict dat,
+              jsmntokens_t *restrict tokens, const char *name,
+              BITCODE_TIMEBLL *date)
+{
+  unsigned long j = 1;
+  double ms;
+  double num = json_float (dat, tokens);
+  date->value = num;
+  date->days = (BITCODE_BL)trunc (num);
+  ms = date->value;
+  while (ms > 1.0)
+    {
+      j *= 10;
+      ms /= 10.0;
+    }
+  date->ms = (BITCODE_BL) (j / 10 * (date->value - date->days));
+  LOG_TRACE ("%s %f (%u, %u) [TIMEBLL]\n", name,
+             date->value, date->days, date->ms);
+}
+
 static int
 json_created_by (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                  jsmntokens_t *restrict tokens)
@@ -1128,8 +1237,10 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RL (summaryinfo_address, 0)
       FIELD_RL (vbaproj_address, 0)
       FIELD_RL (rl_28_80, 0) /* mostly 128/0x80 */
+
       else if (strEQc (key, "HEADER"))
         {
+          LOG_WARN ("Unexpected next section %s", key)
           tokens->tokens--;
           tokens->tokens--;
           return 0;
@@ -1172,39 +1283,60 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       f = (Dwg_DYNAPI_field *)dwg_dynapi_header_field (key);
       if (!f)
         {
+          LOG_WARN ("Unknown key HEADER.%s", key)
           json_advance_unknown (dat, tokens, 0);
           continue;
         }
-      else if (strEQc (f->type, "BD")
-               || strEQc (f->type, "RD"))
+      else if (strEQc (f->type, "BD") || strEQc (f->type, "RD"))
         {
           double num = json_float (dat, tokens);
-          LOG_TRACE ("%s: " FORMAT_RD "\n", key, num)
+          LOG_TRACE ("%s: " FORMAT_RD " [%s]\n", key, num, f->type)
           dwg_dynapi_header_set_value (dwg, key, &num, 0);
         }
-      else if (strEQc (f->type, "RC")
-               || strEQc (f->type, "B")
-               || strEQc (f->type, "BB")
-               || strEQc (f->type, "RS")
-               || strEQc (f->type, "BS")
-               || strEQc (f->type, "RL")
-               || strEQc (f->type, "BL")
-               || strEQc (f->type, "RLL")
-               || strEQc (f->type, "BLL")
-               )
+      else if (strEQc (f->type, "RC") || strEQc (f->type, "B")
+               || strEQc (f->type, "BB") || strEQc (f->type, "RS")
+               || strEQc (f->type, "BS") || strEQc (f->type, "RL")
+               || strEQc (f->type, "BL") || strEQc (f->type, "RLL")
+               || strEQc (f->type, "BLL"))
         {
           long num = json_long (dat, tokens);
-          LOG_TRACE ("%s: %ld\n", key, num)
+          LOG_TRACE ("%s: %ld [%s]\n", key, num, f->type)
           dwg_dynapi_header_set_value (dwg, key, &num, 0);
         }
-      else if (strEQc (key, "HEADER"))
+      else if (strEQc (f->type, "TV") || strEQc (f->type, "T"))
         {
+          char *str = json_string (dat, tokens);
+          LOG_TRACE ("%s: \"%s\" [%s]\n", key, str, f->type)
+          dwg_dynapi_header_set_value (dwg, key, &str, 1);
+        }
+      else if (strEQc (f->type, "TIMEBLL"))
+        {
+          static BITCODE_TIMEBLL date = { 0, 0, 0 };
+          json_TIMEBLL (dat, tokens, key, &date);
+          dwg_dynapi_header_set_value (dwg, key, &date, 0);
+        }
+      else if (strEQc (f->type, "CMC"))
+        {
+          static BITCODE_CMC color = { 0, 0, 0 };
+          json_CMC (dat, dwg, tokens, key, &color);
+          dwg_dynapi_header_set_value (dwg, key, &color, 0);
+        }
+      else if (strEQc (f->type, "H"))
+        {
+          BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, key);
+          dwg_dynapi_header_set_value (dwg, key, &hdl, 0);
+        }
+      //...
+      else if (strEQc (key, "CLASSES"))
+        {
+          LOG_WARN ("Unexpected next section %s", key)
           tokens->tokens--;
           tokens->tokens--;
           return 0;
         }
       else
         {
+          LOG_WARN ("Unhandled %s [%s]", key, f->type)
           tokens->tokens++;
           continue;
         }
