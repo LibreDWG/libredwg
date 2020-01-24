@@ -1671,12 +1671,7 @@ DWG_ENTITY (SPLINE)
     END_REPEAT (ctrl_pts);
   }
   if (FIELD_VALUE (scenario) == 2) {
-    REPEAT (num_fit_pts, fit_pts, Dwg_SPLINE_point)
-    REPEAT_BLOCK
-        SUB_FIELD_3BD_inl (fit_pts[rcount1], xyz, 11);
-    END_REPEAT_BLOCK
-    SET_PARENT_OBJ (fit_pts);
-    END_REPEAT (fit_pts);
+    FIELD_3DPOINT_VECTOR (fit_pts, num_fit_pts, 11)
   }
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -6348,12 +6343,7 @@ DWG_ENTITY (HELIX)
     END_REPEAT (ctrl_pts);
   }
   if (FIELD_VALUE (scenario) & 2) {
-    REPEAT (num_fit_pts, fit_pts, Dwg_SPLINE_point)
-    REPEAT_BLOCK
-        SUB_FIELD_3BD_inl (fit_pts[rcount1], xyz, 11);
-    END_REPEAT_BLOCK
-    SET_PARENT (fit_pts, (Dwg_Entity_SPLINE*)_obj);
-    END_REPEAT (fit_pts);
+    FIELD_3DPOINT_VECTOR (fit_pts, num_fit_pts, 11)
   }
 
   SUBCLASS (AcDbHelix)
@@ -7534,4 +7524,3 @@ DWG_OBJECT (DOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
-

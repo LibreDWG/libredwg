@@ -1560,15 +1560,6 @@ typedef struct _dwg_entity_ELLIPSE
 /**
  spline - SPLINE (36) entity
  */
-typedef struct _dwg_SPLINE_point
-{
-  struct _dwg_entity_SPLINE *parent;
-
-  double x;
-  double y;
-  double z;
-} Dwg_SPLINE_point;
-
 typedef struct _dwg_SPLINE_control_point
 {
   struct _dwg_entity_SPLINE *parent;
@@ -1598,7 +1589,7 @@ typedef struct _dwg_entity_SPLINE
   BITCODE_BD knot_tol;
   BITCODE_BD ctrl_tol;
   BITCODE_BS num_fit_pts;
-  Dwg_SPLINE_point* fit_pts;
+  BITCODE_3DPOINT* fit_pts;
   BITCODE_BL num_knots;
   BITCODE_BD* knots;
   BITCODE_BL num_ctrl_pts;
@@ -4390,7 +4381,7 @@ typedef struct _dwg_entity_HELIX
   BITCODE_BD knot_tol;
   BITCODE_BD ctrl_tol;
   BITCODE_BS num_fit_pts;
-  Dwg_SPLINE_point* fit_pts;
+  BITCODE_3DPOINT* fit_pts;
   BITCODE_BL num_knots;
   BITCODE_BD* knots;
   BITCODE_BL num_ctrl_pts;

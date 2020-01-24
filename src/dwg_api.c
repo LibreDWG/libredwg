@@ -12258,19 +12258,19 @@ dwg_ent_spline_get_num_ctrl_pts (const dwg_ent_spline *restrict spline,
 }
 
 /// Return all spline fit points
-dwg_spline_point *
+dwg_point_3d*
 dwg_ent_spline_get_fit_pts (const dwg_ent_spline *restrict spline,
                             int *restrict error)
 {
-  dwg_spline_point *ptx
-      = calloc (spline->num_fit_pts, sizeof (dwg_spline_point));
+  dwg_point_3d *ptx
+      = calloc (spline->num_fit_pts, sizeof (dwg_point_3d));
   if (ptx)
     {
       BITCODE_BS i;
       *error = 0;
       for (i = 0; i < spline->num_fit_pts; i++)
         {
-          ptx[i] = spline->fit_pts[i];
+          memcpy (&ptx[i], &spline->fit_pts[i], sizeof(dwg_point_3d));
         }
       return ptx;
     }

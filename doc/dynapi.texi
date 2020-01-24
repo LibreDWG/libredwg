@@ -1851,7 +1851,7 @@ BD,	DXF 43
 @item num_fit_pts
 BS,	DXF 74
 @item fit_pts
-Dwg_SPLINE_point*
+3DPOINT*,	DXF 11
 @item num_knots
 BL,	DXF 72
 @item knots
@@ -3085,7 +3085,7 @@ BD,	DXF 43
 @item num_fit_pts
 BS,	DXF 74
 @item fit_pts
-Dwg_SPLINE_point*
+3DPOINT*,	DXF 11
 @item num_knots
 BL,	DXF 72
 @item knots
@@ -8015,24 +8015,6 @@ BD
 BD
 @item w
 BD,	DXF 41
-
-@end vtable
-@end indentedblock
-
-@strong{Dwg_SPLINE_point} @anchor{Dwg_SPLINE_point}
-@vindex Dwg_SPLINE_point
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_entity_SPLINE*
-@item x
-BD
-@item y
-BD
-@item z
-BD
 
 @end vtable
 @end indentedblock

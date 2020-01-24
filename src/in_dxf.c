@@ -4461,7 +4461,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
     {
       _o->num_fit_pts = pair->value.i;
       *jp = 0;
-      _o->fit_pts = xcalloc (_o->num_fit_pts, sizeof (Dwg_SPLINE_point));
+      _o->fit_pts = xcalloc (_o->num_fit_pts, sizeof (BITCODE_3BD));
       _o->scenario = 2;
       _o->flag |= 1024;
       LOG_TRACE ("SPLINE.num_fit_pts = %d [BS 74]\n", _o->num_fit_pts);
@@ -4545,7 +4545,6 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
                      _o->num_fit_pts);
           return 1; // found
         }
-      _o->fit_pts[j].parent = _o;
       _o->fit_pts[j].x = pair->value.d;
       return 1; // found
     }

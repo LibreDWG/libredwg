@@ -1868,8 +1868,8 @@ static const Dwg_DYNAPI_field _dwg_HELIX_fields[] = {
     0,0,0, 43 },
   { "num_fit_pts",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_HELIX, num_fit_pts),
     0,0,0, 74 },
-  { "fit_pts",	"Dwg_SPLINE_point*", sizeof (Dwg_SPLINE_point*),  OFF (struct _dwg_entity_HELIX, fit_pts),
-    1,1,0, 0 },
+  { "fit_pts",	"3DPOINT*", sizeof (BITCODE_3DPOINT*),  OFF (struct _dwg_entity_HELIX, fit_pts),
+    1,1,0, 11 },
   { "num_knots",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_HELIX, num_knots),
     0,0,0, 72 },
   { "knots",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_entity_HELIX, knots),
@@ -2902,8 +2902,8 @@ static const Dwg_DYNAPI_field _dwg_SPLINE_fields[] = {
     0,0,0, 43 },
   { "num_fit_pts",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_SPLINE, num_fit_pts),
     0,0,0, 74 },
-  { "fit_pts",	"Dwg_SPLINE_point*", sizeof (Dwg_SPLINE_point*),  OFF (struct _dwg_entity_SPLINE, fit_pts),
-    1,1,0, 0 },
+  { "fit_pts",	"3DPOINT*", sizeof (BITCODE_3DPOINT*),  OFF (struct _dwg_entity_SPLINE, fit_pts),
+    1,1,0, 11 },
   { "num_knots",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_SPLINE, num_knots),
     0,0,0, 72 },
   { "knots",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_entity_SPLINE, knots),
@@ -6868,18 +6868,6 @@ static const Dwg_DYNAPI_field _dwg_SPLINE_control_point_fields[] = {
     0,0,0, 41 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_SPLINE_point: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_SPLINE_point_fields[] = {
-  { "parent",	"struct _dwg_entity_SPLINE*", sizeof (void *),  OFF (struct _dwg_SPLINE_point, parent),
-    1,1,0, 0 },
-  { "x",	"BD", sizeof (double),  OFF (struct _dwg_SPLINE_point, x),
-    0,0,0, 0 },
-  { "y",	"BD", sizeof (double),  OFF (struct _dwg_SPLINE_point, y),
-    0,0,0, 0 },
-  { "z",	"BD", sizeof (double),  OFF (struct _dwg_SPLINE_point, z),
-    0,0,0, 0 },
-  {NULL,	NULL,	0,	0,	0,0,0, 0},
-};
 /* from typedef struct _dwg_SUNSTUDY_Dates: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_SUNSTUDY_Dates_fields[] = {
   { "julian_day",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_SUNSTUDY_Dates, julian_day),
@@ -7625,23 +7613,22 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
   { "MLINE_line",	(int)DWG_TYPE_MLINE,	NULL,	_dwg_MLINE_line_fields },	/* 36 */
   { "MLINE_vertex",	(int)DWG_TYPE_MLINE,	NULL,	_dwg_MLINE_vertex_fields },	/* 37 */
   { "SPLINE_control_point",	(int)DWG_TYPE_SPLINE,	NULL,	_dwg_SPLINE_control_point_fields },	/* 38 */
-  { "SPLINE_point",	(int)DWG_TYPE_SPLINE,	NULL,	_dwg_SPLINE_point_fields },	/* 39 */
-  { "SUNSTUDY_Dates",	(int)DWG_TYPE_SUNSTUDY,	NULL,	_dwg_SUNSTUDY_Dates_fields },	/* 40 */
-  { "SummaryInfo_Property",	0,	NULL,	_dwg_SummaryInfo_Property_fields },	/* 41 */
-  { "TABLEGEOMETRY_Cell",	(int)DWG_TYPE_TABLEGEOMETRY,	NULL,	_dwg_TABLEGEOMETRY_Cell_fields },	/* 42 */
-  { "TABLESTYLE_Cell",	(int)DWG_TYPE_TABLESTYLE,	NULL,	_dwg_TABLESTYLE_Cell_fields },	/* 43 */
-  { "TABLESTYLE_border",	(int)DWG_TYPE_TABLESTYLE,	NULL,	_dwg_TABLESTYLE_border_fields },	/* 44 */
-  { "TABLESTYLE_rowstyles",	(int)DWG_TYPE_TABLESTYLE,	NULL,	_dwg_TABLESTYLE_rowstyles_fields },	/* 45 */
-  { "TABLE_BreakHeight",	(int)DWG_TYPE_TABLE,	NULL,	_dwg_TABLE_BreakHeight_fields },	/* 46 */
-  { "TABLE_BreakRow",	(int)DWG_TYPE_TABLE,	NULL,	_dwg_TABLE_BreakRow_fields },	/* 47 */
-  { "TABLE_Cell",	(int)DWG_TYPE_TABLE,	NULL,	_dwg_TABLE_Cell_fields },	/* 48 */
-  { "TABLE_CustomDataItem",	(int)DWG_TYPE_TABLE,	NULL,	_dwg_TABLE_CustomDataItem_fields },	/* 49 */
-  { "TABLE_value",	(int)DWG_TYPE_TABLE,	NULL,	_dwg_TABLE_value_fields },	/* 50 */
-  { "TableCell",	0,	NULL,	_dwg_TableCell_fields },	/* 51 */
-  { "TableCellContent",	0,	NULL,	_dwg_TableCellContent_fields },	/* 52 */
-  { "TableCellContent_Attr",	0,	NULL,	_dwg_TableCellContent_Attr_fields },	/* 53 */
-  { "TableDataColumn",	0,	NULL,	_dwg_TableDataColumn_fields },	/* 54 */
-  { "TableRow",	0,	NULL,	_dwg_TableRow_fields },	/* 55 */
+  { "SUNSTUDY_Dates",	(int)DWG_TYPE_SUNSTUDY,	NULL,	_dwg_SUNSTUDY_Dates_fields },	/* 39 */
+  { "SummaryInfo_Property",	0,	NULL,	_dwg_SummaryInfo_Property_fields },	/* 40 */
+  { "TABLEGEOMETRY_Cell",	(int)DWG_TYPE_TABLEGEOMETRY,	NULL,	_dwg_TABLEGEOMETRY_Cell_fields },	/* 41 */
+  { "TABLESTYLE_Cell",	(int)DWG_TYPE_TABLESTYLE,	NULL,	_dwg_TABLESTYLE_Cell_fields },	/* 42 */
+  { "TABLESTYLE_border",	(int)DWG_TYPE_TABLESTYLE,	NULL,	_dwg_TABLESTYLE_border_fields },	/* 43 */
+  { "TABLESTYLE_rowstyles",	(int)DWG_TYPE_TABLESTYLE,	NULL,	_dwg_TABLESTYLE_rowstyles_fields },	/* 44 */
+  { "TABLE_BreakHeight",	(int)DWG_TYPE_TABLE,	NULL,	_dwg_TABLE_BreakHeight_fields },	/* 45 */
+  { "TABLE_BreakRow",	(int)DWG_TYPE_TABLE,	NULL,	_dwg_TABLE_BreakRow_fields },	/* 46 */
+  { "TABLE_Cell",	(int)DWG_TYPE_TABLE,	NULL,	_dwg_TABLE_Cell_fields },	/* 47 */
+  { "TABLE_CustomDataItem",	(int)DWG_TYPE_TABLE,	NULL,	_dwg_TABLE_CustomDataItem_fields },	/* 48 */
+  { "TABLE_value",	(int)DWG_TYPE_TABLE,	NULL,	_dwg_TABLE_value_fields },	/* 49 */
+  { "TableCell",	0,	NULL,	_dwg_TableCell_fields },	/* 50 */
+  { "TableCellContent",	0,	NULL,	_dwg_TableCellContent_fields },	/* 51 */
+  { "TableCellContent_Attr",	0,	NULL,	_dwg_TableCellContent_Attr_fields },	/* 52 */
+  { "TableDataColumn",	0,	NULL,	_dwg_TableDataColumn_fields },	/* 53 */
+  { "TableRow",	0,	NULL,	_dwg_TableRow_fields },	/* 54 */
 
 };
 

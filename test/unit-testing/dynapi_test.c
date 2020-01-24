@@ -11024,14 +11024,14 @@ static int test_HELIX (const Dwg_Object *obj)
         fail ("HELIX.end_tan_vec [3BD]");
   }
   {
-    Dwg_SPLINE_point* fit_pts;
+    BITCODE_3DPOINT* fit_pts;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (helix, "HELIX", "num_fit_pts", &count, NULL)
         && dwg_dynapi_entity_value (helix, "HELIX", "fit_pts", &fit_pts, NULL)
         && fit_pts == helix->fit_pts)
       pass ();
     else
-      fail ("HELIX.fit_pts [Dwg_SPLINE_point*] * %u num_fit_pts", count);
+      fail ("HELIX.fit_pts [3DPOINT*] * %u num_fit_pts", count);
   }
   {
     BITCODE_BD fit_tol;
@@ -16990,14 +16990,14 @@ static int test_SPLINE (const Dwg_Object *obj)
         fail ("SPLINE.end_tan_vec [3BD]");
   }
   {
-    Dwg_SPLINE_point* fit_pts;
+    BITCODE_3DPOINT* fit_pts;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (spline, "SPLINE", "num_fit_pts", &count, NULL)
         && dwg_dynapi_entity_value (spline, "SPLINE", "fit_pts", &fit_pts, NULL)
         && fit_pts == spline->fit_pts)
       pass ();
     else
-      fail ("SPLINE.fit_pts [Dwg_SPLINE_point*] * %u num_fit_pts", count);
+      fail ("SPLINE.fit_pts [3DPOINT*] * %u num_fit_pts", count);
   }
   {
     BITCODE_BD fit_tol;

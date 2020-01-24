@@ -1587,6 +1587,17 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 }
               dwg_dynapi_field_set_value (dwg, _obj, f, &hdls, 1);
             }
+          else if (strEQc (f->type, "3DPOINT*") && t->type == JSMN_ARRAY)
+            {
+              int size1 = t->size;
+              BITCODE_3DPOINT *pts = calloc (size1, sizeof (BITCODE_3BD));
+              tokens->index++;
+              for (int k = 0; k < size1; k++)
+                {
+                  json_3DPOINT (dat, tokens, key, f->type, &pts[k]);
+                }
+              dwg_dynapi_field_set_value (dwg, _obj, f, &pts, 1);
+            }
           else if (strEQc (f->type, "2RD*") && t->type == JSMN_ARRAY)
             {
               int size1 = t->size;

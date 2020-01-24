@@ -467,7 +467,6 @@ typedef struct _dwg_entity_TOLERANCE              dwg_ent_tolerance;
 typedef struct _dwg_entity_ENDBLK                 dwg_ent_endblk;
 typedef struct _dwg_entity_SEQEND                 dwg_ent_seqend;
 typedef struct _dwg_entity_SPLINE                 dwg_ent_spline;
-typedef struct _dwg_SPLINE_point                  dwg_spline_point;
 typedef struct _dwg_SPLINE_control_point          dwg_spline_control_point;
 typedef struct _dwg_entity_OLEFRAME               dwg_ent_oleframe;
 typedef struct _dwg_entity_OLE2FRAME              dwg_ent_ole2frame;
@@ -3466,7 +3465,7 @@ EXPORT BITCODE_BL dwg_ent_spline_get_num_ctrl_pts (
 
 // TODO: dwg_ent_spline_add_ctrl_pts, dwg_ent_spline_delete_ctrl_pts
 
-EXPORT dwg_spline_point *
+EXPORT dwg_point_3d *
 dwg_ent_spline_get_fit_pts (const dwg_ent_spline *restrict spline,
                             int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
