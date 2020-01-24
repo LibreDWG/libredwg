@@ -48,6 +48,7 @@ static void print_wcquote (Bit_Chain *restrict dat,
 #endif
 
 static void _prefix (Bit_Chain *dat);
+static char* _path_field(const char *path);
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -70,7 +71,8 @@ static void _prefix (Bit_Chain *dat);
   dat->bit--;                                                                 \
   PREFIX fprintf (dat->fh, "]\n")
 #define KEYs(nam) PREFIX fprintf (dat->fh, "\"%s\": ", nam)
-#define KEY(nam) PREFIX fprintf (dat->fh, "\"%s\": ", #nam)
+// FIXME strip path to field only
+#define KEY(nam) PREFIX fprintf (dat->fh, "\"%s\": ", _path_field(#nam))
 #define HASH                                                                  \
   PREFIX fprintf (dat->fh, "{\n");                                            \
   dat->bit++
@@ -532,6 +534,8 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
 #define HANDLE_VECTOR(nam, sizefield, code, dxf)                              \
   HANDLE_VECTOR_N (nam, FIELD_VALUE (sizefield), code, dxf)
 
+// FIXME: for KEY not the complete nam path, only the field.
+// e.g. verts[rcount1].lines[rcount2].segparms
 #define _REPEAT_N(times, nam, type, idx)                                      \
   if (_obj->nam)                                                              \
     {                                                                         \
@@ -692,6 +696,16 @@ _prefix (Bit_Chain *dat)
 #define DWG_OBJECT_END                                                        \
   return 0;                                                                   \
   }
+
+static char* _path_field(const char *path)
+{
+  char *s = strrchr (path, ']');
+  if (s && s[1] == '.')
+    {
+      return &s[2];
+    }
+  return (char*)path;
+}
 
 static int
 json_common_entity_data (Bit_Chain *restrict dat,
