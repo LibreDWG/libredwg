@@ -1078,7 +1078,7 @@ ATTRIBUTE_MALLOC
 static BITCODE_H
 json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
              jsmntokens_t *restrict tokens, const char *name,
-             Dwg_Object *restrict obj)
+             const Dwg_Object *restrict obj)
 {
   long code, value;
   const jsmntok_t *t = &tokens->tokens[tokens->index];
@@ -1500,6 +1500,159 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   return 0;
 }
 
+// needs to be recursive, for search in subclasses
+static int
+_set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
+                   jsmntokens_t *restrict tokens,
+                   void *restrict _obj,
+                   const char *restrict name, const char *restrict key,
+                   const Dwg_DYNAPI_field *restrict fields)
+{
+  Dwg_Data *restrict dwg = obj->parent;
+  const Dwg_DYNAPI_field *f;
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  for (f = &fields[0]; f->name; f++) // linear search, not binary for now
+    {
+      LOG_INSANE ("-%s.%s [%s]\n", name, f->name, f->type);
+      // common and entity dynapi, check types
+      if (strEQ (f->name, key)) // found
+        {
+          LOG_INSANE ("-found %s\n", f->name);
+          if (strEQc (f->type, "BD") || strEQc (f->type, "RD"))
+            {
+              double num = json_float (dat, tokens);
+              LOG_TRACE ("%s: " FORMAT_RD " [%s]\n", key, num, f->type);
+              dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
+            }
+          else if (strEQc (f->type, "RC") || strEQc (f->type, "B")
+                   || strEQc (f->type, "BB") || strEQc (f->type, "RS")
+                   || strEQc (f->type, "BS") || strEQc (f->type, "RL")
+                   || strEQc (f->type, "BL") || strEQc (f->type, "RLL")
+                   || strEQc (f->type, "BLd") || strEQc (f->type, "BSd")
+                   || strEQc (f->type, "BLL"))
+            {
+              long num = json_long (dat, tokens);
+              LOG_TRACE ("%s: %ld [%s]\n", key, num, f->type);
+              dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
+            }
+          else if (strEQc (f->type, "TV") || strEQc (f->type, "T")
+                   || strEQc (f->type, "TF") || strEQc (f->type, "TU"))
+            {
+              char *str = json_string (dat, tokens);
+              LOG_TRACE ("%s: \"%s\" [%s]\n", key, str, f->type);
+              dwg_dynapi_field_set_value (dwg, _obj, f, &str, 1);
+            }
+          else if (strEQc (f->type, "3BD") || strEQc (f->type, "3RD")
+                   || strEQc (f->type, "3DPOINT") || strEQc (f->type, "BE")
+                   || strEQc (f->type, "3BD_1"))
+            {
+              BITCODE_3DPOINT pt;
+              json_3DPOINT (dat, tokens, key, f->type, &pt);
+              dwg_dynapi_field_set_value (dwg, _obj, f, &pt, 1);
+            }
+          else if (strEQc (f->type, "2BD") || strEQc (f->type, "2RD")
+                   || strEQc (f->type, "2DPOINT") || strEQc (f->type, "2BD_1"))
+            {
+              BITCODE_2DPOINT pt;
+              json_2DPOINT (dat, tokens, key, f->type, &pt);
+              dwg_dynapi_field_set_value (dwg, _obj, f, &pt, 1);
+            }
+          else if (strEQc (f->type, "TIMEBLL"))
+            {
+              static BITCODE_TIMEBLL date = { 0, 0, 0 };
+              json_TIMEBLL (dat, tokens, key, &date);
+              dwg_dynapi_field_set_value (dwg, _obj, f, &date, 1);
+            }
+          else if (strEQc (f->type, "CMC"))
+            {
+              static BITCODE_CMC color = { 0, 0, 0 };
+              json_CMC (dat, dwg, tokens, key, &color);
+              dwg_dynapi_field_set_value (dwg, _obj, f, &color, 1);
+            }
+          else if (strEQc (f->type, "H"))
+            {
+              BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, key, obj);
+              dwg_dynapi_field_set_value (dwg, _obj, f, &hdl, 1);
+            }
+          else if (strEQc (f->type, "H*") && t->type == JSMN_ARRAY)
+            {
+              int size1 = t->size;
+              BITCODE_H *hdls = calloc (size1, sizeof (BITCODE_H));
+              tokens->index++;
+              for (int k = 0; k < size1; k++)
+                {
+                  hdls[k] = json_HANDLE (dat, dwg, tokens, key, obj);
+                }
+              dwg_dynapi_field_set_value (dwg, _obj, f, &hdls, 1);
+            }
+          else if (strEQc (f->type, "TV*") && t->type == JSMN_ARRAY)
+            {
+              int size1 = t->size;
+              BITCODE_TV *elems = calloc (size1, sizeof (BITCODE_TV));
+              tokens->index++;
+              for (int k = 0; k < size1; k++)
+                {
+                  elems[k] = json_string (dat, tokens);
+                }
+              dwg_dynapi_field_set_value (dwg, _obj, f, &elems, 1);
+            }
+          // subfields:
+          else if (memBEGINc (f->type, "Dwg_") && t->type == JSMN_ARRAY)
+            {
+              int num_elems = t->size;
+              int size_elem;
+              char *elems;
+              const Dwg_DYNAPI_field *sfields;
+              // strip off Dwg_ and final * (Dwg_MLINESTYLE_line* =>
+              // MLINESTYLE_line)
+              char *subclass = dwg_dynapi_subclass_name (f->type);
+              if (!subclass)
+                {
+                  LOG_ERROR ("Unknown subclass type %s", f->type);
+                  goto unknown_ent;
+                }
+              size_elem = dwg_dynapi_fields_size (subclass);
+              sfields = dwg_dynapi_subclass_fields (subclass);
+              if (!size_elem || !sfields)
+                {
+                  LOG_ERROR ("Unknown subclass name %s", subclass);
+                  free (subclass);
+                  goto unknown_ent;
+                }
+              elems = calloc (num_elems, size_elem);
+              tokens->index++;
+              for (int k = 0; k < num_elems; k++)
+                {
+                  // seperate subclass type loop
+                  const Dwg_DYNAPI_field *f1;
+                  char key1[80];
+                  json_fixed_key (key1, dat, tokens);
+                  for (f1 = &sfields[0]; f1->name; f1++) // linear search, not binary
+                    {
+                      LOG_INSANE ("-%s.%s [%s]\n", subclass, f1->name, f1->type);
+                      if (strEQ (f1->name, key1)) // found
+                        {
+                          LOG_INSANE ("-found %s\n", f1->name);
+                          _set_struct_field (dat, obj, tokens, &elems[k], name, key,
+                                             sfields);
+                      }
+                    }
+                }
+              free (subclass);
+              dwg_dynapi_field_set_value (dwg, _obj, f, &elems, 1);
+            }
+          else
+            {
+            unknown_ent:
+              LOG_ERROR ("Unknown type for %s.%s %s", name, key, f->type);
+              ++tokens->index;
+            }
+          break;
+        }
+    }
+  return f->name ? 1 : 0; // found or not
+}
+
 static int
 json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
              jsmntokens_t *restrict tokens)
@@ -1574,6 +1727,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 }
               LOG_TRACE ("\nnew object %s [%d] (size: %d)\n", name, i, objsize);
               obj->supertype = DWG_SUPERTYPE_OBJECT;
+              obj->parent = dwg;
               obj->tio.object = calloc (1, sizeof (Dwg_Object_Object));
               obj->tio.object->dwg = dwg;
               obj->tio.object->objid = i;
@@ -1605,6 +1759,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               return DWG_ERR_INVALIDDWG;
               LOG_TRACE ("\nnew entity %s [%d] (size: %d)\n", name, i, objsize);
               obj->supertype = DWG_SUPERTYPE_ENTITY;
+              obj->parent = dwg;
               obj->tio.entity = calloc (1, sizeof (Dwg_Object_Entity));
               obj->tio.entity->dwg = dwg;
               obj->tio.entity->objid = i;
@@ -1663,125 +1818,22 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           else
             //search_field:
             {
-              for (f = &fields[0]; f->name; f++) // linear search, not binary for now
-                {
-                  LOG_INSANE ("-%s.%s [%s]\n", name, f->name, f->type);
-                  // common and entity dynapi, check types
-                  if (strEQ (f->name, key)) // found
-                    {
-                      LOG_INSANE ("-found %s\n", f->name);
-                      if (strEQc (f->type, "BD") || strEQc (f->type, "RD"))
-                        {
-                          double num = json_float (dat, tokens);
-                          LOG_TRACE ("%s: " FORMAT_RD " [%s]\n", key, num, f->type);
-                          dwg_dynapi_entity_set_value (_obj, name, key, &num, 0);
-                        }
-                      else if (strEQc (f->type, "RC") || strEQc (f->type, "B")
-                               || strEQc (f->type, "BB") || strEQc (f->type, "RS")
-                               || strEQc (f->type, "BS") || strEQc (f->type, "RL")
-                               || strEQc (f->type, "BL") || strEQc (f->type, "RLL")
-                               || strEQc (f->type, "BLd") || strEQc (f->type, "BSd")
-                               || strEQc (f->type, "BLL"))
-                        {
-                          long num = json_long (dat, tokens);
-                          LOG_TRACE ("%s: %ld [%s]\n", key, num, f->type);
-                          dwg_dynapi_entity_set_value (_obj, name, key, &num, 0);
-                        }
-                      else if (strEQc (f->type, "TV") || strEQc (f->type, "T")
-                               || strEQc (f->type, "TF") || strEQc (f->type, "TU"))
-                        {
-                          char *str = json_string (dat, tokens);
-                          LOG_TRACE ("%s: \"%s\" [%s]\n", key, str, f->type);
-                          dwg_dynapi_entity_set_value (_obj, name, key, &str, 1);
-                        }
-                      else if (strEQc (f->type, "3BD") || strEQc (f->type, "3RD")
-                               || strEQc (f->type, "3DPOINT") || strEQc (f->type, "BE")
-                               || strEQc (f->type, "3BD_1"))
-                        {
-                          BITCODE_3DPOINT pt;
-                          json_3DPOINT (dat, tokens, key, f->type, &pt);
-                          dwg_dynapi_entity_set_value (_obj, name, key, &pt, 1);
-                        }
-                      else if (strEQc (f->type, "2BD") || strEQc (f->type, "2RD")
-                               || strEQc (f->type, "2DPOINT") || strEQc (f->type, "2BD_1"))
-                        {
-                          BITCODE_2DPOINT pt;
-                          json_2DPOINT (dat, tokens, key, f->type, &pt);
-                          dwg_dynapi_entity_set_value (_obj, name, key, &pt, 1);
-                        }
-                      else if (strEQc (f->type, "TIMEBLL"))
-                        {
-                          static BITCODE_TIMEBLL date = { 0, 0, 0 };
-                          json_TIMEBLL (dat, tokens, key, &date);
-                          dwg_dynapi_entity_set_value (_obj, name, key, &date, 0);
-                        }
-                      else if (strEQc (f->type, "CMC"))
-                        {
-                          static BITCODE_CMC color = { 0, 0, 0 };
-                          json_CMC (dat, dwg, tokens, key, &color);
-                          dwg_dynapi_entity_set_value (_obj, name, key, &color, 0);
-                        }
-                      else if (strEQc (f->type, "H"))
-                        {
-                          BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, key, obj);
-                          dwg_dynapi_entity_set_value (_obj, name, key, &hdl, 0);
-                        }
-                      else if (strEQc (f->type, "H*") && t->type == JSMN_ARRAY)
-                        {
-                          int size1 = t->size;
-                          BITCODE_H* hdls = calloc (size1, sizeof (BITCODE_H));
-                          tokens->index++;
-                          for (int k = 0; k < size1; k++)
-                            {
-                              hdls[k] = json_HANDLE (dat, dwg, tokens, key, obj);
-                            }
-                          dwg_dynapi_entity_set_value (_obj, name, key, &hdls, 0);
-                        }
-                      else if (strEQc (f->type, "TV*") && t->type == JSMN_ARRAY)
-                        {
-                          int size1 = t->size;
-                          BITCODE_TV* elems = calloc (size1, sizeof (BITCODE_TV));
-                          tokens->index++;
-                          for (int k = 0; k < size1; k++)
-                            {
-                              elems[k] = json_string (dat, tokens);
-                            }
-                          dwg_dynapi_entity_set_value (_obj, name, key, &elems, 1);
-                        }
-                      // subfields:
-                      else if (memBEGINc (f->type, "Dwg_") && t->type == JSMN_ARRAY)
-                        {
-                          int num_elems = t->size;
-                          int size_elem;
-                          char* elems;
-                          // strip off Dwg_ and final * (Dwg_MLINESTYLE_line* => MLINESTYLE_line)
-                          char *subclass = dwg_dynapi_subclass_name (f->type);
-                          if (!subclass)
-                            goto unknown_ent;
-                          size_elem = dwg_dynapi_fields_size (subclass);
-                          free (subclass);
-                          if (!size_elem)
-                            goto unknown_ent;
-                          elems = calloc (num_elems, size_elem);
-                          tokens->index++;
-                          for (int k = 0; k < num_elems; k++)
-                            {
-                              // TODO which types? seperate type loop
-                              // elems[k] = json_string (dat, tokens);
-                            }
-                          dwg_dynapi_entity_set_value (_obj, name, key, &elems, 1);
-                        }
-                      else
-                        {
-                        unknown_ent:
-                          LOG_ERROR ("Unknown type for %s.%s %s", name, key, f->type);
-                          ++tokens->index;
-                        }
-                      break;
-                    }
-                }
-              if (f->name) // found
+              if (_set_struct_field (dat, obj, tokens,_obj, name, key, fields))
                 continue;
+#if 1
+              if (is_entity)
+                {
+                  if (_set_struct_field (dat, obj, tokens, obj->tio.entity, name, key,
+                                         dwg_dynapi_common_entity_fields ()))
+                    continue;
+                }
+              else
+                {
+                  if (_set_struct_field (dat, obj, tokens, obj->tio.object, name, key,
+                                         dwg_dynapi_common_object_fields ()))
+                    continue;
+                }
+#else
               cfields = is_entity ? dwg_dynapi_common_entity_fields ()
                                  : dwg_dynapi_common_object_fields ();
               for (f = &cfields[0]; f->name; f++)
@@ -1868,6 +1920,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 }
               if (f->name) // found
                 continue;
+#endif
               if (!f->name)
                 {
                   LOG_TRACE ("Unknown %s.%s %.*s\n", name, key,

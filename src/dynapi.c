@@ -8269,6 +8269,24 @@ dwg_dynapi_common_set_value (void *restrict _obj,
   }
 }
 
+// can do arbitrary structs, like subclasses
+EXPORT bool
+dwg_dynapi_field_set_value (const Dwg_Data *restrict dwg, /* only needed if unicode strings */
+                            void *restrict ptr,
+                            const Dwg_DYNAPI_field *restrict field,
+                            const void *restrict value,
+                            const bool is_utf8)
+{
+  void *off;
+#ifndef HAVE_NONNULL
+  if (!ptr || !field || !value)
+    return false;
+#endif
+  off = &((char*)ptr)[field->offset];
+  dynapi_set_helper (off, field, dwg ? dwg->header.version : R_INVALID, value, is_utf8);
+  return true;
+}
+
 // check if the handle points to an object with a name.
 // see also dwg_obj_table_get_name, which only supports tables.
 EXPORT char*

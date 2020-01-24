@@ -1429,8 +1429,8 @@ set_handle_size (Dwg_Handle *restrict hdl)
  * header_vars. There obj is NULL.
  */
 EXPORT int
-dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, unsigned long value,
-                Dwg_Object *restrict obj)
+dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
+                const unsigned long value, const Dwg_Object *restrict obj)
 {
   int offset = obj ? (value - (int)obj->handle.value) : 0;
   hdl->code = code;
@@ -1476,8 +1476,8 @@ dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, unsigned long value,
 // Returns an existing ref with the same ownership (hard/soft, owner/pointer)
 // or creates it. May return a freshly allocated ref via dwg_new_ref.
 EXPORT Dwg_Object_Ref *
-dwg_add_handleref (Dwg_Data *restrict dwg, BITCODE_RC code, unsigned long value,
-                   Dwg_Object *restrict obj)
+dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
+                   const unsigned long value, const Dwg_Object *restrict obj)
 {
   Dwg_Object_Ref *ref;
   // DICTIONARY, XRECORD or class may need to be relative.

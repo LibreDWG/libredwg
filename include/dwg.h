@@ -6039,17 +6039,18 @@ EXPORT Dwg_Object_Ref * dwg_new_ref (Dwg_Data *restrict dwg);
  *  May need obj to shorten the code to a relative offset, but not in header_vars.
  *  There obj is NULL.
  */
-EXPORT int
-dwg_add_handle (Dwg_Handle *restrict hdl, BITCODE_RC code, unsigned long value,
-                Dwg_Object *restrict obj);
+EXPORT int dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
+                           const unsigned long value,
+                           const Dwg_Object *restrict obj);
 
 /** Returns an existing ref with the same ownership (hard/soft, owner/pointer)
     or creates it. With obj non-NULL it may return a relative offset, otherwise
     always absolute.
 */
-EXPORT Dwg_Object_Ref *
-dwg_add_handleref (Dwg_Data *restrict dwg, BITCODE_RC code, unsigned long value,
-                   Dwg_Object *restrict obj);
+EXPORT Dwg_Object_Ref *dwg_add_handleref (Dwg_Data *restrict dwg,
+                                          const BITCODE_RC code,
+                                          const unsigned long value,
+                                          const Dwg_Object *restrict obj);
 
 /** Add the empty object to the DWG.
     Returns DWG_ERR_OUTOFMEM, -1 for realloced or 0 if not.
