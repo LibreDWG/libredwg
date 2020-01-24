@@ -1748,8 +1748,32 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                             }
                           dwg_dynapi_entity_set_value (_obj, name, key, &elems, 1);
                         }
+                      // subfields:
+                      else if (memBEGINc (f->type, "Dwg_") && t->type == JSMN_ARRAY)
+                        {
+                          int num_elems = t->size;
+                          int size_elem;
+                          char* elems;
+                          // strip off Dwg_ and final * (Dwg_MLINESTYLE_line* => MLINESTYLE_line)
+                          char *subclass = dwg_dynapi_subclass_name (f->type);
+                          if (!subclass)
+                            goto unknown_ent;
+                          size_elem = dwg_dynapi_fields_size (subclass);
+                          free (subclass);
+                          if (!size_elem)
+                            goto unknown_ent;
+                          elems = calloc (num_elems, size_elem);
+                          tokens->index++;
+                          for (int k = 0; k < num_elems; k++)
+                            {
+                              // TODO which types? seperate type loop
+                              // elems[k] = json_string (dat, tokens);
+                            }
+                          dwg_dynapi_entity_set_value (_obj, name, key, &elems, 1);
+                        }
                       else
                         {
+                        unknown_ent:
                           LOG_ERROR ("Unknown type for %s.%s %s", name, key, f->type);
                           ++tokens->index;
                         }

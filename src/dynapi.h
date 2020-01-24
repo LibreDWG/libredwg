@@ -138,9 +138,13 @@ dwg_dynapi_subclass_fields (const char *restrict name) __nonnull ((1));
 
 int _fields_size_sum (const Dwg_DYNAPI_field *restrict fields);
 
-// The sum of the size of all fields, by struct name
-EXPORT int
-dwg_dynapi_fields_size (const char *restrict name) __nonnull ((1));
+// The sum of the size of all fields, by entity or subclass name
+int dwg_dynapi_fields_size (const char *restrict name) __nonnull ((1));
+
+// Converts from the fields type, like "Dwg_MLINESTYLE_line*" to the
+// subclass name, like "MLINESTYLE_line".
+ATTRIBUTE_MALLOC char*
+dwg_dynapi_subclass_name (const char *restrict type);
 
 #endif
 

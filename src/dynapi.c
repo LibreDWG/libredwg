@@ -8318,7 +8318,7 @@ _fields_size_sum (const Dwg_DYNAPI_field *restrict fields)
 }
 
 // The sum of the size of all fields, by struct name
-EXPORT int
+int
 dwg_dynapi_fields_size (const char *restrict name)
 {
   Dwg_DYNAPI_field *f;
@@ -8330,6 +8330,43 @@ dwg_dynapi_fields_size (const char *restrict name)
     return _fields_size_sum (dwg_dynapi_entity_fields (name));
   else
     return _fields_size_sum (dwg_dynapi_subclass_fields (name));
+}
+
+// Converts from the fields type, like "Dwg_MLINESTYLE_line*" to the
+// subclass name, like "MLINESTYLE_line".
+ATTRIBUTE_MALLOC char*
+dwg_dynapi_subclass_name (const char *restrict type)
+{
+  char *name = NULL;
+  int len = strlen (type);
+  if (memBEGINc (type, "Dwg_"))
+    {
+      name = strdup (&type[4]);
+      if (type[len - 1] == '*')
+        name[len - 5] = '\0';
+    }
+  else if (memBEGINc (type, "struct _dwg_entity_"))
+    {
+      const int off = strlen ("struct _dwg_entity_"); // TABLE
+      name = strdup (&type[off]);
+      if (type[len - 1] == '*')
+        name[len - off - 1] = '\0';
+    }
+  else if (memBEGINc (type, "struct _dwg_object_"))
+    {
+      const int off = strlen ("struct _dwg_object_"); // CELLSTYLEMAP*, EVALUATION_GRAPH, ...
+      name = strdup (&type[off]);
+      if (type[len - 1] == '*')
+        name[len - off - 1] = '\0';
+    }
+  else if (memBEGINc (type, "struct _dwg_")) // CellStyle*
+    {
+      const int off = strlen ("struct _dwg_");
+      name = strdup (&type[off]);
+      if (type[len - 1] == '*')
+        name[len - off - 1] = '\0';
+    }
+  return name;
 }
 
 /* Local Variables: */
