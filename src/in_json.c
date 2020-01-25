@@ -60,6 +60,8 @@ static unsigned int cur_ver = 0;
 static char* created_by;
 static Bit_Chain *g_dat;
 
+#define MIN(X, Y) ((X) < (Y) ? (X) : (Y))
+
 #define json_expect(tokens, typ) \
   if (tokens->tokens[tokens->index].type != JSMN_##typ) \
     return DWG_ERR_INVALIDTYPE
@@ -1220,7 +1222,7 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       json_advance_unknown (dat, tokens, 0);
       return DWG_ERR_INVALIDTYPE;
     }
-  LOG_TRACE ("\n%s pos:%d [%d keys]\n", section, tokens->index, t->size);
+  LOG_TRACE ("\n%s pos:%d [%d keys]\n--------------------\n", section, tokens->index, t->size);
   tokens->tokens++;
   // t = &tokens->tokens[tokens->index];
   // json_expect(tokens, STRING);
@@ -1229,6 +1231,7 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       char key[80];
       json_fixed_key (key, dat, tokens);
+      t = &tokens->tokens[tokens->index];
       if (strEQc (key, "version"))
         {
           version[0] = '\0';
@@ -1256,10 +1259,13 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 LOG_ERROR ("Invalid FILEHEADER.version %s", version);
             }
         }
-      else if (strEQc (key, "zero_5"))
+      else if (strEQc (key, "zero_5") && t->type == JSMN_ARRAY)
         {
-          json_expect(tokens, ARRAY);
-          json_advance_unknown (dat, tokens, 0);
+          tokens->index++;
+          for (int j = 0; j < MIN(5, t->size); j++)
+            {
+              _obj->zero_5[j] = json_long (dat, tokens);
+            }
         }
 
       FIELD_RC (is_maint, 0)
@@ -1291,7 +1297,8 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           tokens->index++;
         }
     }
-  return -1;
+  tokens->tokens--;
+  return 0;
 }
 
 static int
@@ -1312,7 +1319,7 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       json_advance_unknown (dat, tokens, 0);
       return DWG_ERR_INVALIDTYPE;
     }
-  LOG_TRACE ("\n%s pos:%d [%d keys]\n", section, tokens->index, t->size);
+  LOG_TRACE ("\n%s pos:%d [%d keys]\n--------------------\n", section, tokens->index, t->size);
   tokens->tokens++;
   for (int i = 0; i < size; i++)
     {
@@ -1423,7 +1430,7 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       return DWG_ERR_INVALIDTYPE;
     }
   size = t->size;
-  LOG_TRACE ("\n%s pos:%d [%d members]\n", section, tokens->index, size);
+  LOG_TRACE ("\n%s pos:%d [%d members]\n--------------------\n", section, tokens->index, size);
   tokens->tokens++;
   if (dwg->num_classes == 0)
     dwg->dwg_class = calloc (size, sizeof (Dwg_Class));
@@ -1731,7 +1738,13 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                                 break;
                             }
                         }
-                      if (!f1->name) // not found
+                      if (!f1->name && strEQc (key, "lt.index"))
+                        {
+                          if (!_set_struct_field (dat, obj, tokens, &elems[k], subclass, "lt",
+                                                 sfields))
+                            ++tokens->index;
+                        }
+                      else if (!f1->name) // not found
                         {
                           LOG_ERROR ("Unknown subclass field %s.%s", subclass, key1);
                           ++tokens->index;
@@ -1769,7 +1782,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       return DWG_ERR_INVALIDTYPE;
     }
   size = t->size;
-  LOG_TRACE ("\n%s pos:%d [%d members]\n", section, tokens->index, size);
+  LOG_TRACE ("\n%s pos:%d [%d members]\n--------------------\n", section, tokens->index, size);
   tokens->tokens++;
   if (dwg->num_objects == 0)
     dwg->object = malloc (size * sizeof (Dwg_Object));
@@ -1949,7 +1962,7 @@ json_HANDLES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 {
   const char *section = "HANDLES";
   const jsmntok_t *t = &tokens->tokens[tokens->index];
-  (void)dat; (void)dwg;
+  int size;
   if (t->type != JSMN_ARRAY)
     {
       LOG_ERROR ("Expected %s ARRAY at %u of %u tokens, got %s", section,
@@ -1957,8 +1970,22 @@ json_HANDLES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       json_advance_unknown (dat, tokens, 0);
       return DWG_ERR_INVALIDTYPE;
     }
-  // ... dynapi
-  return -1;
+  size = t->size;
+  LOG_TRACE ("\n%s pos:%d [%d members]\n--------------------\n", section,
+             tokens->index, size);
+  // Maybe create dwg->header.section[SECTION_HANDLES_R13] omap here.
+  // struct { uint32_t hdloff; int32_t offset } *omap = calloc (size, 8);
+  for (int i = 0; i < size; i++)
+    {
+      tokens->tokens++;
+      for (int k = 0; k < 2; k++)
+        {
+          long hdloff = json_long (dat, tokens);
+          long offset = json_long (dat, tokens);
+          tokens->tokens++;
+        }
+    }
+  return 0;
 }
 
 static int
