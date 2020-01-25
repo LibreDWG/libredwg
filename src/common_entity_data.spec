@@ -90,6 +90,9 @@
       FIELD_ENC (color,62,420); // in ODA as CMC (B)
 #else
       BITCODE_BS flags;
+#ifdef IS_JSON
+      field_cmc (dat, "color", &ent->color);
+#else
       FIELD_BSx (color.flag, 0);
       flags = ent->color.flag >> 8;
       DECODER {
@@ -106,7 +109,6 @@
         if (FIELD_VALUE (color.index) != 256) // not bylayer
           FIELD_BS (color.index, 62);
       }
-
       if (flags & 0x40 && dat->version < R_2007)
         { // r2004+ in handle stream
           FIELD_HANDLE (color.handle, 0, 430); // DBCOLOR 1E9F74 => 1F05B9
@@ -165,6 +167,7 @@
         {
           LOG_TRACE ("color.index: %u [ENC 62]\n", (unsigned)ent->color.index);
         }
+#endif
 #endif
 #endif
     }

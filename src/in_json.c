@@ -1102,7 +1102,7 @@ json_CMC (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   char key[80];
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   if (t->type == JSMN_OBJECT)
-    {
+    { // 2004+
       tokens->tokens++; // hash of index, rgb...
       for (int j = 0; j < t->size; j++)
         {
@@ -1155,6 +1155,12 @@ json_CMC (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               tokens->index++;
             }
         }
+    }
+  else if (t->type == JSMN_PRIMITIVE)
+    { // pre 2004
+      long num = json_long (dat, tokens);
+      LOG_TRACE ("%s.index %ld [CMC]\n", name, num);
+      color->index = (BITCODE_BSd)num;
     }
 }
 
@@ -1371,7 +1377,7 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           json_TIMEBLL (dat, tokens, key, &date);
           dwg_dynapi_header_set_value (dwg, key, &date, 0);
         }
-      else if (t->type == JSMN_OBJECT && strEQc (f->type, "CMC"))
+      else if (strEQc (f->type, "CMC"))
         {
           static BITCODE_CMC color = { 0, 0, 0 };
           json_CMC (dat, dwg, tokens, key, &color);
@@ -1566,6 +1572,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                     }
                   buf[blen] = '\0';
                   LOG_TRACE ("%s: '%.*s' [%s] (binary)\n", key, blen, buf, f->type);
+                  // set the ptr directly, no alloc, no conversion.
                   old = &((char*)_obj)[f->offset];
                   memcpy (old, &buf, f->size);
                 }
@@ -1600,7 +1607,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               json_TIMEBLL (dat, tokens, key, &date);
               dwg_dynapi_field_set_value (dwg, _obj, f, &date, 1);
             }
-          else if (t->type == JSMN_OBJECT && strEQc (f->type, "CMC"))
+          else if (strEQc (f->type, "CMC"))
             {
               static BITCODE_CMC color = { 0, 0, 0 };
               json_CMC (dat, dwg, tokens, key, &color);
