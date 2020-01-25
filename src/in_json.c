@@ -1785,10 +1785,13 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   LOG_TRACE ("\n%s pos:%d [%d members]\n--------------------\n", section, tokens->index, size);
   tokens->tokens++;
   if (dwg->num_objects == 0)
-    dwg->object = malloc (size * sizeof (Dwg_Object));
+    dwg->object = calloc (size, sizeof (Dwg_Object));
   else
-    dwg->object = realloc (dwg->object, (dwg->num_objects + size)
-                           * sizeof (Dwg_Object));
+    {
+      dwg->object = realloc (dwg->object, (dwg->num_objects + size)
+                             * sizeof (Dwg_Object));
+      memset (&dwg->object[dwg->num_objects], 0, size);
+    }
   if (!dwg->object)
     {
       LOG_ERROR ("Out of memory");
@@ -1843,6 +1846,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               LOG_TRACE ("\nnew object %s [%d] (size: %d)\n", name, i, objsize);
               obj->supertype = DWG_SUPERTYPE_OBJECT;
               obj->parent = dwg;
+              obj->index = i;
               obj->tio.object = calloc (1, sizeof (Dwg_Object_Object));
               obj->tio.object->dwg = dwg;
               obj->tio.object->objid = i;
@@ -1874,6 +1878,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               LOG_TRACE ("\nnew entity %s [%d] (size: %d)\n", name, i, objsize);
               obj->supertype = DWG_SUPERTYPE_ENTITY;
               obj->parent = dwg;
+              obj->index = i;
               obj->tio.entity = calloc (1, sizeof (Dwg_Object_Entity));
               obj->tio.entity->dwg = dwg;
               obj->tio.entity->objid = i;
@@ -1898,31 +1903,35 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               free (obj->dxfname);
               obj->dxfname = json_string (dat, tokens);
             }
-          else if (strEQc (key, "index"))
+          else if (strEQc (key, "index")) // TODO not TableCellContent_Attr
             {
-              obj->index = json_long (dat, tokens);
+              BITCODE_RL index = (BITCODE_RL)json_long (dat, tokens);
+              if (obj->index != index)
+                LOG_WARN ("Unexpected %s.index %d, expected %d", name, index, obj->index)
+              obj->index = index;
               if (is_entity)
                 obj->tio.entity->objid = obj->index;
               else
                 obj->tio.object->objid = obj->index;
               LOG_TRACE ("index: %d\n", obj->index)
             }
-          else if (strEQc (key, "type"))
+          else if (strEQc (key, "type") && !obj->type)
             {
               obj->type = obj->fixedtype = json_long (dat, tokens);
               LOG_TRACE ("type: %d\n", obj->type)
             }
-          else if (strEQc (key, "size"))
+          // Note: also _obj->size
+          else if (strEQc (key, "size") && !obj->size && t->type == JSMN_PRIMITIVE)
             {
               obj->size = json_long (dat, tokens);
               LOG_TRACE ("size: %d\n", obj->size)
             }
-          else if (strEQc (key, "bitsize"))
+          else if (strEQc (key, "bitsize") && !obj->bitsize)
             {
               obj->bitsize = json_long (dat, tokens);
               LOG_TRACE ("bitsize: %d\n", obj->bitsize)
             }
-          else if (strEQc (key, "handle"))
+          else if (strEQc (key, "handle") && !obj->handle.value)
             {
               BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, key, obj);
               obj->handle.code = hdl->handleref.code;
