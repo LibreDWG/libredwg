@@ -954,6 +954,7 @@ EOF
 EOF
     }
   }
+
   if (m{/\* \@\@for test_OBJECT\@\@ \*/}) {
     for my $name (@entity_names, @object_names) {
       #next if $name eq 'DIMENSION_';
@@ -1145,6 +1146,7 @@ EOF
 EOF
     }
   }
+
   if (m{/\* \@\@for if_test_OBJECT\@\@ \*/}) {
     for my $name (@entity_names, @object_names) {
       my $xname = $name =~ /^3/ ? "_$name" : $name; # 3DFACE, 3DSOLID
@@ -1157,6 +1159,49 @@ EOF
 EOF
     }
   }
+
+  if (m{/\* \@\@for test_SIZES\@\@ \*/}) {
+    for my $name (@entity_names) {
+      my $xname = $name =~ /^3/ ? "_$name" : $name; # 3DFACE, 3DSOLID
+      print $fh <<"EOF";
+  size1 = sizeof (Dwg_Entity_$xname);
+  size2 = dwg_dynapi_fields_size (\"$name\");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_$xname): %d != "
+               "dwg_dynapi_fields_size (\\\"$name\\\"): %d\\n", size1, size2);
+      error++;
+    }
+EOF
+    }
+    for my $name (@object_names) {
+      my $xname = $name;
+      print $fh <<"EOF";
+  size1 = sizeof (struct _dwg_object_$xname);
+  size2 = dwg_dynapi_fields_size (\"$name\");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_$xname): %d != "
+               "dwg_dynapi_fields_size (\\\"$name\\\"): %d\\n", size1, size2);
+      error++;
+    }
+EOF
+    }
+    for my $name (@subclasses) {
+      my $xname = $name;
+      $xname =~ s/^_dwg_//;
+      print $fh <<"EOF";
+  size1 = sizeof (struct $name);
+  size2 = dwg_dynapi_fields_size (\"$xname\");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct $xname): %d != "
+               "dwg_dynapi_fields_size (\\\"$xname\\\"): %d\\n", size1, size2);
+      error++;
+    }
+EOF
+    }
+  }
 }
 close $in;
 chmod 0444, $fh;
@@ -1165,7 +1210,7 @@ close $fh;
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1169 "gen-dynapi.pl"
+#line 1209 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -1246,7 +1291,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
-#line 1250 "gen-dynapi.pl"
+#line 1290 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
@@ -1939,7 +1984,7 @@ _fields_size_sum (const Dwg_DYNAPI_field *restrict fields)
 }
 
 // The sum of the size of all fields, by struct name
-int
+EXPORT int
 dwg_dynapi_fields_size (const char *restrict name)
 {
   const Dwg_DYNAPI_field *f;

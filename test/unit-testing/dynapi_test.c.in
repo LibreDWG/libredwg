@@ -61,15 +61,28 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
   return error + failed;
 }
 
+/* for all fields, checks its sizeof vs _fields_size_sum */
+static int
+test_sizes (void)
+{
+  int error = 0;
+  int size1, size2;
+#line 37163 "dynapi_test.c"
+  /* @@for test_SIZES@@ */
+#line 72 "dynapi_test.c.in"
+  return error;
+}
+
 static int
 test_dynapi (const char *filename)
 {
-  int error = 0;
+  int error;
   Dwg_Data dwg;
   BITCODE_BL i;
   num = passed = failed = 0;
 
   dwg.opts = 0;
+  error = test_sizes ();
   if (dwg_read_file (filename, &dwg) >= DWG_ERR_CRITICAL)
     {
       dwg_free (&dwg);
