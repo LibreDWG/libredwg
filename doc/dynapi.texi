@@ -7281,8 +7281,8 @@ BD
 @end vtable
 @end indentedblock
 
-@strong{Dwg_DIMASSOC_ref} @anchor{Dwg_DIMASSOC_ref}
-@vindex Dwg_DIMASSOC_ref
+@strong{Dwg_DIMASSOC_Ref} @anchor{Dwg_DIMASSOC_Ref}
+@vindex Dwg_DIMASSOC_Ref
 
 @indentedblock
 @vtable @code
@@ -7290,23 +7290,23 @@ BD
 @item parent
 struct _dwg_object_DIMASSOC*
 @item rotated_type
-BS
+BS,	DXF 71
 @item osnap_type
-RC
+RC,	DXF 72
 @item classname
-TV
+TV,	DXF 1
 @item main_subent_type
-BS
+BS,	DXF 73
 @item intsect_subent_type
-BS
+BS,	DXF 74
 @item main_gsmarker
-BL
+BL,	DXF 91
 @item osnap_dist
-BD
+BD,	DXF 40
 @item osnap_pt
-3BD
+3BD,	DXF 10
 @item has_lastpt_ref
-B
+B,	DXF 75
 @item mainobj
 H
 @item intsectobj

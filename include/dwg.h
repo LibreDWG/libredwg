@@ -4675,7 +4675,7 @@ typedef struct _dwg_object_DATATABLE
  Object DIMASSOC (varies) DEBUGGING
  --enable-debug only
  */
-typedef struct _dwg_DIMASSOC_ref
+typedef struct _dwg_DIMASSOC_Ref
 {
   struct _dwg_object_DIMASSOC *parent;
   BITCODE_BS rotated_type;    /*!< DXF 71 */

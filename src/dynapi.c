@@ -1,5 +1,5 @@
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1150 "gen-dynapi.pl"
+#line 1169 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -6316,31 +6316,31 @@ static const Dwg_DYNAPI_field _dwg_ContentFormat_fields[] = {
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_DIMASSOC_ref: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_DIMASSOC_ref_fields[] = {
-  { "parent",	"struct _dwg_object_DIMASSOC*", sizeof (void *),  OFF (struct _dwg_DIMASSOC_ref, parent),
+/* from typedef struct _dwg_DIMASSOC_Ref: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_DIMASSOC_Ref_fields[] = {
+  { "parent",	"struct _dwg_object_DIMASSOC*", sizeof (void *),  OFF (struct _dwg_DIMASSOC_Ref, parent),
     1,1,0, 0 },
-  { "rotated_type",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_DIMASSOC_ref, rotated_type),
-    0,0,0, 0 },
-  { "osnap_type",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_DIMASSOC_ref, osnap_type),
-    0,0,0, 0 },
-  { "classname",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_DIMASSOC_ref, classname),
-    1,1,1, 0 },
-  { "main_subent_type",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_DIMASSOC_ref, main_subent_type),
-    0,0,0, 0 },
-  { "intsect_subent_type",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_DIMASSOC_ref, intsect_subent_type),
-    0,0,0, 0 },
-  { "main_gsmarker",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_DIMASSOC_ref, main_gsmarker),
-    0,0,0, 0 },
-  { "osnap_dist",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_DIMASSOC_ref, osnap_dist),
-    0,0,0, 0 },
-  { "osnap_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_DIMASSOC_ref, osnap_pt),
+  { "rotated_type",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_DIMASSOC_Ref, rotated_type),
+    0,0,0, 71 },
+  { "osnap_type",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_DIMASSOC_Ref, osnap_type),
+    0,0,0, 72 },
+  { "classname",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_DIMASSOC_Ref, classname),
+    1,1,1, 1 },
+  { "main_subent_type",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_DIMASSOC_Ref, main_subent_type),
+    0,0,0, 73 },
+  { "intsect_subent_type",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_DIMASSOC_Ref, intsect_subent_type),
+    0,0,0, 74 },
+  { "main_gsmarker",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_DIMASSOC_Ref, main_gsmarker),
+    0,0,0, 91 },
+  { "osnap_dist",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_DIMASSOC_Ref, osnap_dist),
+    0,0,0, 40 },
+  { "osnap_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_DIMASSOC_Ref, osnap_pt),
+    1,0,0, 10 },
+  { "has_lastpt_ref",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_DIMASSOC_Ref, has_lastpt_ref),
+    0,0,0, 75 },
+  { "mainobj",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_DIMASSOC_Ref, mainobj),
     1,0,0, 0 },
-  { "has_lastpt_ref",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_DIMASSOC_ref, has_lastpt_ref),
-    0,0,0, 0 },
-  { "mainobj",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_DIMASSOC_ref, mainobj),
-    1,0,0, 0 },
-  { "intsectobj",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_DIMASSOC_ref, intsectobj),
+  { "intsectobj",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_DIMASSOC_Ref, intsectobj),
     1,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -7586,7 +7586,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
   { "CellContentGeometry",	0,	NULL,	_dwg_CellContentGeometry_fields },	/* 5 */
   { "CellStyle",	0,	NULL,	_dwg_CellStyle_fields },	/* 6 */
   { "ContentFormat",	0,	NULL,	_dwg_ContentFormat_fields },	/* 7 */
-  { "DIMASSOC_ref",	(int)DWG_TYPE_DIMASSOC,	NULL,	_dwg_DIMASSOC_ref_fields },	/* 8 */
+  { "DIMASSOC_Ref",	(int)DWG_TYPE_DIMASSOC,	NULL,	_dwg_DIMASSOC_Ref_fields },	/* 8 */
   { "DIMENSION_common",	0,	"AcDbDimension",	_dwg_DIMENSION_common_fields },	/* 9 */
   { "EVAL_Node",	0,	NULL,	_dwg_EVAL_Node_fields },	/* 10 */
   { "FIELD_ChildValue",	(int)DWG_TYPE_FIELD,	NULL,	_dwg_FIELD_ChildValue_fields },	/* 11 */
@@ -7636,7 +7636,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 
 };
 
-#line 1231 "gen-dynapi.pl"
+#line 1250 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
@@ -8319,6 +8319,8 @@ _fields_size_sum (const Dwg_DYNAPI_field *restrict fields)
 {
   Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)fields;
   int sum = 0;
+  if (!f)
+    return 0;
   for (; f->name; f++)
     {
       sum += f->size;

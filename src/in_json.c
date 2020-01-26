@@ -1679,15 +1679,15 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 }
               dwg_dynapi_field_set_value (dwg, _obj, f, &elems, 1);
             }
-          // subfields:
+          // subclass arrays:
           else if (t->type == JSMN_ARRAY && memBEGINc (f->type, "Dwg_"))
             {
               int num_elems = t->size;
               int size_elem;
               char *elems;
               const Dwg_DYNAPI_field *sfields;
-              // strip off Dwg_ and final * (Dwg_MLINESTYLE_line* =>
-              // MLINESTYLE_line)
+              // strip off Dwg_ and final *
+              // e.g. 'Dwg_MLINESTYLE_line*' => 'MLINESTYLE_line'
               char *subclass = dwg_dynapi_subclass_name (f->type);
               if (!subclass)
                 {

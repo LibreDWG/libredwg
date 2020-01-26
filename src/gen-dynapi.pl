@@ -387,7 +387,7 @@ dxfin_spec "$srcdir/summaryinfo.spec";
   # ASSOCVERTEXACTIONPARAM => AcDbAssocSingleDependencyActionParam,
   # ASSOCVERTEXACTIONPARAM => AcDbAssocVertexActionParam,
   "CELLSTYLEMAP_Cell" => "",
-  "DIMASSOC_ref" => "",
+  "DIMASSOC_Ref" => "",
   "DIMENSION_common" => "AcDbDimension",
   "EVAL_Node" => "",
   "FIELD_ChildValue" => "",
@@ -1165,7 +1165,7 @@ close $fh;
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1150 "gen-dynapi.pl"
+#line 1169 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -1246,7 +1246,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
-#line 1231 "gen-dynapi.pl"
+#line 1250 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
@@ -1929,6 +1929,8 @@ _fields_size_sum (const Dwg_DYNAPI_field *restrict fields)
 {
   Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)fields;
   int sum = 0;
+  if (!f)
+    return 0;
   for (; f->name; f++)
     {
       sum += f->size;
