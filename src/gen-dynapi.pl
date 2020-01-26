@@ -21,7 +21,7 @@ use warnings;
 use vars qw(@entity_names @object_names @subclasses
             $max_entity_names $max_object_names);
 use Convert::Binary::C;
-#use Data::Dumper;
+#use Data::Dumper; # if DEBUG
 #BEGIN { chdir 'src' if $0 =~ /src/; }
 
 # add gcc/clang -print-search-dirs paths
@@ -79,6 +79,7 @@ my $c = Convert::Binary::C->new
 my $hdr = "$topdir/include/dwg.h";
 $c->parse_file($hdr);
 
+#print Data::Dumper->Dump([$c->struct('_dwg_MLINESTYLE_line')], ['_dwg_MLINESTYLE_line']);
 #print Data::Dumper->Dump([$c->struct('_dwg_entity_TEXT')], ['_dwg_entity_TEXT']);
 #print Data::Dumper->Dump([$c->struct('struct _dwg_header_variables')], ['Dwg_Header_Variables']);
 
@@ -482,13 +483,118 @@ sub is_table_control {
                      VPORT|APPID|DIMSTYLE|VPORT_ENTITY)_CONTROL$/x;
 }
 
+sub out_declarator {
+  my ($d,$tmpl,$key,$prefix) = @_;
+  my $n = "_dwg_$key" unless $key =~ /^_dwg_/;
+  my $ns = $tmpl;
+  $ns =~ s/^struct //;
+  my $type = $d->{type};
+  my $decl = $d->{declarators}->[0];
+  my $name = $decl->{declarator};
+  while ($name =~ /^\*/) {
+    $name =~ s/^\*//;
+    $type .= '*';
+  }
+  if ($prefix) { # optional, for unions only
+    $name = $prefix . "." . $name;
+  }
+  # unexpand BITCODE_ macros: e.g. unsigned int -> BITCODE_BL
+  my $bc = exists $h{$ns} ? $h{$ns}{$name} : undef;
+  if (!$bc && $ns =~ /_CONTROL$/) {
+    $bc = $h{COMMON_TABLE_CONTROL_FIELDS}{$name};
+  } elsif (!$bc && $ns =~ /_entity_POLYLINE_/) {
+    $bc = $h{COMMON_ENTITY_POLYLINE}{$name};
+  }
+  $type = $bc if $bc;
+  if ($name eq 'encr_sat_data') {
+    $type = 'char **'; $bc = '';
+  }
+  $type =~ s/\s+$//;
+  my $size = $bc ? "sizeof (BITCODE_$type)" : "sizeof ($type)";
+  $type =~ s/BITCODE_//;
+  # TODO: DIMENSION_COMMON, _3DSOLID_FIELDS macros
+  if ($type eq 'unsigned char') {
+    $type = 'RC';
+  } elsif ($type eq 'unsigned char*') {
+    $type = 'RC*';
+  } elsif ($type eq 'double') {
+    $type = 'BD';
+  } elsif ($type eq 'double*') {
+    $type = 'BD*';
+  } elsif ($type =~ /^Dwg_Bitcode_(\w+)/) {
+    $type = $1;
+  } elsif ($type eq 'char*') {
+    $type = 'TV';
+  } elsif ($type eq 'unsigned short int') {
+    $type = 'BS';
+  } elsif ($type eq 'uint16_t') {
+    $type = 'BS';
+  } elsif ($type eq 'unsigned int') {
+    $type = 'BL';
+  } elsif ($type eq 'unsigned int*') {
+    $type = 'BL*';
+  } elsif ($type eq 'uint32_t') {
+    $type = 'BL';
+  } elsif ($type eq 'uint32_t*') {
+    $type = 'BL*';
+  } elsif ($type eq 'Dwg_Object_Ref*') {
+    $type = 'H';
+  } elsif ($type eq 'Dwg_Object_Ref**') {
+    $type = 'H*';
+  } elsif ($type =~ /\b(unsigned|char|int|long|double)\b/) {
+    warn "unexpanded $type $n.$name\n";
+  } elsif ($type =~ /^struct/) {
+    $size = "sizeof (void *)";
+  } elsif ($type =~ /^HASH\(/) { # inlined struct or union
+    if ($type->{type} eq 'union' && $n !~ /^_dwg_object_/) {
+      # take all declarators and add the "$name." prefix
+      warn "note: union field $n.$name\n";
+      for (@{$type->{declarations}}) {
+        out_declarator ($_, $tmpl, $key, $name);
+      }
+      next;
+    } else {
+      warn "ignore inlined field $n.$name\n";
+      next;
+    }
+  }
+  my $is_malloc = ($type =~ /\*$/ or $type =~ /^(T$|T[UVF])/) ? 1 : 0;
+  my $is_indirect = ($is_malloc or $type =~ /^(struct|[23T]|CMC|H$)/) ? 1 : 0;
+  my $is_string = ($is_malloc and $type =~ /^T[UV]?$/) ? 1 : 0; # not TF or TFF
+  my $sname = $name;
+  if ($name =~ /\[(\d+)\]$/) {
+    $is_malloc = 0;
+    $size = "$1 * $size";
+    $sname =~ s/\[(\d+)\]$//;
+  }
+  if ($ENT{$key}->{$name}) {
+    $type = $ENT{$key}->{$name};
+  } else {
+    $ENT{$key}->{$name} = $type;
+  }
+  my $dxf = $DXF{$key}->{$name};
+  if (!$dxf && $key =~ /DIMENSION/) {
+    $dxf = $DXF{COMMON_ENTITY_DIMENSION}->{$name};
+  }
+  if (!$dxf && $key =~ /ASSOC/) {
+    $dxf = $DXF{ASSOCACTION}->{$name};
+  }
+  $dxf = 0 unless $dxf;
+  warn "no dxf for $key: $name 0\n" unless $dxf or
+    ($name eq 'parent') or
+    ($key eq 'header_variables' and $name eq lc($name));
+
+  printf $fh "  { \"%s\",\t\"%s\", %s,  OFF (%s, %s),\n    %d,%d,%d, %d },\n",
+    $name, $type, $size, $tmpl, $sname, $is_indirect, $is_malloc, $is_string, $dxf;
+
+  print $doc "\@item $name\n$type", $dxf ? ",\tDXF $dxf" : "", "\n";
+}
+
 sub out_struct {
   my ($tmpl, $n) = @_;
   #print $fh " /* ", Data::Dumper->Dump([$s], [$n]), "*/\n";
   my $key = $n;
   $n = "_dwg_$n" unless $n =~ /^_dwg_/;
-  my $ns = $tmpl;
-  $ns =~ s/^struct //;
   my $sortedby = 'offset';
   my $s = $c->struct($tmpl);
   return unless $s->{declarations};
@@ -518,94 +624,7 @@ sub out_struct {
   print $fh "/* from typedef $tmpl: (sorted by $sortedby) */\n",
     "static const Dwg_DYNAPI_field $n","_fields[] = {\n";
   for my $d (@declarations) {
-    my $type = $d->{type};
-    my $decl = $d->{declarators}->[0];
-    my $name = $decl->{declarator};
-    while ($name =~ /^\*/) {
-      $name =~ s/^\*//;
-      $type .= '*';
-    }
-    # unexpand BITCODE_ macros: e.g. unsigned int -> BITCODE_BL
-    my $bc = exists $h{$ns} ? $h{$ns}{$name} : undef;
-    if (!$bc && $ns =~ /_CONTROL$/) {
-      $bc = $h{COMMON_TABLE_CONTROL_FIELDS}{$name};
-    } elsif (!$bc && $ns =~ /_entity_POLYLINE_/) {
-      $bc = $h{COMMON_ENTITY_POLYLINE}{$name};
-    }
-    $type = $bc if $bc;
-    if ($name eq 'encr_sat_data') {
-      $type = 'char **'; $bc = '';
-    }
-    $type =~ s/\s+$//;
-    my $size = $bc ? "sizeof (BITCODE_$type)" : "sizeof ($type)";
-    $type =~ s/BITCODE_//;
-    # TODO: DIMENSION_COMMON, _3DSOLID_FIELDS macros
-    if ($type eq 'unsigned char') {
-      $type = 'RC';
-    } elsif ($type eq 'unsigned char*') {
-      $type = 'RC*';
-    } elsif ($type eq 'double') {
-      $type = 'BD';
-    } elsif ($type eq 'double*') {
-      $type = 'BD*';
-    } elsif ($type =~ /^Dwg_Bitcode_(\w+)/) {
-      $type = $1;
-    } elsif ($type eq 'char*') {
-      $type = 'TV';
-    } elsif ($type eq 'unsigned short int') {
-      $type = 'BS';
-    } elsif ($type eq 'uint16_t') {
-      $type = 'BS';
-    } elsif ($type eq 'unsigned int') {
-      $type = 'BL';
-    } elsif ($type eq 'unsigned int*') {
-      $type = 'BL*';
-    } elsif ($type eq 'uint32_t') {
-      $type = 'BL';
-    } elsif ($type eq 'uint32_t*') {
-      $type = 'BL*';
-    } elsif ($type eq 'Dwg_Object_Ref*') {
-      $type = 'H';
-    } elsif ($type eq 'Dwg_Object_Ref**') {
-      $type = 'H*';
-    } elsif ($type =~ /\b(unsigned|char|int|long|double)\b/) {
-      warn "unexpanded $type $n.$name\n";
-    } elsif ($type =~ /^struct/) {
-      $size = "sizeof (void *)";
-    } elsif ($type =~ /^HASH\(/) { # inlined struct or union
-      warn "ignore inlined field $n.$name\n";
-      next;
-    }
-    my $is_malloc = ($type =~ /\*$/ or $type =~ /^(T$|T[UVF])/) ? 1 : 0;
-    my $is_indirect = ($is_malloc or $type =~ /^(struct|[23T]|CMC|H$)/) ? 1 : 0;
-    my $is_string = ($is_malloc and $type =~ /^T[UV]?$/) ? 1 : 0; # not TF or TFF
-    my $sname = $name;
-    if ($name =~ /\[(\d+)\]$/) {
-      $is_malloc = 0;
-      $size = "$1 * $size";
-      $sname =~ s/\[(\d+)\]$//;
-    }
-    if ($ENT{$key}->{$name}) {
-      $type = $ENT{$key}->{$name};
-    } else {
-      $ENT{$key}->{$name} = $type;
-    }
-    my $dxf = $DXF{$key}->{$name};
-    if (!$dxf && $key =~ /DIMENSION/) {
-      $dxf = $DXF{COMMON_ENTITY_DIMENSION}->{$name};
-    }
-    if (!$dxf && $key =~ /ASSOC/) {
-      $dxf = $DXF{ASSOCACTION}->{$name};
-    }
-    $dxf = 0 unless $dxf;
-    warn "no dxf for $key: $name 0\n" unless $dxf or
-      ($name eq 'parent') or
-      ($key eq 'header_variables' and $name eq lc($name));
-
-    printf $fh "  { \"%s\",\t\"%s\", %s,  OFF (%s, %s),\n    %d,%d,%d, %d },\n",
-      $name, $type, $size, $tmpl, $sname, $is_indirect, $is_malloc, $is_string, $dxf;
-
-    print $doc "\@item $name\n$type", $dxf ? ",\tDXF $dxf" : "", "\n";
+    out_declarator($d, $tmpl, $key);
   }
   print $fh "  {NULL,\tNULL,\t0,\t0,\t0,0,0, 0},\n";
   print $fh "};\n";

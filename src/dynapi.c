@@ -6822,6 +6822,10 @@ static const Dwg_DYNAPI_field _dwg_MLINESTYLE_line_fields[] = {
     0,0,0, 49 },
   { "color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_MLINESTYLE_line, color),
     1,0,0, 0 },
+  { "lt.index",	"BSd", sizeof (BITCODE_BSd),  OFF (struct _dwg_MLINESTYLE_line, lt.index),
+    0,0,0, 0 },
+  { "lt.ltype",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_MLINESTYLE_line, lt.ltype),
+    1,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_MLINE_line: (sorted by offset) */
