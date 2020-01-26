@@ -951,9 +951,9 @@ json_advance_unknown (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
     {
     case JSMN_OBJECT:
     case JSMN_ARRAY:
+      tokens->index++;
       for (int i = 0; i < t->size; i++)
         {
-          tokens->index++;
           error |= json_advance_unknown (dat, tokens, depth + 1);
         }
       return error;
@@ -1827,7 +1827,8 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           char key[80];
           json_fixed_key (key, dat, tokens);
           t = &tokens->tokens[tokens->index];
-          if (strEQc (key, "object"))
+          if (strEQc (key, "object") && t->type == JSMN_STRING
+              && i < (int)dwg->num_objects && !dwg->object[i].type)
             {
               int len = t->end - t->start;
               int objsize = 16;
@@ -1860,7 +1861,8 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               obj->dxfname = strdup (name);
               tokens->index++;
             }
-          else if (strEQc (key, "entity"))
+          else if (strEQc (key, "entity") && t->type == JSMN_STRING
+                   && i < (int)dwg->num_objects && !dwg->object[i].type)
             {
               int len = t->end - t->start;
               int objsize;
@@ -1957,7 +1959,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 }
               LOG_TRACE ("Unknown %s.%s %.*s\n", name, key,
                          t->end - t->start, &dat->chain[t->start]);
-              ++tokens->index;
+              json_advance_unknown (dat, tokens, 0);
             }
         }
     }
