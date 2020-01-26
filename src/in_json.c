@@ -926,7 +926,6 @@ json_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 // on OBJECT to end of OBJECT
 // on ARRAY to end of ARRAY
 // on STRING (key) get next
-// TODO: recursion depth check
 static int
 json_advance_unknown (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
                       int depth)

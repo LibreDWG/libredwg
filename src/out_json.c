@@ -940,6 +940,7 @@ dwg_json_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
 static int
 dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
+  int error = 0;
   switch (obj->type)
     {
     case DWG_TYPE_TEXT:
@@ -1107,7 +1108,7 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         }
       /* > 500 */
       else if (DWG_ERR_UNHANDLEDCLASS
-               & dwg_json_variable_type (obj->parent, dat, obj))
+               & (error = dwg_json_variable_type (obj->parent, dat, obj)))
         {
           Dwg_Data *dwg = obj->parent;
           int is_entity;
@@ -1133,6 +1134,8 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
               goto invalid_type;
             }
         }
+      else
+        return 0;
     }
  invalid_type:
   LOG_WARN ("Unknown object, skipping eed/reactors/xdic/...");
