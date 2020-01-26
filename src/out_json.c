@@ -652,10 +652,14 @@ _prefix (Bit_Chain *dat)
     Dwg_Data *dwg = obj->parent;                                              \
     Dwg_Entity_##token *ent, *_obj;                                           \
     Dwg_Object_Entity *_ent;                                                  \
+    const char *name = #token;                                                \
     LOG_INFO ("Entity " #token ":\n")                                         \
     _ent = obj->tio.entity;                                                   \
     _obj = ent = _ent->tio.token;                                             \
-    FIELD_TEXT (entity, #token);                                              \
+    if (*name == '_')                                                         \
+      FIELD_TEXT (entity, &name[1])                                           \
+    else                                                                      \
+      FIELD_TEXT (entity, name)                                               \
     if (obj->dxfname && strNE (obj->dxfname, #token))                         \
       FIELD_TEXT (dxfname, obj->dxfname);                                     \
     _FIELD (index, RL, 0);                                                    \
@@ -680,10 +684,14 @@ _prefix (Bit_Chain *dat)
     int error = 0;                                                            \
     Bit_Chain *hdl_dat = dat;                                                 \
     Dwg_Data *dwg = obj->parent;                                              \
+    const char *name = #token;                                                \
     Dwg_Object_##token *_obj;                                                 \
-    LOG_INFO ("Object " #token ":\n")                                         \
+    LOG_INFO ("Object "#token ":\n")                                          \
     _obj = obj->tio.object->tio.token;                                        \
-    FIELD_TEXT (object, #token);                                              \
+    if (*name == '_')                                                         \
+      FIELD_TEXT (object, &name[1])                                           \
+    else                                                                      \
+      FIELD_TEXT (object, name)                                               \
     if (obj->dxfname && strNE (obj->dxfname, #token))                         \
       FIELD_TEXT (dxfname, obj->dxfname);                                     \
     _FIELD (index, RL, 0);                                                    \
