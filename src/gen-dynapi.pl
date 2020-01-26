@@ -1942,13 +1942,14 @@ _fields_size_sum (const Dwg_DYNAPI_field *restrict fields)
 int
 dwg_dynapi_fields_size (const char *restrict name)
 {
-  Dwg_DYNAPI_field *f;
+  const Dwg_DYNAPI_field *f;
 #ifndef HAVE_NONNULL
   if (!name)
     return 0;
 #endif
-  if (is_dwg_entity (name) || is_dwg_object (name))
-    return _fields_size_sum (dwg_dynapi_entity_fields (name));
+  f = dwg_dynapi_entity_fields (name);
+  if (f)
+    return _fields_size_sum (f); // VERTEX_PFACE is not entity nor object yet
   else
     return _fields_size_sum (dwg_dynapi_subclass_fields (name));
 }

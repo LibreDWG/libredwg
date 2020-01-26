@@ -133,6 +133,7 @@ EXPORT bool dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
                                         char **restrict textp, int *isnewp,
                                         Dwg_DYNAPI_field *restrict fp)
   __nonnull ((1, 2, 3));
+
 /** Returns the ENTITY|OBJECT.fieldname text value in textp as utf-8.
    entity is the Dwg_Entity_ENTITY or Dwg_Object_OBJECT struct with the
    specific fields. The optional Dwg_DYNAPI_field *fp is filled with the field
@@ -166,6 +167,7 @@ EXPORT bool dwg_dynapi_header_set_value (const Dwg_Data *restrict dwg,
                                          const void *restrict value,
                                          const bool is_utf8)
   __nonnull ((1, 2, 3));
+
 /** Sets the ENTITY.fieldname to a value.
     A malloc'ed struct is passed by ptr, not by the content.
     A non-malloc'ed struct is set by content.
@@ -217,7 +219,7 @@ EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_common_object_field (const char *restrict fieldname)
     __nonnull ((1));
 
-/* Find the fields for this entity or object. */
+/** Find the fields for this entity or object. */
 EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_entity_fields (const char *restrict name) __nonnull ((1));
 
@@ -227,9 +229,12 @@ dwg_dynapi_common_entity_fields (void);
 EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_common_object_fields (void);
 
-/* Find the fields for this subclass. See dwg.h */
+/** Find the fields for this subclass. See dwg.h */
 EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_subclass_fields (const char *restrict name) __nonnull ((1));
+
+/** The sum of the size of all fields, by entity or subclass name */
+EXPORT int dwg_dynapi_fields_size (const char *restrict name) __nonnull ((1));
 
 /* static api */
 typedef struct dwg_point_3d
