@@ -1903,6 +1903,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               free (obj->dxfname);
               obj->dxfname = json_string (dat, tokens);
+              LOG_TRACE ("dxfname: %s\n", obj->dxfname)
             }
           else if (strEQc (key, "index")) // TODO not TableCellContent_Attr
             {
@@ -1938,6 +1939,11 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               obj->handle.code = hdl->handleref.code;
               obj->handle.size = hdl->handleref.size;
               obj->handle.value = hdl->handleref.value;
+            }
+          else if (strEQc (key, "unknown") && memBEGINc (obj->name, "UNKNOWN_"))
+            {
+              obj->unknown_bits = json_string (dat, tokens);
+              LOG_TRACE ("unknown_bits: %.*s\n", t->end - t->start, &dat->chain[t->start])
             }
           else
             //search_field:
