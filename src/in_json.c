@@ -1175,19 +1175,16 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 }
               if (strEQc (name, "MULTILEADER"))
                 {
-                  const char *keytxt = "ctx.content.txt.";
-                  const char *keyblk = "ctx.content.blk.";
                   // embedded structs
-                  if (memBEGIN (key, keytxt, strlen (keytxt))
-                      || memBEGIN (key, keyblk, strlen (keyblk)))
+                  if (memBEGINc (key, "ctx.content.txt.")
+                      || memBEGINc (key, "ctx.content.blk."))
                     {
                       Dwg_Entity_MULTILEADER *_o = (Dwg_Entity_MULTILEADER*)_obj;
                       Dwg_MLEADER_Content *cnt = &_o->ctx.content;
-                      // FIXME: add to dynapi: txt.* and blk.* MLEADER_Content union fields
                       const Dwg_DYNAPI_field *sf
                         = dwg_dynapi_subclass_fields ("MLEADER_Content");
                       if (sf && _set_struct_field (dat, obj, tokens, cnt, "MLEADER",
-                                                   &key[strlen(keytxt)], sf))
+                                                   &key[strlen("ctx.content.")], sf))
                         continue;
                     }
                   else if (memBEGINc (key, "ctx."))
