@@ -592,7 +592,7 @@ main (int argc, char const *argv[])
   pos = bit_position (&bitchain);
 
   bit_write_TV (&bitchain, (char *)"GNU"); // we don't store the \0
-  if (bitchain.byte == 69 && bitchain.bit == 2)
+  if (bitchain.byte == 70 && bitchain.bit == 2)
     pass ();
   else
     fail ("bit_write_TV @%ld.%d", bitchain.byte, bitchain.bit);
@@ -611,7 +611,7 @@ main (int argc, char const *argv[])
     const uint16_t exp[] = {'T', 'e', 'i', 'g', 'h', 'a', 0x2122, 0};
     bitchain.version = R_2007; // @65.0
     bit_write_T (&bitchain, (char *)"Teigha\\U+2122"); // convert to unicode
-    if (bitchain.byte == 80 && bitchain.bit == 2)
+    if (bitchain.byte == 82 && bitchain.bit == 2)
       pass ();
     else
       fail ("bit_write_T => TU @%ld.%d", bitchain.byte, bitchain.bit);
@@ -646,7 +646,7 @@ main (int argc, char const *argv[])
   }
 
   bit_write_L (&bitchain, 20);
-  if (bitchain.byte == 83 && bitchain.bit == 2)
+  if (bitchain.byte == 84 && bitchain.bit == 2)
     pass ();
   else
     fail ("bit_write_L @%ld.%d", bitchain.byte, bitchain.bit);
@@ -667,7 +667,7 @@ main (int argc, char const *argv[])
     color.name = (char *)"Some name";
     color.book_name = (char *)"book_name";
     bit_write_CMC (&bitchain, &color);
-    if (bitchain.byte == 84 && bitchain.bit == 4)
+    if (bitchain.byte == 85 && bitchain.bit == 4)
       pass ();
     else
       fail ("bit_write_CMC @%ld.%d", bitchain.byte, bitchain.bit);
@@ -700,7 +700,7 @@ main (int argc, char const *argv[])
     color.name = (char *)"Some name";
     color.book_name = (char *)"book_name";
     bit_write_CMC (&bitchain, &color);
-    if (bitchain.byte == 105 && bitchain.bit == 2)
+    if (bitchain.byte == 107 && bitchain.bit == 2)
       pass ();
     else
       fail ("bit_write_CMC @%ld.%d", bitchain.byte, bitchain.bit);
@@ -732,18 +732,18 @@ main (int argc, char const *argv[])
   bitchain.byte = 0;
   {
     int ret = bit_search_sentinel (&bitchain, sentinel);
-    if (bitchain.byte == 122)
+    if (bitchain.byte == 124)
       pass ();
     else
       {
         fail ("bit_search_sentinel %lu", bitchain.byte);
-        bitchain.byte = 122;
+        bitchain.byte = 124;
       }
   }
   {
     unsigned int check
-        = bit_calc_CRC (0xC0C1, (unsigned char *)bitchain.chain, 122L);
-    if (check == 0x3144)
+        = bit_calc_CRC (0xC0C1, (unsigned char *)bitchain.chain, 124L);
+    if (check == 0xA583)
       pass ();
     else
       fail ("bit_calc_CRC %04X", check);
@@ -775,5 +775,5 @@ main (int argc, char const *argv[])
   }
 
   free (bitchain.chain);
-  return 0;
+  return failed;
 }
