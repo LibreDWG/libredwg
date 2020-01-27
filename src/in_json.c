@@ -1007,6 +1007,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       for (int j = 0; j < keys; j++)
         {
           char key[80];
+          LOG_INSANE ("[%d] ", j);
           json_fixed_key (key, dat, tokens);
           t = &tokens->tokens[tokens->index];
           if (strEQc (key, "object") && t->type == JSMN_STRING

@@ -5811,9 +5811,13 @@ DWG_OBJECT (MLEADERSTYLE)
   }
   FIELD_BD (align_space, 46);
   FIELD_CMC (block_color, 94,0);
-  FIELD_BD (block_scale.x, 47);
-  FIELD_BD (block_scale.y, 49);
-  FIELD_BD (block_scale.z, 140);
+  JSON {
+    FIELD_3BD (block_scale, 0)
+  } else {
+    FIELD_BD (block_scale.x, 47);
+    FIELD_BD (block_scale.y, 49);
+    FIELD_BD (block_scale.z, 140);
+  }
   FIELD_B (use_block_scale, 293);
   FIELD_BD (block_rotation, 141);
   FIELD_B (use_block_rotation, 294);
