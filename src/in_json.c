@@ -734,7 +734,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                        || strEQc (f->type, "BS") || strEQc (f->type, "RL")
                        || strEQc (f->type, "BL") || strEQc (f->type, "RLL")
                        || strEQc (f->type, "BLd") || strEQc (f->type, "BSd")
-                       || strEQc (f->type, "BLL")))
+                       || strEQc (f->type, "BLL") || strEQc (f->type, "4BITS")))
             {
               long num = json_long (dat, tokens);
               LOG_TRACE ("%s: %ld [%s]\n", key, num, f->type);
@@ -944,6 +944,60 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               ++tokens->index;
             }
           break;
+        }
+      else
+        {
+          // Currently we have 3 known static arrays:
+          if (t->type == JSMN_PRIMITIVE && memBEGINc (key, "vertind[")
+              && strEQc (f->name, "vertind[4]"))
+            {
+              BITCODE_BS arr[4];
+              int index;
+              sscanf (key, "vertind[%d]", &index);
+              if (index >= 0 && index < 4)
+                {
+                  dwg_dynapi_field_get_value (_obj, f, &arr);
+                  arr[index] = json_long (dat, tokens);
+                  LOG_TRACE ("%s: %d [%s]\n", key, (int)arr[index], f->type);
+                  dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
+                }
+              else
+                tokens->index++;
+              break;
+            }
+          else if (t->type == JSMN_PRIMITIVE && memBEGINc (key, "edge[")
+              && strEQc (f->name, "edge[4]"))
+            {
+              BITCODE_BL arr[4];
+              int index;
+              sscanf (key, "edge[%d]", &index);
+              if (index >= 0 && index < 4)
+                {
+                  dwg_dynapi_field_get_value (_obj, f, &arr);
+                  arr[index] = json_long (dat, tokens);
+                  LOG_TRACE ("%s: %d [%s]\n", key, (int)arr[index], f->type);
+                  dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
+                }
+              else
+                tokens->index++;
+              break;
+            }
+          else if (t->type == JSMN_ARRAY && memBEGINc (key, "workplane[")
+                   && strEQc (f->name, "workplane[3]"))
+            {
+              BITCODE_3BD arr[3];
+              int index;
+              sscanf (key, "workplane[%d]", &index);
+              if (index >= 0 && index < 3)
+                {
+                  dwg_dynapi_field_get_value (_obj, f, &arr);
+                  json_3DPOINT (dat, tokens, key, f->type, &arr[index]);
+                  dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
+                }
+              else
+                json_advance_unknown (dat, tokens, 0);
+              break;
+            }
         }
     }
   return f->name ? 1 : 0; // found or not
