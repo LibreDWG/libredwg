@@ -1047,7 +1047,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       int is_entity = 0;
       Dwg_Object *obj = &dwg->object[i];
       Dwg_Object_APPID *_obj = NULL;
-      const Dwg_DYNAPI_field *fields, *cfields;
+      const Dwg_DYNAPI_field *fields = NULL, *cfields;
       const Dwg_DYNAPI_field *f;
 
       memset (obj, 0, sizeof (Dwg_Object));
