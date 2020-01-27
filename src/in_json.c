@@ -744,6 +744,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               LOG_TRACE ("%s: %ld [%s]\n", key, num, f->type);
               dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
             }
+          // TFF not yet in dynapi.c
           else if (t->type == JSMN_STRING
                    && (strEQc (f->type, "TV") || strEQc (f->type, "T")
                        || strEQc (f->type, "TF") || strEQc (f->type, "TU")))
@@ -752,12 +753,22 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               int len = strlen (str);
               if (strEQc (f->type, "TF") && len < f->size) // fixed len: ensure big enough
                 {
+                  char *old;
                   if (strEQc (key, "strings_area"))
-                    str = realloc (str, dwg->header.version > 2004 ? 512 : 256);
+                    {
+                      const int k = dwg->header.version > 2004 ? 512 : 256;
+                      str = realloc (str, k);
+                      memset (&str[len + 1], 0, k - len - 1);
+                    }
                   else if (f->size > sizeof (char*))
-                    str = realloc (str, f->size);
+                    {
+                      str = realloc (str, f->size);
+                      memset (&str[len + 1], 0, f->size - len - 1);
+                    }
                   LOG_TRACE ("%s: \"%s\" [%s]\n", key, str, f->type);
-                  dwg_dynapi_field_set_value (dwg, _obj, f, &str, 1);
+                  old = &((char*)_obj)[f->offset];
+                  memcpy (old, &str, sizeof (char*));
+                  //dwg_dynapi_field_set_value (dwg, _obj, f, &str, 1);
                 }
               else if (f->dxf == 310 && len > 0) // is BINARY
                 {
@@ -773,6 +784,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                     }
                   buf[blen] = '\0';
                   LOG_TRACE ("%s: '%.*s' [%s] (binary)\n", key, blen, buf, f->type);
+                  free (str);
                   // set the ptr directly, no alloc, no conversion.
                   old = &((char*)_obj)[f->offset];
                   memcpy (old, &buf, f->size);
@@ -782,7 +794,6 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   LOG_TRACE ("%s: \"%s\" [%s]\n", key, str, f->type);
                   dwg_dynapi_field_set_value (dwg, _obj, f, &str, 1);
                 }
-              free (str);
             }
           else if (t->type == JSMN_ARRAY
                    && (strEQc (f->type, "3BD") || strEQc (f->type, "3RD")

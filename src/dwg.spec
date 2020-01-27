@@ -4145,7 +4145,7 @@ DWG_ENTITY (OLE2FRAME)
 #ifdef IS_DXF
   // via dwg_decode_ole2() from the first 0x80 bytes in data
   FIELD_BS (oleversion, 70); //  always 2
-  FIELD_TFF (oleclient, strlen (_obj->oleclient), 3);
+  FIELD_TF (oleclient, strlen (_obj->oleclient), 3);
   FIELD_3BD (pt1, 10);  // upper left
   FIELD_3BD (pt2, 11);  // lower right
 #endif

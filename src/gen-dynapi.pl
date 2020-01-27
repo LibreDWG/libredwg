@@ -84,7 +84,7 @@ $c->parse_file($hdr);
 #print Data::Dumper->Dump([$c->struct('_dwg_entity_TEXT')], ['_dwg_entity_TEXT']);
 #print Data::Dumper->Dump([$c->struct('struct _dwg_header_variables')], ['Dwg_Header_Variables']);
 
-my (%h, $n, %structs, %unions, %ENT, %DXF, %SUBCLASS, %DWG_TYPE);
+my (%h, $n, %structs, %unions, %ENT, %DXF, %SIZE, %SUBCLASS, %DWG_TYPE);
 local (@entity_names, @object_names, @subclasses, $max_entity_names, $max_object_names);
 # todo: harmonize more subclasses
 for (sort $c->struct_names) {
@@ -158,6 +158,7 @@ while (<$in>) {
 #$h{Dwg_Bitcode_2BD} = '2BD';
 #$h{Dwg_Bitcode_3RD} = '3RD';
 #$h{Dwg_Bitcode_2RD} = '2RD';
+#$ENT{LTYPE}->{strings_area} = 'TF';
 close $in;
 
 # parse a spec for its objects, subclasses and dxf values
@@ -256,15 +257,21 @@ sub dxf_in {
     } elsif (/^\s+VALUE_HANDLE\s*\(.+,\s*(\w+),\s*\d,\s*(\d+)\)/) {
       $f = $1;
       $DXF{$n}->{$f} = $2 if $2;
+    } elsif (/^\s+FIELD_TF\s*\((\w+),\s*(\d*),\s*(\d+)\)/) {
+      my $type = 'TF';
+      $f = $1;
+      $DXF{$n}->{$f} = $3 if $3;
+      $SIZE{$n}->{$f} = $2;
+      $ENT{$n}->{$f} = 'TF';
     } elsif (/^\s+FIELD_(.+?)\s*\((\w+),\s*(\d+)\)/) {
       my $type = $1;
       $f = $2;
       my $dxf = $3;
       $f =~ s/^(?:fmt|sty|name|value)\.//;
       $DXF{$n}->{$f} = $dxf if $dxf;
-      if ($type =~ /^[23][RB]D_1/) {
-        $ENT{$n}->{$f} = $type;
-      }
+      $ENT{$n}->{$f} = 'TF' if $type eq 'BINARY';
+      $ENT{$n}->{$f} = $type if $type =~ /^T/;
+      $ENT{$n}->{$f} = $type if $type =~ /^[23][RB]D_1/;
     } elsif (@old && /^\s+SUB_FIELD_(.+?)\s*\($v,\s*(\w+),\s*(\d+)\)/) {
       my $type = $1;
       $f = $2;
@@ -282,13 +289,16 @@ sub dxf_in {
       my $type = $1;
       $f = $2;
       $DXF{$n}->{$f} = $3 if $3;
-      if ($type =~ /^[23][RB]D_1/) {
-        $ENT{$n}->{$f} = $type;
-      }
+      $ENT{$n}->{$f} = 'TF' if $type eq 'BINARY';
+      $ENT{$n}->{$f} = $type if $type =~ /^T/;
+      $ENT{$n}->{$f} = $type if $type =~ /^[23][RB]D_1/;
     } elsif (@old && /^\s+SUB_FIELD_(.+?)\s*\(\w+,\s*(\w+),.*,\s*(\d+)\)/) {
       my $type = $1;
       $f = $2;
       $DXF{$n}->{$f} = $3 if $3;
+      $ENT{$n}->{$f} = 'TF' if $type eq 'BINARY';
+      $ENT{$n}->{$f} = $type if $type =~ /^T/;
+      $ENT{$n}->{$f} = $type if $type =~ /^[23][RB]D_1/;
     } elsif (/^\s+HANDLE_VECTOR(?:_N)?\s*\((\w+),.*?,\s*(\d+)\)/) {
       $f = $1;
       $DXF{$n}->{$f} = $2 if $2;
@@ -305,9 +315,11 @@ sub dxf_in {
     } elsif (/^\s+HEADER_([23])D\s*\((\w+)\)/) {
       $f = $2;
       $DXF{$n}->{$f} = $1 eq '2' ? 20 : 30;
-    } elsif (/^\s+VALUE_.+\s*\((\w.+),.*,\s*(\d+)\)/) {
-      $f = $1;
-      $DXF{$n}->{$f} = $2 if $2;
+    } elsif (/^\s+VALUE_(.+)\s*\((\w.+),.*,\s*(\d+)\)/) {
+      my $type = $1;
+      $f = $2;
+      $DXF{$n}->{$f} = $3 if $3;
+      $ENT{$n}->{$f} = $type if $type =~ /^T/;
     }
     if ($f and $n and exists $DXF{$n}->{$f}) {
       warn "  $f $DXF{$n}->{$f}\n";
@@ -586,6 +598,11 @@ sub out_declarator {
       next;
     }
   }
+  if ($ENT{$key}->{$name}) {
+    $type = $ENT{$key}->{$name};
+  } else {
+    $ENT{$key}->{$name} = $type;
+  }
   my $is_malloc = ($type =~ /\*$/ or $type =~ /^(T$|T[UVF])/) ? 1 : 0;
   my $is_indirect = ($is_malloc or $type =~ /^(struct|[23T]|CMC|H$)/) ? 1 : 0;
   my $is_string = ($is_malloc and $type =~ /^T[UV]?$/) ? 1 : 0; # not TF or TFF
@@ -595,10 +612,8 @@ sub out_declarator {
     $size = "$1 * $size";
     $sname =~ s/\[(\d+)\]$//;
   }
-  if ($ENT{$key}->{$name}) {
-    $type = $ENT{$key}->{$name};
-  } else {
-    $ENT{$key}->{$name} = $type;
+  if ($type =~ /^TF/ && exists $SIZE{$key}->{$name}) {
+    $size = $SIZE{$key}->{$name};
   }
   my $dxf = $DXF{$key}->{$name};
   if (!$dxf && $key =~ /DIMENSION/) {
@@ -628,7 +643,10 @@ sub out_struct {
   unless ($s) {
     $s = $c->union($tmpl);
   }
-  return unless $s->{declarations};
+  unless ($s->{declarations}) {
+    delete $ENT{$n};   # don't show up in dynapi_test.c
+    return;
+  }
   my @declarations = @{$s->{declarations}};
   if ($n =~ /^_dwg_(header_variables|object_object|object_entity|SummaryInfo)$/) {
     @declarations = sort {
@@ -1027,6 +1045,9 @@ EOF
 
   for my $var (sort keys %{$ENT{$name}}) {
     my $type = $ENT{$name}->{$var};
+    # if 0 ignored in .spec
+    next if $type eq 'T' and $name eq 'LIGHT' and $var eq 'web_file';
+    next if $type eq 'TF' and $name eq 'SUN' and $var eq 'bytes';
     my $fmt = exists $FMT{$type} ? $FMT{$type} : undef;
     if (!$fmt) {
       if ($type =~ /[ \*]/ or $type eq 'H') {
@@ -1160,18 +1181,35 @@ EOF
       }
     } else { # is_ptr
       my $is_str;
+      my $vardecl = $var;
+      my $size = "sizeof ($lname->$svar)";
+      if (0 and $stype =~ /^TF/) {
+        my $_size = $SIZE{$name}->{$var};
+        if ($_size && $_size =~ /^\d+$/) {
+          $type = 'char';
+          $size = $_size;
+          $vardecl .= "[$size]";
+          if ($var eq 'strings_area') {
+            $vardecl .= ";\n    const Dwg_Data* dwg = obj->parent;";
+            $vardecl .= "\n    const int size = dwg->header.version >= 2004 ? 512 : 256";
+            $size = 'size';
+          }
+        }
+      }
       print $fh <<"EOF";
   {
-    $type $var;
+    $type $vardecl;
     if (dwg_dynapi_entity_value ($lname, "$name", "$var", &$svar, NULL)
 EOF
-        if ($stype =~ /^(TV|RC\*|unsigned char\*|char\*)$/) {
+        if ($stype =~ /^(TV|T|TU|RC\*|unsigned char\*|char\*)$/) {
           $is_str = 1;
           print $fh "        && $svar\n";
           print $fh "           ? strEQ ((char *)$svar, (char *)$lname->$svar)\n";
           print $fh "           : !$lname->$svar)\n";
+        } elsif (0 and $stype =~ /^TF/ and $size !~ /^sizeof/) {
+          print $fh "        && !memcmp ($svar, $lname->$svar, $size))\n";
         } elsif ($type !~ /\*\*/) {
-          print $fh "        && !memcmp (&$svar, &$lname->$svar, sizeof ($lname->$svar)))\n";
+          print $fh "        && !memcmp (&$svar, &$lname->$svar, $size))\n";
         } else {
           print $fh ")\n";
         }
@@ -1272,7 +1310,7 @@ close $fh;
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1234 "gen-dynapi.pl"
+#line 1314 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -1355,7 +1393,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
-#line 1317 "gen-dynapi.pl"
+#line 1397 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
@@ -1551,7 +1589,7 @@ dwg_dynapi_entity_value (void *restrict _obj, const char *restrict name,
         }
       if (fp)
         memcpy (fp, f, sizeof (Dwg_DYNAPI_field));
-      memcpy (out, &((char *)_obj)[f->offset], f->size);
+      memcpy (out, &((char *)_obj)[f->offset], f->is_malloc ? sizeof(char*) : f->size);
       return true;
     }
   }
@@ -1833,24 +1871,24 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
                    const Dwg_Version_Type dwg_version,
                    const void *restrict value, const bool is_utf8)
 {
-  // TODO: sanity checks
+  // TODO: sanity checks. is_malloc (TF)
   // if text strcpy or wcscpy, or do utf8 conversion.
   //if ((char*)old && f->is_malloc)
   //  free (old);
-  if (f->is_string)
+  if (f->is_malloc)
     {
       // NULL ptr
       if (!*(char**)value)
         memcpy (old, value, f->size);
       // ascii
-      else if (strEQc (f->type, "TF") || dwg_version < R_2007)
+      else if (strEQc (f->type, "TF") || (f->is_string && dwg_version < R_2007))
         {
           char *str = malloc (strlen (*(char**)value)+1);
           strcpy (str, *(char**)value);
-          memcpy (old, &str, f->size); // size of ptr
+          memcpy (old, &str, sizeof (char*)); // size of ptr
         }
       // or wide
-      else if (strNE (f->type, "TF") && dwg_version >= R_2007)
+      else if (strNE (f->type, "TF") && (f->is_string && dwg_version >= R_2007))
         {
           BITCODE_TU wstr;
           if (is_utf8)
@@ -1869,8 +1907,10 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
               memcpy (wstr, value, length * 2);
 #endif
             }
-          memcpy (old, &wstr, f->size); // size of ptr
+          memcpy (old, &wstr, sizeof (char*)); // size of ptr
         }
+      else
+        memcpy (old, value, sizeof (char*));
     }
   else
     memcpy (old, value, f->size);

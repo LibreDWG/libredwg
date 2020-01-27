@@ -55,7 +55,7 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 36583 "dynapi_test.c"
+#line 36661 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
 #line 60 "dynapi_test.c.in"
   return error + failed;
@@ -67,7 +67,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 37163 "dynapi_test.c"
+#line 37241 "dynapi_test.c"
   /* @@for test_SIZES@@ */
 #line 72 "dynapi_test.c.in"
   return error;

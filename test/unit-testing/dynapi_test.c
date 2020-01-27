@@ -6373,14 +6373,14 @@ static int test_ATTDEF (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_TV default_value;
+    BITCODE_T default_value;
     if (dwg_dynapi_entity_value (attdef, "ATTDEF", "default_value", &default_value, NULL)
         && default_value
            ? strEQ ((char *)default_value, (char *)attdef->default_value)
            : !attdef->default_value)
       pass ();
     else
-      fail ("ATTDEF.default_value [TV] '%s' <> '%s'", default_value, attdef->default_value);
+      fail ("ATTDEF.default_value [T] '%s' <> '%s'", default_value, attdef->default_value);
   }
   {
     BITCODE_BD elevation;
@@ -6543,14 +6543,14 @@ static int test_ATTDEF (const Dwg_Object *obj)
         fail ("ATTDEF.parent [struct _dwg_object_entity*]");
   }
   {
-    BITCODE_TV prompt;
+    BITCODE_T prompt;
     if (dwg_dynapi_entity_value (attdef, "ATTDEF", "prompt", &prompt, NULL)
         && prompt
            ? strEQ ((char *)prompt, (char *)attdef->prompt)
            : !attdef->prompt)
       pass ();
     else
-      fail ("ATTDEF.prompt [TV] '%s' <> '%s'", prompt, attdef->prompt);
+      fail ("ATTDEF.prompt [T] '%s' <> '%s'", prompt, attdef->prompt);
   }
   {
     BITCODE_RD rotation;
@@ -6577,14 +6577,14 @@ static int test_ATTDEF (const Dwg_Object *obj)
         fail ("ATTDEF.style [H]");
   }
   {
-    BITCODE_TV tag;
+    BITCODE_T tag;
     if (dwg_dynapi_entity_value (attdef, "ATTDEF", "tag", &tag, NULL)
         && tag
            ? strEQ ((char *)tag, (char *)attdef->tag)
            : !attdef->tag)
       pass ();
     else
-      fail ("ATTDEF.tag [TV] '%s' <> '%s'", tag, attdef->tag);
+      fail ("ATTDEF.tag [T] '%s' <> '%s'", tag, attdef->tag);
   }
   {
     BITCODE_RD thickness;
@@ -6938,24 +6938,24 @@ static int test_ATTRIB (const Dwg_Object *obj)
         fail ("ATTRIB.style [H]");
   }
   {
-    BITCODE_TV tag;
+    BITCODE_T tag;
     if (dwg_dynapi_entity_value (attrib, "ATTRIB", "tag", &tag, NULL)
         && tag
            ? strEQ ((char *)tag, (char *)attrib->tag)
            : !attrib->tag)
       pass ();
     else
-      fail ("ATTRIB.tag [TV] '%s' <> '%s'", tag, attrib->tag);
+      fail ("ATTRIB.tag [T] '%s' <> '%s'", tag, attrib->tag);
   }
   {
-    BITCODE_TV text_value;
+    BITCODE_T text_value;
     if (dwg_dynapi_entity_value (attrib, "ATTRIB", "text_value", &text_value, NULL)
         && text_value
            ? strEQ ((char *)text_value, (char *)attrib->text_value)
            : !attrib->text_value)
       pass ();
     else
-      fail ("ATTRIB.text_value [TV] '%s' <> '%s'", text_value, attrib->text_value);
+      fail ("ATTRIB.text_value [T] '%s' <> '%s'", text_value, attrib->text_value);
   }
   {
     BITCODE_RD thickness;
@@ -10396,10 +10396,12 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
   {
     BITCODE_T notes;
     if (dwg_dynapi_entity_value (geopositionmarker, "GEOPOSITIONMARKER", "notes", &notes, NULL)
-        && !memcmp (&notes, &geopositionmarker->notes, sizeof (geopositionmarker->notes)))
-        pass ();
+        && notes
+           ? strEQ ((char *)notes, (char *)geopositionmarker->notes)
+           : !geopositionmarker->notes)
+      pass ();
     else
-        fail ("GEOPOSITIONMARKER.notes [T]");
+      fail ("GEOPOSITIONMARKER.notes [T] '%s' <> '%s'", notes, geopositionmarker->notes);
   }
   {
     struct _dwg_object_entity* parent;
@@ -10436,10 +10438,12 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
   {
     BITCODE_T text;
     if (dwg_dynapi_entity_value (geopositionmarker, "GEOPOSITIONMARKER", "text", &text, NULL)
-        && !memcmp (&text, &geopositionmarker->text, sizeof (geopositionmarker->text)))
-        pass ();
+        && text
+           ? strEQ ((char *)text, (char *)geopositionmarker->text)
+           : !geopositionmarker->text)
+      pass ();
     else
-        fail ("GEOPOSITIONMARKER.text [T]");
+      fail ("GEOPOSITIONMARKER.text [T] '%s' <> '%s'", text, geopositionmarker->text);
   }
   {
     BITCODE_BS text_alignment;
@@ -10607,14 +10611,14 @@ static int test_HATCH (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_TV gradient_name;
+    BITCODE_T gradient_name;
     if (dwg_dynapi_entity_value (hatch, "HATCH", "gradient_name", &gradient_name, NULL)
         && gradient_name
            ? strEQ ((char *)gradient_name, (char *)hatch->gradient_name)
            : !hatch->gradient_name)
       pass ();
     else
-      fail ("HATCH.gradient_name [TV] '%s' <> '%s'", gradient_name, hatch->gradient_name);
+      fail ("HATCH.gradient_name [T] '%s' <> '%s'", gradient_name, hatch->gradient_name);
   }
   {
     BITCODE_BD gradient_shift;
@@ -10681,14 +10685,14 @@ static int test_HATCH (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_TV name;
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (hatch, "HATCH", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)hatch->name)
            : !hatch->name)
       pass ();
     else
-      fail ("HATCH.name [TV] '%s' <> '%s'", name, hatch->name);
+      fail ("HATCH.name [T] '%s' <> '%s'", name, hatch->name);
   }
   {
     BITCODE_BL num_boundary_handles;
@@ -12216,10 +12220,12 @@ static int test_LIGHT (const Dwg_Object *obj)
   {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (light, "LIGHT", "name", &name, NULL)
-        && !memcmp (&name, &light->name, sizeof (light->name)))
-        pass ();
+        && name
+           ? strEQ ((char *)name, (char *)light->name)
+           : !light->name)
+      pass ();
     else
-        fail ("LIGHT.name [T]");
+      fail ("LIGHT.name [T] '%s' <> '%s'", name, light->name);
   }
   {
     struct _dwg_object_entity* parent;
@@ -14152,14 +14158,14 @@ static int test_MTEXT (const Dwg_Object *obj)
         fail ("MTEXT.style [H]");
   }
   {
-    BITCODE_TV text;
+    BITCODE_T text;
     if (dwg_dynapi_entity_value (mtext, "MTEXT", "text", &text, NULL)
         && text
            ? strEQ ((char *)text, (char *)mtext->text)
            : !mtext->text)
       pass ();
     else
-      fail ("MTEXT.text [TV] '%s' <> '%s'", text, mtext->text);
+      fail ("MTEXT.text [T] '%s' <> '%s'", text, mtext->text);
   }
   {
     BITCODE_BD text_height;
@@ -14755,14 +14761,12 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_OLE2FRAME *restrict ole2frame = obj->tio.entity->tio.OLE2FRAME;
   {
-    BITCODE_TV data;
+    BITCODE_TF data;
     if (dwg_dynapi_entity_value (ole2frame, "OLE2FRAME", "data", &data, NULL)
-        && data
-           ? strEQ ((char *)data, (char *)ole2frame->data)
-           : !ole2frame->data)
-      pass ();
+        && !memcmp (&data, &ole2frame->data, sizeof (ole2frame->data)))
+        pass ();
     else
-      fail ("OLE2FRAME.data [TV] '%s' <> '%s'", data, ole2frame->data);
+        fail ("OLE2FRAME.data [TF]");
   }
   {
     BITCODE_BL data_length;
@@ -14813,14 +14817,12 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_TV oleclient;
+    BITCODE_TF oleclient;
     if (dwg_dynapi_entity_value (ole2frame, "OLE2FRAME", "oleclient", &oleclient, NULL)
-        && oleclient
-           ? strEQ ((char *)oleclient, (char *)ole2frame->oleclient)
-           : !ole2frame->oleclient)
-      pass ();
+        && !memcmp (&oleclient, &ole2frame->oleclient, sizeof (ole2frame->oleclient)))
+        pass ();
     else
-      fail ("OLE2FRAME.oleclient [TV] '%s' <> '%s'", oleclient, ole2frame->oleclient);
+        fail ("OLE2FRAME.oleclient [TF]");
   }
   {
     BITCODE_BS oleversion;
@@ -14886,14 +14888,12 @@ static int test_OLEFRAME (const Dwg_Object *obj)
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_OLEFRAME *restrict oleframe = obj->tio.entity->tio.OLEFRAME;
   {
-    BITCODE_TV data;
+    BITCODE_TF data;
     if (dwg_dynapi_entity_value (oleframe, "OLEFRAME", "data", &data, NULL)
-        && data
-           ? strEQ ((char *)data, (char *)oleframe->data)
-           : !oleframe->data)
-      pass ();
+        && !memcmp (&data, &oleframe->data, sizeof (oleframe->data)))
+        pass ();
     else
-      fail ("OLEFRAME.data [TV] '%s' <> '%s'", data, oleframe->data);
+        fail ("OLEFRAME.data [TF]");
   }
   {
     BITCODE_BL data_length;
@@ -19745,14 +19745,14 @@ static int test_TEXT (const Dwg_Object *obj)
         fail ("TEXT.style [H]");
   }
   {
-    BITCODE_TV text_value;
+    BITCODE_T text_value;
     if (dwg_dynapi_entity_value (text, "TEXT", "text_value", &text_value, NULL)
         && text_value
            ? strEQ ((char *)text_value, (char *)text->text_value)
            : !text->text_value)
       pass ();
     else
-      fail ("TEXT.text_value [TV] '%s' <> '%s'", text_value, text->text_value);
+      fail ("TEXT.text_value [T] '%s' <> '%s'", text_value, text->text_value);
   }
   {
     BITCODE_RD thickness;
@@ -19874,14 +19874,14 @@ static int test_TOLERANCE (const Dwg_Object *obj)
         fail ("TOLERANCE.parent [struct _dwg_object_entity*]");
   }
   {
-    BITCODE_TV text_string;
+    BITCODE_T text_string;
     if (dwg_dynapi_entity_value (tolerance, "TOLERANCE", "text_string", &text_string, NULL)
         && text_string
            ? strEQ ((char *)text_string, (char *)tolerance->text_string)
            : !tolerance->text_string)
       pass ();
     else
-      fail ("TOLERANCE.text_string [TV] '%s' <> '%s'", text_string, tolerance->text_string);
+      fail ("TOLERANCE.text_string [T] '%s' <> '%s'", text_string, tolerance->text_string);
   }
   {
     BITCODE_BS unknown_short;
@@ -20647,14 +20647,14 @@ static int test_VIEWPORT (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_TV style_sheet;
+    BITCODE_T style_sheet;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "style_sheet", &style_sheet, NULL)
         && style_sheet
            ? strEQ ((char *)style_sheet, (char *)viewport->style_sheet)
            : !viewport->style_sheet)
       pass ();
     else
-      fail ("VIEWPORT.style_sheet [TV] '%s' <> '%s'", style_sheet, viewport->style_sheet);
+      fail ("VIEWPORT.style_sheet [T] '%s' <> '%s'", style_sheet, viewport->style_sheet);
   }
   {
     BITCODE_B ucs_at_origin;
@@ -22935,10 +22935,12 @@ static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
   {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "name", &name, NULL)
-        && !memcmp (&name, &assocosnappointrefactionparam->name, sizeof (assocosnappointrefactionparam->name)))
-        pass ();
+        && name
+           ? strEQ ((char *)name, (char *)assocosnappointrefactionparam->name)
+           : !assocosnappointrefactionparam->name)
+      pass ();
     else
-        fail ("ASSOCOSNAPPOINTREFACTIONPARAM.name [T]");
+      fail ("ASSOCOSNAPPOINTREFACTIONPARAM.name [T] '%s' <> '%s'", name, assocosnappointrefactionparam->name);
   }
   {
     BITCODE_BS num_params;
@@ -24091,14 +24093,14 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_TV description;
+    BITCODE_T description;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "description", &description, NULL)
         && description
            ? strEQ ((char *)description, (char *)block_header->description)
            : !block_header->description)
       pass ();
     else
-      fail ("BLOCK_HEADER.description [TV] '%s' <> '%s'", description, block_header->description);
+      fail ("BLOCK_HEADER.description [T] '%s' <> '%s'", description, block_header->description);
   }
   {
     BITCODE_H endblk_entity;
@@ -24323,14 +24325,12 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         fail ("BLOCK_HEADER.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_TV preview;
+    BITCODE_TF preview;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "preview", &preview, NULL)
-        && preview
-           ? strEQ ((char *)preview, (char *)block_header->preview)
-           : !block_header->preview)
-      pass ();
+        && !memcmp (&preview, &block_header->preview, sizeof (block_header->preview)))
+        pass ();
     else
-      fail ("BLOCK_HEADER.preview [TV] '%s' <> '%s'", preview, block_header->preview);
+        fail ("BLOCK_HEADER.preview [TF]");
   }
   {
     BITCODE_BL preview_size;
@@ -24365,14 +24365,14 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_TV xref_pname;
+    BITCODE_T xref_pname;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "xref_pname", &xref_pname, NULL)
         && xref_pname
            ? strEQ ((char *)xref_pname, (char *)block_header->xref_pname)
            : !block_header->xref_pname)
       pass ();
     else
-      fail ("BLOCK_HEADER.xref_pname [TV] '%s' <> '%s'", xref_pname, block_header->xref_pname);
+      fail ("BLOCK_HEADER.xref_pname [T] '%s' <> '%s'", xref_pname, block_header->xref_pname);
   }
   {
     BITCODE_B xrefdep;
@@ -24504,10 +24504,12 @@ static int test_DBCOLOR (const Dwg_Object *obj)
   {
     BITCODE_T catalog;
     if (dwg_dynapi_entity_value (dbcolor, "DBCOLOR", "catalog", &catalog, NULL)
-        && !memcmp (&catalog, &dbcolor->catalog, sizeof (dbcolor->catalog)))
-        pass ();
+        && catalog
+           ? strEQ ((char *)catalog, (char *)dbcolor->catalog)
+           : !dbcolor->catalog)
+      pass ();
     else
-        fail ("DBCOLOR.catalog [T]");
+      fail ("DBCOLOR.catalog [T] '%s' <> '%s'", catalog, dbcolor->catalog);
   }
   {
     BITCODE_BL class_version;
@@ -24536,10 +24538,12 @@ static int test_DBCOLOR (const Dwg_Object *obj)
   {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (dbcolor, "DBCOLOR", "name", &name, NULL)
-        && !memcmp (&name, &dbcolor->name, sizeof (dbcolor->name)))
-        pass ();
+        && name
+           ? strEQ ((char *)name, (char *)dbcolor->name)
+           : !dbcolor->name)
+      pass ();
     else
-        fail ("DBCOLOR.name [T]");
+      fail ("DBCOLOR.name [T] '%s' <> '%s'", name, dbcolor->name);
   }
   {
     struct _dwg_object_object* parent;
@@ -24728,14 +24732,14 @@ static int test_DICTIONARYVAR (const Dwg_Object *obj)
         fail ("DICTIONARYVAR.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_TV str;
+    BITCODE_T str;
     if (dwg_dynapi_entity_value (dictionaryvar, "DICTIONARYVAR", "str", &str, NULL)
         && str
            ? strEQ ((char *)str, (char *)dictionaryvar->str)
            : !dictionaryvar->str)
       pass ();
     else
-      fail ("DICTIONARYVAR.str [TV] '%s' <> '%s'", str, dictionaryvar->str);
+      fail ("DICTIONARYVAR.str [T] '%s' <> '%s'", str, dictionaryvar->str);
   }
   return failed;
 }
@@ -25005,10 +25009,12 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
   {
     BITCODE_T DIMALTMZS;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMALTMZS", &DIMALTMZS, NULL)
-        && !memcmp (&DIMALTMZS, &dimstyle->DIMALTMZS, sizeof (dimstyle->DIMALTMZS)))
-        pass ();
+        && DIMALTMZS
+           ? strEQ ((char *)DIMALTMZS, (char *)dimstyle->DIMALTMZS)
+           : !dimstyle->DIMALTMZS)
+      pass ();
     else
-        fail ("DIMSTYLE.DIMALTMZS [T]");
+      fail ("DIMSTYLE.DIMALTMZS [T] '%s' <> '%s'", DIMALTMZS, dimstyle->DIMALTMZS);
   }
   {
     BITCODE_BD DIMALTRND;
@@ -25093,10 +25099,12 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
   {
     BITCODE_T DIMAPOST;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMAPOST", &DIMAPOST, NULL)
-        && !memcmp (&DIMAPOST, &dimstyle->DIMAPOST, sizeof (dimstyle->DIMAPOST)))
-        pass ();
+        && DIMAPOST
+           ? strEQ ((char *)DIMAPOST, (char *)dimstyle->DIMAPOST)
+           : !dimstyle->DIMAPOST)
+      pass ();
     else
-        fail ("DIMSTYLE.DIMAPOST [T]");
+      fail ("DIMSTYLE.DIMAPOST [T] '%s' <> '%s'", DIMAPOST, dimstyle->DIMAPOST);
   }
   {
     BITCODE_BS DIMARCSYM;
@@ -25195,12 +25203,14 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         fail ("DIMSTYLE.DIMBLK1 [H]");
   }
   {
-    BITCODE_T DIMBLK1_T;
+    BITCODE_TV DIMBLK1_T;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMBLK1_T", &DIMBLK1_T, NULL)
-        && !memcmp (&DIMBLK1_T, &dimstyle->DIMBLK1_T, sizeof (dimstyle->DIMBLK1_T)))
-        pass ();
+        && DIMBLK1_T
+           ? strEQ ((char *)DIMBLK1_T, (char *)dimstyle->DIMBLK1_T)
+           : !dimstyle->DIMBLK1_T)
+      pass ();
     else
-        fail ("DIMSTYLE.DIMBLK1_T [T]");
+      fail ("DIMSTYLE.DIMBLK1_T [TV] '%s' <> '%s'", DIMBLK1_T, dimstyle->DIMBLK1_T);
   }
   {
     BITCODE_H DIMBLK2;
@@ -25211,20 +25221,24 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         fail ("DIMSTYLE.DIMBLK2 [H]");
   }
   {
-    BITCODE_T DIMBLK2_T;
+    BITCODE_TV DIMBLK2_T;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMBLK2_T", &DIMBLK2_T, NULL)
-        && !memcmp (&DIMBLK2_T, &dimstyle->DIMBLK2_T, sizeof (dimstyle->DIMBLK2_T)))
-        pass ();
+        && DIMBLK2_T
+           ? strEQ ((char *)DIMBLK2_T, (char *)dimstyle->DIMBLK2_T)
+           : !dimstyle->DIMBLK2_T)
+      pass ();
     else
-        fail ("DIMSTYLE.DIMBLK2_T [T]");
+      fail ("DIMSTYLE.DIMBLK2_T [TV] '%s' <> '%s'", DIMBLK2_T, dimstyle->DIMBLK2_T);
   }
   {
-    BITCODE_T DIMBLK_T;
+    BITCODE_TV DIMBLK_T;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMBLK_T", &DIMBLK_T, NULL)
-        && !memcmp (&DIMBLK_T, &dimstyle->DIMBLK_T, sizeof (dimstyle->DIMBLK_T)))
-        pass ();
+        && DIMBLK_T
+           ? strEQ ((char *)DIMBLK_T, (char *)dimstyle->DIMBLK_T)
+           : !dimstyle->DIMBLK_T)
+      pass ();
     else
-        fail ("DIMSTYLE.DIMBLK_T [T]");
+      fail ("DIMSTYLE.DIMBLK_T [TV] '%s' <> '%s'", DIMBLK_T, dimstyle->DIMBLK_T);
   }
   {
     BITCODE_BD DIMCEN;
@@ -25683,18 +25697,22 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
   {
     BITCODE_T DIMMZS;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMMZS", &DIMMZS, NULL)
-        && !memcmp (&DIMMZS, &dimstyle->DIMMZS, sizeof (dimstyle->DIMMZS)))
-        pass ();
+        && DIMMZS
+           ? strEQ ((char *)DIMMZS, (char *)dimstyle->DIMMZS)
+           : !dimstyle->DIMMZS)
+      pass ();
     else
-        fail ("DIMSTYLE.DIMMZS [T]");
+      fail ("DIMSTYLE.DIMMZS [T] '%s' <> '%s'", DIMMZS, dimstyle->DIMMZS);
   }
   {
     BITCODE_T DIMPOST;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMPOST", &DIMPOST, NULL)
-        && !memcmp (&DIMPOST, &dimstyle->DIMPOST, sizeof (dimstyle->DIMPOST)))
-        pass ();
+        && DIMPOST
+           ? strEQ ((char *)DIMPOST, (char *)dimstyle->DIMPOST)
+           : !dimstyle->DIMPOST)
+      pass ();
     else
-        fail ("DIMSTYLE.DIMPOST [T]");
+      fail ("DIMSTYLE.DIMPOST [T] '%s' <> '%s'", DIMPOST, dimstyle->DIMPOST);
   }
   {
     BITCODE_BD DIMRND;
@@ -26640,14 +26658,14 @@ static int test_FIELD (const Dwg_Object *obj)
       fail ("FIELD.childval [Dwg_FIELD_ChildValue*] * %u num_childval", count);
   }
   {
-    BITCODE_TV code;
+    BITCODE_T code;
     if (dwg_dynapi_entity_value (field, "FIELD", "code", &code, NULL)
         && code
            ? strEQ ((char *)code, (char *)field->code)
            : !field->code)
       pass ();
     else
-      fail ("FIELD.code [TV] '%s' <> '%s'", code, field->code);
+      fail ("FIELD.code [T] '%s' <> '%s'", code, field->code);
   }
   {
     BITCODE_BL evaluation_error_code;
@@ -26666,14 +26684,14 @@ static int test_FIELD (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_TV evaluation_error_msg;
+    BITCODE_T evaluation_error_msg;
     if (dwg_dynapi_entity_value (field, "FIELD", "evaluation_error_msg", &evaluation_error_msg, NULL)
         && evaluation_error_msg
            ? strEQ ((char *)evaluation_error_msg, (char *)field->evaluation_error_msg)
            : !field->evaluation_error_msg)
       pass ();
     else
-      fail ("FIELD.evaluation_error_msg [TV] '%s' <> '%s'", evaluation_error_msg, field->evaluation_error_msg);
+      fail ("FIELD.evaluation_error_msg [T] '%s' <> '%s'", evaluation_error_msg, field->evaluation_error_msg);
   }
   {
     BITCODE_BL evaluation_option;
@@ -26750,14 +26768,14 @@ static int test_FIELD (const Dwg_Object *obj)
       fail ("FIELD.format [TV] '%s' <> '%s'", format, field->format);
   }
   {
-    BITCODE_TV id;
+    BITCODE_T id;
     if (dwg_dynapi_entity_value (field, "FIELD", "id", &id, NULL)
         && id
            ? strEQ ((char *)id, (char *)field->id)
            : !field->id)
       pass ();
     else
-      fail ("FIELD.id [TV] '%s' <> '%s'", id, field->id);
+      fail ("FIELD.id [T] '%s' <> '%s'", id, field->id);
   }
   {
     BITCODE_BL num_childs;
@@ -26834,14 +26852,14 @@ static int test_FIELD (const Dwg_Object *obj)
         fail ("FIELD.value [Dwg_TABLE_value]");
   }
   {
-    BITCODE_TV value_string;
+    BITCODE_T value_string;
     if (dwg_dynapi_entity_value (field, "FIELD", "value_string", &value_string, NULL)
         && value_string
            ? strEQ ((char *)value_string, (char *)field->value_string)
            : !field->value_string)
       pass ();
     else
-      fail ("FIELD.value_string [TV] '%s' <> '%s'", value_string, field->value_string);
+      fail ("FIELD.value_string [T] '%s' <> '%s'", value_string, field->value_string);
   }
   {
     BITCODE_BL value_string_length;
@@ -26958,26 +26976,32 @@ static int test_GEODATA (const Dwg_Object *obj)
   {
     BITCODE_T coord_system_datum;
     if (dwg_dynapi_entity_value (geodata, "GEODATA", "coord_system_datum", &coord_system_datum, NULL)
-        && !memcmp (&coord_system_datum, &geodata->coord_system_datum, sizeof (geodata->coord_system_datum)))
-        pass ();
+        && coord_system_datum
+           ? strEQ ((char *)coord_system_datum, (char *)geodata->coord_system_datum)
+           : !geodata->coord_system_datum)
+      pass ();
     else
-        fail ("GEODATA.coord_system_datum [T]");
+      fail ("GEODATA.coord_system_datum [T] '%s' <> '%s'", coord_system_datum, geodata->coord_system_datum);
   }
   {
     BITCODE_T coord_system_def;
     if (dwg_dynapi_entity_value (geodata, "GEODATA", "coord_system_def", &coord_system_def, NULL)
-        && !memcmp (&coord_system_def, &geodata->coord_system_def, sizeof (geodata->coord_system_def)))
-        pass ();
+        && coord_system_def
+           ? strEQ ((char *)coord_system_def, (char *)geodata->coord_system_def)
+           : !geodata->coord_system_def)
+      pass ();
     else
-        fail ("GEODATA.coord_system_def [T]");
+      fail ("GEODATA.coord_system_def [T] '%s' <> '%s'", coord_system_def, geodata->coord_system_def);
   }
   {
     BITCODE_T coord_system_wkt;
     if (dwg_dynapi_entity_value (geodata, "GEODATA", "coord_system_wkt", &coord_system_wkt, NULL)
-        && !memcmp (&coord_system_wkt, &geodata->coord_system_wkt, sizeof (geodata->coord_system_wkt)))
-        pass ();
+        && coord_system_wkt
+           ? strEQ ((char *)coord_system_wkt, (char *)geodata->coord_system_wkt)
+           : !geodata->coord_system_wkt)
+      pass ();
     else
-        fail ("GEODATA.coord_system_wkt [T]");
+      fail ("GEODATA.coord_system_wkt [T] '%s' <> '%s'", coord_system_wkt, geodata->coord_system_wkt);
   }
   {
     BITCODE_BS coord_type;
@@ -27006,10 +27030,12 @@ static int test_GEODATA (const Dwg_Object *obj)
   {
     BITCODE_T geo_rss_tag;
     if (dwg_dynapi_entity_value (geodata, "GEODATA", "geo_rss_tag", &geo_rss_tag, NULL)
-        && !memcmp (&geo_rss_tag, &geodata->geo_rss_tag, sizeof (geodata->geo_rss_tag)))
-        pass ();
+        && geo_rss_tag
+           ? strEQ ((char *)geo_rss_tag, (char *)geodata->geo_rss_tag)
+           : !geodata->geo_rss_tag)
+      pass ();
     else
-        fail ("GEODATA.geo_rss_tag [T]");
+      fail ("GEODATA.geo_rss_tag [T] '%s' <> '%s'", geo_rss_tag, geodata->geo_rss_tag);
   }
   {
     Dwg_GEODATA_meshface* geomesh_faces;
@@ -27138,26 +27164,32 @@ static int test_GEODATA (const Dwg_Object *obj)
   {
     BITCODE_T observation_coverage_tag;
     if (dwg_dynapi_entity_value (geodata, "GEODATA", "observation_coverage_tag", &observation_coverage_tag, NULL)
-        && !memcmp (&observation_coverage_tag, &geodata->observation_coverage_tag, sizeof (geodata->observation_coverage_tag)))
-        pass ();
+        && observation_coverage_tag
+           ? strEQ ((char *)observation_coverage_tag, (char *)geodata->observation_coverage_tag)
+           : !geodata->observation_coverage_tag)
+      pass ();
     else
-        fail ("GEODATA.observation_coverage_tag [T]");
+      fail ("GEODATA.observation_coverage_tag [T] '%s' <> '%s'", observation_coverage_tag, geodata->observation_coverage_tag);
   }
   {
     BITCODE_T observation_from_tag;
     if (dwg_dynapi_entity_value (geodata, "GEODATA", "observation_from_tag", &observation_from_tag, NULL)
-        && !memcmp (&observation_from_tag, &geodata->observation_from_tag, sizeof (geodata->observation_from_tag)))
-        pass ();
+        && observation_from_tag
+           ? strEQ ((char *)observation_from_tag, (char *)geodata->observation_from_tag)
+           : !geodata->observation_from_tag)
+      pass ();
     else
-        fail ("GEODATA.observation_from_tag [T]");
+      fail ("GEODATA.observation_from_tag [T] '%s' <> '%s'", observation_from_tag, geodata->observation_from_tag);
   }
   {
     BITCODE_T observation_to_tag;
     if (dwg_dynapi_entity_value (geodata, "GEODATA", "observation_to_tag", &observation_to_tag, NULL)
-        && !memcmp (&observation_to_tag, &geodata->observation_to_tag, sizeof (geodata->observation_to_tag)))
-        pass ();
+        && observation_to_tag
+           ? strEQ ((char *)observation_to_tag, (char *)geodata->observation_to_tag)
+           : !geodata->observation_to_tag)
+      pass ();
     else
-        fail ("GEODATA.observation_to_tag [T]");
+      fail ("GEODATA.observation_to_tag [T] '%s' <> '%s'", observation_to_tag, geodata->observation_to_tag);
   }
   {
     BITCODE_B obsolete_false;
@@ -27609,10 +27641,12 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
   {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (geomapimage, "GEOMAPIMAGE", "name", &name, NULL)
-        && !memcmp (&name, &geomapimage->name, sizeof (geomapimage->name)))
-        pass ();
+        && name
+           ? strEQ ((char *)name, (char *)geomapimage->name)
+           : !geomapimage->name)
+      pass ();
     else
-        fail ("GEOMAPIMAGE.name [T]");
+      fail ("GEOMAPIMAGE.name [T] '%s' <> '%s'", name, geomapimage->name);
   }
   {
     struct _dwg_object_object* parent;
@@ -27736,14 +27770,14 @@ static int test_GROUP (const Dwg_Object *obj)
       fail ("GROUP.groups [H*] * %u num_groups", count);
   }
   {
-    BITCODE_TV name;
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (group, "GROUP", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)group->name)
            : !group->name)
       pass ();
     else
-      fail ("GROUP.name [TV] '%s' <> '%s'", name, group->name);
+      fail ("GROUP.name [T] '%s' <> '%s'", name, group->name);
   }
   {
     BITCODE_BL num_groups;
@@ -27882,14 +27916,14 @@ static int test_IMAGEDEF (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_TV file_path;
+    BITCODE_T file_path;
     if (dwg_dynapi_entity_value (imagedef, "IMAGEDEF", "file_path", &file_path, NULL)
         && file_path
            ? strEQ ((char *)file_path, (char *)imagedef->file_path)
            : !imagedef->file_path)
       pass ();
     else
-      fail ("IMAGEDEF.file_path [TV] '%s' <> '%s'", file_path, imagedef->file_path);
+      fail ("IMAGEDEF.file_path [T] '%s' <> '%s'", file_path, imagedef->file_path);
   }
   {
     BITCODE_2RD image_size;
@@ -28439,14 +28473,14 @@ static int test_LAYOUT (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_TV current_style_sheet;
+    BITCODE_T current_style_sheet;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "current_style_sheet", &current_style_sheet, NULL)
         && current_style_sheet
            ? strEQ ((char *)current_style_sheet, (char *)layout->current_style_sheet)
            : !layout->current_style_sheet)
       pass ();
     else
-      fail ("LAYOUT.current_style_sheet [TV] '%s' <> '%s'", current_style_sheet, layout->current_style_sheet);
+      fail ("LAYOUT.current_style_sheet [T] '%s' <> '%s'", current_style_sheet, layout->current_style_sheet);
   }
   {
     BITCODE_BD drawing_units;
@@ -28521,14 +28555,14 @@ static int test_LAYOUT (const Dwg_Object *obj)
         fail ("LAYOUT.ins_point [3DPOINT]");
   }
   {
-    BITCODE_TV layout_name;
+    BITCODE_T layout_name;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "layout_name", &layout_name, NULL)
         && layout_name
            ? strEQ ((char *)layout_name, (char *)layout->layout_name)
            : !layout->layout_name)
       pass ();
     else
-      fail ("LAYOUT.layout_name [TV] '%s' <> '%s'", layout_name, layout->layout_name);
+      fail ("LAYOUT.layout_name [T] '%s' <> '%s'", layout_name, layout->layout_name);
   }
   {
     BITCODE_BD left_margin;
@@ -28603,14 +28637,14 @@ static int test_LAYOUT (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_TV page_setup_name;
+    BITCODE_T page_setup_name;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "page_setup_name", &page_setup_name, NULL)
         && page_setup_name
            ? strEQ ((char *)page_setup_name, (char *)layout->page_setup_name)
            : !layout->page_setup_name)
       pass ();
     else
-      fail ("LAYOUT.page_setup_name [TV] '%s' <> '%s'", page_setup_name, layout->page_setup_name);
+      fail ("LAYOUT.page_setup_name [T] '%s' <> '%s'", page_setup_name, layout->page_setup_name);
   }
   {
     BITCODE_BD paper_height;
@@ -28637,14 +28671,14 @@ static int test_LAYOUT (const Dwg_Object *obj)
         fail ("LAYOUT.paper_image_origin [2BD_1]");
   }
   {
-    BITCODE_TV paper_size;
+    BITCODE_T paper_size;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "paper_size", &paper_size, NULL)
         && paper_size
            ? strEQ ((char *)paper_size, (char *)layout->paper_size)
            : !layout->paper_size)
       pass ();
     else
-      fail ("LAYOUT.paper_size [TV] '%s' <> '%s'", paper_size, layout->paper_size);
+      fail ("LAYOUT.paper_size [T] '%s' <> '%s'", paper_size, layout->paper_size);
   }
   {
     BITCODE_BS paper_units;
@@ -28761,14 +28795,14 @@ static int test_LAYOUT (const Dwg_Object *obj)
       fail ("LAYOUT.plot_view_name [TV] '%s' <> '%s'", plot_view_name, layout->plot_view_name);
   }
   {
-    BITCODE_TV printer_or_config;
+    BITCODE_T printer_or_config;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "printer_or_config", &printer_or_config, NULL)
         && printer_or_config
            ? strEQ ((char *)printer_or_config, (char *)layout->printer_or_config)
            : !layout->printer_or_config)
       pass ();
     else
-      fail ("LAYOUT.printer_or_config [TV] '%s' <> '%s'", printer_or_config, layout->printer_or_config);
+      fail ("LAYOUT.printer_or_config [T] '%s' <> '%s'", printer_or_config, layout->printer_or_config);
   }
   {
     BITCODE_BD real_world_units;
@@ -29106,14 +29140,14 @@ static int test_LTYPE (const Dwg_Object *obj)
       fail ("LTYPE.dashes_r11 [RD*] * %u num_dashes", count);
   }
   {
-    BITCODE_TV description;
+    BITCODE_T description;
     if (dwg_dynapi_entity_value (ltype, "LTYPE", "description", &description, NULL)
         && description
            ? strEQ ((char *)description, (char *)ltype->description)
            : !ltype->description)
       pass ();
     else
-      fail ("LTYPE.description [TV] '%s' <> '%s'", description, ltype->description);
+      fail ("LTYPE.description [T] '%s' <> '%s'", description, ltype->description);
   }
   {
     BITCODE_H extref_handle;
@@ -29190,14 +29224,12 @@ static int test_LTYPE (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_TV strings_area;
+    BITCODE_TF strings_area;
     if (dwg_dynapi_entity_value (ltype, "LTYPE", "strings_area", &strings_area, NULL)
-        && strings_area
-           ? strEQ ((char *)strings_area, (char *)ltype->strings_area)
-           : !ltype->strings_area)
-      pass ();
+        && !memcmp (&strings_area, &ltype->strings_area, sizeof (ltype->strings_area)))
+        pass ();
     else
-      fail ("LTYPE.strings_area [TV] '%s' <> '%s'", strings_area, ltype->strings_area);
+        fail ("LTYPE.strings_area [TF]");
   }
   {
     BITCODE_H* styles;
@@ -29444,10 +29476,12 @@ static int test_MATERIAL (const Dwg_Object *obj)
   {
     BITCODE_T bumpmap_filename;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "bumpmap_filename", &bumpmap_filename, NULL)
-        && !memcmp (&bumpmap_filename, &material->bumpmap_filename, sizeof (material->bumpmap_filename)))
-        pass ();
+        && bumpmap_filename
+           ? strEQ ((char *)bumpmap_filename, (char *)material->bumpmap_filename)
+           : !material->bumpmap_filename)
+      pass ();
     else
-        fail ("MATERIAL.bumpmap_filename [T]");
+      fail ("MATERIAL.bumpmap_filename [T] '%s' <> '%s'", bumpmap_filename, material->bumpmap_filename);
   }
   {
     BITCODE_BS bumpmap_projection;
@@ -29540,10 +29574,12 @@ static int test_MATERIAL (const Dwg_Object *obj)
   {
     BITCODE_T desc;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "desc", &desc, NULL)
-        && !memcmp (&desc, &material->desc, sizeof (material->desc)))
-        pass ();
+        && desc
+           ? strEQ ((char *)desc, (char *)material->desc)
+           : !material->desc)
+      pass ();
     else
-        fail ("MATERIAL.desc [T]");
+      fail ("MATERIAL.desc [T] '%s' <> '%s'", desc, material->desc);
   }
   {
     BITCODE_CMC diffuse_color;
@@ -29620,10 +29656,12 @@ static int test_MATERIAL (const Dwg_Object *obj)
   {
     BITCODE_T diffusemap_filename;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "diffusemap_filename", &diffusemap_filename, NULL)
-        && !memcmp (&diffusemap_filename, &material->diffusemap_filename, sizeof (material->diffusemap_filename)))
-        pass ();
+        && diffusemap_filename
+           ? strEQ ((char *)diffusemap_filename, (char *)material->diffusemap_filename)
+           : !material->diffusemap_filename)
+      pass ();
     else
-        fail ("MATERIAL.diffusemap_filename [T]");
+      fail ("MATERIAL.diffusemap_filename [T] '%s' <> '%s'", diffusemap_filename, material->diffusemap_filename);
   }
   {
     BITCODE_BS diffusemap_projection;
@@ -29700,10 +29738,12 @@ static int test_MATERIAL (const Dwg_Object *obj)
   {
     BITCODE_T genprocname;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "genprocname", &genprocname, NULL)
-        && !memcmp (&genprocname, &material->genprocname, sizeof (material->genprocname)))
-        pass ();
+        && genprocname
+           ? strEQ ((char *)genprocname, (char *)material->genprocname)
+           : !material->genprocname)
+      pass ();
     else
-        fail ("MATERIAL.genprocname [T]");
+      fail ("MATERIAL.genprocname [T] '%s' <> '%s'", genprocname, material->genprocname);
   }
   {
     BITCODE_B genproctableend;
@@ -29748,10 +29788,12 @@ static int test_MATERIAL (const Dwg_Object *obj)
   {
     BITCODE_T genprocvalcolorname;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "genprocvalcolorname", &genprocvalcolorname, NULL)
-        && !memcmp (&genprocvalcolorname, &material->genprocvalcolorname, sizeof (material->genprocvalcolorname)))
-        pass ();
+        && genprocvalcolorname
+           ? strEQ ((char *)genprocvalcolorname, (char *)material->genprocvalcolorname)
+           : !material->genprocvalcolorname)
+      pass ();
     else
-        fail ("MATERIAL.genprocvalcolorname [T]");
+      fail ("MATERIAL.genprocvalcolorname [T] '%s' <> '%s'", genprocvalcolorname, material->genprocvalcolorname);
   }
   {
     BITCODE_BS genprocvalcolorrgb;
@@ -29804,10 +29846,12 @@ static int test_MATERIAL (const Dwg_Object *obj)
   {
     BITCODE_T genprocvaltext;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "genprocvaltext", &genprocvaltext, NULL)
-        && !memcmp (&genprocvaltext, &material->genprocvaltext, sizeof (material->genprocvaltext)))
-        pass ();
+        && genprocvaltext
+           ? strEQ ((char *)genprocvaltext, (char *)material->genprocvaltext)
+           : !material->genprocvaltext)
+      pass ();
     else
-        fail ("MATERIAL.genprocvaltext [T]");
+      fail ("MATERIAL.genprocvaltext [T] '%s' <> '%s'", genprocvaltext, material->genprocvaltext);
   }
   {
     BITCODE_BS global_illumination_mode;
@@ -29924,10 +29968,12 @@ static int test_MATERIAL (const Dwg_Object *obj)
   {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "name", &name, NULL)
-        && !memcmp (&name, &material->name, sizeof (material->name)))
-        pass ();
+        && name
+           ? strEQ ((char *)name, (char *)material->name)
+           : !material->name)
+      pass ();
     else
-        fail ("MATERIAL.name [T]");
+      fail ("MATERIAL.name [T] '%s' <> '%s'", name, material->name);
   }
   {
     BITCODE_BS normalmap_autotransform;
@@ -29964,10 +30010,12 @@ static int test_MATERIAL (const Dwg_Object *obj)
   {
     BITCODE_T normalmap_filename;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "normalmap_filename", &normalmap_filename, NULL)
-        && !memcmp (&normalmap_filename, &material->normalmap_filename, sizeof (material->normalmap_filename)))
-        pass ();
+        && normalmap_filename
+           ? strEQ ((char *)normalmap_filename, (char *)material->normalmap_filename)
+           : !material->normalmap_filename)
+      pass ();
     else
-        fail ("MATERIAL.normalmap_filename [T]");
+      fail ("MATERIAL.normalmap_filename [T] '%s' <> '%s'", normalmap_filename, material->normalmap_filename);
   }
   {
     BITCODE_BS normalmap_method;
@@ -30108,10 +30156,12 @@ static int test_MATERIAL (const Dwg_Object *obj)
   {
     BITCODE_T opacitymap_filename;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "opacitymap_filename", &opacitymap_filename, NULL)
-        && !memcmp (&opacitymap_filename, &material->opacitymap_filename, sizeof (material->opacitymap_filename)))
-        pass ();
+        && opacitymap_filename
+           ? strEQ ((char *)opacitymap_filename, (char *)material->opacitymap_filename)
+           : !material->opacitymap_filename)
+      pass ();
     else
-        fail ("MATERIAL.opacitymap_filename [T]");
+      fail ("MATERIAL.opacitymap_filename [T] '%s' <> '%s'", opacitymap_filename, material->opacitymap_filename);
   }
   {
     BITCODE_BS opacitymap_projection;
@@ -30228,10 +30278,12 @@ static int test_MATERIAL (const Dwg_Object *obj)
   {
     BITCODE_T reflectionmap_filename;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "reflectionmap_filename", &reflectionmap_filename, NULL)
-        && !memcmp (&reflectionmap_filename, &material->reflectionmap_filename, sizeof (material->reflectionmap_filename)))
-        pass ();
+        && reflectionmap_filename
+           ? strEQ ((char *)reflectionmap_filename, (char *)material->reflectionmap_filename)
+           : !material->reflectionmap_filename)
+      pass ();
     else
-        fail ("MATERIAL.reflectionmap_filename [T]");
+      fail ("MATERIAL.reflectionmap_filename [T] '%s' <> '%s'", reflectionmap_filename, material->reflectionmap_filename);
   }
   {
     BITCODE_BS reflectionmap_projection;
@@ -30356,10 +30408,12 @@ static int test_MATERIAL (const Dwg_Object *obj)
   {
     BITCODE_T refractionmap_filename;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "refractionmap_filename", &refractionmap_filename, NULL)
-        && !memcmp (&refractionmap_filename, &material->refractionmap_filename, sizeof (material->refractionmap_filename)))
-        pass ();
+        && refractionmap_filename
+           ? strEQ ((char *)refractionmap_filename, (char *)material->refractionmap_filename)
+           : !material->refractionmap_filename)
+      pass ();
     else
-        fail ("MATERIAL.refractionmap_filename [T]");
+      fail ("MATERIAL.refractionmap_filename [T] '%s' <> '%s'", refractionmap_filename, material->refractionmap_filename);
   }
   {
     BITCODE_BS refractionmap_projection;
@@ -30524,10 +30578,12 @@ static int test_MATERIAL (const Dwg_Object *obj)
   {
     BITCODE_T specularmap_filename;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "specularmap_filename", &specularmap_filename, NULL)
-        && !memcmp (&specularmap_filename, &material->specularmap_filename, sizeof (material->specularmap_filename)))
-        pass ();
+        && specularmap_filename
+           ? strEQ ((char *)specularmap_filename, (char *)material->specularmap_filename)
+           : !material->specularmap_filename)
+      pass ();
     else
-        fail ("MATERIAL.specularmap_filename [T]");
+      fail ("MATERIAL.specularmap_filename [T] '%s' <> '%s'", specularmap_filename, material->specularmap_filename);
   }
   {
     BITCODE_BS specularmap_projection;
@@ -30881,14 +30937,14 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_TV description;
+    BITCODE_T description;
     if (dwg_dynapi_entity_value (mleaderstyle, "MLEADERSTYLE", "description", &description, NULL)
         && description
            ? strEQ ((char *)description, (char *)mleaderstyle->description)
            : !mleaderstyle->description)
       pass ();
     else
-      fail ("MLEADERSTYLE.description [TV] '%s' <> '%s'", description, mleaderstyle->description);
+      fail ("MLEADERSTYLE.description [T] '%s' <> '%s'", description, mleaderstyle->description);
   }
   {
     BITCODE_BD first_seg_angle;
@@ -31178,14 +31234,14 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
         fail ("MLEADERSTYLE.text_color [CMC]");
   }
   {
-    BITCODE_TV text_default;
+    BITCODE_T text_default;
     if (dwg_dynapi_entity_value (mleaderstyle, "MLEADERSTYLE", "text_default", &text_default, NULL)
         && text_default
            ? strEQ ((char *)text_default, (char *)mleaderstyle->text_default)
            : !mleaderstyle->text_default)
       pass ();
     else
-      fail ("MLEADERSTYLE.text_default [TV] '%s' <> '%s'", text_default, mleaderstyle->text_default);
+      fail ("MLEADERSTYLE.text_default [T] '%s' <> '%s'", text_default, mleaderstyle->text_default);
   }
   {
     BITCODE_B text_extended;
@@ -31299,14 +31355,14 @@ static int test_MLINESTYLE (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_MLINESTYLE *restrict mlinestyle = obj->tio.object->tio.MLINESTYLE;
   {
-    BITCODE_TV desc;
+    BITCODE_T desc;
     if (dwg_dynapi_entity_value (mlinestyle, "MLINESTYLE", "desc", &desc, NULL)
         && desc
            ? strEQ ((char *)desc, (char *)mlinestyle->desc)
            : !mlinestyle->desc)
       pass ();
     else
-      fail ("MLINESTYLE.desc [TV] '%s' <> '%s'", desc, mlinestyle->desc);
+      fail ("MLINESTYLE.desc [T] '%s' <> '%s'", desc, mlinestyle->desc);
   }
   {
     BITCODE_BD end_angle;
@@ -31359,14 +31415,14 @@ static int test_MLINESTYLE (const Dwg_Object *obj)
       fail ("MLINESTYLE.lines [Dwg_MLINESTYLE_line*] * %u num_lines", count);
   }
   {
-    BITCODE_TV name;
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (mlinestyle, "MLINESTYLE", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)mlinestyle->name)
            : !mlinestyle->name)
       pass ();
     else
-      fail ("MLINESTYLE.name [TV] '%s' <> '%s'", name, mlinestyle->name);
+      fail ("MLINESTYLE.name [T] '%s' <> '%s'", name, mlinestyle->name);
   }
   {
     BITCODE_RC num_lines;
@@ -31458,10 +31514,12 @@ static int test_NAVISWORKSMODELDEF (const Dwg_Object *obj)
   {
     BITCODE_T path;
     if (dwg_dynapi_entity_value (navisworksmodeldef, "NAVISWORKSMODELDEF", "path", &path, NULL)
-        && !memcmp (&path, &navisworksmodeldef->path, sizeof (navisworksmodeldef->path)))
-        pass ();
+        && path
+           ? strEQ ((char *)path, (char *)navisworksmodeldef->path)
+           : !navisworksmodeldef->path)
+      pass ();
     else
-        fail ("NAVISWORKSMODELDEF.path [T]");
+      fail ("NAVISWORKSMODELDEF.path [T] '%s' <> '%s'", path, navisworksmodeldef->path);
   }
   {
     BITCODE_B status;
@@ -31773,10 +31831,12 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
   {
     BITCODE_T page_setup_name;
     if (dwg_dynapi_entity_value (plotsettings, "PLOTSETTINGS", "page_setup_name", &page_setup_name, NULL)
-        && !memcmp (&page_setup_name, &plotsettings->page_setup_name, sizeof (plotsettings->page_setup_name)))
-        pass ();
+        && page_setup_name
+           ? strEQ ((char *)page_setup_name, (char *)plotsettings->page_setup_name)
+           : !plotsettings->page_setup_name)
+      pass ();
     else
-        fail ("PLOTSETTINGS.page_setup_name [T]");
+      fail ("PLOTSETTINGS.page_setup_name [T] '%s' <> '%s'", page_setup_name, plotsettings->page_setup_name);
   }
   {
     BITCODE_BD paper_height;
@@ -31805,10 +31865,12 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
   {
     BITCODE_T paper_size;
     if (dwg_dynapi_entity_value (plotsettings, "PLOTSETTINGS", "paper_size", &paper_size, NULL)
-        && !memcmp (&paper_size, &plotsettings->paper_size, sizeof (plotsettings->paper_size)))
-        pass ();
+        && paper_size
+           ? strEQ ((char *)paper_size, (char *)plotsettings->paper_size)
+           : !plotsettings->paper_size)
+      pass ();
     else
-        fail ("PLOTSETTINGS.paper_size [T]");
+      fail ("PLOTSETTINGS.paper_size [T] '%s' <> '%s'", paper_size, plotsettings->paper_size);
   }
   {
     BITCODE_BD paper_width;
@@ -31933,10 +31995,12 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
   {
     BITCODE_T printer_cfg_file;
     if (dwg_dynapi_entity_value (plotsettings, "PLOTSETTINGS", "printer_cfg_file", &printer_cfg_file, NULL)
-        && !memcmp (&printer_cfg_file, &plotsettings->printer_cfg_file, sizeof (plotsettings->printer_cfg_file)))
-        pass ();
+        && printer_cfg_file
+           ? strEQ ((char *)printer_cfg_file, (char *)plotsettings->printer_cfg_file)
+           : !plotsettings->printer_cfg_file)
+      pass ();
     else
-        fail ("PLOTSETTINGS.printer_cfg_file [T]");
+      fail ("PLOTSETTINGS.printer_cfg_file [T] '%s' <> '%s'", printer_cfg_file, plotsettings->printer_cfg_file);
   }
   {
     BITCODE_BD right_margin;
@@ -32300,10 +32364,12 @@ static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
   {
     BITCODE_T environ_image_filename;
     if (dwg_dynapi_entity_value (renderenvironment, "RENDERENVIRONMENT", "environ_image_filename", &environ_image_filename, NULL)
-        && !memcmp (&environ_image_filename, &renderenvironment->environ_image_filename, sizeof (renderenvironment->environ_image_filename)))
-        pass ();
+        && environ_image_filename
+           ? strEQ ((char *)environ_image_filename, (char *)renderenvironment->environ_image_filename)
+           : !renderenvironment->environ_image_filename)
+      pass ();
     else
-        fail ("RENDERENVIRONMENT.environ_image_filename [T]");
+      fail ("RENDERENVIRONMENT.environ_image_filename [T] '%s' <> '%s'", environ_image_filename, renderenvironment->environ_image_filename);
   }
   {
     BITCODE_B fog_background_enabled;
@@ -32563,10 +32629,12 @@ static int test_RENDERGLOBAL (const Dwg_Object *obj)
   {
     BITCODE_T save_filename;
     if (dwg_dynapi_entity_value (renderglobal, "RENDERGLOBAL", "save_filename", &save_filename, NULL)
-        && !memcmp (&save_filename, &renderglobal->save_filename, sizeof (renderglobal->save_filename)))
-        pass ();
+        && save_filename
+           ? strEQ ((char *)save_filename, (char *)renderglobal->save_filename)
+           : !renderglobal->save_filename)
+      pass ();
     else
-        fail ("RENDERGLOBAL.save_filename [T]");
+      fail ("RENDERGLOBAL.save_filename [T] '%s' <> '%s'", save_filename, renderglobal->save_filename);
   }
   return failed;
 }
@@ -32624,14 +32692,14 @@ static int test_SCALE (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_TV name;
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (scale, "SCALE", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)scale->name)
            : !scale->name)
       pass ();
     else
-      fail ("SCALE.name [TV] '%s' <> '%s'", name, scale->name);
+      fail ("SCALE.name [T] '%s' <> '%s'", name, scale->name);
   }
   {
     BITCODE_BD paper_units;
@@ -32934,14 +33002,14 @@ static int test_STYLE (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_STYLE *restrict style = obj->tio.object->tio.STYLE;
   {
-    BITCODE_TV bigfont_name;
+    BITCODE_T bigfont_name;
     if (dwg_dynapi_entity_value (style, "STYLE", "bigfont_name", &bigfont_name, NULL)
         && bigfont_name
            ? strEQ ((char *)bigfont_name, (char *)style->bigfont_name)
            : !style->bigfont_name)
       pass ();
     else
-      fail ("STYLE.bigfont_name [TV] '%s' <> '%s'", bigfont_name, style->bigfont_name);
+      fail ("STYLE.bigfont_name [T] '%s' <> '%s'", bigfont_name, style->bigfont_name);
   }
   {
     BITCODE_H extref;
@@ -32984,14 +33052,14 @@ static int test_STYLE (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_TV font_name;
+    BITCODE_T font_name;
     if (dwg_dynapi_entity_value (style, "STYLE", "font_name", &font_name, NULL)
         && font_name
            ? strEQ ((char *)font_name, (char *)style->font_name)
            : !style->font_name)
       pass ();
     else
-      fail ("STYLE.font_name [TV] '%s' <> '%s'", font_name, style->font_name);
+      fail ("STYLE.font_name [T] '%s' <> '%s'", font_name, style->font_name);
   }
   {
     BITCODE_RC generation;
@@ -33471,10 +33539,12 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
   {
     BITCODE_T desc;
     if (dwg_dynapi_entity_value (sunstudy, "SUNSTUDY", "desc", &desc, NULL)
-        && !memcmp (&desc, &sunstudy->desc, sizeof (sunstudy->desc)))
-        pass ();
+        && desc
+           ? strEQ ((char *)desc, (char *)sunstudy->desc)
+           : !sunstudy->desc)
+      pass ();
     else
-        fail ("SUNSTUDY.desc [T]");
+      fail ("SUNSTUDY.desc [T] '%s' <> '%s'", desc, sunstudy->desc);
   }
   {
     BITCODE_BL end_time;
@@ -33697,10 +33767,12 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
   {
     BITCODE_T setup_name;
     if (dwg_dynapi_entity_value (sunstudy, "SUNSTUDY", "setup_name", &setup_name, NULL)
-        && !memcmp (&setup_name, &sunstudy->setup_name, sizeof (sunstudy->setup_name)))
-        pass ();
+        && setup_name
+           ? strEQ ((char *)setup_name, (char *)sunstudy->setup_name)
+           : !sunstudy->setup_name)
+      pass ();
     else
-        fail ("SUNSTUDY.setup_name [T]");
+      fail ("SUNSTUDY.setup_name [T] '%s' <> '%s'", setup_name, sunstudy->setup_name);
   }
   {
     BITCODE_BL shade_plot_type;
@@ -33721,18 +33793,22 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
   {
     BITCODE_T sheet_set_name;
     if (dwg_dynapi_entity_value (sunstudy, "SUNSTUDY", "sheet_set_name", &sheet_set_name, NULL)
-        && !memcmp (&sheet_set_name, &sunstudy->sheet_set_name, sizeof (sunstudy->sheet_set_name)))
-        pass ();
+        && sheet_set_name
+           ? strEQ ((char *)sheet_set_name, (char *)sunstudy->sheet_set_name)
+           : !sunstudy->sheet_set_name)
+      pass ();
     else
-        fail ("SUNSTUDY.sheet_set_name [T]");
+      fail ("SUNSTUDY.sheet_set_name [T] '%s' <> '%s'", sheet_set_name, sunstudy->sheet_set_name);
   }
   {
     BITCODE_T sheet_subset_name;
     if (dwg_dynapi_entity_value (sunstudy, "SUNSTUDY", "sheet_subset_name", &sheet_subset_name, NULL)
-        && !memcmp (&sheet_subset_name, &sunstudy->sheet_subset_name, sizeof (sunstudy->sheet_subset_name)))
-        pass ();
+        && sheet_subset_name
+           ? strEQ ((char *)sheet_subset_name, (char *)sunstudy->sheet_subset_name)
+           : !sunstudy->sheet_subset_name)
+      pass ();
     else
-        fail ("SUNSTUDY.sheet_subset_name [T]");
+      fail ("SUNSTUDY.sheet_subset_name [T] '%s' <> '%s'", sheet_subset_name, sunstudy->sheet_subset_name);
   }
   {
     BITCODE_BD spacing;
@@ -34024,14 +34100,14 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_TV name;
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)tablestyle->name)
            : !tablestyle->name)
       pass ();
     else
-      fail ("TABLESTYLE.name [TV] '%s' <> '%s'", name, tablestyle->name);
+      fail ("TABLESTYLE.name [T] '%s' <> '%s'", name, tablestyle->name);
   }
   {
     BITCODE_BL num_cells;
@@ -34381,24 +34457,24 @@ static int test_UNDERLAYDEFINITION (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_UNDERLAYDEFINITION *restrict underlaydefinition = obj->tio.object->tio.UNDERLAYDEFINITION;
   {
-    BITCODE_TV filename;
+    BITCODE_T filename;
     if (dwg_dynapi_entity_value (underlaydefinition, "UNDERLAYDEFINITION", "filename", &filename, NULL)
         && filename
            ? strEQ ((char *)filename, (char *)underlaydefinition->filename)
            : !underlaydefinition->filename)
       pass ();
     else
-      fail ("UNDERLAYDEFINITION.filename [TV] '%s' <> '%s'", filename, underlaydefinition->filename);
+      fail ("UNDERLAYDEFINITION.filename [T] '%s' <> '%s'", filename, underlaydefinition->filename);
   }
   {
-    BITCODE_TV name;
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (underlaydefinition, "UNDERLAYDEFINITION", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)underlaydefinition->name)
            : !underlaydefinition->name)
       pass ();
     else
-      fail ("UNDERLAYDEFINITION.name [TV] '%s' <> '%s'", name, underlaydefinition->name);
+      fail ("UNDERLAYDEFINITION.name [T] '%s' <> '%s'", name, underlaydefinition->name);
   }
   {
     struct _dwg_object_object* parent;
@@ -35010,10 +35086,12 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
   {
     BITCODE_T desc;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "desc", &desc, NULL)
-        && !memcmp (&desc, &visualstyle->desc, sizeof (visualstyle->desc)))
-        pass ();
+        && desc
+           ? strEQ ((char *)desc, (char *)visualstyle->desc)
+           : !visualstyle->desc)
+      pass ();
     else
-        fail ("VISUALSTYLE.desc [T]");
+      fail ("VISUALSTYLE.desc [T] '%s' <> '%s'", desc, visualstyle->desc);
   }
   {
     BITCODE_BD display_brightness;
@@ -36580,7 +36658,7 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 36583 "dynapi_test.c"
+#line 36661 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -37160,7 +37238,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 37163 "dynapi_test.c"
+#line 37241 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");

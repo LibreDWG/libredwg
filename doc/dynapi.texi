@@ -940,7 +940,7 @@ RD,	DXF 40
 @item width_factor
 RD,	DXF 41
 @item default_value
-TV,	DXF 1
+T,	DXF 1
 @item generation
 BS,	DXF 71
 @item horiz_alignment
@@ -954,7 +954,7 @@ RC,	DXF 280
 @item type
 RC,	DXF 70
 @item tag
-TV,	DXF 2
+T,	DXF 2
 @item field_length
 BS
 @item flags
@@ -976,7 +976,7 @@ BS
 @item attdef_class_version
 RC,	DXF 280
 @item prompt
-TV,	DXF 3
+T,	DXF 3
 
 @end vtable
 @end indentedblock
@@ -1009,7 +1009,7 @@ RD,	DXF 40
 @item width_factor
 RD,	DXF 41
 @item text_value
-TV,	DXF 1
+T,	DXF 1
 @item generation
 BS,	DXF 71
 @item horiz_alignment
@@ -1023,7 +1023,7 @@ RC,	DXF 280
 @item type
 RC,	DXF 70
 @item tag
-TV,	DXF 2
+T,	DXF 2
 @item field_length
 BS,	DXF 73
 @item flags
@@ -1766,13 +1766,13 @@ BL,	DXF 453
 @item colors
 Dwg_HATCH_Color*
 @item gradient_name
-TV,	DXF 470
+T,	DXF 470
 @item elevation
 BD,	DXF 30
 @item extrusion
 BE,	DXF 210
 @item name
-TV,	DXF 2
+T,	DXF 2
 @item solid_fill
 B,	DXF 70
 @item associative
@@ -2388,7 +2388,7 @@ BD,	DXF 43
 @item extents_width
 BD,	DXF 42
 @item text
-TV,	DXF 1
+T,	DXF 1
 @item style
 H,	DXF 7
 @item linespace_style
@@ -2540,11 +2540,11 @@ RC,	DXF 73
 @item data_length
 BL,	DXF 90
 @item data
-TV,	DXF 310
+TF,	DXF 310
 @item oleversion
 BS,	DXF 70
 @item oleclient
-TV,	DXF 3
+TF,	DXF 3
 @item pt1
 3BD,	DXF 10
 @item pt2
@@ -2569,7 +2569,7 @@ BS
 @item data_length
 BL,	DXF 90
 @item data
-TV,	DXF 310
+TF,	DXF 310
 
 @end vtable
 @end indentedblock
@@ -3510,7 +3510,7 @@ RD,	DXF 40
 @item width_factor
 RD,	DXF 41
 @item text_value
-TV,	DXF 1
+T,	DXF 1
 @item generation
 BS,	DXF 71
 @item horiz_alignment
@@ -3545,7 +3545,7 @@ BD
 @item extrusion
 BE
 @item text_string
-TV,	DXF 1
+T,	DXF 1
 @item dimstyle
 H,	DXF 3
 
@@ -3740,7 +3740,7 @@ BL
 @item status_flag
 BL,	DXF 90
 @item style_sheet
-TV,	DXF 1
+T,	DXF 1
 @item render_mode
 RC,	DXF 281
 @item ucs_at_origin
@@ -4442,15 +4442,15 @@ BL
 @item base_pt
 3DPOINT,	DXF 10
 @item xref_pname
-TV,	DXF 1
+T,	DXF 1
 @item num_inserts
 RL
 @item description
-TV,	DXF 4
+T,	DXF 4
 @item preview_size
 BL
 @item preview
-TV,	DXF 310
+TF,	DXF 310
 @item insert_units
 BS,	DXF 70
 @item explodable
@@ -4571,7 +4571,7 @@ struct _dwg_object_object*
 @item intval
 RC,	DXF 280
 @item str
-TV,	DXF 1
+T,	DXF 1
 
 @end vtable
 @end indentedblock
@@ -4758,11 +4758,11 @@ T,	DXF 3
 @item DIMAPOST
 T,	DXF 4
 @item DIMBLK_T
-T,	DXF 5
+TV,	DXF 5
 @item DIMBLK1_T
-T,	DXF 6
+TV,	DXF 6
 @item DIMBLK2_T
-T,	DXF 7
+TV,	DXF 7
 @item DIMALTRND
 BD,	DXF 148
 @item DIMCLRD_N
@@ -4933,9 +4933,9 @@ H*,	DXF 360
 @item parent
 struct _dwg_object_object*
 @item id
-TV,	DXF 1
+T,	DXF 1
 @item code
-TV,	DXF 2
+T,	DXF 2
 @item num_childs
 BL,	DXF 90
 @item childs
@@ -4957,11 +4957,11 @@ BL,	DXF 95
 @item evaluation_error_code
 BL,	DXF 96
 @item evaluation_error_msg
-TV,	DXF 300
+T,	DXF 300
 @item value
 Dwg_TABLE_value
 @item value_string
-TV,	DXF 301
+T,	DXF 301
 @item value_string_length
 BL,	DXF 98
 @item num_childval
@@ -5141,7 +5141,7 @@ BS
 @item parent
 struct _dwg_object_object*
 @item name
-TV,	DXF 300
+T,	DXF 300
 @item unnamed
 BS,	DXF 70
 @item selectable
@@ -5187,7 +5187,7 @@ BL,	DXF 90
 @item image_size
 2RD,	DXF 10
 @item file_path
-TV,	DXF 1
+T,	DXF 1
 @item is_loaded
 B,	DXF 280
 @item resunits
@@ -5324,9 +5324,9 @@ H*
 @item parent
 struct _dwg_object_object*
 @item page_setup_name
-TV,	DXF 1
+T,	DXF 1
 @item printer_or_config
-TV,	DXF 2
+T,	DXF 2
 @item plot_layout_flags
 BS,	DXF 70
 @item left_margin
@@ -5342,7 +5342,7 @@ BD,	DXF 44
 @item paper_height
 BD,	DXF 45
 @item paper_size
-TV,	DXF 4
+T,	DXF 4
 @item plot_origin
 2BD_1,	DXF 46
 @item paper_units
@@ -5362,7 +5362,7 @@ BD,	DXF 142
 @item drawing_units
 BD,	DXF 143
 @item current_style_sheet
-TV,	DXF 7
+T,	DXF 7
 @item scale_type
 BS,	DXF 75
 @item scale_factor
@@ -5376,7 +5376,7 @@ BS,	DXF 77
 @item shade_plot_custom_dpi
 BS,	DXF 78
 @item layout_name
-TV,	DXF 1
+T,	DXF 1
 @item tab_order
 BS,	DXF 71
 @item flag
@@ -5483,7 +5483,7 @@ BS
 @item xrefdep
 B
 @item description
-TV,	DXF 3
+T,	DXF 3
 @item pattern_len
 BD,	DXF 40
 @item alignment
@@ -5497,7 +5497,7 @@ RD*
 @item text_area_is_present
 B
 @item strings_area
-TV,	DXF 3
+TF,	DXF 3
 @item extref_handle
 H
 @item styles
@@ -5766,13 +5766,13 @@ BD,	DXF 42
 @item landing_dist
 BD,	DXF 43
 @item description
-TV,	DXF 3
+T,	DXF 3
 @item arrow_head
 H,	DXF 341
 @item arrow_head_size
 BD,	DXF 44
 @item text_default
-TV,	DXF 300
+T,	DXF 300
 @item text_style
 H,	DXF 342
 @item attach_left
@@ -5839,9 +5839,9 @@ B
 @item parent
 struct _dwg_object_object*
 @item name
-TV,	DXF 2
+T,	DXF 2
 @item desc
-TV,	DXF 3
+T,	DXF 3
 @item flag
 BS,	DXF 70
 @item fill_color
@@ -6144,7 +6144,7 @@ struct _dwg_object_object*
 @item flag
 BS,	DXF 70
 @item name
-TV,	DXF 300
+T,	DXF 300
 @item paper_units
 BD,	DXF 140
 @item drawing_units
@@ -6270,9 +6270,9 @@ RC,	DXF 71
 @item last_height
 BD,	DXF 42
 @item font_name
-TV,	DXF 3
+T,	DXF 3
 @item bigfont_name
-TV,	DXF 4
+T,	DXF 4
 @item extref
 H
 
@@ -6462,7 +6462,7 @@ struct _dwg_object_object*
 @item class_version
 BS
 @item name
-TV,	DXF 3
+T,	DXF 3
 @item flags
 BS,	DXF 71
 @item flow_direction
@@ -6567,9 +6567,9 @@ BL
 @item parent
 struct _dwg_object_object*
 @item filename
-TV,	DXF 1
+T,	DXF 1
 @item name
-TV,	DXF 2
+T,	DXF 2
 
 @end vtable
 @end indentedblock
@@ -8640,7 +8640,7 @@ BB
 @item prev_entity
 H
 @item preview
-TV,	DXF 310
+TF,	DXF 310
 @item preview_exists
 B
 @item preview_size
@@ -8704,19 +8704,19 @@ All Section SummaryInfo fields.
 @vtable @code
 
 @item AUTHOR
-TV,	DXF 1
+T,	DXF 1
 @item COMMENTS
-TV,	DXF 1
+T,	DXF 1
 @item HYPERLINKBASE
-TV,	DXF 1
+T,	DXF 1
 @item KEYWORDS
-TV,	DXF 1
+T,	DXF 1
 @item LASTSAVEDBY
-TV,	DXF 1
+T,	DXF 1
 @item REVISIONNUMBER
-TV,	DXF 1
+T,	DXF 1
 @item SUBJECT
-TV,	DXF 1
+T,	DXF 1
 @item TDCREATE
 TIMERLL
 @item TDINDWG
@@ -8724,7 +8724,7 @@ TIMERLL
 @item TDUPDATE
 TIMERLL
 @item TITLE
-TV,	DXF 1
+T,	DXF 1
 @item num_props
 RS
 @item props

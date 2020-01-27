@@ -1,5 +1,5 @@
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1234 "gen-dynapi.pl"
+#line 1314 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -1080,7 +1080,7 @@ static const Dwg_DYNAPI_field _dwg_ATTDEF_fields[] = {
     0,0,0, 40 },
   { "width_factor",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity_ATTDEF, width_factor),
     0,0,0, 41 },
-  { "default_value",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_ATTDEF, default_value),
+  { "default_value",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_ATTDEF, default_value),
     1,1,1, 1 },
   { "generation",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_ATTDEF, generation),
     0,0,0, 71 },
@@ -1094,7 +1094,7 @@ static const Dwg_DYNAPI_field _dwg_ATTDEF_fields[] = {
     0,0,0, 280 },
   { "type",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_ATTDEF, type),
     0,0,0, 70 },
-  { "tag",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_ATTDEF, tag),
+  { "tag",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_ATTDEF, tag),
     1,1,1, 2 },
   { "field_length",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_ATTDEF, field_length),
     0,0,0, 0 },
@@ -1116,7 +1116,7 @@ static const Dwg_DYNAPI_field _dwg_ATTDEF_fields[] = {
     0,0,0, 0 },
   { "attdef_class_version",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_ATTDEF, attdef_class_version),
     0,0,0, 280 },
-  { "prompt",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_ATTDEF, prompt),
+  { "prompt",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_ATTDEF, prompt),
     1,1,1, 3 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -1142,7 +1142,7 @@ static const Dwg_DYNAPI_field _dwg_ATTRIB_fields[] = {
     0,0,0, 40 },
   { "width_factor",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity_ATTRIB, width_factor),
     0,0,0, 41 },
-  { "text_value",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_ATTRIB, text_value),
+  { "text_value",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_ATTRIB, text_value),
     1,1,1, 1 },
   { "generation",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_ATTRIB, generation),
     0,0,0, 71 },
@@ -1156,7 +1156,7 @@ static const Dwg_DYNAPI_field _dwg_ATTRIB_fields[] = {
     0,0,0, 280 },
   { "type",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_ATTRIB, type),
     0,0,0, 70 },
-  { "tag",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_ATTRIB, tag),
+  { "tag",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_ATTRIB, tag),
     1,1,1, 2 },
   { "field_length",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_ATTRIB, field_length),
     0,0,0, 73 },
@@ -1790,13 +1790,13 @@ static const Dwg_DYNAPI_field _dwg_HATCH_fields[] = {
     0,0,0, 453 },
   { "colors",	"Dwg_HATCH_Color*", sizeof (Dwg_HATCH_Color*),  OFF (struct _dwg_entity_HATCH, colors),
     1,1,0, 0 },
-  { "gradient_name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_HATCH, gradient_name),
+  { "gradient_name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_HATCH, gradient_name),
     1,1,1, 470 },
   { "elevation",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_HATCH, elevation),
     0,0,0, 30 },
   { "extrusion",	"BE", sizeof (BITCODE_BE),  OFF (struct _dwg_entity_HATCH, extrusion),
     0,0,0, 210 },
-  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_HATCH, name),
+  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_HATCH, name),
     1,1,1, 2 },
   { "solid_fill",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_HATCH, solid_fill),
     0,0,0, 70 },
@@ -2328,7 +2328,7 @@ static const Dwg_DYNAPI_field _dwg_MTEXT_fields[] = {
     0,0,0, 43 },
   { "extents_width",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_MTEXT, extents_width),
     0,0,0, 42 },
-  { "text",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_MTEXT, text),
+  { "text",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_MTEXT, text),
     1,1,1, 1 },
   { "style",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_MTEXT, style),
     1,0,0, 7 },
@@ -2466,12 +2466,12 @@ static const Dwg_DYNAPI_field _dwg_OLE2FRAME_fields[] = {
     0,0,0, 73 },
   { "data_length",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_OLE2FRAME, data_length),
     0,0,0, 90 },
-  { "data",	"TV", sizeof (char*),  OFF (struct _dwg_entity_OLE2FRAME, data),
-    1,1,1, 310 },
+  { "data",	"TF", sizeof (char*),  OFF (struct _dwg_entity_OLE2FRAME, data),
+    1,1,0, 310 },
   { "oleversion",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_OLE2FRAME, oleversion),
     0,0,0, 70 },
-  { "oleclient",	"TV", sizeof (char*),  OFF (struct _dwg_entity_OLE2FRAME, oleclient),
-    1,1,1, 3 },
+  { "oleclient",	"TF", sizeof (char*),  OFF (struct _dwg_entity_OLE2FRAME, oleclient),
+    1,1,0, 3 },
   { "pt1",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_OLE2FRAME, pt1),
     1,0,0, 10 },
   { "pt2",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_OLE2FRAME, pt2),
@@ -2488,8 +2488,8 @@ static const Dwg_DYNAPI_field _dwg_OLEFRAME_fields[] = {
     0,0,0, 0 },
   { "data_length",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_OLEFRAME, data_length),
     0,0,0, 90 },
-  { "data",	"TV", sizeof (char*),  OFF (struct _dwg_entity_OLEFRAME, data),
-    1,1,1, 310 },
+  { "data",	"TF", sizeof (char*),  OFF (struct _dwg_entity_OLEFRAME, data),
+    1,1,0, 310 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_PLANESURFACE: (sorted by offset) */
@@ -3306,7 +3306,7 @@ static const Dwg_DYNAPI_field _dwg_TEXT_fields[] = {
     0,0,0, 40 },
   { "width_factor",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity_TEXT, width_factor),
     0,0,0, 41 },
-  { "text_value",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_TEXT, text_value),
+  { "text_value",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_TEXT, text_value),
     1,1,1, 1 },
   { "generation",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_TEXT, generation),
     0,0,0, 71 },
@@ -3334,7 +3334,7 @@ static const Dwg_DYNAPI_field _dwg_TOLERANCE_fields[] = {
     1,0,0, 11 },
   { "extrusion",	"BE", sizeof (BITCODE_BE),  OFF (struct _dwg_entity_TOLERANCE, extrusion),
     0,0,0, 0 },
-  { "text_string",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_TOLERANCE, text_string),
+  { "text_string",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_TOLERANCE, text_string),
     1,1,1, 1 },
   { "dimstyle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_TOLERANCE, dimstyle),
     1,0,0, 3 },
@@ -3480,7 +3480,7 @@ static const Dwg_DYNAPI_field _dwg_VIEWPORT_fields[] = {
     0,0,0, 0 },
   { "status_flag",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_VIEWPORT, status_flag),
     0,0,0, 90 },
-  { "style_sheet",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_VIEWPORT, style_sheet),
+  { "style_sheet",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_VIEWPORT, style_sheet),
     1,1,1, 1 },
   { "render_mode",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_VIEWPORT, render_mode),
     0,0,0, 281 },
@@ -4051,16 +4051,16 @@ static const Dwg_DYNAPI_field _dwg_BLOCK_HEADER_fields[] = {
     0,0,0, 0 },
   { "base_pt",	"3DPOINT", sizeof (BITCODE_3DPOINT),  OFF (struct _dwg_object_BLOCK_HEADER, base_pt),
     1,0,0, 10 },
-  { "xref_pname",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCK_HEADER, xref_pname),
+  { "xref_pname",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCK_HEADER, xref_pname),
     1,1,1, 1 },
   { "num_inserts",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_object_BLOCK_HEADER, num_inserts),
     0,0,0, 0 },
-  { "description",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCK_HEADER, description),
+  { "description",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCK_HEADER, description),
     1,1,1, 4 },
   { "preview_size",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCK_HEADER, preview_size),
     0,0,0, 0 },
-  { "preview",	"TV", sizeof (char*),  OFF (struct _dwg_object_BLOCK_HEADER, preview),
-    1,1,1, 310 },
+  { "preview",	"TF", sizeof (char*),  OFF (struct _dwg_object_BLOCK_HEADER, preview),
+    1,1,0, 310 },
   { "insert_units",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_BLOCK_HEADER, insert_units),
     0,0,0, 70 },
   { "explodable",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCK_HEADER, explodable),
@@ -4145,7 +4145,7 @@ static const Dwg_DYNAPI_field _dwg_DICTIONARYVAR_fields[] = {
     1,1,0, 0 },
   { "intval",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_DICTIONARYVAR, intval),
     0,0,0, 280 },
-  { "str",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_DICTIONARYVAR, str),
+  { "str",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_DICTIONARYVAR, str),
     1,1,1, 1 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -4307,11 +4307,11 @@ static const Dwg_DYNAPI_field _dwg_DIMSTYLE_fields[] = {
     1,1,1, 3 },
   { "DIMAPOST",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_DIMSTYLE, DIMAPOST),
     1,1,1, 4 },
-  { "DIMBLK_T",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_DIMSTYLE, DIMBLK_T),
+  { "DIMBLK_T",	"TV", sizeof (BITCODE_T),  OFF (struct _dwg_object_DIMSTYLE, DIMBLK_T),
     1,1,1, 5 },
-  { "DIMBLK1_T",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_DIMSTYLE, DIMBLK1_T),
+  { "DIMBLK1_T",	"TV", sizeof (BITCODE_T),  OFF (struct _dwg_object_DIMSTYLE, DIMBLK1_T),
     1,1,1, 6 },
-  { "DIMBLK2_T",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_DIMSTYLE, DIMBLK2_T),
+  { "DIMBLK2_T",	"TV", sizeof (BITCODE_T),  OFF (struct _dwg_object_DIMSTYLE, DIMBLK2_T),
     1,1,1, 7 },
   { "DIMALTRND",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_DIMSTYLE, DIMALTRND),
     0,0,0, 148 },
@@ -4443,9 +4443,9 @@ static const Dwg_DYNAPI_field _dwg_EVALUATION_GRAPH_fields[] = {
 static const Dwg_DYNAPI_field _dwg_FIELD_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_FIELD, parent),
     1,1,0, 0 },
-  { "id",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_FIELD, id),
+  { "id",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_FIELD, id),
     1,1,1, 1 },
-  { "code",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_FIELD, code),
+  { "code",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_FIELD, code),
     1,1,1, 2 },
   { "num_childs",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_FIELD, num_childs),
     0,0,0, 90 },
@@ -4467,11 +4467,11 @@ static const Dwg_DYNAPI_field _dwg_FIELD_fields[] = {
     0,0,0, 95 },
   { "evaluation_error_code",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_FIELD, evaluation_error_code),
     0,0,0, 96 },
-  { "evaluation_error_msg",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_FIELD, evaluation_error_msg),
+  { "evaluation_error_msg",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_FIELD, evaluation_error_msg),
     1,1,1, 300 },
   { "value",	"Dwg_TABLE_value", sizeof (Dwg_TABLE_value),  OFF (struct _dwg_object_FIELD, value),
     0,0,0, 0 },
-  { "value_string",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_FIELD, value_string),
+  { "value_string",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_FIELD, value_string),
     1,1,1, 301 },
   { "value_string_length",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_FIELD, value_string_length),
     0,0,0, 98 },
@@ -4623,7 +4623,7 @@ static const Dwg_DYNAPI_field _dwg_GEOMAPIMAGE_fields[] = {
 static const Dwg_DYNAPI_field _dwg_GROUP_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_GROUP, parent),
     1,1,0, 0 },
-  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_GROUP, name),
+  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_GROUP, name),
     1,1,1, 300 },
   { "unnamed",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_GROUP, unnamed),
     0,0,0, 70 },
@@ -4655,7 +4655,7 @@ static const Dwg_DYNAPI_field _dwg_IMAGEDEF_fields[] = {
     0,0,0, 90 },
   { "image_size",	"2RD", sizeof (BITCODE_2RD),  OFF (struct _dwg_object_IMAGEDEF, image_size),
     1,0,0, 10 },
-  { "file_path",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_IMAGEDEF, file_path),
+  { "file_path",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_IMAGEDEF, file_path),
     1,1,1, 1 },
   { "is_loaded",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_IMAGEDEF, is_loaded),
     0,0,0, 280 },
@@ -4749,9 +4749,9 @@ static const Dwg_DYNAPI_field _dwg_LAYER_INDEX_fields[] = {
 static const Dwg_DYNAPI_field _dwg_LAYOUT_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_LAYOUT, parent),
     1,1,0, 0 },
-  { "page_setup_name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_LAYOUT, page_setup_name),
+  { "page_setup_name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_LAYOUT, page_setup_name),
     1,1,1, 1 },
-  { "printer_or_config",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_LAYOUT, printer_or_config),
+  { "printer_or_config",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_LAYOUT, printer_or_config),
     1,1,1, 2 },
   { "plot_layout_flags",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_LAYOUT, plot_layout_flags),
     0,0,0, 70 },
@@ -4767,7 +4767,7 @@ static const Dwg_DYNAPI_field _dwg_LAYOUT_fields[] = {
     0,0,0, 44 },
   { "paper_height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_LAYOUT, paper_height),
     0,0,0, 45 },
-  { "paper_size",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_LAYOUT, paper_size),
+  { "paper_size",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_LAYOUT, paper_size),
     1,1,1, 4 },
   { "plot_origin",	"2BD_1", sizeof (BITCODE_2BD_1),  OFF (struct _dwg_object_LAYOUT, plot_origin),
     1,0,0, 46 },
@@ -4787,7 +4787,7 @@ static const Dwg_DYNAPI_field _dwg_LAYOUT_fields[] = {
     0,0,0, 142 },
   { "drawing_units",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_LAYOUT, drawing_units),
     0,0,0, 143 },
-  { "current_style_sheet",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_LAYOUT, current_style_sheet),
+  { "current_style_sheet",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_LAYOUT, current_style_sheet),
     1,1,1, 7 },
   { "scale_type",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_LAYOUT, scale_type),
     0,0,0, 75 },
@@ -4801,7 +4801,7 @@ static const Dwg_DYNAPI_field _dwg_LAYOUT_fields[] = {
     0,0,0, 77 },
   { "shade_plot_custom_dpi",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_LAYOUT, shade_plot_custom_dpi),
     0,0,0, 78 },
-  { "layout_name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_LAYOUT, layout_name),
+  { "layout_name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_LAYOUT, layout_name),
     1,1,1, 1 },
   { "tab_order",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_LAYOUT, tab_order),
     0,0,0, 71 },
@@ -4883,7 +4883,7 @@ static const Dwg_DYNAPI_field _dwg_LTYPE_fields[] = {
     0,0,0, 0 },
   { "xrefdep",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_LTYPE, xrefdep),
     0,0,0, 0 },
-  { "description",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_LTYPE, description),
+  { "description",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_LTYPE, description),
     1,1,1, 3 },
   { "pattern_len",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_LTYPE, pattern_len),
     0,0,0, 40 },
@@ -4897,8 +4897,8 @@ static const Dwg_DYNAPI_field _dwg_LTYPE_fields[] = {
     1,1,0, 0 },
   { "text_area_is_present",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_LTYPE, text_area_is_present),
     0,0,0, 0 },
-  { "strings_area",	"TF", sizeof (char*),  OFF (struct _dwg_object_LTYPE, strings_area),
-    1,1,1, 3 },
+  { "strings_area",	"TF", 512,  OFF (struct _dwg_object_LTYPE, strings_area),
+    1,1,0, 3 },
   { "extref_handle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_LTYPE, extref_handle),
     1,0,0, 0 },
   { "styles",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_LTYPE, styles),
@@ -5141,13 +5141,13 @@ static const Dwg_DYNAPI_field _dwg_MLEADERSTYLE_fields[] = {
     0,0,0, 42 },
   { "landing_dist",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MLEADERSTYLE, landing_dist),
     0,0,0, 43 },
-  { "description",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_MLEADERSTYLE, description),
+  { "description",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_MLEADERSTYLE, description),
     1,1,1, 3 },
   { "arrow_head",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_MLEADERSTYLE, arrow_head),
     1,0,0, 341 },
   { "arrow_head_size",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MLEADERSTYLE, arrow_head_size),
     0,0,0, 44 },
-  { "text_default",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_MLEADERSTYLE, text_default),
+  { "text_default",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_MLEADERSTYLE, text_default),
     1,1,1, 300 },
   { "text_style",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_MLEADERSTYLE, text_style),
     1,0,0, 342 },
@@ -5207,9 +5207,9 @@ static const Dwg_DYNAPI_field _dwg_MLEADERSTYLE_fields[] = {
 static const Dwg_DYNAPI_field _dwg_MLINESTYLE_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_MLINESTYLE, parent),
     1,1,0, 0 },
-  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_MLINESTYLE, name),
+  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_MLINESTYLE, name),
     1,1,1, 2 },
-  { "desc",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_MLINESTYLE, desc),
+  { "desc",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_MLINESTYLE, desc),
     1,1,1, 3 },
   { "flag",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MLINESTYLE, flag),
     0,0,0, 70 },
@@ -5435,7 +5435,7 @@ static const Dwg_DYNAPI_field _dwg_SCALE_fields[] = {
     1,1,0, 0 },
   { "flag",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SCALE, flag),
     0,0,0, 70 },
-  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_SCALE, name),
+  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_SCALE, name),
     1,1,1, 300 },
   { "paper_units",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_SCALE, paper_units),
     0,0,0, 140 },
@@ -5529,9 +5529,9 @@ static const Dwg_DYNAPI_field _dwg_STYLE_fields[] = {
     0,0,0, 71 },
   { "last_height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_STYLE, last_height),
     0,0,0, 42 },
-  { "font_name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_STYLE, font_name),
+  { "font_name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_STYLE, font_name),
     1,1,1, 3 },
-  { "bigfont_name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_STYLE, bigfont_name),
+  { "bigfont_name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_STYLE, bigfont_name),
     1,1,1, 4 },
   { "extref",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_STYLE, extref),
     1,0,0, 0 },
@@ -5675,7 +5675,7 @@ static const Dwg_DYNAPI_field _dwg_TABLESTYLE_fields[] = {
     1,1,0, 0 },
   { "class_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_TABLESTYLE, class_version),
     0,0,0, 0 },
-  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_TABLESTYLE, name),
+  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_TABLESTYLE, name),
     1,1,1, 3 },
   { "flags",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_TABLESTYLE, flags),
     0,0,0, 71 },
@@ -5751,9 +5751,9 @@ static const Dwg_DYNAPI_field _dwg_UCS_CONTROL_fields[] = {
 static const Dwg_DYNAPI_field _dwg_UNDERLAYDEFINITION_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_UNDERLAYDEFINITION, parent),
     1,1,0, 0 },
-  { "filename",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_UNDERLAYDEFINITION, filename),
+  { "filename",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_UNDERLAYDEFINITION, filename),
     1,1,1, 1 },
-  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_UNDERLAYDEFINITION, name),
+  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_UNDERLAYDEFINITION, name),
     1,1,1, 2 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -7385,8 +7385,8 @@ static const Dwg_DYNAPI_field _dwg_object_entity_fields[] = {
     0,0,0, 0 },
   { "prev_entity",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_entity, prev_entity),
     1,0,0, 0 },
-  { "preview",	"TV", sizeof (char*),  OFF (struct _dwg_object_entity, preview),
-    1,1,1, 310 },
+  { "preview",	"TF", sizeof (char*),  OFF (struct _dwg_object_entity, preview),
+    1,1,0, 310 },
   { "preview_exists",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_entity, preview_exists),
     0,0,0, 0 },
   { "preview_size",	"BLL", sizeof (BITCODE_BLL),  OFF (struct _dwg_object_entity, preview_size),
@@ -7436,19 +7436,19 @@ static const Dwg_DYNAPI_field _dwg_object_object_fields[] = {
 
 /* from typedef struct Dwg_SummaryInfo: (sorted by name) */
 static const Dwg_DYNAPI_field _dwg_SummaryInfo_fields[] = {
-  { "AUTHOR",	"TV", sizeof (BITCODE_TV),  OFF (struct Dwg_SummaryInfo, AUTHOR),
+  { "AUTHOR",	"T", sizeof (BITCODE_TV),  OFF (struct Dwg_SummaryInfo, AUTHOR),
     1,1,1, 1 },
-  { "COMMENTS",	"TV", sizeof (BITCODE_TV),  OFF (struct Dwg_SummaryInfo, COMMENTS),
+  { "COMMENTS",	"T", sizeof (BITCODE_TV),  OFF (struct Dwg_SummaryInfo, COMMENTS),
     1,1,1, 1 },
-  { "HYPERLINKBASE",	"TV", sizeof (BITCODE_TV),  OFF (struct Dwg_SummaryInfo, HYPERLINKBASE),
+  { "HYPERLINKBASE",	"T", sizeof (BITCODE_TV),  OFF (struct Dwg_SummaryInfo, HYPERLINKBASE),
     1,1,1, 1 },
-  { "KEYWORDS",	"TV", sizeof (BITCODE_TV),  OFF (struct Dwg_SummaryInfo, KEYWORDS),
+  { "KEYWORDS",	"T", sizeof (BITCODE_TV),  OFF (struct Dwg_SummaryInfo, KEYWORDS),
     1,1,1, 1 },
-  { "LASTSAVEDBY",	"TV", sizeof (BITCODE_TV),  OFF (struct Dwg_SummaryInfo, LASTSAVEDBY),
+  { "LASTSAVEDBY",	"T", sizeof (BITCODE_TV),  OFF (struct Dwg_SummaryInfo, LASTSAVEDBY),
     1,1,1, 1 },
-  { "REVISIONNUMBER",	"TV", sizeof (BITCODE_TV),  OFF (struct Dwg_SummaryInfo, REVISIONNUMBER),
+  { "REVISIONNUMBER",	"T", sizeof (BITCODE_TV),  OFF (struct Dwg_SummaryInfo, REVISIONNUMBER),
     1,1,1, 1 },
-  { "SUBJECT",	"TV", sizeof (BITCODE_TV),  OFF (struct Dwg_SummaryInfo, SUBJECT),
+  { "SUBJECT",	"T", sizeof (BITCODE_TV),  OFF (struct Dwg_SummaryInfo, SUBJECT),
     1,1,1, 1 },
   { "TDCREATE",	"TIMERLL", sizeof (BITCODE_TIMERLL),  OFF (struct Dwg_SummaryInfo, TDCREATE),
     1,0,0, 0 },
@@ -7456,7 +7456,7 @@ static const Dwg_DYNAPI_field _dwg_SummaryInfo_fields[] = {
     1,0,0, 0 },
   { "TDUPDATE",	"TIMERLL", sizeof (BITCODE_TIMERLL),  OFF (struct Dwg_SummaryInfo, TDUPDATE),
     1,0,0, 0 },
-  { "TITLE",	"TV", sizeof (BITCODE_TV),  OFF (struct Dwg_SummaryInfo, TITLE),
+  { "TITLE",	"T", sizeof (BITCODE_TV),  OFF (struct Dwg_SummaryInfo, TITLE),
     1,1,1, 1 },
   { "num_props",	"RS", sizeof (BITCODE_RS),  OFF (struct Dwg_SummaryInfo, num_props),
     0,0,0, 0 },
@@ -7715,7 +7715,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 
 };
 
-#line 1317 "gen-dynapi.pl"
+#line 1397 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
@@ -7911,7 +7911,7 @@ dwg_dynapi_entity_value (void *restrict _obj, const char *restrict name,
         }
       if (fp)
         memcpy (fp, f, sizeof (Dwg_DYNAPI_field));
-      memcpy (out, &((char *)_obj)[f->offset], f->size);
+      memcpy (out, &((char *)_obj)[f->offset], f->is_malloc ? sizeof(char*) : f->size);
       return true;
     }
   }
@@ -8193,24 +8193,24 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
                    const Dwg_Version_Type dwg_version,
                    const void *restrict value, const bool is_utf8)
 {
-  // TODO: sanity checks
+  // TODO: sanity checks. is_malloc (TF)
   // if text strcpy or wcscpy, or do utf8 conversion.
   //if ((char*)old && f->is_malloc)
   //  free (old);
-  if (f->is_string)
+  if (f->is_malloc)
     {
       // NULL ptr
       if (!*(char**)value)
         memcpy (old, value, f->size);
       // ascii
-      else if (strEQc (f->type, "TF") || dwg_version < R_2007)
+      else if (strEQc (f->type, "TF") || (f->is_string && dwg_version < R_2007))
         {
           char *str = malloc (strlen (*(char**)value)+1);
           strcpy (str, *(char**)value);
-          memcpy (old, &str, f->size); // size of ptr
+          memcpy (old, &str, sizeof (char*)); // size of ptr
         }
       // or wide
-      else if (strNE (f->type, "TF") && dwg_version >= R_2007)
+      else if (strNE (f->type, "TF") && (f->is_string && dwg_version >= R_2007))
         {
           BITCODE_TU wstr;
           if (is_utf8)
@@ -8229,8 +8229,10 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
               memcpy (wstr, value, length * 2);
 #endif
             }
-          memcpy (old, &wstr, f->size); // size of ptr
+          memcpy (old, &wstr, sizeof (char*)); // size of ptr
         }
+      else
+        memcpy (old, value, sizeof (char*));
     }
   else
     memcpy (old, value, f->size);
