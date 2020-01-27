@@ -1942,7 +1942,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           else
             //search_field:
             {
-              if (_set_struct_field (dat, obj, tokens,_obj, name, key, fields))
+              if (_set_struct_field (dat, obj, tokens, _obj, name, key, fields))
                 continue;
               if (is_entity)
                 {
@@ -1955,6 +1955,31 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   if (_set_struct_field (dat, obj, tokens, obj->tio.object, name, key,
                                          dwg_dynapi_common_object_fields ()))
                     continue;
+                }
+              if (strEQc (name, "MULTILEADER"))
+                {
+                  // embedded structs
+                  if (memBEGINc (key, "ctx.content."))
+                    {
+                      Dwg_Entity_MULTILEADER *_o = (Dwg_Entity_MULTILEADER*)_obj;
+                      Dwg_MLEADER_Content *cnt = &_o->ctx.content;
+                      // FIXME: add to dynapi: txt.* and blk.* MLEADER_Content union fields
+                      const Dwg_DYNAPI_field *sf
+                        = dwg_dynapi_subclass_fields ("MLEADER_Content");
+                      if (sf && _set_struct_field (dat, obj, tokens, cnt, "MLEADER",
+                                                   &key[strlen("ctx.content.")], sf))
+                        continue;
+                    }
+                  else if (memBEGINc (key, "ctx."))
+                    {
+                      Dwg_Entity_MULTILEADER *_o = (Dwg_Entity_MULTILEADER*)_obj;
+                      Dwg_MLEADER_AnnotContext *ctx = &_o->ctx;
+                      const Dwg_DYNAPI_field *sf
+                        = dwg_dynapi_subclass_fields ("MLEADER_AnnotContext");
+                      if (sf && _set_struct_field (dat, obj, tokens, ctx, "MLEADER",
+                                                   &key[4], sf))
+                        continue;
+                    }
                 }
               LOG_TRACE ("Unknown %s.%s %.*s\n", name, key,
                          t->end - t->start, &dat->chain[t->start]);
