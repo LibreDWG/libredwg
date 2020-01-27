@@ -265,6 +265,18 @@ static char* _path_field(const char *path);
     {                                                                         \
       PREFIX fprintf (dat->fh, "[0, 0],\n");                                  \
     }
+#define VALUE_BINARY(buf, len, dxf)                                           \
+  {                                                                           \
+    fprintf (dat->fh, "\"");                                                  \
+    if (buf && len)                                                           \
+      {                                                                       \
+        for (long j = 0; j < (long)len; j++)                                  \
+          {                                                                   \
+            fprintf (dat->fh, "%02X", buf[j]);                                \
+          }                                                                   \
+      }                                                                       \
+    fprintf (dat->fh, "\",\n");                                               \
+  }
 #define FIELD_BINARY(nam, size, dxf)                                          \
   {                                                                           \
     long len = (long)size;                                                    \
@@ -1131,11 +1143,23 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           // properly dwg_decode_object/_entity for eed, reactors, xdic
           if (klass && !is_entity)
             {
-              return dwg_json_UNKNOWN_OBJ (dat, obj);
+              int len = obj->num_unknown_bits / 8;
+              if (obj->num_unknown_bits & 8)
+                len++;
+              error |= dwg_json_UNKNOWN_OBJ (dat, obj);
+              KEY (unknown);
+              VALUE_BINARY (obj->unknown_bits, len, 0)
+              return error;
             }
           else if (klass)
             {
-              return dwg_json_UNKNOWN_ENT (dat, obj);
+              int len = obj->num_unknown_bits / 8;
+              if (obj->num_unknown_bits & 8)
+                len++;
+              error |= dwg_json_UNKNOWN_ENT (dat, obj);
+              KEY (unknown);
+              VALUE_BINARY (obj->unknown_bits, len, 0)
+              return error;
             }
           else // not a class
             {

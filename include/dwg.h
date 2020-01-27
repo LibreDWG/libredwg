@@ -2565,7 +2565,7 @@ typedef struct _dwg_HATCH_DefLine
   BITCODE_2BD pt0;
   BITCODE_2BD offset;
   BITCODE_BS  num_dashes;
-  BITCODE_BD * dashes;
+  BITCODE_BD* dashes;
 } Dwg_HATCH_DefLine;
 
 typedef struct _dwg_entity_HATCH
