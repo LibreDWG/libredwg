@@ -7226,6 +7226,82 @@ static const Dwg_DYNAPI_field _dwg_TableRow_fields[] = {
     1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
+/* from typedef union _dwg_MLEADER_Content: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_MLEADER_Content_fields[] = {
+  { "txt.default_text",	"TV", sizeof (BITCODE_TV),  OFF (union _dwg_MLEADER_Content, txt.default_text),
+    1,1,1, 0 },
+  { "txt.normal",	"3BD", sizeof (BITCODE_3BD),  OFF (union _dwg_MLEADER_Content, txt.normal),
+    1,0,0, 0 },
+  { "txt.style",	"H", sizeof (BITCODE_H),  OFF (union _dwg_MLEADER_Content, txt.style),
+    1,0,0, 0 },
+  { "txt.location",	"3BD", sizeof (BITCODE_3BD),  OFF (union _dwg_MLEADER_Content, txt.location),
+    1,0,0, 0 },
+  { "txt.direction",	"3BD", sizeof (BITCODE_3BD),  OFF (union _dwg_MLEADER_Content, txt.direction),
+    1,0,0, 0 },
+  { "txt.rotation",	"BD", sizeof (BITCODE_BD),  OFF (union _dwg_MLEADER_Content, txt.rotation),
+    0,0,0, 0 },
+  { "txt.width",	"BD", sizeof (BITCODE_BD),  OFF (union _dwg_MLEADER_Content, txt.width),
+    0,0,0, 0 },
+  { "txt.height",	"BD", sizeof (BITCODE_BD),  OFF (union _dwg_MLEADER_Content, txt.height),
+    0,0,0, 0 },
+  { "txt.line_spacing_factor",	"BD", sizeof (BITCODE_BD),  OFF (union _dwg_MLEADER_Content, txt.line_spacing_factor),
+    0,0,0, 0 },
+  { "txt.line_spacing_style",	"BS", sizeof (BITCODE_BS),  OFF (union _dwg_MLEADER_Content, txt.line_spacing_style),
+    0,0,0, 0 },
+  { "txt.color",	"CMC", sizeof (BITCODE_CMC),  OFF (union _dwg_MLEADER_Content, txt.color),
+    1,0,0, 0 },
+  { "txt.alignment",	"BS", sizeof (BITCODE_BS),  OFF (union _dwg_MLEADER_Content, txt.alignment),
+    0,0,0, 0 },
+  { "txt.flow",	"BS", sizeof (BITCODE_BS),  OFF (union _dwg_MLEADER_Content, txt.flow),
+    0,0,0, 0 },
+  { "txt.bg_color",	"CMC", sizeof (BITCODE_CMC),  OFF (union _dwg_MLEADER_Content, txt.bg_color),
+    1,0,0, 0 },
+  { "txt.bg_scale",	"BD", sizeof (BITCODE_BD),  OFF (union _dwg_MLEADER_Content, txt.bg_scale),
+    0,0,0, 0 },
+  { "txt.bg_transparency",	"BL", sizeof (BITCODE_BL),  OFF (union _dwg_MLEADER_Content, txt.bg_transparency),
+    0,0,0, 0 },
+  { "txt.is_bg_fill",	"B", sizeof (BITCODE_B),  OFF (union _dwg_MLEADER_Content, txt.is_bg_fill),
+    0,0,0, 0 },
+  { "txt.is_bg_mask_fill",	"B", sizeof (BITCODE_B),  OFF (union _dwg_MLEADER_Content, txt.is_bg_mask_fill),
+    0,0,0, 0 },
+  { "txt.col_type",	"BS", sizeof (BITCODE_BS),  OFF (union _dwg_MLEADER_Content, txt.col_type),
+    0,0,0, 0 },
+  { "txt.is_height_auto",	"B", sizeof (BITCODE_B),  OFF (union _dwg_MLEADER_Content, txt.is_height_auto),
+    0,0,0, 0 },
+  { "txt.col_width",	"BD", sizeof (BITCODE_BD),  OFF (union _dwg_MLEADER_Content, txt.col_width),
+    0,0,0, 0 },
+  { "txt.col_gutter",	"BD", sizeof (BITCODE_BD),  OFF (union _dwg_MLEADER_Content, txt.col_gutter),
+    0,0,0, 0 },
+  { "txt.is_col_flow_reversed",	"B", sizeof (BITCODE_B),  OFF (union _dwg_MLEADER_Content, txt.is_col_flow_reversed),
+    0,0,0, 0 },
+  { "txt.num_col_sizes",	"BL", sizeof (BITCODE_BL),  OFF (union _dwg_MLEADER_Content, txt.num_col_sizes),
+    0,0,0, 0 },
+  { "txt.col_sizes",	"BD*", sizeof (BITCODE_BD*),  OFF (union _dwg_MLEADER_Content, txt.col_sizes),
+    1,1,0, 0 },
+  { "txt.word_break",	"B", sizeof (BITCODE_B),  OFF (union _dwg_MLEADER_Content, txt.word_break),
+    0,0,0, 0 },
+  { "txt.unknown",	"B", sizeof (BITCODE_B),  OFF (union _dwg_MLEADER_Content, txt.unknown),
+    0,0,0, 0 },
+  { "txt",	"struct _content_mtext", sizeof (struct _content_mtext),  OFF (union _dwg_MLEADER_Content, txt),
+    1,0,0, 0 },
+  { "blk.block_table",	"H", sizeof (BITCODE_H),  OFF (union _dwg_MLEADER_Content, blk.block_table),
+    1,0,0, 0 },
+  { "blk.normal",	"3BD", sizeof (BITCODE_3BD),  OFF (union _dwg_MLEADER_Content, blk.normal),
+    1,0,0, 0 },
+  { "blk.location",	"3BD", sizeof (BITCODE_3BD),  OFF (union _dwg_MLEADER_Content, blk.location),
+    1,0,0, 0 },
+  { "blk.scale",	"3BD", sizeof (BITCODE_3BD),  OFF (union _dwg_MLEADER_Content, blk.scale),
+    1,0,0, 0 },
+  { "blk.rotation",	"BD", sizeof (BITCODE_BD),  OFF (union _dwg_MLEADER_Content, blk.rotation),
+    0,0,0, 0 },
+  { "blk.color",	"CMC", sizeof (BITCODE_CMC),  OFF (union _dwg_MLEADER_Content, blk.color),
+    1,0,0, 0 },
+  { "blk.transform",	"BD*", sizeof (BITCODE_BD*),  OFF (union _dwg_MLEADER_Content, blk.transform),
+    1,1,0, 0 },
+  { "blk",	"struct _content_block", sizeof (struct _content_block),  OFF (union _dwg_MLEADER_Content, blk),
+    1,0,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
 
 
 /* common fields: */
@@ -7580,61 +7656,62 @@ static const struct _name_type_fields dwg_name_types[] = {
 
 /* Fields for all the subclasses, sorted for bsearch */
 static const struct _name_subclass_fields dwg_list_subclasses[] = {
-  { "3DSOLID_silhouette", (int)DWG_TYPE__3DSOLID, NULL, _dwg_3DSOLID_silhouette_fields, sizeof (struct _dwg_3DSOLID_silhouette) },	/* 0 */
-  { "3DSOLID_wire", (int)DWG_TYPE__3DSOLID, NULL, _dwg_3DSOLID_wire_fields, sizeof (struct _dwg_3DSOLID_wire) },	/* 1 */
-  { "ACTIONBODY", 0, "AcDbAssocActionBody", _dwg_ACTIONBODY_fields, sizeof (struct _dwg_ACTIONBODY) },	/* 2 */
-  { "BorderStyle", 0, NULL, _dwg_BorderStyle_fields, sizeof (struct _dwg_BorderStyle) },	/* 3 */
-  { "CELLSTYLEMAP_Cell", (int)DWG_TYPE_CELLSTYLEMAP, NULL, _dwg_CELLSTYLEMAP_Cell_fields, sizeof (struct _dwg_CELLSTYLEMAP_Cell) },	/* 4 */
-  { "CellContentGeometry", 0, NULL, _dwg_CellContentGeometry_fields, sizeof (struct _dwg_CellContentGeometry) },	/* 5 */
-  { "CellStyle", 0, NULL, _dwg_CellStyle_fields, sizeof (struct _dwg_CellStyle) },	/* 6 */
-  { "ContentFormat", 0, NULL, _dwg_ContentFormat_fields, sizeof (struct _dwg_ContentFormat) },	/* 7 */
-  { "DIMASSOC_Ref", (int)DWG_TYPE_DIMASSOC, NULL, _dwg_DIMASSOC_Ref_fields, sizeof (struct _dwg_DIMASSOC_Ref) },	/* 8 */
-  { "DIMENSION_common", 0, "AcDbDimension", _dwg_DIMENSION_common_fields, sizeof (struct _dwg_DIMENSION_common) },	/* 9 */
-  { "EVAL_Node", 0, NULL, _dwg_EVAL_Node_fields, sizeof (struct _dwg_EVAL_Node) },	/* 10 */
-  { "FIELD_ChildValue", (int)DWG_TYPE_FIELD, NULL, _dwg_FIELD_ChildValue_fields, sizeof (struct _dwg_FIELD_ChildValue) },	/* 11 */
-  { "FileDepList_Files", 0, NULL, _dwg_FileDepList_Files_fields, sizeof (struct _dwg_FileDepList_Files) },	/* 12 */
-  { "FormattedTableData", 0, NULL, _dwg_FormattedTableData_fields, sizeof (struct _dwg_FormattedTableData) },	/* 13 */
-  { "FormattedTableMerged", 0, NULL, _dwg_FormattedTableMerged_fields, sizeof (struct _dwg_FormattedTableMerged) },	/* 14 */
-  { "GEODATA_meshface", (int)DWG_TYPE_GEODATA, NULL, _dwg_GEODATA_meshface_fields, sizeof (struct _dwg_GEODATA_meshface) },	/* 15 */
-  { "GEODATA_meshpt", (int)DWG_TYPE_GEODATA, NULL, _dwg_GEODATA_meshpt_fields, sizeof (struct _dwg_GEODATA_meshpt) },	/* 16 */
-  { "HATCH_Color", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_Color_fields, sizeof (struct _dwg_HATCH_Color) },	/* 17 */
-  { "HATCH_ControlPoint", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_ControlPoint_fields, sizeof (struct _dwg_HATCH_ControlPoint) },	/* 18 */
-  { "HATCH_DefLine", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_DefLine_fields, sizeof (struct _dwg_HATCH_DefLine) },	/* 19 */
-  { "HATCH_Path", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_Path_fields, sizeof (struct _dwg_HATCH_Path) },	/* 20 */
-  { "HATCH_PathSeg", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_PathSeg_fields, sizeof (struct _dwg_HATCH_PathSeg) },	/* 21 */
-  { "HATCH_PolylinePath", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_PolylinePath_fields, sizeof (struct _dwg_HATCH_PolylinePath) },	/* 22 */
-  { "LAYER_entry", (int)DWG_TYPE_LAYER, NULL, _dwg_LAYER_entry_fields, sizeof (struct _dwg_LAYER_entry) },	/* 23 */
-  { "LEADER_ArrowHead", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_ArrowHead_fields, sizeof (struct _dwg_LEADER_ArrowHead) },	/* 24 */
-  { "LEADER_BlockLabel", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_BlockLabel_fields, sizeof (struct _dwg_LEADER_BlockLabel) },	/* 25 */
-  { "LEADER_Break", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Break_fields, sizeof (struct _dwg_LEADER_Break) },	/* 26 */
-  { "LEADER_Line", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Line_fields, sizeof (struct _dwg_LEADER_Line) },	/* 27 */
-  { "LEADER_Node", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Node_fields, sizeof (struct _dwg_LEADER_Node) },	/* 28 */
-  { "LTYPE_dash", (int)DWG_TYPE_LTYPE, NULL, _dwg_LTYPE_dash_fields, sizeof (struct _dwg_LTYPE_dash) },	/* 29 */
-  { "LWPOLYLINE_width", (int)DWG_TYPE_LWPOLYLINE, NULL, _dwg_LWPOLYLINE_width_fields, sizeof (struct _dwg_LWPOLYLINE_width) },	/* 30 */
-  { "LinkedData", 0, NULL, _dwg_LinkedData_fields, sizeof (struct _dwg_LinkedData) },	/* 31 */
-  { "LinkedTableData", 0, NULL, _dwg_LinkedTableData_fields, sizeof (struct _dwg_LinkedTableData) },	/* 32 */
-  { "MESH_edge", (int)DWG_TYPE_MESH, NULL, _dwg_MESH_edge_fields, sizeof (struct _dwg_MESH_edge) },	/* 33 */
-  { "MLEADER_AnnotContext", 0, NULL, _dwg_MLEADER_AnnotContext_fields, sizeof (struct _dwg_MLEADER_AnnotContext) },	/* 34 */
-  { "MLINESTYLE_line", (int)DWG_TYPE_MLINESTYLE, NULL, _dwg_MLINESTYLE_line_fields, sizeof (struct _dwg_MLINESTYLE_line) },	/* 35 */
-  { "MLINE_line", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_line_fields, sizeof (struct _dwg_MLINE_line) },	/* 36 */
-  { "MLINE_vertex", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_vertex_fields, sizeof (struct _dwg_MLINE_vertex) },	/* 37 */
-  { "SPLINE_control_point", (int)DWG_TYPE_SPLINE, NULL, _dwg_SPLINE_control_point_fields, sizeof (struct _dwg_SPLINE_control_point) },	/* 38 */
-  { "SUNSTUDY_Dates", (int)DWG_TYPE_SUNSTUDY, NULL, _dwg_SUNSTUDY_Dates_fields, sizeof (struct _dwg_SUNSTUDY_Dates) },	/* 39 */
-  { "SummaryInfo_Property", 0, NULL, _dwg_SummaryInfo_Property_fields, sizeof (struct _dwg_SummaryInfo_Property) },	/* 40 */
-  { "TABLEGEOMETRY_Cell", (int)DWG_TYPE_TABLEGEOMETRY, NULL, _dwg_TABLEGEOMETRY_Cell_fields, sizeof (struct _dwg_TABLEGEOMETRY_Cell) },	/* 41 */
-  { "TABLESTYLE_Cell", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_Cell_fields, sizeof (struct _dwg_TABLESTYLE_Cell) },	/* 42 */
-  { "TABLESTYLE_border", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_border_fields, sizeof (struct _dwg_TABLESTYLE_border) },	/* 43 */
-  { "TABLESTYLE_rowstyles", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_rowstyles_fields, sizeof (struct _dwg_TABLESTYLE_rowstyles) },	/* 44 */
-  { "TABLE_BreakHeight", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakHeight_fields, sizeof (struct _dwg_TABLE_BreakHeight) },	/* 45 */
-  { "TABLE_BreakRow", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakRow_fields, sizeof (struct _dwg_TABLE_BreakRow) },	/* 46 */
-  { "TABLE_Cell", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_Cell_fields, sizeof (struct _dwg_TABLE_Cell) },	/* 47 */
-  { "TABLE_CustomDataItem", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_CustomDataItem_fields, sizeof (struct _dwg_TABLE_CustomDataItem) },	/* 48 */
-  { "TABLE_value", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_value_fields, sizeof (struct _dwg_TABLE_value) },	/* 49 */
-  { "TableCell", 0, NULL, _dwg_TableCell_fields, sizeof (struct _dwg_TableCell) },	/* 50 */
-  { "TableCellContent", 0, NULL, _dwg_TableCellContent_fields, sizeof (struct _dwg_TableCellContent) },	/* 51 */
-  { "TableCellContent_Attr", 0, NULL, _dwg_TableCellContent_Attr_fields, sizeof (struct _dwg_TableCellContent_Attr) },	/* 52 */
-  { "TableDataColumn", 0, NULL, _dwg_TableDataColumn_fields, sizeof (struct _dwg_TableDataColumn) },	/* 53 */
-  { "TableRow", 0, NULL, _dwg_TableRow_fields, sizeof (struct _dwg_TableRow) },	/* 54 */
+  { "3DSOLID_silhouette", (int)DWG_TYPE__3DSOLID, NULL, _dwg_3DSOLID_silhouette_fields, sizeof (Dwg_3DSOLID_silhouette) },	/* 0 */
+  { "3DSOLID_wire", (int)DWG_TYPE__3DSOLID, NULL, _dwg_3DSOLID_wire_fields, sizeof (Dwg_3DSOLID_wire) },	/* 1 */
+  { "ACTIONBODY", 0, "AcDbAssocActionBody", _dwg_ACTIONBODY_fields, sizeof (Dwg_ACTIONBODY) },	/* 2 */
+  { "BorderStyle", 0, NULL, _dwg_BorderStyle_fields, sizeof (Dwg_BorderStyle) },	/* 3 */
+  { "CELLSTYLEMAP_Cell", (int)DWG_TYPE_CELLSTYLEMAP, NULL, _dwg_CELLSTYLEMAP_Cell_fields, sizeof (Dwg_CELLSTYLEMAP_Cell) },	/* 4 */
+  { "CellContentGeometry", 0, NULL, _dwg_CellContentGeometry_fields, sizeof (Dwg_CellContentGeometry) },	/* 5 */
+  { "CellStyle", 0, NULL, _dwg_CellStyle_fields, sizeof (Dwg_CellStyle) },	/* 6 */
+  { "ContentFormat", 0, NULL, _dwg_ContentFormat_fields, sizeof (Dwg_ContentFormat) },	/* 7 */
+  { "DIMASSOC_Ref", (int)DWG_TYPE_DIMASSOC, NULL, _dwg_DIMASSOC_Ref_fields, sizeof (Dwg_DIMASSOC_Ref) },	/* 8 */
+  { "DIMENSION_common", 0, "AcDbDimension", _dwg_DIMENSION_common_fields, sizeof (Dwg_DIMENSION_common) },	/* 9 */
+  { "EVAL_Node", 0, NULL, _dwg_EVAL_Node_fields, sizeof (Dwg_EVAL_Node) },	/* 10 */
+  { "FIELD_ChildValue", (int)DWG_TYPE_FIELD, NULL, _dwg_FIELD_ChildValue_fields, sizeof (Dwg_FIELD_ChildValue) },	/* 11 */
+  { "FileDepList_Files", 0, NULL, _dwg_FileDepList_Files_fields, sizeof (Dwg_FileDepList_Files) },	/* 12 */
+  { "FormattedTableData", 0, NULL, _dwg_FormattedTableData_fields, sizeof (Dwg_FormattedTableData) },	/* 13 */
+  { "FormattedTableMerged", 0, NULL, _dwg_FormattedTableMerged_fields, sizeof (Dwg_FormattedTableMerged) },	/* 14 */
+  { "GEODATA_meshface", (int)DWG_TYPE_GEODATA, NULL, _dwg_GEODATA_meshface_fields, sizeof (Dwg_GEODATA_meshface) },	/* 15 */
+  { "GEODATA_meshpt", (int)DWG_TYPE_GEODATA, NULL, _dwg_GEODATA_meshpt_fields, sizeof (Dwg_GEODATA_meshpt) },	/* 16 */
+  { "HATCH_Color", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_Color_fields, sizeof (Dwg_HATCH_Color) },	/* 17 */
+  { "HATCH_ControlPoint", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_ControlPoint_fields, sizeof (Dwg_HATCH_ControlPoint) },	/* 18 */
+  { "HATCH_DefLine", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_DefLine_fields, sizeof (Dwg_HATCH_DefLine) },	/* 19 */
+  { "HATCH_Path", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_Path_fields, sizeof (Dwg_HATCH_Path) },	/* 20 */
+  { "HATCH_PathSeg", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_PathSeg_fields, sizeof (Dwg_HATCH_PathSeg) },	/* 21 */
+  { "HATCH_PolylinePath", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_PolylinePath_fields, sizeof (Dwg_HATCH_PolylinePath) },	/* 22 */
+  { "LAYER_entry", (int)DWG_TYPE_LAYER, NULL, _dwg_LAYER_entry_fields, sizeof (Dwg_LAYER_entry) },	/* 23 */
+  { "LEADER_ArrowHead", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_ArrowHead_fields, sizeof (Dwg_LEADER_ArrowHead) },	/* 24 */
+  { "LEADER_BlockLabel", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_BlockLabel_fields, sizeof (Dwg_LEADER_BlockLabel) },	/* 25 */
+  { "LEADER_Break", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Break_fields, sizeof (Dwg_LEADER_Break) },	/* 26 */
+  { "LEADER_Line", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Line_fields, sizeof (Dwg_LEADER_Line) },	/* 27 */
+  { "LEADER_Node", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Node_fields, sizeof (Dwg_LEADER_Node) },	/* 28 */
+  { "LTYPE_dash", (int)DWG_TYPE_LTYPE, NULL, _dwg_LTYPE_dash_fields, sizeof (Dwg_LTYPE_dash) },	/* 29 */
+  { "LWPOLYLINE_width", (int)DWG_TYPE_LWPOLYLINE, NULL, _dwg_LWPOLYLINE_width_fields, sizeof (Dwg_LWPOLYLINE_width) },	/* 30 */
+  { "LinkedData", 0, NULL, _dwg_LinkedData_fields, sizeof (Dwg_LinkedData) },	/* 31 */
+  { "LinkedTableData", 0, NULL, _dwg_LinkedTableData_fields, sizeof (Dwg_LinkedTableData) },	/* 32 */
+  { "MESH_edge", (int)DWG_TYPE_MESH, NULL, _dwg_MESH_edge_fields, sizeof (Dwg_MESH_edge) },	/* 33 */
+  { "MLEADER_AnnotContext", 0, NULL, _dwg_MLEADER_AnnotContext_fields, sizeof (Dwg_MLEADER_AnnotContext) },	/* 34 */
+  { "MLEADER_Content", 0, NULL, _dwg_MLEADER_Content_fields, sizeof (Dwg_MLEADER_Content) },	/* 35 */
+  { "MLINESTYLE_line", (int)DWG_TYPE_MLINESTYLE, NULL, _dwg_MLINESTYLE_line_fields, sizeof (Dwg_MLINESTYLE_line) },	/* 36 */
+  { "MLINE_line", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_line_fields, sizeof (Dwg_MLINE_line) },	/* 37 */
+  { "MLINE_vertex", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_vertex_fields, sizeof (Dwg_MLINE_vertex) },	/* 38 */
+  { "SPLINE_control_point", (int)DWG_TYPE_SPLINE, NULL, _dwg_SPLINE_control_point_fields, sizeof (Dwg_SPLINE_control_point) },	/* 39 */
+  { "SUNSTUDY_Dates", (int)DWG_TYPE_SUNSTUDY, NULL, _dwg_SUNSTUDY_Dates_fields, sizeof (Dwg_SUNSTUDY_Dates) },	/* 40 */
+  { "SummaryInfo_Property", 0, NULL, _dwg_SummaryInfo_Property_fields, sizeof (Dwg_SummaryInfo_Property) },	/* 41 */
+  { "TABLEGEOMETRY_Cell", (int)DWG_TYPE_TABLEGEOMETRY, NULL, _dwg_TABLEGEOMETRY_Cell_fields, sizeof (Dwg_TABLEGEOMETRY_Cell) },	/* 42 */
+  { "TABLESTYLE_Cell", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_Cell_fields, sizeof (Dwg_TABLESTYLE_Cell) },	/* 43 */
+  { "TABLESTYLE_border", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_border_fields, sizeof (Dwg_TABLESTYLE_border) },	/* 44 */
+  { "TABLESTYLE_rowstyles", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_rowstyles_fields, sizeof (Dwg_TABLESTYLE_rowstyles) },	/* 45 */
+  { "TABLE_BreakHeight", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakHeight_fields, sizeof (Dwg_TABLE_BreakHeight) },	/* 46 */
+  { "TABLE_BreakRow", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakRow_fields, sizeof (Dwg_TABLE_BreakRow) },	/* 47 */
+  { "TABLE_Cell", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_Cell_fields, sizeof (Dwg_TABLE_Cell) },	/* 48 */
+  { "TABLE_CustomDataItem", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_CustomDataItem_fields, sizeof (Dwg_TABLE_CustomDataItem) },	/* 49 */
+  { "TABLE_value", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_value_fields, sizeof (Dwg_TABLE_value) },	/* 50 */
+  { "TableCell", 0, NULL, _dwg_TableCell_fields, sizeof (Dwg_TableCell) },	/* 51 */
+  { "TableCellContent", 0, NULL, _dwg_TableCellContent_fields, sizeof (Dwg_TableCellContent) },	/* 52 */
+  { "TableCellContent_Attr", 0, NULL, _dwg_TableCellContent_Attr_fields, sizeof (Dwg_TableCellContent_Attr) },	/* 53 */
+  { "TableDataColumn", 0, NULL, _dwg_TableDataColumn_fields, sizeof (Dwg_TableDataColumn) },	/* 54 */
+  { "TableRow", 0, NULL, _dwg_TableRow_fields, sizeof (Dwg_TableRow) },	/* 55 */
 
 };
 

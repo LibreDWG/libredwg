@@ -15,6 +15,7 @@
 # typedef struct _dwg_object_(.*)
 #subclasses, typically like
 # typedef struct _dwg_TYPE_subclass
+# typedef union _dwg_MLEADER_Content
 
 use strict;
 use warnings;
@@ -83,7 +84,7 @@ $c->parse_file($hdr);
 #print Data::Dumper->Dump([$c->struct('_dwg_entity_TEXT')], ['_dwg_entity_TEXT']);
 #print Data::Dumper->Dump([$c->struct('struct _dwg_header_variables')], ['Dwg_Header_Variables']);
 
-my (%h, $n, %structs, %ENT, %DXF, %SUBCLASS, %DWG_TYPE);
+my (%h, $n, %structs, %unions, %ENT, %DXF, %SUBCLASS, %DWG_TYPE);
 local (@entity_names, @object_names, @subclasses, $max_entity_names, $max_object_names);
 # todo: harmonize more subclasses
 for (sort $c->struct_names) {
@@ -106,6 +107,15 @@ for (sort $c->struct_names) {
     warn "skip struct $_\n";
   }
 }
+for (sort $c->union_names) {
+  if (/_dwg_([A-Z0-9_]+)/) {
+    $structs{$_}++;
+    $unions{$_}++;
+    push @subclasses, $_;
+  } else {
+    warn "skip union $_\n";
+  }
+}
 push @entity_names, qw(XLINE REGION BODY);
 @entity_names = sort @entity_names;
 # get BITCODE_ macro types for each struct field
@@ -116,6 +126,8 @@ while (<$in>) {
     if (/^typedef struct (_dwg_.+) \{/) {
       $n = $1;
     } elsif (/^typedef struct (_dwg_\S+)$/) {
+      $n = $1;
+    } elsif (/^typedef union (_dwg_\S+)$/) {
       $n = $1;
     } elsif (/^#define (COMMON_\w+)\((\w+)\)/) { # COMMON_TABLE_CONTROL_FIELDS
       # BUG: Convert::Binary::C cannot separate H* from H, both are just Dwg_Object_Ref
@@ -406,6 +418,7 @@ dxfin_spec "$srcdir/summaryinfo.spec";
   "LEADER_Node" => "",
   "LTYPE_dash" => "",
   "LWPOLYLINE_width" => "",
+  "MLEADER_Content" => "",
   "MLEADER_AnnotContext" => "",
   "MLINESTYLE_line" => "",
   "MLINE_line" => "",
@@ -544,7 +557,22 @@ sub out_declarator {
   } elsif ($type =~ /\b(unsigned|char|int|long|double)\b/) {
     warn "unexpanded $type $n.$name\n";
   } elsif ($type =~ /^struct/) {
-    $size = "sizeof (void *)";
+    if ($type =~ /\*$/) {
+      $size = "sizeof (void *)";
+    } else {
+      # e.g. MLEADER_Content.txt.
+      warn "inline struct $key.$name\n";
+      for (@{$c->struct($d->{type})->{declarations}}) {
+        out_declarator ($_, $tmpl, $key, $name);
+      }
+      #next;
+    }
+  } elsif ($type =~ /^union/) {
+    warn "inline union $key.$name\n";
+    for (@{$c->union($d->{type})->{declarations}}) {
+      out_declarator ($_, $tmpl, $key, $name);
+    }
+    #next;
   } elsif ($type =~ /^HASH\(/) { # inlined struct or union
     if ($type->{type} eq 'union' && $n !~ /^_dwg_object_/) {
       # take all declarators and add the "$name." prefix
@@ -597,6 +625,9 @@ sub out_struct {
   $n = "_dwg_$n" unless $n =~ /^_dwg_/;
   my $sortedby = 'offset';
   my $s = $c->struct($tmpl);
+  unless ($s) {
+    $s = $c->union($tmpl);
+  }
   return unless $s->{declarations};
   my @declarations = @{$s->{declarations}};
   if ($n =~ /^_dwg_(header_variables|object_object|object_entity|SummaryInfo)$/) {
@@ -665,7 +696,7 @@ for (<DATA>) {
             $v = $s->{enumerators}->{'DWG_TYPE__'.$k};
             $vs = 'DWG_TYPE__'.$k;
           }
-          my $size = "sizeof (struct _dwg_$k)";
+          my $size = "sizeof (Dwg_$k)";
           if ($c->struct("_dwg_entity_$k")) {
             $size = "sizeof (struct _dwg_entity_$k)";
           } elsif ($c->struct("_dwg_object_$k")) {
@@ -719,7 +750,10 @@ for (<DATA>) {
                 }
               }
             }
-            my $size = "sizeof (struct $_)";
+            my $size = "sizeof (Dwg_$n)";
+            if ($c->union("$_")) {
+              $size = "sizeof (Dwg_$n)";
+            }
             my $subclass = $SUBCLASS{$n};
             if ($subclass) {
               $subclass = '"' . $subclass . '"';
@@ -759,7 +793,11 @@ for (<DATA>) {
       for (@subclasses) {
         my ($name) = $_ =~ /^_dwg_(.*)/;
         print $doc "\@strong{Dwg_$name} \@anchor{Dwg_$name}\n\@vindex Dwg_$name\n\n";
-        out_struct("struct $_", $name);
+        if ($unions{$_}) {
+          out_struct("union $_", $name);
+        } else {
+          out_struct("struct $_", $name);
+        }
       }
     } elsif ($tmpl =~ /^struct _dwg_(\w+)/) {
       if ($1 eq 'header_variables') {
@@ -1209,13 +1247,17 @@ EOF
     }
     for my $name (@subclasses) {
       my $xname = $name;
+      my $struct = "struct $name";
+      if ($unions{$name}) {
+        $struct = "union $name";
+      }
       $xname =~ s/^_dwg_//;
       print $fh <<"EOF";
-  size1 = sizeof (struct $name);
+  size1 = sizeof ($struct);
   size2 = dwg_dynapi_fields_size (\"$xname\");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct $xname): %d != "
+      fprintf (stderr, "sizeof($struct): %d != "
                "dwg_dynapi_fields_size (\\\"$xname\\\"): %d\\n", size1, size2);
       error++;
     }

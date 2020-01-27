@@ -8473,6 +8473,88 @@ struct _dwg_LinkedTableData*
 @end vtable
 @end indentedblock
 
+@strong{Dwg_MLEADER_Content} @anchor{Dwg_MLEADER_Content}
+@vindex Dwg_MLEADER_Content
+
+@indentedblock
+@vtable @code
+
+@item txt.default_text
+TV
+@item txt.normal
+3BD
+@item txt.style
+H
+@item txt.location
+3BD
+@item txt.direction
+3BD
+@item txt.rotation
+BD
+@item txt.width
+BD
+@item txt.height
+BD
+@item txt.line_spacing_factor
+BD
+@item txt.line_spacing_style
+BS
+@item txt.color
+CMC
+@item txt.alignment
+BS
+@item txt.flow
+BS
+@item txt.bg_color
+CMC
+@item txt.bg_scale
+BD
+@item txt.bg_transparency
+BL
+@item txt.is_bg_fill
+B
+@item txt.is_bg_mask_fill
+B
+@item txt.col_type
+BS
+@item txt.is_height_auto
+B
+@item txt.col_width
+BD
+@item txt.col_gutter
+BD
+@item txt.is_col_flow_reversed
+B
+@item txt.num_col_sizes
+BL
+@item txt.col_sizes
+BD*
+@item txt.word_break
+B
+@item txt.unknown
+B
+@item txt
+struct _content_mtext
+@item blk.block_table
+H
+@item blk.normal
+3BD
+@item blk.location
+3BD
+@item blk.scale
+3BD
+@item blk.rotation
+BD
+@item blk.color
+CMC
+@item blk.transform
+BD*
+@item blk
+struct _content_block
+
+@end vtable
+@end indentedblock
+
 @strong{Common Entity fields} @anchor{Common Entity fields}
 @cindex Common Entity fields
 

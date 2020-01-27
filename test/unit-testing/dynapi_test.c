@@ -38328,7 +38328,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("3DSOLID_silhouette");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct 3DSOLID_silhouette): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_3DSOLID_silhouette): %d != "
                "dwg_dynapi_fields_size (\"3DSOLID_silhouette\"): %d\n", size1, size2);
       error++;
     }
@@ -38336,7 +38336,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("3DSOLID_wire");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct 3DSOLID_wire): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_3DSOLID_wire): %d != "
                "dwg_dynapi_fields_size (\"3DSOLID_wire\"): %d\n", size1, size2);
       error++;
     }
@@ -38344,7 +38344,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("ACTIONBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct ACTIONBODY): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_ACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
@@ -38352,7 +38352,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("BorderStyle");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct BorderStyle): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_BorderStyle): %d != "
                "dwg_dynapi_fields_size (\"BorderStyle\"): %d\n", size1, size2);
       error++;
     }
@@ -38360,7 +38360,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("CELLSTYLEMAP_Cell");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct CELLSTYLEMAP_Cell): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_CELLSTYLEMAP_Cell): %d != "
                "dwg_dynapi_fields_size (\"CELLSTYLEMAP_Cell\"): %d\n", size1, size2);
       error++;
     }
@@ -38368,7 +38368,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("CellContentGeometry");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct CellContentGeometry): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_CellContentGeometry): %d != "
                "dwg_dynapi_fields_size (\"CellContentGeometry\"): %d\n", size1, size2);
       error++;
     }
@@ -38376,7 +38376,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("CellStyle");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct CellStyle): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_CellStyle): %d != "
                "dwg_dynapi_fields_size (\"CellStyle\"): %d\n", size1, size2);
       error++;
     }
@@ -38384,7 +38384,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("ContentFormat");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct ContentFormat): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_ContentFormat): %d != "
                "dwg_dynapi_fields_size (\"ContentFormat\"): %d\n", size1, size2);
       error++;
     }
@@ -38392,7 +38392,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("DIMASSOC_Ref");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct DIMASSOC_Ref): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_DIMASSOC_Ref): %d != "
                "dwg_dynapi_fields_size (\"DIMASSOC_Ref\"): %d\n", size1, size2);
       error++;
     }
@@ -38400,7 +38400,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("DIMENSION_common");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct DIMENSION_common): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_DIMENSION_common): %d != "
                "dwg_dynapi_fields_size (\"DIMENSION_common\"): %d\n", size1, size2);
       error++;
     }
@@ -38408,7 +38408,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("EVAL_Node");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct EVAL_Node): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_EVAL_Node): %d != "
                "dwg_dynapi_fields_size (\"EVAL_Node\"): %d\n", size1, size2);
       error++;
     }
@@ -38416,7 +38416,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("FIELD_ChildValue");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct FIELD_ChildValue): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_FIELD_ChildValue): %d != "
                "dwg_dynapi_fields_size (\"FIELD_ChildValue\"): %d\n", size1, size2);
       error++;
     }
@@ -38424,7 +38424,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("FileDepList_Files");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct FileDepList_Files): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_FileDepList_Files): %d != "
                "dwg_dynapi_fields_size (\"FileDepList_Files\"): %d\n", size1, size2);
       error++;
     }
@@ -38432,7 +38432,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("FormattedTableData");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct FormattedTableData): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_FormattedTableData): %d != "
                "dwg_dynapi_fields_size (\"FormattedTableData\"): %d\n", size1, size2);
       error++;
     }
@@ -38440,7 +38440,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("FormattedTableMerged");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct FormattedTableMerged): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_FormattedTableMerged): %d != "
                "dwg_dynapi_fields_size (\"FormattedTableMerged\"): %d\n", size1, size2);
       error++;
     }
@@ -38448,7 +38448,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("GEODATA_meshface");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct GEODATA_meshface): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_GEODATA_meshface): %d != "
                "dwg_dynapi_fields_size (\"GEODATA_meshface\"): %d\n", size1, size2);
       error++;
     }
@@ -38456,7 +38456,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("GEODATA_meshpt");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct GEODATA_meshpt): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_GEODATA_meshpt): %d != "
                "dwg_dynapi_fields_size (\"GEODATA_meshpt\"): %d\n", size1, size2);
       error++;
     }
@@ -38464,7 +38464,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("HATCH_Color");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct HATCH_Color): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_HATCH_Color): %d != "
                "dwg_dynapi_fields_size (\"HATCH_Color\"): %d\n", size1, size2);
       error++;
     }
@@ -38472,7 +38472,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("HATCH_ControlPoint");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct HATCH_ControlPoint): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_HATCH_ControlPoint): %d != "
                "dwg_dynapi_fields_size (\"HATCH_ControlPoint\"): %d\n", size1, size2);
       error++;
     }
@@ -38480,7 +38480,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("HATCH_DefLine");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct HATCH_DefLine): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_HATCH_DefLine): %d != "
                "dwg_dynapi_fields_size (\"HATCH_DefLine\"): %d\n", size1, size2);
       error++;
     }
@@ -38488,7 +38488,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("HATCH_Path");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct HATCH_Path): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_HATCH_Path): %d != "
                "dwg_dynapi_fields_size (\"HATCH_Path\"): %d\n", size1, size2);
       error++;
     }
@@ -38496,7 +38496,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("HATCH_PathSeg");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct HATCH_PathSeg): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_HATCH_PathSeg): %d != "
                "dwg_dynapi_fields_size (\"HATCH_PathSeg\"): %d\n", size1, size2);
       error++;
     }
@@ -38504,7 +38504,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("HATCH_PolylinePath");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct HATCH_PolylinePath): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_HATCH_PolylinePath): %d != "
                "dwg_dynapi_fields_size (\"HATCH_PolylinePath\"): %d\n", size1, size2);
       error++;
     }
@@ -38512,7 +38512,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("LAYER_entry");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct LAYER_entry): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_LAYER_entry): %d != "
                "dwg_dynapi_fields_size (\"LAYER_entry\"): %d\n", size1, size2);
       error++;
     }
@@ -38520,7 +38520,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("LEADER_ArrowHead");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct LEADER_ArrowHead): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_LEADER_ArrowHead): %d != "
                "dwg_dynapi_fields_size (\"LEADER_ArrowHead\"): %d\n", size1, size2);
       error++;
     }
@@ -38528,7 +38528,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("LEADER_BlockLabel");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct LEADER_BlockLabel): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_LEADER_BlockLabel): %d != "
                "dwg_dynapi_fields_size (\"LEADER_BlockLabel\"): %d\n", size1, size2);
       error++;
     }
@@ -38536,7 +38536,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("LEADER_Break");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct LEADER_Break): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_LEADER_Break): %d != "
                "dwg_dynapi_fields_size (\"LEADER_Break\"): %d\n", size1, size2);
       error++;
     }
@@ -38544,7 +38544,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("LEADER_Line");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct LEADER_Line): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_LEADER_Line): %d != "
                "dwg_dynapi_fields_size (\"LEADER_Line\"): %d\n", size1, size2);
       error++;
     }
@@ -38552,7 +38552,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("LEADER_Node");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct LEADER_Node): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_LEADER_Node): %d != "
                "dwg_dynapi_fields_size (\"LEADER_Node\"): %d\n", size1, size2);
       error++;
     }
@@ -38560,7 +38560,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("LTYPE_dash");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct LTYPE_dash): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_LTYPE_dash): %d != "
                "dwg_dynapi_fields_size (\"LTYPE_dash\"): %d\n", size1, size2);
       error++;
     }
@@ -38568,7 +38568,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("LWPOLYLINE_width");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct LWPOLYLINE_width): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_LWPOLYLINE_width): %d != "
                "dwg_dynapi_fields_size (\"LWPOLYLINE_width\"): %d\n", size1, size2);
       error++;
     }
@@ -38576,7 +38576,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("LinkedData");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct LinkedData): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_LinkedData): %d != "
                "dwg_dynapi_fields_size (\"LinkedData\"): %d\n", size1, size2);
       error++;
     }
@@ -38584,7 +38584,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("LinkedTableData");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct LinkedTableData): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_LinkedTableData): %d != "
                "dwg_dynapi_fields_size (\"LinkedTableData\"): %d\n", size1, size2);
       error++;
     }
@@ -38592,7 +38592,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("MESH_edge");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct MESH_edge): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_MESH_edge): %d != "
                "dwg_dynapi_fields_size (\"MESH_edge\"): %d\n", size1, size2);
       error++;
     }
@@ -38600,7 +38600,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("MLEADER_AnnotContext");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct MLEADER_AnnotContext): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_MLEADER_AnnotContext): %d != "
                "dwg_dynapi_fields_size (\"MLEADER_AnnotContext\"): %d\n", size1, size2);
       error++;
     }
@@ -38608,7 +38608,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("MLINESTYLE_line");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct MLINESTYLE_line): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_MLINESTYLE_line): %d != "
                "dwg_dynapi_fields_size (\"MLINESTYLE_line\"): %d\n", size1, size2);
       error++;
     }
@@ -38616,7 +38616,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("MLINE_line");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct MLINE_line): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_MLINE_line): %d != "
                "dwg_dynapi_fields_size (\"MLINE_line\"): %d\n", size1, size2);
       error++;
     }
@@ -38624,7 +38624,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("MLINE_vertex");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct MLINE_vertex): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_MLINE_vertex): %d != "
                "dwg_dynapi_fields_size (\"MLINE_vertex\"): %d\n", size1, size2);
       error++;
     }
@@ -38632,7 +38632,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("SPLINE_control_point");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct SPLINE_control_point): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_SPLINE_control_point): %d != "
                "dwg_dynapi_fields_size (\"SPLINE_control_point\"): %d\n", size1, size2);
       error++;
     }
@@ -38640,7 +38640,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("SUNSTUDY_Dates");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct SUNSTUDY_Dates): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_SUNSTUDY_Dates): %d != "
                "dwg_dynapi_fields_size (\"SUNSTUDY_Dates\"): %d\n", size1, size2);
       error++;
     }
@@ -38648,7 +38648,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("SummaryInfo_Property");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct SummaryInfo_Property): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_SummaryInfo_Property): %d != "
                "dwg_dynapi_fields_size (\"SummaryInfo_Property\"): %d\n", size1, size2);
       error++;
     }
@@ -38656,7 +38656,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("TABLEGEOMETRY_Cell");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct TABLEGEOMETRY_Cell): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_TABLEGEOMETRY_Cell): %d != "
                "dwg_dynapi_fields_size (\"TABLEGEOMETRY_Cell\"): %d\n", size1, size2);
       error++;
     }
@@ -38664,7 +38664,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("TABLESTYLE_Cell");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct TABLESTYLE_Cell): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_TABLESTYLE_Cell): %d != "
                "dwg_dynapi_fields_size (\"TABLESTYLE_Cell\"): %d\n", size1, size2);
       error++;
     }
@@ -38672,7 +38672,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("TABLESTYLE_border");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct TABLESTYLE_border): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_TABLESTYLE_border): %d != "
                "dwg_dynapi_fields_size (\"TABLESTYLE_border\"): %d\n", size1, size2);
       error++;
     }
@@ -38680,7 +38680,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("TABLESTYLE_rowstyles");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct TABLESTYLE_rowstyles): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_TABLESTYLE_rowstyles): %d != "
                "dwg_dynapi_fields_size (\"TABLESTYLE_rowstyles\"): %d\n", size1, size2);
       error++;
     }
@@ -38688,7 +38688,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("TABLE_BreakHeight");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct TABLE_BreakHeight): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_TABLE_BreakHeight): %d != "
                "dwg_dynapi_fields_size (\"TABLE_BreakHeight\"): %d\n", size1, size2);
       error++;
     }
@@ -38696,7 +38696,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("TABLE_BreakRow");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct TABLE_BreakRow): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_TABLE_BreakRow): %d != "
                "dwg_dynapi_fields_size (\"TABLE_BreakRow\"): %d\n", size1, size2);
       error++;
     }
@@ -38704,7 +38704,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("TABLE_Cell");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct TABLE_Cell): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_TABLE_Cell): %d != "
                "dwg_dynapi_fields_size (\"TABLE_Cell\"): %d\n", size1, size2);
       error++;
     }
@@ -38712,7 +38712,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("TABLE_CustomDataItem");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct TABLE_CustomDataItem): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_TABLE_CustomDataItem): %d != "
                "dwg_dynapi_fields_size (\"TABLE_CustomDataItem\"): %d\n", size1, size2);
       error++;
     }
@@ -38720,7 +38720,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("TABLE_value");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct TABLE_value): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_TABLE_value): %d != "
                "dwg_dynapi_fields_size (\"TABLE_value\"): %d\n", size1, size2);
       error++;
     }
@@ -38728,7 +38728,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("TableCell");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct TableCell): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_TableCell): %d != "
                "dwg_dynapi_fields_size (\"TableCell\"): %d\n", size1, size2);
       error++;
     }
@@ -38736,7 +38736,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("TableCellContent");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct TableCellContent): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_TableCellContent): %d != "
                "dwg_dynapi_fields_size (\"TableCellContent\"): %d\n", size1, size2);
       error++;
     }
@@ -38744,7 +38744,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("TableCellContent_Attr");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct TableCellContent_Attr): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_TableCellContent_Attr): %d != "
                "dwg_dynapi_fields_size (\"TableCellContent_Attr\"): %d\n", size1, size2);
       error++;
     }
@@ -38752,7 +38752,7 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("TableDataColumn");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct TableDataColumn): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_TableDataColumn): %d != "
                "dwg_dynapi_fields_size (\"TableDataColumn\"): %d\n", size1, size2);
       error++;
     }
@@ -38760,8 +38760,16 @@ test_sizes (void)
   size2 = dwg_dynapi_fields_size ("TableRow");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct TableRow): %d != "
+      fprintf (stderr, "sizeof(struct _dwg_TableRow): %d != "
                "dwg_dynapi_fields_size (\"TableRow\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (union _dwg_MLEADER_Content);
+  size2 = dwg_dynapi_fields_size ("MLEADER_Content");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(union _dwg_MLEADER_Content): %d != "
+               "dwg_dynapi_fields_size (\"MLEADER_Content\"): %d\n", size1, size2);
       error++;
     }
 #line 72 "dynapi_test.c.in"
