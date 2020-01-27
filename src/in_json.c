@@ -1211,9 +1211,23 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               obj->handle.size = hdl->handleref.size;
               obj->handle.value = hdl->handleref.value;
             }
-          else if (strEQc (key, "unknown") && memBEGINc (obj->name, "UNKNOWN_"))
+          else if (strEQc (key, "unknown_bits") && memBEGINc (obj->name, "UNKNOWN_"))
             {
-              obj->unknown_bits = json_string (dat, tokens);
+              int len = t->end - t->start;
+              char *hex = json_string (dat, tokens);
+              unsigned blen = len / 2;
+              char *buf = malloc (blen + 1);
+              char *pos = hex;
+              char *old;
+              for (unsigned k = 0; k < blen; k++)
+                {
+                  sscanf (pos, "%2hhX", &buf[k]);
+                  pos += 2;
+                }
+              buf[blen] = '\0';
+              obj->num_unknown_bits = blen * 8; // minus some padding bits, see bitsize
+              obj->unknown_bits = buf;
+              //LOG_TRACE ("%s: '%.*s' [%s] (binary)\n", key, blen, buf, f->type);
               LOG_TRACE ("unknown_bits: %.*s\n", t->end - t->start, &dat->chain[t->start])
             }
           else

@@ -2091,6 +2091,11 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                         && obj->supertype == DWG_SUPERTYPE_ENTITY;
           else
             is_entity = obj->supertype == DWG_SUPERTYPE_ENTITY;
+          // in_json
+          if (obj->unknown_bits && obj->num_unknown_bits) // cannot calculate, unknown strlen
+            {
+              bit_write_TF (dat, obj->unknown_bits, obj->num_unknown_bits);
+            }
           // properly dwg_decode_object/_entity for eed, reactors, xdic
           if (is_entity)
             error = dwg_encode_UNKNOWN_ENT (dat, obj);

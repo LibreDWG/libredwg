@@ -1134,6 +1134,9 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           int is_entity;
           int i = obj->type - 500;
           Dwg_Class *klass = NULL;
+          int len = obj->num_unknown_bits / 8;
+          if (obj->num_unknown_bits & 8)
+            len++;
 
           if (i >= 0 && i < (int)dwg->num_classes)
             {
@@ -1143,21 +1146,15 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           // properly dwg_decode_object/_entity for eed, reactors, xdic
           if (klass && !is_entity)
             {
-              int len = obj->num_unknown_bits / 8;
-              if (obj->num_unknown_bits & 8)
-                len++;
               error |= dwg_json_UNKNOWN_OBJ (dat, obj);
-              KEY (unknown);
+              KEY (unknown_bits);
               VALUE_BINARY (obj->unknown_bits, len, 0)
               return error;
             }
           else if (klass)
             {
-              int len = obj->num_unknown_bits / 8;
-              if (obj->num_unknown_bits & 8)
-                len++;
               error |= dwg_json_UNKNOWN_ENT (dat, obj);
-              KEY (unknown);
+              KEY (unknown_bits);
               VALUE_BINARY (obj->unknown_bits, len, 0)
               return error;
             }
