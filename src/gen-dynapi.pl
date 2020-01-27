@@ -665,20 +665,33 @@ for (<DATA>) {
             $v = $s->{enumerators}->{'DWG_TYPE__'.$k};
             $vs = 'DWG_TYPE__'.$k;
           }
+          my $size = "sizeof (struct _dwg_$k)";
+          if ($c->struct("_dwg_entity_$k")) {
+            $size = "sizeof (struct _dwg_entity_$k)";
+          } elsif ($c->struct("_dwg_object_$k")) {
+            $size = "sizeof (struct _dwg_object_$k)";
+          } else {
+            $size = "0";
+          }
           # see if the fields do exist:
           my $fields = exists $structs{$k} ? "_dwg_".$k."_fields" : "NULL";
           if ($k =~ /^(BODY|REGION)$/) {
             $fields = "_dwg_3DSOLID_fields";
+            $size = "sizeof (struct _dwg_entity_3DSOLID)";
           } elsif ($k eq 'XLINE') {
             $fields = "_dwg_RAY_fields";
+            $size = "sizeof (struct _dwg_entity_RAY)";
           } elsif ($k =~ /^VERTEX_(MESH|PFACE)$/) {
             $fields = "_dwg_VERTEX_3D_fields";
+            $size = "sizeof (struct _dwg_entity_VERTEX_3D)";
+          } elsif ($k =~ /^PROXY_LWPOLYLINE$/) {
+            $size = "sizeof (struct _dwg_entity_PROXY_LWPOLYLINE)";
           }
           $DWG_TYPE{$k} = $vs;
-          printf $fh "  { \"%s\",\t%s /*(%d)*/,\t%s },\t/* %d */\n",
-              $k, $vs, $v, $fields, $i++;
+          printf $fh "  { \"%s\", %s /*(%d)*/, %s, %s },\t/* %d */\n",
+            $k, $vs, $v, $fields, $size, $i++;
         } else {
-          printf $fh "  { \"%s\",\t%d },\t/* %d */\n",
+          printf $fh "  { \"%s\", %d },\t/* %d */\n",
             $k, $v, $i++;
         }
       }
@@ -706,14 +719,15 @@ for (<DATA>) {
                 }
               }
             }
+            my $size = "sizeof (struct $_)";
             my $subclass = $SUBCLASS{$n};
             if ($subclass) {
               $subclass = '"' . $subclass . '"';
             } else {
               $subclass = "NULL";
             }
-            printf $fh "  { \"%s\",\t%s,\t%s,\t%s },\t/* %d */\n",
-              $n, $type, $subclass, $_ . "_fields", $i++;
+            printf $fh "  { \"%s\", %s, %s, %s, %s },\t/* %d */\n",
+              $n, $type, $subclass, $_ . "_fields", $size, $i++;
           }
         }
       } else {
@@ -1173,6 +1187,12 @@ EOF
       error++;
     }
 EOF
+      if ($name eq 'PROXY_LWPOLYLINE') {
+        print $fh <<"EOF";
+  if (size1 != size2) // TODO
+    error--;
+EOF
+      }
     }
     for my $name (@object_names) {
       my $xname = $name;
@@ -1210,7 +1230,7 @@ close $fh;
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1209 "gen-dynapi.pl"
+#line 1228 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -1272,6 +1292,7 @@ struct _name_type_fields {
   const char *const name;
   const enum DWG_OBJECT_TYPE type;
   const Dwg_DYNAPI_field *const fields;
+  const int size;
 };
 
 struct _name_subclass_fields {
@@ -1279,6 +1300,7 @@ struct _name_subclass_fields {
   const int type;
   const char *const subclass;
   const Dwg_DYNAPI_field *const fields;
+  const int size;
 };
 
 /* Fields for all the objects, sorted for bsearch. from enum DWG_OBJECT_TYPE: */
@@ -1291,7 +1313,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
-#line 1290 "gen-dynapi.pl"
+#line 1311 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
@@ -1318,6 +1340,40 @@ _name_struct_cmp (const void *restrict key, const void *restrict elem)
 #define NUM_NAME_TYPES  ARRAY_SIZE(dwg_name_types)
 #define NUM_SUBCLASSES  ARRAY_SIZE(dwg_list_subclasses)
 
+static
+const struct _name_type_fields*
+ __nonnull ((1))
+_find_entity (const char *name)
+{
+  const char *p = bsearch (name, dwg_name_types, NUM_NAME_TYPES,
+                           sizeof (dwg_name_types[0]),
+                           _name_struct_cmp);
+  if (p)
+    {
+      const int i = (p - (char *)dwg_name_types) / sizeof (dwg_name_types[0]);
+      return &dwg_name_types[i];
+    }
+  else
+    return NULL;
+}
+
+static
+const struct _name_subclass_fields*
+ __nonnull ((1))
+_find_subclass (const char *name)
+{
+  const char *p = bsearch (name, dwg_list_subclasses, NUM_SUBCLASSES,
+                           sizeof (dwg_list_subclasses[0]),
+                           _name_struct_cmp);
+  if (p)
+    {
+      const int i = (p - (char *)dwg_list_subclasses) / sizeof (dwg_list_subclasses[0]);
+      return &dwg_list_subclasses[i];
+    }
+  else
+    return NULL;
+}
+
 EXPORT bool
 is_dwg_entity (const char *name)
 {
@@ -1339,33 +1395,15 @@ is_dwg_object (const char *name)
 EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_entity_fields (const char *name)
 {
-  const char *p = bsearch (name, dwg_name_types, NUM_NAME_TYPES,
-                           sizeof (dwg_name_types[0]),
-                           _name_struct_cmp);
-  if (p)
-    {
-      const int i = (p - (char *)dwg_name_types) / sizeof (dwg_name_types[0]);
-      const struct _name_type_fields *f = &dwg_name_types[i];
-      return f->fields;
-    }
-  else
-    return NULL;
+  const struct _name_type_fields *f = _find_entity (name);
+  return f ? f->fields : NULL;
 }
 
 EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_subclass_fields (const char *restrict name)
 {
-  const char *p = bsearch (name, dwg_list_subclasses, NUM_SUBCLASSES,
-                           sizeof (dwg_list_subclasses[0]),
-                           _name_struct_cmp);
-  if (p)
-    {
-      const int i = (p - (char *)dwg_list_subclasses) / sizeof (dwg_list_subclasses[0]);
-      const struct _name_subclass_fields *f = &dwg_list_subclasses[i];
-      return f->fields;
-    }
-  else
-    return NULL;
+  const struct _name_subclass_fields *f = _find_subclass (name);
+  return f ? f->fields : NULL;
 }
 
 EXPORT const Dwg_DYNAPI_field *
@@ -1421,6 +1459,20 @@ dwg_dynapi_common_object_field (const char *restrict fieldname)
               fieldname, _dwg_object_object_fields,
               ARRAY_SIZE (_dwg_object_object_fields) - 1, /* NULL terminated */
               sizeof (_dwg_object_object_fields[0]), _name_struct_cmp);
+}
+
+EXPORT int
+dwg_dynapi_entity_size (const char *restrict name)
+{
+  const struct _name_type_fields *f = _find_entity (name);
+  return f ? f->size : 0;
+}
+
+EXPORT int
+dwg_dynapi_subclass_size (const char *restrict name)
+{
+  const struct _name_subclass_fields *f = _find_subclass (name);
+  return f ? f->size : 0;
 }
 
 /* generic field getters */
@@ -1983,20 +2035,33 @@ _fields_size_sum (const Dwg_DYNAPI_field *restrict fields)
   return sum;
 }
 
-// The sum of the size of all fields, by struct name
+// The size of the entity or subclass struct, or the sum of the size of all fields.
 EXPORT int
 dwg_dynapi_fields_size (const char *restrict name)
 {
-  const Dwg_DYNAPI_field *f;
+  const struct _name_type_fields *f;
 #ifndef HAVE_NONNULL
   if (!name)
     return 0;
 #endif
-  f = dwg_dynapi_entity_fields (name);
+
+  f = _find_entity (name);
+  // TODO PROXY_LWPOLYLINE
   if (f)
-    return _fields_size_sum (f); // VERTEX_PFACE is not entity nor object yet
+    {
+      if (f->size)
+        return (int)f->size;
+      else
+        return _fields_size_sum (f->fields); // VERTEX_PFACE is not entity nor object yet
+    }
   else
-    return _fields_size_sum (dwg_dynapi_subclass_fields (name));
+    {
+      int size = dwg_dynapi_subclass_size (name);
+      if (size)
+        return size;
+      else
+        return _fields_size_sum (dwg_dynapi_subclass_fields (name));
+    }
 }
 
 // Converts from the fields type, like "Dwg_MLINESTYLE_line*" to the

@@ -145,9 +145,17 @@ EXPORT const Dwg_DYNAPI_field *dwg_dynapi_common_object_fields (void);
 EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_subclass_fields (const char *restrict name) __nonnull ((1));
 
+// The struct size of the object or entity
+EXPORT int
+dwg_dynapi_entity_size (const char *restrict name) __nonnull ((1));
+
+// The struct size of the subclass
+EXPORT int
+dwg_dynapi_subclass_size (const char *restrict name) __nonnull ((1));
+
 int _fields_size_sum (const Dwg_DYNAPI_field *restrict fields);
 
-// The sum of the size of all fields, by entity or subclass name
+// The size of the entity or subclass name.
 EXPORT int dwg_dynapi_fields_size (const char *restrict name) __nonnull ((1));
 
 // Converts from the fields type, like "Dwg_MLINESTYLE_line*" to the
