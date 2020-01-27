@@ -4897,7 +4897,7 @@ static const Dwg_DYNAPI_field _dwg_LTYPE_fields[] = {
     1,1,0, 0 },
   { "text_area_is_present",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_LTYPE, text_area_is_present),
     0,0,0, 0 },
-  { "strings_area",	"TV", sizeof (char*),  OFF (struct _dwg_object_LTYPE, strings_area),
+  { "strings_area",	"TF", sizeof (char*),  OFF (struct _dwg_object_LTYPE, strings_area),
     1,1,1, 3 },
   { "extref_handle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_LTYPE, extref_handle),
     1,0,0, 0 },

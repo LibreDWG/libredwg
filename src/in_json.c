@@ -749,8 +749,17 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                        || strEQc (f->type, "TF") || strEQc (f->type, "TU")))
             {
               char *str = json_string (dat, tokens);
-              int len;
-              if (f->dxf == 310 && (len = strlen (str))) // is BINARY
+              int len = strlen (str);
+              if (strEQc (f->type, "TF") && len < f->size) // fixed len: ensure big enough
+                {
+                  if (strEQc (key, "strings_area"))
+                    str = realloc (str, dwg->header.version > 2004 ? 512 : 256);
+                  else if (f->size > sizeof (char*))
+                    str = realloc (str, f->size);
+                  LOG_TRACE ("%s: \"%s\" [%s]\n", key, str, f->type);
+                  dwg_dynapi_field_set_value (dwg, _obj, f, &str, 1);
+                }
+              else if (f->dxf == 310 && len > 0) // is BINARY
                 {
                   // convert from hex
                   unsigned blen = len / 2;
