@@ -1246,6 +1246,7 @@ json_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
+#if 0
 /* The object map/handles section */
 static int
 json_handles_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
@@ -1256,6 +1257,7 @@ json_handles_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       Dwg_Object *obj = &dwg->object[j];
       // handle => abs. offset
+      // TODO: The real HANDLES section omap has handleoffset (deleted holes) and addressoffset
       PREFIX;
       fprintf (dat->fh, "[ %lu, %lu ],\n", obj->handle.value, obj->address);
     }
@@ -1263,6 +1265,7 @@ json_handles_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   ENDSEC ();
   return 0;
 }
+#endif
 
 static int
 json_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
@@ -1534,12 +1537,15 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           error |= json_section_template (dat, dwg);
         }
     }
+
+#if 0
   /* object map */
   if (!minimal && dat->version >= R_13)
     {
       if (json_handles_write (dat, dwg) >= DWG_ERR_CRITICAL)
         goto fail;
     }
+#endif
 
   NOCOMMA;
   dat->bit--;

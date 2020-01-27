@@ -2312,6 +2312,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   error |= json_ObjFreeSpace (dat, dwg, &tokens);
                 else if (strEQc (key, "Template"))
                   error |= json_Template (dat, dwg, &tokens);
+                /* Only in json early versions <0.11 */
                 else if (strEQc (key, "HANDLES"))
                   error |= json_HANDLES (dat, dwg, &tokens);
                 else
