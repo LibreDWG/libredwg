@@ -130,6 +130,7 @@ static char* _path_field(const char *path);
 #define VALUE_RC(value, dxf) VALUE (value, RC, dxf)
 #define VALUE_RS(value, dxf) VALUE (value, RS, dxf)
 #define VALUE_RL(value, dxf) VALUE (value, RL, dxf)
+#define VALUE_RLL(value, dxf) VALUE (value, RLL, dxf)
 #define VALUE_RD(value, dxf) VALUE (value, RD, dxf)
 #define VALUE_2RD(pt, dxf) fprintf (dat->fh, "[ %f, %f ],\n", pt.x, pt.y)
 #define VALUE_2DD(pt, d1, d2, dxf) VALUE_2RD (pt, dxf)
@@ -1134,9 +1135,9 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           int is_entity;
           int i = obj->type - 500;
           Dwg_Class *klass = NULL;
-          int len = obj->num_unknown_bits / 8;
+          int num_bytes = obj->num_unknown_bits / 8;
           if (obj->num_unknown_bits & 8)
-            len++;
+            num_bytes++;
 
           if (i >= 0 && i < (int)dwg->num_classes)
             {
@@ -1147,15 +1148,19 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           if (klass && !is_entity)
             {
               error |= dwg_json_UNKNOWN_OBJ (dat, obj);
+              KEY (num_unknown_bits);
+              VALUE_RLL (obj->num_unknown_bits, 0);
               KEY (unknown_bits);
-              VALUE_BINARY (obj->unknown_bits, len, 0)
+              VALUE_BINARY (obj->unknown_bits, num_bytes, 0);
               return error;
             }
           else if (klass)
             {
               error |= dwg_json_UNKNOWN_ENT (dat, obj);
+              KEY (num_unknown_bits);
+              VALUE_RLL (obj->num_unknown_bits, 0);
               KEY (unknown_bits);
-              VALUE_BINARY (obj->unknown_bits, len, 0)
+              VALUE_BINARY (obj->unknown_bits, num_bytes, 0);
               return error;
             }
           else // not a class
