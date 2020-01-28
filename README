@@ -16,8 +16,8 @@ moment our decoder (i.e. reader) is done, just some very advanced
 R2010+ and pre-R13 entities fail to read and are skipped over. The
 writer is good enough for R2000.  Among the example applications we
 wrote using LibreDWG is a reader, a writer, a rewriter (i.e. saveas),
-an initial SVG and Postscript conversion, dxf converters, dwggrep to
-search for text, and dwglayer to print the list of layers.
+an initial SVG and Postscript conversion, dxf and json converters,
+dwggrep to search for text, and dwglayer to print the list of layers.
 More are in the pipeline.
 Please contact us if you want to help.
 
@@ -124,15 +124,14 @@ The programs and examples directories contains some application code that uses o
 * dwgread -- A DWG reader supporting various output formats, such as
   JSON, DXF, DXFB, GeoJSON. Later also YAML, XML/OGR, GPX, SVG, PS.
 
-* dwgwrite -- A DWG writer supporting various input formats.
-  The input formats DXF, DXFB and later JSON, GeoJSON, YAML, XML/OGR, GPX
-  are under construction.
+* dwgwrite -- A DWG writer supporting various input formats, such as DXF, DXFB, JSON.
+  GeoJSON, YAML, XML/OGR, GPX are under construction.
 
 * dwgrewrite -- Reads a DWG, writes it back under a different name and optionally
   under a different version (default r2000), and re-reads it back for confirmation.
 
 * dwg2dxf -- Converts a DWG to a DXF (ascii or binary, minimal or full), optionally
-  under a different version. About 80% coverage.
+  under a different version. About 90% coverage.
 
 * dxf2dwg -- Converts a ascii or binary DXF to a DWG (r2000 only so far).
   About 80% coverage.

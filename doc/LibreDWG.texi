@@ -140,10 +140,10 @@ are skipped.
 
 @item Writing pre-R13 and R2004+ DWG
 Writing DWG formats for R2004 and later: R2007, R2010, R2013, R2018 is an
-ongoing effort and not yet implemented. We write as default in the R2000 format.
+ongoing effort and not yet implemented. We write as default in the R2000 format only.
 
 @item Reading binary DXF
-DXF support is an ongoing effort, and about 80% implemented.
+DXF support is now mostly implemented.
 ASCII DXF's are generated fully, with much more elements and fields and other free libraries,
 but AutoCAD fails to import some of them. See the @file{TODO} file for a detailed coverage report.
 
@@ -215,13 +215,13 @@ and objects:
 Some projects that use DWG (and specifically LibreDWG) are:
 
 @table @asis
+@item FreeCAD
+https://freecadweb.org/
 @item GRASS GIS
 http://grass.osgeo.org/
-@item PythonCAD
-http://pythoncad.sourceforge.net/dokuwiki/doku.php?id=r38_roadmap
 @end table
 
-Plans are adding support for FreeCAD, SolveSpace and OpenSCAD.
+Plans are to add support for SolveSpace, OpenSCAD and PythonCAD.
 
 Related libraries:
 
