@@ -1654,12 +1654,11 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   struct Dwg_Header *obj = &dwg->header;
   jsmn_parser parser;
-  //int num_tokens;
-  //jsmntok_t *tokens;
   jsmntokens_t tokens;
   unsigned int i;
   int error = -1;
 
+  dwg->opts |= loglevel | DWG_OPTS_INDXF;
   loglevel = dwg->opts & 0xf;
   if (!dat->chain && dat->fh)
     {

@@ -12,7 +12,6 @@
 
 /* dwgwrite.c: write a DWG file from various input formats.
  * written by Reini Urban
- * TODO: format readers, loglevel
  */
 
 #include "../src/config.h"
@@ -68,9 +67,9 @@ help (void)
   printf ("             r12, r14, r2000 (default)\n");
   printf ("           Planned versions:\n");
   printf ("             r9, r10, r11, r2004, r2007, r2010, r2013, r2018\n");
-  printf ("  -I fmt,  --format fmt     DXF, DXFB\n");
+  printf ("  -I fmt,  --format fmt     DXF, DXFB, JSON\n");
   printf (
-      "           Planned input formats: JSON, GeoJSON, YAML, XML/OGR, GPX\n");
+      "           Planned input formats: GeoJSON, YAML, XML/OGR, GPX\n");
   printf ("  -o dwgfile, --file        \n");
   printf ("  -y, --overwrite           overwrite existing files\n");
   printf ("           --help           display this help and exit\n");
@@ -84,8 +83,7 @@ help (void)
   printf ("              Planned versions:\n");
   printf ("                r9, r10, r11, r2004, r2007, r2010, r2013, r2018\n");
   printf ("  -I fmt      fmt: DXF, DXFB\n");
-  printf ("              Planned input formats: JSON, GeoJSON, YAML, XML/OGR, "
-          "GPX\n");
+  printf ("              Planned input formats: GeoJSON, YAML, XML/OGR, GPX\n");
   printf ("  -o dwgfile\n");
   printf ("  -y          overwrite existing files\n");
   printf ("  -h          display this help and exit\n");
@@ -267,7 +265,8 @@ main (int argc, char *argv[])
       || (infile && !strcasecmp (infile, ".json")))
     {
       if (opts > 1)
-        printf ("Reading JSON file %s\n", infile ? infile : "from stdin");
+        fprintf (stderr, "Reading JSON file %s\n",
+                 infile ? infile : "from stdin");
       error = dwg_read_json (&dat, &dwg);
     }
   else
