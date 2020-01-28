@@ -373,7 +373,7 @@ json_created_by (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                  jsmntokens_t *restrict tokens)
 {
   const jsmntok_t *t = &tokens->tokens[tokens->index];
-  (void)dat; (void)dwg;
+  (void)dwg;
   if (t->type != JSMN_STRING)
     {
       LOG_ERROR ("Expected %s STRING", "created_by");
@@ -381,6 +381,7 @@ json_created_by (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       return DWG_ERR_INVALIDTYPE;
     }
   created_by = json_string (dat, tokens);
+  LOG_TRACE ("created_by %s\n", created_by);
   tokens->index--; // advanced by the loop
   return 0;
 }
@@ -909,6 +910,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   free (subclass);
                   goto unknown_ent;
                 }
+              LOG_TRACE ("new subclass %s %s [%d elems with size %d]\n", name, subclass,
+                         num_elems, size_elem);
               elems = calloc (num_elems, size_elem);
               tokens->index++;
               // array of structs
@@ -926,6 +929,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                       json_advance_unknown (dat, tokens, 0);
                       return DWG_ERR_INVALIDTYPE;
                     }
+                  LOG_TRACE ("%s.%s[%d]:\n", name, key, k);
                   keys = t->size;
                   tokens->index++;
                   for (int ki = 0; ki < keys; ki++)
@@ -941,15 +945,17 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                           if (strEQ (f1->name, key1)) // found
                             {
                               LOG_INSANE ("-found %s [%s]\n", f1->name, f1->type);
-                              if (_set_struct_field (dat, obj, tokens, &elems[k], subclass, key1,
-                                                     sfields))
+                              if (_set_struct_field (dat, obj, tokens,
+                                                     &elems[k * size_elem],
+                                                     subclass, key1, sfields))
                                 break;
                             }
                         }
                       if (!f1->name && strEQc (key, "lt.index"))
                         {
-                          if (!_set_struct_field (dat, obj, tokens, &elems[k], subclass, "lt",
-                                                 sfields))
+                          if (!_set_struct_field (dat, obj, tokens,
+                                                  &elems[k * size_elem],
+                                                  subclass, "lt", sfields))
                             ++tokens->index;
                         }
                       else if (!f1->name) // not found
@@ -959,8 +965,9 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                         }
                     }
                 }
+              if (dwg_dynapi_field_set_value (dwg, _obj, f, &elems, 1))
+                LOG_TRACE ("subclass %s.%s done\n", name, key);
               free (subclass);
-              dwg_dynapi_field_set_value (dwg, _obj, f, &elems, 1);
             }
           else
             {
@@ -973,7 +980,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         }
       else
         {
-          // Currently we have 3 known static arrays:
+          // Currently we have 3 known static arrays
+          // TODO: => vertind BS[4]
           if (t->type == JSMN_PRIMITIVE && memBEGINc (key, "vertind[")
               && strEQc (f->name, "vertind[4]"))
             {
