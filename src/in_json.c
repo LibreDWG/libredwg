@@ -286,7 +286,7 @@ json_CMC (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   if (t->type == JSMN_OBJECT)
     { // 2004+
-      tokens->tokens++; // hash of index, rgb...
+      tokens->index++; // hash of index, rgb...
       for (int j = 0; j < t->size; j++)
         {
           json_fixed_key (key, dat, tokens);
@@ -405,7 +405,7 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       return DWG_ERR_INVALIDTYPE;
     }
   LOG_TRACE ("\n%s pos:%d [%d keys]\n--------------------\n", section, tokens->index, t->size);
-  tokens->tokens++;
+  tokens->index++;
   // t = &tokens->tokens[tokens->index];
   // json_expect(tokens, STRING);
   // FIELD_TV (version, 0);
@@ -469,8 +469,8 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       else if (strEQc (key, "HEADER"))
         {
           LOG_WARN ("Unexpected next section %s", key)
-          tokens->tokens--;
-          tokens->tokens--;
+          tokens->index--;
+          tokens->index--;
           return 0;
         }
       else
@@ -480,7 +480,7 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         }
     }
   LOG_TRACE ("End of %s\n", section)
-  tokens->tokens--;
+  tokens->index--;
   return 0;
 }
 
@@ -503,7 +503,7 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       return DWG_ERR_INVALIDTYPE;
     }
   LOG_TRACE ("\n%s pos:%d [%d keys]\n--------------------\n", section, tokens->index, t->size);
-  tokens->tokens++;
+  tokens->index++;
   for (int i = 0; i < size; i++)
     {
       char key[80];
@@ -582,20 +582,20 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       else if (t->type == JSMN_OBJECT && strEQc (key, "CLASSES"))
         {
           LOG_WARN ("Unexpected next section %s", key)
-          tokens->tokens--;
-          tokens->tokens--;
+          tokens->index--;
+          tokens->index--;
           return 0;
         }
       else
         {
           LOG_WARN ("Unhandled %s [%s] with %s", key, f->type, t_typename[t->type])
-          tokens->tokens++;
+          tokens->index++;
           continue;
         }
     }
   LOG_TRACE ("End of %s\n", section)
   // the key
-  tokens->tokens--;
+  tokens->index--;
   return 0;
 }
 
@@ -615,7 +615,7 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     }
   size = t->size;
   LOG_TRACE ("\n%s pos:%d [%d members]\n--------------------\n", section, tokens->index, size);
-  tokens->tokens++;
+  tokens->index++;
   if (dwg->num_classes == 0)
     dwg->dwg_class = calloc (size, sizeof (Dwg_Class));
   else
@@ -1053,7 +1053,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     }
   size = t->size;
   LOG_TRACE ("\n%s pos:%d [%d members]\n--------------------\n", section, tokens->index, size);
-  tokens->tokens++;
+  tokens->index++;
   if (dwg->num_objects == 0)
     dwg->object = calloc (size, sizeof (Dwg_Object));
   else
@@ -1338,12 +1338,12 @@ json_HANDLES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   // struct { uint32_t hdloff; int32_t offset } *omap = calloc (size, 8);
   for (int i = 0; i < size; i++)
     {
-      tokens->tokens++;
+      tokens->index++;
       for (int k = 0; k < 2; k++)
         {
           long hdloff = json_long (dat, tokens);
           long offset = json_long (dat, tokens);
-          tokens->tokens++;
+          tokens->index++;
         }
     }
   return 0;
@@ -1365,7 +1365,7 @@ json_THUMBNAILIMAGE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     }
   size = t->size;
   LOG_TRACE ("\n%s pos:%d [%d keys]\n--------------------\n", section, tokens->index, size);
-  tokens->tokens++;
+  tokens->index++;
   for (int i = 0; i < size; i++)
     {
       char key[80];
@@ -1395,7 +1395,7 @@ json_R2004_Header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     }
   size = t->size;
   LOG_TRACE ("\n%s pos:%d [%d keys]\n--------------------\n", section, tokens->index, size);
-  tokens->tokens++;
+  tokens->index++;
   for (int i = 0; i < size; i++)
     {
       char key[80];
@@ -1425,7 +1425,7 @@ json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     }
   size = t->size;
   LOG_TRACE ("\n%s pos:%d [%d keys]\n--------------------\n", section, tokens->index, size);
-  tokens->tokens++;
+  tokens->index++;
   for (int i = 0; i < size; i++)
     {
       char key[80];
@@ -1455,7 +1455,7 @@ json_AppInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     }
   size = t->size;
   LOG_TRACE ("\n%s pos:%d [%d keys]\n--------------------\n", section, tokens->index, size);
-  tokens->tokens++;
+  tokens->index++;
   for (int i = 0; i < size; i++)
     {
       char key[80];
@@ -1485,7 +1485,7 @@ json_AppInfoHistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     }
   size = t->size;
   LOG_TRACE ("\n%s pos:%d [%d keys]\n--------------------\n", section, tokens->index, size);
-  tokens->tokens++;
+  tokens->index++;
   for (int i = 0; i < size; i++)
     {
       char key[80];
@@ -1515,7 +1515,7 @@ json_FileDepList (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     }
   size = t->size;
   LOG_TRACE ("\n%s pos:%d [%d keys]\n--------------------\n", section, tokens->index, size);
-  tokens->tokens++;
+  tokens->index++;
   for (int i = 0; i < size; i++)
     {
       char key[80];
@@ -1545,7 +1545,7 @@ json_Security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     }
   size = t->size;
   LOG_TRACE ("\n%s pos:%d [%d keys]\n--------------------\n", section, tokens->index, size);
-  tokens->tokens++;
+  tokens->index++;
   for (int i = 0; i < size; i++)
     {
       char key[80];
@@ -1575,7 +1575,7 @@ json_RevHistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     }
   size = t->size;
   LOG_TRACE ("\n%s pos:%d [%d keys]\n--------------------\n", section, tokens->index, size);
-  tokens->tokens++;
+  tokens->index++;
   for (int i = 0; i < size; i++)
     {
       char key[80];
@@ -1605,7 +1605,7 @@ json_ObjFreeSpace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     }
   size = t->size;
   LOG_TRACE ("\n%s pos:%d [%d keys]\n--------------------\n", section, tokens->index, size);
-  tokens->tokens++;
+  tokens->index++;
   for (int i = 0; i < size; i++)
     {
       char key[80];
@@ -1635,7 +1635,7 @@ json_Template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     }
   size = t->size;
   LOG_TRACE ("\n%s pos:%d [%d keys]\n--------------------\n", section, tokens->index, size);
-  tokens->tokens++;
+  tokens->index++;
   for (int i = 0; i < size; i++)
     {
       char key[80];
@@ -1698,12 +1698,14 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_ERROR (
           "Invalid json. jsmn error %d at the %u-th token, pos: %u (...%s...)",
           error, parser.toknext, parser.pos, err);
+      free (tokens.tokens);
       return DWG_ERR_INVALIDDWG;
     }
 
   if (tokens.tokens[0].type != JSMN_OBJECT)
     {
       fprintf (stderr, "First JSON element is not an object/hash\n");
+      free (tokens.tokens);
       exit (1);
     }
 
@@ -1724,12 +1726,14 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         {
           LOG_ERROR ("Unexpected JSON key at %u of %u tokens, got %s",
                      tokens.index, tokens.num_tokens, t_typename[t->type]);
+          free (tokens.tokens);
           return DWG_ERR_INVALIDDWG;
         }
       if (len >= 80)
         {
           LOG_ERROR ("Unknown JSON key at %u of %u tokens, len %d > 80",
                      tokens.index, tokens.num_tokens, len);
+          free (tokens.tokens);
           return DWG_ERR_INVALIDDWG;
         }
       memcpy (key, &dat->chain[t->start], len);
@@ -1739,6 +1743,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         {
           LOG_ERROR ("Unexpected end of JSON at %u of %u tokens",
                      tokens.index, tokens.num_tokens);
+          free (tokens.tokens);
           return DWG_ERR_INVALIDDWG;
         }
       if (strEQc (key, "created_by"))
@@ -1778,10 +1783,12 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         {
           LOG_ERROR ("Unexpected JSON key %s at %u of %u tokens. %s:%d", key, tokens.index,
                      tokens.num_tokens, __FUNCTION__, __LINE__);
+          free (tokens.tokens);
           return DWG_ERR_INVALIDDWG;
         }
     }
 
+  free (tokens.tokens);
   return 0;
 }
 
