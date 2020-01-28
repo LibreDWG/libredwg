@@ -147,7 +147,7 @@ DXF support is now mostly implemented.
 ASCII DXF's are generated fully, with much more elements and fields and other free libraries,
 but AutoCAD fails to import some of them. See the @file{TODO} file for a detailed coverage report.
 
-Writing binary DXF is still under construction, done about 80%.
+Reading binary DXF is still under construction, done about 80%.
 
 @item Enabled entities and objects, but unstable, undertested. Field names may change:
 
@@ -216,9 +216,9 @@ Some projects that use DWG (and specifically LibreDWG) are:
 
 @table @asis
 @item FreeCAD
-https://freecadweb.org/
+@url{https://freecadweb.org/}
 @item GRASS GIS
-http://grass.osgeo.org/
+@url{http://grass.osgeo.org/}
 @end table
 
 Plans are to add support for SolveSpace, OpenSCAD and PythonCAD.
@@ -360,6 +360,12 @@ The default text type until r2004.
 @deftypevr {define} BITCODE_TU wchar*
 length + windows 2-byte wchar string (UCS-2).
 The default text type since r2007.
+@end deftypevr
+@deftypevr {define} BITCODE_TF char*
+Fixed length buffer, which can include NUL characters.
+@end deftypevr
+@deftypevr {define} BITCODE_TFF char*
+Embedded fixed length string, which can include NUL characters.
 @end deftypevr
 @deftypevr {define} BITCODE_H void*
 handle-references
@@ -655,7 +661,7 @@ Reading DXFB is under construction and un-tested.
 
 @cindex JSON
 
-We write and read @i{(not yet)} to our own JSON format, which is a
+We write to and read back from our own JSON format, which is a
 readable 1:1 mapping of the DWG structures, and carries much more
 information than the DXF format. The idea is to dump a DWG to JSON and
 filter/query or postprocess it with more powerful JSON query tools
@@ -665,8 +671,8 @@ import it back in. JSON is much better structured than DXF.
 Writing a JSON to stdout via a pipe is not yet recommended, as then
 ending commas are still there, which is strictly not valid JSON.
 
-The current first level objects are ``HEADER'', ``CLASSES'' and
-``OBJECTS'', for more see the specs.
+The current first level objects are all the section names, like
+``HEADER'', ``CLASSES'', ``OBJECTS''. For more see the specs.
 
 @node GeoJSON
 @subsection GeoJSON
@@ -773,7 +779,7 @@ Currently the options need to be specified in this exact same order.
 @item @file{dwgwrite}
 @cindex dwgwrite
 
-Create a DWG from a given input file (@pxref{DXF}, @pxref{DXFB, Binary DXF}),
+Create a DWG from a given input file (@pxref{DXF}, @pxref{DXFB, Binary DXF}, @pxref{JSON}),
 optionally via @code{--as-rNNNN} as another version. Experimental.
 For now can only create r13-r2000 DWG files.
 
@@ -797,7 +803,7 @@ version, an earlier or later version.
 The DWG files are created in the current directory and not overwritten, unless
 the option @code{--overwrite} or @code{-y} is given.
 
-This program is very experimental and AutoCAD may fail to import
+This program is experimental and AutoCAD may fail to import
 it. Only r13-r2000 DWG's can be written yet, currently the default is
 writing as r2000.
 
@@ -839,7 +845,9 @@ With @code{--text} searches only TEXT-like entities: TEXT, MTEXT, ATTRIB, ATTDEF
 @item @file{dwg2SVG}
 @cindex dwg2SVG
 Convert a DWG to a limited SVG. All paperspace and modelspace enties of type:
-TEXT, LINE, CIRCLE, ARC, INSERT.
+TEXT, LINE, CIRCLE, ARC, POLYLINE_2D, LWPOLYLINE, INSERT.
+
+Limitations: Many other graphical entities and properties are still missing.
 
 @item @file{dwg2ps}
 @cindex dwg2ps
