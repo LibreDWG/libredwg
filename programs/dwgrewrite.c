@@ -32,7 +32,7 @@
 
 // avoid the slow fork loop, for afl-clang-fast
 #ifdef __AFL_COMPILER
-static volatile char *__afl_persistent_sig = "##SIG_AFL_PERSISTENT##";
+static volatile const char *__afl_persistent_sig = "##SIG_AFL_PERSISTENT##";
 #endif
 
 static int opts = 1;

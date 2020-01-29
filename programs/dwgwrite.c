@@ -36,6 +36,11 @@
 #include "in_json.h"
 #include "in_dxf.h"
 
+// avoid the slow fork loop, for afl-clang-fast
+#ifdef __AFL_COMPILER
+static volatile const char *__afl_persistent_sig = "##SIG_AFL_PERSISTENT##";
+#endif
+
 static int opts = 1;
 int overwrite = 0;
 
@@ -241,6 +246,12 @@ main (int argc, char *argv[])
   // allow stdin, but require -I|--format then
   memset (&dwg, 0, sizeof (Dwg_Data));
   dwg.opts = opts;
+
+#ifdef __AFL_HAVE_MANUAL_CONTROL
+  __AFL_INIT();
+  while (__AFL_LOOP(1000)) {
+#endif
+
   if (infile)
     {
       struct stat attrib;
@@ -381,6 +392,10 @@ main (int argc, char *argv[])
     {
       dwg_free (&dwg);
     }
+
+#ifdef __AFL_HAVE_MANUAL_CONTROL
+  }
+#endif
 
   if (error >= DWG_ERR_CRITICAL)
     {
