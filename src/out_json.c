@@ -1149,7 +1149,7 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
             {
               error |= dwg_json_UNKNOWN_OBJ (dat, obj);
               KEY (num_unknown_bits);
-              VALUE_RLL (obj->num_unknown_bits, 0);
+              VALUE_RL (obj->num_unknown_bits, 0);
               KEY (unknown_bits);
               VALUE_BINARY (obj->unknown_bits, num_bytes, 0);
               return error;
@@ -1158,7 +1158,7 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
             {
               error |= dwg_json_UNKNOWN_ENT (dat, obj);
               KEY (num_unknown_bits);
-              VALUE_RLL (obj->num_unknown_bits, 0);
+              VALUE_RL (obj->num_unknown_bits, 0);
               KEY (unknown_bits);
               VALUE_BINARY (obj->unknown_bits, num_bytes, 0);
               return error;

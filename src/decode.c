@@ -5654,7 +5654,7 @@ dwg_decode_unknown (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
     return DWG_ERR_VALUEOUTOFBOUNDS;
 
   //*pre_bits = pos % 8;
-  obj->num_unknown_bits = num_bits;
+  obj->num_unknown_bits = (BITCODE_RL)num_bits;
   num_bytes = num_bits / 8;
   if (num_bits % 8)
     {

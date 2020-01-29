@@ -5455,7 +5455,7 @@ typedef struct _dwg_object
   BITCODE_UMC handlestream_size; /*!< r2010+ in bits */
   unsigned long common_size; /* relative offset from type ... end common_entity_data */
 
-  unsigned long num_unknown_bits;
+  BITCODE_RL num_unknown_bits;
   char *unknown_bits;
 
 } Dwg_Object;
