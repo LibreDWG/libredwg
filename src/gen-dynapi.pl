@@ -1114,20 +1114,7 @@ EOF
         readdeps  => 'num_deps',
         writedeps => 'num_deps',
         dashes_r11 => 'num_dashes',
-
         texts => 'numitems',
-
-        block_headers => 'num_entries',
-        layers => 'num_entries',
-        styles => 'num_entries',
-        linetypes => 'num_entries',
-        views => 'num_entries',
-        ucs => 'num_entries',
-        vports => 'num_entries',
-        apps => 'num_entries',
-        dimstyles => 'num_entries',
-        vport_entity_headers => 'num_entries',
-        #entries => 'num_entries',
         encr_sat_data => 'num_blocks',
         );
       my $countfield = exists $countfield{$var} ? $countfield{$var} : "num_$var";
