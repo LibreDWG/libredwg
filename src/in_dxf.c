@@ -5366,8 +5366,8 @@ new_object (char *restrict name, char *restrict dxfname,
                     // DXF often lies about num_entries, skipping defaults
                     // e.g. BLOCK_CONTROL contains mspace+pspace in DXF, but in
                     // the DWG they are extra. But this is fixed at case 2, not here.
-                    LOG_WARN ("Misleading %s.num_entries %d for %dth entry",
-                              ctrlname, num_entries, i);
+                    LOG_TRACE ("Misleading %s.num_entries %d for %dth entry\n",
+                               ctrlname, num_entries, i);
                     i = num_entries;
                     num_entries++;
                     dwg_dynapi_entity_set_value (
