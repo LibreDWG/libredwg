@@ -5888,6 +5888,7 @@ typedef struct _dwg_struct
 #define DWG_OPTS_MINIMAL  0x10
 #define DWG_OPTS_INDXF    0x20
 #define DWG_OPTS_DXFB     0x40
+#define DWG_OPTS_INJSON   0x80
 
 /*--------------------------------------------------
  * Exported Functions

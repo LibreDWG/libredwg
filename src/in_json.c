@@ -1258,6 +1258,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   pos += 2;
                 }
               buf[blen] = '\0';
+              free (hex);
               if (!obj->num_unknown_bits)
                 obj->num_unknown_bits = blen * 8; // minus some padding bits
               obj->unknown_bits = buf;
@@ -1658,7 +1659,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   unsigned int i;
   int error = -1;
 
-  dwg->opts |= loglevel | DWG_OPTS_INDXF;
+  dwg->opts |= loglevel | DWG_OPTS_INDXF | DWG_OPTS_INJSON;
   loglevel = dwg->opts & 0xf;
   if (!dat->chain && dat->fh)
     {
