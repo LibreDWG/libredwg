@@ -113,6 +113,7 @@ main (int argc, char *argv[])
   const char *version = NULL;
   Dwg_Version_Type dwg_version = R_INVALID;
   int c;
+  int force_free = 0;
   int free_outfile = 0;
 #ifdef HAVE_GETOPT_LONG
   int option_index = 0;
@@ -121,6 +122,7 @@ main (int argc, char *argv[])
           { "format", 1, 0, 'I' },    { "file", 1, 0, 'o' },
           { "as", 1, 0, 'a' },        { "help", 0, 0, 0 },
           { "overwrite", 0, 0, 'y' }, { "version", 0, 0, 0 },
+          { "force-free", 0, 0, 0 },
           { NULL, 0, NULL, 0 } };
 #endif
 
@@ -170,6 +172,8 @@ main (int argc, char *argv[])
             return opt_version ();
           if (!strcmp (long_options[option_index].name, "help"))
             return help ();
+          if (!strcmp (long_options[option_index].name, "force-free"))
+            force_free = 1;
           break;
 #else
         case 'i':
@@ -382,6 +386,7 @@ main (int argc, char *argv[])
 
   // forget about leaks. really huge DWG's need endlessly here.
   if ((dwg.header.version && dwg.num_objects < 1000)
+      || force_free
 #if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
       || 1
 #endif
