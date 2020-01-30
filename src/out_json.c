@@ -25,7 +25,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#include <ctype.h>
+#ifdef HAVE_CTYPE_H
+#  include <ctype.h>
+#endif
 
 #include "common.h"
 #include "bits.h"

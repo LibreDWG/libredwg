@@ -45,9 +45,17 @@
 #  define SET_PARENT_OBJ(field)
 #  define SET_PARENT_FIELD(field, what_parent, obj)
 
+// for compile-time range checks with n=3,10,1000,5000,10000,20000,100000
+//#  define LOG2_APPROX(n) (size_t)((-0.344845 * (n) * (n)) + (2.024658 * (n)) - 1.674873)
+//#  define _IN_RANGE     (sizeof (_obj->field) >= LOG2_APPROX (maxvalue) / 8)
+#  define _IN_RANGE(var, n)                                                   \
+    ((sizeof (var) == 1 && n <= 0xff) || (sizeof (var) == 2 && n <= 0xffff)   \
+     || (sizeof (var) >= 4))
+
 #  ifndef IS_FREE
 #    define VALUEOUTOFBOUNDS(field, maxvalue)                                 \
-      if (_obj->field > maxvalue)                                             \
+      if (_IN_RANGE (_obj->field, maxvalue)                                   \
+          && _obj->field > maxvalue)                                          \
         {                                                                     \
           LOG_ERROR ("Invalid %s." #field " %lu", obj->name,                  \
                      (unsigned long)_obj->field);                             \
@@ -56,7 +64,8 @@
         }
 #  else
 #    define VALUEOUTOFBOUNDS(field, maxvalue)                                 \
-      if (_obj->field > maxvalue)                                             \
+      if (_IN_RANGE (_obj->field, maxvalue)                                   \
+          && _obj->field > maxvalue)                                          \
         {                                                                     \
           return DWG_ERR_VALUEOUTOFBOUNDS;                                    \
         }
