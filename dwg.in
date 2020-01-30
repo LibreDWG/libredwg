@@ -1,10 +1,10 @@
 #!/bin/sh
-# create -v3 logs and dwg's with dxf2dwg
+# create -v3 logs and dwg's with dwgwrite from DXF or JSON)
 srcdir="@srcdir@"
 
 make -s -j4 -C src
-make -s -j4 -C programs dxf2dwg
-@DSYMUTIL@ programs/dxf2dwg
+make -s -j4 -C programs dwgwrite
+@DSYMUTIL@ programs/dwgwrite
 v=-v3
 y=
 
@@ -31,10 +31,18 @@ for d in "$@"; do
         dir=_$(basename `dirname "$d"`)
         if [ x$dir = x_test-data ]; then dir=""; fi
         if [ x$dir = x_td ]; then dir=""; fi
-        log=`basename "$d" .dxf`$dir.dxf.log
-        dwg=`basename "$d" .dxf`$dir.dwg
-        echo programs/dxf2dwg $y $v -o "$dwg" "$d" 2\>$log
-        @TIMEOUT_30@ @LTEXEC@ programs/dxf2dwg $y $v -o "$dwg" "$d" 2>$log
+        if [ x$dir = x_. ]; then dir=""; fi
+        case $(basename "$d") in
+            *.dxf)  ext=dxf ;;
+            *.DXF)  ext=dxf ;;
+            *.json) ext=json ;;
+            *.JSON) ext=json ;;
+            *)      echo "Illegal extension for $d"; exit ;;
+        esac
+        log=`basename "$d" .$ext`$dir.$ext.log
+        dwg=`basename "$d" .$ext`$dir.dwg
+        echo programs/dwgwrite $y $v -o "$dwg" "$d" 2\>$log
+        @TIMEOUT_30@ @LTEXEC@ programs/dwgwrite $y $v -o "$dwg" "$d" 2>$log
         ;;
     esac
 done
