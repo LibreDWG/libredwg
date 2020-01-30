@@ -55,7 +55,6 @@ static char* _path_field(const char *path);
  */
 
 #define ACTION json
-#define IS_PRINT
 #define IS_JSON
 
 #define PREFIX _prefix (dat);
@@ -1580,5 +1579,3 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 fail:
   return 1;
 }
-
-#undef IS_PRINT
