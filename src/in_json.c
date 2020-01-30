@@ -871,7 +871,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   char *old;
                   if (strEQc (key, "strings_area"))
                     {
-                      const int k = dwg->header.version > 2004 ? 512 : 256;
+                      const int k = dwg->header.version > R_2004 ? 512 : 256;
                       str = realloc (str, k);
                       memset (&str[len + 1], 0, k - len - 1);
                     }
