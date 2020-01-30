@@ -6,13 +6,13 @@ make -s -j4 -C src
 make -s -j4 -C programs dwg2dxf
 @DSYMUTIL@ programs/dwg2dxf
 v=-v3
-y=
+out=
 
 for d in "$@"; do
     case $d in
-        -y) y="-y"
-             ;;
         -v*) v=$d
+             ;;
+        -y) # ignore
              ;;
         *)
         if [ ! -f $d ]; then
@@ -30,10 +30,11 @@ for d in "$@"; do
         if [ x$dir = x_test-data ]; then dir=""; fi
         if [ x$dir = x_td ]; then dir=""; fi
         if [ x$dir = x_. ]; then dir=""; fi
-        log=`basename "$d" .dxf`$dir.log
-        dxf=`basename "$d" .dxf`$dir.dxf
-        echo programs/dwg2dxf $y $v -o "$dxf" "$d" 2\>$log
-        @TIMEOUT_10@ @LTEXEC@ programs/dwg2dxf $y $v -o "$dxf" "$d" 2>$log
+        b=`basename "$d" .dwg`
+        log=$b$dir.log
+        out=$b$dir.dxf
+        echo programs/dwg2dxf $v -o "$out" "$d" 2\>$log
+        @TIMEOUT_10@ @LTEXEC@ programs/dwg2dxf $v -o "$out" "$d" 2>$log
         ;;
     esac
 done

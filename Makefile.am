@@ -47,7 +47,7 @@ EXTRA_DIST = $(top_srcdir)/.version \
              $(JSON_DIST) \
 	     $(VALGRIND_SUPPRESSIONS_FILE)
 
-.PHONY: check-dwg check-dxf check-dwg-valgrind \
+.PHONY: check-dwg check-dxf check-json check-dwg-valgrind \
         regen-man man manual refman scan-build gcov \
 	unknown regen-unknown
 
@@ -112,19 +112,27 @@ check-dwg-valgrind: all
 	  $(VALGRIND) $(VALGRIND_OPTS) $(VALGRIND_SUPPRESSIONS) $(LTEXEC) programs/dwgread $$d >> check-dwg-valgrind.log 2>&1; \
 	done
 check-dxf: all
-	-mv check-dxf.log check-dxf.log~ 2>/dev/null
-	-for f in $(srcdir)/test/test-data/Drawing_2*.dwg \
-                  $(srcdir)/test/test-data/sample_2*.dwg \
-                  $(srcdir)/test/test-data/example_2000.dwg; \
+	-for f in $(srcdir)/test/test-data/Drawing_*.dwg \
+                  $(srcdir)/test/test-data/sample_*.dwg \
+                  $(srcdir)/test/test-data/example_*.dwg; \
           do \
-            echo programs/dwg2dxf -v3 $$f | tee -a check-dxf.log; \
-            $(LTEXEC) programs/dwg2dxf -v3 $$f >>check-dxf.log 2>&1; \
+           $(srcdir)/dxf-check $$f; \
           done
 	-for d in r14 2000 2004 2007 2010 2013 2018; do \
           for f in $(srcdir)/test/test-data/$$d/*.dwg; do \
-            b=`basename $$f .dwg`; dxf="$${b}_$${d}.dxf"; \
-            echo programs/dwg2dxf -v3 -o $${dxf} $$f | tee -a check-dxf.log; \
-            $(LTEXEC) programs/dwg2dxf -v3 -o $${dxf} $$f >>check-dxf.log 2>&1; \
+            $(srcdir)/dxf-check $$f; \
+	  done; \
+	done
+check-json: all
+	-for f in $(srcdir)/test/test-data/Drawing_*.dwg \
+                  $(srcdir)/test/test-data/sample_*.dwg \
+                  $(srcdir)/test/test-data/example_*.dwg; \
+          do \
+            $(srcdir)/json-check $$f; \
+          done
+	-for d in r14 2000 2004 2007 2010 2013 2018; do \
+          for f in $(srcdir)/test/test-data/$$d/*.dwg; do \
+            $(srcdir)/json-check $$f; \
 	  done; \
 	done
 

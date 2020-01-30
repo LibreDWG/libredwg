@@ -7,11 +7,11 @@ make -s -j4 -C programs dwgread
 @DSYMUTIL@ programs/dwgread
 v=-v3
 y=
+out=
+ob=$b
 
 for d in "$@"; do
     case $d in
-        -y) y="-y"
-             ;;
         -v*) v=$d
              ;;
         *)
@@ -31,9 +31,12 @@ for d in "$@"; do
         if [ x$dir = x_td ]; then dir=""; fi
         b=`basename "$d" .dwg`
         log=$b$dir.log
-        json=$b$dir.json
-        echo programs/dwgread $y $v -o "$json" "$d" 2\>$log
-        @TIMEOUT_10@ @LTEXEC@ programs/dwgread $y $v -o "$json" "$d" 2>$log
+        out="$b$dir.json"
+        echo programs/dwgread $v -Ojson -o "$out" "$d" 2\>$log
+        @TIMEOUT_10@ @LTEXEC@ programs/dwgread $v -Ojson -o "$out" "$d" 2>$log
         ;;
     esac
 done
+v=
+y=
+b=$ob
