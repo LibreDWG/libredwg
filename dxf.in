@@ -29,9 +29,10 @@ for d in "$@"; do
         dir=_$(basename `dirname "$d"`)
         if [ x$dir = x_test-data ]; then dir=""; fi
         if [ x$dir = x_td ]; then dir=""; fi
+        if [ x$dir = x_. ]; then dir=""; fi
         log=`basename "$d" .dxf`$dir.log
         dxf=`basename "$d" .dxf`$dir.dxf
-        echo programs/dwg2dwg $y $v -o "$dxf" "$d" 2\>$log
+        echo programs/dwg2dxf $y $v -o "$dxf" "$d" 2\>$log
         @TIMEOUT_10@ @LTEXEC@ programs/dwg2dxf $y $v -o "$dxf" "$d" 2>$log
         ;;
     esac
