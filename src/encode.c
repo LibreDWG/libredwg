@@ -1754,7 +1754,7 @@ dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       bit_set_position (dat, pos);
     }
 
-    // clang-format off
+  // clang-format off
   #include "classes.inc"
   // clang-format on
 

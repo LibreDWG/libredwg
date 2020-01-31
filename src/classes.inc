@@ -138,7 +138,7 @@
       return DWG_ERR_UNHANDLEDCLASS; \
     }
 #define UNHANDLED_CLASS_DXF(action, _name, _dxfname) \
-  if (strEQc (klass->dxfname, #_dxfname)) \
+  if (klass->dxfname && strEQc (klass->dxfname, #_dxfname)) \
     { \
       WARN_UNHANDLED_CLASS; \
       if (strEQc (_STR(action), "decode") || !memcmp (_STR(action), "in", 2)) { \
