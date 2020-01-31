@@ -1333,14 +1333,19 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               // ADD_ENTITY by name
               // check all objects
 
+              // if in CLASSES keep a high type
 #undef DWG_OBJECT
 #define DWG_OBJECT(token)                       \
   if (strEQc (name, #token))                    \
     {                                           \
       obj->fixedtype = DWG_TYPE_##token;        \
-      if (obj->fixedtype < 500 && obj->fixedtype != obj->type) \
+      if ((obj->fixedtype <= DWG_TYPE_OLE2FRAME \
+           || obj->type < 500)                  \
+          && obj->fixedtype != obj->type)       \
         {                                       \
-          LOG_ERROR ("Invalid type %d for %s", obj->type, name) \
+          LOG_WARN ("Fixup wrong type %d for %s to %d", \
+                    obj->type, name, obj->fixedtype)    \
+          obj->type = obj->fixedtype;           \
           break;                                \
         }                                       \
       goto found_ent;                           \
