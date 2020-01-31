@@ -576,7 +576,8 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       else if (t->type == JSMN_ARRAY && strEQc (f->type, "H"))
         {
           BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, key, NULL);
-          dwg_dynapi_header_set_value (dwg, key, &hdl, 0);
+          if (hdl)
+            dwg_dynapi_header_set_value (dwg, key, &hdl, 0);
         }
       //...
       else if (t->type == JSMN_OBJECT && strEQc (key, "CLASSES"))
@@ -944,7 +945,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             {
               BITCODE_H hdl;
               hdl = json_HANDLE (dat, dwg, tokens, key, obj);
-              dwg_dynapi_field_set_value (dwg, _obj, f, &hdl, 1);
+              if (hdl)
+                dwg_dynapi_field_set_value (dwg, _obj, f, &hdl, 1);
             }
           else if (t->type == JSMN_ARRAY && strEQc (f->type, "H*"))
             {
@@ -954,7 +956,11 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               tokens->index++;
               for (int k = 0; k < size1; k++)
                 {
-                  hdls[k] = json_HANDLE (dat, dwg, tokens, key, obj);
+                  BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, key, obj);
+                  if (hdl)
+                    hdls[k] = json_HANDLE (dat, dwg, tokens, key, obj);
+                  else
+                    hdls[k] = dwg_add_handleref (dwg, 0, 0, NULL);
                 }
               dwg_dynapi_field_set_value (dwg, _obj, f, &hdls, 1);
             }
@@ -1355,9 +1361,12 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           else if (strEQc (key, "handle") && !obj->handle.value)
             {
               BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, key, obj);
-              obj->handle.code = hdl->handleref.code;
-              obj->handle.size = hdl->handleref.size;
-              obj->handle.value = hdl->handleref.value;
+              if (hdl)
+                {
+                  obj->handle.code = hdl->handleref.code;
+                  obj->handle.size = hdl->handleref.size;
+                  obj->handle.value = hdl->handleref.value;
+                }
             }
           else if (strEQc (key, "num_unknown_bits") && memBEGINc (obj->name, "UNKNOWN_"))
             {
