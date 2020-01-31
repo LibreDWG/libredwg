@@ -770,6 +770,27 @@ find_numfield (const Dwg_DYNAPI_field *restrict fields,
   return NULL;
 }
 
+static const Dwg_DYNAPI_field *
+find_sizefield (const Dwg_DYNAPI_field *restrict fields,
+                const char *restrict key)
+{
+  const Dwg_DYNAPI_field *f;
+  char *s = malloc (strlen (key) + 12);
+  strcpy (s, key);
+  strcat (s, "_size");
+  for (f = &fields[0]; f->name; f++)
+    {
+      if (strEQ (s, f->name))
+        {
+          long size = 0;
+          free (s);
+          return f;
+        }
+    }
+  free (s);
+  return NULL;
+}
+
 #define FIXUP_NUMFIELD(type)                                            \
   {                                                                     \
     BITCODE_##type num;                                                 \
@@ -799,7 +820,6 @@ find_numfield (const Dwg_DYNAPI_field *restrict fields,
   }                                                                     \
   break;
 
-
 static void
 json_update_numfield (void *restrict _obj,
                       const Dwg_DYNAPI_field *restrict fields,
@@ -828,6 +848,47 @@ json_update_numfield (void *restrict _obj,
     LOG_WARN ("Unknown num_%s field, cannot check against size", key);
 }
 #undef FIXUP_NUMFIELD
+
+#define FIXUP_SIZEFIELD(type)                                           \
+  {                                                                     \
+    BITCODE_##type num;                                                 \
+    const BITCODE_##type _size = (BITCODE_##type) len;                  \
+    memcpy (&num, &((char*)_obj)[f->offset], f->size);                  \
+    if (num != _size)                                                   \
+      {                                                                 \
+        LOG_WARN ("Fixup sizefield %s " FORMAT_##type " to %lu",        \
+                  f->name, num, len);                                   \
+        memcpy (&((char*)_obj)[f->offset], &_size, f->size);            \
+      }                                                                 \
+    else                                                                \
+      LOG_TRACE ("Check %s " FORMAT_##type " ok\n", f->name, num)       \
+  }                                                                     \
+  break;
+
+// e.g. for TF strings: preview + preview_size.
+static void
+json_update_sizefield (void *restrict _obj,
+                      const Dwg_DYNAPI_field *restrict fields,
+                      const char *restrict key, const size_t len)
+{
+  const Dwg_DYNAPI_field *f = find_sizefield (fields, key);
+  if (f)
+    {
+      switch (f->size)
+        {
+          case 1: FIXUP_SIZEFIELD (B)
+          case 2: FIXUP_SIZEFIELD (BS)
+          case 4: FIXUP_SIZEFIELD (BL)
+          case 8: FIXUP_SIZEFIELD (BLL)
+          default: LOG_ERROR ("Unknown %s dynapi size %d", key, f->size);
+        }
+   }
+ else
+   {
+     LOG_WARN ("Unknown %s size field, cannot check against size", key);
+   }
+}
+#undef FIXUP_SIZE
 
 // needs to be recursive, for search in subclasses
 static int
@@ -875,7 +936,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                        || strEQc (f->type, "TF") || strEQc (f->type, "TU")))
             {
               char *str = json_string (dat, tokens);
-              int len = strlen (str);
+              size_t len = strlen (str);
               if (strEQc (f->type, "TF") && len < f->size) // fixed len: ensure big enough
                 {
                   char *old;
@@ -885,12 +946,16 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                       str = realloc (str, k);
                       memset (&str[len + 1], 0, k - len - 1);
                     }
+                  else if (strEQc (key, "preview")) // adjust to preview_size
+                    {
+                      json_update_sizefield (_obj, fields, key, len);
+                    }
                   else if (f->size > sizeof (char*))
                     {
                       str = realloc (str, f->size);
                       memset (&str[len + 1], 0, f->size - len - 1);
                     }
-                  LOG_TRACE ("%s: \"%s\" [%s]\n", key, str, f->type);
+                  LOG_TRACE ("%s: \"%s\" [%s %d]\n", key, str, f->type, f->size);
                   old = &((char*)_obj)[f->offset];
                   memcpy (old, &str, sizeof (char*));
                   //dwg_dynapi_field_set_value (dwg, _obj, f, &str, 1);
