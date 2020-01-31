@@ -369,6 +369,17 @@ main (int argc, char *argv[])
                 dwg.opts |= opts;
                 error = dwg_write_file (outfile, &dwg);
               }
+            else if ( // for fuzzing mainly
+#ifdef _WIN32
+                     strEQc (outfile, "NUL")
+#else
+                     strEQc (outfile, "/dev/null")
+#endif
+                     )
+              {
+                dwg.opts |= opts;
+                error = dwg_write_file (outfile, &dwg);
+              }
             else
               {
                 fprintf (stderr, "Not writable file or symlink: %s\n",
