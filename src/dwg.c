@@ -176,9 +176,9 @@ dwg_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
 #ifndef _WIN32
             || S_ISLNK (attrib.st_mode)
 #endif
-                ))
+            ))
         {
-          LOG_ERROR ("Error: %s\n", filename);
+          LOG_ERROR ("Illegal input file %s\n", filename);
           return DWG_ERR_IOERROR;
         }
       fp = fopen (filename, "rb");

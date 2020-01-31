@@ -208,12 +208,6 @@ main (int argc, char *argv[])
     }
   i = optind;
 
-  if (optind == argc)
-    {
-      fprintf (stderr, "No input file specified");
-      return 1;
-    }
-  // REQUIRE_INPUT_FILE_ARG (optind);
   memset (&dwg, 0, sizeof (Dwg_Data));
   if (has_v || !fmt)
     dwg.opts = opts;
@@ -222,10 +216,19 @@ main (int argc, char *argv[])
     setenv ("LIBREDWG_TRACE", "1", 0);
 #endif
 
-  if (opts > 1)
-    fprintf (stderr, "Reading DWG file %s\n", argv[i]);
-  // TODO support stdin as in dwgwrite
-  error = dwg_read_file (argv[i], &dwg);
+  if (optind != argc)
+    {
+      if (opts > 1)
+        fprintf (stderr, "Reading DWG file %s\n", argv[i]);
+      error = dwg_read_file (argv[i], &dwg);
+    }
+  else
+    {
+      if (opts > 1)
+        fprintf (stderr, "Reading DWG from stdin\n");
+      error = dwg_read_file ("-", &dwg); // i.e. from stdin
+    }
+
   if (!fmt)
     {
       if (error >= DWG_ERR_CRITICAL)
