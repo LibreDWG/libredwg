@@ -226,6 +226,15 @@ main (int argc, char *argv[])
     }
   i = optind;
 
+#ifdef __AFL_HAVE_MANUAL_CONTROL
+  // llvm_mode deferred init
+  __AFL_INIT();
+#endif
+
+#ifdef __xxAFL_HAVE_MANUAL_CONTROL
+  while (__AFL_LOOP(1000)) { // llvm_mode persistent mode (currently broken)
+#endif
+  
   // get input format from INFILE, not outfile.
   // With stdin, should -I be mandatory, or try to autodetect the format?
   // With a file use the extension.
@@ -246,15 +255,10 @@ main (int argc, char *argv[])
             fprintf (stderr, "Unknown input format for '%s'\n", infile);
         }
     }
-
+  
   // allow stdin, but require -I|--format then
   memset (&dwg, 0, sizeof (Dwg_Data));
   dwg.opts = opts;
-
-#ifdef __AFL_HAVE_MANUAL_CONTROL
-  __AFL_INIT();
-  while (__AFL_LOOP(1000)) {
-#endif
 
   if (infile)
     {
@@ -409,8 +413,8 @@ main (int argc, char *argv[])
       dwg_free (&dwg);
     }
 
-#ifdef __AFL_HAVE_MANUAL_CONTROL
-  }
+#ifdef __xxAFL_HAVE_MANUAL_CONTROL
+  } // __AFL_LOOP(1000) persistent mode
 #endif
 
   if (error >= DWG_ERR_CRITICAL)
