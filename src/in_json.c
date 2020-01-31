@@ -1318,32 +1318,33 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           else if (strEQc (key, "type") && !obj->type)
             {
               obj->type = json_long (dat, tokens);
-              if (obj->type < 500)
-                obj->fixedtype = obj->type;
-              else
-                {
-                  // clang-format off
-                  // ADD_ENTITY by name
-                  // check all objects
+              // clang-format off
+              // ADD_ENTITY by name
+              // check all objects
+
 #undef DWG_OBJECT
 #define DWG_OBJECT(token)                       \
   if (strEQc (name, #token))                    \
     {                                           \
       obj->fixedtype = DWG_TYPE_##token;        \
+      if (obj->fixedtype < 500 && obj->fixedtype != obj->type) \
+        {                                       \
+          LOG_ERROR ("Invalid type %d for %s", obj->type, name) \
+          break;                                \
+        }                                       \
       goto found_ent;                           \
     }                                           \
   else
 #undef DWG_ENTITY
 #define DWG_ENTITY(token) DWG_OBJECT(token)
 
-                  #include "objects.inc"
-                  //final else
-                  LOG_WARN ("Unknown object %s", name);
+              #include "objects.inc"
+              //final else
+              LOG_WARN ("Unknown object %s", name);
 
 #undef DWG_OBJECT
 #undef DWG_ENTITY
-                  // clang-format on
-                }
+              // clang-format on
             found_ent:
               LOG_TRACE ("type: %d,\tfixedtype: %d\n", obj->type, obj->fixedtype)
             }
