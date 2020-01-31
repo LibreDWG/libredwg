@@ -1796,11 +1796,17 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   tokens.num_tokens = jsmn_parse (&parser, (char *)dat->chain, dat->size, NULL, 0);
   if (tokens.num_tokens <= 0)
     {
-      char err[21];
-      memcpy (&err, &dat->chain[parser.pos - 10], 20);
-      err[20] = 0;
-      LOG_ERROR ("Invalid json. jsmn error at pos: %u (...%s...)", parser.pos,
-                 err);
+      if (parser.pos > 10)
+        {
+          char err[21];
+          memcpy (&err, &dat->chain[parser.pos - 10], 20);
+          err[20] = 0;
+          LOG_ERROR ("Invalid json. jsmn error at pos: %u (... %s ...)", parser.pos,
+                     err);
+        }
+      else
+        LOG_ERROR ("Invalid json. jsmn error at pos: %u (%.*s ...)", parser.pos,
+                   10, &dat->chain[parser.pos]);
       return DWG_ERR_INVALIDDWG;
     }
   LOG_TRACE ("  num_tokens: %d\n", tokens.num_tokens);
@@ -1813,12 +1819,17 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                       tokens.num_tokens);
   if (error < 0)
     {
-      char err[21];
-      memcpy (&err, &dat->chain[parser.pos - 10], 20);
-      err[20] = 0;
-      LOG_ERROR (
-          "Invalid json. jsmn error %d at the %u-th token, pos: %u (...%s...)",
-          error, parser.toknext, parser.pos, err);
+      if (parser.pos > 10)
+        {
+          char err[21];
+          memcpy (&err, &dat->chain[parser.pos - 10], 20);
+          err[20] = 0;
+          LOG_ERROR ("Invalid json. jsmn error %d at the %u-th token, pos: %u (... %s ...)",
+                     error, parser.toknext, parser.pos, err);
+        }
+      else
+        LOG_ERROR ("Invalid json. jsmn error %d at the %u-th token, pos: %u (%.*s ...)",
+                   error, parser.toknext, parser.pos, 10, &dat->chain[parser.pos]);
       free (tokens.tokens);
       return DWG_ERR_INVALIDDWG;
     }
