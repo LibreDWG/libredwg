@@ -773,17 +773,26 @@ find_numfield (const Dwg_DYNAPI_field *restrict fields,
 #define FIXUP_NUMFIELD(type)                                            \
   {                                                                     \
     BITCODE_##type num;                                                 \
-    const BITCODE_##type size_1 = (BITCODE_##type) size;                \
+    const BITCODE_##type _size = (BITCODE_##type) size;                 \
     memcpy (&num, &((char*)_obj)[f->offset], f->size);                  \
-    if (num != size_1)                                                  \
+    if (num != _size)                                                   \
       {                                                                 \
-        /* We don't emit a JSON num_reactors field */                   \
-        if (strNE (key, "reactors"))                                    \
+        /* numitems is for 2 arrays, keep the smaller */                \
+        if (strNE (f->name, "numitems") || num > _size)                 \
           {                                                             \
-            LOG_WARN ("Fixup %s " FORMAT_##type " to array size %ld",   \
-                      f->name, num, size);                              \
+            /* We don't emit a JSON num_reactors field */               \
+            if (strNE (key, "reactors"))                                \
+              {                                                         \
+                LOG_WARN ("Fixup %s " FORMAT_##type " to array size %ld", \
+                          f->name, num, size);                          \
+              }                                                         \
+            memcpy (&((char*)_obj)[f->offset], &size, f->size);         \
           }                                                             \
-        memcpy (&((char*)_obj)[f->offset], &size, f->size);             \
+        else                                                            \
+          {                                                             \
+            LOG_WARN ("Inconsistent DICTIONARY.numitems for texts[] "   \
+                      "and itemhandles[] size " FORMAT_##type, num);    \
+          }                                                             \
       }                                                                 \
     else                                                                \
       LOG_TRACE ("Check %s " FORMAT_##type " ok\n", f->name, num)       \
@@ -997,6 +1006,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               for (int k = 0; k < size1; k++)
                 {
                   nums[k] = json_float (dat, tokens);
+                  LOG_TRACE ("%s[%d]: %f [%s]\n", key, k, nums[k], f->type);
                 }
               dwg_dynapi_field_set_value (dwg, _obj, f, &nums, 1);
             }
@@ -1009,6 +1019,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               for (int k = 0; k < size1; k++)
                 {
                   elems[k] = json_string (dat, tokens);
+                  LOG_TRACE ("%s[%d]: \"%s\" [%s]\n", key, k, elems[k], f->type);
                 }
               dwg_dynapi_field_set_value (dwg, _obj, f, &elems, 1);
             }
