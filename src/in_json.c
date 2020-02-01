@@ -225,6 +225,42 @@ json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
   return key;
 }
 
+ATTRIBUTE_MALLOC
+static char *
+json_binary (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
+             const char *restrict key, long *lenp)
+{
+  // convert from hex
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  char *str = json_string (dat, tokens);
+  size_t len = strlen (str);
+  unsigned blen = len / 2;
+  char *buf = len ? malloc (blen + 1) : NULL;
+  char *pos = str;
+  char *old;
+
+  *lenp = 0;
+  if (t->type != JSMN_STRING)
+    {
+      LOG_ERROR ("Expected JSON STRING");
+      json_advance_unknown (dat, tokens, 0);
+      return NULL;
+    }
+  for (unsigned i = 0; i < blen; i++)
+    {
+      sscanf (pos, "%2hhX", &buf[i]);
+      pos += 2;
+    }
+  if (buf)
+    {
+      buf[blen] = '\0';
+      LOG_TRACE ("%s: '%.*s'... [BINARY]\n", key, (int)len/10, str);
+      *lenp = blen;
+    }
+  free (str);
+  return buf;
+}
+
 static double
 json_float (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
 {
@@ -239,6 +275,7 @@ json_float (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
   tokens->index++;
   return strtod ((char *)&dat->chain[t->start], NULL);
 }
+
 static long
 json_long (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
 {
@@ -1622,8 +1659,10 @@ json_THUMBNAILIMAGE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                    jsmntokens_t *restrict tokens)
 {
   const char *section = "THUMBNAILIMAGE";
-  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  const jsmntok_t *restrict t = &tokens->tokens[tokens->index];
+  Dwg_Chain *restrict _obj = &dwg->thumbnail;
   int size;
+  long size1 = 0;
   if (t->type != JSMN_OBJECT)
     {
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
@@ -1639,7 +1678,22 @@ json_THUMBNAILIMAGE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       char key[80];
       json_fixed_key (key, dat, tokens);
       t = &tokens->tokens[tokens->index];
-      json_advance_unknown (dat, tokens, 0);
+      if (strEQc (key, "size"))
+        size1 = json_long (dat, tokens);
+      else if (strEQc (key, "chain"))
+        {
+          long len;
+          dwg->thumbnail.chain = (unsigned char*)json_binary (dat, tokens, key, &len);
+          dwg->thumbnail.size = len;
+          if (size1 > 0 && size1 != len)
+            LOG_WARN ("thumbnail size mismatch: binary len %ld != size %ld", len, size1);
+          LOG_TRACE ("size: %ld\n", len);
+        }
+      else
+        {
+          LOG_TRACE ("%s\n", key)
+          json_advance_unknown (dat, tokens, 0);
+        }
     }
 
   LOG_TRACE ("End of %s\n", section)
