@@ -4,7 +4,8 @@
 # teigha dwg2 -> dxf
 d=${1:-example_2000}
 b=$(basename $d .dwg)
-r=2000
+dir=$(dirname $d)
+r=$(basename $dir)
 f=$d
 case $(dirname $d) in
     *test/test-data) ;;
