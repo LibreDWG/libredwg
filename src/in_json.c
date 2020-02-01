@@ -938,7 +938,30 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             {
               char *str = json_string (dat, tokens);
               size_t len = strlen (str);
-              if (strEQc (f->type, "TF") && len < f->size) // fixed len: ensure big enough
+              if (f->dxf == 310) // is BINARY. TODO: TABLE/FIELD *.data_date
+                {
+                  // convert from hex
+                  unsigned blen = len / 2;
+                  char *buf = len ? malloc (blen + 1) : NULL;
+                  char *pos = str;
+                  char *old;
+                  for (unsigned i = 0; i < blen; i++)
+                    {
+                      sscanf (pos, "%2hhX", &buf[i]);
+                      pos += 2;
+                    }
+                  if (buf)
+                    {
+                      buf[blen] = '\0';
+                      LOG_TRACE ("%s: '%.*s' [%s] (binary)\n", key, blen, buf, f->type);
+                    }
+                  free (str);
+                  json_update_sizefield (_obj, fields, key, blen);
+                  // set the ptr directly, no alloc, no conversion.
+                  old = &((char*)_obj)[f->offset];
+                  memcpy (old, &buf, f->size);
+                }
+              else if (strEQc (f->type, "TF")) // oleclient, strings_area, ... fixup size field
                 {
                   char *old;
                   if (strEQc (key, "strings_area"))
@@ -947,38 +970,16 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                       str = realloc (str, k);
                       memset (&str[len + 1], 0, k - len - 1);
                     }
-                  else if (strEQc (key, "preview")) // adjust to preview_size
-                    {
-                      json_update_sizefield (_obj, fields, key, len);
-                    }
                   else if (f->size > sizeof (char*))
                     {
                       str = realloc (str, f->size);
                       memset (&str[len + 1], 0, f->size - len - 1);
                     }
                   LOG_TRACE ("%s: \"%s\" [%s %d]\n", key, str, f->type, f->size);
+                  json_update_sizefield (_obj, fields, key, len);
                   old = &((char*)_obj)[f->offset];
                   memcpy (old, &str, sizeof (char*));
                   //dwg_dynapi_field_set_value (dwg, _obj, f, &str, 1);
-                }
-              else if (f->dxf == 310 && len > 0) // is BINARY
-                {
-                  // convert from hex
-                  unsigned blen = len / 2;
-                  char *buf = malloc (blen + 1);
-                  char *pos = str;
-                  char *old;
-                  for (unsigned i = 0; i < blen; i++)
-                    {
-                      sscanf (pos, "%2hhX", &buf[i]);
-                      pos += 2;
-                    }
-                  buf[blen] = '\0';
-                  LOG_TRACE ("%s: '%.*s' [%s] (binary)\n", key, blen, buf, f->type);
-                  free (str);
-                  // set the ptr directly, no alloc, no conversion.
-                  old = &((char*)_obj)[f->offset];
-                  memcpy (old, &buf, f->size);
                 }
               else
                 {
