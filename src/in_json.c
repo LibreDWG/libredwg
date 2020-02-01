@@ -262,7 +262,7 @@ ATTRIBUTE_MALLOC
 static BITCODE_H
 json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
              jsmntokens_t *restrict tokens, const char *name,
-             const Dwg_Object *restrict obj)
+             const Dwg_Object *restrict obj, const int i)
 {
   long code, value;
   const jsmntok_t *t = &tokens->tokens[tokens->index];
@@ -274,7 +274,10 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   tokens->index++;
   code = json_long (dat, tokens);
   value = json_long (dat, tokens);
-  LOG_TRACE ("%s [%u, %u] [H]\n", name, (unsigned)code, (unsigned)value);
+  if (i < 0)
+    LOG_TRACE ("%s [%u, %u] [H]\n", name, (unsigned)code, (unsigned)value)
+  else // H*
+    LOG_TRACE ("%s[%d] [%u, %u] [H]\n", name, i, (unsigned)code, (unsigned)value)
   return dwg_add_handleref (dwg, code, value, code >= 6 ? obj : NULL);
 }
 
@@ -319,7 +322,7 @@ json_CMC (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             }
           else if (strEQc (key, "handle")) // [4, value] ARRAY
             {
-              color->handle = json_HANDLE (dat, dwg, tokens, name, NULL);
+              color->handle = json_HANDLE (dat, dwg, tokens, name, NULL, -1);
             }
           else if (strEQc (key, "name"))
             {
@@ -576,7 +579,7 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         }
       else if (t->type == JSMN_ARRAY && strEQc (f->type, "H"))
         {
-          BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, key, NULL);
+          BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, key, NULL, -1);
           if (hdl)
             dwg_dynapi_header_set_value (dwg, key, &hdl, 0);
         }
@@ -1020,7 +1023,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           else if (t->type == JSMN_ARRAY && strEQc (f->type, "H"))
             {
               BITCODE_H hdl;
-              hdl = json_HANDLE (dat, dwg, tokens, key, obj);
+              hdl = json_HANDLE (dat, dwg, tokens, key, obj, -1);
               if (hdl)
                 dwg_dynapi_field_set_value (dwg, _obj, f, &hdl, 1);
             }
@@ -1032,9 +1035,9 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               tokens->index++;
               for (int k = 0; k < size1; k++)
                 {
-                  BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, key, obj);
+                  BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, key, obj, k);
                   if (hdl)
-                    hdls[k] = json_HANDLE (dat, dwg, tokens, key, obj);
+                    hdls[k] = hdl;
                   else
                     hdls[k] = dwg_add_handleref (dwg, 0, 0, NULL);
                 }
@@ -1444,7 +1447,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             }
           else if (strEQc (key, "handle") && !obj->handle.value)
             {
-              BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, key, obj);
+              BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, key, obj, -1);
               if (hdl)
                 {
                   obj->handle.code = hdl->handleref.code;
