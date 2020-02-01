@@ -88,6 +88,20 @@ static Bit_Chain *g_dat;
           _obj->nam = (BITCODE_##type)json_long (dat, tokens);   \
           LOG_TRACE (#nam ": " FORMAT_##type "\n", _obj->nam)    \
         }
+#define _FIELD_LONGT(nam, type, fmt)                             \
+      else if (strEQc (key, #nam))                               \
+        {                                                        \
+          _obj->nam = (BITCODE_##type)json_long (dat, tokens);   \
+          LOG_TRACE (#nam ": " FORMAT_##fmt "\n", _obj->nam)     \
+        }
+#define FIELD_TFF(nam, len, dxf)                                 \
+      else if (strEQc (key, #nam))                               \
+        {                                                        \
+          char *s = json_string (dat, tokens);                   \
+          int slen = strlen (s);                                 \
+          memcpy (&_obj->nam, s, MIN (len, slen);                \
+          LOG_TRACE (#nam ": %.*s\n", len, _obj->nam)            \
+        }
 
 #define FIELD_B(nam, dxf)   _FIELD_LONG (nam, B)
 #define FIELD_BB(nam, dxf)  _FIELD_LONG (nam, BB)
@@ -98,6 +112,8 @@ static Bit_Chain *g_dat;
 #define FIELD_RC(nam, dxf)  _FIELD_LONG (nam, RC)
 #define FIELD_RS(nam, dxf)  _FIELD_LONG (nam, RS)
 #define FIELD_RL(nam, dxf)  _FIELD_LONG (nam, RL)
+#define FIELD_RLx(nam, dxf) _FIELD_LONGT (nam, RL, RLx)
+#define FIELD_RLd(nam, dxf) _FIELD_LONGT (nam, RL, RLd)
 #define FIELD_RLL(nam, dxf) _FIELD_LONG (nam, RLL)
 #define FIELD_MC(nam, dxf)  _FIELD_LONG (nam, MC)
 #define FIELD_MS(nam, dxf)  _FIELD_LONG (nam, MS)
@@ -1602,6 +1618,7 @@ json_R2004_Header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 {
   const char *section = "R2004_Header";
   const jsmntok_t *t = &tokens->tokens[tokens->index];
+  struct Dwg_R2004_Header *_obj = &dwg->r2004_header;
   int size;
   if (t->type != JSMN_OBJECT)
     {
@@ -1618,7 +1635,43 @@ json_R2004_Header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       char key[80];
       json_fixed_key (key, dat, tokens);
       t = &tokens->tokens[tokens->index];
-      json_advance_unknown (dat, tokens, 0);
+
+      if (strEQc (key, "file_ID_string"))
+        {
+          char *s = json_string (dat, tokens);
+          int slen = strlen (s);
+          memcpy (&_obj->file_ID_string, s, MIN (12, slen));
+          LOG_TRACE ("file_ID_string: %.*s\n", 12, _obj->file_ID_string)
+        }
+      //FIELD_TFF (file_ID_string, 12, 0) //pre-allocated
+      FIELD_RLx (header_address, 0)
+      FIELD_RL (header_size, 0)
+      FIELD_RL (x04, 0)
+
+      FIELD_RLd (root_tree_node_gap, 0)
+      FIELD_RLd (lowermost_left_tree_node_gap, 0)
+      FIELD_RLd (lowermost_right_tree_node_gap, 0)
+      FIELD_RL (unknown_long, 0)
+      FIELD_RL (last_section_id, 0)
+      FIELD_RLL (last_section_address, 0)
+      FIELD_RLL (second_header_address, 0)
+      FIELD_RL (num_gaps, 0)
+      FIELD_RL (num_sections, 0)
+      FIELD_RL (x20, 0)
+      FIELD_RL (x80, 0)
+      FIELD_RL (x40, 0)
+      FIELD_RL (section_map_id, 0)
+      FIELD_RLL (section_map_address, 0)
+      FIELD_RL (section_info_id, 0)
+      FIELD_RL (section_array_size, 0)
+      FIELD_RL (gap_array_size, 0)
+      FIELD_RLx (crc32, 0)
+      //end of encrypted 0x6c header
+      else
+        {
+          LOG_ERROR ("Unknown %s.%s ignored", section, key);
+          tokens->index++;
+        }
     }
 
   LOG_TRACE ("End of %s\n", section)
