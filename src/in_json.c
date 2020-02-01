@@ -1345,7 +1345,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           return DWG_ERR_INVALIDTYPE;
         }
       keys = t->size;
-      LOG_INSANE ("-keys: %d\n", keys);
+      LOG_HANDLE ("\n-keys: %d\n", keys);
 
       tokens->index++;
       for (int j = 0; j < keys; j++)

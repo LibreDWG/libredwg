@@ -141,10 +141,11 @@ static char* _path_field(const char *path);
 #define VALUE_TV(nam, dxf)
 
 #define FIELD(nam, type, dxf)                                                 \
-  {                                                                           \
-    PREFIX fprintf (dat->fh, "\"" #nam "\": " FORMAT_##type ",\n",            \
-                    _obj->nam);                                               \
-  }
+  if (!memBEGINc (#nam, "num_"))                                              \
+    {                                                                         \
+      PREFIX fprintf (dat->fh, "\"" #nam "\": " FORMAT_##type ",\n",          \
+                      _obj->nam);                                             \
+    }
 #define _FIELD(nam, type, value)                                              \
   {                                                                           \
     PREFIX fprintf (dat->fh, "\"" #nam "\": " FORMAT_##type ",\n", obj->nam); \
@@ -155,10 +156,11 @@ static char* _path_field(const char *path);
                     _ent->nam);                                               \
   }
 #define SUB_FIELD(o, nam, type, dxf)                                          \
-  {                                                                           \
-    PREFIX fprintf (dat->fh, "\"" #nam "\": " FORMAT_##type ",\n",            \
-                    _obj->o.nam);                                             \
-  }
+  if (!memBEGINc (#nam, "num_"))                                              \
+    {                                                                         \
+      PREFIX fprintf (dat->fh, "\"" #nam "\": " FORMAT_##type ",\n",          \
+                      _obj->o.nam);                                           \
+    }
 #define FIELD_CAST(nam, type, cast, dxf) FIELD (nam, cast, dxf)
 #define FIELD_TRACE(nam, type)
 #define FIELD_G_TRACE(nam, type, dxf)
