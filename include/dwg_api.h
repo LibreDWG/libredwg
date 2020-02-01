@@ -3292,9 +3292,12 @@ EXPORT void dwg_ent_ole2frame_set_mode (dwg_ent_ole2frame *restrict frame,
                                         int *restrict error)
     __nonnull ((3)) _deprecated_dynapi_setter;
 
-EXPORT BITCODE_BL dwg_ent_ole2frame_get_data_length (
+EXPORT BITCODE_BL dwg_ent_ole2frame_get_data_size (
     const dwg_ent_ole2frame *restrict frame, int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
+
+// backcompat API
+#define dwg_ent_ole2frame_get_data_length(a, b) dwg_ent_ole2frame_get_data_size (a, b)
 
 EXPORT char *
 dwg_ent_ole2frame_get_data (const dwg_ent_ole2frame *restrict frame,

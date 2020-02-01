@@ -14769,19 +14769,19 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
         fail ("OLE2FRAME.data [TF]");
   }
   {
-    BITCODE_BL data_length;
-    if (dwg_dynapi_entity_value (ole2frame, "OLE2FRAME", "data_length", &data_length, NULL)
-        && data_length == ole2frame->data_length)
+    BITCODE_BL data_size;
+    if (dwg_dynapi_entity_value (ole2frame, "OLE2FRAME", "data_size", &data_size, NULL)
+        && data_size == ole2frame->data_size)
       pass ();
     else
-      fail ("OLE2FRAME.data_length [BL] %u != %u", ole2frame->data_length, data_length);
-    data_length++;
-    if (dwg_dynapi_entity_set_value (ole2frame, "OLE2FRAME", "data_length", &data_length, 0)
-        && data_length == ole2frame->data_length)
+      fail ("OLE2FRAME.data_size [BL] %u != %u", ole2frame->data_size, data_size);
+    data_size++;
+    if (dwg_dynapi_entity_set_value (ole2frame, "OLE2FRAME", "data_size", &data_size, 0)
+        && data_size == ole2frame->data_size)
       pass ();
     else
-      fail ("OLE2FRAME.data_length [BL] set+1 %u != %u", ole2frame->data_length, data_length);
-    ole2frame->data_length--;
+      fail ("OLE2FRAME.data_size [BL] set+1 %u != %u", ole2frame->data_size, data_size);
+    ole2frame->data_size--;
 
   }
   {
@@ -14896,19 +14896,19 @@ static int test_OLEFRAME (const Dwg_Object *obj)
         fail ("OLEFRAME.data [TF]");
   }
   {
-    BITCODE_BL data_length;
-    if (dwg_dynapi_entity_value (oleframe, "OLEFRAME", "data_length", &data_length, NULL)
-        && data_length == oleframe->data_length)
+    BITCODE_BL data_size;
+    if (dwg_dynapi_entity_value (oleframe, "OLEFRAME", "data_size", &data_size, NULL)
+        && data_size == oleframe->data_size)
       pass ();
     else
-      fail ("OLEFRAME.data_length [BL] %u != %u", oleframe->data_length, data_length);
-    data_length++;
-    if (dwg_dynapi_entity_set_value (oleframe, "OLEFRAME", "data_length", &data_length, 0)
-        && data_length == oleframe->data_length)
+      fail ("OLEFRAME.data_size [BL] %u != %u", oleframe->data_size, data_size);
+    data_size++;
+    if (dwg_dynapi_entity_set_value (oleframe, "OLEFRAME", "data_size", &data_size, 0)
+        && data_size == oleframe->data_size)
       pass ();
     else
-      fail ("OLEFRAME.data_length [BL] set+1 %u != %u", oleframe->data_length, data_length);
-    oleframe->data_length--;
+      fail ("OLEFRAME.data_size [BL] set+1 %u != %u", oleframe->data_size, data_size);
+    oleframe->data_size--;
 
   }
   {
@@ -17595,6 +17595,22 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         fail ("SWEPTSURFACE.pathdata [TF]");
   }
   {
+    BITCODE_BL pathdata_size;
+    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "pathdata_size", &pathdata_size, NULL)
+        && pathdata_size == sweptsurface->pathdata_size)
+      pass ();
+    else
+      fail ("SWEPTSURFACE.pathdata_size [BL] %u != %u", sweptsurface->pathdata_size, pathdata_size);
+    pathdata_size++;
+    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "pathdata_size", &pathdata_size, 0)
+        && pathdata_size == sweptsurface->pathdata_size)
+      pass ();
+    else
+      fail ("SWEPTSURFACE.pathdata_size [BL] set+1 %u != %u", sweptsurface->pathdata_size, pathdata_size);
+    sweptsurface->pathdata_size--;
+
+  }
+  {
     BITCODE_3BD point;
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "point", &point, NULL)
         && !memcmp (&point, &sweptsurface->point, sizeof (sweptsurface->point)))
@@ -17651,38 +17667,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
       pass ();
     else
       fail ("SWEPTSURFACE.silhouettes [Dwg_3DSOLID_silhouette*] * %u num_silhouettes", count);
-  }
-  {
-    BITCODE_BL size_pathdata;
-    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "size_pathdata", &size_pathdata, NULL)
-        && size_pathdata == sweptsurface->size_pathdata)
-      pass ();
-    else
-      fail ("SWEPTSURFACE.size_pathdata [BL] %u != %u", sweptsurface->size_pathdata, size_pathdata);
-    size_pathdata++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "size_pathdata", &size_pathdata, 0)
-        && size_pathdata == sweptsurface->size_pathdata)
-      pass ();
-    else
-      fail ("SWEPTSURFACE.size_pathdata [BL] set+1 %u != %u", sweptsurface->size_pathdata, size_pathdata);
-    sweptsurface->size_pathdata--;
-
-  }
-  {
-    BITCODE_BL size_sweepdata;
-    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "size_sweepdata", &size_sweepdata, NULL)
-        && size_sweepdata == sweptsurface->size_sweepdata)
-      pass ();
-    else
-      fail ("SWEPTSURFACE.size_sweepdata [BL] %u != %u", sweptsurface->size_sweepdata, size_sweepdata);
-    size_sweepdata++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "size_sweepdata", &size_sweepdata, 0)
-        && size_sweepdata == sweptsurface->size_sweepdata)
-      pass ();
-    else
-      fail ("SWEPTSURFACE.size_sweepdata [BL] set+1 %u != %u", sweptsurface->size_sweepdata, size_sweepdata);
-    sweptsurface->size_sweepdata--;
-
   }
   {
     BITCODE_B solid;
@@ -17771,6 +17755,22 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         pass ();
     else
         fail ("SWEPTSURFACE.sweepdata [TF]");
+  }
+  {
+    BITCODE_BL sweepdata_size;
+    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "sweepdata_size", &sweepdata_size, NULL)
+        && sweepdata_size == sweptsurface->sweepdata_size)
+      pass ();
+    else
+      fail ("SWEPTSURFACE.sweepdata_size [BL] %u != %u", sweptsurface->sweepdata_size, sweepdata_size);
+    sweepdata_size++;
+    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "sweepdata_size", &sweepdata_size, 0)
+        && sweepdata_size == sweptsurface->sweepdata_size)
+      pass ();
+    else
+      fail ("SWEPTSURFACE.sweepdata_size [BL] set+1 %u != %u", sweptsurface->sweepdata_size, sweepdata_size);
+    sweptsurface->sweepdata_size--;
+
   }
   {
     BITCODE_BD twist_angle;
@@ -21480,38 +21480,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_BL shsw_size_text;
-    if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_size_text", &shsw_size_text, NULL)
-        && shsw_size_text == acsh_sweep_class->shsw_size_text)
-      pass ();
-    else
-      fail ("ACSH_SWEEP_CLASS.shsw_size_text [BL] %u != %u", acsh_sweep_class->shsw_size_text, shsw_size_text);
-    shsw_size_text++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_size_text", &shsw_size_text, 0)
-        && shsw_size_text == acsh_sweep_class->shsw_size_text)
-      pass ();
-    else
-      fail ("ACSH_SWEEP_CLASS.shsw_size_text [BL] set+1 %u != %u", acsh_sweep_class->shsw_size_text, shsw_size_text);
-    acsh_sweep_class->shsw_size_text--;
-
-  }
-  {
-    BITCODE_BL shsw_size_text2;
-    if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_size_text2", &shsw_size_text2, NULL)
-        && shsw_size_text2 == acsh_sweep_class->shsw_size_text2)
-      pass ();
-    else
-      fail ("ACSH_SWEEP_CLASS.shsw_size_text2 [BL] %u != %u", acsh_sweep_class->shsw_size_text2, shsw_size_text2);
-    shsw_size_text2++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_size_text2", &shsw_size_text2, 0)
-        && shsw_size_text2 == acsh_sweep_class->shsw_size_text2)
-      pass ();
-    else
-      fail ("ACSH_SWEEP_CLASS.shsw_size_text2 [BL] set+1 %u != %u", acsh_sweep_class->shsw_size_text2, shsw_size_text2);
-    acsh_sweep_class->shsw_size_text2--;
-
-  }
-  {
     BITCODE_TF shsw_text;
     if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_text", &shsw_text, NULL)
         && !memcmp (&shsw_text, &acsh_sweep_class->shsw_text, sizeof (acsh_sweep_class->shsw_text)))
@@ -21526,6 +21494,38 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_SWEEP_CLASS.shsw_text2 [TF]");
+  }
+  {
+    BITCODE_BL shsw_text2_size;
+    if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_text2_size", &shsw_text2_size, NULL)
+        && shsw_text2_size == acsh_sweep_class->shsw_text2_size)
+      pass ();
+    else
+      fail ("ACSH_SWEEP_CLASS.shsw_text2_size [BL] %u != %u", acsh_sweep_class->shsw_text2_size, shsw_text2_size);
+    shsw_text2_size++;
+    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_text2_size", &shsw_text2_size, 0)
+        && shsw_text2_size == acsh_sweep_class->shsw_text2_size)
+      pass ();
+    else
+      fail ("ACSH_SWEEP_CLASS.shsw_text2_size [BL] set+1 %u != %u", acsh_sweep_class->shsw_text2_size, shsw_text2_size);
+    acsh_sweep_class->shsw_text2_size--;
+
+  }
+  {
+    BITCODE_BL shsw_text_size;
+    if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_text_size", &shsw_text_size, NULL)
+        && shsw_text_size == acsh_sweep_class->shsw_text_size)
+      pass ();
+    else
+      fail ("ACSH_SWEEP_CLASS.shsw_text_size [BL] %u != %u", acsh_sweep_class->shsw_text_size, shsw_text_size);
+    shsw_text_size++;
+    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_text_size", &shsw_text_size, 0)
+        && shsw_text_size == acsh_sweep_class->shsw_text_size)
+      pass ();
+    else
+      fail ("ACSH_SWEEP_CLASS.shsw_text_size [BL] set+1 %u != %u", acsh_sweep_class->shsw_text_size, shsw_text_size);
+    acsh_sweep_class->shsw_text_size--;
+
   }
   {
     BITCODE_BD start_draft_dist;
@@ -34492,27 +34492,27 @@ static int test_VBA_PROJECT (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_VBA_PROJECT *restrict vba_project = obj->tio.object->tio.VBA_PROJECT;
   {
-    BITCODE_TF bytes;
-    if (dwg_dynapi_entity_value (vba_project, "VBA_PROJECT", "bytes", &bytes, NULL)
-        && !memcmp (&bytes, &vba_project->bytes, sizeof (vba_project->bytes)))
+    BITCODE_TF data;
+    if (dwg_dynapi_entity_value (vba_project, "VBA_PROJECT", "data", &data, NULL)
+        && !memcmp (&data, &vba_project->data, sizeof (vba_project->data)))
         pass ();
     else
-        fail ("VBA_PROJECT.bytes [TF]");
+        fail ("VBA_PROJECT.data [TF]");
   }
   {
-    BITCODE_RL num_bytes;
-    if (dwg_dynapi_entity_value (vba_project, "VBA_PROJECT", "num_bytes", &num_bytes, NULL)
-        && num_bytes == vba_project->num_bytes)
+    BITCODE_RL data_size;
+    if (dwg_dynapi_entity_value (vba_project, "VBA_PROJECT", "data_size", &data_size, NULL)
+        && data_size == vba_project->data_size)
       pass ();
     else
-      fail ("VBA_PROJECT.num_bytes [RL] %u != %u", vba_project->num_bytes, num_bytes);
-    num_bytes++;
-    if (dwg_dynapi_entity_set_value (vba_project, "VBA_PROJECT", "num_bytes", &num_bytes, 0)
-        && num_bytes == vba_project->num_bytes)
+      fail ("VBA_PROJECT.data_size [RL] %u != %u", vba_project->data_size, data_size);
+    data_size++;
+    if (dwg_dynapi_entity_set_value (vba_project, "VBA_PROJECT", "data_size", &data_size, 0)
+        && data_size == vba_project->data_size)
       pass ();
     else
-      fail ("VBA_PROJECT.num_bytes [RL] set+1 %u != %u", vba_project->num_bytes, num_bytes);
-    vba_project->num_bytes--;
+      fail ("VBA_PROJECT.data_size [RL] set+1 %u != %u", vba_project->data_size, data_size);
+    vba_project->data_size--;
 
   }
   {

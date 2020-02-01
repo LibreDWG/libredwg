@@ -11412,13 +11412,13 @@ dwg_ent_ole2frame_set_mode (dwg_ent_ole2frame *restrict frame,
 /** Returns ole2frame data length
  */
 BITCODE_BL
-dwg_ent_ole2frame_get_data_length (const dwg_ent_ole2frame *restrict frame,
-                                   int *restrict error)
+dwg_ent_ole2frame_get_data_size (const dwg_ent_ole2frame *restrict frame,
+                                 int *restrict error)
 {
   if (frame)
     {
       *error = 0;
-      return frame->data_length;
+      return frame->data_size;
     }
   else
     {
@@ -11452,13 +11452,13 @@ dwg_ent_ole2frame_get_data (const dwg_ent_ole2frame *restrict frame,
 void
 dwg_ent_ole2frame_set_data (dwg_ent_ole2frame *restrict frame,
                             const char *restrict data,
-                            const BITCODE_BL data_length, int *restrict error)
+                            const BITCODE_BL data_size, int *restrict error)
 {
   if (frame)
     {
       *error = 0;
       frame->data = (char *)data;
-      frame->data_length = data_length;
+      frame->data_size = data_size;
     }
   else
     {

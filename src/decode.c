@@ -3861,7 +3861,7 @@ pt2        (35.27188116753285, -22.39344715050545, 0.0) [11]
   // next, see the MS-CFB format
   dat->bit = 0;
   dat->byte = 0;
-  dat->size = _obj->data_length;
+  dat->size = _obj->data_size;
   dat->chain = (unsigned char *)&_obj->data[0x80];
   // TODO
 

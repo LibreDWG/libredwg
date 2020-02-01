@@ -2537,7 +2537,7 @@ BS,	DXF 71
 BS,	DXF 72
 @item lock_aspect
 RC,	DXF 73
-@item data_length
+@item data_size
 BL,	DXF 90
 @item data
 TF,	DXF 310
@@ -2566,7 +2566,7 @@ struct _dwg_object_entity*
 BS,	DXF 70
 @item mode
 BS
-@item data_length
+@item data_size
 BL,	DXF 90
 @item data
 TF,	DXF 310
@@ -3159,13 +3159,13 @@ BS,	DXF 72
 BL,	DXF 90
 @item sweep_entity_id
 BL,	DXF 90
-@item size_sweepdata
+@item sweepdata_size
 BL,	DXF 90
 @item sweepdata
 TF,	DXF 310
 @item path_entity_id
 BL,	DXF 90
-@item size_pathdata
+@item pathdata_size
 BL,	DXF 90
 @item pathdata
 TF,	DXF 310
@@ -3864,13 +3864,13 @@ BL,	DXF 91
 3BD,	DXF 10
 @item shsw_bl92
 BL,	DXF 92
-@item shsw_size_text
+@item shsw_text_size
 BL,	DXF 90
 @item shsw_text
 TF,	DXF 310
 @item shsw_bl93
 BL,	DXF 93
-@item shsw_size_text2
+@item shsw_text2_size
 BL,	DXF 90
 @item shsw_text2
 TF,	DXF 310
@@ -6596,10 +6596,10 @@ struct _dwg_object_object*
 
 @item parent
 struct _dwg_object_object*
-@item num_bytes
-RL
-@item bytes
-TF
+@item data_size
+RL,	DXF 90
+@item data
+TF,	DXF 310
 
 @end vtable
 @end indentedblock
@@ -8310,7 +8310,7 @@ BD
 @item data_string
 TV
 @item data_date
-TV
+TF
 @item data_point
 2RD
 @item data_3dpoint

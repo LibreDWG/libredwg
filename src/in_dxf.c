@@ -5951,9 +5951,9 @@ new_object (char *restrict name, char *restrict dxfname,
           else if (pair->code == 90 && obj->fixedtype == DWG_TYPE_OLE2FRAME)
             {
               Dwg_Entity_OLE2FRAME *_o = obj->tio.entity->tio.OLE2FRAME;
-              _o->data_length = pair->value.l;
+              _o->data_size = pair->value.l;
               _o->data = xcalloc (pair->value.l, 1);
-              LOG_TRACE ("OLE2FRAME.data_length = %ld [BL 90]\n", pair->value.l);
+              LOG_TRACE ("OLE2FRAME.data_size = %ld [BL 90]\n", pair->value.l);
             }
           else if (pair->code == 90 && obj->fixedtype == DWG_TYPE_PERSSUBENTMANAGER)
             {
@@ -5981,12 +5981,12 @@ new_object (char *restrict name, char *restrict dxfname,
               const char *pos = pair->value.s;
               unsigned char *s = (unsigned char *)&_o->data[written];
               assert (_o->data);
-              if (blen + written > _o->data_length)
+              if (blen + written > _o->data_size)
                 {
                   dxf_free_pair (pair);
                   LOG_ERROR ("OLE2FRAME.data overflow: %u + written %u > "
-                             "data_length: %u",
-                             blen, written, _o->data_length);
+                             "data_size: %u",
+                             blen, written, _o->data_size);
                   return NULL;
                 }
               for (unsigned _i = 0; _i < blen; _i++)
@@ -5996,7 +5996,7 @@ new_object (char *restrict name, char *restrict dxfname,
                 }
               written += blen;
               LOG_TRACE ("OLE2FRAME.data += %u (%u/%u) [TF 310]\n", blen,
-                         written, _o->data_length);
+                         written, _o->data_size);
             }
           else if (pair->code == 1
                    && (strEQc (name, "_3DSOLID") || strEQc (name, "BODY")

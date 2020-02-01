@@ -6,7 +6,7 @@ api_process (dwg_object *obj)
 {
   int error;
   BITCODE_BS type, mode;
-  BITCODE_BL data_length;
+  BITCODE_BL data_size;
   BITCODE_RC lock_aspect;
   char *data, *data1;
 
@@ -16,7 +16,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (ole2frame, OLE2FRAME, mode, BS, mode);
   CHK_ENTITY_TYPE (ole2frame, OLE2FRAME, lock_aspect, RC, lock_aspect);
 
-  CHK_ENTITY_TYPE_W_OLD (ole2frame, OLE2FRAME, data_length, BL, data_length);
+  CHK_ENTITY_TYPE_W_OLD (ole2frame, OLE2FRAME, data_size, BL, data_size);
   // CHK_ENTITY_TYPE_W_OLD (ole2frame, OLE2FRAME, data, RC*, data);
   if (!dwg_dynapi_entity_value (ole2frame, "OLE2FRAME", "data", &data, NULL))
     fail ("OLE2FRAME.data");
@@ -24,7 +24,7 @@ api_process (dwg_object *obj)
   // TODO wrong dynapi with TF?
   if (error || data != data1
 #if 0
-      || memcmp (&data, &data1, data_length)
+      || memcmp (&data, &data1, data_size)
 #endif
   )
     fail ("TODO: dynapi data: %p, old api data: %p", data, data1);

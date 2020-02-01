@@ -1738,8 +1738,8 @@ typedef struct _dwg_entity_OLEFRAME
 
   BITCODE_BS flag;
   BITCODE_BS mode;
-  BITCODE_BL data_length;
-  char     * data;
+  BITCODE_BL data_size;
+  BITCODE_TF data;
 } Dwg_Entity_OLEFRAME;
 
 /**
@@ -1929,7 +1929,7 @@ typedef struct _dwg_object_BLOCK_HEADER
   BITCODE_RL num_inserts;
   BITCODE_TV description;
   BITCODE_BL preview_size; /* no DXF. BLL? */
-  char     * preview;      /* DXF 310. Called PreviewIcon */
+  BITCODE_TF preview;      /* DXF 310. Called PreviewIcon */
   BITCODE_BS insert_units;
   BITCODE_B explodable;
   BITCODE_RC block_scaling;
@@ -2387,13 +2387,13 @@ typedef struct _dwg_entity_OLE2FRAME
   BITCODE_BS type;         /*!< DXF 71, 1: Link, 2: Embedded, 3: Static */
   BITCODE_BS mode;         /*!< r2000+ DXF 72, tile_mode, 0: mspace, 1: pspace */
   BITCODE_RC lock_aspect;  /*!< r2000+ DXF 73, 0 or 1 (locked) */
-  BITCODE_BL data_length;  /*!< DXF 90 */
-  char     * data;         /*!< DXF 310, the binary object data */
+  BITCODE_BL data_size;    /*!< DXF 90 */
+  BITCODE_TF data;         /*!< DXF 310, the binary object data */
   // embedded into data, not yet decoded:
   // the MS-CFB (ole2 stream) starts at 0x80 in data
   // before is probably:
   BITCODE_BS oleversion;   /*!< DXF 70, always 2 */
-  char     * oleclient;    /*!< DXF 3, e.g. OLE or Paintbrush Picture */
+  BITCODE_TF oleclient;    /*!< DXF 3, e.g. OLE or Paintbrush Picture */
   BITCODE_3BD pt1;         /*!< DXF 10, upper left corner */
   BITCODE_3BD pt2;         /*!< DXF 11, lower right corner */
 } Dwg_Entity_OLE2FRAME;
@@ -2929,8 +2929,8 @@ typedef struct _dwg_object_VBA_PROJECT
 {
   struct _dwg_object_object *parent;
 
-  BITCODE_RL num_bytes;
-  BITCODE_TF bytes;
+  BITCODE_RL data_size;
+  BITCODE_TF data;
 } Dwg_Object_VBA_PROJECT;
 
 
@@ -3038,7 +3038,7 @@ typedef struct _dwg_TABLE_value
   BITCODE_BL data_long;
   BITCODE_BD data_double;
   BITCODE_TV data_string;
-  char     * data_date;
+  BITCODE_TF data_date;
   BITCODE_2RD data_point;
   BITCODE_3RD data_3dpoint;
   BITCODE_BL unit_type;
@@ -4529,10 +4529,10 @@ typedef struct _dwg_entity_SWEPTSURFACE
   BITCODE_BL class_version; /*!< DXF 90 */
 
   BITCODE_BL sweep_entity_id; // 90
-  BITCODE_BL size_sweepdata; // 90
+  BITCODE_BL sweepdata_size; // 90
   BITCODE_TF sweepdata; // 310
   BITCODE_BL path_entity_id; // 90
-  BITCODE_BL size_pathdata; // 90
+  BITCODE_BL pathdata_size; // 90
   BITCODE_TF pathdata; // 310
   BITCODE_BD* sweep_entity_transmatrix; // 40
   BITCODE_BD* path_entity_transmatrix; // 41
@@ -4980,10 +4980,10 @@ typedef struct _dwg_object_ACSH_SWEEP_CLASS
   BITCODE_BL shsw_bl91;       /*!< DXF 91 */
   BITCODE_3BD basept;         /*!< DXF 10 */
   BITCODE_BL shsw_bl92;       /*!< DXF 92 */
-  BITCODE_BL shsw_size_text;  /*!< DXF 90 */
+  BITCODE_BL shsw_text_size;  /*!< DXF 90 */
   BITCODE_TF shsw_text;       /*!< DXF 310 */
   BITCODE_BL shsw_bl93;       /*!< DXF 93 */
-  BITCODE_BL shsw_size_text2; /*!< DXF 90 */
+  BITCODE_BL shsw_text2_size; /*!< DXF 90 */
   BITCODE_TF shsw_text2;      /*!< DXF 310 */
   BITCODE_BD draft_angle;       /*!< DXF 42 0.0 */
   BITCODE_BD start_draft_dist;  /*!< DXF 43 0.0 */

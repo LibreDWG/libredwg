@@ -8,6 +8,7 @@
     FIELD_B (preview_exists, 0);
     if (ent->preview_exists)
       {
+#ifndef IS_JSON
         VERSIONS (R_13, R_2007)
           {
             // or DXF 92 for all PROXY vector preview data with classes
@@ -17,6 +18,7 @@
           {
             FIELD_BLL (preview_size, 160);
           }
+#endif
         if ((int)ent->preview_size >= 0 && ent->preview_size < 210210)
           {
             FIELD_BINARY (preview, ent->preview_size, 310);
@@ -79,7 +81,7 @@
     }
 
   // TODO:
-  // group 92 num_proxydata
+  // group 92 proxydata_size
   // group 310 proxydata
   // color as FIELD_ENC (DXF, ENCODE)
 

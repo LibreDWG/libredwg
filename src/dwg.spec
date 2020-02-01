@@ -2206,11 +2206,13 @@ DWG_ENTITY (OLEFRAME)
   }
 
   ENCODER {
-    if (FIELD_VALUE (data_length) && !FIELD_VALUE (data))
-      FIELD_VALUE (data_length) = 0;
+    if (FIELD_VALUE (data_size) && !FIELD_VALUE (data))
+      FIELD_VALUE (data_size) = 0;
   }
-  FIELD_BL (data_length, 90);
-  FIELD_TF (data, FIELD_VALUE (data_length), 310);
+#ifndef IS_JSON
+  FIELD_BL (data_size, 90);
+#endif
+  FIELD_BINARY (data, FIELD_VALUE (data_size), 310);
 
   COMMON_ENTITY_HANDLE_DATA;
 
@@ -2513,7 +2515,9 @@ DWG_OBJECT (BLOCK_HEADER)
       FIELD_NUM_INSERTS (num_inserts, RL, 0);
       FIELD_T (description, 4);
 
+#ifndef IS_JSON
       FIELD_BL (preview_size, 0);
+#endif
       VALUEOUTOFBOUNDS (preview_size, 0xa00000)
       else
         {
@@ -4155,11 +4159,13 @@ DWG_ENTITY (OLE2FRAME)
     DXF { FIELD_RC (lock_aspect, 73); }
   }
   ENCODER {
-    if (FIELD_VALUE (data_length) && !FIELD_VALUE (data))
-      FIELD_VALUE (data_length) = 0;
+    if (FIELD_VALUE (data_size) && !FIELD_VALUE (data))
+      FIELD_VALUE (data_size) = 0;
   }
-  FIELD_BL (data_length, 90);
-  FIELD_BINARY (data, FIELD_VALUE (data_length), 310);
+#ifndef IS_JSON
+  FIELD_BL (data_size, 90);
+#endif
+  FIELD_BINARY (data, FIELD_VALUE (data_size), 310);
 #ifdef IS_DECODER
   dwg_decode_ole2 (_obj);
 #endif
@@ -4334,7 +4340,7 @@ DWG_OBJECT_END
       break; \
     case 8: /* kDate */ \
       FIELD_BL (value.data_size, 0); \
-      FIELD_TF (value.data_date, FIELD_VALUE (value.data_size), 0); \
+      FIELD_BINARY (value.data_date, FIELD_VALUE (value.data_size), 0); \
       break; \
     case 16: /* kPoint */ \
       FIELD_BL (value.data_size, 0); \
@@ -5498,8 +5504,10 @@ DWG_OBJECT (VBA_PROJECT)
 
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbVbaProject)
-  FIELD_RL (num_bytes, 0);
-  FIELD_TF (bytes, FIELD_VALUE (num_bytes), 0);
+#ifndef IS_JSON
+  FIELD_RL (data_size, 90);
+#endif
+  FIELD_BINARY (data, FIELD_VALUE (data_size), 310);
 
   START_OBJECT_HANDLE_STREAM;
 
@@ -6939,8 +6947,8 @@ DWG_ENTITY (REVOLVEDSURFACE)
   VALUEOUTOFBOUNDS (class_version, 10)
 
   FIELD_BL (id, 90);
-  //FIELD_BL (size_bindata, 90);
-  //FIELD_BINARY (bindata, _obj->size_bindata, 310);
+  //FIELD_BL (bindata_size, 90);
+  //FIELD_BINARY (bindata, FIELD_VALUE (bindata_size), 310);
   FIELD_3BD (axis_point, 10);
   FIELD_3BD (axis_vector, 11);
   FIELD_BD (revolve_angle, 40);
@@ -6972,13 +6980,17 @@ DWG_ENTITY (SWEPTSURFACE)
   VALUEOUTOFBOUNDS (class_version, 10)
 
   FIELD_BL (sweep_entity_id, 90);
-  FIELD_BL (size_sweepdata, 90);
-  VALUEOUTOFBOUNDS (size_sweepdata, 5000)
-  FIELD_BINARY (sweepdata, _obj->size_sweepdata, 310);
+#ifndef IS_JSON
+  FIELD_BL (sweepdata_size, 90);
+#endif
+  VALUEOUTOFBOUNDS (sweepdata_size, 5000)
+  FIELD_BINARY (sweepdata, FIELD_VALUE (sweepdata_size), 310);
   FIELD_BL (path_entity_id, 90);
-  FIELD_BL (size_pathdata, 90);
-  VALUEOUTOFBOUNDS (size_pathdata, 5000)
-  FIELD_BINARY (pathdata, _obj->size_pathdata, 310);
+#ifndef IS_JSON
+  FIELD_BL (pathdata_size, 90);
+#endif
+  VALUEOUTOFBOUNDS (pathdata_size, 5000)
+  FIELD_BINARY (pathdata, FIELD_VALUE (pathdata_size), 310);
   FIELD_VECTOR_N (sweep_entity_transmatrix, BD, 16, 40);
   FIELD_VECTOR_N (path_entity_transmatrix, BD, 16, 41);
   FIELD_BD (draft_angle, 42);
@@ -7203,11 +7215,15 @@ DWG_OBJECT (ACSH_SWEEP_CLASS)
   FIELD_BL (shsw_bl91, 91); //29
   FIELD_3BD (basept, 10); //0,0,0
   FIELD_BL (shsw_bl92, 92); //77
-  FIELD_BL (shsw_size_text, 90); //744
-  FIELD_BINARY (shsw_text, _obj->shsw_size_text, 310);
+#ifndef IS_JSON
+  FIELD_BL (shsw_text_size, 90); //744
+#endif
+  FIELD_BINARY (shsw_text, FIELD_VALUE (shsw_text_size), 310);
   FIELD_BL (shsw_bl93, 93); //77
-  FIELD_BL (shsw_size_text2, 90); //480
-  FIELD_BINARY (shsw_text2, _obj->shsw_size_text2, 310);
+#ifndef IS_JSON
+  FIELD_BL (shsw_text2_size, 90); //480
+#endif
+  FIELD_BINARY (shsw_text2, FIELD_VALUE (shsw_text2_size), 310);
   FIELD_BD (draft_angle, 42); //0.0
   FIELD_BD (start_draft_dist, 43); //0.0
   FIELD_BD (end_draft_dist, 44); //0.0
