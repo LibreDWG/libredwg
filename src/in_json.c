@@ -1471,6 +1471,8 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               free (obj->dxfname);
               obj->dxfname = json_string (dat, tokens);
               LOG_TRACE ("dxfname: %s\n", obj->dxfname)
+              if (!obj->dxfname)
+                obj->dxfname = strdup (name);
             }
           else if (strEQc (key, "index")) // TODO not TableCellContent_Attr
             {
