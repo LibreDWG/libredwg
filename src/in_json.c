@@ -102,6 +102,21 @@ static Bit_Chain *g_dat;
           memcpy (&_obj->nam, s, MIN (len, slen);                \
           LOG_TRACE (#nam ": %.*s\n", len, _obj->nam)            \
         }
+#define FIELD_T(nam, dxf)                                        \
+      else if (strEQc (key, #nam))                               \
+        {                                                        \
+           if (t->type == JSMN_STRING)                           \
+             _obj->nam = json_string (dat, tokens);              \
+           else                                                  \
+             tokens->index++;                                    \
+           LOG_TRACE (#nam ": %s\n", t->type == JSMN_STRING      \
+                      ? _obj->nam : "null")                      \
+        }
+#define FIELD_TIMERLL(nam, dxf)                                  \
+      else if (strEQc (key, #nam))                               \
+        {                                                        \
+          json_TIMERLL (dat, tokens, #nam, "TIMERLL", &_obj->nam); \
+        }
 
 #define FIELD_B(nam, dxf)   _FIELD_LONG (nam, B)
 #define FIELD_BB(nam, dxf)  _FIELD_LONG (nam, BB)
@@ -272,6 +287,24 @@ json_2DPOINT (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
   pt->x = json_float (dat, tokens);
   pt->y = json_float (dat, tokens);
   LOG_TRACE ("%s (%f, %f) [%s]\n", name, pt->x, pt->y, type);
+}
+
+static void
+json_TIMERLL (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
+              const char *restrict name, const char *restrict type,
+              BITCODE_TIMERLL *restrict tl)
+{
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  if (t->type != JSMN_ARRAY || t->size != 2)
+    {
+      LOG_ERROR ("JSON TIMERLL must be ARRAY of size 2")
+      return;
+    }
+  tokens->index++;
+  tl->days = json_long (dat, tokens);
+  tl->ms = json_long (dat, tokens);
+  LOG_TRACE ("%s (%u, %u) [%s]\n", name, (unsigned)tl->days,
+             (unsigned)tl->ms, type);
 }
 
 ATTRIBUTE_MALLOC
@@ -1685,6 +1718,7 @@ json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 {
   const char *section = "SummaryInfo";
   const jsmntok_t *t = &tokens->tokens[tokens->index];
+  struct Dwg_SummaryInfo *_obj = &dwg->summaryinfo;
   int size;
   if (t->type != JSMN_OBJECT)
     {
@@ -1698,10 +1732,83 @@ json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   tokens->index++;
   for (int i = 0; i < size; i++)
     {
+      int size1;
       char key[80];
       json_fixed_key (key, dat, tokens);
       t = &tokens->tokens[tokens->index];
-      json_advance_unknown (dat, tokens, 0);
+
+      if (strEQc (key, "num_props"))
+        {
+          if (t->type == JSMN_PRIMITIVE)
+            tokens->index++;
+          else
+            json_advance_unknown (dat, tokens, 0);
+        }
+      else if (strEQc (key, "props"))
+        {
+          if (t->type != JSMN_ARRAY)
+            {
+              LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s.%s ARRAY",
+                         t_typename[t->type], tokens->index, tokens->num_tokens, section, key);
+              json_advance_unknown (dat, tokens, 0);
+              return 0;
+            }
+          size1 = t->size;
+          LOG_TRACE ("\n%s pos:%d [%d members]\n--------------------\n", "SummaryInfo_Property",
+                     tokens->index, size);
+          _obj->props = calloc (size1, sizeof (Dwg_SummaryInfo_Property));
+          _obj->num_props = size1;
+          tokens->index++;
+          for (int j = 0; j < size1; j++)
+            {
+              tokens->index++; // OBJECT of 2
+              for (int k = 0; k < 2; k++)
+                {
+                  if (t->type == JSMN_STRING)
+                    _obj->props[j].key = json_string (dat, tokens);
+                  else if (t->type == JSMN_PRIMITIVE)
+                    tokens->index++;
+                  else
+                    json_advance_unknown (dat, tokens, 0);
+                  if (t->type == JSMN_STRING)
+                    _obj->props[j].value = json_string (dat, tokens);
+                  else if (t->type == JSMN_PRIMITIVE)
+                    tokens->index++;
+                  else
+                    json_advance_unknown (dat, tokens, 0);
+                  LOG_TRACE ("%s[%d] = (%s, %s)\n", key, j, _obj->props[j].key, _obj->props[j].value)
+                  tokens->index++;
+                }
+            }
+          // num_props array of objects
+          //FIELD_RS (num_props, 0);
+          //REPEAT (num_props, props, Dwg_SummaryInfo_Property)
+          //  REPEAT_BLOCK
+          //  FIELD_T (props[rcount1].key, 0);
+          //  FIELD_T (props[rcount1].value, 0);
+          //END_REPEAT_BLOCK
+          //END_REPEAT (props)
+          //json_advance_unknown (dat, tokens, 0);
+        }
+      FIELD_T (TITLE, 1)
+      FIELD_T (SUBJECT, 1)
+      FIELD_T (AUTHOR, 1)
+      FIELD_T (KEYWORDS, 1)
+      FIELD_T (COMMENTS, 1)
+      FIELD_T (LASTSAVEDBY, 1)
+      FIELD_T (REVISIONNUMBER, 1)
+      FIELD_T (HYPERLINKBASE, 1)
+      FIELD_TIMERLL (TDINDWG, 0)
+      FIELD_TIMERLL (TDCREATE, 0)
+      FIELD_TIMERLL (TDUPDATE, 0)
+      FIELD_RL (unknown1, 0)
+      FIELD_RL (unknown2, 0)
+      else
+        {
+          LOG_ERROR ("Unknown %s.%s ignored", section, key);
+          tokens->index++;
+        }
+      //json_advance_unknown (dat, tokens, 0);
     }
 
   LOG_TRACE ("End of %s\n", section)
