@@ -697,7 +697,7 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   const char *section = "CLASSES";
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   int size;
-  if (t->type != JSMN_ARRAY)
+  if (t->type != JSMN_ARRAY || dwg->num_classes)
     {
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s ARRAY",
                  t_typename[t->type], tokens->index, tokens->num_tokens, section);
@@ -1325,7 +1325,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   const char *section = "OBJECTS";
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   int size;
-  if (t->type != JSMN_ARRAY)
+  if (t->type != JSMN_ARRAY || dwg->num_objects)
     {
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s ARRAY",
                  t_typename[t->type], tokens->index, tokens->num_tokens, section);
