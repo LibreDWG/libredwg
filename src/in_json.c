@@ -1837,6 +1837,7 @@ json_AppInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       char key[80];
       json_fixed_key (key, dat, tokens);
+      LOG_TRACE ("%s\n", key)
       t = &tokens->tokens[tokens->index];
       json_advance_unknown (dat, tokens, 0);
     }
@@ -1867,6 +1868,7 @@ json_AppInfoHistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       char key[80];
       json_fixed_key (key, dat, tokens);
+      LOG_TRACE ("%s\n", key)
       t = &tokens->tokens[tokens->index];
       json_advance_unknown (dat, tokens, 0);
     }
@@ -1897,6 +1899,7 @@ json_FileDepList (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       char key[80];
       json_fixed_key (key, dat, tokens);
+      LOG_TRACE ("%s\n", key)
       t = &tokens->tokens[tokens->index];
       json_advance_unknown (dat, tokens, 0);
     }
@@ -1927,6 +1930,7 @@ json_Security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       char key[80];
       json_fixed_key (key, dat, tokens);
+      LOG_TRACE ("%s\n", key)
       t = &tokens->tokens[tokens->index];
       json_advance_unknown (dat, tokens, 0);
     }
@@ -1957,6 +1961,7 @@ json_RevHistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       char key[80];
       json_fixed_key (key, dat, tokens);
+      LOG_TRACE ("%s\n", key)
       t = &tokens->tokens[tokens->index];
       json_advance_unknown (dat, tokens, 0);
     }
@@ -1987,6 +1992,7 @@ json_ObjFreeSpace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       char key[80];
       json_fixed_key (key, dat, tokens);
+      LOG_TRACE ("%s\n", key)
       t = &tokens->tokens[tokens->index];
       json_advance_unknown (dat, tokens, 0);
     }
@@ -2001,6 +2007,7 @@ json_Template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                jsmntokens_t *restrict tokens)
 {
   const char *section = "Template";
+  struct Dwg_Template *_obj = &dwg->template;
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   int size;
   if (t->type != JSMN_OBJECT)
@@ -2018,7 +2025,17 @@ json_Template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       char key[80];
       json_fixed_key (key, dat, tokens);
       t = &tokens->tokens[tokens->index];
-      json_advance_unknown (dat, tokens, 0);
+      if (strEQc (key, "MEASUREMENT"))
+        {
+          _obj->MEASUREMENT = (BITCODE_BS)json_long (dat, tokens);
+          dwg->header_vars.MEASUREMENT = _obj->MEASUREMENT;
+          LOG_TRACE ("%s: %d\n", key, (int)_obj->MEASUREMENT)
+        }
+      else
+        {
+          LOG_TRACE ("%s\n", key);
+          json_advance_unknown (dat, tokens, 0);
+        }
     }
 
   LOG_TRACE ("End of %s\n", section)
@@ -2188,6 +2205,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
     }
 
+  LOG_TRACE ("\n")
   free (tokens.tokens);
   return 0;
 }
