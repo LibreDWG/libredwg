@@ -1438,6 +1438,8 @@ dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
   if (obj && !offset && value) // only if same obj
     {
       LOG_HANDLE ("object_map{%lX} = %u\n", value, obj->index);
+      assert (obj->parent);
+      assert (obj->parent->object_map);
       hash_set (obj->parent->object_map, value, (uint32_t)obj->index);
     }
 

@@ -25,6 +25,7 @@
 #include "common.h"
 #include "bits.h"
 #include "dwg.h"
+#include "hash.h"
 #include "decode.h"
 #include "dynapi.h"
 #include "in_dxf.h"
@@ -1904,6 +1905,18 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   tokens.tokens = calloc (tokens.num_tokens + 1024, sizeof (jsmntok_t));
   if (!tokens.tokens)
     return DWG_ERR_OUTOFMEM;
+
+  dwg->object_map = hash_new (tokens.num_tokens / 10000);
+  if (!dwg->object_map) // we are obviously on a tiny system
+    {
+      dwg->object_map = hash_new (1024);
+      if (!dwg->object_map)
+        {
+          LOG_ERROR ("Out of memory");
+          return DWG_ERR_OUTOFMEM;
+        }
+    }
+  dwg->dirty_refs = 1;
 
   jsmn_init (&parser); // reset pos to 0
   error = jsmn_parse (&parser, (char *)dat->chain, dat->size, tokens.tokens,
