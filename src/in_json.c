@@ -1359,6 +1359,13 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               int len = t->end - t->start;
               int objsize = 16;
+              if (len >= 80)
+                {
+                  LOG_ERROR ("Illegal %s name %.*s", key, len,
+                             &dat->chain[t->start])
+                  tokens->index++;
+                  break;
+                }
               memcpy (name, &dat->chain[t->start], len);
               name[len] = '\0';
               is_entity = 0;
@@ -1393,6 +1400,13 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               int len = t->end - t->start;
               int objsize;
+              if (len >= 80)
+                {
+                  LOG_ERROR ("Illegal %s name %.*s", key, len,
+                             &dat->chain[t->start])
+                  tokens->index++;
+                  break;
+                }
               memcpy (name, &dat->chain[t->start], len);
               name[len] = '\0';
               is_entity = 1;
