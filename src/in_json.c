@@ -849,34 +849,24 @@ find_sizefield (const Dwg_DYNAPI_field *restrict fields,
     BITCODE_##type num;                                                 \
     const BITCODE_##type _size = (BITCODE_##type) size;                 \
     memcpy (&num, &((char*)_obj)[f->offset], f->size);                  \
-    if (num != _size)                                                   \
+    /* numitems is for 2 arrays, keep the smaller */                    \
+    if (strNE (f->name, "numitems") || num > _size)                     \
       {                                                                 \
-        /* numitems is for 2 arrays, keep the smaller */                \
-        if (strNE (f->name, "numitems") || num > _size)                 \
-          {                                                             \
-            /* We don't emit a JSON num_reactors field */               \
-            if (strNE (key, "reactors"))                                \
-              {                                                         \
-                LOG_WARN ("Fixup %s " FORMAT_##type " to array size %ld", \
-                          f->name, num, size);                          \
-              }                                                         \
-            memcpy (&((char*)_obj)[f->offset], &size, f->size);         \
-          }                                                             \
-        else                                                            \
-          {                                                             \
-            LOG_WARN ("Inconsistent DICTIONARY.numitems for texts[] "   \
-                      "and itemhandles[] size " FORMAT_##type, num);    \
-          }                                                             \
+        LOG_TRACE ("%s: " FORMAT_##type, f->name, _size);               \
+        memcpy (&((char*)_obj)[f->offset], &size, f->size);             \
       }                                                                 \
-    else                                                                \
-      LOG_TRACE ("Check %s " FORMAT_##type " ok\n", f->name, num)       \
+    else if (num != _size)                                              \
+      {                                                                 \
+        LOG_WARN ("Inconsistent DICTIONARY.numitems for texts[] "       \
+                  "and itemhandles[] size " FORMAT_##type, num);        \
+      }                                                                 \
   }                                                                     \
   break;
 
 static void
-json_update_numfield (void *restrict _obj,
-                      const Dwg_DYNAPI_field *restrict fields,
-                      const char *restrict key, const long size)
+json_set_numfield (void *restrict _obj,
+                   const Dwg_DYNAPI_field *restrict fields,
+                   const char *restrict key, const long size)
 {
   const Dwg_DYNAPI_field *f = find_numfield (fields, key);
   if (f)
@@ -898,31 +888,23 @@ json_update_numfield (void *restrict _obj,
         LOG_TRACE ("Check ref[] 4 ok\n")
     }
   else
-    LOG_WARN ("Unknown num_%s field, cannot check against size", key);
+    LOG_ERROR ("Unknown num_%s field", key);
 }
 #undef FIXUP_NUMFIELD
 
 #define FIXUP_SIZEFIELD(type)                                           \
   {                                                                     \
-    BITCODE_##type num;                                                 \
     const BITCODE_##type _size = (BITCODE_##type) len;                  \
-    memcpy (&num, &((char*)_obj)[f->offset], f->size);                  \
-    if (num != _size)                                                   \
-      {                                                                 \
-        LOG_WARN ("Fixup sizefield %s " FORMAT_##type " to %lu",        \
-                  f->name, num, len);                                   \
-        memcpy (&((char*)_obj)[f->offset], &_size, f->size);            \
-      }                                                                 \
-    else                                                                \
-      LOG_TRACE ("Check %s " FORMAT_##type " ok\n", f->name, num)       \
+    LOG_TRACE ("%s: " FORMAT_##type "\n", f->name, _size);              \
+    memcpy (&((char*)_obj)[f->offset], &_size, f->size);                \
   }                                                                     \
   break;
 
 // e.g. for TF strings: preview + preview_size.
 static void
-json_update_sizefield (void *restrict _obj,
-                      const Dwg_DYNAPI_field *restrict fields,
-                      const char *restrict key, const size_t len)
+json_set_sizefield (void *restrict _obj,
+                    const Dwg_DYNAPI_field *restrict fields,
+                    const char *restrict key, const size_t len)
 {
   const Dwg_DYNAPI_field *f = find_sizefield (fields, key);
   if (f)
@@ -938,7 +920,7 @@ json_update_sizefield (void *restrict _obj,
    }
  else
    {
-     LOG_WARN ("Unknown %s size field, cannot check against size", key);
+     LOG_ERROR ("Unknown %s size field", key);
    }
 }
 #undef FIXUP_SIZE
@@ -970,6 +952,12 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               double num = json_float (dat, tokens);
               LOG_TRACE ("%s: " FORMAT_RD " [%s]\n", key, num, f->type);
               dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
+            }
+          // all numfields are calculated form array sizes
+          else if (t->type == JSMN_PRIMITIVE && memBEGINc (key, "num_"))
+            {
+              long num = json_long (dat, tokens);
+              LOG_TRACE ("%s: %ld [%s] (ignored)\n", key, num, f->type);
             }
           else if (t->type == JSMN_PRIMITIVE
                    && (strEQc (f->type, "RC") || strEQc (f->type, "B")
@@ -1008,7 +996,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                       LOG_TRACE ("%s: '%.*s' [%s] (binary)\n", key, blen, buf, f->type);
                     }
                   free (str);
-                  json_update_sizefield (_obj, fields, key, blen);
+                  json_set_sizefield (_obj, fields, key, blen);
                   // set the ptr directly, no alloc, no conversion.
                   old = &((char*)_obj)[f->offset];
                   memcpy (old, &buf, f->size);
@@ -1028,7 +1016,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                       memset (&str[len + 1], 0, f->size - len - 1);
                     }
                   LOG_TRACE ("%s: \"%s\" [%s %d]\n", key, str, f->type, f->size);
-                  json_update_sizefield (_obj, fields, key, len);
+                  json_set_sizefield (_obj, fields, key, len);
                   old = &((char*)_obj)[f->offset];
                   memcpy (old, &str, sizeof (char*));
                   //dwg_dynapi_field_set_value (dwg, _obj, f, &str, 1);
@@ -1080,7 +1068,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             {
               int size1 = t->size;
               BITCODE_H *hdls = calloc (size1, sizeof (BITCODE_H));
-              json_update_numfield (_obj, fields, key, size1);
+              json_set_numfield (_obj, fields, key, size1);
               tokens->index++;
               for (int k = 0; k < size1; k++)
                 {
@@ -1096,7 +1084,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             {
               int size1 = t->size;
               BITCODE_3DPOINT *pts = calloc (size1, sizeof (BITCODE_3BD));
-              json_update_numfield (_obj, fields, key, size1);
+              json_set_numfield (_obj, fields, key, size1);
               tokens->index++;
               for (int k = 0; k < size1; k++)
                 {
@@ -1108,7 +1096,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             {
               int size1 = t->size;
               BITCODE_2DPOINT *pts = calloc (size1, sizeof (BITCODE_2RD));
-              json_update_numfield (_obj, fields, key, size1);
+              json_set_numfield (_obj, fields, key, size1);
               tokens->index++;
               for (int k = 0; k < size1; k++)
                 {
@@ -1120,7 +1108,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             {
               int size1 = t->size;
               BITCODE_BD *nums = calloc (size1, sizeof (BITCODE_BD));
-              json_update_numfield (_obj, fields, key, size1);
+              json_set_numfield (_obj, fields, key, size1);
               tokens->index++;
               for (int k = 0; k < size1; k++)
                 {
@@ -1133,7 +1121,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             {
               int size1 = t->size;
               BITCODE_TV *elems = calloc (size1, sizeof (BITCODE_TV));
-              json_update_numfield (_obj, fields, key, size1);
+              json_set_numfield (_obj, fields, key, size1);
               tokens->index++;
               for (int k = 0; k < size1; k++)
                 {
@@ -1167,7 +1155,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 }
               LOG_TRACE ("new subclass %s %s [%d elems with size %d]\n", name, subclass,
                          num_elems, size_elem);
-              json_update_numfield (_obj, fields, key, num_elems);
+              json_set_numfield (_obj, fields, key, num_elems);
               elems = calloc (num_elems, size_elem);
               tokens->index++;
               // array of structs
