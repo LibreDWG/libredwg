@@ -1702,7 +1702,7 @@ dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
               LOG_INFO ("Fixup Class %s item_class_id to %s for %s\n",
                         klass->dxfname, "OBJECT", obj->name);
               klass->item_class_id = 0x1f2;
-              if (strNE (klass->dxfname, obj->dxfname))
+              if (!klass->dxfname || strNE (klass->dxfname, obj->dxfname))
                 {
                   free (klass->dxfname);
                   klass->dxfname = strdup (obj->dxfname);
