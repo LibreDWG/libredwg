@@ -926,20 +926,13 @@ find_sizefield (const Dwg_DYNAPI_field *restrict fields,
 #define FIXUP_NUMFIELD(type)                                                  \
   {                                                                           \
     BITCODE_##type num;                                                       \
-    const BITCODE_##type _size = (BITCODE_##type)size;                        \
+    BITCODE_##type _size = (BITCODE_##type)size;                              \
     memcpy (&num, &((char *)_obj)[f->offset], f->size);                       \
     /* numitems is for 2 arrays, keep the smaller */                          \
-    if (strNE (f->name, "numitems") || num > _size)                           \
-      {                                                                       \
-        LOG_TRACE ("%s: " FORMAT_##type, f->name, _size);                     \
-        memcpy (&((char *)_obj)[f->offset], &size, f->size);                  \
-      }                                                                       \
-    else if (num != _size)                                                    \
-      {                                                                       \
-        LOG_WARN ("Inconsistent DICTIONARY.numitems for texts[] "             \
-                  "and itemhandles[] size " FORMAT_##type,                    \
-                  num);                                                       \
-      }                                                                       \
+    if (strEQ (f->name, "numitems") && num != _size)                          \
+      _size = MIN (num, _size);                                               \
+    LOG_TRACE ("%s: " FORMAT_##type "\n", f->name, _size);                    \
+    memcpy (&((char *)_obj)[f->offset], &_size, f->size);                     \
   }                                                                           \
   break;
 
@@ -1047,8 +1040,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           else if (t->type == JSMN_PRIMITIVE
                    && (memBEGINc (key, "num_") || strEQc (key, "numitems")))
             {
-              long num = json_long (dat, tokens);
-              LOG_TRACE ("%s: %ld [%s] (ignored)\n", key, num, f->type);
+              tokens->index++;
+              LOG_TRACE ("%s: (ignored)\n", key);
             }
           else if (t->type == JSMN_PRIMITIVE
                    && (strEQc (f->type, "RC") || strEQc (f->type, "B")
@@ -1216,6 +1209,10 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             {
               int size1 = t->size;
               BITCODE_TV *elems = calloc (size1, sizeof (BITCODE_TV));
+              const Dwg_DYNAPI_field *numf = find_numfield (fields, key);
+              /* enforce numitems for texts[] to override MIN with 0 inside */
+              if (memBEGINc (name, "DICTIONARY") && strEQc (key, "texts"))
+                memcpy (&((char *)_obj)[numf->offset], &size1, numf->size);
               json_set_numfield (_obj, fields, key, size1);
               tokens->index++;
               for (int k = 0; k < size1; k++)
@@ -1224,6 +1221,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   LOG_TRACE ("%s[%d]: \"%s\" [%s]\n", key, k, elems[k],
                              f->type);
                 }
+              if (!size1)
+                LOG_TRACE ("%s: [%s] empty\n", key, f->type);
               dwg_dynapi_field_set_value (dwg, _obj, f, &elems, 1);
             }
           // subclass arrays:
