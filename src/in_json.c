@@ -1044,7 +1044,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
             }
           // all numfields are calculated form array sizes
-          else if (t->type == JSMN_PRIMITIVE && memBEGINc (key, "num_"))
+          else if (t->type == JSMN_PRIMITIVE
+                   && (memBEGINc (key, "num_") || strEQc (key, "numitems")))
             {
               long num = json_long (dat, tokens);
               LOG_TRACE ("%s: %ld [%s] (ignored)\n", key, num, f->type);
