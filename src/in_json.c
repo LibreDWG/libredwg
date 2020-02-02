@@ -107,7 +107,8 @@ static Bit_Chain *g_dat;
 #define FIELD_T(nam, dxf)                                                     \
   else if (strEQc (key, #nam))                                                \
   {                                                                           \
-    LOG_TRACE (#nam ": \"%.*s\"\n", t->end - t->start, &dat->chain[t->start]); \
+    LOG_TRACE (#nam ": \"%.*s\"\n", t->end - t->start,                        \
+               &dat->chain[t->start]);                                        \
     if (t->type == JSMN_STRING)                                               \
       {                                                                       \
         if (dwg->header.version >= R_2007)                                    \
@@ -120,15 +121,16 @@ static Bit_Chain *g_dat;
   }
 #define FIELD_T32(nam, dxf)                                                   \
   else if (strEQc (key, #nam))                                                \
-    {                                                                         \
-      LOG_TRACE (#nam ": \"%.*s\"\n", t->end - t->start, &dat->chain[t->start]); \
-      if (t->type == JSMN_STRING)                                             \
-        {                                                                     \
-          _obj->nam = (BITCODE_T32)json_wstring (dat, tokens);                \
-        }                                                                     \
-      else                                                                    \
-        json_advance_unknown (dat, tokens, 0);                                \
-    }
+  {                                                                           \
+    LOG_TRACE (#nam ": \"%.*s\"\n", t->end - t->start,                        \
+               &dat->chain[t->start]);                                        \
+    if (t->type == JSMN_STRING)                                               \
+      {                                                                       \
+        _obj->nam = (BITCODE_T32)json_wstring (dat, tokens);                  \
+      }                                                                       \
+    else                                                                      \
+      json_advance_unknown (dat, tokens, 0);                                  \
+  }
 #define FIELD_TIMERLL(nam, dxf)                                               \
   else if (strEQc (key, #nam))                                                \
   {                                                                           \
@@ -255,7 +257,7 @@ json_wstring (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
       return NULL;
     }
   tokens->index++;
-  return bit_utf8_to_TU ((char*)&dat->chain[t->start]);
+  return bit_utf8_to_TU ((char *)&dat->chain[t->start]);
 }
 
 ATTRIBUTE_MALLOC
@@ -836,6 +838,131 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   LOG_TRACE ("End of %s\n", section)
   tokens->index--;
   return 0;
+}
+
+static void
+json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+          jsmntokens_t *restrict tokens,
+          Dwg_Object_Object *restrict obj)
+{
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  int isize = -1;
+  long size = 0;
+  obj->eed = calloc (t->size, sizeof (Dwg_Eed));
+  obj->num_eed = t->size;
+  LOG_TRACE ("num_eed: " FORMAT_BL" [BL]\n", obj->num_eed);
+  tokens->index++; // array of objects
+  for (unsigned i = 0; i < obj->num_eed; i++)
+    {
+      char key[80];
+      t = &tokens->tokens[tokens->index];
+      if (t->type == JSMN_OBJECT)
+        {
+          tokens->index++; // hash of size, handle, code, value
+          for (int j = 0; j < t->size; j++)
+            {
+              json_fixed_key (key, dat, tokens);
+              if (strEQc (key, "size"))
+                {
+                  size = json_long (dat, tokens);
+                  isize = (int)i;
+                  LOG_TRACE ("eed[%u].size %ld\n", i, size);
+                  obj->eed[i].size = (BITCODE_BS)size;
+                  obj->eed[i].data = calloc (size + 8, 1);
+                }
+              else if (strEQc (key, "handle"))
+                {
+                  BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, "eed[i].handle", NULL, -1);
+                  memcpy (&obj->eed[i].handle, &hdl->handleref, sizeof (Dwg_Handle));
+                  if (isize != (int)i || isize > (int)obj->num_eed)
+                    {
+                      LOG_ERROR ("Missing eed[%u].size field %d or overflow at %s", i, isize, key)
+                      break;
+                    }
+                }
+              else if (strEQc (key, "code"))
+                {
+                  long code = json_long (dat, tokens);
+                  if (isize != (int)i)
+                    obj->eed[i].data = calloc (size + 8, 1); // overallocate
+                  obj->eed[i].data->code = (BITCODE_RC)code;
+                  LOG_TRACE ("eed[%u].data.code %ld\n", i, code);
+                }
+              else if (strEQc (key, "value"))
+                {
+                  Dwg_Eed_Data *data = obj->eed[i].data;
+                  if (!data)
+                    {
+                      LOG_ERROR ("Missing eed[%u].code field", i)
+                      break;
+                    }
+                  switch (data->code)
+                    {
+                    case 0:
+                      {
+                        char *s = json_string (dat, tokens);
+                        int len = strlen (s);
+                        memcpy (&data->u.eed_0.string, s, len + 1);
+                        data->u.eed_0.codepage = dwg->header.codepage;
+                        data->u.eed_0.length = len;
+                        LOG_TRACE ("eed[%u].data.value \"%s\"\n", i, s);
+                      }
+                      break;
+                    case 2:
+                      data->u.eed_2.byte = (BITCODE_RC)json_long (dat, tokens);
+                      LOG_TRACE ("eed[%u].data.value %d\n", i, data->u.eed_2.byte);
+                      break;
+                    case 3:
+                      data->u.eed_3.layer = json_long (dat, tokens);
+                      LOG_TRACE ("eed[%u].data.value %d\n", i, data->u.eed_3.layer);
+                      break;
+                    case 4:
+                      {
+                        long len;
+                        char *s = json_binary (dat, tokens, "eed", &len);
+                        memcpy (&data->u.eed_4.data, s, len);
+                        data->u.eed_4.length = len;
+                        //LOG_TRACE ("eed[%u].data.value \"%s\"\n", i, s);
+                        break;
+                      }
+                    case 5:
+                      data->u.eed_5.entity = json_long (dat, tokens);
+                      LOG_TRACE ("eed[%u].data.value %ld\n", i, (long)data->u.eed_5.entity);
+                      break;
+                    case 10:
+                    case 11:
+                    case 12:
+                    case 13:
+                    case 14:
+                    case 15:
+                      {
+                        BITCODE_3BD pt;
+                        json_3DPOINT (dat, tokens, "eed", "3RD", &pt);
+                        memcpy (&data->u.eed_10.point, &pt, 24);
+                      }
+                      break;
+                    case 40:
+                    case 41:
+                    case 42:
+                      data->u.eed_40.real = json_float (dat, tokens);
+                      LOG_TRACE ("eed[%u].data.value %f\n", i, data->u.eed_40.real);
+                      break;
+                    case 70:
+                      data->u.eed_70.rs = (BITCODE_RS)json_long (dat, tokens);
+                      LOG_TRACE ("eed[%u].data.value %d\n", i, (int)data->u.eed_70.rs);
+                      break;
+                    case 71:
+                      data->u.eed_71.rl = (BITCODE_RL)json_long (dat, tokens);
+                      LOG_TRACE ("eed[%u].data.value %d\n", i, (int)data->u.eed_71.rl);
+                      break;
+                    default:
+                      break;
+                    }
+                }
+            }
+        }
+    }
+  return;
 }
 
 static const Dwg_DYNAPI_field *
@@ -1645,6 +1772,11 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               LOG_TRACE ("unknown_bits: %.*s\n", t->end - t->start,
                          &dat->chain[t->start])
             }
+          else if (strEQc (key, "eed") && !obj->tio.object->num_eed
+                   && t->type == JSMN_ARRAY)
+            {
+              json_eed (dat, dwg, tokens, obj->tio.object);
+            }
           else
             // search_field:
             {
@@ -1846,13 +1978,13 @@ json_R2004_Header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RL (section_array_size, 0)
       FIELD_RL (gap_array_size, 0)
       FIELD_RLx (crc32, 0)
-      // clang-format on
-      // end of encrypted 0x6c header
-      else
-        {
-          LOG_ERROR ("Unknown %s.%s ignored", section, key);
-          tokens->index++;
-        }
+          // clang-format on
+          // end of encrypted 0x6c header
+          else
+      {
+        LOG_ERROR ("Unknown %s.%s ignored", section, key);
+        tokens->index++;
+      }
     }
 
   LOG_TRACE ("End of %s\n", section)
@@ -2107,8 +2239,10 @@ json_FileDepList (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                       t = &tokens->tokens[tokens->index];
                       if (strEQc (key, "timestamp"))
                         {
-                          _obj->files[j].timestamp = (BITCODE_RL)json_long (dat, tokens);
-                          LOG_TRACE ("%s: " FORMAT_RL "\n", key, _obj->files[j].timestamp)
+                          _obj->files[j].timestamp
+                              = (BITCODE_RL)json_long (dat, tokens);
+                          LOG_TRACE ("%s: " FORMAT_RL "\n", key,
+                                     _obj->files[j].timestamp)
                         }
                       // clang-format off
                       FIELD_T32 (files[j].filename, 0)

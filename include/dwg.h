@@ -5136,7 +5136,7 @@ typedef struct _dwg_entity_eed_data
     } eed_3;
     struct { /* 4 (1004) binary */
       BITCODE_RC length;
-      char data[1];
+      char data[1]; // inlined
     } eed_4;
     struct { /* 5 (1005) entity */
       BITCODE_RLL entity;
