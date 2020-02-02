@@ -107,12 +107,28 @@ static Bit_Chain *g_dat;
 #define FIELD_T(nam, dxf)                                                     \
   else if (strEQc (key, #nam))                                                \
   {                                                                           \
+    LOG_TRACE (#nam ": \"%.*s\"\n", t->end - t->start, &dat->chain[t->start]); \
     if (t->type == JSMN_STRING)                                               \
-      _obj->nam = json_string (dat, tokens);                                  \
+      {                                                                       \
+        if (dwg->header.version >= R_2007)                                    \
+          _obj->nam = (BITCODE_T)json_wstring (dat, tokens);                  \
+        else                                                                  \
+          _obj->nam = json_string (dat, tokens);                              \
+      }                                                                       \
     else                                                                      \
-      tokens->index++;                                                        \
-    LOG_TRACE (#nam ": %s\n", t->type == JSMN_STRING ? _obj->nam : "null")    \
+      json_advance_unknown (dat, tokens, 0);                                  \
   }
+#define FIELD_T32(nam, dxf)                                                   \
+  else if (strEQc (key, #nam))                                                \
+    {                                                                         \
+      LOG_TRACE (#nam ": \"%.*s\"\n", t->end - t->start, &dat->chain[t->start]); \
+      if (t->type == JSMN_STRING)                                             \
+        {                                                                     \
+          _obj->nam = (BITCODE_T32)json_wstring (dat, tokens);                \
+        }                                                                     \
+      else                                                                    \
+        json_advance_unknown (dat, tokens, 0);                                \
+    }
 #define FIELD_TIMERLL(nam, dxf)                                               \
   else if (strEQc (key, #nam))                                                \
   {                                                                           \
@@ -225,6 +241,21 @@ json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
   key[len] = '\0';
   tokens->index++;
   return key;
+}
+
+ATTRIBUTE_MALLOC
+static BITCODE_TU
+json_wstring (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
+{
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  if (t->type != JSMN_STRING)
+    {
+      LOG_ERROR ("Expected JSON STRING");
+      json_advance_unknown (dat, tokens, 0);
+      return NULL;
+    }
+  tokens->index++;
+  return bit_utf8_to_TU ((char*)&dat->chain[t->start]);
 }
 
 ATTRIBUTE_MALLOC
@@ -2012,8 +2043,10 @@ json_FileDepList (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   jsmntokens_t *restrict tokens)
 {
   const char *section = "FileDepList";
+  struct Dwg_FileDepList *_obj = &dwg->filedeplist;
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   int size;
+
   if (t->type != JSMN_OBJECT)
     {
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
@@ -2032,7 +2065,78 @@ json_FileDepList (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       json_fixed_key (key, dat, tokens);
       LOG_TRACE ("%s\n", key)
       t = &tokens->tokens[tokens->index];
-      json_advance_unknown (dat, tokens, 0);
+      if (strEQc (key, "features")) // TV[]
+        {
+          if (t->type != JSMN_ARRAY)
+            json_advance_unknown (dat, tokens, 0);
+          else
+            {
+              int size1 = t->size;
+              _obj->features = calloc (size1, sizeof (BITCODE_TV));
+              _obj->num_features = size1;
+              tokens->index++;
+              for (int j = 0; j < size1; j++)
+                {
+                  json_fixed_key (key, dat, tokens);
+                  LOG_TRACE ("%s\n", key)
+                  t = &tokens->tokens[tokens->index];
+                  if (t->type == JSMN_STRING)
+                    _obj->features[j] = json_string (dat, tokens);
+                  else if (t->type == JSMN_PRIMITIVE)
+                    tokens->index++;
+                  else
+                    json_advance_unknown (dat, tokens, 0);
+                }
+            }
+        }
+      else if (strEQc (key, "files"))
+        {
+          if (t->type != JSMN_ARRAY)
+            json_advance_unknown (dat, tokens, 0);
+          else
+            {
+              int size1 = t->size;
+              _obj->files = calloc (size1, sizeof (Dwg_FileDepList_Files));
+              _obj->num_files = size1;
+              tokens->index++;
+              for (int j = 0; j < size1; j++)
+                {
+                  int keys = t->size;
+                  for (int k = 0; k < keys; j++)
+                    {
+                      json_fixed_key (key, dat, tokens);
+                      t = &tokens->tokens[tokens->index];
+                      if (strEQc (key, "timestamp"))
+                        {
+                          _obj->files[j].timestamp = (BITCODE_RL)json_long (dat, tokens);
+                          LOG_TRACE ("%s: " FORMAT_RL "\n", key, _obj->files[j].timestamp)
+                        }
+                      // clang-format off
+                      FIELD_T32 (files[j].filename, 0)
+                      FIELD_T32 (files[j].filepath, 0)
+                      FIELD_T32 (files[j].fingerprint, 0)
+                      FIELD_T32 (files[j].version, 0)
+                      FIELD_RL (files[j].feature_index, 0)
+                      //FIELD_RL (files[j].timestamp, 0)
+                      FIELD_RL (files[j].filesize, 0)
+                      FIELD_RL (files[j].affects_graphics, 0)
+                      FIELD_RL (files[j].refcount, 0)
+                      else
+                        {
+                          LOG_TRACE ("%s\n", key);
+                          json_advance_unknown (dat, tokens, 0);
+                        }
+                      // clang-format on
+                    }
+                  tokens->index++;
+                }
+            }
+        }
+      else
+        {
+          LOG_TRACE ("%s\n", key)
+          json_advance_unknown (dat, tokens, 0);
+        }
     }
 
   LOG_TRACE ("End of %s\n", section)
