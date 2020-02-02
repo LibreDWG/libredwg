@@ -2312,7 +2312,8 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       = jsmn_parse (&parser, (char *)dat->chain, dat->size, NULL, 0);
   if (tokens.num_tokens <= 0)
     {
-      if (parser.pos > 10)
+      const int remaining = dat->size - parser.pos;
+      if (parser.pos > 10 && remaining > 10)
         {
           char err[21];
           memcpy (&err, &dat->chain[parser.pos - 10], 20);
@@ -2321,8 +2322,10 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                      parser.pos, err);
         }
       else
-        LOG_ERROR ("Invalid json. jsmn error at pos: %u (%.*s ...)",
-                   parser.pos, 10, &dat->chain[parser.pos]);
+        {
+          LOG_ERROR ("Invalid json. jsmn error at pos: %u (%.*s ...)",
+                     parser.pos, remaining, &dat->chain[parser.pos]);
+        }
       return DWG_ERR_INVALIDDWG;
     }
   LOG_TRACE ("  num_tokens: %ld\n", tokens.num_tokens);
@@ -2349,7 +2352,8 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                       (unsigned int)tokens.num_tokens);
   if (error < 0)
     {
-      if (parser.pos > 10)
+      const int remaining = dat->size - parser.pos;
+      if (parser.pos > 10 && remaining > 10)
         {
           char err[21];
           memcpy (&err, &dat->chain[parser.pos - 10], 20);
@@ -2359,10 +2363,12 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                      error, parser.toknext, parser.pos, err);
         }
       else
-        LOG_ERROR ("Invalid json. jsmn error %d at the %u-th token, pos: %u "
-                   "(%.*s ...)",
-                   error, parser.toknext, parser.pos, 10,
-                   &dat->chain[parser.pos]);
+        {
+          LOG_ERROR ("Invalid json. jsmn error %d at the %u-th token, pos: %u "
+                     "(%.*s ...)",
+                     error, parser.toknext, parser.pos, remaining,
+                     &dat->chain[parser.pos]);
+        }
       free (tokens.tokens);
       return DWG_ERR_INVALIDDWG;
     }
