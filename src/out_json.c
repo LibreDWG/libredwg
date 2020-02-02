@@ -1405,7 +1405,14 @@ json_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // clang-format off
   #include "filedeplist.spec"
   // clang-format on
-  ENDRECORD ();
+  if (!_obj->num_features && !_obj->num_files)
+    {
+      ENDHASH;
+    }
+  else
+    {
+      ENDRECORD ();
+    }
   return 0;
 }
 
