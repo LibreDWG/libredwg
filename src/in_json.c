@@ -548,8 +548,7 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               if (strEQ (version, version_codes[v]))
                 {
-                  dwg->header.version = dwg->header.from_version = v;
-                  dat->version = dat->from_version = dwg->header.version;
+                  dat->from_version = dwg->header.from_version = v;
                   // is_utf = dat->version >= R_2007;
                   LOG_TRACE ("HEADER.version = dat->version = %s\n", version);
                   /*
@@ -2341,6 +2340,8 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
     }
   dwg->dirty_refs = 1;
+  // we cannot write >= R_2004 yet. avoid widestrings for now
+  dat->version = dwg->header.version = R_2000;
 
   jsmn_init (&parser); // reset pos to 0
   error = jsmn_parse (&parser, (char *)dat->chain, dat->size, tokens.tokens,
