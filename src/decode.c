@@ -3800,7 +3800,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
 
 /** OL2FRAME.data potentially contains as 128 byte of custom specific data:
   BITCODE_BS oleversion;   DXF 70, always 2
-  char     * oleclient;    DXF 3, e.g. OLE or Paintbrush Picture
+  BOTCODE_TF oleclient;    DXF 3, e.g. OLE or Paintbrush Picture
   BITCODE_3RD pt1;         DXF 10, upper left corner
   BITCODE_3RD pt2;         DXF 11, lower right corner
 

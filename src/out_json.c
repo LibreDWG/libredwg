@@ -72,7 +72,7 @@ static char* _path_field(const char *path);
   dat->bit--;                                                                 \
   PREFIX fprintf (dat->fh, "]\n")
 #define KEYs(nam) PREFIX fprintf (dat->fh, "\"%s\": ", nam)
-// FIXME strip path to field only
+// strip path to field only
 #define KEY(nam) PREFIX fprintf (dat->fh, "\"%s\": ", _path_field(#nam))
 #define HASH                                                                  \
   PREFIX fprintf (dat->fh, "{\n");                                            \
@@ -715,7 +715,8 @@ _prefix (Bit_Chain *dat)
     KEY (handle);                                                             \
     VALUE_H (obj->handle, 5);                                                 \
     _FIELD (size, RL, 0);                                                     \
-    _FIELD (bitsize, BL, 0);
+    _FIELD (bitsize, BL, 0);                                                  \
+    error |= json_eed (dat, obj->tio.object);
 
 #define DWG_OBJECT_END                                                        \
   return 0;                                                                   \
@@ -732,16 +733,72 @@ static char* _path_field(const char *path)
 }
 
 static int
+json_eed (Bit_Chain *restrict dat,
+          const Dwg_Object_Object *restrict obj)
+{
+  int error = 0;
+  if (!obj->num_eed)
+    return 0;
+  KEY (eed);
+  ARRAY;
+  for (BITCODE_BL i = 0; i < obj->num_eed; i++)
+    {
+      const Dwg_Eed* _obj = &obj->eed[i];
+      HASH;
+      if (_obj->size)
+        {
+          KEY (size); VALUE_RS (_obj->size, 0);
+          KEY (handle);
+          fprintf (dat->fh, FORMAT_H ",\n", ARGS_H (_obj->handle));
+        }
+      if (_obj->data)
+        {
+          const Dwg_Eed_Data *data = _obj->data;
+          KEY (code); VALUE_RS (data->code, 0);
+          KEY (value);
+          switch (data->code)
+            {
+            case 0: VALUE_TEXT (data->u.eed_0.string); break;
+            case 2: VALUE_RC (data->u.eed_2.byte, 0); break;
+            case 3: VALUE_RL (data->u.eed_3.layer, 0); break;
+            case 4: VALUE_BINARY (data->u.eed_4.data, data->u.eed_4.length, 0); break;
+            case 5: VALUE_RLL (data->u.eed_5.entity, 0); break;
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+            case 15:
+                    VALUE_3RD (data->u.eed_10.point, 0); break;
+            case 40:
+            case 41:
+            case 42:
+                    VALUE_RD (data->u.eed_40.real, 0); break;
+            case 70: VALUE_RS (data->u.eed_70.rs, 0); break;
+            case 71: VALUE_RL (data->u.eed_71.rl, 0); break;
+            default: VALUE_RC (0, 0);
+            }
+        }
+      NOCOMMA;
+      ENDHASH;
+    }
+  NOCOMMA;
+  ENDARRAY;
+  return error;
+}
+
+static int
 json_common_entity_data (Bit_Chain *restrict dat,
                          const Dwg_Object *restrict obj)
 {
-  Dwg_Object_Entity *ent;
+  Dwg_Object_Entity *ent, *_obj;
   // Dwg_Data *dwg = obj->parent;
-  Dwg_Object_Entity *_obj;
   int error = 0;
   BITCODE_BL vcount = 0;
   ent = obj->tio.entity;
   _obj = ent;
+
+  error |= json_eed (dat, (Dwg_Object_Object *)ent);
 
   // clang-format off
   #include "common_entity_handle_data.spec"
