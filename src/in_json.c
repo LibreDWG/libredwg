@@ -966,6 +966,120 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   return;
 }
 
+static void
+json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+            jsmntokens_t *restrict tokens,
+            Dwg_Object_XRECORD *restrict obj)
+{
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  Dwg_Resbuf *rbuf;
+  long size = 0;
+  obj->xdata = (Dwg_Resbuf *)calloc (1, sizeof (Dwg_Resbuf));
+  rbuf = obj->xdata;
+  obj->num_xdata = t->size;
+  LOG_TRACE ("num_xdata: " FORMAT_BL" [BL]\n", obj->num_xdata);
+  tokens->index++; // array of objects
+  for (unsigned i = 0; i < obj->num_xdata; i++)
+    {
+      char key[80];
+      t = &tokens->tokens[tokens->index];
+      if (t->type == JSMN_OBJECT)
+        {
+          Dwg_Resbuf *old = rbuf;
+          tokens->index++; // hash of type, value
+          for (int j = 0; j < t->size; j++)
+            {
+              json_fixed_key (key, dat, tokens);
+              if (strEQc (key, "type"))
+                {
+                  long type = json_long (dat, tokens);
+                  rbuf->type = (BITCODE_RS)type;
+                  LOG_TRACE ("xdata[%u].type %ld\n", i, type);
+                }
+              else if (strEQc (key, "value"))
+                {
+                  enum RES_BUF_VALUE_TYPE vtype = get_base_value_type (rbuf->type);
+                  switch (vtype)
+                    {
+                    case VT_STRING:
+                      {
+                        char *s = json_string (dat, tokens);
+                        int len = strlen (s);
+                        rbuf->value.str.u.data = s;
+                        rbuf->value.str.codepage = dwg->header.codepage;
+                        rbuf->value.str.size = len;
+                        LOG_TRACE ("xdata[%u].value \"%s\"\n", i, s);
+                      }
+                      break;
+                    case VT_BOOL:
+                    case VT_INT8:
+                      {
+                        long l = json_long (dat, tokens);
+                        rbuf->value.i8 = (BITCODE_RC) l;
+                        LOG_TRACE ("xdata[%u].value %ld\n", i, l);
+                      }
+                      break;
+                    case VT_INT16:
+                      {
+                        long l = json_long (dat, tokens);
+                        rbuf->value.i16 = (BITCODE_RS) l;
+                        LOG_TRACE ("xdata[%u].value %ld\n", i, l);
+                      }
+                      break;
+                    case VT_INT32:
+                      {
+                        long l = json_long (dat, tokens);
+                        rbuf->value.i32 = (BITCODE_RL) l;
+                        LOG_TRACE ("xdata[%u].value %ld\n", i, l);
+                      }
+                      break;
+                    case VT_INT64:
+                      {
+                        long l = json_long (dat, tokens);
+                        rbuf->value.i64 = (BITCODE_RLL) l;
+                        LOG_TRACE ("xdata[%u].value %ld\n", i, l);
+                      }
+                      break;
+                    case VT_REAL:
+                      rbuf->value.dbl = json_float (dat, tokens);
+                      LOG_TRACE ("xdata[%u].value %f\n", i, rbuf->value.dbl);
+                      break;
+                    case VT_POINT3D:
+                      {
+                        BITCODE_3BD pt;
+                        json_3DPOINT (dat, tokens, "xdata", "3RD", &pt);
+                        memcpy (&rbuf->value.pt, &pt, 24);
+                      }
+                      break;
+                    case VT_BINARY:
+                      {
+                        long len;
+                        char *s = json_binary (dat, tokens, "xdata", &len);
+                        rbuf->value.str.u.data = s;
+                        rbuf->value.str.size = len;
+                        break;
+                      }
+                    case VT_HANDLE:
+                    case VT_OBJECTID:
+                      {
+                        BITCODE_H hdl;
+                        hdl = json_HANDLE (dat, dwg, tokens, key, NULL, -1);
+                        memcpy (&rbuf->value.h, &hdl->handleref, sizeof (hdl->handleref));
+                      }
+                      break;
+                    case VT_INVALID:
+                    default:
+                      break;
+                    }
+                }
+            }
+          rbuf = (Dwg_Resbuf *)calloc (1, sizeof (Dwg_Resbuf));
+          old->next = rbuf;
+        }
+    }
+  return;
+}
+
 static const Dwg_DYNAPI_field *
 find_numfield (const Dwg_DYNAPI_field *restrict fields,
                const char *restrict key)
@@ -1166,7 +1280,9 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             }
           // all numfields are calculated form array sizes
           else if (t->type == JSMN_PRIMITIVE
-                   && (memBEGINc (key, "num_") || strEQc (key, "numitems")))
+                   && ((memBEGINc (key, "num_")
+                        && strNE (key, "num_databytes"))
+                       || strEQc (key, "numitems")))
             {
               tokens->index++;
               LOG_TRACE ("%s: (ignored)\n", key);
@@ -1360,6 +1476,10 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               if (!size1)
                 LOG_TRACE ("%s: [%s] empty\n", key, f->type);
               dwg_dynapi_field_set_value (dwg, _obj, f, &elems, 1);
+            }
+          else if (t->type == JSMN_ARRAY && strEQc (key, "xdata") && strEQc (name, "XRECORD"))
+            {
+              json_xdata (dat, dwg, tokens, _obj);
             }
           // subclass arrays:
           else if (t->type == JSMN_ARRAY && memBEGINc (f->type, "Dwg_"))
