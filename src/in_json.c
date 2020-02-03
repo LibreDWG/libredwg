@@ -779,6 +779,7 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         }
       keys = t->size;
       tokens->index++;
+      LOG_HANDLE ("\n-keys: %d\n", keys);
       for (int j = 0; j < keys; j++)
         {
           char key[80];
@@ -831,7 +832,7 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               LOG_TRACE ("Unknown CLASS key %s %.*s\n", key, t->end - t->start,
                          &dat->chain[t->start])
-              ++tokens->index;
+              json_advance_unknown (dat, tokens, 0);
             }
         }
     }
