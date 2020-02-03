@@ -907,6 +907,7 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                         data->u.eed_0.codepage = dwg->header.codepage;
                         data->u.eed_0.length = len;
                         LOG_TRACE ("eed[%u].data.value \"%s\"\n", i, s);
+                        free (s);
                       }
                       break;
                     case 2:
@@ -924,6 +925,7 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                         memcpy (&data->u.eed_4.data, s, len);
                         data->u.eed_4.length = len;
                         //LOG_TRACE ("eed[%u].data.value \"%s\"\n", i, s);
+                        free (s);
                         break;
                       }
                     case 5:
