@@ -55,8 +55,7 @@ bin_PROGRAMS     += dwgrewrite
 dist_man1_MANS   += $(srcdir)/dwgrewrite.1
 dwgrewrite_SOURCES = dwgrewrite.c
 if !DISABLE_DXF
-bin_PROGRAMS    += dxf2dwg
-noinst_PROGRAMS += dwgwrite
+bin_PROGRAMS    += dxf2dwg dwgwrite
 dist_man1_MANS  += $(srcdir)/dxf2dwg.1 $(srcdir)/dwgwrite.1
 dxf2dwg_SOURCES  = dxf2dwg.c
 dwgwrite_SOURCES   = dwgwrite.c
@@ -76,7 +75,7 @@ TESTS_ENVIRONMENT = \
  TESTPROG=''
 else
 TESTS_ENVIRONMENT = \
- PROGS='$(bin_PROGRAMS) dwg2dxf' \
+ PROGS='$(bin_PROGRAMS)' \
  datadir='$(top_srcdir)/test/test-data' \
  TESTPROG=''
 endif
@@ -95,6 +94,7 @@ CLEANFILES  = {example_,sample_}*.{bmp,ps,svg,dxf,log}
 if USE_WRITE
 CLEANFILES += {example_,sample_}*rewrite.{dwg,log}
 CLEANFILES += {example_,sample_}*.dwg
+CLEANFILES += example_*.{log1,log2}
 endif
 MAINTAINERCLEANFILES = *_flymake.[ch] *~ *.i
 

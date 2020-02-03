@@ -2,7 +2,7 @@
 # alive.test
 #
 # Copyright (C) 2010 Thien-Thi Nguyen
-# Copyright (C) 2018-2019 Free Software Foundation, Inc.
+# Copyright (C) 2018-2020 Free Software Foundation, Inc.
 #
 # This program is free software, licensed under the terms of the GNU
 # General Public License as published by the Free Software Foundation,
@@ -52,7 +52,8 @@ run ()
     dwg2dxf)    arg="-y $arg" ;;
     dwggrep)    arg="-i tekst $arg" ;;
     dxf2dwg)    arg="-y -v2 ${datadir}/$dwg.dxf" ;;
-    dwgwrite)   arg="-y -v2 ${datadir}/$dwg.dxf" ;;
+    dwgread)    arg="-v2 -o $dwg.json $arg" ;;
+    dwgwrite)   arg="-y -v2 $dwg.json" ;;
     #dwgrewrite) arg="-v2 $arg" ;;
     *)          arg="-v2 $arg" ;;
     esac
@@ -64,8 +65,12 @@ run ()
         top_builddir=..
         TESTPROG="@LTEXEC@"
     fi
-    # indxf still leaks, GH #151
+    # indxf and injson still leaks, GH #151, GH #197
     if test $bprog = dxf2dwg -a -n "@HAVE_ASAN@"
+    then
+       TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
+    fi
+    if test $bprog = dwgwrite -a -n "@HAVE_ASAN@"
     then
        TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
     fi

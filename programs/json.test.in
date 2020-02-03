@@ -1,7 +1,7 @@
 #!/bin/sh
 # json.test
 #
-# Copyright (C) 2018-2019 Free Software Foundation, Inc.
+# Copyright (C) 2018-2020 Free Software Foundation, Inc.
 #
 # This program is free software, licensed under the terms of the GNU
 # General Public License as published by the Free Software Foundation,
@@ -25,12 +25,39 @@ for d in $DATA; do
     rm "$b.json" 2>/dev/null
 done
 
+check_roundtrip() {
+    if [ -f "$dwg" -a -x dwgwrite ]
+    then
+        json=$(basename "$dwg" .dwg).json
+        tgt=$(basename "$dwg")
+        log1=$(basename "$dwg" .dwg).log1
+        log2=$(basename "$dwg" .dwg).log2
+        ../libtool --mode=execute ./dwgread -y -v2 -o "$json" "$dwg" 2>$log1 >/dev/null
+        ../libtool --mode=execute ./dwgwrite -y -v0 -o "$tgt" "$json" 2>/dev/null >/dev/null
+        ../libtool --mode=execute ./dwgread -v2 "$tgt" 2>$log2 >/dev/null
+        expect=$(egrep -c '^Add entity' "$log1")
+        got=$(egrep -c '^Add entity' "$log2")
+        rm "$json" "$tgt" 2>/dev/null
+        if [ "$got" = "$expect" ]
+        then
+            echo "$json" roundtrip ok
+            rm "$log1" "$log2" 2>/dev/null
+        else
+            echo "$json" roundtrip fail: "$expect vs $got" entities
+            #problems=$(expr 1 + $problems)
+            echo "expect=$expect" >$log
+            echo "got=$got" >>$log
+        fi
+    fi
+}
+
 for dwg in $DATA; do
     json="$(basename "$dwg" .dwg).json"
+    log="$json.log"
     dwg="${datadir}/$dwg.dwg"
     echo dwgread -Ojson -o"$json" "$dwg"
     # With --enable-debug fixup nan
-    if ../libtool --mode=execute ./dwgread -Ojson -o"$json" "$dwg" && \
+    if ../libtool --mode=execute ./dwgread -Ojson -o"$json" "$dwg" 2>/dev/null && \
        @JSON_SED_NAN@ "$json" && \
        $JQ . "$json" >"$json.log" 2>&1
     then
@@ -39,9 +66,10 @@ for dwg in $DATA; do
         cat "$json.log"
         problems=$(expr 1 + $problems)
     fi
+
     geojson="$(basename "$dwg" .dwg).geojson"
     echo dwgread -o"$geojson" "$dwg"
-    if ../libtool --mode=execute ./dwgread -Ogeojson -o"$geojson" "$dwg" && \
+    if ../libtool --mode=execute ./dwgread -Ogeojson -o"$geojson" "$dwg" 2>/dev/null && \
        @JSON_SED_NAN@ "$geojson" && \
        $JQ . "$geojson" >>"$json.log" 2>&1
     then
@@ -50,6 +78,8 @@ for dwg in $DATA; do
         cat "$json.log"
         problems=$(expr 1 + $problems)
     fi
+
+    check_roundtrip
 done
 
 if test x0 = x$problems ; then

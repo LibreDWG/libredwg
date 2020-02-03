@@ -158,7 +158,7 @@ dist-hook:
 
 CLEANFILES = check-dwg.log check-dwg-valgrind.log check-dxf.log \
              check-dwg.log~ check-dwg-valgrind.log~ check-dxf.log~ \
-	     *_20*.dxf *_r1*.dxf
+	     *_20*.dxf *_r1*.dxf example_*.dxf.log
 MAINTAINERCLEANFILES  = *~ *.log cover_db .analysis log logs-all.sh
 
 maintainer-clean-local:
