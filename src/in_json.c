@@ -1293,6 +1293,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   else
                     hdls[k] = dwg_add_handleref (dwg, 0, 0, NULL);
                 }
+              if (!size1)
+                LOG_TRACE ("%s: [%s] empty\n", key, f->type);
               dwg_dynapi_field_set_value (dwg, _obj, f, &hdls, 1);
             }
           else if (t->type == JSMN_ARRAY && strEQc (f->type, "3DPOINT*"))
@@ -1305,6 +1307,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 {
                   json_3DPOINT (dat, tokens, key, f->type, &pts[k]);
                 }
+              if (!size1)
+                LOG_TRACE ("%s: [%s] empty\n", key, f->type);
               dwg_dynapi_field_set_value (dwg, _obj, f, &pts, 1);
             }
           else if (t->type == JSMN_ARRAY && strEQc (f->type, "2RD*"))
@@ -1317,6 +1321,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 {
                   json_2DPOINT (dat, tokens, key, f->type, &pts[k]);
                 }
+              if (!size1)
+                LOG_TRACE ("%s: [%s] empty\n", key, f->type);
               dwg_dynapi_field_set_value (dwg, _obj, f, &pts, 1);
             }
           else if (t->type == JSMN_ARRAY && strEQc (f->type, "BD*"))
@@ -1330,6 +1336,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   nums[k] = json_float (dat, tokens);
                   LOG_TRACE ("%s[%d]: %f [%s]\n", key, k, nums[k], f->type);
                 }
+              if (!size1)
+                LOG_TRACE ("%s: [%s] empty\n", key, f->type);
               dwg_dynapi_field_set_value (dwg, _obj, f, &nums, 1);
             }
           else if (t->type == JSMN_ARRAY && strEQc (f->type, "TV*"))
@@ -1381,6 +1389,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               elems = calloc (num_elems, size_elem);
               tokens->index++;
               // array of structs
+              if (!num_elems)
+                LOG_TRACE ("%s: [%s] empty\n", key, f->type);
               for (int k = 0; k < num_elems; k++)
                 {
                   int keys;
