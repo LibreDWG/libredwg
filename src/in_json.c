@@ -1730,6 +1730,11 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                    && t->type == JSMN_PRIMITIVE)
             {
               obj->size = json_long (dat, tokens);
+              if (!obj->handle.value)
+                {
+                  LOG_ERROR ("Required %s.handle missing", name)
+                  return DWG_ERR_INVALIDDWG;
+                }
               LOG_TRACE ("size: %d\n", obj->size)
             }
           else if (strEQc (key, "bitsize") && !obj->bitsize)
