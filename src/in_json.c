@@ -1751,6 +1751,11 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   obj->handle.size = hdl->handleref.size;
                   obj->handle.value = hdl->handleref.value;
                 }
+              if (!obj->type) // TODO: We could eventually relax this
+                {
+                  LOG_ERROR ("Required %s.type missing", name)
+                  return DWG_ERR_INVALIDDWG;
+                }
             }
           else if (strEQc (key, "num_unknown_bits")
                    && memBEGINc (obj->name, "UNKNOWN_"))
