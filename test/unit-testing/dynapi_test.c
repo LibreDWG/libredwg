@@ -36575,22 +36575,6 @@ static int test_XRECORD (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_BL num_databytes;
-    if (dwg_dynapi_entity_value (xrecord, "XRECORD", "num_databytes", &num_databytes, NULL)
-        && num_databytes == xrecord->num_databytes)
-      pass ();
-    else
-      fail ("XRECORD.num_databytes [BL] %u != %u", xrecord->num_databytes, num_databytes);
-    num_databytes++;
-    if (dwg_dynapi_entity_set_value (xrecord, "XRECORD", "num_databytes", &num_databytes, 0)
-        && num_databytes == xrecord->num_databytes)
-      pass ();
-    else
-      fail ("XRECORD.num_databytes [BL] set+1 %u != %u", xrecord->num_databytes, num_databytes);
-    xrecord->num_databytes--;
-
-  }
-  {
     BITCODE_BL num_objid_handles;
     if (dwg_dynapi_entity_value (xrecord, "XRECORD", "num_objid_handles", &num_objid_handles, NULL)
         && num_objid_handles == xrecord->num_objid_handles)
@@ -36649,6 +36633,22 @@ static int test_XRECORD (const Dwg_Object *obj)
       pass ();
     else
       fail ("XRECORD.xdata [Dwg_Resbuf*] * %u num_xdata", count);
+  }
+  {
+    BITCODE_BL xdata_size;
+    if (dwg_dynapi_entity_value (xrecord, "XRECORD", "xdata_size", &xdata_size, NULL)
+        && xdata_size == xrecord->xdata_size)
+      pass ();
+    else
+      fail ("XRECORD.xdata_size [BL] %u != %u", xrecord->xdata_size, xdata_size);
+    xdata_size++;
+    if (dwg_dynapi_entity_set_value (xrecord, "XRECORD", "xdata_size", &xdata_size, 0)
+        && xdata_size == xrecord->xdata_size)
+      pass ();
+    else
+      fail ("XRECORD.xdata_size [BL] set+1 %u != %u", xrecord->xdata_size, xdata_size);
+    xrecord->xdata_size--;
+
   }
   return failed;
 }

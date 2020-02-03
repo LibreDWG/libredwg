@@ -913,8 +913,8 @@
     }                                                                         \
   LOG_TRACE ("num_inserts: %d [RC* 0]\n", FIELD_VALUE (num_inserts))
 
-#define FIELD_XDATA(name, size)                                               \
-  _obj->name = dwg_decode_xdata (dat, _obj, _obj->size)
+#define FIELD_XDATA(name, xdata_size)                                         \
+  _obj->name = dwg_decode_xdata (dat, _obj, _obj->xdata_size)
 
 #define REACTORS(code)                                                        \
   if (obj->tio.object->num_reactors > 0)                                      \

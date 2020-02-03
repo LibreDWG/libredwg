@@ -471,7 +471,7 @@ encode prefers raw over the data.
 
 XRECORD XDATA are very similar to the EED array, but internally it is
 a single linked-list, consisting of something like the EED data code
-+ value pairs. There's only one size, num_databytes, and only one handle
++ value pairs. There's only one size, xdata_size, and only one handle
 to the APPID, which handles this XRECORD XDATA.
 
 @node Functions

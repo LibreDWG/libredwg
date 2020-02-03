@@ -5427,9 +5427,9 @@ DWG_OBJECT (XRECORD)
       FIELD_BS (cloning_flags, 280);
     }
   }
-  FIELD_BL (num_databytes, 0);
-  //VALUEOUTOFBOUNDS (num_databytes, 0xf0000)
-  FIELD_XDATA (xdata, num_databytes);
+  FIELD_BL (xdata_size, 0);
+  //VALUEOUTOFBOUNDS (xdata_size, 0xf0000)
+  FIELD_XDATA (xdata, xdata_size);
 #ifndef IS_DXF
   SINCE (R_2000) {
     FIELD_BS (cloning_flags, 280);
@@ -7550,3 +7550,4 @@ DWG_OBJECT (DOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+

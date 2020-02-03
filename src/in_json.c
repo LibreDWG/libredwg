@@ -1280,9 +1280,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             }
           // all numfields are calculated form array sizes
           else if (t->type == JSMN_PRIMITIVE
-                   && ((memBEGINc (key, "num_")
-                        && strNE (key, "num_databytes"))
-                       || strEQc (key, "numitems")))
+                   && (memBEGINc (key, "num_") || strEQc (key, "numitems")))
             {
               tokens->index++;
               LOG_TRACE ("%s: (ignored)\n", key);

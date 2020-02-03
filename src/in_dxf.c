@@ -4105,13 +4105,13 @@ static Dxf_Pair *
 add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
            Dxf_Pair *restrict pair)
 {
-  BITCODE_BL num_xdata, num_databytes;
+  BITCODE_BL num_xdata, xdata_size;
   // add pairs to xdata linked list
   Dwg_Resbuf *rbuf;
   Dwg_Object_XRECORD *_obj = obj->tio.object->tio.XRECORD;
 
   num_xdata = _obj->num_xdata;
-  num_databytes = _obj->num_databytes;
+  xdata_size = _obj->xdata_size;
   rbuf = calloc (1, sizeof (Dwg_Resbuf));
   if (!rbuf)
     {
@@ -4134,7 +4134,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   else
     _obj->xdata = rbuf;
 
-  num_databytes += 2; // RS
+  xdata_size += 2; // RS
   rbuf->type = pair->code;
   switch (get_base_value_type (rbuf->type))
     {
@@ -4149,7 +4149,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         rbuf->value.str.u.data = strdup (pair->value.s);
         LOG_TRACE ("xdata[%d]: \"%s\" [%d]\n", num_xdata,
                    rbuf->value.str.u.data, rbuf->type);
-        num_databytes += 3 + rbuf->value.str.size;
+        xdata_size += 3 + rbuf->value.str.size;
       }
       LATER_VERSIONS
       {
@@ -4158,39 +4158,39 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           {
             rbuf->value.str.u.wdata = bit_utf8_to_TU (pair->value.s);
           }
-        num_databytes += 2 + 2 * rbuf->value.str.size;
+        xdata_size += 2 + 2 * rbuf->value.str.size;
       }
       break;
     case VT_REAL:
       rbuf->value.dbl = pair->value.d;
       LOG_TRACE ("xdata[%d]: %f [%d]\n", num_xdata, rbuf->value.dbl,
                  rbuf->type);
-      num_databytes += 8;
+      xdata_size += 8;
       break;
     case VT_BOOL:
     case VT_INT8:
       rbuf->value.i8 = pair->value.i;
       LOG_TRACE ("xdata[%d]: %d [%d]\n", num_xdata, (int)rbuf->value.i8,
                  rbuf->type);
-      num_databytes += 1;
+      xdata_size += 1;
       break;
     case VT_INT16:
       rbuf->value.i16 = pair->value.i;
       LOG_TRACE ("xdata[%d]: %d [%d]\n", num_xdata, (int)rbuf->value.i16,
                  rbuf->type);
-      num_databytes += 2;
+      xdata_size += 2;
       break;
     case VT_INT32:
       rbuf->value.i32 = pair->value.l;
       LOG_TRACE ("xdata[%d]: %ld [%d]\n", num_xdata, (long)rbuf->value.i32,
                  rbuf->type);
-      num_databytes += 4;
+      xdata_size += 4;
       break;
     case VT_INT64:
       rbuf->value.i64 = (BITCODE_BLL)pair->value.bll;
       LOG_TRACE ("xdata[%d]: " FORMAT_BLL " [%d]\n", num_xdata,
                  rbuf->value.i64, rbuf->type);
-      num_databytes += 8;
+      xdata_size += 8;
       break;
     case VT_POINT3D:
       rbuf->value.pt[0] = pair->value.d;
@@ -4200,7 +4200,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         return NULL;
       rbuf->value.pt[1] = pair->value.d;
       dxf_free_pair (pair);
-      num_databytes += 24;
+      xdata_size += 24;
       { // if 30
         long pos = bit_position (dat);
         pair = dxf_read_pair (dat);
@@ -4239,14 +4239,14 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
             sscanf (pos, "%2hhX", &s[i]);
             pos += 2;
           }
-        num_databytes += 1 + len;
+        xdata_size += 1 + len;
         LOG_TRACE ("xdata[%d]: ", num_xdata);
         // LOG_TRACE_TF (rbuf->value.str.u.data, rbuf->value.str.size);
       }
       break;
     case VT_HANDLE:
     case VT_OBJECTID:
-      num_databytes += 8;
+      xdata_size += 8;
       dwg_add_handle (&rbuf->value.h, 0, pair->value.u, obj);
       LOG_TRACE ("xdata[%d]: " FORMAT_H " [H %d]\n", num_xdata,
                  ARGS_H (rbuf->value.h), rbuf->type);
@@ -4259,7 +4259,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 
   num_xdata++;
   _obj->num_xdata = num_xdata;
-  _obj->num_databytes = num_databytes;
+  _obj->xdata_size = xdata_size;
   return pair;
 }
 

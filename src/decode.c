@@ -4632,7 +4632,7 @@ dwg_free_xdata_resbuf (Dwg_Resbuf *rbuf)
 // TODO: unify with eed[], use an array not linked list.
 static Dwg_Resbuf *
 dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
-                  BITCODE_BL num_databytes)
+                  BITCODE_BL xdata_size)
 {
   Dwg_Resbuf *rbuf, *root = NULL, *curr = NULL;
   unsigned char codepage;
@@ -4645,20 +4645,20 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
   cnt++;
 
   start_address = dat->byte;
-  end_address = start_address + (unsigned long int)num_databytes;
+  end_address = start_address + (unsigned long int)xdata_size;
   if (obj->parent && obj->parent->objid)
     {
       Dwg_Data *dwg = obj->parent->dwg;
       Dwg_Object *o = &dwg->object[obj->parent->objid];
-      if (num_databytes > o->size)
+      if (xdata_size > o->size)
         {
-          LOG_ERROR ("Invalid XRECORD.num_databytes " FORMAT_BL, num_databytes);
-          obj->num_databytes = 0;
+          LOG_ERROR ("Invalid XRECORD.xdata_size " FORMAT_BL, xdata_size);
+          obj->xdata_size = 0;
           return NULL;
         }
     }
   LOG_INSANE ("xdata:\n");
-  LOG_INSANE_TF (&dat->chain[dat->byte], (int)num_databytes);
+  LOG_INSANE_TF (&dat->chain[dat->byte], (int)xdata_size);
   curr_address = dat->byte;
 
   while (dat->byte < end_address)
@@ -4716,7 +4716,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
                 if (!rbuf->value.str.u.wdata)
                   {
                     LOG_ERROR ("Out of memory");
-                    obj->num_databytes = 0;
+                    obj->xdata_size = 0;
                     obj->num_xdata = 0;
                     if (root)
                       {
@@ -4812,7 +4812,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
         default:
           LOG_ERROR ("Invalid group code in xdata[%u]: %d", num_xdata,
                      rbuf->type)
-          LOG_WARN ("xdata Read %lu, expected %d", dat->byte - start_address, obj->num_databytes);
+          LOG_WARN ("xdata Read %lu, expected %d", dat->byte - start_address, obj->xdata_size);
           dwg_free_xdata_resbuf (rbuf);
           if (curr)
             curr->next = NULL;
@@ -4834,7 +4834,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
       curr_address = dat->byte;
     }
   if (curr_address < end_address)
-    LOG_WARN ("xdata Read %lu, expected %d", dat->byte - start_address, obj->num_databytes);
+    LOG_WARN ("xdata Read %lu, expected %d", dat->byte - start_address, obj->xdata_size);
   obj->num_xdata = num_xdata;
   return root;
 }

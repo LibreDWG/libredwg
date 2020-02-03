@@ -5054,7 +5054,8 @@ dwg_ent_vertex_pface_face_set_vertind (dwg_ent_vert_pface_face *restrict face,
  *                    FUNCTIONS FOR XRECORD OBJECT                     *
  ********************************************************************/
 
-EXPORT BITCODE_BL dwg_obj_xrecord_get_num_databytes (
+#define dwg_obj_xrecord_get_num_databytes(a,b) dwg_obj_xrecord_get_xdata_size (a,b)
+EXPORT BITCODE_BL dwg_obj_xrecord_get_xdata_size (
     const dwg_obj_xrecord *restrict xrecord, int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
 

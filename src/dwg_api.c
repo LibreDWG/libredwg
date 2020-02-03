@@ -11625,13 +11625,13 @@ dwg_obj_proxy_get_objid_object_handles (const dwg_obj_proxy *restrict proxy,
  ********************************************************************/
 
 BITCODE_BL
-dwg_obj_xrecord_get_num_databytes (const dwg_obj_xrecord *restrict xrecord,
-                                   int *restrict error)
+dwg_obj_xrecord_get_xdata_size (const dwg_obj_xrecord *restrict xrecord,
+                                int *restrict error)
 {
   if (xrecord)
     {
       *error = 0;
-      return xrecord->num_databytes;
+      return xrecord->xdata_size;
     }
   else
     {

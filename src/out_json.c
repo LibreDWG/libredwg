@@ -597,7 +597,7 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
   FIELD (num_inserts, type, dxf)
 
 #define FIELD_XDATA(nam, size)                                                \
-  error |= json_xdata (dat, _obj, _obj->size)
+  error |= json_xdata (dat, _obj)
 
 #define REACTORS(code)                                                        \
   if (dat->version >= R_13 && obj->tio.object->num_reactors                   \
@@ -796,8 +796,7 @@ json_eed (Bit_Chain *restrict dat,
 }
 
 static int
-json_xdata (Bit_Chain *restrict dat, const Dwg_Object_XRECORD *restrict obj,
-            BITCODE_BL size)
+json_xdata (Bit_Chain *restrict dat, const Dwg_Object_XRECORD *restrict obj)
 {
   int error = 0;
   Dwg_Resbuf *rbuf = obj->xdata;

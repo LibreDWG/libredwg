@@ -2610,8 +2610,8 @@ typedef struct _dwg_object_XRECORD
 {
   struct _dwg_object_object *parent;
 
-  BITCODE_BL num_databytes;
   BITCODE_BS cloning_flags;
+  BITCODE_BL xdata_size;
   BITCODE_BL num_xdata; /* computed */
   Dwg_Resbuf* xdata;
   BITCODE_BL num_objid_handles;

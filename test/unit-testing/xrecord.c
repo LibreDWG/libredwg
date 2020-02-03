@@ -5,7 +5,7 @@ void
 api_process (dwg_object *obj)
 {
   int error;
-  BITCODE_BL num_databytes;
+  BITCODE_BL xdata_size;
   BITCODE_BS cloning_flags;
   BITCODE_BL num_xdata;
   Dwg_Resbuf *xdata;
@@ -15,7 +15,7 @@ api_process (dwg_object *obj)
 
   dwg_obj_xrecord *xrecord = dwg_object_to_XRECORD (obj);
 
-  CHK_ENTITY_TYPE (xrecord, XRECORD, num_databytes, BL, num_databytes);
+  CHK_ENTITY_TYPE (xrecord, XRECORD, xdata_size, BL, xdata_size);
   CHK_ENTITY_TYPE (xrecord, XRECORD, cloning_flags, BS, cloning_flags);
   CHK_ENTITY_TYPE (xrecord, XRECORD, num_xdata, BL, num_xdata);
   if (!dwg_dynapi_entity_value (xrecord, "XRECORD", "xdata", &xdata, NULL))

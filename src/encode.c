@@ -2589,14 +2589,14 @@ AFL_GCC_POP
 
 static int
 dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
-                  int num_databytes)
+                  int xdata_size)
 {
   Dwg_Resbuf *rbuf = obj->xdata;
   enum RES_BUF_VALUE_TYPE type;
   int i;
   unsigned j = 0;
   BITCODE_BL num_xdata = obj->num_xdata;
-  unsigned long start = dat->byte, end = start + num_databytes;
+  unsigned long start = dat->byte, end = start + xdata_size;
   int error = 0;
 
   while (rbuf)
@@ -2702,15 +2702,15 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
       rbuf = rbuf->next;
       if (j > obj->num_xdata)
         break;
-      if (dat->byte - start >= (unsigned long)num_databytes)
+      if (dat->byte - start >= (unsigned long)xdata_size)
         break;
       j++;
     }
-  if (obj->num_databytes != dat->byte - start)
+  if (obj->xdata_size != dat->byte - start)
     {
       LOG_WARN ("xdata Written %lu, expected %d", dat->byte - start,
-                obj->num_databytes);
-      obj->num_databytes = dat->byte - start;
+                obj->xdata_size);
+      obj->xdata_size = dat->byte - start;
       return error ? error : 1;
     }
   return 0;

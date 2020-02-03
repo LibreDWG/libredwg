@@ -7025,10 +7025,10 @@ BS,	DXF 70
 
 @item parent
 struct _dwg_object_object*
-@item num_databytes
-BL
 @item cloning_flags
 BS,	DXF 280
+@item xdata_size
+BL
 @item num_xdata
 BL
 @item xdata
