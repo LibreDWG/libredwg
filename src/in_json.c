@@ -1855,7 +1855,14 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
               #include "objects.inc"
               //final else
-              LOG_WARN ("Unknown object %s", name);
+              if (strEQc (name, "3DFACE"))
+                obj->fixedtype = DWG_TYPE__3DFACE;
+              else if (strEQc (name, "3DSOLID"))
+                obj->fixedtype = DWG_TYPE__3DSOLID;
+              else if (strEQc (name, "VERTEX_PFACE"))
+                obj->fixedtype = DWG_TYPE_VERTEX_PFACE;
+              else
+                LOG_WARN ("Unknown object %s", name);
 
 #undef DWG_OBJECT
 #undef DWG_ENTITY
