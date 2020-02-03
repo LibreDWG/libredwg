@@ -1560,6 +1560,26 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       const Dwg_DYNAPI_field *fields = NULL, *cfields;
       const Dwg_DYNAPI_field *f;
 
+      if (i > 0)
+        {
+          Dwg_Object *oldobj = &dwg->object[i - 1];
+          if (!oldobj->handle.value)
+            {
+              LOG_ERROR ("Required %s.handle missing", name)
+              return DWG_ERR_INVALIDDWG;
+            }
+          if (!oldobj->type)
+            {
+              LOG_ERROR ("Required %s.type missing", name)
+              return DWG_ERR_INVALIDDWG;
+            }
+          if (oldobj->fixedtype == DWG_TYPE_UNUSED)
+            {
+              LOG_ERROR ("Required %s.fixedtype missing", name)
+              return DWG_ERR_INVALIDDWG;
+            }
+        }
+
       memset (obj, 0, sizeof (Dwg_Object));
       t = &tokens->tokens[tokens->index];
       if (t->type != JSMN_OBJECT)
