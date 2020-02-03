@@ -288,9 +288,8 @@ main (int argc, char *argv[])
                  infile ? infile : "from stdin");
       error = dwg_read_json (&dat, &dwg);
     }
-  else
-  if ((fmt && !strcasecmp (fmt, "dxfb"))
-      || (infile && !strcasecmp (infile, ".dxfb")))
+  else if ((fmt && !strcasecmp (fmt, "dxfb"))
+           || (infile && !strcasecmp (infile, ".dxfb")))
     {
       if (opts > 1)
         fprintf (stderr, "Reading Binary DXF file %s\n",
@@ -327,12 +326,7 @@ main (int argc, char *argv[])
   if (infile && dat.fh)
     fclose (dat.fh);
   if (error >= DWG_ERR_CRITICAL)
-    {
-      fprintf (stderr, "ERROR 0x%x\n", error);
-      if (error && opts > 2)
-        dwg_errstrings (error);
-      exit (1);
-    }
+    goto free;
 
   if (dwg.header.from_version != dwg.header.version)
     dwg.header.from_version = dwg.header.version;
@@ -399,6 +393,7 @@ main (int argc, char *argv[])
       }
   }
 
+  free:
   // forget about leaks. really huge DWG's need endlessly here.
   if ((dwg.header.version && dwg.num_objects < 1000)
       || force_free

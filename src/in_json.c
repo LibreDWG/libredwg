@@ -2627,7 +2627,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (!tokens.tokens)
     return DWG_ERR_OUTOFMEM;
 
-  dwg->object_map = hash_new (tokens.num_tokens / 10000);
+  dwg->object_map = hash_new (tokens.num_tokens / 50);
   if (!dwg->object_map) // we are obviously on a tiny system
     {
       dwg->object_map = hash_new (1024);
