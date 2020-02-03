@@ -23,7 +23,7 @@ case $r in
 esac
 
 # first create a dwg log to compare against
-./log -v4 $d
+./log -v3 $d
 mv $b.log $b.log.orig
 ./dxf -v4 $d
 ./dwg -y -v4 $b.dxf
@@ -44,6 +44,6 @@ if [ -f $b.dwg ]; then
     fi
 fi
 
-./log -v4 $b.dwg
+./log -v3 $b.dwg
 echo diff -bu $b.log.orig $b.log
 diff -bu $b.log.orig $b.log

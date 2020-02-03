@@ -1244,9 +1244,10 @@ classes_section:
             }
           last_offset += offset;
           LOG_TRACE ("\nNext object: %lu ", (unsigned long)dwg->num_objects)
-          LOG_TRACE ("Handleoff: %lX [UMC] "
-                     "Offset: " FORMAT_MC " [MC] @%lu\n",
-                     handleoff, offset, last_offset)
+          LOG_TRACE ("Handleoff: %lX [UMC] Offset: " FORMAT_MC " [MC]",
+                     handleoff, offset)
+          LOG_HANDLE (" @%lu", last_offset)
+          LOG_TRACE ("\n")
 
           if (dat->byte == oldpos)
             break;
