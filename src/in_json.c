@@ -1678,17 +1678,12 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               if (!obj->dxfname)
                 obj->dxfname = strdup (name);
             }
-          else if (strEQc (key, "index")) // TODO not TableCellContent_Attr
+          else if (strEQc (key, "index") && strNE (name, "TableCellContent_Attr"))
             {
               BITCODE_RL index = (BITCODE_RL)json_long (dat, tokens);
               if (obj->index != index)
-                LOG_WARN ("Unexpected %s.index %d, expected %d", name, index,
+                LOG_WARN ("Ignore wrong %s.index %d, expected %d", name, index,
                           obj->index)
-              obj->index = index;
-              if (is_entity)
-                obj->tio.entity->objid = obj->index;
-              else
-                obj->tio.object->objid = obj->index;
               LOG_TRACE ("index: %d\n", obj->index)
             }
           else if (strEQc (key, "type") && !obj->type)
