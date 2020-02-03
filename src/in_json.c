@@ -673,6 +673,7 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           char *str = json_string (dat, tokens);
           LOG_TRACE ("%s: \"%s\" [%s]\n", key, str, f->type)
           dwg_dynapi_header_set_value (dwg, key, &str, 1);
+          free (str);
         }
       else if (t->type == JSMN_ARRAY
                && (strEQc (f->type, "3BD") || strEQc (f->type, "3RD")
@@ -1357,6 +1358,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 {
                   LOG_TRACE ("%s: \"%s\" [%s]\n", key, str, f->type);
                   dwg_dynapi_field_set_value (dwg, _obj, f, &str, 1);
+                  free (str);
                 }
             }
           else if (t->type == JSMN_ARRAY
@@ -2118,6 +2120,7 @@ json_R2004_Header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           int slen = strlen (s);
           memcpy (&_obj->file_ID_string, s, MIN (12, slen));
           LOG_TRACE ("file_ID_string: %.*s\n", 12, _obj->file_ID_string)
+          free (s);
         }
       // clang-format off
       FIELD_RLx (header_address, 0)
