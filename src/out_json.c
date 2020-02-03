@@ -596,7 +596,8 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
 #define FIELD_NUM_INSERTS(num_inserts, type, dxf)                             \
   FIELD (num_inserts, type, dxf)
 
-#define FIELD_XDATA(nam, size)
+#define FIELD_XDATA(nam, size)                                                \
+  error |= json_xdata (dat, _obj, _obj->size)
 
 #define REACTORS(code)                                                        \
   if (dat->version >= R_13 && obj->tio.object->num_reactors                   \
@@ -758,7 +759,14 @@ json_eed (Bit_Chain *restrict dat,
           KEY (value);
           switch (data->code)
             {
-            case 0: VALUE_TEXT (data->u.eed_0.string); break;
+            case 0:
+              PRE (R_2007) {
+                VALUE_TEXT (data->u.eed_0.string);
+              }
+              LATER_VERSIONS {
+                VALUE_TEXT_TU (data->u.eed_0.string);
+              }
+              break;
             case 2: VALUE_RC (data->u.eed_2.byte, 0); break;
             case 3: VALUE_RL (data->u.eed_3.layer, 0); break;
             case 4: VALUE_BINARY (data->u.eed_4.data, data->u.eed_4.length, 0); break;
@@ -779,6 +787,87 @@ json_eed (Bit_Chain *restrict dat,
             default: VALUE_RC (0, 0);
             }
         }
+      NOCOMMA;
+      ENDHASH;
+    }
+  NOCOMMA;
+  ENDARRAY;
+  return error;
+}
+
+static int
+json_xdata (Bit_Chain *restrict dat, const Dwg_Object_XRECORD *restrict obj,
+            BITCODE_BL size)
+{
+  int error = 0;
+  Dwg_Resbuf *rbuf = obj->xdata;
+  KEY (xdata);
+  ARRAY;
+  for (BITCODE_BL i = 0; i < obj->num_xdata; i++)
+    {
+      enum RES_BUF_VALUE_TYPE type;
+      HASH;
+      KEY (type); VALUE_RS (rbuf->type, 0);
+      type = get_base_value_type (rbuf->type);
+      KEY (value);
+      switch (type)
+        {
+        case VT_STRING:
+          PRE (R_2007) {
+            VALUE_TEXT (rbuf->value.str.u.data);
+          }
+          LATER_VERSIONS {
+            VALUE_TEXT_TU (rbuf->value.str.u.data);
+          }
+          LOG_TRACE ("xdata[%u]: \"%s\" [TV %d]\n", i, rbuf->value.str.u.data,
+                     rbuf->type);
+          break;
+        case VT_BINARY:
+          VALUE_BINARY (rbuf->value.str.u.data, rbuf->value.str.size, 0);
+          LOG_TRACE ("xdata[%u]: \"%s\" [TF %d]\n", i, rbuf->value.str.u.data,
+                     rbuf->type);
+          break;
+        case VT_REAL:
+          VALUE_RD (rbuf->value.dbl, 0);
+          LOG_TRACE ("xdata[%u]: %f [RD %d]\n", i, rbuf->value.dbl,
+                     rbuf->type);
+          break;
+        case VT_BOOL:
+        case VT_INT8:
+          VALUE_RC (rbuf->value.i8, 0);
+          LOG_TRACE ("xdata[%u]: %d [RC %d]\n", i, (int)rbuf->value.i8,
+                     rbuf->type);
+          break;
+        case VT_INT16:
+          VALUE_RS (rbuf->value.i16, 0);
+          LOG_TRACE ("xdata[%u]: %d [RS %d]\n", i, (int)rbuf->value.i16,
+                     rbuf->type);
+          break;
+        case VT_INT32:
+          VALUE_RL (rbuf->value.i32, 0);
+          LOG_TRACE ("xdata[%u]: %d [RL %d]\n", i, (int)rbuf->value.i32,
+                     rbuf->type);
+          break;
+        case VT_INT64:
+          VALUE_RLL (rbuf->value.i64, 0);
+          LOG_TRACE ("xdata[%u]: %ld [RLL %d]\n", i, (long)rbuf->value.i64,
+                     rbuf->type);
+          break;
+        case VT_POINT3D:
+          fprintf (dat->fh, "[ %f, %f, %f ],\n", rbuf->value.pt[0], rbuf->value.pt[1],
+                   rbuf->value.pt[2]);
+          LOG_TRACE ("xdata[%u]: (%f,%f,%f) [3RD %d]\n", i, rbuf->value.pt[0],
+                     rbuf->value.pt[1], rbuf->value.pt[2], rbuf->type);
+          break;
+        case VT_HANDLE:
+        case VT_OBJECTID:
+          fprintf (dat->fh, FORMAT_H ",\n", ARGS_H (rbuf->value.h));
+          break;
+        case VT_INVALID:
+        default:
+          break;
+        }
+      rbuf = rbuf->next;
       NOCOMMA;
       ENDHASH;
     }

@@ -2608,7 +2608,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
       switch (type)
         {
         case VT_STRING:
-          UNTIL (R_2007)
+          PRE (R_2007)
           {
             if (dat->byte + 3 + rbuf->value.str.size > end)
               break;
