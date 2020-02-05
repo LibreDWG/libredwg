@@ -46,5 +46,7 @@ if [ -f $b.dwg ]; then
 fi
 
 ./log -v3 $b.dwg
+# bash only
+#diff -bu <(grep -B1 'Add entity ' $b.log.orig) <(grep -B1 'Add entity ' $b.log)
 echo diff -bu $b.log.orig $b.log
 diff -bu $b.log.orig $b.log

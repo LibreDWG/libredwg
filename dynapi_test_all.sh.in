@@ -1,0 +1,6 @@
+#!/bin/sh
+srcdir="@srcdir@"
+for d in $srcdir/test-data/*.dwg $srcdir/test-data/*/*.dwg
+do
+    INPUT=$d test/unit-testing/dynapi_test || echo $d
+done

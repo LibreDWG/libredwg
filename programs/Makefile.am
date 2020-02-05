@@ -30,7 +30,6 @@ dist_man1_MANS += $(srcdir)/dwgbmp.1 $(srcdir)/dwg2dxf.1 \
 	          $(srcdir)/dwg2SVG.1 $(srcdir)/dwglayers.1 \
 		  $(srcdir)/dwggrep.1
 endif
-DISTCLEANFILES = core
 
 if !DISABLE_DXF
 if HAVE_LIBPS
@@ -96,7 +95,8 @@ CLEANFILES += {example_,sample_}*rewrite.{dwg,log}
 CLEANFILES += {example_,sample_}*.dwg
 CLEANFILES += example_*.{log1,log2}
 endif
-MAINTAINERCLEANFILES = *_flymake.[ch] *~ *.i
+MAINTAINERCLEANFILES = *_flymake.[ch] *~ *.i *.ii *.log
+DISTCLEANFILES       = core alive.test json.test
 
 .PHONY: man dsymutil clean-dsymutil check-syntax
 
