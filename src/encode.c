@@ -150,6 +150,7 @@ static bool env_var_checked_p;
   }
 #define FIELD_TF(nam, len, dxf)                                               \
   {                                                                           \
+    LOG_TRACE (#nam ": [TF %d %d]\n", (int)len, dxf);                         \
     if (len > 0)                                                              \
       {                                                                       \
         if (!_obj->nam)                                                       \
@@ -263,7 +264,7 @@ static bool env_var_checked_p;
       int _i;                                                                 \
       for (_i = 0; _i < (len); _i++)                                          \
         {                                                                     \
-          LOG (level, "%02x", (unsigned char)((char *)var)[_i]);              \
+          LOG (level, "%02X", (unsigned char)((char *)var)[_i]);              \
         }                                                                     \
       LOG (level, "\n");                                                      \
       if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)                                \

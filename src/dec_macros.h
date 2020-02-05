@@ -119,7 +119,7 @@
     int _i;                                                                   \
     for (_i = 0; _i < (len); _i++)                                            \
       {                                                                       \
-        LOG (level, "%02x", (unsigned char)((char *)var)[_i]);                \
+        LOG (level, "%02X", (unsigned char)((char *)var)[_i]);                \
       }                                                                       \
     LOG (level, "\n");                                                        \
     if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)                                  \
