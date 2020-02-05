@@ -162,7 +162,7 @@ typedef uint64_t BITCODE_BLL;
   typedef BITCODE_RS dwg_wchar_t;
 # define DWGCHAR dwg_wchar_t
 #endif
-typedef char* BITCODE_TF;
+typedef unsigned char* BITCODE_TF;
 #define FORMAT_TF "\"%s\""
 typedef char* BITCODE_TV;
 #define FORMAT_TV "\"%s\""
@@ -1638,7 +1638,7 @@ typedef struct _dwg_3DSOLID_silhouette
   BITCODE_BS version; \
   BITCODE_BL num_blocks; \
   BITCODE_BL* block_size; \
-  char     ** encr_sat_data; \
+  char** encr_sat_data; \
   BITCODE_RC* acis_data; \
   BITCODE_B wireframe_data_present; \
   BITCODE_B point_present; \
@@ -1665,7 +1665,7 @@ typedef struct _dwg_entity_3DSOLID
   BITCODE_BS version;    /*!< DXF 70 Modeler format version =1*/
   BITCODE_BL num_blocks;
   BITCODE_BL* block_size;
-  BITCODE_RC** encr_sat_data; /*!< DXF 1, the encrypted SAT data */
+  char** encr_sat_data;       /*!< DXF 1, the encrypted SAT data */
   BITCODE_RC*  acis_data;     /*!< decrypted SAT data */
   BITCODE_B wireframe_data_present;
   BITCODE_B point_present;
@@ -2044,7 +2044,7 @@ typedef struct _dwg_object_LTYPE
   Dwg_LTYPE_dash* dashes;
   BITCODE_RD* dashes_r11;
   BITCODE_B text_area_is_present; /* if some shape_flag & 2 */
-  char    * strings_area;
+  BITCODE_TF strings_area;
   BITCODE_H extref_handle;
   BITCODE_H* styles;
 } Dwg_Object_LTYPE;
@@ -5136,7 +5136,7 @@ typedef struct _dwg_entity_eed_data
     } eed_3;
     struct { /* 4 (1004) binary */
       BITCODE_RC length;
-      char data[1]; // inlined
+      unsigned char data[1]; // inlined
     } eed_4;
     struct { /* 5 (1005) entity */
       BITCODE_RLL entity;
@@ -5165,7 +5165,7 @@ typedef struct _dwg_entity_eed
   BITCODE_BS size;
   Dwg_Handle handle;
   Dwg_Eed_Data *data;
-  char* raw; /* a copy of data */
+  BITCODE_TF raw; /* a binary copy of the data */
 } Dwg_Eed;
 
 /**
@@ -5456,7 +5456,7 @@ typedef struct _dwg_object
   unsigned long common_size; /* relative offset from type ... end common_entity_data */
 
   BITCODE_RL num_unknown_bits;
-  char *unknown_bits;
+  BITCODE_TF unknown_bits;
 
 } Dwg_Object;
 
@@ -5810,19 +5810,19 @@ typedef struct _dwg_struct
     BITCODE_RL algo_id;          // RC4
     BITCODE_RL key_len;          // 40
     BITCODE_RL encr_size;        //
-    BITCODE_TV encr_buffer;
+    BITCODE_TF encr_buffer;
   } security;
   
   struct Dwg_VBAProject
   {
     int    size;
-    char  *unknown_bits;
+    BITCODE_TF unknown_bits;
   } vbaproject;
 
   struct Dwg_AppInfoHistory
   {
     int    size;
-    char  *unknown_bits;
+    BITCODE_TF unknown_bits;
   } appinfohistory;
 
   struct Dwg_RevHistory

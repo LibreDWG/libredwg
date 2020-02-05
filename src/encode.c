@@ -1069,7 +1069,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     }
   else
     {
-      bit_write_TF (dat, (char *)dwg->thumbnail.chain, dwg->thumbnail.size);
+      bit_write_TF (dat, dwg->thumbnail.chain, dwg->thumbnail.size);
     }
   bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_THUMBNAIL_END));
 
@@ -1413,7 +1413,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
       // AC1012, AC1014 or AC1015. This is a char[11], zero padded.
       // with \n at 12.
-      bit_write_TF (dat, (char *)_obj->version, 12);
+      bit_write_TF (dat, (BITCODE_TF)_obj->version, 12);
       LOG_TRACE ("version: %s [TFF 12]\n", _obj->version)
 
       for (i = 0; i < 4; i++)
@@ -2191,7 +2191,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
                 data->u.eed_0.length = 0;
               bit_write_RC (dat, data->u.eed_0.length);
               bit_write_RS_LE (dat, data->u.eed_0.codepage);
-              bit_write_TF (dat, data->u.eed_0.string, data->u.eed_0.length);
+              bit_write_TF (dat, (BITCODE_TF)data->u.eed_0.string, data->u.eed_0.length);
             }
           LOG_TRACE ("string: len=%d [RC] cp=%d [RS_LE] \"%s\" [TF]\n",
                      data->u.eed_0.length, data->u.eed_0.codepage,
@@ -2238,7 +2238,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       if (data->u.eed_0.length + 1 <= size)
         {
           bit_write_RC (dat, data->u.eed_4.length);
-          bit_write_TF (dat, data->u.eed_4.data, data->u.eed_4.length);
+          bit_write_TF (dat, (BITCODE_TF)data->u.eed_4.data, data->u.eed_4.length);
         }
       LOG_TRACE ("binary: \"%s\" [TF %d]\n", data->u.eed_4.data,
                  data->u.eed_4.length);
@@ -2616,9 +2616,9 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
             bit_write_RS (dat, rbuf->value.str.size);
             bit_write_RC (dat, rbuf->value.str.codepage);
             if (rbuf->value.str.u.data)
-              bit_write_TF (dat, rbuf->value.str.u.data, rbuf->value.str.size);
+              bit_write_TF (dat, (BITCODE_TF)rbuf->value.str.u.data, rbuf->value.str.size);
             else
-              bit_write_TF (dat, (char *)"", 0);
+              bit_write_TF (dat, (BITCODE_TF)"", 0);
             LOG_TRACE ("xdata[%u]: \"%s\" [TF %d %d]\n", j,
                        rbuf->value.str.u.data, rbuf->value.str.size,
                        rbuf->type);
@@ -2680,7 +2680,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
           if (dat->byte + rbuf->value.str.size > end)
             break;
           bit_write_RC (dat, rbuf->value.str.size);
-          bit_write_TF (dat, rbuf->value.str.u.data, rbuf->value.str.size);
+          bit_write_TF (dat, (BITCODE_TF)rbuf->value.str.u.data, rbuf->value.str.size);
           LOG_TRACE ("xdata[%u]: [TF %d %d] ", j, rbuf->value.str.size,
                      rbuf->type);
           LOG_TRACE_TF (rbuf->value.str.u.data, rbuf->value.str.size);

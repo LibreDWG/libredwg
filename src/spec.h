@@ -145,6 +145,9 @@
 #ifndef FIELD_BLx
 #  define FIELD_BLx(name, dxf) FIELD_BL (name, dxf)
 #endif
+#ifndef FIELD_TFv
+#  define FIELD_TFv(name, len, dxf) FIELD_TF (name, len, dxf)
+#endif
 #ifndef FIELD_TFFx
 #  define FIELD_TFFx(name, len, dxf) FIELD_TFF (name, len, dxf)
 #endif
@@ -294,7 +297,7 @@
     PRE (R_13)                                                                \
     {                                                                         \
       FIELD_RC (flag, 70);                                                    \
-      FIELD_TF (name, 32, 2);                                                 \
+      FIELD_TFv (name, 32, 2);                                                \
       FIELD_RS (used, 0);                                                     \
     }                                                                         \
     LATER_VERSIONS                                                            \

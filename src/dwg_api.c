@@ -11430,7 +11430,7 @@ dwg_ent_ole2frame_get_data_size (const dwg_ent_ole2frame *restrict frame,
 
 /** Returns ole2frame data (binary)
  */
-char *
+BITCODE_TF
 dwg_ent_ole2frame_get_data (const dwg_ent_ole2frame *restrict frame,
                             int *restrict error)
 {
@@ -11451,13 +11451,13 @@ dwg_ent_ole2frame_get_data (const dwg_ent_ole2frame *restrict frame,
  */
 void
 dwg_ent_ole2frame_set_data (dwg_ent_ole2frame *restrict frame,
-                            const char *restrict data,
+                            const BITCODE_TF restrict data,
                             const BITCODE_BL data_size, int *restrict error)
 {
   if (frame)
     {
       *error = 0;
-      frame->data = (char *)data;
+      frame->data = data;
       frame->data_size = data_size;
     }
   else
@@ -20654,7 +20654,7 @@ dwg_ent_get_picture_size (const dwg_obj_ent *restrict ent,
   _BODY_FIELD (ent, preview_size);
 }
 
-EXPORT char *
+EXPORT BITCODE_TF
 dwg_ent_get_picture (const dwg_obj_ent *restrict ent, int *restrict error)
 {
   _BODY_FIELD (ent, preview);

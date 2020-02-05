@@ -1783,7 +1783,7 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
           LOG_TRACE ("num_blocks: 2\n");
           FIELD_VALUE (block_size) = calloc (3, sizeof (BITCODE_RL));
           FIELD_VALUE (encr_sat_data) = calloc (3, sizeof (char*));
-          FIELD_TF (encr_sat_data[0], 15, 1); // "ACIS BinaryFile"
+          FIELD_TFv (encr_sat_data[0], 15, 1); // "ACIS BinaryFile"
           FIELD_VALUE (block_size[0]) = 15;
           FIELD_RL (block_size[1], 0);
           if (FIELD_VALUE (block_size[1]) > obj->size) {
@@ -1793,7 +1793,7 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
             return DWG_ERR_VALUEOUTOFBOUNDS;
           }
           // Binary SAB, unencrypted
-          FIELD_TF (encr_sat_data[1], FIELD_VALUE (block_size[1]), 1);
+          FIELD_TFv (encr_sat_data[1], FIELD_VALUE (block_size[1]), 1);
           total_size = FIELD_VALUE (block_size[1]);
         }
 
@@ -2683,7 +2683,7 @@ DWG_OBJECT (STYLE)
     FIELD_RD (oblique_ang, 50);
     FIELD_RC (generation, 71);
     FIELD_RD (last_height, 42);
-    FIELD_TF (font_name, 128, 3);
+    FIELD_TFv (font_name, 128, 3);
 
     FIELD_VALUE (shape_file) = FIELD_VALUE (flag) & 4;
     FIELD_VALUE (vertical)   = FIELD_VALUE (flag) & 1;
@@ -2752,7 +2752,7 @@ DWG_OBJECT (LTYPE)
 
   PRE (R_13)
   {
-    FIELD_TF (description, 48, 3);
+    FIELD_TFv (description, 48, 3);
     FIELD_RC (alignment, 72);
   }
   LATER_VERSIONS
@@ -7550,4 +7550,5 @@ DWG_OBJECT (DOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 #endif
+
 

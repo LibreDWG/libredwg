@@ -380,6 +380,14 @@
                (unsigned long)len);                                           \
     LOG_INSANE_TF (FIELD_VALUE (nam), (int)len);                              \
   }
+#define FIELD_TFv(nam, len, dxf)                                              \
+  {                                                                           \
+    SINCE (R_13) { _obj->nam = NULL; VECTOR_CHKCOUNT (nam, TF, len, dat) }    \
+    _obj->nam = (BITCODE_TV)bit_read_TF (dat, (int)len);                      \
+    LOG_TRACE (#nam ": \"%s\" [TF %lu " #dxf "]\n", _obj->nam,                \
+               (unsigned long)len);                                           \
+    LOG_INSANE_TF (FIELD_VALUE (nam), (int)len);                              \
+  }
 #define FIELD_TFF(nam, len, dxf)                                              \
   {                                                                           \
     SINCE (R_13) { VECTOR_CHKCOUNT (nam, TF, len, dat) }                      \
@@ -660,7 +668,7 @@
     {                                                                         \
       Bit_Chain here = *dat;                                                  \
       int oldloglevel = loglevel;                                             \
-      char *tmp;                                                              \
+      BITCODE_TF tmp;                                                         \
       BITCODE_BB bb = 0;                                                      \
       BITCODE_RS rs;                                                          \
       BITCODE_RL rl;                                                          \
@@ -669,7 +677,7 @@
       tmp = bit_read_TF (dat, 24);                                            \
       if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)                                \
         {                                                                     \
-          bit_fprint_bits (OUTPUT, (unsigned char *)tmp, 68);                 \
+          bit_fprint_bits (OUTPUT, tmp, 68);                                  \
           HANDLER (OUTPUT, "\n");                                             \
         }                                                                     \
       LOG_TRACE_TF (tmp, 24);                                                 \

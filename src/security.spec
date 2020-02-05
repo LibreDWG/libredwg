@@ -28,4 +28,3 @@
   FIELD_RL (key_len, 0);
   FIELD_RL (encr_size, 0);
   FIELD_BINARY (encr_buffer, FIELD_VALUE (encr_size), 0);
-

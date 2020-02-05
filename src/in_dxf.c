@@ -1706,15 +1706,15 @@ add_3DSOLID_encr (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           total = len;
           o->encr_sat_data[0] = malloc (total + 1); // + the \0
           // memcpy (o->encr_sat_data[0], pair->value.s, len + 1);
-          strcpy (o->encr_sat_data[0], pair->value.s);
+          strcpy ((char*)o->encr_sat_data[0], pair->value.s);
         }
       else
         {
           total += len;
           o->encr_sat_data[0] = realloc (o->encr_sat_data[0], total + 1);
-          strcat (o->encr_sat_data[0], pair->value.s);
+          strcat ((char*)o->encr_sat_data[0], pair->value.s);
         }
-      strcat (o->encr_sat_data[0], "\n");
+      strcat ((char*)o->encr_sat_data[0], "\n");
       i++;
 
       dxf_free_pair (pair);
@@ -4332,7 +4332,7 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       unsigned len = strlen (pair->value.s);
       unsigned blen = len / 2;
       const char *pos = pair->value.s;
-      char *s = &ent->preview[written];
+      BITCODE_TF s = &ent->preview[written];
       if (blen + written > ent->preview_size)
         {
           LOG_ERROR (
@@ -4379,7 +4379,7 @@ add_block_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       unsigned len = strlen (pair->value.s);
       unsigned blen = len / 2;
       const char *pos = pair->value.s;
-      char *s;
+      BITCODE_TF s;
 
       _obj->preview = realloc (_obj->preview, written + blen);
       s = &_obj->preview[written];

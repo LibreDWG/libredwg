@@ -3299,13 +3299,13 @@ EXPORT BITCODE_BL dwg_ent_ole2frame_get_data_size (
 // backcompat API
 #define dwg_ent_ole2frame_get_data_length(a, b) dwg_ent_ole2frame_get_data_size (a, b)
 
-EXPORT char *
+EXPORT BITCODE_TF
 dwg_ent_ole2frame_get_data (const dwg_ent_ole2frame *restrict frame,
                             int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
 
 EXPORT void dwg_ent_ole2frame_set_data (dwg_ent_ole2frame *restrict frame,
-                                        const char *restrict data,
+                                        const BITCODE_TF restrict data,
                                         const BITCODE_BL data_length,
                                         int *restrict error)
     __nonnull ((4)) _deprecated_dynapi_setter;
@@ -5229,8 +5229,9 @@ dwg_ent_get_picture_size (const dwg_obj_ent *restrict ent,
                           int *restrict error) // before r2007 only RL
     __nonnull ((2));
 
-EXPORT char *dwg_ent_get_picture (const dwg_obj_ent *restrict ent,
-                                  int *restrict error) __nonnull ((2));
+EXPORT BITCODE_TF
+dwg_ent_get_picture (const dwg_obj_ent *restrict ent,
+                     int *restrict error) __nonnull ((2));
 
 EXPORT BITCODE_BB dwg_ent_get_entmode (const dwg_obj_ent *restrict ent,
                                        int *restrict error) __nonnull ((2));

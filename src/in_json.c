@@ -1919,7 +1919,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               int len = t->end - t->start;
               char *hex = json_string (dat, tokens);
               unsigned blen = len / 2;
-              char *buf = malloc (blen + 1);
+              BITCODE_TF buf = malloc (blen + 1);
               char *pos = hex;
               char *old;
               for (unsigned k = 0; k < blen; k++)

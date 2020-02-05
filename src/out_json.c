@@ -168,14 +168,14 @@ static char* _path_field(const char *path);
   {                                                                           \
     PREFIX                                                                    \
     fprintf (dat->fh, "\"" #nam "\": ");                                      \
-    VALUE_TEXT (str)                                                          \
+    VALUE_TEXT ((char*)str)                                                   \
   }
 
 #define VALUE_TEXT(str)                                                       \
   {                                                                           \
     if (str                                                                   \
         && (1 || strchr (str, '"') || strchr (str, '\\')                      \
-            || strchr (str, '\n')))                                           \
+              || strchr (str, '\n')))                                         \
       {                                                                       \
         const int len = strlen (str);                                         \
         if (len < 4096 / 6)                                                   \
