@@ -2399,7 +2399,7 @@ json_FileDepList (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               for (int j = 0; j < size1; j++)
                 {
                   int keys = t->size;
-                  for (int k = 0; k < keys; j++)
+                  for (int k = 0; k < keys; k++)
                     {
                       json_fixed_key (key, dat, tokens);
                       t = &tokens->tokens[tokens->index];
