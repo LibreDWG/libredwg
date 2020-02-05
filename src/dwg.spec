@@ -1735,7 +1735,7 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
               FIELD_VALUE (block_size) = (BITCODE_BL*)
                 realloc (FIELD_VALUE (block_size), (i+1) * sizeof (BITCODE_BL));
               FIELD_BL (block_size[i], 0);
-              FIELD_TF (encr_sat_data[i], FIELD_VALUE (block_size[i]), 1);
+              FIELD_TFv (encr_sat_data[i], FIELD_VALUE (block_size[i]), 1);
               total_size += FIELD_VALUE (block_size[i]);
             } while (FIELD_VALUE (block_size[i++]));
 

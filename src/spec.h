@@ -327,7 +327,7 @@
     PRE (R_13)                                                                \
     {                                                                         \
       FIELD_CAST (flag, RC, RS, 70);                                          \
-      FIELD_TF (name, 32, 2);                                                 \
+      FIELD_TFv (name, 32, 2);                                                 \
       FIELD_RS (used, 0);                                                     \
     }                                                                         \
     LATER_VERSIONS                                                            \

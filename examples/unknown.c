@@ -157,7 +157,7 @@ bits_TU (Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 static void
 bits_TF (Bit_Chain *restrict dat, struct _unknown_field *restrict g, int len)
 {
-  bit_write_TF (dat, (char *)g->value, len);
+  bit_write_TF (dat, (BITCODE_TF)g->value, len);
   g->type = BITS_TF;
 }
 
@@ -175,7 +175,7 @@ bits_hexstring (Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
   // convert hex to string
   int len = strlen (g->value) / 2;
-  char buf[1024];
+  unsigned char buf[1024];
   for (int i = 0; i < len; i++)
     {
       unsigned char *s = (unsigned char *)&g->value[i * 2];

@@ -372,7 +372,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           PREP_TABLE (BLOCK_HEADER);
           // TODO DXF 8: layer name
           FIELD_RC (flag, 70);
-          FIELD_TF (name, 32, 2);
+          FIELD_TFv (name, 32, 2);
           FIELD_RS (used, 0);
 
           // TODO RD elevation 30, 2RD base_pt 10: 24
@@ -391,7 +391,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           PREP_TABLE (LAYER);
 
           FIELD_CAST (flag, RC, RS, 70); // 860
-          FIELD_TF (name, 32, 2);
+          FIELD_TFv (name, 32, 2);
           FIELD_RS (used, 0);
 
           FIELD_RS (color_rs, 62); // color, off if negative
@@ -408,7 +408,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           PREP_TABLE (STYLE);
 
           FIELD_RC (flag, 70);
-          FIELD_TF (name, 32, 2);
+          FIELD_TFv (name, 32, 2);
           FIELD_RS (used, 0);
 
           FIELD_RD (fixed_height, 40); // ok
@@ -416,8 +416,8 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           FIELD_RD (oblique_ang, 50);
           FIELD_RC (generation, 71);
           FIELD_RD (last_height, 42);
-          FIELD_TF (font_name, 64, 3);    // 8ed
-          FIELD_TF (bigfont_name, 64, 4); // 92d
+          FIELD_TFv (font_name, 64, 3);    // 8ed
+          FIELD_TFv (bigfont_name, 64, 4); // 92d
           CHK_ENDPOS;
         }
       break;
@@ -428,9 +428,9 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           PREP_TABLE (LTYPE);
 
           FIELD_RC (flag, 70);
-          FIELD_TF (name, 32, 2);
+          FIELD_TFv (name, 32, 2);
           FIELD_RS (used, 0);
-          FIELD_TF (description, 48, 3);
+          FIELD_TFv (description, 48, 3);
           FIELD_RC (alignment, 72);
           FIELD_RC (num_dashes, 73);
           FIELD_VECTOR (dashes_r11, RD, num_dashes, 340);
@@ -447,7 +447,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           PREP_TABLE (VIEW);
 
           FIELD_RC (flag, 70);
-          FIELD_TF (name, 32, 2);
+          FIELD_TFv (name, 32, 2);
           FIELD_RS (used, 0);
 
           FIELD_RD (height, 40);
@@ -470,7 +470,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           PREP_TABLE (UCS);
 
           FIELD_RC (flag, 70);
-          FIELD_TF (name, 32, 2);
+          FIELD_TFv (name, 32, 2);
           FIELD_RS (used, 0);
           FIELD_2RD (origin, 10);
           FIELD_2RD (x_direction, 11);
@@ -486,7 +486,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           PREP_TABLE (VPORT);
 
           FIELD_RC (flag, 70);
-          FIELD_TF (name, 32, 2);
+          FIELD_TFv (name, 32, 2);
           FIELD_RS (used, 0);
 
           FIELD_RD (VIEWSIZE, 40);
@@ -526,7 +526,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           PREP_TABLE (APPID);
 
           FIELD_RC (flag, 70);
-          FIELD_TF (name, 32, 2);
+          FIELD_TFv (name, 32, 2);
           FIELD_RS (used, 0);
           CHK_ENDPOS;
         }
@@ -539,7 +539,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           PREP_TABLE (DIMSTYLE); // d1f
 
           FIELD_RC (flag, 70);
-          FIELD_TF (name, 32, 2);
+          FIELD_TFv (name, 32, 2);
           // off = dat->byte;
           FIELD_RS (used, 0);      // d40
           FIELD_RD (DIMSCALE, 40); // d42
@@ -571,11 +571,11 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           FIELD_RC (DIMSAH, 173);            // ok
           FIELD_RC (DIMTIX, 174);            // ok
           FIELD_RC (DIMSOXD, 175);           // ok
-          FIELD_TF (DIMPOST, 16, 3);         // ok dc8
-          FIELD_TF (DIMAPOST, 16, 4);        // dd8
-          FIELD_TF (DIMBLK_T, 16, 5);        //?? unsupported by ODA
-          FIELD_TF (DIMBLK1_T, 16, 6);       //?? unsupported by ODA
-          FIELD_TF (DIMBLK2_T, 66, 7);       //?? unsupported by ODA
+          FIELD_TFv (DIMPOST, 16, 3);         // ok dc8
+          FIELD_TFv (DIMAPOST, 16, 4);        // dd8
+          FIELD_TFv (DIMBLK_T, 16, 5);        //?? unsupported by ODA
+          FIELD_TFv (DIMBLK1_T, 16, 6);       //?? unsupported by ODA
+          FIELD_TFv (DIMBLK2_T, 66, 7);       //?? unsupported by ODA
           // DEBUG_HERE; //e18
           // dat->byte += 50; //unknown: DIMSHO, DIMASO (global)
           FIELD_RS (DIMCLRD_N, 176); // e4a
@@ -3853,7 +3853,7 @@ pt2        (35.27188116753285, -22.39344715050545, 0.0) [11]
   // FIELD_2BD (pt1, 10);
   // FIELD_2BD (pt2, 11);
   _obj->oleversion = 2;
-  _obj->oleclient = (char *)"OLE";
+  _obj->oleclient = (BITCODE_TF)"OLE";
   _obj->pt1.x = 30.13602472538446;
   _obj->pt1.y = -18.98882829402869;
   _obj->pt2.x = 35.27188116753285;
@@ -4703,7 +4703,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
             if (dat->byte + length > end_address || (short)length < 0)
               break;
             rbuf->value.str.size = length;
-            rbuf->value.str.u.data = bit_read_TF (dat, length);
+            rbuf->value.str.u.data = (char*)bit_read_TF (dat, length);
             LOG_INSANE ("STRING ")
             LOG_TRACE ("xdata[%u]: \"%s\" [TF %d %d]\n", num_xdata,
                        rbuf->value.str.u.data, length, rbuf->type);
@@ -4795,7 +4795,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
               rbuf->value.str.size = 0;
               break;
             }
-          rbuf->value.str.u.data = bit_read_TF (dat, rbuf->value.str.size);
+          rbuf->value.str.u.data = (char*)bit_read_TF (dat, rbuf->value.str.size);
           LOG_INSANE ("BINARY ")
           LOG_TRACE ("xdata[%u]: [TF %d %d] ", num_xdata, rbuf->value.str.size,
                      rbuf->type);
