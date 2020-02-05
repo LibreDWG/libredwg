@@ -5257,7 +5257,7 @@ typedef struct _dwg_object_entity
   BITCODE_B   preview_exists;
   BITCODE_BLL preview_size;     /*!< DXF 160 for bitmaps, DXF 92 for PROXY vector data.
                                   e.g. INSERT, MULTILEADER */
-  char       *preview;          /*!< DXF 310 */
+  BITCODE_TF preview;           /*!< DXF 310 */
   BITCODE_BB entmode;           /*!< has no owner handle:
                                   0 has no ownerhandle, 1 is PSPACE, 2 is MSPACE
                                   3 has ownerhandle. */

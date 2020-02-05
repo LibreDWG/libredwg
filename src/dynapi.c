@@ -7385,7 +7385,7 @@ static const Dwg_DYNAPI_field _dwg_object_entity_fields[] = {
     0,0,0, 0 },
   { "prev_entity",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_entity, prev_entity),
     1,0,0, 0 },
-  { "preview",	"TF", sizeof (char*),  OFF (struct _dwg_object_entity, preview),
+  { "preview",	"TF", sizeof (BITCODE_TF),  OFF (struct _dwg_object_entity, preview),
     1,1,0, 310 },
   { "preview_exists",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_entity, preview_exists),
     0,0,0, 0 },
