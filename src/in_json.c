@@ -1459,6 +1459,21 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 LOG_TRACE ("%s: [%s] empty\n", key, f->type);
               dwg_dynapi_field_set_value (dwg, _obj, f, &nums, 1);
             }
+          else if (t->type == JSMN_ARRAY && strEQc (f->type, "BL*"))
+            {
+              int size1 = t->size;
+              BITCODE_BL *nums = calloc (size1, sizeof (BITCODE_BL));
+              json_set_numfield (_obj, fields, key, size1);
+              tokens->index++;
+              for (int k = 0; k < size1; k++)
+                {
+                  nums[k] = (BITCODE_BL)json_long (dat, tokens);
+                  LOG_TRACE ("%s[%d]: " FORMAT_BL " [BL]\n", key, k, nums[k]);
+                }
+              if (!size1)
+                LOG_TRACE ("%s: [%s] empty\n", key, f->type);
+              dwg_dynapi_field_set_value (dwg, _obj, f, &nums, 1);
+            }
           else if (t->type == JSMN_ARRAY && strEQc (f->type, "TV*"))
             {
               int size1 = t->size;
