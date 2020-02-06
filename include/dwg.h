@@ -364,7 +364,10 @@ typedef enum DWG_OBJECT_TYPE
 
   /* non-fixed types > 500. not stored as type, but as fixedtype */
 
-  DWG_TYPE_ACSH_HISTORY_CLASS = 0x1ff + 1,
+  DWG_TYPE_ACMECOMMANDHISTORY = 0x1ff + 1,
+  DWG_TYPE_ACMESCOPE,
+  DWG_TYPE_ACMESTATEMGR,
+  DWG_TYPE_ACSH_HISTORY_CLASS,
   DWG_TYPE_ACSH_SWEEP_CLASS,
   DWG_TYPE_ANNOTSCALEOBJECTCONTEXTDATA,
   DWG_TYPE_ARCALIGNEDTEXT,
@@ -5338,6 +5341,9 @@ typedef struct _dwg_object_object
     Dwg_Object_VPORT_ENTITY_CONTROL *VPORT_ENTITY_CONTROL;
     Dwg_Object_VPORT_ENTITY_HEADER *VPORT_ENTITY_HEADER;
 
+    //TODO Dwg_Object_ACMECOMMANDHISTORY *ACMECOMMANDHISTORY,
+    //TODO Dwg_Object_ACMESCOPE *ACMESCOPE,
+    //TODO Dwg_Object_ACMESTATEMGR *ACMESTATEMGR,
     //TODO Dwg_Object_ACSH_HISTORY_CLASS *ACSH_HISTORY_CLASS;
     Dwg_Object_ACSH_SWEEP_CLASS *ACSH_SWEEP_CLASS;
     //Dwg_Object_ARCALIGNEDTEXT *ARCALIGNEDTEXT;
@@ -6182,6 +6188,9 @@ EXPORT int dwg_add_ASSOCACTION (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCALIGNEDDIMACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCNETWORK (Dwg_Object *obj);
 EXPORT int dwg_add_NAVISWORKSMODELDEF (Dwg_Object *obj);
+//EXPORT int dwg_add_ACMECOMMANDHISTORY (Dwg_Object *obj);
+//EXPORT int dwg_add_ACMESCOPE (Dwg_Object *obj);
+//EXPORT int dwg_add_ACMESTATEMGR (Dwg_Object *obj);
 //EXPORT int dwg_add_ACSH_HISTORY_CLASS (Dwg_Object *obj);
 EXPORT int dwg_add_ACSH_SWEEP_CLASS (Dwg_Object *obj);
 //EXPORT int dwg_add_ARCALIGNEDTEXT (Dwg_Object *obj);
