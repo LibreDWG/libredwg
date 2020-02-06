@@ -38,36 +38,28 @@ all: $(check_PROGRAMS)
 
 if HAVE_PERL
 # maintainer rules only. srcdir = builddir only
-if HAVE_INSRCDIR
 unknown.c: bd-unknown.inc alldxf_2.inc alldwg.inc
-bd-unknown.inc: bd-unknown.pl
-	$(PERL) bd-unknown.pl | sort | uniq >bd-unknown.inc
+bd-unknown.inc: $(srcdir)/bd-unknown.pl $(srcdir)/ACAD_EVALUATION_GRAPH.pi
+	$(PERL) $(srcdir)/bd-unknown.pl | sort | uniq >bd-unknown.inc
 
 alldxf_2.inc: alldxf_1.inc
 alldxf_1.inc: alldxf_0.inc
 alldxf_0.inc: alldwg.inc log_unknown_dxf.pl
-	test -d ../.git || false
-	test x"$$srcdir" = x"$$builddir" || false
-	test -f alldwg.inc || (echo make regen-unknown; false)
-	-mv alldxf_0.inc alldxf_0.inc~ 2>/dev/null
-	-mv alldxf_1.inc alldxf_1.inc~ 2>/dev/null
-	-mv alldxf_2.inc alldxf_2.inc~ 2>/dev/null
-	cd .. && $(PERL) examples/log_unknown_dxf.pl examples/alldwg.inc
-alldwg.inc: log_unknown.pl
-	test x"$$srcdir" = x"$$builddir" || false
-	echo Creating alldwg.inc will need a few minutes...
+	test -f $(srcdir)/alldwg.inc || (echo make regen-unknown; false)
+	-mv $(srcdir)/alldxf_0.inc alldxf_0.inc~ 2>/dev/null
+	-mv $(srcdir)/alldxf_1.inc alldxf_1.inc~ 2>/dev/null
+	-mv $(srcdir)/alldxf_2.inc alldxf_2.inc~ 2>/dev/null
+	cd .. && $(PERL) $(abs_srcdir)/log_unknown_dxf.pl $(abs_srcdir)/alldwg.inc
+alldwg.inc: $(srcdir)/log_unknown.pl
+	echo Creating $(srcdir)/alldwg.inc will need a few minutes...
 	-cd .. && ./logs-all.sh; \
 	  rm alldwg.tmp 2>/dev/null; \
-	  mv examples/alldwg.inc examples/alldwg.inc~; \
+	  cp $(abs_srcdir)/alldwg.inc examples/alldwg.inc~; \
 	  for l in *_r*.log *_20*.log DS_*.log; \
-	    do $(PERL) examples/log_unknown.pl "$$l" >>alldwg.tmp; done; \
-          grep -v '^//' alldwg.tmp | sort >examples/alldwg.inc; rm alldwg.tmp
+	    do $(PERL) $(abs_srcdir)/log_unknown.pl "$$l" >>alldwg.tmp; done; \
+          grep -v '^//' alldwg.tmp | sort >$(abs_srcdir)/alldwg.inc; rm alldwg.tmp
 
 regen-unknown: alldwg.inc alldxf_0.inc
-else
-regen-unknown:
-	echo "Need a configure in srcdir"
-endif
 endif
 
 if HAVE_WINE
@@ -84,8 +76,8 @@ endif
 
 TESTS = $(top_builddir)/programs/alive.test
 
-EXTRA_DIST = alldxf_0.inc alldxf_1.inc alldxf_2.inc alldwg.inc
-EXTRA_DIST += load_dwg.py unknown.pi
+EXTRA_DIST = alldxf_0.inc alldxf_1.inc alldxf_2.inc alldwg.inc log_unknown_dxf.pl log_unknown.pl
+EXTRA_DIST += load_dwg.py unknown.pi ACAD_EVALUATION_GRAPH.pi bd-unknown.pl
 CLEANFILES = {example,sample}_2000.svg alldwg.inc~ \
 	     alldxf_0.inc~ alldxf_1.inc~ alldxf_2.inc~
 MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i

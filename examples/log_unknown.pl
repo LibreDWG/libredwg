@@ -4,9 +4,11 @@
     make -C examples alldwg.inc
 
 =cut
+no strict;
+my $td = "test/test-data";
 
 # also triggered by objectmap (print) and free
-if (/ Hdlsize: (\d+),/) {
+if (/ Hdlsize: (\d+)[, ]/) {
   $hdlsize = $1; next;
 }
 if (/^Warning: (?:Unhandled|Unstable) Class (object|entity) \d+ (\w+) /) {
@@ -24,15 +26,15 @@ elsif (/^bitsize: (\d+) /) {
   print "//bitsize decoded=$1\n";
   $bitsize = $1; next;
 }
-elsif (/handle: 0\.\d+\.([0-9A-F]+) \[5\]$/) {
+elsif (/handle: 0\.\d+\.([0-9A-F]+) \[H 5\]$/) {
   print "//handle=$1\n";
   $handle = $1; next;
 }
 next unless $bitsize and $handle;
 
-if (/^unknown_bits \[(\d+) \((\d+),(-?\d+),(\d+)\) TF\]: ([0-9a-f]+$)/) {
-  ($num_bits, $commonsize, $hdloff, $strsize, $b) = ($1, $2, $3, $4, $5);
-  print "//offsets=$num_bits, $commonsize, $hdloff, $strsize, $hdlsize\n";
+if (/^unknown_bits \[(\d+) \((\d+),(-?\d+),(\d+)\) (\d+) TF\]: ([0-9A-F]+$)/) {
+  ($num_bits, $commonsize, $hdloff, $strsize, $len, $b) = ($1, $2, $3, $4, $5, $6);
+  print "//offsets=$num_bits, $commonsize, $hdloff, $strsize, $hdlsize. len=$len\n";
   chomp $b; next;
 }
 next unless $b;
@@ -45,18 +47,18 @@ if (/Next object: / or /^Num objects:/) {
   my $dxf = $ARGV; # cvt log to dxf
   my ($n, $d) = $dxf =~ /^(.*)_(r\d+|R?20\d\d)\.log$/;
   if ($n =~ /^(example|sample|Drawing|DS_li)/) {
-    $dxf = "test/test-data/${n}_${d}.dxf";
-    unless (-f $dxf) {
-      $dxf = "test/test-data/$d/$n.dxf";
+    $dxf = "$td/${n}_${d}.dxf";
+    unless (-f $dxf || -f "../$dxf") {
+      $dxf = "$td/$d/$n.dxf";
     }
   } else {
-    $dxf = "test/test-data/$d/$n.dxf";
-    unless (-f $dxf) {
-      $dxf = "test/test-data/${n}_${d}.dxf";
+    $dxf = "$td/$d/$n.dxf";
+    unless (-f $dxf || -f "../$dxf") {
+      $dxf = "$td/${n}_${d}.dxf";
     }
   }
   next if $dxf =~ /work\.orig/; # skip temp. duplicates
-  $dxf = undef unless -f $dxf;
+  $dxf = undef unless -f $dxf || -f "../$dxf";
   printf "    { \"$object\", \"$ARGV\", \"$b\", %s, 0x$handle, ".
     "$is_entity, $num_bits, $commonsize, $hdloff, $strsize, $hdlsize, $bitsize },\n",
     $dxf ? "\"$dxf\"" : "NULL";
