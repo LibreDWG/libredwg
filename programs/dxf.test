@@ -172,7 +172,7 @@ check_roundtrip() {
             echo "$dxf" roundtrip ok
             rm "$log1" "$log2" 2>/dev/null
         else
-            echo "$dxf" roundtrip fail: "$expect vs $got" entities
+            echo "$dxf" "roundtrip fail: $expect vs $got entities (TODO)"
             #problems=$(expr 1 + $problems)
             echo "expect=$expect" >$log
             echo "got=$got" >>$log

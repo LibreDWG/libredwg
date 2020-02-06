@@ -43,7 +43,7 @@ check_roundtrip() {
             echo "$json" roundtrip ok
             rm "$log1" "$log2" 2>/dev/null
         else
-            echo "$json" roundtrip fail: "$expect vs $got" entities
+            echo "$json" "roundtrip fail: $expect vs $got entities (TODO)"
             #problems=$(expr 1 + $problems)
             echo "expect=$expect" >$log
             echo "got=$got" >>$log
