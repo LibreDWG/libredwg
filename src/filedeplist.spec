@@ -19,11 +19,11 @@
   #include "spec.h"
 
   FIELD_RL (num_features, 0);
-  REPEAT (num_features, features, BITCODE_TV)
-  REPEAT_BLOCK
-    FIELD_T32 (features[rcount1], 0);
-  END_REPEAT_BLOCK
-  END_REPEAT (features)
+#ifdef IS_JSON
+  FIELD_VECTOR_T (features, num_features, 0);
+#else
+  FIELD_VECTOR (features, T32, num_features, 0);
+#endif
   FIELD_RL (num_files, 0);
   REPEAT (num_files, files, Dwg_FileDepList_Files)
   REPEAT_BLOCK

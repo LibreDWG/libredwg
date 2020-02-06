@@ -799,7 +799,7 @@ dwg_free_filedeplist (Dwg_Data *dwg)
   struct Dwg_FileDepList *_obj = &dwg->filedeplist;
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
-  BITCODE_RL rcount1, rcount2;
+  BITCODE_RL vcount, rcount1;
 
   // clang-format off
   #include "filedeplist.spec"

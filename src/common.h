@@ -207,6 +207,7 @@ typedef enum DWG_BITS
                     “string stream” within the object data. r2007+ */
   BITS_T,       /** text, version dependent: TV or TU */
   BITS_TF,      /** fixed-length text */
+  BITS_T32,     /** String32 type */
   BITS_HANDLE,  /** handle reference (see the HANDLE REFERENCES section) */
   BITS_BE,      /** BitExtrusion */
   BITS_DD,      /** BitDouble With Default */

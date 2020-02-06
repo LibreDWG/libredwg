@@ -2003,7 +2003,7 @@ read_2007_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   Bit_Chain *str_dat;
   struct Dwg_FileDepList *_obj = &dwg->filedeplist;
   Dwg_Object *obj = NULL;
-  //BITCODE_BL vcount;
+  BITCODE_BL vcount;
   BITCODE_RL rcount1 = 0, rcount2 = 0;
 
   // not compressed, page size: 0x80. 0xc or 0xd

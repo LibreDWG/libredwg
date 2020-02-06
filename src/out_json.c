@@ -143,8 +143,8 @@ static char* _path_field(const char *path);
 #define FIELD(nam, type, dxf)                                                 \
   if (!memBEGINc (#nam, "num_"))                                              \
     {                                                                         \
-      PREFIX fprintf (dat->fh, "\"" #nam "\": " FORMAT_##type ",\n",          \
-                      _obj->nam);                                             \
+      PREFIX fprintf (dat->fh, "\"%s\": " FORMAT_##type ",\n",                \
+                      _path_field(#nam), _obj->nam);                          \
     }
 #define _FIELD(nam, type, value)                                              \
   {                                                                           \
@@ -152,14 +152,14 @@ static char* _path_field(const char *path);
   }
 #define ENT_FIELD(nam, type, value)                                           \
   {                                                                           \
-    PREFIX fprintf (dat->fh, "\"" #nam "\": " FORMAT_##type ",\n",            \
-                    _ent->nam);                                               \
+    PREFIX fprintf (dat->fh, "\"%s\": " FORMAT_##type ",\n",                  \
+                    _path_field(#nam), _ent->nam);                            \
   }
 #define SUB_FIELD(o, nam, type, dxf)                                          \
   if (!memBEGINc (#nam, "num_"))                                              \
     {                                                                         \
-      PREFIX fprintf (dat->fh, "\"" #nam "\": " FORMAT_##type ",\n",          \
-                      _obj->o.nam);                                           \
+      PREFIX fprintf (dat->fh, "\"%s\": " FORMAT_##type ",\n",                \
+                      _path_field(#nam), _obj->o.nam);                        \
     }
 #define FIELD_CAST(nam, type, cast, dxf) FIELD (nam, cast, dxf)
 #define FIELD_TRACE(nam, type)
@@ -167,7 +167,7 @@ static char* _path_field(const char *path);
 #define FIELD_TEXT(nam, str)                                                  \
   {                                                                           \
     PREFIX                                                                    \
-    fprintf (dat->fh, "\"" #nam "\": ");                                      \
+    fprintf (dat->fh, "\"%s\": ", _path_field(#nam));                         \
     VALUE_TEXT ((char*)str)                                                   \
   }
 
@@ -238,24 +238,24 @@ static char* _path_field(const char *path);
   {                                                                           \
     if (_obj->nam)                                                            \
       {                                                                       \
-        PREFIX fprintf (dat->fh, "\"" #nam "\": " FORMAT_H ",\n",             \
-                        ARGS_H (_obj->nam->handleref));                       \
+        PREFIX fprintf (dat->fh, "\"%s\": " FORMAT_H ",\n",                   \
+                        _path_field(#nam), ARGS_H (_obj->nam->handleref));    \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        PREFIX fprintf (dat->fh, "\"" #nam "\": [0, 0],\n");                  \
+        PREFIX fprintf (dat->fh, "\"%s\": [0, 0],\n", _path_field(#nam));     \
       }                                                                       \
   }
 #define SUB_FIELD_HANDLE(o, nam, handle_code, dxf)                            \
   {                                                                           \
     if (_obj->o.nam)                                                          \
       {                                                                       \
-        PREFIX fprintf (dat->fh, "\"" #nam "\": " FORMAT_H ",\n",             \
-                        ARGS_H (_obj->o.nam->handleref));                     \
+        PREFIX fprintf (dat->fh, "\"%s\": " FORMAT_H ",\n",                   \
+                        _path_field(#nam), ARGS_H (_obj->o.nam->handleref));  \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        PREFIX fprintf (dat->fh, "\"" #nam "\": [0, 0],\n");                  \
+        PREFIX fprintf (dat->fh, "\"%s\": [0, 0],\n", _path_field(#nam));     \
       }                                                                       \
   }
 #define FIELD_DATAHANDLE(nam, code, dxf) FIELD_HANDLE (nam, code, dxf)
@@ -1521,6 +1521,7 @@ json_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
+#if 0
 static int
 json_section_appinfohistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
@@ -1537,6 +1538,7 @@ json_section_appinfohistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   ENDRECORD ();
   return 0;
 }
+#endif
 
 static int
 json_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
@@ -1544,20 +1546,13 @@ json_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   struct Dwg_FileDepList *_obj = &dwg->filedeplist;
   Dwg_Object *obj = NULL;
   int error = 0;
-  BITCODE_RL rcount1;
+  BITCODE_RL vcount, rcount1;
 
   RECORD (FileDepList); // single hash
   // clang-format off
   #include "filedeplist.spec"
   // clang-format on
-  if (!_obj->num_features && !_obj->num_files)
-    {
-      ENDHASH;
-    }
-  else
-    {
-      ENDRECORD ();
-    }
+  ENDRECORD ();
   return 0;
 }
 
@@ -1710,7 +1705,7 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           if (dwg->header.vbaproj_address)
             error |= json_section_vbaproject (dat, dwg);
           error |= json_section_appinfo (dat, dwg);
-          error |= json_section_appinfohistory (dat, dwg);
+          //error |= json_section_appinfohistory (dat, dwg);
           error |= json_section_filedeplist (dat, dwg);
           error |= json_section_security (dat, dwg);
           error |= json_section_revhistory (dat, dwg);

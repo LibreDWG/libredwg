@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009-2019 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2009-2020 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -86,11 +86,11 @@ const char version_codes[DWG_VERSIONS][7] = {
 
 // keep in sync with common.h DWG_BITS
 const char *dwg_bits_name[] = {
-  "UNKNOWN", "RC",  "RS",  "RL",      "B",   "BB",     "3B",  "4BITS",
-  "BS",      "BL",  "BLd", "RLL",     "RD",  "BD",     "MC",  "UMC",
-  "MS",      "TV",  "TU",  "T",       "TF",  "HANDLE", "BE",  "DD",
-  "BT",      "BOT", "BLL", "TIMEBLL", "CMC", "ENC",    "2RD", "3RD",
-  "2BD",     "3BD", "2DD", "3DD",     "CRC", "CRC64",
+  "UNKNOWN", "RC",  "RS",  "RL",  "B",       "BB",  "3B",     "4BITS",
+  "BS",      "BL",  "BLd", "RLL", "RD",      "BD",  "MC",     "UMC",
+  "MS",      "TV",  "TU",  "T",   "TF",      "T32", "HANDLE", "BE",
+  "DD",      "BT",  "BOT", "BLL", "TIMEBLL", "CMC", "ENC",    "2RD",
+  "3RD",     "2BD", "3BD", "2DD", "3DD",     "CRC", "CRC64",
 };
 
 // minimal size of type in bits
@@ -117,6 +117,7 @@ const unsigned char dwg_bits_size[] = {
   18,  //"TU",
   2,   //"T",
   1,   //"TF",
+  2,   //"T32",
   8,   //"HANDLE",
   1,   //"BE", or 3BD
   2,   //"DD",
