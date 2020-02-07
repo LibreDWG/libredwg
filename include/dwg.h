@@ -5158,7 +5158,7 @@ typedef struct _dwg_object_RENDERGLOBAL
 
 /**
  * Class AcDbAnnotScaleObjectContextData (varies)
- * for MTEXT, MLEADER, LEADER, BLKREF, ALDIM (AlignedDimension), ...
+ * for MTEXT, TEXT, MLEADER, LEADER, BLKREF, ALDIM (AlignedDimension), MTEXTATTRIBUTE, ...
  * R2010+
  */
 typedef struct _dwg_object_ANNOTSCALEOBJECTCONTEXTDATA
