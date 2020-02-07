@@ -17211,6 +17211,363 @@ static int test_SPLINE (const Dwg_Object *obj)
   }
   return failed;
 }
+static int test_SURFACE (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_SURFACE *restrict surface = obj->tio.entity->tio.SURFACE;
+  {
+    BITCODE_RC* acis_data;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "acis_data", &acis_data, NULL)
+        && acis_data
+           ? strEQ ((char *)acis_data, (char *)surface->acis_data)
+           : !surface->acis_data)
+      pass ();
+    else
+      fail ("SURFACE.acis_data [RC*] '%s' <> '%s'", acis_data, surface->acis_data);
+  }
+  {
+    BITCODE_B acis_empty;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "acis_empty", &acis_empty, NULL)
+        && acis_empty == surface->acis_empty)
+      pass ();
+    else
+      fail ("SURFACE.acis_empty [B] " FORMAT_B " != " FORMAT_B "", surface->acis_empty, acis_empty);
+    acis_empty++;
+    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "acis_empty", &acis_empty, 0)
+        && acis_empty == surface->acis_empty)
+      pass ();
+    else
+      fail ("SURFACE.acis_empty [B] set+1 " FORMAT_B " != " FORMAT_B "", surface->acis_empty, acis_empty);
+    surface->acis_empty--;
+
+  }
+  {
+    BITCODE_B acis_empty2;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "acis_empty2", &acis_empty2, NULL)
+        && acis_empty2 == surface->acis_empty2)
+      pass ();
+    else
+      fail ("SURFACE.acis_empty2 [B] " FORMAT_B " != " FORMAT_B "", surface->acis_empty2, acis_empty2);
+    acis_empty2++;
+    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "acis_empty2", &acis_empty2, 0)
+        && acis_empty2 == surface->acis_empty2)
+      pass ();
+    else
+      fail ("SURFACE.acis_empty2 [B] set+1 " FORMAT_B " != " FORMAT_B "", surface->acis_empty2, acis_empty2);
+    surface->acis_empty2--;
+
+  }
+  {
+    BITCODE_B acis_empty_bit;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "acis_empty_bit", &acis_empty_bit, NULL)
+        && acis_empty_bit == surface->acis_empty_bit)
+      pass ();
+    else
+      fail ("SURFACE.acis_empty_bit [B] " FORMAT_B " != " FORMAT_B "", surface->acis_empty_bit, acis_empty_bit);
+    acis_empty_bit++;
+    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "acis_empty_bit", &acis_empty_bit, 0)
+        && acis_empty_bit == surface->acis_empty_bit)
+      pass ();
+    else
+      fail ("SURFACE.acis_empty_bit [B] set+1 " FORMAT_B " != " FORMAT_B "", surface->acis_empty_bit, acis_empty_bit);
+    surface->acis_empty_bit--;
+
+  }
+  {
+    BITCODE_BL* block_size;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "block_size", &block_size, NULL)
+        && !memcmp (&block_size, &surface->block_size, sizeof (surface->block_size)))
+        pass ();
+    else
+        fail ("SURFACE.block_size [BL*]");
+  }
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "class_version", &class_version, NULL)
+        && class_version == surface->class_version)
+      pass ();
+    else
+      fail ("SURFACE.class_version [BL] %u != %u", surface->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "class_version", &class_version, 0)
+        && class_version == surface->class_version)
+      pass ();
+    else
+      fail ("SURFACE.class_version [BL] set+1 %u != %u", surface->class_version, class_version);
+    surface->class_version--;
+
+  }
+  {
+    char ** encr_sat_data;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "encr_sat_data", &encr_sat_data, NULL)
+        && !memcmp (&encr_sat_data, &surface->encr_sat_data, sizeof (surface->encr_sat_data)))
+      pass ();
+    else
+      fail ("SURFACE.encr_sat_data [char **]");
+  }
+  {
+    struct _dwg_entity_3DSOLID* extra_acis_data;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "extra_acis_data", &extra_acis_data, NULL)
+        && !memcmp (&extra_acis_data, &surface->extra_acis_data, sizeof (surface->extra_acis_data)))
+        pass ();
+    else
+        fail ("SURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*]");
+  }
+  {
+    BITCODE_H history_id;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "history_id", &history_id, NULL)
+        && !memcmp (&history_id, &surface->history_id, sizeof (surface->history_id)))
+        pass ();
+    else
+        fail ("SURFACE.history_id [H]");
+  }
+  {
+    BITCODE_B isoline_present;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "isoline_present", &isoline_present, NULL)
+        && isoline_present == surface->isoline_present)
+      pass ();
+    else
+      fail ("SURFACE.isoline_present [B] " FORMAT_B " != " FORMAT_B "", surface->isoline_present, isoline_present);
+    isoline_present++;
+    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "isoline_present", &isoline_present, 0)
+        && isoline_present == surface->isoline_present)
+      pass ();
+    else
+      fail ("SURFACE.isoline_present [B] set+1 " FORMAT_B " != " FORMAT_B "", surface->isoline_present, isoline_present);
+    surface->isoline_present--;
+
+  }
+  {
+    BITCODE_BS modeler_format_version;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "modeler_format_version", &modeler_format_version, NULL)
+        && modeler_format_version == surface->modeler_format_version)
+      pass ();
+    else
+      fail ("SURFACE.modeler_format_version [BS] %hu != %hu", surface->modeler_format_version, modeler_format_version);
+    modeler_format_version++;
+    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "modeler_format_version", &modeler_format_version, 0)
+        && modeler_format_version == surface->modeler_format_version)
+      pass ();
+    else
+      fail ("SURFACE.modeler_format_version [BS] set+1 %hu != %hu", surface->modeler_format_version, modeler_format_version);
+    surface->modeler_format_version--;
+
+  }
+  {
+    BITCODE_BL num_blocks;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "num_blocks", &num_blocks, NULL)
+        && num_blocks == surface->num_blocks)
+      pass ();
+    else
+      fail ("SURFACE.num_blocks [BL] %u != %u", surface->num_blocks, num_blocks);
+    num_blocks++;
+    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "num_blocks", &num_blocks, 0)
+        && num_blocks == surface->num_blocks)
+      pass ();
+    else
+      fail ("SURFACE.num_blocks [BL] set+1 %u != %u", surface->num_blocks, num_blocks);
+    surface->num_blocks--;
+
+  }
+  {
+    BITCODE_BL num_isolines;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "num_isolines", &num_isolines, NULL)
+        && num_isolines == surface->num_isolines)
+      pass ();
+    else
+      fail ("SURFACE.num_isolines [BL] %u != %u", surface->num_isolines, num_isolines);
+    num_isolines++;
+    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "num_isolines", &num_isolines, 0)
+        && num_isolines == surface->num_isolines)
+      pass ();
+    else
+      fail ("SURFACE.num_isolines [BL] set+1 %u != %u", surface->num_isolines, num_isolines);
+    surface->num_isolines--;
+
+  }
+  {
+    BITCODE_BL num_silhouettes;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "num_silhouettes", &num_silhouettes, NULL)
+        && num_silhouettes == surface->num_silhouettes)
+      pass ();
+    else
+      fail ("SURFACE.num_silhouettes [BL] %u != %u", surface->num_silhouettes, num_silhouettes);
+    num_silhouettes++;
+    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "num_silhouettes", &num_silhouettes, 0)
+        && num_silhouettes == surface->num_silhouettes)
+      pass ();
+    else
+      fail ("SURFACE.num_silhouettes [BL] set+1 %u != %u", surface->num_silhouettes, num_silhouettes);
+    surface->num_silhouettes--;
+
+  }
+  {
+    BITCODE_BL num_wires;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "num_wires", &num_wires, NULL)
+        && num_wires == surface->num_wires)
+      pass ();
+    else
+      fail ("SURFACE.num_wires [BL] %u != %u", surface->num_wires, num_wires);
+    num_wires++;
+    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "num_wires", &num_wires, 0)
+        && num_wires == surface->num_wires)
+      pass ();
+    else
+      fail ("SURFACE.num_wires [BL] set+1 %u != %u", surface->num_wires, num_wires);
+    surface->num_wires--;
+
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "parent", &parent, NULL)
+        && !memcmp (&parent, &surface->parent, sizeof (surface->parent)))
+        pass ();
+    else
+        fail ("SURFACE.parent [struct _dwg_object_entity*]");
+  }
+  {
+    BITCODE_3BD point;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "point", &point, NULL)
+        && !memcmp (&point, &surface->point, sizeof (surface->point)))
+        pass ();
+    else
+        fail ("SURFACE.point [3BD]");
+  }
+  {
+    BITCODE_B point_present;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "point_present", &point_present, NULL)
+        && point_present == surface->point_present)
+      pass ();
+    else
+      fail ("SURFACE.point_present [B] " FORMAT_B " != " FORMAT_B "", surface->point_present, point_present);
+    point_present++;
+    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "point_present", &point_present, 0)
+        && point_present == surface->point_present)
+      pass ();
+    else
+      fail ("SURFACE.point_present [B] set+1 " FORMAT_B " != " FORMAT_B "", surface->point_present, point_present);
+    surface->point_present--;
+
+  }
+  {
+    Dwg_3DSOLID_silhouette* silhouettes;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "num_silhouettes", &count, NULL)
+        && dwg_dynapi_entity_value (surface, "SURFACE", "silhouettes", &silhouettes, NULL)
+        && silhouettes == surface->silhouettes)
+      pass ();
+    else
+      fail ("SURFACE.silhouettes [Dwg_3DSOLID_silhouette*] * %u num_silhouettes", count);
+  }
+  {
+    BITCODE_BS u_isolines;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "u_isolines", &u_isolines, NULL)
+        && u_isolines == surface->u_isolines)
+      pass ();
+    else
+      fail ("SURFACE.u_isolines [BS] %hu != %hu", surface->u_isolines, u_isolines);
+    u_isolines++;
+    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "u_isolines", &u_isolines, 0)
+        && u_isolines == surface->u_isolines)
+      pass ();
+    else
+      fail ("SURFACE.u_isolines [BS] set+1 %hu != %hu", surface->u_isolines, u_isolines);
+    surface->u_isolines--;
+
+  }
+  {
+    BITCODE_B unknown;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "unknown", &unknown, NULL)
+        && unknown == surface->unknown)
+      pass ();
+    else
+      fail ("SURFACE.unknown [B] " FORMAT_B " != " FORMAT_B "", surface->unknown, unknown);
+    unknown++;
+    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "unknown", &unknown, 0)
+        && unknown == surface->unknown)
+      pass ();
+    else
+      fail ("SURFACE.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", surface->unknown, unknown);
+    surface->unknown--;
+
+  }
+  {
+    BITCODE_BL unknown_2007;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "unknown_2007", &unknown_2007, NULL)
+        && unknown_2007 == surface->unknown_2007)
+      pass ();
+    else
+      fail ("SURFACE.unknown_2007 [BL] %u != %u", surface->unknown_2007, unknown_2007);
+    unknown_2007++;
+    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "unknown_2007", &unknown_2007, 0)
+        && unknown_2007 == surface->unknown_2007)
+      pass ();
+    else
+      fail ("SURFACE.unknown_2007 [BL] set+1 %u != %u", surface->unknown_2007, unknown_2007);
+    surface->unknown_2007--;
+
+  }
+  {
+    BITCODE_BS v_isolines;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "v_isolines", &v_isolines, NULL)
+        && v_isolines == surface->v_isolines)
+      pass ();
+    else
+      fail ("SURFACE.v_isolines [BS] %hu != %hu", surface->v_isolines, v_isolines);
+    v_isolines++;
+    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "v_isolines", &v_isolines, 0)
+        && v_isolines == surface->v_isolines)
+      pass ();
+    else
+      fail ("SURFACE.v_isolines [BS] set+1 %hu != %hu", surface->v_isolines, v_isolines);
+    surface->v_isolines--;
+
+  }
+  {
+    BITCODE_BS version;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "version", &version, NULL)
+        && version == surface->version)
+      pass ();
+    else
+      fail ("SURFACE.version [BS] %hu != %hu", surface->version, version);
+    version++;
+    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "version", &version, 0)
+        && version == surface->version)
+      pass ();
+    else
+      fail ("SURFACE.version [BS] set+1 %hu != %hu", surface->version, version);
+    surface->version--;
+
+  }
+  {
+    BITCODE_B wireframe_data_present;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "wireframe_data_present", &wireframe_data_present, NULL)
+        && wireframe_data_present == surface->wireframe_data_present)
+      pass ();
+    else
+      fail ("SURFACE.wireframe_data_present [B] " FORMAT_B " != " FORMAT_B "", surface->wireframe_data_present, wireframe_data_present);
+    wireframe_data_present++;
+    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "wireframe_data_present", &wireframe_data_present, 0)
+        && wireframe_data_present == surface->wireframe_data_present)
+      pass ();
+    else
+      fail ("SURFACE.wireframe_data_present [B] set+1 " FORMAT_B " != " FORMAT_B "", surface->wireframe_data_present, wireframe_data_present);
+    surface->wireframe_data_present--;
+
+  }
+  {
+    Dwg_3DSOLID_wire* wires;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (surface, "SURFACE", "num_wires", &count, NULL)
+        && dwg_dynapi_entity_value (surface, "SURFACE", "wires", &wires, NULL)
+        && wires == surface->wires)
+      pass ();
+    else
+      fail ("SURFACE.wires [Dwg_3DSOLID_wire*] * %u num_wires", count);
+  }
+  return failed;
+}
 static int test_SWEPTSURFACE (const Dwg_Object *obj)
 {
   int error = 0;
@@ -21058,6 +21415,740 @@ static int test_XLINE (const Dwg_Object *obj)
   Dwg_Entity_XLINE *restrict xline = obj->tio.entity->tio.XLINE;
   return failed;
 }
+static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ACSH_BOX_CLASS *restrict acsh_box_class = obj->tio.object->tio.ACSH_BOX_CLASS;
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "class_version", &class_version, NULL)
+        && class_version == acsh_box_class->class_version)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.class_version [BL] %u != %u", acsh_box_class->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (acsh_box_class, "ACSH_BOX_CLASS", "class_version", &class_version, 0)
+        && class_version == acsh_box_class->class_version)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.class_version [BL] set+1 %u != %u", acsh_box_class->class_version, class_version);
+    acsh_box_class->class_version--;
+
+  }
+  {
+    BITCODE_CMC color;
+    if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "color", &color, NULL)
+        && !memcmp (&color, &acsh_box_class->color, sizeof (acsh_box_class->color)))
+        pass ();
+    else
+        fail ("ACSH_BOX_CLASS.color [CMC]");
+  }
+  {
+    BITCODE_BL ee_bl98;
+    if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "ee_bl98", &ee_bl98, NULL)
+        && ee_bl98 == acsh_box_class->ee_bl98)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.ee_bl98 [BL] %u != %u", acsh_box_class->ee_bl98, ee_bl98);
+    ee_bl98++;
+    if (dwg_dynapi_entity_set_value (acsh_box_class, "ACSH_BOX_CLASS", "ee_bl98", &ee_bl98, 0)
+        && ee_bl98 == acsh_box_class->ee_bl98)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.ee_bl98 [BL] set+1 %u != %u", acsh_box_class->ee_bl98, ee_bl98);
+    acsh_box_class->ee_bl98--;
+
+  }
+  {
+    BITCODE_BL ee_bl99;
+    if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "ee_bl99", &ee_bl99, NULL)
+        && ee_bl99 == acsh_box_class->ee_bl99)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.ee_bl99 [BL] %u != %u", acsh_box_class->ee_bl99, ee_bl99);
+    ee_bl99++;
+    if (dwg_dynapi_entity_set_value (acsh_box_class, "ACSH_BOX_CLASS", "ee_bl99", &ee_bl99, 0)
+        && ee_bl99 == acsh_box_class->ee_bl99)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.ee_bl99 [BL] set+1 %u != %u", acsh_box_class->ee_bl99, ee_bl99);
+    acsh_box_class->ee_bl99--;
+
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "parent", &parent, NULL)
+        && !memcmp (&parent, &acsh_box_class->parent, sizeof (acsh_box_class->parent)))
+        pass ();
+    else
+        fail ("ACSH_BOX_CLASS.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BD shb_bd40;
+    if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "shb_bd40", &shb_bd40, NULL)
+        && shb_bd40 == acsh_box_class->shb_bd40)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.shb_bd40 [BD] %g != %g", acsh_box_class->shb_bd40, shb_bd40);
+    shb_bd40++;
+    if (dwg_dynapi_entity_set_value (acsh_box_class, "ACSH_BOX_CLASS", "shb_bd40", &shb_bd40, 0)
+        && shb_bd40 == acsh_box_class->shb_bd40)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.shb_bd40 [BD] set+1 %g != %g", acsh_box_class->shb_bd40, shb_bd40);
+    acsh_box_class->shb_bd40--;
+
+  }
+  {
+    BITCODE_BD shb_bd41;
+    if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "shb_bd41", &shb_bd41, NULL)
+        && shb_bd41 == acsh_box_class->shb_bd41)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.shb_bd41 [BD] %g != %g", acsh_box_class->shb_bd41, shb_bd41);
+    shb_bd41++;
+    if (dwg_dynapi_entity_set_value (acsh_box_class, "ACSH_BOX_CLASS", "shb_bd41", &shb_bd41, 0)
+        && shb_bd41 == acsh_box_class->shb_bd41)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.shb_bd41 [BD] set+1 %g != %g", acsh_box_class->shb_bd41, shb_bd41);
+    acsh_box_class->shb_bd41--;
+
+  }
+  {
+    BITCODE_BD shb_bd42;
+    if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "shb_bd42", &shb_bd42, NULL)
+        && shb_bd42 == acsh_box_class->shb_bd42)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.shb_bd42 [BD] %g != %g", acsh_box_class->shb_bd42, shb_bd42);
+    shb_bd42++;
+    if (dwg_dynapi_entity_set_value (acsh_box_class, "ACSH_BOX_CLASS", "shb_bd42", &shb_bd42, 0)
+        && shb_bd42 == acsh_box_class->shb_bd42)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.shb_bd42 [BD] set+1 %g != %g", acsh_box_class->shb_bd42, shb_bd42);
+    acsh_box_class->shb_bd42--;
+
+  }
+  {
+    BITCODE_BL shb_bl90;
+    if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "shb_bl90", &shb_bl90, NULL)
+        && shb_bl90 == acsh_box_class->shb_bl90)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.shb_bl90 [BL] %u != %u", acsh_box_class->shb_bl90, shb_bl90);
+    shb_bl90++;
+    if (dwg_dynapi_entity_set_value (acsh_box_class, "ACSH_BOX_CLASS", "shb_bl90", &shb_bl90, 0)
+        && shb_bl90 == acsh_box_class->shb_bl90)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.shb_bl90 [BL] set+1 %u != %u", acsh_box_class->shb_bl90, shb_bl90);
+    acsh_box_class->shb_bl90--;
+
+  }
+  {
+    BITCODE_BL shb_bl91;
+    if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "shb_bl91", &shb_bl91, NULL)
+        && shb_bl91 == acsh_box_class->shb_bl91)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.shb_bl91 [BL] %u != %u", acsh_box_class->shb_bl91, shb_bl91);
+    shb_bl91++;
+    if (dwg_dynapi_entity_set_value (acsh_box_class, "ACSH_BOX_CLASS", "shb_bl91", &shb_bl91, 0)
+        && shb_bl91 == acsh_box_class->shb_bl91)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.shb_bl91 [BL] set+1 %u != %u", acsh_box_class->shb_bl91, shb_bl91);
+    acsh_box_class->shb_bl91--;
+
+  }
+  {
+    BITCODE_B shhn_b92;
+    if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "shhn_b92", &shhn_b92, NULL)
+        && shhn_b92 == acsh_box_class->shhn_b92)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.shhn_b92 [B] " FORMAT_B " != " FORMAT_B "", acsh_box_class->shhn_b92, shhn_b92);
+    shhn_b92++;
+    if (dwg_dynapi_entity_set_value (acsh_box_class, "ACSH_BOX_CLASS", "shhn_b92", &shhn_b92, 0)
+        && shhn_b92 == acsh_box_class->shhn_b92)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.shhn_b92 [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_box_class->shhn_b92, shhn_b92);
+    acsh_box_class->shhn_b92--;
+
+  }
+  {
+    BITCODE_BL shhn_bl347;
+    if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "shhn_bl347", &shhn_bl347, NULL)
+        && shhn_bl347 == acsh_box_class->shhn_bl347)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.shhn_bl347 [BL] %u != %u", acsh_box_class->shhn_bl347, shhn_bl347);
+    shhn_bl347++;
+    if (dwg_dynapi_entity_set_value (acsh_box_class, "ACSH_BOX_CLASS", "shhn_bl347", &shhn_bl347, 0)
+        && shhn_bl347 == acsh_box_class->shhn_bl347)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.shhn_bl347 [BL] set+1 %u != %u", acsh_box_class->shhn_bl347, shhn_bl347);
+    acsh_box_class->shhn_bl347--;
+
+  }
+  {
+    BITCODE_BL shhn_bl90;
+    if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "shhn_bl90", &shhn_bl90, NULL)
+        && shhn_bl90 == acsh_box_class->shhn_bl90)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.shhn_bl90 [BL] %u != %u", acsh_box_class->shhn_bl90, shhn_bl90);
+    shhn_bl90++;
+    if (dwg_dynapi_entity_set_value (acsh_box_class, "ACSH_BOX_CLASS", "shhn_bl90", &shhn_bl90, 0)
+        && shhn_bl90 == acsh_box_class->shhn_bl90)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.shhn_bl90 [BL] set+1 %u != %u", acsh_box_class->shhn_bl90, shhn_bl90);
+    acsh_box_class->shhn_bl90--;
+
+  }
+  {
+    BITCODE_BL shhn_bl91;
+    if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "shhn_bl91", &shhn_bl91, NULL)
+        && shhn_bl91 == acsh_box_class->shhn_bl91)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.shhn_bl91 [BL] %u != %u", acsh_box_class->shhn_bl91, shhn_bl91);
+    shhn_bl91++;
+    if (dwg_dynapi_entity_set_value (acsh_box_class, "ACSH_BOX_CLASS", "shhn_bl91", &shhn_bl91, 0)
+        && shhn_bl91 == acsh_box_class->shhn_bl91)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.shhn_bl91 [BL] set+1 %u != %u", acsh_box_class->shhn_bl91, shhn_bl91);
+    acsh_box_class->shhn_bl91--;
+
+  }
+  {
+    BITCODE_BD* shhn_pts;
+    if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "shhn_pts", &shhn_pts, NULL)
+        && !memcmp (&shhn_pts, &acsh_box_class->shhn_pts, sizeof (acsh_box_class->shhn_pts)))
+        pass ();
+    else
+        fail ("ACSH_BOX_CLASS.shhn_pts [BD*]");
+  }
+  return failed;
+}
+static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ACSH_EXTRUSION_CLASS *restrict acsh_extrusion_class = obj->tio.object->tio.ACSH_EXTRUSION_CLASS;
+  {
+    BITCODE_BD align_angle;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "align_angle", &align_angle, NULL)
+        && align_angle == acsh_extrusion_class->align_angle)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.align_angle [BD] %g != %g", acsh_extrusion_class->align_angle, align_angle);
+    align_angle++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "align_angle", &align_angle, 0)
+        && align_angle == acsh_extrusion_class->align_angle)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.align_angle [BD] set+1 %g != %g", acsh_extrusion_class->align_angle, align_angle);
+    acsh_extrusion_class->align_angle--;
+
+  }
+  {
+    BITCODE_RC align_option;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "align_option", &align_option, NULL)
+        && align_option == acsh_extrusion_class->align_option)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.align_option [RC] %u != %u", acsh_extrusion_class->align_option, align_option);
+    align_option++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "align_option", &align_option, 0)
+        && align_option == acsh_extrusion_class->align_option)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.align_option [RC] set+1 %u != %u", acsh_extrusion_class->align_option, align_option);
+    acsh_extrusion_class->align_option--;
+
+  }
+  {
+    BITCODE_B bank;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "bank", &bank, NULL)
+        && bank == acsh_extrusion_class->bank)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.bank [B] " FORMAT_B " != " FORMAT_B "", acsh_extrusion_class->bank, bank);
+    bank++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "bank", &bank, 0)
+        && bank == acsh_extrusion_class->bank)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.bank [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_extrusion_class->bank, bank);
+    acsh_extrusion_class->bank--;
+
+  }
+  {
+    BITCODE_3BD basept;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "basept", &basept, NULL)
+        && !memcmp (&basept, &acsh_extrusion_class->basept, sizeof (acsh_extrusion_class->basept)))
+        pass ();
+    else
+        fail ("ACSH_EXTRUSION_CLASS.basept [3BD]");
+  }
+  {
+    BITCODE_B check_intersections;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "check_intersections", &check_intersections, NULL)
+        && check_intersections == acsh_extrusion_class->check_intersections)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.check_intersections [B] " FORMAT_B " != " FORMAT_B "", acsh_extrusion_class->check_intersections, check_intersections);
+    check_intersections++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "check_intersections", &check_intersections, 0)
+        && check_intersections == acsh_extrusion_class->check_intersections)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.check_intersections [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_extrusion_class->check_intersections, check_intersections);
+    acsh_extrusion_class->check_intersections--;
+
+  }
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "class_version", &class_version, NULL)
+        && class_version == acsh_extrusion_class->class_version)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.class_version [BL] %u != %u", acsh_extrusion_class->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "class_version", &class_version, 0)
+        && class_version == acsh_extrusion_class->class_version)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.class_version [BL] set+1 %u != %u", acsh_extrusion_class->class_version, class_version);
+    acsh_extrusion_class->class_version--;
+
+  }
+  {
+    BITCODE_CMC color;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "color", &color, NULL)
+        && !memcmp (&color, &acsh_extrusion_class->color, sizeof (acsh_extrusion_class->color)))
+        pass ();
+    else
+        fail ("ACSH_EXTRUSION_CLASS.color [CMC]");
+  }
+  {
+    BITCODE_BD draft_angle;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "draft_angle", &draft_angle, NULL)
+        && draft_angle == acsh_extrusion_class->draft_angle)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.draft_angle [BD] %g != %g", acsh_extrusion_class->draft_angle, draft_angle);
+    draft_angle++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "draft_angle", &draft_angle, 0)
+        && draft_angle == acsh_extrusion_class->draft_angle)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.draft_angle [BD] set+1 %g != %g", acsh_extrusion_class->draft_angle, draft_angle);
+    acsh_extrusion_class->draft_angle--;
+
+  }
+  {
+    BITCODE_BL ee_bl98;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "ee_bl98", &ee_bl98, NULL)
+        && ee_bl98 == acsh_extrusion_class->ee_bl98)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.ee_bl98 [BL] %u != %u", acsh_extrusion_class->ee_bl98, ee_bl98);
+    ee_bl98++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "ee_bl98", &ee_bl98, 0)
+        && ee_bl98 == acsh_extrusion_class->ee_bl98)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.ee_bl98 [BL] set+1 %u != %u", acsh_extrusion_class->ee_bl98, ee_bl98);
+    acsh_extrusion_class->ee_bl98--;
+
+  }
+  {
+    BITCODE_BL ee_bl99;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "ee_bl99", &ee_bl99, NULL)
+        && ee_bl99 == acsh_extrusion_class->ee_bl99)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.ee_bl99 [BL] %u != %u", acsh_extrusion_class->ee_bl99, ee_bl99);
+    ee_bl99++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "ee_bl99", &ee_bl99, 0)
+        && ee_bl99 == acsh_extrusion_class->ee_bl99)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.ee_bl99 [BL] set+1 %u != %u", acsh_extrusion_class->ee_bl99, ee_bl99);
+    acsh_extrusion_class->ee_bl99--;
+
+  }
+  {
+    BITCODE_BD end_draft_dist;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "end_draft_dist", &end_draft_dist, NULL)
+        && end_draft_dist == acsh_extrusion_class->end_draft_dist)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.end_draft_dist [BD] %g != %g", acsh_extrusion_class->end_draft_dist, end_draft_dist);
+    end_draft_dist++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "end_draft_dist", &end_draft_dist, 0)
+        && end_draft_dist == acsh_extrusion_class->end_draft_dist)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.end_draft_dist [BD] set+1 %g != %g", acsh_extrusion_class->end_draft_dist, end_draft_dist);
+    acsh_extrusion_class->end_draft_dist--;
+
+  }
+  {
+    BITCODE_B has_align_start;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "has_align_start", &has_align_start, NULL)
+        && has_align_start == acsh_extrusion_class->has_align_start)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.has_align_start [B] " FORMAT_B " != " FORMAT_B "", acsh_extrusion_class->has_align_start, has_align_start);
+    has_align_start++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "has_align_start", &has_align_start, 0)
+        && has_align_start == acsh_extrusion_class->has_align_start)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.has_align_start [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_extrusion_class->has_align_start, has_align_start);
+    acsh_extrusion_class->has_align_start--;
+
+  }
+  {
+    BITCODE_RC miter_option;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "miter_option", &miter_option, NULL)
+        && miter_option == acsh_extrusion_class->miter_option)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.miter_option [RC] %u != %u", acsh_extrusion_class->miter_option, miter_option);
+    miter_option++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "miter_option", &miter_option, 0)
+        && miter_option == acsh_extrusion_class->miter_option)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.miter_option [RC] set+1 %u != %u", acsh_extrusion_class->miter_option, miter_option);
+    acsh_extrusion_class->miter_option--;
+
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "parent", &parent, NULL)
+        && !memcmp (&parent, &acsh_extrusion_class->parent, sizeof (acsh_extrusion_class->parent)))
+        pass ();
+    else
+        fail ("ACSH_EXTRUSION_CLASS.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BD* pathentity_transform;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "pathentity_transform", &pathentity_transform, NULL)
+        && !memcmp (&pathentity_transform, &acsh_extrusion_class->pathentity_transform, sizeof (acsh_extrusion_class->pathentity_transform)))
+        pass ();
+    else
+        fail ("ACSH_EXTRUSION_CLASS.pathentity_transform [BD*]");
+  }
+  {
+    BITCODE_3BD pt2;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "pt2", &pt2, NULL)
+        && !memcmp (&pt2, &acsh_extrusion_class->pt2, sizeof (acsh_extrusion_class->pt2)))
+        pass ();
+    else
+        fail ("ACSH_EXTRUSION_CLASS.pt2 [3BD]");
+  }
+  {
+    BITCODE_BD scale_factor;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "scale_factor", &scale_factor, NULL)
+        && scale_factor == acsh_extrusion_class->scale_factor)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.scale_factor [BD] %g != %g", acsh_extrusion_class->scale_factor, scale_factor);
+    scale_factor++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "scale_factor", &scale_factor, 0)
+        && scale_factor == acsh_extrusion_class->scale_factor)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.scale_factor [BD] set+1 %g != %g", acsh_extrusion_class->scale_factor, scale_factor);
+    acsh_extrusion_class->scale_factor--;
+
+  }
+  {
+    BITCODE_B shhn_b92;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shhn_b92", &shhn_b92, NULL)
+        && shhn_b92 == acsh_extrusion_class->shhn_b92)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shhn_b92 [B] " FORMAT_B " != " FORMAT_B "", acsh_extrusion_class->shhn_b92, shhn_b92);
+    shhn_b92++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shhn_b92", &shhn_b92, 0)
+        && shhn_b92 == acsh_extrusion_class->shhn_b92)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shhn_b92 [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_extrusion_class->shhn_b92, shhn_b92);
+    acsh_extrusion_class->shhn_b92--;
+
+  }
+  {
+    BITCODE_BL shhn_bl347;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shhn_bl347", &shhn_bl347, NULL)
+        && shhn_bl347 == acsh_extrusion_class->shhn_bl347)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shhn_bl347 [BL] %u != %u", acsh_extrusion_class->shhn_bl347, shhn_bl347);
+    shhn_bl347++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shhn_bl347", &shhn_bl347, 0)
+        && shhn_bl347 == acsh_extrusion_class->shhn_bl347)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shhn_bl347 [BL] set+1 %u != %u", acsh_extrusion_class->shhn_bl347, shhn_bl347);
+    acsh_extrusion_class->shhn_bl347--;
+
+  }
+  {
+    BITCODE_BL shhn_bl90;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shhn_bl90", &shhn_bl90, NULL)
+        && shhn_bl90 == acsh_extrusion_class->shhn_bl90)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shhn_bl90 [BL] %u != %u", acsh_extrusion_class->shhn_bl90, shhn_bl90);
+    shhn_bl90++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shhn_bl90", &shhn_bl90, 0)
+        && shhn_bl90 == acsh_extrusion_class->shhn_bl90)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shhn_bl90 [BL] set+1 %u != %u", acsh_extrusion_class->shhn_bl90, shhn_bl90);
+    acsh_extrusion_class->shhn_bl90--;
+
+  }
+  {
+    BITCODE_BL shhn_bl91;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shhn_bl91", &shhn_bl91, NULL)
+        && shhn_bl91 == acsh_extrusion_class->shhn_bl91)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shhn_bl91 [BL] %u != %u", acsh_extrusion_class->shhn_bl91, shhn_bl91);
+    shhn_bl91++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shhn_bl91", &shhn_bl91, 0)
+        && shhn_bl91 == acsh_extrusion_class->shhn_bl91)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shhn_bl91 [BL] set+1 %u != %u", acsh_extrusion_class->shhn_bl91, shhn_bl91);
+    acsh_extrusion_class->shhn_bl91--;
+
+  }
+  {
+    BITCODE_BD* shhn_pts;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shhn_pts", &shhn_pts, NULL)
+        && !memcmp (&shhn_pts, &acsh_extrusion_class->shhn_pts, sizeof (acsh_extrusion_class->shhn_pts)))
+        pass ();
+    else
+        fail ("ACSH_EXTRUSION_CLASS.shhn_pts [BD*]");
+  }
+  {
+    BITCODE_B shsw_b294;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shsw_b294", &shsw_b294, NULL)
+        && shsw_b294 == acsh_extrusion_class->shsw_b294)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shsw_b294 [B] " FORMAT_B " != " FORMAT_B "", acsh_extrusion_class->shsw_b294, shsw_b294);
+    shsw_b294++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shsw_b294", &shsw_b294, 0)
+        && shsw_b294 == acsh_extrusion_class->shsw_b294)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shsw_b294 [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_extrusion_class->shsw_b294, shsw_b294);
+    acsh_extrusion_class->shsw_b294--;
+
+  }
+  {
+    BITCODE_B shsw_b295;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shsw_b295", &shsw_b295, NULL)
+        && shsw_b295 == acsh_extrusion_class->shsw_b295)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shsw_b295 [B] " FORMAT_B " != " FORMAT_B "", acsh_extrusion_class->shsw_b295, shsw_b295);
+    shsw_b295++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shsw_b295", &shsw_b295, 0)
+        && shsw_b295 == acsh_extrusion_class->shsw_b295)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shsw_b295 [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_extrusion_class->shsw_b295, shsw_b295);
+    acsh_extrusion_class->shsw_b295--;
+
+  }
+  {
+    BITCODE_B shsw_b296;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shsw_b296", &shsw_b296, NULL)
+        && shsw_b296 == acsh_extrusion_class->shsw_b296)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shsw_b296 [B] " FORMAT_B " != " FORMAT_B "", acsh_extrusion_class->shsw_b296, shsw_b296);
+    shsw_b296++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shsw_b296", &shsw_b296, 0)
+        && shsw_b296 == acsh_extrusion_class->shsw_b296)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shsw_b296 [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_extrusion_class->shsw_b296, shsw_b296);
+    acsh_extrusion_class->shsw_b296--;
+
+  }
+  {
+    BITCODE_BL shsw_bl90;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shsw_bl90", &shsw_bl90, NULL)
+        && shsw_bl90 == acsh_extrusion_class->shsw_bl90)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shsw_bl90 [BL] %u != %u", acsh_extrusion_class->shsw_bl90, shsw_bl90);
+    shsw_bl90++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shsw_bl90", &shsw_bl90, 0)
+        && shsw_bl90 == acsh_extrusion_class->shsw_bl90)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shsw_bl90 [BL] set+1 %u != %u", acsh_extrusion_class->shsw_bl90, shsw_bl90);
+    acsh_extrusion_class->shsw_bl90--;
+
+  }
+  {
+    BITCODE_BL shsw_bl91;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shsw_bl91", &shsw_bl91, NULL)
+        && shsw_bl91 == acsh_extrusion_class->shsw_bl91)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shsw_bl91 [BL] %u != %u", acsh_extrusion_class->shsw_bl91, shsw_bl91);
+    shsw_bl91++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shsw_bl91", &shsw_bl91, 0)
+        && shsw_bl91 == acsh_extrusion_class->shsw_bl91)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shsw_bl91 [BL] set+1 %u != %u", acsh_extrusion_class->shsw_bl91, shsw_bl91);
+    acsh_extrusion_class->shsw_bl91--;
+
+  }
+  {
+    BITCODE_BL shsw_bl92;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shsw_bl92", &shsw_bl92, NULL)
+        && shsw_bl92 == acsh_extrusion_class->shsw_bl92)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shsw_bl92 [BL] %u != %u", acsh_extrusion_class->shsw_bl92, shsw_bl92);
+    shsw_bl92++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shsw_bl92", &shsw_bl92, 0)
+        && shsw_bl92 == acsh_extrusion_class->shsw_bl92)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shsw_bl92 [BL] set+1 %u != %u", acsh_extrusion_class->shsw_bl92, shsw_bl92);
+    acsh_extrusion_class->shsw_bl92--;
+
+  }
+  {
+    BITCODE_BL shsw_bl93;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shsw_bl93", &shsw_bl93, NULL)
+        && shsw_bl93 == acsh_extrusion_class->shsw_bl93)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shsw_bl93 [BL] %u != %u", acsh_extrusion_class->shsw_bl93, shsw_bl93);
+    shsw_bl93++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shsw_bl93", &shsw_bl93, 0)
+        && shsw_bl93 == acsh_extrusion_class->shsw_bl93)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shsw_bl93 [BL] set+1 %u != %u", acsh_extrusion_class->shsw_bl93, shsw_bl93);
+    acsh_extrusion_class->shsw_bl93--;
+
+  }
+  {
+    BITCODE_TF shsw_text;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shsw_text", &shsw_text, NULL)
+        && !memcmp (&shsw_text, &acsh_extrusion_class->shsw_text, sizeof (acsh_extrusion_class->shsw_text)))
+        pass ();
+    else
+        fail ("ACSH_EXTRUSION_CLASS.shsw_text [TF]");
+  }
+  {
+    BITCODE_TF shsw_text2;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shsw_text2", &shsw_text2, NULL)
+        && !memcmp (&shsw_text2, &acsh_extrusion_class->shsw_text2, sizeof (acsh_extrusion_class->shsw_text2)))
+        pass ();
+    else
+        fail ("ACSH_EXTRUSION_CLASS.shsw_text2 [TF]");
+  }
+  {
+    BITCODE_BL shsw_text2_size;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shsw_text2_size", &shsw_text2_size, NULL)
+        && shsw_text2_size == acsh_extrusion_class->shsw_text2_size)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shsw_text2_size [BL] %u != %u", acsh_extrusion_class->shsw_text2_size, shsw_text2_size);
+    shsw_text2_size++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shsw_text2_size", &shsw_text2_size, 0)
+        && shsw_text2_size == acsh_extrusion_class->shsw_text2_size)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shsw_text2_size [BL] set+1 %u != %u", acsh_extrusion_class->shsw_text2_size, shsw_text2_size);
+    acsh_extrusion_class->shsw_text2_size--;
+
+  }
+  {
+    BITCODE_BL shsw_text_size;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shsw_text_size", &shsw_text_size, NULL)
+        && shsw_text_size == acsh_extrusion_class->shsw_text_size)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shsw_text_size [BL] %u != %u", acsh_extrusion_class->shsw_text_size, shsw_text_size);
+    shsw_text_size++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shsw_text_size", &shsw_text_size, 0)
+        && shsw_text_size == acsh_extrusion_class->shsw_text_size)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.shsw_text_size [BL] set+1 %u != %u", acsh_extrusion_class->shsw_text_size, shsw_text_size);
+    acsh_extrusion_class->shsw_text_size--;
+
+  }
+  {
+    BITCODE_BD start_draft_dist;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "start_draft_dist", &start_draft_dist, NULL)
+        && start_draft_dist == acsh_extrusion_class->start_draft_dist)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.start_draft_dist [BD] %g != %g", acsh_extrusion_class->start_draft_dist, start_draft_dist);
+    start_draft_dist++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "start_draft_dist", &start_draft_dist, 0)
+        && start_draft_dist == acsh_extrusion_class->start_draft_dist)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.start_draft_dist [BD] set+1 %g != %g", acsh_extrusion_class->start_draft_dist, start_draft_dist);
+    acsh_extrusion_class->start_draft_dist--;
+
+  }
+  {
+    BITCODE_BD* sweepentity_transform;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "sweepentity_transform", &sweepentity_transform, NULL)
+        && !memcmp (&sweepentity_transform, &acsh_extrusion_class->sweepentity_transform, sizeof (acsh_extrusion_class->sweepentity_transform)))
+        pass ();
+    else
+        fail ("ACSH_EXTRUSION_CLASS.sweepentity_transform [BD*]");
+  }
+  {
+    BITCODE_BD twist_angle;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "twist_angle", &twist_angle, NULL)
+        && twist_angle == acsh_extrusion_class->twist_angle)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.twist_angle [BD] %g != %g", acsh_extrusion_class->twist_angle, twist_angle);
+    twist_angle++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "twist_angle", &twist_angle, 0)
+        && twist_angle == acsh_extrusion_class->twist_angle)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.twist_angle [BD] set+1 %g != %g", acsh_extrusion_class->twist_angle, twist_angle);
+    acsh_extrusion_class->twist_angle--;
+
+  }
+  return failed;
+}
 static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
 {
   int error = 0;
@@ -21328,35 +22419,35 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_BL shhn_bl98;
-    if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shhn_bl98", &shhn_bl98, NULL)
-        && shhn_bl98 == acsh_sweep_class->shhn_bl98)
+    BITCODE_BL shhn_bl90;
+    if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shhn_bl90", &shhn_bl90, NULL)
+        && shhn_bl90 == acsh_sweep_class->shhn_bl90)
       pass ();
     else
-      fail ("ACSH_SWEEP_CLASS.shhn_bl98 [BL] %u != %u", acsh_sweep_class->shhn_bl98, shhn_bl98);
-    shhn_bl98++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shhn_bl98", &shhn_bl98, 0)
-        && shhn_bl98 == acsh_sweep_class->shhn_bl98)
+      fail ("ACSH_SWEEP_CLASS.shhn_bl90 [BL] %u != %u", acsh_sweep_class->shhn_bl90, shhn_bl90);
+    shhn_bl90++;
+    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shhn_bl90", &shhn_bl90, 0)
+        && shhn_bl90 == acsh_sweep_class->shhn_bl90)
       pass ();
     else
-      fail ("ACSH_SWEEP_CLASS.shhn_bl98 [BL] set+1 %u != %u", acsh_sweep_class->shhn_bl98, shhn_bl98);
-    acsh_sweep_class->shhn_bl98--;
+      fail ("ACSH_SWEEP_CLASS.shhn_bl90 [BL] set+1 %u != %u", acsh_sweep_class->shhn_bl90, shhn_bl90);
+    acsh_sweep_class->shhn_bl90--;
 
   }
   {
-    BITCODE_BL shhn_bl99;
-    if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shhn_bl99", &shhn_bl99, NULL)
-        && shhn_bl99 == acsh_sweep_class->shhn_bl99)
+    BITCODE_BL shhn_bl91;
+    if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shhn_bl91", &shhn_bl91, NULL)
+        && shhn_bl91 == acsh_sweep_class->shhn_bl91)
       pass ();
     else
-      fail ("ACSH_SWEEP_CLASS.shhn_bl99 [BL] %u != %u", acsh_sweep_class->shhn_bl99, shhn_bl99);
-    shhn_bl99++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shhn_bl99", &shhn_bl99, 0)
-        && shhn_bl99 == acsh_sweep_class->shhn_bl99)
+      fail ("ACSH_SWEEP_CLASS.shhn_bl91 [BL] %u != %u", acsh_sweep_class->shhn_bl91, shhn_bl91);
+    shhn_bl91++;
+    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shhn_bl91", &shhn_bl91, 0)
+        && shhn_bl91 == acsh_sweep_class->shhn_bl91)
       pass ();
     else
-      fail ("ACSH_SWEEP_CLASS.shhn_bl99 [BL] set+1 %u != %u", acsh_sweep_class->shhn_bl99, shhn_bl99);
-    acsh_sweep_class->shhn_bl99--;
+      fail ("ACSH_SWEEP_CLASS.shhn_bl91 [BL] set+1 %u != %u", acsh_sweep_class->shhn_bl91, shhn_bl91);
+    acsh_sweep_class->shhn_bl91--;
 
   }
   {
@@ -36762,6 +37853,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_SOLID(obj);
   else  if (obj->fixedtype == DWG_TYPE_SPLINE)
     error += test_SPLINE(obj);
+  else  if (obj->fixedtype == DWG_TYPE_SURFACE)
+    error += test_SURFACE(obj);
   else  if (obj->fixedtype == DWG_TYPE_SWEPTSURFACE)
     error += test_SWEPTSURFACE(obj);
   else  if (obj->fixedtype == DWG_TYPE_TABLE)
@@ -36786,6 +37879,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_WIPEOUT(obj);
   else  if (obj->fixedtype == DWG_TYPE_XLINE)
     error += test_XLINE(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ACSH_BOX_CLASS)
+    error += test_ACSH_BOX_CLASS(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ACSH_EXTRUSION_CLASS)
+    error += test_ACSH_EXTRUSION_CLASS(obj);
   else  if (obj->fixedtype == DWG_TYPE_ACSH_SWEEP_CLASS)
     error += test_ACSH_SWEEP_CLASS(obj);
   else  if (obj->fixedtype == DWG_TYPE_ANNOTSCALEOBJECTCONTEXTDATA)
@@ -37046,6 +38143,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_SOLID (obj);
   else  if (obj->fixedtype == DWG_TYPE_SPLINE)
     error += test_SPLINE (obj);
+  else  if (obj->fixedtype == DWG_TYPE_SURFACE)
+    error += test_SURFACE (obj);
   else  if (obj->fixedtype == DWG_TYPE_SWEPTSURFACE)
     error += test_SWEPTSURFACE (obj);
   else  if (obj->fixedtype == DWG_TYPE_TABLE)
@@ -37070,6 +38169,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_WIPEOUT (obj);
   else  if (obj->fixedtype == DWG_TYPE_XLINE)
     error += test_XLINE (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ACSH_BOX_CLASS)
+    error += test_ACSH_BOX_CLASS (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ACSH_EXTRUSION_CLASS)
+    error += test_ACSH_EXTRUSION_CLASS (obj);
   else  if (obj->fixedtype == DWG_TYPE_ACSH_SWEEP_CLASS)
     error += test_ACSH_SWEEP_CLASS (obj);
   else  if (obj->fixedtype == DWG_TYPE_ANNOTSCALEOBJECTCONTEXTDATA)
@@ -37658,6 +38761,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"SPLINE\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (Dwg_Entity_SURFACE);
+  size2 = dwg_dynapi_fields_size ("SURFACE");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_SURFACE): %d != "
+               "dwg_dynapi_fields_size (\"SURFACE\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (Dwg_Entity_SWEPTSURFACE);
   size2 = dwg_dynapi_fields_size ("SWEPTSURFACE");
   if (size1 != size2)
@@ -37760,6 +38871,22 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Entity_XLINE): %d != "
                "dwg_dynapi_fields_size (\"XLINE\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ACSH_BOX_CLASS);
+  size2 = dwg_dynapi_fields_size ("ACSH_BOX_CLASS");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ACSH_BOX_CLASS): %d != "
+               "dwg_dynapi_fields_size (\"ACSH_BOX_CLASS\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ACSH_EXTRUSION_CLASS);
+  size2 = dwg_dynapi_fields_size ("ACSH_EXTRUSION_CLASS");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ACSH_EXTRUSION_CLASS): %d != "
+               "dwg_dynapi_fields_size (\"ACSH_EXTRUSION_CLASS\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_ACSH_SWEEP_CLASS);

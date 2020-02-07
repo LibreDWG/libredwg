@@ -4412,6 +4412,20 @@ typedef struct _dwg_entity_HELIX
 } Dwg_Entity_HELIX;
 
 /**
+ Entity SURFACE (varies): maybe just PLANESURFACE?
+*/
+typedef struct _dwg_entity_SURFACE
+{
+  struct _dwg_object_entity *parent;
+  _3DSOLID_FIELDS;
+  BITCODE_BS modeler_format_version; /*!< DXF 70 */
+  BITCODE_BS u_isolines;         /*!< DXF 71 */
+  BITCODE_BS v_isolines;         /*!< DXF 72 */
+  BITCODE_BL class_version;      /*!< DXF 90 */
+
+} Dwg_Entity_SURFACE;
+
+/**
  Entity EXTRUDEDSURFACE (varies)
  in DXF encrypted.
 */
@@ -4970,16 +4984,42 @@ typedef struct _dwg_object_ASSOCPLANESURFACEACTIONBODY
 
 } Dwg_Object_ASSOCPLANESURFACEACTIONBODY;
 
+// i.e. planesurf?
+typedef struct _dwg_object_ACSH_BOX_CLASS
+{
+  struct _dwg_object_object *parent;
+  // AcDbEvalExpr
+  BITCODE_BL class_version; // 90
+  BITCODE_BL ee_bl98; //33
+  BITCODE_BL ee_bl99; //29
+  // AcDbShHistoryNode
+  BITCODE_BL shhn_bl90; //33
+  BITCODE_BL shhn_bl91; //29
+  BITCODE_BD* shhn_pts; //last 16x nums 40-55
+  BITCODE_CMC color;      /*!< DXF 62 */
+  BITCODE_B  shhn_b92;    /*!< DXF 92 */
+  BITCODE_BL shhn_bl347;  /*!< DXF 347 */
+
+  // AcDbShPrimitive
+  // AcDbShBox
+  BITCODE_BL shb_bl90;       /*!< DXF 90 (33) */
+  BITCODE_BL shb_bl91;       /*!< DXF 91 (29) */
+  BITCODE_BD shb_bd40;       /*!< DXF 40 1300.0 (length?) */
+  BITCODE_BD shb_bd41;       /*!< DXF 41 20.0 (width?) */
+  BITCODE_BD shb_bd42;       /*!< DXF 42 420.0 (height?) */
+
+} Dwg_Object_ACSH_BOX_CLASS;
+
 typedef struct _dwg_object_ACSH_SWEEP_CLASS
 {
   struct _dwg_object_object *parent;
   // AcDbEvalExpr
   BITCODE_BL class_version; // 90
-  BITCODE_BL ee_bl98; //98
-  BITCODE_BL ee_bl99; //99
+  BITCODE_BL ee_bl98; //33
+  BITCODE_BL ee_bl99; //29
   // AcDbShHistoryNode
-  BITCODE_BL shhn_bl98; //98
-  BITCODE_BL shhn_bl99; //99
+  BITCODE_BL shhn_bl90; //33
+  BITCODE_BL shhn_bl91; //29
   BITCODE_BD* shhn_pts; //last 16x nums 40-55
   BITCODE_CMC color; /*!< DXF 62 */
   BITCODE_B  shhn_b92; /*!< DXF 92 */
@@ -5017,6 +5057,54 @@ typedef struct _dwg_object_ACSH_SWEEP_CLASS
   // AcDbShSweep
 
 } Dwg_Object_ACSH_SWEEP_CLASS;
+
+typedef struct _dwg_object_ACSH_EXTRUSION_CLASS
+{
+  struct _dwg_object_object *parent;
+  // AcDbEvalExpr
+  BITCODE_BL class_version; // 90
+  BITCODE_BL ee_bl98; //33
+  BITCODE_BL ee_bl99; //29
+  // AcDbShHistoryNode
+  BITCODE_BL shhn_bl90; //33
+  BITCODE_BL shhn_bl91; //29
+  BITCODE_BD* shhn_pts; //last 16x nums 40-55
+  BITCODE_CMC color; /*!< DXF 62 */
+  BITCODE_B  shhn_b92; /*!< DXF 92 */
+  BITCODE_BL shhn_bl347; /*!< DXF 347 */
+
+  // AcDbShPrimitive
+  // AcDbShSweepBase
+  BITCODE_BL shsw_bl90;       /*!< DXF 90 */
+  BITCODE_BL shsw_bl91;       /*!< DXF 91 */
+  BITCODE_3BD basept;         /*!< DXF 10 */
+  BITCODE_BL shsw_bl92;       /*!< DXF 92 */
+  BITCODE_BL shsw_text_size;  /*!< DXF 90 */
+  BITCODE_TF shsw_text;       /*!< DXF 310 */
+  BITCODE_BL shsw_bl93;       /*!< DXF 93 */
+  BITCODE_BL shsw_text2_size; /*!< DXF 90 */
+  BITCODE_TF shsw_text2;      /*!< DXF 310 */
+  BITCODE_BD draft_angle;       /*!< DXF 42 0.0 */
+  BITCODE_BD start_draft_dist;  /*!< DXF 43 0.0 */
+  BITCODE_BD end_draft_dist;    /*!< DXF 44 0.0 */
+  BITCODE_BD scale_factor;      /*!< DXF 45 1.0 */
+  BITCODE_BD twist_angle;       /*!< DXF 48 0.0 */
+  BITCODE_BD align_angle;       /*!< DXF 49 0.0 */
+  BITCODE_BD* sweepentity_transform; /*!< DXF 46 16x */
+  BITCODE_BD* pathentity_transform;  /*!< DXF 47 16x */
+  BITCODE_RC align_option;      /*!< DXF 70 2 */
+  BITCODE_RC miter_option;      /*!< DXF 71 2 */
+  BITCODE_B has_align_start;    /*!< DXF 290 1 */
+  BITCODE_B bank;       /*!< DXF 292 1 */
+  BITCODE_B check_intersections; /*!< DXF 293 0 */
+  BITCODE_B shsw_b294;  /*!< DXF 294  1 */
+  BITCODE_B shsw_b295;  /*!< DXF 295  1 */
+  BITCODE_B shsw_b296;  /*!< DXF 296  1 */
+  BITCODE_3BD pt2;      /*!< DXF 11 0,0,0 */
+
+  // AcDbShExtrusion
+
+} Dwg_Object_ACSH_EXTRUSION_CLASS;
 
 typedef struct _dwg_object_NAVISWORKSMODELDEF
 {
@@ -5246,6 +5334,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_MULTILEADER *MULTILEADER;
     Dwg_Entity_PROXY_ENTITY *PROXY_ENTITY;
     Dwg_Entity_PROXY_LWPOLYLINE *PROXY_LWPOLYLINE;
+    Dwg_Entity_SURFACE *SURFACE;
     Dwg_Entity_PLANESURFACE *PLANESURFACE;
     Dwg_Entity_EXTRUDEDSURFACE *EXTRUDEDSURFACE;
     Dwg_Entity_LOFTEDSURFACE *LOFTEDSURFACE;
@@ -5354,8 +5443,8 @@ typedef struct _dwg_object_object
     //TODO Dwg_Object_ACMECOMMANDHISTORY *ACMECOMMANDHISTORY,
     //TODO Dwg_Object_ACMESCOPE *ACMESCOPE,
     //TODO Dwg_Object_ACMESTATEMGR *ACMESTATEMGR,
-    //TODO Dwg_Object_ACSH_BOX_CLASS *ACSH_BOX_CLASS;
-    //TODO Dwg_Object_ACSH_EXTRUSION_CLASS *ACSH_EXTRUSION_CLASS;
+    Dwg_Object_ACSH_BOX_CLASS *ACSH_BOX_CLASS;
+    Dwg_Object_ACSH_EXTRUSION_CLASS *ACSH_EXTRUSION_CLASS;
     //TODO Dwg_Object_ACSH_HISTORY_CLASS *ACSH_HISTORY_CLASS;
     Dwg_Object_ACSH_SWEEP_CLASS *ACSH_SWEEP_CLASS;
     //Dwg_Object_ARCALIGNEDTEXT *ARCALIGNEDTEXT;
@@ -6209,8 +6298,8 @@ EXPORT int dwg_add_NAVISWORKSMODELDEF (Dwg_Object *obj);
 //EXPORT int dwg_add_ACMECOMMANDHISTORY (Dwg_Object *obj);
 //EXPORT int dwg_add_ACMESCOPE (Dwg_Object *obj);
 //EXPORT int dwg_add_ACMESTATEMGR (Dwg_Object *obj);
-//EXPORT int dwg_add_ACSH_BOX_CLASS (Dwg_Object *obj);
-//EXPORT int dwg_add_ACSH_EXTRUSION_CLASS (Dwg_Object *obj);
+EXPORT int dwg_add_ACSH_BOX_CLASS (Dwg_Object *obj);
+EXPORT int dwg_add_ACSH_EXTRUSION_CLASS (Dwg_Object *obj);
 //EXPORT int dwg_add_ACSH_HISTORY_CLASS (Dwg_Object *obj);
 EXPORT int dwg_add_ACSH_SWEEP_CLASS (Dwg_Object *obj);
 //EXPORT int dwg_add_ARCALIGNEDTEXT (Dwg_Object *obj);
@@ -6220,6 +6309,7 @@ EXPORT int dwg_add_ANNOTSCALEOBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCOSNAPPOINTREFACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCPERSSUBENTMANAGER (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCVERTEXACTIONPARAM (Dwg_Object *obj);
+//EXPORT int dwg_add_DATALINK (Dwg_Object *obj);
 EXPORT int dwg_add_DATATABLE (Dwg_Object *obj);
 //EXPORT int dwg_add_DETAILVIEWSTYLE (Dwg_Object *obj);
 EXPORT int dwg_add_EVALUATION_GRAPH (Dwg_Object *obj);
@@ -6242,6 +6332,7 @@ EXPORT int dwg_add_RENDERGLOBAL (Dwg_Object *obj);
 //EXPORT int dwg_add_RAPIDRTRENDERENVIRONMENT (Dwg_Object *obj);
 //EXPORT int dwg_add_RAPIDRTRENDERSETTINGS (Dwg_Object *obj);
 //EXPORT int dwg_add_RTEXT (Dwg_Object *obj);
+EXPORT int dwg_add_SURFACE (Dwg_Object *obj);
 EXPORT int dwg_add_PLANESURFACE (Dwg_Object *obj);
 EXPORT int dwg_add_EXTRUDEDSURFACE (Dwg_Object *obj);
 EXPORT int dwg_add_LOFTEDSURFACE (Dwg_Object *obj);

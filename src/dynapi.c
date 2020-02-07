@@ -91,103 +91,106 @@ static const char dwg_entity_names[][MAXLEN_ENTITIES] = {
   "SHAPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 49 */
   "SOLID" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 50 */
   "SPLINE" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 51 */
-  "SWEPTSURFACE" "\0\0\0\0\0\0",	/* 52 */
-  "TABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 53 */
-  "TEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 54 */
-  "TOLERANCE" "\0\0\0\0\0\0\0\0\0",	/* 55 */
-  "TRACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 56 */
-  "UNDERLAY" "\0\0\0\0\0\0\0\0\0\0",	/* 57 */
-  "UNKNOWN_ENT" "\0\0\0\0\0\0\0",	/* 58 */
-  "VERTEX_2D" "\0\0\0\0\0\0\0\0\0",	/* 59 */
-  "VERTEX_3D" "\0\0\0\0\0\0\0\0\0",	/* 60 */
-  "VERTEX_PFACE_FACE" "\0",	/* 61 */
-  "VIEWPORT" "\0\0\0\0\0\0\0\0\0\0",	/* 62 */
-  "WIPEOUT" "\0\0\0\0\0\0\0\0\0\0\0",	/* 63 */
-  "XLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 64 */
+  "SURFACE" "\0\0\0\0\0\0\0\0\0\0\0",	/* 52 */
+  "SWEPTSURFACE" "\0\0\0\0\0\0",	/* 53 */
+  "TABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 54 */
+  "TEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 55 */
+  "TOLERANCE" "\0\0\0\0\0\0\0\0\0",	/* 56 */
+  "TRACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 57 */
+  "UNDERLAY" "\0\0\0\0\0\0\0\0\0\0",	/* 58 */
+  "UNKNOWN_ENT" "\0\0\0\0\0\0\0",	/* 59 */
+  "VERTEX_2D" "\0\0\0\0\0\0\0\0\0",	/* 60 */
+  "VERTEX_3D" "\0\0\0\0\0\0\0\0\0",	/* 61 */
+  "VERTEX_PFACE_FACE" "\0",	/* 62 */
+  "VIEWPORT" "\0\0\0\0\0\0\0\0\0\0",	/* 63 */
+  "WIPEOUT" "\0\0\0\0\0\0\0\0\0\0\0",	/* 64 */
+  "XLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 65 */
 
 };
 /* sorted for bsearch. from typedef struct _dwg_object_*: */
 static const char dwg_object_names[][MAXLEN_OBJECTS] = {
-  "ACSH_SWEEP_CLASS" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 0 */
-  "ANNOTSCALEOBJECTCONTEXTDATA" "\0\0",	/* 1 */
-  "APPID" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 2 */
-  "APPID_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 3 */
-  "ASSOC2DCONSTRAINTGROUP" "\0\0\0\0\0\0\0",	/* 4 */
-  "ASSOCACTION" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 5 */
-  "ASSOCALIGNEDDIMACTIONBODY" "\0\0\0\0",	/* 6 */
-  "ASSOCDEPENDENCY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 7 */
-  "ASSOCNETWORK" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 8 */
-  "ASSOCOSNAPPOINTREFACTIONPARAM" "",	/* 9 */
-  "ASSOCPERSSUBENTMANAGER" "\0\0\0\0\0\0\0",	/* 10 */
-  "ASSOCPLANESURFACEACTIONBODY" "\0\0",	/* 11 */
-  "BLOCK_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 12 */
-  "BLOCK_HEADER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 13 */
-  "CELLSTYLEMAP" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 14 */
-  "DATATABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 15 */
-  "DBCOLOR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 16 */
-  "DICTIONARY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 17 */
-  "DICTIONARYVAR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 18 */
-  "DICTIONARYWDFLT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 19 */
-  "DIMASSOC" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 20 */
-  "DIMSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 21 */
-  "DIMSTYLE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 22 */
-  "DUMMY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 23 */
-  "DYNAMICBLOCKPURGEPREVENTER" "\0\0\0",	/* 24 */
-  "EVALUATION_GRAPH" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 25 */
-  "FIELD" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 26 */
-  "FIELDLIST" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 27 */
-  "GEODATA" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 28 */
-  "GEOMAPIMAGE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 29 */
-  "GROUP" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 30 */
-  "IDBUFFER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 31 */
-  "IMAGEDEF" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 32 */
-  "IMAGEDEF_REACTOR" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 33 */
-  "LAYER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 34 */
-  "LAYER_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 35 */
-  "LAYER_INDEX" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 36 */
-  "LAYOUT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 37 */
-  "LIGHTLIST" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 38 */
-  "LONG_TRANSACTION" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 39 */
-  "LTYPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 40 */
-  "LTYPE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 41 */
-  "MATERIAL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 42 */
-  "MLEADERSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 43 */
-  "MLINESTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 44 */
-  "NAVISWORKSMODELDEF" "\0\0\0\0\0\0\0\0\0\0\0",	/* 45 */
-  "OBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 46 */
-  "OBJECT_PTR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 47 */
-  "PERSSUBENTMANAGER" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 48 */
-  "PLACEHOLDER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 49 */
-  "PLOTSETTINGS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 50 */
-  "PROXY_OBJECT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 51 */
-  "RASTERVARIABLES" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 52 */
-  "RENDERENVIRONMENT" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 53 */
-  "RENDERGLOBAL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 54 */
-  "SCALE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 55 */
-  "SORTENTSTABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 56 */
-  "SPATIAL_FILTER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 57 */
-  "SPATIAL_INDEX" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 58 */
-  "STYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 59 */
-  "STYLE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 60 */
-  "SUN" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 61 */
-  "SUNSTUDY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 62 */
-  "TABLECONTENT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 63 */
-  "TABLEGEOMETRY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 64 */
-  "TABLESTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 65 */
-  "UCS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 66 */
-  "UCS_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 67 */
-  "UNDERLAYDEFINITION" "\0\0\0\0\0\0\0\0\0\0\0",	/* 68 */
-  "UNKNOWN_OBJ" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 69 */
-  "VBA_PROJECT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 70 */
-  "VIEW" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 71 */
-  "VIEW_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 72 */
-  "VISUALSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 73 */
-  "VPORT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 74 */
-  "VPORT_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 75 */
-  "VPORT_ENTITY_CONTROL" "\0\0\0\0\0\0\0\0\0",	/* 76 */
-  "VPORT_ENTITY_HEADER" "\0\0\0\0\0\0\0\0\0\0",	/* 77 */
-  "WIPEOUTVARIABLES" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 78 */
-  "XRECORD" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 79 */
+  "ACSH_BOX_CLASS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 0 */
+  "ACSH_EXTRUSION_CLASS" "\0\0\0\0\0\0\0\0\0",	/* 1 */
+  "ACSH_SWEEP_CLASS" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 2 */
+  "ANNOTSCALEOBJECTCONTEXTDATA" "\0\0",	/* 3 */
+  "APPID" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 4 */
+  "APPID_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 5 */
+  "ASSOC2DCONSTRAINTGROUP" "\0\0\0\0\0\0\0",	/* 6 */
+  "ASSOCACTION" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 7 */
+  "ASSOCALIGNEDDIMACTIONBODY" "\0\0\0\0",	/* 8 */
+  "ASSOCDEPENDENCY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 9 */
+  "ASSOCNETWORK" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 10 */
+  "ASSOCOSNAPPOINTREFACTIONPARAM" "",	/* 11 */
+  "ASSOCPERSSUBENTMANAGER" "\0\0\0\0\0\0\0",	/* 12 */
+  "ASSOCPLANESURFACEACTIONBODY" "\0\0",	/* 13 */
+  "BLOCK_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 14 */
+  "BLOCK_HEADER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 15 */
+  "CELLSTYLEMAP" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 16 */
+  "DATATABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 17 */
+  "DBCOLOR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 18 */
+  "DICTIONARY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 19 */
+  "DICTIONARYVAR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 20 */
+  "DICTIONARYWDFLT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 21 */
+  "DIMASSOC" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 22 */
+  "DIMSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 23 */
+  "DIMSTYLE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 24 */
+  "DUMMY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 25 */
+  "DYNAMICBLOCKPURGEPREVENTER" "\0\0\0",	/* 26 */
+  "EVALUATION_GRAPH" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 27 */
+  "FIELD" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 28 */
+  "FIELDLIST" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 29 */
+  "GEODATA" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 30 */
+  "GEOMAPIMAGE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 31 */
+  "GROUP" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 32 */
+  "IDBUFFER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 33 */
+  "IMAGEDEF" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 34 */
+  "IMAGEDEF_REACTOR" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 35 */
+  "LAYER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 36 */
+  "LAYER_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 37 */
+  "LAYER_INDEX" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 38 */
+  "LAYOUT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 39 */
+  "LIGHTLIST" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 40 */
+  "LONG_TRANSACTION" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 41 */
+  "LTYPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 42 */
+  "LTYPE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 43 */
+  "MATERIAL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 44 */
+  "MLEADERSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 45 */
+  "MLINESTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 46 */
+  "NAVISWORKSMODELDEF" "\0\0\0\0\0\0\0\0\0\0\0",	/* 47 */
+  "OBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 48 */
+  "OBJECT_PTR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 49 */
+  "PERSSUBENTMANAGER" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 50 */
+  "PLACEHOLDER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 51 */
+  "PLOTSETTINGS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 52 */
+  "PROXY_OBJECT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 53 */
+  "RASTERVARIABLES" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 54 */
+  "RENDERENVIRONMENT" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 55 */
+  "RENDERGLOBAL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 56 */
+  "SCALE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 57 */
+  "SORTENTSTABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 58 */
+  "SPATIAL_FILTER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 59 */
+  "SPATIAL_INDEX" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 60 */
+  "STYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 61 */
+  "STYLE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 62 */
+  "SUN" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 63 */
+  "SUNSTUDY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 64 */
+  "TABLECONTENT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 65 */
+  "TABLEGEOMETRY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 66 */
+  "TABLESTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 67 */
+  "UCS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 68 */
+  "UCS_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 69 */
+  "UNDERLAYDEFINITION" "\0\0\0\0\0\0\0\0\0\0\0",	/* 70 */
+  "UNKNOWN_OBJ" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 71 */
+  "VBA_PROJECT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 72 */
+  "VIEW" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 73 */
+  "VIEW_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 74 */
+  "VISUALSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 75 */
+  "VPORT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 76 */
+  "VPORT_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 77 */
+  "VPORT_ENTITY_CONTROL" "\0\0\0\0\0\0\0\0\0",	/* 78 */
+  "VPORT_ENTITY_HEADER" "\0\0\0\0\0\0\0\0\0\0",	/* 79 */
+  "WIPEOUTVARIABLES" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 80 */
+  "XRECORD" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 81 */
 
 };
 
@@ -2914,6 +2917,62 @@ static const Dwg_DYNAPI_field _dwg_SPLINE_fields[] = {
     1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
+/* from typedef struct _dwg_entity_SURFACE: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_SURFACE_fields[] = {
+  { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_SURFACE, parent),
+    1,1,0, 0 },
+  { "acis_empty",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_SURFACE, acis_empty),
+    0,0,0, 0 },
+  { "unknown",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_SURFACE, unknown),
+    0,0,0, 0 },
+  { "version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_SURFACE, version),
+    0,0,0, 0 },
+  { "num_blocks",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_SURFACE, num_blocks),
+    0,0,0, 0 },
+  { "block_size",	"BL*", sizeof (BITCODE_BL*),  OFF (struct _dwg_entity_SURFACE, block_size),
+    1,1,0, 0 },
+  { "encr_sat_data",	"char **", sizeof (char **),  OFF (struct _dwg_entity_SURFACE, encr_sat_data),
+    1,1,0, 0 },
+  { "acis_data",	"RC*", sizeof (BITCODE_RC*),  OFF (struct _dwg_entity_SURFACE, acis_data),
+    1,1,0, 0 },
+  { "wireframe_data_present",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_SURFACE, wireframe_data_present),
+    0,0,0, 0 },
+  { "point_present",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_SURFACE, point_present),
+    0,0,0, 0 },
+  { "point",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_SURFACE, point),
+    1,0,0, 0 },
+  { "num_isolines",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_SURFACE, num_isolines),
+    0,0,0, 0 },
+  { "isoline_present",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_SURFACE, isoline_present),
+    0,0,0, 0 },
+  { "num_wires",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_SURFACE, num_wires),
+    0,0,0, 0 },
+  { "wires",	"Dwg_3DSOLID_wire*", sizeof (Dwg_3DSOLID_wire*),  OFF (struct _dwg_entity_SURFACE, wires),
+    1,1,0, 0 },
+  { "num_silhouettes",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_SURFACE, num_silhouettes),
+    0,0,0, 0 },
+  { "silhouettes",	"Dwg_3DSOLID_silhouette*", sizeof (Dwg_3DSOLID_silhouette*),  OFF (struct _dwg_entity_SURFACE, silhouettes),
+    1,1,0, 0 },
+  { "acis_empty2",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_SURFACE, acis_empty2),
+    0,0,0, 0 },
+  { "extra_acis_data",	"struct _dwg_entity_3DSOLID*", sizeof (void *),  OFF (struct _dwg_entity_SURFACE, extra_acis_data),
+    1,1,0, 0 },
+  { "unknown_2007",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_SURFACE, unknown_2007),
+    0,0,0, 0 },
+  { "history_id",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_SURFACE, history_id),
+    1,0,0, 0 },
+  { "acis_empty_bit",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_SURFACE, acis_empty_bit),
+    0,0,0, 0 },
+  { "modeler_format_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_SURFACE, modeler_format_version),
+    0,0,0, 70 },
+  { "u_isolines",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_SURFACE, u_isolines),
+    0,0,0, 71 },
+  { "v_isolines",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_SURFACE, v_isolines),
+    0,0,0, 72 },
+  { "class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_SURFACE, class_version),
+    0,0,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
 /* from typedef struct _dwg_entity_SWEPTSURFACE: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_SWEPTSURFACE_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_SWEPTSURFACE, parent),
@@ -3551,6 +3610,116 @@ static const Dwg_DYNAPI_field _dwg_WIPEOUT_fields[] = {
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 
+/* from typedef struct _dwg_object_ACSH_BOX_CLASS: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_ACSH_BOX_CLASS_fields[] = {
+  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ACSH_BOX_CLASS, parent),
+    1,1,0, 0 },
+  { "class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_BOX_CLASS, class_version),
+    0,0,0, 90 },
+  { "ee_bl98",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_BOX_CLASS, ee_bl98),
+    0,0,0, 98 },
+  { "ee_bl99",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_BOX_CLASS, ee_bl99),
+    0,0,0, 99 },
+  { "shhn_bl90",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_BOX_CLASS, shhn_bl90),
+    0,0,0, 90 },
+  { "shhn_bl91",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_BOX_CLASS, shhn_bl91),
+    0,0,0, 91 },
+  { "shhn_pts",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_object_ACSH_BOX_CLASS, shhn_pts),
+    1,1,0, 40 },
+  { "color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_object_ACSH_BOX_CLASS, color),
+    1,0,0, 62 },
+  { "shhn_b92",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_ACSH_BOX_CLASS, shhn_b92),
+    0,0,0, 92 },
+  { "shhn_bl347",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_BOX_CLASS, shhn_bl347),
+    0,0,0, 347 },
+  { "shb_bl90",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_BOX_CLASS, shb_bl90),
+    0,0,0, 90 },
+  { "shb_bl91",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_BOX_CLASS, shb_bl91),
+    0,0,0, 91 },
+  { "shb_bd40",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_ACSH_BOX_CLASS, shb_bd40),
+    0,0,0, 40 },
+  { "shb_bd41",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_ACSH_BOX_CLASS, shb_bd41),
+    0,0,0, 41 },
+  { "shb_bd42",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_ACSH_BOX_CLASS, shb_bd42),
+    0,0,0, 42 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_object_ACSH_EXTRUSION_CLASS: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_ACSH_EXTRUSION_CLASS_fields[] = {
+  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, parent),
+    1,1,0, 0 },
+  { "class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, class_version),
+    0,0,0, 90 },
+  { "ee_bl98",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, ee_bl98),
+    0,0,0, 98 },
+  { "ee_bl99",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, ee_bl99),
+    0,0,0, 99 },
+  { "shhn_bl90",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, shhn_bl90),
+    0,0,0, 90 },
+  { "shhn_bl91",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, shhn_bl91),
+    0,0,0, 91 },
+  { "shhn_pts",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, shhn_pts),
+    1,1,0, 40 },
+  { "color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, color),
+    1,0,0, 62 },
+  { "shhn_b92",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, shhn_b92),
+    0,0,0, 92 },
+  { "shhn_bl347",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, shhn_bl347),
+    0,0,0, 347 },
+  { "shsw_bl90",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, shsw_bl90),
+    0,0,0, 90 },
+  { "shsw_bl91",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, shsw_bl91),
+    0,0,0, 91 },
+  { "basept",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, basept),
+    1,0,0, 10 },
+  { "shsw_bl92",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, shsw_bl92),
+    0,0,0, 92 },
+  { "shsw_text_size",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, shsw_text_size),
+    0,0,0, 90 },
+  { "shsw_text",	"TF", sizeof (BITCODE_TF),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, shsw_text),
+    1,1,0, 310 },
+  { "shsw_bl93",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, shsw_bl93),
+    0,0,0, 93 },
+  { "shsw_text2_size",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, shsw_text2_size),
+    0,0,0, 90 },
+  { "shsw_text2",	"TF", sizeof (BITCODE_TF),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, shsw_text2),
+    1,1,0, 310 },
+  { "draft_angle",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, draft_angle),
+    0,0,0, 42 },
+  { "start_draft_dist",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, start_draft_dist),
+    0,0,0, 43 },
+  { "end_draft_dist",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, end_draft_dist),
+    0,0,0, 44 },
+  { "scale_factor",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, scale_factor),
+    0,0,0, 45 },
+  { "twist_angle",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, twist_angle),
+    0,0,0, 48 },
+  { "align_angle",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, align_angle),
+    0,0,0, 49 },
+  { "sweepentity_transform",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, sweepentity_transform),
+    1,1,0, 46 },
+  { "pathentity_transform",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, pathentity_transform),
+    1,1,0, 47 },
+  { "align_option",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, align_option),
+    0,0,0, 70 },
+  { "miter_option",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, miter_option),
+    0,0,0, 71 },
+  { "has_align_start",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, has_align_start),
+    0,0,0, 290 },
+  { "bank",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, bank),
+    0,0,0, 292 },
+  { "check_intersections",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, check_intersections),
+    0,0,0, 293 },
+  { "shsw_b294",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, shsw_b294),
+    0,0,0, 294 },
+  { "shsw_b295",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, shsw_b295),
+    0,0,0, 295 },
+  { "shsw_b296",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, shsw_b296),
+    0,0,0, 296 },
+  { "pt2",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, pt2),
+    1,0,0, 11 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
 /* from typedef struct _dwg_object_ACSH_SWEEP_CLASS: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_ACSH_SWEEP_CLASS_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ACSH_SWEEP_CLASS, parent),
@@ -3561,10 +3730,10 @@ static const Dwg_DYNAPI_field _dwg_ACSH_SWEEP_CLASS_fields[] = {
     0,0,0, 98 },
   { "ee_bl99",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_SWEEP_CLASS, ee_bl99),
     0,0,0, 99 },
-  { "shhn_bl98",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_SWEEP_CLASS, shhn_bl98),
-    0,0,0, 98 },
-  { "shhn_bl99",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_SWEEP_CLASS, shhn_bl99),
-    0,0,0, 99 },
+  { "shhn_bl90",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_SWEEP_CLASS, shhn_bl90),
+    0,0,0, 90 },
+  { "shhn_bl91",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_SWEEP_CLASS, shhn_bl91),
+    0,0,0, 91 },
   { "shhn_pts",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_object_ACSH_SWEEP_CLASS, shhn_pts),
     1,1,0, 40 },
   { "color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_object_ACSH_SWEEP_CLASS, color),
@@ -7494,8 +7663,8 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "ACMECOMMANDHISTORY", DWG_TYPE_ACMECOMMANDHISTORY /*(514)*/, NULL, 0 },	/* 4 */
   { "ACMESCOPE", DWG_TYPE_ACMESCOPE /*(515)*/, NULL, 0 },	/* 5 */
   { "ACMESTATEMGR", DWG_TYPE_ACMESTATEMGR /*(516)*/, NULL, 0 },	/* 6 */
-  { "ACSH_BOX_CLASS", DWG_TYPE_ACSH_BOX_CLASS /*(517)*/, NULL, 0 },	/* 7 */
-  { "ACSH_EXTRUSION_CLASS", DWG_TYPE_ACSH_EXTRUSION_CLASS /*(518)*/, NULL, 0 },	/* 8 */
+  { "ACSH_BOX_CLASS", DWG_TYPE_ACSH_BOX_CLASS /*(517)*/, _dwg_ACSH_BOX_CLASS_fields, sizeof (struct _dwg_object_ACSH_BOX_CLASS) },	/* 7 */
+  { "ACSH_EXTRUSION_CLASS", DWG_TYPE_ACSH_EXTRUSION_CLASS /*(518)*/, _dwg_ACSH_EXTRUSION_CLASS_fields, sizeof (struct _dwg_object_ACSH_EXTRUSION_CLASS) },	/* 8 */
   { "ACSH_HISTORY_CLASS", DWG_TYPE_ACSH_HISTORY_CLASS /*(519)*/, NULL, 0 },	/* 9 */
   { "ACSH_REVOLVE_CLASS", DWG_TYPE_ACSH_REVOLVE_CLASS /*(520)*/, NULL, 0 },	/* 10 */
   { "ACSH_SPHERE_CLASS", DWG_TYPE_ACSH_SPHERE_CLASS /*(521)*/, NULL, 0 },	/* 11 */
@@ -7627,7 +7796,7 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "STYLE_CONTROL", DWG_TYPE_STYLE_CONTROL /*(52)*/, _dwg_STYLE_CONTROL_fields, sizeof (struct _dwg_object_STYLE_CONTROL) },	/* 137 */
   { "SUN", DWG_TYPE_SUN /*(586)*/, _dwg_SUN_fields, sizeof (struct _dwg_object_SUN) },	/* 138 */
   { "SUNSTUDY", DWG_TYPE_SUNSTUDY /*(587)*/, _dwg_SUNSTUDY_fields, sizeof (struct _dwg_object_SUNSTUDY) },	/* 139 */
-  { "SURFACE", DWG_TYPE_SURFACE /*(588)*/, NULL, 0 },	/* 140 */
+  { "SURFACE", DWG_TYPE_SURFACE /*(588)*/, _dwg_SURFACE_fields, sizeof (struct _dwg_entity_SURFACE) },	/* 140 */
   { "SWEPTSURFACE", DWG_TYPE_SWEPTSURFACE /*(593)*/, _dwg_SWEPTSURFACE_fields, sizeof (struct _dwg_entity_SWEPTSURFACE) },	/* 141 */
   { "TABLE", DWG_TYPE_TABLE /*(594)*/, _dwg_TABLE_fields, sizeof (struct _dwg_entity_TABLE) },	/* 142 */
   { "TABLECONTENT", DWG_TYPE_TABLECONTENT /*(595)*/, _dwg_TABLECONTENT_fields, sizeof (struct _dwg_object_TABLECONTENT) },	/* 143 */
