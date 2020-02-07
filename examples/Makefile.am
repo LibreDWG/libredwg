@@ -27,6 +27,7 @@ EXTRA_PROGRAMS = unknown bd bits
 load_dwg_SOURCES = load_dwg.c
 dwg2svg2_SOURCES = dwg2svg2.c
 unknown_SOURCES  = unknown.c
+# alldxf_0.inc alldxf_1.inc alldxf_2.inc alldwg.inc bd-unknown.inc
 unknown_LDADD  = $(top_builddir)/src/bits.lo $(top_builddir)/src/common.lo
 bd_SOURCE  = bd.c
 bd_LDADD  = $(top_builddir)/src/bits.lo
@@ -37,20 +38,22 @@ all: $(check_PROGRAMS)
 .PHONY: check-syntax regen-unknown dsymutil gcov
 
 if HAVE_PERL
-# maintainer rules only. srcdir = builddir only
-unknown.c: bd-unknown.inc alldxf_2.inc alldwg.inc
-bd-unknown.inc: $(srcdir)/bd-unknown.pl $(srcdir)/ACAD_EVALUATION_GRAPH.pi
-	$(PERL) $(srcdir)/bd-unknown.pl | sort | uniq >bd-unknown.inc
+# maintainer rules only
+regen-unknown: $(srcdir)/alldwg.inc $(srcdir)/alldxf_0.inc $(srcdir)/bd-unknown.inc
 
-alldxf_2.inc: alldxf_1.inc
-alldxf_1.inc: alldxf_0.inc
-alldxf_0.inc: alldwg.inc log_unknown_dxf.pl
+$(srcdir)/bd-unknown.inc: $(srcdir)/bd-unknown.pl $(srcdir)/alldxf_0.inc \
+	                  ACAD_EVALUATION_GRAPH.pi
+	$(PERL) $(srcdir)/bd-unknown.pl | sort | uniq >$(srcdir)/bd-unknown.inc
+
+$(srcdir)/alldxf_2.inc: $(srcdir)/alldxf_1.inc
+$(srcdir)/alldxf_1.inc: $(srcdir)/alldxf_0.inc
+$(srcdir)/alldxf_0.inc: $(srcdir)/alldwg.inc $(srcdir)/log_unknown_dxf.pl
 	test -f $(srcdir)/alldwg.inc || (echo make regen-unknown; false)
 	-mv $(srcdir)/alldxf_0.inc alldxf_0.inc~ 2>/dev/null
 	-mv $(srcdir)/alldxf_1.inc alldxf_1.inc~ 2>/dev/null
 	-mv $(srcdir)/alldxf_2.inc alldxf_2.inc~ 2>/dev/null
 	cd .. && $(PERL) $(abs_srcdir)/log_unknown_dxf.pl $(abs_srcdir)/alldwg.inc
-alldwg.inc: $(srcdir)/log_unknown.pl
+$(srcdir)/alldwg.inc: $(srcdir)/log_unknown.pl
 	echo Creating $(srcdir)/alldwg.inc will need a few minutes...
 	-cd .. && ./logs-all.sh; \
 	  rm alldwg.tmp 2>/dev/null; \
@@ -58,8 +61,6 @@ alldwg.inc: $(srcdir)/log_unknown.pl
 	  for l in *_r*.log *_20*.log DS_*.log; \
 	    do $(PERL) $(abs_srcdir)/log_unknown.pl "$$l" >>alldwg.tmp; done; \
           grep -v '^//' alldwg.tmp | sort >$(abs_srcdir)/alldwg.inc; rm alldwg.tmp
-
-regen-unknown: alldwg.inc alldxf_0.inc
 endif
 
 if HAVE_WINE
