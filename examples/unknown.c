@@ -44,6 +44,8 @@
 //void *memmem (const void *big, size_t big_len, const void *little,
 //              size_t little_len);
 
+
+#define CHAIN_SIZE 32
 int cur_hdl; // to avoid dupl. search
 
 struct _unknown_field
@@ -150,8 +152,11 @@ bits_TV (Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 static void
 bits_TU (Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
-  bit_write_TU (dat, (BITCODE_TU)g->value);
+  // the source is always utf8
+  BITCODE_TU wstr = bit_utf8_to_TU ((char*)g->value);
+  bit_write_TU (dat, wstr);
   g->type = BITS_TU;
+  free (wstr);
 }
 
 static void
@@ -471,8 +476,8 @@ is_handle (int code)
 static void
 bits_try_handle (struct _unknown_field *g, int code, unsigned int objhandle)
 {
-  Bit_Chain dat = { NULL, 16, 0, 0, NULL, 0, 0 };
-  dat.chain = calloc (1, 16);
+  Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, NULL, 0, 0 };
+  dat.chain = calloc (1, CHAIN_SIZE);
 
   bits_handle (&dat, g, code, objhandle);
 
@@ -494,10 +499,10 @@ bits_format (struct _unknown_field *g, const int version,
              struct _unknown_dxf *dxf)
 {
   int code = g->code;
-  Bit_Chain dat = { NULL, 16, 0, 0, NULL, 0, 0 };
+  Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, NULL, 0, 0 };
   const int is16 = version >= 2007 ? 1 : 0;
 
-  dat.chain = calloc (1, 16);
+  dat.chain = calloc (1, CHAIN_SIZE);
   if (version)
     {
       char s[16];
@@ -578,7 +583,7 @@ bits_format (struct _unknown_field *g, const int version,
   else if (code <= 481)
     bits_handle (&dat, g, 5, 0);
   else if (code == 999)
-    return;
+    ;
   else if (1000 <= code && code <= 1009)
     bits_string (&dat, g);
   else if (1010 <= code && code <= 1049)
@@ -600,6 +605,7 @@ bits_format (struct _unknown_field *g, const int version,
   else
     {
       free (dat.chain);
+      dat.chain = NULL;
     }
 }
 
@@ -863,6 +869,8 @@ main (int argc, char *argv[])
         {
           strcpy (pi_fn, "examples/");
         }
+      else
+          strcpy (pi_fn, "");
       strcat (pi_fn, class);
       strcat (pi_fn, ".pi");
       pi = fopen (pi_fn, "w");
@@ -1008,40 +1016,34 @@ main (int argc, char *argv[])
                     }
                   if (g[j].type == BITS_ENC)
                     {
-                      Bit_Chain dat = { NULL, 16, 0, 0, NULL, 0, 0 };
-                      dat.chain = calloc (1, 16);
+                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, NULL, 0, 0 };
+                      dat.chain = calloc (1, CHAIN_SIZE);
 
                       bits_CMC (&dat, &g[j]);
                       g[j].bytes = dat.chain;
                       g[j].num_bits = (dat.byte * 8) + dat.bit;
                       num_found = search_bits (j, &g[j], &unknown_dxf[i],
                                                &dxf[i], offset);
-                      free (dat.chain);
                       if (num_found)
-                        {
-                          goto FOUND;
-                        }
+                        goto FOUND;
                     }
                   if (g[j].type == BITS_BS && strlen (g[j].value) < 3)
                     {
-                      Bit_Chain dat = { NULL, 16, 0, 0, NULL, 0, 0 };
-                      dat.chain = calloc (1, 16);
+                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, NULL, 0, 0 };
+                      dat.chain = calloc (1, CHAIN_SIZE);
 
                       bits_RC (&dat, &g[j]);
                       g[j].bytes = dat.chain;
                       g[j].num_bits = (dat.byte * 8) + dat.bit;
                       num_found = search_bits (j, &g[j], &unknown_dxf[i],
                                                &dxf[i], offset);
-                      free (dat.chain);
                       if (num_found)
-                        {
-                          goto FOUND;
-                        }
+                        goto FOUND;
                     }
                   if (g[j].type == BITS_BS)
                     {
-                      Bit_Chain dat = { NULL, 16, 0, 0, NULL, 0, 0 };
-                      dat.chain = calloc (1, 16);
+                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, NULL, 0, 0 };
+                      dat.chain = calloc (1, CHAIN_SIZE);
 
                       bits_BL (&dat, &g[j]);
                       g[j].bytes = dat.chain;
@@ -1049,10 +1051,7 @@ main (int argc, char *argv[])
                       num_found = search_bits (j, &g[j], &unknown_dxf[i],
                                                &dxf[i], offset);
                       if (num_found)
-                        {
-                          free (dat.chain);
-                          goto FOUND;
-                        }
+                        goto FOUND;
 
                       bit_set_position (&dat, 0);
                       bits_RS (&dat, &g[j]);
@@ -1060,17 +1059,14 @@ main (int argc, char *argv[])
                       g[j].num_bits = (dat.byte * 8) + dat.bit;
                       num_found = search_bits (j, &g[j], &unknown_dxf[i],
                                                &dxf[i], offset);
-                      free (dat.chain);
                       if (num_found)
-                        {
-                          goto FOUND;
-                        }
+                        goto FOUND;
                     }
                   if ((g[j].type == BITS_BL || g[j].type == BITS_BLd)
                       && strlen (g[j].value) <= 5)
                     {
-                      Bit_Chain dat = { NULL, 16, 0, 0, NULL, 0, 0 };
-                      dat.chain = calloc (1, 16);
+                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, NULL, 0, 0 };
+                      dat.chain = calloc (1, CHAIN_SIZE);
 
                       bits_BS (&dat, &g[j]);
                       g[j].bytes = dat.chain;
@@ -1078,10 +1074,7 @@ main (int argc, char *argv[])
                       num_found = search_bits (j, &g[j], &unknown_dxf[i],
                                                &dxf[i], offset);
                       if (num_found)
-                        {
-                          free (dat.chain);
-                          goto FOUND;
-                        }
+                        goto FOUND;
 
                       bit_set_position (&dat, 0);
                       bits_RL (&dat, &g[j]);
@@ -1089,43 +1082,34 @@ main (int argc, char *argv[])
                       g[j].num_bits = (dat.byte * 8) + dat.bit;
                       num_found = search_bits (j, &g[j], &unknown_dxf[i],
                                                &dxf[i], offset);
-                      free (dat.chain);
                       if (num_found)
-                        {
-                          goto FOUND;
-                        }
+                        goto FOUND;
                     }
                   if (g[j].type == BITS_RC)
                     {
-                      Bit_Chain dat = { NULL, 16, 0, 0, NULL, 0, 0 };
-                      dat.chain = calloc (1, 16);
+                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, NULL, 0, 0 };
+                      dat.chain = calloc (1, CHAIN_SIZE);
 
                       bits_BS (&dat, &g[j]);
                       g[j].bytes = dat.chain;
                       g[j].num_bits = (dat.byte * 8) + dat.bit;
                       num_found = search_bits (j, &g[j], &unknown_dxf[i],
                                                &dxf[i], offset);
-                      free (dat.chain);
                       if (num_found)
-                        {
-                          goto FOUND;
-                        }
+                        goto FOUND;
                     }
                   if (g[j].type == BITS_BD)
                     {
-                      Bit_Chain dat = { NULL, 16, 0, 0, NULL, 0, 0 };
-                      dat.chain = calloc (1, 16);
+                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, NULL, 0, 0 };
+                      dat.chain = calloc (1, CHAIN_SIZE);
 
                       bits_RD (&dat, &g[j]);
                       g[j].bytes = dat.chain;
                       g[j].num_bits = (dat.byte * 8) + dat.bit;
                       num_found = search_bits (j, &g[j], &unknown_dxf[i],
                                                &dxf[i], offset);
-                      free (dat.chain);
                       if (num_found)
-                        {
-                          goto FOUND;
-                        }
+                        goto FOUND;
                     }
                   // relaxed BD search, less mantissa precision.
                   // e.g. 49:"0.0008202099737533" (66 bits of type BD)
@@ -1133,8 +1117,8 @@ main (int argc, char *argv[])
                   if (g[j].type == BITS_RD && strlen (g[j].value) >= 3)
                     {
                       double d;
-                      Bit_Chain dat = { NULL, 16, 0, 0, NULL, 0, 0 };
-                      dat.chain = calloc (1, 16);
+                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, NULL, 0, 0 };
+                      dat.chain = calloc (1, CHAIN_SIZE);
 
                       bits_BD (&dat, &g[j]); // g.value -> dat
                       g[j].bytes = dat.chain;
@@ -1142,10 +1126,7 @@ main (int argc, char *argv[])
                       if (dat.byte == 8)
                         g[j].num_bits = 58; // from 66
                       else
-                        {
-                          free (dat.chain);
-                          goto FOUND;
-                        }
+                        goto FOUND;
                       // print rounded found value and show bit diff
                       printf (
                           "  imprecise BD search, 42bit mantissa precision\n");
@@ -1177,11 +1158,10 @@ main (int argc, char *argv[])
                           // precision\n");
                           num_found = search_bits (j, &g[j], &unknown_dxf[i],
                                                    &dxf[i], offset);
-                          free (dat.chain);
                           if (num_found)
                             {
-                              dat.chain
-                                  = (unsigned char *)unknown_dxf[i].bytes;
+                              free (dat.chain);
+                              dat.chain = (unsigned char *)unknown_dxf[i].bytes;
                               dat.size = unknown_dxf[i].num_bits / 8;
                               bit_set_position (&dat, g[j].pos[0]);
                               d = bit_read_BD (&dat);
@@ -1204,8 +1184,8 @@ main (int argc, char *argv[])
                   if (g[j].type == BITS_RD && strlen (g[j].value) >= 3)
                     {
                       double d;
-                      Bit_Chain dat = { NULL, 16, 0, 0, NULL, 0, 0 };
-                      dat.chain = calloc (1, 16);
+                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, NULL, 0, 0 };
+                      dat.chain = calloc (1, CHAIN_SIZE);
 
                       bits_RD (&dat, &g[j]); // g.value -> dat
                       g[j].bytes = dat.chain;
@@ -1213,10 +1193,7 @@ main (int argc, char *argv[])
                       if (dat.byte == 8)
                         g[j].num_bits = 56; // from 64
                       else
-                        {
-                          free (dat.chain);
-                          goto FOUND;
-                        }
+                        goto FOUND;
                       // print rounded found value and show bit diff
                       printf (
                           "  imprecise RD search, 42bit mantissa precision\n");
@@ -1249,11 +1226,10 @@ main (int argc, char *argv[])
                           // precision\n");
                           num_found = search_bits (j, &g[j], &unknown_dxf[i],
                                                    &dxf[i], offset);
-                          free (dat.chain);
                           if (num_found)
                             {
-                              dat.chain
-                                  = (unsigned char *)unknown_dxf[i].bytes;
+                              free (dat.chain);
+                              dat.chain = (unsigned char *)unknown_dxf[i].bytes;
                               dat.size = unknown_dxf[i].num_bits / 8;
                               bit_set_position (&dat, g[j].pos[0]);
                               d = bit_read_BD (&dat);
@@ -1278,9 +1254,9 @@ main (int argc, char *argv[])
                   // the length usually includes the final \0
                   if (g[j].type == BITS_TV || g[j].type == BITS_TU)
                     {
-                      Bit_Chain dat = { NULL, 16, 0, 0, NULL, 0, 0 };
+                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, NULL, 0, 0 };
                       int len = strlen (g[j].value);
-                      dat.chain = calloc (1, 16);
+                      dat.chain = calloc (1, CHAIN_SIZE);
 
 #if 0
                       /* TU/TF cannot be mixed */
@@ -1293,28 +1269,22 @@ main (int argc, char *argv[])
                           num_found = search_bits (j, &g[j], &unknown_dxf[i],
                                                    &dxf[i], offset);
                           if (num_found)
-                            {
-                              free (dat.chain);
-                              goto FOUND;
-                            }
+                            goto FOUND;
                         }
 #endif
                       if (len)
                         {
                           bit_set_position (&dat, 0);
-                          bits_TF (&dat, &g[j],
-                                   len); // search without the final \0
+                          // search without the final \0
+                          bits_TF (&dat, &g[j], len);
 
                           g[j].bytes = dat.chain;
                           g[j].num_bits = (dat.byte * 8) + dat.bit;
                           num_found = search_bits (j, &g[j], &unknown_dxf[i],
                                                    &dxf[i], offset);
-                          free (dat.chain);
                           if (num_found)
                             goto FOUND;
                         }
-                      else
-                        free (dat.chain);
                     }
 
                   if (!num_found || is_common_entity_data (g[j].code))
@@ -1362,6 +1332,7 @@ main (int argc, char *argv[])
                        have_struct ? "," : " ", piname, g[j].code);
               have_struct = 1;
               bit_fprint_bits (pi, g[j].bytes, g[j].num_bits);
+              //free (g[j].bytes);
               if (g[j].type == BITS_HANDLE)
                 {
                   char buf[32];
@@ -1530,6 +1501,7 @@ main (int argc, char *argv[])
                 &g[j])) { offset = g[j].pos[0]+1; goto SEARCH;
                 }
                 */
+              free (g[j].bytes);
             }
           fprintf (pi, "  ],\n"
                        "  Data = [S,Fields,Class,Dxf,Version,Offsets],\n"

@@ -2231,8 +2231,7 @@ bit_fprint_bits (FILE *fp, unsigned char *bits, long unsigned int size)
     {
       unsigned char bit = i % 8;
       unsigned char result = (bits[i / 8] & (0x80 >> bit)) >> (7 - bit);
-      if (i && !bit)
-        HANDLER (fp, " ");
+      /*if (i && !bit) HANDLER (fp, " ");*/
       HANDLER (fp, "%d", result ? 1 : 0);
       // fprintf(fp, "%d", BIT(bits, i) ? 1 : 0);
     }

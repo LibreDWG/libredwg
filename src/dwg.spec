@@ -7285,7 +7285,7 @@ DWG_OBJECT (ACSH_BOX_CLASS)
   SUBCLASS (AcDbShBox)
   FIELD_BL (shb_bl90, 90); //33
   FIELD_BL (shb_bl91, 91); //29
-  FIELD_BD (shb_bd40, 40); //len?    1298.99..
+  FIELD_BD (shb_bd40, 40); //len?    1298.99.. (pos: 514)
   FIELD_BD (shb_bd41, 41); //width?  20.0..
   FIELD_BD (shb_bd42, 42); //height? 420.0
   START_OBJECT_HANDLE_STREAM;
@@ -7699,3 +7699,4 @@ DWG_OBJECT (RAPIDRTRENDERSETTINGS)
 DWG_OBJECT_END
 
 #endif
+
