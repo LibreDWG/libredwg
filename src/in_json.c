@@ -1339,8 +1339,17 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   if (strEQc (key, "strings_area"))
                     {
                       const int k = dwg->header.version > R_2004 ? 512 : 256;
-                      str = realloc (str, k);
-                      memset (&str[len + 1], 0, k - len - 1);
+                      if (len > (size_t)k)
+                        {
+                          LOG_ERROR ("Illegal %s.%s length %lu > %d, stripped", name,
+                                     key, len, k);
+                          len = (size_t)k;
+                        }
+                      else if (len != (size_t)k)
+                        {
+                          str = realloc (str, k);
+                          memset (&str[len + 1], 0, k - len - 1);
+                        }
                     }
                   else if (f->size > sizeof (char *))
                     {
@@ -1349,7 +1358,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                     }
                   LOG_TRACE ("%s: \"%s\" [%s %d]\n", key, str, f->type,
                              f->size);
-                  json_set_sizefield (_obj, fields, key, len);
+                  if (strNE (key, "strings_area"))
+                    json_set_sizefield (_obj, fields, key, len);
                   old = &((char *)_obj)[f->offset];
                   memcpy (old, &str, sizeof (char *));
                   // dwg_dynapi_field_set_value (dwg, _obj, f, &str, 1);
