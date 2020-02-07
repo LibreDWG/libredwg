@@ -1755,11 +1755,10 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               name[len] = '\0';
               is_entity = 0;
               fields = dwg_dynapi_entity_fields (name);
-              // TODO: add tests that all calculated sizes are correct
               objsize = dwg_dynapi_fields_size (name);
-              if (!fields || !objsize)
+              if (!fields || !objsize || !is_dwg_object (name))
                 {
-                  LOG_ERROR ("Unknown object or entity %s", name);
+                  LOG_ERROR ("Unknown object %s", name);
                   json_advance_unknown (dat, tokens, 0);
                   break;
                 }
@@ -1798,9 +1797,9 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               is_entity = 1;
               fields = dwg_dynapi_entity_fields (name);
               objsize = dwg_dynapi_fields_size (name);
-              if (!fields || !objsize)
+              if (!fields || !objsize || !is_dwg_entity (name))
                 {
-                  LOG_ERROR ("Unknown object or entity %s", name);
+                  LOG_ERROR ("Unknown entity %s", name);
                   json_advance_unknown (dat, tokens, 0);
                   break;
                 }
