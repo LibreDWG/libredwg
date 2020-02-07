@@ -6242,16 +6242,15 @@ DWG_ENTITY (LIGHT)
 
 DWG_ENTITY_END
 
-// (varies) UNSTABLE
+// (varies)
 // ENHANCEDBLOCK => AcDbDynamicBlockRoundTripPurgePreventer
 DWG_OBJECT (DYNAMICBLOCKPURGEPREVENTER)
 
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbDynamicBlockPurgePreventer)
   FIELD_BS (flag, 70); //1 class_version would be 90
-  FIELD_RS (unknown_rs1, 0);
-
   START_OBJECT_HANDLE_STREAM;
+  FIELD_HANDLE (block, 5, 0)
 DWG_OBJECT_END
 
 // UNSTABLE. missing color index 62: 21

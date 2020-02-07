@@ -4893,12 +4893,12 @@ typedef struct _dwg_object_EVALUATION_GRAPH
   BITCODE_H  *evalexpr;    //360
 } Dwg_Object_EVALUATION_GRAPH;
 
-// UNSTABLE
+// stable
 typedef struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER
 {
   struct _dwg_object_object *parent;
   BITCODE_BS flag;         /*!< DXF 70 0 */
-  BITCODE_RS unknown_rs1;
+  BITCODE_H  block;
 } Dwg_Object_DYNAMICBLOCKPURGEPREVENTER;
 
 typedef struct _dwg_object_PERSSUBENTMANAGER
@@ -6249,6 +6249,7 @@ EXPORT int dwg_add_UNKNOWN_OBJ (Dwg_Object *obj);
 /* STABLE: */
 EXPORT int dwg_add_DICTIONARYVAR (Dwg_Object *obj);
 EXPORT int dwg_add_DICTIONARYWDFLT (Dwg_Object *obj);
+EXPORT int dwg_add_DYNAMICBLOCKPURGEPREVENTER (Dwg_Object *obj);
 EXPORT int dwg_add_FIELD (Dwg_Object *obj);
 EXPORT int dwg_add_FIELDLIST (Dwg_Object *obj);
 EXPORT int dwg_add_IDBUFFER (Dwg_Object *obj);
@@ -6272,7 +6273,6 @@ EXPORT int dwg_add_ASSOCPLANESURFACEACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_add_CAMERA (Dwg_Object *obj);
 EXPORT int dwg_add_DIMASSOC (Dwg_Object *obj);
 EXPORT int dwg_add_DBCOLOR (Dwg_Object *obj);
-EXPORT int dwg_add_DYNAMICBLOCKPURGEPREVENTER (Dwg_Object *obj);
 EXPORT int dwg_add_GEODATA (Dwg_Object *obj);
 EXPORT int dwg_add_HELIX (Dwg_Object *obj);
 EXPORT int dwg_add_LIGHT (Dwg_Object *obj);

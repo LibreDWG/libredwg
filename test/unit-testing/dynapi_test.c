@@ -27497,6 +27497,14 @@ static int test_DYNAMICBLOCKPURGEPREVENTER (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_DYNAMICBLOCKPURGEPREVENTER *restrict dynamicblockpurgepreventer = obj->tio.object->tio.DYNAMICBLOCKPURGEPREVENTER;
   {
+    BITCODE_H block;
+    if (dwg_dynapi_entity_value (dynamicblockpurgepreventer, "DYNAMICBLOCKPURGEPREVENTER", "block", &block, NULL)
+        && !memcmp (&block, &dynamicblockpurgepreventer->block, sizeof (dynamicblockpurgepreventer->block)))
+        pass ();
+    else
+        fail ("DYNAMICBLOCKPURGEPREVENTER.block [H]");
+  }
+  {
     BITCODE_BS flag;
     if (dwg_dynapi_entity_value (dynamicblockpurgepreventer, "DYNAMICBLOCKPURGEPREVENTER", "flag", &flag, NULL)
         && flag == dynamicblockpurgepreventer->flag)
@@ -27519,22 +27527,6 @@ static int test_DYNAMICBLOCKPURGEPREVENTER (const Dwg_Object *obj)
         pass ();
     else
         fail ("DYNAMICBLOCKPURGEPREVENTER.parent [struct _dwg_object_object*]");
-  }
-  {
-    BITCODE_RS unknown_rs1;
-    if (dwg_dynapi_entity_value (dynamicblockpurgepreventer, "DYNAMICBLOCKPURGEPREVENTER", "unknown_rs1", &unknown_rs1, NULL)
-        && unknown_rs1 == dynamicblockpurgepreventer->unknown_rs1)
-      pass ();
-    else
-      fail ("DYNAMICBLOCKPURGEPREVENTER.unknown_rs1 [RS] %hu != %hu", dynamicblockpurgepreventer->unknown_rs1, unknown_rs1);
-    unknown_rs1++;
-    if (dwg_dynapi_entity_set_value (dynamicblockpurgepreventer, "DYNAMICBLOCKPURGEPREVENTER", "unknown_rs1", &unknown_rs1, 0)
-        && unknown_rs1 == dynamicblockpurgepreventer->unknown_rs1)
-      pass ();
-    else
-      fail ("DYNAMICBLOCKPURGEPREVENTER.unknown_rs1 [RS] set+1 %hu != %hu", dynamicblockpurgepreventer->unknown_rs1, unknown_rs1);
-    dynamicblockpurgepreventer->unknown_rs1--;
-
   }
   return failed;
 }

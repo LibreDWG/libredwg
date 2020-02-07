@@ -5069,8 +5069,8 @@ struct _dwg_object_object*
 struct _dwg_object_object*
 @item flag
 BS,	DXF 70
-@item unknown_rs1
-RS
+@item block
+H
 
 @end vtable
 @end indentedblock

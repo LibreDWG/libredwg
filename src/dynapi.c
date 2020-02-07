@@ -4576,8 +4576,8 @@ static const Dwg_DYNAPI_field _dwg_DYNAMICBLOCKPURGEPREVENTER_fields[] = {
     1,1,0, 0 },
   { "flag",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER, flag),
     0,0,0, 70 },
-  { "unknown_rs1",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER, unknown_rs1),
-    0,0,0, 0 },
+  { "block",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER, block),
+    1,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_EVALUATION_GRAPH: (sorted by offset) */
