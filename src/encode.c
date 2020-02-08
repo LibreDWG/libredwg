@@ -1644,7 +1644,7 @@ dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj)
                 {
                   // a static string, which cannot be free'd. important for
                   // indxf
-                  if (dwg->opts & (DWG_OPTS_INDXF | DWG_OPTS_INJSON))
+                  if (dwg->opts & DWG_OPTS_IN)
                     obj->dxfname = strdup ((char *)alias);
                   else
                     obj->dxfname = (char *)alias;
@@ -1653,7 +1653,7 @@ dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj)
                 }
               klass = NULL; // inefficient
 
-              if (invalid_klass > 2 && !(dwg->opts & (DWG_OPTS_INDXF | DWG_OPTS_INJSON)))
+              if (invalid_klass > 2 && !(dwg->opts & DWG_OPTS_IN))
                 goto search_by_index;
             }
         }
@@ -1745,7 +1745,7 @@ dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
         }
     }
 
-  if (dwg->opts & (DWG_OPTS_INDXF | DWG_OPTS_INJSON)) // DXF import
+  if (dwg->opts & DWG_OPTS_IN) // DXF import
     {
       unsigned long pos = bit_position (dat);
       dat->byte = obj->address;
