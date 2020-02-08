@@ -4590,7 +4590,7 @@ DWG_OBJECT (SPATIAL_INDEX)
 
 DWG_OBJECT_END
 
-#ifdef DEBUG_CLASSES
+#if defined (DEBUG_CLASSES) || defined (IS_FREE)
 
 // 20.4.101.3 Content format for TABLECONTENT and Cell_Style_Field
 #define ContentFormat_fields(fmt) \
@@ -5496,7 +5496,7 @@ DWG_OBJECT (SCALE)
 
 DWG_OBJECT_END
 
-#ifdef DEBUG_CLASSES
+#if defined (DEBUG_CLASSES) || defined (IS_FREE)
 
 // just guessing:
 // VBA_PROJECT (81 + varies), a blob
@@ -6147,7 +6147,7 @@ DWG_OBJECT (VISUALSTYLE)
   FIELD_CMC (edge_intersection_color, 64,422);
   FIELD_CMC (edge_obscured_color, 65,423);
   //}
-#ifdef DEBUG_CLASSES
+#if defined (DEBUG_CLASSES) || defined (IS_FREE)
   DEBUG_HERE_OBJ
   FIELD_BS (edge_intersection_line_pattern, 175);
   FIELD_BD (edge_crease_angle, 42);
@@ -6381,7 +6381,7 @@ DWG_ENTITY_END
    The following entities/objects are only stored as raw UNKNOWN_ENT/OBJ,
    unless enabled via --enable-debug/-DDEBUG_CLASSES */
 
-#ifdef DEBUG_CLASSES
+#if defined (DEBUG_CLASSES) || defined (IS_FREE)
 
 // DEBUGGING
 DWG_OBJECT (EVALUATION_GRAPH)
@@ -7506,6 +7506,49 @@ geoimage_height
 */
 DWG_OBJECT_END
 
+DWG_OBJECT (ANNOTSCALEOBJECTCONTEXTDATA)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbObjectContextData)
+  SINCE (R_2010) {
+    IF_ENCODE_FROM_EARLIER {
+      FIELD_VALUE (class_version) = 3;
+    }
+    FIELD_BS (class_version, 70);
+    VALUEOUTOFBOUNDS (class_version, 10)
+  }
+  FIELD_B (has_file, 290);
+  FIELD_B (defaultflag, 0);
+  SUBCLASS (AcDbAnnotScaleObjectContextData)
+  // 70
+  // 10
+  // 11
+  // 40
+  // 41
+  // 42
+  // 43
+  // 71
+  // 72
+  // 44
+  // 45
+  // 73
+  // 74
+  // 46
+  START_OBJECT_HANDLE_STREAM;
+  FIELD_HANDLE (scale, 5, 340); /* to SCALE */
+DWG_OBJECT_END
+
+DWG_OBJECT (LIGHTLIST)
+  DECODE_UNKNOWN_BITS
+DWG_OBJECT_END
+
+// (varies) TODO
+DWG_OBJECT (DATATABLE)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbDataTable)
+  DEBUG_HERE_OBJ
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 #endif /* DEBUG_CLASSES */
 
 /* Those undocumented objects are also stored as raw UNKNOWN_OBJ */
@@ -7550,16 +7593,6 @@ DWG_OBJECT (ASSOCGEOMDEPENDENCY)
   //FIELD_B (DependentOnCompoundObject, 90);
 DWG_OBJECT_END
 
-// (varies) TODO
-DWG_OBJECT (DATATABLE)
-
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbDataTable)
-  DEBUG_HERE_OBJ
-  START_OBJECT_HANDLE_STREAM;
-
-DWG_OBJECT_END
-
 // subclass: VIEWSTYLE_ModelDoc => "AcDbModelDocViewStyle"
 
 DWG_OBJECT (DETAILVIEWSTYLE)
@@ -7572,44 +7605,6 @@ DWG_OBJECT_END
 
 // EXACXREFPANELOBJECT
 DWG_OBJECT (XREFPANELOBJECT)
-  DECODE_UNKNOWN_BITS
-DWG_OBJECT_END
-
-DWG_OBJECT (ANNOTSCALEOBJECTCONTEXTDATA)
-  DECODE_UNKNOWN_BITS
-
-  SUBCLASS (AcDbObjectContextData)
-  SINCE (R_2010) {
-    IF_ENCODE_FROM_EARLIER {
-      FIELD_VALUE (class_version) = 3;
-    }
-    FIELD_BS (class_version, 70);
-    VALUEOUTOFBOUNDS (class_version, 10)
-  }
-  FIELD_B (has_file, 290);
-  FIELD_B (defaultflag, 0);
-  SUBCLASS (AcDbAnnotScaleObjectContextData)
-  // 70
-  // 10
-  // 11
-  // 40
-  // 41
-  // 42
-  // 43
-  // 71
-  // 72
-  // 44
-  // 45
-  // 73
-  // 74
-  // 46
-
-  START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (scale, 5, 340); /* to SCALE */
-
-DWG_OBJECT_END
-
-DWG_OBJECT (LIGHTLIST)
   DECODE_UNKNOWN_BITS
 DWG_OBJECT_END
 

@@ -420,6 +420,24 @@ dwg_free_eed (Dwg_Object *obj)
 
 #include "dwg.spec"
 
+static int
+dwg_free_variable_no_class (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
+{
+  Bit_Chain *dat = &pdat;
+
+#undef DWG_ENTITY
+#undef DWG_OBJECT
+#define DWG_ENTITY(name) if (obj->fixedtype == DWG_TYPE_##name) return dwg_free_##name (dat, obj);
+#define DWG_OBJECT(name) DWG_ENTITY (name)
+
+  #include "objects.inc"
+
+#undef DWG_ENTITY
+#undef DWG_OBJECT
+
+  return DWG_ERR_UNHANDLEDCLASS;
+}
+
 /* returns 1 if object could be freed and 0 otherwise
  */
 static int
@@ -429,14 +447,19 @@ dwg_free_variable_type (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
   Dwg_Class *klass;
   Bit_Chain *dat = &pdat;
 
+  // no matching class
   if (i < 0 || i >= (int)dwg->num_classes)
-    return DWG_ERR_INVALIDTYPE;
+    {
+      LOG_WARN ("No class for %s type %d found", obj->name, obj->type);
+      return dwg_free_variable_no_class (dwg, obj);
+    }
 
   klass = &dwg->dwg_class[i];
-  // TODO: with in_json CLASSES are not really needed. The objects
-  // do have a proper dxfname and fixedtype. But they leak without a CLASS.
   if (!klass || !klass->dxfname)
-    return DWG_ERR_INTERNALERROR;
+    {
+      LOG_WARN ("No class for %s type %d found", obj->name, obj->type);
+      return dwg_free_variable_no_class (dwg, obj);
+    }
 
   if (strNE (obj->dxfname, klass->dxfname))
     {
@@ -447,7 +470,7 @@ dwg_free_variable_type (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
           || obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
         return DWG_ERR_UNHANDLEDCLASS;
       else
-        return DWG_ERR_INVALIDTYPE;
+        return dwg_free_variable_no_class (dwg, obj);
     }
 
   // global class dispatcher:
@@ -461,7 +484,8 @@ dwg_free_variable_type (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
   #undef WARN_UNSTABLE_CLASS
   // clang-format on
 
-  return DWG_ERR_UNHANDLEDCLASS;
+  LOG_WARN ("No class for %s type %d found", obj->name, obj->type);
+  return dwg_free_variable_no_class (dwg, obj);
 }
 
 // using the global dat
