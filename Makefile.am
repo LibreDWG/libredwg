@@ -116,11 +116,11 @@ check-dxf: all
                   $(srcdir)/test/test-data/sample_*.dwg \
                   $(srcdir)/test/test-data/example_*.dwg; \
           do \
-           $(srcdir)/dxf-check $$f; \
+            env MAKEFLAGS= $(srcdir)/dxf-check $$f; \
           done
 	-for d in r14 2000 2004 2007 2010 2013 2018; do \
           for f in $(srcdir)/test/test-data/$$d/*.dwg; do \
-            $(srcdir)/dxf-check $$f; \
+            env MAKEFLAGS= $(srcdir)/dxf-check $$f; \
 	  done; \
 	done
 check-json: all
@@ -128,11 +128,11 @@ check-json: all
                   $(srcdir)/test/test-data/sample_*.dwg \
                   $(srcdir)/test/test-data/example_*.dwg; \
           do \
-            $(srcdir)/json-check $$f; \
+            env MAKEFLAGS= $(srcdir)/json-check $$f; \
           done
 	-for d in r14 2000 2004 2007 2010 2013 2018; do \
           for f in $(srcdir)/test/test-data/$$d/*.dwg; do \
-            $(srcdir)/json-check $$f; \
+            env MAKEFLAGS= $(srcdir)/json-check $$f; \
 	  done; \
 	done
 

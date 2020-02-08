@@ -2,8 +2,8 @@
 # create -v3 logs and dxf's from dwg's with dwg2dxf
 srcdir="@srcdir@"
 
-make -s -j4 -C src
-make -s -j4 -C programs dwg2dxf
+make -s -C src
+make -s -C programs dwg2dxf
 @DSYMUTIL@ programs/dwg2dxf
 v=-v3
 out=

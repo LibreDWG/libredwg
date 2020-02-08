@@ -2,8 +2,8 @@
 # create -v3 logs and json's from dwg's with dwgread -Ojson
 srcdir="@srcdir@"
 
-make -s -j4 -C src
-make -s -j4 -C programs dwgread
+make -s -C src
+make -s -C programs dwgread
 @DSYMUTIL@ programs/dwgread
 v=-v3
 y=
