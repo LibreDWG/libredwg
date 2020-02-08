@@ -517,8 +517,10 @@ fi
 AM_CONDITIONAL([HAVE_JQ], [test -n "$JQ"])
 
 case $host_os in
-  darwin*) DSYMUTIL=dsymutil ;;
-  *) DSYMUTIL=echo ;;
+  darwin*)  DSYMUTIL=dsymutil ;;
+  mingw*)   DSYMUTIL=rem ;;
+  windows*) DSYMUTIL=rem ;;
+  *) DSYMUTIL=: ;;
 esac
 AC_SUBST([DSYMUTIL])
 
