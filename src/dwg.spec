@@ -3583,15 +3583,22 @@ DWG_OBJECT (MLINESTYLE)
         SUB_FIELD_BSd (lines[rcount1], lt.index, 6);
 #endif
     }
+#if defined(IS_JSON) || defined (IS_DXF)
+    SINCE (R_2018)
+    {
+        SUB_FIELD_HANDLE (lines[rcount1], lt.ltype, 5, 6);
+    }
+#endif
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (lines)
-  if (!IF_IS_FREE || dat->version < R_2018) // there's a 2nd loop below, don't free
+  if (!IF_IS_FREE || dat->from_version < R_2018) // there's a 2nd loop below, don't free
     {
       END_REPEAT (lines);
     }
 
   START_OBJECT_HANDLE_STREAM;
   // FIXME: init HANDLE_STREAM earlier, merge into upper repeat_block
+#if !(defined(IS_JSON) || defined (IS_DXF))
   SINCE (R_2018)
   {
     _REPEAT_CNF (_obj->num_lines, lines, Dwg_MLINESTYLE_line, 1)
@@ -3601,6 +3608,7 @@ DWG_OBJECT (MLINESTYLE)
     //SET_PARENT_OBJ (lines)
     END_REPEAT (lines);
   }
+#endif
 
 DWG_OBJECT_END
 
