@@ -413,14 +413,18 @@
     _obj->nam = bit_read_T32 (dat);                                           \
     if (dat->version < R_2007)                                                \
       {                                                                       \
-        FIELD_G_TRACE (nam, T32, dxf)                                         \
+        LOG_TRACE (#nam ": \"%s\" [T32 %d]\n", _obj->nam, dxf);               \
       }                                                                       \
     else                                                                      \
       {                                                                       \
         LOG_TRACE_TU_I (#nam, rcount1, FIELD_VALUE (nam), dxf)                \
       }                                                                       \
   }
-#define FIELD_TV(nam, dxf) FIELDG (nam, TV, dxf)
+#define FIELD_TV(nam, dxf)                                                    \
+  {                                                                           \
+    _obj->nam = bit_read_TV (dat);                                            \
+    LOG_TRACE (#nam ": \"%s\" [TV %d]\n", _obj->nam, dxf);                    \
+  }
 #define FIELD_TU(nam, dxf)                                                    \
   {                                                                           \
     _obj->nam = (BITCODE_TU)bit_read_TU (str_dat);                            \
@@ -815,7 +819,8 @@
           PRE (R_2007)                                                        \
           {                                                                   \
             _obj->name[vcount] = bit_read_TV (dat);                           \
-            LOG_TRACE (#name "[%ld]: %s\n", (long)vcount, _obj->name[vcount]) \
+            LOG_TRACE (#name "[%d]: \"%s\" [TV %d]\n", (int)vcount,           \
+                       _obj->name[vcount], dxf)                               \
           }                                                                   \
           LATER_VERSIONS                                                      \
           {                                                                   \
@@ -833,8 +838,8 @@
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
           _obj->name[vcount] = bit_read_##type (dat);                         \
-          LOG_INSANE (#name "[%ld]: " FORMAT_##type " [" #type " %d]\n",      \
-                      (long)vcount, _obj->name[vcount], _dxf++)               \
+          LOG_INSANE (#name "[%d]: " FORMAT_##type " [" #type " %d]\n",       \
+                      (int)vcount, _obj->name[vcount], _dxf++)                \
         }                                                                     \
     }
 
