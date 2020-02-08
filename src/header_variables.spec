@@ -236,7 +236,7 @@
   FIELD_HANDLE (TEXTSTYLE, 5, 7);
   FIELD_HANDLE (CELTYPE, 5, 6);
 
-  SINCE (R_2007)
+  IF_FREE_OR_SINCE (R_2007)
     {
       FIELD_HANDLE (CMATERIAL, 5, 0);
     }
@@ -263,7 +263,7 @@
       FIELD_HANDLE (PUCSNAME, 5, 2);
     }
 
-  SINCE (R_2000)
+  IF_FREE_OR_SINCE (R_2000)
     {
       FIELD_HANDLE (PUCSORTHOREF, 5, 2);
       FIELD_BS (PUCSORTHOVIEW, 70);
@@ -287,7 +287,7 @@
   FIELD_3BD (UCSYDIR, 10);
   FIELD_HANDLE (UCSNAME, 5, 2);
 
-  SINCE (R_2000)
+  IF_FREE_OR_SINCE (R_2000)
     {
       FIELD_HANDLE (UCSORTHOREF, 5, 2);
       FIELD_BS (UCSORTHOVIEW, 70);
@@ -383,7 +383,7 @@
   FIELD_BD (DIMTFAC, 40);
   FIELD_BD (DIMGAP, 40);
 
-  VERSIONS (R_13, R_14)
+  IF_FREE_OR_VERSIONS (R_13, R_14)
     {
       FIELD_TV (DIMPOST, 1);
       FIELD_TV (DIMAPOST, 1);
@@ -636,7 +636,7 @@
       FIELD_BS (unknown_57, 0);
     }
 
-  SINCE (R_2007) {
+  IF_FREE_OR_SINCE (R_2007) {
     // TODO split str_dat stream and get rid of this block
     SECTION_STRING_STREAM
     FIELD_T (unknown_text1, 0);
@@ -657,4 +657,5 @@
     FIELD_T (PROJECTNAME, 1);
     END_STRING_STREAM
   }
+
 

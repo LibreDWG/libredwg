@@ -71,7 +71,7 @@ DWG_ENTITY (TEXT)
       FIELD_BS (vert_alignment, 73);
     }
 
-  SINCE (R_2000)
+  IF_FREE_OR_SINCE (R_2000)
     {
       /* We assume that the user (the client application)
          is responsible for taking care of properly updating the dataflags field
@@ -151,7 +151,7 @@ DWG_ENTITY (ATTRIB)
       FIELD_BS (vert_alignment, 73);
     }
 
-  SINCE (R_2000)
+  IF_FREE_OR_SINCE (R_2000)
     {
       /* We assume that the user (the client application)
          is responsible for taking care of properly updating the dataflags field
@@ -258,7 +258,7 @@ DWG_ENTITY (ATTDEF)
       FIELD_BS (vert_alignment, 74);
     }
 
-  SINCE (R_2000)
+  IF_FREE_OR_SINCE (R_2000)
     {
       /* We assume that the user (the client application)
          is responsible for taking care of properly updating the dataflags field
@@ -303,7 +303,7 @@ DWG_ENTITY (ATTDEF)
       FIELD_RC (class_version, 280); // 0 = r2010
       VALUEOUTOFBOUNDS (class_version, 10)
     }
-  SINCE (R_2018)
+  IF_FREE_OR_SINCE (R_2018)
     {
       FIELD_RC (type, 70); // 1=single line, 2=multi line attrib, 4=multi line attdef
 
@@ -1556,7 +1556,7 @@ DWG_ENTITY (VIEWPORT)
     FIELD_BS (grid_major, 61);
   }
 
-  SINCE (R_2000)
+  IF_FREE_OR_SINCE (R_2000)
     {
       FIELD_BL (num_frozen_layers, 0);
       FIELD_BL (status_flag, 90);
@@ -2183,7 +2183,7 @@ DWG_OBJECT (DICTIONARYWDFLT)
 
   START_OBJECT_HANDLE_STREAM;
 #ifndef IS_DXF
-  SINCE (R_2000)
+  IF_FREE_OR_SINCE (R_2000)
     {
       HANDLE_VECTOR_N (itemhandles, FIELD_VALUE (numitems), 2, 350);
     }
@@ -2510,7 +2510,7 @@ DWG_OBJECT (BLOCK_HEADER)
     FIELD_T (xref_pname, 1); // and 3
   }
 
-  SINCE (R_2000)
+  IF_FREE_OR_SINCE (R_2000)
     {
       FIELD_NUM_INSERTS (num_inserts, RL, 0);
       FIELD_T (description, 4);
@@ -2557,7 +2557,7 @@ DWG_OBJECT (BLOCK_HEADER)
   SINCE (R_13) {
     FIELD_HANDLE (endblk_entity, 3, 0);
   }
-  SINCE (R_2000)
+  IF_FREE_OR_SINCE (R_2000)
     {
       if (FIELD_VALUE (num_inserts) && FIELD_VALUE (num_inserts) < 0xf00000) {
         HANDLE_VECTOR (inserts, num_inserts, ANYCODE, 0);
@@ -2638,10 +2638,10 @@ DWG_OBJECT (LAYER)
 
   START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (xref, 5, 0);
-  SINCE (R_2000) {
+  IF_FREE_OR_SINCE (R_2000) {
     FIELD_HANDLE (plotstyle, 5, 390);
   }
-  SINCE (R_2007) {
+  IF_FREE_OR_SINCE (R_2007) {
     FIELD_HANDLE (material, ANYCODE, 347);
   }
   FIELD_HANDLE (ltype, 5, 6);
@@ -2908,7 +2908,7 @@ DWG_OBJECT (VIEW)
     FIELD_HANDLE (visualstyle, 5, 348);
     FIELD_HANDLE (sun, 3, 361);
   }
-  SINCE (R_2000)
+  IF_FREE_OR_SINCE (R_2000)
     {
       if (FIELD_VALUE (associated_ucs) & 1)
         {
@@ -2957,12 +2957,12 @@ DWG_OBJECT (UCS)
     FIELD_BS (orthographic_type, 71); // on pairs with 13?
   }
 
-  SINCE (R_13)
+  IF_FREE_OR_SINCE (R_13)
   {
     START_OBJECT_HANDLE_STREAM;
     FIELD_HANDLE (null_handle, 5, 0);
   }
-  SINCE (R_2000)
+  IF_FREE_OR_SINCE (R_2000)
   {
     FIELD_HANDLE (base_ucs, ANYCODE, 346);
     FIELD_HANDLE (named_ucs, 5, 345);
@@ -3025,7 +3025,7 @@ DWG_OBJECT (VPORT)
     FIELD_RC (render_mode, 281);
   }
 
-  SINCE (R_2000)
+  IF_FREE_OR_SINCE (R_2000)
   {
     FIELD_3BD (ucs_origin, 110);
     FIELD_3BD (ucs_x_axis, 111);
@@ -3037,7 +3037,7 @@ DWG_OBJECT (VPORT)
     FIELD_BS (ucs_orthografic_type, 79);
     FIELD_BD (ucs_elevation, 146);
   }
-  SINCE (R_2007)
+  IF_FREE_OR_SINCE (R_2007)
   {
     FIELD_HANDLE (visualstyle, 5, 348);
     FIELD_BS (grid_flags, 60);
@@ -3176,14 +3176,14 @@ DWG_OBJECT (VPORT)
     FIELD_HANDLE (null_handle, 5, 0);
   }
 
-  SINCE (R_2007)
+  IF_FREE_OR_SINCE (R_2007)
     {
       FIELD_HANDLE (background, 4, 332); //soft ptr
       FIELD_HANDLE (visualstyle, 5, 348); //hard ptr
       FIELD_HANDLE (sun, 3, 361); //hard owner
     }
 
-  SINCE (R_2000)
+  IF_FREE_OR_SINCE (R_2000)
     {
       FIELD_HANDLE (named_ucs, 5, 345);
       FIELD_HANDLE (base_ucs, 5, 346);
@@ -3356,8 +3356,12 @@ DWG_OBJECT (DIMSTYLE)
       FIELD_CMC (DIMCLRE, 177,0);
       FIELD_CMC (DIMCLRT, 178,0);
     }
-
-  SINCE (R_2000)
+  else FREE {
+      FIELD_TV (DIMBLK_T, 5);
+      FIELD_TV (DIMBLK1_T, 6);
+      FIELD_TV (DIMBLK2_T, 7);
+  }
+  IF_FREE_OR_SINCE (R_2000)
     {
       FIELD_T (DIMPOST, 3);
       FIELD_T (DIMAPOST, 4);
@@ -3398,7 +3402,7 @@ DWG_OBJECT (DIMSTYLE)
       FIELD_BS (DIMARCSYM, 90);
     }
 
-  SINCE (R_2000)
+  IF_FREE_OR_SINCE (R_2000)
     {
       FIELD_BD (DIMTXT, 140);
       FIELD_BD (DIMCEN, 141);
@@ -4136,7 +4140,7 @@ DWG_ENTITY (LWPOLYLINE)
     VERSIONS (R_13, R_14) {
       FIELD_2RD_VECTOR (points, num_points, 10);
     }
-    SINCE (R_2000) {
+    IF_FREE_OR_SINCE (R_2000) {
       FIELD_2DD_VECTOR (points, num_points, 10);
     }
 
@@ -4223,8 +4227,7 @@ DWG_ENTITY (PROXY_LWPOLYLINE)
   VERSIONS (R_13, R_14) {
     FIELD_2RD_VECTOR (points, num_points);
   }
-
-  SINCE (R_2000) {
+  IF_FREE_OR_SINCE (R_2000) {
     FIELD_2DD_VECTOR (points, num_points);
   }
 

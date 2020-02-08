@@ -1367,7 +1367,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 }
               else
                 {
-                  LOG_TRACE ("%s: \"%s\" [%s]\n", key, str, f->type);
+                  LOG_TRACE ("%s: \"%s\" [%s] len=%d\n", key, str, f->type, (int)len);
                   dwg_dynapi_field_set_value (dwg, _obj, f, &str, 1);
                   free (str);
                 }
