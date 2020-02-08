@@ -518,7 +518,7 @@ DWG_ENTITY (INSERT)
 
   //Spec typo? Spec says "2004:" but I think it should be "2004+:"
   // just like field num_owned (AND just like in MINSERT)
-  SINCE (R_2004)
+  IF_FREE_OR_SINCE (R_2004)
     {
       if (FIELD_VALUE (has_attribs))
         {
@@ -636,7 +636,7 @@ DWG_ENTITY (MINSERT)
 
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (block_header, 5, 0);
-  VERSIONS (R_13, R_2000)
+  IF_FREE_OR_VERSIONS (R_13, R_2000)
   {
     if (FIELD_VALUE (has_attribs))
       {
@@ -645,7 +645,7 @@ DWG_ENTITY (MINSERT)
       }
   }
 
-  SINCE (R_2004)
+  IF_FREE_OR_SINCE (R_2004)
     {
     if (FIELD_VALUE (has_attribs))
       {
@@ -878,21 +878,21 @@ DWG_ENTITY (POLYLINE_2D)
   }
   COMMON_ENTITY_HANDLE_DATA;
 
-  VERSIONS (R_13, R_2000)
+  IF_FREE_OR_VERSIONS (R_13, R_2000)
     {
       FIELD_HANDLE (first_vertex, 4, 0);
       FIELD_HANDLE (last_vertex, 4, 0);
     }
 
-  SINCE (R_2004)
+  IF_FREE_OR_SINCE (R_2004)
     {
       HANDLE_VECTOR (vertex, num_owned, 3, 0);
     }
 
-  SINCE (R_13)
-  {
-    FIELD_HANDLE (seqend, 3, 0);
-  }
+  IF_FREE_OR_SINCE (R_13)
+    {
+      FIELD_HANDLE (seqend, 3, 0);
+    }
 
 DWG_ENTITY_END
 
@@ -914,12 +914,12 @@ DWG_ENTITY (POLYLINE_3D)
   }
 
   COMMON_ENTITY_HANDLE_DATA;
-  VERSIONS (R_13, R_2000)
+  IF_FREE_OR_VERSIONS (R_13, R_2000)
     {
       FIELD_HANDLE (first_vertex, 4, 0);
       FIELD_HANDLE (last_vertex, 4, 0);
     }
-  SINCE (R_2004)
+  IF_FREE_OR_SINCE (R_2004)
     {
       HANDLE_VECTOR (vertex, num_owned, 3, 0);
     }
@@ -1361,12 +1361,12 @@ DWG_ENTITY (POLYLINE_PFACE)
   }
 
   COMMON_ENTITY_HANDLE_DATA;
-  VERSIONS (R_13, R_2000)
+  IF_FREE_OR_VERSIONS (R_13, R_2000)
     {
       FIELD_HANDLE (first_vertex, 4, 0);
       FIELD_HANDLE (last_vertex, 4, 0);
     }
-  SINCE (R_2004)
+  IF_FREE_OR_SINCE (R_2004)
     {
       HANDLE_VECTOR (vertex, num_owned, 4, 0);
     }
@@ -1395,7 +1395,7 @@ DWG_ENTITY (POLYLINE_MESH)
       FIELD_HANDLE (first_vertex, 4, 0);
       FIELD_HANDLE (last_vertex, 4, 0);
     }
-  SINCE (R_2004)
+  IF_FREE_OR_SINCE (R_2004)
     {
       VALUEOUTOFBOUNDS (num_owned, 100000)
       HANDLE_VECTOR (vertex, num_owned, 4, 0);
@@ -2547,7 +2547,7 @@ DWG_OBJECT (BLOCK_HEADER)
         }
     }
 
-  SINCE (R_2004)
+  IF_FREE_OR_SINCE (R_2004)
     {
       if (FIELD_VALUE (num_owned) < 0xf00000) {
         HANDLE_VECTOR (entities, num_owned, 4, 0);
@@ -3444,7 +3444,7 @@ DWG_OBJECT (DIMSTYLE)
       FIELD_B (DIMFXLON, 290);
     }
 
-  SINCE (R_2010)
+  IF_FREE_OR_SINCE (R_2010)
     {
       FIELD_B (DIMTXTDIRECTION, 295);
       FIELD_BD (DIMALTMZF, 0); // undocumented
@@ -3471,7 +3471,7 @@ DWG_OBJECT (DIMSTYLE)
     FIELD_HANDLE (DIMTXSTY, 5, 340); /* Text style (DIMTXSTY) */
   }
 
-  SINCE (R_2000)
+  IF_FREE_OR_SINCE (R_2000)
     {
       FIELD_HANDLE (DIMLDRBLK, 5, 341); /* Leader arrow (DIMLDRBLK)*/
       FIELD_HANDLE (DIMBLK, 5, 342);  /* Arrow */
@@ -3479,7 +3479,7 @@ DWG_OBJECT (DIMSTYLE)
       FIELD_HANDLE (DIMBLK2, 5, 344); /* Arrow 2 */
     }
 
-  SINCE (R_2007)
+  IF_FREE_OR_SINCE (R_2007)
     {
       FIELD_HANDLE (DIMLTYPE, ANYCODE, 345);
       FIELD_HANDLE (DIMLTEX1, ANYCODE, 346);
@@ -4036,10 +4036,10 @@ DWG_OBJECT (LAYOUT)
   }
 
   START_OBJECT_HANDLE_STREAM;
-  SINCE (R_2004) {
+  IF_FREE_OR_SINCE (R_2004) {
     FIELD_HANDLE (plot_view, 5, 6);
   }
-  SINCE (R_2007) {
+  IF_FREE_OR_SINCE (R_2007) {
     FIELD_HANDLE (visualstyle, 4, 0);
   }
   FIELD_HANDLE (block_header, 4, 330); // => BLOCK_HEADER.pspace or mspace
@@ -4047,7 +4047,7 @@ DWG_OBJECT (LAYOUT)
   FIELD_HANDLE (base_ucs, 5, 346);
   FIELD_HANDLE (named_ucs, 5, 345);
 
-  SINCE (R_2004) {
+  IF_FREE_OR_SINCE (R_2004) {
     HANDLE_VECTOR (viewports, num_viewports, 4, 0);
   }
 

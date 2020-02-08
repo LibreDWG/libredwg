@@ -24,6 +24,8 @@
 #  define DXF if (0)
 #  define JSON if (0)
 #  define FREE if (0)
+#  define IF_FREE_OR_SINCE(x) SINCE (x)
+#  define IF_FREE_OR_VERSIONS(x,y) VERSIONS(x, y)
 #  define IF_ENCODE_FROM_EARLIER if (0)
 #  define IF_ENCODE_FROM_EARLIER_OR_DXF if (0)
 #  define IF_ENCODE_FROM_PRE_R13 if (0)
@@ -269,6 +271,10 @@
 #  define FREE if (1)
 #  undef IF_IS_FREE
 #  define IF_IS_FREE 1
+#  undef IF_FREE_OR_SINCE
+#  define IF_FREE_OR_SINCE(x) if (1)
+#  undef IF_FREE_OR_VERSIONS
+#  define IF_FREE_OR_VERSIONS(x,y) if (1)
 #else
 #  ifndef END_REPEAT
 #    define END_REPEAT(field)
