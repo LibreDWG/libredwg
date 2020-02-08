@@ -770,6 +770,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   const char *section_names[]
       = { "AcDb:Header", "AcDb:Classes", "AcDb:Handles",
           "2NDHEADER",   "MEASUREMENT",  "AcDb:AuxHeader" };
+  Dwg_Version_Type orig_from_version = dat->from_version;
 
   if (dwg->opts)
     loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
@@ -902,7 +903,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         if (!dwg->header_vars.HANDSEED || !dwg->header_vars.TDCREATE.days)
           {
             dwg->header.num_sections = 5;
-            // to trigger IF_ENCODE_FROM_EARLIER defaults
+            // hack to trigger IF_ENCODE_FROM_EARLIER defaults. undone after HEADER
             dat->from_version = R_11;
             if (dat->version <= dat->from_version)
               dat->from_version = dat->version - 1;
@@ -1096,8 +1097,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   //  str_dat = dat;
   dwg_encode_header_variables (dat, hdl_dat, dat, dwg);
   // undo minimal HEADER hack
-  if (dat->from_version != dwg->header.from_version)
-    dat->from_version = dwg->header.from_version;
+  if (dat->from_version != orig_from_version)
+    dat->from_version = orig_from_version;
   encode_patch_RLsize (dat, pvzadr);
   bit_write_CRC (dat, pvzadr, 0xC0C1);
 
@@ -2115,7 +2116,8 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     }
 
   /* DXF: patchup size and bitsize */
-  if (!obj->size)
+  /* Imported json sizes are unreliable when changing versions */
+  if (!obj->size || (dwg->opts & DWG_OPTS_INJSON && dwg->header.version != dwg->header.from_version))
     {
       BITCODE_BL pos = bit_position (dat);
       assert (address);
@@ -2123,7 +2125,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       if (dat->bit)
         obj->size++;
       // assert (obj->bitsize); // on errors
-      if (!obj->bitsize)
+      if (!obj->bitsize || (dwg->opts & DWG_OPTS_INJSON && dwg->header.version != dwg->header.from_version))
         {
           LOG_TRACE ("-bitsize calc from address (no handle) @%lu.%u\n",
                      dat->byte, dat->bit);

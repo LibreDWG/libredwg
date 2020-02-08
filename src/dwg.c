@@ -352,13 +352,16 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
   dat.opts = dwg->opts;
   dat.version = (Dwg_Version_Type)dwg->header.version;
   dat.from_version = (Dwg_Version_Type)dwg->header.from_version;
+  // but no wide chars from JSON, because we just encode to R_2000
+  if (dwg->opts & DWG_OPTS_INJSON)
+    dat.from_version = dat.version;
 
   // Encode the DWG struct into dat (in memory). Needs 2x DWG heap, dwg + dat.
   dat.size = 0;
   error = dwg_encode ((Dwg_Data *)dwg, &dat);
   if (error >= DWG_ERR_CRITICAL)
     {
-      LOG_ERROR ("Failed to encode datastructure.\n")
+      LOG_ERROR ("Failed to encode Dwg_Data\n")
       if (dat.size > 0)
         {
           free (dat.chain);
