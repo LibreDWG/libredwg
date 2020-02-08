@@ -94,8 +94,8 @@ static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
 // obj is the relative base object here and there.
 #define VALUE_HANDLE(ref, nam, _code, dxf)                                    \
   if (ref                                                                     \
-      && (!(dat->opts & DWG_OPTS_INDXF) && ref->handleref.size == 0           \
-          && ref->absolute_ref == 0 && !ref->obj)                             \
+      && (!(dat->opts & (DWG_OPTS_INDXF | DWG_OPTS_INJSON))                   \
+          && ref->handleref.size == 0 && ref->absolute_ref == 0 && !ref->obj) \
       && !(ref->handleref.size || (obj && ref->handleref.code > 5)))          \
     {                                                                         \
       free (ref);                                                             \
@@ -173,12 +173,12 @@ static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
 #define FIELD_TIMERLL(name, dxf)
 // indxf does not assign names yet
 #define FIELD_CMC(color, dxf1, dxf2)                                          \
-  if (!(dat->opts & DWG_OPTS_INDXF)) {                                        \
+  if (!(dat->opts & (DWG_OPTS_INDXF | DWG_OPTS_INJSON))) {                    \
     FIELD_T (color.name, 0);                                                  \
     FIELD_T (color.book_name, 0);                                             \
   }
 #define SUB_FIELD_CMC(o, color, dxf1, dxf2)                                   \
-  if (!(dat->opts & DWG_OPTS_INDXF)) {                                        \
+  if (!(dat->opts & (DWG_OPTS_INDXF | DWG_OPTS_INJSON))) {                    \
     VALUE_TV (_obj->o.color.name, 0);                                         \
     VALUE_TV (_obj->o.color.book_name, 0);                                    \
   }
