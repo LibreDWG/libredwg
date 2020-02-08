@@ -1714,18 +1714,21 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           Dwg_Object *oldobj = &dwg->object[i - 1];
           if (!oldobj->handle.value)
             {
-              LOG_ERROR ("Required %s.handle missing", name)
-              oldobj->type = oldobj->fixedtype = DWG_TYPE_DUMMY;
+              LOG_ERROR ("Required %s.handle missing, skipped", name)
+              dwg_free_object (obj);
+              obj = oldobj;
             }
-          if (!oldobj->type)
+          else if (!oldobj->type)
             {
-              LOG_ERROR ("Required %s.type missing", name)
-              oldobj->type = oldobj->fixedtype = DWG_TYPE_DUMMY;
+              LOG_ERROR ("Required %s.type missing, skipped", name)
+              dwg_free_object (obj);
+              obj = oldobj;
             }
-          if (oldobj->fixedtype == DWG_TYPE_UNUSED)
+          else if (oldobj->fixedtype == DWG_TYPE_UNUSED)
             {
-              LOG_ERROR ("Required %s.fixedtype missing", name);
-              oldobj->type = oldobj->fixedtype = DWG_TYPE_DUMMY;
+              LOG_ERROR ("Required %s.fixedtype missing, skipped", name);
+              dwg_free_object (obj);
+              obj = oldobj;
             }
         }
 
@@ -2648,7 +2651,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   unsigned int i;
   int error = -1;
 
-  dwg->opts |= loglevel | DWG_OPTS_INDXF | DWG_OPTS_INJSON;
+  dwg->opts |= (loglevel | DWG_OPTS_INDXF | DWG_OPTS_INJSON);
   loglevel = dwg->opts & 0xf;
   if (!dat->chain && dat->fh)
     {

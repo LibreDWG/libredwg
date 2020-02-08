@@ -743,10 +743,10 @@ dwg_free_object (Dwg_Object *obj)
               dwg_free_UNKNOWN_OBJ (dat, obj);
         }
     }
-  /* With this importer the dxfname is dynamic, just the name is const */
-  if (dwg->opts & DWG_OPTS_INDXF)
+  /* With indxf the dxfname is dynamic, just the name is const */
+  if (dwg->opts & (DWG_OPTS_INDXF|DWG_OPTS_INJSON))
     FREE_IF (obj->dxfname);
-  /* With in_json even the name is dynamic */
+  /* With injson even the name is dynamic */
   if (dwg->opts & DWG_OPTS_INJSON)
     FREE_IF (obj->name);
   obj->type = DWG_TYPE_FREED;
