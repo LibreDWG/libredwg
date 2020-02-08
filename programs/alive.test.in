@@ -92,7 +92,8 @@ run ()
     else
         case $bprog in
         dwggrep) ;;
-        dwgrewrite|dwgwrite) test -f core && rm core
+        dwgrewrite) #crashes on mingw
+                test -f core && rm core
                 tmpnum=$(expr 1 + $problems)
                 echo $(basename $0): TODO $prog $tmpnum failures
                 ls -l $log ;;
@@ -117,6 +118,7 @@ for d in $DATA; do
     rm $b.ps 2>/dev/null
     rm $b.bmp 2>/dev/null
     rm $b-rewrite.dwg 2>/dev/null
+    rm $b-dwgwrite.dwg 2>/dev/null
 done
 
 for prog in $PROGS ; do
@@ -139,6 +141,7 @@ esac
 
 # TODO: check generated DXF's against original DXF's
 # skip the run part if dwg2dxf is part of bin_PROGRAMS (i.e. being installed)
+# rather see the dxf.test roundtrip test
 # only in programs, not examples:
 if test -f cmp_dxf.pl -a -e dwg2dxf; then
     for dwg in $DATA; do
