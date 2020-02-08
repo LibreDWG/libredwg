@@ -1343,7 +1343,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                       if (len > (size_t)k)
                         {
                           LOG_ERROR ("Illegal %s.%s length %lu > %d, stripped", name,
-                                     key, len, k);
+                                     key, (unsigned long)len, k);
                           len = (size_t)k;
                         }
                       else if (len != (size_t)k)
@@ -2757,7 +2757,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   //                  AppInfoHistory, FileDepList, Security, RevHistory,
   //                  ObjFreeSpace, Template
   // section arrays: CLASSES, OBJECTS, HANDLES
-  for (tokens.index = 1; tokens.index < tokens.num_tokens; tokens.index++)
+  for (tokens.index = 1; tokens.index < (unsigned int)tokens.num_tokens; tokens.index++)
     {
       char key[80];
       const jsmntok_t *t = &tokens.tokens[tokens.index];
@@ -2782,7 +2782,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       memcpy (key, &dat->chain[t->start], len);
       key[len] = '\0';
       tokens.index++;
-      if (tokens.index >= tokens.num_tokens)
+      if (tokens.index >= (unsigned int)tokens.num_tokens)
         {
           LOG_ERROR ("Unexpected end of JSON at %u of %ld tokens",
                      tokens.index, tokens.num_tokens);
