@@ -2753,7 +2753,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // valid first level tokens:
   // created_by: string
   // section objects: FILEHEADER, HEADER, THUMBNAILIMAGE, R2004_Header,
-  // SummaryInfo, AppInfo,
+  //                  SummaryInfo, AppInfo,
   //                  AppInfoHistory, FileDepList, Security, RevHistory,
   //                  ObjFreeSpace, Template
   // section arrays: CLASSES, OBJECTS, HANDLES
