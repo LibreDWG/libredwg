@@ -402,8 +402,9 @@ static char* _path_field(const char *path);
 #define SUB_FIELD_BLL(o, nam, dxf) SUB_FIELD (o, nam, BLL, dxf)
 #define SUB_FIELD_RLL(o, nam, dxf) SUB_FIELD (o, nam, RLL, dxf)
 #define SUB_FIELD_3BD_inl(o, nam, dxf)                                        \
-  KEY (nam);                                                                  \
-  VALUE_3RD (_obj->o, dxf)
+  SUB_FIELD_RD (o, x, dxf);                                                   \
+  SUB_FIELD_RD (o, y, dxf);                                                   \
+  SUB_FIELD_RD (o, z, dxf)
 #define SUB_FIELD_2BD_1(o, nam, dxf)                                          \
   KEY (nam);                                                                  \
   VALUE_2RD (_obj->o.nam, dxf)
