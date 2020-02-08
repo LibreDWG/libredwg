@@ -112,8 +112,10 @@
 #ifndef SUB_FIELD_TU
 #  define SUB_FIELD_TU(o, nam, dxf) FIELD_TU (o.nam, dxf)
 #endif
-#ifndef SUB_FIELD_BL
+#ifndef SUB_FIELD_T
 #  define SUB_FIELD_T(o, nam, dxf) FIELD_T (o.nam, dxf)
+#endif
+#ifndef SUB_FIELD_BL
 #  define SUB_FIELD_B(o, nam, dxf) FIELDG (o.nam, B, dxf)
 #  define SUB_FIELD_BL(o, nam, dxf) FIELDG (o.nam, BL, dxf)
 #  define SUB_FIELD_BB(o, nam, dxf) FIELDG (o.nam, BB, dxf)

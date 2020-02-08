@@ -3671,6 +3671,12 @@ DWG_ENTITY (HATCH)
       error |= DWG_FUNC_N (ACTION,_HATCH_gradientfill)(dat,str_dat,obj,_obj);
     }
 #endif
+#ifdef IS_FREE
+  if (dat->from_version >= R_2004)
+    {
+      error |= DWG_FUNC_N (ACTION,_HATCH_gradientfill)(dat,str_dat,obj,_obj);
+    }
+#endif
   DXF {
     BITCODE_3RD pt = { 0.0, 0.0, 0.0 };
     pt.z = FIELD_VALUE (elevation);

@@ -1095,6 +1095,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   // if (dat->version >= R_2007)
   //  str_dat = dat;
   dwg_encode_header_variables (dat, hdl_dat, dat, dwg);
+  // undo minimal HEADER hack
+  if (dat->from_version != dwg->header.from_version)
+    dat->from_version = dwg->header.from_version;
   encode_patch_RLsize (dat, pvzadr);
   bit_write_CRC (dat, pvzadr, 0xC0C1);
 
