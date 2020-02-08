@@ -83,6 +83,7 @@ static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
   }
 #define FIELD_VALUE(name) _obj->name
 #define SUB_FIELD(o, nam, type, dxf) FIELD (_obj->o.nam, type)
+#define SUB_FIELD_T(o, nam, dxf) FIELD_TV (_obj->o.nam, dxf)
 
 #define ANYCODE -1
 #define FIELD_HANDLE(nam, code, dxf) VALUE_HANDLE (_obj->nam, nam, code, dxf)

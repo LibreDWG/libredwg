@@ -64,6 +64,7 @@ static char *created_by;
 static Bit_Chain *g_dat;
 
 #define MIN(X, Y) ((X) < (Y) ? (X) : (Y))
+#define MAX(X, Y) ((X) > (Y) ? (X) : (Y))
 
 #define json_expect(tokens, typ)                                              \
   if (tokens->tokens[tokens->index].type != JSMN_##typ)                       \
@@ -1206,7 +1207,7 @@ json_set_numfield (void *restrict _obj,
   else if (strEQc (key, "ref"))
     {
       if (size != 4) // fixed size
-        LOG_ERROR ("Need 4 ref array elements, have %ld", size)
+        LOG_WARN ("Need 4 ref array elements, have %ld", size)
       else
         LOG_TRACE ("Check ref[] 4 ok\n")
     }
@@ -1541,7 +1542,13 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   o->num_lines = num_elems;
                   LOG_TRACE ("MLINE.num_lines = %d\n", num_elems);
                 }
-              elems = num_elems ? calloc (num_elems, size_elem) : NULL;
+              if (strEQc (subclass, "DIMASSOC_Ref") && num_elems != 4)
+                {
+                  elems = calloc (MAX (4, num_elems), size_elem);
+                  LOG_TRACE ("DIMASSOC num_refs = 4\n");
+                }
+              else
+                elems = num_elems ? calloc (num_elems, size_elem) : NULL;
               tokens->index++;
               // array of structs
               if (!num_elems)
