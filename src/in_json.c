@@ -1176,7 +1176,7 @@ find_sizefield (const Dwg_DYNAPI_field *restrict fields,
     /* numitems is for 2 arrays, keep the smaller */                          \
     if (strEQ (f->name, "numitems") && num != _size)                          \
       _size = MIN (num, _size);                                               \
-    LOG_TRACE ("%s: " FORMAT_##type "\n", f->name, _size);                    \
+    LOG_TRACE ("%s = " FORMAT_##type "\n", f->name, _size);                   \
     memcpy (&((char *)_obj)[f->offset], &_size, f->size);                     \
   }                                                                           \
   break;
@@ -1218,7 +1218,7 @@ json_set_numfield (void *restrict _obj,
 #define FIXUP_SIZEFIELD(type)                                                 \
   {                                                                           \
     const BITCODE_##type _size = (BITCODE_##type)len;                         \
-    LOG_TRACE ("%s: " FORMAT_##type "\n", f->name, _size);                    \
+    LOG_TRACE ("%s = " FORMAT_##type "\n", f->name, _size);                   \
     memcpy (&((char *)_obj)[f->offset], &_size, f->size);                     \
   }                                                                           \
   break;
@@ -1286,7 +1286,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                    && (memBEGINc (key, "num_") || strEQc (key, "numitems")))
             {
               tokens->index++;
-              LOG_TRACE ("%s: (ignored)\n", key);
+              LOG_TRACE ("%s: %.*s (ignored)\n", key, t->end - t->start, &dat->chain[t->start]);
             }
           else if (t->type == JSMN_PRIMITIVE
                    && (strEQc (f->type, "RC") || strEQc (f->type, "B")
@@ -1424,6 +1424,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 }
               if (!size1)
                 LOG_TRACE ("%s: [%s] empty\n", key, f->type);
+              //memcpy (&((char *)_obj)[f->offset], &hdls, sizeof (hdls));
               dwg_dynapi_field_set_value (dwg, _obj, f, &hdls, 1);
             }
           else if (t->type == JSMN_ARRAY && strEQc (f->type, "3DPOINT*"))
