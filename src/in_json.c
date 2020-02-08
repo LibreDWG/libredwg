@@ -1535,6 +1535,12 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               LOG_TRACE ("new subclass %s %s [%d elems with size %d]\n", name,
                          subclass, num_elems, size_elem);
               json_set_numfield (_obj, fields, key, num_elems);
+              if (strEQc (subclass, "MLINE_line") && num_elems)
+                {
+                  Dwg_Entity_MLINE *o = obj->tio.entity->tio.MLINE;
+                  o->num_lines = num_elems;
+                  LOG_TRACE ("MLINE.num_lines = %d\n", num_elems);
+                }
               elems = num_elems ? calloc (num_elems, size_elem) : NULL;
               tokens->index++;
               // array of structs
