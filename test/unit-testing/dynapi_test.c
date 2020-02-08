@@ -20655,6 +20655,20 @@ static int test_VERTEX_3D (const Dwg_Object *obj)
   }
   return failed;
 }
+static int test_VERTEX_MESH (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_VERTEX_MESH *restrict vertex_mesh = obj->tio.entity->tio.VERTEX_MESH;
+  return failed;
+}
+static int test_VERTEX_PFACE (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_VERTEX_PFACE *restrict vertex_pface = obj->tio.entity->tio.VERTEX_PFACE;
+  return failed;
+}
 static int test_VERTEX_PFACE_FACE (const Dwg_Object *obj)
 {
   int error = 0;
@@ -37863,6 +37877,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_VERTEX_2D(obj);
   else  if (obj->fixedtype == DWG_TYPE_VERTEX_3D)
     error += test_VERTEX_3D(obj);
+  else  if (obj->fixedtype == DWG_TYPE_VERTEX_MESH)
+    error += test_VERTEX_MESH(obj);
+  else  if (obj->fixedtype == DWG_TYPE_VERTEX_PFACE)
+    error += test_VERTEX_PFACE(obj);
   else  if (obj->fixedtype == DWG_TYPE_VERTEX_PFACE_FACE)
     error += test_VERTEX_PFACE_FACE(obj);
   else  if (obj->fixedtype == DWG_TYPE_VIEWPORT)
@@ -38153,6 +38171,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_VERTEX_2D (obj);
   else  if (obj->fixedtype == DWG_TYPE_VERTEX_3D)
     error += test_VERTEX_3D (obj);
+  else  if (obj->fixedtype == DWG_TYPE_VERTEX_MESH)
+    error += test_VERTEX_MESH (obj);
+  else  if (obj->fixedtype == DWG_TYPE_VERTEX_PFACE)
+    error += test_VERTEX_PFACE (obj);
   else  if (obj->fixedtype == DWG_TYPE_VERTEX_PFACE_FACE)
     error += test_VERTEX_PFACE_FACE (obj);
   else  if (obj->fixedtype == DWG_TYPE_VIEWPORT)
@@ -38831,6 +38853,22 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Entity_VERTEX_3D): %d != "
                "dwg_dynapi_fields_size (\"VERTEX_3D\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Entity_VERTEX_MESH);
+  size2 = dwg_dynapi_fields_size ("VERTEX_MESH");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_VERTEX_MESH): %d != "
+               "dwg_dynapi_fields_size (\"VERTEX_MESH\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Entity_VERTEX_PFACE);
+  size2 = dwg_dynapi_fields_size ("VERTEX_PFACE");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_VERTEX_PFACE): %d != "
+               "dwg_dynapi_fields_size (\"VERTEX_PFACE\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Entity_VERTEX_PFACE_FACE);

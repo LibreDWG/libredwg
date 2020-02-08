@@ -3734,6 +3734,14 @@ RC,	DXF 70
 @end vtable
 @end indentedblock
 
+@strong{VERTEX_MESH} @anchor{VERTEX_MESH}
+@cindex entity, VERTEX_MESH
+@vindex VERTEX_MESH
+
+@strong{VERTEX_PFACE} @anchor{VERTEX_PFACE}
+@cindex entity, VERTEX_PFACE
+@vindex VERTEX_PFACE
+
 @strong{VERTEX_PFACE_FACE} @anchor{VERTEX_PFACE_FACE}
 @cindex entity, VERTEX_PFACE_FACE
 @vindex VERTEX_PFACE_FACE

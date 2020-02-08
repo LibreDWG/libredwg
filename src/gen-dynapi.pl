@@ -116,7 +116,10 @@ for (sort $c->union_names) {
     warn "skip union $_\n";
   }
 }
-push @entity_names, qw(XLINE REGION BODY);
+# typedefs as aliases:
+push @entity_names, qw(XLINE);                    # RAY
+push @entity_names, qw(VERTEX_MESH VERTEX_PFACE); # VERTEX_3D
+push @entity_names, qw(REGION BODY);              # 3DSOLID
 @entity_names = sort @entity_names;
 # get BITCODE_ macro types for each struct field
 open my $in, "<", $hdr or die "hdr: $!";

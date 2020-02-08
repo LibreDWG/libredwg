@@ -101,10 +101,12 @@ static const char dwg_entity_names[][MAXLEN_ENTITIES] = {
   "UNKNOWN_ENT" "\0\0\0\0\0\0\0",	/* 59 */
   "VERTEX_2D" "\0\0\0\0\0\0\0\0\0",	/* 60 */
   "VERTEX_3D" "\0\0\0\0\0\0\0\0\0",	/* 61 */
-  "VERTEX_PFACE_FACE" "\0",	/* 62 */
-  "VIEWPORT" "\0\0\0\0\0\0\0\0\0\0",	/* 63 */
-  "WIPEOUT" "\0\0\0\0\0\0\0\0\0\0\0",	/* 64 */
-  "XLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 65 */
+  "VERTEX_MESH" "\0\0\0\0\0\0\0",	/* 62 */
+  "VERTEX_PFACE" "\0\0\0\0\0\0",	/* 63 */
+  "VERTEX_PFACE_FACE" "\0",	/* 64 */
+  "VIEWPORT" "\0\0\0\0\0\0\0\0\0\0",	/* 65 */
+  "WIPEOUT" "\0\0\0\0\0\0\0\0\0\0\0",	/* 66 */
+  "XLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 67 */
 
 };
 /* sorted for bsearch. from typedef struct _dwg_object_*: */
