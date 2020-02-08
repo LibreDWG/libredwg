@@ -1411,7 +1411,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           else if (t->type == JSMN_ARRAY && strEQc (f->type, "H*"))
             {
               int size1 = t->size;
-              BITCODE_H *hdls = calloc (size1, sizeof (BITCODE_H));
+              BITCODE_H *hdls = size1 ? calloc (size1, sizeof (BITCODE_H)) : NULL;
               json_set_numfield (_obj, fields, key, size1);
               tokens->index++;
               for (int k = 0; k < size1; k++)
@@ -1430,7 +1430,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           else if (t->type == JSMN_ARRAY && strEQc (f->type, "3DPOINT*"))
             {
               int size1 = t->size;
-              BITCODE_3DPOINT *pts = calloc (size1, sizeof (BITCODE_3BD));
+              BITCODE_3DPOINT *pts = size1 ? calloc (size1, sizeof (BITCODE_3BD)) : NULL;
               json_set_numfield (_obj, fields, key, size1);
               tokens->index++;
               for (int k = 0; k < size1; k++)
@@ -1444,7 +1444,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           else if (t->type == JSMN_ARRAY && strEQc (f->type, "2RD*"))
             {
               int size1 = t->size;
-              BITCODE_2DPOINT *pts = calloc (size1, sizeof (BITCODE_2RD));
+              BITCODE_2DPOINT *pts = size1 ? calloc (size1, sizeof (BITCODE_2RD)) : NULL;
               json_set_numfield (_obj, fields, key, size1);
               tokens->index++;
               for (int k = 0; k < size1; k++)
@@ -1458,7 +1458,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           else if (t->type == JSMN_ARRAY && strEQc (f->type, "BD*"))
             {
               int size1 = t->size;
-              BITCODE_BD *nums = calloc (size1, sizeof (BITCODE_BD));
+              BITCODE_BD *nums = size1 ? calloc (size1, sizeof (BITCODE_BD)) : NULL;
               json_set_numfield (_obj, fields, key, size1);
               tokens->index++;
               for (int k = 0; k < size1; k++)
@@ -1473,7 +1473,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           else if (t->type == JSMN_ARRAY && strEQc (f->type, "BL*"))
             {
               int size1 = t->size;
-              BITCODE_BL *nums = calloc (size1, sizeof (BITCODE_BL));
+              BITCODE_BL *nums = size1 ? calloc (size1, sizeof (BITCODE_BL)) : NULL;
               json_set_numfield (_obj, fields, key, size1);
               tokens->index++;
               for (int k = 0; k < size1; k++)
@@ -1488,7 +1488,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           else if (t->type == JSMN_ARRAY && strEQc (f->type, "TV*"))
             {
               int size1 = t->size;
-              BITCODE_TV *elems = calloc (size1, sizeof (BITCODE_TV));
+              BITCODE_TV *elems = size1 ? calloc (size1, sizeof (BITCODE_TV)) : NULL;
               const Dwg_DYNAPI_field *numf = find_numfield (fields, key);
               /* enforce numitems for texts[] to override MIN with 0 inside */
               if (memBEGINc (name, "DICTIONARY") && strEQc (key, "texts"))
@@ -1535,7 +1535,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               LOG_TRACE ("new subclass %s %s [%d elems with size %d]\n", name,
                          subclass, num_elems, size_elem);
               json_set_numfield (_obj, fields, key, num_elems);
-              elems = calloc (num_elems, size_elem);
+              elems = num_elems ? calloc (num_elems, size_elem) : NULL;
               tokens->index++;
               // array of structs
               if (!num_elems)

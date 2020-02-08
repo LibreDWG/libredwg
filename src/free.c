@@ -433,6 +433,8 @@ dwg_free_variable_type (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
     return DWG_ERR_INVALIDTYPE;
 
   klass = &dwg->dwg_class[i];
+  // TODO: with in_json CLASSES are not really needed. The objects
+  // do have a proper dxfname and fixedtype. But they leak without a CLASS.
   if (!klass || !klass->dxfname)
     return DWG_ERR_INTERNALERROR;
 
