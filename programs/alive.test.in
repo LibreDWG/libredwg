@@ -65,15 +65,16 @@ run ()
         top_builddir=..
         TESTPROG="@LTEXEC@"
     fi
-    # indxf and injson still leaks, GH #151, GH #197
+    # indxf still leaks, GH #151
     if test $bprog = dxf2dwg -a -n "@HAVE_ASAN@"
     then
        TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
     fi
-    if test $bprog = dwgwrite -a -n "@HAVE_ASAN@"
-    then
-       TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
-    fi
+    # injson leaks fixed, GH #197
+    #if test $bprog = dwgwrite -a -n "@HAVE_ASAN@"
+    #then
+    #   TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
+    #fi
     echo $TESTPROG ./$prog $arg 2\>$log
     # writers can hang
     #if test $bprog = dwgrewrite -o $bprog = dwgwrite -o $bprog = dxf2dwg
