@@ -1715,17 +1715,17 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           if (!oldobj->handle.value)
             {
               LOG_ERROR ("Required %s.handle missing", name)
-              return DWG_ERR_INVALIDDWG;
+              oldobj->type = oldobj->fixedtype = DWG_TYPE_DUMMY;
             }
           if (!oldobj->type)
             {
               LOG_ERROR ("Required %s.type missing", name)
-              return DWG_ERR_INVALIDDWG;
+              oldobj->type = oldobj->fixedtype = DWG_TYPE_DUMMY;
             }
           if (oldobj->fixedtype == DWG_TYPE_UNUSED)
             {
-              LOG_ERROR ("Required %s.fixedtype missing", name)
-              return DWG_ERR_INVALIDDWG;
+              LOG_ERROR ("Required %s.fixedtype missing", name);
+              oldobj->type = oldobj->fixedtype = DWG_TYPE_DUMMY;
             }
         }
 
@@ -1755,11 +1755,22 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               int len = t->end - t->start;
               int objsize = 16;
+              obj->supertype = DWG_SUPERTYPE_OBJECT;
+              obj->parent = dwg;
+              obj->index = i;
+
               if (len >= 80)
                 {
                   LOG_ERROR ("Illegal %s name %.*s", key, len,
                              &dat->chain[t->start])
-                  tokens->index++;
+                  obj->type = obj->fixedtype = DWG_TYPE_DUMMY;
+                  // exhaust the rest
+                  for (; j < keys; j++)
+                    {
+                      json_advance_unknown (dat, tokens, 0); // value
+                      tokens->index++; // next key
+                    }
+                  tokens->index--;
                   break;
                 }
               memcpy (name, &dat->chain[t->start], len);
@@ -1770,14 +1781,18 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               if (!fields || !objsize || !is_dwg_object (name))
                 {
                   LOG_ERROR ("Unknown object %s", name);
-                  json_advance_unknown (dat, tokens, 0);
+                  obj->type = obj->fixedtype = DWG_TYPE_DUMMY;
+                  // exhaust the rest
+                  for (; j < keys; j++)
+                    {
+                      json_advance_unknown (dat, tokens, 0); // value
+                      tokens->index++; // next key
+                    }
+                  tokens->index--;
                   break;
                 }
               LOG_TRACE ("\nnew object %s [%d] (size: %d)\n", name, i,
                          objsize);
-              obj->supertype = DWG_SUPERTYPE_OBJECT;
-              obj->parent = dwg;
-              obj->index = i;
               obj->tio.object = calloc (1, sizeof (Dwg_Object_Object));
               obj->tio.object->dwg = dwg;
               obj->tio.object->objid = i;
@@ -1796,11 +1811,22 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               int len = t->end - t->start;
               int objsize;
+              obj->supertype = DWG_SUPERTYPE_ENTITY;
+              obj->parent = dwg;
+              obj->index = i;
+
               if (len >= 80)
                 {
                   LOG_ERROR ("Illegal %s name %.*s", key, len,
                              &dat->chain[t->start])
-                  tokens->index++;
+                  obj->type = obj->fixedtype = DWG_TYPE_DUMMY;
+                  // exhaust the rest
+                  for (; j < keys; j++)
+                    {
+                      json_advance_unknown (dat, tokens, 0); // value
+                      tokens->index++; // next key
+                    }
+                  tokens->index--;
                   break;
                 }
               memcpy (name, &dat->chain[t->start], len);
@@ -1811,14 +1837,18 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               if (!fields || !objsize || !is_dwg_entity (name))
                 {
                   LOG_ERROR ("Unknown entity %s", name);
-                  json_advance_unknown (dat, tokens, 0);
+                  obj->type = obj->fixedtype = DWG_TYPE_DUMMY;
+                  // exhaust the rest
+                  for (; j < keys; j++)
+                    {
+                      json_advance_unknown (dat, tokens, 0); // value
+                      tokens->index++; // next key
+                    }
+                  tokens->index--;
                   break;
                 }
               LOG_TRACE ("\nnew entity %s [%d] (size: %d)\n", name, i,
                          objsize);
-              obj->supertype = DWG_SUPERTYPE_ENTITY;
-              obj->parent = dwg;
-              obj->index = i;
               obj->tio.entity = calloc (1, sizeof (Dwg_Object_Entity));
               obj->tio.entity->dwg = dwg;
               obj->tio.entity->objid = i;

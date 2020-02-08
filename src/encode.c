@@ -642,7 +642,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
     Bit_Chain *hdl_dat = dat;                                                 \
     Bit_Chain *str_dat = dat;                                                 \
     Dwg_Data *dwg = obj->parent;                                              \
-    Dwg_Object_##token *_obj = obj->tio.object->tio.token;                    \
+    Dwg_Object_##token *_obj = obj->tio.object ? obj->tio.object->tio.token : NULL; \
     error = dwg_encode_object (obj, dat, hdl_dat, str_dat);                   \
     if (error)                                                                \
       return error;                                                           \
@@ -1723,7 +1723,7 @@ dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
               LOG_INFO ("Fixup Class %s item_class_id to %s for %s\n",
                         klass->dxfname, "ENTITY", obj->name);
               klass->item_class_id = 0x1f3;
-              if (strNE (klass->dxfname, obj->dxfname))
+              if (!klass->dxfname || strNE (klass->dxfname, obj->dxfname))
                 {
                   free (klass->dxfname);
                   klass->dxfname = strdup (obj->dxfname);
@@ -2531,6 +2531,8 @@ dwg_encode_object (Dwg_Object *restrict obj, Bit_Chain *hdl_dat,
     obj->hdlpos
         = bit_position (dat) + obj->bitsize; // the handle stream offset
   SINCE (R_2007) { obj_string_stream (dat, obj, str_dat); }
+  if (!ord)
+    return DWG_ERR_INVALIDTYPE;
 
   bit_write_H (dat, &obj->handle);
   LOG_TRACE ("handle: " FORMAT_H " [H 5]\n", ARGS_H (obj->handle));
