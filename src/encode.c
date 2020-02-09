@@ -132,7 +132,8 @@ static bool env_var_checked_p;
       if (!_obj->nam)                                                         \
         _obj->nam = strdup ("");                                              \
     }                                                                         \
-    FIELDG (nam, TV, dxf);                                                    \
+    bit_write_TV (dat, _obj->nam);                                            \
+    LOG_TRACE (#nam ": \"%s\" [TV %d]\n", _obj->nam, dxf);                    \
   }
 // may need to convert from/to TV<=>TU
 #define FIELD_T(nam, dxf)                                                     \
@@ -393,8 +394,8 @@ static bool env_var_checked_p;
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
           bit_write_##type (dat, _obj->nam[vcount]);                          \
-          LOG_TRACE (#nam "[%ld]: " FORMAT_##type "\n", (long)vcount,         \
-                     _obj->nam[vcount])                                       \
+          LOG_TRACE (#nam "[%ld]: " FORMAT_##type " [%s %d]\n", (long)vcount, \
+                     _obj->nam[vcount], #type, dxf)                           \
         }                                                                     \
     }
 #define FIELD_VECTOR_T(nam, size, dxf)                                        \
@@ -406,7 +407,8 @@ static bool env_var_checked_p;
           PRE (R_2007)                                                        \
           {                                                                   \
             bit_write_TV (dat, _obj->nam[vcount]);                            \
-            LOG_TRACE (#nam "[%d]: %s\n", (int)vcount, _obj->nam[vcount])     \
+            LOG_TRACE (#nam "[%d]: \"%s\" [TV %d]\n", (int)vcount,            \
+                       _obj->nam[vcount], dxf)                                \
           }                                                                   \
           else                                                                \
           {                                                                   \
