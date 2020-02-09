@@ -6,8 +6,7 @@ d=${1:-example_2000}
 b=$(basename $d .dwg)
 dir=$(dirname $d)
 r=$(basename $dir)
-f=$d
-case $(dirname $d) in
+case $dir in
     *test/test-data) ;;
     *test/test-data/*) r=`basename $(dirname $d)`; b=${b}_${r} ;;
 esac
@@ -15,7 +14,7 @@ case $r in
     20*)      ;;
     r9)       r=9 ;;
     r1[0234]) r=${r:1} ;;
-    *)  case $d in
+    *)  case $b in
             *_20*)      r=${b:(-4)}; f=`basename $b _$r` ;;
             *_r9)       r=9;         f=`basename $b _r$r` ;;
             *_r1[0234]) r=${b:(-2)}; f=`basename $b _r$r` ;;
