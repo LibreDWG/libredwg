@@ -756,7 +756,7 @@ json_eed (Bit_Chain *restrict dat,
       if (_obj->data)
         {
           const Dwg_Eed_Data *data = _obj->data;
-          KEY (code); VALUE_RS (data->code, 0);
+          KEY (code); VALUE_RC (data->code, 0);
           KEY (value);
           switch (data->code)
             {
