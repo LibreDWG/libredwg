@@ -539,11 +539,14 @@ static bool env_var_checked_p;
   *hdl_dat = *dat;                                                            \
   if (dat->version >= R_2007 && obj->bitsize)                                 \
     bit_set_position (hdl_dat, obj->hdlpos);                                  \
-  if (!obj->bitsize)                                                          \
+  if (!obj->bitsize ||                                                        \
+      (dwg->opts & DWG_OPTS_INJSON                                            \
+       && dwg->header.version != dwg->header.from_version))                   \
     {                                                                         \
       LOG_TRACE ("-bitsize calc from HANDLE_STREAM @%lu.%u (%lu)\n",          \
                  dat->byte, dat->bit, obj->address);                          \
       obj->bitsize = bit_position (dat) - (obj->address * 8);                 \
+      obj->was_bitsize_set = 1;                                                   \
     }                                                                         \
   RESET_VER
 
@@ -2127,7 +2130,11 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       if (dat->bit)
         obj->size++;
       // assert (obj->bitsize); // on errors
-      if (!obj->bitsize || (dwg->opts & DWG_OPTS_INJSON && dwg->header.version != dwg->header.from_version))
+      if (!obj->bitsize ||
+          (dwg->opts & DWG_OPTS_INJSON
+           && dwg->header.version != dwg->header.from_version
+           // and not calculated from HANDLE_STREAM already
+           && !obj->was_bitsize_set))
         {
           LOG_TRACE ("-bitsize calc from address (no handle) @%lu.%u\n",
                      dat->byte, dat->bit);
@@ -2393,6 +2400,7 @@ dwg_encode_entity (Dwg_Object *restrict obj, Bit_Chain *hdl_dat,
     LOG_TRACE ("bitsize: %u [RL] (@%lu.%lu)\n", obj->bitsize,
                obj->bitsize_pos / 8, obj->bitsize_pos % 8);
   }
+  obj->was_bitsize_set = 0;
   if (obj->bitsize)
     obj->hdlpos = obj->address * 8 + obj->bitsize;
   SINCE (R_2007)
@@ -2534,9 +2542,10 @@ dwg_encode_object (Dwg_Object *restrict obj, Bit_Chain *hdl_dat,
     LOG_INFO ("bitsize: " FORMAT_RL " [RL] (@%lu.%u)\n", obj->bitsize,
               dat->byte - 4, dat->bit);
   }
+  obj->was_bitsize_set = 0;
   if (obj->bitsize)
-    obj->hdlpos
-        = bit_position (dat) + obj->bitsize; // the handle stream offset
+    // the handle stream offset
+    obj->hdlpos = bit_position (dat) + obj->bitsize;
   SINCE (R_2007) { obj_string_stream (dat, obj, str_dat); }
   if (!ord)
     return DWG_ERR_INVALIDTYPE;

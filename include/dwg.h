@@ -5561,6 +5561,7 @@ typedef struct _dwg_object
   BITCODE_RL bitsize;        /* common + object fields, but no handles */
   unsigned long bitsize_pos; /* bitsize offset in bits: r13-2007 */
   unsigned long hdlpos;      /* relative offset, in bits */
+  BITCODE_B  was_bitsize_set;    /* internally for encode only */
   BITCODE_B  has_strings;        /*!< r2007+ */
   BITCODE_RL stringstream_size;  /*!< r2007+ in bits, unused */
   BITCODE_UMC handlestream_size; /*!< r2010+ in bits */
