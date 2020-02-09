@@ -3622,9 +3622,7 @@ DWG_OBJECT (DICTIONARYVAR)
   SUBCLASS (DictionaryVariables)
   FIELD_RC (intval, 280);
   FIELD_T (str, 1);
-
   START_OBJECT_HANDLE_STREAM;
-
 DWG_OBJECT_END
 
 #ifndef IS_INDXF
