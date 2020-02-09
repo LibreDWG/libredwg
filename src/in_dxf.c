@@ -1382,7 +1382,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
 }
 
 int
-is_table_name (const char *name)
+is_table_name (const char *restrict name)
 {
   return strEQc (name, "LTYPE") || strEQc (name, "VPORT")
          || strEQc (name, "VPORT") || strEQc (name, "APPID")
@@ -4838,9 +4838,74 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return found;
 }
 
+// Also exported to in_json. To set list of children in POLYLINE_*/*INSERT
+void
+in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned, BITCODE_H *owned)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Entity_SEQEND *o = obj->tio.entity->tio.SEQEND;
+  Dwg_Object *owner;
+  Dwg_Entity_POLYLINE_2D *ow;
+  const char *owhdls; // the name of the H*
+  const char *firstfield;
+  const char *lastfield;
+
+  if (obj->fixedtype != DWG_TYPE_SEQEND)
+    return;
+  owner = dwg_ref_object (dwg, obj->tio.entity->ownerhandle);
+  if (!owner)
+    {
+      if (obj->tio.entity->ownerhandle)
+        LOG_WARN ("Missing owner from " FORMAT_REF " [H 330]",
+                  ARGS_REF (obj->tio.entity->ownerhandle))
+      else
+        LOG_WARN ("Missing owner")
+      return;
+    }
+
+  obj->tio.entity->ownerhandle->obj = NULL;
+  owhdls = memBEGINc (owner->name, "POLYLINE_") ? "vertex" : "attrib_handles";
+  ow = owner->tio.entity->tio.POLYLINE_2D; // not the same layout for all possible owners
+  if (!num_owned && !owned)
+    {
+      dwg_dynapi_entity_value (ow, owner->name, "num_owned", &num_owned, 0);
+      dwg_dynapi_entity_value (ow, owner->name, owhdls, &owned, 0);
+    }
+  if (!num_owned)
+    return;
+
+  if (memBEGINc (owner->name, "POLYLINE_"))
+    {
+      firstfield = "first_vertex"; lastfield = "last_vertex";
+    }
+  else
+    {
+      firstfield = "first_attrib"; lastfield = "last_attrib";
+    }
+  // store all these fields, or just the ones for the requested version?
+  if (dwg->header.version >= R_13 && dwg->header.version <= R_2000) // if downconvert to r2000
+    {
+      dwg_dynapi_entity_set_value (ow, owner->name, firstfield, &owned[0], 0);
+      LOG_TRACE ("%s.%s = " FORMAT_REF "[H 0]\n", owner->name, firstfield,
+                 ARGS_REF (owned[0]));
+      dwg_dynapi_entity_set_value (ow, owner->name, lastfield,
+                                   &owned[num_owned - 1], 0);
+      LOG_TRACE ("%s.%s = " FORMAT_REF "[H 0]\n", owner->name, lastfield,
+                 ARGS_REF (owned[num_owned - 1]));
+    }
+  else if (dwg->header.version >= R_2004 && !owned) // we cannot write r2004, TODO
+    {
+      BITCODE_H *first, *last;
+      dwg_dynapi_entity_value (ow, owner->name, firstfield, &first, 0);
+      dwg_dynapi_entity_value (ow, owner->name, lastfield, &last, 0);
+      //..
+      LOG_ERROR ("Cannot yet create the owner array from %s to %s", firstfield, lastfield)
+    }
+}
+
 // see GH #138. add vertices / attribs
 static void
-postprocess_SEQEND (Dwg_Object *obj)
+dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
 {
   Dwg_Data *dwg = obj->parent;
   Dwg_Entity_SEQEND *o = obj->tio.entity->tio.SEQEND;
@@ -4884,6 +4949,7 @@ postprocess_SEQEND (Dwg_Object *obj)
   obj->tio.entity->ownerhandle->obj = NULL;
   owhdls = memBEGINc (owner->name, "POLYLINE_") ? "vertex" : "attrib_handles";
   ow = owner->tio.entity->tio.POLYLINE_2D;
+
   seqend = dwg_add_handleref (dwg, 3, obj->handle.value, owner);
   dwg_dynapi_entity_set_value (ow, owner->name, "seqend", &seqend, 0);
   LOG_TRACE ("%s.seqend = " FORMAT_REF " [H 0]\n", owner->name,
@@ -4906,33 +4972,9 @@ postprocess_SEQEND (Dwg_Object *obj)
     return;
   dwg_dynapi_entity_set_value (ow, owner->name, "num_owned", &num_owned, 0);
   LOG_TRACE ("%s.num_owned = " FORMAT_BL " [BL 0]\n", owner->name, num_owned);
-  // TODO: store all these fields, or just the ones for the requested version?
-  if (dwg->header.version >= R_13 && dwg->header.version <= R_2000)
-    {
-      const char *firstfield;
-      const char *lastfield;
-      if (memBEGINc (owner->name, "POLYLINE_"))
-        {
-          firstfield = "first_vertex";
-          lastfield = "last_vertex";
-        }
-      else
-        {
-          firstfield = "first_attrib";
-          lastfield = "last_attrib";
-        }
-      dwg_dynapi_entity_set_value (ow, owner->name, firstfield, &owned[0], 0);
-      LOG_TRACE ("%s.%s = " FORMAT_REF "[H 0]\n", owner->name, firstfield,
-                 ARGS_REF (owned[0]));
-      dwg_dynapi_entity_set_value (ow, owner->name, lastfield,
-                                   &owned[num_owned - 1], 0);
-      LOG_TRACE ("%s.%s] = " FORMAT_REF "[H 0]\n", owner->name, lastfield,
-                 ARGS_REF (owned[num_owned - 1]));
-    }
-  else if (dwg->header.version >= R_2004)
-    {
-      dwg_dynapi_entity_set_value (ow, owner->name, owhdls, &owned, 0);
-    }
+
+  dwg_dynapi_entity_set_value (ow, owner->name, owhdls, &owned, 0);
+  in_postprocess_SEQEND (obj, num_owned, owned);
 }
 
 // seperate model_space and model_space into its own fields, out of entries[]
@@ -5040,12 +5082,97 @@ postprocess_TEXTlike (Dwg_Object *obj)
 }
 
 int
-is_textlike (Dwg_Object *obj)
+is_textlike (Dwg_Object *restrict obj)
 {
   // has dataflags and common text fields
   return obj->fixedtype == DWG_TYPE_TEXT ||
     obj->fixedtype == DWG_TYPE_ATTDEF ||
     obj->fixedtype == DWG_TYPE_ATTRIB;
+}
+
+void
+in_postprocess_handles (Dwg_Object *restrict obj)
+{
+  Dwg_Data *dwg = obj->parent;
+  const char *name = obj->name;
+  int is_entity = obj->supertype == DWG_SUPERTYPE_ENTITY;
+
+  // common_entity_handle_data:
+  // set xdic_missing_flag and xdicobjhandle if <2004
+  if (is_entity ? !obj->tio.entity->xdicobjhandle
+                : !obj->tio.object->xdicobjhandle)
+    {
+      if (dwg->header.version >= R_2004)
+        {
+          if (is_entity)
+            obj->tio.entity->xdic_missing_flag = 1;
+          else
+            obj->tio.object->xdic_missing_flag = 1;
+        }
+      else if (dwg->header.version >= R_13 && !is_entity)
+        obj->tio.object->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, obj);
+      else if (dwg->header.version >= R_13 && is_entity)
+        obj->tio.entity->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, obj);
+    }
+
+  if (is_entity)
+    {
+      Dwg_Object_Entity *ent = obj->tio.entity;
+      if (dwg->header.version >= R_13 && dwg->header.version <= R_14)
+        {
+          if (ent->ltype_flags < 3)
+            ent->isbylayerlt = 1;
+        }
+      if (dwg->header.version >= R_13 && dwg->header.version <= R_2000
+          && obj->type != DWG_TYPE_SEQEND && obj->type != DWG_TYPE_ENDBLK)
+        {
+          Dwg_Object *prev = find_prev_entity (obj);
+          ent->next_entity = NULL; // temp.
+          if (prev)
+            {
+              if (prev->tio.entity->prev_entity)
+                prev->tio.entity->nolinks = 0;
+              if (obj->type == DWG_TYPE_BLOCK
+                  || (prev->type != DWG_TYPE_SEQEND
+                      && prev->type != DWG_TYPE_ENDBLK))
+                {
+                  prev->tio.entity->nolinks = 0;
+                  prev->tio.entity->next_entity
+                      = dwg_add_handleref (dwg, 4, obj->handle.value, prev);
+                  LOG_TRACE ("prev %s(%lX).next_entity = " FORMAT_REF "\n",
+                             prev->name, prev->handle.value,
+                             ARGS_REF (prev->tio.entity->next_entity));
+                  ent->nolinks = 0;
+                  ent->prev_entity
+                      = dwg_add_handleref (dwg, 4, prev->handle.value, obj);
+                  LOG_TRACE ("%s.prev_entity = " FORMAT_REF "\n", name,
+                             ARGS_REF (ent->prev_entity));
+                }
+              else
+                {
+                  LOG_TRACE ("%s.prev_entity = NULL HANDLE 4\n", name);
+                  ent->prev_entity = NULL;
+                  ent->nolinks = 1;
+                }
+            }
+          else if (obj->type == DWG_TYPE_BLOCK)
+            {
+              ent->nolinks = 0;
+              ent->prev_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+              ent->next_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+              LOG_TRACE ("%s.prev_entity = next_entity = " FORMAT_REF "\n",
+                         name, ARGS_REF (ent->prev_entity));
+            }
+          else
+            {
+              LOG_TRACE ("%s.prev_entity = NULL HANDLE 4\n", name);
+              ent->prev_entity = NULL;
+              ent->nolinks = 1;
+            }
+        }
+      else if (obj->type != DWG_TYPE_SEQEND && obj->type != DWG_TYPE_ENDBLK)
+        ent->nolinks = 1;
+    }
 }
 
 /* For tables, entities and objects.
@@ -5323,7 +5450,7 @@ new_object (char *restrict name, char *restrict dxfname,
         { // common flags: name, xrefref, xrefdep, ...
         case 0:
           if (strEQc (name, "SEQEND"))
-            postprocess_SEQEND (obj);
+            dxf_postprocess_SEQEND (obj);
           return pair;
         case 105: /* DIMSTYLE only for 5 */
           if (strNE (name, "DIMSTYLE"))
@@ -6856,7 +6983,7 @@ new_object (char *restrict name, char *restrict dxfname,
     }
 
   if (obj->type == DWG_TYPE_SEQEND)
-    postprocess_SEQEND (obj);
+    dxf_postprocess_SEQEND (obj);
   // set defaults not in dxf:
   else if (obj->type == DWG_TYPE__3DFACE && dwg->header.version >= R_2000)
     {
@@ -6867,81 +6994,7 @@ new_object (char *restrict name, char *restrict dxfname,
   else if (is_textlike (obj))
     postprocess_TEXTlike (obj);
 
-  // common_entity_handle_data:
-  // set xdic_missing_flag and xdicobjhandle if <2004
-  if (is_entity ? !obj->tio.entity->xdicobjhandle
-                : !obj->tio.object->xdicobjhandle)
-    {
-      if (dwg->header.version >= R_2004)
-        {
-          if (is_entity)
-            obj->tio.entity->xdic_missing_flag = 1;
-          else
-            obj->tio.object->xdic_missing_flag = 1;
-        }
-      else if (dwg->header.version >= R_13 && !is_entity)
-        obj->tio.object->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, obj);
-      else if (dwg->header.version >= R_13 && is_entity)
-        obj->tio.entity->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, obj);
-    }
-  if (is_entity)
-    {
-      Dwg_Object_Entity *ent = obj->tio.entity;
-      if (dwg->header.version >= R_13 && dwg->header.version <= R_14)
-        {
-          if (ent->ltype_flags < 3)
-            ent->isbylayerlt = 1;
-        }
-      if (dwg->header.version >= R_13 && dwg->header.version <= R_2000
-          && obj->type != DWG_TYPE_SEQEND && obj->type != DWG_TYPE_ENDBLK)
-        {
-          Dwg_Object *prev = find_prev_entity (obj);
-          ent->next_entity = NULL; // temp.
-          if (prev)
-            {
-              if (prev->tio.entity->prev_entity)
-                prev->tio.entity->nolinks = 0;
-              if (obj->type == DWG_TYPE_BLOCK
-                  || (prev->type != DWG_TYPE_SEQEND
-                      && prev->type != DWG_TYPE_ENDBLK))
-                {
-                  prev->tio.entity->nolinks = 0;
-                  prev->tio.entity->next_entity
-                      = dwg_add_handleref (dwg, 4, obj->handle.value, prev);
-                  LOG_TRACE ("prev %s(%lX).next_entity = " FORMAT_REF "\n",
-                             prev->name, prev->handle.value,
-                             ARGS_REF (prev->tio.entity->next_entity));
-                  ent->nolinks = 0;
-                  ent->prev_entity
-                      = dwg_add_handleref (dwg, 4, prev->handle.value, obj);
-                  LOG_TRACE ("%s.prev_entity = " FORMAT_REF "\n", name,
-                             ARGS_REF (ent->prev_entity));
-                }
-              else
-                {
-                  LOG_TRACE ("%s.prev_entity = NULL HANDLE 4\n", name);
-                  ent->prev_entity = NULL;
-                  ent->nolinks = 1;
-                }
-            }
-          else if (obj->type == DWG_TYPE_BLOCK)
-            {
-              ent->nolinks = 0;
-              ent->prev_entity = dwg_add_handleref (dwg, 4, 0, NULL);
-              ent->next_entity = dwg_add_handleref (dwg, 4, 0, NULL);
-              LOG_TRACE ("%s.prev_entity = next_entity = " FORMAT_REF "\n",
-                         name, ARGS_REF (ent->prev_entity));
-            }
-          else
-            {
-              LOG_TRACE ("%s.prev_entity = NULL HANDLE 4\n", name);
-              ent->prev_entity = NULL;
-              ent->nolinks = 1;
-            }
-        }
-      else if (obj->type != DWG_TYPE_SEQEND && obj->type != DWG_TYPE_ENDBLK)
-        ent->nolinks = 1;
-    }
+  in_postprocess_handles (obj);
 
   return pair;
 }
@@ -7234,7 +7287,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 void
-entity_alias (char *name)
+entity_alias (char *restrict name)
 {
   const int len = strlen (name);
   // check aliases (dxfname => name)
@@ -7347,7 +7400,7 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 void
-object_alias (char *name)
+object_alias (char *restrict name)
 {
   const int len = strlen (name);
   // check aliases (dxfname => name)

@@ -1743,6 +1743,10 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               dwg_free_object (obj);
               obj = oldobj;
             }
+          if (oldobj->fixedtype == DWG_TYPE_SEQEND)
+            {
+              in_postprocess_SEQEND (oldobj, 0, NULL);
+            }
         }
 
       memset (obj, 0, sizeof (Dwg_Object));
