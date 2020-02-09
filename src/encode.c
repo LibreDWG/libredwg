@@ -1798,7 +1798,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   while (dat->byte + obj->size >= dat->size)
     bit_chain_alloc (dat);
 
-  // TODO: calculate size from the fields. either <0x7fff or more
+  // TODO: calculate size from the fields. either <0x7fff or more.
   // patch it afterwards and check old<>new size if enough space allocated.
   bit_write_MS (dat, obj->size);
   obj->address = dat->byte;
@@ -2169,9 +2169,9 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     {
       if (obj->size)
         LOG_WARN ("Wrong object size: %lu + %u = %lu != %lu: %ld off",
-                  obj->address, obj->size, end_address, dat->byte,
+                  address, obj->size, end_address, dat->byte,
                   (long)(end_address - dat->byte));
-      dat->byte = end_address;
+      //dat->byte = end_address;
     }
   assert (!dat->bit);
   bit_write_CRC (dat, address, 0xC0C1);
