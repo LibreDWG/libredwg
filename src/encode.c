@@ -44,7 +44,7 @@
 #include "encode.h"
 #include "decode.h"
 
-// from dwg_api
+// from dynapi
 bool is_dwg_object (const char *name);
 bool is_dwg_entity (const char *name);
 
