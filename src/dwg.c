@@ -1433,21 +1433,21 @@ set_handle_size (Dwg_Handle *restrict hdl)
  */
 EXPORT int
 dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
-                const unsigned long value, const Dwg_Object *restrict obj)
+                const unsigned long absref, const Dwg_Object *restrict obj)
 {
-  int offset = obj ? (value - (int)obj->handle.value) : 0;
+  int offset = obj ? (absref - (int)obj->handle.value) : 0;
   hdl->code = code;
-  hdl->value = value;
-  if (obj && !offset && value) // only if same obj
+  hdl->value = absref;
+  if (obj && !offset && absref) // only if same obj
     {
-      LOG_HANDLE ("object_map{%lX} = %u\n", value, obj->index);
+      LOG_HANDLE ("object_map{%lX} = %u\n", absref, obj->index);
       assert (obj->parent);
       assert (obj->parent->object_map);
-      hash_set (obj->parent->object_map, value, (uint32_t)obj->index);
+      hash_set (obj->parent->object_map, absref, (uint32_t)obj->index);
     }
 
   set_handle_size (hdl);
-  if (code == 4 && obj && value)
+  if (code == 4 && obj && absref)
     {
       // change code to 6.0.0 or 8.0.0
       if (offset == 1)
@@ -1482,7 +1482,7 @@ dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
 // or creates it. May return a freshly allocated ref via dwg_new_ref.
 EXPORT Dwg_Object_Ref *
 dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
-                   const unsigned long value, const Dwg_Object *restrict obj)
+                   const unsigned long absref, const Dwg_Object *restrict obj)
 {
   Dwg_Object_Ref *ref;
   // DICTIONARY, XRECORD or class may need to be relative.
@@ -1495,18 +1495,18 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
     ;
   else
     {
-      // search of this code-value pair already exists
+      // search of this code-absref pair already exists
       for (BITCODE_BL i = 0; i < dwg->num_object_refs; i++)
         {
           Dwg_Object_Ref *refi = dwg->object_ref[i];
-          if (refi->absolute_ref == value && refi->handleref.code == code)
+          if (refi->absolute_ref == absref && refi->handleref.code == code)
             return refi;
         }
     }
   // else create a new ref
   ref = dwg_new_ref (dwg);
-  dwg_add_handle (&ref->handleref, code, value, obj);
-  ref->absolute_ref = value;
+  dwg_add_handle (&ref->handleref, code, absref, obj);
+  ref->absolute_ref = absref;
   // fill ->obj later
   return ref;
 }

@@ -115,7 +115,11 @@ static char* _path_field(const char *path);
 #undef FORMAT_BLx
 #undef FORMAT_BLX
 #undef FORMAT_4BITS
+#undef ARGS_H
+#define ARGS_H(hdl) hdl.code, hdl.value
 #define FORMAT_H "[%u, %lu]"
+#define ARGS_HREF(ref) ref->handleref.code, ref->handleref.size, ref->handleref.value, ref->absolute_ref
+#define FORMAT_HREF "[%u, %u, %lu, %lu]"
 #define FORMAT_RLL "%" PRIu64
 #define FORMAT_BLL "%" PRIu64
 #define FORMAT_RC "%d"
@@ -124,8 +128,6 @@ static char* _path_field(const char *path);
 #define FORMAT_BLx FORMAT_BL
 #define FORMAT_BLX FORMAT_BL
 #define FORMAT_4BITS FORMAT_RC
-#undef ARGS_H
-#define ARGS_H(hdl) hdl.code, hdl.value
 #define VALUE(value, type, dxf) fprintf (dat->fh, FORMAT_##type ",\n", value)
 #define VALUE_B(value, dxf) VALUE (value, B, dxf)
 #define VALUE_RC(value, dxf) VALUE (value, RC, dxf)
@@ -227,19 +229,20 @@ static char* _path_field(const char *path);
 #define VALUE_HANDLE(hdlptr, nam, handle_code, dxf)                           \
   if (hdlptr)                                                                 \
     {                                                                         \
-      fprintf (dat->fh, FORMAT_H ",\n", ARGS_H (hdlptr->handleref));          \
+      fprintf (dat->fh, FORMAT_HREF ",\n", ARGS_HREF (hdlptr));               \
     }                                                                         \
   else                                                                        \
     {                                                                         \
       fprintf (dat->fh, "[0, 0],\n");                                         \
     }
-#define VALUE_H(hdl, dxf) fprintf (dat->fh, FORMAT_H ",\n", ARGS_H (hdl))
+#define VALUE_H(hdl, dxf) \
+  fprintf (dat->fh, FORMAT_H ",\n", hdl.code, hdl.value)
 #define FIELD_HANDLE(nam, handle_code, dxf)                                   \
   {                                                                           \
     if (_obj->nam)                                                            \
       {                                                                       \
-        PREFIX fprintf (dat->fh, "\"%s\": " FORMAT_H ",\n",                   \
-                        _path_field(#nam), ARGS_H (_obj->nam->handleref));    \
+        PREFIX fprintf (dat->fh, "\"%s\": " FORMAT_HREF ",\n",                \
+                        _path_field(#nam), ARGS_HREF (_obj->nam));            \
       }                                                                       \
     else                                                                      \
       {                                                                       \
@@ -250,8 +253,8 @@ static char* _path_field(const char *path);
   {                                                                           \
     if (_obj->o.nam)                                                          \
       {                                                                       \
-        PREFIX fprintf (dat->fh, "\"%s\": " FORMAT_H ",\n",                   \
-                        _path_field(#nam), ARGS_H (_obj->o.nam->handleref));  \
+        PREFIX fprintf (dat->fh, "\"%s\": " FORMAT_HREF ",\n",                \
+                        _path_field(#nam), ARGS_HREF (_obj->o.nam));          \
       }                                                                       \
     else                                                                      \
       {                                                                       \
@@ -262,8 +265,7 @@ static char* _path_field(const char *path);
 #define FIELD_HANDLE_N(nam, vcount, handle_code, dxf)                         \
   if (_obj->nam)                                                              \
     {                                                                         \
-      PREFIX fprintf (dat->fh, FORMAT_H ",\n",                                \
-                      ARGS_H (_obj->nam->handleref));                         \
+      PREFIX fprintf (dat->fh, FORMAT_HREF ",\n", ARGS_HREF (_obj->nam));     \
     }                                                                         \
   else                                                                        \
     {                                                                         \

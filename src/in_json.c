@@ -386,22 +386,40 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
              jsmntokens_t *restrict tokens, const char *name,
              const Dwg_Object *restrict obj, const int i)
 {
-  long code, value;
+  long code, size, value, absref;
   const jsmntok_t *t = &tokens->tokens[tokens->index];
-  if (t->type != JSMN_ARRAY || t->size != 2)
+  BITCODE_H ref;
+  if (t->type != JSMN_ARRAY || (t->size != 2 && t->size != 4))
     {
-      LOG_ERROR ("JSON HANDLE must be ARRAY of [ code, value ]")
+      LOG_ERROR ("JSON HANDLE must be ARRAY of [ code, value ] or [ code, size, value, absref ]")
       return NULL;
     }
   tokens->index++;
   code = json_long (dat, tokens);
   value = json_long (dat, tokens);
+  if (t->size == 4)
+    {
+      size = value;
+      value = json_long (dat, tokens);
+      absref = json_long (dat, tokens);
+      ref = dwg_add_handleref (dwg, code, absref, code >= 6 ? obj : NULL);
+      if ((BITCODE_RC)size != ref->handleref.size || (unsigned long)value != ref->handleref.value)
+        {
+          // FIXME internal in_json problem only
+          LOG_INFO ("dwg_add_handle(%.*s) inconsistency => " FORMAT_REF "\n",
+                    t->end - t->start, &dat->chain[t->start], ARGS_REF (ref));
+          ref->handleref.size = (BITCODE_RC)size;
+          ref->handleref.value = (unsigned long)value;
+          ref->absolute_ref = (unsigned long)absref;
+        }
+    }
+  else
+      ref = dwg_add_handleref (dwg, code, value, code >= 6 ? obj : NULL);
   if (i < 0)
-    LOG_TRACE ("%s [%u, %u] [H]\n", name, (unsigned)code, (unsigned)value)
+    LOG_TRACE ("%s: " FORMAT_REF " [H]\n", name, ARGS_REF (ref))
   else // H*
-    LOG_TRACE ("%s[%d] [%u, %u] [H]\n", name, i, (unsigned)code,
-               (unsigned)value)
-  return dwg_add_handleref (dwg, code, value, code >= 6 ? obj : NULL);
+    LOG_TRACE ("%s[%d]: " FORMAT_REF " [H]\n", name, i, ARGS_REF (ref))
+  return ref;
 }
 
 static void
