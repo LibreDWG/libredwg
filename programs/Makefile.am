@@ -46,7 +46,7 @@ dwg2dxf_SOURCES   = dwg2dxf.c
 dwglayers_SOURCES = dwglayers.c
 dwg2SVG_SOURCES   = dwg2SVG.c escape.c geom.c
 dwggrep_SOURCES   = dwggrep.c
-dwggrep_CFLAGS    = $(CFLAGS) $(AM_CFLAGS) $(PCRE2_CFLAGS)
+dwggrep_CFLAGS    = $(AM_CFLAGS) $(CFLAGS) $(PCRE2_CFLAGS)
 dwggrep_LDADD     = $(LDADD) $(PCRE2_LIBS)
 
 if USE_WRITE
