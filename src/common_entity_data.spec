@@ -43,8 +43,10 @@
 #ifdef IS_ENCODER
       bit_write_RL (dat, obj->bitsize);
 #endif
+#ifndef IS_FREE
       LOG_TRACE ("bitsize: " FORMAT_BL " @%lu.%u\n", obj->bitsize,
                 dat->byte - 4, dat->bit)
+#endif
 #ifdef IS_DECODER
     if (obj->bitsize > obj->size * 8)
       {
