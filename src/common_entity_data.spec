@@ -144,7 +144,7 @@
         {
           int type = ent->color.rgb >> 24; //?
           FIELD_BL (color.rgb, 0); //ODA bug, documented as BS
-#if defined(IS_DECODER) || defined(IS_FREE)
+#if defined(IS_DECODER)
           LOG_TRACE ("color.rgb: %06x [ENC.BL 420] (%d)\n", (unsigned)ent->color.rgb,
                     (int32_t)(ent->color.rgb & 0x00ffffff));
 #elif defined(IS_ENCODER) && defined(IS_DXF)
