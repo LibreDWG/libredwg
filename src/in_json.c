@@ -396,10 +396,9 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     }
   tokens->index++;
   code = json_long (dat, tokens);
-  value = json_long (dat, tokens);
   if (t->size == 4)
     {
-      size = value;
+      size = json_long (dat, tokens);
       value = json_long (dat, tokens);
       absref = json_long (dat, tokens);
       ref = dwg_add_handleref (dwg, code, absref, code >= 6 ? obj : NULL);
@@ -414,7 +413,10 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         }
     }
   else
-      ref = dwg_add_handleref (dwg, code, value, code >= 6 ? obj : NULL);
+    {
+      absref = json_long (dat, tokens);
+      ref = dwg_add_handleref (dwg, code, absref, code >= 6 ? obj : NULL);
+    }
   if (i < 0)
     LOG_TRACE ("%s: " FORMAT_REF " [H]\n", name, ARGS_REF (ref))
   else // H*
