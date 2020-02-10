@@ -920,7 +920,7 @@ print_wcquote (Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr)
   uint16_t c;
   if (!ws)
     {
-      fprintf (dat->fh, "null,\n");
+      fprintf (dat->fh, "\"\",\n");
       return;
     }
   fprintf (dat->fh, "\"");
