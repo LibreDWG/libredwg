@@ -435,13 +435,13 @@ static bool env_var_checked_p;
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        if (handle_code != ANYCODE && hdlptr->handleref.code != handle_code   \
-            && (handle_code == 4 && hdlptr->handleref.code < 6))              \
+        if (handle_code != ANYCODE && (hdlptr)->handleref.code != handle_code \
+            && (handle_code == 4 && (hdlptr)->handleref.code < 6))      \
           {                                                                   \
             LOG_WARN ("Expected a CODE %d handle, got a %d", handle_code,     \
-                      hdlptr->handleref.code);                                \
+                      (hdlptr)->handleref.code);                        \
           }                                                                   \
-        bit_write_H (hdl_dat, &hdlptr->handleref);                            \
+        bit_write_H (hdl_dat, &(hdlptr)->handleref);                    \
         LOG_TRACE (#nam ": " FORMAT_REF " [H %d]\n", ARGS_REF (hdlptr), dxf)  \
       }                                                                       \
   }

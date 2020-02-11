@@ -298,6 +298,7 @@
 #ifndef START_OBJECT_HANDLE_STREAM
 #  define START_OBJECT_HANDLE_STREAM                                          \
     START_HANDLE_STREAM;                                                      \
+    assert (obj->supertype == DWG_SUPERTYPE_OBJECT);                          \
     VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 4, 0);           \
     REACTORS (4);                                                             \
     XDICOBJHANDLE (3)
@@ -305,6 +306,7 @@
 
 #ifndef COMMON_TABLE_FLAGS
 #  define COMMON_TABLE_FLAGS(acdbname)                                        \
+    assert (obj->supertype == DWG_SUPERTYPE_OBJECT);                          \
     PRE (R_13)                                                                \
     {                                                                         \
       FIELD_RC (flag, 70);                                                    \
@@ -333,12 +335,13 @@
     }                                                                         \
     RESET_VER
 
-// Same as above. just _dwg_object_LAYER::flags is short, not RC
+// Same as above. just Dwg_Object_LAYER::flags is short, not RC
 #  define LAYER_TABLE_FLAGS(acdbname)                                         \
+    assert (obj->fixedtype == DWG_TYPE_LAYER);                                \
     PRE (R_13)                                                                \
     {                                                                         \
       FIELD_CAST (flag, RC, RS, 70);                                          \
-      FIELD_TFv (name, 32, 2);                                                 \
+      FIELD_TFv (name, 32, 2);                                                \
       FIELD_RS (used, 0);                                                     \
     }                                                                         \
     LATER_VERSIONS                                                            \
