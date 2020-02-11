@@ -1007,108 +1007,103 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       char key[80];
       t = &tokens->tokens[tokens->index];
-      if (t->type == JSMN_OBJECT) // or array of [ type, value ]?
+      if (t->type == JSMN_ARRAY && t->size == 2) // of [ type, value ]
         {
           Dwg_Resbuf *old = rbuf;
-          tokens->index++; // hash of type, value
-          for (int j = 0; j < t->size; j++)
+          enum RES_BUF_VALUE_TYPE vtype;
+
+          tokens->index++;
+          rbuf->type = (BITCODE_RS)json_long (dat, tokens);
+          LOG_INSANE ("xdata[%u]: type %d\n", i, rbuf->type);
+          vtype = get_base_value_type (rbuf->type);
+          switch (vtype)
             {
-              json_fixed_key (key, dat, tokens);
-              if (strEQc (key, "type"))
+            case VT_STRING:
+              {
+                char *s = json_string (dat, tokens);
+                int len = strlen (s);
+                rbuf->value.str.size = len;
+                PRE (R_2007) // target version
                 {
-                  long type = json_long (dat, tokens);
-                  rbuf->type = (BITCODE_RS)type;
-                  LOG_INSANE ("xdata[%u].type %ld\n", i, type);
+                  rbuf->value.str.u.data = s;
+                  rbuf->value.str.codepage = dwg->header.codepage;
+                  LOG_TRACE ("xdata[%u]: \"%s\" [TV %d]\n", i, s,
+                             (int)rbuf->type);
                 }
-              else if (strEQc (key, "value"))
+                LATER_VERSIONS
                 {
-                  enum RES_BUF_VALUE_TYPE vtype = get_base_value_type (rbuf->type);
-                  switch (vtype)
-                    {
-                    case VT_STRING:
-                      {
-                        char *s = json_string (dat, tokens);
-                        int len = strlen (s);
-                        rbuf->value.str.size = len;
-                        PRE (R_2007) // target version
-                          {
-                            rbuf->value.str.u.data = s;
-                            rbuf->value.str.codepage = dwg->header.codepage;
-                            LOG_TRACE ("xdata[%u]: \"%s\" [TV %d]\n", i, s,
-                                       (int)rbuf->type);
-                          }
-                        LATER_VERSIONS
-                          {
-                            rbuf->value.str.u.wdata = bit_utf8_to_TU (s);
-                            LOG_TRACE_TU ("xdata", rbuf->value.str.u.wdata, rbuf->type);
-                          }
-                      }
-                      break;
-                    case VT_BOOL:
-                    case VT_INT8:
-                      {
-                        long l = json_long (dat, tokens);
-                        rbuf->value.i8 = (BITCODE_RC) l;
-                        LOG_TRACE ("xdata[%u]: %ld [RC %d]\n", i, l, (int)rbuf->type);
-                      }
-                      break;
-                    case VT_INT16:
-                      {
-                        long l = json_long (dat, tokens);
-                        rbuf->value.i16 = (BITCODE_RS) l;
-                        LOG_TRACE ("xdata[%u]: %ld [RS %d]\n", i, l, (int)rbuf->type);
-                      }
-                      break;
-                    case VT_INT32:
-                      {
-                        long l = json_long (dat, tokens);
-                        rbuf->value.i32 = (BITCODE_RL) l;
-                        LOG_TRACE ("xdata[%u]: %ld [RL %d]\n", i, l, (int)rbuf->type);
-                      }
-                      break;
-                    case VT_INT64:
-                      {
-                        long l = json_long (dat, tokens);
-                        rbuf->value.i64 = (BITCODE_BLL) l;
-                        LOG_TRACE ("xdata[%u]: %ld [BLL %d]\n", i, l, (int)rbuf->type);
-                      }
-                      break;
-                    case VT_REAL:
-                      rbuf->value.dbl = json_float (dat, tokens);
-                      LOG_TRACE ("xdata[%u]: %f [RD %d]\n", i, rbuf->value.dbl, (int)rbuf->type);
-                      break;
-                    case VT_POINT3D:
-                      {
-                        BITCODE_3BD pt;
-                        json_3DPOINT (dat, tokens, "xdata", "3RD", &pt);
-                        memcpy (&rbuf->value.pt, &pt, 24);
-                      }
-                      break;
-                    case VT_BINARY:
-                      {
-                        long len;
-                        char *s = json_binary (dat, tokens, "xdata", &len);
-                        rbuf->value.str.u.data = s;
-                        rbuf->value.str.size = len;
-                        break;
-                      }
-                    case VT_HANDLE:
-                    case VT_OBJECTID:
-                      {
-                        BITCODE_H hdl;
-                        hdl = json_HANDLE (dat, dwg, tokens, key, NULL, -1);
-                        memcpy (&rbuf->value.h, &hdl->handleref, sizeof (hdl->handleref));
-                      }
-                      break;
-                    case VT_INVALID:
-                    default:
-                      break;
-                    }
+                  rbuf->value.str.u.wdata = bit_utf8_to_TU (s);
+                  LOG_TRACE_TU ("xdata", rbuf->value.str.u.wdata, rbuf->type);
                 }
+              }
+              break;
+            case VT_BOOL:
+            case VT_INT8:
+              {
+                long l = json_long (dat, tokens);
+                rbuf->value.i8 = (BITCODE_RC)l;
+                LOG_TRACE ("xdata[%u]: %ld [RC %d]\n", i, l, (int)rbuf->type);
+              }
+              break;
+            case VT_INT16:
+              {
+                long l = json_long (dat, tokens);
+                rbuf->value.i16 = (BITCODE_RS)l;
+                LOG_TRACE ("xdata[%u]: %ld [RS %d]\n", i, l, (int)rbuf->type);
+              }
+              break;
+            case VT_INT32:
+              {
+                long l = json_long (dat, tokens);
+                rbuf->value.i32 = (BITCODE_RL)l;
+                LOG_TRACE ("xdata[%u]: %ld [RL %d]\n", i, l, (int)rbuf->type);
+              }
+              break;
+            case VT_INT64:
+              {
+                long l = json_long (dat, tokens);
+                rbuf->value.i64 = (BITCODE_BLL)l;
+                LOG_TRACE ("xdata[%u]: %ld [BLL %d]\n", i, l, (int)rbuf->type);
+              }
+              break;
+            case VT_REAL:
+              rbuf->value.dbl = json_float (dat, tokens);
+              LOG_TRACE ("xdata[%u]: %f [RD %d]\n", i, rbuf->value.dbl,
+                         (int)rbuf->type);
+              break;
+            case VT_POINT3D:
+              {
+                BITCODE_3BD pt;
+                json_3DPOINT (dat, tokens, "xdata", "3RD", &pt);
+                memcpy (&rbuf->value.pt, &pt, 24);
+              }
+              break;
+            case VT_BINARY:
+              {
+                long len;
+                char *s = json_binary (dat, tokens, "xdata", &len);
+                rbuf->value.str.u.data = s;
+                rbuf->value.str.size = len;
+                break;
+              }
+            case VT_HANDLE:
+            case VT_OBJECTID:
+              {
+                BITCODE_H hdl;
+                hdl = json_HANDLE (dat, dwg, tokens, key, NULL, -1);
+                memcpy (&rbuf->value.h, &hdl->handleref,
+                        sizeof (hdl->handleref));
+              }
+              break;
+            case VT_INVALID:
+            default:
+              break;
             }
           rbuf = (Dwg_Resbuf *)calloc (1, sizeof (Dwg_Resbuf));
           old->next = rbuf;
         }
+      else
+        json_advance_unknown (dat, tokens, 0);
     }
   return;
 }

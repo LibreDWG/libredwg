@@ -808,10 +808,10 @@ json_xdata (Bit_Chain *restrict dat, const Dwg_Object_XRECORD *restrict obj)
   for (BITCODE_BL i = 0; i < obj->num_xdata; i++)
     {
       enum RES_BUF_VALUE_TYPE type;
-      HASH;
-      KEY (type); VALUE_RS (rbuf->type, 0);
+      PREFIX ARRAY;
+      PREFIX VALUE_RS (rbuf->type, 0);
+      PREFIX
       type = get_base_value_type (rbuf->type);
-      KEY (value);
       switch (type)
         {
         case VT_STRING:
@@ -871,7 +871,7 @@ json_xdata (Bit_Chain *restrict dat, const Dwg_Object_XRECORD *restrict obj)
         }
       rbuf = rbuf->next;
       NOCOMMA;
-      ENDHASH;
+      ENDARRAY;
     }
   NOCOMMA;
   ENDARRAY;
