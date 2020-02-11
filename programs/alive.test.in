@@ -70,11 +70,11 @@ run ()
     then
        TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
     fi
-    # rewrite leaks 3DSOLID
-    if test $bprog = dwgrewrite -a -n "@HAVE_ASAN@" -a "$bdwg" = example_2000 
-    then
-       TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
-    fi
+    # rewrite leaked 3DSOLID
+    #if test $bprog = dwgrewrite -a -n "@HAVE_ASAN@" -a "$bdwg" = example_2000
+    #then
+    #   TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
+    #fi
     # injson leaks fixed, GH #197
     #if test $bprog = dwgwrite -a -n "@HAVE_ASAN@"
     #then

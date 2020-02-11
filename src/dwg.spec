@@ -1735,19 +1735,29 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
               FIELD_VALUE (block_size) = (BITCODE_BL*)
                 realloc (FIELD_VALUE (block_size), (i+1) * sizeof (BITCODE_BL));
               FIELD_BL (block_size[i], 0);
-              FIELD_TFv (encr_sat_data[i], FIELD_VALUE (block_size[i]), 1);
-              total_size += FIELD_VALUE (block_size[i]);
-            } while (FIELD_VALUE (block_size[i++]));
+              if (FIELD_VALUE (block_size[i]) > 0
+                  && AVAIL_BITS (dat) > 8 * FIELD_VALUE (block_size[i]))
+                {
+                  FIELD_TFv (encr_sat_data[i], FIELD_VALUE (block_size[i]), 1);
+                  total_size += FIELD_VALUE (block_size[i]);
+                }
+              else
+                {
+                  _obj->encr_sat_data[i] = NULL;
+                  _obj->block_size[i] = 0;
+                }
+            }
+          while (FIELD_VALUE (block_size[i++]) > 0 && AVAIL_BITS (dat) >= 16); // crc RS
 
           // de-obfuscate SAT data
-          FIELD_VALUE (acis_data) = malloc (total_size+1);
-          num_blocks = i-1;
+          FIELD_VALUE (acis_data) = malloc (total_size + 1);
+          num_blocks = i - 1;
           FIELD_VALUE (num_blocks) = num_blocks;
           LOG_TRACE ("num_blocks: " FORMAT_BL "\n", FIELD_VALUE (num_blocks));
           idx = 0;
-          for (i=0; i<num_blocks; i++)
+          for ( i =0; i < num_blocks; i++)
             {
-              for (j=0; j < FIELD_VALUE (block_size[i]); j++)
+              for (j = 0; j < FIELD_VALUE (block_size[i]); j++)
                 {
                   if (FIELD_VALUE (encr_sat_data[i][j] <= 32))
                     {
@@ -7708,4 +7718,3 @@ DWG_OBJECT (RAPIDRTRENDERSETTINGS)
 DWG_OBJECT_END
 
 #endif
-
