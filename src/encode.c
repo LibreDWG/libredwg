@@ -932,6 +932,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       {
         struct Dwg_AuxHeader *_obj = &dwg->auxheader;
         Dwg_Object *obj = NULL;
+        BITCODE_BL vcount;
         assert (!dat->bit);
         LOG_INFO ("\n=======> AuxHeader: %8u\n",
                   (unsigned)dat->byte); // size: 123
@@ -943,9 +944,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           {
             BITCODE_RS tmpunknown[] = { 4, 0x565, 0, 0, 2, 1 };
             LOG_TRACE ("Use AuxHeader defaults...\n");
-            FIELD_VALUE (aux_intro[0]) = 0xff;
-            FIELD_VALUE (aux_intro[1]) = 0x77;
-            FIELD_VALUE (aux_intro[2]) = 0x01;
+            FIELD_VALUE (aux_intro_1) = 0xff;
+            FIELD_VALUE (aux_intro_2) = 0x77;
+            FIELD_VALUE (aux_intro_3) = 0x01;
             FIELD_VALUE (minus_1) = -1;
             FIELD_VALUE (dwg_version) = dwg->header.dwg_version;
             FIELD_VALUE (maint_version) = dwg->header.maint_version;
@@ -953,7 +954,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             FIELD_VALUE (dwg_version_2) = dwg->header.dwg_version;
             FIELD_VALUE (maint_version_1) = dwg->header.maint_version;
             FIELD_VALUE (maint_version_2) = dwg->header.maint_version;
-            memcpy (FIELD_VALUE (unknown_rs), tmpunknown, sizeof (tmpunknown));
+            memcpy (FIELD_VALUE (unknown_6rs), tmpunknown, sizeof (tmpunknown));
             FIELD_VALUE (TDCREATE) = dwg->header_vars.TDCREATE.value;
             FIELD_VALUE (TDUPDATE) = dwg->header_vars.TDUPDATE.value;
             if (dwg->header_vars.HANDSEED)

@@ -103,7 +103,17 @@ static Bit_Chain *g_dat;
     char *s = json_string (dat, tokens);                                      \
     int slen = strlen (s);                                                    \
     memcpy (&_obj->nam, s, MIN (len, slen));                                  \
-    LOG_TRACE (#nam ": %.*s\n", len, _obj->nam)                               \
+    LOG_TRACE (#nam ": %.*s\n", len, _obj->nam);                              \
+    free (s);                                                                 \
+  }
+#define FIELD_TFFx(nam, len, dxf)  FIELD_BINARY(nam, len, dxf)
+#define FIELD_BINARY(nam, len, dxf)                                           \
+  else if (strEQc (key, #nam))                                                \
+  {                                                                           \
+    long slen;                                                                \
+    char *s = json_binary (dat, tokens, #nam, &slen);                         \
+    memcpy (&_obj->nam, s, MIN (len, slen));                                  \
+    free (s);                                                                 \
   }
 #define FIELD_T(nam, dxf)                                                     \
   else if (strEQc (key, #nam))                                                \
@@ -145,7 +155,9 @@ static Bit_Chain *g_dat;
 #define FIELD_BL(nam, dxf) _FIELD_LONG (nam, BL)
 #define FIELD_BLL(nam, dxf) _FIELD_LONG (nam, BLL)
 #define FIELD_RC(nam, dxf) _FIELD_LONG (nam, RC)
+#define FIELD_RCx(nam, dxf) _FIELD_LONGT (nam, RC, RCx)
 #define FIELD_RS(nam, dxf) _FIELD_LONG (nam, RS)
+#define FIELD_RSx(nam, dxf) _FIELD_LONGT (nam, RS, RSx)
 #define FIELD_RL(nam, dxf) _FIELD_LONG (nam, RL)
 #define FIELD_RLx(nam, dxf) _FIELD_LONGT (nam, RL, RLx)
 #define FIELD_RLd(nam, dxf) _FIELD_LONGT (nam, RL, RLd)
@@ -499,8 +511,9 @@ json_TIMEBLL (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
               const char *name, BITCODE_TIMEBLL *date)
 {
   unsigned long j = 1;
-  double ms;
-  double num = json_float (dat, tokens);
+  double ms, num;
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  num = json_float (dat, tokens);
   date->value = num;
   date->days = (BITCODE_BL)trunc (num);
   ms = date->value;
@@ -510,7 +523,7 @@ json_TIMEBLL (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
       ms /= 10.0;
     }
   date->ms = (BITCODE_BL) (j / 10 * (date->value - date->days));
-  LOG_TRACE ("%s %f (%u, %u) [TIMEBLL]\n", name, date->value, date->days,
+  LOG_TRACE ("%s %.08f (%u, %u) [TIMEBLL]\n", name, date->value, date->days,
              date->ms);
 }
 
@@ -2258,6 +2271,88 @@ json_R2004_Header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 }
 
 static int
+json_AuxHeader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                jsmntokens_t *restrict tokens)
+{
+  const char *section = "AuxHeader";
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  struct Dwg_AuxHeader *_obj = &dwg->auxheader;
+  int size;
+  if (t->type != JSMN_OBJECT)
+    {
+      LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
+                 t_typename[t->type], tokens->index, tokens->num_tokens,
+                 section);
+      json_advance_unknown (dat, tokens, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
+  size = t->size;
+  LOG_TRACE ("\n%s pos:%d [%d keys]\n--------------------\n", section,
+             tokens->index, size);
+  tokens->index++;
+  for (int i = 0; i < size; i++)
+    {
+      char key[80];
+      json_fixed_key (key, dat, tokens);
+      t = &tokens->tokens[tokens->index];
+
+      if (strEQc (key, "aux_intro_1"))
+        {
+          _obj->aux_intro_1 = (BITCODE_RC)json_long (dat, tokens);
+          LOG_TRACE ("aux_intro_1: 0x%x\n", _obj->aux_intro_1)
+        }
+      // clang-format off
+      FIELD_RCx (aux_intro_2, 0)
+      FIELD_RCx (aux_intro_3, 0)
+      FIELD_RSx (dwg_version, 0)
+      FIELD_RS (maint_version, 0)
+      FIELD_RL (numsaves, 0)
+      FIELD_RL (minus_1, 0)
+      FIELD_RS (numsaves_1, 0)
+      FIELD_RS (numsaves_2, 0)
+      FIELD_RL (zero, 0)
+      FIELD_RSx (dwg_version_1, 0)
+      FIELD_RS (maint_version_1, 0)
+      FIELD_RSx (dwg_version_2, 0)
+      FIELD_RS (maint_version_2, 0)
+      FIELD_TFFx (unknown_6rs, 12, 0)
+      //for (i=0; i<6; i++) {
+      //  FIELD_RSx (unknown_6rs[i], 0); /* 5 0x893 5 0x893 0 1 */
+      //}
+      FIELD_TFF (unknown_20rc, 20, 0) // documented as 5xRL, but really looks like some RC flags
+      FIELD_RD (TDCREATE, 0)
+      FIELD_RD (TDUPDATE, 0)
+      FIELD_RLx (HANDSEED, 0)
+      FIELD_RL (plot_stamp, 0)
+      FIELD_RS (zero_1, 0)
+      FIELD_RS (numsaves_3, 0)
+      FIELD_RL (zero_2, 0)
+      FIELD_RL (zero_3, 0)
+      FIELD_RL (zero_4, 0)
+      FIELD_RL (numsaves_4, 0)
+      FIELD_RL (zero_5, 0)
+      FIELD_RL (zero_6, 0)
+      FIELD_RL (zero_7, 0)
+      FIELD_RL (zero_8, 0)
+      //SINCE (R_2018) {
+      //  for (i = 0; i < 3; i++) {
+      //    FIELD_RS (zero_18[i], 0);
+      //  }
+      //}
+      // clang-format on
+      else
+        {
+          LOG_ERROR ("Unknown %s.%s ignored", section, key);
+          tokens->index++;
+        }
+    }
+
+  LOG_TRACE ("End of %s\n", section)
+  tokens->index--;
+  return 1;
+}
+
+static int
 json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   jsmntokens_t *restrict tokens)
 {
@@ -2829,6 +2924,8 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         error |= json_OBJECTS (dat, dwg, &tokens);
       else if (strEQc (key, "THUMBNAILIMAGE"))
         error |= json_THUMBNAILIMAGE (dat, dwg, &tokens);
+      else if (strEQc (key, "AuxHeader"))
+        error |= json_AuxHeader (dat, dwg, &tokens);
       else if (strEQc (key, "R2004_Header"))
         error |= json_R2004_Header (dat, dwg, &tokens);
       else if (strEQc (key, "SummaryInfo"))

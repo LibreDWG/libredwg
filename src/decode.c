@@ -166,8 +166,8 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // version
   memset (&dwg->header_vars, 0, sizeof (dwg->header_vars));
   memset (&dwg->summaryinfo, 0, sizeof (dwg->summaryinfo));
-  memset (&dwg->r2004_header.file_ID_string[0], 0, sizeof (dwg->r2004_header));
-  memset (&dwg->auxheader.aux_intro[0], 0, sizeof (dwg->auxheader));
+  memset (&dwg->r2004_header, 0, sizeof (dwg->r2004_header));
+  memset (&dwg->auxheader, 0, sizeof (dwg->auxheader));
   memset (&dwg->second_header, 0, sizeof (dwg->second_header));
 
   if (dwg->opts)

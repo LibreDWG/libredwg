@@ -146,6 +146,9 @@
 #ifndef FIELD_RSx
 #  define FIELD_RSx(name, dxf) FIELD_RS (name, dxf)
 #endif
+#ifndef FIELD_RCx
+#  define FIELD_RCx(name, dxf) FIELD_RC (name, dxf)
+#endif
 #ifndef FIELD_BLx
 #  define FIELD_BLx(name, dxf) FIELD_BL (name, dxf)
 #endif

@@ -278,7 +278,7 @@ static char* _path_field(const char *path);
       {                                                                       \
         for (long j = 0; j < (long)len; j++)                                  \
           {                                                                   \
-            fprintf (dat->fh, "%02X", buf[j]);                                \
+            fprintf (dat->fh, "%02X", ((BITCODE_RC*)buf)[j]);                 \
           }                                                                   \
       }                                                                       \
     fprintf (dat->fh, "\",\n");                                               \
@@ -292,7 +292,7 @@ static char* _path_field(const char *path);
       {                                                                       \
         for (long j = 0; j < len; j++)                                        \
           {                                                                   \
-            fprintf (dat->fh, "%02X", _obj->nam[j]);                          \
+            fprintf (dat->fh, "%02X", ((BITCODE_RC*)_obj->nam)[j]);           \
           }                                                                   \
       }                                                                       \
     fprintf (dat->fh, "\",\n");                                               \
@@ -306,6 +306,7 @@ static char* _path_field(const char *path);
 #define FIELD_BLL(nam, dxf) FIELD (nam, BLL, dxf)
 #define FIELD_BD(nam, dxf) FIELD (nam, BD, dxf)
 #define FIELD_RC(nam, dxf) FIELD (nam, RC, dxf)
+#define FIELD_RCx(nam, dxf) FIELD (nam, RC, dxf)
 #define FIELD_RS(nam, dxf) FIELD (nam, RS, dxf)
 #define FIELD_RD(nam, dxf) FIELD (nam, RD, dxf)
 #define FIELD_RL(nam, dxf) FIELD (nam, RL, dxf)
@@ -1630,7 +1631,7 @@ json_section_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   struct Dwg_AuxHeader *_obj = &dwg->auxheader;
   Dwg_Object *obj = NULL;
   int error = 0, i;
-  BITCODE_RL rcount1;
+  BITCODE_RL vcount, rcount1;
 
   RECORD (AuxHeader); // single hash
   // clang-format off
@@ -1689,12 +1690,12 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (json_objects_write (dat, dwg) >= DWG_ERR_CRITICAL)
     goto fail;
 
-  if (!minimal && dat->version >= R_2000)
+  if (!minimal && dat->version >= R_13)
     {
       if (json_thumbnail_write (dat, dwg) >= DWG_ERR_CRITICAL)
         goto fail;
       /* the other sections */
-      if (dat->version < R_13 && dat->version <= R_2000)
+      if (dat->version <= R_2000)
         {
           error |= json_section_template (dat, dwg); // i.e. MEASUREMENT
           error |= json_section_auxheader (dat, dwg);

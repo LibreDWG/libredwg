@@ -77,8 +77,10 @@ typedef unsigned char BITCODE_RC;
 #endif
 #define FORMAT_RCd "%d"
 #define FORMAT_RCu "%u"
+#define FORMAT_RCx "0x%x"
 typedef signed char BITCODE_RCd;
 typedef unsigned char BITCODE_RCu;
+typedef unsigned char BITCODE_RCx;
 typedef unsigned char BITCODE_B;
 #define FORMAT_B "%d"
 typedef unsigned char BITCODE_BB;
@@ -5837,30 +5839,32 @@ typedef struct _dwg_struct
   /* #define DWG_AUXHEADER_SIZE 123 */
   struct Dwg_AuxHeader
   {
-    BITCODE_RC   aux_intro[3]; /* ff 77 01 */
+    BITCODE_RC   aux_intro_1; /* ff 77 01 */
+    BITCODE_RC   aux_intro_2;
+    BITCODE_RC   aux_intro_3;
     BITCODE_RS   dwg_version;
     BITCODE_RS   maint_version;
-    BITCODE_RL   num_saves;
+    BITCODE_RL   numsaves;
     BITCODE_RL   minus_1;
-    BITCODE_RS   num_saves_1;
-    BITCODE_RS   num_saves_2;
+    BITCODE_RS   numsaves_1;
+    BITCODE_RS   numsaves_2;
     BITCODE_RL   zero;
     BITCODE_RS   dwg_version_1;
     BITCODE_RS   maint_version_1;
     BITCODE_RS   dwg_version_2;
     BITCODE_RS   maint_version_2;
-    BITCODE_RS   unknown_rs[6];
-    BITCODE_RC   unknown_rc[20]; /* some vars */
+    BITCODE_RS   unknown_6rs[6];
+    BITCODE_RC   unknown_20rc[20]; /* some vars, maybe 5xRL */
     BITCODE_RD   TDCREATE; /* ?? format TD */
     BITCODE_RD   TDUPDATE;
     BITCODE_RL   HANDSEED;
     BITCODE_RL   plot_stamp;
     BITCODE_RS   zero_1;
-    BITCODE_RS   num_saves_3;
+    BITCODE_RS   numsaves_3;
     BITCODE_RL   zero_2;
     BITCODE_RL   zero_3;
     BITCODE_RL   zero_4;
-    BITCODE_RL   num_saves_4;
+    BITCODE_RL   numsaves_4;
     BITCODE_RL   zero_5;
     BITCODE_RL   zero_6;
     BITCODE_RL   zero_7;
