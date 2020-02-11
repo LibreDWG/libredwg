@@ -657,5 +657,3 @@
     FIELD_T (PROJECTNAME, 1);
     END_STRING_STREAM
   }
-
-
