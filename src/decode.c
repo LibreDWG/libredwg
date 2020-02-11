@@ -4705,8 +4705,8 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
             rbuf->value.str.size = length;
             rbuf->value.str.u.data = (char*)bit_read_TF (dat, length);
             LOG_INSANE ("STRING ")
-            LOG_TRACE ("xdata[%u]: \"%s\" [TF %d %d]\n", num_xdata,
-                       rbuf->value.str.u.data, length, rbuf->type);
+            LOG_TRACE ("xdata[%u]: \"%s\" [TV %d]\n", num_xdata,
+                       rbuf->value.str.u.data, rbuf->type);
           }
           LATER_VERSIONS
           {

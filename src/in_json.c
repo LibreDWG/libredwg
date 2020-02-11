@@ -1001,13 +1001,13 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   obj->xdata = (Dwg_Resbuf *)calloc (1, sizeof (Dwg_Resbuf));
   rbuf = obj->xdata;
   obj->num_xdata = t->size;
-  LOG_TRACE ("num_xdata: " FORMAT_BL" [BL]\n", obj->num_xdata);
+  LOG_INSANE ("num_xdata: " FORMAT_BL"\n", obj->num_xdata);
   tokens->index++; // array of objects
   for (unsigned i = 0; i < obj->num_xdata; i++)
     {
       char key[80];
       t = &tokens->tokens[tokens->index];
-      if (t->type == JSMN_OBJECT)
+      if (t->type == JSMN_OBJECT) // or array of [ type, value ]?
         {
           Dwg_Resbuf *old = rbuf;
           tokens->index++; // hash of type, value
@@ -1018,7 +1018,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 {
                   long type = json_long (dat, tokens);
                   rbuf->type = (BITCODE_RS)type;
-                  LOG_TRACE ("xdata[%u].type %ld\n", i, type);
+                  LOG_INSANE ("xdata[%u].type %ld\n", i, type);
                 }
               else if (strEQc (key, "value"))
                 {
@@ -1029,10 +1029,19 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                       {
                         char *s = json_string (dat, tokens);
                         int len = strlen (s);
-                        rbuf->value.str.u.data = s;
-                        rbuf->value.str.codepage = dwg->header.codepage;
                         rbuf->value.str.size = len;
-                        LOG_TRACE ("xdata[%u].value \"%s\"\n", i, s);
+                        PRE (R_2007) // target version
+                          {
+                            rbuf->value.str.u.data = s;
+                            rbuf->value.str.codepage = dwg->header.codepage;
+                            LOG_TRACE ("xdata[%u]: \"%s\" [TV %d]\n", i, s,
+                                       (int)rbuf->type);
+                          }
+                        LATER_VERSIONS
+                          {
+                            rbuf->value.str.u.wdata = bit_utf8_to_TU (s);
+                            LOG_TRACE_TU ("xdata", rbuf->value.str.u.wdata, rbuf->type);
+                          }
                       }
                       break;
                     case VT_BOOL:
@@ -1040,33 +1049,33 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                       {
                         long l = json_long (dat, tokens);
                         rbuf->value.i8 = (BITCODE_RC) l;
-                        LOG_TRACE ("xdata[%u].value %ld\n", i, l);
+                        LOG_TRACE ("xdata[%u]: %ld [RC %d]\n", i, l, (int)rbuf->type);
                       }
                       break;
                     case VT_INT16:
                       {
                         long l = json_long (dat, tokens);
                         rbuf->value.i16 = (BITCODE_RS) l;
-                        LOG_TRACE ("xdata[%u].value %ld\n", i, l);
+                        LOG_TRACE ("xdata[%u]: %ld [RS %d]\n", i, l, (int)rbuf->type);
                       }
                       break;
                     case VT_INT32:
                       {
                         long l = json_long (dat, tokens);
                         rbuf->value.i32 = (BITCODE_RL) l;
-                        LOG_TRACE ("xdata[%u].value %ld\n", i, l);
+                        LOG_TRACE ("xdata[%u]: %ld [RL %d]\n", i, l, (int)rbuf->type);
                       }
                       break;
                     case VT_INT64:
                       {
                         long l = json_long (dat, tokens);
-                        rbuf->value.i64 = (BITCODE_RLL) l;
-                        LOG_TRACE ("xdata[%u].value %ld\n", i, l);
+                        rbuf->value.i64 = (BITCODE_BLL) l;
+                        LOG_TRACE ("xdata[%u]: %ld [BLL %d]\n", i, l, (int)rbuf->type);
                       }
                       break;
                     case VT_REAL:
                       rbuf->value.dbl = json_float (dat, tokens);
-                      LOG_TRACE ("xdata[%u].value %f\n", i, rbuf->value.dbl);
+                      LOG_TRACE ("xdata[%u]: %f [RD %d]\n", i, rbuf->value.dbl, (int)rbuf->type);
                       break;
                     case VT_POINT3D:
                       {

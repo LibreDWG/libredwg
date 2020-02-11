@@ -2637,9 +2637,8 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
               bit_write_TF (dat, (BITCODE_TF)rbuf->value.str.u.data, rbuf->value.str.size);
             else
               bit_write_TF (dat, (BITCODE_TF)"", 0);
-            LOG_TRACE ("xdata[%u]: \"%s\" [TF %d %d]\n", j,
-                       rbuf->value.str.u.data, rbuf->value.str.size,
-                       rbuf->type);
+            LOG_TRACE ("xdata[%u]: \"%s\" [TV %d]\n", j,
+                       rbuf->value.str.u.data, rbuf->type);
           }
           LATER_VERSIONS
           {
@@ -2649,6 +2648,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
             bit_write_RS (dat, rbuf->value.str.size);
             for (i = 0; i < rbuf->value.str.size; i++)
               bit_write_RS (dat, rbuf->value.str.u.wdata[i]);
+            LOG_TRACE_TU ("xdata", rbuf->value.str.u.wdata, rbuf->type);
           }
           break;
         case VT_REAL:
