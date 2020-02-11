@@ -70,6 +70,11 @@ run ()
     then
        TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
     fi
+    # rewrite leaks 3DSOLID
+    if test $bprog = dwgrewrite -a -n "@HAVE_ASAN@" -a "$bdwg" = example_2000 
+    then
+       TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
+    fi
     # injson leaks fixed, GH #197
     #if test $bprog = dwgwrite -a -n "@HAVE_ASAN@"
     #then
@@ -92,11 +97,27 @@ run ()
     else
         case $bprog in
         dwggrep) ;;
-        dwgrewrite) #crashes on mingw
-                test -f core && rm core
-                tmpnum=$(expr 1 + $problems)
-                echo $(basename $0): TODO $prog $tmpnum failures
-                ls -l $log ;;
+        dwgwrite)
+            case "`uname -s`" in
+            CYGWIN*)tmpnum=$(expr 1 + $problems)
+                    echo $(basename $0): TODO $prog $tmpnum failures
+                    ls -l $log ;;
+            *)      problems=$(expr 1 + $problems)
+                    echo $prog failure $?
+                    tail -n100 $log ;;
+            esac
+            ;;
+        dwgrewrite)
+            case "`uname -s`" in
+            MINGW*) test -f core && rm core
+                    tmpnum=$(expr 1 + $problems)
+                    echo $(basename $0): TODO $prog $tmpnum failures
+                    ls -l $log ;;
+            *)      problems=$(expr 1 + $problems)
+                    echo $prog failure $?
+                    tail -n100 $log ;;
+            esac
+            ;;
         *)      problems=$(expr 1 + $problems)
                 echo $prog failure $?
                 tail -n100 $log ;;
