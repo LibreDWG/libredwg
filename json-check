@@ -9,6 +9,8 @@ r=$(basename $dir)
 case $dir in
     *test/test-data) ;;
     *test/test-data/*) r=`basename $(dirname $d)`; b=${b}_${r} ;;
+    *td) ;;
+    *td/*)             r=`basename $(dirname $d)`; b=${b}_${r} ;;
 esac
 case $r in
     20*)      ;;
