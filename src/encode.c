@@ -235,8 +235,8 @@ static bool env_var_checked_p;
 #define FIELD_TIMEBLL(nam, dxf)                                               \
   {                                                                           \
     bit_write_TIMEBLL (dat, (BITCODE_TIMEBLL)_obj->nam);                      \
-    LOG_TRACE (#nam ": " FORMAT_BL "." FORMAT_BL "\n", _obj->nam.days,        \
-               _obj->nam.ms);                                                 \
+    LOG_TRACE (#nam ": " FORMAT_BL "." FORMAT_BL " [TIMEBLL %d]\n",           \
+               _obj->nam.days, _obj->nam.ms, dxf);                            \
   }
 
 #define FIELD_CMC(color, dxf1, dxf2)                                          \

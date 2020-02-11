@@ -510,20 +510,35 @@ static void
 json_TIMEBLL (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
               const char *name, BITCODE_TIMEBLL *date)
 {
-  unsigned long j = 1;
-  double ms, num;
+  double ms;
   const jsmntok_t *t = &tokens->tokens[tokens->index];
-  num = json_float (dat, tokens);
-  date->value = num;
-  date->days = (BITCODE_BL)trunc (num);
-  ms = date->value;
-  while (ms > 1.0)
+  // the double format looses the last two digits 6-8
+  if (t->type == JSMN_ARRAY && t->size == 2)
     {
-      j *= 10;
-      ms /= 10.0;
+      tokens->index++;
+      date->days = json_long (dat, tokens);
+      date->ms = json_long (dat, tokens);
+      ms = (double)date->ms;
+      while (ms > 1.0)
+        ms /= 10.0;
+      date->value = date->days + ms; // just for display, not calculations
     }
-  date->ms = (BITCODE_BL) (j / 10 * (date->value - date->days));
-  LOG_TRACE ("%s %.08f (%u, %u) [TIMEBLL]\n", name, date->value, date->days,
+  else
+    {
+      unsigned long j = 1;
+      double num;
+      num = json_float (dat, tokens);
+      date->value = num;
+      date->days = (BITCODE_BL)trunc (num);
+      ms = date->value;
+      while (ms > 1.0)
+        {
+          j *= 10;
+          ms /= 10.0;
+        }
+      date->ms = (BITCODE_BL) (j / 10 * (date->value - date->days));
+    }
+  LOG_TRACE ("%s: %.08f (%u, %u) [TIMEBLL]\n", name, date->value, date->days,
              date->ms);
 }
 
@@ -727,7 +742,7 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           json_2DPOINT (dat, tokens, key, f->type, &pt);
           dwg_dynapi_header_set_value (dwg, key, &pt, 1);
         }
-      else if (t->type == JSMN_PRIMITIVE && strEQc (f->type, "TIMEBLL"))
+      else if (strEQc (f->type, "TIMEBLL") || strEQc (f->type, "TIMERLL"))
         {
           static BITCODE_TIMEBLL date = { 0, 0, 0 };
           json_TIMEBLL (dat, tokens, key, &date);
@@ -1427,7 +1442,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               json_2DPOINT (dat, tokens, key, f->type, &pt);
               dwg_dynapi_field_set_value (dwg, _obj, f, &pt, 1);
             }
-          else if (t->type == JSMN_PRIMITIVE && strEQc (f->type, "TIMEBLL"))
+          else if (strEQc (f->type, "TIMEBLL") || strEQc (f->type, "TIMERLL"))
             {
               static BITCODE_TIMEBLL date = { 0, 0, 0 };
               json_TIMEBLL (dat, tokens, key, &date);

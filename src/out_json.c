@@ -370,11 +370,6 @@ static char* _path_field(const char *path);
 #define FIELD_3BD(nam, dxf) FIELD_3RD (nam, dxf)
 #define FIELD_3BD_1(nam, dxf) FIELD_3RD (nam, dxf)
 #define FIELD_3DPOINT(nam, dxf) FIELD_3BD (nam, dxf)
-#define FIELD_TIMERLL(nam, dxf)                                               \
-  {                                                                           \
-    PREFIX fprintf (dat->fh, "\"" #nam "\": [ %u, %u ],\n", _obj->nam.days,   \
-                    _obj->nam.ms);                                            \
-  }
 
 #define SUB_FIELD_T(o, nam, dxf)                                              \
   {                                                                           \
@@ -461,8 +456,9 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
   field_cmc (dat, #color, &_obj->o.color)
 
 #define FIELD_TIMEBLL(nam, dxf)                                               \
-  PREFIX fprintf (dat->fh, "\"" #nam "\": " FORMAT_BL "." FORMAT_BL ",\n",    \
+  PREFIX fprintf (dat->fh, "\"" #nam "\": [ " FORMAT_BL ", " FORMAT_BL " ],\n", \
                   _obj->nam.days, _obj->nam.ms)
+#define FIELD_TIMERLL(nam, dxf) FIELD_TIMEBLL(nam, dxf)
 
 // FIELD_VECTOR_N(nam, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
