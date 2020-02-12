@@ -1478,13 +1478,13 @@ bit_embed_TU (BITCODE_TU restrict wstr)
   return str;
 }
 
-/** Write ASCII text.
+/** Write ASCIIZ text.
  */
 void
 bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
 {
   int i;
-  int length = chain ? strlen ((const char *)chain) + 1 : 0;
+  int length = (chain && *chain) ? strlen ((const char *)chain) + 1 : 0;
   bit_write_BS (dat, length);
   for (i = 0; i < length; i++)
     bit_write_RC (dat, (unsigned char)chain[i]);

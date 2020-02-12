@@ -1105,7 +1105,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   // undo minimal HEADER hack
   if (dat->from_version != orig_from_version)
     dat->from_version = orig_from_version;
-  dat->byte -= 6; // FIXME!
   encode_patch_RLsize (dat, pvzadr);
   bit_write_CRC (dat, pvzadr, 0xC0C1);
 

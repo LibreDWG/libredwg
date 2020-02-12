@@ -66,8 +66,8 @@
           char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
           if (s2)                                                             \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
-              LOG_TRACE (strcat (s2, ": " FORMAT_##type " [" #type " %d]\n"), \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
+              LOG_TRACE (strcat (s2, ": " FORMAT_##type " [" #type " %d]"),   \
                          rcount1, rcount2, _obj->nam, dxfgroup);              \
               GCC46_DIAG_RESTORE                                              \
               free (s2);                                                      \
@@ -75,17 +75,20 @@
             }                                                                 \
           else                                                                \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
-              LOG_TRACE (strcat (s1, ": " FORMAT_##type " [" #type " %d]\n"), \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
+              LOG_TRACE (strcat (s1, ": " FORMAT_##type " [" #type " %d]"),   \
                          rcount1, _obj->nam, dxfgroup);                       \
               GCC46_DIAG_RESTORE                                              \
               free (s1);                                                      \
             }                                                                 \
         }                                                                     \
       else                                                                    \
-        LOG_TRACE (#nam ": " FORMAT_##type " [" #type " %d]\n", _obj->nam,    \
-                   dxfgroup)                                                  \
+        LOG_TRACE (#nam ": " FORMAT_##type " [" #type " %d]", _obj->nam,      \
+                   dxfgroup);                                                 \
+      LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                            \
+      LOG_TRACE ("\n")                                                        \
     }
+  
 #define FIELD_TRACE(nam, type)                                                \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
     {                                                                         \
@@ -428,7 +431,9 @@
 #define FIELD_TV(nam, dxf)                                                    \
   {                                                                           \
     _obj->nam = bit_read_TV (dat);                                            \
-    LOG_TRACE (#nam ": \"%s\" [TV %d]\n", _obj->nam, dxf);                    \
+    LOG_TRACE (#nam ": \"%s\" [TV %d]", _obj->nam, dxf);                      \
+    LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
+    LOG_TRACE ("\n")                                                          \
   }
 #define FIELD_TU(nam, dxf)                                                    \
   {                                                                           \
@@ -441,7 +446,9 @@
     if (dat->version < R_2007)                                                \
       {                                                                       \
         _obj->nam = bit_read_TV (dat);                                        \
-        LOG_TRACE (#nam ": \"%s\" [T %d]\n", _obj->nam, dxf);                 \
+        LOG_TRACE (#nam ": \"%s\" [T %d]", _obj->nam, dxf);                   \
+        LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                          \
+        LOG_TRACE ("\n")                                                      \
       }                                                                       \
     else                                                                      \
       {                                                                       \
@@ -825,8 +832,10 @@
           PRE (R_2007)                                                        \
           {                                                                   \
             _obj->name[vcount] = bit_read_TV (dat);                           \
-            LOG_TRACE (#name "[%d]: \"%s\" [TV %d]\n", (int)vcount,           \
+            LOG_TRACE (#name "[%d]: \"%s\" [TV %d]", (int)vcount,             \
                        _obj->name[vcount], dxf)                               \
+            LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                      \
+            LOG_TRACE ("\n")                                                  \
           }                                                                   \
           LATER_VERSIONS                                                      \
           {                                                                   \
