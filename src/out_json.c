@@ -119,6 +119,10 @@ static char* _path_field(const char *path);
 #define ARGS_H(hdl) hdl.code, hdl.value
 #define FORMAT_H "[%u, %lu]"
 #define ARGS_HREF(ref) ref->handleref.code, ref->handleref.size, ref->handleref.value, ref->absolute_ref
+#undef FORMAT_RD
+#undef FORMAT_BD
+#define FORMAT_RD "%.14f"
+#define FORMAT_BD FORMAT_RD
 #define FORMAT_HREF "[%u, %u, %lu, %lu]"
 #define FORMAT_RLL "%" PRIu64
 #define FORMAT_BLL "%" PRIu64
@@ -135,10 +139,10 @@ static char* _path_field(const char *path);
 #define VALUE_RL(value, dxf) VALUE (value, RL, dxf)
 #define VALUE_RLL(value, dxf) VALUE (value, RLL, dxf)
 #define VALUE_RD(value, dxf) VALUE (value, RD, dxf)
-#define VALUE_2RD(pt, dxf) fprintf (dat->fh, "[ %f, %f ],\n", pt.x, pt.y)
+#define VALUE_2RD(pt, dxf) fprintf (dat->fh, "[ " FORMAT_RD ", " FORMAT_RD " ],\n", pt.x, pt.y)
 #define VALUE_2DD(pt, d1, d2, dxf) VALUE_2RD (pt, dxf)
 #define VALUE_3RD(pt, dxf)                                                    \
-  fprintf (dat->fh, "[ %f, %f, %f ],\n", pt.x, pt.y, pt.z)
+  fprintf (dat->fh, "[ " FORMAT_RD ", " FORMAT_RD ", " FORMAT_RD " ],\n", pt.x, pt.y, pt.z)
 #define VALUE_3BD(pt, dxf) VALUE_3RD (pt, dxf)
 #define VALUE_TV(nam, dxf)
 
@@ -357,14 +361,14 @@ static char* _path_field(const char *path);
 #define FIELD_3DD(nam, def, dxf) FIELD_3RD (nam, dxf)
 #define FIELD_2RD(nam, dxf)                                                   \
   {                                                                           \
-    PREFIX fprintf (dat->fh, "\"" #nam "\": [ %f, %f ],\n", _obj->nam.x,      \
+    PREFIX fprintf (dat->fh, "\"" #nam "\": [ " FORMAT_RD ", " FORMAT_RD " ],\n", _obj->nam.x,      \
                     _obj->nam.y);                                             \
   }
 #define FIELD_2BD(nam, dxf) FIELD_2RD (nam, dxf)
 #define FIELD_2BD_1(nam, dxf) FIELD_2RD (nam, dxf)
 #define FIELD_3RD(nam, dxf)                                                   \
   {                                                                           \
-    PREFIX fprintf (dat->fh, "\"" #nam "\": [ %f, %f, %f ],\n", _obj->nam.x,  \
+    PREFIX fprintf (dat->fh, "\"" #nam "\": [ " FORMAT_RD ", " FORMAT_RD ", " FORMAT_RD " ],\n", _obj->nam.x,  \
                     _obj->nam.y, _obj->nam.z);                                \
   }
 #define FIELD_3BD(nam, dxf) FIELD_3RD (nam, dxf)
@@ -855,8 +859,8 @@ json_xdata (Bit_Chain *restrict dat, const Dwg_Object_XRECORD *restrict obj)
                      rbuf->type);
           break;
         case VT_POINT3D:
-          fprintf (dat->fh, "[ %f, %f, %f ],\n", rbuf->value.pt[0], rbuf->value.pt[1],
-                   rbuf->value.pt[2]);
+          fprintf (dat->fh, "[ " FORMAT_RD ", " FORMAT_RD ", " FORMAT_RD " ],\n",
+                   rbuf->value.pt[0], rbuf->value.pt[1], rbuf->value.pt[2]);
           LOG_TRACE ("xdata[%u]: (%f,%f,%f) [3RD %d]\n", i, rbuf->value.pt[0],
                      rbuf->value.pt[1], rbuf->value.pt[2], rbuf->type);
           break;

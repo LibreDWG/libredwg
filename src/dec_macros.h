@@ -149,7 +149,7 @@
             {                                                                 \
               GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
               LOG_TRACE (strcat (s2, ": (" FORMAT_BD ", " FORMAT_BD           \
-                                     ") [" #type " %d]\n"),                   \
+                                     ") [" #type " %d]"),                     \
                          rcount1, rcount2, _obj->nam.x, _obj->nam.y, dxf)     \
               GCC46_DIAG_RESTORE                                              \
               free (s2);                                                      \
@@ -159,15 +159,17 @@
             {                                                                 \
               GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
               LOG_TRACE (strcat (s1, ": (" FORMAT_BD ", " FORMAT_BD           \
-                                     ") [" #type " %d]\n"),                   \
+                                     ") [" #type " %d]"),                     \
                          rcount1, _obj->nam.x, _obj->nam.y, dxf)              \
               GCC46_DIAG_RESTORE                                              \
               free (s1);                                                      \
             }                                                                 \
         }                                                                     \
       else                                                                    \
-        LOG_TRACE (#nam ": (" FORMAT_BD ", " FORMAT_BD ") [" #type " %d]\n",  \
+        LOG_TRACE (#nam ": (" FORMAT_BD ", " FORMAT_BD ") [" #type " %d]",    \
                    _obj->nam.x, _obj->nam.y, dxf)                             \
+      LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                            \
+      LOG_TRACE ("\n")                                                        \
     }
 #define FIELD_3PT_TRACE(nam, type, dxf)                                       \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
@@ -178,9 +180,9 @@
           char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
           if (s2)                                                             \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
               LOG_TRACE (strcat (s2, ": (" FORMAT_BD ", " FORMAT_BD           \
-                                     ", " FORMAT_BD ") [" #type " %d]\n"),    \
+                                     ", " FORMAT_BD ") [" #type " %d]"),      \
                          rcount1, rcount2, _obj->nam.x, _obj->nam.y,          \
                          _obj->nam.z, dxf)                                    \
               GCC46_DIAG_RESTORE                                              \
@@ -189,9 +191,9 @@
             }                                                                 \
           else                                                                \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
               LOG_TRACE (strcat (s1, ": (" FORMAT_BD ", " FORMAT_BD           \
-                                     ", " FORMAT_BD ") [" #type " %d]\n"),    \
+                                     ", " FORMAT_BD ") [" #type " %d]"),      \
                          rcount1, _obj->nam.x, _obj->nam.y, _obj->nam.z, dxf) \
               GCC46_DIAG_RESTORE                                              \
               free (s1);                                                      \
@@ -199,8 +201,10 @@
         }                                                                     \
       else                                                                    \
         LOG_TRACE (#nam ": (" FORMAT_BD ", " FORMAT_BD ", " FORMAT_BD         \
-                        ") [" #type " %d]\n",                                 \
+                        ") [" #type " %d]",                                   \
                    _obj->nam.x, _obj->nam.y, _obj->nam.z, dxf)                \
+      LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                            \
+      LOG_TRACE ("\n")                                                        \
     }
 
 #define FIELD_VALUE(nam) _obj->nam
@@ -580,19 +584,24 @@
 #define FIELD_TIMEBLL(nam, dxf)                                               \
   {                                                                           \
     _obj->nam = bit_read_TIMEBLL (dat);                                       \
-    LOG_TRACE (#nam ": %.8f  (" FORMAT_BL ", " FORMAT_BL ") [TIMEBLL %d]\n",  \
+    LOG_TRACE (#nam ": %.8f  (" FORMAT_BL ", " FORMAT_BL ") [TIMEBLL %d]",    \
                _obj->nam.value, _obj->nam.days, _obj->nam.ms, dxf);           \
+    LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
+    LOG_TRACE ("\n")                                                          \
   }
 #define FIELD_TIMERLL(nam, dxf)                                               \
   {                                                                           \
     _obj->nam = bit_read_TIMERLL (dat);                                       \
-    LOG_TRACE (#nam ": %.8f  (" FORMAT_RL ", " FORMAT_RL ") [TIMERLL %d]\n",  \
+    LOG_TRACE (#nam ": %.8f  (" FORMAT_RL ", " FORMAT_RL ") [TIMERLL %d]",    \
                _obj->nam.value, _obj->nam.days, _obj->nam.ms, dxf);           \
+    LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
+    LOG_TRACE ("\n")                                                          \
   }
 #define FIELD_CMC(color, dxf1, dxf2)                                          \
   {                                                                           \
     bit_read_CMC (dat, &_obj->color);                                         \
     LOG_TRACE (#color ".index: %d [CMC.BS %d]\n", _obj->color.index, dxf1);   \
+    LOG_INSANE (" @%lu.%u\n", dat->byte, dat->bit)                            \
     if (dat->version >= R_2004)                                               \
       {                                                                       \
         LOG_TRACE (#color ".rgb: 0x%06x [CMC.BL %d]\n",                       \
@@ -610,16 +619,17 @@
   {                                                                           \
     bit_read_CMC (dat, &_obj->o.color);                                       \
     LOG_TRACE (#o "." #color ".index: %d [CMC.BS %d]\n", _obj->o.color.index, dxf1); \
+    LOG_INSANE (" @%lu.%u\n", dat->byte, dat->bit)                            \
     if (dat->version >= R_2004)                                               \
       {                                                                       \
-        LOG_TRACE (#o "." #color ".rgb: 0x%06x [CMC.BL %d]\n",                       \
+        LOG_TRACE (#o "." #color ".rgb: 0x%06x [CMC.BL %d]\n",                \
                    (unsigned)_obj->o.color.rgb, dxf2);                        \
-        LOG_TRACE (#o "." #color ".flag: 0x%x [CMC.RC]\n",                           \
+        LOG_TRACE (#o "." #color ".flag: 0x%x [CMC.RC]\n",                    \
                    (unsigned)_obj->o.color.flag);                             \
         if (_obj->o.color.flag & 1)                                           \
-          LOG_TRACE (#o "." #color ".name: %s [CMC.TV]\n", _obj->o.color.name);      \
+          LOG_TRACE (#o "." #color ".name: %s [CMC.TV]\n", _obj->o.color.name);\
         if (_obj->o.color.flag & 2)                                           \
-          LOG_TRACE (#o "." #color ".bookname: %s [CMC.TV]\n",                       \
+          LOG_TRACE (#o "." #color ".bookname: %s [CMC.TV]\n",                \
                      _obj->o.color.book_name);                                \
       }                                                                       \
   }
