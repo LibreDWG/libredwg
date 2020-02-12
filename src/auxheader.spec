@@ -21,6 +21,7 @@
   SINCE (R_2000) {
     IF_ENCODE_FROM_EARLIER {
       BITCODE_RS def_unknown_6rs[] = { 4, 0x565, 0, 0, 2, 1 };
+      BITCODE_RL def_unknown_5rl[] = { 0, 0, 0, 256, 393218 };
       FIELD_VALUE (aux_intro[0]) = 0xff;
       FIELD_VALUE (aux_intro[1]) = 0x77;
       FIELD_VALUE (aux_intro[2]) = 0x01;
@@ -30,6 +31,7 @@
       FIELD_VALUE (dwg_version_2) = dwg->header.dwg_version;
       FIELD_VALUE (maint_version_2) = dwg->header.maint_version;
       memcpy (FIELD_VALUE (unknown_6rs), def_unknown_6rs, sizeof(def_unknown_6rs));
+      memcpy (FIELD_VALUE (unknown_5rl), def_unknown_5rl, sizeof(def_unknown_5rl));
       FIELD_VALUE (TDCREATE) = dwg->header_vars.TDCREATE.value;
       FIELD_VALUE (TDUPDATE) = dwg->header_vars.TDUPDATE.value;
       FIELD_VALUE (HANDSEED) = dwg->header_vars.HANDSEED
