@@ -2546,6 +2546,49 @@ json_AppInfoHistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   return 1;
 }
 
+static void
+json_FileDepList_Files (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                        jsmntokens_t *restrict tokens,
+                        struct Dwg_FileDepList *o, int size)
+{
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  o->files = calloc (size, sizeof (Dwg_FileDepList_Files));
+  o->num_files = size;
+  for (int j = 0; j < size; j++)
+    {
+      int keys;
+      Dwg_FileDepList_Files *_obj = &o->files[j];
+      tokens->index++;
+      t = &tokens->tokens[tokens->index];
+      keys = t->size;
+      assert (t->type == JSMN_OBJECT);
+      tokens->index++;
+      for (int k = 0; k < keys; k++)
+        {
+          char key[80];
+          json_fixed_key (key, dat, tokens);
+          t = &tokens->tokens[tokens->index];
+          // clang-format off
+          if (0) ; // else
+          FIELD_T32 (filename, 0)
+          FIELD_T32 (filepath, 0)
+          FIELD_T32 (fingerprint, 0)
+          FIELD_T32 (version, 0)
+          FIELD_RL (feature_index, 0)
+          FIELD_RL(timestamp, 0)
+          FIELD_RL (filesize, 0)
+          FIELD_RL (affects_graphics, 0)
+          FIELD_RL (refcount, 0)
+          else
+            {
+              LOG_TRACE ("%s\n", key);
+              json_advance_unknown (dat, tokens, 0);
+            }
+          // clang-format on
+        }
+    }
+}
+
 static int
 json_FileDepList (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   jsmntokens_t *restrict tokens)
@@ -2585,11 +2628,12 @@ json_FileDepList (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               tokens->index++;
               for (int j = 0; j < size1; j++)
                 {
-                  json_fixed_key (key, dat, tokens);
-                  LOG_TRACE ("%s\n", key)
                   t = &tokens->tokens[tokens->index];
                   if (t->type == JSMN_STRING)
-                    _obj->features[j] = json_string (dat, tokens);
+                    {
+                      _obj->features[j] = json_string (dat, tokens);
+                      LOG_TRACE ("  %s\n", _obj->features[j]);
+                    }
                   else if (t->type == JSMN_PRIMITIVE)
                     tokens->index++;
                   else
@@ -2599,48 +2643,12 @@ json_FileDepList (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         }
       else if (strEQc (key, "files"))
         {
-          if (t->type != JSMN_ARRAY)
+          if (t->type != JSMN_ARRAY) // of OBJECTs
             json_advance_unknown (dat, tokens, 0);
+          else if (t->size)
+            json_FileDepList_Files (dat, dwg, tokens, _obj, t->size);
           else
-            {
-              int size1 = t->size;
-              _obj->files = calloc (size1, sizeof (Dwg_FileDepList_Files));
-              _obj->num_files = size1;
-              tokens->index++;
-              for (int j = 0; j < size1; j++)
-                {
-                  int keys = t->size;
-                  for (int k = 0; k < keys; k++)
-                    {
-                      json_fixed_key (key, dat, tokens);
-                      t = &tokens->tokens[tokens->index];
-                      if (strEQc (key, "timestamp"))
-                        {
-                          _obj->files[j].timestamp
-                              = (BITCODE_RL)json_long (dat, tokens);
-                          LOG_TRACE ("%s: " FORMAT_RL "\n", key,
-                                     _obj->files[j].timestamp)
-                        }
-                      // clang-format off
-                      FIELD_T32 (files[j].filename, 0)
-                      FIELD_T32 (files[j].filepath, 0)
-                      FIELD_T32 (files[j].fingerprint, 0)
-                      FIELD_T32 (files[j].version, 0)
-                      FIELD_RL (files[j].feature_index, 0)
-                      //FIELD_RL (files[j].timestamp, 0)
-                      FIELD_RL (files[j].filesize, 0)
-                      FIELD_RL (files[j].affects_graphics, 0)
-                      FIELD_RL (files[j].refcount, 0)
-                      else
-                        {
-                          LOG_TRACE ("%s\n", key);
-                          json_advance_unknown (dat, tokens, 0);
-                        }
-                      // clang-format on
-                    }
-                  tokens->index++;
-                }
-            }
+            tokens->index++; // empty array
         }
       else
         {
