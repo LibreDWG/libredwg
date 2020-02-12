@@ -5854,7 +5854,7 @@ typedef struct _dwg_struct
     BITCODE_RS   dwg_version_2;
     BITCODE_RS   maint_version_2;
     BITCODE_RS   unknown_6rs[6];
-    BITCODE_RC   unknown_20rc[20]; /* some vars, maybe 5xRL */
+    BITCODE_RL   unknown_5rl[5];
     BITCODE_RD   TDCREATE; /* ?? format TD */
     BITCODE_RD   TDUPDATE;
     BITCODE_RL   HANDSEED;

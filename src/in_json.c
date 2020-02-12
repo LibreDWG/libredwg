@@ -2330,11 +2330,14 @@ json_AuxHeader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RS (maint_version_1, 0)
       FIELD_RSx (dwg_version_2, 0)
       FIELD_RS (maint_version_2, 0)
+      // TODO: inlined vector
+      // FIELD_VECTOR_N (unknown_6rs, RS, 6, 0)
       FIELD_TFFx (unknown_6rs, 12, 0)
       //for (i=0; i<6; i++) {
       //  FIELD_RSx (unknown_6rs[i], 0); /* 5 0x893 5 0x893 0 1 */
       //}
-      FIELD_TFF (unknown_20rc, 20, 0) // documented as 5xRL, but really looks like some RC flags
+      // FIELD_VECTOR_N (unknown_5rl, RL, 5, 0)
+      FIELD_TFFx (unknown_5rl, 20, 0)
       FIELD_RD (TDCREATE, 0)
       FIELD_RD (TDUPDATE, 0)
       FIELD_RLx (HANDSEED, 0)

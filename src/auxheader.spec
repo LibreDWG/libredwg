@@ -52,14 +52,21 @@
   FIELD_RS (maint_version_1, 0);
   FIELD_RSx (dwg_version_2, 0);
   FIELD_RS (maint_version_2, 0);
-#if 1
+#ifdef IS_JSON
   FIELD_TFFx (unknown_6rs, 12, 0);
 #else
+  // TODO: inlined vector without malloc
   for (i = 0; i < 6; i++) {
     FIELD_RSx (unknown_6rs[i], 0); /* 5 0x893 5 0x893 0 1 */
   }
 #endif
-  FIELD_TFF (unknown_20rc, 20, 0) // documented as 5xRL, but really looks like some RC flags
+#ifdef IS_JSON
+  FIELD_TFFx (unknown_5rl, 20, 0)
+#else
+  for (i = 0; i < 5; i++) {
+    FIELD_RL (unknown_5rl[i], 0);
+  }
+#endif
   //DEBUG_HERE;
   FIELD_RD (TDCREATE, 0);
   //DEBUG_HERE;
@@ -78,7 +85,7 @@
   FIELD_RL (zero_8, 0);
   //DEBUG_HERE;
   SINCE (R_2018) {
-#if 1
+#ifdef IS_JSON
     FIELD_TFFx (zero_18, 6, 0);
 #else
     for (i = 0; i < 3; i++) {
