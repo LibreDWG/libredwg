@@ -215,15 +215,12 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
         }                                                                     \
       else if (strEQc (_fmt, "%-16.14f"))                                     \
         {                                                                     \
-          char *_s;                                                           \
-          if (strEQc (buf, "0.00000000000000"))                               \
-            strcpy (buf, "0.0");                                              \
-          else if ((_s = strstr (buf, ".00000000000000")))                    \
-            strcpy (_s, ".0");                                                \
-          else if ((_s = strstr (buf, ".50000000000000")))                    \
-            strcpy (_s, ".5");                                                \
-          else if ((_s = strstr (buf, ".12500000000000")))                    \
-            strcpy (_s, ".125");                                              \
+          int k = strlen (buf);                                               \
+          if (strrchr (buf, '.') && buf[k-1] == '0')                          \
+            {                                                                 \
+              for (k--; k > 1 && buf[k-1] != '.' && buf[k] == '0'; k--)       \
+                buf[k] = '\0';                                                \
+            }                                                                 \
         }                                                                     \
       fprintf (dat->fh, "%s\r\n", buf);                                       \
     }

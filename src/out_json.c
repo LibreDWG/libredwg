@@ -141,16 +141,14 @@ static char* _path_field(const char *path);
 #define VALUE_RD(value, dxf)                                                  \
   {                                                                           \
     char _buf[256];                                                           \
-    char *_s;                                                                 \
+    int k;                                                                    \
     snprintf (_buf, 255, FORMAT_RD, value);                                   \
-    if (strEQc (_buf, "0.00000000000000"))                                    \
-      strcpy (_buf, "0.0");                                                   \
-    else if ((_s = strstr (_buf, ".00000000000000")))                         \
-      strcpy (_s, ".0");                                                      \
-    else if ((_s = strstr (_buf, ".50000000000000")))                         \
-      strcpy (_s, ".5");                                                      \
-    else if ((_s = strstr (_buf, ".12500000000000")))                         \
-      strcpy (_s, ".125");                                                    \
+    k = strlen (_buf);                                                        \
+    if (strrchr (_buf, '.') && _buf[k-1] == '0')                              \
+      {                                                                       \
+        for (k--; k > 1 && _buf[k-1] != '.' && _buf[k] == '0'; k--)           \
+          _buf[k] = '\0';                                                     \
+      }                                                                       \
     fprintf (dat->fh, "%s", _buf);                                            \
   }
 #define VALUE_2RD(pt, dxf)                                                    \
@@ -427,13 +425,20 @@ static char* _path_field(const char *path);
 #define SUB_FIELD_BL(o, nam, dxf) SUB_FIELD (o, nam, BL, dxf)
 #define SUB_FIELD_BLx(o, nam, dxf) SUB_FIELD (o, nam, BLx, dxf)
 #define SUB_FIELD_BLd(o, nam, dxf) SUB_FIELD (o, nam, BLd, dxf)
-#define SUB_FIELD_BD(o, nam, dxf) SUB_FIELD (o, nam, BD, dxf)
 #define SUB_FIELD_RC(o, nam, dxf) SUB_FIELD (o, nam, RC, dxf)
 #define SUB_FIELD_RS(o, nam, dxf) SUB_FIELD (o, nam, RS, dxf)
-#define SUB_FIELD_RD(o, nam, dxf) SUB_FIELD (o, nam, RD, dxf)
 #define SUB_FIELD_RL(o, nam, dxf) SUB_FIELD (o, nam, RL, dxf)
 #define SUB_FIELD_BLL(o, nam, dxf) SUB_FIELD (o, nam, BLL, dxf)
 #define SUB_FIELD_RLL(o, nam, dxf) SUB_FIELD (o, nam, RLL, dxf)
+
+#define SUB_FIELD_BD(o, nam, dxf)                                             \
+  if (!memBEGINc (#nam, "num_"))                                              \
+    {                                                                         \
+      PREFIX fprintf (dat->fh, "\"%s\": ", _path_field(#nam));                \
+      VALUE_RD (_obj->o.nam, dxf);                                            \
+      fprintf (dat->fh, ",\n");                                               \
+    }
+#define SUB_FIELD_RD(o, nam, dxf) SUB_FIELD_BD (o, nam, dxf)
 #define SUB_FIELD_3BD_inl(o, nam, dxf)                                        \
   SUB_FIELD_RD (o, x, dxf);                                                   \
   SUB_FIELD_RD (o, y, dxf);                                                   \
