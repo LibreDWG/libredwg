@@ -283,6 +283,7 @@ json_wstring (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
       return NULL;
     }
   tokens->index++;
+  dat->chain[t->end] = '\0';
   return bit_utf8_to_TU ((char *)&dat->chain[t->start]);
 }
 
