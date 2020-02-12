@@ -968,6 +968,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       else
         {
           BITCODE_BL old_size = dat->size;
+          BITCODE_BL vcount;
           dat->size = end_address;
           // clang-format off
           #include "auxheader.spec"

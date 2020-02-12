@@ -5839,9 +5839,7 @@ typedef struct _dwg_struct
   /* #define DWG_AUXHEADER_SIZE 123 */
   struct Dwg_AuxHeader
   {
-    BITCODE_RC   aux_intro_1; /* ff 77 01 */
-    BITCODE_RC   aux_intro_2;
-    BITCODE_RC   aux_intro_3;
+    BITCODE_RC   aux_intro[3]; /* ff 77 01 */
     BITCODE_RS   dwg_version;
     BITCODE_RS   maint_version;
     BITCODE_RL   numsaves;

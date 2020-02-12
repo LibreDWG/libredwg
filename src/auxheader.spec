@@ -20,16 +20,16 @@
 
   SINCE (R_2000) {
     IF_ENCODE_FROM_EARLIER {
-      BITCODE_RS tmpunknown[] = {5, 0x893, 5, 0x893, 0, 1};
-      FIELD_VALUE (aux_intro_1) = 0xff;
-      FIELD_VALUE (aux_intro_2) = 0x77;
-      FIELD_VALUE (aux_intro_3) = 0x01;
+      BITCODE_RS def_unknown_6rs[] = { 4, 0x565, 0, 0, 2, 1 };
+      FIELD_VALUE (aux_intro[0]) = 0xff;
+      FIELD_VALUE (aux_intro[1]) = 0x77;
+      FIELD_VALUE (aux_intro[2]) = 0x01;
       FIELD_VALUE (minus_1) = -1;
       FIELD_VALUE (dwg_version) = dwg->header.dwg_version;
       FIELD_VALUE (maint_version) = dwg->header.maint_version;
       FIELD_VALUE (dwg_version_2) = dwg->header.dwg_version;
       FIELD_VALUE (maint_version_2) = dwg->header.maint_version;
-      memcpy (FIELD_VALUE (unknown_6rs), tmpunknown, sizeof(tmpunknown));
+      memcpy (FIELD_VALUE (unknown_6rs), def_unknown_6rs, sizeof(def_unknown_6rs));
       FIELD_VALUE (TDCREATE) = dwg->header_vars.TDCREATE.value;
       FIELD_VALUE (TDUPDATE) = dwg->header_vars.TDUPDATE.value;
       FIELD_VALUE (HANDSEED) = dwg->header_vars.HANDSEED
@@ -38,9 +38,7 @@
     }
   }
 
-  FIELD_RCx (aux_intro_1, 0); /* ff 77 01 */
-  FIELD_RCx (aux_intro_2, 0);
-  FIELD_RCx (aux_intro_3, 0);
+  FIELD_VECTOR_INL (aux_intro, RC, 3, 0) /* ff 77 01 */
   FIELD_RSx (dwg_version, 0);
   FIELD_RS (maint_version, 0);
   FIELD_RL (numsaves, 0);
@@ -52,21 +50,8 @@
   FIELD_RS (maint_version_1, 0);
   FIELD_RSx (dwg_version_2, 0);
   FIELD_RS (maint_version_2, 0);
-#ifdef IS_JSON
-  FIELD_TFFx (unknown_6rs, 12, 0);
-#else
-  // TODO: inlined vector without malloc
-  for (i = 0; i < 6; i++) {
-    FIELD_RSx (unknown_6rs[i], 0); /* 5 0x893 5 0x893 0 1 */
-  }
-#endif
-#ifdef IS_JSON
-  FIELD_TFFx (unknown_5rl, 20, 0)
-#else
-  for (i = 0; i < 5; i++) {
-    FIELD_RL (unknown_5rl[i], 0);
-  }
-#endif
+  FIELD_VECTOR_INL (unknown_6rs, RS, 6, 0)
+  FIELD_VECTOR_INL (unknown_5rl, RL, 5, 0)
   //DEBUG_HERE;
   FIELD_RD (TDCREATE, 0);
   //DEBUG_HERE;
@@ -85,11 +70,5 @@
   FIELD_RL (zero_8, 0);
   //DEBUG_HERE;
   SINCE (R_2018) {
-#ifdef IS_JSON
-    FIELD_TFFx (zero_18, 6, 0);
-#else
-    for (i = 0; i < 3; i++) {
-      FIELD_RS (zero_18[i], 0);
-    }
-#endif
+    FIELD_VECTOR_INL (zero_18, RS, 3, 0)
   }

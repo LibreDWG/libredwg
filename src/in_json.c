@@ -168,6 +168,19 @@ static Bit_Chain *g_dat;
 #define FIELD_BD(nam, dxf) _FIELD_FLOAT (nam, BD)
 #define FIELD_RD(nam, dxf) _FIELD_FLOAT (nam, RD)
 
+// NOTE: Only for int types for now, no float. There don't exist any inlined float vectors
+#define FIELD_VECTOR_INL(nam, typ, _size, dxf)                                \
+  else if (strEQc (key, #nam) && t->type == JSMN_ARRAY && t->size == _size)   \
+  {                                                                           \
+    tokens->index++;                                                          \
+    for (int vcount = 0; vcount < _size; vcount++)                            \
+      {                                                                       \
+        _obj->nam[vcount] = (BITCODE_##typ)json_long (dat, tokens);           \
+        LOG_TRACE (#nam "[%d]: " FORMAT_##typ " [" #typ " %d]\n", vcount,     \
+                   _obj->nam[vcount], dxf);                                   \
+      }                                                                       \
+  }
+
 // advance until next known first-level type
 // on OBJECT to end of OBJECT
 // on ARRAY to end of ARRAY
@@ -618,6 +631,7 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 LOG_ERROR ("Invalid FILEHEADER.version %s", version);
             }
         }
+      // FIELD_VECTOR_INL (zero_5, RL, 5, 0)
       else if (strEQc (key, "zero_5") && t->type == JSMN_ARRAY)
         {
           tokens->index++;
@@ -2311,14 +2325,9 @@ json_AuxHeader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       json_fixed_key (key, dat, tokens);
       t = &tokens->tokens[tokens->index];
 
-      if (strEQc (key, "aux_intro_1"))
-        {
-          _obj->aux_intro_1 = (BITCODE_RC)json_long (dat, tokens);
-          LOG_TRACE ("aux_intro_1: 0x%x\n", _obj->aux_intro_1)
-        }
       // clang-format off
-      FIELD_RCx (aux_intro_2, 0)
-      FIELD_RCx (aux_intro_3, 0)
+      if (0) ; // else
+      FIELD_VECTOR_INL (aux_intro, RC, 3, 0)
       FIELD_RSx (dwg_version, 0)
       FIELD_RS (maint_version, 0)
       FIELD_RL (numsaves, 0)
@@ -2330,14 +2339,8 @@ json_AuxHeader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RS (maint_version_1, 0)
       FIELD_RSx (dwg_version_2, 0)
       FIELD_RS (maint_version_2, 0)
-      // TODO: inlined vector
-      // FIELD_VECTOR_N (unknown_6rs, RS, 6, 0)
-      FIELD_TFFx (unknown_6rs, 12, 0)
-      //for (i=0; i<6; i++) {
-      //  FIELD_RSx (unknown_6rs[i], 0); /* 5 0x893 5 0x893 0 1 */
-      //}
-      // FIELD_VECTOR_N (unknown_5rl, RL, 5, 0)
-      FIELD_TFFx (unknown_5rl, 20, 0)
+      FIELD_VECTOR_INL (unknown_6rs, RS, 6, 0)
+      FIELD_VECTOR_INL (unknown_5rl, RL, 5, 0)
       FIELD_RD (TDCREATE, 0)
       FIELD_RD (TDUPDATE, 0)
       FIELD_RLx (HANDSEED, 0)
@@ -2352,11 +2355,7 @@ json_AuxHeader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RL (zero_6, 0)
       FIELD_RL (zero_7, 0)
       FIELD_RL (zero_8, 0)
-      //SINCE (R_2018) {
-      //  for (i = 0; i < 3; i++) {
-      //    FIELD_RS (zero_18[i], 0);
-      //  }
-      //}
+      FIELD_VECTOR_INL (zero_18, RS, 3, 0)
       // clang-format on
       else
         {

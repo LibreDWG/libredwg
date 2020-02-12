@@ -421,6 +421,8 @@ static bool env_var_checked_p;
 
 #define FIELD_VECTOR(nam, type, size, dxf)                                    \
   FIELD_VECTOR_N (nam, type, _obj->size, dxf)
+#define FIELD_VECTOR_INL(nam, type, size, dxf)                                \
+  FIELD_VECTOR_N (nam, type, size, dxf)
 
 #define VALUE_HANDLE(hdlptr, nam, handle_code, dxf)                           \
   IF_ENCODE_SINCE_R13                                                         \
@@ -940,13 +942,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         dwg->header.section[SECTION_AUXHEADER_R2000].number = 5;
         dwg->header.section[SECTION_AUXHEADER_R2000].address = dat->byte;
 
-        if (!_obj->dwg_version)
+        if (!_obj->dwg_version) // todo: needed?
           {
-            BITCODE_RS tmpunknown[] = { 4, 0x565, 0, 0, 2, 1 };
+            BITCODE_RS def_unknown_6rs[] = { 4, 0x565, 0, 0, 2, 1 };
             LOG_TRACE ("Use AuxHeader defaults...\n");
-            FIELD_VALUE (aux_intro_1) = 0xff;
-            FIELD_VALUE (aux_intro_2) = 0x77;
-            FIELD_VALUE (aux_intro_3) = 0x01;
+            FIELD_VALUE (aux_intro[0]) = 0xff;
+            FIELD_VALUE (aux_intro[1]) = 0x77;
+            FIELD_VALUE (aux_intro[2]) = 0x01;
             FIELD_VALUE (minus_1) = -1;
             FIELD_VALUE (dwg_version) = dwg->header.dwg_version;
             FIELD_VALUE (maint_version) = dwg->header.maint_version;
@@ -954,7 +956,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             FIELD_VALUE (dwg_version_2) = dwg->header.dwg_version;
             FIELD_VALUE (maint_version_1) = dwg->header.maint_version;
             FIELD_VALUE (maint_version_2) = dwg->header.maint_version;
-            memcpy (FIELD_VALUE (unknown_6rs), tmpunknown, sizeof (tmpunknown));
+            memcpy (FIELD_VALUE (unknown_6rs), def_unknown_6rs, sizeof(def_unknown_6rs));
             FIELD_VALUE (TDCREATE) = dwg->header_vars.TDCREATE.value;
             FIELD_VALUE (TDUPDATE) = dwg->header_vars.TDUPDATE.value;
             if (dwg->header_vars.HANDSEED)

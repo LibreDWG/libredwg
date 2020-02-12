@@ -502,6 +502,8 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
 
 #define FIELD_VECTOR(nam, type, size, dxf)                                    \
   FIELD_VECTOR_N (nam, type, _obj->size, dxf)
+#define FIELD_VECTOR_INL(nam, type, size, dxf)                                \
+  FIELD_VECTOR_N(nam, type, size, dxf)
 
 #define FIELD_2RD_VECTOR(nam, size, dxf)                                      \
   KEY (nam);                                                                  \

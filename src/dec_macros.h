@@ -821,6 +821,18 @@
                       _obj->name[vcount])                                     \
         }                                                                     \
     }
+// inlined, with const size and without malloc
+#define FIELD_VECTOR_INL(name, type, size, dxf)                               \
+  if (size > 0)                                                               \
+    {                                                                         \
+      VECTOR_CHKCOUNT (name, type, size, dat)                                 \
+      for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
+        {                                                                     \
+          _obj->name[vcount] = bit_read_##type (dat);                         \
+          LOG_TRACE (#name "[%ld]: " FORMAT_##type "\n", (long)vcount,        \
+                      _obj->name[vcount])                                     \
+        }                                                                     \
+    }
 #define FIELD_VECTOR_T(name, size, dxf)                                       \
   if (_obj->size > 0)                                                         \
     {                                                                         \
