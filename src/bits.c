@@ -994,8 +994,8 @@ bit_write_MS (Bit_Chain *dat, BITCODE_MS value)
 {
   if (value > 0x7fff)
     {
-      bit_write_RS (dat, (value & 0xffff8000) >> 15);
-      bit_write_RS (dat, value & 0x7fff);
+      bit_write_RS (dat, value);
+      bit_write_RS (dat, value >> 15);
     }
   else
     {
