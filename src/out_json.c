@@ -138,11 +138,40 @@ static char* _path_field(const char *path);
 #define VALUE_RS(value, dxf) VALUE (value, RS, dxf)
 #define VALUE_RL(value, dxf) VALUE (value, RL, dxf)
 #define VALUE_RLL(value, dxf) VALUE (value, RLL, dxf)
-#define VALUE_RD(value, dxf) VALUE (value, RD, dxf)
-#define VALUE_2RD(pt, dxf) fprintf (dat->fh, "[ " FORMAT_RD ", " FORMAT_RD " ],\n", pt.x, pt.y)
+#define VALUE_RD(value, dxf)                                                  \
+  {                                                                           \
+    char _buf[256];                                                           \
+    char *_s;                                                                 \
+    snprintf (_buf, 255, FORMAT_RD, value);                                   \
+    if (strEQc (_buf, "0.00000000000000"))                                    \
+      strcpy (_buf, "0.0");                                                   \
+    else if ((_s = strstr (_buf, ".00000000000000")))                         \
+      strcpy (_s, ".0");                                                      \
+    else if ((_s = strstr (_buf, ".50000000000000")))                         \
+      strcpy (_s, ".5");                                                      \
+    else if ((_s = strstr (_buf, ".12500000000000")))                         \
+      strcpy (_s, ".125");                                                    \
+    fprintf (dat->fh, "%s", _buf);                                            \
+  }
+#define VALUE_2RD(pt, dxf)                                                    \
+  {                                                                           \
+    fprintf (dat->fh, "[ ");                                                  \
+    VALUE_RD (pt.x, 0);                                                       \
+    fprintf (dat->fh, ", ");                                                  \
+    VALUE_RD (pt.y, 0);                                                       \
+    fprintf (dat->fh, " ],\n");                                               \
+  }
 #define VALUE_2DD(pt, d1, d2, dxf) VALUE_2RD (pt, dxf)
 #define VALUE_3RD(pt, dxf)                                                    \
-  fprintf (dat->fh, "[ " FORMAT_RD ", " FORMAT_RD ", " FORMAT_RD " ],\n", pt.x, pt.y, pt.z)
+  {                                                                           \
+    fprintf (dat->fh, "[ ");                                                  \
+    VALUE_RD (pt.x, 0);                                                       \
+    fprintf (dat->fh, ", ");                                                  \
+    VALUE_RD (pt.y, 0);                                                       \
+    fprintf (dat->fh, ", ");                                                  \
+    VALUE_RD (pt.z, 0);                                                       \
+    fprintf (dat->fh, " ],\n");                                               \
+  }
 #define VALUE_3BD(pt, dxf) VALUE_3RD (pt, dxf)
 #define VALUE_TV(nam, dxf)
 
@@ -308,11 +337,16 @@ static char* _path_field(const char *path);
 #define FIELD_BS(nam, dxf) FIELD (nam, BS, dxf)
 #define FIELD_BL(nam, dxf) FIELD (nam, BL, dxf)
 #define FIELD_BLL(nam, dxf) FIELD (nam, BLL, dxf)
-#define FIELD_BD(nam, dxf) FIELD (nam, BD, dxf)
+#define FIELD_BD(nam, dxf)                                                    \
+  {                                                                           \
+    PREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));                 \
+    VALUE_RD (_obj->nam, dxf);                                                \
+    fprintf (dat->fh, ",\n");                                                 \
+  }
 #define FIELD_RC(nam, dxf) FIELD (nam, RC, dxf)
 #define FIELD_RCx(nam, dxf) FIELD (nam, RC, dxf)
 #define FIELD_RS(nam, dxf) FIELD (nam, RS, dxf)
-#define FIELD_RD(nam, dxf) FIELD (nam, RD, dxf)
+#define FIELD_RD(nam, dxf) FIELD_BD (nam, dxf)
 #define FIELD_RL(nam, dxf) FIELD (nam, RL, dxf)
 #define FIELD_RLL(nam, dxf) FIELD (nam, RLL, dxf)
 #define FIELD_MC(nam, dxf) FIELD (nam, MC, dxf)
@@ -355,21 +389,18 @@ static char* _path_field(const char *path);
 #define FIELD_BT(nam, dxf) FIELD (nam, BT, dxf);
 #define FIELD_4BITS(nam, dxf) FIELD (nam, 4BITS, dxf)
 #define FIELD_BE(nam, dxf) FIELD_3RD (nam, dxf)
-#define FIELD_DD(nam, _default, dxf)                                          \
-  PREFIX fprintf (dat->fh, "\"" #nam "\": " FORMAT_DD ",\n", _obj->nam)
+#define FIELD_DD(nam, _default, dxf) FIELD_BD (nam, dxf)
 #define FIELD_2DD(nam, d1, d2, dxf) FIELD_2RD (nam, dxf)
 #define FIELD_3DD(nam, def, dxf) FIELD_3RD (nam, dxf)
 #define FIELD_2RD(nam, dxf)                                                   \
   {                                                                           \
-    PREFIX fprintf (dat->fh, "\"" #nam "\": [ " FORMAT_RD ", " FORMAT_RD " ],\n", _obj->nam.x,      \
-                    _obj->nam.y);                                             \
+    PREFIX fprintf (dat->fh, "\"" #nam "\": "); VALUE_2RD (_obj->nam, dxf);   \
   }
 #define FIELD_2BD(nam, dxf) FIELD_2RD (nam, dxf)
 #define FIELD_2BD_1(nam, dxf) FIELD_2RD (nam, dxf)
 #define FIELD_3RD(nam, dxf)                                                   \
   {                                                                           \
-    PREFIX fprintf (dat->fh, "\"" #nam "\": [ " FORMAT_RD ", " FORMAT_RD ", " FORMAT_RD " ],\n", _obj->nam.x,  \
-                    _obj->nam.y, _obj->nam.z);                                \
+    PREFIX fprintf (dat->fh, "\"" #nam "\": "); VALUE_3RD (_obj->nam, dxf);   \
   }
 #define FIELD_3BD(nam, dxf) FIELD_3RD (nam, dxf)
 #define FIELD_3BD_1(nam, dxf) FIELD_3RD (nam, dxf)
