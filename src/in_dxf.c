@@ -73,9 +73,13 @@ static Dxf_Objs *dxf_objs;
 static void *
 xcalloc (size_t n, size_t s)
 {
-  void *p = calloc (n, s);
+  void *p;
+  if ((n * s) > INT32_MAX)
+    goto err;
+  p = calloc (n, s);
   if (!p)
     {
+    err:
       LOG_ERROR ("Out of memory with calloc %ld * %ld\n", (long)n,
                  (long)s);
       exit (1);
