@@ -269,6 +269,8 @@
 #if defined(IS_JSON)
 #  undef JSON
 #  define JSON if (1)
+#  undef DXF_OR_PRINT
+#  define DXF_OR_PRINT if (1)
 #endif
 
 #if defined(IS_FREE)

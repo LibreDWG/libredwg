@@ -1010,6 +1010,7 @@ DWG_ENTITY (LINE)
     {
       DXF_OR_PRINT
         {
+          JSON { FIELD_B (z_is_zero, 0); }
           FIELD_3DPOINT (start, 10);
           FIELD_3DPOINT (end, 11);
         }
@@ -1034,7 +1035,6 @@ DWG_ENTITY (LINE)
           FIELD_3PT_TRACE (start, DD, 10);
           FIELD_3PT_TRACE (end, DD, 11);
         }
-
       ENCODER
         {
           FIELD_VALUE (z_is_zero) = (FIELD_VALUE (start.z) == 0.0 &&
@@ -1308,6 +1308,7 @@ DWG_ENTITY (_3DFACE)
 
       DXF_OR_PRINT
         {
+          JSON { FIELD_B (z_is_zero, 0); }
           FIELD_3DPOINT (corner1, 10);
         }
       DECODER
@@ -2631,7 +2632,11 @@ DWG_OBJECT (LAYER)
     DXF_OR_PRINT {
       int lw = dxf_cvt_lweight (FIELD_VALUE (linewt));
       FIELD_B (plotflag, 290);
-      KEY (linewt); VALUE_RC ((signed char)lw, 370);
+      JSON {
+        FIELD_RC (linewt, 370);
+      } else {
+        KEY (linewt); VALUE_RC ((signed char)lw, 370);
+      }
     }
   }
   FIELD_CMC (color, 62,420);
