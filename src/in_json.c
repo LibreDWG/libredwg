@@ -264,10 +264,33 @@ json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
       json_advance_unknown (dat, tokens, 0);
       return NULL;
     }
-  key = malloc (len + 1);
-  // FIXME: Unquote \", convert Unicode to \\U+xxxx as in bit_embed_TU
-  memcpy (key, &dat->chain[t->start], len);
-  key[len] = '\0';
+  // Unquote \", convert Unicode to \\U+xxxx as in bit_embed_TU
+  if (memchr (&dat->chain[t->start], '\\', len))
+    {
+      len += 8;
+      key = malloc (len);
+      dat->chain[t->end] = '\0';
+      while (!bit_utf8_to_TV (key, &dat->chain[t->start], len))
+        {
+          LOG_INSANE ("Not enough room in quoted string len=%d\n", len-8)
+          len += 8;
+          if (len > 6 * (t->end - t->start))
+            {
+              LOG_ERROR ("bit_utf8_to_TV loop len=%d vs %d \"%.*s\"", len, t->end - t->start,
+                         t->end - t->start, &dat->chain[t->start]);
+              len = t->end - t->start;
+              goto normal;
+            }
+          key = realloc (key, len);
+        }
+    }
+  else
+    {
+    normal:
+      key = malloc (len + 1);
+      memcpy (key, &dat->chain[t->start], len);
+      key[len] = '\0';
+    }
   tokens->index++;
   return key;
 }

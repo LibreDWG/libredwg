@@ -1832,7 +1832,7 @@ bit_convert_TU (BITCODE_TU restrict wstr)
     Returns NULL if not enough room in dest.
 */
 char *
-bit_utf8_to_TV (char *restrict dest, const char *restrict src, const int destlen)
+bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src, const int destlen)
 {
   unsigned char c;
   unsigned char *s = (unsigned char *)src;
@@ -1927,7 +1927,9 @@ bit_utf8_to_TV (char *restrict dest, const char *restrict src, const int destlen
   return d;
 }
 
-/** converts UTF-8 to UCS-2. Returns a copy */
+/** converts UTF-8 to UCS-2. Returns a copy.
+    TODO: unquote json_cquote as above.
+ */
 BITCODE_TU
 bit_utf8_to_TU (char *restrict str)
 {

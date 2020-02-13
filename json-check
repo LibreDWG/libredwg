@@ -26,8 +26,11 @@ esac
 # first create a dwg log to compare against
 ./log -v3 $d
 mv $b.log $b.log.orig
+rm $b.json $b.dwg 2>/dev/null
 ./json -v4 $d
-./dwg -y -v4 $b.json
+if [ -f $b.json ]; then
+    ./dwg -y -v4 $b.json
+fi
 
 if [ -f $b.dwg ]; then
     case `uname` in
@@ -44,10 +47,10 @@ if [ -f $b.dwg ]; then
     else
         echo TeighaFileConverter not installed
     fi
-fi
 
-./log -v3 $b.dwg
-# bash only
-#diff -bu <(grep -B1 'Add entity ' $b.log.orig) <(grep -B1 'Add entity ' $b.log)
-echo diff -bu $b.log.orig $b.log
-diff -bu $b.log.orig $b.log
+    ./log -v3 $b.dwg
+    # bash only
+    #diff -bu <(grep -B1 'Add entity ' $b.log.orig) <(grep -B1 'Add entity ' $b.log)
+    echo diff -bu $b.log.orig $b.log
+    diff -bu $b.log.orig $b.log
+fi

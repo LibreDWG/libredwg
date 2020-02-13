@@ -239,9 +239,10 @@ EXPORT char *bit_embed_TU (BITCODE_TU restrict wstr) ATTRIBUTE_MALLOC;
 EXPORT char *bit_convert_TU (BITCODE_TU restrict wstr) ATTRIBUTE_MALLOC;
 
 /** Converts UTF-8 (dxf,json) to ASCII TV.
-    Unquotes \" to ", undo json_cquote(), \uxxxx or other unicode => \U+XXXX */
+    Unquotes \" to ", undo json_cquote(), \uxxxx or other unicode => \U+XXXX
+    Returns NULL if not enough room in dest. */
 EXPORT char *
-bit_utf8_to_TV (char *restrict dest, const char *restrict src, const int len);
+bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src, const int len);
 
 /** Converts UTF-8 to UCS-2. Returns a copy.
     Needed by dwg importers, writers (e.g. dxf2dwg) */
