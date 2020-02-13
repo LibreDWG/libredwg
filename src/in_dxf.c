@@ -222,6 +222,7 @@ dxf_read_rd (Bit_Chain *dat)
     }
 }
 
+// TODO: TV only, no unicode. We encode only r2000 so far.
 static void
 dxf_read_string (Bit_Chain *dat, char **string)
 {

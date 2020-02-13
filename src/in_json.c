@@ -265,6 +265,7 @@ json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
       return NULL;
     }
   key = malloc (len + 1);
+  // FIXME: Unquote \", convert Unicode to \\U+xxxx as in bit_embed_TU
   memcpy (key, &dat->chain[t->start], len);
   key[len] = '\0';
   tokens->index++;
