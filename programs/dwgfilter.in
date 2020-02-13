@@ -1,0 +1,73 @@
+#!/bin/sh
+# options: --help, --version, --debug, -i
+version() {
+    echo "dwgfilter @PACKAGE_VERSION@"
+    exit
+}
+help() {
+    echo "dwgfilter [OPTIONS...] dwgfile"
+    echo ""
+    echo "OPTIONS: --help,--version"
+    echo "  --debug  keep the tmp json"
+    echo "  -i       write back in-place, with an updating JQ query"
+    echo "  ...      all other options are passed to jq. See 'man jq'"
+    exit
+}
+
+opts=
+# get last arg
+for dwg; do true; done
+for arg in "$@"
+do
+    case $arg in
+        --help) help ;;
+        --version) version ;;
+        --debug) debug=1 ;;
+        $dwg) if [ ! -f "$dwg" ]; then echo DWG "$dwg" not found; exit 1; fi ;;
+        -i)   writemode=1 ;;
+        *)    opts="$opts $arg" ;;
+    esac
+done
+if [ ! -f "$dwg" ]
+then
+    echo Wrong input DWG "$dwg"
+    exit 1
+fi
+if [ -z "$opts" ]
+then
+    echo Input JQ query arguments missing
+    exit 1
+fi
+
+prefix="@prefix@"
+exec_prefix="@exec_prefix@"
+jq="@JQ@"
+jq="${jq:-jq}"
+json="/tmp/dwgfilter-$$.json"
+selfpath="$(realpath $0)"
+if [ "$selfpath" = "@bindir@/dwgfilter" ]; then
+    dwgread="@bindir@/dwgread"
+    dwgwrite="@bindir@/dwgwrite"
+else
+    dwgread="$(dirname $selfpath)/dwgread"
+    dwgwrite="$(dirname $selfpath)/dwgwrite"
+fi
+
+if [ -n "$debug" ]; then
+    dwgread="$dwgread -v3"
+    dwgwrite="$dwgwrite -v3"
+fi
+echo $dwgread -O json -o $json $dwg
+$dwgread -O json -o $json $dwg
+echo $jq "$opts" $json
+$jq "$opts" $json
+fail=$?
+if [ $fail = 0 -a -n "$writemode" ]; then
+    mv "$dwg" "$dwg.bak"
+    echo $dwgwrite -o $dwg $json
+    $dwgwrite -o $dwg $json || ( mv "$dwg.bak" "$dwg"; fail=1)
+fi
+if [ -z "$debug" ]; then
+    rm $json
+fi
+exit $fail

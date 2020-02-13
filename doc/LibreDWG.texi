@@ -844,6 +844,14 @@ With @code{--type NAME} search only NAME entities or objects.
 With @code{--dxf NUM} search only in DXF group NUM fields.
 With @code{--text} searches only TEXT-like entities: TEXT, MTEXT, ATTRIB, ATTDEF.
 
+@item @file{dwgfilter}
+@cindex dwgfilter
+
+Search and modify a single DWG file via @code{jq}, using the powerful
+JQ query expression language on a temporary json file. See @code{man jq}.
+
+With @code{-i} replaces the DWG in-place. This only makes sense with an JQ expression which changes values.
+
 @item @file{dwg2SVG}
 @cindex dwg2SVG
 Convert a DWG to a limited SVG. All paperspace and modelspace enties of type:
