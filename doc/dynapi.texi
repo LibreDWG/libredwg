@@ -5444,7 +5444,7 @@ B
 @item plotflag
 B,	DXF 290
 @item linewt
-RC
+RC,	DXF 370
 @item color
 CMC,	DXF 62
 @item color_rs

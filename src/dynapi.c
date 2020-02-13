@@ -4871,7 +4871,7 @@ static const Dwg_DYNAPI_field _dwg_LAYER_fields[] = {
   { "plotflag",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_LAYER, plotflag),
     0,0,0, 290 },
   { "linewt",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_LAYER, linewt),
-    0,0,0, 0 },
+    0,0,0, 370 },
   { "color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_object_LAYER, color),
     1,0,0, 62 },
   { "color_rs",	"short", sizeof (short),  OFF (struct _dwg_object_LAYER, color_rs),
