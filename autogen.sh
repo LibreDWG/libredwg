@@ -23,6 +23,10 @@ fi
 set -e
 autoreconf --install --symlink "$@" -I m4
 
-git submodule update --init --recursive
+if [ -x "$(which git)" ]; then
+    git submodule update --init --recursive
+else
+    curl https://raw.githubusercontent.com/zserge/jsmn/master/jsmn.h -o jsmn/jsmn.h
+fi
 
 # autogen.sh ends here
