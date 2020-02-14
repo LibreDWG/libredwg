@@ -200,29 +200,29 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
     {                                                                         \
       const char *_fmt = dxf_format (dxf);                                    \
       assert (_fmt);                                                          \
-      GROUP (dxf);                                                            \
-      GCC46_DIAG_IGNORE (-Wformat-nonliteral)                                 \
-      snprintf (buf, 255, _fmt, value);                                       \
-      GCC46_DIAG_RESTORE                                                      \
-      /* not a string, empty num. must be zero */                             \
-      if (strEQc (_fmt, "%s") && !*buf)                                       \
-        strcpy (buf, "0");                                                    \
-      else if (90 <= dxf && dxf < 100)                                        \
+      if (strEQc (_fmt, "%-16.14f"))                                          \
         {                                                                     \
-          /* -Wpointer-to-int-cast */                                         \
-          const int32_t _si = (int32_t) (intptr_t) (value);                   \
-          snprintf (buf, 255, "%6i", _si);                                    \
+          const double _rd = (double)(intptr_t) (value);                      \
+          dxf_print_rd (dat, _rd, dxf);                                       \
         }                                                                     \
-      else if (strEQc (_fmt, "%-16.14f"))                                     \
+      else                                                                    \
         {                                                                     \
-          int k = strlen (buf);                                               \
-          if (strrchr (buf, '.') && buf[k-1] == '0')                          \
+          GROUP (dxf);                                                        \
+          GCC46_DIAG_IGNORE (-Wformat-nonliteral)                             \
+          snprintf (buf, 255, _fmt, value);                                   \
+          GCC46_DIAG_RESTORE                                                  \
+          /* not a string, empty num. must be zero */                         \
+          if (strEQc (_fmt, "%s") && !*buf)                                   \
+            fprintf (dat->fh, "0\r\n");                                       \
+          else if (90 <= dxf && dxf < 100)                                    \
             {                                                                 \
-              for (k--; k > 1 && buf[k-1] != '.' && buf[k] == '0'; k--)       \
-                buf[k] = '\0';                                                \
+              /* -Wpointer-to-int-cast */                                     \
+              const int32_t _si = (int32_t) (intptr_t) (value);               \
+              fprintf (dat->fh, "%6i\r\n", _si);                              \
             }                                                                 \
+          else                                                                \
+            fprintf (dat->fh, "%s\r\n", buf);                                 \
         }                                                                     \
-      fprintf (dat->fh, "%s\r\n", buf);                                       \
     }
 
 static void
