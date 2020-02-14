@@ -1092,8 +1092,8 @@ DWG_ENTITY_END
       BITCODE_RC flag = FIELD_VALUE (flag1); \
       flag = (flag & 1) ? flag & 0x7F : flag | 0x80; /* clear bit 7 */ \
       flag = (flag & 2) ? flag | 0x20 : flag & 0xDF; /* set bit 5 */ \
-      flag &= 0xF8; /* clear the 3 flag bits, and set them: */ \
-      if (_obj->flag == DWG_TYPE_DIMENSION_ALIGNED)       flag |= 1; \
+      flag &= 0xE0; /* clear the 3 flag bits, and set them: */ \
+      if      (_obj->flag == DWG_TYPE_DIMENSION_ALIGNED)  flag |= 1; \
       else if (_obj->flag == DWG_TYPE_DIMENSION_ANG2LN)   flag |= 2; \
       else if (_obj->flag == DWG_TYPE_DIMENSION_DIAMETER) flag |= 3; \
       else if (_obj->flag == DWG_TYPE_DIMENSION_RADIUS)   flag |= 4; \
