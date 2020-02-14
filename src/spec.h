@@ -109,6 +109,9 @@
 #ifndef SUB_FIELD_BSd
 #  define SUB_FIELD_BSd(o, nam, dxf) FIELD_BSd (o.nam, dxf)
 #endif
+#ifndef SUB_FIELD_BSx
+#  define SUB_FIELD_BSx(o, nam, dxf) FIELD_BSx (o.nam, dxf)
+#endif
 #ifndef SUB_FIELD_TU
 #  define SUB_FIELD_TU(o, nam, dxf) FIELD_TU (o.nam, dxf)
 #endif

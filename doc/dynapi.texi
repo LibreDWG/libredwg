@@ -5689,14 +5689,12 @@ RC,	DXF 73
 Dwg_LTYPE_dash*
 @item dashes_r11
 RD*
-@item text_area_is_present
+@item has_strings_area
 B
 @item strings_area
-TF,	DXF 3
+TF
 @item extref_handle
 H
-@item styles
-H*,	DXF 340
 
 @end vtable
 @end indentedblock
@@ -7995,7 +7993,9 @@ struct _dwg_object_LTYPE*
 @item length
 BD,	DXF 49
 @item complex_shapecode
-BS,	DXF 74
+BS,	DXF 75
+@item style
+H
 @item x_offset
 RD,	DXF 44
 @item y_offset
@@ -8005,7 +8005,7 @@ BD,	DXF 46
 @item rotation
 BD,	DXF 50
 @item shape_flag
-BS,	DXF 75
+BS,	DXF 74
 
 @end vtable
 @end indentedblock

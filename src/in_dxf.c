@@ -1417,23 +1417,34 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           _o->dashes[j].length = pair->value.d;
           LOG_TRACE ("LTYPE.dashes[%d].length = %f [BD 49]\n", j,
                      pair->value.d);
+          PRE (R_13)
+            _o->pattern_len += pair->value.d;
         }
       else if (pair->code == 74)
+        {
+          _o->dashes[j].shape_flag = pair->value.i;
+          LOG_TRACE ("LTYPE.dashes[%d].shape_flag = 0%x [RSx 74]\n", j,
+                     pair->value.i);
+          if (_o->dashes[j].shape_flag & 0x4)
+            _o->has_strings_area = 1;
+        }
+      else if (pair->code == 75)
         {
           if (j < 0)
             j++;
           assert (j < num_dashes);
           _o->dashes[j].complex_shapecode = pair->value.i;
-          LOG_TRACE ("LTYPE.dashes[%d].complex_shapecode = %d [RS 74]\n", j,
+          LOG_TRACE ("LTYPE.dashes[%d].complex_shapecode = %d [RS 75]\n", j,
                      pair->value.i);
         }
-      else if (pair->code == 75)
+      else if (pair->code == 340)
         {
-          _o->dashes[j].shape_flag = pair->value.i;
-          LOG_TRACE ("LTYPE.dashes[%d].shape_flag = %d [RS 75]\n", j,
-                     pair->value.i);
-          if (_o->dashes[j].shape_flag & 0x2)
-            _o->text_area_is_present = 1;
+          if (j < 0)
+            j++;
+          assert (j < num_dashes);
+          _o->dashes[j].style = dwg_add_handleref (obj->parent, 5, pair->value.u, obj);
+          LOG_TRACE ("LTYPE.dashes[%d].style = " FORMAT_REF " [H 340]\n", j,
+                     ARGS_REF (_o->dashes[j].style));
         }
       else if (pair->code == 44)
         {
@@ -2516,7 +2527,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           BITCODE_H ref
               = dwg_add_handleref (obj->parent, 3, pair->value.u, obj);
-          // o->boundary_handles[k++] = ref;
+          // o->boundary_handles[k] = ref;
           LOG_TRACE ("HATCH.boundary_handles[%d] = " FORMAT_REF " [H 330]\n",
                      k, ARGS_REF (ref));
         }
@@ -7081,11 +7092,10 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                            && obj->handle.value
                                   == _ctrl->byblock->absolute_ref)
                     i--;
-                  else if (dwg->header.version > R_2004 && _obj->name &&
-                           strNE (_obj->name, "Continuous"))
+                  else if (dwg->header.version > R_2004 && _obj->name
+                           && _obj->has_strings_area)
                     {
-                      _obj->text_area_is_present = 0;
-                      //or _obj->strings_area = xcalloc (512, 1);
+                      _obj->strings_area = xcalloc (512, 1);
                     }
                   if (dwg->header.version <= R_2004)
                     _obj->strings_area = xcalloc (256, 1);

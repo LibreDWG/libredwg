@@ -5066,14 +5066,12 @@ static const Dwg_DYNAPI_field _dwg_LTYPE_fields[] = {
     1,1,0, 0 },
   { "dashes_r11",	"RD*", sizeof (BITCODE_RD*),  OFF (struct _dwg_object_LTYPE, dashes_r11),
     1,1,0, 0 },
-  { "text_area_is_present",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_LTYPE, text_area_is_present),
+  { "has_strings_area",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_LTYPE, has_strings_area),
     0,0,0, 0 },
-  { "strings_area",	"TF", 512,  OFF (struct _dwg_object_LTYPE, strings_area),
-    1,1,0, 3 },
+  { "strings_area",	"TF", sizeof (BITCODE_TF),  OFF (struct _dwg_object_LTYPE, strings_area),
+    1,1,0, 0 },
   { "extref_handle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_LTYPE, extref_handle),
     1,0,0, 0 },
-  { "styles",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_LTYPE, styles),
-    1,1,0, 340 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_LTYPE_CONTROL: (sorted by offset) */
@@ -6876,7 +6874,9 @@ static const Dwg_DYNAPI_field _dwg_LTYPE_dash_fields[] = {
   { "length",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_LTYPE_dash, length),
     0,0,0, 49 },
   { "complex_shapecode",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_LTYPE_dash, complex_shapecode),
-    0,0,0, 74 },
+    0,0,0, 75 },
+  { "style",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_LTYPE_dash, style),
+    1,0,0, 0 },
   { "x_offset",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_LTYPE_dash, x_offset),
     0,0,0, 44 },
   { "y_offset",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_LTYPE_dash, y_offset),
@@ -6886,7 +6886,7 @@ static const Dwg_DYNAPI_field _dwg_LTYPE_dash_fields[] = {
   { "rotation",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_LTYPE_dash, rotation),
     0,0,0, 50 },
   { "shape_flag",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_LTYPE_dash, shape_flag),
-    0,0,0, 75 },
+    0,0,0, 74 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_LWPOLYLINE_width: (sorted by offset) */

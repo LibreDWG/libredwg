@@ -30271,6 +30271,22 @@ static int test_LTYPE (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_B has_strings_area;
+    if (dwg_dynapi_entity_value (ltype, "LTYPE", "has_strings_area", &has_strings_area, NULL)
+        && has_strings_area == ltype->has_strings_area)
+      pass ();
+    else
+      fail ("LTYPE.has_strings_area [B] " FORMAT_B " != " FORMAT_B "", ltype->has_strings_area, has_strings_area);
+    has_strings_area++;
+    if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "has_strings_area", &has_strings_area, 0)
+        && has_strings_area == ltype->has_strings_area)
+      pass ();
+    else
+      fail ("LTYPE.has_strings_area [B] set+1 " FORMAT_B " != " FORMAT_B "", ltype->has_strings_area, has_strings_area);
+    ltype->has_strings_area--;
+
+  }
+  {
     BITCODE_TV name;
     if (dwg_dynapi_entity_value (ltype, "LTYPE", "name", &name, NULL)
         && name
@@ -30327,32 +30343,6 @@ static int test_LTYPE (const Dwg_Object *obj)
         pass ();
     else
         fail ("LTYPE.strings_area [TF]");
-  }
-  {
-    BITCODE_H* styles;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (ltype, "LTYPE", "num_dashes", &count, NULL)
-        && dwg_dynapi_entity_value (ltype, "LTYPE", "styles", &styles, NULL)
-        && styles == ltype->styles)
-      pass ();
-    else
-      fail ("LTYPE.styles [H*] * %u num_dashes", count);
-  }
-  {
-    BITCODE_B text_area_is_present;
-    if (dwg_dynapi_entity_value (ltype, "LTYPE", "text_area_is_present", &text_area_is_present, NULL)
-        && text_area_is_present == ltype->text_area_is_present)
-      pass ();
-    else
-      fail ("LTYPE.text_area_is_present [B] " FORMAT_B " != " FORMAT_B "", ltype->text_area_is_present, text_area_is_present);
-    text_area_is_present++;
-    if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "text_area_is_present", &text_area_is_present, 0)
-        && text_area_is_present == ltype->text_area_is_present)
-      pass ();
-    else
-      fail ("LTYPE.text_area_is_present [B] set+1 " FORMAT_B " != " FORMAT_B "", ltype->text_area_is_present, text_area_is_present);
-    ltype->text_area_is_present--;
-
   }
   {
     BITCODE_RS used;

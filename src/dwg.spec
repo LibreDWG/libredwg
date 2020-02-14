@@ -2765,62 +2765,58 @@ DWG_OBJECT (LTYPE)
 
   COMMON_TABLE_FLAGS (Linetype)
 
-  PRE (R_13)
-  {
+  PRE (R_13) {
     FIELD_TFv (description, 48, 3);
-    FIELD_RC (alignment, 72);
   }
-  LATER_VERSIONS
-  {
+  LATER_VERSIONS {
     FIELD_T (description, 3);
     FIELD_BD (pattern_len, 40); // total length
-    FIELD_RC (alignment, 72);
   }
+  FIELD_RC (alignment, 72);
   FIELD_RCu (num_dashes, 73);
   REPEAT (num_dashes, dashes, Dwg_LTYPE_dash)
   REPEAT_BLOCK
-      PRE (R_13)
-      {
-        FIELD_RD (dashes[rcount1].length, 49);
-#ifndef IS_PRINT
-        FIELD_VALUE (pattern_len) += FIELD_VALUE (dashes[rcount1].length);
-#endif
-        FIELD_RS (dashes[rcount1].complex_shapecode, 74);
-        FIELD_RD (dashes[rcount1].x_offset, 44);
-        FIELD_RD (dashes[rcount1].y_offset, 45);
-        FIELD_RD (dashes[rcount1].scale, 46);
-        FIELD_RD (dashes[rcount1].rotation, 50);
-        FIELD_RS (dashes[rcount1].shape_flag, 75);
-        if (FIELD_VALUE (dashes[rcount1].shape_flag) & 0x2)
-          FIELD_VALUE (text_area_is_present) = 1;
-      }
-      LATER_VERSIONS
-      {
-        SUB_FIELD_BD (dashes[rcount1],length, 49);
-        SUB_FIELD_BS (dashes[rcount1],complex_shapecode, 74);
-        SUB_FIELD_RD (dashes[rcount1],x_offset, 44);
-        SUB_FIELD_RD (dashes[rcount1],y_offset, 45);
-        SUB_FIELD_BD (dashes[rcount1],scale, 46);
-        SUB_FIELD_BD (dashes[rcount1],rotation, 50);
-        SUB_FIELD_BS (dashes[rcount1],shape_flag, 75);
-        if (FIELD_VALUE (dashes[rcount1].shape_flag) & 0x2)
-          FIELD_VALUE (text_area_is_present) = 1;
-      }
+    SUB_FIELD_BD (dashes[rcount1],length, 49);
+    SUB_FIELD_BS (dashes[rcount1],complex_shapecode, 75);
+    DXF_OR_PRINT {
+      SUB_FIELD_HANDLE (dashes[rcount1],style, 5, 340);
+    }
+    SUB_FIELD_RD (dashes[rcount1],x_offset, 44);
+    SUB_FIELD_RD (dashes[rcount1],y_offset, 45);
+    SUB_FIELD_BD (dashes[rcount1],scale, 46);
+    SUB_FIELD_BD (dashes[rcount1],rotation, 50);
+    SUB_FIELD_BSx (dashes[rcount1],shape_flag, 74);
+    DECODER {
+      if (FIELD_VALUE (dashes[rcount1].shape_flag) & 0x4)
+        FIELD_VALUE (has_strings_area) = 1;
+    }
+    PRE (R_13) {
+      DECODER { FIELD_VALUE (pattern_len) += FIELD_VALUE (dashes[rcount1].length); }
+    }
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (dashes)
-  END_REPEAT (dashes);
+#ifndef IS_FREE
+  END_REPEAT (dashes);  // there's a 2nd loop below, don't free
+#endif
 
   UNTIL (R_2004) {
-    FIELD_TF (strings_area, 256, 3);
+    FIELD_BINARY (strings_area, 256, 0);
   }
   LATER_VERSIONS {
-    if (FIELD_VALUE (text_area_is_present))
-      FIELD_TF (strings_area, 512, 3);
+    if (FIELD_VALUE (has_strings_area))
+      FIELD_BINARY (strings_area, 512, 0);
   }
 
   START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (extref_handle, 5, 0);
-  HANDLE_VECTOR (styles, num_dashes, 5, 340);
+  // FIXME: init HANDLE_STREAM earlier, merge into upper repeat_block
+#if !(defined(IS_JSON) || defined (IS_DXF))
+  _REPEAT_CNF (_obj->num_dashes, dashes, Dwg_LTYPE_dash, 1)
+  REPEAT_BLOCK
+      SUB_FIELD_HANDLE (dashes[rcount1],style, 5, 0);
+  END_REPEAT_BLOCK
+  END_REPEAT (dashes);
+#endif
 
 DWG_OBJECT_END
 
@@ -3594,7 +3590,7 @@ DWG_OBJECT (MLINESTYLE)
         case 32767: VALUE_TFF ("BYLAYER", 6); break; /* default (SHRT_MAX) */
         case 32766: VALUE_TFF ("BYBLOCK", 6); break;
         case 0:  VALUE_TFF ("CONTINUOUS", 6); break;
-        //else lookup on LTYPE_CONTROL list TODO
+        //TODO else lookup name on LTYPE_CONTROL list
         default: /*FIELD_HANDLE_NAME (lt.ltype, 5, 6);*/
                  VALUE_TFF ("", 6); break;
         }
@@ -3603,9 +3599,8 @@ DWG_OBJECT (MLINESTYLE)
 #endif
     }
 #if defined(IS_JSON) || defined (IS_DXF)
-    SINCE (R_2018)
-    {
-        SUB_FIELD_HANDLE (lines[rcount1], lt.ltype, 5, 6);
+    SINCE (R_2018) {
+      SUB_FIELD_HANDLE (lines[rcount1], lt.ltype, 5, 6);
     }
 #endif
   END_REPEAT_BLOCK

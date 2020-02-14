@@ -105,7 +105,7 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
       }                                                                       \
     while (len > 127);                                                        \
   }
-#define FIELD_BINARY(name, size, dxf) VALUE_BINARY (_obj->name, size, dxf)
+#define FIELD_BINARY(name, size, dxf) if (dxf) VALUE_BINARY (_obj->name, size, dxf)
 
 #define FIELD_VALUE(nam) _obj->nam
 #define ANYCODE -1

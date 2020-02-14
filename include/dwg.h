@@ -2039,12 +2039,15 @@ typedef struct _dwg_object_LTYPE_CONTROL
 typedef struct _dwg_LTYPE_dash {
   struct _dwg_object_LTYPE *parent;
   BITCODE_BD length;
-  BITCODE_BS complex_shapecode;
+  BITCODE_BS complex_shapecode; /* on shape_flag 2: shape number.
+                                   4: index into strings_area. */
+  BITCODE_H style;
   BITCODE_RD x_offset;
   BITCODE_RD y_offset;
   BITCODE_BD scale;
   BITCODE_BD rotation;
-  BITCODE_BS shape_flag;
+  BITCODE_BS shape_flag; /* 1: text rotated 0, 2: complex_shapecode is index,
+                            4: complex_shapecode is index into strings_area. */
 } Dwg_LTYPE_dash;
 
 typedef struct _dwg_object_LTYPE
@@ -2056,10 +2059,10 @@ typedef struct _dwg_object_LTYPE
   BITCODE_RC num_dashes;
   Dwg_LTYPE_dash* dashes;
   BITCODE_RD* dashes_r11;
-  BITCODE_B text_area_is_present; /* if some shape_flag & 2 */
+  BITCODE_B has_strings_area; /* if some shape_flag & 4 (ODA bug) */
   BITCODE_TF strings_area;
   BITCODE_H extref_handle;
-  BITCODE_H* styles;
+  //BITCODE_H* styles;
 } Dwg_Object_LTYPE;
 
 /* 58 and 59 are UNKNOWN OBJECTS */
