@@ -230,16 +230,17 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 {
   if (dxf && !bit_isnan (value))
     {
+      char _buf[128];
+      int k;
       fprintf (dat->fh, "%3i\r\n", dxf);
-      // TODO strip ending 0 (sprintf, ...)
-      if (value == 0.0)
-        fprintf (dat->fh, "0.0\r\n");
-      else if (value == 0.5)
-        fprintf (dat->fh, "0.5\r\n");
-      else if (value == 0.125)
-        fprintf (dat->fh, "0.125\r\n");
-      else
-        fprintf (dat->fh, "%-16.14f\r\n", value);
+      snprintf (_buf, 127, "%-16.14f", value);
+      k = strlen (_buf);
+      if (strrchr (_buf, '.') && _buf[k - 1] == '0')
+        {
+          for (k--; k > 1 && _buf[k - 1] != '.' && _buf[k] == '0'; k--)
+            _buf[k] = '\0';
+        }
+      fprintf (dat->fh, "%s\r\n", _buf);
     }
 }
 #define VALUE_BSd(value, dxf)                                                 \
