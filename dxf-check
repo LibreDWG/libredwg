@@ -26,8 +26,11 @@ esac
 # first create a dwg log to compare against
 ./log -v3 $d
 mv $b.log $b.log.orig
+
 ./dxf -v4 $d
-./dwg -y -v4 $b.dxf
+if [ -f $b.dxf ]; then
+    ./dwg -y -v4 $b.dxf
+fi
 
 if [ -f $b.dwg ]; then
     case `uname` in
@@ -36,15 +39,14 @@ if [ -f $b.dwg ]; then
         Windows) TeighaFileConverter=TeighaFileConverter ;;
     esac
     if [ -x $TeighaFileConverter ]; then
-        cp $b.dwg test/
-        echo TeighaFileConverter "test" "." ACAD$r DXF 0 1 $b.dwg
-        $TeighaFileConverter "test" "." ACAD$r DXF 0 1 $b.dwg
-        cat $b.dxf.err
+        echo TeighaFileConverter "." "test" ACAD$r DXF 0 1 $b.dwg
+        $TeighaFileConverter "." "test" ACAD$r DXF 0 1 $b.dwg
+        cat test/$b.dxf.err
     else
         echo TeighaFileConverter not installed
     fi
-fi
 
-./log -v3 $b.dwg
-echo diff -bu $b.log.orig $b.log
-diff -bu $b.log.orig $b.log
+    ./log -v3 $b.dwg
+    echo diff -bu $b.log.orig $b.log
+    diff -bu $b.log.orig $b.log
+fi

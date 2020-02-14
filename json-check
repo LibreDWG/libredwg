@@ -27,6 +27,7 @@ esac
 ./log -v3 $d
 mv $b.log $b.log.orig
 rm $b.json $b.dwg 2>/dev/null
+
 ./json -v4 $d
 if [ -f $b.json ]; then
     ./dwg -y -v4 $b.json
