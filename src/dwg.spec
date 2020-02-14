@@ -1090,9 +1090,9 @@ DWG_ENTITY_END
     } \
     DECODER { \
       BITCODE_RC flag = FIELD_VALUE (flag1); \
+      flag &= 0xE0; /* clear the upper flag bits, and fix them: */ \
       flag = (flag & 1) ? flag & 0x7F : flag | 0x80; /* clear bit 7 */ \
       flag = (flag & 2) ? flag | 0x20 : flag & 0xDF; /* set bit 5 */ \
-      flag &= 0xE0; /* clear the 3 flag bits, and set them: */ \
       if      (_obj->flag == DWG_TYPE_DIMENSION_ALIGNED)  flag |= 1; \
       else if (_obj->flag == DWG_TYPE_DIMENSION_ANG2LN)   flag |= 2; \
       else if (_obj->flag == DWG_TYPE_DIMENSION_DIAMETER) flag |= 3; \
@@ -1151,6 +1151,7 @@ DWG_ENTITY (DIMENSION_ORDINATE)
             ? flag | 0x80 : flag & 0xBF; /* set bit 6 */
     FIELD_VALUE (flag) = flag;
   }
+  JSON { FIELD_RC (flag, 0); }
 
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (dimstyle, 5, 0);
@@ -1164,6 +1165,7 @@ DWG_ENTITY (DIMENSION_LINEAR)
   // TODO PRE (R_R13)
   SUBCLASS (AcDbDimension)
   COMMON_ENTITY_DIMENSION
+  JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDbAlignedDimension)
   FIELD_3BD (_13_pt, 13);
   FIELD_3BD (_14_pt, 14);
@@ -1183,6 +1185,7 @@ DWG_ENTITY (DIMENSION_ALIGNED)
 
   SUBCLASS (AcDbDimension)
   COMMON_ENTITY_DIMENSION
+  JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDbAlignedDimension)
   FIELD_3BD (_13_pt, 13); // TODO: rename
   FIELD_3BD (_14_pt, 14); // TODO: rename
@@ -1202,6 +1205,7 @@ DWG_ENTITY (DIMENSION_ANG3PT)
 
   SUBCLASS (AcDbDimension)
   COMMON_ENTITY_DIMENSION
+  JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDb3PointAngularDimension)
   DECODER_OR_ENCODER {
     FIELD_3BD (def_pt, 10);
@@ -1221,6 +1225,7 @@ DWG_ENTITY (DIMENSION_ANG2LN)
 
   SUBCLASS (AcDbDimension)
   COMMON_ENTITY_DIMENSION
+  JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDb2LineAngularDimension)
   FIELD_2RD (_16_pt, 16);
   FIELD_3BD (_13_pt, 13);
@@ -1241,6 +1246,7 @@ DWG_ENTITY (DIMENSION_RADIUS)
 
   SUBCLASS (AcDbDimension)
   COMMON_ENTITY_DIMENSION
+  JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDbRadialDimension)
   DECODER_OR_ENCODER {
     FIELD_3BD (def_pt, 10);
@@ -1259,6 +1265,7 @@ DWG_ENTITY (DIMENSION_DIAMETER)
 
   SUBCLASS (AcDbDimension)
   COMMON_ENTITY_DIMENSION
+  JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDbDiametricDimension)
   FIELD_3BD (first_arc_pt, 15);
   DECODER_OR_ENCODER {

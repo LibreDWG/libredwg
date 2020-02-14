@@ -592,6 +592,10 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
 #define HANDLE_VECTOR(nam, sizefield, code, dxf)                              \
   HANDLE_VECTOR_N (nam, FIELD_VALUE (sizefield), code, dxf)
 
+// violates duplicate keys
+#define SUBCLASS(name) \
+  PREFIX fprintf (dat->fh, "\"_subclass\": \"" #name "\",\n");
+
 // FIXME: for KEY not the complete nam path, only the field.
 // e.g. verts[rcount1].lines[rcount2].segparms
 #define _REPEAT_N(times, nam, type, idx)                                      \

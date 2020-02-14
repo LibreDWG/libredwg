@@ -2073,6 +2073,12 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   return DWG_ERR_INVALIDDWG;
                 }
             }
+          // ignore subclass markers
+          else if (t->type == JSMN_STRING && strEQc (key, "_subclass"))
+            {
+              LOG_TRACE ("_subclass: %.*s\n", t->end - t->start, &dat->chain[t->start]);
+              tokens->index++;
+            }
           else if (strEQc (key, "num_unknown_bits")
                    && memBEGINc (obj->name, "UNKNOWN_"))
             {
