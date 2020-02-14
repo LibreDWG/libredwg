@@ -2523,11 +2523,13 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_TRACE ("HATCH.seeds[%d] = (%f, %f) [2RD 10]\n", k, o->seeds[k].x,
                      pair->value.d);
         }
-      else if (pair->code == 330 && o->num_boundary_handles)
+      else if (pair->code == 330 && o->num_boundary_handles && (BITCODE_BL)k < o->num_boundary_handles)
         {
           BITCODE_H ref
               = dwg_add_handleref (obj->parent, 3, pair->value.u, obj);
-          // o->boundary_handles[k] = ref;
+          if (!o->boundary_handles)
+            o->boundary_handles = xcalloc (o->num_boundary_handles, sizeof (BITCODE_H));
+          o->boundary_handles[k] = ref;
           LOG_TRACE ("HATCH.boundary_handles[%d] = " FORMAT_REF " [H 330]\n",
                      k, ARGS_REF (ref));
         }
