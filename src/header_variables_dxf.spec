@@ -20,7 +20,7 @@
 
   SECTION (HEADER);
 
-  HEADER_VALUE (ACADVER, TV, 1, version_codes[dwg->header.version]);
+  HEADER_VALUE_TV (ACADVER, 1, version_codes[dwg->header.version]);
 
   if (minimal) {
     HEADER_VALUE (HANDSEED, RS, 5, _obj->HANDSEED->absolute_ref);
@@ -35,20 +35,20 @@
     HEADER_VALUE (ACADMAINTVER, RC, 90, dwg->header.maint_version);
   }
   SINCE (R_10) {
-    HEADER_VALUE (DWGCODEPAGE, TV, 3, codepage);
+    HEADER_VALUE_TV (DWGCODEPAGE, 3, codepage);
   }
   SINCE (R_2004) {
     // usually only since 2010
     if (dwg->summaryinfo.TITLE && strlen (dwg->summaryinfo.TITLE))
       {
-        HEADER_VALUE (TITLE, TU, 1, dwg->summaryinfo.TITLE);
-        HEADER_VALUE (SUBJECT, TU, 1, dwg->summaryinfo.SUBJECT);
-        HEADER_VALUE (AUTHOR, TU, 1, dwg->summaryinfo.AUTHOR);
-        HEADER_VALUE (KEYWORDS, TU, 1, dwg->summaryinfo.KEYWORDS);
+        HEADER_VALUE_TU (TITLE, 1, dwg->summaryinfo.TITLE);
+        HEADER_VALUE_TU (SUBJECT, 1, dwg->summaryinfo.SUBJECT);
+        HEADER_VALUE_TU (AUTHOR, 1, dwg->summaryinfo.AUTHOR);
+        HEADER_VALUE_TU (KEYWORDS, 1, dwg->summaryinfo.KEYWORDS);
       }
     if (dwg->summaryinfo.LASTSAVEDBY && strlen (dwg->summaryinfo.LASTSAVEDBY))
       {
-        HEADER_VALUE (LASTSAVEDBY, TU, 1, dwg->summaryinfo.LASTSAVEDBY);
+        HEADER_VALUE_TU (LASTSAVEDBY, 1, dwg->summaryinfo.LASTSAVEDBY);
       }
   }
   SINCE (R_2013) {
@@ -309,7 +309,7 @@
   HEADER_RC (PSLTSCALE, 70);
   HEADER_RC (TREEDEPTH, 70);
   UNTIL (R_11) {
-    HEADER_VALUE (DWGCODEPAGE, TV, 3, codepage);
+    HEADER_VALUE_TV (DWGCODEPAGE, 3, codepage);
   }
   VERSIONS (R_14, R_2000) { //? maybe only for r14
     HEADER_RC (PICKSTYLE, 70);
@@ -424,5 +424,3 @@
     }
 
   ENDSEC ();
-
-

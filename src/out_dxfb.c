@@ -67,12 +67,17 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
 #define SUB_FIELD(o, nam, type, dxf) FIELDG (o.nam, type, dxf)
 
 #define HEADER_VALUE(nam, type, dxf, value)                                   \
-  GROUP (9);                                                                  \
-  fprintf (dat->fh, "$%s%c", #nam, 0);                                        \
-  VALUE_##type (value, dxf)
+  if (dxf)                                                                    \
+    {                                                                         \
+      GROUP (9);                                                              \
+      fprintf (dat->fh, "$%s%c", #nam, 0);                                    \
+      VALUE_##type (value, dxf);                                              \
+    }
 
 #define HEADER_VAR(nam, type, dxf)                                            \
   HEADER_VALUE (nam, type, dxf, dwg->header_vars.nam)
+#define HEADER_VALUE_TV(nam, dxf, value) HEADER_VALUE (nam, TV, dxf, value)
+#define HEADER_VALUE_TU(nam, dxf, value) HEADER_VALUE (nam, TU, dxf, value)
 
 #define FIELD_CAST(nam, type, cast, dxf) FIELDG (nam, cast, dxf)
 #define FIELD_TRACE(nam, type)

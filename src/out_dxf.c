@@ -168,6 +168,20 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
     }
 #define HEADER_VAR(nam, type, dxf)                                            \
   HEADER_VALUE (nam, type, dxf, dwg->header_vars.nam)
+#define HEADER_VALUE_TV(nam, dxf, value)                                      \
+  if (dxf)                                                                    \
+    {                                                                         \
+      GROUP (9);                                                              \
+      fprintf (dat->fh, "$" #nam "\r\n");                                     \
+      VALUE_TV (value, dxf);                                                  \
+    }
+#define HEADER_VALUE_TU(nam, dxf, value)                                      \
+  if (dxf)                                                                    \
+    {                                                                         \
+      GROUP (9);                                                              \
+      fprintf (dat->fh, "$" #nam "\r\n");                                     \
+      VALUE_TU (value, dxf);                                                  \
+    }
 
 #define HEADER_3D(nam)                                                        \
   HEADER_9 (nam);                                                             \
@@ -202,8 +216,7 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
       assert (_fmt);                                                          \
       if (strEQc (_fmt, "%-16.14f"))                                          \
         {                                                                     \
-          const double _rd = (double)(intptr_t) (value);                      \
-          dxf_print_rd (dat, _rd, dxf);                                       \
+          dxf_print_rd (dat, (double)(value), dxf);                           \
         }                                                                     \
       else                                                                    \
         {                                                                     \
