@@ -119,15 +119,17 @@
     }
 #define LOG_TF(level, var, len)                                               \
   {                                                                           \
-    int _i;                                                                   \
-    for (_i = 0; _i < (len); _i++)                                            \
+    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE || len <= 256)                    \
       {                                                                       \
-        LOG (level, "%02X", (unsigned char)((char *)var)[_i]);                \
+        for (int _i = 0; _i < (len); _i++)                                    \
+          {                                                                   \
+            LOG (level, "%02X", (unsigned char)((char *)var)[_i]);            \
+          }                                                                   \
+        LOG (level, "\n");                                                    \
       }                                                                       \
-    LOG (level, "\n");                                                        \
     if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)                                  \
       {                                                                       \
-        for (_i = 0; _i < (len); _i++)                                        \
+        for (int _i = 0; _i < (len); _i++)                                    \
           {                                                                   \
             unsigned char c = ((unsigned char *)var)[_i];                     \
             LOG_INSANE ("%-2c", isprint (c) ? c : ' ');                       \
@@ -390,7 +392,7 @@
     _obj->nam = bit_read_TF (dat, (int)len);                                  \
     LOG_TRACE (#nam ": \"%s\" [TF %lu " #dxf "]\n", _obj->nam,                \
                (unsigned long)len);                                           \
-    LOG_INSANE_TF (FIELD_VALUE (nam), (int)len);                              \
+    LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \
   }
 #define FIELD_TFv(nam, len, dxf)                                              \
   {                                                                           \
@@ -398,14 +400,14 @@
     _obj->nam = (BITCODE_TV)bit_read_TF (dat, (int)len);                      \
     LOG_TRACE (#nam ": \"%s\" [TF %lu " #dxf "]\n", _obj->nam,                \
                (unsigned long)len);                                           \
-    LOG_INSANE_TF (FIELD_VALUE (nam), (int)len);                              \
+    LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \
   }
 #define FIELD_TFF(nam, len, dxf)                                              \
   {                                                                           \
     SINCE (R_13) { VECTOR_CHKCOUNT (nam, TF, len, dat) }                      \
     bit_read_fixed (dat, _obj->nam, (int)len);                                \
     LOG_TRACE (#nam ": \"%s\" [TFF %d " #dxf "]\n", _obj->nam, (int)len);     \
-    LOG_INSANE_TF (FIELD_VALUE (nam), (int)len);                              \
+    LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \
   }
 #define FIELD_TFFx(nam, len, dxf)                                             \
   {                                                                           \

@@ -2800,7 +2800,13 @@ DWG_OBJECT (LTYPE)
 #endif
 
   UNTIL (R_2004) {
-    FIELD_BINARY (strings_area, 256, 0);
+    JSON {
+      if (FIELD_VALUE (has_strings_area))
+        FIELD_BINARY (strings_area, 256, 0);
+    }
+    else {
+      FIELD_BINARY (strings_area, 256, 0);
+    }
   }
   LATER_VERSIONS {
     if (FIELD_VALUE (has_strings_area))
