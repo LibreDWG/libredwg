@@ -3830,9 +3830,12 @@ find_prev_entity (Dwg_Object *obj)
 static int
 is_obj_absref (Dwg_Object *obj)
 {
-  if (obj->type < DWG_TYPE_GROUP && // needs to absolute 4.1.X
-      obj->fixedtype != DWG_TYPE_DICTIONARY &&
+  /* With DICTIONARY it may vary */
+  if (obj->type < DWG_TYPE_GROUP && // needs to be absolute 4.1.X
+      /* obj->fixedtype != DWG_TYPE_DICTIONARY && */
       obj->fixedtype != DWG_TYPE_XRECORD)
+    return 1;
+  else if (obj->fixedtype == DWG_TYPE_LAYOUT)
     return 1;
   else // may have relative ref: 8.0.0
     return 0;
