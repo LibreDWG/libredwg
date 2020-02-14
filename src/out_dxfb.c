@@ -1144,6 +1144,8 @@ decl_dxfb_process_VERTEX (PFACE)
   {                                                                           \
     int error = 0;                                                            \
     Dwg_Entity_##token *_obj = obj->tio.entity->tio.token;                    \
+    if (!_obj->has_attribs)                                                   \
+        return 0;                                                             \
                                                                               \
     VERSIONS (R_13, R_2000)                                                   \
     {                                                                         \
@@ -1211,28 +1213,18 @@ static int dwg_dxfb_object (Bit_Chain *restrict dat,
     case DWG_TYPE_BLOCK:
       return dwg_dxfb_BLOCK (dat, obj);
     case DWG_TYPE_ENDBLK:
-      return dwg_dxfb_ENDBLK (dat, obj);
+      LOG_WARN ("stale %s subentity", obj->dxfname);
+      return 0; // dwg_dxf_ENDBLK(dat, obj);
     case DWG_TYPE_SEQEND:
-      return dwg_dxfb_SEQEND (dat, obj);
+      LOG_WARN ("stale %s subentity", obj->dxfname);
+      return 0; // dwg_dxf_SEQEND(dat, obj);
 
     case DWG_TYPE_INSERT:
       error = dwg_dxfb_INSERT (dat, obj);
-      {
-        Dwg_Entity_INSERT *_obj = obj->tio.entity->tio.INSERT;
-        if (_obj->has_attribs)
-          return error | dxfb_process_INSERT (dat, obj, i);
-        else
-          return error;
-      }
+      return error | dxfb_process_INSERT (dat, obj, i);
     case DWG_TYPE_MINSERT:
       error = dwg_dxfb_MINSERT (dat, obj);
-      {
-        Dwg_Entity_MINSERT *_obj = obj->tio.entity->tio.MINSERT;
-        if (_obj->has_attribs)
-          return error | dxfb_process_MINSERT (dat, obj, i);
-        else
-          return error;
-      }
+      return error | dxfb_process_MINSERT (dat, obj, i);
     case DWG_TYPE_POLYLINE_2D:
       error = dwg_dxfb_POLYLINE_2D (dat, obj);
       return error | dxfb_process_VERTEX_2D (dat, obj, i);

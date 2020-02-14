@@ -946,8 +946,9 @@ dxf_cvt_tablerecord (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
 }
 
 /* pre-r13 mspace and pspace blocks have different names:
- *Model_Space => $MODEL_SPACE
- *Paper_Space => $PAPER_SPACE
+   *Model_Space => $MODEL_SPACE
+   *Paper_Space => $PAPER_SPACE
+   TODO: Better use proper EXTNAMES
  */
 static void
 dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
@@ -1297,6 +1298,8 @@ decl_dxf_process_VERTEX (PFACE)
     int error = 0;                                                            \
     Dwg_Entity_##token *_obj = obj->tio.entity->tio.token;                    \
                                                                               \
+    if (!_obj->has_attribs)                                                   \
+        return 0;                                                             \
     VERSIONS (R_13, R_2000)                                                   \
     {                                                                         \
       Dwg_Object *last_attrib                                                 \
@@ -1374,22 +1377,10 @@ static int dwg_dxf_object (Bit_Chain *restrict dat,
 
     case DWG_TYPE_INSERT:
       error = dwg_dxf_INSERT (dat, obj);
-      {
-        Dwg_Entity_INSERT *_obj = obj->tio.entity->tio.INSERT;
-        if (_obj->has_attribs)
-          return error | dxf_process_INSERT (dat, obj, i);
-        else
-          return error;
-      }
+      return error | dxf_process_INSERT (dat, obj, i);
     case DWG_TYPE_MINSERT:
       error = dwg_dxf_MINSERT (dat, obj);
-      {
-        Dwg_Entity_MINSERT *_obj = obj->tio.entity->tio.MINSERT;
-        if (_obj->has_attribs)
-          return error | dxf_process_MINSERT (dat, obj, i);
-        else
-          return error;
-      }
+      return error | dxf_process_MINSERT (dat, obj, i);
     case DWG_TYPE_POLYLINE_2D:
       error = dwg_dxf_POLYLINE_2D (dat, obj);
       return error | dxf_process_VERTEX_2D (dat, obj, i);
