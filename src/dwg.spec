@@ -4151,7 +4151,7 @@ DWG_ENTITY (LWPOLYLINE)
     END_REPEAT (points)
   } else {
 #ifndef IS_RELEASE
-    if (FIELD_VALUE (num_points) > 0x10000) {
+    if (FIELD_VALUE (num_points) > 20000) {
       LOG_ERROR ("Invalid LWPOLYLINE.num_points %ld", (long)FIELD_VALUE (num_points));
       _obj->num_points = 0;
       DEBUG_HERE_OBJ
