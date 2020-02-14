@@ -31,9 +31,6 @@
 #include <string.h>
 #include <stdbool.h>
 #include <assert.h>
-#ifdef HAVE_WCHAR_H
-#  include <wchar.h>
-#endif
 
 #include "common.h"
 #include "bits.h"

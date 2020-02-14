@@ -33,11 +33,17 @@
 #ifndef BITS_H
 #define BITS_H
 
-#include <stdio.h>
 #include "config.h"
 #ifdef HAVE_WCHAR_H
+// cross-compilation problem:
+// /usr/lib/gcc/arm-linux-gnueabi/9/include-fixed/limits.h defines it as 1
+#  if defined(MB_LEN_MAX) && MB_LEN_MAX != 16 && MB_LEN_MAX != 32
+#    undef MB_LEN_MAX
+#    define MB_LEN_MAX	16
+#  endif
 #  include <wchar.h>
 #endif
+#include <stdio.h>
 #include "common.h"
 #include "dwg.h"
 
