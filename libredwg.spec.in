@@ -1,0 +1,101 @@
+Name:           libredwg
+Version:        @VERSION@
+Release:        1%{?dist}
+Summary:        GNU library and programs to read and write DWG files
+
+License:        GPLv3+
+URL:            https://www.gnu.org/software/libredwg/
+Source0:        https://ftp.gnu.org/gnu/libredwg/libredwg-%{version}.tar.xz
+Packager:       Reini Urban <rurban@cpan.org>
+
+# TODO libps-devel
+BuildRequires:  texinfo, texlive, pcre2-devel, swig, python3-devel
+BuildRequires:  python3-libxml2, perl, perl-Convert-Binary-C
+Requires:       pcre2, pcre2-utf16
+# no big-endian. s390 untested
+ExcludeArch:    sparc alpha ppc64 ppc
+
+%description
+At the moment our decoder (i.e. reader) is done, just some very advanced
+R2010+ and pre-R13 entities fail to read and are skipped over. The
+writer is good enough for R2000.  Among the example applications we
+wrote using LibreDWG is a reader, a writer, a rewriter (i.e. saveas),
+an initial SVG and Postscript conversion, dxf and json converters,
+dwggrep to search for text, and dwglayer to print the list of layers.
+
+%package        devel
+Summary:        Development files for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description    devel
+The %{name}-devel package contains libraries, perl5 and python bindings
+and header files for developing applications that use %{name}.
+
+%package -n     python3-LibreDWG
+Summary:        Python bindings for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}, %{name}-devel, python
+
+%description -n python3-LibreDWG
+The python3-LibreDWG package contains the python bindings for developing applications
+that use %{name}.
+
+%package -n     perl-LibreDWG
+Summary:        Perl bindings for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}, %{name}-devel, perl
+
+%description -n  perl-LibreDWG
+The perl-LibreDWG package contains the perl bindings for developing applications
+that use %{name}.
+
+%prep
+%autosetup
+
+
+%build
+%configure --disable-static
+%make_build PERL=/usr/bin/perl
+%make_build check
+%make_build pdf
+
+%install
+rm -rf $RPM_BUILD_ROOT
+%make_install
+find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
+
+
+%post -p /sbin/ldconfig
+/sbin/install-info %{_infodir}/LibreDWG.info %{_infodir}/dir || :
+
+%postun -p /sbin/ldconfig
+
+%preun
+if [ $1 = 0 ] ; then
+/sbin/install-info --delete %{_infodir}/LibreDWG.info %{_infodir}/dir || :
+fi
+
+%files
+%license COPYING
+%doc README AUTHORS NEWS TODO doc/LibreDWG.info doc/LibreDWG.pdf
+%{_bindir}/*
+%{_libdir}/*.so.*
+%{_mandir}/*
+/usr/share/info/*
+
+%files devel
+%{_includedir}/*
+%{_libdir}/*.so
+%{_libdir}/pkgconfig/*.pc
+
+%files -n python3-LibreDWG
+%{python_sitelib}/*
+%{python_sitearch}/*
+
+%files -n perl-LibreDWG
+# %{perl_sitelib}/*
+# %{perl_sitearch}/*
+/usr/local/lib64/perl5/*
+%{_libdir}/perl5/perllocal.pod
+
+%changelog
+* Sat Feb 15 2020 Reini Urban <rurban@cpan.org>
+- Initial version of the rpm package. 0.10.1

@@ -51,7 +51,8 @@ perl/LibreDWG.$(OBJEXT): perl/LibreDWG.pm perl/Makefile perl/LibreDWG.xs
 	-if test -f perl/pm_to_blib; then rm perl/pm_to_blib; fi
 	-if test -d perl/blib; then rm -rf perl/blib; fi
 	-if grep "NOOP = rem" perl/Makefile; then false; else \
-	    cd perl && $(MAKE) OPTIMIZE="-I$(abs_top_srcdir)/include -I$(abs_top_builddir)/src" \
+	    cd perl && $(MAKE) PERL="$(PERL)" \
+	                       OPTIMIZE="-I$(abs_top_srcdir)/include -I$(abs_top_builddir)/src" \
 	                       OTHERLDFLAGS="-L$(abs_top_builddir)/src/.libs"; fi
 
 perl/Makefile: perl/Makefile.PL
