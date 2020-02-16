@@ -420,7 +420,25 @@ if test -n "$PERL"; then
   [PERL_VERSION=`"$PERL" -e'print $^V' 2>&1`]
   AC_MSG_RESULT([$PERL_VERSION])
   AM_RUN_LOG([$PERL -V:cc])
+
+  dnl --enable-perl-install=vendor. default: site
+  AS_IF([test x$enable_bindings = xyes],
+    [AC_MSG_CHECKING([for --with-perl-install=])
+     AC_ARG_WITH(perl-install,
+	AS_HELP_STRING([--with-perl-install=],
+          [Where to install the perl bindings, vendor,arch,yes,no or @<:@default=site@:>@]),
+	[case "${with_perl_install}" in
+	 vendor)   with_perl_install=vendor; AC_MSG_RESULT([vendor]) ;;
+	 yes|site) with_perl_install=site;   AC_MSG_RESULT([site]) ;;
+	 perl)     with_perl_install=perl;   AC_MSG_RESULT([perl]) ;;
+	 no)       with_perl_install=no;     AC_MSG_RESULT([no]) ;;
+	 *)        AC_MSG_RESULT([invalid ${with_perl_install}: vendor,site,yes,perl,no]) ;;
+	 esac],
+        [with_perl_install=site; AC_MSG_RESULT([site (default)]) ])
+    ]
+  )
 fi
+AC_SUBST([with_perl_install])
 
 AM_CONDITIONAL([HAVE_SWIG_PYTHON], [test -n "$SWIG" && test -n "$PYTHON_VERSION"])
 AM_CONDITIONAL([HAVE_PYTHON], [test x$enable_python != xno])

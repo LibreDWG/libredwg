@@ -57,7 +57,7 @@ perl/LibreDWG.$(OBJEXT): perl/LibreDWG.pm perl/Makefile perl/LibreDWG.xs
 
 perl/Makefile: perl/Makefile.PL
 	-cd perl && \
-	  $(PERL) Makefile.PL
+	  $(PERL) Makefile.PL PERL="$(PERL)" INSTALLDIRS=@with_perl_install@
 
 # Maybe disable if LibreDWG.so was not installed yet.
 # rpath/LD_LIBRARY_PATH overrides are too troublesome
@@ -65,13 +65,14 @@ check-am: $(dist_perl_PERL) perl/Makefile perl/LibreDWG.$(OBJEXT)
 	@echo Making check for perl
 	-if grep "NOOP = rem" perl/Makefile; then false; else \
 	    LD_LIBRARY_PATH="$(abs_top_builddir)/src/.libs" $(MAKE) -C perl test \
-	      OPTIMIZE="-I$(abs_top_srcdir)/include -I$(abs_top_builddir)/src" \
+	      PERL="$(PERL)" OPTIMIZE="-I$(abs_top_srcdir)/include -I$(abs_top_builddir)/src" \
               OTHERLDFLAGS="-L$(abs_top_builddir)/src/.libs"; fi
 
 install-am: $(dist_perl_PERL) perl/Makefile perl/LibreDWG.$(OBJEXT)
 	@echo Making install for perl
-	-if grep "NOOP = rem" perl/Makefile; then false; else \
-	    $(MAKE) -C perl install; fi
+	-if test x@with_perl_install@ != xno; then if grep "NOOP = rem" perl/Makefile; \
+            then false; \
+	    else $(MAKE) -C perl install_@with_perl_install@ PERL="$(PERL)"; fi; fi
 
 clean-am:
 	-$(MAKE) -C perl clean

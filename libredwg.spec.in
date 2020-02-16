@@ -66,9 +66,11 @@ rm -rf $RPM_BUILD_ROOT
 %make_install
 find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
 rm $RPM_BUILD_ROOT%{_libdir}/perl5/perllocal.pod
-#dwgwrite was noinst until 0.11
-#rm $RPM_BUILD_ROOT%{_mandir}/man1/dwgwrite.1
-chmod u+w $RPM_BUILD_ROOT%(eval "`%{__perl} -V:installsitearch`"; echo $installsitearch)/auto/LibreDWG/LibreDWG.so
+rm $RPM_BUILD_ROOT%{perl_vendorarch}/auto/LibreDWG/.packlist
+#perl EUMM sets it read-only, objcopy needs write
+chmod u+w $RPM_BUILD_ROOT%{perl_vendorarch}/auto/LibreDWG/LibreDWG.so
+
+%ldconfig_scriptlets
 
 %post
 /sbin/install-info %{_infodir}/LibreDWG.info %{_infodir}/dir || :
@@ -119,11 +121,10 @@ fi
 %{python_sitearch}/_LibreDWG.so*
 
 %files -n perl-LibreDWG
-%(eval "`%{__perl} -V:installsitearch`"; echo $installsitearch)/LibreDWG.pm
-%(eval "`%{__perl} -V:installsitearch`"; echo $installsitearch)/auto/LibreDWG/.packlist
-%(eval "`%{__perl} -V:installsitearch`"; echo $installsitearch)/auto/LibreDWG/LibreDWG.so
+%{perl_vendorarch}/LibreDWG.pm
+%{perl_vendorarch}/auto/LibreDWG/LibreDWG.so
 #TODO add to {_libdir}/perl5/perllocal.pod
 
 %changelog
-* Sat Feb 15 2020 Reini Urban <rurban@cpan.org> 0.10.1-1
+* Sat Feb 15 2020 Reini Urban <reini.urban@gmail.com> 0.10.1-1
 - Initial version targetting fc31
