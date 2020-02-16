@@ -39,8 +39,8 @@ VALGRIND_SUPPRESSIONS = @VALGRIND_SUPPRESSIONS@
 VALGRIND_SUPPRESSIONS_FILE = @VALGRIND_SUPPRESSIONS_FILE@
 VALGRIND_OPTS = --leak-check=full --show-reachable=no --num-callers=30
 JSON_DIST = jsmn/jsmn.h jsmn/LICENSE jsmn/README.md
-EXTRA_DIST = $(top_srcdir)/.version \
-             README libredwg.spec \
+doc_DIST = README HACKING NEWS TODO
+EXTRA_DIST = $(top_srcdir)/.version libredwg.spec \
 	     dwg.in dxf.in dxf-allcvt.lsp dxf-allcvt.sh test-dxf.sh \
 	     log.in logs-all-parallel.sh.in logs-all-serial.sh.in unknown.sh \
 	     build-aux/swig_python.patch \
