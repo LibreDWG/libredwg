@@ -1,12 +1,13 @@
 # -*- sh -*-
 Name:           libredwg
-Version:        @VERSION@
+Version:        0.10.1.2899
 Release:        1%{?dist}
 Summary:        GNU C library and programs to read and write DWG files
 
 License:        GPLv3+
 URL:            https://www.gnu.org/software/libredwg/
-Source0:        https://ftp.gnu.org/gnu/libredwg/libredwg-%{version}.tar.xz
+#Source0:        https://ftp.gnu.org/gnu/libredwg/libredwg-%{version}.tar.xz
+Source0:        https://github.com/LibreDWG/libredwg/releases/download/%{version}/libredwg-%{version}.tar.gz
 
 # TODO libps-devel
 BuildRequires:  texinfo-tex, texinfo, pcre2-devel, swig, python3-devel
@@ -31,8 +32,8 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 %description    devel
 The %{name}-devel package contains libraries, perl5 and python bindings
 and header files for developing applications that use %{name}.
-For more serious development use the git repo, and add parallel, timeout
-and potion.
+For more serious development use the git repository, and add parallel,
+timeout and potion.
 
 %package -n     python3-LibreDWG
 Summary:        Python bindings for %{name}
@@ -65,6 +66,9 @@ sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 rm -rf $RPM_BUILD_ROOT
 %make_install
 find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
+#later
+rm $RPM_BUILD_ROOT%{_bindir}/dwg2ps || :
+rm $RPM_BUILD_ROOT%{_mandir}/man1/dwg2ps.1 || :
 rm $RPM_BUILD_ROOT%{_libdir}/perl5/perllocal.pod
 rm $RPM_BUILD_ROOT%{perl_vendorarch}/auto/LibreDWG/.packlist
 #perl EUMM sets it read-only, objcopy needs write
@@ -82,10 +86,10 @@ fi
 
 %files
 %license COPYING
-%doc README AUTHORS NEWS TODO doc/LibreDWG.pdf
+%doc README AUTHORS NEWS HACKING TODO doc/LibreDWG.pdf
 %{_bindir}/dwg2SVG
 %{_bindir}/dwg2dxf
-%{_bindir}/dwg2ps
+#{_bindir}/dwg2ps
 %{_bindir}/dwgbmp
 %{_bindir}/dwgfilter
 %{_bindir}/dwggrep
@@ -98,7 +102,7 @@ fi
 %{_libdir}/libredwg.so.0.0.10
 %{_mandir}/man1/dwg2SVG.1.gz
 %{_mandir}/man1/dwg2dxf.1.gz
-%{_mandir}/man1/dwg2ps.1.gz
+#{_mandir}/man1/dwg2ps.1.gz
 %{_mandir}/man1/dwgbmp.1.gz
 %{_mandir}/man1}/dwgfilter.1.gz
 %{_mandir}/man1/dwggrep.1.gz
@@ -126,5 +130,9 @@ fi
 #TODO add to {_libdir}/perl5/perllocal.pod
 
 %changelog
+* Sun Feb 16 2020 Reini Urban <reini.urban@gmail.com> 0.10.1.2899-1
+- with dwgfilter and dwgwrite, from github pre-releases
+* Sun Feb 16 2020 Reini Urban <reini.urban@gmail.com> 0.10.1-2
+- installvendor patch
 * Sat Feb 15 2020 Reini Urban <reini.urban@gmail.com> 0.10.1-1
 - Initial version targetting fc31

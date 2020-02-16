@@ -594,7 +594,6 @@ AC_CONFIG_FILES([
 	test/xmlsuite/Makefile
 	test/unit-testing/Makefile
 	libredwg.pc
-	libredwg.spec
 ])
 
 AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([doc/Doxyfile])])

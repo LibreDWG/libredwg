@@ -141,7 +141,7 @@ someone should probably think about and resolve them!
   This needs to be done with an in-tree ./configure, not in an extra build directory.
 
   Before a release:
-  - update NEWS manually
+  - update NEWS, .appveyor.yml, libredwg.spec manually
   - generate the missing ChangeLog entries
     e.g. via build-aux/gitlog-to-changelog --since='2018-11-05' >x
   - make distcheck
