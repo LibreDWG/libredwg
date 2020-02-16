@@ -1818,21 +1818,21 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           Dwg_Object *oldobj = &dwg->object[i - 1];
           if (!oldobj->handle.value)
             {
-              LOG_ERROR ("Required %s.handle missing, skipped", name)
+              LOG_ERROR ("Required %s.handle missing, skipped", oldobj->name)
               dwg_free_object (obj);
-              obj = oldobj;
+              obj = oldobj; i--; size--;
             }
           else if (!oldobj->type)
             {
-              LOG_ERROR ("Required %s.type missing, skipped", name)
+              LOG_ERROR ("Required %s.type missing, skipped", oldobj->name)
               dwg_free_object (obj);
-              obj = oldobj;
+              obj = oldobj; i--; size--;
             }
           else if (oldobj->fixedtype == DWG_TYPE_UNUSED)
             {
-              LOG_ERROR ("Required %s.fixedtype missing, skipped", name);
+              LOG_ERROR ("Required %s.fixedtype missing, skipped", oldobj->name);
               dwg_free_object (obj);
-              obj = oldobj;
+              obj = oldobj; i--; size--;
             }
           if (oldobj->fixedtype == DWG_TYPE_SEQEND)
             {
