@@ -43,6 +43,7 @@
 #include "encode.h"
 #include "dynapi.h"
 #include "hash.h"
+#include "free.h"
 
 #ifndef _DWG_API_H_
 Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
@@ -82,7 +83,7 @@ xcalloc (size_t n, size_t s)
     err:
       LOG_ERROR ("Out of memory with calloc %ld * %ld\n", (long)n,
                  (long)s);
-      exit (1);
+      return NULL;
     }
   return p;
 }
@@ -296,6 +297,8 @@ dxf_read_pair (Bit_Chain *dat)
 {
   Dxf_Pair *pair = xcalloc (1, sizeof (Dxf_Pair));
   const int is_binary = dat->opts & DWG_OPTS_DXFB;
+  if (!pair)
+    return NULL;
   if (dat->size - dat->byte < 6) // at least 0\nEOF\n
     {
     err:
@@ -424,6 +427,11 @@ array_push (array_hdls *restrict hdls, const char *restrict field,
     {
       hdls->size += 16;
       hdls = realloc (hdls, 8 + (hdls->size * sizeof (struct array_hdl)));
+      if (!hdls)
+        {
+          LOG_ERROR ("Out of memory");
+          return NULL;
+        }
       //memset (hdls, 0, 8 + (hdls->size * sizeof (struct array_hdl));
     }
   hdls->nitems = i + 1;
@@ -437,6 +445,8 @@ array_hdls *
 new_array_hdls (int size)
 {
   array_hdls *hdls = xcalloc (1, 8 + size * sizeof (struct array_hdl));
+  if (!hdls)
+    return NULL;
   hdls->size = size;
   return hdls;
 }
@@ -1155,12 +1165,24 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       if (i || eed)
         {
           eed = (Dwg_Eed *)realloc (eed, (i + 1) * sizeof (Dwg_Eed));
+          if (!eed)
+            {
+              LOG_ERROR ("Out of memory");
+              dwg_free_eed (obj);
+              return;
+            }
           if (i)
             memset (&eed[i], 0, sizeof (Dwg_Eed));
         }
       else
         {
           eed = (Dwg_Eed *)xcalloc (1, sizeof (Dwg_Eed));
+          if (!eed)
+            {
+              LOG_ERROR ("Out of memory");
+              dwg_free_eed (obj);
+              return;
+            }
         }
       obj->tio.object->eed = eed;
       obj->tio.object->num_eed++;
@@ -1185,6 +1207,12 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
             /* code [RC] + len [RC] + cp [RS] + str[len] */
             size = 1 + 1 + 2 + len;
             eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size+1);
+            if (!eed[i].data)
+              {
+                LOG_ERROR ("Out of memory");
+                dwg_free_eed (obj);
+                return;
+              }
             eed[i].data->code = code; // 1000
             eed[i].data->u.eed_0.length = len;
             eed[i].data->u.eed_0.codepage = dwg->header.codepage;
@@ -1199,6 +1227,12 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
             /* code [RC] + length [RS] + 2*len [TU] */
             size = 1 + 2 + (len * 2);
             eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size + 2);
+            if (!eed[i].data)
+              {
+                LOG_ERROR ("Out of memory");
+                dwg_free_eed (obj);
+                return;
+              }
             eed[i].data->code = code;
             eed[i].data->u.eed_0_r2007.length = len;
             eed[i].data->u.eed_0.codepage = obj->parent->header.codepage; /* UTF-8 */
@@ -1250,6 +1284,12 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       /* code [RC] + byte [RC] */
       size = 1 + 1;
       eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size);
+      if (!eed[i].data)
+        {
+          LOG_ERROR ("Out of memory");
+          dwg_free_eed (obj);
+          return;
+        }
       eed[i].data->code = code; // 1002
       eed[i].data->u.eed_2.byte = (BITCODE_RC)pair->value.i;
       LOG_TRACE ("byte: %d\n", pair->value.i);
@@ -1263,6 +1303,12 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         /* code [RC] + len+0 + length [RC] */
         size = 1 + len / 2 + 1 + 1;
         eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size);
+        if (!eed[i].data)
+          {
+            LOG_ERROR ("Out of memory");
+            dwg_free_eed (obj);
+            return;
+          }
         eed[i].data->code = code; // 1004
         eed[i].data->u.eed_4.length = len / 2;
         LOG_TRACE ("binary[%d]: ", len);
@@ -1285,6 +1331,12 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       /* code [RC] + 3*RD */
       size = 1 + 3 * 8;
       eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size);
+      if (!eed[i].data)
+        {
+          LOG_ERROR ("Out of memory");
+          dwg_free_eed (obj);
+          return;
+        }
       eed[i].data->code = code;
       eed[i].data->u.eed_10.point.x = pair->value.d;
       eed[i].size += size;
@@ -1329,6 +1381,12 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       /* code [RC] + 3*RD */
       size = 1 + 8;
       eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size);
+      if (!eed[i].data)
+        {
+          LOG_ERROR ("Out of memory");
+          dwg_free_eed (obj);
+          return;
+        }
       eed[i].data->code = code; // 1071
       eed[i].data->u.eed_40.real = pair->value.d;
       LOG_TRACE ("real: %f\n", pair->value.d);
@@ -1338,6 +1396,12 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       /* code [RC] + RS */
       size = 1 + 2;
       eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size);
+      if (!eed[i].data)
+        {
+          LOG_ERROR ("Out of memory");
+          dwg_free_eed (obj);
+          return;
+        }
       eed[i].data->code = code; // 1071
       eed[i].data->u.eed_70.rs = pair->value.i;
       LOG_TRACE ("short: %d\n", pair->value.i);
@@ -1347,6 +1411,12 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       /* code [RC] + RL */
       size = 1 + 4;
       eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size);
+      if (!eed[i].data)
+        {
+          LOG_ERROR ("Out of memory");
+          dwg_free_eed (obj);
+          return;
+        }
       eed[i].data->code = code; // 1071
       eed[i].data->u.eed_71.rl = pair->value.l;
       LOG_TRACE ("long: %ld\n", pair->value.l);
@@ -1360,6 +1430,12 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         /* code [RC] + RLL */
         size = 1 + 8;
         eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size);
+        if (!eed[i].data)
+          {
+            LOG_ERROR ("Out of memory");
+            dwg_free_eed (obj);
+            return;
+          }
         eed[i].data->code = code; // 1005
         sscanf (pos, "%lX", &l);
         eed[i].data->u.eed_5.entity = (BITCODE_RLL)l;
@@ -1406,6 +1482,11 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   Dwg_Data *dwg = obj->parent;
   int num_dashes = (int)_o->num_dashes;
   _o->dashes = xcalloc (_o->num_dashes, sizeof (Dwg_LTYPE_dash));
+  if (!_o->dashes)
+    {
+      _o->num_dashes = 0;
+      return NULL;
+    }
   for (int j = -1; j < num_dashes;)
     {
       if (!pair || pair->code == 0)
@@ -1489,6 +1570,11 @@ add_MLINESTYLE_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   _o->num_lines = num_lines;
   LOG_TRACE ("MLINESTYLE.num_lines = %d [RC 71]\n", num_lines);
   _o->lines = xcalloc (num_lines, sizeof (Dwg_MLINESTYLE_line));
+  if (!_o->lines)
+    {
+      _o->num_lines = 0;
+      return NULL;
+    }
 
   for (int j = -1; j < (int)num_lines;)
     {
@@ -1570,6 +1656,11 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   _o->num_points = num_points;
   LOG_TRACE ("LWPOLYLINE.num_points = %u [BS 90]\n", num_points);
   _o->points = xcalloc (num_points, sizeof (BITCODE_2RD));
+  if (!_o->points)
+    {
+      _o->num_points = 0;
+      return NULL;
+    }
 
   while (pair != NULL && pair->code != 0)
     {
@@ -1646,6 +1737,11 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           if (!j)
             {
               _o->bulges = xcalloc (num_points, sizeof (BITCODE_BD));
+              if (!_o->bulges)
+                {
+                  _o->num_bulges = 0;
+                  return NULL;
+                }
               _o->num_bulges = num_points;
             }
           assert (j >= 0);
@@ -1659,6 +1755,11 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           if (!j)
             {
               _o->vertexids = xcalloc (num_points, sizeof (BITCODE_BL));
+              if (!_o->vertexids)
+                {
+                  _o->num_vertexids = 0;
+                  return NULL;
+                }
               _o->num_vertexids = num_points;
             }
           assert (j >= 0);
@@ -1672,8 +1773,13 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           if (!j)
             {
-              _o->flag |= 4;
               _o->widths = xcalloc (num_points, sizeof (Dwg_LWPOLYLINE_width));
+              if (!_o->widths)
+                {
+                  _o->num_widths = 0;
+                  return NULL;
+                }
+              _o->flag |= 4;
               _o->num_widths = num_points;
             }
           assert (j >= 0);
@@ -1711,8 +1817,18 @@ add_3DSOLID_encr (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   int i = 0, total = 0;
   o->num_blocks = 1;
   o->encr_sat_data = xcalloc (2, sizeof (char *));
+  if (!o->encr_sat_data)
+    {
+      o->num_blocks = 0;
+      return NULL;
+    }
   o->encr_sat_data[0] = NULL;
   o->block_size = xcalloc (2, sizeof (BITCODE_BL));
+  if (!o->block_size)
+    {
+      o->num_blocks = 0;
+      return NULL;
+    }
 
   while (pair != NULL && pair->code == 1)
     {
@@ -1721,6 +1837,11 @@ add_3DSOLID_encr (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           total = len;
           o->encr_sat_data[0] = malloc (total + 1); // + the \0
+          if (!o->encr_sat_data[0])
+            {
+              LOG_ERROR ("Out of memory");
+              return NULL;
+            }
           // memcpy (o->encr_sat_data[0], pair->value.s, len + 1);
           strcpy ((char*)o->encr_sat_data[0], pair->value.s);
         }
@@ -1728,6 +1849,11 @@ add_3DSOLID_encr (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           total += len;
           o->encr_sat_data[0] = realloc (o->encr_sat_data[0], total + 1);
+          if (!o->encr_sat_data[0])
+            {
+              LOG_ERROR ("Out of memory");
+              return NULL;
+            }
           strcat ((char*)o->encr_sat_data[0], pair->value.s);
         }
       strcat ((char*)o->encr_sat_data[0], "\n");
@@ -1743,6 +1869,10 @@ add_3DSOLID_encr (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       int idx = 0;
       o->unknown = 1; // ??
       o->acis_data = xcalloc (1, total + 1);
+      if (!o->acis_data)
+        {
+          return NULL;
+        }
       for (i = 0; i < total; i++)
         {
           if (o->encr_sat_data[0][i] == '^' && i <= total
@@ -1781,6 +1911,11 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       if (pair->value.u)
         {
           o->subdiv_vertex = xcalloc (o->num_subdiv_vertex, sizeof (BITCODE_3BD));
+          if (!o->subdiv_vertex)
+            {
+              o->num_subdiv_vertex = 0;
+              return NULL;
+            }
         }
     }
 
@@ -1800,6 +1935,11 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           if (pair->value.u)
             {
               o->vertex = xcalloc (o->num_vertex, sizeof (BITCODE_3BD));
+              if (!o->vertex)
+                {
+                  o->num_vertex = 0;
+                  return NULL;
+                }
             }
         }
       else if (pair->code == 93)
@@ -1812,6 +1952,11 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           if (pair->value.u)
             {
               o->faces = xcalloc (o->num_faces, sizeof (BITCODE_BL));
+              if (!o->faces)
+                {
+                  o->num_faces = 0;
+                  return NULL;
+                }
             }
         }
       else if (pair->code == 94)
@@ -1824,6 +1969,11 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           if (pair->value.u) // from face - to face
             {
               o->edges = xcalloc (o->num_edges, sizeof (Dwg_MESH_edge));
+              if (!o->edges)
+                {
+                  o->num_edges = 0;
+                  return NULL;
+                }
             }
         }
       else if (pair->code == 95)
@@ -1836,6 +1986,11 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           if (pair->value.u)
             {
               o->crease = xcalloc (o->num_crease, sizeof (BITCODE_BD));
+              if (!o->crease)
+                {
+                  o->num_crease = 0;
+                  return NULL;
+                }
             }
         }
       else if (pair->code == 10)
@@ -1968,18 +2123,33 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       o->num_paths = pair->value.u;
       LOG_TRACE ("HATCH.num_paths = %u [BS 91]\n", o->num_paths);
       o->paths = xcalloc (o->num_paths, sizeof (Dwg_HATCH_Path));
+      if (!o->paths)
+        {
+          o->num_paths = 0;
+          return NULL;
+        }
     }
   else if (pair->code == 78)
     {
       o->num_deflines = pair->value.l;
       LOG_TRACE ("HATCH.num_deflines = %ld [BS 78]\n", pair->value.l);
       o->deflines = xcalloc (pair->value.l, sizeof (Dwg_HATCH_DefLine));
+      if (!o->deflines)
+        {
+          o->num_deflines = 0;
+          return NULL;
+        }
     }
   if (pair->code == 453)
     {
       o->num_colors = pair->value.l;
       LOG_TRACE ("HATCH.num_colors = %ld [BL 453]\n", pair->value.l);
       o->colors = xcalloc (pair->value.l, sizeof (Dwg_HATCH_Color));
+      if (!o->colors)
+        {
+          o->num_colors = 0;
+          return NULL;
+        }
     }
 
   while (pair->code != 0)
@@ -2008,15 +2178,25 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_TRACE ("HATCH.paths[%d].num_segs_or_paths = %u [BL 93]\n", j,
                      pair->value.u);
           k = -1;
-          if (!is_plpath)
+          if (pair->value.u && !is_plpath)
             { /* segs */
               o->paths[j].segs
                   = xcalloc (pair->value.u, sizeof (Dwg_HATCH_PathSeg));
+              if (!o->paths[j].segs)
+                {
+                  o->paths[j].num_segs_or_paths = 0;
+                  return NULL;
+                }
             }
-          else
+          else if (pair->value.u)
             { /* polyline path */
               o->paths[j].polyline_paths
                   = xcalloc (pair->value.u, sizeof (Dwg_HATCH_PolylinePath));
+              if (!o->paths[j].polyline_paths)
+                {
+                  o->paths[j].num_segs_or_paths = 0;
+                  return NULL;
+                }
             }
         }
       else if (pair->code == 72)
@@ -2081,6 +2261,11 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_TRACE ("HATCH.paths[%d].segs[%d].num_knots = %ld [BL 95]\n", j,
                      k, pair->value.l);
           o->paths[j].segs[k].knots = xcalloc (pair->value.l, sizeof (double));
+          if (!o->paths[j].segs[k].knots)
+            {
+              o->paths[j].segs[k].num_knots = 0;
+              return NULL;
+            }
           l = -1;
         }
       else if (pair->code == 96 && !is_plpath)
@@ -2095,6 +2280,11 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               k, pair->value.l);
           o->paths[j].segs[k].control_points
               = xcalloc (pair->value.l, sizeof (Dwg_HATCH_ControlPoint));
+          if (!o->paths[j].segs[k].control_points)
+            {
+              o->paths[j].segs[k].num_control_points = 0;
+              return NULL;
+            }
           l = -1;
         }
       else if (pair->code == 10 && !is_plpath && !o->num_seeds)
@@ -2418,6 +2608,11 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           o->num_deflines = pair->value.l;
           LOG_TRACE ("HATCH.num_deflines = %ld [BS 78]\n", pair->value.l);
           o->deflines = xcalloc (pair->value.l, sizeof (Dwg_HATCH_DefLine));
+          if (!o->deflines)
+            {
+              o->num_deflines = 0;
+              return NULL;
+            }
           j = -1;
         }
       else if (pair->code == 53 && o->num_deflines)
@@ -2472,6 +2667,11 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             {
               o->deflines[j].dashes
                 = xcalloc (pair->value.u, sizeof (BITCODE_BD));
+              if (!o->deflines[j].dashes)
+                {
+                  o->deflines[j].num_dashes = 0;
+                  return NULL;
+                }
             }
           k = -1;
         }
@@ -2503,6 +2703,11 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           if (pair->value.u)
             {
               o->seeds = xcalloc (pair->value.u, sizeof (BITCODE_2RD));
+              if (!o->seeds)
+                {
+                  o->num_seeds = 0;
+                  return NULL;
+                }
             }
           k = -1;
         }
@@ -2529,6 +2734,11 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               = dwg_add_handleref (obj->parent, 3, pair->value.u, obj);
           if (!o->boundary_handles)
             o->boundary_handles = xcalloc (o->num_boundary_handles, sizeof (BITCODE_H));
+          if (!o->boundary_handles)
+            {
+              o->num_boundary_handles = 0;
+              return NULL;
+            }
           o->boundary_handles[k] = ref;
           LOG_TRACE ("HATCH.boundary_handles[%d] = " FORMAT_REF " [H 330]\n",
                      k, ARGS_REF (ref));
@@ -2540,6 +2750,11 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           if (pair->value.u)
             {
               o->colors = xcalloc (pair->value.u, sizeof (Dwg_HATCH_Color));
+              if (!o->colors)
+                {
+                  o->num_colors = 0;
+                  return NULL;
+                }
             }
           j = -1;
         }
@@ -2621,6 +2836,11 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       int i = -1, j = -1, k = -1;
       Dwg_MLEADER_AnnotContext *ctx = &o->ctx;
       lnode->lines = xcalloc (1, sizeof (Dwg_LEADER_Line));
+      if (!lnode->lines)
+        {
+          lnode->num_lines = 0;
+          return NULL;
+        }
 
       // lines and breaks
       while (pair->code != 305 && pair->code != 0)
@@ -2637,8 +2857,17 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               lnode->num_lines = i + 1;
               LOG_TRACE ("%s.leaders[].num_lines = %d\n", obj->name, i + 1);
               if (i > 0)
-                lnode->lines = realloc (
-                    lnode->lines, lnode->num_lines * sizeof (Dwg_LEADER_Line));
+                {
+                  lnode->lines
+                      = realloc (lnode->lines,
+                                 lnode->num_lines * sizeof (Dwg_LEADER_Line));
+                  if (!lnode->lines)
+                    {
+                      lnode->num_lines = 0;
+                      LOG_ERROR ("Out of memory");
+                      return NULL;
+                    }
+                }
               lline = &lnode->lines[i];
               memset (lline, 0, sizeof (Dwg_LEADER_Line));
               lline->num_breaks = 0;
@@ -3347,6 +3576,10 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               if (!j)
                 {
                   ctx->content.blk.transform = xcalloc (16, sizeof (double));
+                  if (!ctx->content.blk.transform)
+                    {
+                      return NULL;
+                    }
                 }
               ctx->content.blk.transform[j] = pair->value.d;
               LOG_TRACE ("%s.ctx.content.blk.transform[%d] = %f [BD %d]\n",
@@ -3513,6 +3746,11 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           if (!o->rowstyles[i].borders)
             {
               o->rowstyles[i].borders = xcalloc (6, sizeof (Dwg_TABLESTYLE_border));
+              if (!o->rowstyles[i].borders)
+                {
+                  o->rowstyles[i].num_borders = 0;
+                  return NULL;
+                }
               o->rowstyles[i].num_borders = 6;
             }
           assert (o->rowstyles[i].num_borders);
@@ -3568,6 +3806,10 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   int i = -1;
   int have_rotated_type = 0;
   o->ref = xcalloc (4, sizeof (Dwg_DIMASSOC_Ref));
+  if (!o->ref)
+    {
+      return NULL;
+    }
 
   while (pair != NULL && pair->code != 0)
     {
@@ -3997,10 +4239,12 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
               BITCODE_H *hdls;
               // can be -1
               BITCODE_BL num_entries = pair->value.i < 0 ? 0 : pair->value.i;
+              hdls = xcalloc (num_entries, sizeof (Dwg_Object_Ref *));
+              if (!hdls)
+                num_entries = 0;
               dwg_dynapi_entity_set_value (_obj, obj->name, "num_entries",
                                            &num_entries, 1);
               LOG_TRACE ("%s.num_entries = %u [BL 70]\n", ctrlname, num_entries);
-              hdls = xcalloc (num_entries, sizeof (Dwg_Object_Ref *));
               dwg_dynapi_entity_set_value (_obj, obj->name, "entries", &hdls,
                                            0);
               LOG_TRACE ("Add %d %s.%s\n", num_entries, ctrlname, "entries");
@@ -4012,12 +4256,14 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
               if (pair->value.u)
                 {
                   BITCODE_H *hdls;
+                  hdls = xcalloc (pair->value.u, sizeof (Dwg_Object_Ref *));
+                  if (!hdls)
+                    pair->value.u = 0;
                   dwg_dynapi_entity_set_value (_obj, obj->name,
                                                "num_morehandles", &pair->value,
                                                is_utf);
                   LOG_TRACE ("%s.num_morehandles = %u [BL 71]\n", ctrlname,
                              pair->value.u);
-                  hdls = xcalloc (pair->value.u, sizeof (Dwg_Object_Ref *));
                   dwg_dynapi_entity_set_value (_obj, obj->name, "morehandles",
                                                &hdls, 0);
                   LOG_TRACE ("Add %s.morehandles[%d]\n", ctrlname,
@@ -4466,6 +4712,11 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
       _o->num_knots = pair->value.i;
       *jp = 0;
       _o->knots = xcalloc (_o->num_knots, sizeof (BITCODE_BD));
+      if (!_o->knots)
+        {
+          _o->num_knots = 0;
+          return 0;
+        }
       LOG_TRACE ("SPLINE.num_knots = %d [BS 72]\n", _o->num_knots);
       return 1; // found
     }
@@ -4475,6 +4726,11 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
       *jp = 0;
       _o->ctrl_pts
           = xcalloc (_o->num_ctrl_pts, sizeof (Dwg_SPLINE_control_point));
+      if (!_o->ctrl_pts)
+        {
+          _o->num_ctrl_pts = 0;
+          return 0;
+        }
       LOG_TRACE ("SPLINE.num_ctrl_pts = %d [BS 73]\n", _o->num_ctrl_pts);
       return 1; // found
     }
@@ -4483,6 +4739,11 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
       _o->num_fit_pts = pair->value.i;
       *jp = 0;
       _o->fit_pts = xcalloc (_o->num_fit_pts, sizeof (BITCODE_3BD));
+      if (!_o->fit_pts)
+        {
+          _o->num_fit_pts = 0;
+          return 0;
+        }
       _o->scenario = 2;
       _o->flag |= 1024;
       LOG_TRACE ("SPLINE.num_fit_pts = %d [BS 74]\n", _o->num_fit_pts);
@@ -4616,6 +4877,11 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       _o->num_verts = pair->value.i;
       _o->parent = obj->tio.entity;
       _o->verts = xcalloc (_o->num_verts, sizeof (Dwg_MLINE_vertex));
+      if (!_o->verts)
+        {
+          _o->num_verts = 0;
+          return 0;
+        }
       LOG_TRACE ("MLINE.num_verts = %d [BS 72]\n", _o->num_verts);
       *jp = 0;
     }
@@ -4626,6 +4892,11 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           _o->verts[_j].lines
               = xcalloc (_o->num_lines, sizeof (Dwg_MLINE_line));
+          if (!_o->verts[_j].lines)
+            {
+              _o->num_lines = 0;
+              return 2;
+            }
         }
       LOG_TRACE ("MLINE.num_lines = %d [BS 73]\n", _o->num_lines);
       *kp = 0;
@@ -4767,6 +5038,11 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       _o->verts[j].lines[k].num_segparms = pair->value.i;
       _o->verts[j].lines[k].segparms
           = xcalloc (pair->value.i, sizeof (BITCODE_BD));
+      if (!_o->verts[j].lines[k].segparms)
+        {
+          _o->verts[j].lines[k].num_segparms = 0;
+          return 2;
+        }
       LOG_TRACE ("MLINE.v[%d].l[%d].num_segparms = %d [BS 74]\n", j, k,
                  pair->value.i);
       *lp = 0;
@@ -5410,6 +5686,11 @@ new_object (char *restrict name, char *restrict dxfname,
       Dwg_Object_TABLESTYLE *_o = obj->tio.object->tio.TABLESTYLE;
       _o->num_rowstyles = 3;
       _o->rowstyles = xcalloc (3, sizeof (Dwg_TABLESTYLE_rowstyles));
+      if (!_o->rowstyles)
+        {
+          _o->num_rowstyles = 0;
+          return NULL;
+        }
       for (j = 0; j < 3; j++)
         {
           _o->rowstyles[j].borders = xcalloc (6, sizeof (Dwg_TABLESTYLE_border));
@@ -5534,6 +5815,8 @@ new_object (char *restrict name, char *restrict dxfname,
                     hdls = realloc (hdls,
                                     num_entries * sizeof (Dwg_Object_Ref *));
                   }
+                if (pair->value.u && !hdls)
+                  return NULL;
                 hdls[i] = dwg_add_handleref (dwg, 2, pair->value.u, obj);
                 dwg_dynapi_entity_set_value (_ctrl, ctrlname, "entries", &hdls,
                                              0);
@@ -5735,6 +6018,8 @@ new_object (char *restrict name, char *restrict dxfname,
                 inserts = realloc (inserts, num_inserts * sizeof (BITCODE_H));
               else
                 inserts = xcalloc (num_inserts, sizeof (BITCODE_H));
+              if (num_inserts && !inserts)
+                return NULL;
               dwg_dynapi_entity_set_value (_obj, obj->name, "inserts",
                                            &inserts, 0);
               hdl = dwg_add_handleref (dwg, 4, pair->value.u, obj);
@@ -6101,6 +6386,11 @@ new_object (char *restrict name, char *restrict dxfname,
               Dwg_Entity_OLE2FRAME *_o = obj->tio.entity->tio.OLE2FRAME;
               _o->data_size = pair->value.l;
               _o->data = xcalloc (pair->value.l, 1);
+              if (!_o->data)
+                {
+                  _o->data_size = 0;
+                  return NULL;
+                }
               LOG_TRACE ("OLE2FRAME.data_size = %ld [BL 90]\n", pair->value.l);
             }
           else if (pair->code == 90 && obj->fixedtype == DWG_TYPE_PERSSUBENTMANAGER)
@@ -6360,8 +6650,15 @@ new_object (char *restrict name, char *restrict dxfname,
               if (!o->num_column_heights)
                 o->num_column_heights = 1;
               if (!j)
-                o->column_heights
+                {
+                  o->column_heights
                     = xcalloc (o->num_column_heights, sizeof (BITCODE_BD));
+                  if (!o->column_heights)
+                    {
+                      o->num_column_heights = 0;
+                      return NULL;
+                    }
+                }
               assert (j < (int)o->num_column_heights);
               o->column_heights[j] = pair->value.d;
               LOG_TRACE ("MTEXT.column_heights[%d] = %f [BD* 50]\n", j,
@@ -6381,7 +6678,14 @@ new_object (char *restrict name, char *restrict dxfname,
             {
               Dwg_Entity_LEADER *o = obj->tio.entity->tio.LEADER;
               if (!j && pair->code == 10)
-                o->points = xcalloc (o->num_points, sizeof (BITCODE_3BD));
+                {
+                  o->points = xcalloc (o->num_points, sizeof (BITCODE_3BD));
+                  if (!o->points)
+                    {
+                      o->num_points = 0;
+                      return NULL;
+                    }
+                }
               assert (j >= 0);
               assert (j < (int)o->num_points);
               assert (o->points);
@@ -6727,6 +7031,8 @@ new_object (char *restrict name, char *restrict dxfname,
                       if (!matrix)
                         {
                           matrix = xcalloc (16, sizeof (BITCODE_BD));
+                          if (!matrix)
+                            return NULL;
                           j = 0;
                         }
                       assert (j >= 0 && j < 16);
@@ -7101,9 +7407,15 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                            && _obj->has_strings_area)
                     {
                       _obj->strings_area = xcalloc (512, 1);
+                      if (!_obj->strings_area)
+                        return DWG_ERR_OUTOFMEM;
                     }
                   if (dwg->header.version <= R_2004)
-                    _obj->strings_area = xcalloc (256, 1);
+                    {
+                      _obj->strings_area = xcalloc (256, 1);
+                      if (!_obj->strings_area)
+                        return DWG_ERR_OUTOFMEM;
+                    }
                 }
             }
           // next table
@@ -7126,6 +7438,8 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                             _ctrl->entries = realloc (
                                 _ctrl->entries,
                                 _ctrl->num_entries * sizeof (BITCODE_H));
+                            if (_ctrl->num_entries && !_ctrl->entries)
+                              return DWG_ERR_OUTOFMEM;
                             LOG_TRACE ("%s.num_entries-- => %d\n", ctrl->name,
                                        _ctrl->num_entries);
                           }
