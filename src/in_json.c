@@ -510,6 +510,7 @@ json_CMC (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       tokens->index++; // hash of index, rgb...
       for (int j = 0; j < t->size; j++)
         {
+          JSON_TOKENS_CHECK_OVERFLOW
           json_fixed_key (key, dat, tokens);
           if (strEQc (key, "index"))
             {
@@ -1394,6 +1395,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
     {
       // LOG_INSANE ("-%s.%s [%s]\n", name, f->name, f->type);
       // common and entity dynapi, check types
+      JSON_TOKENS_CHECK_OVERFLOW_ERR
       if (strEQ (f->name, key)) // found
         {
           LOG_INSANE ("-found %s [%s] %s\n", f->name, f->type,
@@ -1511,24 +1513,28 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                        || strEQc (f->type, "2BD_1")))
             {
               BITCODE_2DPOINT pt;
+              JSON_TOKENS_CHECK_OVERFLOW_ERR
               json_2DPOINT (dat, tokens, key, f->type, &pt);
               dwg_dynapi_field_set_value (dwg, _obj, f, &pt, 1);
             }
           else if (strEQc (f->type, "TIMEBLL") || strEQc (f->type, "TIMERLL"))
             {
               static BITCODE_TIMEBLL date = { 0, 0, 0 };
+              JSON_TOKENS_CHECK_OVERFLOW_ERR
               json_TIMEBLL (dat, tokens, key, &date);
               dwg_dynapi_field_set_value (dwg, _obj, f, &date, 1);
             }
           else if (strEQc (f->type, "CMC"))
             {
               static BITCODE_CMC color = { 0, 0, 0 };
+              JSON_TOKENS_CHECK_OVERFLOW_ERR
               json_CMC (dat, dwg, tokens, key, &color);
               dwg_dynapi_field_set_value (dwg, _obj, f, &color, 1);
             }
           else if (t->type == JSMN_ARRAY && strEQc (f->type, "H"))
             {
               BITCODE_H hdl;
+              JSON_TOKENS_CHECK_OVERFLOW_ERR
               hdl = json_HANDLE (dat, dwg, tokens, key, obj, -1);
               if (hdl)
                 dwg_dynapi_field_set_value (dwg, _obj, f, &hdl, 1);
@@ -1541,7 +1547,9 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               tokens->index++;
               for (int k = 0; k < size1; k++)
                 {
-                  BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, key, obj, k);
+                  BITCODE_H hdl;
+                  JSON_TOKENS_CHECK_OVERFLOW_ERR
+                  hdl = json_HANDLE (dat, dwg, tokens, key, obj, k);
                   if (hdl)
                     hdls[k] = hdl;
                   else
@@ -1560,6 +1568,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               tokens->index++;
               for (int k = 0; k < size1; k++)
                 {
+                  JSON_TOKENS_CHECK_OVERFLOW_ERR
                   json_3DPOINT (dat, tokens, key, f->type, &pts[k]);
                 }
               if (!size1)
@@ -1574,6 +1583,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               tokens->index++;
               for (int k = 0; k < size1; k++)
                 {
+                  JSON_TOKENS_CHECK_OVERFLOW_ERR
                   json_2DPOINT (dat, tokens, key, f->type, &pts[k]);
                 }
               if (!size1)
@@ -1588,6 +1598,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               tokens->index++;
               for (int k = 0; k < size1; k++)
                 {
+                  JSON_TOKENS_CHECK_OVERFLOW_ERR
                   nums[k] = json_float (dat, tokens);
                   LOG_TRACE ("%s[%d]: %f [%s]\n", key, k, nums[k], f->type);
                 }
@@ -1603,6 +1614,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               tokens->index++;
               for (int k = 0; k < size1; k++)
                 {
+                  JSON_TOKENS_CHECK_OVERFLOW_ERR
                   nums[k] = (BITCODE_BL)json_long (dat, tokens);
                   LOG_TRACE ("%s[%d]: " FORMAT_BL " [BL]\n", key, k, nums[k]);
                 }
@@ -1622,6 +1634,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               tokens->index++;
               for (int k = 0; k < size1; k++)
                 {
+                  JSON_TOKENS_CHECK_OVERFLOW_ERR
                   elems[k] = json_string (dat, tokens);
                   LOG_TRACE ("%s[%d]: \"%s\" [%s]\n", key, k, elems[k],
                              f->type);
@@ -1680,6 +1693,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               for (int k = 0; k < num_elems; k++)
                 {
                   int keys;
+                  JSON_TOKENS_CHECK_OVERFLOW_ERR
                   t = &tokens->tokens[tokens->index];
                   if (t->type != JSMN_OBJECT)
                     {
@@ -1699,6 +1713,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                       // seperate subclass type loop
                       const Dwg_DYNAPI_field *f1;
                       char key1[80];
+                      JSON_TOKENS_CHECK_OVERFLOW_ERR
                       json_fixed_key (key1, dat, tokens);
                       LOG_INSANE ("-search %s.%s\n", subclass, key1);
                       for (f1 = &sfields[0]; f1->name;
@@ -1741,6 +1756,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               LOG_ERROR ("Unknown type for %s.%s %s with %s", name, key,
                          f->type, t_typename[t->type]);
               ++tokens->index;
+              JSON_TOKENS_CHECK_OVERFLOW_ERR
             }
           break;
         }
@@ -1748,6 +1764,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         {
           // Currently we have 3 known static arrays
           // TODO: => vertind BS[4]
+          JSON_TOKENS_CHECK_OVERFLOW_ERR
           if (t->type == JSMN_PRIMITIVE && memBEGINc (key, "vertind[")
               && strEQc (f->name, "vertind[4]"))
             {
