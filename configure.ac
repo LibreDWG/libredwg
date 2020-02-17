@@ -542,6 +542,9 @@ case $host_os in
 esac
 AC_SUBST([DSYMUTIL])
 
+AC_CHECK_PROGS([RPMLINT], [rpmlint])
+AM_CONDITIONAL([HAVE_RPMLINT], [test -n "$RPMLINT"])
+
 dnl help2man only by the maintainer
 
 if test x$cross_compiling = xno; then

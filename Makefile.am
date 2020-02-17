@@ -99,6 +99,14 @@ regen-swig-patch:
 	-difforig bindings/python/swig_python.c >xxxx
 	if test -s xxxx; then mv xxxx build-aux/swig_python.patch; fi
 
+if HAVE_RPMLINT
+# fragile, serial-tests only. SPEC_LOG_COMPILER does not work there
+TESTS = $(srcdir)/libredwg.spec
+TESTS_ENVIRONMENT = $(RPMLINT)
+# TEST_EXTENSIONS = .spec
+# SPEC_LOG_COMPILER = $(RPMLINT)
+endif
+
 check-dwg: all
 	-mv check-dwg.log check-dwg.log~ 2>/dev/null
 	for d in `find $(srcdir)/test/test-data -iname \*.dwg -size -40M`; do \
