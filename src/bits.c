@@ -1923,7 +1923,11 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src, const in
         }
       /* everything above 0xf0 exceeds ucs-2, 4-6 byte seqs */
     }
-  *dest = '\0';
+
+  if (dest >= endp)
+    return NULL;
+  else
+    *dest = '\0';
   return d;
 }
 
