@@ -1,6 +1,6 @@
 # -*- sh -*-
 Name:           libredwg
-Version:        0.10.1.2901
+Version:        0.10.1.2905
 Release:        1%{?dist}
 Summary:        GNU C library and programs to read and write DWG files
 

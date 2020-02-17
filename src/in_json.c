@@ -142,6 +142,18 @@ static Bit_Chain *g_dat;
     else                                                                      \
       json_advance_unknown (dat, tokens, 0);                                  \
   }
+#define FIELD_TU16(nam, dxf)                                                  \
+  else if (strEQc (key, #nam))                                                \
+  {                                                                           \
+    LOG_TRACE (#nam ": \"%.*s\"\n", t->end - t->start,                        \
+               &dat->chain[t->start]);                                        \
+    if (t->type == JSMN_STRING)                                               \
+      {                                                                       \
+        _obj->nam = (BITCODE_TU)json_wstring (dat, tokens);                   \
+      }                                                                       \
+    else                                                                      \
+      json_advance_unknown (dat, tokens, 0);                                  \
+  }
 #define FIELD_TIMERLL(nam, dxf)                                               \
   else if (strEQc (key, #nam))                                                \
   {                                                                           \
@@ -2478,7 +2490,7 @@ json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   t_typename[t->type], tokens->index, tokens->num_tokens,
                   section, key);
               json_advance_unknown (dat, tokens, 0);
-              return 0;
+              return DWG_ERR_INVALIDTYPE;
             }
           size1 = t->size;
           LOG_TRACE ("\n%s pos:%d [%d members]\n--------------------\n",
@@ -2488,36 +2500,39 @@ json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           tokens->index++;
           for (int j = 0; j < size1; j++)
             {
-              tokens->index++; // OBJECT of 2
-              for (int k = 0; k < 2; k++)
+              JSON_TOKENS_CHECK_OVERFLOW_ERR
+              t = &tokens->tokens[tokens->index];
+              if (t->type != JSMN_OBJECT)
                 {
-                  JSON_TOKENS_CHECK_OVERFLOW_ERR
-                  if (t->type == JSMN_STRING)
-                    _obj->props[j].key = json_string (dat, tokens);
-                  else if (t->type == JSMN_PRIMITIVE)
-                    tokens->index++;
-                  else
-                    json_advance_unknown (dat, tokens, 0);
-                  if (t->type == JSMN_STRING)
-                    _obj->props[j].value = json_string (dat, tokens);
-                  else if (t->type == JSMN_PRIMITIVE)
-                    tokens->index++;
-                  else
-                    json_advance_unknown (dat, tokens, 0);
-                  LOG_TRACE ("%s[%d] = (%s, %s)\n", key, j, _obj->props[j].key,
-                             _obj->props[j].value)
-                  tokens->index++;
+                  LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s.%s OBJECT",
+                             t_typename[t->type], tokens->index, tokens->num_tokens,
+                             section, key);
+                  json_advance_unknown (dat, tokens, 0);
+                  return DWG_ERR_INVALIDTYPE;
                 }
+              tokens->index++; // OBJECT of 2: key, value. TODO: array of 2
+              json_fixed_key (key, dat, tokens);
+              JSON_TOKENS_CHECK_OVERFLOW_ERR
+              t = &tokens->tokens[tokens->index];
+              if (t->type == JSMN_STRING) // key
+                _obj->props[j].key = json_string (dat, tokens);
+              else if (t->type == JSMN_PRIMITIVE)
+                tokens->index++;
+              else
+                json_advance_unknown (dat, tokens, 0);
+
+              json_fixed_key (key, dat, tokens);
+              JSON_TOKENS_CHECK_OVERFLOW_ERR
+              t = &tokens->tokens[tokens->index];
+              if (t->type == JSMN_STRING) // value
+                _obj->props[j].value = json_string (dat, tokens);
+              else if (t->type == JSMN_PRIMITIVE)
+                tokens->index++;
+              else
+                json_advance_unknown (dat, tokens, 0);
+              LOG_TRACE ("props[%d] = (%s,%s)\n", j, _obj->props[j].key,
+                         _obj->props[j].value)
             }
-          // num_props array of objects
-          // FIELD_RS (num_props, 0);
-          // REPEAT (num_props, props, Dwg_SummaryInfo_Property)
-          //  REPEAT_BLOCK
-          //  FIELD_T (props[rcount1].key, 0);
-          //  FIELD_T (props[rcount1].value, 0);
-          // END_REPEAT_BLOCK
-          // END_REPEAT (props)
-          // json_advance_unknown (dat, tokens, 0);
         }
       // clang-format off
       FIELD_T (TITLE, 1)
@@ -2536,10 +2551,9 @@ json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       else
         {
           LOG_ERROR ("Unknown %s.%s ignored", section, key);
-          tokens->index++;
+          json_advance_unknown (dat, tokens, 0);
         }
       // clang-format on
-      // json_advance_unknown (dat, tokens, 0);
     }
 
   LOG_TRACE ("End of %s\n", section)
@@ -2553,6 +2567,7 @@ json_AppInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 {
   const char *section = "AppInfo";
   const jsmntok_t *t = &tokens->tokens[tokens->index];
+  struct Dwg_AppInfo *_obj = &dwg->appinfo;
   int size;
   if (t->type != JSMN_OBJECT)
     {
@@ -2573,7 +2588,24 @@ json_AppInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       json_fixed_key (key, dat, tokens);
       LOG_TRACE ("%s\n", key)
       t = &tokens->tokens[tokens->index];
-      json_advance_unknown (dat, tokens, 0);
+
+      // clang-format off
+      if (0) ;
+      FIELD_RL (class_version, 0)
+      FIELD_TU16 (appinfo_name, 0)
+      FIELD_RL (num_strings, 0)
+      FIELD_TFFx (version_checksum, 16, 0)
+      FIELD_TU16 (version, 0)
+      FIELD_TFFx (comment_checksum, 16, 0)
+      FIELD_TU16 (comment, 0)
+      FIELD_TFFx (product_checksum, 16, 0)
+      FIELD_TU16 (product_info, 0)
+      else
+        {
+          LOG_ERROR ("Unknown %s.%s ignored", section, key);
+          json_advance_unknown (dat, tokens, 0);
+        }
+      // clang-format on
     }
 
   LOG_TRACE ("End of %s\n", section)
