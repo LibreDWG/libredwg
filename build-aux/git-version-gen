@@ -1,6 +1,6 @@
 #!/bin/sh
 # Print a version string.
-scriptversion=2018-07-11.20; # UTC
+scriptversion=2020-02-17.18; # UTC
 
 # Copyright (C) 2007-2018 Free Software Foundation, Inc.
 #
@@ -125,7 +125,7 @@ if test "x$tarball_version_file" = x; then
     exit 1
 fi
 
-tag_sed_script="${tag_sed_script:-s/x/x/}"
+tag_sed_script="${tag_sed_script:-s/-/_/g}"
 
 nl='
 '
@@ -165,9 +165,9 @@ elif test "`git log -1 --pretty=format:x . 2>&1`" = x \
 then
     # Is this a new git that lists number of commits since the last
     # tag or the previous older version that did not?
-    #   Newer: v6.10-77-g0f8faeb
-    #   Older: v6.10-g0f8faeb
-    vprefix=`expr "X$v" : 'X\(.*\)-g[^-]*$'` || vprefix=$v
+    #   Newer: v6.10_77_g0f8faeb
+    #   Older: v6.10_g0f8faeb
+    vprefix=`expr "X$v" : 'X\(.*\)_g[^_]*$'` || vprefix=$v
     case $vprefix in
         *-*) : git describe is probably okay three part flavor ;;
         *)
@@ -175,19 +175,20 @@ then
             # Recreate the number of commits and rewrite such that the
             # result is the same as if we were using the newer version
             # of git describe.
-            vtag=`echo "$v" | sed 's/-.*//'`
+            vtag=`echo "$v" | sed 's/_.*//'`
             commit_list=`git rev-list "$vtag"..HEAD 2>/dev/null` \
                 || { commit_list=failed;
                      echo "$0: WARNING: git rev-list failed" 1>&2; }
             numcommits=`echo "$commit_list" | wc -l`
-            v=`echo "$v" | sed "s/\(.*\)-\(.*\)/\1-$numcommits-\2/"`;
+            v=`echo "$v" | sed "s/\(.*\)_\(.*\)/\1_$numcommits_\2/"`;
             test "$commit_list" = failed && v=UNKNOWN
             ;;
     esac
 
-    # Change the penultimate "-" to ".", for version-comparing tools.
+    # Change the penultimate "_" to ".", for version-comparing tools.
     # Remove the "g" to save a byte.
-    v=`echo "$v" | sed 's/-\([^-]*\)-g\([^-]*\)$/.\1-\2/'`;
+    # The rpm version must not contain a -
+    v=`echo "$v" | sed 's/_\([^_]*\)_g\([^_]*\)$/.\1_\2/'`;
     v_from_git=1
 elif test "x$fallback" = x || git --version >/dev/null 2>&1; then
     v=UNKNOWN
@@ -210,7 +211,7 @@ if test "x$v_from_git" != x; then
       *) # Append the suffix only if there isn't one already.
           case $v in
             *-dirty) ;;
-            *) v="$v-dirty" ;;
+            *) v="$v_dirty" ;;
           esac ;;
   esac
 fi

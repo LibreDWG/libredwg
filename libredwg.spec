@@ -131,7 +131,7 @@ fi
 #TODO add to {_libdir}/perl5/perllocal.pod
 
 %changelog
-* Mon Feb 17 2020 Reini Urban <reini.urban@gmail.com> 0.10.1.2901-1
+* Mon Feb 17 2020 Reini Urban <reini.urban@gmail.com> 0.10.1.2905-1
 - with dwgfilter and dwgwrite, from github pre-releases
 * Mon Feb 17 2020 Reini Urban <reini.urban@gmail.com> 0.10.1-2
 - installvendor patch, added pslib

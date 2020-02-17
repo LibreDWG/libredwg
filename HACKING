@@ -40,7 +40,7 @@ someone should probably think about and resolve them!
 * version numbers
 
   We follow semantic versioning, using git-version-gen with no v prefix.
-  e.g. 0.5, 0.5.0.1099, 0.5.0.1093.1-967f
+  e.g. 0.5, 0.5.0.1099, 0.5.0.1093.1_967f
 
   Major for breaking changes in the API of otherwise declared stable entities.
 
@@ -55,9 +55,9 @@ someone should probably think about and resolve them!
   builds on github.
 
   The optional number after those 4 numbers is the number of commits not yet
-  merged to master. E.g. the 1 in 0.5.0.1093.1-967f.
+  merged to master. E.g. the 1 in 0.5.0.1093.1_967f.
   And finally for local development builds the abbrevated git tag, e.g. the 967f
-  in 0.5.0.1093.1-967f.
+  in 0.5.0.1093.1_967f.
 
   So a released version will be 2 or 3 numbers, a development version will also
   carry the 4-digit build number, and if it's a branch also two more elements.
