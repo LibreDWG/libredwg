@@ -6,24 +6,24 @@ Summary:        GNU C library and programs to read and write DWG files
 
 License:        GPLv3+
 URL:            https://www.gnu.org/software/libredwg/
-#Source0:        https://ftp.gnu.org/gnu/libredwg/libredwg-%{version}.tar.xz
-Source0:        https://github.com/LibreDWG/libredwg/releases/download/%{version}/libredwg-%{version}.tar.gz
+#Source0:        https://ftp.gnu.org/gnu/libredwg/libredwg-%%{version}.tar.xz
+Source0:        https://github.com/LibreDWG/libredwg/releases/download/%{version}/libredwg-%{version}.tar.xz
 
-# TODO libps-devel
-BuildRequires:  texinfo-tex, texinfo, pcre2-devel, swig, python3-devel
-BuildRequires:  python3-libxml2, perl, perl-Convert-Binary-C
+BuildRequires:  gcc, texinfo-tex, texinfo, pcre2-devel, swig, python3-devel
+BuildRequires:  python3-libxml2, perl-devel, perl-Convert-Binary-C, pslib-devel
 Requires:       pcre2, pcre2-utf16
 # no big-endian. s390 untested
 ExcludeArch:    sparc alpha ppc64 ppc
 
 %description
-At the moment our decoder (i.e. reader) is done, just some very advanced
-R2010+ and preR13 entities fail to read and are skipped over. The
-writer is good enough for R2000.  Among the example applications we
-wrote using LibreDWG is a reader, a writer, a re-writer (i.e. SaveAS),
-an initial SVG and Postscript conversion, dxf and json converters,
-dwggrep to search for text, dwglayer to print the list of layers, and
-dwgfilter to use JQ expressions to query or change a DWG.
+LibreDWG is a free C library to read and write DWG files. At the moment
+our decoder (i.e. reader) is done, just some very advanced R2010+ and
+preR13 entities fail to read and are skipped over. The writer is good
+enough for R2000.  As programs we provide a reader, a writer, a
+re-writer (i.e. SaveAS), an initial basic SVG and Postscript
+conversion, experimental dxf and json converters, dwggrep to search
+for text, dwglayer to print the list of layers, and dwgfilter to use
+JQ expressions to query or change a DWG.
 
 %package        devel
 Summary:        Development files for %{name}
@@ -59,24 +59,22 @@ applications that use %{name}.
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 %make_build PERL=/usr/bin/perl PYTHON=/usr/bin/python
-%make_build check
 %make_build pdf
+
+%check
+%make_build check
 
 %install
 rm -rf $RPM_BUILD_ROOT
 %make_install
 find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
-#later
-rm $RPM_BUILD_ROOT%{_bindir}/dwg2ps || :
-rm $RPM_BUILD_ROOT%{_mandir}/man1/dwg2ps.1 || :
 rm $RPM_BUILD_ROOT%{_libdir}/perl5/perllocal.pod
 rm $RPM_BUILD_ROOT%{perl_vendorarch}/auto/LibreDWG/.packlist
 #perl EUMM sets it read-only, objcopy needs write
 chmod u+w $RPM_BUILD_ROOT%{perl_vendorarch}/auto/LibreDWG/LibreDWG.so
 
-%ldconfig_scriptlets
-
 %post
+/sbin/ldconfig
 /sbin/install-info %{_infodir}/LibreDWG.info %{_infodir}/dir || :
 
 %preun
@@ -84,12 +82,14 @@ if [ $1 = 0 ] ; then
 /sbin/install-info --delete %{_infodir}/LibreDWG.info %{_infodir}/dir || :
 fi
 
+%ldconfig_postun
+
 %files
 %license COPYING
 %doc README AUTHORS NEWS doc/LibreDWG.pdf
 %{_bindir}/dwg2SVG
 %{_bindir}/dwg2dxf
-#{_bindir}/dwg2ps
+%{_bindir}/dwg2ps
 %{_bindir}/dwgbmp
 %{_bindir}/dwgfilter
 %{_bindir}/dwggrep
@@ -102,9 +102,9 @@ fi
 %{_libdir}/libredwg.so.0.0.10
 %{_mandir}/man1/dwg2SVG.1.gz
 %{_mandir}/man1/dwg2dxf.1.gz
-#{_mandir}/man1/dwg2ps.1.gz
+%{_mandir}/man1/dwg2ps.1.gz
 %{_mandir}/man1/dwgbmp.1.gz
-%{_mandir}/man1}/dwgfilter.1.gz
+%{_mandir}/man1/dwgfilter.1.gz
 %{_mandir}/man1/dwggrep.1.gz
 %{_mandir}/man1/dwglayers.1.gz
 %{_mandir}/man1/dwgread.1.gz
@@ -131,9 +131,9 @@ fi
 #TODO add to {_libdir}/perl5/perllocal.pod
 
 %changelog
-* Sun Feb 16 2020 Reini Urban <reini.urban@gmail.com> 0.10.1.2899-1
+* Mon Feb 17 2020 Reini Urban <reini.urban@gmail.com> 0.10.1.2901-1
 - with dwgfilter and dwgwrite, from github pre-releases
-* Sun Feb 16 2020 Reini Urban <reini.urban@gmail.com> 0.10.1-2
-- installvendor patch
+* Mon Feb 17 2020 Reini Urban <reini.urban@gmail.com> 0.10.1-2
+- installvendor patch, added pslib
 * Sat Feb 15 2020 Reini Urban <reini.urban@gmail.com> 0.10.1-1
-- Initial version targetting fc31
+- Initial version tested on fc31
