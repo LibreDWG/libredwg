@@ -3740,6 +3740,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
       obj->eed[idx].raw = bit_read_TF (dat, size);
       LOG_TRACE ("EED[%u] raw: %d\n", idx, size);
       LOG_TRACE_TF (obj->eed[idx].raw, size);
+      LOG_TRACE ("\n");
       dat->byte = sav_byte;
       LOG_POS
 
@@ -5667,6 +5668,7 @@ dwg_decode_unknown (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
              obj->common_size, obj->bitsize - obj->common_size,
              (int)obj->stringstream_size, num_bytes);
   LOG_TRACE_TF (obj->unknown_bits, num_bytes);
+  LOG_TRACE ("\n");
   bit_set_position (dat, pos);
   if (num_bits % 8)
     dat->size--;

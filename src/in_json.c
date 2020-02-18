@@ -413,6 +413,7 @@ json_3DPOINT (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
       return;
     }
   tokens->index++;
+  JSON_TOKENS_CHECK_OVERFLOW
   pt->x = json_float (dat, tokens);
   pt->y = json_float (dat, tokens);
   pt->z = json_float (dat, tokens);
@@ -431,6 +432,7 @@ json_2DPOINT (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
       return;
     }
   tokens->index++;
+  JSON_TOKENS_CHECK_OVERFLOW
   pt->x = json_float (dat, tokens);
   pt->y = json_float (dat, tokens);
   LOG_TRACE ("%s (%f, %f) [%s]\n", name, pt->x, pt->y, type);
@@ -448,6 +450,7 @@ json_TIMERLL (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
       return;
     }
   tokens->index++;
+  JSON_TOKENS_CHECK_OVERFLOW
   tl->days = json_long (dat, tokens);
   tl->ms = json_long (dat, tokens);
   LOG_TRACE ("%s (%u, %u) [%s]\n", name, (unsigned)tl->days, (unsigned)tl->ms,

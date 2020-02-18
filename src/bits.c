@@ -1051,9 +1051,10 @@ bit_read_DD (Bit_Chain *dat, double default_value)
   if (two_bit_code == 0)
     return default_value;
   if (two_bit_code == 3)
-    return (bit_read_RD (dat));
+    return bit_read_RD (dat);
   if (two_bit_code == 2)
     {
+      // first 2 bits eq (6-7), the rest not (0-5)
       uchar_result = (unsigned char *)&default_value;
       uchar_result[4] = bit_read_RC (dat);
       uchar_result[5] = bit_read_RC (dat);
@@ -1066,6 +1067,7 @@ bit_read_DD (Bit_Chain *dat, double default_value)
     }
   else /* if (two_bit_code == 1) */
     {
+      // first half eq, only update 2nd
       uchar_result = (unsigned char *)&default_value;
       uchar_result[0] = bit_read_RC (dat);
       uchar_result[1] = bit_read_RC (dat);
@@ -1082,19 +1084,19 @@ void
 bit_write_DD (Bit_Chain *dat, double value, double default_value)
 {
   unsigned char *uchar_value;
-
-  unsigned int *uint_value;
-  unsigned int *uint_default;
+  uint32_t *uint_value;
+  uint32_t *uint_default;
 
   if (value == default_value)
     bit_write_BB (dat, 0);
   else
     {
       uchar_value = (unsigned char *)&value;
-      uint_value = (unsigned int *)&value;
-      uint_default = (unsigned int *)&default_value;
+      uint_value = (uint32_t *)&value;
+      uint_default = (uint32_t *)&default_value;
       if (uint_value[0] == uint_default[0])
         {
+          // in fact only the first 2 bits need to diff
           if (uint_value[1] != uint_default[1])
             {
               bit_write_BB (dat, 2);

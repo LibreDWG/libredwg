@@ -1008,13 +1008,17 @@ DWG_ENTITY (LINE)
     }
   SINCE (R_2000)
     {
+      ENCODER {
+        FIELD_VALUE (z_is_zero) = (FIELD_VALUE (start.z) == 0.0 &&
+                                   FIELD_VALUE (end.z) == 0.0);
+      }
       DXF_OR_PRINT
         {
           JSON { FIELD_B (z_is_zero, 0); }
           FIELD_3DPOINT (start, 10);
           FIELD_3DPOINT (end, 11);
         }
-      DECODER
+      else
         {
           FIELD_B (z_is_zero, 0);
           FIELD_RD (start.x, 10);
@@ -1028,23 +1032,6 @@ DWG_ENTITY (LINE)
               FIELD_VALUE (end.z) = 0.0;
             }
           else
-            {
-              FIELD_RD (start.z, 30);
-              FIELD_DD (end.z, FIELD_VALUE (start.z), 31);
-            }
-          FIELD_3PT_TRACE (start, DD, 10);
-          FIELD_3PT_TRACE (end, DD, 11);
-        }
-      ENCODER
-        {
-          FIELD_VALUE (z_is_zero) = (FIELD_VALUE (start.z) == 0.0 &&
-                                      FIELD_VALUE (end.z) == 0.0);
-          FIELD_B (z_is_zero, 0);
-          FIELD_RD (start.x, 10);
-          FIELD_DD (end.x, FIELD_VALUE (start.x), 11);
-          FIELD_RD (start.y, 20);
-          FIELD_DD (end.y, FIELD_VALUE (start.y), 21);
-          if (!FIELD_VALUE (z_is_zero))
             {
               FIELD_RD (start.z, 30);
               FIELD_DD (end.z, FIELD_VALUE (start.z), 31);
