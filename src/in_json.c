@@ -1318,10 +1318,6 @@ find_sizefield (const Dwg_DYNAPI_field *restrict fields,
   {                                                                           \
     BITCODE_##type num;                                                       \
     BITCODE_##type _size = (BITCODE_##type)size;                              \
-    memcpy (&num, &((char *)_obj)[f->offset], f->size);                       \
-    /* numitems is for 2 arrays, keep the smaller */                          \
-    if (strEQ (f->name, "numitems") && num != _size)                          \
-      _size = MIN (num, _size);                                               \
     LOG_TRACE ("%s = " FORMAT_##type "\n", f->name, _size);                   \
     memcpy (&((char *)_obj)[f->offset], &_size, f->size);                     \
   }                                                                           \
@@ -1561,24 +1557,83 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             }
           else if (t->type == JSMN_ARRAY && strEQc (f->type, "H*"))
             {
-              int size1 = t->size;
+              BITCODE_BL size1 = t->size;
               BITCODE_H *hdls = size1 ? calloc (size1, sizeof (BITCODE_H)) : NULL;
-              json_set_numfield (_obj, fields, key, size1);
+              if (memBEGINc (name, "DICTIONARY") && strEQc (key, "itemhandles"))
+                {
+                  BITCODE_BL numitems; // check against existing texts size
+                  const Dwg_DYNAPI_field *numf = find_numfield (fields, key);
+                  memcpy (&numitems, &((char *)_obj)[numf->offset], numf->size);
+                  if (numitems && size1 > numitems)
+                    {
+                      LOG_WARN ("Skip some itemhandles, only accept %d of %d",
+                                numitems, (int)size1)
+                      size1 = numitems;
+                    }
+                }
+              json_set_numfield (_obj, fields, key, (long)size1);
               tokens->index++;
-              for (int k = 0; k < size1; k++)
+              for (int k = 0; k < t->size; k++)
                 {
                   BITCODE_H hdl;
                   JSON_TOKENS_CHECK_OVERFLOW_ERR
                   hdl = json_HANDLE (dat, dwg, tokens, key, obj, k);
-                  if (hdl)
-                    hdls[k] = hdl;
+                  if (k < (int)size1)
+                    {
+                      if (hdl)
+                        hdls[k] = hdl;
+                      else
+                        hdls[k] = dwg_add_handleref (dwg, 0, 0, NULL);
+                    }
                   else
-                    hdls[k] = dwg_add_handleref (dwg, 0, 0, NULL);
+                    LOG_WARN ("ignored");
                 }
               if (!size1)
                 LOG_TRACE ("%s: [%s] empty\n", key, f->type);
               //memcpy (&((char *)_obj)[f->offset], &hdls, sizeof (hdls));
               dwg_dynapi_field_set_value (dwg, _obj, f, &hdls, 1);
+            }
+          else if (t->type == JSMN_ARRAY && strEQc (f->type, "TV*"))
+            {
+              int skip = 0;
+              BITCODE_BL size1 = t->size;
+              BITCODE_TV *elems = size1 ? calloc (size1, sizeof (BITCODE_TV)) : NULL;
+              if (memBEGINc (name, "DICTIONARY") && strEQc (key, "texts"))
+                {
+                  const Dwg_DYNAPI_field *numf = find_numfield (fields, key);
+                  memcpy (&size1, &((char *)_obj)[numf->offset], numf->size);
+                  if (size1)
+                    {
+                      // leak the wrong handles
+                      LOG_ERROR ("%s.texts must be before itemhandles", name)
+                      skip = 1;
+                    }
+                  else
+                    size1 = t->size;
+                }
+              json_set_numfield (_obj, fields, key, (long)size1);
+              tokens->index++;
+              for (int k = 0; k < t->size; k++)
+                {
+                  JSON_TOKENS_CHECK_OVERFLOW_ERR
+                  if (!skip && k < (int)size1)
+                    {
+                      elems[k] = json_string (dat, tokens);
+                      LOG_TRACE ("%s[%d]: \"%s\" [%s]\n", key, k, elems[k],
+                                 f->type);
+                    }
+                  else
+                    {
+                      tokens->index++;
+                      t = &tokens->tokens[tokens->index];
+                      LOG_WARN ("%s[%d]: \"%.*s\" [%s] ignored", key, k,
+                                t->end - t->start, &dat->chain[t->start], f->type);
+                    }
+                }
+              if (!t->size)
+                LOG_TRACE ("%s: [%s] empty\n", key, f->type);
+              if (!skip)
+                dwg_dynapi_field_set_value (dwg, _obj, f, &elems, 1);
             }
           else if (t->type == JSMN_ARRAY && strEQc (f->type, "3DPOINT*"))
             {
@@ -1641,27 +1696,6 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               if (!size1)
                 LOG_TRACE ("%s: [%s] empty\n", key, f->type);
               dwg_dynapi_field_set_value (dwg, _obj, f, &nums, 1);
-            }
-          else if (t->type == JSMN_ARRAY && strEQc (f->type, "TV*"))
-            {
-              int size1 = t->size;
-              BITCODE_TV *elems = size1 ? calloc (size1, sizeof (BITCODE_TV)) : NULL;
-              const Dwg_DYNAPI_field *numf = find_numfield (fields, key);
-              /* enforce numitems for texts[] to override MIN with 0 inside */
-              if (memBEGINc (name, "DICTIONARY") && strEQc (key, "texts"))
-                memcpy (&((char *)_obj)[numf->offset], &size1, numf->size);
-              json_set_numfield (_obj, fields, key, size1);
-              tokens->index++;
-              for (int k = 0; k < size1; k++)
-                {
-                  JSON_TOKENS_CHECK_OVERFLOW_ERR
-                  elems[k] = json_string (dat, tokens);
-                  LOG_TRACE ("%s[%d]: \"%s\" [%s]\n", key, k, elems[k],
-                             f->type);
-                }
-              if (!size1)
-                LOG_TRACE ("%s: [%s] empty\n", key, f->type);
-              dwg_dynapi_field_set_value (dwg, _obj, f, &elems, 1);
             }
           else if (t->type == JSMN_ARRAY && strEQc (key, "xdata") && strEQc (name, "XRECORD"))
             {
