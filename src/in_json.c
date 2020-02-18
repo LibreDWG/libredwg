@@ -1103,14 +1103,14 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   return;
 }
 
-static void
+static int
 json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             jsmntokens_t *restrict tokens,
             Dwg_Object_XRECORD *restrict obj)
 {
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   Dwg_Resbuf *rbuf;
-  long size = 0;
+  BITCODE_BL size = 0;
   obj->xdata = (Dwg_Resbuf *)calloc (1, sizeof (Dwg_Resbuf));
   rbuf = obj->xdata;
   obj->num_xdata = t->size;
@@ -1119,7 +1119,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   for (unsigned i = 0; i < obj->num_xdata; i++)
     {
       char key[80];
-      JSON_TOKENS_CHECK_OVERFLOW
+      JSON_TOKENS_CHECK_OVERFLOW_ERR
       t = &tokens->tokens[tokens->index];
       if (t->type == JSMN_ARRAY && t->size == 2) // of [ type, value ]
         {
@@ -1129,6 +1129,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           tokens->index++;
           rbuf->type = (BITCODE_RS)json_long (dat, tokens);
           LOG_INSANE ("xdata[%u]: type %d\n", i, rbuf->type);
+          size += 2;
           vtype = get_base_value_type (rbuf->type);
           switch (vtype)
             {
@@ -1143,11 +1144,13 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   rbuf->value.str.codepage = dwg->header.codepage;
                   LOG_TRACE ("xdata[%u]: \"%s\" [TV %d]\n", i, s,
                              (int)rbuf->type);
+                  size += len + 3;
                 }
                 LATER_VERSIONS
                 {
                   rbuf->value.str.u.wdata = bit_utf8_to_TU (s);
                   LOG_TRACE_TU ("xdata", rbuf->value.str.u.wdata, rbuf->type);
+                  size += (len * 2) + 2;
                 }
               }
               break;
@@ -1157,6 +1160,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 long l = json_long (dat, tokens);
                 rbuf->value.i8 = (BITCODE_RC)l;
                 LOG_TRACE ("xdata[%u]: %ld [RC %d]\n", i, l, (int)rbuf->type);
+                size += 1;
               }
               break;
             case VT_INT16:
@@ -1164,6 +1168,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 long l = json_long (dat, tokens);
                 rbuf->value.i16 = (BITCODE_RS)l;
                 LOG_TRACE ("xdata[%u]: %ld [RS %d]\n", i, l, (int)rbuf->type);
+                size += 2;
               }
               break;
             case VT_INT32:
@@ -1171,6 +1176,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 long l = json_long (dat, tokens);
                 rbuf->value.i32 = (BITCODE_RL)l;
                 LOG_TRACE ("xdata[%u]: %ld [RL %d]\n", i, l, (int)rbuf->type);
+                size += 4;
               }
               break;
             case VT_INT64:
@@ -1178,18 +1184,21 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 long l = json_long (dat, tokens);
                 rbuf->value.i64 = (BITCODE_BLL)l;
                 LOG_TRACE ("xdata[%u]: %ld [BLL %d]\n", i, l, (int)rbuf->type);
+                size += 8;
               }
               break;
             case VT_REAL:
               rbuf->value.dbl = json_float (dat, tokens);
               LOG_TRACE ("xdata[%u]: %f [RD %d]\n", i, rbuf->value.dbl,
                          (int)rbuf->type);
+              size += 8;
               break;
             case VT_POINT3D:
               {
                 BITCODE_3BD pt;
                 json_3DPOINT (dat, tokens, "xdata", "3RD", &pt);
                 memcpy (&rbuf->value.pt, &pt, 24);
+                size += 24;
               }
               break;
             case VT_BINARY:
@@ -1198,6 +1207,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 char *s = json_binary (dat, tokens, "xdata", &len);
                 rbuf->value.str.u.data = s;
                 rbuf->value.str.size = len;
+                size += len + 2;
                 break;
               }
             case VT_HANDLE:
@@ -1207,6 +1217,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 hdl = json_HANDLE (dat, dwg, tokens, key, NULL, -1);
                 memcpy (&rbuf->value.h, &hdl->handleref,
                         sizeof (hdl->handleref));
+                size += 8;
               }
               break;
             case VT_INVALID:
@@ -1219,7 +1230,11 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       else
         json_advance_unknown (dat, tokens, 0);
     }
-  return;
+  if (dat->version == dat->from_version
+      && obj->xdata_size != size)
+    LOG_WARN ("Changed XRECORD.xdata_size from %u to %u", obj->xdata_size, size)
+  obj->xdata_size = size;
+  return 0;
 }
 
 static const Dwg_DYNAPI_field *
@@ -1398,6 +1413,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   Dwg_Data *restrict dwg = obj->parent;
   const Dwg_DYNAPI_field *f;
   const jsmntok_t *t = &tokens->tokens[tokens->index];
+  int error = 0;
   LOG_INSANE ("-search %s.%s: %s %.*s\n", name, key, t_typename[t->type],
               t->end - t->start, &dat->chain[t->start]);
   for (f = &fields[0]; f->name; f++) // linear search, not binary for now
@@ -1599,6 +1615,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                     {
                       // leak the wrong handles
                       LOG_ERROR ("%s.texts must be before itemhandles", name)
+                      error |= DWG_ERR_INVALIDTYPE;
                       skip = 1;
                     }
                   else
@@ -1692,7 +1709,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             }
           else if (t->type == JSMN_ARRAY && strEQc (key, "xdata") && strEQc (name, "XRECORD"))
             {
-              json_xdata (dat, dwg, tokens, _obj);
+              error |= json_xdata (dat, dwg, tokens, _obj);
             }
           // subclass arrays:
           else if (t->type == JSMN_ARRAY && memBEGINc (f->type, "Dwg_"))
@@ -1864,7 +1881,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             }
         }
     }
-  return f->name ? 1 : 0; // found or not
+  return error | (f->name ? 1 : 0); // found or not
 }
 
 static int
