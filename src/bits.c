@@ -1080,12 +1080,13 @@ bit_read_DD (Bit_Chain *dat, double default_value)
 
 /** Write bit-double with default.
  */
-void
+BITCODE_BB
 bit_write_DD (Bit_Chain *dat, double value, double default_value)
 {
   unsigned char *uchar_value;
   uint32_t *uint_value;
   uint32_t *uint_default;
+  BITCODE_BB bits = 0;
 
   if (value == default_value)
     bit_write_BB (dat, 0);
@@ -1099,6 +1100,7 @@ bit_write_DD (Bit_Chain *dat, double value, double default_value)
           // in fact only the first 2 bits need to diff
           if (uint_value[1] != uint_default[1])
             {
+              bits = 2;
               bit_write_BB (dat, 2);
               bit_write_RC (dat, uchar_value[4]);
               bit_write_RC (dat, uchar_value[5]);
@@ -1109,6 +1111,7 @@ bit_write_DD (Bit_Chain *dat, double value, double default_value)
             }
           else
             {
+              bits = 1;
               bit_write_BB (dat, 1);
               bit_write_RC (dat, uchar_value[0]);
               bit_write_RC (dat, uchar_value[1]);
@@ -1118,10 +1121,12 @@ bit_write_DD (Bit_Chain *dat, double value, double default_value)
         }
       else
         {
+          bits = 3;
           bit_write_BB (dat, 3);
           bit_write_RD (dat, value);
         }
     }
+  return bits;
 }
 
 /** Read bit-thickness.

@@ -4060,14 +4060,17 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
       ent->preview_exists = 0;
       return error | DWG_ERR_INVALIDHANDLE;
     }
-  LOG_TRACE ("handle: " FORMAT_H " [H 5]\n", ARGS_H (obj->handle))
-
+  LOG_TRACE ("handle: " FORMAT_H " [H 5]", ARGS_H (obj->handle))
+  LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)
+  LOG_TRACE ("\n")
   PRE (R_13) { return DWG_ERR_NOTYETSUPPORTED; }
 
   if (has_wrong_bitsize)
     LOG_WARN ("Skip eed")
   else
     error |= dwg_decode_eed (dat, (Dwg_Object_Object *)ent);
+  LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)
+  LOG_TRACE ("\n")
   if (error & (DWG_ERR_INVALIDEED | DWG_ERR_VALUEOUTOFBOUNDS))
     return error;
 
@@ -4837,6 +4840,25 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
     LOG_WARN ("xdata Read %lu, expected %d", dat->byte - start_address, obj->xdata_size);
   obj->num_xdata = num_xdata;
   return root;
+}
+
+static BITCODE_BB bit_read_BB_noadv (Bit_Chain *dat)
+{
+  unsigned char result;
+  unsigned char byte;
+  byte = dat->chain[dat->byte];
+  if (dat->bit < 7)
+    result = (byte & (0xc0 >> dat->bit)) >> (6 - dat->bit);
+  else
+    {
+      result = (byte & 0x01) << 1;
+      if (dat->byte < dat->size - 1)
+        {
+          byte = dat->chain[dat->byte + 1];
+          result |= (byte & 0x80) >> 7;
+        }
+    }
+  return (BITCODE_BB)result;
 }
 
 /* OBJECTS *******************************************************************/

@@ -182,25 +182,19 @@ void bit_read_BE (Bit_Chain *restrict dat, double *restrict x,
 
 void bit_write_BE (Bit_Chain *dat, double x, double y, double z);
 
-BITCODE_DD
-bit_read_DD (Bit_Chain *dat, double);
+BITCODE_DD bit_read_DD (Bit_Chain *dat, double default_value);
+BITCODE_BB bit_write_DD (Bit_Chain *dat, double value, double default_value);
 
-void bit_write_DD (Bit_Chain *dat, double value, double);
-
-BITCODE_BT
-bit_read_BT (Bit_Chain *dat);
-
+BITCODE_BT bit_read_BT (Bit_Chain *dat);
 void bit_write_BT (Bit_Chain *dat, double value);
 
 int bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle);
-
 void bit_write_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle);
 
 uint16_t bit_read_CRC (Bit_Chain *dat);
 
 int bit_check_CRC (Bit_Chain *dat, long unsigned int start_address,
                    const uint16_t seed);
-
 uint16_t bit_write_CRC (Bit_Chain *dat, long unsigned int start_address,
                         const uint16_t seed);
 // object-map only
@@ -208,7 +202,6 @@ uint16_t bit_write_CRC_LE (Bit_Chain *dat, long unsigned int start_address,
                            const uint16_t seed);
 
 uint16_t bit_calc_CRC (const uint16_t seed, unsigned char *adr, long len);
-
 uint32_t bit_calc_CRC32 (const uint32_t seed, unsigned char *adr, long len);
 
 void bit_read_fixed (Bit_Chain *restrict dat, BITCODE_RC *restrict dest,

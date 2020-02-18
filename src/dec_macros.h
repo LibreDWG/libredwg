@@ -615,6 +615,7 @@
         if (_obj->color.flag & 2)                                             \
           LOG_TRACE (#color ".bookname: %s [CMC.TV]\n",                       \
                      _obj->color.book_name);                                  \
+        LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte, dat->bit) \
       }                                                                       \
   }
 #define SUB_FIELD_CMC(o, color, dxf1, dxf2)                                   \
@@ -906,12 +907,23 @@
       FIELD_2RD (name[0], dxf);                                               \
       for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
+          BITCODE_BB b2, b1 = bit_read_BB_noadv (dat);                        \
           FIELD_DD (name[vcount].x, FIELD_VALUE (name[vcount - 1].x), dxf);   \
+          b2 = bit_read_BB_noadv (dat);                                       \
           FIELD_DD (name[vcount].y, FIELD_VALUE (name[vcount - 1].y),         \
                     dxf + 10);                                                \
-          LOG_TRACE (#name "[%ld]: (" FORMAT_BD ", " FORMAT_BD ") [DD %d]\n", \
-                     (long)vcount, _obj->name[vcount].x,                      \
-                     _obj->name[vcount].y, dxf)                               \
+          if (b1 == 3 && b2 == 3)                                             \
+            LOG_TRACE (#name "[%ld]: (" FORMAT_BD ", " FORMAT_BD              \
+                             ") [2DD %d]",                                    \
+                       (long)vcount, _obj->name[vcount].x,                    \
+                       _obj->name[vcount].y, dxf)                             \
+          else                                                                \
+            LOG_TRACE (#name "[%ld]: (" FORMAT_BD ", " FORMAT_BD              \
+                             ") [2DD/%d%d %d]",                               \
+                       (long)vcount, _obj->name[vcount].x,                    \
+                       _obj->name[vcount].y, b1, b2, dxf)                     \
+          LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                        \
+          LOG_TRACE ("\n")                                                    \
         }                                                                     \
     }                                                                         \
   else                                                                        \
