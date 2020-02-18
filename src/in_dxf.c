@@ -791,19 +791,11 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           else if (pair->type == VT_REAL && strEQc (f->type, "TIMEBLL"))
             {
               static BITCODE_TIMEBLL date = { 0, 0, 0 };
-              unsigned long j = 1;
               double ms;
               date.value = pair->value.d;
               date.days = (BITCODE_BL)trunc (pair->value.d);
-              ms = date.value;
-              while (ms > 1.0)
-                {
-                  j *= 10;
-                  ms /= 10.0;
-                }
-              // date.ms = (BITCODE_BL)(1000000 * (date.value - date.days));
-              date.ms = (BITCODE_BL) (j / 10 * (date.value - date.days));
-              LOG_TRACE ("HEADER.%s %f (%u, %u) [TIMEBLL %d]\n", &field[1],
+              date.ms = (BITCODE_BL)(86400.0 * (date.value - date.days));
+              LOG_TRACE ("HEADER.%s %.09f (%u, %u) [TIMEBLL %d]\n", &field[1],
                          date.value, date.days, date.ms, pair->code);
               dwg_dynapi_header_set_value (dwg, &field[1], &date, 0);
             }

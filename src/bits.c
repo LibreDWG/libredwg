@@ -2032,10 +2032,7 @@ bit_read_TIMEBLL (Bit_Chain *dat)
       date.days = bit_read_BL (dat);
       date.ms = bit_read_BL (dat);
     }
-  ms = (double)date.ms;
-  while (ms > 1.0)
-    ms /= 10.0;
-  date.value = date.days + ms; // just for display, not calculations
+  date.value = date.days + (date.ms / 86400.0); // just for display, not calculations
   return date;
 }
 

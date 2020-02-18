@@ -584,25 +584,15 @@ json_TIMEBLL (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
       tokens->index++;
       date->days = json_long (dat, tokens);
       date->ms = json_long (dat, tokens);
-      ms = (double)date->ms;
-      while (ms > 1.0)
-        ms /= 10.0;
-      date->value = date->days + ms; // just for display, not calculations
+      date->value = date->days + (86400.0 * date->ms); // just for display, not calculations
     }
   else
     {
-      unsigned long j = 1;
       double num;
       num = json_float (dat, tokens);
       date->value = num;
       date->days = (BITCODE_BL)trunc (num);
-      ms = date->value;
-      while (ms > 1.0)
-        {
-          j *= 10;
-          ms /= 10.0;
-        }
-      date->ms = (BITCODE_BL) (j / 10 * (date->value - date->days));
+      date->ms = (BITCODE_BL) (86400.0 * (date->value - date->days));
     }
   LOG_TRACE ("%s: %.08f (%u, %u) [TIMEBLL]\n", name, date->value, date->days,
              date->ms);

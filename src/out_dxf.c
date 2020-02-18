@@ -509,7 +509,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 #define FIELD_TIMEBLL(nam, dxf)                                               \
   GROUP (dxf);                                                                \
   fprintf (dat->fh, FORMAT_RL "." FORMAT_RL "\r\n", _obj->nam.days,           \
-           _obj->nam.ms)
+           (BITCODE_RL)(_obj->nam.ms / 86400.0))
 #define HEADER_CMC(nam, dxf)                                                  \
   HEADER_9 (nam);                                                             \
   VALUE_RS (dwg->header_vars.nam.index, dxf)

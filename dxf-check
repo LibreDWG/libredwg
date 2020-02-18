@@ -29,6 +29,7 @@ mv $b.log $b.log.orig
 
 ./dxf -v4 $d
 if [ -f $b.dxf ]; then
+    mv $b.log $b.dwg2dxf.log
     ./dwg -y -v4 $b.dxf
 fi
 
