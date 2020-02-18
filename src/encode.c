@@ -2326,12 +2326,12 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           LOG_TRACE ("EED[%d] size: " FORMAT_BS " [BS]\n", i, size);
           LOG_POS
           bit_write_H (dat, &eed->handle);
+          last_handle = eed->handle.value;
           LOG_TRACE ("EED[%d] handle: " FORMAT_H " [H]\n", i,
                      ARGS_H (eed->handle));
           LOG_POS
           if (eed->raw)
             {
-              last_handle = eed->handle.value;
               LOG_TRACE ("EED[%d] raw [TF %d]\n", i, size);
               bit_write_TF (dat, eed->raw, size);
               LOG_TRACE_TF (eed->raw, size);
